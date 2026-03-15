@@ -8,3 +8,61 @@
  *
  * Consider organizing styles into separate files for maintainability.
  */
+
+/* TUI Colors - Terminal UI стиль */
+:root {
+  --tui-bg: #0a0a0a;
+  --tui-bg-light: #f5f5f5;
+  --tui-bg-secondary: #1a1a1a;
+  --tui-border: #333333;
+  --tui-text: #e0e0e0;
+  --tui-text-dark: #1a1a1a;
+  --tui-muted: #888888;
+  
+  /* Status colors */
+  --status-pending: #fbbf24;
+  --status-accepted: #3b82f6;
+  --status-preparing: #f59e0b;
+  --status-ready: #10b981;
+  --status-issued: #6b7280;
+  --status-cancelled: #ef4444;
+  
+  /* Role accents */
+  --barista-accent: #3b82f6;
+  --manager-accent: #8b5cf6;
+  --kitchen-accent: #f97316;
+}
+
+/* Base TUI styles */
+.bg-tui-bg { background-color: var(--tui-bg); }
+.bg-tui-bg-light { background-color: var(--tui-bg-light); }
+.bg-tui-bg-secondary { background-color: var(--tui-bg-secondary); }
+.border-tui-border { border-color: var(--tui-border); }
+.text-tui-text { color: var(--tui-text); }
+.text-tui-text-dark { color: var(--tui-text-dark); }
+.text-tui-muted { color: var(--tui-muted); }
+
+/* Status colors */
+.bg-status-pending { background-color: var(--status-pending); }
+.bg-status-accepted { background-color: var(--status-accepted); }
+.bg-status-preparing { background-color: var(--status-preparing); }
+.bg-status-ready { background-color: var(--status-ready); }
+.bg-status-issued { background-color: var(--status-issued); }
+.bg-status-cancelled { background-color: var(--status-cancelled); }
+.text-status-pending { color: var(--status-pending); }
+.text-status-accepted { color: var(--status-accepted); }
+.text-status-preparing { color: var(--status-preparing); }
+.text-status-ready { color: var(--status-ready); }
+.text-status-issued { color: var(--status-issued); }
+.text-status-cancelled { color: var(--status-cancelled); }
+
+/* Role accents */
+.text-barista-accent { color: var(--barista-accent); }
+.bg-barista-accent { background-color: var(--barista-accent); }
+.text-manager-accent { color: var(--manager-accent); }
+.bg-manager-accent { background-color: var(--manager-accent); }
+.text-kitchen-accent { color: var(--kitchen-accent); }
+.bg-kitchen-accent { background-color: var(--kitchen-accent); }
+
+/* Utility classes */
+.font-mono { font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace; }

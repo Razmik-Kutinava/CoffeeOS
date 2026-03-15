@@ -9,6 +9,17 @@ Rails.application.routes.draw do
   # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
+  # Authentication routes
+  get '/login', to: 'auth/sessions#new', as: :login
+  post '/login', to: 'auth/sessions#create'
+  delete '/logout', to: 'auth/sessions#destroy', as: :logout
+
+  # Dashboard routes (временные заглушки для тестирования)
+  get '/barista', to: 'dashboards#barista', as: :barista_dashboard
+  get '/manager', to: 'dashboards#manager', as: :manager_dashboard
+  get '/prep_kitchen', to: 'dashboards#prep_kitchen', as: :prep_kitchen_dashboard
+  get '/admin', to: 'dashboards#admin', as: :admin_dashboard
+
   # Defines the root path route ("/")
-  # root "posts#index"
+  root 'auth/sessions#new'
 end

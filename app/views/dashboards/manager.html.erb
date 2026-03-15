@@ -1,0 +1,33 @@
+<div class="w-full max-w-4xl mx-auto p-8 bg-tui-bg text-tui-text min-h-screen font-mono">
+  <!-- Flash сообщения -->
+  <% if flash[:notice] %>
+    <div class="mb-6 p-4 bg-status-ready/10 border border-status-ready text-status-ready rounded-lg text-center">
+      <div class="text-xl font-bold">✓ <%= flash[:notice] %></div>
+      <div class="text-sm mt-2">Добро пожаловать, <%= @user&.name || 'Пользователь' %>!</div>
+    </div>
+  <% end %>
+  
+  <% if flash[:alert] %>
+    <div class="mb-6 p-4 bg-status-cancelled/10 border border-status-cancelled text-status-cancelled rounded-lg text-center">
+      ⚠ <%= flash[:alert] %>
+    </div>
+  <% end %>
+  
+  <!-- Dashboard контент -->
+  <div class="border border-tui-border bg-tui-bg-secondary p-8 rounded-lg">
+    <h1 class="text-3xl font-bold mb-4 text-barista-accent text-center">
+      Dashboard <%= @role %>
+    </h1>
+    
+    <div class="mt-6 text-center text-tui-text">
+      <p class="text-lg">Добро пожаловать, <strong><%= @user&.name || 'Пользователь' %></strong>!</p>
+      <p class="text-sm text-tui-muted mt-2">Роль: <%= @user&.roles&.first&.name || 'Не назначена' %></p>
+    </div>
+    
+    <!-- Временная заглушка -->
+    <div class="mt-8 p-4 bg-tui-bg border border-tui-border rounded text-center text-tui-muted">
+      <p>Здесь будет dashboard для роли <%= @role %></p>
+      <p class="text-xs mt-2">Эта страница будет реализована позже</p>
+    </div>
+  </div>
+</div>
