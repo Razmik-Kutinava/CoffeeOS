@@ -1,5 +1,16 @@
 class User < ApplicationRecord
-  enum status: { active: 'active', blocked: 'blocked' }
+  # Временная замена enum для отладки
+  # enum status: { active: 'active', blocked: 'blocked' }
+  
+  STATUSES = { active: 'active', blocked: 'blocked' }.freeze
+  
+  def active?
+    status == 'active'
+  end
+  
+  def blocked?
+    status == 'blocked'
+  end
 
   belongs_to :tenant, optional: true
   has_many :user_roles, dependent: :destroy
@@ -14,7 +25,7 @@ class User < ApplicationRecord
   validate :email_or_phone_present
 
   scope :for_tenant, ->(tenant_id) { where(tenant_id: tenant_id) }
-  scope :active, -> { where(status: 'active') }
+  # scope :active конфликтует с enum методом active?, используем where(status: 'active') напрямую
 
   def has_role?(role_code)
     roles.exists?(code: role_code)
@@ -22,6 +33,23 @@ class User < ApplicationRecord
 
   def has_any_role?(*role_codes)
     roles.where(code: role_codes).exists?
+  end
+  
+  # Проверка пароля через bcrypt
+  def authenticate(password)
+    return false if password_hash.blank? || password.blank?
+    
+    begin
+      BCrypt::Password.new(password_hash) == password
+    rescue BCrypt::Errors::InvalidHash
+      false
+    end
+  end
+  
+  # Установка пароля (хеширование через bcrypt)
+  def password=(new_password)
+    return if new_password.blank?
+    self.password_hash = BCrypt::Password.create(new_password, cost: 12)
   end
 
   private
