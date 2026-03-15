@@ -33,3 +33,11 @@
 # Ignore key files for decrypting credentials and more.
 /config/*.key
 
+# Документация проекта (внутренняя, не для репозитория)
+/docs
+/.claude
+/benchmark
+
+# Все markdown файлы кроме README.md
+*.md
+!README.md
