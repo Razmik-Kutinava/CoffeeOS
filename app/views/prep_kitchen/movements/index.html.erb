@@ -1,0 +1,32 @@
+<h1 class="pk-title">Движения склада</h1>
+<div class="pk-actions">
+  <% if Current.role_code == "prep_kitchen_manager" %>
+    <%= link_to "Создать движение", prep_kitchen_new_movement_path, class: "pk-btn" %>
+  <% else %>
+    <span class="pk-muted">Создание доступно только менеджеру кухни</span>
+  <% end %>
+</div>
+
+<div class="pk-card">
+  <table class="pk-table">
+    <thead><tr><th>Дата</th><th>Тип</th><th>Статус</th><th>Позиций</th><th>Действия</th></tr></thead>
+    <tbody>
+      <% @movements.each do |movement| %>
+        <tr>
+          <td><%= movement.created_at&.strftime("%d.%m %H:%M") %></td>
+          <td><%= movement.movement_type %></td>
+          <td><%= movement.status %></td>
+          <td><%= movement.stock_movement_items.size %></td>
+          <td>
+            <% if Current.role_code == "prep_kitchen_manager" && movement.status == "draft" %>
+              <%= button_to "Подтвердить", prep_kitchen_confirm_movement_path(movement), method: :post, class: "pk-btn" %>
+              <%= button_to "Отменить", prep_kitchen_cancel_movement_path(movement), method: :post, class: "pk-btn pk-btn-danger" %>
+            <% else %>
+              <span class="pk-muted">—</span>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

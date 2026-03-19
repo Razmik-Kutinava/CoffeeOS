@@ -1,0 +1,152 @@
+<div class="manager-layout">
+  <%= render "manager/shared/sidebar" %>
+
+  <main class="main">
+    <div class="status-bar">
+      <div class="status-left">
+        <span class="dot"></span>
+      <span class="status-bar-title">
+        <% if Current.role_code == "shift_manager" %>
+          ⏱️ Менеджер смены
+        <% else %>
+          🏢 Офис-менеджер
+        <% end %>
+      </span>
+        <span class="status-bar-tenant">Точка: <%= current_user.tenant&.name || "Не указана" %></span>
+      </div>
+
+      <div class="status-right">
+        <div class="status-bar-user">
+          <span>👤 <%= current_user.name %></span>
+          <%= button_to logout_path, method: :delete, data: { turbo_method: :delete }, class: "logout-btn-header" do %>
+            Выйти
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <div class="content" id="content">
+      <% if flash[:notice] %>
+        <div class="flash flash-notice">✓ <%= flash[:notice] %></div>
+      <% end %>
+      <% if flash[:alert] %>
+        <div class="flash flash-alert">⚠ <%= flash[:alert] %></div>
+      <% end %>
+
+      <%= content_for?(:content) ? yield(:content) : yield %>
+    </div>
+  </main>
+</div>
+
+<style>
+  .manager-layout {
+    background: #0b0d0e;
+    color: var(--tui-text);
+    height: 100vh;
+    display: flex;
+    overflow: hidden;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    position: relative;
+    z-index: 1;
+  }
+
+  .main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: #0b0d0e;
+  }
+
+  .status-bar {
+    height: 60px;
+    background: rgba(26, 31, 58, 0.8);
+    border-bottom: 1px solid var(--tui-border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    font-size: 13px;
+    color: var(--tui-muted);
+  }
+
+  .status-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .status-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .status-bar-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--tui-text-bright);
+  }
+
+  .status-bar-tenant {
+    color: var(--tui-muted);
+  }
+
+  .status-bar-user {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 10px;
+    background: var(--manager-accent);
+    box-shadow: 0 0 10px rgba(139, 92, 246, 0.6);
+  }
+
+  .logout-btn-header {
+    background: transparent;
+    border: 1px solid rgba(255, 0, 110, 0.5);
+    color: var(--status-cancelled);
+    cursor: pointer;
+    padding: 6px 10px;
+    border-radius: 10px;
+    transition: all 0.15s;
+    font-family: inherit;
+  }
+
+  .logout-btn-header:hover {
+    background: rgba(255, 0, 110, 0.15);
+    box-shadow: 0 0 20px rgba(255, 0, 110, 0.25);
+  }
+
+  .content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 24px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(139, 92, 246, 0.35) rgba(26, 31, 58, 0.2);
+  }
+
+  .flash {
+    border: 1px solid var(--tui-border);
+    background: rgba(26, 31, 58, 0.7);
+    padding: 10px 12px;
+    border-radius: 12px;
+    margin-bottom: 16px;
+  }
+
+  .flash-notice {
+    border-color: rgba(0, 255, 136, 0.4);
+    box-shadow: 0 0 18px rgba(0, 255, 136, 0.12);
+  }
+
+  .flash-alert {
+    border-color: rgba(255, 0, 110, 0.5);
+    box-shadow: 0 0 18px rgba(255, 0, 110, 0.12);
+  }
+</style>
+

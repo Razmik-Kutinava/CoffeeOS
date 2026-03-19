@@ -1,0 +1,31 @@
+<div class="page">
+  <div class="page-header">
+    <h1 class="page-title">⏱️ Смены / Касса</h1>
+    <div class="page-subtitle">История смен и разбор расхождений</div>
+  </div>
+
+  <div class="card">
+    <% if @shifts.any? %>
+      <div class="table">
+        <% @shifts.each do |s| %>
+          <div class="row">
+            <div class="row-main">
+              <%= link_to "Смена ##{s.id}", manager_shift_path(s), class: "link" %>
+              <span class="pill"><%= s.status %></span>
+              <span class="muted"><%= s.opened_at&.strftime("%d.%m %H:%M") %> → <%= s.closed_at&.strftime("%d.%m %H:%M") || "…" %></span>
+            </div>
+            <div class="row-meta">
+              <span class="muted">opening: <%= s.opening_cash %> ₽</span>
+              <span class="muted">closing: <%= s.closing_cash || "-" %> ₽</span>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="empty">Смен нет</div>
+    <% end %>
+  </div>
+</div>
+
+<%= render "manager/shared/page_styles" %>
+

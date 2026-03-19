@@ -1,0 +1,112 @@
+<% 
+  time_ago = time_ago_in_words(order.created_at)
+  status_colors = {
+    'accepted' => 'bg-status-accepted',
+    'preparing' => 'bg-status-preparing',
+    'ready' => 'bg-status-ready'
+  }
+  status_labels = {
+    'accepted' => '→ prep',
+    'preparing' => '→ ready',
+    'ready' => '✓ issue'
+  }
+  next_status = {
+    'accepted' => 'preparing',
+    'preparing' => 'ready',
+    'ready' => 'issued'
+  }
+  
+  last_status_log = order.order_status_logs.where(status_to: order.status).order(created_at: :desc).first
+  status_start_time = last_status_log&.created_at || order.created_at
+  minutes_in_status = ((Time.current - status_start_time) / 60).floor
+  
+  timer_class = if minutes_in_status > 10
+    'timer-critical'
+  elsif minutes_in_status > 5
+    'timer-warning'
+  else
+    ''
+  end
+%>
+
+<% 
+  customer_name = order.customer&.name || order.customer_name || 'Гость'
+  customer_level = '🥇 Gold' # TODO: из loyalty_account когда будет модель
+  promo_discount = order.discount_amount > 0 ? order.discount_amount : nil
+%>
+<div class="card" id="order_<%= order.id %>" onclick="showOrderDetail('<%= order.id %>')">
+  <div class="card-header">
+    <span class="order-number">#<%= order.order_number %></span>
+    <span class="order-timer <%= timer_class %>" data-time="<%= status_start_time.iso8601 %>">⏱️ <%= minutes_in_status %> мин</span>
+  </div>
+  
+  <% if order.status == 'ready' && order.customer %>
+    <div class="card-customer">
+      <span>👤 <%= customer_name %></span>
+      <% if customer_level.present? %>
+        <span class="customer-level"><%= customer_level %></span>
+      <% end %>
+    </div>
+  <% end %>
+  
+  <div class="card-items">
+    <% order.order_items.limit(3).each do |item| %>
+      <div class="item-row">
+        <span class="item-qty"><%= item.quantity %>×</span>
+        <span><%= item.product_name %></span>
+        <% if item.modifier_options.present? %>
+          <% modifiers = JSON.parse(item.modifier_options) rescue {} %>
+          <% if modifiers.any? %>
+            <span class="item-mod">(<%= modifiers.values.join(', ') %>)</span>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+    <% if order.order_items.count > 3 %>
+      <div class="item-row item-more">
+        <span class="text-tui-muted">...еще <%= order.order_items.count - 3 %></span>
+      </div>
+    <% end %>
+  </div>
+  
+  <div class="card-footer">
+    <div class="card-price-row">
+      <span class="order-price"><%= number_to_currency(order.final_amount, unit: '₽', format: '%n %u', delimiter: ' ') %></span>
+    </div>
+    <% if promo_discount %>
+      <div class="promo-discount">Промокод: -<%= number_to_currency(promo_discount, unit: '₽', format: '%n %u', delimiter: ' ') %></div>
+    <% end %>
+  </div>
+  
+  <div class="card-actions">
+    <% if order.status == 'accepted' %>
+      <%= button_to "Принять →", update_status_barista_order_path(order, status: 'preparing'), 
+          method: :patch,
+          class: "btn btn-primary",
+          data: { turbo_method: :patch },
+          onclick: "event.stopPropagation();" %>
+      <%= button_to "✕", cancel_barista_order_path(order), 
+          method: :post,
+          params: { reason: 'Отменено баристой', reason_code: 'barista_cancel' },
+          class: "btn btn-danger",
+          data: { turbo_method: :post, turbo_confirm: "Отменить заказ?" },
+          onclick: "event.stopPropagation();" %>
+    <% elsif order.status == 'preparing' %>
+      <%= button_to "Готово →", update_status_barista_order_path(order, status: 'ready'), 
+          method: :patch,
+          class: "btn btn-primary",
+          data: { turbo_method: :patch },
+          onclick: "event.stopPropagation();" %>
+    <% elsif order.status == 'ready' %>
+      <div class="ready-actions">
+        <%= button_to "🔔", '#', class: "btn btn-icon", onclick: "event.stopPropagation(); alert('Вызов клиента'); return false;" %>
+        <%= button_to "📱", '#', class: "btn btn-icon", onclick: "event.stopPropagation(); alert('QR код'); return false;" %>
+        <%= button_to "Выдать", update_status_barista_order_path(order, status: 'issued'), 
+            method: :patch,
+            class: "btn btn-success",
+            data: { turbo_method: :patch },
+            onclick: "event.stopPropagation();" %>
+      </div>
+    <% end %>
+  </div>
+</div>

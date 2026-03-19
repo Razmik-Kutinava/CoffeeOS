@@ -1,0 +1,11 @@
+[Unit]
+Description=Run CoffeeOS callback audit alert every 5 minutes
+
+[Timer]
+OnBootSec=2min
+OnUnitActiveSec=5min
+Unit=coffeeos-callback-audit-alert.service
+Persistent=true
+
+[Install]
+WantedBy=timers.target

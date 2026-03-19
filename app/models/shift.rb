@@ -1,7 +1,7 @@
 class Shift < ApplicationRecord
   self.table_name = 'shifts'
 
-  enum status: { open: 'open', closed: 'closed', cancelled: 'cancelled' }
+  enum :status, { open: 'open', closed: 'closed', cancelled: 'cancelled' }
 
   belongs_to :tenant
   belongs_to :opened_by, class_name: 'User'

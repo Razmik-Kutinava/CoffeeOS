@@ -1,0 +1,44 @@
+<div class="page">
+  <div class="page-header">
+    <h1 class="page-title">↩️ Возвраты</h1>
+    <div class="page-subtitle">Контроль и диагностика возвратов</div>
+  </div>
+
+  <div class="card">
+    <div class="filters">
+      <%= form_with url: manager_finance_refunds_path, method: :get, local: true, class: "filters-form" do |f| %>
+        <label class="label">
+          Статус
+          <%= f.select :status,
+              options_for_select([["Все", ""], *Refund.statuses.keys.map { |s| [s, s] }], params[:status]),
+              {}, class: "input" %>
+        </label>
+        <%= f.submit "Фильтр", class: "btn" %>
+        <%= link_to "Сброс", manager_finance_refunds_path, class: "btn btn-ghost" %>
+      <% end %>
+    </div>
+
+    <% if @refunds.any? %>
+      <div class="table">
+        <% @refunds.each do |r| %>
+          <div class="row">
+            <div class="row-main">
+              <%= link_to r.order&.order_number || "order", manager_order_path(r.order_id), class: "link" %>
+              <span class="pill"><%= r.status %></span>
+              <span class="muted"><%= r.reason %></span>
+            </div>
+            <div class="row-meta">
+              <span><%= r.amount %> ₽</span>
+              <span class="muted"><%= r.created_at&.strftime("%d.%m %H:%M") %></span>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="empty">Нет возвратов</div>
+    <% end %>
+  </div>
+</div>
+
+<%= render "manager/shared/page_styles" %>
+

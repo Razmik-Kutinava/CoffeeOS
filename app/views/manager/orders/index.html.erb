@@ -1,0 +1,44 @@
+<div class="page">
+  <div class="page-header">
+    <h1 class="page-title">🧾 Заказы</h1>
+    <div class="page-subtitle">Офисный просмотр и разбор заказов</div>
+  </div>
+
+  <div class="card">
+    <div class="filters">
+      <%= form_with url: manager_orders_path, method: :get, local: true, class: "filters-form" do |f| %>
+        <label class="label">
+          Статус
+          <%= f.select :status,
+              options_for_select([["Все", ""], ["accepted", "accepted"], ["preparing", "preparing"], ["ready", "ready"], ["issued", "issued"], ["closed", "closed"], ["cancelled", "cancelled"]], params[:status]),
+              {}, class: "input" %>
+        </label>
+        <%= f.submit "Фильтр", class: "btn" %>
+        <%= link_to "Сброс", manager_orders_path, class: "btn btn-ghost" %>
+      <% end %>
+    </div>
+
+    <% if @orders.any? %>
+      <div class="table">
+        <% @orders.each do |o| %>
+          <div class="row">
+            <div class="row-main">
+              <%= link_to o.order_number, manager_order_path(o), class: "link" %>
+              <span class="pill"><%= o.status %></span>
+              <span class="muted"><%= o.source %></span>
+            </div>
+            <div class="row-meta">
+              <span><%= o.final_amount %> ₽</span>
+              <span class="muted"><%= o.created_at&.strftime("%d.%m %H:%M") %></span>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="empty">Ничего не найдено</div>
+    <% end %>
+  </div>
+</div>
+
+<%= render "manager/shared/page_styles" %>
+

@@ -1,0 +1,57 @@
+<div class="page">
+  <div class="page-header">
+    <h1 class="page-title">🧙 Close Shift Wizard</h1>
+    <div class="page-subtitle">
+      <span class="muted">Смена:</span> <span class="accent">#<%= @shift.id %></span>
+      <span class="pill"><%= @shift.status %></span>
+    </div>
+  </div>
+
+  <div class="grid">
+    <section class="card">
+      <div class="card-title">Проверки (блокеры)</div>
+
+      <div class="kv">
+        <div class="kv-row">
+          <span class="muted">Зависшие платежи</span>
+          <span class="pill"><%= @pending_payments.size %></span>
+        </div>
+        <div class="kv-row">
+          <span class="muted">Failed чеки</span>
+          <span class="pill"><%= @failed_receipts.size %></span>
+        </div>
+        <div class="kv-row">
+          <span class="muted">Pending возвраты</span>
+          <span class="pill"><%= @pending_refunds.size %></span>
+        </div>
+      </div>
+
+      <div class="card-muted" style="margin-top: 10px;">
+        В следующем шаге эти блоки будут разворачиваться в инциденты с быстрыми действиями (повторить/разобрать).
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="card-title">Ожидаемая наличка</div>
+      <div class="kv">
+        <div class="kv-row"><span class="muted">expected</span><span class="accent"><%= @expected_cash %> ₽</span></div>
+        <div class="kv-row"><span class="muted">opening</span><span><%= @shift.opening_cash %> ₽</span></div>
+      </div>
+    </section>
+  </div>
+
+  <section class="card">
+    <div class="card-title">Закрыть смену</div>
+    <%= form_with url: manager_close_shift_path(@shift), method: :post, local: true, class: "filters-form" do |f| %>
+      <label class="label">
+        Фактическая наличка (closing_cash)
+        <%= f.number_field :closing_cash, step: 0.01, min: 0, value: @shift.closing_cash, class: "input" %>
+      </label>
+      <%= f.submit "Закрыть", class: "btn", data: { turbo_confirm: "Закрыть смену? Проверь блокеры." } %>
+      <%= link_to "Назад", manager_shift_path(@shift), class: "btn btn-ghost" %>
+    <% end %>
+  </section>
+</div>
+
+<%= render "manager/shared/page_styles" %>
+

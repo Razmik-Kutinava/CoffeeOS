@@ -33,6 +33,22 @@
 # Ignore key files for decrypting credentials and more.
 /config/*.key
 
+# Local Postgres test cluster (never commit)
+/.pg_test/
+
+# Local scratch/notes file
+/qc
+
+# Coverage reports (e.g. SimpleCov)
+/coverage/
+
+# Node dependencies (if added later)
+/node_modules/
+
+# Editor/OS noise
+.DS_Store
+Thumbs.db
+
 # Документация проекта (внутренняя, не для репозитория)
 /docs
 /.claude

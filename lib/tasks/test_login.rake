@@ -43,6 +43,7 @@ namespace :test do
       { email: 'barista@test.com', name: 'Бариста Тест', roles: ['barista'] },
       { email: 'manager@test.com', name: 'Менеджер Тест', roles: ['shift_manager'] },
       { email: 'office@test.com', name: 'Офис Тест', roles: ['office_manager'] },
+      { email: 'kitchen-manager@test.com', name: 'Менеджер кухни Тест', roles: ['prep_kitchen_manager'] },
       { email: 'kitchen@test.com', name: 'Кухня Тест', roles: ['prep_kitchen_worker'] },
       { email: 'admin@test.com', name: 'Админ Тест', roles: ['franchise_manager'] },
       { email: 'multi@test.com', name: 'Мульти Роль', roles: ['barista', 'shift_manager'] },
@@ -87,6 +88,7 @@ namespace :test do
     puts "  - barista@test.com (роль: barista)"
     puts "  - manager@test.com (роль: shift_manager)"
     puts "  - office@test.com (роль: office_manager)"
+    puts "  - kitchen-manager@test.com (роль: prep_kitchen_manager)"
     puts "  - kitchen@test.com (роль: prep_kitchen_worker)"
     puts "  - admin@test.com (роль: franchise_manager)"
     puts "  - multi@test.com (роли: barista, shift_manager)"
@@ -102,6 +104,7 @@ namespace :test do
       'barista@test.com',
       'manager@test.com',
       'office@test.com',
+      'kitchen-manager@test.com',
       'kitchen@test.com',
       'admin@test.com',
       'multi@test.com',

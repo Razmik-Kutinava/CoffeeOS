@@ -9,60 +9,278 @@
  * Consider organizing styles into separate files for maintainability.
  */
 
-/* TUI Colors - Terminal UI стиль */
+/* TUI Colors - Яркий Terminal UI стиль с неоновыми эффектами */
 :root {
-  --tui-bg: #0a0a0a;
-  --tui-bg-light: #f5f5f5;
-  --tui-bg-secondary: #1a1a1a;
-  --tui-border: #333333;
-  --tui-text: #e0e0e0;
+  /* Основные цвета фона с градиентами */
+  --tui-bg: #0a0e27;
+  --tui-bg-gradient: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 50%, #0f172a 100%);
+  --tui-bg-secondary: #1a1f3a;
+  --tui-bg-card: rgba(26, 31, 58, 0.8);
+  --tui-bg-card-hover: rgba(30, 40, 70, 0.95);
+  --tui-border: rgba(59, 130, 246, 0.3);
+  --tui-border-glow: rgba(59, 130, 246, 0.5);
+  --tui-text: #e0e8ff;
+  --tui-text-bright: #ffffff;
   --tui-text-dark: #1a1a1a;
-  --tui-muted: #888888;
+  --tui-muted: #8b9dc3;
   
-  /* Status colors */
-  --status-pending: #fbbf24;
-  --status-accepted: #3b82f6;
-  --status-preparing: #f59e0b;
-  --status-ready: #10b981;
-  --status-issued: #6b7280;
-  --status-cancelled: #ef4444;
+  /* Яркие статусные цвета с неоном */
+  --status-pending: #ffd700;
+  --status-pending-glow: rgba(255, 215, 0, 0.4);
+  --status-accepted: #00d4ff;
+  --status-accepted-glow: rgba(0, 212, 255, 0.4);
+  --status-preparing: #ff6b35;
+  --status-preparing-glow: rgba(255, 107, 53, 0.4);
+  --status-ready: #00ff88;
+  --status-ready-glow: rgba(0, 255, 136, 0.4);
+  --status-issued: #9d4edd;
+  --status-cancelled: #ff006e;
+  --status-cancelled-glow: rgba(255, 0, 110, 0.4);
   
-  /* Role accents */
-  --barista-accent: #3b82f6;
+  /* Акцентные цвета с градиентами */
+  --barista-accent: #00d4ff;
+  --barista-accent-dark: #0099cc;
+  --barista-gradient: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
   --manager-accent: #8b5cf6;
-  --kitchen-accent: #f97316;
+  --kitchen-accent: #ff6b35;
+  
+  /* Неоновые эффекты */
+  --neon-blue: #00d4ff;
+  --neon-purple: #8b5cf6;
+  --neon-pink: #ff006e;
+  --neon-green: #00ff88;
+  --neon-orange: #ff6b35;
 }
 
-/* Base TUI styles */
-.bg-tui-bg { background-color: var(--tui-bg); }
-.bg-tui-bg-light { background-color: var(--tui-bg-light); }
-.bg-tui-bg-secondary { background-color: var(--tui-bg-secondary); }
-.border-tui-border { border-color: var(--tui-border); }
+/* Base TUI styles с градиентами */
+body {
+  background: var(--tui-bg-gradient);
+  background-attachment: fixed;
+}
+
+.bg-tui-bg { 
+  background: var(--tui-bg-gradient);
+}
+.bg-tui-bg-light { background-color: #f5f5f5; }
+.bg-tui-bg-secondary { 
+  background: var(--tui-bg-card);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--tui-border);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 0 0 20px var(--tui-border-glow);
+}
+.border-tui-border { 
+  border-color: var(--tui-border);
+  box-shadow: 0 0 10px var(--tui-border-glow);
+}
 .text-tui-text { color: var(--tui-text); }
 .text-tui-text-dark { color: var(--tui-text-dark); }
 .text-tui-muted { color: var(--tui-muted); }
 
-/* Status colors */
-.bg-status-pending { background-color: var(--status-pending); }
-.bg-status-accepted { background-color: var(--status-accepted); }
-.bg-status-preparing { background-color: var(--status-preparing); }
-.bg-status-ready { background-color: var(--status-ready); }
+/* Яркие статусные цвета с неоновыми эффектами */
+.bg-status-pending { 
+  background: linear-gradient(135deg, var(--status-pending) 0%, #ffed4e 100%);
+  box-shadow: 0 0 20px var(--status-pending-glow), 0 0 40px var(--status-pending-glow);
+  color: #000;
+  font-weight: bold;
+}
+.bg-status-accepted { 
+  background: linear-gradient(135deg, var(--status-accepted) 0%, var(--barista-accent-dark) 100%);
+  box-shadow: 0 0 20px var(--status-accepted-glow), 0 0 40px var(--status-accepted-glow);
+  color: #fff;
+  font-weight: bold;
+}
+.bg-status-preparing { 
+  background: linear-gradient(135deg, var(--status-preparing) 0%, #ff8c42 100%);
+  box-shadow: 0 0 20px var(--status-preparing-glow), 0 0 40px var(--status-preparing-glow);
+  color: #fff;
+  font-weight: bold;
+}
+.bg-status-ready { 
+  background: linear-gradient(135deg, var(--status-ready) 0%, #00cc6a 100%);
+  box-shadow: 0 0 20px var(--status-ready-glow), 0 0 40px var(--status-ready-glow);
+  color: #000;
+  font-weight: bold;
+}
 .bg-status-issued { background-color: var(--status-issued); }
-.bg-status-cancelled { background-color: var(--status-cancelled); }
-.text-status-pending { color: var(--status-pending); }
-.text-status-accepted { color: var(--status-accepted); }
-.text-status-preparing { color: var(--status-preparing); }
-.text-status-ready { color: var(--status-ready); }
-.text-status-issued { color: var(--status-issued); }
-.text-status-cancelled { color: var(--status-cancelled); }
+.bg-status-cancelled { 
+  background: linear-gradient(135deg, var(--status-cancelled) 0%, #cc0055 100%);
+  box-shadow: 0 0 20px var(--status-cancelled-glow);
+  color: #fff;
+  font-weight: bold;
+}
 
-/* Role accents */
-.text-barista-accent { color: var(--barista-accent); }
-.bg-barista-accent { background-color: var(--barista-accent); }
-.text-manager-accent { color: var(--manager-accent); }
-.bg-manager-accent { background-color: var(--manager-accent); }
-.text-kitchen-accent { color: var(--kitchen-accent); }
-.bg-kitchen-accent { background-color: var(--kitchen-accent); }
+.text-status-pending { 
+  color: var(--status-pending);
+  text-shadow: 0 0 10px var(--status-pending-glow);
+}
+.text-status-accepted { 
+  color: var(--status-accepted);
+  text-shadow: 0 0 10px var(--status-accepted-glow);
+}
+.text-status-preparing { 
+  color: var(--status-preparing);
+  text-shadow: 0 0 10px var(--status-preparing-glow);
+}
+.text-status-ready { 
+  color: var(--status-ready);
+  text-shadow: 0 0 10px var(--status-ready-glow);
+}
+.text-status-issued { color: var(--status-issued); }
+.text-status-cancelled { 
+  color: var(--status-cancelled);
+  text-shadow: 0 0 10px var(--status-cancelled-glow);
+}
+
+/* Яркие акцентные цвета с градиентами */
+.text-barista-accent { 
+  color: var(--barista-accent);
+  text-shadow: 0 0 10px var(--status-accepted-glow);
+}
+.bg-barista-accent { 
+  background: var(--barista-gradient);
+  box-shadow: 0 0 20px var(--status-accepted-glow);
+  color: #fff;
+  font-weight: bold;
+}
+.text-manager-accent { 
+  color: var(--manager-accent);
+  text-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
+}
+.bg-manager-accent { 
+  background: linear-gradient(135deg, var(--manager-accent) 0%, #6d28d9 100%);
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.5);
+}
+.text-kitchen-accent { 
+  color: var(--kitchen-accent);
+  text-shadow: 0 0 10px var(--status-preparing-glow);
+}
+.bg-kitchen-accent { 
+  background: linear-gradient(135deg, var(--kitchen-accent) 0%, #ff8c42 100%);
+  box-shadow: 0 0 20px var(--status-preparing-glow);
+}
 
 /* Utility classes */
-.font-mono { font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace; }
+.font-mono { 
+  font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+  letter-spacing: 0.5px;
+}
+
+/* Дополнительные яркие эффекты */
+body {
+  position: relative;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 30%, rgba(0, 212, 255, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(0, 255, 136, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(255, 107, 53, 0.05) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+  animation: gradientShift 15s ease infinite;
+}
+
+/* Улучшенные карточки */
+.card-glow {
+  position: relative;
+}
+
+.card-glow::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, var(--barista-accent), var(--status-ready), var(--status-preparing), var(--barista-accent));
+  border-radius: inherit;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s;
+  filter: blur(10px);
+}
+
+.card-glow:hover::after {
+  opacity: 0.6;
+}
+
+/* Анимация появления элементов */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+/* Пульсирующие точки */
+@keyframes pulseGlow {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+    box-shadow: 0 0 10px currentColor;
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.1);
+    box-shadow: 0 0 20px currentColor;
+  }
+}
+
+.pulse-glow {
+  animation: pulseGlow 2s ease-in-out infinite;
+}
+
+/* Анимации и эффекты */
+@keyframes neonPulse {
+  0%, 100% { 
+    opacity: 1;
+    box-shadow: 0 0 20px currentColor, 0 0 40px currentColor;
+  }
+  50% { 
+    opacity: 0.8;
+    box-shadow: 0 0 30px currentColor, 0 0 60px currentColor;
+  }
+}
+
+@keyframes slideInGlow {
+  from { 
+    opacity: 0;
+    transform: translateY(20px);
+    filter: blur(10px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.neon-glow {
+  animation: neonPulse 2s ease-in-out infinite;
+}
+
+.gradient-animated {
+  background-size: 200% 200%;
+  animation: gradientShift 3s ease infinite;
+}

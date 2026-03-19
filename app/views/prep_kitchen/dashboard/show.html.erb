@@ -1,0 +1,24 @@
+<h1 class="pk-title">Дашборд цеха</h1>
+<div class="pk-kpis">
+  <div class="pk-kpi"><div class="pk-muted">Low stock</div><strong><%= @low_stock_count %></strong></div>
+  <div class="pk-kpi"><div class="pk-muted">Out of stock</div><strong><%= @out_of_stock_count %></strong></div>
+  <div class="pk-kpi"><div class="pk-muted">Draft движений</div><strong><%= @draft_movements_count %></strong></div>
+  <div class="pk-kpi"><div class="pk-muted">Auto stop-list</div><strong><%= @auto_stop_list_count %></strong></div>
+  <div class="pk-kpi"><div class="pk-muted">Сегодня движений</div><strong><%= @today_movements_count %></strong></div>
+</div>
+
+<div class="pk-card">
+  <h3>Критичные ингредиенты</h3>
+  <table class="pk-table">
+    <thead><tr><th>Ингредиент</th><th>Остаток</th><th>Мин.</th></tr></thead>
+    <tbody>
+      <% @critical_ingredients.each do |stock| %>
+        <tr>
+          <td><%= stock.ingredient&.name %></td>
+          <td><%= stock.qty %></td>
+          <td><%= stock.min_qty %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

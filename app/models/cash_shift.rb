@@ -1,9 +1,10 @@
 class CashShift < ApplicationRecord
-  enum status: { open: 'open', closed: 'closed' }
+  enum :status, { open: 'open', closed: 'closed' }
 
   belongs_to :tenant
   belongs_to :opened_by, class_name: 'User'
   belongs_to :closed_by, class_name: 'User', optional: true
+  has_many :orders, dependent: :nullify
 
   validates :status, presence: true
   validates :opening_cash, presence: true, numericality: { greater_than_or_equal_to: 0 }

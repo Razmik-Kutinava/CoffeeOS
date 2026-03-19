@@ -1,18 +1,18 @@
 class StockMovement < ApplicationRecord
-  enum movement_type: {
+  enum :movement_type, {
     receipt: 'receipt',
     write_off: 'write_off',
     inventory: 'inventory',
     order_deduct: 'order_deduct',
     return: 'return'
   }
-  enum status: { draft: 'draft', confirmed: 'confirmed', cancelled: 'cancelled' }
+  enum :status, { draft: 'draft', confirmed: 'confirmed', cancelled: 'cancelled' }
 
   belongs_to :tenant
   belongs_to :created_by, class_name: 'User', optional: true
   belongs_to :confirmed_by, class_name: 'User', optional: true
   belongs_to :order, foreign_key: 'reference_id', optional: true
-  has_many :stock_movement_items, dependent: :destroy
+  has_many :stock_movement_items, foreign_key: "movement_id", dependent: :destroy
 
   validates :movement_type, presence: true
   validates :status, presence: true

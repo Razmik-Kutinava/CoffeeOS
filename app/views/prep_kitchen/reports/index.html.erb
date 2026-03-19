@@ -1,0 +1,30 @@
+<h1 class="pk-title">Отчеты цеха</h1>
+<div class="pk-card">
+  <div>Период: <%= @from %> — <%= @to %></div>
+  <div>Приход (qty): <strong><%= @report[:receipt_qty] %></strong></div>
+  <div>Списание (qty): <strong><%= @report[:write_off_qty] %></strong></div>
+  <div>Net (qty): <strong><%= @report[:net_qty] %></strong></div>
+  <div>Stop-list manual: <strong><%= @report[:stop_list_manual] %></strong></div>
+  <div>Stop-list auto: <strong><%= @report[:stop_list_auto] %></strong></div>
+</div>
+
+<div class="pk-card">
+  <h3>Топ дефицитов</h3>
+  <ul>
+    <% @report[:top_deficit].each do |row| %>
+      <li><%= row.ingredient&.name %> — <%= row.qty %> / min <%= row.min_qty %></li>
+    <% end %>
+  </ul>
+</div>
+
+<div class="pk-card">
+  <h3>Группировка (<%= @group_by %>)</h3>
+  <table class="pk-table">
+    <thead><tr><th>Ключ</th><th>Значение</th></tr></thead>
+    <tbody>
+      <% @report[:grouped].each do |key, value| %>
+        <tr><td><%= key %></td><td><%= value %></td></tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

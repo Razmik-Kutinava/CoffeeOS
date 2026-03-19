@@ -1,0 +1,124 @@
+<div class="page">
+  <div class="page-header">
+    <h1 class="page-title">🚨 Инциденты (MVP)</h1>
+    <div class="page-subtitle">Очередь проблем: платежи / чеки / устройства / склад</div>
+  </div>
+
+  <div class="grid">
+    <section class="card">
+      <div class="card-title">💳 Зависшие платежи</div>
+      <% if @pending_payments.any? %>
+        <div class="table">
+          <% @pending_payments.each do |p| %>
+            <div class="row">
+              <div class="row-main">
+                <%= link_to p.order&.order_number || "order", manager_order_path(p.order_id), class: "link" %>
+                <span class="pill"><%= p.status %></span>
+                <span class="muted"><%= p.method %> / <%= p.provider %></span>
+              </div>
+              <div class="row-meta">
+                <span><%= p.amount %> ₽</span>
+                <span class="muted"><%= p.created_at&.strftime("%d.%m %H:%M") %></span>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="empty">Нет</div>
+      <% end %>
+    </section>
+
+    <section class="card">
+      <div class="card-title">🧾 Failed чеки</div>
+      <% if @failed_receipts.any? %>
+        <div class="table">
+          <% @failed_receipts.each do |fr| %>
+            <div class="row">
+              <div class="row-main">
+                <%= link_to fr.order&.order_number || "order", manager_order_path(fr.order_id), class: "link" %>
+                <span class="pill"><%= fr.type %></span>
+                <span class="pill"><%= fr.status %></span>
+              </div>
+              <div class="row-meta">
+                <span class="muted"><%= fr.created_at&.strftime("%d.%m %H:%M") %></span>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="empty">Нет</div>
+      <% end %>
+    </section>
+
+    <section class="card">
+      <div class="card-title">↩️ Pending возвраты</div>
+      <% if @pending_refunds.any? %>
+        <div class="table">
+          <% @pending_refunds.each do |r| %>
+            <div class="row">
+              <div class="row-main">
+                <%= link_to r.order&.order_number || "order", manager_order_path(r.order_id), class: "link" %>
+                <span class="pill">refund</span>
+                <span class="pill"><%= r.status %></span>
+              </div>
+              <div class="row-meta">
+                <span><%= r.amount %> ₽</span>
+                <span class="muted"><%= r.reason %></span>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="empty">Нет</div>
+      <% end %>
+    </section>
+  </div>
+
+  <div class="grid">
+    <section class="card">
+      <div class="card-title">📟 Offline устройства</div>
+      <% if @offline_devices.any? %>
+        <div class="table">
+          <% @offline_devices.each do |d| %>
+            <div class="row">
+              <div class="row-main">
+                <span class="link" style="cursor: default; text-decoration: none;"><%= d.name %></span>
+                <span class="pill"><%= d.device_type %></span>
+                <span class="pill" style="border-color: rgba(255, 0, 110, 0.45); background: rgba(255, 0, 110, 0.10);">offline</span>
+              </div>
+              <div class="row-meta">
+                <span class="muted">last_seen: <%= d.last_seen_at&.strftime("%d.%m %H:%M") || "-" %></span>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="empty">Нет</div>
+      <% end %>
+    </section>
+
+    <section class="card">
+      <div class="card-title">📦 Out of stock</div>
+      <% if @out_of_stock.any? %>
+        <div class="table">
+          <% @out_of_stock.each do |s| %>
+            <div class="row">
+              <div class="row-main">
+                <span class="link" style="cursor: default; text-decoration: none;"><%= s.ingredient&.name || "ingredient##{s.ingredient_id}" %></span>
+                <span class="pill" style="border-color: rgba(255, 0, 110, 0.45); background: rgba(255, 0, 110, 0.10);">qty 0</span>
+              </div>
+              <div class="row-meta">
+                <span class="muted">min: <%= s.min_qty %></span>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="empty">Нет</div>
+      <% end %>
+    </section>
+  </div>
+</div>
+
+<%= render "manager/shared/page_styles" %>
+

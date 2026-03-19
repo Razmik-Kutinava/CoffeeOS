@@ -1,5 +1,5 @@
 class OrderStatusLog < ApplicationRecord
-  enum source: {
+  enum :source, {
     system: 'system',
     barista: 'barista',
     shift_manager: 'shift_manager',
@@ -16,4 +16,5 @@ class OrderStatusLog < ApplicationRecord
 
   scope :recent, -> { order(created_at: :desc) }
   scope :for_order, ->(order_id) { where(order_id: order_id).order(created_at: :asc) }
+  scope :for_current_tenant, -> { joins(:order).where(orders: { tenant_id: Current.tenant_id }) }
 end

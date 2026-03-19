@@ -5,10 +5,13 @@ default: &default
   adapter: postgresql
   encoding: unicode
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  username: <%= ENV.fetch("DATABASE_USER") { "postgres" } %>
-  password: <%= ENV.fetch("DATABASE_PASSWORD") { "123456" } %>
-  host: <%= ENV.fetch("DATABASE_HOST") { "localhost" } %>
+  username: "<%= ENV.fetch("DATABASE_USER") { "postgres" } %>"
+  password: "<%= ENV.fetch("DATABASE_PASSWORD") { "123456" } %>"
+  # Prefer IPv4 loopback to avoid IPv6 (::1) pg_hba mismatches on Windows installs.
+  host: "<%= ENV.fetch("DATABASE_HOST") { "127.0.0.1" } %>"
   port: <%= ENV.fetch("DATABASE_PORT") { 5432 } %>
+  # Avoid SSL negotiation issues on local dev/test Postgres installs.
+  sslmode: "<%= ENV.fetch("DATABASE_SSLMODE") { "disable" } %>"
 
 development:
   <<: *default

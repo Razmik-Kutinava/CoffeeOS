@@ -1,0 +1,111 @@
+<div class="page">
+  <div class="page-header">
+    <h1 class="page-title">Заказ <span class="accent"><%= @order.order_number %></span></h1>
+    <div class="page-subtitle">
+      <span class="pill"><%= @order.status %></span>
+      <span class="muted">source: <%= @order.source %></span>
+      <span class="muted">создан: <%= @order.created_at&.strftime("%d.%m %H:%M") %></span>
+    </div>
+  </div>
+
+  <div class="grid grid-2">
+    <section class="card">
+      <div class="card-title">Состав</div>
+      <% if @items.any? %>
+        <div class="table">
+          <% @items.each do |it| %>
+            <div class="row">
+              <div class="row-main">
+                <span class="link" style="cursor: default; text-decoration: none;"><%= it.quantity %>× <%= it.product_name %></span>
+              </div>
+              <div class="row-meta">
+                <span class="muted"><%= it.total_price %> ₽</span>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="empty">Пусто</div>
+      <% end %>
+    </section>
+
+    <section class="card">
+      <div class="card-title">Суммы</div>
+      <div class="kv">
+        <div class="kv-row"><span class="muted">total</span><span><%= @order.total_amount %> ₽</span></div>
+        <div class="kv-row"><span class="muted">discount</span><span><%= @order.discount_amount %> ₽</span></div>
+        <div class="kv-row"><span class="muted">final</span><span class="accent"><%= @order.final_amount %> ₽</span></div>
+      </div>
+    </section>
+  </div>
+
+  <div class="grid">
+    <section class="card">
+      <div class="card-title">Платежи</div>
+      <% if @payments.any? %>
+        <div class="table">
+          <% @payments.each do |p| %>
+            <div class="row">
+              <div class="row-main">
+                <span class="link" style="cursor: default; text-decoration: none;"><%= p.method %> / <%= p.provider %></span>
+                <span class="pill"><%= p.status %></span>
+              </div>
+              <div class="row-meta">
+                <span><%= p.amount %> ₽</span>
+                <span class="muted"><%= p.created_at&.strftime("%d.%m %H:%M") %></span>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="empty">Нет платежей</div>
+      <% end %>
+    </section>
+
+    <section class="card">
+      <div class="card-title">Возвраты</div>
+      <% if @refunds.any? %>
+        <div class="table">
+          <% @refunds.each do |r| %>
+            <div class="row">
+              <div class="row-main">
+                <span class="link" style="cursor: default; text-decoration: none;">refund</span>
+                <span class="pill"><%= r.status %></span>
+              </div>
+              <div class="row-meta">
+                <span><%= r.amount %> ₽</span>
+                <span class="muted"><%= r.created_at&.strftime("%d.%m %H:%M") %></span>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="empty">Нет возвратов</div>
+      <% end %>
+    </section>
+  </div>
+
+  <section class="card">
+    <div class="card-title">Фискальные чеки</div>
+    <% if @fiscal_receipts.any? %>
+      <div class="table">
+        <% @fiscal_receipts.each do |fr| %>
+          <div class="row">
+            <div class="row-main">
+              <span class="link" style="cursor: default; text-decoration: none;">receipt</span>
+              <span class="pill"><%= fr.status %></span>
+            </div>
+            <div class="row-meta">
+              <span class="muted"><%= fr.created_at&.strftime("%d.%m %H:%M") %></span>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="empty">Нет чеков</div>
+    <% end %>
+  </section>
+</div>
+
+<%= render "manager/shared/page_styles" %>
+

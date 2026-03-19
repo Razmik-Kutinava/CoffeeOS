@@ -1,0 +1,209 @@
+<% content_for :content do %>
+<div class="shift-page">
+  <div class="shift-header">
+    <h1 class="shift-title">⏰ Текущая смена</h1>
+    <% if @shift %>
+      <div class="shift-time"><%= @shift.opened_at.strftime('%H:%M') %> - <%= (@shift.opened_at + 12.hours).strftime('%H:%M') %></div>
+    <% end %>
+  </div>
+
+  <% if @shift %>
+    <div class="shift-info-card">
+      <div class="shift-info-header">
+        <h2>Смена #<%= @shift.id %></h2>
+        <div class="shift-info-meta">
+          <div>Открыта: <%= @shift.opened_at.strftime('%H:%M') %> (<%= distance_of_time_in_words(@shift.opened_at, Time.current) %> назад)</div>
+          <div>Открыл: <%= @shift.opened_by&.name || 'Неизвестно' %> (Shift Manager)</div>
+        </div>
+      </div>
+      
+      <div class="shift-staff-section">
+        <h3>👥 Сотрудники в смене:</h3>
+        <div class="staff-list">
+          <% if @shift_staff.present? %>
+            <% @shift_staff.each do |staff_user| %>
+              <div class="staff-item">
+                <span class="staff-status">✅</span>
+                <span class="staff-name"><%= staff_user.name %> (<%= staff_user.roles&.first&.name || 'Бариста' %>)</span>
+                <span class="staff-time">— с <%= @shift.opened_at.strftime('%H:%M') %></span>
+              </div>
+            <% end %>
+          <% else %>
+            <div class="staff-item">
+              <span class="staff-status">✅</span>
+              <span class="staff-name"><%= @current_user_obj&.name || 'Текущий пользователь' %> (Бариста)</span>
+              <span class="staff-time">— с <%= @shift.opened_at.strftime('%H:%M') %></span>
+            </div>
+          <% end %>
+        </div>
+      </div>
+      
+      <div class="shift-stats-section">
+        <h3>📊 Статистика за смену:</h3>
+        <div class="stats-list">
+          <div class="stat-item">• Заказов: <strong><%= @orders_count %></strong></div>
+          <div class="stat-item">• Выручка: <strong><%= number_to_currency(@revenue, unit: '₽', format: '%n %u', delimiter: ' ', precision: 0) %></strong></div>
+          <div class="stat-item">• Средний чек: <strong><%= number_to_currency(@average_check, unit: '₽', format: '%n %u', delimiter: ' ') %></strong></div>
+          <div class="stat-item">• Отменено: <strong><%= @cancelled_count %> заказов</strong></div>
+          <div class="stat-item">• Возвратов: <strong><%= @refund_count %></strong></div>
+        </div>
+        
+        <div class="payments-section">
+          <h4>💳 Оплаты:</h4>
+          <div class="payments-list">
+            <% if @payments_by_method.any? %>
+              <% @payments_by_method.each do |pm| %>
+                <div class="payment-item">
+                  • <%= pm.method == 'card' ? 'Карта' : pm.method == 'cash' ? 'Наличные' : 'СБП' %>: 
+                  <strong><%= pm.count %> заказов (<%= number_to_currency(pm.total, unit: '₽', format: '%n %u', delimiter: ' ', precision: 0) %>)</strong>
+                </div>
+              <% end %>
+            <% else %>
+              <div class="payment-item">Нет данных</div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% else %>
+    <div class="empty-shift">
+      <p>Смена не открыта</p>
+    </div>
+  <% end %>
+  
+  <div class="shift-note">
+    ⚠️ Управление сменой доступно только менеджеру
+  </div>
+</div>
+<% end %>
+
+<%= render 'barista/shared/layout' %>
+
+<style>
+  .shift-page {
+    max-width: 900px;
+  }
+  
+  .shift-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #1e262c;
+  }
+  
+  .shift-title {
+    font-size: 20px;
+    font-weight: 500;
+    color: #d4dcec;
+    margin: 0;
+  }
+  
+  .shift-time {
+    font-size: 13px;
+    color: #6e7b8c;
+  }
+  
+  .shift-info-card {
+    background: #0f1214;
+    border: 1px solid #1e262c;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+  }
+  
+  .shift-info-header {
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #1e262c;
+  }
+  
+  .shift-info-header h2 {
+    font-size: 18px;
+    font-weight: 500;
+    color: #d4dcec;
+    margin: 0 0 8px 0;
+  }
+  
+  .shift-info-meta {
+    font-size: 13px;
+    color: #6e7b8c;
+    line-height: 1.6;
+  }
+  
+  .shift-staff-section,
+  .shift-stats-section {
+    margin-bottom: 24px;
+  }
+  
+  .shift-staff-section h3,
+  .shift-stats-section h3 {
+    font-size: 14px;
+    font-weight: 500;
+    color: #d4dcec;
+    margin: 0 0 12px 0;
+  }
+  
+  .staff-list,
+  .stats-list {
+    margin-left: 16px;
+  }
+  
+  .staff-item,
+  .stat-item {
+    font-size: 13px;
+    color: #9aa8b9;
+    margin-bottom: 8px;
+    line-height: 1.6;
+  }
+  
+  .staff-item strong,
+  .stat-item strong {
+    color: #d4dcec;
+    font-weight: 500;
+  }
+  
+  .payments-section {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px dashed #1e262c;
+  }
+  
+  .payments-section h4 {
+    font-size: 13px;
+    font-weight: 500;
+    color: #d4dcec;
+    margin: 0 0 12px 0;
+  }
+  
+  .payments-list {
+    margin-left: 16px;
+  }
+  
+  .payment-item {
+    font-size: 13px;
+    color: #9aa8b9;
+    margin-bottom: 6px;
+  }
+  
+  .payment-item strong {
+    color: #d4dcec;
+    font-weight: 500;
+  }
+  
+  .empty-shift {
+    text-align: center;
+    padding: 60px 20px;
+    color: #6e7b8c;
+  }
+  
+  .shift-note {
+    font-size: 12px;
+    color: #6e7b8c;
+    text-align: center;
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 1px solid #1e262c;
+  }
+</style>

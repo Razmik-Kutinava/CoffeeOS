@@ -1,0 +1,31 @@
+<div class="page">
+  <div class="page-header">
+    <h1 class="page-title">👥 Персонал</h1>
+    <div class="page-subtitle">Пользователи точки и их роли</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Пользователи</div>
+    <% if @users.any? %>
+      <div class="table">
+        <% @users.each do |u| %>
+          <div class="row">
+            <div class="row-main">
+              <span class="link" style="cursor: default; text-decoration: none;"><%= u.name %></span>
+              <span class="muted"><%= u.email || u.phone %></span>
+              <span class="pill"><%= u.status %></span>
+            </div>
+            <div class="row-meta">
+              <span class="muted"><%= u.roles.map(&:code).join(", ") %></span>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="empty">Нет пользователей</div>
+    <% end %>
+  </div>
+</div>
+
+<%= render "manager/shared/page_styles" %>
+

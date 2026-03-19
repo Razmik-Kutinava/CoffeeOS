@@ -1,5 +1,5 @@
 class PaymentStatusLog < ApplicationRecord
-  enum source: { callback: 'callback', polling: 'polling', manual: 'manual' }
+  enum :source, { callback: 'callback', polling: 'polling', manual: 'manual' }
 
   belongs_to :payment
 

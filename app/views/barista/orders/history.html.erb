@@ -1,0 +1,80 @@
+<% content_for :content do %>
+<div class="history-page">
+  <!-- Header -->
+  <div class="mb-6">
+    <h1 class="text-3xl font-bold mb-2">История заказов</h1>
+  </div>
+
+  <!-- Filters and Table -->
+  <div class="bg-tui-bg-secondary rounded-xl border border-tui-border p-6">
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-xl font-bold">История заказов</h2>
+      <!-- Filters -->
+      <div class="flex space-x-3">
+        <%= form_with url: barista_orders_history_path, method: :get, local: true, class: "flex space-x-3" do |f| %>
+          <%= f.select :status, options_for_select([
+            ['Все статусы', 'all'],
+            ['Закрытые', 'closed'],
+            ['Отменённые', 'cancelled'],
+            ['Выданные', 'issued']
+          ], params[:status] || 'all'), {}, { class: "bg-gray-800 border border-tui-border rounded-lg px-4 py-2 text-sm text-tui-text" } %>
+          <%= f.date_field :date, value: params[:date] || Date.today, class: "bg-gray-800 border border-tui-border rounded-lg px-4 py-2 text-sm text-tui-text" %>
+          <%= f.submit "Применить", class: "bg-barista-accent hover:bg-blue-600 px-4 py-2 rounded-lg text-sm transition cursor-pointer" %>
+        <% end %>
+      </div>
+    </div>
+    
+    <!-- Table -->
+    <div class="overflow-x-auto">
+      <table class="w-full">
+        <thead class="text-left text-tui-muted border-b border-tui-border">
+          <tr>
+            <th class="pb-3 text-sm font-medium">№ Заказа</th>
+            <th class="pb-3 text-sm font-medium">Время</th>
+            <th class="pb-3 text-sm font-medium">Статус</th>
+            <th class="pb-3 text-sm font-medium">Сумма</th>
+            <th class="pb-3 text-sm font-medium">Оплата</th>
+            <th class="pb-3 text-sm font-medium">Источник</th>
+            <th class="pb-3 text-sm font-medium">Действия</th>
+          </tr>
+        </thead>
+        <tbody id="orders-history">
+          <% if @orders.any? %>
+            <% @orders.each do |order| %>
+              <tr class="border-b border-tui-border hover:bg-gray-800 transition cursor-pointer" onclick="showOrderDetail('<%= order.id %>')">
+                <td class="py-3 font-medium text-sm"><%= order.order_number %></td>
+                <td class="py-3 text-tui-muted text-sm"><%= order.created_at.strftime('%H:%M') %></td>
+                <td class="py-3">
+                  <span class="px-2 py-1 bg-gray-700 rounded text-xs">
+                    <%= order.status == 'closed' ? 'Закрыт' : order.status == 'cancelled' ? 'Отменён' : order.status == 'issued' ? 'Выдан' : order.status %>
+                  </span>
+                </td>
+                <td class="py-3 font-medium text-sm"><%= number_to_currency(order.final_amount, unit: '₽', format: '%n %u', delimiter: ' ') %></td>
+                <td class="py-3">
+                  <% if order.payments.any? && order.payments.first.status == 'succeeded' %>
+                    <span class="text-status-ready">✓</span>
+                  <% else %>
+                    <span class="text-tui-muted">○</span>
+                  <% end %>
+                </td>
+                <td class="py-3 text-tui-muted text-sm">
+                  <%= order.source == 'kiosk' ? 'Киоск' : order.source == 'app' ? 'Приложение' : 'Ручной' %>
+                </td>
+                <td class="py-3">
+                  <button onclick="event.stopPropagation(); showOrderDetail('<%= order.id %>')" class="text-barista-accent hover:underline text-sm">Детали</button>
+                </td>
+              </tr>
+            <% end %>
+          <% else %>
+            <tr>
+              <td colspan="7" class="py-8 text-center text-tui-muted">Заказов не найдено</td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<% end %>
+
+<%= render 'barista/shared/layout' %>

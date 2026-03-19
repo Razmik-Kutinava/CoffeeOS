@@ -1,0 +1,42 @@
+<div class="page">
+  <div class="page-header">
+    <h1 class="page-title">📈 Отчёты</h1>
+    <div class="page-subtitle">Быстрый срез по периоду (офис)</div>
+  </div>
+
+  <div class="card">
+    <div class="filters">
+      <%= form_with url: manager_reports_path, method: :get, local: true, class: "filters-form" do |f| %>
+        <label class="label">
+          From
+          <%= f.text_field :from, value: @from.strftime("%Y-%m-%d %H:%M"), class: "input" %>
+        </label>
+        <label class="label">
+          To
+          <%= f.text_field :to, value: @to.strftime("%Y-%m-%d %H:%M"), class: "input" %>
+        </label>
+        <%= f.submit "Показать", class: "btn" %>
+      <% end %>
+    </div>
+
+    <div class="grid">
+      <section class="card" style="margin: 0;">
+        <div class="card-title">Заказы</div>
+        <div class="kv">
+          <div class="kv-row"><span class="muted">count</span><span class="accent"><%= @orders_count %></span></div>
+          <div class="kv-row"><span class="muted">cancelled</span><span><%= @cancelled_count %></span></div>
+        </div>
+      </section>
+      <section class="card" style="margin: 0;">
+        <div class="card-title">Деньги</div>
+        <div class="kv">
+          <div class="kv-row"><span class="muted">revenue (succeeded)</span><span class="accent"><%= @revenue %> ₽</span></div>
+          <div class="kv-row"><span class="muted">refunds (succeeded)</span><span><%= @refunds_sum %> ₽</span></div>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+
+<%= render "manager/shared/page_styles" %>
+

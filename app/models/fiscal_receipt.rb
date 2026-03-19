@@ -1,6 +1,10 @@
 class FiscalReceipt < ApplicationRecord
-  enum type: { payment: 'payment', refund: 'refund' }
-  enum status: { pending: 'pending', sent: 'sent', confirmed: 'confirmed', failed: 'failed' }
+  # В таблице fiscal_receipts колонка называется `type`, но мы используем её как enum,
+  # а не для STI. Поэтому отключаем STI-интерпретацию.
+  self.inheritance_column = :_type_disabled
+
+  enum :type, { payment: 'payment', refund: 'refund' }
+  enum :status, { pending: 'pending', sent: 'sent', confirmed: 'confirmed', failed: 'failed' }
 
   belongs_to :tenant
   belongs_to :order
