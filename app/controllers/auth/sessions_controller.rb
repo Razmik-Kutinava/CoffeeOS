@@ -73,13 +73,13 @@ class Auth::SessionsController < ApplicationController
   def dashboard_path_for_role(role_code)
     case role_code
     when 'barista'
-      '/barista'
+      barista_dashboard_path
     when 'shift_manager', 'office_manager'
-      '/manager'
+      manager_dashboard_path
     when 'prep_kitchen_worker', 'prep_kitchen_manager'
-      '/prep_kitchen'
+      prep_kitchen_dashboard_path
     when 'franchise_manager', 'ук_global_admin', 'ук_country_manager', 'ук_billing_admin'
-      '/admin'
+      admin_dashboard_path
     else
       root_path
     end

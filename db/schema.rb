@@ -353,6 +353,8 @@ ActiveRecord::Schema[8.1].define(version: 2025_01_15_000009) do
     t.uuid "tenant_id", null: false
     t.decimal "total_amount", precision: 10, scale: 2, null: false
     t.datetime "updated_at", null: false
+    t.uuid "cash_shift_id"
+    t.index ["cash_shift_id"], name: "index_orders_on_cash_shift_id"
     t.index ["customer_id"], name: "index_orders_on_customer_id"
     t.index ["order_number"], name: "index_orders_on_order_number"
     t.index ["qr_token"], name: "index_orders_on_qr_token", where: "(qr_token IS NOT NULL)"

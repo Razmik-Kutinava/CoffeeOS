@@ -1,0 +1,185 @@
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">☕ CoffeeOS</div>
+    <div class="tenant">
+      <span class="tenant-dot"></span>
+      <span><%= current_user.tenant&.name || "Точка" %></span>
+    </div>
+  </div>
+
+  <nav class="nav">
+    <%= link_to manager_dashboard_path, class: "nav-item #{'active' if request.path == manager_dashboard_path}" do %>
+      <span class="emoji">🧭</span><span>Дашборд</span>
+    <% end %>
+    <%= link_to manager_orders_path, class: "nav-item #{'active' if request.path.start_with?(manager_orders_path)}" do %>
+      <span class="emoji">🧾</span><span>Заказы</span>
+    <% end %>
+    <%= link_to manager_finance_payments_path, class: "nav-item #{'active' if request.path == manager_finance_payments_path}" do %>
+      <span class="emoji">💳</span><span>Платежи</span>
+    <% end %>
+    <%= link_to manager_finance_refunds_path, class: "nav-item #{'active' if request.path == manager_finance_refunds_path}" do %>
+      <span class="emoji">↩️</span><span>Возвраты</span>
+    <% end %>
+    <%= link_to manager_finance_fiscal_receipts_path, class: "nav-item #{'active' if request.path == manager_finance_fiscal_receipts_path}" do %>
+      <span class="emoji">🧾</span><span>Фискализация</span>
+    <% end %>
+    <%= link_to manager_shifts_path, class: "nav-item #{'active' if request.path.start_with?(manager_shifts_path)}" do %>
+      <span class="emoji">⏱️</span><span>Смены/Касса</span>
+    <% end %>
+    <%= link_to manager_inventory_path, class: "nav-item #{'active' if request.path == manager_inventory_path}" do %>
+      <span class="emoji">📦</span><span>Склад</span>
+    <% end %>
+    <%= link_to manager_menu_path, class: "nav-item #{'active' if request.path == manager_menu_path}" do %>
+      <span class="emoji">🍽️</span><span>Меню</span>
+    <% end %>
+    <%= link_to manager_reports_path, class: "nav-item #{'active' if request.path == manager_reports_path}" do %>
+      <span class="emoji">📈</span><span>Отчёты</span>
+    <% end %>
+    <% if Current.role_code == "office_manager" %>
+      <%= link_to manager_staff_path, class: "nav-item #{'active' if request.path == manager_staff_path}" do %>
+        <span class="emoji">👥</span><span>Персонал</span>
+      <% end %>
+      <%= link_to manager_devices_path, class: "nav-item #{'active' if request.path == manager_devices_path}" do %>
+        <span class="emoji">📟</span><span>Устройства</span>
+      <% end %>
+    <% end %>
+    <%= link_to manager_incidents_path, class: "nav-item #{'active' if request.path == manager_incidents_path}" do %>
+      <span class="emoji">🚨</span><span>Инциденты</span>
+    <% end %>
+
+    <div style="flex: 1;"></div>
+  </nav>
+
+  <div class="user-section">
+    <div class="user-avatar"><%= current_user.name&.first&.upcase || 'U' %></div>
+    <div class="user-info">
+      <div class="user-name"><%= current_user.name %></div>
+      <div class="user-role"><%= Current.role_code %></div>
+    </div>
+  </div>
+</aside>
+
+<style>
+  .sidebar {
+    width: 240px;
+    background: rgba(26, 31, 58, 0.92);
+    border-right: 1px solid var(--tui-border);
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    flex-shrink: 0;
+    box-shadow: 4px 0 30px rgba(0, 0, 0, 0.5), 0 0 40px rgba(139, 92, 246, 0.15);
+    backdrop-filter: blur(10px);
+  }
+
+  .sidebar-header {
+    padding: 18px 16px;
+    border-bottom: 1px solid var(--tui-border);
+  }
+
+  .brand {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: var(--tui-text-bright);
+    background-image: linear-gradient(135deg, var(--manager-accent) 0%, var(--neon-blue) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .tenant {
+    margin-top: 10px;
+    font-size: 12px;
+    color: var(--tui-muted);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .tenant-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 10px;
+    background: var(--manager-accent);
+    box-shadow: 0 0 12px rgba(139, 92, 246, 0.65);
+    animation: pulseGlow 2s ease-in-out infinite;
+  }
+
+  .nav {
+    flex: 1;
+    padding: 12px 10px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    border-radius: 12px;
+    color: var(--tui-muted);
+    font-size: 14px;
+    margin-bottom: 6px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    border: 1px solid transparent;
+    text-decoration: none;
+  }
+
+  .nav-item:hover {
+    background: rgba(139, 92, 246, 0.12);
+    color: var(--tui-text-bright);
+    border-color: rgba(139, 92, 246, 0.25);
+    transform: translateX(4px);
+    box-shadow: inset 0 0 20px rgba(139, 92, 246, 0.08);
+  }
+
+  .nav-item.active {
+    background: linear-gradient(90deg, rgba(139, 92, 246, 0.22) 0%, rgba(139, 92, 246, 0.06) 100%);
+    border-left: 4px solid var(--manager-accent);
+    color: var(--tui-text-bright);
+    box-shadow: inset 0 0 22px rgba(139, 92, 246, 0.10);
+  }
+
+  .emoji {
+    font-size: 16px;
+  }
+
+  .user-section {
+    padding: 16px;
+    border-top: 1px solid var(--tui-border);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(26, 31, 58, 0.8);
+  }
+
+  .user-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 12px;
+    background: rgba(139, 92, 246, 0.18);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--tui-text-bright);
+    border: 1px solid rgba(139, 92, 246, 0.35);
+    font-size: 14px;
+    font-weight: 700;
+    box-shadow: 0 0 22px rgba(139, 92, 246, 0.18);
+  }
+
+  .user-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--tui-text-bright);
+  }
+
+  .user-role {
+    font-size: 11px;
+    color: var(--tui-muted);
+  }
+</style>
+

@@ -1,0 +1,50 @@
+<div class="page">
+  <div class="page-header">
+    <h1 class="page-title">🧾 Фискализация</h1>
+    <div class="page-subtitle">Очередь/ошибки чеков и статус доставки в ОФД</div>
+  </div>
+
+  <div class="card">
+    <div class="filters">
+      <%= form_with url: manager_finance_fiscal_receipts_path, method: :get, local: true, class: "filters-form" do |f| %>
+        <label class="label">
+          Тип
+          <%= f.select :type,
+              options_for_select([["Все", ""], *FiscalReceipt.types.keys.map { |t| [t, t] }], params[:type]),
+              {}, class: "input" %>
+        </label>
+        <label class="label">
+          Статус
+          <%= f.select :status,
+              options_for_select([["Все", ""], *FiscalReceipt.statuses.keys.map { |s| [s, s] }], params[:status]),
+              {}, class: "input" %>
+        </label>
+        <%= f.submit "Фильтр", class: "btn" %>
+        <%= link_to "Сброс", manager_finance_fiscal_receipts_path, class: "btn btn-ghost" %>
+      <% end %>
+    </div>
+
+    <% if @receipts.any? %>
+      <div class="table">
+        <% @receipts.each do |fr| %>
+          <div class="row">
+            <div class="row-main">
+              <%= link_to fr.order&.order_number || "order", manager_order_path(fr.order_id), class: "link" %>
+              <span class="pill"><%= fr.type %></span>
+              <span class="pill"><%= fr.status %></span>
+              <span class="muted"><%= fr.ofd_provider %></span>
+            </div>
+            <div class="row-meta">
+              <span class="muted"><%= fr.created_at&.strftime("%d.%m %H:%M") %></span>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="empty">Нет чеков</div>
+    <% end %>
+  </div>
+</div>
+
+<%= render "manager/shared/page_styles" %>
+

@@ -1,0 +1,29 @@
+<h1 class="pk-title">Очередь в производство</h1>
+<div class="pk-card">
+  <div class="pk-muted">Период: <%= @from %> — <%= @to %></div>
+  <div class="pk-muted">Заказов: <%= @orders.size %></div>
+</div>
+
+<div class="pk-card">
+  <h3>Спрос по продуктам</h3>
+  <table class="pk-table">
+    <thead><tr><th>Продукт</th><th>Кол-во</th></tr></thead>
+    <tbody>
+      <% @demand_result[:product_demand].each do |name, qty| %>
+        <tr><td><%= name %></td><td><%= qty %></td></tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<div class="pk-card">
+  <h3>Спрос по ингредиентам</h3>
+  <table class="pk-table">
+    <thead><tr><th>Ингредиент</th><th>Кол-во</th><th>Ед.</th></tr></thead>
+    <tbody>
+      <% @demand_result[:ingredient_demand].each do |row| %>
+        <tr><td><%= row[:name] %></td><td><%= row[:qty] %></td><td><%= row[:unit] %></td></tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

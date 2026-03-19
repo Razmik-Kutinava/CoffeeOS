@@ -1,0 +1,50 @@
+<div class="page">
+  <div class="page-header">
+    <h1 class="page-title">💳 Платежи</h1>
+    <div class="page-subtitle">Статусы, методы, провайдеры — диагностика оплат</div>
+  </div>
+
+  <div class="card">
+    <div class="filters">
+      <%= form_with url: manager_finance_payments_path, method: :get, local: true, class: "filters-form" do |f| %>
+        <label class="label">
+          Статус
+          <%= f.select :status,
+              options_for_select([["Все", ""], *Payment.statuses.keys.map { |s| [s, s] }], params[:status]),
+              {}, class: "input" %>
+        </label>
+        <label class="label">
+          Метод
+          <%= f.select :method,
+              options_for_select([["Все", ""], *Payment.methods.keys.map { |m| [m, m] }], params[:method]),
+              {}, class: "input" %>
+        </label>
+        <%= f.submit "Фильтр", class: "btn" %>
+        <%= link_to "Сброс", manager_finance_payments_path, class: "btn btn-ghost" %>
+      <% end %>
+    </div>
+
+    <% if @payments.any? %>
+      <div class="table">
+        <% @payments.each do |p| %>
+          <div class="row">
+            <div class="row-main">
+              <%= link_to p.order&.order_number || "order", manager_order_path(p.order_id), class: "link" %>
+              <span class="pill"><%= p.status %></span>
+              <span class="muted"><%= p.method %> / <%= p.provider %></span>
+            </div>
+            <div class="row-meta">
+              <span><%= p.amount %> ₽</span>
+              <span class="muted"><%= p.created_at&.strftime("%d.%m %H:%M") %></span>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="empty">Нет платежей</div>
+    <% end %>
+  </div>
+</div>
+
+<%= render "manager/shared/page_styles" %>
+

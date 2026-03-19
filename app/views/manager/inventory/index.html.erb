@@ -1,0 +1,29 @@
+<div class="page">
+  <div class="page-header">
+    <h1 class="page-title">📦 Склад</h1>
+    <div class="page-subtitle">Остатки по ингредиентам (office view)</div>
+  </div>
+
+  <div class="card">
+    <% if @stocks.any? %>
+      <div class="table">
+        <% @stocks.each do |s| %>
+          <div class="row">
+            <div class="row-main">
+              <span class="link" style="cursor: default; text-decoration: none;"><%= s.ingredient&.name || "ingredient##{s.ingredient_id}" %></span>
+            </div>
+            <div class="row-meta">
+              <span class="pill">qty: <%= s.qty %></span>
+              <span class="muted">min: <%= s.min_qty %></span>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="empty">Нет остатков</div>
+    <% end %>
+  </div>
+</div>
+
+<%= render "manager/shared/page_styles" %>
+

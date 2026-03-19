@@ -1,5 +1,9 @@
 class Refund < ApplicationRecord
-  enum status: { pending: 'pending', succeeded: 'succeeded', failed: 'failed' }
+  enum :status, {
+    pending: 'pending',
+    succeeded: 'succeeded',
+    failed: 'failed'
+  }
 
   belongs_to :tenant
   belongs_to :payment

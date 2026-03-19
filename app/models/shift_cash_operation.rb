@@ -1,5 +1,5 @@
 class ShiftCashOperation < ApplicationRecord
-  enum operation_type: { deposit: 'deposit', withdrawal: 'withdrawal', collection: 'collection' }
+  enum :operation_type, { deposit: 'deposit', withdrawal: 'withdrawal', collection: 'collection' }
 
   belongs_to :shift
   belongs_to :tenant

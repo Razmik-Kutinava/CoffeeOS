@@ -1,5 +1,5 @@
 class Ingredient < ApplicationRecord
-  enum unit: { g: 'g', ml: 'ml', pcs: 'pcs' }
+  enum :unit, { g: 'g', ml: 'ml', pcs: 'pcs' }
 
   has_many :ingredient_tenant_stocks, dependent: :destroy
   has_many :product_recipes, dependent: :destroy

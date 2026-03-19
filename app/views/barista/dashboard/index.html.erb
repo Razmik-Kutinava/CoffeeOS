@@ -1,0 +1,118 @@
+<% content_for :content do %>
+<div class="dashboard-page">
+  <div class="dashboard-header">
+    <h1 class="dashboard-title">📋 Заказы</h1>
+    <div class="dashboard-meta">
+      <span class="dashboard-time">⏰ <%= Time.current.strftime('%H:%M') %></span>
+      <span class="dashboard-stats">Заказов за смену: <%= @orders_count || 0 %></span>
+    </div>
+  </div>
+  
+  <div class="kanban" id="kanban">
+    <!-- Column 1: ACCEPTED -->
+    <div class="column">
+      <div class="column-header">
+        <div class="column-title">
+          <span class="column-dot dot-new"></span>
+          <span>ACCEPTED</span>
+          <span class="column-subtitle">Принять</span>
+        </div>
+        <span class="column-count" id="count-new"><%= @new_orders.count %></span>
+      </div>
+      <div class="cards" id="orders-new">
+        <% if @new_orders.any? %>
+          <%= render partial: 'order_card', collection: @new_orders, as: :order %>
+        <% else %>
+          <div class="empty-column">Нет заказов</div>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- Column 2: PREPARING -->
+    <div class="column">
+      <div class="column-header">
+        <div class="column-title">
+          <span class="column-dot dot-prep"></span>
+          <span>PREPARING</span>
+          <span class="column-subtitle">Готовлю</span>
+        </div>
+        <span class="column-count" id="count-preparing"><%= @preparing_orders.count %></span>
+      </div>
+      <div class="cards" id="orders-preparing">
+        <% if @preparing_orders.any? %>
+          <%= render partial: 'order_card', collection: @preparing_orders, as: :order %>
+        <% else %>
+          <div class="empty-column">Нет заказов</div>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- Column 3: READY -->
+    <div class="column">
+      <div class="column-header">
+        <div class="column-title">
+          <span class="column-dot dot-ready"></span>
+          <span>READY</span>
+          <span class="column-subtitle">К выдаче</span>
+        </div>
+        <span class="column-count" id="count-ready"><%= @ready_orders.count %></span>
+      </div>
+      <div class="cards" id="orders-ready">
+        <% if @ready_orders.any? %>
+          <%= render partial: 'order_card', collection: @ready_orders, as: :order %>
+        <% else %>
+          <div class="empty-column">Нет заказов</div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  
+  <div class="dashboard-footer">
+    <div class="footer-stats">
+      <span>Всего: <strong id="total-orders"><%= @new_orders.count + @preparing_orders.count + @ready_orders.count %></strong></span>
+      <span>В работе: <strong id="in-progress"><%= @preparing_orders.count %></strong></span>
+      <span>К выдаче: <strong id="ready-count"><%= @ready_orders.count %></strong></span>
+    </div>
+    <div class="footer-hint">💡 Подсказка: Перетащите карточку или нажмите кнопку</div>
+  </div>
+  
+  <!-- Turbo Stream подписка на real-time обновления -->
+  <%= turbo_stream_from "orders_#{Current.tenant_id}" %>
+</div>
+<% end %>
+
+<%= render 'barista/shared/layout' %>
+
+<script>
+  function formatTime(date) {
+    const mins = Math.floor((new Date() - new Date(date)) / 60000);
+    if (mins < 1) return 'just now';
+    if (mins < 60) return `${mins} min ago`;
+    const h = Math.floor(mins / 60);
+    const m = mins % 60;
+    return `${h}h ${m}m ago`;
+  }
+
+  function getTimerClass(date) {
+    const mins = Math.floor((new Date() - new Date(date)) / 60000);
+    if (mins > 10) return 'timer-critical';
+    if (mins > 5) return 'timer-warning';
+    return '';
+  }
+
+  function startTimers() {
+    setInterval(() => {
+      document.querySelectorAll('.order-timer').forEach(el => {
+        if (el.dataset.time) {
+          const date = new Date(el.dataset.time);
+          el.textContent = formatTime(date);
+          el.className = `order-timer ${getTimerClass(date)}`;
+        }
+      });
+    }, 1000);
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    startTimers();
+  });
+</script>

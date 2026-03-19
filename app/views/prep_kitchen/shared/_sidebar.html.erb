@@ -1,0 +1,28 @@
+<aside class="pk-sidebar">
+  <div class="pk-brand">🍳 Заготовочный цех</div>
+  <div class="pk-user">
+    <div><%= current_user&.name || "Пользователь" %></div>
+    <small><%= Current.role_code %></small>
+  </div>
+
+  <nav class="pk-nav">
+    <%= link_to "Дашборд", prep_kitchen_dashboard_path, class: "pk-nav-item #{'active' if request.path == prep_kitchen_dashboard_path}" %>
+    <%= link_to "Очередь", prep_kitchen_queue_path, class: "pk-nav-item #{'active' if request.path == prep_kitchen_queue_path}" %>
+    <%= link_to "Техкарты", prep_kitchen_recipes_path, class: "pk-nav-item #{'active' if request.path == prep_kitchen_recipes_path}" %>
+    <%= link_to "Склад", prep_kitchen_inventory_path, class: "pk-nav-item #{'active' if request.path == prep_kitchen_inventory_path}" %>
+    <%= link_to "Движения", prep_kitchen_movements_path, class: "pk-nav-item #{'active' if request.path.start_with?(prep_kitchen_movements_path)}" %>
+    <%= link_to "Стоп-лист", prep_kitchen_stop_list_path, class: "pk-nav-item #{'active' if request.path == prep_kitchen_stop_list_path}" %>
+    <%= link_to "Инциденты", prep_kitchen_incidents_path, class: "pk-nav-item #{'active' if request.path == prep_kitchen_incidents_path}" %>
+    <%= link_to "Отчеты", prep_kitchen_reports_path, class: "pk-nav-item #{'active' if request.path == prep_kitchen_reports_path}" %>
+  </nav>
+
+  <div class="pk-logout">
+    <%= button_to logout_path,
+      method: :delete,
+      data: { turbo_method: :delete },
+      class: "pk-nav-item pk-logout-btn" do %>
+      Выйти
+    <% end %>
+  </div>
+</aside>
+

@@ -1,0 +1,28 @@
+<h1 class="pk-title">Новое движение</h1>
+<div class="pk-card">
+  <%= form_with url: prep_kitchen_movements_path, method: :post, local: true do |f| %>
+    <div class="pk-form-row">
+      <%= f.label :movement_type, "Тип" %>
+      <%= f.select :movement_type, StockMovement.movement_types.keys, {}, class: "pk-select" %>
+    </div>
+    <div class="pk-form-row">
+      <%= f.label :note, "Комментарий" %>
+      <%= f.text_field :note, class: "pk-input" %>
+    </div>
+
+    <h3>Позиции</h3>
+    <% 3.times do |i| %>
+      <div class="pk-form-row">
+        <select name="movement[items][<%= i %>][ingredient_id]" class="pk-select">
+          <option value="">Ингредиент</option>
+          <% @ingredients.each do |ingredient| %>
+            <option value="<%= ingredient.id %>"><%= ingredient.name %></option>
+          <% end %>
+        </select>
+        <input class="pk-input" type="number" step="0.001" name="movement[items][<%= i %>][qty_change]" placeholder="qty_change">
+        <input class="pk-input" type="number" step="0.01" name="movement[items][<%= i %>][unit_cost]" placeholder="unit_cost">
+      </div>
+    <% end %>
+    <%= f.submit "Создать черновик", class: "pk-btn" %>
+  <% end %>
+</div>

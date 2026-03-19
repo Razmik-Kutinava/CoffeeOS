@@ -1,0 +1,48 @@
+<% 
+  # Определяем в какую колонку переместить заказ
+  target_column = case @order.status
+  when 'accepted'
+    'orders-new'
+  when 'preparing'
+    'orders-preparing'
+  when 'ready'
+    'orders-ready'
+  else
+    nil
+  end
+  
+  # Определяем из какой колонки удалить
+  old_status = params[:old_status] || @order.order_status_logs.order(created_at: :desc).second&.status_to || 'accepted'
+  source_column = case old_status
+  when 'accepted'
+    'orders-new'
+  when 'preparing'
+    'orders-preparing'
+  when 'ready'
+    'orders-ready'
+  else
+    nil
+  end
+%>
+
+<% if source_column && source_column != target_column %>
+  <%= turbo_stream.remove "order_#{@order.id}" %>
+<% end %>
+
+<% if target_column %>
+  <%= turbo_stream.append target_column do %>
+    <%= render partial: 'order_card', locals: { order: @order } %>
+  <% end %>
+<% end %>
+
+<%= turbo_stream.replace "count-new" do %>
+  <%= render partial: 'count_badge', locals: { count: Order.for_barista_board(Current.tenant_id).where(status: 'accepted').count, type: 'new' } %>
+<% end %>
+
+<%= turbo_stream.replace "count-preparing" do %>
+  <%= render partial: 'count_badge', locals: { count: Order.for_barista_board(Current.tenant_id).where(status: 'preparing').count, type: 'preparing' } %>
+<% end %>
+
+<%= turbo_stream.replace "count-ready" do %>
+  <%= render partial: 'count_badge', locals: { count: Order.for_barista_board(Current.tenant_id).where(status: 'ready').count, type: 'ready' } %>
+<% end %>

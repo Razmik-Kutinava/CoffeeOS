@@ -1,5 +1,5 @@
 class Payment < ApplicationRecord
-  enum method: {
+  enum :method, {
     card: 'card',
     cash: 'cash',
     sbp: 'sbp',
@@ -8,7 +8,7 @@ class Payment < ApplicationRecord
     internal_balance: 'internal_balance',
     mixed: 'mixed'
   }
-  enum status: {
+  enum :status, {
     pending: 'pending',
     processing: 'processing',
     succeeded: 'succeeded',

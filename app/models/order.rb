@@ -1,5 +1,5 @@
 class Order < ApplicationRecord
-  enum status: {
+  enum :status, {
     pending_payment: 'pending_payment',
     accepted: 'accepted',
     preparing: 'preparing',
@@ -8,17 +8,21 @@ class Order < ApplicationRecord
     closed: 'closed',
     cancelled: 'cancelled'
   }
-  enum source: { kiosk: 'kiosk', app: 'app', manual: 'manual', mobile: 'mobile' }
+  enum :source, { kiosk: 'kiosk', app: 'app', manual: 'manual', mobile: 'mobile' }
 
   belongs_to :tenant
   belongs_to :customer, class_name: 'MobileCustomer', foreign_key: 'customer_id', optional: true
+  belongs_to :cash_shift, optional: true
   # cancel_reason_code - ссылка на order_cancel_reasons.code (без FK в Rails, только в БД)
   # cancel_stage - строка, не enum
   has_many :order_items, dependent: :destroy
   has_many :order_status_logs, dependent: :destroy
   has_many :payments, dependent: :destroy
 
-  validates :order_number, presence: true
+  # `barista/orders#create` создаёт Order с пустым `order_number: ''`,
+  # рассчитывая на заполнение на уровне БД (триггер). Чтобы Rails не
+  # блокировал insert, разрешаем пустой номер для этого сценария.
+  validates :order_number, presence: true, unless: -> { order_number.blank? && source == 'manual' }
   validates :source, presence: true
   validates :status, presence: true
   validates :total_amount, presence: true, numericality: { greater_than: 0 }
@@ -27,7 +31,7 @@ class Order < ApplicationRecord
   validate :amounts_consistency
 
   scope :for_current_tenant, -> { where(tenant_id: Current.tenant_id) }
-  scope :for_barista_board, ->(tenant_id) { where(tenant_id: tenant_id, status: ['accepted', 'preparing', 'ready']) }
+  scope :for_barista_board, ->(tenant_id) { where(tenant_id: tenant_id).where(status: %w[accepted preparing ready]) }
   scope :active, -> { where(status: ['accepted', 'preparing', 'ready']) }
   scope :recent, -> { order(created_at: :desc) }
   scope :mobile, -> { where(source: 'mobile') }

@@ -1,0 +1,28 @@
+<h1 class="pk-title">Инциденты цеха</h1>
+
+<div class="pk-card">
+  <h3>Out of stock</h3>
+  <ul>
+    <% @incidents[:out_of_stock].each do |row| %>
+      <li><%= row.ingredient&.name %> — остаток <%= row.qty %></li>
+    <% end %>
+  </ul>
+</div>
+
+<div class="pk-card">
+  <h3>Low stock</h3>
+  <ul>
+    <% @incidents[:low_stock].each do |row| %>
+      <li><%= row.ingredient&.name %> — <%= row.qty %> / min <%= row.min_qty %></li>
+    <% end %>
+  </ul>
+</div>
+
+<div class="pk-card">
+  <h3>Старые черновики</h3>
+  <ul>
+    <% @incidents[:stale_drafts].each do |row| %>
+      <li><%= row.id %> — <%= row.movement_type %> — <%= row.created_at %></li>
+    <% end %>
+  </ul>
+</div>

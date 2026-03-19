@@ -1,0 +1,23 @@
+<h1 class="pk-title">Техкарты</h1>
+<div class="pk-card">
+  <table class="pk-table">
+    <thead><tr><th>Продукт</th><th>Базовая рецептура</th><th>Модификаторы</th></tr></thead>
+    <tbody>
+      <% @products.each do |product| %>
+        <tr>
+          <td><%= product.name %></td>
+          <td>
+            <% @recipes_by_product[product.id].to_a.each do |row| %>
+              <div><%= row.ingredient&.name %>: <%= row.qty_per_serving %></div>
+            <% end %>
+          </td>
+          <td>
+            <% @modifier_effects_by_product[product.id].to_a.each do |row| %>
+              <div><%= row.option&.name %> -> <%= row.ingredient&.name %>: <%= row.qty_change %></div>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

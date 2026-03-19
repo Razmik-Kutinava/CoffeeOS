@@ -1,0 +1,33 @@
+<div class="page">
+  <div class="page-header">
+    <h1 class="page-title">🍽️ Меню точки</h1>
+    <div class="page-subtitle">Цены/включение/stop-list (пока read-only, дальше добавим операции)</div>
+  </div>
+
+  <div class="card">
+    <% if @settings.any? %>
+      <div class="table">
+        <% @settings.each do |s| %>
+          <div class="row">
+            <div class="row-main">
+              <span class="link" style="cursor: default; text-decoration: none;"><%= s.product&.name || "product##{s.product_id}" %></span>
+              <% if s.is_sold_out %>
+                <span class="pill" style="border-color: rgba(255, 0, 110, 0.45); background: rgba(255, 0, 110, 0.10);">sold_out</span>
+                <span class="muted"><%= s.sold_out_reason %></span>
+              <% end %>
+            </div>
+            <div class="row-meta">
+              <span class="pill">price: <%= s.price %> ₽</span>
+              <span class="muted"><%= s.is_enabled ? "enabled" : "disabled" %></span>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="empty">Нет настроек меню</div>
+    <% end %>
+  </div>
+</div>
+
+<%= render "manager/shared/page_styles" %>
+

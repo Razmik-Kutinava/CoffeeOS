@@ -44,62 +44,35 @@ class ApplicationRecord < ActiveRecord::Base
       return yield
     end
     
-    # Сохранить старые значения
-    old_tenant = begin
-      result = conn.execute("SHOW app.current_tenant_id")
-      result.first&.dig('app.current_tenant_id')
-    rescue PG::InFailedSqlTransaction
-      return yield
-    rescue
-      nil
-    end
-    
-    old_user = begin
-      result = conn.execute("SHOW app.current_user_id")
-      result.first&.dig('app.current_user_id')
-    rescue PG::InFailedSqlTransaction
-      return yield
-    rescue
-      nil
-    end
-    
     begin
       # Установить новые значения
       if Current.tenant_id
-        conn.execute("SET LOCAL app.current_tenant_id = '#{Current.tenant_id}'")
+        begin
+          conn.execute("SET LOCAL app.current_tenant_id = '#{Current.tenant_id}'")
+        rescue ActiveRecord::StatementInvalid => e
+          # Dev/test may run without custom GUCs/RLS bootstrap. Don't break writes.
+          raise e unless e.message.include?("unrecognized configuration parameter")
+        end
       end
       if Current.user_id
-        conn.execute("SET LOCAL app.current_user_id = '#{Current.user_id}'")
+        begin
+          conn.execute("SET LOCAL app.current_user_id = '#{Current.user_id}'")
+        rescue ActiveRecord::StatementInvalid => e
+          raise e unless e.message.include?("unrecognized configuration parameter")
+        end
       end
       
       yield
     rescue PG::InFailedSqlTransaction, ActiveRecord::StatementInvalid => e
-      # Если транзакция провалилась, пробрасываем ошибку дальше
-      raise e
-    ensure
-      # Восстановить только если транзакция еще активна и не провалилась
-      begin
-        return unless conn.transaction_open?
-        
-        # Проверяем состояние транзакции перед восстановлением
-        conn.execute("SELECT 1")
-        
-        if old_tenant.present?
-          conn.execute("SET LOCAL app.current_tenant_id = '#{old_tenant}'")
-        else
-          conn.execute("RESET app.current_tenant_id")
-        end
-        
-        if old_user.present?
-          conn.execute("SET LOCAL app.current_user_id = '#{old_user}'")
-        else
-          conn.execute("RESET app.current_user_id")
-        end
-      rescue PG::InFailedSqlTransaction, ActiveRecord::StatementInvalid
-        # Игнорируем ошибки при восстановлении в провалившейся транзакции
-      rescue
-        # Игнорируем другие ошибки при восстановлении
+      # If transaction failed or context isn't supported, let the error propagate
+      # unless it's the optional custom GUC missing.
+      if e.is_a?(ActiveRecord::StatementInvalid) && e.message.include?("unrecognized configuration parameter")
+        yield
+      else
+        raise e
       end
+    ensure
+      # No-op: SET LOCAL is scoped to the current transaction and will be reset automatically.
     end
   end
 end

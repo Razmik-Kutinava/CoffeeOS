@@ -1,0 +1,82 @@
+<div class="min-h-screen bg-tui-bg text-tui-text font-mono">
+  <%= render 'barista/shared/sidebar' %>
+
+  <main class="ml-64 p-6">
+    <div class="bg-tui-bg-secondary rounded-2xl border border-tui-border max-w-2xl mx-auto">
+      <div class="p-6">
+        <div class="flex justify-between items-start mb-6">
+          <div>
+            <h3 class="text-3xl font-bold"><%= @order.order_number %></h3>
+            <p class="text-tui-muted"><%= @order.created_at.strftime('%H:%M') %> • <%= time_ago_in_words(@order.created_at) %> назад</p>
+          </div>
+          <%= link_to barista_dashboard_path, class: "text-tui-muted hover:text-white text-2xl" do %>
+            ×
+          <% end %>
+        </div>
+
+        <div class="grid grid-cols-2 gap-6">
+          <div>
+            <h4 class="font-bold mb-3">Позиции заказа:</h4>
+            <div class="space-y-2">
+              <% @order_items.each do |item| %>
+                <div class="flex justify-between py-2 border-b border-tui-border">
+                  <span><%= item.quantity %>× <%= item.product_name %></span>
+                  <span class="text-tui-muted">
+                    <% if item.modifier_options.present? %>
+                      <% modifiers = JSON.parse(item.modifier_options) rescue {} %>
+                      <%= modifiers.values.join(', ') || '—' %>
+                    <% else %>
+                      —
+                    <% end %>
+                  </span>
+                </div>
+              <% end %>
+            </div>
+          </div>
+          
+          <div>
+            <h4 class="font-bold mb-3">Информация:</h4>
+            <div class="space-y-2 text-sm">
+              <div class="flex justify-between">
+                <span class="text-tui-muted">Источник:</span>
+                <span><%= @order.source == 'kiosk' ? 'Киоск' : @order.source == 'app' ? 'Приложение' : 'Ручной' %></span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-tui-muted">Статус:</span>
+                <span><%= @order.status == 'accepted' ? 'Принят' : @order.status == 'preparing' ? 'Готовится' : @order.status == 'ready' ? 'Готов' : @order.status %></span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-tui-muted">Оплата:</span>
+                <span>
+                  <% if @order.payments.any? && @order.payments.first.status == 'succeeded' %>
+                    Оплачено
+                  <% else %>
+                    Не оплачено
+                  <% end %>
+                </span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-tui-muted">Клиент:</span>
+                <span><%= @order.customer_name || 'Гость' %></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="border-t border-tui-border mt-6 pt-6">
+          <div class="flex justify-between items-center mb-6">
+            <span class="text-2xl font-bold">Итого:</span>
+            <span class="text-4xl font-bold"><%= number_to_currency(@order.final_amount, unit: '₽', format: '%n %u', delimiter: ' ') %></span>
+          </div>
+          
+          <div class="flex space-x-3">
+            <%= link_to "Закрыть", barista_dashboard_path, class: "flex-1 bg-gray-700 hover:bg-gray-600 py-3 rounded-lg font-medium transition text-center block" %>
+            <button class="flex-1 bg-barista-accent hover:bg-blue-600 py-3 rounded-lg font-medium transition">
+              🖨️ Чек
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>

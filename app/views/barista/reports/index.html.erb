@@ -1,0 +1,94 @@
+<% content_for :content do %>
+<div class="reports-page">
+  <div class="reports-header">
+    <h1 class="reports-title">📊 Отчёты</h1>
+  </div>
+  
+  <% if @shift %>
+    <div class="reports-section">
+      <h2 class="section-title">Статистика за смену</h2>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">Заказов</div>
+          <div class="stat-value"><%= @orders_count || 0 %></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Выручка</div>
+          <div class="stat-value"><%= number_to_currency(@revenue || 0, unit: '₽', format: '%n %u', delimiter: ' ', precision: 0) %></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Средний чек</div>
+          <div class="stat-value"><%= number_to_currency(@average_check || 0, unit: '₽', format: '%n %u', delimiter: ' ') %></div>
+        </div>
+      </div>
+    </div>
+  <% else %>
+    <div class="empty-state">
+      <p>Смена не открыта</p>
+    </div>
+  <% end %>
+</div>
+<% end %>
+
+<%= render 'barista/shared/layout' %>
+
+<style>
+  .reports-page {
+    max-width: 900px;
+  }
+  
+  .reports-header {
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #1e262c;
+  }
+  
+  .reports-title {
+    font-size: 20px;
+    font-weight: 500;
+    color: #d4dcec;
+    margin: 0;
+  }
+  
+  .reports-section {
+    margin-bottom: 32px;
+  }
+  
+  .section-title {
+    font-size: 16px;
+    font-weight: 500;
+    color: #d4dcec;
+    margin-bottom: 16px;
+  }
+  
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  
+  .stat-card {
+    background: #0f1214;
+    border: 1px solid #1e262c;
+    border-radius: 12px;
+    padding: 20px;
+  }
+  
+  .stat-label {
+    font-size: 12px;
+    color: #6e7b8c;
+    margin-bottom: 8px;
+  }
+  
+  .stat-value {
+    font-size: 24px;
+    font-weight: 600;
+    color: #d4dcec;
+  }
+  
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #6e7b8c;
+  }
+</style>

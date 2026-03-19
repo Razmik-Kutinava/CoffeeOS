@@ -1,0 +1,397 @@
+<% content_for :content do %>
+<div class="create-order-page">
+  <!-- Header -->
+  <div class="mb-6">
+    <h1 class="text-3xl font-bold mb-2">Создание заказа</h1>
+  </div>
+
+  <!-- Main Content: Catalog + Cart -->
+  <div class="grid grid-cols-3 gap-6">
+    <!-- Left Column: Catalog (2/3 width) -->
+    <div class="col-span-2 bg-tui-bg-secondary rounded-xl border border-tui-border p-6">
+      <!-- Category Tabs -->
+      <div class="flex justify-between items-center mb-6">
+        <div class="flex space-x-4">
+          <button onclick="filterCategory('all')" class="tab-active px-4 py-2 text-sm font-medium border-b-2 border-barista-accent text-barista-accent">Все</button>
+          <% @categories.each do |category| %>
+            <button onclick="filterCategory('<%= category.slug %>')" class="px-4 py-2 text-sm text-tui-muted hover:text-white transition" data-category="<%= category.slug %>">
+              <%= category.name %>
+            </button>
+          <% end %>
+        </div>
+        <!-- Search Input -->
+        <input type="text" id="product-search" placeholder="🔍 Поиск продукта..." class="bg-gray-800 border border-tui-border rounded-lg px-4 py-2 text-sm text-tui-text w-64">
+      </div>
+      
+      <!-- Product Grid (4 columns) -->
+      <div class="grid grid-cols-4 gap-4" id="product-catalog">
+        <% @products.each do |product| %>
+          <% setting = product.product_tenant_settings.find_by(tenant_id: Current.tenant_id) %>
+          <% next unless setting&.is_enabled %>
+          <div class="product-card bg-gray-800 rounded-xl p-4 border border-tui-border cursor-pointer transition hover:border-barista-accent hover:transform hover:-translate-y-1 <%= 'opacity-50 cursor-not-allowed' if setting.is_sold_out %>" 
+               onclick="<%= setting.is_sold_out ? '' : "addToCart('#{product.id}', '#{product.name}', #{setting.price || 0})" %>"
+               data-category="<%= product.category&.slug || 'all' %>">
+            <div class="text-4xl mb-2">☕</div>
+            <div class="font-medium mb-1 text-sm"><%= product.name %></div>
+            <div class="text-barista-accent font-bold"><%= number_to_currency(setting.price, unit: '₽', format: '%n %u', delimiter: ' ') %></div>
+            <% if setting.is_sold_out %>
+              <div class="text-status-cancelled text-xs mt-1">⛔ Стоп (<%= setting.stock_qty == 0 ? 'Закончился' : 'Нет ингредиентов' %>)</div>
+            <% else %>
+              <div class="text-status-ready text-xs mt-1">✅ В наличии</div>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- Right Column: Cart (1/3 width) -->
+    <div class="bg-tui-bg-secondary rounded-xl border border-tui-border p-6">
+      <h3 class="text-xl font-bold mb-4">Корзина</h3>
+      
+      <!-- Customer Search -->
+      <div class="mb-4">
+        <label class="block text-sm text-tui-muted mb-2">Клиент (опционально)</label>
+        <input type="text" id="customer-search" placeholder="Телефон или имя" class="w-full bg-gray-800 border border-tui-border rounded-lg px-4 py-2 text-sm text-tui-text">
+      </div>
+      
+      <!-- Promo Code -->
+      <div class="mb-4">
+        <label class="block text-sm text-tui-muted mb-2">Промокод</label>
+        <div class="flex gap-2">
+          <input type="text" id="promo-code-input" placeholder="Введите промокод" class="flex-1 bg-gray-800 border border-tui-border rounded-lg px-4 py-2 text-sm text-tui-text">
+          <button onclick="applyPromoCode()" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg text-sm transition">Применить</button>
+        </div>
+        <div id="promo-code-status" class="mt-2 text-xs"></div>
+      </div>
+      
+      <!-- Cart Items (Scrollable) -->
+      <div id="cart-items" class="space-y-3 mb-4 max-h-[35vh] overflow-y-auto scrollbar-hide">
+        <div class="text-tui-muted text-center py-8 text-sm">Корзина пуста</div>
+      </div>
+      
+      <!-- Totals Section -->
+      <div class="border-t border-tui-border pt-4 mb-4">
+        <div class="flex justify-between mb-2 text-sm">
+          <span class="text-tui-muted">Сумма:</span>
+          <span class="font-medium" id="cart-subtotal">0 ₽</span>
+        </div>
+        <div class="flex justify-between mb-2 text-sm">
+          <span class="text-tui-muted">Скидка:</span>
+          <span class="font-medium text-status-ready" id="cart-discount">0 ₽</span>
+        </div>
+        <div class="flex justify-between text-lg font-bold">
+          <span>Итого:</span>
+          <span id="cart-total">0 ₽</span>
+        </div>
+      </div>
+      
+      <!-- Action Buttons -->
+      <button onclick="showPaymentModal()" class="w-full bg-barista-accent hover:bg-blue-600 py-3 rounded-lg font-medium transition mb-3">
+        💳 Оплатить
+      </button>
+      <button onclick="clearCart()" class="w-full bg-gray-700 hover:bg-gray-600 py-3 rounded-lg font-medium transition">
+        🗑️ Очистить
+      </button>
+    </div>
+  </div>
+  
+  <!-- Payment Modal -->
+  <div class="modal-overlay" id="modal-payment">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>Оплата</h2>
+        <div class="modal-close" onclick="closePaymentModal()">✕</div>
+      </div>
+      <div class="modal-body">
+        <div class="payment-total-section">
+          <div class="payment-label">Сумма к оплате:</div>
+          <div class="payment-amount" id="payment-total">0 ₽</div>
+        </div>
+        <div class="payment-methods">
+          <button onclick="processPayment('cash')" class="payment-btn payment-btn-cash">
+            💵 Наличные
+          </button>
+          <button onclick="processPayment('card')" class="payment-btn payment-btn-card">
+            💳 Карта
+          </button>
+          <button onclick="processPayment('sbp')" class="payment-btn payment-btn-sbp">
+            📱 СБП
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<% end %>
+
+<%= render 'barista/shared/layout' %>
+
+<script>
+  let cart = [];
+  
+  function addToCart(productId, productName, price) {
+    const existing = cart.find(c => c.id === productId);
+    if (existing) {
+      existing.qty++;
+    } else {
+      cart.push({ id: productId, name: productName, price: price, qty: 1 });
+    }
+    renderCart();
+    showToast('Товар добавлен в корзину', 'success');
+  }
+  
+  function renderCart() {
+    const subtotal = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+    const promoCode = document.getElementById('promo-code-input')?.value.trim() || '';
+    const discount = promoCode ? (subtotal * 0.1) : 0; // 10% скидка если промокод есть
+    const total = subtotal - discount;
+    
+    const cartItems = document.getElementById('cart-items');
+    if (cart.length === 0) {
+      cartItems.innerHTML = '<div class="text-tui-muted text-center py-8 text-sm">Корзина пуста</div>';
+    } else {
+      cartItems.innerHTML = cart.map((item, idx) => `
+        <div class="flex justify-between items-center bg-gray-800 rounded-lg p-3">
+          <div>
+            <div class="font-medium text-sm">${item.qty}× ${item.name}</div>
+            <div class="text-xs text-tui-muted">${(item.price * item.qty).toLocaleString('ru-RU')} ₽</div>
+          </div>
+          <div class="flex space-x-2">
+            <button onclick="updateCartQty(${idx}, -1)" class="text-tui-muted hover:text-white text-lg">−</button>
+            <button onclick="updateCartQty(${idx}, 1)" class="text-tui-muted hover:text-white text-lg">+</button>
+            <button onclick="removeFromCart(${idx})" class="text-status-cancelled hover:text-red-300 text-lg">×</button>
+          </div>
+        </div>
+      `).join('');
+    }
+    
+    document.getElementById('cart-subtotal').textContent = `${subtotal.toLocaleString('ru-RU')} ₽`;
+    document.getElementById('cart-discount').textContent = `${discount.toLocaleString('ru-RU')} ₽`;
+    document.getElementById('cart-total').textContent = `${total.toLocaleString('ru-RU')} ₽`;
+  }
+  
+  function updateCartQty(idx, delta) {
+    cart[idx].qty += delta;
+    if (cart[idx].qty <= 0) cart.splice(idx, 1);
+    renderCart();
+  }
+  
+  function removeFromCart(idx) {
+    cart.splice(idx, 1);
+    renderCart();
+  }
+  
+  function clearCart() {
+    if (cart.length === 0) return;
+    if (confirm('Очистить корзину?')) {
+      cart = [];
+      renderCart();
+      showToast('Корзина очищена', 'success');
+    }
+  }
+  
+  function showPaymentModal() {
+    const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+    if (total === 0) {
+      showToast('Корзина пуста', 'warning');
+      return;
+    }
+    document.getElementById('payment-total').textContent = `${total.toLocaleString('ru-RU')} ₽`;
+    document.getElementById('modal-payment').classList.add('active');
+  }
+  
+  function processPayment(method) {
+    const customerName = document.getElementById('customer-search').value;
+    const promoCode = document.getElementById('promo-code-input')?.value || '';
+    
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = '<%= barista_orders_path %>';
+    
+    // CSRF token
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
+    const csrfInput = document.createElement('input');
+    csrfInput.type = 'hidden';
+    csrfInput.name = 'authenticity_token';
+    csrfInput.value = csrfToken;
+    form.appendChild(csrfInput);
+    
+    // Cart items
+    cart.forEach((item, idx) => {
+      const productIdInput = document.createElement('input');
+      productIdInput.type = 'hidden';
+      productIdInput.name = `cart_items[${idx}][product_id]`;
+      productIdInput.value = item.id;
+      form.appendChild(productIdInput);
+      
+      const qtyInput = document.createElement('input');
+      qtyInput.type = 'hidden';
+      qtyInput.name = `cart_items[${idx}][quantity]`;
+      qtyInput.value = item.qty;
+      form.appendChild(qtyInput);
+    });
+    
+    // Payment method
+    const methodInput = document.createElement('input');
+    methodInput.type = 'hidden';
+    methodInput.name = 'payment_method';
+    methodInput.value = method;
+    form.appendChild(methodInput);
+    
+    // Customer name
+    if (customerName) {
+      const nameInput = document.createElement('input');
+      nameInput.type = 'hidden';
+      nameInput.name = 'customer_name';
+      nameInput.value = customerName;
+      form.appendChild(nameInput);
+    }
+    
+    // Promo code
+    if (promoCode) {
+      const promoInput = document.createElement('input');
+      promoInput.type = 'hidden';
+      promoInput.name = 'promo_code';
+      promoInput.value = promoCode;
+      form.appendChild(promoInput);
+    }
+    
+    document.body.appendChild(form);
+    form.submit();
+  }
+  
+  function closePaymentModal() {
+    document.getElementById('modal-payment').classList.remove('active');
+  }
+  
+  function applyPromoCode() {
+    const promoCode = document.getElementById('promo-code-input').value.trim();
+    const statusDiv = document.getElementById('promo-code-status');
+    
+    if (!promoCode) {
+      statusDiv.innerHTML = '<span style="color: #6e7b8c;">Введите промокод</span>';
+      return;
+    }
+    
+    // TODO: валидация через API когда будет модель PromoCode
+    // Пока просто показываем что промокод применён
+    statusDiv.innerHTML = '<span style="color: #7cf0a0;">✓ Промокод применён (скидка 10%)</span>';
+    renderCart(); // Пересчитываем с учётом скидки
+  }
+  
+  function filterCategory(cat) {
+    document.querySelectorAll('.tab-active').forEach(tab => tab.classList.remove('tab-active', 'border-b-2', 'border-barista-accent', 'text-barista-accent'));
+    document.querySelectorAll('.product-card').forEach(card => {
+      if (cat === 'all' || card.dataset.category === cat) {
+        card.style.display = 'block';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+    
+    const activeTab = cat === 'all' 
+      ? document.querySelector('[onclick="filterCategory(\'all\')"]')
+      : document.querySelector(`[data-category="${cat}"]`);
+    if (activeTab) {
+      activeTab.classList.add('tab-active', 'border-b-2', 'border-barista-accent', 'text-barista-accent');
+    }
+  }
+  
+  // Search handler
+  document.addEventListener('DOMContentLoaded', () => {
+    const searchInput = document.getElementById('product-search');
+    if (searchInput) {
+      searchInput.addEventListener('input', (e) => {
+        const query = e.target.value.toLowerCase();
+        document.querySelectorAll('.product-card').forEach(card => {
+          const name = card.querySelector('.font-medium').textContent.toLowerCase();
+          if (name.includes(query)) {
+            card.style.display = 'block';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+    }
+  });
+</script>
+
+<style>
+  .scrollbar-hide::-webkit-scrollbar { display: none; }
+  .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+  
+  .tab-active {
+    color: #7bc5f0;
+  }
+  
+  .product-card:hover {
+    border-color: #7bc5f0;
+  }
+  
+  /* Payment Modal Styles */
+  .payment-total-section {
+    text-align: center;
+    margin-bottom: 24px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid #1e262c;
+  }
+  
+  .payment-label {
+    font-size: 13px;
+    color: #6e7b8c;
+    margin-bottom: 8px;
+  }
+  
+  .payment-amount {
+    font-size: 32px;
+    font-weight: 600;
+    color: #7cf0a0;
+  }
+  
+  .payment-methods {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .payment-btn {
+    padding: 16px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: inherit;
+  }
+  
+  .payment-btn-cash {
+    background: #1a3326;
+    border-color: #3a9b5e;
+    color: #7cf0a0;
+  }
+  
+  .payment-btn-cash:hover {
+    background: #2d4c3a;
+  }
+  
+  .payment-btn-card {
+    background: #1e2a33;
+    border-color: #2d4c66;
+    color: #7bc5f0;
+  }
+  
+  .payment-btn-card:hover {
+    background: #2d4c66;
+  }
+  
+  .payment-btn-sbp {
+    background: #2a1e33;
+    border-color: #4c2d66;
+    color: #c97cf0;
+  }
+  
+  .payment-btn-sbp:hover {
+    background: #3d2d4c;
+  }
+</style>

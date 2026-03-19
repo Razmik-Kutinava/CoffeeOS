@@ -1,0 +1,91 @@
+<div class="page">
+  <div class="page-header">
+    <h1 class="page-title">Смена <span class="accent">#<%= @shift.id %></span></h1>
+    <div class="page-subtitle">
+      <span class="pill"><%= @shift.status %></span>
+      <span class="muted"><%= @shift.opened_at&.strftime("%d.%m %H:%M") %> → <%= @shift.closed_at&.strftime("%d.%m %H:%M") || "…" %></span>
+      <%= link_to "Закрыть смену (Wizard)", manager_close_shift_path(@shift), class: "btn" %>
+    </div>
+  </div>
+
+  <div class="grid grid-2">
+    <section class="card">
+      <div class="card-title">Касса</div>
+      <div class="kv">
+        <div class="kv-row"><span class="muted">opening</span><span><%= @shift.opening_cash %> ₽</span></div>
+        <div class="kv-row"><span class="muted">closing</span><span><%= @shift.closing_cash || "-" %> ₽</span></div>
+      </div>
+    </section>
+    <section class="card">
+      <div class="card-title">Операции по кассе</div>
+      <% if @cash_ops.any? %>
+        <div class="table">
+          <% @cash_ops.each do |op| %>
+            <div class="row">
+              <div class="row-main">
+                <span class="pill"><%= op.operation_type %></span>
+                <span class="muted"><%= op.comment %></span>
+              </div>
+              <div class="row-meta">
+                <span><%= op.amount %> ₽</span>
+                <span class="muted"><%= op.created_at&.strftime("%d.%m %H:%M") %></span>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="empty">Нет операций</div>
+      <% end %>
+    </section>
+  </div>
+
+  <div class="grid">
+    <section class="card">
+      <div class="card-title">Платежи смены</div>
+      <% if @payments.any? %>
+        <div class="table">
+          <% @payments.each do |p| %>
+            <div class="row">
+              <div class="row-main">
+                <%= link_to p.order&.order_number || "order", manager_order_path(p.order_id), class: "link" %>
+                <span class="pill"><%= p.status %></span>
+                <span class="muted"><%= p.method %></span>
+              </div>
+              <div class="row-meta">
+                <span><%= p.amount %> ₽</span>
+                <span class="muted"><%= p.created_at&.strftime("%d.%m %H:%M") %></span>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="empty">Нет платежей</div>
+      <% end %>
+    </section>
+
+    <section class="card">
+      <div class="card-title">Заказы смены</div>
+      <% if @orders.any? %>
+        <div class="table">
+          <% @orders.each do |o| %>
+            <div class="row">
+              <div class="row-main">
+                <%= link_to o.order_number, manager_order_path(o), class: "link" %>
+                <span class="pill"><%= o.status %></span>
+              </div>
+              <div class="row-meta">
+                <span><%= o.final_amount %> ₽</span>
+                <span class="muted"><%= o.created_at&.strftime("%d.%m %H:%M") %></span>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="empty">Нет заказов</div>
+      <% end %>
+    </section>
+  </div>
+</div>
+
+<%= render "manager/shared/page_styles" %>
+
