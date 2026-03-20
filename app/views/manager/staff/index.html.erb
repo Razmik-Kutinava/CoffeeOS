@@ -2,6 +2,9 @@
   <div class="page-header">
     <h1 class="page-title">👥 Персонал</h1>
     <div class="page-subtitle">Пользователи точки и их роли</div>
+    <% if office_or_franchise_manager? || uk_in_manager? %>
+      <%= link_to "Добавить", new_manager_staff_member_path, class: "link" %>
+    <% end %>
   </div>
 
   <div class="card">
@@ -17,6 +20,9 @@
             </div>
             <div class="row-meta">
               <span class="muted"><%= u.roles.map(&:code).join(", ") %></span>
+              <% if office_or_franchise_manager? || uk_in_manager? %>
+                <%= link_to "Изменить", edit_manager_staff_member_path(u), class: "link" %>
+              <% end %>
             </div>
           </div>
         <% end %>

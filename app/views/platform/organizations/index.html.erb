@@ -1,0 +1,12 @@
+<h1 style="font-size: 1.4rem;">Организации</h1>
+<p><%= link_to "Новая", new_platform_organization_path, style: "color: #93c5fd;" %></p>
+<ul>
+  <% @organizations.each do |o| %>
+    <li style="margin: 8px 0;">
+      <%= o.name %> (<%= o.slug %>)
+      <%= link_to "Правка", edit_platform_organization_path(o), style: "color: #93c5fd;" %> ·
+      <%= link_to "Владелец", new_platform_franchise_owner_path(organization_id: o.id), style: "color: #93c5fd;" %> ·
+      <%= link_to "Точка", new_platform_tenant_path(organization_id: o.id), style: "color: #93c5fd;" %>
+    </li>
+  <% end %>
+</ul>

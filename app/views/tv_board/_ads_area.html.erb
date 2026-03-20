@@ -1,0 +1,6 @@
+<div id="tv-ads-area" class="tv-ads-area">
+  <% effective = local_assigns.fetch(:effective_limit, tv_setting.show_order_count.to_i).to_i %>
+  <% if effective <= 0 %>
+    <div class="tv-ads-placeholder">ADS PLACEHOLDER</div>
+  <% end %>
+</div>

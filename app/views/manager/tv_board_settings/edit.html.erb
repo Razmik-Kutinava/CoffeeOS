@@ -1,0 +1,57 @@
+<div class="page">
+  <div class="page-header">
+    <h1 class="page-title">📺 Настройки TV-борда</h1>
+    <div class="page-subtitle">
+      Лимит карточек в колонках на всех ТВ точки. Режим «очередь / реклама» для каждой ТВ — в
+      <%= link_to "Устройствах", manager_devices_path, class: "link" %>.
+    </div>
+  </div>
+
+  <div class="card">
+    <%= form_with model: @tv_setting, url: manager_tv_board_settings_path, method: :patch do |f| %>
+      <div class="grid grid-2">
+        <div class="kv">
+          <div class="kv-row">
+            <div class="label">
+              Показ очереди (0 = реклама)
+            </div>
+            <%= f.number_field :show_order_count, class: "input", min: 0, max: 50, step: 1 %>
+          </div>
+
+          <div class="kv-row">
+            <div class="label">
+              Таймер READY (сек)
+            </div>
+            <%= f.number_field :display_seconds_ready, class: "input", min: 1, max: 300, step: 1 %>
+          </div>
+
+          <div class="kv-row">
+            <div class="label">
+              Тема
+            </div>
+            <%= f.select :theme,
+              options_for_select([["dark", "dark"], ["light", "light"], ["brand", "brand"]], @tv_setting.theme),
+              {},
+              { class: "input" } %>
+          </div>
+        </div>
+
+        <div class="kv">
+          <div class="card-title">Сводка</div>
+          <div class="empty">
+            <div>show_order_count: <strong><%= @tv_setting.show_order_count %></strong></div>
+            <div>display_seconds_ready: <strong><%= @tv_setting.display_seconds_ready %></strong></div>
+            <div>theme: <strong><%= @tv_setting.theme %></strong></div>
+          </div>
+
+          <div style="margin-top: 12px;">
+            <%= f.submit "Сохранить", class: "btn" %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<%= render "manager/shared/page_styles" %>
+

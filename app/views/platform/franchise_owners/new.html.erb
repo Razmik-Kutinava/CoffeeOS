@@ -1,0 +1,14 @@
+<h1>Владелец сети (franchise_manager)</h1>
+<p style="color: #94a3b8;">Нужна организация и минимум одна точка.</p>
+<%= form_with model: @user, url: platform_franchise_owners_path, local: true, style: "max-width: 420px;" do |f| %>
+  <% if @user.errors.any? %>
+    <p style="color: #fca5a5;"><%= @user.errors.full_messages.to_sentence %></p>
+  <% end %>
+  <p><%= f.label :organization_id, "Организация" %>
+    <%= f.collection_select :organization_id, Organization.order(:name), :id, :name, {}, { style: "width: 100%;" } %></p>
+  <p><%= f.label :name %> <%= f.text_field :name, required: true, style: "width: 100%;" %></p>
+  <p><%= f.label :email %> <%= f.email_field :email, style: "width: 100%;" %></p>
+  <p><%= f.label :phone %> <%= f.text_field :phone, style: "width: 100%;" %></p>
+  <p><%= f.label :password %> <%= f.password_field :password, required: true, style: "width: 100%;" %></p>
+  <%= f.submit "Создать" %>
+<% end %>

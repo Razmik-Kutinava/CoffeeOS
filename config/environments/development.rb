@@ -46,17 +46,11 @@ Rails.application.configure do
   # Raise an error on page load if there are pending migrations.
   config.active_record.migration_error = :page_load
 
-  # Highlight code that triggered database queries in logs.
-  config.active_record.verbose_query_logs = true
-
-  # Append comments with runtime information tags to SQL queries in logs.
-  config.active_record.query_log_tags_enabled = true
-
-  # Highlight code that enqueued background job in logs.
-  config.active_job.verbose_enqueue_logs = true
-
-  # Highlight code that triggered redirect in logs.
-  config.action_dispatch.verbose_redirect_logs = true
+  # Меньше «стрима» в консоль (включить при отладке SQL/джобов).
+  config.active_record.verbose_query_logs = ENV["VERBOSE_QUERY_LOGS"].present?
+  config.active_record.query_log_tags_enabled = ENV["VERBOSE_QUERY_LOGS"].present?
+  config.active_job.verbose_enqueue_logs = ENV["VERBOSE_QUERY_LOGS"].present?
+  config.action_dispatch.verbose_redirect_logs = ENV["VERBOSE_QUERY_LOGS"].present?
 
   # Suppress logger output for asset requests.
   config.assets.quiet = true
@@ -64,8 +58,7 @@ Rails.application.configure do
   # Raises error for missing translations.
   # config.i18n.raise_on_missing_translations = true
 
-  # Annotate rendered view with file names.
-  config.action_view.annotate_rendered_view_with_filenames = true
+  config.action_view.annotate_rendered_view_with_filenames = ENV["VERBOSE_VIEWS"].present?
 
   # Uncomment if you wish to allow Action Cable access from any origin.
   # config.action_cable.disable_request_forgery_protection = true

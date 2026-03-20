@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <title>CoffeeOS | УК</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+  <body class="font-mono" style="margin: 0; background: #0f111a; color: #e2e8f0;">
+    <%= render "platform/shared/nav" %>
+    <main style="padding: 24px; max-width: 1100px; margin: 0 auto;">
+      <% if flash[:notice] %>
+        <div style="margin-bottom: 12px; color: #86efac;"><%= flash[:notice] %></div>
+      <% end %>
+      <% if flash[:alert] %>
+        <div style="margin-bottom: 12px; color: #fca5a5;"><%= flash[:alert] %></div>
+      <% end %>
+      <%= yield %>
+    </main>
+  </body>
+</html>

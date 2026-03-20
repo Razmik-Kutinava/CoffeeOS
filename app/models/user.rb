@@ -13,6 +13,7 @@ class User < ApplicationRecord
   end
 
   belongs_to :tenant, optional: true
+  belongs_to :organization, optional: true
   has_many :user_roles, dependent: :destroy
   has_many :roles, through: :user_roles
   has_many :sessions, dependent: :destroy
@@ -33,6 +34,20 @@ class User < ApplicationRecord
 
   def has_any_role?(*role_codes)
     roles.where(code: role_codes).exists?
+  end
+
+  def franchise_manager?
+    roles.exists?(code: "franchise_manager")
+  end
+
+  def uk_global_admin?
+    roles.exists?(code: "ук_global_admin")
+  end
+
+  def accessible_manager_tenants
+    return Tenant.none unless organization_id
+
+    Tenant.where(organization_id: organization_id).order(:name)
   end
   
   # Проверка пароля через bcrypt

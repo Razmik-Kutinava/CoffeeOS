@@ -1,0 +1,9 @@
+<div class="page">
+  <div class="page-header">
+    <h1 class="page-title"><%= @user.name %></h1>
+    <%= link_to "← К списку", manager_staff_members_path, class: "link" %>
+  </div>
+
+  <%= render "form", user: @user %>
+</div>
+<%= render "manager/shared/page_styles" %>

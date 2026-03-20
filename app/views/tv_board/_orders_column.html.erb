@@ -1,0 +1,35 @@
+<% label = case status
+   when "accepted" then "ACCEPTED"
+   when "preparing" then "PREPARING"
+   when "ready" then "READY"
+   else status.to_s.upcase
+   end
+%>
+
+<% column_id = case status
+   when "accepted" then "tv-orders-accepted"
+   when "preparing" then "tv-orders-preparing"
+   when "ready" then "tv-orders-ready"
+   else "tv-orders-#{status}"
+   end
+%>
+
+<div id="<%= column_id %>" class="tv-column" data-tv-column="<%= status %>">
+  <div class="tv-column-header">
+    <div class="tv-column-title"><%= label %></div>
+    <div class="tv-column-count"><%= orders.size %></div>
+  </div>
+
+  <div class="tv-column-cards">
+    <% if orders.any? %>
+      <% orders.each_with_index do |order, idx| %>
+        <%= render "tv_board/order_card",
+          order: order,
+          status: status,
+          position: idx + 1 %>
+      <% end %>
+    <% else %>
+      <div class="tv-empty-column">Нет заказов</div>
+    <% end %>
+  </div>
+</div>

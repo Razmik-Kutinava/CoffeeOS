@@ -6,13 +6,17 @@
       <div class="status-left">
         <span class="dot"></span>
       <span class="status-bar-title">
-        <% if Current.role_code == "shift_manager" %>
+        <% if franchise_manager? %>
+          🏢 Франчайзи
+        <% elsif uk_in_manager? %>
+          🛡️ УК (точка)
+        <% elsif Current.role_code == "shift_manager" %>
           ⏱️ Менеджер смены
         <% else %>
           🏢 Офис-менеджер
         <% end %>
       </span>
-        <span class="status-bar-tenant">Точка: <%= current_user.tenant&.name || "Не указана" %></span>
+        <span class="status-bar-tenant">Точка: <%= current_tenant&.name || current_user.tenant&.name || "Не указана" %></span>
       </div>
 
       <div class="status-right">

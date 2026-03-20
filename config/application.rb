@@ -27,8 +27,10 @@ module CoffeeOs
     # Автозагрузка middleware
     config.autoload_paths << Rails.root.join('app/middleware')
 
-    # Middleware для логирования Current.tenant_id (помогает в troubleshooting)
-    require_relative '../app/middleware/log_tenant_middleware'
-    config.middleware.use LogTenantMiddleware
+    # Лог каждого запроса в JSON (шумно). Включить: LOG_TENANT_MIDDLEWARE=1
+    if ENV["LOG_TENANT_MIDDLEWARE"].present?
+      require_relative "../app/middleware/log_tenant_middleware"
+      config.middleware.use LogTenantMiddleware
+    end
   end
 end
