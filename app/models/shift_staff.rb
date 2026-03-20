@@ -1,5 +1,5 @@
 class ShiftStaff < ApplicationRecord
-  enum role_in_shift: { barista: 'barista', shift_manager: 'shift_manager' }
+  enum :role_in_shift, { barista: 'barista', shift_manager: 'shift_manager' }
 
   belongs_to :shift
   belongs_to :user
