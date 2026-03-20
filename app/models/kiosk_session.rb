@@ -1,5 +1,5 @@
 class KioskSession < ApplicationRecord
-  enum end_reason: {
+  enum :end_reason, {
     timeout: 'timeout',
     order_completed: 'order_completed',
     manual_reset: 'manual_reset',
