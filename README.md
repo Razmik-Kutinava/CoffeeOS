@@ -23,6 +23,8 @@ Things you may want to cover:
 
 * Services (job queues, cache servers, search engines, etc.)
 
+* **Деплой (Render, Docker и т.п.):** в переменных окружения обязательно задать **`SECRET_KEY_BASE`** (локально: `bin/rails secret`, вставить длинную строку в панели сервиса). Альтернатива — **`RAILS_MASTER_KEY`** из `config/master.key`, тогда ключ возьмётся из `credentials`. Плюс **`DATABASE_URL`** на managed Postgres. После деплоя: миграции (`bin/rails db:migrate` в Release Command или Shell).
+
 * Deployment instructions
 
 * ...
