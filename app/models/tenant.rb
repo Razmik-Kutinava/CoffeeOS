@@ -37,6 +37,8 @@ class Tenant < ApplicationRecord
     status == 'frozen'
   end
 
+  belongs_to :organization, optional: true
+
   has_many :users, dependent: :nullify
   has_many :orders, dependent: :destroy
   has_many :payments, dependent: :destroy

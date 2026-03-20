@@ -1,0 +1,10 @@
+<%= form_with model: organization,
+    url: organization.persisted? ? platform_organization_path(organization) : platform_organizations_path,
+    local: true, style: "max-width: 420px;" do |f| %>
+  <% if organization.errors.any? %>
+    <p style="color: #fca5a5;"><%= organization.errors.full_messages.to_sentence %></p>
+  <% end %>
+  <p><%= f.label :name %> <%= f.text_field :name, required: true, style: "width: 100%;" %></p>
+  <p><%= f.label :slug, "Slug (латиница)" %> <%= f.text_field :slug, required: true, style: "width: 100%;" %></p>
+  <%= f.submit %>
+<% end %>

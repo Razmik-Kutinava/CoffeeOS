@@ -1,7 +1,22 @@
 <div class="page">
   <div class="page-header">
     <h1 class="page-title">📟 Устройства</h1>
-    <div class="page-subtitle">Онлайн/оффлайн, последние активности, типы устройств</div>
+    <div class="page-subtitle">
+      Онлайн/оффлайн, типы. TV: создать устройство и выбрать «очередь» или «реклама» (на каждую ТВ отдельно).
+      Лимит карточек очереди — в
+      <%= link_to "настройках TV точки", manager_tv_board_settings_path, class: "link" %>.
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom: 14px;">
+    <div class="card-title">Добавить TV-борд</div>
+    <%= form_with model: @new_device, url: manager_devices_path, method: :post, class: "filters-form" do |f| %>
+      <label class="label">
+        Название на ТВ
+        <%= f.text_field :name, class: "input", placeholder: "Например: ТВ зал", required: true %>
+      </label>
+      <%= f.submit "Создать TV + токен", class: "btn" %>
+    <% end %>
   </div>
 
   <div class="card">
@@ -17,9 +32,23 @@
               <% else %>
                 <span class="pill" style="border-color: rgba(255, 0, 110, 0.45); background: rgba(255, 0, 110, 0.10);">offline</span>
               <% end %>
+              <% if d.device_type == "tv_board" && d.device_token.present? %>
+                <span class="muted" style="font-size: 11px; max-width: 420px; overflow: hidden; text-overflow: ellipsis;">
+                  /tv_board?token=<%= d.device_token %>
+                </span>
+              <% end %>
             </div>
-            <div class="row-meta">
+            <div class="row-meta" style="flex-wrap: wrap; gap: 8px; justify-content: flex-end;">
               <span class="muted">last_seen: <%= d.last_seen_at&.strftime("%d.%m %H:%M") || "-" %></span>
+              <% if d.device_type == "tv_board" %>
+                <div style="display: flex; gap: 6px; align-items: center;">
+                  <span class="muted">экран:</span>
+                  <%= button_to "Очередь", manager_device_tv_mode_path(d, tv_mode: Device::TV_MODE_ORDERS),
+                      method: :patch, class: "btn btn-ghost", form: { style: "display:inline;" } %>
+                  <%= button_to "Реклама", manager_device_tv_mode_path(d, tv_mode: Device::TV_MODE_ADS),
+                      method: :patch, class: "btn btn-ghost", form: { style: "display:inline;" } %>
+                </div>
+              <% end %>
             </div>
           </div>
         <% end %>
@@ -31,4 +60,3 @@
 </div>
 
 <%= render "manager/shared/page_styles" %>
-

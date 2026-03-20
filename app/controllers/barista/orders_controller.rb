@@ -280,6 +280,9 @@ module Barista
         partial: 'barista/dashboard/count_badge',
         locals: { count: counts[:ready], type: 'ready' }
       )
+
+      # TV board: перерисовываем колонки целиком для корректного idx.
+      broadcast_tv_columns_update
       
       respond_to do |format|
         format.turbo_stream { render turbo_stream: turbo_stream.remove("order_#{@order.id}") }
@@ -288,6 +291,64 @@ module Barista
     end
     
     private
+
+    def tv_board_setting_for_current_tenant
+      TvBoardSetting.find_by(tenant_id: Current.tenant_id) ||
+        TvBoardSetting.create!(
+          tenant_id: Current.tenant_id,
+          show_order_count: 10,
+          display_seconds_ready: 60,
+          theme: 'dark'
+        )
+    end
+
+    def orders_for_tv_column(status, limit)
+      Order.for_barista_board(Current.tenant_id)
+           .where(status: status)
+           .order(created_at: :asc)
+           .limit(limit)
+    end
+
+    def broadcast_tv_columns_update
+      tv_setting = tv_board_setting_for_current_tenant
+
+      Device.for_current_tenant.where(device_type: "tv_board", is_active: true).find_each do |device|
+        effective = device.tv_effective_show_order_count(tv_setting)
+        stream = "tv_orders_#{device.id}"
+
+        Turbo::StreamsChannel.broadcast_replace_to(
+          stream,
+          target: "tv-ads-area",
+          partial: "tv_board/ads_area",
+          locals: { tv_setting: tv_setting, effective_limit: effective }
+        )
+
+        accepted_orders = effective > 0 ? orders_for_tv_column("accepted", effective) : Order.none
+        preparing_orders = effective > 0 ? orders_for_tv_column("preparing", effective) : Order.none
+        ready_orders = effective > 0 ? orders_for_tv_column("ready", effective) : Order.none
+
+        Turbo::StreamsChannel.broadcast_replace_to(
+          stream,
+          target: "tv-orders-accepted",
+          partial: "tv_board/orders_column",
+          locals: { status: "accepted", orders: accepted_orders, tv_setting: tv_setting }
+        )
+
+        Turbo::StreamsChannel.broadcast_replace_to(
+          stream,
+          target: "tv-orders-preparing",
+          partial: "tv_board/orders_column",
+          locals: { status: "preparing", orders: preparing_orders, tv_setting: tv_setting }
+        )
+
+        Turbo::StreamsChannel.broadcast_replace_to(
+          stream,
+          target: "tv-orders-ready",
+          partial: "tv_board/orders_column",
+          locals: { status: "ready", orders: ready_orders, tv_setting: tv_setting }
+        )
+      end
+    end
     
     def broadcast_order_update(order, old_status = nil)
       # Определяем в какую колонку переместить заказ
@@ -371,6 +432,9 @@ module Barista
         partial: 'barista/dashboard/count_badge',
         locals: { count: counts[:ready], type: 'ready' }
       )
+
+      # TV board: перерисовываем колонки целиком для корректного idx.
+      broadcast_tv_columns_update
     end
   end
 end

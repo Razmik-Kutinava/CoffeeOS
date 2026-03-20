@@ -1,0 +1,34 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# Кроссплатформенный вход в smoke-задачи (Windows / macOS / Linux).
+# Использование:
+#   bin/smoke           — все тесты (как bin/rails smoke)
+#   bin/smoke tests     — то же
+#   bin/smoke ci        — полный прогон как в GitHub Actions
+#   bin/smoke lint      — только RuboCop
+
+APP_ROOT = File.expand_path("..", __dir__)
+Dir.chdir(APP_ROOT)
+
+mode = (ARGV[0] || "tests").downcase
+rails = File.join(APP_ROOT, "bin", "rails")
+unless File.executable?(rails) || File.file?(rails)
+  warn "Не найден bin/rails в #{APP_ROOT}"
+  exit 2
+end
+
+task =
+  case mode
+  when "tests", "test" then "smoke:tests"
+  when "ci", "full" then "smoke:ci"
+  when "lint" then "smoke:lint"
+  when "rls" then "smoke:rls"
+  else
+    warn "Неизвестный режим: #{mode.inspect}"
+    warn "Допустимо: tests | ci | lint | rls"
+    exit 2
+  end
+
+cmd = [Gem.ruby, rails, task]
+exit(system(*cmd) ? 0 : 1)

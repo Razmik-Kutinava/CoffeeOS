@@ -1,0 +1,154 @@
+<% theme = @tv_setting.theme %>
+
+<%# TV board: без логина, ориентирован на быстрый взгляд с расстояния %>
+<div class="tv-board tv-theme-<%= theme %>" data-tv-device-id="<%= @device.id %>">
+  <div class="tv-header">
+    <div class="tv-title">Заказы</div>
+    <div class="tv-time">⏰ <%= Time.current.strftime("%H:%M") %></div>
+  </div>
+
+  <%= render "tv_board/ads_area", tv_setting: @tv_setting, effective_limit: @effective_limit %>
+
+  <div class="tv-kanban">
+    <%= render "tv_board/orders_column",
+      status: "accepted",
+      orders: @accepted_orders,
+      tv_setting: @tv_setting %>
+
+    <%= render "tv_board/orders_column",
+      status: "preparing",
+      orders: @preparing_orders,
+      tv_setting: @tv_setting %>
+
+    <%= render "tv_board/orders_column",
+      status: "ready",
+      orders: @ready_orders,
+      tv_setting: @tv_setting %>
+  </div>
+</div>
+
+<%= turbo_stream_from "tv_orders_#{@device.id}" %>
+
+<style>
+  .tv-board {
+    min-height: 100vh;
+    padding: 12px;
+    box-sizing: border-box;
+    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  }
+
+  .tv-theme-dark {
+    background: #0b0d12;
+    color: #e9ecf1;
+  }
+
+  .tv-theme-light {
+    background: #f4f6fb;
+    color: #1a1f2a;
+  }
+
+  .tv-theme-brand {
+    background: #0b0d12;
+    color: #e9ecf1;
+  }
+
+  .tv-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 10px;
+  }
+
+  .tv-title {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: 0.3px;
+  }
+
+  .tv-time {
+    font-size: 16px;
+    opacity: 0.9;
+  }
+
+  .tv-ads-area {
+    margin-bottom: 10px;
+  }
+
+  .tv-ads-placeholder {
+    border: 1px dashed rgba(139, 92, 246, 0.45);
+    background: rgba(139, 92, 246, 0.08);
+    padding: 14px;
+    text-align: center;
+    border-radius: 16px;
+    font-weight: 800;
+    letter-spacing: 0.4px;
+  }
+
+  .tv-kanban {
+    display: flex;
+    gap: 10px;
+  }
+
+  .tv-column {
+    flex: 1;
+    border-radius: 16px;
+    border: 1px solid rgba(139, 92, 246, 0.22);
+    background: rgba(26, 31, 58, 0.18);
+    padding: 10px;
+    box-sizing: border-box;
+  }
+
+  .tv-column-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+
+  .tv-column-title {
+    font-weight: 900;
+    font-size: 14px;
+    letter-spacing: 0.4px;
+  }
+
+  .tv-column-count {
+    opacity: 0.85;
+    font-weight: 800;
+  }
+
+  .tv-column-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .tv-order-card {
+    border-radius: 14px;
+    border: 1px solid rgba(139, 92, 246, 0.18);
+    background: rgba(10, 14, 39, 0.28);
+    padding: 10px;
+  }
+
+  .tv-order-pos {
+    font-weight: 900;
+    font-size: 20px;
+    line-height: 1.1;
+  }
+
+  .tv-order-number {
+    margin-top: 2px;
+    font-weight: 800;
+    font-size: 16px;
+    opacity: 0.95;
+  }
+
+  .tv-empty-column {
+    opacity: 0.6;
+    font-weight: 700;
+    padding: 12px 0;
+    text-align: center;
+    border-radius: 14px;
+    border: 1px dashed rgba(139, 92, 246, 0.18);
+  }
+</style>
+

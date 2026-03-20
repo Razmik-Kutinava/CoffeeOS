@@ -25,4 +25,19 @@ class Device < ApplicationRecord
 
     token_expires_at > Time.current
   end
+
+  # Per-TV режим: "ads" | "orders" (в metadata). Лимит карточек — tenant-wide из TvBoardSetting.
+  TV_MODE_ADS = "ads".freeze
+  TV_MODE_ORDERS = "orders".freeze
+
+  def tv_ads_mode?
+    (metadata || {})["tv_mode"].to_s == TV_MODE_ADS
+  end
+
+  def tv_effective_show_order_count(tv_setting)
+    limit = tv_setting.show_order_count.to_i
+    return 0 if tv_ads_mode?
+
+    limit
+  end
 end

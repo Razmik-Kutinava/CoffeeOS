@@ -7,8 +7,35 @@ require_relative "support/factories"
 
 module ActiveSupport
   class TestCase
-    # Run tests in parallel with specified workers
-    parallelize(workers: :number_of_processors, with: :threads)
+    # Parallel tests (Rails 8.1+): только :processes и :threads (символ :fork не поддерживается).
+    # На Unix используем :processes (отдельные процессы через Parallelization — безопаснее для pg/libvips,
+    # чем :threads в одном процессе).
+    # Thread-based parallelization может давать "free(): invalid size" (WSL + /mnt/c, нативные гемы).
+    #
+    # MRI Windows: нет Process.fork — параллель в потоках часто роняет процесс (heap corruption);
+    # оставляем последовательный прогон.
+    #
+    # Sequential: PARALLEL_WORKERS=0  (or false / no)
+    # Fixed count: PARALLEL_WORKERS=4 (где есть процессы, или явно 0)
+    case ENV["PARALLEL_WORKERS"]&.downcase
+    when "0", "false", "no"
+      # no parallelize — single process
+    else
+      workers =
+        if ENV["PARALLEL_WORKERS"].present?
+          ENV["PARALLEL_WORKERS"].to_i.clamp(1, 32)
+        else
+          :number_of_processors
+        end
+
+      if Process.respond_to?(:fork)
+        parallelize(workers: workers, with: :processes)
+      elsif Gem.win_platform?
+        # последовательно; не вызываем parallelize(workers: N, with: :threads)
+      else
+        parallelize(workers: workers, with: :threads)
+      end
+    end
 
     # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
     fixtures :all

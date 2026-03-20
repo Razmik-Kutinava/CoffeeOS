@@ -11,12 +11,20 @@ module TestFactories
     @@rls_disabled = true
   end
 
-  def create_tenant!(name: "Точка", slug: "tenant-#{SecureRandom.hex(4)}")
+  def create_organization!(name: "Организация", slug: nil)
     disable_rls_once!
+    slug ||= "org-#{SecureRandom.hex(4)}"
+    Organization.create!(name: name, slug: slug)
+  end
+
+  def create_tenant!(name: "Точка", slug: nil, organization: nil)
+    disable_rls_once!
+    slug ||= "tenant-#{SecureRandom.hex(4)}"
     Tenant.create!(
+      organization: organization,
       name: name,
       slug: slug,
-      type: "CoffeeShop",
+      type: "sales_point",
       status: "active",
       currency: "RUB",
       country: "RU",
@@ -28,10 +36,11 @@ module TestFactories
     Role.find_or_create_by!(code: code) { |r| r.name = name || code.humanize }
   end
 
-  def create_user!(tenant:, role_codes:, email: nil, phone: nil, name: "User", password: "pass123")
+  def create_user!(tenant:, role_codes:, email: nil, phone: nil, name: "User", password: "pass123", organization: nil)
     email ||= "user-#{SecureRandom.hex(4)}@test.local"
     user = User.create!(
       tenant: tenant,
+      organization: organization,
       name: name,
       email: email,
       phone: phone,
@@ -45,6 +54,12 @@ module TestFactories
     end
 
     user
+  end
+
+  def create_uk_admin!(email: "uk@test.local", password: "pass123")
+    disable_rls_once!
+    t = create_tenant!(name: "UK anchor", slug: "uk-anchor-#{SecureRandom.hex(4)}")
+    create_user!(tenant: t, role_codes: %w[ук_global_admin], email: email, password: password, name: "UK")
   end
 
   def create_category!(name: "Категория", slug: nil)
@@ -79,8 +94,9 @@ module TestFactories
 
   def login_as!(user, password: "pass123")
     post "/login", params: { email: user.email, password: password }
-    assert_response :redirect
-    follow_redirect! rescue nil
+    assert_response :redirect, "ожидался редирект после логина"
+    follow_redirect!
+    follow_redirect! if response.redirect?
   end
 end
 

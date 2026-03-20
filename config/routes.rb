@@ -25,6 +25,8 @@ Rails.application.routes.draw do
   namespace :manager do
     get "/", to: "dashboard#show", as: :dashboard
 
+    post "/switch_tenant", to: "tenant_context#update", as: :switch_tenant
+
     get "/orders", to: "orders#index", as: :orders
     get "/orders/:id", to: "orders#show", as: :order
 
@@ -43,11 +45,19 @@ Rails.application.routes.draw do
     get "/menu", to: "menu#index", as: :menu
     get "/reports", to: "reports#index", as: :reports
 
-    get "/staff", to: "staff#index", as: :staff
+    resources :staff_members, path: "staff", controller: "staff", only: %i[index new create edit update]
     get "/devices", to: "devices#index", as: :devices
+    post "/devices", to: "devices#create"
+    patch "/devices/:id/tv_mode", to: "devices#update_tv_mode", as: :device_tv_mode
 
     get "/incidents", to: "incidents#index", as: :incidents
+
+    get "/tv_board_settings", to: "tv_board_settings#edit", as: :tv_board_settings
+    patch "/tv_board_settings", to: "tv_board_settings#update"
   end
+
+  # TV board (без логина) - подключение по device_token
+  get "/tv_board", to: "tv_boards#show", as: :tv_board
 
   get "/manager", to: redirect("/manager/")
   namespace :prep_kitchen do
@@ -68,7 +78,19 @@ Rails.application.routes.draw do
   end
 
   get "/prep_kitchen", to: redirect("/prep_kitchen/")
-  get '/admin', to: 'dashboards#admin', as: :admin_dashboard
+  # Не редиректить /admin → /admin/: это даёт бесконечный цикл со слэшем вместе с корнем namespace.
+  namespace :platform, path: "admin" do
+    root to: "dashboard#show"
+    resources :organizations, only: %i[index new create edit update]
+    resources :tenants, only: %i[index new create edit update] do
+      member do
+        post :open_as_manager
+      end
+    end
+    resources :franchise_owners, only: %i[new create], path: "franchise_owners"
+  end
+  # Редирект /admin/ → /admin через get "/admin/" в Rails даёт второй маршрут на тот же GET /admin и цикл 301.
+  # Корень platform уже обслуживает и /admin, и /admin/ (без отдельного redirect).
 
   # Health API — мониторинг точек для центральной админки (JSON)
   namespace :health do

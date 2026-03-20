@@ -3,8 +3,21 @@
     <div class="brand">☕ CoffeeOS</div>
     <div class="tenant">
       <span class="tenant-dot"></span>
-      <span><%= current_user.tenant&.name || "Точка" %></span>
+      <span><%= current_tenant&.name || current_user.tenant&.name || "Точка" %></span>
     </div>
+    <% if franchise_manager? && accessible_manager_tenants.many? %>
+      <%= form_with url: manager_switch_tenant_path, method: :post, data: { turbo: false }, style: "margin-top: 8px;" do %>
+        <%= select_tag :tenant_id,
+            options_from_collection_for_select(accessible_manager_tenants, :id, :name, Current.tenant_id),
+            onchange: "this.form.submit()",
+            style: "width: 100%; padding: 6px; font-size: 12px;" %>
+      <% end %>
+    <% end %>
+    <% if uk_in_manager? && Current.tenant_id.present? %>
+      <div style="margin-top: 8px; font-size: 11px;">
+        <%= link_to "← Админка УК", platform_root_path, class: "link" %>
+      </div>
+    <% end %>
   </div>
 
   <nav class="nav">
@@ -35,12 +48,16 @@
     <%= link_to manager_reports_path, class: "nav-item #{'active' if request.path == manager_reports_path}" do %>
       <span class="emoji">📈</span><span>Отчёты</span>
     <% end %>
-    <% if Current.role_code == "office_manager" %>
-      <%= link_to manager_staff_path, class: "nav-item #{'active' if request.path == manager_staff_path}" do %>
+    <% if office_or_franchise_manager? || uk_in_manager? %>
+      <%= link_to manager_staff_members_path, class: "nav-item #{'active' if request.path.start_with?(manager_staff_members_path)}" do %>
         <span class="emoji">👥</span><span>Персонал</span>
       <% end %>
       <%= link_to manager_devices_path, class: "nav-item #{'active' if request.path == manager_devices_path}" do %>
         <span class="emoji">📟</span><span>Устройства</span>
+      <% end %>
+
+      <%= link_to manager_tv_board_settings_path, class: "nav-item #{'active' if request.path == manager_tv_board_settings_path}" do %>
+        <span class="emoji">📺</span><span>TV</span>
       <% end %>
     <% end %>
     <%= link_to manager_incidents_path, class: "nav-item #{'active' if request.path == manager_incidents_path}" do %>

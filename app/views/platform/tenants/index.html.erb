@@ -1,0 +1,25 @@
+<h1>Точки</h1>
+<p><%= link_to "Новая", new_platform_tenant_path, style: "color: #93c5fd;" %></p>
+<table style="width: 100%; border-collapse: collapse; font-size: 13px;">
+  <thead>
+    <tr style="text-align: left; border-bottom: 1px solid #334155;">
+      <th style="padding: 8px;">Название</th>
+      <th style="padding: 8px;">Slug</th>
+      <th style="padding: 8px;">Орг.</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @tenants.each do |t| %>
+      <tr style="border-bottom: 1px solid #1e293b;">
+        <td style="padding: 8px;"><%= t.name %></td>
+        <td style="padding: 8px;"><%= t.slug %></td>
+        <td style="padding: 8px;"><%= t.organization&.name || "—" %></td>
+        <td style="padding: 8px;">
+          <%= button_to "Менеджер", open_as_manager_platform_tenant_path(t), method: :post, form: { style: "display:inline;" } %>
+          <%= link_to "Правка", edit_platform_tenant_path(t), style: "color: #93c5fd;" %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

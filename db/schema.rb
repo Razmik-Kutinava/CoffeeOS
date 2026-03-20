@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_01_15_000009) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_20_120002) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -337,6 +337,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_01_15_000009) do
     t.text "cancel_reason"
     t.string "cancel_reason_code", limit: 50
     t.string "cancel_stage", limit: 50
+    t.uuid "cash_shift_id"
     t.datetime "created_at", null: false
     t.uuid "customer_id"
     t.string "customer_name", limit: 255
@@ -353,7 +354,6 @@ ActiveRecord::Schema[8.1].define(version: 2025_01_15_000009) do
     t.uuid "tenant_id", null: false
     t.decimal "total_amount", precision: 10, scale: 2, null: false
     t.datetime "updated_at", null: false
-    t.uuid "cash_shift_id"
     t.index ["cash_shift_id"], name: "index_orders_on_cash_shift_id"
     t.index ["customer_id"], name: "index_orders_on_customer_id"
     t.index ["order_number"], name: "index_orders_on_order_number"
@@ -364,6 +364,14 @@ ActiveRecord::Schema[8.1].define(version: 2025_01_15_000009) do
     t.index ["tenant_id", "status"], name: "index_orders_on_tenant_id_and_status"
     t.index ["tenant_id"], name: "index_orders_on_tenant_id"
     t.check_constraint "total_amount > 0::numeric AND discount_amount >= 0::numeric AND final_amount >= 0::numeric AND final_amount = (total_amount - discount_amount)", name: "chk_order_amounts"
+  end
+
+  create_table "organizations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.string "slug", null: false
+    t.datetime "updated_at", null: false
+    t.index ["slug"], name: "index_organizations_on_slug", unique: true
   end
 
   create_table "payment_polling_attempts", id: :uuid, default: -> { "gen_random_uuid()" }, comment: "Попытки опроса статуса платежа у провайдера", force: :cascade do |t|
@@ -650,6 +658,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_01_15_000009) do
     t.datetime "created_at", null: false
     t.string "currency", limit: 3, default: "RUB", null: false
     t.string "name", null: false
+    t.uuid "organization_id"
     t.jsonb "settings", default: {}, comment: "Настройки точки: график работы, контакты, etc"
     t.string "slug", null: false, comment: "URL-friendly идентификатор точки"
     t.string "status", default: "active", null: false
@@ -657,6 +666,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_01_15_000009) do
     t.string "type", null: false
     t.datetime "updated_at", null: false
     t.index ["country"], name: "index_tenants_on_country"
+    t.index ["organization_id"], name: "index_tenants_on_organization_id"
     t.index ["slug"], name: "index_tenants_on_slug", unique: true
     t.index ["status"], name: "index_tenants_on_status"
     t.index ["type"], name: "index_tenants_on_type"
@@ -693,12 +703,14 @@ ActiveRecord::Schema[8.1].define(version: 2025_01_15_000009) do
     t.string "email"
     t.datetime "last_login_at", precision: nil
     t.string "name", null: false
+    t.uuid "organization_id"
     t.string "password_hash", null: false
     t.string "phone", limit: 20
     t.string "status", default: "active", null: false
     t.uuid "tenant_id"
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_users_on_email", unique: true, where: "(email IS NOT NULL)"
+    t.index ["organization_id"], name: "index_users_on_organization_id"
     t.index ["phone"], name: "index_users_on_phone", unique: true, where: "(phone IS NOT NULL)"
     t.index ["status"], name: "index_users_on_status"
     t.index ["tenant_id"], name: "index_users_on_tenant_id"
@@ -779,11 +791,13 @@ ActiveRecord::Schema[8.1].define(version: 2025_01_15_000009) do
   add_foreign_key "stock_movements", "tenants", on_delete: :cascade
   add_foreign_key "stock_movements", "users", column: "confirmed_by_id", on_delete: :nullify
   add_foreign_key "stock_movements", "users", column: "created_by_id", on_delete: :nullify
+  add_foreign_key "tenants", "organizations"
   add_foreign_key "tv_board_settings", "tenants", on_delete: :cascade
   add_foreign_key "tv_board_settings", "users", column: "updated_by_id", on_delete: :nullify
   add_foreign_key "user_roles", "roles", on_delete: :cascade
   add_foreign_key "user_roles", "tenants", on_delete: :cascade
   add_foreign_key "user_roles", "users", column: "granted_by_id", on_delete: :nullify
   add_foreign_key "user_roles", "users", on_delete: :cascade
+  add_foreign_key "users", "organizations"
   add_foreign_key "users", "tenants", on_delete: :nullify
 end

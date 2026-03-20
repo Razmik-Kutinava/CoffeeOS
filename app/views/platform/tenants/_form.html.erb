@@ -1,0 +1,32 @@
+<%= form_with model: tenant,
+    url: tenant.persisted? ? platform_tenant_path(tenant) : platform_tenants_path,
+    local: true, style: "max-width: 520px;" do |f| %>
+  <% if tenant.errors.any? %>
+    <p style="color: #fca5a5;"><%= tenant.errors.full_messages.to_sentence %></p>
+  <% end %>
+  <p><%= f.label :organization_id, "Организация" %>
+    <%= f.collection_select :organization_id, Organization.order(:name), :id, :name, { include_blank: "—" }, { style: "width: 100%;" } %></p>
+  <p><%= f.label :name %> <%= f.text_field :name, required: true, style: "width: 100%;" %></p>
+  <p><%= f.label :slug %> <%= f.text_field :slug, required: true, style: "width: 100%;" %></p>
+  <p><%= f.label :type %>
+    <%= f.select :type, [%w[Точка\ продаж sales_point], %w[Кухня production_kitchen]] %></p>
+  <p><%= f.label :status %>
+    <%= f.select :status, Tenant::STATUSES.map { |k, v| [k.to_s.humanize, v] } %></p>
+  <p><%= f.label :city %> <%= f.text_field :city, style: "width: 100%;" %></p>
+  <p><%= f.label :country %> <%= f.text_field :country, maxlength: 2, style: "width: 4rem;" %></p>
+  <p><%= f.label :currency %> <%= f.text_field :currency, maxlength: 3, style: "width: 4rem;" %></p>
+  <p><%= f.label :timezone %> <%= f.text_field :timezone, style: "width: 100%;" %></p>
+
+  <h2 style="font-size: 1rem; margin-top: 1.5rem;">Модули</h2>
+  <% TenantModuleFlags::LABELS.each do |code, label| %>
+    <% ff = tenant.persisted? ? FeatureFlag.find_by(tenant_id: tenant.id, module: code) : nil %>
+    <% on = ff ? ff.enabled : true %>
+    <p>
+      <%= hidden_field_tag "modules[#{code}]", "0" %>
+      <%= check_box_tag "modules[#{code}]", "1", on, id: "mod_#{code}" %>
+      <%= label_tag "mod_#{code}", label %>
+    </p>
+  <% end %>
+
+  <%= f.submit tenant.persisted? ? "Сохранить" : "Создать" %>
+<% end %>
