@@ -3,6 +3,10 @@ require "active_support/core_ext/integer/time"
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
+  # Render / Docker: в образ не кладётся master.key — без RAILS_MASTER_KEY credentials не открыть.
+  # Задайте в панели сервиса SECRET_KEY_BASE (сгенерировать: bin/rails secret) или RAILS_MASTER_KEY.
+  config.secret_key_base = ENV["SECRET_KEY_BASE"].presence || Rails.application.credentials.secret_key_base
+
   # Code is not reloaded between requests.
   config.enable_reloading = false
 
