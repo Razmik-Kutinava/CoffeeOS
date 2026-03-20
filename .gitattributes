@@ -7,3 +7,7 @@ db/schema.rb linguist-generated
 vendor/* linguist-vendored
 config/credentials/*.yml.enc diff=rails_credentials
 config/credentials.yml.enc diff=rails_credentials
+
+# Один клон с диска C: из Windows и WSL: без этого WSL показывает тысячи «diff» (CRLF vs LF)
+# и ломает checkout. Держим текст в репозитории в LF.
+* text=auto eol=lf
