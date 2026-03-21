@@ -77,6 +77,6 @@ COPY --chown=rails:rails --from=build /rails /rails
 # Entrypoint prepares the database.
 ENTRYPOINT ["/rails/bin/docker-entrypoint"]
 
-# Start server via Thruster by default, this can be overwritten at runtime
-EXPOSE 80
-CMD ["./bin/thrust", "./bin/rails", "server"]
+# Render и др. PaaS: слушать $PORT (см. config/puma.rb), без Thruster — иначе прокси на [::1]:3000 даёт 502/503.
+EXPOSE 3000
+CMD ["./bin/rails", "server", "-b", "0.0.0.0"]
