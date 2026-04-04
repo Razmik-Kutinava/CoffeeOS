@@ -2,7 +2,7 @@
 # Витрина /shop: Rails (порт 3000) + Vite (HMR). Без Vite: bin/server или bin/dev --rails-only
 APP_ROOT = File.expand_path("..", __dir__)
 Dir.chdir(APP_ROOT)
-require File.expand_path("../config/bundle_env", __dir__)
+load File.expand_path("../config/bundle_env.rb", __dir__)
 AppBundleEnv.apply!(ENV)
 
 if ARGV.include?("--rails-only")

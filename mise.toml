@@ -1,0 +1,5 @@
+# Версии для mise (https://mise.jdx.dev/) — один Ruby/Node в PATH, без смешения rbenv + системного bundle.
+# Установка: mise install
+[tools]
+ruby = "3.4.8"
+node = "20"

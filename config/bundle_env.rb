@@ -1,12 +1,32 @@
 # frozen_string_literal: true
 
-# Фиксируем абсолютные пути до Bundler.setup.
-# На WSL с репозиторием на /mnt/c/ (drvfs) относительный BUNDLE_PATH из .bundle/config
-# иногда не совпадает с каталогом, откуда Ruby ищет гемы после bundle install.
+# До Bundler.setup выставляем абсолютные BUNDLE_GEMFILE и BUNDLE_PATH.
+#
+# WSL + клон на /mnt/c|d/... (drvfs): гемы в ./vendor/bundle часто ставятся «успешно»,
+# но Ruby/Bundler их не видит (симлинки, метаданные). Кладём bundle на ext4 в ~/.
 module AppBundleEnv
   def self.apply!(env = ENV)
     root = File.expand_path("..", __dir__)
     env["BUNDLE_GEMFILE"] = File.join(root, "Gemfile")
-    env["BUNDLE_PATH"] = File.join(root, "vendor", "bundle")
+    env["BUNDLE_PATH"] = bundle_path_for(root)
+  end
+
+  def self.bundle_path_for(root)
+    if wsl_repo_on_drvfs?(root)
+      slug = root.sub(%r{\A/mnt/}, "mnt_").tr("/", "_")
+      File.join(Dir.home, ".local", "share", "coffeeos-vendor", slug)
+    else
+      File.join(root, "vendor", "bundle")
+    end
+  end
+
+  def self.wsl_repo_on_drvfs?(root)
+    return false unless root.start_with?("/mnt/")
+    return false unless RUBY_PLATFORM.include?("linux")
+
+    v = File.read("/proc/version")
+    v.downcase.include?("microsoft")
+  rescue StandardError
+    false
   end
 end
