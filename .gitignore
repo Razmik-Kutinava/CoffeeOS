@@ -49,9 +49,7 @@
 .DS_Store
 Thumbs.db
 
-# Документация проекта (внутренняя, не для репозитория)
-/docs
-/.claude
+# Локальные docs/ и .claude/ не коммитим: добавь у себя в .git/info/exclude строки /docs/ и /.claude/
 /benchmark
 
 # Все markdown файлы кроме README.md
