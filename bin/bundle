@@ -1,0 +1,7 @@
+#!/usr/bin/env ruby
+# Всегда выставляет тот же BUNDLE_PATH, что и config/boot.rb (важно для WSL + /mnt/c).
+APP_ROOT = File.expand_path("..", __dir__)
+Dir.chdir(APP_ROOT)
+load File.expand_path("../config/bundle_env.rb", __dir__)
+AppBundleEnv.apply!(ENV)
+exec Gem.ruby, "-S", "bundle", *ARGV

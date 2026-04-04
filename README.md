@@ -21,7 +21,11 @@ Things you may want to cover:
 
 * **Два входа (франчайзи `/manager/` и УК `/admin/`):** после `bin/rails db:migrate` выполнить `bin/rails test:create_test_users`, затем логин `franchise@test.com` или `uk@test.com` (пароль в выводе rake, обычно `test123456`). Подробнее: [docs/features/ADMIN_PANELS_LOGIN.md](docs/features/ADMIN_PANELS_LOGIN.md).
 
-* **WSL / системный Ruby без sudo:** в репозитории задан `BUNDLE_PATH=vendor/bundle` (см. `.bundle/config`). После `git pull` в WSL из корня проекта выполните **`bundle install`**. Перед запуском приложение выставляет **абсолютные** `BUNDLE_GEMFILE` и `BUNDLE_PATH` (см. `config/bundle_env.rb` + `config/boot.rb`) — это устраняет сбой «Could not find rails…» при клоне на **`/mnt/c/...`**. Если глюки остаются: `rm -rf tmp/cache/bootsnap*` и при необходимости пересоберите гемы: `rm -rf vendor/bundle && bundle install`. Надёжнее держать клон на **`~/projects/...`** (ext4), а не на диске C:.
+* **WSL + репозиторий на `/mnt/c/...` (диск Windows):** drvfs ломает `./vendor/bundle` — после «успешного» `bundle install` команды вроде `bin/rails` пишут *Could not find rails…*. Используйте **`./bin/bundle install`** (и дальше **`./bin/bundle exec …`** при необходимости): гемы ставятся в **`~/.local/share/coffeeos-vendor/…`** на ext4 (см. `config/bundle_env.rb`). Либо клонируйте проект в **`~/projects/CoffeeOS`** — тогда снова используется `./vendor/bundle` и обычный `bundle install` ОК.
+
+* **Версии Ruby/Node (mise):** в корне есть `mise.toml` (Ruby **3.4.8**, Node **20**). Команда **`mise install`** подтянет те же версии, что и `.ruby-version`, без путаницы rbenv/системный Ruby.
+
+* **Прочие среды:** в `.bundle/config` по-прежнему `BUNDLE_PATH: vendor/bundle` для CI и клонов на нативном диске. `config/boot.rb` задаёт те же пути через `AppBundleEnv`.
 
 * **Запуск:** **`./bin/server`** — только Rails (логин, manager, barista и т.д.), без Vite. **`./bin/dev`** — витрина **`/shop`**: Rails :3000 + Vite (HMR). **`./bin/dev --rails-only`** — то же, что `bin/server` на порту 3000. После **`npm run vite:build`** витрина может открываться и без живого Vite (статические ассеты).
 

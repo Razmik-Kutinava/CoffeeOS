@@ -9,11 +9,15 @@ end
 
 FileUtils.chdir APP_ROOT do
   # This script is a way to set up or update your development environment automatically.
-  # This script is idempotent, so that you can run it at any time and get an expectable outcome.
+  # This script is idempotent, so that you can run it at any point and get an expectable outcome.
   # Add necessary setup steps to this file.
 
+  load File.join(APP_ROOT, "config", "bundle_env.rb")
+  AppBundleEnv.apply!(ENV)
+
   puts "== Installing dependencies =="
-  system("bundle check") || system!("bundle install")
+  bundle_bin = File.join(APP_ROOT, "bin", "bundle")
+  system(Gem.ruby, bundle_bin, "check") || system!(Gem.ruby, bundle_bin, "install")
 
   # puts "\n== Copying sample files =="
   # unless File.exist?("config/database.yml")
@@ -30,6 +34,6 @@ FileUtils.chdir APP_ROOT do
   unless ARGV.include?("--skip-server")
     puts "\n== Starting development server =="
     STDOUT.flush # flush the output before exec(2) so that it displays
-    exec "bin/dev"
+    exec Gem.ruby, File.join(APP_ROOT, "bin", "dev")
   end
 end
