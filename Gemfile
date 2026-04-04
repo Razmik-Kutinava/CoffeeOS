@@ -45,6 +45,9 @@ gem "image_processing", "~> 1.2"
 # Rate limiting для API
 gem "rack-attack"
 
+# Витрина (Svelte SPA из coffee-shop) через Vite
+gem "vite_rails", "~> 3.10"
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
@@ -62,6 +65,7 @@ end
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
+  gem "foreman", "~> 0.90.0"
 end
 
 group :test do

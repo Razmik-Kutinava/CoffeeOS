@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <title><%= content_for(:title) || "CoffeeOS — витрина" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <% if @shop_tenant %>
+      <meta name="shop-tenant-id" content="<%= @shop_tenant.id %>">
+    <% end %>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= vite_client_tag %>
+    <%= vite_javascript_tag "application" %>
+  </head>
+  <body class="min-h-screen antialiased">
+    <% if @shop_tenant.blank? %>
+      <div style="background:#1a1a1a;color:#fff;padding:1rem;font-family:system-ui,sans-serif;">
+        <p><strong>Витрина /shop</strong></p>
+        <p>Задайте в <code>.env</code> переменную <code>SHOP_DEFAULT_TENANT_ID</code> (UUID точки) или откройте
+          <code>/shop?tenant_id=...</code></p>
+      </div>
+    <% end %>
+    <%= yield %>
+  </body>
+</html>

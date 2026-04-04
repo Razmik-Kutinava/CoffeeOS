@@ -22,7 +22,9 @@ class Order < ApplicationRecord
   # `barista/orders#create` создаёт Order с пустым `order_number: ''`,
   # рассчитывая на заполнение на уровне БД (триггер). Чтобы Rails не
   # блокировал insert, разрешаем пустой номер для этого сценария.
-  validates :order_number, presence: true, unless: -> { order_number.blank? && source == 'manual' }
+  validates :order_number, presence: true, unless: -> {
+    order_number.blank? && source.in?(%w[manual mobile])
+  }
   validates :source, presence: true
   validates :status, presence: true
   validates :total_amount, presence: true, numericality: { greater_than: 0 }
