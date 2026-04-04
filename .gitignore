@@ -4,8 +4,12 @@
 # belong in git's global ignore instead:
 # `$XDG_CONFIG_HOME/git/ignore` or `~/.config/git/ignore`
 
-# Ignore bundler config.
-/.bundle
+# Bundler: не коммитим кэш, но path к гемам — в репо (удобно для WSL без sudo)
+/.bundle/*
+!/.bundle/config
+
+# Гемы в каталоге проекта (`path vendor/bundle`)
+/vendor/bundle/
 
 # Ignore all environment files.
 /.env*
