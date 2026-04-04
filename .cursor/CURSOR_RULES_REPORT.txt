@@ -1,13 +1,18 @@
 Отчёт: правила Cursor для CoffeeOS
-Дата: 2026-04-04
+Дата: 2026-04-04 (обновлено)
 
 Сделано
-- Добавлен один файл .cursor/rules/coffeeos-core.mdc с alwaysApply: true.
-- В нём 8 коротких пунктов: тенант/RLS, панели, enum Rails 8, миграции, секреты, объём правок, проверки, честность к схеме.
+- coffeeos-core.mdc — alwaysApply: true, 8 пунктов (тенант/RLS, панели, enum, миграции, секреты, объём правок, проверки, честность к схеме).
+- Пять узких правил с globs (alwaysApply: false), по реальной структуре app/ и test/:
+  - coffeeos-data.mdc — db/migrate, db/schema.rb, app/models
+  - coffeeos-http.mdc — app/controllers, config/routes.rb
+  - coffeeos-ui.mdc — app/views, app/javascript, app/assets, app/components
+  - coffeeos-services.mdc — app/services
+  - coffeeos-tests.mdc — test
 
 Почему так
-- Один компактный rule вместо многих ролей — меньше шума в контексте, проще поддерживать.
-- Жёсткие пункты совпадают с реальной архитектурой репо (мультитенант, несколько layout, без утечки секретов).
+- Ядро даёт инварианты всегда; остальное подмешивается по открытым/редактируемым файлам — меньше шума, чем десятки правил «на каждый скилл».
+- Слои разделены: данные, HTTP, UI, сервисы, тесты — совпадает с типичными PR по этому репо.
 
 Дальше
-- При необходимости добавить узкие rules с globs (например db/migrate/**) — опционально.
+- При частых правках только Docker/CI — опционально вынести шестой файл с globs config/**, Dockerfile, .github/**, bin/**.

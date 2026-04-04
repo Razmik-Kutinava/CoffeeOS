@@ -1,0 +1,12 @@
+---
+description: CoffeeOS — контроллеры, роуты, панели
+globs: app/controllers/**,config/routes.rb
+alwaysApply: false
+---
+
+# HTTP / панели
+
+- Неймспейсы по ролям: `barista`, `manager`, `prep_kitchen`, `platform`, `auth`, `callbacks`, `health` — свой `base` и layout; не смешивать ответственность ролей в одном контроллере.
+- RBAC и маршруты: `docs/architecture/ROLES_AND_PERMISSIONS.md`, `docs/stack/Authorization.md`; пример — `.claude/examples/controller-example.md`.
+- Тяжёлую логику выносить в `app/services/`; колбэки — переменные `CALLBACK_*` как в проекте.
+- Домен: `.claude/domain/orders.md`, `shifts.md`, `inventory.md`.

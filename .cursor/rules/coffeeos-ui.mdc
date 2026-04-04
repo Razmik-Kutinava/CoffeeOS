@@ -1,0 +1,11 @@
+---
+description: CoffeeOS — Turbo, Stimulus, ERB, ассеты
+globs: app/views/**,app/javascript/**,app/assets/**,app/components/**
+alwaysApply: false
+---
+
+# UI
+
+- Стек: Hotwire (Turbo + Stimulus), ERB; без React/Vue без явного решения. См. `docs/stack/Frontend.md`, `docs/stack/Turbo.md`.
+- Темы и компоненты: `docs/guides/UI_GUIDELINES.md`; layout по ролям в `app/views/layouts/`.
+- Real-time: Turbo Streams / Action Cable — как на существующих экранах баристы и ТВ.

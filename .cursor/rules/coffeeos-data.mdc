@@ -1,0 +1,12 @@
+---
+description: CoffeeOS — миграции, схема, модели, RLS
+globs: db/migrate/**,db/schema.rb,app/models/**
+alwaysApply: false
+---
+
+# Данные
+
+- Тенант и RLS: согласованно с `Current.tenant_id` / `SET LOCAL app.current_tenant_id`; детали — локально `docs/guides/RLS_AND_TENANT_CONTEXT.md`, `.claude/architecture/multi-tenant.md`.
+- Запросы: ActiveRecord по умолчанию; сырой SQL — для функций БД, тяжёлой аналитики или миграций (`.claude/constraints.md`).
+- Миграции: минимальные, без дублирующих индексов; стиль — `.claude/examples/migration-example.md`.
+- `enum` только `enum :имя, { ... }` (Rails 8). Перед новыми полями — `db/schema.rb` и существующие модели.
