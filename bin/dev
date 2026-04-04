@@ -1,2 +1,9 @@
 #!/usr/bin/env ruby
-exec "./bin/rails", "server", *ARGV
+# Запуск Rails + Vite для витрины /shop (Procfile.dev). Только Rails: bin/rails server
+APP_ROOT = File.expand_path("..", __dir__)
+Dir.chdir(APP_ROOT)
+if ARGV.include?("--rails-only")
+  exec "./bin/rails", "server", "-p", "3000", *(ARGV - ["--rails-only"])
+else
+  exec "bundle", "exec", "foreman", "start", "-f", "Procfile.dev"
+end

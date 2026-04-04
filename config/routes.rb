@@ -114,6 +114,28 @@ Rails.application.routes.draw do
     get '/shift', to: 'shifts#show', as: :shift
   end
 
+  # Витрина (Svelte SPA, данные точки — ProductTenantSetting, заказы — mobile + orders)
+  namespace :shop, path: "shop" do
+    root to: "pages#home"
+    namespace :api do
+      get "categories", to: "categories#index"
+      get "products", to: "products#index"
+      get "products/:id", to: "products#show"
+      post "cart/add", to: "cart#add"
+      get "cart", to: "cart#show"
+      delete "cart/items/:index", to: "cart#destroy"
+      patch "cart/items/:index", to: "cart#update"
+      post "orders", to: "orders#create"
+      get "orders/history", to: "orders#history"
+      get "orders/:id", to: "orders#show"
+      post "promo_codes/apply", to: "promo_codes#apply"
+      get "profile", to: "profile#show"
+      get "favorites", to: "favorites#index"
+      post "favorites", to: "favorites#create"
+      delete "favorites/:product_id", to: "favorites#destroy"
+    end
+  end
+
   # Defines the root path route ("/")
   root 'auth/sessions#new'
 end
