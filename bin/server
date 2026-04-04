@@ -1,0 +1,7 @@
+#!/usr/bin/env ruby
+# Обычный запуск приложения (панели, логин и т.д.) без dev-сервера Vite для /shop.
+APP_ROOT = File.expand_path("..", __dir__)
+Dir.chdir(APP_ROOT)
+require File.expand_path("../config/bundle_env", __dir__)
+AppBundleEnv.apply!(ENV)
+exec Gem.ruby, File.join(APP_ROOT, "bin", "rails"), "server", *ARGV

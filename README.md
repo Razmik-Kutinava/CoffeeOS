@@ -21,9 +21,11 @@ Things you may want to cover:
 
 * **Два входа (франчайзи `/manager/` и УК `/admin/`):** после `bin/rails db:migrate` выполнить `bin/rails test:create_test_users`, затем логин `franchise@test.com` или `uk@test.com` (пароль в выводе rake, обычно `test123456`). Подробнее: [docs/features/ADMIN_PANELS_LOGIN.md](docs/features/ADMIN_PANELS_LOGIN.md).
 
-* **WSL / системный Ruby без sudo:** в репозитории задан `BUNDLE_PATH=vendor/bundle` (см. `.bundle/config`). После `git pull` в WSL из корня проекта выполните **`bundle install`** — гемы ставятся в `vendor/bundle/`, без записи в `/var/lib/gems`. Запускайте **`bin/rails server`** или **`bundle exec rails server`**, а не голый `rails s` из другого каталога Ruby.
+* **WSL / системный Ruby без sudo:** в репозитории задан `BUNDLE_PATH=vendor/bundle` (см. `.bundle/config`). После `git pull` в WSL из корня проекта выполните **`bundle install`**. Перед запуском приложение выставляет **абсолютные** `BUNDLE_GEMFILE` и `BUNDLE_PATH` (см. `config/bundle_env.rb` + `config/boot.rb`) — это устраняет сбой «Could not find rails…» при клоне на **`/mnt/c/...`**. Если глюки остаются: `rm -rf tmp/cache/bootsnap*` и при необходимости пересоберите гемы: `rm -rf vendor/bundle && bundle install`. Надёжнее держать клон на **`~/projects/...`** (ext4), а не на диске C:.
 
-* **Витрина `/shop` (Svelte из coffee-shop):** в `.env` задайте `SHOP_DEFAULT_TENANT_ID=<uuid точки>` (или откройте `/shop?tenant_id=...`). У точки должны быть `ProductTenantSetting` и активные продукты. Запуск вместе с Vite: `bin/dev` (Foreman: Rails 3000 + Vite 3036). Только Rails: `bin/dev --rails-only`. Сборка фронта: `npm run vite:build`. В WSL при первом запуске витрины: **`npm install`** в корне проекта.
+* **Запуск:** **`./bin/server`** — только Rails (логин, manager, barista и т.д.), без Vite. **`./bin/dev`** — витрина **`/shop`**: Rails :3000 + Vite (HMR). **`./bin/dev --rails-only`** — то же, что `bin/server` на порту 3000. После **`npm run vite:build`** витрина может открываться и без живого Vite (статические ассеты).
+
+* **Витрина `/shop` (Svelte из coffee-shop):** в `.env` задайте `SHOP_DEFAULT_TENANT_ID=<uuid точки>` (или откройте `/shop?tenant_id=...`). У точки должны быть `ProductTenantSetting` и активные продукты. В WSL при разработке витрины: **`npm install`** в корне проекта.
 
 * Services (job queues, cache servers, search engines, etc.)
 

@@ -1,9 +1,12 @@
 #!/usr/bin/env ruby
-# Запуск Rails + Vite для витрины /shop (Procfile.dev). Только Rails: bin/rails server
+# Витрина /shop: Rails (порт 3000) + Vite (HMR). Без Vite: bin/server или bin/dev --rails-only
 APP_ROOT = File.expand_path("..", __dir__)
 Dir.chdir(APP_ROOT)
+require File.expand_path("../config/bundle_env", __dir__)
+AppBundleEnv.apply!(ENV)
+
 if ARGV.include?("--rails-only")
-  exec "./bin/rails", "server", "-p", "3000", *(ARGV - ["--rails-only"])
+  exec Gem.ruby, File.join(APP_ROOT, "bin", "rails"), "server", "-p", "3000", *(ARGV - ["--rails-only"])
 else
-  exec "bundle", "exec", "foreman", "start", "-f", "Procfile.dev"
+  exec Gem.ruby, "-S", "bundle", "exec", "foreman", "start", "-f", "Procfile.dev"
 end
