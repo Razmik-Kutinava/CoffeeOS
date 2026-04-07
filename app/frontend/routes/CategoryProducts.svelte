@@ -19,7 +19,8 @@
   onMount(async () => {
     try {
       const categories = await loadCatalog()
-      category = categories.find(c => c.id == params.id)
+      const want = String(params.id ?? "")
+      category = categories.find(c => String(c.id) === want)
       if (category) {
         products = category.products
       } else {

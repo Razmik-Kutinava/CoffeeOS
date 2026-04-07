@@ -1,0 +1,36 @@
+<% content_for :page_title, "#{@category.name} — CoffeeOS блог" %>
+<% content_for :meta_description, @category.description.presence || "Рубрика «#{@category.name}» в блоге CoffeeOS." %>
+
+<h1 style="font-size:1.5rem;margin-bottom:1rem;"><%= @category.name %></h1>
+<% if @category.description.present? %>
+  <p style="color:var(--blog-muted);margin-bottom:1.5rem;"><%= @category.description %></p>
+<% end %>
+
+<nav class="blog-nav" style="margin-bottom:1rem;">
+  <%= link_to "← Все записи", blog_root_path %>
+  <% if blog_editor? %>
+    <%= link_to "Новая статья", new_blog_post_path(blog_category_id: @category.id) %>
+  <% end %>
+</nav>
+
+<% if @posts.empty? %>
+  <p style="color:var(--blog-muted);">В этой рубрике пока нет записей.</p>
+<% else %>
+  <% @posts.each do |post| %>
+    <%= link_to blog_post_path(post.slug), class: "blog-card" do %>
+      <h2>
+        <%= post.title %>
+        <% if blog_editor? && !post.published? %>
+          <span class="blog-badge">черновик</span>
+        <% end %>
+      </h2>
+      <div class="meta">
+        <% if post.published_at %>
+          <%= post.published_at.strftime("%d.%m.%Y") %>
+        <% else %>
+          без даты публикации
+        <% end %>
+      </div>
+    <% end %>
+  <% end %>
+<% end %>

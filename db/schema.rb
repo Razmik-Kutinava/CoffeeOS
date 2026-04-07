@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_20_120002) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_06_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -21,6 +21,35 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_20_120002) do
   create_enum "payment_method", ["card", "cash", "sbp", "apple_pay", "google_pay", "internal_balance", "mixed"]
   create_enum "payment_status", ["pending", "processing", "succeeded", "failed", "refunded", "partially_refunded", "requires_review"]
   create_enum "shift_status", ["open", "closed", "cancelled"]
+
+  create_table "blog_categories", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.text "description"
+    t.string "name", null: false
+    t.string "slug", null: false
+    t.integer "sort_order", default: 0, null: false
+    t.datetime "updated_at", null: false
+    t.index ["slug"], name: "index_blog_categories_on_slug", unique: true
+  end
+
+  create_table "blog_posts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "blog_category_id"
+    t.text "body"
+    t.text "conclusion"
+    t.string "cover_image_url", limit: 2048
+    t.datetime "created_at", null: false
+    t.text "intro"
+    t.string "meta_description", limit: 500
+    t.string "meta_title"
+    t.integer "position", default: 0, null: false
+    t.datetime "published_at"
+    t.string "slug", null: false
+    t.string "title", null: false
+    t.datetime "updated_at", null: false
+    t.index ["blog_category_id"], name: "index_blog_posts_on_blog_category_id"
+    t.index ["published_at"], name: "index_blog_posts_on_published_at"
+    t.index ["slug"], name: "index_blog_posts_on_slug", unique: true
+  end
 
   create_table "cash_shifts", id: :uuid, default: -> { "gen_random_uuid()" }, comment: "Кассовые смены", force: :cascade do |t|
     t.decimal "cash_difference", precision: 10, scale: 2
@@ -716,6 +745,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_20_120002) do
     t.index ["tenant_id"], name: "index_users_on_tenant_id"
   end
 
+  add_foreign_key "blog_posts", "blog_categories"
   add_foreign_key "cash_shifts", "tenants", on_delete: :cascade
   add_foreign_key "cash_shifts", "users", column: "closed_by_id", on_delete: :nullify
   add_foreign_key "cash_shifts", "users", column: "opened_by_id", on_delete: :restrict

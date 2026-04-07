@@ -43,6 +43,7 @@ Rails.application.routes.draw do
 
     get "/inventory", to: "inventory#index", as: :inventory
     get "/menu", to: "menu#index", as: :menu
+    patch "/menu/settings/:id/price", to: "menu#update_price", as: :menu_setting_price
     get "/reports", to: "reports#index", as: :reports
 
     resources :staff_members, path: "staff", controller: "staff", only: %i[index new create edit update]
@@ -81,6 +82,17 @@ Rails.application.routes.draw do
   # Не редиректить /admin → /admin/: это даёт бесконечный цикл со слэшем вместе с корнем namespace.
   namespace :platform, path: "admin" do
     root to: "dashboard#show"
+    get "/menu", to: "menu#index", as: :menu
+    post "/menu/categories", to: "menu#create_category", as: :menu_categories
+    patch "/menu/categories/:id", to: "menu#update_category", as: :menu_category
+    delete "/menu/categories/:id", to: "menu#destroy_category", as: :menu_category_destroy
+    post "/menu/products", to: "menu#create_product", as: :menu_products
+    patch "/menu/products/:id", to: "menu#update_product", as: :menu_product
+    delete "/menu/products/:id", to: "menu#destroy_product", as: :menu_product_destroy
+    post "/menu/modifier_groups", to: "menu#create_modifier_group", as: :menu_modifier_groups
+    patch "/menu/modifier_groups/:id", to: "menu#update_modifier_group", as: :menu_modifier_group
+    post "/menu/modifier_options", to: "menu#create_modifier_option", as: :menu_modifier_options
+    patch "/menu/modifier_options/:id", to: "menu#update_modifier_option", as: :menu_modifier_option
     resources :organizations, only: %i[index new create edit update]
     resources :tenants, only: %i[index new create edit update] do
       member do
@@ -112,6 +124,14 @@ Rails.application.routes.draw do
       end
     end
     get '/shift', to: 'shifts#show', as: :shift
+  end
+
+  # Публичный блог (редакторы: роль blog_editor, вход из модалки после long-press в футере)
+  namespace :blog do
+    root "home#index"
+    get "categories/:slug", to: "categories#show", as: :category
+    resources :posts, param: :slug, only: %i[show new create edit update destroy]
+    resource :session, only: %i[create destroy], controller: "sessions"
   end
 
   # Витрина (Svelte SPA, данные точки — ProductTenantSetting, заказы — mobile + orders)

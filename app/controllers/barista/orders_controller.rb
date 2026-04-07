@@ -1,7 +1,7 @@
 module Barista
   class OrdersController < BaseController
     def show
-      @order = Order.for_current_tenant.find(params[:id])
+      @order = Order.for_current_tenant.includes(:payments).find(params[:id])
       @order_items = @order.order_items.includes(:product)
       
       respond_to do |format|
@@ -18,8 +18,9 @@ module Barista
               {
                 product_name: item.product_name,
                 quantity: item.quantity,
-                unit_price: item.unit_price,
-                total_price: item.total_price
+                price: item.unit_price,
+                total_price: item.total_price,
+                modifiers: Array(item.modifier_options&.dig("selected_modifiers")).map { |m| m["name"] }
               }
             end
           }
@@ -74,13 +75,20 @@ module Barista
         # Подсчитываем суммы
         total_amount = 0
         order_items_data = []
-        
+
+        all_product_ids = cart_items.map { |i| i[:product_id] || i['product_id'] }.map(&:to_i)
+        products_map = Product.where(id: all_product_ids).index_by(&:id)
+        settings_map = ProductTenantSetting
+          .where(product_id: all_product_ids, tenant_id: Current.tenant_id)
+          .index_by(&:product_id)
+
         cart_items.each do |item|
-          product_id = item[:product_id] || item['product_id']
+          product_id = (item[:product_id] || item['product_id']).to_i
           quantity = (item[:quantity] || item['quantity'] || 1).to_i
-          
-          product = Product.find(product_id)
-          setting = product.product_tenant_settings.find_by(tenant_id: Current.tenant_id)
+
+          product = products_map[product_id]
+          raise ActiveRecord::RecordNotFound, "Товар ##{product_id} не найден" unless product
+          setting = settings_map[product_id]
           
           unless setting&.is_enabled && !setting.is_sold_out
             raise "Продукт #{product.name} недоступен"
@@ -253,37 +261,12 @@ module Barista
         target: "order_#{@order.id}"
       )
       
-      # Обновление счётчиков
-      counts = {
-        new: Order.for_barista_board(Current.tenant_id).where(status: 'accepted').count,
-        preparing: Order.for_barista_board(Current.tenant_id).where(status: 'preparing').count,
-        ready: Order.for_barista_board(Current.tenant_id).where(status: 'ready').count
-      }
-      
-      Turbo::StreamsChannel.broadcast_replace_to(
-        "orders_#{Current.tenant_id}",
-        target: "count-new",
-        partial: 'barista/dashboard/count_badge',
-        locals: { count: counts[:new], type: 'new' }
-      )
-      
-      Turbo::StreamsChannel.broadcast_replace_to(
-        "orders_#{Current.tenant_id}",
-        target: "count-preparing",
-        partial: 'barista/dashboard/count_badge',
-        locals: { count: counts[:preparing], type: 'preparing' }
-      )
-      
-      Turbo::StreamsChannel.broadcast_replace_to(
-        "orders_#{Current.tenant_id}",
-        target: "count-ready",
-        partial: 'barista/dashboard/count_badge',
-        locals: { count: counts[:ready], type: 'ready' }
-      )
+      # Обновление счётчиков — один запрос вместо трёх
+      broadcast_order_counts
 
       # TV board: перерисовываем колонки целиком для корректного idx.
       broadcast_tv_columns_update
-      
+
       respond_to do |format|
         format.turbo_stream { render turbo_stream: turbo_stream.remove("order_#{@order.id}") }
         format.html { redirect_to barista_dashboard_path, notice: "Заказ отменён" }
@@ -291,6 +274,33 @@ module Barista
     end
     
     private
+
+    def broadcast_order_counts
+      raw = Order.for_barista_board(Current.tenant_id)
+                 .where(status: %w[accepted preparing ready])
+                 .group(:status)
+                 .count
+      counts = { new: raw['accepted'].to_i, preparing: raw['preparing'].to_i, ready: raw['ready'].to_i }
+
+      Turbo::StreamsChannel.broadcast_replace_to(
+        "orders_#{Current.tenant_id}",
+        target: "count-new",
+        partial: 'barista/dashboard/count_badge',
+        locals: { count: counts[:new], type: 'new' }
+      )
+      Turbo::StreamsChannel.broadcast_replace_to(
+        "orders_#{Current.tenant_id}",
+        target: "count-preparing",
+        partial: 'barista/dashboard/count_badge',
+        locals: { count: counts[:preparing], type: 'preparing' }
+      )
+      Turbo::StreamsChannel.broadcast_replace_to(
+        "orders_#{Current.tenant_id}",
+        target: "count-ready",
+        partial: 'barista/dashboard/count_badge',
+        locals: { count: counts[:ready], type: 'ready' }
+      )
+    end
 
     def tv_board_setting_for_current_tenant
       TvBoardSetting.find_by(tenant_id: Current.tenant_id) ||
@@ -405,33 +415,8 @@ module Barista
         end
       end
       
-      # Обновление счётчиков
-      counts = {
-        new: Order.for_barista_board(Current.tenant_id).where(status: 'accepted').count,
-        preparing: Order.for_barista_board(Current.tenant_id).where(status: 'preparing').count,
-        ready: Order.for_barista_board(Current.tenant_id).where(status: 'ready').count
-      }
-      
-      Turbo::StreamsChannel.broadcast_replace_to(
-        "orders_#{Current.tenant_id}",
-        target: "count-new",
-        partial: 'barista/dashboard/count_badge',
-        locals: { count: counts[:new], type: 'new' }
-      )
-      
-      Turbo::StreamsChannel.broadcast_replace_to(
-        "orders_#{Current.tenant_id}",
-        target: "count-preparing",
-        partial: 'barista/dashboard/count_badge',
-        locals: { count: counts[:preparing], type: 'preparing' }
-      )
-      
-      Turbo::StreamsChannel.broadcast_replace_to(
-        "orders_#{Current.tenant_id}",
-        target: "count-ready",
-        partial: 'barista/dashboard/count_badge',
-        locals: { count: counts[:ready], type: 'ready' }
-      )
+      # Обновление счётчиков — один запрос вместо трёх
+      broadcast_order_counts
 
       # TV board: перерисовываем колонки целиком для корректного idx.
       broadcast_tv_columns_update

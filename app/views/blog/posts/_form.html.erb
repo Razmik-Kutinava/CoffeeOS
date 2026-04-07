@@ -1,0 +1,44 @@
+<%= form_with model: @post, url: (@post.persisted? ? blog_post_path(@post) : blog_posts_path), method: (@post.persisted? ? :patch : :post), local: true, html: { class: "blog-form" } do |f| %>
+  <% if @post.errors.any? %>
+    <div class="blog-flash blog-flash--alert" role="alert">
+      <%= @post.errors.full_messages.to_sentence %>
+    </div>
+  <% end %>
+
+  <%= f.label :title, "Заголовок (H1)" %>
+  <%= f.text_field :title, required: true %>
+
+  <%= f.label :slug, "Slug URL (латиница, можно оставить пустым при создании)" %>
+  <%= f.text_field :slug, placeholder: "avtomatichyeski-iz-zagolovka" %>
+
+  <%= f.label :blog_category_id, "Рубрика" %>
+  <%= f.collection_select :blog_category_id, @categories, :id, :name, { include_blank: "Без рубрики" }, {} %>
+
+  <%= f.label :cover_image_url, "URL обложки (необязательно)" %>
+  <%= f.text_field :cover_image_url, placeholder: "https://..." %>
+
+  <%= f.label :intro, "Вступление" %>
+  <%= f.text_area :intro, rows: 4, placeholder: "Коротко о чём статья." %>
+
+  <%= f.label :body, "Текст статьи (HTML: p, strong, em, ul, ol, li, h2, h3, blockquote, a)" %>
+  <%= f.text_area :body, class: "blog-body-field", placeholder: "<p>...</p>" %>
+
+  <%= f.label :conclusion, "Выводы" %>
+  <%= f.text_area :conclusion, rows: 5, placeholder: "Итоги и призыв." %>
+
+  <%= f.label :meta_title, "Meta title (SEO, необязательно)" %>
+  <%= f.text_field :meta_title %>
+
+  <%= f.label :meta_description, "Meta description (SEO, необязательно)" %>
+  <%= f.text_area :meta_description, rows: 2 %>
+
+  <%= f.label :publish do %>
+    <%= f.check_box :publish, {}, "1", "0" %>
+    Опубликовать (снять галочку = черновик)
+  <% end %>
+
+  <div class="blog-toolbar" style="margin-top:1rem;">
+    <%= f.submit @post.persisted? ? "Сохранить" : "Создать" %>
+    <%= link_to "Отмена", @post.persisted? ? blog_post_path(@post) : blog_root_path %>
+  </div>
+<% end %>

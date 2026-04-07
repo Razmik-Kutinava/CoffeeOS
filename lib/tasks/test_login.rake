@@ -40,7 +40,8 @@ namespace :test do
       { code: "franchise_manager", name: "Менеджер франшизы (владелец сети)" },
       { code: "ук_global_admin", name: "УК — глобальный админ" },
       { code: "ук_country_manager", name: "Менеджер страны" },
-      { code: "ук_billing_admin", name: "Биллинг админ" }
+      { code: "ук_billing_admin", name: "Биллинг админ" },
+      { code: "blog_editor", name: "Редактор блога" }
     ]
 
     roles = {}
@@ -65,7 +66,9 @@ namespace :test do
       { email: "uk@test.com", name: "УК Тест", roles: ["ук_global_admin"] },
       { email: "multi@test.com", name: "Мульти Роль", roles: %w[barista shift_manager] },
       { phone: "+79991234567", name: "Телефон Тест", roles: ["barista"] },
-      { email: "blocked@test.com", name: "Заблокированный", roles: ["barista"], status: "blocked" }
+      { email: "blocked@test.com", name: "Заблокированный", roles: ["barista"], status: "blocked" },
+      { email: "blog_editor@test.com", name: "Редактор блога", roles: ["blog_editor"] },
+      { email: "blog_editor2@test.com", name: "Редактор блога 2", roles: ["blog_editor"] }
     ]
 
     users_data.each do |user_data|
@@ -101,12 +104,18 @@ namespace :test do
     puts "\n=== Готово ==="
     puts "Пароль для всех (кроме заблокированного): #{test_password}"
     puts ""
+    puts "Параллельные разные пользователи: разные поддомены *.localhost или 127.0.0.1 vs localhost (см. docs/features/ADMIN_PANELS_LOGIN.md)."
+    puts ""
     puts "Два входа в «админки»:"
     puts "  1) Франчайзи (несколько точек, как офис) → логин franchise@test.com → после входа /manager/"
     puts "  2) УК (платформа) → логин uk@test.com → после входа /admin/"
     puts ""
     puts "Офис одной точки: office@test.com → /manager/"
     puts "Старый admin@test.com удалён из сценария; используй franchise@test.com и uk@test.com."
+    puts ""
+    puts "Блог (после db:migrate и bin/rails blog:seed):"
+    puts "  http://localhost:3001/blog"
+    puts "  Редакторы: blog_editor@test.com / blog_editor2@test.com — пароль как у остальных (#{test_password})"
   end
 
   desc "Удалить всех тестовых пользователей (из списка задачи)"
@@ -116,6 +125,7 @@ namespace :test do
     test_emails = %w[
       barista@test.com manager@test.com office@test.com kitchen-manager@test.com
       kitchen@test.com franchise@test.com uk@test.com admin@test.com multi@test.com blocked@test.com
+      blog_editor@test.com blog_editor2@test.com
     ]
 
     test_phone = "+79991234567"

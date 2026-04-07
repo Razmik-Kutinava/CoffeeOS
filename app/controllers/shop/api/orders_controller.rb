@@ -34,7 +34,7 @@ module Shop
               status: o.status,
               total: o.final_amount.to_f,
               created_at: o.created_at.iso8601,
-              items_count: o.order_items.sum(:quantity)
+              items_count: o.order_items.sum(&:quantity)
             }
           }
         else

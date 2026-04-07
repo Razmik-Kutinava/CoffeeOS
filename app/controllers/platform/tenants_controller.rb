@@ -17,9 +17,8 @@ module Platform
       end
 
       ActiveRecord::Base.transaction do
-        ActiveRecord::Base.connection.execute(
-          "SET LOCAL app.current_user_id = '#{current_user.id}'"
-        )
+        conn = ActiveRecord::Base.connection
+        conn.execute("SET LOCAL app.current_user_id = #{conn.quote(current_user.id.to_s)}")
         TenantModuleFlags.sync!(@tenant, module_params)
       end
       redirect_to platform_tenants_path, notice: "Точка создана"
@@ -36,9 +35,8 @@ module Platform
       end
 
       ActiveRecord::Base.transaction do
-        ActiveRecord::Base.connection.execute(
-          "SET LOCAL app.current_user_id = '#{current_user.id}'"
-        )
+        conn = ActiveRecord::Base.connection
+        conn.execute("SET LOCAL app.current_user_id = #{conn.quote(current_user.id.to_s)}")
         TenantModuleFlags.sync!(@tenant, module_params)
       end
       redirect_to platform_tenants_path, notice: "Сохранено"

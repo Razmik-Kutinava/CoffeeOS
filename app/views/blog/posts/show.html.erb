@@ -1,0 +1,78 @@
+<% content_for :page_title, "#{@post.display_meta_title} — CoffeeOS блог" %>
+<% content_for :meta_description, @post.display_meta_description %>
+<% content_for :canonical_url, blog_post_url(@post) %>
+
+<article class="blog-prose" itemscope itemtype="https://schema.org/BlogPosting">
+  <% if blog_editor? %>
+    <div class="blog-toolbar">
+      <%= link_to "Редактировать", edit_blog_post_path(@post.slug) %>
+      <%= button_to "Удалить", blog_post_path(@post.slug), method: :delete, form: { data: { turbo_confirm: "Удалить статью?" } } %>
+      <%= link_to "Все записи", blog_root_path %>
+    </div>
+  <% end %>
+
+  <header>
+    <p style="font-size:0.9rem;color:var(--blog-muted);margin:0 0 0.5rem;">
+      <% if @post.blog_category %>
+        <%= link_to @post.blog_category.name, blog_category_path(@post.blog_category.slug), style: "color:var(--blog-accent);text-decoration:none;" %>
+      <% else %>
+        Блог
+      <% end %>
+      <% if @post.published_at %>
+        · <time datetime="<%= @post.published_at.iso8601 %>"><%= @post.published_at.strftime("%d.%m.%Y") %></time>
+      <% elsif blog_editor? %>
+        · <span class="blog-badge">черновик</span>
+      <% end %>
+    </p>
+    <h1 itemprop="headline"><%= @post.title %></h1>
+  </header>
+
+  <% if @post.cover_image_url.present? %>
+    <figure style="margin:1.25rem 0;">
+      <img src="<%= @post.cover_image_url %>" alt="" style="max-width:100%;border-radius:8px;border:1px solid var(--blog-border);" loading="lazy">
+    </figure>
+  <% end %>
+
+  <% if @post.intro.present? %>
+    <section class="lead" itemprop="description">
+      <%= simple_format(@post.intro, {}, wrapper_tag: "div") %>
+    </section>
+  <% end %>
+
+  <% if @post.body.present? %>
+    <section itemprop="articleBody">
+      <%= @post.body.html_safe %>
+    </section>
+  <% end %>
+
+  <% if @post.conclusion.present? %>
+    <section class="conclusion">
+      <h2 style="font-size:1rem;margin-top:0;color:var(--blog-accent);">Выводы</h2>
+      <%= simple_format(@post.conclusion, {}, wrapper_tag: "div") %>
+    </section>
+  <% end %>
+
+  <aside class="blog-cta">
+    <div style="font-size:0.95rem;color:var(--blog-muted);">Подпишитесь на обновления</div>
+    <%= link_to "Перейти в Telegram", blog_cta_href, rel: "noopener noreferrer", target: "_blank" %>
+  </aside>
+
+  <% related =
+       if @post.blog_category_id.present?
+         BlogPost.published.where(blog_category_id: @post.blog_category_id).where.not(id: @post.id).recent_first.limit(3)
+       else
+         BlogPost.none
+       end %>
+  <% if related.any? %>
+    <nav style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--blog-border);" aria-label="Ещё в рубрике">
+      <h2 style="font-size:1rem;color:var(--blog-muted);">Ещё в рубрике</h2>
+      <ul style="margin:0.5rem 0 0;padding-left:1.25rem;">
+        <% related.each do |p| %>
+          <li style="margin-bottom:0.35rem;">
+            <%= link_to p.title, blog_post_path(p.slug), style: "color:var(--blog-accent);" %>
+          </li>
+        <% end %>
+      </ul>
+    </nav>
+  <% end %>
+</article>

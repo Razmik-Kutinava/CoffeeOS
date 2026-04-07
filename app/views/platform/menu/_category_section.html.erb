@@ -1,0 +1,242 @@
+<% prod_list = cat.products.sort_by(&:sort_order) %>
+<% n_products = prod_list.size %>
+<details class="pm-cat-acc" id="category-<%= cat.id %>">
+  <summary class="pm-cat-summary">
+    <span class="pm-cat-summary__main">
+      <span class="pm-cat-summary__title"><%= cat.name %></span>
+      <span class="pm-cat-summary__badge"><%= n_products %> шт.</span>
+    </span>
+    <span class="pm-cat-summary__meta">
+      <% if cat.is_active %><span class="pm-pill pm-pill--ok">активна</span><% else %><span class="pm-pill">выкл</span><% end %>
+    </span>
+  </summary>
+
+  <div class="pm-cat-inner">
+    <div class="pm-category-head pm-category-head--compact">
+      <%= form_with url: platform_menu_category_path(cat), method: :patch, local: true do %>
+        <div class="pm-row-2">
+          <div class="pm-field">
+            <label class="pm-label">Название</label>
+            <input type="text" name="category[name]" value="<%= cat.name %>" required>
+          </div>
+          <div class="pm-field">
+            <label class="pm-label">Slug</label>
+            <input type="text" name="category[slug]" value="<%= cat.slug %>">
+          </div>
+        </div>
+        <div class="pm-field">
+          <label class="pm-label">Описание</label>
+          <textarea name="category[description]" rows="2" placeholder="Описание категории"><%= cat.description %></textarea>
+        </div>
+        <div class="pm-row-2">
+          <div class="pm-field">
+            <label class="pm-label">Порядок</label>
+            <input type="number" name="category[sort_order]" value="<%= cat.sort_order %>" min="0">
+          </div>
+          <div class="pm-field pm-check" style="align-self: flex-end;">
+            <input type="hidden" name="category[is_active]" value="0">
+            <label><input type="checkbox" name="category[is_active]" value="1" <%= "checked" if cat.is_active %>> Активна</label>
+          </div>
+        </div>
+        <%= button_tag "Сохранить категорию", type: "submit", class: "pm-btn pm-btn--primary pm-btn--small" %>
+      <% end %>
+      <%= button_to "Удалить категорию из БД", platform_menu_category_destroy_path(cat), method: :delete,
+          form: { data: { turbo_confirm: "Удалить категорию и все товары в ней из базы? Если товар уже в заказах — удаление не выполнится." } },
+          class: "pm-btn pm-btn--danger" %>
+    </div>
+
+    <div class="pm-category-body pm-category-body--compact">
+      <% prod_list.each do |product| %>
+        <details class="pm-product-acc" id="product-<%= product.id %>">
+          <summary class="pm-product-summary">
+            <% if product.image_url.present? %>
+              <img class="pm-thumb pm-thumb--xs" src="<%= product.image_url %>" alt="" width="40" height="40" loading="lazy">
+            <% else %>
+              <div class="pm-thumb pm-thumb--xs pm-thumb--empty" aria-hidden="true">—</div>
+            <% end %>
+            <span class="pm-product-summary__text">
+              <span class="pm-product-summary__name"><%= product.name %></span>
+              <span class="pm-product-summary__price"><%= product.base_price %> ₽<% unless product.is_active %> · выкл<% end %></span>
+            </span>
+          </summary>
+
+          <div class="pm-product-inner">
+            <div class="pm-product-layout pm-product-layout--compact">
+              <div>
+                <% if product.image_url.present? %>
+                  <img class="pm-thumb pm-thumb--compact" src="<%= product.image_url %>" alt="" width="88" height="88" loading="lazy">
+                <% else %>
+                  <div class="pm-thumb pm-thumb--compact pm-thumb--empty" role="img" aria-label="Нет фото">Нет фото</div>
+                <% end %>
+              </div>
+              <div>
+                <%= form_with url: platform_menu_product_path(product), method: :patch, local: true, html: { multipart: true } do %>
+                  <input type="hidden" name="product[category_id]" value="<%= cat.id %>">
+                  <div class="pm-row-2">
+                    <div class="pm-field">
+                      <label class="pm-label">Название</label>
+                      <input type="text" name="product[name]" value="<%= product.name %>" required>
+                    </div>
+                    <div class="pm-field">
+                      <label class="pm-label">Slug</label>
+                      <input type="text" name="product[slug]" value="<%= product.slug %>">
+                    </div>
+                  </div>
+                  <div class="pm-field">
+                    <label class="pm-label">Описание</label>
+                    <textarea name="product[description]" rows="2" placeholder="Для витрины"><%= product.description %></textarea>
+                  </div>
+                  <div class="pm-row-2">
+                    <div class="pm-field">
+                      <label class="pm-label">Базовая цена, ₽</label>
+                      <input type="number" name="product[base_price]" value="<%= product.base_price %>" step="0.01" min="0.01">
+                    </div>
+                    <div class="pm-field">
+                      <label class="pm-label">Порядок</label>
+                      <input type="number" name="product[sort_order]" value="<%= product.sort_order %>" min="0">
+                    </div>
+                  </div>
+                  <div class="pm-field">
+                    <label class="pm-label">Фото по ссылке</label>
+                    <input type="url" name="product[image_url]" value="<%= product.image_url %>" placeholder="https://…">
+                  </div>
+                  <div class="pm-field">
+                    <label class="pm-label">Заменить фото файлом</label>
+                    <input type="file" name="product[image]" accept="image/jpeg,image/png,image/webp,image/gif">
+                  </div>
+                  <input type="hidden" name="product[is_active]" value="0">
+                  <label class="pm-check">
+                    <input type="checkbox" name="product[is_active]" value="1" <%= "checked" if product.is_active %>> Активен
+                  </label>
+                  <%= button_tag "Сохранить товар", type: "submit", class: "pm-btn pm-btn--primary pm-btn--small" %>
+                <% end %>
+                <%= button_to "Удалить товар из БД", platform_menu_product_destroy_path(product), method: :delete,
+                    form: { data: { turbo_confirm: "Удалить товар из базы? Если он уже в заказах — удаление не выполнится." } },
+                    class: "pm-btn pm-btn--danger" %>
+              </div>
+            </div>
+
+            <details class="pm-modifiers">
+              <summary>Модификаторы</summary>
+
+              <div class="pm-mod-new-group">
+                <p class="pm-mod-hint pm-mod-hint--short">
+                  Сначала группа (например «Температура»), затем варианты с доплатой.
+                </p>
+                <%= form_with url: platform_menu_modifier_groups_path, method: :post, local: true, class: "pm-modifier-block" do %>
+                  <input type="hidden" name="product_modifier_group[product_id]" value="<%= product.id %>">
+                  <div class="pm-row-2">
+                    <div class="pm-field">
+                      <label class="pm-label" for="new_grp_name_<%= product.id %>">Новая группа</label>
+                      <input id="new_grp_name_<%= product.id %>" type="text" name="product_modifier_group[name]" placeholder="Температура, Объём…" required>
+                    </div>
+                    <div class="pm-field">
+                      <label class="pm-label" for="new_grp_sort_<%= product.id %>">Порядок</label>
+                      <input id="new_grp_sort_<%= product.id %>" type="number" name="product_modifier_group[sort_order]" value="0" min="0">
+                    </div>
+                  </div>
+                  <input type="hidden" name="product_modifier_group[is_required]" value="0">
+                  <label class="pm-check">
+                    <input type="checkbox" name="product_modifier_group[is_required]" value="1"> Обязательный выбор в группе
+                  </label>
+                  <%= button_tag "Добавить группу", type: "submit", class: "pm-btn pm-btn--primary pm-btn--small" %>
+                <% end %>
+              </div>
+
+              <% groups = product.product_modifier_groups.sort_by(&:sort_order) %>
+              <% if groups.empty? %>
+                <p class="pm-hint" style="margin:0 0 8px;">Нет групп — добавьте выше.</p>
+              <% end %>
+
+              <% groups.each do |group| %>
+                <div class="pm-mod-group-card" id="modifier-group-<%= group.id %>">
+                  <h4 class="pm-mod-group-title">Группа: <%= group.name %></h4>
+
+                  <%= form_with url: platform_menu_modifier_group_path(group), method: :patch, local: true, class: "pm-modifier-block" do %>
+                    <div class="pm-row-2">
+                      <div class="pm-field">
+                        <label class="pm-label">Название группы</label>
+                        <input type="text" name="product_modifier_group[name]" value="<%= group.name %>" required>
+                      </div>
+                      <div class="pm-field">
+                        <label class="pm-label">Порядок</label>
+                        <input type="number" name="product_modifier_group[sort_order]" value="<%= group.sort_order %>" min="0">
+                      </div>
+                    </div>
+                    <input type="hidden" name="product_modifier_group[is_required]" value="0">
+                    <label class="pm-check">
+                      <input type="checkbox" name="product_modifier_group[is_required]" value="1" <%= "checked" if group.is_required %>> Обязательный выбор
+                    </label>
+                    <%= button_tag "Сохранить группу", type: "submit", class: "pm-btn pm-btn--primary pm-btn--small" %>
+                  <% end %>
+
+                  <p class="pm-mod-options-title">Варианты</p>
+
+                  <%= form_with url: platform_menu_modifier_options_path, method: :post, local: true, class: "pm-modifier-block" do %>
+                    <input type="hidden" name="product_modifier_option[group_id]" value="<%= group.id %>">
+                    <div class="pm-row-2">
+                      <div class="pm-field">
+                        <label class="pm-label">Новый вариант</label>
+                        <input type="text" name="product_modifier_option[name]" placeholder="Горячий, L…" required>
+                      </div>
+                      <div class="pm-field">
+                        <label class="pm-label">Доплата, ₽</label>
+                        <input type="number" name="product_modifier_option[price_delta]" step="0.01" min="0" value="0">
+                      </div>
+                    </div>
+                    <div class="pm-row-2">
+                      <div class="pm-field">
+                        <label class="pm-label">Порядок</label>
+                        <input type="number" name="product_modifier_option[sort_order]" value="0" min="0">
+                      </div>
+                      <div class="pm-field pm-check" style="align-self: flex-end;">
+                        <input type="hidden" name="product_modifier_option[is_active]" value="0">
+                        <label><input type="checkbox" name="product_modifier_option[is_active]" value="1" checked> На витрине</label>
+                      </div>
+                    </div>
+                    <%= button_tag "Добавить вариант", type: "submit", class: "pm-btn pm-btn--primary pm-btn--small" %>
+                  <% end %>
+
+                  <% opts = group.product_modifier_options.sort_by(&:sort_order) %>
+                  <% if opts.any? %>
+                    <div class="pm-option-list">
+                      <% opts.each do |opt| %>
+                        <div class="pm-option-row">
+                          <%= form_with url: platform_menu_modifier_option_path(opt), method: :patch, local: true do %>
+                            <div class="pm-row-2">
+                              <div class="pm-field">
+                                <label class="pm-label">Вариант</label>
+                                <input type="text" name="product_modifier_option[name]" value="<%= opt.name %>" required>
+                              </div>
+                              <div class="pm-field">
+                                <label class="pm-label">Доплата, ₽</label>
+                                <input type="number" name="product_modifier_option[price_delta]" value="<%= opt.price_delta %>" step="0.01" min="0">
+                              </div>
+                            </div>
+                            <div class="pm-row-2">
+                              <div class="pm-field">
+                                <label class="pm-label">Порядок</label>
+                                <input type="number" name="product_modifier_option[sort_order]" value="<%= opt.sort_order %>" min="0">
+                              </div>
+                              <div class="pm-field pm-check" style="align-self: flex-end;">
+                                <input type="hidden" name="product_modifier_option[is_active]" value="0">
+                                <label><input type="checkbox" name="product_modifier_option[is_active]" value="1" <%= "checked" if opt.is_active %>> Активен</label>
+                              </div>
+                            </div>
+                            <%= button_tag "Сохранить вариант", type: "submit", class: "pm-btn pm-btn--primary pm-btn--small" %>
+                          <% end %>
+                        </div>
+                      <% end %>
+                    </div>
+                  <% else %>
+                    <p class="pm-hint" style="margin:8px 0 0;">Нет вариантов — форма выше.</p>
+                  <% end %>
+                </div>
+              <% end %>
+            </details>
+          </div>
+        </details>
+      <% end %>
+    </div>
+  </div>
+</details>

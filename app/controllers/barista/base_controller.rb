@@ -30,12 +30,9 @@ module Barista
       # Устанавливаем PostgreSQL контекст для RLS
       return unless Current.tenant_id
       
-      ActiveRecord::Base.connection.execute(
-        "SET LOCAL app.current_tenant_id = '#{Current.tenant_id}'"
-      )
-      ActiveRecord::Base.connection.execute(
-        "SET LOCAL app.current_user_id = '#{Current.user_id}'"
-      ) if Current.user_id
+      conn = ActiveRecord::Base.connection
+      conn.execute("SET LOCAL app.current_tenant_id = #{conn.quote(Current.tenant_id.to_s)}")
+      conn.execute("SET LOCAL app.current_user_id = #{conn.quote(Current.user_id.to_s)}") if Current.user_id
     end
     
     def current_user

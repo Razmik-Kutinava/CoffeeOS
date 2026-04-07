@@ -14,7 +14,12 @@ module Shop
           ).distinct
         end
 
-        render json: rel.map { |p| product_list_json(p, tenant_id: tenant_id) }
+        products = rel.to_a
+        settings = ProductTenantSetting
+          .where(product_id: products.map(&:id), tenant_id: tenant_id)
+          .index_by(&:product_id)
+
+        render json: products.map { |p| product_list_json(p, setting: settings[p.id]) }
       end
 
       def show
@@ -29,11 +34,12 @@ module Shop
 
       private
 
-      def product_list_json(product, tenant_id:)
-        setting = ProductTenantSetting.find_by!(product_id: product.id, tenant_id: tenant_id)
+      def product_list_json(product, setting:)
+        raise ActiveRecord::RecordNotFound, "Setting not found for product #{product.id}" unless setting
         {
           id: product.id,
           name: product.name,
+          description: product.description,
           price: setting.price.to_f,
           stock: Shop::Catalog.stock_for_display(setting),
           category: { id: product.category_id, name: product.category.name }

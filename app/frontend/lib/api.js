@@ -2,8 +2,15 @@ function csrfToken() {
   return document.querySelector('meta[name="csrf-token"]')?.getAttribute("content") || ""
 }
 
+/** Сначала ?tenant_id= в URL (совпадает с выбранной точкой в менеджере), иначе meta с сервера. */
+function resolvedShopTenantId() {
+  const q = new URLSearchParams(window.location.search).get("tenant_id")
+  if (q && String(q).trim()) return String(q).trim()
+  return document.querySelector('meta[name="shop-tenant-id"]')?.getAttribute("content") || ""
+}
+
 function withTenantQuery(url) {
-  const tid = document.querySelector('meta[name="shop-tenant-id"]')?.getAttribute("content")
+  const tid = resolvedShopTenantId()
   if (!tid || url.includes("tenant_id=")) return url
   const sep = url.includes("?") ? "&" : "?"
   return `${url}${sep}tenant_id=${encodeURIComponent(tid)}`
@@ -25,7 +32,8 @@ export async function api(path, opts = {}) {
   const res = await fetch(url, {
     credentials: "same-origin",
     ...opts,
-    headers
+    headers,
+    cache: opts.cache ?? "no-store"
   })
   const data = await res.json().catch(() => ({}))
   if (!res.ok) {

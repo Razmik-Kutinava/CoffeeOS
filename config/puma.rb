@@ -28,8 +28,9 @@
 threads_count = ENV.fetch("RAILS_MAX_THREADS", 3)
 threads threads_count, threads_count
 
-# Specifies the `port` that Puma will listen on to receive requests; default is 3000.
-port ENV.fetch("PORT", 3000)
+# Порт: переменная PORT (прод/контейнеры задают сами). Локально по умолчанию 3001 — часто 3000 уже занят
+# (второй терминал, другой Rails, Cursor preview). Нужен именно 3000: PORT=3000 bin/rails server
+port Integer(ENV.fetch("PORT", 3001))
 
 # Allow puma to be restarted by `bin/rails restart` command.
 plugin :tmp_restart

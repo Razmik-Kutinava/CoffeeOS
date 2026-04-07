@@ -82,6 +82,9 @@ Rails.application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 
+  # Логировать медленные запросы к БД (>500ms) — помогает найти деградацию в проде
+  config.active_record.logger = Logger.new(STDOUT) if ENV["RAILS_LOG_SLOW_QUERIES"].present?
+
   # Only use :id for inspections in production.
   config.active_record.attributes_for_inspect = [ :id ]
 
