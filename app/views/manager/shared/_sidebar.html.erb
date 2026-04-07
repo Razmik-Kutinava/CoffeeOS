@@ -18,6 +18,11 @@
         <%= link_to "← Админка УК", platform_root_path, class: "link" %>
       </div>
     <% end %>
+    <% if current_tenant %>
+      <div style="margin-top: 8px; font-size: 11px;">
+        <%= link_to "🛒 Витрина этой точки", "/shop?tenant_id=#{current_tenant.id}", target: "_blank", rel: "noopener", class: "link" %>
+      </div>
+    <% end %>
   </div>
 
   <nav class="nav">

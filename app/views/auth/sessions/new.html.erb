@@ -24,6 +24,22 @@
     <% end %>
     
     <%= render Auth::LoginFormComponent.new(user: @user) %>
+
+    <div class="mt-6 text-tui-muted text-xs leading-relaxed">
+      <p class="mb-2">
+        Текущий хост: <code class="text-tui-text"><%= request.host_with_port %></code>.
+        Сессия в браузере привязана к <strong>хосту</strong>: один и тот же логин на всех вкладках с этим адресом.
+      </p>
+      <p>
+        Чтобы одновременно быть под разными пользователями (УК, офис, бариста и т.д.), откройте
+        <strong>отдельное окно</strong> с <strong>другим хостом</strong>, например
+        <code class="text-tui-text">uk.localhost</code>,
+        <code class="text-tui-text">mgr.localhost</code>,
+        <code class="text-tui-text">barista.localhost</code>
+        (тот же порт, например <code class="text-tui-text">:3001</code>) или
+        <code class="text-tui-text">127.0.0.1</code> vs <code class="text-tui-text">localhost</code>.
+      </p>
+    </div>
   </div>
   
   <!-- Footer -->

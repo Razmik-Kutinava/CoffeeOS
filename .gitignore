@@ -34,6 +34,9 @@
 
 /public/assets
 
+# Загрузки фото товаров УК (public/uploads/products)
+/public/uploads/
+
 # Ignore key files for decrypting credentials and more.
 /config/*.key
 
@@ -59,9 +62,10 @@ Thumbs.db
 # Локальные docs/ и .claude/ не коммитим: добавь у себя в .git/info/exclude строки /docs/ и /.claude/
 /benchmark
 
-# Все markdown файлы кроме README.md
+# Все markdown файлы кроме README.md и doc/features/
 *.md
 !README.md
+!doc/**/*.md
 
 # Vite Ruby
 /public/vite*

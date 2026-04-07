@@ -1,7 +1,35 @@
 #!/usr/bin/env ruby
-# Обычный запуск приложения (панели, логин и т.д.) без dev-сервера Vite для /shop.
+# Запуск Rails (панели, логин и т.д.) без Vite.
+# Перед стартом автоматически освобождает порт, если он занят.
 APP_ROOT = File.expand_path("..", __dir__)
 Dir.chdir(APP_ROOT)
 load File.expand_path("../config/bundle_env.rb", __dir__)
 AppBundleEnv.apply!(ENV)
+
+port = ENV.fetch("PORT", "3001")
+
+def kill_port(port)
+  # ss -tlnp выдаёт строки вида: LISTEN ... 127.0.0.1:3001 ... users:(("ruby",pid=1234,...))
+  output = `ss -tlnp 2>/dev/null | grep ":#{port} "`.strip
+  return if output.empty?
+
+  if output =~ /pid=(\d+)/
+    old_pid = $1.to_i
+    warn "=> Порт #{port} занят (PID #{old_pid}), завершаю старый процесс..."
+    Process.kill("TERM", old_pid) rescue nil
+    sleep 1.5
+    # Если ещё живой — KILL
+    begin
+      Process.kill(0, old_pid)
+      Process.kill("KILL", old_pid) rescue nil
+      sleep 0.5
+    rescue Errno::ESRCH
+      # уже завершился
+    end
+    warn "=> Порт #{port} освобождён."
+  end
+end
+
+kill_port(port)
+
 exec Gem.ruby, File.join(APP_ROOT, "bin", "rails"), "server", *ARGV

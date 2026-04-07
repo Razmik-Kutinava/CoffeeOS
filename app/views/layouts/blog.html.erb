@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8">
+    <title><%= content_for?(:page_title) ? yield(:page_title) : "CoffeeOS — блог" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <% if content_for?(:meta_description) %>
+      <meta name="description" content="<%= yield :meta_description %>">
+    <% end %>
+    <% if content_for?(:canonical_url) %>
+      <link rel="canonical" href="<%= yield :canonical_url %>">
+    <% end %>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+    <style>
+      :root {
+        --blog-bg: #121212;
+        --blog-surface: #1a1a1a;
+        --blog-border: #3a3a3a;
+        --blog-text: #e8e8e8;
+        --blog-muted: #a0a0a0;
+        --blog-accent: #ff8c42;
+        --blog-accent-dim: #c96d2e;
+      }
+      .blog-body {
+        min-height: 100vh;
+        background: var(--blog-bg);
+        color: var(--blog-text);
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        line-height: 1.6;
+      }
+      .blog-wrap { max-width: 42rem; margin: 0 auto; padding: 0 1rem 4rem; }
+      .blog-header {
+        border-bottom: 1px solid var(--blog-border);
+        padding: 1rem 0;
+        margin-bottom: 1.5rem;
+      }
+      .blog-header a { color: var(--blog-accent); text-decoration: none; font-weight: 600; }
+      .blog-header a:hover { text-decoration: underline; }
+      .blog-hero {
+        padding: 2rem 0 1.5rem;
+        border-bottom: 1px solid var(--blog-border);
+        margin-bottom: 2rem;
+      }
+      .blog-hero h1 { font-size: 1.75rem; margin: 0 0 0.5rem; color: var(--blog-text); }
+      .blog-hero p { margin: 0; color: var(--blog-muted); font-size: 0.95rem; }
+      .blog-card {
+        display: block;
+        padding: 1rem;
+        margin-bottom: 0.75rem;
+        background: var(--blog-surface);
+        border: 1px solid var(--blog-border);
+        border-radius: 8px;
+        text-decoration: none;
+        color: inherit;
+        transition: border-color 0.15s;
+      }
+      .blog-card:hover { border-color: var(--blog-accent-dim); }
+      .blog-card h2 { font-size: 1.1rem; margin: 0 0 0.35rem; color: var(--blog-text); }
+      .blog-card .meta { font-size: 0.8rem; color: var(--blog-muted); }
+      .blog-prose { font-size: 1.05rem; }
+      .blog-prose h1 { font-size: 1.75rem; margin-top: 0; }
+      .blog-prose h2 { font-size: 1.35rem; margin-top: 1.75rem; color: var(--blog-text); }
+      .blog-prose h3 { font-size: 1.15rem; margin-top: 1.25rem; }
+      .blog-prose .lead {
+        font-size: 1.1rem;
+        color: #cfcfcf;
+        border-left: 3px solid var(--blog-accent);
+        padding-left: 1rem;
+        margin: 1.25rem 0;
+      }
+      .blog-prose .conclusion {
+        margin-top: 2rem;
+        padding: 1rem 1.25rem;
+        background: var(--blog-surface);
+        border-radius: 8px;
+        border: 1px solid var(--blog-border);
+      }
+      .blog-prose blockquote {
+        margin: 1.25rem 0;
+        padding: 0.75rem 1rem;
+        border-left: 3px solid var(--blog-accent-dim);
+        color: #d0d0d0;
+        font-style: italic;
+      }
+      .blog-cta {
+        margin: 2rem 0;
+        padding: 1rem 1.25rem;
+        background: linear-gradient(135deg, #2a1f18 0%, #1a1a1a 100%);
+        border: 1px solid var(--blog-accent-dim);
+        border-radius: 8px;
+        text-align: center;
+      }
+      .blog-cta a {
+        display: inline-block;
+        margin-top: 0.5rem;
+        padding: 0.5rem 1.25rem;
+        background: var(--blog-accent);
+        color: #1a1a1a;
+        font-weight: 600;
+        border-radius: 6px;
+        text-decoration: none;
+      }
+      .blog-cta a:hover { filter: brightness(1.05); }
+      .blog-nav { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.5rem; }
+      .blog-nav a {
+        font-size: 0.95rem;
+        color: var(--blog-accent);
+        text-decoration: none;
+      }
+      .blog-nav a:hover { text-decoration: underline; }
+      .blog-badge {
+        display: inline-block;
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        padding: 0.15rem 0.45rem;
+        border-radius: 4px;
+        background: #3d2a1a;
+        color: var(--blog-accent);
+        margin-left: 0.35rem;
+      }
+      .blog-footer {
+        margin-top: 3rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid var(--blog-border);
+        font-size: 0.8rem;
+        color: var(--blog-muted);
+      }
+      .blog-footer__trigger {
+        cursor: default;
+        user-select: none;
+        -webkit-user-select: none;
+      }
+      .blog-toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+        align-items: center;
+      }
+      .blog-toolbar a, .blog-toolbar button {
+        font-size: 0.85rem;
+        padding: 0.35rem 0.75rem;
+        border-radius: 6px;
+        border: 1px solid var(--blog-border);
+        background: var(--blog-surface);
+        color: var(--blog-accent);
+        text-decoration: none;
+        cursor: pointer;
+      }
+      .blog-toolbar a:hover, .blog-toolbar button:hover { border-color: var(--blog-accent); }
+      dialog.blog-modal {
+        border: 1px solid var(--blog-border);
+        border-radius: 10px;
+        background: var(--blog-surface);
+        color: var(--blog-text);
+        padding: 1.25rem;
+        max-width: 22rem;
+      }
+      dialog.blog-modal::backdrop { background: rgba(0,0,0,0.65); }
+      .blog-modal label { display: block; font-size: 0.85rem; margin-bottom: 0.75rem; }
+      .blog-modal input[type="email"], .blog-modal input[type="password"] {
+        width: 100%;
+        margin-top: 0.25rem;
+        padding: 0.5rem 0.6rem;
+        border-radius: 6px;
+        border: 1px solid var(--blog-border);
+        background: #0d0d0d;
+        color: var(--blog-text);
+        box-sizing: border-box;
+      }
+      .blog-modal .actions { margin-top: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap; }
+      .blog-modal button[type="submit"] {
+        padding: 0.45rem 1rem;
+        border-radius: 6px;
+        border: none;
+        background: var(--blog-accent);
+        color: #1a1a1a;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      .blog-flash { margin-bottom: 1rem; padding: 0.65rem 0.85rem; border-radius: 0.5rem; font-size: 0.9rem; }
+      .blog-flash--notice { background: #1a2f1a; border: 1px solid #2d5a2d; color: #b8e8b8; }
+      .blog-flash--alert { background: #2f1a1a; border: 1px solid #5a2d2d; color: #ffb8b8; }
+      .blog-form label { display: block; margin-top: 0.75rem; font-size: 0.9rem; }
+      .blog-form input[type="text"], .blog-form textarea, .blog-form select {
+        width: 100%;
+        margin-top: 0.25rem;
+        padding: 0.5rem 0.6rem;
+        border-radius: 6px;
+        border: 1px solid var(--blog-border);
+        background: #0d0d0d;
+        color: var(--blog-text);
+        box-sizing: border-box;
+      }
+      .blog-form textarea { min-height: 6rem; font-family: inherit; }
+      .blog-form textarea.blog-body-field { min-height: 14rem; }
+    </style>
+  </head>
+  <body class="blog-body" data-controller="blog-unlock">
+    <div class="blog-wrap">
+      <header class="blog-header">
+        <%= link_to "CoffeeOS — блог", blog_root_path %>
+        <% if blog_editor? %>
+          <span class="blog-badge">редактор</span>
+        <% end %>
+      </header>
+
+      <% if notice.present? %>
+        <div class="blog-flash blog-flash--notice" role="status"><%= notice %></div>
+      <% end %>
+      <% if alert.present? %>
+        <div class="blog-flash blog-flash--alert" role="alert"><%= alert %></div>
+      <% end %>
+
+      <%= yield %>
+
+      <%= render "blog/shared/footer" %>
+    </div>
+
+    <dialog class="blog-modal" data-blog-unlock-target="dialog" data-action="click->blog-unlock#backdropClose">
+      <div data-action="click->blog-unlock#stopPropagation">
+        <h2 style="margin:0 0 0.75rem;font-size:1.1rem;">Вход редактора блога</h2>
+        <p style="margin:0 0 1rem;font-size:0.85rem;color:var(--blog-muted);">Удерживайте строку копирайта в футере, чтобы открыть это окно.</p>
+        <%= form_with url: blog_session_path, method: :post, local: true do |f| %>
+          <label>Email
+            <%= email_field_tag :email, params[:email], name: "email", autocomplete: "username", required: true %>
+          </label>
+          <label>Пароль
+            <%= password_field_tag :password, nil, name: "password", autocomplete: "current-password", required: true %>
+          </label>
+          <div class="actions">
+            <%= f.submit "Войти" %>
+            <button type="button" style="padding:0.45rem 0.85rem;border-radius:6px;border:1px solid var(--blog-border);background:transparent;color:var(--blog-muted);cursor:pointer;" data-action="click->blog-unlock#closeDialog">Отмена</button>
+          </div>
+        <% end %>
+      </div>
+    </dialog>
+  </body>
+</html>

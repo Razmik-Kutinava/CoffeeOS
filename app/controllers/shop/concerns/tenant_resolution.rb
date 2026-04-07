@@ -17,8 +17,11 @@ module Shop
     def development_fallback_tenant_id
       return unless Rails.env.development? || Rails.env.test?
 
-      Tenant.order(:created_at).pick(:id).tap do |id|
-        Rails.logger.info("[shop] Using first tenant as fallback: #{id}") if id
+      # Сначала точка из сидов витрины / test users — иначе «первый tenant» часто без каталога.
+      tenant = Tenant.find_by(slug: "test-cafe") || Tenant.order(:created_at).first
+      if tenant
+        Rails.logger.info("[shop] Витрина (dev): точка #{tenant.slug} (#{tenant.id})")
+        tenant.id
       end
     end
 

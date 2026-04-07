@@ -66,6 +66,12 @@ group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
   gem "foreman", "~> 0.90.0"
+
+  # N+1 detector — логирует/рейзит при N+1 и missing includes
+  gem "bullet"
+
+  # Показывает кол-во запросов и время на каждой странице (toolbar)
+  gem "rack-mini-profiler", require: false
 end
 
 group :test do

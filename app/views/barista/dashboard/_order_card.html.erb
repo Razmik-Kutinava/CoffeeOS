@@ -30,7 +30,7 @@
 %>
 
 <% 
-  customer_name = order.customer&.name || order.customer_name || 'Гость'
+  customer_name = [order.customer&.first_name, order.customer&.last_name].compact.join(' ').presence || order.customer_name || 'Гость'
   customer_level = '🥇 Gold' # TODO: из loyalty_account когда будет модель
   promo_discount = order.discount_amount > 0 ? order.discount_amount : nil
 %>
@@ -54,11 +54,9 @@
       <div class="item-row">
         <span class="item-qty"><%= item.quantity %>×</span>
         <span><%= item.product_name %></span>
-        <% if item.modifier_options.present? %>
-          <% modifiers = JSON.parse(item.modifier_options) rescue {} %>
-          <% if modifiers.any? %>
-            <span class="item-mod">(<%= modifiers.values.join(', ') %>)</span>
-          <% end %>
+        <% selected = Array(item.modifier_options&.dig("selected_modifiers")) %>
+        <% if selected.any? %>
+          <span class="item-mod">(<%= selected.map { |m| m["name"] }.join(', ') %>)</span>
         <% end %>
       </div>
     <% end %>

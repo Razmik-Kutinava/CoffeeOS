@@ -10,9 +10,14 @@ module Shop
         return render json: [] if ids.empty?
 
         tenant_id = @shop_tenant.id
-        scope = Shop::Catalog.products_scope(tenant_id).where(id: ids)
-        render json: scope.map { |p|
-          setting = ProductTenantSetting.find_by!(product_id: p.id, tenant_id: tenant_id)
+        products = Shop::Catalog.products_scope(tenant_id).where(id: ids).to_a
+        settings = ProductTenantSetting
+          .where(product_id: products.map(&:id), tenant_id: tenant_id)
+          .index_by(&:product_id)
+
+        render json: products.map { |p|
+          setting = settings[p.id]
+          next unless setting
           {
             id: p.id,
             name: p.name,
@@ -21,7 +26,7 @@ module Shop
             description: p.description,
             category_id: p.category_id
           }
-        }
+        }.compact
       end
 
       def create

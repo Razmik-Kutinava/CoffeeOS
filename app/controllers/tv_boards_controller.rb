@@ -30,9 +30,8 @@ class TvBoardsController < ApplicationController
     Current.user_id = nil
     Current.role_code = "tv_board"
 
-    ActiveRecord::Base.connection.execute(
-      "SET LOCAL app.current_tenant_id = '#{Current.tenant_id}'"
-    )
+    conn = ActiveRecord::Base.connection
+    conn.execute("SET LOCAL app.current_tenant_id = #{conn.quote(Current.tenant_id.to_s)}")
 
     @tv_setting = tv_board_setting_for_current_tenant
     @effective_limit = @device.tv_effective_show_order_count(@tv_setting)

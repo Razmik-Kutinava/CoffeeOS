@@ -23,6 +23,9 @@
         <% category_products.each do |product| %>
           <% setting = product.product_tenant_settings.find_by(tenant_id: Current.tenant_id) %>
           <div class="product-row" data-product-name="<%= product.name.downcase %>">
+            <% if product.image_url.present? %>
+              <img src="<%= product.image_url %>" alt="" class="product-thumb" width="48" height="48" loading="lazy" decoding="async">
+            <% end %>
             <div class="product-info">
               <span class="product-name"><%= product.name %></span>
               <span class="product-price"><%= number_to_currency(setting&.price || 0, unit: '₽', format: '%n %u', delimiter: ' ') %></span>
@@ -123,8 +126,19 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 12px;
     padding: 12px 16px;
     border-bottom: 1px solid #1e262c;
+  }
+
+  .product-thumb {
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    object-fit: cover;
+    border: 1px solid #1e262c;
+    background: #1a1f24;
   }
   
   .product-row:last-child {

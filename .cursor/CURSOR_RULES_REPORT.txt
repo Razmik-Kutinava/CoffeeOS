@@ -9,6 +9,7 @@
   - coffeeos-ui.mdc — app/views, app/javascript, app/assets, app/components
   - coffeeos-services.mdc — app/services
   - coffeeos-tests.mdc — test
+- coffeeos-code-review.mdc — alwaysApply: false; ревью PR/диффа по запросу (тенант, RLS, схема, секреты, объём диффа). Подключай через @ или описание в чате («ревью PR», «разбор диффа»). Процесс: docs/REVIEW.md; чеклист при открытии PR: .github/pull_request_template.md.
 
 Почему так
 - Ядро даёт инварианты всегда; остальное подмешивается по открытым/редактируемым файлам — меньше шума, чем десятки правил «на каждый скилл».

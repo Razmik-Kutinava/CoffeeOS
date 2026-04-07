@@ -70,7 +70,9 @@ module Shop
     private
 
     def tenant_setting(product)
-      ProductTenantSetting.find_by!(product_id: product.id, tenant_id: @tenant_id)
+      setting = ProductTenantSetting.find_by(product_id: product.id, tenant_id: @tenant_id)
+      raise ActiveRecord::RecordNotFound, "Настройки цены для товара '#{product.name}' не найдены для данной точки" unless setting
+      setting
     end
 
     def shop_available?(product)

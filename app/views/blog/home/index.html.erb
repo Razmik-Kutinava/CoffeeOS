@@ -1,0 +1,56 @@
+<% content_for :page_title, "CoffeeOS — блог" %>
+
+<section class="blog-hero">
+  <h1><%= @hero_title %></h1>
+  <p><%= @hero_subtitle %></p>
+</section>
+
+<% if blog_editor? %>
+  <div class="blog-toolbar">
+    <%= link_to "Новая статья", new_blog_post_path %>
+  </div>
+<% end %>
+
+<% if @categories.any? %>
+  <nav class="blog-nav" aria-label="Рубрики">
+    <% @categories.each do |cat| %>
+      <%= link_to cat.name, blog_category_path(cat.slug) %>
+    <% end %>
+  </nav>
+<% end %>
+
+<% if blog_editor? && @draft_posts.present? %>
+  <h2 style="font-size:1rem;color:var(--blog-muted);margin:2rem 0 0.75rem;">Черновики</h2>
+  <% @draft_posts.each do |post| %>
+    <%= link_to blog_post_path(post.slug), class: "blog-card" do %>
+      <h2>
+        <%= post.title %>
+        <span class="blog-badge">черновик</span>
+      </h2>
+      <div class="meta"><%= post.blog_category&.name || "Без рубрики" %></div>
+    <% end %>
+  <% end %>
+<% end %>
+
+<h2 style="font-size:1rem;color:var(--blog-muted);margin:2rem 0 0.75rem;"><%= blog_editor? ? "Все записи" : "Последние записи" %></h2>
+
+<% if @latest_posts.empty? %>
+  <p style="color:var(--blog-muted);">Пока нет опубликованных статей.</p>
+<% else %>
+  <% @latest_posts.each do |post| %>
+    <%= link_to blog_post_path(post.slug), class: "blog-card" do %>
+      <h2>
+        <%= post.title %>
+        <% if blog_editor? && !post.published? %>
+          <span class="blog-badge">черновик</span>
+        <% end %>
+      </h2>
+      <div class="meta">
+        <%= post.blog_category&.name || "Без рубрики" %>
+        <% if post.published_at %>
+          · <%= post.published_at.strftime("%d.%m.%Y") %>
+        <% end %>
+      </div>
+    <% end %>
+  <% end %>
+<% end %>

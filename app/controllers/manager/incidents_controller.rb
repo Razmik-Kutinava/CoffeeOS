@@ -32,7 +32,10 @@ module Manager
         @pending_refunds = Refund.for_current_tenant.pending.order(created_at: :asc).limit(50)
       end
 
-      @offline_devices = Device.for_current_tenant.order(last_seen_at: :asc).select { |d| !d.online? }.first(50)
+      @offline_devices = Device.for_current_tenant
+                                .where('last_seen_at IS NULL OR last_seen_at <= ?', 2.minutes.ago)
+                                .order(last_seen_at: :asc)
+                                .limit(50)
       @out_of_stock = IngredientTenantStock.for_current_tenant.out_of_stock.includes(:ingredient).limit(50)
     end
   end

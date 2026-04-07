@@ -70,6 +70,8 @@ class Auth::SessionsController < ApplicationController
 
   def dashboard_path_for_role(role_code)
     case role_code
+    when "blog_editor"
+      blog_root_path
     when "barista"
       barista_dashboard_path
     when "shift_manager", "office_manager"

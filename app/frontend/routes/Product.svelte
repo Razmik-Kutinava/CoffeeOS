@@ -7,6 +7,8 @@
 
   useTelegramBack(() => window.history.back())
 
+  const shopTelegramUrl = (import.meta.env.VITE_SHOP_TELEGRAM_URL || "").trim()
+
   let { params } = $props()
 
   let product = $state(null)
@@ -86,10 +88,11 @@
   }
 
   function writeToTelegram() {
+    if (!shopTelegramUrl) return
     if (window.Telegram?.WebApp) {
-      window.Telegram.WebApp.openTelegramLink('https://t.me/codeblack_bar')
+      window.Telegram.WebApp.openTelegramLink(shopTelegramUrl)
     } else {
-      window.open('https://t.me/codeblack_bar', '_blank')
+      window.open(shopTelegramUrl, "_blank")
     }
     showMoreMenu = false
   }
@@ -203,9 +206,11 @@
   <!-- Выпадающее меню от "⋮" -->
   {#if showMoreMenu}
     <div class="more-menu">
-      <button onclick={writeToTelegram}>
-        <span>✈️</span> Написать в Telegram
-      </button>
+      {#if shopTelegramUrl}
+        <button onclick={writeToTelegram}>
+          <span>✈️</span> Написать в Telegram
+        </button>
+      {/if}
       <button onclick={shareProduct}>
         <span>🔗</span> Поделиться
       </button>

@@ -1,3 +1,3 @@
-vite: bundle exec vite dev
-web: bin/rails server -p 3000
+# Rails + Vite (витрина /shop). Явно -p 3001: Foreman иначе подставляет свой PORT, а 3000 часто занят.
+web: bin/rails server -p 3001
 vite: bin/vite dev

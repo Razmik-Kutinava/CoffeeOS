@@ -1,0 +1,25 @@
+<footer class="blog-footer">
+  <p style="margin:0;">
+    <span
+      class="blog-footer__trigger"
+      title=""
+      data-action="
+        pointerdown->blog-unlock#startHold
+        pointerup->blog-unlock#cancelHold
+        pointerleave->blog-unlock#cancelHold
+        pointercancel->blog-unlock#cancelHold
+        touchstart->blog-unlock#startHold
+        touchend->blog-unlock#cancelHold
+        touchcancel->blog-unlock#cancelHold
+      "
+    >© <%= Time.current.year %> CoffeeOS</span>
+    — заметки о кофе и сервисе.
+  </p>
+  <% if blog_editor? %>
+    <p style="margin:0.75rem 0 0;">
+      <%= button_to "Выйти из режима редактора", blog_session_path, method: :delete, form: { data: { turbo: false } } %>
+    </p>
+  <% else %>
+    <p style="margin:0.5rem 0 0;font-size:0.75rem;opacity:0.7;">Удерживайте надпись © CoffeeOS, чтобы войти как редактор.</p>
+  <% end %>
+</footer>
