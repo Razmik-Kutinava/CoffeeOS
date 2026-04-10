@@ -41,6 +41,10 @@ Things you may want to cover:
 
 * **Деплой (Render, Docker и т.п.):** **`SECRET_KEY_BASE`** (`bin/rails secret`) или **`RAILS_MASTER_KEY`**. **`DATABASE_URL`** — один Postgres на все конфиги (**primary**, **cache**, **queue**, **cable** для Solid Cache/Queue/Cable). Docker entrypoint делает **`db:prepare`**. При необходимости в Shell: **`bin/rails db:migrate`**. Образ слушает **`PORT`** (Puma), **без Thruster** — так ожидает Render и нет 502 из‑за прокси на localhost.
 
+* **Публичные разделы в проде (https://coffeeos-ii8n.onrender.com):**
+  * Витрина: **`/shop`** — `https://coffeeos-ii8n.onrender.com/shop`
+  * Блог: **`/blog`** — `https://coffeeos-ii8n.onrender.com/blog`
+
 * Deployment instructions
 
 * ...
