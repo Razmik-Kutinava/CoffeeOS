@@ -18,7 +18,7 @@ module Shop
     # Если в базе ровно одна активная точка — используем её автоматически.
     # Удобно для production без явно заданного SHOP_DEFAULT_TENANT_ID.
     def single_tenant_fallback_id
-      tenants = Tenant.where(is_active: true)
+      tenants = Tenant.where(status: "active")
       return unless tenants.count == 1
 
       tenant = tenants.first
