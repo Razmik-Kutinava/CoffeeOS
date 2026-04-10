@@ -8,7 +8,9 @@ module AppBundleEnv
   def self.apply!(env = ENV)
     root = File.expand_path("..", __dir__)
     env["BUNDLE_GEMFILE"] = File.join(root, "Gemfile")
-    env["BUNDLE_PATH"] = bundle_path_for(root)
+    # In Docker/production BUNDLE_PATH is already set via ENV in the Dockerfile
+    # (/usr/local/bundle). Don't override it — gems are installed there.
+    env["BUNDLE_PATH"] = bundle_path_for(root) unless env["BUNDLE_PATH"]
   end
 
   def self.bundle_path_for(root)
