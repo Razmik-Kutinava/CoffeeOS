@@ -4,6 +4,10 @@
 # (любые флаги после "server", напр. -b 0.0.0.0 — старый тест по двум последним аргументам ломался)
 if [ "${1:-}" = "./bin/rails" ] && [ "${2:-}" = "server" ]; then
   ./bin/rails db:prepare
+  # Если заданы переменные — автоматически запустить первичную настройку
+  if [ -n "${ADMIN_PASSWORD:-}" ]; then
+    ./bin/rails setup:production || true
+  fi
 fi
 
 exec "${@}"
