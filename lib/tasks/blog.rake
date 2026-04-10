@@ -1,6 +1,31 @@
 # frozen_string_literal: true
 
 namespace :blog do
+  desc "Создать редактора блога: EMAIL=... PASSWORD=... NAME='Имя'"
+  task create_editor: :environment do
+    email    = ENV.fetch("EMAIL") { abort "Укажите EMAIL=..." }
+    password = ENV.fetch("PASSWORD") { abort "Укажите PASSWORD=..." }
+    name     = ENV.fetch("NAME", "Blog Editor")
+
+    role = Role.find_or_create_by!(code: "blog_editor") do |r|
+      r.name = "Редактор блога"
+    end
+
+    user = User.find_or_initialize_by(email: email.downcase.strip)
+    is_new = user.new_record?
+    user.name     = name
+    user.status   = "active"
+    user.password = password
+    user.save!
+
+    unless user.has_role?("blog_editor")
+      UserRole.create!(user: user, role: role)
+    end
+
+    puts "#{is_new ? 'Создан' : 'Обновлён'} редактор блога: #{user.email}"
+  end
+
+
   desc "Создать демо-рубрики и статьи блога (идемпотентно)"
   task seed: :environment do
     unless ActiveRecord::Base.connection.data_source_exists?("blog_categories")
