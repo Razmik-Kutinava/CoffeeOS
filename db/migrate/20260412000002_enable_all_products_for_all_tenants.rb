@@ -3,13 +3,10 @@ class EnableAllProductsForAllTenants < ActiveRecord::Migration[8.1]
     tenants = Tenant.all.to_a
     return say("Нет тенантов — пропускаем") if tenants.empty?
 
-    products = Product.all.to_a
-    return say("Нет товаров — пропускаем") if products.empty?
+    products = Product.where(is_active: true).to_a
+    return say("Нет активных товаров — пропускаем") if products.empty?
 
     products.each do |product|
-      # Убеждаемся что товар активен
-      product.update_columns(is_active: true) unless product.is_active
-
       fallback_price = product.base_price.presence&.to_d
       fallback_price = BigDecimal("100") if fallback_price.blank? || fallback_price <= 0
 
