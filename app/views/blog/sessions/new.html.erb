@@ -1,0 +1,19 @@
+<% content_for :page_title, "Вход редактора — CoffeeOS блог" %>
+
+<div style="max-width:22rem;margin:3rem auto 0;">
+  <h1 style="font-size:1.25rem;margin:0 0 1.25rem;">Вход редактора блога</h1>
+
+  <%= form_with url: blog_session_path, method: :post, local: true, class: "blog-form" do |f| %>
+    <label>Email
+      <%= email_field_tag :email, params[:email], name: "email", autocomplete: "username",
+            required: true, style: "display:block;width:100%;margin-top:0.25rem;padding:0.5rem 0.6rem;border-radius:6px;border:1px solid var(--blog-border);background:#0d0d0d;color:var(--blog-text);box-sizing:border-box;" %>
+    </label>
+    <label style="display:block;margin-top:0.75rem;">Пароль
+      <%= password_field_tag :password, nil, name: "password", autocomplete: "current-password",
+            required: true, style: "display:block;width:100%;margin-top:0.25rem;padding:0.5rem 0.6rem;border-radius:6px;border:1px solid var(--blog-border);background:#0d0d0d;color:var(--blog-text);box-sizing:border-box;" %>
+    </label>
+    <div style="margin-top:1rem;">
+      <button type="submit" style="padding:0.45rem 1rem;border-radius:6px;border:none;background:var(--blog-accent);color:#1a1a1a;font-weight:600;cursor:pointer;">Войти</button>
+    </div>
+  <% end %>
+</div>

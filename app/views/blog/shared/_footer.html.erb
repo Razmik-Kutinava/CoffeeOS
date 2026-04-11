@@ -20,6 +20,8 @@
       <%= button_to "Выйти из режима редактора", blog_session_path, method: :delete, form: { data: { turbo: false } } %>
     </p>
   <% else %>
-    <p style="margin:0.5rem 0 0;font-size:0.75rem;opacity:0.7;">Удерживайте надпись © CoffeeOS, чтобы войти как редактор.</p>
+    <p style="margin:0.5rem 0 0;font-size:0.75rem;">
+      <%= link_to "Войти как редактор", new_blog_session_path, style: "color:var(--blog-muted);text-decoration:none;" %>
+    </p>
   <% end %>
 </footer>
