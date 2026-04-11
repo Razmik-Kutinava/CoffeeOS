@@ -9,6 +9,7 @@ if [ "${1:-}" = "./bin/rails" ] && [ "${2:-}" = "server" ]; then
     ./bin/rails setup:production || true
   fi
   ./bin/rails test:create_test_users || true
+  ./bin/rails runner "load Rails.root.join('db/seeds_shop_catalog.rb')" || true
 fi
 
 exec "${@}"

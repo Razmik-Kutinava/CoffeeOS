@@ -19,11 +19,26 @@ module Shop
     # Удобно для production без явно заданного SHOP_DEFAULT_TENANT_ID.
     def single_tenant_fallback_id
       tenants = Tenant.where(status: "active")
-      return unless tenants.count == 1
 
-      tenant = tenants.first
-      Rails.logger.info("[shop] Витрина: единственная точка #{tenant.slug} (#{tenant.id})")
-      tenant.id
+      if tenants.count == 1
+        tenant = tenants.first
+        Rails.logger.info("[shop] Витрина: единственная точка #{tenant.slug} (#{tenant.id})")
+        return tenant.id
+      end
+
+      # Несколько тенантов — берём по ORG_SLUG (задаётся в setup:production)
+      org_slug = ENV["ORG_SLUG"].presence
+      if org_slug
+        tenant = tenants.joins(:organization)
+                        .where(organizations: { slug: org_slug })
+                        .first
+        if tenant
+          Rails.logger.info("[shop] Витрина: тенант по ORG_SLUG=#{org_slug} → #{tenant.slug} (#{tenant.id})")
+          return tenant.id
+        end
+      end
+
+      nil
     end
 
     def development_fallback_tenant_id
