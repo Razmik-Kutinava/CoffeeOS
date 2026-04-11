@@ -131,7 +131,7 @@ Rails.application.routes.draw do
     root "home#index"
     get "categories/:slug", to: "categories#show", as: :category
     resources :posts, param: :slug, only: %i[show new create edit update destroy]
-    resource :session, only: %i[new create destroy], controller: "sessions"
+    resource :session, only: %i[create destroy], controller: "sessions"
   end
 
   # Витрина (Svelte SPA, данные точки — ProductTenantSetting, заказы — mobile + orders)
