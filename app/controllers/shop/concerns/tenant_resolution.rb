@@ -65,8 +65,6 @@ module Shop
 
     def apply_shop_tenant!(tenant)
       Current.tenant_id = tenant.id
-      conn = ActiveRecord::Base.connection
-      conn.execute("SET LOCAL app.current_tenant_id = #{conn.quote(tenant.id.to_s)}")
     end
     end
   end

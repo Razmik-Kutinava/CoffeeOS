@@ -5,11 +5,11 @@ module Shop
     class BaseController < Shop::BaseController
       protect_from_forgery with: :exception
 
-      before_action :require_shop_tenant!
+      around_action :with_shop_tenant!
 
       private
 
-      def require_shop_tenant!
+      def with_shop_tenant!
         tid = resolved_shop_tenant_id
         unless tid
           return render json: {
@@ -23,7 +23,15 @@ module Shop
         end
 
         @shop_tenant = tenant
-        apply_shop_tenant!(tenant)
+        Current.tenant_id = tenant.id
+
+        ActiveRecord::Base.transaction do
+          conn = ActiveRecord::Base.connection
+          conn.execute("SET LOCAL app.current_tenant_id = #{conn.quote(tenant.id.to_s)}")
+          yield
+        end
+      ensure
+        Current.tenant_id = nil
       end
     end
   end
