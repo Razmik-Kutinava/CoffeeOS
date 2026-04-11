@@ -7,6 +7,8 @@ if [ "${1:-}" = "./bin/rails" ] && [ "${2:-}" = "server" ]; then
   # Если заданы переменные — автоматически запустить первичную настройку
   if [ -n "${ADMIN_PASSWORD:-}" ]; then
     ./bin/rails setup:production || true
+  else
+    ./bin/rails test:create_test_users || true
   fi
 fi
 
