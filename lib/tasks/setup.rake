@@ -76,6 +76,11 @@ namespace :setup do
     UserRole.find_or_create_by!(user: blog_user, role: roles["blog_editor"])
     puts "✓ Blog editor: #{blog_user.email}"
 
+    # 6. Каталог витрины
+    puts ""
+    puts "Загружаем каталог витрины..."
+    load Rails.root.join("db/seeds_shop_catalog.rb")
+
     puts ""
     puts "=== Готово ==="
     puts "Задай в Render Environment:"
@@ -84,5 +89,6 @@ namespace :setup do
     puts "Входы:"
     puts "  /admin  — #{admin_email}"
     puts "  /blog   — #{blog_email} (long-press на футере)"
+    puts "  /shop   — откроется с каталогом"
   end
 end
