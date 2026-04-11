@@ -2,6 +2,10 @@
 
 module Blog
   class SessionsController < Blog::ApplicationController
+    def new
+      redirect_to blog_root_path if blog_editor?
+    end
+
     def create
       email_or_phone = (params[:email] || params.dig(:user, :email)).to_s.strip.downcase
       password = params[:password] || params.dig(:user, :password).to_s
