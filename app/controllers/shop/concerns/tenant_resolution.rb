@@ -38,6 +38,17 @@ module Shop
         end
       end
 
+      # Последний fallback — первый активный тенант у которого есть товары
+      tenant = tenants.joins(:product_tenant_settings)
+                      .where(product_tenant_settings: { is_enabled: true })
+                      .order(:created_at)
+                      .first
+      tenant ||= tenants.order(:created_at).first
+      if tenant
+        Rails.logger.info("[shop] Витрина: fallback-тенант #{tenant.slug} (#{tenant.id})")
+        return tenant.id
+      end
+
       nil
     end
 
