@@ -138,6 +138,7 @@ Rails.application.routes.draw do
   namespace :shop, path: "shop" do
     root to: "pages#home"
     namespace :api do
+      get "debug", to: "debug#index"
       get "categories", to: "categories#index"
       get "products", to: "products#index"
       get "products/:id", to: "products#show"
