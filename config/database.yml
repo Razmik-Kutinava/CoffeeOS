@@ -22,11 +22,14 @@ test:
   database: coffeeos_test
 
 # Solid Cache / Solid Queue / Solid Cable — именованные БД; один Postgres (Render) = один DATABASE_URL.
+# В продакшн используем только DATABASE_URL (External URL из Render dashboard).
+# Не наследуем default чтобы sslmode:disable не блокировал SSL-соединение с Render Postgres.
 production:
   primary: &production_primary
-    <<: *default
-    url: <%= ENV.fetch("DATABASE_URL") { "" } %>
-    database: <%= ENV.fetch("DATABASE_NAME") { "coffeeos_production" } %>
+    adapter: postgresql
+    encoding: unicode
+    pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+    url: <%= ENV["DATABASE_URL"] %>
   cache:
     <<: *production_primary
     migrations_paths: db/cache_migrate
