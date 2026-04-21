@@ -23,6 +23,7 @@ module Shop
         end
 
         @shop_tenant = tenant
+        previous_tenant_id = Current.tenant_id
         Current.tenant_id = tenant.id
 
         ActiveRecord::Base.transaction do
@@ -31,7 +32,7 @@ module Shop
           yield
         end
       ensure
-        Current.tenant_id = nil
+        Current.tenant_id = previous_tenant_id
       end
     end
   end

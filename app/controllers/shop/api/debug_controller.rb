@@ -2,49 +2,39 @@
 
 module Shop
   module Api
-    class DebugController < Shop::BaseController
-      include Shop::Concerns::TenantResolution
-
+    # Диагностический endpoint для проверки tenant resolution и каталога.
+    # Доступен только вне production. В production маршрут не регистрируется (см. routes.rb).
+    class DebugController < Shop::Api::BaseController
       def index
-        tid = resolved_shop_tenant_id
-        tenant = Tenant.find_by(id: tid)
+        # @shop_tenant и Current.tenant_id установлены через around_action :with_shop_tenant! из BaseController
+        tenant = @shop_tenant
 
-        all_tenants = Tenant.all.select(:id, :slug, :name, :status).map do |t|
-          { id: t.id, slug: t.slug, name: t.name, status: t.status }
-        end
-
-        all_products = Product.all.select(:id, :name, :slug, :is_active, :category_id, :base_price).map do |p|
-          { id: p.id, name: p.name, slug: p.slug, is_active: p.is_active, category_id: p.category_id, base_price: p.base_price&.to_f }
-        end
-
-        all_categories = Category.all.select(:id, :name, :slug, :is_active).map do |c|
-          { id: c.id, name: c.name, slug: c.slug, is_active: c.is_active }
-        end
-
-        # PTS запрос внутри транзакции с SET LOCAL
-        pts_data = []
-        if tenant
-          ActiveRecord::Base.transaction do
-            conn = ActiveRecord::Base.connection
-            conn.execute("SET LOCAL app.current_tenant_id = #{conn.quote(tenant.id.to_s)}")
-            pts_data = ProductTenantSetting.where(tenant_id: tenant.id).map do |pts|
-              { product_id: pts.product_id, price: pts.price&.to_f, is_enabled: pts.is_enabled, is_sold_out: pts.is_sold_out }
-            end
+        tenant_products = Product
+          .joins(:product_tenant_settings)
+          .where(product_tenant_settings: { tenant_id: tenant.id })
+          .select(:id, :name, :slug, :is_active, :category_id, :base_price)
+          .map do |p|
+            { id: p.id, name: p.name, slug: p.slug, is_active: p.is_active,
+              category_id: p.category_id, base_price: p.base_price&.to_f }
           end
+
+        tenant_categories = Category
+          .joins(products: :product_tenant_settings)
+          .where(product_tenant_settings: { tenant_id: tenant.id })
+          .distinct
+          .select(:id, :name, :slug, :is_active)
+          .map { |c| { id: c.id, name: c.name, slug: c.slug, is_active: c.is_active } }
+
+        pts_data = ProductTenantSetting.where(tenant_id: tenant.id).map do |pts|
+          { product_id: pts.product_id, price: pts.price&.to_f,
+            is_enabled: pts.is_enabled, is_sold_out: pts.is_sold_out }
         end
 
         render json: {
-          resolved_tenant_id: tid,
-          resolved_tenant: tenant ? { id: tenant.id, slug: tenant.slug, name: tenant.name } : nil,
-          env: {
-            SHOP_DEFAULT_TENANT_ID: ENV["SHOP_DEFAULT_TENANT_ID"],
-            ORG_SLUG: ENV["ORG_SLUG"],
-            RAILS_ENV: Rails.env
-          },
-          tenants: all_tenants,
-          products: all_products,
-          categories: all_categories,
-          product_tenant_settings_for_tenant: pts_data
+          resolved_tenant: { id: tenant.id, slug: tenant.slug, name: tenant.name },
+          products_for_tenant: tenant_products,
+          categories_for_tenant: tenant_categories,
+          product_tenant_settings: pts_data
         }
       end
     end

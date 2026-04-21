@@ -1,6 +1,6 @@
 class SeedBlackCoffeeCatalog < ActiveRecord::Migration[8.1]
   def up
-    return say("Каталог уже есть — пропускаем") if Category.exists? && Product.exists?
+    return say("Каталог уже есть — пропускаем") if Category.exists?(slug: "chernyj")
 
     cat = Category.create!(
       name: "Черный",
