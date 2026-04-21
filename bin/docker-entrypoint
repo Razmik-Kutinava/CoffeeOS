@@ -9,7 +9,10 @@ if [ "${1:-}" = "./bin/rails" ] && [ "${2:-}" = "server" ]; then
   if [ -n "${ADMIN_PASSWORD:-}" ]; then
     ./bin/rails setup:production || true
   fi
-  ./bin/rails test:create_test_users || true
+  # Создание тестовых пользователей только в не-production или по явному флагу
+  if [ "${CREATE_TEST_USERS:-false}" = "true" ]; then
+    ./bin/rails test:create_test_users || true
+  fi
 fi
 
 exec "${@}"
