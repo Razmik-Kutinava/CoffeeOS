@@ -286,8 +286,9 @@ class BaristaTabletRegressionTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_no_match(/B-1/, response.body)
 
+    # RecordNotFound теперь обрабатывается централизованно в ApplicationController — редирект на root
     get "/barista/orders/#{order_b.id}"
-    assert_response :not_found
+    assert_response :redirect
   end
 
   # 13. Обработка ошибок

@@ -4,7 +4,9 @@ require "test_helper"
 
 class HealthApiTest < ActionDispatch::IntegrationTest
   test "GET /health/tenants returns JSON with tenants" do
+    admin = create_uk_admin!(email: "health-admin@test.local")
     tenant = create_tenant!(name: "Health Point", slug: "health-point")
+    login_as!(admin)
     get "/health/tenants"
     assert_response :success
     assert_equal "application/json", response.media_type
@@ -17,7 +19,9 @@ class HealthApiTest < ActionDispatch::IntegrationTest
   end
 
   test "GET /health/tenants/:id returns JSON for single tenant" do
+    admin = create_uk_admin!(email: "health-admin2@test.local")
     tenant = create_tenant!(name: "Single Point", slug: "single-point")
+    login_as!(admin)
     get "/health/tenants/#{tenant.id}"
     assert_response :success
     data = response.parsed_body

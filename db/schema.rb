@@ -525,7 +525,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_12_000003) do
     t.index ["product_id"], name: "index_product_tenant_settings_on_product_id"
     t.index ["tenant_id", "is_enabled", "is_sold_out"], name: "idx_pts_tenant_enabled"
     t.index ["tenant_id"], name: "index_product_tenant_settings_on_tenant_id"
-    t.check_constraint "is_sold_out = false AND sold_out_reason IS NULL OR is_sold_out = true AND (sold_out_reason::text = ANY (ARRAY['manual'::character varying, 'stock_empty'::character varying]::text[]))", name: "chk_sold_out_reason"
+    t.check_constraint "is_sold_out = false AND sold_out_reason IS NULL OR is_sold_out = true AND (sold_out_reason::text = ANY (ARRAY['manual'::character varying::text, 'stock_empty'::character varying::text]))", name: "chk_sold_out_reason"
   end
 
   create_table "products", id: :uuid, default: -> { "gen_random_uuid()" }, comment: "Глобальный каталог продуктов (управляет УК)", force: :cascade do |t|

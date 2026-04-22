@@ -52,17 +52,18 @@ class Order < ApplicationRecord
     !status.in?(%w[issued closed cancelled])
   end
 
+  VALID_TRANSITIONS = {
+    'accepted'  => %w[preparing cancelled],
+    'preparing' => %w[ready cancelled],
+    'ready'     => %w[issued cancelled]
+  }.freeze
+
   def can_change_status?
-    case status
-    when 'accepted'
-      true
-    when 'preparing'
-      true
-    when 'ready'
-      true
-    else
-      false
-    end
+    VALID_TRANSITIONS.key?(status)
+  end
+
+  def can_transition_to?(new_status)
+    VALID_TRANSITIONS[status]&.include?(new_status.to_s) || false
   end
 
   private

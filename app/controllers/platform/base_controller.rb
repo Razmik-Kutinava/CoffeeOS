@@ -7,6 +7,8 @@ module Platform
     before_action :require_login
     before_action :require_uk_global_admin
     before_action :assign_current_for_rls
+    # Доступ ограничен require_uk_global_admin; fine-grained authorize при необходимости в подклассах.
+    before_action :skip_authorization
 
     private
 
@@ -30,8 +32,5 @@ module Platform
       redirect_to root_path, alert: "Доступ только для УК"
     end
 
-    def current_user
-      @current_user ||= User.find_by(id: session[:user_id]) if session[:user_id]
-    end
   end
 end

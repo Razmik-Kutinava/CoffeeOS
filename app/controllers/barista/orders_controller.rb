@@ -2,6 +2,7 @@ module Barista
   class OrdersController < BaseController
     def show
       @order = Order.for_current_tenant.includes(:payments).find(params[:id])
+      authorize @order
       @order_items = @order.order_items.includes(:product)
       
       respond_to do |format|
@@ -29,6 +30,7 @@ module Barista
     end
     
     def history
+      authorize Order, :history?
       @orders = Order.for_current_tenant
                     .where(status: ['closed', 'cancelled', 'issued'])
                     .includes(:order_items, :payments)
@@ -36,8 +38,8 @@ module Barista
                     .limit(100)
       
       if params[:date].present?
-        date = Date.parse(params[:date])
-        @orders = @orders.where("DATE(created_at) = ?", date)
+        date = Date.parse(params[:date]) rescue nil
+        @orders = @orders.where("DATE(created_at) = ?", date) if date
       end
       
       if params[:status].present? && params[:status] != 'all'
@@ -46,6 +48,7 @@ module Barista
     end
     
     def new
+      authorize Order, :create?
       @products = Product.joins(:product_tenant_settings)
                          .where(product_tenant_settings: { tenant_id: Current.tenant_id, is_enabled: true })
                          .includes(:category, :product_tenant_settings)
@@ -55,130 +58,43 @@ module Barista
     end
     
     def create
-      cart_items = params[:cart_items] || []
-      payment_method = params[:payment_method] || 'cash'
-      customer_name = params[:customer_name].presence
-      promo_code = params[:promo_code].presence
-      
-      if cart_items.empty?
-        redirect_to barista_new_order_path, alert: "Корзина пуста"
-        return
-      end
-      
+      authorize Order, :create?
+
       shift = current_shift
       unless shift
         redirect_to barista_new_order_path, alert: "Смена не открыта"
         return
       end
-      
-      ActiveRecord::Base.transaction do
-        # Подсчитываем суммы
-        total_amount = 0
-        order_items_data = []
 
-        all_product_ids = cart_items.map { |i| i[:product_id] || i['product_id'] }.map(&:to_i)
-        products_map = Product.where(id: all_product_ids).index_by(&:id)
-        settings_map = ProductTenantSetting
-          .where(product_id: all_product_ids, tenant_id: Current.tenant_id)
-          .index_by(&:product_id)
+      order = Barista::OrderCreationService.new(
+        cart_items:     params[:cart_items] || [],
+        payment_method: params[:payment_method] || "cash",
+        customer_name:  params[:customer_name].presence,
+        promo_code:     params[:promo_code].presence,
+        shift:          shift,
+        tenant_id:      Current.tenant_id,
+        user_id:        Current.user_id
+      ).call!
 
-        cart_items.each do |item|
-          product_id = (item[:product_id] || item['product_id']).to_i
-          quantity = (item[:quantity] || item['quantity'] || 1).to_i
-
-          product = products_map[product_id]
-          raise ActiveRecord::RecordNotFound, "Товар ##{product_id} не найден" unless product
-          setting = settings_map[product_id]
-          
-          unless setting&.is_enabled && !setting.is_sold_out
-            raise "Продукт #{product.name} недоступен"
-          end
-          
-          item_price = setting.price
-          item_total = item_price * quantity
-          total_amount += item_total
-          
-          order_items_data << {
-            product: product,
-            quantity: quantity,
-            price: item_price,
-            total_price: item_total
-          }
-        end
-        
-        # Применяем промокод если есть (пока без валидации, просто заглушка)
-        discount_amount = 0
-        promo_code_id = nil
-        if promo_code.present?
-          # TODO: валидация промокода через модель PromoCode когда будет создана
-          discount_amount = (total_amount * 0.1).round(2) # 10% скидка для теста
-        end
-        
-        final_amount = total_amount - discount_amount
-        
-        # Создаём заказ (order_number сгенерируется триггером)
-        order = Order.create!(
-          tenant_id: Current.tenant_id,
-          cash_shift_id: shift.id,
-          order_number: '', # Триггер сгенерирует автоматически
-          source: 'manual',
-          customer_name: customer_name,
-          status: 'accepted', # Сразу в статус accepted после оплаты
-          total_amount: total_amount,
-          discount_amount: discount_amount,
-          final_amount: final_amount,
-          promo_code_id: promo_code_id
-        )
-        
-        # Создаём позиции заказа
-        order_items_data.each do |item_data|
-          OrderItem.create!(
-            order_id: order.id,
-            product_id: item_data[:product].id,
-            product_name: item_data[:product].name,
-            quantity: item_data[:quantity],
-            unit_price: item_data[:price],
-            total_price: item_data[:total_price]
-          )
-        end
-        
-        # Создаём платёж
-        Payment.create!(
-          order_id: order.id,
-          tenant_id: Current.tenant_id,
-          amount: final_amount,
-          method: payment_method,
-          provider: 'manual',
-          status: 'succeeded',
-          paid_at: Time.current
-        )
-        
-        # Логируем статус
-        OrderStatusLog.create!(
-          order_id: order.id,
-          status_from: 'pending_payment',
-          status_to: 'accepted',
-          changed_by_id: Current.user_id,
-          source: 'barista',
-          comment: 'Заказ создан баристой'
-        )
-        
-        # Broadcast через Action Cable
-        broadcast_order_update(order, 'pending_payment')
-        
-        redirect_to barista_dashboard_path, notice: "Заказ ##{order.order_number} создан успешно"
-      end
+      broadcast_order_update(order, "pending_payment")
+      redirect_to barista_dashboard_path, notice: "Заказ ##{order.order_number} создан успешно"
+    rescue Barista::CartValidationService::CartValidationError => e
+      Rails.logger.warn("Cart validation failed: #{e.message}")
+      redirect_to barista_new_order_path, alert: e.message
+    rescue Barista::OrderCreationService::OrderCreationError => e
+      Rails.logger.warn("Order creation rejected: #{e.message}")
+      redirect_to barista_new_order_path, alert: e.message
     rescue => e
-      Rails.logger.error("Order creation failed: #{e.message}")
-      Rails.logger.error(e.backtrace.join("\n"))
-      redirect_to barista_new_order_path, alert: "Ошибка создания заказа: #{e.message}"
+      Rails.logger.error("Order creation failed: #{e.class} — #{e.message}")
+      redirect_to barista_new_order_path, alert: "Не удалось создать заказ. Попробуйте ещё раз."
     end
     
     def update_status
       @order = Order.for_current_tenant.find(params[:id])
-      
+      authorize @order, :update_status?
+
       new_status = params[:status]
-      
+
       unless @order.can_change_status?
         respond_to do |format|
           format.turbo_stream { render turbo_stream: turbo_stream.replace("order_#{@order.id}", partial: 'barista/dashboard/order_card', locals: { order: @order }) }
@@ -187,14 +103,7 @@ module Barista
         return
       end
       
-      # Валидация перехода статуса
-      valid_transitions = {
-        'accepted' => ['preparing', 'cancelled'],
-        'preparing' => ['ready', 'cancelled'],
-        'ready' => ['issued', 'cancelled']
-      }
-      
-      unless valid_transitions[@order.status]&.include?(new_status)
+      unless @order.can_transition_to?(new_status)
         respond_to do |format|
           format.turbo_stream { render turbo_stream: turbo_stream.replace("order_#{@order.id}", partial: 'barista/dashboard/order_card', locals: { order: @order }) }
           format.html { redirect_to barista_dashboard_path, alert: "Недопустимый переход статуса" }
@@ -227,7 +136,8 @@ module Barista
     
     def cancel
       @order = Order.for_current_tenant.find(params[:id])
-      
+      authorize @order, :cancel?
+
       unless @order.can_be_cancelled?
         respond_to do |format|
           format.turbo_stream { render turbo_stream: turbo_stream.replace("order_#{@order.id}", partial: 'barista/dashboard/order_card', locals: { order: @order }) }
@@ -265,7 +175,7 @@ module Barista
       broadcast_order_counts
 
       # TV board: перерисовываем колонки целиком для корректного idx.
-      broadcast_tv_columns_update
+      BroadcastTvColumnsJob.perform_later(Current.tenant_id)
 
       respond_to do |format|
         format.turbo_stream { render turbo_stream: turbo_stream.remove("order_#{@order.id}") }
@@ -302,64 +212,6 @@ module Barista
       )
     end
 
-    def tv_board_setting_for_current_tenant
-      TvBoardSetting.find_by(tenant_id: Current.tenant_id) ||
-        TvBoardSetting.create!(
-          tenant_id: Current.tenant_id,
-          show_order_count: 10,
-          display_seconds_ready: 60,
-          theme: 'dark'
-        )
-    end
-
-    def orders_for_tv_column(status, limit)
-      Order.for_barista_board(Current.tenant_id)
-           .where(status: status)
-           .order(created_at: :asc)
-           .limit(limit)
-    end
-
-    def broadcast_tv_columns_update
-      tv_setting = tv_board_setting_for_current_tenant
-
-      Device.for_current_tenant.where(device_type: "tv_board", is_active: true).find_each do |device|
-        effective = device.tv_effective_show_order_count(tv_setting)
-        stream = "tv_orders_#{device.id}"
-
-        Turbo::StreamsChannel.broadcast_replace_to(
-          stream,
-          target: "tv-ads-area",
-          partial: "tv_board/ads_area",
-          locals: { tv_setting: tv_setting, effective_limit: effective }
-        )
-
-        accepted_orders = effective > 0 ? orders_for_tv_column("accepted", effective) : Order.none
-        preparing_orders = effective > 0 ? orders_for_tv_column("preparing", effective) : Order.none
-        ready_orders = effective > 0 ? orders_for_tv_column("ready", effective) : Order.none
-
-        Turbo::StreamsChannel.broadcast_replace_to(
-          stream,
-          target: "tv-orders-accepted",
-          partial: "tv_board/orders_column",
-          locals: { status: "accepted", orders: accepted_orders, tv_setting: tv_setting }
-        )
-
-        Turbo::StreamsChannel.broadcast_replace_to(
-          stream,
-          target: "tv-orders-preparing",
-          partial: "tv_board/orders_column",
-          locals: { status: "preparing", orders: preparing_orders, tv_setting: tv_setting }
-        )
-
-        Turbo::StreamsChannel.broadcast_replace_to(
-          stream,
-          target: "tv-orders-ready",
-          partial: "tv_board/orders_column",
-          locals: { status: "ready", orders: ready_orders, tv_setting: tv_setting }
-        )
-      end
-    end
-    
     def broadcast_order_update(order, old_status = nil)
       # Определяем в какую колонку переместить заказ
       target_column = case order.status
@@ -419,7 +271,7 @@ module Barista
       broadcast_order_counts
 
       # TV board: перерисовываем колонки целиком для корректного idx.
-      broadcast_tv_columns_update
+      BroadcastTvColumnsJob.perform_later(Current.tenant_id)
     end
   end
 end

@@ -6,8 +6,12 @@ module Manager
 
     before_action :require_privileged_manager!
     before_action :set_staff_user, only: %i[edit update]
+    # Переопределяем skip_authorization из base — здесь нужен явный Pundit
+    skip_before_action :skip_authorization
+    after_action :verify_authorized
 
     def index
+      authorize User, :index?
       tid = Current.tenant_id
       uids = UserRole.where(tenant_id: tid).distinct.pluck(:user_id)
       @users = User.where(tenant_id: tid).or(User.where(id: uids)).distinct.includes(:roles).order(:name).limit(500)
@@ -15,10 +19,12 @@ module Manager
     end
 
     def new
+      authorize User, :create?
       @user = User.new(tenant_id: Current.tenant_id)
     end
 
     def create
+      authorize User, :create?
       @user = User.new(staff_user_params.merge(tenant_id: Current.tenant_id, status: "active"))
       if @user.save
         sync_roles!(@user, role_codes_param)
@@ -29,9 +35,11 @@ module Manager
     end
 
     def edit
+      authorize @user, :update?
     end
 
     def update
+      authorize @user, :update?
       p = staff_user_params
       p = p.except(:password) if p[:password].blank?
       if @user.update(p)

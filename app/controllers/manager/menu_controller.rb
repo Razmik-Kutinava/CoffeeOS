@@ -9,9 +9,8 @@ module Manager
     end
 
     def update_price
-      return redirect_to(manager_menu_path, alert: "Недостаточно прав") unless office_or_franchise_manager?
-
       setting = ProductTenantSetting.where(tenant_id: Current.tenant_id).find(params[:id])
+      authorize setting, :update?
 
       if setting.update(price_params)
         redirect_to manager_menu_path, notice: "Цена обновлена"

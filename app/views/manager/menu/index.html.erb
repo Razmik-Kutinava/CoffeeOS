@@ -28,6 +28,9 @@
                 <span class="pill">price: <%= s.price %> ₽</span>
               <% end %>
               <span class="muted"><%= s.is_enabled ? "enabled" : "disabled" %></span>
+              <% if s.is_sold_out %>
+                <span class="pill" style="color: var(--status-cancelled);">sold_out<% if s.sold_out_reason.present? %> · <%= s.sold_out_reason %><% end %></span>
+              <% end %>
             </div>
           </div>
         <% end %>

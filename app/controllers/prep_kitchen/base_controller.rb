@@ -6,6 +6,8 @@ module PrepKitchen
     before_action :require_login
     before_action :require_prep_kitchen_role
     before_action :set_tenant_context
+    # Доступ ограничен require_prep_kitchen_role; fine-grained authorize при необходимости в подклассах.
+    before_action :skip_authorization
 
     private
 
@@ -28,12 +30,7 @@ module PrepKitchen
 
       return if Current.tenant_id.blank?
 
-      ActiveRecord::Base.connection.execute(
-        "SET LOCAL app.current_tenant_id = '#{Current.tenant_id}'"
-      )
-      ActiveRecord::Base.connection.execute(
-        "SET LOCAL app.current_user_id = '#{Current.user_id}'"
-      )
+      set_pg_context(tenant_id: Current.tenant_id, user_id: Current.user_id)
     end
 
     def prep_kitchen_role_code
@@ -49,8 +46,5 @@ module PrepKitchen
       Current.role_code == "prep_kitchen_manager"
     end
 
-    def current_user
-      @current_user ||= User.find_by(id: session[:user_id]) if session[:user_id].present?
-    end
   end
 end

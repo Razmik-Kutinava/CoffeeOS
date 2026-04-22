@@ -27,6 +27,16 @@ class Rack::Attack
     end
   end
   
+  # Лимит на создание заказов баристой: 30 заказов в минуту с одного IP
+  throttle('barista/orders', limit: 30, period: 1.minute) do |req|
+    req.ip if req.path == '/barista/orders' && req.post?
+  end
+
+  # Лимит на логин: 10 попыток в минуту с одного IP
+  throttle('auth/login', limit: 10, period: 1.minute) do |req|
+    req.ip if req.path == '/login' && req.post?
+  end
+
   # Блокировка при превышении лимита
   self.throttled_responder = lambda do |env|
     [

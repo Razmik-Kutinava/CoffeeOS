@@ -1,3 +1,0 @@
-# CoffeeOS callback audit alert (every 5 minutes)
-# Adjust APP_DIR and user to your deployment.
-*/5 * * * * cd /var/www/coffeeos/current && RAILS_ENV=production WINDOW_MINUTES=60 MAX_ERROR_RATE_PERCENT=2.0 MIN_EVENTS=20 /usr/bin/env bash ops/callbacks/run_callback_audit_alert.sh

@@ -7,6 +7,9 @@ module Manager
     before_action :ensure_franchise_tenant_session!
     before_action :ensure_uk_manager_tenant!
     before_action :set_tenant_context
+    # Роль-доступ обеспечивается require_manager_role выше.
+    # Конкретные CRUD-действия могут переопределить через authorize @resource.
+    before_action :skip_authorization
 
     helper_method :franchise_manager?, :office_manager?, :office_or_franchise_manager?, :shift_manager?,
                   :accessible_manager_tenants, :current_tenant, :uk_in_manager?
@@ -81,9 +84,7 @@ module Manager
 
       return if Current.tenant_id.blank?
 
-      conn = ActiveRecord::Base.connection
-      conn.execute("SET LOCAL app.current_tenant_id = #{conn.quote(Current.tenant_id.to_s)}")
-      conn.execute("SET LOCAL app.current_user_id = #{conn.quote(Current.user_id.to_s)}") if Current.user_id
+      set_pg_context(tenant_id: Current.tenant_id, user_id: Current.user_id)
     end
 
     def manager_role_code
@@ -122,10 +123,6 @@ module Manager
 
     def current_cash_shift
       @current_cash_shift ||= CashShift.for_current_tenant.open.order(opened_at: :desc).first
-    end
-
-    def current_user
-      @current_user ||= User.find_by(id: session[:user_id]) if session[:user_id]
     end
 
     def current_tenant

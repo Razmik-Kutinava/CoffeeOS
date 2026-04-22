@@ -45,6 +45,9 @@ gem "image_processing", "~> 1.2"
 # Rate limiting для API
 gem "rack-attack"
 
+# Authorization
+gem "pundit"
+
 # Витрина (Svelte SPA из coffee-shop) через Vite
 gem "vite_rails", "~> 3.10"
 

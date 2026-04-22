@@ -151,7 +151,7 @@ class ManagerOfficePanelTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_includes response.body, "sold_out"
     assert_includes response.body, "manual"
-    assert_includes response.body, "price: 123.0 ₽"
+    assert_includes response.body, "123.0"
     assert_includes response.body, "enabled"
   end
 

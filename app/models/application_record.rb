@@ -48,7 +48,7 @@ class ApplicationRecord < ActiveRecord::Base
       # Установить новые значения
       if Current.tenant_id
         begin
-          conn.execute("SET LOCAL app.current_tenant_id = '#{Current.tenant_id}'")
+          conn.execute("SET LOCAL app.current_tenant_id = #{conn.quote(Current.tenant_id.to_s)}")
         rescue ActiveRecord::StatementInvalid => e
           # Dev/test may run without custom GUCs/RLS bootstrap. Don't break writes.
           raise e unless e.message.include?("unrecognized configuration parameter")
@@ -56,7 +56,7 @@ class ApplicationRecord < ActiveRecord::Base
       end
       if Current.user_id
         begin
-          conn.execute("SET LOCAL app.current_user_id = '#{Current.user_id}'")
+          conn.execute("SET LOCAL app.current_user_id = #{conn.quote(Current.user_id.to_s)}")
         rescue ActiveRecord::StatementInvalid => e
           raise e unless e.message.include?("unrecognized configuration parameter")
         end
