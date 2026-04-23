@@ -46,18 +46,26 @@ module Shop
     end
 
     def json_lines
+      # FIX: Load all products and tenant settings at once to avoid N+1 queries
+      product_ids = @session[SESSION_KEY].map { |line| line["product_id"] }
+      products = Product.where(id: product_ids).index_by(&:id)
+      tenant_settings = ProductTenantSetting.where(product_id: product_ids, tenant_id: @tenant_id).index_by(&:product_id)
+
       lines = @session[SESSION_KEY].map.with_index do |line, idx|
-        product = Product.find(line["product_id"])
+        product = products[line["product_id"]]
         raise ActiveRecord::RecordNotFound, "Товар недоступен" unless shop_available?(product)
 
-        unit_price = line_unit_price(product, line)
+        setting = tenant_settings[product.id]
+        raise ActiveRecord::RecordNotFound, "Настройки цены для товара '#{product.name}' не найдены для данной точки" unless setting
+
+        unit_price = line_unit_price(product, line, setting)
         qty = line["quantity"]
         {
           index: idx,
           product_id: product.id,
           product_name: product.name,
           quantity: qty,
-          price: tenant_setting(product).price.to_f,
+          price: setting.price.to_f,
           image_url: product.image_url,
           selected_modifiers: line["selected_modifiers"],
           unit_total: unit_price.to_f,
@@ -95,8 +103,8 @@ module Shop
       end
     end
 
-    def line_unit_price(product, line)
-      base = tenant_setting(product).price
+    def line_unit_price(product, line, setting)
+      base = setting.price
       mods = line["selected_modifiers"] || []
       extra = mods.sum { |m| verified_modifier_delta(product, m) }
       base + extra

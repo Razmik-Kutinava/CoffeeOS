@@ -20,12 +20,23 @@ class CashShift < ApplicationRecord
     status == 'open'
   end
 
+  # BUG-008 FIX: Вычисляем финансовые итоги смены при закрытии.
   def close!(closed_by_user, closing_cash_amount)
+    total_sales    = orders.joins(:payments).merge(Payment.succeeded).sum('payments.amount')
+    total_refunds  = orders.joins(:payments => :refunds).where(refunds: { status: 'succeeded' }).sum('refunds.amount')
+    cash_payments  = orders.joins(:payments).merge(Payment.succeeded).where(payments: { method: 'cash' }).sum('payments.amount')
+    expected_cash  = opening_cash + cash_payments - total_refunds
+    cash_diff      = closing_cash_amount - expected_cash
+
     update!(
       status: 'closed',
       closed_by: closed_by_user,
       closed_at: Time.current,
-      closing_cash: closing_cash_amount
+      closing_cash: closing_cash_amount,
+      total_sales: total_sales,
+      total_refunds: total_refunds,
+      expected_cash: expected_cash,
+      cash_difference: cash_diff
     )
   end
 

@@ -18,9 +18,9 @@ module Manager
         @shift = CashShift.for_current_tenant.find(params[:id])
       end
 
-      @pending_payments = Payment.for_current_tenant.joins(:order).where(orders: { cash_shift_id: @shift.id }).pending_or_processing.limit(50)
-      @failed_receipts = FiscalReceipt.for_current_tenant.joins(:order).where(orders: { cash_shift_id: @shift.id }, status: "failed").limit(50)
-      @pending_refunds = Refund.for_current_tenant.joins(:order).where(orders: { cash_shift_id: @shift.id }, status: "pending").limit(50)
+      @pending_payments = Payment.for_current_tenant.includes(:order).joins(:order).where(orders: { cash_shift_id: @shift.id }).pending_or_processing.limit(50)
+      @failed_receipts = FiscalReceipt.for_current_tenant.includes(:payment).joins(:order).where(orders: { cash_shift_id: @shift.id }, status: "failed").limit(50)
+      @pending_refunds = Refund.for_current_tenant.includes(:payment, :order).joins(:order).where(orders: { cash_shift_id: @shift.id }, status: "pending").limit(50)
 
       cash_payments_sum = Payment.for_current_tenant.joins(:order)
         .where(orders: { cash_shift_id: @shift.id }, method: "cash", status: "succeeded")

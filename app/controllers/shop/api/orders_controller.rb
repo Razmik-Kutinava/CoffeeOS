@@ -16,7 +16,7 @@ module Shop
       end
 
       def show
-        order = Order.where(tenant_id: @shop_tenant.id, source: :mobile).find(params[:id])
+        order = Order.where(tenant_id: @shop_tenant.id, source: :mobile).includes(:order_items).find(params[:id])
         render json: order_json(order)
       rescue ActiveRecord::RecordNotFound
         render json: { error: "Order not found", status: 404 }, status: :not_found
@@ -34,7 +34,7 @@ module Shop
               status: o.status,
               total: o.final_amount.to_f,
               created_at: o.created_at.iso8601,
-              items_count: o.order_items.sum(&:quantity)
+              items_count: o.order_items.size
             }
           }
         else

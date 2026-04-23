@@ -18,14 +18,14 @@ module Manager
         shift = current_cash_shift
         return redirect_to(manager_orders_path, alert: "Нет открытой смены") unless shift
 
-        @order = Order.for_current_tenant.where(cash_shift_id: shift.id).find(params[:id])
+        @order = Order.for_current_tenant.includes(:customer, :order_items).where(cash_shift_id: shift.id).find(params[:id])
       else
-        @order = Order.for_current_tenant.find(params[:id])
+        @order = Order.for_current_tenant.includes(:customer, :order_items).find(params[:id])
       end
-      @items = @order.order_items
-      @payments = Payment.for_current_tenant.where(order_id: @order.id).order(created_at: :desc)
-      @refunds = Refund.for_current_tenant.where(order_id: @order.id).order(created_at: :desc)
-      @fiscal_receipts = FiscalReceipt.for_current_tenant.where(order_id: @order.id).order(created_at: :desc)
+      @items = @order.order_items.includes(:product)
+      @payments = Payment.for_current_tenant.includes(:order).where(order_id: @order.id).order(created_at: :desc)
+      @refunds = Refund.for_current_tenant.includes(:payment, :order).where(order_id: @order.id).order(created_at: :desc)
+      @fiscal_receipts = FiscalReceipt.for_current_tenant.includes(:payment).where(order_id: @order.id).order(created_at: :desc)
     end
   end
 end

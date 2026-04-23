@@ -16,7 +16,13 @@ module Barista
     
     def require_barista_role
       user = current_user
-      unless user&.has_role?('barista')
+      # BUG-013 FIX: Проверяем что пользователь не заблокирован при каждом запросе.
+      unless user&.active?
+        reset_session
+        redirect_to login_path, alert: "Ваша учётная запись заблокирована"
+        return
+      end
+      unless user.has_role?('barista')
         redirect_to root_path, alert: "Доступ запрещён"
         return
       end
@@ -34,7 +40,7 @@ module Barista
 
 
     def current_shift
-      @current_shift ||= CashShift.find_by(tenant_id: Current.tenant_id, status: 'open')
+      @current_shift ||= CashShift.lock.find_by(tenant_id: Current.tenant_id, status: 'open')
     end
   end
 end

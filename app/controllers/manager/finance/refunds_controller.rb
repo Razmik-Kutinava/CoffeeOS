@@ -2,7 +2,7 @@ module Manager
   module Finance
     class RefundsController < ::Manager::BaseController
       def index
-        scope = Refund.for_current_tenant
+        scope = Refund.for_current_tenant.includes(:payment, :order)
 
         if shift_manager?
           shift = current_cash_shift

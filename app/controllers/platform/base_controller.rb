@@ -13,11 +13,12 @@ module Platform
     private
 
     # RLS на product_tenant_settings и др. читает app.current_user_id / app.current_tenant_id в PostgreSQL.
-    # Без Current.user_id контекст в callbacks ApplicationRecord может не совпасть с политикой.
+    # BUG-014 FIX: Устанавливаем PostgreSQL GUC-переменные чтобы RLS работало корректно в Platform-разделе.
     def assign_current_for_rls
       return unless current_user
 
       Current.user_id = current_user.id
+      set_pg_context(user_id: current_user.id)
     end
 
     def require_login

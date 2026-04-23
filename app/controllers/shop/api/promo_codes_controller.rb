@@ -11,11 +11,9 @@ module Shop
           return render json: { valid: false, error: "Введите промокод" }, status: :unprocessable_entity
         end
 
-        # Заглушка: любой непустой код даёт 10% (как в баристе до модели PromoCode)
-        discount = (BigDecimal(order_total.to_s) * 0.1).round(2).to_f
-        final_total = [ order_total - discount, 0.0 ].max
-
-        render json: { valid: true, discount: discount, final_total: final_total }
+        # BUG-004 FIX: Промокоды не реализованы — отклоняем любой код до появления модели PromoCode.
+        # Раньше любой непустой код давал 10% скидку, что приводило к прямым финансовым потерям.
+        render json: { valid: false, error: "Промокоды временно недоступны" }, status: :unprocessable_entity
       end
     end
   end

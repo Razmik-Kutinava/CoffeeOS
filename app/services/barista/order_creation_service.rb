@@ -74,9 +74,9 @@ module Barista
     private
 
     def apply_promo(total)
-      return 0 unless @promo_code.present?
-      # TODO: валидация через модель PromoCode
-      (total * 0.1).round(2)
+      # BUG-004 FIX: Промокоды не реализованы — не применяем скидку.
+      # Заглушка "10% на любой код" отключена во избежание финансовых потерь.
+      0
     end
   end
 end

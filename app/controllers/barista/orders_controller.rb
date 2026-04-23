@@ -93,6 +93,15 @@ module Barista
       @order = Order.for_current_tenant.find(params[:id])
       authorize @order, :update_status?
 
+      # BUG-005 FIX: Нельзя менять статус заказа без открытой кассовой смены.
+      unless current_shift
+        respond_to do |format|
+          format.turbo_stream { render turbo_stream: turbo_stream.replace("order_#{@order.id}", partial: 'barista/dashboard/order_card', locals: { order: @order }) }
+          format.html { redirect_to barista_dashboard_path, alert: "Смена не открыта. Откройте смену перед работой с заказами." }
+        end
+        return
+      end
+
       new_status = params[:status]
 
       unless @order.can_change_status?
@@ -138,6 +147,15 @@ module Barista
       @order = Order.for_current_tenant.find(params[:id])
       authorize @order, :cancel?
 
+      # BUG-005 FIX: Нельзя отменять заказ без открытой кассовой смены.
+      unless current_shift
+        respond_to do |format|
+          format.turbo_stream { render turbo_stream: turbo_stream.replace("order_#{@order.id}", partial: 'barista/dashboard/order_card', locals: { order: @order }) }
+          format.html { redirect_to barista_dashboard_path, alert: "Смена не открыта. Откройте смену перед работой с заказами." }
+        end
+        return
+      end
+
       unless @order.can_be_cancelled?
         respond_to do |format|
           format.turbo_stream { render turbo_stream: turbo_stream.replace("order_#{@order.id}", partial: 'barista/dashboard/order_card', locals: { order: @order }) }
@@ -153,7 +171,7 @@ module Barista
         cancel_reason_code: params[:reason_code],
         cancel_stage: old_status
       )
-      
+
       # Логирование отмены
       OrderStatusLog.create!(
         order_id: @order.id,
@@ -164,6 +182,39 @@ module Barista
         source: 'barista',
         comment: params[:reason] || 'Отменено баристой'
       )
+
+      # BUG-017 FIX: При отмене в статусе 'preparing' ингредиенты уже списаны триггером.
+      # Если бариста подтвердил что ингредиенты НЕ использованы — создаём возвратное движение.
+      if old_status == 'preparing' && params[:ingredients_used] == 'false'
+        movement = StockMovement.create!(
+          tenant_id: Current.tenant_id,
+          movement_type: :return,
+          status: :confirmed,
+          created_by_id: Current.user_id,
+          confirmed_by_id: Current.user_id,
+          confirmed_at: Time.current,
+          reference_id: @order.id,
+          note: "Возврат при отмене заказа ##{@order.order_number} (ингредиенты не использованы)"
+        )
+
+        # FIX: Load all recipes at once to avoid N+1 queries
+        product_ids = @order.order_items.pluck(:product_id)
+        recipes = ProductRecipe.where(product_id: product_ids).includes(:ingredient)
+
+        @order.order_items.each do |item|
+          item_recipes = recipes.select { |r| r.product_id == item.product_id }
+          item_recipes.each do |recipe|
+            qty_to_restore = recipe.qty_per_serving * item.quantity
+            StockMovementItem.create!(
+              movement_id: movement.id,
+              ingredient_id: recipe.ingredient_id,
+              qty: qty_to_restore
+            )
+            IngredientTenantStock.where(tenant_id: Current.tenant_id, ingredient_id: recipe.ingredient_id)
+                                 .update_all("qty = qty + #{qty_to_restore.to_f}")
+          end
+        end
+      end
       
       # Broadcast через Action Cable - удаляем из табло
       Turbo::StreamsChannel.broadcast_remove_to(

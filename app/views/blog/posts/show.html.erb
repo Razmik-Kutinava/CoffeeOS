@@ -41,7 +41,7 @@
 
   <% if @post.body.present? %>
     <section itemprop="articleBody">
-      <%= @post.body.html_safe %>
+      <%= sanitize(@post.body, tags: %w[p h1 h2 h3 h4 h5 h6 strong em u a ul ol li blockquote code pre br hr div span img figure figcaption table thead tbody tr th td], attributes: %w[href src alt title class style width height target rel]) %>
     </section>
   <% end %>
 

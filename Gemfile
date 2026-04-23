@@ -45,6 +45,10 @@ gem "image_processing", "~> 1.2"
 # Rate limiting для API
 gem "rack-attack"
 
+# Error tracking (Sentry) — активируется через SENTRY_DSN в ENV
+gem "sentry-ruby"
+gem "sentry-rails"
+
 # Authorization
 gem "pundit"
 

@@ -2,7 +2,7 @@ module Manager
   module Finance
     class PaymentsController < ::Manager::BaseController
       def index
-        scope = Payment.for_current_tenant
+        scope = Payment.for_current_tenant.includes(:order)
 
         if shift_manager?
           shift = current_cash_shift

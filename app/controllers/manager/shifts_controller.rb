@@ -22,8 +22,8 @@ module Manager
         @shift = CashShift.for_current_tenant.find(params[:id])
       end
 
-      @orders = Order.for_current_tenant.where(cash_shift_id: @shift.id).order(created_at: :desc).limit(200)
-      @payments = Payment.for_current_tenant.joins(:order).where(orders: { cash_shift_id: @shift.id }).order(created_at: :desc).limit(200)
+      @orders = Order.for_current_tenant.includes(:customer, :order_items).where(cash_shift_id: @shift.id).order(created_at: :desc).limit(200)
+      @payments = Payment.for_current_tenant.includes(:order).joins(:order).where(orders: { cash_shift_id: @shift.id }).order(created_at: :desc).limit(200)
       @cash_ops = ShiftCashOperation.for_current_tenant.where(shift_id: @shift.id).recent.limit(200)
     end
   end

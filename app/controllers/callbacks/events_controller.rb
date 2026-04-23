@@ -1,5 +1,3 @@
-require "fileutils"
-
 module Callbacks
   class EventsController < ApplicationController
     skip_forgery_protection
@@ -22,7 +20,7 @@ module Callbacks
       old_status = payment.status
       payment.with_lock do
         payment.status = new_status
-        payment.provider_data = payment.provider_data.merge(provider_data)
+        payment.provider_data = (payment.provider_data || {}).merge(provider_data)
         payment.provider_payment_id = params[:provider_payment_id] if params[:provider_payment_id].present?
         payment.paid_at = Time.current if new_status == "succeeded" && payment.paid_at.blank?
         payment.save!
@@ -37,19 +35,19 @@ module Callbacks
             provider_response: provider_data
           )
         end
-      end
 
-      # If order was waiting for payment and callback confirms it - move to accepted.
-      if payment.status == "succeeded" && payment.order.status == "pending_payment"
-        payment.order.update!(status: "accepted")
-        OrderStatusLog.create!(
-          order: payment.order,
-          status_from: "pending_payment",
-          status_to: "accepted",
-          changed_by_id: nil,
-          source: "payment_callback",
-          comment: "Оплата подтверждена callback"
-        )
+        # FIX: Move order update inside payment transaction to prevent race condition
+        if payment.status == "succeeded" && payment.order.status == "pending_payment"
+          payment.order.update!(status: "accepted")
+          OrderStatusLog.create!(
+            order: payment.order,
+            status_from: "pending_payment",
+            status_to: "accepted",
+            changed_by_id: nil,
+            source: "payment_callback",
+            comment: "Оплата подтверждена callback"
+          )
+        end
       end
 
       audit_event(
@@ -167,8 +165,9 @@ module Callbacks
 
       return if @idempotency_cache_key.blank?
 
+      # BUG-019 FIX: Используем только Redis/Solid Cache. Файловый fallback удалён —
+      # он не работает в multi-pod окружении (каждый pod имеет свою файловую систему).
       existing = Rails.cache.read(@idempotency_cache_key)
-      existing ||= read_idempotency_file(@callback_idempotency_key)
       if existing.present?
         audit_event(state: "duplicate", callback_type: action_name, tenant_id: params[:tenant_id], details: { existing: existing })
         return render json: { ok: true, duplicate: true, idempotency_key: @callback_idempotency_key }, status: :ok
@@ -181,7 +180,6 @@ module Callbacks
         payload_hash: @callback_payload_hash
       }
       Rails.cache.write(@idempotency_cache_key, cache_payload, expires_in: 24.hours)
-      write_idempotency_file(@callback_idempotency_key, cache_payload)
     end
 
     def find_payment!(tenant_id)
@@ -252,54 +250,6 @@ module Callbacks
       Rails.logger.error({ event: "callback_audit_write_failed", error: e.message }.to_json)
     end
 
-    def idempotency_file_path
-      Rails.root.join("tmp", "callback_idempotency_keys.log")
-    end
-
-    def read_idempotency_file(key)
-      path = idempotency_file_path
-      return nil unless File.exist?(path)
-
-      last_entry = nil
-      File.open(path, "r") do |f|
-        f.each_line do |line|
-          next if line.strip.empty?
-          entry = JSON.parse(line) rescue nil
-          next unless entry.is_a?(Hash)
-          next unless entry["idempotency_key"] == key
-          next if entry["expires_at"].present? && Time.zone.parse(entry["expires_at"]) < Time.current
-
-          last_entry = entry
-        end
-      end
-
-      last_entry
-    rescue StandardError
-      nil
-    end
-
-    def write_idempotency_file(key, payload)
-      path = idempotency_file_path
-      FileUtils.mkdir_p(path.dirname)
-      expires_at = (Time.current + 24.hours).iso8601
-      row = {
-        idempotency_key: key,
-        action: payload[:action],
-        state: payload[:state],
-        payload_hash: payload[:payload_hash],
-        at: Time.current.iso8601,
-        expires_at: expires_at
-      }
-
-      File.open(path, "a") do |f|
-        f.flock(File::LOCK_EX)
-        f.puts(row.to_json)
-      ensure
-        f.flock(File::LOCK_UN)
-      end
-    rescue StandardError => e
-      Rails.logger.error({ event: "callback_idempotency_file_write_failed", error: e.message }.to_json)
-    end
   end
 end
 

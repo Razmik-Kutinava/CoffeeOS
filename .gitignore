@@ -62,6 +62,12 @@ Thumbs.db
 # Локальные docs/ и .claude/ не коммитим: добавь у себя в .git/info/exclude строки /docs/ и /.claude/
 /benchmark
 
+# VSCode settings
+.vscode/
+
+# Claude Code free-claude-code
+/free-claude-code/
+
 # Все markdown файлы кроме README.md и doc/features/
 *.md
 !README.md

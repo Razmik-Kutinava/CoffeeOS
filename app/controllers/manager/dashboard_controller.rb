@@ -4,22 +4,22 @@ module Manager
       @tenant = current_tenant
 
       # MVP: быстрые метрики для офиса. Умные расчёты (health/incidents) добавим следующим шагом.
-      @recent_orders = Order.for_current_tenant.order(created_at: :desc).limit(10)
-      @recent_payments = Payment.for_current_tenant.order(created_at: :desc).limit(10)
-      @recent_refunds = Refund.for_current_tenant.order(created_at: :desc).limit(10)
-      @recent_fiscal = FiscalReceipt.for_current_tenant.order(created_at: :desc).limit(10)
+      @recent_orders = Order.for_current_tenant.includes(:customer, :order_items).order(created_at: :desc).limit(10)
+      @recent_payments = Payment.for_current_tenant.includes(:order).order(created_at: :desc).limit(10)
+      @recent_refunds = Refund.for_current_tenant.includes(:payment, :order).order(created_at: :desc).limit(10)
+      @recent_fiscal = FiscalReceipt.for_current_tenant.includes(:payment).order(created_at: :desc).limit(10)
 
       if shift_manager?
         shift = current_cash_shift
         if shift
-          @recent_orders = Order.for_current_tenant.where(cash_shift_id: shift.id).order(created_at: :desc).limit(10)
-          @recent_payments = Payment.for_current_tenant.joins(:order)
+          @recent_orders = Order.for_current_tenant.includes(:customer, :order_items).where(cash_shift_id: shift.id).order(created_at: :desc).limit(10)
+          @recent_payments = Payment.for_current_tenant.includes(:order).joins(:order)
                                        .where(orders: { cash_shift_id: shift.id })
                                        .order(created_at: :desc).limit(10)
-          @recent_refunds = Refund.for_current_tenant.joins(:order)
+          @recent_refunds = Refund.for_current_tenant.includes(:payment, :order).joins(:order)
                                     .where(orders: { cash_shift_id: shift.id })
                                     .order(created_at: :desc).limit(10)
-          @recent_fiscal = FiscalReceipt.for_current_tenant.joins(:order)
+          @recent_fiscal = FiscalReceipt.for_current_tenant.includes(:payment).joins(:order)
                                           .where(orders: { cash_shift_id: shift.id })
                                           .order(created_at: :desc).limit(10)
         else

@@ -6,17 +6,17 @@ module Manager
       if shift_manager?
         shift = current_cash_shift
         if shift
-          @pending_payments = Payment.for_current_tenant.pending_or_processing
+          @pending_payments = Payment.for_current_tenant.includes(:order).pending_or_processing
                                    .joins(:order)
                                    .where(orders: { cash_shift_id: shift.id })
                                    .order(created_at: :asc)
                                    .limit(50)
-          @failed_receipts = FiscalReceipt.for_current_tenant.where(status: "failed")
+          @failed_receipts = FiscalReceipt.for_current_tenant.includes(:payment).where(status: "failed")
                                             .joins(:order)
                                             .where(orders: { cash_shift_id: shift.id })
                                             .order(created_at: :asc)
                                             .limit(50)
-          @pending_refunds = Refund.for_current_tenant.pending
+          @pending_refunds = Refund.for_current_tenant.includes(:payment, :order).pending
                                      .joins(:order)
                                      .where(orders: { cash_shift_id: shift.id })
                                      .order(created_at: :asc)
@@ -27,9 +27,9 @@ module Manager
           @pending_refunds = []
         end
       else
-        @pending_payments = Payment.for_current_tenant.pending_or_processing.order(created_at: :asc).limit(50)
-        @failed_receipts = FiscalReceipt.for_current_tenant.where(status: "failed").order(created_at: :asc).limit(50)
-        @pending_refunds = Refund.for_current_tenant.pending.order(created_at: :asc).limit(50)
+        @pending_payments = Payment.for_current_tenant.includes(:order).pending_or_processing.order(created_at: :asc).limit(50)
+        @failed_receipts = FiscalReceipt.for_current_tenant.includes(:payment).where(status: "failed").order(created_at: :asc).limit(50)
+        @pending_refunds = Refund.for_current_tenant.includes(:payment, :order).pending.order(created_at: :asc).limit(50)
       end
 
       @offline_devices = Device.for_current_tenant

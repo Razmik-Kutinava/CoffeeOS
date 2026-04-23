@@ -34,7 +34,13 @@ module Manager
 
     def require_manager_role
       user = current_user
-      return if user&.has_any_role?("office_manager", "shift_manager", "franchise_manager") || user&.uk_global_admin?
+      # BUG-013 FIX: Проверяем что пользователь не заблокирован при каждом запросе.
+      unless user&.active?
+        reset_session
+        redirect_to login_path, alert: "Ваша учётная запись заблокирована"
+        return
+      end
+      return if user.has_any_role?("office_manager", "shift_manager", "franchise_manager") || user.uk_global_admin?
 
       redirect_to root_path, alert: "Доступ запрещён"
     end
