@@ -2,7 +2,7 @@
 # Docs: https://fly.io/docs/reference/configuration/
 
 app = "coffeeos"
-primary_region = "fra"
+primary_region = "ams"
 
 [build]
 
@@ -18,9 +18,9 @@ primary_region = "fra"
 [http_service]
   internal_port = 3000
   force_https   = true
-  auto_stop_machines  = "stop"
+  auto_stop_machines  = false
   auto_start_machines = true
-  min_machines_running = 0
+  min_machines_running = 1
 
   [http_service.concurrency]
     type       = "connections"
@@ -29,11 +29,11 @@ primary_region = "fra"
 
 [[vm]]
   size   = "shared-cpu-1x"
-  memory = "512mb"
+  memory = "1024mb"
 
 [checks]
   [checks.health]
-    grace_period = "120s"
+    grace_period = "180s"
     interval     = "15s"
     method       = "GET"
     path         = "/up"

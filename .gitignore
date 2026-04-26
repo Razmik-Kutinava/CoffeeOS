@@ -68,12 +68,6 @@ Thumbs.db
 # Claude Code free-claude-code
 /free-claude-code/
 
-# GitHub Actions и настройки
-/.github/
-
-# Cursor IDE настройки
-/.cursor/
-
 # Все markdown файлы кроме README.md и doc/features/
 *.md
 !README.md

@@ -49,9 +49,3 @@
 # Ignore Docker-related files
 /.dockerignore
 /Dockerfile*
-
-# Ignore Claude Code cache
-/free-claude-code/
-
-# Ignore Cursor IDE settings
-/.cursor/
