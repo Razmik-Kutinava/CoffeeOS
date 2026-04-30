@@ -1,0 +1,53 @@
+<%# BACK-007: Диалог отмены заказа с вопросом об ингредиентах %>
+<dialog id="cancel_order_<%= order.id %>" class="cancel-dialog">
+  <div class="dialog-content">
+    <h3>Отмена заказа #<%= order.order_number %></h3>
+
+    <% if order.status == 'preparing' %>
+      <p class="ingredients-question">
+        Ингредиенты уже использованы?
+      </p>
+      <div class="ingredients-options">
+        <label class="radio-option">
+          <%= radio_button_tag 'ingredients_used', 'true', false, id: "ingredients_used_yes_#{order.id}" %>
+          <span>Да, ингредиенты уже использованы</span>
+        </label>
+        <label class="radio-option">
+          <%= radio_button_tag 'ingredients_used', 'false', true, id: "ingredients_used_no_#{order.id}" %>
+          <span>Нет, ингредиенты не использованы (вернуть на склад)</span>
+        </label>
+      </div>
+    <% end %>
+
+    <div class="dialog-actions">
+      <%= button_to "Отменить", cancel_barista_order_path(order),
+          method: :post,
+          params: { reason: 'Отменено баристой', reason_code: 'barista_cancel' },
+          class: "btn btn-danger",
+          data: { turbo_method: :post },
+          form: { id: "cancel_form_#{order.id}" } %>
+      <button type="button" class="btn btn-secondary" onclick="document.getElementById('cancel_order_<%= order.id %>').close()">
+        Отмена
+      </button>
+    </div>
+  </div>
+</dialog>
+
+<script>
+  // BACK-007: При отправке формы добавляем ingredients_used в параметры
+  document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('cancel_form_<%= order.id %>');
+    if (form) {
+      form.addEventListener('submit', function(e) {
+        const selected = document.querySelector('input[name="ingredients_used"]:checked');
+        if (selected) {
+          const input = document.createElement('input');
+          input.type = 'hidden';
+          input.name = 'ingredients_used';
+          input.value = selected.value;
+          form.appendChild(input);
+        }
+      });
+    }
+  });
+</script>

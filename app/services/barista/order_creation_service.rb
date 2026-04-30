@@ -74,9 +74,19 @@ module Barista
     private
 
     def apply_promo(total)
-      # BUG-004 FIX: Промокоды не реализованы — не применяем скидку.
-      # Заглушка "10% на любой код" отключена во избежание финансовых потерь.
-      0
+      return 0 unless @promo_code.present?
+
+      promo = PromoCode.find_by(code: @promo_code, tenant_id: @tenant_id)
+      return 0 unless promo&.active?
+
+      # Проверка срока действия
+      return 0 if promo.valid_from > Time.current || promo.valid_to < Time.current
+
+      # Проверка лимита использования
+      return 0 if promo.max_uses > 0 && promo.used_count >= promo.max_uses
+
+      # Применяем скидку
+      (total * promo.discount_percentage / 100).round(2)
     end
   end
 end

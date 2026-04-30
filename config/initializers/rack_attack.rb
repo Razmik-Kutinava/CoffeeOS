@@ -37,6 +37,16 @@ class Rack::Attack
     req.ip if req.path == '/login' && req.post?
   end
 
+  # Лимит для shop API: 150 запросов в минуту с одного IP
+  throttle('shop/api', limit: 150, period: 1.minute) do |req|
+    req.ip if req.path.start_with?('/shop/api/')
+  end
+
+  # Лимит на создание заказов через shop: 10 заказов в минуту с одного IP
+  throttle('shop/orders', limit: 10, period: 1.minute) do |req|
+    req.ip if req.path == '/shop/api/orders' && req.post?
+  end
+
   # Блокировка при превышении лимита
   self.throttled_responder = lambda do |env|
     [
@@ -48,9 +58,10 @@ class Rack::Attack
   
   # Логирование заблокированных запросов
   ActiveSupport::Notifications.subscribe('rack.attack') do |name, start, finish, request_id, req|
-    if req.env['rack.attack.match_type'] == :throttle
+    next unless req.is_a?(Hash) && req['rack.attack.match_type']
+    if req['rack.attack.match_type'] == :throttle
       Rails.logger.warn(
-        "[RateLimit] #{req.env['rack.attack.matched']} - #{req.ip} - #{req.path}"
+        "[RateLimit] #{req['rack.attack.matched']} - #{req['rack.attack.matched']} - #{req['rack.attack.matched']&.ip} - #{req['rack.attack.matched']&.path}"
       )
     end
   end

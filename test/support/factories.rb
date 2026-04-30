@@ -92,11 +92,25 @@ module TestFactories
     )
   end
 
-  def login_as!(user, password: "pass123")
-    post "/login", params: { email: user.email, password: password }
+  def create_mobile_customer!(phone: "+79#{format('%09d', rand(1_000_000_000))}")
+    MobileCustomer.create!(
+      phone: phone,
+      first_name: "Test",
+      last_name: "Customer",
+      is_active: true
+    )
+  end
+
+  def login_as!(user, password: "pass123", tenant_id: nil)
+    rack_attack_enabled = Rack::Attack.enabled if defined?(Rack::Attack)
+    Rack::Attack.enabled = false if defined?(Rack::Attack)
+
+    post "/login", params: { email: user.email, password: password, tenant_id: tenant_id }
     assert_response :redirect, "ожидался редирект после логина"
     follow_redirect!
     follow_redirect! if response.redirect?
+  ensure
+    Rack::Attack.enabled = rack_attack_enabled if defined?(Rack::Attack) && !rack_attack_enabled.nil?
   end
 end
 

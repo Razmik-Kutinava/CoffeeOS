@@ -413,7 +413,6 @@ class ManagerOfficePanelTest < ActionDispatch::IntegrationTest
     product, _category = create_product_fixture!(tenant: tenant)
     create_order_item!(order: order, product: product, quantity: 1, unit_price: 120)
 
-    create_payment!(tenant: tenant, order: order, amount: 120, status: "succeeded")
     payment_for_receipt = create_payment!(tenant: tenant, order: order, amount: 120, status: "succeeded")
     create_fiscal_receipt!(tenant: tenant, order: order, payment: payment_for_receipt, status: "confirmed")
     create_refund!(tenant: tenant, order: order, payment: payment_for_receipt, amount: 10, status: "succeeded")

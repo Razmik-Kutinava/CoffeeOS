@@ -1,0 +1,11 @@
+---
+description: CoffeeOS — Minitest, интеграции, фабрики
+globs: test/**
+alwaysApply: false
+---
+
+# Тесты
+
+- Стратегия и типы тестов: `docs/guides/TESTING_STRATEGY.md`.
+- Фабрики и хелперы: `test/support/factories.rb`, `test/test_helper.rb`; триггеры БД — `test/support/db_triggers.rb` где уместно.
+- После изменений в панелях/потоках — указать релевантные `test/integration/*` или `test/tests/*`; при необходимости — команды из CI (`.github/workflows/ci.yml`).

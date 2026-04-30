@@ -1,0 +1,47 @@
+---
+description: Правила производительности и безопасности CoffeeOS — N+1, SQL Injection, preload. Применяется всегда при написании Rails кода.
+alwaysApply: true
+---
+
+# Производительность и безопасность (CoffeeOS)
+
+## Запросы к БД — ЗАПРЕЩЕНО
+
+- **Никогда** не вызывать `find_by`, `find`, `where` внутри `.map`, `.each`, `.select` или любого цикла — это N+1
+- **Никогда** не писать ActiveRecord запросы внутри методов-сериализаторов (`*_json`, `*_hash`, `*_data`)
+- **Никогда** не интерполировать переменные в SQL строку: `"... = '#{value}'"` — SQL Injection
+- **Никогда** не использовать `find_by!` без rescue
+
+## Запросы к БД — ОБЯЗАТЕЛЬНО
+
+- Перед итерацией по коллекции — загружать все связанные данные **одним запросом** через `index_by` или `group_by`
+- Для `ProductTenantSetting` всегда: `where(product_id: ids, tenant_id: tid).index_by(&:product_id)`
+- SQL параметры через `conn.quote(value.to_s)` или плейсхолдеры `where("col = ?", value)`
+- При загрузке коллекции с ассоциациями — `includes(...)` или `preload(...)`
+- Несколько COUNT по одной таблице — заменить на `group(:col).count`
+
+## Правильный паттерн (делай так)
+
+```ruby
+# 2 запроса вместо N+1
+products = scope.to_a
+settings = ProductTenantSetting
+  .where(product_id: products.map(&:id), tenant_id: tid)
+  .index_by(&:product_id)
+products.map { |p| build_json(p, setting: settings[p.id]) }
+```
+
+## Безопасность
+
+- `SET LOCAL` в PostgreSQL — только через `conn.quote()`:
+  `conn.execute("SET LOCAL app.current_tenant_id = #{conn.quote(val.to_s)}")`
+- Логика токенов/авторизации: `return device if valid?` — не `return nil if valid?`
+- JSON API контроллеры: `protect_from_forgery with: :null_session`
+
+## Чеклист перед тем как предложить код
+
+1. Есть ли N+1 (find_by/find/where внутри цикла)?
+2. Есть ли SQL интерполяция через `#{}`?
+3. Все ли `find_by!` обёрнуты в rescue?
+4. Все ли ассоциации preload-нуты перед итерацией?
+5. Несколько одинаковых COUNT → заменить на GROUP BY?

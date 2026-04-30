@@ -48,9 +48,9 @@ class ApplicationController < ActionController::Base
 
   # Устанавливает PostgreSQL GUC-переменные для RLS.
   # Вызывается из каждого namespace base_controller.
-  def set_pg_context(tenant_id:, user_id: nil)
+  def set_pg_context(tenant_id: nil, user_id: nil)
     conn = ActiveRecord::Base.connection
-    conn.execute("SET LOCAL app.current_tenant_id = #{conn.quote(tenant_id.to_s)}")
+    conn.execute("SET LOCAL app.current_tenant_id = #{conn.quote(tenant_id.to_s)}") if tenant_id
     conn.execute("SET LOCAL app.current_user_id = #{conn.quote(user_id.to_s)}") if user_id
   end
 end

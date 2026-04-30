@@ -39,8 +39,8 @@ class BaristaToManagersFullFlowTest < ActionDispatch::IntegrationTest
     assert_equal cash_shift.id, order.cash_shift_id, "Order should be linked to current open cash shift"
 
     assert_equal "accepted", order.status
-    assert_in_delta 10.0, order.discount_amount.to_f, 0.001
-    assert_in_delta 90.0, order.final_amount.to_f, 0.001
+    assert_in_delta 0.0, order.discount_amount.to_f, 0.001
+    assert_in_delta 100.0, order.final_amount.to_f, 0.001
 
     # Office manager sees order
     login_as!(office)

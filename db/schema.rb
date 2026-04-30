@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_23_000001) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_28_000002) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_stat_statements"
@@ -442,6 +442,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_23_000001) do
     t.enum "status", default: "pending", null: false, enum_type: "payment_status"
     t.uuid "tenant_id", null: false
     t.datetime "updated_at", null: false
+    t.index ["created_at"], name: "idx_payments_created_at"
     t.index ["order_id"], name: "idx_one_succeeded_payment_per_order", unique: true, where: "(status = 'succeeded'::payment_status)", comment: "BUG-018: Один успешный платёж на заказ"
     t.index ["order_id"], name: "index_payments_on_order_id"
     t.index ["provider_payment_id"], name: "index_payments_on_provider_payment_id", where: "(provider_payment_id IS NOT NULL)"
@@ -527,7 +528,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_23_000001) do
     t.index ["product_id"], name: "index_product_tenant_settings_on_product_id"
     t.index ["tenant_id", "is_enabled", "is_sold_out"], name: "idx_pts_tenant_enabled"
     t.index ["tenant_id"], name: "index_product_tenant_settings_on_tenant_id"
-    t.check_constraint "is_sold_out = false AND sold_out_reason IS NULL OR is_sold_out = true AND (sold_out_reason::text = ANY (ARRAY['manual'::character varying, 'stock_empty'::character varying]::text[]))", name: "chk_sold_out_reason"
+    t.check_constraint "is_sold_out = false AND sold_out_reason IS NULL OR is_sold_out = true AND (sold_out_reason::text = ANY (ARRAY['manual'::character varying::text, 'stock_empty'::character varying::text]))", name: "chk_sold_out_reason"
   end
 
   create_table "products", id: :uuid, default: -> { "gen_random_uuid()" }, comment: "Глобальный каталог продуктов (управляет УК)", force: :cascade do |t|
@@ -551,6 +552,25 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_23_000001) do
     t.index ["sort_order"], name: "index_products_on_sort_order"
   end
 
+  create_table "promo_codes", id: :uuid, default: -> { "gen_random_uuid()" }, comment: "Промокоды для скидок", force: :cascade do |t|
+    t.string "code", limit: 50, null: false, comment: "Код промокода (уникальный в тенанте)"
+    t.datetime "created_at", null: false
+    t.text "description", comment: "Описание промокода для админа"
+    t.decimal "discount_percentage", precision: 5, scale: 2, default: "0.0", null: false, comment: "Процент скидки (0-100)"
+    t.boolean "is_active", default: true, null: false, comment: "Активен ли промокод"
+    t.integer "max_uses", default: 0, null: false, comment: "Максимальное количество использований (0 = безлимит)"
+    t.uuid "tenant_id", null: false, comment: "Тенант (точка)"
+    t.datetime "updated_at", null: false
+    t.integer "used_count", default: 0, null: false, comment: "Сколько раз уже использован"
+    t.datetime "valid_from", null: false, comment: "Начало действия промокода"
+    t.datetime "valid_to", null: false, comment: "Окончание действия промокода"
+    t.index ["is_active"], name: "index_promo_codes_on_is_active"
+    t.index ["tenant_id", "code"], name: "idx_promo_codes_tenant_code", unique: true
+    t.index ["tenant_id"], name: "index_promo_codes_on_tenant_id"
+    t.index ["valid_from"], name: "index_promo_codes_on_valid_from"
+    t.index ["valid_to"], name: "index_promo_codes_on_valid_to"
+  end
+
   create_table "refunds", id: :uuid, default: -> { "gen_random_uuid()" }, comment: "Возвраты средств", force: :cascade do |t|
     t.decimal "amount", precision: 10, scale: 2, null: false
     t.datetime "created_at", null: false
@@ -563,6 +583,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_23_000001) do
     t.string "status", default: "pending", null: false
     t.uuid "tenant_id", null: false
     t.datetime "updated_at", null: false
+    t.index ["created_at"], name: "idx_refunds_created_at"
     t.index ["initiated_by_id"], name: "index_refunds_on_initiated_by_id"
     t.index ["order_id"], name: "index_refunds_on_order_id"
     t.index ["payment_id"], name: "index_refunds_on_payment_id"
@@ -652,6 +673,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_23_000001) do
     t.index ["tenant_id"], name: "index_shifts_on_tenant_id"
   end
 
+  create_table "solid_cache_entries", primary_key: ["key", "namespace"], force: :cascade do |t|
+    t.integer "byte_size", null: false
+    t.datetime "created_at", null: false
+    t.datetime "expires_at"
+    t.string "key", null: false
+    t.integer "key_hash", null: false
+    t.string "namespace", null: false
+    t.binary "value"
+    t.index ["key_hash", "namespace"], name: "index_solid_cache_entries_on_key_hash_and_namespace", unique: true
+  end
+
   create_table "stock_movement_items", id: :uuid, default: -> { "gen_random_uuid()" }, comment: "Позиции движения (какие ингредиенты, сколько)", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.uuid "ingredient_id", null: false
@@ -679,6 +711,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_23_000001) do
     t.index ["movement_type"], name: "index_stock_movements_on_movement_type"
     t.index ["reference_id"], name: "index_stock_movements_on_reference_id", where: "(reference_id IS NOT NULL)"
     t.index ["status"], name: "index_stock_movements_on_status"
+    t.index ["tenant_id", "created_at"], name: "idx_stock_movements_tenant_created", order: { created_at: :desc }
     t.index ["tenant_id"], name: "index_stock_movements_on_tenant_id"
   end
 

@@ -7,6 +7,11 @@ module Shop
         tenant_id = @shop_tenant.id
         scope = Shop::Catalog.products_scope(tenant_id)
 
+        # Кэширование с ключом по tenant_id и пагинации
+        cache_key = "shop/categories/#{tenant_id}/#{params[:page]}/#{params[:per_page]}"
+        cached_data = Rails.cache.read(cache_key)
+        return render json: cached_data if cached_data
+
         # 1 запрос: все товары
         all_products = scope.order(:sort_order).to_a
 
@@ -20,6 +25,11 @@ module Shop
         # 1 запрос: категории
         categories = Category.where(id: products_by_category.keys.compact).order(:sort_order)
 
+        # Пагинация по категориям
+        page = [params[:page].to_i, 1].max
+        per_page = [[params[:per_page].to_i, 1].max, 50].min
+        categories = categories.limit(per_page).offset((page - 1) * per_page)
+
         data = categories.map do |cat|
           prods = products_by_category[cat.id] || []
           {
@@ -29,7 +39,12 @@ module Shop
             products: prods.map { |p| product_summary_json(p, setting: settings[p.id]) }
           }
         end
-        render json: data
+        response_data = {
+          data: data,
+          meta: { page: page, per_page: per_page }
+        }
+        Rails.cache.write(cache_key, response_data, expires_in: 5.minutes)
+        render json: response_data
       end
 
       private

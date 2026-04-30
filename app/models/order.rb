@@ -49,7 +49,7 @@ class Order < ApplicationRecord
   end
 
   def can_be_cancelled?
-    !status.in?(%w[issued closed cancelled])
+    !status.in?(%w[pending_payment issued closed cancelled])
   end
 
   VALID_TRANSITIONS = {

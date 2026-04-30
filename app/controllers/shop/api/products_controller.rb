@@ -14,12 +14,27 @@ module Shop
           ).distinct
         end
 
+        # Пагинация
+        page = [params[:page].to_i, 1].max
+        per_page = [params[:per_page].to_i, 1, 100].min
+        rel = rel.limit(per_page).offset((page - 1) * per_page)
+
+        # Кэширование с ключом по tenant_id, фильтрам и пагинации
+        cache_key = "shop/products/#{tenant_id}/#{params[:category_id]}/#{params[:in_stock]}/#{page}/#{per_page}"
+        cached_data = Rails.cache.read(cache_key)
+        return render json: cached_data if cached_data
+
         products = rel.to_a
         settings = ProductTenantSetting
           .where(product_id: products.map(&:id), tenant_id: tenant_id)
           .index_by(&:product_id)
 
-        render json: products.map { |p| product_list_json(p, setting: settings[p.id]) }
+        response_data = {
+          data: products.map { |p| product_list_json(p, setting: settings[p.id]) },
+          meta: { page: page, per_page: per_page }
+        }
+        Rails.cache.write(cache_key, response_data, expires_in: 5.minutes)
+        render json: response_data
       end
 
       def show

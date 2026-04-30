@@ -3,6 +3,8 @@
 module Shop
   class CartService
     SESSION_KEY = :shop_cart
+    MAX_CART_ITEMS = 50
+    MAX_ITEM_QUANTITY = 99
 
     def initialize(session, tenant_id)
       @session = session
@@ -14,16 +16,31 @@ module Shop
       product = Product.find(product_id)
       raise ActiveRecord::RecordNotFound, "Товар не найден" unless shop_available?(product)
 
+      # Проверка на общее количество товаров в корзине
+      current_total = @session[SESSION_KEY].sum { |l| l["quantity"].to_i }
+      if current_total >= MAX_CART_ITEMS
+        raise ActiveRecord::RecordNotFound, "Максимум #{MAX_CART_ITEMS} товаров в корзине"
+      end
+
       line = {
         "product_id" => product.id,
-        "quantity" => quantity.to_i.clamp(1, 99),
+        "quantity" => quantity.to_i.clamp(1, MAX_ITEM_QUANTITY),
         "selected_modifiers" => normalize_modifiers(selected_modifiers)
       }
       key = line_key(line)
       existing = @session[SESSION_KEY].find_index { |l| line_key(l) == key }
       if existing
+        # Проверка при добавлении к существующему товару
+        new_quantity = @session[SESSION_KEY][existing]["quantity"] + line["quantity"]
+        if new_quantity > MAX_ITEM_QUANTITY
+          raise ActiveRecord::RecordNotFound, "Максимум #{MAX_ITEM_QUANTITY} единиц товара"
+        end
         @session[SESSION_KEY][existing]["quantity"] += line["quantity"]
       else
+        # Проверка при добавлении нового товара
+        if current_total + line["quantity"] > MAX_CART_ITEMS
+          raise ActiveRecord::RecordNotFound, "Максимум #{MAX_CART_ITEMS} товаров в корзине"
+        end
         @session[SESSION_KEY] << line
       end
       self
@@ -116,7 +133,10 @@ module Shop
 
       opt = ProductModifierOption.joins(:group)
         .find_by(id: oid, product_modifier_groups: { product_id: product.id })
-      opt ? opt.price_delta : BigDecimal(m["price"].to_s)
+      unless opt
+        raise ActiveRecord::RecordNotFound, "Модификатор #{oid} не найден для товара #{product.id}"
+      end
+      opt.price_delta
     end
   end
 end

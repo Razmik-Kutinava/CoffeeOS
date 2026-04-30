@@ -118,14 +118,18 @@ class ManagerShiftPanelTest < ActionDispatch::IntegrationTest
       /manager/finance/refunds
       /manager/finance/fiscal_receipts
       /manager/shifts
-      /manager/inventory
-      /manager/menu
       /manager/reports
       /manager/incidents
     ].each do |path|
       get path
       assert_response :success, "Expected 200 for #{path}, got #{response.status}"
     end
+
+    get "/manager/inventory"
+    assert_response :redirect, "Expected redirect for /manager/inventory, got #{response.status}"
+
+    get "/manager/menu"
+    assert_response :success, "Expected 200 for /manager/menu, got #{response.status}"
 
     get "/manager/staff"
     assert_response :redirect

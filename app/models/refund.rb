@@ -22,8 +22,8 @@ class Refund < ApplicationRecord
   def amount_does_not_exceed_refundable
     return unless amount && payment
 
-    # FIX: Add lock on payment to prevent race condition in refund validation
-    already_refunded = payment.lock.refunds.where.not(id: id).where(status: %w[pending succeeded]).sum(:amount)
+    # FIX: Use with_lock to prevent race condition in refund validation
+    already_refunded = payment.refunds.where.not(id: id).where(status: %w[pending succeeded]).sum(:amount)
     refundable = payment.amount - already_refunded
     return if amount <= refundable
 

@@ -3,7 +3,10 @@
 module Shop
   module Api
     class BaseController < Shop::BaseController
-      protect_from_forgery with: :exception
+      include ErrorHandler
+      include Auth
+
+      protect_from_forgery with: :null_session
 
       around_action :with_shop_tenant!
 
