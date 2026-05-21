@@ -12,16 +12,33 @@ module Platform
 
     def create
       @tenant = Tenant.new(tenant_params)
-      unless @tenant.save
+      committed = false
+      ActiveRecord::Base.transaction do
+        unless @tenant.save
+          raise ActiveRecord::Rollback
+        end
+
+        begin
+          Platform::TenantOnboarding::Provision.call(
+            tenant: @tenant,
+            actor_user_id: current_user.id,
+            module_params: module_params
+          )
+          committed = true
+        rescue => e
+          Rails.logger.error("TenantOnboarding::Provision failed: #{e.class} — #{e.message}")
+          @tenant.errors.add(:base, "Не удалось инициализировать точку. Попробуйте ещё раз.")
+          raise ActiveRecord::Rollback
+        end
+      end
+
+      unless committed
         return render(:new, status: :unprocessable_entity)
       end
 
-      ActiveRecord::Base.transaction do
-        conn = ActiveRecord::Base.connection
-        conn.execute("SET LOCAL app.current_user_id = #{conn.quote(current_user.id.to_s)}")
-        TenantModuleFlags.sync!(@tenant, module_params)
-      end
-      redirect_to platform_tenants_path, notice: "Точка создана"
+      shop_hint = Platform::TenantOnboarding::UrlBuilder.shop_url_for(@tenant)
+      redirect_to platform_tenants_path,
+                  notice: "Точка создана. Витрина: #{shop_hint}"
     end
 
     def edit
@@ -30,15 +47,30 @@ module Platform
 
     def update
       @tenant = Tenant.find(params[:id])
-      unless @tenant.update(tenant_params)
+      committed = false
+      ActiveRecord::Base.transaction do
+        unless @tenant.update(tenant_params)
+          raise ActiveRecord::Rollback
+        end
+
+        begin
+          Platform::TenantOnboarding::Provision.call(
+            tenant: @tenant,
+            actor_user_id: current_user.id,
+            module_params: module_params
+          )
+          committed = true
+        rescue => e
+          Rails.logger.error("TenantOnboarding::Provision failed on update: #{e.class} — #{e.message}")
+          @tenant.errors.add(:base, "Не удалось обновить настройки точки. Попробуйте ещё раз.")
+          raise ActiveRecord::Rollback
+        end
+      end
+
+      unless committed
         return render(:edit, status: :unprocessable_entity)
       end
 
-      ActiveRecord::Base.transaction do
-        conn = ActiveRecord::Base.connection
-        conn.execute("SET LOCAL app.current_user_id = #{conn.quote(current_user.id.to_s)}")
-        TenantModuleFlags.sync!(@tenant, module_params)
-      end
       redirect_to platform_tenants_path, notice: "Сохранено"
     end
 
