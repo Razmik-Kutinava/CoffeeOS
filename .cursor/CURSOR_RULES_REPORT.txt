@@ -19,4 +19,4 @@
 - При частых правках только Docker/CI — опционально вынести шестой файл с globs config/**, Dockerfile, .github/**, bin/**.
 
 Обновление 2026-05-14
-- `prd-factory-agent.mdc` удалён; процесс агента зафиксирован в `.cursorrules` и `docs/agents/AGENTS.md`. Команда `/prd-factory` перенаправляет туда.
+- `prd-factory-agent.mdc` удалён; процесс агента в `.cursorrules` и `docs/agents/AGENTS.md`.
