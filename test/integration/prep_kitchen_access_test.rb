@@ -36,7 +36,7 @@ class PrepKitchenAccessTest < ActionDispatch::IntegrationTest
 
   test "non kitchen user gets denied" do
     tenant = create_tenant!(name: "Kitchen C", slug: "kitchen-c")
-    office = create_user!(tenant: tenant, role_codes: %w[office_manager], email: "office-k@test.com", name: "Office")
+    office = create_user!(tenant: tenant, role_codes: %w[general_manager], email: "office-k@test.com", name: "Office")
 
     login_as!(office)
     get "/prep_kitchen"

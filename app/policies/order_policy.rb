@@ -6,7 +6,7 @@ class OrderPolicy < ApplicationPolicy
   def history?       = barista? || any_manager?
   def create?        = barista?
   def update_status? = barista?
-  def cancel?        = barista? || shift_manager? || office_manager? || uk_global_admin?
+  def cancel?        = barista? || shift_manager? || general_manager? || uk_global_admin?
 
   class Scope < ApplicationPolicy::Scope
     def resolve

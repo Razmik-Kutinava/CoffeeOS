@@ -12,7 +12,7 @@ class BaristaToManagersFullFlowTest < ActionDispatch::IntegrationTest
     tenant = create_tenant!(name: "TFF", slug: "tff")
 
     barista = create_user!(tenant: tenant, role_codes: %w[barista], email: "ff-bar@test.com", name: "FFBar")
-    office = create_user!(tenant: tenant, role_codes: %w[office_manager], email: "ff-office@test.com", name: "FFOffice")
+    office = create_user!(tenant: tenant, role_codes: %w[general_manager], email: "ff-office@test.com", name: "FFOffice")
     shift_manager = create_user!(tenant: tenant, role_codes: %w[shift_manager], email: "ff-mgr@test.com", name: "FFMgr")
 
     cash_shift = open_cash_shift!(tenant: tenant, opened_by: barista)

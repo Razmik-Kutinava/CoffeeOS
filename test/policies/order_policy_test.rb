@@ -9,7 +9,7 @@ class OrderPolicyTest < ActionDispatch::IntegrationTest
 
     @barista        = create_user!(tenant: @tenant, role_codes: %w[barista],        email: "pol-barista@t.local",  name: "PB")
     @shift_manager  = create_user!(tenant: @tenant, role_codes: %w[shift_manager],  email: "pol-shift@t.local",   name: "PS")
-    @office_manager = create_user!(tenant: @tenant, role_codes: %w[office_manager], email: "pol-office@t.local",  name: "PO")
+    @general_manager = create_user!(tenant: @tenant, role_codes: %w[general_manager], email: "pol-office@t.local",  name: "PO")
     @stranger       = create_user!(tenant: @tenant, role_codes: %w[],               email: "pol-nobody@t.local",  name: "PN")
   end
 
@@ -18,8 +18,8 @@ class OrderPolicyTest < ActionDispatch::IntegrationTest
     assert OrderPolicy.new(@barista, Order).create?
   end
 
-  test "office_manager cannot create order via barista policy" do
-    assert_not OrderPolicy.new(@office_manager, Order).create?
+  test "general_manager cannot create order via barista policy" do
+    assert_not OrderPolicy.new(@general_manager, Order).create?
   end
 
   test "unauthenticated user raises NotAuthorizedError" do
@@ -31,8 +31,8 @@ class OrderPolicyTest < ActionDispatch::IntegrationTest
     assert OrderPolicy.new(@barista, @order).show?
   end
 
-  test "office_manager can show order" do
-    assert OrderPolicy.new(@office_manager, @order).show?
+  test "general_manager can show order" do
+    assert OrderPolicy.new(@general_manager, @order).show?
   end
 
   test "user with no role cannot show order" do
@@ -44,8 +44,8 @@ class OrderPolicyTest < ActionDispatch::IntegrationTest
     assert OrderPolicy.new(@barista, @order).update_status?
   end
 
-  test "office_manager cannot update_status via barista policy" do
-    assert_not OrderPolicy.new(@office_manager, @order).update_status?
+  test "general_manager cannot update_status via barista policy" do
+    assert_not OrderPolicy.new(@general_manager, @order).update_status?
   end
 
   # cancel?
@@ -53,8 +53,8 @@ class OrderPolicyTest < ActionDispatch::IntegrationTest
     assert OrderPolicy.new(@barista, @order).cancel?
   end
 
-  test "office_manager can cancel" do
-    assert OrderPolicy.new(@office_manager, @order).cancel?
+  test "general_manager can cancel" do
+    assert OrderPolicy.new(@general_manager, @order).cancel?
   end
 
   test "stranger cannot cancel" do

@@ -70,8 +70,8 @@ module Manager
       tenant = Tenant.find(Current.tenant_id)
       codes = (codes & assignable_role_codes).map(&:to_s)
 
-      if office_manager? && !franchise_manager? && !current_user.uk_global_admin?
-        codes -= ["office_manager"]
+      if general_manager? && !franchise_manager? && !current_user.uk_global_admin?
+        codes -= ["general_manager"]
       end
 
       desired_ids = codes.filter_map do |c|
@@ -88,13 +88,13 @@ module Manager
     end
 
     def assignable_role_codes
-      %w[barista shift_manager office_manager prep_kitchen_worker prep_kitchen_manager]
+      %w[barista shift_manager general_manager prep_kitchen_worker prep_kitchen_manager]
     end
 
     def assignable_staff_role_codes
       c = assignable_role_codes.dup
-      if office_manager? && !franchise_manager? && !current_user.uk_global_admin?
-        c -= ["office_manager"]
+      if general_manager? && !franchise_manager? && !current_user.uk_global_admin?
+        c -= ["general_manager"]
       end
       c
     end

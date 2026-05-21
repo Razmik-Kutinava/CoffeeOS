@@ -103,7 +103,7 @@ class ManagerOfficePanelTest < ActionDispatch::IntegrationTest
   test "office manager can open /manager and main pages" do
     tenant = create_tenant!(name: "T1", slug: "t1")
     barista = create_user!(tenant: tenant, role_codes: %w[barista], email: "bar@test.com", name: "Bar")
-    office = create_user!(tenant: tenant, role_codes: %w[office_manager], email: "office@test.com", name: "Office")
+    office = create_user!(tenant: tenant, role_codes: %w[general_manager], email: "office@test.com", name: "Office")
 
     login_as!(office)
 
@@ -131,7 +131,7 @@ class ManagerOfficePanelTest < ActionDispatch::IntegrationTest
 
   test "office menu shows sold_out indicator and reason" do
     tenant = create_tenant!(name: "TMenu", slug: "tmenu")
-    office = create_user!(tenant: tenant, role_codes: %w[office_manager], email: "office-menu@test.com", name: "OfficeMenu")
+    office = create_user!(tenant: tenant, role_codes: %w[general_manager], email: "office-menu@test.com", name: "OfficeMenu")
 
     category = create_category!(name: "КатMenu")
     product = Product.create!(name: "ПрMenu", slug: "пр-menu", category: category, sort_order: 1)
@@ -157,7 +157,7 @@ class ManagerOfficePanelTest < ActionDispatch::IntegrationTest
 
   test "office inventory shows qty/min_qty and out of stock ingredients" do
     tenant = create_tenant!(name: "TInv", slug: "tinv")
-    office = create_user!(tenant: tenant, role_codes: %w[office_manager], email: "office-inv@test.com", name: "OfficeInv")
+    office = create_user!(tenant: tenant, role_codes: %w[general_manager], email: "office-inv@test.com", name: "OfficeInv")
 
     ingredient = Ingredient.create!(name: "ing-inv", unit: "g", is_active: true)
     stock = IngredientTenantStock.create!(tenant: tenant, ingredient: ingredient, qty: 0, min_qty: 1)
@@ -172,7 +172,7 @@ class ManagerOfficePanelTest < ActionDispatch::IntegrationTest
 
   test "office devices show online and offline labels" do
     tenant = create_tenant!(name: "TDev", slug: "tdev")
-    office = create_user!(tenant: tenant, role_codes: %w[office_manager], email: "office-dev@test.com", name: "OfficeDev")
+    office = create_user!(tenant: tenant, role_codes: %w[general_manager], email: "office-dev@test.com", name: "OfficeDev")
 
     online_device = Device.create!(
       tenant: tenant,
@@ -206,7 +206,7 @@ class ManagerOfficePanelTest < ActionDispatch::IntegrationTest
 
   test "office staff shows users and their role codes" do
     tenant = create_tenant!(name: "TStaff", slug: "tstaff")
-    office = create_user!(tenant: tenant, role_codes: %w[office_manager], email: "office-staff@test.com", name: "OfficeStaff")
+    office = create_user!(tenant: tenant, role_codes: %w[general_manager], email: "office-staff@test.com", name: "OfficeStaff")
 
     user_a = create_user!(tenant: tenant, role_codes: %w[barista], email: "staff-bar@test.com", name: "StaffBar")
     user_b = create_user!(tenant: tenant, role_codes: %w[shift_manager], email: "staff-mgr@test.com", name: "StaffMgr")
@@ -222,7 +222,7 @@ class ManagerOfficePanelTest < ActionDispatch::IntegrationTest
 
   test "office reports compute counts and sums by from/to" do
     tenant = create_tenant!(name: "TRpt", slug: "trpt")
-    office = create_user!(tenant: tenant, role_codes: %w[office_manager], email: "office-rpt@test.com", name: "OfficeRpt")
+    office = create_user!(tenant: tenant, role_codes: %w[general_manager], email: "office-rpt@test.com", name: "OfficeRpt")
     barista = create_user!(tenant: tenant, role_codes: %w[barista], email: "bar-rpt@test.com", name: "BarRpt")
 
     cash_shift = open_cash_shift!(tenant: tenant, opened_by: barista)
@@ -283,7 +283,7 @@ class ManagerOfficePanelTest < ActionDispatch::IntegrationTest
   test "barista status update is reflected on office orders list" do
     tenant = create_tenant!(name: "T3", slug: "t3")
     barista = create_user!(tenant: tenant, role_codes: %w[barista], email: "bar3@test.com", name: "Bar3")
-    office = create_user!(tenant: tenant, role_codes: %w[office_manager], email: "office3@test.com", name: "Office3")
+    office = create_user!(tenant: tenant, role_codes: %w[general_manager], email: "office3@test.com", name: "Office3")
 
     cash_shift = open_cash_shift!(tenant: tenant, opened_by: barista)
     order = create_order!(tenant: tenant, cash_shift: cash_shift, status: "accepted", amount: 120)
@@ -306,7 +306,7 @@ class ManagerOfficePanelTest < ActionDispatch::IntegrationTest
   test "barista cancel is reflected on office orders list" do
     tenant = create_tenant!(name: "T4", slug: "t4")
     barista = create_user!(tenant: tenant, role_codes: %w[barista], email: "bar4@test.com", name: "Bar4")
-    office = create_user!(tenant: tenant, role_codes: %w[office_manager], email: "office4@test.com", name: "Office4")
+    office = create_user!(tenant: tenant, role_codes: %w[general_manager], email: "office4@test.com", name: "Office4")
 
     cash_shift = open_cash_shift!(tenant: tenant, opened_by: barista)
     OrderCancelReason.create!(
@@ -336,7 +336,7 @@ class ManagerOfficePanelTest < ActionDispatch::IntegrationTest
   test "office incidents show pending payment, failed fiscal receipt, pending refund, offline device, out of stock" do
     tenant = create_tenant!(name: "T5", slug: "t5")
     barista = create_user!(tenant: tenant, role_codes: %w[barista], email: "bar5@test.com", name: "Bar5")
-    office = create_user!(tenant: tenant, role_codes: %w[office_manager], email: "office5@test.com", name: "Office5")
+    office = create_user!(tenant: tenant, role_codes: %w[general_manager], email: "office5@test.com", name: "Office5")
 
     cash_shift = open_cash_shift!(tenant: tenant, opened_by: barista)
     order = create_order!(tenant: tenant, cash_shift: cash_shift, status: "accepted", amount: 300)
@@ -368,7 +368,7 @@ class ManagerOfficePanelTest < ActionDispatch::IntegrationTest
   test "Close Shift Wizard blocks closing when there are blockers" do
     tenant = create_tenant!(name: "T6", slug: "t6")
     barista = create_user!(tenant: tenant, role_codes: %w[barista], email: "bar6@test.com", name: "Bar6")
-    office = create_user!(tenant: tenant, role_codes: %w[office_manager], email: "office6@test.com", name: "Office6")
+    office = create_user!(tenant: tenant, role_codes: %w[general_manager], email: "office6@test.com", name: "Office6")
 
     shift = open_cash_shift!(tenant: tenant, opened_by: barista)
     OrderCancelReason.create!(
@@ -406,7 +406,7 @@ class ManagerOfficePanelTest < ActionDispatch::IntegrationTest
   test "Close Shift Wizard closes shift when there are no blockers" do
     tenant = create_tenant!(name: "T7", slug: "t7")
     barista = create_user!(tenant: tenant, role_codes: %w[barista], email: "bar7@test.com", name: "Bar7")
-    office = create_user!(tenant: tenant, role_codes: %w[office_manager], email: "office7@test.com", name: "Office7")
+    office = create_user!(tenant: tenant, role_codes: %w[general_manager], email: "office7@test.com", name: "Office7")
 
     shift = open_cash_shift!(tenant: tenant, opened_by: barista)
     order = create_order!(tenant: tenant, cash_shift: shift, status: "accepted", amount: 120)
@@ -427,7 +427,7 @@ class ManagerOfficePanelTest < ActionDispatch::IntegrationTest
   test "office closing shift makes barista see 'Смена закрыта' and blocks order creation" do
     tenant = create_tenant!(name: "T8", slug: "t8")
     barista = create_user!(tenant: tenant, role_codes: %w[barista], email: "bar8@test.com", name: "Bar8")
-    office = create_user!(tenant: tenant, role_codes: %w[office_manager], email: "office8@test.com", name: "Office8")
+    office = create_user!(tenant: tenant, role_codes: %w[general_manager], email: "office8@test.com", name: "Office8")
 
     shift = open_cash_shift!(tenant: tenant, opened_by: barista)
 
@@ -458,7 +458,7 @@ class ManagerOfficePanelTest < ActionDispatch::IntegrationTest
   test "barista turbo: invalid status transition returns turbo-stream replace" do
     tenant = create_tenant!(name: "T9", slug: "t9")
     barista = create_user!(tenant: tenant, role_codes: %w[barista], email: "bar9@test.com", name: "Bar9")
-    office = create_user!(tenant: tenant, role_codes: %w[office_manager], email: "office9@test.com", name: "Office9")
+    office = create_user!(tenant: tenant, role_codes: %w[general_manager], email: "office9@test.com", name: "Office9")
 
     cash_shift = open_cash_shift!(tenant: tenant, opened_by: barista)
     order = create_order!(tenant: tenant, cash_shift: cash_shift, status: "issued", amount: 100)
@@ -482,7 +482,7 @@ class ManagerOfficePanelTest < ActionDispatch::IntegrationTest
   test "barista turbo: cancel order returns turbo-stream remove" do
     tenant = create_tenant!(name: "T10", slug: "t10")
     barista = create_user!(tenant: tenant, role_codes: %w[barista], email: "bar10@test.com", name: "Bar10")
-    office = create_user!(tenant: tenant, role_codes: %w[office_manager], email: "office10@test.com", name: "Office10")
+    office = create_user!(tenant: tenant, role_codes: %w[general_manager], email: "office10@test.com", name: "Office10")
 
     cash_shift = open_cash_shift!(tenant: tenant, opened_by: barista)
     OrderCancelReason.create!(

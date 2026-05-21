@@ -39,8 +39,8 @@ class ApplicationPolicy
     user.has_role?("shift_manager")
   end
 
-  def office_manager?
-    user.has_role?("office_manager")
+  def general_manager?
+    user.has_role?("general_manager")
   end
 
   def franchise_manager?
@@ -52,11 +52,11 @@ class ApplicationPolicy
   end
 
   def any_manager?
-    shift_manager? || office_manager? || franchise_manager? || uk_global_admin?
+    shift_manager? || general_manager? || franchise_manager? || uk_global_admin?
   end
 
   def privileged_manager?
-    office_manager? || franchise_manager? || uk_global_admin?
+    general_manager? || franchise_manager? || uk_global_admin?
   end
 
   def prep_kitchen_manager?

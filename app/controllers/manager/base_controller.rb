@@ -11,7 +11,7 @@ module Manager
     # Конкретные CRUD-действия могут переопределить через authorize @resource.
     before_action :skip_authorization
 
-    helper_method :franchise_manager?, :office_manager?, :office_or_franchise_manager?, :shift_manager?,
+    helper_method :franchise_manager?, :general_manager?, :general_or_franchise_manager?, :shift_manager?,
                   :accessible_manager_tenants, :current_tenant, :uk_in_manager?
 
     def uk_in_manager?
@@ -19,7 +19,7 @@ module Manager
     end
 
     def require_privileged_manager!
-      return if office_or_franchise_manager? || current_user.uk_global_admin?
+      return if general_or_franchise_manager? || current_user.uk_global_admin?
 
       redirect_to manager_dashboard_path, alert: "Доступ запрещён"
     end
@@ -40,7 +40,7 @@ module Manager
         redirect_to login_path, alert: "Ваша учётная запись заблокирована"
         return
       end
-      return if user.has_any_role?("office_manager", "shift_manager", "franchise_manager") || user.uk_global_admin?
+      return if user.has_any_role?("general_manager", "shift_manager", "franchise_manager") || user.uk_global_admin?
 
       redirect_to root_path, alert: "Доступ запрещён"
     end
@@ -94,31 +94,31 @@ module Manager
     end
 
     def manager_role_code
-      return "office_manager" if current_user&.uk_global_admin?
+      return "general_manager" if current_user&.uk_global_admin?
 
       role_from_session = session[:role_code]
       return role_from_session if current_user&.has_role?(role_from_session)
 
       return "shift_manager" if current_user&.has_role?("shift_manager")
       return "franchise_manager" if current_user&.franchise_manager?
-      return "office_manager" if current_user&.has_role?("office_manager")
-      "office_manager"
+      return "general_manager" if current_user&.has_role?("general_manager")
+      "general_manager"
     end
 
     def shift_manager?
       Current.role_code == "shift_manager"
     end
 
-    def office_manager?
-      Current.role_code == "office_manager"
+    def general_manager?
+      Current.role_code == "general_manager"
     end
 
     def franchise_manager?
       Current.role_code == "franchise_manager"
     end
 
-    def office_or_franchise_manager?
-      office_manager? || franchise_manager?
+    def general_or_franchise_manager?
+      general_manager? || franchise_manager?
     end
 
     def accessible_manager_tenants
@@ -135,8 +135,8 @@ module Manager
       @current_tenant ||= Tenant.find_by(id: Current.tenant_id) if Current.tenant_id
     end
 
-    def require_office_or_franchise_manager!
-      return if office_or_franchise_manager?
+    def require_general_or_franchise_manager!
+      return if general_or_franchise_manager?
 
       redirect_to manager_dashboard_path, alert: "Доступ запрещён"
     end

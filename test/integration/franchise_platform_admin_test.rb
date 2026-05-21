@@ -66,16 +66,16 @@ class FranchisePlatformAdminTest < ActionDispatch::IntegrationTest
           email: "om-#{SecureRandom.hex(4)}@test.local",
           password: "pass123"
         },
-        role_codes: ["office_manager"]
+        role_codes: ["general_manager"]
       }
     end
     assert_redirected_to manager_staff_members_path
   end
 
-  test "office manager cannot keep office_manager role when creating staff" do
+  test "general manager cannot keep general_manager role when creating staff" do
     org = create_organization!
     t = create_tenant!(organization: org)
-    om = create_user!(tenant: t, role_codes: %w[office_manager], email: "om-y@test.local")
+    om = create_user!(tenant: t, role_codes: %w[general_manager], email: "om-y@test.local")
 
     login_as!(om, password: "pass123")
 
@@ -87,13 +87,13 @@ class FranchisePlatformAdminTest < ActionDispatch::IntegrationTest
           email: em,
           password: "pass123"
         },
-        role_codes: %w[office_manager barista]
+        role_codes: %w[general_manager barista]
       }
     end
     assert_redirected_to manager_staff_members_path
     nu = User.find_by!(email: em)
     assert nu.roles.exists?(code: "barista")
-    assert_not nu.roles.exists?(code: "office_manager")
+    assert_not nu.roles.exists?(code: "general_manager")
   end
 
   test "health tenant json requires uk session" do

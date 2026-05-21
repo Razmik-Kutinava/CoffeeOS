@@ -66,7 +66,7 @@ class CallbacksE2ETest < ActionDispatch::IntegrationTest
 
     tenant = create_tenant!(name: "TCB", slug: "tcb")
     barista = create_user!(tenant: tenant, role_codes: %w[barista], email: "cb-bar@test.com", name: "CbBar")
-    office = create_user!(tenant: tenant, role_codes: %w[office_manager], email: "cb-office@test.com", name: "CbOffice")
+    office = create_user!(tenant: tenant, role_codes: %w[general_manager], email: "cb-office@test.com", name: "CbOffice")
 
     shift = open_cash_shift!(tenant: tenant, opened_by: barista)
     order = create_order!(tenant: tenant, cash_shift: shift, status: "accepted", amount: 150)

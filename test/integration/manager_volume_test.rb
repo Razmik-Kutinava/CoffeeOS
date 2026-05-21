@@ -54,7 +54,7 @@ class ManagerVolumeTest < ActionDispatch::IntegrationTest
     tenant = create_tenant!(name: "TVol", slug: "tvol")
 
     barista = create_user!(tenant: tenant, role_codes: %w[barista], email: "vol-bar@test.com", name: "VolBar")
-    office = create_user!(tenant: tenant, role_codes: %w[office_manager], email: "vol-office@test.com", name: "VolOffice")
+    office = create_user!(tenant: tenant, role_codes: %w[general_manager], email: "vol-office@test.com", name: "VolOffice")
     shift_manager = create_user!(tenant: tenant, role_codes: %w[shift_manager], email: "vol-mgr@test.com", name: "VolMgr")
 
     cash_shift = open_cash_shift!(tenant: tenant, opened_by: barista)

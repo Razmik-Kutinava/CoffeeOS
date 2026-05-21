@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_28_000002) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_20_000002) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_stat_statements"
@@ -22,6 +22,68 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_28_000002) do
   create_enum "payment_method", ["card", "cash", "sbp", "apple_pay", "google_pay", "internal_balance", "mixed"]
   create_enum "payment_status", ["pending", "processing", "succeeded", "failed", "refunded", "partially_refunded", "requires_review"]
   create_enum "shift_status", ["open", "closed", "cancelled"]
+
+  create_table "admin_audit_logs", id: :uuid, default: -> { "gen_random_uuid()" }, comment: "Журнал административных действий УК/менеджмента", force: :cascade do |t|
+    t.string "action", limit: 50, null: false
+    t.uuid "actor_id"
+    t.datetime "created_at", null: false
+    t.jsonb "details", default: {}, null: false
+    t.uuid "entity_id"
+    t.string "entity_type", limit: 100, null: false
+    t.string "request_id", limit: 128
+    t.uuid "tenant_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["action"], name: "index_admin_audit_logs_on_action"
+    t.index ["actor_id"], name: "index_admin_audit_logs_on_actor_id"
+    t.index ["details"], name: "index_admin_audit_logs_on_details", using: :gin
+    t.index ["request_id"], name: "index_admin_audit_logs_on_request_id"
+    t.index ["tenant_id", "created_at"], name: "index_admin_audit_logs_on_tenant_id_and_created_at"
+    t.index ["tenant_id", "entity_type", "entity_id"], name: "idx_on_tenant_id_entity_type_entity_id_8b86cf7584"
+    t.index ["tenant_id"], name: "index_admin_audit_logs_on_tenant_id"
+  end
+
+  create_table "billing_plans", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "code", limit: 50, null: false
+    t.datetime "created_at", null: false
+    t.text "description"
+    t.jsonb "features", default: {}, null: false
+    t.boolean "is_active", default: true, null: false
+    t.integer "max_devices"
+    t.integer "max_products"
+    t.integer "max_staff"
+    t.string "name", limit: 100, null: false
+    t.decimal "price_monthly", precision: 10, scale: 2, default: "0.0", null: false
+    t.decimal "price_yearly", precision: 10, scale: 2
+    t.integer "sort_order", default: 0, null: false
+    t.datetime "updated_at", null: false
+    t.index ["code"], name: "index_billing_plans_on_code", unique: true
+    t.index ["is_active", "sort_order"], name: "index_billing_plans_on_is_active_and_sort_order"
+    t.check_constraint "price_monthly >= 0::numeric", name: "chk_billing_price"
+  end
+
+  create_table "billing_subscriptions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.decimal "amount_paid", precision: 10, scale: 2, default: "0.0"
+    t.string "billing_period", limit: 20, default: "monthly", null: false
+    t.datetime "cancelled_at", precision: nil
+    t.datetime "created_at", null: false
+    t.uuid "created_by_id"
+    t.datetime "expires_at", precision: nil
+    t.string "payment_reference", limit: 255
+    t.uuid "plan_id", null: false
+    t.datetime "started_at", precision: nil, default: -> { "now()" }, null: false
+    t.string "status", limit: 50, default: "active", null: false
+    t.uuid "tenant_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by_id"], name: "index_billing_subscriptions_on_created_by_id"
+    t.index ["expires_at"], name: "idx_billing_subscriptions_expires", where: "((status)::text = 'active'::text)"
+    t.index ["plan_id"], name: "idx_billing_subscriptions_plan"
+    t.index ["plan_id"], name: "index_billing_subscriptions_on_plan_id"
+    t.index ["tenant_id", "status"], name: "idx_billing_subscriptions_tenant_status"
+    t.index ["tenant_id"], name: "index_billing_subscriptions_on_tenant_id"
+    t.check_constraint "amount_paid >= 0::numeric", name: "chk_amount_paid"
+    t.check_constraint "billing_period::text = ANY (ARRAY['monthly'::character varying, 'yearly'::character varying, 'trial'::character varying, 'free'::character varying]::text[])", name: "chk_billing_period"
+    t.check_constraint "status::text = ANY (ARRAY['active'::character varying, 'cancelled'::character varying, 'expired'::character varying, 'past_due'::character varying]::text[])", name: "chk_subscription_status"
+  end
 
   create_table "blog_categories", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -141,6 +203,23 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_28_000002) do
     t.index ["tenant_id"], name: "index_feature_flags_on_tenant_id"
   end
 
+  create_table "feature_flags_logs", id: :uuid, default: -> { "gen_random_uuid()" }, comment: "История изменений feature_flags по точкам", force: :cascade do |t|
+    t.string "action", limit: 20, null: false
+    t.datetime "changed_at", precision: nil, default: -> { "now()" }, null: false
+    t.uuid "changed_by_id"
+    t.datetime "created_at", null: false
+    t.boolean "enabled", null: false
+    t.jsonb "meta", default: {}, null: false
+    t.string "module", limit: 100, null: false
+    t.uuid "tenant_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["action"], name: "index_feature_flags_logs_on_action"
+    t.index ["changed_by_id"], name: "index_feature_flags_logs_on_changed_by_id"
+    t.index ["meta"], name: "index_feature_flags_logs_on_meta", using: :gin
+    t.index ["tenant_id", "module", "changed_at"], name: "idx_on_tenant_id_module_changed_at_63cbda49da"
+    t.index ["tenant_id"], name: "index_feature_flags_logs_on_tenant_id"
+  end
+
   create_table "fiscal_receipts", id: :uuid, default: -> { "gen_random_uuid()" }, comment: "Фискальные чеки (ОФД)", force: :cascade do |t|
     t.datetime "confirmed_at", precision: nil
     t.datetime "created_at", null: false
@@ -183,11 +262,18 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_28_000002) do
     t.datetime "created_at", null: false
     t.text "description"
     t.boolean "is_active", default: true, null: false
+    t.boolean "is_semifinished", default: false, null: false
     t.string "name", null: false
+    t.string "production_unit", limit: 20
+    t.integer "shelf_life_hours"
+    t.string "storage_temp", limit: 50
     t.string "unit", limit: 10, null: false
     t.datetime "updated_at", null: false
     t.index ["is_active"], name: "index_ingredients_on_is_active"
+    t.index ["is_semifinished"], name: "idx_ingredients_semifinished", where: "(is_semifinished = true)"
     t.index ["name"], name: "index_ingredients_on_name"
+    t.index ["storage_temp"], name: "idx_ingredients_storage_temp"
+    t.check_constraint "storage_temp IS NULL OR (storage_temp::text = ANY (ARRAY['room'::character varying, 'refrigerated'::character varying, 'frozen'::character varying]::text[]))", name: "chk_ingredient_storage_temp"
   end
 
   create_table "kiosk_carts", id: :uuid, default: -> { "gen_random_uuid()" }, comment: "Корзины киоска (привязка к сессии)", force: :cascade do |t|
@@ -241,6 +327,43 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_28_000002) do
     t.index ["tenant_id"], name: "index_kiosk_settings_on_tenant_id"
   end
 
+  create_table "loyalty_accounts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.integer "balance", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.uuid "customer_id", null: false
+    t.string "level", limit: 50, default: "bronze", null: false
+    t.integer "lifetime_earned", default: 0, null: false
+    t.integer "lifetime_spent", default: 0, null: false
+    t.datetime "updated_at", null: false
+    t.index ["customer_id"], name: "index_loyalty_accounts_on_customer_id", unique: true
+    t.index ["level"], name: "index_loyalty_accounts_on_level"
+    t.check_constraint "balance >= 0", name: "chk_loyalty_balance"
+    t.check_constraint "level::text = ANY (ARRAY['bronze'::character varying, 'silver'::character varying, 'gold'::character varying, 'platinum'::character varying]::text[])", name: "chk_loyalty_level"
+    t.check_constraint "lifetime_earned >= 0", name: "chk_loyalty_lifetime_earned"
+    t.check_constraint "lifetime_spent >= 0", name: "chk_loyalty_lifetime_spent"
+  end
+
+  create_table "loyalty_transactions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.integer "balance_after", null: false
+    t.datetime "created_at", precision: nil, default: -> { "now()" }, null: false
+    t.uuid "created_by_id"
+    t.uuid "customer_id", null: false
+    t.text "description"
+    t.uuid "order_id"
+    t.integer "points", null: false
+    t.uuid "tenant_id"
+    t.string "transaction_type", limit: 50, null: false
+    t.index ["created_by_id"], name: "index_loyalty_transactions_on_created_by_id"
+    t.index ["customer_id", "created_at"], name: "idx_loyalty_tx_customer_created", order: { created_at: :desc }
+    t.index ["customer_id"], name: "index_loyalty_transactions_on_customer_id"
+    t.index ["order_id"], name: "index_loyalty_transactions_on_order_id"
+    t.index ["tenant_id"], name: "index_loyalty_transactions_on_tenant_id"
+    t.index ["transaction_type"], name: "idx_loyalty_tx_type"
+    t.check_constraint "balance_after >= 0", name: "chk_loyalty_txn_balance_after"
+    t.check_constraint "points > 0", name: "chk_loyalty_txn_points"
+    t.check_constraint "transaction_type::text = ANY (ARRAY['earn'::character varying, 'spend'::character varying, 'expire'::character varying, 'manual_add'::character varying, 'manual_subtract'::character varying]::text[])", name: "chk_loyalty_txn_type"
+  end
+
   create_table "menu_types", id: :uuid, default: -> { "gen_random_uuid()" }, comment: "Типы меню (kiosk, main, seasonal)", force: :cascade do |t|
     t.string "code", limit: 50, null: false
     t.datetime "created_at", null: false
@@ -248,6 +371,23 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_28_000002) do
     t.string "name", limit: 100, null: false
     t.datetime "updated_at", null: false
     t.index ["code"], name: "index_menu_types_on_code", unique: true
+  end
+
+  create_table "mobile_carts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.uuid "customer_id", null: false
+    t.datetime "expires_at", precision: nil, default: -> { "(now() + 'PT24H'::interval)" }, null: false
+    t.jsonb "items", default: [], null: false
+    t.uuid "tenant_id", null: false
+    t.decimal "total_amount", precision: 10, scale: 2, default: "0.0", null: false
+    t.datetime "updated_at", null: false
+    t.index ["customer_id", "tenant_id"], name: "index_mobile_carts_on_customer_id_and_tenant_id", unique: true
+    t.index ["customer_id"], name: "idx_mobile_carts_customer"
+    t.index ["customer_id"], name: "index_mobile_carts_on_customer_id"
+    t.index ["expires_at"], name: "idx_mobile_carts_expires"
+    t.index ["tenant_id"], name: "idx_mobile_carts_tenant"
+    t.index ["tenant_id"], name: "index_mobile_carts_on_tenant_id"
+    t.check_constraint "total_amount >= 0::numeric", name: "chk_mobile_cart_total"
   end
 
   create_table "mobile_customers", id: :uuid, default: -> { "gen_random_uuid()" }, comment: "Клиенты мобильного приложения", force: :cascade do |t|
@@ -278,6 +418,24 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_28_000002) do
     t.index ["expires_at"], name: "index_mobile_otp_codes_on_expires_at"
     t.index ["is_used"], name: "index_mobile_otp_codes_on_is_used"
     t.index ["phone"], name: "index_mobile_otp_codes_on_phone"
+  end
+
+  create_table "mobile_payment_methods", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "card_brand", limit: 20
+    t.string "card_expires_at", limit: 7
+    t.string "card_masked", limit: 20
+    t.text "card_token"
+    t.datetime "created_at", precision: nil, default: -> { "now()" }, null: false
+    t.uuid "customer_id", null: false
+    t.boolean "is_active", default: true, null: false
+    t.boolean "is_default", default: false, null: false
+    t.datetime "last_used_at", precision: nil
+    t.string "payment_type", limit: 20, default: "card", null: false
+    t.index ["customer_id", "is_active"], name: "idx_pm_active", where: "(is_active = true)"
+    t.index ["customer_id"], name: "idx_pm_customer"
+    t.index ["customer_id"], name: "idx_pm_default", where: "((is_default = true) AND (is_active = true))"
+    t.index ["customer_id"], name: "index_mobile_payment_methods_on_customer_id"
+    t.check_constraint "payment_type::text = ANY (ARRAY['card'::character varying, 'sbp'::character varying, 'ya_pay'::character varying]::text[])", name: "chk_pm_type"
   end
 
   create_table "mobile_sessions", id: :uuid, default: -> { "gen_random_uuid()" }, comment: "Сессии мобильного приложения", force: :cascade do |t|
@@ -330,6 +488,33 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_28_000002) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "order_feedback", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.text "comment"
+    t.datetime "created_at", null: false
+    t.uuid "customer_id", null: false
+    t.string "negative_tags", default: [], array: true
+    t.uuid "order_id", null: false
+    t.string "positive_tags", default: [], array: true
+    t.integer "rating", null: false
+    t.boolean "resolved", default: false, null: false
+    t.datetime "resolved_at", precision: nil
+    t.uuid "resolved_by_id"
+    t.string "sentiment", limit: 20
+    t.uuid "tenant_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["customer_id"], name: "index_order_feedback_on_customer_id"
+    t.index ["negative_tags"], name: "index_order_feedback_on_negative_tags", using: :gin
+    t.index ["order_id"], name: "index_order_feedback_on_order_id", unique: true
+    t.index ["positive_tags"], name: "index_order_feedback_on_positive_tags", using: :gin
+    t.index ["rating"], name: "index_order_feedback_on_rating"
+    t.index ["resolved"], name: "index_order_feedback_on_resolved"
+    t.index ["resolved_by_id"], name: "index_order_feedback_on_resolved_by_id"
+    t.index ["tenant_id", "created_at"], name: "idx_feedback_tenant_created", order: { created_at: :desc }
+    t.index ["tenant_id"], name: "index_order_feedback_on_tenant_id"
+    t.check_constraint "rating >= 1 AND rating <= 5", name: "chk_feedback_rating"
+    t.check_constraint "sentiment IS NULL OR (sentiment::text = ANY (ARRAY['positive'::character varying, 'neutral'::character varying, 'negative'::character varying]::text[]))", name: "chk_feedback_sentiment"
+  end
+
   create_table "order_items", id: :uuid, default: -> { "gen_random_uuid()" }, comment: "Позиции заказа (продукты + модификаторы)", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.jsonb "modifier_options", default: {}, comment: "JSON: {\"milk_type\": \"uuid\", \"syrup\": \"uuid\"}"
@@ -373,12 +558,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_28_000002) do
     t.string "customer_name", limit: 255
     t.decimal "discount_amount", precision: 10, scale: 2, default: "0.0", null: false
     t.decimal "final_amount", precision: 10, scale: 2, null: false
+    t.timestamptz "issued_at"
     t.string "locker_cell", limit: 10
     t.string "order_number", limit: 20, null: false, comment: "Читаемый номер заказа #YYYYMM-#### (уникален в пределах тенанта)"
     t.bigserial "order_sequence", null: false, comment: "Автоинкремент для генерации номера заказа"
+    t.string "pickup_method", limit: 50
     t.uuid "promo_code_id"
     t.datetime "qr_expires_at", precision: nil
     t.uuid "qr_token"
+    t.timestamptz "ready_at"
     t.enum "source", null: false, enum_type: "order_source"
     t.enum "status", default: "pending_payment", null: false, enum_type: "order_status"
     t.uuid "tenant_id", null: false
@@ -386,13 +574,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_28_000002) do
     t.datetime "updated_at", null: false
     t.index ["cash_shift_id"], name: "index_orders_on_cash_shift_id"
     t.index ["customer_id"], name: "index_orders_on_customer_id"
+    t.index ["issued_at"], name: "idx_orders_issued_at", where: "(issued_at IS NOT NULL)"
     t.index ["order_number"], name: "index_orders_on_order_number"
     t.index ["qr_token"], name: "index_orders_on_qr_token", where: "(qr_token IS NOT NULL)"
+    t.index ["ready_at"], name: "idx_orders_ready_at", where: "(ready_at IS NOT NULL)"
     t.index ["status"], name: "index_orders_on_status"
     t.index ["tenant_id", "created_at"], name: "index_orders_on_tenant_id_and_created_at", order: { created_at: :desc }
     t.index ["tenant_id", "order_number"], name: "idx_orders_tenant_number", unique: true
     t.index ["tenant_id", "status"], name: "index_orders_on_tenant_id_and_status"
     t.index ["tenant_id"], name: "index_orders_on_tenant_id"
+    t.check_constraint "pickup_method IS NULL OR (pickup_method::text = ANY (ARRAY['qr'::character varying, 'manual'::character varying, 'auto'::character varying]::text[]))", name: "chk_pickup_method"
     t.check_constraint "total_amount > 0::numeric AND discount_amount >= 0::numeric AND final_amount >= 0::numeric AND final_amount = (total_amount - discount_amount)", name: "chk_order_amounts"
   end
 
@@ -449,6 +640,65 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_28_000002) do
     t.index ["status"], name: "index_payments_on_status"
     t.index ["tenant_id", "status"], name: "index_payments_on_tenant_id_and_status"
     t.index ["tenant_id"], name: "index_payments_on_tenant_id"
+  end
+
+  create_table "pickup_calls", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "acknowledged_at", precision: nil
+    t.string "call_type", limit: 50, default: "ready", null: false
+    t.datetime "called_at", precision: nil, default: -> { "now()" }, null: false
+    t.uuid "called_by_id"
+    t.uuid "device_id"
+    t.uuid "order_id", null: false
+    t.uuid "tenant_id", null: false
+    t.index ["called_by_id"], name: "index_pickup_calls_on_called_by_id"
+    t.index ["device_id"], name: "index_pickup_calls_on_device_id"
+    t.index ["order_id", "called_at"], name: "idx_pickup_calls_unacknowledged", where: "(acknowledged_at IS NULL)"
+    t.index ["order_id"], name: "idx_pickup_calls_order"
+    t.index ["order_id"], name: "index_pickup_calls_on_order_id"
+    t.index ["tenant_id", "called_at"], name: "idx_pickup_calls_tenant_created", order: { called_at: :desc }
+    t.index ["tenant_id"], name: "index_pickup_calls_on_tenant_id"
+    t.check_constraint "call_type::text = ANY (ARRAY['ready'::character varying, 'reminder'::character varying]::text[])", name: "chk_pickup_call_type"
+  end
+
+  create_table "pickup_display_settings", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.integer "auto_complete_seconds"
+    t.datetime "created_at", null: false
+    t.uuid "device_id", null: false
+    t.string "display_mode", limit: 50, default: "number", null: false
+    t.boolean "is_active", default: true, null: false
+    t.integer "items_visible_count", default: 10, null: false
+    t.boolean "show_order_items", default: false, null: false
+    t.boolean "sound_enabled", default: true, null: false
+    t.uuid "tenant_id", null: false
+    t.datetime "updated_at", null: false
+    t.text "welcome_message", default: "Ваш заказ готов!"
+    t.index ["device_id"], name: "idx_pickup_display_settings_device"
+    t.index ["device_id"], name: "index_pickup_display_settings_on_device_id"
+    t.index ["tenant_id", "device_id"], name: "index_pickup_display_settings_on_tenant_id_and_device_id", unique: true
+    t.index ["tenant_id", "is_active"], name: "idx_pickup_display_settings_active", where: "(is_active = true)"
+    t.index ["tenant_id"], name: "idx_pickup_display_settings_tenant"
+    t.index ["tenant_id"], name: "index_pickup_display_settings_on_tenant_id"
+    t.check_constraint "auto_complete_seconds IS NULL OR auto_complete_seconds > 0", name: "chk_pickup_auto_complete_seconds"
+    t.check_constraint "display_mode::text = ANY (ARRAY['number'::character varying, 'name'::character varying, 'both'::character varying]::text[])", name: "chk_pickup_display_mode"
+    t.check_constraint "items_visible_count >= 1 AND items_visible_count <= 20", name: "chk_pickup_items_visible_count"
+  end
+
+  create_table "pickup_events", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", precision: nil, default: -> { "now()" }, null: false
+    t.uuid "created_by_id"
+    t.uuid "device_id"
+    t.string "event_type", limit: 50, null: false
+    t.jsonb "meta"
+    t.uuid "order_id", null: false
+    t.uuid "tenant_id", null: false
+    t.index ["created_by_id"], name: "index_pickup_events_on_created_by_id"
+    t.index ["device_id"], name: "index_pickup_events_on_device_id"
+    t.index ["event_type"], name: "idx_pickup_events_type"
+    t.index ["order_id"], name: "idx_pickup_events_order"
+    t.index ["order_id"], name: "index_pickup_events_on_order_id"
+    t.index ["tenant_id", "created_at"], name: "idx_pickup_events_tenant_created", order: { created_at: :desc }
+    t.index ["tenant_id"], name: "index_pickup_events_on_tenant_id"
+    t.check_constraint "event_type::text = ANY (ARRAY['ready'::character varying, 'called'::character varying, 'qr_scanned'::character varying, 'issued'::character varying, 'timeout'::character varying, 'not_picked_up'::character varying]::text[])", name: "chk_pickup_event_type"
   end
 
   create_table "product_menu_visibilities", id: :uuid, default: -> { "gen_random_uuid()" }, comment: "Видимость продуктов в разных меню", force: :cascade do |t|
@@ -528,7 +778,45 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_28_000002) do
     t.index ["product_id"], name: "index_product_tenant_settings_on_product_id"
     t.index ["tenant_id", "is_enabled", "is_sold_out"], name: "idx_pts_tenant_enabled"
     t.index ["tenant_id"], name: "index_product_tenant_settings_on_tenant_id"
-    t.check_constraint "is_sold_out = false AND sold_out_reason IS NULL OR is_sold_out = true AND (sold_out_reason::text = ANY (ARRAY['manual'::character varying::text, 'stock_empty'::character varying::text]))", name: "chk_sold_out_reason"
+    t.check_constraint "is_sold_out = false AND sold_out_reason IS NULL OR is_sold_out = true AND (sold_out_reason::text = ANY (ARRAY['manual'::character varying, 'stock_empty'::character varying]::text[]))", name: "chk_sold_out_reason"
+  end
+
+  create_table "production_batches", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "completed_at", precision: nil
+    t.datetime "created_at", null: false
+    t.datetime "expires_at", precision: nil
+    t.text "note"
+    t.datetime "planned_at", precision: nil, default: -> { "now()" }, null: false
+    t.uuid "produced_by_id"
+    t.decimal "quantity", precision: 10, scale: 3, null: false
+    t.uuid "semifinished_id", null: false
+    t.datetime "started_at", precision: nil
+    t.string "status", limit: 50, default: "planned", null: false
+    t.uuid "tenant_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["expires_at"], name: "idx_production_batches_expires", where: "(expires_at IS NOT NULL)"
+    t.index ["planned_at"], name: "idx_production_batches_planned_at", order: :desc
+    t.index ["produced_by_id"], name: "index_production_batches_on_produced_by_id"
+    t.index ["semifinished_id"], name: "idx_production_batches_semifinished"
+    t.index ["tenant_id", "status"], name: "idx_production_batches_tenant_status"
+    t.index ["tenant_id"], name: "index_production_batches_on_tenant_id"
+    t.check_constraint "quantity > 0::numeric", name: "chk_batch_quantity"
+    t.check_constraint "status::text = ANY (ARRAY['planned'::character varying, 'in_progress'::character varying, 'completed'::character varying, 'cancelled'::character varying]::text[])", name: "chk_batch_status"
+  end
+
+  create_table "production_recipes", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.uuid "ingredient_id", null: false
+    t.text "note"
+    t.decimal "quantity", precision: 10, scale: 3, null: false
+    t.uuid "semifinished_id", null: false
+    t.string "unit_override", limit: 20
+    t.datetime "updated_at", null: false
+    t.index ["ingredient_id"], name: "idx_production_recipes_ingredient"
+    t.index ["semifinished_id", "ingredient_id"], name: "idx_production_recipes_semifinished_ingredient", unique: true
+    t.index ["semifinished_id"], name: "idx_production_recipes_semifinished"
+    t.check_constraint "quantity > 0::numeric", name: "chk_production_recipe_quantity"
+    t.check_constraint "semifinished_id <> ingredient_id", name: "chk_production_recipe_not_self"
   end
 
   create_table "products", id: :uuid, default: -> { "gen_random_uuid()" }, comment: "Глобальный каталог продуктов (управляет УК)", force: :cascade do |t|
@@ -552,6 +840,25 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_28_000002) do
     t.index ["sort_order"], name: "index_products_on_sort_order"
   end
 
+  create_table "promo_code_usages", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.uuid "customer_id"
+    t.decimal "discount_amount", precision: 10, scale: 2, default: "0.0", null: false
+    t.uuid "order_id"
+    t.uuid "promo_code_id", null: false
+    t.string "status", limit: 20, default: "applied", null: false
+    t.uuid "tenant_id", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "used_at", precision: nil, default: -> { "now()" }, null: false
+    t.index ["customer_id"], name: "index_promo_code_usages_on_customer_id"
+    t.index ["order_id"], name: "index_promo_code_usages_on_order_id"
+    t.index ["promo_code_id"], name: "index_promo_code_usages_on_promo_code_id"
+    t.index ["tenant_id", "used_at"], name: "idx_promo_usage_tenant_used", order: { used_at: :desc }
+    t.index ["tenant_id"], name: "index_promo_code_usages_on_tenant_id"
+    t.check_constraint "discount_amount >= 0::numeric", name: "chk_promo_usage_discount"
+    t.check_constraint "status::text = ANY (ARRAY['applied'::character varying, 'reverted'::character varying]::text[])", name: "chk_promo_usage_status"
+  end
+
   create_table "promo_codes", id: :uuid, default: -> { "gen_random_uuid()" }, comment: "Промокоды для скидок", force: :cascade do |t|
     t.string "code", limit: 50, null: false, comment: "Код промокода (уникальный в тенанте)"
     t.datetime "created_at", null: false
@@ -569,6 +876,29 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_28_000002) do
     t.index ["tenant_id"], name: "index_promo_codes_on_tenant_id"
     t.index ["valid_from"], name: "index_promo_codes_on_valid_from"
     t.index ["valid_to"], name: "index_promo_codes_on_valid_to"
+  end
+
+  create_table "push_notifications", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.text "body", null: false
+    t.datetime "created_at", null: false
+    t.uuid "customer_id", null: false
+    t.text "error_message"
+    t.string "notification_type", limit: 50, null: false
+    t.jsonb "payload", default: {}, null: false
+    t.datetime "read_at", precision: nil
+    t.datetime "scheduled_at", precision: nil
+    t.datetime "sent_at", precision: nil
+    t.string "status", limit: 50, default: "pending", null: false
+    t.uuid "tenant_id"
+    t.string "title", limit: 255, null: false
+    t.datetime "updated_at", null: false
+    t.index ["customer_id", "created_at"], name: "idx_push_customer_created", order: { created_at: :desc }
+    t.index ["customer_id"], name: "index_push_notifications_on_customer_id"
+    t.index ["scheduled_at"], name: "index_push_notifications_on_scheduled_at"
+    t.index ["status"], name: "index_push_notifications_on_status"
+    t.index ["tenant_id", "notification_type"], name: "idx_push_tenant_type"
+    t.index ["tenant_id"], name: "index_push_notifications_on_tenant_id"
+    t.check_constraint "status::text = ANY (ARRAY['pending'::character varying, 'sent'::character varying, 'failed'::character varying, 'read'::character varying]::text[])", name: "chk_push_status"
   end
 
   create_table "refunds", id: :uuid, default: -> { "gen_random_uuid()" }, comment: "Возвраты средств", force: :cascade do |t|
@@ -681,7 +1011,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_28_000002) do
     t.integer "key_hash", null: false
     t.string "namespace", null: false
     t.binary "value"
-    t.index ["key_hash", "namespace"], name: "index_solid_cache_entries_on_key_hash_and_namespace", unique: true
+    t.index ["key_hash"], name: "index_solid_cache_entries_on_key_hash", unique: true
   end
 
   create_table "stock_movement_items", id: :uuid, default: -> { "gen_random_uuid()" }, comment: "Позиции движения (какие ингредиенты, сколько)", force: :cascade do |t|
@@ -715,6 +1045,63 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_28_000002) do
     t.index ["tenant_id"], name: "index_stock_movements_on_tenant_id"
   end
 
+  create_table "supply_order_items", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "ingredient_id", null: false
+    t.text "note"
+    t.decimal "quantity_requested", precision: 10, scale: 3, null: false
+    t.decimal "quantity_shipped", precision: 10, scale: 3
+    t.uuid "supply_order_id", null: false
+    t.decimal "unit_cost", precision: 10, scale: 2
+    t.index ["ingredient_id"], name: "idx_supply_order_items_ingredient"
+    t.index ["ingredient_id"], name: "index_supply_order_items_on_ingredient_id"
+    t.index ["supply_order_id", "ingredient_id"], name: "idx_supply_order_items_order_ingredient", unique: true
+    t.index ["supply_order_id"], name: "idx_supply_order_items_supply_order"
+    t.index ["supply_order_id"], name: "index_supply_order_items_on_supply_order_id"
+    t.check_constraint "quantity_requested > 0::numeric", name: "chk_supply_item_requested"
+    t.check_constraint "quantity_shipped IS NULL OR quantity_shipped >= 0::numeric", name: "chk_supply_item_shipped"
+  end
+
+  create_table "supply_orders", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "confirmed_by_id"
+    t.datetime "created_at", null: false
+    t.uuid "from_tenant_id", null: false
+    t.text "note"
+    t.datetime "received_at", precision: nil
+    t.uuid "requested_by_id"
+    t.datetime "shipped_at", precision: nil
+    t.string "status", limit: 50, default: "pending", null: false
+    t.uuid "to_tenant_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["confirmed_by_id"], name: "index_supply_orders_on_confirmed_by_id"
+    t.index ["created_at"], name: "idx_supply_orders_created_at", order: :desc
+    t.index ["from_tenant_id", "status"], name: "idx_supply_orders_from_tenant_status"
+    t.index ["requested_by_id"], name: "index_supply_orders_on_requested_by_id"
+    t.index ["to_tenant_id", "status"], name: "idx_supply_orders_to_tenant_status"
+    t.check_constraint "from_tenant_id <> to_tenant_id", name: "chk_supply_order_tenants"
+    t.check_constraint "status::text = ANY (ARRAY['pending'::character varying, 'confirmed'::character varying, 'shipped'::character varying, 'received'::character varying, 'cancelled'::character varying]::text[])", name: "chk_supply_order_status"
+  end
+
+  create_table "tenant_invitations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "accepted_at", precision: nil
+    t.uuid "accepted_by_id"
+    t.datetime "created_at", precision: nil, default: -> { "now()" }, null: false
+    t.string "email", limit: 255, null: false
+    t.datetime "expires_at", precision: nil, default: -> { "(now() + 'P7D'::interval)" }, null: false
+    t.uuid "invited_by_id"
+    t.uuid "role_id", null: false
+    t.string "status", limit: 50, default: "pending", null: false
+    t.uuid "tenant_id", null: false
+    t.uuid "token", default: -> { "gen_random_uuid()" }, null: false
+    t.index ["accepted_by_id"], name: "index_tenant_invitations_on_accepted_by_id"
+    t.index ["email", "status"], name: "idx_tenant_invitations_email_status"
+    t.index ["invited_by_id"], name: "index_tenant_invitations_on_invited_by_id"
+    t.index ["role_id"], name: "index_tenant_invitations_on_role_id"
+    t.index ["tenant_id", "status"], name: "idx_tenant_invitations_tenant_status"
+    t.index ["tenant_id"], name: "index_tenant_invitations_on_tenant_id"
+    t.index ["token"], name: "idx_tenant_invitations_token", unique: true
+    t.check_constraint "status::text = ANY (ARRAY['pending'::character varying, 'accepted'::character varying, 'expired'::character varying, 'cancelled'::character varying]::text[])", name: "chk_invitation_status"
+  end
+
   create_table "tenants", id: :uuid, default: -> { "gen_random_uuid()" }, comment: "Точки продаж (кофейни)", force: :cascade do |t|
     t.text "address"
     t.string "city", limit: 100
@@ -723,6 +1110,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_28_000002) do
     t.string "currency", limit: 3, default: "RUB", null: false
     t.string "name", null: false
     t.uuid "organization_id"
+    t.uuid "plan_id"
     t.jsonb "settings", default: {}, comment: "Настройки точки: график работы, контакты, etc"
     t.string "slug", null: false, comment: "URL-friendly идентификатор точки"
     t.string "status", default: "active", null: false
@@ -731,6 +1119,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_28_000002) do
     t.datetime "updated_at", null: false
     t.index ["country"], name: "index_tenants_on_country"
     t.index ["organization_id"], name: "index_tenants_on_organization_id"
+    t.index ["plan_id"], name: "index_tenants_on_plan_id"
     t.index ["slug"], name: "index_tenants_on_slug", unique: true
     t.index ["status"], name: "index_tenants_on_status"
     t.index ["type"], name: "index_tenants_on_type"
@@ -780,6 +1169,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_28_000002) do
     t.index ["tenant_id"], name: "index_users_on_tenant_id"
   end
 
+  add_foreign_key "admin_audit_logs", "tenants", on_delete: :cascade
+  add_foreign_key "admin_audit_logs", "users", column: "actor_id", on_delete: :nullify
+  add_foreign_key "billing_subscriptions", "billing_plans", column: "plan_id", on_delete: :restrict
+  add_foreign_key "billing_subscriptions", "tenants", on_delete: :cascade
+  add_foreign_key "billing_subscriptions", "users", column: "created_by_id", on_delete: :nullify
   add_foreign_key "blog_posts", "blog_categories"
   add_foreign_key "cash_shifts", "tenants", on_delete: :cascade
   add_foreign_key "cash_shifts", "users", column: "closed_by_id", on_delete: :nullify
@@ -791,6 +1185,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_28_000002) do
   add_foreign_key "devices", "users", column: "registered_by_id", on_delete: :nullify
   add_foreign_key "feature_flags", "tenants", on_delete: :cascade
   add_foreign_key "feature_flags", "users", column: "enabled_by_id", on_delete: :nullify
+  add_foreign_key "feature_flags_logs", "tenants", on_delete: :cascade
+  add_foreign_key "feature_flags_logs", "users", column: "changed_by_id", on_delete: :nullify
   add_foreign_key "fiscal_receipts", "orders", on_delete: :cascade
   add_foreign_key "fiscal_receipts", "payments", on_delete: :cascade
   add_foreign_key "fiscal_receipts", "refunds", on_delete: :cascade
@@ -803,12 +1199,24 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_28_000002) do
   add_foreign_key "kiosk_sessions", "tenants", on_delete: :cascade
   add_foreign_key "kiosk_settings", "devices", on_delete: :cascade
   add_foreign_key "kiosk_settings", "tenants", on_delete: :cascade
+  add_foreign_key "loyalty_accounts", "mobile_customers", column: "customer_id", on_delete: :cascade
+  add_foreign_key "loyalty_transactions", "mobile_customers", column: "customer_id", on_delete: :cascade
+  add_foreign_key "loyalty_transactions", "orders", on_delete: :nullify
+  add_foreign_key "loyalty_transactions", "tenants", on_delete: :nullify
+  add_foreign_key "loyalty_transactions", "users", column: "created_by_id", on_delete: :nullify
+  add_foreign_key "mobile_carts", "mobile_customers", column: "customer_id", on_delete: :cascade
+  add_foreign_key "mobile_carts", "tenants", on_delete: :cascade
+  add_foreign_key "mobile_payment_methods", "mobile_customers", column: "customer_id", on_delete: :cascade
   add_foreign_key "mobile_sessions", "mobile_customers", column: "customer_id", on_delete: :cascade
   add_foreign_key "modifier_option_recipes", "ingredients", on_delete: :cascade
   add_foreign_key "modifier_option_recipes", "product_modifier_options", column: "option_id", on_delete: :cascade
   add_foreign_key "modifier_option_tenant_settings", "product_modifier_options", column: "option_id", on_delete: :cascade
   add_foreign_key "modifier_option_tenant_settings", "tenants", on_delete: :cascade
   add_foreign_key "modifier_option_tenant_settings", "users", column: "updated_by_id", on_delete: :nullify
+  add_foreign_key "order_feedback", "mobile_customers", column: "customer_id", on_delete: :cascade
+  add_foreign_key "order_feedback", "orders", on_delete: :cascade
+  add_foreign_key "order_feedback", "tenants", on_delete: :cascade
+  add_foreign_key "order_feedback", "users", column: "resolved_by_id", on_delete: :nullify
   add_foreign_key "order_items", "orders", on_delete: :cascade
   add_foreign_key "order_items", "products", name: "fk_order_items_product", on_delete: :restrict
   add_foreign_key "order_status_logs", "devices", name: "fk_order_status_logs_device", on_delete: :nullify
@@ -821,6 +1229,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_28_000002) do
   add_foreign_key "payment_status_logs", "payments", on_delete: :cascade
   add_foreign_key "payments", "orders", on_delete: :cascade
   add_foreign_key "payments", "tenants", on_delete: :cascade
+  add_foreign_key "pickup_calls", "devices", on_delete: :nullify
+  add_foreign_key "pickup_calls", "orders", on_delete: :cascade
+  add_foreign_key "pickup_calls", "tenants", on_delete: :cascade
+  add_foreign_key "pickup_calls", "users", column: "called_by_id", on_delete: :nullify
+  add_foreign_key "pickup_display_settings", "devices", on_delete: :cascade
+  add_foreign_key "pickup_display_settings", "tenants", on_delete: :cascade
+  add_foreign_key "pickup_events", "devices", on_delete: :nullify
+  add_foreign_key "pickup_events", "orders", on_delete: :cascade
+  add_foreign_key "pickup_events", "tenants", on_delete: :cascade
+  add_foreign_key "pickup_events", "users", column: "created_by_id", on_delete: :nullify
   add_foreign_key "product_menu_visibilities", "menu_types", on_delete: :cascade
   add_foreign_key "product_menu_visibilities", "products", on_delete: :cascade
   add_foreign_key "product_modifier_groups", "products", on_delete: :cascade
@@ -833,9 +1251,20 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_28_000002) do
   add_foreign_key "product_tenant_settings", "products", on_delete: :cascade
   add_foreign_key "product_tenant_settings", "tenants", on_delete: :cascade
   add_foreign_key "product_tenant_settings", "users", column: "price_updated_by_id", on_delete: :nullify
+  add_foreign_key "production_batches", "ingredients", column: "semifinished_id", on_delete: :cascade
+  add_foreign_key "production_batches", "tenants", on_delete: :cascade
+  add_foreign_key "production_batches", "users", column: "produced_by_id", on_delete: :nullify
+  add_foreign_key "production_recipes", "ingredients", column: "semifinished_id", on_delete: :cascade
+  add_foreign_key "production_recipes", "ingredients", on_delete: :cascade
   add_foreign_key "products", "categories", on_delete: :restrict
   add_foreign_key "products", "products", column: "copied_from_id", on_delete: :nullify
   add_foreign_key "products", "users", column: "created_by_id", on_delete: :nullify
+  add_foreign_key "promo_code_usages", "mobile_customers", column: "customer_id", on_delete: :nullify
+  add_foreign_key "promo_code_usages", "orders", on_delete: :nullify
+  add_foreign_key "promo_code_usages", "promo_codes", on_delete: :cascade
+  add_foreign_key "promo_code_usages", "tenants", on_delete: :cascade
+  add_foreign_key "push_notifications", "mobile_customers", column: "customer_id", on_delete: :cascade
+  add_foreign_key "push_notifications", "tenants", on_delete: :nullify
   add_foreign_key "refunds", "orders", on_delete: :cascade
   add_foreign_key "refunds", "payments", on_delete: :cascade
   add_foreign_key "refunds", "tenants", on_delete: :cascade
@@ -856,6 +1285,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_28_000002) do
   add_foreign_key "stock_movements", "tenants", on_delete: :cascade
   add_foreign_key "stock_movements", "users", column: "confirmed_by_id", on_delete: :nullify
   add_foreign_key "stock_movements", "users", column: "created_by_id", on_delete: :nullify
+  add_foreign_key "supply_order_items", "ingredients", on_delete: :cascade
+  add_foreign_key "supply_order_items", "supply_orders", on_delete: :cascade
+  add_foreign_key "supply_orders", "tenants", column: "from_tenant_id", on_delete: :cascade
+  add_foreign_key "supply_orders", "tenants", column: "to_tenant_id", on_delete: :cascade
+  add_foreign_key "supply_orders", "users", column: "confirmed_by_id", on_delete: :nullify
+  add_foreign_key "supply_orders", "users", column: "requested_by_id", on_delete: :nullify
+  add_foreign_key "tenant_invitations", "roles", on_delete: :cascade
+  add_foreign_key "tenant_invitations", "tenants", on_delete: :cascade
+  add_foreign_key "tenant_invitations", "users", column: "accepted_by_id", on_delete: :nullify
+  add_foreign_key "tenant_invitations", "users", column: "invited_by_id", on_delete: :nullify
+  add_foreign_key "tenants", "billing_plans", column: "plan_id", on_delete: :nullify
   add_foreign_key "tenants", "organizations"
   add_foreign_key "tv_board_settings", "tenants", on_delete: :cascade
   add_foreign_key "tv_board_settings", "users", column: "updated_by_id", on_delete: :nullify
