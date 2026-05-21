@@ -183,6 +183,20 @@ module Barista
         comment: params[:reason] || 'Отменено баристой'
       )
 
+      AdminAuditLog.log(
+        action: "order_cancelled",
+        actor: current_user,
+        entity: @order,
+        tenant_id: Current.tenant_id,
+        details: {
+          order_number: @order.order_number,
+          cancel_reason: @order.cancel_reason,
+          cancel_stage: old_status,
+          final_amount: @order.final_amount
+        },
+        request_id: request.request_id
+      )
+
       # BUG-017 FIX: При отмене в статусе 'preparing' ингредиенты уже списаны триггером.
       # Если бариста подтвердил что ингредиенты НЕ использованы — создаём возвратное движение.
       if old_status == 'preparing' && params[:ingredients_used] == 'false'

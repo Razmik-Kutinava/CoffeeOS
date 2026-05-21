@@ -20,7 +20,7 @@ class Barista::OrdersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "manager cannot create order via barista endpoint" do
-    manager = create_user!(tenant: @tenant, role_codes: %w[office_manager], email: "mgr-bctrl@test.local", name: "Mgr")
+    manager = create_user!(tenant: @tenant, role_codes: %w[general_manager], email: "mgr-bctrl@test.local", name: "Mgr")
     login_as!(manager)
     post "/barista/orders", params: { cart_items: [{ product_id: @product.id, quantity: 1 }] }
     assert_no_orders_created
@@ -88,6 +88,28 @@ class Barista::OrdersControllerTest < ActionDispatch::IntegrationTest
   end
 
   # ── изоляция тенантов ──────────────────────────────────────────────────────
+
+  # ── аудит отмены ───────────────────────────────────────────────────────────
+
+  test "cancelling order creates AdminAuditLog record" do
+    login_as!(@barista)
+    order = Order.create!(
+      tenant: @tenant, cash_shift: @shift,
+      order_number: "AUD-001", source: "manual", status: "accepted",
+      total_amount: 200, discount_amount: 0, final_amount: 200
+    )
+
+    assert_difference "AdminAuditLog.count", 1 do
+      post "/barista/orders/#{order.id}/cancel", params: { reason: "Клиент передумал" }
+    end
+
+    log = AdminAuditLog.order(created_at: :desc).first
+    assert_equal "order_cancelled", log.action
+    assert_equal order.id, log.entity_id
+    assert_equal "Order", log.entity_type
+    assert_equal @tenant.id, log.tenant_id
+    assert_equal "Клиент передумал", log.details["cancel_reason"]
+  end
 
   test "barista cannot update status of another tenant's order" do
     other_tenant  = create_tenant!(name: "Other", slug: "other-#{SecureRandom.hex(3)}")
