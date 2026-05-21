@@ -8,7 +8,7 @@ class TelegramAlertJob < ApplicationJob
     text = "🚨 *CoffeeOS Alert*\n\n#{message}"
     
     if context.any?
-      text += "\n\n*Context:*\n"
+      text += "\n\n*Context:*\n" 
       context.each do |key, value|
         text += "#{key}: #{value}\n"
       end

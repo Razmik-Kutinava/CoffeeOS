@@ -2,6 +2,10 @@
 # Защита от злоупотреблений и DDoS
 
 class Rack::Attack
+  # Используем MemoryStore для rate limiting, так как SolidCache не поддерживает increment
+  # Это предотвращает ошибки при upsert в solid_cache_entries
+  Rack::Attack.cache.store = ActiveSupport::Cache::MemoryStore.new
+
   # Лимит для API: 100 запросов в минуту с одного IP
   throttle('api/ip', limit: 100, period: 1.minute) do |req|
     req.ip if req.path.start_with?('/api/')

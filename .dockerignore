@@ -45,7 +45,28 @@
 
 # Ignore development files
 /.devcontainer
+/.cursor
+/.claude
+/.vscode
+/.idea
+
+# Ignore local logs, reports and temporary artifacts.
+/coverage
+/reports
+/*.log
+/free-claude-code
+/.pg_test
+/.venv
+/vendor/bundle
+
+# Ignore documentation and local notes not needed for build.
+/agent-transcripts
+/README*
+/docs
+
+# Ignore test files in production image build context.
+/test
+/spec
 
 # Ignore Docker-related files
 /.dockerignore
-/Dockerfile*

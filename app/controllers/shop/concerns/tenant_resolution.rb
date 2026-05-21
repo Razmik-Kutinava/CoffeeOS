@@ -10,6 +10,7 @@ module Shop
     def resolved_shop_tenant_id
       params[:tenant_id].presence ||
         request.headers["X-Shop-Tenant"].presence ||
+        Platform::TenantOnboarding::UrlBuilder.tenant_id_for_host(request.host).presence ||
         ENV.fetch("SHOP_DEFAULT_TENANT_ID", nil).presence ||
         single_tenant_fallback_id ||
         development_fallback_tenant_id

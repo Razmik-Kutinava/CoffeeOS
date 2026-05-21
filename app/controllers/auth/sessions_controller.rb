@@ -74,7 +74,7 @@ class Auth::SessionsController < ApplicationController
       blog_root_path
     when "barista"
       barista_dashboard_path
-    when "shift_manager", "office_manager"
+    when "shift_manager", "general_manager"
       manager_dashboard_path
     when "franchise_manager"
       manager_dashboard_path

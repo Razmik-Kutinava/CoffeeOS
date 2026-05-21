@@ -3,13 +3,15 @@
 module Shop
   module Api
     class CategoriesController < Shop::Api::BaseController
+      skip_before_action :authenticate_shop_api!, only: [:index]
+
       def index
         tenant_id = @shop_tenant.id
         scope = Shop::Catalog.products_scope(tenant_id)
 
         # Кэширование с ключом по tenant_id и пагинации
         cache_key = "shop/categories/#{tenant_id}/#{params[:page]}/#{params[:per_page]}"
-        cached_data = Rails.cache.read(cache_key)
+        cached_data = safe_cache_read(cache_key)
         return render json: cached_data if cached_data
 
         # 1 запрос: все товары
@@ -43,11 +45,24 @@ module Shop
           data: data,
           meta: { page: page, per_page: per_page }
         }
-        Rails.cache.write(cache_key, response_data, expires_in: 5.minutes)
+        safe_cache_write(cache_key, response_data)
         render json: response_data
       end
 
       private
+
+      def safe_cache_read(key)
+        Rails.cache.read(key)
+      rescue StandardError => e
+        Rails.logger.warn("[Shop::API][categories] cache read skipped: #{e.class}: #{e.message}")
+        nil
+      end
+
+      def safe_cache_write(key, payload)
+        Rails.cache.write(key, payload, expires_in: 5.minutes)
+      rescue StandardError => e
+        Rails.logger.warn("[Shop::API][categories] cache write skipped: #{e.class}: #{e.message}")
+      end
 
       def product_summary_json(product, setting:)
         {
