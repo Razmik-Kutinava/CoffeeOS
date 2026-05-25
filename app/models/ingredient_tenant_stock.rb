@@ -3,7 +3,7 @@ class IngredientTenantStock < ApplicationRecord
   belongs_to :ingredient
 
   validates :tenant_id, uniqueness: { scope: :ingredient_id }
-  validates :qty, presence: true, numericality: { greater_than_or_equal_to: 0 }
+  validates :qty, presence: true, numericality: true
   validates :min_qty, numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
 
   scope :for_current_tenant, -> { where(tenant_id: Current.tenant_id) }
