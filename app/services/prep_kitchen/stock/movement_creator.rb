@@ -26,27 +26,31 @@ module PrepKitchen
         ingredient_ids = items.map { |item| item[:ingredient_id] }
         return PrepKitchen::Result.failure("Ингредиенты в документе не должны повторяться") if ingredient_ids.uniq.size != ingredient_ids.size
 
-        movement = StockMovement.new(
-          tenant_id: @tenant_id,
-          movement_type: movement_type,
-          status: "draft",
-          note: payload[:note],
-          created_by: @user
-        )
+        movement = nil
 
-        items.each do |item|
-          movement.stock_movement_items.build(
-            ingredient_id: item[:ingredient_id],
-            qty_change: item[:qty_change],
-            unit_cost: item[:unit_cost]
+        ActiveRecord::Base.transaction do
+          movement = StockMovement.create!(
+            tenant_id: @tenant_id,
+            movement_type: movement_type,
+            status: "draft",
+            note: payload[:note],
+            created_by: @user
           )
+
+          items.each do |item|
+            movement.stock_movement_items.create!(
+              ingredient_id: item[:ingredient_id],
+              qty_change: item[:qty_change],
+              unit_cost: item[:unit_cost]
+            )
+          end
         end
 
-        if movement.save
-          PrepKitchen::Result.success(movement)
-        else
-          PrepKitchen::Result.failure(movement.errors.full_messages.join(", "))
-        end
+        PrepKitchen::Result.success(movement.reload)
+      rescue ActiveRecord::RecordInvalid => e
+        PrepKitchen::Result.failure(e.record.errors.full_messages.join(", "))
+      rescue ActiveRecord::RecordNotSaved => e
+        PrepKitchen::Result.failure(e.record&.errors&.full_messages&.join(", ") || e.message)
       end
     end
   end

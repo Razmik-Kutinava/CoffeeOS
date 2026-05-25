@@ -67,8 +67,9 @@ module PrepKitchen
     private
 
     def movement_params
-      permitted = params.require(:movement).permit(:movement_type, :note)
-      permitted[:items] = normalize_items(params.dig(:movement, :items))
+      raw = params.require(:movement)
+      permitted = raw.permit(:movement_type, :note)
+      permitted[:items] = normalize_items(raw[:items])
       permitted
     end
 
@@ -90,7 +91,13 @@ module PrepKitchen
       return [] if items.blank?
 
       values = items.is_a?(Hash) ? items.values : Array(items)
-      values.map { |row| row.respond_to?(:permit) ? row.permit(:ingredient_id, :qty_change, :unit_cost).to_h : row }
+      values.filter_map do |row|
+        h = row.respond_to?(:permit) ? row.permit(:ingredient_id, :qty_change, :unit_cost).to_h : row.to_h
+        h = h.with_indifferent_access
+        next if h[:ingredient_id].blank? || h[:qty_change].blank?
+
+        h.slice(:ingredient_id, :qty_change, :unit_cost)
+      end
     end
   end
 end
