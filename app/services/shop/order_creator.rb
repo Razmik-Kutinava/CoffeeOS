@@ -21,31 +21,32 @@ module Shop
 
       customer = find_or_create_customer!(params)
 
-      # BUG-016 FIX: Наличные оплачиваются сразу (бариста принимает деньги),
-      # безналичные (card, sbp, apple_pay, google_pay) ждут подтверждения от платёжного провайдера.
-      payment_method   = map_payment_method(params[:payment_method])
-      cash_payment     = payment_method == :cash
-      order_status     = cash_payment ? :accepted : :pending_payment
-      payment_status   = cash_payment ? :succeeded : :pending
-      paid_at          = cash_payment ? Time.current : nil
+      payment_method = map_payment_method(params[:payment_method])
+      flow = payment_flow(payment_method)
 
       order = nil
       ActiveRecord::Base.transaction do
+        # В1 гибрид смены: витрина/shop не привязана к CashShift (cash_shift_id остаётся NULL).
+        # Barista POS — только через OrderCreationService с открытой сменой. См. docs/operations/milestones/veha_1/ORDER_ENTRY_AUDIT.md.
         order = Order.create!(
           tenant_id: @tenant.id,
           customer_id: customer.id,
           customer_name: customer.full_name.presence || params[:name].presence || "Гость",
           order_number: "",
           source: :mobile,
-          status: order_status,
+          status: flow[:order_status],
           total_amount: subtotal,
           discount_amount: discount,
           final_amount: total,
           promo_code_id: nil
         )
 
+        product_ids = cart_data[:items].map { |line| line[:product_id] }.uniq
+        products_by_id = Product.where(id: product_ids).index_by(&:id)
+
         cart_data[:items].each do |line|
-          product = Product.find(line[:product_id])
+          product = products_by_id[line[:product_id]]
+          raise Error, "Товар не найден. Обновите корзину." unless product
           # BUG-020 FIX: Перепроверяем доступность товара внутри транзакции перед созданием заказа.
           raise Error, "Товар '#{product.name}' стал недоступен. Обновите корзину." unless shop_available_for_order?(product)
           unit = BigDecimal(line[:unit_total].to_s)
@@ -64,9 +65,9 @@ module Shop
         OrderStatusLog.create!(
           order_id: order.id,
           status_from: :pending_payment,
-          status_to: order_status,
+          status_to: flow[:order_status],
           source: :customer,
-          comment: cash_payment ? "Наличная оплата на витрине /shop" : "Ожидание подтверждения оплаты #{payment_method}"
+          comment: flow[:comment]
         )
 
         Payment.create!(
@@ -75,9 +76,11 @@ module Shop
           amount: total,
           method: payment_method,
           provider: "shop",
-          status: payment_status,
-          paid_at: paid_at
+          status: flow[:payment_status],
+          paid_at: flow[:paid_at]
         )
+
+        Inventory::OrderRecipeDeduction.call!(order: order.reload) if flow[:order_status] == :accepted
 
         @session[Shop::CartService::SESSION_KEY] = []
         @session[@shop_customer_session_key] = customer.id
@@ -87,6 +90,31 @@ module Shop
     end
 
     private
+
+    # В1: реального платёжного шлюза нет — имитация успешной оплаты (SHOP_SIMULATE_PAYMENT=1 по умолчанию).
+    # В2: SHOP_SIMULATE_PAYMENT=0 — card/sbp ждут callback (Callbacks::PaymentStatusUpdater).
+    def simulate_shop_payment?
+      ActiveModel::Type::Boolean.new.cast(ENV.fetch("SHOP_SIMULATE_PAYMENT", "1"))
+    end
+
+    def payment_flow(payment_method)
+      if simulate_shop_payment?
+        return {
+          order_status: :accepted,
+          payment_status: :succeeded,
+          paid_at: Time.current,
+          comment: "Имитация оплаты #{payment_method} на витрине /shop (реальный шлюз — веха 2)"
+        }
+      end
+
+      cash_payment = payment_method == :cash
+      {
+        order_status: cash_payment ? :accepted : :pending_payment,
+        payment_status: cash_payment ? :succeeded : :pending,
+        paid_at: cash_payment ? Time.current : nil,
+        comment: cash_payment ? "Наличная оплата на витрине /shop" : "Ожидание подтверждения оплаты #{payment_method}"
+      }
+    end
 
     def map_payment_method(raw)
       case raw.to_s.downcase

@@ -14,6 +14,8 @@ Rails.application.config.to_prepare do
         private
 
         def authenticate_shop_api!
+          return if browser_shop_session?
+
           api_key = request.headers["X-Shop-Api-Key"] || params[:api_key]
 
           unless api_key.present?
@@ -29,6 +31,17 @@ Rails.application.config.to_prepare do
             render json: { error: "Неверный API ключ" }, status: :unauthorized
             return
           end
+        end
+
+        def browser_shop_session?
+          csrf = request.headers["X-CSRF-Token"]
+          return false if csrf.blank?
+
+          referer = request.referer.to_s
+          return false if referer.blank?
+
+          base = request.base_url
+          referer.start_with?(base) && referer.include?("/shop")
         end
       end
     end

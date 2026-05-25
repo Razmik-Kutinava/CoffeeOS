@@ -8,6 +8,9 @@
     <% if @shop_tenant %>
       <meta name="shop-tenant-id" content="<%= @shop_tenant.id %>">
     <% end %>
+    <% if ENV["SHOP_API_KEY"].present? %>
+      <meta name="shop-api-key" content="<%= ENV["SHOP_API_KEY"] %>">
+    <% end %>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
     <%= vite_client_tag %>

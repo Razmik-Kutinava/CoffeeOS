@@ -34,9 +34,12 @@ module Shop
             .order(created_at: :desc)
             .includes(:order_items)
 
-          # Пагинация
+          if ActiveModel::Type::Boolean.new.cast(params[:today])
+            orders = orders.where("orders.created_at >= ?", Time.zone.today.beginning_of_day)
+          end
+
           page = [params[:page].to_i, 1].max
-          per_page = [params[:per_page].to_i, 1, 50].min
+          per_page = [[params[:per_page].to_i, 1].max, 50].min
           orders = orders.limit(per_page).offset((page - 1) * per_page)
 
           render json: orders.map { |o|
@@ -47,7 +50,7 @@ module Shop
               created_at: o.created_at.iso8601,
               items_count: o.order_items.size
             }
-          }.map { |o| o.merge(page: page, per_page: per_page) }
+          }
         else
           render json: []
         end

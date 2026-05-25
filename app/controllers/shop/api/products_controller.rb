@@ -16,7 +16,7 @@ module Shop
 
         # Пагинация
         page = [params[:page].to_i, 1].max
-        per_page = [params[:per_page].to_i, 1, 100].min
+        per_page = [[params[:per_page].to_i, 1].max, 100].min
         rel = rel.limit(per_page).offset((page - 1) * per_page)
 
         # Кэширование с ключом по tenant_id, фильтрам и пагинации
