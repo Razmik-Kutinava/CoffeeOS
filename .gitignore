@@ -80,6 +80,8 @@ Thumbs.db
 !/docs/product/*.md
 !/docs/operations/
 !/docs/operations/*.md
+!/docs/operations/milestones/
+!/docs/operations/milestones/**/*.md
 !/docs/agents/
 !/docs/agents/AGENTS.md
 !/docs/agents/AGENTS/
