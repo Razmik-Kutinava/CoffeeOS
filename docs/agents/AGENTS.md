@@ -17,6 +17,20 @@ Rails 8, PostgreSQL, Svelte/Vite, Pundit, Minitest.
 - В staging — только из develop
 - В main — только из staging, только после review + тестов
 
+## Сервис-объекты (Веха 1 — обязательно для агентов)
+
+Практика **только Service Objects**, без Domain Folders и без запрета ActiveRecord между модулями. Подробности: `.cursor/rules/coffeeos-services.mdc`, краткий триггер — `coffeeos-core.mdc` п. 9. Статус внедрения по вехам (дописывать): `docs/operations/MILESTONE_PRACTICES.md`.
+
+| Ситуация | Действие |
+|----------|----------|
+| Заказ, склад, онбординг, оплата, транзакция, 2+ модели | Класс в `app/services/{barista\|shop\|prep_kitchen\|platform\|…}/` |
+| Простой index/show, одна модель, < ~15 строк | Можно в контроллере |
+| Массовый рефакторинг всех контроллеров | **Только** по явному апруву пользователя |
+
+Контроллер вызывает сервис (`Barista::OrderCreationService`, `Shop::OrderCreator`, …), не дублирует `create!`/транзакции. Эталоны: `app/services/barista/order_creation_service.rb`, `app/services/platform/tenant_onboarding/provision.rb`.
+
+**Не делать:** `app/models/sales`, изоляция доменов как в Dodo, перенос всего legacy без задачи.
+
 ## Правила работы
 
 - Опора на продукт: `docs/product/01_Vision.md`, `docs/product/02_functional.md`, `docs/product/03_Business_Logic.md`. `docs/product/ARCHITECTURE.md` — когда пользователь явно считает документ готовым каноном или задача архитектурная.
@@ -48,7 +62,7 @@ Rails 8, PostgreSQL, Svelte/Vite, Pundit, Minitest.
 
 ## Definition of Done
 
-1. Реализация соответствует `01_Vision` / `02_functional` / `03_Business_Logic`, `.cursorrules` и актуальной `ARCHITECTURE.md` (если она уже канон)
+1. Реализация соответствует `01_Vision` / `02_functional` / `03_Business_Logic`, `.cursorrules`, **сервис-объектам (секция выше)** и актуальной `ARCHITECTURE.md` (если она уже канон)
 2. Тесты написаны и проходят
 3. Code Review агент одобрил
 4. Refactoring рекомендации выполнены

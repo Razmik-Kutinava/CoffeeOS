@@ -29,7 +29,7 @@ Things you may want to cover:
 
 * **Прочие среды:** в `.bundle/config` по-прежнему `BUNDLE_PATH: vendor/bundle` для CI и клонов на нативном диске. `config/boot.rb` задаёт те же пути через `AppBundleEnv`.
 
-* **Запуск:** **`./bin/server`** — только Rails (логин, manager, barista и т.д.), без Vite, по умолчанию **порт 3001** (`config/puma.rb` — на 3000 часто `EADDRINUSE`). Нужен именно 3000: `PORT=3000 ./bin/server`. **`./bin/dev`** — витрина **`/shop`**: Rails **:3001** + Vite (HMR). **`./bin/dev --rails-only`** — как `bin/server`. После **`npm run vite:build`** витрина может открываться и без живого Vite (статические ассеты). Открывай **`http://127.0.0.1:3001`** (не 3000).
+* **Запуск:** **`./bin/server`** — только Rails (логин, manager, barista и т.д.), без Vite, по умолчанию **порт 3001** (`config/puma.rb` — на 3000 часто `EADDRINUSE`). Нужен именно 3000: `PORT=3000 ./bin/server`. **`ruby bin/ensure-server`** — если :3001 не отвечает, поднимает Rails в фоне (лог `log/dev-server.log`; удобно перед MCP). **`./bin/dev`** — витрина **`/shop`**: Rails **:3001** + Vite (HMR). **`./bin/dev --rails-only`** — как `bin/server`. После **`npm run vite:build`** витрина может открываться и без живого Vite (статические ассеты). Открывай **`http://127.0.0.1:3001`** (не 3000).
 
 * **УК — меню, витрина, каталог (что менялось):** см. [doc/features/PLATFORM_MENU_AND_VITRINA.md](doc/features/PLATFORM_MENU_AND_VITRINA.md).
 
