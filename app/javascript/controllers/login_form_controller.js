@@ -57,8 +57,8 @@ export default class extends Controller {
   }
   
   isValidEmailOrPhone(value) {
-    // Email regex
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    // Email: локальные домены demo.coffeeos.local и обычные адреса
+    const emailRegex = /^[^\s@]+@([^\s@]+\.)+[^\s@]+$/
     // Phone regex (российский формат)
     const phoneRegex = /^\+?[1-9]\d{10,14}$/
     

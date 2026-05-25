@@ -17,38 +17,13 @@ module Callbacks
         return render json: { error: "invalid payment status" }, status: :unprocessable_entity
       end
 
-      old_status = payment.status
-      payment.with_lock do
-        payment.status = new_status
-        payment.provider_data = (payment.provider_data || {}).merge(provider_data)
-        payment.provider_payment_id = params[:provider_payment_id] if params[:provider_payment_id].present?
-        payment.paid_at = Time.current if new_status == "succeeded" && payment.paid_at.blank?
-        payment.save!
-
-        if old_status != new_status
-          PaymentStatusLog.create!(
-            payment: payment,
-            status_from: old_status,
-            status_to: new_status,
-            source: "callback",
-            note: params[:note],
-            provider_response: provider_data
-          )
-        end
-
-        # FIX: Move order update inside payment transaction to prevent race condition
-        if payment.status == "succeeded" && payment.order.status == "pending_payment"
-          payment.order.update!(status: "accepted")
-          OrderStatusLog.create!(
-            order: payment.order,
-            status_from: "pending_payment",
-            status_to: "accepted",
-            changed_by_id: nil,
-            source: "payment_callback",
-            comment: "Оплата подтверждена callback"
-          )
-        end
-      end
+      payment = Callbacks::PaymentStatusUpdater.new(
+        payment: payment,
+        new_status: new_status,
+        provider_data: provider_data,
+        provider_payment_id: params[:provider_payment_id],
+        note: params[:note]
+      ).call!
 
       audit_event(
         state: "processed",
@@ -59,6 +34,8 @@ module Callbacks
       )
 
       render json: { ok: true, payment_id: payment.id, status: payment.status }
+    rescue Callbacks::PaymentStatusUpdater::InvalidStatusError
+      render json: { error: "invalid payment status" }, status: :unprocessable_entity
     rescue ActiveRecord::RecordNotFound
       audit_event(state: "failed", callback_type: "payment", tenant_id: params[:tenant_id], details: { error: "payment not found" })
       render json: { error: "payment not found" }, status: :not_found
