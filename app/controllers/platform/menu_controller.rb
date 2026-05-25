@@ -50,10 +50,7 @@ module Platform
       product = Product.new(attrs)
       product.slug = unique_slug(Product, product_params[:slug], product.name)
       product.created_by = current_user
-      ActiveRecord::Base.transaction do
-        product.save!
-        ensure_tenant_settings!(product)
-      end
+      Platform::Menu::PublishProductService.new(product: product, user: current_user).call!
       img_msg = apply_product_image_upload!(product, image_file)
       notice = "Товар добавлен и разослан по точкам. Ниже можно добавить ещё товар в эту категорию."
       notice = "#{notice} #{img_msg}" if img_msg.present?
@@ -71,10 +68,8 @@ module Platform
       if attrs[:slug].present?
         attrs[:slug] = unique_slug(Product, attrs[:slug], product.name, skip_id: product.id)
       end
-      ActiveRecord::Base.transaction do
-        product.update!(attrs)
-        ensure_tenant_settings!(product)
-      end
+      product.assign_attributes(attrs)
+      Platform::Menu::PublishProductService.new(product: product, user: current_user).call!
       img_msg = apply_product_image_upload!(product, image_file)
       notice = "Товар обновлён"
       notice = "#{notice} #{img_msg}" if img_msg.present?
@@ -211,33 +206,6 @@ module Platform
         scope = scope.where.not(id: skip_id) if skip_id
       end
       slug
-    end
-
-    # Для каждой точки — PTS с валидной ценой. Явный SET LOCAL в транзакции: RLS на pts требует контекст PostgreSQL.
-    def ensure_tenant_settings!(product)
-      uid = current_user.id
-      fallback = product.base_price.presence&.to_d
-      fallback = BigDecimal("1") if fallback.blank? || fallback <= 0
-
-      Tenant.select(:id).find_each do |tenant|
-        ActiveRecord::Base.transaction do
-          conn = ActiveRecord::Base.connection
-          conn.execute("SET LOCAL app.current_user_id = #{conn.quote(uid.to_s)}")
-          conn.execute("SET LOCAL app.current_tenant_id = #{conn.quote(tenant.id.to_s)}")
-
-          Current.tenant_id = tenant.id
-
-          pts = ProductTenantSetting.find_or_initialize_by(tenant_id: tenant.id, product_id: product.id)
-          pts.price = product.base_price.presence&.to_d || pts.price || fallback
-          pts.price = fallback if pts.price.blank? || pts.price <= 0
-          pts.is_enabled = true
-          pts.is_sold_out = false
-          pts.sold_out_reason = nil
-          pts.save!
-        end
-      end
-    ensure
-      Current.tenant_id = nil
     end
 
     def destroy_blocked_message
