@@ -5,31 +5,15 @@ Dir.chdir(APP_ROOT)
 load File.expand_path("../config/bundle_env.rb", __dir__)
 AppBundleEnv.apply!(ENV)
 
+$LOAD_PATH.unshift(File.join(APP_ROOT, "lib"))
+require "port_killer"
+
 port = ENV.fetch("PORT", "3001")
 
-def kill_port(port)
-  output = `ss -tlnp 2>/dev/null | grep ":#{port} "`.strip
-  return if output.empty?
-
-  if output =~ /pid=(\d+)/
-    old_pid = $1.to_i
-    warn "=> Порт #{port} занят (PID #{old_pid}), завершаю старый процесс..."
-    Process.kill("TERM", old_pid) rescue nil
-    sleep 1.5
-    begin
-      Process.kill(0, old_pid)
-      Process.kill("KILL", old_pid) rescue nil
-      sleep 0.5
-    rescue Errno::ESRCH
-    end
-    warn "=> Порт #{port} освобождён."
-  end
-end
-
 if ARGV.include?("--rails-only")
-  kill_port(port)
+  PortKiller.free(port)
   exec Gem.ruby, File.join(APP_ROOT, "bin", "rails"), "server", *(ARGV - ["--rails-only"])
 else
-  kill_port(port)
+  PortKiller.free(port)
   exec Gem.ruby, "-S", "bundle", "exec", "foreman", "start", "-f", "Procfile.dev"
 end

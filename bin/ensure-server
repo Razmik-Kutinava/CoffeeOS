@@ -1,0 +1,17 @@
+#!/usr/bin/env ruby
+# Ждёт /up на :3001; если сервер не запущен — поднимает Rails в фоне (для MCP и bin/dev на Windows).
+APP_ROOT = File.expand_path("..", __dir__)
+Dir.chdir(APP_ROOT)
+load File.expand_path("../config/bundle_env.rb", __dir__)
+AppBundleEnv.apply!(ENV)
+
+$LOAD_PATH.unshift(File.join(APP_ROOT, "lib"))
+require "dev_server"
+
+begin
+  puts DevServer.ensure!
+rescue StandardError => e
+  warn "ERROR: #{e.message}"
+  warn "Лог: log/dev-server.log"
+  exit 1
+end
