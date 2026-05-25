@@ -1,5 +1,547 @@
 # CHANGELOG
 
+## v1.52 — 2026-05-25
+
+### Итог
+
+- Документация **Вехи 1** собрана в `docs/operations/milestones/veha_1/`.
+- Корневой `MILESTONE_PRACTICES.md` — указатель на папки вех.
+
+### Структура
+
+- `milestones/veha_1/`: CHECKLIST, PRACTICES, QA_ACCEPTANCE_RUN, CODE_REVIEW, ORDER_ENTRY_AUDIT, DEMO_LOGINS.
+- `milestones/veha_2/` — заготовка под В2.
+
+---
+
+## v1.51 — 2026-05-25
+
+### Итог
+
+- Code review В1 перед демо: `docs/operations/milestones/veha_1/CODE_REVIEW.md`; блокеров нет.
+- Исправление N+1 в `Shop::OrderCreator` (preload products).
+
+### Тесты
+
+- shop + block_g после правки: **51 runs, 165 assertions, 0 failures**.
+
+---
+
+## v1.50 — 2026-05-25
+
+### Итог
+
+- Gate **A/B гибрид смены**: `docs/operations/milestones/veha_1/ORDER_ENTRY_AUDIT.md`, §G чеклиста, gate в `MILESTONE_PRACTICES.md`.
+- Сквозной аудит 8 входов заказа — все соответствуют В1.
+
+### Документация
+
+- `docs/operations/milestones/veha_1/ORDER_ENTRY_AUDIT.md` — реестр + правило синхронизации с таск-трекером.
+- Комментарии в `Shop::OrderCreator`, `Barista::OrderCreationService` → ссылка на аудит.
+
+---
+
+## v1.49 — 2026-05-25
+
+### Итог
+
+- Блок **H.2** (агент): сухой прогон + MCP DevTools по `qa_scenarios.md`; журнал V1-* заполнен (Авто/MCP).
+- Полный suite: **479 runs, 0 failures** (повторный прогон 2026-05-25).
+- Живое демо (**H.3**) — на владельце.
+
+### Документация
+
+- `docs/agents/AGENTS/qa_scenarios.md` — этапы 1–3, журнал прогона.
+- `docs/operations/milestones/veha_1/QA_ACCEPTANCE_RUN.md` — протокол прогона (сухой + MCP).
+
+### Заметки QA
+
+- `tmp/shop_mcp_flow.rb` in-process: 2/9 (401 без browser session); компенсировано MCP + `test/integration/shop/`.
+- Batch shop+block_g: единичный 429 Rack::Attack; изолированный `block_g` shop test — OK.
+
+---
+
+## v1.48 — 2026-05-24
+
+### Итог
+
+- Блок **G закрыт**: гибрид shop без смены / barista только с открытой `CashShift`; отмена с причиной + audit; MCP UI OK.
+- Полный suite: **479 runs, 1896 assertions, 0 failures** (2026-05-24).
+
+### Изменено
+
+- `Barista::OrderCreationService` — `shift.open?` guard.
+- `Barista::OrderCancellationService` — обязательная причина.
+- `Barista::OrdersController` — `normalize_cart_items`, `@shift` в `new`, cancel reason + rescue.
+- `app/views/barista/orders/new.html.erb` — JS корзины внутри `content_for`.
+- `lib/port_killer.rb`, `lib/dev_server.rb`, `bin/ensure-server` — MCP/dev на Windows.
+- `test/integration/block_g_cash_shift_test.rb` — 8 runs (+ HTML form cart_items index).
+
+---
+
+## v1.47 — 2026-05-24
+
+### Итог
+
+- Блок **F закрыт**: списание по техкарте при продаже, отрицательный остаток, prep_kitchen movements, техдолг зафиксирован.
+- `Inventory::OrderRecipeDeduction`, migration `block_f_stock_deduction`, demo recipes/stock.
+
+### Изменено
+
+- `app/services/inventory/order_recipe_deduction.rb` — новый.
+- `Barista::OrderCreationService`, `Shop::OrderCreator` — вызов deduction.
+- `IngredientTenantStock` — снят validation `qty >= 0`.
+- `Demo::EnvironmentSetup` — `ensure_demo_recipes_and_stock!`.
+- Тесты: `block_f_stock_flow_test.rb`, `order_recipe_deduction_test.rb`.
+
+---
+
+## v1.46 — 2026-05-24
+
+### Итог
+
+- Блок **E UI MCP закрыт**: Chrome DevTools — полный shop-флоу в браузере **OK**.
+- Vite на Windows ARM: явные native bindings (`rolldown`, `tailwindcss/oxide`, `lightningcss`).
+- `.env`: `SHOP_API_KEY` + `SHOP_DEFAULT_TENANT_ID` (demo-point-a).
+
+---
+
+## v1.45 — 2026-05-21
+
+### Итог
+
+- Блок **E закрыт**: MCP-эквивалент `tmp/shop_mcp_flow.rb` **9/9** на demo-point-a; shop suite **57/147/0**; полный suite **462/1834/0**.
+- Chrome DevTools / Puppeteer MCP — **errored**; API-сценарии покрыты in-process runner + `block_e_shop_flow_test`.
+
+### Изменено
+
+- `tmp/shop_mcp_flow.rb` — CSRF bypass для dev-runner, API key header, fix status check.
+- `docs/operations/milestones/veha_1/CHECKLIST.md` — блок E `[x]`.
+- `docs/operations/MILESTONE_PRACTICES.md` — журнал MCP Block E.
+
+---
+
+## v1.44 — 2026-05-21
+
+### Итог
+
+- Блок **E спец-тесты**: `block_e_shop_flow_test.rb` + auth browser session; shop suite **57/147/0**.
+- MCP и полный suite **не запускали** — ждём апрув.
+
+### Изменено
+
+- `test/integration/shop/block_e_shop_flow_test.rb` — новый.
+- `test/integration/shop/api/authentication_test.rb` — browser CSRF session.
+
+---
+
+## v1.43 — 2026-05-21
+
+### Итог
+
+- Блок **E фаза 1**: Svelte shop — меню, корзина+модификаторы, mock оплата, история за сегодня, skeleton, anti double-click.
+- Локальные shop-тесты: **51/113/0**. Полный suite **не запускали** — ждём апрув.
+
+### Изменено
+
+- Frontend: `catalog.js`, `api.js`, `modifiers.js`, `PageSkeleton.svelte`, Catalog/Cart/Checkout/Orders/Product/CategoryProducts.
+- Backend: `orders_controller#history` (`today=1`), `shop_api_auth` browser session, layout `shop-api-key` meta.
+- Тест: `orders_controller_test` — history today.
+
+---
+
+## v1.42 — 2026-05-21
+
+### Итог
+
+- Блок **D закрыт**: полный `bin/rails test` — **455 runs, 1795 assertions, 0 failures**.
+- Fix тестов после `Demo::EnvironmentSetup` (глобальные `order_cancel_reasons`, shop-каталог в test DB).
+- Чеклист `VEHA_1_CHECKLIST.md` § D — все 7 ролей `[x]`.
+
+### Изменено
+
+- `test/support/factories.rb` — `ensure_order_cancel_reason!`.
+- Тесты: manager_office/shift, barista_tablet, catalog_bootstrap, publish_product_service.
+
+---
+
+## v1.41 — 2026-05-21
+
+### Итог
+
+- **Критические фиксы блока D:** форма movement (`movement[items][][...]`), триггер `generate_order_number`, `demo:seed` без `tmp/mcp_setup.rb`.
+- Миграция `20260523140000_ensure_order_number_trigger` — функция + триггер + backfill пустых номеров.
+- `Demo::EnvironmentSetup` — открытая смена demo-point-a, `order_cancel_reasons`, stock цеха, сброс stop-list.
+- Целевые тесты: **42 runs, 206 assertions, 0 failures** (environment_setup, order_creation, prep_kitchen movements, movement_creator, block_d smoke).
+- Полный suite **не запускали** — ждём апрув.
+
+### Изменено
+
+- `app/views/prep_kitchen/movements/new.html.erb` — `scope: :movement`, items `movement[items][][...]`.
+- `app/controllers/prep_kitchen/movements_controller.rb` — `movement_params`, `normalize_items`.
+- `app/services/barista/order_creation_service.rb` — `reload` + ошибка при пустом `order_number`.
+- `app/services/demo/environment_setup.rb` — cancel reasons, open shift, kitchen stock, PTS reset.
+- `db/migrate/20260523140000_ensure_order_number_trigger.rb` — новый.
+- Тесты: `order_creation_service_test`, `environment_setup_test`, `prep_kitchen_movements_test`.
+
+---
+
+## v1.40 — 2026-05-23
+
+### Итог
+
+- Блок **D**: MCP **POST**-флоу всех 7 ролей (Chrome DevTools, isolated context).
+- Подготовка dev: `demo:seed`, `tmp/mcp_setup.rb` (CashShift + `order_cancel_reasons`), restart `rails s`.
+- Заметка: barista повторный create в dev — `idx_orders_tenant_number` (пустой `order_number`).
+- Полный suite **не запускали** — ждём апрув.
+
+### Изменено
+
+- `MILESTONE_PRACTICES.md` § Block D — журнал POST-флоу.
+- `SESSION_STATE.md`, `VEHA_1_CHECKLIST.md` — статус awaiting approval.
+
+---
+
+## v1.39 — 2026-05-23
+
+### Итог
+
+- Блок **D**: обход **7 ролей через Chrome DevTools MCP** — все GET-экраны OK.
+- Fix: `login_form_controller.js` — email regex для `@demo.coffeeos.local`.
+- Smoke: `block_d_panel_screens_test` **7/84/0**. Полный suite **не запускали**.
+
+### Изменено
+
+- `MILESTONE_PRACTICES.md` § Block D — журнал MCP-прогона.
+- `app/javascript/controllers/login_form_controller.js` — multi-dot email domains.
+
+---
+
+## v1.38 — 2026-05-21
+
+### Итог
+
+- Подготовка блока **D**: единые demo-логины, чеклист с MCP, smoke GET всех панелей (**7 runs, 84 assertions, 0 failures**).
+- Полный `bin/rails test` **не запускали** — ожидание апрува.
+
+### Добавлено
+
+- `docs/operations/milestones/veha_1/DEMO_LOGINS.md`
+- `test/integration/panels/block_d_panel_screens_test.rb`
+
+### Изменено
+
+- `lib/tasks/test_login.rake` — делегирует `Demo::EnvironmentSetup` (убран `office_manager` и старые @test.com).
+- `VEHA_1_CHECKLIST.md` §D — MCP + demo logins + порядок закрытия.
+
+---
+
+## v1.37 — 2026-05-21
+
+### Итог
+
+- Блок **C** чеклиста В1 закрыт: RBAC **platform / УК** — org, tenant, выдача `franchise_manager`, только `uk_global_admin`.
+- Полный прогон: **446 runs, 1686 assertions, 0 failures**.
+
+### Добавлено
+
+- `test/integration/auth/platform_uk_rbac_test.rb` — 7 тестов.
+
+### Документация
+
+- `VEHA_1_CHECKLIST.md` — C platform/УК [x]; блок C завершён.
+- `MILESTONE_PRACTICES.md` § Platform / УК RBAC.
+
+---
+
+## v1.36 — 2026-05-21
+
+### Итог
+
+- Блок **C** чеклиста В1: RBAC **prep_kitchen_worker** — просмотр своего цеха, без мутаций и чужих панелей.
+- Полный прогон: **439 runs, 1644 assertions, 0 failures**.
+
+### Добавлено
+
+- `test/integration/auth/prep_kitchen_worker_rbac_test.rb` — 6 тестов.
+
+### Документация
+
+- `VEHA_1_CHECKLIST.md` — C prep_kitchen_worker [x]; `MILESTONE_PRACTICES.md` § Prep kitchen worker RBAC.
+
+---
+
+## v1.35 — 2026-05-21
+
+### Итог
+
+- Блок **C** чеклиста В1: RBAC **prep_kitchen_manager** — полный доступ к цеху, без чужих панелей.
+- Полный прогон: **433 runs, 1612 assertions, 0 failures**.
+
+### Добавлено
+
+- `test/integration/auth/prep_kitchen_manager_rbac_test.rb` — 6 тестов.
+
+### Документация
+
+- `VEHA_1_CHECKLIST.md` — C prep_kitchen_manager [x]; `MILESTONE_PRACTICES.md` § Prep kitchen manager RBAC.
+
+---
+
+## v1.34 — 2026-05-21
+
+### Итог
+
+- Блок **C** чеклиста В1: RBAC **franchise_manager** — просмотр своих точек, без POS и редактирования меню.
+- Полный прогон: **427 runs, 1577 assertions, 0 failures**.
+
+### Изменено
+
+- `ProductTenantSettingPolicy#update?` — franchise_manager не может менять цены.
+- `manager/menu/index.html.erb` — форма цены только для general_manager / УК.
+
+### Добавлено
+
+- `test/integration/auth/franchise_manager_rbac_test.rb` — 6 тестов.
+
+### Документация
+
+- `VEHA_1_CHECKLIST.md` — C franchise_manager [x]; `MILESTONE_PRACTICES.md` § Franchise manager RBAC.
+
+---
+
+## v1.33 — 2026-05-21
+
+### Итог
+
+- Блок **C** чеклиста В1: RBAC **general_manager** — меню, цены, staff, склад своей точки.
+- Полный прогон: **421 runs, 1544 assertions, 0 failures**.
+
+### Добавлено
+
+- `test/integration/auth/general_manager_rbac_test.rb` — 9 тестов: privileged paths, tenant isolation, forbidden panels.
+
+### Документация
+
+- `VEHA_1_CHECKLIST.md` — C general_manager [x]; `MILESTONE_PRACTICES.md` § General manager RBAC.
+
+---
+
+## v1.32 — 2026-05-21
+
+### Итог
+
+- Блок **C** чеклиста В1: RBAC **shift_manager** — оперативка текущей смены, без «глубокой» истории.
+- Полный прогон: **412 runs, 1500 assertions, 0 failures**.
+
+### Добавлено
+
+- `test/integration/auth/shift_manager_rbac_test.rb` — 8 тестов: scope текущей смены, forbidden panels, menu read-only, closed shift hidden.
+
+### Документация
+
+- `VEHA_1_CHECKLIST.md` — C shift_manager [x]; `MILESTONE_PRACTICES.md` § Shift manager RBAC.
+
+---
+
+## v1.31 — 2026-05-21
+
+### Итог
+
+- Блок **C** чеклиста В1: RBAC **barista** — только POS и своя смена; manager/prep_kitchen/admin закрыты.
+- Полный прогон: **404 runs, 1457 assertions, 0 failures**.
+
+### Добавлено
+
+- `test/integration/auth/barista_rbac_test.rb` — 7 тестов: allowed POS paths, forbidden panels, PATCH/POST guard, tenant isolation.
+
+### Документация
+
+- `VEHA_1_CHECKLIST.md` — C barista [x]; `MILESTONE_PRACTICES.md` § Barista RBAC.
+
+---
+
+## v1.30 — 2026-05-21
+
+### Итог
+
+- Блок **C** чеклиста В1: session-login для всех панелей (barista, manager, prep_kitchen, platform/УК).
+- Полный прогон: **397 runs, 1414 assertions, 0 failures**.
+
+### Добавлено
+
+- `test/integration/auth/panel_login_test.rb` — 11 тестов: редиректы по ролям, guard без сессии, logout, user без ролей.
+
+### Документация
+
+- `VEHA_1_CHECKLIST.md` — C session login [x]; `MILESTONE_PRACTICES.md` § Session login.
+
+---
+
+## v1.29 — 2026-05-21
+
+### Итог
+
+- Блок **B** чеклиста В1: RLS — точка A не видит данные точки B; **новых Postgres-политик нет**.
+- Полный прогон: **386 runs, 1327 assertions, 0 failures**.
+
+### Добавлено
+
+- `test/support/rls_test_bootstrap.rb`, `rls_test_helper.rb` — bootstrap существующих migrate-политик в test DB; роль `coffeeos_rls_test` (NOBYPASSRLS).
+- `test/integration/rls_tenant_isolation_test.rb` — 7 тестов Postgres RLS (orders, payments, PTS, смены, остатки).
+
+### Документация
+
+- `VEHA_1_CHECKLIST.md` — RLS [x]; `MILESTONE_PRACTICES.md` § RLS.
+
+---
+
+## v1.28 — 2026-05-21
+
+### Итог
+
+- Блок **B** чеклиста В1: Shop API (меню, заказ, auth); **имитация оплаты** без шлюза (до вехи 2).
+- Полный прогон: **377 runs, 1293 assertions, 0 failures**.
+
+### Изменено
+
+- `Shop::OrderCreator` — `SHOP_SIMULATE_PAYMENT=1` (default): все методы → accepted/succeeded; `=0` — режим pending для вехи 2.
+- `Shop::Api::ProductsController#index` — fix default `per_page`.
+
+### Добавлено
+
+- Тесты: `shop/api/{products_controller,mvp_flow,authentication}_test.rb`.
+
+### Документация
+
+- `VEHA_1_CHECKLIST.md` — Shop API [x]; `MILESTONE_PRACTICES.md` § Shop API.
+
+---
+
+## v1.27 — 2026-05-21
+
+### Итог
+
+- Блок **B** чеклиста В1: демо-среда (1 org, 2 точки, каталог, PTS, пользователи с ролями).
+- Полный прогон: **367 runs, 1246 assertions, 0 failures**.
+
+### Добавлено
+
+- `Demo::EnvironmentSetup` — идемпотентная демо-среда В1.
+- `db/seeds_demo_v1.rb`, `lib/tasks/demo.rake` (`bin/rails demo:seed`).
+- `test/services/demo/environment_setup_test.rb`.
+
+### Изменено
+
+- `db/seeds.rb` — вместо прямой загрузки каталога вызывает demo seed (каталог внутри setup).
+- Демо: добавлен `demo-prep-kitchen` + `pk-manager` / `pk-worker` (prep_kitchen).
+
+---
+
+## v1.26 — 2026-05-21
+
+### Итог
+
+- Блок **B** чеклиста В1: проверены CRUD и связи MVP-моделей (Tenant, Category, Product, Modifier, Order, OrderItem).
+- Полный прогон: **364 runs, 1217 assertions, 0 failures**.
+
+### Добавлено
+
+- `test/models/mvp_core_models_test.rb` — 17 тестов CRUD, ассоциаций, cascade/restrict, jsonb `modifier_options`.
+
+### Документация
+
+- `VEHA_1_CHECKLIST.md` — пункт B «MVP-модели» [x].
+- `MILESTONE_PRACTICES.md` — таблица проверки моделей + журнал.
+
+---
+
+## v1.25 — 2026-05-21
+
+### Итог
+
+- Блок **A. Service Objects** чеклиста В1 закрыт.
+- Полный прогон: **347 runs, 1166 assertions, 0 failures**.
+
+### Документация
+
+- `MILESTONE_PRACTICES.md` — таблица «Рефактор: что сделано и зачем».
+- `VEHA_1_CHECKLIST.md` — все пункты секции A отмечены [x].
+
+---
+
+## v1.24 — 2026-05-21
+
+### Добавлено
+
+- `Barista::OrderStatusUpdateService`, `Callbacks::PaymentStatusUpdater`, `Platform::Menu::PublishProductService` + unit-тесты.
+
+### Изменено
+
+- `barista/orders_controller#update_status`, `callbacks/events_controller#payment`, `platform/menu_controller` create/update product.
+- `docs/operations/milestones/veha_1/CHECKLIST.md` — аудит контроллеров [x].
+
+### Проверка
+
+- `bin/rails test test/services/barista/ test/services/callbacks/ test/services/platform/menu/ test/controllers/callbacks/events_controller_test.rb test/controllers/barista/orders_controller_test.rb` → 75 runs, 0 failures.
+
+---
+
+## v1.23 — 2026-05-21
+
+### Изменено
+
+- `app/services/prep_kitchen/stock/movement_creator.rb` — создание черновика: сначала `StockMovement`, затем `stock_movement_items` в транзакции (вместо nested save).
+- `test/services/prep_kitchen/stock/movement_creator_test.rb` — happy-path и hash items из формы.
+
+### Проверка
+
+- `bin/rails test test/services/prep_kitchen/stock/` → 10 runs, 0 failures.
+
+### Изменено (docs)
+
+- `docs/operations/milestones/veha_1/CHECKLIST.md` — MovementCreator [x].
+
+---
+
+## v1.22 — 2026-05-21
+
+### Добавлено
+
+- `app/services/barista/order_cancellation_service.rb` — отмена заказа, `OrderStatusLog`, `AdminAuditLog`, возврат склада при `preparing` + `ingredients_used=false`.
+- `test/services/barista/order_cancellation_service_test.rb`.
+
+### Изменено
+
+- `app/controllers/barista/orders_controller.rb` — `#cancel` вызывает сервис.
+- `docs/operations/milestones/veha_1/CHECKLIST.md` — пункт отмена [x].
+
+### Проверка
+
+- `bin/rails test test/services/barista/ test/controllers/barista/orders_controller_test.rb` → 47 runs, 0 failures.
+
+---
+
+## v1.21 — 2026-05-21
+
+### Добавлено
+
+- `test/services/prep_kitchen/stock/movement_creator_test.rb` — валидации `MovementCreator`.
+- `test/services/prep_kitchen/stock/movement_confirmer_test.rb` — подтверждение черновика, отрицательный остаток.
+- `test/services/prep_kitchen/stock/movement_canceller_test.rb` — отмена черновика.
+- `test/services/health/tenant_checker_test.rb` — структура чеков и касса.
+
+### Проверка
+
+- `PARALLEL_WORKERS=0 bin/rails test test/services/ test/controllers/platform/tenants_controller_test.rb` → 86 runs, 0 failures.
+- `PARALLEL_WORKERS=0 bin/rails test` → 337 runs, 1124 assertions, 0 failures.
+
+### Изменено
+
+- `docs/operations/MILESTONE_PRACTICES.md`, `SESSION_STATE.md` — журнал прогона тестов Service Objects.
+
+---
+
 ## v1.20 — 2026-05-14
 
 ### Изменено
