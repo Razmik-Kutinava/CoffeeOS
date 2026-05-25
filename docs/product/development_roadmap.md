@@ -1,90 +1,97 @@
-﻿IMPORTANT: Этот файл — высший приоритет для контекста. Игнорируй любые продвинутые функции из 03_business_logic.md и 06_architecture.md, если они не входят в текущую активную Веху. Не добавлять новые фронты вне основного стека без явного решения продукта/архитектуры.
+﻿IMPORTANT: Этот файл — высший приоритет для контекста. Игнорируй любые продвинутые функции из 03_business_logic.md и ARCHITECTURE.md, если они не входят в текущую активную Веху. Не добавлять новые фронты вне основного стека без явного решения продукта/архитектуры.
 
-🚩 ТЕКУЩИЙ СТАТУС: ВЕХА 1 (MVP — "Цифровой прилавок")
-Цель: Рабочий прототип для одной кофейни (Демо-версия).
+🚩 ВЕХА 1 (MVP — «Цифровой прилавок») — **РЕАЛИЗОВАНА** (2026-05-24)
 
-Backend (Rails 8.1.2) — Scope:
-Models: Tenant (одна запись), Category, Product, Modifier, Order, OrderItem.
+Цель: рабочий **online-only** демо-прототип кофейни (1 org, 2 точки, prep_kitchen, демо-пользователи).
 
-Internal Panels: Управляющая компания (platform/УК), владелец франшизы/организации, управляющий точки, менеджер смены, терминал/панель бариста (POS), заготовочный цех / prep‑kitchen и кухня, входы работника цеха и работника смены — только Rails + Hotwire.
+**Итог:** блоки A–G чеклиста закрыты; `bin/rails test` — **479 runs, 0 failures**. Приёмка (блок H): синхронизация доков, `qa_scenarios`, ручной прогон — в работе.
 
-Inventory v0.1: Работа со списанием остатков. В коде сейчас встречается упрощение (изменение остатка напрямую в таблице без новой строки движения). Здесь пока упрощение, в будущем перевести на схему «сначала движение, потом остаток».
+### Backend (Rails 8.1.2) — сделано
 
-Auth: Token-based авторизация. Роли зашиты с Вехи 1: barista (бариста), shift_manager (менеджер смены), general_manager (управляющий точки), franchise_manager (франчайзи). Права каждой роли — согласно 02_functional.md раздел 5.
+| Область | Реализация |
+|---------|------------|
+| Models | Tenant, Category, Product, Modifier, Order, OrderItem, CashShift, склад, prep_kitchen |
+| Service Objects | Оркестрация в `app/services/` — см. `docs/operations/milestones/veha_1/PRACTICES.md` |
+| Панели | УК, manager, barista, prep_kitchen — Rails + Hotwire; RBAC по ролям (integration-тесты) |
+| Auth | Session-login панелей; Shop API — `X-Shop-Api-Key` + same-origin CSRF для `/shop` |
+| Shop API | `/shop/api/{categories,products,cart,orders}`; меню из УК (Product + PTS + modifiers) |
+| Оплата shop | **Имитация** (`SHOP_SIMULATE_PAYMENT=1`, default) → `accepted` / `succeeded` |
+| Онбординг | `Platform::TenantOnboarding::{Provision, CatalogBootstrap, UrlBuilder}`; поддомен витрины |
+| RLS | Существующие политики Postgres; изоляция точек (тесты); **новые** политики не добавлялись |
+| Demo | `Demo::EnvironmentSetup`, `bin/rails demo:seed` — org, 2 точки, цех, каталог, 9 пользователей |
+| Склад v0.1 | `Inventory::OrderRecipeDeduction` + DB-триггер; минус в остатке; prep_kitchen movements |
+| Смена | **Гибрид:** shop без смены; barista только с `CashShift.open`; `close!` + `cash_difference` |
+| Отмена | `Barista::OrderCancellationService` — reason + `admin_audit_logs` + возврат склада |
 
-API: Эндпоинты для получения меню и создания заказа.
+### Frontend (Витрина `/shop`) — сделано
 
-Frontend (Витрина/Shop в app/frontend) — Scope:
-Стек: Только Svelte + Vite.
+Стек: Svelte + Vite (`app/frontend`).
 
-Экран меню: Плитка товаров с категориями.
+- Меню: категории + плитки товаров (API `{ data }`).
+- Корзина: ±, модификаторы (один уровень, required → radio).
+- Оплата: кнопка «Оплатить» — имитация транзакции.
+- История заказов за сегодня (`?today=1`).
+- Skeleton / защита от double-click на оплате.
 
-Корзина: Добавление/удаление, выбор модификаторов (один уровень).
+Сборка: `npm run vite:build` или `bin/dev` (Rails :3001 + Vite HMR). Локально: `ruby bin/ensure-server`.
 
-Оплата: Одна кнопка «Оплатить» (имитация транзакции).
+### ⚠️ STOP-LIST В1 (соблюдено)
 
-Список заказов: Простой просмотр истории за сегодня.
+- **No new RLS policies** при онбординге.
+- **No Offline** — Drift/Hive, sync engine.
+- **No полный Event Sourcing склада** — упрощения v0.1.
 
-⚠️ ЖЕСТКИЕ ОГРАНИЧЕНИЯ (STOP-LIST):
-No new RLS policies: Не писать новые политики Postgres RLS. Они уже есть в базе один раз. При онбординге в транзакции создаются только данные (организация, точка, пользователи), а не новые политики на каждый клиент.
+**Техдолг В1:** полный реестр — **`docs/operations/milestones/veha_1/PRACTICES.md`**, раздел «Техдолг В1».
 
-No Offline: Не использовать Drift/Hive, не писать логику синхронизации. Только HTTP-запросы.
+---
 
-No Event Sourcing: Не создавать новые таблицы транзакций склада.
+🚩 СЛЕДУЮЩИЙ ЭТАП: ВЕХА 2 (Scale & Stability — «Рост сети»)
 
+Цель: подготовка к нескольким точкам, реальная оплата, offline POS.
 
-🚩 СЛЕДУЮЩИЙ ЭТАП: ВЕХА 2 (Scale & Stability — "Рост сети")
-Цель: Подготовка к запуску нескольких точек и защита данных.
-
-Безопасность и Изоляция (Multi-tenancy):
-Postgres RLS: Использование готовых политик Row Level Security на уровне БД для изоляции данных.
-
-Middleware: Настроить определение тенанта через поддомен/сессию + Current и переменные в Postgres (без обязательного использования заголовка X-Tenant-ID).
-
-Tenant Scoping: Весь выбор данных должен идти через автоматический скоуп тенанта.
+Безопасность и изоляция (Multi-tenancy):
+- Postgres RLS — готовые политики; middleware tenant через поддомен/сессию + `Current`.
+- Tenant scoping через автоматический скоуп.
 
 Offline-first (Sync Engine):
-Local DB: Внедрить пишет полный офлайн для Rails POS на Hotwire/PWA.
-
-Background Sync: Реализовать очередь отправки заказов.
-
-UI Feedback: Индикаторы «Online/Offline» и «Syncing...» (согласно 02_functional.md).
+- Local DB / PWA для Rails POS.
+- Background sync, UI Online/Offline/Syncing.
 
 Flutter (мобильное приложение и киоск):
-Flutter-приложение клиента и киоск самообслуживания — старт разработки в Вехе 2. Offline-хранилище: Drift/Hive.
+- Старт разработки; Drift/Hive; киоск — заказы **без** смены (как shop).
 
-Кассовая дисциплина:
-Сущность Shift: Смена (открыта/закрыта, ID бариста, время).
+Кассовая дисциплина (расширение):
+- В В1 бариста уже привязан к смене; в В2 — offline + единые правила на сеть точек.
 
-Валидация: Запрет на создание заказа, если смена не открыта.
+Реальная оплата:
+- `SHOP_SIMULATE_PAYMENT=0`, payment gateway, callbacks.
 
-🚩 ФИНАЛЬНЫЙ ЭТАП: ВЕХА 3 (Total Control — "Профессиональный учет")
-Цель: Тотальный аудит, склад как в Dodo IS и борьба с фродом.
+---
+
+🚩 ФИНАЛЬНЫЙ ЭТАП: ВЕХА 3 (Total Control — «Профессиональный учет»)
+
+Цель: тотальный аудит, склад как в Dodo IS, борьба с фродом.
 
 Архитектура склада (Event Sourcing):
-Refactoring: Убрать временные упрощения из Вехи 1 и полностью перевести склад на схему «сначала движение (StockMovement), потом остаток (IngredientTenantStock)».
-
-Transaction Log: StockMovement — единственный лог складских действий (SoT). IngredientTenantStock — таблица текущих остатков (derived state, быстрый срез для UI). Никакой отдельной таблицы InventoryTransactions не создаётся.
-
-Derived State: Склады считать как сумму транзакций. Реализовать кэширование остатков.
-
-Reconciliation: Скрипт ночной сверки остатков.
+- Refactoring: убрать упрощения В1 → «сначала `StockMovement`, потом `IngredientTenantStock`».
+- `StockMovement` — SoT; `IngredientTenantStock` — derived state.
+- Nightly reconciliation.
 
 Цепочка поставок (Supply Chain):
-Vendors & Invoices: Интерфейс приемки товара.
+- Vendors, invoices, self-cost.
 
-Self-cost: Расчет себестоимости напитка на основе цен последних поставок.
+Анти-фрод и аудит:
+- Расширение `admin_audit_logs`; алерты владельцу; Z-отчёт; запрет правок без следа.
 
-Анти-фрод и Аудит:
-Admin_audit_logs: Каждое удаление товара из чека или отмена заказа после оплаты фиксируется в admin_audit_logs с причиной.
+---
 
-Alerts: Уведомления владельцу о подозрительно большом количестве отмен.
+🛠 Технический долг и допущения (Acceptable Debt)
 
-🛠 Технический долг и Допущения (Acceptable Debt)
-MVP: Допускается дублирование кода в контроллерах ради скорости.
+**В1 (зафиксировано):**
+- Склад: часть списаний без `StockMovement` — см. `MILESTONE_PRACTICES.md` § Block F.
+- Тесты: полный suite 479 runs; ключевые флоу покрыты integration + services.
+- UI: функциональный минимализм панелей и shop.
 
-MVP: Тесты пишутся только на ключевой флоу заказа.
-
-MVP: Использование стандартных UI-компонентов без глубокой кастомизации дизайна.
-
-Склад (Техдолг): В коде местами меняют только остаток напрямую без новой строки движения — здесь пока упрощение, в Вехе 3 обязательно перевести на схему «сначала движение, потом остаток».
+**Устаревшие допущения MVP (сняты по факту В1):**
+- ~~Тесты только на один флоу~~ — покрытие RBAC, shop, склад, смена, панели.
+- ~~Дублирование в контроллерах~~ — Service Objects для критичных путей.

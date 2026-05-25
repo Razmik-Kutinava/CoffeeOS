@@ -1,4 +1,50 @@
-⚠️ ВАЖНО: Этот файл описывает целевую бизнес-логику (Веха 3). В Вехе 1 действуют упрощения, описанные в development_roadmap.md — он имеет приоритет над этим документом.
+⚠️ ВАЖНО: этот файл — **целевая** бизнес-логика (полнота — **Веха 3**). Для текущего кода и демо приоритет у **`development_roadmap.md`** и секции **«Веха 1»** ниже.
+
+## Веха 1 — реализованная бизнес-логика (2026-05)
+
+### Заказы и смена (гибрид)
+
+- **Shop / витрина:** заказ создаётся без `cash_shift_id`; открытая `CashShift` не проверяется.
+- **Barista POS:** создание, смена статуса и отмена заказа — только при `CashShift` со статусом `open`; иначе redirect и сообщение «Смена не открыта».
+- Заказы баристы сохраняют `cash_shift_id` текущей смены.
+
+### Оплата shop
+
+- По умолчанию **имитация** (`SHOP_SIMULATE_PAYMENT=1`): заказ сразу `accepted`, платёж `succeeded`, provider `shop`.
+- Реальный платёжный шлюз — **Веха 2** (`SHOP_SIMULATE_PAYMENT=0` → `pending_payment` до callback).
+
+### Списание склада при продаже
+
+- При `accepted`: `Inventory::OrderRecipeDeduction` (shop/barista, сразу после позиций заказа).
+- DB-триггер `auto_deduct_ingredients_on_order_accept` при UPDATE `pending_payment` → `accepted`.
+- Остаток в `ingredient_tenant_stocks` может быть **отрицательным** — продажа не блокируется.
+- Ручные движения prep_kitchen по-прежнему не допускают минус в `MovementConfirmer`.
+- Часть продаж **без** строки `StockMovement` (техдолг В1 → полный журнал в В3).
+
+### Отмена заказа (бариста)
+
+- Обязательный `reason` из справочника `order_cancel_reasons`.
+- Запись в `admin_audit_logs` (`order_cancelled`).
+- При `preparing` и `ingredients_used=false` — возврат на склад через `StockMovement` (return).
+
+### Кассовая смена
+
+- `CashShift#close!` — расчёт `total_sales`, `expected_cash`, **`cash_difference`** (недостача = отрицательное значение).
+- Полный анти-фрод смены (Z-отчёт, алерты) — **Веха 3**.
+
+### Онбординг и изоляция
+
+- `Platform::TenantOnboarding::Provision` — org + tenant + модули + каталог (PTS) в транзакции; откат при ошибке.
+- RLS: существующие политики в миграциях; **новые** политики при онбординге не создаются.
+- `SET LOCAL app.current_tenant_id` / `app.current_user_id` в контроллерах точки.
+
+### Оркестрация (Service Objects)
+
+Тяжёлая логика в `app/services/{панель}/`: создание/отмена заказа бариста, shop `OrderCreator`, движения prep_kitchen, callback оплаты, онбординг — не в контроллерах.
+
+---
+
+## Целевая логика (Веха 2–3)
 
 Модель учета складских остатков (Inventory Logic)
 Мы используем гибридную модель Event Sourcing, чтобы обеспечить 100% аудит и точность данных.

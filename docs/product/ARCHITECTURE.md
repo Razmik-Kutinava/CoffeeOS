@@ -1,4 +1,29 @@
-﻿06_architecture.md: Системная архитектура CoffeeOS (CODE BLACK)
+﻿# Системная архитектура CoffeeOS
+
+⚠️ **Веха 1 реализована (2026-05-24).** Ниже — общая архитектура; блок **«Веха 1 — как в коде»** описывает фактическую реализацию демо.
+
+## Веха 1 — как в коде (демо)
+
+| Слой | Реализация |
+|------|------------|
+| Backend | Rails 8.1.2 монолит; бизнес-логика в `app/services/{barista,shop,prep_kitchen,platform,callbacks}/` |
+| Панели | Rails + Hotwire: `platform`, `manager`, `barista`, `prep_kitchen` |
+| Shop | Svelte + Vite; Rails отдаёт layout + API; статика после `vite:build` |
+| Auth панелей | Session (`POST /login`); Pundit policies |
+| Shop API | `X-Shop-Api-Key`; для same-origin `/shop` — CSRF session (`shop_api_auth`) |
+| Tenant | `Current.tenant_id` + `SET LOCAL app.current_tenant_id` (+ `app.current_user_id`) |
+| RLS | Политики из миграций (не генерируются при онбординге) |
+| Заказы shop | `Shop::OrderCreator` — без `cash_shift_id` |
+| Заказы barista | `Barista::OrderCreationService` — требует `CashShift.open` |
+| Склад | `Inventory::OrderRecipeDeduction` + PG-триггер на `accepted`; prep_kitchen `MovementCreator/Confirmer` |
+| Онбординг | `Platform::TenantOnboarding::Provision` в транзакции |
+| Demo | `Demo::EnvironmentSetup`, `demo:seed` |
+| Очереди | Solid Queue (PostgreSQL) |
+| Локальный dev | `bin/ensure-server`, `lib/port_killer.rb` (кросс-платформенный порт) |
+
+**Не в архитектуре В1:** offline-буфер POS, Flutter, Redis, полный event log склада, payment gateway.
+
+---
 
 Архитектурная парадигма
 Система строится на принципе «Smart Application, Reliable Storage». Мы сознательно отказываемся от концепции Thick Database (логика в SQL/триггерах) в пользу гибкости бэкенда на Ruby on Rails.
@@ -47,7 +72,7 @@ Primary State: Таблица StockMovement. Любое изменение ос�
 
 Snapshot State: Таблица IngredientTenantStock. Отображает текущий срез остатков по конкретной точке. Обновляется асинхронно или по расписанию для высокой скорости чтения.
 
-Logic Location: Расчет остатков по техкартам (ТТК) происходит на уровне Ruby-сервисов (например, с использованием классов проводки склада из app/services, обрабатывающих StockMovement и IngredientTenantStock), а не в триггерах БД.
+Logic Location: расчёт по техкартам — Ruby-сервис `Inventory::OrderRecipeDeduction` + DB-триггер при смене статуса заказа; prep_kitchen — `Stock::Movement*` через `StockMovement`. **В1:** часть продаж обновляет `IngredientTenantStock` напрямую без строки движения (техдолг → В3).
 
 Масштабируемость (Roadmap)
 Текущий монолитный подход на Rails рассчитан на сеть до 200 точек. При дальнейшем росте архитектура предусматривает:
