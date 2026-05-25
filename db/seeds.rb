@@ -3,5 +3,5 @@
 # The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
 
 unless Rails.env.production?
-  load Rails.root.join("db/seeds_shop_catalog.rb")
+  load Rails.root.join("db/seeds_demo_v1.rb")
 end
