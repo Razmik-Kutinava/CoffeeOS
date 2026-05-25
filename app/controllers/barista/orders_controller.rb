@@ -49,6 +49,7 @@ module Barista
     
     def new
       authorize Order, :create?
+      @shift = current_shift
       @products = Product.joins(:product_tenant_settings)
                          .where(product_tenant_settings: { tenant_id: Current.tenant_id, is_enabled: true })
                          .includes(:category, :product_tenant_settings)
@@ -67,7 +68,7 @@ module Barista
       end
 
       order = Barista::OrderCreationService.new(
-        cart_items:     params[:cart_items] || [],
+        cart_items:     normalize_cart_items(params[:cart_items]),
         payment_method: params[:payment_method] || "cash",
         customer_name:  params[:customer_name].presence,
         promo_code:     params[:promo_code].presence,
@@ -102,44 +103,26 @@ module Barista
         return
       end
 
-      new_status = params[:status]
+      begin
+        result = Barista::OrderStatusUpdateService.new(
+          order: @order,
+          new_status: params[:status],
+          user_id: Current.user_id,
+          comment: params[:comment]
+        ).call!
 
-      unless @order.can_change_status?
+        @order = result[:order]
+        broadcast_order_update(@order, result[:old_status])
+
+        respond_to do |format|
+          format.turbo_stream
+          format.html { redirect_to barista_dashboard_path, notice: "Статус обновлён" }
+        end
+      rescue Barista::OrderStatusUpdateService::OrderStatusUpdateError => e
         respond_to do |format|
           format.turbo_stream { render turbo_stream: turbo_stream.replace("order_#{@order.id}", partial: 'barista/dashboard/order_card', locals: { order: @order }) }
-          format.html { redirect_to barista_dashboard_path, alert: "Нельзя изменить статус" }
+          format.html { redirect_to barista_dashboard_path, alert: e.message }
         end
-        return
-      end
-      
-      unless @order.can_transition_to?(new_status)
-        respond_to do |format|
-          format.turbo_stream { render turbo_stream: turbo_stream.replace("order_#{@order.id}", partial: 'barista/dashboard/order_card', locals: { order: @order }) }
-          format.html { redirect_to barista_dashboard_path, alert: "Недопустимый переход статуса" }
-        end
-        return
-      end
-      
-      old_status = @order.status
-      @order.update!(status: new_status)
-      
-      # Логирование изменения статуса
-      OrderStatusLog.create!(
-        order_id: @order.id,
-        status_from: old_status,
-        status_to: new_status,
-        changed_by_id: Current.user_id,
-        device_id: nil,
-        source: 'barista',
-        comment: params[:comment]
-      )
-      
-      # Broadcast через Action Cable
-      broadcast_order_update(@order, old_status)
-      
-      respond_to do |format|
-        format.turbo_stream
-        format.html { redirect_to barista_dashboard_path, notice: "Статус обновлён" }
       end
     end
     
@@ -163,73 +146,26 @@ module Barista
         end
         return
       end
-      
-      old_status = @order.status
-      @order.update!(
-        status: 'cancelled',
-        cancel_reason: params[:reason] || 'Отменено баристой',
-        cancel_reason_code: params[:reason_code],
-        cancel_stage: old_status
-      )
 
-      # Логирование отмены
-      OrderStatusLog.create!(
-        order_id: @order.id,
-        status_from: old_status,
-        status_to: 'cancelled',
-        changed_by_id: Current.user_id,
-        device_id: nil,
-        source: 'barista',
-        comment: params[:reason] || 'Отменено баристой'
-      )
-
-      AdminAuditLog.log(
-        action: "order_cancelled",
-        actor: current_user,
-        entity: @order,
-        tenant_id: Current.tenant_id,
-        details: {
-          order_number: @order.order_number,
-          cancel_reason: @order.cancel_reason,
-          cancel_stage: old_status,
-          final_amount: @order.final_amount
-        },
-        request_id: request.request_id
-      )
-
-      # BUG-017 FIX: При отмене в статусе 'preparing' ингредиенты уже списаны триггером.
-      # Если бариста подтвердил что ингредиенты НЕ использованы — создаём возвратное движение.
-      if old_status == 'preparing' && params[:ingredients_used] == 'false'
-        movement = StockMovement.create!(
-          tenant_id: Current.tenant_id,
-          movement_type: :return,
-          status: :confirmed,
-          created_by_id: Current.user_id,
-          confirmed_by_id: Current.user_id,
-          confirmed_at: Time.current,
-          reference_id: @order.id,
-          note: "Возврат при отмене заказа ##{@order.order_number} (ингредиенты не использованы)"
-        )
-
-        # FIX: Load all recipes at once to avoid N+1 queries
-        product_ids = @order.order_items.pluck(:product_id)
-        recipes = ProductRecipe.where(product_id: product_ids).includes(:ingredient)
-
-        @order.order_items.each do |item|
-          item_recipes = recipes.select { |r| r.product_id == item.product_id }
-          item_recipes.each do |recipe|
-            qty_to_restore = recipe.qty_per_serving * item.quantity
-            StockMovementItem.create!(
-              movement_id: movement.id,
-              ingredient_id: recipe.ingredient_id,
-              qty: qty_to_restore
-            )
-            IngredientTenantStock.where(tenant_id: Current.tenant_id, ingredient_id: recipe.ingredient_id)
-                                 .update_all("qty = qty + #{qty_to_restore.to_f}")
-          end
+      if params[:reason].to_s.strip.blank?
+        respond_to do |format|
+          format.turbo_stream { render turbo_stream: turbo_stream.replace("order_#{@order.id}", partial: 'barista/dashboard/order_card', locals: { order: @order }) }
+          format.html { redirect_to barista_dashboard_path, alert: "Укажите причину отмены" }
         end
+        return
       end
-      
+
+      Barista::OrderCancellationService.new(
+        order: @order,
+        actor: current_user,
+        tenant_id: Current.tenant_id,
+        user_id: Current.user_id,
+        reason: params[:reason],
+        reason_code: params[:reason_code],
+        ingredients_used: params[:ingredients_used],
+        request_id: request.request_id
+      ).call!
+
       # Broadcast через Action Cable - удаляем из табло
       Turbo::StreamsChannel.broadcast_remove_to(
         "orders_#{Current.tenant_id}",
@@ -246,8 +182,13 @@ module Barista
         format.turbo_stream { render turbo_stream: turbo_stream.remove("order_#{@order.id}") }
         format.html { redirect_to barista_dashboard_path, notice: "Заказ отменён" }
       end
+    rescue Barista::OrderCancellationService::OrderCancellationError => e
+      respond_to do |format|
+        format.turbo_stream { render turbo_stream: turbo_stream.replace("order_#{@order.id}", partial: 'barista/dashboard/order_card', locals: { order: @order }) }
+        format.html { redirect_to barista_dashboard_path, alert: e.message }
+      end
     end
-    
+
     private
 
     def broadcast_order_counts
@@ -337,6 +278,18 @@ module Barista
 
       # TV board: перерисовываем колонки целиком для корректного idx.
       BroadcastTvColumnsJob.perform_later(Current.tenant_id)
+    end
+
+    # HTML-форма шлёт cart_items[0][product_id]; интеграционные тесты — массив хэшей.
+    def normalize_cart_items(raw)
+      return [] if raw.blank?
+
+      list = if raw.is_a?(ActionController::Parameters) || raw.is_a?(Hash)
+               raw.values
+             else
+               Array(raw)
+             end
+      list.map { |item| item.is_a?(ActionController::Parameters) ? item.to_unsafe_h : item.to_h }
     end
   end
 end

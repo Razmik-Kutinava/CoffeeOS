@@ -3,6 +3,7 @@
 module Barista
   # Создаёт заказ баристы: валидирует корзину, считает суммы,
   # создаёт Order + OrderItems + Payment + OrderStatusLog в одной транзакции.
+  # В1: только при открытой CashShift (@shift.open?) — см. docs/operations/milestones/veha_1/ORDER_ENTRY_AUDIT.md.
   class OrderCreationService
     class OrderCreationError < StandardError; end
 
@@ -18,6 +19,10 @@ module Barista
 
     # Возвращает созданный Order либо бросает OrderCreationError / ActiveRecord::RecordNotFound
     def call!
+      unless @shift&.open?
+        raise OrderCreationError, "Смена не открыта"
+      end
+
       validated_items = CartValidationService.new(@cart_items, tenant_id: @tenant_id).call!
 
       total_amount    = validated_items.sum { |i| i[:total_price] }
@@ -48,6 +53,8 @@ module Barista
           )
         end
 
+        Inventory::OrderRecipeDeduction.call!(order: order.reload)
+
         Payment.create!(
           order_id:  order.id,
           tenant_id: @tenant_id,
@@ -66,6 +73,11 @@ module Barista
           source:         "barista",
           comment:        "Заказ создан баристой"
         )
+
+        order.reload
+        if order.order_number.blank?
+          raise OrderCreationError, "order_number не назначен (триггер generate_order_number)"
+        end
 
         order
       end
