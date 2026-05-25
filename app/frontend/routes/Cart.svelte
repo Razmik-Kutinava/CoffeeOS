@@ -2,10 +2,12 @@
   import { onMount } from "svelte"
   import { link, push } from "svelte-spa-router"
   import { api } from "../lib/api.js"
+  import PageSkeleton from "../components/PageSkeleton.svelte"
 
   let items = $state([])
   let total = $state(0)
   let loading = $state(true)
+  let busyIndex = $state(null)
   let promo = $state("")
   let promoPreview = $state(null)
   let err = $state(null)
@@ -39,25 +41,37 @@
   }
 
   async function bump(index, delta) {
+    if (busyIndex !== null) return
+    busyIndex = index
     err = null
-    await api(`/cart/items/${index}`, {
-      method: "PATCH",
-      body: JSON.stringify({ delta })
-    })
-    await load()
+    try {
+      await api(`/cart/items/${index}`, {
+        method: "PATCH",
+        body: JSON.stringify({ delta })
+      })
+      await load()
+    } finally {
+      busyIndex = null
+    }
   }
 
   async function removeLine(index) {
+    if (busyIndex !== null) return
+    busyIndex = index
     err = null
-    await api(`/cart/items/${index}`, { method: "DELETE" })
-    await load()
+    try {
+      await api(`/cart/items/${index}`, { method: "DELETE" })
+      await load()
+    } finally {
+      busyIndex = null
+    }
   }
 </script>
 
 <h1 class="mb-4 text-xl font-bold">Корзина</h1>
 
 {#if loading}
-  <p class="text-[#a0a0a0]">Загрузка…</p>
+  <PageSkeleton />
 {:else if err && !items.length}
   <p class="text-red-400">{err}</p>
 {:else if !items.length}
@@ -77,10 +91,18 @@
         <p class="text-sm text-[#a0a0a0]">
           {Math.round(line.unit_total)}₽ × {line.quantity}
         </p>
+        {#if line.selected_modifiers?.length}
+          <ul class="mt-1 space-y-0.5 text-xs text-[#888]">
+            {#each line.selected_modifiers as mod (mod.id)}
+              <li>{mod.name}{#if Number(mod.price) > 0} (+{Math.round(mod.price)}₽){/if}</li>
+            {/each}
+          </ul>
+        {/if}
         <div class="mt-2 flex items-center gap-2">
           <button
             type="button"
-            class="rounded bg-[#3a3a3a] px-2 py-0.5 text-sm"
+            class="rounded bg-[#3a3a3a] px-2 py-0.5 text-sm disabled:opacity-40"
+            disabled={busyIndex !== null}
             onclick={() => bump(line.index, -1)}
           >
             −
@@ -88,14 +110,16 @@
           <span class="text-sm">{line.quantity}</span>
           <button
             type="button"
-            class="rounded bg-[#3a3a3a] px-2 py-0.5 text-sm"
+            class="rounded bg-[#3a3a3a] px-2 py-0.5 text-sm disabled:opacity-40"
+            disabled={busyIndex !== null}
             onclick={() => bump(line.index, 1)}
           >
             +
           </button>
           <button
             type="button"
-            class="ml-auto text-sm text-red-400"
+            class="ml-auto text-sm text-red-400 disabled:opacity-40"
+            disabled={busyIndex !== null}
             onclick={() => removeLine(line.index)}
           >
             Удалить

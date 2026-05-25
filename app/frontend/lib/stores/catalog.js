@@ -7,7 +7,8 @@ export async function loadCatalog() {
   if (inflight) return inflight
   inflight = (async () => {
     try {
-      return await api("/categories")
+      const res = await api("/categories")
+      return Array.isArray(res) ? res : (res.data ?? [])
     } finally {
       inflight = null
     }

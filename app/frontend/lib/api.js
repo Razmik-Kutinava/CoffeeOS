@@ -18,6 +18,13 @@ function withTenantQuery(url) {
 
 const API_PREFIX = "/shop/api"
 
+function shopApiKey() {
+  const meta = document.querySelector('meta[name="shop-api-key"]')?.getAttribute("content")
+  if (meta && meta.trim()) return meta.trim()
+  const env = import.meta.env.VITE_SHOP_API_KEY
+  return env && String(env).trim() ? String(env).trim() : ""
+}
+
 export async function api(path, opts = {}) {
   let url = path.startsWith("/") ? `${API_PREFIX}${path}` : `${API_PREFIX}/${path}`
   url = withTenantQuery(url)
@@ -25,6 +32,10 @@ export async function api(path, opts = {}) {
     Accept: "application/json",
     "X-CSRF-Token": csrfToken(),
     ...opts.headers
+  }
+  const apiKey = shopApiKey()
+  if (apiKey && !headers["X-Shop-Api-Key"]) {
+    headers["X-Shop-Api-Key"] = apiKey
   }
   if (opts.body && !headers["Content-Type"]) {
     headers["Content-Type"] = "application/json"

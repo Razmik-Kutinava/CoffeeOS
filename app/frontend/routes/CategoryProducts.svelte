@@ -5,6 +5,7 @@
   import { loadCatalog } from "../lib/stores/catalog.js"
   import { useTelegramBack } from "../lib/telegram.js"
   import { favorites } from "../lib/stores/favorites.js"
+  import PageSkeleton from "../components/PageSkeleton.svelte"
 
   let { params } = $props()
 
@@ -65,7 +66,7 @@
   </div>
 
   {#if loading}
-    <div class="loading">Загрузка...</div>
+    <PageSkeleton />
   {:else if error}
     <div class="error">{error}</div>
   {:else if products.length === 0}

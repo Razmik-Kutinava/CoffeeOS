@@ -10,9 +10,10 @@
   let promo_code = $state("")
   let submitting = $state(false)
   let err = $state(null)
-  let doneId = $state(null)
+  let done = $state(null)
 
   async function submit() {
+    if (submitting) return
     err = null
     submitting = true
     try {
@@ -24,10 +25,11 @@
           comment,
           is_car_pickup,
           car_number,
-          promo_code: promo_code || undefined
+          promo_code: promo_code || undefined,
+          payment_method: "mock"
         })
       })
-      doneId = res.order_id
+      done = res
     } catch (e) {
       err = e.message
     } finally {
@@ -36,21 +38,31 @@
   }
 </script>
 
-{#if doneId}
+{#if done}
   <div class="py-8 text-center">
-    <p class="mb-2 text-xl font-bold text-green-400">Заказ #{doneId} создан</p>
-    <p class="mb-6 text-[#a0a0a0]">Оплата (ЮКасса) подключается на следующем шаге.</p>
-    <button
-      type="button"
-      class="rounded-xl bg-[#ff8c42] px-6 py-3 font-semibold text-black"
-      onclick={() => push("/")}
-    >
-      На главную
-    </button>
+    <p class="mb-2 text-xl font-bold text-green-400">Заказ #{done.order_id} оплачен</p>
+    <p class="mb-1 text-[#fff]">Сумма: {Math.round(done.total)}₽</p>
+    <p class="mb-6 text-sm text-[#a0a0a0]">Имитация оплаты (В1). Статус: {done.status}</p>
+    <div class="flex flex-col gap-3">
+      <button
+        type="button"
+        class="rounded-xl bg-[#ff8c42] px-6 py-3 font-semibold text-black"
+        onclick={() => push("/orders")}
+      >
+        История заказов
+      </button>
+      <button
+        type="button"
+        class="rounded-xl border border-[#3a3a3a] px-6 py-3 text-[#a0a0a0]"
+        onclick={() => push("/")}
+      >
+        На главную
+      </button>
+    </div>
   </div>
 {:else}
   <h1 class="mb-4 text-xl font-bold">Оформление</h1>
-  <p class="mb-4 text-sm text-[#a0a0a0]">Самовывоз: NAPI:BAR, Самара</p>
+  <p class="mb-4 text-sm text-[#a0a0a0]">Самовывоз · оплата имитируется без платёжного шлюза</p>
 
   <label class="mb-3 block">
     <span class="mb-1 block text-sm text-[#a0a0a0]">Имя</span>
@@ -101,6 +113,6 @@
     disabled={submitting || !phone || !name}
     onclick={submit}
   >
-    {submitting ? "Отправка…" : "Подтвердить заказ"}
+    {submitting ? "Оплата…" : "Оплатить"}
   </button>
 {/if}

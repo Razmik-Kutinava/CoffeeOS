@@ -2,6 +2,7 @@
   import { onMount } from "svelte"
   import { loadCatalog } from "../lib/stores/catalog.js"
   import CategorySection from "../components/CategorySection.svelte"
+  import PageSkeleton from "../components/PageSkeleton.svelte"
 
   let categories = $state([])
   let loading = $state(true)
@@ -19,7 +20,7 @@
 </script>
 
 {#if loading}
-  <p class="text-center text-[#a0a0a0] py-8">Загрузка…</p>
+  <PageSkeleton />
 {:else if err}
   <p class="text-center text-red-400 py-8">{err}</p>
 {:else if categories.length === 0}

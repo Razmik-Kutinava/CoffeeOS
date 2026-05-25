@@ -4,6 +4,10 @@
   import { api } from "../lib/api.js"
   import { useTelegramBack } from "../lib/telegram.js"
   import { favorites } from "../lib/stores/favorites.js"
+  import {
+    isRadioModifierGroup,
+    defaultSelectionForGroup
+  } from "../lib/modifiers.js"
 
   useTelegramBack(() => window.history.back())
 
@@ -18,16 +22,13 @@
   let qty = $state(1)
   let showMoreMenu = $state(false)
   let isFav = $state(false)
+  let adding = $state(false)
 
   onMount(async () => {
     try {
       product = await api(`/products/${params.id}`)
       for (const g of product.modifier_groups) {
-        if (g.modifier_type === "radio") {
-          selected[g.id] = g.modifiers[0]?.id
-        } else {
-          selected[g.id] = []
-        }
+        selected[g.id] = defaultSelectionForGroup(g)
       }
       selected = { ...selected }
       await favorites.load()
@@ -52,7 +53,7 @@
     if (!product) return 0
     let t = Number(product.price)
     for (const g of product.modifier_groups) {
-      if (g.modifier_type === "radio") {
+      if (isRadioModifierGroup(g)) {
         const mid = selected[g.id]
         const m = g.modifiers.find((x) => x.id === mid)
         if (m) t += Number(m.price_change)
@@ -67,9 +68,12 @@
   })
 
   async function addToCart() {
+    if (adding) return
+    adding = true
+    try {
     const selected_modifiers = []
     for (const g of product.modifier_groups) {
-      if (g.modifier_type === "radio") {
+      if (isRadioModifierGroup(g)) {
         const mid = selected[g.id]
         const m = g.modifiers.find((x) => x.id === mid)
         if (m) selected_modifiers.push({ id: m.id, name: m.name, price: Number(m.price_change) })
@@ -85,6 +89,9 @@
       body: JSON.stringify({ product_id: product.id, quantity: qty, selected_modifiers })
     })
     push("/cart")
+    } finally {
+      adding = false
+    }
   }
 
   function writeToTelegram() {
@@ -137,7 +144,7 @@
   {#each product.modifier_groups as g (g.id)}
     <div class="mb-4">
       <p class="mb-2 text-sm font-medium">{g.name}</p>
-      {#if g.modifier_type === "radio"}
+      {#if isRadioModifierGroup(g)}
         <div class="flex flex-wrap gap-2">
           {#each g.modifiers as m (m.id)}
             <label class="cursor-pointer">
@@ -195,10 +202,10 @@
     </div>
     <button
       class="add-to-cart-btn"
-      disabled={product.stock <= 0}
+      disabled={product.stock <= 0 || adding}
       onclick={addToCart}
     >
-      В корзину 🛒
+      {adding ? "Добавляем…" : "В корзину 🛒"}
     </button>
     <button class="more-btn" onclick={() => showMoreMenu = !showMoreMenu}>⋮</button>
   </div>

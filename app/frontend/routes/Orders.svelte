@@ -3,6 +3,7 @@
   import { push } from 'svelte-spa-router';
   import { api } from '../lib/api.js';
   import { useTelegramBack } from '../lib/telegram.js';
+  import PageSkeleton from '../components/PageSkeleton.svelte';
 
   useTelegramBack(() => push('/profile'));
 
@@ -10,26 +11,26 @@
   let loading = $state(true);
 
   const STATUS_LABELS = {
-    pending: 'Ожидает',
-    paid: 'Оплачен',
+    pending_payment: 'Ожидает оплаты',
+    accepted: 'Принят',
     preparing: 'Готовится',
     ready: 'Готов',
-    completed: 'Выдан',
+    issued: 'Выдан',
     cancelled: 'Отменён'
   };
 
   const STATUS_COLORS = {
-    pending: '#a0a0a0',
-    paid: '#ff8c42',
+    pending_payment: '#a0a0a0',
+    accepted: '#ff8c42',
     preparing: '#ff8c42',
     ready: '#4caf50',
-    completed: '#4caf50',
+    issued: '#4caf50',
     cancelled: '#f44336'
   };
 
   onMount(async () => {
     try {
-      orders = await api('orders/history');
+      orders = await api('/orders/history?today=1');
     } catch {
       orders = [];
     } finally {
@@ -37,9 +38,10 @@
     }
   });
 
-  function formatDate(iso) {
-    return new Date(iso).toLocaleDateString('ru-RU', {
-      day: 'numeric', month: 'long', year: 'numeric'
+  function formatTime(iso) {
+    return new Date(iso).toLocaleTimeString('ru-RU', {
+      hour: '2-digit',
+      minute: '2-digit'
     });
   }
 </script>
@@ -47,15 +49,15 @@
 <div class="orders-page">
   <div class="page-header">
     <button class="back-btn" onclick={() => push('/profile')}>‹</button>
-    <h1>Мои заказы</h1>
+    <h1>Заказы за сегодня</h1>
   </div>
 
   {#if loading}
-    <div class="loading">Загрузка...</div>
+    <PageSkeleton />
   {:else if orders.length === 0}
     <div class="empty-state">
       <div class="empty-icon">📦</div>
-      <p>Заказов пока нет</p>
+      <p>Сегодня заказов пока нет</p>
       <button class="go-catalog" onclick={() => push('/')}>Сделать заказ</button>
     </div>
   {:else}
@@ -69,11 +71,11 @@
             </span>
           </div>
           <div class="order-bottom">
-            <span class="order-date">{formatDate(order.created_at)}</span>
-            <span class="order-total">{order.total} ₽</span>
+            <span class="order-date">{formatTime(order.created_at)}</span>
+            <span class="order-total">{Math.round(order.total)} ₽</span>
           </div>
           {#if order.items_count}
-            <div class="order-items-count">{order.items_count} позиции</div>
+            <div class="order-items-count">{order.items_count} поз.</div>
           {/if}
         </div>
       {/each}
@@ -116,7 +118,7 @@
     margin: 0;
   }
 
-  .loading, .empty-state {
+  .empty-state {
     display: flex;
     flex-direction: column;
     align-items: center;

@@ -6,8 +6,12 @@
     "vite:build": "bundle exec vite build"
   },
   "devDependencies": {
+    "@rolldown/binding-win32-arm64-msvc": "^1.0.2",
+    "@rolldown/binding-win32-x64-msvc": "^1.0.2",
     "@sveltejs/vite-plugin-svelte": "^7.0.0",
+    "@tailwindcss/oxide-win32-arm64-msvc": "^4.3.0",
     "@tailwindcss/vite": "^4.2.2",
+    "lightningcss-win32-arm64-msvc": "^1.32.0",
     "tailwindcss": "^4.2.2",
     "vite": "^8.0.0",
     "vite-plugin-ruby": "^5.2.0"
