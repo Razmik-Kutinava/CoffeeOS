@@ -14,6 +14,41 @@ class DbTriggersTest < ActionDispatch::IntegrationTest
     Ingredient.create!(name: name, unit: unit, is_active: true)
   end
 
+  test "auto_deduct: service deducts when order inserted accepted after items" do
+    tenant = create_tenant!(name: "Ins Tenant", slug: "ins-tenant-#{SecureRandom.hex(4)}")
+
+    category = create_category!
+    product = create_product!(category: category, name: "Espresso")
+    enable_product_for_tenant!(tenant: tenant, product: product, price: 100)
+
+    ingredient = create_ingredient!(name: "Grounds", unit: "g")
+    ProductRecipe.create!(product: product, ingredient: ingredient, qty_per_serving: 12)
+    IngredientTenantStock.create!(tenant: tenant, ingredient: ingredient, qty: 30, min_qty: 5)
+
+    order = Order.create!(
+      tenant: tenant,
+      order_number: "INS-#{SecureRandom.hex(4)}",
+      source: "manual",
+      status: "accepted",
+      total_amount: 100,
+      discount_amount: 0,
+      final_amount: 100
+    )
+    OrderItem.create!(
+      order: order,
+      product_id: product.id,
+      product_name: product.name,
+      quantity: 1,
+      unit_price: 100,
+      total_price: 100
+    )
+
+    Inventory::OrderRecipeDeduction.call!(order: order)
+
+    stock = IngredientTenantStock.find_by!(tenant_id: tenant.id, ingredient_id: ingredient.id)
+    assert_equal 18.to_d, stock.qty, "30 - 12 via OrderRecipeDeduction"
+  end
+
   test "auto_deduct: ingredients are deducted when order status changes to accepted" do
     tenant = create_tenant!(name: "Trig Tenant", slug: "trig-tenant-#{SecureRandom.hex(4)}")
     user = create_user!(tenant: tenant, role_codes: %w[barista], email: "trig@test.com", name: "Trig")

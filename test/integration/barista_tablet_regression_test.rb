@@ -36,7 +36,11 @@ class BaristaTabletRegressionTest < ActionDispatch::IntegrationTest
   test "barista can cancel accepted order with reason and code" do
     login_as!(@barista)
 
-    OrderCancelReason.create!(code: "barista_cancel", name: "Отменено баристой", description: "Отмена заказа баристой", sort_order: 1, is_active: true)
+    ensure_order_cancel_reason!(
+      code: "barista_cancel",
+      name: "Отменено баристой",
+      description: "Отмена заказа баристой"
+    )
 
     order = Order.create!(
       tenant: @tenant_a,

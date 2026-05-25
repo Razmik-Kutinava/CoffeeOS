@@ -260,12 +260,10 @@ class ManagerShiftPanelTest < ActionDispatch::IntegrationTest
     create_order_item!(order: order, product: product, quantity: 1, unit_price: 120)
 
     login_as!(barista)
-    OrderCancelReason.create!(
+    ensure_order_cancel_reason!(
       code: "barista_cancel",
       name: "Отменено баристой",
-      description: "Отмена заказа баристой",
-      sort_order: 1,
-      is_active: true
+      description: "Отмена заказа баристой"
     )
 
     patch "/barista/orders/#{order.id}/update_status",

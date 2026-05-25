@@ -46,4 +46,33 @@ class PrepKitchenMovementsTest < ActionDispatch::IntegrationTest
     assert_response :redirect
     assert_not_equal "confirmed", movement.reload.status
   end
+
+  test "manager can create movement via form-style params" do
+    tenant = create_tenant!(name: "Kitchen F", slug: "kitchen-f")
+    manager = create_user!(tenant: tenant, role_codes: %w[prep_kitchen_manager], email: "km4@test.com", name: "Manager3")
+    ingredient = create_ingredient!
+
+    login_as!(manager)
+    assert_difference -> { StockMovement.where(tenant_id: tenant.id).count }, 1 do
+      post prep_kitchen_movements_path, params: {
+        movement: {
+          movement_type: "receipt",
+          note: "demo receipt",
+          items: [
+            { ingredient_id: "", qty_change: "", unit_cost: "" },
+            { ingredient_id: ingredient.id, qty_change: "12.5", unit_cost: "99.9" }
+          ]
+        }
+      }
+    end
+
+    assert_redirected_to prep_kitchen_movements_path
+    movement = StockMovement.where(tenant_id: tenant.id).order(created_at: :desc).first!
+    assert_equal "draft", movement.status
+    assert_equal "receipt", movement.movement_type
+    assert_equal "demo receipt", movement.note
+    assert_equal 1, movement.stock_movement_items.count
+    assert_equal ingredient.id, movement.stock_movement_items.first.ingredient_id
+    assert_equal BigDecimal("12.5"), movement.stock_movement_items.first.qty_change
+  end
 end

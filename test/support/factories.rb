@@ -92,6 +92,15 @@ module TestFactories
     )
   end
 
+  def ensure_order_cancel_reason!(code:, name:, description: nil, sort_order: 1, is_active: true)
+    OrderCancelReason.find_or_create_by!(code: code) do |reason|
+      reason.name = name
+      reason.description = description || name
+      reason.sort_order = sort_order
+      reason.is_active = is_active
+    end
+  end
+
   def create_mobile_customer!(phone: "+79#{format('%09d', rand(1_000_000_000))}")
     MobileCustomer.create!(
       phone: phone,

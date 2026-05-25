@@ -309,12 +309,10 @@ class ManagerOfficePanelTest < ActionDispatch::IntegrationTest
     office = create_user!(tenant: tenant, role_codes: %w[general_manager], email: "office4@test.com", name: "Office4")
 
     cash_shift = open_cash_shift!(tenant: tenant, opened_by: barista)
-    OrderCancelReason.create!(
+    ensure_order_cancel_reason!(
       code: "barista_cancel",
       name: "Отменено баристой",
-      description: "Отмена заказа баристой",
-      sort_order: 1,
-      is_active: true
+      description: "Отмена заказа баристой"
     )
     order = create_order!(tenant: tenant, cash_shift: cash_shift, status: "accepted", amount: 200)
     product, _category = create_product_fixture!(tenant: tenant)
@@ -371,12 +369,10 @@ class ManagerOfficePanelTest < ActionDispatch::IntegrationTest
     office = create_user!(tenant: tenant, role_codes: %w[general_manager], email: "office6@test.com", name: "Office6")
 
     shift = open_cash_shift!(tenant: tenant, opened_by: barista)
-    OrderCancelReason.create!(
+    ensure_order_cancel_reason!(
       code: "barista_cancel",
       name: "Отменено баристой",
-      description: "Отмена заказа баристой",
-      sort_order: 1,
-      is_active: true
+      description: "Отмена заказа баристой"
     )
     order = create_order!(tenant: tenant, cash_shift: shift, status: "accepted", amount: 100)
     product, _category = create_product_fixture!(tenant: tenant)
@@ -485,12 +481,10 @@ class ManagerOfficePanelTest < ActionDispatch::IntegrationTest
     office = create_user!(tenant: tenant, role_codes: %w[general_manager], email: "office10@test.com", name: "Office10")
 
     cash_shift = open_cash_shift!(tenant: tenant, opened_by: barista)
-    OrderCancelReason.create!(
+    ensure_order_cancel_reason!(
       code: "barista_cancel",
       name: "Отменено баристой",
-      description: "Отмена заказа баристой",
-      sort_order: 1,
-      is_active: true
+      description: "Отмена заказа баристой"
     )
     order = create_order!(tenant: tenant, cash_shift: cash_shift, status: "accepted", amount: 130)
 

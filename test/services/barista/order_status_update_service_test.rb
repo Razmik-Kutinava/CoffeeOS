@@ -1,0 +1,52 @@
+# frozen_string_literal: true
+
+require "test_helper"
+
+class Barista::OrderStatusUpdateServiceTest < ActiveSupport::TestCase
+  include TestFactories
+
+  setup do
+    @tenant = create_tenant!
+    @user = create_user!(tenant: @tenant, role_codes: %w[barista])
+    @shift = open_cash_shift!(tenant: @tenant, opened_by: @user)
+    @order = Order.create!(
+      tenant: @tenant,
+      cash_shift: @shift,
+      order_number: "ST-1",
+      source: "manual",
+      status: "accepted",
+      total_amount: 100,
+      discount_amount: 0,
+      final_amount: 100
+    )
+    Current.tenant_id = @tenant.id
+  end
+
+  teardown { Current.reset }
+
+  test "updates status and creates status log" do
+    result = Barista::OrderStatusUpdateService.new(
+      order: @order,
+      new_status: "preparing",
+      user_id: @user.id,
+      comment: "В работу"
+    ).call!
+
+    assert_equal "preparing", result[:order].status
+    assert_equal "accepted", result[:old_status]
+    log = OrderStatusLog.order(created_at: :desc).first
+    assert_equal "preparing", log.status_to
+    assert_equal "В работу", log.comment
+  end
+
+  test "rejects invalid transition" do
+    assert_raises(Barista::OrderStatusUpdateService::OrderStatusUpdateError) do
+      Barista::OrderStatusUpdateService.new(
+        order: @order,
+        new_status: "issued",
+        user_id: @user.id
+      ).call!
+    end
+    assert_equal "accepted", @order.reload.status
+  end
+end

@@ -28,6 +28,7 @@ class Platform::TenantOnboarding::CatalogBootstrapTest < ActiveSupport::TestCase
     pts = ProductTenantSetting.find_by(tenant_id: t2.id, product_id: p1.id)
     assert pts
     assert_equal BigDecimal("150"), pts.price
-    assert_equal 1, ProductTenantSetting.where(tenant_id: t2.id).count
+    assert_equal Product.where(is_active: true).count, ProductTenantSetting.where(tenant_id: t2.id).count
+    assert_equal 1, ProductTenantSetting.where(tenant_id: t1.id).count
   end
 end

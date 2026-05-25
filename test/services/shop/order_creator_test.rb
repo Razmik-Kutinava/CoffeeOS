@@ -107,7 +107,32 @@ class Shop::OrderCreatorTest < ActiveSupport::TestCase
   # Card payment → pending_payment + pending
   # ---------------------------------------------------------------------------
 
-  test "card payment creates order with pending_payment status" do
+  test "card payment creates order with accepted status when payment is simulated (v1 default)" do
+    session = build_session_with_item
+    begin
+      order = run_creator(session, payment_method: "card")
+      assert_equal "accepted", order.status
+    rescue Shop::OrderCreator::Error => e
+      raise unless e.message.match?(/order_number/i)
+      pass "DB trigger not installed; skipping"
+    end
+  end
+
+  test "card payment creates payment with succeeded status when payment is simulated" do
+    session = build_session_with_item
+    begin
+      order   = run_creator(session, payment_method: "card")
+      payment = order.payments.first
+      assert_equal "succeeded", payment.status
+    rescue Shop::OrderCreator::Error => e
+      raise unless e.message.match?(/order_number/i)
+      pass "DB trigger not installed; skipping"
+    end
+  end
+
+  test "card payment creates order with pending_payment when SHOP_SIMULATE_PAYMENT=0" do
+    old = ENV["SHOP_SIMULATE_PAYMENT"]
+    ENV["SHOP_SIMULATE_PAYMENT"] = "0"
     session = build_session_with_item
     begin
       order = run_creator(session, payment_method: "card")
@@ -115,10 +140,14 @@ class Shop::OrderCreatorTest < ActiveSupport::TestCase
     rescue Shop::OrderCreator::Error => e
       raise unless e.message.match?(/order_number/i)
       pass "DB trigger not installed; skipping"
+    ensure
+      ENV["SHOP_SIMULATE_PAYMENT"] = old
     end
   end
 
-  test "card payment creates payment with pending status" do
+  test "card payment creates payment with pending status when SHOP_SIMULATE_PAYMENT=0" do
+    old = ENV["SHOP_SIMULATE_PAYMENT"]
+    ENV["SHOP_SIMULATE_PAYMENT"] = "0"
     session = build_session_with_item
     begin
       order   = run_creator(session, payment_method: "card")
@@ -127,6 +156,8 @@ class Shop::OrderCreatorTest < ActiveSupport::TestCase
     rescue Shop::OrderCreator::Error => e
       raise unless e.message.match?(/order_number/i)
       pass "DB trigger not installed; skipping"
+    ensure
+      ENV["SHOP_SIMULATE_PAYMENT"] = old
     end
   end
 
@@ -134,23 +165,23 @@ class Shop::OrderCreatorTest < ActiveSupport::TestCase
   # SBP payment → pending_payment + pending
   # ---------------------------------------------------------------------------
 
-  test "sbp payment creates order with pending_payment status" do
+  test "sbp payment creates order with accepted status when payment is simulated" do
     session = build_session_with_item
     begin
       order = run_creator(session, payment_method: "sbp")
-      assert_equal "pending_payment", order.status
+      assert_equal "accepted", order.status
     rescue Shop::OrderCreator::Error => e
       raise unless e.message.match?(/order_number/i)
       pass "DB trigger not installed; skipping"
     end
   end
 
-  test "sbp payment creates payment with pending status" do
+  test "sbp payment creates payment with succeeded status when payment is simulated" do
     session = build_session_with_item
     begin
       order   = run_creator(session, payment_method: "sbp")
       payment = order.payments.first
-      assert_equal "pending", payment.status
+      assert_equal "succeeded", payment.status
     rescue Shop::OrderCreator::Error => e
       raise unless e.message.match?(/order_number/i)
       pass "DB trigger not installed; skipping"

@@ -32,6 +32,7 @@ class Shop::Api::OrdersControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     json = JSON.parse(response.body)
     assert json["order_id"].present?
+    assert_equal "accepted", json["status"]
     assert json["total"] == 200.0
   end
 
@@ -59,5 +60,28 @@ class Shop::Api::OrdersControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     json = JSON.parse(response.body)
     assert json.is_a?(Array)
+  end
+
+  test "GET /shop/api/orders/history?today=1 returns only todays orders" do
+    post "/shop/api/cart/add",
+      headers: { "X-Shop-Tenant" => @tenant.id.to_s },
+      params: { product_id: @product.id, quantity: 1, selected_modifiers: [] },
+      as: :json
+    assert_response :success
+
+    post "/shop/api/orders",
+      headers: { "X-Shop-Tenant" => @tenant.id.to_s },
+      params: { phone: @customer.phone, name: "Today User", payment_method: "mock" },
+      as: :json
+    assert_response :success
+
+    get "/shop/api/orders/history",
+      headers: { "X-Shop-Tenant" => @tenant.id.to_s },
+      params: { today: 1 }
+
+    assert_response :success
+    json = JSON.parse(response.body)
+    assert json.length >= 1
+    assert json.all? { |row| Time.zone.parse(row["created_at"]) >= Time.zone.today.beginning_of_day }
   end
 end
