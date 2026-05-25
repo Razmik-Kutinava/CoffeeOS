@@ -55,8 +55,8 @@ RUN chmod +x bin/* && \
     sed -i "s/\r$//g" bin/* && \
     sed -i 's/ruby\.exe$/ruby/' bin/*
 
-# Install JS dependencies for Vite build
-RUN npm install
+# Install JS dependencies for Vite build (Linux x64; no Windows-only bindings in package.json)
+RUN npm ci
 
 # Precompiling assets for production without requiring secret RAILS_MASTER_KEY
 RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile

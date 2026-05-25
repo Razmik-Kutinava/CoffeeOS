@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## v1.53 — 2026-05-25
+
+### Деплой Fly
+
+- **Причина падения:** в `package.json` были прямые `devDependencies` только под Windows ARM64 (`@rolldown/binding-win32-arm64-msvc`, `@tailwindcss/oxide-win32-arm64-msvc`, `lightningcss-win32-arm64-msvc`) — `npm install` в Docker (linux/x64) падал с `EBADPLATFORM`.
+- **Исправление:** убраны win32-binding из `package.json`; платформенные биндинги подтягивает Vite/Tailwind как optional. В Dockerfile — `npm ci`.
+- **Локально на Windows:** после `npm install` optional-биндинги ставятся сами; не добавлять win32-пакеты в корень `package.json`.
+
+---
+
 ## v1.52 — 2026-05-25
 
 ### Итог
