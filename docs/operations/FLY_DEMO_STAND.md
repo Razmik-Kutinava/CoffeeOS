@@ -6,6 +6,37 @@
 
 ---
 
+## Частые ошибки в терминале
+
+### 1. `fly certs add "*.coffeeos.fly.dev"` → `cannot register certificate`
+
+**Это не баг CoffeeOS.** На зоне `*.fly.dev` Fly **не выдаёт** сертификаты для поддоменов приложения.
+
+**Что делать:** команду **не запускать**. Витрины открывать так:
+
+`https://coffeeos.fly.dev/shop?tenant_id=<uuid>`
+
+UUID — см. ниже § «Узнать URL без SSH».
+
+---
+
+### 2. `fly ssh console` → `tunnel unavailable` / `timed out`
+
+**Приложение при этом может работать** (сайт в браузере открывается). Ошибка — доступ **с твоего ПК** к API/туннелю Fly (сеть, VPN, firewall, провайдер).
+
+**Попробуй по порядку:**
+
+1. Браузер: https://coffeeos.fly.dev/up — зелёная страница = app жив.
+2. Повтори через 1–2 мин: `fly ssh console -a coffeeos`
+3. Другая сеть (мобильный интернет без VPN) или выключи VPN.
+4. `fly auth whoami` — залогинен ли аккаунт.
+5. Обнови CLI: `fly version` → при необходимости [установка](https://fly.io/docs/flyctl/install/).
+6. **Без SSH** — UUID витрин из логов деплоя (см. ниже) или из УК в браузере.
+
+**SSH не обязателен** для демо, если деплой и `demo:seed` в release прошли успешно.
+
+---
+
 ## После каждого деплоя (автоматически)
 
 `fly.toml`:
@@ -14,52 +45,83 @@
 - `SHOP_BASE_DOMAIN` **не задан** — витрина `?tenant_id=` (режим B)
 - `DEMO_AUTO_SEED=true` — запасной `demo:seed` при старте Puma
 
+В логах release после сида есть строки **`Shop A:`** / **`Shop B:`** с полным URL.
+
 **Чеклист:** [`milestones/veha_1/CHECKLIST.md`](milestones/veha_1/CHECKLIST.md) § H.0.
+
+---
+
+## Узнать URL витрин (без SSH)
+
+### A. Логи Fly (удобнее всего)
+
+```bash
+fly logs -a coffeeos | grep -E "Shop A:|Shop B:|Точка A:"
+```
+
+Или в браузере: [Fly dashboard → coffeeos → Logs](https://fly.io/apps/coffeeos/monitoring), фильтр `Shop A`.
+
+После последнего деплоя ищи:
+
+```
+Shop A: https://coffeeos.fly.dev/shop?tenant_id=...
+Shop B: https://coffeeos.fly.dev/shop?tenant_id=...
+```
+
+### B. УК в браузере
+
+1. https://coffeeos.fly.dev/login  
+2. `uk@demo.coffeeos.local` / `demo123456`  
+3. Админка → точки → открыть **demo-point-a** → в адресе или карточке скопировать **id** (UUID).  
+4. Витрина: `https://coffeeos.fly.dev/shop?tenant_id=<этот-uuid>`
+
+### C. SSH (если туннель заработал)
+
+```bash
+fly ssh console -a coffeeos
+```
+
+На машине (интерактивно, не `-C`):
+
+```bash
+cd /rails
+bin/rails demo:shop_urls
+```
 
 ---
 
 ## Ручной прогон (если автосид не сработал)
 
+Только если в логах release **нет** `Shop A:` или витрина пустая — и **SSH доступен**:
+
 ```bash
 fly ssh console -a coffeeos
-bin/rails demo:seed
-bin/rails demo:shop_urls
+cd /rails && bin/rails demo:seed
 ```
 
 Пароль и логины: [`milestones/veha_1/DEMO_LOGINS.md`](milestones/veha_1/DEMO_LOGINS.md) (`demo123456`).
 
 ---
 
-## Витрины (режим B — тест на Fly)
+## Витрины (режим B)
 
-| Slug (в БД) | URL для демо |
-|-------------|--------------|
-| `demo-point-a` | `https://coffeeos.fly.dev/shop?tenant_id=<uuid-a>` |
-| `demo-point-b` | `https://coffeeos.fly.dev/shop?tenant_id=<uuid-b>` |
+| Slug | Как открыть |
+|------|-------------|
+| `demo-point-a` | URL из логов / УК с `tenant_id` |
+| `demo-point-b` | то же |
 
-UUID:
-
-```bash
-fly ssh console -a coffeeos -C 'bin/rails demo:shop_urls'
-```
-
-**Не пытаться** `fly certs` на `*.coffeeos.fly.dev` — см. [`SHOP_URL_MODES.md`](SHOP_URL_MODES.md) § «что не работает».
-
-Slug точек в демо **сохранены** (`demo-point-a`, `demo-point-b`) — при переходе на свой домен витрины станут `https://demo-point-a.shop.бренд.ru/shop` без смены slug.
+Slug в БД **не меняется** — при своём домене будет `https://demo-point-a.shop.бренд.ru/shop`.
 
 ---
 
 ## Когда появится свой домен (режим A)
 
-Пошагово: [`SHOP_URL_MODES.md`](SHOP_URL_MODES.md) § «Переход B → A».  
-Кратко: DNS wildcard → `fly certs` → `SHOP_BASE_DOMAIN=shop.бренд.ru` → deploy → smoke поддоменов.
+[`SHOP_URL_MODES.md`](SHOP_URL_MODES.md) § «Переход B → A».
 
 ---
 
 ## Убрать автосид после живого демо
 
-1. В `fly.toml` убрать `demo:seed` из `release_command` (оставить `db:prepare`).
-2. `DEMO_AUTO_SEED=false` или удалить.
+1. В `fly.toml` убрать `demo:seed` из `release_command`.
+2. `DEMO_AUTO_SEED=false`.
 3. Отметить § H.0 в чеклисте В1.
-
-**main/prod:** не включать `DEMO_AUTO_SEED` и `demo:seed` в release без отдельного решения.
