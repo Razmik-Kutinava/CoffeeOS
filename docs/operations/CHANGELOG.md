@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## v1.57 — 2026-05-26 (Fly: troubleshooting certs/SSH; полные Shop URL в demo:seed)
+
+### Ops
+
+- `FLY_DEMO_STAND.md`: разбор `fly certs` (ожидаемый отказ) и `fly ssh` timeout; как взять URL витрин **без SSH** (`fly logs`, УК).
+- `demo:seed` печатает полные `https://coffeeos.fly.dev/shop?tenant_id=…` в лог release (APP_HOST).
+
+---
+
 ## v1.56 — 2026-05-25 (URL витрины: режим Fly demo vs поддомены прод)
 
 ### Проблема
