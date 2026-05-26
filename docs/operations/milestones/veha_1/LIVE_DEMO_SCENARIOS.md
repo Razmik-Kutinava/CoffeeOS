@@ -15,7 +15,7 @@
 | 0.1 | На стенде (Fly/local) выполнить `bin/rails demo:seed` | Org `demo-coffeeos`, точки A/B, цех, каталог, **открытая смена** на точке A |
 | 0.2 | Открыть `https://coffeeos.fly.dev/login` (или local `:3001/login`) | Форма входа |
 | 0.3 | Узнать UUID точки A: `bin/rails runner "puts Tenant.find_by!(slug: 'demo-point-a').id"` | UUID для витрины, если нет поддомена |
-| 0.4 | Витрина A: URL из `fly ssh … demo:shop_urls` (режим B: `?tenant_id=`) | Каталог без логина |
+| 0.4 | Витрина A: `https://coffeeos.fly.dev/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789` | Каталог без логина |
 | 0.5 | Записать в журнал: дата, стенд (Fly/local), кто проводил | Строка в [`PRACTICES.md`](PRACTICES.md) § H.3 или таблица «Журнал» внизу |
 
 **Fly demo:** `APP_HOST=coffeeos.fly.dev`, режим B — `?tenant_id=`. **Прод (режим A):** `{slug}.{SHOP_BASE_DOMAIN}` — см. `docs/operations/SHOP_URL_MODES.md`.
