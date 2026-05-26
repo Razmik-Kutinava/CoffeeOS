@@ -8,6 +8,15 @@
 **Организация:** `demo-coffeeos`  
 **Точки:** `demo-point-a`, `demo-point-b`, `demo-prep-kitchen` (цех)
 
+### Витрины на Fly (режим B, без поддомена)
+
+| Точка | Shop URL |
+|-------|----------|
+| A | https://coffeeos.fly.dev/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789 |
+| B | https://coffeeos.fly.dev/shop?tenant_id=655aaccb-004a-4bb9-a50a-ce618854dda3 |
+
+См. [`../../CUSTOMER_HANDOFF.md`](../../CUSTOMER_HANDOFF.md), [`../../SHOP_URL_MODES.md`](../../SHOP_URL_MODES.md).
+
 | Email | Роль | Tenant | После login |
 |-------|------|--------|-------------|
 | uk@demo.coffeeos.local | ук_global_admin | A | `/admin` |
