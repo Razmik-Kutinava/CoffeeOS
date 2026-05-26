@@ -89,7 +89,8 @@ Rails.application.configure do
   # DNS rebinding protection — разрешаем только реальные хосты проекта
   config.hosts = [
     "coffeeos.fly.dev",
-    /.*\.fly\.dev/       # staging/preview machines Fly.io
+    /.*\.coffeeos\.fly\.dev\z/, # витрины точек: {slug}.coffeeos.fly.dev
+    /.*\.fly\.dev/              # preview machines Fly.io
   ]
   config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
 end

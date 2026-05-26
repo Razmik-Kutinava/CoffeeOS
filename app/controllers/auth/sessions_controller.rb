@@ -1,4 +1,6 @@
 class Auth::SessionsController < ApplicationController
+  include AuthLoginRls
+
   layout "auth"
 
   def new
@@ -9,7 +11,10 @@ class Auth::SessionsController < ApplicationController
     email_or_phone = (params[:user]&.dig(:email) || params[:email] || "").strip.downcase
     password = params[:user]&.dig(:password) || params[:password] || ""
 
-    user = User.find_by("LOWER(email) = ? OR phone = ?", email_or_phone, email_or_phone)
+    user = nil
+    with_auth_login_rls! do
+      user = User.find_by("LOWER(email) = ? OR phone = ?", email_or_phone, email_or_phone)
+    end
 
     if user && user.authenticate(password)
       unless user.active?
@@ -21,7 +26,8 @@ class Auth::SessionsController < ApplicationController
       Current.tenant_id = user.tenant_id
       Current.user_id = user.id
 
-      user_roles = user.roles.to_a
+      user_roles = []
+      with_auth_login_rls! { user_roles = user.roles.to_a }
 
       if user_roles.empty?
         flash.now[:alert] = "У вас нет назначенных ролей"

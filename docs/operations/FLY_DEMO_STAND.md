@@ -34,13 +34,21 @@ bin/rails demo:seed
 | A | https://demo-point-a.coffeeos.fly.dev/shop |
 | B | https://demo-point-b.coffeeos.fly.dev/shop |
 
-**Wildcard TLS (один раз на стенде):**
+**Пока нет wildcard-сертификата** (chrome-error на поддомене) — витрина точки A:
+
+`https://coffeeos.fly.dev/shop?tenant_id=8c7f5bc7-f2b4-43f0-991c-5ede0f480b20`
+
+(после `demo:seed` UUID в логе release или `fly ssh` → `rails runner "puts Tenant.find_by!(slug:'demo-point-a').id"`)
+
+**Wildcard TLS (один раз на стенде, обязательно для поддоменов):**
 
 ```bash
+flyctl auth login
 fly certs add "*.coffeeos.fly.dev" -a coffeeos
+fly certs list -a coffeeos
 ```
 
-Проверка: `fly certs list -a coffeeos`. Без wildcard — витрина по `https://coffeeos.fly.dev/shop?tenant_id=<uuid>`.
+Дождаться статуса **Ready** (не Issued/пусто). Без cert поддомен в браузере не откроется.
 
 ---
 
