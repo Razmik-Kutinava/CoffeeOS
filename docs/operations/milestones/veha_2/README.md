@@ -2,7 +2,7 @@
 
 **Старт:** 2026-05-25. **В1:** код на `develop`, официальное закрытие — по [`../veha_1/CHECKLIST.md`](../veha_1/CHECKLIST.md) § H.3 / § I (параллельно с В2).
 
-**Fly demo-стенд:** [`../FLY_DEMO_STAND.md`](../FLY_DEMO_STAND.md) — автосид; URL витрин: [`../SHOP_URL_MODES.md`](../SHOP_URL_MODES.md) (режим B сейчас, поддомены A — с своим доменом).
+**Fly demo-стенд:** [`../FLY_DEMO_STAND.md`](../FLY_DEMO_STAND.md), [`../CUSTOMER_HANDOFF.md`](../CUSTOMER_HANDOFF.md) — автосид; URL: [`../SHOP_URL_MODES.md`](../SHOP_URL_MODES.md).
 
 **Цель вехи:** новая организация и точки **из коробки** (боевые входы, RLS, каталог), связанные админки; **реальная оплата** на витрине (QR на столах); киоск на точку; далее offline и прочее из roadmap.
 
