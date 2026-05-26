@@ -13,7 +13,7 @@
 | `uk_global_admin` | вручную / seed | `/admin` |
 | `franchise_manager` | УК `franchise_owners/new` | `/manager` |
 | `general_manager`, `shift_manager`, `barista` | **manager → staff** | `/manager`, `/barista` |
-| `prep_kitchen_*` | manager staff или seed | `/prep_kitchen` |
+| `prep_kitchen_*` | manager staff после `open_as_manager` на цех *(§3 ONBOARDING 2026-05-26)* или seed | `/prep_kitchen` |
 
 **Привязка к точке:** `users.tenant_id` + `user_roles` (role + tenant). После login — `Current.tenant_id`, RLS.
 

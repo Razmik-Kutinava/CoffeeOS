@@ -71,6 +71,12 @@
 
 ## Журнал изменений (дописывать снизу)
 
+- **2026-05-26 — ONBOARDING §3 Заготовочный цех (полный цикл)**
+  - **Проверка:** УК создаёт `production_kitchen` + модуль `prep_kitchen` (barista/menu/kiosk off); staff `prep_kitchen_manager` через manager/staff после `open_as_manager`; login → `/prep_kitchen`.
+  - **Код:** изменений не потребовалось (В1: форма type, модули, staff, prep_kitchen panel).
+  - **Тесты:** `test/integration/platform/onboarding_prep_kitchen_test.rb` — 2 runs, 30 assertions, 0 failures.
+  - **Чеклист:** §3 `[x]`. **Следующий:** §4 карточка «все входы».
+
 - **2026-05-26 — ONBOARDING §2 Точка продаж (полный цикл)**
   - **Код:** поле `address` в форме `/admin/tenants` + `tenant_params`.
   - **Проверка:** создание 3 точек (org, slug, city, address, sales_point); модули menu+barista, kiosk off; flash URL при `SHOP_BASE_DOMAIN`; PTS + shop API не пустой; RLS orders A≠B.

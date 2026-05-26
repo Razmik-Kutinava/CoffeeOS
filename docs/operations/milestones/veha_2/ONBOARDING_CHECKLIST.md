@@ -26,8 +26,8 @@
 
 ## 3. Заготовочный цех (если в scope org)
 
-- [ ] Tenant `production_kitchen`, slug отдельный, модуль `prep_kitchen`
-- [ ] Вход `/prep_kitchen` после создания staff — см. STAFF_ACCESS
+- [x] Tenant `production_kitchen`, slug отдельный, модуль `prep_kitchen` *(2026-05-26)*
+- [x] Вход `/prep_kitchen` после создания staff — УК → open_as_manager → manager/staff → login *(2026-05-26, STAFF_ACCESS)*
 
 ---
 

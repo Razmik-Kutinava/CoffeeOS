@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## v1.60 — 2026-05-26 (В2 онбординг §3: заготовочный цех)
+
+- ONBOARDING §3: `production_kitchen` + `prep_kitchen`, staff → `/prep_kitchen` — работает без правок.
+- Тесты: `onboarding_prep_kitchen_test.rb` (2/0).
+
+---
+
 ## v1.59 — 2026-05-26 (В2 онбординг §2: точка продаж)
 
 - Поле `address` в форме создания точки УК (`platform/tenants`).
