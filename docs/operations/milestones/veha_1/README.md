@@ -15,7 +15,7 @@
 
 **В2 стартовала; В1 не закрыта официально** — `docs/operations/HANDOFF.md`, `CHANGELOG` v1.54.
 
-**Fly demo-стенд (живое демо):** [`../FLY_DEMO_STAND.md`](../FLY_DEMO_STAND.md) — сид после деплоя, поддомены витрин.
+**Fly demo-стенд (живое демо):** [`../FLY_DEMO_STAND.md`](../FLY_DEMO_STAND.md), [`../CUSTOMER_HANDOFF.md`](../CUSTOMER_HANDOFF.md) — URL, логины, сценарии.
 
 **Связанные (вне папки):**
 
