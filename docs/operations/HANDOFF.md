@@ -91,11 +91,14 @@
 
 ### Демо-стенд (develop → Fly)
 
-**Обязательно после деплоя** (пока H.3 не закрыта): `fly.toml` — `release_command` с `demo:seed`, `SHOP_BASE_DOMAIN=coffeeos.fly.dev`. Инструкция: `docs/operations/FLY_DEMO_STAND.md`, чеклист § H.0 в `milestones/veha_1/CHECKLIST.md`.
+**URL витрины:** два режима — [`SHOP_URL_MODES.md`](SHOP_URL_MODES.md). Сейчас **режим B** (Fly): `?tenant_id=`. **Режим A** (прод): `{slug}.shop.домен` после своего DNS/TLS.
 
-- Витрины: `demo-point-a.coffeeos.fly.dev/shop`, `demo-point-b.coffeeos.fly.dev/shop`
+**После деплоя** (H.3): `fly.toml` — `demo:seed` в release; **без** `SHOP_BASE_DOMAIN`.  
+`fly ssh console -a coffeeos -C 'bin/rails demo:shop_urls'` — URL точек A/B.
+
+- Инструкция: `FLY_DEMO_STAND.md`, чеклист § H.0 `veha_1/CHECKLIST.md`
 - Логины: `milestones/veha_1/DEMO_LOGINS.md` (`demo123456`)
-- Wildcard cert: `fly certs add "*.coffeeos.fly.dev" -a coffeeos` (если поддомены 404)
+- Свой домен: `veha_2/CHECKLIST.md` § **A-inf**
 
 ---
 

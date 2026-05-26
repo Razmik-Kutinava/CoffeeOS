@@ -48,14 +48,14 @@ Organization (org)
 
 ## Модель входов (как задумано)
 
-### Клиентские каналы — **поддомен точки**
+### Клиентские каналы — **поддомен точки** (канон)
 
-| Канал | URL (прод) | Tenant resolution |
-|-------|------------|-------------------|
-| Витрина | `https://{slug}.coffeeos.fly.dev/shop` | Host → `Tenant.slug` |
-| Киоск | `https://{slug}.coffeeos.fly.dev/...` (путь — в KIOSK.md) | То же |
+| Канал | URL (режим A, прод) | Tenant resolution |
+|-------|---------------------|-------------------|
+| Витрина | `https://{slug}.{SHOP_BASE_DOMAIN}/shop` | Host → `Tenant.slug` |
+| Киоск | `https://{slug}.{SHOP_BASE_DOMAIN}/...` (путь — KIOSK.md) | То же |
 
-`SHOP_BASE_DOMAIN` — см. INFRA_URLS.md. Локально без домена: `/shop?tenant_id=...`.
+**Fly demo (режим B):** `https://coffeeos.fly.dev/shop?tenant_id=…` — slug в БД тот же, поддомен после своего домена. См. [`../../SHOP_URL_MODES.md`](../../SHOP_URL_MODES.md), [`INFRA_URLS.md`](INFRA_URLS.md).
 
 ### Операционные панели — **общий хост**
 

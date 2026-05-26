@@ -20,7 +20,7 @@
 
 | Точка | Shop URL |
 |-------|----------|
-| | `https://{slug}.coffeeos.fly.dev/shop` |
+| | Режим A: `https://{slug}.{SHOP_BASE_DOMAIN}/shop` · Fly: `demo:shop_urls` |
 
 ---
 

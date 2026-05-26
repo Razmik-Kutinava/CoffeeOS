@@ -27,7 +27,17 @@
 - [ ] ⭐ После создания — каталог PTS без ручного `demo:seed` (кроме демо-стенда)
 - [ ] ⭐ Staff на точку: документированный путь — [`STAFF_ACCESS.md`](STAFF_ACCESS.md); код/UX по чеклисту онбординга
 - [ ] QA: негативный откат онбординга при ошибке Provision (аналог В1 B 5.1)
-- [ ] `INFRA_URLS.md`: прод/стейдж с `SHOP_BASE_DOMAIN` проверены на новой org
+- [ ] `INFRA_URLS.md` + [`../../SHOP_URL_MODES.md`](../../SHOP_URL_MODES.md): на Fly — режим B (`?tenant_id=`); slug точек сохранены
+
+### A-inf. Свой домен → поддомены `{slug}.shop.бренд.ru` (режим A)
+
+Пока домена нет — **не блокер** В2; на Fly тестируем режим B. Канон поддоменов не снимаем.
+
+- [ ] Домен + DNS `*.shop…` CNAME → `coffeeos.fly.dev`
+- [ ] `fly certs add "*.shop…" -a coffeeos` → Ready
+- [ ] `SHOP_BASE_DOMAIN=shop.…` на стенде + `config.hosts` при необходимости
+- [ ] Smoke: 3 slug → 3 HTTPS-витрины, разное меню
+- [ ] Flash УК после create → `https://{slug}.shop…/shop` (не `?tenant_id=`)
 
 ---
 

@@ -181,13 +181,13 @@
 
 ### H.0 После деплоя на Fly (demo-стенд develop) — **обязательно до живого демо**
 
-Пока идёт приёмка H.3: в `fly.toml` включены `release_command` (`db:prepare` + `demo:seed`) и `SHOP_BASE_DOMAIN`. Подробно: [`../../FLY_DEMO_STAND.md`](../../FLY_DEMO_STAND.md).
+Пока идёт приёмка H.3: в `fly.toml` — `release_command` (`db:prepare` + `demo:seed`), **без** `SHOP_BASE_DOMAIN` (режим B). Подробно: [`../../FLY_DEMO_STAND.md`](../../FLY_DEMO_STAND.md), [`../../SHOP_URL_MODES.md`](../../SHOP_URL_MODES.md).
 
 - [ ] ⭐ Деплой `develop` прошёл (GitHub Actions → Fly)
 - [ ] ⭐ В логах release: `demo:seed` без ошибки (или ручной `fly ssh console` → `bin/rails demo:seed`)
-- [ ] ⭐ Smoke: https://demo-point-a.coffeeos.fly.dev/shop — меню не пустое
+- [ ] ⭐ Smoke: `https://coffeeos.fly.dev/shop?tenant_id=<uuid demo-point-a>` — меню не пустое (см. FLY_DEMO_STAND)
 - [ ] ⭐ Логин `barista-a@demo.coffeeos.local` / `demo123456` → `/barista`
-- [ ] Wildcard `*.coffeeos.fly.dev` в `fly certs` (если поддомены не открываются — см. FLY_DEMO_STAND)
+- [x] Поддомены на `*.coffeeos.fly.dev` на Fly недоступны (DNS/TLS) — витрина через `?tenant_id=` (FLY_DEMO_STAND)
 - [ ] После закрытия H.3: **убрать** `demo:seed` из `release_command` (отметить здесь дату)
 
 ### 3. Живое демо

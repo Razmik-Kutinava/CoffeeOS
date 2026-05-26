@@ -26,7 +26,7 @@
 |-----|----------|-----|
 | 0.1 | Push `develop` → CI deploy | ⏳ |
 | 0.2 | `demo:seed` (release или SSH) | ⏳ |
-| 0.3 | Витрина `demo-point-a.coffeeos.fly.dev/shop` | ⏳ |
+| 0.3 | Витрина A (`demo:shop_urls` / `?tenant_id=`) | ⏳ |
 | 0.4 | Логин barista-a / demo123456 | ⏳ |
 
 ---

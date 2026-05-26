@@ -1,5 +1,32 @@
 # CHANGELOG
 
+## v1.56 — 2026-05-25 (URL витрины: режим Fly demo vs поддомены прод)
+
+### Проблема
+
+- `fly certs add "*.coffeeos.fly.dev"` и `demo-point-a.coffeeos.fly.dev` → `cannot register certificate for this domain` (зона `*.fly.dev` у Fly, нет DNS на `{slug}.coffeeos.fly.dev`).
+
+### Решение (два режима, поддомены не отменены)
+
+| Режим | Где | URL витрины |
+|-------|-----|-------------|
+| **A — прод** | Свой домен + `SHOP_BASE_DOMAIN` | `https://{slug}.shop.бренд.ru/shop` |
+| **B — Fly demo** | `coffeeos`, без `SHOP_BASE_DOMAIN` | `https://coffeeos.fly.dev/shop?tenant_id=` |
+
+- `UrlBuilder`: поддомены **только** при явном `SHOP_BASE_DOMAIN` (убран дефолт `coffeeos.fly.dev` в production).
+- `fly.toml`: `SHOP_BASE_DOMAIN` не задан (комментарий про переход на режим A).
+- `bin/rails demo:shop_urls` — печать URL всех активных точек.
+- Доки: [`SHOP_URL_MODES.md`](SHOP_URL_MODES.md), обновлены `FLY_DEMO_STAND.md`, `INFRA_URLS.md`, `ONBOARDING.md`, чеклисты В1/В2.
+
+### Твои действия после merge/deploy
+
+1. Push `develop` → дождаться GitHub Actions → Fly.
+2. `fly ssh console -a coffeeos -C 'bin/rails demo:shop_urls'` — скопировать URL витрин A/B.
+3. Smoke: витрина A с `?tenant_id=`, логин barista (`DEMO_LOGINS.md`).
+4. Свой домен — по чеклисту **A-inf** в `veha_2/CHECKLIST.md` и § «Переход B → A» в `SHOP_URL_MODES.md`.
+
+---
+
 ## v1.55 — 2026-05-25 (Fly demo-стенд: автосид + docs в git)
 
 ### Fly / живое демо

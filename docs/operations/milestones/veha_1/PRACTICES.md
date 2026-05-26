@@ -93,7 +93,7 @@
 | `LIVE_DEMO_SCENARIOS_PLAIN.md` | Для заказчика и нетехнарей: шаги, логины, ссылки витрин |
 | `LIVE_DEMO_SCENARIOS.md` | Техническая версия для QA/разработки |
 
-**Витрины (прод):** https://demo-point-a.coffeeos.fly.dev/shop · https://demo-point-b.coffeeos.fly.dev/shop  
+**Витрины (Fly demo):** `bin/rails demo:shop_urls` — режим B. **Прод:** `{slug}.{SHOP_BASE_DOMAIN}/shop` — см. `docs/operations/SHOP_URL_MODES.md`.
 **Минимум приёмки:** 4 истории в plain-доке § 10.
 
 **MCP по ~55 сценариям** (`LIVE_DEMO_SCENARIOS.md`): только **после** живого демо (чеклист H.3 `[x]`); до живого — не гонять.

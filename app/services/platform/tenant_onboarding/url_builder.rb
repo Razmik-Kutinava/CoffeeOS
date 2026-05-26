@@ -25,9 +25,10 @@ module Platform
         "#{scheme}://#{slug}.#{dom}#{port}/shop"
       end
 
+      # Поддомены только при явном SHOP_BASE_DOMAIN (свой DNS + fly certs).
+      # На coffeeos.fly.dev нет DNS/TLS для {slug}.coffeeos.fly.dev — без env ссылки идут с ?tenant_id=.
       def self.shop_base_domain
-        ENV["SHOP_BASE_DOMAIN"].presence ||
-          (Rails.env.production? ? "coffeeos.fly.dev" : nil)
+        ENV["SHOP_BASE_DOMAIN"].presence
       end
 
       # Соответствие поддомена хоста записи Tenant.slug (для витрины /shop).

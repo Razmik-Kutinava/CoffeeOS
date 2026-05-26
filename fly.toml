@@ -8,7 +8,8 @@ primary_region = "ams"
 
 [env]
   APP_HOST          = "coffeeos.fly.dev"
-  SHOP_BASE_DOMAIN  = "coffeeos.fly.dev"
+  # SHOP_BASE_DOMAIN не задаём: на Fly нет DNS/TLS для {slug}.coffeeos.fly.dev (см. FLY_DEMO_STAND.md).
+  # После своего домена: SHOP_BASE_DOMAIN = "shop.example.com" + fly certs + wildcard CNAME.
   PORT              = "3000"
   RAILS_ENV         = "production"
   RAILS_LOG_TO_STDOUT = "true"

@@ -8,6 +8,13 @@
 **Статус В1:** блоки **A–G** `[x]`, **H.2** `[x]`, code review `[x]`, деплой Fly `[x]` (v1.53). **H.3** демо и **§ I** — заочно, без блокировки В2.  
 **Следующий фокус команды:** **Веха 2** — `HANDOFF.md`, `development_roadmap.md` § В2.
 
+### Сессия 2026-05-25 (Fly URL: режим B vs поддомены A)
+
+- **Проблема:** `fly certs add "*.coffeeos.fly.dev"` → ACME отказ; поддомены `{slug}.coffeeos.fly.dev` не резолвятся.
+- **Решение:** два режима в `docs/operations/SHOP_URL_MODES.md`. Fly demo = `?tenant_id=`; канон прод = `{slug}.{SHOP_BASE_DOMAIN}`. Slug в БД не трогаем.
+- **Код:** `UrlBuilder` без дефолта домена; `fly.toml` без `SHOP_BASE_DOMAIN`; `demo:shop_urls`.
+- **Следующий шаг владельца:** deploy develop → `fly ssh … demo:shop_urls` → smoke H.3. Свой домен — чеклист **A-inf** В2.
+
 ### Сессия 2026-05-25 (handoff: В2 старт, В1 открыта в ops)
 
 - Push **15 коммитов** В1 + **fix(deploy)** `4a25187`.
