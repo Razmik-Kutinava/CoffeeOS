@@ -183,10 +183,10 @@
 
 Пока идёт приёмка H.3: в `fly.toml` — `release_command` (`db:prepare` + `demo:seed`), **без** `SHOP_BASE_DOMAIN` (режим B). Подробно: [`../../FLY_DEMO_STAND.md`](../../FLY_DEMO_STAND.md), [`../../SHOP_URL_MODES.md`](../../SHOP_URL_MODES.md).
 
-- [ ] ⭐ Деплой `develop` прошёл (GitHub Actions → Fly)
-- [ ] ⭐ В логах release: `demo:seed` без ошибки (или ручной `fly ssh console` → `bin/rails demo:seed`)
-- [ ] ⭐ Smoke: `https://coffeeos.fly.dev/shop?tenant_id=<uuid demo-point-a>` — меню не пустое (см. FLY_DEMO_STAND)
-- [ ] ⭐ Логин `barista-a@demo.coffeeos.local` / `demo123456` → `/barista`
+- [x] ⭐ Деплой `develop` прошёл (GitHub Actions → Fly, 2026-05-26 `ad5da58+`)
+- [x] ⭐ В логах release: `demo:seed` без ошибки
+- [x] ⭐ Smoke: витрина A с `tenant_id` — меню не пустое (см. CUSTOMER_HANDOFF)
+- [x] ⭐ Логин `barista-a@demo.coffeeos.local` / `demo123456` → `/barista`
 - [x] Поддомены на `*.coffeeos.fly.dev` на Fly недоступны (DNS/TLS) — витрина через `?tenant_id=` (FLY_DEMO_STAND)
 - [ ] После закрытия H.3: **убрать** `demo:seed` из `release_command` (отметить здесь дату)
 
