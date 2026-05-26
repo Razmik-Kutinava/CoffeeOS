@@ -3,7 +3,17 @@
 ## Текущее состояние
 
 **Дата:** 2026-05-25  
-**Статус:** блоки **A–G** закрыты. **H.2** закрыт. **Code review V1** — OK. Push на `develop` (15 коммитов). **Fly:** первый деплой упал на `npm EBADPLATFORM` (win32 bindings в `package.json`) — fix v1.53, повторный push. Остаётся: **H.3** демо → **§ I**.
+**Веха 1:** **официально не закрыта** (§ I и H.3 в чеклисте — `[ ]`). Код A–G и H.2 — готовы на `develop`.  
+**Веха 2:** **активная разработка** (новое окно/агент); старт параллельно с «хвостом» В1.  
+**Статус В1:** блоки **A–G** `[x]`, **H.2** `[x]`, code review `[x]`, деплой Fly `[x]` (v1.53). **H.3** демо и **§ I** — заочно, без блокировки В2.  
+**Следующий фокус команды:** **Веха 2** — `HANDOFF.md`, `development_roadmap.md` § В2.
+
+### Сессия 2026-05-25 (handoff: В2 старт, В1 открыта в ops)
+
+- Push **15 коммитов** В1 + **fix(deploy)** `4a25187`.
+- Ops: папка `milestones/veha_1/` в git (`.gitignore`); CHANGELOG v1.50–v1.54.
+- Живое демо: `LIVE_DEMO_SCENARIOS.md` + `LIVE_DEMO_SCENARIOS_PLAIN.md` (простой язык, URL витрин, роли gm/shift в словаре).
+- **Не в git** на момент записи: `LIVE_DEMO_SCENARIOS*.md`, частично `CHECKLIST`/`README` — закоммитить при удобстве.
 
 ## Что сделано
 
@@ -126,3 +136,5 @@
 [2026-05-21] | Действие: Блок D prep — `DEMO_LOGINS.md`, `test_login.rake`→`Demo::EnvironmentSetup`, чеклист D+MCP, `block_d_panel_screens_test` (7/84/0). MCP Chrome DevTools errored. Полный suite **не запускали** — ждём апрув. | Следующий шаг: апрув → `bin/rails test`; MCP visual flows. | Статус: superseded | Вопросы: включить MCP в Cursor Settings.
 
 [2026-05-24] | Действие: Блок **G закрыт** — апрув на полный suite; `bin/rails test` **479/1896/0** (~286 s), ошибок/failures нет. Фиксы до прогона: `PortKiller`/`bin/ensure-server`, JS корзины barista, `normalize_cart_items`, `@shift` на create-order. MCP barista+shop OK. Чеклист G все `[x]`; `MILESTONE_PRACTICES` §G, `CHANGELOG` v1.48. | Следующий шаг: блок **H** — ручной QA `qa_scenarios.md`, живое демо. | Статус: done | Вопросы: нет.
+
+[2026-05-25] | Действие: Push **16 коммитов** В1 на `develop`; Fly deploy fix (npm win32, v1.53). Доки живого демо: `LIVE_DEMO_SCENARIOS*.md`. Ops: `HANDOFF.md`, `CHANGELOG` v1.54. **В1 официально не закрыта** — параллельный старт **В2**. | Следующий шаг: агент **В2** по `HANDOFF.md`; В1 закрыть заочно (H.3 + §I). | Статус: veha2_active_veha1_open | Вопросы: закоммитить LIVE_DEMO в git при удобстве.

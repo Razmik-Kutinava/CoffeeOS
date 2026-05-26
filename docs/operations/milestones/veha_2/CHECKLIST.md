@@ -1,0 +1,129 @@
+# Веха 2 — чеклист закрытия «Scale & Stability»
+
+**Цель:** сеть точек **из коробки**, реальная оплата на клиентских каналах, киоск, связные админки.
+
+**Статус вехи:** **в работе** (доки и разработка с 2026-05-25). В1 официально может быть ещё открыта — не писать «В2 закрыта», пока § I ниже не `[x]`.
+
+**Не входит в В2:** полный Event Sourcing склада, Z-отчёт, supply chain, анти-фрод алерты — **Веха 3** (`development_roadmap.md`).
+
+**Как пользоваться:** `[x]` по мере готовности; ⭐ = критично для «веха закрыта». Детали онбординга — [`ONBOARDING_CHECKLIST.md`](ONBOARDING_CHECKLIST.md). Правки UI — [`DEMO_FEEDBACK.md`](DEMO_FEEDBACK.md).
+
+**Связанные:** [`README.md`](README.md), [`PRACTICES.md`](PRACTICES.md), `docs/product/development_roadmap.md`.
+
+### Gate: чеклист ↔ таск-трекер
+
+- **Новый канал заказа** → сначала [`ORDER_ENTRY_AUDIT.md`](ORDER_ENTRY_AUDIT.md), потом код.
+- **Done в трекере** не раньше `[x]` здесь (или явный перенос в § I с датой).
+
+---
+
+## A. Онбординг «из коробки» (приоритет 1)
+
+См. детальный список: [`ONBOARDING_CHECKLIST.md`](ONBOARDING_CHECKLIST.md).
+
+- [ ] ⭐ УК: org + N точек (slug, **address**, city, модули) — транзакция + `TenantOnboarding::Provision`
+- [ ] ⭐ Карточка точки в УК: **все входы** (витрина/киоск URL, панели, кого создать) — см. [`ONBOARDING.md`](ONBOARDING.md)
+- [ ] ⭐ Поле `address` в форме точки (`tenants.address` уже в БД)
+- [ ] ⭐ После создания — каталог PTS без ручного `demo:seed` (кроме демо-стенда)
+- [ ] ⭐ Staff на точку: документированный путь — [`STAFF_ACCESS.md`](STAFF_ACCESS.md); код/UX по чеклисту онбординга
+- [ ] QA: негативный откат онбординга при ошибке Provision (аналог В1 B 5.1)
+- [ ] `INFRA_URLS.md`: прод/стейдж с `SHOP_BASE_DOMAIN` проверены на новой org
+
+---
+
+## B. Связность админок (приоритет 1)
+
+- [ ] ⭐ УК → точка → `open_as_manager` → manager видит **ту же** точку и каталог
+- [ ] ⭐ Меню УК → PTS на все точки org → витрина `{slug}/shop` показывает актуальное меню
+- [ ] ⭐ Barista / prep_kitchen — только данные **своего** `tenant_id` (RLS + session)
+- [ ] ⭐ Feature flags (модули) отключают недоступные разделы или явный «модуль выключен»
+- [ ] Health `/health/tenants` отражает новые точки (опционально в демо)
+
+---
+
+## C. Реальная оплата (приоритет 2)
+
+См. [`PAYMENT.md`](PAYMENT.md).
+
+- [ ] ⭐ `SHOP_SIMULATE_PAYMENT=0` на стенде приёмки: card/sbp → `pending_payment`
+- [ ] ⭐ Интеграция шлюза (целевой: ЮKassa) + redirect / widget по продукту
+- [ ] ⭐ Callback → `Callbacks::PaymentStatusUpdater` → order `accepted`, списание склада
+- [ ] ⭐ Витрина: UX ожидания оплаты, без double-submit (как В1)
+- [ ] ⭐ QR на столах: стабильный URL витрины точки (`{slug}.домен/shop`)
+- [ ] Manager: pending payments при закрытии смены (уже частично в UI — проверить на реальных платежах)
+- [ ] Тесты: shop `SHOP_SIMULATE_PAYMENT=0` + callback e2e расширены под провайдера
+
+---
+
+## D. Киоск (приоритет 3, с оплатой как shop)
+
+См. [`KIOSK.md`](KIOSK.md).
+
+- [ ] ⭐ Маршруты/UI киоска (не только `FeatureFlag` + `devices`)
+- [ ] ⭐ URL киоска на точку (`{slug}.домен/...` — зафиксировать путь в KIOSK.md)
+- [ ] ⭐ Заказ через тот же pipeline, что shop (без смены, как В1 гибрид)
+- [ ] ⭐ Оплата киоска = та же цепочка, что § C (не отдельный «второй шлюз» без нужды)
+- [ ] Регистрация устройства `device_type: kiosk` на точку
+- [ ] Запись в [`ORDER_ENTRY_AUDIT.md`](ORDER_ENTRY_AUDIT.md)
+
+---
+
+## E. Полировка по демо (параллельно)
+
+См. [`DEMO_FEEDBACK.md`](DEMO_FEEDBACK.md) — **не блокирует** A–C, кроме явных блокеров.
+
+- [ ] Процесс: каждая правка заказчика → строка в DEMO_FEEDBACK → PR → `[x]`
+- [ ] Критичные блокеры демо (если есть) закрыты до «веха принята»
+
+---
+
+## F. Кассовая дисциплина (расширение, после C/D или по продукту)
+
+- [ ] Решение продукта: единая смена на **всех** каналах? (сейчас В1: shop/киоск без смены)
+- [ ] Если да — код + [`ORDER_ENTRY_AUDIT.md`](ORDER_ENTRY_AUDIT.md) + `qa_scenarios` 3.V2-1
+- [ ] Z-отчёт — **не В2** (В3)
+
+---
+
+## G. Offline-first (позже в В2)
+
+См. [`OFFLINE_SYNC.md`](OFFLINE_SYNC.md).
+
+- [ ] IndexedDB буфер barista POS
+- [ ] Индикатор Online/Offline/Syncing
+- [ ] Sync queue + `client_uuid` / idempotency на create order
+- [ ] `drift_offset` по ARCHITECTURE.md
+- [ ] Сценарии O-1…O-3 в `qa_scenarios.md`
+
+---
+
+## H. Надёжность (хвост В2)
+
+- [ ] Outbox-паттерн на Solid Queue (критичные side-effects)
+- [ ] Circuit Breaker для внешних API (платёж, ОФД)
+- [ ] UX таймаут БД >5 с (qa 6.2)
+
+---
+
+## I. Приёмка и закрытие вехи
+
+- [ ] [`QA_ACCEPTANCE_RUN.md`](QA_ACCEPTANCE_RUN.md) — этапы 1–3
+- [ ] [`CODE_REVIEW.md`](CODE_REVIEW.md) — вердикт перед прод-включением оплаты
+- [ ] Живое демо В2 (когда появятся [`LIVE_DEMO_SCENARIOS_PLAIN.md`](LIVE_DEMO_SCENARIOS_PLAIN.md))
+- [ ] `bin/rails test` — зафиксировать runs/0 failures в `PRACTICES.md`
+- [ ] `docs/operations/SESSION_STATE.md` — «Веха 2 закрыта» или список хвостов
+- [ ] `docs/operations/CHANGELOG.md` — запись о закрытии В2
+- [ ] Техдолг В2→В3 только здесь / `PRACTICES.md`, не в `development_roadmap`
+
+---
+
+## Критерий «Веха 2 закрыта»
+
+1. Блоки **A, B, C** (⭐) — `[x]`.
+2. **D** — киоск с заказом и оплатой на тестовой org, или явный перенос в § I с датой.
+3. Новая org из УК: **3+ точки**, карточка входов, витрина с **реальной** оплатой на стенде.
+4. § I заполнен в operations.
+
+**Дата закрытия:** ____________  
+**Кто принял:** ____________  
+**Хвосты в В3:** ____________

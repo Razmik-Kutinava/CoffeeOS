@@ -74,18 +74,14 @@ Thumbs.db
 !doc/**/*.md
 !docs/**/*.md
 
-# Документы централизованы в docs/, но в git держим только канон и агентные инструкции.
+# Документы: в git — product/, operations/ (включая milestones), agents/
 /docs/**
 !/docs/product/
-!/docs/product/*.md
+!/docs/product/**
 !/docs/operations/
-!/docs/operations/*.md
-!/docs/operations/milestones/
-!/docs/operations/milestones/**/*.md
+!/docs/operations/**
 !/docs/agents/
-!/docs/agents/AGENTS.md
-!/docs/agents/AGENTS/
-!/docs/agents/AGENTS/*.md
+!/docs/agents/**
 
 # Vite Ruby
 /public/vite*

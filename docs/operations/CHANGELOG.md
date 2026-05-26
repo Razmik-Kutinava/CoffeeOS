@@ -1,5 +1,54 @@
 # CHANGELOG
 
+## v1.55 — 2026-05-25 (Fly demo-стенд: автосид + docs в git)
+
+### Fly / живое демо
+
+- `fly.toml`: `SHOP_BASE_DOMAIN=coffeeos.fly.dev`, `DEMO_AUTO_SEED=true`, `release_command` = `db:prepare` + `demo:seed` (временно до закрытия H.3).
+- `bin/docker-entrypoint`: запасной `demo:seed` при `DEMO_AUTO_SEED=true`.
+- `docs/operations/FLY_DEMO_STAND.md` — инструкция, wildcard cert, откат автосида.
+- Чеклист § **H.0** в `milestones/veha_1/CHECKLIST.md`, этап 0 в `QA_ACCEPTANCE_RUN.md`.
+
+### Документация
+
+- `.gitignore`: `docs/operations/**` и `milestones/**` в git (агенты + команда).
+- Полный комплект `milestones/veha_2/` (чеклисты, онбординг, оплата, …).
+
+---
+
+## v1.54 — 2026-05-25 (параллельный старт В2; В1 **не закрыта** официально)
+
+### Git / деплой
+
+- **develop → origin:** 16 коммитов В1 (код A–G, тесты, docs product/ops/agents, `milestones/veha_1/` в git после правки `.gitignore`).
+- **Fly:** первый деплой упал (`npm EBADPLATFORM`, win32 bindings) — **v1.53** исправлен; повторный push `4a25187`. Деплой через GitHub Actions `Deploy to Fly.io` на push в `develop`.
+- **Прод:** https://coffeeos.fly.dev · витрина А https://demo-point-a.coffeeos.fly.dev/shop · Б https://demo-point-b.coffeeos.fly.dev/shop
+
+### Документация (сессия 2026-05-25, конец В1)
+
+- `docs/operations/milestones/veha_1/LIVE_DEMO_SCENARIOS.md` — ручные сценарии для технарей (все роли, 2–4 мин).
+- `docs/operations/milestones/veha_1/LIVE_DEMO_SCENARIOS_PLAIN.md` — то же простым языком для заказчика/нетехнарей; ссылки на витрину, роли `gm-a`/`gm-b`/`shift-a` в словаре.
+- Обновлены `CHECKLIST.md` § H.3, `README.md` (карта папки вехи).
+
+### Код (уже в develop, кратко)
+
+- Блоки A–G: сервисы barista/shop/inventory/demo, shop Svelte, block F/G тесты, RLS, гибрид смены, `OrderCancellationService`, `MovementCreator`, миграции stock/order_number.
+- Code review: N+1 fix в `Shop::OrderCreator`.
+- Deploy fix: `package.json` без win32 devDeps, `Dockerfile` → `npm ci`.
+
+### Не закрыто (В1)
+
+- **H.3** живое демо владельцем (инструкции готовы).
+- **§ I** формальное закрытие вехи в ops.
+- Локально **не в git** (на момент записи): `LIVE_DEMO_SCENARIOS*.md`, правки `CHECKLIST`/`README` — закоммитить перед В2.
+
+### Следующий этап
+
+- **Веха 2** — основная разработка (`HANDOFF.md`, `milestones/veha_2/`).
+- **Веха 1** — остаётся открытой в ops до H.3 + § I; закрытие может быть заочным, без остановки В2.
+
+---
+
 ## v1.53 — 2026-05-25
 
 ### Деплой Fly

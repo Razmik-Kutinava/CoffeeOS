@@ -2,6 +2,8 @@
 
 **Цель:** рабочий демо-прототип одной кофейни, online-only.
 
+**Статус вехи:** код A–G и H.2 готовы; **официальное закрытие — нет** (§ H.3, § I ниже `[ ]`). Разработка **Вехи 2** идёт параллельно.
+
 **Не входит в В1:** offline, Event Sourcing склада, новые RLS-политики, Domain Folders, Outbox, Flutter/киоск, loyalty/pickup/production как продукт для демо.
 
 **Как пользоваться:** отмечай `[x]` по мере выполнения. Закрытие вехи — когда критичные пункты (⭐) сделаны и зафиксирован блок «Закрытие вехи» внизу.
@@ -175,13 +177,27 @@
 ### 2.1 Code review перед демо
 
 - [x] ⭐ Code review В1 + правки по находкам (**2026-05-25:** `docs/operations/milestones/veha_1/CODE_REVIEW.md`; исправлен N+1 в `Shop::OrderCreator`; shop+block_g **51/0**)
-- [ ] Коммит + деплой Fly — **после апрува** владельца
+- [x] Коммит + деплой Fly — **2026-05-25:** 16 коммитов на `develop`; fix npm v1.53 (`4a25187`); CI `Deploy to Fly.io`
+
+### H.0 После деплоя на Fly (demo-стенд develop) — **обязательно до живого демо**
+
+Пока идёт приёмка H.3: в `fly.toml` включены `release_command` (`db:prepare` + `demo:seed`) и `SHOP_BASE_DOMAIN`. Подробно: [`../../FLY_DEMO_STAND.md`](../../FLY_DEMO_STAND.md).
+
+- [ ] ⭐ Деплой `develop` прошёл (GitHub Actions → Fly)
+- [ ] ⭐ В логах release: `demo:seed` без ошибки (или ручной `fly ssh console` → `bin/rails demo:seed`)
+- [ ] ⭐ Smoke: https://demo-point-a.coffeeos.fly.dev/shop — меню не пустое
+- [ ] ⭐ Логин `barista-a@demo.coffeeos.local` / `demo123456` → `/barista`
+- [ ] Wildcard `*.coffeeos.fly.dev` в `fly certs` (если поддомены не открываются — см. FLY_DEMO_STAND)
+- [ ] После закрытия H.3: **убрать** `demo:seed` из `release_command` (отметить здесь дату)
 
 ### 3. Живое демо
 
-Показ **не QA-исполнителю**: заказчик / бариста / менеджер. Не полный чеклист — 3–4 цепочки «как в жизни».
+Показ **не QA-исполнителю**: заказчик / бариста / менеджер. Инструкция простым языком: [`LIVE_DEMO_SCENARIOS_PLAIN.md`](LIVE_DEMO_SCENARIOS_PLAIN.md); техническая — [`LIVE_DEMO_SCENARIOS.md`](LIVE_DEMO_SCENARIOS.md). Минимум для приёмки — 4 истории в конце plain-дока (§ 10).
 
-- [ ] ⭐ Демо: бариста → заказ → склад; shop → заказ; УК → точка/каталог
+**Порядок:** сначала **живое** (H.3) → потом **MCP** по полному списку (~55 сценариев), если нужна регрессия. MCP **не** заменяет живое и **не** гонять до него (кроме срочного релиза без даты демо).
+
+- [ ] ⭐ Демо: бариста → заказ → склад; shop → заказ; УК → точка/каталог (см. LIVE_DEMO § 10)
+- [ ] MCP DevTools: прогон `LIVE_DEMO_SCENARIOS.md` — **после** `[x]` живого демо; журнал в `PRACTICES.md` § H.3
 
 ---
 

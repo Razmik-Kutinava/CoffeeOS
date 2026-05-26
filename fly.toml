@@ -8,12 +8,20 @@ primary_region = "ams"
 
 [env]
   APP_HOST          = "coffeeos.fly.dev"
+  SHOP_BASE_DOMAIN  = "coffeeos.fly.dev"
   PORT              = "3000"
   RAILS_ENV         = "production"
   RAILS_LOG_TO_STDOUT = "true"
   RAILS_SERVE_STATIC_FILES = "true"
   WEB_CONCURRENCY   = "0"
   RAILS_MAX_THREADS = "3"
+  # Период живого демо на develop→Fly: идемпотентный demo:seed после каждого деплоя.
+  # Убрать demo:seed из release_command после закрытия H.3 (см. veha_1/CHECKLIST § H.0).
+  DEMO_AUTO_SEED    = "true"
+
+# Миграции + демо-данные перед трафиком (coffeeos = стенд develop, не main/prod).
+[deploy]
+  release_command = "bin/rails db:prepare && bin/rails demo:seed"
 
 [http_service]
   internal_port = 3000

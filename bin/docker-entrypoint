@@ -13,6 +13,10 @@ if [ "${1:-}" = "./bin/rails" ] && [ "${2:-}" = "server" ]; then
   if [ "${CREATE_TEST_USERS:-false}" = "true" ]; then
     ./bin/rails test:create_test_users || true
   fi
+  # Fly demo-стенд (develop): идемпотентный сид при старте машины, если release_command не отработал.
+  if [ "${DEMO_AUTO_SEED:-false}" = "true" ]; then
+    ./bin/rails demo:seed || true
+  fi
 fi
 
 exec "${@}"

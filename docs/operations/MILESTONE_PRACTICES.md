@@ -5,7 +5,7 @@
 | Веха | Документ |
 |------|----------|
 | **Веха 1** | [`docs/operations/milestones/veha_1/PRACTICES.md`](milestones/veha_1/PRACTICES.md) |
-| **Веха 2+** | [`docs/operations/milestones/veha_2/`](milestones/veha_2/README.md) (позже) |
+| **Веха 2** | [`docs/operations/milestones/veha_2/PRACTICES.md`](milestones/veha_2/PRACTICES.md) |
 
 **Карта вех:** [`docs/operations/milestones/README.md`](milestones/README.md)  
 **Чеклист В1:** [`docs/operations/milestones/veha_1/CHECKLIST.md`](milestones/veha_1/CHECKLIST.md)
