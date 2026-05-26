@@ -84,7 +84,8 @@ fly ssh console -a coffeeos -C 'bin/rails demo:shop_urls'
 
 | Документ | Содержание |
 |----------|------------|
-| [`FLY_DEMO_STAND.md`](FLY_DEMO_STAND.md) | Режим B: автосид, smoke, откат |
+| [`FLY_DEMO_STAND.md`](FLY_DEMO_STAND.md) | Режим B: автосид, smoke, откат, **ошибки `fly certs` / `fly ssh`** |
+| [`CUSTOMER_HANDOFF.md`](CUSTOMER_HANDOFF.md) | Одна страница для заказчика: URL + логины |
 | [`milestones/veha_2/INFRA_URLS.md`](milestones/veha_2/INFRA_URLS.md) | ENV, панели, чеклист приёмки |
 | [`milestones/veha_2/ONBOARDING.md`](milestones/veha_2/ONBOARDING.md) | Карточка точки, flash URL |
 | [`CHANGELOG.md`](CHANGELOG.md) | История решений |
