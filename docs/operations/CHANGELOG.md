@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## v1.59 — 2026-05-26 (В2 онбординг §2: точка продаж)
+
+- Поле `address` в форме создания точки УК (`platform/tenants`).
+- Тесты: `onboarding_sales_point_test.rb` — 3 точки, модули, flash URL, меню, RLS (5/0).
+- ONBOARDING_CHECKLIST §2 `[x]`; V2-T2 закрыт.
+
+---
+
 ## v1.58 — 2026-05-26 (В2 онбординг §1: организация)
 
 - Проверка ONBOARDING_CHECKLIST §1: создание org в УК (`/admin/organizations`), список, привязка tenant к org — **работает без правок кода**.

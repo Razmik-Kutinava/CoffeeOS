@@ -52,7 +52,7 @@
 | ID | Тема | Статус | Куда дальше |
 |----|------|--------|-------------|
 | V2-T1 | Нет карточки «все входы» в УК | open | ONBOARDING § A |
-| V2-T2 | `address` не в форме tenant | open | ONBOARDING § A |
+| V2-T2 | `address` не в форме tenant | **done** §2 ONBOARDING 2026-05-26 | — |
 | V2-T3 | Staff только manager + franchise из УК | open | STAFF_ACCESS |
 | V2-T4 | Киоск без routes | open | KIOSK |
 | V2-T5 | Реальный шлюз не подключён | open | PAYMENT |
@@ -70,6 +70,14 @@
 ---
 
 ## Журнал изменений (дописывать снизу)
+
+- **2026-05-26 — ONBOARDING §2 Точка продаж (полный цикл)**
+  - **Код:** поле `address` в форме `/admin/tenants` + `tenant_params`.
+  - **Проверка:** создание 3 точек (org, slug, city, address, sales_point); модули menu+barista, kiosk off; flash URL при `SHOP_BASE_DOMAIN`; PTS + shop API не пустой; RLS orders A≠B.
+  - **Rollback:** уже был — `test/controllers/platform/tenants_controller_test.rb`.
+  - **Тесты:** `test/integration/platform/onboarding_sales_point_test.rb` — 5 runs, 61 assertions, 0 failures.
+  - **Чеклист:** `ONBOARDING_CHECKLIST.md` §2 — `[x]`.
+  - **Следующий шаг:** §3 Заготовочный цех.
 
 - **2026-05-26 — ONBOARDING §1 Организация (полный цикл)**
   - **Проверка:** `/admin/organizations/new` (namespace `platform`, path `admin`) — форма name + slug; create → org в списке; ссылка «Точка» с `organization_id` → tenant привязан к org.

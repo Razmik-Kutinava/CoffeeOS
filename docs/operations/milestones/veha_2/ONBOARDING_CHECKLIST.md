@@ -15,12 +15,12 @@
 
 ## 2. Точка продаж (×3 для приёмочного сценария)
 
-- [ ] Создание: org, name, **slug уникальный**, type `sales_point`, city, **address** (поле в форме)
-- [ ] Модули: `barista`, `menu`, `kiosk` (киоск — когда UI готов), без лишнего для сценария «только витрина+QR»
-- [ ] Provision без ошибки; rollback при сбое (ручной тест 5.1)
-- [ ] Flash / карточка: URL витрины `https://{slug}.{domain}/shop`
-- [ ] Открыть витрину — меню не пустое (PTS + каталог УК)
-- [ ] RLS: заказ на точке A не виден на B
+- [x] Создание: org, name, **slug уникальный**, type `sales_point`, city, **address** (поле в форме) *(2026-05-26: добавлено поле address)*
+- [x] Модули: `barista`, `menu`, `kiosk` off для сценария «только витрина+QR» *(2026-05-26)*
+- [x] Provision без ошибки; rollback при сбое *(rollback: `tenants_controller_test.rb`; provision: onboarding test)*
+- [x] Flash / карточка: URL витрины `{slug}.{SHOP_BASE_DOMAIN}/shop` *(при заданном домене; Fly — `?tenant_id=`)*
+- [x] Открыть витрину — меню не пустое (PTS + каталог УК) *(2026-05-26)*
+- [x] RLS: заказ на точке A не виден на B *(2026-05-26)*
 
 ---
 
