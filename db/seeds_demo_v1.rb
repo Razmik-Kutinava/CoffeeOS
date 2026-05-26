@@ -6,6 +6,15 @@
 puts "[demo] Настройка демо-среды В1..."
 result = Demo::EnvironmentSetup.call(load_catalog: true)
 
+def demo_shop_public_url(tenant)
+  path = Platform::TenantOnboarding::UrlBuilder.shop_url_for(tenant)
+  return path unless path.start_with?("/")
+
+  host = ENV.fetch("APP_HOST", "localhost:3001")
+  scheme = Rails.env.production? ? "https" : "http"
+  "#{scheme}://#{host}#{path}"
+end
+
 puts <<~MSG
 
 [demo] Готово:
@@ -17,7 +26,7 @@ puts <<~MSG
   PTS: A=#{result.pts_a_count}, B=#{result.pts_b_count}
   Demo-пользователей: #{result.users_count} (в т.ч. pk-manager / pk-worker → /prep_kitchen)
   Пароль: #{Demo::EnvironmentSetup::DEMO_PASSWORD}
-  Shop A: #{Platform::TenantOnboarding::UrlBuilder.shop_url_for(result.tenant_a)}
-  Shop B: #{Platform::TenantOnboarding::UrlBuilder.shop_url_for(result.tenant_b)}
+  Shop A: #{demo_shop_public_url(result.tenant_a)}
+  Shop B: #{demo_shop_public_url(result.tenant_b)}
 
 MSG
