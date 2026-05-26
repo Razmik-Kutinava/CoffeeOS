@@ -15,6 +15,12 @@
 - **Код:** `UrlBuilder` без дефолта домена; `fly.toml` без `SHOP_BASE_DOMAIN`; `demo:shop_urls`.
 - **Следующий шаг владельца:** deploy develop → `fly ssh … demo:shop_urls` → smoke H.3. Свой домен — чеклист **A-inf** В2.
 
+### Сессия 2026-05-26 (передача заказчику на живое демо)
+
+- Стенд Fly проверен: `/up`, витрина A/B, логин barista.
+- **Готово к H.3:** [`CUSTOMER_HANDOFF.md`](CUSTOMER_HANDOFF.md), UUID витрин в plain-доке и DEMO_LOGINS.
+- H.0 smoke отмечен `[x]` в чеклисте; **H.3 живое демо** — ждёт заказчика.
+
 ### Сессия 2026-05-25 (handoff: В2 старт, В1 открыта в ops)
 
 - Push **15 коммитов** В1 + **fix(deploy)** `4a25187`.
