@@ -98,6 +98,7 @@
 
 - Инструкция: `FLY_DEMO_STAND.md`, чеклист § H.0 `veha_1/CHECKLIST.md`
 - Логины: `milestones/veha_1/DEMO_LOGINS.md` (`demo123456`)
+- **Передать заказчику:** [`CUSTOMER_HANDOFF.md`](CUSTOMER_HANDOFF.md) + `LIVE_DEMO_SCENARIOS_PLAIN.md`
 - Свой домен: `veha_2/CHECKLIST.md` § **A-inf**
 
 ---
