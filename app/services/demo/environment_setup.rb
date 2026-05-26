@@ -182,20 +182,22 @@ module Demo
 
     # Точка B — цены base_price + 10 ₽ (демо различия PTS между точками).
     def apply_point_b_price_markup!(tenant_b)
-      Product.where(is_active: true).find_each do |product|
-        bp = product.base_price.presence&.to_d
-        next if bp.blank? || bp <= 0
+      with_tenant_rls!(tenant_b) do
+        Product.where(is_active: true).find_each do |product|
+          bp = product.base_price.presence&.to_d
+          next if bp.blank? || bp <= 0
 
-        pts = ProductTenantSetting.find_by(tenant_id: tenant_b.id, product_id: product.id)
-        next unless pts
+          pts = ProductTenantSetting.find_by(tenant_id: tenant_b.id, product_id: product.id)
+          next unless pts
 
-        target = bp + 10
-        pts.update!(price: target) if pts.price.to_d != target
+          target = bp + 10
+          pts.update!(price: target) if pts.price.to_d != target
+        end
       end
     end
 
     def ensure_module_flags!(tenant, modules)
-      TenantModuleFlags.sync!(tenant, modules)
+      with_tenant_rls!(tenant) { TenantModuleFlags.sync!(tenant, modules) }
     end
 
     def ensure_users!(organization:, tenant_a:, tenant_b:, tenant_kitchen:, roles:)
@@ -215,24 +217,29 @@ module Demo
     end
 
     def upsert_user!(email:, name:, tenant:, organization:, role_codes:, roles:)
-      user = User.find_or_initialize_by(email: email.downcase.strip)
-      user.assign_attributes(
-        name: name,
-        tenant: tenant,
-        organization: organization,
-        status: "active",
-        password: DEMO_PASSWORD
-      )
-      user.save!
+      with_tenant_rls!(tenant) do
+        user = User.find_or_initialize_by(email: email.downcase.strip)
+        user.assign_attributes(
+          name: name,
+          tenant: tenant,
+          organization: organization,
+          status: "active",
+          password: DEMO_PASSWORD
+        )
+        user.save!
 
-      scope = user.user_roles.where(tenant_id: tenant.id)
-      scope.destroy_all
+        conn = ActiveRecord::Base.connection
+        conn.execute("SET LOCAL app.current_user_id = #{conn.quote(user.id.to_s)}")
 
-      role_codes.each do |code|
-        UserRole.create!(user: user, role: roles.fetch(code), tenant_id: tenant.id)
+        scope = user.user_roles.where(tenant_id: tenant.id)
+        scope.destroy_all
+
+        role_codes.each do |code|
+          UserRole.create!(user: user, role: roles.fetch(code), tenant_id: tenant.id)
+        end
+
+        user
       end
-
-      user
     end
 
     def ensure_order_cancel_reasons!
@@ -306,18 +313,36 @@ module Demo
       end
 
       [tenant_a, tenant_b].each do |tenant|
-        [coffee, milk].each do |ingredient|
-          IngredientTenantStock.find_or_create_by!(tenant_id: tenant.id, ingredient_id: ingredient.id) do |stock|
-            stock.qty = 5_000
-            stock.min_qty = 200
+        with_tenant_rls!(tenant) do
+          [coffee, milk].each do |ingredient|
+            IngredientTenantStock.find_or_create_by!(tenant_id: tenant.id, ingredient_id: ingredient.id) do |stock|
+              stock.qty = 5_000
+              stock.min_qty = 200
+            end
           end
         end
       end
     end
 
     def reset_demo_pts_availability!(tenants)
-      ProductTenantSetting.where(tenant_id: tenants.map(&:id), is_sold_out: true)
-                          .update_all(is_sold_out: false, sold_out_reason: nil, updated_at: Time.current)
+      tenants.each do |tenant|
+        with_tenant_rls!(tenant) do
+          ProductTenantSetting.where(tenant_id: tenant.id, is_sold_out: true)
+                              .update_all(is_sold_out: false, sold_out_reason: nil, updated_at: Time.current)
+        end
+      end
+    end
+
+    def with_tenant_rls!(tenant)
+      conn = ActiveRecord::Base.connection
+      previous_tid = Current.tenant_id
+      ActiveRecord::Base.transaction do
+        conn.execute("SET LOCAL app.current_tenant_id = #{conn.quote(tenant.id.to_s)}")
+        Current.tenant_id = tenant.id
+        yield
+      end
+    ensure
+      Current.tenant_id = previous_tid
     end
   end
 end

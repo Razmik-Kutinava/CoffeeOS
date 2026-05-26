@@ -21,7 +21,7 @@ primary_region = "ams"
 
 # Миграции + демо-данные перед трафиком (coffeeos = стенд develop, не main/prod).
 [deploy]
-  release_command = "bin/rails db:prepare && bin/rails demo:seed"
+  release_command = "bin/rails fly:release"
 
 [http_service]
   internal_port = 3000

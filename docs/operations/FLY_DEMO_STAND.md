@@ -8,7 +8,7 @@
 
 `fly.toml`:
 
-- `release_command`: `db:prepare` + `demo:seed` (идемпотентно)
+- `release_command`: `bin/rails fly:release` (`db:prepare` + solid migrate + `demo:seed`)
 - `SHOP_BASE_DOMAIN=coffeeos.fly.dev`
 - `DEMO_AUTO_SEED=true` — запасной `demo:seed` при старте Puma (`bin/docker-entrypoint`)
 
