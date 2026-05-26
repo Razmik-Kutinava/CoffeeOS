@@ -15,6 +15,10 @@
 - **Код:** `UrlBuilder` без дефолта домена; `fly.toml` без `SHOP_BASE_DOMAIN`; `demo:shop_urls`.
 - **Следующий шаг владельца:** deploy develop → `fly ssh … demo:shop_urls` → smoke H.3. Свой домен — чеклист **A-inf** В2.
 
+### Сессия 2026-05-26 (В2 онбординг §1)
+
+- ONBOARDING_CHECKLIST §1 «Организация» — `[x]`; код без изменений; тесты onboarding org.
+
 ### Сессия 2026-05-26 (передача заказчику на живое демо)
 
 - Стенд Fly проверен: `/up`, витрина A/B, логин barista.

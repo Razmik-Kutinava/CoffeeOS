@@ -71,6 +71,13 @@
 
 ## Журнал изменений (дописывать снизу)
 
+- **2026-05-26 — ONBOARDING §1 Организация (полный цикл)**
+  - **Проверка:** `/admin/organizations/new` (namespace `platform`, path `admin`) — форма name + slug; create → org в списке; ссылка «Точка» с `organization_id` → tenant привязан к org.
+  - **Код:** изменений не потребовалось (уже в В1: `Platform::OrganizationsController`, index с `new_platform_tenant_path(organization_id:)`).
+  - **Тесты:** `test/integration/platform/onboarding_organization_test.rb` — 3 runs, 27 assertions, 0 failures.
+  - **Чеклист:** `ONBOARDING_CHECKLIST.md` §1 — `[x]`.
+  - **Следующий шаг:** §2 Точка продаж (×3).
+
 - **2026-05-25** — Создан комплект доков В2; приоритет: коробка → оплата → киоск; фидбек в `DEMO_FEEDBACK.md`.
 - **2026-05-25** — Базовый suite В1 на `develop`: **479 runs, 0 failures** (эталон до изменений В2).
 

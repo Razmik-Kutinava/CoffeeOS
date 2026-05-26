@@ -8,8 +8,8 @@
 
 ## 1. Организация
 
-- [ ] `/admin/organizations/new` — имя, slug org
-- [ ] Org видна в списке и привязана к новым tenants
+- [x] `/admin/organizations/new` — имя, slug org *(проверено 2026-05-26)*
+- [x] Org видна в списке и привязана к новым tenants *(проверено 2026-05-26)*
 
 ---
 

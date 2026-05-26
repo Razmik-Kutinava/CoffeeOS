@@ -21,7 +21,7 @@
 
 См. детальный список: [`ONBOARDING_CHECKLIST.md`](ONBOARDING_CHECKLIST.md).
 
-- [ ] ⭐ УК: org + N точек (slug, **address**, city, модули) — транзакция + `TenantOnboarding::Provision`
+- [ ] ⭐ УК: org + N точек (slug, **address**, city, модули) — транзакция + `TenantOnboarding::Provision` *(§1 org — [x] ONBOARDING_CHECKLIST)*
 - [ ] ⭐ Карточка точки в УК: **все входы** (витрина/киоск URL, панели, кого создать) — см. [`ONBOARDING.md`](ONBOARDING.md)
 - [ ] ⭐ Поле `address` в форме точки (`tenants.address` уже в БД)
 - [ ] ⭐ После создания — каталог PTS без ручного `demo:seed` (кроме демо-стенда)

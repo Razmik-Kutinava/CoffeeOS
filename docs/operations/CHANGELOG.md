@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## v1.58 — 2026-05-26 (В2 онбординг §1: организация)
+
+- Проверка ONBOARDING_CHECKLIST §1: создание org в УК (`/admin/organizations`), список, привязка tenant к org — **работает без правок кода**.
+- Тесты: `test/integration/platform/onboarding_organization_test.rb` (3/0).
+- Ops: `ONBOARDING_CHECKLIST.md` §1 `[x]`, журнал в `veha_2/PRACTICES.md`.
+
+---
+
 ## v1.57 — 2026-05-26 (Fly: troubleshooting certs/SSH; полные Shop URL в demo:seed)
 
 ### Ops
