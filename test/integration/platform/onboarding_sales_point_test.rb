@@ -90,7 +90,7 @@ class Platform::OnboardingSalesPointTest < ActionDispatch::IntegrationTest
     assert_equal 3, Tenant.where(organization_id: @org.id, type: "sales_point").where(slug: slugs).count
   end
 
-  test "create flash includes subdomain shop url when SHOP_BASE_DOMAIN set" do
+  test "create redirects to tenant show card with shop url when SHOP_BASE_DOMAIN set" do
     slug = "onboard-flash-#{SecureRandom.hex(4)}"
 
     post platform_tenants_path, params: tenant_payload(
@@ -100,11 +100,14 @@ class Platform::OnboardingSalesPointTest < ActionDispatch::IntegrationTest
       address: "Tverskaya 1"
     )
 
-    assert_redirected_to platform_tenants_path
-    assert_match %r{http://#{slug}\.shop\.example\.com/shop}, flash[:notice]
-
     tenant = Tenant.find_by!(slug: slug)
     @created_tenant_ids << tenant.id
+
+    assert_redirected_to platform_tenant_path(tenant)
+
+    follow_redirect!
+    assert_response :success
+    assert_match %r{http://#{slug}\.shop\.example\.com/shop}, response.body
   end
 
   test "onboarded tenant shop menu is not empty after provision" do

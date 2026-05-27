@@ -22,4 +22,17 @@ class Platform::TenantOnboarding::UrlBuilderTest < ActiveSupport::TestCase
   ensure
     ENV["SHOP_BASE_DOMAIN"] = prev
   end
+
+  test "shop_url_for uses tenant_id fallback for reserved slug" do
+    org = create_organization!
+    tenant = create_tenant!(organization: org, slug: "safe-#{SecureRandom.hex(2)}")
+    tenant.update_column(:slug, "api")
+    prev = ENV["SHOP_BASE_DOMAIN"]
+    ENV["SHOP_BASE_DOMAIN"] = "example.com"
+
+    assert_match %r{/shop\?tenant_id=#{tenant.id}}, Platform::TenantOnboarding::UrlBuilder.shop_url_for(tenant)
+    assert_nil Platform::TenantOnboarding::UrlBuilder.tenant_id_for_host("api.example.com")
+  ensure
+    ENV["SHOP_BASE_DOMAIN"] = prev
+  end
 end
