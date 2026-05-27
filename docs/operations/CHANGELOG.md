@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## v1.65 — 2026-05-27 (онбординг: закрытие блока A)
+
+- **CHECKLIST.md §A:** все `[x]` — PTS без demo:seed и rollback тестированы (`tenants_controller_test.rb`).
+- **MCP Prod:** org + точка созданы на `coffeeos.fly.dev` — витрина работает, каталог подтянут.
+
+---
+
 ## v1.64 — 2026-05-27 (MCP прогон 3: STF + CON-01 + SHP-08)
 
 - **Staff:** `User#normalize_blank_phone` — пустой телефон → `NULL` (второй staff без дубликата `index_users_on_phone`).

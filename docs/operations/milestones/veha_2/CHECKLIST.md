@@ -21,12 +21,12 @@
 
 См. детальный список: [`ONBOARDING_CHECKLIST.md`](ONBOARDING_CHECKLIST.md).
 
-- [ ] ⭐ УК: org + N точек (slug, **address**, city, модули) — транзакция + `TenantOnboarding::Provision` *(§1–§3 ONBOARDING_CHECKLIST — [x])*
+- [x] ⭐ УК: org + N точек (slug, **address**, city, модули) — транзакция + `TenantOnboarding::Provision` *(§1–§3 ONBOARDING_CHECKLIST — [x])*
 - [x] ⭐ Карточка точки в УК: **все входы** (витрина/киоск URL, панели, кого создать) — см. [`ONBOARDING.md`](ONBOARDING.md) *(2026-05-26)*
 - [x] ⭐ Поле `address` в форме точки (`tenants.address` уже в БД) *(2026-05-26)*
-- [ ] ⭐ После создания — каталог PTS без ручного `demo:seed` (кроме демо-стенда)
+- [x] ⭐ После создания — каталог PTS без ручного `demo:seed` (кроме демо-стенда) — `tenants_controller_test.rb#create provisions PTS`
 - [x] ⭐ Staff на точку: документированный путь — [`STAFF_ACCESS.md`](STAFF_ACCESS.md); код/UX по чеклисту онбординга *(§5 ONBOARDING 2026-05-26)*
-- [ ] QA: негативный откат онбординга при ошибке Provision (аналог В1 B 5.1)
+- [x] QA: негативный откат онбординга при ошибке Provision — `tenants_controller_test.rb#create rolls back tenant`
 - [x] `INFRA_URLS.md` + [`../../SHOP_URL_MODES.md`](../../SHOP_URL_MODES.md): на Fly — режим B (`?tenant_id=`); slug точек сохранены *(§7 ONBOARDING 2026-05-26)*
 
 ### A-inf. Свой домен → поддомены `{slug}.shop.бренд.ru` (режим A)

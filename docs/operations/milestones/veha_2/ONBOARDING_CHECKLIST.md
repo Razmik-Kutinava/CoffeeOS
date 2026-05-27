@@ -92,3 +92,9 @@
 ### Формально ещё не закрыто
 
 - [ ] Приёмка **заказчиком** руками (тот же сценарий без разработчика)
+
+### Покрытие тестами
+
+- `test/controllers/platform/tenants_controller_test.rb`
+  - `create rolls back tenant if Provision raises an error` — rollback транзакции
+  - `create provisions PTS for catalog products` — каталог без demo:seed*
