@@ -1,0 +1,9 @@
+<h1>Точка: <%= @tenant.name %></h1>
+
+<p style="margin-bottom: 16px;">
+  <%= link_to "← К списку", platform_tenants_path, style: "color: #93c5fd;" %>
+  · <%= link_to "Правка", edit_platform_tenant_path(@tenant), style: "color: #93c5fd;" %>
+  · <%= button_to "Менеджер", open_as_manager_platform_tenant_path(@tenant), method: :post, form: { style: "display:inline;" } %>
+</p>
+
+<%= render "entry_points_card", tenant: @tenant, entry_points: @entry_points %>

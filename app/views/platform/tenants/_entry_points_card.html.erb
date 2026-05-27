@@ -1,0 +1,70 @@
+<section style="margin-bottom: 24px; padding: 16px; border: 1px solid #334155; border-radius: 8px; background: #1e293b;">
+  <h2 style="font-size: 1.1rem; margin: 0 0 12px;">Входы и URL</h2>
+
+  <p style="margin: 0 0 8px;"><strong>Организация:</strong> <%= entry_points[:organization_name].presence || "—" %></p>
+  <p style="margin: 0 0 8px;"><strong>Slug:</strong> <%= entry_points[:slug] %></p>
+  <p style="margin: 0 0 8px;"><strong>Город:</strong> <%= tenant.city.presence || "—" %></p>
+  <p style="margin: 0 0 16px;"><strong>Адрес:</strong> <%= entry_points[:address].presence || "—" %></p>
+
+  <h3 style="font-size: 0.95rem; margin: 16px 0 8px;">Клиентские каналы</h3>
+  <ul style="list-style: none; padding: 0; margin: 0 0 16px;">
+    <li style="margin: 8px 0;">
+      <strong>Витрина:</strong>
+      <% if tenant.sales_point? || entry_points[:modules].any? { |m| m.code == "menu" && m.enabled } %>
+        <a href="<%= entry_points[:shop_public_url] %>" style="color: #93c5fd;" target="_blank" rel="noopener"><%= entry_points[:shop_public_url] %></a>
+        <button type="button" onclick="navigator.clipboard.writeText('<%= j entry_points[:shop_public_url] %>')" style="margin-left: 8px;">Копировать</button>
+        <div style="font-size: 12px; color: #94a3b8; margin-top: 4px;"><%= entry_points[:qr_hint] %></div>
+      <% else %>
+        <span style="color: #94a3b8;">— (точка не sales_point / меню выключено)</span>
+      <% end %>
+    </li>
+    <li style="margin: 8px 0;">
+      <strong>Киоск:</strong>
+      <% if entry_points[:kiosk_enabled] %>
+        <% if entry_points[:kiosk_ui_ready] %>
+          <a href="<%= entry_points[:kiosk_public_url] %>" style="color: #93c5fd;" target="_blank" rel="noopener"><%= entry_points[:kiosk_public_url] %></a>
+          <button type="button" onclick="navigator.clipboard.writeText('<%= j entry_points[:kiosk_public_url] %>')" style="margin-left: 8px;">Копировать</button>
+        <% else %>
+          <span style="color: #fbbf24;"><%= entry_points[:kiosk_public_url] %> — UI в разработке (§ KIOSK.md)</span>
+        <% end %>
+      <% else %>
+        <span style="color: #94a3b8;">модуль kiosk выключен</span>
+      <% end %>
+    </li>
+  </ul>
+
+  <h3 style="font-size: 0.95rem; margin: 16px 0 8px;">Панели (общий хост, вход через <%= entry_points[:login_url] %>)</h3>
+  <ul style="margin: 0 0 16px;">
+    <li><a href="<%= entry_points[:login_url] %>" style="color: #93c5fd;">/login</a> — страница входа</li>
+    <li><code><%= entry_points[:manager_path] %></code> — manager / franchise / GM / shift</li>
+    <li><code><%= entry_points[:barista_path] %></code> — barista POS</li>
+    <li><code><%= entry_points[:prep_kitchen_path] %></code> — заготовочный цех</li>
+  </ul>
+
+  <h3 style="font-size: 0.95rem; margin: 16px 0 8px;">Модули</h3>
+  <ul style="margin: 0 0 16px;">
+    <% entry_points[:modules].each do |mod| %>
+      <li><%= mod.label %> (<code><%= mod.code %></code>): <%= mod.enabled ? "вкл" : "выкл" %></li>
+    <% end %>
+  </ul>
+
+  <h3 style="font-size: 0.95rem; margin: 16px 0 8px;">Staff — создайте в manager → staff</h3>
+  <ul style="margin: 0;">
+    <% entry_points[:staff_items].each do |item| %>
+      <li>
+        <%= item.label %>
+        <% if item.filled %>
+          <span style="color: #86efac;">✓ есть</span>
+        <% else %>
+          <span style="color: #fca5a5;">— создайте</span>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+  <p style="font-size: 12px; color: #94a3b8; margin-top: 12px;">
+    УК:
+    <%= button_to "Создать staff →", open_as_manager_platform_tenant_path(tenant, to: "staff"), method: :post, form: { style: "display:inline;" } %>
+    или <%= button_to "Открыть manager", open_as_manager_platform_tenant_path(tenant), method: :post, form: { style: "display:inline;" } %>
+    → staff → назначить роли. Пароль — см. STAFF_ACCESS.
+  </p>
+</section>

@@ -36,13 +36,24 @@ module Platform
         return render(:new, status: :unprocessable_entity)
       end
 
-      shop_hint = Platform::TenantOnboarding::UrlBuilder.shop_url_for(@tenant)
-      redirect_to platform_tenants_path,
-                  notice: "Точка создана. Витрина: #{shop_hint}"
+      redirect_to platform_tenant_path(@tenant),
+                  notice: "Точка создана"
+    end
+
+    def show
+      @tenant = Tenant.includes(:organization, :feature_flags).find(params[:id])
+      @entry_points = Platform::TenantOnboarding::EntryPoints.for(
+        @tenant,
+        host: entry_points_host
+      )
     end
 
     def edit
-      @tenant = Tenant.find(params[:id])
+      @tenant = Tenant.includes(:organization, :feature_flags).find(params[:id])
+      @entry_points = Platform::TenantOnboarding::EntryPoints.for(
+        @tenant,
+        host: entry_points_host
+      )
     end
 
     def update
@@ -68,16 +79,25 @@ module Platform
       end
 
       unless committed
+        @entry_points = Platform::TenantOnboarding::EntryPoints.for(
+          @tenant,
+          host: entry_points_host
+        )
         return render(:edit, status: :unprocessable_entity)
       end
 
-      redirect_to platform_tenants_path, notice: "Сохранено"
+      redirect_to platform_tenant_path(@tenant), notice: "Сохранено"
     end
 
     def open_as_manager
       tenant = Tenant.find(params[:id])
       session[:manager_tenant_id] = tenant.id.to_s
-      redirect_to manager_dashboard_path, notice: "Панель менеджера: #{tenant.name}"
+      destination =
+        case params[:to].to_s
+        when "staff" then manager_staff_members_path
+        else manager_dashboard_path
+        end
+      redirect_to destination, notice: "Панель менеджера: #{tenant.name}"
     end
 
     private
@@ -90,6 +110,10 @@ module Platform
 
     def module_params
       params.fetch(:modules, ActionController::Parameters.new).permit(*TenantModuleFlags.modules)
+    end
+
+    def entry_points_host
+      ENV.fetch("APP_HOST", request.host_with_port)
     end
   end
 end

@@ -16,6 +16,7 @@
         <td style="padding: 8px;"><%= t.slug %></td>
         <td style="padding: 8px;"><%= t.organization&.name || "—" %></td>
         <td style="padding: 8px;">
+          <%= link_to "Карточка", platform_tenant_path(t), style: "color: #93c5fd;" %> ·
           <%= button_to "Менеджер", open_as_manager_platform_tenant_path(t), method: :post, form: { style: "display:inline;" } %>
           <%= link_to "Правка", edit_platform_tenant_path(t), style: "color: #93c5fd;" %>
         </td>

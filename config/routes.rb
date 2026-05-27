@@ -94,7 +94,7 @@ Rails.application.routes.draw do
     post "/menu/modifier_options", to: "menu#create_modifier_option", as: :menu_modifier_options
     patch "/menu/modifier_options/:id", to: "menu#update_modifier_option", as: :menu_modifier_option
     resources :organizations, only: %i[index new create edit update]
-    resources :tenants, only: %i[index new create edit update] do
+    resources :tenants, only: %i[index show new create edit update] do
       member do
         post :open_as_manager
       end
