@@ -24,6 +24,8 @@
 | [STAFF_ACCESS.md](STAFF_ACCESS.md) | **заполнен** | Кто как заводится на точку |
 | [INFRA_URLS.md](INFRA_URLS.md) | **заполнен** | Поддомены, DNS, `SHOP_BASE_DOMAIN` |
 | [../LOCAL_DEV.md](../LOCAL_DEV.md) | **заполнен** | Подъём на WSL: migrate, seed, `bin/dev`, витрина |
+| [ONBOARDING_DEVTOOLS_SCENARIOS.md](ONBOARDING_DEVTOOLS_SCENARIOS.md) | **заполнен** | 58 сценариев MCP (онбординг) |
+| [ONBOARDING_DEVTOOLS_RUN.md](ONBOARDING_DEVTOOLS_RUN.md) | **заполнен** | Журнал прогона 2026-05-27 |
 | [`../SHOP_URL_MODES.md`](../SHOP_URL_MODES.md) | **заполнен** | Режим A (поддомен) vs B (Fly `?tenant_id=`) |
 | [DEMO_FEEDBACK.md](DEMO_FEEDBACK.md) | **шаблон** | Очередь правок заказчика после демо В1 |
 | [QA_ACCEPTANCE_RUN.md](QA_ACCEPTANCE_RUN.md) | **каркас** | Протокол приёмки В2 (заполнять при прогоне) |

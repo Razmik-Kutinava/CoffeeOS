@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## v1.62 — 2026-05-27 (MCP DevTools прогон онбординга)
+
+- Каталог 58 сценариев: [`milestones/veha_2/ONBOARDING_DEVTOOLS_SCENARIOS.md`](milestones/veha_2/ONBOARDING_DEVTOOLS_SCENARIOS.md).
+- Журнал прогона локалки (34 PASS): [`milestones/veha_2/ONBOARDING_DEVTOOLS_RUN.md`](milestones/veha_2/ONBOARDING_DEVTOOLS_RUN.md).
+- ONBOARDING_CHECKLIST § приёмка — ссылка на MCP; блок **не закрыт** (ждём заказчика + CON-03/04).
+
+---
+
 ## v1.61 — 2026-05-27 (ops: локальный подъём WSL)
 
 - Документ [`LOCAL_DEV.md`](LOCAL_DEV.md): migrate, `demo:seed`, `demo:shop_urls`, `ruby bin/dev`, URL витрины, типичные ошибки, сверка с Fly (режим B).

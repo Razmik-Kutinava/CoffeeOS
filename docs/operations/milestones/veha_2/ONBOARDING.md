@@ -2,7 +2,7 @@
 
 **Зачем документ:** единая модель «из коробки» — что создаёт УК, что получает клиент, какие URL и как привязка к БД без поддомена на каждую роль.
 
-**Чеклист реализации:** [`ONBOARDING_CHECKLIST.md`](ONBOARDING_CHECKLIST.md). **Инфра URL:** [`INFRA_URLS.md`](INFRA_URLS.md). **Staff:** [`STAFF_ACCESS.md`](STAFF_ACCESS.md). **Локальный подъём (WSL):** [`../../LOCAL_DEV.md`](../../LOCAL_DEV.md).
+**Чеклист реализации:** [`ONBOARDING_CHECKLIST.md`](ONBOARDING_CHECKLIST.md). **Инфра URL:** [`INFRA_URLS.md`](INFRA_URLS.md). **Staff:** [`STAFF_ACCESS.md`](STAFF_ACCESS.md). **Локальный подъём (WSL):** [`../../LOCAL_DEV.md`](../../LOCAL_DEV.md). **MCP прогон:** [`ONBOARDING_DEVTOOLS_SCENARIOS.md`](ONBOARDING_DEVTOOLS_SCENARIOS.md) → [`ONBOARDING_DEVTOOLS_RUN.md`](ONBOARDING_DEVTOOLS_RUN.md).
 
 ---
 
