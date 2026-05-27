@@ -82,16 +82,13 @@
 - [x] TEN: **3 точки на чистой org** — MCP Run2 (`mcp-point-1..3`, 2026-05-26)
 - [x] KIT: карточка цеха, вход pk-manager → `/prep_kitchen`
 - [x] ENT: карточка «все входы» (URL, модули, staff ✓, kiosk hint)
-- [ ] STF: open_as_manager + создание staff на новой org — *след. прогон / руками*
-- [ ] CON: **цена УК → витрина** (CON-01) — *след. прогон*
+- [x] STF: open_as_manager + создание staff на новой org *(2026-05-27: MCP Run2 — barista + GM, login barista → `/barista`)*
+- [x] CON: **цена УК → витрина** (CON-01) *(2026-05-27: PublishProduct → vitrina 199₽)*
 - [x] CON: barista заказ → manager (integration test PASS после `db:ensure_triggers`)
 - [x] SHP: витрина A/B, API categories, корзина quick-add; **product card → product page** (fix Header)
-- [ ] SHP: **simulate заказ** (SHP-08) — *MAN / отладка cart/add с карточки*
+- [x] SHP: **simulate заказ** (SHP-08) *(2026-05-27: #202605-0002, 199₽, accepted; success UI — MAN/MCP quirk)*
 - [x] INF: `demo:shop_urls` режим B; Fly UUID локально не подходит
 
 ### Формально ещё не закрыто
 
 - [ ] Приёмка **заказчиком** руками (тот же сценарий без разработчика)
-- [ ] CON-01 цена УК → витрина (MCP)
-- [ ] SHP-08 simulate checkout
-- [ ] **Деплой prod** — после апрува

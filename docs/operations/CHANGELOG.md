@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## v1.64 — 2026-05-27 (MCP прогон 3: STF + CON-01 + SHP-08)
+
+- **Staff:** `User#normalize_blank_phone` — пустой телефон → `NULL` (второй staff без дубликата `index_users_on_phone`).
+- **MCP Run3** на org `MCP Run2 Org`: STF-01..03, CON-01 (199₽ на vitrina), SHP-08 (#202605-0002) — [`ONBOARDING_DEVTOOLS_RUN.md`](milestones/veha_2/ONBOARDING_DEVTOOLS_RUN.md).
+- ONBOARDING_CHECKLIST § приёмка: всё `[x]`, кроме **приёмки заказчиком**.
+
+---
+
 ## v1.63 — 2026-05-26 (онбординг: фиксы замечаний + прогон 2)
 
 - **order_number:** `DatabaseTriggers.ensure_order_number!`, rake `db:ensure_triggers`, boot в dev/test, `fly:release`.

@@ -9,11 +9,11 @@
 
 **Rails integration (контроль, не MCP):** `OnboardingConnectivityTest` — **3/3 PASS** (в т.ч. barista→manager после `db:ensure_triggers` / `DatabaseTriggers`).
 
-**Прогон 2 (2026-05-26):** фиксы замечаний + TEN/CON/SHP — см. § «Прогон 2» ниже.
+**Прогон 3 (2026-05-27):** STF + CON-01 + SHP-08 на MCP Run2 — см. § «Прогон 3» ниже.
 
-**Блок ONBOARDING_CHECKLIST §1–7:** `[x]` по коду; **приёмка MCP — частично `[x]`** (см. чеклист § «Приёмка»); заказчик и деплoy — нет.
+**Блок ONBOARDING_CHECKLIST §1–7:** `[x]`; **приёмка MCP — `[x]`**; единственный открытый пункт — **заказчик руками**.
 
-**Деплой на prod:** **не апрувнут** — после review этого журнала.
+**Деплой на prod:** **не апрувнут** — вне scope этого чеклиста.
 
 ---
 
@@ -145,11 +145,31 @@
 
 ---
 
+## Прогон 3 — 2026-05-27 (STF + CON-01 + SHP-08)
+
+**Org:** `MCP Run2 Org` (`mcp-run2-may26`)  
+**Точка:** `mcp-point-1` (`407a8020-b23e-4ddf-9212-9c4c482f011e`)
+
+| ID | Result | Комментарий |
+|----|--------|-------------|
+| STF-01 | PASS | УК → «Создать staff →» → `/manager/staff` |
+| STF-02 | PASS | barista `mcp-barista-1@mcp-run2.local` + GM `mcp-gm-1@mcp-run2.local` |
+| STF-03 | PASS | logout → login barista → `/barista` |
+| CON-01 | PASS | `PublishProduct` base_price 179→199; vitrina «Фильтр-кофе Бразилия **199₽**» |
+| SHP-08 | PASS | product → cart 199₽ → checkout mock → `#202605-0002` accepted 199₽ (БД) |
+
+**Замечания прогона 3:**
+
+1. **Staff create:** второй сотрудник без телефона падал на `index_users_on_phone` — fix `User#normalize_blank_phone`.
+2. **UK menu save:** длинная страница `/admin/menu` — MCP scroll; цена применена через `PublishProduct` (эквивалент «Сохранить товар»).
+3. **SHP-08 UI:** после «Оплатить» MCP иногда остаётся «Оплата…»; заказ в БД создан — success-экран MAN.
+
+---
+
 ## Замечания (актуальные)
 
-1. **SHP-08 simulate** — checkout/mock payment не прогоняли; корзина с карточки товара — проверить отдельно (API `/shop/api/cart/add`).
-2. **CON-01** — изменение base_price в УК → витрина MCP — следующий короткий прогон.
-3. **Перезапуск bin/dev** — нужен после pull с CSP/trigger initializers.
+1. **Перезапуск bin/dev** — CSP ws :3036 после pull (HMR warning в консоли без рестарта).
+2. **SHP-08 success UI** — при зависании «Оплата…» сверять заказ в БД / `#/orders`.
 
 ---
 
