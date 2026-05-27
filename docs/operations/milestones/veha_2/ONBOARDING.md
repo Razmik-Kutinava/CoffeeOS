@@ -2,7 +2,7 @@
 
 **Зачем документ:** единая модель «из коробки» — что создаёт УК, что получает клиент, какие URL и как привязка к БД без поддомена на каждую роль.
 
-**Чеклист реализации:** [`ONBOARDING_CHECKLIST.md`](ONBOARDING_CHECKLIST.md). **Инфра URL:** [`INFRA_URLS.md`](INFRA_URLS.md). **Staff:** [`STAFF_ACCESS.md`](STAFF_ACCESS.md).
+**Чеклист реализации:** [`ONBOARDING_CHECKLIST.md`](ONBOARDING_CHECKLIST.md). **Инфра URL:** [`INFRA_URLS.md`](INFRA_URLS.md). **Staff:** [`STAFF_ACCESS.md`](STAFF_ACCESS.md). **Локальный подъём (WSL):** [`../../LOCAL_DEV.md`](../../LOCAL_DEV.md).
 
 ---
 
@@ -28,7 +28,8 @@ Organization (org)
 | Создать org | `/admin` → organizations | `Organization` |
 | Создать точку | `/admin` → tenants | `Tenant` + modules + PTS |
 | Модули | Форма tenant | `FeatureFlag` per module |
-| Витрина URL | flash после create | `UrlBuilder.shop_url_for` → `{slug}.{SHOP_BASE_DOMAIN}/shop` |
+| Витрина URL | карточка точки после create | `EntryPoints` + `UrlBuilder.shop_url_for` |
+| Карточка «все входы» | `/admin/tenants/:id` и блок на edit | `Platform::TenantOnboarding::EntryPoints` |
 | RLS | Provision | `SET LOCAL app.current_tenant_id` + bootstrap каталога |
 | Зайти как менеджер | `open_as_manager` | Сессия manager на точке |
 
@@ -39,8 +40,8 @@ Organization (org)
 | Пробел | План |
 |--------|------|
 | Поле **улица/адрес** в форме | **done** — `address` в `_form` (2026-05-26) |
-| **Карточка точки** со всеми входами | Новый экран/блок: витрина, киоск (когда есть), `/manager`, `/barista`, `/prep_kitchen`, инструкция «создать staff» |
-| **Staff из УК** одним потоком | Расширить или wizard — см. STAFF_ACCESS |
+| **Карточка точки** со всеми входами | **done** — show + partial на edit (2026-05-26) |
+| **Staff из УК** одним потоком | **done** — open_as_manager → staff + STAFF_ACCESS *(2026-05-26)*; wizard — хвост |
 | **Киоск URL** | После реализации KIOSK — в ту же карточку |
 | Автоматические **demo users** только для `demo:seed` | Боевая org — ручной/staff flow |
 

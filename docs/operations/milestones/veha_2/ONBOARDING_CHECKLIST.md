@@ -33,38 +33,38 @@
 
 ## 4. Карточка «все входы» (продукт В2)
 
-- [ ] Экран или блок на tenant#edit / show:
-  - [ ] Витрина URL + QR hint
-  - [ ] Киоск URL (когда есть)
-  - [ ] Ссылки: `/manager`, `/barista`, `/prep_kitchen` (общий хост)
-  - [ ] Адрес, slug, org name
-  - [ ] Список модулей on/off
-  - [ ] Чеклист staff: «создайте barista@…, gm@…»
-- [ ] Копирование URL в буфер (nice-to-have)
+- [x] Экран или блок на tenant#edit / show *(2026-05-26: `/admin/tenants/:id` + блок на edit)*
+  - [x] Витрина URL + QR hint
+  - [x] Киоск URL (когда есть; UI — пометка «в разработке»)
+  - [x] Ссылки: `/manager`, `/barista`, `/prep_kitchen` (общий хост)
+  - [x] Адрес, slug, org name
+  - [x] Список модулей on/off
+  - [x] Чеклист staff: «создайте barista@…, gm@…»
+- [x] Копирование URL в буфер (nice-to-have) *(кнопка «Копировать» на витрине)*
 
 ---
 
 ## 5. Staff (минимум для «боевых входов»)
 
-- [ ] GM или barista на **каждую** sales_point — логин работает
-- [ ] Документированный пароль/сброс — [`STAFF_ACCESS.md`](STAFF_ACCESS.md)
-- [ ] УК `open_as_manager` на каждую точку — OK
+- [x] GM или barista на **каждую** sales_point — логин работает *(2026-05-26: УК → open_as_manager → manager/staff → /login)*
+- [x] Документированный пароль/сброс — [`STAFF_ACCESS.md`](STAFF_ACCESS.md) *(2026-05-26)*
+- [x] УК `open_as_manager` на каждую точку — OK *(2026-05-26, 3 точки в тесте)*
 
 ---
 
 ## 6. Связность (smoke)
 
-- [ ] УК изменил цену PTS → витрина точки показывает новую цену
-- [ ] Barista создал заказ → manager видит в смене
-- [ ] Prep_kitchen movement — только свой tenant
+- [x] УК изменил цену PTS → витрина точки показывает новую цену *(2026-05-26: platform menu → PublishProduct → shop API)*
+- [x] Barista создал заказ → manager видит в смене *(2026-05-26: manager/shifts/:id + /manager/orders)*
+- [x] Prep_kitchen movement — только свой tenant *(2026-05-26: confirm чужого movement не проходит)*
 
 ---
 
 ## 7. Инфра
 
-- [ ] `SHOP_BASE_DOMAIN` на стенде — см. [`INFRA_URLS.md`](INFRA_URLS.md)
-- [ ] Wildcard DNS `*.domain` → приложение
-- [ ] Новые slug не в RESERVED (`www`, `admin`, `api`, …)
+- [x] `SHOP_BASE_DOMAIN` на стенде — см. [`INFRA_URLS.md`](INFRA_URLS.md) *(2026-05-26: Fly режим B — без env в fly.toml; режим A — когда свой домен)*
+- [x] Wildcard DNS `*.domain` → приложение *(2026-05-26: код резолвит Host→slug; на Fly DNS не нужен; прод — INFRA_URLS § A)*
+- [x] Новые slug не в RESERVED (`www`, `admin`, `api`, …) *(2026-05-26: валидация Tenant + UrlBuilder fallback)*
 
 ---
 

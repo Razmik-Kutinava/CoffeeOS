@@ -21,31 +21,33 @@
 
 См. детальный список: [`ONBOARDING_CHECKLIST.md`](ONBOARDING_CHECKLIST.md).
 
-- [ ] ⭐ УК: org + N точек (slug, **address**, city, модули) — транзакция + `TenantOnboarding::Provision` *(§1 org — [x] ONBOARDING_CHECKLIST)*
-- [ ] ⭐ Карточка точки в УК: **все входы** (витрина/киоск URL, панели, кого создать) — см. [`ONBOARDING.md`](ONBOARDING.md)
-- [ ] ⭐ Поле `address` в форме точки (`tenants.address` уже в БД)
+- [ ] ⭐ УК: org + N точек (slug, **address**, city, модули) — транзакция + `TenantOnboarding::Provision` *(§1–§3 ONBOARDING_CHECKLIST — [x])*
+- [x] ⭐ Карточка точки в УК: **все входы** (витрина/киоск URL, панели, кого создать) — см. [`ONBOARDING.md`](ONBOARDING.md) *(2026-05-26)*
+- [x] ⭐ Поле `address` в форме точки (`tenants.address` уже в БД) *(2026-05-26)*
 - [ ] ⭐ После создания — каталог PTS без ручного `demo:seed` (кроме демо-стенда)
-- [ ] ⭐ Staff на точку: документированный путь — [`STAFF_ACCESS.md`](STAFF_ACCESS.md); код/UX по чеклисту онбординга
+- [x] ⭐ Staff на точку: документированный путь — [`STAFF_ACCESS.md`](STAFF_ACCESS.md); код/UX по чеклисту онбординга *(§5 ONBOARDING 2026-05-26)*
 - [ ] QA: негативный откат онбординга при ошибке Provision (аналог В1 B 5.1)
-- [ ] `INFRA_URLS.md` + [`../../SHOP_URL_MODES.md`](../../SHOP_URL_MODES.md): на Fly — режим B (`?tenant_id=`); slug точек сохранены
+- [x] `INFRA_URLS.md` + [`../../SHOP_URL_MODES.md`](../../SHOP_URL_MODES.md): на Fly — режим B (`?tenant_id=`); slug точек сохранены *(§7 ONBOARDING 2026-05-26)*
 
 ### A-inf. Свой домен → поддомены `{slug}.shop.бренд.ru` (режим A)
 
 Пока домена нет — **не блокер** В2; на Fly тестируем режим B. Канон поддоменов не снимаем.
 
-- [ ] Домен + DNS `*.shop…` CNAME → `coffeeos.fly.dev`
+- [ ] Домен + DNS `*.shop…` CNAME → `coffeeos.fly.dev` *(прод — когда будет домен)*
 - [ ] `fly certs add "*.shop…" -a coffeeos` → Ready
 - [ ] `SHOP_BASE_DOMAIN=shop.…` на стенде + `config.hosts` при необходимости
 - [ ] Smoke: 3 slug → 3 HTTPS-витрины, разное меню
-- [ ] Flash УК после create → `https://{slug}.shop…/shop` (не `?tenant_id=`)
+- [x] Карточка УК после create → URL витрины *(режим A: subdomain; B: `?tenant_id=`)*
+
+**Код готов:** reserved slug, Host→tenant, UrlBuilder — §7 ONBOARDING.
 
 ---
 
 ## B. Связность админок (приоритет 1)
 
-- [ ] ⭐ УК → точка → `open_as_manager` → manager видит **ту же** точку и каталог
-- [ ] ⭐ Меню УК → PTS на все точки org → витрина `{slug}/shop` показывает актуальное меню
-- [ ] ⭐ Barista / prep_kitchen — только данные **своего** `tenant_id` (RLS + session)
+- [x] ⭐ УК → точка → `open_as_manager` → manager видит **ту же** точку и каталог *(§5–§6 ONBOARDING 2026-05-26)*
+- [x] ⭐ Меню УК → PTS на все точки org → витрина `{slug}/shop` показывает актуальное меню *(§6: PublishProduct + shop API)*
+- [x] ⭐ Barista / prep_kitchen — только данные **своего** `tenant_id` (RLS + session) *(§6 prep_kitchen movement; §2 RLS orders)*
 - [ ] ⭐ Feature flags (модули) отключают недоступные разделы или явный «модуль выключен»
 - [ ] Health `/health/tenants` отражает новые точки (опционально в демо)
 

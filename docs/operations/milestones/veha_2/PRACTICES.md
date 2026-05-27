@@ -51,9 +51,9 @@
 
 | ID | Тема | Статус | Куда дальше |
 |----|------|--------|-------------|
-| V2-T1 | Нет карточки «все входы» в УК | open | ONBOARDING § A |
+| V2-T1 | Нет карточки «все входы» в УК | **done** §4 ONBOARDING 2026-05-26 | — |
 | V2-T2 | `address` не в форме tenant | **done** §2 ONBOARDING 2026-05-26 | — |
-| V2-T3 | Staff только manager + franchise из УК | open | STAFF_ACCESS |
+| V2-T3 | Staff только manager + franchise из УК | **done** §5 ONBOARDING 2026-05-26 (путь open_as_manager → staff) | wizard — хвост |
 | V2-T4 | Киоск без routes | open | KIOSK |
 | V2-T5 | Реальный шлюз не подключён | open | PAYMENT |
 
@@ -70,6 +70,32 @@
 ---
 
 ## Журнал изменений (дописывать снизу)
+
+- **2026-05-26 — ONBOARDING §7 Инфра (URL / DNS / slug)**
+  - **Код:** валидация reserved slug на `Tenant`; подсказка в форме точки; UrlBuilder fallback для legacy reserved.
+  - **Проверка:** Fly — без `SHOP_BASE_DOMAIN`; режим A — subdomain на карточке; shop API по Host; slug `admin` отклоняется.
+  - **Док:** `INFRA_URLS.md` § ONBOARDING §7 статус стендов.
+  - **Тесты:** `onboarding_infra_test.rb` 5/18; `tenant_slug_validation_test.rb` 2/4; `url_builder_test` +1.
+  - **Чеклист:** §7 `[x]`. **ONBOARDING блок A–7 закрыт.**
+
+- **2026-05-26 — ONBOARDING §6 Связность (smoke)**
+  - **Проверка:** УК меняет `base_price` в `/admin/menu` → PTS + витрина `/shop/api/products/:id`; barista заказ → GM видит в `manager/shifts/:id` и `/manager/orders`; prep_kitchen confirm только своего tenant.
+  - **Код:** изменений не потребовалось (В1: PublishProductService, barista orders, prep_kitchen RLS).
+  - **Тесты:** `onboarding_connectivity_test.rb` — 3 runs, 31 assertions, 0 failures.
+  - **Чеклист:** §6 `[x]`. **Следующий:** §7 Инфра.
+
+- **2026-05-26 — ONBOARDING §5 Staff (боевые входы)**
+  - **Код:** `open_as_manager` с `to=staff` → redirect на manager/staff; кнопка «Создать staff →» на карточке точки.
+  - **Проверка:** barista и GM создаются через manager/staff после open_as_manager; login → `/barista` / `/manager`; сброс пароля (пустое поле = без изменений); open_as_manager на 3 sales_point.
+  - **Док:** `STAFF_ACCESS.md` — пароль, сброс, путь УК.
+  - **Тесты:** `onboarding_staff_test.rb` — 5 runs, 65 assertions, 0 failures.
+  - **Чеклист:** §5 `[x]`. **V2-T3** closed (wizard — хвост). **Следующий:** §6 Связность.
+
+- **2026-05-26 — ONBOARDING §4 Карточка «все входы»**
+  - **Код:** `Platform::TenantOnboarding::EntryPoints`; `TenantsController#show`; partial `_entry_points_card` на show/edit; redirect после create/update → карточка; ссылка «Карточка» в index/dashboard.
+  - **Проверка:** org/slug/address/city; URL витрины (режим A/B); панели `/login`, `/manager`, `/barista`, `/prep_kitchen`; модули on/off; чеклист staff (✓/создайте); киоск — URL или «выкл»; копирование витрины.
+  - **Тесты:** `entry_points_test.rb` — 4 runs, 23 assertions; `onboarding_entry_points_test.rb` — 3 runs, 43 assertions; обновлён §2 sales_point redirect.
+  - **Чеклист:** §4 `[x]`. **V2-T1** closed. **Следующий:** §5 Staff.
 
 - **2026-05-26 — ONBOARDING §3 Заготовочный цех (полный цикл)**
   - **Проверка:** УК создаёт `production_kitchen` + модуль `prep_kitchen` (barista/menu/kiosk off); staff `prep_kitchen_manager` через manager/staff после `open_as_manager`; login → `/prep_kitchen`.

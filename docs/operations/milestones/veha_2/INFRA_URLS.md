@@ -56,6 +56,20 @@
 
 `www`, `app`, `admin`, `api`, `mail`, `ftp` — нельзя (`UrlBuilder::RESERVED_SUBDOMAINS`).
 
+**Код (2026-05-26):** `Tenant` отклоняет slug при create/update; форма точки показывает подсказку; если в БД остался старый reserved slug — витрина fallback на `?tenant_id=`.
+
+---
+
+## ONBOARDING §7 — статус стендов
+
+| Стенд | SHOP_BASE_DOMAIN | Wildcard DNS | Проверка |
+|-------|------------------|--------------|----------|
+| **Fly demo** (`coffeeos`) | **не задан** (режим B) | не нужен | `?tenant_id=` в карточке точки |
+| **Прод / свой домен** | `shop.бренд.ru` | `*.shop.бренд.ru` → Fly | поддомены + TLS — § «Режим A» выше |
+| **Локально** | опционально `localhost` | `/etc/hosts` или `?tenant_id=` | см. SHOP_URL_MODES |
+
+Тесты: `onboarding_infra_test.rb`, `shop_tenant_subdomain_test.rb`, `tenant_slug_validation_test.rb`.
+
 ---
 
 ## Чеклист перед приёмкой новой org (режим A)
