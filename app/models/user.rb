@@ -25,6 +25,8 @@ class User < ApplicationRecord
   validates :status, presence: true
   validate :email_or_phone_present
 
+  before_validation :normalize_blank_phone
+
   scope :for_tenant, ->(tenant_id) { where(tenant_id: tenant_id) }
   # scope :active конфликтует с enum методом active?, используем where(status: 'active') напрямую
 
@@ -72,5 +74,9 @@ class User < ApplicationRecord
   def email_or_phone_present
     return if email.present? || phone.present?
     errors.add(:base, 'Email или телефон должен быть указан')
+  end
+
+  def normalize_blank_phone
+    self.phone = nil if phone.blank?
   end
 end
