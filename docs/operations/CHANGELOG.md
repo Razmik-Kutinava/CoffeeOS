@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## v1.66 — 2026-05-27 (блок B: feature flags + health endpoint)
+
+- **Feature flags:** `barista/base_controller` + `prep_kitchen/base_controller` — `require_*_module!` блокирует доступ при выключенном модуле.
+- **Health:** `Health::TenantsController` — `/health/tenants` (401 без auth, JSON для uk_global_admin).
+- Тесты: `barista/feature_flags_test.rb` (2), `health/tenants_controller_test.rb` (3) — 5/5 PASS.
+- CHECKLIST.md §B — все `[x]`.
+
+---
+
 ## v1.65 — 2026-05-27 (онбординг: закрытие блока A)
 
 - **CHECKLIST.md §A:** все `[x]` — PTS без demo:seed и rollback тестированы (`tenants_controller_test.rb`).

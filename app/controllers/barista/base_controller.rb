@@ -4,6 +4,7 @@ module Barista
     before_action :require_login
     before_action :require_barista_role
     before_action :set_tenant_context
+    before_action :require_barista_module!
     
     private
     
@@ -38,6 +39,15 @@ module Barista
       set_pg_context(tenant_id: Current.tenant_id, user_id: Current.user_id)
     end
 
+
+    def require_barista_module!
+      return unless Current.tenant_id
+
+      ff = FeatureFlag.find_by(tenant_id: Current.tenant_id, module: "barista")
+      return if ff.nil? || ff.enabled?
+
+      redirect_to root_path, alert: "Модуль «Касса / бариста» выключен для этой точки"
+    end
 
     def current_shift
       @current_shift ||= CashShift.lock.find_by(tenant_id: Current.tenant_id, status: 'open')

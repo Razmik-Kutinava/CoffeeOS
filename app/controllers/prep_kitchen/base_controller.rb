@@ -6,6 +6,7 @@ module PrepKitchen
     before_action :require_login
     before_action :require_prep_kitchen_role
     before_action :set_tenant_context
+    before_action :require_prep_kitchen_module!
     # Доступ ограничен require_prep_kitchen_role; fine-grained authorize при необходимости в подклассах.
     before_action :skip_authorization
 
@@ -40,6 +41,15 @@ module PrepKitchen
       return "prep_kitchen_manager" if current_user&.has_role?("prep_kitchen_manager")
 
       "prep_kitchen_worker"
+    end
+
+    def require_prep_kitchen_module!
+      return unless Current.tenant_id
+
+      ff = FeatureFlag.find_by(tenant_id: Current.tenant_id, module: "prep_kitchen")
+      return if ff.nil? || ff.enabled?
+
+      redirect_to root_path, alert: "Модуль «Заготовочный цех» выключен для этой точки"
     end
 
     def prep_kitchen_manager?
