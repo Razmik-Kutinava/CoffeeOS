@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## v1.61 — 2026-05-27 (ops: локальный подъём WSL)
+
+- Документ [`LOCAL_DEV.md`](LOCAL_DEV.md): migrate, `demo:seed`, `demo:shop_urls`, `ruby bin/dev`, URL витрины, типичные ошибки, сверка с Fly (режим B).
+- Ссылки из `milestones/veha_2/ONBOARDING.md`, `milestones/veha_2/README.md`.
+
+---
+
 ## v1.60 — 2026-05-26 (В2 онбординг §3: заготовочный цех)
 
 - ONBOARDING §3: `production_kitchen` + `prep_kitchen`, staff → `/prep_kitchen` — работает без правок.
