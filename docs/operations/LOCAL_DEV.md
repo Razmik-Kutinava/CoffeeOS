@@ -141,7 +141,8 @@ http://127.0.0.1:3001/shop/api/debug?tenant_id=<uuid>
 | **`/shop/api/categories` 404** | неверный или старый `tenant_id` | `bin/rails demo:seed` + URL из вывода; не брать UUID с Fly из docs |
 | **chrome-error / страница не грузится** | сервер не запущен или `https://` | `ruby bin/dev`, открыть **`http://127.0.0.1:3001`** |
 | **Пустая витрина, жёлтый баннер** | нет `tenant_id` / точка не в БД | `/shop?tenant_id=...` или `SHOP_DEFAULT_TENANT_ID` в `.env` |
-| **CSP: ws://127.0.0.1:3036 blocked** | CSP режет WebSocket Vite | HMR может не работать; **меню и заказы не ломает**. Для полного HMR — правка CSP в dev (отдельная задача) |
+| **CSP: ws://127.0.0.1:3036 blocked** | CSP режет WebSocket Vite | В **development** CSP разрешает ws :3036; после pull — **перезапустить `bin/dev`** |
+| **Заказ barista без order_number** | триггер не в schema.rb | `bin/rails db:ensure_triggers` (или `db:migrate`); в test/dev — auto на boot |
 | **Vite / rolldown binding** | `npm install` делали в Windows на том же `node_modules` | `rm -rf node_modules && npm install` **только в WSL** |
 | **Долго «Booting Puma»** | проект на `/mnt/c/` (медленный I/O) | подождать; опционально клон в `~/projects/` на ext4 |
 

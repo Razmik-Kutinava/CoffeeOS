@@ -79,18 +79,19 @@
 - [x] AUTH: вход УК, GM, barista-a, pk-manager → свои панели
 - [x] ORG: список, форма, создание org через UI
 - [x] TEN: форма новой точки; витрина demo-point-a/b — меню не пустое
-- [ ] TEN: **3 точки на чистой org** (не demo-coffeeos) — *след. прогон*
+- [x] TEN: **3 точки на чистой org** — MCP Run2 (`mcp-point-1..3`, 2026-05-26)
 - [x] KIT: карточка цеха, вход pk-manager → `/prep_kitchen`
 - [x] ENT: карточка «все входы» (URL, модули, staff ✓, kiosk hint)
 - [ ] STF: open_as_manager + создание staff на новой org — *след. прогон / руками*
-- [ ] CON: **цена УК → витрина** (CON-01) — *след. прогон, приоритет*
-- [ ] CON: barista заказ → manager смена (CON-03/04) — *след. прогон / руками*
-- [x] SHP: витрина A/B, API categories, корзина quick-add
-- [ ] SHP: **simulate заказ** (SHP-08) — *след. прогон, приоритет*
+- [ ] CON: **цена УК → витрина** (CON-01) — *след. прогон*
+- [x] CON: barista заказ → manager (integration test PASS после `db:ensure_triggers`)
+- [x] SHP: витрина A/B, API categories, корзина quick-add; **product card → product page** (fix Header)
+- [ ] SHP: **simulate заказ** (SHP-08) — *MAN / отладка cart/add с карточки*
 - [x] INF: `demo:shop_urls` режим B; Fly UUID локально не подходит
 
 ### Формально ещё не закрыто
 
 - [ ] Приёмка **заказчиком** руками (тот же сценарий без разработчика)
-- [ ] Связность **цены и заказа** между УК ↔ точки ↔ витрина (след. MCP-прогон)
+- [ ] CON-01 цена УК → витрина (MCP)
+- [ ] SHP-08 simulate checkout
 - [ ] **Деплой prod** — после апрува

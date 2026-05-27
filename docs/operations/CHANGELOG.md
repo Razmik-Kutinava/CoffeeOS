@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## v1.63 — 2026-05-26 (онбординг: фиксы замечаний + прогон 2)
+
+- **order_number:** `DatabaseTriggers.ensure_order_number!`, rake `db:ensure_triggers`, boot в dev/test, `fly:release`.
+- **Shop:** CSP Vite HMR (dev), Header без перехода на `/login`, org select `name (slug)`, catch-all `/shop/*`.
+- Журнал MCP прогон 2: TEN-02..04, product card, integration CON-03/04 — [`ONBOARDING_DEVTOOLS_RUN.md`](milestones/veha_2/ONBOARDING_DEVTOOLS_RUN.md).
+
+---
+
 ## v1.62 — 2026-05-27 (MCP DevTools прогон онбординга)
 
 - Каталог 58 сценариев: [`milestones/veha_2/ONBOARDING_DEVTOOLS_SCENARIOS.md`](milestones/veha_2/ONBOARDING_DEVTOOLS_SCENARIOS.md).

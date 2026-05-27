@@ -7,7 +7,9 @@
 
 **Итог прогона (MCP + API):** **34 PASS**, **0 FAIL**, **24 SKIP/MAN** (не прогоняли в этой сессии или только руками).
 
-**Rails integration (контроль, не MCP):** 23 runs, **22 PASS**, **1 FAIL** — `OnboardingConnectivityTest#test_barista_order_from_onboarded_tenant_appears_on_manager_shift_view` («barista должен создать заказ в открытой смене»). **→ CON-03/CON-04 требуют ручной проверки или фикса теста.**
+**Rails integration (контроль, не MCP):** `OnboardingConnectivityTest` — **3/3 PASS** (в т.ч. barista→manager после `db:ensure_triggers` / `DatabaseTriggers`).
+
+**Прогон 2 (2026-05-26):** фиксы замечаний + TEN/CON/SHP — см. § «Прогон 2» ниже.
 
 **Блок ONBOARDING_CHECKLIST §1–7:** `[x]` по коду; **приёмка MCP — частично `[x]`** (см. чеклист § «Приёмка»); заказчик и деплoy — нет.
 
@@ -112,12 +114,42 @@
 
 ---
 
-## Замечания
+## Замечания (прогон 1) — **исправлено в прогоне 2**
 
-1. **CSP WebSocket Vite** (`ws://127.0.0.1:3036`) — предупреждение в консоли; HMR может не работать, **витрина и API не ломаются**.
-2. **С product card → /login** при клике с главной витрины — обход через категорию + quick-add (SHP-07).
-3. **Дубликаты MCP Accept Org** в combobox — от повторных прогонов; на prod не влияет.
-4. **Следующий прогон MCP (готов к запуску):** TEN-02..04 (3 точки на чистой org), **CON-01** (цена УК → витрина), **SHP-08** (simulate), связь всех панелей..
+| # | Было | Фикс | Статус |
+|---|------|------|--------|
+| 1 | CSP блокировал ws Vite | `connect-src` + ws/http :3036 в development | **FIX** |
+| 2 | product card → `/login` | Header: `use:link href="/"` → `push("/")`; catch-all `/shop/*` | **FIX** — MCP: `#/product/…` OK |
+| 3 | Дубликаты org в combobox | `Organization#display_name_for_select` → `name (slug)` | **FIX** |
+| 4 | order_number триггер | `DatabaseTriggers.ensure_order_number!`, `db:ensure_triggers`, test/dev boot | **FIX** — CON-03/04 integration PASS |
+
+---
+
+## Прогон 2 — 2026-05-26 (после фиксов)
+
+**Org:** `MCP Run2 Org` (`mcp-run2-may26`)  
+**Точки:** `mcp-point-1..3` (provision + menu/barista)
+
+| ID | Result | Комментарий |
+|----|--------|-------------|
+| TEN-02 | PASS | mcp-point-1, City 1, address |
+| TEN-03 | PASS | mcp-point-2 |
+| TEN-04 | PASS | mcp-point-3 |
+| TEN-05 | PASS | vitrina mcp-point-1 — «Фильтр-кофе Бразилия 179₽» |
+| SHP (card) | PASS | клик с главной → `#/product/…`, не `/login` |
+| CON-01 | SKIP | изменение цены в UI УК — *след. шаг* |
+| CON-03/04 | PASS | `bin/rails test onboarding_connectivity_test.rb` (barista→manager) |
+| SHP-08 | SKIP | «В корзину» на карточке завис «Добавляем…»; quick-add (SHP-07) ранее PASS — simulate checkout MAN |
+
+**Команда после pull:** `bin/rails db:ensure_triggers` (или `db:migrate`), перезапуск `bin/dev` для CSP/initializers.
+
+---
+
+## Замечания (актуальные)
+
+1. **SHP-08 simulate** — checkout/mock payment не прогоняли; корзина с карточки товара — проверить отдельно (API `/shop/api/cart/add`).
+2. **CON-01** — изменение base_price в УК → витрина MCP — следующий короткий прогон.
+3. **Перезапуск bin/dev** — нужен после pull с CSP/trigger initializers.
 
 ---
 
