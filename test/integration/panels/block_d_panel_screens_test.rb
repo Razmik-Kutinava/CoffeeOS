@@ -47,6 +47,7 @@ class BlockDPanelScreensTest < ActionDispatch::IntegrationTest
     assert_get_success edit_platform_organization_path(@org)
     assert_get_success platform_tenants_path
     assert_get_success new_platform_tenant_path
+    assert_get_success platform_tenant_path(@tenant_a)
     assert_get_success edit_platform_tenant_path(@tenant_a)
     assert_get_success new_platform_franchise_owner_path
     assert_get_success platform_menu_path
