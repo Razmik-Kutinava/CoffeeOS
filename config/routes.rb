@@ -155,6 +155,8 @@ Rails.application.routes.draw do
       post "favorites", to: "favorites#create"
       delete "favorites/:product_id", to: "favorites#destroy"
     end
+    # SPA hash-routes иногда попадают на сервер как /shop/... — отдаём shell витрины
+    get "*spa_path", to: "pages#home", constraints: ->(req) { req.format.html? }
   end
 
   # Defines the root path route ("/")

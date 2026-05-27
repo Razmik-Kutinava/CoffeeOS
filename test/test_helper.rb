@@ -45,6 +45,11 @@ module ActiveSupport
     # Tests run against a fresh local Postgres instance; disable RLS so factories can
     # insert data without needing per-connection GUC bootstrap.
     setup do
+      unless defined?(@@db_triggers_ready) && @@db_triggers_ready
+        DatabaseTriggers.ensure_order_number!
+        @@db_triggers_ready = true
+      end
+
       next if defined?(@@rls_disabled) && @@rls_disabled
 
       begin

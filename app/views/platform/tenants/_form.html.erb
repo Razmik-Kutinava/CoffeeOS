@@ -5,7 +5,7 @@
     <p style="color: #fca5a5;"><%= tenant.errors.full_messages.to_sentence %></p>
   <% end %>
   <p><%= f.label :organization_id, "Организация" %>
-    <%= f.collection_select :organization_id, Organization.order(:name), :id, :name, { include_blank: "—" }, { style: "width: 100%;" } %></p>
+    <%= f.collection_select :organization_id, Organization.order(:name), :id, :display_name_for_select, { include_blank: "—" }, { style: "width: 100%;" } %></p>
   <p><%= f.label :name %> <%= f.text_field :name, required: true, style: "width: 100%;" %></p>
   <p><%= f.label :slug %> <%= f.text_field :slug, required: true, style: "width: 100%;" %>
     <span style="display: block; font-size: 12px; color: #94a3b8; margin-top: 4px;">

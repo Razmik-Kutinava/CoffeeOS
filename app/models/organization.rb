@@ -6,4 +6,8 @@ class Organization < ApplicationRecord
 
   validates :name, presence: true
   validates :slug, presence: true, uniqueness: true, format: { with: /\A[a-z0-9][a-z0-9\-]*\z/, message: "только латиница, цифры и дефис" }
+
+  def display_name_for_select
+    "#{name} (#{slug})"
+  end
 end

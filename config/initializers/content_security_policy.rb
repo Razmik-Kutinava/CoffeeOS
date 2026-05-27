@@ -7,7 +7,14 @@ Rails.application.configure do
     # Hotwire/Turbo требует unsafe-inline для inline scripts
     policy.script_src  :self, :unsafe_inline
     policy.style_src   :self, :unsafe_inline
-    policy.connect_src :self, :wss  # Action Cable WebSocket
+    if Rails.env.development?
+      # Vite HMR (config/vite.json port 3036)
+      policy.connect_src :self, :wss,
+                         "ws://127.0.0.1:3036", "ws://localhost:3036",
+                         "http://127.0.0.1:3036", "http://localhost:3036"
+    else
+      policy.connect_src :self, :wss  # Action Cable WebSocket
+    end
     policy.frame_ancestors :none
   end
 end
