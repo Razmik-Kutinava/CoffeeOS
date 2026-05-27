@@ -56,8 +56,24 @@ class Tenant < ApplicationRecord
   has_many :shift_cash_operations, dependent: :destroy
 
   validates :name, presence: true
+  validates :slug, presence: true, uniqueness: true
   validates :type, presence: true
   validates :status, presence: true
   validates :country, presence: true, length: { is: 2 }
   validates :currency, presence: true, length: { is: 3 }
+  validate :slug_not_reserved_for_shop_subdomain
+
+  private
+
+  def slug_not_reserved_for_shop_subdomain
+    return if slug.blank?
+
+    reserved = Platform::TenantOnboarding::UrlBuilder::RESERVED_SUBDOMAINS
+    return unless reserved.include?(slug.to_s.downcase)
+
+    errors.add(
+      :slug,
+      "зарезервирован (#{reserved.join(', ')}) — нельзя использовать как поддомен витрины"
+    )
+  end
 end

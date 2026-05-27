@@ -7,7 +7,12 @@
   <p><%= f.label :organization_id, "Организация" %>
     <%= f.collection_select :organization_id, Organization.order(:name), :id, :name, { include_blank: "—" }, { style: "width: 100%;" } %></p>
   <p><%= f.label :name %> <%= f.text_field :name, required: true, style: "width: 100%;" %></p>
-  <p><%= f.label :slug %> <%= f.text_field :slug, required: true, style: "width: 100%;" %></p>
+  <p><%= f.label :slug %> <%= f.text_field :slug, required: true, style: "width: 100%;" %>
+    <span style="display: block; font-size: 12px; color: #94a3b8; margin-top: 4px;">
+      Латиница, уникальный. Нельзя: <%= Platform::TenantOnboarding::UrlBuilder::RESERVED_SUBDOMAINS.join(', ') %>.
+      Витрина: <code>{slug}.<%= Platform::TenantOnboarding::UrlBuilder.shop_base_domain.presence || 'SHOP_BASE_DOMAIN' %></code> или <code>?tenant_id=</code> без домена.
+    </span>
+  </p>
   <p><%= f.label :type %>
     <%= f.select :type, [%w[Точка\ продаж sales_point], %w[Кухня production_kitchen]] %></p>
   <p><%= f.label :status %>
