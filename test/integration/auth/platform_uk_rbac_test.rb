@@ -86,8 +86,8 @@ class Auth::PlatformUkRbacTest < ActionDispatch::IntegrationTest
       }
     end
 
-    assert_redirected_to platform_tenants_path
     tenant = Tenant.find_by!(slug: slug)
+    assert_redirected_to platform_tenant_path(tenant)
     assert FeatureFlag.find_by(tenant_id: tenant.id, module: "menu")&.enabled
   end
 

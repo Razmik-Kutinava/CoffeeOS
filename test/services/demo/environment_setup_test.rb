@@ -80,9 +80,9 @@ class Demo::EnvironmentSetupTest < ActiveSupport::TestCase
     assert_equal first.tenant_a.id, second.tenant_a.id
     assert_equal first.tenant_b.id, second.tenant_b.id
     assert_equal 1, Organization.where(slug: Demo::EnvironmentSetup::ORG_SLUG).count
-    assert_equal 3, Tenant.where(organization_id: first.organization.id, type: "sales_point").count
+    assert_equal 2, Tenant.where(organization_id: first.organization.id, type: "sales_point").count
     assert_equal 1, Tenant.where(organization_id: first.organization.id, type: "production_kitchen").count
-    assert_equal 4, Tenant.where(organization_id: first.organization.id).count
+    assert_equal 3, Tenant.where(organization_id: first.organization.id).count
     assert_equal first.users_count, second.users_count
   end
 

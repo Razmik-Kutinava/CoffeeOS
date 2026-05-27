@@ -35,8 +35,8 @@ class FranchisePlatformAdminTest < ActionDispatch::IntegrationTest
         modules: { "kiosk" => "1", "menu" => "1" }
       }
     end
-    assert_redirected_to platform_tenants_path
     t = Tenant.order(:created_at).last
+    assert_redirected_to platform_tenant_path(t)
     assert_equal org.id, t.organization_id
     assert FeatureFlag.find_by(tenant_id: t.id, module: "kiosk")&.enabled
   end

@@ -166,6 +166,25 @@
 
 ---
 
+---
+
+## Прогон 4 — 2026-05-27 (pre-deploy smoke: все роли + feature flags)
+
+**Цель:** убедиться что код рабочий перед деплоем; проверить feature flags (новая функция В2).
+
+| Роль / сценарий | Результат |
+|-----------------|-----------|
+| УК → `/admin` | PASS |
+| barista-a → `/barista` | PASS |
+| gm-a → `/manager` | PASS |
+| pk-manager → `/prep_kitchen` | PASS |
+| Feature flag barista=off → `/barista` → редирект | PASS |
+| Feature flag barista restore → `/barista` → вход | PASS |
+
+**`bin/rails test`:** 517 runs, **0 failures, 0 errors** (после фиксов pre-existing тестов: redirect path, trigger в параллельном прогоне, cancel reason FK).
+
+---
+
 ## Замечания (актуальные)
 
 1. **Перезапуск bin/dev** — CSP ws :3036 после pull (HMR warning в консоли без рестарта).

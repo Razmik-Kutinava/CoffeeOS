@@ -117,6 +117,7 @@ class BlockGCashShiftTest < ActionDispatch::IntegrationTest
   end
 
   test "cancel with reason writes admin audit log" do
+    ensure_order_cancel_reason!(code: "customer_changed_mind", name: "Клиент передумал")
     login_as!(@barista)
     order = Order.create!(
       tenant: @tenant,
