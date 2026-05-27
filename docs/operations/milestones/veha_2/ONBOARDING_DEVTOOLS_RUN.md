@@ -183,6 +183,15 @@
 
 **`bin/rails test`:** 517 runs, **0 failures, 0 errors** (после фиксов pre-existing тестов: redirect path, trigger в параллельном прогоне, cancel reason FK).
 
+**Прод smoke (coffeeos.fly.dev):**
+
+| Роль | URL | Результат |
+|------|-----|-----------|
+| УК | `/admin` | PASS |
+| barista-a | `/barista` | PASS |
+
+CI Deploy: success. Стенд живой.
+
 ---
 
 ## Замечания (актуальные)
