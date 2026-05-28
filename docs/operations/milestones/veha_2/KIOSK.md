@@ -47,6 +47,57 @@
 
 ---
 
+## Что готово сейчас (2026-05-28)
+
+| Компонент | Статус |
+|-----------|--------|
+| БД: `devices`, `kiosk_settings`, `kiosk_carts`, `kiosk_sessions` | ✅ готово |
+| `Device` модель + `device_token`, `tenant_id`, `online?` | ✅ готово |
+| Оплата Т-Банк (`TbankAdapter`, callback, `PaymentStatusUpdater`) | ✅ готово, переиспользуется |
+| Заказ (`Shop::OrderCreator`) | ✅ готово, переиспользуется |
+| Маршруты `/kiosk/api/...` | ❌ нет |
+| Аутентификация планшета по `device_token` | ❌ нет |
+| UI регистрации устройства в УК/manager | ❌ нет |
+
+---
+
+## Что ждёт Flutter
+
+Блок заморожен до появления Flutter-приложения. Когда будет готово:
+
+1. **Регистрация устройства** — кнопка в УК/manager → создаёт `Device(device_type: kiosk)` → выдаёт `device_token` (QR или ручной ввод на планшете)
+2. **Auth API** — `POST /kiosk/api/auth` → Flutter даёт `device_token` → получает `tenant_id` + подтверждение
+3. **Kiosk API** — меню, корзина, заказ (переиспользует логику shop)
+4. **Тест приёмки** — симуляция через браузер/Postman с `X-Device-Token` заголовком, потом на реальном планшете
+
+---
+
+## API контракт (черновик для Flutter)
+
+```
+POST /kiosk/api/auth
+  Header: X-Device-Token: <token>
+  Response: { tenant_id, tenant_name, kiosk_settings }
+
+GET  /kiosk/api/products        (те же что /shop/api/products)
+POST /kiosk/api/cart/add
+POST /kiosk/api/orders          (те же что /shop/api/orders → payment_url)
+GET  /kiosk/api/orders/:id
+```
+
+---
+
+## Симуляция на приёмке (без Flutter)
+
+Пока Flutter нет — имитируем через браузер или Postman:
+1. Создать `Device(device_type: kiosk, tenant_id: ...)` через Rails console
+2. Открыть витрину `/shop?tenant_id=...` — это тот же pipeline
+3. Оформить заказ с оплатой картой → проверить `accepted`
+4. **Полноценный тест** — только когда будет реальный Flutter на планшете
+
+---
+
 ## Статус
 
-**2026-05-25:** документ и план; код **не начат**.
+**2026-05-25:** документ и план; код не начат.  
+**2026-05-28:** фундамент (БД, оплата, заказ) готов; ждём Flutter-приложение.
