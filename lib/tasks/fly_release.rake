@@ -58,4 +58,60 @@ namespace :fly do
     Rake::Task["demo:seed"].invoke
     puts "[fly:release] OK"
   end
+
+  desc "Prod smoke: card order + signed T-Bank CONFIRMED webhook via Solid Queue worker"
+  task callback_smoke: :environment do
+    require "net/http"
+
+    tenant_id  = ENV.fetch("SMOKE_TENANT_ID", "2fdee1ac-4674-41ee-b89e-87b45643f789")
+    product_id = ENV.fetch("SMOKE_PRODUCT_ID", "24dae391-2199-4959-907e-d08c4cec3329")
+
+    tenant = Tenant.find(tenant_id)
+    session = {}
+    Shop::CartService.new(session, tenant.id).add!(
+      product_id: product_id,
+      quantity: 1,
+      selected_modifiers: []
+    )
+
+    order = Shop::OrderCreator.new(session, tenant: tenant).call!(
+      name: "WorkerCallbackSmoke",
+      phone: "+7900#{SecureRandom.random_number(10**7).to_s.rjust(7, '0')}",
+      payment_method: "card"
+    )
+    raise "expected pending_payment, got #{order.status}" unless order.pending_payment?
+
+    payment = order.payments.order(created_at: :desc).first
+    payment_id = payment.provider_payment_id.presence || "smoke-#{SecureRandom.hex(4)}"
+    payment.update!(provider: "tbank", provider_payment_id: payment_id) if payment.provider_payment_id.blank?
+
+    payload = {
+      "TerminalKey" => ENV.fetch("TBANK_TERMINAL_KEY"),
+      "OrderId"     => order.id.to_s,
+      "PaymentId"   => payment_id,
+      "Status"      => "CONFIRMED",
+      "Amount"      => (order.final_amount * 100).to_i
+    }
+    payload["Token"] = Payments::TbankAdapter.new.build_token(payload)
+
+    host = ENV.fetch("APP_HOST", "coffeeos.fly.dev")
+    res = Net::HTTP.post(
+      URI("https://#{host}/callbacks/tbank"),
+      payload.to_json,
+      "Content-Type" => "application/json"
+    )
+
+    sleep 5
+    order.reload
+    payment.reload
+
+    puts({
+      smoke: "worker_callback",
+      order_id: order.id,
+      order_status: order.status,
+      payment_status: payment.status,
+      callback_http: res.code,
+      callback_body: res.body
+    }.to_json)
+  end
 end

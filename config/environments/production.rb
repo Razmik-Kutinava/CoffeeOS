@@ -99,5 +99,7 @@ Rails.application.configure do
     /.*\.coffeeos\.fly\.dev\z/, # витрины точек: {slug}.coffeeos.fly.dev
     /.*\.fly\.dev/              # preview machines Fly.io
   ]
-  config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
+  config.host_authorization = {
+    exclude: ->(request) { request.path == "/up" || request.path.start_with?("/callbacks/") }
+  }
 end

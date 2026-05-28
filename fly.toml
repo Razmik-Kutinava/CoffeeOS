@@ -16,6 +16,8 @@ primary_region = "ams"
   RAILS_SERVE_STATIC_FILES = "true"
   WEB_CONCURRENCY   = "0"
   RAILS_MAX_THREADS = "3"
+  # Worker (bin/jobs): Solid Queue threads + dispatchers > RAILS_MAX_THREADS; иначе crash loop на prod.
+  DB_POOL           = "8"
   # Период живого демо на develop→Fly: идемпотентный demo:seed после каждого деплоя.
   # Убрать demo:seed из release_command после закрытия H.3 (см. veha_1/CHECKLIST § H.0).
   DEMO_AUTO_SEED    = "true"
