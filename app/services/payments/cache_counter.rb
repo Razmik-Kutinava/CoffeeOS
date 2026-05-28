@@ -34,5 +34,9 @@ module Payments
       delete(Payments::TbankAdapter::CB_FAILURES_KEY)
       delete(Payments::TbankAdapter::CB_OPEN_KEY)
     end
+
+    def clear!
+      STORE.clear
+    end
   end
 end

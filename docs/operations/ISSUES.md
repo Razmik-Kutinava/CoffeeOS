@@ -6,6 +6,12 @@
 
 ## 🟡 Важно
 
+[2026-05-28] — Fly: Solid Queue/Cable schema не загружались → callback 500, barista broadcast 500
+Приоритет: 🟡 | Статус: **решено**
+Описание: `solid_queue_jobs` / `solid_cable_messages` отсутствовали; idempotency callback на SolidCache → RangeError.
+Решение: idempotency → `Payments::CacheCounter`; callback `perform_now` fallback; `fly:release` → `DatabaseTasks.load_schema` для queue/cache/cable; barista broadcast rescue.
+Проверка: E2E callback `f8427fc4-…` → `accepted`; barista `##202605-0008` на табло; 544/0 tests.
+
 ## 🟢 Потом
 
 ## Закрытые

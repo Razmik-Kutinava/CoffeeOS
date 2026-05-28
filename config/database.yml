@@ -33,9 +33,12 @@ production:
   cache:
     <<: *production_primary
     migrations_paths: db/cache_migrate
+    schema_dump_path: db/cache_schema.rb
   queue:
     <<: *production_primary
     migrations_paths: db/queue_migrate
+    schema_dump_path: db/queue_schema.rb
   cable:
     <<: *production_primary
     migrations_paths: db/cable_migrate
+    schema_dump_path: db/cable_schema.rb

@@ -244,40 +244,40 @@ module Barista
         nil
       end
       
-      # Удаляем из старой колонки если статус изменился
-      if source_column && source_column != target_column
-        Turbo::StreamsChannel.broadcast_remove_to(
-          "orders_#{Current.tenant_id}",
-          target: "order_#{order.id}"
-        )
-      end
-      
-      # Добавляем в новую колонку (или обновляем если остался в той же)
-      if target_column
-        if source_column == target_column
-          # Обновляем карточку в той же колонке
-          Turbo::StreamsChannel.broadcast_replace_to(
+      # Turbo/Solid Cable может быть недоступен на Fly до load schema — не ломаем смену статуса.
+      begin
+        # Удаляем из старой колонки если статус изменился
+        if source_column && source_column != target_column
+          Turbo::StreamsChannel.broadcast_remove_to(
             "orders_#{Current.tenant_id}",
-            target: "order_#{order.id}",
-            partial: 'barista/dashboard/order_card',
-            locals: { order: order }
-          )
-        else
-          # Добавляем в новую колонку
-          Turbo::StreamsChannel.broadcast_append_to(
-            "orders_#{Current.tenant_id}",
-            target: target_column,
-            partial: 'barista/dashboard/order_card',
-            locals: { order: order }
+            target: "order_#{order.id}"
           )
         end
-      end
-      
-      # Обновление счётчиков — один запрос вместо трёх
-      broadcast_order_counts
 
-      # TV board: перерисовываем колонки целиком для корректного idx.
-      BroadcastTvColumnsJob.perform_later(Current.tenant_id)
+        # Добавляем в новую колонку (или обновляем если остался в той же)
+        if target_column
+          if source_column == target_column
+            Turbo::StreamsChannel.broadcast_replace_to(
+              "orders_#{Current.tenant_id}",
+              target: "order_#{order.id}",
+              partial: 'barista/dashboard/order_card',
+              locals: { order: order }
+            )
+          else
+            Turbo::StreamsChannel.broadcast_append_to(
+              "orders_#{Current.tenant_id}",
+              target: target_column,
+              partial: 'barista/dashboard/order_card',
+              locals: { order: order }
+            )
+          end
+        end
+
+        broadcast_order_counts
+        BroadcastTvColumnsJob.perform_later(Current.tenant_id)
+      rescue StandardError => e
+        Rails.logger.warn("[Barista::Orders] broadcast skipped: #{e.class} #{e.message}")
+      end
     end
 
     # HTML-форма шлёт cart_items[0][product_id]; интеграционные тесты — массив хэшей.

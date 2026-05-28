@@ -87,3 +87,21 @@
 | Callback E2E (оплата картой) | SKIP | без списания реальных денег |
 
 **Вердикт:** боевой терминал **включён**, smoke **PASS**.
+
+### Прогон 3 — prod E2E callback + barista (2026-05-28)
+
+**Инструмент:** Chrome DevTools MCP + signed webhook (CheckOrder → CONFIRMED)
+
+| Шаг | PASS/FAIL | Примечание |
+|-----|-----------|------------|
+| Card Init prod | PASS | `f8427fc4-…`, `pay.tbank.ru/roEOwCZL` |
+| Форма Т-Банка 179₽ | PASS | |
+| Тест-карта на prod | SKIP | `ACTIVATION_ERROR` — prod не принимает sandbox-карты |
+| Callback CONFIRMED | PASS | PaymentId `8576370191`, order → `accepted` |
+| Barista board | PASS | `##202605-0008` в колонке ACCEPTED |
+| Barista accept → preparing | PASS | после fix broadcast rescue |
+| Suite | PASS | 544/0 |
+
+**Fixes:** `TbankController` idempotency MemoryStore + `perform_now`; `fly:release` solid schemas; barista broadcast rescue.
+
+**Вердикт:** E2E оплаты **PASS** (без списания реальных денег на форме Т-Банка).

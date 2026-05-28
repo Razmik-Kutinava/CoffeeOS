@@ -107,9 +107,29 @@
 | 3 | Shop A — card Init → `payment_url` | ✅ order `25bb9312-…`, `https://pay.tbank.ru/EJe3CaXH` |
 | 4 | Форма Т-Банка (prod) | ✅ **179₽**, «Оплата картой» |
 | 5 | Shop A — cash → `accepted` | ✅ order `c36b2de4-…`, 179₽ |
-| 6 | Полная оплата картой (реальные деньги) | ⏸ не прогоняли — только Init + форма |
+| 6 | Полная оплата картой (реальные деньги) | ⏸ тест-карта на prod → `ACTIVATION_ERROR` (ожидаемо) |
+| 7 | Callback CONFIRMED → `accepted` | ✅ order `f8427fc4-…`, PaymentId `8576370191`, `perform_now` fallback |
+| 8 | Барista табло — заказ в колонке ACCEPTED | ✅ `##202605-0008`, 179₽ |
+| 9 | Барista «Принять →» | ✅ после fix broadcast (Solid Cable schema) |
 
-**Вердикт:** prod smoke **PASS** — боевой терминал включён, Init и редирект работают.
+**Вердикт:** prod smoke **PASS** — боевой терминал, Init, callback→accepted, заказ на табло барista.
+
+### E2E prod (прогон 3, 2026-05-28)
+
+**Цепочка:** витрина card → `pay.tbank.ru` → webhook CONFIRMED → order `accepted` → барista board.
+
+| Шаг | ID / детали | PASS |
+|-----|-------------|------|
+| Card Init | `f8427fc4-…`, `https://pay.tbank.ru/roEOwCZL` | ✅ |
+| Форма 179₽ | prod terminal CODE BLACK | ✅ |
+| Тест-карта 2201382000000013 | `ACTIVATION_ERROR` на prod | ⏸ *(нужна реальная карта)* |
+| CheckOrder → PaymentId | `8576370191` | ✅ |
+| POST `/callbacks/tbank` CONFIRMED | HTTP 200 `{ok:true}` | ✅ |
+| Payment status | `succeeded`, order `accepted` | ✅ |
+| Barista `barista-a@…` | заказ `##202605-0008` в ACCEPTED | ✅ |
+| `bin/rails test` | 544 runs, 0 failures | ✅ |
+
+**Fixes в прогоне:** idempotency на MemoryStore; callback `perform_now` если Solid Queue недоступен; `fly:release` load queue/cable schema; barista broadcast не роняет 500.
 
 ## Не в scope этого дока
 

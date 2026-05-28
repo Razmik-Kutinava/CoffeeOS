@@ -19,6 +19,8 @@ primary_region = "ams"
   # Период живого демо на develop→Fly: идемпотентный demo:seed после каждого деплоя.
   # Убрать demo:seed из release_command после закрытия H.3 (см. veha_1/CHECKLIST § H.0).
   DEMO_AUTO_SEED    = "true"
+  # SOLID_QUEUE_IN_PUMA не включаем на Fly 1x — Puma падает если queue недоступен.
+  # Callback T-Bank: perform_now fallback в TbankController.
 
 # Миграции + демо-данные перед трафиком (coffeeos = стенд develop, не main/prod).
 [deploy]

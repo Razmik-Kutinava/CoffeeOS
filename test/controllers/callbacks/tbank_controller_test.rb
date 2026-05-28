@@ -36,7 +36,7 @@ class Callbacks::TbankControllerTest < ActionDispatch::IntegrationTest
   teardown do
     ENV.delete("TBANK_TERMINAL_KEY")
     ENV.delete("TBANK_PASSWORD")
-    Rails.cache.clear
+    Payments::CacheCounter.clear!
   end
 
   # ---------------------------------------------------------------------------

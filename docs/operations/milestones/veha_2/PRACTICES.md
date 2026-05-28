@@ -158,6 +158,14 @@
   - **Чеклист:** `ONBOARDING_CHECKLIST.md` §1 — `[x]`.
   - **Следующий шаг:** §2 Точка продаж (×3).
 
+- **2026-05-28 — Prod E2E callback + barista PASS**
+  - **Заказ:** `f8427fc4-…`, PaymentId `8576370191`, 179₽
+  - **Callback:** CONFIRMED → `accepted`, payment `succeeded` (`perform_now` fallback)
+  - **Barista:** `##202605-0008` на табло ACCEPTED; accept после fix broadcast
+  - **Тест-карта prod:** `ACTIVATION_ERROR` (ожидаемо)
+  - **Fixes:** idempotency MemoryStore, solid schema load, barista broadcast rescue
+  - **Tests:** 544/0
+
 - **2026-05-28 — Prod terminal включён + smoke PASS**
   - **Fly:** `TBANK_TERMINAL_KEY=1719235292309`, `SHOP_SIMULATE_PAYMENT=0`, rolling deploy OK
   - **Smoke (DevTools MCP):** card Init → `https://pay.tbank.ru/EJe3CaXH`, 179₽ на форме; cash → `accepted`
