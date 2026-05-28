@@ -193,16 +193,20 @@
 | УК | `/admin` | PASS |
 | barista-a | `/barista` | PASS |
 
-**Прод smoke (coffeeos.fly.dev) — прогон 5 (2026-05-28):**
+**Прод smoke (coffeeos.fly.dev) — прогон 5 полный (2026-05-28) — AUTH-01..08:**
 
-| AUTH | Роль | URL | Результат |
-|------|------|-----|-----------|
-| AUTH-01 | uk_global_admin | `/admin` | PASS |
-| AUTH-02 | franchise_manager | `/manager` (switcher A/B) | PASS |
-| AUTH-06 | shift_manager | `/manager` (sidebar урезан) | PASS |
-| AUTH-08 | prep_kitchen_worker | `/prep_kitchen` | PASS |
+| AUTH | Роль | Email | URL | Результат |
+|------|------|-------|-----|-----------|
+| AUTH-01 | uk_global_admin | uk@ | `/admin` | PASS |
+| AUTH-02 | franchise_manager | franchise@ | `/manager` (switcher A/B) | PASS |
+| AUTH-03 | general_manager | gm-a@ | `/manager` | PASS |
+| AUTH-04 | barista A | barista-a@ | `/barista` | PASS |
+| AUTH-05 | barista B | barista-b@ | `/barista` | PASS |
+| AUTH-06 | shift_manager | shift-a@ | `/manager` (sidebar урезан) | PASS |
+| AUTH-07 | prep_kitchen_manager | pk-manager@ | `/prep_kitchen` | PASS |
+| AUTH-08 | prep_kitchen_worker | pk-worker@ | `/prep_kitchen` | PASS |
 
-CI Deploy: success. Все роли на проде работают.
+CI Deploy: success. Все 8 ролей на проде работают.
 
 ---
 
