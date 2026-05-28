@@ -56,14 +56,16 @@
 
 ## Минимальный набор на точку продаж
 
-| Роль | Зачем |
-|------|--------|
-| `general_manager` | Меню, staff, склад |
-| `shift_manager` | Смена, оперативка |
-| `barista` | POS |
-| `franchise_manager` | На org (один на сеть) |
+| Роль | Зачем | Панель | Статус проверки |
+|------|--------|--------|-----------------|
+| `general_manager` | Меню, staff, склад | `/manager` | ✅ MCP прогон В1+В2 |
+| `shift_manager` | Смена, оперативка | `/manager` | ⚠️ В1 OK; **В2 AUTH-06 SKIP** |
+| `barista` | POS | `/barista` | ✅ MCP прогон В1+В2 |
+| `franchise_manager` | На org (один на сеть) | `/manager` | ✅ MCP прогон В1 |
 
 **Приёмка §5:** на каждую sales_point достаточно **GM или barista** с рабочим `/login`.
+
+> **⚠️ shift_manager В2:** логин через `/manager` проверен в В1; в В2 MCP-прогонах AUTH-06 пропущен. Закрыть в прогоне 5.
 
 Цех: `prep_kitchen_manager` + `prep_kitchen_worker` на `production_kitchen` tenant.
 

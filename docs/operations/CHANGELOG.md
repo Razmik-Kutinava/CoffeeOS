@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## v1.67 — 2026-05-28 (доки: shift_manager пропуск зафиксирован)
+
+- **CHECKLIST §B, ONBOARDING_CHECKLIST §5:** добавлен пункт `[ ]` shift_manager login не проверялся (AUTH-06 SKIP).
+- **DEMO_LOGINS.md В2:** полная таблица ролей включая shift_manager; замечание про AUTH-06.
+- **STAFF_ACCESS.md:** таблица минимального набора с колонкой статус проверки.
+- **PRACTICES.md:** раздел «Известные пропуски».
+- **ONBOARDING_DEVTOOLS_RUN.md:** прогон 4 — AUTH-06 SKIP; замечание 3.
+- Тесты и MCP-прогон 5 — после апрува.
+
+---
+
 ## v1.66 — 2026-05-27 (блок B: feature flags + health endpoint)
 
 - **Feature flags:** `barista/base_controller` + `prep_kitchen/base_controller` — `require_*_module!` блокирует доступ при выключенном модуле.

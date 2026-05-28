@@ -1,20 +1,39 @@
 # Demo-логины стенда В2
 
-**Зачем:** когда заведёте **новую org** (не `demo-coffeeos`) для приёмки В2 — сюда таблица email / роль / точка / пароль.
-
-**Сейчас:** используйте демо В1 — [`../veha_1/DEMO_LOGINS.md`](../veha_1/DEMO_LOGINS.md) (`demo123456`, `demo-point-a/b`).
+**Демо-данные:** `demo-coffeeos`, пароль `demo123456` — полный список [`../veha_1/DEMO_LOGINS.md`](../veha_1/DEMO_LOGINS.md).
 
 ---
 
-## Шаблон (заполнить после онбординга тестовой org)
+## Текущие демо-логины
+
+| Email | Роль | Tenant | Панель |
+|-------|------|--------|--------|
+| uk@demo.coffeeos.local | uk_global_admin | demo-point-a | `/admin` |
+| franchise@demo.coffeeos.local | franchise_manager | demo-point-a | `/manager` |
+| gm-a@demo.coffeeos.local | general_manager | demo-point-a | `/manager` |
+| gm-b@demo.coffeeos.local | general_manager | demo-point-b | `/manager` |
+| **shift-a@demo.coffeeos.local** | **shift_manager** | demo-point-a | `/manager` |
+| barista-a@demo.coffeeos.local | barista | demo-point-a | `/barista` |
+| barista-b@demo.coffeeos.local | barista | demo-point-b | `/barista` |
+| pk-manager@demo.coffeeos.local | prep_kitchen_manager | demo-prep-kitchen | `/prep_kitchen` |
+| pk-worker@demo.coffeeos.local | prep_kitchen_worker | demo-prep-kitchen | `/prep_kitchen` |
+
+> **⚠️ shift_manager (AUTH-06):** логин `shift-a@demo.coffeeos.local` через `/manager` **не прогонялся в MCP-прогонах 1–4** (SKIP). Закрыть в прогоне 5 после апрува.
+
+---
+
+## Шаблон для новой org (заполнить после онбординга)
 
 | Email | Роль | Точка (slug) | Панель / URL |
 |-------|------|--------------|--------------|
 | | uk_global_admin | — | `/admin` |
+| | franchise_manager | org | `/manager` |
 | | general_manager | | `/manager` |
+| | shift_manager | | `/manager` |
 | | barista | | `/barista` |
+| | prep_kitchen_manager | кухня | `/prep_kitchen` |
 
-**Пароль:** ____________ (не коммитить production secrets; для стенда — ok в этом файле если политика команды允许)
+**Пароль:** ____________
 
 **Витрины:**
 
@@ -24,4 +43,4 @@
 
 ---
 
-**Статус 2026-05-25:** каркас; данных нет.
+**Обновлено 2026-05-28:** добавлены все роли включая shift_manager; замечание AUTH-06 SKIP.

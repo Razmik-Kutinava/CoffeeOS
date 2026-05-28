@@ -180,6 +180,7 @@
 | pk-manager → `/prep_kitchen` | PASS |
 | Feature flag barista=off → `/barista` → редирект | PASS |
 | Feature flag barista restore → `/barista` → вход | PASS |
+| **shift-a (AUTH-06) → `/manager`** | **SKIP — не прогонялся** |
 
 **`bin/rails test`:** 517 runs, **0 failures, 0 errors** (после фиксов pre-existing тестов: redirect path, trigger в параллельном прогоне, cancel reason FK).
 
@@ -198,6 +199,7 @@ CI Deploy: success. Стенд живой.
 
 1. **Перезапуск bin/dev** — CSP ws :3036 после pull (HMR warning в консоли без рестарта).
 2. **SHP-08 success UI** — при зависании «Оплата…» сверять заказ в БД / `#/orders`.
+3. **AUTH-06 SKIP (shift_manager)** — `shift-a@demo.coffeeos.local` не проверялся ни в одном из прогонов 1–4. Закрыть в прогоне 5: login → `/manager` → проверить доступ к сменам, заблокированный inventory/staff.
 
 ---
 
