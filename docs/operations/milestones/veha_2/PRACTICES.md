@@ -56,7 +56,7 @@
 | V2-T3 | Staff только manager + franchise из УК | **done** §5 ONBOARDING 2026-05-26 (путь open_as_manager → staff) | wizard — хвост |
 | V2-T4 | Киоск без routes | open | KIOSK |
 | V2-T5 | Реальный шлюз не подключён | **done** Т-Банк 2026-05-28 (тест-терминал); прод — после Outbox+CB | PAYMENT |
-| V2-T6 | Боевой терминал Т-Банка не включён | open | Только после Outbox + Circuit Breaker |
+| V2-T6 | Боевой терминал Т-Банка не включён | **done** *(2026-05-28)* | `1719235292309` на Fly, prod smoke PASS |
 | V2-T7 | QR режим B (без домена) | open | Режим A — когда будет домен; §I хвост |
 | V2-T8 | Flaky тест `events_controller_test.rb:208` (timing) | open | Исправить race condition в тесте |
 
@@ -83,7 +83,7 @@
 5. ✅ **Idempotency `/callbacks/tbank`** — Redis `tbank:callback:{PaymentId}:{Status}` *(2026-05-28)*
 6. ✅ **Мониторинг** — `StuckPaymentsCheckJob` → Telegram *(2026-05-28)*
 7. ❌ §I QA приёмка + Code Review
-8. ❌ Переключить на боевой терминал (`1719235292309`) — **решение заказчика**, тест-терминал остаётся
+8. ✅ Переключить на боевой терминал (`1719235292309`) — *(2026-05-28, prod smoke PASS)*
 
 ---
 
@@ -157,6 +157,13 @@
   - **Тесты:** `test/integration/platform/onboarding_organization_test.rb` — 3 runs, 27 assertions, 0 failures.
   - **Чеклист:** `ONBOARDING_CHECKLIST.md` §1 — `[x]`.
   - **Следующий шаг:** §2 Точка продаж (×3).
+
+- **2026-05-28 — Prod terminal включён + smoke PASS**
+  - **Fly:** `TBANK_TERMINAL_KEY=1719235292309`, `SHOP_SIMULATE_PAYMENT=0`, rolling deploy OK
+  - **Smoke (DevTools MCP):** card Init → `https://pay.tbank.ru/EJe3CaXH`, 179₽ на форме; cash → `accepted`
+  - **Тесты:** 47 payment-related runs, 0 failures
+  - **Не прогоняли:** полная оплата картой (реальные деньги) и callback E2E
+  - **V2-T6:** closed
 
 - **2026-05-28 — Fix card/sbp 500 + smoke PASS**
   - **Причина:** Circuit breaker на SolidCache → `RangeError` / broken increment

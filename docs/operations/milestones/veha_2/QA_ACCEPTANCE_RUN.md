@@ -11,7 +11,7 @@
 | Этап | Что | Инструмент | Статус |
 |------|-----|------------|--------|
 | **1. Сухой** | Тесты + новая org без demo seed | `bin/rails test`, integration | ✅ 541/0 *(2026-05-28)* |
-| **2. MCP / браузер** | Онбординг, оплата, киоск | Chrome DevTools MCP | ✅ pre-prod *(2026-05-28)* |
+| **2. MCP / браузер** | Онбординг, оплата, киоск | Chrome DevTools MCP | ✅ pre-prod + **prod terminal** *(2026-05-28)* |
 | **3. Живое демо** | Заказчик | `LIVE_DEMO_SCENARIOS_PLAIN.md` | ⏳ |
 
 ---
@@ -70,3 +70,20 @@
 | Deploy | PASS | `884cdea` на Fly, release cleared CB cache |
 
 **Вердикт:** готовы к боевому терминалу (ждёт апрув заказчика).
+
+### Прогон 2 — prod terminal smoke (2026-05-28)
+
+**Инструмент:** Chrome DevTools MCP на `coffeeos.fly.dev`  
+**Секреты:** боевой `TBANK_TERMINAL_KEY=1719235292309`, `SHOP_SIMULATE_PAYMENT=0`
+
+| Шаг | PASS/FAIL | Примечание |
+|-----|-----------|------------|
+| Fly secrets + rolling deploy | PASS | machine healthy |
+| `/up` | PASS | 200 |
+| Payment tests | PASS | 47 runs, 0 failures |
+| Order card → T-Bank (prod) | PASS | `25bb9312-…`, `https://pay.tbank.ru/EJe3CaXH` |
+| Форма pay.tbank.ru | PASS | 179₽ |
+| Order cash | PASS | `c36b2de4-…`, `accepted` |
+| Callback E2E (оплата картой) | SKIP | без списания реальных денег |
+
+**Вердикт:** боевой терминал **включён**, smoke **PASS**.

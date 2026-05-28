@@ -47,7 +47,7 @@
 - [x] Manager: pending payments при закрытии смены — CloseWizard показывает pending онлайн-платежи за 24ч (не блокируют закрытие) *(2026-05-28)*
 - [ ] Киоск: reuse shop payment flow — [`KIOSK.md`](KIOSK.md) *(ждёт Flutter)*
 - [x] ⭐ **Outbox + Circuit Breaker** — [`CHECKLIST.md`](CHECKLIST.md) §H *(2026-05-28, commit `0338a3e`)*
-- [ ] ⭐ Переключить на боевой терминал (`TBANK_TERMINAL_KEY=1719235292309`) — после smoke card/sbp PASS + апрув заказчика
+- [x] ⭐ Переключить на боевой терминал (`TBANK_TERMINAL_KEY=1719235292309`) — *(2026-05-28, prod smoke PASS)*
 
 ---
 
@@ -94,6 +94,22 @@
 | 9 | Полный callback T-Bank (оплата картой) | ⏸ не прогоняли — блокер п.7 |
 
 **Вердикт:** pre-prod smoke **PASS** — готовы к переключению на боевой терминал после апрува заказчика.
+
+## Smoke prod (2026-05-28, Chrome DevTools MCP)
+
+**Стенд:** `coffeeos.fly.dev`, **боевой** терминал `1719235292309`, `SHOP_SIMULATE_PAYMENT=0`  
+**Переключение:** `fly secrets set TBANK_TERMINAL_KEY=1719235292309 TBANK_PASSWORD=… TBANK_RETURN_URL=https://coffeeos.fly.dev SHOP_SIMULATE_PAYMENT=0 -a coffeeos` (пароль только в Fly secrets, не в репо).
+
+| # | Сценарий | Результат |
+|---|----------|-----------|
+| 1 | `/up` после rolling deploy | ✅ 200 |
+| 2 | Payment tests (47 runs) | ✅ 0 failures |
+| 3 | Shop A — card Init → `payment_url` | ✅ order `25bb9312-…`, `https://pay.tbank.ru/EJe3CaXH` |
+| 4 | Форма Т-Банка (prod) | ✅ **179₽**, «Оплата картой» |
+| 5 | Shop A — cash → `accepted` | ✅ order `c36b2de4-…`, 179₽ |
+| 6 | Полная оплата картой (реальные деньги) | ⏸ не прогоняли — только Init + форма |
+
+**Вердикт:** prod smoke **PASS** — боевой терминал включён, Init и редирект работают.
 
 ## Не в scope этого дока
 
