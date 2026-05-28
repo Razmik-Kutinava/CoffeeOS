@@ -186,14 +186,23 @@
 
 **`bin/rails test`:** 517 runs, **0 failures, 0 errors** (после фиксов pre-existing тестов: redirect path, trigger в параллельном прогоне, cancel reason FK).
 
-**Прод smoke (coffeeos.fly.dev):**
+**Прод smoke (coffeeos.fly.dev) — прогон 4:**
 
 | Роль | URL | Результат |
 |------|-----|-----------|
 | УК | `/admin` | PASS |
 | barista-a | `/barista` | PASS |
 
-CI Deploy: success. Стенд живой.
+**Прод smoke (coffeeos.fly.dev) — прогон 5 (2026-05-28):**
+
+| AUTH | Роль | URL | Результат |
+|------|------|-----|-----------|
+| AUTH-01 | uk_global_admin | `/admin` | PASS |
+| AUTH-02 | franchise_manager | `/manager` (switcher A/B) | PASS |
+| AUTH-06 | shift_manager | `/manager` (sidebar урезан) | PASS |
+| AUTH-08 | prep_kitchen_worker | `/prep_kitchen` | PASS |
+
+CI Deploy: success. Все роли на проде работают.
 
 ---
 
