@@ -133,7 +133,7 @@
 - [x] ⭐ **Circuit Breaker** — `TbankAdapter#post_json_with_circuit_breaker`: 5 ошибок → circuit open 60с → fallback *(2026-05-28)*
 - [x] ⭐ **Idempotency в `/callbacks/tbank`** — Redis-ключ `tbank:callback:{PaymentId}:{Status}` TTL 24ч *(2026-05-28)*
 - [x] **Мониторинг зависших платежей** — `Payments::StuckPaymentsCheckJob`: pending_payment > 30 мин → TelegramAlertJob *(2026-05-28)*
-- [ ] Переключить на боевой терминал Т-Банка (`fly secrets set TBANK_TERMINAL_KEY=1719235292309`) — **только после Outbox + CB + Idempotency**
+- [ ] Переключить на боевой терминал Т-Банка (`fly secrets set TBANK_TERMINAL_KEY=1719235292309`) — Outbox+CB+Idempotency готовы *(2026-05-28)*; ждёт решения заказчика
 - [ ] UX таймаут БД >5 с (qa 6.2)
 - [ ] Blameless Postmortem при закрытии §I — разобрать инциденты по шаблону из `PRACTICES.md`
 - [ ] Возврат (refund) через Т-Банк API — **В3**, не блокирует В2

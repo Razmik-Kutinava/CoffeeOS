@@ -78,12 +78,12 @@
 
 1. ✅ Тест-терминал Т-Банк работает (`1719235292292DEMO`)
 2. ✅ Регистрация киоска в manager/devices
-3. ❌ **Outbox** — `PaymentCallbackJob` на Solid Queue (если сервер упал — заказ не потеряется)
-4. ❌ **Circuit Breaker** — `TbankAdapter` защищён (если Т-Банк недоступен — сайт не ломается)
-5. ❌ **Idempotency `/callbacks/tbank`** — Redis-ключ по `PaymentId` (если Т-Банк прислал webhook дважды — не задвоится)
-6. ❌ **Мониторинг** — заказы `pending_payment` > 30 мин → алерт
+3. ✅ **Outbox** — `Payments::TbankCallbackJob` на Solid Queue *(2026-05-28, commit `0338a3e`)*
+4. ✅ **Circuit Breaker** — `TbankAdapter#post_json_with_circuit_breaker` *(2026-05-28)*
+5. ✅ **Idempotency `/callbacks/tbank`** — Redis `tbank:callback:{PaymentId}:{Status}` *(2026-05-28)*
+6. ✅ **Мониторинг** — `StuckPaymentsCheckJob` → Telegram *(2026-05-28)*
 7. ❌ §I QA приёмка + Code Review
-8. ❌ Переключить на боевой терминал (`1719235292309`) в `fly secrets set`
+8. ❌ Переключить на боевой терминал (`1719235292309`) — **решение заказчика**, тест-терминал остаётся
 
 ---
 
@@ -158,12 +158,15 @@
   - **Чеклист:** `ONBOARDING_CHECKLIST.md` §1 — `[x]`.
   - **Следующий шаг:** §2 Точка продаж (×3).
 
-- **2026-05-28 — §H Надёжность — РЕАЛИЗОВАН** *(см. итог ниже после тестов)*
-  - **Idempotency TbankController**: Redis-ключ `tbank:callback:{PaymentId}:{Status}` — дубль от Т-Банка игнорируется
-  - **Circuit Breaker TbankAdapter**: Redis счётчик ошибок; при 5 подряд → `CircuitOpenError` → fallback; сбрасывается при успехе
-  - **Outbox/PaymentCallbackJob**: контроллер только проверяет подпись + enqueue; `Payments::TbankCallbackJob` обрабатывает с `retry_on` x5
-  - **StuckPaymentsCheckJob**: `pending_payment` > 30 мин → `TelegramAlertJob`
-  - **Тесты итог:** **541 runs, 0 failures, 0 errors** (было 539 до §H)
+- **2026-05-28 — §H Надёжность — РЕАЛИЗОВАН + push + deploy**
+  - **Коммит:** `0338a3e` — Outbox, CB, Idempotency, Monitoring
+  - **Idempotency:** `Callbacks::TbankController` — Redis `tbank:callback:{PaymentId}:{Status}` TTL 24ч
+  - **Circuit Breaker:** `Payments::TbankAdapter` — 5 ошибок → circuit open 60с
+  - **Outbox:** контроллер enqueue → `Payments::TbankCallbackJob` (retry x5)
+  - **Мониторинг:** `Payments::StuckPaymentsCheckJob` — pending > 30 мин → `TelegramAlertJob`
+  - **Тесты:** **541 runs, 0 failures, 0 errors**
+  - **Deploy:** `coffeeos.fly.dev` — после апрува заказчика
+  - **Не включено:** боевой терминал Т-Банка (остаётся DEMO), refund — В3
 
 - **2026-05-28 — §H Надёжность — уточнён и расширен**
   - Добавлены: Idempotency `/callbacks/tbank` (защита от двойного webhook), мониторинг зависших `pending_payment` > 30 мин.
