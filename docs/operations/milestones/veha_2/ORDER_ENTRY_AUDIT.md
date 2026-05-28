@@ -29,7 +29,7 @@
 | 4 | Barista controller guards | `barista/orders_controller` | open shift | block_g |
 | 5 | Barista cancel | `OrderCancellationService` | open + reason | block_g |
 | 6 | Payment callback | `Callbacks::PaymentStatusUpdater` | не создаёт Order | callbacks tests |
-| 7 | **Kiosk** | _TBD В2_ | как shop (план) | _TBD_ |
+| 7 | **Kiosk** | `Device(device_type:kiosk)` + `device_token`; регистрация в manager/devices *(2026-05-28)*; API `/kiosk/api/...` ждёт Flutter; OrderCreator + Т-Банк готовы | NULL (как shop) | TBD (Flutter) |
 | 8 | **Offline sync POST** | _TBD В2_ | TBD | O-1…O-3 qa |
 
 **Gate:** новый # → PR → строка в [`CHECKLIST.md`](CHECKLIST.md) § D/F → `qa_scenarios.md`.
@@ -50,4 +50,5 @@
 
 ## История изменений
 
+- **2026-05-28** — Киоск: регистрация устройства в manager/devices реализована; API ждёт Flutter.
 - **2026-05-25** — Создан реестр В2; киоск/offline — заглушки до реализации.

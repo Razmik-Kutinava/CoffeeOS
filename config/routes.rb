@@ -50,6 +50,7 @@ Rails.application.routes.draw do
     resources :staff_members, path: "staff", controller: "staff", only: %i[index new create edit update]
     get "/devices", to: "devices#index", as: :devices
     post "/devices", to: "devices#create"
+    post "/devices/kiosk", to: "devices#create_kiosk", as: :devices_kiosk
     patch "/devices/:id/tv_mode", to: "devices#update_tv_mode", as: :device_tv_mode
 
     get "/incidents", to: "incidents#index", as: :incidents

@@ -26,6 +26,24 @@ module Manager
       end
     end
 
+    def create_kiosk
+      @new_kiosk = Device.new(name: params.dig(:device, :name).to_s.strip)
+      @new_kiosk.tenant_id   = Current.tenant_id
+      @new_kiosk.device_type = "kiosk"
+      @new_kiosk.is_active   = true
+      @new_kiosk.device_token = SecureRandom.hex(24)
+
+      if @new_kiosk.save
+        redirect_to manager_devices_path,
+                    notice: "Киоск «#{@new_kiosk.name}» создан. Токен: #{@new_kiosk.device_token}"
+      else
+        @devices    = Device.for_current_tenant.order(created_at: :desc).limit(500)
+        @new_device = Device.new(device_type: "tv_board", is_active: true)
+        flash.now[:alert] = @new_kiosk.errors.full_messages.to_sentence
+        render :index, status: :unprocessable_entity
+      end
+    end
+
     def update_tv_mode
       @tv_device = Device.for_current_tenant.find(params[:id])
       unless @tv_device.device_type == "tv_board"

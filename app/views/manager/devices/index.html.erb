@@ -8,15 +8,29 @@
     </div>
   </div>
 
-  <div class="card" style="margin-bottom: 14px;">
-    <div class="card-title">Добавить TV-борд</div>
-    <%= form_with model: @new_device, url: manager_devices_path, method: :post, class: "filters-form" do |f| %>
-      <label class="label">
-        Название на ТВ
-        <%= f.text_field :name, class: "input", placeholder: "Например: ТВ зал", required: true %>
-      </label>
-      <%= f.submit "Создать TV + токен", class: "btn" %>
-    <% end %>
+  <div style="display: flex; gap: 14px; margin-bottom: 14px; flex-wrap: wrap;">
+    <div class="card" style="flex: 1; min-width: 260px;">
+      <div class="card-title">Добавить TV-борд</div>
+      <%= form_with model: @new_device, url: manager_devices_path, method: :post, class: "filters-form" do |f| %>
+        <label class="label">
+          Название на ТВ
+          <%= f.text_field :name, class: "input", placeholder: "Например: ТВ зал", required: true %>
+        </label>
+        <%= f.submit "Создать TV + токен", class: "btn" %>
+      <% end %>
+    </div>
+
+    <div class="card" style="flex: 1; min-width: 260px;">
+      <div class="card-title">Добавить киоск (Flutter)</div>
+      <div class="card-muted" style="margin-bottom: 10px;">Планшет самообслуживания. Сохрани токен — он нужен Flutter-приложению при первом запуске.</div>
+      <%= form_with url: manager_devices_kiosk_path, method: :post, class: "filters-form" do |f| %>
+        <label class="label">
+          Название киоска
+          <%= text_field_tag "device[name]", nil, class: "input", placeholder: "Например: Киоск у входа", required: true %>
+        </label>
+        <%= f.submit "Создать киоск + токен", class: "btn" %>
+      <% end %>
+    </div>
   </div>
 
   <div class="card">
@@ -35,6 +49,11 @@
               <% if d.device_type == "tv_board" && d.device_token.present? %>
                 <span class="muted" style="font-size: 11px; max-width: 420px; overflow: hidden; text-overflow: ellipsis;">
                   /tv_board?token=<%= d.device_token %>
+                </span>
+              <% end %>
+              <% if d.device_type == "kiosk" && d.device_token.present? %>
+                <span class="muted" style="font-size: 11px; max-width: 420px; overflow: hidden; text-overflow: ellipsis;">
+                  token: <%= d.device_token %>
                 </span>
               <% end %>
             </div>
