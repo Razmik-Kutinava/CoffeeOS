@@ -158,6 +158,15 @@
   - **Чеклист:** `ONBOARDING_CHECKLIST.md` §1 — `[x]`.
   - **Следующий шаг:** §2 Точка продаж (×3).
 
+- **2026-05-28 — Pre-prod smoke (Chrome DevTools MCP) — частичный PASS**
+  - **Suite:** 541 runs, 0 failures
+  - **Shop A/B:** каталог OK (`2fdee1ac-…`, `655aaccb-…` из `DEMO_LOGINS.md`)
+  - **Cash order:** ✅ `accepted` 179₽
+  - **Card order:** ❌ HTTP 500 на Init Т-Банка (circuit/T-Bank) — **блокер боевого терминала**
+  - **Manager:** ✅ `shift-a@…` → `/manager`
+  - **Доки:** `PAYMENT.md` § Smoke, `QA_ACCEPTANCE_RUN.md` прогон 0, `ISSUES.md`
+  - **Ждём апрув** на fix card/sbp перед prod terminal
+
 - **2026-05-28 — §H Надёжность — РЕАЛИЗОВАН + push + deploy**
   - **Коммит:** `0338a3e` — Outbox, CB, Idempotency, Monitoring
   - **Idempotency:** `Callbacks::TbankController` — Redis `tbank:callback:{PaymentId}:{Status}` TTL 24ч

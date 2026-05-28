@@ -43,11 +43,11 @@
 - [x] `PaymentStatusUpdater` — добавлено `Inventory::OrderRecipeDeduction` при `succeeded` *(2026-05-28)*
 - [x] Тесты: `test/services/payments/tbank_adapter_test.rb` (11 тестов), `test/controllers/callbacks/tbank_controller_test.rb` (8 тестов) *(2026-05-28)*
 - [x] Витрина: выбор card/sbp/cash, редирект на `payment_url`, без double-submit *(2026-05-28)*
-- [ ] Staging: `SHOP_SIMULATE_PAYMENT=0` + тестовый ключ задеплоен (`fly secrets set`)
+- [x] Staging: `SHOP_SIMULATE_PAYMENT=0` + тестовый ключ DEMO на Fly *(2026-05-28, `fly secrets set`)*
 - [x] Manager: pending payments при закрытии смены — CloseWizard показывает pending онлайн-платежи за 24ч (не блокируют закрытие) *(2026-05-28)*
-- [ ] Киоск: reuse shop payment flow — [`KIOSK.md`](KIOSK.md)
-- [ ] ⭐ **Outbox + Circuit Breaker** — см. [`CHECKLIST.md`](CHECKLIST.md) §H и [`PRACTICES.md`](PRACTICES.md) — **обязательно до боевого терминала**
-- [ ] ⭐ Переключить на боевой терминал (`TBANK_TERMINAL_KEY=1719235292309`) — только после Outbox+CB+QA
+- [ ] Киоск: reuse shop payment flow — [`KIOSK.md`](KIOSK.md) *(ждёт Flutter)*
+- [x] ⭐ **Outbox + Circuit Breaker** — [`CHECKLIST.md`](CHECKLIST.md) §H *(2026-05-28, commit `0338a3e`)*
+- [ ] ⭐ Переключить на боевой терминал (`TBANK_TERMINAL_KEY=1719235292309`) — после smoke card/sbp PASS + апрув заказчика
 
 ---
 
@@ -73,8 +73,27 @@
 - **Терминал тест:** `1719235292292DEMO` → прод: `1719235292309`
 - **Флоу:** витрина → `OrderCreator` → `TbankAdapter#init_payment` → `PaymentURL` → редирект → Т-Банк форма → callback `POST /callbacks/tbank` → `PaymentStatusUpdater` → order `accepted` → списание склада
 - **Протестировано:** браузерный тест — редирект на `https://pay.tbank.ru/x77ZGOty`, сумма 179₽ передана корректно
-- **Тесты:** 539 runs, 0 failures (TbankAdapter x11, TbankController x8)
+- **Тесты:** 541 runs, 0 failures (TbankAdapter x11, TbankController x8)
 - **Manager:** CloseWizard показывает pending online-платежи за 24ч (информационно, не блокируют)
+
+## Smoke pre-prod (2026-05-28, Chrome DevTools MCP)
+
+**Стенд:** `coffeeos.fly.dev`, DEMO-терминал, `SHOP_SIMULATE_PAYMENT=0`  
+**UUID витрин:** см. [`../veha_1/DEMO_LOGINS.md`](../veha_1/DEMO_LOGINS.md) — **не** локальный `8c7f5bc7-…` из qa_scenarios.
+
+| # | Сценарий | Результат |
+|---|----------|-----------|
+| 1 | `/up` | ✅ 200 |
+| 2 | `bin/rails test` | ✅ 541 runs, 0 failures |
+| 3 | Витрина A `?tenant_id=2fdee1ac-…` — каталог | ✅ товары, 179₽ |
+| 4 | Витрина B `?tenant_id=655aaccb-…` — каталог | ✅ другие цены (189₽), изоляция |
+| 5 | Корзина → checkout UI | ✅ |
+| 6 | Заказ **cash** → `accepted` | ✅ order `c5ffaf41-…`, 179₽ |
+| 7 | Заказ **card** → `payment_url` → pay.tbank.ru | ❌ **500** — см. ISSUES (circuit/T-Bank Init) |
+| 8 | Manager `shift-a@…` → `/manager` | ✅ дашборд, витрина в sidebar |
+| 9 | Полный callback T-Bank (оплата картой) | ⏸ не прогоняли — блокер п.7 |
+
+**Вердикт:** к боевому терминалу **не готовы** — сначала починить card/sbp Init на Fly (или сброс circuit + диагностика T-Bank).
 
 ## Не в scope этого дока
 
