@@ -114,9 +114,14 @@
 
 ## H. Надёжность (хвост В2)
 
-- [ ] Outbox-паттерн на Solid Queue (критичные side-effects)
-- [ ] Circuit Breaker для внешних API (платёж, ОФД)
+> ⚠️ **Outbox + Circuit Breaker обязательны ДО переключения на боевой терминал Т-Банка.**  
+> Детали и шаги — [`PRACTICES.md`](PRACTICES.md) § «7 практик Dodo».
+
+- [ ] ⭐ **Outbox** — `PaymentCallbackJob` на Solid Queue: retry + dead_letter + idempotency на duplicate delivery
+- [ ] ⭐ **Circuit Breaker** — обернуть `Payments::TbankAdapter#post_json`: N ошибок → fallback `pending_payment` + «попробуйте позже»
+- [ ] Переключить на боевой терминал Т-Банка (`fly secrets set TBANK_TERMINAL_KEY=1719235292309`) — **только после Outbox + CB**
 - [ ] UX таймаут БД >5 с (qa 6.2)
+- [ ] Blameless Postmortem при закрытии §I — разобрать инциденты по шаблону из `PRACTICES.md`
 
 ---
 
@@ -136,8 +141,9 @@
 
 1. Блоки **A, B, C** (⭐) — `[x]`.
 2. **D** — киоск с заказом и оплатой на тестовой org, или явный перенос в § I с датой.
-3. Новая org из УК: **3+ точки**, карточка входов, витрина с **реальной** оплатой на стенде.
-4. § I заполнен в operations.
+3. **H** — Outbox + Circuit Breaker `[x]` до переключения на боевой терминал.
+4. Новая org из УК: **3+ точки**, карточка входов, витрина с **реальной** оплатой на стенде.
+5. § I заполнен в operations.
 
 **Дата закрытия:** ____________  
 **Кто принял:** ____________  

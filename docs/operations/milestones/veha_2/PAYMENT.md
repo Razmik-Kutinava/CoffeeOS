@@ -46,6 +46,8 @@
 - [ ] Staging: `SHOP_SIMULATE_PAYMENT=0` + тестовый ключ задеплоен (`fly secrets set`)
 - [x] Manager: pending payments при закрытии смены — CloseWizard показывает pending онлайн-платежи за 24ч (не блокируют закрытие) *(2026-05-28)*
 - [ ] Киоск: reuse shop payment flow — [`KIOSK.md`](KIOSK.md)
+- [ ] ⭐ **Outbox + Circuit Breaker** — см. [`CHECKLIST.md`](CHECKLIST.md) §H и [`PRACTICES.md`](PRACTICES.md) — **обязательно до боевого терминала**
+- [ ] ⭐ Переключить на боевой терминал (`TBANK_TERMINAL_KEY=1719235292309`) — только после Outbox+CB+QA
 
 ---
 
