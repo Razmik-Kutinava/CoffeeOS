@@ -113,12 +113,12 @@
 
 | Шаг | PASS/FAIL | Примечание |
 |-----|-----------|------------|
-| Deploy + `fly scale count worker=1` | PASS | GH Actions run #36–37, commit `97baa77` |
+| Deploy + `fly scale count worker=1` | PASS | GH Actions #39 `0bde33d` |
 | `/up` | PASS | 200 |
-| Shop A cash → `accepted` | PASS | order `c85849ad-…`, 179₽, Smoke Test |
-| Barista login + табло | PASS | `barista-a@…`, 4+ заказов в ACCEPTED |
-| Shop cash → табло **без F5** | ⏸ | retest после deploy worker (barista открыли после заказа) |
-| Callback → табло без F5 | ⏸ | не прогоняли в этом прогоне |
-| Worker logs — job processed | ⏸ | проверить в Fly logs worker |
+| Shop A cash → `accepted` | PASS | LiveSmoke2, 179₽ |
+| Barista login + табло | PASS | `barista-a@…` |
+| Shop cash → табло **без F5** | **PASS** | ACCEPTED 5→6, sync broadcast |
+| Callback → табло без F5 | ⏸ | signed webhook отдельно |
+| WebSocket `/cable` | PASS | 101 |
 
-**Вердикт:** smoke **частичный PASS** — витрина→cash→accepted OK; live-табло — повтор после деплоя worker.
+**Вердикт:** smoke **PASS** — live-табло без F5 подтверждено MCP.
