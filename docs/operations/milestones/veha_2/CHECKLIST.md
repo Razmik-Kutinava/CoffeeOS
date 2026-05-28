@@ -119,14 +119,24 @@
 
 ## H. Надёжность (хвост В2)
 
-> ⚠️ **Outbox + Circuit Breaker обязательны ДО переключения на боевой терминал Т-Банка.**  
+> ⚠️ **Весь блок H обязателен ДО переключения на боевой терминал Т-Банка.**  
 > Детали и шаги — [`PRACTICES.md`](PRACTICES.md) § «7 практик Dodo».
+>
+> **Что значит каждый пункт простыми словами:**  
+> — Outbox: если сервер упал в момент callback от Т-Банка — заказ не потеряется, обработка повторится  
+> — Circuit Breaker: если Т-Банк недоступен — сайт не ломается, клиент видит «попробуйте позже»  
+> — Idempotency callback: если Т-Банк прислал webhook дважды — заказ не задвоится  
+> — Мониторинг: если callback вообще не пришёл — мы узнаем и разберёмся вручную  
+> — Боевой терминал: только когда всё выше готово — включаем реальные деньги
 
-- [ ] ⭐ **Outbox** — `PaymentCallbackJob` на Solid Queue: retry + dead_letter + idempotency на duplicate delivery
-- [ ] ⭐ **Circuit Breaker** — обернуть `Payments::TbankAdapter#post_json`: N ошибок → fallback `pending_payment` + «попробуйте позже»
-- [ ] Переключить на боевой терминал Т-Банка (`fly secrets set TBANK_TERMINAL_KEY=1719235292309`) — **только после Outbox + CB**
+- [ ] ⭐ **Outbox** — `PaymentCallbackJob` на Solid Queue: retry + dead_letter; если сервер упал — повторит автоматически
+- [ ] ⭐ **Circuit Breaker** — `Payments::TbankAdapter#post_json`: при N ошибках подряд → fallback `pending_payment` + «попробуйте позже»
+- [ ] ⭐ **Idempotency в `/callbacks/tbank`** — защита от двойной обработки webhook (Т-Банк повторяет при таймауте); использовать Redis-ключ по `PaymentId`
+- [ ] **Мониторинг зависших платежей** — алерт/джоб: заказы в `pending_payment` > 30 мин → лог/уведомление
+- [ ] Переключить на боевой терминал Т-Банка (`fly secrets set TBANK_TERMINAL_KEY=1719235292309`) — **только после Outbox + CB + Idempotency**
 - [ ] UX таймаут БД >5 с (qa 6.2)
 - [ ] Blameless Postmortem при закрытии §I — разобрать инциденты по шаблону из `PRACTICES.md`
+- [ ] Возврат (refund) через Т-Банк API — **В3**, не блокирует В2
 
 ---
 

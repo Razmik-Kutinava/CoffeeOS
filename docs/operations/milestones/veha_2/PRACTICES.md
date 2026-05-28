@@ -77,10 +77,13 @@
 ### Порядок «перед боевыми деньгами»
 
 1. ✅ Тест-терминал Т-Банк работает (`1719235292292DEMO`)
-2. ❌ **Outbox** — `PaymentCallbackJob` на Solid Queue
-3. ❌ **Circuit Breaker** — `TbankAdapter` защищён
-4. ❌ §I QA приёмка + Code Review
-5. ❌ Переключить на боевой терминал (`1719235292309`) в `fly secrets set`
+2. ✅ Регистрация киоска в manager/devices
+3. ❌ **Outbox** — `PaymentCallbackJob` на Solid Queue (если сервер упал — заказ не потеряется)
+4. ❌ **Circuit Breaker** — `TbankAdapter` защищён (если Т-Банк недоступен — сайт не ломается)
+5. ❌ **Idempotency `/callbacks/tbank`** — Redis-ключ по `PaymentId` (если Т-Банк прислал webhook дважды — не задвоится)
+6. ❌ **Мониторинг** — заказы `pending_payment` > 30 мин → алерт
+7. ❌ §I QA приёмка + Code Review
+8. ❌ Переключить на боевой терминал (`1719235292309`) в `fly secrets set`
 
 ---
 
@@ -154,6 +157,21 @@
   - **Тесты:** `test/integration/platform/onboarding_organization_test.rb` — 3 runs, 27 assertions, 0 failures.
   - **Чеклист:** `ONBOARDING_CHECKLIST.md` §1 — `[x]`.
   - **Следующий шаг:** §2 Точка продаж (×3).
+
+- **2026-05-28 — §H Надёжность — уточнён и расширен**
+  - Добавлены: Idempotency `/callbacks/tbank` (защита от двойного webhook), мониторинг зависших `pending_payment` > 30 мин.
+  - Refund вынесен в В3.
+  - Порядок перед боевыми деньгами обновлён (8 шагов).
+
+- **2026-05-28 — §D Киоск — частично закрыт**
+  - Регистрация устройства `device_type: kiosk` в manager/devices — готово.
+  - `ORDER_ENTRY_AUDIT.md` — киоск зафиксирован.
+  - Остальные 4 пункта — ждут Flutter-приложения (срок неизвестен).
+  - `KIOSK.md` обновлён: что готово, API контракт черновик, инструкция симуляции.
+
+- **2026-05-28 — §F, §G — решение**
+  - §F (кассовая дисциплина): привязка витрины к смене — не делаем пока нет продуктового решения.
+  - §G (Offline-first): откладываем в В3 или до первого клиента с проблемами связи.
 
 - **2026-05-28 — §C Реальная оплата (Т-Банк) — ЗАКРЫТ**
   - **Код:** `Payments::TbankAdapter` (Init API, Token, маппинг статусов); `Shop::OrderCreator` → адаптер → `payment_url`; `Callbacks::TbankController` + `POST /callbacks/tbank`; `PaymentStatusUpdater` + `OrderRecipeDeduction`; `Checkout.svelte` — radio card/sbp/cash + редирект.
