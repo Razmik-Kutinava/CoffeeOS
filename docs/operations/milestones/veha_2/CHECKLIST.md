@@ -129,10 +129,10 @@
 > — Мониторинг: если callback вообще не пришёл — мы узнаем и разберёмся вручную  
 > — Боевой терминал: только когда всё выше готово — включаем реальные деньги
 
-- [ ] ⭐ **Outbox** — `PaymentCallbackJob` на Solid Queue: retry + dead_letter; если сервер упал — повторит автоматически
-- [ ] ⭐ **Circuit Breaker** — `Payments::TbankAdapter#post_json`: при N ошибках подряд → fallback `pending_payment` + «попробуйте позже»
-- [ ] ⭐ **Idempotency в `/callbacks/tbank`** — защита от двойной обработки webhook (Т-Банк повторяет при таймауте); использовать Redis-ключ по `PaymentId`
-- [ ] **Мониторинг зависших платежей** — алерт/джоб: заказы в `pending_payment` > 30 мин → лог/уведомление
+- [x] ⭐ **Outbox** — `Payments::TbankCallbackJob` на Solid Queue: retry x5 + discard на InvalidStatus *(2026-05-28)*
+- [x] ⭐ **Circuit Breaker** — `TbankAdapter#post_json_with_circuit_breaker`: 5 ошибок → circuit open 60с → fallback *(2026-05-28)*
+- [x] ⭐ **Idempotency в `/callbacks/tbank`** — Redis-ключ `tbank:callback:{PaymentId}:{Status}` TTL 24ч *(2026-05-28)*
+- [x] **Мониторинг зависших платежей** — `Payments::StuckPaymentsCheckJob`: pending_payment > 30 мин → TelegramAlertJob *(2026-05-28)*
 - [ ] Переключить на боевой терминал Т-Банка (`fly secrets set TBANK_TERMINAL_KEY=1719235292309`) — **только после Outbox + CB + Idempotency**
 - [ ] UX таймаут БД >5 с (qa 6.2)
 - [ ] Blameless Postmortem при закрытии §I — разобрать инциденты по шаблону из `PRACTICES.md`

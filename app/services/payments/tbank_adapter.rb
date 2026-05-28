@@ -21,6 +21,12 @@ module Payments
 
     BASE_URL = "https://securepay.tinkoff.ru/v2"
 
+    # Circuit Breaker — Redis ключи
+    CB_FAILURES_KEY  = "tbank:cb:failures"
+    CB_OPEN_KEY      = "tbank:cb:open"
+    CB_THRESHOLD     = 5   # ошибок подряд перед открытием
+    CB_OPEN_TTL      = 60  # секунд в открытом состоянии
+
     # Статусы Т-Банка → наши статусы Payment
     TBANK_STATUS_MAP = {
       "CONFIRMED"        => "succeeded",
@@ -48,7 +54,7 @@ module Payments
       }
       payload["Token"] = build_token(payload)
 
-      response = post_json("#{BASE_URL}/Init", payload)
+      response = post_json_with_circuit_breaker("#{BASE_URL}/Init", payload)
       raise ApiError.new(error_code: response["ErrorCode"], message: response["Message"].to_s) unless response["Success"]
 
       {
@@ -85,6 +91,23 @@ module Payments
     end
 
     private
+
+    def post_json_with_circuit_breaker(url, payload)
+      if Rails.cache.exist?(CB_OPEN_KEY)
+        raise Error, "Т-Банк временно недоступен (circuit open). Попробуйте позже."
+      end
+
+      result = post_json(url, payload)
+      Rails.cache.delete(CB_FAILURES_KEY)
+      result
+    rescue Error, Net::OpenTimeout, Net::ReadTimeout => e
+      failures = Rails.cache.increment(CB_FAILURES_KEY, 1, expires_in: 5.minutes) || 1
+      if failures >= CB_THRESHOLD
+        Rails.cache.write(CB_OPEN_KEY, true, expires_in: CB_OPEN_TTL)
+        Rails.logger.error("[TbankAdapter] Circuit opened after #{failures} failures")
+      end
+      raise
+    end
 
     def terminal_key
       ENV.fetch("TBANK_TERMINAL_KEY") { raise Error, "TBANK_TERMINAL_KEY не задан" }

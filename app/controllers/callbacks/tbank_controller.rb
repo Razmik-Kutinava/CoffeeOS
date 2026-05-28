@@ -1,11 +1,12 @@
 # frozen_string_literal: true
 
 module Callbacks
-  # Обработчик webhook-уведомлений от Т-Банка (интернет-эквайринг).
-  # Т-Банк шлёт POST с JSON, авторизация — Token (SHA256 отсортированных значений + Password).
-  # Docs: https://www.tbank.ru/kassa/dev/payments/#tag/Notifikacii
+  # Webhook от Т-Банка: только проверяет подпись + idempotency + enqueue.
+  # Реальная обработка — в Payments::TbankCallbackJob (retry x5).
   class TbankController < ApplicationController
     skip_forgery_protection
+
+    IDEMPOTENCY_TTL = 24.hours
 
     def notify
       payload = parse_payload
@@ -16,45 +17,29 @@ module Callbacks
         return render json: { error: "invalid token" }, status: :unauthorized
       end
 
-      order_id           = payload["OrderId"].to_s
-      tbank_payment_id   = payload["PaymentId"].to_s
-      tbank_status       = payload["Status"].to_s
-      our_status         = Payments::TbankAdapter.map_status(tbank_status)
+      # Idempotency: Т-Банк повторяет webhook при таймауте.
+      # Ключ по PaymentId + Status — защищаем от дублирования.
+      idem_key = idempotency_key(payload)
+      if idem_key && Rails.cache.exist?(idem_key)
+        Rails.logger.info("[Tbank::Callback] Duplicate webhook ignored, key=#{idem_key}")
+        return render json: { ok: true, duplicate: true }
+      end
+
+      tbank_status = payload["Status"].to_s
+      our_status   = Payments::TbankAdapter.map_status(tbank_status)
 
       unless our_status
-        Rails.logger.info("[Tbank::Callback] Ignored status=#{tbank_status} for OrderId=#{order_id}")
+        Rails.logger.info("[Tbank::Callback] Ignored status=#{tbank_status} for OrderId=#{payload['OrderId']}")
         return render json: { ok: true }
       end
 
-      payment = Payment
-        .joins(:order)
-        .where(orders: { id: order_id })
-        .where(provider_payment_id: tbank_payment_id)
-        .or(
-          Payment.joins(:order).where(orders: { id: order_id }).where(provider: "tbank")
-        )
-        .order(created_at: :desc)
-        .first
+      # Enqueue — возвращаем 200 Т-Банку немедленно, job обработает с retry
+      Payments::TbankCallbackJob.perform_later(payload.to_h)
 
-      unless payment
-        Rails.logger.warn("[Tbank::Callback] Payment not found, OrderId=#{order_id}, PaymentId=#{tbank_payment_id}")
-        return render json: { error: "payment not found" }, status: :not_found
-      end
+      Rails.cache.write(idem_key, true, expires_in: IDEMPOTENCY_TTL) if idem_key
 
-      Callbacks::PaymentStatusUpdater.new(
-        payment: payment,
-        new_status: our_status,
-        provider_data: payload.except("Token", "Password"),
-        provider_payment_id: tbank_payment_id,
-        note: "Т-Банк: #{tbank_status}"
-      ).call!
-
-      Rails.logger.info("[Tbank::Callback] Processed OrderId=#{order_id}, status=#{tbank_status}→#{our_status}")
-
+      Rails.logger.info("[Tbank::Callback] Enqueued OrderId=#{payload['OrderId']}, status=#{tbank_status}")
       render json: { ok: true }
-    rescue Callbacks::PaymentStatusUpdater::InvalidStatusError => e
-      Rails.logger.error("[Tbank::Callback] InvalidStatus: #{e.message}")
-      render json: { error: e.message }, status: :unprocessable_entity
     rescue StandardError => e
       Rails.logger.error("[Tbank::Callback] Error: #{e.class} #{e.message}")
       render json: { error: "internal error" }, status: :internal_server_error
@@ -69,6 +54,14 @@ module Callbacks
       JSON.parse(body)
     rescue JSON::ParserError
       nil
+    end
+
+    def idempotency_key(payload)
+      payment_id = payload["PaymentId"].to_s
+      status     = payload["Status"].to_s
+      return nil if payment_id.blank? || status.blank?
+
+      "tbank:callback:#{payment_id}:#{status}"
     end
 
     def render_bad_request(msg)

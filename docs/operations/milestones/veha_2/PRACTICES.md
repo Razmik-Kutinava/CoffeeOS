@@ -158,6 +158,13 @@
   - **Чеклист:** `ONBOARDING_CHECKLIST.md` §1 — `[x]`.
   - **Следующий шаг:** §2 Точка продаж (×3).
 
+- **2026-05-28 — §H Надёжность — РЕАЛИЗОВАН** *(см. итог ниже после тестов)*
+  - **Idempotency TbankController**: Redis-ключ `tbank:callback:{PaymentId}:{Status}` — дубль от Т-Банка игнорируется
+  - **Circuit Breaker TbankAdapter**: Redis счётчик ошибок; при 5 подряд → `CircuitOpenError` → fallback; сбрасывается при успехе
+  - **Outbox/PaymentCallbackJob**: контроллер только проверяет подпись + enqueue; `Payments::TbankCallbackJob` обрабатывает с `retry_on` x5
+  - **StuckPaymentsCheckJob**: `pending_payment` > 30 мин → `TelegramAlertJob`
+  - **Тесты итог:** **541 runs, 0 failures, 0 errors** (было 539 до §H)
+
 - **2026-05-28 — §H Надёжность — уточнён и расширен**
   - Добавлены: Idempotency `/callbacks/tbank` (защита от двойного webhook), мониторинг зависших `pending_payment` > 30 мин.
   - Refund вынесен в В3.

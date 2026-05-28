@@ -4,6 +4,7 @@ require "test_helper"
 
 class Callbacks::TbankControllerTest < ActionDispatch::IntegrationTest
   include TestFactories
+  include ActiveJob::TestHelper
 
   setup do
     ENV["TBANK_TERMINAL_KEY"] = "TestTerminal"
@@ -35,6 +36,7 @@ class Callbacks::TbankControllerTest < ActionDispatch::IntegrationTest
   teardown do
     ENV.delete("TBANK_TERMINAL_KEY")
     ENV.delete("TBANK_PASSWORD")
+    Rails.cache.clear
   end
 
   # ---------------------------------------------------------------------------
@@ -76,19 +78,28 @@ class Callbacks::TbankControllerTest < ActionDispatch::IntegrationTest
   end
 
   # ---------------------------------------------------------------------------
-  # CONFIRMED → order accepted
-  # Заказ без items → OrderRecipeDeduction вернёт early
+  # CONFIRMED → job enqueued → order accepted
   # ---------------------------------------------------------------------------
 
-  test "CONFIRMED transitions order to accepted and payment to succeeded" do
-    post_notify(tbank_payload(status: "CONFIRMED"))
+  test "CONFIRMED enqueues TbankCallbackJob" do
+    assert_enqueued_with(job: Payments::TbankCallbackJob) do
+      post_notify(tbank_payload(status: "CONFIRMED"))
+    end
     assert_response :ok
+  end
+
+  test "CONFIRMED transitions order to accepted and payment to succeeded after job" do
+    perform_enqueued_jobs do
+      post_notify(tbank_payload(status: "CONFIRMED"))
+    end
     assert_equal "succeeded", @payment.reload.status
     assert_equal "accepted",  @order.reload.status
   end
 
-  test "CONFIRMED stores provider_payment_id on payment" do
-    post_notify(tbank_payload(status: "CONFIRMED"))
+  test "CONFIRMED stores provider_payment_id after job" do
+    perform_enqueued_jobs do
+      post_notify(tbank_payload(status: "CONFIRMED"))
+    end
     assert_equal "tbank_pay_777", @payment.reload.provider_payment_id
   end
 
@@ -98,32 +109,53 @@ class Callbacks::TbankControllerTest < ActionDispatch::IntegrationTest
   end
 
   # ---------------------------------------------------------------------------
-  # REJECTED → payment failed, order stays pending
+  # REJECTED → job enqueued → payment failed
   # ---------------------------------------------------------------------------
 
-  test "REJECTED transitions payment to failed, order stays pending_payment" do
-    post_notify(tbank_payload(status: "REJECTED"))
+  test "REJECTED transitions payment to failed after job" do
+    perform_enqueued_jobs do
+      post_notify(tbank_payload(status: "REJECTED"))
+    end
     assert_response :ok
     assert_equal "failed",          @payment.reload.status
     assert_equal "pending_payment", @order.reload.status
   end
 
   # ---------------------------------------------------------------------------
+  # Idempotency — дубль игнорируется
+  # ---------------------------------------------------------------------------
+
+  test "duplicate webhook returns ok with duplicate: true" do
+    post_notify(tbank_payload(status: "CONFIRMED"))
+    assert_response :ok
+
+    perform_enqueued_jobs
+
+    post_notify(tbank_payload(status: "CONFIRMED"))
+    assert_response :ok
+    assert_equal true, JSON.parse(response.body)["duplicate"]
+  end
+
+  # ---------------------------------------------------------------------------
   # Ignored statuses
   # ---------------------------------------------------------------------------
 
-  test "FORM_SHOWED returns ok without changing payment status" do
-    post_notify(tbank_payload(status: "FORM_SHOWED"))
+  test "FORM_SHOWED returns ok without enqueuing job" do
+    assert_no_enqueued_jobs do
+      post_notify(tbank_payload(status: "FORM_SHOWED"))
+    end
     assert_response :ok
     assert_equal "pending", @payment.reload.status
   end
 
   # ---------------------------------------------------------------------------
-  # Payment not found
+  # Payment not found — job logs warning, no error
   # ---------------------------------------------------------------------------
 
-  test "returns 404 when payment not found" do
-    post_notify(tbank_payload(order_id: 999999, payment_id: "no_such_id"))
-    assert_response :not_found
+  test "unknown order enqueues job that silently skips" do
+    assert_enqueued_with(job: Payments::TbankCallbackJob) do
+      post_notify(tbank_payload(order_id: 999999, payment_id: "no_such_id"))
+    end
+    assert_response :ok
   end
 end
