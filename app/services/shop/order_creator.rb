@@ -98,7 +98,7 @@ module Shop
       end
 
       if order.accepted?
-        Barista::BroadcastOrderBoardJob.perform_later(order.id, "pending_payment")
+        Barista::OrderBoardBroadcaster.call(order: order.reload, old_status: "pending_payment")
       end
 
       order

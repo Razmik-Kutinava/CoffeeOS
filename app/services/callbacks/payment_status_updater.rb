@@ -61,7 +61,7 @@ module Callbacks
       )
       order = @payment.order.reload
       Inventory::OrderRecipeDeduction.call!(order: order)
-      Barista::BroadcastOrderBoardJob.perform_later(order.id, "pending_payment")
+      Barista::OrderBoardBroadcaster.call(order: order, old_status: "pending_payment")
     end
   end
 end

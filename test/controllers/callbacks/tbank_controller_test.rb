@@ -96,12 +96,13 @@ class Callbacks::TbankControllerTest < ActionDispatch::IntegrationTest
     assert_equal "accepted",  @order.reload.status
   end
 
-  test "CONFIRMED enqueues barista board broadcast after job" do
-    assert_enqueued_with(job: Barista::BroadcastOrderBoardJob, args: [ @order.id, "pending_payment" ]) do
+  test "CONFIRMED broadcasts synchronously (no BroadcastOrderBoardJob)" do
+    assert_no_enqueued_jobs(only: Barista::BroadcastOrderBoardJob) do
       perform_enqueued_jobs(only: Payments::TbankCallbackJob) do
         post_notify(tbank_payload(status: "CONFIRMED"))
       end
     end
+    assert_equal "accepted", @order.reload.status
   end
 
   test "CONFIRMED stores provider_payment_id after job" do
