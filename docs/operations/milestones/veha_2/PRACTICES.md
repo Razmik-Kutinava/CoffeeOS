@@ -73,9 +73,9 @@
 
 | Пропуск | AUTH-ID | Обнаружен | Статус |
 |---------|---------|-----------|--------|
-| `shift_manager` (`shift-a@demo.coffeeos.local`) → `/manager` | AUTH-06 | 2026-05-28 | Открыт — закрыть в прогоне 5 |
-| `franchise_manager` (`franchise@demo.coffeeos.local`) → `/manager` | AUTH-02 | 2026-05-28 | Открыт — закрыть в прогоне 5 |
-| `prep_kitchen_worker` (`pk-worker@demo.coffeeos.local`) → `/prep_kitchen` | AUTH-08 | 2026-05-28 | Открыт — закрыть в прогоне 5 |
+| `shift_manager` (`shift-a@demo.coffeeos.local`) → `/manager` | AUTH-06 | 2026-05-28 | ✅ Закрыт прогон 5 |
+| `franchise_manager` (`franchise@demo.coffeeos.local`) → `/manager` | AUTH-02 | 2026-05-28 | ✅ Закрыт прогон 5 |
+| `prep_kitchen_worker` (`pk-worker@demo.coffeeos.local`) → `/prep_kitchen` | AUTH-08 | 2026-05-28 | ✅ Закрыт прогон 5 |
 
 **Правило:** AUTH-блок прогонять полностью (AUTH-01…AUTH-10), не выборочно.
 

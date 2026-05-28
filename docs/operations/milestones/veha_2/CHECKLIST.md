@@ -48,9 +48,9 @@
 - [x] ⭐ УК → точка → `open_as_manager` → manager видит **ту же** точку и каталог *(§5–§6 ONBOARDING 2026-05-26)*
 - [x] ⭐ Меню УК → PTS на все точки org → витрина `{slug}/shop` показывает актуальное меню *(§6: PublishProduct + shop API)*
 - [x] ⭐ Barista / prep_kitchen — только данные **своего** `tenant_id` (RLS + session) *(§6 prep_kitchen movement; §2 RLS orders)*
-- [ ] ⭐ **shift_manager** (`shift-a@demo.coffeeos.local`) → `/manager` — **AUTH-06 SKIP**
-- [ ] ⭐ **franchise_manager** (`franchise@demo.coffeeos.local`) → `/manager` — **AUTH-02 SKIP**
-- [ ] ⭐ **prep_kitchen_worker** (`pk-worker@demo.coffeeos.local`) → `/prep_kitchen` — **AUTH-08 SKIP**
+- [x] ⭐ **shift_manager** (`shift-a@demo.coffeeos.local`) → `/manager` *(2026-05-28: прогон 5, AUTH-06 PASS)*
+- [x] ⭐ **franchise_manager** (`franchise@demo.coffeeos.local`) → `/manager` *(2026-05-28: AUTH-02 PASS, switcher A/B)*
+- [x] ⭐ **prep_kitchen_worker** (`pk-worker@demo.coffeeos.local`) → `/prep_kitchen` *(2026-05-28: AUTH-08 PASS)*
 - [x] ⭐ Feature flags (модули) отключают недоступные разделы или явный «модуль выключен» *(2026-05-27: barista/prep_kitchen base_controller + `feature_flags_test.rb`)*
 - [x] Health `/health/tenants` отражает новые точки (опционально в демо) *(2026-05-27: `health/tenants_controller_test.rb` 3 tests)*
 

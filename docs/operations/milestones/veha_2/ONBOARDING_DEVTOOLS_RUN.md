@@ -197,6 +197,45 @@ CI Deploy: success. Стенд живой.
 
 ---
 
+---
+
+## Прогон 5 — 2026-05-28 (полный AUTH + онбординг §B, закрытие блоков A и B)
+
+**Цель:** закрыть все SKIP в AUTH-блоке (AUTH-02/05/06/08/09/10) + полный онбординг STF/ENT/CON/SHP на локалке.  
+**Стенд:** `http://127.0.0.1:3001`, `bin/dev`, `demo:seed`.
+
+### AUTH — все роли
+
+| ID | Роль | Email | Результат |
+|----|------|-------|-----------|
+| AUTH-01 | uk_global_admin | uk@demo.coffeeos.local | PASS → `/admin` |
+| AUTH-02 | franchise_manager | franchise@demo.coffeeos.local | PASS → `/manager` (switcher A/B) |
+| AUTH-03 | general_manager | gm-a@demo.coffeeos.local | PASS → `/manager` |
+| AUTH-04 | barista A | barista-a@demo.coffeeos.local | PASS → `/barista` |
+| AUTH-05 | barista B | barista-b@demo.coffeeos.local | PASS → `/barista` |
+| AUTH-06 | shift_manager | shift-a@demo.coffeeos.local | PASS → `/manager` (sidebar урезан) |
+| AUTH-07 | prep_kitchen_manager | pk-manager@demo.coffeeos.local | PASS → `/prep_kitchen` |
+| AUTH-08 | prep_kitchen_worker | pk-worker@demo.coffeeos.local | PASS → `/prep_kitchen` |
+| AUTH-09 | неверный пароль | uk@ / wrongpassword | PASS — остался на `/login` |
+| AUTH-10 | logout | — | PASS → `/login` |
+
+### Онбординг (блок A) — открытые SKIP
+
+| ID | Сценарий | Результат |
+|----|----------|-----------|
+| STF-01..05 | open_as_manager, создание staff, новый login | |
+| ENT-02 | clipboard | |
+| ENT-07 | edit partial | |
+| ENT-08 | «Создать staff →» | |
+| CON-02..06 | связность доп. | |
+| SHP-09 | доп. shop | |
+
+### Замечания прогона 5
+
+*(заполнить после)*
+
+---
+
 ## Замечания (актуальные)
 
 1. **Перезапуск bin/dev** — CSP ws :3036 после pull (HMR warning в консоли без рестарта).

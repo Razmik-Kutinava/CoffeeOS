@@ -59,16 +59,14 @@
 | Роль | Зачем | Панель | Статус В2 |
 |------|--------|--------|-----------|
 | `uk_global_admin` | УК: org/точки/меню | `/admin` | ✅ AUTH-01 |
-| `franchise_manager` | Просмотр своих точек | `/manager` | ⚠️ **AUTH-02 SKIP** |
+| `franchise_manager` | Просмотр своих точек (switcher A/B) | `/manager` | ✅ AUTH-02 |
 | `general_manager` | Меню, staff, склад | `/manager` | ✅ AUTH-03 |
-| `shift_manager` | Смена, оперативка | `/manager` | ⚠️ **AUTH-06 SKIP** |
-| `barista` | POS | `/barista` | ✅ AUTH-04 |
+| `shift_manager` | Смена, оперативка (урезанный sidebar) | `/manager` | ✅ AUTH-06 |
+| `barista` | POS | `/barista` | ✅ AUTH-04/05 |
 | `prep_kitchen_manager` | Склад цеха, движения | `/prep_kitchen` | ✅ AUTH-07 |
-| `prep_kitchen_worker` | Просмотр остатков/очереди | `/prep_kitchen` | ⚠️ **AUTH-08 SKIP** |
+| `prep_kitchen_worker` | Просмотр остатков/очереди | `/prep_kitchen` | ✅ AUTH-08 |
 
 **Приёмка §5:** на каждую sales_point достаточно **GM или barista** с рабочим `/login`.
-
-> **⚠️ AUTH-02/06/08:** franchise_manager, shift_manager, prep_kitchen_worker — не прогонялись в MCP В2. Закрыть в прогоне 5.
 
 Цех: `prep_kitchen_manager` + `prep_kitchen_worker` на `production_kitchen` tenant.
 
