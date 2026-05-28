@@ -11,7 +11,7 @@
 | Этап | Что | Инструмент | Статус |
 |------|-----|------------|--------|
 | **1. Сухой** | Тесты + новая org без demo seed | `bin/rails test`, integration | ✅ 541/0 *(2026-05-28)* |
-| **2. MCP / браузер** | Онбординг, оплата, киоск | Chrome DevTools MCP | 🟡 частично *(2026-05-28)* |
+| **2. MCP / браузер** | Онбординг, оплата, киоск | Chrome DevTools MCP | ✅ pre-prod *(2026-05-28)* |
 | **3. Живое демо** | Заказчик | `LIVE_DEMO_SCENARIOS_PLAIN.md` | ⏳ |
 
 ---
@@ -51,10 +51,22 @@
 | Shop B catalog | PASS | tenant `655aaccb-004a-4bb9-a50a-ce618854dda3`, цены отличаются |
 | Cart + checkout UI | PASS | |
 | Order cash | PASS | `accepted`, 179₽ |
-| Order card → T-Bank | **FAIL** | HTTP 500; stack: `TbankAdapter#post_json_with_circuit_breaker:96` |
+| Order card → T-Bank | **FAIL→PASS** | см. прогон 1 |
 | Manager login | PASS | `shift-a@demo.coffeeos.local` → `/manager` |
 | Kiosk | SKIP | Flutter |
 | T-Bank callback E2E | SKIP | blocked by card FAIL |
 
-**Блокер:** card/sbp Init на Fly — см. `ISSUES.md` и `PAYMENT.md` § Smoke pre-prod.  
-**Следующий шаг:** fix + повтор smoke → апрув → боевой терминал.
+**Блокер:** card/sbp — **закрыт** (`884cdea`).  
+**Следующий шаг:** апрув → боевой терминал + smoke на prod.
+
+### Прогон 1 — pre-prod smoke повтор (2026-05-28)
+
+**Fix:** `80e38be` + `884cdea` — Circuit breaker на MemoryStore, не SolidCache.
+
+| Шаг | PASS/FAIL | Примечание |
+|-----|-----------|------------|
+| Order card → T-Bank | **PASS** | 200, `payment_url` `https://pay.tbank.ru/liDXgYg9`, 179₽ на форме |
+| Order cash | **PASS** | 200 `accepted` |
+| Deploy | PASS | `884cdea` на Fly, release cleared CB cache |
+
+**Вердикт:** готовы к боевому терминалу (ждёт апрув заказчика).

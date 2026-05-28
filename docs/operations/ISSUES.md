@@ -4,18 +4,17 @@
 
 ## 🔴 Блокеры
 
-[2026-05-28] — Shop card/sbp: 500 при Init Т-Банка на Fly (pre-prod smoke)
-Приоритет: 🔴 | Статус: открыта
-Описание: `POST /shop/api/orders` с `payment_method=card` на `coffeeos.fly.dev` возвращает 500 «Внутренняя ошибка сервера». Cash — 200 `accepted`. Fly logs: stack в `Payments::TbankAdapter#post_json_with_circuit_breaker:96` → `init_payment` → `OrderCreator#init_gateway_payment!`.
-Влияние: нет редиректа на `pay.tbank.ru`; блокер переключения на боевой терминал.
-Smoke: `QA_ACCEPTANCE_RUN.md` прогон 0 (2026-05-28); cash order `c5ffaf41-02a7-4fff-bed4-d8e88a8136d0` OK.
-Следующий шаг: диагностика circuit open vs T-Bank API error; ожидать 422 с текстом, не 500; повтор smoke card/sbp.
-
 ## 🟡 Важно
 
 ## 🟢 Потом
 
 ## Закрытые
+
+[2026-05-28] — Shop card/sbp: 500 при Init Т-Банка на Fly (pre-prod smoke)
+Приоритет: 🔴 | Статус: **решено**
+Описание: Circuit breaker использовал `Rails.cache.increment` / SolidCache → `ActiveRecord::RangeError` (key_hash out of range) → 500 вместо 422.
+Решение: `Payments::CacheCounter` на `MemoryStore` (как Rack::Attack); ApiError не трипит CB; `void_pending_online_order!` при ошибке Init; `rescue_from Shop::OrderCreator::Error` → 422. Коммиты `80e38be`, `884cdea`.
+Проверка: smoke card → 200, `payment_url` `https://pay.tbank.ru/…`, 179₽ на форме Т-Банка; cash → 200 `accepted`.
 
 [2026-05-01] — SolidCache: No unique index found for key_hash
 Приоритет: 🔴 | Статус: закрыта

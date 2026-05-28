@@ -158,6 +158,13 @@
   - **Чеклист:** `ONBOARDING_CHECKLIST.md` §1 — `[x]`.
   - **Следующий шаг:** §2 Точка продаж (×3).
 
+- **2026-05-28 — Fix card/sbp 500 + smoke PASS**
+  - **Причина:** Circuit breaker на SolidCache → `RangeError` / broken increment
+  - **Fix:** `Payments::CacheCounter` → MemoryStore; `void_pending_online_order!`; `rescue_from OrderCreator::Error`
+  - **Коммиты:** `80e38be`, `884cdea`
+  - **Smoke:** card 200 → `pay.tbank.ru`, 179₽; cash 200; suite 544 runs
+  - **Статус:** готовы к боевому терминалу (апрув заказчика)
+
 - **2026-05-28 — Pre-prod smoke (Chrome DevTools MCP) — частичный PASS**
   - **Suite:** 541 runs, 0 failures
   - **Shop A/B:** каталог OK (`2fdee1ac-…`, `655aaccb-…` из `DEMO_LOGINS.md`)

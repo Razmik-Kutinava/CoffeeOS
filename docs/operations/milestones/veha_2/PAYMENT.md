@@ -89,11 +89,11 @@
 | 4 | Витрина B `?tenant_id=655aaccb-…` — каталог | ✅ другие цены (189₽), изоляция |
 | 5 | Корзина → checkout UI | ✅ |
 | 6 | Заказ **cash** → `accepted` | ✅ order `c5ffaf41-…`, 179₽ |
-| 7 | Заказ **card** → `payment_url` → pay.tbank.ru | ❌ **500** — см. ISSUES (circuit/T-Bank Init) |
+| 7 | Заказ **card** → `payment_url` → pay.tbank.ru | ✅ *(2026-05-28 после `884cdea`)* order `f40fb10d-…`, 179₽ |
 | 8 | Manager `shift-a@…` → `/manager` | ✅ дашборд, витрина в sidebar |
 | 9 | Полный callback T-Bank (оплата картой) | ⏸ не прогоняли — блокер п.7 |
 
-**Вердикт:** к боевому терминалу **не готовы** — сначала починить card/sbp Init на Fly (или сброс circuit + диагностика T-Bank).
+**Вердикт:** pre-prod smoke **PASS** — готовы к переключению на боевой терминал после апрува заказчика.
 
 ## Не в scope этого дока
 
