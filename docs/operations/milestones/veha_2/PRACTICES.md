@@ -165,7 +165,7 @@
   - **Outbox:** контроллер enqueue → `Payments::TbankCallbackJob` (retry x5)
   - **Мониторинг:** `Payments::StuckPaymentsCheckJob` — pending > 30 мин → `TelegramAlertJob`
   - **Тесты:** **541 runs, 0 failures, 0 errors**
-  - **Deploy:** `coffeeos.fly.dev` — после апрува заказчика
+  - **Deploy:** `coffeeos.fly.dev` — ✅ `2026-05-28`, release_command OK, smoke checks passed
   - **Не включено:** боевой терминал Т-Банка (остаётся DEMO), refund — В3
 
 - **2026-05-28 — §H Надёжность — уточнён и расширен**
