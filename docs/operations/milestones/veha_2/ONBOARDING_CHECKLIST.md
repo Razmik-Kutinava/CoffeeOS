@@ -47,7 +47,9 @@
 ## 5. Staff (минимум для «боевых входов»)
 
 - [x] GM или barista на **каждую** sales_point — логин работает *(2026-05-26: УК → open_as_manager → manager/staff → /login)*
-- [ ] **shift_manager** на каждую sales_point — логин `/manager` проверен *(не проверялось в прогонах 1–4; AUTH-06 SKIP)*
+- [ ] **shift_manager** (`shift-a`) → `/manager` — **AUTH-06 SKIP, не проверялось в прогонах 1–4**
+- [ ] **franchise_manager** (`franchise@`) → `/manager` — **AUTH-02 SKIP**
+- [ ] **prep_kitchen_worker** (`pk-worker`) → `/prep_kitchen` — **AUTH-08 SKIP**
 - [x] Документированный пароль/сброс — [`STAFF_ACCESS.md`](STAFF_ACCESS.md) *(2026-05-26)*
 - [x] УК `open_as_manager` на каждую точку — OK *(2026-05-26, 3 точки в тесте)*
 

@@ -56,16 +56,19 @@
 
 ## Минимальный набор на точку продаж
 
-| Роль | Зачем | Панель | Статус проверки |
-|------|--------|--------|-----------------|
-| `general_manager` | Меню, staff, склад | `/manager` | ✅ MCP прогон В1+В2 |
-| `shift_manager` | Смена, оперативка | `/manager` | ⚠️ В1 OK; **В2 AUTH-06 SKIP** |
-| `barista` | POS | `/barista` | ✅ MCP прогон В1+В2 |
-| `franchise_manager` | На org (один на сеть) | `/manager` | ✅ MCP прогон В1 |
+| Роль | Зачем | Панель | Статус В2 |
+|------|--------|--------|-----------|
+| `uk_global_admin` | УК: org/точки/меню | `/admin` | ✅ AUTH-01 |
+| `franchise_manager` | Просмотр своих точек | `/manager` | ⚠️ **AUTH-02 SKIP** |
+| `general_manager` | Меню, staff, склад | `/manager` | ✅ AUTH-03 |
+| `shift_manager` | Смена, оперативка | `/manager` | ⚠️ **AUTH-06 SKIP** |
+| `barista` | POS | `/barista` | ✅ AUTH-04 |
+| `prep_kitchen_manager` | Склад цеха, движения | `/prep_kitchen` | ✅ AUTH-07 |
+| `prep_kitchen_worker` | Просмотр остатков/очереди | `/prep_kitchen` | ⚠️ **AUTH-08 SKIP** |
 
 **Приёмка §5:** на каждую sales_point достаточно **GM или barista** с рабочим `/login`.
 
-> **⚠️ shift_manager В2:** логин через `/manager` проверен в В1; в В2 MCP-прогонах AUTH-06 пропущен. Закрыть в прогоне 5.
+> **⚠️ AUTH-02/06/08:** franchise_manager, shift_manager, prep_kitchen_worker — не прогонялись в MCP В2. Закрыть в прогоне 5.
 
 Цех: `prep_kitchen_manager` + `prep_kitchen_worker` на `production_kitchen` tenant.
 
