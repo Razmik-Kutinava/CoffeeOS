@@ -97,6 +97,10 @@ module Shop
         raise e
       end
 
+      if order.accepted?
+        Barista::BroadcastOrderBoardJob.perform_later(order.id, "pending_payment")
+      end
+
       order
     end
 

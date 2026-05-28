@@ -59,7 +59,9 @@ module Callbacks
         source: "payment_callback",
         comment: "Оплата подтверждена callback"
       )
-      Inventory::OrderRecipeDeduction.call!(order: @payment.order.reload)
+      order = @payment.order.reload
+      Inventory::OrderRecipeDeduction.call!(order: order)
+      Barista::BroadcastOrderBoardJob.perform_later(order.id, "pending_payment")
     end
   end
 end

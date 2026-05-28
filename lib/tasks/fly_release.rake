@@ -3,12 +3,20 @@
 module FlyRelease
   module_function
 
-  def load_solid_schema!(db_name, schema_path)
+  def load_solid_schema!(db_name, schema_path, marker_table:)
     cfg = ActiveRecord::Base.configurations.configs_for(env_name: Rails.env, name: db_name)
     return unless cfg
 
     path = Rails.root.join(schema_path)
     return unless path.exist?
+
+    conn_class = Class.new(ActiveRecord::Base) { self.abstract_class = true }
+    conn_class.establish_connection(cfg.configuration_hash)
+
+    if conn_class.connection.table_exists?(marker_table)
+      puts "[fly:release] #{marker_table} exists (#{db_name}) — skip load_schema"
+      return
+    end
 
     puts "[fly:release] load schema #{schema_path} (#{db_name})..."
     ActiveRecord::Tasks::DatabaseTasks.load_schema(cfg, ActiveRecord.schema_format, path)
@@ -29,9 +37,9 @@ namespace :fly do
     Payments::CacheCounter.clear_circuit!
     puts "[fly:release] cleared T-Bank circuit breaker cache"
 
-    FlyRelease.load_solid_schema!("queue", "db/queue_schema.rb")
-    FlyRelease.load_solid_schema!("cache", "db/cache_schema.rb")
-    FlyRelease.load_solid_schema!("cable", "db/cable_schema.rb")
+    FlyRelease.load_solid_schema!("queue", "db/queue_schema.rb", marker_table: "solid_queue_jobs")
+    FlyRelease.load_solid_schema!("cache", "db/cache_schema.rb", marker_table: "solid_cache_entries")
+    FlyRelease.load_solid_schema!("cable", "db/cable_schema.rb", marker_table: "solid_cable_messages")
 
     %w[queue cache cable].each do |db|
       name = "db:migrate:#{db}"

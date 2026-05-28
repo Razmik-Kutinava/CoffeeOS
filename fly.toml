@@ -19,14 +19,19 @@ primary_region = "ams"
   # Период живого демо на develop→Fly: идемпотентный demo:seed после каждого деплоя.
   # Убрать demo:seed из release_command после закрытия H.3 (см. veha_1/CHECKLIST § H.0).
   DEMO_AUTO_SEED    = "true"
-  # SOLID_QUEUE_IN_PUMA не включаем на Fly 1x — Puma падает если queue недоступен.
-  # Callback T-Bank: perform_now fallback в TbankController.
+  # SOLID_QUEUE_IN_PUMA не включаем — отдельный process worker (bin/jobs).
+  # После первого деплоя с [processes]: fly scale count worker=1
+
+[processes]
+  web    = "./bin/rails server -b 0.0.0.0"
+  worker = "./bin/jobs"
 
 # Миграции + демо-данные перед трафиком (coffeeos = стенд develop, не main/prod).
 [deploy]
   release_command = "bin/rails fly:release"
 
 [http_service]
+  processes = ["web"]
   internal_port = 3000
   force_https   = true
   auto_stop_machines  = false

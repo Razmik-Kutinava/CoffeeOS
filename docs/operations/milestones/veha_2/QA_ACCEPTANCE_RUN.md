@@ -105,3 +105,19 @@
 **Fixes:** `TbankController` idempotency MemoryStore + `perform_now`; `fly:release` solid schemas; barista broadcast rescue.
 
 **Вердикт:** E2E оплаты **PASS** (без списания реальных денег на форме Т-Банка).
+
+### Прогон 4 — Solid Queue worker + live табло (2026-05-28)
+
+**Инструмент:** Chrome DevTools MCP на `coffeeos.fly.dev`  
+**Код:** worker `bin/jobs` в `fly.toml`; `Barista::OrderBoardBroadcaster` + job после callback и cash-заказа витрины; idempotent `fly:release` schema.
+
+| Шаг | PASS/FAIL | Примечание |
+|-----|-----------|------------|
+| Deploy + `fly scale count worker=1` | | |
+| `/up` | | |
+| Shop A cash → табло без F5 | | |
+| Callback CONFIRMED → табло без F5 | | |
+| Worker logs — job processed | | |
+| Suite | | |
+
+**Вердикт:** _заполнить после smoke_

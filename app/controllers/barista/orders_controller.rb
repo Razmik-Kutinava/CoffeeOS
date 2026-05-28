@@ -77,7 +77,7 @@ module Barista
         user_id:        Current.user_id
       ).call!
 
-      broadcast_order_update(order, "pending_payment")
+      Barista::OrderBoardBroadcaster.call(order: order, old_status: "pending_payment")
       redirect_to barista_dashboard_path, notice: "Заказ ##{order.order_number} создан успешно"
     rescue Barista::CartValidationService::CartValidationError => e
       Rails.logger.warn("Cart validation failed: #{e.message}")
@@ -112,7 +112,7 @@ module Barista
         ).call!
 
         @order = result[:order]
-        broadcast_order_update(@order, result[:old_status])
+        Barista::OrderBoardBroadcaster.call(order: @order, old_status: result[:old_status])
 
         respond_to do |format|
           format.turbo_stream
@@ -166,16 +166,11 @@ module Barista
         request_id: request.request_id
       ).call!
 
-      # Broadcast через Action Cable - удаляем из табло
       Turbo::StreamsChannel.broadcast_remove_to(
         "orders_#{Current.tenant_id}",
         target: "order_#{@order.id}"
       )
-      
-      # Обновление счётчиков — один запрос вместо трёх
       broadcast_order_counts
-
-      # TV board: перерисовываем колонки целиком для корректного idx.
       BroadcastTvColumnsJob.perform_later(Current.tenant_id)
 
       respond_to do |format|
@@ -216,68 +211,6 @@ module Barista
         partial: 'barista/dashboard/count_badge',
         locals: { count: counts[:ready], type: 'ready' }
       )
-    end
-
-    def broadcast_order_update(order, old_status = nil)
-      # Определяем в какую колонку переместить заказ
-      target_column = case order.status
-      when 'accepted'
-        'orders-new'
-      when 'preparing'
-        'orders-preparing'
-      when 'ready'
-        'orders-ready'
-      else
-        nil
-      end
-      
-      # Определяем из какой колонки удалить (старый статус)
-      old_status ||= order.order_status_logs.order(created_at: :desc).second&.status_to || 'accepted'
-      source_column = case old_status
-      when 'accepted'
-        'orders-new'
-      when 'preparing'
-        'orders-preparing'
-      when 'ready'
-        'orders-ready'
-      else
-        nil
-      end
-      
-      # Turbo/Solid Cable может быть недоступен на Fly до load schema — не ломаем смену статуса.
-      begin
-        # Удаляем из старой колонки если статус изменился
-        if source_column && source_column != target_column
-          Turbo::StreamsChannel.broadcast_remove_to(
-            "orders_#{Current.tenant_id}",
-            target: "order_#{order.id}"
-          )
-        end
-
-        # Добавляем в новую колонку (или обновляем если остался в той же)
-        if target_column
-          if source_column == target_column
-            Turbo::StreamsChannel.broadcast_replace_to(
-              "orders_#{Current.tenant_id}",
-              target: "order_#{order.id}",
-              partial: 'barista/dashboard/order_card',
-              locals: { order: order }
-            )
-          else
-            Turbo::StreamsChannel.broadcast_append_to(
-              "orders_#{Current.tenant_id}",
-              target: target_column,
-              partial: 'barista/dashboard/order_card',
-              locals: { order: order }
-            )
-          end
-        end
-
-        broadcast_order_counts
-        BroadcastTvColumnsJob.perform_later(Current.tenant_id)
-      rescue StandardError => e
-        Rails.logger.warn("[Barista::Orders] broadcast skipped: #{e.class} #{e.message}")
-      end
     end
 
     # HTML-форма шлёт cart_items[0][product_id]; интеграционные тесты — массив хэшей.

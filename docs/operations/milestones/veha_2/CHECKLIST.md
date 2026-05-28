@@ -134,6 +134,7 @@
 - [x] ⭐ **Idempotency в `/callbacks/tbank`** — Redis-ключ `tbank:callback:{PaymentId}:{Status}` TTL 24ч *(2026-05-28)*
 - [x] **Мониторинг зависших платежей** — `Payments::StuckPaymentsCheckJob`: pending_payment > 30 мин → TelegramAlertJob *(2026-05-28)*
 - [x] Переключить на боевой терминал Т-Банка (`fly secrets set TBANK_TERMINAL_KEY=1719235292309`) — *(2026-05-28, prod smoke PASS)*
+- [ ] **Solid Queue + Solid Cable на Fly** — worker `bin/jobs`; callback async (retry x5); live-табло без F5 *(прогон 4, 2026-05-28)*. Цех — [`veha_3/CHECKLIST.md`](../veha_3/CHECKLIST.md) §A
 - [ ] UX таймаут БД >5 с (qa 6.2)
 - [ ] Blameless Postmortem при закрытии §I — разобрать инциденты по шаблону из `PRACTICES.md`
 - [ ] Возврат (refund) через Т-Банк API — **В3**, не блокирует В2

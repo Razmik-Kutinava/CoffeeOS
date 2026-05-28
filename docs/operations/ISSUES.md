@@ -6,6 +6,12 @@
 
 ## 🟡 Важно
 
+[2026-05-28] — Fly: Solid Queue worker + live табло без F5
+Приоритет: 🟡 | Статус: **в работе (код готов, нужен deploy)**
+Описание: callback без retry если worker не запущен; оплата с витрины не попадала на табло барista без F5.
+Решение: `Barista::OrderBoardBroadcaster` + job после callback; `fly.toml` processes web+worker; `fly:release` idempotent schema load; Action Cable origins в production.
+Деплой: `fly deploy` → `fly scale count worker=1` → smoke callback + табло без F5.
+
 [2026-05-28] — Fly: Solid Queue/Cable schema не загружались → callback 500, barista broadcast 500
 Приоритет: 🟡 | Статус: **решено**
 Описание: `solid_queue_jobs` / `solid_cable_messages` отсутствовали; idempotency callback на SolidCache → RangeError.

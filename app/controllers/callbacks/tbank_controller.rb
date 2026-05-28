@@ -33,7 +33,8 @@ module Callbacks
         return render json: { ok: true }
       end
 
-      # Enqueue — возвращаем 200 Т-Банку немедленно, job обработает с retry
+      # Enqueue — 200 Т-Банку сразу; worker обрабатывает с retry x5.
+      # perform_now — только если таблицы queue ещё не созданы (до первого fly:release).
       begin
         Payments::TbankCallbackJob.perform_later(payload.to_h)
       rescue SolidQueue::Job::EnqueueError, ActiveRecord::StatementInvalid => e

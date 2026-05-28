@@ -131,6 +131,24 @@
 
 **Fixes в прогоне:** idempotency на MemoryStore; callback `perform_now` если Solid Queue недоступен; `fly:release` load queue/cable schema; barista broadcast не роняет 500.
 
+### Прогон 4 — Solid Queue + live табло (2026-05-28)
+
+**Код (commit TBD):**
+- `fly.toml`: processes `web` + `worker` (`bin/jobs`); после деплоя `fly scale count worker=1`
+- `Barista::OrderBoardBroadcaster` — Turbo Streams на канбан
+- `Barista::BroadcastOrderBoardJob` — после callback оплаты и cash-заказа витрины
+- `fly:release` — schema queue/cache/cable только если таблиц ещё нет
+- `production.rb` — Action Cable URL/origins для Fly
+- Цех ↔ точка — [`../veha_3/CHECKLIST.md`](../veha_3/CHECKLIST.md) §A
+
+| Шаг | PASS/FAIL | Примечание |
+|-----|-----------|------------|
+| Deploy + worker=1 | | |
+| Shop cash → барista без F5 | | |
+| Callback → барista без F5 | | |
+
+**Вердикт:** _после smoke MCP_
+
 ## Не в scope этого дока
 
 - Фискализация / ОФД — отдельные callbacks, частично в schema
