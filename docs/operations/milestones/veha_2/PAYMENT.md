@@ -145,9 +145,11 @@
 |-----|-----------|------------|
 | Deploy + worker=1 | PASS | CI #39 |
 | Shop cash → барista без F5 | **PASS** | sync `OrderBoardBroadcaster` (`0bde33d`) |
-| Callback → барista без F5 | ⏸ | signed webhook |
+| Worker crash loop (pool 3 < SQ 5) | **FIX** | `DB_POOL=8` в `fly.toml` + `database.yml` |
+| Signed callback → worker | **PASS** | `fly:callback_smoke`: order `85bef120` → `accepted`, `[TbankCallbackJob] Processed` на worker |
+| Callback → барista без F5 | **PASS** | sync broadcast в `PaymentStatusUpdater` |
 
-**Вердикт:** live-табло **PASS**; callback retest отдельно.
+**Вердикт:** live-табло + async callback **PASS**. Retest: `fly machine exec <web> -a coffeeos --timeout 120 -j '/bin/bash -lc "cd /rails && bin/rake fly:callback_smoke"'`
 
 ## Не в scope этого дока
 

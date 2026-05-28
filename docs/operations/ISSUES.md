@@ -6,6 +6,12 @@
 
 ## 🟡 Важно
 
+[2026-05-28] — Fly: worker crash loop (DB pool < Solid Queue threads)
+Статус: resolved
+Описание: `bin/jobs` exit code 1 — «Solid Queue is configured to use 5 threads but the database connection pool is 3»; worker machine stopped, jobs не обрабатывались.
+Решение: `DB_POOL=8` в `fly.toml`; `database.yml` — `ENV.fetch("DB_POOL")`; rake `fly:callback_smoke` для prod retest.
+Проверка: worker `2871332` started; `TbankCallbackJob` Processed order `85bef120` через SolidQueue(critical), без perform_now fallback.
+
 [2026-05-28] — Fly: Solid Queue worker + live табло без F5
 Приоритет: 🟡 | Статус: **решено**
 Описание: broadcast через async job не доходил до табло (worker/job lag).

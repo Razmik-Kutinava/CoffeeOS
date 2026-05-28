@@ -118,7 +118,10 @@
 | Shop A cash → `accepted` | PASS | LiveSmoke2, 179₽ |
 | Barista login + табло | PASS | `barista-a@…` |
 | Shop cash → табло **без F5** | **PASS** | ACCEPTED 5→6, sync broadcast |
-| Callback → табло без F5 | ⏸ | signed webhook отдельно |
+| Signed callback → worker → `accepted` | **PASS** | `85bef120`, `TbankCallbackJob` на worker `2871332`, без `perform_now` |
+| Callback → табло без F5 | **PASS** | sync broadcast после worker |
 | WebSocket `/cable` | PASS | 101 |
 
-**Вердикт:** smoke **PASS** — live-табло без F5 подтверждено MCP.
+**Fix (2026-05-28):** worker падал (`Solid Queue … pool is 3`) → `DB_POOL=8`; `/callbacks/*` исключён из `host_authorization`.
+
+**Вердикт:** smoke **PASS** — live-табло и async callback подтверждены.
