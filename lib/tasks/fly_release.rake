@@ -9,8 +9,7 @@ namespace :fly do
     puts "[fly:release] db:ensure_triggers..."
     Rake::Task["db:ensure_triggers"].invoke
 
-    Payments::CacheCounter.delete(Payments::TbankAdapter::CB_FAILURES_KEY)
-    Rails.cache.delete(Payments::TbankAdapter::CB_OPEN_KEY)
+    Payments::CacheCounter.clear_circuit!
     puts "[fly:release] cleared T-Bank circuit breaker cache"
 
     %w[queue cache cable].each do |db|

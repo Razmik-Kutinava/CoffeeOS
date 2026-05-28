@@ -108,7 +108,7 @@ module Payments
     rescue Error, Net::OpenTimeout, Net::ReadTimeout
       failures = Payments::CacheCounter.increment(CB_FAILURES_KEY, expires_in: 5.minutes)
       if failures >= CB_THRESHOLD
-        Rails.cache.write(CB_OPEN_KEY, 1, expires_in: CB_OPEN_TTL.seconds)
+        Payments::CacheCounter.write(CB_OPEN_KEY, 1, expires_in: CB_OPEN_TTL.seconds)
         Rails.logger.error("[TbankAdapter] Circuit opened after #{failures} failures")
       end
       raise

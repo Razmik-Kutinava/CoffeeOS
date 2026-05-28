@@ -138,8 +138,7 @@ class Payments::TbankAdapterTest < ActiveSupport::TestCase
     assert_not Payments::CacheCounter.present?(Payments::TbankAdapter::CB_OPEN_KEY)
     assert_equal 0, Payments::CacheCounter.read(Payments::TbankAdapter::CB_FAILURES_KEY)
   ensure
-    Payments::CacheCounter.delete(Payments::TbankAdapter::CB_FAILURES_KEY)
-    Rails.cache.delete(Payments::TbankAdapter::CB_OPEN_KEY)
+    Payments::CacheCounter.clear_circuit!
   end
 
   test "transport errors increment circuit failures" do
@@ -160,7 +159,6 @@ class Payments::TbankAdapterTest < ActiveSupport::TestCase
 
     assert_equal 1, Payments::CacheCounter.read(Payments::TbankAdapter::CB_FAILURES_KEY)
   ensure
-    Payments::CacheCounter.delete(Payments::TbankAdapter::CB_FAILURES_KEY)
-    Rails.cache.delete(Payments::TbankAdapter::CB_OPEN_KEY)
+    Payments::CacheCounter.clear_circuit!
   end
 end
