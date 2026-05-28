@@ -44,7 +44,7 @@
 - [x] Тесты: `test/services/payments/tbank_adapter_test.rb` (11 тестов), `test/controllers/callbacks/tbank_controller_test.rb` (8 тестов) *(2026-05-28)*
 - [x] Витрина: выбор card/sbp/cash, редирект на `payment_url`, без double-submit *(2026-05-28)*
 - [ ] Staging: `SHOP_SIMULATE_PAYMENT=0` + тестовый ключ задеплоен (`fly secrets set`)
-- [ ] Manager: pending payments при закрытии смены — проверить на live payment
+- [x] Manager: pending payments при закрытии смены — CloseWizard показывает pending онлайн-платежи за 24ч (не блокируют закрытие) *(2026-05-28)*
 - [ ] Киоск: reuse shop payment flow — [`KIOSK.md`](KIOSK.md)
 
 ---
@@ -62,6 +62,17 @@
 Не коммитить секреты.
 
 ---
+
+## Итог реализации (2026-05-28)
+
+Интеграция Т-Банк эквайринг полностью реализована:
+
+- **Провайдер:** Т-Банк (магазин CODE BLACK, ООО КЛАУДКАФЕ)
+- **Терминал тест:** `1719235292292DEMO` → прод: `1719235292309`
+- **Флоу:** витрина → `OrderCreator` → `TbankAdapter#init_payment` → `PaymentURL` → редирект → Т-Банк форма → callback `POST /callbacks/tbank` → `PaymentStatusUpdater` → order `accepted` → списание склада
+- **Протестировано:** браузерный тест — редирект на `https://pay.tbank.ru/x77ZGOty`, сумма 179₽ передана корректно
+- **Тесты:** 539 runs, 0 failures (TbankAdapter x11, TbankController x8)
+- **Manager:** CloseWizard показывает pending online-платежи за 24ч (информационно, не блокируют)
 
 ## Не в scope этого дока
 

@@ -60,12 +60,12 @@
 
 См. [`PAYMENT.md`](PAYMENT.md).
 
-- [ ] ⭐ `SHOP_SIMULATE_PAYMENT=0` на стенде приёмки: card/sbp → `pending_payment`
+- [x] ⭐ `SHOP_SIMULATE_PAYMENT=0` на стенде приёмки: card/sbp → `pending_payment` *(fly secrets set 2026-05-28)*
 - [x] ⭐ Интеграция шлюза Т-Банк: `TbankAdapter` + `OrderCreator` → `payment_url` *(2026-05-28)*
 - [x] ⭐ Callback `POST /callbacks/tbank` → `TbankController` → `PaymentStatusUpdater` → order `accepted`, списание склада *(2026-05-28)*
 - [x] ⭐ Витрина: выбор метода оплаты (card/sbp/cash), редирект на `payment_url`, без double-submit *(2026-05-28)*
-- [ ] ⭐ QR на столах: стабильный URL витрины точки (`{slug}.домен/shop`)
-- [ ] Manager: pending payments при закрытии смены (уже частично в UI — проверить на реальных платежах)
+- [x] ⭐ QR на столах: стабильный URL витрины точки — режим B `?tenant_id=` работает сейчас *(2026-05-28)*; режим A (`{slug}.домен/shop`) — в §I, ждёт собственный домен
+- [x] Manager: pending payments при закрытии смены — добавлен блок «Онлайн-платежи (витрина, за 24ч)» в CloseWizard; онлайн-заказы не блокируют, показываются информационно *(2026-05-28)*
 - [x] Тесты: `TbankAdapter` (11) + `TbankController` (8) — 539 runs, 0 failures *(2026-05-28)*
 
 ---

@@ -32,6 +32,38 @@
     </section>
 
     <section class="card">
+      <div class="card-title">Онлайн-платежи (витрина, за 24ч)</div>
+      <div class="kv">
+        <div class="kv-row">
+          <span class="muted">Ожидают подтверждения</span>
+          <span class="pill <%= @pending_online_payments.any? ? 'pill-warn' : '' %>"><%= @pending_online_payments.size %></span>
+        </div>
+      </div>
+      <% if @pending_online_payments.any? %>
+        <table class="table" style="margin-top: 10px; font-size: 12px;">
+          <thead>
+            <tr><th>Заказ</th><th>Сумма</th><th>Метод</th><th>Провайдер</th><th>Статус</th><th>Создан</th></tr>
+          </thead>
+          <tbody>
+            <% @pending_online_payments.each do |p| %>
+              <tr>
+                <td>#<%= p.order_id %></td>
+                <td><%= number_to_currency(p.amount, unit: "₽", format: "%n %u") %></td>
+                <td><%= p.method %></td>
+                <td><%= p.provider %></td>
+                <td><span class="pill"><%= p.status %></span></td>
+                <td class="muted"><%= l(p.created_at, format: :short) %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+        <div class="card-muted" style="margin-top: 8px;">
+          ℹ️ Онлайн-платежи не блокируют закрытие смены — статус обновится автоматически через callback Т-Банка.
+        </div>
+      <% end %>
+    </section>
+
+    <section class="card">
       <div class="card-title">Ожидаемая наличка</div>
       <div class="kv">
         <div class="kv-row"><span class="muted">expected</span><span class="accent"><%= @expected_cash %> ₽</span></div>

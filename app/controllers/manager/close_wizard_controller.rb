@@ -22,6 +22,17 @@ module Manager
       @failed_receipts = FiscalReceipt.for_current_tenant.includes(:payment).joins(:order).where(orders: { cash_shift_id: @shift.id }, status: "failed").limit(50)
       @pending_refunds = Refund.for_current_tenant.includes(:payment, :order).joins(:order).where(orders: { cash_shift_id: @shift.id }, status: "pending").limit(50)
 
+      # Онлайн-платежи (shop/витрина) — не привязаны к смене, не блокируют закрытие.
+      # Показываем за последние 24 часа чтобы менеджер мог проконтролировать Т-Банк.
+      @pending_online_payments = Payment.for_current_tenant
+        .includes(:order)
+        .joins(:order)
+        .where(orders: { cash_shift_id: nil })
+        .where(status: %w[pending processing])
+        .where("payments.created_at >= ?", 24.hours.ago)
+        .order(created_at: :desc)
+        .limit(50)
+
       cash_payments_sum = Payment.for_current_tenant.joins(:order)
         .where(orders: { cash_shift_id: @shift.id }, method: "cash", status: "succeeded")
         .sum(:amount)
