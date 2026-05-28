@@ -18,6 +18,7 @@ Rails.application.routes.draw do
   namespace :callbacks do
     post "/payments", to: "events#payment"
     post "/fiscal_receipts", to: "events#fiscal_receipt"
+    post "/tbank", to: "tbank#notify"
   end
 
   # Dashboard routes (временные заглушки для тестирования)

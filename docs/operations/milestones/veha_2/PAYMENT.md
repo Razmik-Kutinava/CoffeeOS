@@ -36,10 +36,14 @@
 
 ## Задачи реализации
 
-- [ ] Адаптер провайдера (create payment, status, secrets через ENV)
-- [ ] Витрина: UI «Оплатить» → шлюз, не simulate на prod/staging приёмки
-- [ ] Callback URL + подпись (`CALLBACK_*` как в проекте)
-- [ ] Staging: `SHOP_SIMULATE_PAYMENT=0` + тестовый ключ шлюза
+- [x] Адаптер провайдера Т-Банк — `app/services/payments/tbank_adapter.rb` *(2026-05-28)*
+- [x] `OrderCreator` вызывает адаптер при `pending_payment`, сохраняет `provider_payment_id`, возвращает `payment_url` *(2026-05-28)*
+- [x] `Shop::Api::OrdersController` — возвращает `payment_url` в JSON ответе *(2026-05-28)*
+- [x] Callback: `Callbacks::TbankController` + `POST /callbacks/tbank` — верификация Token, маппинг статусов *(2026-05-28)*
+- [x] `PaymentStatusUpdater` — добавлено `Inventory::OrderRecipeDeduction` при `succeeded` *(2026-05-28)*
+- [x] Тесты: `test/services/payments/tbank_adapter_test.rb` (11 тестов), `test/controllers/callbacks/tbank_controller_test.rb` (8 тестов) *(2026-05-28)*
+- [ ] Витрина: UI «Оплатить» → редирект на `payment_url` шлюза, экран ожидания
+- [ ] Staging: `SHOP_SIMULATE_PAYMENT=0` + тестовый ключ задеплоен (`fly secrets set`)
 - [ ] Manager: pending payments при закрытии смены — проверить на live payment
 - [ ] Киоск: reuse shop payment flow — [`KIOSK.md`](KIOSK.md)
 
@@ -51,7 +55,9 @@
 |------------|------------|
 | `SHOP_SIMULATE_PAYMENT` | `0` на боевом приёмочном стенде |
 | `CALLBACK_*` | Секреты callback (см. существующие в проекте) |
-| _TBD_ | Ключи ЮKassa / return URL |
+| `TBANK_TERMINAL_KEY` | TerminalKey терминала (тест: `1719235292292DEMO`) |
+| `TBANK_PASSWORD` | Password терминала |
+| `TBANK_RETURN_URL` | Базовый URL приложения для SuccessURL/FailURL (напр. `https://coffeeos.fly.dev`) |
 
 Не коммитить секреты.
 

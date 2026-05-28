@@ -4,10 +4,13 @@ module Shop
   class OrderCreator
     class Error < StandardError; end
 
-    def initialize(session, tenant:, shop_customer_session_key: :shop_customer_id)
+    attr_reader :payment_url
+
+    def initialize(session, tenant:, shop_customer_session_key: :shop_customer_id, request: nil)
       @session = session
       @tenant = tenant
       @shop_customer_session_key = shop_customer_session_key
+      @request = request
     end
 
     def call!(params)
@@ -25,6 +28,7 @@ module Shop
       flow = payment_flow(payment_method)
 
       order = nil
+      payment = nil
       ActiveRecord::Base.transaction do
         # В1 гибрид смены: витрина/shop не привязана к CashShift (cash_shift_id остаётся NULL).
         # Barista POS — только через OrderCreationService с открытой сменой. См. docs/operations/milestones/veha_1/ORDER_ENTRY_AUDIT.md.
@@ -70,7 +74,7 @@ module Shop
           comment: flow[:comment]
         )
 
-        Payment.create!(
+        payment = Payment.create!(
           order_id: order.id,
           tenant_id: @tenant.id,
           amount: total,
@@ -85,6 +89,8 @@ module Shop
         @session[Shop::CartService::SESSION_KEY] = []
         @session[@shop_customer_session_key] = customer.id
       end
+
+      init_gateway_payment!(order, payment) if flow[:order_status] == :pending_payment
 
       order
     end
@@ -139,6 +145,26 @@ module Shop
       ProductTenantSetting
         .lock("FOR SHARE")
         .exists?(product_id: product.id, tenant_id: @tenant.id, is_enabled: true, is_sold_out: false)
+    end
+
+    def init_gateway_payment!(order, payment)
+      return_base_url = ENV.fetch("TBANK_RETURN_URL", @request&.base_url.to_s)
+      notification_url = "#{return_base_url}/callbacks/tbank"
+
+      result = Payments::TbankAdapter.new.init_payment(
+        order: order,
+        return_base_url: return_base_url,
+        notification_url: notification_url
+      )
+
+      payment.update_columns(
+        provider: "tbank",
+        provider_payment_id: result[:provider_payment_id]
+      )
+
+      @payment_url = result[:payment_url]
+    rescue Payments::TbankAdapter::Error => e
+      raise Error, "Не удалось инициировать оплату: #{e.message}"
     end
 
     def find_or_create_customer!(params)

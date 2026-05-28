@@ -5,13 +5,15 @@ module Shop
     class OrdersController < Shop::Api::BaseController
       def create
         Rails.logger.info("[Shop::Order] Creating order for tenant #{@shop_tenant.id}, phone: #{order_params[:phone]}")
-        order = Shop::OrderCreator.new(session, tenant: @shop_tenant).call!(order_params.to_h.symbolize_keys)
+        creator = Shop::OrderCreator.new(session, tenant: @shop_tenant, request: request)
+        order = creator.call!(order_params.to_h.symbolize_keys)
         Rails.logger.info("[Shop::Order] Order created: #{order.id}, total: #{order.final_amount}, status: #{order.status}")
         render json: {
           order_id: order.id,
           total: order.final_amount.to_f,
           discount: order.discount_amount.to_f,
-          status: order.status
+          status: order.status,
+          payment_url: creator.payment_url
         }
       rescue Shop::OrderCreator::Error => e
         Rails.logger.error("[Shop::Order] Failed to create order: #{e.message}")

@@ -59,6 +59,7 @@ module Callbacks
         source: "payment_callback",
         comment: "Оплата подтверждена callback"
       )
+      Inventory::OrderRecipeDeduction.call!(order: @payment.order.reload)
     end
   end
 end

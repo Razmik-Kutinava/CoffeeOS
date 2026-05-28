@@ -52,8 +52,13 @@ class Shop::Api::MvpFlowTest < ActionDispatch::IntegrationTest
     assert_equal "card", payment.method
   end
 
-  test "card payment stays pending when SHOP_SIMULATE_PAYMENT=0 (v2 gateway mode)" do
-    old = ENV["SHOP_SIMULATE_PAYMENT"]
+  # В2: при SHOP_SIMULATE_PAYMENT=0 и не настроенном шлюзе (тест-среда без TBANK_TERMINAL_KEY)
+  # OrderCreator завершается ошибкой с понятным сообщением.
+  # Когда ключи настроены — заказ создаётся в pending_payment и API отдаёт payment_url.
+  test "card payment returns error when SHOP_SIMULATE_PAYMENT=0 and gateway not configured" do
+    old_simulate  = ENV["SHOP_SIMULATE_PAYMENT"]
+    old_tbank_key = ENV.delete("TBANK_TERMINAL_KEY")
+
     ENV["SHOP_SIMULATE_PAYMENT"] = "0"
 
     post "/shop/api/cart/add",
@@ -67,14 +72,10 @@ class Shop::Api::MvpFlowTest < ActionDispatch::IntegrationTest
       params: { phone: @customer.phone, name: "V2 mode", payment_method: "card" },
       as: :json
 
-    if response.successful?
-      order = Order.find(response.parsed_body["order_id"])
-      assert_equal "pending_payment", order.status
-      assert_equal "pending", order.payments.first.status
-    else
-      assert_match(/order_number/i, response.parsed_body["error"].to_s)
-    end
+    assert_response :unprocessable_entity
+    assert_match(/TBANK_TERMINAL_KEY/i, response.parsed_body["error"].to_s)
   ensure
-    ENV["SHOP_SIMULATE_PAYMENT"] = old
+    ENV["SHOP_SIMULATE_PAYMENT"] = old_simulate
+    ENV["TBANK_TERMINAL_KEY"]    = old_tbank_key if old_tbank_key
   end
 end
