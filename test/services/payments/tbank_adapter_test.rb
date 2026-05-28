@@ -118,4 +118,49 @@ class Payments::TbankAdapterTest < ActiveSupport::TestCase
       )
     end
   end
+
+  test "ApiError from T-Bank does not trip circuit breaker" do
+    adapter = Payments::TbankAdapter.new
+    order = Struct.new(:id, :final_amount).new(SecureRandom.uuid, BigDecimal("100.00"))
+
+    adapter.define_singleton_method(:post_json) do |*_args|
+      { "Success" => false, "ErrorCode" => "9999", "Message" => "bad" }
+    end
+
+    assert_raises(Payments::TbankAdapter::ApiError) do
+      adapter.init_payment(
+        order: order,
+        return_base_url: "https://example.com",
+        notification_url: "https://example.com/callbacks/tbank"
+      )
+    end
+
+    assert_not Payments::CacheCounter.present?(Payments::TbankAdapter::CB_OPEN_KEY)
+    assert_equal 0, Payments::CacheCounter.read(Payments::TbankAdapter::CB_FAILURES_KEY)
+  ensure
+    Payments::CacheCounter.delete(Payments::TbankAdapter::CB_FAILURES_KEY)
+    Rails.cache.delete(Payments::TbankAdapter::CB_OPEN_KEY)
+  end
+
+  test "transport errors increment circuit failures" do
+    adapter = Payments::TbankAdapter.new
+    order = Struct.new(:id, :final_amount).new(SecureRandom.uuid, BigDecimal("100.00"))
+
+    adapter.define_singleton_method(:post_json) do |*_args|
+      raise Payments::TbankAdapter::Error, "timeout"
+    end
+
+    assert_raises(Payments::TbankAdapter::Error) do
+      adapter.init_payment(
+        order: order,
+        return_base_url: "https://example.com",
+        notification_url: "https://example.com/callbacks/tbank"
+      )
+    end
+
+    assert_equal 1, Payments::CacheCounter.read(Payments::TbankAdapter::CB_FAILURES_KEY)
+  ensure
+    Payments::CacheCounter.delete(Payments::TbankAdapter::CB_FAILURES_KEY)
+    Rails.cache.delete(Payments::TbankAdapter::CB_OPEN_KEY)
+  end
 end

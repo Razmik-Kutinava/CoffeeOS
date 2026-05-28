@@ -90,7 +90,12 @@ module Shop
         @session[@shop_customer_session_key] = customer.id
       end
 
-      init_gateway_payment!(order, payment) if flow[:order_status] == :pending_payment
+      begin
+        init_gateway_payment!(order, payment) if flow[:order_status] == :pending_payment
+      rescue Error => e
+        void_pending_online_order!(order, payment)
+        raise e
+      end
 
       order
     end
@@ -145,6 +150,15 @@ module Shop
       ProductTenantSetting
         .lock("FOR SHARE")
         .exists?(product_id: product.id, tenant_id: @tenant.id, is_enabled: true, is_sold_out: false)
+    end
+
+    def void_pending_online_order!(order, payment)
+      return unless order.pending_payment?
+
+      order.update!(status: :cancelled)
+      payment.update!(status: :failed) if payment.pending?
+    rescue ActiveRecord::RecordInvalid => e
+      Rails.logger.error("[Shop::OrderCreator] void_pending_online_order failed: #{e.message}")
     end
 
     def init_gateway_payment!(order, payment)

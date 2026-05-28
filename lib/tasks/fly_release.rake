@@ -9,6 +9,10 @@ namespace :fly do
     puts "[fly:release] db:ensure_triggers..."
     Rake::Task["db:ensure_triggers"].invoke
 
+    Payments::CacheCounter.delete(Payments::TbankAdapter::CB_FAILURES_KEY)
+    Rails.cache.delete(Payments::TbankAdapter::CB_OPEN_KEY)
+    puts "[fly:release] cleared T-Bank circuit breaker cache"
+
     %w[queue cache cable].each do |db|
       name = "db:migrate:#{db}"
       next unless Rake::Task.task_defined?(name)

@@ -11,17 +11,17 @@ module Payments
   class TbankAdapter
     class Error < StandardError; end
     class ApiError < Error
-      attr_reader :error_code, :message
+      attr_reader :error_code, :api_message
       def initialize(error_code:, message:)
         @error_code = error_code
-        @message = message
+        @api_message = message
         super("Т-Банк API error #{error_code}: #{message}")
       end
     end
 
     BASE_URL = "https://securepay.tinkoff.ru/v2"
 
-    # Circuit Breaker — Redis ключи
+    # Circuit Breaker — SolidCache (read/write, без increment)
     CB_FAILURES_KEY  = "tbank:cb:failures"
     CB_OPEN_KEY      = "tbank:cb:open"
     CB_THRESHOLD     = 5   # ошибок подряд перед открытием
@@ -54,7 +54,10 @@ module Payments
       }
       payload["Token"] = build_token(payload)
 
-      response = post_json_with_circuit_breaker("#{BASE_URL}/Init", payload)
+      response = with_circuit_breaker { post_json("#{BASE_URL}/Init", payload) }
+      unless response.is_a?(Hash)
+        raise Error, "Некорректный ответ Т-Банка"
+      end
       raise ApiError.new(error_code: response["ErrorCode"], message: response["Message"].to_s) unless response["Success"]
 
       {
@@ -92,18 +95,20 @@ module Payments
 
     private
 
-    def post_json_with_circuit_breaker(url, payload)
-      if Rails.cache.exist?(CB_OPEN_KEY)
+    def with_circuit_breaker
+      if Payments::CacheCounter.present?(CB_OPEN_KEY)
         raise Error, "Т-Банк временно недоступен (circuit open). Попробуйте позже."
       end
 
-      result = post_json(url, payload)
-      Rails.cache.delete(CB_FAILURES_KEY)
+      result = yield
+      Payments::CacheCounter.delete(CB_FAILURES_KEY)
       result
-    rescue Error, Net::OpenTimeout, Net::ReadTimeout => e
-      failures = Rails.cache.increment(CB_FAILURES_KEY, 1, expires_in: 5.minutes) || 1
+    rescue ApiError
+      raise
+    rescue Error, Net::OpenTimeout, Net::ReadTimeout
+      failures = Payments::CacheCounter.increment(CB_FAILURES_KEY, expires_in: 5.minutes)
       if failures >= CB_THRESHOLD
-        Rails.cache.write(CB_OPEN_KEY, true, expires_in: CB_OPEN_TTL)
+        Rails.cache.write(CB_OPEN_KEY, 1, expires_in: CB_OPEN_TTL.seconds)
         Rails.logger.error("[TbankAdapter] Circuit opened after #{failures} failures")
       end
       raise
