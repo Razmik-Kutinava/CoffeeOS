@@ -7,10 +7,10 @@
 ## 🟡 Важно
 
 [2026-05-28] — Fly: Solid Queue worker + live табло без F5
-Приоритет: 🟡 | Статус: **решено (код + CI), smoke live-табло — retest**
-Описание: callback без retry если worker не запущен; оплата с витрины не попадала на табло барista без F5.
-Решение: `Barista::OrderBoardBroadcaster` + job после callback и cash витрины; `fly.toml` web+worker; CI `fly scale count web=1 worker=1`; commits `a7f469e`, `97baa77`.
-Проверка: MCP smoke — shop cash `c85849ad` accepted 179₽; barista login OK. Live без F5 — retest.
+Приоритет: 🟡 | Статус: **решено**
+Описание: broadcast через async job не доходил до табло (worker/job lag).
+Решение: sync `OrderBoardBroadcaster` из витрины и callback; worker для `TbankCallbackJob` retry; CI scale web=1 worker=1. Commits `a7f469e`, `97baa77`, `0bde33d`.
+Проверка: MCP — barista открыт → cash LiveSmoke2 → ACCEPTED 5→6 без F5; `/cable` 101.
 
 [2026-05-28] — Fly: Solid Queue/Cable schema не загружались → callback 500, barista broadcast 500
 Приоритет: 🟡 | Статус: **решено**

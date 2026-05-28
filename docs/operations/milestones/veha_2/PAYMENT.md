@@ -143,11 +143,11 @@
 
 | Шаг | PASS/FAIL | Примечание |
 |-----|-----------|------------|
-| Deploy + worker=1 | PASS | CI `97baa77` |
-| Shop cash → барista без F5 | ⏸ | cash order OK; live broadcast — retest |
-| Callback → барista без F5 | ⏸ | |
+| Deploy + worker=1 | PASS | CI #39 |
+| Shop cash → барista без F5 | **PASS** | sync `OrderBoardBroadcaster` (`0bde33d`) |
+| Callback → барista без F5 | ⏸ | signed webhook |
 
-**Вердикт:** частичный PASS — deploy + витрина cash; live-табло retest.
+**Вердикт:** live-табло **PASS**; callback retest отдельно.
 
 ## Не в scope этого дока
 
