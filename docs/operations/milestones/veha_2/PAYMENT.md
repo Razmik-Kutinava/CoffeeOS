@@ -143,11 +143,11 @@
 
 | Шаг | PASS/FAIL | Примечание |
 |-----|-----------|------------|
-| Deploy + worker=1 | | |
-| Shop cash → барista без F5 | | |
-| Callback → барista без F5 | | |
+| Deploy + worker=1 | PASS | CI `97baa77` |
+| Shop cash → барista без F5 | ⏸ | cash order OK; live broadcast — retest |
+| Callback → барista без F5 | ⏸ | |
 
-**Вердикт:** _после smoke MCP_
+**Вердикт:** частичный PASS — deploy + витрина cash; live-табло retest.
 
 ## Не в scope этого дока
 

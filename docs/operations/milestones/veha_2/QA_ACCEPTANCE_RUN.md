@@ -113,11 +113,12 @@
 
 | Шаг | PASS/FAIL | Примечание |
 |-----|-----------|------------|
-| Deploy + `fly scale count worker=1` | | |
-| `/up` | | |
-| Shop A cash → табло без F5 | | |
-| Callback CONFIRMED → табло без F5 | | |
-| Worker logs — job processed | | |
-| Suite | | |
+| Deploy + `fly scale count worker=1` | PASS | GH Actions run #36–37, commit `97baa77` |
+| `/up` | PASS | 200 |
+| Shop A cash → `accepted` | PASS | order `c85849ad-…`, 179₽, Smoke Test |
+| Barista login + табло | PASS | `barista-a@…`, 4+ заказов в ACCEPTED |
+| Shop cash → табло **без F5** | ⏸ | retest после deploy worker (barista открыли после заказа) |
+| Callback → табло без F5 | ⏸ | не прогоняли в этом прогоне |
+| Worker logs — job processed | ⏸ | проверить в Fly logs worker |
 
-**Вердикт:** _заполнить после smoke_
+**Вердикт:** smoke **частичный PASS** — витрина→cash→accepted OK; live-табло — повтор после деплоя worker.
