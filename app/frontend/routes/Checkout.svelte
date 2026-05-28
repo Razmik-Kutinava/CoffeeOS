@@ -8,6 +8,7 @@
   let is_car_pickup = $state(false)
   let car_number = $state("")
   let promo_code = $state("")
+  let payment_method = $state("card")
   let submitting = $state(false)
   let err = $state(null)
   let done = $state(null)
@@ -26,9 +27,15 @@
           is_car_pickup,
           car_number,
           promo_code: promo_code || undefined,
-          payment_method: "mock"
+          payment_method
         })
       })
+
+      if (res.payment_url) {
+        window.location.href = res.payment_url
+        return
+      }
+
       done = res
     } catch (e) {
       err = e.message
@@ -40,9 +47,9 @@
 
 {#if done}
   <div class="py-8 text-center">
-    <p class="mb-2 text-xl font-bold text-green-400">Заказ #{done.order_id} оплачен</p>
+    <p class="mb-2 text-xl font-bold text-green-400">Заказ #{done.order_id} принят</p>
     <p class="mb-1 text-[#fff]">Сумма: {Math.round(done.total)}₽</p>
-    <p class="mb-6 text-sm text-[#a0a0a0]">Имитация оплаты (В1). Статус: {done.status}</p>
+    <p class="mb-6 text-sm text-[#a0a0a0]">Статус: {done.status}</p>
     <div class="flex flex-col gap-3">
       <button
         type="button"
@@ -62,7 +69,6 @@
   </div>
 {:else}
   <h1 class="mb-4 text-xl font-bold">Оформление</h1>
-  <p class="mb-4 text-sm text-[#a0a0a0]">Самовывоз · оплата имитируется без платёжного шлюза</p>
 
   <label class="mb-3 block">
     <span class="mb-1 block text-sm text-[#a0a0a0]">Имя</span>
@@ -103,6 +109,19 @@
     <input bind:value={promo_code} class="w-full rounded-lg border border-[#3a3a3a] bg-[#2a2a2a] px-3 py-2" />
   </label>
 
+  <div class="mb-6">
+    <span class="mb-2 block text-sm text-[#a0a0a0]">Способ оплаты</span>
+    <div class="flex gap-3">
+      {#each [["card", "Картой"], ["sbp", "СБП"], ["cash", "Наличные"]] as [val, label]}
+        <label class="flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-lg border px-3 py-2 text-sm
+          {payment_method === val ? 'border-[#ff8c42] bg-[#ff8c42]/10 text-[#ff8c42]' : 'border-[#3a3a3a] text-[#a0a0a0]'}">
+          <input type="radio" bind:group={payment_method} value={val} class="hidden" />
+          {label}
+        </label>
+      {/each}
+    </div>
+  </div>
+
   {#if err}
     <p class="mb-4 text-sm text-red-400">{err}</p>
   {/if}
@@ -113,6 +132,6 @@
     disabled={submitting || !phone || !name}
     onclick={submit}
   >
-    {submitting ? "Оплата…" : "Оплатить"}
+    {submitting ? "Переход к оплате…" : payment_method === "cash" ? "Оформить (наличные)" : "Оплатить →"}
   </button>
 {/if}

@@ -42,7 +42,7 @@
 - [x] Callback: `Callbacks::TbankController` + `POST /callbacks/tbank` — верификация Token, маппинг статусов *(2026-05-28)*
 - [x] `PaymentStatusUpdater` — добавлено `Inventory::OrderRecipeDeduction` при `succeeded` *(2026-05-28)*
 - [x] Тесты: `test/services/payments/tbank_adapter_test.rb` (11 тестов), `test/controllers/callbacks/tbank_controller_test.rb` (8 тестов) *(2026-05-28)*
-- [ ] Витрина: UI «Оплатить» → редирект на `payment_url` шлюза, экран ожидания
+- [x] Витрина: выбор card/sbp/cash, редирект на `payment_url`, без double-submit *(2026-05-28)*
 - [ ] Staging: `SHOP_SIMULATE_PAYMENT=0` + тестовый ключ задеплоен (`fly secrets set`)
 - [ ] Manager: pending payments при закрытии смены — проверить на live payment
 - [ ] Киоск: reuse shop payment flow — [`KIOSK.md`](KIOSK.md)

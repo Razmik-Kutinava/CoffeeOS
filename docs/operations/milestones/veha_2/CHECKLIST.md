@@ -63,7 +63,7 @@
 - [ ] ⭐ `SHOP_SIMULATE_PAYMENT=0` на стенде приёмки: card/sbp → `pending_payment`
 - [x] ⭐ Интеграция шлюза Т-Банк: `TbankAdapter` + `OrderCreator` → `payment_url` *(2026-05-28)*
 - [x] ⭐ Callback `POST /callbacks/tbank` → `TbankController` → `PaymentStatusUpdater` → order `accepted`, списание склада *(2026-05-28)*
-- [ ] ⭐ Витрина: UX редиректа на `payment_url`, экран ожидания оплаты, без double-submit
+- [x] ⭐ Витрина: выбор метода оплаты (card/sbp/cash), редирект на `payment_url`, без double-submit *(2026-05-28)*
 - [ ] ⭐ QR на столах: стабильный URL витрины точки (`{slug}.домен/shop`)
 - [ ] Manager: pending payments при закрытии смены (уже частично в UI — проверить на реальных платежах)
 - [x] Тесты: `TbankAdapter` (11) + `TbankController` (8) — 539 runs, 0 failures *(2026-05-28)*
