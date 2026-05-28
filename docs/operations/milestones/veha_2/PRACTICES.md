@@ -55,7 +55,32 @@
 | V2-T2 | `address` не в форме tenant | **done** §2 ONBOARDING 2026-05-26 | — |
 | V2-T3 | Staff только manager + franchise из УК | **done** §5 ONBOARDING 2026-05-26 (путь open_as_manager → staff) | wizard — хвост |
 | V2-T4 | Киоск без routes | open | KIOSK |
-| V2-T5 | Реальный шлюз не подключён | open | PAYMENT |
+| V2-T5 | Реальный шлюз не подключён | **done** Т-Банк 2026-05-28 (тест-терминал); прод — после Outbox+CB | PAYMENT |
+| V2-T6 | Боевой терминал Т-Банка не включён | open | Только после Outbox + Circuit Breaker |
+| V2-T7 | QR режим B (без домена) | open | Режим A — когда будет домен; §I хвост |
+| V2-T8 | Flaky тест `events_controller_test.rb:208` (timing) | open | Исправить race condition в тесте |
+
+---
+
+## 7 практик (из обсуждения Dodo) — статус В2
+
+| Практика | Веха | Статус | Что делать |
+|----------|------|--------|------------|
+| **Service Objects** | В1 ✅ / В2 ✅ | Работает | `TbankAdapter`, `OrderCreator`, `PaymentStatusUpdater` — по паттерну. Продолжать в D (Киоск) |
+| **Domain Folders** | В4+ | ⏸ Отложено | Не вводить `app/models/{domain}` — пока моделей < 50, AR между «доменами» разрешён |
+| **Outbox (Solid Queue)** | В2 (перед прод) | ❌ Не начато | **Обязательно до переключения на боевой терминал.** Критичные side-effects (payment callback → order accept → inventory) должны быть idempotent и retryable. Файл: `app/jobs/` + Solid Queue. Шаги: 1) выделить `PaymentCallbackJob`; 2) retry + dead_letter; 3) тест на duplicate delivery |
+| **Circuit Breaker** | В2 (перед прод) | ❌ Не начато | **Вместе с Outbox.** Обернуть `TbankAdapter#init_payment` и `post_json` в CB (например `stoplight` gem или ручной счётчик в Redis). При N ошибках подряд — fallback: заказ остаётся `pending_payment`, клиент видит «попробуйте позже». Шаги: 1) gem; 2) обернуть `post_json`; 3) тест на open/half-open |
+| **Event Sourcing склада** | В3 | ❌ Не начато | Склад v0.1 — прямой UPDATE. В3: `StockMovement` как журнал, nightly reconciliation |
+| **Read Replicas** | После трафика | ❌ Не начато | Когда появится реальная нагрузка на SELECT-запросы. Fly Postgres replica + `ApplicationRecord.connected_to(role: :reading)` |
+| **Blameless Postmortems** | В2 закрытие | ❌ Не начато | При закрытии §I: разобрать любые инциденты (flaky тесты, callback failures) в формате «что случилось → root cause → fix → prevention» |
+
+### Порядок «перед боевыми деньгами»
+
+1. ✅ Тест-терминал Т-Банк работает (`1719235292292DEMO`)
+2. ❌ **Outbox** — `PaymentCallbackJob` на Solid Queue
+3. ❌ **Circuit Breaker** — `TbankAdapter` защищён
+4. ❌ §I QA приёмка + Code Review
+5. ❌ Переключить на боевой терминал (`1719235292309`) в `fly secrets set`
 
 ---
 
@@ -129,6 +154,14 @@
   - **Тесты:** `test/integration/platform/onboarding_organization_test.rb` — 3 runs, 27 assertions, 0 failures.
   - **Чеклист:** `ONBOARDING_CHECKLIST.md` §1 — `[x]`.
   - **Следующий шаг:** §2 Точка продаж (×3).
+
+- **2026-05-28 — §C Реальная оплата (Т-Банк) — ЗАКРЫТ**
+  - **Код:** `Payments::TbankAdapter` (Init API, Token, маппинг статусов); `Shop::OrderCreator` → адаптер → `payment_url`; `Callbacks::TbankController` + `POST /callbacks/tbank`; `PaymentStatusUpdater` + `OrderRecipeDeduction`; `Checkout.svelte` — radio card/sbp/cash + редирект.
+  - **Секреты:** `fly secrets set TBANK_TERMINAL_KEY TBANK_PASSWORD TBANK_RETURN_URL SHOP_SIMULATE_PAYMENT=0`.
+  - **Проверка:** browser-тест → редирект `https://pay.tbank.ru/x77ZGOty`, 179₽; Manager CloseWizard → блок «Онлайн-платежи (витрина, за 24ч)» — 1 pending платёж виден.
+  - **Тесты:** TbankAdapter x11 + TbankController x8; полный suite **539 runs, 0 failures** (1 pre-existing flaky timing).
+  - **Коммиты:** `7593cde` → `a8eade0` → `7b8a0e3`.
+  - **Техдолг:** V2-T5 closed; V2-T6 open (боевой терминал — после Outbox+CB).
 
 - **2026-05-25** — Создан комплект доков В2; приоритет: коробка → оплата → киоск; фидбек в `DEMO_FEEDBACK.md`.
 - **2026-05-25** — Базовый suite В1 на `develop`: **479 runs, 0 failures** (эталон до изменений В2).
