@@ -1,12 +1,10 @@
 # CHANGELOG
 
-## v1.68 — 2026-05-30 (В2: kiosk auth API + закрытие docs оплаты)
+## v1.68 — 2026-05-30 (kiosk auth API + FLUTTER_API doc)
 
 - **Kiosk:** `POST /kiosk/api/auth` — `device_token` → `tenant_id` (`c44b1eb`); тесты 6/0.
-- **Docs:** [`FLUTTER_API.md`](milestones/veha_2/FLUTTER_API.md), [`POSTMORTEM_2026-05-28.md`](milestones/veha_2/POSTMORTEM_2026-05-28.md).
-- **В2 оплата:** A+B+C+H приняты; worker `DB_POOL=8`; callback via worker PASS.
-- **§D:** Flutter UI перенос Q3 2026 (TBD); backend готов.
-- **Хвосты В3:** refund, offline, Flutter UI, свой домен.
+- **Docs:** [`FLUTTER_API.md`](milestones/veha_2/FLUTTER_API.md), черновик postmortem.
+- **§I приёмка В2:** **не закрыта** — ждёт апрува заказчика.
 
 ---
 

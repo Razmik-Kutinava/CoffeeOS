@@ -135,4 +135,4 @@
 | Curl smoke script | DOC | manager token → auth → products → order |
 | Flutter UI | SKIP | Q3 2026 TBD |
 
-**Вердикт:** kiosk **backend PASS**; UI ждёт Flutter.
+**Вердикт:** kiosk backend задокументирован; **приёмка §I — не закрыта** (ждёт апрува).

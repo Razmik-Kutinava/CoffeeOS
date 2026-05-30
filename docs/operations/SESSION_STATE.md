@@ -4,15 +4,14 @@
 
 **Дата:** 2026-05-30  
 **Веха 1:** официально не закрыта (§ I, H.3 — `[ ]`).  
-**Веха 2:** **оплата + backend киоска — готовы**; Flutter UI — хвост Q3 2026 (TBD).  
-**Следующий фокус:** Flutter app/планшет → цеплять к [`FLUTTER_API.md`](milestones/veha_2/FLUTTER_API.md); offline/смены — по продукту.
+**Веха 2:** **в работе**; оплата на prod работает; §I приёмка — **не закрыта** (ждёт апрува).  
+**Следующий фокус:** Flutter app; §I — после решения заказчика.
 
-### Сессия 2026-05-30 (В2: kiosk auth + docs closure)
+### Сессия 2026-05-30 (Kiosk auth API — без закрытия §I)
 
-- **Код:** `POST /kiosk/api/auth` (`c44b1eb`); shop API без изменений.
-- **Prod:** worker stable, `fly:callback_smoke` PASS.
-- **Docs:** FLUTTER_API, POSTMORTEM, CHECKLIST §I, CODE_REVIEW PASS.
-- **§D:** backend ✅; Flutter UI — не блокер В2.
+- **Код:** `POST /kiosk/api/auth` (`c44b1eb`).
+- **Docs:** FLUTTER_API, postmortem черновик.
+- **§I:** галочки **не** ставить без апрува заказчика.
 
 ### Сессия 2026-05-25 (Fly URL: режим B vs поддомены A)
 

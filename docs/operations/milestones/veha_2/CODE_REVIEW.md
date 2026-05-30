@@ -12,7 +12,7 @@
 |------|------------------|
 | Онбординг | `platform/tenants*`, `tenant_onboarding/*`, views |
 | Оплата | `shop/order_creator`, callbacks, провайдер |
-| Киоск | _TBD_ |
+| Киоск | `kiosk/api/auth_controller`, shop API reuse |
 | RLS / tenant | controllers base, `Current` |
 
 **Чеклист проекта:** `.cursor/rules/coffeeos-performance.mdc`, `coffeeos-core.mdc`.
@@ -21,13 +21,20 @@
 
 ## Итог ревью
 
-**Вердикт:** **PASS для включения боевой оплаты на витрине** *(2026-05-30)*
+**Вердикт:** _не проводилось_ (ждёт апрува заказчика)
 
-Оплата Т-Банк: adapter, callback, idempotency, Outbox, Circuit Breaker, worker на Fly — соответствует `.cursor/rules`. Kiosk: `POST /kiosk/api/auth` + shop API reuse. Хвост: Flutter UI, refund (В3), UX таймаут БД.
+---
+
+## Находки
+
+| ID | Severity | Файл | Находка | Действие |
+|----|----------|------|---------|----------|
+| — | — | — | — | — |
+
+---
 
 ## Тесты после ревью
 
 ```
-kiosk auth: 6 runs, 0 failures (2026-05-30)
-payment-related: см. PAYMENT.md прогоны 3–4
+(заполнить после ревью)
 ```

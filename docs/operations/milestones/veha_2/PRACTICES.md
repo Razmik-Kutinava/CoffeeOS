@@ -72,7 +72,7 @@
 | **Circuit Breaker** | В2 (перед прод) | ✅ Done | `TbankAdapter#post_json_with_circuit_breaker` *(2026-05-28)* |
 | **Event Sourcing склада** | В3 | ❌ Не начато | Склад v0.1 — прямой UPDATE. В3: `StockMovement` как журнал, nightly reconciliation |
 | **Read Replicas** | После трафика | ❌ Не начато | Когда появится реальная нагрузка на SELECT-запросы. Fly Postgres replica + `ApplicationRecord.connected_to(role: :reading)` |
-| **Blameless Postmortems** | В2 закрытие | ✅ Done | [`POSTMORTEM_2026-05-28.md`](POSTMORTEM_2026-05-28.md) — worker crash loop, callback path |
+| **Blameless Postmortems** | В2 закрытие | ❌ Не начато | Черновик [`POSTMORTEM_2026-05-28.md`](POSTMORTEM_2026-05-28.md); `[x]` в §I — после апрува |
 
 ### Порядок «перед боевыми деньгами»
 
@@ -82,7 +82,7 @@
 4. ✅ **Circuit Breaker** — `TbankAdapter#post_json_with_circuit_breaker` *(2026-05-28)*
 5. ✅ **Idempotency `/callbacks/tbank`** — Redis `tbank:callback:{PaymentId}:{Status}` *(2026-05-28)*
 6. ✅ **Мониторинг** — `StuckPaymentsCheckJob` → Telegram *(2026-05-28)*
-7. ✅ §I QA приёмка оплаты — прогоны 3–4 PASS; formal code review — [`CODE_REVIEW.md`](CODE_REVIEW.md) *(2026-05-30)*
+7. ❌ §I QA приёмка + Code Review — **ждёт апрува заказчика**
 8. ✅ Переключить на боевой терминал (`1719235292309`) — *(2026-05-28, prod smoke PASS)*
 
 ---
@@ -158,12 +158,11 @@
   - **Чеклист:** `ONBOARDING_CHECKLIST.md` §1 — `[x]`.
   - **Следующий шаг:** §2 Точка продаж (×3).
 
-- **2026-05-30 — Kiosk auth API + закрытие docs оплаты**
+- **2026-05-30 — Kiosk auth API + docs (без закрытия §I)**
   - **Код:** `POST /kiosk/api/auth` (`c44b1eb`); тесты 6/0
-  - **Docs:** [`FLUTTER_API.md`](FLUTTER_API.md), [`POSTMORTEM_2026-05-28.md`](POSTMORTEM_2026-05-28.md)
+  - **Docs:** [`FLUTTER_API.md`](FLUTTER_API.md), черновик postmortem
   - **Prod:** worker `DB_POOL=8`, callback via worker PASS (`85bef120`)
-  - **§D:** backend готов; Flutter UI — хвост до app
-  - **§I:** оплата A+B+C+H принята; киоск UI перенос явный
+  - **§I / CODE_REVIEW:** не закрыты — нужен апрув заказчика
 
 - **2026-05-28 — Prod E2E callback + barista PASS**
   - **Заказ:** `f8427fc4-…`, PaymentId `8576370191`, 179₽
