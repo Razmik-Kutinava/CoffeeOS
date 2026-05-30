@@ -210,4 +210,18 @@
 
 **Fix прогона:** `SlowRequestOverlay.svelte` — отсутствовал открывающий `<script>` (vite build fail).
 
+### Прогон 9 — deploy Fly + prod smoke (2026-05-30)
+
+**Push:** `85c566a..7b72132` → `develop` → GH Actions Deploy (UX overlay + slow_page + CSRF fix уже на prod).
+
+**Коммиты в деплое:** `eab8706` (UX overlay), `6831e24`, `854aa61` (Svelte fix), `7b72132` (slow_page auto-smoke).
+
+| Шаг | PASS/FAIL | Примечание |
+|-----|-----------|------------|
+| `/up` | **PASS** | 200 |
+| Kiosk curl smoke | **PASS** | cookie → cart 179₽ → order `76c0540e-…` accepted «Kiosk Curl Prog9» |
+| Shop MCP | **PASS** | витрина грузится, `#app` |
+| Barista MCP | **PASS** | табло ACCEPTED, overlay markup на `/barista`, 17 заказов за смену |
+| UX overlay на prod | **N/A** | `/test/slow_*` только local/test; overlay проверен local 8b–8c |
+
 **§I не закрывать.**
