@@ -177,7 +177,7 @@
 
 ### Прогон 8 — UX таймаут БД >5 с (qa 6.2) (2026-05-30)
 
-**Коммит:** `eab8706` (локально, push после апрува).
+**Коммиты:** `eab8706` + `6831e24` + fix Svelte (локально, push после апрува).
 
 | Шаг | PASS/FAIL | Примечание |
 |-----|-----------|------------|
@@ -186,5 +186,28 @@
 | Shop Svelte overlay | **PASS** | `SlowRequestOverlay.svelte` |
 | `GET /test/slow_page` | **PASS** | local/test only |
 | `slow_request_ux_test.rb` | **PASS** | 2 runs, 9 assertions, 0 failures (WSL) |
+
+**§I не закрывать.**
+
+### Прогон 8b — MCP DevTools + full suite (2026-05-30)
+
+**Стенд:** `localhost:3001` (WSL dev). **Prod:** не деплоили (ждёт апрува).
+
+**MCP Chrome DevTools** — fetch `/test/slow_json` (sleep 6 с), overlay через ~5 с:
+
+| Экран | PASS/FAIL | Примечание |
+|-------|-----------|------------|
+| `/login` | **PASS** | «Загрузка данных…», скрывается после ответа |
+| `/shop?tenant_id=…` | **PASS** | Svelte `.slow-request-shop-overlay` |
+| `/barista` | **PASS** | `.slow-request-overlay--visible` |
+
+> `/test/slow_page` — первая загрузка HTML без overlay (JS ещё не патчит fetch); qa 6.2 проверяем через **fetch >5 с** на загруженной странице.
+
+| Suite | PASS/FAIL | Примечание |
+|-------|-----------|------------|
+| `bin/rails test` | **PASS** | **554 runs, 2297 assertions, 0 failures** (WSL, ~14 мин) |
+| `slow_request_ux_test.rb` | **PASS** | повтор после fix Svelte `<script>` |
+
+**Fix прогона:** `SlowRequestOverlay.svelte` — отсутствовал открывающий `<script>` (vite build fail).
 
 **§I не закрывать.**

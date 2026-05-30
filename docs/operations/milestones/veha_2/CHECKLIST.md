@@ -148,7 +148,7 @@
 - [ ] [`QA_ACCEPTANCE_RUN.md`](QA_ACCEPTANCE_RUN.md) — этапы 1–3
 - [ ] [`CODE_REVIEW.md`](CODE_REVIEW.md) — вердикт перед прод-включением оплаты
 - [ ] Живое демо В2 (когда появятся [`LIVE_DEMO_SCENARIOS_PLAIN.md`](LIVE_DEMO_SCENARIOS_PLAIN.md))
-- [ ] `bin/rails test` — зафиксировать runs/0 failures в `PRACTICES.md` *(cart_persistence: 1/0 local WSL 2026-05-30; полный suite — отдельно)*
+- [ ] `bin/rails test` — зафиксировать runs/0 failures в `PRACTICES.md` *(554/0 WSL 2026-05-30, prog 8b; §I без `[x]`)*
 - [ ] `docs/operations/SESSION_STATE.md` — «Веха 2 закрыта» или список хвостов
 - [ ] `docs/operations/CHANGELOG.md` — запись о закрытии В2
 - [ ] Техдолг В2→В3 только здесь / `PRACTICES.md`, не в `development_roadmap`

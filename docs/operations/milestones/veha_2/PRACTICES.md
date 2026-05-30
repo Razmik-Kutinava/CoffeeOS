@@ -239,7 +239,8 @@
   - **Код:** `slow_request_controller.js` + fetch tracker; overlay skeleton в layout (barista/manager/УК/auth/prep_kitchen) и shop Svelte `SlowRequestOverlay`.
   - **Dev/test:** `GET /test/slow_page`, `GET /test/slow_json` (`Rails.env.local?` only).
   - **Тест:** `test/integration/slow_request_ux_test.rb` — 2 runs, 9 assertions, 0 failures (WSL).
-  - **Журнал:** `QA_ACCEPTANCE_RUN.md` прогон 8.
+  - **MCP (8b):** login/shop/barista overlay PASS на `localhost:3001`; full suite **554/0** (WSL).
+  - **Журнал:** `QA_ACCEPTANCE_RUN.md` прогон 8–8b.
 
 - **2026-05-28 — §C Реальная оплата (Т-Банк) — ЗАКРЫТ**
   - **Код:** `Payments::TbankAdapter` (Init API, Token, маппинг статусов); `Shop::OrderCreator` → адаптер → `payment_url`; `Callbacks::TbankController` + `POST /callbacks/tbank`; `PaymentStatusUpdater` + `OrderRecipeDeduction`; `Checkout.svelte` — radio card/sbp/cash + редирект.

@@ -1,14 +1,15 @@
-import { onMount } from "svelte"
-import { installSlowRequestTracker, onSlowRequestChange } from "../lib/slowRequest.js"
+<script>
+  import { onMount } from "svelte"
+  import { installSlowRequestTracker, onSlowRequestChange } from "../lib/slowRequest.js"
 
-let visible = $state(false)
+  let visible = $state(false)
 
-onMount(() => {
-  installSlowRequestTracker()
-  return onSlowRequestChange((next) => {
-    visible = next
+  onMount(() => {
+    installSlowRequestTracker()
+    return onSlowRequestChange((next) => {
+      visible = next
+    })
   })
-})
 </script>
 
 {#if visible}
