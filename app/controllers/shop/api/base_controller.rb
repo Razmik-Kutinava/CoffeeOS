@@ -6,7 +6,8 @@ module Shop
       include ErrorHandler
       include Auth
 
-      protect_from_forgery with: :null_session
+      # API key / browser vitrina: Auth модуль. null_session без CSRF обнуляет cookie каждый запрос — curl/Flutter не видят корзину.
+      skip_forgery_protection
 
       around_action :with_shop_tenant!
 
