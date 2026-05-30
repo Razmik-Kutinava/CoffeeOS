@@ -184,6 +184,14 @@ curl -s -X POST "$BASE/shop/api/orders" \
 # 5) Barista: /barista → заказ в ACCEPTED без F5
 ```
 
+**Локальная страховка (не prod):**
+
+```bash
+bin/rails test test/integration/shop/api/cart_persistence_test.rb
+```
+
+Ожидание: `1 run, 5 assertions, 0 failures`. На Windows без WSL — если PG на `:5432` недоступен, см. `DATABASE_PORT` / WSL в `QA_ACCEPTANCE_RUN.md` прогон 7.
+
 **Card без списания:** заказ с `"payment_method":"card"` → `pending_payment`; callback на Fly:
 
 ```bash

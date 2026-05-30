@@ -171,4 +171,6 @@
 
 **Root cause prog 6 PARTIAL:** `protect_from_forgery with: :null_session` обнулял session без CSRF — curl/Flutter с `X-Shop-Api-Key` не видели корзину. **Fix:** `skip_forgery_protection` в `Shop::Api::BaseController` + тест `cart_persistence_test.rb`.
 
+**Локальный тест (2026-05-30):** `bin/rails test test/integration/shop/api/cart_persistence_test.rb` — **PASS** (WSL, 1 run / 5 assertions / 0 failures). На Windows-native Ruby PG на `:5432` недоступен — гонять через WSL или `DATABASE_PORT=65432` с верным паролем.
+
 **§I не закрывать.**

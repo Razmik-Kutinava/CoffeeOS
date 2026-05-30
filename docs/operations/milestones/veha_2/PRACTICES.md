@@ -232,6 +232,7 @@
   - **Curl:** GET `/shop` → cookie → cart/add → cart GET → orders cash — **PASS** (`Kiosk Curl Prog7`, order `e3a06dc9-…`, 179₽ accepted).
   - **Barista:** `##202605-0016` в ACCEPTED без F5.
   - **Тест:** `test/integration/shop/api/cart_persistence_test.rb`.
+  - **Локально:** PASS через WSL — `1 run, 5 assertions, 0 failures` (2026-05-30).
   - **Журнал:** `QA_ACCEPTANCE_RUN.md` прогон 7. §I не закрыта.
 
 - **2026-05-28 — §C Реальная оплата (Т-Банк) — ЗАКРЫТ**
