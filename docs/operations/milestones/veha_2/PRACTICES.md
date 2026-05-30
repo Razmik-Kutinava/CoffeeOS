@@ -235,9 +235,11 @@
   - **Локально:** PASS через WSL — `1 run, 5 assertions, 0 failures` (2026-05-30).
   - **Журнал:** `QA_ACCEPTANCE_RUN.md` прогон 7. §I не закрыта.
 
-- **2026-05-30 — §H UX таймаут БД >5 с (qa 6.2) — в работе**
-  - **План:** глобальный skeleton/loader если fetch/Turbo >5 с; dev/test endpoint `GET /test/slow_page`; тест + прогон в `QA_ACCEPTANCE_RUN.md` прогон 8.
-  - **Не блокер:** prod curl киоска уже PASS; закрывает §H п.140.
+- **2026-05-30 — §H UX таймаут БД >5 с (qa 6.2) — PASS**
+  - **Код:** `slow_request_controller.js` + fetch tracker; overlay skeleton в layout (barista/manager/УК/auth/prep_kitchen) и shop Svelte `SlowRequestOverlay`.
+  - **Dev/test:** `GET /test/slow_page`, `GET /test/slow_json` (`Rails.env.local?` only).
+  - **Тест:** `test/integration/slow_request_ux_test.rb` — 2 runs, 9 assertions, 0 failures (WSL).
+  - **Журнал:** `QA_ACCEPTANCE_RUN.md` прогон 8.
 
 - **2026-05-28 — §C Реальная оплата (Т-Банк) — ЗАКРЫТ**
   - **Код:** `Payments::TbankAdapter` (Init API, Token, маппинг статусов); `Shop::OrderCreator` → адаптер → `payment_url`; `Callbacks::TbankController` + `POST /callbacks/tbank`; `PaymentStatusUpdater` + `OrderRecipeDeduction`; `Checkout.svelte` — radio card/sbp/cash + редирект.

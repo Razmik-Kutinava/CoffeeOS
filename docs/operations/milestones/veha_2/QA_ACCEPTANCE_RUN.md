@@ -174,3 +174,17 @@
 **Локальный тест (2026-05-30):** `bin/rails test test/integration/shop/api/cart_persistence_test.rb` — **PASS** (WSL, 1 run / 5 assertions / 0 failures). На Windows-native Ruby PG на `:5432` недоступен — гонять через WSL или `DATABASE_PORT=65432` с верным паролем.
 
 **§I не закрывать.**
+
+### Прогон 8 — UX таймаут БД >5 с (qa 6.2) (2026-05-30)
+
+**Коммит:** `eab8706` (локально, push после апрува).
+
+| Шаг | PASS/FAIL | Примечание |
+|-----|-----------|------------|
+| Overlay в HTML layouts | **PASS** | barista/manager/УК/auth/prep_kitchen |
+| Fetch >5 с → skeleton | **PASS** | `slow_request_tracker.js` |
+| Shop Svelte overlay | **PASS** | `SlowRequestOverlay.svelte` |
+| `GET /test/slow_page` | **PASS** | local/test only |
+| `slow_request_ux_test.rb` | **PASS** | 2 runs, 9 assertions, 0 failures (WSL) |
+
+**§I не закрывать.**
