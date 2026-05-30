@@ -227,6 +227,13 @@
   - **Новая org:** `smoke-org-qa6-0530` + tenant `d8e287c5-5524-423c-8e5a-605570c69517`, shop API products 200.
   - **Журнал:** `QA_ACCEPTANCE_RUN.md` прогон 6. §I не закрыта.
 
+- **2026-05-30 — Прогон 7 prod curl smoke (kiоск API)**
+  - **Deploy:** `e932944` → `11f40b6` (`skip_forgery_protection` в `Shop::Api::BaseController`; `null_session` ломал cookie jar для curl/Flutter).
+  - **Curl:** GET `/shop` → cookie → cart/add → cart GET → orders cash — **PASS** (`Kiosk Curl Prog7`, order `e3a06dc9-…`, 179₽ accepted).
+  - **Barista:** `##202605-0016` в ACCEPTED без F5.
+  - **Тест:** `test/integration/shop/api/cart_persistence_test.rb`.
+  - **Журнал:** `QA_ACCEPTANCE_RUN.md` прогон 7. §I не закрыта.
+
 - **2026-05-28 — §C Реальная оплата (Т-Банк) — ЗАКРЫТ**
   - **Код:** `Payments::TbankAdapter` (Init API, Token, маппинг статусов); `Shop::OrderCreator` → адаптер → `payment_url`; `Callbacks::TbankController` + `POST /callbacks/tbank`; `PaymentStatusUpdater` + `OrderRecipeDeduction`; `Checkout.svelte` — radio card/sbp/cash + редирект.
   - **Секреты:** `fly secrets set TBANK_TERMINAL_KEY TBANK_PASSWORD TBANK_RETURN_URL SHOP_SIMULATE_PAYMENT=0`.

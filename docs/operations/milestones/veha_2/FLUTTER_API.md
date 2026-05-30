@@ -136,7 +136,8 @@ Content-Type: application/json
 
 Секреты **не коммитить**: `SHOP_API_KEY` из meta `shop-api-key` на `/shop` или `fly secrets list`; `DEVICE_TOKEN` из manager.
 
-> **Корзина:** сначала `GET /shop?tenant_id=…` (cookie), дальше все запросы с `-c/-b`. JSON body — `--data-binary @file.json` (PowerShell ломает экранирование).
+> **Корзина:** сначала `GET /shop?tenant_id=…` (cookie), дальше все запросы с `-c/-b`. JSON body — `--data-binary @file.json` (PowerShell ломает inline JSON).  
+> **CSRF:** Shop API с `X-Shop-Api-Key` не требует CSRF-токена (`skip_forgery_protection`); `null_session` без токена обнулял session — см. прогон 7 в `QA_ACCEPTANCE_RUN.md`.
 
 ```bash
 export BASE="https://coffeeos.fly.dev"
@@ -157,21 +158,28 @@ export PRODUCT_ID=$(curl -s "$BASE/shop/api/products" \
   -H "X-Shop-Tenant: $TENANT_ID" \
   -H "X-Shop-Api-Key: $SHOP_API_KEY" | jq -r '.data[0].id')
 
-# 3) Корзина (cookie jar!)
+# 3) Корзина (cookie jar!) — JSON из файла
+printf '{"product_id":"%s","quantity":1,"selected_modifiers":[]}\n' "$PRODUCT_ID" > /tmp/cart_add.json
 curl -s -X POST "$BASE/shop/api/cart/add" \
   -c "$COOKIE_JAR" -b "$COOKIE_JAR" \
   -H "X-Shop-Tenant: $TENANT_ID" \
   -H "X-Shop-Api-Key: $SHOP_API_KEY" \
   -H "Content-Type: application/json" \
-  -d "{\"product_id\":\"$PRODUCT_ID\",\"quantity\":1,\"selected_modifiers\":[]}" | jq .
+  --data-binary @/tmp/cart_add.json | jq .
+
+curl -s "$BASE/shop/api/cart" \
+  -c "$COOKIE_JAR" -b "$COOKIE_JAR" \
+  -H "X-Shop-Tenant: $TENANT_ID" \
+  -H "X-Shop-Api-Key: $SHOP_API_KEY" | jq .
 
 # 4) Заказ cash → accepted
+printf '{"name":"Kiosk Smoke","phone":"+79001234567","payment_method":"cash"}\n' > /tmp/order_cash.json
 curl -s -X POST "$BASE/shop/api/orders" \
   -c "$COOKIE_JAR" -b "$COOKIE_JAR" \
   -H "X-Shop-Tenant: $TENANT_ID" \
   -H "X-Shop-Api-Key: $SHOP_API_KEY" \
   -H "Content-Type: application/json" \
-  -d '{"name":"Kiosk Smoke","phone":"+79001234567","payment_method":"cash"}' | jq .
+  --data-binary @/tmp/order_cash.json | jq .
 
 # 5) Barista: /barista → заказ в ACCEPTED без F5
 ```

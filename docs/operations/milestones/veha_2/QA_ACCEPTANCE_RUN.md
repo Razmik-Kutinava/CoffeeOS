@@ -154,3 +154,21 @@
 **Fix:** `Shop::CartService#touch_cart_session!` — session dirty для cookie между запросами API.
 
 **§I не закрывать.**
+
+### Прогон 7 — curl smoke PASS (2026-05-30)
+
+**Deploy:** `e932944` (prog 6 + `touch_cart_session!`, GH Actions #45) → `11f40b6` (fix `skip_forgery_protection` вместо `null_session`, GH Actions #46).
+
+**Инструмент:** curl (`--data-binary @file.json`, один cookie jar) + Chrome DevTools MCP на `coffeeos.fly.dev`.
+
+| Шаг | PASS/FAIL | Примечание |
+|-----|-----------|------------|
+| GET `/shop?tenant_id=…` → cookie | **PASS** | jar перед API |
+| Kiosk auth curl | **PASS** | device «Smoke QA6b», tenant Demo A |
+| cart/add + cart GET | **PASS** | total 179₽, корзина persist между запросами |
+| POST orders cash | **PASS** | `order_id` `e3a06dc9-b56b-4acb-8e81-93d1a83e38ca`, status `accepted` |
+| Barista табло | **PASS** | `##202605-0016` в ACCEPTED, 0 мин, без F5 |
+
+**Root cause prog 6 PARTIAL:** `protect_from_forgery with: :null_session` обнулял session без CSRF — curl/Flutter с `X-Shop-Api-Key` не видели корзину. **Fix:** `skip_forgery_protection` в `Shop::Api::BaseController` + тест `cart_persistence_test.rb`.
+
+**§I не закрывать.**

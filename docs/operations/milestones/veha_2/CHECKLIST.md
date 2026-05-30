@@ -80,7 +80,7 @@
 |------|--------|
 | Rails: auth, shop API, оплата § C | ✅ |
 | Flutter UI | ❌ |
-| Curl smoke | 📋 в `FLUTTER_API.md`, не `[x]` |
+| Curl smoke | ✅ prog 7 PASS (`QA_ACCEPTANCE_RUN.md`); §I без `[x]` |
 
 - [ ] ⭐ UI киоска — **ждёт Flutter**
 - [ ] ⭐ URL киоска на точку — **ждёт домен + Flutter**
