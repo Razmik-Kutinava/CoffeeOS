@@ -72,27 +72,28 @@
 
 ## D. Киоск (приоритет 3, с оплатой как shop)
 
-> ⏸ **UI киоска — ждёт Flutter.** Backend готов (auth + shop API).  
-> **Один документ:** [`FLUTTER_API.md`](FLUTTER_API.md) — API, demo, curl smoke.  
-> Приёмка §I **не закрыта** без апрува.
+> **В2:** backend + **витрина** + curl smoke — достаточно.  
+> **В3:** Flutter UI (планшет + мобилка) — [`FLUTTER_API.md`](FLUTTER_API.md).  
+> Приёмка §I **не закрыта** без апрува и §E.
 
 | Слой | Статус |
 |------|--------|
 | Rails: auth, shop API, оплата § C | ✅ |
-| Flutter UI | ❌ |
-| Curl smoke | ✅ prog 7 PASS (`QA_ACCEPTANCE_RUN.md`); §I без `[x]` |
+| Витрина + curl smoke (имитация киоска) | ✅ prog 7–9 |
+| Flutter UI | → **В3** |
+| Curl smoke | ✅ prog 7 PASS (`QA_ACCEPTANCE_RUN.md`) |
 
-- [ ] ⭐ UI киоска — **ждёт Flutter**
-- [ ] ⭐ URL киоска на точку — **ждёт домен + Flutter**
-- [ ] ⭐ Заказ / оплата — API готов; E2E через Flutter или curl в `FLUTTER_API.md`
+- [x] ⭐ Заказ / оплата через API — curl + витрина PASS; см. [`FLUTTER_API.md`](FLUTTER_API.md) *(prog 7–9)*
 - [x] Регистрация устройства `device_type: kiosk` на точку — форма в manager/devices, токен выдаётся *(2026-05-28)*
 - [x] Запись в [`ORDER_ENTRY_AUDIT.md`](ORDER_ENTRY_AUDIT.md) *(2026-05-28)*
+- [ ] ⭐ UI киоска (Flutter) — **В3**, дата: ____________
+- [ ] ⭐ URL киоска на точку — **В3** (домен + Flutter)
 
 ---
 
-## E. Полировка по демо (параллельно)
+## E. Полировка по демо (блокер §I)
 
-См. [`DEMO_FEEDBACK.md`](DEMO_FEEDBACK.md) — **не блокирует** A–C, кроме явных блокеров.
+См. [`DEMO_FEEDBACK.md`](DEMO_FEEDBACK.md) — **открыт**, пока нет фидбека заказчика и закрытых блокеров **§I не закрываем**.
 
 - [ ] Процесс: каждая правка заказчика → строка в DEMO_FEEDBACK → PR → `[x]`
 - [ ] Критичные блокеры демо (если есть) закрыты до «веха принята»
@@ -101,21 +102,21 @@
 
 ## F. Кассовая дисциплина (расширение, после C/D или по продукту)
 
-- [ ] Решение продукта: единая смена на **всех** каналах? (сейчас В1: shop/киоск без смены)
-- [ ] Если да — код + [`ORDER_ENTRY_AUDIT.md`](ORDER_ENTRY_AUDIT.md) + `qa_scenarios` 3.V2-1
-- [ ] Z-отчёт — **не В2** (В3)
+- [x] Решение продукта: **смена — barista/manager да; shop/киоск — нет** (как сейчас) *(2026-05-30)*
+- [ ] Единая смена на **всех** каналах (код + audit + qa 3.V2-1) — **В3**
+- [ ] Z-отчёт — **В3**
 
 ---
 
-## G. Offline-first (позже в В2)
+## G. Offline-first — **В3**
 
-См. [`OFFLINE_SYNC.md`](OFFLINE_SYNC.md).
+> Перенос из В2. См. [`OFFLINE_SYNC.md`](OFFLINE_SYNC.md).
 
-- [ ] IndexedDB буфер barista POS
-- [ ] Индикатор Online/Offline/Syncing
-- [ ] Sync queue + `client_uuid` / idempotency на create order
-- [ ] `drift_offset` по ARCHITECTURE.md
-- [ ] Сценарии O-1…O-3 в `qa_scenarios.md`
+- [ ] IndexedDB буфер barista POS — **В3**
+- [ ] Индикатор Online/Offline/Syncing — **В3**
+- [ ] Sync queue + `client_uuid` / idempotency на create order — **В3**
+- [ ] `drift_offset` по ARCHITECTURE.md — **В3**
+- [ ] Сценарии O-1…O-3 в `qa_scenarios.md` — **В3**
 
 ---
 
@@ -145,26 +146,31 @@
 
 ## I. Приёмка и закрытие вехи
 
+> **Блокеры §I:** §E (DEMO_FEEDBACK открыт) + живое демо + апрув заказчика.  
+> **Хвосты → В3:** Flutter (киоск/мобилка), offline (§G), касса на всех каналах (§F п.2), refund (§H).
+
 - [ ] [`QA_ACCEPTANCE_RUN.md`](QA_ACCEPTANCE_RUN.md) — этапы 1–3
-- [ ] [`CODE_REVIEW.md`](CODE_REVIEW.md) — вердикт перед прод-включением оплаты
-- [ ] Живое демо В2 (когда появятся [`LIVE_DEMO_SCENARIOS_PLAIN.md`](LIVE_DEMO_SCENARIOS_PLAIN.md))
-- [ ] `bin/rails test` — зафиксировать runs/0 failures в `PRACTICES.md` *(554/0 WSL 2026-05-30, prog 8b; §I без `[x]`)*
+- [ ] [`CODE_REVIEW.md`](CODE_REVIEW.md) — вердикт *(по сигналу заказчика)*
+- [ ] **§E** [`DEMO_FEEDBACK.md`](DEMO_FEEDBACK.md) — фидбек и блокеры закрыты
+- [ ] Живое демо В2 — [`LIVE_DEMO_SCENARIOS_PLAIN.md`](LIVE_DEMO_SCENARIOS_PLAIN.md)
+- [x] `bin/rails test` — **554/0** в `PRACTICES.md` *(2026-05-30, prog 8b)*
+- [ ] Postmortem — [`POSTMORTEM_2026-05-28.md`](POSTMORTEM_2026-05-28.md) `[x]` при закрытии §I
 - [ ] `docs/operations/SESSION_STATE.md` — «Веха 2 закрыта» или список хвостов
 - [ ] `docs/operations/CHANGELOG.md` — запись о закрытии В2
-- [ ] Техдолг В2→В3 только здесь / `PRACTICES.md`, не в `development_roadmap`
-- [ ] §D Киоск: имитация приёмки через браузер/Postman — см. [`FLUTTER_API.md`](FLUTTER_API.md); полный тест до Flutter
-- [ ] §D Киоск (Flutter): перенос — зафиксировать дату когда Flutter будет готов
+- [x] **§D В2:** витрина + curl smoke — см. [`FLUTTER_API.md`](FLUTTER_API.md), prog 7–9
+- [x] **§F решение** — смена barista/manager; shop/киоск без смены *(см. §F)*
+- [ ] **§D Flutter** — **В3**, дата: ____________
 
 ---
 
 ## Критерий «Веха 2 закрыта»
 
 1. Блоки **A, B, C** (⭐) — `[x]`.
-2. **D** — киоск с заказом и оплатой на тестовой org, или явный перенос в § I с датой.
+2. **D** — для В2: витрина + curl smoke ✅; Flutter UI → **В3** (дата в §I).
 3. **H** — Outbox + Circuit Breaker `[x]` до переключения на боевой терминал.
 4. Новая org из УК: **3+ точки**, карточка входов, витрина с **реальной** оплатой на стенде.
-5. § I заполнен в operations.
+5. **§E** закрыт + § I заполнен + апрув заказчика.
 
 **Дата закрытия:** ____________  
 **Кто принял:** ____________  
-**Хвосты в В3:** ____________
+**Хвосты в В3:** Flutter (киоск/мобилка), offline (§G), касса на всех каналах (§F), refund (§H), Z-отчёт
