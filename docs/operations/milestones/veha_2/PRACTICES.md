@@ -235,6 +235,10 @@
   - **Локально:** PASS через WSL — `1 run, 5 assertions, 0 failures` (2026-05-30).
   - **Журнал:** `QA_ACCEPTANCE_RUN.md` прогон 7. §I не закрыта.
 
+- **2026-05-30 — §H UX таймаут БД >5 с (qa 6.2) — в работе**
+  - **План:** глобальный skeleton/loader если fetch/Turbo >5 с; dev/test endpoint `GET /test/slow_page`; тест + прогон в `QA_ACCEPTANCE_RUN.md` прогон 8.
+  - **Не блокер:** prod curl киоска уже PASS; закрывает §H п.140.
+
 - **2026-05-28 — §C Реальная оплата (Т-Банк) — ЗАКРЫТ**
   - **Код:** `Payments::TbankAdapter` (Init API, Token, маппинг статусов); `Shop::OrderCreator` → адаптер → `payment_url`; `Callbacks::TbankController` + `POST /callbacks/tbank`; `PaymentStatusUpdater` + `OrderRecipeDeduction`; `Checkout.svelte` — radio card/sbp/cash + редирект.
   - **Секреты:** `fly secrets set TBANK_TERMINAL_KEY TBANK_PASSWORD TBANK_RETURN_URL SHOP_SIMULATE_PAYMENT=0`.

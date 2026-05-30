@@ -170,4 +170,11 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   root 'auth/sessions#new'
+
+  if Rails.env.local?
+    namespace :test do
+      get "slow_page", to: "slow_queries#page"
+      get "slow_json", to: "slow_queries#json"
+    end
+  end
 end

@@ -7,9 +7,11 @@
     <%= csp_meta_tag %>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= stylesheet_link_tag "platform_menu", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "slow_request", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
-  <body class="font-mono" style="margin: 0; background: #0f111a; color: #e2e8f0;">
+  <body class="font-mono" style="margin: 0; background: #0f111a; color: #e2e8f0;" data-controller="slow-request">
+    <%= render "shared/slow_request_overlay" %>
     <%= render "platform/shared/nav" %>
     <main style="padding: 24px; max-width: 1100px; margin: 0 auto;">
       <% if flash[:notice] %>

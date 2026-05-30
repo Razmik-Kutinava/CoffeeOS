@@ -20,11 +20,13 @@
 
     <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "slow_request", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
 
   </head>
 
-  <body>
+  <body data-controller="slow-request">
+    <%= render "shared/slow_request_overlay" %>
     <%= yield %>
   </body>
 </html>

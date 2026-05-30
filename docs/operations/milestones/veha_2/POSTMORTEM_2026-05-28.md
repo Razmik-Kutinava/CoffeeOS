@@ -46,5 +46,5 @@
 
 - [x] DB pool fix deployed
 - [x] Signed callback via worker verified
-- [ ] UX таймаут БД >5с — хвост §H (не блокер оплаты)
+- [x] UX таймаут БД >5с — прогон 8 PASS (`slow_request_ux_test.rb`)
 - [ ] Flaky `events_controller_test.rb:208` — V2-T8

@@ -4,9 +4,12 @@
   import Header from "./components/Header.svelte"
   import BottomNav from "./components/BottomNav.svelte"
   import RouteLoading from "./components/RouteLoading.svelte"
+  import SlowRequestOverlay from "./components/SlowRequestOverlay.svelte"
   import Catalog from "./routes/Catalog.svelte"
   import { initTelegram } from "./lib/telegram.js"
+  import { installSlowRequestTracker } from "./lib/slowRequest.js"
 
+  installSlowRequestTracker()
   initTelegram()
 
   function lazyRoute(importer) {
@@ -35,6 +38,7 @@
 </script>
 
 <div class="min-h-screen bg-[#1a1a1a] text-white">
+  <SlowRequestOverlay />
   <Header />
   <main class="mx-auto max-w-lg px-3 pb-28 pt-14">
     <Router {routes} options={{ hash: true }} />

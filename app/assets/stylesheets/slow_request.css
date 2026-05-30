@@ -1,0 +1,73 @@
+.slow-request-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background: rgba(10, 14, 39, 0.72);
+  backdrop-filter: blur(2px);
+}
+
+.slow-request-overlay--visible {
+  display: flex;
+}
+
+.slow-request-overlay__panel {
+  width: min(420px, 100%);
+  padding: 1.25rem;
+  border-radius: 16px;
+  border: 1px solid rgba(59, 130, 246, 0.35);
+  background: rgba(26, 31, 58, 0.96);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+}
+
+.slow-request-overlay__message {
+  margin: 1rem 0 0;
+  text-align: center;
+  color: #c7d2fe;
+  font-size: 0.95rem;
+}
+
+.slow-request-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.slow-request-skeleton__line {
+  height: 0.85rem;
+  width: 55%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #1f2937 25%, #374151 50%, #1f2937 75%);
+  background-size: 200% 100%;
+  animation: slow-request-pulse 1.4s ease-in-out infinite;
+}
+
+.slow-request-skeleton__line--wide {
+  width: 75%;
+}
+
+.slow-request-skeleton__cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.slow-request-skeleton__card {
+  height: 4.5rem;
+  border-radius: 12px;
+  background: linear-gradient(90deg, #111827 25%, #1f2937 50%, #111827 75%);
+  background-size: 200% 100%;
+  animation: slow-request-pulse 1.4s ease-in-out infinite;
+}
+
+body.slow-request-active {
+  cursor: progress;
+}
+
+@keyframes slow-request-pulse {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
