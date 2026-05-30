@@ -240,7 +240,8 @@
   - **Dev/test:** `GET /test/slow_page`, `GET /test/slow_json` (`Rails.env.local?` only).
   - **Тест:** `test/integration/slow_request_ux_test.rb` — 2 runs, 9 assertions, 0 failures (WSL).
   - **MCP (8b):** login/shop/barista overlay PASS на `localhost:3001`; full suite **554/0** (WSL).
-  - **Журнал:** `QA_ACCEPTANCE_RUN.md` прогон 8–8b.
+  - **Fix (8c):** `/test/slow_page` — instant HTML + auto-fetch slow_json; MCP overlay PASS.
+  - **Журнал:** `QA_ACCEPTANCE_RUN.md` прогон 8–8c.
 
 - **2026-05-28 — §C Реальная оплата (Т-Банк) — ЗАКРЫТ**
   - **Код:** `Payments::TbankAdapter` (Init API, Token, маппинг статусов); `Shop::OrderCreator` → адаптер → `payment_url`; `Callbacks::TbankController` + `POST /callbacks/tbank`; `PaymentStatusUpdater` + `OrderRecipeDeduction`; `Checkout.svelte` — radio card/sbp/cash + редирект.

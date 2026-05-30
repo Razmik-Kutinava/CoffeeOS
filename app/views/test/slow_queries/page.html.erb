@@ -1,2 +1,27 @@
 <h1 class="text-xl font-semibold mb-4">Slow query smoke</h1>
-<p>Страница для qa 6.2: ответ сервера &gt;5 с, overlay skeleton должен появиться раньше.</p>
+<p class="mb-2">qa 6.2: страница открывается сразу, затем JS дергает медленный API — overlay через ~5 с.</p>
+<p id="slow-query-status" class="text-sm opacity-80">Ожидание медленного запроса…</p>
+
+<script>
+  (function () {
+    function startSlowSmoke() {
+      var status = document.getElementById("slow-query-status")
+      fetch("<%= test_slow_json_path %>", { credentials: "same-origin" })
+        .then(function (res) { return res.json() })
+        .then(function (data) {
+          if (status) status.textContent = "Готово: " + JSON.stringify(data)
+        })
+        .catch(function (err) {
+          if (status) status.textContent = "Ошибка: " + err.message
+        })
+    }
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", function () {
+        setTimeout(startSlowSmoke, 250)
+      })
+    } else {
+      setTimeout(startSlowSmoke, 250)
+    }
+  })()
+</script>

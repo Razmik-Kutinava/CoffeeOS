@@ -5,7 +5,6 @@ module Test
     layout "auth"
 
     def page
-      sleep slow_seconds
       render :page
     end
 

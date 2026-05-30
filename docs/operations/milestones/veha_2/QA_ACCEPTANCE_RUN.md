@@ -201,7 +201,7 @@
 | `/shop?tenant_id=…` | **PASS** | Svelte `.slow-request-shop-overlay` |
 | `/barista` | **PASS** | `.slow-request-overlay--visible` |
 
-> `/test/slow_page` — первая загрузка HTML без overlay (JS ещё не патчит fetch); qa 6.2 проверяем через **fetch >5 с** на загруженной странице.
+> `/test/slow_page` — открывается сразу, inline JS дергает `/test/slow_json` → overlay через ~5 с **(прогон 8c, MCP PASS)**.
 
 | Suite | PASS/FAIL | Примечание |
 |-------|-----------|------------|
