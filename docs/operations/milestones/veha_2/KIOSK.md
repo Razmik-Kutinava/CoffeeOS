@@ -55,9 +55,10 @@
 | `Device` модель + `device_token`, `tenant_id`, `online?` | ✅ готово |
 | Оплата Т-Банк (`TbankAdapter`, callback, `PaymentStatusUpdater`) | ✅ готово, переиспользуется |
 | Заказ (`Shop::OrderCreator`) | ✅ готово, переиспользуется |
-| Маршруты `/kiosk/api/...` | ❌ нет |
-| Аутентификация планшета по `device_token` | ❌ нет |
-| UI регистрации устройства в УК/manager | ❌ нет |
+| Маршруты `/kiosk/api/...` | ✅ `POST /kiosk/api/auth` *(2026-05-30, `c44b1eb`)* |
+| Аутентификация планшета по `device_token` | ✅ `X-Device-Token` → `tenant_id` |
+| UI регистрации устройства в УК/manager | ✅ manager/devices → «создать киоск» |
+| Flutter UI (планшет/мобилка) | ❌ ждёт app; backend — [`FLUTTER_API.md`](FLUTTER_API.md) |
 
 ---
 
@@ -65,10 +66,10 @@
 
 Блок заморожен до появления Flutter-приложения. Когда будет готово:
 
-1. **Регистрация устройства** — кнопка в УК/manager → создаёт `Device(device_type: kiosk)` → выдаёт `device_token` (QR или ручной ввод на планшете)
-2. **Auth API** — `POST /kiosk/api/auth` → Flutter даёт `device_token` → получает `tenant_id` + подтверждение
-3. **Kiosk API** — меню, корзина, заказ (переиспользует логику shop)
-4. **Тест приёмки** — симуляция через браузер/Postman с `X-Device-Token` заголовком, потом на реальном планшете
+1. **Регистрация устройства** — manager → Devices → «создать киоск» → `device_token` *(готово)*
+2. **Auth API** — `POST /kiosk/api/auth` → Flutter даёт `device_token` → получает `tenant_id` *(готово 2026-05-30)*
+3. **Kiosk API** — меню, корзина, заказ через **`/shop/api/*`** + `X-Shop-Tenant` *(готово, переиспользует shop)*
+4. **Тест приёмки** — curl по [`FLUTTER_API.md`](FLUTTER_API.md); полный UI — когда Flutter
 
 ---
 
@@ -99,5 +100,5 @@ GET  /kiosk/api/orders/:id
 
 ## Статус
 
-**2026-05-25:** документ и план; код не начат.  
-**2026-05-28:** фундамент (БД, оплата, заказ) готов; ждём Flutter-приложение.
+**2026-05-28:** фундамент (БД, оплата, заказ) готов; ждём Flutter UI.  
+**2026-05-30:** `POST /kiosk/api/auth` + контракт [`FLUTTER_API.md`](FLUTTER_API.md).

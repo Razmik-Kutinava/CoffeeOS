@@ -54,7 +54,7 @@
 | V2-T1 | Нет карточки «все входы» в УК | **done** §4 ONBOARDING 2026-05-26 | — |
 | V2-T2 | `address` не в форме tenant | **done** §2 ONBOARDING 2026-05-26 | — |
 | V2-T3 | Staff только manager + franchise из УК | **done** §5 ONBOARDING 2026-05-26 (путь open_as_manager → staff) | wizard — хвост |
-| V2-T4 | Киоск без routes | open | KIOSK |
+| V2-T4 | Киоск без routes | **auth done** | `POST /kiosk/api/auth`; Flutter UI — open |
 | V2-T5 | Реальный шлюз не подключён | **done** Т-Банк 2026-05-28 (тест-терминал); прод — после Outbox+CB | PAYMENT |
 | V2-T6 | Боевой терминал Т-Банка не включён | **done** *(2026-05-28)* | `1719235292309` на Fly, prod smoke PASS |
 | V2-T7 | QR режим B (без домена) | open | Режим A — когда будет домен; §I хвост |
