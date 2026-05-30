@@ -72,17 +72,19 @@
 
 ## D. Киоск (приоритет 3, с оплатой как shop)
 
-> ⏸ **Заблокировано Flutter-приложением** (2026-05-28).  
-> Когда Flutter будет готов — реализация ~1 день (API + регистрация устройства).  
-> Пока витрина `/shop?tenant_id=` — основной клиентский канал.  
-> Детали и API контракт — [`KIOSK.md`](KIOSK.md).
+> ⏸ **UI киоска — ждёт Flutter.** Backend готов (auth + shop API).  
+> **Один документ:** [`FLUTTER_API.md`](FLUTTER_API.md) — API, demo, curl smoke.  
+> Приёмка §I **не закрыта** без апрува.
 
-См. [`KIOSK.md`](KIOSK.md).
+| Слой | Статус |
+|------|--------|
+| Rails: auth, shop API, оплата § C | ✅ |
+| Flutter UI | ❌ |
+| Curl smoke | 📋 в `FLUTTER_API.md`, не `[x]` |
 
-- [ ] ⭐ Маршруты/UI киоска — **ждёт Flutter**; Rails: `POST /kiosk/api/auth` ✅ (`c44b1eb`), UI нет
-- [ ] ⭐ URL киоска на точку — **ждёт домен + Flutter**; сейчас: `?tenant_id=` как витрина
-- [ ] ⭐ Заказ через тот же pipeline, что shop — shop API готов; kiosk → `X-Shop-Tenant` после auth
-- [ ] ⭐ Оплата киоска = та же цепочка, что § C — **готово**, переиспользуется без изменений
+- [ ] ⭐ UI киоска — **ждёт Flutter**
+- [ ] ⭐ URL киоска на точку — **ждёт домен + Flutter**
+- [ ] ⭐ Заказ / оплата — API готов; E2E через Flutter или curl в `FLUTTER_API.md`
 - [x] Регистрация устройства `device_type: kiosk` на точку — форма в manager/devices, токен выдаётся *(2026-05-28)*
 - [x] Запись в [`ORDER_ENTRY_AUDIT.md`](ORDER_ENTRY_AUDIT.md) *(2026-05-28)*
 

@@ -132,7 +132,25 @@
 |-----|-----------|------------|
 | `POST /kiosk/api/auth` | PASS | 6 tests; `X-Device-Token` → `tenant_id` |
 | Shop API reuse | PASS | `/shop/api/*` + `X-Shop-Tenant` — см. [`FLUTTER_API.md`](FLUTTER_API.md) |
-| Curl smoke script | DOC | manager token → auth → products → order |
+| Curl smoke | DOC | см. [`FLUTTER_API.md`](FLUTTER_API.md) § Prod smoke |
 | Flutter UI | SKIP | Q3 2026 TBD |
 
-**Вердикт:** kiosk backend задокументирован; **приёмка §I — не закрыта** (ждёт апрува).
+**Вердикт:** kiosk backend задокументирован в `FLUTTER_API.md`; **приёмка §I — не закрыта** (ждёт апрува).
+
+### Прогон 6 — smoke checklist (2026-05-30)
+
+**Инструмент:** curl + MCP DevTools / Chrome DevTools на `coffeeos.fly.dev`
+
+| Шаг | PASS/FAIL | Примечание |
+|-----|-----------|------------|
+| SHOP_API_KEY на prod | **PASS** | без ключа → 401; ключ в meta `/shop` → products 200 |
+| shift-a → `/manager` | **PASS** | `shift-a@demo.coffeeos.local`, AUTH-06 |
+| Kiosk auth curl | **PASS** | device «Smoke QA6b», tenant Demo A |
+| Kiosk cart+order curl | **PARTIAL** | cart 200; order 422 «корзина пуста» — session cookie не persist (fix `touch_cart_session!`, ждёт deploy) |
+| Kiosk E2E barista | **PASS** | витрина cash «Smoke QA6b» → `##202605-0015` ACCEPTED |
+| Новая org (не demo) | **PASS** | org `smoke-org-qa6-0530`, tenant `d8e287c5-5524-423c-8e5a-605570c69517`, products API 200 |
+| `bin/rails test` | **551/1 fail** | 1 failure pre-existing; shop/kiosk tests green после fix cart |
+
+**Fix:** `Shop::CartService#touch_cart_session!` — session dirty для cookie между запросами API.
+
+**§I не закрывать.**

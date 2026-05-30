@@ -37,17 +37,18 @@ module Shop
         end
         @session[SESSION_KEY][existing]["quantity"] += line["quantity"]
       else
-        # Проверка при добавлении нового товара
         if current_total + line["quantity"] > MAX_CART_ITEMS
           raise ActiveRecord::RecordNotFound, "Максимум #{MAX_CART_ITEMS} товаров в корзине"
         end
         @session[SESSION_KEY] << line
       end
+      touch_cart_session!
       self
     end
 
     def remove!(index)
       @session[SESSION_KEY].delete_at(index.to_i)
+      touch_cart_session!
     end
 
     def update_quantity!(index, delta)
@@ -56,10 +57,12 @@ module Shop
 
       @session[SESSION_KEY][i]["quantity"] += delta.to_i
       @session[SESSION_KEY].delete_at(i) if @session[SESSION_KEY][i]["quantity"] < 1
+      touch_cart_session!
     end
 
     def clear!
       @session[SESSION_KEY] = []
+      touch_cart_session!
     end
 
     def json_lines
@@ -93,6 +96,11 @@ module Shop
     end
 
     private
+
+    # Rails не помечает session dirty при in-place изменении массива — cookie не обновляется между HTTP-запросами.
+    def touch_cart_session!
+      @session[SESSION_KEY] = @session[SESSION_KEY].dup
+    end
 
     def tenant_setting(product)
       setting = ProductTenantSetting.find_by(product_id: product.id, tenant_id: @tenant_id)

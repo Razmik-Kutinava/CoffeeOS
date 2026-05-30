@@ -220,6 +220,13 @@
   - §F (кассовая дисциплина): привязка витрины к смене — не делаем пока нет продуктового решения.
   - §G (Offline-first): откладываем в В3 или до первого клиента с проблемами связи.
 
+- **2026-05-30 — Прогон 6 prod smoke (checklist)**
+  - **SHOP_API_KEY:** задан на prod (401 без ключа, products 200 с ключом из meta `/shop`).
+  - **AUTH-06:** `shift-a@demo.coffeeos.local` → `/manager` PASS.
+  - **Kiosk:** curl auth PASS; cart+order curl PARTIAL (session cookie — fix `CartService#touch_cart_session!`); E2E barista PASS (cash «Smoke QA6b», `##202605-0015`).
+  - **Новая org:** `smoke-org-qa6-0530` + tenant `d8e287c5-5524-423c-8e5a-605570c69517`, shop API products 200.
+  - **Журнал:** `QA_ACCEPTANCE_RUN.md` прогон 6. §I не закрыта.
+
 - **2026-05-28 — §C Реальная оплата (Т-Банк) — ЗАКРЫТ**
   - **Код:** `Payments::TbankAdapter` (Init API, Token, маппинг статусов); `Shop::OrderCreator` → адаптер → `payment_url`; `Callbacks::TbankController` + `POST /callbacks/tbank`; `PaymentStatusUpdater` + `OrderRecipeDeduction`; `Checkout.svelte` — radio card/sbp/cash + редирект.
   - **Секреты:** `fly secrets set TBANK_TERMINAL_KEY TBANK_PASSWORD TBANK_RETURN_URL SHOP_SIMULATE_PAYMENT=0`.

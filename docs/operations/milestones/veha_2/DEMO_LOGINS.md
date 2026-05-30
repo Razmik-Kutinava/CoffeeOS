@@ -18,7 +18,7 @@
 | pk-manager@demo.coffeeos.local | prep_kitchen_manager | demo-prep-kitchen | `/prep_kitchen` |
 | pk-worker@demo.coffeeos.local | prep_kitchen_worker | demo-prep-kitchen | `/prep_kitchen` |
 
-> **⚠️ shift_manager (AUTH-06):** логин `shift-a@demo.coffeeos.local` через `/manager` **не прогонялся в MCP-прогонах 1–4** (SKIP). Закрыть в прогоне 5 после апрува.
+> **⚠️ shift_manager (AUTH-06):** логин `shift-a@demo.coffeeos.local` через `/manager` — **PASS** *(прогон 6, 2026-05-30)*.
 
 ---
 
