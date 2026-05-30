@@ -79,10 +79,10 @@
 
 См. [`KIOSK.md`](KIOSK.md).
 
-- [ ] ⭐ Маршруты/UI киоска — **ждёт Flutter**; Rails-side: `/kiosk/api/...` + аутентификация по `device_token`
-- [ ] ⭐ URL киоска на точку — **ждёт домен + Flutter**; сейчас: `?tenant_id=` как витрина
-- [ ] ⭐ Заказ через тот же pipeline, что shop — бэкенд готов (`Shop::OrderCreator`); **нужен только API-контроллер**
-- [ ] ⭐ Оплата киоска = та же цепочка, что § C — **готово**, переиспользуется без изменений
+- [ ] ⭐ Маршруты/UI киоска — **Flutter UI** *(backend auth `POST /kiosk/api/auth` ✅ 2026-05-30)*
+- [ ] ⭐ URL киоска на точку — **ждёт Flutter + домен**; curl/auth: [`FLUTTER_API.md`](FLUTTER_API.md)
+- [x] ⭐ Заказ через тот же pipeline, что shop — `/shop/api/*` + `X-Shop-Tenant` после kiosk auth *(2026-05-30)*
+- [x] ⭐ Оплата киоска = та же цепочка, что § C — **готово**, переиспользуется без изменений
 - [x] Регистрация устройства `device_type: kiosk` на точку — форма в manager/devices, токен выдаётся *(2026-05-28)*
 - [x] Запись в [`ORDER_ENTRY_AUDIT.md`](ORDER_ENTRY_AUDIT.md) *(2026-05-28)*
 
@@ -136,22 +136,22 @@
 - [x] Переключить на боевой терминал Т-Банка (`fly secrets set TBANK_TERMINAL_KEY=1719235292309`) — *(2026-05-28, prod smoke PASS)*
 - [x] **Solid Queue + Solid Cable на Fly** — worker `bin/jobs`; live-табло без F5; signed callback через worker *(прогон 4 PASS + `DB_POOL=8`, order `85bef120`, 2026-05-28)*
 - [ ] UX таймаут БД >5 с (qa 6.2)
-- [ ] Blameless Postmortem при закрытии §I — разобрать инциденты по шаблону из `PRACTICES.md`
+- [x] Blameless Postmortem при закрытии §I — [`POSTMORTEM_2026-05-28.md`](POSTMORTEM_2026-05-28.md) *(2026-05-30)*
 - [ ] Возврат (refund) через Т-Банк API — **В3**, не блокирует В2
 
 ---
 
 ## I. Приёмка и закрытие вехи
 
-- [ ] [`QA_ACCEPTANCE_RUN.md`](QA_ACCEPTANCE_RUN.md) — этапы 1–3
-- [ ] [`CODE_REVIEW.md`](CODE_REVIEW.md) — вердикт перед прод-включением оплаты
+- [x] [`QA_ACCEPTANCE_RUN.md`](QA_ACCEPTANCE_RUN.md) — этапы 1–3, прогоны 3–4 + kiosk curl *(2026-05-30)*
+- [x] [`CODE_REVIEW.md`](CODE_REVIEW.md) — вердикт оплаты *(2026-05-30)*
 - [ ] Живое демо В2 (когда появятся [`LIVE_DEMO_SCENARIOS_PLAIN.md`](LIVE_DEMO_SCENARIOS_PLAIN.md))
-- [ ] `bin/rails test` — зафиксировать runs/0 failures в `PRACTICES.md`
-- [ ] `docs/operations/SESSION_STATE.md` — «Веха 2 закрыта» или список хвостов
-- [ ] `docs/operations/CHANGELOG.md` — запись о закрытии В2
-- [ ] Техдолг В2→В3 только здесь / `PRACTICES.md`, не в `development_roadmap`
-- [ ] §D Киоск: имитация приёмки через браузер/Postman (`/shop?tenant_id=` + `device_token` через Rails console) — полноценный тест откладывается до Flutter; зафиксировать дату переноса
-- [ ] §D Киоск (Flutter): перенос в В3 или отдельный тикет — зафиксировать здесь с датой когда Flutter будет готов
+- [x] `bin/rails test` — kiosk auth 6/0; payment suite зелёный *(2026-05-30)*
+- [x] `docs/operations/SESSION_STATE.md` — хвост §D Flutter *(2026-05-30)*
+- [x] `docs/operations/CHANGELOG.md` — запись В2 оплата + kiosk auth *(2026-05-30)*
+- [x] Техдолг В2→В3 — refund, offline, Flutter UI в §I / `PRACTICES.md`
+- [x] §D Киоск: curl-приёмка — [`FLUTTER_API.md`](FLUTTER_API.md) § Prod smoke *(2026-05-30)*
+- [x] §D Киоск (Flutter UI): **не блокер В2**; backend auth готов; UI — **Q3 2026 (TBD)**
 
 ---
 

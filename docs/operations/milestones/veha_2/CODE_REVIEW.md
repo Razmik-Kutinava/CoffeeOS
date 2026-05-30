@@ -21,20 +21,13 @@
 
 ## Итог ревью
 
-**Вердикт:** _не проводилось_
+**Вердикт:** **PASS для включения боевой оплаты на витрине** *(2026-05-30)*
 
----
-
-## Находки
-
-| ID | Severity | Файл | Находка | Действие |
-|----|----------|------|---------|----------|
-| — | — | — | — | — |
-
----
+Оплата Т-Банк: adapter, callback, idempotency, Outbox, Circuit Breaker, worker на Fly — соответствует `.cursor/rules`. Kiosk: `POST /kiosk/api/auth` + shop API reuse. Хвост: Flutter UI, refund (В3), UX таймаут БД.
 
 ## Тесты после ревью
 
 ```
-(заполнить)
+kiosk auth: 6 runs, 0 failures (2026-05-30)
+payment-related: см. PAYMENT.md прогоны 3–4
 ```

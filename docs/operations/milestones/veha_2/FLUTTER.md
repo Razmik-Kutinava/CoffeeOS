@@ -4,7 +4,7 @@
 
 **Когда наполнять:** после решения продукта (один абзац в PRACTICES + дата).
 
-**Сейчас:** **не в активной разработке**; приоритет — Rails киоск [`KIOSK.md`](KIOSK.md).
+**Сейчас:** Flutter app + tablet UI — **не в активной разработке**; backend [`FLUTTER_API.md`](FLUTTER_API.md) + `POST /kiosk/api/auth` готовы *(2026-05-30)*.
 
 ---
 

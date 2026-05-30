@@ -2,11 +2,17 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-05-25  
-**Веха 1:** **официально не закрыта** (§ I и H.3 в чеклисте — `[ ]`). Код A–G и H.2 — готовы на `develop`.  
-**Веха 2:** **активная разработка** (новое окно/агент); старт параллельно с «хвостом» В1.  
-**Статус В1:** блоки **A–G** `[x]`, **H.2** `[x]`, code review `[x]`, деплой Fly `[x]` (v1.53). **H.3** демо и **§ I** — заочно, без блокировки В2.  
-**Следующий фокус команды:** **Веха 2** — `HANDOFF.md`, `development_roadmap.md` § В2.
+**Дата:** 2026-05-30  
+**Веха 1:** официально не закрыта (§ I, H.3 — `[ ]`).  
+**Веха 2:** **оплата + backend киоска — готовы**; Flutter UI — хвост Q3 2026 (TBD).  
+**Следующий фокус:** Flutter app/планшет → цеплять к [`FLUTTER_API.md`](milestones/veha_2/FLUTTER_API.md); offline/смены — по продукту.
+
+### Сессия 2026-05-30 (В2: kiosk auth + docs closure)
+
+- **Код:** `POST /kiosk/api/auth` (`c44b1eb`); shop API без изменений.
+- **Prod:** worker stable, `fly:callback_smoke` PASS.
+- **Docs:** FLUTTER_API, POSTMORTEM, CHECKLIST §I, CODE_REVIEW PASS.
+- **§D:** backend ✅; Flutter UI — не блокер В2.
 
 ### Сессия 2026-05-25 (Fly URL: режим B vs поддомены A)
 

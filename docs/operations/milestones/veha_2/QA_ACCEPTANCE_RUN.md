@@ -125,3 +125,14 @@
 **Fix (2026-05-28):** worker падал (`Solid Queue … pool is 3`) → `DB_POOL=8`; `/callbacks/*` исключён из `host_authorization`.
 
 **Вердикт:** smoke **PASS** — live-табло и async callback подтверждены.
+
+### Прогон 5 — Kiosk backend + docs (2026-05-30)
+
+| Шаг | PASS/FAIL | Примечание |
+|-----|-----------|------------|
+| `POST /kiosk/api/auth` | PASS | 6 tests; `X-Device-Token` → `tenant_id` |
+| Shop API reuse | PASS | `/shop/api/*` + `X-Shop-Tenant` — см. [`FLUTTER_API.md`](FLUTTER_API.md) |
+| Curl smoke script | DOC | manager token → auth → products → order |
+| Flutter UI | SKIP | Q3 2026 TBD |
+
+**Вердикт:** kiosk **backend PASS**; UI ждёт Flutter.

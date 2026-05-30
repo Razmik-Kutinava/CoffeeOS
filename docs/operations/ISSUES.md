@@ -6,6 +6,12 @@
 
 ## 🟡 Важно
 
+[2026-05-30] — Kiosk: POST /kiosk/api/auth
+Статус: resolved
+Описание: Flutter/планшет нужен tenant по device_token; отдельного эндпоинта не было.
+Решение: `Kiosk::Api::AuthController`, контракт [`FLUTTER_API.md`](milestones/veha_2/FLUTTER_API.md); shop API без дублирования.
+Проверка: 6 tests; curl smoke в FLUTTER_API.md.
+
 [2026-05-28] — Fly: worker crash loop (DB pool < Solid Queue threads)
 Статус: resolved
 Описание: `bin/jobs` exit code 1 — «Solid Queue is configured to use 5 threads but the database connection pool is 3»; worker machine stopped, jobs не обрабатывались.

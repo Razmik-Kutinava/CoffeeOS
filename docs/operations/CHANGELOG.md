@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## v1.68 — 2026-05-30 (В2: kiosk auth API + закрытие docs оплаты)
+
+- **Kiosk:** `POST /kiosk/api/auth` — `device_token` → `tenant_id` (`c44b1eb`); тесты 6/0.
+- **Docs:** [`FLUTTER_API.md`](milestones/veha_2/FLUTTER_API.md), [`POSTMORTEM_2026-05-28.md`](milestones/veha_2/POSTMORTEM_2026-05-28.md).
+- **В2 оплата:** A+B+C+H приняты; worker `DB_POOL=8`; callback via worker PASS.
+- **§D:** Flutter UI перенос Q3 2026 (TBD); backend готов.
+- **Хвосты В3:** refund, offline, Flutter UI, свой домен.
+
+---
+
 ## v1.67 — 2026-05-28 (доки: shift_manager пропуск зафиксирован)
 
 - **CHECKLIST §B, ONBOARDING_CHECKLIST §5:** добавлен пункт `[ ]` shift_manager login не проверялся (AUTH-06 SKIP).
