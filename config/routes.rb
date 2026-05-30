@@ -62,6 +62,13 @@ Rails.application.routes.draw do
   # TV board (без логина) - подключение по device_token
   get "/tv_board", to: "tv_boards#show", as: :tv_board
 
+  # Киоск (Flutter): auth по device_token → tenant; меню/заказ — /shop/api/*
+  namespace :kiosk, path: "kiosk" do
+    namespace :api do
+      post "auth", to: "auth#create"
+    end
+  end
+
   get "/manager", to: redirect("/manager/")
   namespace :prep_kitchen do
     get "/", to: "dashboard#show", as: :dashboard
