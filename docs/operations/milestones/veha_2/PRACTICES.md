@@ -68,11 +68,11 @@
 |----------|------|--------|------------|
 | **Service Objects** | В1 ✅ / В2 ✅ | Работает | `TbankAdapter`, `OrderCreator`, `PaymentStatusUpdater` — по паттерну. Продолжать в D (Киоск) |
 | **Domain Folders** | В4+ | ⏸ Отложено | Не вводить `app/models/{domain}` — пока моделей < 50, AR между «доменами» разрешён |
-| **Outbox (Solid Queue)** | В2 (перед прод) | ❌ Не начато | **Обязательно до переключения на боевой терминал.** Критичные side-effects (payment callback → order accept → inventory) должны быть idempotent и retryable. Файл: `app/jobs/` + Solid Queue. Шаги: 1) выделить `PaymentCallbackJob`; 2) retry + dead_letter; 3) тест на duplicate delivery |
-| **Circuit Breaker** | В2 (перед прод) | ❌ Не начато | **Вместе с Outbox.** Обернуть `TbankAdapter#init_payment` и `post_json` в CB (например `stoplight` gem или ручной счётчик в Redis). При N ошибках подряд — fallback: заказ остаётся `pending_payment`, клиент видит «попробуйте позже». Шаги: 1) gem; 2) обернуть `post_json`; 3) тест на open/half-open |
+| **Outbox (Solid Queue)** | В2 (перед прод) | ✅ Done | `Payments::TbankCallbackJob`, retry x5, Solid Queue worker на Fly *(2026-05-28)* |
+| **Circuit Breaker** | В2 (перед прод) | ✅ Done | `TbankAdapter#post_json_with_circuit_breaker` *(2026-05-28)* |
 | **Event Sourcing склада** | В3 | ❌ Не начато | Склад v0.1 — прямой UPDATE. В3: `StockMovement` как журнал, nightly reconciliation |
 | **Read Replicas** | После трафика | ❌ Не начато | Когда появится реальная нагрузка на SELECT-запросы. Fly Postgres replica + `ApplicationRecord.connected_to(role: :reading)` |
-| **Blameless Postmortems** | В2 закрытие | ❌ Не начато | При закрытии §I: разобрать любые инциденты (flaky тесты, callback failures) в формате «что случилось → root cause → fix → prevention» |
+| **Blameless Postmortems** | В2 закрытие | ✅ Done | [`POSTMORTEM_2026-05-28.md`](POSTMORTEM_2026-05-28.md) — worker crash loop, callback path |
 
 ### Порядок «перед боевыми деньгами»
 
@@ -82,7 +82,7 @@
 4. ✅ **Circuit Breaker** — `TbankAdapter#post_json_with_circuit_breaker` *(2026-05-28)*
 5. ✅ **Idempotency `/callbacks/tbank`** — Redis `tbank:callback:{PaymentId}:{Status}` *(2026-05-28)*
 6. ✅ **Мониторинг** — `StuckPaymentsCheckJob` → Telegram *(2026-05-28)*
-7. ❌ §I QA приёмка + Code Review
+7. ✅ §I QA приёмка оплаты — прогоны 3–4 PASS; formal code review — [`CODE_REVIEW.md`](CODE_REVIEW.md) *(2026-05-30)*
 8. ✅ Переключить на боевой терминал (`1719235292309`) — *(2026-05-28, prod smoke PASS)*
 
 ---
@@ -157,6 +157,13 @@
   - **Тесты:** `test/integration/platform/onboarding_organization_test.rb` — 3 runs, 27 assertions, 0 failures.
   - **Чеклист:** `ONBOARDING_CHECKLIST.md` §1 — `[x]`.
   - **Следующий шаг:** §2 Точка продаж (×3).
+
+- **2026-05-30 — Kiosk auth API + закрытие docs оплаты**
+  - **Код:** `POST /kiosk/api/auth` (`c44b1eb`); тесты 6/0
+  - **Docs:** [`FLUTTER_API.md`](FLUTTER_API.md), [`POSTMORTEM_2026-05-28.md`](POSTMORTEM_2026-05-28.md)
+  - **Prod:** worker `DB_POOL=8`, callback via worker PASS (`85bef120`)
+  - **§D:** backend готов; Flutter UI — хвост до app
+  - **§I:** оплата A+B+C+H принята; киоск UI перенос явный
 
 - **2026-05-28 — Prod E2E callback + barista PASS**
   - **Заказ:** `f8427fc4-…`, PaymentId `8576370191`, 179₽
