@@ -1,8 +1,10 @@
 # Прогон приёмки Веха 2
 
-**Зачем:** протокол, как [`../veha_1/QA_ACCEPTANCE_RUN.md`](../veha_1/QA_ACCEPTANCE_RUN.md) для В1 — заполнять **когда начнётся** приёмка В2 (не сейчас).
+**Зачем:** протокол приёмки В2 — по образцу [`../veha_1/QA_ACCEPTANCE_RUN.md`](../veha_1/QA_ACCEPTANCE_RUN.md). **Статус:** приёмка **в работе**; прогоны **0–9** — история; **10+** — актуальный scope (см. ниже).
 
-**Сценарии:** `docs/agents/AGENTS/qa_scenarios.md` — секции **[ВЕХА 2]**. **Чеклист:** [`CHECKLIST.md`](CHECKLIST.md) § I.
+**Порядок в § I чеклиста:** сначала [`CODE_REVIEW.md`](CODE_REVIEW.md), потом этот документ.
+
+**Сценарии:** `docs/agents/AGENTS/qa_scenarios.md` — **[ВЕХА 2]**; RBAC/онбординг — [`ONBOARDING_DEVTOOLS_SCENARIOS.md`](ONBOARDING_DEVTOOLS_SCENARIOS.md) (AUTH-01…10). **Чеклист:** [`CHECKLIST.md`](CHECKLIST.md) § I.
 
 ---
 
@@ -10,33 +12,78 @@
 
 | Этап | Что | Инструмент | Статус |
 |------|-----|------------|--------|
-| **1. Сухой** | Тесты + новая org без demo seed | `bin/rails test`, integration | ✅ 541/0 *(2026-05-28)* |
-| **2. MCP / браузер** | Онбординг, оплата, киоск | Chrome DevTools MCP | ✅ pre-prod + **prod terminal** *(2026-05-28)* |
-| **3. Живое демо** | Заказчик | `LIVE_DEMO_SCENARIOS_PLAIN.md` | ⏳ |
+| **0. Code review** | Чистый код до прогонов | [`CODE_REVIEW.md`](CODE_REVIEW.md) | ✅ **2026-05-30** — вердict: к прогону 10; 554/0 |
+| **1. Сухой** | `bin/rails test` + 3 org × 3 точки без `demo:seed` | integration, runner | ✅ частично *(554/0, 2026-05-30)*; **3×3 org — прогон 10** |
+| **2. MCP / curl** | Оплата-имитация, URL витрины, kiosk API, RBAC-матрица, stress | Chrome DevTools MCP, curl | ✅ частично *(0–9)*; **полный scope — прогон 10** |
+| **3. Живое демо** | Заказчик, **реальные** оплаты со списанием | [`LIVE_DEMO_SCENARIOS_PLAIN.md`](LIVE_DEMO_SCENARIOS_PLAIN.md) | ⏳ |
+
+**Этап 3** — показ людям: заказчик сам проходит сценарии; **деньги списываются по-настоящему**. Этапы 1–2 — **без списания** (cash + mock card / callback без оплаты на форме банка).
 
 ---
 
-## Подготовка (заполнить при прогоне)
+## Подготовка (на каждый прогон)
 
-| Шаг | Команда | Результат |
-|-----|---------|-----------|
-| Demo / чистая org | demo-point-a/b на Fly (`DEMO_LOGINS.md`) | ✅ |
-| `bin/rails test` | полный suite | **541 runs, 0 failures** *(2026-05-28)* |
-| `SHOP_SIMULATE_PAYMENT` | 0 на стенде | ✅ Fly secrets |
+| Шаг | Действие | Результат |
+|-----|----------|-----------|
+| Коммиты | Все коммиты прогона в git | hash + message в журнале прогона |
+| Ops-хронология | `CHANGELOG.md`, `PRACTICES.md`, `SESSION_STATE.md` | запись «что / зачем / итог» |
+| Demo / новые org | 3 org × 3 точки из УК (`ONBOARDING.md`) | org slug + tenant id в журнале |
+| `bin/rails test` | полный suite перед MCP | runs / failures |
+| Оплата на стенде MCP | **имитация:** cash + mock card; `SHOP_SIMULATE_PAYMENT=1` или cash + signed callback без списания | не этап 3 |
+| Fly | `coffeeos.fly.dev`, deploy из `develop` | `/up` 200 |
 
 ---
 
-## Минимальный scope приёмки В2
+## Минимальный scope приёмки В2 (прогон 10+)
 
-1. Org + 3 точки из УК с address + карточка URL.
-2. Витрина с **реальной** оплатой (или тестовым шлюзом).
-3. QR URL открывается с телефона.
-4. Kiosk — если § D чеклиста закрыт.
-5. RBAC smoke всех ролей на **новой** org.
+### 1. Сеть из коробки (3 org × 3 точки)
+
+- **Минимум:** **3 организации**, в каждой **≥ 3 точки** (`sales_point`, address, city, slug, модули).
+- **Сверх минимума:** одна org с 4–5 точками — необязательно; если сделано — строка «сверх минимума» в журнале прогона 10.
+- **На каждой точке** включены и проверены модули: **menu + barista**, **витрина**, **оплата (имитация)**, **kiosk (API)**, связь **barista ↔ prep_kitchen** (заказ доходит до barista / движения склада где модуль цеха включён).
+- Карточка «все входы» в УК: URL витрины, панели, staff — см. [`ONBOARDING.md`](ONBOARDING.md).
+
+### 2. Оплата (этапы 1–2 vs 3)
+
+| Где | Режим |
+|-----|--------|
+| Этапы **1–2**, MCP, curl | **Cash** + **mock card** (имитация, **без списания**). Card flow: `payment_url` + при необходимости signed callback — без оплаты на форме банка. |
+| **Stress-smoke** | Пачки **5–8 оплат** (нал + карта) по **разным точкам**, интервал **~3 с**, несколько раундов (имитация «много точек платят одновременно»). |
+| **Этап 3** — живое демо | **Реальные** оплаты со списанием — только [`LIVE_DEMO_SCENARIOS_PLAIN.md`](LIVE_DEMO_SCENARIOS_PLAIN.md). |
+
+На **каждой** из 9+ новых точек — минимум 1 cash + 1 mock card (имитация).
+
+### 3. URL витрины (QR — не фича продукта)
+
+- Для **каждой** точки: URL из карточки УК / `UrlBuilder` (режим B: `?tenant_id=`).
+- Проверка: URL **открывается**, витрина грузит меню (MCP или телефон).
+- QR-картинку в продукте **не делаем**; при необходимости — сгенерить QR из URL вручную для скана.
+
+### 4. Kiosk (имитация без Flutter)
+
+На **каждую** новую точку с модулем kiosk — полный цикл по [`FLUTTER_API.md`](FLUTTER_API.md):
+
+1. `POST /kiosk/api/auth` → device token  
+2. `/shop/api/*` (cart → order, cash или mock card)  
+3. Заказ **accepted** на табло **barista**  
+
+Flutter UI — **В3**; для В2 достаточно curl/E2E как киоск.
+
+### 5. RBAC — полная матрица (не prog 8b)
+
+- **УК** (`uk@…`): org, точки, модули, карточка входов, staff/logins для каждого входа.
+- **Точка:** franchise_manager, general_manager, shift_manager, barista, prep_kitchen_manager, prep_kitchen_worker — см. [`DEMO_LOGINS.md`](../veha_1/DEMO_LOGINS.md) (роли на **новой** org после онбординга).
+- **AUTH-01…10** — все закрыты; **≥ 3–5 сценариев на роль**; приоритет: **деньги, заказы, barista ↔ цех, выдача клиенту**; УК — **все** сценарии создания.
+- Инструмент: **Chrome DevTools MCP**; матрица «роль × сценарий» — в прогоне 10.
+- **Прогон 8b** (login/shop/barista overlay) — **не считается** полным RBAC; дополняется прогоном 10.
+
+**Ссылки:** [`ONBOARDING_DEVTOOLS_SCENARIOS.md`](ONBOARDING_DEVTOOLS_SCENARIOS.md), [`STAFF_ACCESS.md`](STAFF_ACCESS.md).
 
 ---
 
 ## Журнал прогонов
+
+> **0–9** — история (до расширения scope). **10+** — приёмка по разделу «Минимальный scope» выше.
 
 ### Прогон 0 — pre-prod smoke (2026-05-28)
 
@@ -191,6 +238,8 @@
 
 ### Прогон 8b — MCP DevTools + full suite (2026-05-30)
 
+> ⚠️ **Не полный RBAC** — только overlay UX + shop/barista/login. Полная матрица ролей → **прогон 10**.
+
 **Стенд:** `localhost:3001` (WSL dev). **Prod:** не деплоили (ждёт апрува).
 
 **MCP Chrome DevTools** — fetch `/test/slow_json` (sleep 6 с), overlay через ~5 с:
@@ -225,3 +274,26 @@
 | UX overlay на prod | **N/A** | `/test/slow_*` только local/test; overlay проверен local 8b–8c |
 
 **§I не закрывать.**
+
+### Прогон 10 — полный scope приёмки В2 (ожидает прогона)
+
+**Цель:** 3 org × 3 точки, все модули на точке, URL витрины, kiosk curl × N точек, RBAC AUTH-01…10, stress-оплаты (5–8 / ~3 с).
+
+**Инструмент:** [`CODE_REVIEW.md`](CODE_REVIEW.md) → `bin/rails test` → MCP DevTools + curl (`FLUTTER_API.md`).
+
+| Блок | PASS/FAIL | Примечание |
+|------|-----------|------------|
+| Code review | **PASS** | 2026-05-30, см. [`CODE_REVIEW.md`](CODE_REVIEW.md) |
+| 3 org × 3 точки (УК) | | slug, address, entry points card |
+| Модули на каждой точке | | menu, barista, kiosk, prep_kitchen где нужно |
+| URL витрины × точка | | `?tenant_id=` открывается, меню не пустое |
+| Оплата имитация × точка | | cash + mock card |
+| Stress оплат | | 5–8 заказов / ~3 с, нал + карта, разные точки |
+| Kiosk curl × точка | | auth → cart → order → barista |
+| RBAC матрица | | AUTH-01…10, ≥3 сценария/роль |
+| `bin/rails test` | | runs / failures |
+| Коммиты + ops | | CHANGELOG / PRACTICES / SESSION_STATE |
+
+**Вердикт:** _заполнить после прогона._
+
+**§I не закрывать** без этапа 3 (живое демо + апрув).

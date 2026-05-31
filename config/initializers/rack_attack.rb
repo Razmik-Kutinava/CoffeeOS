@@ -13,7 +13,11 @@ class Rack::Attack
   
   # Лимит для киоска: 10 запросов в секунду по device_token
   throttle('kiosk/device', limit: 10, period: 1.second) do |req|
-    req.env['HTTP_X_DEVICE_TOKEN'] if req.path.start_with?('/api/kiosk/')
+    req.env['HTTP_X_DEVICE_TOKEN'] if req.path.start_with?('/kiosk/api/')
+  end
+
+  throttle('kiosk/auth/ip', limit: 30, period: 1.minute) do |req|
+    req.ip if req.path == '/kiosk/api/auth' && req.post?
   end
   
   # Лимит для мобильного API: 200 запросов в минуту по refresh_token

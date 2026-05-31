@@ -150,7 +150,7 @@
 > **Блокеры §I:** §E (DEMO_FEEDBACK открыт) + живое демо + апрув заказчика.  
 > **Хвосты → В3:** Flutter (киоск/мобилка), offline (§G), касса на всех каналах (§F п.2), refund (§H).
 
-- [ ] [`CODE_REVIEW.md`](CODE_REVIEW.md) — вердикт *(по сигналу заказчика)*
+- [x] [`CODE_REVIEW.md`](CODE_REVIEW.md) — вердикт **2026-05-30** (к прогону 10; 554/0)
 - [ ] [`QA_ACCEPTANCE_RUN.md`](QA_ACCEPTANCE_RUN.md) — этапы 1–3
 - [ ] **§E** [`DEMO_FEEDBACK.md`](DEMO_FEEDBACK.md) — фидбек и блокеры закрыты
 - [ ] Живое демо В2 — [`LIVE_DEMO_SCENARIOS_PLAIN.md`](LIVE_DEMO_SCENARIOS_PLAIN.md)

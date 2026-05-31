@@ -20,7 +20,7 @@ module Callbacks
       # Idempotency: Т-Банк повторяет webhook при таймауте.
       # Ключ по PaymentId + Status — защищаем от дублирования.
       idem_key = idempotency_key(payload)
-      if idem_key && Payments::CacheCounter.present?(idem_key)
+      if idem_key && !Payments::CacheCounter.claim(idem_key, expires_in: IDEMPOTENCY_TTL)
         Rails.logger.info("[Tbank::Callback] Duplicate webhook ignored, key=#{idem_key}")
         return render json: { ok: true, duplicate: true }
       end
@@ -41,8 +41,6 @@ module Callbacks
         Rails.logger.warn("[Tbank::Callback] Queue unavailable, perform_now: #{e.class}")
         Payments::TbankCallbackJob.perform_now(payload.to_h)
       end
-
-      Payments::CacheCounter.write(idem_key, 1, expires_in: IDEMPOTENCY_TTL) if idem_key
 
       Rails.logger.info("[Tbank::Callback] Enqueued OrderId=#{payload['OrderId']}, status=#{tbank_status}")
       render json: { ok: true }

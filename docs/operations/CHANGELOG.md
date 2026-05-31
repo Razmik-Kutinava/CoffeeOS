@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## v1.72 — 2026-05-30 (V2 code review + CR fixes)
+
+- **CR:** [`milestones/veha_2/CODE_REVIEW.md`](milestones/veha_2/CODE_REVIEW.md) — вердict «к прогону 10».
+- **Код:** OrderCreator batch PTS; Tbank callback `claim` до enqueue; job lookup strict; Rack::Attack `/kiosk/api/`.
+- **Тесты:** **554/0** (WSL). §I **не закрыта** — следующий шаг: **прогон 10**.
+
+---
+
 ## v1.71 — 2026-05-30 (product docs: В2 реализовано)
 
 - **Product:** синхронизация фактов В2 — `01_Vision`, `02_functional`, `03_Business_Logic`, `ARCHITECTURE`, `development_roadmap` (сделано vs В3, 554/0, §I открыта).

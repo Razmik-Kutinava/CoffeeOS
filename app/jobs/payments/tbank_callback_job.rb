@@ -22,9 +22,12 @@ module Payments
         .joins(:order)
         .where(orders: { id: order_id })
         .where(provider_payment_id: tbank_payment_id)
-        .or(
-          Payment.joins(:order).where(orders: { id: order_id }).where(provider: "tbank")
-        )
+        .first
+
+      payment ||= Payment
+        .joins(:order)
+        .where(orders: { id: order_id }, provider: "tbank", status: :pending)
+        .where(provider_payment_id: [nil, ""])
         .order(created_at: :desc)
         .first
 

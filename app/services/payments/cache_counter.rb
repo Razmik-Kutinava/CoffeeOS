@@ -30,6 +30,15 @@ module Payments
       STORE.read(key).present?
     end
 
+    # Резервирует ключ до enqueue (same-pod dedup). Возвращает false если ключ уже занят.
+    def claim(key, expires_in:)
+      return false if key.blank?
+      return false if present?(key)
+
+      write(key, 1, expires_in: expires_in)
+      true
+    end
+
     def clear_circuit!
       delete(Payments::TbankAdapter::CB_FAILURES_KEY)
       delete(Payments::TbankAdapter::CB_OPEN_KEY)

@@ -47,12 +47,15 @@ module Shop
 
         product_ids = cart_data[:items].map { |line| line[:product_id] }.uniq
         products_by_id = Product.where(id: product_ids).index_by(&:id)
+        available_product_ids = shop_available_product_ids(product_ids)
 
         cart_data[:items].each do |line|
           product = products_by_id[line[:product_id]]
           raise Error, "Товар не найден. Обновите корзину." unless product
           # BUG-020 FIX: Перепроверяем доступность товара внутри транзакции перед созданием заказа.
-          raise Error, "Товар '#{product.name}' стал недоступен. Обновите корзину." unless shop_available_for_order?(product)
+          unless available_product_ids.include?(product.id)
+            raise Error, "Товар '#{product.name}' стал недоступен. Обновите корзину."
+          end
           unit = BigDecimal(line[:unit_total].to_s)
           qty = line[:quantity].to_i
           OrderItem.create!(
@@ -147,7 +150,23 @@ module Shop
       0
     end
 
-    # BUG-020 FIX: Проверка доступности товара с блокировкой внутри транзакции.
+    # BUG-020 FIX: один запрос на все позиции корзины (FOR SHARE внутри транзакции OrderCreator).
+    def shop_available_product_ids(product_ids)
+      active_ids = Product.where(id: product_ids, is_active: true).pluck(:id)
+      return [] if active_ids.empty?
+
+      ProductTenantSetting
+        .lock("FOR SHARE")
+        .where(
+          product_id: active_ids,
+          tenant_id: @tenant.id,
+          is_enabled: true,
+          is_sold_out: false
+        )
+        .pluck(:product_id)
+        .to_set
+    end
+
     def shop_available_for_order?(product)
       return false unless product.is_active?
 

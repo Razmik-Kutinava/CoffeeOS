@@ -9,6 +9,12 @@
 
 **Product docs sync (2026-05-30):** `docs/product/*` + `qa_scenarios.md` — блок «В2 реализовано»; агенты читают **`development_roadmap.md`** первым по scope.
 
+### Code review V2 — **2026-05-30**
+
+- **Вердикт:** к **прогону 10**; правки: OrderCreator N+1, Tbank idempotency claim, callback job lookup, Rack::Attack kiosk path.
+- **Тесты:** 554/0 (WSL). MCP — в прогоне 10.
+- **Док:** [`CODE_REVIEW.md`](CODE_REVIEW.md)
+
 ### Gate (как в В1)
 
 1. Смена/каналы заказа — [`ORDER_ENTRY_AUDIT.md`](ORDER_ENTRY_AUDIT.md).
