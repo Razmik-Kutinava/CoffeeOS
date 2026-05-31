@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## v1.69 — 2026-05-30 (V2-T8: flaky callback timestamp test)
+
+- **Тест:** `events_controller_test.rb` — anti-replay «timestamp within 300s»: было 299 с (race на границе) → **200 с + `travel_to`**.
+- **Прогон:** файл **23 runs, 0 failures**; целевой тест **×5 PASS** (Windows native Ruby).
+- **Ops:** V2-T8 **done** — `PRACTICES.md`, `CHECKLIST.md` §H, `POSTMORTEM_2026-05-28.md`.
+- **§I приёмка В2:** не закрыта.
+
+---
+
 ## v1.68 — 2026-05-30 (kiosk auth API + FLUTTER_API doc)
 
 - **Kiosk:** `POST /kiosk/api/auth` — `device_token` → `tenant_id` (`c44b1eb`); тесты 6/0.

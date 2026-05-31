@@ -58,7 +58,7 @@
 | V2-T5 | Реальный шлюз не подключён | **done** Т-Банк 2026-05-28 (тест-терминал); прод — после Outbox+CB | PAYMENT |
 | V2-T6 | Боевой терминал Т-Банка не включён | **done** *(2026-05-28)* | `1719235292309` на Fly, prod smoke PASS |
 | V2-T7 | QR режим B (без домена) | open | Режим A — когда будет домен; §I хвост |
-| V2-T8 | Flaky тест `events_controller_test.rb:208` (timing) | open | Исправить race condition в тесте |
+| V2-T8 | Flaky тест `events_controller_test.rb:208` (timing) | **done** *(2026-05-30)* | 200 с + `travel_to`; 23/0, ×5 PASS |
 
 ---
 
@@ -110,6 +110,12 @@
 ---
 
 ## Журнал изменений (дописывать снизу)
+
+- **2026-05-30 — V2-T8 flaky callback test — ЗАКРЫТ**
+  - **Проблема:** `events_controller_test.rb:208` — timestamp 299 с назад, race на границе `CALLBACK_MAX_AGE_SECONDS=300`.
+  - **Fix:** `travel_to` + timestamp **200 с** назад; `TimeHelpers` в тест-классе.
+  - **Прогон:** файл 23 runs, 39 assertions, 0 failures; целевой тест ×5 PASS.
+  - **Ops:** `CHECKLIST.md` §H, `POSTMORTEM_2026-05-28.md`, `CHANGELOG` v1.69.
 
 - **2026-05-26 — ONBOARDING §7 Инфра (URL / DNS / slug)**
   - **Код:** валидация reserved slug на `Tenant`; подсказка в форме точки; UrlBuilder fallback для legacy reserved.

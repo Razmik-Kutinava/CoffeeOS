@@ -47,4 +47,4 @@
 - [x] DB pool fix deployed
 - [x] Signed callback via worker verified
 - [x] UX таймаут БД >5с — прогон 8 PASS (`slow_request_ux_test.rb`)
-- [ ] Flaky `events_controller_test.rb:208` — V2-T8
+- [x] Flaky `events_controller_test.rb:208` — V2-T8 *(2026-05-30: 200 s + travel_to)*
