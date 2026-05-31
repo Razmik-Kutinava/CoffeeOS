@@ -93,7 +93,7 @@
 
 ## E. Полировка по демо (блокер §I)
 
-См. [`DEMO_FEEDBACK.md`](DEMO_FEEDBACK.md) — **открыт**, пока нет фидбека заказчика и закрытых блокеров **§I не закрываем**.
+См. [`DEMO_FEEDBACK.md`](DEMO_FEEDBACK.md) — **открыт**. 2026-05-30: фидбек по **В1 § 1** зафиксирован в [`../veha_1/DEMO_FEEDBACK.md`](../veha_1/DEMO_FEEDBACK.md); **строк правок В2 пока нет**. §I не закрываем.
 
 - [ ] Процесс: каждая правка заказчика → строка в DEMO_FEEDBACK → PR → `[x]`
 - [ ] Критичные блокеры демо (если есть) закрыты до «веха принята»
@@ -150,8 +150,8 @@
 > **Блокеры §I:** §E (DEMO_FEEDBACK открыт) + живое демо + апрув заказчика.  
 > **Хвосты → В3:** Flutter (киоск/мобилка), offline (§G), касса на всех каналах (§F п.2), refund (§H).
 
-- [ ] [`QA_ACCEPTANCE_RUN.md`](QA_ACCEPTANCE_RUN.md) — этапы 1–3
 - [ ] [`CODE_REVIEW.md`](CODE_REVIEW.md) — вердикт *(по сигналу заказчика)*
+- [ ] [`QA_ACCEPTANCE_RUN.md`](QA_ACCEPTANCE_RUN.md) — этапы 1–3
 - [ ] **§E** [`DEMO_FEEDBACK.md`](DEMO_FEEDBACK.md) — фидбек и блокеры закрыты
 - [ ] Живое демо В2 — [`LIVE_DEMO_SCENARIOS_PLAIN.md`](LIVE_DEMO_SCENARIOS_PLAIN.md)
 - [x] `bin/rails test` — **554/0** в `PRACTICES.md` *(2026-05-30, prog 8b)*

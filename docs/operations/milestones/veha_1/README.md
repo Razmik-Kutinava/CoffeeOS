@@ -12,6 +12,7 @@
 | [DEMO_LOGINS.md](DEMO_LOGINS.md) | Demo-пользователи и пароль |
 | [LIVE_DEMO_SCENARIOS.md](LIVE_DEMO_SCENARIOS.md) | Ручные сценарии живого демо (2–4 мин), все роли — для разработчиков |
 | [LIVE_DEMO_SCENARIOS_PLAIN.md](LIVE_DEMO_SCENARIOS_PLAIN.md) | То же простым языком — для заказчика (H.3) |
+| [DEMO_FEEDBACK.md](DEMO_FEEDBACK.md) | Фидбек заказчика по живому демо; PDF в `artifacts/` |
 
 **В2 стартовала; В1 не закрыта официально** — `docs/operations/HANDOFF.md`, `CHANGELOG` v1.54.
 

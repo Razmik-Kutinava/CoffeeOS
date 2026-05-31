@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## v1.70 — 2026-05-30 (живое демо В1: фидбек заказчика § 1)
+
+- **Заказчик:** первый прогон plain § **1.1–1.4** — PDF + разбор в [`milestones/veha_1/DEMO_FEEDBACK.md`](milestones/veha_1/DEMO_FEEDBACK.md).
+- **Артефакт:** [`milestones/veha_1/artifacts/customer_live_qa_block1_2026-05-30.pdf`](milestones/veha_1/artifacts/customer_live_qa_block1_2026-05-30.pdf).
+- **Итог:** 1.2 **OK**; 1.1 / 1.3 / 1.4 **частично**; багов не заявлено. **H.3 В1 `[ ]`**; §I В2 **не закрыта**.
+
+---
+
 ## v1.69 — 2026-05-30 (V2-T8: flaky callback timestamp test)
 
 - **Тест:** `events_controller_test.rb` — anti-replay «timestamp within 300s»: было 299 с (race на границе) → **200 с + `travel_to`**.
