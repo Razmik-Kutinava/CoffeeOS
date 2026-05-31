@@ -45,26 +45,36 @@
 
 ---
 
-🚩 СЛЕДУЮЩИЙ ЭТАП: ВЕХА 2 (Scale & Stability — «Рост сети»)
+🚩 ВЕХА 2 (Scale & Stability — «Рост сети») — **КОД ~88%, ПРИЁМКА §I НЕ ЗАКРЫТА** (2026-05-30)
 
-Цель: подготовка к нескольким точкам, реальная оплата, offline POS.
+Цель: сеть **из коробки** (УК → org/точки), **реальная оплата** Т-Банк, backend киоска, практики надёжности (H).
 
-Безопасность и изоляция (Multi-tenancy):
-- Postgres RLS — готовые политики; middleware tenant через поддомен/сессию + `Current`.
-- Tenant scoping через автоматический скоуп.
+**Итог кода:** блоки A–H [`veha_2/CHECKLIST.md`](../operations/milestones/veha_2/CHECKLIST.md) в основном `[x]`; **`bin/rails test` — 554 runs, 0 failures** (2026-05-30). **§I открыта:** живое demo, QA прогон 10, DEMO_FEEDBACK.
 
-Offline-first (Sync Engine):
-- Local DB / PWA для Rails POS.
-- Background sync, UI Online/Offline/Syncing.
+### Сделано в В2
 
-Flutter (мобильное приложение и киоск):
-- Старт разработки; Drift/Hive; киоск — заказы **без** смены (как shop).
+| Область | Реализация |
+|---------|------------|
+| Онбординг | `Platform::TenantOnboarding::{Provision, CatalogBootstrap, UrlBuilder}`; org → SAL/KIT/ENT + prep_kitchen; **карточка входов** (URL, модули, staff) |
+| URL витрины | Поддомен (режим A) или `/shop?tenant_id=` на Fly (режим B) — `SHOP_URL_MODES.md` |
+| Оплата | **Т-Банк** (`Payments::TbankAdapter`, `Callbacks::TbankController`, `TbankCallbackJob`); cash/card/sbp; `SHOP_SIMULATE_PAYMENT=0` на prod |
+| Надёжность | Outbox (Solid Queue worker), Circuit Breaker, idempotency callback; `StuckPaymentsCheckJob` |
+| Shop / витрина | `pending_payment` + редирект на `pay.tbank.ru`; callback → `accepted` + списание |
+| Kiosk backend | `POST /kiosk/api/auth` (device_token); заказы через shop API; **без Flutter UI** |
+| Live-табло | Barista POS — broadcast без F5 (Solid Cable + worker) |
+| Feature flags | Модули точки — скрытие разделов панелей |
+| UX | Overlay skeleton при медленном fetch **>5 с** (`slow_request_ux_test`) |
+| Смена | **Гибрид сохранён** (shop/киоск без смены; barista с `CashShift.open`); CloseWizard — pending online за 24ч |
+| RBAC / staff | AUTH-01…10 (сценарии в `ONBOARDING_DEVTOOLS_SCENARIOS.md`) |
 
-Кассовая дисциплина (расширение):
-- В В1 бариста уже привязан к смене; в В2 — offline + единые правила на сеть точек.
+### Перенесено в В3 (не обещали в закрытии В2)
 
-Реальная оплата:
-- `SHOP_SIMULATE_PAYMENT=0`, payment gateway, callbacks.
+- Offline POS (IndexedDB, sync queue, drift)
+- Flutter UI (киоск / мобилка)
+- **Единая смена** на всех каналах (shop/киоск тоже только при open shift)
+- Refund, Z-отчёт, полный Event Sourcing склада
+
+**Ops:** `docs/operations/milestones/veha_2/` — CHECKLIST, PRACTICES, PAYMENT, QA_ACCEPTANCE_RUN.
 
 ---
 

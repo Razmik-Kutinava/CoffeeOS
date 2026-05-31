@@ -1,6 +1,6 @@
 ﻿# Системная архитектура CoffeeOS
 
-⚠️ **Веха 1 реализована (2026-05-24).** Ниже — общая архитектура; блок **«Веха 1 — как в коде»** описывает фактическую реализацию демо.
+⚠️ **Веха 1 реализована (2026-05-24). Веха 2 — блок «как в коде» ниже.** Общая архитектура — далее; при расхождении с `development_roadmap.md` — приоритет у roadmap.
 
 ## Веха 1 — как в коде (демо)
 
@@ -22,6 +22,23 @@
 | Локальный dev | `bin/ensure-server`, `lib/port_killer.rb` (кросс-платформенный порт) |
 
 **Не в архитектуре В1:** offline-буфер POS, Flutter, Redis, полный event log склада, payment gateway.
+
+## Веха 2 — как в коде (2026-05)
+
+| Слой | Реализация |
+|------|------------|
+| Онбординг | `Platform::TenantOnboarding::{Provision, CatalogBootstrap, UrlBuilder}`; карточка входов; org → точки → staff |
+| URL витрины | `UrlBuilder.shop_url_for` — режим A (поддомен) / B (`?tenant_id=` на Fly) |
+| Оплата | `Payments::TbankAdapter` → Init API; `Shop::OrderCreator` → `payment_url`; `Callbacks::TbankController` → enqueue |
+| Async callback | `Payments::TbankCallbackJob` (Solid Queue, retry x5); worker `bin/jobs` на Fly |
+| Надёжность | Circuit Breaker в адаптере; idempotency callback (`Rails.cache` / Redis на prod) |
+| Shop / kiosk API | `Shop::Api::*` — `skip_forgery_protection` + `X-Shop-Api-Key` / tenant header; kiosk — `ActionController::API` |
+| Kiosk auth | `POST /kiosk/api/auth` — `device_token` → `tenant_id` для shop API |
+| Live UI | Solid Cable + Turbo Streams на barista POS (табло без F5) |
+| Feature flags | Проверка модулей tenant в base controllers панелей |
+| Смена | Гибрид В1 сохранён; CloseWizard — информационный блок pending online |
+
+**Не в архитектуре В2:** IndexedDB offline-буфер, Flutter-клиент, единая смена на всех каналах, Read Replicas.
 
 ---
 

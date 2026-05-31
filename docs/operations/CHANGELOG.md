@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## v1.71 — 2026-05-30 (product docs: В2 реализовано)
+
+- **Product:** синхронизация фактов В2 — `01_Vision`, `02_functional`, `03_Business_Logic`, `ARCHITECTURE`, `development_roadmap` (сделано vs В3, 554/0, §I открыта).
+- **Agents:** `qa_scenarios.md` — расширен **[ВЕХА 2]** (Т-Банк, 3×3, AUTH, kiosk, stress); offline/единая смена → **В3**.
+- **Источник правды для агентов:** `docs/product/development_roadmap.md` + ops `milestones/veha_2/CHECKLIST.md`.
+
+---
+
 ## v1.70 — 2026-05-30 (живое демо В1: фидбек заказчика § 1)
 
 - **Заказчик:** первый прогон plain § **1.1–1.4** — PDF + разбор в [`milestones/veha_1/DEMO_FEEDBACK.md`](milestones/veha_1/DEMO_FEEDBACK.md).

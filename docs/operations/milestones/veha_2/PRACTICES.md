@@ -7,6 +7,8 @@
 
 **Чеклист:** [`CHECKLIST.md`](CHECKLIST.md). **Онбординг детально:** [`ONBOARDING_CHECKLIST.md`](ONBOARDING_CHECKLIST.md).
 
+**Product docs sync (2026-05-30):** `docs/product/*` + `qa_scenarios.md` — блок «В2 реализовано»; агенты читают **`development_roadmap.md`** первым по scope.
+
 ### Gate (как в В1)
 
 1. Смена/каналы заказа — [`ORDER_ENTRY_AUDIT.md`](ORDER_ENTRY_AUDIT.md).

@@ -6,7 +6,7 @@
 
 **Цель вехи:** новая организация и точки **из коробки** (боевые входы, RLS, каталог), связанные админки; **реальная оплата** на витрине (QR на столах); киоск на точку; далее offline и прочее из roadmap.
 
-**Продукт:** `docs/product/development_roadmap.md` § «ВЕХА 2». **Handoff:** `docs/operations/HANDOFF.md`.
+**Продукт (канон scope):** `docs/product/development_roadmap.md` § ВЕХА 2; детали — `01_Vision`, `02_functional`, `03_Business_Logic`, `ARCHITECTURE` (обновлено 2026-05-30). **Handoff:** `docs/operations/HANDOFF.md`.
 
 ---
 

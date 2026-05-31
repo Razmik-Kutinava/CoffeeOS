@@ -11,7 +11,7 @@
 ### Оплата shop
 
 - По умолчанию **имитация** (`SHOP_SIMULATE_PAYMENT=1`): заказ сразу `accepted`, платёж `succeeded`, provider `shop`.
-- Реальный платёжный шлюз — **Веха 2** (`SHOP_SIMULATE_PAYMENT=0` → `pending_payment` до callback).
+- Реальный платёжный шлюз — **[В2] Т-Банк** (см. блок «Веха 2» ниже); при `SHOP_SIMULATE_PAYMENT=1` — имитация как в В1.
 
 ### Списание склада при продаже
 
@@ -44,7 +44,43 @@
 
 ---
 
-## Целевая логика (Веха 2–3)
+## Веха 2 — реализованная бизнес-логика (2026-05)
+
+### Оплата Т-Банк (shop)
+
+- `SHOP_SIMULATE_PAYMENT=0`: card/sbp → заказ `pending_payment`, платёж `pending`, клиент уходит на `pay.tbank.ru`.
+- Callback `POST /callbacks/tbank` (signed Token) → `Payments::TbankCallbackJob` (Outbox) → `PaymentStatusUpdater` → заказ **`accepted`** → списание склада (как В1).
+- cash на витрине — сразу `accepted` (без шлюза).
+- **Не ЮKassa.** Idempotency callback; Circuit Breaker на Init API; мониторинг зависших `pending_payment` > 30 мин.
+
+### Kiosk
+
+- `POST /kiosk/api/auth`: активный `device_token` → `tenant_id`; дальше **shop API** (те же правила заказа/оплаты).
+- **Без открытой смены** (как shop). Flutter UI — **не В2**.
+
+### Онбординг сети
+
+- УК создаёт org и точки (SAL/KIT/ENT + prep_kitchen); **карточка входов** — URL, модули, staff.
+- `UrlBuilder`: поддомен или `?tenant_id=` (Fly demo).
+
+### Смена (гибрид сохранён)
+
+- Shop / kiosk — **без** `CashShift`. Barista — только при `open`.
+- **Единая смена на всех каналах — В3** (сценарий 3.V2-1).
+
+### Приёмка
+
+- **MCP / автотесты:** имитация оплаты или signed callback без списания на форме банка.
+- **Живое demo заказчика (этап 3):** реальные деньги на форме Т-Банка.
+- §I В2 **не закрыта** (см. `veha_2/CHECKLIST.md`).
+
+### Не в В2
+
+- Offline POS, Flutter UI, refund, Z-отчёт, полный Event Sourcing склада.
+
+---
+
+## Целевая логика (Веха 3)
 
 Модель учета складских остатков (Inventory Logic)
 Мы используем гибридную модель Event Sourcing, чтобы обеспечить 100% аудит и точность данных.

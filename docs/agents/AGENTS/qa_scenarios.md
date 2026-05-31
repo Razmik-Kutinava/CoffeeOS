@@ -1,24 +1,24 @@
-# QA-сценарии CoffeeOS (приёмка Вехи 1)
+# QA-сценарии CoffeeOS (приёмка Вех 1–2)
 
 ⚠️ **Структура по вехам**
 
 | Пометка | Когда прогонять |
 |---------|-----------------|
-| Без пометки, префикс **V1-** | **Сейчас** — закрытие Вехи 1 |
-| **[ВЕХА 2]** | Только в Вехе 2 |
-| **[ВЕХА 3]** | Только в Вехе 3 |
+| Без пометки, префикс **V1-** | **В1** — H.2 / живое demo |
+| **[ВЕХА 2]** | **В2** — онбординг, Т-Банк, kiosk, RBAC |
+| **[ВЕХА 3]** | Offline, единая смена, Event Sourcing |
 
-`bin/rails test` **не заменяет** прогон по V1-* ниже, но закрывает **этап 1** (сухой).
+`bin/rails test` **не заменяет** MCP/ручной прогон; закрывает **этап 1** (сухой).
 
-### Этапы приёмки H (до живого демо)
+### Этапы приёмки H
 
 | Этап | Кто | Инструмент | Журнал |
 |------|-----|------------|--------|
-| **1. Сухой** | Агент | `bin/rails test`, integration, `rails runner` | колонка **Авто** |
-| **2. MCP** | Агент | Chrome DevTools MCP | колонка **MCP** |
-| **3. Ручной + демо** | Владелец | Браузер, 3–4 цепочки для людей | колонка **Ручной** |
+| **1. Сухой** | Агент | `bin/rails test`, integration | **Авто** — `veha_2/QA_ACCEPTANCE_RUN.md` |
+| **2. MCP** | Агент | Chrome DevTools MCP | **MCP** — там же + `ONBOARDING_DEVTOOLS_RUN.md` |
+| **3. Ручной + demo** | Заказчик | Браузер, **реальные деньги** | **Ручной** — `DEMO_FEEDBACK.md` |
 
-Полный протокол прогона агента: `docs/operations/milestones/veha_1/QA_ACCEPTANCE_RUN.md`.
+Протоколы: [`veha_1/QA_ACCEPTANCE_RUN.md`](../../operations/milestones/veha_1/QA_ACCEPTANCE_RUN.md) · [`veha_2/QA_ACCEPTANCE_RUN.md`](../../operations/milestones/veha_2/QA_ACCEPTANCE_RUN.md)
 
 ---
 
@@ -293,31 +293,59 @@ bin/rails runner "puts AdminAuditLog.where(action: 'order_cancelled').order(crea
 
 ---
 
-## Сценарии [ВЕХА 2] — не прогонять в В1
+## Сценарии [ВЕХА 2]
 
-### [ВЕХА 2] 3.V2-1: Запрет заказа без смены на **всех** каналах
+MCP-шаги: [`ONBOARDING_DEVTOOLS_SCENARIOS.md`](../../operations/milestones/veha_2/ONBOARDING_DEVTOOLS_SCENARIOS.md). Журнал: [`ONBOARDING_DEVTOOLS_RUN.md`](../../operations/milestones/veha_2/ONBOARDING_DEVTOOLS_RUN.md).
 
-Единая кассовая дисциплина (включая киоск / offline POS). В В1 shop **разрешён** без смены (V1-3.3).
+### V2-ONB: Онбординг 3 org × 3 точки
 
-### [ВЕХА 2] 6.2: Таймаут базы данных (>5 с)
+**Действие:** УК → 3 org, точки SAL/KIT/ENT + prep_kitchen; карточка «все входы».
 
-**Действие:** имитировать медленный ответ БД.  
-**Ожидание:** skeleton/loader, без пустого экрана.  
-*В В1 не воспроизводится без dev-хаков — прогон в В2.*
+**Ожидание:** URL витрины (`?tenant_id=` на Fly); staff; RLS.
 
-### [ВЕХА 2] Offline / sync / idempotency
+### V2-AUTH: RBAC AUTH-01…10
 
-**[В2] O-1:** POS offline — заказ в IndexedDB, индикатор Offline.  
-**[В2] O-2:** После online — sync, `drift_offset`.  
-**[В2] O-3:** Повторная отправка с `client_uuid` — один заказ в БД.
+**Действие:** прогон § AUTH в ONBOARDING_DEVTOOLS_SCENARIOS.
 
-### [ВЕХА 2] Реальная оплата
+**Ожидание:** роли изолированы; cross-panel — redirect/403.
 
-ЮKassa / callback, `SHOP_SIMULATE_PAYMENT=0`.
+### V2-PAY: Т-Банк (не ЮKassa)
+
+**Действие:** `SHOP_SIMULATE_PAYMENT=0`; card/sbp → `pending_payment` → callback → `accepted`.
+
+**Ожидание:** списание; barista табло без F5; idempotent callback.
+
+**MCP:** signed callback OK. **Живое demo:** реальные деньги.
+
+### V2-PAY-STRESS: 5–8 оплат / ~3 с
+
+**Действие:** серия заказов с витрины.
+
+**Ожидание:** без 500/дубликатов.
+
+### V2-URL / V2-KIOSK / V2-FLOW
+
+- **URL:** витрина/QR из карточки точки — меню и цены своего tenant.
+- **Kiosk:** `POST /kiosk/api/auth` + shop API (curl); без Flutter UI.
+- **Barista ↔ prep_kitchen:** продажа → остаток цеха ↓ (как V1-1.4).
+
+### [ВЕХА 2] 6.2: Таймаут >5 с — **[В2] done**
+
+Overlay skeleton (`slow_request_ux_test`; прогон 8, 2026-05-30).
 
 ---
 
-## Сценарии [ВЕХА 3] — не прогонять в В1
+## Сценарии [ВЕХА 3] — не закрытие В2
+
+### [ВЕХА 3] 3.V2-1: Единая смена на **всех** каналах
+
+Shop/kiosk **без** смены в В1–В2 (гибрид). Единая дисциплина — **В3**.
+
+### [ВЕХА 3] Offline POS (O-1…O-3)
+
+IndexedDB, sync, `client_uuid`. *(Callback idempotency Т-Банка — **[В2] done**.)*
+
+---
 
 - Уведомления владельцу о подозрительных отменах; автоматический финансовый отчёт при расхождении смены.
 - Полный журнал склада (Event Sourcing как SoT), nightly reconciliation.
@@ -327,6 +355,8 @@ bin/rails runner "puts AdminAuditLog.where(action: 'order_cancelled').order(crea
 
 ## Ссылки
 
-- Логины: `docs/operations/milestones/veha_1/DEMO_LOGINS.md`
-- Чеклист вехи: `docs/operations/milestones/veha_1/CHECKLIST.md` (блок H)
+- Логины В1: `docs/operations/milestones/veha_1/DEMO_LOGINS.md`
+- Чеклист В1: `docs/operations/milestones/veha_1/CHECKLIST.md` (блок H)
+- Чеклист В2: `docs/operations/milestones/veha_2/CHECKLIST.md` (§I)
+- Продукт (scope): `docs/product/development_roadmap.md`
 - Техдолг (не дублировать в QA): `docs/operations/milestones/veha_1/PRACTICES.md` § «Техдолг В1»
