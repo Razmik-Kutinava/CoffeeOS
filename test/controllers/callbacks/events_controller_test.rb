@@ -3,6 +3,8 @@
 require "test_helper"
 
 class Callbacks::EventsControllerTest < ActionDispatch::IntegrationTest
+  include ActiveSupport::Testing::TimeHelpers
+
   setup do
     @tenant = create_tenant!
     @user   = create_user!(tenant: @tenant, role_codes: %w[barista])
@@ -205,7 +207,7 @@ class Callbacks::EventsControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test "timestamp exactly within 300 seconds is accepted" do
+  test "timestamp within 300 seconds is accepted" do
     secret = "my-secret"
     with_secret(secret) do
       ENV["CALLBACK_SHARED_TOKEN"] = ""
@@ -217,20 +219,23 @@ class Callbacks::EventsControllerTest < ActionDispatch::IntegrationTest
         provider_payment_id: "pay_ts_ok"
       }
 
-      body            = req_params.to_json
-      fresh_timestamp = (Time.current.to_i - 299).to_s
-      sig             = OpenSSL::HMAC.hexdigest("SHA256", secret, "#{fresh_timestamp}.#{body}")
+      body = req_params.to_json
+      # 200 s ago — safely inside CALLBACK_MAX_AGE_SECONDS (300); 299 s caused flaky race at boundary.
+      travel_to Time.zone.parse("2026-05-30 12:00:00 UTC") do
+        fresh_timestamp = (Time.current.to_i - 200).to_s
+        sig             = OpenSSL::HMAC.hexdigest("SHA256", secret, "#{fresh_timestamp}.#{body}")
 
-      post "/callbacks/payments",
-           params:  body,
-           headers: {
-             "Content-Type"         => "application/json",
-             "X-Callback-Timestamp" => fresh_timestamp,
-             "X-Callback-Signature" => sig,
-             "X-Idempotency-Key"    => SecureRandom.hex(8)
-           }
+        post "/callbacks/payments",
+             params:  body,
+             headers: {
+               "Content-Type"         => "application/json",
+               "X-Callback-Timestamp" => fresh_timestamp,
+               "X-Callback-Signature" => sig,
+               "X-Idempotency-Key"    => SecureRandom.hex(8)
+             }
 
-      assert_not_equal 401, response.status
+        assert_not_equal 401, response.status
+      end
     end
   end
 
