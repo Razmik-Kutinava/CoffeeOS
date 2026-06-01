@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## v1.73 — 2026-05-30 (V2 прогон 10 — частичный PASS)
+
+- **Приёмка:** [`milestones/veha_2/QA_ACCEPTANCE_RUN.md`](milestones/veha_2/QA_ACCEPTANCE_RUN.md) — **прогон 10** на `coffeeos.fly.dev` (MCP + curl).
+- **Итог:** витрина A/B, stress 6× cash `accepted`, card `pending_payment` + `payment_url`, barista/manager видят заказы; **554/0** (WSL).
+- **PARTIAL:** 3 org × 3 точки на всех org; kiosk без `DEVICE_TOKEN`; RBAC не полная матрица; MCP checkout — fixed nav.
+- **§I не закрыта** — этап 3 (живое демо), прогон 11 по хвостам. **Push:** только после апрува (локальный ops-коммит).
+
+---
+
 ## v1.72 — 2026-05-30 (V2 code review + CR fixes)
 
 - **CR:** [`milestones/veha_2/CODE_REVIEW.md`](milestones/veha_2/CODE_REVIEW.md) — вердict «к прогону 10».

@@ -13,8 +13,8 @@
 | Этап | Что | Инструмент | Статус |
 |------|-----|------------|--------|
 | **0. Code review** | Чистый код до прогонов | [`CODE_REVIEW.md`](CODE_REVIEW.md) | ✅ **2026-05-30** — вердict: к прогону 10; 554/0 |
-| **1. Сухой** | `bin/rails test` + 3 org × 3 точки без `demo:seed` | integration, runner | ✅ частично *(554/0, 2026-05-30)*; **3×3 org — прогон 10** |
-| **2. MCP / curl** | Оплата-имитация, URL витрины, kiosk API, RBAC-матрица, stress | Chrome DevTools MCP, curl | ✅ частично *(0–9)*; **полный scope — прогон 10** |
+| **1. Сухой** | `bin/rails test` + 3 org × 3 точки без `demo:seed` | integration, runner | ✅ **554/0**; 3×3 org — **PARTIAL** (прогон 10) |
+| **2. MCP / curl** | Оплата-имитация, URL витрины, kiosk API, RBAC-матрица, stress | Chrome DevTools MCP, curl | ✅ **частичный PASS** (прогон 10, 2026-05-30) |
 | **3. Живое демо** | Заказчик, **реальные** оплаты со списанием | [`LIVE_DEMO_SCENARIOS_PLAIN.md`](LIVE_DEMO_SCENARIOS_PLAIN.md) | ⏳ |
 
 **Этап 3** — показ людям: заказчик сам проходит сценарии; **деньги списываются по-настоящему**. Этапы 1–2 — **без списания** (cash + mock card / callback без оплаты на форме банка).
@@ -275,25 +275,29 @@ Flutter UI — **В3**; для В2 достаточно curl/E2E как киос
 
 **§I не закрывать.**
 
-### Прогон 10 — полный scope приёмки В2 (ожидает прогона)
+### Прогон 10 — полный scope приёмки В2 (2026-05-30)
 
-**Цель:** 3 org × 3 точки, все модули на точке, URL витрины, kiosk curl × N точек, RBAC AUTH-01…10, stress-оплаты (5–8 / ~3 с).
+**Стенд:** `https://coffeeos.fly.dev` (deploy `e97397b` + CR fixes). **Инструмент:** Chrome DevTools MCP + curl (`tmp/prog10_stress.rb`, cookie jar как prog 7/9). **Push/deploy:** нет — только ops-коммит локально, ждёт апрува.
 
-**Инструмент:** [`CODE_REVIEW.md`](CODE_REVIEW.md) → `bin/rails test` → MCP DevTools + curl (`FLUTTER_API.md`).
+**Цель:** 3 org × 3 точки, модули, URL, kiosk, RBAC AUTH-01…10, stress 5–8 / ~3 с.
 
 | Блок | PASS/FAIL | Примечание |
 |------|-----------|------------|
-| Code review | **PASS** | 2026-05-30, см. [`CODE_REVIEW.md`](CODE_REVIEW.md) |
-| 3 org × 3 точки (УК) | | slug, address, entry points card |
-| Модули на каждой точке | | menu, barista, kiosk, prep_kitchen где нужно |
-| URL витрины × точка | | `?tenant_id=` открывается, меню не пустое |
-| Оплата имитация × точка | | cash + mock card |
-| Stress оплат | | 5–8 заказов / ~3 с, нал + карта, разные точки |
-| Kiosk curl × точка | | auth → cart → order → barista |
-| RBAC матрица | | AUTH-01…10, ≥3 сценария/роль |
-| `bin/rails test` | | runs / failures |
-| Коммиты + ops | | CHANGELOG / PRACTICES / SESSION_STATE |
+| Code review | **PASS** | [`CODE_REVIEW.md`](CODE_REVIEW.md) 2026-05-30 |
+| `/up` | **PASS** | HTTP 200 |
+| `bin/rails test` | **PASS** | **554 runs, 0 failures** (WSL, ~73 с) |
+| 3 org × 3 точки (УК) | **PARTIAL** | MCP `/admin/organizations`: **4 org** (test-franchise, demo-coffeeos, mcp-prod-test-0627, smoke-org-qa6-0530). **Demo org** — 3 точки (A, B, prep). У **smoke/mcp** — по 1 точке; нет **9 новых** точек с полным онбордингом в этом прогоне |
+| Модули на каждой точке | **PARTIAL** | Demo A/B: menu+barista+витрина проверены; kiosk/prep — не на всех 9+ точках |
+| URL витрины × точка | **PASS** | A/B HTTP 200, каталог MCP + API (`PRODUCTS_A/B=1` каждая) |
+| Оплата имитация × точка | **PARTIAL** | curl cash **accepted** (A+B); card **pending_payment** + `payment_url` present (корень JSON). MCP checkout A: корзина OK, «Оплатить» — **частично** (fixed bottom nav перекрывает клик по «Наличные») |
+| Stress оплат | **PASS** | 6× cash `accepted`, интервал ~3 с, A↔B (`prog10_stress.rb`) |
+| Kiosk curl × точка | **SKIP** | нет `DEVICE_TOKEN` в среде прогона; эталон — **прогон 7/9 PASS** |
+| RBAC матрица | **PARTIAL** | MCP: AUTH-01 `/admin`, AUTH-02 franchise → `/manager`, AUTH-04 barista-a → `/barista` (заказы Prog10 в очереди). Остальные роли — по [`DEMO_LOGINS.md`](../veha_1/DEMO_LOGINS.md), без ≥3 сценариев/роль в этом прогоне |
+| Barista ↔ заказ | **PASS** | После stress/curl — заказы на `/barista` и в manager (#202606-0002…) |
+| Коммиты + ops | **PASS** | локальный коммит ops (без push): CHANGELOG v1.73, этот журнал, PRACTICES техдолг CR |
 
-**Вердикт:** _заполнить после прогона._
+**Артефакты прогона (не в git):** `tmp/prog10_stress.rb`, `tmp/prog10_debug.rb` — curl smoke; не коммитить.
 
-**§I не закрывать** без этапа 3 (живое демо + апрув).
+**Вердикт:** **частичный PASS** — ключевые каналы (витрина, cash/card API, barista, stress, suite) на prod OK; **блокеры §I:** этап 3 живое демо; полный 3×3×модули; kiosk с токеном; полная RBAC-матрица → **прогон 11** или доработка после апрува.
+
+**§I не закрывать** без этапа 3 (живое демо + апрув заказчика).

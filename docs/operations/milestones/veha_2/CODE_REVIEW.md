@@ -79,8 +79,8 @@ bin/rails test
 
 ## Следующие шаги
 
-1. **Прогон 10** — [`QA_ACCEPTANCE_RUN.md`](QA_ACCEPTANCE_RUN.md) (3×3, AUTH, stress, kiosk curl).
-2. Фиксы по прогону 10 → **прогон 11** при необходимости.
+1. ~~**Прогон 10**~~ — **частичный PASS** 2026-05-30 — [`QA_ACCEPTANCE_RUN.md`](QA_ACCEPTANCE_RUN.md).
+2. **Техдолг CR** (V2-CR-01…05 в [`PRACTICES.md`](PRACTICES.md)) → фиксы → **прогон 11** (3×3, kiosk token, RBAC).
 3. **Живое demo** (этап 3) — отложено.
 4. §I — postmortem, SESSION_STATE, апрув заказчика.
 

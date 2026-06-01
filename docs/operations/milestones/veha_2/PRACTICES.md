@@ -12,8 +12,15 @@
 ### Code review V2 — **2026-05-30**
 
 - **Вердикт:** к **прогону 10**; правки: OrderCreator N+1, Tbank idempotency claim, callback job lookup, Rack::Attack kiosk path.
-- **Тесты:** 554/0 (WSL). MCP — в прогоне 10.
+- **Тесты:** 554/0 (WSL). **Прогон 10:** частичный PASS — [`QA_ACCEPTANCE_RUN.md`](QA_ACCEPTANCE_RUN.md).
 - **Док:** [`CODE_REVIEW.md`](CODE_REVIEW.md)
+
+### Прогон 10 — **2026-05-30**
+
+- **Стенд:** `coffeeos.fly.dev`, deploy после `e97397b`.
+- **PASS:** suite 554/0; URL витрины A/B; curl stress 6× cash; card mock `payment_url`; barista/manager заказы.
+- **PARTIAL / SKIP:** 3×3 на всех org; kiosk без `DEVICE_TOKEN`; RBAC не полная матрица.
+- **Следующее:** фиксы по техдолгу CR → прогон 11; живое демо (этап 3).
 
 ### Gate (как в В1)
 
@@ -67,6 +74,15 @@
 | V2-T6 | Боевой терминал Т-Банка не включён | **done** *(2026-05-28)* | `1719235292309` на Fly, prod smoke PASS |
 | V2-T7 | QR режим B (без домена) | open | Режим A — когда будет домен; §I хвост |
 | V2-T8 | Flaky тест `events_controller_test.rb:208` (timing) | **done** *(2026-05-30)* | 200 с + `travel_to`; 23/0, ×5 PASS |
+| V2-CR-01 | `catalog_bootstrap.rb` N+1 PTS | **open** | [`CODE_REVIEW.md`](CODE_REVIEW.md) V2-001; perf при онбординге |
+| V2-CR-02 | `events_controller` без `CALLBACK_*` | **accepted** | prod: secrets в Fly; проверять на deploy |
+| V2-CR-03 | `browser_shop_session?` без CSRF verify | **open** | витрина Svelte; отдельная задача |
+| V2-CR-04 | `CacheCounter` MemoryStore | **open** | 1 pod Fly OK; multi-pod → Redis/Solid (В3) |
+| V2-CR-05 | Kiosk `KioskSetting` без tenant GUC | **open** | owner bypass; В3 при FORCE RLS |
+| V2-P10-01 | Прогон 10: 3 org × 3 точки | **open** | см. QA прогон 10 PARTIAL |
+| V2-P10-02 | Прогон 10: kiosk curl × N точек | **open** | нужен `DEVICE_TOKEN` из manager |
+| V2-P10-03 | Прогон 10: RBAC ≥3 сценария/роль | **open** | прогон 11 / MCP матрица |
+| V2-P10-04 | Shop checkout MCP: fixed bottom nav | **open** | UX: scroll/offset для «Наличные» |
 
 ---
 
