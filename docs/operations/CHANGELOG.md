@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v1.77 — 2026-06-01 (V2 прогон 10 — блок 0, план добивки)
+
+- **Нет прогона 11:** добивка в рамках прогона 10, блоки 1–14 в `QA_ACCEPTANCE_RUN.md`.
+- **Scope:** без Flutter / живого демо / живой оплаты; MCP-витрина 5 точек.
+- **Точка входа агента:** `SESSION_STATE.md` + таблица блоков; блок 0 ✅, код не меняли.
+
 ## v1.76 — 2026-06-01 (V2 прогон 10c — финал QA scope)
 
 - **10c:** 9× shop URLs, stress wave 2, kiosk cash+card 9×, Prog10 staff login (barista Alpha), prep_kitchen, AUTH-10 logout.

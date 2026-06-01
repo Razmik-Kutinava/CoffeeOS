@@ -79,9 +79,9 @@ bin/rails test
 
 ## Следующие шаги
 
-1. ~~**Прогон 10**~~ — **частичный PASS** 2026-05-30 — [`QA_ACCEPTANCE_RUN.md`](QA_ACCEPTANCE_RUN.md).
-2. **Техдолг CR** (V2-CR-01…05 в [`PRACTICES.md`](PRACTICES.md)) → фиксы → **прогон 11** (3×3, kiosk token, RBAC).
-3. **Живое demo** (этап 3) — отложено.
-4. §I — postmortem, SESSION_STATE, апрув заказчика.
+1. **Прогон 10** — этапы 0–2 **PASS** 2026-06-01; **добивка** — блоки 1–14 в [`QA_ACCEPTANCE_RUN.md`](QA_ACCEPTANCE_RUN.md) (прогона 11 **нет**).
+2. **Техдолг CR** (V2-CR-01…05 в [`PRACTICES.md`](PRACTICES.md)) → фиксы в рамках **прогона 10** (блоки 1–5).
+3. **Живое demo** — только §I чеклиста, не прогон 10.
+4. §I — postmortem (блок 14), затем фидбек §E, апрув, SESSION_STATE/CHANGELOG.
 
 **Связанные доки:** [`CHECKLIST.md`](CHECKLIST.md) §I, [`PRACTICES.md`](PRACTICES.md), [`PAYMENT.md`](PAYMENT.md).

@@ -20,7 +20,13 @@
 - **Стенд:** `coffeeos.fly.dev`, deploy после `e97397b`.
 - **PASS:** suite 554/0; URL витрины A/B; curl stress 6× cash; card mock `payment_url`; barista/manager заказы.
 - **PARTIAL / SKIP:** 3×3 на всех org; kiosk без `DEVICE_TOKEN`; RBAC не полная матрица.
-- **Следующее:** фиксы по техдолгу CR → прогон 11; живое демо (этап 3).
+- **Следующее:** добивка **прогона 10** (блоки 1–14) — [`QA_ACCEPTANCE_RUN.md`](QA_ACCEPTANCE_RUN.md); прогона 11 **нет**.
+
+### Прогон 10 — продолжение (2026-06-01)
+
+- **Точка входа агента:** [`../../SESSION_STATE.md`](../../SESSION_STATE.md).
+- **План работ:** [`QA_ACCEPTANCE_RUN.md`](QA_ACCEPTANCE_RUN.md) — таблица блоков 0–14; блок **0** ✅.
+- **Не в scope:** Flutter, живое демо, живая оплата, 9 MCP-витрин (делаем 5).
 
 ### Gate (как в В1)
 
