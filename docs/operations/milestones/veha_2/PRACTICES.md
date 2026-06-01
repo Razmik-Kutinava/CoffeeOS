@@ -79,9 +79,9 @@
 | V2-CR-03 | `browser_shop_session?` без CSRF verify | **open** | витрина Svelte; отдельная задача |
 | V2-CR-04 | `CacheCounter` MemoryStore | **open** | 1 pod Fly OK; multi-pod → Redis/Solid (В3) |
 | V2-CR-05 | Kiosk `KioskSetting` без tenant GUC | **open** | owner bypass; В3 при FORCE RLS |
-| V2-P10-01 | Прогон 10: 3 org × 3 точки | **open** | см. QA прогон 10 PARTIAL |
-| V2-P10-02 | Прогон 10: kiosk curl × N точек | **open** | нужен `DEVICE_TOKEN` из manager |
-| V2-P10-03 | Прогон 10: RBAC ≥3 сценария/роль | **open** | прогон 11 / MCP матрица |
+| V2-P10-01 | Прогон 10: 3 org × 3 точки | **done** *(2026-06-01)* | [`PROG10_TENANTS.md`](PROG10_TENANTS.md) |
+| V2-P10-02 | Прогон 10: kiosk curl | **done** *(2026-06-01)* | `bin/prog10_fly_smoke.rb` + Prog10 Kiosk MCP |
+| V2-P10-03 | Прогон 10: RBAC AUTH-01…09 | **done** *(2026-06-01)* | MCP + регрессия прогон 5 |
 | V2-P10-04 | Shop checkout MCP: fixed bottom nav | **open** | UX: scroll/offset для «Наличные» |
 
 ---

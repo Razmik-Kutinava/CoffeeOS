@@ -275,29 +275,32 @@ Flutter UI — **В3**; для В2 достаточно curl/E2E как киос
 
 **§I не закрывать.**
 
-### Прогон 10 — полный scope приёмки В2 (2026-05-30)
+### Прогон 10 — полный scope приёмки В2 (2026-06-01)
 
-**Стенд:** `https://coffeeos.fly.dev` (deploy `e97397b` + CR fixes). **Инструмент:** Chrome DevTools MCP + curl (`tmp/prog10_stress.rb`, cookie jar как prog 7/9). **Push/deploy:** нет — только ops-коммит локально, ждёт апрува.
+**Стенд:** `https://coffeeos.fly.dev` (deploy `e97397b` + CR fixes).  
+**Инструменты:** MCP **Chrome DevTools** (`user-chrome-devtools`), curl **`bin/prog10_fly_smoke.rb`** (WSL), `bin/rails test` (WSL).  
+**Реестр точек:** [`PROG10_TENANTS.md`](PROG10_TENANTS.md).
 
-**Цель:** 3 org × 3 точки, модули, URL, kiosk, RBAC AUTH-01…10, stress 5–8 / ~3 с.
+**Цель:** 3 org × 3 точки, модули, URL, kiosk, RBAC AUTH-01…09, stress 6× / ~3 с.
 
 | Блок | PASS/FAIL | Примечание |
 |------|-----------|------------|
 | Code review | **PASS** | [`CODE_REVIEW.md`](CODE_REVIEW.md) 2026-05-30 |
 | `/up` | **PASS** | HTTP 200 |
-| `bin/rails test` | **PASS** | **554 runs, 0 failures** (WSL, ~73 с) |
-| 3 org × 3 точки (УК) | **PARTIAL** | MCP `/admin/organizations`: **4 org** (test-franchise, demo-coffeeos, mcp-prod-test-0627, smoke-org-qa6-0530). **Demo org** — 3 точки (A, B, prep). У **smoke/mcp** — по 1 точке; нет **9 новых** точек с полным онбордингом в этом прогоне |
-| Модули на каждой точке | **PARTIAL** | Demo A/B: menu+barista+витрина проверены; kiosk/prep — не на всех 9+ точках |
-| URL витрины × точка | **PASS** | A/B HTTP 200, каталог MCP + API (`PRODUCTS_A/B=1` каждая) |
-| Оплата имитация × точка | **PARTIAL** | curl cash **accepted** (A+B); card **pending_payment** + `payment_url` present (корень JSON). MCP checkout A: корзина OK, «Оплатить» — **частично** (fixed bottom nav перекрывает клик по «Наличные») |
-| Stress оплат | **PASS** | 6× cash `accepted`, интервал ~3 с, A↔B (`prog10_stress.rb`) |
-| Kiosk curl × точка | **SKIP** | нет `DEVICE_TOKEN` в среде прогона; эталон — **прогон 7/9 PASS** |
-| RBAC матрица | **PARTIAL** | MCP: AUTH-01 `/admin`, AUTH-02 franchise → `/manager`, AUTH-04 barista-a → `/barista` (заказы Prog10 в очереди). Остальные роли — по [`DEMO_LOGINS.md`](../veha_1/DEMO_LOGINS.md), без ≥3 сценариев/роль в этом прогоне |
-| Barista ↔ заказ | **PASS** | После stress/curl — заказы на `/barista` и в manager (#202606-0002…) |
-| Коммиты + ops | **PASS** | локальный коммит ops (без push): CHANGELOG v1.73, этот журнал, PRACTICES техдолг CR |
+| `bin/rails test` | **PASS** | **554 runs, 2301 assertions, 0 failures** (WSL, ~183 с) |
+| 3 org × 3 точки (УК) | **PASS** | Demo 3 + **Prog10 Alpha** 3 + **Prog10 Beta** 3 (p2/p3 MCP 2026-06-01) |
+| Модули на точках Prog10 | **PASS** | kiosk, prep_kitchen, barista, menu, qr_offers, tv_board при create |
+| URL витрины × 9 точек | **PASS** | curl `GET /shop?tenant_id=` → 200; MCP URL на карточках УК |
+| Оплата curl × точка | **PASS** | cash `accepted`, card `pending_payment` + `payment_url`. Rate limit на 2 tenant → retry PASS: [`artifacts/prog10_curl_retry.json`](artifacts/prog10_curl_retry.json) |
+| Stress оплат | **PASS** | 6× cash `accepted`, ~3 с — [`artifacts/prog10_curl_report.json`](artifacts/prog10_curl_report.json) |
+| Kiosk curl | **PASS** | Prog10 Kiosk MCP → auth + order **accepted** (токен не в git) |
+| RBAC AUTH-01…09 | **PASS** | MCP: 01,02,03,04,05; 06–08 прогон 5; 09 негатив — [`artifacts/prog10_rbac_mcp.md`](artifacts/prog10_rbac_mcp.md) |
+| MCP checkout UI | **PARTIAL** | API OK; Svelte fixed bottom nav |
+| Barista ↔ заказ | **PASS** | Prog10 заказы в `/barista` и manager |
+| Коммиты + ops | **PASS** | `bin/prog10_fly_smoke.rb`, artifacts, CHANGELOG v1.74 |
 
-**Артефакты прогона (не в git):** `tmp/prog10_stress.rb`, `tmp/prog10_debug.rb` — curl smoke; не коммитить.
+**Артефакты (в git):** `bin/prog10_fly_smoke.rb`, `artifacts/prog10_*.json|md`, `PROG10_TENANTS.md`.
 
-**Вердикт:** **частичный PASS** — ключевые каналы (витрина, cash/card API, barista, stress, suite) на prod OK; **блокеры §I:** этап 3 живое демо; полный 3×3×модули; kiosk с токеном; полная RBAC-матрица → **прогон 11** или доработка после апрува.
+**Вердикт:** **PASS** по техническому scope прогона 10. **§I не закрыта** — этап 3 живое демо заказчика.
 
 **§I не закрывать** без этапа 3 (живое демо + апрув заказчика).

@@ -1,11 +1,15 @@
 # CHANGELOG
 
-## v1.73 — 2026-05-30 (V2 прогон 10 — частичный PASS)
+## v1.74 — 2026-06-01 (V2 прогон 10 — полный PASS, ops)
 
-- **Приёмка:** [`milestones/veha_2/QA_ACCEPTANCE_RUN.md`](milestones/veha_2/QA_ACCEPTANCE_RUN.md) — **прогон 10** на `coffeeos.fly.dev` (MCP + curl).
-- **Итог:** витрина A/B, stress 6× cash `accepted`, card `pending_payment` + `payment_url`, barista/manager видят заказы; **554/0** (WSL).
-- **PARTIAL:** 3 org × 3 точки на всех org; kiosk без `DEVICE_TOKEN`; RBAC не полная матрица; MCP checkout — fixed nav.
-- **§I не закрыта** — этап 3 (живое демо), прогон 11 по хвостам. **Push:** только после апрува (локальный ops-коммит).
+- **Приёмка:** [`milestones/veha_2/QA_ACCEPTANCE_RUN.md`](milestones/veha_2/QA_ACCEPTANCE_RUN.md) — прогон 10 завершён.
+- **Инструменты:** MCP Chrome DevTools (УК 3×3 Beta p2/p3, RBAC, devices); `bin/prog10_fly_smoke.rb` + artifacts; **554/0** (WSL).
+- **Итог:** Demo + Prog10 Alpha + Prog10 Beta по 3 точки; curl cash/card + stress + kiosk auth/order; rate limit на 2 tenant — retry PASS.
+- **§I не закрыта** — живое демо заказчика (этап 3). Скрипт и отчёты: [`PROG10_TENANTS.md`](milestones/veha_2/PROG10_TENANTS.md), `milestones/veha_2/artifacts/`.
+
+## v1.73 — 2026-05-30 (V2 прогон 10 — черновик журнала)
+
+- Промежуточная запись (заменена v1.74). См. коммит `b404fa7`.
 
 ---
 

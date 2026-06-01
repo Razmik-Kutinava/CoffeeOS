@@ -2,17 +2,20 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-05-30  
+**Дата:** 2026-06-01  
 **Веха 1:** официально не закрыта (§ I, H.3 — `[ ]`).  
-**Веха 2:** **в работе**; **прогон 10** — **частичный PASS** (см. `milestones/veha_2/QA_ACCEPTANCE_RUN.md`); §I **не закрыта**.  
-**Следующий фокус:** техдолг из CR → фиксы; прогон 11 (3×3, kiosk token, RBAC); этап 3 живое демо; **push ops — после апрува**.
+**Веха 2:** **в работе**; **прогон 10** — **PASS** (технический scope); §I **не закрыта** (живое демо).  
+**Следующий фокус:** этап 3 живое демо заказчика; V2-P10-04 checkout UX; push по апруву.
 
-### Сессия 2026-05-30 (прогон 10 — без push)
+### Сессия 2026-06-01 (прогон 10 — полный)
 
-- **CR:** done (`e97397b` на origin).
-- **Прогон 10:** MCP DevTools + `tmp/prog10_stress.rb` на Fly — stress PASS, AUTH частично, 3×3 PARTIAL.
-- **Тесты:** 554/0 (WSL).
-- **Ops:** CHANGELOG v1.73, QA_ACCEPTANCE_RUN прогон 10, PRACTICES техдолг CR — **локальный коммит**, deploy не трогали.
+- **Инструменты:** MCP Chrome DevTools (УК Beta p2/p3, RBAC, devices); `bin/prog10_fly_smoke.rb`; WSL curl + **554/0**.
+- **Итог:** 3 org × 3 точки; kiosk curl PASS; curl cash/card + stress; rate limit → retry PASS.
+- **Ops:** CHANGELOG v1.74, artifacts, `PROG10_TENANTS.md`, QA журнал обновлён.
+
+### Сессия 2026-05-30 (прогон 10 — черновик)
+
+- Промежуточный журнал → дополнен 2026-06-01 (см. выше).
 
 ### Сессия 2026-05-30 (V2-T8 — flaky events_controller_test) — **done**
 

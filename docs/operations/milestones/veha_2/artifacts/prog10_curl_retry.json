@@ -1,0 +1,49 @@
+{
+  "at": "2026-06-01T07:54:18Z",
+  "retry": [
+    {
+      "tenant_id": "d29fcf3a-da72-4a95-9683-9cfa71a2d865",
+      "cash": {
+        "ok": true,
+        "status": "accepted"
+      },
+      "card": {
+        "ok": true,
+        "status": "pending_payment"
+      }
+    },
+    {
+      "tenant_id": "03a4d457-e16f-4998-b764-69b3de083732",
+      "cash": {
+        "ok": true,
+        "status": "accepted"
+      },
+      "card": {
+        "ok": true,
+        "status": "pending_payment"
+      }
+    },
+    {
+      "tenant_id": "628a937b-f4e2-43b7-bd7f-9fa44f031460",
+      "cash": {
+        "ok": true,
+        "status": "accepted"
+      },
+      "card": {
+        "ok": true,
+        "status": "pending_payment"
+      }
+    },
+    {
+      "tenant_id": "b57c2a88-91a5-481e-b44f-29e29c77cfb5",
+      "cash": {
+        "ok": true,
+        "status": "accepted"
+      },
+      "card": {
+        "ok": true,
+        "status": "pending_payment"
+      }
+    }
+  ]
+}

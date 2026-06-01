@@ -1,0 +1,59 @@
+{
+  "at": "2026-06-01T07:54:07Z",
+  "results": [
+    {
+      "id": "AUTH-01",
+      "email": "uk@demo.coffeeos.local",
+      "path": "/login",
+      "pass": false
+    },
+    {
+      "id": "AUTH-02",
+      "email": "franchise@demo.coffeeos.local",
+      "path": "/login",
+      "pass": false
+    },
+    {
+      "id": "AUTH-03",
+      "email": "gm-a@demo.coffeeos.local",
+      "path": "/login",
+      "pass": false
+    },
+    {
+      "id": "AUTH-04",
+      "email": "barista-a@demo.coffeeos.local",
+      "path": "/login",
+      "pass": false
+    },
+    {
+      "id": "AUTH-05",
+      "email": "barista-b@demo.coffeeos.local",
+      "path": "/login",
+      "pass": false
+    },
+    {
+      "id": "AUTH-06",
+      "email": "shift-a@demo.coffeeos.local",
+      "path": "/login",
+      "pass": false
+    },
+    {
+      "id": "AUTH-07",
+      "email": "pk-manager@demo.coffeeos.local",
+      "path": "/login",
+      "pass": false
+    },
+    {
+      "id": "AUTH-08",
+      "email": "pk-worker@demo.coffeeos.local",
+      "path": "/login",
+      "pass": false
+    },
+    {
+      "id": "AUTH-09",
+      "email": "uk@/bad",
+      "path": "/login",
+      "pass": true
+    }
+  ]
+}
