@@ -7,25 +7,27 @@ module Platform
     class CatalogBootstrap
       def self.ensure_pts_for_tenant!(tenant)
         fallback_price = BigDecimal("1")
+        active_products = Product.where(is_active: true).to_a
+        return if active_products.empty?
 
-        Product.where(is_active: true).find_each do |product|
+        existing_by_product_id = ProductTenantSetting
+          .where(tenant_id: tenant.id, product_id: active_products.map(&:id))
+          .index_by(&:product_id)
+
+        active_products.each do |product|
+          next if existing_by_product_id[product.id]
+
           bp = product.base_price.presence&.to_d
           bp = fallback_price if bp.blank? || bp <= 0
 
-          pts = ProductTenantSetting.find_or_initialize_by(
+          ProductTenantSetting.create!(
             tenant_id: tenant.id,
-            product_id: product.id
-          )
-          next if pts.persisted?
-
-          pts.assign_attributes(
-            price: product.base_price.presence&.to_d || bp,
+            product_id: product.id,
+            price: bp,
             is_enabled: true,
             is_sold_out: false,
             sold_out_reason: nil
           )
-          pts.price = bp if pts.price.blank? || pts.price <= 0
-          pts.save!
         end
       end
     end

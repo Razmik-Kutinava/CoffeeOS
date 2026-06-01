@@ -32,6 +32,9 @@ module Platform
       end
 
       def build
+        flags = feature_flags_by_module
+        kiosk_on = flags["kiosk"]&.enabled == true
+
         {
           organization_name: tenant.organization&.name,
           slug: tenant.slug,
@@ -40,14 +43,14 @@ module Platform
           shop_path: shop_path,
           shop_public_url: public_url(shop_path),
           kiosk_path: kiosk_path,
-          kiosk_public_url: kiosk_enabled? ? public_url(kiosk_path) : nil,
-          kiosk_enabled: kiosk_enabled?,
+          kiosk_public_url: kiosk_on ? public_url(kiosk_path) : nil,
+          kiosk_enabled: kiosk_on,
           kiosk_ui_ready: KIOSK_UI_READY,
           login_url: public_url("/login"),
           manager_path: "/manager",
           barista_path: "/barista",
           prep_kitchen_path: "/prep_kitchen",
-          modules: module_items,
+          modules: module_items(flags),
           staff_items: staff_items,
           qr_hint: qr_hint
         }
@@ -79,13 +82,11 @@ module Platform
         "#{scheme}://#{host}#{path}"
       end
 
-      def kiosk_enabled?
-        FeatureFlag.find_by(tenant_id: tenant.id, module: "kiosk")&.enabled == true
+      def feature_flags_by_module
+        @feature_flags_by_module ||= FeatureFlag.where(tenant_id: tenant.id).index_by(&:module)
       end
 
-      def module_items
-        flags = FeatureFlag.where(tenant_id: tenant.id).index_by(&:module)
-
+      def module_items(flags = feature_flags_by_module)
         TenantModuleFlags.modules.map do |code|
           ff = flags[code]
           ModuleItem.new(

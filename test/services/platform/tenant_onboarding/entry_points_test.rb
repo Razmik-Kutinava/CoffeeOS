@@ -59,6 +59,23 @@ class Platform::TenantOnboarding::EntryPointsTest < ActiveSupport::TestCase
     assert_not gm.filled
   end
 
+  test "build loads feature flags in a single query" do
+    tenant = create_tenant!(organization: @org, slug: "ff-one-#{SecureRandom.hex(2)}")
+    TenantModuleFlags.sync!(tenant, { "menu" => "1", "kiosk" => "1", "barista" => "1" })
+
+    feature_flag_selects = 0
+    subscriber = ActiveSupport::Notifications.subscribe("sql.active_record") do |*, payload|
+      feature_flag_selects += 1 if payload[:sql].match?(/\bFROM\s+"feature_flags"/i)
+    end
+
+    data = Platform::TenantOnboarding::EntryPoints.for(tenant)
+    ActiveSupport::Notifications.unsubscribe(subscriber)
+
+    assert_equal 1, feature_flag_selects
+    assert data[:kiosk_enabled]
+    assert data[:modules].find { |m| m.code == "kiosk" }.enabled
+  end
+
   test "production kitchen staff checklist uses prep_kitchen roles" do
     tenant = create_tenant!(organization: @org, slug: "kitchen-ep-#{SecureRandom.hex(2)}")
     tenant.update!(type: "production_kitchen")

@@ -80,7 +80,7 @@
 | V2-T6 | Боевой терминал Т-Банка не включён | **done** *(2026-05-28)* | `1719235292309` на Fly, prod smoke PASS |
 | V2-T7 | QR режим B (без домена) | open | Режим A — когда будет домен; §I хвост |
 | V2-T8 | Flaky тест `events_controller_test.rb:208` (timing) | **done** *(2026-05-30)* | 200 с + `travel_to`; 23/0, ×5 PASS |
-| V2-CR-01 | `catalog_bootstrap.rb` N+1 PTS | **open** | [`CODE_REVIEW.md`](CODE_REVIEW.md) V2-001; perf при онбординге |
+| V2-CR-01 | `catalog_bootstrap.rb` N+1 PTS | **done** *(2026-06-01, блок 1)* | prefetch PTS + bulk create |
 | V2-CR-02 | `events_controller` без `CALLBACK_*` | **accepted** | prod: secrets в Fly; проверять на deploy |
 | V2-CR-03 | `browser_shop_session?` без CSRF verify | **open** | витрина Svelte; отдельная задача |
 | V2-CR-04 | `CacheCounter` MemoryStore | **open** | 1 pod Fly OK; multi-pod → Redis/Solid (В3) |

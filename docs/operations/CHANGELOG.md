@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v1.78 — 2026-06-01 (V2 прогон 10 — блок 1, CR-01 + V2-006)
+
+- **CatalogBootstrap:** prefetch `ProductTenantSetting` по tenant — без N+1 `find_or_initialize_by` в цикле.
+- **EntryPoints:** один запрос `FeatureFlag` на карточку точки (kiosk + modules).
+- **Тесты:** `entry_points_test` — assert 1 FF query; suite **555/0**.
+
 ## v1.77 — 2026-06-01 (V2 прогон 10 — блок 0, план добивки)
 
 - **Нет прогона 11:** добивка в рамках прогона 10, блоки 1–14 в `QA_ACCEPTANCE_RUN.md`.
