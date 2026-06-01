@@ -4,14 +4,15 @@
 
 **Дата:** 2026-06-01  
 **Веха 1:** официально не закрыта (§ I, H.3 — `[ ]`).  
-**Веха 2:** **в работе**; **прогон 10** — **PASS** (технический scope); §I **не закрыта** (живое демо).  
-**Следующий фокус:** этап 3 живое демо заказчика; V2-P10-04 checkout UX; push по апруву.
+**Веха 2:** **в работе**; **QA прогон 10** — **PASS** (2026-06-01); §I **не закрыта** (живое демо только в чеклисте §I).  
+**Следующий фокус:** §E фидбек, живое демо §I, postmortem.
 
-### Сессия 2026-06-01 (прогон 10 — полный)
+### Сессия 2026-06-01 (прогон 10b — QA закрыт)
 
-- **Инструменты:** MCP Chrome DevTools (УК Beta p2/p3, RBAC, devices); `bin/prog10_fly_smoke.rb`; WSL curl + **554/0**.
-- **Итог:** 3 org × 3 точки; kiosk curl PASS; curl cash/card + stress; rate limit → retry PASS.
-- **Ops:** CHANGELOG v1.74, artifacts, `PROG10_TENANTS.md`, QA журнал обновлён.
+- **9×** cash+card + **8×** stress: `prog10_curl_full.json` (`ORDER_DELAY_SEC=7`).
+- **9×** kiosk: `prog10_collect_kiosk_tokens.rb` + `prog10_kiosk_full.json`.
+- **RBAC** матрица, MCP checkout (scrollIntoView), barista #202606-*.
+- **QA_ACCEPTANCE_RUN** — PASS; живое демо убрано из scope прогона 10.
 
 ### Сессия 2026-05-30 (прогон 10 — черновик)
 

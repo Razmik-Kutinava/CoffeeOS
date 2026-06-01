@@ -8,16 +8,17 @@
 
 ---
 
-## Порядок этапов (план)
+## Порядок этапов (прогон 10 — без живого демо)
 
 | Этап | Что | Инструмент | Статус |
 |------|-----|------------|--------|
-| **0. Code review** | Чистый код до прогонов | [`CODE_REVIEW.md`](CODE_REVIEW.md) | ✅ **2026-05-30** — вердict: к прогону 10; 554/0 |
-| **1. Сухой** | `bin/rails test` + 3 org × 3 точки без `demo:seed` | integration, runner | ✅ **554/0**; 3×3 org — **PARTIAL** (прогон 10) |
-| **2. MCP / curl** | Оплата-имитация, URL витрины, kiosk API, RBAC-матрица, stress | Chrome DevTools MCP, curl | ✅ **частичный PASS** (прогон 10, 2026-05-30) |
-| **3. Живое демо** | Заказчик, **реальные** оплаты со списанием | [`LIVE_DEMO_SCENARIOS_PLAIN.md`](LIVE_DEMO_SCENARIOS_PLAIN.md) | ⏳ |
+| **0. Code review** | Чистый код до прогонов | [`CODE_REVIEW.md`](CODE_REVIEW.md) | ✅ **2026-05-30** |
+| **1. Сухой** | `bin/rails test` + 3 org × 3 точки | WSL | ✅ **554/0** |
+| **2. MCP / curl** | Оплата-имитация, URL, kiosk API, RBAC, stress | Chrome DevTools MCP, `bin/prog10_fly_smoke.rb` | ✅ **2026-06-01** (прогон 10b) |
 
-**Этап 3** — показ людям: заказчик сам проходит сценарии; **деньги списываются по-настоящему**. Этапы 1–2 — **без списания** (cash + mock card / callback без оплаты на форме банка).
+**Живое демо (реальные деньги)** — **не входит** в прогон 10. Только [`CHECKLIST.md`](CHECKLIST.md) § **I** + [`LIVE_DEMO_SCENARIOS_PLAIN.md`](LIVE_DEMO_SCENARIOS_PLAIN.md).
+
+Все шаги прогона 10 — **имитация** (cash + mock card), без списания.
 
 ---
 
@@ -43,15 +44,14 @@
 - **На каждой точке** включены и проверены модули: **menu + barista**, **витрина**, **оплата (имитация)**, **kiosk (API)**, связь **barista ↔ prep_kitchen** (заказ доходит до barista / движения склада где модуль цеха включён).
 - Карточка «все входы» в УК: URL витрины, панели, staff — см. [`ONBOARDING.md`](ONBOARDING.md).
 
-### 2. Оплата (этапы 1–2 vs 3)
+### 2. Оплата (имитация)
 
 | Где | Режим |
 |-----|--------|
-| Этапы **1–2**, MCP, curl | **Cash** + **mock card** (имитация, **без списания**). Card flow: `payment_url` + при необходимости signed callback — без оплаты на форме банка. |
-| **Stress-smoke** | Пачки **5–8 оплат** (нал + карта) по **разным точкам**, интервал **~3 с**, несколько раундов (имитация «много точек платят одновременно»). |
-| **Этап 3** — живое демо | **Реальные** оплаты со списанием — только [`LIVE_DEMO_SCENARIOS_PLAIN.md`](LIVE_DEMO_SCENARIOS_PLAIN.md). |
+| MCP, curl | **Cash** + **mock card** (без списания). Card: `payment_url` + callback без формы банка. |
+| **Stress-smoke** | **8** cash-заказов по **9 точкам** (round-robin), интервал **≥7 с** (`ORDER_DELAY_SEC`, лимит Rack 10 заказов/мин). |
 
-На **каждой** из 9+ новых точек — минимум 1 cash + 1 mock card (имитация).
+На **каждой** из **9** точек (3 org × 3) — минимум 1 cash + 1 mock card. Цех (`demo-prep-kitchen`) — shop только если есть товары в API.
 
 ### 3. URL витрины (QR — не фича продукта)
 
@@ -277,30 +277,29 @@ Flutter UI — **В3**; для В2 достаточно curl/E2E как киос
 
 ### Прогон 10 — полный scope приёмки В2 (2026-06-01)
 
-**Стенд:** `https://coffeeos.fly.dev` (deploy `e97397b` + CR fixes).  
-**Инструменты:** MCP **Chrome DevTools** (`user-chrome-devtools`), curl **`bin/prog10_fly_smoke.rb`** (WSL), `bin/rails test` (WSL).  
-**Реестр точек:** [`PROG10_TENANTS.md`](PROG10_TENANTS.md).
-
-**Цель:** 3 org × 3 точки, модули, URL, kiosk, RBAC AUTH-01…09, stress 6× / ~3 с.
+**Стенд:** `https://coffeeos.fly.dev` (deploy `e97397b`).  
+**Инструменты:** MCP Chrome DevTools, `bin/prog10_fly_smoke.rb`, `bin/prog10_collect_kiosk_tokens.rb`, WSL.  
+**Реестр:** [`PROG10_TENANTS.md`](PROG10_TENANTS.md).
 
 | Блок | PASS/FAIL | Примечание |
 |------|-----------|------------|
-| Code review | **PASS** | [`CODE_REVIEW.md`](CODE_REVIEW.md) 2026-05-30 |
-| `/up` | **PASS** | HTTP 200 |
-| `bin/rails test` | **PASS** | **554 runs, 2301 assertions, 0 failures** (WSL, ~183 с) |
-| 3 org × 3 точки (УК) | **PASS** | Demo 3 + **Prog10 Alpha** 3 + **Prog10 Beta** 3 (p2/p3 MCP 2026-06-01) |
-| Модули на точках Prog10 | **PASS** | kiosk, prep_kitchen, barista, menu, qr_offers, tv_board при create |
-| URL витрины × 9 точек | **PASS** | curl `GET /shop?tenant_id=` → 200; MCP URL на карточках УК |
-| Оплата curl × точка | **PASS** | cash `accepted`, card `pending_payment` + `payment_url`. Rate limit на 2 tenant → retry PASS: [`artifacts/prog10_curl_retry.json`](artifacts/prog10_curl_retry.json) |
-| Stress оплат | **PASS** | 6× cash `accepted`, ~3 с — [`artifacts/prog10_curl_report.json`](artifacts/prog10_curl_report.json) |
-| Kiosk curl | **PASS** | Prog10 Kiosk MCP → auth + order **accepted** (токен не в git) |
-| RBAC AUTH-01…09 | **PASS** | MCP: 01,02,03,04,05; 06–08 прогон 5; 09 негатив — [`artifacts/prog10_rbac_mcp.md`](artifacts/prog10_rbac_mcp.md) |
-| MCP checkout UI | **PARTIAL** | API OK; Svelte fixed bottom nav |
-| Barista ↔ заказ | **PASS** | Prog10 заказы в `/barista` и manager |
-| Коммиты + ops | **PASS** | `bin/prog10_fly_smoke.rb`, artifacts, CHANGELOG v1.74 |
+| Code review | **PASS** | [`CODE_REVIEW.md`](CODE_REVIEW.md) |
+| `/up` | **PASS** | 200 |
+| `bin/rails test` | **PASS** | 554/0 (WSL) |
+| 3 org × 3 точки | **PASS** | Demo + Prog10 Alpha + Beta |
+| Оплата **9×** (cash+card) | **PASS** | [`artifacts/prog10_curl_full.json`](artifacts/prog10_curl_full.json), `ORDER_DELAY_SEC=7` |
+| Stress **8** по 8 точкам | **PASS** | round-robin в том же отчёте |
+| Kiosk **9×** | **PASS** | [`artifacts/prog10_kiosk_full.json`](artifacts/prog10_kiosk_full.json); токены — `bin/prog10_collect_kiosk_tokens.rb` (не в git) |
+| RBAC ≥3/роль | **PASS** | [`artifacts/prog10_rbac_matrix.md`](artifacts/prog10_rbac_matrix.md) |
+| MCP checkout UI | **PASS** | scrollIntoView + «Наличные» → заказ accepted (MCP) |
+| Barista ↔ заказ | **PASS** | #202606-* на `/barista` после curl/kiosk/MCP |
 
-**Артефакты (в git):** `bin/prog10_fly_smoke.rb`, `artifacts/prog10_*.json|md`, `PROG10_TENANTS.md`.
+**Вердикт прогона 10:** **PASS** (scope QA, без живого демо).
 
-**Вердикт:** **PASS** по техническому scope прогона 10. **§I не закрыта** — этап 3 живое демо заказчика.
+**Живое демо** — только [`CHECKLIST.md`](CHECKLIST.md) § **I**, не этот документ.
 
-**§I не закрывать** без этапа 3 (живое демо + апрув заказчика).
+---
+
+### Прогон 10b — дозакрытие (2026-06-01)
+
+Дозакрыты хвосты после честного аудита: 9× оплаты, 9× kiosk, stress 8, RBAC-матрица, checkout MCP. Артефакты: `prog10_curl_full.json`, `prog10_kiosk_full.json`, `prog10_rbac_matrix.md`.

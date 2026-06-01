@@ -1,9 +1,8 @@
 # Прогон 10 — реестр точек (Fly, 2026-06-01)
 
 **Стенд:** `https://coffeeos.fly.dev`  
-**Скрипт curl:** `ruby bin/prog10_fly_smoke.rb`  
-**Отчёт JSON:** [`artifacts/prog10_curl_report.json`](artifacts/prog10_curl_report.json)  
-**Retry (rate limit):** [`artifacts/prog10_curl_retry.json`](artifacts/prog10_curl_retry.json)
+**Скрипты:** `ruby bin/prog10_fly_smoke.rb` · `ruby bin/prog10_collect_kiosk_tokens.rb /tmp/prog10_kiosk_tokens.json`  
+**Отчёты:** [`artifacts/prog10_curl_full.json`](artifacts/prog10_curl_full.json) · [`artifacts/prog10_kiosk_full.json`](artifacts/prog10_kiosk_full.json)
 
 ## 3 org × 3 точки (MCP УК + demo seed)
 
@@ -15,14 +14,15 @@
 
 Org IDs (УК): Alpha `83a6d574-e0cd-411f-add9-a5d8a08451ec`; Beta `efc04caf-ca79-4f2a-a231-eb82f02d2787`.
 
-**Киоск (curl):** устройство «Prog10 Kiosk MCP» на Demo A — токен в manager/devices (не коммитить); curl `POST /kiosk/api/auth` → order **accepted** (см. отчёт).
+**Киоск:** по одному устройству «Prog10 Kiosk {slug}» на каждую из 9 точек — `bin/prog10_collect_kiosk_tokens.rb` (токены не в git).
 
-## Curl TENANTS (9 точек продаж + smoke QA6)
+## Запуск (9 точек)
 
 ```bash
-export TENANTS="2fdee1ac-4674-41ee-b89e-87b45643f789,655aaccb-004a-4bb9-a50a-ce618854dda3,1c064640-4301-4435-8ded-c92fb075e9cc,edf8a0a9-38e7-4049-b9c6-3e08c6c23a76,d29fcf3a-da72-4a95-9683-9cfa71a2d865,03a4d457-e16f-4998-b764-69b3de083732,628a937b-f4e2-43b7-bd7f-9fa44f031460,b57c2a88-91a5-481e-b44f-29e29c77cfb5,d8e287c5-5524-423c-8e5a-605570c69517"
-export DEVICE_TOKEN="<из manager/devices, Prog10 Kiosk MCP>"
-ruby bin/prog10_fly_smoke.rb
-```
+ORDER_DELAY_SEC=7 ruby bin/prog10_fly_smoke.rb
 
-Smoke org QA6: `d8e287c5-5524-423c-8e5a-605570c69517` (доп. точка, прогон 6).
+ruby bin/prog10_collect_kiosk_tokens.rb /tmp/prog10_kiosk_tokens.json
+KIOSK_TOKENS_FILE=/tmp/prog10_kiosk_tokens.json ORDER_DELAY_SEC=7 \
+  OUT=docs/operations/milestones/veha_2/artifacts/prog10_kiosk_full.json \
+  ruby bin/prog10_fly_smoke.rb
+```

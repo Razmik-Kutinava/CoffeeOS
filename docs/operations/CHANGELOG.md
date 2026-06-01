@@ -1,11 +1,15 @@
 # CHANGELOG
 
-## v1.74 — 2026-06-01 (V2 прогон 10 — полный PASS, ops)
+## v1.75 — 2026-06-01 (V2 прогон 10b — закрытие QA)
 
-- **Приёмка:** [`milestones/veha_2/QA_ACCEPTANCE_RUN.md`](milestones/veha_2/QA_ACCEPTANCE_RUN.md) — прогон 10 завершён.
-- **Инструменты:** MCP Chrome DevTools (УК 3×3 Beta p2/p3, RBAC, devices); `bin/prog10_fly_smoke.rb` + artifacts; **554/0** (WSL).
-- **Итог:** Demo + Prog10 Alpha + Prog10 Beta по 3 точки; curl cash/card + stress + kiosk auth/order; rate limit на 2 tenant — retry PASS.
-- **§I не закрыта** — живое демо заказчика (этап 3). Скрипт и отчёты: [`PROG10_TENANTS.md`](milestones/veha_2/PROG10_TENANTS.md), `milestones/veha_2/artifacts/`.
+- **QA:** прогон 10 **PASS** — 9× cash/card, 9× kiosk, stress 8, RBAC-матрица, MCP checkout.
+- **Скрипты:** `bin/prog10_fly_smoke.rb` (ORDER_DELAY_SEC), `bin/prog10_collect_kiosk_tokens.rb`.
+- **Артефакты:** `prog10_curl_full.json`, `prog10_kiosk_full.json`, `prog10_rbac_matrix.md`.
+- **Живое демо** вынесено из QA → только §I [`CHECKLIST.md`](milestones/veha_2/CHECKLIST.md).
+
+## v1.74 — 2026-06-01 (V2 прогон 10 — первый журнал)
+
+- Промежуточный PASS; дополнен в v1.75 / прогон 10b.
 
 ## v1.73 — 2026-05-30 (V2 прогон 10 — черновик журнала)
 

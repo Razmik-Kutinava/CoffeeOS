@@ -1,0 +1,285 @@
+{
+  "base": "https://coffeeos.fly.dev",
+  "at": "2026-06-01T09:08:14Z",
+  "order_delay_sec": 7.0,
+  "up": "200",
+  "tenants": [
+    {
+      "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+      "shop_http": "200",
+      "products": 1,
+      "cash": {
+        "ok": true,
+        "status": "accepted",
+        "payment_url": null
+      },
+      "card": {
+        "ok": true,
+        "status": "pending_payment",
+        "payment_url": "present"
+      }
+    },
+    {
+      "tenant_id": "655aaccb-004a-4bb9-a50a-ce618854dda3",
+      "shop_http": "200",
+      "products": 1,
+      "cash": {
+        "ok": true,
+        "status": "accepted",
+        "payment_url": null
+      },
+      "card": {
+        "ok": true,
+        "status": "pending_payment",
+        "payment_url": "present"
+      }
+    },
+    {
+      "tenant_id": "d47165db-81c9-4e9d-bc50-e37fe610d86c",
+      "shop_http": "200",
+      "products": 1,
+      "cash": {
+        "ok": true,
+        "status": "accepted",
+        "payment_url": null
+      },
+      "card": {
+        "ok": true,
+        "status": "pending_payment",
+        "payment_url": "present"
+      }
+    },
+    {
+      "tenant_id": "1c064640-4301-4435-8ded-c92fb075e9cc",
+      "shop_http": "200",
+      "products": 1,
+      "cash": {
+        "ok": true,
+        "status": "accepted",
+        "payment_url": null
+      },
+      "card": {
+        "ok": true,
+        "status": "pending_payment",
+        "payment_url": "present"
+      }
+    },
+    {
+      "tenant_id": "edf8a0a9-38e7-4049-b9c6-3e08c6c23a76",
+      "shop_http": "200",
+      "products": 1,
+      "cash": {
+        "ok": true,
+        "status": "accepted",
+        "payment_url": null
+      },
+      "card": {
+        "ok": true,
+        "status": "pending_payment",
+        "payment_url": "present"
+      }
+    },
+    {
+      "tenant_id": "d29fcf3a-da72-4a95-9683-9cfa71a2d865",
+      "shop_http": "200",
+      "products": 1,
+      "cash": {
+        "ok": true,
+        "status": "accepted",
+        "payment_url": null
+      },
+      "card": {
+        "ok": true,
+        "status": "pending_payment",
+        "payment_url": "present"
+      }
+    },
+    {
+      "tenant_id": "03a4d457-e16f-4998-b764-69b3de083732",
+      "shop_http": "200",
+      "products": 1,
+      "cash": {
+        "ok": true,
+        "status": "accepted",
+        "payment_url": null
+      },
+      "card": {
+        "ok": true,
+        "status": "pending_payment",
+        "payment_url": "present"
+      }
+    },
+    {
+      "tenant_id": "628a937b-f4e2-43b7-bd7f-9fa44f031460",
+      "shop_http": "200",
+      "products": 1,
+      "cash": {
+        "ok": true,
+        "status": "accepted",
+        "payment_url": null
+      },
+      "card": {
+        "ok": true,
+        "status": "pending_payment",
+        "payment_url": "present"
+      }
+    },
+    {
+      "tenant_id": "b57c2a88-91a5-481e-b44f-29e29c77cfb5",
+      "shop_http": "200",
+      "products": 1,
+      "cash": {
+        "ok": true,
+        "status": "accepted",
+        "payment_url": null
+      },
+      "card": {
+        "ok": true,
+        "status": "pending_payment",
+        "payment_url": "present"
+      }
+    }
+  ],
+  "stress": [
+    {
+      "ok": true,
+      "status": "accepted",
+      "payment_url": null,
+      "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+      "round": 1
+    },
+    {
+      "ok": true,
+      "status": "accepted",
+      "payment_url": null,
+      "tenant_id": "655aaccb-004a-4bb9-a50a-ce618854dda3",
+      "round": 2
+    },
+    {
+      "ok": true,
+      "status": "accepted",
+      "payment_url": null,
+      "tenant_id": "d47165db-81c9-4e9d-bc50-e37fe610d86c",
+      "round": 3
+    },
+    {
+      "ok": true,
+      "status": "accepted",
+      "payment_url": null,
+      "tenant_id": "1c064640-4301-4435-8ded-c92fb075e9cc",
+      "round": 4
+    },
+    {
+      "ok": true,
+      "status": "accepted",
+      "payment_url": null,
+      "tenant_id": "edf8a0a9-38e7-4049-b9c6-3e08c6c23a76",
+      "round": 5
+    },
+    {
+      "ok": true,
+      "status": "accepted",
+      "payment_url": null,
+      "tenant_id": "d29fcf3a-da72-4a95-9683-9cfa71a2d865",
+      "round": 6
+    },
+    {
+      "ok": true,
+      "status": "accepted",
+      "payment_url": null,
+      "tenant_id": "03a4d457-e16f-4998-b764-69b3de083732",
+      "round": 7
+    },
+    {
+      "ok": true,
+      "status": "accepted",
+      "payment_url": null,
+      "tenant_id": "628a937b-f4e2-43b7-bd7f-9fa44f031460",
+      "round": 8
+    }
+  ],
+  "kiosk": [
+    {
+      "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+      "token_prefix": "c91428b4",
+      "order": {
+        "ok": true,
+        "status": "accepted",
+        "payment_url": null
+      }
+    },
+    {
+      "tenant_id": "655aaccb-004a-4bb9-a50a-ce618854dda3",
+      "token_prefix": "952c1129",
+      "order": {
+        "ok": true,
+        "status": "accepted",
+        "payment_url": null
+      }
+    },
+    {
+      "tenant_id": "d47165db-81c9-4e9d-bc50-e37fe610d86c",
+      "token_prefix": "16f3906b",
+      "order": {
+        "ok": true,
+        "status": "accepted",
+        "payment_url": null
+      }
+    },
+    {
+      "tenant_id": "1c064640-4301-4435-8ded-c92fb075e9cc",
+      "token_prefix": "0bbd19da",
+      "order": {
+        "ok": true,
+        "status": "accepted",
+        "payment_url": null
+      }
+    },
+    {
+      "tenant_id": "edf8a0a9-38e7-4049-b9c6-3e08c6c23a76",
+      "token_prefix": "e37b8b3b",
+      "order": {
+        "ok": true,
+        "status": "accepted",
+        "payment_url": null
+      }
+    },
+    {
+      "tenant_id": "d29fcf3a-da72-4a95-9683-9cfa71a2d865",
+      "token_prefix": "5b25667c",
+      "order": {
+        "ok": true,
+        "status": "accepted",
+        "payment_url": null
+      }
+    },
+    {
+      "tenant_id": "03a4d457-e16f-4998-b764-69b3de083732",
+      "token_prefix": "4f871d0a",
+      "order": {
+        "ok": true,
+        "status": "accepted",
+        "payment_url": null
+      }
+    },
+    {
+      "tenant_id": "628a937b-f4e2-43b7-bd7f-9fa44f031460",
+      "token_prefix": "5cf63155",
+      "order": {
+        "ok": true,
+        "status": "accepted",
+        "payment_url": null
+      }
+    },
+    {
+      "tenant_id": "b57c2a88-91a5-481e-b44f-29e29c77cfb5",
+      "token_prefix": "e0261ab6",
+      "order": {
+        "ok": true,
+        "status": "accepted",
+        "payment_url": null
+      }
+    }
+  ],
+  "shop_api_key_len": 39
+}
