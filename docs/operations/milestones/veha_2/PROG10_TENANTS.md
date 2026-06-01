@@ -1,8 +1,8 @@
 # Прогон 10 — реестр точек (Fly, 2026-06-01)
 
 **Стенд:** `https://coffeeos.fly.dev`  
-**Скрипты:** `ruby bin/prog10_fly_smoke.rb` · `ruby bin/prog10_collect_kiosk_tokens.rb /tmp/prog10_kiosk_tokens.json`  
-**Отчёты:** [`artifacts/prog10_curl_full.json`](artifacts/prog10_curl_full.json) · [`artifacts/prog10_kiosk_full.json`](artifacts/prog10_kiosk_full.json)
+**Скрипты:** `prog10_fly_smoke.rb` · `prog10_collect_kiosk_tokens.rb` · `prog10_shop_urls_check.rb` · `prog10_stress_wave2.rb`  
+**Отчёты:** `prog10_curl_full.json` · `prog10_kiosk_cash_card.json` · `prog10_shop_urls.json` · `prog10_stress_wave2.json` · `prog10_staff_setup.json`
 
 ## 3 org × 3 точки (MCP УК + demo seed)
 

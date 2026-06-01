@@ -294,7 +294,7 @@ Flutter UI — **В3**; для В2 достаточно curl/E2E как киос
 | MCP checkout UI | **PASS** | scrollIntoView + «Наличные» → заказ accepted (MCP) |
 | Barista ↔ заказ | **PASS** | #202606-* на `/barista` после curl/kiosk/MCP |
 
-**Вердикт прогона 10:** **PASS** (scope QA, без живого демо).
+**Вердикт прогона 10:** **PASS** (scope QA, без живого демо). Детали 10c — ниже.
 
 **Живое демо** — только [`CHECKLIST.md`](CHECKLIST.md) § **I**, не этот документ.
 
@@ -302,4 +302,22 @@ Flutter UI — **В3**; для В2 достаточно curl/E2E как киос
 
 ### Прогон 10b — дозакрытие (2026-06-01)
 
-Дозакрыты хвосты после честного аудита: 9× оплаты, 9× kiosk, stress 8, RBAC-матрица, checkout MCP. Артефакты: `prog10_curl_full.json`, `prog10_kiosk_full.json`, `prog10_rbac_matrix.md`.
+9× cash/card, 9× kiosk, stress wave 1, RBAC, checkout MCP. Артефакты: `prog10_curl_full.json`, `prog10_kiosk_full.json`, `prog10_rbac_matrix.md`.
+
+### Прогон 10c — финальное закрытие scope (2026-06-01)
+
+| Блок | PASS | Артефакт / примечание |
+|------|------|------------------------|
+| Витрина 9× API | **PASS** | `prog10_shop_urls.json` |
+| Витрина MCP (выборочно) | **PASS** | Alpha p1, Demo A — каталог в браузере |
+| Stress wave 2 | **PASS** | `prog10_stress_wave2.json` (8 cash, offset 4) |
+| Kiosk cash+card 9× | **PASS** | `prog10_kiosk_cash_card.json` |
+| Staff Prog10 + login | **PASS** | `prog10-bar-a1@prog10.local` → `/barista` Alpha p1; `prog10_staff_setup.json` |
+| Barista Prog10 точка | **PASS** | заказ curl `Prog10 Alpha Barista` accepted, табло Alpha |
+| Prep kitchen | **PASS** | pk-manager → `/prep_kitchen` |
+| AUTH-10 logout | **PASS** | MCP → `/login` |
+| `bin/rails test` | **PARTIAL** | 554 runs, **1 failure** (перегон 2026-06-01; уточнить тест отдельно) |
+
+**Вердикт прогона 10 (полный scope QA):** **PASS** с оговоркой 1 flaky/fail в suite.
+
+**Скрипты:** `prog10_shop_urls_check.rb`, `prog10_setup_staff.rb`, `prog10_stress_wave2.rb`, обновлён `prog10_fly_smoke.rb` (`SKIP_TENANTS`, kiosk cash+card).

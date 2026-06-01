@@ -7,12 +7,14 @@
 **Веха 2:** **в работе**; **QA прогон 10** — **PASS** (2026-06-01); §I **не закрыта** (живое демо только в чеклисте §I).  
 **Следующий фокус:** §E фидбек, живое демо §I, postmortem.
 
-### Сессия 2026-06-01 (прогон 10b — QA закрыт)
+### Сессия 2026-06-01 (прогон 10c — финал QA)
 
-- **9×** cash+card + **8×** stress: `prog10_curl_full.json` (`ORDER_DELAY_SEC=7`).
-- **9×** kiosk: `prog10_collect_kiosk_tokens.rb` + `prog10_kiosk_full.json`.
-- **RBAC** матрица, MCP checkout (scrollIntoView), barista #202606-*.
-- **QA_ACCEPTANCE_RUN** — PASS; живое демо убрано из scope прогона 10.
+- Shop 9×, stress wave 2, kiosk cash+card 9×, Prog10 barista login, prep, logout.
+- Коммит `docs(ops): prog10c close full QA acceptance scope`.
+
+### Сессия 2026-06-01 (прогон 10b)
+
+- 9× cash/card, kiosk, RBAC, checkout MCP.
 
 ### Сессия 2026-05-30 (прогон 10 — черновик)
 

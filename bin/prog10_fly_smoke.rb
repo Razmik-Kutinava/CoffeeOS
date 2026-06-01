@@ -100,7 +100,10 @@ def kiosk_order(tenant_id, device_token, key)
   return { ok: false, error: "auth failed", auth: auth } unless auth["tenant_id"]
 
   pause
-  order_flow(tenant_id, key, "cash", "kiosk")
+  cash = order_flow(tenant_id, key, "cash", "kiosk-cash")
+  pause
+  card = order_flow(tenant_id, key, "card", "kiosk-card")
+  { cash: cash, card: card }
 end
 
 def load_kiosk_tokens
@@ -125,6 +128,7 @@ tenants = ENV.fetch("TENANTS", PROG10_NINE.join(",")).split(",").map(&:strip).re
 key = shop_key(tenants.first)
 report[:shop_api_key_len] = key.length
 
+unless ENV["SKIP_TENANTS"] == "1"
 tenants.each do |tid|
   code = curl_code("#{BASE}/shop?tenant_id=#{tid}")
   products_n = JSON.parse(curl("#{BASE}/shop/api/products",
@@ -142,12 +146,18 @@ tenants.each do |tid|
   }
 end
 
+end
+
+unless ENV["SKIP_STRESS"] == "1"
 stress_rounds = ENV.fetch("STRESS_ROUNDS", "8").to_i
+stress_offset = ENV.fetch("STRESS_OFFSET", "0").to_i
 stress_rounds.times do |i|
-  tid = tenants[i % tenants.length]
-  r = order_flow(tid, key, "cash", "stress#{i}")
-  report[:stress] << r.merge(tenant_id: tid, round: i + 1)
+  idx = (i + stress_offset) % tenants.length
+  tid = tenants[idx]
+  r = order_flow(tid, key, "cash", "stress#{stress_offset}-#{i}")
+  report[:stress] << r.merge(tenant_id: tid, round: i + 1, wave: stress_offset.zero? ? 1 : 2)
   pause
+end
 end
 
 kiosk_tokens = load_kiosk_tokens
@@ -168,6 +178,9 @@ sales_tenants = report[:tenants].reject { |t| t[:cash][:skipped] }
 failed = report[:up] != "200" ||
   sales_tenants.any? { |t| t[:shop_http] != "200" || !t[:cash][:ok] || !t[:card][:ok] } ||
   report[:stress].any? { |s| !s[:ok] } ||
-  (kiosk_tokens.any? && report[:kiosk].is_a?(Array) && report[:kiosk].any? { |k| !k.dig(:order, :ok) })
+  (kiosk_tokens.any? && report[:kiosk].is_a?(Array) && report[:kiosk].any? do |k|
+    o = k[:order]
+    !o.dig(:cash, :ok) || !o.dig(:card, :ok)
+  end)
 
 exit(failed ? 1 : 0)

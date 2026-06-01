@@ -1,0 +1,23 @@
+{
+  "at": "2026-06-01T10:20:00Z",
+  "password": "demo123456",
+  "points": [
+    {
+      "tenant_id": "1c064640-4301-4435-8ded-c92fb075e9cc",
+      "slug": "alpha-p1",
+      "staff_on_card": ["general_manager", "barista"],
+      "login_barista": {
+        "email": "prog10-bar-a1@prog10.local",
+        "path": "/barista",
+        "tenant": "Prog10 Alpha Point 1",
+        "pass": true
+      },
+      "address": "Москва, ул. Прогон 10, 1"
+    },
+    {
+      "tenant_id": "03a4d457-e16f-4998-b764-69b3de083732",
+      "slug": "beta-p1",
+      "note": "staff по карточке УК — проверить при расширении; demo staff на Beta через UK open_as_manager"
+    }
+  ]
+}

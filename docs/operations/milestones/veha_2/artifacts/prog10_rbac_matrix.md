@@ -14,6 +14,9 @@
 | barista B | barista-b@ | `/barista` | табло B | — | **PASS** |
 | prep_kitchen_manager | pk-manager@ | `/prep_kitchen` | дашборд цеха | движения/склад | **PASS** (прогон 5) |
 | prep_kitchen_worker | pk-worker@ | `/prep_kitchen` | просмотр | — | **PASS** (прогон 5) |
+| prog10 barista | prog10-bar-a1@prog10.local | `/barista` | точка Alpha p1 | заказы на табло | **PASS** (10c) |
+| prog10 GM | prog10-gm-a1@prog10.local | `/manager` | (карточка УК ✓) | — | **PASS** (карточка) |
+| AUTH-10 logout | любой | `/login` после «Выйти» | — | — | **PASS** (10c) |
 | негатив | uk@ + bad pwd | остаётся `/login` | — | — | **PASS** |
 
 **Barista ↔ заказ:** curl/kiosk/MCP checkout → заказы на `/barista` (Demo A). Цех — отдельный tenant `demo-prep-kitchen`; связь shop→barista на точке продаж **PASS**.

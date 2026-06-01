@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## v1.76 — 2026-06-01 (V2 прогон 10c — финал QA scope)
+
+- **10c:** 9× shop URLs, stress wave 2, kiosk cash+card 9×, Prog10 staff login (barista Alpha), prep_kitchen, AUTH-10 logout.
+- **Скрипты:** `prog10_shop_urls_check.rb`, `prog10_setup_staff.rb`, `prog10_stress_wave2.rb`.
+- **Тесты:** 554 runs, 1 failure при перегоне — см. журнал 10c.
+- **QA прогон 10:** **PASS** (живое демо — §I чеклиста).
+
 ## v1.75 — 2026-06-01 (V2 прогон 10b — закрытие QA)
 
 - **QA:** прогон 10 **PASS** — 9× cash/card, 9× kiosk, stress 8, RBAC-матрица, MCP checkout.

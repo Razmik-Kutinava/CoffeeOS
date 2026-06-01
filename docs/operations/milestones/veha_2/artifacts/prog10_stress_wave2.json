@@ -1,0 +1,79 @@
+{
+  "base": "https://coffeeos.fly.dev",
+  "at": "2026-06-01T10:11:02Z",
+  "order_delay_sec": 7.0,
+  "up": "200",
+  "tenants": [
+
+  ],
+  "stress": [
+    {
+      "ok": true,
+      "status": "accepted",
+      "payment_url": null,
+      "tenant_id": "edf8a0a9-38e7-4049-b9c6-3e08c6c23a76",
+      "round": 1,
+      "wave": 2
+    },
+    {
+      "ok": true,
+      "status": "accepted",
+      "payment_url": null,
+      "tenant_id": "d29fcf3a-da72-4a95-9683-9cfa71a2d865",
+      "round": 2,
+      "wave": 2
+    },
+    {
+      "ok": true,
+      "status": "accepted",
+      "payment_url": null,
+      "tenant_id": "03a4d457-e16f-4998-b764-69b3de083732",
+      "round": 3,
+      "wave": 2
+    },
+    {
+      "ok": true,
+      "status": "accepted",
+      "payment_url": null,
+      "tenant_id": "628a937b-f4e2-43b7-bd7f-9fa44f031460",
+      "round": 4,
+      "wave": 2
+    },
+    {
+      "ok": true,
+      "status": "accepted",
+      "payment_url": null,
+      "tenant_id": "b57c2a88-91a5-481e-b44f-29e29c77cfb5",
+      "round": 5,
+      "wave": 2
+    },
+    {
+      "ok": true,
+      "status": "accepted",
+      "payment_url": null,
+      "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+      "round": 6,
+      "wave": 2
+    },
+    {
+      "ok": true,
+      "status": "accepted",
+      "payment_url": null,
+      "tenant_id": "655aaccb-004a-4bb9-a50a-ce618854dda3",
+      "round": 7,
+      "wave": 2
+    },
+    {
+      "ok": true,
+      "status": "accepted",
+      "payment_url": null,
+      "tenant_id": "d47165db-81c9-4e9d-bc50-e37fe610d86c",
+      "round": 8,
+      "wave": 2
+    }
+  ],
+  "kiosk": {
+    "skip": "no KIOSK_TOKENS_FILE"
+  },
+  "shop_api_key_len": 39
+}
