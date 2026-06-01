@@ -2,8 +2,8 @@
 
 require "test_helper"
 
-class Shop::Api::AuthenticationTest < ActiveSupport::TestCase
-  class FakeController < ActionController::Base
+class Shop::Api::AuthenticationTest < ActionDispatch::IntegrationTest
+  class FakeController < ApplicationController
     include Shop::Api::Auth
 
     attr_accessor :rendered
@@ -16,6 +16,7 @@ class Shop::Api::AuthenticationTest < ActiveSupport::TestCase
   setup do
     @controller = FakeController.new
     @controller.request = ActionDispatch::TestRequest.create
+    @controller.response = ActionDispatch::TestResponse.new
     @old_key = ENV["SHOP_API_KEY"]
     ENV["SHOP_API_KEY"] = "test-shop-api-key"
   end
@@ -42,11 +43,25 @@ class Shop::Api::AuthenticationTest < ActiveSupport::TestCase
     assert_nil @controller.rendered
   end
 
-  test "browser shop session with csrf and referer passes without api key" do
-    @controller.request.headers["X-CSRF-Token"] = "tok"
-    @controller.request.headers["HTTP_REFERER"] = "http://example.com/shop?tenant_id=abc"
-    @controller.request.host = "example.com"
+  test "browser shop session with valid csrf and referer passes without api key" do
+    token = @controller.send(:form_authenticity_token)
+    @controller.request.headers["X-CSRF-Token"] = token
+    @controller.request.headers["HTTP_REFERER"] = "#{@controller.request.base_url}/shop?tenant_id=abc"
     @controller.send(:authenticate_shop_api!)
     assert_nil @controller.rendered
+  end
+
+  test "browser shop session with forged csrf token is rejected" do
+    @controller.request.headers["X-CSRF-Token"] = "forged-token"
+    @controller.request.headers["HTTP_REFERER"] = "#{@controller.request.base_url}/shop?tenant_id=abc"
+    @controller.send(:authenticate_shop_api!)
+    assert_equal :unauthorized, @controller.rendered[:status]
+  end
+
+  test "browser shop session without referer is rejected" do
+    token = @controller.send(:form_authenticity_token)
+    @controller.request.headers["X-CSRF-Token"] = token
+    @controller.send(:authenticate_shop_api!)
+    assert_equal :unauthorized, @controller.rendered[:status]
   end
 end

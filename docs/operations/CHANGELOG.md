@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v1.79 — 2026-06-01 (V2 прогон 10 — блок 2, shop CSRF + order privacy)
+
+- **Shop API:** `browser_shop_session?` — `valid_authenticity_token?` (V2-CR-03 / SEC-02).
+- **Orders#show:** только заказ текущего `shop_customer_id` в сессии (SEC-08).
+- **Тесты:** auth forged CSRF → 401; чужая сессия → 404 на show; suite **559/0**.
+
 ## v1.78 — 2026-06-01 (V2 прогон 10 — блок 1, CR-01 + V2-006)
 
 - **CatalogBootstrap:** prefetch `ProductTenantSetting` по tenant — без N+1 `find_or_initialize_by` в цикле.

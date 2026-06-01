@@ -22,6 +22,13 @@ module Shop
 
       def show
         order = Order.where(tenant_id: @shop_tenant.id, source: :mobile).includes(:order_items).find(params[:id])
+        unless order_visible_to_session_customer?(order)
+          Rails.logger.warn(
+            "[Shop::Order] Order #{order.id} not visible to customer #{session[:shop_customer_id].inspect}"
+          )
+          return render json: { error: "Order not found", status: 404 }, status: :not_found
+        end
+
         Rails.logger.info("[Shop::Order] Viewing order #{order.id} by customer #{session[:shop_customer_id]}")
         render json: order_json(order)
       rescue ActiveRecord::RecordNotFound
@@ -59,6 +66,11 @@ module Shop
       end
 
       private
+
+      def order_visible_to_session_customer?(order)
+        cid = session[:shop_customer_id]
+        cid.present? && order.customer_id.present? && order.customer_id.to_s == cid.to_s
+      end
 
       def order_params
         params.permit(:name, :phone, :comment, :is_car_pickup, :car_number, :promo_code, :payment_method, :pickup_time)

@@ -34,9 +34,15 @@ Rails.application.config.to_prepare do
         end
 
         def browser_shop_session?
-          csrf = request.headers["X-CSRF-Token"]
-          return false if csrf.blank?
+          return false unless shop_browser_referer?
 
+          token = request.headers["X-CSRF-Token"].presence
+          return false if token.blank?
+
+          valid_authenticity_token?(session, token)
+        end
+
+        def shop_browser_referer?
           referer = request.referer.to_s
           return false if referer.blank?
 
