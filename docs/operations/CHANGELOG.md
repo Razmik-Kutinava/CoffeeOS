@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## v1.98 — 2026-06-02 (gate: тесты 562/0, Fly ops — веха не закрыта)
+
+- Перегон `bin/rails test` WSL: **562/0**.
+- Fly deploy + verify secrets — владелец (агент без token).
+- SEC-07 (API key в meta витрины) — явная задача в CHECKLIST блок 4, backlog после В2.
+- **Веха 2 официально не закрыта.**
+
 ## v1.97 — 2026-06-02 (V2 прогон 10 — блок 14 postmortem)
 
 - Postmortem § «Прогон 10» в `POSTMORTEM_2026-05-28.md`.

@@ -220,16 +220,16 @@
 
 ---
 
-### Блок 4 — Код: ops *(⚠ 2026-06-02, тесты 559/0)*
+### Блок 4 — Код: ops *(⚠ 2026-06-02)*
 
 - [x] V2-CR-02 — manual-check `CALLBACK_SHARED_SECRET` + `CALLBACK_SHARED_TOKEN` на Fly *(auto flyctl не было)*
-- [ ] SEC-07 — API key в meta витрины → backlog (демо-стенд)
+- [ ] **SEC-07** — убрать `shop-api-key` из `<meta>` витрины (`app/views/shop/shop.html.erb`). **Источник:** [`CODE_REVIEW.md`](CODE_REVIEW.md) SEC-07 · [`PRACTICES.md`](PRACTICES.md) V2-SEC-07. **Когда:** после В2 / перед боевым доменом (не блокер demo Fly). **Статус:** backlog, задача не снимается до PR.
 
 ---
 
-### Блок 5 — Гейт кода *(2026-06-02, 559/0)*
+### Блок 5 — Гейт кода *(2026-06-02, перегон 562/0)*
 
-- [x] Полный `bin/rails test` WSL — **559/0**
+- [x] Полный `bin/rails test` WSL — **562/0** *(2026-06-02, gate после блоков 14)*
 - [x] Синхрон `PRACTICES.md` / `CODE_REVIEW.md` (статусы CR)
 
 ---

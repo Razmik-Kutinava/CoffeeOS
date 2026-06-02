@@ -12,9 +12,17 @@
 | Сейчас | Дальше |
 |--------|--------|
 | Блоки **0–14** ✅ (прогон 10 ops) | **Апрув 14** → §E / §I |
-| Хвосты кода | V2-P10-08, SEC-07, PREP-MULTI → backlog |
+| Gate **562/0** WSL *(2026-06-02)* | Fly deploy + secrets — **владелец** (`flyctl auth login`) |
+| Хвосты кода | **SEC-07** (блок 4), V2-P10-08, PREP-MULTI |
 
 **Ops на блок:** `SESSION_STATE` + коммит всегда; `PRACTICES` (CR); `QA_ACCEPTANCE_RUN` + `artifacts/` (QA); `CHANGELOG` если заметно; `CHECKLIST` `[x]` только по факту.
+
+### Сессия 2026-06-02 (gate: тесты + Fly ops)
+
+- **`bin/rails test`:** **562 runs, 0 failures** (WSL).
+- **Fly deploy / secrets:** не выполнено агентом (нет `flyctl` token). Владелец: `flyctl auth login` → `fly secrets list -a coffeeos` (нужны `CALLBACK_SHARED_SECRET`, `CALLBACK_SHARED_TOKEN`) → `fly deploy`.
+- **Веха 2 не закрыта** — только gate; §E / §I без изменений.
+- **SEC-07:** задача закреплена в CHECKLIST блок 4 + PRACTICES V2-SEC-07.
 
 ### Сессия 2026-06-02 (прогон 10 — блок 14 postmortem)
 
