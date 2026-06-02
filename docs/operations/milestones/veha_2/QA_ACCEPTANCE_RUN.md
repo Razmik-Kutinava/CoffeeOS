@@ -49,8 +49,8 @@
 | **9** | Kiosk→barista ×9 (curl+MCP) | ✅ **2026-06-02** — cash+card curl, MCP 9/9; апрув заказчика |
 | **10** | Витрина MCP 5 точек + SHP-09 | ✅ **2026-06-02** — cash+card+SHP-03/05; **ждём апрув → блок 3 → блок 11** |
 | **11** | CON-02…06 | ✅ **2026-06-02** — `prog10_connectivity.json`; апрув заказчика |
-| **12** | Barista↔цех e2e (demo prep + Prog10 prep) | ✅ **2026-06-02** — `prog10_warehouse_block12.json`; V2-BACKLOG-PREP-MULTI зафиксирован |
-| **13** | Перепроверка curl 9×, stress, RBAC, артефакты | `[ ]` |
+| **12** | Barista↔цех e2e (demo prep + Prog10 prep) | ✅ **2026-06-02** — апрув заказчика |
+| **13** | Перепроверка curl 9×, stress, RBAC, артефакты | ✅ **2026-06-02** — `prog10_final_block13.json`, index; ждём апрув → блок 14 |
 | **14** | Postmortem → `[x]` | `[ ]` |
 | *после* | §E фидбек → правки → апрув → SESSION_STATE/CHANGELOG §I | вне блоков |
 
@@ -357,3 +357,20 @@ Flutter UI — **В3**; для В2 достаточно curl/E2E как киос
 **Вердикт прогона 10 (полный scope QA):** **PASS** с оговоркой 1 flaky/fail в suite.
 
 **Скрипты:** `prog10_shop_urls_check.rb`, `prog10_setup_staff.rb`, `prog10_stress_wave2.rb`, обновлён `prog10_fly_smoke.rb` (`SKIP_TENANTS`, kiosk cash+card).
+
+### Прогон 10d — блок 13 финал (2026-06-02)
+
+| Хвост | PASS/SKIP | Артефакт |
+|-------|-----------|----------|
+| curl 9× shop cash+card | **PASS** | `prog10_final_block13.json` (9 tenants) |
+| stress wave 1 (8 rounds) | **PASS** | в `prog10_final_block13.json` |
+| stress wave 2 (offset 4) | **PASS** | `prog10_stress_wave2.json` |
+| kiosk 9× cash+card | **PASS** | `prog10_final_block13.json` |
+| RBAC matrix + isolation | **PASS** | `prog10_rbac_matrix.md`, `prog10_staff_isolation.json` |
+| артефакты index | **PASS** | `prog10_final_index.json` |
+| живое демо / §I | **SKIP** | вне scope прогона 10 |
+| V2-P10-08 source=kiosk | **SKIP** | после блоков 1–14 |
+| SEC-07 shop meta key | **SKIP** | backlog после В2 |
+| общий цех на N точек | **SKIP** | `V2-BACKLOG-PREP-MULTI` → Веха 3 |
+
+**Вердикт блока 13:** **PASS**.

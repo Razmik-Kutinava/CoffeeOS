@@ -312,17 +312,25 @@
 
 ---
 
-### Блок 12 — QA: Склад
+### Блок 12 — QA: Склад *(2026-06-02, закрыт)*
 
-- [x] Barista ↔ цех e2e: demo prep + Prog10 prep *(2026-06-02, `prog10_warehouse_block12.json`)*
+- [x] Barista ↔ цех e2e: demo prep + Prog10 prep (`prog10_warehouse_block12.json`)
+
+*Апрув блока 12 — 2026-06-02.*
 
 ---
 
-### Блок 13 — QA: Финал прогона 10
+### Блок 13 — QA: Финал прогона 10 *(2026-06-02)*
 
-- [ ] curl 9×, stress, RBAC
-- [ ] артефакты `artifacts/`
-- [ ] `QA_ACCEPTANCE_RUN.md` + хвосты PASS/SKIP
+Артефакты: `prog10_final_block13.json` · `prog10_stress_wave2.json` · `prog10_final_index.json`
+
+- [x] curl **9×** cash+card + kiosk **9×** — `prog10_final_block13.json` (`ORDER_DELAY_SEC=5`)
+- [x] stress wave1 **8/8** + wave2 **8/8** — в final + `prog10_stress_wave2.json`
+- [x] RBAC — `prog10_rbac_matrix.md` + `prog10_staff_isolation.json` (блок 7)
+- [x] индекс артефактов `prog10_final_index.json`
+- [x] `QA_ACCEPTANCE_RUN.md` — хвосты PASS/SKIP (§ прогон 10d)
+
+*Ждём апрув блока 13 → блок 14.*
 
 ---
 

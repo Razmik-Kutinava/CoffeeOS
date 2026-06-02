@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## v1.96 — 2026-06-02 (V2 прогон 10 — блок 13 финал)
+
+- Перепрогон Fly: curl **9×**, stress **8+8**, kiosk **9×** — `prog10_final_block13.json`.
+- Индекс артефактов `prog10_final_index.json`; хвосты PASS/SKIP в QA §10d.
+
 ## v1.95 — 2026-06-02 (V2 прогон 10 — блок 12 склад)
 
 - Блок 12 закрыт: barista↔цех e2e (`prog10_warehouse_block12.json`).

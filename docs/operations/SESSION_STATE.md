@@ -11,10 +11,17 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| Блок **12** ✅ — склад e2e | **Блок 13** → финал прогона 10 |
+| Блок **13** ✅ — финал curl/stress/RBAC | **Апрув 13** → блок **14** |
 | Блок **0–10** + **3** QA готовы | Fly deploy — владелец |
 
 **Ops на блок:** `SESSION_STATE` + коммит всегда; `PRACTICES` (CR); `QA_ACCEPTANCE_RUN` + `artifacts/` (QA); `CHANGELOG` если заметно; `CHECKLIST` `[x]` только по факту.
+
+### Сессия 2026-06-02 (прогон 10 — блок 13 финал)
+
+- **Апрув блока 12** → перепрогон Fly: `prog10_final_block13.json` (9× cash+card, stress 8, kiosk 9×).
+- **Stress wave 2:** `prog10_stress_wave2.json` обновлён.
+- **Индекс:** `prog10_final_index.json`; QA хвосты PASS/SKIP в `QA_ACCEPTANCE_RUN` §10d.
+- **Следующий:** апрув блока 13 → блок **14** (postmortem).
 
 ### Сессия 2026-06-02 (прогон 10 — блок 12 склад)
 

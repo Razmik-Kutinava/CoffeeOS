@@ -1,7 +1,7 @@
 {
   "base": "https://coffeeos.fly.dev",
-  "at": "2026-06-01T10:11:02Z",
-  "order_delay_sec": 7.0,
+  "at": "2026-06-02T15:14:39Z",
+  "order_delay_sec": 5.0,
   "up": "200",
   "tenants": [
 
