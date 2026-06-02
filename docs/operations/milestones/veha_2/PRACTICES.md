@@ -92,6 +92,7 @@
 | V2-P10-03 | Прогон 10: RBAC AUTH-01…09 | **done** *(2026-06-01)* | MCP + регрессия прогон 5 |
 | V2-P10-04 | Shop checkout MCP: fixed bottom nav | **done** *(2026-06-01)* | scrollIntoView + клик «Наличные» PASS |
 | V2-P10-05 | Staff/RBAC изоляция 9 точек | **done** *(2026-06-02, блок 7)* | `prog10_staff_isolation.json`: own `200`, foreign `404` |
+| V2-P10-06 | ENT карточка УК (02/07/08) | **done** *(2026-06-02, блок 8)* | `prog10_ent_card_mcp.json` на demo-a |
 
 ---
 

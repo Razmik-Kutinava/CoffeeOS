@@ -1,0 +1,36 @@
+{
+  "at": "2026-06-02T12:30:00Z",
+  "base": "https://coffeeos.fly.dev",
+  "mcp_server": "user-puppeteer",
+  "tenant": {
+    "slug": "demo-a",
+    "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+    "name": "Demo Coffee Point A"
+  },
+  "uk": "uk@demo.coffeeos.local",
+  "results": [
+    {
+      "id": "ENT-02",
+      "page": "/admin/tenants/:id",
+      "pass": true,
+      "note": "Кнопка «Копировать» у витрины; onclick navigator.clipboard.writeText с URL shop?tenant_id=…"
+    },
+    {
+      "id": "ENT-07",
+      "page": "/admin/tenants/:id/edit",
+      "pass": true,
+      "note": "Partial entry_points_card: Входы и URL, модули, staff checklist, Создать staff →"
+    },
+    {
+      "id": "ENT-08",
+      "page": "/admin/tenants/:id → open_as_manager?to=staff",
+      "pass": true,
+      "note": "POST open_as_manager(to=staff) → /manager/staff"
+    }
+  ],
+  "summary": {
+    "pass": 3,
+    "total": 3,
+    "block8_ready_for_approval": true
+  }
+}

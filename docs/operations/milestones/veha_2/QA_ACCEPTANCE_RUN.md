@@ -44,8 +44,8 @@
 | **4** | CR-02 Fly callback secrets; SEC-07 backlog | ⚠ **2026-06-02** — тесты 559/0, manual secret-check (`CALLBACK_SHARED_SECRET`, `CALLBACK_SHARED_TOKEN`) |
 | **5** | Гейт тестов + PRACTICES/CODE_REVIEW sync | ✅ **2026-06-02** — 559/0 |
 | **6** | V2-T3 wizard + лист логинов org | ✅ **2026-06-02** — 561/0 |
-| **7** | Staff/RBAC Prog10 ×9 (STF-01…05) | ⚠ **2026-06-02** — curl 9/9; MCP **9/9** точек (`prog10_staff_mcp_9pt.json`): STF-01/02/04 на 9, **STF-03 создание staff ×9**; demo-prep barista-модуль ожидаемо недоступен (probe `GET /barista` не возвращает панель); **техготово, ждём апрув перед блоком 8** |
-| **8** | ENT-02, ENT-07, ENT-08 | `[ ]` |
+| **7** | Staff/RBAC Prog10 ×9 (STF-01…05) | ✅ **2026-06-02** — curl 9/9 + MCP 9/9 (`prog10_staff_mcp_9pt.json`); апрув заказчика |
+| **8** | ENT-02, ENT-07, ENT-08 | ⚠ **2026-06-02** — MCP 3/3 на demo-a (`prog10_ent_card_mcp.json`); **ждём апрув перед блоком 9** |
 | **9** | Kiosk→barista ×9 (curl+MCP) | `[ ]` |
 | **10** | Витрина MCP 5 точек + SHP-09 | `[ ]` |
 | **11** | CON-02…06 | `[ ]` |

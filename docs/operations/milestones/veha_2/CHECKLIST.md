@@ -175,3 +175,39 @@
 **Дата закрытия:** ____________  
 **Кто принял:** ____________  
 **Хвосты в В3:** Flutter (киоск/мобилка), offline (§G), касса на всех каналах (§F), refund (§H), Z-отчёт
+
+
+
+Блок 8 — QA: УК карточка точки *(MCP demo-a 2026-06-02, `prog10_ent_card_mcp.json`)*
+
+- [x] ENT-02 clipboard
+- [x] ENT-07 edit partial
+- [x] ENT-08 «Создать staff →»
+
+Блок 9 — QA: Kiosk → barista
+
+curl киоск 9 точек
+MCP: заказ виден на /barista ×9
+Блок 10 — QA: Витрина
+
+MCP 5 точек: меню, корзина, checkout
+SHP-09
+Блок 11 — QA: Связность
+
+CON-02…06 (панели, переходы, tenant)
+Блок 12 — QA: Склад
+
+Barista ↔ цех e2e: demo prep + Prog10 prep
+Блок 13 — QA: Финал прогона 10
+
+curl 9×, stress, RBAC
+артефакты artifacts/
+QA_ACCEPTANCE_RUN.md + хвосты PASS/SKIP
+Блок 14 — Доки
+
+Postmortem дописать → [x]
+После блоков 1–14 (не сейчас):
+§E фидбек заказчика → правки → апрув → SESSION_STATE + CHANGELOG → §I.
+
+В3 / не трогаем: Flutter, домен/QR, живое демо, живая оплата, invite пароль, offline/refund/Event Sourcing.
+
