@@ -41,8 +41,8 @@
 | **1** | CR-01, V2-006 + тесты | ✅ **2026-06-01** — 555/0 |
 | **2** | CR-03, SEC-08 + тесты shop | ✅ **2026-06-01** — 559/0 |
 | **3** | CR-05, CR-04 + тесты kiosk | ✅ **2026-06-02** — апрув заказчика |
-| **4** | CR-02 Fly callback secrets; SEC-07 backlog | ⚠ **2026-06-02** — тесты 559/0, manual secret-check (`CALLBACK_SHARED_SECRET`, `CALLBACK_SHARED_TOKEN`) |
-| **5** | Гейт тестов + PRACTICES/CODE_REVIEW sync | ✅ **2026-06-02** — 559/0 |
+| **4** | CR-02 Fly callback secrets; SEC-07 → В3 | ✅ **2026-06-02** — CR-02 manual; SEC-07 → `veha_3` V3-SEC-07 |
+| **5** | Гейт тестов + PRACTICES/CODE_REVIEW sync | ✅ **2026-06-02** — **562/0** |
 | **6** | V2-T3 wizard + лист логинов org | ✅ **2026-06-02** — 561/0 |
 | **7** | Staff/RBAC Prog10 ×9 (STF-01…05) | ✅ **2026-06-02** — curl 9/9 + MCP 9/9 (`prog10_staff_mcp_9pt.json`); апрув заказчика |
 | **8** | ENT-02, ENT-07, ENT-08 | ✅ **2026-06-02** — MCP 3/3 на demo-a (`prog10_ent_card_mcp.json`); апрув заказчика |
@@ -54,7 +54,120 @@
 | **14** | Postmortem → `[x]` | ✅ **2026-06-02** — `POSTMORTEM_2026-05-28.md` § Прогон 10; ждём апрув → §E/§I |
 | *после* | §E фидбек → правки → апрув → SESSION_STATE/CHANGELOG §I | вне блоков |
 
-**Ops на блок (не всё подряд):** всегда `SESSION_STATE.md` + коммит; код/CR → `PRACTICES.md`; QA/MCP → этот файл + `artifacts/`; `CHANGELOG.md` — если блок заметный; `CHECKLIST.md` `[x]` — только когда пункт реально закрыт.
+**Ops на блок:** `SESSION_STATE.md` + коммит; код/CR → `PRACTICES.md`; QA/MCP → этот файл + `artifacts/`; `CHANGELOG.md` — если заметно. Сводка вехи §A–§I — [`CHECKLIST.md`](CHECKLIST.md).
+
+---
+
+## Прогон 10 — блоки 0–14 (детальный чеклист)
+
+**В3 / не трогаем:** Flutter, домен/QR, живое демо, живая оплата, invite пароль, offline/refund/Event Sourcing.
+
+### Блок 0 — вход *(docs, 2026-06-01, коммит `1da0ca4`)*
+
+- [x] Прогон 10 = продолжение; **прогона 11 нет**
+- [x] Scope: без Flutter, живого демо, живой оплаты; MCP-витрина **5**, не 9
+- [x] Таблица блоков 0–14 в этом файле
+
+### Блок 1 — Код: perf + мелочи *(2026-06-01, `4621b63`, тесты 555/0)*
+
+- [x] V2-CR-01 — N+1 `catalog_bootstrap` (prefetch PTS)
+- [x] V2-006 — дубли FeatureFlag `entry_points`
+- [x] `bin/rails test` (onboarding + полный suite)
+
+### Блок 2 — Код: витрина *(2026-06-01, `a0ce6f6`, тесты 559/0)*
+
+- [x] V2-CR-03 — CSRF browser shop (`valid_authenticity_token?`)
+- [x] SEC-08 — `orders#show` только свой гость в сессии
+- [x] Тесты shop/cart/orders
+
+### Блок 3 — Код: kiosk + кэш *(2026-06-02, закрыт)*
+
+- [x] V2-CR-05 — kiosk tenant GUC (`with_kiosk_tenant_guc!`, тесты 7/0, Fly curl **9/9** — `prog10_kiosk_auth_fly_cr05.json`)
+- [x] V2-CR-04 — CacheCounter **wontfix** Fly 1 pod; при 2+ серверах → Redis (`PRACTICES`)
+- [x] Тесты kiosk — `test/controllers/kiosk/api/auth_controller_test.rb`
+
+*Апрув блока 3 — 2026-06-02.*
+
+### Блок 4 — Код: ops *(2026-06-02)*
+
+- [x] V2-CR-02 — manual-check `CALLBACK_SHARED_SECRET` + `CALLBACK_SHARED_TOKEN` на Fly *(auto flyctl не было)*
+- [x] **SEC-07** — **перенесено в В3** → [`veha_3/CHECKLIST.md`](../veha_3/CHECKLIST.md) § **E**, **V3-SEC-07**. На demo Fly meta key OK; fix перед боевым доменом.
+
+### Блок 5 — Гейт кода *(2026-06-02, перегон 562/0)*
+
+- [x] Полный `bin/rails test` WSL — **562/0**
+- [x] Синхрон `PRACTICES.md` / `CODE_REVIEW.md` (статусы CR)
+
+### Блок 6 — Продукт: staff *(2026-06-02, `cf7a2cf`, тесты 561/0)*
+
+- [x] V2-T3 — wizard «первая команда на точке» + `team_template`
+- [x] Лист логинов новой org — `STAFF_ACCESS.md`
+
+### Блок 7 — QA: Staff/RBAC Prog10 *(2026-06-02, апрув заказчика)*
+
+Артефакты: `prog10_staff_isolation.json` · `prog10_staff_mcp_9pt.json`
+
+- [x] curl 9/9 — изоляция: свой заказ `200`, чужой `404`; prep — barista `302` (ожидаемо)
+- [x] MCP STF-01/02 — open_as_manager + staff list (**9/9**)
+- [x] MCP STF-03 — создание barista в UI (**9/9**)
+- [x] MCP STF-04 — login barista → `/barista` *(demo-prep: barista недоступен — норма)*
+
+### Блок 8 — QA: УК карточка точки *(2026-06-02)*
+
+Артефакт: `prog10_ent02_clipboard.json` · `prog10_ent_card_mcp.json`
+
+- [x] ENT-02, ENT-07, ENT-08
+
+*Апрув блока 8 — 2026-06-02.*
+
+### Блок 9 — QA: Kiosk → barista *(2026-06-02)*
+
+Артефакты: `prog10_kiosk_barista.json` · `prog10_kiosk_barista_mcp.json` · `bin/prog10_kiosk_barista.rb`
+
+- [x] curl киоск 9× — auth + cash + mock card
+- [x] barista JSON/HTML + MCP ×9
+
+**Хвост (код):** `source=kiosk` — **V2-P10-08** в `PRACTICES.md`.
+
+*Апрув блока 9 — 2026-06-02.*
+
+### Блок 10 — QA: Витрина *(2026-06-02)*
+
+Точки: demo-a, demo-b, alpha-p1, alpha-p2, beta-p1. Артефакты: `prog10_shop_vitrina_*`, `prog10_shop_shp03*`.
+
+- [x] curl/API + MCP: cash, mock card, SHP-03/05, SHP-09
+
+*Апрув блока 10 — 2026-06-02.*
+
+### Блок 11 — QA: Связность *(2026-06-02)*
+
+Артефакты: `prog10_connectivity.json`, `prog10_connectivity_con02_fly.json`
+
+- [x] CON-01…06 (см. артефакт); backlog общий цех → `V2-BACKLOG-PREP-MULTI`
+
+*Апрув блока 11 — 2026-06-02.*
+
+### Блок 12 — QA: Склад *(2026-06-02)*
+
+- [x] `prog10_warehouse_block12.json`
+
+*Апрув блока 12 — 2026-06-02.*
+
+### Блок 13 — QA: Финал *(2026-06-02)*
+
+Артефакты: `prog10_final_block13.json`, `prog10_stress_wave2.json`, `prog10_final_index.json`
+
+- [x] curl 9×, stress 8+8, kiosk 9×, RBAC, index (§10d ниже)
+
+*Апрув блока 13 — 2026-06-02.*
+
+### Блок 14 — Доки *(2026-06-02)*
+
+- [x] Postmortem — [`POSTMORTEM_2026-05-28.md`](POSTMORTEM_2026-05-28.md) § «Прогон 10»
+
+*Ждём апрув блока 14 → §E / §I.*
+
+**После блоков 1–14:** §E → правки → апрув → SESSION_STATE/CHANGELOG → §I.
 
 ---
 
@@ -370,7 +483,7 @@ Flutter UI — **В3**; для В2 достаточно curl/E2E как киос
 | артефакты index | **PASS** | `prog10_final_index.json` |
 | живое демо / §I | **SKIP** | вне scope прогона 10 |
 | V2-P10-08 source=kiosk | **SKIP** | после блоков 1–14 |
-| SEC-07 shop meta key | **SKIP** | backlog после В2 |
+| SEC-07 shop meta key | **SKIP** | → В3 **V3-SEC-07** |
 | общий цех на N точек | **SKIP** | `V2-BACKLOG-PREP-MULTI` → Веха 3 |
 
 **Вердикт блока 13:** **PASS**.
@@ -380,6 +493,6 @@ Flutter UI — **В3**; для В2 достаточно curl/E2E как киос
 | Пункт | Статус |
 |-------|--------|
 | Postmortem § Прогон 10 | **PASS** — [`POSTMORTEM_2026-05-28.md`](POSTMORTEM_2026-05-28.md) |
-| CHECKLIST блоки 0–14 | **PASS** |
+| Детальный чеклист 0–14 | **PASS** | § выше в этом файле |
 
-**Вердикт блока 14:** **PASS**. Прогон 10 ops **завершён**; §I — отдельно.
+**Вердикт блока 14:** **PASS**. Прогон 10 ops **завершён**; §I в [`CHECKLIST.md`](CHECKLIST.md) — отдельно.
