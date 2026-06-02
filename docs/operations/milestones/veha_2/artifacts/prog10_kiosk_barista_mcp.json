@@ -1,0 +1,102 @@
+{
+  "at": "2026-06-02T12:41:26.337Z",
+  "base": "https://coffeeos.fly.dev",
+  "curl_baseline": "prog10_kiosk_barista.json (9/9)",
+  "mcp_server": "puppeteer (tmp/prog10_kiosk_barista_mcp.cjs)",
+  "points": [
+    {
+      "slug": "demo-a",
+      "barista_expected": true,
+      "barista_email": "barista-a@demo.coffeeos.local",
+      "order_id": "ef65752e-00ed-46ea-8f23-9b2fd91da9e8",
+      "mcp_login": "PASS",
+      "mcp_barista_url": "https://coffeeos.fly.dev/barista",
+      "mcp_order_on_board": true,
+      "pass": true
+    },
+    {
+      "slug": "demo-b",
+      "barista_expected": true,
+      "barista_email": "barista-b@demo.coffeeos.local",
+      "order_id": "c1df338f-2c9d-4393-b135-217eae55e3f9",
+      "mcp_login": "PASS",
+      "mcp_barista_url": "https://coffeeos.fly.dev/barista",
+      "mcp_order_on_board": true,
+      "pass": true
+    },
+    {
+      "slug": "demo-prep",
+      "barista_expected": false,
+      "barista_email": "mcp-stf03-demo-prep-06021510@prog10.local",
+      "order_id": "e1f0cb15-d1a0-428f-8a7a-939fe69adf15",
+      "mcp_login": "PASS",
+      "mcp_barista_url": "https://coffeeos.fly.dev/",
+      "mcp_order_on_board": false,
+      "pass": true
+    },
+    {
+      "slug": "alpha-p1",
+      "barista_expected": true,
+      "barista_email": "mcp-stf03-alpha-p1-06021250@prog10.local",
+      "order_id": "bb59f136-c527-4bf9-8e32-4c33e05e603f",
+      "mcp_login": "PASS",
+      "mcp_barista_url": "https://coffeeos.fly.dev/barista",
+      "mcp_order_on_board": true,
+      "pass": true
+    },
+    {
+      "slug": "alpha-p2",
+      "barista_expected": true,
+      "barista_email": "mcp-stf03-alpha-p2-06021250@prog10.local",
+      "order_id": "d33d0b2a-63f8-4613-8686-e576259e878c",
+      "mcp_login": "PASS",
+      "mcp_barista_url": "https://coffeeos.fly.dev/barista",
+      "mcp_order_on_board": true,
+      "pass": true
+    },
+    {
+      "slug": "alpha-p3",
+      "barista_expected": true,
+      "barista_email": "mcp-stf03-alpha-p3-06021510@prog10.local",
+      "order_id": "34614e52-d30f-446a-9943-ad8d6a29c850",
+      "mcp_login": "PASS",
+      "mcp_barista_url": "https://coffeeos.fly.dev/barista",
+      "mcp_order_on_board": true,
+      "pass": true
+    },
+    {
+      "slug": "beta-p1",
+      "barista_expected": true,
+      "barista_email": "mcp-stf03-beta-p1-06021250@prog10.local",
+      "order_id": "3061a949-f375-4abb-9d63-53717f7aa535",
+      "mcp_login": "PASS",
+      "mcp_barista_url": "https://coffeeos.fly.dev/barista",
+      "mcp_order_on_board": true,
+      "pass": true
+    },
+    {
+      "slug": "beta-p2",
+      "barista_expected": true,
+      "barista_email": "mcp-stf03-beta-p2-06021250@prog10.local",
+      "order_id": "09124236-c82a-411a-850b-c6296db40254",
+      "mcp_login": "PASS",
+      "mcp_barista_url": "https://coffeeos.fly.dev/barista",
+      "mcp_order_on_board": true,
+      "pass": true
+    },
+    {
+      "slug": "beta-p3",
+      "barista_expected": true,
+      "barista_email": "mcp-stf03-beta-p3-06021510@prog10.local",
+      "order_id": "5c732fe2-ef14-4c2c-9e07-519478f51264",
+      "mcp_login": "PASS",
+      "mcp_barista_url": "https://coffeeos.fly.dev/barista",
+      "mcp_order_on_board": true,
+      "pass": true
+    }
+  ],
+  "summary": {
+    "pass": 9,
+    "total": 9
+  }
+}

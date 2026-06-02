@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## v1.90 — 2026-06-02 (V2 прогон 10 — блок 10, витрина 5 точек)
+
+- curl **5/5:** меню, корзина, cash checkout, SHP-09 history API (`prog10_shop_vitrina_curl.json`).
+- MCP Puppeteer **5/5:** UI vitrina + история заказов (`prog10_shop_vitrina_mcp.json`).
+- Блок **9** ✅ + mock card (`prog10_kiosk_barista_card.json`); блок **11** — после апрува.
+
+## v1.89 — 2026-06-02 (V2 прогон 10 — блок 9, kiosk → barista ×9)
+
+- curl **9/9:** киоск auth + cash order `accepted` + заказ на табло barista (`prog10_kiosk_barista.json`, `bin/prog10_kiosk_barista.rb`).
+- MCP Puppeteer **9/9:** login barista → `/barista`, заказ на доске (`prog10_kiosk_barista_mcp.json`).
+- Блок **8** ✅ после апрува; блок **10** — после апрува.
+
 ## v1.88 — 2026-06-02 (V2 прогон 10 — ENT-02 clipboard verify)
 
 - ENT-02: реальная проверка буфера после «Копировать» + Ctrl+V (`prog10_ent02_clipboard.json`).

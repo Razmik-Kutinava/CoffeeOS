@@ -1,0 +1,132 @@
+{
+  "at": "2026-06-02T13:14:19Z",
+  "base": "https://coffeeos.fly.dev",
+  "note": "block 10: shop vitrina curl 5pt — menu/cart/checkout/SHP-09 history API",
+  "points": [
+    {
+      "slug": "demo-a",
+      "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+      "menu": {
+        "ok": true,
+        "products": 1,
+        "categories": 1
+      },
+      "cart": {
+        "ok": true,
+        "items": 1,
+        "total": 295.0
+      },
+      "checkout": {
+        "ok": true,
+        "order_id": "5a6424a6-0219-4845-b59b-b392d289a0bd",
+        "status": "accepted"
+      },
+      "shp09_history": {
+        "ok": true,
+        "count": 1,
+        "order_id": "5a6424a6-0219-4845-b59b-b392d289a0bd"
+      },
+      "pass": true
+    },
+    {
+      "slug": "demo-b",
+      "tenant_id": "655aaccb-004a-4bb9-a50a-ce618854dda3",
+      "menu": {
+        "ok": true,
+        "products": 1,
+        "categories": 1
+      },
+      "cart": {
+        "ok": true,
+        "items": 1,
+        "total": 305.0
+      },
+      "checkout": {
+        "ok": true,
+        "order_id": "d8da021e-df66-4736-a312-e1646f9a893e",
+        "status": "accepted"
+      },
+      "shp09_history": {
+        "ok": true,
+        "count": 1,
+        "order_id": "d8da021e-df66-4736-a312-e1646f9a893e"
+      },
+      "pass": true
+    },
+    {
+      "slug": "alpha-p1",
+      "tenant_id": "1c064640-4301-4435-8ded-c92fb075e9cc",
+      "menu": {
+        "ok": true,
+        "products": 1,
+        "categories": 1
+      },
+      "cart": {
+        "ok": true,
+        "items": 1,
+        "total": 295.0
+      },
+      "checkout": {
+        "ok": true,
+        "order_id": "5cef582c-fa30-4a4f-8a1b-e805366fe07e",
+        "status": "accepted"
+      },
+      "shp09_history": {
+        "ok": true,
+        "count": 1,
+        "order_id": "5cef582c-fa30-4a4f-8a1b-e805366fe07e"
+      },
+      "pass": true
+    },
+    {
+      "slug": "alpha-p2",
+      "tenant_id": "edf8a0a9-38e7-4049-b9c6-3e08c6c23a76",
+      "menu": {
+        "ok": true,
+        "products": 1,
+        "categories": 1
+      },
+      "cart": {
+        "ok": true,
+        "items": 1,
+        "total": 295.0
+      },
+      "checkout": {
+        "ok": true,
+        "order_id": "60687848-1ecb-4e6e-a31a-122c00168af0",
+        "status": "accepted"
+      },
+      "shp09_history": {
+        "ok": true,
+        "count": 1,
+        "order_id": "60687848-1ecb-4e6e-a31a-122c00168af0"
+      },
+      "pass": true
+    },
+    {
+      "slug": "beta-p1",
+      "tenant_id": "03a4d457-e16f-4998-b764-69b3de083732",
+      "menu": {
+        "ok": true,
+        "products": 1,
+        "categories": 1
+      },
+      "cart": {
+        "ok": true,
+        "items": 1,
+        "total": 295.0
+      },
+      "checkout": {
+        "ok": true,
+        "order_id": "dabd0410-c04c-4cee-9461-60dfbda96c1f",
+        "status": "accepted"
+      },
+      "shp09_history": {
+        "ok": true,
+        "count": 1,
+        "order_id": "dabd0410-c04c-4cee-9461-60dfbda96c1f"
+      },
+      "pass": true
+    }
+  ]
+}

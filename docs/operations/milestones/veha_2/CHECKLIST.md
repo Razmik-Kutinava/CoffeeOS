@@ -176,38 +176,145 @@
 **Кто принял:** ____________  
 **Хвосты в В3:** Flutter (киоск/мобилка), offline (§G), касса на всех каналах (§F), refund (§H), Z-отчёт
 
+---
 
+## Прогон 10 — блоки 0–14 (чеклист работы)
 
-Блок 8 — QA: УК карточка точки *(MCP demo-a 2026-06-02, `prog10_ent_card_mcp.json`)*
+Сводка статусов: [`QA_ACCEPTANCE_RUN.md`](QA_ACCEPTANCE_RUN.md) · вход агента: [`SESSION_STATE.md`](../../SESSION_STATE.md).
 
-- [x] ENT-02 clipboard
-- [x] ENT-07 edit partial
-- [x] ENT-08 «Создать staff →»
+**В3 / не трогаем:** Flutter, домен/QR, живое демо, живая оплата, invite пароль, offline/refund/Event Sourcing.
 
-Блок 9 — QA: Kiosk → barista
+---
 
-curl киоск 9 точек
-MCP: заказ виден на /barista ×9
-Блок 10 — QA: Витрина
+### Блок 0 — вход *(docs, 2026-06-01, коммит `1da0ca4`)*
 
-MCP 5 точек: меню, корзина, checkout
-SHP-09
-Блок 11 — QA: Связность
+- [x] Прогон 10 = продолжение; **прогона 11 нет**
+- [x] Scope: без Flutter, живого демо, живой оплаты; MCP-витрина **5**, не 9
+- [x] Таблица блоков 0–14 в `QA_ACCEPTANCE_RUN.md`
 
-CON-02…06 (панели, переходы, tenant)
-Блок 12 — QA: Склад
+---
 
-Barista ↔ цех e2e: demo prep + Prog10 prep
-Блок 13 — QA: Финал прогона 10
+### Блок 1 — Код: perf + мелочи *(2026-06-01, `4621b63`, тесты 555/0)*
 
-curl 9×, stress, RBAC
-артефакты artifacts/
-QA_ACCEPTANCE_RUN.md + хвосты PASS/SKIP
-Блок 14 — Доки
+- [x] V2-CR-01 — N+1 `catalog_bootstrap` (prefetch PTS)
+- [x] V2-006 — дубли FeatureFlag `entry_points`
+- [x] `bin/rails test` (onboarding + полный suite)
 
-Postmortem дописать → [x]
-После блоков 1–14 (не сейчас):
-§E фидбек заказчика → правки → апрув → SESSION_STATE + CHANGELOG → §I.
+---
 
-В3 / не трогаем: Flutter, домен/QR, живое демо, живая оплата, invite пароль, offline/refund/Event Sourcing.
+### Блок 2 — Код: витрина *(2026-06-01, `a0ce6f6`, тесты 559/0)*
 
+- [x] V2-CR-03 — CSRF browser shop (`valid_authenticity_token?`)
+- [x] SEC-08 — `orders#show` только свой гость в сессии
+- [x] Тесты shop/cart/orders
+
+---
+
+### Блок 3 — Код: kiosk + кэш
+
+- [ ] V2-CR-05 — kiosk tenant GUC
+- [ ] V2-CR-04 — CacheCounter (fix или wontfix в `PRACTICES`, 1 pod Fly)
+- [ ] Тесты kiosk
+
+---
+
+### Блок 4 — Код: ops *(⚠ 2026-06-02, тесты 559/0)*
+
+- [x] V2-CR-02 — manual-check `CALLBACK_SHARED_SECRET` + `CALLBACK_SHARED_TOKEN` на Fly *(auto flyctl не было)*
+- [ ] SEC-07 — API key в meta витрины → backlog (демо-стенд)
+
+---
+
+### Блок 5 — Гейт кода *(2026-06-02, 559/0)*
+
+- [x] Полный `bin/rails test` WSL — **559/0**
+- [x] Синхрон `PRACTICES.md` / `CODE_REVIEW.md` (статусы CR)
+
+---
+
+### Блок 6 — Продукт: staff *(2026-06-02, `cf7a2cf`, тесты 561/0)*
+
+- [x] V2-T3 — wizard «первая команда на точке» + `team_template`
+- [x] Лист логинов новой org — `STAFF_ACCESS.md`
+
+---
+
+### Блок 7 — QA: Staff/RBAC Prog10 *(2026-06-02, апрув заказчика)*
+
+Артефакты: `prog10_staff_isolation.json` (curl 9/9) · `prog10_staff_mcp_9pt.json` (MCP 9/9)
+
+- [x] curl 9/9 — изоляция: свой заказ `200`, чужой `404`; prep — barista `302` (ожидаемо)
+- [x] MCP STF-01/02 — open_as_manager + staff list (**9/9** точек)
+- [x] MCP STF-03 — создание barista в UI (**9/9** точек)
+- [x] MCP STF-04 — login новых barista → `/barista` на sales_point *(demo-prep: панель barista недоступна — норма)*
+
+---
+
+### Блок 8 — QA: УК карточка точки *(2026-06-02, `prog10_ent_card_mcp.json`)*
+
+Артефакт clipboard: `prog10_ent02_clipboard.json`
+
+- [x] ENT-02 — «Копировать» URL витрины (буфер + Ctrl+V на demo-a)
+- [x] ENT-07 — `/admin/tenants/:id/edit` — partial entry points
+- [x] ENT-08 — «Создать staff →» → `/manager/staff`
+
+*Апрув блока 8 — 2026-06-02.*
+
+---
+
+### Блок 9 — QA: Kiosk → barista *(2026-06-02, curl 9/9 + MCP 9/9)*
+
+Артефакты: `prog10_kiosk_barista.json` · `prog10_kiosk_barista_mcp.json` · скрипт `bin/prog10_kiosk_barista.rb`
+
+- [x] curl киоск 9 точек — auth + cash order `accepted`
+- [x] curl киоск 9 точек — auth + **mock card** (`PAYMENT=card`, `prog10_kiosk_barista_card.json`)
+- [x] barista JSON/HTML — заказ на табло (**8** sales + **demo-prep** без панели barista — норма)
+- [x] MCP Puppeteer — login barista → `/barista`, заказ на доске ×9
+
+**Хвост после блоков 1–14 (код):** заказы через киоск-API должны быть `source=kiosk`, не `mobile` — см. `PRACTICES.md` **V2-P10-08**.
+
+*Апрув блока 9 — 2026-06-02.*
+
+---
+
+### Блок 10 — QA: Витрина *(2026-06-02, curl 5/5 + MCP 5/5)*
+
+Точки: demo-a, demo-b, alpha-p1, alpha-p2, beta-p1.
+
+Артефакты: `prog10_shop_vitrina_curl.json` · `prog10_shop_vitrina_mcp.json` · `bin/prog10_shop_vitrina.rb`
+
+- [x] curl/API — меню, корзина, checkout (cash), SHP-09 history API
+- [x] MCP — меню → товар → корзина → checkout (наличные) → история заказов
+- [x] SHP-09 — заказ виден в «Заказы за сегодня»
+
+*Ждём апрув перед блоком 11.*
+
+---
+
+### Блок 11 — QA: Связность
+
+- [ ] CON-02…06 (панели, переходы, tenant)
+
+---
+
+### Блок 12 — QA: Склад
+
+- [ ] Barista ↔ цех e2e: demo prep + Prog10 prep
+
+---
+
+### Блок 13 — QA: Финал прогона 10
+
+- [ ] curl 9×, stress, RBAC
+- [ ] артефакты `artifacts/`
+- [ ] `QA_ACCEPTANCE_RUN.md` + хвосты PASS/SKIP
+
+---
+
+### Блок 14 — Доки
+
+- [ ] Postmortem дописать → `[x]`
+
+---
+
+**После блоков 1–14 (не сейчас):** §E фидбек заказчика → правки → апрув → SESSION_STATE + CHANGELOG → §I.

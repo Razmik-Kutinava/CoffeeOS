@@ -1,0 +1,67 @@
+{
+  "at": "2026-06-02T13:16:18.802Z",
+  "base": "https://coffeeos.fly.dev",
+  "mcp": "puppeteer tmp/prog10_shop_mcp.cjs",
+  "note": "block 10: vitrina UI 5pt menu→cart→checkout cash→orders history",
+  "points": [
+    {
+      "slug": "demo-a",
+      "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+      "menu": true,
+      "cart": true,
+      "checkout": true,
+      "shp09_history": true,
+      "order_id": "20f56dd8-5409-48d2-a299-06e8c4a91d3b",
+      "error": null,
+      "pass": true
+    },
+    {
+      "slug": "demo-b",
+      "tenant_id": "655aaccb-004a-4bb9-a50a-ce618854dda3",
+      "menu": true,
+      "cart": true,
+      "checkout": true,
+      "shp09_history": true,
+      "order_id": "16578761-f1e4-4d07-a0d2-994f1c9770a3",
+      "error": null,
+      "pass": true
+    },
+    {
+      "slug": "alpha-p1",
+      "tenant_id": "1c064640-4301-4435-8ded-c92fb075e9cc",
+      "menu": true,
+      "cart": true,
+      "checkout": true,
+      "shp09_history": true,
+      "order_id": "e7490e6c-4271-41a4-a83e-b5a68e466747",
+      "error": null,
+      "pass": true
+    },
+    {
+      "slug": "alpha-p2",
+      "tenant_id": "edf8a0a9-38e7-4049-b9c6-3e08c6c23a76",
+      "menu": true,
+      "cart": true,
+      "checkout": true,
+      "shp09_history": true,
+      "order_id": "d7c599f3-2b1c-4551-9a96-9a8e1754f83a",
+      "error": null,
+      "pass": true
+    },
+    {
+      "slug": "beta-p1",
+      "tenant_id": "03a4d457-e16f-4998-b764-69b3de083732",
+      "menu": true,
+      "cart": true,
+      "checkout": true,
+      "shp09_history": true,
+      "order_id": "055e21cf-575e-4cd4-a499-cda020c923fc",
+      "error": null,
+      "pass": true
+    }
+  ],
+  "summary": {
+    "pass": 5,
+    "total": 5
+  }
+}
