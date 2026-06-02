@@ -9,7 +9,7 @@
 #
 # Usage:
 #   ruby bin/prog10_staff_rbac_isolation.rb
-#   OUT=docs/operations/milestones/veha_2/artifacts/prog10_staff_isolation.json ruby bin/prog10_staff_rbac_isolation.rb
+#   OUT=docs/operations/milestones/veha_2/artifacts/prog10/staff-rbac/prog10_staff_isolation.json ruby bin/prog10_staff_rbac_isolation.rb
 
 require "json"
 require "open3"
@@ -17,7 +17,7 @@ require "securerandom"
 
 BASE = ENV.fetch("BASE", "https://coffeeos.fly.dev")
 PASSWORD = ENV.fetch("STAFF_PASSWORD", "demo123456")
-OUT = ENV.fetch("OUT", "docs/operations/milestones/veha_2/artifacts/prog10_staff_isolation.json")
+OUT = ENV.fetch("OUT", "docs/operations/milestones/veha_2/artifacts/prog10/staff-rbac/prog10_staff_isolation.json")
 
 POINTS = [
   { slug: "demo-a", tenant_id: "2fdee1ac-4674-41ee-b89e-87b45643f789", barista_expected: true },

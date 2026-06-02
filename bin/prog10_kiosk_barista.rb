@@ -5,7 +5,7 @@
 # Usage:
 #   ruby bin/prog10_collect_kiosk_tokens.rb /tmp/prog10_kiosk_tokens.json
 #   KIOSK_TOKENS_FILE=/tmp/prog10_kiosk_tokens.json ruby bin/prog10_kiosk_barista.rb
-#   OUT=docs/operations/milestones/veha_2/artifacts/prog10_kiosk_barista.json ruby bin/prog10_kiosk_barista.rb
+#   OUT=docs/operations/milestones/veha_2/artifacts/prog10/kiosk/prog10_kiosk_barista.json ruby bin/prog10_kiosk_barista.rb
 
 require "json"
 require "open3"
@@ -14,7 +14,7 @@ BASE = ENV.fetch("BASE", "https://coffeeos.fly.dev")
 PASSWORD = ENV.fetch("STAFF_PASSWORD", "demo123456")
 ORDER_DELAY = ENV.fetch("ORDER_DELAY_SEC", "7").to_f
 PAYMENT = ENV.fetch("PAYMENT", "cash") # cash | card
-_DEFAULT_OUT = "docs/operations/milestones/veha_2/artifacts/prog10_kiosk_barista"
+_DEFAULT_OUT = "docs/operations/milestones/veha_2/artifacts/prog10/kiosk/prog10_kiosk_barista"
 OUT = ENV.fetch("OUT") {
   PAYMENT == "card" ? "#{_DEFAULT_OUT}_card.json" : "#{_DEFAULT_OUT}.json"
 }

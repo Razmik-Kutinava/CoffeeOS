@@ -10,7 +10,7 @@ require "json"
 require "open3"
 
 BASE = ENV.fetch("BASE", "https://coffeeos.fly.dev")
-OUT = ENV.fetch("OUT", "docs/operations/milestones/veha_2/artifacts/prog10_kiosk_auth_fly_cr05.json")
+OUT = ENV.fetch("OUT", "docs/operations/milestones/veha_2/artifacts/prog10/kiosk/prog10_kiosk_auth_fly_cr05.json")
 
 POINTS = {
   "2fdee1ac-4674-41ee-b89e-87b45643f789" => "demo-a",

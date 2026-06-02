@@ -4,14 +4,14 @@
 # Блок 10: витрина — curl API (5 точек): меню, корзина, заказ cash, история (SHP-09 API).
 # Usage:
 #   ruby bin/prog10_shop_vitrina.rb
-#   OUT=docs/operations/milestones/veha_2/artifacts/prog10_shop_vitrina_curl.json ruby bin/prog10_shop_vitrina.rb
+#   OUT=docs/operations/milestones/veha_2/artifacts/prog10/shop/prog10_shop_vitrina_curl.json ruby bin/prog10_shop_vitrina.rb
 
 require "json"
 require "open3"
 
 BASE = ENV.fetch("BASE", "https://coffeeos.fly.dev")
 ORDER_DELAY = ENV.fetch("ORDER_DELAY_SEC", "5").to_f
-OUT = ENV.fetch("OUT", "docs/operations/milestones/veha_2/artifacts/prog10_shop_vitrina_curl.json")
+OUT = ENV.fetch("OUT", "docs/operations/milestones/veha_2/artifacts/prog10/shop/prog10_shop_vitrina_curl.json")
 
 # 5 точек прогона 10 (не 9): demo A/B + по 2 из Alpha/Beta
 POINTS = [

@@ -44,11 +44,11 @@
 | **4** | CR-02 Fly callback secrets; SEC-07 → В3 | ✅ **2026-06-02** — CR-02 manual; SEC-07 → `veha_3` V3-SEC-07 |
 | **5** | Гейт тестов + PRACTICES/CODE_REVIEW sync | ✅ **2026-06-02** — **562/0** |
 | **6** | V2-T3 wizard + лист логинов org | ✅ **2026-06-02** — 561/0 |
-| **7** | Staff/RBAC Prog10 ×9 (STF-01…05) | ✅ **2026-06-02** — curl 9/9 + MCP 9/9 (`prog10_staff_mcp_9pt.json`); апрув заказчика |
-| **8** | ENT-02, ENT-07, ENT-08 | ✅ **2026-06-02** — MCP 3/3 на demo-a (`prog10_ent_card_mcp.json`); апрув заказчика |
+| **7** | Staff/RBAC Prog10 ×9 (STF-01…05) | ✅ **2026-06-02** — curl 9/9 + MCP 9/9 (`prog10/staff-rbac/prog10_staff_mcp_9pt.json`); апрув заказчика |
+| **8** | ENT-02, ENT-07, ENT-08 | ✅ **2026-06-02** — MCP 3/3 на demo-a (`prog10/platform-ent/prog10_ent_card_mcp.json`); апрув заказчика |
 | **9** | Kiosk→barista ×9 (curl+MCP) | ✅ **2026-06-02** — cash+card curl, MCP 9/9; апрув заказчика |
 | **10** | Витрина MCP 5 точек + SHP-09 | ✅ **2026-06-02** — cash+card+SHP-03/05; **ждём апрув → блок 3 → блок 11** |
-| **11** | CON-02…06 | ✅ **2026-06-02** — `prog10_connectivity.json`; апрув заказчика |
+| **11** | CON-02…06 | ✅ **2026-06-02** — `prog10/_index/prog10_connectivity.json`; апрув заказчика |
 | **12** | Barista↔цех e2e (demo prep + Prog10 prep) | ✅ **2026-06-02** — апрув заказчика |
 | **13** | Перепроверка curl 9×, stress, RBAC, артефакты | ✅ **2026-06-02** — апрув заказчика |
 | **14** | Postmortem → `[x]` | ✅ **2026-06-02** — `POSTMORTEM_2026-05-28.md` § Прогон 10; ждём апрув → §E/§I |
@@ -82,7 +82,7 @@
 
 ### Блок 3 — Код: kiosk + кэш *(2026-06-02, закрыт)*
 
-- [x] V2-CR-05 — kiosk tenant GUC (`with_kiosk_tenant_guc!`, тесты 7/0, Fly curl **9/9** — `prog10_kiosk_auth_fly_cr05.json`)
+- [x] V2-CR-05 — kiosk tenant GUC (`with_kiosk_tenant_guc!`, тесты 7/0, Fly curl **9/9** — `prog10/kiosk/prog10_kiosk_auth_fly_cr05.json`)
 - [x] V2-CR-04 — CacheCounter **wontfix** Fly 1 pod; при 2+ серверах → Redis (`PRACTICES`)
 - [x] Тесты kiosk — `test/controllers/kiosk/api/auth_controller_test.rb`
 
@@ -105,7 +105,7 @@
 
 ### Блок 7 — QA: Staff/RBAC Prog10 *(2026-06-02, апрув заказчика)*
 
-Артефакты: `prog10_staff_isolation.json` · `prog10_staff_mcp_9pt.json`
+Артефакты: `prog10/staff-rbac/prog10_staff_isolation.json` · `prog10/staff-rbac/prog10_staff_mcp_9pt.json`
 
 - [x] curl 9/9 — изоляция: свой заказ `200`, чужой `404`; prep — barista `302` (ожидаемо)
 - [x] MCP STF-01/02 — open_as_manager + staff list (**9/9**)
@@ -114,7 +114,7 @@
 
 ### Блок 8 — QA: УК карточка точки *(2026-06-02)*
 
-Артефакт: `prog10_ent02_clipboard.json` · `prog10_ent_card_mcp.json`
+Артефакт: `prog10/platform-ent/prog10_ent02_clipboard.json` · `prog10/platform-ent/prog10_ent_card_mcp.json`
 
 - [x] ENT-02, ENT-07, ENT-08
 
@@ -122,7 +122,7 @@
 
 ### Блок 9 — QA: Kiosk → barista *(2026-06-02)*
 
-Артефакты: `prog10_kiosk_barista.json` · `prog10_kiosk_barista_mcp.json` · `bin/prog10_kiosk_barista.rb`
+Артефакты: `prog10/kiosk/prog10_kiosk_barista.json` · `prog10/kiosk/prog10_kiosk_barista_mcp.json` · `bin/prog10_kiosk_barista.rb`
 
 - [x] curl киоск 9× — auth + cash + mock card
 - [x] barista JSON/HTML + MCP ×9
@@ -141,7 +141,7 @@
 
 ### Блок 11 — QA: Связность *(2026-06-02)*
 
-Артефакты: `prog10_connectivity.json`, `prog10_connectivity_con02_fly.json`
+Артефакты: `prog10/_index/prog10_connectivity.json`, `prog10/connectivity/prog10_connectivity_con02_fly.json`
 
 - [x] CON-01…06 (см. артефакт); backlog общий цех → `V2-BACKLOG-PREP-MULTI`
 
@@ -149,13 +149,13 @@
 
 ### Блок 12 — QA: Склад *(2026-06-02)*
 
-- [x] `prog10_warehouse_block12.json`
+- [x] `prog10/warehouse/prog10_warehouse_block12.json`
 
 *Апрув блока 12 — 2026-06-02.*
 
 ### Блок 13 — QA: Финал *(2026-06-02)*
 
-Артефакты: `prog10_final_block13.json`, `prog10_stress_wave2.json`, `prog10_final_index.json`
+Артефакты: `prog10/_index/prog10_final_block13.json`, `prog10/smoke/prog10_stress_wave2.json`, `prog10/_index/prog10_final_index.json`
 
 - [x] curl 9×, stress 8+8, kiosk 9×, RBAC, index (§10d ниже)
 
@@ -436,10 +436,10 @@ Flutter UI — **В3**; для В2 достаточно curl/E2E как киос
 | `/up` | **PASS** | 200 |
 | `bin/rails test` | **PASS** | 554/0 (WSL) |
 | 3 org × 3 точки | **PASS** | Demo + Prog10 Alpha + Beta |
-| Оплата **9×** (cash+card) | **PASS** | [`artifacts/prog10_curl_full.json`](artifacts/prog10_curl_full.json), `ORDER_DELAY_SEC=7` |
+| Оплата **9×** (cash+card) | **PASS** | [`artifacts/prog10/smoke/prog10_curl_full.json`](artifacts/prog10/smoke/prog10_curl_full.json), `ORDER_DELAY_SEC=7` |
 | Stress **8** по 8 точкам | **PASS** | round-robin в том же отчёте |
-| Kiosk **9×** | **PASS** | [`artifacts/prog10_kiosk_full.json`](artifacts/prog10_kiosk_full.json); токены — `bin/prog10_collect_kiosk_tokens.rb` (не в git) |
-| RBAC ≥3/роль | **PASS** | [`artifacts/prog10_rbac_matrix.md`](artifacts/prog10_rbac_matrix.md) |
+| Kiosk **9×** | **PASS** | [`artifacts/prog10/smoke/prog10_kiosk_full.json`](artifacts/prog10/smoke/prog10_kiosk_full.json); токены — `bin/prog10_collect_kiosk_tokens.rb` (не в git) |
+| RBAC ≥3/роль | **PASS** | [`artifacts/prog10/staff-rbac/prog10_rbac_matrix.md`](artifacts/prog10/staff-rbac/prog10_rbac_matrix.md) |
 | MCP checkout UI | **PASS** | scrollIntoView + «Наличные» → заказ accepted (MCP) |
 | Barista ↔ заказ | **PASS** | #202606-* на `/barista` после curl/kiosk/MCP |
 
@@ -451,17 +451,17 @@ Flutter UI — **В3**; для В2 достаточно curl/E2E как киос
 
 ### Прогон 10b — дозакрытие (2026-06-01)
 
-9× cash/card, 9× kiosk, stress wave 1, RBAC, checkout MCP. Артефакты: `prog10_curl_full.json`, `prog10_kiosk_full.json`, `prog10_rbac_matrix.md`.
+9× cash/card, 9× kiosk, stress wave 1, RBAC, checkout MCP. Артефакты: `prog10/smoke/prog10_curl_full.json`, `prog10/smoke/prog10_kiosk_full.json`, `prog10/staff-rbac/prog10_rbac_matrix.md`.
 
 ### Прогон 10c — финальное закрытие scope (2026-06-01)
 
 | Блок | PASS | Артефакт / примечание |
 |------|------|------------------------|
-| Витрина 9× API | **PASS** | `prog10_shop_urls.json` |
+| Витрина 9× API | **PASS** | `prog10/smoke/prog10_shop_urls.json` |
 | Витрина MCP (выборочно) | **PASS** | Alpha p1, Demo A — каталог в браузере |
-| Stress wave 2 | **PASS** | `prog10_stress_wave2.json` (8 cash, offset 4) |
-| Kiosk cash+card 9× | **PASS** | `prog10_kiosk_cash_card.json` |
-| Staff Prog10 + login | **PASS** | `prog10-bar-a1@prog10.local` → `/barista` Alpha p1; `prog10_staff_setup.json` |
+| Stress wave 2 | **PASS** | `prog10/smoke/prog10_stress_wave2.json` (8 cash, offset 4) |
+| Kiosk cash+card 9× | **PASS** | `prog10/smoke/prog10_kiosk_cash_card.json` |
+| Staff Prog10 + login | **PASS** | `prog10-bar-a1@prog10.local` → `/barista` Alpha p1; `prog10/staff-rbac/prog10_staff_setup.json` |
 | Barista Prog10 точка | **PASS** | заказ curl `Prog10 Alpha Barista` accepted, табло Alpha |
 | Prep kitchen | **PASS** | pk-manager → `/prep_kitchen` |
 | AUTH-10 logout | **PASS** | MCP → `/login` |
@@ -475,12 +475,12 @@ Flutter UI — **В3**; для В2 достаточно curl/E2E как киос
 
 | Хвост | PASS/SKIP | Артефакт |
 |-------|-----------|----------|
-| curl 9× shop cash+card | **PASS** | `prog10_final_block13.json` (9 tenants) |
-| stress wave 1 (8 rounds) | **PASS** | в `prog10_final_block13.json` |
-| stress wave 2 (offset 4) | **PASS** | `prog10_stress_wave2.json` |
-| kiosk 9× cash+card | **PASS** | `prog10_final_block13.json` |
-| RBAC matrix + isolation | **PASS** | `prog10_rbac_matrix.md`, `prog10_staff_isolation.json` |
-| артефакты index | **PASS** | `prog10_final_index.json` |
+| curl 9× shop cash+card | **PASS** | `prog10/_index/prog10_final_block13.json` (9 tenants) |
+| stress wave 1 (8 rounds) | **PASS** | в `prog10/_index/prog10_final_block13.json` |
+| stress wave 2 (offset 4) | **PASS** | `prog10/smoke/prog10_stress_wave2.json` |
+| kiosk 9× cash+card | **PASS** | `prog10/_index/prog10_final_block13.json` |
+| RBAC matrix + isolation | **PASS** | `prog10/staff-rbac/prog10_rbac_matrix.md`, `prog10/staff-rbac/prog10_staff_isolation.json` |
+| артефакты index | **PASS** | `prog10/_index/prog10_final_index.json` |
 | живое демо / §I | **SKIP** | вне scope прогона 10 |
 | V2-P10-08 source=kiosk | **SKIP** | после блоков 1–14 |
 | SEC-07 shop meta key | **SKIP** | → В3 **V3-SEC-07** |

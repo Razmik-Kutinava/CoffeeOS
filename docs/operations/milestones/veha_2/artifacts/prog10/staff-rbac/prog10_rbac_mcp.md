@@ -14,6 +14,6 @@
 | AUTH-06 | shift-a@demo.coffeeos.local | `/manager` | **PASS** — регрессия прогон 5 (2026-05-28), sidebar урезан |
 | AUTH-07 | pk-manager@demo.coffeeos.local | `/prep_kitchen` | **PASS** — регрессия прогон 5 |
 | AUTH-08 | pk-worker@demo.coffeeos.local | `/prep_kitchen` | **PASS** — регрессия прогон 5 |
-| AUTH-09 | uk@ + wrong password | остаётся `/login` | **PASS** — HTTP-скрипт `prog10_rbac_report.json` (CSRF блокирует curl-login; негативный кейс без сессии OK) |
+| AUTH-09 | uk@ + wrong password | остаётся `/login` | **PASS** — HTTP-скрипт `prog10/staff-rbac/prog10_rbac_report.json` (CSRF блокирует curl-login; негативный кейс без сессии OK) |
 
 **Примечание:** curl без CSRF-токена не подходит для POST `/login` — RBAC на prod проверен через MCP (как прогоны 5/8b).

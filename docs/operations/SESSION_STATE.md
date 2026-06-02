@@ -11,11 +11,29 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| Блоки **0–14** ✅ (прогон 10 ops) | **Апрув 14** → §E / §I |
+| Артефакты прогона 10 **сгруппированы** под `veha_2/artifacts/prog10/` | **Апрув 14** → §E / §I |
+| Блоки **0–14** ✅ (прогон 10 ops) | PDF заказчика → `artifacts/demo-feedback/` (не в git пока) |
 | Gate **562/0** WSL *(2026-06-02)* | Fly deploy + secrets — **владелец** (`flyctl auth login`) |
 | Хвосты кода | V2-P10-08; **V3-SEC-07** (shop meta key); PREP-MULTI → В3 |
 
 **Ops на блок:** `SESSION_STATE` + коммит всегда; `PRACTICES` (CR); `QA_ACCEPTANCE_RUN` + `artifacts/` (QA); `CHANGELOG` если заметно; `CHECKLIST` `[x]` только по факту.
+
+**Артефакты (для агента в другом редакторе):** точка входа — [`milestones/veha_2/artifacts/README.md`](milestones/veha_2/artifacts/README.md). Прогон 10: `artifacts/prog10/{_index,smoke,kiosk,shop,staff-rbac,connectivity,platform-ent,warehouse}/`. Сводный индекс: `prog10/_index/prog10_final_index.json`. Скрипты `bin/prog10_*` пишут в эти подпапки (OUT обновлён). Старый плоский путь `artifacts/prog10_*.json` **удалён** — везде относительные ссылки `artifacts/prog10/...`.
+
+### Сессия 2026-06-02 (ops: реорганизация артефактов вехи 2)
+
+- **Зачем:** плоский каталог `veha_2/artifacts/prog10_*` был нечитаем для человека и агента; нужна группировка по смыслу блоков QA, без «одна папка = один файл».
+- **Сделано:**
+  - `artifacts/README.md` — оглавление вехи 2.
+  - `artifacts/demo-feedback/README.md` — заготовка под §E (PDF/скрины заказчика; цепочка с `veha_1/artifacts/`).
+  - `artifacts/prog10/README.md` — оглавление прогона 10.
+  - **7 подпапок:** `_index` (сводки, tenant_ids, final_index), `smoke`, `kiosk`, `shop`, `staff-rbac`, `connectivity`, `platform-ent`, `warehouse`.
+  - `git mv` всех JSON/MD артефактов прогона 10; `prog10_final_index.json` перенесён в `_index/` с путями относительно `prog10/`.
+  - Обновлены ссылки: `QA_ACCEPTANCE_RUN`, `PROG10_TENANTS`, `PRACTICES`, `POSTMORTEM`, `CHANGELOG`, `SESSION_STATE`.
+  - `bin/prog10_*` — дефолты `OUT` и пути к `tenant_ids.json`.
+- **Не в коммите:** PDF в корне `artifacts/` (untracked) — положить в `demo-feedback/` при §E.
+- **Push:** не делали (локальные коммиты).
+- **Следующий шаг по вехе:** апрув блока 14 → §E [`DEMO_FEEDBACK.md`](milestones/veha_2/DEMO_FEEDBACK.md) → §I.
 
 ### Сессия 2026-06-02 (gate: тесты + Fly ops)
 
@@ -32,68 +50,68 @@
 
 ### Сессия 2026-06-02 (прогон 10 — блок 13 финал)
 
-- **Апрув блока 12** → перепрогон Fly: `prog10_final_block13.json` (9× cash+card, stress 8, kiosk 9×).
-- **Stress wave 2:** `prog10_stress_wave2.json` обновлён.
-- **Индекс:** `prog10_final_index.json`; QA хвосты PASS/SKIP в `QA_ACCEPTANCE_RUN` §10d.
+- **Апрув блока 12** → перепрогон Fly: `prog10/_index/prog10_final_block13.json` (9× cash+card, stress 8, kiosk 9×).
+- **Stress wave 2:** `prog10/smoke/prog10_stress_wave2.json` обновлён.
+- **Индекс:** `prog10/_index/prog10_final_index.json`; QA хвосты PASS/SKIP в `QA_ACCEPTANCE_RUN` §10d.
 - **Следующий:** апрув блока 13 → блок **14** (postmortem).
 
 ### Сессия 2026-06-02 (прогон 10 — блок 12 склад)
 
 - **Апрув блока 11** от заказчика → старт блока 12.
 - Прогонены тесты склада/связности: `prep_kitchen_movements_test` + `onboarding_connectivity_test` = **6 runs, 50 assertions, 0 failures**.
-- Артефакт: `prog10_warehouse_block12.json` (barista PASS, prep movement PASS, foreign confirm blocked PASS).
+- Артефакт: `prog10/warehouse/prog10_warehouse_block12.json` (barista PASS, prep movement PASS, foreign confirm blocked PASS).
 - Зафиксировано: auto-link «точка → общий цех» в **V2-BACKLOG-PREP-MULTI** (после В2, Веха 3).
 - Следующий: блок **13** (curl 9×, stress, RBAC, артефакты).
 
 ### Сессия 2026-06-02 (прогон 10 — блок 11 CON-02…06)
 
 - **Апрув блока 3** от заказчика → старт блока 11.
-- **CON-02:** Fly demo-a/b разные PTS (`prog10_connectivity_con02_fly.json`); `tenant_isolation_test` 2/0.
-- **CON-03/04/06:** `onboarding_connectivity_test` 3/0; **CON-05:** `prog10_staff_isolation.json`.
+- **CON-02:** Fly demo-a/b разные PTS (`prog10/connectivity/prog10_connectivity_con02_fly.json`); `tenant_isolation_test` 2/0.
+- **CON-03/04/06:** `onboarding_connectivity_test` 3/0; **CON-05:** `prog10/staff-rbac/prog10_staff_isolation.json`.
 - **Backlog:** `V2-BACKLOG-PREP-MULTI` — общий цех на несколько точек после В2.
 - **Следующий:** апрув блока 11 → блок **12** (barista↔цех).
 
 ### Сессия 2026-06-02 (прогон 10 — блок 3 закрыт: CR-05 + CR-04)
 
-- **CR-05:** `with_kiosk_tenant_guc!`; тесты **7/0**; Fly `POST /kiosk/api/auth` **9/9** — `prog10_kiosk_auth_fly_cr05.json` (`bin/prog10_kiosk_auth_fly_verify.rb`).
+- **CR-05:** `with_kiosk_tenant_guc!`; тесты **7/0**; Fly `POST /kiosk/api/auth` **9/9** — `prog10/kiosk/prog10_kiosk_auth_fly_cr05.json` (`bin/prog10_kiosk_auth_fly_verify.rb`).
 - **CR-04:** **wontfix** на Fly 1 pod; при смене хостинга / 2+ инстансов → **Redis** — `PRACTICES`.
 - **Git:** push `develop` **23 коммита** → `d80b518`. **Fly deploy:** не выполнен (нет `flyctl auth`); curl на текущем Fly — PASS.
 - **Следующий:** апрув блока 3 → блок **11** (не начинать без апрува).
 
 ### Сессия 2026-06-02 (прогон 10 — блок 10 добивка: card + SHP-03)
 
-- **card curl 5/5** — `prog10_shop_vitrina_card_curl.json`; **card MCP 5/5** — редирект на оплату.
-- **SHP-03/05** — `/shop` без tenant_id: `prog10_shop_shp03.json`, `prog10_shop_shp03_mcp.json`.
+- **card curl 5/5** — `prog10/shop/prog10_shop_vitrina_card_curl.json`; **card MCP 5/5** — редирект на оплату.
+- **SHP-03/05** — `/shop` без tenant_id: `prog10/shop/prog10_shop_shp03.json`, `prog10/shop/prog10_shop_shp03_mcp.json`.
 - **Следующий:** апрув блока 10 → **блок 3** (CR-05 GUC). Блок 11 — не начинать без апрува.
 
 ### Сессия 2026-06-02 (прогон 10 — блок 10, витрина 5 точек)
 
-- **curl:** `bin/prog10_shop_vitrina.rb` — меню/корзина/checkout/история API — **5/5** (`prog10_shop_vitrina_curl.json`).
-- **MCP:** Puppeteer UI — каталог → корзина → наличные → SHP-09 — **5/5** (`prog10_shop_vitrina_mcp.json`).
+- **curl:** `bin/prog10_shop_vitrina.rb` — меню/корзина/checkout/история API — **5/5** (`prog10/shop/prog10_shop_vitrina_curl.json`).
+- **MCP:** Puppeteer UI — каталог → корзина → наличные → SHP-09 — **5/5** (`prog10/shop/prog10_shop_vitrina_mcp.json`).
 - **Следующий:** блок **11** — после апрува.
 
 ### Сессия 2026-06-02 (прогон 10 — блок 9, kiosk → barista ×9)
 
-- **curl:** `bin/prog10_kiosk_barista.rb` — киоск auth + cash order + barista JSON/HTML — **9/9** (`prog10_kiosk_barista.json`).
-- **MCP:** Puppeteer — login barista, заказ на `/barista` — **9/9** (`prog10_kiosk_barista_mcp.json`); demo-prep без панели barista — ожидаемо.
+- **curl:** `bin/prog10_kiosk_barista.rb` — киоск auth + cash order + barista JSON/HTML — **9/9** (`prog10/kiosk/prog10_kiosk_barista.json`).
+- **MCP:** Puppeteer — login barista, заказ на `/barista` — **9/9** (`prog10/kiosk/prog10_kiosk_barista_mcp.json`); demo-prep без панели barista — ожидаемо.
 - **Следующий:** блок **10** — после апрува.
 
 ### Сессия 2026-06-02 (прогон 10 — блок 8, ENT карточка УК)
 
 - MCP Puppeteer на **demo-a**: ENT-02 (Копировать URL), ENT-07 (edit + partial), ENT-08 (Создать staff → `/manager/staff`).
-- Артефакты: `prog10_ent_card_mcp.json`, `prog10_ent_card_mcp.md`.
+- Артефакты: `prog10/platform-ent/prog10_ent_card_mcp.json`, `prog10/platform-ent/prog10_ent_card_mcp.md`.
 - **Следующий:** блок **9** — после апрува.
 
 ### Сессия 2026-06-02 (прогон 10 — блок 7, MCP 9 точек + STF-03)
 
-- **curl:** 9/9 без изменений (`prog10_staff_isolation.json`).
-- **MCP +9 точек:** STF-01/02/04 на 9 точках; **STF-03** — создание barista на всех 9 (`prog10_staff_mcp_9pt.json`); **STF-04** — login новых → `/barista` на sales_point (для `demo-prep` barista-модуль ожидаемо недоступен: `GET /barista` не отдаёт панель).
+- **curl:** 9/9 без изменений (`prog10/staff-rbac/prog10_staff_isolation.json`).
+- **MCP +9 точек:** STF-01/02/04 на 9 точках; **STF-03** — создание barista на всех 9 (`prog10/staff-rbac/prog10_staff_mcp_9pt.json`); **STF-04** — login новых → `/barista` на sales_point (для `demo-prep` barista-модуль ожидаемо недоступен: `GET /barista` не отдаёт панель).
 - **STF-03 UI:** demo-b — fill+click; остальные точки — POST форм в сессии Puppeteer (UK).
 - **Следующий:** блок 8 — после твоего апрува (техготово 9/9).
 
 ### Сессия 2026-06-02 (прогон 10 — блок 7, MCP 3 org — срез 1)
 
-- Первый срез 3 org: `prog10_staff_mcp_3org.json` (STF-01/02/04 + ISO JSON).
+- Первый срез 3 org: `prog10/staff-rbac/prog10_staff_mcp_3org.json` (STF-01/02/04 + ISO JSON).
 
 ### Сессия 2026-06-02 (прогон 10 — блок 6, staff wizard)
 

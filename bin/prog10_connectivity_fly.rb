@@ -8,7 +8,7 @@ require "json"
 require "open3"
 
 BASE = ENV.fetch("BASE", "https://coffeeos.fly.dev")
-OUT = ENV.fetch("OUT", "docs/operations/milestones/veha_2/artifacts/prog10_connectivity_con02_fly.json")
+OUT = ENV.fetch("OUT", "docs/operations/milestones/veha_2/artifacts/prog10/connectivity/prog10_connectivity_con02_fly.json")
 
 DEMO_A = "2fdee1ac-4674-41ee-b89e-87b45643f789"
 DEMO_B = "655aaccb-004a-4bb9-a50a-ce618854dda3"

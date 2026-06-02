@@ -2,7 +2,7 @@
   "at": "2026-06-02T14:30:00Z",
   "base": "https://coffeeos.fly.dev",
   "mcp_server": "user-puppeteer",
-  "curl_baseline": "prog10_staff_isolation.json (9/9)",
+  "curl_baseline": "prog10/staff-rbac/prog10_staff_isolation.json (9/9)",
   "scope": {
     "stf01_02_04_points": 6,
     "stf03_create_staff_points": 6,

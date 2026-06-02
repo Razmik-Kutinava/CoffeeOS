@@ -13,7 +13,7 @@
       "id": "ENT-02",
       "page": "/admin/tenants/:id",
       "pass": true,
-      "note": "Кнопка «Копировать» → реальный буфер + Ctrl+V совпали с URL витрины (prog10_ent02_clipboard.json)"
+      "note": "Кнопка «Копировать» → реальный буфер + Ctrl+V совпали с URL витрины (prog10/platform-ent/prog10_ent02_clipboard.json)"
     },
     {
       "id": "ENT-07",

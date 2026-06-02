@@ -2,13 +2,13 @@
 
 **Стенд:** `https://coffeeos.fly.dev`  
 **Дата:** 2026-06-02  
-**JSON:** [`prog10_staff_mcp_3org.json`](prog10_staff_mcp_3org.json)
+**JSON:** [`prog10/staff-rbac/prog10_staff_mcp_3org.json`](prog10/staff-rbac/prog10_staff_mcp_3org.json)
 
 ## Scope
 
 | Канал | Охват |
 |-------|--------|
-| **curl** | 9/9 точек — [`prog10_staff_isolation.json`](prog10_staff_isolation.json) |
+| **curl** | 9/9 точек — [`prog10/staff-rbac/prog10_staff_isolation.json`](prog10/staff-rbac/prog10_staff_isolation.json) |
 | **MCP UI** | **3 org × 1 точка:** Demo `demo-a`, Alpha `alpha-p1`, Beta `beta-p1` |
 
 Сценарии: **STF-01** (open_as_manager → `/manager`), **STF-02** (`/manager/staff`, iso-barista в списке), **STF-04** (login barista → `/barista`), изоляция заказа в браузере (own JSON `200`, чужой tenant `404`).

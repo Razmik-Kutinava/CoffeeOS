@@ -1,8 +1,8 @@
 # Прогон 10 — MCP Staff (6 точек, блок 7 продолжение)
 
 **Стенд:** `https://coffeeos.fly.dev`  
-**JSON:** [`prog10_staff_mcp_6pt.json`](prog10_staff_mcp_6pt.json)  
-**Предыдущий срез:** [`prog10_staff_mcp_3org.json`](prog10_staff_mcp_3org.json) (первые 3 org)
+**JSON:** [`prog10/staff-rbac/prog10_staff_mcp_6pt.json`](prog10/staff-rbac/prog10_staff_mcp_6pt.json)  
+**Предыдущий срез:** [`prog10/staff-rbac/prog10_staff_mcp_3org.json`](prog10/staff-rbac/prog10_staff_mcp_3org.json) (первые 3 org)
 
 ## Итог
 

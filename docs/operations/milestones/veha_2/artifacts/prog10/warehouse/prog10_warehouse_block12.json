@@ -4,9 +4,9 @@
   "block": 12,
   "note": "Barista ↔ prep warehouse E2E status for V2",
   "evidence": {
-    "kiosk_barista_flow": "prog10_kiosk_barista.json (accepted orders visible on /barista)",
+    "kiosk_barista_flow": "prog10/kiosk/prog10_kiosk_barista.json (accepted orders visible on /barista)",
     "prep_movement_rls": "onboarding_connectivity_test + prep_kitchen_movements_test",
-    "connectivity": "prog10_connectivity.json"
+    "connectivity": "prog10/_index/prog10_connectivity.json"
   },
   "tests": [
     {
@@ -19,7 +19,7 @@
       "id": "WHS-01",
       "title": "Barista order accepted on sales point",
       "status": "PASS",
-      "source": "prog10_kiosk_barista.json"
+      "source": "prog10/kiosk/prog10_kiosk_barista.json"
     },
     {
       "id": "WHS-02",

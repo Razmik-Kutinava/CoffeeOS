@@ -69,6 +69,6 @@ SETUP.each do |point|
 end
 
 out = { at: Time.now.utc.strftime("%Y-%m-%dT%H:%M:%SZ"), password: "(demo123456)", points: results }
-path = ENV.fetch("OUT", "docs/operations/milestones/veha_2/artifacts/prog10_staff_setup.json")
+path = ENV.fetch("OUT", "docs/operations/milestones/veha_2/artifacts/prog10/staff-rbac/prog10_staff_setup.json")
 File.write(path, JSON.pretty_generate(out))
 puts JSON.pretty_generate(out)

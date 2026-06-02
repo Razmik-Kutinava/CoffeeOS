@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## v1.100 — 2026-06-02 (V2 ops: реорганизация артефактов прогона 10)
+
+- Плоский `veha_2/artifacts/prog10_*` → дерево `artifacts/prog10/{_index,smoke,kiosk,shop,staff-rbac,connectivity,platform-ent,warehouse}/`.
+- README: `artifacts/README.md`, `artifacts/prog10/README.md`, `artifacts/demo-feedback/README.md` (§E).
+- Индекс: `prog10/_index/prog10_final_index.json` (пути относительно `prog10/`).
+- Ссылки в QA/PRACTICES/POSTMORTEM/PROG10_TENANTS + `bin/prog10_*` OUT.
+- **Код/тесты не менялись.** Веха 2 §I по-прежнему не закрыта.
+
 ## v1.99 — 2026-06-02 (SEC-07 → Веха 3)
 
 - **V3-SEC-07:** убрать `shop-api-key` из meta витрины — [`veha_3/CHECKLIST.md`](milestones/veha_3/CHECKLIST.md) § E.
@@ -19,24 +27,24 @@
 
 ## v1.96 — 2026-06-02 (V2 прогон 10 — блок 13 финал)
 
-- Перепрогон Fly: curl **9×**, stress **8+8**, kiosk **9×** — `prog10_final_block13.json`.
-- Индекс артефактов `prog10_final_index.json`; хвосты PASS/SKIP в QA §10d.
+- Перепрогон Fly: curl **9×**, stress **8+8**, kiosk **9×** — `prog10/_index/prog10_final_block13.json`.
+- Индекс артефактов `prog10/_index/prog10_final_index.json`; хвосты PASS/SKIP в QA §10d.
 
 ## v1.95 — 2026-06-02 (V2 прогон 10 — блок 12 склад)
 
-- Блок 12 закрыт: barista↔цех e2e (`prog10_warehouse_block12.json`).
+- Блок 12 закрыт: barista↔цех e2e (`prog10/warehouse/prog10_warehouse_block12.json`).
 - Тесты: `prep_kitchen_movements_test` + `onboarding_connectivity_test` → **6/50/0**.
 - Зафиксирован backlog `V2-BACKLOG-PREP-MULTI`: общий цех на несколько точек — после В2 (Веха 3).
 
 ## v1.94 — 2026-06-02 (V2 прогон 10 — блок 11 связность)
 
-- CON-02…06: тесты + Fly CON-02 + артефакт `prog10_connectivity.json`.
+- CON-02…06: тесты + Fly CON-02 + артефакт `prog10/_index/prog10_connectivity.json`.
 - Backlog: `V2-BACKLOG-PREP-MULTI` (цех на N точек — после В2).
 - Апрув блока 3 → блок 11; ждём апрув 11 → блок 12.
 
 ## v1.93 — 2026-06-02 (V2 прогон 10 — блок 3 закрыт)
 
-- **CR-05:** Fly `POST /kiosk/api/auth` **9/9** — `prog10_kiosk_auth_fly_cr05.json`, `bin/prog10_kiosk_auth_fly_verify.rb`.
+- **CR-05:** Fly `POST /kiosk/api/auth` **9/9** — `prog10/kiosk/prog10_kiosk_auth_fly_cr05.json`, `bin/prog10_kiosk_auth_fly_verify.rb`.
 - **CR-04:** wontfix на Fly 1 pod; при multi-pod / смене хостинга → Redis — `PRACTICES`.
 - Push `develop` (23 коммита); `fly deploy` — владелец (`flyctl auth login`).
 
@@ -53,23 +61,23 @@
 
 ## v1.90 — 2026-06-02 (V2 прогон 10 — блок 10, витрина 5 точек)
 
-- curl **5/5:** меню, корзина, cash checkout, SHP-09 history API (`prog10_shop_vitrina_curl.json`).
-- MCP Puppeteer **5/5:** UI vitrina + история заказов (`prog10_shop_vitrina_mcp.json`).
-- Блок **9** ✅ + mock card (`prog10_kiosk_barista_card.json`); блок **11** — после апрува.
+- curl **5/5:** меню, корзина, cash checkout, SHP-09 history API (`prog10/shop/prog10_shop_vitrina_curl.json`).
+- MCP Puppeteer **5/5:** UI vitrina + история заказов (`prog10/shop/prog10_shop_vitrina_mcp.json`).
+- Блок **9** ✅ + mock card (`prog10/kiosk/prog10_kiosk_barista_card.json`); блок **11** — после апрува.
 
 ## v1.89 — 2026-06-02 (V2 прогон 10 — блок 9, kiosk → barista ×9)
 
-- curl **9/9:** киоск auth + cash order `accepted` + заказ на табло barista (`prog10_kiosk_barista.json`, `bin/prog10_kiosk_barista.rb`).
-- MCP Puppeteer **9/9:** login barista → `/barista`, заказ на доске (`prog10_kiosk_barista_mcp.json`).
+- curl **9/9:** киоск auth + cash order `accepted` + заказ на табло barista (`prog10/kiosk/prog10_kiosk_barista.json`, `bin/prog10_kiosk_barista.rb`).
+- MCP Puppeteer **9/9:** login barista → `/barista`, заказ на доске (`prog10/kiosk/prog10_kiosk_barista_mcp.json`).
 - Блок **8** ✅ после апрува; блок **10** — после апрува.
 
 ## v1.88 — 2026-06-02 (V2 прогон 10 — ENT-02 clipboard verify)
 
-- ENT-02: реальная проверка буфера после «Копировать» + Ctrl+V (`prog10_ent02_clipboard.json`).
+- ENT-02: реальная проверка буфера после «Копировать» + Ctrl+V (`prog10/platform-ent/prog10_ent02_clipboard.json`).
 
 ## v1.87 — 2026-06-02 (V2 прогон 10 — блок 8, ENT карточка УК)
 
-- MCP: ENT-02, ENT-07, ENT-08 на demo-a — PASS 3/3 (`prog10_ent_card_mcp.json`).
+- MCP: ENT-02, ENT-07, ENT-08 на demo-a — PASS 3/3 (`prog10/platform-ent/prog10_ent_card_mcp.json`).
 - Блок 7 отмечен ✅ после апрува заказчика.
 - Блок 8 — ждём апрув перед блоком 9.
 
@@ -77,25 +85,25 @@
 
 - MCP Puppeteer: **9/9** точек — STF-01/02/04 на 9, **STF-03** (создание barista) на всех 9.
 - `demo-prep`: barista-модуль ожидаемо недоступен (probe `GET /barista` не отдаёт панель barista).
-- Артефакты: `prog10_staff_mcp_9pt.json`, `prog10_staff_mcp_9pt.md`.
+- Артефакты: `prog10/staff-rbac/prog10_staff_mcp_9pt.json`, `prog10/staff-rbac/prog10_staff_mcp_9pt.md`.
 - Блок 7 техготов, ждём апрув перед блоком **8**.
 
 ## v1.85 — 2026-06-02 (V2 прогон 10 — блок 7, MCP 6 точек + STF-03)
 
 - MCP Puppeteer: **6/9** точек — STF-01/02, **STF-03** (создание barista ×6), STF-04 (login новых ×6).
-- Артефакты: `prog10_staff_mcp_6pt.json`, `prog10_staff_mcp_6pt.md`.
+- Артефакты: `prog10/staff-rbac/prog10_staff_mcp_6pt.json`, `prog10/staff-rbac/prog10_staff_mcp_6pt.md`.
 - Блок 7 в QA — **не закрыт** (3 точки только curl; апрув перед блоком 8).
 
 ## v1.84 — 2026-06-02 (V2 прогон 10 — блок 7, MCP STF 3 org)
 
 - MCP UI на Fly: **3 org** (Demo/Alpha/Beta) — STF-01/02/04 + изоляция заказа в браузере (own `200`, foreign `404`).
-- Артефакты: `prog10_staff_mcp_3org.json`, `prog10_staff_mcp_3org.md`.
-- curl 9/9 без изменений (`prog10_staff_isolation.json`); STF-03 UI и 6 оставшихся точек в браузере — вне scope.
+- Артефакты: `prog10/staff-rbac/prog10_staff_mcp_3org.json`, `prog10/staff-rbac/prog10_staff_mcp_3org.md`.
+- curl 9/9 без изменений (`prog10/staff-rbac/prog10_staff_isolation.json`); STF-03 UI и 6 оставшихся точек в браузере — вне scope.
 
 ## v1.83 — 2026-06-02 (V2 прогон 10 — блок 7, staff/rbac isolation)
 
 - Добавлен `bin/prog10_staff_rbac_isolation.rb` для проверки изоляции staff/RBAC по 9 точкам.
-- Артефакты: `prog10_staff_isolation.json` + `prog10_staff_isolation.md` (PASS 9/9).
+- Артефакты: `prog10/staff-rbac/prog10_staff_isolation.json` + `prog10/staff-rbac/prog10_staff_isolation.md` (PASS 9/9).
 - Изоляция подтверждена: own order `200`, foreign order `404`; prep-tenant barista доступ ожидаемо закрыт (`302`).
 
 ## v1.82 — 2026-06-02 (V2 прогон 10 — блок 6, staff wizard)
@@ -146,7 +154,7 @@
 
 - **QA:** прогон 10 **PASS** — 9× cash/card, 9× kiosk, stress 8, RBAC-матрица, MCP checkout.
 - **Скрипты:** `bin/prog10_fly_smoke.rb` (ORDER_DELAY_SEC), `bin/prog10_collect_kiosk_tokens.rb`.
-- **Артефакты:** `prog10_curl_full.json`, `prog10_kiosk_full.json`, `prog10_rbac_matrix.md`.
+- **Артефакты:** `prog10/smoke/prog10_curl_full.json`, `prog10/smoke/prog10_kiosk_full.json`, `prog10/staff-rbac/prog10_rbac_matrix.md`.
 - **Живое демо** вынесено из QA → только §I [`CHECKLIST.md`](milestones/veha_2/CHECKLIST.md).
 
 ## v1.74 — 2026-06-01 (V2 прогон 10 — первый журнал)

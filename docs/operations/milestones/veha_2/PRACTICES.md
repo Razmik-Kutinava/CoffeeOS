@@ -91,15 +91,15 @@
 | V2-P10-02 | Прогон 10: kiosk curl | **done** *(2026-06-01)* | `bin/prog10_fly_smoke.rb` + Prog10 Kiosk MCP |
 | V2-P10-03 | Прогон 10: RBAC AUTH-01…09 | **done** *(2026-06-01)* | MCP + регрессия прогон 5 |
 | V2-P10-04 | Shop checkout MCP: fixed bottom nav | **done** *(2026-06-01)* | scrollIntoView + клик «Наличные» PASS |
-| V2-P10-05 | Staff/RBAC изоляция 9 точек | **done** *(2026-06-02, блок 7)* | `prog10_staff_isolation.json`: own `200`, foreign `404` |
-| V2-P10-06 | ENT карточка УК (02/07/08) | **done** *(2026-06-02, блок 8)* | `prog10_ent_card_mcp.json` на demo-a |
-| V2-P10-07 | Kiosk→barista: mock card ×9 | **done** *(2026-06-02)* | `prog10_kiosk_barista_card.json` |
+| V2-P10-05 | Staff/RBAC изоляция 9 точек | **done** *(2026-06-02, блок 7)* | `prog10/staff-rbac/prog10_staff_isolation.json`: own `200`, foreign `404` |
+| V2-P10-06 | ENT карточка УК (02/07/08) | **done** *(2026-06-02, блок 8)* | `prog10/platform-ent/prog10_ent_card_mcp.json` на demo-a |
+| V2-P10-07 | Kiosk→barista: mock card ×9 | **done** *(2026-06-02)* | `prog10/kiosk/prog10_kiosk_barista_card.json` |
 | V2-P10-09 | Витрина MCP 5 точек + SHP-09 | **done** *(2026-06-02, блок 10)* | cash+card+SHP-03: `prog10_shop_vitrina_*`, `prog10_shop_vitrina_card_*`, `prog10_shop_shp03*` |
 | V2-P10-08 | **Заказ киоска помечается `source=mobile`, не `kiosk`** | **open — после блоков 1–14** | `Shop::OrderCreator` + передача device token в shop API; UI бариста «Киоск» vs «Витрина» |
 | V2-BACKLOG-PREP-MULTI | Один заготовочный цех на **несколько** точек продаж | **backlog — после В2** | Сейчас **1 `production_kitchen` = 1 tenant**, RLS верный; CON-06 — изоляция на этой модели. Потом: связь цех↔точки, права не только `Current.tenant_id` |
-| V2-P10-11 | Блок 11 CON-02…06 | **done** *(2026-06-02)* | `prog10_connectivity.json`, тесты + Fly CON-02 |
-| V2-P10-12 | Блок 12 Barista↔цех e2e | **done** *(2026-06-02)* | `prog10_warehouse_block12.json`; auto-link sales→prep в backlog V2-BACKLOG-PREP-MULTI |
-| V2-P10-13 | Блок 13 финал прогона 10 | **done** *(2026-06-02)* | `prog10_final_block13.json`, `prog10_final_index.json` |
+| V2-P10-11 | Блок 11 CON-02…06 | **done** *(2026-06-02)* | `prog10/_index/prog10_connectivity.json`, тесты + Fly CON-02 |
+| V2-P10-12 | Блок 12 Barista↔цех e2e | **done** *(2026-06-02)* | `prog10/warehouse/prog10_warehouse_block12.json`; auto-link sales→prep в backlog V2-BACKLOG-PREP-MULTI |
+| V2-P10-13 | Блок 13 финал прогона 10 | **done** *(2026-06-02)* | `prog10/_index/prog10_final_block13.json`, `prog10/_index/prog10_final_index.json` |
 | V2-P10-14 | Блок 14 Postmortem | **done** *(2026-06-02)* | `POSTMORTEM_2026-05-28.md` § Прогон 10 |
 
 **Когда править V2-P10-08:** после закрытия QA-блоков 10–14 и §E; отдельный кодовый PR (не смешивать с витриной/RBAC). Иначе отчёты и табло врут про канал заказа.

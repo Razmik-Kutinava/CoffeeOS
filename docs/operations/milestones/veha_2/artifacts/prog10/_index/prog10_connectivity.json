@@ -14,7 +14,7 @@
       "id": "CON-02",
       "title": "PTS только на точке",
       "status": "PASS",
-      "evidence": "test/integration/shop/api/tenant_isolation_test.rb 2/0; prog10_connectivity_con02_fly.json (demo-a vs demo-b)"
+      "evidence": "test/integration/shop/api/tenant_isolation_test.rb 2/0; prog10/connectivity/prog10_connectivity_con02_fly.json (demo-a vs demo-b)"
     },
     {
       "id": "CON-03",
@@ -32,7 +32,7 @@
       "id": "CON-05",
       "title": "RLS заказов A/B",
       "status": "PASS",
-      "evidence": "prog10_staff_isolation.json — foreign_order_http 404 на 9 точках (блок 7)"
+      "evidence": "prog10/staff-rbac/prog10_staff_isolation.json — foreign_order_http 404 на 9 точках (блок 7)"
     },
     {
       "id": "CON-06",

@@ -6,7 +6,7 @@
     "user-puppeteer"
   ],
   "scope": "STF-01/02/04/05 (выборочно) — 3 org × 1 точка; не все 9",
-  "note": "curl 9/9 — prog10_staff_isolation.json; MCP UI — эта выборка",
+  "note": "curl 9/9 — prog10/staff-rbac/prog10_staff_isolation.json; MCP UI — эта выборка",
   "results": [
     {
       "org": "Demo CoffeeOS",
@@ -62,6 +62,6 @@
   "summary": {
     "mcp_org_pass": 3,
     "mcp_org_total": 3,
-    "curl_9of9": "prog10_staff_isolation.json"
+    "curl_9of9": "prog10/staff-rbac/prog10_staff_isolation.json"
   }
 }

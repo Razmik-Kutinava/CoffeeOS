@@ -9,7 +9,7 @@ require "open3"
 
 BASE = ENV.fetch("BASE", "https://coffeeos.fly.dev")
 ORDER_DELAY = ENV.fetch("ORDER_DELAY_SEC", "5").to_f
-OUT = ENV.fetch("OUT", "docs/operations/milestones/veha_2/artifacts/prog10_shop_vitrina_card_curl.json")
+OUT = ENV.fetch("OUT", "docs/operations/milestones/veha_2/artifacts/prog10/shop/prog10_shop_vitrina_card_curl.json")
 
 POINTS = [
   { slug: "demo-a", tenant_id: "2fdee1ac-4674-41ee-b89e-87b45643f789" },

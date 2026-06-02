@@ -8,7 +8,7 @@ require "json"
 require "open3"
 
 BASE = ENV.fetch("BASE", "https://coffeeos.fly.dev")
-OUT = ENV.fetch("OUT", "docs/operations/milestones/veha_2/artifacts/prog10_shop_shp03.json")
+OUT = ENV.fetch("OUT", "docs/operations/milestones/veha_2/artifacts/prog10/shop/prog10_shop_shp03.json")
 
 def run_curl(*args)
   out, status = Open3.capture2("curl", "-sS", *args)

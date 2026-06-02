@@ -61,16 +61,16 @@
 | Область | Результат | Артефакт |
 |---------|-----------|----------|
 | 3 org × 9 точек | PASS | [`PROG10_TENANTS.md`](PROG10_TENANTS.md) |
-| curl shop + kiosk 9× | PASS | `prog10_final_block13.json` |
-| stress 8+8 | PASS | final + `prog10_stress_wave2.json` |
-| RBAC / staff | PASS | `prog10_rbac_matrix.md`, `prog10_staff_isolation.json` |
+| curl shop + kiosk 9× | PASS | `prog10/_index/prog10_final_block13.json` |
+| stress 8+8 | PASS | final + `prog10/smoke/prog10_stress_wave2.json` |
+| RBAC / staff | PASS | `prog10/staff-rbac/prog10_rbac_matrix.md`, `prog10/staff-rbac/prog10_staff_isolation.json` |
 | Kiosk → barista | PASS | `prog10_kiosk_barista*.json` |
 | Витрина 5 точек | PASS | `prog10_shop_vitrina_*` |
-| Связность CON-02…06 | PASS | `prog10_connectivity.json` |
-| Склад barista↔цех | PASS (модель 1 цех = 1 tenant) | `prog10_warehouse_block12.json` |
-| Kiosk GUC (CR-05) | PASS | `prog10_kiosk_auth_fly_cr05.json` |
+| Связность CON-02…06 | PASS | `prog10/_index/prog10_connectivity.json` |
+| Склад barista↔цех | PASS (модель 1 цех = 1 tenant) | `prog10/warehouse/prog10_warehouse_block12.json` |
+| Kiosk GUC (CR-05) | PASS | `prog10/kiosk/prog10_kiosk_auth_fly_cr05.json` |
 
-Индекс: [`artifacts/prog10_final_index.json`](artifacts/prog10_final_index.json).
+Индекс: [`artifacts/prog10/_index/prog10_final_index.json`](artifacts/prog10/_index/prog10_final_index.json).
 
 ### Что чинили в прогоне (код)
 

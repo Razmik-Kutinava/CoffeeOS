@@ -5,7 +5,7 @@ require "json"
 require "open3"
 
 BASE = ENV.fetch("BASE", "https://coffeeos.fly.dev")
-IDS_PATH = File.expand_path("../docs/operations/milestones/veha_2/artifacts/prog10_tenant_ids.json", __dir__)
+IDS_PATH = File.expand_path("../docs/operations/milestones/veha_2/artifacts/prog10/_index/prog10_tenant_ids.json", __dir__)
 TENANTS = JSON.parse(File.read(IDS_PATH))
 
 def curl_code(url)
@@ -32,7 +32,7 @@ results = TENANTS.map do |row|
 end
 
 out = { at: Time.now.utc.strftime("%Y-%m-%dT%H:%M:%SZ"), tenants: results }
-path = ENV.fetch("OUT", "docs/operations/milestones/veha_2/artifacts/prog10_shop_urls.json")
+path = ENV.fetch("OUT", "docs/operations/milestones/veha_2/artifacts/prog10/smoke/prog10_shop_urls.json")
 File.write(path, JSON.pretty_generate(out))
 puts JSON.pretty_generate(out)
 exit(results.all? { |r| r.dig(:shop, :shop_http) == "200" && r.dig(:shop, :products).to_i.positive? } ? 0 : 1)

@@ -3,8 +3,8 @@
 **Дата:** 2026-06-02  
 **Стенд:** `https://coffeeos.fly.dev`  
 **Скрипт:** `bin/prog10_staff_rbac_isolation.rb`  
-**JSON-отчёт:** `prog10_staff_isolation.json`  
-**MCP UI:** [`prog10_staff_mcp_9pt.md`](prog10_staff_mcp_9pt.md) · [`prog10_staff_mcp_9pt.json`](prog10_staff_mcp_9pt.json) (актуально); срез 6pt: [`prog10_staff_mcp_6pt.json`](prog10_staff_mcp_6pt.json); срез 3 org: [`prog10_staff_mcp_3org.json`](prog10_staff_mcp_3org.json)
+**JSON-отчёт:** `prog10/staff-rbac/prog10_staff_isolation.json`  
+**MCP UI:** [`prog10/staff-rbac/prog10_staff_mcp_9pt.md`](prog10/staff-rbac/prog10_staff_mcp_9pt.md) · [`prog10/staff-rbac/prog10_staff_mcp_9pt.json`](prog10/staff-rbac/prog10_staff_mcp_9pt.json) (актуально); срез 6pt: [`prog10/staff-rbac/prog10_staff_mcp_6pt.json`](prog10/staff-rbac/prog10_staff_mcp_6pt.json); срез 3 org: [`prog10/staff-rbac/prog10_staff_mcp_3org.json`](prog10/staff-rbac/prog10_staff_mcp_3org.json)
 
 ## Что проверено
 

@@ -8,7 +8,7 @@
 
 **Как пользоваться:** `[x]` по мере готовности; ⭐ = критично для «веха закрыта». Детали онбординга — [`ONBOARDING_CHECKLIST.md`](ONBOARDING_CHECKLIST.md). Правки UI — [`DEMO_FEEDBACK.md`](DEMO_FEEDBACK.md).
 
-**Связанные:** [`README.md`](README.md), [`PRACTICES.md`](PRACTICES.md), `docs/product/development_roadmap.md`.
+**Связанные:** [`README.md`](README.md), [`PRACTICES.md`](PRACTICES.md), [`artifacts/README.md`](artifacts/README.md) (прогон 10 → `artifacts/prog10/`), `docs/product/development_roadmap.md`.
 
 ### Gate: чеклист ↔ таск-трекер
 
