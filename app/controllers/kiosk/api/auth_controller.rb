@@ -14,13 +14,14 @@ module Kiosk
         device.update_columns(last_seen_at: Time.current, updated_at: Time.current)
 
         tenant = device.tenant
+        settings = with_kiosk_tenant_guc!(tenant.id) { kiosk_settings_json(device) }
         render json: {
           tenant_id: tenant.id,
           tenant_name: tenant.name,
           tenant_slug: tenant.slug,
           device_id: device.id,
           device_name: device.name,
-          kiosk_settings: kiosk_settings_json(device)
+          kiosk_settings: settings
         }
       end
 
@@ -44,8 +45,19 @@ module Kiosk
         device if device&.token_valid?
       end
 
+      # После lookup device с row_security off — KioskSetting только с tenant GUC (RLS).
+      def with_kiosk_tenant_guc!(tenant_id)
+        result = nil
+        ActiveRecord::Base.transaction do
+          conn = ActiveRecord::Base.connection
+          conn.execute("SET LOCAL app.current_tenant_id = #{conn.quote(tenant_id.to_s)}")
+          result = yield
+        end
+        result
+      end
+
       def kiosk_settings_json(device)
-        setting = KioskSetting.find_by(device_id: device.id, tenant_id: device.tenant_id, is_active: true)
+        setting = KioskSetting.active.find_by(device_id: device.id, tenant_id: device.tenant_id)
         return default_kiosk_settings if setting.nil?
 
         {

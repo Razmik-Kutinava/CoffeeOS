@@ -50,6 +50,27 @@ class Kiosk::Api::AuthControllerTest < ActionDispatch::IntegrationTest
     assert_response :unauthorized
   end
 
+  test "returns persisted kiosk_settings under tenant GUC" do
+    KioskSetting.create!(
+      tenant: @tenant,
+      device: @device,
+      allow_card: false,
+      allow_cash: true,
+      idle_timeout_seconds: 120,
+      welcome_text: "CR05 kiosk welcome",
+      is_active: true
+    )
+
+    post "/kiosk/api/auth", headers: { "X-Device-Token" => @device.device_token }
+
+    assert_response :success
+    settings = response.parsed_body["kiosk_settings"]
+    assert_equal "CR05 kiosk welcome", settings["welcome_text"]
+    assert_equal false, settings["allow_card"]
+    assert_equal true, settings["allow_cash"]
+    assert_equal 120, settings["idle_timeout_seconds"]
+  end
+
   test "returns unauthorized for tv_board token" do
     tv = Device.create!(
       tenant: @tenant,
