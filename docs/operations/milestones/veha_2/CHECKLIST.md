@@ -216,7 +216,7 @@
 - [x] V2-CR-04 — CacheCounter **wontfix** Fly 1 pod; при 2+ серверах → Redis (`PRACTICES`)
 - [x] Тесты kiosk — `test/controllers/kiosk/api/auth_controller_test.rb`
 
-*Ждём апрув блока 3 → блок 11. Деплой: `git push` ✅; `fly deploy` — владелец (`flyctl auth login`).*
+*Апрув блока 3 — 2026-06-02.*
 
 ---
 
@@ -298,9 +298,17 @@
 
 ---
 
-### Блок 11 — QA: Связность
+### Блок 11 — QA: Связность *(2026-06-02, апрув блока 3)*
 
-- [ ] CON-02…06 (панели, переходы, tenant)
+Артефакты: `prog10_connectivity.json` · `prog10_connectivity_con02_fly.json` · `bin/prog10_connectivity_fly.rb`
+
+- [x] CON-01 — цена УК → витрина (ранее ONBOARDING §B)
+- [x] CON-02 — PTS demo-a **179₽** / demo-b **189₽** (Fly + `tenant_isolation_test`)
+- [x] CON-03/04 — barista заказ → manager видит (`onboarding_connectivity_test` 3/0)
+- [x] CON-05 — RLS заказов (`prog10_staff_isolation.json`, блок 7)
+- [x] CON-06 — prep movement RLS (integration test); **backlog:** общий цех на N точек → `V2-BACKLOG-PREP-MULTI`
+
+*Ждём апрув блока 11 → блок 12.*
 
 ---
 

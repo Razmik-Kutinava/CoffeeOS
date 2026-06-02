@@ -11,10 +11,18 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| Блок **3** ✅ — CR-05 Fly **9/9**; CR-04 wontfix | **Апрув 3** → блок **11** |
-| Блок **0–10** QA готовы | `fly deploy` — владелец (нет `flyctl` token в агенте) |
+| Блок **11** ✅ — CON-02…06 | **Апрув 11** → блок **12** |
+| Блок **0–10** + **3** QA готовы | Fly deploy — владелец |
 
 **Ops на блок:** `SESSION_STATE` + коммит всегда; `PRACTICES` (CR); `QA_ACCEPTANCE_RUN` + `artifacts/` (QA); `CHANGELOG` если заметно; `CHECKLIST` `[x]` только по факту.
+
+### Сессия 2026-06-02 (прогон 10 — блок 11 CON-02…06)
+
+- **Апрув блока 3** от заказчика → старт блока 11.
+- **CON-02:** Fly demo-a/b разные PTS (`prog10_connectivity_con02_fly.json`); `tenant_isolation_test` 2/0.
+- **CON-03/04/06:** `onboarding_connectivity_test` 3/0; **CON-05:** `prog10_staff_isolation.json`.
+- **Backlog:** `V2-BACKLOG-PREP-MULTI` — общий цех на несколько точек после В2.
+- **Следующий:** апрув блока 11 → блок **12** (barista↔цех).
 
 ### Сессия 2026-06-02 (прогон 10 — блок 3 закрыт: CR-05 + CR-04)
 

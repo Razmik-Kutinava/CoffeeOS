@@ -1,0 +1,50 @@
+{
+  "at": "2026-06-02T14:39:27Z",
+  "note": "V2 прогон 10 блок 11 — CON-02…06 связность",
+  "block": 11,
+  "approve_block_3": "2026-06-02 заказчик",
+  "scenarios": [
+    {
+      "id": "CON-01",
+      "title": "Цена УК → витрина",
+      "status": "PASS",
+      "evidence": "ONBOARDING прогон 3 (2026-05-27); CHECKLIST §B"
+    },
+    {
+      "id": "CON-02",
+      "title": "PTS только на точке",
+      "status": "PASS",
+      "evidence": "test/integration/shop/api/tenant_isolation_test.rb 2/0; prog10_connectivity_con02_fly.json (demo-a vs demo-b)"
+    },
+    {
+      "id": "CON-03",
+      "title": "Barista заказ в смене",
+      "status": "PASS",
+      "evidence": "test/integration/platform/onboarding_connectivity_test.rb (barista POST order)"
+    },
+    {
+      "id": "CON-04",
+      "title": "Manager видит заказ",
+      "status": "PASS",
+      "evidence": "onboarding_connectivity_test.rb (manager shift + orders list)"
+    },
+    {
+      "id": "CON-05",
+      "title": "RLS заказов A/B",
+      "status": "PASS",
+      "evidence": "prog10_staff_isolation.json — foreign_order_http 404 на 9 точках (блок 7)"
+    },
+    {
+      "id": "CON-06",
+      "title": "Prep movement RLS",
+      "status": "PASS",
+      "evidence": "onboarding_connectivity_test.rb (foreign movement stays draft); модель 1 цех = 1 tenant",
+      "backlog": "V2-BACKLOG-PREP-MULTI — общий заготовочный цех на несколько точек: отдельная схема после В2, сейчас не кодим"
+    }
+  ],
+  "integration_tests": {
+    "onboarding_connectivity_test": "3 runs, 31 assertions, 0 failures",
+    "shop_tenant_isolation_test": "2 runs, 7 assertions, 0 failures"
+  },
+  "pass": true
+}

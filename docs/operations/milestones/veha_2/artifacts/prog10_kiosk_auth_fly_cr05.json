@@ -1,8 +1,8 @@
 {
-  "at": "2026-06-02T14:15:39Z",
+  "at": "2026-06-02T14:28:06Z",
   "base": "https://coffeeos.fly.dev",
   "note": "CR-05 fly verify: kiosk/api/auth ×9 after deploy",
-  "deploy_ref": "d80b518",
+  "deploy_ref": null,
   "results": [
     {
       "slug": "demo-a",

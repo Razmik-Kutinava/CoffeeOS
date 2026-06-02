@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v1.94 — 2026-06-02 (V2 прогон 10 — блок 11 связность)
+
+- CON-02…06: тесты + Fly CON-02 + артефакт `prog10_connectivity.json`.
+- Backlog: `V2-BACKLOG-PREP-MULTI` (цех на N точек — после В2).
+- Апрув блока 3 → блок 11; ждём апрув 11 → блок 12.
+
 ## v1.93 — 2026-06-02 (V2 прогон 10 — блок 3 закрыт)
 
 - **CR-05:** Fly `POST /kiosk/api/auth` **9/9** — `prog10_kiosk_auth_fly_cr05.json`, `bin/prog10_kiosk_auth_fly_verify.rb`.

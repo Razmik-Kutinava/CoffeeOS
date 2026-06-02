@@ -1,0 +1,18 @@
+{
+  "at": "2026-06-02T14:39:27Z",
+  "base": "https://coffeeos.fly.dev",
+  "note": "CON-02: PTS per tenant on Fly (demo-a vs demo-b)",
+  "product_id": "24dae391-2199-4959-907e-d08c4cec3329",
+  "demo_a": {
+    "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+    "price": 179.0
+  },
+  "demo_b": {
+    "tenant_id": "655aaccb-004a-4bb9-a50a-ce618854dda3",
+    "price": 189.0,
+    "price_via_product_id": 189.0
+  },
+  "same_product_id": true,
+  "prices_differ": true,
+  "pass": true
+}
