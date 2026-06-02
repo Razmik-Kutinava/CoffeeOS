@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v1.95 — 2026-06-02 (V2 прогон 10 — блок 12 склад)
+
+- Блок 12 закрыт: barista↔цех e2e (`prog10_warehouse_block12.json`).
+- Тесты: `prep_kitchen_movements_test` + `onboarding_connectivity_test` → **6/50/0**.
+- Зафиксирован backlog `V2-BACKLOG-PREP-MULTI`: общий цех на несколько точек — после В2 (Веха 3).
+
 ## v1.94 — 2026-06-02 (V2 прогон 10 — блок 11 связность)
 
 - CON-02…06: тесты + Fly CON-02 + артефакт `prog10_connectivity.json`.

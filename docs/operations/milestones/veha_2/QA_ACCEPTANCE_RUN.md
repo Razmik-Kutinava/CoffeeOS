@@ -48,8 +48,8 @@
 | **8** | ENT-02, ENT-07, ENT-08 | ✅ **2026-06-02** — MCP 3/3 на demo-a (`prog10_ent_card_mcp.json`); апрув заказчика |
 | **9** | Kiosk→barista ×9 (curl+MCP) | ✅ **2026-06-02** — cash+card curl, MCP 9/9; апрув заказчика |
 | **10** | Витрина MCP 5 точек + SHP-09 | ✅ **2026-06-02** — cash+card+SHP-03/05; **ждём апрув → блок 3 → блок 11** |
-| **11** | CON-02…06 | ✅ **2026-06-02** — `prog10_connectivity.json`; ждём апрув → блок 12 |
-| **12** | Barista↔цех e2e (demo prep + Prog10 prep) | `[ ]` |
+| **11** | CON-02…06 | ✅ **2026-06-02** — `prog10_connectivity.json`; апрув заказчика |
+| **12** | Barista↔цех e2e (demo prep + Prog10 prep) | ✅ **2026-06-02** — `prog10_warehouse_block12.json`; V2-BACKLOG-PREP-MULTI зафиксирован |
 | **13** | Перепроверка curl 9×, stress, RBAC, артефакты | `[ ]` |
 | **14** | Postmortem → `[x]` | `[ ]` |
 | *после* | §E фидбек → правки → апрув → SESSION_STATE/CHANGELOG §I | вне блоков |

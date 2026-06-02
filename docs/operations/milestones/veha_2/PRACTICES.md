@@ -98,6 +98,7 @@
 | V2-P10-08 | **Заказ киоска помечается `source=mobile`, не `kiosk`** | **open — после блоков 1–14** | `Shop::OrderCreator` + передача device token в shop API; UI бариста «Киоск» vs «Витрина» |
 | V2-BACKLOG-PREP-MULTI | Один заготовочный цех на **несколько** точек продаж | **backlog — после В2** | Сейчас **1 `production_kitchen` = 1 tenant**, RLS верный; CON-06 — изоляция на этой модели. Потом: связь цех↔точки, права не только `Current.tenant_id` |
 | V2-P10-11 | Блок 11 CON-02…06 | **done** *(2026-06-02)* | `prog10_connectivity.json`, тесты + Fly CON-02 |
+| V2-P10-12 | Блок 12 Barista↔цех e2e | **done** *(2026-06-02)* | `prog10_warehouse_block12.json`; auto-link sales→prep в backlog V2-BACKLOG-PREP-MULTI |
 
 **Когда править V2-P10-08:** после закрытия QA-блоков 10–14 и §E; отдельный кодовый PR (не смешивать с витриной/RBAC). Иначе отчёты и табло врут про канал заказа.
 

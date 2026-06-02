@@ -11,10 +11,18 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| Блок **11** ✅ — CON-02…06 | **Апрув 11** → блок **12** |
+| Блок **12** ✅ — склад e2e | **Блок 13** → финал прогона 10 |
 | Блок **0–10** + **3** QA готовы | Fly deploy — владелец |
 
 **Ops на блок:** `SESSION_STATE` + коммит всегда; `PRACTICES` (CR); `QA_ACCEPTANCE_RUN` + `artifacts/` (QA); `CHANGELOG` если заметно; `CHECKLIST` `[x]` только по факту.
+
+### Сессия 2026-06-02 (прогон 10 — блок 12 склад)
+
+- **Апрув блока 11** от заказчика → старт блока 12.
+- Прогонены тесты склада/связности: `prep_kitchen_movements_test` + `onboarding_connectivity_test` = **6 runs, 50 assertions, 0 failures**.
+- Артефакт: `prog10_warehouse_block12.json` (barista PASS, prep movement PASS, foreign confirm blocked PASS).
+- Зафиксировано: auto-link «точка → общий цех» в **V2-BACKLOG-PREP-MULTI** (после В2, Веха 3).
+- Следующий: блок **13** (curl 9×, stress, RBAC, артефакты).
 
 ### Сессия 2026-06-02 (прогон 10 — блок 11 CON-02…06)
 

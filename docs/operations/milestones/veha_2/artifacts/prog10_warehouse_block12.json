@@ -1,0 +1,46 @@
+{
+  "at": "2026-06-02T14:50:00Z",
+  "base": "https://coffeeos.fly.dev",
+  "block": 12,
+  "note": "Barista ↔ prep warehouse E2E status for V2",
+  "evidence": {
+    "kiosk_barista_flow": "prog10_kiosk_barista.json (accepted orders visible on /barista)",
+    "prep_movement_rls": "onboarding_connectivity_test + prep_kitchen_movements_test",
+    "connectivity": "prog10_connectivity.json"
+  },
+  "tests": [
+    {
+      "cmd": "bin/rails test test/integration/prep_kitchen_movements_test.rb test/integration/platform/onboarding_connectivity_test.rb",
+      "result": "6 runs, 50 assertions, 0 failures"
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "WHS-01",
+      "title": "Barista order accepted on sales point",
+      "status": "PASS",
+      "source": "prog10_kiosk_barista.json"
+    },
+    {
+      "id": "WHS-02",
+      "title": "Prep stock movement create/confirm in own tenant",
+      "status": "PASS",
+      "source": "prep_kitchen_movements_test.rb"
+    },
+    {
+      "id": "WHS-03",
+      "title": "Foreign prep movement cannot be confirmed",
+      "status": "PASS",
+      "source": "onboarding_connectivity_test.rb"
+    },
+    {
+      "id": "WHS-04",
+      "title": "Cross-tenant barista↔prep auto-link",
+      "status": "SKIP_BY_DESIGN",
+      "reason": "V2 architecture: 1 production_kitchen = 1 tenant, no automatic order forwarding from sales tenant to prep tenant",
+      "backlog": "V2-BACKLOG-PREP-MULTI / Veha 3 Section A"
+    }
+  ],
+  "pass": true,
+  "git_head": "e8ff5bc"
+}

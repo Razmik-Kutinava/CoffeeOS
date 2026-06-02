@@ -308,13 +308,13 @@
 - [x] CON-05 — RLS заказов (`prog10_staff_isolation.json`, блок 7)
 - [x] CON-06 — prep movement RLS (integration test); **backlog:** общий цех на N точек → `V2-BACKLOG-PREP-MULTI`
 
-*Ждём апрув блока 11 → блок 12.*
+*Апрув блока 11 — 2026-06-02.*
 
 ---
 
 ### Блок 12 — QA: Склад
 
-- [ ] Barista ↔ цех e2e: demo prep + Prog10 prep
+- [x] Barista ↔ цех e2e: demo prep + Prog10 prep *(2026-06-02, `prog10_warehouse_block12.json`)*
 
 ---
 
