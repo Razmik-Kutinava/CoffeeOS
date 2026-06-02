@@ -56,7 +56,7 @@
 | Переменная | Назначение |
 |------------|------------|
 | `SHOP_SIMULATE_PAYMENT` | `0` на боевом приёмочном стенде |
-| `CALLBACK_*` | Секреты callback (см. существующие в проекте) |
+| `CALLBACK_SHARED_SECRET`, `CALLBACK_SHARED_TOKEN` | Секреты callback (для `Callbacks::EventsController`) |
 | `TBANK_TERMINAL_KEY` | TerminalKey терминала (тест: `1719235292292DEMO`) |
 | `TBANK_PASSWORD` | Password терминала |
 | `TBANK_RETURN_URL` | Базовый URL приложения для SuccessURL/FailURL (напр. `https://coffeeos.fly.dev`) |

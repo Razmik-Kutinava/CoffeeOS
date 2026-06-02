@@ -19,7 +19,7 @@
 ### Сессия 2026-06-02 (прогон 10 — блок 4, ops)
 
 - **V2-CR-02:** auto-check секретов на Fly не выполнен — в среде нет `flyctl`.
-- **Зафиксировано:** manual-check перед deploy обязателен (`CALLBACK_*` в Fly).
+- **Зафиксировано:** manual-check перед deploy обязателен (`CALLBACK_SHARED_SECRET`, `CALLBACK_SHARED_TOKEN` в Fly).
 - **SEC-07:** `shop-api-key` в meta оставлен как backlog (демо-стенд).
 - **Тесты:** suite **559/0**.
 - **Следующий:** блок 3 (CR-05, CR-04).

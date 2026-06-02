@@ -81,7 +81,7 @@
 | V2-T7 | QR режим B (без домена) | open | Режим A — когда будет домен; §I хвост |
 | V2-T8 | Flaky тест `events_controller_test.rb:208` (timing) | **done** *(2026-05-30)* | 200 с + `travel_to`; 23/0, ×5 PASS |
 | V2-CR-01 | `catalog_bootstrap.rb` N+1 PTS | **done** *(2026-06-01, блок 1)* | prefetch PTS + bulk create |
-| V2-CR-02 | `events_controller` без `CALLBACK_*` | **in_progress** *(блок 4, 2026-06-02)* | В этой среде нет `flyctl`; проверка секретов вручную в Fly Dashboard/CLI перед deploy |
+| V2-CR-02 | `events_controller` без callback secrets | **in_progress** *(блок 4, 2026-06-02)* | Проверять в Fly именно `CALLBACK_SHARED_SECRET` и `CALLBACK_SHARED_TOKEN` (Dashboard/CLI) |
 | V2-CR-03 | `browser_shop_session?` без CSRF verify | **done** *(2026-06-01, блок 2)* | `valid_authenticity_token?` + referer |
 | V2-CR-04 | `CacheCounter` MemoryStore | **open** | 1 pod Fly OK; multi-pod → Redis/Solid (В3) |
 | V2-CR-05 | Kiosk `KioskSetting` без tenant GUC | **open** | owner bypass; В3 при FORCE RLS |
