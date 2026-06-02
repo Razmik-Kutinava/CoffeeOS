@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v1.81 — 2026-06-02 (V2 прогон 10 — блок 5, gate кода)
+
+- Полный `bin/rails test` в WSL: **559/2311/0**.
+- Блок 5 отмечен выполненным в `QA_ACCEPTANCE_RUN.md`.
+- Синхронизированы статусы CR/gate в `PRACTICES.md` и `CODE_REVIEW.md`.
+
 ## v1.80 — 2026-06-02 (V2 прогон 10 — блок 4, ops checks)
 
 - **V2-CR-02:** автоматическая проверка callback secrets на Fly не выполнена (в среде нет `flyctl`); в ops зафиксирован manual-check `CALLBACK_SHARED_SECRET` + `CALLBACK_SHARED_TOKEN`.

@@ -42,7 +42,7 @@
 | **2** | CR-03, SEC-08 + тесты shop | ✅ **2026-06-01** — 559/0 |
 | **3** | CR-05, CR-04 + тесты kiosk | `[ ]` |
 | **4** | CR-02 Fly callback secrets; SEC-07 backlog | ⚠ **2026-06-02** — тесты 559/0, manual secret-check (`CALLBACK_SHARED_SECRET`, `CALLBACK_SHARED_TOKEN`) |
-| **5** | Гейт **554/0** + PRACTICES CR | `[ ]` |
+| **5** | Гейт тестов + PRACTICES/CODE_REVIEW sync | ✅ **2026-06-02** — 559/0 |
 | **6** | V2-T3 wizard + лист логинов org | `[ ]` |
 | **7** | Staff/RBAC Prog10 ×9 (STF-01…05) | `[ ]` |
 | **8** | ENT-02, ENT-07, ENT-08 | `[ ]` |
