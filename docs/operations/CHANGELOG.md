@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v1.93 — 2026-06-02 (V2 прогон 10 — блок 3 закрыт)
+
+- **CR-05:** Fly `POST /kiosk/api/auth` **9/9** — `prog10_kiosk_auth_fly_cr05.json`, `bin/prog10_kiosk_auth_fly_verify.rb`.
+- **CR-04:** wontfix на Fly 1 pod; при multi-pod / смене хостинга → Redis — `PRACTICES`.
+- Push `develop` (23 коммита); `fly deploy` — владелец (`flyctl auth login`).
+
 ## v1.92 — 2026-06-02 (V2 прогон 10 — блок 3, CR-05 kiosk GUC)
 
 - `Kiosk::Api::AuthController`: `SET LOCAL app.current_tenant_id` перед загрузкой `KioskSetting`.

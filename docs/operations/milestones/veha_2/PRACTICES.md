@@ -84,7 +84,7 @@
 | V2-CR-01 | `catalog_bootstrap.rb` N+1 PTS | **done** *(2026-06-01, блок 1)* | prefetch PTS + bulk create |
 | V2-CR-02 | `events_controller` без callback secrets | **in_progress** *(блок 4, 2026-06-02)* | Проверять в Fly именно `CALLBACK_SHARED_SECRET` и `CALLBACK_SHARED_TOKEN` (Dashboard/CLI) |
 | V2-CR-03 | `browser_shop_session?` без CSRF verify | **done** *(2026-06-01, блок 2)* | `valid_authenticity_token?` + referer |
-| V2-CR-04 | `CacheCounter` MemoryStore | **open** | 1 pod Fly OK; multi-pod → Redis/Solid (В3) |
+| V2-CR-04 | `CacheCounter` MemoryStore | **accepted / wontfix** *(2026-06-02, блок 3)* | Fly **1 pod** — in-process OK; при **2+ серверах** или смене хостинга → **Redis** (или Solid Cache) для общего счётчика |
 | V2-CR-05 | Kiosk `KioskSetting` без tenant GUC | **done** *(2026-06-02, блок 3)* | `SET LOCAL` в `kiosk/api/auth` |
 | V2-SEC-07 | `shop.html.erb` meta `shop-api-key` | **accepted / backlog** *(блок 4, 2026-06-02)* | демо-стенд; ротация/уборка ключа из meta — после В2 |
 | V2-P10-01 | Прогон 10: 3 org × 3 точки | **done** *(2026-06-01)* | [`PROG10_TENANTS.md`](PROG10_TENANTS.md) |

@@ -40,7 +40,7 @@
 | **0** | Правила + этот план в ops | ✅ **2026-06-01** |
 | **1** | CR-01, V2-006 + тесты | ✅ **2026-06-01** — 555/0 |
 | **2** | CR-03, SEC-08 + тесты shop | ✅ **2026-06-01** — 559/0 |
-| **3** | CR-05, CR-04 + тесты kiosk | ⚠ **2026-06-02** — CR-05 ✅ 7/0; CR-04 open; Fly auth после деплоя |
+| **3** | CR-05, CR-04 + тесты kiosk | ✅ **2026-06-02** — CR-05 7/0 + Fly auth **9/9**; CR-04 wontfix (1 pod); ждём апрув → блок 11 |
 | **4** | CR-02 Fly callback secrets; SEC-07 backlog | ⚠ **2026-06-02** — тесты 559/0, manual secret-check (`CALLBACK_SHARED_SECRET`, `CALLBACK_SHARED_TOKEN`) |
 | **5** | Гейт тестов + PRACTICES/CODE_REVIEW sync | ✅ **2026-06-02** — 559/0 |
 | **6** | V2-T3 wizard + лист логинов org | ✅ **2026-06-02** — 561/0 |

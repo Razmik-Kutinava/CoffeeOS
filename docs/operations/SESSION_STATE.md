@@ -11,16 +11,17 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| Блок **3** ⚠ — CR-05 ✅ (7/0); CR-04 open | **Апрув 3** → блок **11** |
-| Блок **0–10** QA готовы | Деплой Fly → перепроверка kiosk auth |
+| Блок **3** ✅ — CR-05 Fly **9/9**; CR-04 wontfix | **Апрув 3** → блок **11** |
+| Блок **0–10** QA готовы | `fly deploy` — владелец (нет `flyctl` token в агенте) |
 
 **Ops на блок:** `SESSION_STATE` + коммит всегда; `PRACTICES` (CR); `QA_ACCEPTANCE_RUN` + `artifacts/` (QA); `CHANGELOG` если заметно; `CHECKLIST` `[x]` только по факту.
 
-### Сессия 2026-06-02 (прогон 10 — блок 3, CR-05 kiosk GUC)
+### Сессия 2026-06-02 (прогон 10 — блок 3 закрыт: CR-05 + CR-04)
 
-- **Код:** `Kiosk::Api::AuthController#with_kiosk_tenant_guc!` перед `KioskSetting`.
-- **Тесты:** kiosk auth **7/0** (+ кейс persisted settings).
-- **Следующий:** деплой → curl auth на Prog10 Kiosk; апрув блока 3 → блок 11.
+- **CR-05:** `with_kiosk_tenant_guc!`; тесты **7/0**; Fly `POST /kiosk/api/auth` **9/9** — `prog10_kiosk_auth_fly_cr05.json` (`bin/prog10_kiosk_auth_fly_verify.rb`).
+- **CR-04:** **wontfix** на Fly 1 pod; при смене хостинга / 2+ инстансов → **Redis** — `PRACTICES`.
+- **Git:** push `develop` **23 коммита** → `d80b518`. **Fly deploy:** не выполнен (нет `flyctl auth`); curl на текущем Fly — PASS.
+- **Следующий:** апрув блока 3 → блок **11** (не начинать без апрува).
 
 ### Сессия 2026-06-02 (прогон 10 — блок 10 добивка: card + SHP-03)
 

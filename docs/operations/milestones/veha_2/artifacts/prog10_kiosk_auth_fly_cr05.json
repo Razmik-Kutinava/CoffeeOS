@@ -1,0 +1,89 @@
+{
+  "at": "2026-06-02T14:15:39Z",
+  "base": "https://coffeeos.fly.dev",
+  "note": "CR-05 fly verify: kiosk/api/auth ×9 after deploy",
+  "deploy_ref": "d80b518",
+  "results": [
+    {
+      "slug": "demo-a",
+      "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+      "token_prefix": "c91428b4",
+      "http": "200",
+      "tenant_id_ok": true,
+      "has_settings": true,
+      "pass": true
+    },
+    {
+      "slug": "demo-b",
+      "tenant_id": "655aaccb-004a-4bb9-a50a-ce618854dda3",
+      "token_prefix": "952c1129",
+      "http": "200",
+      "tenant_id_ok": true,
+      "has_settings": true,
+      "pass": true
+    },
+    {
+      "slug": "demo-prep",
+      "tenant_id": "d47165db-81c9-4e9d-bc50-e37fe610d86c",
+      "token_prefix": "16f3906b",
+      "http": "200",
+      "tenant_id_ok": true,
+      "has_settings": true,
+      "pass": true
+    },
+    {
+      "slug": "alpha-p1",
+      "tenant_id": "1c064640-4301-4435-8ded-c92fb075e9cc",
+      "token_prefix": "0bbd19da",
+      "http": "200",
+      "tenant_id_ok": true,
+      "has_settings": true,
+      "pass": true
+    },
+    {
+      "slug": "alpha-p2",
+      "tenant_id": "edf8a0a9-38e7-4049-b9c6-3e08c6c23a76",
+      "token_prefix": "e37b8b3b",
+      "http": "200",
+      "tenant_id_ok": true,
+      "has_settings": true,
+      "pass": true
+    },
+    {
+      "slug": "alpha-p3",
+      "tenant_id": "d29fcf3a-da72-4a95-9683-9cfa71a2d865",
+      "token_prefix": "5b25667c",
+      "http": "200",
+      "tenant_id_ok": true,
+      "has_settings": true,
+      "pass": true
+    },
+    {
+      "slug": "beta-p1",
+      "tenant_id": "03a4d457-e16f-4998-b764-69b3de083732",
+      "token_prefix": "4f871d0a",
+      "http": "200",
+      "tenant_id_ok": true,
+      "has_settings": true,
+      "pass": true
+    },
+    {
+      "slug": "beta-p2",
+      "tenant_id": "628a937b-f4e2-43b7-bd7f-9fa44f031460",
+      "token_prefix": "5cf63155",
+      "http": "200",
+      "tenant_id_ok": true,
+      "has_settings": true,
+      "pass": true
+    },
+    {
+      "slug": "beta-p3",
+      "tenant_id": "b57c2a88-91a5-481e-b44f-29e29c77cfb5",
+      "token_prefix": "e0261ab6",
+      "http": "200",
+      "tenant_id_ok": true,
+      "has_settings": true,
+      "pass": true
+    }
+  ]
+}

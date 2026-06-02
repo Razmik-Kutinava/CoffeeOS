@@ -210,13 +210,13 @@
 
 ---
 
-### Блок 3 — Код: kiosk + кэш *(2026-06-02, CR-05)*
+### Блок 3 — Код: kiosk + кэш *(2026-06-02, закрыт)*
 
-- [x] V2-CR-05 — kiosk tenant GUC (`with_kiosk_tenant_guc!`, тесты 7/0, `prog10_block3_cr05.json`)
-- [ ] V2-CR-04 — CacheCounter (fix или wontfix в `PRACTICES`, 1 pod Fly)
+- [x] V2-CR-05 — kiosk tenant GUC (`with_kiosk_tenant_guc!`, тесты 7/0, Fly curl **9/9** — `prog10_kiosk_auth_fly_cr05.json`)
+- [x] V2-CR-04 — CacheCounter **wontfix** Fly 1 pod; при 2+ серверах → Redis (`PRACTICES`)
 - [x] Тесты kiosk — `test/controllers/kiosk/api/auth_controller_test.rb`
 
-*Fly: перепроверить auth после деплоя. Ждём апрув → блок 11.*
+*Ждём апрув блока 3 → блок 11. Деплой: `git push` ✅; `fly deploy` — владелец (`flyctl auth login`).*
 
 ---
 
