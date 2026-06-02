@@ -11,10 +11,18 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| Блок **6** ✅ — wizard staff + логины org | Блок **3** — CR-05, CR-04 |
-| Блок **0–2,4–5** выполнены | … блоки 7–14 |
+| Блок **7** ✅ — Staff/RBAC изоляция 9/9 | Блок **8** — ENT-02/07/08 |
+| Блок **0–2,4–6** выполнены | … блоки 9–14 |
 
 **Ops на блок:** `SESSION_STATE` + коммит всегда; `PRACTICES` (CR); `QA_ACCEPTANCE_RUN` + `artifacts/` (QA); `CHANGELOG` если заметно; `CHECKLIST` `[x]` только по факту.
+
+### Сессия 2026-06-02 (прогон 10 — блок 7, staff/rbac isolation)
+
+- Прогнан `bin/prog10_staff_rbac_isolation.rb` по 9 точкам.
+- Матрица изоляции PASS 9/9: own order `200`, foreign order `404`; для prep-tenant barista ожидаемо `302`.
+- Артефакты: `artifacts/prog10_staff_isolation.json`, `artifacts/prog10_staff_isolation.md`.
+- MCP DevTools: browser smoke на `https://coffeeos.fly.dev/login` (доступ/структура страницы подтверждены).
+- Следующий: блок 8 (ENT-02, ENT-07, ENT-08).
 
 ### Сессия 2026-06-02 (прогон 10 — блок 6, staff wizard)
 

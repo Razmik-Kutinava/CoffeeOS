@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v1.83 — 2026-06-02 (V2 прогон 10 — блок 7, staff/rbac isolation)
+
+- Добавлен `bin/prog10_staff_rbac_isolation.rb` для проверки изоляции staff/RBAC по 9 точкам.
+- Артефакты: `prog10_staff_isolation.json` + `prog10_staff_isolation.md` (PASS 9/9).
+- Изоляция подтверждена: own order `200`, foreign order `404`; prep-tenant barista доступ ожидаемо закрыт (`302`).
+
 ## v1.82 — 2026-06-02 (V2 прогон 10 — блок 6, staff wizard)
 
 - Карточка точки УК: добавлен wizard «первая команда» с шаблоном логинов (role/email/panel).

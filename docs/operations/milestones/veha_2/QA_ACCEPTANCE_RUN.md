@@ -44,7 +44,7 @@
 | **4** | CR-02 Fly callback secrets; SEC-07 backlog | ⚠ **2026-06-02** — тесты 559/0, manual secret-check (`CALLBACK_SHARED_SECRET`, `CALLBACK_SHARED_TOKEN`) |
 | **5** | Гейт тестов + PRACTICES/CODE_REVIEW sync | ✅ **2026-06-02** — 559/0 |
 | **6** | V2-T3 wizard + лист логинов org | ✅ **2026-06-02** — 561/0 |
-| **7** | Staff/RBAC Prog10 ×9 (STF-01…05) | `[ ]` |
+| **7** | Staff/RBAC Prog10 ×9 (STF-01…05) | ✅ **2026-06-02** — PASS 9/9 (`prog10_staff_isolation.json`) |
 | **8** | ENT-02, ENT-07, ENT-08 | `[ ]` |
 | **9** | Kiosk→barista ×9 (curl+MCP) | `[ ]` |
 | **10** | Витрина MCP 5 точек + SHP-09 | `[ ]` |
