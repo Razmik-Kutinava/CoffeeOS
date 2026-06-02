@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## v1.86 — 2026-06-02 (V2 прогон 10 — блок 7, MCP 9 точек + STF-03)
+
+- MCP Puppeteer: **9/9** точек — STF-01/02/04 на 9, **STF-03** (создание barista) на всех 9.
+- `demo-prep`: barista-модуль ожидаемо недоступен (probe `GET /barista` не отдаёт панель barista).
+- Артефакты: `prog10_staff_mcp_9pt.json`, `prog10_staff_mcp_9pt.md`.
+- Блок 7 техготов, ждём апрув перед блоком **8**.
+
 ## v1.85 — 2026-06-02 (V2 прогон 10 — блок 7, MCP 6 точек + STF-03)
 
 - MCP Puppeteer: **6/9** точек — STF-01/02, **STF-03** (создание barista ×6), STF-04 (login новых ×6).

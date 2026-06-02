@@ -1,0 +1,102 @@
+{
+  "at": "2026-06-02T11:55:00Z",
+  "base": "https://coffeeos.fly.dev",
+  "curl_baseline": "prog10_staff_isolation.json (9/9)",
+  "mcp_servers": ["user-puppeteer"],
+  "scope": {
+    "stf01_02_04_points": 9,
+    "stf03_create_staff_points": 9
+  },
+  "stf03_batches": {
+    "batch_1": "06021250 (demo-a/demo-b + alpha-p1/alpha-p2 + beta-p1/beta-p2)",
+    "batch_2": "06021510 (demo-prep + alpha-p3 + beta-p3)"
+  },
+  "points": [
+    {
+      "slug": "demo-a",
+      "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+      "stf01": "PASS",
+      "stf02_staff_list": "PASS",
+      "stf03_email": "mcp-stf03-demo-a-06021250@prog10.local",
+      "stf03_in_list": true,
+      "stf04_barista_board": "PASS (/barista)"
+    },
+    {
+      "slug": "demo-b",
+      "tenant_id": "655aaccb-004a-4bb9-a50a-ce618854dda3",
+      "stf01": "PASS",
+      "stf02_staff_list": "PASS",
+      "stf03_email": "mcp-stf03-demo-b-06021250@prog10.local",
+      "stf03_in_list": true,
+      "stf04_barista_board": "PASS (/barista)"
+    },
+    {
+      "slug": "demo-prep",
+      "tenant_id": "d47165db-81c9-4e9d-bc50-e37fe610d86c",
+      "stf01": "PASS",
+      "stf02_staff_list": "PASS",
+      "stf03_email": "mcp-stf03-demo-prep-06021510@prog10.local",
+      "stf03_in_list": true,
+      "stf04_barista_board": "NOT_AVAILABLE (demo-prep: бариста-модуль недоступен; probe GET /barista вернул не панель barista, responseURL=/)"
+    },
+    {
+      "slug": "alpha-p1",
+      "tenant_id": "1c064640-4301-4435-8ded-c92fb075e9cc",
+      "stf01": "PASS",
+      "stf02_staff_list": "PASS",
+      "stf03_email": "mcp-stf03-alpha-p1-06021250@prog10.local",
+      "stf03_in_list": true,
+      "stf04_barista_board": "PASS (/barista)"
+    },
+    {
+      "slug": "alpha-p2",
+      "tenant_id": "edf8a0a9-38e7-4049-b9c6-3e08c6c23a76",
+      "stf01": "PASS",
+      "stf02_staff_list": "PASS",
+      "stf03_email": "mcp-stf03-alpha-p2-06021250@prog10.local",
+      "stf03_in_list": true,
+      "stf04_barista_board": "PASS (/barista)"
+    },
+    {
+      "slug": "alpha-p3",
+      "tenant_id": "d29fcf3a-da72-4a95-9683-9cfa71a2d865",
+      "stf01": "PASS",
+      "stf02_staff_list": "PASS",
+      "stf03_email": "mcp-stf03-alpha-p3-06021510@prog10.local",
+      "stf03_in_list": true,
+      "stf04_barista_board": "PASS (/barista)"
+    },
+    {
+      "slug": "beta-p1",
+      "tenant_id": "03a4d457-e16f-4998-b764-69b3de083732",
+      "stf01": "PASS",
+      "stf02_staff_list": "PASS",
+      "stf03_email": "mcp-stf03-beta-p1-06021250@prog10.local",
+      "stf03_in_list": true,
+      "stf04_barista_board": "PASS (/barista)"
+    },
+    {
+      "slug": "beta-p2",
+      "tenant_id": "628a937b-f4e2-43b7-bd7f-9fa44f031460",
+      "stf01": "PASS",
+      "stf02_staff_list": "PASS",
+      "stf03_email": "mcp-stf03-beta-p2-06021250@prog10.local",
+      "stf03_in_list": true,
+      "stf04_barista_board": "PASS (/barista)"
+    },
+    {
+      "slug": "beta-p3",
+      "tenant_id": "b57c2a88-91a5-481e-b44f-29e29c77cfb5",
+      "stf01": "PASS",
+      "stf02_staff_list": "PASS",
+      "stf03_email": "mcp-stf03-beta-p3-06021510@prog10.local",
+      "stf03_in_list": true,
+      "stf04_barista_board": "PASS (/barista)"
+    }
+  ],
+  "summary": {
+    "mcp_stf01_02_pass_points": 9,
+    "mcp_stf03_create_staff_pass_points": 9,
+    "mcp_block7_ready_for_approval": true
+  }
+}
