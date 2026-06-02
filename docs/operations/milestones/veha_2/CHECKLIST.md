@@ -140,7 +140,7 @@
 - [x] **Solid Queue + Solid Cable на Fly** — worker `bin/jobs`; live-табло без F5; signed callback через worker *(прогон 4 PASS + `DB_POOL=8`, order `85bef120`, 2026-05-28)*
 - [x] UX таймаут БД >5 с (qa 6.2) — overlay skeleton при fetch >5 с; тест `slow_request_ux_test.rb` *(прогон 8, 2026-05-30)*
 - [x] V2-T8: flaky `events_controller_test` (callback timestamp) — 200 с + `travel_to` *(2026-05-30, 23/0 + ×5)*
-- [ ] Blameless Postmortem при закрытии §I — черновик [`POSTMORTEM_2026-05-28.md`](POSTMORTEM_2026-05-28.md); `[x]` после апрува
+- [x] Blameless Postmortem — [`POSTMORTEM_2026-05-28.md`](POSTMORTEM_2026-05-28.md) § Fly/T-Bank + § Прогон 10 *(блок 14, 2026-06-02)*
 - [ ] Возврат (refund) через Т-Банк API — **В3**, не блокирует В2
 
 ---
@@ -155,7 +155,7 @@
 - [ ] **§E** [`DEMO_FEEDBACK.md`](DEMO_FEEDBACK.md) — фидбек и блокеры закрыты
 - [ ] Живое демо В2 — [`LIVE_DEMO_SCENARIOS_PLAIN.md`](LIVE_DEMO_SCENARIOS_PLAIN.md)
 - [x] `bin/rails test` — **554/0** в `PRACTICES.md` *(2026-05-30, prog 8b)*
-- [ ] Postmortem — [`POSTMORTEM_2026-05-28.md`](POSTMORTEM_2026-05-28.md) `[x]` при закрытии §I
+- [x] Postmortem (прогон 10) — [`POSTMORTEM_2026-05-28.md`](POSTMORTEM_2026-05-28.md); §I веха — после §E + живого демо
 - [ ] `docs/operations/SESSION_STATE.md` — «Веха 2 закрыта» или список хвостов
 - [ ] `docs/operations/CHANGELOG.md` — запись о закрытии В2
 - [x] **§D В2:** витрина + curl smoke — см. [`FLUTTER_API.md`](FLUTTER_API.md), prog 7–9
@@ -330,13 +330,15 @@
 - [x] индекс артефактов `prog10_final_index.json`
 - [x] `QA_ACCEPTANCE_RUN.md` — хвосты PASS/SKIP (§ прогон 10d)
 
-*Ждём апрув блока 13 → блок 14.*
+*Апрув блока 13 — 2026-06-02.*
 
 ---
 
-### Блок 14 — Доки
+### Блок 14 — Доки *(2026-06-02, закрыт)*
 
-- [ ] Postmortem дописать → `[x]`
+- [x] Postmortem дописан — [`POSTMORTEM_2026-05-28.md`](POSTMORTEM_2026-05-28.md) § «Прогон 10»
+
+*Ждём апрув блока 14 → §E / §I (вне блоков 1–14).*
 
 ---
 

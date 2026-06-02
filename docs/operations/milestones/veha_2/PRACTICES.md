@@ -100,6 +100,7 @@
 | V2-P10-11 | Блок 11 CON-02…06 | **done** *(2026-06-02)* | `prog10_connectivity.json`, тесты + Fly CON-02 |
 | V2-P10-12 | Блок 12 Barista↔цех e2e | **done** *(2026-06-02)* | `prog10_warehouse_block12.json`; auto-link sales→prep в backlog V2-BACKLOG-PREP-MULTI |
 | V2-P10-13 | Блок 13 финал прогона 10 | **done** *(2026-06-02)* | `prog10_final_block13.json`, `prog10_final_index.json` |
+| V2-P10-14 | Блок 14 Postmortem | **done** *(2026-06-02)* | `POSTMORTEM_2026-05-28.md` § Прогон 10 |
 
 **Когда править V2-P10-08:** после закрытия QA-блоков 10–14 и §E; отдельный кодовый PR (не смешивать с витриной/RBAC). Иначе отчёты и табло врут про канал заказа.
 
@@ -115,7 +116,7 @@
 | **Circuit Breaker** | В2 (перед прод) | ✅ Done | `TbankAdapter#post_json_with_circuit_breaker` *(2026-05-28)* |
 | **Event Sourcing склада** | В3 | ❌ Не начато | Склад v0.1 — прямой UPDATE. В3: `StockMovement` как журнал, nightly reconciliation |
 | **Read Replicas** | После трафика | ❌ Не начато | Когда появится реальная нагрузка на SELECT-запросы. Fly Postgres replica + `ApplicationRecord.connected_to(role: :reading)` |
-| **Blameless Postmortems** | В2 закрытие | ❌ Не начато | Черновик [`POSTMORTEM_2026-05-28.md`](POSTMORTEM_2026-05-28.md); `[x]` в §I — после апрува |
+| **Blameless Postmortems** | В2 прогон 10 | ✅ § Прогон 10 | [`POSTMORTEM_2026-05-28.md`](POSTMORTEM_2026-05-28.md); §I веха — после §E |
 
 ### Порядок «перед боевыми деньгами»
 
