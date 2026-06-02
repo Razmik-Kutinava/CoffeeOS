@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v1.85 — 2026-06-02 (V2 прогон 10 — блок 7, MCP 6 точек + STF-03)
+
+- MCP Puppeteer: **6/9** точек — STF-01/02, **STF-03** (создание barista ×6), STF-04 (login новых ×6).
+- Артефакты: `prog10_staff_mcp_6pt.json`, `prog10_staff_mcp_6pt.md`.
+- Блок 7 в QA — **не закрыт** (3 точки только curl; апрув перед блоком 8).
+
 ## v1.84 — 2026-06-02 (V2 прогон 10 — блок 7, MCP STF 3 org)
 
 - MCP UI на Fly: **3 org** (Demo/Alpha/Beta) — STF-01/02/04 + изоляция заказа в браузере (own `200`, foreign `404`).

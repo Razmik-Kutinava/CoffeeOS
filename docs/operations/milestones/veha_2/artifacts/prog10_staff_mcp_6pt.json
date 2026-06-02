@@ -1,0 +1,118 @@
+{
+  "at": "2026-06-02T14:30:00Z",
+  "base": "https://coffeeos.fly.dev",
+  "mcp_server": "user-puppeteer",
+  "curl_baseline": "prog10_staff_isolation.json (9/9)",
+  "scope": {
+    "stf01_02_04_points": 6,
+    "stf03_create_staff_points": 6,
+    "not_in_browser": ["demo-prep", "alpha-p3", "beta-p3"]
+  },
+  "stf01_02_04": [
+    {
+      "slug": "demo-a",
+      "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+      "stf01": "PASS",
+      "stf02": "PASS",
+      "stf04_existing_barista": "PASS",
+      "batch": 1
+    },
+    {
+      "slug": "demo-b",
+      "tenant_id": "655aaccb-004a-4bb9-a50a-ce618854dda3",
+      "stf01": "PASS",
+      "stf02": "PASS",
+      "point": "Demo Coffee Point B",
+      "batch": 2
+    },
+    {
+      "slug": "alpha-p1",
+      "tenant_id": "1c064640-4301-4435-8ded-c92fb075e9cc",
+      "stf01": "PASS",
+      "stf02": "PASS",
+      "stf04_existing_barista": "PASS",
+      "batch": 1
+    },
+    {
+      "slug": "alpha-p2",
+      "tenant_id": "edf8a0a9-38e7-4049-b9c6-3e08c6c23a76",
+      "stf01": "PASS",
+      "stf02": "PASS",
+      "point": "Prog10 Alpha Point 2",
+      "batch": 2
+    },
+    {
+      "slug": "beta-p1",
+      "tenant_id": "03a4d457-e16f-4998-b764-69b3de083732",
+      "stf01": "PASS",
+      "stf02": "PASS",
+      "stf04_existing_barista": "PASS",
+      "batch": 1
+    },
+    {
+      "slug": "beta-p2",
+      "tenant_id": "628a937b-f4e2-43b7-bd7f-9fa44f031460",
+      "stf01": "PASS",
+      "stf02": "PASS",
+      "point": "Prog10 Beta Point 2",
+      "batch": 2
+    }
+  ],
+  "stf03_create_staff": [
+    {
+      "slug": "demo-a",
+      "email": "mcp-stf03-demo-a-06021250@prog10.local",
+      "method": "browser_form_post",
+      "in_list": true,
+      "stf04_login_barista": "PASS",
+      "point": "Demo Coffee Point A"
+    },
+    {
+      "slug": "demo-b",
+      "email": "mcp-stf03-demo-b-06021250@prog10.local",
+      "method": "ui_puppeteer_fill_click",
+      "in_list": true,
+      "stf04_login_barista": "PASS",
+      "point": "Demo Coffee Point B"
+    },
+    {
+      "slug": "alpha-p1",
+      "email": "mcp-stf03-alpha-p1-06021250@prog10.local",
+      "method": "browser_form_post",
+      "in_list": true,
+      "stf04_login_barista": "PASS",
+      "point": "Prog10 Alpha Point 1"
+    },
+    {
+      "slug": "alpha-p2",
+      "email": "mcp-stf03-alpha-p2-06021250@prog10.local",
+      "method": "browser_form_post",
+      "in_list": true,
+      "stf04_login_barista": "PASS",
+      "point": "Prog10 Alpha Point 2"
+    },
+    {
+      "slug": "beta-p1",
+      "email": "mcp-stf03-beta-p1-06021250@prog10.local",
+      "method": "browser_form_post",
+      "in_list": true,
+      "stf04_login_barista": "PASS",
+      "point": "Prog10 Beta Point 1"
+    },
+    {
+      "slug": "beta-p2",
+      "email": "mcp-stf03-beta-p2-06021250@prog10.local",
+      "method": "browser_form_post",
+      "in_list": true,
+      "stf04_login_barista": "PASS",
+      "point": "Prog10 Beta Point 2"
+    }
+  ],
+  "summary": {
+    "stf01_02_pass": 6,
+    "stf03_pass": 6,
+    "stf04_new_staff_pass": 6,
+    "block7_closed": false,
+    "block7_note": "3 точки (prep, alpha-p3, beta-p3) — только curl; блок 8 — после апрува"
+  }
+}

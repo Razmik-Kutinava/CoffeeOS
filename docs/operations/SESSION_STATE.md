@@ -11,18 +11,22 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| Блок **7** ✅ — curl 9/9 + MCP STF **3 org** | Блок **8** — **ждём апрув** |
+| Блок **7** ⚠ — curl 9/9; MCP **6/9** (STF-03 ×6 в браузере) | Блок **8** — **после апрува** |
 | Блок **0–2,4–6** выполнены | … блоки 9–14 |
 
 **Ops на блок:** `SESSION_STATE` + коммит всегда; `PRACTICES` (CR); `QA_ACCEPTANCE_RUN` + `artifacts/` (QA); `CHANGELOG` если заметно; `CHECKLIST` `[x]` только по факту.
 
-### Сессия 2026-06-02 (прогон 10 — блок 7, staff/rbac + MCP 3 org)
+### Сессия 2026-06-02 (прогон 10 — блок 7, MCP 6 точек + STF-03)
 
-- **curl:** `bin/prog10_staff_rbac_isolation.rb` — PASS **9/9** (`prog10_staff_isolation.json`).
-- **MCP UI (3 org):** Demo `demo-a`, Alpha `alpha-p1`, Beta `beta-p1` — STF-01/02/04 PASS; изоляция в браузере own `200`, foreign `404` (`prog10_staff_mcp_3org.json`).
-- **MCP:** `cursor-ide-browser` — `/login` OK; пароль через fill/type не проходит (Stimulus). `user-puppeteer` — полный STF-прогон.
-- **Не гоняли:** STF по всем 9 точкам в браузере; STF-03 (создание staff в UI).
-- **Следующий:** блок **8** — **после апрува** (ENT-02, ENT-07, ENT-08).
+- **curl:** 9/9 без изменений (`prog10_staff_isolation.json`).
+- **MCP +6 точек:** STF-01/02 на demo-a/b, alpha-p1/p2, beta-p1/p2; **STF-03** — создание barista на тех же 6 (`mcp-stf03-*-06021250@prog10.local`); **STF-04** — login новых → `/barista` на своей точке (`prog10_staff_mcp_6pt.json`).
+- **STF-03 UI:** demo-b — fill+click; остальные 5 — POST формы в сессии Puppeteer (UK).
+- **Не в браузере:** demo-prep, alpha-p3, beta-p3.
+- **Блок 7 не закрыт** в QA — ждём апрув перед блоком 8.
+
+### Сессия 2026-06-02 (прогон 10 — блок 7, MCP 3 org — срез 1)
+
+- Первый срез 3 org: `prog10_staff_mcp_3org.json` (STF-01/02/04 + ISO JSON).
 
 ### Сессия 2026-06-02 (прогон 10 — блок 6, staff wizard)
 
