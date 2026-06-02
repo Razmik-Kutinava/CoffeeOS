@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v1.88 — 2026-06-02 (V2 прогон 10 — ENT-02 clipboard verify)
+
+- ENT-02: реальная проверка буфера после «Копировать» + Ctrl+V (`prog10_ent02_clipboard.json`).
+
 ## v1.87 — 2026-06-02 (V2 прогон 10 — блок 8, ENT карточка УК)
 
 - MCP: ENT-02, ENT-07, ENT-08 на demo-a — PASS 3/3 (`prog10_ent_card_mcp.json`).

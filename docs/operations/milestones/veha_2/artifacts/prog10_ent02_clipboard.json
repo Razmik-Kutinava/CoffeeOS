@@ -1,0 +1,14 @@
+{
+  "at": "2026-06-02T13:00:00Z",
+  "base": "https://coffeeos.fly.dev",
+  "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "scenario": "ENT-02",
+  "method": "Puppeteer: click «Копировать» → clipboard.readText() + Ctrl+V в textarea",
+  "expected": "https://coffeeos.fly.dev/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "clip_after_click": "https://coffeeos.fly.dev/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "pasted_ctrl_v": "https://coffeeos.fly.dev/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "match_clip": true,
+  "match_paste": true,
+  "pass": true,
+  "note": "Нужны CDP permissions clipboardReadWrite; без них headless даёт пустой буфер"
+}
