@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v1.80 — 2026-06-02 (V2 прогон 10 — блок 4, ops checks)
+
+- **V2-CR-02:** автоматическая проверка `CALLBACK_*` на Fly не выполнена (в среде нет `flyctl`); в ops зафиксирован обязательный manual-check перед deploy.
+- **SEC-07:** подтверждён backlog — `shop-api-key` в meta витрины оставлен для демо-стенда, ротация после В2.
+- **Тесты:** полный suite **559/0**.
+
 ## v1.79 — 2026-06-01 (V2 прогон 10 — блок 2, shop CSRF + order privacy)
 
 - **Shop API:** `browser_shop_session?` — `valid_authenticity_token?` (V2-CR-03 / SEC-02).

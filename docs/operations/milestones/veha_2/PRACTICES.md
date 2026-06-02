@@ -81,10 +81,11 @@
 | V2-T7 | QR режим B (без домена) | open | Режим A — когда будет домен; §I хвост |
 | V2-T8 | Flaky тест `events_controller_test.rb:208` (timing) | **done** *(2026-05-30)* | 200 с + `travel_to`; 23/0, ×5 PASS |
 | V2-CR-01 | `catalog_bootstrap.rb` N+1 PTS | **done** *(2026-06-01, блок 1)* | prefetch PTS + bulk create |
-| V2-CR-02 | `events_controller` без `CALLBACK_*` | **accepted** | prod: secrets в Fly; проверять на deploy |
+| V2-CR-02 | `events_controller` без `CALLBACK_*` | **in_progress** *(блок 4, 2026-06-02)* | В этой среде нет `flyctl`; проверка секретов вручную в Fly Dashboard/CLI перед deploy |
 | V2-CR-03 | `browser_shop_session?` без CSRF verify | **done** *(2026-06-01, блок 2)* | `valid_authenticity_token?` + referer |
 | V2-CR-04 | `CacheCounter` MemoryStore | **open** | 1 pod Fly OK; multi-pod → Redis/Solid (В3) |
 | V2-CR-05 | Kiosk `KioskSetting` без tenant GUC | **open** | owner bypass; В3 при FORCE RLS |
+| V2-SEC-07 | `shop.html.erb` meta `shop-api-key` | **accepted / backlog** *(блок 4, 2026-06-02)* | демо-стенд; ротация/уборка ключа из meta — после В2 |
 | V2-P10-01 | Прогон 10: 3 org × 3 точки | **done** *(2026-06-01)* | [`PROG10_TENANTS.md`](PROG10_TENANTS.md) |
 | V2-P10-02 | Прогон 10: kiosk curl | **done** *(2026-06-01)* | `bin/prog10_fly_smoke.rb` + Prog10 Kiosk MCP |
 | V2-P10-03 | Прогон 10: RBAC AUTH-01…09 | **done** *(2026-06-01)* | MCP + регрессия прогон 5 |

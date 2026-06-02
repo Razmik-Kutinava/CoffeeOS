@@ -38,11 +38,11 @@
 | V2-001 | Major | `catalog_bootstrap.rb` | N+1 PTS при bootstrap каталога | **Исправлено** *(2026-06-01, блок 1)* — prefetch + create! |
 | V2-003 | Major | `kiosk/api/auth_controller.rb` | `KioskSetting` без tenant GUC после RLS off | **Отложено** — owner bypass RLS; при FORCE RLS — fix в В3 |
 | V2-004b | Major | `tbank_callback_job.rb` | Job без `SET LOCAL tenant` | **Принято** — DB owner bypass; документировано (как V1 jobs) |
-| SEC-01 | P0 | `events_controller.rb` | Auth skip если `CALLBACK_*` пуст | **Принято** — prod: secrets в Fly; T-Bank через `/callbacks/tbank`. Проверить secrets на deploy |
+| SEC-01 | P0 | `events_controller.rb` | Auth skip если `CALLBACK_*` пуст | **Принято** — prod: secrets в Fly; T-Bank через `/callbacks/tbank`. Блок 4: manual-check перед deploy (без `flyctl` в среде) |
 | SEC-02 | P0 | `shop_api_auth.rb` | `browser_shop_session?` без verify CSRF | **Исправлено** *(2026-06-01, блок 2)* — `valid_authenticity_token?` |
 | SEC-03 | P1 | `cache_counter.rb` | MemoryStore — не cluster-safe | **Принято** — 1 web pod Fly; multi-pod → Solid/Redis (В3) |
 | SEC-06 | P2 | `tenant_resolution.rb` | `X-Shop-Tenant` без auth | **Принято** — публичная витрина по UUID/slug; изоляция по tenant_id |
-| SEC-07 | P2 | `shop.html.erb` | API key в meta | **Принято** — демо-стенд; ротация ключей → backlog |
+| SEC-07 | P2 | `shop.html.erb` | API key в meta | **Принято** — демо-стенд; backlog подтверждён (блок 4) |
 | SEC-08 | P2 | `orders_controller.rb` | `show` без проверки customer | **Исправлено** *(2026-06-01, блок 2)* — только `session[:shop_customer_id]` |
 | V2-006 | Minor | `entry_points.rb` | Дубли FeatureFlag запросов | **Исправлено** *(2026-06-01)* — один `where` + index_by |
 | V2-007 | Minor | `products_controller.rb` | `find_by!` без rescue | OK — `show` ловит RecordNotFound |
