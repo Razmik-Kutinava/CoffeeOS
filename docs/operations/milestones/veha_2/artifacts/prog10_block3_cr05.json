@@ -1,0 +1,9 @@
+{
+  "at": "2026-06-02T13:50:00Z",
+  "block": 3,
+  "item": "V2-CR-05",
+  "change": "Kiosk::Api::AuthController — SET LOCAL app.current_tenant_id before KioskSetting lookup",
+  "tests": "test/controllers/kiosk/api/auth_controller_test.rb — 7 runs, 0 failures",
+  "fly_recheck": "after deploy to coffeeos.fly.dev — bin/prog10_collect_kiosk_tokens.rb + POST /kiosk/api/auth",
+  "kiosk_data": "Prog10 Kiosk devices on 9 points (prog10_collect_kiosk_tokens.rb)"
+}

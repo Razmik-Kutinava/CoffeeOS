@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## v1.92 — 2026-06-02 (V2 прогон 10 — блок 3, CR-05 kiosk GUC)
+
+- `Kiosk::Api::AuthController`: `SET LOCAL app.current_tenant_id` перед загрузкой `KioskSetting`.
+- Тесты kiosk auth **7/0**; CR-04 CacheCounter — open.
+
 ## v1.91 — 2026-06-02 (V2 прогон 10 — блок 10 добивка)
 
 - Mock **card** на 5 точках: curl + MCP (`prog10_shop_vitrina_card_*`).

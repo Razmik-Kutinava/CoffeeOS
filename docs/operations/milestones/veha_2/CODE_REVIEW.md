@@ -36,7 +36,7 @@
 | V2-005 | Major | `tbank_controller.rb` | Idempotency после enqueue (TOCTOU) | **Исправлено:** `CacheCounter.claim` до enqueue |
 | SEC-09 | Major | `rack_attack.rb` | Throttle kiosk на `/api/kiosk/` — маршрут `/kiosk/api/` | **Исправлено:** path + throttle IP на auth |
 | V2-001 | Major | `catalog_bootstrap.rb` | N+1 PTS при bootstrap каталога | **Исправлено** *(2026-06-01, блок 1)* — prefetch + create! |
-| V2-003 | Major | `kiosk/api/auth_controller.rb` | `KioskSetting` без tenant GUC после RLS off | **Отложено** — owner bypass RLS; при FORCE RLS — fix в В3 |
+| V2-003 | Major | `kiosk/api/auth_controller.rb` | `KioskSetting` без tenant GUC после RLS off | **Исправлено** *(2026-06-02, блок 3)* — `with_kiosk_tenant_guc!` |
 | V2-004b | Major | `tbank_callback_job.rb` | Job без `SET LOCAL tenant` | **Принято** — DB owner bypass; документировано (как V1 jobs) |
 | SEC-01 | P0 | `events_controller.rb` | Auth skip если callback secrets пусты | **Принято** — prod: secrets в Fly (`CALLBACK_SHARED_SECRET`, `CALLBACK_SHARED_TOKEN`); T-Bank через `/callbacks/tbank`. Блок 4: manual-check перед deploy |
 | SEC-02 | P0 | `shop_api_auth.rb` | `browser_shop_session?` без verify CSRF | **Исправлено** *(2026-06-01, блок 2)* — `valid_authenticity_token?` |

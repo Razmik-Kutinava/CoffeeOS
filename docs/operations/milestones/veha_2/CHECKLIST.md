@@ -210,11 +210,13 @@
 
 ---
 
-### Блок 3 — Код: kiosk + кэш
+### Блок 3 — Код: kiosk + кэш *(2026-06-02, CR-05)*
 
-- [ ] V2-CR-05 — kiosk tenant GUC
+- [x] V2-CR-05 — kiosk tenant GUC (`with_kiosk_tenant_guc!`, тесты 7/0, `prog10_block3_cr05.json`)
 - [ ] V2-CR-04 — CacheCounter (fix или wontfix в `PRACTICES`, 1 pod Fly)
-- [ ] Тесты kiosk
+- [x] Тесты kiosk — `test/controllers/kiosk/api/auth_controller_test.rb`
+
+*Fly: перепроверить auth после деплоя. Ждём апрув → блок 11.*
 
 ---
 
@@ -292,7 +294,7 @@
 
 **Не в этом блоке:** `source=kiosk` → **V2-P10-08** (после 10–14).
 
-*Ждём апрув блока 10 → потом блок 3 (код) → потом апрув → блок 11.*
+*Апрув блока 10 — 2026-06-02.*
 
 ---
 
