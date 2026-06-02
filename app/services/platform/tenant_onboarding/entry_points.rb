@@ -8,6 +8,8 @@ module Platform
 
       ModuleItem = Data.define(:code, :label, :enabled)
 
+      TeamTemplateItem = Data.define(:role, :email, :panel)
+
       SALES_STAFF = [
         { code: "general_manager", label: "Менеджер (general_manager)" },
         { code: "barista", label: "Бариста (barista)" },
@@ -52,6 +54,7 @@ module Platform
           prep_kitchen_path: "/prep_kitchen",
           modules: module_items(flags),
           staff_items: staff_items,
+          team_template: team_template_items,
           qr_hint: qr_hint
         }
       end
@@ -123,6 +126,23 @@ module Platform
           "QR: напечатайте ссылку витрины (режим без поддомена — tenant_id в URL)."
         else
           "QR: напечатайте ссылку витрины или используйте поддомен #{tenant.slug}.#{UrlBuilder.shop_base_domain}."
+        end
+      end
+
+      def team_template_items
+        base = tenant.slug.presence || "point"
+
+        if tenant.production_kitchen?
+          [
+            TeamTemplateItem.new(role: "prep_kitchen_manager", email: "pkm-#{base}@org.local", panel: "/prep_kitchen"),
+            TeamTemplateItem.new(role: "prep_kitchen_worker", email: "pkw-#{base}@org.local", panel: "/prep_kitchen")
+          ]
+        else
+          [
+            TeamTemplateItem.new(role: "general_manager", email: "gm-#{base}@org.local", panel: "/manager"),
+            TeamTemplateItem.new(role: "barista", email: "barista-#{base}@org.local", panel: "/barista"),
+            TeamTemplateItem.new(role: "shift_manager", email: "shift-#{base}@org.local", panel: "/manager")
+          ]
         end
       end
     end

@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## v1.82 — 2026-06-02 (V2 прогон 10 — блок 6, staff wizard)
+
+- Карточка точки УК: добавлен wizard «первая команда» с шаблоном логинов (role/email/panel).
+- `EntryPoints` теперь отдаёт `team_template` для sales point и production kitchen.
+- `STAFF_ACCESS.md`: закрыты пункты wizard + лист логинов новой org.
+- Тесты: `entry_points_test` **7/0**; полный suite **561/2318/0**.
+
 ## v1.81 — 2026-06-02 (V2 прогон 10 — блок 5, gate кода)
 
 - Полный `bin/rails test` в WSL: **559/2311/0**.

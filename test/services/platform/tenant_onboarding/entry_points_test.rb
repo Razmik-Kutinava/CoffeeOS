@@ -88,4 +88,23 @@ class Platform::TenantOnboarding::EntryPointsTest < ActiveSupport::TestCase
     assert_includes codes, "prep_kitchen_worker"
     assert_not_includes codes, "barista"
   end
+
+  test "team template includes first team emails for sales point" do
+    tenant = create_tenant!(organization: @org, slug: "alpha-p1")
+    data = Platform::TenantOnboarding::EntryPoints.for(tenant)
+
+    emails = data[:team_template].map(&:email)
+    assert_includes emails, "gm-alpha-p1@org.local"
+    assert_includes emails, "barista-alpha-p1@org.local"
+    assert_includes emails, "shift-alpha-p1@org.local"
+  end
+
+  test "team template includes prep roles for production kitchen" do
+    tenant = create_tenant!(organization: @org, slug: "prep-a1")
+    tenant.update!(type: "production_kitchen")
+    data = Platform::TenantOnboarding::EntryPoints.for(tenant)
+
+    roles = data[:team_template].map(&:role)
+    assert_equal %w[prep_kitchen_manager prep_kitchen_worker], roles
+  end
 end

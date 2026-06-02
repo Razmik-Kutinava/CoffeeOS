@@ -61,6 +61,17 @@
       </li>
     <% end %>
   </ul>
+  <h3 style="font-size: 0.95rem; margin: 16px 0 8px;">Wizard: первая команда точки</h3>
+  <p style="margin: 0 0 8px; color: #94a3b8; font-size: 12px;">
+    Шаблон логинов для новой org (замените `org.local` на ваш домен/почту, пароль задайте в manager).
+  </p>
+  <ul style="margin: 0;">
+    <% entry_points[:team_template].each do |item| %>
+      <li>
+        <code><%= item.email %></code> — <%= item.role %> → <code><%= item.panel %></code>
+      </li>
+    <% end %>
+  </ul>
   <p style="font-size: 12px; color: #94a3b8; margin-top: 12px;">
     УК:
     <%= button_to "Создать staff →", open_as_manager_platform_tenant_path(tenant, to: "staff"), method: :post, form: { style: "display:inline;" } %>
