@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## v1.99 — 2026-06-02 (SEC-07 → Веха 3)
+
+- **V3-SEC-07:** убрать `shop-api-key` из meta витрины — [`veha_3/CHECKLIST.md`](milestones/veha_3/CHECKLIST.md) § E.
+- В2 блок 4: SEC-07 закрыт как перенос (demo Fly OK).
+
 ## v1.98 — 2026-06-02 (gate: тесты 562/0, Fly ops — веха не закрыта)
 
 - Перегон `bin/rails test` WSL: **562/0**.

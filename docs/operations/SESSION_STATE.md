@@ -13,7 +13,7 @@
 |--------|--------|
 | Блоки **0–14** ✅ (прогон 10 ops) | **Апрув 14** → §E / §I |
 | Gate **562/0** WSL *(2026-06-02)* | Fly deploy + secrets — **владелец** (`flyctl auth login`) |
-| Хвосты кода | **SEC-07** (блок 4), V2-P10-08, PREP-MULTI |
+| Хвосты кода | V2-P10-08; **V3-SEC-07** (shop meta key); PREP-MULTI → В3 |
 
 **Ops на блок:** `SESSION_STATE` + коммит всегда; `PRACTICES` (CR); `QA_ACCEPTANCE_RUN` + `artifacts/` (QA); `CHANGELOG` если заметно; `CHECKLIST` `[x]` только по факту.
 

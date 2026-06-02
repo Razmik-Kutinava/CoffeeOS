@@ -86,7 +86,7 @@
 | V2-CR-03 | `browser_shop_session?` без CSRF verify | **done** *(2026-06-01, блок 2)* | `valid_authenticity_token?` + referer |
 | V2-CR-04 | `CacheCounter` MemoryStore | **accepted / wontfix** *(2026-06-02, блок 3)* | Fly **1 pod** — in-process OK; при **2+ серверах** или смене хостинга → **Redis** (или Solid Cache) для общего счётчика |
 | V2-CR-05 | Kiosk `KioskSetting` без tenant GUC | **done** *(2026-06-02, блок 3)* | `SET LOCAL` в `kiosk/api/auth` |
-| V2-SEC-07 | `shop.html.erb` meta `shop-api-key` | **open / backlog** *(блок 4)* | **Задача:** убрать ключ из `<meta>`, отдавать только header/session. **Когда:** после В2, до боевого домена. **CHECKLIST** блок 4 `[ ]`. Демо Fly — не блокер |
+| V2-SEC-07 | `shop.html.erb` meta `shop-api-key` | **deferred → В3** *(2026-06-02)* | Задача **V3-SEC-07** — [`veha_3/CHECKLIST.md`](../veha_3/CHECKLIST.md) § E. В2 блок 4: wontfix для demo Fly |
 | V2-P10-01 | Прогон 10: 3 org × 3 точки | **done** *(2026-06-01)* | [`PROG10_TENANTS.md`](PROG10_TENANTS.md) |
 | V2-P10-02 | Прогон 10: kiosk curl | **done** *(2026-06-01)* | `bin/prog10_fly_smoke.rb` + Prog10 Kiosk MCP |
 | V2-P10-03 | Прогон 10: RBAC AUTH-01…09 | **done** *(2026-06-01)* | MCP + регрессия прогон 5 |

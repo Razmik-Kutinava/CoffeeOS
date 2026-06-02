@@ -42,6 +42,18 @@
 
 ---
 
+## E. Безопасность / hardening (хвост из В2)
+
+Перенесено из [`veha_2/CHECKLIST.md`](../veha_2/CHECKLIST.md) блок 4 *(решение 2026-06-02)*.
+
+| ID | Задача | Источник | Когда |
+|----|--------|----------|--------|
+| **V3-SEC-07** | Убрать `shop-api-key` из `<meta>` в `app/views/shop/shop.html.erb`; ключ только header/session/сервер | CODE_REVIEW SEC-07, V2-SEC-07 | До боевого домена / prod hardening (не блокер demo Fly) |
+
+- [ ] **V3-SEC-07** — PR: убрать meta key, обновить shop Svelte/Flutter curl (`FLUTTER_API.md`), smoke витрины
+
+---
+
 ## Критерий «Веха 3 стартована»
 
 1. Задача **A** зафиксирована в roadmap и не блокирует В2 prod.

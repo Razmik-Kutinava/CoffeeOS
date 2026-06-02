@@ -223,7 +223,7 @@
 ### Блок 4 — Код: ops *(⚠ 2026-06-02)*
 
 - [x] V2-CR-02 — manual-check `CALLBACK_SHARED_SECRET` + `CALLBACK_SHARED_TOKEN` на Fly *(auto flyctl не было)*
-- [ ] **SEC-07** — убрать `shop-api-key` из `<meta>` витрины (`app/views/shop/shop.html.erb`). **Источник:** [`CODE_REVIEW.md`](CODE_REVIEW.md) SEC-07 · [`PRACTICES.md`](PRACTICES.md) V2-SEC-07. **Когда:** после В2 / перед боевым доменом (не блокер demo Fly). **Статус:** backlog, задача не снимается до PR.
+- [x] **SEC-07** — **перенесено в В3** → [`veha_3/CHECKLIST.md`](../veha_3/CHECKLIST.md) § **E**, задача **V3-SEC-07**. **Решение (2026-06-02):** на demo Fly оставляем meta key; чинить перед боевым доменом, не в хвосте прогона 10. Источник: CODE_REVIEW SEC-07.
 
 ---
 
