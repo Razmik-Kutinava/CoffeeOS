@@ -277,17 +277,22 @@
 
 ---
 
-### Блок 10 — QA: Витрина *(2026-06-02, curl 5/5 + MCP 5/5)*
+### Блок 10 — QA: Витрина *(2026-06-02, добивка + базовый прогон)*
 
 Точки: demo-a, demo-b, alpha-p1, alpha-p2, beta-p1.
 
-Артефакты: `prog10_shop_vitrina_curl.json` · `prog10_shop_vitrina_mcp.json` · `bin/prog10_shop_vitrina.rb`
+Артефакты: `prog10_shop_vitrina_*` · `prog10_shop_vitrina_card_*` · `prog10_shop_shp03*` · `bin/prog10_shop_vitrina.rb` · `bin/prog10_shop_vitrina_card.rb` · `bin/prog10_shop_shp03.rb`
 
 - [x] curl/API — меню, корзина, checkout (cash), SHP-09 history API
-- [x] MCP — меню → товар → корзина → checkout (наличные) → история заказов
-- [x] SHP-09 — заказ виден в «Заказы за сегодня»
+- [x] MCP — меню → корзина → checkout (наличные) → история
+- [x] **mock card** — curl 5/5 + MCP 5/5 (`pending_payment` + payment_url / редирект Т-Банк)
+- [x] **SHP-03** — `/shop` без `tenant_id` (curl + MCP): 200, fallback tenant в meta
+- [x] **SHP-05** — API categories без tenant: 200 fallback на Fly (не 500)
+- [x] SHP-09 — история после заказа
 
-*Ждём апрув перед блоком 11.*
+**Не в этом блоке:** `source=kiosk` → **V2-P10-08** (после 10–14).
+
+*Ждём апрув блока 10 → потом блок 3 (код) → потом апрув → блок 11.*
 
 ---
 

@@ -1,0 +1,56 @@
+{
+  "at": "2026-06-02T13:41:25.817Z",
+  "base": "https://coffeeos.fly.dev",
+  "note": "block 10: vitrina UI mock card 5pt",
+  "points": [
+    {
+      "slug": "demo-a",
+      "payment": "card",
+      "checkout": true,
+      "pending_or_paid": false,
+      "payment_url_redirect": true,
+      "pass": true,
+      "error": null
+    },
+    {
+      "slug": "demo-b",
+      "payment": "card",
+      "checkout": true,
+      "pending_or_paid": false,
+      "payment_url_redirect": true,
+      "pass": true,
+      "error": null
+    },
+    {
+      "slug": "alpha-p1",
+      "payment": "card",
+      "checkout": true,
+      "pending_or_paid": false,
+      "payment_url_redirect": true,
+      "pass": true,
+      "error": null
+    },
+    {
+      "slug": "alpha-p2",
+      "payment": "card",
+      "checkout": true,
+      "pending_or_paid": false,
+      "payment_url_redirect": true,
+      "pass": true,
+      "error": null
+    },
+    {
+      "slug": "beta-p1",
+      "payment": "card",
+      "checkout": true,
+      "pending_or_paid": false,
+      "payment_url_redirect": true,
+      "pass": true,
+      "error": null
+    }
+  ],
+  "summary": {
+    "pass": 5,
+    "total": 5
+  }
+}

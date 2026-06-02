@@ -1,0 +1,10 @@
+{
+  "at": "2026-06-02T13:39:55.367Z",
+  "base": "https://coffeeos.fly.dev",
+  "scenario": "SHP-03",
+  "pass": true,
+  "http_ok": true,
+  "has_catalog": true,
+  "tenant_meta": "3d9f95bb-28d7-4bea-9229-7f72d6fbf977",
+  "error": null
+}

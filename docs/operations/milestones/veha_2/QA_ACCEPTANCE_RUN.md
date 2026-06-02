@@ -47,7 +47,7 @@
 | **7** | Staff/RBAC Prog10 ×9 (STF-01…05) | ✅ **2026-06-02** — curl 9/9 + MCP 9/9 (`prog10_staff_mcp_9pt.json`); апрув заказчика |
 | **8** | ENT-02, ENT-07, ENT-08 | ✅ **2026-06-02** — MCP 3/3 на demo-a (`prog10_ent_card_mcp.json`); апрув заказчика |
 | **9** | Kiosk→barista ×9 (curl+MCP) | ✅ **2026-06-02** — cash+card curl, MCP 9/9; апрув заказчика |
-| **10** | Витрина MCP 5 точек + SHP-09 | ✅ **2026-06-02** — curl 5/5 + MCP 5/5 (`prog10_shop_vitrina_*`); **ждём апрув перед блоком 11** |
+| **10** | Витрина MCP 5 точек + SHP-09 | ✅ **2026-06-02** — cash+card+SHP-03/05; **ждём апрув → блок 3 → блок 11** |
 | **11** | CON-02…06 | `[ ]` |
 | **12** | Barista↔цех e2e (demo prep + Prog10 prep) | `[ ]` |
 | **13** | Перепроверка curl 9×, stress, RBAC, артефакты | `[ ]` |

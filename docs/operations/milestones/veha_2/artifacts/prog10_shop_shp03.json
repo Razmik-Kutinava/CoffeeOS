@@ -1,0 +1,19 @@
+{
+  "at": "2026-06-02T13:42:06Z",
+  "base": "https://coffeeos.fly.dev",
+  "scenario": "SHP-03 + SHP-05",
+  "shp03": {
+    "shop_http": "200",
+    "has_tenant_meta": "3d9f95bb-28d7-4bea-9229-7f72d6fbf977",
+    "has_catalog_hint": false,
+    "has_banner_hint": true,
+    "pass": true
+  },
+  "shp05": {
+    "categories_http": "200",
+    "body_preview": "{\"data\":[{\"id\":\"fdedd2e7-f7d5-445a-af8b-097a76eaa128\",\"name\":\"Фильтр-кофе\",\"position\":1,\"products\":[{\"id\":\"0f0d3f12-3756",
+    "pass": true,
+    "note": "Fly fallback tenant (не 404, но ок)"
+  },
+  "pass": true
+}

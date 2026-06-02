@@ -1,0 +1,57 @@
+{
+  "at": "2026-06-02T13:41:24Z",
+  "base": "https://coffeeos.fly.dev",
+  "note": "block 10: mock card checkout curl 5pt",
+  "points": [
+    {
+      "slug": "demo-a",
+      "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+      "pass": true,
+      "checkout": {
+        "order_id": "256187ff-2889-40b3-8c80-65355c4ee18c",
+        "status": "pending_payment",
+        "payment_url": "present"
+      }
+    },
+    {
+      "slug": "demo-b",
+      "tenant_id": "655aaccb-004a-4bb9-a50a-ce618854dda3",
+      "pass": true,
+      "checkout": {
+        "order_id": "6a0e0980-7c67-41b4-82c2-f769909a8fcd",
+        "status": "pending_payment",
+        "payment_url": "present"
+      }
+    },
+    {
+      "slug": "alpha-p1",
+      "tenant_id": "1c064640-4301-4435-8ded-c92fb075e9cc",
+      "pass": true,
+      "checkout": {
+        "order_id": "48f9d211-8a8b-48f0-bf07-f4645337e579",
+        "status": "pending_payment",
+        "payment_url": "present"
+      }
+    },
+    {
+      "slug": "alpha-p2",
+      "tenant_id": "edf8a0a9-38e7-4049-b9c6-3e08c6c23a76",
+      "pass": true,
+      "checkout": {
+        "order_id": "1bd583f7-3045-49d7-88a2-443de7abfa3a",
+        "status": "pending_payment",
+        "payment_url": "present"
+      }
+    },
+    {
+      "slug": "beta-p1",
+      "tenant_id": "03a4d457-e16f-4998-b764-69b3de083732",
+      "pass": true,
+      "checkout": {
+        "order_id": "45824ea3-8f78-434c-ba53-e1070e210ca7",
+        "status": "pending_payment",
+        "payment_url": "present"
+      }
+    }
+  ]
+}

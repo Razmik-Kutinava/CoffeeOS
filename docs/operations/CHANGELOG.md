@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v1.91 — 2026-06-02 (V2 прогон 10 — блок 10 добивка)
+
+- Mock **card** на 5 точках: curl + MCP (`prog10_shop_vitrina_card_*`).
+- **SHP-03/05:** `/shop` без tenant_id — curl + MCP (`prog10_shop_shp03*`).
+- Дальше: апрув 10 → блок 3 (CR-05); `source=kiosk` — V2-P10-08 позже.
+
 ## v1.90 — 2026-06-02 (V2 прогон 10 — блок 10, витрина 5 точек)
 
 - curl **5/5:** меню, корзина, cash checkout, SHP-09 history API (`prog10_shop_vitrina_curl.json`).
