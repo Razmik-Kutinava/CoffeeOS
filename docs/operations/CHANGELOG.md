@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v1.84 — 2026-06-02 (V2 прогон 10 — блок 7, MCP STF 3 org)
+
+- MCP UI на Fly: **3 org** (Demo/Alpha/Beta) — STF-01/02/04 + изоляция заказа в браузере (own `200`, foreign `404`).
+- Артефакты: `prog10_staff_mcp_3org.json`, `prog10_staff_mcp_3org.md`.
+- curl 9/9 без изменений (`prog10_staff_isolation.json`); STF-03 UI и 6 оставшихся точек в браузере — вне scope.
+
 ## v1.83 — 2026-06-02 (V2 прогон 10 — блок 7, staff/rbac isolation)
 
 - Добавлен `bin/prog10_staff_rbac_isolation.rb` для проверки изоляции staff/RBAC по 9 точкам.

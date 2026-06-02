@@ -1,0 +1,67 @@
+{
+  "at": "2026-06-02T12:00:00Z",
+  "base": "https://coffeeos.fly.dev",
+  "mcp_servers": [
+    "cursor-ide-browser",
+    "user-puppeteer"
+  ],
+  "scope": "STF-01/02/04/05 (выборочно) — 3 org × 1 точка; не все 9",
+  "note": "curl 9/9 — prog10_staff_isolation.json; MCP UI — эта выборка",
+  "results": [
+    {
+      "org": "Demo CoffeeOS",
+      "slug": "demo-a",
+      "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+      "stf01_open_as_manager": "PASS",
+      "stf01_url": "/manager",
+      "stf02_staff_list": "PASS",
+      "stf02_iso_barista_visible": "iso-bar-demo-a-06021041@prog10.local",
+      "stf04_barista_login": "PASS",
+      "stf04_url": "/barista",
+      "iso_own_order_json": 200,
+      "iso_foreign_order_json": 404,
+      "iso_foreign_note": "fake UUID → 404; own order from barista board",
+      "pass": true
+    },
+    {
+      "org": "Prog10 Network Alpha",
+      "slug": "alpha-p1",
+      "tenant_id": "1c064640-4301-4435-8ded-c92fb075e9cc",
+      "stf01_open_as_manager": "PASS",
+      "stf01_url": "/manager",
+      "stf02_staff_list": "PASS",
+      "stf02_iso_barista_visible": "iso-bar-alpha-p1-06021041@prog10.local",
+      "stf04_barista_login": "PASS",
+      "stf04_url": "/barista",
+      "iso_own_order_json": 200,
+      "iso_foreign_order_json": 404,
+      "iso_foreign_note": "order c36b2de4-… (demo-a) → 404 for alpha barista",
+      "pass": true
+    },
+    {
+      "org": "Prog10 Network Beta",
+      "slug": "beta-p1",
+      "tenant_id": "03a4d457-e16f-4998-b764-69b3de083732",
+      "stf01_open_as_manager": "PASS",
+      "stf02_staff_list": "PASS",
+      "stf02_point_label": "Prog10 Beta Point 1",
+      "stf02_iso_barista_visible": "iso-bar-beta-p1-06021041@prog10.local",
+      "stf04_barista_login": "PASS",
+      "stf04_url": "/barista",
+      "iso_own_order_json": 200,
+      "iso_foreign_order_json": 404,
+      "iso_foreign_note": "order c36b2de4-… (demo-a) → 404 for beta barista",
+      "pass": true
+    }
+  ],
+  "cursor_ide_browser": {
+    "login_page": "PASS",
+    "password_automation": "BLOCKED",
+    "password_note": "fill/type не меняют value (Stimulus login-form); вход через puppeteer evaluate + input events"
+  },
+  "summary": {
+    "mcp_org_pass": 3,
+    "mcp_org_total": 3,
+    "curl_9of9": "prog10_staff_isolation.json"
+  }
+}

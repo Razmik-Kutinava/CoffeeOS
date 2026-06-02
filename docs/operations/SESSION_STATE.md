@@ -11,18 +11,18 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| Блок **7** ✅ — Staff/RBAC изоляция 9/9 | Блок **8** — ENT-02/07/08 |
+| Блок **7** ✅ — curl 9/9 + MCP STF **3 org** | Блок **8** — **ждём апрув** |
 | Блок **0–2,4–6** выполнены | … блоки 9–14 |
 
 **Ops на блок:** `SESSION_STATE` + коммит всегда; `PRACTICES` (CR); `QA_ACCEPTANCE_RUN` + `artifacts/` (QA); `CHANGELOG` если заметно; `CHECKLIST` `[x]` только по факту.
 
-### Сессия 2026-06-02 (прогон 10 — блок 7, staff/rbac isolation)
+### Сессия 2026-06-02 (прогон 10 — блок 7, staff/rbac + MCP 3 org)
 
-- Прогнан `bin/prog10_staff_rbac_isolation.rb` по 9 точкам.
-- Матрица изоляции PASS 9/9: own order `200`, foreign order `404`; для prep-tenant barista ожидаемо `302`.
-- Артефакты: `artifacts/prog10_staff_isolation.json`, `artifacts/prog10_staff_isolation.md`.
-- MCP DevTools: browser smoke на `https://coffeeos.fly.dev/login` (доступ/структура страницы подтверждены).
-- Следующий: блок 8 (ENT-02, ENT-07, ENT-08).
+- **curl:** `bin/prog10_staff_rbac_isolation.rb` — PASS **9/9** (`prog10_staff_isolation.json`).
+- **MCP UI (3 org):** Demo `demo-a`, Alpha `alpha-p1`, Beta `beta-p1` — STF-01/02/04 PASS; изоляция в браузере own `200`, foreign `404` (`prog10_staff_mcp_3org.json`).
+- **MCP:** `cursor-ide-browser` — `/login` OK; пароль через fill/type не проходит (Stimulus). `user-puppeteer` — полный STF-прогон.
+- **Не гоняли:** STF по всем 9 точкам в браузере; STF-03 (создание staff в UI).
+- **Следующий:** блок **8** — **после апрува** (ENT-02, ENT-07, ENT-08).
 
 ### Сессия 2026-06-02 (прогон 10 — блок 6, staff wizard)
 

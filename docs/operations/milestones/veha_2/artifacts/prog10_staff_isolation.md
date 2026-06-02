@@ -3,7 +3,8 @@
 **Дата:** 2026-06-02  
 **Стенд:** `https://coffeeos.fly.dev`  
 **Скрипт:** `bin/prog10_staff_rbac_isolation.rb`  
-**JSON-отчёт:** `prog10_staff_isolation.json`
+**JSON-отчёт:** `prog10_staff_isolation.json`  
+**MCP UI (3 org):** [`prog10_staff_mcp_3org.md`](prog10_staff_mcp_3org.md) · [`prog10_staff_mcp_3org.json`](prog10_staff_mcp_3org.json)
 
 ## Что проверено
 
