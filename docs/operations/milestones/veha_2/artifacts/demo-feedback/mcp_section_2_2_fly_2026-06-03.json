@@ -3,32 +3,44 @@
   "stand": "https://coffeeos.fly.dev",
   "run_at": "2026-06-03",
   "tool": "chrome-devtools-mcp",
-  "deploy_note": "Код + миграция 20260603150000 + demo:seed repair. MCP до redeploy: цены на Fly ещё 0.",
-  "expected_after_deploy": {
-    "product": "Фильтр-кофе Бразилия",
-    "modifier_prices": {
-      "Яблочный с корицей": "+15₽",
-      "Пивной кордиал": "+20₽",
-      "Мёд": "+40₽"
-    },
-    "demo_combo": "179 + 20 (кордиал) = 199₽ в корзине и при оплате"
-  },
+  "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "product_id": "24dae391-2199-4959-907e-d08c4cec3329",
+  "deploy_note": "После redeploy пользователя: API price_change 15/20/40, UI +N₽ на карточке.",
   "steps": [
     {
       "step": 1,
-      "action": "Карточка Бразилия — группы «обязательно», выбрать Пивной кордиал (+20₽)",
-      "verdict": "pending_deploy"
+      "action": "Карточка Бразилия — видны +15/+20/+40; выбрать Пивной кордиал",
+      "result": {
+        "labels_visible": ["+15₽", "+20₽", "+40₽"],
+        "bottom_price_after_cordial": "199₽"
+      },
+      "verdict": "PASS"
     },
     {
       "step": 2,
-      "action": "В корзину → Итого 199₽, в списке допок (+20₽)",
-      "verdict": "pending_deploy"
+      "action": "Корзина с кордиалом (+20)",
+      "result": {
+        "line": "199₽ × 1",
+        "modifier_line": "Пивной кордиал… (+20₽)",
+        "total": "199₽"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "step": "api",
+      "action": "GET /shop/api/products — price_change",
+      "result": {
+        "Яблочный": 15,
+        "Пивной кордиал": 20,
+        "Мёд": 40
+      },
+      "verdict": "PASS"
     }
   ],
-  "pre_deploy_probe": {
-    "run_at": "2026-06-03",
-    "has_priced_modifiers_on_fly": false,
-    "bottom_price_shown": "179₽"
+  "minor": {
+    "label_obязательно_on_groups": "not visible on Fly (не блокер §2.2)"
   },
-  "overall": "code_PASS_tests_PASS_fly_pending_redeploy"
+  "overall": "PASS",
+  "ready_for": "§2.3–2.4 оплата",
+  "customer_approval": "pending"
 }

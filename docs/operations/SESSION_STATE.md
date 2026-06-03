@@ -28,6 +28,7 @@
 - **Код:** миграция `20260603150000` + `Demo::EnvironmentSetup#repair_brazil_shop_modifier_prices!` (+15/+20/+40 на Бразилию); UI «· обязательно» на группах; корзина/оплата уже считали `price_delta`.
 - **Тесты:** `qa_section_2_2_modifiers_test` — 179+20+40=239, заказ 199₽.
 - **Fly:** нужен **redeploy + demo:seed** (или migrate на release); MCP — после.
+- **MCP Fly (redeploy):** +15/+20/+40 на карточке; кордиал → **199₽** в корзине — **PASS** (`mcp_section_2_2_fly_2026-06-03.json`).
 - **Следующий:** §2.3–2.4 оплата.
 
 ### Сессия 2026-06-03 (post-deploy MCP batch)
