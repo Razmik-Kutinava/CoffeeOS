@@ -1,0 +1,34 @@
+{
+  "scenario": "PDF §2.2 — платные модификаторы на витрине",
+  "stand": "https://coffeeos.fly.dev",
+  "run_at": "2026-06-03",
+  "tool": "chrome-devtools-mcp",
+  "deploy_note": "Код + миграция 20260603150000 + demo:seed repair. MCP до redeploy: цены на Fly ещё 0.",
+  "expected_after_deploy": {
+    "product": "Фильтр-кофе Бразилия",
+    "modifier_prices": {
+      "Яблочный с корицей": "+15₽",
+      "Пивной кордиал": "+20₽",
+      "Мёд": "+40₽"
+    },
+    "demo_combo": "179 + 20 (кордиал) = 199₽ в корзине и при оплате"
+  },
+  "steps": [
+    {
+      "step": 1,
+      "action": "Карточка Бразилия — группы «обязательно», выбрать Пивной кордиал (+20₽)",
+      "verdict": "pending_deploy"
+    },
+    {
+      "step": 2,
+      "action": "В корзину → Итого 199₽, в списке допок (+20₽)",
+      "verdict": "pending_deploy"
+    }
+  ],
+  "pre_deploy_probe": {
+    "run_at": "2026-06-03",
+    "has_priced_modifiers_on_fly": false,
+    "bottom_price_shown": "179₽"
+  },
+  "overall": "code_PASS_tests_PASS_fly_pending_redeploy"
+}

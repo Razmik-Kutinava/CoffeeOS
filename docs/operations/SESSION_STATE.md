@@ -23,6 +23,13 @@
 
 **Артефакты (для агента в другом редакторе):** точка входа — [`milestones/veha_2/artifacts/README.md`](milestones/veha_2/artifacts/README.md). Прогон 10: `artifacts/prog10/{_index,smoke,kiosk,shop,staff-rbac,connectivity,platform-ent,warehouse}/`. Сводный индекс: `prog10/_index/prog10_final_index.json`. Скрипты `bin/prog10_*` пишут в эти подпапки (OUT обновлён). Старый плоский путь `artifacts/prog10_*.json` **удалён** — везде относительные ссылки `artifacts/prog10/...`.
 
+### Сессия 2026-06-03 (§2.2: платные модификаторы)
+
+- **Код:** миграция `20260603150000` + `Demo::EnvironmentSetup#repair_brazil_shop_modifier_prices!` (+15/+20/+40 на Бразилию); UI «· обязательно» на группах; корзина/оплата уже считали `price_delta`.
+- **Тесты:** `qa_section_2_2_modifiers_test` — 179+20+40=239, заказ 199₽.
+- **Fly:** нужен **redeploy + demo:seed** (или migrate на release); MCP — после.
+- **Следующий:** §2.3–2.4 оплата.
+
 ### Сессия 2026-06-03 (post-deploy MCP batch)
 
 - **После fly deploy:** Chrome MCP — §2 A↔B заказы, §3.6 `franchise@` → `/manager`, §1.3 «Открыть смену», §1.2 «Управляющий точки», §1.4 склад точки vs цех — **PASS**.
