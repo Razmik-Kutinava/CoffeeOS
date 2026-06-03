@@ -1,0 +1,70 @@
+{
+  "scenario": "PDF §1.2 — две кофейни не смешиваются",
+  "stand": "https://coffeeos.fly.dev",
+  "run_at": "2026-06-02",
+  "tool": "chrome-devtools-mcp",
+  "logins": {
+    "gm_a": "gm-a@demo.coffeeos.local",
+    "gm_b": "gm-b@demo.coffeeos.local",
+    "password": "demo123456"
+  },
+  "deploy_note": "Подпись роли «Управляющий точки» — в коде develop; на Fly до deploy ещё «Офис-менеджер».",
+  "steps": [
+    {
+      "step": 1,
+      "actor": "gm-a",
+      "path": "/manager/menu",
+      "expect": "Point A, Бразилия 179, без 189",
+      "result": {
+        "tenant": "Demo Coffee Point A",
+        "brazil_price_inputs": ["179.0"],
+        "has_189": false,
+        "has_point_b": false,
+        "role_label": "Офис-менеджер"
+      },
+      "verdict": "PASS_isolation",
+      "ux_note": "role_label FAIL until deploy (ожидаем «Управляющий точки»)"
+    },
+    {
+      "step": 2,
+      "actor": "gm-b",
+      "path": "/manager/menu",
+      "expect": "Point B, Бразилия 189 (+10 vs A), без Point A",
+      "result": {
+        "tenant": "Demo Coffee Point B",
+        "brazil_price_inputs": ["189.0"],
+        "has_179": false,
+        "has_point_a": false,
+        "role_label": "Офис-менеджер"
+      },
+      "verdict": "PASS_isolation",
+      "ux_note": "role_label FAIL until deploy"
+    },
+    {
+      "step": 3,
+      "actor": "gm-a",
+      "path": "/manager",
+      "expect": "Только A, заказы без сумм/точки B",
+      "result": {
+        "tenant": "Demo Coffee Point A",
+        "has_point_b": false,
+        "order_amounts_unique": ["179.0", "295.0"],
+        "has_b_marker_305": false,
+        "role_label": "Офис-менеджер"
+      },
+      "verdict": "PASS_isolation",
+      "ux_note": "role_label FAIL until deploy",
+      "screenshot": "mcp_1_2_step3_gm-a_dashboard.png"
+    }
+  ],
+  "integration_tests": {
+    "file": "test/integration/demo/qa_section_1_2_gm_isolation_test.rb",
+    "runs": 3,
+    "failures": 0
+  },
+  "overall": {
+    "isolation": "PASS",
+    "gm_role_label_fix": "code_ready_deploy_pending",
+    "customer_approval": "pending"
+  }
+}

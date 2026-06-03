@@ -109,7 +109,7 @@ class ManagerOfficePanelTest < ActionDispatch::IntegrationTest
 
     get "/manager"
     assert_response :success
-    assert_includes response.body, "Офис-менеджер"
+    assert_includes response.body, "Управляющий точки"
 
     %w[
       /manager/orders

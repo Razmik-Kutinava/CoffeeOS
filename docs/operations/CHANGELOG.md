@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## v1.102 — 2026-06-02 (§1.2 GM isolation + role label)
+
+- **Manager UI:** `general_manager` в шапке `/manager` — **«Управляющий точки»** (не «Офис-менеджер»).
+- **Тесты:** `qa_section_1_2_gm_isolation_test` — 3 шага PDF §1.2; office panel — ожидание новой подписи.
+- **MCP Fly:** артефакт `veha_2/artifacts/demo-feedback/mcp_section_1_2_fly_2026-06-02.json` — изоляция **PASS**; подпись на Fly после deploy.
+- §I вехи **не закрыта**; §1.2 — до апрува заказчика.
+
 ## v1.101 — 2026-06-02 (V2 §E: фидбек PDF + shop/franchise fixes)
 
 - PDF прогонка §1–3 → `veha_2/artifacts/demo-feedback/`; очередь [`DEMO_FEEDBACK.md`](milestones/veha_2/DEMO_FEEDBACK.md).

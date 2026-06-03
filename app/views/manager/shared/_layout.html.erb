@@ -12,8 +12,10 @@
           🛡️ УК (точка)
         <% elsif Current.role_code == "shift_manager" %>
           ⏱️ Менеджер смены
+        <% elsif general_manager? %>
+          🏢 Управляющий точки
         <% else %>
-          🏢 Офис-менеджер
+          🏢 Менеджер
         <% end %>
       </span>
         <span class="status-bar-tenant">Точка: <%= current_tenant&.name || current_user.tenant&.name || "Не указана" %></span>

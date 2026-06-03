@@ -11,8 +11,9 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **§E открыт:** PDF §1–3 → [`DEMO_FEEDBACK.md`](milestones/veha_2/DEMO_FEEDBACK.md) (5 пунктов) | Фиксы на Fly + апрув заказчика → §I |
-| Фиксы в коде: shop history per-tenant, franchise org | UI витрины, оплата, §4+ PDF — **потом** |
+| **§E открыт:** PDF §1–3 → [`DEMO_FEEDBACK.md`](milestones/veha_2/DEMO_FEEDBACK.md) | Фиксы на Fly + апрув → §I |
+| **§1.2:** изоляция MCP **PASS**; подпись GM — код готов, Fly после deploy | Апрув §1.2 заказчиком |
+| Фиксы в коде: shop per-tenant, franchise org, GM label | UI витрины, оплата, §4+ PDF |
 | Артефакты прогона 10 под `artifacts/prog10/` | **Апрув 14** прогона 10 |
 | Блоки **0–14** ✅ (прогон 10 ops) | |
 | Gate **562/0** WSL *(2026-06-02)* | Fly deploy + secrets — **владелец** (`flyctl auth login`) |
@@ -21,6 +22,14 @@
 **Ops на блок:** `SESSION_STATE` + коммит всегда; `PRACTICES` (CR); `QA_ACCEPTANCE_RUN` + `artifacts/` (QA); `CHANGELOG` если заметно; `CHECKLIST` `[x]` только по факту.
 
 **Артефакты (для агента в другом редакторе):** точка входа — [`milestones/veha_2/artifacts/README.md`](milestones/veha_2/artifacts/README.md). Прогон 10: `artifacts/prog10/{_index,smoke,kiosk,shop,staff-rbac,connectivity,platform-ent,warehouse}/`. Сводный индекс: `prog10/_index/prog10_final_index.json`. Скрипты `bin/prog10_*` пишут в эти подпапки (OUT обновлён). Старый плоский путь `artifacts/prog10_*.json` **удалён** — везде относительные ссылки `artifacts/prog10/...`.
+
+### Сессия 2026-06-02 (§1.2: изоляция GM + подпись роли)
+
+- **MCP Fly:** §1.2 шаги 1–3 — изоляция A/B **PASS** (179 vs 189, gm-a без Point B); артефакт `artifacts/demo-feedback/mcp_section_1_2_fly_2026-06-02.json` + скрин дашборда.
+- **Код:** `manager/shared/_layout` — для `general_manager` подпись **«Управляющий точки»**; тесты `qa_section_1_2_gm_isolation_test` (3/0), office panel обновлён.
+- **Fly:** подпись на проде ещё «Офис-менеджер» до **deploy**; изоляция уже OK.
+- **§1.2 до апрува:** функционально закрыт ops; апрув заказчика + перепроверка подписи после deploy.
+- **Коммит:** `fix(manager): GM role label and §1.2 isolation QA` (+ ops).
 
 ### Сессия 2026-06-02 (§E: фидбек PDF + фиксы shop/franchise)
 
