@@ -103,6 +103,7 @@ module Demo
         ensure_module_flags!(tenant_b, SALES_POINT_MODULES)
         ensure_module_flags!(tenant_kitchen, KITCHEN_MODULES)
         load_catalog! if @load_catalog
+        repair_brazil_shop_modifier_prices!
         ensure_pts_for_tenants!([tenant_a, tenant_b])
         apply_point_b_price_markup!(tenant_b)
         ensure_users!(
@@ -339,6 +340,23 @@ module Demo
           ProductTenantSetting.where(tenant_id: tenant.id, is_sold_out: true)
                               .update_all(is_sold_out: false, sold_out_reason: nil, updated_at: Time.current)
         end
+      end
+    end
+
+    # §2.2 демо: платные модификаторы на витрине (каталог «Черный» / Бразилия).
+    def repair_brazil_shop_modifier_prices!
+      product = Product.find_by(slug: "filtr-kofe-braziliya")
+      return unless product
+
+      [
+        [ "Яблочный с корицей%", 15 ],
+        [ "Пивной кордиал%", 20 ],
+        [ "Мёд%", 40 ]
+      ].each do |pattern, price|
+        ProductModifierOption.joins(:group)
+          .where(product_modifier_groups: { product_id: product.id })
+          .where("product_modifier_options.name LIKE ?", pattern)
+          .update_all(price_delta: price, updated_at: Time.current)
       end
     end
 

@@ -143,7 +143,12 @@
 
   {#each product.modifier_groups as g (g.id)}
     <div class="mb-4">
-      <p class="mb-2 text-sm font-medium">{g.name}</p>
+      <p class="mb-2 text-sm font-medium">
+        {g.name}
+        {#if g.modifier_type === "required"}
+          <span class="ml-1 text-xs font-normal text-[#888]">· обязательно</span>
+        {/if}
+      </p>
       {#if isRadioModifierGroup(g)}
         <div class="flex flex-wrap gap-2">
           {#each g.modifiers as m (m.id)}
