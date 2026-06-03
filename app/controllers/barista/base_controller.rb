@@ -5,8 +5,13 @@ module Barista
     before_action :require_barista_role
     before_action :set_tenant_context
     before_action :require_barista_module!
-    
+    before_action :assign_shift_for_layout
+
     private
+
+    def assign_shift_for_layout
+      @shift = current_shift
+    end
     
     def require_login
       unless session[:user_id]

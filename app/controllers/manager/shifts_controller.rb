@@ -1,12 +1,29 @@
 module Manager
   class ShiftsController < BaseController
     def index
+      @open_shift = current_cash_shift
       if shift_manager?
-        shift = current_cash_shift
-        @shifts = shift ? [shift] : []
+        @shifts = @open_shift ? [@open_shift] : CashShift.for_current_tenant.recent.limit(20)
       else
         @shifts = CashShift.for_current_tenant.recent.limit(200)
       end
+    end
+
+    def create
+      unless shift_manager? || general_manager?
+        redirect_to manager_shifts_path, alert: "Открыть смену может менеджер смены или управляющий точки"
+        return
+      end
+
+      tenant = current_tenant || Tenant.find(Current.tenant_id)
+      shift = CashShifts::OpenService.call(
+        tenant: tenant,
+        opened_by: current_user,
+        opening_cash: params[:opening_cash]
+      )
+      redirect_to manager_shifts_path, notice: "Смена открыта (#{shift.opened_at.strftime('%H:%M')})"
+    rescue CashShifts::OpenService::Error => e
+      redirect_to manager_shifts_path, alert: e.message
     end
 
     def show

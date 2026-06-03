@@ -4,28 +4,67 @@
     <div class="page-subtitle">История смен и разбор расхождений</div>
   </div>
 
+  <section class="card shift-actions-card">
+    <% if @open_shift %>
+      <div class="shift-status shift-status-open">
+        <strong>Смена открыта</strong>
+        <span class="muted">с <%= @open_shift.opened_at.strftime("%d.%m %H:%M") %> · открыл <%= @open_shift.opened_by&.name %></span>
+      </div>
+      <div class="shift-actions">
+        <%= link_to "Закрыть смену", manager_close_shift_path(@open_shift), class: "btn btn-danger" %>
+        <%= link_to "Подробнее", manager_shift_path(@open_shift), class: "btn btn-secondary" %>
+      </div>
+    <% else %>
+      <div class="shift-status shift-status-closed">
+        <strong>Смена закрыта</strong>
+        <span class="muted">Касса бариста не принимает новые заказы, пока смену не откроют</span>
+      </div>
+      <% if shift_manager? || general_manager? %>
+        <%= form_with url: manager_open_shift_path, method: :post, class: "shift-open-form" do %>
+          <label class="muted">Сумма в кассе на старте (₽)</label>
+          <%= number_field_tag :opening_cash, 0, min: 0, step: 1, class: "input" %>
+          <%= submit_tag "Открыть смену", class: "btn" %>
+        <% end %>
+      <% end %>
+    <% end %>
+  </section>
+
   <div class="card">
     <% if @shifts.any? %>
       <div class="table">
         <% @shifts.each do |s| %>
           <div class="row">
             <div class="row-main">
-              <%= link_to "Смена ##{s.id}", manager_shift_path(s), class: "link" %>
-              <span class="pill"><%= s.status %></span>
+              <%= link_to "Смена ##{s.id.to_s.first(8)}…", manager_shift_path(s), class: "link" %>
+              <span class="pill <%= s.open? ? 'pill-open' : '' %>"><%= s.status %></span>
               <span class="muted"><%= s.opened_at&.strftime("%d.%m %H:%M") %> → <%= s.closed_at&.strftime("%d.%m %H:%M") || "…" %></span>
             </div>
             <div class="row-meta">
-              <span class="muted">opening: <%= s.opening_cash %> ₽</span>
-              <span class="muted">closing: <%= s.closing_cash || "-" %> ₽</span>
+              <span class="muted">в кассе: <%= s.opening_cash %> ₽</span>
+              <% if s.open? && (shift_manager? || general_manager?) %>
+                <%= link_to "Закрыть", manager_close_shift_path(s), class: "link link-warn" %>
+              <% end %>
             </div>
           </div>
         <% end %>
       </div>
     <% else %>
-      <div class="empty">Смен нет</div>
+      <div class="empty">Смен ещё не было — откройте первую смену кнопкой выше</div>
     <% end %>
   </div>
 </div>
 
 <%= render "manager/shared/page_styles" %>
-
+<style>
+  .shift-actions-card { margin-bottom: 20px; }
+  .shift-status { margin-bottom: 12px; display: flex; flex-direction: column; gap: 4px; }
+  .shift-status-open strong { color: #7cf0a0; }
+  .shift-status-closed strong { color: #f0a07c; }
+  .shift-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+  .shift-open-form { display: flex; align-items: flex-end; gap: 12px; flex-wrap: wrap; margin-top: 12px; }
+  .shift-open-form .input { max-width: 120px; }
+  .btn-danger { border-color: rgba(255, 100, 100, 0.5); color: #ffb4b4; }
+  .btn-secondary { opacity: 0.85; }
+  .pill-open { color: #7cf0a0; }
+  .link-warn { color: #f0a07c; margin-left: 8px; }
+</style>

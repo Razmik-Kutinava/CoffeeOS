@@ -60,9 +60,10 @@ class Demo::EnvironmentSetupTest < ActiveSupport::TestCase
     assert OrderCancelReason.exists?(code: "customer_changed_mind")
     assert OrderCancelReason.exists?(code: "other")
 
-    barista_a = User.find_by!(email: "barista-a@demo.coffeeos.local")
-    open_shift = CashShift.find_by!(tenant_id: result.tenant_a.id, status: "open")
-    assert_equal barista_a.id, open_shift.opened_by_id
+    assert_nil CashShift.find_by(tenant_id: result.tenant_a.id, status: "open"),
+                 "demo seed: смена A должна быть закрыта для ручного открытия (§1.3)"
+    assert_nil CashShift.find_by(tenant_id: result.tenant_b.id, status: "open"),
+                 "demo seed: смена B должна быть закрыта"
 
     ingredient = Ingredient.active.order(:name).first
     if ingredient

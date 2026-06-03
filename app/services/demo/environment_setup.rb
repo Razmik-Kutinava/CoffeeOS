@@ -269,29 +269,22 @@ module Demo
     end
 
     def ensure_demo_operations!(tenant_a:, tenant_b:, tenant_kitchen:)
-      barista_a = User.find_by!(email: "barista-a@demo.coffeeos.local")
-      ensure_open_cash_shift!(tenant: tenant_a, opened_by: barista_a)
+      ensure_demo_shifts_closed!(tenant_a, tenant_b)
       ensure_demo_recipes_and_stock!(tenant_a:, tenant_b:)
       ensure_kitchen_stock!(tenant_kitchen)
       reset_demo_pts_availability!([tenant_a, tenant_b])
     end
 
-    def ensure_open_cash_shift!(tenant:, opened_by:)
-      conn = ActiveRecord::Base.connection
-      shift = nil
-      ActiveRecord::Base.transaction do
-        conn.execute("SET LOCAL app.current_tenant_id = #{conn.quote(tenant.id.to_s)}")
-        conn.execute("SET LOCAL app.current_user_id = #{conn.quote(opened_by.id.to_s)}")
-        shift = CashShift.find_by(tenant: tenant, status: "open") ||
-                CashShift.create!(
-                  tenant: tenant,
-                  status: "open",
-                  opened_by: opened_by,
-                  opened_at: Time.current,
-                  opening_cash: 0
-                )
+    # §1.3 демо: смены A/B закрыты — открытие вручную бариста или менеджером смены.
+    def ensure_demo_shifts_closed!(tenant_a, tenant_b)
+      closer = User.find_by!(email: "shift-a@demo.coffeeos.local")
+      [tenant_a, tenant_b].each do |tenant|
+        CashShift.where(tenant_id: tenant.id, status: "open").find_each do |shift|
+          shift.close!(closer, shift.opening_cash || 0)
+        rescue StandardError
+          shift.update!(status: "closed", closed_at: Time.current, closed_by: closer)
+        end
       end
-      shift
     end
 
     def ensure_kitchen_stock!(tenant_kitchen)

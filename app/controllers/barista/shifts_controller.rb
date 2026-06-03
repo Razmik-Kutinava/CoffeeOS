@@ -1,5 +1,17 @@
 module Barista
   class ShiftsController < BaseController
+    def create
+      tenant = Tenant.find(Current.tenant_id)
+      shift = CashShifts::OpenService.call(
+        tenant: tenant,
+        opened_by: current_user,
+        opening_cash: params[:opening_cash]
+      )
+      redirect_to barista_dashboard_path, notice: "Смена открыта (#{shift.opened_at.strftime('%H:%M')})"
+    rescue CashShifts::OpenService::Error => e
+      redirect_to barista_shift_path, alert: e.message
+    end
+
     def show
       @shift = current_shift
       @current_user_obj = current_user

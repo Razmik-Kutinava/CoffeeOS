@@ -67,13 +67,16 @@
     </div>
   <% else %>
     <div class="empty-shift">
-      <p>Смена не открыта</p>
+      <p><strong>Смена закрыта</strong></p>
+      <p class="muted">Новые заказы на кассе недоступны, пока не откроете смену.</p>
+      <%= form_with url: barista_open_shift_path, method: :post, class: "shift-open-form" do %>
+        <label class="muted">Сумма в кассе на старте (₽)</label>
+        <%= number_field_tag :opening_cash, 0, min: 0, step: 1, class: "shift-cash-input" %>
+        <%= submit_tag "Открыть смену", class: "btn-open-shift" %>
+      <% end %>
+      <p class="muted" style="margin-top: 12px;">Закрыть смену может менеджер смены в кабинете «Смены/Касса».</p>
     </div>
   <% end %>
-  
-  <div class="shift-note">
-    ⚠️ Управление сменой доступно только менеджеру
-  </div>
 </div>
 <% end %>
 
@@ -198,12 +201,35 @@
     color: #6e7b8c;
   }
   
-  .shift-note {
-    font-size: 12px;
-    color: #6e7b8c;
-    text-align: center;
-    margin-top: 24px;
-    padding-top: 16px;
-    border-top: 1px solid #1e262c;
+  .shift-open-form {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  .shift-cash-input {
+    background: #141a1f;
+    border: 1px solid #2d4c66;
+    color: #e5e9f0;
+    padding: 8px 12px;
+    border-radius: 8px;
+    max-width: 140px;
+  }
+
+  .btn-open-shift {
+    background: #1a3326;
+    border: 1px solid #3a9b5e;
+    color: #7cf0a0;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 14px;
+  }
+
+  .btn-open-shift:hover {
+    background: #2a4d36;
   }
 </style>

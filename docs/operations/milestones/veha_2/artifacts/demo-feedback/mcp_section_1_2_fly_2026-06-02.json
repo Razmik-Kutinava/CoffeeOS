@@ -8,7 +8,8 @@
     "gm_b": "gm-b@demo.coffeeos.local",
     "password": "demo123456"
   },
-  "deploy_note": "Подпись роли «Управляющий точки» — в коде develop; на Fly до deploy ещё «Офис-менеджер».",
+  "deploy_note": "После deploy 2026-06-02: на Fly подпись «Управляющий точки» (перепроверено MCP post-deploy).",
+  "post_deploy_rerun_at": "2026-06-02",
   "steps": [
     {
       "step": 1,
@@ -20,10 +21,10 @@
         "brazil_price_inputs": ["179.0"],
         "has_189": false,
         "has_point_b": false,
-        "role_label": "Офис-менеджер"
+        "role_label": "Управляющий точки"
       },
-      "verdict": "PASS_isolation",
-      "ux_note": "role_label FAIL until deploy (ожидаем «Управляющий точки»)"
+      "verdict": "PASS",
+      "post_deploy": true
     },
     {
       "step": 2,
@@ -35,10 +36,10 @@
         "brazil_price_inputs": ["189.0"],
         "has_179": false,
         "has_point_a": false,
-        "role_label": "Офис-менеджер"
+        "role_label": "Управляющий точки"
       },
-      "verdict": "PASS_isolation",
-      "ux_note": "role_label FAIL until deploy"
+      "verdict": "PASS",
+      "post_deploy": true
     },
     {
       "step": 3,
@@ -50,10 +51,10 @@
         "has_point_b": false,
         "order_amounts_unique": ["179.0", "295.0"],
         "has_b_marker_305": false,
-        "role_label": "Офис-менеджер"
+        "role_label": "Управляющий точки"
       },
-      "verdict": "PASS_isolation",
-      "ux_note": "role_label FAIL until deploy",
+      "verdict": "PASS",
+      "post_deploy": true,
       "screenshot": "mcp_1_2_step3_gm-a_dashboard.png"
     }
   ],
@@ -64,7 +65,7 @@
   },
   "overall": {
     "isolation": "PASS",
-    "gm_role_label_fix": "code_ready_deploy_pending",
+    "gm_role_label_fix": "PASS_on_fly_post_deploy",
     "customer_approval": "pending"
   }
 }

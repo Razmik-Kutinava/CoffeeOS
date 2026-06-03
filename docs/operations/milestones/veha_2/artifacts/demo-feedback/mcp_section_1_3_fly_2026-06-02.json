@@ -1,0 +1,21 @@
+{
+  "scenario": "PDF §1.3 — смена: витрина и касса",
+  "stand": "https://coffeeos.fly.dev",
+  "run_at": "2026-06-02",
+  "tool": "chrome-devtools-mcp",
+  "logins": {
+    "barista_a": "barista-a@demo.coffeeos.local",
+    "barista_b": "barista-b@demo.coffeeos.local",
+    "shift_a": "shift-a@demo.coffeeos.local",
+    "password": "demo123456"
+  },
+  "shop_tenants": {
+    "A": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+    "B": "655aaccb-004a-4bb9-a50a-ce618854dda3"
+  },
+  "steps": [],
+  "overall": {
+    "status": "pending_mcp_after_deploy",
+    "note": "Заполнить после MCP-прогона на Fly с новым UI открытия/закрытия"
+  }
+}

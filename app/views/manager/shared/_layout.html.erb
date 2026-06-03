@@ -19,6 +19,13 @@
         <% end %>
       </span>
         <span class="status-bar-tenant">Точка: <%= current_tenant&.name || current_user.tenant&.name || "Не указана" %></span>
+        <% if Current.tenant_id.present? %>
+          <% if current_cash_shift %>
+            <span class="shift-pill shift-pill-open">● Смена открыта с <%= current_cash_shift.opened_at.strftime("%H:%M") %></span>
+          <% else %>
+            <span class="shift-pill shift-pill-closed">● Смена закрыта</span>
+          <% end %>
+        <% end %>
       </div>
 
       <div class="status-right">
@@ -97,6 +104,25 @@
 
   .status-bar-tenant {
     color: var(--tui-muted);
+  }
+
+  .shift-pill {
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 500;
+  }
+
+  .shift-pill-open {
+    color: #7cf0a0;
+    border: 1px solid rgba(60, 155, 94, 0.5);
+    background: rgba(26, 51, 38, 0.6);
+  }
+
+  .shift-pill-closed {
+    color: #f0a07c;
+    border: 1px solid rgba(155, 94, 60, 0.4);
+    background: rgba(51, 38, 26, 0.5);
   }
 
   .status-bar-user {

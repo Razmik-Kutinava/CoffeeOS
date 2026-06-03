@@ -38,6 +38,7 @@ Rails.application.routes.draw do
     end
 
     get "/shifts", to: "shifts#index", as: :shifts
+    post "/shifts/open", to: "shifts#create", as: :open_shift
     get "/shifts/:id", to: "shifts#show", as: :shift
     get "/shifts/:id/close", to: "close_wizard#show", as: :close_shift
     post "/shifts/:id/close", to: "close_wizard#update"
@@ -133,6 +134,7 @@ Rails.application.routes.draw do
       end
     end
     get '/shift', to: 'shifts#show', as: :shift
+    post '/shift/open', to: 'shifts#create', as: :open_shift
   end
 
   # Публичный блог

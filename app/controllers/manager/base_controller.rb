@@ -10,9 +10,10 @@ module Manager
     # Роль-доступ обеспечивается require_manager_role выше.
     # Конкретные CRUD-действия могут переопределить через authorize @resource.
     before_action :skip_authorization
+    before_action :assign_shift_for_layout
 
     helper_method :franchise_manager?, :general_manager?, :general_or_franchise_manager?, :shift_manager?,
-                  :accessible_manager_tenants, :current_tenant, :uk_in_manager?
+                  :accessible_manager_tenants, :current_tenant, :uk_in_manager?, :current_cash_shift
 
     def uk_in_manager?
       current_user&.uk_global_admin?
@@ -127,7 +128,13 @@ module Manager
       Tenant.where(organization_id: current_user.organization_id).order(:name)
     end
 
+    def assign_shift_for_layout
+      @open_cash_shift = current_cash_shift
+    end
+
     def current_cash_shift
+      return nil unless Current.tenant_id
+
       @current_cash_shift ||= CashShift.for_current_tenant.open.order(opened_at: :desc).first
     end
 

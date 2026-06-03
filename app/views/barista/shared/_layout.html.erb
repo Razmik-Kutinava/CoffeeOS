@@ -49,10 +49,10 @@
       <div class="status-bar-header">
         <% if @shift %>
           <span class="dot"></span>
-          <span class="status-bar-title">⏰ Смена: <%= @shift.opened_at.strftime('%H:%M') %>-<%= (@shift.opened_at + 12.hours).strftime('%H:%M') %></span>
+          <span class="status-bar-title">● Смена открыта с <%= @shift.opened_at.strftime('%H:%M') %></span>
         <% else %>
           <span class="dot" style="background: #f07c7c; box-shadow: 0 0 8px #f07c7c80;"></span>
-          <span class="status-bar-title">Смена закрыта</span>
+          <span class="status-bar-title">● Смена закрыта — откройте на вкладке «Смена»</span>
         <% end %>
         <span class="status-bar-tenant">Точка: <%= current_user.tenant&.name || 'Не указана' %></span>
       </div>

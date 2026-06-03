@@ -23,6 +23,14 @@
 
 **Артефакты (для агента в другом редакторе):** точка входа — [`milestones/veha_2/artifacts/README.md`](milestones/veha_2/artifacts/README.md). Прогон 10: `artifacts/prog10/{_index,smoke,kiosk,shop,staff-rbac,connectivity,platform-ent,warehouse}/`. Сводный индекс: `prog10/_index/prog10_final_index.json`. Скрипты `bin/prog10_*` пишут в эти подпапки (OUT обновлён). Старый плоский путь `artifacts/prog10_*.json` **удалён** — везде относительные ссылки `artifacts/prog10/...`.
 
+### Сессия 2026-06-02 (§1.3: смена — UI открыть/закрыть)
+
+- **Код:** `CashShifts::OpenService`; POST open — бариста + manager; плашки в шапке; экран «Смены/Касса» с кнопками.
+- **Демо:** seed закрывает смены A/B (не авто-открытие).
+- **Тесты:** `qa_section_1_3_shift_flow_test` 4/0; `open_service_test` 2/0.
+- **MCP:** `mcp_section_1_3_fly_2026-06-02.json` — прогон на Fly после deploy.
+- **§1.3 до апрува** заказчика.
+
 ### Сессия 2026-06-02 (§1.2: изоляция GM + подпись роли)
 
 - **MCP Fly:** §1.2 шаги 1–3 — изоляция A/B **PASS** (179 vs 189, gm-a без Point B); артефакт `artifacts/demo-feedback/mcp_section_1_2_fly_2026-06-02.json` + скрин дашборда.
