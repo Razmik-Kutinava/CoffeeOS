@@ -13,9 +13,23 @@
     "A": "2fdee1ac-4674-41ee-b89e-87b45643f789",
     "B": "655aaccb-004a-4bb9-a50a-ce618854dda3"
   },
-  "steps": [],
+  "steps": [
+    {
+      "step": 1,
+      "action": "shop A — заказ Бразилия, оплата",
+      "verdict": "PASS",
+      "note": "Витрина A, имя+телефон, Оплатить"
+    },
+    {
+      "step": 2,
+      "action": "barista-a до deploy fed380c",
+      "verdict": "PARTIAL",
+      "note": "На Fly ещё старая шапка «Смена 08:06» (авто-смена). После deploy+seed — «Смена закрыта» и кнопка «Открыть»"
+    }
+  ],
   "overall": {
-    "status": "pending_mcp_after_deploy",
-    "note": "Заполнить после MCP-прогона на Fly с новым UI открытия/закрытия"
+    "status": "code_and_tests_PASS",
+    "fly_mcp": "partial_until_deploy",
+    "commit": "fed380c"
   }
 }
