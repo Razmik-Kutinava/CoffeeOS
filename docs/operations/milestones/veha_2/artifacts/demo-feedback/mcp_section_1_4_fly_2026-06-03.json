@@ -1,0 +1,49 @@
+{
+  "scenario": "PDF §1.4 — продажа и остатки",
+  "stand": "https://coffeeos.fly.dev",
+  "run_at": "2026-06-03",
+  "tool": "chrome-devtools-mcp",
+  "conclusion": "Списание работает на складе ТОЧКИ (A), не на складе ЦЕХА. Сценарий для заказчика нужно править.",
+  "steps": [
+    {
+      "step": 1,
+      "actor": "pk-manager@demo.coffeeos.local",
+      "path": "/prep_kitchen/inventory",
+      "label": "склад цеха",
+      "before": { "Demo Coffee Beans": "-242.0", "Demo Milk": "-2100.0" },
+      "note": "У заказчика в PDF было 10.0 — на Fly уже минус (старые продажи/движения)"
+    },
+    {
+      "step": 1b,
+      "actor": "gm-a@demo.coffeeos.local",
+      "path": "/manager/inventory",
+      "label": "склад точки A",
+      "before": { "Demo Coffee Beans": "3992.0", "Demo Milk": "-3400.0" }
+    },
+    {
+      "step": 2,
+      "action": "barista-a: открыть смену → Создать → Фильтр-кофе Бразилия → наличные",
+      "verdict": "PASS",
+      "note": "Витрина: кнопка Оплатить не отправила POST /shop/api/orders в MCP-сессии — отдельно"
+    },
+    {
+      "step": 3,
+      "after_sale": {
+        "prep_kitchen": { "Demo Coffee Beans": "-242.0", "Demo Milk": "-2100.0", "changed": false },
+        "point_a_manager": { "Demo Coffee Beans": "3974.0", "Demo Milk": "-3550.0", "changed": true, "beans_delta": -18, "milk_delta": -150 }
+      },
+      "verdict": "PASS_on_point_stock",
+      "kitchen_verdict": "FAIL_for_scenario_as_written"
+    }
+  ],
+  "recommendation": {
+    "customer_text": "Шаг 1–3 смотреть остатки в gm-a → Склад (/manager/inventory), не только в цехе",
+    "product_backlog": "Связка цех ↔ точки (движения/общий склад) — отдельная задача, не §1.4 демо"
+  },
+  "overall": {
+    "deduction_works": true,
+    "where": "tenant_id заказа (кофейня A/B)",
+    "section_1_4_as_written": "misleading",
+    "customer_approval": "pending"
+  }
+}
