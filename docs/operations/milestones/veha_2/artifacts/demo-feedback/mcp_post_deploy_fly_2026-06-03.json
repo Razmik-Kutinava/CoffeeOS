@@ -1,0 +1,91 @@
+{
+  "scenario": "Post-deploy MCP batch (§E долг после fly deploy)",
+  "stand": "https://coffeeos.fly.dev",
+  "run_at": "2026-06-03",
+  "tool": "chrome-devtools-mcp",
+  "deploy_note": "Пользователь выполнил fly deploy; прогон сразу после.",
+  "logins": {
+    "password": "demo123456",
+    "shop_tenant_a": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+    "shop_tenant_b": "655aaccb-004a-4bb9-a50a-ce618854dda3"
+  },
+  "checks": [
+    {
+      "id": "shop_ab_orders",
+      "pdf": "§2 витрина A↔B",
+      "steps": [
+        "POST /shop/api/orders на A (cash, MCP PostDeploy A)",
+        "history A: заказ defa504a-2cc3-4d44-9880-28e1b3ae436e",
+        "переход на tenant B: history пустой, заказа A нет",
+        "возврат на A #/orders: заказ на месте"
+      ],
+      "result": {
+        "order_id": "defa504a-2cc3-4d44-9880-28e1b3ae436e",
+        "hasAOrderOnB": false,
+        "hasAOrderOnA": true,
+        "ui_orders_today": "Заказ #defa504a… 358 ₽"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "id": "franchise_login",
+      "pdf": "§3.6",
+      "steps": ["POST /login franchise@", "GET /manager"],
+      "result": {
+        "url": "/manager",
+        "hasPointA": true,
+        "hasSwitcher": true,
+        "role": "Франчайз"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "id": "shift_1_3",
+      "pdf": "§1.3",
+      "actor": "barista-a@demo.coffeeos.local",
+      "steps": [
+        "/barista — плашка «Смена закрыта»",
+        "/barista/shift — кнопка «Открыть смену»",
+        "клик Открыть → плашка «Смена открыта с 14:10»"
+      ],
+      "result": {
+        "closed_banner": true,
+        "open_button": true,
+        "opened_banner": "Смена открыта с 14:10"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "id": "gm_label_1_2",
+      "pdf": "§1.2 подпись",
+      "actor": "gm-a@demo.coffeeos.local",
+      "result": {
+        "roleLabel": "Управляющий точки",
+        "badLabel_office_manager": false
+      },
+      "verdict": "PASS"
+    },
+    {
+      "id": "inventory_1_4",
+      "pdf": "§1.4 склад",
+      "steps": [
+        "gm-a → /manager/inventory (склад точки A)",
+        "pk-manager → /prep_kitchen/inventory (цех)"
+      ],
+      "result": {
+        "point_a": { "Demo Coffee Beans": "3938.0", "Demo Milk": "-3850.0" },
+        "prep_kitchen": { "Demo Coffee Beans": "242.0", "Demo Milk": "2100.0" },
+        "note": "Списание с точки A (после витринного заказа beans уменьшился). Цех — отдельные остатки, не склад точки."
+      },
+      "verdict": "PASS"
+    },
+    {
+      "id": "menu_2_1_recheck",
+      "pdf": "§2.1",
+      "note": "Повтор не гоняли отдельно; предыдущий артефакт mcp_section_2_1_fly_2026-06-02.json PASS, деплой не ломал витрину (заказ A прошёл)."
+    }
+  ],
+  "overall": "PASS",
+  "ready_for": "§2.2 shop UI (следующая разработка/проверка)",
+  "customer_approval": "pending"
+}

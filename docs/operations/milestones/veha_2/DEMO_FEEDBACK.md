@@ -23,15 +23,15 @@
 
 | Дата | Источник | Сценарий / экран | Суть | Статус | PR / коммит |
 |------|----------|------------------|------|--------|-------------|
-| 2026-06-02 | заказчик PDF §2 | shop витрина Б | **Баг:** заказ «пропадает» с экранов при смене точки A↔B (одна сессия, один customer) | done | `Shop::CustomerSession` per-tenant *(проверить на Fly)* |
-| 2026-06-02 | заказчик PDF §3.6 | franchise / УК | **Баг:** франчайзи «нет» — вход или создание из УК | done | `organization_id` create + `demo:seed` repair *(после seed/deploy)* |
+| 2026-06-02 | заказчик PDF §2 | shop витрина Б | **Баг:** заказ «пропадает» с экранов при смене точки A↔B (одна сессия, один customer) | done *(MCP post-deploy)* | [`mcp_post_deploy_fly_2026-06-03.json`](artifacts/demo-feedback/mcp_post_deploy_fly_2026-06-03.json) §shop_ab |
+| 2026-06-02 | заказчик PDF §3.6 | franchise / УК | **Баг:** франчайзи «нет» — вход или создание из УК | done *(MCP post-deploy)* | [`mcp_post_deploy_fly_2026-06-03.json`](artifacts/demo-feedback/mcp_post_deploy_fly_2026-06-03.json) §franchise |
 | 2026-06-02 | заказчик PDF §2.2 | shop UI | Стрелка назад, свайп, +1 товар — проверить/допилить | open | — |
 | 2026-06-02 | заказчик PDF §2.3–2.4 | shop оплата | Дотестить оплату (ФИО до кнопки, двойной «Оплатить», во время оплаты) | open | — |
 | 2026-06-02 | заказчик PDF §2.5 | shop | Медленный интернет: крутилка; тест в подвале | open | overlay есть, проверить на Fly |
 | 2026-06-02 | заказчик PDF §1.2 | `/manager` шапка | GM видит **«Офис-менеджер»** вместо **«Управляющий точки»** | done | Fly MCP post-deploy: **«Управляющий точки»** |
 | 2026-06-02 | QA §1.2 | gm-a / gm-b Fly | Изоляция A/B: цены 179 vs 189, A не видит B | done *(MCP)* | [`mcp_section_1_2_fly_2026-06-02.json`](artifacts/demo-feedback/mcp_section_1_2_fly_2026-06-02.json) |
-| 2026-06-02 | заказчик PDF §1.3 | смена / UI | Неясно где открыть/закрыть смену; в демо смена открывалась сама | done *(код)* | Кнопки открыть/закрыть + плашка; `demo:seed` закрывает смены A/B |
-| 2026-06-03 | заказчик PDF §1.4 | склад цеха vs точка | Ожидали минус на **цехе**, списание только на **точке** | done *(сценарий)* | MCP Fly: [`mcp_section_1_4_fly_2026-06-03.json`](artifacts/demo-feedback/mcp_section_1_4_fly_2026-06-03.json); plain §1.4 обновлён |
+| 2026-06-02 | заказчик PDF §1.3 | смена / UI | Неясно где открыть/закрыть смену; в демо смена открывалась сама | done *(MCP post-deploy)* | [`mcp_post_deploy_fly_2026-06-03.json`](artifacts/demo-feedback/mcp_post_deploy_fly_2026-06-03.json) §shift; кнопка «Открыть смену» на Fly |
+| 2026-06-03 | заказчик PDF §1.4 | склад цеха vs точка | Ожидали минус на **цехе**, списание только на **точке** | done *(MCP post-deploy)* | [`mcp_post_deploy_fly_2026-06-03.json`](artifacts/demo-feedback/mcp_post_deploy_fly_2026-06-03.json) §inventory + [`mcp_section_1_4_fly_2026-06-03.json`](artifacts/demo-feedback/mcp_section_1_4_fly_2026-06-03.json) |
 | 2026-06-02 | заказчик PDF §2.1 | shop витрина A | Меню: каталог → категория → карточка (название, цена, модификаторы; скрин заказчика = карточка) | done *(MCP)* | [`mcp_section_2_1_fly_2026-06-02.json`](artifacts/demo-feedback/mcp_section_2_1_fly_2026-06-02.json) |
 
 ### §2.1 до апрува заказчика
@@ -51,6 +51,16 @@
 | gm-a не видит Point B / заказы B | **PASS** |
 | Подпись роли GM на Fly | **PASS** (post-deploy MCP) |
 | Апрув §1.2 в PDF | **pending** |
+
+---
+
+## Post-deploy MCP (2026-06-03) — выполнено
+
+Сводный артефакт: [`mcp_post_deploy_fly_2026-06-03.json`](artifacts/demo-feedback/mcp_post_deploy_fly_2026-06-03.json) — **PASS** (§2 A↔B, §3.6 franchise, §1.3 смена, §1.2 подпись GM, §1.4 склад точки vs цех).
+
+**Дальше по витрине:** §2.2–2.5 — `open` (разработка/проверка).
+
+Апрув заказчика в PDF — **pending** (не блокирует старт §2.2 в коде).
 
 ---
 
