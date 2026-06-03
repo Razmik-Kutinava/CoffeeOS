@@ -6,10 +6,9 @@ module Shop
 
     attr_reader :payment_url
 
-    def initialize(session, tenant:, shop_customer_session_key: :shop_customer_id, request: nil)
+    def initialize(session, tenant:, request: nil)
       @session = session
       @tenant = tenant
-      @shop_customer_session_key = shop_customer_session_key
       @request = request
     end
 
@@ -90,7 +89,7 @@ module Shop
         Inventory::OrderRecipeDeduction.call!(order: order.reload) if flow[:order_status] == :accepted
 
         @session[Shop::CartService::SESSION_KEY] = []
-        @session[@shop_customer_session_key] = customer.id
+        Shop::CustomerSession.set_customer_id!(@session, @tenant.id, customer.id)
       end
 
       begin

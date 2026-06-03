@@ -112,6 +112,7 @@ module Demo
           tenant_kitchen: tenant_kitchen,
           roles: roles
         )
+        repair_franchise_organization_links!(organization: org)
         ensure_order_cancel_reasons!
         ensure_demo_operations!(tenant_a: tenant_a, tenant_b: tenant_b, tenant_kitchen: tenant_kitchen)
       end
@@ -239,6 +240,21 @@ module Demo
         end
 
         user
+      end
+    end
+
+    # Fly/старые стенды: franchise_manager без organization_id → «Нет организации» при входе.
+    def repair_franchise_organization_links!(organization:)
+      role = Role.find_by(code: "franchise_manager")
+      return unless role
+
+      User.joins(:user_roles).where(user_roles: { role_id: role.id }).distinct.find_each do |user|
+        next if user.organization_id.present?
+
+        anchor = organization.tenants.order(:created_at).first
+        next unless anchor
+
+        user.update!(organization_id: organization.id, tenant_id: user.tenant_id || anchor.id)
       end
     end
 

@@ -107,6 +107,52 @@ class Shop::Api::OrdersControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  test "history is isolated per shop tenant for same phone" do
+    tenant_b = create_tenant!(name: "Shop B", slug: "shop-b-#{SecureRandom.hex(4)}")
+    enable_product_for_tenant!(tenant: tenant_b, product: @product, price: 210)
+    phone = "+7999#{SecureRandom.random_number(10**7).to_s.rjust(7, '0')}"
+
+    open_session do |sess|
+      sess.post "/shop/api/cart/add",
+        headers: { "X-Shop-Tenant" => @tenant.id.to_s },
+        params: { product_id: @product.id, quantity: 1, selected_modifiers: [] },
+        as: :json
+      sess.post "/shop/api/orders",
+        headers: { "X-Shop-Tenant" => @tenant.id.to_s },
+        params: { phone: phone, name: "A Guest", payment_method: "cash" },
+        as: :json
+      order_a = sess.response.parsed_body["order_id"]
+
+      sess.get "/shop/api/orders/history",
+        headers: { "X-Shop-Tenant" => @tenant.id.to_s },
+        params: { today: 1 }
+      ids_a = sess.response.parsed_body.map { |r| r["id"] }
+      assert_includes ids_a, order_a
+
+      sess.get "/shop/api/orders/history",
+        headers: { "X-Shop-Tenant" => tenant_b.id.to_s },
+        params: { today: 1 }
+      assert_empty sess.response.parsed_body
+
+      sess.post "/shop/api/cart/add",
+        headers: { "X-Shop-Tenant" => tenant_b.id.to_s },
+        params: { product_id: @product.id, quantity: 1, selected_modifiers: [] },
+        as: :json
+      sess.post "/shop/api/orders",
+        headers: { "X-Shop-Tenant" => tenant_b.id.to_s },
+        params: { phone: phone, name: "B Guest", payment_method: "cash" },
+        as: :json
+      order_b = sess.response.parsed_body["order_id"]
+
+      sess.get "/shop/api/orders/history",
+        headers: { "X-Shop-Tenant" => tenant_b.id.to_s },
+        params: { today: 1 }
+      ids_b = sess.response.parsed_body.map { |r| r["id"] }
+      assert_includes ids_b, order_b
+      assert_not_includes ids_b, order_a
+    end
+  end
+
   test "GET /shop/api/orders/:id hides order from another session" do
     order_id = nil
     open_session do |sess|

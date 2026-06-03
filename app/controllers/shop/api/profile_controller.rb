@@ -4,7 +4,8 @@ module Shop
   module Api
     class ProfileController < Shop::Api::BaseController
       def show
-        customer = MobileCustomer.find_by(id: session[:shop_customer_id])
+        cid = Shop::CustomerSession.customer_id(session, @shop_tenant.id)
+        customer = MobileCustomer.find_by(id: cid) if cid.present?
         if customer
           render json: {
             id: customer.id,

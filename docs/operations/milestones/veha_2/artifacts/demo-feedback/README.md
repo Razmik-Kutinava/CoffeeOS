@@ -1,9 +1,10 @@
-# Demo feedback — артефакты (§E)
+# Фидбек заказчика (§E Веха 2)
 
-**Очередь правок:** [`../DEMO_FEEDBACK.md`](../DEMO_FEEDBACK.md) (веха 2).
+| Файл | Содержимое |
+|------|------------|
+| [`customer_qa_prog10_2026-06.pdf`](customer_qa_prog10_2026-06.pdf) | Прогонка сценариев **§1–3** (общие, витрина, УК). **§4+ нет** в файле. |
+| [`../veha_1/artifacts/customer_live_qa_block1_2026-05-30.pdf`](../../veha_1/artifacts/customer_live_qa_block1_2026-05-30.pdf) | Предыдущий пакет (В1 §1). |
 
-**Цепочка с В1:** первый прогон живого демо — [`../../veha_1/DEMO_FEEDBACK.md`](../../veha_1/DEMO_FEEDBACK.md), PDF [`../../veha_1/artifacts/customer_live_qa_block1_2026-05-30.pdf`](../../veha_1/artifacts/customer_live_qa_block1_2026-05-30.pdf).
+**Очередь правок:** [`../../DEMO_FEEDBACK.md`](../../DEMO_FEEDBACK.md).
 
-**Сюда класть:** новые PDF/PNG от заказчика, имя с датой, например `customer_demo_feedback_2026-06-02.pdf`.
-
-**В `DEMO_FEEDBACK.md`:** строка `**Артефакт:** [demo-feedback/имя.pdf](demo-feedback/имя.pdf)`.
+**Для агента:** после правок — статус `done` + коммит; deploy Fly — владелец; §I не ставить без апрува.

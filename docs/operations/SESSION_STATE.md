@@ -11,14 +11,24 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| Артефакты прогона 10 **сгруппированы** под `veha_2/artifacts/prog10/` | **Апрув 14** → §E / §I |
-| Блоки **0–14** ✅ (прогон 10 ops) | PDF заказчика → `artifacts/demo-feedback/` (не в git пока) |
+| **§E открыт:** PDF §1–3 → [`DEMO_FEEDBACK.md`](milestones/veha_2/DEMO_FEEDBACK.md) (5 пунктов) | Фиксы на Fly + апрув заказчика → §I |
+| Фиксы в коде: shop history per-tenant, franchise org | UI витрины, оплата, §4+ PDF — **потом** |
+| Артефакты прогона 10 под `artifacts/prog10/` | **Апрув 14** прогона 10 |
+| Блоки **0–14** ✅ (прогон 10 ops) | |
 | Gate **562/0** WSL *(2026-06-02)* | Fly deploy + secrets — **владелец** (`flyctl auth login`) |
 | Хвосты кода | V2-P10-08; **V3-SEC-07** (shop meta key); PREP-MULTI → В3 |
 
 **Ops на блок:** `SESSION_STATE` + коммит всегда; `PRACTICES` (CR); `QA_ACCEPTANCE_RUN` + `artifacts/` (QA); `CHANGELOG` если заметно; `CHECKLIST` `[x]` только по факту.
 
 **Артефакты (для агента в другом редакторе):** точка входа — [`milestones/veha_2/artifacts/README.md`](milestones/veha_2/artifacts/README.md). Прогон 10: `artifacts/prog10/{_index,smoke,kiosk,shop,staff-rbac,connectivity,platform-ent,warehouse}/`. Сводный индекс: `prog10/_index/prog10_final_index.json`. Скрипты `bin/prog10_*` пишут в эти подпапки (OUT обновлён). Старый плоский путь `artifacts/prog10_*.json` **удалён** — везде относительные ссылки `artifacts/prog10/...`.
+
+### Сессия 2026-06-02 (§E: фидбек PDF + фиксы shop/franchise)
+
+- **PDF:** `artifacts/demo-feedback/customer_qa_prog10_2026-06.pdf` (§1–3; §4+ нет).
+- **DEMO_FEEDBACK:** 5 строк (2 blocker in_progress, 3 open).
+- **Код:** `Shop::CustomerSession` — история заказов по точке; `franchise_owners#create` + `demo:seed` repair `organization_id`; login — приоритет роли `franchise_manager`.
+- **Не сделано:** UI витрины (назад/свайп/+1), дотест оплаты, подвал slow-net; §4+ PDF.
+- **Следующий:** deploy Fly → проверка заказчиком → `done` в DEMO_FEEDBACK.
 
 ### Сессия 2026-06-02 (ops: реорганизация артефактов вехи 2)
 

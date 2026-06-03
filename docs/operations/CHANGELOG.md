@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## v1.101 — 2026-06-02 (V2 §E: фидбек PDF + shop/franchise fixes)
+
+- PDF прогонка §1–3 → `veha_2/artifacts/demo-feedback/`; очередь [`DEMO_FEEDBACK.md`](milestones/veha_2/DEMO_FEEDBACK.md).
+- **Shop:** `Shop::CustomerSession` — customer_id в сессии **по tenant_id** (фикс «пропал заказ» при A↔B).
+- **Franchise:** `organization_id` при создании из УК; `demo:seed` чинит franchise без org; login — приоритет роли.
+- §I вехи **не закрыта**; UI/оплата из PDF — в очереди `open`.
+
 ## v1.100 — 2026-06-02 (V2 ops: реорганизация артефактов прогона 10)
 
 - Плоский `veha_2/artifacts/prog10_*` → дерево `artifacts/prog10/{_index,smoke,kiosk,shop,staff-rbac,connectivity,platform-ent,warehouse}/`.

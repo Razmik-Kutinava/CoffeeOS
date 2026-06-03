@@ -21,7 +21,9 @@ module Platform
         return render :new, status: :unprocessable_entity
       end
 
-      @user = User.new(user_params.merge(tenant_id: anchor.id, status: "active"))
+      @user = User.new(
+        user_params.merge(tenant_id: anchor.id, organization_id: org.id, status: "active")
+      )
       role = Role.find_or_create_by!(code: "franchise_manager") { |r| r.name = "Franchise manager" }
 
       if @user.save

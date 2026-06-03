@@ -35,7 +35,7 @@ class Auth::SessionsController < ApplicationController
         return render :new, status: :unprocessable_entity
       end
 
-      role = user_roles.first
+      role = pick_login_role(user_roles)
       Current.role_code = role.code
       apply_session_after_login!(user, role.code)
       redirect_to dashboard_path_for_role(role.code), notice: "Добро пожаловать!"
@@ -58,6 +58,20 @@ class Auth::SessionsController < ApplicationController
   end
 
   private
+
+  # При нескольких ролях — приоритетная (franchise_manager выше barista и т.д.).
+  LOGIN_ROLE_PRIORITY = %w[
+    ук_global_admin ук_country_manager ук_billing_admin
+    franchise_manager general_manager shift_manager
+    barista prep_kitchen_manager prep_kitchen_worker blog_editor
+  ].freeze
+
+  def pick_login_role(user_roles)
+    user_roles.min_by do |role|
+      idx = LOGIN_ROLE_PRIORITY.index(role.code)
+      idx.nil? ? LOGIN_ROLE_PRIORITY.length : idx
+    end
+  end
 
   def apply_session_after_login!(user, role_code)
     session[:user_id] = user.id

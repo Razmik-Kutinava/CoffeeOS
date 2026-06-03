@@ -24,12 +24,14 @@ module Shop
         order = Order.where(tenant_id: @shop_tenant.id, source: :mobile).includes(:order_items).find(params[:id])
         unless order_visible_to_session_customer?(order)
           Rails.logger.warn(
-            "[Shop::Order] Order #{order.id} not visible to customer #{session[:shop_customer_id].inspect}"
+            "[Shop::Order] Order #{order.id} not visible to customer #{Shop::CustomerSession.customer_id(session, @shop_tenant.id).inspect}"
           )
           return render json: { error: "Order not found", status: 404 }, status: :not_found
         end
 
-        Rails.logger.info("[Shop::Order] Viewing order #{order.id} by customer #{session[:shop_customer_id]}")
+        Rails.logger.info(
+          "[Shop::Order] Viewing order #{order.id} by customer #{Shop::CustomerSession.customer_id(session, @shop_tenant.id)}"
+        )
         render json: order_json(order)
       rescue ActiveRecord::RecordNotFound
         Rails.logger.warn("[Shop::Order] Order not found: #{params[:id]}")
@@ -37,7 +39,7 @@ module Shop
       end
 
       def history
-        cid = session[:shop_customer_id]
+        cid = Shop::CustomerSession.customer_id(session, @shop_tenant.id)
         if cid.present?
           orders = Order.where(tenant_id: @shop_tenant.id, customer_id: cid, source: :mobile)
             .order(created_at: :desc)
@@ -68,7 +70,7 @@ module Shop
       private
 
       def order_visible_to_session_customer?(order)
-        cid = session[:shop_customer_id]
+        cid = Shop::CustomerSession.customer_id(session, @shop_tenant.id)
         cid.present? && order.customer_id.present? && order.customer_id.to_s == cid.to_s
       end
 

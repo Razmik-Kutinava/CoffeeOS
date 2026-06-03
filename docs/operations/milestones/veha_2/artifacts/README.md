@@ -9,4 +9,4 @@
 | [`demo-feedback/`](demo-feedback/) | PDF/скрины фидбека заказчика (§E). Цепочка с [`veha_1/artifacts`](../../veha_1/artifacts/). |
 | [`prog10/`](prog10/) | Прогон 10 — curl/MCP отчёты на Fly. См. [`prog10/README.md`](prog10/README.md). |
 
-**Не в git:** токены киосков (`/tmp/prog10_kiosk_tokens.json`), реальные секреты, локальные PDF до явного добавления в `demo-feedback/`.
+**Не в git:** токены киосков (`/tmp/prog10_kiosk_tokens.json`), реальные секреты.
