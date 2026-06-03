@@ -1,0 +1,46 @@
+{
+  "scenario": "PDF §2.1 — витрина: меню (каталог → категория → карточка)",
+  "stand": "https://coffeeos.fly.dev",
+  "run_at": "2026-06-02",
+  "tool": "chrome-devtools-mcp",
+  "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "entry_url": "https://coffeeos.fly.dev/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "customer_note": "Скрин заказчика (Фильтр-кофе Бразилия) = приёмка карточки: название, цена, модификаторы; визуал карточки (☕) на витрине.",
+  "steps": [
+    {
+      "step": 1,
+      "action": "Открыть витрину точки A",
+      "expect": "Категории и карточки напитков",
+      "result": {
+        "categories": ["Черный"],
+        "products_visible": ["Фильтр-кофе Бразилия 179₽", "Фильтр-кофе без кофеина (декаф) Гватемала 295₽"]
+      },
+      "verdict": "PASS"
+    },
+    {
+      "step": 2,
+      "action": "Нажать категорию «Черный» (Смотреть все)",
+      "expect": "Список товаров категории",
+      "result": {
+        "hash": "#/category/08af5e93-b615-4cb1-851f-b25fc79ab714",
+        "heading": "Черный",
+        "product_count": 2
+      },
+      "verdict": "PASS"
+    },
+    {
+      "step": 3,
+      "action": "Открыть карточку «Фильтр-кофе Бразилия»",
+      "expect": "Название, цена, картинка/карточка, модификаторы",
+      "result": {
+        "hash": "#/product/24dae391-2199-4959-907e-d08c4cec3329",
+        "title": "Фильтр-кофе Бразилия",
+        "price": "179₽",
+        "modifiers": ["Температура (Со льдом)", "Вкус (3 варианта)", "Интенсивность (3 варианта)"],
+        "description_present": true
+      },
+      "verdict": "PASS"
+    }
+  ],
+  "overall": "PASS"
+}
