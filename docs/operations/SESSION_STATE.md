@@ -5,20 +5,28 @@
 **Дата:** 2026-06-04  
 **Веха 1:** официально не закрыта (§ I, H.3 — `[ ]`).  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
-**§E / PDF:** идём по очереди; **внутренний апрув** — не ждём PDF на каждый пункт; **финальный PDF-прогон** — в конце.
+**§E / PDF:** PDF заказчика в `artifacts/demo-feedback/`; **внутренний апрув** достаточен.
 
 **Прогона 11 нет.** Точка входа для агента: [`milestones/veha_2/DEMO_FEEDBACK.md`](milestones/veha_2/DEMO_FEEDBACK.md) + `artifacts/demo-feedback/`.
 
 | Сейчас | Дальше |
 |--------|--------|
-| **Очередь §1–3** в DEMO_FEEDBACK — **все done** (MCP Fly) | §4+ PDF → §I |
-| **§2** 2.1–2.5, A↔B, онбординг, franchise staff — **PASS** | финальный апрув PDF §1.2/§2.1 |
+| **DEMO_FEEDBACK** — все done (MCP Fly) | §I: живое демо / закрытие вехи по решению |
+| **§2** 2.1–2.5, A↔B, онбординг, franchise — **PASS** | |
 | **§1.2–1.4** — MCP Fly **PASS** | живое демо В2 |
 | Хвост MCP: успех оплаты + история; подвал физически | |
 
 **Ops на блок:** `SESSION_STATE` + коммит всегда; `PRACTICES` (CR); `QA_ACCEPTANCE_RUN` + `artifacts/` (QA); `CHANGELOG` если заметно; `CHECKLIST` `[x]` только по факту.
 
 **Артефакты (для агента в другом редакторе):** точка входа — [`milestones/veha_2/artifacts/README.md`](milestones/veha_2/artifacts/README.md). Прогон 10: `artifacts/prog10/{_index,smoke,kiosk,shop,staff-rbac,connectivity,platform-ent,warehouse}/`. Сводный индекс: `prog10/_index/prog10_final_index.json`. Скрипты `bin/prog10_*` пишут в эти подпапки (OUT обновлён). Старый плоский путь `artifacts/prog10_*.json` **удалён** — везде относительные ссылки `artifacts/prog10/...`.
+
+### Сессия 2026-06-04 (УК → Меню → витрины A/B, PTS + categories API)
+
+- **Код:** `ProductTenantSync` — PTS на все точки при publish/bootstrap; `categories#index` default `per_page=50`; repair PTS при открытии УК «Меню»; rake `platform:menu:sync_pts`.
+- **Коммит:** `589e397` — `fix(shop): PTS sync to all tenants and full categories on vitrina` (push `develop`).
+- **Fly API (без UI):** A/B — по **3** категории, **11** товаров, `meta.per_page=50` — **PASS**.
+- **Fly UI УК:** `uk@demo.coffeeos.local` / `demo123456` → **422** (логин не принят); создание товара+модификаторов в УК через MCP **не выполнено** — нужен `fly auth login` + `fly ssh console -a coffeeos -C "bin/rails demo:seed"` (или актуальный пароль УК).
+- **Деплой:** push на `develop`; если CI не подхватил — `fly deploy -a coffeeos` с машины с `fly auth`.
 
 ### Сессия 2026-06-04 (franchise staff + sync ops)
 
