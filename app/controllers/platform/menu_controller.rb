@@ -5,6 +5,7 @@ module Platform
     before_action :load_categories, only: :index
 
     def index
+      repair_catalog_pts_if_needed!
       @new_category = Category.new
       @new_product = Product.new
       @new_group = ProductModifierGroup.new
@@ -149,6 +150,16 @@ module Platform
     end
 
     private
+
+    # Товары без PTS на точках не попадают на витрину — чиним при открытии меню УК.
+    def repair_catalog_pts_if_needed!
+      return unless current_user
+      return unless Platform::Menu::ProductTenantSync.needs_repair?
+
+      Platform::Menu::ProductTenantSync.repair_missing_pts!(user: current_user)
+    rescue StandardError => e
+      Rails.logger.warn("[platform/menu] PTS repair skipped: #{e.class}: #{e.message}")
+    end
 
     def load_categories
       @categories = Category

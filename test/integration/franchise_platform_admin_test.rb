@@ -59,7 +59,7 @@ class FranchisePlatformAdminTest < ActionDispatch::IntegrationTest
     follow_redirect!
     assert_response :success
 
-    assert_difference -> { User.count }, +1 do
+    assert_no_difference -> { User.count } do
       post manager_staff_members_path, params: {
         user: {
           name: "Офис",
@@ -69,7 +69,7 @@ class FranchisePlatformAdminTest < ActionDispatch::IntegrationTest
         role_codes: ["general_manager"]
       }
     end
-    assert_redirected_to manager_staff_members_path
+    assert_redirected_to manager_dashboard_path
   end
 
   test "general manager cannot keep general_manager role when creating staff" do

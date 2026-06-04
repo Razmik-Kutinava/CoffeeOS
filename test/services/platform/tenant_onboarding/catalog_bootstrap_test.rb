@@ -15,12 +15,13 @@ class Platform::TenantOnboarding::CatalogBootstrapTest < ActiveSupport::TestCase
 
     enable_product_for_tenant!(tenant: t1, product: p1, price: 99)
 
+    actor_id = SecureRandom.uuid
     ActiveRecord::Base.transaction do
       conn = ActiveRecord::Base.connection
-      conn.execute("SET LOCAL app.current_user_id = #{conn.quote(SecureRandom.uuid)}")
+      conn.execute("SET LOCAL app.current_user_id = #{conn.quote(actor_id)}")
       conn.execute("SET LOCAL app.current_tenant_id = #{conn.quote(t2.id.to_s)}")
       Current.tenant_id = t2.id
-      Platform::TenantOnboarding::CatalogBootstrap.ensure_pts_for_tenant!(t2)
+      Platform::TenantOnboarding::CatalogBootstrap.ensure_pts_for_tenant!(t2, actor_user_id: actor_id)
     ensure
       Current.tenant_id = nil
     end

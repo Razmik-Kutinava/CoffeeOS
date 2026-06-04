@@ -24,7 +24,7 @@ module Platform
         previous_tid = Current.tenant_id
         begin
           Current.tenant_id = @tenant.id
-          CatalogBootstrap.ensure_pts_for_tenant!(@tenant)
+          CatalogBootstrap.ensure_pts_for_tenant!(@tenant, actor_user_id: @actor_user_id)
         ensure
           Current.tenant_id = previous_tid
         end

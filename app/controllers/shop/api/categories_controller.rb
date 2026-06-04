@@ -27,9 +27,14 @@ module Shop
         # 1 запрос: категории
         categories = Category.where(id: products_by_category.keys.compact).order(:sort_order)
 
-        # Пагинация по категориям
+        # Пагинация по категориям (витрина без per_page — отдаём все категории, до 50)
         page = [params[:page].to_i, 1].max
-        per_page = [[params[:per_page].to_i, 1].max, 50].min
+        default_per_page = 50
+        per_page = if params[:per_page].present?
+          [[params[:per_page].to_i, 1].max, default_per_page].min
+        else
+          default_per_page
+        end
         categories = categories.limit(per_page).offset((page - 1) * per_page)
 
         data = categories.map do |cat|

@@ -65,6 +65,9 @@ class BlockDPanelScreensTest < ActionDispatch::IntegrationTest
     franchise_manager_get_screens.each do |path|
       assert_get_success path
     end
+
+    get manager_staff_members_path
+    assert_redirected_to manager_dashboard_path
   end
 
   test "shift_manager operational screens open" do
@@ -160,7 +163,6 @@ class BlockDPanelScreensTest < ActionDispatch::IntegrationTest
       manager_reports_path,
       manager_inventory_path,
       manager_menu_path,
-      manager_staff_members_path,
       manager_devices_path,
       manager_incidents_path
     ]

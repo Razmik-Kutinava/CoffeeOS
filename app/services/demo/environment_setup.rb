@@ -176,7 +176,7 @@ module Demo
         conn.execute("SET LOCAL app.current_user_id = #{conn.quote(actor_id)}")
         conn.execute("SET LOCAL app.current_tenant_id = #{conn.quote(tenant.id.to_s)}")
         Current.tenant_id = tenant.id
-        Platform::TenantOnboarding::CatalogBootstrap.ensure_pts_for_tenant!(tenant)
+        Platform::TenantOnboarding::CatalogBootstrap.ensure_pts_for_tenant!(tenant, actor_user_id: actor_id)
       end
     ensure
       Current.tenant_id = previous_tid
