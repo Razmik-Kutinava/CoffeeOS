@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v1.113 — 2026-06-04 (§2.5 post-deploy MCP + fix boot skeleton)
+
+- Post-deploy MCP Slow 3G **PASS**: `.shop-boot-skeleton` на Fly, фон `#1a1a1a`.
+- Fix: `application.js` — `replaceChildren()` перед mount (boot skeleton не залипал).
+- Подвал: не гоняли (только DevTools).
+
 ## v1.112 — 2026-06-04 (§2.5: медленный интернет — витрина)
 
 - MCP Slow 3G **PASS**: скелетон при загрузке меню, тёмный фон (не белый экран).

@@ -24,7 +24,8 @@
 
 - **MCP Fly Slow 3G:** 13 сэмплов `.page-skeleton`, фон `rgb(26,26,26)`, меню загрузилось — **PASS** — [`mcp_section_2_5_fly_2026-06-04.json`](milestones/veha_2/artifacts/demo-feedback/mcp_section_2_5_fly_2026-06-04.json).
 - **Код:** boot skeleton в `shop/pages/home.html.erb` до Svelte; `shop.html.erb` body `#1a1a1a`; `PageSkeleton` aria «Загрузка меню».
-- **Не делали:** физический тест в подвале; оверлей >5 с на этом прогоне не сработал (меню <5 с).
+- **Не делали:** физический тест в подвале; оверлей >5 s не сработал (меню <5 s).
+- **Post-deploy MCP Slow 3G:** boot skeleton на Fly виден (`Загрузка меню…`), фон тёмный — **PASS**; найден хвост: skeleton не снимался после mount → `application.js` `replaceChildren()` — нужен мини-deploy.
 
 ### Сессия 2026-06-04 (§2.3–2.4: оплата, корзина при возврате с банка)
 

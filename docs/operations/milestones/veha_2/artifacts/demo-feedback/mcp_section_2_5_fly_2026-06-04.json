@@ -5,29 +5,45 @@
   "tool": "chrome-devtools-mcp",
   "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
   "entry_url": "https://coffeeos.fly.dev/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789",
-  "network": "Slow 3G (DevTools emulate)",
-  "steps": [
+  "runs": [
     {
-      "step": "2.5.1",
-      "action": "Slow 3G → открыть витрину (cold), сэмплы DOM каждые 150ms",
-      "expect": "Скелетон/заглушка, фон не белый",
+      "label": "pre-deploy (649aa9f не на Fly)",
+      "network": "Slow 3G",
       "result": {
         "body_background": "rgb(26, 26, 26)",
         "skeleton_samples": 13,
         "overlay_samples": 0,
-        "busy_samples": 13,
+        "boot_skeleton": false
+      },
+      "verdict": "PASS"
+    },
+    {
+      "label": "post-deploy (boot skeleton на Fly)",
+      "network": "Slow 3G",
+      "deploy": "пользователь fly deploy после 649aa9f",
+      "result": {
+        "body_background": "rgb(26, 26, 26)",
+        "boot_skeleton_samples": 44,
+        "page_skeleton_samples": 14,
+        "overlay_samples": 0,
+        "boot_message": "Загрузка меню…",
         "menu_loaded": true,
-        "note": "overlay (5s) не понадобился — меню грузилось <5s; скелетон PageSkeleton покрывал загрузку"
+        "finding": "boot skeleton оставался в DOM вместе с меню после mount — fix replaceChildren() в application.js"
       },
       "verdict": "PASS"
     }
   ],
-  "code_followup": {
-    "commit": "boot skeleton в shop/home.html.erb до гидрации Svelte; body #1a1a1a; PageSkeleton aria «Загрузка меню»",
-    "deploy": "нужен fly deploy для boot skeleton на стенде; MCP PASS и до деплоя (PageSkeleton + тёмный фон)"
-  },
-  "not_in_scope": [
-    "Физический тест в подвале заказчиком — не выполняли (эмуляция Slow 3G)"
+  "steps": [
+    {
+      "step": "2.5.1",
+      "action": "Slow 3G → cold open, DOM samples 150ms",
+      "expect": "Заглушка/скелетон, не белый экран",
+      "verdict": "PASS"
+    }
   ],
+  "not_done": [
+    "Физический тест в подвале — только DevTools Slow 3G (по согласованию)"
+  ],
+  "followup_deploy": "После fix replaceChildren — повторный fly deploy (мини-патч)",
   "summary": { "pass": 1, "fail": 0 }
 }

@@ -109,7 +109,8 @@
 | Успех оплаты + заказ в истории | MCP без реальной оплаты в Т-Банке |
 | Стрелка «назад» на экране банка | UI Т-Банка, не наша витрина |
 | §2.5 медленный интернет | **done** *(MCP Slow 3G)* |
-| Тест §2.5 в подвале (физический) | Не делали — Slow 3G в DevTools |
+| Тест §2.5 в подвале (физический) | **не делали** — только Slow 3G DevTools |
+| Post-deploy MCP §2.5 (boot skeleton на Fly) | **PASS** — [`mcp_section_2_5`](artifacts/demo-feedback/mcp_section_2_5_fly_2026-06-04.json) `post-deploy`; fix `replaceChildren` — мини-deploy |
 
 ## УК: где «пользователи» (для агента)
 
