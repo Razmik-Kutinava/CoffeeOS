@@ -11,7 +11,7 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **§2.3–2.4** код готов; MCP Fly: ФИО/лоадер **PASS**, корзина после банка **FAIL** до deploy | **fly deploy** → перепрогон MCP |
+| **§2.3** MCP Fly post-deploy **PASS** (ФИО, лоадер, корзина после банка) | **§2.4** MCP двойной клик; §2.5 |
 | **§1.2–1.4, §2.1–2.2** — MCP Fly **PASS** | **§2.5** slow-net |
 | **Обязательно:** подсказки онбординга витрины | **open:** УК/staff — убрать Персонал у franchise |
 | Очередь: [`DEMO_FEEDBACK.md`](milestones/veha_2/DEMO_FEEDBACK.md) | §4+ PDF от заказчика → §I |
@@ -24,8 +24,9 @@
 
 - **Код:** `OrderCreator` — корзина чистится только при `accepted`; `PendingOrderSession` + reuse pending; `PaymentReturnsController`; `PaymentResult.svelte`; `POST abandon/finalize`, `DELETE /cart`.
 - **Тесты:** `order_creator_test`, `qa_section_2_3_payment_cart_test` — 0 failures (2 skip без TBANK в CI).
-- **MCP Fly (до deploy):** ФИО/лоадер/банк **PASS**; назад → «Корзина пуста» **FAIL** — [`mcp_section_2_3_fly_2026-06-04.json`](milestones/veha_2/artifacts/demo-feedback/mcp_section_2_3_fly_2026-06-04.json).
-- **Блокер:** `flyctl auth login` → `fly deploy -a coffeeos` → повтор MCP.
+- **Fly deploy:** `deployment-01KT8Q97MRQS1S4T060MR3Y3ZQ` (release_command OK; warning listen 0.0.0.0:3000 — стенд отвечает).
+- **MCP Fly post-deploy:** §2.3 **PASS** (корзина после банка: Бразилия 179₽) — [`mcp_section_2_3_fly_2026-06-04.json`](milestones/veha_2/artifacts/demo-feedback/mcp_section_2_3_fly_2026-06-04.json).
+- **Не в MCP:** успех оплаты + история; §2.4 двойной клик.
 
 ### Сессия 2026-06-03 (§2.2: платные модификаторы)
 

@@ -155,6 +155,15 @@
 
 ## Журнал изменений (дописывать снизу)
 
+- **2026-06-04 — §2.3 оплата витрина: корзина до успешной оплаты — ЗАКРЫТ (MCP Fly)**
+  - **Проблема (заказчик):** после «Оплатить» и ухода на Т-Банк свайп назад → «Корзина пуста», заказ не в истории.
+  - **Fix:** `OrderCreator` не чистит `shop_cart` при `pending_payment`; `PendingOrderSession` + reuse; `PaymentReturnsController`; `PaymentResult.svelte`; `abandon`/`finalize`; кнопка «Идёт оплата…».
+  - **Коммиты:** `11ab05f`, `06115fb` (ops).
+  - **Deploy:** Fly `deployment-01KT8Q97MRQS1S4T060MR3Y3ZQ`.
+  - **MCP Fly:** ФИО/лоадер/корзина после банка — **PASS** (`mcp_section_2_3_fly_2026-06-04.json`).
+  - **Не в scope MCP:** успех оплаты + история; §2.4 двойной клик (код есть).
+  - **Следующий:** §2.4 MCP, §2.5, подсказки онбординга, franchise staff.
+
 - **2026-05-30 — V2-T8 flaky callback test — ЗАКРЫТ**
   - **Проблема:** `events_controller_test.rb:208` — timestamp 299 с назад, race на границе `CALLBACK_MAX_AGE_SECONDS=300`.
   - **Fix:** `travel_to` + timestamp **200 с** назад; `TimeHelpers` в тест-классе.
