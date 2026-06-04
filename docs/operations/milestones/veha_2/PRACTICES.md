@@ -155,6 +155,11 @@
 
 ## Журнал изменений (дописывать снизу)
 
+- **2026-06-04 — franchise staff RBAC + sync DEMO_FEEDBACK — ЗАКРЫТ (MCP Fly)**
+  - **Задача:** у `franchise_manager` скрыть «Персонал»; у GM/УК оставить.
+  - **Код:** `Manager::BaseController#staff_management_visible?`, sidebar, `StaffController` guard.
+  - **Коммиты:** `7311338`, `62ced8e`; MCP — [`mcp_franchise_staff_fly_2026-06-04.json`](artifacts/demo-feedback/mcp_franchise_staff_fly_2026-06-04.json).
+
 - **2026-06-04 — §2.3 оплата витрина: корзина до успешной оплаты — ЗАКРЫТ (MCP Fly)**
   - **Проблема (заказчик):** после «Оплатить» и ухода на Т-Банк свайп назад → «Корзина пуста», заказ не в истории.
   - **Fix:** `OrderCreator` не чистит `shop_cart` при `pending_payment`; `PendingOrderSession` + reuse; `PaymentReturnsController`; `PaymentResult.svelte`; `abandon`/`finalize`; кнопка «Идёт оплата…».
@@ -162,7 +167,7 @@
   - **Deploy:** Fly `deployment-01KT8Q97MRQS1S4T060MR3Y3ZQ`.
   - **MCP Fly:** ФИО/лоадер/корзина после банка — **PASS** (`mcp_section_2_3_fly_2026-06-04.json`).
   - **Не в scope MCP:** успех оплаты + история; подсчёт дублей в БД.
-  - **Следующий:** §2.5, подсказки онбординга, franchise staff.
+  - **Следующий (на момент записи):** §2.5, онбординг, franchise staff — **закрыто 2026-06-04** (см. журнал ниже).
 
 - **2026-06-04 — §2.4 двойной «Оплатить» — ЗАКРЫТ (MCP Fly)**
   - **MCP:** 2 клика на оформлении → «Идёт оплата…», 2-й blocked, один `pay.tbank.ru` — **PASS** (`mcp_section_2_4_fly_2026-06-04.json`).

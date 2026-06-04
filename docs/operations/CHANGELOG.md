@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## v1.116 — 2026-06-04 (ops: DEMO_FEEDBACK sync + franchise staff MCP)
+
+- Синхронизация `DEMO_FEEDBACK`, `SESSION_STATE`, `CHECKLIST` §E — убраны устаревшие «ждём deploy» / «open franchise».
+- MCP Fly franchise staff **PASS** — артефакт `mcp_franchise_staff_fly_2026-06-04.json`; код `7311338`, `62ced8e`.
+
 ## v1.115 — 2026-06-04 (§2: A↔B fix, онбординг, подвал MCP)
 
 - **A↔B:** `CustomerSession` не отдаёт legacy на чужой tenant; подпись в «Заказы»; MCP+БД **PASS**.

@@ -59,7 +59,7 @@
 | Роль | Зачем | Панель | Статус В2 |
 |------|--------|--------|-----------|
 | `uk_global_admin` | УК: org/точки/меню | `/admin` | ✅ AUTH-01 |
-| `franchise_manager` | Просмотр своих точек (switcher A/B) | `/manager` | ✅ AUTH-02 |
+| `franchise_manager` | Просмотр своих точек (switcher A/B); **без** «Персонал» | `/manager` | ✅ AUTH-02; RBAC `7311338` |
 | `general_manager` | Меню, staff, склад | `/manager` | ✅ AUTH-03 |
 | `shift_manager` | Смена, оперативка (урезанный sidebar) | `/manager` | ✅ AUTH-06 |
 | `barista` | POS | `/barista` | ✅ AUTH-04/05 |

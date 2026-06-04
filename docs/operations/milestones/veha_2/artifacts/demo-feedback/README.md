@@ -14,6 +14,7 @@
 | [`mcp_section_2_4_fly_2026-06-04.json`](mcp_section_2_4_fly_2026-06-04.json) | §2.4 двойной «Оплатить» — один редирект; `db_orders_count: 1` **PASS** |
 | [`mcp_section_2_5_fly_2026-06-04.json`](mcp_section_2_5_fly_2026-06-04.json) | §2.5 подвал-эмуляция: Slow 3G + Offline **PASS** |
 | [`mcp_shop_ab_fly_2026-06-04.json`](mcp_shop_ab_fly_2026-06-04.json) | §2 A↔B заказы на B после смены точки **PASS** |
+| [`mcp_franchise_staff_fly_2026-06-04.json`](mcp_franchise_staff_fly_2026-06-04.json) | Franchise без «Персонал»; GM с «Персонал» **PASS** |
 | [`../veha_1/artifacts/customer_live_qa_block1_2026-05-30.pdf`](../../veha_1/artifacts/customer_live_qa_block1_2026-05-30.pdf) | Предыдущий пакет (В1 §1). |
 
 **Очередь правок:** [`../../DEMO_FEEDBACK.md`](../../DEMO_FEEDBACK.md).

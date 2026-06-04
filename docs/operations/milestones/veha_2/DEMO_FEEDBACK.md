@@ -4,7 +4,7 @@
 
 **Источник:** PDF [`artifacts/demo-feedback/customer_qa_prog10_2026-06.pdf`](artifacts/demo-feedback/customer_qa_prog10_2026-06.pdf) (продолжение В1: [`../veha_1/artifacts/customer_live_qa_block1_2026-05-30.pdf`](../veha_1/artifacts/customer_live_qa_block1_2026-05-30.pdf)).
 
-**Сейчас (2026-06-04):** §E **открыт**. §2.1–2.5 + A↔B + онбординг (код) — **done *(MCP / код)***; **ждём deploy** для UI онбординга и Catalog offline-текста. **Следующий:** УК/franchise staff.
+**Сейчас (2026-06-04):** Очередь PDF §1–3 — **все строки done** *(MCP Fly + код)*. §E для §I: ждём **PDF §4+**, **финальный апрув** §1.2/§2.1 в PDF, **живое демо**. **Хвост MCP:** успех реальной оплаты + история; физический подвал §2.5.
 
 **Связь:** [`CHECKLIST.md`](CHECKLIST.md) § E · [`SESSION_STATE.md`](../../SESSION_STATE.md) · прогон 10 [`QA_ACCEPTANCE_RUN.md`](QA_ACCEPTANCE_RUN.md).
 
@@ -23,7 +23,7 @@
 
 | Дата | Источник | Сценарий / экран | Суть | Статус | PR / коммит |
 |------|----------|------------------|------|--------|-------------|
-| 2026-06-04 | заказчик PDF §2 | shop витрина Б | Заказ A↔B: не путать точки; fix `CustomerSession` + подпись в «Заказы» | **done** *(MCP+fix)* | [`mcp_shop_ab_fly_2026-06-04.json`](artifacts/demo-feedback/mcp_shop_ab_fly_2026-06-04.json) |
+| 2026-06-04 | заказчик PDF §2 | shop витрина Б | Заказ A↔B: не путать точки; fix `CustomerSession` + подпись в «Заказы» | **done** *(MCP+fix)* | `6c5cc0b`; [`mcp_shop_ab_fly_2026-06-04.json`](artifacts/demo-feedback/mcp_shop_ab_fly_2026-06-04.json) |
 | 2026-06-02 | заказчик PDF §3.6 | franchise / УК | **Баг:** франчайзи «нет» — вход или создание из УК | done *(MCP post-deploy)* | [`mcp_post_deploy_fly_2026-06-03.json`](artifacts/demo-feedback/mcp_post_deploy_fly_2026-06-03.json) §franchise |
 | 2026-06-02 | заказчик PDF §2.2 | shop UI | Стрелка назад, свайп, +1 товар — проверить/допилить | done *(PDF)* | назад/свайп/+1 — ок по прогонке; платные модификаторы — код `51e4d22+` |
 | 2026-06-03 | заказчик PDF §2.2 | shop модификаторы | Платные допки +15/+20/+40, пересчёт корзины/оплаты | done *(MCP)* | [`mcp_section_2_2_fly_2026-06-03.json`](artifacts/demo-feedback/mcp_section_2_2_fly_2026-06-03.json) — кордиал → **199₽** |
@@ -35,8 +35,8 @@
 | 2026-06-02 | заказчик PDF §1.3 | смена / UI | Неясно где открыть/закрыть смену; в демо смена открывалась сама | done *(MCP post-deploy)* | [`mcp_post_deploy_fly_2026-06-03.json`](artifacts/demo-feedback/mcp_post_deploy_fly_2026-06-03.json) §shift; кнопка «Открыть смену» на Fly |
 | 2026-06-03 | заказчик PDF §1.4 | склад цеха vs точка | Ожидали минус на **цехе**, списание только на **точке** | done *(MCP post-deploy)* | [`mcp_post_deploy_fly_2026-06-03.json`](artifacts/demo-feedback/mcp_post_deploy_fly_2026-06-03.json) §inventory + [`mcp_section_1_4_fly_2026-06-03.json`](artifacts/demo-feedback/mcp_section_1_4_fly_2026-06-03.json) |
 | 2026-06-02 | заказчик PDF §2.1 | shop витрина A | Меню: каталог → категория → карточка (название, цена, модификаторы; скрин заказчика = карточка) | done *(MCP)* | [`mcp_section_2_1_fly_2026-06-02.json`](artifacts/demo-feedback/mcp_section_2_1_fly_2026-06-02.json) |
-| 2026-06-04 | заказчик (чат) | УК vs franchise / staff | У **франчайзи** скрыт «Персонал»; у **GM** — виден | **done** *(MCP Fly)* | `7311338`; franchise — нет 👥; gm-a — есть 👥; `/manager/staff` → редирект |
-| 2026-06-04 | команда / заказчик | shop витрина | **Подсказки онбординга** (баннер, подсветка, блок «В корзину») | **done** *(код)* | `Product.svelte`; MCP UI после deploy |
+| 2026-06-04 | заказчик (чат) | УК vs franchise / staff | У **франчайзи** скрыт «Персонал»; у **GM** — виден | **done** *(MCP Fly)* | `7311338`, `62ced8e`; [`mcp_franchise_staff_fly_2026-06-04.json`](artifacts/demo-feedback/mcp_franchise_staff_fly_2026-06-04.json) |
+| 2026-06-04 | команда / заказчик | shop витрина | **Подсказки онбординга** (баннер, подсветка, блок «В корзину») | **done** *(MCP Fly)* | `6c5cc0b` — `Product.svelte`; баннер на карточке Бразилия post-deploy |
 
 ### §2.2 — приёмка (MCP Fly)
 
@@ -45,7 +45,7 @@
 | +15/+20/+40 на карточке Fly | **PASS** |
 | Выбор кордиала → **199₽** (179+20) | **PASS** |
 | Корзина: `(+20₽)`, Итого **199₽** | **PASS** |
-| Подсказки онбординга | **done** *(код)* — MCP UI после deploy |
+| Подсказки онбординга | **PASS** post-deploy (`6c5cc0b`) |
 
 ### §2.1 до апрува заказчика
 
@@ -110,7 +110,14 @@
 | Возврат на B — заказ на месте (API + UI) | **PASS** |
 | Fix legacy customer на чужой точке | **код** `CustomerSession` |
 
-**Дальше:** deploy (онбординг + offline-текст каталога); **open** УК/franchise staff.
+### Franchise / staff — приёмка (MCP Fly 2026-06-04)
+
+| Критерий | Статус |
+|----------|--------|
+| `franchise@` — в сайдбаре нет «Персонал» | **PASS** |
+| `franchise@` — `/manager/staff` → редирект `/manager` | **PASS** |
+| `gm-a@` — «Персонал» в сайдбаре | **PASS** |
+| Код + тест RBAC | `7311338`, `62ced8e` |
 
 ### Не сделано в рамках §2.3–2.4 (зафиксировано)
 
@@ -127,7 +134,7 @@
 - В `/admin` **нет** пункта меню «Пользователи».
 - Путь УК: **Точки** → карточка точки → **«Панель менеджера»** / **«Создать staff →»** → `/manager/staff` (список email + роли).
 - Дашборд УК: ссылки **«Панель менеджера»** в таблице точек — то же самое.
-- Франчайзи: только `/manager` (не `/admin`); сейчас видит **Персонал** — нужно убрать (строка в очереди выше).
+- Франчайзи: только `/manager` (не `/admin`); **«Персонал» скрыт** — staff только у УК/GM (`7311338`, MCP [`mcp_franchise_staff_fly_2026-06-04.json`](artifacts/demo-feedback/mcp_franchise_staff_fly_2026-06-04.json)).
 
 ---
 

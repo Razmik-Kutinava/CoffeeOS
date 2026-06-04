@@ -1,0 +1,31 @@
+{
+  "run_at": "2026-06-04",
+  "environment": "https://coffeeos.fly.dev",
+  "tool": "chrome-devtools-mcp",
+  "section": "franchise_staff_rbac",
+  "commits": ["7311338", "62ced8e"],
+  "checks": [
+    {
+      "id": "franchise_sidebar_no_staff",
+      "user": "franchise@demo.coffeeos.local",
+      "page": "/manager",
+      "expect": "sidebar without «Персонал»",
+      "status": "PASS"
+    },
+    {
+      "id": "franchise_direct_staff_redirect",
+      "user": "franchise@demo.coffeeos.local",
+      "url": "/manager/staff",
+      "expect": "redirect to /manager",
+      "status": "PASS"
+    },
+    {
+      "id": "gm_sidebar_has_staff",
+      "user": "gm-a@demo.coffeeos.local",
+      "page": "/manager",
+      "expect": "sidebar link «Персонал» → /manager/staff",
+      "status": "PASS"
+    }
+  ],
+  "note": "Post-deploy MCP after hide staff for franchise_manager."
+}

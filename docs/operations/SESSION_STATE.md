@@ -11,23 +11,28 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **§2** MCP+код: 2.1–2.5, A↔B, онбординг | deploy UI; franchise staff |
-| **§1.2–1.4** — MCP Fly **PASS** | |
-| **Обязательно:** подсказки онбординга витрины | **open:** УК/staff — убрать Персонал у franchise |
-| Очередь: [`DEMO_FEEDBACK.md`](milestones/veha_2/DEMO_FEEDBACK.md) | §4+ PDF от заказчика → §I |
+| **Очередь §1–3** в DEMO_FEEDBACK — **все done** (MCP Fly) | §4+ PDF → §I |
+| **§2** 2.1–2.5, A↔B, онбординг, franchise staff — **PASS** | финальный апрув PDF §1.2/§2.1 |
+| **§1.2–1.4** — MCP Fly **PASS** | живое демо В2 |
+| Хвост MCP: успех оплаты + история; подвал физически | |
 
 **Ops на блок:** `SESSION_STATE` + коммит всегда; `PRACTICES` (CR); `QA_ACCEPTANCE_RUN` + `artifacts/` (QA); `CHANGELOG` если заметно; `CHECKLIST` `[x]` только по факту.
 
 **Артефакты (для агента в другом редакторе):** точка входа — [`milestones/veha_2/artifacts/README.md`](milestones/veha_2/artifacts/README.md). Прогон 10: `artifacts/prog10/{_index,smoke,kiosk,shop,staff-rbac,connectivity,platform-ent,warehouse}/`. Сводный индекс: `prog10/_index/prog10_final_index.json`. Скрипты `bin/prog10_*` пишут в эти подпапки (OUT обновлён). Старый плоский путь `artifacts/prog10_*.json` **удалён** — везде относительные ссылки `artifacts/prog10/...`.
 
-### Сессия 2026-06-04 (§2.5: медленный интернет)
+### Сессия 2026-06-04 (franchise staff + sync ops)
 
-- **MCP Fly Slow 3G:** 13 сэмплов `.page-skeleton`, фон `rgb(26,26,26)`, меню загрузилось — **PASS** — [`mcp_section_2_5_fly_2026-06-04.json`](milestones/veha_2/artifacts/demo-feedback/mcp_section_2_5_fly_2026-06-04.json).
-- **Код:** boot skeleton в `shop/pages/home.html.erb` до Svelte; `shop.html.erb` body `#1a1a1a`; `PageSkeleton` aria «Загрузка меню».
-- **Не делали:** физический тест в подвале; оверлей >5 s не сработал (меню <5 s).
-- **§2.5 подвал-эмуляция:** Slow 3G PASS; Offline in-app — fail fetch (текст каталога после deploy).
-- **§2 A↔B:** fix `CustomerSession` + MCP PASS — [`mcp_shop_ab_fly_2026-06-04.json`](milestones/veha_2/artifacts/demo-feedback/mcp_shop_ab_fly_2026-06-04.json).
-- **Онбординг:** баннер/подсветка в `Product.svelte` — код готов, MCP UI после deploy.
+- **Код:** `staff_management_visible?` — GM/УК видят «Персонал», `franchise_manager` — нет; `require_staff_management!` на `StaffController`.
+- **Коммиты:** `7311338`, `62ced8e`; ops `8ee6584`.
+- **MCP Fly:** franchise — нет 👥, `/manager/staff` → redirect; gm-a — есть 👥 — **PASS** — [`mcp_franchise_staff_fly_2026-06-04.json`](milestones/veha_2/artifacts/demo-feedback/mcp_franchise_staff_fly_2026-06-04.json).
+
+### Сессия 2026-06-04 (§2.5 + A↔B + онбординг)
+
+- **MCP Fly Slow 3G:** скелетон, фон `#1a1a1a`, меню — **PASS** — [`mcp_section_2_5_fly_2026-06-04.json`](milestones/veha_2/artifacts/demo-feedback/mcp_section_2_5_fly_2026-06-04.json); post-deploy `ca6f2ef` — skeleton не залипает.
+- **§2 A↔B:** `CustomerSession` fix + MCP — [`mcp_shop_ab_fly_2026-06-04.json`](milestones/veha_2/artifacts/demo-feedback/mcp_shop_ab_fly_2026-06-04.json); коммит `6c5cc0b`.
+- **Онбординг:** `Product.svelte` — баннер/подсветка; MCP post-deploy **PASS** (`6c5cc0b`).
+- **Offline каталог:** текст ошибки в `Catalog.svelte` — post-deploy проверен.
+- **Не делали:** физический подвал; оверлей >5 s (меню <5 s на Slow 3G).
 
 ### Сессия 2026-06-04 (§2.3–2.4: оплата, корзина при возврате с банка)
 
@@ -36,7 +41,7 @@
 - **Fly deploy:** `deployment-01KT8Q97MRQS1S4T060MR3Y3ZQ` (release_command OK; warning listen 0.0.0.0:3000 — стенд отвечает).
 - **MCP Fly post-deploy:** §2.3 **PASS** (корзина после банка: Бразилия 179₽) — [`mcp_section_2_3_fly_2026-06-04.json`](milestones/veha_2/artifacts/demo-feedback/mcp_section_2_3_fly_2026-06-04.json).
 - **§2.4 MCP+БД Fly:** двойной «Оплатить» — один редирект, 2-й клик blocked; `db_orders_count: 1` (`fly ssh` runner, тел. `+79001112244`) — [`mcp_section_2_4_fly_2026-06-04.json`](milestones/veha_2/artifacts/demo-feedback/mcp_section_2_4_fly_2026-06-04.json).
-- **Не в MCP:** успех оплаты + история; подсчёт дублей заказов в БД.
+- **Не в MCP:** успех оплаты + история (§2.4 дубли в БД — **PASS**, `db_orders_count: 1`).
 
 ### Сессия 2026-06-03 (§2.2: платные модификаторы)
 
@@ -48,9 +53,9 @@
 
 ### Сессия 2026-06-03 (handoff ops: УК/staff, онбординг, апрув)
 
-- **УК vs франчайзи (заказчик):** пользователи точки — у **УК** (`/admin` → Точки → **Панель менеджера** → `/manager/staff`); отдельного пункта «Пользователи» в меню УК **нет**. У **франчайзи** сейчас тоже есть **«Персонал»** в `/manager` — **расхождение с ожиданием**, задача **open** в `DEMO_FEEDBACK`.
-- **Подсказки онбординга витрины:** **обязательны к реализации** (не опционально) — после §2.3–2.4 или по приоритету команды.
-- **Апрув:** PDF не блокер; делаем по сценарию, финальный прогон PDF позже.
+- **УК vs франчайзи:** staff у УК/GM (`/admin` → Точки → **Панель менеджера**); у franchise **«Персонал» убран** — см. сессию 2026-06-04 franchise staff.
+- **Подсказки онбординга:** реализованы `6c5cc0b`, MCP post-deploy **PASS**.
+- **Апрув:** PDF не блокер на каждый шаг; финальный прогон PDF позже.
 
 ### Сессия 2026-06-03 (post-deploy MCP batch)
 
