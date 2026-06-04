@@ -24,6 +24,7 @@
     "/product/:id": lazyRoute(() => import("./routes/Product.svelte")),
     "/cart": lazyRoute(() => import("./routes/Cart.svelte")),
     "/checkout": lazyRoute(() => import("./routes/Checkout.svelte")),
+    "/payment-result": lazyRoute(() => import("./routes/PaymentResult.svelte")),
     "/profile": lazyRoute(() => import("./routes/Profile.svelte")),
     "/favorites": lazyRoute(() => import("./routes/Favorites.svelte")),
     "/orders": lazyRoute(() => import("./routes/Orders.svelte")),

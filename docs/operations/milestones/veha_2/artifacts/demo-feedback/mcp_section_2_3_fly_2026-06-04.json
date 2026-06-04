@@ -1,0 +1,43 @@
+{
+  "scenario": "PDF §2.3–2.4 — учебная оплата, корзина при возврате с банка",
+  "stand": "https://coffeeos.fly.dev",
+  "run_at": "2026-06-04",
+  "tool": "chrome-devtools-mcp",
+  "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "entry_url": "https://coffeeos.fly.dev/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "code_commit": "pending — fix в develop, нужен fly deploy",
+  "customer_comments": [
+    "кнопка не активна без ФИО — ок",
+    "нет стрелки назад на экране банка",
+    "свайп назад — корзина пустая"
+  ],
+  "steps": [
+    {
+      "step": "2.3.1",
+      "action": "Оформление без имени/телефона",
+      "expect": "Оплатить неактивна",
+      "result": { "button": "Оплатить →", "disabled": true },
+      "verdict": "PASS"
+    },
+    {
+      "step": "2.3.1b",
+      "action": "Заполнить имя и телефон, нажать Оплатить",
+      "expect": "Кнопка думает, редирект на банк",
+      "result": { "button_while_loading": "Переход к оплате…", "redirect": "https://pay.tbank.ru/" },
+      "verdict": "PASS"
+    },
+    {
+      "step": "2.3.2",
+      "action": "Назад с pay.tbank.ru → корзина",
+      "expect": "Товары в корзине (не пусто)",
+      "result": { "cart_text": "Корзина пуста", "items": 0 },
+      "verdict": "FAIL",
+      "note": "На Fly без деплоя фикса (корзина чистится при создании pending заказа). После deploy ожидаем PASS."
+    }
+  ],
+  "summary": {
+    "pass": 2,
+    "fail": 1,
+    "blocked": ["fly deploy — flyctl auth login у владельца"]
+  }
+}

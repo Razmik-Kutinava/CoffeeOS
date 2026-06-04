@@ -4,7 +4,7 @@
 
 **Источник:** PDF [`artifacts/demo-feedback/customer_qa_prog10_2026-06.pdf`](artifacts/demo-feedback/customer_qa_prog10_2026-06.pdf) (продолжение В1: [`../veha_1/artifacts/customer_live_qa_block1_2026-05-30.pdf`](../veha_1/artifacts/customer_live_qa_block1_2026-05-30.pdf)).
 
-**Сейчас (2026-06-03):** §E **открыт**. Критичные пункты §1–2 ниже — большинство **done *(MCP)*** на Fly. **Внутренний апрув команды** — идём дальше по очереди; **финальная подпись в PDF** — в конце, не блокер каждого пункта. §I вехи **не закрываем** до закрытия §E.
+**Сейчас (2026-06-04):** §E **открыт**. §2.3–2.4 — **код готов** (корзина до оплаты, идемпотентность, return URL); **MCP Fly FAIL** на «назад с банка → корзина» до `fly deploy`. **Внутренний апрув** — после деплоя перепрогон MCP. §I — не закрываем.
 
 **Связь:** [`CHECKLIST.md`](CHECKLIST.md) § E · [`SESSION_STATE.md`](../../SESSION_STATE.md) · прогон 10 [`QA_ACCEPTANCE_RUN.md`](QA_ACCEPTANCE_RUN.md).
 
@@ -27,7 +27,7 @@
 | 2026-06-02 | заказчик PDF §3.6 | franchise / УК | **Баг:** франчайзи «нет» — вход или создание из УК | done *(MCP post-deploy)* | [`mcp_post_deploy_fly_2026-06-03.json`](artifacts/demo-feedback/mcp_post_deploy_fly_2026-06-03.json) §franchise |
 | 2026-06-02 | заказчик PDF §2.2 | shop UI | Стрелка назад, свайп, +1 товар — проверить/допилить | done *(PDF)* | назад/свайп/+1 — ок по прогонке; платные модификаторы — код `51e4d22+` |
 | 2026-06-03 | заказчик PDF §2.2 | shop модификаторы | Платные допки +15/+20/+40, пересчёт корзины/оплаты | done *(MCP)* | [`mcp_section_2_2_fly_2026-06-03.json`](artifacts/demo-feedback/mcp_section_2_2_fly_2026-06-03.json) — кордиал → **199₽** |
-| 2026-06-02 | заказчик PDF §2.3–2.4 | shop оплата | Дотестить оплату (ФИО до кнопки, двойной «Оплатить», во время оплаты) | open | — |
+| 2026-06-04 | заказчик PDF §2.3–2.4 | shop оплата | ФИО до кнопки; лоадер; корзина при возврате с банка; идемпотентность двойного клика | **in_progress** | код в develop; MCP [`mcp_section_2_3_fly_2026-06-04.json`](artifacts/demo-feedback/mcp_section_2_3_fly_2026-06-04.json) — FAIL корзина до deploy |
 | 2026-06-02 | заказчик PDF §2.5 | shop | Медленный интернет: крутилка; тест в подвале | open | overlay есть, проверить на Fly |
 | 2026-06-02 | заказчик PDF §1.2 | `/manager` шапка | GM видит **«Офис-менеджер»** вместо **«Управляющий точки»** | done | Fly MCP post-deploy: **«Управляющий точки»** |
 | 2026-06-02 | QA §1.2 | gm-a / gm-b Fly | Изоляция A/B: цены 179 vs 189, A не видит B | done *(MCP)* | [`mcp_section_1_2_fly_2026-06-02.json`](artifacts/demo-feedback/mcp_section_1_2_fly_2026-06-02.json) |

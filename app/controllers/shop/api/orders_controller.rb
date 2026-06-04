@@ -38,6 +38,41 @@ module Shop
         render json: { error: "Order not found", status: 404 }, status: :not_found
       end
 
+      def abandon
+        order = Order.where(tenant_id: @shop_tenant.id, source: :mobile).find(params[:id])
+        unless order_visible_to_session_customer?(order)
+          return render json: { error: "Order not found", status: 404 }, status: :not_found
+        end
+
+        if order.pending_payment?
+          order.payments.where(status: :pending).find_each do |payment|
+            payment.update!(status: :failed)
+          end
+          order.update!(status: :cancelled)
+          Shop::PendingOrderSession.clear!(session, @shop_tenant.id)
+        end
+
+        render json: { order_id: order.id, status: order.status }
+      rescue ActiveRecord::RecordNotFound
+        render json: { error: "Order not found", status: 404 }, status: :not_found
+      end
+
+      def finalize
+        order = Order.where(tenant_id: @shop_tenant.id, source: :mobile).find(params[:id])
+        unless order_visible_to_session_customer?(order)
+          return render json: { error: "Order not found", status: 404 }, status: :not_found
+        end
+
+        if order.accepted?
+          Shop::CartService.new(session, @shop_tenant.id).clear!
+          Shop::PendingOrderSession.clear!(session, @shop_tenant.id)
+        end
+
+        render json: order_json(order).merge(payment_settled: order.accepted?)
+      rescue ActiveRecord::RecordNotFound
+        render json: { error: "Order not found", status: 404 }, status: :not_found
+      end
+
       def history
         cid = Shop::CustomerSession.customer_id(session, @shop_tenant.id)
         if cid.present?

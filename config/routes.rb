@@ -14,6 +14,9 @@ Rails.application.routes.draw do
   post '/login', to: 'auth/sessions#create'
   delete '/logout', to: 'auth/sessions#destroy', as: :logout
 
+  get "/payment/success", to: "payment_returns#success"
+  get "/payment/fail", to: "payment_returns#fail"
+
   # External callbacks (payment providers / fiscal providers)
   namespace :callbacks do
     post "/payments", to: "events#payment"
@@ -155,10 +158,13 @@ Rails.application.routes.draw do
       get "products/:id", to: "products#show"
       post "cart/add", to: "cart#add"
       get "cart", to: "cart#show"
+      delete "cart", to: "cart#clear"
       delete "cart/items/:index", to: "cart#destroy"
       patch "cart/items/:index", to: "cart#update"
       post "orders", to: "orders#create"
       get "orders/history", to: "orders#history"
+      post "orders/:id/abandon", to: "orders#abandon"
+      post "orders/:id/finalize", to: "orders#finalize"
       get "orders/:id", to: "orders#show"
       post "promo_codes/apply", to: "promo_codes#apply"
       get "profile", to: "profile#show"

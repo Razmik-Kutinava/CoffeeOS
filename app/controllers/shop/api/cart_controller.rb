@@ -22,6 +22,11 @@ module Shop
         render json: { items: data[:items], total: data[:total] }
       end
 
+      def clear
+        Shop::CartService.new(session, @shop_tenant.id).clear!
+        render json: { items: [], total: 0 }
+      end
+
       def destroy
         index = params[:index].to_i
         return render json: { error: "Неверный индекс" }, status: :unprocessable_entity if index < 0

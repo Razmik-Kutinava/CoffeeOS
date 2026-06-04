@@ -17,6 +17,7 @@
     if (submitting) return
     err = null
     submitting = true
+    let redirecting = false
     try {
       const res = await api("/orders", {
         method: "POST",
@@ -32,6 +33,12 @@
       })
 
       if (res.payment_url) {
+        try {
+          sessionStorage.setItem("shop_last_order_id", String(res.order_id))
+        } catch (_) {
+          /* ignore */
+        }
+        redirecting = true
         window.location.href = res.payment_url
         return
       }
@@ -40,7 +47,7 @@
     } catch (e) {
       err = e.message
     } finally {
-      submitting = false
+      if (!redirecting) submitting = false
     }
   }
 </script>
@@ -132,6 +139,12 @@
     disabled={submitting || !phone || !name}
     onclick={submit}
   >
-    {submitting ? "Переход к оплате…" : payment_method === "cash" ? "Оформить (наличные)" : "Оплатить →"}
+    {submitting
+      ? payment_method === "cash"
+        ? "Оформляем…"
+        : "Идёт оплата…"
+      : payment_method === "cash"
+        ? "Оформить (наличные)"
+        : "Оплатить →"}
   </button>
 {/if}

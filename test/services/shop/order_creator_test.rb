@@ -268,11 +268,28 @@ class Shop::OrderCreatorTest < ActiveSupport::TestCase
   test "cart is cleared from session after successful order" do
     session = build_session_with_item
     begin
-      run_creator(session)
+      run_creator(session, payment_method: "cash")
       assert_empty session[Shop::CartService::SESSION_KEY]
     rescue Shop::OrderCreator::Error => e
       raise unless e.message.match?(/order_number/i)
       pass "DB trigger not installed; skipping"
+    end
+  end
+
+  test "cart stays in session when order is pending_payment" do
+    old_simulate = ENV["SHOP_SIMULATE_PAYMENT"]
+    old_tbank = ENV.delete("TBANK_TERMINAL_KEY")
+    ENV["SHOP_SIMULATE_PAYMENT"] = "0"
+    session = build_session_with_item
+    begin
+      run_creator(session, payment_method: "card")
+      assert session[Shop::CartService::SESSION_KEY].any?
+    rescue Shop::OrderCreator::Error => e
+      raise unless e.message.match?(/order_number|TBANK/i)
+      pass "Gateway not configured in test env; skipping"
+    ensure
+      ENV["SHOP_SIMULATE_PAYMENT"] = old_simulate
+      ENV["TBANK_TERMINAL_KEY"] = old_tbank if old_tbank
     end
   end
 

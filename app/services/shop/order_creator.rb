@@ -16,6 +16,9 @@ module Shop
       cart_data = Shop::CartService.new(@session, @tenant.id).json_lines
       raise Error, "Корзина пуста" if cart_data[:items].empty?
 
+      reused = find_reusable_pending_order!(cart_data, params)
+      return reused if reused
+
       subtotal = BigDecimal(cart_data[:total].to_s)
       discount = promo_discount(subtotal, params)
       total = (subtotal - discount).round(2)
@@ -88,8 +91,8 @@ module Shop
 
         Inventory::OrderRecipeDeduction.call!(order: order.reload) if flow[:order_status] == :accepted
 
-        @session[Shop::CartService::SESSION_KEY] = []
-        Shop::CustomerSession.set_customer_id!(@session, @tenant.id, customer.id)
+        bind_customer!(customer.id)
+        clear_cart! if flow[:order_status] == :accepted
       end
 
       begin
@@ -97,6 +100,12 @@ module Shop
       rescue Error => e
         void_pending_online_order!(order, payment)
         raise e
+      end
+
+      if order.pending_payment?
+        Shop::PendingOrderSession.set!(@session, @tenant.id, order.id)
+      else
+        Shop::PendingOrderSession.clear!(@session, @tenant.id)
       end
 
       if order.accepted?
@@ -179,8 +188,44 @@ module Shop
 
       order.update!(status: :cancelled)
       payment.update!(status: :failed) if payment.pending?
+      Shop::PendingOrderSession.clear!(@session, @tenant.id)
     rescue ActiveRecord::RecordInvalid => e
       Rails.logger.error("[Shop::OrderCreator] void_pending_online_order failed: #{e.message}")
+    end
+
+    def find_reusable_pending_order!(cart_data, params)
+      return nil if simulate_shop_payment?
+
+      pending_id = Shop::PendingOrderSession.order_id(@session, @tenant.id)
+      return nil if pending_id.blank?
+
+      order = Order.where(id: pending_id, tenant_id: @tenant.id, source: :mobile, status: :pending_payment)
+        .includes(:payments)
+        .first
+      return nil unless order
+
+      subtotal = BigDecimal(cart_data[:total].to_s)
+      discount = promo_discount(subtotal, params)
+      total = (subtotal - discount).round(2)
+      return nil unless order.final_amount == total
+
+      payment = order.payments.find { |p| p.pending? }
+      return nil unless payment
+
+      init_gateway_payment!(order, payment)
+      order
+    rescue Payments::TbankAdapter::Error, Error => e
+      Rails.logger.warn("[Shop::OrderCreator] reuse pending order #{pending_id} failed: #{e.message}")
+      void_pending_online_order!(order, payment) if defined?(order) && order&.pending_payment?
+      nil
+    end
+
+    def bind_customer!(customer_id)
+      Shop::CustomerSession.set_customer_id!(@session, @tenant.id, customer_id)
+    end
+
+    def clear_cart!
+      @session[Shop::CartService::SESSION_KEY] = []
     end
 
     def init_gateway_payment!(order, payment)
