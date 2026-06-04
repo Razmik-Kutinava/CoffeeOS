@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## v1.114 — 2026-06-04 (§2.5: MCP после deploy ca6f2ef — skeleton не залипает)
+
+- Fly Slow 3G: `boot_with_menu: 0`, финал без `.shop-boot-skeleton` — **PASS**.
+- Артефакт `mcp_section_2_5` — 3 прогона; §2.5 полностью закрыт (подвал не в scope).
+
 ## v1.113 — 2026-06-04 (§2.5 post-deploy MCP + fix boot skeleton)
 
 - Post-deploy MCP Slow 3G **PASS**: `.shop-boot-skeleton` на Fly, фон `#1a1a1a`.

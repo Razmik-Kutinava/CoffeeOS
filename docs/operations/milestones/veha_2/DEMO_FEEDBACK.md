@@ -96,9 +96,10 @@
 
 | Критерий | Статус |
 |----------|--------|
-| При загрузке меню — скелетон, не белый экран | **PASS** (13 сэмплов `.page-skeleton`, фон `#1a1a1a`) |
-| Оверлей «Загрузка данных…» при долгом fetch (>5 с) | **код есть**; на Slow 3G меню успело до 5 с |
-| Тест в подвале (живой) | **не гоняли** — эмуляция DevTools |
+| При загрузке меню — скелетон, не белый экран | **PASS** (boot HTML + PageSkeleton, фон `#1a1a1a`) |
+| Boot skeleton не залипает после загрузки | **PASS** post-deploy `ca6f2ef` — `boot_with_menu: 0` |
+| Оверлей «Загрузка данных…» при долгом fetch (>5 с) | **код есть**; на Slow 3G меню <5 с |
+| Тест в подвале (живой) | **не делали** — Slow 3G DevTools |
 
 **Дальше:** **обязательно** подсказки онбординга; **open** УК/franchise staff; перепроверка A↔B заказов.
 
@@ -110,7 +111,7 @@
 | Стрелка «назад» на экране банка | UI Т-Банка, не наша витрина |
 | §2.5 медленный интернет | **done** *(MCP Slow 3G)* |
 | Тест §2.5 в подвале (физический) | **не делали** — только Slow 3G DevTools |
-| Post-deploy MCP §2.5 (boot skeleton на Fly) | **PASS** — [`mcp_section_2_5`](artifacts/demo-feedback/mcp_section_2_5_fly_2026-06-04.json) `post-deploy`; fix `replaceChildren` — мини-deploy |
+| Post-deploy MCP §2.5 + `replaceChildren` | **PASS** — 3 прогона в [`mcp_section_2_5_fly_2026-06-04.json`](artifacts/demo-feedback/mcp_section_2_5_fly_2026-06-04.json); коммиты `649aa9f`, `ca6f2ef` |
 
 ## УК: где «пользователи» (для агента)
 

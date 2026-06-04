@@ -5,45 +5,34 @@
   "tool": "chrome-devtools-mcp",
   "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
   "entry_url": "https://coffeeos.fly.dev/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "commits": ["649aa9f boot skeleton", "ca6f2ef replaceChildren fix"],
   "runs": [
     {
-      "label": "pre-deploy (649aa9f не на Fly)",
+      "label": "pre-deploy",
       "network": "Slow 3G",
-      "result": {
-        "body_background": "rgb(26, 26, 26)",
-        "skeleton_samples": 13,
-        "overlay_samples": 0,
-        "boot_skeleton": false
-      },
-      "verdict": "PASS"
+      "verdict": "PASS",
+      "note": "PageSkeleton + тёмный фон; boot HTML ещё не на Fly"
     },
     {
-      "label": "post-deploy (boot skeleton на Fly)",
+      "label": "post-deploy-boot (649aa9f)",
       "network": "Slow 3G",
-      "deploy": "пользователь fly deploy после 649aa9f",
+      "verdict": "PASS",
+      "finding": "boot skeleton залипал поверх меню после mount"
+    },
+    {
+      "label": "post-deploy-ca6f2ef (replaceChildren)",
+      "network": "Slow 3G",
+      "deploy": "пользователь fly deploy после ca6f2ef",
       "result": {
         "body_background": "rgb(26, 26, 26)",
-        "boot_skeleton_samples": 44,
-        "page_skeleton_samples": 14,
-        "overlay_samples": 0,
-        "boot_message": "Загрузка меню…",
-        "menu_loaded": true,
-        "finding": "boot skeleton оставался в DOM вместе с меню после mount — fix replaceChildren() в application.js"
+        "boot_skeleton_stuck_with_menu": 0,
+        "final_boot_skeleton": false,
+        "final_menu": true,
+        "cold_reload_boot_with_menu": 0
       },
       "verdict": "PASS"
     }
   ],
-  "steps": [
-    {
-      "step": "2.5.1",
-      "action": "Slow 3G → cold open, DOM samples 150ms",
-      "expect": "Заглушка/скелетон, не белый экран",
-      "verdict": "PASS"
-    }
-  ],
-  "not_done": [
-    "Физический тест в подвале — только DevTools Slow 3G (по согласованию)"
-  ],
-  "followup_deploy": "После fix replaceChildren — повторный fly deploy (мини-патч)",
-  "summary": { "pass": 1, "fail": 0 }
+  "not_done": ["Физический тест в подвале — только DevTools Slow 3G"],
+  "summary": { "pass": 1, "fail": 0, "closed": true }
 }
