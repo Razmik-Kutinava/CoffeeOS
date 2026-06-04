@@ -1,0 +1,26 @@
+{
+  "scenario": "PDF §2.4 — двойное нажатие «Оплатить»",
+  "stand": "https://coffeeos.fly.dev",
+  "run_at": "2026-06-04",
+  "tool": "chrome-devtools-mcp",
+  "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "code": "PendingOrderSession + reuse pending order (коммит 11ab05f, deploy post-2026-06-04)",
+  "steps": [
+    {
+      "step": "2.4.1",
+      "action": "Оформление: имя/телефон, два быстрых клика «Оплатить»",
+      "expect": "Один заказ, один переход на банк",
+      "result": {
+        "first_click": "Идёт оплата…, кнопка disabled",
+        "second_click": "не сработал (уже disabled / редирект)",
+        "redirect": "один URL https://pay.tbank.ru/"
+      },
+      "verdict": "PASS"
+    }
+  ],
+  "limits": [
+    "Не считали заказы в БД на Fly — только UI + один редирект",
+    "Не гоняли тройной клик в race до disabled"
+  ],
+  "summary": { "pass": 1, "fail": 0 }
+}

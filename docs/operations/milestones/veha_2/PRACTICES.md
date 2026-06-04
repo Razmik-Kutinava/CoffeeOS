@@ -161,8 +161,13 @@
   - **Коммиты:** `11ab05f`, `06115fb` (ops).
   - **Deploy:** Fly `deployment-01KT8Q97MRQS1S4T060MR3Y3ZQ`.
   - **MCP Fly:** ФИО/лоадер/корзина после банка — **PASS** (`mcp_section_2_3_fly_2026-06-04.json`).
-  - **Не в scope MCP:** успех оплаты + история; §2.4 двойной клик (код есть).
-  - **Следующий:** §2.4 MCP, §2.5, подсказки онбординга, franchise staff.
+  - **Не в scope MCP:** успех оплаты + история; подсчёт дублей в БД.
+  - **Следующий:** §2.5, подсказки онбординга, franchise staff.
+
+- **2026-06-04 — §2.4 двойной «Оплатить» — ЗАКРЫТ (MCP Fly)**
+  - **MCP:** 2 клика на оформлении → «Идёт оплата…», 2-й blocked, один `pay.tbank.ru` — **PASS** (`mcp_section_2_4_fly_2026-06-04.json`).
+  - **Код:** тот же `11ab05f` (`PendingOrderSession`, reuse).
+  - **Честно:** количество заказов в БД на Fly не пересчитывали.
 
 - **2026-05-30 — V2-T8 flaky callback test — ЗАКРЫТ**
   - **Проблема:** `events_controller_test.rb:208` — timestamp 299 с назад, race на границе `CALLBACK_MAX_AGE_SECONDS=300`.
