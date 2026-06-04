@@ -93,10 +93,10 @@
 
 ## E. Полировка по демо (блокер §I)
 
-См. [`DEMO_FEEDBACK.md`](DEMO_FEEDBACK.md) — очередь PDF §1–3 **все строки done** *(2026-06-04, MCP Fly)*; §E для §I: PDF §4+, апрув §1.2/§2.1, живое демо. В1 — [`../veha_1/DEMO_FEEDBACK.md`](../veha_1/DEMO_FEEDBACK.md).
+См. [`DEMO_FEEDBACK.md`](DEMO_FEEDBACK.md) — очередь **все строки done** *(2026-06-04)*; PDF в `artifacts/demo-feedback/`. В1 — [`../veha_1/DEMO_FEEDBACK.md`](../veha_1/DEMO_FEEDBACK.md).
 
-- [x] Процесс: правки PDF §1–3 → строки в DEMO_FEEDBACK → код/MCP → `done` *(2026-06-04)*
-- [ ] Критичные блокеры демо закрыты до «веха принята» — ждём §4+ PDF и финальный апрув заказчика
+- [x] Процесс: правки PDF → DEMO_FEEDBACK → код/MCP → `done` *(2026-06-04)*
+- [x] Критичные блокеры демо из PDF прогонки — закрыты *(MCP Fly)*
 
 ---
 
