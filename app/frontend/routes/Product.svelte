@@ -23,8 +23,27 @@
   let showMoreMenu = $state(false)
   let isFav = $state(false)
   let adding = $state(false)
+  let showOnboardingHint = $state(false)
+  let modifierHint = $state(null)
+  let highlightGroupId = $state(null)
+
+  function isRequiredGroup(g) {
+    return g.modifier_type === "required"
+  }
+
+  function isGroupFilled(g) {
+    if (!isRequiredGroup(g)) return true
+    if (isRadioModifierGroup(g)) return !!selected[g.id]
+    return (selected[g.id] || []).length > 0
+  }
+
+  function missingRequiredGroups() {
+    if (!product?.modifier_groups) return []
+    return product.modifier_groups.filter((g) => isRequiredGroup(g) && !isGroupFilled(g))
+  }
 
   onMount(async () => {
+    showOnboardingHint = !sessionStorage.getItem("shop_onboarding_dismissed")
     try {
       product = await api(`/products/${params.id}`)
       for (const g of product.modifier_groups) {
@@ -67,8 +86,24 @@
     return t * qty
   })
 
+  function dismissOnboarding() {
+    sessionStorage.setItem("shop_onboarding_dismissed", "1")
+    showOnboardingHint = false
+  }
+
   async function addToCart() {
     if (adding) return
+    const missing = missingRequiredGroups()
+    if (missing.length > 0) {
+      const g = missing[0]
+      highlightGroupId = g.id
+      modifierHint = `Выберите: ${g.name}`
+      g.id && document.getElementById(`mod-group-${g.id}`)?.scrollIntoView({ behavior: "smooth", block: "center" })
+      return
+    }
+    modifierHint = null
+    highlightGroupId = null
+    dismissOnboarding()
     adding = true
     try {
     const selected_modifiers = []
@@ -141,8 +176,23 @@
   <h1 class="mb-2 text-xl font-bold leading-tight">{product.name}</h1>
   <p class="mb-4 text-sm text-[#a0a0a0]">{product.description}</p>
 
+  {#if showOnboardingHint && product.modifier_groups?.some(isRequiredGroup)}
+    <div class="onboarding-banner mb-4 rounded-xl border border-[#ff8c42]/40 bg-[#3a2a1a] px-3 py-2 text-sm text-[#e8c4a8]">
+      Сначала выберите параметры с пометкой <strong>обязательно</strong> (вкус, температура и т.д.), затем «В корзину».
+      <button type="button" class="onboarding-dismiss" onclick={dismissOnboarding}>Понятно</button>
+    </div>
+  {/if}
+
+  {#if modifierHint}
+    <p class="modifier-hint mb-3" role="alert">{modifierHint}</p>
+  {/if}
+
   {#each product.modifier_groups as g (g.id)}
-    <div class="mb-4">
+    <div
+      id={"mod-group-" + g.id}
+      class="mb-4 mod-group"
+      class:mod-group--highlight={highlightGroupId === g.id}
+    >
       <p class="mb-2 text-sm font-medium">
         {g.name}
         {#if g.modifier_type === "required"}
@@ -157,7 +207,7 @@
                 type="radio"
                 name={"mg-" + g.id}
                 checked={selected[g.id] === m.id}
-                onchange={() => { selected[g.id] = m.id; selected = { ...selected } }}
+                onchange={() => { selected[g.id] = m.id; selected = { ...selected }; highlightGroupId = null; modifierHint = null }}
                 class="peer sr-only"
               />
               <span class="inline-block rounded-lg border border-[#3a3a3a] px-3 py-2 text-sm peer-checked:border-[#ff8c42] peer-checked:bg-[#3a2a1a]">
@@ -391,4 +441,34 @@
 
   .more-menu button:last-child { border-bottom: none; }
   .more-menu button:active { background: #3a3a3a; }
+
+  .onboarding-banner {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .onboarding-dismiss {
+    align-self: flex-start;
+    background: none;
+    border: none;
+    color: #ff8c42;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  .modifier-hint {
+    color: #ff8c42;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .mod-group--highlight {
+    border-radius: 12px;
+    outline: 2px solid #ff8c42;
+    outline-offset: 4px;
+    padding: 4px;
+  }
 </style>

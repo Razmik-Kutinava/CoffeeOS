@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v1.115 — 2026-06-04 (§2: A↔B fix, онбординг, подвал MCP)
+
+- **A↔B:** `CustomerSession` не отдаёт legacy на чужой tenant; подпись в «Заказы»; MCP+БД **PASS**.
+- **Онбординг:** баннер + подсветка обязательных модификаторов в `Product.svelte`.
+- **§2.5:** MCP Slow 3G + Offline in-app; подвал физически не гоняли.
+
 ## v1.114 — 2026-06-04 (§2.5: MCP после deploy ca6f2ef — skeleton не залипает)
 
 - Fly Slow 3G: `boot_with_menu: 0`, финал без `.shop-boot-skeleton` — **PASS**.

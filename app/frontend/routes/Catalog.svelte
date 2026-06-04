@@ -22,7 +22,11 @@
 {#if loading}
   <PageSkeleton />
 {:else if err}
-  <p class="text-center text-red-400 py-8">{err}</p>
+  <div class="catalog-error py-8 px-4 text-center">
+    <p class="text-[#ff8c42] font-medium mb-2">Не удалось загрузить меню</p>
+    <p class="text-[#a0a0a0] text-sm">{err}</p>
+    <p class="text-[#888] text-xs mt-3">Проверьте интернет и обновите страницу</p>
+  </div>
 {:else if categories.length === 0}
   <div class="no-results">
     <p>Пока нет товаров</p>

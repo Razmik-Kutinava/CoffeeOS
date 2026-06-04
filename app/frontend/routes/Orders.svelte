@@ -58,6 +58,7 @@
     <div class="empty-state">
       <div class="empty-icon">📦</div>
       <p>Сегодня заказов пока нет</p>
+      <p class="empty-hint">Показаны заказы только этой кофейни. Заказали в другой точке — откройте её витрину по QR.</p>
       <button class="go-catalog" onclick={() => push('/')}>Сделать заказ</button>
     </div>
   {:else}
@@ -128,6 +129,14 @@
   }
 
   .empty-icon { font-size: 48px; }
+
+  .empty-hint {
+    font-size: 13px;
+    line-height: 1.4;
+    text-align: center;
+    max-width: 280px;
+    color: #888;
+  }
 
   .go-catalog {
     background: var(--accent, #ff8c42);

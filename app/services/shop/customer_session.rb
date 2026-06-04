@@ -10,12 +10,13 @@ module Shop
     def self.customer_id(session, tenant_id)
       tid = tenant_id.to_s
       bucket = session[BUCKET_KEY]
-      if bucket.is_a?(Hash) && bucket[tid].present?
-        return bucket[tid].to_s
+      if bucket.is_a?(Hash)
+        return bucket[tid].to_s if bucket[tid].present?
+        # Не подставляем legacy с другой точки — иначе на B «пропадают» заказы после визита A.
+        return nil
       end
 
-      legacy = session[LEGACY_KEY]
-      legacy.presence&.to_s
+      session[LEGACY_KEY].presence&.to_s
     end
 
     def self.set_customer_id!(session, tenant_id, customer_id)

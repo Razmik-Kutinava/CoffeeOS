@@ -5,10 +5,19 @@
   "tool": "chrome-devtools-mcp",
   "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
   "code": "PendingOrderSession + reuse pending order (коммит 11ab05f, deploy post-2026-06-04)",
+  "test_phone": "+79001112244",
+  "db_orders_count": 1,
+  "db_verified_at": "2026-06-04T07:37:51Z",
+  "db_method": "fly ssh console -a coffeeos → bin/rails runner (orders за 15 мин по телефону)",
+  "db_sample_order": {
+    "id": "adf286dd-3cf4-4135-9981-0b717be89b3a",
+    "status": "pending_payment",
+    "final_amount": "537.0"
+  },
   "steps": [
     {
       "step": "2.4.1",
-      "action": "Оформление: имя/телефон, два быстрых клика «Оплатить»",
+      "action": "Оформление: имя/телефон, клик «Оплатить» (второй при «Идёт оплата…» blocked)",
       "expect": "Один заказ, один переход на банк",
       "result": {
         "first_click": "Идёт оплата…, кнопка disabled",
@@ -16,11 +25,17 @@
         "redirect": "один URL https://pay.tbank.ru/"
       },
       "verdict": "PASS"
+    },
+    {
+      "step": "2.4.2",
+      "action": "Подсчёт заказов mobile в БД Fly за 15 мин по test_phone",
+      "expect": "db_orders_count = 1",
+      "result": { "db_orders_count": 1 },
+      "verdict": "PASS"
     }
   ],
   "limits": [
-    "Не считали заказы в БД на Fly — только UI + один редирект",
     "Не гоняли тройной клик в race до disabled"
   ],
-  "summary": { "pass": 1, "fail": 0 }
+  "summary": { "pass": 2, "fail": 0 }
 }

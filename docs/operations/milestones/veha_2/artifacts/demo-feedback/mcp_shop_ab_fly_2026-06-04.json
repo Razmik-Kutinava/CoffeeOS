@@ -1,0 +1,45 @@
+{
+  "scenario": "PDF §2 — витрина A↔B, заказы не «пропадают»",
+  "stand": "https://coffeeos.fly.dev",
+  "run_at": "2026-06-04",
+  "tool": "chrome-devtools-mcp",
+  "tenant_a": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "tenant_b": "655aaccb-004a-4bb9-a50a-ce618854dda3",
+  "test_phone": "+79008881122",
+  "code_fix": "Shop::CustomerSession — не подставлять legacy customer другой точки; подпись в Orders.svelte",
+  "steps": [
+    {
+      "step": "ab.1",
+      "action": "Cash-заказ на B (API, та же cookie-сессия)",
+      "result": { "order_id": "a71035be-2f3e-4eb3-9931-572cbcaa9197", "status": "accepted" },
+      "verdict": "PASS"
+    },
+    {
+      "step": "ab.2",
+      "action": "history B → A → B (API)",
+      "result": {
+        "b1": ["a71035be-2f3e-4eb3-9931-572cbcaa9197"],
+        "a": [],
+        "b2": ["a71035be-2f3e-4eb3-9931-572cbcaa9197"]
+      },
+      "verdict": "PASS"
+    },
+    {
+      "step": "ab.3",
+      "action": "UI #/orders на A — пусто; на B — заказ виден",
+      "result": {
+        "orders_a": "Сегодня заказов пока нет",
+        "orders_b": "Заказ #a71035be… 398₽ Принят"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "step": "ab.4",
+      "action": "БД Fly: заказ на tenant B",
+      "result": { "customer_id": "58b3db22-55fc-4f95-8a54-cc5a3a19873d", "orders_b": 1 },
+      "verdict": "PASS"
+    }
+  ],
+  "root_cause": "legacy shop_customer_id подставлялся на чужой tenant_id — пустая история до заказа; путаница A/B у гостя",
+  "summary": { "pass": 4, "fail": 0 }
+}

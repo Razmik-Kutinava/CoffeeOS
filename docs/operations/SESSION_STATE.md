@@ -11,7 +11,7 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **§2.1–2.5** MCP Fly **PASS** (витрина, оплата, slow-net) | онбординг; franchise staff; A↔B заказы |
+| **§2** MCP+код: 2.1–2.5, A↔B, онбординг | deploy UI; franchise staff |
 | **§1.2–1.4** — MCP Fly **PASS** | |
 | **Обязательно:** подсказки онбординга витрины | **open:** УК/staff — убрать Персонал у franchise |
 | Очередь: [`DEMO_FEEDBACK.md`](milestones/veha_2/DEMO_FEEDBACK.md) | §4+ PDF от заказчика → §I |
@@ -25,7 +25,9 @@
 - **MCP Fly Slow 3G:** 13 сэмплов `.page-skeleton`, фон `rgb(26,26,26)`, меню загрузилось — **PASS** — [`mcp_section_2_5_fly_2026-06-04.json`](milestones/veha_2/artifacts/demo-feedback/mcp_section_2_5_fly_2026-06-04.json).
 - **Код:** boot skeleton в `shop/pages/home.html.erb` до Svelte; `shop.html.erb` body `#1a1a1a`; `PageSkeleton` aria «Загрузка меню».
 - **Не делали:** физический тест в подвале; оверлей >5 s не сработал (меню <5 s).
-- **Post-deploy MCP Slow 3G (2-й deploy, `ca6f2ef`):** boot skeleton снимается, меню без залипания (`boot_with_menu: 0`) — **PASS**, §2.5 **закрыт**.
+- **§2.5 подвал-эмуляция:** Slow 3G PASS; Offline in-app — fail fetch (текст каталога после deploy).
+- **§2 A↔B:** fix `CustomerSession` + MCP PASS — [`mcp_shop_ab_fly_2026-06-04.json`](milestones/veha_2/artifacts/demo-feedback/mcp_shop_ab_fly_2026-06-04.json).
+- **Онбординг:** баннер/подсветка в `Product.svelte` — код готов, MCP UI после deploy.
 
 ### Сессия 2026-06-04 (§2.3–2.4: оплата, корзина при возврате с банка)
 

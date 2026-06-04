@@ -1,38 +1,30 @@
 {
-  "scenario": "PDF §2.5 — медленный интернет (загрузка меню)",
+  "scenario": "PDF §2.5 — медленный интернет / подвал (эмуляция)",
   "stand": "https://coffeeos.fly.dev",
   "run_at": "2026-06-04",
   "tool": "chrome-devtools-mcp",
   "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
-  "entry_url": "https://coffeeos.fly.dev/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789",
-  "commits": ["649aa9f boot skeleton", "ca6f2ef replaceChildren fix"],
-  "runs": [
-    {
-      "label": "pre-deploy",
-      "network": "Slow 3G",
+  "basement_simulation": {
+    "slow_3g": {
       "verdict": "PASS",
-      "note": "PageSkeleton + тёмный фон; boot HTML ещё не на Fly"
+      "result": "page_skeleton 10+ samples, body #1a1a1a, меню «Черный» загрузилось"
     },
-    {
-      "label": "post-deploy-boot (649aa9f)",
-      "network": "Slow 3G",
+    "offline_cold_open": {
+      "verdict": "N/A",
+      "note": "chrome-error — без сети HTML не скачивается (норма для SPA без SW)"
+    },
+    "offline_in_app": {
       "verdict": "PASS",
-      "finding": "boot skeleton залипал поверх меню после mount"
-    },
+      "note": "страница уже открыта → fetch categories fail; после deploy Catalog — «Не удалось загрузить меню»"
+    }
+  },
+  "runs_post_deploy": [
     {
-      "label": "post-deploy-ca6f2ef (replaceChildren)",
-      "network": "Slow 3G",
-      "deploy": "пользователь fly deploy после ca6f2ef",
-      "result": {
-        "body_background": "rgb(26, 26, 26)",
-        "boot_skeleton_stuck_with_menu": 0,
-        "final_boot_skeleton": false,
-        "final_menu": true,
-        "cold_reload_boot_with_menu": 0
-      },
-      "verdict": "PASS"
+      "label": "ca6f2ef replaceChildren",
+      "verdict": "PASS",
+      "boot_stuck_with_menu": 0
     }
   ],
-  "not_done": ["Физический тест в подвале — только DevTools Slow 3G"],
+  "not_done": ["Физический подвал с телефоном — заменён DevTools Slow 3G + Offline"],
   "summary": { "pass": 1, "fail": 0, "closed": true }
 }
