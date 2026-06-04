@@ -4,7 +4,7 @@ module Manager
   class StaffController < BaseController
     helper_method :assignable_staff_role_codes
 
-    before_action :require_privileged_manager!
+    before_action :require_staff_management!
     before_action :set_staff_user, only: %i[edit update]
     # Переопределяем skip_authorization из base — здесь нужен явный Pundit
     skip_before_action :skip_authorization

@@ -13,7 +13,18 @@ module Manager
     before_action :assign_shift_for_layout
 
     helper_method :franchise_manager?, :general_manager?, :general_or_franchise_manager?, :shift_manager?,
-                  :accessible_manager_tenants, :current_tenant, :uk_in_manager?, :current_cash_shift
+                  :accessible_manager_tenants, :current_tenant, :uk_in_manager?, :current_cash_shift,
+                  :staff_management_visible?
+
+    def staff_management_visible?
+      general_manager? || uk_in_manager?
+    end
+
+    def require_staff_management!
+      return if staff_management_visible?
+
+      redirect_to manager_dashboard_path, alert: "Доступ запрещён"
+    end
 
     def uk_in_manager?
       current_user&.uk_global_admin?

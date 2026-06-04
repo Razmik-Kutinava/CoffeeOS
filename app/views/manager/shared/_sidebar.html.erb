@@ -53,7 +53,7 @@
     <%= link_to manager_reports_path, class: "nav-item #{'active' if request.path == manager_reports_path}" do %>
       <span class="emoji">📈</span><span>Отчёты</span>
     <% end %>
-    <% if general_or_franchise_manager? || uk_in_manager? %>
+    <% if staff_management_visible? %>
       <%= link_to manager_staff_members_path, class: "nav-item #{'active' if request.path.start_with?(manager_staff_members_path)}" do %>
         <span class="emoji">👥</span><span>Персонал</span>
       <% end %>
