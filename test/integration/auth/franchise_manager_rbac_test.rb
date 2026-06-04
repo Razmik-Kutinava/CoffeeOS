@@ -100,4 +100,9 @@ class Auth::FranchiseManagerRbacTest < ActionDispatch::IntegrationTest
       assert_response :redirect, "franchise_manager не должен видеть #{path_helper}"
     end
   end
+
+  test "franchise_manager cannot open staff management" do
+    get manager_staff_members_path
+    assert_redirected_to manager_dashboard_path
+  end
 end
