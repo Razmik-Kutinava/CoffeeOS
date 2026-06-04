@@ -1,1 +1,53 @@
-<div id="app"></div>
+<div id="app">
+  <div class="shop-boot-skeleton" aria-busy="true" aria-label="Загрузка меню">
+    <div class="shop-boot-line shop-boot-line--wide"></div>
+    <div class="shop-boot-line"></div>
+    <div class="shop-boot-cards">
+      <div class="shop-boot-card"></div>
+      <div class="shop-boot-card"></div>
+      <div class="shop-boot-card"></div>
+    </div>
+    <p class="shop-boot-message">Загрузка меню…</p>
+  </div>
+</div>
+
+<style>
+  .shop-boot-skeleton {
+    padding: 3.5rem 0.75rem 1.5rem;
+    max-width: 32rem;
+    margin: 0 auto;
+  }
+  .shop-boot-message {
+    margin: 1rem 0 0;
+    text-align: center;
+    color: #a0a0a0;
+    font-size: 0.95rem;
+    font-family: system-ui, sans-serif;
+  }
+  .shop-boot-line {
+    height: 0.85rem;
+    width: 55%;
+    border-radius: 999px;
+    margin-bottom: 0.75rem;
+    background: linear-gradient(90deg, #2a2a2a 25%, #3a3a3a 50%, #2a2a2a 75%);
+    background-size: 200% 100%;
+    animation: shop-boot-pulse 1.4s ease-in-out infinite;
+  }
+  .shop-boot-line--wide { width: 75%; }
+  .shop-boot-cards {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.75rem;
+  }
+  .shop-boot-card {
+    height: 4.5rem;
+    border-radius: 12px;
+    background: linear-gradient(90deg, #222 25%, #333 50%, #222 75%);
+    background-size: 200% 100%;
+    animation: shop-boot-pulse 1.4s ease-in-out infinite;
+  }
+  @keyframes shop-boot-pulse {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+</style>

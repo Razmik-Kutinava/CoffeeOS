@@ -11,7 +11,8 @@
 | [`mcp_post_deploy_fly_2026-06-03.json`](mcp_post_deploy_fly_2026-06-03.json) | Post-deploy batch: §2 A↔B, §3.6, §1.3, §1.2, §1.4 |
 | [`mcp_section_2_2_fly_2026-06-03.json`](mcp_section_2_2_fly_2026-06-03.json) | §2.2 платные модификаторы (MCP после redeploy) |
 | [`mcp_section_2_3_fly_2026-06-04.json`](mcp_section_2_3_fly_2026-06-04.json) | §2.3 оплата post-deploy: ФИО, «Идёт оплата…», корзина после банка **PASS** |
-| [`mcp_section_2_4_fly_2026-06-04.json`](mcp_section_2_4_fly_2026-06-04.json) | §2.4 двойной «Оплатить» — один редирект на банк **PASS** |
+| [`mcp_section_2_4_fly_2026-06-04.json`](mcp_section_2_4_fly_2026-06-04.json) | §2.4 двойной «Оплатить» — один редирект; `db_orders_count: 1` **PASS** |
+| [`mcp_section_2_5_fly_2026-06-04.json`](mcp_section_2_5_fly_2026-06-04.json) | §2.5 Slow 3G: скелетон меню, фон не белый **PASS** |
 | [`../veha_1/artifacts/customer_live_qa_block1_2026-05-30.pdf`](../../veha_1/artifacts/customer_live_qa_block1_2026-05-30.pdf) | Предыдущий пакет (В1 §1). |
 
 **Очередь правок:** [`../../DEMO_FEEDBACK.md`](../../DEMO_FEEDBACK.md).

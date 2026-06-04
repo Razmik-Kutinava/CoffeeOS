@@ -1,4 +1,4 @@
-<div class="page-skeleton flex flex-col gap-3 py-4" aria-busy="true" aria-label="Загрузка">
+<div class="page-skeleton flex flex-col gap-3 py-4" aria-busy="true" aria-label="Загрузка меню">
   <div class="h-4 w-2/5 animate-pulse rounded bg-[#2a2a2a]"></div>
   <div class="flex gap-3 overflow-hidden">
     {#each [1, 2, 3] as _}

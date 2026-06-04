@@ -1,0 +1,33 @@
+{
+  "scenario": "PDF §2.5 — медленный интернет (загрузка меню)",
+  "stand": "https://coffeeos.fly.dev",
+  "run_at": "2026-06-04",
+  "tool": "chrome-devtools-mcp",
+  "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "entry_url": "https://coffeeos.fly.dev/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "network": "Slow 3G (DevTools emulate)",
+  "steps": [
+    {
+      "step": "2.5.1",
+      "action": "Slow 3G → открыть витрину (cold), сэмплы DOM каждые 150ms",
+      "expect": "Скелетон/заглушка, фон не белый",
+      "result": {
+        "body_background": "rgb(26, 26, 26)",
+        "skeleton_samples": 13,
+        "overlay_samples": 0,
+        "busy_samples": 13,
+        "menu_loaded": true,
+        "note": "overlay (5s) не понадобился — меню грузилось <5s; скелетон PageSkeleton покрывал загрузку"
+      },
+      "verdict": "PASS"
+    }
+  ],
+  "code_followup": {
+    "commit": "boot skeleton в shop/home.html.erb до гидрации Svelte; body #1a1a1a; PageSkeleton aria «Загрузка меню»",
+    "deploy": "нужен fly deploy для boot skeleton на стенде; MCP PASS и до деплоя (PageSkeleton + тёмный фон)"
+  },
+  "not_in_scope": [
+    "Физический тест в подвале заказчиком — не выполняли (эмуляция Slow 3G)"
+  ],
+  "summary": { "pass": 1, "fail": 0 }
+}
