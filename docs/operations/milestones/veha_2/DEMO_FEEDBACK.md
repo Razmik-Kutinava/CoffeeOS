@@ -35,7 +35,7 @@
 | 2026-06-02 | заказчик PDF §1.3 | смена / UI | Неясно где открыть/закрыть смену; в демо смена открывалась сама | done *(MCP post-deploy)* | [`mcp_post_deploy_fly_2026-06-03.json`](artifacts/demo-feedback/mcp_post_deploy_fly_2026-06-03.json) §shift; кнопка «Открыть смену» на Fly |
 | 2026-06-03 | заказчик PDF §1.4 | склад цеха vs точка | Ожидали минус на **цехе**, списание только на **точке** | done *(MCP post-deploy)* | [`mcp_post_deploy_fly_2026-06-03.json`](artifacts/demo-feedback/mcp_post_deploy_fly_2026-06-03.json) §inventory + [`mcp_section_1_4_fly_2026-06-03.json`](artifacts/demo-feedback/mcp_section_1_4_fly_2026-06-03.json) |
 | 2026-06-02 | заказчик PDF §2.1 | shop витрина A | Меню: каталог → категория → карточка (название, цена, модификаторы; скрин заказчика = карточка) | done *(MCP)* | [`mcp_section_2_1_fly_2026-06-02.json`](artifacts/demo-feedback/mcp_section_2_1_fly_2026-06-02.json) |
-| 2026-06-04 | заказчик (чат) | УК vs franchise / staff | У **франчайзи** скрыт «Персонал»; у **УК/GM** — виден | **done** *(код)* | `staff_management_visible?`; MCP после deploy |
+| 2026-06-04 | заказчик (чат) | УК vs franchise / staff | У **франчайзи** скрыт «Персонал»; у **GM** — виден | **done** *(MCP Fly)* | `7311338`; franchise — нет 👥; gm-a — есть 👥; `/manager/staff` → редирект |
 | 2026-06-04 | команда / заказчик | shop витрина | **Подсказки онбординга** (баннер, подсветка, блок «В корзину») | **done** *(код)* | `Product.svelte`; MCP UI после deploy |
 
 ### §2.2 — приёмка (MCP Fly)
