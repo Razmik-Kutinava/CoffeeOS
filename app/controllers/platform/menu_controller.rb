@@ -52,6 +52,8 @@ module Platform
       product.slug = unique_slug(Product, product_params[:slug], product.name)
       product.created_by = current_user
       Platform::Menu::PublishProductService.new(product: product, user: current_user).call!
+      # Дублируем sync: на стенде create иногда не успевал разложить PTS до первого запроса витрины.
+      Platform::Menu::ProductTenantSync.sync_product_to_all_tenants!(product: product, user: current_user)
       img_msg = apply_product_image_upload!(product, image_file)
       notice = "Товар добавлен и разослан по точкам. Ниже можно добавить ещё товар в эту категорию."
       notice = "#{notice} #{img_msg}" if img_msg.present?
@@ -85,6 +87,7 @@ module Platform
     def create_modifier_group
       group = ProductModifierGroup.new(modifier_group_params)
       if group.save
+        bust_shop_catalog_cache!
         redirect_to platform_menu_path, notice: "Группа модификаторов добавлена"
       else
         redirect_to platform_menu_path, alert: group.errors.full_messages.join(", ")
@@ -94,6 +97,7 @@ module Platform
     def update_modifier_group
       group = ProductModifierGroup.find(params[:id])
       if group.update(modifier_group_params)
+        bust_shop_catalog_cache!
         redirect_to platform_menu_path, notice: "Группа модификаторов обновлена"
       else
         redirect_to platform_menu_path, alert: group.errors.full_messages.join(", ")
@@ -105,6 +109,7 @@ module Platform
     def create_modifier_option
       option = ProductModifierOption.new(modifier_option_params)
       if option.save
+        bust_shop_catalog_cache!
         redirect_to platform_menu_path, notice: "Опция модификатора добавлена"
       else
         redirect_to platform_menu_path, alert: option.errors.full_messages.join(", ")
@@ -114,6 +119,7 @@ module Platform
     def update_modifier_option
       option = ProductModifierOption.find(params[:id])
       if option.update(modifier_option_params)
+        bust_shop_catalog_cache!
         redirect_to platform_menu_path, notice: "Опция модификатора обновлена"
       else
         redirect_to platform_menu_path, alert: option.errors.full_messages.join(", ")
@@ -152,6 +158,10 @@ module Platform
     private
 
     # Товары без PTS на точках не попадают на витрину — чиним при открытии меню УК.
+    def bust_shop_catalog_cache!
+      Platform::Menu::ProductTenantSync.bust_shop_catalog_cache!
+    end
+
     def repair_catalog_pts_if_needed!
       return unless current_user
       return unless Platform::Menu::ProductTenantSync.needs_repair?

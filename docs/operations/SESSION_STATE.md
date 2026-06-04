@@ -20,13 +20,13 @@
 
 **Артефакты (для агента в другом редакторе):** точка входа — [`milestones/veha_2/artifacts/README.md`](milestones/veha_2/artifacts/README.md). Прогон 10: `artifacts/prog10/{_index,smoke,kiosk,shop,staff-rbac,connectivity,platform-ent,warehouse}/`. Сводный индекс: `prog10/_index/prog10_final_index.json`. Скрипты `bin/prog10_*` пишут в эти подпапки (OUT обновлён). Старый плоский путь `artifacts/prog10_*.json` **удалён** — везде относительные ссылки `artifacts/prog10/...`.
 
-### Сессия 2026-06-04 (УК → Меню → витрины A/B, PTS + categories API)
+### Сессия 2026-06-04 (УК → Меню → витрины A/B, автообновление без F5)
 
-- **Код:** `ProductTenantSync` — PTS на все точки при publish/bootstrap; `categories#index` default `per_page=50`; repair PTS при открытии УК «Меню»; rake `platform:menu:sync_pts`.
-- **Коммит:** `589e397` — `fix(shop): PTS sync to all tenants and full categories on vitrina` (push `develop`).
-- **Fly API (без UI):** A/B — по **3** категории, **11** товаров, `meta.per_page=50` — **PASS**.
-- **Fly UI УК:** `uk@demo.coffeeos.local` / `demo123456` → **422** (логин не принят); создание товара+модификаторов в УК через MCP **не выполнено** — нужен `fly auth login` + `fly ssh console -a coffeeos -C "bin/rails demo:seed"` (или актуальный пароль УК).
-- **Деплой:** push на `develop`; если CI не подхватил — `fly deploy -a coffeeos` с машины с `fly auth`.
+- **Критерий приёмки:** изменение в УК → **все открытые витрины A/B** показывают меню **без F5** (polling, не ручное обновление).
+- **Код:** `catalog.js` — polling **8 с** + refetch при `visibilitychange`; `Catalog.svelte` / `CategoryProducts.svelte` / `Product.svelte`; `menu_controller` — cache bust при модификаторах; `create_product` — повторный `ProductTenantSync` после publish.
+- **MCP Fly (post seed+deploy):** UK login **PASS**; товар `OPS-AUTO-175630` + модификаторы → API A/B **PASS**; витрина A: `wait_for` нового товара без reload **FAIL** на деплое без polling — [`mcp_uk_menu_autorefresh_fly_2026-06-04.json`](milestones/veha_2/artifacts/demo-feedback/mcp_uk_menu_autorefresh_fly_2026-06-04.json).
+- **Следующий шаг:** `fly deploy -a coffeeos` с коммитом polling → повтор MCP step 2 (ожидание ≤16 с на A и B).
+- **База:** `589e397` PTS + `per_page=50`; `ca684ab`/`f59bd1a` ops.
 
 ### Сессия 2026-06-04 (franchise staff + sync ops)
 

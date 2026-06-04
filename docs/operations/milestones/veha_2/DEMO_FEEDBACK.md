@@ -37,7 +37,8 @@
 | 2026-06-02 | заказчик PDF §2.1 | shop витрина A | Меню: каталог → категория → карточка (название, цена, модификаторы; скрин заказчика = карточка) | done *(MCP)* | [`mcp_section_2_1_fly_2026-06-02.json`](artifacts/demo-feedback/mcp_section_2_1_fly_2026-06-02.json) |
 | 2026-06-04 | заказчик (чат) | УК vs franchise / staff | У **франчайзи** скрыт «Персонал»; у **GM** — виден | **done** *(MCP Fly)* | `7311338`, `62ced8e`; [`mcp_franchise_staff_fly_2026-06-04.json`](artifacts/demo-feedback/mcp_franchise_staff_fly_2026-06-04.json) |
 | 2026-06-04 | команда / заказчик | shop витрина | **Подсказки онбординга** (баннер, подсветка, блок «В корзину») | **done** *(MCP Fly)* | `6c5cc0b` — `Product.svelte`; баннер на карточке Бразилия post-deploy |
-| 2026-06-04 | команда (чат) | УК → Меню → витрины A/B | В УК 3–4 категории, на витрине пусто/1 категория — PTS + `per_page` API | **done** *(API Fly)* | `589e397`; A/B API: 3 cat × 11 products, `per_page=50`; UI УК create — ждёт рабочий логин на Fly |
+| 2026-06-04 | команда (чат) | УК → Меню → витрины A/B | PTS + `per_page` API; UK create товар+модификаторы | **done** *(API)* | `589e397`; MCP UK `OPS-AUTO-175630` на A/B API |
+| 2026-06-04 | команда (чат) | shop витрина A/B | **Автообновление меню без F5** после правок УК | **in_progress** | polling 8s в `catalog.js` + deploy; журнал [`mcp_uk_menu_autorefresh_fly_2026-06-04.json`](artifacts/demo-feedback/mcp_uk_menu_autorefresh_fly_2026-06-04.json) — DOM FAIL до деплоя polling |
 
 ### §2.2 — приёмка (MCP Fly)
 

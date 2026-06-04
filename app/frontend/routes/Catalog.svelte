@@ -1,6 +1,6 @@
 <script>
   import { onMount } from "svelte"
-  import { loadCatalog } from "../lib/stores/catalog.js"
+  import { loadCatalog, startCatalogPolling, stopCatalogPolling } from "../lib/stores/catalog.js"
   import CategorySection from "../components/CategorySection.svelte"
   import PageSkeleton from "../components/PageSkeleton.svelte"
 
@@ -11,11 +11,15 @@
   onMount(async () => {
     try {
       categories = await loadCatalog()
+      startCatalogPolling((cats) => {
+        categories = cats
+      })
     } catch (e) {
       err = e.message
     } finally {
       loading = false
     }
+    return () => stopCatalogPolling()
   })
 </script>
 

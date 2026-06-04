@@ -2,7 +2,7 @@
   import { onMount } from "svelte"
   import { push } from "svelte-spa-router"
   import { api } from "../lib/api.js"
-  import { loadCatalog } from "../lib/stores/catalog.js"
+  import { loadCatalog, startCatalogPolling, stopCatalogPolling } from "../lib/stores/catalog.js"
   import { useTelegramBack } from "../lib/telegram.js"
   import { favorites } from "../lib/stores/favorites.js"
   import PageSkeleton from "../components/PageSkeleton.svelte"
@@ -17,22 +17,28 @@
 
   useTelegramBack(() => push('/'))
 
+  function applyCategories(categories) {
+    const want = String(params.id ?? "")
+    category = categories.find((c) => String(c.id) === want)
+    if (category) {
+      products = category.products
+      error = null
+    } else if (!loading) {
+      error = "Категория не найдена"
+    }
+  }
+
   onMount(async () => {
     try {
-      const categories = await loadCatalog()
-      const want = String(params.id ?? "")
-      category = categories.find(c => String(c.id) === want)
-      if (category) {
-        products = category.products
-      } else {
-        error = "Категория не найдена"
-      }
+      applyCategories(await loadCatalog())
+      startCatalogPolling(applyCategories)
       await favorites.load()
     } catch (e) {
       error = e.message
     } finally {
       loading = false
     }
+    return () => stopCatalogPolling()
   })
 
   async function quickAddToCart(product) {

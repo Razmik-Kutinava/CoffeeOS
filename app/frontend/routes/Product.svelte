@@ -12,6 +12,7 @@
   useTelegramBack(() => window.history.back())
 
   const shopTelegramUrl = (import.meta.env.VITE_SHOP_TELEGRAM_URL || "").trim()
+  const PRODUCT_POLL_MS = 8_000
 
   let { params } = $props()
 
@@ -42,16 +43,40 @@
     return product.modifier_groups.filter((g) => isRequiredGroup(g) && !isGroupFilled(g))
   }
 
+  async function loadProduct(keepSelections = false) {
+    const prev = keepSelections ? { ...selected } : {}
+    const p = await api(`/products/${params.id}`)
+    product = p
+    for (const g of product.modifier_groups) {
+      if (prev[g.id] !== undefined) selected[g.id] = prev[g.id]
+      else selected[g.id] = defaultSelectionForGroup(g)
+    }
+    selected = { ...selected }
+  }
+
   onMount(async () => {
     showOnboardingHint = !sessionStorage.getItem("shop_onboarding_dismissed")
-    try {
-      product = await api(`/products/${params.id}`)
-      for (const g of product.modifier_groups) {
-        selected[g.id] = defaultSelectionForGroup(g)
+    let pollTimer
+    const tick = async () => {
+      try {
+        await loadProduct(true)
+      } catch {
+        /* keep last product */
       }
-      selected = { ...selected }
+    }
+    try {
+      await loadProduct(false)
       await favorites.load()
       isFav = favorites.isFavorite(product.id)
+      pollTimer = setInterval(tick, PRODUCT_POLL_MS)
+      const onVisible = () => {
+        if (document.visibilityState === "visible") tick()
+      }
+      document.addEventListener("visibilitychange", onVisible)
+      return () => {
+        clearInterval(pollTimer)
+        document.removeEventListener("visibilitychange", onVisible)
+      }
     } catch (e) {
       error = e.message
     } finally {
