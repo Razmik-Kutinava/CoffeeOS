@@ -6,7 +6,7 @@
 
 | Папка | Зачем |
 |-------|--------|
-| [`demo-feedback/`](demo-feedback/) | PDF/скрины фидбека заказчика (§E). Цепочка с [`veha_1/artifacts`](../../veha_1/artifacts/). |
+| [`demo-feedback/`](demo-feedback/) | PDF/скрины фидбека заказчика (§E). **УК→витрины:** [`mcp_uk_menu_autorefresh_fly_2026-06-04.json`](demo-feedback/mcp_uk_menu_autorefresh_fly_2026-06-04.json). Handoff: [`../HANDOFF_UK_MENU_VITRINA.md`](../HANDOFF_UK_MENU_VITRINA.md). |
 | [`prog10/`](prog10/) | Прогон 10 — curl/MCP отчёты на Fly. См. [`prog10/README.md`](prog10/README.md). |
 
 **Не в git:** токены киосков (`/tmp/prog10_kiosk_tokens.json`), реальные секреты.

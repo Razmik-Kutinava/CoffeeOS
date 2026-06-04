@@ -46,7 +46,7 @@
 ## B. Связность админок (приоритет 1)
 
 - [x] ⭐ УК → точка → `open_as_manager` → manager видит **ту же** точку и каталог *(§5–§6 ONBOARDING 2026-05-26)*
-- [x] ⭐ Меню УК → PTS на все точки org → витрина `{slug}/shop` показывает актуальное меню *(§6: PublishProduct + shop API)*
+- [x] ⭐ Меню УК → PTS на все точки org → витрина показывает меню; **без F5** polling ~8 s *(2026-06-04: `589e397`+`e398981`+`1861f4f`, handoff `HANDOFF_UK_MENU_VITRINA.md`)*
 - [x] ⭐ Barista / prep_kitchen — только данные **своего** `tenant_id` (RLS + session) *(§6 prep_kitchen movement; §2 RLS orders)*
 - [x] ⭐ **shift_manager** (`shift-a@demo.coffeeos.local`) → `/manager` *(2026-05-28: прогон 5, AUTH-06 PASS)*
 - [x] ⭐ **franchise_manager** (`franchise@demo.coffeeos.local`) → `/manager` *(2026-05-28: AUTH-02 PASS, switcher A/B)*

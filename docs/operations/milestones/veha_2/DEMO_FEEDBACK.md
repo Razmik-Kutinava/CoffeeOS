@@ -38,7 +38,8 @@
 | 2026-06-04 | заказчик (чат) | УК vs franchise / staff | У **франчайзи** скрыт «Персонал»; у **GM** — виден | **done** *(MCP Fly)* | `7311338`, `62ced8e`; [`mcp_franchise_staff_fly_2026-06-04.json`](artifacts/demo-feedback/mcp_franchise_staff_fly_2026-06-04.json) |
 | 2026-06-04 | команда / заказчик | shop витрина | **Подсказки онбординга** (баннер, подсветка, блок «В корзину») | **done** *(MCP Fly)* | `6c5cc0b` — `Product.svelte`; баннер на карточке Бразилия post-deploy |
 | 2026-06-04 | команда (чат) | УК → Меню → витрины A/B | PTS + `per_page` API; UK create товар+модификаторы | **done** *(API)* | `589e397`; MCP UK `OPS-AUTO-175630` на A/B API |
-| 2026-06-04 | команда (чат) | shop витрина A/B | **Автообновление меню без F5** после правок УК | **done** *(MCP Fly post-deploy)* | `e398981` polling 8s; MCP: цена 259₽ и OPS-DEPLOY на A/B без F5 — **PASS** — [`mcp_uk_menu_autorefresh_fly_2026-06-04.json`](artifacts/demo-feedback/mcp_uk_menu_autorefresh_fly_2026-06-04.json); follow-up: publish sync вне TX |
+| 2026-06-04 | команда (чат) | shop витрина A/B | **Автообновление меню без F5** (~8 s) | **done** *(MCP+Fly)* | `e398981`+`1861f4f`; [`mcp_uk_menu_autorefresh_fly_2026-06-04.json`](artifacts/demo-feedback/mcp_uk_menu_autorefresh_fly_2026-06-04.json); handoff [`HANDOFF_UK_MENU_VITRINA.md`](HANDOFF_UK_MENU_VITRINA.md) |
+| 2026-06-04 | команда (чат) | УК → Меню → A/B | Новый товар+модификаторы в **браузере** → API A/B сразу | **done** *(Fly)* | `OPS-POSTDEPLOY-001` на A/B после deploy `1861f4f`; см. handoff |
 
 ### §2.2 — приёмка (MCP Fly)
 

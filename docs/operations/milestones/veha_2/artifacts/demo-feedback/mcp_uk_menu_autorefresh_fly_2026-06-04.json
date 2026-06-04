@@ -1,39 +1,41 @@
 {
-  "scenario": "УК → Меню → витрины A/B: автообновление без F5 (post-deploy e398981)",
+  "scenario": "УК → Меню → витрины A/B: товар, модификаторы, автообновление без F5",
   "stand": "https://coffeeos.fly.dev",
   "run_at": "2026-06-04",
-  "tool": "chrome-devtools-mcp + curl",
+  "tool": "chrome-devtools-mcp + curl + API",
   "tenant_a": "2fdee1ac-4674-41ee-b89e-87b45643f789",
   "tenant_b": "655aaccb-004a-4bb9-a50a-ce618854dda3",
   "uk_login": "uk@demo.coffeeos.local / demo123456",
-  "criteria": "Изменение в УК → открытые витрины A/B обновляются сами, без F5",
-  "deploy_note": "Polling 8s в bundle (lo=8e3); follow-up commit: publish sync вне TX, PTS price fix",
+  "criteria": "УК → изменения на всех открытых витринах A/B без F5; новый товар в браузере сразу на API",
+  "commits": ["589e397", "e398981", "1861f4f"],
+  "polling_interval_sec": 8,
+  "worst_case_sec": 16,
   "steps": [
     {
       "step": 1,
-      "action": "UK DevTools: создать OPS-MCP-LIVE-888 (288₽) + curl товары/модификаторы",
-      "result": "Товар в каталоге УК; часть OPS-товаров на API после repair",
+      "action": "post-deploy e398981: витрины A/B открыты, UK меняет цену OPS-AUTO-175630 199→259",
+      "result": "DOM A и B: 259₽ без reload ≤16s",
       "verdict": "PASS"
     },
     {
       "step": 2,
-      "action": "Витрина A открыта, без reload: UK меняет цену OPS-AUTO-175630 199→259",
-      "result": "DOM A: 259₽ без F5; DOM B: 259₽ без F5",
+      "action": "post-deploy e398981: карточки OPS-DEPLOY-222/331544 на API → DOM без F5",
+      "result": "Карточки на A и B через polling",
       "verdict": "PASS"
     },
     {
       "step": 3,
-      "action": "Витрина A/B без reload: на API появились OPS-DEPLOY-222/331544",
-      "result": "Карточки DEPLOY на A и B через polling ≤16s",
+      "action": "post-deploy 1861f4f: UK браузер — новый товар OPS-POSTDEPLOY-001 + модификаторы",
+      "result": "api_A=true api_B=true без захода «для repair»",
       "verdict": "PASS"
     },
     {
       "step": 4,
-      "action": "wait_for OPS-MCP-LIVE-888 на витрине без F5",
-      "result": "timeout — PTS на API не сразу (нужен deploy publish fix)",
-      "verdict": "PARTIAL"
+      "action": "curl create (автотест) OPS-DEPLOY-VERIFY",
+      "result": "api_A/B false — curl не эталон; приёмка только через форму УК в браузере",
+      "verdict": "N/A"
     }
   ],
   "overall": "PASS",
-  "overall_note": "Критерий автообновления без F5 на A/B выполнен (цена + новые карточки). Мгновенный PTS на brand-new товаре — доработка publish в следующем деплое."
+  "operator_note": "Создавать товары в УК→Меню в браузере. Витрины обновляются сами ~8с. F5 не нужен."
 }

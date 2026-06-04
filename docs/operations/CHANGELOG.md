@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v1.117 — 2026-06-04 (УК→витрины: PTS, polling 8s, handoff)
+
+- **Код:** `589e397` PTS на все точки + API categories `per_page=50`; `e398981` polling витрины 8s без F5; `1861f4f` PTS sync вне TX publish.
+- **Fly:** автообновление A/B **PASS**; `OPS-POSTDEPLOY-001` на API A/B после create в браузере.
+- **Ops:** [`HANDOFF_UK_MENU_VITRINA.md`](milestones/veha_2/HANDOFF_UK_MENU_VITRINA.md), MCP `mcp_uk_menu_autorefresh_fly_2026-06-04.json`, `SESSION_STATE` обновлён.
+
 ## v1.116 — 2026-06-04 (ops: DEMO_FEEDBACK sync + franchise staff MCP)
 
 - Синхронизация `DEMO_FEEDBACK`, `SESSION_STATE`, `CHECKLIST` §E — убраны устаревшие «ждём deploy» / «open franchise».

@@ -2,31 +2,34 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-06-04  
+**Дата:** 2026-06-04 (обновлено: handoff УК→витрины)  
 **Веха 1:** официально не закрыта (§ I, H.3 — `[ ]`).  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
 **§E / PDF:** PDF заказчика в `artifacts/demo-feedback/`; **внутренний апрув** достаточен.
 
-**Прогона 11 нет.** Точка входа для агента: [`milestones/veha_2/DEMO_FEEDBACK.md`](milestones/veha_2/DEMO_FEEDBACK.md) + `artifacts/demo-feedback/`.
+**Прогона 11 нет.** Точка входа для агента:
+- **УК → Меню → витрины:** [`milestones/veha_2/HANDOFF_UK_MENU_VITRINA.md`](milestones/veha_2/HANDOFF_UK_MENU_VITRINA.md) ← **читать первым** для этой темы.
+- Общее: [`milestones/veha_2/DEMO_FEEDBACK.md`](milestones/veha_2/DEMO_FEEDBACK.md) + `artifacts/demo-feedback/`.
 
 | Сейчас | Дальше |
 |--------|--------|
-| **DEMO_FEEDBACK** — все done (MCP Fly) | §I: живое демо / закрытие вехи по решению |
+| **УК→витрины A/B:** create + модификаторы + **без F5** (~8 s) — **PASS** на Fly | §I: живое демо / закрытие вехи |
+| **DEMO_FEEDBACK** — все done (MCP Fly) | Апрув push/deploy — по решению владельца |
 | **§2** 2.1–2.5, A↔B, онбординг, franchise — **PASS** | |
-| **§1.2–1.4** — MCP Fly **PASS** | живое демо В2 |
-| Хвост MCP: успех оплаты + история; подвал физически | |
+| Хвост: успех реальной оплаты + история; подвал физически | |
 
 **Ops на блок:** `SESSION_STATE` + коммит всегда; `PRACTICES` (CR); `QA_ACCEPTANCE_RUN` + `artifacts/` (QA); `CHANGELOG` если заметно; `CHECKLIST` `[x]` только по факту.
 
 **Артефакты (для агента в другом редакторе):** точка входа — [`milestones/veha_2/artifacts/README.md`](milestones/veha_2/artifacts/README.md). Прогон 10: `artifacts/prog10/{_index,smoke,kiosk,shop,staff-rbac,connectivity,platform-ent,warehouse}/`. Сводный индекс: `prog10/_index/prog10_final_index.json`. Скрипты `bin/prog10_*` пишут в эти подпапки (OUT обновлён). Старый плоский путь `artifacts/prog10_*.json` **удалён** — везде относительные ссылки `artifacts/prog10/...`.
 
-### Сессия 2026-06-04 (УК → Меню → витрины A/B, автообновление без F5)
+### Сессия 2026-06-04 (УК → Меню → витрины A/B — ЗАКРЫТО на Fly)
 
-- **Критерий приёмки:** изменение в УК → **все открытые витрины A/B** показывают меню **без F5** — **PASS** (MCP post-deploy `e398981`).
-- **MCP Fly:** UK DevTools + curl; витрины A/B открыты: цена **199→259₽** и **OPS-DEPLOY-*** на DOM **без reload** ≤16 с — [`mcp_uk_menu_autorefresh_fly_2026-06-04.json`](milestones/veha_2/artifacts/demo-feedback/mcp_uk_menu_autorefresh_fly_2026-06-04.json).
-- **Код:** polling 8s; `PublishProductService` — PTS sync вне TX; `ProductTenantSync` — цена PTS из `base_price` (следующий deploy).
-- **Хвост:** brand-new товар на API сразу после create — после deploy publish-fix; иначе заход УК → Меню (repair PTS).
-- **База:** `589e397` PTS; `e398981` polling; `ca684ab`/`f59bd1a` ops.
+- **Handoff для агента:** [`HANDOFF_UK_MENU_VITRINA.md`](milestones/veha_2/HANDOFF_UK_MENU_VITRINA.md).
+- **Критерий:** правки в УК → витрины **A/B без F5** за **~8–16 с** — **PASS** (`e398981` + MCP).
+- **Создание товара:** УК → Меню в **браузере** → сразу на API A/B — **PASS** (`OPS-POSTDEPLOY-001` после deploy `1861f4f`). Заход в Меню «для PTS» в обычном flow **не нужен**.
+- **Коммиты:** `589e397` PTS+API · `e398981` polling 8s · `1861f4f` publish sync вне TX · ops `ca684ab`/`f59bd1a`/`1861f4f`.
+- **MCP:** [`mcp_uk_menu_autorefresh_fly_2026-06-04.json`](milestones/veha_2/artifacts/demo-feedback/mcp_uk_menu_autorefresh_fly_2026-06-04.json).
+- **Дальше:** §I живое демо; апрув push/deploy — владелец репо.
 
 ### Сессия 2026-06-04 (franchise staff + sync ops)
 
