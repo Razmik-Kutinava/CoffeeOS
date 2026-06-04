@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v1.118 — 2026-06-04 (бизнес-требования заказчика после прогонки)
+
+- [`CUSTOMER_BUSINESS_REQUIREMENTS.md`](milestones/veha_2/CUSTOMER_BUSINESS_REQUIREMENTS.md) — перепись требований заказчика (витрина / табло / обратная связь); ссылка на PDF 56 стр.
+
 ## v1.117 — 2026-06-04 (УК→витрины: PTS, polling 8s, handoff)
 
 - **Код:** `589e397` PTS на все точки + API categories `per_page=50`; `e398981` polling витрины 8s без F5; `1861f4f` PTS sync вне TX publish.

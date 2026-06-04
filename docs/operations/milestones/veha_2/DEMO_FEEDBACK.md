@@ -6,7 +6,8 @@
 
 **Сейчас (2026-06-04):** Очередь — **все строки done** *(MCP Fly + код)*. Апрув заказчика в PDF **не ждём** — достаточно внутреннего. **Хвост (не блокер):** успех реальной оплаты + история; подвал физически.
 
-**Связь:** [`CHECKLIST.md`](CHECKLIST.md) § E · [`SESSION_STATE.md`](../../SESSION_STATE.md) · прогон 10 [`QA_ACCEPTANCE_RUN.md`](QA_ACCEPTANCE_RUN.md).
+**Связь:** [`CHECKLIST.md`](CHECKLIST.md) § E · [`SESSION_STATE.md`](../../SESSION_STATE.md) · прогон 10 [`QA_ACCEPTANCE_RUN.md`](QA_ACCEPTANCE_RUN.md).  
+**Требования заказчика (вперёд, после прогонки):** [`CUSTOMER_BUSINESS_REQUIREMENTS.md`](CUSTOMER_BUSINESS_REQUIREMENTS.md).
 
 ---
 

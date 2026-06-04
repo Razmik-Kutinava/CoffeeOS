@@ -10,13 +10,14 @@
 **Прогона 11 нет.** Точка входа для агента:
 - **УК → Меню → витрины:** [`milestones/veha_2/HANDOFF_UK_MENU_VITRINA.md`](milestones/veha_2/HANDOFF_UK_MENU_VITRINA.md) ← **читать первым** для этой темы.
 - Общее: [`milestones/veha_2/DEMO_FEEDBACK.md`](milestones/veha_2/DEMO_FEEDBACK.md) + `artifacts/demo-feedback/`.
+- **Требования заказчика (вперёд):** [`milestones/veha_2/CUSTOMER_BUSINESS_REQUIREMENTS.md`](milestones/veha_2/CUSTOMER_BUSINESS_REQUIREMENTS.md).
 
 | Сейчас | Дальше |
 |--------|--------|
 | **УК→витрины A/B:** create + модификаторы + **без F5** (~8 s) — **PASS** на Fly | §I: живое демо / закрытие вехи |
 | **DEMO_FEEDBACK** — все done (MCP Fly) | Апрув push/deploy — по решению владельца |
 | **§2** 2.1–2.5, A↔B, онбординг, franchise — **PASS** | |
-| Хвост: успех реальной оплаты + история; подвал физически | |
+| Хвост: успех реальной оплаты + история; подвал физически | **Требования заказчика:** [`CUSTOMER_BUSINESS_REQUIREMENTS.md`](milestones/veha_2/CUSTOMER_BUSINESS_REQUIREMENTS.md) |
 
 **Ops на блок:** `SESSION_STATE` + коммит всегда; `PRACTICES` (CR); `QA_ACCEPTANCE_RUN` + `artifacts/` (QA); `CHANGELOG` если заметно; `CHECKLIST` `[x]` только по факту.
 
