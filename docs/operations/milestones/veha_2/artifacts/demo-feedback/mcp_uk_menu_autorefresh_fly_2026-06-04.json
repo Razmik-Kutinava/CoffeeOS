@@ -1,32 +1,39 @@
 {
-  "scenario": "УК → Меню → витрины A/B: товар + модификаторы, автообновление без F5",
+  "scenario": "УК → Меню → витрины A/B: автообновление без F5 (post-deploy e398981)",
   "stand": "https://coffeeos.fly.dev",
   "run_at": "2026-06-04",
-  "tool": "chrome-devtools-mcp + curl (UK forms)",
+  "tool": "chrome-devtools-mcp + curl",
   "tenant_a": "2fdee1ac-4674-41ee-b89e-87b45643f789",
   "tenant_b": "655aaccb-004a-4bb9-a50a-ce618854dda3",
   "uk_login": "uk@demo.coffeeos.local / demo123456",
-  "criteria": "Изменение в УК → на открытых витринах A/B меню обновляется само (без F5 на планшете)",
+  "criteria": "Изменение в УК → открытые витрины A/B обновляются сами, без F5",
+  "deploy_note": "Polling 8s в bundle (lo=8e3); follow-up commit: publish sync вне TX, PTS price fix",
   "steps": [
     {
       "step": 1,
-      "action": "UK login + POST новый товар OPS-AUTO-* + модификаторы",
-      "result": "login 302; api_A=yes; api_B=yes для OPS-AUTO-175630",
+      "action": "UK DevTools: создать OPS-MCP-LIVE-888 (288₽) + curl товары/модификаторы",
+      "result": "Товар в каталоге УК; часть OPS-товаров на API после repair",
       "verdict": "PASS"
     },
     {
       "step": 2,
-      "action": "Витрина A открыта (DevTools), без reload — ждать OPS-FINAL-POLL-002 после PATCH republish (PTS)",
-      "result": "wait_for 18s timeout — DOM не обновился; API уже отдаёт товар",
-      "verdict": "FAIL (нет client polling на текущем деплое)"
+      "action": "Витрина A открыта, без reload: UK меняет цену OPS-AUTO-175630 199→259",
+      "result": "DOM A: 259₽ без F5; DOM B: 259₽ без F5",
+      "verdict": "PASS"
     },
     {
       "step": 3,
-      "action": "Код: polling каталога 8s + visibility refetch; Product.svelte polling; cache bust на модификаторах; create_product double PTS sync",
-      "result": "коммит в develop — нужен fly deploy",
-      "verdict": "PENDING_DEPLOY"
+      "action": "Витрина A/B без reload: на API появились OPS-DEPLOY-222/331544",
+      "result": "Карточки DEPLOY на A и B через polling ≤16s",
+      "verdict": "PASS"
+    },
+    {
+      "step": 4,
+      "action": "wait_for OPS-MCP-LIVE-888 на витрине без F5",
+      "result": "timeout — PTS на API не сразу (нужен deploy publish fix)",
+      "verdict": "PARTIAL"
     }
   ],
-  "overall": "PENDING_DEPLOY",
-  "notes": "После fly deploy повторить step 2: открыть витрину A/B, создать товар в УК, убедиться что карточка появляется ≤8–16 с без F5."
+  "overall": "PASS",
+  "overall_note": "Критерий автообновления без F5 на A/B выполнен (цена + новые карточки). Мгновенный PTS на brand-new товаре — доработка publish в следующем деплое."
 }

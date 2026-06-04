@@ -10,10 +10,9 @@ module Platform
       end
 
       def call!
-        ActiveRecord::Base.transaction do
-          @product.save!
-          ProductTenantSync.sync_product_to_all_tenants!(product: @product, user: @user)
-        end
+        ActiveRecord::Base.transaction { @product.save! }
+        # Sync вне транзакции save: иначе на prod nested TX иногда не фиксирует PTS до commit.
+        ProductTenantSync.sync_product_to_all_tenants!(product: @product, user: @user)
 
         @product
       end

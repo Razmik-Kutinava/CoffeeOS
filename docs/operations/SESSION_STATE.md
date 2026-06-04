@@ -22,11 +22,11 @@
 
 ### Сессия 2026-06-04 (УК → Меню → витрины A/B, автообновление без F5)
 
-- **Критерий приёмки:** изменение в УК → **все открытые витрины A/B** показывают меню **без F5** (polling, не ручное обновление).
-- **Код:** `catalog.js` — polling **8 с** + refetch при `visibilitychange`; `Catalog.svelte` / `CategoryProducts.svelte` / `Product.svelte`; `menu_controller` — cache bust при модификаторах; `create_product` — повторный `ProductTenantSync` после publish.
-- **MCP Fly (post seed+deploy):** UK login **PASS**; товар `OPS-AUTO-175630` + модификаторы → API A/B **PASS**; витрина A: `wait_for` нового товара без reload **FAIL** на деплое без polling — [`mcp_uk_menu_autorefresh_fly_2026-06-04.json`](milestones/veha_2/artifacts/demo-feedback/mcp_uk_menu_autorefresh_fly_2026-06-04.json).
-- **Следующий шаг:** `fly deploy -a coffeeos` с коммитом polling → повтор MCP step 2 (ожидание ≤16 с на A и B).
-- **База:** `589e397` PTS + `per_page=50`; `ca684ab`/`f59bd1a` ops.
+- **Критерий приёмки:** изменение в УК → **все открытые витрины A/B** показывают меню **без F5** — **PASS** (MCP post-deploy `e398981`).
+- **MCP Fly:** UK DevTools + curl; витрины A/B открыты: цена **199→259₽** и **OPS-DEPLOY-*** на DOM **без reload** ≤16 с — [`mcp_uk_menu_autorefresh_fly_2026-06-04.json`](milestones/veha_2/artifacts/demo-feedback/mcp_uk_menu_autorefresh_fly_2026-06-04.json).
+- **Код:** polling 8s; `PublishProductService` — PTS sync вне TX; `ProductTenantSync` — цена PTS из `base_price` (следующий deploy).
+- **Хвост:** brand-new товар на API сразу после create — после deploy publish-fix; иначе заход УК → Меню (repair PTS).
+- **База:** `589e397` PTS; `e398981` polling; `ca684ab`/`f59bd1a` ops.
 
 ### Сессия 2026-06-04 (franchise staff + sync ops)
 

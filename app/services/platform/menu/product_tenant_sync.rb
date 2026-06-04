@@ -75,7 +75,8 @@ module Platform
           Current.tenant_id = tenant_id
 
           pts = ProductTenantSetting.find_or_initialize_by(tenant_id: tenant_id, product_id: product.id)
-          pts.price = product.base_price.presence&.to_d || pts.price || fallback
+          bp = product.base_price.presence&.to_d
+          pts.price = (bp.present? && bp.positive?) ? bp : (pts.price.presence || fallback)
           pts.price = fallback if pts.price.blank? || pts.price <= 0
           pts.is_enabled = enabled
           pts.is_sold_out = false if enabled
