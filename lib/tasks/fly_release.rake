@@ -49,13 +49,13 @@ namespace :fly do
       Rake::Task[name].invoke
     end
 
-    unless ActiveModel::Type::Boolean.new.cast(ENV.fetch("DEMO_AUTO_SEED", "false"))
+    if ActiveModel::Type::Boolean.new.cast(ENV.fetch("DEMO_AUTO_SEED", "false"))
+      puts "[fly:release] demo:seed..."
+      Rake::Task["demo:seed"].invoke
+    else
       puts "[fly:release] DEMO_AUTO_SEED not set — skip demo:seed"
-      next
     end
 
-    puts "[fly:release] demo:seed..."
-    Rake::Task["demo:seed"].invoke
     puts "[fly:release] OK"
   end
 

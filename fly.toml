@@ -30,7 +30,13 @@ primary_region = "ams"
 
 # Миграции + демо-данные перед трафиком (coffeeos = стенд develop, не main/prod).
 [deploy]
-  release_command = "bin/rails fly:release"
+  # sleep 2 — сеть Fly иногда не готова сразу; echo — ранний stdout до boot Rails.
+  release_command = "sh -c 'echo [fly:release] starting && sleep 2 && bin/rails fly:release'"
+  release_command_timeout = "10m"
+
+  [deploy.release_command_vm]
+    size   = "shared-cpu-2x"
+    memory = "2048mb"
 
 [http_service]
   processes = ["web"]
@@ -51,6 +57,7 @@ primary_region = "ams"
 
 [checks]
   [checks.health]
+    processes    = ["web"]
     grace_period = "180s"
     interval     = "15s"
     method       = "GET"
