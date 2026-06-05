@@ -2,6 +2,7 @@
   import { onMount } from "svelte"
   import { push } from "svelte-spa-router"
   import { api } from "../lib/api.js"
+  import { clearGuestOrderSession, reconnectGuestOrder } from "../lib/shopGuestSession.js"
 
   let status = $state("fail")
   let orderId = $state("")
@@ -33,9 +34,12 @@
     }
 
     try {
+      await reconnectGuestOrder(api)
+
       if (status === "success") {
         done = await pollAccepted()
         message = "Заказ принят"
+        clearGuestOrderSession()
       } else {
         await api(`/orders/${orderId}/abandon`, { method: "POST" })
         message = "Оплата не завершена. Корзина сохранена — можно попробовать снова."

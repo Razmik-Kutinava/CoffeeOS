@@ -1,0 +1,51 @@
+{
+  "scenario": "§2.3 этап 2 — заказ виден после возврата с банка",
+  "stand": "https://coffeeos.fly.dev",
+  "run_at": "2026-06-04",
+  "deploy": "deployment-01KTC026K62C7QHT6JC3VRKNRS",
+  "tool": "chrome-devtools-mcp",
+  "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "test_phone": "+79005556605",
+  "test_order_id": "f3f18122-7a4d-40bd-b129-14339e6e9d5b",
+  "code_changes": [
+    "Shop::GuestOrderReconnect + reconnect_token в POST /orders",
+    "POST /shop/api/session/reconnect",
+    "frontend shopGuestSession.js — sessionStorage token + reconnect",
+    "PaymentResult/Orders/App — восстановление сессии после банка"
+  ],
+  "steps": [
+    {
+      "step": "2.1",
+      "action": "Создать заказ (pending_payment) → #/orders",
+      "expect": "Заказ виден в «Заказы за сегодня»",
+      "result": {
+        "order_id": "f3f18122-7a4d-40bd-b129-14339e6e9d5b",
+        "status_label": "Ожидает оплаты",
+        "total": "179 ₽"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "step": "2.2",
+      "action": "payment-result fail → abandon → корзина",
+      "expect": "Заказ «Отменён» в истории; корзина не пустая",
+      "result": {
+        "history_status": "Отменён",
+        "cart": "Фильтр-кофе Бразилия 179₽ × 1",
+        "payment_result_message": "Оплата не завершена. Корзина сохранена — можно попробовать снова."
+      },
+      "verdict": "PASS"
+    },
+    {
+      "step": "2.3",
+      "action": "MCP полный сценарий банк → заказы (reconnect_token)",
+      "expect": "JSON + скрин",
+      "result": {
+        "reconnect_token_in_api": true,
+        "screenshot": "screenshots/stage2_2_1_orders_visible_2026-06-04.png"
+      },
+      "verdict": "PASS"
+    }
+  ],
+  "summary": { "pass": 3, "fail": 0, "stage2_verdict": "PASS" }
+}

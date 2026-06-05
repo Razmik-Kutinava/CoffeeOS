@@ -4,10 +4,13 @@
 
 **Источник:** PDF [`artifacts/demo-feedback/customer_qa_prog10_2026-06.pdf`](artifacts/demo-feedback/customer_qa_prog10_2026-06.pdf) (продолжение В1: [`../veha_1/artifacts/customer_live_qa_block1_2026-05-30.pdf`](../veha_1/artifacts/customer_live_qa_block1_2026-05-30.pdf)).
 
-**Сейчас (2026-06-04):** Очередь — **все строки done** *(MCP Fly + код)*. Апрув заказчика в PDF **не ждём** — достаточно внутреннего. **Хвост (не блокер):** успех реальной оплаты + история; подвал физически.
+**Сейчас (2026-06-04):** Очередь **§1–3 ниже** — **done** *(MCP Fly + код)*.  
+**Новая работа заказчика (§2.3 повторно + UX):** чеклист этапов 1–5 → [`CUSTOMER_BUSINESS_REQUIREMENTS.md`](CUSTOMER_BUSINESS_REQUIREMENTS.md) — **не дублировать здесь**.
+
+**Честно:** «всё done» = **выборочные** строки из PDF §1–3. **Не закрыто:** успех оплаты + история; баг «заказ не виден после банка»; подвал §2.5 физически; баг «удаление заказа с экранов» (PDF витрина B) — **не в таблице**.
 
 **Связь:** [`CHECKLIST.md`](CHECKLIST.md) § E · [`SESSION_STATE.md`](../../SESSION_STATE.md) · прогон 10 [`QA_ACCEPTANCE_RUN.md`](QA_ACCEPTANCE_RUN.md).  
-**Требования заказчика (вперёд, после прогонки):** [`CUSTOMER_BUSINESS_REQUIREMENTS.md`](CUSTOMER_BUSINESS_REQUIREMENTS.md).
+**Активный чеклист:** [`CUSTOMER_BUSINESS_REQUIREMENTS.md`](CUSTOMER_BUSINESS_REQUIREMENTS.md).
 
 ---
 

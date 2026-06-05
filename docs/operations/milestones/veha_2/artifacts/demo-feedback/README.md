@@ -17,7 +17,7 @@
 | [`mcp_franchise_staff_fly_2026-06-04.json`](mcp_franchise_staff_fly_2026-06-04.json) | Franchise без «Персонал»; GM с «Персонал» **PASS** |
 | [`../veha_1/artifacts/customer_live_qa_block1_2026-05-30.pdf`](../../veha_1/artifacts/customer_live_qa_block1_2026-05-30.pdf) | Предыдущий пакет (В1 §1). |
 
-**Очередь правок:** [`../../DEMO_FEEDBACK.md`](../../DEMO_FEEDBACK.md).  
-**Требования заказчика (вперёд):** [`../../CUSTOMER_BUSINESS_REQUIREMENTS.md`](../../CUSTOMER_BUSINESS_REQUIREMENTS.md).
+**Очередь правок (история §1–3):** [`../../DEMO_FEEDBACK.md`](../../DEMO_FEEDBACK.md) — done 2026-06-04.  
+**Активный чеклист (§2.3 этапы 1–5):** [`../../CUSTOMER_BUSINESS_REQUIREMENTS.md`](../../CUSTOMER_BUSINESS_REQUIREMENTS.md) — новые MCP JSON сюда же.
 
 **Для агента:** после правок — статус `done` + коммит; deploy Fly — владелец; §I не ставить без апрува.

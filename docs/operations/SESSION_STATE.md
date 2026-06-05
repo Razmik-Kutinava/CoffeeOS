@@ -2,26 +2,40 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-06-04 (обновлено: handoff УК→витрины)  
+**Дата:** 2026-06-04 (обновлено: §2.3 чеклист в CUSTOMER_BUSINESS_REQUIREMENTS)  
 **Веха 1:** официально не закрыта (§ I, H.3 — `[ ]`).  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
-**§E / PDF:** PDF заказчика в `artifacts/demo-feedback/`; **внутренний апрув** достаточен.
+**§E / PDF:** строки §1–3 в `DEMO_FEEDBACK` — **done**; **активная работа** — §2.3 этапы 1–5 в [`CUSTOMER_BUSINESS_REQUIREMENTS.md`](milestones/veha_2/CUSTOMER_BUSINESS_REQUIREMENTS.md).
 
 **Прогона 11 нет.** Точка входа для агента:
-- **УК → Меню → витрины:** [`milestones/veha_2/HANDOFF_UK_MENU_VITRINA.md`](milestones/veha_2/HANDOFF_UK_MENU_VITRINA.md) ← **читать первым** для этой темы.
-- Общее: [`milestones/veha_2/DEMO_FEEDBACK.md`](milestones/veha_2/DEMO_FEEDBACK.md) + `artifacts/demo-feedback/`.
-- **Требования заказчика (вперёд):** [`milestones/veha_2/CUSTOMER_BUSINESS_REQUIREMENTS.md`](milestones/veha_2/CUSTOMER_BUSINESS_REQUIREMENTS.md).
+- **§2.3 оплата витрина (СЕЙЧАС):** [`milestones/veha_2/CUSTOMER_BUSINESS_REQUIREMENTS.md`](milestones/veha_2/CUSTOMER_BUSINESS_REQUIREMENTS.md) ← **читать первым**.
+- УК → витрины (закрыто): [`milestones/veha_2/HANDOFF_UK_MENU_VITRINA.md`](milestones/veha_2/HANDOFF_UK_MENU_VITRINA.md).
+- История PDF-багов: [`milestones/veha_2/DEMO_FEEDBACK.md`](milestones/veha_2/DEMO_FEEDBACK.md) + `artifacts/demo-feedback/mcp_*.json`.
 
 | Сейчас | Дальше |
 |--------|--------|
-| **УК→витрины A/B:** create + модификаторы + **без F5** (~8 s) — **PASS** на Fly | §I: живое демо / закрытие вехи |
-| **DEMO_FEEDBACK** — все done (MCP Fly) | Апрув push/deploy — по решению владельца |
-| **§2** 2.1–2.5, A↔B, онбординг, franchise — **PASS** | |
-| Хвост: успех реальной оплаты + история; подвал физически | **Требования заказчика:** [`CUSTOMER_BUSINESS_REQUIREMENTS.md`](milestones/veha_2/CUSTOMER_BUSINESS_REQUIREMENTS.md) |
+| **§2.3 этап 2** — PASS MCP 2026-06-04 (GuestOrderReconnect) | **Этап 3:** оформление UX |
+| **УК→витрины A/B** — PASS на Fly | Этапы 3–5 по CUSTOMER_BUSINESS |
+| **DEMO_FEEDBACK** §1–3 — done | MCP JSON → `[x]` только по факту |
 
 **Ops на блок:** `SESSION_STATE` + коммит всегда; `PRACTICES` (CR); `QA_ACCEPTANCE_RUN` + `artifacts/` (QA); `CHANGELOG` если заметно; `CHECKLIST` `[x]` только по факту.
 
 **Артефакты (для агента в другом редакторе):** точка входа — [`milestones/veha_2/artifacts/README.md`](milestones/veha_2/artifacts/README.md). Прогон 10: `artifacts/prog10/{_index,smoke,kiosk,shop,staff-rbac,connectivity,platform-ent,warehouse}/`. Сводный индекс: `prog10/_index/prog10_final_index.json`. Скрипты `bin/prog10_*` пишут в эти подпапки (OUT обновлён). Старый плоский путь `artifacts/prog10_*.json` **удалён** — везде относительные ссылки `artifacts/prog10/...`.
+
+### Сессия 2026-06-04 (§2.3 этап 2 — заказ после банка, PASS)
+
+- **Баг:** после Т-Банка заказ не виден в «Заказы за сегодня» (сессия гостя терялась).
+- **Фикс:** `GuestOrderReconnect` + `reconnect_token` + `/session/reconnect` + frontend `shopGuestSession.js`.
+- **MCP:** [`mcp_section_2_3_stage2_2026-06-04.json`](milestones/veha_2/artifacts/demo-feedback/mcp_section_2_3_stage2_2026-06-04.json), deploy `01KTC026K62C7QHT6JC3VRKNRS`.
+- **Дальше:** этап 3 (оформление UX).
+
+### Сессия 2026-06-04 (§2.3 — чеклист этапы 1–5, ops)
+
+- **Главный документ:** [`CUSTOMER_BUSINESS_REQUIREMENTS.md`](milestones/veha_2/CUSTOMER_BUSINESS_REQUIREMENTS.md) — §2.3 MCP → код → iframe T-Bank → полная оплата.
+- **Согласовано:** бариста/TV только `accepted`; fail/отказ — менеджер/УК; MCP обязателен перед `done`.
+- **Следующий шаг агента:** **этап 3** — экран оформления (один путь, регистрация один раз).
+- **Этап 2:** PASS — [`mcp_section_2_3_stage2_2026-06-04.json`](milestones/veha_2/artifacts/demo-feedback/mcp_section_2_3_stage2_2026-06-04.json), deploy `01KTC026K62C7QHT6JC3VRKNRS`.
+- **Ops:** `SESSION_STATE`, `DEMO_FEEDBACK` (честный статус), `CHANGELOG` v1.119.
 
 ### Сессия 2026-06-04 (УК → Меню → витрины A/B — ЗАКРЫТО на Fly)
 

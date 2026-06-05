@@ -1,6 +1,13 @@
 <script>
+  import { onMount } from "svelte"
   import { push } from "svelte-spa-router"
   import { api } from "../lib/api.js"
+  import {
+    lastGuestOrderId,
+    reconnectGuestOrder,
+    returningFromPaymentPage,
+    saveGuestOrderSession
+  } from "../lib/shopGuestSession.js"
 
   let name = $state("")
   let phone = $state("")
@@ -12,6 +19,24 @@
   let submitting = $state(false)
   let err = $state(null)
   let done = $state(null)
+
+  onMount(() => {
+    const recover = async () => {
+      const orderId = lastGuestOrderId()
+      if (!orderId) return
+      await reconnectGuestOrder(api)
+      if (returningFromPaymentPage()) {
+        push(`/payment-result?status=fail&order_id=${orderId}`)
+      }
+    }
+
+    recover()
+    const onPageShow = (event) => {
+      if (event.persisted) recover()
+    }
+    window.addEventListener("pageshow", onPageShow)
+    return () => window.removeEventListener("pageshow", onPageShow)
+  })
 
   async function submit() {
     if (submitting) return
@@ -33,11 +58,7 @@
       })
 
       if (res.payment_url) {
-        try {
-          sessionStorage.setItem("shop_last_order_id", String(res.order_id))
-        } catch (_) {
-          /* ignore */
-        }
+        saveGuestOrderSession(res.order_id, res.reconnect_token)
         redirecting = true
         window.location.href = res.payment_url
         return

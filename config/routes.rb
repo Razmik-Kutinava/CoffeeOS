@@ -163,6 +163,7 @@ Rails.application.routes.draw do
       patch "cart/items/:index", to: "cart#update"
       post "orders", to: "orders#create"
       get "orders/history", to: "orders#history"
+      post "session/reconnect", to: "session#reconnect"
       post "orders/:id/abandon", to: "orders#abandon"
       post "orders/:id/finalize", to: "orders#finalize"
       get "orders/:id", to: "orders#show"

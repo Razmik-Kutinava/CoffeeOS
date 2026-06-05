@@ -2,6 +2,7 @@
   import { onMount } from 'svelte';
   import { push } from 'svelte-spa-router';
   import { api } from '../lib/api.js';
+  import { reconnectGuestOrder } from '../lib/shopGuestSession.js';
   import { useTelegramBack } from '../lib/telegram.js';
   import PageSkeleton from '../components/PageSkeleton.svelte';
 
@@ -30,6 +31,7 @@
 
   onMount(async () => {
     try {
+      await reconnectGuestOrder(api);
       orders = await api('/orders/history?today=1');
     } catch {
       orders = [];

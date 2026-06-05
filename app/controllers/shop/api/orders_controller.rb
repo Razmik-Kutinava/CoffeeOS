@@ -13,7 +13,8 @@ module Shop
           total: order.final_amount.to_f,
           discount: order.discount_amount.to_f,
           status: order.status,
-          payment_url: creator.payment_url
+          payment_url: creator.payment_url,
+          reconnect_token: Shop::GuestOrderReconnect.token_for(order)
         }
       rescue Shop::OrderCreator::Error => e
         Rails.logger.error("[Shop::Order] Failed to create order: #{e.message}")
@@ -74,6 +75,7 @@ module Shop
       end
 
       def history
+        try_reconnect_from_params!
         cid = Shop::CustomerSession.customer_id(session, @shop_tenant.id)
         if cid.present?
           orders = Order.where(tenant_id: @shop_tenant.id, customer_id: cid, source: :mobile)
@@ -106,11 +108,45 @@ module Shop
 
       def order_visible_to_session_customer?(order)
         cid = Shop::CustomerSession.customer_id(session, @shop_tenant.id)
-        cid.present? && order.customer_id.present? && order.customer_id.to_s == cid.to_s
+        if cid.present? && order.customer_id.present? && order.customer_id.to_s == cid.to_s
+          return true
+        end
+
+        pending_id = Shop::PendingOrderSession.order_id(session, @shop_tenant.id)
+        if pending_id.present? && pending_id.to_s == order.id.to_s
+          Shop::CustomerSession.set_customer_id!(session, @shop_tenant.id, order.customer_id)
+          return true
+        end
+
+        token = params[:reconnect_token].presence
+        if token.present?
+          rebound = Shop::GuestOrderReconnect.bind!(
+            session,
+            tenant_id: @shop_tenant.id,
+            order_id: order.id,
+            token: token
+          )
+          return rebound.present?
+        end
+
+        false
       end
 
       def order_params
         params.permit(:name, :phone, :comment, :is_car_pickup, :car_number, :promo_code, :payment_method, :pickup_time)
+      end
+
+      def try_reconnect_from_params!
+        order_id = params[:order_id].presence
+        token = params[:reconnect_token].presence
+        return if order_id.blank? || token.blank?
+
+        Shop::GuestOrderReconnect.bind!(
+          session,
+          tenant_id: @shop_tenant.id,
+          order_id: order_id,
+          token: token
+        )
       end
 
       def order_json(order)

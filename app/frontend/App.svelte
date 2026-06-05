@@ -1,6 +1,8 @@
 <script>
   import Router from "svelte-spa-router"
   import { wrap } from "svelte-spa-router/wrap"
+  import { push } from "svelte-spa-router"
+  import { onMount } from "svelte"
   import Header from "./components/Header.svelte"
   import BottomNav from "./components/BottomNav.svelte"
   import RouteLoading from "./components/RouteLoading.svelte"
@@ -8,6 +10,12 @@
   import Catalog from "./routes/Catalog.svelte"
   import { initTelegram } from "./lib/telegram.js"
   import { installSlowRequestTracker } from "./lib/slowRequest.js"
+  import { api } from "./lib/api.js"
+  import {
+    lastGuestOrderId,
+    reconnectGuestOrder,
+    returningFromPaymentPage
+  } from "./lib/shopGuestSession.js"
 
   installSlowRequestTracker()
   initTelegram()
@@ -35,6 +43,32 @@
     "/certificate": lazyRoute(() => import("./routes/Certificate.svelte")),
     "/category/:id": lazyRoute(() => import("./routes/CategoryProducts.svelte"))
   }
+
+  async function recoverAfterPaymentReturn() {
+    const orderId = lastGuestOrderId()
+    if (!orderId) return
+
+    const hash = window.location.hash || ""
+    if (hash.includes("payment-result")) return
+
+    const onCheckout = hash.includes("checkout")
+    if (!onCheckout && !returningFromPaymentPage()) return
+
+    await reconnectGuestOrder(api)
+    push(`/payment-result?status=fail&order_id=${orderId}`)
+  }
+
+  onMount(() => {
+    const onPageShow = (event) => {
+      if (event.persisted || returningFromPaymentPage()) {
+        recoverAfterPaymentReturn()
+      }
+    }
+    window.addEventListener("pageshow", onPageShow)
+    recoverAfterPaymentReturn()
+
+    return () => window.removeEventListener("pageshow", onPageShow)
+  })
 
 </script>
 

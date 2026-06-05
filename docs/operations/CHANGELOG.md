@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## v1.120 — 2026-06-04 (§2.3 этап 2: заказ виден после банка)
+
+- `Shop::GuestOrderReconnect` + `POST /shop/api/session/reconnect` + `reconnect_token` в ответе создания заказа.
+- Frontend: `shopGuestSession.js`, восстановление сессии в PaymentResult / Orders / App / Checkout.
+- MCP PASS: [`mcp_section_2_3_stage2_2026-06-04.json`](milestones/veha_2/artifacts/demo-feedback/mcp_section_2_3_stage2_2026-06-04.json), deploy `01KTC026K62C7QHT6JC3VRKNRS`.
+
+## v1.119 — 2026-06-04 (§2.3 чеклист этапы 1–5, синхронизация ops)
+
+- [`CUSTOMER_BUSINESS_REQUIREMENTS.md`](milestones/veha_2/CUSTOMER_BUSINESS_REQUIREMENTS.md) — чеклист §2.3 (MCP → код → iframe → полная оплата); контекст PDF vs prog10 vs DEMO_FEEDBACK.
+- [`SESSION_STATE.md`](SESSION_STATE.md), [`DEMO_FEEDBACK.md`](milestones/veha_2/DEMO_FEEDBACK.md) — честный статус: старые done ≠ новая работа заказчика.
+
 ## v1.118 — 2026-06-04 (бизнес-требования заказчика после прогонки)
 
 - [`CUSTOMER_BUSINESS_REQUIREMENTS.md`](milestones/veha_2/CUSTOMER_BUSINESS_REQUIREMENTS.md) — перепись требований заказчика (витрина / табло / обратная связь); ссылка на PDF 56 стр.

@@ -1,0 +1,75 @@
+{
+  "scenario": "§2.3 этап 1 — перепроверка «уже есть» (MCP, без кода)",
+  "stand": "https://coffeeos.fly.dev",
+  "run_at": "2026-06-04T12:00:00Z",
+  "deploy": "deployment-01KT8ZPWJ82E8YMM8TZMK5K01V (fly deploy из WSL, post-1861f4f)",
+  "tool": "chrome-devtools-mcp",
+  "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "entry_url": "https://coffeeos.fly.dev/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "test_product": "Фильтр-кофе Бразилия 209₽ (модификаторы: Со льдом, Топинамбур +30₽, Сахар)",
+  "test_phone": "+79005556601",
+  "test_name": "MCP Этап1",
+  "screenshots": [
+    "screenshots/stage1_1_1_pay_disabled_clean_2026-06-04.png",
+    "screenshots/stage1_1_2_tbank_2026-06-04.png",
+    "screenshots/stage1_1_4_cart_after_bank_2026-06-04.png"
+  ],
+  "steps": [
+    {
+      "step": "1.1",
+      "action": "Оформление без имени и телефона",
+      "expect": "Кнопка «Оплатить →» неактивна",
+      "result": {
+        "payButtonText": "Оплатить →",
+        "disabled": true,
+        "name": "",
+        "phone": ""
+      },
+      "verdict": "PASS"
+    },
+    {
+      "step": "1.2",
+      "action": "Заполнить имя/телефон, нажать «Оплатить»",
+      "expect": "«Идёт оплата…», кнопка disabled, редирект на pay.tbank.ru",
+      "result": {
+        "button_while_loading": "Идёт оплата…",
+        "disabled_while_loading": true,
+        "redirect_url": "https://pay.tbank.ru/P4l5X1V4",
+        "redirect_title": "Т-Банк | Платежная страница",
+        "amount_on_bank": "209 ₽"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "step": "1.3",
+      "action": "Двойной клик «Оплатить» (§2.4 в рамках этапа 1)",
+      "expect": "После первого клика кнопка disabled; второй клик не создаёт второй переход",
+      "result": {
+        "before_click": { "text": "Оплатить →", "disabled": false },
+        "after_first_click": { "text": "Идёт оплата…", "disabled": true },
+        "after_second_click": { "text": "Идёт оплата…", "disabled": true },
+        "redirects_observed": 1
+      },
+      "verdict": "PASS",
+      "note": "Подсчёт заказов в БД Fly не выполнялся (нет fly auth в агенте); UI-защита совпадает с прогоном 2026-06-04 (mcp_section_2_4_fly_2026-06-04.json)"
+    },
+    {
+      "step": "1.4",
+      "action": "Назад с pay.tbank.ru → корзина витрины",
+      "expect": "Товар в корзине, не пусто",
+      "result": {
+        "cart_url": "https://coffeeos.fly.dev/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789#/cart",
+        "item": "Фильтр-кофе Бразилия 209₽ × 1",
+        "modifiers": ["Со льдом", "Топинамбур — нейтральная сладость без послевкусия (+30₽)", "Сахар — мягкая сладость"],
+        "total": "209₽"
+      },
+      "verdict": "PASS"
+    }
+  ],
+  "code_touched": false,
+  "summary": {
+    "pass": 4,
+    "fail": 0,
+    "stage1_verdict": "PASS — код не меняли"
+  }
+}
