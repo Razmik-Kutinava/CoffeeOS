@@ -79,9 +79,13 @@
   <p class="mb-4 text-red-400">{err}</p>
   <button type="button" class="text-[#ff8c42]" onclick={() => push("/orders")}>История заказов</button>
 {:else}
+  <p class="mb-1 text-xs text-[#888]">Корзина → Оформление → Оплата → Результат</p>
   <p class="mb-4 text-[#a0a0a0]">{message}</p>
   <div class="flex flex-col gap-3">
-    <button type="button" class="rounded-xl bg-[#ff8c42] py-3 font-semibold text-black" onclick={() => push("/cart")}>
+    <button type="button" class="rounded-xl bg-[#ff8c42] py-3 font-semibold text-black" onclick={() => push("/orders")}>
+      История заказов
+    </button>
+    <button type="button" class="rounded-xl bg-[#ff8c42]/90 py-3 font-semibold text-black" onclick={() => push("/cart")}>
       В корзину
     </button>
     <button type="button" class="rounded-xl border border-[#3a3a3a] py-3 text-[#a0a0a0]" onclick={() => push("/checkout")}>

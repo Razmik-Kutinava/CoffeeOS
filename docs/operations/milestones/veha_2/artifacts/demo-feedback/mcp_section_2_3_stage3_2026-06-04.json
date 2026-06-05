@@ -1,0 +1,68 @@
+{
+  "scenario": "§2.3 этап 3 — оформление UX (второй заказ тем же гостем)",
+  "stand": "https://coffeeos.fly.dev",
+  "run_at": "2026-06-04",
+  "deploy": "fly deploy post-7412de7 (stage 3 checkout UX)",
+  "tool": "chrome-devtools-mcp",
+  "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "test_guest": { "name": "Stage2 MCP", "phone": "+79005556605" },
+  "code_changes": [
+    "shopGuestProfile.js — localStorage имя/телефон по tenant",
+    "Checkout — компактные контакты, назад в корзину, цепочка шагов",
+    "PaymentResult fail — кнопка «История заказов»",
+    "Cart — подсказка шага 1"
+  ],
+  "steps": [
+    {
+      "step": "3.1",
+      "action": "Путь корзина → оформление → оплата → результат → история",
+      "expect": "Подсказки шагов + кнопки навигации",
+      "result": {
+        "cart_hint": "Шаг 1: Корзина → Оформление → Оплата → История",
+        "checkout_hint": "Корзина → Оформление → Оплата → История",
+        "payment_result_hint": "Корзина → Оформление → Оплата → Результат",
+        "history_button_on_fail": true
+      },
+      "verdict": "PASS"
+    },
+    {
+      "step": "3.2",
+      "action": "Назад с оформления в корзину",
+      "expect": "Корзина не пустая",
+      "result": { "item": "Фильтр-кофе Бразилия 179₽ × 1" },
+      "verdict": "PASS"
+    },
+    {
+      "step": "3.3",
+      "action": "Второй заказ — профиль из localStorage",
+      "expect": "Имя/телефон не вводить заново, блок «Контакты» + «Изменить»",
+      "result": {
+        "compact_contacts": true,
+        "name": "Stage2 MCP",
+        "phone": "+79005556605",
+        "name_phone_inputs_hidden": true
+      },
+      "verdict": "PASS"
+    },
+    {
+      "step": "3.4",
+      "action": "Второй заказ тем же гостем → история",
+      "expect": "Новый заказ виден",
+      "result": {
+        "order_id": "d70ead3b-8ae7-4562-b2b1-a59d196f51a4",
+        "status_label": "Ожидает оплаты",
+        "note": "payment-result через API после банка (MCP automation); UI-профиль и путь — PASS"
+      },
+      "verdict": "PASS"
+    }
+  ],
+  "not_done": [
+    "Почта гостя — вне этапа 3",
+    "Полный клик «Оплатить»→банк→назад в MCP без API-хвоста — automation теряет sessionStorage на редиректе (на телефоне ок)"
+  ],
+  "screenshots": [
+    "screenshots/stage3_3_3_second_order_compact_2026-06-04.png",
+    "screenshots/stage3_3_4_orders_after_second_2026-06-04.png"
+  ],
+  "summary": { "pass": 4, "fail": 0, "stage3_verdict": "PASS" }
+}

@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v1.121 — 2026-06-04 (§2.3 этап 3: оформление UX)
+
+- `shopGuestProfile.js` — имя/телефон в localStorage; компактный блок на повторном заказе.
+- Checkout/Cart/PaymentResult — шаги пути, «назад» в корзину, «История» на fail.
+- MCP PASS: [`mcp_section_2_3_stage3_2026-06-04.json`](milestones/veha_2/artifacts/demo-feedback/mcp_section_2_3_stage3_2026-06-04.json).
+
 ## v1.120 — 2026-06-04 (§2.3 этап 2: заказ виден после банка)
 
 - `Shop::GuestOrderReconnect` + `POST /shop/api/session/reconnect` + `reconnect_token` в ответе создания заказа.

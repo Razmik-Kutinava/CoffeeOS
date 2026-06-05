@@ -14,7 +14,7 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **§2.3 этап 2** — PASS MCP 2026-06-04 (GuestOrderReconnect) | **Этап 3:** оформление UX |
+| **§2.3 этап 3** — PASS (профиль localStorage, путь оформления) | **Этап 4:** iframe T-Bank |
 | **УК→витрины A/B** — PASS на Fly | Этапы 3–5 по CUSTOMER_BUSINESS |
 | **DEMO_FEEDBACK** §1–3 — done | MCP JSON → `[x]` только по факту |
 
@@ -33,8 +33,8 @@
 
 - **Главный документ:** [`CUSTOMER_BUSINESS_REQUIREMENTS.md`](milestones/veha_2/CUSTOMER_BUSINESS_REQUIREMENTS.md) — §2.3 MCP → код → iframe T-Bank → полная оплата.
 - **Согласовано:** бариста/TV только `accepted`; fail/отказ — менеджер/УК; MCP обязателен перед `done`.
-- **Следующий шаг агента:** **этап 3** — экран оформления (один путь, регистрация один раз).
-- **Этап 2:** PASS — [`mcp_section_2_3_stage2_2026-06-04.json`](milestones/veha_2/artifacts/demo-feedback/mcp_section_2_3_stage2_2026-06-04.json), deploy `01KTC026K62C7QHT6JC3VRKNRS`.
+- **Следующий шаг:** этап 4 (iframe T-Bank / статусы).
+- **Этап 3:** PASS — [`mcp_section_2_3_stage3_2026-06-04.json`](milestones/veha_2/artifacts/demo-feedback/mcp_section_2_3_stage3_2026-06-04.json).
 - **Ops:** `SESSION_STATE`, `DEMO_FEEDBACK` (честный статус), `CHANGELOG` v1.119.
 
 ### Сессия 2026-06-04 (УК → Меню → витрины A/B — ЗАКРЫТО на Fly)
