@@ -14,7 +14,7 @@ class Health::TenantCheckerTest < ActiveSupport::TestCase
     result = Health::TenantChecker.new(@tenant).call
 
     assert_equal @tenant.id, result[:tenant_id]
-    %i[cash_register orders queue kiosk app_mobile payments inventory failed_payments].each do |key|
+    %i[cash_register orders queue pending_payment kiosk shop_vitrina app payments inventory failed_payments].each do |key|
       assert result[:checks].key?(key), "missing check #{key}"
       assert %w[ok warning error].include?(result[:checks][key][:status])
     end

@@ -26,7 +26,7 @@ module Health
 
     def show
       tenant = Tenant.find(params[:id])
-      result = Health::TenantChecker.new(tenant).call
+      result = Health::TenantChecker.new(tenant, include_events: true).call
       render json: {
         tenant: {
           id: tenant.id,
@@ -36,6 +36,7 @@ module Health
         },
         checks: result[:checks],
         overall: result[:overall],
+        recent_events: result[:recent_events],
         generated_at: Time.current.iso8601
       }
     end

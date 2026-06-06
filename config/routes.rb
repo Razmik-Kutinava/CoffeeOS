@@ -113,6 +113,8 @@ Rails.application.routes.draw do
       end
     end
     resources :franchise_owners, only: %i[new create], path: "franchise_owners"
+    get "monitoring", to: "monitoring#index", as: :monitoring
+    get "monitoring/:id", to: "monitoring#show", as: :monitoring_tenant
   end
   # Редирект /admin/ → /admin через get "/admin/" в Rails даёт второй маршрут на тот же GET /admin и цикл 301.
   # Корень platform уже обслуживает и /admin, и /admin/ (без отдельного redirect).

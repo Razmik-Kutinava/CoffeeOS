@@ -28,5 +28,8 @@ class HealthApiTest < ActionDispatch::IntegrationTest
     assert_equal tenant.id, data.dig("tenant", "id")
     assert data.key?("checks")
     assert data.key?("overall")
+    assert data.key?("recent_events")
+    assert data["checks"].key?("shop_vitrina")
+    assert data["checks"].key?("pending_payment")
   end
 end

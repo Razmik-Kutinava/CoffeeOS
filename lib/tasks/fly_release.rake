@@ -198,4 +198,34 @@ namespace :fly do
       callback_http: res.code
     }.to_json)
   end
+
+  desc "Prod smoke §2A.1: tenant monitoring JSON + TenantChecker for demo tenant"
+  task health_smoke: :environment do
+    tenant_id = ENV.fetch("SMOKE_TENANT_ID", "2fdee1ac-4674-41ee-b89e-87b45643f789")
+    tenant = Tenant.find(tenant_id)
+    result = Health::TenantChecker.new(tenant, include_events: true).call
+    checks = result[:checks]
+
+    required = %i[cash_register orders queue pending_payment kiosk shop_vitrina app payments inventory failed_payments]
+    missing = required.reject { |k| checks.key?(k) }
+
+    payload = {
+      smoke: "section_2a_1_health",
+      tenant_id: tenant.id,
+      tenant_slug: tenant.slug,
+      overall: result[:overall],
+      checks_present: required - missing,
+      checks_missing: missing,
+      pending_stuck: checks.dig(:pending_payment, :stuck),
+      shop_vitrina_hour: checks.dig(:shop_vitrina, :count),
+      failed_payments_24h: checks.dig(:failed_payments, :count),
+      recent_events_count: (result[:recent_events] || []).size,
+      payment_failure_events: checks.dig(:failed_payments, :recent_events)&.size || 0,
+      generated_at: Time.current.iso8601
+    }
+
+    raise "missing checks: #{missing.join(', ')}" if missing.any?
+
+    puts payload.to_json
+  end
 end
