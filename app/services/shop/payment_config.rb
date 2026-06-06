@@ -4,7 +4,7 @@ module Shop
   module PaymentConfig
     module_function
 
-    TBANK_SCRIPT_URL = "https://integrationjs.t-static.ru/integration.js"
+    TBANK_SCRIPT_URL = "https://integrationjs.tbank.ru/integration.js"
 
     def simulate?
       ActiveModel::Type::Boolean.new.cast(ENV.fetch("SHOP_SIMULATE_PAYMENT", "1"))

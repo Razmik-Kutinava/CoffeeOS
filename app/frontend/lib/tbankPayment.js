@@ -1,11 +1,13 @@
 const SESSION_KEY = "shop_payment_session"
+const INTEGRATION_NAME = "shop-payment"
 
 const SUCCESS_STATUSES = new Set(["CONFIRMED", "AUTHORIZED"])
 const FAIL_STATUSES = new Set(["REJECTED", "REVERSED", "CANCELED", "REFUNDED", "PARTIAL_REFUNDED"])
 
-const DEFAULT_SCRIPT_URL = "https://integrationjs.t-static.ru/integration.js"
+const DEFAULT_SCRIPT_URL = "https://integrationjs.tbank.ru/integration.js"
 
-let integrationPromise = null
+let initPromise = null
+let initTerminalKey = null
 
 export function savePaymentSession(data) {
   sessionStorage.setItem(SESSION_KEY, JSON.stringify(data))
@@ -63,33 +65,60 @@ export function mapTbankStatus(status) {
   return "paying"
 }
 
-export async function openTbankIframe({ container, terminalKey, paymentId, scriptUrl, onStatusChange }) {
-  const PaymentIntegration = await loadScript(scriptUrl)
+async function getIntegration(terminalKey, scriptUrl) {
+  await loadScript(scriptUrl)
 
-  if (!integrationPromise) {
-    integrationPromise = PaymentIntegration.init({
+  if (initPromise && initTerminalKey !== terminalKey) {
+    initPromise = null
+  }
+
+  if (!initPromise) {
+    initTerminalKey = terminalKey
+    initPromise = window.PaymentIntegration.init({
       terminalKey,
       product: "eacq",
-      features: {
-        iframe: {
-          config: {
-            status: {
-              changedCallback: (status) => {
-                onStatusChange?.(mapTbankStatus(status), status)
-              }
-            },
-            deepLinkRedirectCallback: (url) => {
-              window.location.href = url
-            }
-          }
-        }
-      }
+      features: { iframe: {} }
     })
   }
 
-  const integration = await integrationPromise
-  const iframeIntegration = await integration.iframe.get("main-integration")
-  await iframeIntegration.connect(container, { paymentId: String(paymentId) })
+  return initPromise
+}
+
+/**
+ * Официальный API T-Bank: iframe.create + mount(container, PaymentURL).
+ * @see https://developer.tbank.ru/eacq/intro/developer/setup_js/setup_iframe
+ */
+export async function openTbankIframe({ container, terminalKey, paymentUrl, scriptUrl, onStatusChange }) {
+  if (!container || !paymentUrl || !terminalKey) {
+    throw new Error("Нет контейнера, PaymentURL или terminalKey")
+  }
+
+  const integration = await getIntegration(terminalKey, scriptUrl)
+
+  try {
+    await integration.iframe.remove(INTEGRATION_NAME)
+  } catch {
+    // первая оплата — интеграции ещё нет
+  }
+
+  const iframeConfig = {
+    status: {
+      changedCallback: (status) => {
+        onStatusChange?.(mapTbankStatus(status), status)
+      }
+    },
+    deepLinkRedirectCallback: (url) => {
+      window.location.href = url
+    }
+  }
+
+  const iframeIntegration = await integration.iframe.create(INTEGRATION_NAME, iframeConfig)
+  await iframeIntegration.mount(container, paymentUrl)
+
+  if (typeof iframeIntegration.setTheme === "function") {
+    await iframeIntegration.setTheme("dark")
+  }
+
   return iframeIntegration
 }
 
@@ -98,6 +127,7 @@ export function redirectToPaymentUrl(paymentUrl) {
   window.location.href = paymentUrl
 }
 
+/** Запасной путь без integration.js */
 export function embedPaymentUrlIframe(container, paymentUrl) {
   if (!container || !paymentUrl) throw new Error("Нет контейнера или URL оплаты")
 

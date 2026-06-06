@@ -49,14 +49,16 @@
 
   async function startIframe() {
     if (iframeStarted || !iframeHost) return
+    if (!session?.payment_url) throw new Error("Нет данных для оплаты")
+
     iframeStarted = true
 
-    if (session?.provider_payment_id && session?.terminal_key) {
+    if (session?.terminal_key) {
       try {
         await openTbankIframe({
           container: iframeHost,
           terminalKey: session.terminal_key,
-          paymentId: session.provider_payment_id,
+          paymentUrl: session.payment_url,
           scriptUrl: session.integration_script_url,
           onStatusChange: (mapped) => {
             if (mapped === "success") finishSuccess()
@@ -66,17 +68,12 @@
         phase = "paying"
         return
       } catch (e) {
-        console.warn("[Payment] integration.js iframe failed, fallback to PaymentURL embed", e)
+        console.warn("[Payment] integration.js mount failed, fallback to PaymentURL embed", e)
       }
     }
 
-    if (session?.payment_url) {
-      embedPaymentUrlIframe(iframeHost, session.payment_url)
-      phase = "paying"
-      return
-    }
-
-    throw new Error("Нет данных для оплаты")
+    embedPaymentUrlIframe(iframeHost, session.payment_url)
+    phase = "paying"
   }
 
   $effect(() => {
@@ -113,7 +110,7 @@
     saveGuestOrderSession(data.order_id, data.reconnect_token)
     await reconnectGuestOrder(api)
 
-    if (data.payment_iframe && (data.provider_payment_id || data.payment_url)) {
+    if (data.payment_iframe && data.payment_url) {
       await tick()
       return
     }

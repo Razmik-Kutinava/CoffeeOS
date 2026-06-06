@@ -25,7 +25,9 @@ Rails.application.configure do
                          "https://*.tinkoff.ru", "https://*.tcsbank.ru", "https://*.tbank.ru",
                          "https://*.nspk.ru", "https://*.t-static.ru"
     end
-    # frame-src для iframe-формы Т-Банка не задаём — ломает 3DS (дока T-Bank setup_js)
+    # iframe-форма T-Bank (§2.3 этап 4); frame-src — по доке setup_iframe
+    policy.frame_src   :self,
+                       "https://*.tinkoff.ru", "https://*.tcsbank.ru", "https://*.tbank.ru"
     policy.frame_ancestors :none
   end
 end
