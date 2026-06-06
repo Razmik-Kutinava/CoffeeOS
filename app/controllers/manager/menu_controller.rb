@@ -13,6 +13,7 @@ module Manager
       authorize setting, :update?
 
       if setting.update(price_params)
+        Platform::Menu::ProductTenantSync.bust_shop_catalog_cache!(tenant_ids: [Current.tenant_id])
         redirect_to manager_menu_path, notice: "Цена обновлена"
       else
         redirect_to manager_menu_path, alert: setting.errors.full_messages.join(", ")

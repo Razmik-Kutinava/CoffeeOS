@@ -54,16 +54,23 @@ module Platform
         end
       end
 
-      def bust_shop_catalog_cache!
-        Tenant.pluck(:id).each do |tenant_id|
-          (1..5).each do |page|
-            [nil, "", "1", "10", "50"].each do |per|
-              Rails.cache.delete("shop/categories/#{tenant_id}/#{page}/#{per}")
-            end
-          end
+      def bust_shop_catalog_cache!(tenant_ids: nil)
+        ids = tenant_ids.presence || Tenant.pluck(:id)
+        Array(ids).each do |tenant_id|
+          bust_categories_cache_for!(tenant_id)
         end
       rescue StandardError => e
         Rails.logger.warn("[ProductTenantSync] cache bust skipped: #{e.class}: #{e.message}")
+      end
+
+      def bust_categories_cache_for!(tenant_id)
+        pages = [nil, "", *1..5]
+        per_pages = [nil, "", "1", "10", "50"]
+        pages.each do |page|
+          per_pages.each do |per|
+            Rails.cache.delete("shop/categories/#{tenant_id}/#{page}/#{per}")
+          end
+        end
       end
 
       def upsert_pts!(product:, tenant_id:, user_id:, fallback:, enabled:)
