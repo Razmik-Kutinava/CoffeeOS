@@ -2,7 +2,7 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-06-05 (обновлено: §2.3 этап 4 iframe)  
+**Дата:** 2026-06-06 (обновлено: §2.3 этап 4.2 iframe PASS)  
 **Веха 1:** официально не закрыта (§ I, H.3 — `[ ]`).  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
 **§E / PDF:** строки §1–3 в `DEMO_FEEDBACK` — **done**; **активная работа** — §2.3 этапы 1–5 в [`CUSTOMER_BUSINESS_REQUIREMENTS.md`](milestones/veha_2/CUSTOMER_BUSINESS_REQUIREMENTS.md).
@@ -14,14 +14,23 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **§2.3 этап 3** — PASS (профиль localStorage, путь оформления) | **Этап 5:** полная оплата + webhook |
-| **§2.3 этап 4** — PASS/PARTIAL (iframe экран, отмена, CSP) | ЛК Т-Банка: включить integration.js |
+| **§2.3 этап 4** — PASS (iframe integration.js на `/payment`) | **Этап 5:** полная оплата + webhook |
+| **§2.3 этап 3** — PASS (профиль localStorage, путь оформления) | 4.5 fail-журнал — backlog |
 | **УК→витрины A/B** — PASS на Fly | Этапы 3–5 по CUSTOMER_BUSINESS |
 | **DEMO_FEEDBACK** §1–3 — done | MCP JSON → `[x]` только по факту |
 
 **Ops на блок:** `SESSION_STATE` + коммит всегда; `PRACTICES` (CR); `QA_ACCEPTANCE_RUN` + `artifacts/` (QA); `CHANGELOG` если заметно; `CHECKLIST` `[x]` только по факту.
 
 **Артефакты (для агента в другом редакторе):** точка входа — [`milestones/veha_2/artifacts/README.md`](milestones/veha_2/artifacts/README.md). Прогон 10: `artifacts/prog10/{_index,smoke,kiosk,shop,staff-rbac,connectivity,platform-ent,warehouse}/`. Сводный индекс: `prog10/_index/prog10_final_index.json`. Скрипты `bin/prog10_*` пишут в эти подпапки (OUT обновлён). Старый плоский путь `artifacts/prog10_*.json` **удалён** — везде относительные ссылки `artifacts/prog10/...`.
+
+### Сессия 2026-06-06 (§2.3 этап 4.2 — integration.js PASS)
+
+- **Fix API:** `iframe.create('shop-payment')` + `mount(container, PaymentURL)` по [доке T-Bank](https://developer.tbank.ru/eacq/intro/developer/setup_js/setup_iframe); script `integrationjs.tbank.ru`.
+- **Deploy:** `deployment-01KTDZYTAVDCSJNWKEFF86D2E4`, commit `5829f09`.
+- **MCP:** корзина → оформление → `#/payment` — форма T-Pay/SberPay/карта **в iframe на нашей странице** — **PASS**.
+- **Скрин:** [`stage4_payment_iframe_2026-06-06.png`](milestones/veha_2/artifacts/demo-feedback/screenshots/stage4_payment_iframe_2026-06-06.png).
+- **Артефакт:** [`mcp_section_2_3_stage4_2026-06-06.json`](milestones/veha_2/artifacts/demo-feedback/mcp_section_2_3_stage4_2026-06-06.json).
+- **Дальше:** этап 5 — полная оплата + webhook.
 
 ### Сессия 2026-06-05 (§2.3 этап 4 — iframe оплата)
 

@@ -1,0 +1,42 @@
+{
+  "scenario": "§2.3 этап 4.2 — T-Bank iframe integration.js create+mount(PaymentURL)",
+  "stand": "https://coffeeos.fly.dev",
+  "run_at": "2026-06-06",
+  "tool": "cursor-ide-browser-mcp",
+  "tenant_a": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "deploy": "deployment-01KTDZYTAVDCSJNWKEFF86D2E4",
+  "commit": "5829f09",
+  "screenshot": "screenshots/stage4_payment_iframe_2026-06-06.png",
+  "steps": [
+    {
+      "id": "4.checkout_route",
+      "check": "Корзина → Оформление → #/payment (остаёмся на coffeeos.fly.dev)",
+      "result": "PASS",
+      "evidence": "URL #/payment, заголовок «Оплата», сумма 418₽"
+    },
+    {
+      "id": "4.2_integration_js",
+      "check": "integration.js init → iframe.create('shop-payment') → mount(container, PaymentURL)",
+      "result": "PASS",
+      "evidence": "pay.tbank.ru/KdJSC53J?instance=shop-payment внутри iframeHost; T-Pay / SberPay / «Оплата картой» на экране"
+    },
+    {
+      "id": "4.2_csp",
+      "check": "CSP script-src + frame-src *.tbank.ru",
+      "result": "PASS"
+    },
+    {
+      "id": "4.2_fallback",
+      "check": "Fallback embed PaymentURL при ошибке mount",
+      "result": "PASS",
+      "note": "код в tbankPayment.js; не понадобился в MCP-прогоне"
+    },
+    {
+      "id": "4.4_cancel",
+      "check": "Кнопка «Отмена» на /payment",
+      "result": "PASS"
+    }
+  ],
+  "overall": "PASS",
+  "next": "Этап 5 — полная оплата до webhook → accepted → «Заказы за сегодня»"
+}

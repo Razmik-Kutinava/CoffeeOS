@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v1.123 — 2026-06-06 (§2.3 этап 4.2: integration.js PASS)
+
+- `tbankPayment.js` — официальный API: `iframe.create` + `mount(PaymentURL)`; `integrationjs.tbank.ru`.
+- CSP `frame-src` для `*.tbank.ru`; fallback embed PaymentURL сохранён.
+- MCP PASS + скрин: [`stage4_payment_iframe_2026-06-06.png`](milestones/veha_2/artifacts/demo-feedback/screenshots/stage4_payment_iframe_2026-06-06.png), [`mcp_section_2_3_stage4_2026-06-06.json`](milestones/veha_2/artifacts/demo-feedback/mcp_section_2_3_stage4_2026-06-06.json).
+
 ## v1.122 — 2026-06-05 (§2.3 этап 4: iframe оплата на витрине)
 
 - Экран `/payment` вместо полного редиректа; `integration.js` + fallback embed `PaymentURL`.
