@@ -117,6 +117,7 @@ Rails.application.routes.draw do
     get "monitoring/:id", to: "monitoring#show", as: :monitoring_tenant
     get "monitoring/:id/events", to: "monitoring#events", as: :monitoring_tenant_events
     get "monitoring/:id/sessions", to: "tenant_sessions#show", as: :monitoring_tenant_sessions
+    get "monitoring/:id/transactions", to: "tenant_transactions#show", as: :monitoring_tenant_transactions
     get "session", to: "session#show", as: :session
   end
   # Редирект /admin/ → /admin через get "/admin/" в Rails даёт второй маршрут на тот же GET /admin и цикл 301.
@@ -127,6 +128,7 @@ Rails.application.routes.draw do
     resources :tenants, only: [:index, :show] do
       member do
         get :events
+        get :transactions
       end
     end
   end

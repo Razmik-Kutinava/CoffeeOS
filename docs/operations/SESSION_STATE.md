@@ -2,7 +2,7 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-06-06 (обновлено: **2A.3 на апрув**, 2A.2 закрыт)  
+**Дата:** 2026-06-06 (обновлено: **2A.4 на апрув**, 2A.3 PASS)  
 **Веха 1:** официально не закрыта (§ I, H.3 — `[ ]`).  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
 **§2.3 оплата витрина:** **done** 2026-06-06 — [`CUSTOMER_BUSINESS_REQUIREMENTS.md`](milestones/veha_2/CUSTOMER_BUSINESS_REQUIREMENTS.md).
@@ -14,11 +14,23 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **2A.3** — `[~]` сессии точки (онлайн + все пользователи) на Fly | **2A.4** — транзакции (после апрува) |
+| **2A.4** — `[~]` транзакции точки на Fly | **Блок 2** — табло баристы (после апрува 2A) |
 
 **Ops на блок:** `SESSION_STATE` + коммит всегда; `PRACTICES` (CR); `QA_ACCEPTANCE_RUN` + `artifacts/` (QA); `CHANGELOG` если заметно; `CHECKLIST` `[x]` только по факту.
 
 **Артефакты (для агента в другом редакторе):** точка входа — [`milestones/veha_2/artifacts/README.md`](milestones/veha_2/artifacts/README.md). Прогон 10: `artifacts/prog10/{_index,smoke,kiosk,shop,staff-rbac,connectivity,platform-ent,warehouse}/`. Сводный индекс: `prog10/_index/prog10_final_index.json`. Скрипты `bin/prog10_*` пишут в эти подпапки (OUT обновлён). Старый плоский путь `artifacts/prog10_*.json` **удалён** — везде относительные ссылки `artifacts/prog10/...`.
+
+### Сессия 2026-06-06 (§2A.3 — сессии точки: **PASS**)
+
+- **Апрув заказчика:** 2A.3 закрыт `[x]`.
+- **Код:** `Auth::SessionTracker`; `/admin/monitoring/:id/sessions`.
+- **Commit:** `824204d`, `1e4b813`. MCP: `mcp_section_2a_3_sessions_2026-06-06.json`.
+
+### Сессия 2026-06-06 (§2A.4 — транзакции точки, на апрув)
+
+- **Код:** `Platform::TenantTransactionsOverview`; `/admin/monitoring/:id/transactions` (HTML + JSON); `/health/tenants/:id/transactions`.
+- **UI:** сводка статусов, фильтры, список платежей с PaymentId, отказы, ▸ JSON.
+- **Дальше:** скрин Fly + апрув 2A.4 → **Блок 2** табло баристы.
 
 ### Сессия 2026-06-06 (§2A.3 — сессии точки: онлайн + все пользователи, на апрув)
 

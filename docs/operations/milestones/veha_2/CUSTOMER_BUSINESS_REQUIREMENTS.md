@@ -209,8 +209,8 @@
 |---|-------|----------------------------|--------|
 | 2A.1 | **Мониторинг точек** | UI `/admin/monitoring` — сводка всех точек + drill-down; JSON `/health/tenants`. Checks: касса, заказы, очередь, **pending_payment**, **витрина**, оплаты, отказы | `[x]` **PASS** 2026-06-06 |
 | 2A.2 | **Журнал событий** | Детали под каждой проверкой + **единая лента** 24ч; JSON events для ИИ-агента | `[x]` **PASS** 2026-06-06 |
-| 2A.3 | **Логин / user ID / сессии точки** | user id в nav; audit login/logout; `/admin/session` (своя); **`/admin/monitoring/:id/sessions`** — кто онлайн, все пользователи + последний вход, сводка ролей, чужие сессии с ▸ JSON; `Auth::SessionTracker` → таблица `sessions` | `[~]` **на апрув** |
-| 2A.4 | **Транзакции** | Список **платежей** по точке: сумма, статус, заказ, T-Bank PaymentId. УК видит деньги витрины/POS, не только «заказ accepted» | `[ ]` |
+| 2A.3 | **Логин / user ID / сессии точки** | user id в nav; audit login/logout; `/admin/session` (своя); **`/admin/monitoring/:id/sessions`** — кто онлайн, все пользователи + последний вход, сводка ролей, чужие сессии с ▸ JSON; `Auth::SessionTracker` → таблица `sessions` | `[x]` **PASS** 2026-06-06 |
+| 2A.4 | **Транзакции** | **`/admin/monitoring/:id/transactions`** — список платежей 24ч: сумма, статус, заказ, T-Bank PaymentId, фильтры, ▸ JSON; JSON `/health/tenants/:id/transactions` | `[~]` **на апрув** |
 
 > **Порядок:** 2A.1 → 2A.2 → 2A.3 → 2A.4 → **Блок 2** (табло баристы).
 

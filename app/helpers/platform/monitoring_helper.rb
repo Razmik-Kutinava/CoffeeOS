@@ -122,6 +122,25 @@ module Platform
       event[:summary].presence || "Событие"
     end
 
+    PAYMENT_STATUS_COLORS = {
+      "succeeded" => "#86efac",
+      "pending" => "#fcd34d",
+      "processing" => "#fcd34d",
+      "failed" => "#fca5a5",
+      "refunded" => "#94a3b8",
+      "partially_refunded" => "#94a3b8",
+      "requires_review" => "#fcd34d"
+    }.freeze
+
+    def monitoring_payment_status_badge(status)
+      color = PAYMENT_STATUS_COLORS[status.to_s] || "#94a3b8"
+      content_tag(
+        :span,
+        status.to_s,
+        style: "display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600;background:#{color}22;color:#{color};border:1px solid #{color}44;"
+      )
+    end
+
     def monitoring_online_badge(online)
       if online
         content_tag(

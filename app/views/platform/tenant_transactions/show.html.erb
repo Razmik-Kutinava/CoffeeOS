@@ -1,0 +1,85 @@
+<p style="margin-bottom: 16px;">
+  <%= link_to "← Мониторинг точки", platform_monitoring_tenant_path(@tenant), style: "color: #93c5fd;" %>
+  · <%= link_to "← Все точки", platform_monitoring_path, style: "color: #93c5fd;" %>
+  · <%= link_to "Transactions JSON", platform_monitoring_tenant_transactions_path(@tenant, format: :json, status: params[:status], method: params[:method]), style: "color: #93c5fd;", target: "_blank", rel: "noopener" %>
+</p>
+
+<h1 style="font-size: 1.5rem; margin-bottom: 4px;">Транзакции — <%= @tenant.name %></h1>
+<p style="color: #94a3b8; margin-bottom: 20px; font-size: 13px;">
+  <%= @tenant.slug %>
+  · за 24ч: <%= @overview[:summary][:total_count] %> платежей
+  · успешно <%= @overview[:summary][:succeeded_amount] %> <%= @overview[:summary][:currency] %>
+  · <%= l(@generated_at, format: :short) %>
+</p>
+
+<section style="margin-bottom: 20px;">
+  <h2 style="font-size: 1.1rem; margin-bottom: 12px;">Сводка по статусам</h2>
+  <% if @overview[:summary][:by_status].any? %>
+    <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px;">
+      <% @overview[:summary][:by_status].each do |status, count| %>
+        <span style="display:inline-block;padding:6px 12px;border-radius:6px;font-size:12px;background:#1e293b;border:1px solid #334155;color:#e2e8f0;">
+          <strong><%= status %></strong> · <%= count %>
+        </span>
+      <% end %>
+    </div>
+  <% else %>
+    <p style="color: #64748b; font-size: 13px; margin-bottom: 16px;">Платежей за 24 часа нет.</p>
+  <% end %>
+
+  <%= form_with url: platform_monitoring_tenant_transactions_path(@tenant), method: :get, local: true, style: "display:flex;flex-wrap:wrap;gap:12px;align-items:end;" do |f| %>
+    <label style="font-size:12px;color:#94a3b8;">
+      Статус<br>
+      <%= f.select :status,
+          options_for_select([["Все", ""]] + Payment.statuses.keys.map { |s| [s, s] }, params[:status]),
+          {}, style: "margin-top:4px;padding:6px 8px;background:#1e293b;border:1px solid #334155;color:#e2e8f0;border-radius:4px;" %>
+    </label>
+    <label style="font-size:12px;color:#94a3b8;">
+      Метод<br>
+      <%= f.select :method,
+          options_for_select([["Все", ""]] + Payment.methods.keys.map { |m| [m, m] }, params[:method]),
+          {}, style: "margin-top:4px;padding:6px 8px;background:#1e293b;border:1px solid #334155;color:#e2e8f0;border-radius:4px;" %>
+    </label>
+    <%= f.submit "Фильтр", style: "padding:6px 14px;background:#334155;border:none;color:#e2e8f0;border-radius:4px;cursor:pointer;" %>
+    <%= link_to "Сброс", platform_monitoring_tenant_transactions_path(@tenant), style: "color:#93c5fd;font-size:13px;" %>
+  <% end %>
+</section>
+
+<section style="margin-bottom: 28px;">
+  <h2 style="font-size: 1.1rem; margin-bottom: 12px;">Платежи (<%= @overview[:payments].size %>)</h2>
+  <p style="color: #64748b; font-size: 12px; margin-bottom: 12px;">Сумма, статус, заказ, T-Bank PaymentId; у каждой строки — ▸ JSON.</p>
+  <% if @overview[:payments].any? %>
+    <div style="display: flex; flex-direction: column; gap: 8px;">
+      <% @overview[:payments].each do |pay| %>
+        <div style="border: 1px solid #334155; border-radius: 8px; background: #1a1f2e; overflow: hidden;">
+          <div style="padding: 12px; display: grid; grid-template-columns: 120px 1fr auto; gap: 12px; align-items: start;">
+            <div style="color: #94a3b8; font-size: 12px; white-space: nowrap;">
+              <%= monitoring_event_time(pay[:at]) %>
+            </div>
+            <div style="font-size: 13px; color: #e2e8f0; line-height: 1.4;">
+              <%= pay[:summary] %><br>
+              <span style="color: #64748b; font-size: 12px;">
+                <%= pay[:method] %> / <%= pay[:provider] %>
+                · заказ <%= pay[:order_number] || pay[:order_id] %> (<%= pay[:order_status] %>)
+                <% if pay[:order_source].present? %> · <%= pay[:order_source] %><% end %>
+              </span>
+            </div>
+            <div><%= monitoring_payment_status_badge(pay[:status]) %></div>
+          </div>
+          <%= render "platform/monitoring/json_details", payload: pay %>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <p style="color: #64748b; font-size: 13px;">Нет платежей по выбранным фильтрам.</p>
+  <% end %>
+</section>
+
+<section>
+  <h2 style="font-size: 1.1rem; margin-bottom: 8px;">Отказы оплаты (24ч, <%= @overview[:failed_events].size %>)</h2>
+  <p style="color: #64748b; font-size: 12px; margin-bottom: 12px;">Журнал shop_payment_failed и failed-платежи.</p>
+  <% if @overview[:failed_events].any? %>
+    <%= render "platform/monitoring/event_feed", events: @overview[:failed_events] %>
+  <% else %>
+    <p style="color: #64748b; font-size: 13px;">Отказов за 24 часа нет.</p>
+  <% end %>
+</section>

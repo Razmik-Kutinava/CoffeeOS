@@ -60,6 +60,16 @@ module Health
       }
     end
 
+    def transactions
+      tenant = Tenant.find(params[:id])
+      overview = Platform::TenantTransactionsOverview.new(
+        tenant,
+        status: params[:status],
+        method: params[:method]
+      ).call
+      render json: overview.merge(generated_at: Time.current.iso8601)
+    end
+
     private
 
     def require_uk_global_admin

@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v1.135 — 2026-06-06 (§2A.4: транзакции точки — payments для УК)
+
+- `Platform::TenantTransactionsOverview` + `/admin/monitoring/:id/transactions` (HTML + JSON).
+- Фильтры status/method; сводка; T-Bank PaymentId; блок отказов; ▸ JSON.
+- JSON API: `/health/tenants/:id/transactions`. **2A.3 → PASS. 2A.4 на апрув.**
+
 ## v1.134 — 2026-06-06 (§2A.3: сессии точки — кто онлайн, все пользователи)
 
 - `Auth::SessionTracker` — запись активных сессий в таблицу `sessions` при login/logout.
