@@ -1,6 +1,12 @@
 const SESSION_KEY = "shop_payment_session"
 const INTEGRATION_NAME = "shop-payment"
 
+export const PAYMENT_METHOD_LABELS = {
+  card: "Картой",
+  sbp: "СБП",
+  cash: "Наличные"
+}
+
 const SUCCESS_STATUSES = new Set(["CONFIRMED", "AUTHORIZED"])
 const FAIL_STATUSES = new Set(["REJECTED", "REVERSED", "CANCELED", "REFUNDED", "PARTIAL_REFUNDED"])
 
@@ -84,6 +90,12 @@ async function getIntegration(terminalKey, scriptUrl) {
   return initPromise
 }
 
+function applyDarkContainer(container) {
+  container.classList.add("shop-payment-host")
+  container.style.backgroundColor = "#1a1a1a"
+  container.style.colorScheme = "dark"
+}
+
 /**
  * Официальный API T-Bank: iframe.create + mount(container, PaymentURL).
  * @see https://developer.tbank.ru/eacq/intro/developer/setup_js/setup_iframe
@@ -92,6 +104,8 @@ export async function openTbankIframe({ container, terminalKey, paymentUrl, scri
   if (!container || !paymentUrl || !terminalKey) {
     throw new Error("Нет контейнера, PaymentURL или terminalKey")
   }
+
+  applyDarkContainer(container)
 
   const integration = await getIntegration(terminalKey, scriptUrl)
 
@@ -113,13 +127,30 @@ export async function openTbankIframe({ container, terminalKey, paymentUrl, scri
   }
 
   const iframeIntegration = await integration.iframe.create(INTEGRATION_NAME, iframeConfig)
-  await iframeIntegration.mount(container, paymentUrl)
 
   if (typeof iframeIntegration.setTheme === "function") {
-    await iframeIntegration.setTheme("dark")
+    try {
+      await iframeIntegration.setTheme("dark")
+    } catch {
+      // SDK без тёмной темы — оболочка CoffeeOS перекрывает
+    }
   }
 
+  await iframeIntegration.mount(container, paymentUrl)
+  styleMountedIframe(container)
+
   return iframeIntegration
+}
+
+function styleMountedIframe(container) {
+  for (const iframe of container.querySelectorAll("iframe")) {
+    iframe.classList.add("shop-payment-iframe")
+    iframe.style.backgroundColor = "#1a1a1a"
+    iframe.style.border = "0"
+    iframe.style.width = "100%"
+    iframe.style.minHeight = "360px"
+    iframe.style.colorScheme = "dark"
+  }
 }
 
 export function redirectToPaymentUrl(paymentUrl) {
@@ -131,11 +162,15 @@ export function redirectToPaymentUrl(paymentUrl) {
 export function embedPaymentUrlIframe(container, paymentUrl) {
   if (!container || !paymentUrl) throw new Error("Нет контейнера или URL оплаты")
 
+  applyDarkContainer(container)
   container.replaceChildren()
+
   const iframe = document.createElement("iframe")
   iframe.src = paymentUrl
-  iframe.title = "Форма оплаты Т-Банк"
-  iframe.className = "h-[420px] w-full border-0 bg-white"
+  iframe.title = "Безопасная оплата"
+  iframe.className = "shop-payment-iframe h-[360px] w-full border-0"
+  iframe.style.backgroundColor = "#1a1a1a"
+  iframe.style.colorScheme = "dark"
   iframe.setAttribute("allow", "payment")
   container.appendChild(iframe)
   return iframe

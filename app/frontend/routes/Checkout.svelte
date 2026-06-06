@@ -91,6 +91,7 @@
             payment_url: res.payment_url,
             reconnect_token: res.reconnect_token,
             payment_iframe: true,
+            payment_method,
             integration_script_url: config.integration_script_url
           })
           redirecting = true
