@@ -1,0 +1,29 @@
+{
+  "section": "2A.1",
+  "title": "UK tenant monitoring — health smoke",
+  "date": "2026-06-06",
+  "environment": "fly_prod",
+  "host": "https://coffeeos.fly.dev",
+  "commit": "72afacc",
+  "smoke_task": "fly:health_smoke",
+  "ui_verified": {
+    "summary": "https://coffeeos.fly.dev/admin/monitoring",
+    "drill_down_tenant_a": "https://coffeeos.fly.dev/admin/monitoring/2fdee1ac-4674-41ee-b89e-87b45643f789",
+    "json_api": "https://coffeeos.fly.dev/health/tenants",
+    "screenshots": [
+      "screenshots/monitoring_summary_2026-06-06.png",
+      "screenshots/monitoring_drilldown_point_a_2026-06-06.png"
+    ],
+    "login": "uk@demo.coffeeos.local",
+    "point_a_overall": "warning",
+    "point_a_pending_stuck": 37,
+    "point_a_shop_vitrina_hour": 4
+  },
+  "smoke_local": {
+    "tenant_id": "1cd79e79-44bf-4770-8fd3-1666669af27d",
+    "overall": "warning",
+    "checks_missing": []
+  },
+  "tests": "12 runs, 71 assertions, 0 failures",
+  "status": "needs_customer_approval"
+}

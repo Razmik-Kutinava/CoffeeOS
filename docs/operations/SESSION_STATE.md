@@ -2,7 +2,7 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-06-06 (обновлено: **§2.3 закрыт**, апрув заказчика)  
+**Дата:** 2026-06-06 (обновлено: **§2A.1 на апрув**)  
 **Веха 1:** официально не закрыта (§ I, H.3 — `[ ]`).  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
 **§2.3 оплата витрина:** **done** 2026-06-06 — [`CUSTOMER_BUSINESS_REQUIREMENTS.md`](milestones/veha_2/CUSTOMER_BUSINESS_REQUIREMENTS.md).
@@ -14,13 +14,21 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **§2.3** — `[x]` закрыт | **Блок 2A** — УК Health / журнал / логин / транзакции |
-| Deploy | `deployment-01KTE3QZ9XNPXM62HZD5C01JB6` |
-| **DEMO_FEEDBACK** §2.3 | **done** |
+| **§2A.1** — `[~]` UI мониторинг на Fly | **2A.2** — журнал событий (после апрува 2A.1) |
+| Deploy | auto GH Actions после `72afacc` |
 
 **Ops на блок:** `SESSION_STATE` + коммит всегда; `PRACTICES` (CR); `QA_ACCEPTANCE_RUN` + `artifacts/` (QA); `CHANGELOG` если заметно; `CHECKLIST` `[x]` только по факту.
 
 **Артефакты (для агента в другом редакторе):** точка входа — [`milestones/veha_2/artifacts/README.md`](milestones/veha_2/artifacts/README.md). Прогон 10: `artifacts/prog10/{_index,smoke,kiosk,shop,staff-rbac,connectivity,platform-ent,warehouse}/`. Сводный индекс: `prog10/_index/prog10_final_index.json`. Скрипты `bin/prog10_*` пишут в эти подпапки (OUT обновлён). Старый плоский путь `artifacts/prog10_*.json` **удалён** — везде относительные ссылки `artifacts/prog10/...`.
+
+### Сессия 2026-06-06 (§2A.1 — мониторинг точек УК, на апрув)
+
+- **UI:** `/admin/monitoring` — сводка всех точек; `/admin/monitoring/:id` — проверки + журнал 24ч.
+- **JSON:** `/health/tenants` (+ `recent_events` на show).
+- **TenantChecker:** + `pending_payment`, `shop_vitrina`, `app`; audit events на drill-down.
+- **Smoke:** `fly:health_smoke`; MCP: [`mcp_section_2a_1_2026-06-06.json`](milestones/veha_2/artifacts/demo-feedback/mcp_section_2a_1_2026-06-06.json).
+- **Скрины:** `artifacts/demo-feedback/screenshots/monitoring_summary_2026-06-06.png`, `monitoring_drilldown_point_a_2026-06-06.png`.
+- **Commit:** `72afacc`. **Дальше:** апрув → 2A.2 журнал событий.
 
 ### Сессия 2026-06-06 (§2.3 **закрыт** — апрув + 5.3)
 

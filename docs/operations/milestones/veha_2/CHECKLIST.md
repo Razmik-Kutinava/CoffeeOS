@@ -60,7 +60,7 @@
 
 См. [`CUSTOMER_BUSINESS_REQUIREMENTS.md`](CUSTOMER_BUSINESS_REQUIREMENTS.md) «Блок 2A».
 
-- [ ] ⭐ **2A.1** Health JSON `/health/tenants` — Fly smoke + показ УК
+- [~] ⭐ **2A.1** Мониторинг точек — UI `/admin/monitoring` + JSON API — **на апрув** (MCP [`mcp_section_2a_1_2026-06-06.json`](artifacts/demo-feedback/mcp_section_2a_1_2026-06-06.json), скрины в `artifacts/demo-feedback/screenshots/monitoring_*`)
 - [ ] ⭐ **2A.2** Журнал событий в УК (audit + оплаты + заказы)
 - [ ] **2A.3** Логин / user ID — трассировка «кто залогинен» для воспроизведения
 - [ ] **2A.4** Транзакции (payments) — список по точке для УК

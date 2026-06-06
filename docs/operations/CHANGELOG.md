@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## v1.130 — 2026-06-06 (§2A.1: мониторинг точек УК — на апрув)
+
+- UI `/admin/monitoring` — сводка + drill-down; nav «Мониторинг точек».
+- `Health::TenantChecker`: pending_payment, shop_vitrina, audit events.
+- Rake `fly:health_smoke`; MCP + скрины Fly prod.
+- Commit `72afacc`. **Статус 2A.1:** `[~]` до апрува заказчика.
+
 ## v1.129 — 2026-06-06 (§2.3 закрыт: апрув заказчика + этап 5.3)
 
 - Апрув §2.3; 5.3 PASS — [`mcp_section_2_3_stage5_3_2026-06-06.json`](milestones/veha_2/artifacts/demo-feedback/mcp_section_2_3_stage5_3_2026-06-06.json).
