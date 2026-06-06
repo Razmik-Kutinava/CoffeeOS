@@ -1,0 +1,34 @@
+{
+  "section": "2A.3-sessions",
+  "date": "2026-06-06",
+  "commit": "824204d",
+  "environment": "https://coffeeos.fly.dev",
+  "tenant": {
+    "id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+    "name": "Demo Coffee Point A",
+    "slug": "demo-point-a"
+  },
+  "checks": [
+    {
+      "id": "sessions_page",
+      "url": "/admin/monitoring/2fdee1ac-4674-41ee-b89e-87b45643f789/sessions",
+      "status": "PASS",
+      "note": "UI: role summary, online block, all users, login feed, expandable JSON"
+    },
+    {
+      "id": "sessions_json",
+      "url": "/admin/monitoring/2fdee1ac-4674-41ee-b89e-87b45643f789/sessions.json",
+      "status": "PASS",
+      "keys": ["tenant", "users_count", "online_count", "roles_summary", "users", "active_sessions", "recent_events"]
+    },
+    {
+      "id": "session_tracker",
+      "status": "PASS",
+      "note": "login creates Session row; logout revokes; UK session visible as online on anchor tenant"
+    }
+  ],
+  "screenshots": [
+    "artifacts/demo-feedback/screenshots/tenant_sessions_point_a_2026-06-06.png"
+  ],
+  "status": "pending_customer_approval"
+}

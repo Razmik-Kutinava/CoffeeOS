@@ -25,7 +25,9 @@
 - **Код:** `Auth::SessionTracker` → таблица `sessions`; `Platform::TenantSessionsOverview`; `/admin/monitoring/:id/sessions` (HTML + JSON).
 - **UI:** сводка ролей; блок «Сейчас онлайн»; все пользователи + последний вход/выход; журнал входов 24ч; ▸ JSON на каждой строке (в т.ч. чужие сессии).
 - **LoginJournal:** audit с `context_tenant_id` (точка franchise/manager).
-- **Дальше:** скрины Fly + апрув 2A.3 → 2A.4 транзакции.
+- **Commit:** `824204d`. MCP: [`mcp_section_2a_3_sessions_2026-06-06.json`](milestones/veha_2/artifacts/demo-feedback/mcp_section_2a_3_sessions_2026-06-06.json).
+- **Скрин:** `tenant_sessions_point_a_2026-06-06.png` (Fly: 8 users, 1 online, role summary).
+- **Дальше:** апрув 2A.3 → 2A.4 транзакции.
 
 ### Сессия 2026-06-06 (§2A.3 UX — человеческая лента + JSON, на апрув)
 
