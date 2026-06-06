@@ -3,7 +3,12 @@
 module Platform
   class SessionController < BaseController
     def show
-      render json: Platform::SessionInfo.new(current_user, session).to_h
+      @session_info = Platform::SessionInfo.new(current_user, session)
+
+      respond_to do |format|
+        format.html
+        format.json { render json: @session_info.to_h }
+      end
     end
   end
 end

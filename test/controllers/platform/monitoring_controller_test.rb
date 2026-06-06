@@ -39,7 +39,8 @@ class Platform::MonitoringControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_includes response.body, @tenant.name
     assert_includes response.body, "Проверки и детали"
-    assert_includes response.body, "Единая лента"
+    assert_includes response.body, "Лента событий"
+    assert_includes response.body, "▸ JSON"
   end
 
   test "uk admin gets events json" do

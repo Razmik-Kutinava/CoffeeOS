@@ -82,5 +82,63 @@ module Platform
       else value.to_s.truncate(48)
       end
     end
+
+    KIND_LABELS = {
+      "audit" => "Аудит",
+      "order_status" => "Статус заказа",
+      "check_detail" => "Запись"
+    }.freeze
+
+    ACTION_LABELS = {
+      "user_login" => "Вход в систему",
+      "user_logout" => "Выход из системы",
+      "shop_payment_failed" => "Отказ оплаты"
+    }.freeze
+
+    def monitoring_kind_label(kind)
+      KIND_LABELS[kind.to_s] || kind.to_s
+    end
+
+    def monitoring_event_time(at)
+      return "—" if at.blank?
+
+      I18n.l(Time.zone.parse(at.to_s), format: :short)
+    rescue ArgumentError, TypeError
+      at.to_s
+    end
+
+    def monitoring_human_summary(event)
+      payload = (event[:payload] || {}).with_indifferent_access
+      action = payload[:action].presence
+
+      if action.present? && ACTION_LABELS.key?(action)
+        base = ACTION_LABELS[action]
+        email = payload[:actor_email] || payload[:email]
+        return "#{base}: #{email}" if email.present?
+
+        return base
+      end
+
+      event[:summary].presence || "Событие"
+    end
+
+    def monitoring_pretty_json(data)
+      JSON.pretty_generate(deep_stringify(data))
+    rescue StandardError
+      data.inspect
+    end
+
+    def deep_stringify(obj)
+      case obj
+      when Hash
+        obj.transform_values { |v| deep_stringify(v) }
+      when Array
+        obj.map { |v| deep_stringify(v) }
+      when Time, ActiveSupport::TimeWithZone, Date, DateTime
+        obj.iso8601
+      else
+        obj
+      end
+    end
   end
 end

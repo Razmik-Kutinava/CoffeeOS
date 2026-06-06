@@ -1,0 +1,19 @@
+<div style="display: flex; flex-direction: column; gap: 8px;">
+  <% events.each do |ev| %>
+    <div style="border: 1px solid #334155; border-radius: 8px; background: #1a1f2e; overflow: hidden;">
+      <div style="padding: 12px; display: grid; grid-template-columns: 120px 110px 1fr; gap: 12px; align-items: start;">
+        <div style="color: #94a3b8; font-size: 12px; white-space: nowrap;">
+          <%= monitoring_event_time(ev[:at]) %>
+        </div>
+        <div>
+          <span style="font-size: 11px; color: #64748b;"><%= monitoring_kind_label(ev[:kind]) %></span><br>
+          <span style="font-size: 11px;"><%= monitoring_check_label(ev[:check]) %></span>
+        </div>
+        <div style="font-size: 13px; color: #e2e8f0; line-height: 1.4;">
+          <%= monitoring_human_summary(ev) %>
+        </div>
+      </div>
+      <%= render "platform/monitoring/json_details", payload: ev %>
+    </div>
+  <% end %>
+</div>
