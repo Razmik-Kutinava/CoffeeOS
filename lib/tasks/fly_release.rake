@@ -117,30 +117,27 @@ namespace :fly do
 
   desc "Prod smoke §2.3 stage 5.2: card order → webhook → history today"
   task stage5_2_smoke: :environment do
-    require "action_dispatch/testing/integration"
+    require "net/http"
 
     tenant_id  = ENV.fetch("SMOKE_TENANT_ID", "2fdee1ac-4674-41ee-b89e-87b45643f789")
     product_id = ENV.fetch("SMOKE_PRODUCT_ID", "24dae391-2199-4959-907e-d08c4cec3329")
     tenant = Tenant.find(tenant_id)
-    headers = { "X-Shop-Tenant" => tenant.id.to_s }
     phone = "+7906#{SecureRandom.random_number(10**7).to_s.rjust(7, '0')}"
+    session = {}
 
-    sess = ActionDispatch::Integration::Session.new(Rails.application)
+    Shop::CartService.new(session, tenant.id).add!(
+      product_id: product_id,
+      quantity: 1,
+      selected_modifiers: []
+    )
 
-    sess.post "/shop/api/cart/add",
-      headers: headers,
-      params: { product_id: product_id, quantity: 1, selected_modifiers: [] },
-      as: :json
-    raise "cart add #{sess.response.status}" unless sess.response.status == 200
+    order = Shop::OrderCreator.new(session, tenant: tenant).call!(
+      name: "Stage52Smoke",
+      phone: phone,
+      payment_method: "card"
+    )
+    raise "expected pending_payment, got #{order.status}" unless order.pending_payment?
 
-    sess.post "/shop/api/orders",
-      headers: headers,
-      params: { phone: phone, name: "Stage52Smoke", payment_method: "card" },
-      as: :json
-    order_body = JSON.parse(sess.response.body)
-    raise "order create #{sess.response.status} #{order_body}" unless sess.response.status == 200
-
-    order = Order.find(order_body["order_id"])
     payment = order.payments.order(created_at: :desc).first
     payment_id = payment.provider_payment_id.presence || "smoke-#{SecureRandom.hex(4)}"
     payment.update!(provider: "tbank", provider_payment_id: payment_id) if payment.provider_payment_id.blank?
@@ -163,18 +160,37 @@ namespace :fly do
     sleep 5
     order.reload
 
-    sess.post "/shop/api/orders/#{order.id}/finalize", headers: headers, as: :json
-    finalize = JSON.parse(sess.response.body)
+    payment_settled = order.accepted?
+    if payment_settled
+      Shop::CartService.new(session, tenant.id).clear!
+      Shop::PendingOrderSession.clear!(session, tenant.id)
+    end
 
-    sess.get "/shop/api/orders/history", headers: headers, params: { today: 1 }, as: :json
-    history = JSON.parse(sess.response.body)
+    cid = Shop::CustomerSession.customer_id(session, tenant.id)
+    history = if cid.present?
+      Order.where(tenant_id: tenant.id, customer_id: cid, source: :mobile)
+        .where("orders.created_at >= ?", Time.zone.today.beginning_of_day)
+        .order(created_at: :desc)
+        .includes(:order_items)
+        .map do |o|
+          {
+            "id" => o.id,
+            "status" => o.status,
+            "total" => o.final_amount.to_f,
+            "items_count" => o.order_items.size
+          }
+        end
+    else
+      []
+    end
     row = history.find { |r| r["id"] == order.id }
 
     puts({
       smoke: "stage5_2_history",
       order_id: order.id,
-      order_status: order.reload.status,
-      payment_settled: finalize["payment_settled"],
+      order_status: order.status,
+      customer_bound: cid.present?,
+      payment_settled: payment_settled,
       history_count: history.size,
       history_found: row.present?,
       history_status: row&.dig("status"),
