@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v1.126 — 2026-06-06 (§2.3 этап 5.1: оплата → webhook → accepted)
+
+- Интеграционный тест `qa_section_2_3_stage5_e2e_test.rb`: cart → card order → CONFIRMED callback → finalize.
+- Fly smoke PASS: `fly:callback_smoke` order `05c99c7e-…` → `accepted`, payment `succeeded`.
+- MCP: [`mcp_section_2_3_stage5_1_2026-06-06.json`](milestones/veha_2/artifacts/demo-feedback/mcp_section_2_3_stage5_1_2026-06-06.json).
+
 ## v1.125 — 2026-06-06 (§2.3 этап 4.5: журнал отказов оплаты)
 
 - `Shop::PaymentFailureJournal` — guest abandon, FailURL, webhook REJECTED.

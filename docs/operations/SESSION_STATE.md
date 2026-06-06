@@ -2,7 +2,7 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-06-06 (обновлено: §2.3 этап 4.2 iframe PASS)  
+**Дата:** 2026-06-06 (обновлено: §2.3 этап 5.1 webhook → accepted PASS)  
 **Веха 1:** официально не закрыта (§ I, H.3 — `[ ]`).  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
 **§E / PDF:** строки §1–3 в `DEMO_FEEDBACK` — **done**; **активная работа** — §2.3 этапы 1–5 в [`CUSTOMER_BUSINESS_REQUIREMENTS.md`](milestones/veha_2/CUSTOMER_BUSINESS_REQUIREMENTS.md).
@@ -14,8 +14,8 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **§2.3 этап 4** — PASS на Fly (`01KTE1S9XJ4ASQND4RY885J84R`) | **Этап 5:** полная оплата + webhook |
-| **§2.3 этап 3** — PASS (профиль localStorage, путь оформления) | 4.5 fail-журнал — backlog |
+| **§2.3 этап 5.1** — PASS (`fly:callback_smoke`, order `05c99c7e-…`) | **Этап 5.2:** «Заказы за сегодня» на витрине |
+| **§2.3 этап 4** — PASS на Fly (`01KTE1S9XJ4ASQND4RY885J84R`) | 5.3 MCP + DEMO_FEEDBACK sync |
 | **УК→витрины A/B** — PASS на Fly | Этапы 3–5 по CUSTOMER_BUSINESS |
 | **DEMO_FEEDBACK** §1–3 — done | MCP JSON → `[x]` только по факту |
 
@@ -23,12 +23,20 @@
 
 **Артефакты (для агента в другом редакторе):** точка входа — [`milestones/veha_2/artifacts/README.md`](milestones/veha_2/artifacts/README.md). Прогон 10: `artifacts/prog10/{_index,smoke,kiosk,shop,staff-rbac,connectivity,platform-ent,warehouse}/`. Сводный индекс: `prog10/_index/prog10_final_index.json`. Скрипты `bin/prog10_*` пишут в эти подпапки (OUT обновлён). Старый плоский путь `artifacts/prog10_*.json` **удалён** — везде относительные ссылки `artifacts/prog10/...`.
 
+### Сессия 2026-06-06 (§2.3 этап 5.1 — оплата → webhook → accepted)
+
+- **Fly:** `fly:callback_smoke` — order `05c99c7e-9215-45ff-a54d-627b23bc11f0` → `accepted`, payment `succeeded`, callback HTTP 200.
+- **Тест:** `test/integration/shop/api/qa_section_2_3_stage5_e2e_test.rb` — cart → card → CONFIRMED → finalize (13 assertions).
+- **MCP:** [`mcp_section_2_3_stage5_1_2026-06-06.json`](milestones/veha_2/artifacts/demo-feedback/mcp_section_2_3_stage5_1_2026-06-06.json).
+- **Дальше:** этап 5.2 — заказ в «Заказы за сегодня».
+
 ### Сессия 2026-06-06 (§2.3 этап 4.5 — журнал отказов оплаты)
 
 - **Код:** `Shop::PaymentFailureJournal` — abandon, FailURL, webhook `REJECTED` → `OrderStatusLog` + `AdminAuditLog` (`shop_payment_failed`).
 - **Менеджер:** `/manager/incidents` — блок «Отказы оплаты (витрина)»; история статусов на заказе.
 - **УК:** `/health/tenants` → `checks.failed_payments.recent_events` (namespace может переименоваться).
-- **Дальше:** этап 5 — после апрува заказчика по UI оплаты.
+- **Deploy (апрув):** `deployment-01KTE1S9XJ4ASQND4RY885J84R`, commits `1c7809e`…`cae4e8e` на Fly.
+- **Дальше:** этап 5 — полная оплата до webhook.
 
 ### Сессия 2026-06-06 (§2.3 — оболочка CoffeeOS на оплате)
 

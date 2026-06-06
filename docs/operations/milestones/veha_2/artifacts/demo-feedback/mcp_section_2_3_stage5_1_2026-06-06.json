@@ -1,0 +1,42 @@
+{
+  "scenario": "§2.3 этап 5.1 — полная оплата card → webhook CONFIRMED → order accepted",
+  "stand": "https://coffeeos.fly.dev",
+  "run_at": "2026-06-06",
+  "tool": "fly:callback_smoke + bin/rails test qa_section_2_3_stage5_e2e_test",
+  "tenant_a": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "deploy": "deployment-01KTE1S9XJ4ASQND4RY885J84R",
+  "steps": [
+    {
+      "id": "5.1.cart_order",
+      "check": "Корзина → POST /shop/api/orders card → pending_payment + payment_url",
+      "result": "PASS",
+      "evidence": "fly:callback_smoke: OrderCreator card Init на tenant A"
+    },
+    {
+      "id": "5.1.webhook",
+      "check": "POST /callbacks/tbank CONFIRMED (signed) → PaymentStatusUpdater",
+      "result": "PASS",
+      "evidence": "callback_http 200, callback_body {\"ok\":true}"
+    },
+    {
+      "id": "5.1.accepted",
+      "check": "order status accepted, payment succeeded",
+      "result": "PASS",
+      "evidence": "order_id 05c99c7e-9215-45ff-a54d-627b23bc11f0, order_status accepted, payment_status succeeded"
+    },
+    {
+      "id": "5.1.finalize",
+      "check": "POST /orders/:id/finalize → payment_settled, корзина очищена",
+      "result": "PASS",
+      "evidence": "integration test qa_section_2_3_stage5_e2e_test.rb — 13 assertions"
+    },
+    {
+      "id": "5.1.test_card_ui",
+      "check": "Тестовая карта T-Bank на prod terminal",
+      "result": "SKIP",
+      "note": "prod terminal → ACTIVATION_ERROR на sandbox-карте; цепочка подтверждена signed webhook (как QA прогон 3, 2026-05-28)"
+    }
+  ],
+  "overall": "PASS",
+  "next": "Этап 5.2 — заказ в «Заказы за сегодня» на витрине"
+}
