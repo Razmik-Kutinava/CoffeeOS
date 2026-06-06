@@ -3,6 +3,7 @@
   import { push } from "svelte-spa-router"
   import { api } from "../lib/api.js"
   import { clearGuestOrderSession, reconnectGuestOrder } from "../lib/shopGuestSession.js"
+  import { clearPaymentSession } from "../lib/tbankPayment.js"
 
   let status = $state("fail")
   let orderId = $state("")
@@ -35,11 +36,14 @@
 
     try {
       await reconnectGuestOrder(api)
+      clearPaymentSession()
 
       if (status === "success") {
         done = await pollAccepted()
         message = "Заказ принят"
         clearGuestOrderSession()
+      } else if (status === "cancel") {
+        message = "Оплата отменена. Корзина сохранена — можно попробовать снова."
       } else {
         await api(`/orders/${orderId}/abandon`, { method: "POST" })
         message = "Оплата не завершена. Корзина сохранена — можно попробовать снова."
@@ -56,6 +60,7 @@
   <p class="py-8 text-center text-[#a0a0a0]">Проверяем оплату…</p>
 {:else if done}
   <div class="py-8 text-center">
+    <p class="mb-2 text-xs text-[#888]">Корзина → Оформление → Оплата → Результат</p>
     <p class="mb-2 text-xl font-bold text-green-400">{message}</p>
     <p class="mb-1 text-[#fff]">Сумма: {Math.round(done.total)}₽</p>
     <div class="mt-6 flex flex-col gap-3">

@@ -8,14 +8,7 @@ module Shop
         creator = Shop::OrderCreator.new(session, tenant: @shop_tenant, request: request)
         order = creator.call!(order_params.to_h.symbolize_keys)
         Rails.logger.info("[Shop::Order] Order created: #{order.id}, total: #{order.final_amount}, status: #{order.status}")
-        render json: {
-          order_id: order.id,
-          total: order.final_amount.to_f,
-          discount: order.discount_amount.to_f,
-          status: order.status,
-          payment_url: creator.payment_url,
-          reconnect_token: Shop::GuestOrderReconnect.token_for(order)
-        }
+        render json: order_create_json(order, creator)
       rescue Shop::OrderCreator::Error => e
         Rails.logger.error("[Shop::Order] Failed to create order: #{e.message}")
         render json: { error: e.message, status: 422 }, status: :unprocessable_entity
@@ -51,6 +44,10 @@ module Shop
           end
           order.update!(status: :cancelled)
           Shop::PendingOrderSession.clear!(session, @shop_tenant.id)
+          Rails.logger.info(
+            "[Shop::Payment] guest abandoned order #{order.id} tenant=#{@shop_tenant.id} " \
+            "(manager/UK journal — backlog §2.3.4.5)"
+          )
         end
 
         render json: { order_id: order.id, status: order.status }
@@ -130,6 +127,25 @@ module Shop
         end
 
         false
+      end
+
+      def order_create_json(order, creator)
+        payload = {
+          order_id: order.id,
+          total: order.final_amount.to_f,
+          discount: order.discount_amount.to_f,
+          status: order.status,
+          payment_url: creator.payment_url,
+          reconnect_token: Shop::GuestOrderReconnect.token_for(order)
+        }
+
+        if creator.provider_payment_id.present?
+          payload[:provider_payment_id] = creator.provider_payment_id
+          payload[:payment_iframe] = Shop::PaymentConfig.iframe_enabled?
+          payload[:terminal_key] = Shop::PaymentConfig.terminal_key if Shop::PaymentConfig.iframe_enabled?
+        end
+
+        payload
       end
 
       def order_params

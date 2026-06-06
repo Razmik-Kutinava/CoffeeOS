@@ -4,7 +4,7 @@ module Shop
   class OrderCreator
     class Error < StandardError; end
 
-    attr_reader :payment_url
+    attr_reader :payment_url, :provider_payment_id
 
     def initialize(session, tenant:, request: nil)
       @session = session
@@ -244,6 +244,7 @@ module Shop
       )
 
       @payment_url = result[:payment_url]
+      @provider_payment_id = result[:provider_payment_id]
     rescue Payments::TbankAdapter::Error => e
       raise Error, "Не удалось инициировать оплату: #{e.message}"
     end

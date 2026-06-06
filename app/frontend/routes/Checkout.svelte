@@ -9,6 +9,7 @@
     returningFromPaymentPage,
     saveGuestOrderSession
   } from "../lib/shopGuestSession.js"
+  import { savePaymentSession } from "../lib/tbankPayment.js"
 
   let name = $state("")
   let phone = $state("")
@@ -72,8 +73,31 @@
         })
       })
 
-      if (res.payment_url) {
+      if (res.payment_url || res.provider_payment_id) {
         saveGuestOrderSession(res.order_id, res.reconnect_token)
+
+        if (res.payment_iframe && res.provider_payment_id) {
+          let config = {}
+          try {
+            config = await api("/config")
+          } catch {
+            config = {}
+          }
+          savePaymentSession({
+            order_id: res.order_id,
+            total: res.total,
+            provider_payment_id: res.provider_payment_id,
+            terminal_key: res.terminal_key || config.terminal_key,
+            payment_url: res.payment_url,
+            reconnect_token: res.reconnect_token,
+            payment_iframe: true,
+            integration_script_url: config.integration_script_url
+          })
+          redirecting = true
+          push("/payment")
+          return
+        }
+
         redirecting = true
         window.location.href = res.payment_url
         return
