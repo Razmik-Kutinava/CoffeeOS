@@ -14,7 +14,7 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **§2.3 этап 4** — PASS (iframe integration.js на `/payment`) | **Этап 5:** полная оплата + webhook |
+| **§2.3 этап 4** — PASS (4.1–4.5); **UI оплаты — ждём ок заказчика** | **Этап 5:** полная оплата + webhook *(после апрува)* |
 | **§2.3 этап 3** — PASS (профиль localStorage, путь оформления) | 4.5 fail-журнал — backlog |
 | **УК→витрины A/B** — PASS на Fly | Этапы 3–5 по CUSTOMER_BUSINESS |
 | **DEMO_FEEDBACK** §1–3 — done | MCP JSON → `[x]` только по факту |
@@ -22,6 +22,13 @@
 **Ops на блок:** `SESSION_STATE` + коммит всегда; `PRACTICES` (CR); `QA_ACCEPTANCE_RUN` + `artifacts/` (QA); `CHANGELOG` если заметно; `CHECKLIST` `[x]` только по факту.
 
 **Артефакты (для агента в другом редакторе):** точка входа — [`milestones/veha_2/artifacts/README.md`](milestones/veha_2/artifacts/README.md). Прогон 10: `artifacts/prog10/{_index,smoke,kiosk,shop,staff-rbac,connectivity,platform-ent,warehouse}/`. Сводный индекс: `prog10/_index/prog10_final_index.json`. Скрипты `bin/prog10_*` пишут в эти подпапки (OUT обновлён). Старый плоский путь `artifacts/prog10_*.json` **удалён** — везде относительные ссылки `artifacts/prog10/...`.
+
+### Сессия 2026-06-06 (§2.3 этап 4.5 — журнал отказов оплаты)
+
+- **Код:** `Shop::PaymentFailureJournal` — abandon, FailURL, webhook `REJECTED` → `OrderStatusLog` + `AdminAuditLog` (`shop_payment_failed`).
+- **Менеджер:** `/manager/incidents` — блок «Отказы оплаты (витрина)»; история статусов на заказе.
+- **УК:** `/health/tenants` → `checks.failed_payments.recent_events` (namespace может переименоваться).
+- **Дальше:** этап 5 — после апрува заказчика по UI оплаты.
 
 ### Сессия 2026-06-06 (§2.3 — оболочка CoffeeOS на оплате)
 

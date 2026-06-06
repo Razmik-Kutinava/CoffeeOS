@@ -117,13 +117,24 @@
 | 4.2 | **T-Bank iframe** (`integration.js`, CSP) | `[x]` **PASS** | CoffeeOS-оболочка + маска T-Pay/SberPay; `setTheme(dark)`; скрин [`stage4_payment_shell_paying_2026-06-06.png`](artifacts/demo-feedback/screenshots/stage4_payment_shell_paying_2026-06-06.png) |
 | 4.3 | **СБП** — deep link / QR | `[x]` **PASS** *(код)* | `deepLinkRedirectCallback`; ручной SBP — этап 5 |
 | 4.4 | Своя кнопка **«Отмена»** | `[x]` **PASS** | `/payment` → abandon |
-| 4.5 | Fail/отказ → **менеджер/УК** (журнал) | `[ ]` | log only; отдельная фича |
+| 4.5 | Fail/отказ → **менеджер/УК** (журнал) | `[x]` **PASS** | `Shop::PaymentFailureJournal` → `OrderStatusLog` + `AdminAuditLog`; менеджер `/manager/incidents`; УК `/health/tenants` → `checks.failed_payments.recent_events` |
+
+> **2026-06-06 (4.5):** commit `1c7809e` — журнал отказов оплаты: abandon / fail URL / webhook REJECTED.
 
 > **2026-06-06 (shell):** commit `7a0533c`, deploy `01KTE0P9PZSVF3YNJYEMC1DVXX` — оболочка CoffeeOS на `/payment`, маска жёлтых кнопок банка.
 
 > **2026-06-06:** deploy `01KTDZYTAVDCSJNWKEFF86D2E4`, commit `5829f09`. MCP: [`mcp_section_2_3_stage4_2026-06-06.json`](artifacts/demo-feedback/mcp_section_2_3_stage4_2026-06-06.json). **4.2 PASS** — форма T-Bank в iframe на `/payment`.
 
 > **2026-06-05:** deploy `01KTDZ0609R0DFVNCMK1AYV3N5`, commit `ebd5b31`. MCP: [`mcp_section_2_3_stage4_2026-06-05.json`](artifacts/demo-feedback/mcp_section_2_3_stage4_2026-06-05.json).
+
+**Долг — приёмка заказчиком (этап 4, UI оплаты):** `[ ]` **не проверено заказчиком**
+
+Показать на Fly и получить ок/правки по тому, что сдали сейчас:
+- свой intro-экран (сумма, «Картой», оранжевая кнопка);
+- маска жёлтых T-Pay / SberPay;
+- внутри iframe остаётся логотип/поля Т‑Банка — **осознанный компромисс**; если не устраивает → отдельная задача (не iframe).
+
+Скрин для демо: [`stage4_payment_shell_paying_2026-06-06.png`](artifacts/demo-feedback/screenshots/stage4_payment_shell_paying_2026-06-06.png).
 
 ---
 

@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## v1.125 — 2026-06-06 (§2.3 этап 4.5: журнал отказов оплаты)
+
+- `Shop::PaymentFailureJournal` — guest abandon, FailURL, webhook REJECTED.
+- Менеджер: инциденты + история статусов заказа; УК: `health/tenants` → `recent_events`.
+
 ## v1.124 — 2026-06-06 (§2.3: оболочка CoffeeOS на экране оплаты)
 
 - `Payment.svelte` — intro в стиле витрины, маска T-Pay/SberPay, тёмный iframe-host.
