@@ -126,8 +126,8 @@ class Callbacks::TbankControllerTest < ActionDispatch::IntegrationTest
       post_notify(tbank_payload(status: "REJECTED"))
     end
     assert_response :ok
-    assert_equal "failed",          @payment.reload.status
-    assert_equal "pending_payment", @order.reload.status
+    assert_equal "failed",   @payment.reload.status
+    assert_equal "cancelled", @order.reload.status
   end
 
   # ---------------------------------------------------------------------------
