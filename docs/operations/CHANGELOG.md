@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## v1.131 — 2026-06-06 (§2A.2: журнал событий — на апрув)
+
+- `Health::TenantEventFeed`: детали под checks + unified feed для UI и ИИ-агента.
+- JSON: `/health/tenants/:id/events`, show дополнен `check_details`.
+- UI drill-down: таблицы + единая лента 24ч.
+- 2A.1 → `[x]` PASS. Commit `d46e3ed`.
+
 ## v1.130 — 2026-06-06 (§2A.1: мониторинг точек УК — на апрув)
 
 - UI `/admin/monitoring` — сводка + drill-down; nav «Мониторинг точек».

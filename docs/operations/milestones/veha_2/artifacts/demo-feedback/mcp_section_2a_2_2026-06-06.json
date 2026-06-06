@@ -1,0 +1,26 @@
+{
+  "section": "2A.2",
+  "title": "Event journal — check details + unified feed",
+  "date": "2026-06-06",
+  "commit": "d46e3ed",
+  "tests": "13 runs, 91 assertions, 0 failures",
+  "features": {
+    "ui": "/admin/monitoring/:id — table under each check + unified feed",
+    "json_events": [
+      "/health/tenants/:id/events",
+      "/admin/monitoring/:id/events",
+      "/health/tenants/:id (includes check_details + unified_feed)"
+    ],
+    "service": "Health::TenantEventFeed"
+  },
+  "smoke_local": {
+    "event_feed_checks": 10,
+    "unified_feed_size": 0
+  },
+  "fly_prod": {
+    "status": "deploy_pending_after_push",
+    "verify_url": "https://coffeeos.fly.dev/admin/monitoring/2fdee1ac-4674-41ee-b89e-87b45643f789",
+    "events_json": "https://coffeeos.fly.dev/health/tenants/2fdee1ac-4674-41ee-b89e-87b45643f789/events"
+  },
+  "status": "needs_customer_approval"
+}

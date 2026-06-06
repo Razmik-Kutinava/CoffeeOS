@@ -2,7 +2,7 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-06-06 (обновлено: **§2A.1 на апрув**)  
+**Дата:** 2026-06-06 (обновлено: **2A.2 на апрув**, 2A.1 закрыт)  
 **Веха 1:** официально не закрыта (§ I, H.3 — `[ ]`).  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
 **§2.3 оплата витрина:** **done** 2026-06-06 — [`CUSTOMER_BUSINESS_REQUIREMENTS.md`](milestones/veha_2/CUSTOMER_BUSINESS_REQUIREMENTS.md).
@@ -14,12 +14,20 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **§2A.1** — `[~]` UI мониторинг на Fly | **2A.2** — журнал событий (после апрува 2A.1) |
-| Deploy | auto GH Actions после `72afacc` |
+| **2A.2** — `[~]` журнал + детали на Fly (deploy `d46e3ed`) | **2A.3** — логин / user ID |
 
 **Ops на блок:** `SESSION_STATE` + коммит всегда; `PRACTICES` (CR); `QA_ACCEPTANCE_RUN` + `artifacts/` (QA); `CHANGELOG` если заметно; `CHECKLIST` `[x]` только по факту.
 
 **Артефакты (для агента в другом редакторе):** точка входа — [`milestones/veha_2/artifacts/README.md`](milestones/veha_2/artifacts/README.md). Прогон 10: `artifacts/prog10/{_index,smoke,kiosk,shop,staff-rbac,connectivity,platform-ent,warehouse}/`. Сводный индекс: `prog10/_index/prog10_final_index.json`. Скрипты `bin/prog10_*` пишут в эти подпапки (OUT обновлён). Старый плоский путь `artifacts/prog10_*.json` **удалён** — везде относительные ссылки `artifacts/prog10/...`.
+
+### Сессия 2026-06-06 (§2A.2 — журнал событий, на апрув)
+
+- **2A.1:** `[x]` PASS (апрув заказчика).
+- **Код:** `Health::TenantEventFeed` — детали под каждой проверкой + `unified_feed` 24ч.
+- **UI:** drill-down — таблица строк под каждым check + единая лента.
+- **JSON:** `/health/tenants/:id/events`, `/admin/monitoring/:id/events`; show включает `check_details`.
+- **Commit:** `d46e3ed`. MCP: [`mcp_section_2a_2_2026-06-06.json`](milestones/veha_2/artifacts/demo-feedback/mcp_section_2a_2_2026-06-06.json).
+- **Дальше:** апрув 2A.2 → 2A.3.
 
 ### Сессия 2026-06-06 (§2A.1 — мониторинг точек УК, на апрув)
 
