@@ -80,7 +80,7 @@ class Shop::Api::QaSection23Stage5E2eTest < ActionDispatch::IntegrationTest
     p
   end
 
-  test "§2.3 stage 5.1: cart card order webhook CONFIRMED finalize accepted" do
+  test "§2.3 stage 5.1–5.2: card payment accepted and visible in today history" do
     order_id = nil
 
     open_session do |sess|
@@ -121,6 +121,17 @@ class Shop::Api::QaSection23Stage5E2eTest < ActionDispatch::IntegrationTest
       sess.get "/shop/api/cart", headers: shop_headers
       cart_after = JSON.parse(sess.response.body)
       assert cart_after["items"].empty?, "cart cleared after accepted finalize"
+
+      sess.get "/shop/api/orders/history",
+        headers: shop_headers,
+        params: { today: 1 },
+        as: :json
+      history = JSON.parse(sess.response.body)
+      row = history.find { |r| r["id"] == order_id }
+      assert row, "accepted order must appear in today's history"
+      assert_equal "accepted", row["status"]
+      assert_equal 179.0, row["total"].to_f
+      assert row["items_count"].to_i >= 1
     end
 
     order = Order.find(order_id)

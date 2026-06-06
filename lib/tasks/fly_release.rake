@@ -114,4 +114,72 @@ namespace :fly do
       callback_body: res.body
     }.to_json)
   end
+
+  desc "Prod smoke §2.3 stage 5.2: card order → webhook → history today"
+  task stage5_2_smoke: :environment do
+    require "action_dispatch/testing/integration"
+
+    tenant_id  = ENV.fetch("SMOKE_TENANT_ID", "2fdee1ac-4674-41ee-b89e-87b45643f789")
+    product_id = ENV.fetch("SMOKE_PRODUCT_ID", "24dae391-2199-4959-907e-d08c4cec3329")
+    tenant = Tenant.find(tenant_id)
+    headers = { "X-Shop-Tenant" => tenant.id.to_s }
+    phone = "+7906#{SecureRandom.random_number(10**7).to_s.rjust(7, '0')}"
+
+    sess = ActionDispatch::Integration::Session.new(Rails.application)
+
+    sess.post "/shop/api/cart/add",
+      headers: headers,
+      params: { product_id: product_id, quantity: 1, selected_modifiers: [] },
+      as: :json
+    raise "cart add #{sess.response.status}" unless sess.response.status == 200
+
+    sess.post "/shop/api/orders",
+      headers: headers,
+      params: { phone: phone, name: "Stage52Smoke", payment_method: "card" },
+      as: :json
+    order_body = JSON.parse(sess.response.body)
+    raise "order create #{sess.response.status} #{order_body}" unless sess.response.status == 200
+
+    order = Order.find(order_body["order_id"])
+    payment = order.payments.order(created_at: :desc).first
+    payment_id = payment.provider_payment_id.presence || "smoke-#{SecureRandom.hex(4)}"
+    payment.update!(provider: "tbank", provider_payment_id: payment_id) if payment.provider_payment_id.blank?
+
+    payload = {
+      "TerminalKey" => ENV.fetch("TBANK_TERMINAL_KEY"),
+      "OrderId"     => order.id.to_s,
+      "PaymentId"   => payment_id,
+      "Status"      => "CONFIRMED",
+      "Amount"      => (order.final_amount * 100).to_i
+    }
+    payload["Token"] = Payments::TbankAdapter.new.build_token(payload)
+
+    host = ENV.fetch("APP_HOST", "coffeeos.fly.dev")
+    res = Net::HTTP.post(
+      URI("https://#{host}/callbacks/tbank"),
+      payload.to_json,
+      "Content-Type" => "application/json"
+    )
+    sleep 5
+    order.reload
+
+    sess.post "/shop/api/orders/#{order.id}/finalize", headers: headers, as: :json
+    finalize = JSON.parse(sess.response.body)
+
+    sess.get "/shop/api/orders/history", headers: headers, params: { today: 1 }, as: :json
+    history = JSON.parse(sess.response.body)
+    row = history.find { |r| r["id"] == order.id }
+
+    puts({
+      smoke: "stage5_2_history",
+      order_id: order.id,
+      order_status: order.reload.status,
+      payment_settled: finalize["payment_settled"],
+      history_count: history.size,
+      history_found: row.present?,
+      history_status: row&.dig("status"),
+      history_total: row&.dig("total"),
+      callback_http: res.code
+    }.to_json)
+  end
 end
