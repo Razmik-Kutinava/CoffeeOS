@@ -56,7 +56,16 @@
 
 ---
 
-## C. Реальная оплата (приоритет 2)
+## B2A. УК — мониторинг (перед табло баристы)
+
+См. [`CUSTOMER_BUSINESS_REQUIREMENTS.md`](CUSTOMER_BUSINESS_REQUIREMENTS.md) «Блок 2A».
+
+- [ ] ⭐ **2A.1** Health JSON `/health/tenants` — Fly smoke + показ УК
+- [ ] ⭐ **2A.2** Журнал событий в УК (audit + оплаты + заказы)
+- [ ] **2A.3** Логин / user ID — трассировка «кто залогинен» для воспроизведения
+- [ ] **2A.4** Транзакции (payments) — список по точке для УК
+
+---
 
 См. [`PAYMENT.md`](PAYMENT.md).
 

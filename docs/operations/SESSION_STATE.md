@@ -8,13 +8,13 @@
 **§2.3 оплата витрина:** **done** 2026-06-06 — [`CUSTOMER_BUSINESS_REQUIREMENTS.md`](milestones/veha_2/CUSTOMER_BUSINESS_REQUIREMENTS.md).
 
 **Прогона 11 нет.** Точка входа для агента:
-- **Блок 2 (СЕЙЧАС):** табло баристы — [`CUSTOMER_BUSINESS_REQUIREMENTS.md`](milestones/veha_2/CUSTOMER_BUSINESS_REQUIREMENTS.md) «Блок 2».
+- **Блок 2A (СЕЙЧАС):** УК — Health, журнал, логин, транзакции — [`CUSTOMER_BUSINESS_REQUIREMENTS.md`](milestones/veha_2/CUSTOMER_BUSINESS_REQUIREMENTS.md) «Блок 2A».
 - УК → витрины (закрыто): [`milestones/veha_2/HANDOFF_UK_MENU_VITRINA.md`](milestones/veha_2/HANDOFF_UK_MENU_VITRINA.md).
 - §2.3 MCP: [`mcp_section_2_3_stage5_3_2026-06-06.json`](milestones/veha_2/artifacts/demo-feedback/mcp_section_2_3_stage5_3_2026-06-06.json).
 
 | Сейчас | Дальше |
 |--------|--------|
-| **§2.3** — `[x]` закрыт, апрув 2026-06-06 | **Блок 2** — табло баристы |
+| **§2.3** — `[x]` закрыт | **Блок 2A** — УК Health / журнал / логин / транзакции |
 | Deploy | `deployment-01KTE3QZ9XNPXM62HZD5C01JB6` |
 | **DEMO_FEEDBACK** §2.3 | **done** |
 
