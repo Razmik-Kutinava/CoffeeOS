@@ -188,11 +188,8 @@ module Health
           at: log.created_at.iso8601,
           kind: "audit",
           check: audit_check_key(log.action),
-          summary: "#{log.action} #{log.entity_type}##{log.entity_id}",
-          payload: Shop::PaymentFailureJournal.event_json(log).merge(
-            actor_id: log.actor_id,
-            entity_type: log.entity_type
-          )
+          summary: audit_summary(log),
+          payload: audit_payload(log)
         }
       end
 
@@ -249,7 +246,43 @@ module Health
     end
 
     def audit_check_key(action)
-      action == Shop::PaymentFailureJournal::ACTION ? "failed_payments" : "orders"
+      case action
+      when Shop::PaymentFailureJournal::ACTION then "failed_payments"
+      when Auth::LoginJournal::ACTION_LOGIN, Auth::LoginJournal::ACTION_LOGOUT then "session"
+      else "orders"
+      end
+    end
+
+    def audit_summary(log)
+      case log.action
+      when Auth::LoginJournal::ACTION_LOGIN
+        "Вход: #{log.details['email']} (#{log.details['user_id']})"
+      when Auth::LoginJournal::ACTION_LOGOUT
+        "Выход: #{log.details['email']} (#{log.details['user_id']})"
+      when Shop::PaymentFailureJournal::ACTION
+        log.details["reason_label"] || log.action
+      else
+        "#{log.action} #{log.entity_type}##{log.entity_id}"
+      end
+    end
+
+    def audit_payload(log)
+      base = {
+        action: log.action,
+        actor_id: log.actor_id,
+        actor_email: log.details["email"],
+        actor_name: log.details["name"],
+        entity_type: log.entity_type,
+        entity_id: log.entity_id,
+        user_id: log.details["user_id"],
+        role_code: log.details["role_code"]
+      }
+
+      if log.action == Shop::PaymentFailureJournal::ACTION
+        base.merge(Shop::PaymentFailureJournal.event_json(log))
+      else
+        base.merge(log.details.symbolize_keys)
+      end
     end
 
     def orders_scope

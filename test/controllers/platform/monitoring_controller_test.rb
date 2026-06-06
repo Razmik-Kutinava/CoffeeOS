@@ -29,6 +29,8 @@ class Platform::MonitoringControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_includes response.body, "Мониторинг точек"
     assert_includes response.body, @tenant.name
+    assert_includes response.body, @uk.id
+    assert_includes response.body, @uk.email
   end
 
   test "uk admin sees tenant drill-down" do

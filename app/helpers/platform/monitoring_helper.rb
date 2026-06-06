@@ -12,7 +12,8 @@ module Platform
       app: "Приложение",
       payments: "Оплаты (час)",
       inventory: "Склад",
-      failed_payments: "Отказы оплаты"
+      failed_payments: "Отказы оплаты",
+      session: "Сессия / логин",
     }.freeze
 
     def monitoring_status_color(status)

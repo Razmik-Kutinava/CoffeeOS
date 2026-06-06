@@ -116,6 +116,7 @@ Rails.application.routes.draw do
     get "monitoring", to: "monitoring#index", as: :monitoring
     get "monitoring/:id", to: "monitoring#show", as: :monitoring_tenant
     get "monitoring/:id/events", to: "monitoring#events", as: :monitoring_tenant_events
+    get "session", to: "session#show", as: :session
   end
   # Редирект /admin/ → /admin через get "/admin/" в Rails даёт второй маршрут на тот же GET /admin и цикл 301.
   # Корень platform уже обслуживает и /admin, и /admin/ (без отдельного redirect).

@@ -38,6 +38,7 @@ class Auth::SessionsController < ApplicationController
       role = pick_login_role(user_roles)
       Current.role_code = role.code
       apply_session_after_login!(user, role.code)
+      Auth::LoginJournal.record_login!(user: user, role_code: role.code, request: request)
       redirect_to dashboard_path_for_role(role.code), notice: "Добро пожаловать!"
     else
       flash.now[:alert] = "Неверный email/телефон или пароль"
@@ -47,9 +48,13 @@ class Auth::SessionsController < ApplicationController
   end
 
   def destroy
+    user = current_user
+    role_code = session[:role_code]
+    Auth::LoginJournal.record_logout!(user: user, role_code: role_code, request: request) if user
     session[:user_id] = nil
     session[:tenant_id] = nil
     session[:role_code] = nil
+    session[:logged_in_at] = nil
     session[:manager_tenant_id] = nil
     Current.tenant_id = nil
     Current.user_id = nil
@@ -77,6 +82,7 @@ class Auth::SessionsController < ApplicationController
     session[:user_id] = user.id
     session[:tenant_id] = user.tenant_id
     session[:role_code] = role_code
+    session[:logged_in_at] = Time.current.iso8601
 
     if user.uk_global_admin?
       session[:manager_tenant_id] = nil

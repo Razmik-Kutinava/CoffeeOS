@@ -61,7 +61,8 @@
 См. [`CUSTOMER_BUSINESS_REQUIREMENTS.md`](CUSTOMER_BUSINESS_REQUIREMENTS.md) «Блок 2A».
 
 - [x] ⭐ **2A.1** Мониторинг точек — UI + JSON — **PASS** 2026-06-06
-- [~] ⭐ **2A.2** Журнал событий — детали под checks + unified feed + Events JSON — **на апрув**
+- [x] ⭐ **2A.2** Журнал событий — детали + unified feed + Events JSON — **PASS** 2026-06-06
+- [~] ⭐ **2A.3** Логин / user ID — nav + audit + Session JSON — **на апрув**
 - [ ] **2A.3** Логин / user ID — трассировка «кто залогинен» для воспроизведения
 - [ ] **2A.4** Транзакции (payments) — список по точке для УК
 

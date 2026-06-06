@@ -43,6 +43,17 @@ class Auth::SessionsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "barista", session[:role_code]
   end
 
+  test "POST /login records user_login in audit log" do
+    assert_difference -> { AdminAuditLog.where(action: Auth::LoginJournal::ACTION_LOGIN).count }, 1 do
+      post "/login", params: { email: @user.email, password: "pass123" }
+    end
+  end
+
+  test "POST /login sets logged_in_at in session" do
+    post "/login", params: { email: @user.email, password: "pass123" }
+    assert session[:logged_in_at].present?
+  end
+
   test "POST /login with valid credentials redirects to barista dashboard" do
     post "/login", params: { email: @user.email, password: "pass123" }
     assert_redirected_to barista_dashboard_path
