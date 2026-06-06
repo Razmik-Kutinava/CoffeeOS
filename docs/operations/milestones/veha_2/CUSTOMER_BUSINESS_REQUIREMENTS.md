@@ -119,6 +119,8 @@
 | 4.4 | Своя кнопка **«Отмена»** | `[x]` **PASS** | `/payment` → abandon |
 | 4.5 | Fail/отказ → **менеджер/УК** (журнал) | `[x]` **PASS** | `Shop::PaymentFailureJournal` → `OrderStatusLog` + `AdminAuditLog`; менеджер `/manager/incidents`; УК `/health/tenants` → `checks.failed_payments.recent_events` |
 
+> **2026-06-06 (deploy апрув):** `01KTE1S9XJ4ASQND4RY885J84R` — этап 4 целиком на Fly, готовы к этапу 5.
+
 > **2026-06-06 (4.5):** commit `1c7809e` — журнал отказов оплаты: abandon / fail URL / webhook REJECTED.
 
 > **2026-06-06 (shell):** commit `7a0533c`, deploy `01KTE0P9PZSVF3YNJYEMC1DVXX` — оболочка CoffeeOS на `/payment`, маска жёлтых кнопок банка.
