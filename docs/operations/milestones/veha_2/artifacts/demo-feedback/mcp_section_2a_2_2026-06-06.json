@@ -22,5 +22,6 @@
     "verify_url": "https://coffeeos.fly.dev/admin/monitoring/2fdee1ac-4674-41ee-b89e-87b45643f789",
     "events_json": "https://coffeeos.fly.dev/health/tenants/2fdee1ac-4674-41ee-b89e-87b45643f789/events"
   },
-  "status": "needs_customer_approval"
+  "status": "PASS",
+  "approved": "2026-06-06"
 }

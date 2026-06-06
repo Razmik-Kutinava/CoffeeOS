@@ -1,0 +1,23 @@
+{
+  "section": "2A.3",
+  "title": "Login / user ID traceability",
+  "date": "2026-06-06",
+  "commit": "123c059",
+  "tests": "27 runs, 111 assertions, 0 failures",
+  "features": {
+    "nav": "email + user id + role + Session JSON link",
+    "audit": ["user_login", "user_logout"],
+    "session_json": "/admin/session",
+    "event_feed": "audit payload includes actor_id, actor_email, user_id"
+  },
+  "fly_prod": {
+    "session_json_url": "https://coffeeos.fly.dev/admin/session",
+    "example_user_id": "f2261f97-5662-4c4e-8a58-af3c2343a9f8",
+    "example_email": "uk@demo.coffeeos.local",
+    "screenshots": [
+      "screenshots/session_user_id_nav_2026-06-06.png",
+      "screenshots/session_json_2026-06-06.png"
+    ]
+  },
+  "status": "needs_customer_approval"
+}
