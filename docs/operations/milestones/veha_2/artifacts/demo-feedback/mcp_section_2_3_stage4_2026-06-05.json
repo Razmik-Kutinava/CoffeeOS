@@ -1,0 +1,61 @@
+{
+  "scenario": "§2.3 этап 4 — оплата iframe / наш экран оплаты",
+  "stand": "https://coffeeos.fly.dev",
+  "run_at": "2026-06-05",
+  "tool": "cursor-ide-browser-mcp + curl",
+  "tenant_a": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "deploy": "deployment-01KTDZ0609R0DFVNCMK1AYV3N5",
+  "commit": "ebd5b31",
+  "steps": [
+    {
+      "id": "4.csp",
+      "check": "CSP разрешает script/connect/img/style для *.tbank.ru",
+      "result": "PASS",
+      "evidence": "content-security-policy header on /shop includes tbank/tinkoff/nspk/t-static"
+    },
+    {
+      "id": "4.api_config",
+      "check": "GET /shop/api/config (browser session)",
+      "result": "PASS",
+      "note": "curl без CSRF — 401; в браузере через api.js OK"
+    },
+    {
+      "id": "4.checkout_route",
+      "check": "Оформление → #/payment (не window.location pay.tbank.ru сразу)",
+      "result": "PASS",
+      "evidence": "URL #/payment, заголовок «Идёт оплата…», сумма 209₽"
+    },
+    {
+      "id": "4.1_screens",
+      "check": "Экраны: loading / оплата / отмена / результат",
+      "result": "PASS",
+      "note": "Payment.svelte + PaymentResult status=cancel|success|fail"
+    },
+    {
+      "id": "4.2_integration_js",
+      "check": "integration.js + PaymentId iframe",
+      "result": "PARTIAL",
+      "note": "integration.js на Fly уходит в fallback; нужна настройка iframe в ЛК Т-Банка. Fallback: embed PaymentURL в iframe на /payment (commit post-ebd5b31)"
+    },
+    {
+      "id": "4.3_sbp",
+      "check": "deepLinkRedirectCallback в tbankPayment.js",
+      "result": "PASS",
+      "note": "код есть; полный SBP — ручной прогон на телефоне"
+    },
+    {
+      "id": "4.4_cancel",
+      "check": "Кнопка «Отмена» на /payment",
+      "result": "PASS",
+      "note": "UI после phase=paying; abandon API"
+    },
+    {
+      "id": "4.5_manager_journal",
+      "check": "Fail → журнал менеджер/УК",
+      "result": "OPEN",
+      "note": "только Rails.logger на abandon; отдельная фича"
+    }
+  ],
+  "overall": "PASS_WITH_NOTES",
+  "next": "Этап 5 — полная оплата до webhook + история"
+}

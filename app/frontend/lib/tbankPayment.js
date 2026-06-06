@@ -97,3 +97,16 @@ export function redirectToPaymentUrl(paymentUrl) {
   if (!paymentUrl) return
   window.location.href = paymentUrl
 }
+
+export function embedPaymentUrlIframe(container, paymentUrl) {
+  if (!container || !paymentUrl) throw new Error("Нет контейнера или URL оплаты")
+
+  container.replaceChildren()
+  const iframe = document.createElement("iframe")
+  iframe.src = paymentUrl
+  iframe.title = "Форма оплаты Т-Банк"
+  iframe.className = "h-[420px] w-full border-0 bg-white"
+  iframe.setAttribute("allow", "payment")
+  container.appendChild(iframe)
+  return iframe
+}

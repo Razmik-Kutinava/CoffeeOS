@@ -76,7 +76,7 @@
       if (res.payment_url || res.provider_payment_id) {
         saveGuestOrderSession(res.order_id, res.reconnect_token)
 
-        if (res.payment_iframe && res.provider_payment_id) {
+        if (res.payment_iframe && (res.provider_payment_id || res.payment_url)) {
           let config = {}
           try {
             config = await api("/config")

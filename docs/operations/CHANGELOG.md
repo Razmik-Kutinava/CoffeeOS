@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v1.122 — 2026-06-05 (§2.3 этап 4: iframe оплата на витрине)
+
+- Экран `/payment` вместо полного редиректа; `integration.js` + fallback embed `PaymentURL`.
+- API: `provider_payment_id`, `payment_iframe`, `GET /shop/api/config`; CSP для доменов T-Bank.
+- Кнопка «Отмена», `PaymentResult` status=cancel; MCP JSON stage4.
+
 ## v1.121 — 2026-06-04 (§2.3 этап 3: оформление UX)
 
 - `shopGuestProfile.js` — имя/телефон в localStorage; компактный блок на повторном заказе.

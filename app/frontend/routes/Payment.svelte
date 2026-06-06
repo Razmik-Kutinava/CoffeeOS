@@ -5,6 +5,7 @@
   import {
     clearPaymentSession,
     loadPaymentSession,
+    embedPaymentUrlIframe,
     openTbankIframe,
     redirectToPaymentUrl
   } from "../lib/tbankPayment.js"
@@ -47,29 +48,40 @@
   }
 
   async function startIframe() {
-    if (iframeStarted || !iframeHost || !session?.provider_payment_id || !session?.terminal_key) return
+    if (iframeStarted || !iframeHost) return
     iframeStarted = true
 
-    await openTbankIframe({
-      container: iframeHost,
-      terminalKey: session.terminal_key,
-      paymentId: session.provider_payment_id,
-      scriptUrl: session.integration_script_url,
-      onStatusChange: (mapped) => {
-        if (mapped === "success") finishSuccess()
-        else if (mapped === "fail") finishFail("fail")
+    if (session?.provider_payment_id && session?.terminal_key) {
+      try {
+        await openTbankIframe({
+          container: iframeHost,
+          terminalKey: session.terminal_key,
+          paymentId: session.provider_payment_id,
+          scriptUrl: session.integration_script_url,
+          onStatusChange: (mapped) => {
+            if (mapped === "success") finishSuccess()
+            else if (mapped === "fail") finishFail("fail")
+          }
+        })
+        phase = "paying"
+        return
+      } catch (e) {
+        console.warn("[Payment] integration.js iframe failed, fallback to PaymentURL embed", e)
       }
-    })
-    phase = "paying"
+    }
+
+    if (session?.payment_url) {
+      embedPaymentUrlIframe(iframeHost, session.payment_url)
+      phase = "paying"
+      return
+    }
+
+    throw new Error("Нет данных для оплаты")
   }
 
   $effect(() => {
-    if (session?.payment_iframe && iframeHost && phase === "loading" && !iframeStarted) {
+    if (session && iframeHost && phase === "loading" && !iframeStarted) {
       startIframe().catch((e) => {
-        if (session.payment_url) {
-          redirectToPaymentUrl(session.payment_url)
-          return
-        }
         err = e.message
         phase = "error"
       })
@@ -101,7 +113,7 @@
     saveGuestOrderSession(data.order_id, data.reconnect_token)
     await reconnectGuestOrder(api)
 
-    if (data.payment_iframe && data.provider_payment_id && data.terminal_key) {
+    if (data.payment_iframe && (data.provider_payment_id || data.payment_url)) {
       await tick()
       return
     }

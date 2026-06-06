@@ -113,13 +113,13 @@
 
 | # | Критерий | Статус | Примечание |
 |---|----------|--------|------------|
-| 4.1 | Наш экран: **Идёт оплата / успех / ошибка / отмена** | `[ ]` | п. 1.9 |
-| 4.2 | **T-Bank iframe** вместо полного редиректа (`integration.js`, CSP `frame-src *.tbank.ru`) | `[ ]` | Init только с бэкенда |
-| 4.3 | **СБП** — deep link / QR в iframe-конфиге | `[ ]` | `deepLinkRedirectCallback` |
-| 4.4 | Своя кнопка **«Отмена»** (стрелки на банке — не наши) | `[ ]` |
-| 4.5 | Fail/отказ → **менеджер/УК** (журнал), **не бариста** | `[ ]` | отдельная фича, после 4.1 |
+| 4.1 | Наш экран: **Идёт оплата / успех / ошибка / отмена** | `[x]` **PASS** | `Payment.svelte`, `PaymentResult` |
+| 4.2 | **T-Bank iframe** (`integration.js`, CSP) | `[~]` **PARTIAL** | Init на бэке; fallback embed `PaymentURL`; ЛК Т-Банка iframe |
+| 4.3 | **СБП** — deep link / QR | `[x]` **PASS** *(код)* | `deepLinkRedirectCallback`; ручной SBP — этап 5 |
+| 4.4 | Своя кнопка **«Отмена»** | `[x]` **PASS** | `/payment` → abandon |
+| 4.5 | Fail/отказ → **менеджер/УК** (журнал) | `[ ]` | log only; отдельная фича |
 
-**От владельца:** deploy Fly + в ЛК Т-Банка: iframe/integration.js для терминала.
+> **2026-06-05:** deploy `01KTDZ0609R0DFVNCMK1AYV3N5`, commit `ebd5b31`. MCP: [`mcp_section_2_3_stage4_2026-06-05.json`](artifacts/demo-feedback/mcp_section_2_3_stage4_2026-06-05.json).
 
 ---
 
@@ -176,8 +176,7 @@
 | Поле | Значение |
 |------|----------|
 | Версия | 2026-06-04, чеклист §2.3 этапы 1–5 |
-| **Следующий шаг агента** | **Этап 4** — iframe T-Bank / статусы оплаты |
-| Этап 1 §2.3 | **PASS** — [`mcp_section_2_3_stage1_rerun_2026-06-04.json`](artifacts/demo-feedback/mcp_section_2_3_stage1_rerun_2026-06-04.json) |
-| Этап 2 §2.3 | **PASS** — [`mcp_section_2_3_stage2_2026-06-04.json`](artifacts/demo-feedback/mcp_section_2_3_stage2_2026-06-04.json) |
+| **Следующий шаг агента** | **Этап 5** — полная оплата + webhook + история |
+| Этап 4 §2.3 | **PASS/PARTIAL** — [`mcp_section_2_3_stage4_2026-06-05.json`](artifacts/demo-feedback/mcp_section_2_3_stage4_2026-06-05.json) |
 | Этап 3 §2.3 | **PASS** — [`mcp_section_2_3_stage3_2026-06-04.json`](artifacts/demo-feedback/mcp_section_2_3_stage3_2026-06-04.json) |
 | Точка входа ops | этот файл → [`SESSION_STATE.md`](../../SESSION_STATE.md) |
