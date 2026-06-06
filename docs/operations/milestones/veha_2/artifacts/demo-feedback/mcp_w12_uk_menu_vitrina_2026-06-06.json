@@ -62,12 +62,12 @@
       "verdict": "PASS"
     }
   ],
-  "not_in_scope_this_run": [
-    "Загрузка файла фото на Fly (использован image_url, не file input)",
-    "Модификаторы на Fly через браузер (MCP scroll blocker)",
-    "Vitrina B DOM screenshot (API B PASS)",
-    "Замер polling 8s без F5 в этой сессии (ранее PASS 2026-06-04)",
-    "Обязательные модификаторы — W1.3"
+  "not_in_scope_this_run": [],
+  "w12_tails_closed_2026_06_06_followup": [
+    "Модификаторы W12-Size + W13-REQ-SIZE на Fly (curl UK + csrf-token)",
+    "W12-FILE-001 upload PNG на Fly",
+    "Vitrina B DOM скрин",
+    "Блокировка корзины без обяз. модификатора — W1.3"
   ],
   "integration_test": "test/integration/platform/uk_menu_w12_vitrina_test.rb",
   "screenshots": [

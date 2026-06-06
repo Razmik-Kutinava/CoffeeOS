@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## v1.141 — 2026-06-06 (W1.3 обяз. модификаторы + хвосты W1.2)
+
+- **W1.3:** Fly MCP — `W13-REQ-SIZE` is_required, vitrina блокирует «В корзину»; test `uk_menu_w13_required_modifiers_test.rb`.
+- **W1.2 хвосты:** модификаторы + FILE upload на Fly, vitrina B DOM; MCP [`mcp_w13_required_modifiers_fly_2026-06-06.json`](../milestones/veha_2/artifacts/demo-feedback/mcp_w13_required_modifiers_fly_2026-06-06.json).
+- **Fix:** `Platform::MenuController#update_product` → `bust_shop_catalog_cache!`.
+- **Ops:** CBR W1.3 `[x]`, CHECKLIST § B2B, SESSION_STATE → W1.4.
+
 ## v1.140 — 2026-06-06 (W1.2: MCP УК → меню → витрина)
 
 - **Сценарий:** категория `W12-FLY-0606` + `W12-PHOTO-001` (299₽, фото URL) + `W12-PLAIN-001` (149₽) на Fly; API витрин A/B; DOM витрина A.
