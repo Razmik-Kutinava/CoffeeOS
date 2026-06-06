@@ -41,5 +41,7 @@
   "screenshots": [
     "artifacts/demo-feedback/screenshots/tenant_transactions_point_a_2026-06-06.png"
   ],
-  "status": "pending_customer_approval"
+  "status": "approved",
+  "approved_at": "2026-06-06",
+  "note": "Customer approval: 2A.4 PASS, block 2A closed"
 }

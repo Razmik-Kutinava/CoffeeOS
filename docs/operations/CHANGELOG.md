@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## v1.136 — 2026-06-06 (§2A.4 PASS — блок 2A закрыт)
+
+- Апрув заказчика: 2A.4 транзакции точки → `[x]` PASS.
+- **Блок 2A полностью закрыт** (2A.1–2A.4). Следующий фокус: **Блок 2** табло баристы.
+
 ## v1.135 — 2026-06-06 (§2A.4: транзакции точки — payments для УК)
 
 - `Platform::TenantTransactionsOverview` + `/admin/monitoring/:id/transactions` (HTML + JSON).
