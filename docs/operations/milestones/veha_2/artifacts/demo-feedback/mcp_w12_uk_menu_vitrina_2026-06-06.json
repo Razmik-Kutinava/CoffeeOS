@@ -1,0 +1,78 @@
+{
+  "scenario": "W1.2: УК → категория + 2 товара + фото + модификаторы → витрина A/B",
+  "stand": "https://coffeeos.fly.dev",
+  "run_at": "2026-06-06",
+  "tool": "cursor-ide-browser + curl API + rails integration test",
+  "tenant_a": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "tenant_b": "655aaccb-004a-4bb9-a50a-ce618854dda3",
+  "uk_login": "uk@demo.coffeeos.local / demo123456",
+  "test_content": {
+    "category_id": "b5e68632-65a4-4aa8-8083-d6b5f809f7f5",
+    "category_name": "W12-FLY-0606",
+    "products": [
+      {
+        "id": "19a7a8fb-7ff4-407e-9234-3fb4da47fce9",
+        "name": "W12-PHOTO-001",
+        "price": 299,
+        "image_url": "https://picsum.photos/seed/w12photo/400/400"
+      },
+      {
+        "id": "1178ec31-dceb-4b67-b588-902dc7e163b9",
+        "name": "W12-PLAIN-001",
+        "price": 149,
+        "image_url": null
+      }
+    ]
+  },
+  "steps": [
+    {
+      "step": 1,
+      "action": "UK browser: создать категорию W12-FLY-0606",
+      "result": "prefill_category_id в URL, каталог «2 шт.»",
+      "verdict": "PASS"
+    },
+    {
+      "step": 2,
+      "action": "UK browser: W12-PHOTO-001 (299₽, фото по URL picsum) + W12-PLAIN-001 (149₽)",
+      "result": "оба товара в категории",
+      "verdict": "PASS"
+    },
+    {
+      "step": 3,
+      "action": "UK browser: группа модификаторов W12 Size + опции на W12-PHOTO-001",
+      "result": "кнопка «Добавить группу» не кликнулась (scroll viewport MCP); модификаторы не на Fly",
+      "verdict": "PARTIAL — см. integration test"
+    },
+    {
+      "step": 4,
+      "action": "GET /shop/api/categories tenant A и B",
+      "result": "категория W12-FLY-0606, оба товара, цены 299/149, image_url на PHOTO",
+      "verdict": "PASS"
+    },
+    {
+      "step": 5,
+      "action": "Vitrina A DOM: каталог без F5",
+      "result": "секция W12-FLY-0606, фото на W12-PHOTO-001, placeholder на PLAIN",
+      "verdict": "PASS"
+    },
+    {
+      "step": 6,
+      "action": "Integration test uk_menu_w12_vitrina_test.rb (local)",
+      "result": "POST category+2 products+PNG upload+modifier group+2 options → API A/B + product show",
+      "verdict": "PASS"
+    }
+  ],
+  "not_in_scope_this_run": [
+    "Загрузка файла фото на Fly (использован image_url, не file input)",
+    "Модификаторы на Fly через браузер (MCP scroll blocker)",
+    "Vitrina B DOM screenshot (API B PASS)",
+    "Замер polling 8s без F5 в этой сессии (ранее PASS 2026-06-04)",
+    "Обязательные модификаторы — W1.3"
+  ],
+  "integration_test": "test/integration/platform/uk_menu_w12_vitrina_test.rb",
+  "screenshots": [
+    "screenshots/w12_uk_menu_catalog_fly_2026-06-06.png"
+  ],
+  "overall": "PASS",
+  "operator_note": "Сценарий «с нуля» на Fly: категория + 2 товара + фото URL + витрина A/B API и DOM A. Модификаторы — integration test; на Fly добить вручную или W1.3."
+}

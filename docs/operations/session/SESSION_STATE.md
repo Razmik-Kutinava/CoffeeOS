@@ -2,7 +2,7 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-06-06 (обновлено: **W1.1 PASS**, следующий **W1.2** MCP меню из УК)  
+**Дата:** 2026-06-06 (обновлено: **W1.2 PASS** на апрув, следующий **W1.3** обязательные модификаторы)  
 **Веха 1:** официально не закрыта (§ I, H.3 — `[ ]`).  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
 **§2.3 оплата витрина:** **done** 2026-06-06 — [`CUSTOMER_BUSINESS_REQUIREMENTS.md`](milestones/veha_2/requirements/CUSTOMER_BUSINESS_REQUIREMENTS.md).
@@ -12,16 +12,25 @@
 **CBR — три потока + траектория:** тот же CBR § «Три потока», «Траектория», «Волна 4». **Северная звезда:** PDF 56 стр.
 
 **Прогона 11 нет.** Точка входа для агента:
-- **W1.2 (СЕЙЧАС):** MCP УК → категория + товары + модификаторы → витрина.
+- **W1.3 (СЕЙЧАС):** обязательные модификаторы — MCP на Fly.
+- **W1.2:** **на апрув** — Fly `W12-FLY-0606` + 2 товара + фото URL → API A/B + DOM A; integration test с модификаторами.
 - **W1.1:** **done** — manager price → `bust_shop_catalog_cache!` + fix nil page key.
 - **Блок 2:** табло баристы — после W1.1–W1.4 или явного переноса.
 - УК → витрины (закрыто): [`milestones/veha_2/runbooks/HANDOFF_UK_MENU_VITRINA.md`](milestones/veha_2/runbooks/HANDOFF_UK_MENU_VITRINA.md).
 
 | Сейчас | Дальше |
 |--------|--------|
-| **Волна 4** — W1.2 MCP меню из УК | W1.3–W1.4 |
+| **Волна 4** — W1.2 на апрув; **W1.3** обяз. модификаторы | W1.4 → табло |
 
 **Ops на блок:** `SESSION_STATE` + коммит всегда; `PRACTICES` (CR); `QA_ACCEPTANCE_RUN` + `artifacts/` (QA); `CHANGELOG` если заметно; `CHECKLIST` `[x]` только по факту.
+
+### Сессия 2026-06-06 (W1.2 — УК меню → витрина: **на апрув**)
+
+- **Fly MCP:** категория `W12-FLY-0606`, товары `W12-PHOTO-001` (299₽, picsum URL), `W12-PLAIN-001` (149₽); API A/B ✅; DOM витрина A ✅.
+- **Тест:** `test/integration/platform/uk_menu_w12_vitrina_test.rb` — 33 assertions, модификаторы optional + PNG upload.
+- **Артефакт:** [`mcp_w12_uk_menu_vitrina_2026-06-06.json`](milestones/veha_2/artifacts/demo-feedback/mcp_w12_uk_menu_vitrina_2026-06-06.json).
+- **Не в Fly browser:** добавление группы модификаторов (scroll MCP); загрузка файла фото (только URL).
+- **Дальше после апрува:** **W1.3** обязательные модификаторы.
 
 **Артефакты (для агента в другом редакторе):** точка входа — [`milestones/veha_2/artifacts/README.md`](milestones/veha_2/artifacts/README.md). Прогон 10: `artifacts/prog10/{_index,smoke,kiosk,shop,staff-rbac,connectivity,platform-ent,warehouse}/`. Сводный индекс: `prog10/_index/prog10_final_index.json`. Скрипты `bin/prog10_*` пишут в эти подпапки (OUT обновлён). Старый плоский путь `artifacts/prog10_*.json` **удалён** — везде относительные ссылки `artifacts/prog10/...`.
 

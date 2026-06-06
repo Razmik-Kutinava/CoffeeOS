@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## v1.140 — 2026-06-06 (W1.2: MCP УК → меню → витрина)
+
+- **Сценарий:** категория `W12-FLY-0606` + `W12-PHOTO-001` (299₽, фото URL) + `W12-PLAIN-001` (149₽) на Fly; API витрин A/B; DOM витрина A.
+- **Тест:** `test/integration/platform/uk_menu_w12_vitrina_test.rb` — полный HTTP-поток включая PNG upload и optional модификаторы.
+- **Ops:** CBR W1.2 `[x]`, CHECKLIST § B2B, MCP [`mcp_w12_uk_menu_vitrina_2026-06-06.json`](../milestones/veha_2/artifacts/demo-feedback/mcp_w12_uk_menu_vitrina_2026-06-06.json).
+- **Хвост W1.2:** модификаторы на Fly через браузер не добавлены (MCP scroll); обязательные модификаторы — **W1.3**.
+
 ## v1.139 — 2026-06-06 (W1.1: цена manager → витрина)
 
 - **Баг:** после смены цены в `/manager/menu` витрина показывала старую цену до 5 мин (кэш `shop/categories/...`).
