@@ -36,7 +36,16 @@ class Platform::MonitoringControllerTest < ActionDispatch::IntegrationTest
     get platform_monitoring_tenant_path(@tenant)
     assert_response :success
     assert_includes response.body, @tenant.name
-    assert_includes response.body, "Проверки"
-    assert_includes response.body, "Журнал событий"
+    assert_includes response.body, "Проверки и детали"
+    assert_includes response.body, "Единая лента"
+  end
+
+  test "uk admin gets events json" do
+    login_as!(@uk)
+    get platform_monitoring_tenant_events_path(@tenant)
+    assert_response :success
+    data = JSON.parse(response.body)
+    assert data.key?("check_details")
+    assert data.key?("unified_feed")
   end
 end

@@ -42,5 +42,16 @@ class Health::TenantsControllerTest < ActionDispatch::IntegrationTest
     data = JSON.parse(response.body)
     assert data.key?("checks")
     assert data.key?("overall")
+    assert data.key?("check_details")
+    assert data.key?("unified_feed")
+  end
+
+  test "health events returns feed json" do
+    login_as!(@uk)
+    get "/health/tenants/#{@tenant.id}/events"
+    assert_response :success
+    data = JSON.parse(response.body)
+    assert data.key?("check_details")
+    assert data.key?("unified_feed")
   end
 end

@@ -209,6 +209,7 @@ namespace :fly do
     required = %i[cash_register orders queue pending_payment kiosk shop_vitrina app payments inventory failed_payments]
     missing = required.reject { |k| checks.key?(k) }
 
+    feed = Health::TenantEventFeed.new(tenant).call
     payload = {
       smoke: "section_2a_1_health",
       tenant_id: tenant.id,
@@ -221,6 +222,8 @@ namespace :fly do
       failed_payments_24h: checks.dig(:failed_payments, :count),
       recent_events_count: (result[:recent_events] || []).size,
       payment_failure_events: checks.dig(:failed_payments, :recent_events)&.size || 0,
+      event_feed_checks: feed[:check_details].keys,
+      unified_feed_size: feed[:unified_feed].size,
       generated_at: Time.current.iso8601
     }
 

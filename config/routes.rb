@@ -115,13 +115,18 @@ Rails.application.routes.draw do
     resources :franchise_owners, only: %i[new create], path: "franchise_owners"
     get "monitoring", to: "monitoring#index", as: :monitoring
     get "monitoring/:id", to: "monitoring#show", as: :monitoring_tenant
+    get "monitoring/:id/events", to: "monitoring#events", as: :monitoring_tenant_events
   end
   # Редирект /admin/ → /admin через get "/admin/" в Rails даёт второй маршрут на тот же GET /admin и цикл 301.
   # Корень platform уже обслуживает и /admin, и /admin/ (без отдельного redirect).
 
   # Health API — мониторинг точек для центральной админки (JSON)
   namespace :health do
-    resources :tenants, only: [:index, :show]
+    resources :tenants, only: [:index, :show] do
+      member do
+        get :events
+      end
+    end
   end
 
   # Barista namespace

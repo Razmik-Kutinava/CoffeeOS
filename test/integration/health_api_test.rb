@@ -31,5 +31,7 @@ class HealthApiTest < ActionDispatch::IntegrationTest
     assert data.key?("recent_events")
     assert data["checks"].key?("shop_vitrina")
     assert data["checks"].key?("pending_payment")
+    assert data.key?("check_details")
+    assert data.key?("unified_feed")
   end
 end

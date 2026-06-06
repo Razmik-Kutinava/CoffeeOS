@@ -1,6 +1,7 @@
 <p style="margin-bottom: 16px;">
   <%= link_to "← Все точки", platform_monitoring_path, style: "color: #93c5fd;" %>
   · <%= link_to "JSON", health_tenant_path(@tenant), style: "color: #93c5fd;", target: "_blank", rel: "noopener" %>
+  · <%= link_to "Events JSON", platform_monitoring_tenant_events_path(@tenant), style: "color: #93c5fd;", target: "_blank", rel: "noopener" %>
 </p>
 
 <h1 style="font-size: 1.5rem; margin-bottom: 4px;"><%= @tenant.name %></h1>
@@ -10,69 +11,47 @@
 </p>
 
 <section style="margin-bottom: 28px;">
-  <h2 style="font-size: 1.1rem; margin-bottom: 12px;">Проверки</h2>
-  <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px;">
-    <% @result[:checks].each do |key, check| %>
-      <div style="border: 1px solid #334155; border-radius: 8px; padding: 12px; background: #1a1f2e;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-          <strong style="font-size: 13px;"><%= monitoring_check_label(key) %></strong>
-          <%= monitoring_status_badge(check[:status]) %>
+  <h2 style="font-size: 1.1rem; margin-bottom: 12px;">Проверки и детали</h2>
+
+  <% @result[:checks].each do |key, check| %>
+    <% detail = @feed.dig(:check_details, key.to_sym) || @feed.dig(:check_details, key.to_s) %>
+    <div style="margin-bottom: 20px; border: 1px solid #334155; border-radius: 8px; overflow: hidden; background: #1a1f2e;">
+      <div style="padding: 12px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155;">
+        <div>
+          <strong style="font-size: 14px;"><%= monitoring_check_label(key) %></strong>
+          <div style="color: #94a3b8; font-size: 12px; margin-top: 4px;"><%= check[:message] %></div>
         </div>
-        <div style="color: #cbd5e1; font-size: 12px;"><%= check[:message] %></div>
+        <%= monitoring_status_badge(check[:status]) %>
       </div>
-    <% end %>
-  </div>
+
+      <% if detail && detail[:rows].any? %>
+        <%= render "platform/monitoring/detail_table", detail: detail %>
+      <% else %>
+        <div style="padding: 12px; color: #64748b; font-size: 12px;">Нет строк для показа</div>
+      <% end %>
+    </div>
+  <% end %>
 </section>
 
-<% payment_events = @result.dig(:checks, :failed_payments, :recent_events) || [] %>
-<% if payment_events.any? %>
-  <section style="margin-bottom: 28px;">
-    <h2 style="font-size: 1.1rem; margin-bottom: 12px;">Отказы оплаты (витрина, 24ч)</h2>
-    <table style="width: 100%; border-collapse: collapse; font-size: 12px;">
-      <thead>
-        <tr style="text-align: left; border-bottom: 1px solid #334155;">
-          <th style="padding: 8px;">Время</th>
-          <th style="padding: 8px;">Заказ</th>
-          <th style="padding: 8px;">Причина</th>
-          <th style="padding: 8px;">Сумма</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% payment_events.each do |ev| %>
-          <tr style="border-bottom: 1px solid #1e293b;">
-            <td style="padding: 8px; color: #94a3b8;"><%= ev[:at] %></td>
-            <td style="padding: 8px;"><%= ev[:order_number] || ev[:order_id] %></td>
-            <td style="padding: 8px;"><%= ev[:reason_label] || ev[:reason] %></td>
-            <td style="padding: 8px;"><%= ev[:amount] %></td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-  </section>
-<% end %>
-
-<% audit_events = @result[:recent_events] || [] %>
 <section>
-  <h2 style="font-size: 1.1rem; margin-bottom: 12px;">Журнал событий (24ч)</h2>
-  <% if audit_events.any? %>
+  <h2 style="font-size: 1.1rem; margin-bottom: 12px;">Единая лента (24ч, последние <%= @feed[:unified_feed].size %>)</h2>
+  <% if @feed[:unified_feed].any? %>
     <table style="width: 100%; border-collapse: collapse; font-size: 12px;">
       <thead>
         <tr style="text-align: left; border-bottom: 1px solid #334155;">
           <th style="padding: 8px;">Время</th>
-          <th style="padding: 8px;">Действие</th>
-          <th style="padding: 8px;">Сущность</th>
-          <th style="padding: 8px;">Детали</th>
+          <th style="padding: 8px;">Проверка</th>
+          <th style="padding: 8px;">Тип</th>
+          <th style="padding: 8px;">Событие</th>
         </tr>
       </thead>
       <tbody>
-        <% audit_events.each do |ev| %>
+        <% @feed[:unified_feed].each do |ev| %>
           <tr style="border-bottom: 1px solid #1e293b;">
             <td style="padding: 8px; color: #94a3b8; white-space: nowrap;"><%= ev[:at] %></td>
-            <td style="padding: 8px;"><%= ev[:action] %></td>
-            <td style="padding: 8px;"><%= ev[:entity_type] %> #<%= ev[:entity_id] %></td>
-            <td style="padding: 8px; color: #94a3b8; max-width: 360px; overflow: hidden; text-overflow: ellipsis;">
-              <%= ev[:details].to_json.truncate(120) %>
-            </td>
+            <td style="padding: 8px;"><%= monitoring_check_label(ev[:check]) %></td>
+            <td style="padding: 8px;"><%= ev[:kind] %></td>
+            <td style="padding: 8px;"><%= ev[:summary] %></td>
           </tr>
         <% end %>
       </tbody>

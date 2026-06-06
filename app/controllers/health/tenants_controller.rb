@@ -27,6 +27,7 @@ module Health
     def show
       tenant = Tenant.find(params[:id])
       result = Health::TenantChecker.new(tenant, include_events: true).call
+      feed = Health::TenantEventFeed.new(tenant).call
       render json: {
         tenant: {
           id: tenant.id,
@@ -37,6 +38,24 @@ module Health
         checks: result[:checks],
         overall: result[:overall],
         recent_events: result[:recent_events],
+        check_details: feed[:check_details],
+        unified_feed: feed[:unified_feed],
+        generated_at: Time.current.iso8601
+      }
+    end
+
+    def events
+      tenant = Tenant.find(params[:id])
+      feed = Health::TenantEventFeed.new(tenant).call
+      render json: {
+        tenant: {
+          id: tenant.id,
+          name: tenant.name,
+          slug: tenant.slug,
+          organization_id: tenant.organization_id
+        },
+        check_details: feed[:check_details],
+        unified_feed: feed[:unified_feed],
         generated_at: Time.current.iso8601
       }
     end

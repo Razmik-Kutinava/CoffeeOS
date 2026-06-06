@@ -1,0 +1,23 @@
+<table style="width: 100%; border-collapse: collapse; font-size: 12px;">
+  <thead>
+    <tr style="text-align: left; border-bottom: 1px solid #1e293b; background: #0f111a;">
+      <% detail[:columns].each do |col| %>
+        <th style="padding: 8px;"><%= monitoring_column_label(col) %></th>
+      <% end %>
+    </tr>
+  </thead>
+  <tbody>
+    <% detail[:rows].each do |row| %>
+      <tr style="border-bottom: 1px solid #1e293b;">
+        <% detail[:columns].each do |col| %>
+          <td style="padding: 8px; color: <%= col == 'at' ? '#94a3b8' : '#e2e8f0' %>;">
+            <%= monitoring_cell_value(row[col.to_sym] || row[col.to_s]) %>
+          </td>
+        <% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<div style="padding: 8px 12px; color: #64748b; font-size: 11px; border-top: 1px solid #1e293b;">
+  Показано строк: <%= detail[:count] %>
+</div>
