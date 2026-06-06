@@ -1,0 +1,45 @@
+{
+  "section": "2A.4-transactions",
+  "date": "2026-06-06",
+  "commit": "b63242c",
+  "environment": "https://coffeeos.fly.dev",
+  "tenant": {
+    "id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+    "name": "Demo Coffee Point A",
+    "slug": "demo-point-a"
+  },
+  "checks": [
+    {
+      "id": "transactions_page",
+      "url": "/admin/monitoring/2fdee1ac-4674-41ee-b89e-87b45643f789/transactions",
+      "status": "PASS",
+      "observed": {
+        "payments_24h": 13,
+        "succeeded_amount_rub": 716.0,
+        "by_status": { "succeeded": 4, "pending": 5, "failed": 4 },
+        "failed_events_24h": 4
+      }
+    },
+    {
+      "id": "transactions_json_ui",
+      "url": "/admin/monitoring/2fdee1ac-4674-41ee-b89e-87b45643f789/transactions.json",
+      "status": "PASS",
+      "keys": ["tenant", "summary", "payments", "failed_events", "filters"]
+    },
+    {
+      "id": "health_transactions_json",
+      "url": "/health/tenants/2fdee1ac-4674-41ee-b89e-87b45643f789/transactions",
+      "status": "PASS",
+      "note": "requires uk_global_admin session"
+    },
+    {
+      "id": "2a3_approved",
+      "status": "PASS",
+      "note": "2A.3 closed [x] per customer approval in session"
+    }
+  ],
+  "screenshots": [
+    "artifacts/demo-feedback/screenshots/tenant_transactions_point_a_2026-06-06.png"
+  ],
+  "status": "pending_customer_approval"
+}

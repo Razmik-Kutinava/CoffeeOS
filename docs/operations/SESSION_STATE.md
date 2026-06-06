@@ -30,7 +30,9 @@
 
 - **Код:** `Platform::TenantTransactionsOverview`; `/admin/monitoring/:id/transactions` (HTML + JSON); `/health/tenants/:id/transactions`.
 - **UI:** сводка статусов, фильтры, список платежей с PaymentId, отказы, ▸ JSON.
-- **Дальше:** скрин Fly + апрув 2A.4 → **Блок 2** табло баристы.
+- **Commit:** `b63242c`. MCP: [`mcp_section_2a_4_2026-06-06.json`](milestones/veha_2/artifacts/demo-feedback/mcp_section_2a_4_2026-06-06.json).
+- **Скрин:** `tenant_transactions_point_a_2026-06-06.png` (Fly: 13 платежей, 716 RUB succeeded).
+- **Дальше:** апрув 2A.4 → **Блок 2** табло баристы.
 
 ### Сессия 2026-06-06 (§2A.3 — сессии точки: онлайн + все пользователи, на апрув)
 
