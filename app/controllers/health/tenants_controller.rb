@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 # JSON health: только ук_global_admin (сессия + cookie).
+# Namespace/route может быть переименован; recent_events в checks.failed_payments — журнал shop_payment_failed.
 module Health
   class TenantsController < ApplicationController
     layout false

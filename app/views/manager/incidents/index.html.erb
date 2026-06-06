@@ -76,6 +76,32 @@
 
   <div class="grid">
     <section class="card">
+      <div class="card-title">❌ Отказы оплаты (витрина)</div>
+      <% if @shop_payment_failures.any? %>
+        <div class="table">
+          <% @shop_payment_failures.each do |log| %>
+            <div class="row">
+              <div class="row-main">
+                <% if log.entity_id.present? %>
+                  <%= link_to log.details["order_number"].presence || "order", manager_order_path(log.entity_id), class: "link" %>
+                <% else %>
+                  <span class="link" style="cursor: default; text-decoration: none;">заказ</span>
+                <% end %>
+                <span class="pill"><%= log.details["reason_label"] || log.details["reason"] %></span>
+              </div>
+              <div class="row-meta">
+                <span><%= log.details["final_amount"] %> ₽</span>
+                <span class="muted"><%= log.created_at&.strftime("%d.%m %H:%M") %></span>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="empty">Нет</div>
+      <% end %>
+    </section>
+
+    <section class="card">
       <div class="card-title">📟 Offline устройства</div>
       <% if @offline_devices.any? %>
         <div class="table">

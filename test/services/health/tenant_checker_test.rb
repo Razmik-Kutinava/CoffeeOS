@@ -35,4 +35,29 @@ class Health::TenantCheckerTest < ActiveSupport::TestCase
 
     assert_equal "ok", result[:checks][:cash_register][:status]
   end
+
+  test "warns when failed payments exist" do
+    Payment.create!(
+      order: Order.create!(
+        tenant: @tenant,
+        order_number: "F-1",
+        source: "mobile",
+        status: "cancelled",
+        total_amount: 100,
+        discount_amount: 0,
+        final_amount: 100
+      ),
+      tenant: @tenant,
+      amount: 100,
+      method: "card",
+      provider: "tbank",
+      status: "failed",
+      created_at: 1.hour.ago
+    )
+
+    result = Health::TenantChecker.new(@tenant).call
+
+    assert_equal "warning", result[:checks][:failed_payments][:status]
+    assert result[:checks][:failed_payments][:recent_events].is_a?(Array)
+  end
 end

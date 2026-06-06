@@ -39,15 +39,15 @@ module Shop
         end
 
         if order.pending_payment?
-          order.payments.where(status: :pending).find_each do |payment|
-            payment.update!(status: :failed)
-          end
-          order.update!(status: :cancelled)
-          Shop::PendingOrderSession.clear!(session, @shop_tenant.id)
-          Rails.logger.info(
-            "[Shop::Payment] guest abandoned order #{order.id} tenant=#{@shop_tenant.id} " \
-            "(manager/UK journal — backlog §2.3.4.5)"
+          payment = order.payments.find_by(status: :pending) || order.payments.order(created_at: :desc).first
+          Shop::PaymentFailureJournal.record!(
+            order: order,
+            payment: payment,
+            reason: :guest_abandon,
+            source: :customer,
+            details: { trigger: "abandon_api" }
           )
+          Shop::PendingOrderSession.clear!(session, @shop_tenant.id)
         end
 
         render json: { order_id: order.id, status: order.status }

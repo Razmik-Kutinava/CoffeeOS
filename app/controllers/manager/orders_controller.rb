@@ -26,6 +26,7 @@ module Manager
       @payments = Payment.for_current_tenant.includes(:order).where(order_id: @order.id).order(created_at: :desc)
       @refunds = Refund.for_current_tenant.includes(:payment, :order).where(order_id: @order.id).order(created_at: :desc)
       @fiscal_receipts = FiscalReceipt.for_current_tenant.includes(:payment).where(order_id: @order.id).order(created_at: :desc)
+      @status_logs = @order.order_status_logs.order(created_at: :asc)
     end
   end
 end

@@ -37,6 +37,12 @@ module Manager
                                 .order(last_seen_at: :asc)
                                 .limit(50)
       @out_of_stock = IngredientTenantStock.for_current_tenant.out_of_stock.includes(:ingredient).limit(50)
+      @shop_payment_failures = AdminAuditLog
+        .for_tenant(Current.tenant_id)
+        .where(action: Shop::PaymentFailureJournal::ACTION)
+        .recent
+        .limit(50)
+        .includes(:tenant)
     end
   end
 end

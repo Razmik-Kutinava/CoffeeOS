@@ -105,6 +105,28 @@
       <div class="empty">Нет чеков</div>
     <% end %>
   </section>
+
+  <section class="card">
+    <div class="card-title">История статусов</div>
+    <% if @status_logs.any? %>
+      <div class="table">
+        <% @status_logs.each do |log| %>
+          <div class="row">
+            <div class="row-main">
+              <span class="pill"><%= log.status_from %> → <%= log.status_to %></span>
+              <span class="muted"><%= log.source %></span>
+            </div>
+            <div class="row-meta">
+              <span class="muted"><%= log.comment %></span>
+              <span class="muted"><%= log.created_at&.strftime("%d.%m %H:%M") %></span>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="empty">Нет записей</div>
+    <% end %>
+  </section>
 </div>
 
 <%= render "manager/shared/page_styles" %>

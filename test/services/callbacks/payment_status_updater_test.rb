@@ -45,4 +45,21 @@ class Callbacks::PaymentStatusUpdaterTest < ActiveSupport::TestCase
       Callbacks::PaymentStatusUpdater.new(payment: @payment, new_status: "bogus").call!
     end
   end
+
+  test "failed payment cancels pending order and journals" do
+    assert_difference ["AdminAuditLog.count", "OrderStatusLog.count"], 1 do
+      Callbacks::PaymentStatusUpdater.new(
+        payment: @payment,
+        new_status: "failed",
+        provider_data: { "Status" => "REJECTED" },
+        note: "Т-Банк: REJECTED"
+      ).call!
+    end
+
+    assert_equal "failed", @payment.reload.status
+    assert_equal "cancelled", @order.reload.status
+    log = AdminAuditLog.order(created_at: :desc).first
+    assert_equal Shop::PaymentFailureJournal::ACTION, log.action
+    assert_equal "bank_rejected", log.details["reason"]
+  end
 end

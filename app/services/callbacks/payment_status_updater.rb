@@ -39,6 +39,7 @@ module Callbacks
         end
 
         accept_order_if_paid!
+        fail_order_if_rejected!
       end
 
       @payment.reload
@@ -62,6 +63,23 @@ module Callbacks
       order = @payment.order.reload
       Inventory::OrderRecipeDeduction.call!(order: order)
       Barista::OrderBoardBroadcaster.call(order: order, old_status: "pending_payment")
+    end
+
+    def fail_order_if_rejected!
+      return unless @payment.status == "failed"
+      return unless @payment.order.pending_payment?
+
+      Shop::PaymentFailureJournal.record!(
+        order: @payment.order,
+        payment: @payment,
+        reason: :bank_rejected,
+        source: :payment_callback,
+        details: {
+          trigger: "payment_callback",
+          provider_status: @provider_data["Status"],
+          note: @note
+        }.compact
+      )
     end
   end
 end

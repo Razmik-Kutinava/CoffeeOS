@@ -134,10 +134,12 @@ module Health
       count = Payment.where(tenant_id: @tenant.id, status: 'failed')
                     .where('created_at > ?', @since_long)
                     .count
+      recent_events = Shop::PaymentFailureJournal.recent_for_tenant(@tenant.id, since: @since_long, limit: 10)
       {
-        status: count.positive? ? 'warning' : 'ok',
+        status: (count.positive? || recent_events.any?) ? 'warning' : 'ok',
         message: "Неудачных оплат за 24ч: #{count}",
-        count: count
+        count: count,
+        recent_events: recent_events
       }
     end
 
