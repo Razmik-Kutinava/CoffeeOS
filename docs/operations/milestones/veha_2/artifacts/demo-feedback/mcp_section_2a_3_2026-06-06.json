@@ -19,5 +19,13 @@
       "screenshots/session_json_2026-06-06.png"
     ]
   },
+  "ux_human_feed": {
+    "commit": "bd130e2",
+    "features": ["expandable JSON per row", "human event labels", "session HTML page"],
+    "screenshots": [
+      "screenshots/monitoring_human_feed_2026-06-06.png",
+      "screenshots/session_human_page_2026-06-06.png"
+    ]
+  },
   "status": "needs_customer_approval"
 }

@@ -1,5 +1,18 @@
 # CHANGELOG
 
+## v1.133 — 2026-06-06 (§2A.3 UX: человеческая лента + раскрывающийся JSON)
+
+- Лента мониторинга: понятный текст + **▸ JSON** на строку.
+- `/admin/session` — HTML «Моя сессия»; JSON через `?format=json`.
+- Nav: «Моя сессия». Commit `bd130e2`. **2A.3 на апрув.**
+
+## v1.132 — 2026-06-06 (§2A.3: логин / user ID — на апрув)
+
+- Nav УК: email + user id + Session JSON `/admin/session`.
+- `Auth::LoginJournal`: audit входа/выхода с user_id, email, role.
+- Event feed: actor_id/email в audit payload.
+- 2A.2 → `[x]` PASS. Commit `123c059`.
+
 ## v1.131 — 2026-06-06 (§2A.2: журнал событий — на апрув)
 
 - `Health::TenantEventFeed`: детали под checks + unified feed для UI и ИИ-агента.

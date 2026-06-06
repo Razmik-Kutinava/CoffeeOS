@@ -20,6 +20,19 @@
 
 **Артефакты (для агента в другом редакторе):** точка входа — [`milestones/veha_2/artifacts/README.md`](milestones/veha_2/artifacts/README.md). Прогон 10: `artifacts/prog10/{_index,smoke,kiosk,shop,staff-rbac,connectivity,platform-ent,warehouse}/`. Сводный индекс: `prog10/_index/prog10_final_index.json`. Скрипты `bin/prog10_*` пишут в эти подпапки (OUT обновлён). Старый плоский путь `artifacts/prog10_*.json` **удалён** — везде относительные ссылки `artifacts/prog10/...`.
 
+### Сессия 2026-06-06 (§2A.3 UX — человеческая лента + JSON, на апрув)
+
+- **UI:** лента событий понятным текстом; **▸ JSON** у каждой строки; `/admin/session` — HTML-карточка + JSON.
+- **Commit:** `bd130e2`. Скрины: `monitoring_human_feed_2026-06-06.png`, `session_human_page_2026-06-06.png`.
+
+### Сессия 2026-06-06 (§2A.3 — логин / user ID, на апрув)
+
+- **2A.2:** `[x]` PASS (апрув заказчика).
+- **Код:** `Auth::LoginJournal` — audit `user_login`/`user_logout`; nav показывает email + user id; `/admin/session` JSON.
+- **Commit:** `123c059`. MCP: [`mcp_section_2a_3_2026-06-06.json`](milestones/veha_2/artifacts/demo-feedback/mcp_section_2a_3_2026-06-06.json).
+- **Скрины:** `session_user_id_nav_2026-06-06.png`, `session_json_2026-06-06.png`.
+- **Дальше:** апрув 2A.3 → 2A.4 транзакции.
+
 ### Сессия 2026-06-06 (§2A.2 — журнал событий, на апрув)
 
 - **2A.1:** `[x]` PASS (апрув заказчика).
