@@ -94,7 +94,7 @@
 ## E. Полировка по демо (блокер §I)
 
 См. [`DEMO_FEEDBACK.md`](DEMO_FEEDBACK.md) — очередь **§1–3 done** *(2026-06-04)*.  
-**Активная работа заказчика (§2.3 UX):** [`CUSTOMER_BUSINESS_REQUIREMENTS.md`](CUSTOMER_BUSINESS_REQUIREMENTS.md) этапы 1–5 — **не закрыто**.
+**Активная работа заказчика (§2.3 UX):** **done** 2026-06-06 — [`CUSTOMER_BUSINESS_REQUIREMENTS.md`](CUSTOMER_BUSINESS_REQUIREMENTS.md). **Следующее:** блок 2 (табло баристы).
 
 - [x] Процесс: правки PDF → DEMO_FEEDBACK → код/MCP → `done` *(2026-06-04)*
 - [x] Критичные блокеры демо из PDF прогонки — закрыты *(MCP Fly)*

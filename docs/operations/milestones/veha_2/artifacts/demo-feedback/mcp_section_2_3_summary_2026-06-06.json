@@ -5,8 +5,11 @@
   "deploy": "deployment-01KTE2SYJK31BGHHRVWQ9AH9Z2",
   "commit": "54b7bdf",
   "tenant_a": "2fdee1ac-4674-41ee-b89e-87b45643f789",
-  "customer_approval": "pending",
-  "overall_technical": "PASS_WITH_NOTES",
+  "customer_approval": "approved",
+  "customer_approval_at": "2026-06-06",
+  "customer_approval_note": "чат: «апрув на 2.3 все норм, если что позже вернется»",
+  "overall_technical": "PASS",
+  "section_2_3_closed": true,
   "summary_ru": "Витрина: оформление → T-Bank iframe в оболочке CoffeeOS → webhook → accepted → «Заказы за сегодня». Этапы 1–5 прогнаны на Fly (MCP + smoke + интеграционный тест). Закрытие §2.3 — только после ок заказчика.",
   "stages": [
     {
@@ -75,8 +78,8 @@
     "failures": 0
   },
   "close_gate": {
-    "status": "open",
-    "requires": "Апрув заказчика по UI оплаты (этап 4) + итоговая сводка §2.3",
-    "checklist_row": "CUSTOMER_BUSINESS_REQUIREMENTS.md → «Закрытие §2.3»"
+    "status": "closed",
+    "closed_at": "2026-06-06",
+    "artifact": "mcp_section_2_3_stage5_3_2026-06-06.json"
   }
 }

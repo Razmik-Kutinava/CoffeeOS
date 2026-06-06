@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## v1.129 — 2026-06-06 (§2.3 закрыт: апрув заказчика + этап 5.3)
+
+- Апрув §2.3; 5.3 PASS — [`mcp_section_2_3_stage5_3_2026-06-06.json`](milestones/veha_2/artifacts/demo-feedback/mcp_section_2_3_stage5_3_2026-06-06.json).
+- Fix test: webhook REJECTED → order `cancelled` (PaymentFailureJournal).
+- Retest Fly: `fly:callback_smoke`, `fly:stage5_2_smoke` PASS.
+- Deploy: `deployment-01KTE3QZ9XNPXM62HZD5C01JB6`.
+- **Следующий фокус:** блок 2 — табло баристы.
+
 ## v1.128 — 2026-06-06 (§2.3 этап 5.3: сводка на апрув заказчика)
 
 - «Итог §2.3» + «Закрытие §2.3» в CBR — **§2.3 не закрыт** до апрува.

@@ -4,9 +4,9 @@
 
 **Источник:** PDF [`artifacts/demo-feedback/customer_qa_prog10_2026-06.pdf`](artifacts/demo-feedback/customer_qa_prog10_2026-06.pdf) (продолжение В1: [`../veha_1/artifacts/customer_live_qa_block1_2026-05-30.pdf`](../veha_1/artifacts/customer_live_qa_block1_2026-05-30.pdf)).
 
-**Сейчас (2026-06-06):** §2.3 — **техпрогон PASS**, сводка готова, **закрытие только по апруву заказчика** → [`CUSTOMER_BUSINESS_REQUIREMENTS.md`](CUSTOMER_BUSINESS_REQUIREMENTS.md) («Итог §2.3»).
+**Сейчас (2026-06-06):** **§2.3 закрыт** — апрув заказчика. Следующий фокус: **блок 2** (табло баристы) → [`CUSTOMER_BUSINESS_REQUIREMENTS.md`](CUSTOMER_BUSINESS_REQUIREMENTS.md).
 
-**Честно:** §1–3 в таблице ниже — **done** *(выборочно)*. §2.3 — отдельный чеклист; **не закрыт** до вашего ок.
+**Честно:** §1–3 в таблице ниже — **done** *(выборочно)*. §2.3 — **done** *(этапы 1–5, MCP)*.
 
 **Связь:** [`CHECKLIST.md`](CHECKLIST.md) § E · [`SESSION_STATE.md`](../../SESSION_STATE.md) · прогон 10 [`QA_ACCEPTANCE_RUN.md`](QA_ACCEPTANCE_RUN.md).  
 **Активный чеклист:** [`CUSTOMER_BUSINESS_REQUIREMENTS.md`](CUSTOMER_BUSINESS_REQUIREMENTS.md).
@@ -30,6 +30,7 @@
 | 2026-06-02 | заказчик PDF §3.6 | franchise / УК | **Баг:** франчайзи «нет» — вход или создание из УК | done *(MCP post-deploy)* | [`mcp_post_deploy_fly_2026-06-03.json`](artifacts/demo-feedback/mcp_post_deploy_fly_2026-06-03.json) §franchise |
 | 2026-06-02 | заказчик PDF §2.2 | shop UI | Стрелка назад, свайп, +1 товар — проверить/допилить | done *(PDF)* | назад/свайп/+1 — ок по прогонке; платные модификаторы — код `51e4d22+` |
 | 2026-06-03 | заказчик PDF §2.2 | shop модификаторы | Платные допки +15/+20/+40, пересчёт корзины/оплаты | done *(MCP)* | [`mcp_section_2_2_fly_2026-06-03.json`](artifacts/demo-feedback/mcp_section_2_2_fly_2026-06-03.json) — кордиал → **199₽** |
+| 2026-06-06 | заказчик (чат) | shop §2.3 оплата | Полная приёмка §2.3 этапы 1–5 + UI iframe | **done** *(апрув)* | [`mcp_section_2_3_stage5_3_2026-06-06.json`](artifacts/demo-feedback/mcp_section_2_3_stage5_3_2026-06-06.json) |
 | 2026-06-04 | заказчик PDF §2.3 | shop оплата | ФИО до кнопки; «Идёт оплата…»; корзина после возврата с банка | **done** *(MCP)* | [`mcp_section_2_3_fly_2026-06-04.json`](artifacts/demo-feedback/mcp_section_2_3_fly_2026-06-04.json) post-deploy |
 | 2026-06-04 | заказчик PDF §2.4 | shop оплата | Двойной «Оплатить» — один заказ | **done** *(MCP+БД Fly)* | [`mcp_section_2_4_fly_2026-06-04.json`](artifacts/demo-feedback/mcp_section_2_4_fly_2026-06-04.json) `db_orders_count: 1`; код `11ab05f` |
 | 2026-06-04 | заказчик PDF §2.5 | shop | Медленный интернет: крутилка; тест в подвале | **done** *(MCP Slow 3G)* | [`mcp_section_2_5_fly_2026-06-04.json`](artifacts/demo-feedback/mcp_section_2_5_fly_2026-06-04.json); boot skeleton `home.html.erb` |
@@ -90,15 +91,15 @@
 | Успех оплаты → webhook → `accepted` | **PASS** — [`mcp_section_2_3_stage5_1_2026-06-06.json`](artifacts/demo-feedback/mcp_section_2_3_stage5_1_2026-06-06.json) |
 | История за сегодня после card оплаты | **PASS** — [`mcp_section_2_3_stage5_2_2026-06-06.json`](artifacts/demo-feedback/mcp_section_2_3_stage5_2_2026-06-06.json) |
 
-### §2.3 — итог (на апрув заказчика)
+### §2.3 — итог (**done**, апрув 2026-06-06)
 
 | Поле | Значение |
 |------|----------|
-| **Закрытие §2.3** | **`open`** — ждём ваш ок |
+| **Статус** | **done** — апрув заказчика («всё норм, если что позже вернётся») |
+| Закрытие 5.3 | [`mcp_section_2_3_stage5_3_2026-06-06.json`](artifacts/demo-feedback/mcp_section_2_3_stage5_3_2026-06-06.json) |
 | Сводка | [`mcp_section_2_3_summary_2026-06-06.json`](artifacts/demo-feedback/mcp_section_2_3_summary_2026-06-06.json) |
-| Детали | [`CUSTOMER_BUSINESS_REQUIREMENTS.md`](CUSTOMER_BUSINESS_REQUIREMENTS.md) → «Итог §2.3» |
-| UI оплаты (оболочка + iframe) | Показать на Fly; скрин [`stage4_payment_shell_paying_2026-06-06.png`](artifacts/demo-feedback/screenshots/stage4_payment_shell_paying_2026-06-06.png) |
-| После апрува | Строка §2.3 → **done**, блок 2 (табло баристы) |
+| Retest Fly | `fly:callback_smoke` order `b697b433-…`; `fly:stage5_2_smoke` order `38eed006-…` |
+| Дальше | Блок 2 — табло баристы |
 
 ### §2.4 — приёмка (MCP Fly 2026-06-04)
 
