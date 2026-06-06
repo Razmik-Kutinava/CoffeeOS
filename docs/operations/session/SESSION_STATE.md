@@ -2,7 +2,7 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-06-06 (обновлено: **W1.3 PASS**, хвосты W1.2 закрыты, следующий **W1.4**)  
+**Дата:** 2026-06-06 (обновлено: **W1.3 полностью PASS** post-deploy, polling + корзина Hot, следующий **W1.4**)  
 **Веха 1:** официально не закрыта (§ I, H.3 — `[ ]`).  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
 **§2.3 оплата витрина:** **done** 2026-06-06 — [`CUSTOMER_BUSINESS_REQUIREMENTS.md`](milestones/veha_2/requirements/CUSTOMER_BUSINESS_REQUIREMENTS.md).
@@ -25,12 +25,13 @@
 
 **Ops на блок:** `SESSION_STATE` + коммит всегда; `PRACTICES` (CR); `QA_ACCEPTANCE_RUN` + `artifacts/` (QA); `CHANGELOG` если заметно; `CHECKLIST` `[x]` только по факту.
 
-### Сессия 2026-06-06 (W1.3 — обязательные модификаторы: **PASS**)
+### Сессия 2026-06-06 (W1.3 — обязательные модификаторы: **PASS** post-deploy)
 
-- **Fly:** UK curl → `W13-REQ-SIZE` (is_required) + Hot/Iced; vitrina A alert «Выберите: W13-REQ-SIZE» при «В корзину» без выбора.
-- **Хвосты W1.2:** optional `W12-Size`, `W12-FILE-001` (PNG upload), vitrina B DOM, модификаторы на live Fly.
-- **Код:** `Platform::MenuController#update_product` → `bust_shop_catalog_cache!` (polling цены УК→витрина после deploy).
+- **Fly post-deploy:** UK curl → Hot/Iced в группы `W13-REQ-SIZE`; vitrina блок без выбора ✅; **happy path** Hot → корзина ✅ (`W12-PHOTO-001` 299₽).
+- **Polling:** `W12-PLAIN-001` **179₽** на vitrina A без F5 (cache bust `update_product` работает).
+- **Хвосты W1.2:** optional `W12-Size`, `W12-FILE-001`, vitrina B DOM — закрыты ранее.
 - **Тест:** `test/integration/platform/uk_menu_w13_required_modifiers_test.rb`.
+- **Скрины:** `w13_cart_hot_happy_fly_2026-06-06.png`, `w12_polling_price_179_fly_2026-06-06.png`.
 - **Артефакт:** [`mcp_w13_required_modifiers_fly_2026-06-06.json`](milestones/veha_2/artifacts/demo-feedback/mcp_w13_required_modifiers_fly_2026-06-06.json).
 
 ### Сессия 2026-06-06 (W1.2 — УК меню → витрина: **PASS**)

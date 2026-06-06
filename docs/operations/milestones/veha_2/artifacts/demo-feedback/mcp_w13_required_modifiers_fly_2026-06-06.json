@@ -1,43 +1,52 @@
 {
-  "scenario": "W1.3: обязательные модификаторы — УК is_required → витрина блокирует «В корзину»",
+  "scenario": "W1.3 post-deploy: обяз. модификаторы + happy path корзина + polling цены",
   "stand": "https://coffeeos.fly.dev",
   "run_at": "2026-06-06",
-  "tool": "curl (UK session + csrf-token meta) + cursor-ide-browser vitrina",
+  "tool": "curl UK (login X-CSRF-Token) + cursor-ide-browser vitrina",
   "product_id": "19a7a8fb-7ff4-407e-9234-3fb4da47fce9",
+  "plain_product_id": "1178ec31-dceb-4b67-b588-902dc7e163b9",
   "tenant_a": "2fdee1ac-4674-41ee-b89e-87b45643f789",
-  "tenant_b": "655aaccb-004a-4bb9-a50a-ce618854dda3",
   "steps": [
     {
       "step": 1,
-      "action": "UK curl: группа W13-REQ-SIZE is_required=1 + опции Hot/Iced на W12-PHOTO-001",
-      "result": "302; на карточке товара DOM «W13-REQ-SIZE · обязательно»",
+      "action": "UK curl: Hot/Iced в пустые группы W13-REQ-SIZE (post-deploy data fix)",
+      "result": "302×4; shop API: W13-REQ-SIZE ['Hot','Iced'] на обеих группах",
       "verdict": "PASS"
     },
     {
       "step": 2,
-      "action": "Vitrina A: «В корзину» без выбора обязательной группы",
-      "result": "alert «Выберите: W13-REQ-SIZE», остаёмся на карточке",
+      "action": "Vitrina: блок без выбора (ранее зафиксировано)",
+      "result": "alert «Выберите: W13-REQ-SIZE»",
       "verdict": "PASS"
     },
     {
       "step": 3,
+      "action": "Vitrina happy path: Hot (обе обяз. группы) → «В корзину» → /cart",
+      "result": "W12-PHOTO-001 299₽ ×1, модификаторы Hot ×2",
+      "verdict": "PASS"
+    },
+    {
+      "step": 4,
+      "action": "Polling цены УК→витрина без F5 (W12-PLAIN-001 179₽)",
+      "result": "API plain_price=179; DOM «W12-PLAIN-001 179₽» в каталоге",
+      "verdict": "PASS"
+    },
+    {
+      "step": 5,
       "action": "Integration test uk_menu_w13_required_modifiers_test.rb",
       "result": "2 tests, 17 assertions",
       "verdict": "PASS"
     }
   ],
-  "w12_tails_closed_in_same_run": [
-    "W12-Size optional модификаторы (curl UK)",
-    "W12-FILE-001 с upload PNG на Fly — /uploads/products/… на vitrina B",
-    "Vitrina B DOM: W12-FLY-0606 + 3 товара",
-    "Polling product card: модификаторы видны без F5 при открытии карточки после UK"
-  ],
-  "not_deployed_yet": [
-    "bust_shop_catalog_cache! на update_product в УК — в коде develop, на Fly после deploy; до deploy цена UK→витрина polling только через modifier/create"
+  "notes": [
+    "На Fly две дублирующие группы W13-REQ-SIZE (исторический double POST); для корзины нужен выбор в обеих",
+    "Shop API без X-Shop-Api-Key → 401 после deploy (ожидаемо); vitrina browser использует meta shop-api-key"
   ],
   "integration_test": "test/integration/platform/uk_menu_w13_required_modifiers_test.rb",
   "screenshots": [
     "screenshots/w13_required_modifier_block_fly_2026-06-06.png",
+    "screenshots/w13_cart_hot_happy_fly_2026-06-06.png",
+    "screenshots/w12_polling_price_179_fly_2026-06-06.png",
     "screenshots/w12_vitrina_b_catalog_fly_2026-06-06.png"
   ],
   "overall": "PASS"

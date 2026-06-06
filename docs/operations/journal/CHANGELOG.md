@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v1.142 — 2026-06-06 (W1.3 post-deploy: корзина Hot + polling 179₽)
+
+- **Fly MCP post-deploy:** UK curl → Hot/Iced в `W13-REQ-SIZE`; vitrina happy path Hot → корзина (`W12-PHOTO-001` 299₽).
+- **Polling:** `W12-PLAIN-001` **179₽** на vitrina A без F5; скрины `w13_cart_hot_happy_fly_2026-06-06.png`, `w12_polling_price_179_fly_2026-06-06.png`.
+- **Ops:** MCP [`mcp_w13_required_modifiers_fly_2026-06-06.json`](../milestones/veha_2/artifacts/demo-feedback/mcp_w13_required_modifiers_fly_2026-06-06.json) обновлён; SESSION_STATE → W1.4.
+
 ## v1.141 — 2026-06-06 (W1.3 обяз. модификаторы + хвосты W1.2)
 
 - **W1.3:** Fly MCP — `W13-REQ-SIZE` is_required, vitrina блокирует «В корзину»; test `uk_menu_w13_required_modifiers_test.rb`.
