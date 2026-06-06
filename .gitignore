@@ -46,6 +46,10 @@
 # Local scratch/notes file
 /qc
 
+# Agent session scratch in repo root (commit messages, one-off scripts)
+/tmp_*
+/-b
+
 # Coverage reports (e.g. SimpleCov)
 /coverage/
 

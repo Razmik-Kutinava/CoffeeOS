@@ -1,0 +1,52 @@
+# bin — исполняемые скрипты
+
+## Ежедневная разработка
+
+| Скрипт | Назначение |
+|--------|------------|
+| `dev` | Rails + Vite (витрина `/shop`), порт 3001 |
+| `server` | Только Rails-сервер |
+| `setup` | Первичная настройка проекта |
+| `rails` / `rake` | Стандартные Rails binstubs |
+| `bundle` | Bundler |
+
+## Качество и CI
+
+| Скрипт | Назначение |
+|--------|------------|
+| `smoke` | Smoke-тесты: `tests` \| `ci` \| `lint` \| `rls` |
+| `ci` | Полный CI-прогон локально |
+| `rubocop` / `brakeman` / `bundler-audit` | Линт и безопасность |
+
+## Деплой и инфра
+
+| Скрипт | Назначение |
+|--------|------------|
+| `kamal` | Деплой на Fly через Kamal |
+| `docker-entrypoint` | Entrypoint контейнера |
+| `ensure-server` | Проверка/подъём сервера |
+
+## CoffeeOS — prog10 (ручной smoke / demo)
+
+Скрипты `prog10_*` — **не binstubs**, а проектные Ruby-скрипты для проверок на Fly/локально:
+
+| Скрипт | Назначение |
+|--------|------------|
+| `prog10_fly_smoke.rb` | Общий smoke Fly-стенда |
+| `prog10_connectivity_fly.rb` | Сеть / доступность |
+| `prog10_shop_vitrina.rb` | Витрина |
+| `prog10_shop_vitrina_card.rb` | Карточка товара |
+| `prog10_shop_urls_check.rb` | URL-режимы витрины |
+| `prog10_shop_shp03.rb` | Сценарий SHP-03 |
+| `prog10_kiosk_barista.rb` | Киоск + бариста |
+| `prog10_kiosk_auth_fly_verify.rb` | Auth киоска на Fly |
+| `prog10_staff_rbac_isolation.rb` | RBAC / изоляция staff |
+| `prog10_setup_staff.rb` | Заведение staff |
+| `prog10_collect_kiosk_tokens.rb` | Сбор токенов киоска |
+| `prog10_stress_wave2.rb` | Нагрузочный прогон |
+
+Запуск: `ruby bin/prog10_fly_smoke.rb` или `./bin/prog10_fly_smoke.rb` (если executable).
+
+## Остальное
+
+`puma`, `vite`, `jobs`, `irb`, `dotenv` и т.д. — **gem binstubs** от Bundler; не редактировать вручную, обновляются через `bundle binstubs`.

@@ -6,7 +6,7 @@ namespace :demo do
     load Rails.root.join("db/seeds_demo_v1.rb")
   end
 
-  desc "URL витрин всех активных точек (режим поддомен или ?tenant_id= — см. docs/operations/SHOP_URL_MODES.md)"
+  desc "URL витрин всех активных точек (режим поддомен или ?tenant_id= — см. docs/operations/dev/SHOP_URL_MODES.md)"
   task shop_urls: :environment do
     base = Platform::TenantOnboarding::UrlBuilder.shop_base_domain
     mode = base.present? ? "A (поддомен #{base})" : "B (Fly demo / без SHOP_BASE_DOMAIN)"

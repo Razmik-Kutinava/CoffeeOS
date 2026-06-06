@@ -19,7 +19,7 @@ Rails 8, PostgreSQL, Svelte/Vite, Pundit, Minitest.
 
 ## Сервис-объекты (Веха 1 — обязательно для агентов)
 
-Практика **только Service Objects**, без Domain Folders и без запрета ActiveRecord между модулями. Подробности: `.cursor/rules/coffeeos-services.mdc`, краткий триггер — `coffeeos-core.mdc` п. 9. Статус внедрения по вехам (дописывать): `docs/operations/MILESTONE_PRACTICES.md`.
+Практика **только Service Objects**, без Domain Folders и без запрета ActiveRecord между модулями. Подробности: `.cursor/rules/coffeeos-services.mdc`, краткий триггер — `coffeeos-core.mdc` п. 9. Статус внедрения по вехам (дописывать): `docs/operations/reference/MILESTONE_PRACTICES.md`.
 
 | Ситуация | Действие |
 |----------|----------|
@@ -35,7 +35,7 @@ Rails 8, PostgreSQL, Svelte/Vite, Pundit, Minitest.
 
 - Опора на продукт: `docs/product/01_Vision.md`, `docs/product/02_functional.md`, `docs/product/03_Business_Logic.md`. `docs/product/ARCHITECTURE.md` — когда пользователь явно считает документ готовым каноном или задача архитектурная.
 - Корень процесса: **`.cursorrules`** (ISSUES, SESSION_STATE, коммиты, деструктив, продуктовые доки).
-- По контексту: `docs/operations/ISSUES.md`, `docs/operations/SESSION_STATE.md`, при необходимости `HANDOFF.md`, `CHANGELOG.md`.
+- По контексту: `docs/operations/ISSUES.md`, `docs/operations/session/SESSION_STATE.md`, при необходимости `session/HANDOFF.md`, `journal/CHANGELOG.md`.
 - Не додумывай; не хватает данных — эскалация.
 - Секреты только через ENV; не хардкодить.
 - **Баги и ошибки:** сразу запись в `docs/operations/ISSUES.md` (где, приоритет, влияние); довести до **«решено»**; в той же записи — **что сделано, чем закрыли** (см. шапку `ISSUES.md`).
@@ -66,7 +66,7 @@ Rails 8, PostgreSQL, Svelte/Vite, Pundit, Minitest.
 2. Тесты написаны и проходят
 3. Code Review агент одобрил
 4. Refactoring рекомендации выполнены
-5. Изменения отражены в docs/operations/CHANGELOG.md
-6. docs/operations/HANDOFF.md обновлён
-7. docs/operations/SESSION_STATE.md обновлён
+5. Изменения отражены в docs/operations/journal/CHANGELOG.md
+6. docs/operations/session/HANDOFF.md обновлён
+7. docs/operations/session/SESSION_STATE.md обновлён
 8. Нет открытых 🔴 блокеров для релиза

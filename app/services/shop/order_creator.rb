@@ -33,7 +33,7 @@ module Shop
       payment = nil
       ActiveRecord::Base.transaction do
         # В1 гибрид смены: витрина/shop не привязана к CashShift (cash_shift_id остаётся NULL).
-        # Barista POS — только через OrderCreationService с открытой сменой. См. docs/operations/milestones/veha_1/ORDER_ENTRY_AUDIT.md.
+        # Barista POS — только через OrderCreationService с открытой сменой. См. docs/operations/milestones/veha_1/reference/ORDER_ENTRY_AUDIT.md.
         order = Order.create!(
           tenant_id: @tenant.id,
           customer_id: customer.id,

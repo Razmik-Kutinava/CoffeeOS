@@ -1,25 +1,29 @@
 # Веха 1 — «Цифровой прилавок»
 
-Все операционные документы приёмки и журнала **В1** — в этой папке.
+## Структура
+
+| Папка | Содержимое |
+|-------|------------|
+| [checklists/](checklists/) | CHECKLIST |
+| [qa/](qa/) | приёмка, live-demo, code review |
+| [reference/](reference/) | PRACTICES, DEMO_FEEDBACK, логины, audit |
+
+Stub-файлы удалены. Старые пути → [`../PATH_MAP.md`](../PATH_MAP.md).
 
 | Файл | Назначение |
 |------|------------|
-| [CHECKLIST.md](CHECKLIST.md) | Главный чеклист закрытия вехи (блоки A–J) |
-| [PRACTICES.md](PRACTICES.md) | Журнал практик, блоки A–H, MCP, техдолг В1 |
-| [QA_ACCEPTANCE_RUN.md](QA_ACCEPTANCE_RUN.md) | Протокол прогона QA (сухой + MCP) |
-| [CODE_REVIEW.md](CODE_REVIEW.md) | Code review перед живым демо |
-| [ORDER_ENTRY_AUDIT.md](ORDER_ENTRY_AUDIT.md) | Решение A/B смены + реестр входов заказа |
-| [DEMO_LOGINS.md](DEMO_LOGINS.md) | Demo-пользователи и пароль |
-| [LIVE_DEMO_SCENARIOS.md](LIVE_DEMO_SCENARIOS.md) | Ручные сценарии живого демо (2–4 мин), все роли — для разработчиков |
-| [LIVE_DEMO_SCENARIOS_PLAIN.md](LIVE_DEMO_SCENARIOS_PLAIN.md) | То же простым языком — для заказчика (H.3) |
-| [DEMO_FEEDBACK.md](DEMO_FEEDBACK.md) | Фидбек заказчика по живому демо; PDF в `artifacts/` |
+| [checklists/CHECKLIST.md](checklists/CHECKLIST.md) | Главный чеклист закрытия вехи (блоки A–J) |
+| [reference/PRACTICES.md](reference/PRACTICES.md) | Журнал практик, блоки A–H, MCP, техдолг В1 |
+| [qa/QA_ACCEPTANCE_RUN.md](qa/QA_ACCEPTANCE_RUN.md) | Протокол прогона QA (сухой + MCP) |
+| [qa/CODE_REVIEW.md](qa/CODE_REVIEW.md) | Code review перед живым демо |
+| [reference/ORDER_ENTRY_AUDIT.md](reference/ORDER_ENTRY_AUDIT.md) | Решение A/B смены + реестр входов заказа |
+| [reference/DEMO_LOGINS.md](reference/DEMO_LOGINS.md) | Demo-пользователи и пароль |
+| [qa/LIVE_DEMO_SCENARIOS.md](qa/LIVE_DEMO_SCENARIOS.md) | Ручные сценарии живого демо (2–4 мин), все роли |
+| [qa/LIVE_DEMO_SCENARIOS_PLAIN.md](qa/LIVE_DEMO_SCENARIOS_PLAIN.md) | То же простым языком — для заказчика (H.3) |
+| [reference/DEMO_FEEDBACK.md](reference/DEMO_FEEDBACK.md) | Фидбек заказчика; PDF в `artifacts/` |
 
-**В2 стартовала; В1 не закрыта официально** — `docs/operations/HANDOFF.md`, `CHANGELOG` v1.54.
+**В2 стартовала; В1 не закрыта официально** — `docs/operations/session/HANDOFF.md`, `CHANGELOG` v1.54.
 
-**Fly demo-стенд (живое демо):** [`../FLY_DEMO_STAND.md`](../FLY_DEMO_STAND.md), [`../CUSTOMER_HANDOFF.md`](../CUSTOMER_HANDOFF.md) — URL, логины, сценарии.
+**Fly demo-стенд:** [`../demo/FLY_DEMO_STAND.md`](../demo/FLY_DEMO_STAND.md), [`../demo/CUSTOMER_HANDOFF.md`](../demo/CUSTOMER_HANDOFF.md).
 
-**Связанные (вне папки):**
-
-- QA-сценарии: `docs/agents/AGENTS/qa_scenarios.md`
-- Продукт: `docs/product/development_roadmap.md`, `docs/product/01_Vision.md` …
-- Состояние сессии: `docs/operations/SESSION_STATE.md`
+**Связанные (вне папки):** `docs/agents/AGENTS/qa_scenarios.md`, `docs/operations/session/SESSION_STATE.md`.

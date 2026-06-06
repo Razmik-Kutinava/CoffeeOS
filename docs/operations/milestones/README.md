@@ -8,6 +8,6 @@
 | **Веха 2** — Scale & Stability | [`veha_2/`](veha_2/README.md) | в работе (доки 2026-05-25) |
 | **Веха 3** — Total Control | — | не начата |
 
-**Общие ops (не привязаны к одной вехе):** `../CHANGELOG.md`, `../SESSION_STATE.md`, `../HANDOFF.md`, `../ISSUES.md`, `../GAP_LIST_CORE_SCHEMA.md`.
+**Общие ops (не привязаны к одной вехе):** `../journal/CHANGELOG.md`, `../session/SESSION_STATE.md`, `../session/HANDOFF.md`, `../ISSUES.md`, `../GAP_LIST_CORE_SCHEMA.md`.
 
 **Продуктовый scope:** `docs/product/development_roadmap.md`.

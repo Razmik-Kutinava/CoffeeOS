@@ -3,7 +3,7 @@
 module Barista
   # Создаёт заказ баристы: валидирует корзину, считает суммы,
   # создаёт Order + OrderItems + Payment + OrderStatusLog в одной транзакции.
-  # В1: только при открытой CashShift (@shift.open?) — см. docs/operations/milestones/veha_1/ORDER_ENTRY_AUDIT.md.
+  # В1: только при открытой CashShift (@shift.open?) — см. docs/operations/milestones/veha_1/reference/ORDER_ENTRY_AUDIT.md.
   class OrderCreationService
     class OrderCreationError < StandardError; end
 

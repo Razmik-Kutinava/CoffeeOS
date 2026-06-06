@@ -18,7 +18,7 @@
 | **2. MCP** | Агент | Chrome DevTools MCP | **MCP** — там же + `ONBOARDING_DEVTOOLS_RUN.md` |
 | **3. Ручной + demo** | Заказчик | Браузер, **реальные деньги** | **Ручной** — `DEMO_FEEDBACK.md` |
 
-Протоколы: [`veha_1/QA_ACCEPTANCE_RUN.md`](../../operations/milestones/veha_1/QA_ACCEPTANCE_RUN.md) · [`veha_2/QA_ACCEPTANCE_RUN.md`](../../operations/milestones/veha_2/QA_ACCEPTANCE_RUN.md)
+Протоколы: [`veha_1/QA_ACCEPTANCE_RUN.md`](../../operations/milestones/veha_1/qa/QA_ACCEPTANCE_RUN.md) · [`veha_2/QA_ACCEPTANCE_RUN.md`](../../operations/milestones/veha_2/qa/QA_ACCEPTANCE_RUN.md)
 
 ---
 
@@ -32,7 +32,7 @@
 | Base URL | `http://127.0.0.1:3001` |
 | Логин панелей | `http://127.0.0.1:3001/login` |
 | Пароль всех demo-пользователей | `demo123456` |
-| Логины / роли | `docs/operations/milestones/veha_1/DEMO_LOGINS.md` |
+| Логины / роли | `docs/operations/milestones/veha_1/reference/DEMO_LOGINS.md` |
 | Tenant A (slug) | `demo-point-a` |
 | Tenant B (slug) | `demo-point-b` |
 | Цех (slug) | `demo-prep-kitchen` |
@@ -51,7 +51,7 @@ bin/rails runner "puts Tenant.find_by!(slug: 'demo-point-a').id"
 
 ## Журнал прогона В1
 
-**Прогон агента:** 2026-05-25. Детали: `docs/operations/milestones/veha_1/QA_ACCEPTANCE_RUN.md`.
+**Прогон агента:** 2026-05-25. Детали: `docs/operations/milestones/veha_1/qa/QA_ACCEPTANCE_RUN.md`.
 
 | ID | Авто (этап 1) | MCP (этап 2) | Ручной (этап 3) | Комментарий |
 |----|---------------|--------------|-----------------|-------------|
@@ -175,7 +175,7 @@ bin/rails runner "puts Tenant.find_by!(slug: 'demo-point-a').id"
 ## 3. Кассовая дисциплина и заказы (гибрид смены + shop)
 
 **Цель:** barista привязан к `CashShift`; shop — без смены.  
-**Реестр входов (не дублировать правила):** `docs/operations/milestones/veha_1/ORDER_ENTRY_AUDIT.md`.
+**Реестр входов (не дублировать правила):** `docs/operations/milestones/veha_1/reference/ORDER_ENTRY_AUDIT.md`.
 
 > После `demo:seed` у `barista-a` обычно уже **открытая** смена. Для V1-3.1 сначала **закройте** смену: `/barista/shift` → закрытие (wizard), затем пробуйте новый заказ.
 
@@ -295,7 +295,7 @@ bin/rails runner "puts AdminAuditLog.where(action: 'order_cancelled').order(crea
 
 ## Сценарии [ВЕХА 2]
 
-MCP-шаги: [`ONBOARDING_DEVTOOLS_SCENARIOS.md`](../../operations/milestones/veha_2/ONBOARDING_DEVTOOLS_SCENARIOS.md). Журнал: [`ONBOARDING_DEVTOOLS_RUN.md`](../../operations/milestones/veha_2/ONBOARDING_DEVTOOLS_RUN.md).
+MCP-шаги: [`ONBOARDING_DEVTOOLS_SCENARIOS.md`](../../operations/milestones/veha_2/runbooks/ONBOARDING_DEVTOOLS_SCENARIOS.md). Журнал: [`ONBOARDING_DEVTOOLS_RUN.md`](../../operations/milestones/veha_2/runbooks/ONBOARDING_DEVTOOLS_RUN.md).
 
 ### V2-ONB: Онбординг 3 org × 3 точки
 
@@ -355,8 +355,8 @@ IndexedDB, sync, `client_uuid`. *(Callback idempotency Т-Банка — **[В2]
 
 ## Ссылки
 
-- Логины В1: `docs/operations/milestones/veha_1/DEMO_LOGINS.md`
-- Чеклист В1: `docs/operations/milestones/veha_1/CHECKLIST.md` (блок H)
-- Чеклист В2: `docs/operations/milestones/veha_2/CHECKLIST.md` (§I)
+- Логины В1: `docs/operations/milestones/veha_1/reference/DEMO_LOGINS.md`
+- Чеклист В1: `docs/operations/milestones/veha_1/checklists/CHECKLIST.md` (блок H)
+- Чеклист В2: `docs/operations/milestones/veha_2/checklists/CHECKLIST.md` (§I)
 - Продукт (scope): `docs/product/development_roadmap.md`
-- Техдолг (не дублировать в QA): `docs/operations/milestones/veha_1/PRACTICES.md` § «Техдолг В1»
+- Техдолг (не дублировать в QA): `docs/operations/milestones/veha_1/reference/PRACTICES.md` § «Техдолг В1»

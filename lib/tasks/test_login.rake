@@ -37,9 +37,9 @@ namespace :test do
     puts "Пароль всех demo-пользователей: #{Demo::EnvironmentSetup::DEMO_PASSWORD}"
     puts ""
     puts "Дубль задачи = demo:seed. Канон: app/services/demo/environment_setup.rb"
-    puts "Док: docs/operations/milestones/veha_1/DEMO_LOGINS.md"
+    puts "Док: docs/operations/milestones/veha_1/reference/DEMO_LOGINS.md"
     puts ""
-    puts "MCP / ручной обход блока D: docs/operations/milestones/veha_1/CHECKLIST.md §D"
+    puts "MCP / ручной обход блока D: docs/operations/milestones/veha_1/checklists/CHECKLIST.md §D"
   end
 
   desc "Удалить demo-пользователей (@demo.coffeeos.local) и опциональных test@ extras"

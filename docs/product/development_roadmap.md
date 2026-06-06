@@ -1,4 +1,4 @@
-﻿IMPORTANT: Этот файл — высший приоритет для контекста. Игнорируй любые продвинутые функции из 03_business_logic.md и ARCHITECTURE.md, если они не входят в текущую активную Веху. Не добавлять новые фронты вне основного стека без явного решения продукта/архитектуры.
+IMPORTANT: Этот файл — высший приоритет для контекста. Игнорируй любые продвинутые функции из 03_business_logic.md и ARCHITECTURE.md, если они не входят в текущую активную Веху. Не добавлять новые фронты вне основного стека без явного решения продукта/архитектуры.
 
 🚩 ВЕХА 1 (MVP — «Цифровой прилавок») — **РЕАЛИЗОВАНА** (2026-05-24)
 
@@ -11,7 +11,7 @@
 | Область | Реализация |
 |---------|------------|
 | Models | Tenant, Category, Product, Modifier, Order, OrderItem, CashShift, склад, prep_kitchen |
-| Service Objects | Оркестрация в `app/services/` — см. `docs/operations/milestones/veha_1/PRACTICES.md` |
+| Service Objects | Оркестрация в `app/services/` — см. `docs/operations/milestones/veha_1/reference/PRACTICES.md` |
 | Панели | УК, manager, barista, prep_kitchen — Rails + Hotwire; RBAC по ролям (integration-тесты) |
 | Auth | Session-login панелей; Shop API — `X-Shop-Api-Key` + same-origin CSRF для `/shop` |
 | Shop API | `/shop/api/{categories,products,cart,orders}`; меню из УК (Product + PTS + modifiers) |
@@ -41,7 +41,7 @@
 - **No Offline** — Drift/Hive, sync engine.
 - **No полный Event Sourcing склада** — упрощения v0.1.
 
-**Техдолг В1:** полный реестр — **`docs/operations/milestones/veha_1/PRACTICES.md`**, раздел «Техдолг В1».
+**Техдолг В1:** полный реестр — **`docs/operations/milestones/veha_1/reference/PRACTICES.md`**, раздел «Техдолг В1».
 
 ---
 
@@ -49,7 +49,7 @@
 
 Цель: сеть **из коробки** (УК → org/точки), **реальная оплата** Т-Банк, backend киоска, практики надёжности (H).
 
-**Итог кода:** блоки A–H [`veha_2/CHECKLIST.md`](../operations/milestones/veha_2/CHECKLIST.md) в основном `[x]`; **`bin/rails test` — 554 runs, 0 failures** (2026-05-30). **§I открыта:** живое demo, QA прогон 10, DEMO_FEEDBACK.
+**Итог кода:** блоки A–H [`veha_2/checklists/CHECKLIST.md`](../operations/milestones/veha_2/checklists/CHECKLIST.md) в основном `[x]`; **`bin/rails test` — 554 runs, 0 failures** (2026-05-30). **§I открыта:** живое demo, QA прогон 10, DEMO_FEEDBACK.
 
 ### Сделано в В2
 

@@ -9,7 +9,7 @@
 [2026-05-30] — Kiosk: POST /kiosk/api/auth
 Статус: resolved
 Описание: Flutter/планшет нужен tenant по device_token; отдельного эндпоинта не было.
-Решение: `Kiosk::Api::AuthController`, контракт [`FLUTTER_API.md`](milestones/veha_2/FLUTTER_API.md); shop API без дублирования.
+Решение: `Kiosk::Api::AuthController`, контракт [`FLUTTER_API.md`](milestones/veha_2/runbooks/FLUTTER_API.md); shop API без дублирования.
 Проверка: 6 tests; curl smoke в FLUTTER_API.md.
 
 [2026-05-28] — Fly: worker crash loop (DB pool < Solid Queue threads)
