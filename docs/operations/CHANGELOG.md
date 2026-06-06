@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v1.128 — 2026-06-06 (§2.3 этап 5.3: сводка на апрув заказчика)
+
+- «Итог §2.3» + «Закрытие §2.3» в CBR — **§2.3 не закрыт** до апрува.
+- MCP: [`mcp_section_2_3_summary_2026-06-06.json`](milestones/veha_2/artifacts/demo-feedback/mcp_section_2_3_summary_2026-06-06.json).
+- DEMO_FEEDBACK: §2.3 итог, fix устаревших «не гоняли».
+
 ## v1.127 — 2026-06-06 (§2.3 этап 5.2: «Заказы за сегодня» после оплаты)
 
 - E2E-тест: accepted card-заказ в `GET /orders/history?today=1` (17 assertions).

@@ -4,10 +4,9 @@
 
 **Источник:** PDF [`artifacts/demo-feedback/customer_qa_prog10_2026-06.pdf`](artifacts/demo-feedback/customer_qa_prog10_2026-06.pdf) (продолжение В1: [`../veha_1/artifacts/customer_live_qa_block1_2026-05-30.pdf`](../veha_1/artifacts/customer_live_qa_block1_2026-05-30.pdf)).
 
-**Сейчас (2026-06-04):** Очередь **§1–3 ниже** — **done** *(MCP Fly + код)*.  
-**Новая работа заказчика (§2.3 повторно + UX):** чеклист этапов 1–5 → [`CUSTOMER_BUSINESS_REQUIREMENTS.md`](CUSTOMER_BUSINESS_REQUIREMENTS.md) — **не дублировать здесь**.
+**Сейчас (2026-06-06):** §2.3 — **техпрогон PASS**, сводка готова, **закрытие только по апруву заказчика** → [`CUSTOMER_BUSINESS_REQUIREMENTS.md`](CUSTOMER_BUSINESS_REQUIREMENTS.md) («Итог §2.3»).
 
-**Честно:** «всё done» = **выборочные** строки из PDF §1–3. **Не закрыто:** этап 5.3 (финальный MCP sync); баг «удаление заказа с экранов» (PDF витрина B). Успех оплаты + история за сегодня — **PASS** (5.1 + 5.2).
+**Честно:** §1–3 в таблице ниже — **done** *(выборочно)*. §2.3 — отдельный чеклист; **не закрыт** до вашего ок.
 
 **Связь:** [`CHECKLIST.md`](CHECKLIST.md) § E · [`SESSION_STATE.md`](../../SESSION_STATE.md) · прогон 10 [`QA_ACCEPTANCE_RUN.md`](QA_ACCEPTANCE_RUN.md).  
 **Активный чеклист:** [`CUSTOMER_BUSINESS_REQUIREMENTS.md`](CUSTOMER_BUSINESS_REQUIREMENTS.md).
@@ -80,15 +79,26 @@
 | §2.1 меню | [`mcp_section_2_1_fly_2026-06-02.json`](artifacts/demo-feedback/mcp_section_2_1_fly_2026-06-02.json) | **PASS** |
 | §2.2 модификаторы (+15/+20/+40, 199₽) | [`mcp_section_2_2_fly_2026-06-03.json`](artifacts/demo-feedback/mcp_section_2_2_fly_2026-06-03.json) | **PASS** |
 
-### §2.3 — приёмка (MCP Fly post-deploy 2026-06-04)
+### §2.3 — приёмка техпрогона (Fly, 2026-06-04 … 2026-06-06)
 
-| Критерий | Статус |
-|----------|--------|
-| Без ФИО кнопка неактивна | **PASS** |
-| С ФИО → «Идёт оплата…» → Т-Банк | **PASS** |
+| Критерий | Статус / артефакт |
+|----------|-------------------|
+| Без ФИО кнопка неактивна | **PASS** — stage 1 |
+| С ФИО → «Идёт оплата…» → T-Bank iframe | **PASS** — stage 4 |
 | Назад с банка → корзина с товаром | **PASS** |
-| Успех оплаты → webhook → `accepted` | **PASS** *(5.1, 2026-06-06)* | [`mcp_section_2_3_stage5_1_2026-06-06.json`](artifacts/demo-feedback/mcp_section_2_3_stage5_1_2026-06-06.json) |
-| История за сегодня после card оплаты | **PASS** *(5.2, 2026-06-06)* | [`mcp_section_2_3_stage5_2_2026-06-06.json`](artifacts/demo-feedback/mcp_section_2_3_stage5_2_2026-06-06.json) — order `72801b25-…`, 179₽ |
+| Заказ виден после банка (reconnect) | **PASS** — [`mcp_section_2_3_stage2_2026-06-04.json`](artifacts/demo-feedback/mcp_section_2_3_stage2_2026-06-04.json) |
+| Успех оплаты → webhook → `accepted` | **PASS** — [`mcp_section_2_3_stage5_1_2026-06-06.json`](artifacts/demo-feedback/mcp_section_2_3_stage5_1_2026-06-06.json) |
+| История за сегодня после card оплаты | **PASS** — [`mcp_section_2_3_stage5_2_2026-06-06.json`](artifacts/demo-feedback/mcp_section_2_3_stage5_2_2026-06-06.json) |
+
+### §2.3 — итог (на апрув заказчика)
+
+| Поле | Значение |
+|------|----------|
+| **Закрытие §2.3** | **`open`** — ждём ваш ок |
+| Сводка | [`mcp_section_2_3_summary_2026-06-06.json`](artifacts/demo-feedback/mcp_section_2_3_summary_2026-06-06.json) |
+| Детали | [`CUSTOMER_BUSINESS_REQUIREMENTS.md`](CUSTOMER_BUSINESS_REQUIREMENTS.md) → «Итог §2.3» |
+| UI оплаты (оболочка + iframe) | Показать на Fly; скрин [`stage4_payment_shell_paying_2026-06-06.png`](artifacts/demo-feedback/screenshots/stage4_payment_shell_paying_2026-06-06.png) |
+| После апрува | Строка §2.3 → **done**, блок 2 (табло баристы) |
 
 ### §2.4 — приёмка (MCP Fly 2026-06-04)
 
@@ -125,15 +135,15 @@
 | `gm-a@` — «Персонал» в сайдбаре | **PASS** |
 | Код + тест RBAC | `7311338`, `62ced8e` |
 
-### Не сделано в рамках §2.3–2.4 (зафиксировано)
+### Вне §2.3 / не блокирует закрытие (зафиксировано)
 
 | Что | Почему |
 |-----|--------|
-| Успех оплаты + заказ в истории | MCP без реальной оплаты в Т-Банке |
 | Стрелка «назад» на экране банка | UI Т-Банка, не наша витрина |
-| §2.5 медленный интернет | **done** *(MCP Slow 3G)* |
-| Тест §2.5 в подвале (физический) | **не делали** — только Slow 3G DevTools |
-| Post-deploy MCP §2.5 + `replaceChildren` | **PASS** — 3 прогона в [`mcp_section_2_5_fly_2026-06-04.json`](artifacts/demo-feedback/mcp_section_2_5_fly_2026-06-04.json); коммиты `649aa9f`, `ca6f2ef` |
+| 100% свой UI без iframe | PCI / отдельная задача |
+| Реальное списание prod-картой в MCP | prod terminal + sandbox-карта → `ACTIVATION_ERROR` |
+| SBP QR ручной прогон | Код есть; smoke не делали |
+| §2.5 тест в подвале (физический) | **не делали** — только Slow 3G DevTools |
 
 ## УК: где «пользователи» (для агента)
 

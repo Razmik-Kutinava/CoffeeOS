@@ -1,0 +1,82 @@
+{
+  "scenario": "§2.3 — сводная приёмка (на апрув заказчика)",
+  "stand": "https://coffeeos.fly.dev",
+  "run_at": "2026-06-06",
+  "deploy": "deployment-01KTE2SYJK31BGHHRVWQ9AH9Z2",
+  "commit": "54b7bdf",
+  "tenant_a": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "customer_approval": "pending",
+  "overall_technical": "PASS_WITH_NOTES",
+  "summary_ru": "Витрина: оформление → T-Bank iframe в оболочке CoffeeOS → webhook → accepted → «Заказы за сегодня». Этапы 1–5 прогнаны на Fly (MCP + smoke + интеграционный тест). Закрытие §2.3 — только после ок заказчика.",
+  "stages": [
+    {
+      "stage": 1,
+      "name": "Проверка «уже есть»",
+      "result": "PASS",
+      "artifact": "mcp_section_2_3_stage1_rerun_2026-06-04.json"
+    },
+    {
+      "stage": 2,
+      "name": "Баг: заказ не виден после банка",
+      "result": "PASS",
+      "artifact": "mcp_section_2_3_stage2_2026-06-04.json",
+      "code": "GuestOrderReconnect, shopGuestSession.js"
+    },
+    {
+      "stage": 3,
+      "name": "Экран оформления, регистрация один раз",
+      "result": "PASS",
+      "artifact": "mcp_section_2_3_stage3_2026-06-04.json"
+    },
+    {
+      "stage": 4,
+      "name": "T-Bank iframe + оболочка CoffeeOS + журнал отказов",
+      "result": "PASS",
+      "artifacts": [
+        "mcp_section_2_3_stage4_2026-06-06.json",
+        "screenshots/stage4_payment_shell_paying_2026-06-06.png"
+      ],
+      "customer_ui_signoff": "pending",
+      "notes": "Внутри iframe — логотип/поля Т-Банка (PCI). Маска T-Pay/SberPay."
+    },
+    {
+      "stage": "5.1",
+      "name": "Оплата → webhook → accepted",
+      "result": "PASS",
+      "artifact": "mcp_section_2_3_stage5_1_2026-06-06.json",
+      "fly_evidence": "order 05c99c7e-9215-45ff-a54d-627b23bc11f0",
+      "skip": "Тестовая карта на prod terminal — ACTIVATION_ERROR; цепочка через signed webhook"
+    },
+    {
+      "stage": "5.2",
+      "name": "Заказ в «Заказы за сегодня»",
+      "result": "PASS",
+      "artifact": "mcp_section_2_3_stage5_2_2026-06-06.json",
+      "fly_evidence": "order 72801b25-8fbe-4b8f-9a7f-a26d22868444, accepted, 179₽"
+    }
+  ],
+  "pdf_mapping": {
+    "step_1_no_double_pay": "PASS — disabled без ФИО, один заказ",
+    "step_2_payment_success": "PASS — webhook → accepted (signed smoke)",
+    "step_3_history_today": "PASS — history?today=1",
+    "back_on_bank_screen": "wontfix — UI Т-Банка",
+    "order_invisible_after_bank": "PASS — этап 2 reconnect"
+  },
+  "out_of_scope_not_blocking": [
+    "ОФД / чек на почту",
+    "Rebill карты",
+    "100% свой UI без iframe",
+    "Ручной SBP deep link на Fly",
+    "Реальное списание prod-картой в MCP"
+  ],
+  "tests": {
+    "integration": "test/integration/shop/api/qa_section_2_3_stage5_e2e_test.rb",
+    "assertions": 17,
+    "failures": 0
+  },
+  "close_gate": {
+    "status": "open",
+    "requires": "Апрув заказчика по UI оплаты (этап 4) + итоговая сводка §2.3",
+    "checklist_row": "CUSTOMER_BUSINESS_REQUIREMENTS.md → «Закрытие §2.3»"
+  }
+}

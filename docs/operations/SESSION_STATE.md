@@ -2,7 +2,7 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-06-06 (обновлено: §2.3 этап 5.2 history today PASS)  
+**Дата:** 2026-06-06 (обновлено: §2.3 сводка на апрув заказчика)  
 **Веха 1:** официально не закрыта (§ I, H.3 — `[ ]`).  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
 **§E / PDF:** строки §1–3 в `DEMO_FEEDBACK` — **done**; **активная работа** — §2.3 этапы 1–5 в [`CUSTOMER_BUSINESS_REQUIREMENTS.md`](milestones/veha_2/CUSTOMER_BUSINESS_REQUIREMENTS.md).
@@ -14,14 +14,22 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **§2.3 этап 5.2** — PASS (`fly:stage5_2_smoke`, order `72801b25-…` в history) | **Этап 5.3:** MCP + DEMO_FEEDBACK финал |
-| **§2.3 этап 5.1** — PASS (`fly:callback_smoke`) | deploy `01KTE2SYJK31BGHHRVWQ9AH9Z2` |
+| **§2.3** — свodка готова, **закрытие `[ ]` ждём апрув** | **Блок 2** — табло баристы (после апрува §2.3) |
+| Deploy | `01KTE2SYJK31BGHHRVWQ9AH9Z2` |
 | **УК→витрины A/B** — PASS на Fly | Этапы 3–5 по CUSTOMER_BUSINESS |
 | **DEMO_FEEDBACK** §1–3 — done | MCP JSON → `[x]` только по факту |
 
 **Ops на блок:** `SESSION_STATE` + коммит всегда; `PRACTICES` (CR); `QA_ACCEPTANCE_RUN` + `artifacts/` (QA); `CHANGELOG` если заметно; `CHECKLIST` `[x]` только по факту.
 
 **Артефакты (для агента в другом редакторе):** точка входа — [`milestones/veha_2/artifacts/README.md`](milestones/veha_2/artifacts/README.md). Прогон 10: `artifacts/prog10/{_index,smoke,kiosk,shop,staff-rbac,connectivity,platform-ent,warehouse}/`. Сводный индекс: `prog10/_index/prog10_final_index.json`. Скрипты `bin/prog10_*` пишут в эти подпапки (OUT обновлён). Старый плоский путь `artifacts/prog10_*.json` **удалён** — везде относительные ссылки `artifacts/prog10/...`.
+
+### Сессия 2026-06-06 (§2.3 этап 5.3 — сводка на апрув)
+
+- **Сводка:** «Итог §2.3» + «Закрытие §2.3» в [`CUSTOMER_BUSINESS_REQUIREMENTS.md`](milestones/veha_2/CUSTOMER_BUSINESS_REQUIREMENTS.md).
+- **MCP:** [`mcp_section_2_3_summary_2026-06-06.json`](milestones/veha_2/artifacts/demo-feedback/mcp_section_2_3_summary_2026-06-06.json) — `customer_approval: pending`.
+- **DEMO_FEEDBACK:** §2.3 итог, исправлены устаревшие «не гоняли».
+- **§2.3 НЕ закрыт** — только после апрува заказчика.
+- **Дальше:** апрув → закрыть §2.3 → блок 2.
 
 ### Сессия 2026-06-06 (§2.3 этап 5.2 — «Заказы за сегодня»)
 
