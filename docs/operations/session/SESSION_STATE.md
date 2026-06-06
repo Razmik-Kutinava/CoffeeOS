@@ -2,21 +2,23 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-06-06 (обновлено: **ops docs reorganized**, следующий — **Блок 2** табло)  
+**Дата:** 2026-06-06 (обновлено: **CBR три потока + волна 4**, фокус **W1.1** цены на витрине)  
 **Веха 1:** официально не закрыта (§ I, H.3 — `[ ]`).  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
 **§2.3 оплата витрина:** **done** 2026-06-06 — [`CUSTOMER_BUSINESS_REQUIREMENTS.md`](milestones/veha_2/requirements/CUSTOMER_BUSINESS_REQUIREMENTS.md).
 
-**Навигация ops (2026-06-06):** доки разложены по папкам — [`../README.md`](../README.md), [`milestones/PATH_MAP.md`](milestones/PATH_MAP.md). CHANGELOG → `journal/`; SESSION_STATE → `session/`.
+**Навигация ops:** [`../README.md`](../README.md) · [`milestones/PATH_MAP.md`](milestones/PATH_MAP.md).
+
+**CBR — три потока + траектория:** тот же CBR § «Три потока», «Траектория», «Волна 4». **Северная звезда:** PDF 56 стр.
 
 **Прогона 11 нет.** Точка входа для агента:
-- **Блок 2 (СЕЙЧАС):** табло баристы — [`CUSTOMER_BUSINESS_REQUIREMENTS.md`](milestones/veha_2/requirements/CUSTOMER_BUSINESS_REQUIREMENTS.md) «Блок 2».
+- **W1.1 (СЕЙЧАС):** баг цены УК/менеджер → витрина — CBR волна 4.
+- **Блок 2:** табло баристы — после W1.1–W1.4 или явного переноса.
 - УК → витрины (закрыто): [`milestones/veha_2/runbooks/HANDOFF_UK_MENU_VITRINA.md`](milestones/veha_2/runbooks/HANDOFF_UK_MENU_VITRINA.md).
-- §2.3 MCP: [`mcp_section_2_3_stage5_3_2026-06-06.json`](milestones/veha_2/artifacts/demo-feedback/mcp_section_2_3_stage5_3_2026-06-06.json).
 
 | Сейчас | Дальше |
 |--------|--------|
-| **Блок 2** — табло баристы | — |
+| **Волна 4** — поток 1 (W1.1…W1.4) | **Блок 2** табло |
 
 **Ops на блок:** `SESSION_STATE` + коммит всегда; `PRACTICES` (CR); `QA_ACCEPTANCE_RUN` + `artifacts/` (QA); `CHANGELOG` если заметно; `CHECKLIST` `[x]` только по факту.
 

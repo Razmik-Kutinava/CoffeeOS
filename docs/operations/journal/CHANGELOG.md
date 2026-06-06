@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## v1.138 — 2026-06-06 (CBR: три потока, траектория, волна 4)
+
+**Зачем:** фиксируем **канон потоков** (приём → обработка → тест-приёмка), **как шли** (§2.3 → 2A → витрина), **северную звезду** (PDF 56 стр.), чтобы новые вводные не стирали курс.
+
+**Документы:**
+- [`requirements/CUSTOMER_BUSINESS_REQUIREMENTS.md`](../milestones/veha_2/requirements/CUSTOMER_BUSINESS_REQUIREMENTS.md) — три потока, траектория волн 0–5, W1.1–W1.5
+- [`checklists/CHECKLIST.md`](../milestones/veha_2/checklists/CHECKLIST.md) — § B2B поток 1
+- [`session/SESSION_STATE.md`](../session/SESSION_STATE.md) — фокус W1.1
+
+**Следующий код:** W1.1 баг цены на витрине.
+
 ## v1.137 — 2026-06-06 (ops docs: навигация — папки вместо «простыни»)
 
 **Зачем:** в `docs/operations/` и `milestones/veha_*` торчало 40+ файлов в корне — непонятно где CHECKLIST, CBR, runbook, demo. Агенты и люди терялись; в корне репо скапливался мусор `tmp_*` от сессий.

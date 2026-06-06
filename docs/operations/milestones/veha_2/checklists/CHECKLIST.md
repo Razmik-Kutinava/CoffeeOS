@@ -10,6 +10,8 @@
 
 **Связанные:** [`README.md`](README.md), [`PRACTICES.md`](PRACTICES.md), [`artifacts/README.md`](artifacts/README.md) (прогон 10 → `artifacts/prog10/`), `docs/product/development_roadmap.md`.
 
+**Три потока + траектория:** [`CUSTOMER_BUSINESS_REQUIREMENTS.md`](../requirements/CUSTOMER_BUSINESS_REQUIREMENTS.md) — канон потоков 1–3, волны 0–5, **северная звезда = PDF 56 стр.**
+
 ### Gate: чеклист ↔ таск-трекер
 
 - **Новый канал заказа** → сначала [`ORDER_ENTRY_AUDIT.md`](ORDER_ENTRY_AUDIT.md), потом код.
@@ -67,7 +69,19 @@
 
 ---
 
-См. [`PAYMENT.md`](PAYMENT.md).
+## B2B. Поток 1 — витрина (волна 4, после §2.3 и 2A)
+
+См. CBR «[Волна 4](#волна-4--поток-1-приём-заказа-следующие-задачи)». **Не табло**, пока W1.1–W1.4 не закрыты или явно перенесены.
+
+- [ ] ⭐ **W1.1** Баг 6.1 — цена из менеджера/УК на витрине (cache bust)
+- [ ] ⭐ **W1.2** MCP: УК → категория + 2 товара + фото + модификаторы → витрина
+- [ ] **W1.3** Обязательные модификаторы — MCP на Fly
+- [ ] **W1.4** Сверка категорий: ядро = витрина = barista
+- [x] **W1.5** Боевые оплаты — §2.3 PASS 2026-06-06
+
+---
+
+## C. Оплата (приоритет 1 — §2.3 закрыт)
 
 - [x] ⭐ `SHOP_SIMULATE_PAYMENT=0` на стенде приёмки: card/sbp → `pending_payment` *(fly secrets set 2026-05-28)*
 - [x] ⭐ Интеграция шлюза Т-Банк: `TbankAdapter` + `OrderCreator` → `payment_url` *(2026-05-28)*
