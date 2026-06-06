@@ -30,4 +30,15 @@ class Auth::LoginJournalTest < ActiveSupport::TestCase
       Auth::LoginJournal.record_logout!(user: @user, role_code: "ук_global_admin")
     end
   end
+
+  test "context_tenant_id overrides user tenant in audit log" do
+    other = create_tenant!(slug: "other-#{SecureRandom.hex(3)}")
+    Auth::LoginJournal.record_login!(
+      user: @user,
+      role_code: "barista",
+      context_tenant_id: other.id
+    )
+    log = AdminAuditLog.order(created_at: :desc).first
+    assert_equal other.id, log.tenant_id
+  end
 end

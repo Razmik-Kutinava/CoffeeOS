@@ -122,6 +122,18 @@ module Platform
       event[:summary].presence || "Событие"
     end
 
+    def monitoring_online_badge(online)
+      if online
+        content_tag(
+          :span,
+          "ОНЛАЙН",
+          style: "display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600;background:#86efac22;color:#86efac;border:1px solid #86efac44;"
+        )
+      else
+        content_tag(:span, "офлайн", style: "color:#64748b;font-size:12px;")
+      end
+    end
+
     def monitoring_pretty_json(data)
       JSON.pretty_generate(deep_stringify(data))
     rescue StandardError

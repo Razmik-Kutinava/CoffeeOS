@@ -38,7 +38,19 @@ class Auth::SessionsController < ApplicationController
       role = pick_login_role(user_roles)
       Current.role_code = role.code
       apply_session_after_login!(user, role.code)
-      Auth::LoginJournal.record_login!(user: user, role_code: role.code, request: request)
+      context_tenant_id = session[:manager_tenant_id].presence || user.tenant_id
+      Auth::SessionTracker.start!(
+        user: user,
+        rack_session: session,
+        request: request,
+        context_tenant_id: context_tenant_id
+      )
+      Auth::LoginJournal.record_login!(
+        user: user,
+        role_code: role.code,
+        request: request,
+        context_tenant_id: context_tenant_id
+      )
       redirect_to dashboard_path_for_role(role.code), notice: "Добро пожаловать!"
     else
       flash.now[:alert] = "Неверный email/телефон или пароль"
@@ -50,12 +62,22 @@ class Auth::SessionsController < ApplicationController
   def destroy
     user = current_user
     role_code = session[:role_code]
-    Auth::LoginJournal.record_logout!(user: user, role_code: role_code, request: request) if user
+    context_tenant_id = session[:manager_tenant_id].presence || user&.tenant_id
+    if user
+      Auth::LoginJournal.record_logout!(
+        user: user,
+        role_code: role_code,
+        request: request,
+        context_tenant_id: context_tenant_id
+      )
+      Auth::SessionTracker.end!(rack_session: session)
+    end
     session[:user_id] = nil
     session[:tenant_id] = nil
     session[:role_code] = nil
     session[:logged_in_at] = nil
     session[:manager_tenant_id] = nil
+    session[:db_session_id] = nil
     Current.tenant_id = nil
     Current.user_id = nil
     Current.role_code = nil

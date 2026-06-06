@@ -1,0 +1,102 @@
+<p style="margin-bottom: 16px;">
+  <%= link_to "← Мониторинг точки", platform_monitoring_tenant_path(@tenant), style: "color: #93c5fd;" %>
+  · <%= link_to "← Все точки", platform_monitoring_path, style: "color: #93c5fd;" %>
+  · <%= link_to "Sessions JSON", platform_monitoring_tenant_sessions_path(@tenant, format: :json), style: "color: #93c5fd;", target: "_blank", rel: "noopener" %>
+</p>
+
+<h1 style="font-size: 1.5rem; margin-bottom: 4px;">Сессии — <%= @tenant.name %></h1>
+<p style="color: #94a3b8; margin-bottom: 20px; font-size: 13px;">
+  <%= @tenant.slug %>
+  · пользователей <%= @overview[:users_count] %>
+  · онлайн <%= @overview[:online_count] %>
+  · активных сессий <%= @overview[:active_sessions_count] %>
+  · <%= l(@generated_at, format: :short) %>
+</p>
+
+<section style="margin-bottom: 28px;">
+  <h2 style="font-size: 1.1rem; margin-bottom: 12px;">Сводка ролей на точке</h2>
+  <% if @overview[:roles_summary].any? %>
+    <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+      <% @overview[:roles_summary].each do |role, count| %>
+        <span style="display:inline-block;padding:6px 12px;border-radius:6px;font-size:12px;background:#1e293b;border:1px solid #334155;color:#e2e8f0;">
+          <strong><%= role %></strong> · <%= count %>
+        </span>
+      <% end %>
+    </div>
+  <% else %>
+    <p style="color: #64748b; font-size: 13px;">Нет пользователей с ролями на этой точке.</p>
+  <% end %>
+</section>
+
+<section style="margin-bottom: 28px;">
+  <h2 style="font-size: 1.1rem; margin-bottom: 12px;">Сейчас онлайн (<%= @overview[:active_sessions_count] %>)</h2>
+  <p style="color: #64748b; font-size: 12px; margin-bottom: 12px;">Активные сессии всех ролей; у каждой строки — ▸ JSON (как «чужая сессия»).</p>
+  <% if @overview[:active_sessions].any? %>
+    <div style="display: flex; flex-direction: column; gap: 8px;">
+      <% @overview[:active_sessions].each do |sess| %>
+        <div style="border: 1px solid #334155; border-radius: 8px; background: #1a1f2e; overflow: hidden;">
+          <div style="padding: 12px; display: grid; grid-template-columns: 120px 1fr auto; gap: 12px; align-items: start;">
+            <div style="color: #94a3b8; font-size: 12px;">
+              <%= monitoring_event_time(sess[:logged_in_at]) %>
+            </div>
+            <div style="font-size: 13px; color: #e2e8f0; line-height: 1.4;">
+              <strong><%= sess[:name] %></strong>
+              <span style="color: #64748b;"> · <%= sess[:email] %></span><br>
+              <span style="color: #64748b; font-size: 12px;">
+                роль <%= sess[:role_code] || "—" %>
+                · IP <%= sess[:ip_address] || "—" %>
+                · до <%= monitoring_event_time(sess[:expires_at]) %>
+              </span>
+            </div>
+            <div><%= monitoring_online_badge(true) %></div>
+          </div>
+          <%= render "platform/monitoring/json_details", payload: sess %>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <p style="color: #64748b; font-size: 13px;">Сейчас никто не онлайн (или сессии ещё не записывались — перелогин на точке).</p>
+  <% end %>
+</section>
+
+<section style="margin-bottom: 28px;">
+  <h2 style="font-size: 1.1rem; margin-bottom: 12px;">Все пользователи точки (<%= @overview[:users_count] %>)</h2>
+  <p style="color: #64748b; font-size: 12px; margin-bottom: 12px;">Роли, последний вход и выход; ▸ JSON — полная строка для агента.</p>
+  <% if @overview[:users].any? %>
+    <div style="display: flex; flex-direction: column; gap: 8px;">
+      <% @overview[:users].each do |u| %>
+        <div style="border: 1px solid #334155; border-radius: 8px; background: #1a1f2e; overflow: hidden;">
+          <div style="padding: 12px; display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: start;">
+            <div style="font-size: 13px; color: #e2e8f0; line-height: 1.4;">
+              <strong><%= u[:name] %></strong>
+              <span style="color: #64748b;"> · <%= u[:email] || u[:phone] %></span><br>
+              <span style="color: #64748b; font-size: 12px;">
+                <%= u[:roles].join(", ").presence || "без ролей" %>
+                · user id <span style="color:#93c5fd;word-break:break-all;"><%= u[:user_id] %></span>
+              </span><br>
+              <span style="color: #64748b; font-size: 12px; margin-top: 4px; display: inline-block;">
+                вход: <%= u[:last_login_at].present? ? monitoring_event_time(u[:last_login_at]) : "—" %>
+                <% if u[:last_login_role].present? %>(<%= u[:last_login_role] %>)<% end %>
+                · выход: <%= u[:last_logout_at].present? ? monitoring_event_time(u[:last_logout_at]) : "—" %>
+              </span>
+            </div>
+            <div><%= monitoring_online_badge(u[:online]) %></div>
+          </div>
+          <%= render "platform/monitoring/json_details", payload: u %>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <p style="color: #64748b; font-size: 13px;">Пользователей на точке нет.</p>
+  <% end %>
+</section>
+
+<section>
+  <h2 style="font-size: 1.1rem; margin-bottom: 8px;">Журнал входов (24ч, <%= @overview[:recent_events].size %>)</h2>
+  <p style="color: #64748b; font-size: 12px; margin-bottom: 12px;">Кто когда заходил и выходил; ▸ JSON на каждой строке.</p>
+  <% if @overview[:recent_events].any? %>
+    <%= render "platform/monitoring/event_feed", events: @overview[:recent_events] %>
+  <% else %>
+    <p style="color: #64748b; font-size: 13px;">Входов за 24 часа нет.</p>
+  <% end %>
+</section>

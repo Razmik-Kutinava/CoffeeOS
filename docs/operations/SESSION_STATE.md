@@ -14,11 +14,18 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **2A.3** — `[~]` user id + Session JSON на Fly | **2A.4** — транзакции (после апрува) |
+| **2A.3** — `[~]` сессии точки (онлайн + все пользователи) на Fly | **2A.4** — транзакции (после апрува) |
 
 **Ops на блок:** `SESSION_STATE` + коммит всегда; `PRACTICES` (CR); `QA_ACCEPTANCE_RUN` + `artifacts/` (QA); `CHANGELOG` если заметно; `CHECKLIST` `[x]` только по факту.
 
 **Артефакты (для агента в другом редакторе):** точка входа — [`milestones/veha_2/artifacts/README.md`](milestones/veha_2/artifacts/README.md). Прогон 10: `artifacts/prog10/{_index,smoke,kiosk,shop,staff-rbac,connectivity,platform-ent,warehouse}/`. Сводный индекс: `prog10/_index/prog10_final_index.json`. Скрипты `bin/prog10_*` пишут в эти подпапки (OUT обновлён). Старый плоский путь `artifacts/prog10_*.json` **удалён** — везде относительные ссылки `artifacts/prog10/...`.
+
+### Сессия 2026-06-06 (§2A.3 — сессии точки: онлайн + все пользователи, на апрув)
+
+- **Код:** `Auth::SessionTracker` → таблица `sessions`; `Platform::TenantSessionsOverview`; `/admin/monitoring/:id/sessions` (HTML + JSON).
+- **UI:** сводка ролей; блок «Сейчас онлайн»; все пользователи + последний вход/выход; журнал входов 24ч; ▸ JSON на каждой строке (в т.ч. чужие сессии).
+- **LoginJournal:** audit с `context_tenant_id` (точка franchise/manager).
+- **Дальше:** скрины Fly + апрув 2A.3 → 2A.4 транзакции.
 
 ### Сессия 2026-06-06 (§2A.3 UX — человеческая лента + JSON, на апрув)
 

@@ -7,20 +7,21 @@ module Auth
     ACTION_LOGOUT = "user_logout"
 
     class << self
-      def record_login!(user:, role_code:, request: nil)
-        new(user: user, action: ACTION_LOGIN, role_code: role_code, request: request).call!
+      def record_login!(user:, role_code:, request: nil, context_tenant_id: nil)
+        new(user: user, action: ACTION_LOGIN, role_code: role_code, request: request, context_tenant_id: context_tenant_id).call!
       end
 
-      def record_logout!(user:, role_code: nil, request: nil)
-        new(user: user, action: ACTION_LOGOUT, role_code: role_code, request: request).call!
+      def record_logout!(user:, role_code: nil, request: nil, context_tenant_id: nil)
+        new(user: user, action: ACTION_LOGOUT, role_code: role_code, request: request, context_tenant_id: context_tenant_id).call!
       end
     end
 
-    def initialize(user:, action:, role_code: nil, request: nil)
+    def initialize(user:, action:, role_code: nil, request: nil, context_tenant_id: nil)
       @user = user
       @action = action
       @role_code = role_code
       @request = request
+      @context_tenant_id = context_tenant_id
     end
 
     def call!
@@ -28,7 +29,7 @@ module Auth
         action: @action,
         actor: @user,
         entity: @user,
-        tenant_id: @user.tenant_id,
+        tenant_id: @context_tenant_id || @user.tenant_id,
         details: {
           user_id: @user.id,
           email: @user.email,

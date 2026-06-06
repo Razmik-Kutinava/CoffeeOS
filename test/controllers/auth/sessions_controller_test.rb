@@ -49,6 +49,13 @@ class Auth::SessionsControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  test "POST /login creates db session record" do
+    assert_difference -> { Session.active.count }, 1 do
+      post "/login", params: { email: @user.email, password: "pass123" }
+    end
+    assert session[:db_session_id].present?
+  end
+
   test "POST /login sets logged_in_at in session" do
     post "/login", params: { email: @user.email, password: "pass123" }
     assert session[:logged_in_at].present?
@@ -130,6 +137,15 @@ class Auth::SessionsControllerTest < ActionDispatch::IntegrationTest
     login_as!(@user)
     delete "/logout"
     assert_nil session[:role_code]
+  end
+
+  test "DELETE /logout revokes db session" do
+    login_as!(@user)
+    sid = session[:db_session_id]
+    assert sid.present?
+
+    delete "/logout"
+    refute Session.find(sid).active?
   end
 
   # ---------------------------------------------------------------------------
