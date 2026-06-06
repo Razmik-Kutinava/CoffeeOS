@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v1.124 — 2026-06-06 (§2.3: оболочка CoffeeOS на экране оплаты)
+
+- `Payment.svelte` — intro в стиле витрины, маска T-Pay/SberPay, тёмный iframe-host.
+- `payment_method` в сессии оплаты; `setTheme(dark)` до mount.
+- Deploy `01KTE0P9PZSVF3YNJYEMC1DVXX`, commit `7a0533c`.
+
 ## v1.123 — 2026-06-06 (§2.3 этап 4.2: integration.js PASS)
 
 - `tbankPayment.js` — официальный API: `iframe.create` + `mount(PaymentURL)`; `integrationjs.tbank.ru`.

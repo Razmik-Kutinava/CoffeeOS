@@ -114,10 +114,12 @@
 | # | Критерий | Статус | Примечание |
 |---|----------|--------|------------|
 | 4.1 | Наш экран: **Идёт оплата / успех / ошибка / отмена** | `[x]` **PASS** | `Payment.svelte`, `PaymentResult` |
-| 4.2 | **T-Bank iframe** (`integration.js`, CSP) | `[x]` **PASS** | `iframe.create` + `mount(PaymentURL)`; script `integrationjs.tbank.ru`; скрин [`stage4_payment_iframe_2026-06-06.png`](artifacts/demo-feedback/screenshots/stage4_payment_iframe_2026-06-06.png) |
+| 4.2 | **T-Bank iframe** (`integration.js`, CSP) | `[x]` **PASS** | CoffeeOS-оболочка + маска T-Pay/SberPay; `setTheme(dark)`; скрин [`stage4_payment_shell_paying_2026-06-06.png`](artifacts/demo-feedback/screenshots/stage4_payment_shell_paying_2026-06-06.png) |
 | 4.3 | **СБП** — deep link / QR | `[x]` **PASS** *(код)* | `deepLinkRedirectCallback`; ручной SBP — этап 5 |
 | 4.4 | Своя кнопка **«Отмена»** | `[x]` **PASS** | `/payment` → abandon |
 | 4.5 | Fail/отказ → **менеджер/УК** (журнал) | `[ ]` | log only; отдельная фича |
+
+> **2026-06-06 (shell):** commit `7a0533c`, deploy `01KTE0P9PZSVF3YNJYEMC1DVXX` — оболочка CoffeeOS на `/payment`, маска жёлтых кнопок банка.
 
 > **2026-06-06:** deploy `01KTDZYTAVDCSJNWKEFF86D2E4`, commit `5829f09`. MCP: [`mcp_section_2_3_stage4_2026-06-06.json`](artifacts/demo-feedback/mcp_section_2_3_stage4_2026-06-06.json). **4.2 PASS** — форма T-Bank в iframe на `/payment`.
 
