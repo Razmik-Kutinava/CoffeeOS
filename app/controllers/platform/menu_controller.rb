@@ -73,6 +73,7 @@ module Platform
       end
       product.assign_attributes(attrs)
       Platform::Menu::PublishProductService.new(product: product, user: current_user).call!
+      bust_shop_catalog_cache!
       img_msg = apply_product_image_upload!(product, image_file)
       notice = "Товар обновлён"
       notice = "#{notice} #{img_msg}" if img_msg.present?
