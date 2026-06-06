@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## v1.139 — 2026-06-06 (W1.1: цена manager → витрина)
+
+- **Баг:** после смены цены в `/manager/menu` витрина показывала старую цену до 5 мин (кэш `shop/categories/...`).
+- **Fix:** `Manager::MenuController#update_price` → `ProductTenantSync.bust_shop_catalog_cache!(tenant_ids: …)`; сброс ключей с `page=nil`.
+- **Тест:** `test/integration/manager/menu_price_vitrina_cache_test.rb`.
+- **Ops:** CBR W1.1 `[x]`, CHECKLIST § B2B, SESSION_STATE → W1.2.
+
 ## v1.138 — 2026-06-06 (CBR: три потока, траектория, волна 4)
 
 **Зачем:** фиксируем **канон потоков** (приём → обработка → тест-приёмка), **как шли** (§2.3 → 2A → витрина), **северную звезду** (PDF 56 стр.), чтобы новые вводные не стирали курс.
