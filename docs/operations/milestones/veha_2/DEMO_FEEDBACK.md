@@ -7,7 +7,7 @@
 **Сейчас (2026-06-04):** Очередь **§1–3 ниже** — **done** *(MCP Fly + код)*.  
 **Новая работа заказчика (§2.3 повторно + UX):** чеклист этапов 1–5 → [`CUSTOMER_BUSINESS_REQUIREMENTS.md`](CUSTOMER_BUSINESS_REQUIREMENTS.md) — **не дублировать здесь**.
 
-**Честно:** «всё done» = **выборочные** строки из PDF §1–3. **Не закрыто:** история за сегодня (этап 5.2); баг «удаление заказа с экранов» (PDF витрина B) — **не в таблице**. Успех оплаты → `accepted` — **PASS** этап 5.1 (signed webhook на Fly).
+**Честно:** «всё done» = **выборочные** строки из PDF §1–3. **Не закрыто:** этап 5.3 (финальный MCP sync); баг «удаление заказа с экранов» (PDF витрина B). Успех оплаты + история за сегодня — **PASS** (5.1 + 5.2).
 
 **Связь:** [`CHECKLIST.md`](CHECKLIST.md) § E · [`SESSION_STATE.md`](../../SESSION_STATE.md) · прогон 10 [`QA_ACCEPTANCE_RUN.md`](QA_ACCEPTANCE_RUN.md).  
 **Активный чеклист:** [`CUSTOMER_BUSINESS_REQUIREMENTS.md`](CUSTOMER_BUSINESS_REQUIREMENTS.md).
@@ -88,7 +88,7 @@
 | С ФИО → «Идёт оплата…» → Т-Банк | **PASS** |
 | Назад с банка → корзина с товаром | **PASS** |
 | Успех оплаты → webhook → `accepted` | **PASS** *(5.1, 2026-06-06)* | [`mcp_section_2_3_stage5_1_2026-06-06.json`](artifacts/demo-feedback/mcp_section_2_3_stage5_1_2026-06-06.json) |
-| История за сегодня после оплаты | **не гоняли** (этап 5.2) |
+| История за сегодня после card оплаты | **PASS** *(5.2, 2026-06-06)* | [`mcp_section_2_3_stage5_2_2026-06-06.json`](artifacts/demo-feedback/mcp_section_2_3_stage5_2_2026-06-06.json) — order `72801b25-…`, 179₽ |
 
 ### §2.4 — приёмка (MCP Fly 2026-06-04)
 

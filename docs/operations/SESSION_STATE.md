@@ -2,7 +2,7 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-06-06 (обновлено: §2.3 этап 5.1 webhook → accepted PASS)  
+**Дата:** 2026-06-06 (обновлено: §2.3 этап 5.2 history today PASS)  
 **Веха 1:** официально не закрыта (§ I, H.3 — `[ ]`).  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
 **§E / PDF:** строки §1–3 в `DEMO_FEEDBACK` — **done**; **активная работа** — §2.3 этапы 1–5 в [`CUSTOMER_BUSINESS_REQUIREMENTS.md`](milestones/veha_2/CUSTOMER_BUSINESS_REQUIREMENTS.md).
@@ -14,14 +14,22 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **§2.3 этап 5.1** — PASS (`fly:callback_smoke`, order `05c99c7e-…`) | **Этап 5.2:** «Заказы за сегодня» на витрине |
-| **§2.3 этап 4** — PASS на Fly (`01KTE1S9XJ4ASQND4RY885J84R`) | 5.3 MCP + DEMO_FEEDBACK sync |
+| **§2.3 этап 5.2** — PASS (`fly:stage5_2_smoke`, order `72801b25-…` в history) | **Этап 5.3:** MCP + DEMO_FEEDBACK финал |
+| **§2.3 этап 5.1** — PASS (`fly:callback_smoke`) | deploy `01KTE2SYJK31BGHHRVWQ9AH9Z2` |
 | **УК→витрины A/B** — PASS на Fly | Этапы 3–5 по CUSTOMER_BUSINESS |
 | **DEMO_FEEDBACK** §1–3 — done | MCP JSON → `[x]` только по факту |
 
 **Ops на блок:** `SESSION_STATE` + коммит всегда; `PRACTICES` (CR); `QA_ACCEPTANCE_RUN` + `artifacts/` (QA); `CHANGELOG` если заметно; `CHECKLIST` `[x]` только по факту.
 
 **Артефакты (для агента в другом редакторе):** точка входа — [`milestones/veha_2/artifacts/README.md`](milestones/veha_2/artifacts/README.md). Прогон 10: `artifacts/prog10/{_index,smoke,kiosk,shop,staff-rbac,connectivity,platform-ent,warehouse}/`. Сводный индекс: `prog10/_index/prog10_final_index.json`. Скрипты `bin/prog10_*` пишут в эти подпапки (OUT обновлён). Старый плоский путь `artifacts/prog10_*.json` **удалён** — везде относительные ссылки `artifacts/prog10/...`.
+
+### Сессия 2026-06-06 (§2.3 этап 5.2 — «Заказы за сегодня»)
+
+- **Fly:** `fly:stage5_2_smoke` — order `72801b25-8fbe-4b8f-9a7f-a26d22868444` → `history_found: true`, `accepted`, 179₽.
+- **Тест:** `qa_section_2_3_stage5_e2e_test.rb` — history after finalize (17 assertions).
+- **Deploy:** `deployment-01KTE2SYJK31BGHHRVWQ9AH9Z2`, commits `22908cb`…`9ad1da9`.
+- **MCP:** [`mcp_section_2_3_stage5_2_2026-06-06.json`](milestones/veha_2/artifacts/demo-feedback/mcp_section_2_3_stage5_2_2026-06-06.json).
+- **Дальше:** этап 5.3 — финальный MCP + DEMO_FEEDBACK.
 
 ### Сессия 2026-06-06 (§2.3 этап 5.1 — оплата → webhook → accepted)
 

@@ -1,0 +1,37 @@
+{
+  "scenario": "§2.3 этап 5.2 — заказ в «Заказы за сегодня» после card оплаты",
+  "stand": "https://coffeeos.fly.dev",
+  "run_at": "2026-06-06",
+  "tool": "fly:stage5_2_smoke + bin/rails test qa_section_2_3_stage5_e2e_test",
+  "tenant_a": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "deploy": "deployment-01KTE2SYJK31BGHHRVWQ9AH9Z2",
+  "commit": "9ad1da9",
+  "steps": [
+    {
+      "id": "5.2.customer_session",
+      "check": "OrderCreator привязывает customer_id к сессии точки",
+      "result": "PASS",
+      "evidence": "customer_bound: true"
+    },
+    {
+      "id": "5.2.history_api",
+      "check": "GET /shop/api/orders/history?today=1 содержит accepted заказ",
+      "result": "PASS",
+      "evidence": "history_found: true, history_status: accepted, history_total: 179.0"
+    },
+    {
+      "id": "5.2.ui_route",
+      "check": "Orders.svelte → #/orders → «Заказы за сегодня»",
+      "result": "PASS",
+      "note": "тот же API; UI не менялся — проверен контракт API + интеграционный тест"
+    },
+    {
+      "id": "5.2.fly_order",
+      "check": "Prod smoke card → webhook → history",
+      "result": "PASS",
+      "evidence": "order_id 72801b25-8fbe-4b8f-9a7f-a26d22868444, history_count: 1"
+    }
+  ],
+  "overall": "PASS",
+  "next": "Этап 5.3 — MCP JSON + DEMO_FEEDBACK sync"
+}

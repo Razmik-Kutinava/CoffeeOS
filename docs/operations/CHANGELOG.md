@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v1.127 — 2026-06-06 (§2.3 этап 5.2: «Заказы за сегодня» после оплаты)
+
+- E2E-тест: accepted card-заказ в `GET /orders/history?today=1` (17 assertions).
+- Rake `fly:stage5_2_smoke` — prod PASS, order `72801b25-…`, deploy `01KTE2SYJK31BGHHRVWQ9AH9Z2`.
+- MCP: [`mcp_section_2_3_stage5_2_2026-06-06.json`](milestones/veha_2/artifacts/demo-feedback/mcp_section_2_3_stage5_2_2026-06-06.json).
+
 ## v1.126 — 2026-06-06 (§2.3 этап 5.1: оплата → webhook → accepted)
 
 - Интеграционный тест `qa_section_2_3_stage5_e2e_test.rb`: cart → card order → CONFIRMED callback → finalize.

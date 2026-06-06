@@ -119,6 +119,8 @@
 | 4.4 | Своя кнопка **«Отмена»** | `[x]` **PASS** | `/payment` → abandon |
 | 4.5 | Fail/отказ → **менеджер/УК** (журнал) | `[x]` **PASS** | `Shop::PaymentFailureJournal` → `OrderStatusLog` + `AdminAuditLog`; менеджер `/manager/incidents`; УК `/health/tenants` → `checks.failed_payments.recent_events` |
 
+> **2026-06-06 (5.2):** `fly:stage5_2_smoke` — order `72801b25-…` в history today (`accepted`, 179₽). MCP: [`mcp_section_2_3_stage5_2_2026-06-06.json`](artifacts/demo-feedback/mcp_section_2_3_stage5_2_2026-06-06.json).
+
 > **2026-06-06 (5.1):** `fly:callback_smoke` — order `05c99c7e-…` → `accepted`; интеграционный тест `qa_section_2_3_stage5_e2e_test.rb`. MCP: [`mcp_section_2_3_stage5_1_2026-06-06.json`](artifacts/demo-feedback/mcp_section_2_3_stage5_1_2026-06-06.json).
 
 > **2026-06-06 (deploy апрув):** `01KTE1S9XJ4ASQND4RY885J84R` — этап 4 целиком на Fly, готовы к этапу 5.
@@ -147,7 +149,7 @@
 | # | Критерий | Статус |
 |---|----------|--------|
 | 5.1 | **Тестовая/боевая оплата** до конца → webhook → `accepted` | `[x]` **PASS** |
-| 5.2 | Заказ в **«Заказы за сегодня»** на витрине | `[ ]` |
+| 5.2 | Заказ в **«Заказы за сегодня»** на витрине | `[x]` **PASS** |
 | 5.3 | MCP + JSON → обновить [`DEMO_FEEDBACK.md`](DEMO_FEEDBACK.md) | `[ ]` |
 
 **После этапа 5:** контент (фото, модификаторы в УК), ОФД/чек на почту, rebill карты — **отдельные пункты**, не блокируют 5.1–5.2.
@@ -195,7 +197,7 @@
 | Поле | Значение |
 |------|----------|
 | Версия | 2026-06-04, чеклист §2.3 этапы 1–5 |
-| **Следующий шаг агента** | **Этап 5.2** — заказ в «Заказы за сегодня» на витрине |
+| **Следующий шаг агента** | **Этап 5.3** — MCP + DEMO_FEEDBACK финал §2.3 |
 | Этап 4 §2.3 | **PASS/PARTIAL** — [`mcp_section_2_3_stage4_2026-06-05.json`](artifacts/demo-feedback/mcp_section_2_3_stage4_2026-06-05.json) |
 | Этап 3 §2.3 | **PASS** — [`mcp_section_2_3_stage3_2026-06-04.json`](artifacts/demo-feedback/mcp_section_2_3_stage3_2026-06-04.json) |
 | Точка входа ops | этот файл → [`SESSION_STATE.md`](../../SESSION_STATE.md) |
