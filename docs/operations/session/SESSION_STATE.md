@@ -30,10 +30,8 @@
 - **Было:** barista menu/POS свой scope (без фильтров как витрина); shop categories без `Category.active`.
 - **Стало:** `Shop::Catalog.tenant_menu` — единый `products_scope` + `Category.active`; barista `/menu` и `/create-order` используют его.
 - **Тест:** `test/integration/platform/uk_menu_w14_category_sync_test.rb` — 3 tests, 38 assertions.
-- **Fly spot-check:** `W12-FLY-0606` — shop API и barista menu совпали (3 товара).
-- **Regression:** barista tablet test #6 — sold_out скрыт (как витрина).
-- **Артефакт:** [`mcp_w14_category_sync_fly_2026-06-06.json`](milestones/veha_2/artifacts/demo-feedback/mcp_w14_category_sync_fly_2026-06-06.json).
-- **Не сделано в W1.4:** полный diff всего demo-каталога на Fly; tenant B barista; УК admin ≠ tenant view (by design); deploy barista fix на Fly — после push; UI стоп-листа sold_out для barista — backlog.
+- **Fly FULL A+B:** 5 категорий × 18 товаров — shop API = barista menu, `category_diffs=[]` (оба PASS).
+- **Не сделано / ждём:** апрув заказчика → `[x]`; MCP manager disable/sold_out вручную; стоп-лист UI barista — backlog.
 - **Дальше:** **ждём апрув W1.4** → потом блок 2 (табло).
 
 ### Сессия 2026-06-06 (W1.3 — обязательные модификаторы: **PASS** post-deploy)

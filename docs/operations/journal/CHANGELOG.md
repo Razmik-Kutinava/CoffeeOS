@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## v1.144 — 2026-06-06 (W1.4 Fly FULL sync A+B — на апрув)
+
+- **Fly MCP:** tenant A+B — полная сверка shop `/api/categories` vs barista `/menu` (5 кат, 18 товаров, diffs=[]).
+- **Ops:** MCP JSON обновлён; W1.4 `[ ]` до апрува; стоп-лист UI — backlog.
+
 ## v1.143 — 2026-06-06 (W1.4 сверка категорий — на апрув)
 
 - **Код:** `Shop::Catalog.tenant_menu`; barista menu/POS → тот же scope, что витрина; shop categories → `Category.active`.

@@ -66,7 +66,7 @@
 | W1.1 | **Баг 6.1** — цена из УК/менеджера **не доходит** на витрину | **исправлено** 2026-06-06 | `[x]` **PASS** | `manager/menu#update_price` → `bust_shop_catalog_cache!`; ключ кэша с `page=nil` тоже сбрасывается |
 | W1.2 | **MCP:** из УК категория + 2 товара + фото + модификаторы → **проверка на витрине** | **PASS** 2026-06-06 | `[x]` | Fly: `W12-FLY-0606` + 2 товара + фото URL → API A/B + DOM A; модификаторы на Fly — **integration test** (браузер MCP scroll); файл фото — test only |
 | W1.3 | **Обязательные модификаторы** — на тестовом контенте | **PASS** 2026-06-06 | `[x]` | Fly: `W13-REQ-SIZE` is_required → alert «Выберите…»; integration test |
-| W1.4 | **Сверка категорий:** ядро = витрина = barista | **на апрув** 2026-06-06 | `[ ]` | `Shop::Catalog.tenant_menu`; barista=витрина scope; Fly spot-check W12; полный audit demo-каталога — open |
+| W1.4 | **Сверка категорий:** ядро = витрина = barista | **на апрув** 2026-06-06 | `[ ]` | Fly FULL A+B: 5 cat / 18 prod PASS; код `tenant_menu`; стоп-UI — backlog |
 | W1.5 | **Боевые оплаты** — финальный MCP smoke | **есть** | `[x]` | §2.3 закрыт; `SHOP_SIMULATE_PAYMENT=0` + webhook T-Bank |
 
 **Потом (не волна 4):** PWA, app, kiosk, email verify, чек/ОФД, push — **backlog** потока 1.

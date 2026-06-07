@@ -1,16 +1,16 @@
 {
-  "scenario": "W1.4: сверка категорий витрина = barista (Shop::Catalog.products_scope)",
+  "scenario": "W1.4: полная сверка категорий витрина (shop API) = barista (/menu)",
   "stand": "https://coffeeos.fly.dev",
   "run_at": "2026-06-06",
-  "tool": "curl shop API + barista HTML (barista-a@demo)",
-  "tenant_a": "2fdee1ac-4674-41ee-b89e-87b45643f789",
-  "category_spot_check": "W12-FLY-0606",
+  "tool": "tmp_fly_w14_full_sync.sh — shop /api/categories vs barista HTML parse",
+  "code": "Shop::Catalog.tenant_menu; barista MenuCatalogLoadable",
+  "integration_test": "test/integration/platform/uk_menu_w14_category_sync_test.rb",
   "steps": [
     {
       "step": 1,
       "action": "Код: barista menu/POS → Shop::Catalog.tenant_menu; shop categories → Category.active",
       "result": "единый products_scope",
-      "verdict": "PASS (local test)"
+      "verdict": "PASS"
     },
     {
       "step": 2,
@@ -20,18 +20,110 @@
     },
     {
       "step": 3,
-      "action": "Fly spot-check W12-FLY-0606: shop API vs barista /menu",
-      "result": "3 товара совпали: W12-PHOTO-001, W12-PLAIN-001, W12-FILE-001",
+      "action": "Fly FULL tenant A: все категории/товары shop API vs barista-a /menu",
+      "result": "5 категорий, 18 товаров — совпадение 1:1, category_diffs=[]",
+      "verdict": "PASS"
+    },
+    {
+      "step": 4,
+      "action": "Fly FULL tenant B: все категории/товары shop API vs barista-b /menu",
+      "result": "5 категорий, 18 товаров — совпадение 1:1, category_diffs=[]",
       "verdict": "PASS"
     }
   ],
-  "not_in_scope_or_pending": [
-    "Полный diff всех категорий каталога demo на Fly — только spot-check W12",
-    "Tenant B barista на Fly не проверялся",
-    "УК /admin/menu показывает все товары ядра, не tenant-scope — ожидаемо",
-    "sold_out в barista menu больше не виден (как витрина); отдельный UI стоп-листа — backlog",
-    "Deploy barista scope на Fly — после push пользователя"
+  "tenants": [
+    {
+      "tenant_label": "A",
+      "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+      "barista_email": "barista-a@demo.coffeeos.local",
+      "shop_categories": 5,
+      "shop_products": 18,
+      "barista_categories": 5,
+      "barista_products": 18,
+      "missing_categories_on_barista": [],
+      "extra_categories_on_barista": [],
+      "category_diffs": [],
+      "verdict": "PASS",
+      "shop_snapshot": {
+        "Черный": [
+          "Фильтр-кофе Бразилия",
+          "Фильтр-кофе без кофеина (декаф) Гватемала"
+        ],
+        "Фильтр-кофе": [
+          "Фильтр-кофе Бразилия",
+          "Фильтр-кофе Гватемала, без кофеина"
+        ],
+        "Холодные": [
+          "Cold Brew + клюква + имбирь + лёд",
+          "Cold Brew + пивной кордиал + сливки + лёд",
+          "Cold Brew + пряный манго + сливки + лёд",
+          "Cold Brew + сливки + лёд",
+          "Бамбл",
+          "Кофе-тоник",
+          "Матча тоник"
+        ],
+        "Сезоные напитки": [
+          "Cold Brew + пивной кордиал + сливки + лед",
+          "Cold Brew + пряный манго + сливки + лед",
+          "Cold Brew + сливки + лед",
+          "Cold brew + клюква + имбирь + лед"
+        ],
+        "W12-FLY-0606": [
+          "W12-FILE-001",
+          "W12-PHOTO-001",
+          "W12-PLAIN-001"
+        ]
+      }
+    },
+    {
+      "tenant_label": "B",
+      "tenant_id": "655aaccb-004a-4bb9-a50a-ce618854dda3",
+      "barista_email": "barista-b@demo.coffeeos.local",
+      "shop_categories": 5,
+      "shop_products": 18,
+      "barista_categories": 5,
+      "barista_products": 18,
+      "missing_categories_on_barista": [],
+      "extra_categories_on_barista": [],
+      "category_diffs": [],
+      "verdict": "PASS",
+      "shop_snapshot": {
+        "Черный": [
+          "Фильтр-кофе Бразилия",
+          "Фильтр-кофе без кофеина (декаф) Гватемала"
+        ],
+        "Фильтр-кофе": [
+          "Фильтр-кофе Бразилия",
+          "Фильтр-кофе Гватемала, без кофеина"
+        ],
+        "Холодные": [
+          "Cold Brew + клюква + имбирь + лёд",
+          "Cold Brew + пивной кордиал + сливки + лёд",
+          "Cold Brew + пряный манго + сливки + лёд",
+          "Cold Brew + сливки + лёд",
+          "Бамбл",
+          "Кофе-тоник",
+          "Матча тоник"
+        ],
+        "Сезоные напитки": [
+          "Cold Brew + пивной кордиал + сливки + лед",
+          "Cold Brew + пряный манго + сливки + лед",
+          "Cold Brew + сливки + лед",
+          "Cold brew + клюква + имбирь + лед"
+        ],
+        "W12-FLY-0606": [
+          "W12-FILE-001",
+          "W12-PHOTO-001",
+          "W12-PLAIN-001"
+        ]
+      }
+    }
   ],
-  "integration_test": "test/integration/platform/uk_menu_w14_category_sync_test.rb",
+  "not_done_pending_approval": [
+    "CBR/CHECKLIST [x] — только после апрува заказчика",
+    "MCP: manager disable/sold_out → vitrina+barista hide (ручной spot-check не в этом прогоне)",
+    "Barista UI стоп-листа (серый блок «в стопе») — backlog по решению заказчика",
+    "Kiosk menu sync — вне W1.4"
+  ],
   "overall": "PASS на апрув"
 }
