@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## v1.143 — 2026-06-06 (W1.4 сверка категорий — на апрув)
+
+- **Код:** `Shop::Catalog.tenant_menu`; barista menu/POS → тот же scope, что витрина; shop categories → `Category.active`.
+- **Тест:** `uk_menu_w14_category_sync_test.rb` (3 tests, 38 assertions); barista regression sold_out обновлён.
+- **Fly:** spot-check `W12-FLY-0606` shop API = barista menu — PASS.
+- **Не в scope:** полный audit demo-каталога, tenant B, deploy Fly, UI стоп-листа.
+- **Ops:** MCP [`mcp_w14_category_sync_fly_2026-06-06.json`](../milestones/veha_2/artifacts/demo-feedback/mcp_w14_category_sync_fly_2026-06-06.json); CBR/CHECKLIST W1.4 `[ ]` до апрува.
+
 ## v1.142 — 2026-06-06 (W1.3 post-deploy: корзина Hot + polling 179₽)
 
 - **Fly MCP post-deploy:** UK curl → Hot/Iced в `W13-REQ-SIZE`; vitrina happy path Hot → корзина (`W12-PHOTO-001` 299₽).

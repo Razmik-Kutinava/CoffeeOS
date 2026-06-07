@@ -76,7 +76,7 @@
 - [x] ⭐ **W1.1** Баг 6.1 — цена из менеджера/УК на витрине (cache bust) — **PASS** 2026-06-06
 - [x] ⭐ **W1.2** MCP: УК → категория + 2 товара + фото + модификаторы → витрина — **PASS** 2026-06-06 ([`mcp_w12_uk_menu_vitrina_2026-06-06.json`](../artifacts/demo-feedback/mcp_w12_uk_menu_vitrina_2026-06-06.json); модификаторы на Fly — integration test)
 - [x] **W1.3** Обязательные модификаторы — MCP на Fly — **PASS** 2026-06-06 ([`mcp_w13_required_modifiers_fly_2026-06-06.json`](../artifacts/demo-feedback/mcp_w13_required_modifiers_fly_2026-06-06.json))
-- [ ] **W1.4** Сверка категорий: ядро = витрина = barista
+- [ ] **W1.4** Сверка категорий: витрина = barista — **на апрув** 2026-06-06 ([`mcp_w14_category_sync_fly_2026-06-06.json`](../artifacts/demo-feedback/mcp_w14_category_sync_fly_2026-06-06.json); полный audit — open)
 - [x] **W1.5** Боевые оплаты — §2.3 PASS 2026-06-06
 
 ---

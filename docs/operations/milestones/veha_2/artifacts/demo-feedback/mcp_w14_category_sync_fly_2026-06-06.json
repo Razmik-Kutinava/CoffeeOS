@@ -1,0 +1,37 @@
+{
+  "scenario": "W1.4: сверка категорий витрина = barista (Shop::Catalog.products_scope)",
+  "stand": "https://coffeeos.fly.dev",
+  "run_at": "2026-06-06",
+  "tool": "curl shop API + barista HTML (barista-a@demo)",
+  "tenant_a": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "category_spot_check": "W12-FLY-0606",
+  "steps": [
+    {
+      "step": 1,
+      "action": "Код: barista menu/POS → Shop::Catalog.tenant_menu; shop categories → Category.active",
+      "result": "единый products_scope",
+      "verdict": "PASS (local test)"
+    },
+    {
+      "step": 2,
+      "action": "Integration test uk_menu_w14_category_sync_test.rb",
+      "result": "3 tests, 38 assertions",
+      "verdict": "PASS"
+    },
+    {
+      "step": 3,
+      "action": "Fly spot-check W12-FLY-0606: shop API vs barista /menu",
+      "result": "3 товара совпали: W12-PHOTO-001, W12-PLAIN-001, W12-FILE-001",
+      "verdict": "PASS"
+    }
+  ],
+  "not_in_scope_or_pending": [
+    "Полный diff всех категорий каталога demo на Fly — только spot-check W12",
+    "Tenant B barista на Fly не проверялся",
+    "УК /admin/menu показывает все товары ядра, не tenant-scope — ожидаемо",
+    "sold_out в barista menu больше не виден (как витрина); отдельный UI стоп-листа — backlog",
+    "Deploy barista scope на Fly — после push пользователя"
+  ],
+  "integration_test": "test/integration/platform/uk_menu_w14_category_sync_test.rb",
+  "overall": "PASS на апрув"
+}
