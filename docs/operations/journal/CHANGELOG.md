@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v1.145 — 2026-06-06 (W1.4 PASS — апрув заказчика, волна 4 закрыта)
+
+- **Апрув:** сверка категорий vitrina = barista; Fly FULL A+B; CBR/CHECKLIST W1.4 `[x]`.
+- **Волна 4 W1.1–W1.4:** закрыта; следующий фокус — **блок 2** табло.
+- **Backlog:** barista стоп-лист UI; kiosk.
+
 ## v1.144 — 2026-06-06 (W1.4 Fly FULL sync A+B — на апрув)
 
 - **Fly MCP:** tenant A+B — полная сверка shop `/api/categories` vs barista `/menu` (5 кат, 18 товаров, diffs=[]).

@@ -2,7 +2,7 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-06-06 (обновлено: **W1.4 на апрув** — barista=витрина scope; **не идём дальше без апрува**)  
+**Дата:** 2026-06-06 (обновлено: **W1.4 PASS** — апрув заказчика; **волна 4 W1.1–W1.4 закрыта**; следующий **блок 2** табло)  
 **Веха 1:** официально не закрыта (§ I, H.3 — `[ ]`).  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
 **§2.3 оплата витрина:** **done** 2026-06-06 — [`CUSTOMER_BUSINESS_REQUIREMENTS.md`](milestones/veha_2/requirements/CUSTOMER_BUSINESS_REQUIREMENTS.md).
@@ -12,27 +12,26 @@
 **CBR — три потока + траектория:** тот же CBR § «Три потока», «Траектория», «Волна 4». **Северная звезда:** PDF 56 стр.
 
 **Прогона 11 нет.** Точка входа для агента:
-- **W1.4 (СЕЙЧАС):** **на апрув** — витрина = barista scope; ждём заказчика.
-- **W1.3:** **done** — обяз. модификаторы на Fly.
-- **W1.2:** **done** — хвосты закрыты.
-- **W1.1:** **done** — manager price → cache bust.
-- **Блок 2:** табло баристы — **только после апрува W1.4**.
+- **Блок 2 (СЕЙЧАС):** табло баристы.
+- **W1.4:** **done** — витрина = barista; Fly FULL A+B; апрув 2026-06-06.
+- **W1.1–W1.3:** **done**.
 - УК → витрины (закрыто): [`milestones/veha_2/runbooks/HANDOFF_UK_MENU_VITRINA.md`](milestones/veha_2/runbooks/HANDOFF_UK_MENU_VITRINA.md).
 
 | Сейчас | Дальше |
 |--------|--------|
-| **Сейчас** | **W1.4 на апрув** — сверка категорий витрина=barista | **блок 2** табло — **только после апрува W1.4** |
+| **Блок 2** — табло баристы | поток 3 тест-приёмка |
 
-**Ops на блок:** `SESSION_STATE` + коммит всегда; `PRACTICES` (CR); `QA_ACCEPTANCE_RUN` + `artifacts/` (QA); `CHANGELOG` если заметно; `CHECKLIST` `[x]` только по факту **или после апрува заказчика**.
+**Ops на блок:** `SESSION_STATE` + коммит всегда; `PRACTICES` (CR); `QA_ACCEPTANCE_RUN` + `artifacts/` (QA); `CHANGELOG` если заметно; `CHECKLIST` `[x]` только по факту.
 
-### Сессия 2026-06-06 (W1.4 — сверка категорий: **на апрув**)
+### Сессия 2026-06-06 (W1.4 — сверка категорий: **PASS**, апрув заказчика)
 
-- **Было:** barista menu/POS свой scope (без фильтров как витрина); shop categories без `Category.active`.
-- **Стало:** `Shop::Catalog.tenant_menu` — единый `products_scope` + `Category.active`; barista `/menu` и `/create-order` используют его.
-- **Тест:** `test/integration/platform/uk_menu_w14_category_sync_test.rb` — 3 tests, 38 assertions.
-- **Fly FULL A+B:** 5 категорий × 18 товаров — shop API = barista menu, `category_diffs=[]` (оба PASS).
-- **Не сделано / ждём:** апрув заказчика → `[x]`; MCP manager disable/sold_out вручную; стоп-лист UI barista — backlog.
-- **Дальше:** **ждём апрув W1.4** → потом блок 2 (табло).
+- **Апрув:** заказчик 2026-06-06.
+- **Код:** `Shop::Catalog.tenant_menu`; barista = vitrina scope.
+- **Fly FULL A+B:** 5 cat / 18 prod, diffs=[].
+- **Тест:** `uk_menu_w14_category_sync_test.rb`; PTS disable/sold_out — integration test.
+- **Артефакт:** [`mcp_w14_category_sync_fly_2026-06-06.json`](milestones/veha_2/artifacts/demo-feedback/mcp_w14_category_sync_fly_2026-06-06.json).
+- **Backlog:** barista UI стоп-листа; kiosk sync.
+- **Дальше:** **блок 2** табло.
 
 ### Сессия 2026-06-06 (W1.3 — обязательные модификаторы: **PASS** post-deploy)
 

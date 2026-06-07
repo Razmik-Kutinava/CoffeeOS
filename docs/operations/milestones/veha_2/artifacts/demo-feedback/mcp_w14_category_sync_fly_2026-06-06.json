@@ -119,11 +119,11 @@
       }
     }
   ],
-  "not_done_pending_approval": [
-    "CBR/CHECKLIST [x] — только после апрува заказчика",
-    "MCP: manager disable/sold_out → vitrina+barista hide (ручной spot-check не в этом прогоне)",
-    "Barista UI стоп-листа (серый блок «в стопе») — backlog по решению заказчика",
-    "Kiosk menu sync — вне W1.4"
+  "approved_at": "2026-06-06",
+  "approved_by": "заказчик",
+  "backlog_out_of_w14": [
+    "Barista UI стоп-листа (серый блок «в стопе»)",
+    "Kiosk menu sync"
   ],
-  "overall": "PASS на апрув"
+  "overall": "PASS"
 }
