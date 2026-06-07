@@ -96,16 +96,14 @@ class BaristaTabletRegressionTest < ActionDispatch::IntegrationTest
     assert_no_match(/#{Regexp.escape(o_issued.order_number)}/, response.body)
   end
 
-  # 6. Меню: показывает стоп-лист для sold_out позиций
-  test "menu shows stop indicator for sold out product" do
+  # 6. Меню (W1.4): sold_out скрыт — как на витрине (products_scope)
+  test "menu hides sold out product aligned with vitrina" do
     login_as!(@barista)
     ProductTenantSetting.find_by!(tenant: @tenant_a, product: @product).update!(is_sold_out: true, sold_out_reason: "stock_empty")
 
     get "/barista/menu"
     assert_response :success
-    assert_includes response.body, @product.name
-    assert_includes response.body, "⛔"
-    assert_includes response.body, "Стоп"
+    refute_includes response.body, @product.name
   end
 
   # 7. Смена: отображает статистику (выручка/кол-во заказов)

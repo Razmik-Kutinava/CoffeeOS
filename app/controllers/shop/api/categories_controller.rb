@@ -25,7 +25,7 @@ module Shop
         products_by_category = all_products.group_by(&:category_id)
 
         # 1 запрос: категории
-        categories = Category.where(id: products_by_category.keys.compact).order(:sort_order)
+        categories = Category.active.where(id: products_by_category.keys.compact).order(:sort_order)
 
         # Пагинация по категориям (витрина без per_page — отдаём все категории, до 50)
         page = [params[:page].to_i, 1].max

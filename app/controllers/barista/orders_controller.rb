@@ -1,5 +1,6 @@
 module Barista
   class OrdersController < BaseController
+    include MenuCatalogLoadable
     def show
       @order = Order.for_current_tenant.includes(:payments).find(params[:id])
       authorize @order
@@ -50,11 +51,7 @@ module Barista
     def new
       authorize Order, :create?
       @shift = current_shift
-      @products = Product.joins(:product_tenant_settings)
-                         .where(product_tenant_settings: { tenant_id: Current.tenant_id, is_enabled: true })
-                         .includes(:category, :product_tenant_settings)
-                         .order('categories.sort_order ASC, products.sort_order ASC')
-      @categories = Category.active.order(sort_order: :asc)
+      load_tenant_menu!
       @cart = session[:barista_cart] || []
     end
     
