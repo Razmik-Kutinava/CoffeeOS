@@ -80,7 +80,7 @@
         </div>
         <div class="pm-field">
           <label class="pm-label" for="new_prod_img_url">Фото по ссылке (необязательно)</label>
-          <%= f.url_field :image_url, id: "new_prod_img_url", name: "product[image_url]", placeholder: "https://…" %>
+          <%= f.text_field :image_url, id: "new_prod_img_url", name: "product[image_url]", placeholder: "https://… или /uploads/products/…" %>
         </div>
         <div class="pm-field">
           <label class="pm-label" for="new_prod_img_file">Или загрузить файл</label>
