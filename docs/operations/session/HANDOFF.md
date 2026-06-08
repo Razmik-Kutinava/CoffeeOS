@@ -9,7 +9,8 @@
 | Что | Где |
 |-----|-----|
 | **Коммит + ops (канон)** | `.cursor/rules/workflow/coffeeos-commit-ops.mdc` |
-| Воркфлоу шага | `.cursor/rules/workflow/coffeeos-agent-workflow.mdc` |
+| **Задачи, go, отчёт** | `.cursor/rules/workflow/coffeeos-task-workflow.mdc` |
+| Воркфлоу шага (краткий) | `.cursor/rules/workflow/coffeeos-agent-workflow.mdc` |
 | Структура репо | `.cursor/rules/workflow/coffeeos-repo-layout.mdc` |
 | Dev gates (DoD, регрессия) | `.cursor/rules/workflow/coffeeos-dev-gates.mdc` |
 | Лимиты файлов / сплит | `.cursor/rules/workflow/coffeeos-file-size-split.mdc` |

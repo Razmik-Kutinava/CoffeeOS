@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## v1.150 — 2026-06-08 (task-workflow: go, тесты, честный отчёт)
+
+- **Новое:** `coffeeos-task-workflow.mdc` — старт сессии, CHECKLIST/CBR, go, обязательные тесты, честный отчёт, backlog.
+- **Обновлено:** `coffeeos-agent-workflow.mdc` — краткий индекс → task-workflow.
+
 ## v1.149 — 2026-06-08 (repo-layout: структура репозитория)
 
 - **Новое:** `coffeeos-repo-layout.mdc` — куда класть код/docs, зеркало test/, переносы с go, README sync.

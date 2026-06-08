@@ -2,8 +2,8 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-06-08 (обновлено: **`coffeeos-repo-layout.mdc`** — куда класть файлы, переносы только с go)  
-**Предыдущее:** dev-gates; W1.4 PASS; следующий **блок 2** табло  
+**Дата:** 2026-06-08 (обновлено: **`coffeeos-task-workflow.mdc`** — go, тесты, честный отчёт, старт сессии)  
+**Предыдущее:** repo-layout; W1.4 PASS; следующий **блок 2** табло  
 **Веха 1:** официально не закрыта (§ I, H.3 — `[ ]`).  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
 **§2.3 оплата витрина:** **done** 2026-06-06 — [`CUSTOMER_BUSINESS_REQUIREMENTS.md`](milestones/veha_2/requirements/CUSTOMER_BUSINESS_REQUIREMENTS.md).
@@ -23,6 +23,12 @@
 | **Блок 2** — табло баристы | поток 3 тест-приёмка |
 
 **Ops на блок:** `SESSION_STATE` + коммит всегда; `PRACTICES` (CR); `QA_ACCEPTANCE_RUN` + `artifacts/` (QA); `CHANGELOG` если заметно; `CHECKLIST` `[x]` только по факту.
+
+### Сессия 2026-06-08 (task-workflow — задачи и отчёт)
+
+- **Новое:** `coffeeos-task-workflow.mdc` — старт сессии (таблица), go, тесты, честный отчёт, backlog → CBR/DEMO_FEEDBACK.
+- **Обновлено:** `coffeeos-agent-workflow.mdc` — краткий индекс, ссылка на task-workflow.
+- **Коммит:** локально; push по **`go`**.
 
 ### Сессия 2026-06-08 (repo-layout — структура репозитория)
 

@@ -7,7 +7,8 @@
 
 Workflow (alwaysApply)
 - coffeeos-commit-ops.mdc — ВСЕГДА git commit + ops; push только по апруву (канон репо)
-- coffeeos-agent-workflow.mdc — порядок шага; коммит только через commit-ops
+- coffeeos-task-workflow.mdc — CHECKLIST/CBR, go, тесты, честный отчёт, старт сессии
+- coffeeos-agent-workflow.mdc — краткий порядок шага → task-workflow
 - coffeeos-repo-layout.mdc — структура репо, куда класть, переносы с go
 - coffeeos-dev-gates.mdc — DoD, регрессия по зонам, hot-path, migration gate
 - coffeeos-file-size-split.mdc — лимиты 50/120/200, сплит по панелям

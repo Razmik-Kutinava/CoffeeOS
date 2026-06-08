@@ -1,19 +1,17 @@
 ---
-description: CoffeeOS — порядок шага агента (коммит/ops — coffeeos-commit-ops.mdc)
+description: CoffeeOS — порядок шага агента (детали задач → coffeeos-task-workflow.mdc)
 alwaysApply: true
 ---
 
-# CoffeeOS — рабочий процесс агента
+# CoffeeOS — рабочий процесс агента (краткий)
 
-**Коммит и ops:** только [`coffeeos-commit-ops.mdc`](coffeeos-commit-ops.mdc) — других формулировок нет.
+**Задачи, go, честный отчёт:** [`coffeeos-task-workflow.mdc`](coffeeos-task-workflow.mdc) — канон для CHECKLIST/CBR/фич.
 
-**Гейты (DoD, регрессия, миграции):** [`coffeeos-dev-gates.mdc`](coffeeos-dev-gates.mdc).
+**Коммит и ops:** только [`coffeeos-commit-ops.mdc`](coffeeos-commit-ops.mdc).
 
-**Структура репо:** [`coffeeos-repo-layout.mdc`](coffeeos-repo-layout.mdc).
+**Гейты:** [`coffeeos-dev-gates.mdc`](coffeeos-dev-gates.mdc). **Структура:** [`coffeeos-repo-layout.mdc`](coffeeos-repo-layout.mdc).
 
-**Правила проекта:** [`../project/`](../project/) (`coffeeos-core`, `coffeeos-performance`, …).
-
-**Веха / заказчик:** `docs/operations/milestones/veha_2/checklists/CHECKLIST.md`, `requirements/CUSTOMER_BUSINESS_REQUIREMENTS.md`, `requirements/DEMO_FEEDBACK.md`.
+**Правила проекта:** [`../project/`](../project/).
 
 ---
 
@@ -21,13 +19,13 @@ alwaysApply: true
 
 | # | Действие |
 |---|----------|
-| 1 | Один логический шаг — не смешивать несвязанное |
-| 2 | Тесты — `bin/rails test …` / `bin/smoke` (см. `project/coffeeos-tests.mdc`) |
+| 1 | Один логический шаг |
+| 2 | Тесты (`coffeeos-dev-gates.mdc`) |
 | 3 | **`git commit`** + **ops** (`coffeeos-commit-ops.mdc`) |
-| 4 | Краткий отчёт: что сделано, **`Коммит: <хеш>`**, что прогнать |
-| 5 | **Стоп** — ждать **`go`** на следующий шаг |
+| 4 | **Честный отчёт** (`coffeeos-task-workflow.mdc` § Отчёт) |
+| 5 | **Стоп** — ждать **`go`** |
 
-Срочность не отменяет коммит, тесты и ops-доки.
+Срочность не отменяет коммит, тесты и ops.
 
 ---
 
@@ -35,10 +33,10 @@ alwaysApply: true
 
 | Файл | Когда |
 |------|--------|
-| `docs/operations/session/SESSION_STATE.md` | После каждого шага с правками |
+| `docs/operations/session/SESSION_STATE.md` | После шага с правками |
 | `docs/operations/session/HANDOFF.md` | Конец шага |
-| `docs/operations/journal/CHANGELOG.md` | Конец шага / заметное изменение |
+| `docs/operations/journal/CHANGELOG.md` | Конец шага |
 | `docs/operations/ISSUES.md` | Баг |
-| `DEMO_FEEDBACK.md` / `CUSTOMER_BUSINESS_REQUIREMENTS.md` | Заказчик / backlog В2 |
+| CBR / `DEMO_FEEDBACK.md` | Заказчик / backlog |
 
-После **`git push`** — обновить SESSION_STATE и HANDOFF.
+После **`git push`** — SESSION_STATE + HANDOFF.
