@@ -19,8 +19,8 @@ PhD в clean code, DRY/KISS, maintainability и безопасном рефак�
 
 ## Файлы для чтения
 - .cursorrules
-- .cursor/rules/coffeeos-core.mdc
-- .cursor/rules/coffeeos-performance.mdc
+- .cursor/rules/project/coffeeos-core.mdc
+- .cursor/rules/project/coffeeos-performance.mdc
 - docs/reviews/REFACTORING.md
 
 ## Критерий качества

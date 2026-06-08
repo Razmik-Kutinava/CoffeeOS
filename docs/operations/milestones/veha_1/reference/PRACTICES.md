@@ -14,7 +14,7 @@
 3. **Таск-трекер** — статус Done **не раньше** соответствующих `[x]` в чеклисте.
 4. **Новый канал заказа** — сначала строка в `docs/operations/milestones/veha_1/reference/ORDER_ENTRY_AUDIT.md`, потом PR.
 
-Правила кода для агентов: `.cursor/rules/coffeeos-services.mdc`, `coffeeos-core.mdc` п. 9, `docs/agents/AGENTS.md`.
+Правила кода для агентов: `.cursor/rules/project/coffeeos-services.mdc`, `coffeeos-core.mdc` п. 9, `docs/agents/AGENTS.md`.
 
 ---
 

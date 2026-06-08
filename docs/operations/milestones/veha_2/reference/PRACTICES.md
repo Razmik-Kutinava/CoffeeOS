@@ -33,7 +33,7 @@
 
 1. Смена/каналы заказа — [`ORDER_ENTRY_AUDIT.md`](ORDER_ENTRY_AUDIT.md).
 2. Таск-трекер Done не раньше `[x]` в чеклисте.
-3. Правила кода: `.cursor/rules/coffeeos-core.mdc`, `coffeeos-performance.mdc`, `coffeeos-services.mdc`, `docs/agents/AGENTS.md`.
+3. Правила кода: `.cursor/rules/project/coffeeos-core.mdc`, `coffeeos-performance.mdc`, `coffeeos-services.mdc`, `docs/agents/AGENTS.md`.
 
 ---
 

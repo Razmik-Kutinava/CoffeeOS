@@ -28,4 +28,4 @@ bin/rails db:prepare              # create + migrate + seed (dev)
 ## Важно
 
 - Сиды в `db/seeds*.rb` — **источник правды** для demo-данных; rake-задачи ссылаются на эти пути.
-- RLS-политики — в миграциях и триггерах; перед правками смотри `.cursor/rules/coffeeos-core.mdc`.
+- RLS-политики — в миграциях и триггерах; перед правками смотри `.cursor/rules/project/coffeeos-core.mdc`.

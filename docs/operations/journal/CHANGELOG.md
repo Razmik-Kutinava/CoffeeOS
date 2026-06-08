@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## v1.152 — 2026-06-08 (правила: гармонизация workflow + project + доки)
+
+- **Новое:** `docs/operations/RULES_INDEX.md`, `.cursor/rules/coffeeos-index.mdc`.
+- **Синхрон:** `AGENTS.md`, `.cursorrules` с `commit-ops` (push по апруву, SESSION_STATE каждый шаг).
+- **Symlinks:** `.cursor/rules/coffeeos-*.mdc` → `project/` для Cursor и старых путей.
+- **Доки:** ссылки `project/coffeeos-*` в PRACTICES, HANDOFF, ISSUES, db/README.
+
 ## v1.151 — 2026-06-08 (корень: tmp_* → scripts/scratch)
 
 - **Уборка:** 19 одноразовых `tmp_*` из корня → `scripts/scratch/`; `.gitignore` + `.keep`.

@@ -1,26 +1,23 @@
 # HANDOFF — старт Вехи 2 (Веха 1 **не закрыта официально**)
 
 **Дата:** 2026-06-08 (правила агента) · было 2026-05-25  
-**Ветка:** `develop` (локально ahead: UK form fix + rules reorg — push по **`go`**)  
+**Ветка:** `develop` (синхрон с `origin` после push rules; локальные коммиты — по **`go`**)  
 **Прод:** https://coffeeos.fly.dev
 
-### Сессия 2026-06-08 — правила Cursor
+### Сессия 2026-06-08 — правила Cursor (синхронизировано)
+
+**Карта:** `docs/operations/RULES_INDEX.md` · индекс `.cursor/rules/coffeeos-index.mdc`
 
 | Что | Где |
 |-----|-----|
-| **Коммит + ops (канон)** | `.cursor/rules/workflow/coffeeos-commit-ops.mdc` |
-| **Задачи, go, отчёт** | `.cursor/rules/workflow/coffeeos-task-workflow.mdc` |
-| Воркфлоу шага (краткий) | `.cursor/rules/workflow/coffeeos-agent-workflow.mdc` |
-| Структура репо | `.cursor/rules/workflow/coffeeos-repo-layout.mdc` |
-| Dev gates (DoD, регрессия) | `.cursor/rules/workflow/coffeeos-dev-gates.mdc` |
-| Лимиты файлов / сплит | `.cursor/rules/workflow/coffeeos-file-size-split.mdc` |
-| Домен CoffeeOS (8 файлов) | `.cursor/rules/project/coffeeos-*.mdc` |
+| **Коммит + ops (канон)** | `workflow/coffeeos-commit-ops.mdc` |
+| **Задачи, go, отчёт** | `workflow/coffeeos-task-workflow.mdc` |
+| Workflow + project | `.cursor/rules/workflow/`, `.cursor/rules/project/` |
+| Symlinks | `.cursor/rules/coffeeos-*.mdc` → `project/` (совместимость) |
 
-**Коммит:** всегда после шага с правками. **Push:** только по явному апруву пользователя.
+**Коммит:** всегда после шага. **Push:** только по апруву. **Scratch:** `scripts/scratch/`.
 
-**Scratch агента:** `scripts/scratch/` (не корень); `tmp_*` в корне — запрещено.
-
-Старые пути `.cursor/rules/coffeeos-*.mdc` в доках — обновлять по мере касания; канон — `project/`.
+`AGENTS.md` и `.cursorrules` приведены к workflow (без «push каждые 3–5»).
 
 ### Статус вех (важно для агента)
 
@@ -97,7 +94,7 @@
 2. Создать/наполнить **`docs/operations/milestones/veha_2/`** (сейчас только `README.md`-заготовка).
 3. **Не ломать** гибрид смены В1 без явного продукта — в В2 планируется ужесточение (единая смена на всех каналах), см. `ORDER_ENTRY_AUDIT.md`.
 4. Техдолг В1 — только в **`milestones/veha_1/reference/PRACTICES.md`** § «Техдолг В1», не размазывать по Vision/Architecture.
-5. Правила кода: `.cursor/rules/coffeeos-core.mdc`, `coffeeos-performance.mdc`, `coffeeos-services.mdc`.
+5. Правила кода: `.cursor/rules/project/coffeeos-core.mdc`, `coffeeos-performance.mdc`, `coffeeos-services.mdc`; карта — `RULES_INDEX.md`.
 
 ### Приоритеты В2 (из roadmap, не начато)
 

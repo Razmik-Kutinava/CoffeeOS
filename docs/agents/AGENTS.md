@@ -13,60 +13,47 @@ Rails 8, PostgreSQL, Svelte/Vite, Pundit, Minitest.
 - develop — разработка
 - staging — предпрод
 - main — продакшн
-- `feat/*` и `fix/*` — от develop, мёрдж обратно в develop
-- В staging — только из develop
-- В main — только из staging, только после review + тестов
+- `feat/*` и `fix/*` — от develop
+- В staging — только из develop; в main — только из staging после review + тестов
 
-## Сервис-объекты (Веха 1 — обязательно для агентов)
+## Канон правил агента
 
-Практика **только Service Objects**, без Domain Folders и без запрета ActiveRecord между модулями. Подробности: `.cursor/rules/coffeeos-services.mdc`, краткий триггер — `coffeeos-core.mdc` п. 9. Статус внедрения по вехам (дописывать): `docs/operations/reference/MILESTONE_PRACTICES.md`.
+| Уровень | Где |
+|---------|-----|
+| **Процесс** | `.cursor/rules/workflow/` — см. `docs/operations/RULES_INDEX.md` |
+| **Код** | `.cursor/rules/project/coffeeos-*.mdc` |
+| **Индекс** | `.cursorrules` (кратко), этот файл |
+
+**При конфликте:** `coffeeos-commit-ops.mdc` и `coffeeos-task-workflow.mdc` **важнее** старых формулировок про «push каждые N коммитов».
+
+## Сервис-объекты (Веха 1)
+
+Практика **только Service Objects**, без Domain Folders. Подробности: `.cursor/rules/project/coffeeos-services.mdc`, п. 9 — `coffeeos-core.mdc`. Журнал: `docs/operations/reference/MILESTONE_PRACTICES.md`.
 
 | Ситуация | Действие |
 |----------|----------|
-| Заказ, склад, онбординг, оплата, транзакция, 2+ модели | Класс в `app/services/{barista\|shop\|prep_kitchen\|platform\|…}/` |
+| Заказ, склад, онбординг, оплата, 2+ модели | `app/services/{panel}/` |
 | Простой index/show, одна модель, < ~15 строк | Можно в контроллере |
-| Массовый рефакторинг всех контроллеров | **Только** по явному апруву пользователя |
+| Массовый рефакторинг | Только по апруву |
 
-Контроллер вызывает сервис (`Barista::OrderCreationService`, `Shop::OrderCreator`, …), не дублирует `create!`/транзакции. Эталоны: `app/services/barista/order_creation_service.rb`, `app/services/platform/tenant_onboarding/provision.rb`.
-
-**Не делать:** `app/models/sales`, изоляция доменов как в Dodo, перенос всего legacy без задачи.
+Эталоны: `app/services/barista/order_creation_service.rb`, `app/services/platform/tenant_onboarding/provision.rb`.
 
 ## Правила работы
 
-- Опора на продукт: `docs/product/01_Vision.md`, `docs/product/02_functional.md`, `docs/product/03_Business_Logic.md`. `docs/product/ARCHITECTURE.md` — когда пользователь явно считает документ готовым каноном или задача архитектурная.
-- Корень процесса: **`.cursorrules`** (ISSUES, SESSION_STATE, коммиты, деструктив, продуктовые доки).
-- По контексту: `docs/operations/ISSUES.md`, `docs/operations/session/SESSION_STATE.md`, при необходимости `session/HANDOFF.md`, `journal/CHANGELOG.md`.
-- Не додумывай; не хватает данных — эскалация.
-- Секреты только через ENV; не хардкодить.
-- **Баги и ошибки:** сразу запись в `docs/operations/ISSUES.md` (где, приоритет, влияние); довести до **«решено»**; в той же записи — **что сделано, чем закрыли** (см. шапку `ISSUES.md`).
-- **SESSION_STATE:** не после каждого клика — когда **2–3+ содержательных шага**, **смена задачи**, **важный поворот** или **каждые 3–4 коммита**; зафиксировать смысл сделанного для следующей сессии.
-- **Коммиты:** осмысленные, частые; формат и пуш — как в `.cursorrules`.
-- Миграции БД, деструктив по данным/git (`drop`, `reset --hard`, `--force` и т.п.) — только с **явным подтверждением** пользователя и осознанием окружения (не production без отдельного согласия).
-- Большие файлы (>200 строк) — по Refactor Split: план разбиения → согласование → перенос и тесты.
-- Гранулярность: целевой размер 50–120 строк, лимит 200, одна ответственность на файл/модуль; имя файла = главная ответственность.
-- `utils/helpers`-свалки запрещены; общий util только в доменном модуле и с тестами.
-- Формальный QA handoff (если включён у команды): статус и передача через `ISSUES`, не «устно».
-- Конец сессии: при значимом прогрессе — короткий апдейт `SESSION_STATE` (и при необходимости `HANDOFF`).
+- Продукт: `docs/product/01_Vision.md`, `02_functional.md`, `03_Business_Logic.md`; `ARCHITECTURE.md` — когда явно канон.
+- **Баги:** сразу `docs/operations/ISSUES.md` до «решено».
+- **SESSION_STATE:** после **каждого шага с правками** (`coffeeos-commit-ops.mdc`).
+- **Коммит:** всегда после шага с изменениями файлов; **push** — только по явной просьбе пользователя.
+- **Новая задача:** план → **`go`** (`coffeeos-task-workflow.mdc`).
+- Миграции / деструктивный git — только с **`go`** (`coffeeos-dev-gates.mdc`).
+- Файлы >200 строк — сплит с **`go`** (`coffeeos-file-size-split.mdc`).
+- Scratch агента: `scripts/scratch/`, не корень репо.
 
 ## Тестирование
 
-- Unit + integration обязательны для критичной логики
-- Без зелёных тестов задача не завершена
-- Перед релизом: smoke/regression по критичным потокам
-- Регулярный QA прогон: каждые 3 дня и после релиза
-
-## Коммиты и пуши
-
-- Коммит после завершённого логического шага; не копить длинные сессии без коммитов (см. `.cursorrules`).
-- Пуш каждые 3–5 коммитов и перед сменой этапа / в конце сессии.
+- Тест на каждое изменение поведения; регрессия зоны — `coffeeos-dev-gates.mdc`.
+- Без зелёных тестов шаг не `done` (или `blocked` + ISSUES).
 
 ## Definition of Done
 
-1. Реализация соответствует `01_Vision` / `02_functional` / `03_Business_Logic`, `.cursorrules`, **сервис-объектам (секция выше)** и актуальной `ARCHITECTURE.md` (если она уже канон)
-2. Тесты написаны и проходят
-3. Code Review агент одобрил
-4. Refactoring рекомендации выполнены
-5. Изменения отражены в docs/operations/journal/CHANGELOG.md
-6. docs/operations/session/HANDOFF.md обновлён
-7. docs/operations/session/SESSION_STATE.md обновлён
-8. Нет открытых 🔴 блокеров для релиза
+См. `coffeeos-dev-gates.mdc` и `coffeeos-task-workflow.mdc`: тесты, ops (SESSION_STATE, CHANGELOG, HANDOFF), честный отчёт, `[x]` в CHECKLIST/CBR — после «ок» пользователя / MCP Fly.

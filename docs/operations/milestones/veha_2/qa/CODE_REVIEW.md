@@ -6,7 +6,7 @@
 
 **Скоуп:** онбординг УК, Т-Банк, kiosk API, shop API, RLS/`Current`, Rack::Attack.
 
-**Чеклист проекта:** `.cursor/rules/coffeeos-performance.mdc`, `coffeeos-core.mdc`.
+**Чеклист проекта:** `.cursor/rules/project/coffeeos-performance.mdc`, `coffeeos-core.mdc`.
 
 ---
 

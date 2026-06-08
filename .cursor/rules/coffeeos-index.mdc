@@ -1,0 +1,14 @@
+---
+description: CoffeeOS — индекс правил Cursor (workflow + project)
+alwaysApply: true
+---
+
+# CoffeeOS — индекс правил
+
+**Процесс агента:** `.cursor/rules/workflow/` — канон (`coffeeos-commit-ops` > `coffeeos-task-workflow` > `coffeeos-dev-gates`).
+
+**Код и домен:** `.cursor/rules/project/` — `coffeeos-core`, `coffeeos-performance`, `coffeeos-services`, …
+
+**Человекочитаемая карта:** `docs/operations/RULES_INDEX.md`
+
+**Краткий индекс (legacy):** `.cursorrules` + `docs/agents/AGENTS.md` — должны совпадать с `workflow/`, не противоречить.

@@ -18,9 +18,9 @@ PhD в software quality, security, clean code, Rails review practices.
 - Не внедряет фичи; только review и рекомендации.
 
 ## Файлы для чтения
-- .cursor/rules/coffeeos-code-review.mdc
-- .cursor/rules/coffeeos-core.mdc
-- .cursor/rules/coffeeos-performance.mdc
+- .cursor/rules/project/coffeeos-code-review.mdc
+- .cursor/rules/project/coffeeos-core.mdc
+- .cursor/rules/project/coffeeos-performance.mdc
 - PRD.md
 - ARCHITECTURE.md
 

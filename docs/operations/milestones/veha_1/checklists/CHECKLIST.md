@@ -20,7 +20,7 @@
 
 ## A. Service Objects (практика В1)
 
-- [x] Правила агентов: `.cursor/rules/coffeeos-core.mdc` п.9, `coffeeos-services.mdc`, `docs/agents/AGENTS.md`
+- [x] Правила агентов: `.cursor/rules/project/coffeeos-core.mdc` п.9, `coffeeos-services.mdc`, `docs/agents/AGENTS.md`
 - [x] Автотесты: `test/services/**` + полный `bin/rails test` зелёный (зафиксировать дату/число runs в `MILESTONE_PRACTICES.md`)
 - [x] ⭐ Вынести **отмену заказа бариста + возврат на склад** в `Barista::OrderCancellationService` (`app/services/barista/order_cancellation_service.rb`)
 - [x] ⭐ Починить **`PrepKitchen::Stock::MovementCreator`** — черновик + позиции в транзакции (movement `create!`, затем items)

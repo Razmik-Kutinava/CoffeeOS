@@ -1,26 +1,23 @@
 Отчёт: правила Cursor для CoffeeOS
-Дата: 2026-06-08 (обновлено)
+Дата: 2026-06-08 (синхронизация)
 
 Структура
-- .cursor/rules/workflow/ — как действует агент (alwaysApply)
-- .cursor/rules/project/ — домен CoffeeOS (core, performance, services, …)
+- .cursor/rules/coffeeos-index.mdc — alwaysApply индекс
+- .cursor/rules/workflow/ — 6 файлов (процесс агента)
+- .cursor/rules/project/ — 8 файлов (домен кода)
+- .cursor/rules/coffeeos-*.mdc — symlinks → project/ (совместимость)
 
-Workflow (alwaysApply)
-- coffeeos-commit-ops.mdc — ВСЕГДА git commit + ops; push только по апруву (канон репо)
-- coffeeos-task-workflow.mdc — CHECKLIST/CBR, go, тесты, честный отчёт, старт сессии
-- coffeeos-agent-workflow.mdc — краткий порядок шага → task-workflow
-- coffeeos-repo-layout.mdc — структура репо, куда класть, переносы с go
-- coffeeos-dev-gates.mdc — DoD, регрессия по зонам, hot-path, migration gate
-- coffeeos-file-size-split.mdc — лимиты 50/120/200, сплит по панелям
+Канон при конфликте
+1. workflow/coffeeos-commit-ops.mdc
+2. workflow/coffeeos-task-workflow.mdc
+3. workflow/coffeeos-dev-gates.mdc
+4. project/coffeeos-*.mdc
 
-Project (8 файлов)
-- coffeeos-core.mdc — alwaysApply (в project/)
-- coffeeos-performance, data, http, ui, services, tests — globs
-- coffeeos-code-review — по запросу
+Человекочитаемо
+- docs/operations/RULES_INDEX.md
+- docs/agents/AGENTS.md (синхрон с workflow)
+- .cursorrules (краткий индекс)
 
-Ops при шаге
-- SESSION_STATE, HANDOFF, CHANGELOG, ISSUES; backlog — CBR / DEMO_FEEDBACK / PRACTICES
-
-Дальше
-- Следующие правила по примерам заказчика → workflow/
-- Обновить ссылки в docs/agents/AGENTS.md на project/ (по мере касания)
+Ops
+- SESSION_STATE после шага; CHANGELOG+HANDOFF в конце шага
+- ISSUES — баги; backlog — CBR / DEMO_FEEDBACK

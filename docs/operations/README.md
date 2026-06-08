@@ -4,7 +4,8 @@
 
 | Файл | Назначение |
 |------|------------|
-| [ISSUES.md](ISSUES.md) | Баги и инциденты (`.cursorrules` → сюда сразу) |
+| [ISSUES.md](ISSUES.md) | Баги и инциденты (сразу при обнаружении) |
+| [RULES_INDEX.md](RULES_INDEX.md) | Индекс правил агента (workflow + project) |
 
 ## Папки
 

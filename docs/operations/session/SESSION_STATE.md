@@ -2,8 +2,8 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-06-08 (обновлено: **корень репо** — `tmp_*` → `scripts/scratch/`; `.cursorrules` → workflow)  
-**Предыдущее:** task-workflow; W1.4 PASS; следующий **блок 2** табло  
+**Дата:** 2026-06-08 (обновлено: **гармонизация правил** — RULES_INDEX, AGENTS, symlinks, пути project/)  
+**Предыдущее:** W1.4 PASS; следующий **блок 2** табло  
 **Веха 1:** официально не закрыта (§ I, H.3 — `[ ]`).  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
 **§2.3 оплата витрина:** **done** 2026-06-06 — [`CUSTOMER_BUSINESS_REQUIREMENTS.md`](milestones/veha_2/requirements/CUSTOMER_BUSINESS_REQUIREMENTS.md).
@@ -23,6 +23,13 @@
 | **Блок 2** — табло баристы | поток 3 тест-приёмка |
 
 **Ops на блок:** `SESSION_STATE` + коммит всегда; `PRACTICES` (CR); `QA_ACCEPTANCE_RUN` + `artifacts/` (QA); `CHANGELOG` если заметно; `CHECKLIST` `[x]` только по факту.
+
+### Сессия 2026-06-08 (гармонизация правил)
+
+- **RULES_INDEX.md** + `coffeeos-index.mdc`; AGENTS.md + `.cursorrules` = workflow.
+- **Symlinks** `.cursor/rules/coffeeos-*.mdc` → `project/`.
+- **Доки:** пути `project/coffeeos-*` в PRACTICES, HANDOFF, CODE_REVIEW, db/README.
+- **Push:** по **`go`**.
 
 ### Сессия 2026-06-08 (корень репо — scratch)
 
