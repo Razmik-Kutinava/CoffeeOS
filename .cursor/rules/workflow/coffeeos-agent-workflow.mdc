@@ -7,6 +7,8 @@ alwaysApply: true
 
 **Коммит и ops:** только [`coffeeos-commit-ops.mdc`](coffeeos-commit-ops.mdc) — других формулировок нет.
 
+**Гейты (DoD, регрессия, миграции):** [`coffeeos-dev-gates.mdc`](coffeeos-dev-gates.mdc).
+
 **Правила проекта:** [`../project/`](../project/) (`coffeeos-core`, `coffeeos-performance`, …).
 
 **Веха / заказчик:** `docs/operations/milestones/veha_2/checklists/CHECKLIST.md`, `requirements/CUSTOMER_BUSINESS_REQUIREMENTS.md`, `requirements/DEMO_FEEDBACK.md`.

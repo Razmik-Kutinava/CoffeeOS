@@ -1,0 +1,119 @@
+---
+description: CoffeeOS — технические гейты (DoD, регрессия, миграции, API, hot-path)
+alwaysApply: true
+---
+
+# CoffeeOS — dev gates
+
+Дополняет [`coffeeos-agent-workflow.mdc`](coffeeos-agent-workflow.mdc), [`coffeeos-commit-ops.mdc`](coffeeos-commit-ops.mdc), [`coffeeos-file-size-split.mdc`](coffeeos-file-size-split.mdc), [`../project/`](../project/).
+
+---
+
+## Приоритет правил (при конфликте)
+
+0. **`coffeeos-commit-ops.mdc`** — всегда `git commit` + ops; **`git push`** — только по явному апруву
+1. **Безопасность** — секреты, auth, RLS, prod/Fly
+2. **`docs/operations/ISSUES.md`** — открытые 🔴 блокеры
+3. **`coffeeos-agent-workflow.mdc`** — go, тесты, honest report, стоп между шагами
+4. **`coffeeos-dev-gates.mdc`** (этот файл) — миграции, API, регрессия, hot-path
+5. **`coffeeos-file-size-split.mdc`** + **`../project/coffeeos-*.mdc`**
+6. **`docs/agents/AGENTS.md`** — индекс процесса агента
+
+---
+
+## Definition of Done — пункт чеклиста / CBR
+
+Пункт **не закрыт** (`[x]` в CHECKLIST / `done` в DEMO_FEEDBACK), пока не выполнено:
+
+| # | Критерий |
+|---|----------|
+| 1 | Тест **на изменение** (unit/integration) — зелёный |
+| 2 | **Регрессия зоны** — команды из таблицы ниже (если зона затронута) |
+| 3 | **ISSUES / backlog** — отложенное и баги записаны (CBR, DEMO_FEEDBACK, PRACTICES) |
+| 4 | **Ops** — SESSION_STATE; CHANGELOG + HANDOFF в конце шага |
+| 5 | **Runbook** — если менялся нетривиальный флоу (онбординг, оплата, MCP) |
+| 6 | **`[x]` / апрув заказчика** — только после **«ок»** пользователя (MCP на Fly для витрины/оплаты) |
+
+---
+
+## Регрессия по зонам
+
+Запускать зоны **по отдельности** (из корня репо):
+
+| Зона / затронуто | Команда |
+|------------------|---------|
+| **Shop / витрина** | `bin/rails test test/integration/shop/` |
+| **Оплата §2.3** | `bin/rails test test/integration/shop/api/qa_section_2_3_payment_cart_test.rb test/integration/shop/api/qa_section_2_3_stage5_e2e_test.rb test/services/shop/order_creator_test.rb` |
+| **T-Bank callback** | `bin/rails test test/controllers/callbacks/tbank_controller_test.rb test/services/payments/tbank_adapter_test.rb` |
+| **Platform / УК / меню** | `bin/rails test test/integration/platform/` |
+| **Онбординг** | `bin/rails test test/integration/platform/onboarding_*` |
+| **Barista / смена** | `bin/rails test test/integration/barista_* test/integration/block_g_cash_shift_test.rb` |
+| **Manager** | `bin/rails test test/integration/manager_* test/integration/auth/shift_manager_rbac_test.rb` |
+| **Prep kitchen / склад** | `bin/rails test test/integration/prep_kitchen_* test/integration/block_f_stock_flow_test.rb` |
+| **RBAC / auth** | `bin/rails test test/integration/auth/` |
+| **RLS / изоляция** | `bin/rails test test/integration/rls_tenant_isolation_test.rb test/integration/multi_tenant_isolation_test.rb test/integration/shop/api/tenant_isolation_test.rb` |
+| **Health / callbacks** | `bin/rails test test/integration/health_api_test.rb test/integration/callbacks_e2e_test.rb` |
+| **Смоук стенда** | `bin/smoke` (если есть изменения деплоя / URL / health) |
+
+**Только docs/rules** (без кода app/): полная регрессия не обязательна; ops + commit по `coffeeos-commit-ops.mdc`.
+
+### Что записать после регрессии
+
+| Куда | Обязательно |
+|------|-------------|
+| **Отчёт пользователю** | команда + PASS/FAIL + краткий итог (runs/failures) |
+| **SESSION_STATE.md** | зона + результат |
+| **ISSUES.md** | если FAIL и не чиним в этом шаге |
+
+UI витрины / УК затронут → MCP DevTools на Fly или чеклист в отчёте (см. `ONBOARDING_DEVTOOLS_SCENARIOS.md`, CBR).
+
+---
+
+## Hot-path — не трогать без причины в плане
+
+Изменения только если пункт чеклиста/баг **явно** требует; иначе — минимальный diff, регрессия **обязательна**:
+
+| Путь | Риск |
+|------|------|
+| `app/services/shop/order_creator.rb` | заказ + оплата витрины |
+| `app/controllers/callbacks/tbank_controller.rb` | webhook → accepted, склад |
+| `app/jobs/payments/tbank_callback_job.rb` | async callback, outbox |
+| `app/services/payments/tbank_adapter.rb` | circuit breaker, payment_url |
+| `app/services/platform/tenant_onboarding/provision.rb` | онбординг org + точек |
+| `app/controllers/concerns/` + base controllers панелей | tenant session, RLS context |
+| `app/models/current.rb` + `SET LOCAL app.current_tenant_id` | изоляция точек |
+
+---
+
+## Migration Gate (БД)
+
+Перед **любым** DDL / миграцией / изменением `db/schema.rb`:
+
+1. Показать: что меняется, pending миграции, **план отката**
+2. Ждать **`go`**
+3. После — smoke: `bin/rails test test/integration/rls_tenant_isolation_test.rb` (минимум) + тесты затронутой зоны
+
+Запрещено без `go`: `DROP`, `TRUNCATE`, `db:reset`, удаление применённых миграций.
+
+RLS-политики — только с явным планом; см. `project/coffeeos-data.mdc`.
+
+---
+
+## API и контракт
+
+| Изменение | Обязательно |
+|-----------|-------------|
+| Новый/изменённый роут `shop/api`, `callbacks` | сверка с `config/routes.rb`; integration test |
+| JSON shop API (categories, cart, orders) | регрессия `test/integration/shop/api/` |
+| Поля Order / Payment / PTS | smoke заказа + витрина/barista sync при меню |
+| Turbo Streams / Action Cable (табло, barista) | integration на подписку/ broadcast |
+
+Breaking change без миграции фронта/Svelte → **стоп**, запись в ISSUES, ждать решения.
+
+---
+
+## Секреты и ENV
+
+- Ключи: `SECRET_KEY_BASE`, `RAILS_MASTER_KEY`, `CALLBACK_*`, `TBANK_*` — только secrets/Fly, не в git
+- **Не коммитить** `.env`, credentials, prod dumps
+- Новая переменная → документировать в runbook или `docs/operations/demo/FLY_DEMO_STAND.md`

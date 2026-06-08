@@ -10,6 +10,7 @@
 |-----|-----|
 | **Коммит + ops (канон)** | `.cursor/rules/workflow/coffeeos-commit-ops.mdc` |
 | Воркфлоу шага | `.cursor/rules/workflow/coffeeos-agent-workflow.mdc` |
+| Dev gates (DoD, регрессия) | `.cursor/rules/workflow/coffeeos-dev-gates.mdc` |
 | Лимиты файлов / сплит | `.cursor/rules/workflow/coffeeos-file-size-split.mdc` |
 | Домен CoffeeOS (8 файлов) | `.cursor/rules/project/coffeeos-*.mdc` |
 

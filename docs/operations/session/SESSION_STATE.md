@@ -2,8 +2,8 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-06-08 (обновлено: **`coffeeos-commit-ops.mdc`** — всегда commit + ops; push по апруву)  
-**Предыдущее:** workflow/project rules; W1.4 PASS; следующий **блок 2** табло  
+**Дата:** 2026-06-08 (обновлено: **`coffeeos-dev-gates.mdc`** — DoD, регрессия по зонам, hot-path, migration gate)  
+**Предыдущее:** commit-ops; W1.4 PASS; следующий **блок 2** табло  
 **Веха 1:** официально не закрыта (§ I, H.3 — `[ ]`).  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
 **§2.3 оплата витрина:** **done** 2026-06-06 — [`CUSTOMER_BUSINESS_REQUIREMENTS.md`](milestones/veha_2/requirements/CUSTOMER_BUSINESS_REQUIREMENTS.md).
@@ -23,6 +23,12 @@
 | **Блок 2** — табло баристы | поток 3 тест-приёмка |
 
 **Ops на блок:** `SESSION_STATE` + коммит всегда; `PRACTICES` (CR); `QA_ACCEPTANCE_RUN` + `artifacts/` (QA); `CHANGELOG` если заметно; `CHECKLIST` `[x]` только по факту.
+
+### Сессия 2026-06-08 (dev-gates — DoD и регрессия)
+
+- **Новое:** `coffeeos-dev-gates.mdc` — приоритет правил, DoD, зоны `bin/rails test`, hot-path, migration/API gate.
+- **Обновлено:** `coffeeos-agent-workflow.mdc` — ссылка на dev-gates.
+- **Коммит:** локально; push по **`go`**.
 
 ### Сессия 2026-06-08 (commit-ops — всегда коммит + ops)
 

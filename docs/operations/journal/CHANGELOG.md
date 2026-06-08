@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## v1.148 — 2026-06-08 (dev-gates: DoD, регрессия, hot-path)
+
+- **Новое:** `coffeeos-dev-gates.mdc` — приоритет правил, DoD (CHECKLIST/CBR), регрессия по зонам Rails, hot-path, migration/API gate.
+- **Обновлено:** `coffeeos-agent-workflow.mdc` — ссылка на dev-gates.
+
 ## v1.147 — 2026-06-08 (commit-ops: всегда git commit + ops)
 
 - **Новое:** `coffeeos-commit-ops.mdc` — канон: commit + SESSION_STATE всегда; CHANGELOG + HANDOFF в конце шага; push только по апруву.
