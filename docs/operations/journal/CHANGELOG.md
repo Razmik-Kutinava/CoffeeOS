@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## v1.149 — 2026-06-08 (repo-layout: структура репозитория)
+
+- **Новое:** `coffeeos-repo-layout.mdc` — куда класть код/docs, зеркало test/, переносы с go, README sync.
+- **Обновлено:** `coffeeos-agent-workflow.mdc` — ссылка на repo-layout.
+
 ## v1.148 — 2026-06-08 (dev-gates: DoD, регрессия, hot-path)
 
 - **Новое:** `coffeeos-dev-gates.mdc` — приоритет правил, DoD (CHECKLIST/CBR), регрессия по зонам Rails, hot-path, migration/API gate.

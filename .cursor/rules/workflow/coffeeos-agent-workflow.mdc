@@ -9,6 +9,8 @@ alwaysApply: true
 
 **Гейты (DoD, регрессия, миграции):** [`coffeeos-dev-gates.mdc`](coffeeos-dev-gates.mdc).
 
+**Структура репо:** [`coffeeos-repo-layout.mdc`](coffeeos-repo-layout.mdc).
+
 **Правила проекта:** [`../project/`](../project/) (`coffeeos-core`, `coffeeos-performance`, …).
 
 **Веха / заказчик:** `docs/operations/milestones/veha_2/checklists/CHECKLIST.md`, `requirements/CUSTOMER_BUSINESS_REQUIREMENTS.md`, `requirements/DEMO_FEEDBACK.md`.

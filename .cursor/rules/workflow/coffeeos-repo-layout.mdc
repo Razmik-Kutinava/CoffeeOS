@@ -1,0 +1,125 @@
+---
+description: CoffeeOS — структура репозитория, куда класть файлы, запрет переносов без апрува
+alwaysApply: true
+---
+
+# CoffeeOS — структура репозитория
+
+Канон дерева: [`docs/operations/README.md`](../../../docs/operations/README.md), [`docs/operations/milestones/PATH_MAP.md`](../../../docs/operations/milestones/PATH_MAP.md).  
+Процесс: [`coffeeos-agent-workflow.mdc`](coffeeos-agent-workflow.mdc), [`coffeeos-dev-gates.mdc`](coffeeos-dev-gates.mdc).
+
+---
+
+## 1. Куда что класть (новые файлы)
+
+| Тип | Папка | Пример |
+|-----|-------|--------|
+| Продукт, roadmap | `docs/product/` | `development_roadmap.md` |
+| Архитектура, RBAC | `docs/architecture/` | `ROLES_AND_PERMISSIONS.md` |
+| Стек | `docs/stack/` | `Frontend.md`, `Turbo.md` |
+| Гайды | `docs/guides/` | `TESTING_STRATEGY.md`, `UI_GUIDELINES.md` |
+| Агенты | `docs/agents/` | `AGENTS.md` |
+| Ops сессий | `docs/operations/session/` | `SESSION_STATE.md`, `HANDOFF.md` |
+| Ops журнал | `docs/operations/journal/` | `CHANGELOG.md` |
+| Вехи, чеклисты, runbooks | `docs/operations/milestones/veha_*/` | `checklists/`, `runbooks/`, `requirements/` |
+| MCP / прогоны | `docs/operations/milestones/veha_2/artifacts/` | `demo-feedback/*.json` |
+| Локальная разработка | `docs/operations/dev/` | `LOCAL_DEV.md`, `SHOP_URL_MODES.md` |
+| Демо / Fly | `docs/operations/demo/` | `FLY_DEMO_STAND.md` |
+| Правила Cursor | `.cursor/rules/workflow/`, `.cursor/rules/project/` | `coffeeos-*.mdc` |
+| Контроллеры (панели) | `app/controllers/{namespace}/` | `platform/`, `barista/`, `shop/` |
+| Сервисы | `app/services/{namespace}/` | `shop/order_creator.rb` |
+| Модели | `app/models/` | общие AR-модели |
+| ERB / Hotwire | `app/views/{namespace}/` | layout по роли |
+| Shop UI (Svelte) | `app/frontend/` | `routes/`, `components/`, `lib/` |
+| Stimulus | `app/javascript/controllers/` | |
+| Миграции | `db/migrate/` | минимальные, RLS в миграциях |
+| Сиды | `db/seeds*.rb` | не ломать пути в `seeds.rb` |
+| Скрипты | `bin/` | `smoke`, `prog10_*` |
+| Тесты unit | `test/models/`, `test/services/` | зеркало `app/` |
+| Тесты integration | `test/integration/` | по панели/флоу |
+| Фикстуры | `test/fixtures/` | YAML |
+
+**Запрещено в корне репо:** логи, sqlite, дампы БД, выводы скриптов, openapi-снимки, `tmp_commit.sh`.
+
+| Тип файла | Куда |
+|-----------|------|
+| MCP JSON прогона | `docs/operations/milestones/veha_2/artifacts/demo-feedback/` |
+| Скриншоты приёмки | `…/artifacts/demo-feedback/screenshots/` |
+| Загрузки фото товаров (runtime) | `public/uploads/products/` (на Fly — эфемерно до volume/S3) |
+| Секреты | `.env` локально; Fly secrets — не в git |
+
+---
+
+## 1b. Новые файлы — без мусора
+
+**Корень репо** — инфра: `README.md`, `Gemfile`, `fly.toml`, `Dockerfile`, `.github/`, `config/`.
+
+**Перед созданием** — существующая папка по панели/домену. Новую подпапку — только если **3+ файла** одного типа или явная зона (`app/services/platform/menu/`).
+
+**Не дробить:** не создавать `lib/utils`, `app/models/sales/` (Domain Folders — только по явному запросу).
+
+**После шага:** лишний файл в корне — в тот же коммит перенести или удалить.
+
+---
+
+## 2. Тесты — зеркало кода
+
+- Unit → `test/services/…`, `test/models/…` ↔ `app/services/…`, `app/models/…`
+- Integration → `test/integration/{панель}/` или `test/integration/shop/api/`
+- Не класть тесты в `app/`, не дублировать в корень `tests/` (у нас `test/`)
+
+---
+
+## 3. Переносы и новые папки — только с апрува
+
+**Без явного `go` запрещено:**
+
+- `git mv`, массовое переименование папок
+- Реорганизация `docs/operations/milestones/` (кроме PATH_MAP-совместимых путей)
+- Удаление файлов проекта
+
+**Порядок:**
+
+1. Таблица: `файл | сейчас | куда | риск`; обновить `PATH_MAP.md` при смене путей docs.
+2. Ждать **`go`** на пакет.
+3. Один пакет → коммит → SESSION_STATE.
+
+Новый файл в **правильной** папке по таблице — без `go`. Новая **папка верхнего уровня** в `app/` или `docs/` — только после **`go`**.
+
+---
+
+## 4. Доки — без дублей
+
+- Канон вехи В2: `CHECKLIST.md` + `CUSTOMER_BUSINESS_REQUIREMENTS.md`.
+- Не копировать блоки между CBR / DEMO_FEEDBACK / HANDOFF — ссылка «→ см. …».
+- Карта ops: `docs/operations/README.md`.
+
+---
+
+## 5. README sync (при изменениях кода)
+
+| Уровень | Файл |
+|---------|------|
+| БД / миграции | `db/README.md` |
+| Скрипты | `bin/README.md` |
+| Процесс агента | `docs/agents/AGENTS.md` |
+| Нетривиальный флоу | runbook в `docs/operations/milestones/veha_2/runbooks/` |
+
+### Когда обновлять (в том же коммите)
+
+| Изменение | Обновить |
+|-----------|----------|
+| Новый сервис в `app/services/{panel}/` | при 2+ сервисах в папке — строка в runbook или AGENTS при смене паттерна |
+| Новый runbook-флоу (оплата, онбординг) | новый/существующий `runbooks/*.md` |
+| Новая миграция с RLS | `db/README.md` при нетривиальном DDL |
+| Новый bin-скрипт прогона | `bin/README.md` |
+
+Однострочный фикс без смены ответственности — README не трогать.
+
+---
+
+## 6. Связь с workflow
+
+- **Фичи / фиксы:** `coffeeos-agent-workflow.mdc` + `coffeeos-dev-gates.mdc`
+- **Структура:** `coffeeos-commit-ops.mdc` (commit + SESSION_STATE)
+- **Размер файлов:** `coffeeos-file-size-split.mdc`
