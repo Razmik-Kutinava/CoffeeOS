@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## v1.151 — 2026-06-08 (корень: tmp_* → scripts/scratch)
+
+- **Уборка:** 19 одноразовых `tmp_*` из корня → `scripts/scratch/`; `.gitignore` + `.keep`.
+- **`.cursorrules`:** индекс на `workflow/`; коммит всегда, push по апруву; scratch не в корне.
+
 ## v1.150 — 2026-06-08 (task-workflow: go, тесты, честный отчёт)
 
 - **Новое:** `coffeeos-task-workflow.mdc` — старт сессии, CHECKLIST/CBR, go, обязательные тесты, честный отчёт, backlog.

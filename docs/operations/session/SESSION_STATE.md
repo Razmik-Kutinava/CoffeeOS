@@ -2,8 +2,8 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-06-08 (обновлено: **`coffeeos-task-workflow.mdc`** — go, тесты, честный отчёт, старт сессии)  
-**Предыдущее:** repo-layout; W1.4 PASS; следующий **блок 2** табло  
+**Дата:** 2026-06-08 (обновлено: **корень репо** — `tmp_*` → `scripts/scratch/`; `.cursorrules` → workflow)  
+**Предыдущее:** task-workflow; W1.4 PASS; следующий **блок 2** табло  
 **Веха 1:** официально не закрыта (§ I, H.3 — `[ ]`).  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
 **§2.3 оплата витрина:** **done** 2026-06-06 — [`CUSTOMER_BUSINESS_REQUIREMENTS.md`](milestones/veha_2/requirements/CUSTOMER_BUSINESS_REQUIREMENTS.md).
@@ -23,6 +23,12 @@
 | **Блок 2** — табло баристы | поток 3 тест-приёмка |
 
 **Ops на блок:** `SESSION_STATE` + коммит всегда; `PRACTICES` (CR); `QA_ACCEPTANCE_RUN` + `artifacts/` (QA); `CHANGELOG` если заметно; `CHECKLIST` `[x]` только по факту.
+
+### Сессия 2026-06-08 (корень репо — scratch)
+
+- **Перенос:** 19× `tmp_*` из корня → `scripts/scratch/` (gitignore).
+- **Обновлено:** `.cursorrules` (индекс на `.cursor/rules/workflow/`), `coffeeos-repo-layout.mdc`.
+- **Push:** по **`go`**.
 
 ### Сессия 2026-06-08 (task-workflow — задачи и отчёт)
 

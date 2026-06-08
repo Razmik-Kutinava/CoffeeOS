@@ -46,7 +46,9 @@
 # Local scratch/notes file
 /qc
 
-# Agent session scratch in repo root (commit messages, one-off scripts)
+# Agent scratch: one-off scripts, commit msgs — только scripts/scratch/, не корень
+/scripts/scratch/*
+!/scripts/scratch/.keep
 /tmp_*
 /-b
 

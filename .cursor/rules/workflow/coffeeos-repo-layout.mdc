@@ -34,12 +34,13 @@ alwaysApply: true
 | Stimulus | `app/javascript/controllers/` | |
 | Миграции | `db/migrate/` | минимальные, RLS в миграциях |
 | Сиды | `db/seeds*.rb` | не ломать пути в `seeds.rb` |
-| Скрипты | `bin/` | `smoke`, `prog10_*` |
+| Скрипты (прогоны, CI) | `bin/` | `smoke`, `prog10_*` |
+| Scratch агента (не коммитить) | `scripts/scratch/` | `tmp_fly_*.sh`, черновики |
 | Тесты unit | `test/models/`, `test/services/` | зеркало `app/` |
 | Тесты integration | `test/integration/` | по панели/флоу |
 | Фикстуры | `test/fixtures/` | YAML |
 
-**Запрещено в корне репо:** логи, sqlite, дампы БД, выводы скриптов, openapi-снимки, `tmp_commit.sh`.
+**Запрещено в корне репо:** логи, sqlite, дампы, `tmp_*`, одноразовые `.sh`/`.py` агента → `scripts/scratch/`.
 
 | Тип файла | Куда |
 |-----------|------|
