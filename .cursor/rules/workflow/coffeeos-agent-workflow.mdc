@@ -1,11 +1,11 @@
 ---
-description: CoffeeOS — порядок шага агента (коммит — user rules; домен — project/)
+description: CoffeeOS — порядок шага агента (коммит/ops — coffeeos-commit-ops.mdc)
 alwaysApply: true
 ---
 
 # CoffeeOS — рабочий процесс агента
 
-**Коммит:** только по явной просьбе пользователя (user rules «committing-changes-with-git»). Без просьбы — не коммитить.
+**Коммит и ops:** только [`coffeeos-commit-ops.mdc`](coffeeos-commit-ops.mdc) — других формулировок нет.
 
 **Правила проекта:** [`../project/`](../project/) (`coffeeos-core`, `coffeeos-performance`, …).
 
@@ -19,12 +19,11 @@ alwaysApply: true
 |---|----------|
 | 1 | Один логический шаг — не смешивать несвязанное |
 | 2 | Тесты — `bin/rails test …` / `bin/smoke` (см. `project/coffeeos-tests.mdc`) |
-| 3 | **`git commit`** — только если пользователь попросил |
-| 4 | Ops — SESSION_STATE, HANDOFF, CHANGELOG (таблица ниже) |
-| 5 | Краткий отчёт: что сделано, что прогнать |
-| 6 | **Стоп** — ждать **`go`** на следующий шаг |
+| 3 | **`git commit`** + **ops** (`coffeeos-commit-ops.mdc`) |
+| 4 | Краткий отчёт: что сделано, **`Коммит: <хеш>`**, что прогнать |
+| 5 | **Стоп** — ждать **`go`** на следующий шаг |
 
-Срочность не отменяет тесты и ops-доки; коммит — только по просьбе.
+Срочность не отменяет коммит, тесты и ops-доки.
 
 ---
 
@@ -32,10 +31,10 @@ alwaysApply: true
 
 | Файл | Когда |
 |------|--------|
-| `docs/operations/session/SESSION_STATE.md` | После значимого шага |
-| `docs/operations/session/HANDOFF.md` | Конец шага / передача контекста |
-| `docs/operations/journal/CHANGELOG.md` | Закрытие фичи, деплой |
-| `docs/operations/ISSUES.md` | Баг / инцидент |
-| `DEMO_FEEDBACK.md` / `CUSTOMER_BUSINESS_REQUIREMENTS.md` | Правка по заказчику (В2) |
+| `docs/operations/session/SESSION_STATE.md` | После каждого шага с правками |
+| `docs/operations/session/HANDOFF.md` | Конец шага |
+| `docs/operations/journal/CHANGELOG.md` | Конец шага / заметное изменение |
+| `docs/operations/ISSUES.md` | Баг |
+| `DEMO_FEEDBACK.md` / `CUSTOMER_BUSINESS_REQUIREMENTS.md` | Заказчик / backlog В2 |
 
 После **`git push`** — обновить SESSION_STATE и HANDOFF.

@@ -8,9 +8,12 @@
 
 | Что | Где |
 |-----|-----|
-| Воркфлоу агента | `.cursor/rules/workflow/coffeeos-agent-workflow.mdc` |
+| **Коммит + ops (канон)** | `.cursor/rules/workflow/coffeeos-commit-ops.mdc` |
+| Воркфлоу шага | `.cursor/rules/workflow/coffeeos-agent-workflow.mdc` |
 | Лимиты файлов / сплит | `.cursor/rules/workflow/coffeeos-file-size-split.mdc` |
 | Домен CoffeeOS (8 файлов) | `.cursor/rules/project/coffeeos-*.mdc` |
+
+**Коммит:** всегда после шага с правками. **Push:** только по явному апруву пользователя.
 
 Старые пути `.cursor/rules/coffeeos-*.mdc` в доках — обновлять по мере касания; канон — `project/`.
 

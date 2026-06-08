@@ -1,0 +1,45 @@
+---
+description: CoffeeOS — ВСЕГДА git commit + ops; push только по апруву (единственное правило коммита)
+alwaysApply: true
+---
+
+# CoffeeOS — коммит и ops (единственное правило)
+
+**Канон в этом репозитории.** Порядок шага — [`coffeeos-agent-workflow.mdc`](coffeeos-agent-workflow.mdc).
+
+Project Rules здесь **важнее** глобальных User Rules про «коммит только по просьбе» — в CoffeeOS коммит после шага **обязателен**.
+
+---
+
+## Всегда (без исключений, без вопроса пользователю)
+
+Шаг **изменил любой файл** в репозитории → до отчёта пользователю:
+
+1. **`git commit`** (локально)
+2. **`docs/operations/session/SESSION_STATE.md`**
+3. В конце шага: **`docs/operations/journal/CHANGELOG.md`** + **`docs/operations/session/HANDOFF.md`**
+4. При баге: **`docs/operations/ISSUES.md`**
+5. При отложенном scope: backlog в **`CUSTOMER_BUSINESS_REQUIREMENTS.md`** / **`DEMO_FEEDBACK.md`** / **`PRACTICES.md`** (секция backlog)
+
+**Не спрашивать** разрешения на коммит. **Не писать** в отчёте: «коммит не делал», «напиши коммит», «нужен ли коммит».
+
+В отчёте только: **`Коммит: <хеш>`** или **«read-only, файлы не менялись»**.
+
+---
+
+## Только с явным апрувом пользователя
+
+- **`git push`**
+- deploy / prod (`fly deploy`, secrets prod)
+- деструктивный git (force push, hard reset, …)
+
+**`git push` ≠ `git commit`.** Коммит локальный — всегда после правок. Push — только когда пользователь явно написал push / deploy.
+
+---
+
+## Проверка перед «done»
+
+- Релевантные тесты зелёные (`bin/rails test …`, smoke — см. `project/coffeeos-tests.mdc`)
+- `git status` — нет незакоммиченных файлов по задаче (кроме явно оговорённых)
+
+Скриптов `check_agent_step.py` в репозитории **нет** — не требовать.

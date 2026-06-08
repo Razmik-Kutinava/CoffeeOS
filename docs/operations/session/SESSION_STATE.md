@@ -2,8 +2,8 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-06-08 (обновлено: **правила агента** — `.cursor/rules/workflow/` + `project/`; файл `coffeeos-file-size-split.mdc`)  
-**Предыдущее:** 2026-06-06 — W1.4 PASS; волна 4 закрыта; следующий **блок 2** табло  
+**Дата:** 2026-06-08 (обновлено: **`coffeeos-commit-ops.mdc`** — всегда commit + ops; push по апруву)  
+**Предыдущее:** workflow/project rules; W1.4 PASS; следующий **блок 2** табло  
 **Веха 1:** официально не закрыта (§ I, H.3 — `[ ]`).  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
 **§2.3 оплата витрина:** **done** 2026-06-06 — [`CUSTOMER_BUSINESS_REQUIREMENTS.md`](milestones/veha_2/requirements/CUSTOMER_BUSINESS_REQUIREMENTS.md).
@@ -24,12 +24,17 @@
 
 **Ops на блок:** `SESSION_STATE` + коммит всегда; `PRACTICES` (CR); `QA_ACCEPTANCE_RUN` + `artifacts/` (QA); `CHANGELOG` если заметно; `CHECKLIST` `[x]` только по факту.
 
+### Сессия 2026-06-08 (commit-ops — всегда коммит + ops)
+
+- **Новое:** `coffeeos-commit-ops.mdc` — канон коммита (перебивает user rules «коммит по просьбе»).
+- **Обновлено:** `coffeeos-agent-workflow.mdc` — ссылка только на commit-ops.
+- **Push:** только по явному апруву.
+- **Дальше:** следующие правила — ждать **`go`**.
+
 ### Сессия 2026-06-08 (правила агента — workflow + project)
 
-- **Структура:** `.cursor/rules/workflow/` (воркфлоу, лимиты файлов); `.cursor/rules/project/` (8× `coffeeos-*.mdc` перенесены из корня).
-- **Новые правила:** `coffeeos-agent-workflow.mdc`, `coffeeos-file-size-split.mdc`.
-- **Коммит:** `develop` (локально, не push).
-- **Дальше:** следующие правила по примерам заказчика — ждать **`go`**.
+- **Структура:** `.cursor/rules/workflow/` + `project/`; `coffeeos-file-size-split.mdc`.
+- **Коммит:** `b0f58c2` (локально, не push).
 
 ### Сессия 2026-06-06 (W1.4 — сверка категорий: **PASS**, апрув заказчика)
 

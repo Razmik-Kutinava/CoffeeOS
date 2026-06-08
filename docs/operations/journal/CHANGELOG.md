@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## v1.147 — 2026-06-08 (commit-ops: всегда git commit + ops)
+
+- **Новое:** `coffeeos-commit-ops.mdc` — канон: commit + SESSION_STATE всегда; CHANGELOG + HANDOFF в конце шага; push только по апруву.
+- **Обновлено:** `coffeeos-agent-workflow.mdc` — убран «коммит по просьбе», ссылка на commit-ops.
+
 ## v1.146 — 2026-06-08 (правила агента: workflow + project)
 
 - **Структура:** `.cursor/rules/workflow/` + `.cursor/rules/project/`; 8× `coffeeos-*.mdc` перенесены из корня rules.
