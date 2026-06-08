@@ -1,0 +1,78 @@
+---
+description: CoffeeOS — лимиты размера файлов, сплит кода, запрет монолитов
+alwaysApply: true
+---
+
+# CoffeeOS — размер файлов и сплит кода
+
+Связано: [`coffeeos-agent-workflow.mdc`](coffeeos-agent-workflow.mdc), [`../project/coffeeos-services.mdc`](../project/coffeeos-services.mdc).
+
+---
+
+## 1. Лимиты (новый и изменяемый код)
+
+| Уровень | Строк (ориентир по файлу) | Действие |
+|---------|---------------------------|----------|
+| **Цель** | ≤ 50 | Новые методы, Stimulus, маленькие сервисы |
+| **Норма** | 51–120 | Допустимо при одной ответственности |
+| **Предупреждение** | 121–200 | При следующем касании — план сплита |
+| **Стоп** | > 200 | Не добавлять код; сначала сплит + **`go`** |
+
+Один файл ≈ **1–2 логические функции/класса** или одна группа экшенов контроллера.
+
+---
+
+## 2. Куда дробить
+
+По **панели/контексту**, рядом с текущим модулем — не в общий `lib/` без домена:
+
+```
+app/controllers/platform/menu_controller.rb  → services/platform/menu/*.rb + тонкий controller
+app/services/shop/order_creator.rb           → shop/cart_validator.rb, shop/payment_initiator.rb
+app/frontend/routes/Product.svelte           → lib/shop/productLogic.js + разметка
+```
+
+Именование: `{Namespace}::{ДействиеСервиса}` — `Barista::OrderCreationService`, не `helpers.rb`.
+
+**Запрещено:** свалка `lib/utils`, `concerns` «на всё», `misc/` без домена и без тестов.
+
+Панели: `barista`, `manager`, `prep_kitchen`, `platform`, `shop` — не смешивать в одном файле.
+
+---
+
+## 3. Сплит существующего монолита — только с апрува
+
+Перед рефакторингом файла > 200 строк:
+
+1. Таблица `старый путь → новые пути → что экспортируется`.
+2. Риски (импорты, циклы, тесты, RLS).
+3. Ждать **`go`** пользователя.
+4. Сплит + тесты зелёные + один коммит `refactor: split …`.
+
+**Не сплитить молча** во время другой фичи — отдельный шаг.
+
+---
+
+## 4. Исключения (допустимо > 200 без срочного сплита)
+
+- Автогенерация, vendor, `db/schema.rb`
+- Миграции Rails (`db/migrate/`)
+- Seeds, фикстуры, JSON артефакты
+- **Документы** (`docs/`) — лимит 200 только для **кода**
+
+Legacy-монолиты: фиксировать в `docs/operations/ISSUES.md` или отдельном audit при сплите.
+
+---
+
+## 5. Тесты после сплита
+
+- Зеркало: `test/services/barista/order_creation_service_test.rb` ↔ `app/services/barista/order_creation_service.rb`
+- Integration на исходный сценарий обязателен (`test/integration/…`).
+
+---
+
+## 6. Frontend (Svelte / shop)
+
+- Логика > ~50 строк → `app/frontend/lib/{домен}/` или рядом с route.
+- Страница — разметка + вызовы lib; тяжёлые `.svelte` дробить по тем же лимитам.
+- Hotwire/ERB: partials + Stimulus, не раздувать один `.html.erb`.

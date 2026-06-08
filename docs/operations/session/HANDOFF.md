@@ -1,8 +1,18 @@
 # HANDOFF — старт Вехи 2 (Веха 1 **не закрыта официально**)
 
-**Дата:** 2026-05-25  
-**Ветка:** `develop` (синхрон с `origin/develop` после push В1 + fix деплоя `4a25187`)  
+**Дата:** 2026-06-08 (правила агента) · было 2026-05-25  
+**Ветка:** `develop` (локально ahead: UK form fix + rules reorg — push по **`go`**)  
 **Прод:** https://coffeeos.fly.dev
+
+### Сессия 2026-06-08 — правила Cursor
+
+| Что | Где |
+|-----|-----|
+| Воркфлоу агента | `.cursor/rules/workflow/coffeeos-agent-workflow.mdc` |
+| Лимиты файлов / сплит | `.cursor/rules/workflow/coffeeos-file-size-split.mdc` |
+| Домен CoffeeOS (8 файлов) | `.cursor/rules/project/coffeeos-*.mdc` |
+
+Старые пути `.cursor/rules/coffeeos-*.mdc` в доках — обновлять по мере касания; канон — `project/`.
 
 ### Статус вех (важно для агента)
 

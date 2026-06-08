@@ -1,0 +1,41 @@
+---
+description: CoffeeOS — порядок шага агента (коммит — user rules; домен — project/)
+alwaysApply: true
+---
+
+# CoffeeOS — рабочий процесс агента
+
+**Коммит:** только по явной просьбе пользователя (user rules «committing-changes-with-git»). Без просьбы — не коммитить.
+
+**Правила проекта:** [`../project/`](../project/) (`coffeeos-core`, `coffeeos-performance`, …).
+
+**Веха / заказчик:** `docs/operations/milestones/veha_2/checklists/CHECKLIST.md`, `requirements/CUSTOMER_BUSINESS_REQUIREMENTS.md`, `requirements/DEMO_FEEDBACK.md`.
+
+---
+
+## Порядок шага
+
+| # | Действие |
+|---|----------|
+| 1 | Один логический шаг — не смешивать несвязанное |
+| 2 | Тесты — `bin/rails test …` / `bin/smoke` (см. `project/coffeeos-tests.mdc`) |
+| 3 | **`git commit`** — только если пользователь попросил |
+| 4 | Ops — SESSION_STATE, HANDOFF, CHANGELOG (таблица ниже) |
+| 5 | Краткий отчёт: что сделано, что прогнать |
+| 6 | **Стоп** — ждать **`go`** на следующий шаг |
+
+Срочность не отменяет тесты и ops-доки; коммит — только по просьбе.
+
+---
+
+## Ops-файлы
+
+| Файл | Когда |
+|------|--------|
+| `docs/operations/session/SESSION_STATE.md` | После значимого шага |
+| `docs/operations/session/HANDOFF.md` | Конец шага / передача контекста |
+| `docs/operations/journal/CHANGELOG.md` | Закрытие фичи, деплой |
+| `docs/operations/ISSUES.md` | Баг / инцидент |
+| `DEMO_FEEDBACK.md` / `CUSTOMER_BUSINESS_REQUIREMENTS.md` | Правка по заказчику (В2) |
+
+После **`git push`** — обновить SESSION_STATE и HANDOFF.

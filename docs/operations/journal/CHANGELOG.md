@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## v1.146 — 2026-06-08 (правила агента: workflow + project)
+
+- **Структура:** `.cursor/rules/workflow/` + `.cursor/rules/project/`; 8× `coffeeos-*.mdc` перенесены из корня rules.
+- **Новое:** `coffeeos-agent-workflow.mdc` (порядок шага, ops), `coffeeos-file-size-split.mdc` (лимиты 50/120/200, сплит по панелям).
+- **Ops:** SESSION_STATE, HANDOFF обновлены.
+- **Не в коммите:** правка `CUSTOMER_BUSINESS_REQUIREMENTS.md` (unstaged, отдельно).
+
 ## v1.145 — 2026-06-06 (W1.4 PASS — апрув заказчика, волна 4 закрыта)
 
 - **Апрув:** сверка категорий vitrina = barista; Fly FULL A+B; CBR/CHECKLIST W1.4 `[x]`.
