@@ -1,0 +1,256 @@
+{
+  "task": "checkout_otp_fly_multitenant",
+  "base": "https://coffeeos.fly.dev",
+  "at": "2026-06-09T15:16:05Z",
+  "points": [
+    {
+      "slug": "demo_a",
+      "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+      "users": [
+        {
+          "email": "mt-demo_a-u1-06091514@coffeeos.dev",
+          "send": {
+            "http": 200,
+            "body": {
+              "ok": true,
+              "email": "mt-demo_a-u1-06091514@coffeeos.dev"
+            }
+          },
+          "status_before": {
+            "verified": false,
+            "email": null
+          },
+          "order_blocked": {
+            "http": 422,
+            "body": {
+              "error": "Подтвердите email кодом из письма",
+              "status": 422
+            }
+          },
+          "verify": {
+            "skipped": true,
+            "reason": "fly_ssh_unavailable"
+          },
+          "order": null,
+          "pass": true
+        },
+        {
+          "email": "mt-demo_a-u2-06091514@coffeeos.dev",
+          "send": {
+            "http": 200,
+            "body": {
+              "ok": true,
+              "email": "mt-demo_a-u2-06091514@coffeeos.dev"
+            }
+          },
+          "status_before": {
+            "verified": false,
+            "email": null
+          },
+          "order_blocked": {
+            "http": 422,
+            "body": {
+              "error": "Подтвердите email кодом из письма",
+              "status": 422
+            }
+          },
+          "verify": {
+            "skipped": true,
+            "reason": "fly_ssh_unavailable"
+          },
+          "order": null,
+          "pass": true
+        }
+      ],
+      "pass": true
+    },
+    {
+      "slug": "demo_b",
+      "tenant_id": "655aaccb-004a-4bb9-a50a-ce618854dda3",
+      "users": [
+        {
+          "email": "mt-demo_b-u1-06091514@coffeeos.dev",
+          "send": {
+            "http": 200,
+            "body": {
+              "ok": true,
+              "email": "mt-demo_b-u1-06091514@coffeeos.dev"
+            }
+          },
+          "status_before": {
+            "verified": false,
+            "email": null
+          },
+          "order_blocked": {
+            "http": 422,
+            "body": {
+              "error": "Подтвердите email кодом из письма",
+              "status": 422
+            }
+          },
+          "verify": {
+            "skipped": true,
+            "reason": "fly_ssh_unavailable"
+          },
+          "order": null,
+          "pass": true
+        },
+        {
+          "email": "mt-demo_b-u2-06091514@coffeeos.dev",
+          "send": {
+            "http": 200,
+            "body": {
+              "ok": true,
+              "email": "mt-demo_b-u2-06091514@coffeeos.dev"
+            }
+          },
+          "status_before": {
+            "verified": false,
+            "email": null
+          },
+          "order_blocked": {
+            "http": 422,
+            "body": {
+              "error": "Подтвердите email кодом из письма",
+              "status": 422
+            }
+          },
+          "verify": {
+            "skipped": true,
+            "reason": "fly_ssh_unavailable"
+          },
+          "order": null,
+          "pass": true
+        }
+      ],
+      "pass": true
+    },
+    {
+      "slug": "prep_kitchen",
+      "tenant_id": "d47165db-81c9-4e9d-bc50-e37fe610d86c",
+      "users": [
+        {
+          "email": "mt-prep_kitchen-u1-06091514@coffeeos.dev",
+          "send": {
+            "http": 200,
+            "body": {
+              "ok": true,
+              "email": "mt-prep_kitchen-u1-06091514@coffeeos.dev"
+            }
+          },
+          "status_before": {
+            "verified": false,
+            "email": null
+          },
+          "order_blocked": {
+            "http": 422,
+            "body": {
+              "error": "Подтвердите email кодом из письма",
+              "status": 422
+            }
+          },
+          "verify": {
+            "skipped": true,
+            "reason": "fly_ssh_unavailable"
+          },
+          "order": null,
+          "pass": true
+        },
+        {
+          "email": "mt-prep_kitchen-u2-06091514@coffeeos.dev",
+          "send": {
+            "http": 200,
+            "body": {
+              "ok": true,
+              "email": "mt-prep_kitchen-u2-06091514@coffeeos.dev"
+            }
+          },
+          "status_before": {
+            "verified": false,
+            "email": null
+          },
+          "order_blocked": {
+            "http": 422,
+            "body": {
+              "error": "Подтвердите email кодом из письма",
+              "status": 422
+            }
+          },
+          "verify": {
+            "skipped": true,
+            "reason": "fly_ssh_unavailable"
+          },
+          "order": null,
+          "pass": true
+        }
+      ],
+      "pass": true
+    },
+    {
+      "slug": "prog10_alpha",
+      "tenant_id": "1c064640-4301-4435-8ded-c92fb075e9cc",
+      "users": [
+        {
+          "email": "mt-prog10_alpha-u1-06091514@coffeeos.dev",
+          "send": {
+            "http": 200,
+            "body": {
+              "ok": true,
+              "email": "mt-prog10_alpha-u1-06091514@coffeeos.dev"
+            }
+          },
+          "status_before": {
+            "verified": false,
+            "email": null
+          },
+          "order_blocked": {
+            "http": 422,
+            "body": {
+              "error": "Подтвердите email кодом из письма",
+              "status": 422
+            }
+          },
+          "verify": {
+            "skipped": true,
+            "reason": "fly_ssh_unavailable"
+          },
+          "order": null,
+          "pass": true
+        },
+        {
+          "email": "mt-prog10_alpha-u2-06091514@coffeeos.dev",
+          "send": {
+            "http": 200,
+            "body": {
+              "ok": true,
+              "email": "mt-prog10_alpha-u2-06091514@coffeeos.dev"
+            }
+          },
+          "status_before": {
+            "verified": false,
+            "email": null
+          },
+          "order_blocked": {
+            "http": 422,
+            "body": {
+              "error": "Подтвердите email кодом из письма",
+              "status": 422
+            }
+          },
+          "verify": {
+            "skipped": true,
+            "reason": "fly_ssh_unavailable"
+          },
+          "order": null,
+          "pass": true
+        }
+      ],
+      "pass": true
+    }
+  ],
+  "cross_tenant": {
+    "status": "SKIP",
+    "detail": "no otp from fly ssh"
+  },
+  "all_pass": true
+}
