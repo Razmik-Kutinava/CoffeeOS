@@ -2,6 +2,8 @@
 
 namespace :shop do
   namespace :otp do
+    # На Fly: fly machine exec <machine_id> -a coffeeos '/rails/bin/rails runner "…"'
+    # Не fly ssh — обрывается без exit code (см. bin/shop_checkout_otp_fly_multitenant.rb).
     desc "Fly smoke: вывести активный OTP для EMAIL (только ops, не для прода вручную)"
     task peek: :environment do
       email = Shop::EmailVerificationSession.normalize(ENV.fetch("EMAIL", ""))

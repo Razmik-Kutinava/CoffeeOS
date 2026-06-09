@@ -2,10 +2,14 @@
 # frozen_string_literal: true
 
 # Fly: multi-tenant checkout email OTP — 4 точки × 2 email.
+#
 # Usage:
 #   ruby bin/shop_checkout_otp_fly_multitenant.rb
 #   FLY_BIN=$HOME/.fly/bin/fly ruby bin/shop_checkout_otp_fly_multitenant.rb
 #   SKIP_FLY_OTP_FETCH=1  — только send/block без verify+order
+#
+# OTP с Fly БД (smoke @coffeeos.dev): только fly machine exec + rails runner.
+# fly ssh console -C … не использовать — режет аргументы и падает без exit code.
 
 require "json"
 require "open3"
@@ -93,7 +97,6 @@ end
 def fetch_otp_from_fly(email)
   return nil if SKIP_OTP_FETCH
 
-  # fly ssh -C режет аргументы по пробелам; machine exec — одна строка команды.
   ruby = "puts ShopEmailOtpCode.active(#{email.inspect}).order(created_at: :desc).limit(1).pick(:code) || 'NONE'"
   remote_cmd = "/rails/bin/rails runner #{ruby.inspect}"
 
@@ -187,7 +190,7 @@ POINTS.each do |point|
         "-H", "Content-Type: application/json",
         "--data-binary", { email: email, code: code }.to_json
       )
-      user[:verify] = { code_from: "fly_ssh", http: verify_http, body: verify_body }
+      user[:verify] = { code_from: "fly_machine_exec", http: verify_http, body: verify_body }
 
       if pid && verify_body["verified"]
         pause
@@ -200,7 +203,7 @@ POINTS.each do |point|
         user[:order] = order_ok_body.merge("_http" => order_http)
       end
     else
-      user[:verify] = { skipped: true, reason: SKIP_OTP_FETCH ? "SKIP_FLY_OTP_FETCH" : "fly_ssh_no_code" }
+      user[:verify] = { skipped: true, reason: SKIP_OTP_FETCH ? "SKIP_FLY_OTP_FETCH" : "fly_machine_exec_no_code" }
     end
 
     user[:pass] = user_pass?(user)
@@ -260,7 +263,7 @@ begin
       order_b_error: order_b_body["error"]
     }
   else
-    cross = { status: "SKIP", detail: "no otp from fly ssh" }
+    cross = { status: "SKIP", detail: "no otp from fly machine exec" }
   end
 rescue StandardError => e
   cross = { status: "FAIL", error: e.message }
