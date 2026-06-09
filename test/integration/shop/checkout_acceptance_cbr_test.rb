@@ -21,7 +21,6 @@ class Shop::CheckoutAcceptanceCbrTest < ActionDispatch::IntegrationTest
     @product = create_product!(category: category)
     enable_product_for_tenant!(tenant: @tenant, product: @product, price: 179)
     @email = "cbr-#{SecureRandom.hex(4)}@example.com"
-    @bad_email = "not-an-email"
     ENV["SHOP_SIMULATE_PAYMENT"] = "1"
   end
 
@@ -112,15 +111,7 @@ class Shop::CheckoutAcceptanceCbrTest < ActionDispatch::IntegrationTest
     assert_equal 6, record.code.length
   end
 
-  test "cbr_09 rejects invalid email on send" do
-    post "/shop/api/email_otp/send",
-      headers: shop_tenant_headers(@tenant.id),
-      params: { email: @bad_email },
-      as: :json
-    assert_response :unprocessable_entity
-  end
-
-  # п.10 — без verify заказ не создаётся
+  # п.10 — без verify заказ не создаётся (детали API: email_otp_checkout_test)
   test "cbr_10 order rejected without verified email" do
     post "/shop/api/cart/add",
       headers: shop_tenant_headers(@tenant.id),
@@ -135,24 +126,6 @@ class Shop::CheckoutAcceptanceCbrTest < ActionDispatch::IntegrationTest
 
     assert_response :unprocessable_entity
     assert_match(/подтвердите email/i, response.parsed_body["error"].to_s)
-  end
-
-  test "cbr_10 order succeeds after verify" do
-    open_session do |sess|
-      sess.post "/shop/api/cart/add",
-        headers: shop_tenant_headers(@tenant.id),
-        params: { product_id: @product.id, quantity: 1, selected_modifiers: [] },
-        as: :json
-      verify_shop_email!(tenant_id: @tenant.id, email: @email, session: sess)
-
-      sess.post "/shop/api/orders",
-        headers: shop_tenant_headers(@tenant.id),
-        params: shop_order_params(email: @email, payment_method: "cash"),
-        as: :json
-
-      assert_equal 200, sess.response.status
-      assert_equal "accepted", JSON.parse(sess.response.body)["status"]
-    end
   end
 
   private

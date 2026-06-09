@@ -40,25 +40,24 @@
     },
     "09_code_to_email": {
       "status": "PASS",
-      "tests": [
-        "Shop::CheckoutAcceptanceCbrTest#test_cbr_09_confirmation_code_stored_for_submitted_email",
-        "Shop::CheckoutAcceptanceCbrTest#test_cbr_09_rejects_invalid_email_on_send"
-      ],
+      "test": "Shop::CheckoutAcceptanceCbrTest#test_cbr_09_confirmation_code_stored_for_submitted_email",
+      "edge_cases": "Shop::Api::EmailOtpCheckoutTest#test_send_rejects_invalid_email",
       "brevo_prod": "bin/rails shop:brevo:test OK; письма на реальный inbox (см. shop_email_otp_brevo_2026-06-09.json)"
     },
     "10_no_code_no_order": {
       "status": "PASS",
-      "tests": [
-        "Shop::CheckoutAcceptanceCbrTest#test_cbr_10_order_rejected_without_verified_email",
-        "Shop::CheckoutAcceptanceCbrTest#test_cbr_10_order_succeeds_after_verify"
+      "test": "Shop::CheckoutAcceptanceCbrTest#test_cbr_10_order_rejected_without_verified_email",
+      "edge_cases": [
+        "Shop::Api::EmailOtpCheckoutTest#test_verify_rejects_wrong_code_and_order_stays_blocked",
+        "Shop::Api::EmailOtpCheckoutTest#test_email_otp_verify_then_cash_order"
       ]
     }
   },
   "tests": {
-    "checkout_acceptance_cbr_test": "12 runs PASS",
+    "checkout_acceptance_cbr_test": "10 runs PASS (1 test = 1 CBR пункт)",
     "email_otp_tenant_isolation_test": "4 runs PASS",
     "checkout_ui_cleanup_test": "2 runs PASS",
-    "email_otp_checkout_test": "2 runs PASS",
+    "email_otp_checkout_test": "4 runs PASS (happy + invalid email + wrong code)",
     "shop_integration_suite": "58 runs, 350 assertions, 0 failures, 3 skips",
     "email_otp_service_test": "3 runs PASS"
   },
