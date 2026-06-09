@@ -69,7 +69,6 @@
 </script>
 
 <h1 class="mb-4 text-xl font-bold">Корзина</h1>
-<p class="mb-4 text-xs text-[#888]">Шаг 1: Корзина → Оформление → Оплата → История</p>
 
 {#if loading}
   <PageSkeleton />

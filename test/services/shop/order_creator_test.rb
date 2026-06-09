@@ -31,10 +31,11 @@ class Shop::OrderCreatorTest < ActiveSupport::TestCase
     }
   end
 
-  def run_creator(session, payment_method: "cash", phone: "+79001234567")
+  def run_creator(session, payment_method: "cash", email: "guest@example.com")
+    Shop::EmailVerificationSession.mark_verified!(session, @tenant.id, email)
     Shop::OrderCreator.new(session, tenant: @tenant).call!({
       payment_method: payment_method,
-      phone:          phone,
+      email:          email,
       name:           "Test User"
     })
   end
@@ -58,22 +59,32 @@ class Shop::OrderCreatorTest < ActiveSupport::TestCase
   end
 
   # ---------------------------------------------------------------------------
-  # Phone validation
+  # Email validation
   # ---------------------------------------------------------------------------
 
-  test "raises Error when phone is blank" do
+  test "raises Error when email is blank" do
     session = build_session_with_item
+    Shop::EmailVerificationSession.mark_verified!(session, @tenant.id, "guest@example.com")
     error   = assert_raises(Shop::OrderCreator::Error) do
-      run_creator(session, phone: "")
+      Shop::OrderCreator.new(session, tenant: @tenant).call!({
+        payment_method: "cash",
+        email: "",
+        name: "Test User"
+      })
     end
-    assert_match(/телефон/i, error.message)
+    assert_match(/email/i, error.message)
   end
 
-  test "raises Error when phone is only whitespace" do
+  test "raises Error when email is not verified" do
     session = build_session_with_item
-    assert_raises(Shop::OrderCreator::Error) do
-      run_creator(session, phone: "   ")
+    error   = assert_raises(Shop::OrderCreator::Error) do
+      Shop::OrderCreator.new(session, tenant: @tenant).call!({
+        payment_method: "cash",
+        email: "guest@example.com",
+        name: "Test User"
+      })
     end
+    assert_match(/подтвердите email/i, error.message)
   end
 
   # ---------------------------------------------------------------------------
@@ -297,25 +308,25 @@ class Shop::OrderCreatorTest < ActiveSupport::TestCase
   # MobileCustomer is created
   # ---------------------------------------------------------------------------
 
-  test "creates a mobile customer record for new phone number" do
-    phone   = "+7900#{rand(100000..999999)}"
+  test "creates a mobile customer record for new email" do
+    email   = "new-#{SecureRandom.hex(4)}@example.com"
     session = build_session_with_item
     begin
-      run_creator(session, phone: phone)
-      assert MobileCustomer.exists?(phone: phone)
+      run_creator(session, email: email)
+      assert MobileCustomer.exists?(email: email)
     rescue Shop::OrderCreator::Error => e
       raise unless e.message.match?(/order_number/i)
       pass "DB trigger not installed; skipping"
     end
   end
 
-  test "reuses existing mobile customer for same phone number" do
-    phone    = "+79011112233"
-    existing = MobileCustomer.create!(phone: phone, first_name: "Old", is_active: true)
+  test "reuses existing mobile customer for same email" do
+    email    = "reuse-#{SecureRandom.hex(4)}@example.com"
+    existing = MobileCustomer.create!(email: email, first_name: "Old", is_active: true)
     session  = build_session_with_item
     begin
-      run_creator(session, phone: phone)
-      assert_equal 1, MobileCustomer.where(phone: phone).count
+      run_creator(session, email: email)
+      assert_equal 1, MobileCustomer.where(email: email).count
     rescue Shop::OrderCreator::Error => e
       raise unless e.message.match?(/order_number/i)
       pass "DB trigger not installed; skipping"

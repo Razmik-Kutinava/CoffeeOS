@@ -33,9 +33,6 @@
         <div class="p-2">
           <p class="line-clamp-2 text-sm leading-tight text-white">{product.name}</p>
           <p class="mt-1 font-semibold text-[#ff8c42]">{Math.round(product.price)}₽</p>
-          {#if product.stock <= 0}
-            <p class="text-xs text-red-400">Нет в наличии</p>
-          {/if}
         </div>
       </button>
     {/each}

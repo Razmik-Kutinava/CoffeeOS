@@ -12,7 +12,8 @@ class Shop::Api::MvpFlowTest < ActionDispatch::IntegrationTest
     @product = create_product!(category: @category, slug: "shop-mvp-prod-#{SecureRandom.hex(3)}", name: "Раф")
     @product.update!(base_price: 300)
     enable_product_for_tenant!(tenant: @tenant, product: @product, price: 320)
-    @customer = create_mobile_customer!
+    @email = "mvp-#{SecureRandom.hex(4)}@example.com"
+    @customer = create_mobile_customer!(email: @email)
   end
 
   test "menu cart and order flow with simulated card payment" do
@@ -32,9 +33,11 @@ class Shop::Api::MvpFlowTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_equal 640.0, response.parsed_body["total"]
 
+    verify_shop_email!(tenant_id: @tenant.id, email: @email)
+
     post "/shop/api/orders",
       headers: { "X-Shop-Tenant" => @tenant.id.to_s },
-      params: { phone: @customer.phone, name: "Shop MVP", payment_method: "card" },
+      params: shop_order_params(email: @email, name: "Shop MVP", payment_method: "card"),
       as: :json
     assert_response :success
 
@@ -58,6 +61,7 @@ class Shop::Api::MvpFlowTest < ActionDispatch::IntegrationTest
   test "card payment returns error when SHOP_SIMULATE_PAYMENT=0 and gateway not configured" do
     old_simulate  = ENV["SHOP_SIMULATE_PAYMENT"]
     old_tbank_key = ENV.delete("TBANK_TERMINAL_KEY")
+    old_tbank_pass = ENV.delete("TBANK_PASSWORD")
 
     ENV["SHOP_SIMULATE_PAYMENT"] = "0"
 
@@ -67,9 +71,11 @@ class Shop::Api::MvpFlowTest < ActionDispatch::IntegrationTest
       as: :json
     assert_response :success
 
+    verify_shop_email!(tenant_id: @tenant.id, email: @email)
+
     post "/shop/api/orders",
       headers: { "X-Shop-Tenant" => @tenant.id.to_s },
-      params: { phone: @customer.phone, name: "V2 mode", payment_method: "card" },
+      params: shop_order_params(email: @email, name: "V2 mode", payment_method: "card"),
       as: :json
 
     assert_response :unprocessable_entity
@@ -77,5 +83,6 @@ class Shop::Api::MvpFlowTest < ActionDispatch::IntegrationTest
   ensure
     ENV["SHOP_SIMULATE_PAYMENT"] = old_simulate
     ENV["TBANK_TERMINAL_KEY"]    = old_tbank_key if old_tbank_key
+    ENV["TBANK_PASSWORD"]        = old_tbank_pass if old_tbank_pass
   end
 end

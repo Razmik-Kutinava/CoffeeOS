@@ -250,10 +250,15 @@ module Shop
     end
 
     def find_or_create_customer!(params)
-      phone = params[:phone].to_s.gsub(/\s/, "")
-      raise Error, "Укажите телефон" if phone.blank?
+      email = Shop::EmailVerificationSession.normalize(params[:email])
+      raise Error, "Укажите email" if email.blank?
 
-      customer = MobileCustomer.find_or_initialize_by(phone: phone)
+      verified = Shop::EmailVerificationSession.verified_email(@session, @tenant.id)
+      unless verified == email
+        raise Error, "Подтвердите email кодом из письма"
+      end
+
+      customer = MobileCustomer.find_or_initialize_by(email: email)
       customer.first_name = params[:name].to_s.split(/\s+/).first.presence || "Гость"
       customer.last_name = params[:name].to_s.split(/\s+/)[1..]&.join(" ").presence
       customer.is_active = true

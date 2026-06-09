@@ -156,10 +156,7 @@
     <button type="button" class="text-2xl text-[#ff8c42]" onclick={() => push("/checkout")} aria-label="Назад">
       ‹
     </button>
-    <div>
-      <h1 class="text-xl font-bold">Оплата</h1>
-      <p class="text-xs text-[#888]">Корзина → Оформление → Оплата → Результат</p>
-    </div>
+    <h1 class="text-xl font-bold">Оплата</h1>
   </div>
 
   <div class="mb-4 rounded-xl border border-[#3a3a3a] bg-[#2a2a2a] p-4">
@@ -198,10 +195,7 @@
   </button>
 {:else}
   <div class="mb-4 flex items-center justify-between gap-3">
-    <div>
-      <h1 class="text-xl font-bold">{phase === "loading" ? "Подключаем оплату…" : "Оплата"}</h1>
-      <p class="text-xs text-[#888]">Корзина → Оформление → Оплата → Результат</p>
-    </div>
+    <h1 class="text-xl font-bold">{phase === "loading" ? "Подключаем оплату…" : "Оплата"}</h1>
     {#if phase === "paying"}
       <button
         type="button"

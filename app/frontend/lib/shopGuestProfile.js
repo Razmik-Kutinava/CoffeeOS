@@ -7,24 +7,43 @@ function profileStorageKey() {
   return `shop_guest_profile:${tid}`
 }
 
+export function maskEmail(email) {
+  const value = email?.trim()
+  if (!value || !value.includes("@")) return value || ""
+  const [local, domain] = value.split("@")
+  if (!local || !domain) return value
+  return `${local.slice(0, 1)}***@${domain}`
+}
+
+export function isValidEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email?.trim() || "")
+}
+
 export function loadGuestProfile() {
   try {
     const raw = localStorage.getItem(profileStorageKey())
     if (!raw) return null
     const data = JSON.parse(raw)
-    if (!data?.name?.trim() || !data?.phone?.trim()) return null
-    return { name: data.name.trim(), phone: data.phone.trim() }
+    if (!data?.name?.trim() || !data?.email?.trim()) return null
+    return {
+      name: data.name.trim(),
+      email: data.email.trim().toLowerCase(),
+      emailVerified: !!data.emailVerified
+    }
   } catch (_) {
     return null
   }
 }
 
-export function saveGuestProfile({ name, phone }) {
+export function saveGuestProfile({ name, email, emailVerified }) {
   const n = name?.trim()
-  const p = phone?.trim()
-  if (!n || !p) return
+  const e = email?.trim().toLowerCase()
+  if (!n || !e) return
   try {
-    localStorage.setItem(profileStorageKey(), JSON.stringify({ name: n, phone: p }))
+    localStorage.setItem(
+      profileStorageKey(),
+      JSON.stringify({ name: n, email: e, emailVerified: !!emailVerified })
+    )
   } catch (_) {
     /* ignore */
   }

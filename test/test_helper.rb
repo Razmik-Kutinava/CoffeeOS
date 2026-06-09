@@ -4,6 +4,7 @@ require "rails/test_help"
 
 require "securerandom"
 require_relative "support/factories"
+require_relative "support/shop_email_test_helper"
 
 module ActiveSupport
   class TestCase
@@ -65,4 +66,5 @@ end
 
 class ActionDispatch::IntegrationTest
   include TestFactories
+  include ShopEmailTestHelper
 end

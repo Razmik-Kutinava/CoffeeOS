@@ -2,7 +2,12 @@
   import { onMount } from "svelte"
   import { push } from "svelte-spa-router"
   import { api } from "../lib/api.js"
-  import { loadGuestProfile, saveGuestProfile } from "../lib/shopGuestProfile.js"
+  import {
+    loadGuestProfile,
+    saveGuestProfile,
+    maskEmail,
+    isValidEmail
+  } from "../lib/shopGuestProfile.js"
   import {
     lastGuestOrderId,
     reconnectGuestOrder,
@@ -12,25 +17,46 @@
   import { savePaymentSession } from "../lib/tbankPayment.js"
 
   let name = $state("")
-  let phone = $state("")
-  let comment = $state("")
-  let is_car_pickup = $state(false)
-  let car_number = $state("")
+  let email = $state("")
+  let otpCode = $state("")
   let promo_code = $state("")
   let payment_method = $state("card")
+  let sbpNotice = $state(false)
+  let emailVerified = $state(false)
+  let sendingCode = $state(false)
+  let verifyingCode = $state(false)
+  let otpNotice = $state("")
   let submitting = $state(false)
   let err = $state(null)
   let done = $state(null)
   let savedProfile = $state(false)
   let editContact = $state(true)
 
+  const canSendCode = $derived(isValidEmail(email) && !sendingCode)
+  const canPay = $derived(
+    !!name?.trim() && isValidEmail(email) && emailVerified && !submitting
+  )
+
   onMount(() => {
     const profile = loadGuestProfile()
     if (profile) {
       name = profile.name
-      phone = profile.phone
+      email = profile.email
+      emailVerified = profile.emailVerified
       savedProfile = true
       editContact = false
+    }
+
+    const syncServerStatus = async () => {
+      if (!isValidEmail(email)) return
+      try {
+        const status = await api("/email_otp/status")
+        if (status.verified && status.email === email.trim().toLowerCase()) {
+          emailVerified = true
+        }
+      } catch {
+        /* session may be empty */
+      }
     }
 
     const recover = async () => {
@@ -43,6 +69,7 @@
     }
 
     recover()
+    syncServerStatus()
     const onPageShow = (event) => {
       if (event.persisted) recover()
     }
@@ -50,24 +77,82 @@
     return () => window.removeEventListener("pageshow", onPageShow)
   })
 
+  function selectPayment(val) {
+    if (val === "sbp") {
+      sbpNotice = true
+      return
+    }
+    sbpNotice = false
+    payment_method = val
+  }
+
+  function onEmailInput() {
+    const profile = loadGuestProfile()
+    if (profile && profile.email === email.trim().toLowerCase() && profile.emailVerified) {
+      emailVerified = true
+      return
+    }
+    emailVerified = false
+    otpNotice = ""
+  }
+
+  async function sendCode() {
+    if (!canSendCode) return
+    err = null
+    otpNotice = ""
+    sendingCode = true
+    try {
+      await api("/email_otp/send", {
+        method: "POST",
+        body: JSON.stringify({ email: email.trim().toLowerCase() })
+      })
+      otpNotice = "Код отправлен на почту"
+      emailVerified = false
+    } catch (e) {
+      err = e.message
+    } finally {
+      sendingCode = false
+    }
+  }
+
+  async function verifyCode() {
+    if (!isValidEmail(email) || !otpCode.trim()) return
+    err = null
+    verifyingCode = true
+    try {
+      await api("/email_otp/verify", {
+        method: "POST",
+        body: JSON.stringify({
+          email: email.trim().toLowerCase(),
+          code: otpCode.trim()
+        })
+      })
+      emailVerified = true
+      otpNotice = "Email подтверждён"
+      saveGuestProfile({ name, email, emailVerified: true })
+      savedProfile = true
+      editContact = false
+    } catch (e) {
+      emailVerified = false
+      err = e.message
+    } finally {
+      verifyingCode = false
+    }
+  }
+
   async function submit() {
-    if (submitting) return
+    if (!canPay) return
     err = null
     submitting = true
     let redirecting = false
     try {
-      saveGuestProfile({ name, phone })
-      savedProfile = true
-      editContact = false
+      saveGuestProfile({ name, email, emailVerified: true })
 
       const res = await api("/orders", {
         method: "POST",
         body: JSON.stringify({
           name,
-          phone,
-          comment,
-          is_car_pickup,
-          car_number,
+          email: email.trim().toLowerCase(),
           promo_code: promo_code || undefined,
           payment_method
         })
@@ -115,7 +200,6 @@
 
 {#if done}
   <div class="py-8 text-center">
-    <p class="mb-2 text-xs text-[#888]">Корзина → Оформление → Результат</p>
     <p class="mb-2 text-xl font-bold text-green-400">Заказ #{done.order_id} принят</p>
     <p class="mb-1 text-[#fff]">Сумма: {Math.round(done.total)}₽</p>
     <p class="mb-6 text-sm text-[#a0a0a0]">Статус: {done.status}</p>
@@ -141,18 +225,23 @@
     <button type="button" class="text-2xl text-[#ff8c42]" onclick={() => push("/cart")} aria-label="Назад в корзину">
       ‹
     </button>
-    <div>
-      <h1 class="text-xl font-bold">Оформление</h1>
-      <p class="text-xs text-[#888]">Корзина → Оформление → Оплата → История</p>
-    </div>
+    <h1 class="text-xl font-bold">Оформление</h1>
   </div>
 
-  {#if savedProfile && !editContact}
+  {#if savedProfile && !editContact && emailVerified}
     <div class="mb-4 rounded-xl border border-[#3a3a3a] bg-[#2a2a2a] p-4">
       <p class="mb-1 text-sm text-[#a0a0a0]">Контакты</p>
       <p class="font-medium text-white">{name}</p>
-      <p class="text-sm text-[#a0a0a0]">{phone}</p>
-      <button type="button" class="mt-2 text-sm text-[#ff8c42]" onclick={() => (editContact = true)}>
+      <p class="text-sm text-[#a0a0a0]">{maskEmail(email)}</p>
+      <button
+        type="button"
+        class="mt-2 text-sm text-[#ff8c42]"
+        onclick={() => {
+          editContact = true
+          emailVerified = false
+          otpCode = ""
+        }}
+      >
         Изменить
       </button>
     </div>
@@ -166,33 +255,50 @@
       />
     </label>
     <label class="mb-3 block">
-      <span class="mb-1 block text-sm text-[#a0a0a0]">Телефон</span>
+      <span class="mb-1 block text-sm text-[#a0a0a0]">Email</span>
       <input
-        bind:value={phone}
+        bind:value={email}
+        oninput={onEmailInput}
+        type="email"
+        inputmode="email"
+        autocomplete="email"
         class="w-full rounded-lg border border-[#3a3a3a] bg-[#2a2a2a] px-3 py-2"
-        autocomplete="tel"
+        placeholder="you@example.com"
       />
     </label>
+    <div class="mb-3 flex gap-2">
+      <button
+        type="button"
+        class="rounded-lg bg-[#3a3a3a] px-4 py-2 text-sm text-white disabled:opacity-50"
+        disabled={!canSendCode}
+        onclick={sendCode}
+      >
+        {sendingCode ? "Отправляем…" : "Отправить код"}
+      </button>
+    </div>
+    <label class="mb-3 block">
+      <span class="mb-1 block text-sm text-[#a0a0a0]">Код из письма</span>
+      <input
+        bind:value={otpCode}
+        inputmode="numeric"
+        maxlength="6"
+        class="w-full rounded-lg border border-[#3a3a3a] bg-[#2a2a2a] px-3 py-2 tracking-widest"
+        placeholder="123456"
+      />
+    </label>
+    <button
+      type="button"
+      class="mb-4 w-full rounded-lg border border-[#ff8c42] py-2 text-sm text-[#ff8c42] disabled:opacity-50"
+      disabled={verifyingCode || !otpCode.trim() || !isValidEmail(email)}
+      onclick={verifyCode}
+    >
+      {verifyingCode ? "Проверяем…" : "Подтвердить email"}
+    </button>
+    {#if otpNotice}
+      <p class="mb-3 text-sm text-green-400" role="status">{otpNotice}</p>
+    {/if}
   {/if}
 
-  <label class="mb-3 block">
-    <span class="mb-1 block text-sm text-[#a0a0a0]">Комментарий</span>
-    <textarea
-      bind:value={comment}
-      class="w-full rounded-lg border border-[#3a3a3a] bg-[#2a2a2a] px-3 py-2"
-      rows="2"
-    ></textarea>
-  </label>
-  <label class="mb-3 flex items-center gap-2">
-    <input type="checkbox" bind:checked={is_car_pickup} />
-    <span class="text-sm">Выдача в машину</span>
-  </label>
-  {#if is_car_pickup}
-    <label class="mb-3 block">
-      <span class="mb-1 block text-sm text-[#a0a0a0]">Номер авто</span>
-      <input bind:value={car_number} class="w-full rounded-lg border border-[#3a3a3a] bg-[#2a2a2a] px-3 py-2" />
-    </label>
-  {/if}
   <label class="mb-6 block">
     <span class="mb-1 block text-sm text-[#a0a0a0]">Промокод (необязательно)</span>
     <input bind:value={promo_code} class="w-full rounded-lg border border-[#3a3a3a] bg-[#2a2a2a] px-3 py-2" />
@@ -201,14 +307,28 @@
   <div class="mb-6">
     <span class="mb-2 block text-sm text-[#a0a0a0]">Способ оплаты</span>
     <div class="flex gap-3">
-      {#each [["card", "Картой"], ["sbp", "СБП"], ["cash", "Наличные"]] as [val, label]}
-        <label class="flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-lg border px-3 py-2 text-sm
-          {payment_method === val ? 'border-[#ff8c42] bg-[#ff8c42]/10 text-[#ff8c42]' : 'border-[#3a3a3a] text-[#a0a0a0]'}">
-          <input type="radio" bind:group={payment_method} value={val} class="hidden" />
+      {#each [["card", "Картой"], ["cash", "Наличные"]] as [val, label]}
+        <button
+          type="button"
+          class="flex flex-1 items-center justify-center gap-2 rounded-lg border px-3 py-2 text-sm
+            {payment_method === val ? 'border-[#ff8c42] bg-[#ff8c42]/10 text-[#ff8c42]' : 'border-[#3a3a3a] text-[#a0a0a0]'}"
+          onclick={() => selectPayment(val)}
+        >
           {label}
-        </label>
+        </button>
       {/each}
+      <button
+        type="button"
+        class="flex flex-1 items-center justify-center gap-2 rounded-lg border border-[#3a3a3a] px-3 py-2 text-sm text-[#757575] opacity-60"
+        aria-disabled="true"
+        onclick={() => selectPayment("sbp")}
+      >
+        СБП
+      </button>
     </div>
+    {#if sbpNotice}
+      <p class="mt-2 text-sm text-[#a0a0a0]" role="status">Будет позже</p>
+    {/if}
   </div>
 
   {#if err}
@@ -218,7 +338,7 @@
   <button
     type="button"
     class="w-full rounded-xl bg-[#ff8c42] py-4 text-lg font-semibold text-black disabled:opacity-50"
-    disabled={submitting || !phone || !name}
+    disabled={!canPay}
     onclick={submit}
   >
     {submitting

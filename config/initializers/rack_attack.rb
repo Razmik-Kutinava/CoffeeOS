@@ -34,6 +34,15 @@ class Rack::Attack
       JSON.parse(req.body.read)['phone'] rescue nil
     end
   end
+
+  # Лимит OTP витрины: 5 писем в минуту на email
+  throttle('shop/email_otp', limit: 5, period: 1.minute) do |req|
+    if req.path == '/shop/api/email_otp/send' && req.post?
+      body = req.body.read
+      req.body.rewind if req.body.respond_to?(:rewind)
+      JSON.parse(body)['email'].to_s.downcase.presence rescue nil
+    end
+  end
   
   # Лимит на создание заказов баристой: 30 заказов в минуту с одного IP
   throttle('barista/orders', limit: 30, period: 1.minute) do |req|
@@ -74,3 +83,5 @@ class Rack::Attack
     end
   end
 end
+
+Rack::Attack.enabled = false if Rails.env.test?

@@ -1,0 +1,46 @@
+{
+  "task": "shop_email_otp_brevo",
+  "date": "2026-06-09",
+  "status": "PASS",
+  "provider": "Brevo (BREVO_API_KEY + MAIL_FROM)",
+  "api": [
+    "POST /shop/api/email_otp/send",
+    "POST /shop/api/email_otp/verify",
+    "GET /shop/api/email_otp/status"
+  ],
+  "checkout": {
+    "phone_removed": true,
+    "email_field": true,
+    "otp_required_before_pay": true,
+    "profile_persists_email": "shopGuestProfile.js"
+  },
+  "tests": {
+    "email_otp_test": "3 runs PASS",
+    "email_otp_checkout_test": "2 runs PASS",
+    "order_creator_test": "PASS",
+    "shop_integration_suite": "58 runs, 350 assertions, 0 failures",
+    "checkout_acceptance_cbr_test": "12 runs PASS",
+    "email_otp_tenant_isolation_test": "4 runs PASS",
+    "vite_build": "PASS",
+    "rack_attack_test_env": "disabled in test"
+  },
+  "fly_mcp": {
+    "stand": "https://coffeeos.fly.dev/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789",
+    "checkout_email_field": true,
+    "send_code_status": "200 — Код отправлен на почту",
+    "verify_email": "t***@mcp.coffeeos.dev masked, Оплатить enabled",
+    "deploy": "2026-06-09 redeploy OK"
+  },
+  "fly_secrets": {
+    "required": ["BREVO_API_KEY", "MAIL_FROM"],
+    "optional": ["MAIL_FROM_NAME"],
+    "mode": "xkeysib REST API",
+    "SHOP_OTP_LOG_FALLBACK": "removed"
+  },
+  "fly_mcp_2026_06_09": {
+    "send_code": "200 — Код отправлен на почту (darksegun1988@gmail.com)",
+    "verify_email": "d***@gmail.com masked, Оплатить enabled",
+    "brevo_local_test": "bin/rails shop:brevo:test OK"
+  },
+  "dev_note": "test → код 123456; prod → Brevo API (xkeysib)"
+}

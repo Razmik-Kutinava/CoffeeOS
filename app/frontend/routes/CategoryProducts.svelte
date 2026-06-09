@@ -106,9 +106,6 @@
                 {/if}
                 <span class="price-row">
                   <span class="product-price">{Math.round(product.price)} ₽</span>
-                  {#if product.stock <= 0}
-                    <span class="out-of-stock">Нет в наличии</span>
-                  {/if}
                 </span>
               </span>
             </span>
@@ -293,7 +290,6 @@
     color: #ff8c42;
   }
 
-  .out-of-stock { font-size: 9px; color: #f44336; }
 
   .card-toolbar {
     display: flex;

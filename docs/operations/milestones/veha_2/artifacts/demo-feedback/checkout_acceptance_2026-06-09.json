@@ -1,0 +1,107 @@
+{
+  "task": "checkout_cbr_acceptance",
+  "date": "2026-06-09",
+  "source": "docs/operations/milestones/veha_2/requirements/CUSTOMER_BUSINESS_REQUIREMENTS.md §checkout критерии 1–10",
+  "status": "PASS",
+  "note_cbr_06": "В «Изменениях» чекбокс «Выдача в машину» убран; в критерии п.6 — оставить. Сдаём по разделу «Изменения».",
+  "criteria": {
+    "01_email_not_phone": {
+      "status": "PASS",
+      "test": "Shop::CheckoutAcceptanceCbrTest#test_cbr_01_checkout_has_email_field_with_validation_not_phone"
+    },
+    "02_send_code": {
+      "status": "PASS",
+      "test": "Shop::CheckoutAcceptanceCbrTest#test_cbr_02_email_otp_send_endpoint_accepts_valid_email"
+    },
+    "03_no_comment": {
+      "status": "PASS",
+      "test": "Shop::CheckoutAcceptanceCbrTest#test_cbr_03_comment_field_absent_from_checkout_vitrina"
+    },
+    "04_no_stock": {
+      "status": "PASS",
+      "test": "Shop::CheckoutAcceptanceCbrTest#test_cbr_04_stock_labels_absent_from_catalog_vitrina"
+    },
+    "05_sbp_disabled": {
+      "status": "PASS",
+      "test": "Shop::CheckoutAcceptanceCbrTest#test_cbr_05_sbp_disabled_with_later_message_in_checkout"
+    },
+    "06_car_pickup_removed": {
+      "status": "PASS",
+      "implementation": "removed per Изменения",
+      "test": "Shop::CheckoutAcceptanceCbrTest#test_cbr_06_car_pickup_checkbox_removed_per_changes_section"
+    },
+    "07_breadcrumbs_hidden": {
+      "status": "PASS",
+      "test": "Shop::CheckoutAcceptanceCbrTest#test_cbr_07_breadcrumbs_hidden_on_checkout_flow_pages"
+    },
+    "08_validation_before_pay": {
+      "status": "PASS",
+      "test": "Shop::CheckoutAcceptanceCbrTest#test_cbr_08_pay_blocked_until_name_email_and_verification"
+    },
+    "09_code_to_email": {
+      "status": "PASS",
+      "tests": [
+        "Shop::CheckoutAcceptanceCbrTest#test_cbr_09_confirmation_code_stored_for_submitted_email",
+        "Shop::CheckoutAcceptanceCbrTest#test_cbr_09_rejects_invalid_email_on_send"
+      ],
+      "brevo_prod": "bin/rails shop:brevo:test OK; письма на реальный inbox (см. shop_email_otp_brevo_2026-06-09.json)"
+    },
+    "10_no_code_no_order": {
+      "status": "PASS",
+      "tests": [
+        "Shop::CheckoutAcceptanceCbrTest#test_cbr_10_order_rejected_without_verified_email",
+        "Shop::CheckoutAcceptanceCbrTest#test_cbr_10_order_succeeds_after_verify"
+      ]
+    }
+  },
+  "tests": {
+    "checkout_acceptance_cbr_test": "12 runs PASS",
+    "email_otp_tenant_isolation_test": "4 runs PASS",
+    "checkout_ui_cleanup_test": "2 runs PASS",
+    "email_otp_checkout_test": "2 runs PASS",
+    "shop_integration_suite": "58 runs, 350 assertions, 0 failures, 3 skips",
+    "email_otp_service_test": "3 runs PASS"
+  },
+  "multi_tenant": {
+    "status": "PASS",
+    "integration": {
+      "file": "test/integration/shop/api/email_otp_tenant_isolation_test.rb",
+      "cases": [
+        "verify on tenant A → order on B rejected (422)",
+        "verify on A then B separately → orders with correct tenant_id",
+        "otp status on B false after verify only on A",
+        "guest profile localStorage key scoped per tenant_id"
+      ]
+    },
+    "fly_tenants": [
+      {
+        "slug": "demo_a",
+        "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+        "shop_url": "https://coffeeos.fly.dev/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789"
+      },
+      {
+        "slug": "demo_b",
+        "tenant_id": "655aaccb-004a-4bb9-a50a-ce618854dda3",
+        "shop_url": "https://coffeeos.fly.dev/shop?tenant_id=655aaccb-004a-4bb9-a50a-ce618854dda3"
+      },
+      {
+        "slug": "prep_kitchen",
+        "tenant_id": "d47165db-81c9-4e9d-bc50-e37fe610d86c",
+        "shop_url": "https://coffeeos.fly.dev/shop?tenant_id=d47165db-81c9-4e9d-bc50-e37fe610d86c"
+      },
+      {
+        "slug": "prog10_alpha",
+        "tenant_id": "1c064640-4301-4435-8ded-c92fb075e9cc",
+        "shop_url": "https://coffeeos.fly.dev/shop?tenant_id=1c064640-4301-4435-8ded-c92fb075e9cc"
+      }
+    ],
+    "fly_mcp": {
+      "demo_a": "PASS — send 200, verify, Оплатить enabled (shop_email_otp_brevo_2026-06-09.json)",
+      "demo_b_prep_alpha": "изоляция OTP/заказов — integration tests; curl без browser CSRF / SHOP_API_KEY → 401/500"
+    }
+  },
+  "related_artifacts": [
+    "shop_email_otp_brevo_2026-06-09.json",
+    "checkout_ui_cleanup_2026-06-09.json"
+  ]
+}

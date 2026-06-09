@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_03_150000) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_09_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_stat_statements"
@@ -396,7 +396,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_03_150000) do
     t.boolean "is_active", default: true, null: false
     t.datetime "last_login_at", precision: nil
     t.string "last_name", limit: 100
-    t.string "phone", limit: 20, null: false
+    t.string "phone", limit: 20
     t.boolean "push_enabled", default: false, null: false
     t.string "push_token", limit: 255
     t.datetime "updated_at", null: false
@@ -777,7 +777,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_03_150000) do
     t.index ["product_id"], name: "index_product_tenant_settings_on_product_id"
     t.index ["tenant_id", "is_enabled", "is_sold_out"], name: "idx_pts_tenant_enabled"
     t.index ["tenant_id"], name: "index_product_tenant_settings_on_tenant_id"
-    t.check_constraint "is_sold_out = false AND sold_out_reason IS NULL OR is_sold_out = true AND (sold_out_reason::text = ANY (ARRAY['manual'::character varying, 'stock_empty'::character varying]::text[]))", name: "chk_sold_out_reason"
+    t.check_constraint "is_sold_out = false AND sold_out_reason IS NULL OR is_sold_out = true AND (sold_out_reason::text = ANY (ARRAY['manual'::character varying::text, 'stock_empty'::character varying::text]))", name: "chk_sold_out_reason"
   end
 
   create_table "production_batches", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -1000,6 +1000,19 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_03_150000) do
     t.index ["opened_by_id"], name: "index_shifts_on_opened_by_id"
     t.index ["status"], name: "index_shifts_on_status"
     t.index ["tenant_id"], name: "index_shifts_on_tenant_id"
+  end
+
+  create_table "shop_email_otp_codes", id: :uuid, default: -> { "gen_random_uuid()" }, comment: "OTP коды подтверждения email на витрине /shop", force: :cascade do |t|
+    t.integer "attempts", default: 0, null: false
+    t.string "code", limit: 6, null: false
+    t.datetime "created_at", null: false
+    t.string "email", limit: 255, null: false
+    t.datetime "expires_at", null: false
+    t.boolean "is_used", default: false, null: false
+    t.datetime "updated_at", null: false
+    t.index ["email", "is_used"], name: "index_shop_email_otp_codes_on_email_and_is_used"
+    t.index ["email"], name: "index_shop_email_otp_codes_on_email"
+    t.index ["expires_at"], name: "index_shop_email_otp_codes_on_expires_at"
   end
 
   create_table "solid_cache_entries", primary_key: ["key", "namespace"], force: :cascade do |t|

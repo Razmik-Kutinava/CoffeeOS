@@ -16,7 +16,8 @@ class BlockEShopFlowTest < ActionDispatch::IntegrationTest
     @group = ProductModifierGroup.create!(product: @product, name: "Размер", is_required: true, sort_order: 1)
     @option = ProductModifierOption.create!(group: @group, name: "L", price_delta: 40, sort_order: 1)
 
-    @customer = create_mobile_customer!(phone: "+7900#{rand(10_000_000..99_999_999)}")
+    @email = "block-e-#{SecureRandom.hex(4)}@example.com"
+    @customer = create_mobile_customer!(email: @email)
     @headers = { "X-Shop-Tenant" => @tenant.id.to_s }
   end
 
@@ -69,9 +70,11 @@ class BlockEShopFlowTest < ActionDispatch::IntegrationTest
       as: :json
     assert_response :success
 
+    verify_shop_email!(tenant_id: @tenant.id, email: @email)
+
     post "/shop/api/orders",
       headers: @headers,
-      params: { phone: @customer.phone, name: "Block E", payment_method: "mock" },
+      params: shop_order_params(email: @email, name: "Block E", payment_method: "mock"),
       as: :json
     assert_response :success
 
@@ -90,9 +93,11 @@ class BlockEShopFlowTest < ActionDispatch::IntegrationTest
       headers: @headers,
       params: { product_id: @product.id, quantity: 1, selected_modifiers: [] },
       as: :json
+    verify_shop_email!(tenant_id: @tenant.id, email: @email)
+
     post "/shop/api/orders",
       headers: @headers,
-      params: { phone: @customer.phone, name: "Today", payment_method: "mock" },
+      params: shop_order_params(email: @email, name: "Today", payment_method: "mock"),
       as: :json
     assert_response :success
     today_id = response.parsed_body["order_id"]
@@ -104,7 +109,7 @@ class BlockEShopFlowTest < ActionDispatch::IntegrationTest
       as: :json
     post "/shop/api/orders",
       headers: @headers,
-      params: { phone: @customer.phone, name: "Yesterday", payment_method: "mock" },
+      params: shop_order_params(email: @email, name: "Yesterday", payment_method: "mock"),
       as: :json
     assert_response :success
     old_id = response.parsed_body["order_id"]

@@ -101,9 +101,10 @@ module TestFactories
     end
   end
 
-  def create_mobile_customer!(phone: "+79#{format('%09d', rand(1_000_000_000))}")
+  def create_mobile_customer!(phone: "+79#{format('%09d', rand(1_000_000_000))}", email: nil)
     MobileCustomer.create!(
       phone: phone,
+      email: email,
       first_name: "Test",
       last_name: "Customer",
       is_active: true

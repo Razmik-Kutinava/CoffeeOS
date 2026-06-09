@@ -4,7 +4,7 @@ module Shop
   module Api
     class OrdersController < Shop::Api::BaseController
       def create
-        Rails.logger.info("[Shop::Order] Creating order for tenant #{@shop_tenant.id}, phone: #{order_params[:phone]}")
+        Rails.logger.info("[Shop::Order] Creating order for tenant #{@shop_tenant.id}, email: #{order_params[:email]}")
         creator = Shop::OrderCreator.new(session, tenant: @shop_tenant, request: request)
         order = creator.call!(order_params.to_h.symbolize_keys)
         Rails.logger.info("[Shop::Order] Order created: #{order.id}, total: #{order.final_amount}, status: #{order.status}")
@@ -149,7 +149,7 @@ module Shop
       end
 
       def order_params
-        params.permit(:name, :phone, :comment, :is_car_pickup, :car_number, :promo_code, :payment_method, :pickup_time)
+        params.permit(:name, :email, :phone, :comment, :is_car_pickup, :car_number, :promo_code, :payment_method, :pickup_time)
       end
 
       def try_reconnect_from_params!

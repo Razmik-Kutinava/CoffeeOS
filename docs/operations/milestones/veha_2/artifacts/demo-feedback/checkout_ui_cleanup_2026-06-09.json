@@ -1,0 +1,44 @@
+{
+  "task": "checkout_ui_cleanup",
+  "date": "2026-06-09",
+  "scope": [
+    "remove_comment_field",
+    "remove_car_pickup",
+    "remove_breadcrumbs",
+    "disable_sbp_with_message",
+    "remove_stock_labels_catalog"
+  ],
+  "status": "PASS",
+  "tests": {
+    "file": "test/integration/shop/checkout_ui_cleanup_test.rb",
+    "runs": 2,
+    "assertions": 57,
+    "failures": 0
+  },
+  "build": "npm run vite:build — OK",
+  "files_changed": [
+    "app/frontend/routes/Checkout.svelte",
+    "app/frontend/routes/Cart.svelte",
+    "app/frontend/routes/Payment.svelte",
+    "app/frontend/routes/PaymentResult.svelte",
+    "app/frontend/components/CategorySection.svelte",
+    "app/frontend/routes/CategoryProducts.svelte",
+    "test/integration/shop/checkout_ui_cleanup_test.rb"
+  ],
+  "verified_absent_in_sources": [
+    "Комментарий",
+    "Выдача в машину",
+    "Корзина → Оформление",
+    "Нет в наличии"
+  ],
+  "verified_present_checkout": [
+    "СБП",
+    "Будет позже"
+  ],
+  "browser_mcp": {
+    "note": "Локальный стенд без SHOP_DEFAULT_TENANT_ID / tenant в БД — витрина не грузит каталог. Визуальный прогон после deploy на Fly.",
+    "url_attempted": "http://localhost:3001/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789#/checkout"
+  },
+  "superseded_by": "checkout_acceptance_2026-06-09.json (email OTP + полная CBR приёмка)"
+}
+

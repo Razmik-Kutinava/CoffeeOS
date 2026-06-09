@@ -7,10 +7,15 @@ class Shop::Api::QaSection23Stage5E2eTest < ActionDispatch::IntegrationTest
   include ActiveJob::TestHelper
 
   module FakeTbankInit
+    mattr_accessor :enabled, default: false
     mattr_accessor :provider_payment_id, default: nil
 
     module Override
       def init_payment(**)
+        unless FakeTbankInit.enabled
+          return super
+        end
+
         {
           payment_url: "https://pay.tbank.ru/stage5-test",
           provider_payment_id: FakeTbankInit.provider_payment_id
@@ -19,10 +24,10 @@ class Shop::Api::QaSection23Stage5E2eTest < ActionDispatch::IntegrationTest
     end
 
     def self.install!
-      return if @installed
+      return if @prepended
 
       Payments::TbankAdapter.prepend(Override)
-      @installed = true
+      @prepended = true
     end
   end
 
@@ -32,7 +37,8 @@ class Shop::Api::QaSection23Stage5E2eTest < ActionDispatch::IntegrationTest
     category = create_category!
     @product = create_product!(category: category)
     enable_product_for_tenant!(tenant: @tenant, product: @product, price: 179)
-    @customer = create_mobile_customer!(phone: "+79005556677")
+    @email = "stage5-#{SecureRandom.hex(4)}@example.com"
+    @customer = create_mobile_customer!(email: @email)
 
     @old_simulate = ENV["SHOP_SIMULATE_PAYMENT"]
     @old_tbank_key = ENV["TBANK_TERMINAL_KEY"]
@@ -43,6 +49,7 @@ class Shop::Api::QaSection23Stage5E2eTest < ActionDispatch::IntegrationTest
 
     @provider_payment_id = "stage5-pay-#{SecureRandom.hex(4)}"
     FakeTbankInit.install!
+    FakeTbankInit.enabled = true
     FakeTbankInit.provider_payment_id = @provider_payment_id
 
     Payments::CacheCounter.clear!
@@ -50,6 +57,7 @@ class Shop::Api::QaSection23Stage5E2eTest < ActionDispatch::IntegrationTest
 
   teardown do
     Current.reset
+    FakeTbankInit.enabled = false
     ENV["SHOP_SIMULATE_PAYMENT"] = @old_simulate
     if @old_tbank_key
       ENV["TBANK_TERMINAL_KEY"] = @old_tbank_key
@@ -90,9 +98,11 @@ class Shop::Api::QaSection23Stage5E2eTest < ActionDispatch::IntegrationTest
         as: :json
       assert_equal 200, sess.response.status
 
+      verify_shop_email!(tenant_id: @tenant.id, email: @email, session: sess)
+
       sess.post "/shop/api/orders",
         headers: shop_headers,
-        params: { phone: @customer.phone, name: "Stage5 QA", payment_method: "card" },
+        params: shop_order_params(email: @email, name: "Stage5 QA", payment_method: "card"),
         as: :json
       body = JSON.parse(sess.response.body)
       assert_equal 200, sess.response.status, body.inspect

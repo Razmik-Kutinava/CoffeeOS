@@ -60,7 +60,6 @@
   <p class="py-8 text-center text-[#a0a0a0]">Проверяем оплату…</p>
 {:else if done}
   <div class="py-8 text-center">
-    <p class="mb-2 text-xs text-[#888]">Корзина → Оформление → Оплата → Результат</p>
     <p class="mb-2 text-xl font-bold text-green-400">{message}</p>
     <p class="mb-1 text-[#fff]">Сумма: {Math.round(done.total)}₽</p>
     <div class="mt-6 flex flex-col gap-3">
@@ -84,7 +83,6 @@
   <p class="mb-4 text-red-400">{err}</p>
   <button type="button" class="text-[#ff8c42]" onclick={() => push("/orders")}>История заказов</button>
 {:else}
-  <p class="mb-1 text-xs text-[#888]">Корзина → Оформление → Оплата → Результат</p>
   <p class="mb-4 text-[#a0a0a0]">{message}</p>
   <div class="flex flex-col gap-3">
     <button type="button" class="rounded-xl bg-[#ff8c42] py-3 font-semibold text-black" onclick={() => push("/orders")}>

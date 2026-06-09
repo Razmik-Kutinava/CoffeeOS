@@ -11,7 +11,8 @@ class Shop::Api::QaSection23PaymentCartTest < ActionDispatch::IntegrationTest
     category = create_category!
     @product = create_product!(category: category)
     enable_product_for_tenant!(tenant: @tenant, product: @product, price: 179)
-    @customer = create_mobile_customer!(phone: "+79001112233")
+    @email = "qa23-cart-#{SecureRandom.hex(4)}@example.com"
+    @customer = create_mobile_customer!(email: @email)
     @old_simulate = ENV["SHOP_SIMULATE_PAYMENT"]
     ENV["SHOP_SIMULATE_PAYMENT"] = "0"
     @old_tbank = ENV["TBANK_TERMINAL_KEY"]
@@ -32,9 +33,11 @@ class Shop::Api::QaSection23PaymentCartTest < ActionDispatch::IntegrationTest
         as: :json
       assert_equal 200, sess.response.status
 
+      verify_shop_email!(tenant_id: @tenant.id, email: @email, session: sess)
+
       sess.post "/shop/api/orders",
         headers: { "X-Shop-Tenant" => @tenant.id.to_s },
-        params: { phone: @customer.phone, name: "QA Guest", payment_method: "card" },
+        params: shop_order_params(email: @email, name: "QA Guest", payment_method: "card"),
         as: :json
 
       body = JSON.parse(sess.response.body)
@@ -62,10 +65,12 @@ class Shop::Api::QaSection23PaymentCartTest < ActionDispatch::IntegrationTest
         params: { product_id: @product.id, quantity: 1, selected_modifiers: [] },
         as: :json
 
+      verify_shop_email!(tenant_id: @tenant.id, email: @email, session: sess)
+
       2.times do
         sess.post "/shop/api/orders",
           headers: headers,
-          params: { phone: @customer.phone, name: "QA Guest", payment_method: "card" },
+          params: shop_order_params(email: @email, name: "QA Guest", payment_method: "card"),
           as: :json
         break if sess.response.status == 422
       end
@@ -78,7 +83,7 @@ class Shop::Api::QaSection23PaymentCartTest < ActionDispatch::IntegrationTest
       order_id = first["order_id"]
       sess.post "/shop/api/orders",
         headers: headers,
-        params: { phone: @customer.phone, name: "QA Guest", payment_method: "card" },
+        params: shop_order_params(email: @email, name: "QA Guest", payment_method: "card"),
         as: :json
       second = JSON.parse(sess.response.body)
       assert_equal order_id, second["order_id"]
