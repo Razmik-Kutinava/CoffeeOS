@@ -4,15 +4,17 @@
 # Fly: multi-tenant checkout email OTP — 4 точки × 2 email.
 # Usage:
 #   ruby bin/shop_checkout_otp_fly_multitenant.rb
-#   OUT=docs/operations/milestones/veha_2/artifacts/demo-feedback/checkout_otp_fly_multitenant_2026-06-09.json ruby bin/shop_checkout_otp_fly_multitenant.rb
-#   SKIP_FLY_OTP_FETCH=1  — только send/status/block без verify+order (без fly ssh)
+#   FLY_BIN=$HOME/.fly/bin/fly ruby bin/shop_checkout_otp_fly_multitenant.rb
+#   SKIP_FLY_OTP_FETCH=1  — только send/block без verify+order
 
 require "json"
 require "open3"
+require "shellwords"
 require "tmpdir"
 
 BASE = ENV.fetch("BASE", "https://coffeeos.fly.dev")
 FLY_APP = ENV.fetch("FLY_APP", "coffeeos")
+FLY_BIN = ENV.fetch("FLY_BIN", "fly")
 OUT = ENV.fetch("OUT", "docs/operations/milestones/veha_2/artifacts/demo-feedback/checkout_otp_fly_multitenant_#{Time.now.utc.strftime('%Y-%m-%d')}.json")
 ORDER_DELAY = ENV.fetch("ORDER_DELAY_SEC", "2").to_f
 SKIP_OTP_FETCH = ENV["SKIP_FLY_OTP_FETCH"] == "1"
@@ -23,6 +25,8 @@ POINTS = [
   { slug: "prep_kitchen", tenant_id: "d47165db-81c9-4e9d-bc50-e37fe610d86c" },
   { slug: "prog10_alpha", tenant_id: "1c064640-4301-4435-8ded-c92fb075e9cc" }
 ].freeze
+
+NULL_DEV = Gem.win_platform? ? "NUL" : "/dev/null"
 
 def curl_json(*args)
   raw = curl(*args)
@@ -49,15 +53,6 @@ def curl(*args)
   out
 end
 
-NULL_DEV = Gem.win_platform? ? "NUL" : "/dev/null"
-
-def curl_code(*args)
-  out, status = Open3.capture2("curl", "-sS", "-o", NULL_DEV, "-w", "%{http_code}", *args)
-  raise "curl failed" unless status.success?
-
-  out.strip.to_i
-end
-
 def pause
   sleep ORDER_DELAY if ORDER_DELAY.positive?
 end
@@ -70,20 +65,66 @@ def shop_key(tenant_id)
   key
 end
 
+def extract_otp_code(text)
+  return nil if text.nil? || text.empty?
+
+  lines = text.lines.map(&:strip).reject(&:empty?)
+  lines.reverse_each do |line|
+    next if line.start_with?("Connecting to")
+    return line if line.match?(/\A\d{6}\z/)
+  end
+
+  text.scan(/\b(\d{6})\b/).last&.first
+end
+
+def fly_machine_id
+  @fly_machine_id ||= begin
+    out, status = Open3.capture2(FLY_BIN, "machine", "list", "-a", FLY_APP, "--json")
+    raise "fly machine list failed" unless status.success?
+
+    machines = JSON.parse(out)
+    machine = machines.find { |m| m["state"] == "started" } || machines.first
+    raise "no fly machine for #{FLY_APP}" unless machine&.dig("id")
+
+    machine["id"]
+  end
+end
+
 def fetch_otp_from_fly(email)
   return nil if SKIP_OTP_FETCH
 
-  esc = email.gsub("'", "'\\\\''")
-  runner = "r=ShopEmailOtpCode.active('#{esc}').order(created_at: :desc).first; print(r&.code || 'NONE')"
-  cmd = "bin/rails runner \"#{runner}\""
-  out, status = Open3.capture2("fly", "ssh", "console", "-a", FLY_APP, "-C", cmd)
-  return nil unless status.success?
+  # fly ssh -C режет аргументы по пробелам; machine exec — одна строка команды.
+  ruby = "puts ShopEmailOtpCode.active(#{email.inspect}).order(created_at: :desc).limit(1).pick(:code) || 'NONE'"
+  remote_cmd = "/rails/bin/rails runner #{ruby.inspect}"
 
-  code = out.strip
-  code if code.match?(/\A\d{6}\z/)
+  out, err, status = Open3.capture3(
+    FLY_BIN, "machine", "exec", fly_machine_id, "-a", FLY_APP, remote_cmd
+  )
+  combined = [out, err].join("\n")
+  code = extract_otp_code(combined)
+  code = nil if code == "NONE"
+
+  if code.nil?
+    warn "[fly-otp] #{email}: status=#{status.success?} excerpt=#{combined.lines.last(5).join.strip.inspect}"
+  end
+
+  code
 rescue StandardError => e
-  warn "[fly-otp] #{e.message}"
+  warn "[fly-otp] #{email}: #{e.class} #{e.message}"
   nil
+end
+
+def user_pass?(user)
+  base = user[:send][:http] == 200 &&
+    user[:status_before]["verified"] == false &&
+    user[:order_blocked]&.dig(:http) == 422
+
+  return base if SKIP_OTP_FETCH
+
+  base &&
+    user[:verify].is_a?(Hash) &&
+    user[:verify][:body]&.dig("verified") == true &&
+    user[:order]&.dig("status") == "accepted"
 end
 
 suffix = Time.now.utc.strftime("%m%d%H%M")
@@ -93,13 +134,15 @@ cross = { status: "SKIP", detail: nil }
 
 POINTS.each do |point|
   tid = point[:tenant_id]
-  jar = File.join(Dir.tmpdir, "shop-otp-#{point[:slug]}-#{suffix}.cookies")
-  File.delete(jar) if File.exist?(jar)
-  curl("-c", jar, "#{BASE}/shop?tenant_id=#{tid}", "-o", NULL_DEV)
+  products = JSON.parse(curl("#{BASE}/shop/api/products", "-H", "X-Shop-Tenant: #{tid}", "-H", "X-Shop-Api-Key: #{api_key}"))
+  pid = products.dig("data", 0, "id")
 
   users = []
   2.times do |i|
     email = "mt-#{point[:slug]}-u#{i + 1}-#{suffix}@coffeeos.dev"
+    jar = File.join(Dir.tmpdir, "shop-otp-#{point[:slug]}-u#{i + 1}-#{suffix}.cookies")
+    File.delete(jar) if File.exist?(jar)
+    curl("-c", jar, "#{BASE}/shop?tenant_id=#{tid}", "-o", NULL_DEV)
     user = { email: email, send: nil, status_before: nil, order_blocked: nil, verify: nil, order: nil, pass: false }
 
     pause
@@ -119,9 +162,6 @@ POINTS.each do |point|
     )
     user[:status_before] = status_body
 
-    pause
-    products = JSON.parse(curl("#{BASE}/shop/api/products", "-H", "X-Shop-Tenant: #{tid}", "-H", "X-Shop-Api-Key: #{api_key}"))
-    pid = products.dig("data", 0, "id")
     if pid
       curl("-X", "POST", "#{BASE}/shop/api/cart/add", "-c", jar, "-b", jar,
         "-H", "X-Shop-Tenant: #{tid}", "-H", "X-Shop-Api-Key: #{api_key}",
@@ -140,34 +180,30 @@ POINTS.each do |point|
     code = fetch_otp_from_fly(email)
     if code
       pause
-      verify_body, = curl_json(
+      verify_body, verify_http = curl_post_json(
         "-X", "POST", "#{BASE}/shop/api/email_otp/verify",
         "-c", jar, "-b", jar,
         "-H", "X-Shop-Tenant: #{tid}", "-H", "X-Shop-Api-Key: #{api_key}",
         "-H", "Content-Type: application/json",
         "--data-binary", { email: email, code: code }.to_json
       )
-      user[:verify] = { code_from: "fly_ssh", body: verify_body }
+      user[:verify] = { code_from: "fly_ssh", http: verify_http, body: verify_body }
 
       if pid && verify_body["verified"]
         pause
-        order_ok_body, = curl_json(
+        order_ok_body, order_http = curl_post_json(
           "-X", "POST", "#{BASE}/shop/api/orders", "-c", jar, "-b", jar,
           "-H", "X-Shop-Tenant: #{tid}", "-H", "X-Shop-Api-Key: #{api_key}",
           "-H", "Content-Type: application/json",
           "--data-binary", { email: email, name: "MT #{point[:slug]} u#{i + 1}", payment_method: "cash" }.to_json
         )
-        user[:order] = order_ok_body
+        user[:order] = order_ok_body.merge("_http" => order_http)
       end
     else
-      user[:verify] = { skipped: true, reason: SKIP_OTP_FETCH ? "SKIP_FLY_OTP_FETCH" : "fly_ssh_unavailable" }
+      user[:verify] = { skipped: true, reason: SKIP_OTP_FETCH ? "SKIP_FLY_OTP_FETCH" : "fly_ssh_no_code" }
     end
 
-    user[:pass] = user[:send][:http] == 200 &&
-      user[:status_before]["verified"] == false &&
-      user[:order_blocked]&.dig(:http) == 422 &&
-      (user[:order]&.dig("status") == "accepted" || user[:verify][:skipped])
-
+    user[:pass] = user_pass?(user)
     users << user
   end
 
@@ -179,7 +215,6 @@ POINTS.each do |point|
   }
 end
 
-# Cross-tenant: verify demo_a u1, order on demo_b blocked
 begin
   a = POINTS[0]
   b = POINTS[1]
@@ -187,30 +222,45 @@ begin
   jar = File.join(Dir.tmpdir, "shop-otp-cross-#{suffix}.cookies")
   File.delete(jar) if File.exist?(jar)
   curl("-c", jar, "#{BASE}/shop?tenant_id=#{a[:tenant_id]}", "-o", NULL_DEV)
+
+  products_b = JSON.parse(curl("#{BASE}/shop/api/products", "-H", "X-Shop-Tenant: #{b[:tenant_id]}", "-H", "X-Shop-Api-Key: #{api_key}"))
+  pid_b = products_b.dig("data", 0, "id")
+
   curl("-X", "POST", "#{BASE}/shop/api/email_otp/send", "-c", jar, "-b", jar,
     "-H", "X-Shop-Tenant: #{a[:tenant_id]}", "-H", "X-Shop-Api-Key: #{api_key}",
     "-H", "Content-Type: application/json", "--data-binary", { email: email }.to_json)
+
   code = fetch_otp_from_fly(email)
   if code
     curl("-X", "POST", "#{BASE}/shop/api/email_otp/verify", "-c", jar, "-b", jar,
       "-H", "X-Shop-Tenant: #{a[:tenant_id]}", "-H", "X-Shop-Api-Key: #{api_key}",
       "-H", "Content-Type: application/json", "--data-binary", { email: email, code: code }.to_json)
+
     status_b, = curl_json("#{BASE}/shop/api/email_otp/status", "-b", jar, "-c", jar,
       "-H", "X-Shop-Tenant: #{b[:tenant_id]}", "-H", "X-Shop-Api-Key: #{api_key}")
-    order_b_body, = curl_json(
+
+    if pid_b
+      curl("-X", "POST", "#{BASE}/shop/api/cart/add", "-c", jar, "-b", jar,
+        "-H", "X-Shop-Tenant: #{b[:tenant_id]}", "-H", "X-Shop-Api-Key: #{api_key}",
+        "-H", "Content-Type: application/json",
+        "--data-binary", { product_id: pid_b, quantity: 1, selected_modifiers: [] }.to_json)
+    end
+
+    order_b_body, order_b_http = curl_post_json(
       "-X", "POST", "#{BASE}/shop/api/orders", "-c", jar, "-b", jar,
       "-H", "X-Shop-Tenant: #{b[:tenant_id]}", "-H", "X-Shop-Api-Key: #{api_key}",
       "-H", "Content-Type: application/json",
       "--data-binary", { email: email, name: "Cross", payment_method: "cash" }.to_json
     )
     cross = {
-      status: (status_b["verified"] == false && order_b_body["error"].to_s.match?(/подтвердите email/i)) ? "PASS" : "FAIL",
+      status: (status_b["verified"] == false && order_b_http == 422 &&
+        order_b_body["error"].to_s.match?(/подтвердите email/i)) ? "PASS" : "FAIL",
       verified_on_b: status_b["verified"],
-      order_b_http: order_b_body["error"] || order_b_body["status"]
+      order_b_http: order_b_http,
+      order_b_error: order_b_body["error"]
     }
   else
-    cross[:status] = "SKIP"
-    cross[:detail] = "no otp from fly ssh"
+    cross = { status: "SKIP", detail: "no otp from fly ssh" }
   end
 rescue StandardError => e
   cross = { status: "FAIL", error: e.message }
@@ -219,10 +269,13 @@ end
 report = {
   task: "checkout_otp_fly_multitenant",
   base: BASE,
-  at: Time.now.utc.iso8601,
+  at: Time.now.utc.strftime("%Y-%m-%dT%H:%M:%SZ"),
+  fly_bin: FLY_BIN,
+  otp_fetch: SKIP_OTP_FETCH ? "skipped" : "fly machine exec + rails runner",
+  fly_machine: (fly_machine_id rescue nil),
   points: rows,
   cross_tenant: cross,
-  all_pass: rows.all? { |r| r[:pass] } && %w[PASS SKIP].include?(cross[:status])
+  all_pass: rows.all? { |r| r[:pass] } && cross[:status] == "PASS"
 }
 
 File.write(OUT, JSON.pretty_generate(report))

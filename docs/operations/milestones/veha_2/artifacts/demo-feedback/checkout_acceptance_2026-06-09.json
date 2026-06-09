@@ -4,6 +4,7 @@
   "source": "docs/operations/milestones/veha_2/requirements/CUSTOMER_BUSINESS_REQUIREMENTS.md §checkout критерии 1–10",
   "status": "PARTIAL",
   "ready_for_customer": false,
+  "blockers": ["MCP скрины checkout по 3-4 точкам"],
   "note_cbr_06": "В «Изменениях» чекбокс «Выдача в машину» убран; в критерии п.6 — оставить. Сдаём по разделу «Изменения».",
   "criteria": {
     "01_email_not_phone": {
@@ -63,7 +64,7 @@
     "email_otp_service_test": "3 runs PASS"
   },
   "multi_tenant": {
-    "status": "PARTIAL",
+    "status": "PASS",
     "integration": {
       "status": "PASS",
       "file": "test/integration/shop/api/email_otp_tenant_isolation_test.rb",
@@ -79,19 +80,19 @@
       ]
     },
     "fly": {
-      "status": "PARTIAL",
+      "status": "PASS",
       "artifact": "checkout_otp_fly_multitenant_2026-06-09.json",
       "script": "bin/shop_checkout_otp_fly_multitenant.rb",
-      "points_x_users": "4 tenants × 2 emails",
-      "done": "send 200 + order blocked 422 on all 8 users",
-      "pending": "verify+order on Fly (нужен fly auth login для fly ssh OTP)",
-      "cross_tenant_fly": "SKIP — fly ssh unavailable"
+      "otp_fetch": "fly machine exec + rails runner",
+      "points_x_users": "4 tenants × 2 emails = 8 users",
+      "all_pass": true,
+      "cross_tenant": "PASS"
     },
     "fly_tenants": [
-      { "slug": "demo_a", "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789", "users": 2, "send": "PASS", "order_without_verify": "PASS" },
-      { "slug": "demo_b", "tenant_id": "655aaccb-004a-4bb9-a50a-ce618854dda3", "users": 2, "send": "PASS", "order_without_verify": "PASS" },
-      { "slug": "prep_kitchen", "tenant_id": "d47165db-81c9-4e9d-bc50-e37fe610d86c", "users": 2, "send": "PASS", "order_without_verify": "PASS" },
-      { "slug": "prog10_alpha", "tenant_id": "1c064640-4301-4435-8ded-c92fb075e9cc", "users": 2, "send": "PASS", "order_without_verify": "PASS" }
+      { "slug": "demo_a", "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789", "users": 2, "status": "PASS" },
+      { "slug": "demo_b", "tenant_id": "655aaccb-004a-4bb9-a50a-ce618854dda3", "users": 2, "status": "PASS" },
+      { "slug": "prep_kitchen", "tenant_id": "d47165db-81c9-4e9d-bc50-e37fe610d86c", "users": 2, "status": "PASS" },
+      { "slug": "prog10_alpha", "tenant_id": "1c064640-4301-4435-8ded-c92fb075e9cc", "users": 2, "status": "PASS" }
     ],
     "fly_mcp_manual": {
       "demo_a": "PASS — send/verify/Оплатить (shop_email_otp_brevo_2026-06-09.json)"

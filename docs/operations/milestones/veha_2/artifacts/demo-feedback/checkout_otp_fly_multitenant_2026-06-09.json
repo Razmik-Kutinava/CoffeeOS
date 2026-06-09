@@ -1,19 +1,22 @@
 {
   "task": "checkout_otp_fly_multitenant",
   "base": "https://coffeeos.fly.dev",
-  "at": "2026-06-09T15:16:05Z",
+  "at": "2026-06-09T15:41:01Z",
+  "fly_bin": "fly",
+  "otp_fetch": "fly machine exec + rails runner",
+  "fly_machine": "9080d40db67238",
   "points": [
     {
       "slug": "demo_a",
       "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
       "users": [
         {
-          "email": "mt-demo_a-u1-06091514@coffeeos.dev",
+          "email": "mt-demo_a-u1-06091539@coffeeos.dev",
           "send": {
             "http": 200,
             "body": {
               "ok": true,
-              "email": "mt-demo_a-u1-06091514@coffeeos.dev"
+              "email": "mt-demo_a-u1-06091539@coffeeos.dev"
             }
           },
           "status_before": {
@@ -28,19 +31,31 @@
             }
           },
           "verify": {
-            "skipped": true,
-            "reason": "fly_ssh_unavailable"
+            "code_from": "fly_ssh",
+            "http": 200,
+            "body": {
+              "verified": true,
+              "email": "mt-demo_a-u1-06091539@coffeeos.dev"
+            }
           },
-          "order": null,
+          "order": {
+            "order_id": "f3b2a7c2-b6b3-4eaa-a9e6-f7828ffcd0b6",
+            "total": 385.0,
+            "discount": 0.0,
+            "status": "accepted",
+            "payment_url": null,
+            "reconnect_token": "eyJfcmFpbHMiOnsiZGF0YSI6eyJvaWQiOiJmM2IyYTdjMi1iNmIzLTRlYWEtYTllNi1mNzgyOGZmY2QwYjYiLCJjaWQiOiJjODM2MTMwNS1jMmI1LTQ5YTEtODVlYy1iYjJlYmY1MGJhZmEiLCJ0aWQiOiIyZmRlZTFhYy00Njc0LTQxZWUtYjg5ZS04N2I0NTY0M2Y3ODkifSwiZXhwIjoiMjAyNi0wNi0xMFQxNTozOToyNS4xNDJaIn19--1d7834be1b616df05c81501b48a078df542a9add",
+            "_http": 200
+          },
           "pass": true
         },
         {
-          "email": "mt-demo_a-u2-06091514@coffeeos.dev",
+          "email": "mt-demo_a-u2-06091539@coffeeos.dev",
           "send": {
             "http": 200,
             "body": {
               "ok": true,
-              "email": "mt-demo_a-u2-06091514@coffeeos.dev"
+              "email": "mt-demo_a-u2-06091539@coffeeos.dev"
             }
           },
           "status_before": {
@@ -55,10 +70,22 @@
             }
           },
           "verify": {
-            "skipped": true,
-            "reason": "fly_ssh_unavailable"
+            "code_from": "fly_ssh",
+            "http": 200,
+            "body": {
+              "verified": true,
+              "email": "mt-demo_a-u2-06091539@coffeeos.dev"
+            }
           },
-          "order": null,
+          "order": {
+            "order_id": "d7292f97-5495-4991-9fe6-a67eff377418",
+            "total": 385.0,
+            "discount": 0.0,
+            "status": "accepted",
+            "payment_url": null,
+            "reconnect_token": "eyJfcmFpbHMiOnsiZGF0YSI6eyJvaWQiOiJkNzI5MmY5Ny01NDk1LTQ5OTEtOWZlNi1hNjdlZmYzNzc0MTgiLCJjaWQiOiIzNDRhMzNkOC1jZGU4LTQ0MmUtODk2ZS1jOTA5NmJjODg0NTgiLCJ0aWQiOiIyZmRlZTFhYy00Njc0LTQxZWUtYjg5ZS04N2I0NTY0M2Y3ODkifSwiZXhwIjoiMjAyNi0wNi0xMFQxNTozOTozNy4xOTlaIn19--916c9b4eb8f582a00fc417a6074b5afdde730052",
+            "_http": 200
+          },
           "pass": true
         }
       ],
@@ -69,12 +96,12 @@
       "tenant_id": "655aaccb-004a-4bb9-a50a-ce618854dda3",
       "users": [
         {
-          "email": "mt-demo_b-u1-06091514@coffeeos.dev",
+          "email": "mt-demo_b-u1-06091539@coffeeos.dev",
           "send": {
             "http": 200,
             "body": {
               "ok": true,
-              "email": "mt-demo_b-u1-06091514@coffeeos.dev"
+              "email": "mt-demo_b-u1-06091539@coffeeos.dev"
             }
           },
           "status_before": {
@@ -89,19 +116,31 @@
             }
           },
           "verify": {
-            "skipped": true,
-            "reason": "fly_ssh_unavailable"
+            "code_from": "fly_ssh",
+            "http": 200,
+            "body": {
+              "verified": true,
+              "email": "mt-demo_b-u1-06091539@coffeeos.dev"
+            }
           },
-          "order": null,
+          "order": {
+            "order_id": "17f907df-8e82-40fc-bd65-75759a0bf030",
+            "total": 395.0,
+            "discount": 0.0,
+            "status": "accepted",
+            "payment_url": null,
+            "reconnect_token": "eyJfcmFpbHMiOnsiZGF0YSI6eyJvaWQiOiIxN2Y5MDdkZi04ZTgyLTQwZmMtYmQ2NS03NTc1OWEwYmYwMzAiLCJjaWQiOiI4NDc2YTJjOS03NDI4LTQ2ZGYtOTgyMC0wNGNjN2M1MzI2MzciLCJ0aWQiOiI2NTVhYWNjYi0wMDRhLTRiYjktYTUwYS1jZTYxODg1NGRkYTMifSwiZXhwIjoiMjAyNi0wNi0xMFQxNTozOTo1MC40NzhaIn19--5647d6b1bcdf920a453d1cc9f65f867e4ec6e548",
+            "_http": 200
+          },
           "pass": true
         },
         {
-          "email": "mt-demo_b-u2-06091514@coffeeos.dev",
+          "email": "mt-demo_b-u2-06091539@coffeeos.dev",
           "send": {
             "http": 200,
             "body": {
               "ok": true,
-              "email": "mt-demo_b-u2-06091514@coffeeos.dev"
+              "email": "mt-demo_b-u2-06091539@coffeeos.dev"
             }
           },
           "status_before": {
@@ -116,10 +155,22 @@
             }
           },
           "verify": {
-            "skipped": true,
-            "reason": "fly_ssh_unavailable"
+            "code_from": "fly_ssh",
+            "http": 200,
+            "body": {
+              "verified": true,
+              "email": "mt-demo_b-u2-06091539@coffeeos.dev"
+            }
           },
-          "order": null,
+          "order": {
+            "order_id": "353c1a2b-0246-455b-af3d-0b3f567b5b84",
+            "total": 395.0,
+            "discount": 0.0,
+            "status": "accepted",
+            "payment_url": null,
+            "reconnect_token": "eyJfcmFpbHMiOnsiZGF0YSI6eyJvaWQiOiIzNTNjMWEyYi0wMjQ2LTQ1NWItYWYzZC0wYjNmNTY3YjViODQiLCJjaWQiOiIxZTA0YzQxYi0zY2EzLTQyZjYtYmY3Yy05YzNlZDEzNGY1YjIiLCJ0aWQiOiI2NTVhYWNjYi0wMDRhLTRiYjktYTUwYS1jZTYxODg1NGRkYTMifSwiZXhwIjoiMjAyNi0wNi0xMFQxNTo0MDowMi4wNDBaIn19--48efeb882bf2740c099fafde30882905766227e3",
+            "_http": 200
+          },
           "pass": true
         }
       ],
@@ -130,12 +181,12 @@
       "tenant_id": "d47165db-81c9-4e9d-bc50-e37fe610d86c",
       "users": [
         {
-          "email": "mt-prep_kitchen-u1-06091514@coffeeos.dev",
+          "email": "mt-prep_kitchen-u1-06091539@coffeeos.dev",
           "send": {
             "http": 200,
             "body": {
               "ok": true,
-              "email": "mt-prep_kitchen-u1-06091514@coffeeos.dev"
+              "email": "mt-prep_kitchen-u1-06091539@coffeeos.dev"
             }
           },
           "status_before": {
@@ -150,19 +201,31 @@
             }
           },
           "verify": {
-            "skipped": true,
-            "reason": "fly_ssh_unavailable"
+            "code_from": "fly_ssh",
+            "http": 200,
+            "body": {
+              "verified": true,
+              "email": "mt-prep_kitchen-u1-06091539@coffeeos.dev"
+            }
           },
-          "order": null,
+          "order": {
+            "order_id": "4353d947-1476-4035-932c-5bab02bf8e46",
+            "total": 385.0,
+            "discount": 0.0,
+            "status": "accepted",
+            "payment_url": null,
+            "reconnect_token": "eyJfcmFpbHMiOnsiZGF0YSI6eyJvaWQiOiI0MzUzZDk0Ny0xNDc2LTQwMzUtOTMyYy01YmFiMDJiZjhlNDYiLCJjaWQiOiI0NmE4Njk0My05M2YxLTRmMjQtYThhZi0wMDg5OGYwMGUwMGMiLCJ0aWQiOiJkNDcxNjVkYi04MWM5LTRlOWQtYmM1MC1lMzdmZTYxMGQ4NmMifSwiZXhwIjoiMjAyNi0wNi0xMFQxNTo0MDoxNC4zNTRaIn19--5cb4487a21f4ab78d01ae0d1c5357c18f3610158",
+            "_http": 200
+          },
           "pass": true
         },
         {
-          "email": "mt-prep_kitchen-u2-06091514@coffeeos.dev",
+          "email": "mt-prep_kitchen-u2-06091539@coffeeos.dev",
           "send": {
             "http": 200,
             "body": {
               "ok": true,
-              "email": "mt-prep_kitchen-u2-06091514@coffeeos.dev"
+              "email": "mt-prep_kitchen-u2-06091539@coffeeos.dev"
             }
           },
           "status_before": {
@@ -177,10 +240,22 @@
             }
           },
           "verify": {
-            "skipped": true,
-            "reason": "fly_ssh_unavailable"
+            "code_from": "fly_ssh",
+            "http": 200,
+            "body": {
+              "verified": true,
+              "email": "mt-prep_kitchen-u2-06091539@coffeeos.dev"
+            }
           },
-          "order": null,
+          "order": {
+            "order_id": "1fb7edd5-3263-4061-a306-c6f4d125dfec",
+            "total": 385.0,
+            "discount": 0.0,
+            "status": "accepted",
+            "payment_url": null,
+            "reconnect_token": "eyJfcmFpbHMiOnsiZGF0YSI6eyJvaWQiOiIxZmI3ZWRkNS0zMjYzLTQwNjEtYTMwNi1jNmY0ZDEyNWRmZWMiLCJjaWQiOiI4YmVhODRlMy03MDIxLTQ3YmEtOTU4OS1kMGI1Y2RlNTViMmQiLCJ0aWQiOiJkNDcxNjVkYi04MWM5LTRlOWQtYmM1MC1lMzdmZTYxMGQ4NmMifSwiZXhwIjoiMjAyNi0wNi0xMFQxNTo0MDoyNi4xMzJaIn19--f512ba853776e5d6899089eff1a12749990e6b1a",
+            "_http": 200
+          },
           "pass": true
         }
       ],
@@ -191,12 +266,12 @@
       "tenant_id": "1c064640-4301-4435-8ded-c92fb075e9cc",
       "users": [
         {
-          "email": "mt-prog10_alpha-u1-06091514@coffeeos.dev",
+          "email": "mt-prog10_alpha-u1-06091539@coffeeos.dev",
           "send": {
             "http": 200,
             "body": {
               "ok": true,
-              "email": "mt-prog10_alpha-u1-06091514@coffeeos.dev"
+              "email": "mt-prog10_alpha-u1-06091539@coffeeos.dev"
             }
           },
           "status_before": {
@@ -211,19 +286,31 @@
             }
           },
           "verify": {
-            "skipped": true,
-            "reason": "fly_ssh_unavailable"
+            "code_from": "fly_ssh",
+            "http": 200,
+            "body": {
+              "verified": true,
+              "email": "mt-prog10_alpha-u1-06091539@coffeeos.dev"
+            }
           },
-          "order": null,
+          "order": {
+            "order_id": "5247c403-0f65-483b-8965-5e8bcce91fdd",
+            "total": 385.0,
+            "discount": 0.0,
+            "status": "accepted",
+            "payment_url": null,
+            "reconnect_token": "eyJfcmFpbHMiOnsiZGF0YSI6eyJvaWQiOiI1MjQ3YzQwMy0wZjY1LTQ4M2ItODk2NS01ZThiY2NlOTFmZGQiLCJjaWQiOiIxNTg1YTk3ZC02Zjk3LTQ0ODYtYTQ0Yy0zZmFjMTU5ZDk4YWIiLCJ0aWQiOiIxYzA2NDY0MC00MzAxLTQ0MzUtOGRlZC1jOTJmYjA3NWU5Y2MifSwiZXhwIjoiMjAyNi0wNi0xMFQxNTo0MDozOC40NTJaIn19--8b0607b79248baa326ab9a25bcb7b7ec26a2e7db",
+            "_http": 200
+          },
           "pass": true
         },
         {
-          "email": "mt-prog10_alpha-u2-06091514@coffeeos.dev",
+          "email": "mt-prog10_alpha-u2-06091539@coffeeos.dev",
           "send": {
             "http": 200,
             "body": {
               "ok": true,
-              "email": "mt-prog10_alpha-u2-06091514@coffeeos.dev"
+              "email": "mt-prog10_alpha-u2-06091539@coffeeos.dev"
             }
           },
           "status_before": {
@@ -238,10 +325,22 @@
             }
           },
           "verify": {
-            "skipped": true,
-            "reason": "fly_ssh_unavailable"
+            "code_from": "fly_ssh",
+            "http": 200,
+            "body": {
+              "verified": true,
+              "email": "mt-prog10_alpha-u2-06091539@coffeeos.dev"
+            }
           },
-          "order": null,
+          "order": {
+            "order_id": "6fe8058d-594a-4b8f-8c3e-aab51244d02d",
+            "total": 385.0,
+            "discount": 0.0,
+            "status": "accepted",
+            "payment_url": null,
+            "reconnect_token": "eyJfcmFpbHMiOnsiZGF0YSI6eyJvaWQiOiI2ZmU4MDU4ZC01OTRhLTRiOGYtOGMzZS1hYWI1MTI0NGQwMmQiLCJjaWQiOiI4NTNhYWNjNS1kMTM5LTQ2MjctYTZkMy1mYzYzNTZjYmE4OTUiLCJ0aWQiOiIxYzA2NDY0MC00MzAxLTQ0MzUtOGRlZC1jOTJmYjA3NWU5Y2MifSwiZXhwIjoiMjAyNi0wNi0xMFQxNTo0MDo1MC45NDNaIn19--d9d966962c3eda327770ce28c9c6356a34eef099",
+            "_http": 200
+          },
           "pass": true
         }
       ],
@@ -249,8 +348,10 @@
     }
   ],
   "cross_tenant": {
-    "status": "SKIP",
-    "detail": "no otp from fly ssh"
+    "status": "PASS",
+    "verified_on_b": false,
+    "order_b_http": 422,
+    "order_b_error": "Подтвердите email кодом из письма"
   },
   "all_pass": true
 }

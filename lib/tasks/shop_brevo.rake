@@ -1,6 +1,17 @@
 # frozen_string_literal: true
 
 namespace :shop do
+  namespace :otp do
+    desc "Fly smoke: вывести активный OTP для EMAIL (только ops, не для прода вручную)"
+    task peek: :environment do
+      email = Shop::EmailVerificationSession.normalize(ENV.fetch("EMAIL", ""))
+      abort "EMAIL required" if email.blank?
+
+      code = ShopEmailOtpCode.active(email).order(created_at: :desc).limit(1).pick(:code)
+      puts(code || "NONE")
+    end
+  end
+
   namespace :brevo do
     desc "Проверка Brevo: отправка тестового OTP на MAIL_FROM"
     task test: :environment do
