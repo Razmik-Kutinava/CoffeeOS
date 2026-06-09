@@ -2,9 +2,8 @@
   "task": "checkout_cbr_acceptance",
   "date": "2026-06-09",
   "source": "docs/operations/milestones/veha_2/requirements/CUSTOMER_BUSINESS_REQUIREMENTS.md §checkout критерии 1–10",
-  "status": "PARTIAL",
-  "ready_for_customer": false,
-  "blockers": ["MCP скрины checkout по 3-4 точкам"],
+  "status": "PASS",
+  "ready_for_customer": true,
   "note_cbr_06": "В «Изменениях» чекбокс «Выдача в машину» убран; в критерии п.6 — оставить. Сдаём по разделу «Изменения».",
   "criteria": {
     "01_email_not_phone": {
@@ -94,13 +93,17 @@
       { "slug": "prep_kitchen", "tenant_id": "d47165db-81c9-4e9d-bc50-e37fe610d86c", "users": 2, "status": "PASS" },
       { "slug": "prog10_alpha", "tenant_id": "1c064640-4301-4435-8ded-c92fb075e9cc", "users": 2, "status": "PASS" }
     ],
-    "fly_mcp_manual": {
-      "demo_a": "PASS — send/verify/Оплатить (shop_email_otp_brevo_2026-06-09.json)"
+    "mcp_screenshots": {
+      "status": "PASS",
+      "artifact": "checkout_mcp_fly_2026-06-09.json",
+      "dir": "screenshots/checkout_mcp_2026-06-09",
+      "tenants": 4
     }
   },
   "related_artifacts": [
     "shop_email_otp_brevo_2026-06-09.json",
     "checkout_ui_cleanup_2026-06-09.json",
-    "checkout_otp_fly_multitenant_2026-06-09.json"
+    "checkout_otp_fly_multitenant_2026-06-09.json",
+    "checkout_mcp_fly_2026-06-09.json"
   ]
 }

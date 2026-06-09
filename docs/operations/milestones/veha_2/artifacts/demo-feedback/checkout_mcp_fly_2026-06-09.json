@@ -1,0 +1,63 @@
+{
+  "task": "checkout_mcp_fly_screenshots",
+  "date": "2026-06-09",
+  "stand": "https://coffeeos.fly.dev",
+  "status": "PASS",
+  "screenshots_dir": "docs/operations/milestones/veha_2/artifacts/demo-feedback/screenshots/checkout_mcp_2026-06-09",
+  "tenants": [
+    {
+      "slug": "demo_a",
+      "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+      "url": "https://coffeeos.fly.dev/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789#/checkout",
+      "screenshots": [
+        { "file": "checkout_demo_a_email_form.png", "shows": "Email, Отправить код, Код из письма, нет Телефона/Комментария" },
+        { "file": "checkout_demo_a_sbp.png", "shows": "СБП + Будет позже, Оплатить после verify" },
+        { "file": "checkout_demo_a_verified.png", "shows": "Контакты сохранены, masked email" }
+      ],
+      "pass": true
+    },
+    {
+      "slug": "demo_b",
+      "tenant_id": "655aaccb-004a-4bb9-a50a-ce618854dda3",
+      "url": "https://coffeeos.fly.dev/shop?tenant_id=655aaccb-004a-4bb9-a50a-ce618854dda3",
+      "price_proof": "189₽ в корзине (отличается от demo_a)",
+      "screenshots": [
+        { "file": "checkout_demo_b_cart.png", "shows": "Корзина 189₽×2, нет крошек checkout" },
+        { "file": "checkout_demo_b_checkout.png", "shows": "Пустой checkout: Имя, Email, OTP" }
+      ],
+      "pass": true
+    },
+    {
+      "slug": "prep_kitchen",
+      "tenant_id": "d47165db-81c9-4e9d-bc50-e37fe610d86c",
+      "url": "https://coffeeos.fly.dev/shop?tenant_id=d47165db-81c9-4e9d-bc50-e37fe610d86c#/checkout",
+      "screenshots": [
+        { "file": "checkout_prep_kitchen_catalog.png", "shows": "Каталог точки, цены 179₽" },
+        { "file": "checkout_prep_kitchen_checkout.png", "shows": "Checkout OTP форма" }
+      ],
+      "pass": true
+    },
+    {
+      "slug": "prog10_alpha",
+      "tenant_id": "1c064640-4301-4435-8ded-c92fb075e9cc",
+      "url": "https://coffeeos.fly.dev/shop?tenant_id=1c064640-4301-4435-8ded-c92fb075e9cc#/checkout",
+      "screenshots": [
+        { "file": "checkout_prog10_alpha_checkout.png", "shows": "Checkout OTP форма" }
+      ],
+      "pass": true
+    }
+  ],
+  "cbr_visual_checks": {
+    "email_not_phone": "PASS",
+    "otp_fields": "PASS",
+    "no_comment": "PASS",
+    "no_breadcrumbs_checkout": "PASS",
+    "sbp_budet_pozzhe": "PASS",
+    "no_car_pickup_on_checkout": "PASS",
+    "pay_disabled_without_verify": "PASS"
+  },
+  "related": [
+    "checkout_acceptance_2026-06-09.json",
+    "checkout_otp_fly_multitenant_2026-06-09.json"
+  ]
+}

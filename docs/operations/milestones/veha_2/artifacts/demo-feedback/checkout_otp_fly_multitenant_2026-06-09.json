@@ -1,22 +1,22 @@
 {
   "task": "checkout_otp_fly_multitenant",
   "base": "https://coffeeos.fly.dev",
-  "at": "2026-06-09T15:41:01Z",
+  "at": "2026-06-09T15:45:06Z",
   "fly_bin": "fly",
   "otp_fetch": "fly machine exec + rails runner",
-  "fly_machine": "9080d40db67238",
+  "fly_machine": "e7845645b20668",
   "points": [
     {
       "slug": "demo_a",
       "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
       "users": [
         {
-          "email": "mt-demo_a-u1-06091539@coffeeos.dev",
+          "email": "mt-demo_a-u1-06091542@coffeeos.dev",
           "send": {
             "http": 200,
             "body": {
               "ok": true,
-              "email": "mt-demo_a-u1-06091539@coffeeos.dev"
+              "email": "mt-demo_a-u1-06091542@coffeeos.dev"
             }
           },
           "status_before": {
@@ -35,27 +35,27 @@
             "http": 200,
             "body": {
               "verified": true,
-              "email": "mt-demo_a-u1-06091539@coffeeos.dev"
+              "email": "mt-demo_a-u1-06091542@coffeeos.dev"
             }
           },
           "order": {
-            "order_id": "f3b2a7c2-b6b3-4eaa-a9e6-f7828ffcd0b6",
+            "order_id": "e1032e8a-73b0-42d9-b730-80b903447873",
             "total": 385.0,
             "discount": 0.0,
             "status": "accepted",
             "payment_url": null,
-            "reconnect_token": "eyJfcmFpbHMiOnsiZGF0YSI6eyJvaWQiOiJmM2IyYTdjMi1iNmIzLTRlYWEtYTllNi1mNzgyOGZmY2QwYjYiLCJjaWQiOiJjODM2MTMwNS1jMmI1LTQ5YTEtODVlYy1iYjJlYmY1MGJhZmEiLCJ0aWQiOiIyZmRlZTFhYy00Njc0LTQxZWUtYjg5ZS04N2I0NTY0M2Y3ODkifSwiZXhwIjoiMjAyNi0wNi0xMFQxNTozOToyNS4xNDJaIn19--1d7834be1b616df05c81501b48a078df542a9add",
+            "reconnect_token": "eyJfcmFpbHMiOnsiZGF0YSI6eyJvaWQiOiJlMTAzMmU4YS03M2IwLTQyZDktYjczMC04MGI5MDM0NDc4NzMiLCJjaWQiOiJmNzI4NGExZi1kZDQxLTRkNjYtODg1My05ZTcxYzcxMzhiYWQiLCJ0aWQiOiIyZmRlZTFhYy00Njc0LTQxZWUtYjg5ZS04N2I0NTY0M2Y3ODkifSwiZXhwIjoiMjAyNi0wNi0xMFQxNTo0MzowNy45MzRaIn19--38ce97d860fb381b959bc572e045905722bd897c",
             "_http": 200
           },
           "pass": true
         },
         {
-          "email": "mt-demo_a-u2-06091539@coffeeos.dev",
+          "email": "mt-demo_a-u2-06091542@coffeeos.dev",
           "send": {
             "http": 200,
             "body": {
               "ok": true,
-              "email": "mt-demo_a-u2-06091539@coffeeos.dev"
+              "email": "mt-demo_a-u2-06091542@coffeeos.dev"
             }
           },
           "status_before": {
@@ -74,16 +74,16 @@
             "http": 200,
             "body": {
               "verified": true,
-              "email": "mt-demo_a-u2-06091539@coffeeos.dev"
+              "email": "mt-demo_a-u2-06091542@coffeeos.dev"
             }
           },
           "order": {
-            "order_id": "d7292f97-5495-4991-9fe6-a67eff377418",
+            "order_id": "5f319180-3ee8-4c83-932a-04dd82ab81ab",
             "total": 385.0,
             "discount": 0.0,
             "status": "accepted",
             "payment_url": null,
-            "reconnect_token": "eyJfcmFpbHMiOnsiZGF0YSI6eyJvaWQiOiJkNzI5MmY5Ny01NDk1LTQ5OTEtOWZlNi1hNjdlZmYzNzc0MTgiLCJjaWQiOiIzNDRhMzNkOC1jZGU4LTQ0MmUtODk2ZS1jOTA5NmJjODg0NTgiLCJ0aWQiOiIyZmRlZTFhYy00Njc0LTQxZWUtYjg5ZS04N2I0NTY0M2Y3ODkifSwiZXhwIjoiMjAyNi0wNi0xMFQxNTozOTozNy4xOTlaIn19--916c9b4eb8f582a00fc417a6074b5afdde730052",
+            "reconnect_token": "eyJfcmFpbHMiOnsiZGF0YSI6eyJvaWQiOiI1ZjMxOTE4MC0zZWU4LTRjODMtOTMyYS0wNGRkODJhYjgxYWIiLCJjaWQiOiJmZDhjZTE4Mi00ZGRjLTQ5OGUtODFkNS00N2RiNmI1NmNlY2UiLCJ0aWQiOiIyZmRlZTFhYy00Njc0LTQxZWUtYjg5ZS04N2I0NTY0M2Y3ODkifSwiZXhwIjoiMjAyNi0wNi0xMFQxNTo0MzoyMi45NjRaIn19--d7eaf1bfa273a13846859c4c57772d79003beda3",
             "_http": 200
           },
           "pass": true
@@ -96,12 +96,12 @@
       "tenant_id": "655aaccb-004a-4bb9-a50a-ce618854dda3",
       "users": [
         {
-          "email": "mt-demo_b-u1-06091539@coffeeos.dev",
+          "email": "mt-demo_b-u1-06091542@coffeeos.dev",
           "send": {
             "http": 200,
             "body": {
               "ok": true,
-              "email": "mt-demo_b-u1-06091539@coffeeos.dev"
+              "email": "mt-demo_b-u1-06091542@coffeeos.dev"
             }
           },
           "status_before": {
@@ -120,27 +120,27 @@
             "http": 200,
             "body": {
               "verified": true,
-              "email": "mt-demo_b-u1-06091539@coffeeos.dev"
+              "email": "mt-demo_b-u1-06091542@coffeeos.dev"
             }
           },
           "order": {
-            "order_id": "17f907df-8e82-40fc-bd65-75759a0bf030",
+            "order_id": "a784135d-367d-4ae5-8dd6-ce43eb6b6712",
             "total": 395.0,
             "discount": 0.0,
             "status": "accepted",
             "payment_url": null,
-            "reconnect_token": "eyJfcmFpbHMiOnsiZGF0YSI6eyJvaWQiOiIxN2Y5MDdkZi04ZTgyLTQwZmMtYmQ2NS03NTc1OWEwYmYwMzAiLCJjaWQiOiI4NDc2YTJjOS03NDI4LTQ2ZGYtOTgyMC0wNGNjN2M1MzI2MzciLCJ0aWQiOiI2NTVhYWNjYi0wMDRhLTRiYjktYTUwYS1jZTYxODg1NGRkYTMifSwiZXhwIjoiMjAyNi0wNi0xMFQxNTozOTo1MC40NzhaIn19--5647d6b1bcdf920a453d1cc9f65f867e4ec6e548",
+            "reconnect_token": "eyJfcmFpbHMiOnsiZGF0YSI6eyJvaWQiOiJhNzg0MTM1ZC0zNjdkLTRhZTUtOGRkNi1jZTQzZWI2YjY3MTIiLCJjaWQiOiJmNWNkMjZlZC0yM2QwLTQ1ZTUtYTRjYy0yNjRhZmFkM2ZmOGEiLCJ0aWQiOiI2NTVhYWNjYi0wMDRhLTRiYjktYTUwYS1jZTYxODg1NGRkYTMifSwiZXhwIjoiMjAyNi0wNi0xMFQxNTo0MzozOC44OTdaIn19--932ddc63975c67d9b3a705f7d291d09086221d87",
             "_http": 200
           },
           "pass": true
         },
         {
-          "email": "mt-demo_b-u2-06091539@coffeeos.dev",
+          "email": "mt-demo_b-u2-06091542@coffeeos.dev",
           "send": {
             "http": 200,
             "body": {
               "ok": true,
-              "email": "mt-demo_b-u2-06091539@coffeeos.dev"
+              "email": "mt-demo_b-u2-06091542@coffeeos.dev"
             }
           },
           "status_before": {
@@ -159,16 +159,16 @@
             "http": 200,
             "body": {
               "verified": true,
-              "email": "mt-demo_b-u2-06091539@coffeeos.dev"
+              "email": "mt-demo_b-u2-06091542@coffeeos.dev"
             }
           },
           "order": {
-            "order_id": "353c1a2b-0246-455b-af3d-0b3f567b5b84",
+            "order_id": "d4378374-00b8-4b5c-aad0-d11e48cc1a34",
             "total": 395.0,
             "discount": 0.0,
             "status": "accepted",
             "payment_url": null,
-            "reconnect_token": "eyJfcmFpbHMiOnsiZGF0YSI6eyJvaWQiOiIzNTNjMWEyYi0wMjQ2LTQ1NWItYWYzZC0wYjNmNTY3YjViODQiLCJjaWQiOiIxZTA0YzQxYi0zY2EzLTQyZjYtYmY3Yy05YzNlZDEzNGY1YjIiLCJ0aWQiOiI2NTVhYWNjYi0wMDRhLTRiYjktYTUwYS1jZTYxODg1NGRkYTMifSwiZXhwIjoiMjAyNi0wNi0xMFQxNTo0MDowMi4wNDBaIn19--48efeb882bf2740c099fafde30882905766227e3",
+            "reconnect_token": "eyJfcmFpbHMiOnsiZGF0YSI6eyJvaWQiOiJkNDM3ODM3NC0wMGI4LTRiNWMtYWFkMC1kMTFlNDhjYzFhMzQiLCJjaWQiOiJlYTA1MDNkMC05Y2VjLTQwYTktYWJiMS1kZDViN2IyMTY0OTkiLCJ0aWQiOiI2NTVhYWNjYi0wMDRhLTRiYjktYTUwYS1jZTYxODg1NGRkYTMifSwiZXhwIjoiMjAyNi0wNi0xMFQxNTo0Mzo1NC4zMDdaIn19--2cf60b71e33dc60c8db251168d536264322e6f8a",
             "_http": 200
           },
           "pass": true
@@ -181,12 +181,12 @@
       "tenant_id": "d47165db-81c9-4e9d-bc50-e37fe610d86c",
       "users": [
         {
-          "email": "mt-prep_kitchen-u1-06091539@coffeeos.dev",
+          "email": "mt-prep_kitchen-u1-06091542@coffeeos.dev",
           "send": {
             "http": 200,
             "body": {
               "ok": true,
-              "email": "mt-prep_kitchen-u1-06091539@coffeeos.dev"
+              "email": "mt-prep_kitchen-u1-06091542@coffeeos.dev"
             }
           },
           "status_before": {
@@ -205,27 +205,27 @@
             "http": 200,
             "body": {
               "verified": true,
-              "email": "mt-prep_kitchen-u1-06091539@coffeeos.dev"
+              "email": "mt-prep_kitchen-u1-06091542@coffeeos.dev"
             }
           },
           "order": {
-            "order_id": "4353d947-1476-4035-932c-5bab02bf8e46",
+            "order_id": "5900af47-f969-4163-8201-9b4c99bab497",
             "total": 385.0,
             "discount": 0.0,
             "status": "accepted",
             "payment_url": null,
-            "reconnect_token": "eyJfcmFpbHMiOnsiZGF0YSI6eyJvaWQiOiI0MzUzZDk0Ny0xNDc2LTQwMzUtOTMyYy01YmFiMDJiZjhlNDYiLCJjaWQiOiI0NmE4Njk0My05M2YxLTRmMjQtYThhZi0wMDg5OGYwMGUwMGMiLCJ0aWQiOiJkNDcxNjVkYi04MWM5LTRlOWQtYmM1MC1lMzdmZTYxMGQ4NmMifSwiZXhwIjoiMjAyNi0wNi0xMFQxNTo0MDoxNC4zNTRaIn19--5cb4487a21f4ab78d01ae0d1c5357c18f3610158",
+            "reconnect_token": "eyJfcmFpbHMiOnsiZGF0YSI6eyJvaWQiOiI1OTAwYWY0Ny1mOTY5LTQxNjMtODIwMS05YjRjOTliYWI0OTciLCJjaWQiOiJlYTAyMDkwOC1kMDhmLTQ2NDEtYWUyOC1kOWE1Nzg1YjVlODciLCJ0aWQiOiJkNDcxNjVkYi04MWM5LTRlOWQtYmM1MC1lMzdmZTYxMGQ4NmMifSwiZXhwIjoiMjAyNi0wNi0xMFQxNTo0NDowOS44NjBaIn19--bd490508e40ed26f22e81012a2134667581cbbce",
             "_http": 200
           },
           "pass": true
         },
         {
-          "email": "mt-prep_kitchen-u2-06091539@coffeeos.dev",
+          "email": "mt-prep_kitchen-u2-06091542@coffeeos.dev",
           "send": {
             "http": 200,
             "body": {
               "ok": true,
-              "email": "mt-prep_kitchen-u2-06091539@coffeeos.dev"
+              "email": "mt-prep_kitchen-u2-06091542@coffeeos.dev"
             }
           },
           "status_before": {
@@ -244,16 +244,16 @@
             "http": 200,
             "body": {
               "verified": true,
-              "email": "mt-prep_kitchen-u2-06091539@coffeeos.dev"
+              "email": "mt-prep_kitchen-u2-06091542@coffeeos.dev"
             }
           },
           "order": {
-            "order_id": "1fb7edd5-3263-4061-a306-c6f4d125dfec",
+            "order_id": "2e5d6f8d-2a89-4c25-97fd-67979b1ba7fc",
             "total": 385.0,
             "discount": 0.0,
             "status": "accepted",
             "payment_url": null,
-            "reconnect_token": "eyJfcmFpbHMiOnsiZGF0YSI6eyJvaWQiOiIxZmI3ZWRkNS0zMjYzLTQwNjEtYTMwNi1jNmY0ZDEyNWRmZWMiLCJjaWQiOiI4YmVhODRlMy03MDIxLTQ3YmEtOTU4OS1kMGI1Y2RlNTViMmQiLCJ0aWQiOiJkNDcxNjVkYi04MWM5LTRlOWQtYmM1MC1lMzdmZTYxMGQ4NmMifSwiZXhwIjoiMjAyNi0wNi0xMFQxNTo0MDoyNi4xMzJaIn19--f512ba853776e5d6899089eff1a12749990e6b1a",
+            "reconnect_token": "eyJfcmFpbHMiOnsiZGF0YSI6eyJvaWQiOiIyZTVkNmY4ZC0yYTg5LTRjMjUtOTdmZC02Nzk3OWIxYmE3ZmMiLCJjaWQiOiIwMjI5YzhmMS0zOGYyLTQxMDUtYTI1Ni0xNGUxMmUxM2E2MWQiLCJ0aWQiOiJkNDcxNjVkYi04MWM5LTRlOWQtYmM1MC1lMzdmZTYxMGQ4NmMifSwiZXhwIjoiMjAyNi0wNi0xMFQxNTo0NDoyNS4xMDFaIn19--359d40aef9dcf3c9f62c0e232d3cb753e5418e96",
             "_http": 200
           },
           "pass": true
@@ -266,12 +266,12 @@
       "tenant_id": "1c064640-4301-4435-8ded-c92fb075e9cc",
       "users": [
         {
-          "email": "mt-prog10_alpha-u1-06091539@coffeeos.dev",
+          "email": "mt-prog10_alpha-u1-06091542@coffeeos.dev",
           "send": {
             "http": 200,
             "body": {
               "ok": true,
-              "email": "mt-prog10_alpha-u1-06091539@coffeeos.dev"
+              "email": "mt-prog10_alpha-u1-06091542@coffeeos.dev"
             }
           },
           "status_before": {
@@ -290,27 +290,27 @@
             "http": 200,
             "body": {
               "verified": true,
-              "email": "mt-prog10_alpha-u1-06091539@coffeeos.dev"
+              "email": "mt-prog10_alpha-u1-06091542@coffeeos.dev"
             }
           },
           "order": {
-            "order_id": "5247c403-0f65-483b-8965-5e8bcce91fdd",
+            "order_id": "c00fd6c6-19be-44ae-b102-41a1ec800c6d",
             "total": 385.0,
             "discount": 0.0,
             "status": "accepted",
             "payment_url": null,
-            "reconnect_token": "eyJfcmFpbHMiOnsiZGF0YSI6eyJvaWQiOiI1MjQ3YzQwMy0wZjY1LTQ4M2ItODk2NS01ZThiY2NlOTFmZGQiLCJjaWQiOiIxNTg1YTk3ZC02Zjk3LTQ0ODYtYTQ0Yy0zZmFjMTU5ZDk4YWIiLCJ0aWQiOiIxYzA2NDY0MC00MzAxLTQ0MzUtOGRlZC1jOTJmYjA3NWU5Y2MifSwiZXhwIjoiMjAyNi0wNi0xMFQxNTo0MDozOC40NTJaIn19--8b0607b79248baa326ab9a25bcb7b7ec26a2e7db",
+            "reconnect_token": "eyJfcmFpbHMiOnsiZGF0YSI6eyJvaWQiOiJjMDBmZDZjNi0xOWJlLTQ0YWUtYjEwMi00MWExZWM4MDBjNmQiLCJjaWQiOiI0Y2FhOGJiYi01Y2NhLTRjNGItYjFhMC1iNTAzNGMyYTRkNzYiLCJ0aWQiOiIxYzA2NDY0MC00MzAxLTQ0MzUtOGRlZC1jOTJmYjA3NWU5Y2MifSwiZXhwIjoiMjAyNi0wNi0xMFQxNTo0NDo0My4zNDlaIn19--e0c27131e7d741d3d4b82c7c0e8340f37c7b2ee1",
             "_http": 200
           },
           "pass": true
         },
         {
-          "email": "mt-prog10_alpha-u2-06091539@coffeeos.dev",
+          "email": "mt-prog10_alpha-u2-06091542@coffeeos.dev",
           "send": {
             "http": 200,
             "body": {
               "ok": true,
-              "email": "mt-prog10_alpha-u2-06091539@coffeeos.dev"
+              "email": "mt-prog10_alpha-u2-06091542@coffeeos.dev"
             }
           },
           "status_before": {
@@ -329,16 +329,16 @@
             "http": 200,
             "body": {
               "verified": true,
-              "email": "mt-prog10_alpha-u2-06091539@coffeeos.dev"
+              "email": "mt-prog10_alpha-u2-06091542@coffeeos.dev"
             }
           },
           "order": {
-            "order_id": "6fe8058d-594a-4b8f-8c3e-aab51244d02d",
+            "order_id": "e7b89501-f7a1-432a-a4bb-06a7f7df0e52",
             "total": 385.0,
             "discount": 0.0,
             "status": "accepted",
             "payment_url": null,
-            "reconnect_token": "eyJfcmFpbHMiOnsiZGF0YSI6eyJvaWQiOiI2ZmU4MDU4ZC01OTRhLTRiOGYtOGMzZS1hYWI1MTI0NGQwMmQiLCJjaWQiOiI4NTNhYWNjNS1kMTM5LTQ2MjctYTZkMy1mYzYzNTZjYmE4OTUiLCJ0aWQiOiIxYzA2NDY0MC00MzAxLTQ0MzUtOGRlZC1jOTJmYjA3NWU5Y2MifSwiZXhwIjoiMjAyNi0wNi0xMFQxNTo0MDo1MC45NDNaIn19--d9d966962c3eda327770ce28c9c6356a34eef099",
+            "reconnect_token": "eyJfcmFpbHMiOnsiZGF0YSI6eyJvaWQiOiJlN2I4OTUwMS1mN2ExLTQzMmEtYTRiYi0wNmE3ZjdkZjBlNTIiLCJjaWQiOiI1YjZjMDM3Ni1lNWYyLTRjMzYtOWMwMS0zMDgwZmVjNGI5YmIiLCJ0aWQiOiIxYzA2NDY0MC00MzAxLTQ0MzUtOGRlZC1jOTJmYjA3NWU5Y2MifSwiZXhwIjoiMjAyNi0wNi0xMFQxNTo0NDo1OS4xNzdaIn19--9d71d91c789bbce5b8d3bb224e9a6d1964b755b3",
             "_http": 200
           },
           "pass": true
