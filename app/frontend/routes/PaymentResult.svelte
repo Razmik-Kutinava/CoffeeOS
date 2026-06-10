@@ -9,7 +9,6 @@
   let orderId = $state("")
 
   let message = $state("")
-  let done = $state(null)
   let err = $state(null)
   let loading = $state(true)
 
@@ -39,9 +38,10 @@
       clearPaymentSession()
 
       if (status === "success") {
-        done = await pollAccepted()
-        message = "Заказ принят"
+        await pollAccepted()
         clearGuestOrderSession()
+        push(`/order/${orderId}`)
+        return
       } else if (status === "cancel") {
         message = "Оплата отменена. Корзина сохранена — можно попробовать снова."
       } else {
@@ -58,27 +58,6 @@
 
 {#if loading}
   <p class="py-8 text-center text-[#a0a0a0]">Проверяем оплату…</p>
-{:else if done}
-  <div class="py-8 text-center">
-    <p class="mb-2 text-xl font-bold text-green-400">{message}</p>
-    <p class="mb-1 text-[#fff]">Сумма: {Math.round(done.total)}₽</p>
-    <div class="mt-6 flex flex-col gap-3">
-      <button
-        type="button"
-        class="rounded-xl bg-[#ff8c42] px-6 py-3 font-semibold text-black"
-        onclick={() => push("/orders")}
-      >
-        История заказов
-      </button>
-      <button
-        type="button"
-        class="rounded-xl border border-[#3a3a3a] px-6 py-3 text-[#a0a0a0]"
-        onclick={() => push("/")}
-      >
-        В каталог
-      </button>
-    </div>
-  </div>
 {:else if err}
   <p class="mb-4 text-red-400">{err}</p>
   <button type="button" class="text-[#ff8c42]" onclick={() => push("/orders")}>История заказов</button>

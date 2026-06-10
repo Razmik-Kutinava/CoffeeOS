@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## v1.156 — 2026-06-09 (B1.1 этап 1: экран статуса заказа)
+
+- **Витрина:** `OrderStatus.svelte`, маршрут `#/order/:id`, `orderStatusProgress.js`.
+- **API:** `GET /shop/api/orders/:id` — `order_number`, `tenant`, `payment_settled`.
+- **Редиректы:** checkout (наличные), payment-result (успех), список заказов.
+- **Артефакт:** `b11_stage1_static_ui_2026-06-09.json`.
+
 ## v1.155 — 2026-06-09 (B1.1 этап 0: маппинг статусов)
 
 - **B1_1_order_status_progress.md:** план этапов 0–4; маппинг `pending_payment` → `accepted` → `preparing` → `ready`; UI из макетов; расхождение use case заказчика.

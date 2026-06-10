@@ -1,0 +1,27 @@
+{
+  "task": "B1_1_order_status_progress",
+  "stage": 1,
+  "date": "2026-06-09",
+  "status": "PASS",
+  "scope": "static UI + redirect after checkout/payment",
+  "route": "#/order/:id",
+  "api": "GET /shop/api/orders/:id",
+  "redirects": [
+    "Checkout cash → /order/:id",
+    "PaymentResult success → /order/:id",
+    "Orders list card tap → /order/:id"
+  ],
+  "files": [
+    "app/frontend/routes/OrderStatus.svelte",
+    "app/frontend/lib/orderStatusProgress.js",
+    "app/frontend/App.svelte",
+    "app/controllers/shop/api/orders_controller.rb",
+    "app/frontend/routes/Checkout.svelte",
+    "app/frontend/routes/PaymentResult.svelte",
+    "app/frontend/routes/Orders.svelte"
+  ],
+  "tests": [
+    "test/integration/shop/api/orders_controller_test.rb — order_json fields"
+  ],
+  "not_in_scope": ["WebSocket", "cancel button", "delivery block"]
+}

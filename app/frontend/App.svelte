@@ -37,6 +37,7 @@
     "/profile": lazyRoute(() => import("./routes/Profile.svelte")),
     "/favorites": lazyRoute(() => import("./routes/Favorites.svelte")),
     "/orders": lazyRoute(() => import("./routes/Orders.svelte")),
+    "/order/:id": lazyRoute(() => import("./routes/OrderStatus.svelte")),
     "/reviews": lazyRoute(() => import("./routes/Reviews.svelte")),
     "/deposits": lazyRoute(() => import("./routes/Deposits.svelte")),
     "/bonuses": lazyRoute(() => import("./routes/Bonuses.svelte")),

@@ -66,7 +66,7 @@
   {:else}
     <div class="orders-list">
       {#each orders as order (order.id)}
-        <div class="order-card">
+        <button type="button" class="order-card" onclick={() => push(`/order/${order.id}`)}>
           <div class="order-top">
             <span class="order-id">Заказ #{order.id}</span>
             <span class="order-status" style="color: {STATUS_COLORS[order.status] || '#a0a0a0'}">
@@ -80,7 +80,7 @@
           {#if order.items_count}
             <div class="order-items-count">{order.items_count} поз.</div>
           {/if}
-        </div>
+        </button>
       {/each}
     </div>
   {/if}
@@ -162,6 +162,15 @@
     background: var(--bg-secondary, #2a2a2a);
     border-radius: 12px;
     padding: 16px;
+    border: none;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    color: inherit;
+  }
+
+  .order-card:active {
+    opacity: 0.9;
   }
 
   .order-top {

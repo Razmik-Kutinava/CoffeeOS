@@ -168,9 +168,13 @@ module Shop
       def order_json(order)
         {
           id: order.id,
+          order_number: order.order_number,
           total: order.final_amount.to_f,
           status: order.status,
           discount_amount: order.discount_amount.to_f,
+          payment_settled: !order.pending_payment?,
+          created_at: order.created_at.iso8601,
+          tenant: tenant_pickup_json,
           items: order.order_items.map do |item|
             {
               product_name: item.product_name,
@@ -180,6 +184,14 @@ module Shop
               line_total: item.total_price.to_f
             }
           end
+        }
+      end
+
+      def tenant_pickup_json
+        {
+          name: @shop_tenant.name,
+          address: @shop_tenant.address,
+          city: @shop_tenant.city
         }
       end
     end

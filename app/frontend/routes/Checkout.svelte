@@ -28,7 +28,6 @@
   let otpNotice = $state("")
   let submitting = $state(false)
   let err = $state(null)
-  let done = $state(null)
   let savedProfile = $state(false)
   let editContact = $state(true)
 
@@ -158,8 +157,9 @@
         })
       })
 
+      saveGuestOrderSession(res.order_id, res.reconnect_token)
+
       if (res.payment_url || res.provider_payment_id) {
-        saveGuestOrderSession(res.order_id, res.reconnect_token)
 
         if (res.payment_iframe && (res.provider_payment_id || res.payment_url)) {
           let config = {}
@@ -189,7 +189,8 @@
         return
       }
 
-      done = res
+      redirecting = true
+      push(`/order/${res.order_id}`)
     } catch (e) {
       err = e.message
     } finally {
@@ -198,29 +199,7 @@
   }
 </script>
 
-{#if done}
-  <div class="py-8 text-center">
-    <p class="mb-2 text-xl font-bold text-green-400">Заказ #{done.order_id} принят</p>
-    <p class="mb-1 text-[#fff]">Сумма: {Math.round(done.total)}₽</p>
-    <p class="mb-6 text-sm text-[#a0a0a0]">Статус: {done.status}</p>
-    <div class="flex flex-col gap-3">
-      <button
-        type="button"
-        class="rounded-xl bg-[#ff8c42] px-6 py-3 font-semibold text-black"
-        onclick={() => push("/orders")}
-      >
-        История заказов
-      </button>
-      <button
-        type="button"
-        class="rounded-xl border border-[#3a3a3a] px-6 py-3 text-[#a0a0a0]"
-        onclick={() => push("/")}
-      >
-        На главную
-      </button>
-    </div>
-  </div>
-{:else}
+<div>
   <div class="mb-4 flex items-center gap-3">
     <button type="button" class="text-2xl text-[#ff8c42]" onclick={() => push("/cart")} aria-label="Назад в корзину">
       ‹
@@ -349,4 +328,4 @@
         ? "Оформить (наличные)"
         : "Оплатить →"}
   </button>
-{/if}
+</div>

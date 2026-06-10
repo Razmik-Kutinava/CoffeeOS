@@ -106,7 +106,14 @@ class Shop::Api::OrdersControllerTest < ActionDispatch::IntegrationTest
       sess.get "/shop/api/orders/#{order_id}",
         headers: shop_tenant_headers(@tenant.id)
       assert_equal 200, sess.response.status
-      assert_equal order_id, sess.response.parsed_body["id"]
+      body = sess.response.parsed_body
+      assert_equal order_id, body["id"]
+      assert body["order_number"].present?
+      assert_equal true, body["payment_settled"]
+      assert body["created_at"].present?
+      assert_equal @tenant.name, body.dig("tenant", "name")
+      assert body["items"].is_a?(Array)
+      assert body["items"].first["product_name"].present?
     end
   end
 

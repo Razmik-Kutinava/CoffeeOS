@@ -2,8 +2,8 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-06-09 (B1.1 этап 0 — маппинг статусов)  
-**Предыдущее:** B1.7 checkout внутр. PASS; B1.1 этап 0 done → ждём go на этап 1  
+**Дата:** 2026-06-09 (B1.1 этап 1 — статический UI)  
+**Предыдущее:** B1.1 этап 0; этап 1 done → ждём go на этап 2 (WebSocket)  
 **Веха 1:** официально не закрыта (§ I, H.3 — `[ ]`).  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
 **§2.3 оплата витрина:** **done** 2026-06-06 — [`CUSTOMER_BUSINESS_REQUIREMENTS.md`](milestones/veha_2/requirements/CUSTOMER_BUSINESS_REQUIREMENTS.md).
@@ -23,6 +23,13 @@
 | **Блок 2** — табло баристы | поток 3 тест-приёмка |
 
 **Ops на блок:** commit + SESSION_STATE всегда (без вопроса); `PRACTICES` (CR); `QA_ACCEPTANCE_RUN` + `artifacts/` (QA); `CHANGELOG` + `HANDOFF`; `CHECKLIST` `[x]` только по факту.
+
+### Сессия 2026-06-09 (B1.1 этап 1 — статический UI)
+
+- **Экран** `#/order/:id`: прогресс-бар 4 шага, состав, самовывоз, итого.
+- **API:** `order_json` + tenant pickup; редиректы checkout/payment-result.
+- **Тесты:** `orders_controller_test` — новые поля JSON.
+- **Следующее:** **go** на этап 2 (WebSocket).
 
 ### Сессия 2026-06-09 (B1.1 этап 0 — согласование)
 
