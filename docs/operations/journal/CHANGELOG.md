@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v1.153 — 2026-06-09 (правила: коммит всегда, отчёт Сделано/Не сделано)
+
+- **Усилено:** `coffeeos-commit-ops.mdc` — commit обязателен до отчёта; список запрещённых формулировок («коммитить?» и т.п.).
+- **Отчёт:** `coffeeos-task-workflow.mdc` — единый формат таблицы **Сделано | Не сделано**.
+- **Синхрон:** `.cursorrules`, `AGENTS.md`, `RULES_INDEX`, `HANDOFF`, `SESSION_STATE`, `demo-feedback/README`, `AGENTS/git.md`.
+
 ## v1.152 — 2026-06-08 (правила: гармонизация workflow + project + доки)
 
 - **Новое:** `docs/operations/RULES_INDEX.md`, `.cursor/rules/coffeeos-index.mdc`.

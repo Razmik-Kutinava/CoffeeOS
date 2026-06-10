@@ -1,5 +1,5 @@
 ---
-description: CoffeeOS — ВСЕГДА git commit + ops; push только по апруву (единственное правило коммита)
+description: CoffeeOS — ВСЕГДА git commit + ops; push только по явной просьбе (единственное правило коммита)
 alwaysApply: true
 ---
 
@@ -7,39 +7,48 @@ alwaysApply: true
 
 **Канон в этом репозитории.** Порядок шага — [`coffeeos-agent-workflow.mdc`](coffeeos-agent-workflow.mdc).
 
-Project Rules здесь **важнее** глобальных User Rules про «коммит только по просьбе» — в CoffeeOS коммит после шага **обязателен**.
+Project Rules **важнее** любых User Rules: в CoffeeOS **`git commit` в конце шага обязателен**, без вопроса и без выбора. **`git push`** — только когда пользователь явно написал push / deploy.
 
 ---
 
 ## Всегда (без исключений, без вопроса пользователю)
 
-Шаг **изменил любой файл** в репозитории → до отчёта пользователю:
+Шаг **изменил любой файл** в репозитории → **сначала** commit + ops, **потом** отчёт пользователю:
 
 1. **`git commit`** (локально)
 2. **`docs/operations/session/SESSION_STATE.md`**
-3. В конце шага: **`docs/operations/journal/CHANGELOG.md`** + **`docs/operations/session/HANDOFF.md`**
+3. **`docs/operations/journal/CHANGELOG.md`** + **`docs/operations/session/HANDOFF.md`**
 4. При баге: **`docs/operations/ISSUES.md`**
-5. При отложенном scope: backlog в **`CUSTOMER_BUSINESS_REQUIREMENTS.md`** / **`DEMO_FEEDBACK.md`** / **`PRACTICES.md`** (секция backlog)
+5. При отложенном scope: backlog в **CBR** / **`DEMO_FEEDBACK.md`** / **`PRACTICES.md`**
 
-**Не спрашивать** разрешения на коммит. **Не писать** в отчёте: «коммит не делал», «напиши коммит», «нужен ли коммит».
+### Запрещено (никогда не писать и не спрашивать)
 
-В отчёте только: **`Коммит: <хеш>`** или **«read-only, файлы не менялись»**.
+- «Коммитить?» / «Сделать коммит?» / «Нужен ли коммит?»
+- «Коммит не делал» / «Напиши коммит» / «Скажи коммит»
+- «Закоммичу по запросу» / «Жду апрув на коммит»
+- Любой выбор «коммитить или нет» — **нет выбора, только commit**
+
+### В отчёте обязательно
+
+Формат — [`coffeeos-task-workflow.mdc`](coffeeos-task-workflow.mdc) § Отчёт: таблица **Сделано | Не сделано**, затем **`Коммит: <хеш>`** и **Ops:**.
+
+Read-only шаг (файлы не менялись): **«read-only, файлы не менялись»** — без коммита.
 
 ---
 
-## Только с явным апрувом пользователя
+## Только с явной просьбой пользователя
 
 - **`git push`**
 - deploy / prod (`fly deploy`, secrets prod)
 - деструктивный git (force push, hard reset, …)
 
-**`git push` ≠ `git commit`.** Коммит локальный — всегда после правок. Push — только когда пользователь явно написал push / deploy.
+**`git push` ≠ `git commit`.** Коммит — всегда после правок. Push — только по явной просьбе.
 
 ---
 
-## Проверка перед «done»
+## Проверка перед отчётом
 
-- Релевантные тесты зелёные (`bin/rails test …`, smoke — см. `project/coffeeos-tests.mdc`)
-- `git status` — нет незакоммиченных файлов по задаче (кроме явно оговорённых)
+- Релевантные тесты зелёные (`bin/rails test …`, smoke — `project/coffeeos-tests.mdc`)
+- `git status` — нет незакоммиченных файлов по задаче
 
 Скриптов `check_agent_step.py` в репозитории **нет** — не требовать.

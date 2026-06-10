@@ -22,7 +22,7 @@ alwaysApply: true
 | 1 | Один логический шаг |
 | 2 | Тесты (`coffeeos-dev-gates.mdc`) |
 | 3 | **`git commit`** + **ops** (`coffeeos-commit-ops.mdc`) |
-| 4 | **Честный отчёт** (`coffeeos-task-workflow.mdc` § Отчёт) |
+| 4 | **Отчёт** — таблица Сделано \| Не сделано + коммит (`coffeeos-task-workflow.mdc`) |
 | 5 | **Стоп** — ждать **`go`** |
 
 Срочность не отменяет коммит, тесты и ops.

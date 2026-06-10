@@ -1,13 +1,13 @@
 # Индекс правил агента CoffeeOS
 
-**Обновлено:** 2026-06-08. При конфликте приоритет у **workflow** (см. `coffeeos-dev-gates.mdc`).
+**Обновлено:** 2026-06-09. При конфликте приоритет у **workflow** (см. `coffeeos-dev-gates.mdc`).
 
 ## Workflow — `.cursor/rules/workflow/`
 
 | Файл | Назначение |
 |------|------------|
-| `coffeeos-commit-ops.mdc` | **Канон:** всегда commit + ops; push только по апруву |
-| `coffeeos-task-workflow.mdc` | go, тесты, честный отчёт, старт сессии, CHECKLIST/CBR |
+| `coffeeos-commit-ops.mdc` | **Канон:** commit + ops всегда (без вопроса); push только по явной просьбе |
+| `coffeeos-task-workflow.mdc` | go, тесты, отчёт **Сделано \| Не сделано**, старт сессии, CHECKLIST/CBR |
 | `coffeeos-agent-workflow.mdc` | Краткий порядок шага |
 | `coffeeos-dev-gates.mdc` | DoD, регрессия по зонам, hot-path, миграции |
 | `coffeeos-repo-layout.mdc` | Куда класть файлы; `scripts/scratch/` |

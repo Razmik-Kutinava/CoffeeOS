@@ -2,8 +2,8 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-06-08 (обновлено: **гармонизация правил** — RULES_INDEX, AGENTS, symlinks, пути project/)  
-**Предыдущее:** W1.4 PASS; следующий **блок 2** табло  
+**Дата:** 2026-06-09 (правила: **коммит всегда без вопроса**, отчёт **Сделано | Не сделано**)  
+**Предыдущее:** checkout CBR — внутр. PASS, ждём апрув заказчика; **блок 2** табло  
 **Веха 1:** официально не закрыта (§ I, H.3 — `[ ]`).  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
 **§2.3 оплата витрина:** **done** 2026-06-06 — [`CUSTOMER_BUSINESS_REQUIREMENTS.md`](milestones/veha_2/requirements/CUSTOMER_BUSINESS_REQUIREMENTS.md).
@@ -22,7 +22,14 @@
 |--------|--------|
 | **Блок 2** — табло баристы | поток 3 тест-приёмка |
 
-**Ops на блок:** `SESSION_STATE` + коммит всегда; `PRACTICES` (CR); `QA_ACCEPTANCE_RUN` + `artifacts/` (QA); `CHANGELOG` если заметно; `CHECKLIST` `[x]` только по факту.
+**Ops на блок:** commit + SESSION_STATE всегда (без вопроса); `PRACTICES` (CR); `QA_ACCEPTANCE_RUN` + `artifacts/` (QA); `CHANGELOG` + `HANDOFF`; `CHECKLIST` `[x]` только по факту.
+
+### Сессия 2026-06-09 (commit-ops: отчёт Сделано / Не сделано)
+
+- **Усилено:** `coffeeos-commit-ops.mdc` — запрет любых вопросов про коммит; commit до отчёта.
+- **Отчёт:** `coffeeos-task-workflow.mdc` — таблица **Сделано | Не сделано** + хеш.
+- **Синхрон:** `.cursorrules`, `AGENTS.md`, `RULES_INDEX`, `HANDOFF`, `demo-feedback/README`, `AGENTS/git.md`, `veha_1/CODE_REVIEW`.
+- **Push:** только по явной просьбе (не путать с commit).
 
 ### Сессия 2026-06-08 (гармонизация правил)
 
@@ -41,18 +48,18 @@
 
 - **Новое:** `coffeeos-task-workflow.mdc` — старт сессии (таблица), go, тесты, честный отчёт, backlog → CBR/DEMO_FEEDBACK.
 - **Обновлено:** `coffeeos-agent-workflow.mdc` — краткий индекс, ссылка на task-workflow.
-- **Коммит:** локально; push по **`go`**.
+- **Коммит:** всегда; push по явной просьбе.
 
 ### Сессия 2026-06-08 (repo-layout — структура репозитория)
 
 - **Новое:** `coffeeos-repo-layout.mdc` — Rails-пути, docs/operations, тесты, переносы с go, README sync.
-- **Коммит:** локально; push по **`go`**.
+- **Коммит:** всегда; push по явной просьбе.
 
 ### Сессия 2026-06-08 (dev-gates — DoD и регрессия)
 
 - **Новое:** `coffeeos-dev-gates.mdc` — приоритет правил, DoD, зоны `bin/rails test`, hot-path, migration/API gate.
 - **Обновлено:** `coffeeos-agent-workflow.mdc` — ссылка на dev-gates.
-- **Коммит:** локально; push по **`go`**.
+- **Коммит:** всегда; push по явной просьбе.
 
 ### Сессия 2026-06-08 (commit-ops — всегда коммит + ops)
 

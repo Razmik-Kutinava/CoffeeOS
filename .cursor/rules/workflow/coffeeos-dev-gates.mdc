@@ -11,7 +11,7 @@ alwaysApply: true
 
 ## Приоритет правил (при конфликте)
 
-0. **`coffeeos-commit-ops.mdc`** — всегда `git commit` + ops; **`git push`** — только по явному апруву
+0. **`coffeeos-commit-ops.mdc`** — всегда `git commit` + ops (без вопроса); **`git push`** — только по явной просьбе
 1. **Безопасность** — секреты, auth, RLS, prod/Fly
 2. **`docs/operations/ISSUES.md`** — открытые 🔴 блокеры
 3. **`coffeeos-agent-workflow.mdc`** — go, тесты, honest report, стоп между шагами

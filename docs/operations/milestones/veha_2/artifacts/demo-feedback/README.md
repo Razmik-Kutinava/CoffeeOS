@@ -22,4 +22,4 @@
 
 **Checkout email OTP (Fly smoke):** `bin/shop_checkout_otp_fly_multitenant.rb` — OTP из БД только через **`fly machine exec` + `rails runner`**. `fly ssh console` для OTP **не работает** (remote command exited without exit status). Артефакты: `checkout_otp_fly_multitenant_*.json`, `checkout_acceptance_2026-06-09.json`.
 
-**Для агента:** после правок — статус `done` + коммит; deploy Fly — владелец; §I не ставить без апрува.
+**Для агента:** commit + ops всегда (`coffeeos-commit-ops.mdc`); отчёт — Сделано | Не сделано. Push/deploy — только по просьбе. §I / `[x]` CHECKLIST — после «ок» заказчика.

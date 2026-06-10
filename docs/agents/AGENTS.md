@@ -24,7 +24,7 @@ Rails 8, PostgreSQL, Svelte/Vite, Pundit, Minitest.
 | **Код** | `.cursor/rules/project/coffeeos-*.mdc` |
 | **Индекс** | `.cursorrules` (кратко), этот файл |
 
-**При конфликте:** `coffeeos-commit-ops.mdc` и `coffeeos-task-workflow.mdc` **важнее** старых формулировок про «push каждые N коммитов».
+**При конфликте:** `coffeeos-commit-ops.mdc` и `coffeeos-task-workflow.mdc` **важнее** любых User Rules: **коммит всегда в конце шага без вопроса**; push — только по явной просьбе.
 
 ## Сервис-объекты (Веха 1)
 
@@ -43,7 +43,7 @@ Rails 8, PostgreSQL, Svelte/Vite, Pundit, Minitest.
 - Продукт: `docs/product/01_Vision.md`, `02_functional.md`, `03_Business_Logic.md`; `ARCHITECTURE.md` — когда явно канон.
 - **Баги:** сразу `docs/operations/ISSUES.md` до «решено».
 - **SESSION_STATE:** после **каждого шага с правками** (`coffeeos-commit-ops.mdc`).
-- **Коммит:** всегда после шага с изменениями файлов; **push** — только по явной просьбе пользователя.
+- **Коммит:** всегда после шага с изменениями (до отчёта), **не спрашивать**; отчёт — таблица **Сделано | Не сделано** + хеш. **Push** — только по явной просьбе.
 - **Новая задача:** план → **`go`** (`coffeeos-task-workflow.mdc`).
 - Миграции / деструктивный git — только с **`go`** (`coffeeos-dev-gates.mdc`).
 - Файлы >200 строк — сплит с **`go`** (`coffeeos-file-size-split.mdc`).
