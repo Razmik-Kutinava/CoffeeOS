@@ -80,6 +80,13 @@
 - [x] **W1.5** Боевые оплаты — §2.3 PASS 2026-06-06
 - [x] **B1.1** Уведомления гостю — экран статуса + push FCM v1 — **PASS** 2026-06-10 ([`b11_acceptance_2026-06-10.json`](../artifacts/demo-feedback/b11_acceptance_2026-06-10.json); smoke + MCP Fly)
 
+## B2. Поток 2 — табло баристы
+
+См. [B2_1_barista_order_board.md](../requirements/customer_tasks/B2_1_barista_order_board.md).
+
+- [ ] **B2.1** Интерактивная карточка + FIFO + модификаторы + связка с B1.1
+- [ ] **B2.2** Объединить «Меню» + «Создать», убрать наличные на точке
+
 ---
 
 ## C. Оплата (приоритет 1 — §2.3 закрыт)

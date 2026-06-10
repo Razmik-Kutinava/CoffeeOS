@@ -2,8 +2,8 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-06-10 (B1.1 закрыта: FIREBASE_* на Fly · smoke + MCP PASS)  
-**Предыдущее:** B1.1 push FCM v1; этапы 0–5 · заказчик `[x]`  
+**Дата:** 2026-06-10 (B2.1 ТЗ табло бариста · B1.7 BR-fixes)  
+**Предыдущее:** B1.1 закрыта: FIREBASE_* на Fly · smoke + MCP PASS  
 **Веха 1:** официально не закрыта (§ I, H.3 — `[ ]`).  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
 **§2.3 оплата витрина:** **done** 2026-06-06 — [`CUSTOMER_BUSINESS_REQUIREMENTS.md`](milestones/veha_2/requirements/CUSTOMER_BUSINESS_REQUIREMENTS.md).
@@ -23,6 +23,17 @@
 | **Блок 2** — табло баристы | поток 3 тест-приёмка |
 
 **Ops на блок:** commit + SESSION_STATE всегда (без вопроса); `PRACTICES` (CR); `QA_ACCEPTANCE_RUN` + `artifacts/` (QA); `CHANGELOG` + `HANDOFF`; `CHECKLIST` `[x]` только по факту.
+
+### Сессия 2026-06-10 (B2.1 — ТЗ табло бариста)
+
+- **ТЗ:** `B2_1_barista_order_board.md` — MVP: web `/barista`, карточка, FIFO, модификаторы, B1.1 WS/push.
+- **Не MVP:** PWA, кухня, брак/переделка/возврат — фаза 2/3.
+- **B2.2:** заготовка «Меню + Создать», убрать наличные на точке.
+- **Артефакт:** `b21_stage0_mapping_2026-06-10.json`.
+
+### Сессия 2026-06-10 (B1.7 BR-fixes)
+
+- **BR-1/BR-2:** убраны промокод и наличные с checkout · Fly MCP PASS · коммит `ffd3cfc`.
 
 ### Сессия 2026-06-10 (B1.1 закрытие — Firebase на Fly)
 

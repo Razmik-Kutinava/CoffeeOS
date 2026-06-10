@@ -1,0 +1,35 @@
+{
+  "task": "B2_1_barista_order_board",
+  "stage": 0,
+  "date": "2026-06-10",
+  "status": "MAPPING",
+  "baseline_screenshot": "screenshots/b21_barista_board_2026-06-10/barista_board_before.png",
+  "stack": "Rails 8 + Hotwire/Turbo — /barista",
+  "mvp_scope": [
+    "interactive card UI",
+    "FIFO by created_at",
+    "modifiers display",
+    "guest WS/push via B1.1"
+  ],
+  "deferred_phase_2_3": [
+    "PWA",
+    "kitchen prep_kitchen board",
+    "defect rework return",
+    "defect_reasons",
+    "cancel sound",
+    "write-off draft on cancel"
+  ],
+  "existing_code": {
+    "dashboard": "app/views/barista/dashboard/index.html.erb",
+    "order_card": "app/views/barista/dashboard/_order_card.html.erb",
+    "status_update": "app/services/barista/order_status_update_service.rb",
+    "board_broadcast": "app/services/barista/order_board_broadcaster.rb",
+    "guest_broadcast": "app/services/shop/guest_order_broadcaster.rb",
+    "push": "app/services/shop/order_status_push_notifier.rb"
+  },
+  "columns": ["accepted", "preparing", "ready"],
+  "payment": {
+    "vitrina": "card only (B1.7 BR-2)",
+    "barista_create": "remove cash — B2.2"
+  }
+}

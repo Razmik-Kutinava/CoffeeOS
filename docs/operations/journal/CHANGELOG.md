@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## v1.164 — 2026-06-10 (B2.1 ТЗ: табло бариста + B2.2 заготовка)
+
+- **ТЗ:** `B2_1_barista_order_board.md` — MVP scope, этапы 0–5, маппинг кода.
+- **Заготовка:** `B2_2_barista_menu_create_merge.md`.
+- **Ops:** CBR, CHECKLIST §B2, SESSION_STATE, `b21_stage0_mapping_2026-06-10.json`.
+
+## v1.163 — 2026-06-10 (B1.7 BR-fixes: промокод и наличные с checkout)
+
+- **Fix:** `Checkout.svelte` — BR-1 промокод, BR-2 наличные.
+- **Артефакты:** `b17_br_fixes_2026-06-10.json`, MCP скрин.
+
 ## v1.162 — 2026-06-10 (B1.1 закрытие: Firebase secrets на Fly + приёмка)
 
 - **Fly:** `FIREBASE_*` secrets (FCM HTTP v1); smoke `push_register` PASS.
