@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## v1.166 — 2026-06-10 (B2.1 этап 1: карточка табло бариста)
+
+- **UI:** `_order_card` — цвет по статусу, кнопка 80px (ГОТОВИТСЯ/ГОТОВ/Выдать), модификаторы +/БЕЗ.
+- **Perf:** preload `order_status_logs`; `Barista::DashboardHelper`.
+- **Артефакты:** `b21_stage1_card_ui_2026-06-10.json`, скрины stage1_*.
+
+## v1.165 — 2026-06-10 (B2.2 ТЗ: меню + создать бариста)
+
+- **ТЗ:** `B2_2_barista_menu_create_merge.md` — полный текст заказчика, этапы 0–5, маппинг кода.
+- **Этап 0:** `b22_stage0_mapping_2026-06-10.json`; baseline Fly + 2 макета в `screenshots/b22_menu_create_merge_2026-06-10/`.
+- **Ops:** CBR, CHECKLIST §B2, SESSION_STATE, customer_tasks README.
+
 ## v1.164 — 2026-06-10 (B2.1 ТЗ: табло бариста + B2.2 заготовка)
 
 - **ТЗ:** `B2_1_barista_order_board.md` — MVP scope, этапы 0–5, маппинг кода.

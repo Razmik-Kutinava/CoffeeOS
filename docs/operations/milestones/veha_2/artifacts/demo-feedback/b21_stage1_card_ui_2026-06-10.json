@@ -1,0 +1,46 @@
+{
+  "task": "B2_1_barista_order_board",
+  "stage": 1,
+  "date": "2026-06-10",
+  "status": "PASS",
+  "environment": "localhost:3000 (dev) + seeded orders B21-A/P/R-001",
+  "files_changed": [
+    "app/views/barista/dashboard/_order_card.html.erb",
+    "app/views/barista/shared/_layout.html.erb",
+    "app/helpers/barista/dashboard_helper.rb",
+    "app/controllers/barista/dashboard_controller.rb",
+    "app/services/barista/order_board_broadcaster.rb",
+    "test/helpers/barista/dashboard_helper_test.rb",
+    "test/integration/barista_tablet_regression_test.rb"
+  ],
+  "checklist": {
+    "square_fixed_card": { "result": "PASS", "note": "min-height 280px, flex column" },
+    "status_colors": { "result": "PASS", "note": "card--accepted/preparing/ready" },
+    "button_80px_full_width": { "result": "PASS", "note": "card-btn-status min-height 80px" },
+    "button_labels": { "result": "PASS", "note": "ГОТОВИТСЯ / ГОТОВ / Выдать" },
+    "modifiers_added_caps": { "result": "PASS", "note": "+ СО ЛЬДОМ mod-added" },
+    "modifiers_removed_strike": { "result": "PASS", "note": "removed_modifiers → БЕЗ … mod-removed" },
+    "remove_small_buttons": { "result": "PASS", "note": "нет Принять → / ✕ / 🔔 / 📱" },
+    "n_plus_one_logs": { "result": "PASS", "note": "preload order_status_logs в dashboard + broadcaster" }
+  },
+  "not_in_stage_1": [
+    "Этап 2: убрать подсказку «Перетащите карточку…», проверка FIFO после move",
+    "Этап 3: тексты WS/push гостю, e2e витрина→гость",
+    "Этап 4: overlay отмены на карточке",
+    "Этап 5: fly smoke, b21_acceptance, barista_board_after.png",
+    "Цена/промокод на карточке — убраны (не в MVP карточки)",
+    "Клик по карточке → showOrderDetail — убран",
+    "removed_modifiers в проде: ключ в JSONB готов, витрина пока пишет только selected_modifiers",
+    "Fly deploy + скрины на coffeeos.fly.dev — только localhost"
+  ],
+  "screenshots": [
+    "screenshots/b21_barista_board_2026-06-10/stage1_card_accepted.png",
+    "screenshots/b21_barista_board_2026-06-10/stage1_card_preparing.png",
+    "screenshots/b21_barista_board_2026-06-10/stage1_card_ready.png",
+    "screenshots/b21_barista_board_2026-06-10/stage1_modifiers.png"
+  ],
+  "tests": {
+    "dashboard_helper_test": "3 runs PASS",
+    "barista_tablet_regression_test": "B2.1 stage1 test PASS"
+  }
+}

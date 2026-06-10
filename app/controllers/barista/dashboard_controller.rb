@@ -2,21 +2,23 @@ module Barista
   class DashboardController < BaseController
     def index
       # Получаем активные заказы для табло
+      board_includes = [:order_items, :payments, :customer, :order_status_logs]
+
       @new_orders = Order.for_barista_board(Current.tenant_id)
                         .where(status: 'accepted')
-                        .includes(:order_items, :payments, :customer)
+                        .includes(*board_includes)
                         .order(created_at: :asc)
                         .limit(50)
-      
+
       @preparing_orders = Order.for_barista_board(Current.tenant_id)
                                .where(status: 'preparing')
-                               .includes(:order_items, :payments, :customer)
+                               .includes(*board_includes)
                                .order(created_at: :asc)
                                .limit(50)
-      
+
       @ready_orders = Order.for_barista_board(Current.tenant_id)
                           .where(status: 'ready')
-                          .includes(:order_items, :payments, :customer)
+                          .includes(*board_includes)
                           .order(created_at: :asc)
                           .limit(50)
       

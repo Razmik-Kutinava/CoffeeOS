@@ -7,12 +7,15 @@ module Barista
       new(order: order, old_status: old_status).call
     end
 
+    CARD_INCLUDES = [:order_items, :order_status_logs, :customer].freeze
+
     def initialize(order:, old_status: nil)
       @order = order
       @old_status = old_status
     end
 
     def call
+      @order = Order.includes(*CARD_INCLUDES).find(@order.id)
       tenant_id = @order.tenant_id
       target_column = column_for(@order.status)
       source_column = column_for(resolve_old_status)

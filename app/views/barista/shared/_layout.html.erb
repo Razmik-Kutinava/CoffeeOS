@@ -482,138 +482,186 @@
     border-radius: 4px;
   }
 
-  /* ===== ORDER CARD ===== */
-  .card {
-    background: #141a1f;
-    border: 1px solid #1e262c;
-    border-radius: 10px;
-    padding: 16px;
-    transition: all 0.2s ease;
-    cursor: pointer;
+  /* ===== ORDER CARD (B2.1) ===== */
+  .order-card {
+    display: flex;
+    flex-direction: column;
+    min-height: 280px;
+    border-radius: 12px;
+    border: 2px solid #1e262c;
+    overflow: hidden;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
   }
 
-  .card:hover {
-    border-color: #2d4c66;
-    transform: translateY(-1px);
-    background: #1a2126;
+  .order-card.card--accepted {
+    background: linear-gradient(180deg, rgba(30, 100, 180, 0.35) 0%, #141a1f 45%);
+    border-color: #3d7ab8;
+  }
+  .order-card.card--preparing {
+    background: linear-gradient(180deg, rgba(230, 140, 40, 0.35) 0%, #141a1f 45%);
+    border-color: #c87830;
+  }
+  .order-card.card--ready {
+    background: linear-gradient(180deg, rgba(60, 180, 100, 0.35) 0%, #141a1f 45%);
+    border-color: #3a9b5e;
   }
 
-  .card-header {
+  .order-card .card-body {
+    flex: 1;
+    padding: 14px 14px 8px;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  .order-card .card-header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    margin-bottom: 12px;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 4px;
   }
 
   .order-number {
-    font-weight: 600;
-    color: #d4dcec;
-    font-size: 15px;
+    font-weight: 700;
+    color: #f0f4fa;
+    font-size: 16px;
+    letter-spacing: 0.02em;
   }
 
-  .order-badge {
-    background: #1e262c;
-    padding: 2px 8px;
-    border-radius: 20px;
+  .order-created {
     font-size: 11px;
     color: #9aa8b9;
+    white-space: nowrap;
   }
 
+  .card-timer-row {
+    margin-bottom: 10px;
+  }
+
+  .order-timer {
+    font-size: 12px;
+    color: #9aa8b9;
+  }
+  .timer-critical { color: #f07c7c; font-weight: 600; }
+  .timer-warning { color: #f0c97c; font-weight: 600; }
+
   .card-items {
-    margin-bottom: 12px;
+    flex: 1;
+    overflow-y: auto;
+    scrollbar-width: thin;
+  }
+
+  .item-block {
+    margin-bottom: 8px;
   }
 
   .item-row {
     display: flex;
-    gap: 8px;
+    gap: 6px;
     font-size: 13px;
-    color: #b6c4d4;
-    padding: 2px 0;
+    color: #e5e9f0;
+    line-height: 1.35;
   }
 
   .item-qty {
-    color: #7bc5f0;
-    min-width: 24px;
+    color: #fff;
+    font-weight: 700;
+    min-width: 22px;
   }
 
-  .item-mod {
-    color: #6e7b8c;
-    font-size: 11px;
+  .item-name {
+    font-weight: 500;
   }
 
-  .card-customer {
+  .item-mods {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 8px;
-    padding-bottom: 8px;
-    border-bottom: 1px dashed #1e262c;
-    font-size: 12px;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-top: 4px;
+    margin-left: 28px;
   }
-  
-  .customer-level {
-    color: #f0c97c;
+
+  .mod-added {
+    display: inline-block;
     font-size: 11px;
-  }
-  
-  .card-footer {
-    margin-top: 12px;
-    padding-top: 12px;
-    border-top: 1px dashed #1e262c;
-  }
-  
-  .card-price-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 4px;
-  }
-  
-  .loyalty-badge {
-    font-size: 11px;
-    color: #7cf0a0;
-    background: #1a3326;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    color: #1a1200;
+    background: #ffc857;
     padding: 2px 6px;
     border-radius: 4px;
   }
-  
-  .promo-discount {
+
+  .mod-removed {
+    display: inline-block;
     font-size: 11px;
-    color: #7cf0a0;
-    margin-top: 4px;
+    font-weight: 600;
+    color: #9aa8b9;
+    text-decoration: line-through;
+    text-transform: uppercase;
   }
-  
+
   .item-more {
     color: #6e7b8c;
+    font-size: 12px;
     font-style: italic;
-  }
-  
-  .ready-actions {
-    display: flex;
-    gap: 4px;
-  }
-  
-  .btn-icon {
-    padding: 8px;
-    min-width: 36px;
+    margin-top: 4px;
   }
 
-  .order-timer {
-    font-size: 13px;
-    color: #9aa8b9;
-  }
-  .timer-critical { color: #f07c7c; }
-  .timer-warning { color: #f0c97c; }
-
-  .order-price {
-    font-weight: 600;
-    color: #7cf0a0;
+  .order-card .card-actions {
+    padding: 0;
+    margin: 0;
+    flex-shrink: 0;
   }
 
-  .card-actions {
-    display: flex;
-    gap: 8px;
-    margin-top: 12px;
+  .order-card .card-actions form {
+    margin: 0;
+    width: 100%;
+  }
+
+  .card-btn-status {
+    display: block;
+    width: 100%;
+    min-height: 80px;
+    padding: 12px 16px;
+    border: none;
+    border-radius: 0;
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    font-family: inherit;
+    transition: filter 0.15s ease, transform 0.1s ease;
+  }
+
+  .card-btn-status:hover {
+    filter: brightness(1.12);
+  }
+  .card-btn-status:active {
+    transform: scale(0.99);
+  }
+
+  .card-btn-status--accepted {
+    background: linear-gradient(180deg, #4a9fd4 0%, #2d6a9f 100%);
+    color: #fff;
+  }
+  .card-btn-status--preparing {
+    background: linear-gradient(180deg, #f0a040 0%, #c87820 100%);
+    color: #1a1000;
+  }
+  .card-btn-status--ready {
+    background: linear-gradient(180deg, #5cd68a 0%, #2d9b5a 100%);
+    color: #0a1a10;
+  }
+
+  /* legacy .card / .btn — другие экраны бариста */
+  .card:not(.order-card) {
+    background: #141a1f;
+    border: 1px solid #1e262c;
+    border-radius: 10px;
+    padding: 16px;
   }
 
   .btn {
@@ -625,34 +673,7 @@
     background: transparent;
     color: #b6c4d4;
     cursor: pointer;
-    transition: all 0.15s;
     font-family: inherit;
-  }
-
-  .btn-primary {
-    background: #1e2a33;
-    border-color: #2d4c66;
-    color: #7bc5f0;
-    flex: 1;
-  }
-  .btn-primary:hover {
-    background: #2d4c66;
-    color: #e5e9f0;
-  }
-
-  .btn-danger {
-    border-color: #4c2d2d;
-    color: #f07c7c;
-  }
-  .btn-danger:hover {
-    background: #4c2d2d;
-    color: #ffa0a0;
-  }
-
-  .btn-success {
-    background: #1a3326;
-    border-color: #3a9b5e;
-    color: #7cf0a0;
   }
 
   /* ===== MODAL ===== */

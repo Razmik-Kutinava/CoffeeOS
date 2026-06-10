@@ -2,7 +2,8 @@
   "task": "B2_1_barista_order_board",
   "stage": 0,
   "date": "2026-06-10",
-  "status": "MAPPING",
+  "status": "BASELINE_CAPTURED",
+  "baseline_source": "MCP browser screenshot Fly 2026-06-10 (barista-a@demo.coffeeos.local)",
   "baseline_screenshot": "screenshots/b21_barista_board_2026-06-10/barista_board_before.png",
   "stack": "Rails 8 + Hotwire/Turbo — /barista",
   "mvp_scope": [

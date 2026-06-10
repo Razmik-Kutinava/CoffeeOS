@@ -351,18 +351,35 @@ class BaristaTabletRegressionTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "100"
   end
 
-  # 15. UI/UX детали (проверяем разметку)
-  test "order card is clickable and action buttons stop propagation and cancel confirm exists" do
+  # 15. B2.1 — карточка табло: цвет, кнопка 80px, модификаторы
+  test "order card renders B2.1 stage1 layout with status button and modifiers" do
     login_as!(@barista)
     order = Order.create!(tenant: @tenant_a, cash_shift: @cash_shift, order_number: "UX-1", source: "manual", status: "accepted", total_amount: 100, discount_amount: 0, final_amount: 100)
-    OrderItem.create!(order: order, product_id: @product.id, product_name: @product.name, quantity: 1, unit_price: 100, total_price: 100)
+    OrderItem.create!(
+      order: order,
+      product_id: @product.id,
+      product_name: @product.name,
+      quantity: 1,
+      unit_price: 100,
+      total_price: 100,
+      modifier_options: {
+        "selected_modifiers" => [{ "name" => "Со льдом" }],
+        "removed_modifiers" => [{ "name" => "Сахар" }]
+      }
+    )
 
     get "/barista"
     assert_response :success
-    assert_includes response.body, "onclick=\"showOrderDetail('"
+    assert_includes response.body, 'class="card order-card card--accepted"'
+    assert_includes response.body, "ГОТОВИТСЯ"
+    assert_includes response.body, "card-btn-status"
+    assert_includes response.body, "mod-added"
+    assert_includes response.body, "+ СО ЛЬДОМ"
+    assert_includes response.body, "mod-removed"
+    assert_includes response.body, "БЕЗ Сахар"
     assert_includes response.body, "event.stopPropagation();"
-    assert_includes response.body, "data-turbo-confirm"
-    assert_includes response.body, "Отменить заказ?"
+    refute_includes response.body, "Принять →"
+    refute_includes response.body, "Отменить заказ?"
   end
 end
 

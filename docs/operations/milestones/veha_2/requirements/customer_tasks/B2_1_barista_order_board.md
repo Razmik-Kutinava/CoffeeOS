@@ -119,8 +119,8 @@
 
 | Функция | MVP B2.1 | Позже |
 |---------|----------|-------|
-| Квадратная карточка + цвет + большая кнопка | `[ ]` | — |
-| Модификаторы жирным / БЕЗ | `[ ]` | — |
+| Квадратная карточка + цвет + большая кнопка | `[x]` | — |
+| Модификаторы жирным / БЕЗ | `[x]` | — |
 | FIFO по `created_at` в колонке | `[ ]` | переделка в начало очереди |
 | WS + push гостю при смене статуса | проверить B1.1 | PWA |
 | Отмена на карточке (overlay) | упрощённо `[ ]` | звук, списание |
@@ -151,8 +151,8 @@
 
 | Этап | Содержание | Статус |
 |------|------------|--------|
-| **0** | Маппинг, baseline-скрин, артефакт `b21_stage0_*.json` | `[ ]` |
-| **1** | Карточка: layout, цвета, кнопка 80px, модификаторы | `[ ]` |
+| **0** | Маппинг, baseline-скрин, артефакт `b21_stage0_*.json` | `[x]` |
+| **1** | Карточка: layout, цвета, кнопка 80px, модификаторы | `[x]` 2026-06-10 |
 | **2** | FIFO-сортировка в колонках, убрать ручной reorder | `[ ]` |
 | **3** | Связка статус → гость (WS/push), тексты уведомлений | `[ ]` |
 | **4** | Отмена: overlay на карточке (без звука/списания в MVP) | `[ ]` |
@@ -192,3 +192,113 @@
 
 - `artifacts/demo-feedback/b21_stage0_mapping_2026-06-10.json`
 - `artifacts/demo-feedback/screenshots/b21_barista_board_2026-06-10/`
+
+
+
+
+Этап 1 — карточка (главная работа)
+Файлы: _order_card.html.erb, стили в _layout.html.erb, preload в dashboard_controller.rb
+
+
+ Квадратная карточка фиксированного размера
+
+ Цвет по статусу: accepted синий · preparing оранжевый · ready зелёный
+
+ Кнопка ≥80px на всю ширину: ГОТОВИТСЯ / ГОТОВ / Выдать
+
+ Модификаторы: + КАПС жирным · БЕЗ … зачёркнуто
+
+ Убрать мелкие кнопки «Принять →» / «✕»
+
+ Починить N+1 по order_status_logs
+Скрины по окончанию:
+
+Скрин	Что показать
+stage1_card_accepted.png
+Колонка ACCEPTED — синяя карточка, большая кнопка
+stage1_card_preparing.png
+Колонка PREPARING — оранжевая
+stage1_card_ready.png
+Колонка READY — зелёная
+stage1_modifiers.png
+Крупный план: модификаторы + / БЕЗ
+Артефакт: b21_stage1_card_ui_YYYY-MM-DD.json — какие файлы тронуты, PASS/FAIL по чеклисту этапа 1.
+
+Этап 2 — FIFO
+Файлы: dashboard_controller.rb, index.html.erb
+
+
+ order(created_at: :asc) — проверить (уже есть)
+
+ Убрать «Перетащите карточку…»
+
+ После смены статуса карточка в конце следующей колонки
+Скрины по окончанию:
+
+Скрин	Что показать
+stage2_fifo_accepted.png
+2+ заказа в accepted — старый сверху
+stage2_after_status_move.png
+После «ГОТОВИТСЯ» — карточка в preparing в правильном порядке
+Артефакт: b21_stage2_fifo_YYYY-MM-DD.json — порядок created_at, нет drag-hint.
+
+Этап 3 — гость (WS + push)
+Файлы: OrderStatusUpdateService, GuestOrderBroadcaster, OrderStatusPushNotifier
+
+
+ accepted → preparing: «Ваш заказ начали готовить»
+
+ preparing → ready: «Заказ готов, забирайте!»
+
+ WS на экране гостя ≤5 с
+
+ Push (если FCM включён)
+Скрины по окончанию:
+
+Скрин	Что показать
+stage3_guest_preparing.png
+Экран гостя после «ГОТОВИТСЯ»
+stage3_guest_ready.png
+Экран гостя после «ГОТОВ»
+stage3_push_optional.png
+(опционально) push на телефоне
+Артефакт: b21_stage3_guest_notify_YYYY-MM-DD.json — тексты, тайминг WS, push да/нет.
+
+Этап 4 — отмена (упрощённо)
+Файлы: _order_card.html.erb, cancel flow
+
+
+ Overlay: тёмно-серый, «СТОП! ЗАКАЗ ОТМЕНЁН», кнопка подтверждения
+
+ Без звука и списания
+Скрины по окончанию:
+
+Скрин	Что показать
+stage4_cancel_overlay.png
+Карточка с overlay отмены
+stage4_cancel_confirmed.png
+После подтверждения
+Артефакт: b21_stage4_cancel_YYYY-MM-DD.json.
+
+Этап 5 — финальная приёмка
+
+ Тесты
+
+ Smoke bin/b21_barista_board_fly_smoke.rb
+
+ MCP Fly на coffeeos.fly.dev
+Скрины по окончанию:
+
+Скрин	Что показать
+barista_board_after.png
+Итоговое табло — все 3 колонки
+stage5_e2e_vitrina_to_board.png
+Заказ с витрины появился на табло
+Артефакты:
+
+Файл	Содержание
+b21_acceptance_YYYY-MM-DD.json
+Все критерии MVP §приёмка — PASS/FAIL
+b21_mcp_fly_YYYY-MM-DD.json
+MCP-прогон Fly
+
