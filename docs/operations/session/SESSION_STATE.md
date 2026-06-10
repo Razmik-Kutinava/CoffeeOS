@@ -2,8 +2,8 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-06-10 (B1.1 push FCM v1 + регистрация в витрине)  
-**Предыдущее:** B1.1 этапы 0–4; Fly deploy done · заказчик `[x]`  
+**Дата:** 2026-06-10 (B1.1 закрыта: FIREBASE_* на Fly · smoke + MCP PASS)  
+**Предыдущее:** B1.1 push FCM v1; этапы 0–5 · заказчик `[x]`  
 **Веха 1:** официально не закрыта (§ I, H.3 — `[ ]`).  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
 **§2.3 оплата витрина:** **done** 2026-06-06 — [`CUSTOMER_BUSINESS_REQUIREMENTS.md`](milestones/veha_2/requirements/CUSTOMER_BUSINESS_REQUIREMENTS.md).
@@ -24,13 +24,22 @@
 
 **Ops на блок:** commit + SESSION_STATE всегда (без вопроса); `PRACTICES` (CR); `QA_ACCEPTANCE_RUN` + `artifacts/` (QA); `CHANGELOG` + `HANDOFF`; `CHECKLIST` `[x]` только по факту.
 
+### Сессия 2026-06-10 (B1.1 закрытие — Firebase на Fly)
+
+- **Secrets:** все `FIREBASE_*` на `coffeeos` (`bin/fly_firebase_secrets.sh`).
+- **Локально:** `config/secrets/firebase-service-account.json` + `bin/minify_firebase_env.rb`.
+- **Smoke:** `b11_fly_smoke_2026-06-10.json` **PASS** — в т.ч. `push_register` HTTP 200.
+- **MCP Fly:** `b11_mcp_fly_2026-06-10.json` **PASS** — catalog, firebase SW, OrderStatus bundle.
+- **Тесты:** B1.1 suite 21 runs, 113 assertions PASS.
+- **Доки:** CBR + customer_tasks README — B1.1 заказчик `[x]`.
+- **Ручной хвост:** push в шторке на телефоне (1 прогон владельцем).
+
 ### Сессия 2026-06-10 (B1.1 push FCM v1 end-to-end)
 
 - **API:** `POST /shop/api/push/register` — сохранение `push_token`.
 - **FCM:** `FcmClient` HTTP v1 + `FirebaseConfig`; SW `/firebase-messaging-sw.js`.
 - **UI:** «Разрешить уведомления» на `OrderStatus.svelte`.
 - **Док:** `docs/operations/dev/FIREBASE_PUSH.md` — ENV для Fly.
-- **Нужно от владельца:** `FIREBASE_*` + `FIREBASE_SERVICE_ACCOUNT_JSON` + `FIREBASE_VAPID_KEY` на Fly.
 
 ### Сессия 2026-06-10 (B1.1 этап 5 — push + WS session)
 

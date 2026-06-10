@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## v1.162 — 2026-06-10 (B1.1 закрытие: Firebase secrets на Fly + приёмка)
+
+- **Fly:** `FIREBASE_*` secrets (FCM HTTP v1); smoke `push_register` PASS.
+- **Ops:** `config/secrets/` + gitignore; `bin/fly_firebase_secrets.sh`, `bin/minify_firebase_env.rb`, `bin/b11_mcp_fly_verify.sh`.
+- **MCP Fly:** `b11_mcp_fly_2026-06-10.json` PASS (catalog, SW, bundle, meta).
+- **Тесты:** B1.1 suite 21 runs PASS.
+- **Доки:** B1.1 заказчик `[x]` в CBR + customer_tasks; `b11_acceptance` обновлён.
+
 ## v1.161 — 2026-06-10 (B1.1 push: FCM v1 + регистрация в витрине)
 
 - **API:** `POST /shop/api/push/register`.

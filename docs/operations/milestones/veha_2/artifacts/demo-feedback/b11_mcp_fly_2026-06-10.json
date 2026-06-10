@@ -4,10 +4,29 @@
   "base": "https://coffeeos.fly.dev",
   "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
   "checks": [
-    { "id": "catalog", "pass": true, "note": "Каталог demo_a открывается" },
-    { "id": "order_status_bundle", "pass": true, "note": "OrderStatus-BP_rAIa-.js в vite bundle на Fly" },
-    { "id": "order_route_ui", "pass": true, "note": "После deploy develop — экран статуса в бандле (не пустой роут)" }
+    {
+      "id": "catalog",
+      "pass": true,
+      "http": 200
+    },
+    {
+      "id": "firebase_sw",
+      "pass": true,
+      "http": 200
+    },
+    {
+      "id": "order_status_bundle",
+      "pass": true
+    },
+    {
+      "id": "firebase_meta_tags",
+      "pass": true
+    },
+    {
+      "id": "push_register_smoke",
+      "pass": true,
+      "note": "see b11_fly_smoke same date"
+    }
   ],
-  "status": "PASS",
-  "screenshots": "screenshots/b11_mcp_fly_2026-06-10/"
+  "status": "PASS"
 }

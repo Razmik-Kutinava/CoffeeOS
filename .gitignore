@@ -39,6 +39,8 @@
 
 # Ignore key files for decrypting credentials and more.
 /config/*.key
+/config/secrets/*.json
+!/config/secrets/.gitkeep
 
 # Local Postgres test cluster (never commit)
 /.pg_test/

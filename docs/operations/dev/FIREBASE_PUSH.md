@@ -11,25 +11,26 @@
 | `FIREBASE_MESSAGING_SENDER_ID` | то же (`486831309396`) |
 | `FIREBASE_APP_ID` | то же |
 | `FIREBASE_VAPID_KEY` | Cloud Messaging → Web Push certificates → Key pair |
-| `FIREBASE_SERVICE_ACCOUNT_JSON` | Service accounts → Generate new private key (весь JSON одной строкой) |
+| `FIREBASE_SERVICE_ACCOUNT_JSON` | Service accounts → Generate new private key → файл `config/secrets/firebase-service-account.json` (не в git) |
 
-**Не коммитить** JSON и ключи в git.
+**Не коммитить** JSON и ключи в git. См. `config/secrets/README.md`.
+
+## Локально
+
+```bash
+# JSON в .env одной строкой
+ruby bin/minify_firebase_env.rb
+```
 
 ## Fly
 
 ```bash
-fly secrets set \
-  FIREBASE_API_KEY=... \
-  FIREBASE_AUTH_DOMAIN=coffeeos-fa701.firebaseapp.com \
-  FIREBASE_PROJECT_ID=coffeeos-fa701 \
-  FIREBASE_STORAGE_BUCKET=coffeeos-fa701.firebasestorage.app \
-  FIREBASE_MESSAGING_SENDER_ID=486831309396 \
-  FIREBASE_APP_ID=1:486831309396:web:... \
-  FIREBASE_VAPID_KEY=... \
-  -a coffeeos
+# из корня репо (WSL, fly в PATH)
+bash bin/fly_firebase_secrets.sh
+fly deploy -a coffeeos
 ```
 
-`FIREBASE_SERVICE_ACCOUNT_JSON` — длинная строка; удобнее положить в `.env` локально и на Fly через `fly secrets set FIREBASE_SERVICE_ACCOUNT_JSON='{"type":"service_account",...}'`.
+Скрипт читает `config/secrets/firebase-service-account.json` и выставляет все 8 `FIREBASE_*` secrets.
 
 ## Проверка
 

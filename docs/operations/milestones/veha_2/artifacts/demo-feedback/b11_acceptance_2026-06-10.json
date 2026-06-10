@@ -7,21 +7,28 @@
   "customer_acceptance_date": "2026-06-10",
   "tests": {
     "order_status_acceptance_cbr_test": { "runs": 8, "status": "PASS" },
-    "b11_suite": { "runs": 20, "assertions": 118, "status": "PASS" }
+    "b11_suite": { "runs": 21, "assertions": 113, "status": "PASS", "note": "acceptance + push_register + notifier + broadcaster + channel + barista status" }
   },
   "fly": {
-    "deploy": "develop pushed 2026-06-10 — OrderStatus в vite bundle на coffeeos.fly.dev",
+    "deploy": "coffeeos.fly.dev — develop + FIREBASE_* secrets 2026-06-10",
     "smoke_script": "bin/b11_order_status_fly_smoke.rb",
-    "smoke_status": "PARTIAL — otp_send OK; OTP из fly machine требует flyctl auth login",
-    "mcp": "каталог + bundle OrderStatus на Fly подтверждены"
+    "smoke_status": "PASS — otp, create_order, order_show, push_register, guest_cancel",
+    "mcp": "b11_mcp_fly_2026-06-10.json PASS — catalog, firebase_sw, OrderStatus bundle, firebase meta"
+  },
+  "firebase": {
+    "project_id": "coffeeos-fa701",
+    "secrets_on_fly": true,
+    "local_json_path": "config/secrets/firebase-service-account.json",
+    "push_register_http": 200
   },
   "features": {
     "push_on_status_change": true,
+    "fcm_http_v1": true,
     "ws_without_reconnect_token": true,
-    "chain": "витрина → оплата → табло бариста → экран статуса"
+    "chain": "витрина → оплата → табло бариста → экран статуса + push"
   },
   "not_done": [
-    "PNG макеты заказчика в screenshots/b11_order_status_2026-06-09/ — файлы не найдены на диске",
-    "Полный fly smoke с OTP без flyctl auth login на агенте"
+    "PNG макеты заказчика в screenshots/b11_order_status_2026-06-09/ — файлы не в репо",
+    "E2E push в шторке на физическом устройстве — ручной прогон владельцем (код + Fly secrets готовы)"
   ]
 }
