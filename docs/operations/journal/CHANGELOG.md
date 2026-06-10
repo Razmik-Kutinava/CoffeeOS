@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## v1.155 — 2026-06-09 (B1.1 этап 0: маппинг статусов)
+
+- **B1_1_order_status_progress.md:** план этапов 0–4; маппинг `pending_payment` → `accepted` → `preparing` → `ready`; UI из макетов; расхождение use case заказчика.
+- **Артефакт:** `b11_stage0_mapping_2026-06-09.json`; `screenshots/b11_order_status_2026-06-09/README.md`.
+
 ## v1.154 — 2026-06-09 (ТЗ заказчика → customer_tasks/)
 
 - **Новое:** `requirements/customer_tasks/` — отдельный `.md` на задачу (B1.7 checkout, B1.1 прогресс-бар).

@@ -1,0 +1,79 @@
+{
+  "task": "B1_1_order_status_progress",
+  "stage": 0,
+  "date": "2026-06-09",
+  "status": "PASS",
+  "source_tz": "requirements/customer_tasks/B1_1_order_status_progress.md",
+  "mockups": {
+    "dir": "screenshots/b11_order_status_2026-06-09",
+    "files": [
+      {
+        "file": "b11_order_status_screen_mockup.png",
+        "shows": "Экран статуса: заголовок Готовится, 8–12 мин, 4 шага, состав, самовывоз, итого оплачено"
+      },
+      {
+        "file": "b11_order_flow_mockup.png",
+        "shows": "Флоу каталог → корзина → оплата → экран статуса (8-й экран)"
+      }
+    ],
+    "note": "Макеты от заказчика в чате 2026-06-09; PNG положить в dir при наличии файлов"
+  },
+  "status_mapping": {
+    "description": "4 шага ТЗ ↔ Order.status (витрина mobile). Бариста/TV не меняем.",
+    "steps": [
+      {
+        "index": 1,
+        "label_tz": "Принят",
+        "current_when": ["pending_payment"],
+        "completed_when": ["accepted", "preparing", "ready", "issued", "closed"]
+      },
+      {
+        "index": 2,
+        "label_tz": "Оплачен",
+        "current_when": ["accepted"],
+        "completed_when": ["preparing", "ready", "issued", "closed"]
+      },
+      {
+        "index": 3,
+        "label_tz": "Готовится",
+        "current_when": ["preparing"],
+        "completed_when": ["ready", "issued", "closed"]
+      },
+      {
+        "index": 4,
+        "label_tz": "Готов",
+        "current_when": ["ready"],
+        "completed_when": ["issued", "closed"]
+      }
+    ],
+    "terminal": {
+      "cancelled": "Прогресс-бар скрыт, сообщение «Заказ отменён»",
+      "issued_closed": "Все 4 шага с галочкой; заголовок «Готов» или «Выдан» — на этапе 1 UI"
+    }
+  },
+  "tz_discrepancy": {
+    "customer_use_case_step_6": "«Кухня подтверждает → Оплачен»",
+    "coffeeos_reality": "Оплата (webhook T-Bank / наличные) → accepted; на табло баристы только accepted. Шаг «Оплачен» = accepted после оплаты, не подтверждение кухни.",
+    "decision": "Следуем реальному pipeline CoffeeOS; заказчику показать на прогоне"
+  },
+  "ui_from_mockups": {
+    "header": "Крупный текст = название текущего шага",
+    "eta": "Примерно 8–12 минут (статично, без % на шагах)",
+    "progress_bar": "4 кружка + линия заливки; #FF8C42 активный, #4CAF50 done, #757575 будущий",
+    "blocks": ["Состав заказа", "Самовывоз + адрес точки", "Итого оплачено + бейдж Оплачен"],
+    "not_in_scope_mock": ["Процент на шаге (50%)", "Кнопка «Оплатить 3₽» внизу макета"]
+  },
+  "implementation_stages": [
+    { "id": 0, "name": "Согласование маппинга + макеты", "status": "done" },
+    { "id": 1, "name": "Статический экран /order/:id + редирект", "status": "pending" },
+    { "id": 2, "name": "WebSocket / live update", "status": "pending" },
+    { "id": 3, "name": "Отмена + corner cases", "status": "pending" },
+    { "id": 4, "name": "Тесты + MCP Fly", "status": "pending" }
+  ],
+  "code_touchpoints_future": [
+    "app/frontend/routes/OrderStatus.svelte (new)",
+    "app/controllers/shop/api/orders_controller.rb",
+    "app/channels/ (guest order channel — этап 2)",
+    "Barista::OrderStatusUpdateService broadcast"
+  ]
+}

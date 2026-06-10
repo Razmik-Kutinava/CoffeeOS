@@ -1,8 +1,20 @@
 # HANDOFF — старт Вехи 2 (Веха 1 **не закрыта официально**)
 
-**Дата:** 2026-06-09 (ТЗ в `customer_tasks/`) · было 2026-06-08  
+**Дата:** 2026-06-09 (B1.1 этап 0) · было ТЗ в `customer_tasks/`  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev
+
+### B1.1 — экран статуса заказа
+
+| Этап | Статус |
+|------|--------|
+| 0 Маппинг + макеты | `[x]` — [`b11_stage0_mapping_2026-06-09.json`](../milestones/veha_2/artifacts/demo-feedback/b11_stage0_mapping_2026-06-09.json) |
+| 1 Статический UI `/order/:id` | `[ ]` — **ждём go** |
+| 2 WebSocket | `[ ]` |
+| 3 Отмена | `[ ]` |
+| 4 Тесты + MCP | `[ ]` |
+
+ТЗ: [`B1_1_order_status_progress.md`](../milestones/veha_2/requirements/customer_tasks/B1_1_order_status_progress.md)
 
 ### Сессия 2026-06-08 — правила Cursor (синхронизировано)
 
