@@ -126,7 +126,7 @@
     </div>
 
     {#if progress.cancelled}
-      <div class="message-block cancelled" class:kitchen-cancel={progress.cancelledByKitchen}>
+      <div class="message-block cancelled" class:staff-cancel={progress.cancelledByStaff}>
         <p>{progress.cancelMessage}</p>
       </div>
     {:else if progress.showProgress}
