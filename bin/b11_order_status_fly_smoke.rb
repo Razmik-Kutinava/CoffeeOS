@@ -146,7 +146,7 @@ begin
   order_id = order_body["order_id"]
   result[:checks] << {
     id: "create_order",
-    pass: order_http == 200 && order_id.present? && order_body["status"] == "accepted",
+    pass: order_http == 200 && !order_id.to_s.empty? && order_body["status"] == "accepted",
     http: order_http,
     order_id: order_id,
     order_create_ms: (order_ms * 1000).round
@@ -170,9 +170,24 @@ begin
 
   result[:checks] << {
     id: "order_show_fields",
-    pass: show_body["can_cancel"] == true && show_body["order_number"].present? && show_body.dig("tenant", "name").present?,
+    pass: show_body["can_cancel"] == true && !show_body["order_number"].to_s.empty? && !show_body.dig("tenant", "name").to_s.empty?,
     body_keys: show_body.keys
   }
+
+  push_reg_body, push_reg_http = curl_post_json(
+    "-X", "POST", "#{BASE}/shop/api/push/register",
+    "-b", jar, "-c", jar,
+    "-H", "X-Shop-Tenant: #{TENANT_ID}", "-H", "X-Shop-Api-Key: #{api_key}",
+    "-H", "Content-Type: application/json",
+    "--data-binary", { push_token: "b11-fly-smoke-fcm-token", push_enabled: true }.to_json
+  )
+  result[:checks] << {
+    id: "push_register",
+    pass: push_reg_http == 200 && push_reg_body["registered"] == true,
+    http: push_reg_http,
+    note: push_reg_http == 503 ? "set FIREBASE_* on Fly" : nil
+  }
+
   result[:checks] << {
     id: "guest_cancel",
     pass: cancel_http == 200 && cancel_body["status"] == "cancelled" && cancel_body["cancelled_by"] == "guest",

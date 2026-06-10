@@ -160,10 +160,13 @@ Rails.application.routes.draw do
   end
 
   # Витрина (Svelte SPA, данные точки — ProductTenantSetting, заказы — mobile + orders)
+  get "/firebase-messaging-sw.js", to: "shop/firebase_sw#show", defaults: { format: :js }
+
   namespace :shop, path: "shop" do
     root to: "pages#home"
     namespace :api do
       get "config", to: "config#show"
+      post "push/register", to: "push#register"
       get "debug", to: "debug#index" unless Rails.env.production?
       get "categories", to: "categories#index"
       get "products", to: "products#index"

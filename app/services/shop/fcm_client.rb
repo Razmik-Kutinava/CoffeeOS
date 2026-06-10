@@ -1,51 +1,114 @@
 # frozen_string_literal: true
 
+require "jwt"
+require "net/http"
+require "json"
+require "openssl"
+
 module Shop
-  # Отправка push через FCM HTTP v1 (legacy server key).
+  # Отправка push через Firebase Cloud Messaging HTTP v1.
   class FcmClient
     class Error < StandardError; end
 
-    API_URL = "https://fcm.googleapis.com/fcm/send"
+    OAUTH_URL = URI("https://oauth2.googleapis.com/token")
+    FCM_SCOPE = "https://www.googleapis.com/auth/firebase.messaging"
 
     def self.deliver!(token:, title:, body:, data: {})
       new.deliver!(token: token, title: title, body: body, data: data)
     end
 
     def deliver!(token:, title:, body:, data: {})
-      server_key = ENV["FCM_SERVER_KEY"].to_s.strip
-      if server_key.blank?
-        Rails.logger.info("[Shop::FcmClient] FCM_SERVER_KEY missing — push logged only: #{title}")
+      account = Shop::FirebaseConfig.service_account
+      project_id = Shop::FirebaseConfig.project_id
+
+      if account.blank? || project_id.blank?
+        Rails.logger.info("[Shop::FcmClient] FIREBASE_SERVICE_ACCOUNT_JSON missing — push logged only: #{title}")
         return { stub: true }
       end
 
-      payload = {
-        to: token,
-        notification: { title: title, body: body },
-        data: data.transform_keys(&:to_s).transform_values(&:to_s)
-      }
+      access_token = fetch_access_token!(account)
+      send_message!(
+        project_id: project_id,
+        access_token: access_token,
+        token: token,
+        title: title,
+        body: body,
+        data: data
+      )
+    end
 
-      response = HTTParty.post(
-        API_URL,
-        headers: {
-          "Authorization" => "key=#{server_key}",
-          "Content-Type" => "application/json"
+    private
+
+    def fetch_access_token!(account)
+      client_email = account["client_email"]
+      private_key_pem = account["private_key"]
+      raise Error, "service account missing client_email or private_key" if client_email.blank? || private_key_pem.blank?
+
+      private_key = OpenSSL::PKey::RSA.new(private_key_pem)
+      now = Time.now.to_i
+      assertion = JWT.encode(
+        {
+          iss: client_email,
+          sub: client_email,
+          aud: OAUTH_URL.to_s,
+          iat: now,
+          exp: now + 3600,
+          scope: FCM_SCOPE
         },
-        body: payload.to_json,
-        timeout: 10
+        private_key,
+        "RS256"
       )
 
-      unless response.success?
-        raise Error, "FCM #{response.code}: #{response.body}"
-      end
-
+      response = post_form(
+        OAUTH_URL,
+        "grant_type" => "urn:ietf:params:oauth:grant-type:jwt-bearer",
+        "assertion" => assertion
+      )
       parsed = JSON.parse(response.body)
-      if parsed["failure"].to_i.positive?
-        raise Error, "FCM failure: #{parsed['results']}"
+      token = parsed["access_token"]
+      raise Error, "OAuth token missing: #{parsed}" if token.blank?
+
+      token
+    end
+
+    def send_message!(project_id:, access_token:, token:, title:, body:, data:)
+      uri = URI("https://fcm.googleapis.com/v1/projects/#{project_id}/messages:send")
+      payload = {
+        message: {
+          token: token,
+          notification: { title: title, body: body },
+          data: data.transform_keys(&:to_s).transform_values(&:to_s)
+        }
+      }
+
+      response = post_json(uri, payload, "Authorization" => "Bearer #{access_token}")
+      unless response.is_a?(Net::HTTPSuccess)
+        raise Error, "FCM v1 #{response.code}: #{response.body}"
       end
 
-      parsed
+      JSON.parse(response.body)
     rescue JSON::ParserError => e
-      raise Error, "FCM invalid JSON: #{e.message}"
+      raise Error, "FCM v1 invalid JSON: #{e.message}"
+    end
+
+    def post_form(uri, form)
+      request = Net::HTTP::Post.new(uri)
+      request.set_form_data(form)
+      http_request(uri, request)
+    end
+
+    def post_json(uri, body, headers = {})
+      request = Net::HTTP::Post.new(uri)
+      request["Content-Type"] = "application/json"
+      headers.each { |k, v| request[k] = v }
+      request.body = body.to_json
+      http_request(uri, request)
+    end
+
+    def http_request(uri, request)
+      Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme == "https", open_timeout: 10, read_timeout: 15) do |http|
+        http.request(request)
+      end
     end
   end
 end

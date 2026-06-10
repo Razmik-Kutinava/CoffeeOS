@@ -4,7 +4,10 @@ module Shop
   module Api
     class ConfigController < Shop::Api::BaseController
       def show
-        render json: Shop::PaymentConfig.client_json
+        render json: Shop::PaymentConfig.client_json.merge(
+          firebase: Shop::FirebaseConfig.client_json,
+          push_configured: Shop::FirebaseConfig.client_configured?
+        )
       end
     end
   end

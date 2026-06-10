@@ -5,6 +5,7 @@
   import { reconnectGuestOrder, guestReconnectToken } from "../lib/shopGuestSession.js"
   import { subscribeGuestOrderStatus } from "../lib/shopOrderCable.js"
   import { orderProgressView } from "../lib/orderStatusProgress.js"
+  import { firebaseClientConfigured, registerShopPush } from "../lib/firebasePush.js"
   import { useTelegramBack } from "../lib/telegram.js"
   import PageSkeleton from "../components/PageSkeleton.svelte"
 
@@ -16,6 +17,9 @@
   let cableState = $state("idle")
   let cancelErr = $state(null)
   let cancelling = $state(false)
+  let pushAvailable = $state(false)
+  let pushState = $state("idle")
+  let pushErr = $state(null)
   let unsubscribeCable = null
 
   const progress = $derived(order ? orderProgressView(order) : null)
@@ -38,6 +42,26 @@
       can_cancel: patch.can_cancel ?? order.can_cancel,
       cancelled_by: patch.cancelled_by ?? order.cancelled_by,
       cancel_message: patch.cancel_message ?? order.cancel_message
+    }
+  }
+
+  async function enablePushNotifications() {
+    pushErr = null
+    pushState = "requesting"
+    try {
+      const result = await registerShopPush()
+      if (result.ok) {
+        pushState = "registered"
+      } else if (result.reason === "denied") {
+        pushState = "denied"
+        pushErr = "Уведомления отключены в браузере"
+      } else {
+        pushState = "error"
+        pushErr = "Не удалось включить уведомления"
+      }
+    } catch (e) {
+      pushState = "error"
+      pushErr = e.message || "Ошибка подписки на push"
     }
   }
 
@@ -77,6 +101,11 @@
           cableState = state
         }
       })
+
+      pushAvailable = firebaseClientConfigured()
+      if (pushAvailable && typeof Notification !== "undefined" && Notification.permission === "granted") {
+        enablePushNotifications()
+      }
     } catch (e) {
       err = e.message || "Заказ не найден"
     } finally {
@@ -124,6 +153,25 @@
         <p class="eta">Примерно 8–12 минут</p>
       {/if}
     </div>
+
+    {#if pushAvailable && !progress.cancelled && pushState !== "registered"}
+      <div class="push-banner">
+        <p class="push-banner-text">Получайте статус заказа в шторке уведомлений</p>
+        {#if pushErr}
+          <p class="push-banner-error">{pushErr}</p>
+        {/if}
+        <button
+          type="button"
+          class="push-banner-btn"
+          disabled={pushState === "requesting"}
+          onclick={enablePushNotifications}
+        >
+          {pushState === "requesting" ? "Подключаем…" : "Разрешить уведомления"}
+        </button>
+      </div>
+    {:else if pushState === "registered"}
+      <p class="push-ok" role="status">Уведомления включены</p>
+    {/if}
 
     {#if progress.cancelled}
       <div class="message-block cancelled" class:staff-cancel={progress.cancelledByStaff}>
@@ -431,6 +479,50 @@
     color: #ff8c42;
   }
 
+  .push-banner {
+    margin: 0 0 16px;
+    padding: 14px 16px;
+    border-radius: 12px;
+    border: 1px solid #3a3a3a;
+    background: #242424;
+  }
+
+  .push-banner-text {
+    margin: 0 0 10px;
+    font-size: 14px;
+    color: #e8e8e8;
+    line-height: 1.4;
+  }
+
+  .push-banner-error {
+    margin: 0 0 8px;
+    font-size: 13px;
+    color: #ff8c42;
+  }
+
+  .push-banner-btn {
+    width: 100%;
+    border: none;
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #1a1a1a;
+    background: #ff8c42;
+    cursor: pointer;
+  }
+
+  .push-banner-btn:disabled {
+    opacity: 0.7;
+    cursor: wait;
+  }
+
+  .push-ok {
+    margin: 0 0 12px;
+    font-size: 13px;
+    color: #4caf50;
+  }
+
   .pickup-card {
     display: flex;
     gap: 12px;
@@ -511,7 +603,7 @@
     margin: 0;
   }
 
-  .message-block.kitchen-cancel p {
+  .message-block.staff-cancel p {
     color: #ffb74d;
   }
 

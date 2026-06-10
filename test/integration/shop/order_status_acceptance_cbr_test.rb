@@ -120,8 +120,13 @@ class Shop::OrderStatusAcceptanceCbrTest < ActionDispatch::IntegrationTest
   test "b11_08 push notifier on status change" do
     assert_path_exists Rails.root.join("app/services/shop/order_status_push_notifier.rb")
     assert_path_exists Rails.root.join("app/jobs/shop/send_push_notification_job.rb")
+    assert_path_exists Rails.root.join("app/controllers/shop/api/push_controller.rb")
     broadcaster = File.read(Rails.root.join("app/services/shop/guest_order_broadcaster.rb"))
+    screen = vitrina_source("routes/OrderStatus.svelte")
+    push_js = File.read(Rails.root.join("app/frontend/lib/firebasePush.js"))
     assert_includes broadcaster, "OrderStatusPushNotifier"
+    assert_includes screen, "Разрешить уведомления"
+    assert_includes push_js, "/push/register"
   end
 
   private

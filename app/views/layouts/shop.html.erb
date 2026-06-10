@@ -11,6 +11,17 @@
     <% if ENV["SHOP_API_KEY"].present? %>
       <meta name="shop-api-key" content="<%= ENV["SHOP_API_KEY"] %>">
     <% end %>
+    <% if Shop::FirebaseConfig.client_configured? %>
+      <meta name="firebase-api-key" content="<%= Shop::FirebaseConfig.api_key %>">
+      <meta name="firebase-auth-domain" content="<%= Shop::FirebaseConfig.auth_domain %>">
+      <meta name="firebase-project-id" content="<%= Shop::FirebaseConfig.project_id %>">
+      <meta name="firebase-storage-bucket" content="<%= Shop::FirebaseConfig.storage_bucket %>">
+      <meta name="firebase-messaging-sender-id" content="<%= Shop::FirebaseConfig.messaging_sender_id %>">
+      <meta name="firebase-app-id" content="<%= Shop::FirebaseConfig.app_id %>">
+      <% if Shop::FirebaseConfig.vapid_key.present? %>
+        <meta name="firebase-vapid-key" content="<%= Shop::FirebaseConfig.vapid_key %>">
+      <% end %>
+    <% end %>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
     <%= vite_client_tag %>

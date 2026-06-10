@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## v1.161 — 2026-06-10 (B1.1 push: FCM v1 + регистрация в витрине)
+
+- **API:** `POST /shop/api/push/register`.
+- **FCM HTTP v1:** `FcmClient`, `FirebaseConfig`, service worker.
+- **Витрина:** `firebasePush.js`, кнопка на экране статуса.
+- **Док:** `docs/operations/dev/FIREBASE_PUSH.md`.
+- **Smoke:** `push_register` в `bin/b11_order_status_fly_smoke.rb`.
+
 ## v1.160 — 2026-06-10 (B1.1 этап 5: push + WS session + приёмка)
 
 - **Push:** `OrderStatusPushNotifier`, `PushNotification`, `SendPushNotificationJob`, `FcmClient`.
