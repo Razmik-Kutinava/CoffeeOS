@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## v1.160 — 2026-06-10 (B1.1 этап 5: push + WS session + приёмка)
+
+- **Push:** `OrderStatusPushNotifier`, `PushNotification`, `SendPushNotificationJob`, `FcmClient`.
+- **WS:** подписка по customer session без `reconnect_token` (история заказов).
+- **ТЗ:** убраны кухня/доставка; цепочка витрина → бариста; приёмка заказчика `[x]`.
+- **Тесты:** B1.1 suite 20 runs PASS; deploy develop на Fly.
+
 ## v1.159 — 2026-06-10 (B1.1 этап 4: приёмка + Fly/MCP)
 
 - **Тесты:** `order_status_acceptance_cbr_test` (7 критериев B1.1).

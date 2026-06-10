@@ -3,7 +3,7 @@
   "date": "2026-06-10",
   "base": "https://coffeeos.fly.dev",
   "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
-  "email": "b11-fly-06100841@coffeeos.dev",
+  "email": "b11-fly-06100917@coffeeos.dev",
   "checks": [
     {
       "id": "otp_send",

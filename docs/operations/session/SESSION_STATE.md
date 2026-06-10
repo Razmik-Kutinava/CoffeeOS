@@ -2,8 +2,8 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-06-10 (B1.1 этап 4 — приёмка)  
-**Предыдущее:** B1.1 этапы 0–3; внутр. PASS · Fly deploy pending · заказчик `[ ]`  
+**Дата:** 2026-06-10 (B1.1 этап 5 — push + WS session + приёмка)  
+**Предыдущее:** B1.1 этапы 0–4; Fly deploy done · заказчик `[x]`  
 **Веха 1:** официально не закрыта (§ I, H.3 — `[ ]`).  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
 **§2.3 оплата витрина:** **done** 2026-06-06 — [`CUSTOMER_BUSINESS_REQUIREMENTS.md`](milestones/veha_2/requirements/CUSTOMER_BUSINESS_REQUIREMENTS.md).
@@ -24,11 +24,21 @@
 
 **Ops на блок:** commit + SESSION_STATE всегда (без вопроса); `PRACTICES` (CR); `QA_ACCEPTANCE_RUN` + `artifacts/` (QA); `CHANGELOG` + `HANDOFF`; `CHECKLIST` `[x]` только по факту.
 
+### Сессия 2026-06-10 (B1.1 этап 5 — push + WS session)
+
+- **Push:** `OrderStatusPushNotifier` + `PushNotification` + `SendPushNotificationJob` + `FcmClient`.
+- **WS:** `GuestOrderChannel` — подписка по customer session без `reconnect_token`.
+- **ТЗ:** убраны кухня, доставка, «оплачен после кухни»; цепочка витрина → бариста.
+- **Тесты:** B1.1 suite 20 runs, 118 assertions PASS.
+- **Fly:** develop pushed; `OrderStatus` в bundle на coffeeos.fly.dev; smoke PARTIAL (нет flyctl auth).
+- **Приёмка заказчика:** `[x]` 2026-06-10.
+- **Не сделано:** PNG макеты в репо (файлы не на диске).
+
 ### Сессия 2026-06-10 (B1.1 этап 4 — приёмка)
 
 - **Тесты:** `order_status_acceptance_cbr_test` 7× PASS; B1.1 suite 18 runs.
-- **Fly/MCP:** UI `#/order/:id` на Fly пустой — **нужен deploy**; `b11_acceptance_2026-06-10.json`.
-- **Следующее:** deploy → прогон заказчика.
+- **Fly/MCP:** deploy develop → OrderStatus на Fly.
+- **Артефакт:** `b11_acceptance_2026-06-10.json`.
 
 ### Сессия 2026-06-09 (B1.1 этап 3 — отмена)
 
