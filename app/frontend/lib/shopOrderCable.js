@@ -11,7 +11,8 @@ function shopTenantId() {
  * @returns {() => void} unsubscribe
  */
 export function subscribeGuestOrderStatus({ orderId, reconnectToken, onStatus, onConnection }) {
-  if (!orderId || !reconnectToken || !shopTenantId()) {
+  const tenantId = shopTenantId()
+  if (!orderId || !tenantId) {
     onConnection?.("unavailable")
     return () => {}
   }
@@ -19,13 +20,17 @@ export function subscribeGuestOrderStatus({ orderId, reconnectToken, onStatus, o
   const consumer = createConsumer()
   let disconnected = false
 
+  const channelParams = {
+    channel: "Shop::GuestOrderChannel",
+    order_id: orderId,
+    tenant_id: tenantId
+  }
+  if (reconnectToken) {
+    channelParams.reconnect_token = reconnectToken
+  }
+
   const subscription = consumer.subscriptions.create(
-    {
-      channel: "Shop::GuestOrderChannel",
-      order_id: orderId,
-      tenant_id: shopTenantId(),
-      reconnect_token: reconnectToken
-    },
+    channelParams,
     {
       connected() {
         disconnected = false

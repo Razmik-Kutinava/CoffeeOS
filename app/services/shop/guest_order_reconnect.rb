@@ -22,12 +22,19 @@ module Shop
         order
       end
 
-      def order_for_cable!(order_id:, tenant_id:, token:)
+      def order_for_cable!(order_id:, tenant_id:, token: nil, customer_id: nil)
         order = Order.where(id: order_id, tenant_id: tenant_id, source: :mobile).first
         return nil unless order
-        return nil unless token_matches_order?(order, tenant_id: tenant_id, token: token)
 
-        order
+        if token.present?
+          return order if token_matches_order?(order, tenant_id: tenant_id, token: token)
+        end
+
+        if customer_id.present? && order.customer_id.present? && order.customer_id.to_s == customer_id.to_s
+          return order
+        end
+
+        nil
       end
 
       def token_matches_order?(order, tenant_id:, token:)

@@ -39,7 +39,7 @@ class Shop::Api::OrdersGuestCancelTest < ActionDispatch::IntegrationTest
     assert_includes JSON.parse(response.body)["error"], "уже готовится"
   end
 
-  test "GET order after barista cancel shows kitchen message" do
+  test "GET order after barista cancel shows staff message" do
     order_id = create_cash_order!
     order = Order.find(order_id)
 
@@ -58,7 +58,7 @@ class Shop::Api::OrdersGuestCancelTest < ActionDispatch::IntegrationTest
     assert_response :success
     body = JSON.parse(response.body)
     assert_equal "cancelled", body["status"]
-    assert_equal "kitchen", body["cancelled_by"]
+    assert_equal "staff", body["cancelled_by"]
     assert_includes body["cancel_message"], "исполнителем"
   end
 

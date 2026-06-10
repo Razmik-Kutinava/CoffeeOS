@@ -3,7 +3,7 @@
 module Shop
   # Метаданные отмены для API витрины и WebSocket (B1.1).
   module OrderCancellationPresenter
-    KITCHEN_MESSAGE = "Заказ отменён исполнителем. Средства будут возвращены в течение 3 рабочих дней"
+    STAFF_MESSAGE = "Заказ отменён исполнителем. Средства будут возвращены в течение 3 рабочих дней"
     GUEST_MESSAGE = "Заказ отменён"
 
     module_function
@@ -22,14 +22,14 @@ module Shop
     def cancelled_by(order)
       log = cancellation_log(order)
       case log&.source
-      when "barista" then "kitchen"
+      when "barista" then "staff"
       when "customer" then "guest"
       else "system"
       end
     end
 
     def cancel_message_for(cancelled_by)
-      cancelled_by == "kitchen" ? KITCHEN_MESSAGE : GUEST_MESSAGE
+      cancelled_by == "staff" ? STAFF_MESSAGE : GUEST_MESSAGE
     end
 
     def cancellation_log(order)

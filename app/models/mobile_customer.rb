@@ -1,6 +1,7 @@
 class MobileCustomer < ApplicationRecord
   has_many :mobile_sessions, dependent: :destroy
   has_many :orders, dependent: :nullify
+  has_many :push_notifications, foreign_key: :customer_id, dependent: :destroy
 
   validates :phone, uniqueness: true, allow_nil: true,
                     format: { with: /\A[+]?[0-9]{10,15}\z/ }, if: -> { phone.present? }

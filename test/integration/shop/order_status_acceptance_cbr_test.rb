@@ -63,8 +63,12 @@ class Shop::OrderStatusAcceptanceCbrTest < ActionDispatch::IntegrationTest
     assert_path_exists Rails.root.join("app/frontend/lib/shopOrderCable.js")
 
     screen = vitrina_source("routes/OrderStatus.svelte")
+    cable = File.read(Rails.root.join("app/frontend/lib/shopOrderCable.js"))
+    channel = File.read(Rails.root.join("app/channels/shop/guest_order_channel.rb"))
     assert_includes screen, "subscribeGuestOrderStatus"
     assert_includes screen, "Обновление статуса"
+    assert_includes cable, "reconnect_token"
+    assert_includes channel, "customer_id"
   end
 
   # Критерий: отмена гостем + запрет на preparing
@@ -84,8 +88,8 @@ class Shop::OrderStatusAcceptanceCbrTest < ActionDispatch::IntegrationTest
     assert_includes response.parsed_body["error"], "уже готовится"
   end
 
-  # Критерий: отмена кухней — отдельное сообщение в API
-  test "b11_06 kitchen cancel message in order json" do
+  # Критерий: отмена баристой — отдельное сообщение в API
+  test "b11_06 staff cancel message in order json" do
     order_id = create_cash_order!
     order = Order.find(order_id)
     barista = create_user!(tenant: @tenant, role_codes: ["barista"])
@@ -102,7 +106,7 @@ class Shop::OrderStatusAcceptanceCbrTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     body = response.parsed_body
-    assert_equal "kitchen", body["cancelled_by"]
+    assert_equal "staff", body["cancelled_by"]
     assert_includes body["cancel_message"], "исполнителем"
   end
 
@@ -110,6 +114,14 @@ class Shop::OrderStatusAcceptanceCbrTest < ActionDispatch::IntegrationTest
   test "b11_07 orders list links to order status screen" do
     orders = vitrina_source("routes/Orders.svelte")
     assert_includes orders, "push(`/order/${order.id}`)"
+  end
+
+  # Критерий: push при смене статуса
+  test "b11_08 push notifier on status change" do
+    assert_path_exists Rails.root.join("app/services/shop/order_status_push_notifier.rb")
+    assert_path_exists Rails.root.join("app/jobs/shop/send_push_notification_job.rb")
+    broadcaster = File.read(Rails.root.join("app/services/shop/guest_order_broadcaster.rb"))
+    assert_includes broadcaster, "OrderStatusPushNotifier"
   end
 
   private

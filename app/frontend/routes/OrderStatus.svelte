@@ -69,19 +69,14 @@
       await reconnectGuestOrder(api)
       order = await api(`/orders/${orderId}`)
 
-      const token = guestReconnectToken()
-      if (token) {
-        unsubscribeCable = subscribeGuestOrderStatus({
-          orderId,
-          reconnectToken: token,
-          onStatus: applyStatusPatch,
-          onConnection: (state) => {
-            cableState = state
-          }
-        })
-      } else {
-        cableState = "unavailable"
-      }
+      unsubscribeCable = subscribeGuestOrderStatus({
+        orderId,
+        reconnectToken: guestReconnectToken(),
+        onStatus: applyStatusPatch,
+        onConnection: (state) => {
+          cableState = state
+        }
+      })
     } catch (e) {
       err = e.message || "Заказ не найден"
     } finally {

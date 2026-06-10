@@ -24,10 +24,22 @@ class Shop::GuestOrderChannelTest < ActionCable::Channel::TestCase
     @token = Shop::GuestOrderReconnect.token_for(@order)
   end
 
-  test "rejects subscription without reconnect token" do
+  test "rejects subscription without reconnect token or customer session" do
+    stub_connection(session: {})
     subscribe order_id: @order.id, tenant_id: @tenant.id
 
     assert subscription.rejected?
+  end
+
+  test "subscribes with customer session without reconnect token" do
+    shop_session = {}
+    Shop::CustomerSession.set_customer_id!(shop_session, @tenant.id, @customer.id)
+    stub_connection(session: shop_session)
+
+    subscribe order_id: @order.id, tenant_id: @tenant.id
+
+    assert subscription.confirmed?
+    assert_has_stream_for @order
   end
 
   test "subscribes with valid reconnect token" do

@@ -21,16 +21,16 @@ export function orderProgressView(orderOrStatus) {
   const status = order?.status ?? orderOrStatus
 
   if (status === "cancelled") {
-    const kitchen = order?.cancelled_by === "kitchen"
+    const staff = order?.cancelled_by === "staff"
     const cancelMessage =
       order?.cancel_message ||
-      (kitchen
+      (staff
         ? "Заказ отменён исполнителем. Средства будут возвращены в течение 3 рабочих дней"
         : "Заказ отменён")
 
     return {
       cancelled: true,
-      cancelledByKitchen: kitchen,
+      cancelledByStaff: staff,
       header: "Заказ отменён",
       cancelMessage,
       showProgress: false,

@@ -16,6 +16,7 @@ module Shop
       payload.merge!(Shop::OrderCancellationPresenter.meta_for(order)) if order.cancelled?
 
       Shop::GuestOrderChannel.broadcast_to(order, payload)
+      Shop::OrderStatusPushNotifier.call(order: order, old_status: old_status)
     rescue StandardError => e
       Rails.logger.warn("[Shop::GuestOrderBroadcaster] cable unavailable: #{e.class} #{e.message}")
     end
