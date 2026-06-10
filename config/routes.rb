@@ -180,6 +180,7 @@ Rails.application.routes.draw do
       get "orders/history", to: "orders#history"
       post "session/reconnect", to: "session#reconnect"
       post "orders/:id/abandon", to: "orders#abandon"
+      post "orders/:id/cancel", to: "orders#cancel"
       post "orders/:id/finalize", to: "orders#finalize"
       get "orders/:id", to: "orders#show"
       post "promo_codes/apply", to: "promo_codes#apply"

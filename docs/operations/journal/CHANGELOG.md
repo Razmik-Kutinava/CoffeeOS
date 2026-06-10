@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## v1.158 — 2026-06-09 (B1.1 этап 3: отмена заказа гостем)
+
+- **API:** `POST /shop/api/orders/:id/cancel`; `GuestOrderCancellationService`.
+- **Модель:** `Order#guest_can_cancel?` — до `preparing`/`ready`.
+- **UI:** кнопка отмены, сообщения guest/kitchen; presenter в API/WS.
+- **Тесты:** guest cancel service + integration.
+
 ## v1.157 — 2026-06-09 (B1.1 этап 2: WebSocket статуса заказа)
 
 - **Cable:** `Shop::GuestOrderChannel`, `GuestOrderBroadcaster`; гостевое подключение без user_id.

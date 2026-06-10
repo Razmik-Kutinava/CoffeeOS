@@ -52,6 +52,11 @@ class Order < ApplicationRecord
     !status.in?(%w[pending_payment issued closed cancelled])
   end
 
+  # B1.1: гость может отменить до начала приготовления (ТЗ: не preparing / не ready).
+  def guest_can_cancel?
+    status.in?(%w[pending_payment accepted])
+  end
+
   VALID_TRANSITIONS = {
     'accepted'  => %w[preparing cancelled],
     'preparing' => %w[ready cancelled],

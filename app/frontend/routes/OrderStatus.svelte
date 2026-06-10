@@ -14,9 +14,12 @@
   let loading = $state(true)
   let err = $state(null)
   let cableState = $state("idle")
+  let cancelErr = $state(null)
+  let cancelling = $state(false)
   let unsubscribeCable = null
 
-  const progress = $derived(order ? orderProgressView(order.status) : null)
+  const progress = $derived(order ? orderProgressView(order) : null)
+  const showCancelButton = $derived(Boolean(order?.can_cancel))
 
   const pickupLine = $derived(
     order?.tenant
@@ -31,7 +34,26 @@
     order = {
       ...order,
       status: patch.status,
-      payment_settled: patch.payment_settled ?? order.payment_settled
+      payment_settled: patch.payment_settled ?? order.payment_settled,
+      can_cancel: patch.can_cancel ?? order.can_cancel,
+      cancelled_by: patch.cancelled_by ?? order.cancelled_by,
+      cancel_message: patch.cancel_message ?? order.cancel_message
+    }
+  }
+
+  async function cancelOrder() {
+    if (!order?.can_cancel || cancelling) return
+    if (!window.confirm("Отменить заказ?")) return
+
+    cancelErr = null
+    cancelling = true
+    try {
+      const updated = await api(`/orders/${order.id}/cancel`, { method: "POST" })
+      order = updated
+    } catch (e) {
+      cancelErr = e.message
+    } finally {
+      cancelling = false
     }
   }
 
@@ -109,8 +131,8 @@
     </div>
 
     {#if progress.cancelled}
-      <div class="message-block cancelled">
-        <p>Заказ отменён</p>
+      <div class="message-block cancelled" class:kitchen-cancel={progress.cancelledByKitchen}>
+        <p>{progress.cancelMessage}</p>
       </div>
     {:else if progress.showProgress}
       <div class="progress-wrap" aria-label="Прогресс заказа">
@@ -178,10 +200,24 @@
       </div>
       {#if progress.paymentSettled}
         <span class="paid-badge">Оплачен</span>
-      {:else}
+      {:else if !progress.cancelled}
         <span class="pending-badge">Ожидает оплаты</span>
       {/if}
     </section>
+
+    {#if showCancelButton}
+      {#if cancelErr}
+        <p class="cancel-error" role="alert">{cancelErr}</p>
+      {/if}
+      <button
+        type="button"
+        class="cancel-btn"
+        disabled={cancelling}
+        onclick={cancelOrder}
+      >
+        {cancelling ? "Отменяем…" : "Отменить заказ"}
+      </button>
+    {/if}
   {/if}
 </div>
 
@@ -474,8 +510,39 @@
   }
 
   .message-block.cancelled p {
-    font-size: 18px;
+    font-size: 16px;
+    line-height: 1.45;
     color: #f44336;
+    margin: 0;
+  }
+
+  .message-block.kitchen-cancel p {
+    color: #ffb74d;
+  }
+
+  .cancel-btn {
+    width: 100%;
+    margin-top: 8px;
+    padding: 14px;
+    border-radius: 12px;
+    border: 1px solid #f44336;
+    background: transparent;
+    color: #f44336;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .cancel-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  .cancel-error {
+    margin: 12px 0 0;
+    font-size: 13px;
+    color: #f44336;
+    text-align: center;
   }
 
   .error-text {

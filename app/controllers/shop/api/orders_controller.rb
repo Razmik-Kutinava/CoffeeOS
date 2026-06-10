@@ -55,6 +55,26 @@ module Shop
         render json: { error: "Order not found", status: 404 }, status: :not_found
       end
 
+      def cancel
+        order = Order.where(tenant_id: @shop_tenant.id, source: :mobile).find(params[:id])
+        unless order_visible_to_session_customer?(order)
+          return render json: { error: "Order not found", status: 404 }, status: :not_found
+        end
+
+        order = Shop::GuestOrderCancellationService.new(
+          order: order,
+          session: session,
+          tenant_id: @shop_tenant.id,
+          request_id: request.request_id
+        ).call!
+
+        render json: order_json(order)
+      rescue Shop::GuestOrderCancellationService::Error => e
+        render json: { error: e.message, status: 422 }, status: :unprocessable_entity
+      rescue ActiveRecord::RecordNotFound
+        render json: { error: "Order not found", status: 404 }, status: :not_found
+      end
+
       def finalize
         order = Order.where(tenant_id: @shop_tenant.id, source: :mobile).find(params[:id])
         unless order_visible_to_session_customer?(order)
@@ -175,6 +195,7 @@ module Shop
           payment_settled: !order.pending_payment?,
           created_at: order.created_at.iso8601,
           tenant: tenant_pickup_json,
+          **Shop::OrderCancellationPresenter.meta_for(order),
           items: order.order_items.map do |item|
             {
               product_name: item.product_name,

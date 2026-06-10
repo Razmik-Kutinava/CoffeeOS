@@ -1,0 +1,33 @@
+{
+  "task": "B1_1_order_status_progress",
+  "stage": 3,
+  "date": "2026-06-09",
+  "status": "PASS",
+  "api": "POST /shop/api/orders/:id/cancel",
+  "guest_cancel_allowed": ["pending_payment", "accepted"],
+  "guest_cancel_denied": ["preparing", "ready", "issued", "closed", "cancelled"],
+  "ui_messages": {
+    "guest": "Заказ отменён",
+    "kitchen": "Заказ отменён исполнителем. Средства будут возвращены в течение 3 рабочих дней",
+    "denied": "Невозможно отменить заказ, он уже готовится"
+  },
+  "files": [
+    "app/models/order.rb",
+    "app/services/shop/guest_order_cancellation_service.rb",
+    "app/services/shop/order_cancellation_presenter.rb",
+    "app/controllers/shop/api/orders_controller.rb",
+    "app/frontend/routes/OrderStatus.svelte",
+    "app/frontend/lib/orderStatusProgress.js"
+  ],
+  "tests": [
+    "test/services/shop/guest_order_cancellation_service_test.rb",
+    "test/integration/shop/api/orders_guest_cancel_test.rb"
+  ],
+  "not_done_in_stage": [
+    "actual card refund processing",
+    "push notifications",
+    "WS without reconnect_token",
+    "MCP Fly cancel flow (stage 4)",
+    "customer acceptance (stage 4)"
+  ]
+}

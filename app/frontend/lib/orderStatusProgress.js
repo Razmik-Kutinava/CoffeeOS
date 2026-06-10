@@ -16,15 +16,28 @@ const CURRENT_INDEX = {
   closed: 4
 }
 
-export function orderProgressView(status) {
+export function orderProgressView(orderOrStatus) {
+  const order = typeof orderOrStatus === "object" && orderOrStatus !== null ? orderOrStatus : null
+  const status = order?.status ?? orderOrStatus
+
   if (status === "cancelled") {
+    const kitchen = order?.cancelled_by === "kitchen"
+    const cancelMessage =
+      order?.cancel_message ||
+      (kitchen
+        ? "Заказ отменён исполнителем. Средства будут возвращены в течение 3 рабочих дней"
+        : "Заказ отменён")
+
     return {
       cancelled: true,
+      cancelledByKitchen: kitchen,
       header: "Заказ отменён",
+      cancelMessage,
       showProgress: false,
       showEta: false,
       steps: [],
-      fillPercent: 0
+      fillPercent: 0,
+      paymentSettled: order?.payment_settled ?? false
     }
   }
 

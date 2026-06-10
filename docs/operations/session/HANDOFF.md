@@ -11,8 +11,8 @@
 | 0 Маппинг + макеты | `[x]` — [`b11_stage0_mapping_2026-06-09.json`](../milestones/veha_2/artifacts/demo-feedback/b11_stage0_mapping_2026-06-09.json) |
 | 1 Статический UI `/order/:id` | `[x]` — [`b11_stage1_static_ui_2026-06-09.json`](../milestones/veha_2/artifacts/demo-feedback/b11_stage1_static_ui_2026-06-09.json) |
 | 2 WebSocket | `[x]` — [`b11_stage2_websocket_2026-06-09.json`](../milestones/veha_2/artifacts/demo-feedback/b11_stage2_websocket_2026-06-09.json) |
-| 3 Отмена | `[ ]` — **ждём go** |
-| 4 Тесты + MCP | `[ ]` |
+| 3 Отмена | `[x]` — [`b11_stage3_cancel_2026-06-09.json`](../milestones/veha_2/artifacts/demo-feedback/b11_stage3_cancel_2026-06-09.json) |
+| 4 Тесты + MCP | `[ ]` — **ждём go** |
 
 ТЗ: [`B1_1_order_status_progress.md`](../milestones/veha_2/requirements/customer_tasks/B1_1_order_status_progress.md)
 

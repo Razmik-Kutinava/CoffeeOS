@@ -44,7 +44,10 @@ export function subscribeGuestOrderStatus({ orderId, reconnectToken, onStatus, o
         if (data?.type === "status_changed" && data.status) {
           onStatus?.({
             status: data.status,
-            payment_settled: data.payment_settled
+            payment_settled: data.payment_settled,
+            can_cancel: data.can_cancel,
+            cancelled_by: data.cancelled_by,
+            cancel_message: data.cancel_message
           })
         }
       }

@@ -7,6 +7,7 @@ module Shop
     ACTION = "shop_payment_failed"
 
     REASONS = {
+      guest_order_cancel: "Гость отменил заказ на экране статуса",
       guest_abandon: "Гость отменил оплату на витрине",
       bank_fail_return: "Возврат с банка без оплаты",
       bank_rejected: "Банк отклонил платёж",
