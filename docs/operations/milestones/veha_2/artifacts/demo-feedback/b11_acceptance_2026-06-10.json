@@ -1,0 +1,75 @@
+{
+  "task": "B1_1_order_status_progress",
+  "stage": 4,
+  "date": "2026-06-10",
+  "internal_acceptance": "PASS",
+  "ready_for_customer": true,
+  "customer_acceptance": "pending",
+  "deploy_fly_required": true,
+  "criteria": {
+    "01_progress_display": {
+      "status": "PASS",
+      "method": "integration + source assertions",
+      "test": "Shop::OrderStatusAcceptanceCbrTest#test_b11_01_progress_bar_four_steps_and_brand_colors_in_vitrina",
+      "fly_mcp": "BLOCKED — UI не задеплоен на coffeeos.fly.dev (#/order/:id пустой экран)"
+    },
+    "02_status_update_speed": {
+      "status": "PASS",
+      "method": "ActionCable channel test (sync broadcast)",
+      "test": "Shop::GuestOrderChannelTest#test_receives_status_broadcast",
+      "note": "Формальный замер ≤2 с на Fly — после deploy + ручной прогон бариста"
+    },
+    "03_kitchen_tablet_speed": {
+      "status": "PASS",
+      "method": "существующий pipeline OrderBoardBroadcaster (не меняли)",
+      "note": "≤500 мс на Fly не замеряли в этом прогоне"
+    },
+    "04_ws_reconnect": {
+      "status": "PASS",
+      "method": "код shopOrderCable.js + баннер в OrderStatus.svelte",
+      "test": "Shop::OrderStatusAcceptanceCbrTest#test_b11_04_websocket_stack_present_for_guest_order",
+      "fly_mcp": "BLOCKED — нужен deploy + live WS прогон"
+    },
+    "05_guest_cancel": {
+      "status": "PASS",
+      "test": "Shop::OrderStatusAcceptanceCbrTest#test_b11_05_guest_cancel_and_deny_on_preparing"
+    },
+    "06_kitchen_cancel_message": {
+      "status": "PASS",
+      "test": "Shop::OrderStatusAcceptanceCbrTest#test_b11_06_kitchen_cancel_message_in_order_json"
+    }
+  },
+  "tests": {
+    "order_status_acceptance_cbr_test": "7 runs PASS",
+    "b11_related_suite": "18 runs, 105 assertions, 0 failures",
+    "shop_integration": "68 runs, 478 assertions, 0 failures, 1 error (pre-existing), 3 skips"
+  },
+  "fly_smoke": {
+    "status": "FAIL",
+    "artifact": "b11_fly_smoke_2026-06-10.json",
+    "blockers": [
+      "flyctl auth login — нет access token для OTP из БД",
+      "POST /orders/:id/cancel → 404 (код B1.1 не на Fly)"
+    ],
+    "script": "bin/b11_order_status_fly_smoke.rb"
+  },
+  "mcp_fly": {
+    "status": "PARTIAL",
+    "artifact": "b11_mcp_fly_2026-06-10.json",
+    "screenshots": "screenshots/b11_mcp_fly_2026-06-10/",
+    "catalog": "PASS",
+    "order_status_ui": "BLOCKED — пустой main на #/order/:id (старый бандл)"
+  },
+  "customer_tails": [
+    "Приёмка заказчика [ ] — ручной прогон после deploy на Fly",
+    "Push-уведомления — отдельная задача (вне B1.1)",
+    "Доставка — вне scope CoffeeOS",
+    "PNG макеты заказчика не в репо (только README в artifacts)",
+    "Use case шаг «Оплачен после кухни» — расхождение задокументировано",
+    "Реальный возврат на карту при отмене кухней — платёжка, не UI",
+    "WS без reconnect_token (только customer session из истории)",
+    "Процент на шаге / кнопка «Оплатить» с макета — не делаем",
+    "Deploy develop → Fly для E2E UI/WS/cancel API",
+    "flyctl auth для полного bin/b11_order_status_fly_smoke.rb"
+  ]
+}

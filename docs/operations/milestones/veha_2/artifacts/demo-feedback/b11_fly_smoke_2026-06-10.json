@@ -1,0 +1,16 @@
+{
+  "task": "B1_1_order_status_fly_smoke",
+  "date": "2026-06-10",
+  "base": "https://coffeeos.fly.dev",
+  "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "email": "b11-fly-06100841@coffeeos.dev",
+  "checks": [
+    {
+      "id": "otp_send",
+      "pass": true,
+      "http": 200
+    }
+  ],
+  "status": "FAIL",
+  "error": "RuntimeError: otp not fetched from fly"
+}

@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## v1.159 — 2026-06-10 (B1.1 этап 4: приёмка + Fly/MCP)
+
+- **Тесты:** `order_status_acceptance_cbr_test` (7 критериев B1.1).
+- **Скрипт:** `bin/b11_order_status_fly_smoke.rb`.
+- **Артефакты:** `b11_acceptance_2026-06-10.json`, `b11_mcp_fly_2026-06-10.json`, MCP скрины.
+- **Fly:** B1.1 не на проде — deploy pending; внутр. приёмка PASS.
+
 ## v1.158 — 2026-06-09 (B1.1 этап 3: отмена заказа гостем)
 
 - **API:** `POST /shop/api/orders/:id/cancel`; `GuestOrderCancellationService`.

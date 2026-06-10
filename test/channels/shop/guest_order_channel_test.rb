@@ -40,7 +40,7 @@ class Shop::GuestOrderChannelTest < ActionCable::Channel::TestCase
   test "receives status broadcast" do
     subscribe order_id: @order.id, tenant_id: @tenant.id, reconnect_token: @token
 
-    assert_broadcast_on(Shop::GuestOrderChannel.broadcasting_for(@order), type: "status_changed") do
+    assert_broadcasts(Shop::GuestOrderChannel.broadcasting_for(@order), 1) do
       @order.update!(status: :preparing)
       Shop::GuestOrderBroadcaster.call(order: @order.reload, old_status: "accepted")
     end

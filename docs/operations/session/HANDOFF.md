@@ -12,7 +12,7 @@
 | 1 Статический UI `/order/:id` | `[x]` — [`b11_stage1_static_ui_2026-06-09.json`](../milestones/veha_2/artifacts/demo-feedback/b11_stage1_static_ui_2026-06-09.json) |
 | 2 WebSocket | `[x]` — [`b11_stage2_websocket_2026-06-09.json`](../milestones/veha_2/artifacts/demo-feedback/b11_stage2_websocket_2026-06-09.json) |
 | 3 Отмена | `[x]` — [`b11_stage3_cancel_2026-06-09.json`](../milestones/veha_2/artifacts/demo-feedback/b11_stage3_cancel_2026-06-09.json) |
-| 4 Тесты + MCP | `[ ]` — **ждём go** |
+| 4 Тесты + MCP | `[x]` — [`b11_acceptance_2026-06-10.json`](../milestones/veha_2/artifacts/demo-feedback/b11_acceptance_2026-06-10.json) · **deploy Fly** → прогон заказчика |
 
 ТЗ: [`B1_1_order_status_progress.md`](../milestones/veha_2/requirements/customer_tasks/B1_1_order_status_progress.md)
 

@@ -2,8 +2,8 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-06-09 (B1.1 этап 3 — отмена гостем)  
-**Предыдущее:** B1.1 этапы 0–2; этап 3 done → ждём go на этап 4 (приёмка)  
+**Дата:** 2026-06-10 (B1.1 этап 4 — приёмка)  
+**Предыдущее:** B1.1 этапы 0–3; внутр. PASS · Fly deploy pending · заказчик `[ ]`  
 **Веха 1:** официально не закрыта (§ I, H.3 — `[ ]`).  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
 **§2.3 оплата витрина:** **done** 2026-06-06 — [`CUSTOMER_BUSINESS_REQUIREMENTS.md`](milestones/veha_2/requirements/CUSTOMER_BUSINESS_REQUIREMENTS.md).
@@ -23,6 +23,12 @@
 | **Блок 2** — табло баристы | поток 3 тест-приёмка |
 
 **Ops на блок:** commit + SESSION_STATE всегда (без вопроса); `PRACTICES` (CR); `QA_ACCEPTANCE_RUN` + `artifacts/` (QA); `CHANGELOG` + `HANDOFF`; `CHECKLIST` `[x]` только по факту.
+
+### Сессия 2026-06-10 (B1.1 этап 4 — приёмка)
+
+- **Тесты:** `order_status_acceptance_cbr_test` 7× PASS; B1.1 suite 18 runs.
+- **Fly/MCP:** UI `#/order/:id` на Fly пустой — **нужен deploy**; `b11_acceptance_2026-06-10.json`.
+- **Следующее:** deploy → прогон заказчика.
 
 ### Сессия 2026-06-09 (B1.1 этап 3 — отмена)
 
