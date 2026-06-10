@@ -102,7 +102,7 @@
 | 1 | **B1.7** | Доработка экрана оформления заказа | внутр. PASS · заказчик `[ ]` | [B1_7_checkout_order_screen.md](customer_tasks/B1_7_checkout_order_screen.md) |
 | 2 | **B1.1** | Экран уведомления заказа + прогресс-бар | **`[x]`** 2026-06-10 · Fly + FCM | [B1_1_order_status_progress.md](customer_tasks/B1_1_order_status_progress.md) |
 | 3 | **B2.1** | Табло бариста — интерактивная карточка | **ТЗ** · реализация `[ ]` | [B2_1_barista_order_board.md](customer_tasks/B2_1_barista_order_board.md) |
-| 4 | **B2.2** | Меню + Создать (бариста) | заготовка | [B2_2_barista_menu_create_merge.md](customer_tasks/B2_2_barista_menu_create_merge.md) |
+| 4 | **B2.2** | Меню + Создать (бариста) | **ТЗ** · реализация `[ ]` | [B2_2_barista_menu_create_merge.md](customer_tasks/B2_2_barista_menu_create_merge.md) |
 
 **Следующий фокус по задачам заказчика:** **B2.1** табло баристы (витрина картой → табло → гость).
 
@@ -315,7 +315,7 @@
 - **ТЗ:** [B2_1_barista_order_board.md](customer_tasks/B2_1_barista_order_board.md) · [B2_2](customer_tasks/B2_2_barista_menu_create_merge.md).
 - Цепочка MVP: **витрина (карта)** → табло → WS/push гостю (B1.1).
 - Кухня / prep_kitchen / PWA / брак-переделка — **фаза 2 (конец) или фаза 3**.
-- **Статус:** ТЗ `[x]` 2026-06-10 · код `[ ]`.
+- **Статус:** B2.1 + B2.2 ТЗ `[x]` 2026-06-10 · код `[ ]` · порядок: B2.1 → B2.2.
 
 ---
 

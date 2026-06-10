@@ -1,0 +1,55 @@
+{
+  "task": "B2_2_barista_menu_create_merge",
+  "stage": 0,
+  "date": "2026-06-10",
+  "status": "BASELINE_CAPTURED",
+  "baseline_screenshots": {
+    "menu": "screenshots/b22_menu_create_merge_2026-06-10/barista_menu_before.png",
+    "create": "screenshots/b22_menu_create_merge_2026-06-10/barista_create_before.png",
+    "baseline_source": "MCP browser Fly 2026-06-10 (barista-a@demo.coffeeos.local)"
+  },
+  "customer_mockups": {
+    "menu_cards_checkout": "screenshots/b22_menu_create_merge_2026-06-10/customer_mockup_menu_cards_checkout.png",
+    "modifiers_acquiring": "screenshots/b22_menu_create_merge_2026-06-10/customer_mockup_modifiers_acquiring.png",
+    "acquiring_flow_note": "стрелка от «Оплатить»: запрос на эквайринг сбера на аппарат"
+  },
+  "stack": "Rails 8 + Hotwire/Turbo — /barista/menu + /barista/create-order → merge",
+  "mvp_scope": [
+    "single menu screen with cart",
+    "product cards with modifiers and availability toggle",
+    "sold out sync to vitrina via ProductTenantSetting",
+    "pay via POS Sber adapter",
+    "remove cash and separate Create nav"
+  ],
+  "deferred": [
+    "full Sber POS protocol doc from customer",
+    "partial payment corner case",
+    "cash fallback on terminal error"
+  ],
+  "coffeeos_overrides": {
+    "cash_on_corner_case": "not implemented — align with B1.7 no cash",
+    "payment_today": "TbankAdapter for vitrina only; barista uses local POS stub until Sber spec",
+    "sber_acquiring_full_text": "запрос на эквайринг сбера на аппарат"
+  },
+  "existing_code": {
+    "menu_readonly": "app/views/barista/menu/index.html.erb",
+    "create_order": "app/views/barista/orders/new.html.erb",
+    "menu_controller": "app/controllers/barista/menu_controller.rb",
+    "order_creation": "app/services/barista/order_creation_service.rb",
+    "cart_validation": "app/services/barista/cart_validation_service.rb",
+    "catalog": "Barista::MenuCatalogLoadable / Shop::Catalog.tenant_menu",
+    "sold_out_model": "ProductTenantSetting.is_sold_out",
+    "board_after_pay": "Barista::OrderBoardBroadcaster"
+  },
+  "routes": {
+    "menu": "/barista/menu",
+    "create": "/barista/create-order",
+    "target": "/barista/menu"
+  },
+  "payment": {
+    "vitrina": "T-Bank iframe card/sbp (B1.7 no cash)",
+    "barista_today": "modal cash/card/sbp in new.html.erb",
+    "barista_target": "POS Sber terminal only"
+  },
+  "depends_on": ["B2.1 stages 0-3 recommended first"]
+}
