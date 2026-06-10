@@ -10,6 +10,14 @@ export function saveGuestOrderSession(orderId, reconnectToken) {
   }
 }
 
+export function guestReconnectToken() {
+  try {
+    return sessionStorage.getItem(TOKEN_KEY)
+  } catch (_) {
+    return null
+  }
+}
+
 export function lastGuestOrderId() {
   try {
     return sessionStorage.getItem(ORDER_ID_KEY)

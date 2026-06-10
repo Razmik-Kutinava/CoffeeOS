@@ -2,8 +2,8 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-06-09 (B1.1 этап 1 — статический UI)  
-**Предыдущее:** B1.1 этап 0; этап 1 done → ждём go на этап 2 (WebSocket)  
+**Дата:** 2026-06-09 (B1.1 этап 2 — WebSocket)  
+**Предыдущее:** B1.1 этапы 0–1; этап 2 done → ждём go на этап 3 (отмена)  
 **Веха 1:** официально не закрыта (§ I, H.3 — `[ ]`).  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
 **§2.3 оплата витрина:** **done** 2026-06-06 — [`CUSTOMER_BUSINESS_REQUIREMENTS.md`](milestones/veha_2/requirements/CUSTOMER_BUSINESS_REQUIREMENTS.md).
@@ -23,6 +23,12 @@
 | **Блок 2** — табло баристы | поток 3 тест-приёмка |
 
 **Ops на блок:** commit + SESSION_STATE всегда (без вопроса); `PRACTICES` (CR); `QA_ACCEPTANCE_RUN` + `artifacts/` (QA); `CHANGELOG` + `HANDOFF`; `CHECKLIST` `[x]` только по факту.
+
+### Сессия 2026-06-09 (B1.1 этап 2 — WebSocket)
+
+- **Shop::GuestOrderChannel** + broadcaster на смену статуса (бариста, оплата, cash).
+- **Frontend:** `@rails/actioncable`, баннер reconnect, live-патч статуса.
+- **Следующее:** **go** на этап 3 (отмена гостем).
 
 ### Сессия 2026-06-09 (B1.1 этап 1 — статический UI)
 

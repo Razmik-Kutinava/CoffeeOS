@@ -14,19 +14,29 @@ module Shop
       end
 
       def bind!(session, tenant_id:, order_id:, token:)
-        order = Order.where(id: order_id, tenant_id: tenant_id, source: :mobile).first
+        order = order_for_cable!(order_id: order_id, tenant_id: tenant_id, token: token)
         return nil unless order
-
-        payload = verifier.verify(token).symbolize_keys
-        return nil unless payload[:oid].to_s == order.id.to_s
-        return nil unless payload[:cid].to_s == order.customer_id.to_s
-        return nil unless payload[:tid].to_s == tenant_id.to_s
 
         Shop::CustomerSession.set_customer_id!(session, tenant_id, order.customer_id)
         Shop::PendingOrderSession.set!(session, tenant_id, order.id) if order.pending_payment?
         order
+      end
+
+      def order_for_cable!(order_id:, tenant_id:, token:)
+        order = Order.where(id: order_id, tenant_id: tenant_id, source: :mobile).first
+        return nil unless order
+        return nil unless token_matches_order?(order, tenant_id: tenant_id, token: token)
+
+        order
+      end
+
+      def token_matches_order?(order, tenant_id:, token:)
+        payload = verifier.verify(token).symbolize_keys
+        payload[:oid].to_s == order.id.to_s &&
+          payload[:cid].to_s == order.customer_id.to_s &&
+          payload[:tid].to_s == tenant_id.to_s
       rescue ActiveSupport::MessageVerifier::InvalidSignature
-        nil
+        false
       end
 
       def verifier

@@ -1,8 +1,9 @@
 <script>
-  import { onMount } from "svelte"
+  import { onMount, onDestroy } from "svelte"
   import { push } from "svelte-spa-router"
   import { api } from "../lib/api.js"
-  import { reconnectGuestOrder } from "../lib/shopGuestSession.js"
+  import { reconnectGuestOrder, guestReconnectToken } from "../lib/shopGuestSession.js"
+  import { subscribeGuestOrderStatus } from "../lib/shopOrderCable.js"
   import { orderProgressView } from "../lib/orderStatusProgress.js"
   import { useTelegramBack } from "../lib/telegram.js"
   import PageSkeleton from "../components/PageSkeleton.svelte"
@@ -12,6 +13,8 @@
   let order = $state(null)
   let loading = $state(true)
   let err = $state(null)
+  let cableState = $state("idle")
+  let unsubscribeCable = null
 
   const progress = $derived(order ? orderProgressView(order.status) : null)
 
@@ -22,6 +25,15 @@
   )
 
   useTelegramBack(() => push("/orders"))
+
+  function applyStatusPatch(patch) {
+    if (!order || !patch?.status) return
+    order = {
+      ...order,
+      status: patch.status,
+      payment_settled: patch.payment_settled ?? order.payment_settled
+    }
+  }
 
   onMount(async () => {
     const orderId = params?.id
@@ -34,11 +46,30 @@
     try {
       await reconnectGuestOrder(api)
       order = await api(`/orders/${orderId}`)
+
+      const token = guestReconnectToken()
+      if (token) {
+        unsubscribeCable = subscribeGuestOrderStatus({
+          orderId,
+          reconnectToken: token,
+          onStatus: applyStatusPatch,
+          onConnection: (state) => {
+            cableState = state
+          }
+        })
+      } else {
+        cableState = "unavailable"
+      }
     } catch (e) {
       err = e.message || "Заказ не найден"
     } finally {
       loading = false
     }
+  })
+
+  onDestroy(() => {
+    unsubscribeCable?.()
+    unsubscribeCable = null
   })
 
   function formatMoney(value) {
@@ -65,6 +96,10 @@
       <button type="button" class="primary-btn" onclick={() => push("/")}>В каталог</button>
     </div>
   {:else if order && progress}
+    {#if cableState === "disconnected"}
+      <p class="cable-banner" role="status">Обновление статуса…</p>
+    {/if}
+
     <div class="status-hero">
       <p class="order-number">Заказ #{order.order_number || order.id}</p>
       <h1 class="status-title">{progress.header}</h1>
@@ -175,6 +210,16 @@
   .page-title {
     font-size: 16px;
     color: #a0a0a0;
+  }
+
+  .cable-banner {
+    margin: 0 0 12px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    background: rgba(255, 140, 66, 0.12);
+    color: #ff8c42;
+    font-size: 13px;
+    text-align: center;
   }
 
   .status-hero {

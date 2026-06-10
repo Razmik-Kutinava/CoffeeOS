@@ -109,7 +109,9 @@ module Shop
       end
 
       if order.accepted?
-        Barista::OrderBoardBroadcaster.call(order: order.reload, old_status: "pending_payment")
+        order = order.reload
+        Barista::OrderBoardBroadcaster.call(order: order, old_status: "pending_payment")
+        Shop::GuestOrderBroadcaster.call(order: order, old_status: "pending_payment")
       end
 
       order

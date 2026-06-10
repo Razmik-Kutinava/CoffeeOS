@@ -1,0 +1,36 @@
+{
+  "task": "B1_1_order_status_progress",
+  "stage": 2,
+  "date": "2026-06-09",
+  "status": "PASS",
+  "channel": "Shop::GuestOrderChannel",
+  "auth": "reconnect_token + order_id + tenant_id",
+  "payload": {
+    "type": "status_changed",
+    "fields": ["order_id", "status", "payment_settled", "old_status"]
+  },
+  "broadcast_triggers": [
+    "Barista::OrderStatusUpdateService",
+    "Barista::OrderCancellationService",
+    "Callbacks::PaymentStatusUpdater (accepted)",
+    "Shop::OrderCreator (cash/accepted)"
+  ],
+  "frontend": {
+    "lib": "shopOrderCable.js",
+    "dependency": "@rails/actioncable",
+    "disconnected_ui": "Обновление статуса…"
+  },
+  "tests": [
+    "test/channels/shop/guest_order_channel_test.rb",
+    "test/services/shop/guest_order_broadcaster_test.rb"
+  ],
+  "not_done_in_stage": [
+    "guest cancel button (stage 3)",
+    "kitchen cancel copy (stage 3)",
+    "push notifications",
+    "delivery",
+    "MCP Fly WS verification (stage 4)",
+    "customer acceptance metrics (stage 4)",
+    "WS without reconnect_token (history-only session)"
+  ]
+}

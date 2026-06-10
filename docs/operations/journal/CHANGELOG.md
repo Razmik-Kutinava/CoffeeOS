@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## v1.157 — 2026-06-09 (B1.1 этап 2: WebSocket статуса заказа)
+
+- **Cable:** `Shop::GuestOrderChannel`, `GuestOrderBroadcaster`; гостевое подключение без user_id.
+- **Триггеры:** бариста status/cancel, payment callback, cash order.
+- **Витрина:** `shopOrderCable.js`, live update на `OrderStatus.svelte`.
+- **Тесты:** channel + broadcaster.
+
 ## v1.156 — 2026-06-09 (B1.1 этап 1: экран статуса заказа)
 
 - **Витрина:** `OrderStatus.svelte`, маршрут `#/order/:id`, `orderStatusProgress.js`.

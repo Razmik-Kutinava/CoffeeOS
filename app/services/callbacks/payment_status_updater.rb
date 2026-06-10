@@ -63,6 +63,7 @@ module Callbacks
       order = @payment.order.reload
       Inventory::OrderRecipeDeduction.call!(order: order)
       Barista::OrderBoardBroadcaster.call(order: order, old_status: "pending_payment")
+      Shop::GuestOrderBroadcaster.call(order: order, old_status: "pending_payment")
     end
 
     def fail_order_if_rejected!

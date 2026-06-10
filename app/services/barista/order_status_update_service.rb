@@ -37,7 +37,10 @@ module Barista
         )
       end
 
-      { order: @order.reload, old_status: old_status }
+      order = @order.reload
+      Shop::GuestOrderBroadcaster.call(order: order, old_status: old_status)
+
+      { order: order, old_status: old_status }
     end
   end
 end

@@ -30,7 +30,8 @@ module ApplicationCable
         end
       end
 
-      reject_unauthorized_connection
+      # Гость витрины: без user_id — каналы сами проверяют reconnect_token (Shop::GuestOrderChannel).
+      nil
     end
   end
 end

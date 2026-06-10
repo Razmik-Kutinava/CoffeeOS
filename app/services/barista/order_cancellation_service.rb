@@ -56,7 +56,9 @@ module Barista
         restore_stock_if_needed!(old_status: old_status)
       end
 
-      @order.reload
+      order = @order.reload
+      Shop::GuestOrderBroadcaster.call(order: order, old_status: old_status)
+      order
     end
 
     private

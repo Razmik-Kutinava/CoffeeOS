@@ -23,5 +23,5 @@
   "tests": [
     "test/integration/shop/api/orders_controller_test.rb — order_json fields"
   ],
-  "not_in_scope": ["WebSocket", "cancel button", "delivery block"]
+  "not_in_scope": ["WebSocket", "cancel button"]
 }
