@@ -19,7 +19,8 @@ alwaysApply: true
 - `docs/operations/session/SESSION_STATE.md`
 - `docs/operations/ISSUES.md` (🔴)
 - `docs/operations/milestones/veha_2/checklists/CHECKLIST.md`
-- `docs/operations/milestones/veha_2/requirements/CUSTOMER_BUSINESS_REQUIREMENTS.md` (активный фокус)
+- `docs/operations/milestones/veha_2/requirements/CUSTOMER_BUSINESS_REQUIREMENTS.md` (индекс)
+- `docs/operations/milestones/veha_2/requirements/customer_tasks/` (активное ТЗ — файл задачи)
 
 Первый ответ пользователю — **таблица** (все три поля заполнены):
 
