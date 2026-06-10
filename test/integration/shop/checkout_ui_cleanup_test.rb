@@ -74,5 +74,10 @@ class Shop::CheckoutUiCleanupTest < ActionDispatch::IntegrationTest
     refute_includes checkout, "is_car_pickup"
     assert_includes checkout, "Email"
     refute_includes checkout, "Телефон"
+    refute_includes checkout, "Промокод"
+    refute_includes checkout, "promo_code"
+    refute_includes checkout, "Наличные"
+    refute_includes checkout, '"cash"'
+    assert_includes checkout, "Картой"
   end
 end

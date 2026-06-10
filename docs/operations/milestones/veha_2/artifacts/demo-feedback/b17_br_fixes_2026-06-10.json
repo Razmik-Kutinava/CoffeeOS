@@ -1,0 +1,30 @@
+{
+  "task": "B1_7_checkout_br_fixes",
+  "date": "2026-06-10",
+  "base": "https://coffeeos.fly.dev",
+  "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "checks": [
+    {
+      "id": "BR-1_no_promo_on_checkout",
+      "pass": true,
+      "note": "MCP #/checkout — нет поля «Промокод»"
+    },
+    {
+      "id": "BR-2_no_cash_payment",
+      "pass": true,
+      "note": "MCP — только «Картой» + «СБП»"
+    },
+    {
+      "id": "BR-2_sbp_later",
+      "pass": true,
+      "note": "СБП → «Будет позже»"
+    },
+    {
+      "id": "rails_checkout_ui_cleanup",
+      "pass": true,
+      "note": "checkout_ui_cleanup_test + checkout_acceptance_cbr_test — 12 runs PASS"
+    }
+  ],
+  "status": "PASS",
+  "screenshot": "screenshots/b17_br_fixes_2026-06-10/checkout_no_promo_no_cash_sbp.png"
+}

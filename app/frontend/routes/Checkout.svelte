@@ -19,7 +19,6 @@
   let name = $state("")
   let email = $state("")
   let otpCode = $state("")
-  let promo_code = $state("")
   let payment_method = $state("card")
   let sbpNotice = $state(false)
   let emailVerified = $state(false)
@@ -152,7 +151,6 @@
         body: JSON.stringify({
           name,
           email: email.trim().toLowerCase(),
-          promo_code: promo_code || undefined,
           payment_method
         })
       })
@@ -278,15 +276,10 @@
     {/if}
   {/if}
 
-  <label class="mb-6 block">
-    <span class="mb-1 block text-sm text-[#a0a0a0]">Промокод (необязательно)</span>
-    <input bind:value={promo_code} class="w-full rounded-lg border border-[#3a3a3a] bg-[#2a2a2a] px-3 py-2" />
-  </label>
-
   <div class="mb-6">
     <span class="mb-2 block text-sm text-[#a0a0a0]">Способ оплаты</span>
     <div class="flex gap-3">
-      {#each [["card", "Картой"], ["cash", "Наличные"]] as [val, label]}
+      {#each [["card", "Картой"]] as [val, label]}
         <button
           type="button"
           class="flex flex-1 items-center justify-center gap-2 rounded-lg border px-3 py-2 text-sm
@@ -320,12 +313,6 @@
     disabled={!canPay}
     onclick={submit}
   >
-    {submitting
-      ? payment_method === "cash"
-        ? "Оформляем…"
-        : "Идёт оплата…"
-      : payment_method === "cash"
-        ? "Оформить (наличные)"
-        : "Оплатить →"}
+    {submitting ? "Идёт оплата…" : "Оплатить →"}
   </button>
 </div>
