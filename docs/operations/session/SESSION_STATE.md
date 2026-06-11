@@ -28,7 +28,7 @@
 
 - **Фича:** витрина пишет `removed_modifiers` (все опции − выбранные) → корзина → `OrderItem.modifier_options` → табло «БЕЗ …».
 - **Код:** `Shop::ModifierSelection`, `Product.svelte`, тесты checkout.
-- **Деплой:** после push — `flyctl deploy`.
+- **Деплой:** ✅ Fly **v210** `632bccf`, `/up` 200.
 
 ### Сессия 2026-06-11 (витрина checkout — OTP desync fix)
 
