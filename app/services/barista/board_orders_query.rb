@@ -3,7 +3,8 @@
 module Barista
   # FIFO-очередь заказов на табло бариста (created_at ASC).
   class BoardOrdersQuery
-    INCLUDES = [:order_items, :order_status_logs, :customer, :payments].freeze
+    # Только то, что читает _order_card + order_status_start_time (без customer/payments).
+    INCLUDES = [:order_items, :order_status_logs].freeze
     LIMIT = 50
     COLUMN_DOM_IDS = {
       "accepted" => "orders-new",
