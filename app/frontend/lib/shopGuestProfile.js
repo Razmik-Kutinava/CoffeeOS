@@ -56,3 +56,10 @@ export function clearGuestProfile() {
     /* ignore */
   }
 }
+
+/** Сбросить только флаг OTP — имя/email оставить (session на сервере могла слететь). */
+export function clearEmailVerifiedInProfile() {
+  const profile = loadGuestProfile()
+  if (!profile) return
+  saveGuestProfile({ ...profile, emailVerified: false })
+}

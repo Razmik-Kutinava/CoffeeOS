@@ -5,6 +5,7 @@
   import {
     loadGuestProfile,
     saveGuestProfile,
+    clearEmailVerifiedInProfile,
     maskEmail,
     isValidEmail
   } from "../lib/shopGuestProfile.js"
@@ -35,26 +36,49 @@
     !!name?.trim() && isValidEmail(email) && emailVerified && !submitting
   )
 
+  function applyServerVerificationStatus(status) {
+    const normalized = email.trim().toLowerCase()
+    const serverOk =
+      status?.verified === true && status?.email === normalized && isValidEmail(email)
+    if (serverOk) {
+      emailVerified = true
+      editContact = false
+      saveGuestProfile({ name, email, emailVerified: true })
+      return true
+    }
+    emailVerified = false
+    editContact = true
+    clearEmailVerifiedInProfile()
+    if (savedProfile && isValidEmail(email)) {
+      otpNotice = "Подтвердите email кодом — сессия истекла"
+    }
+    return false
+  }
+
+  async function syncServerStatus() {
+    if (!isValidEmail(email)) {
+      emailVerified = false
+      return false
+    }
+    try {
+      const status = await api("/email_otp/status")
+      return applyServerVerificationStatus(status)
+    } catch {
+      emailVerified = false
+      editContact = true
+      clearEmailVerifiedInProfile()
+      return false
+    }
+  }
+
   onMount(() => {
     const profile = loadGuestProfile()
     if (profile) {
       name = profile.name
       email = profile.email
-      emailVerified = profile.emailVerified
       savedProfile = true
-      editContact = false
-    }
-
-    const syncServerStatus = async () => {
-      if (!isValidEmail(email)) return
-      try {
-        const status = await api("/email_otp/status")
-        if (status.verified && status.email === email.trim().toLowerCase()) {
-          emailVerified = true
-        }
-      } catch {
-        /* session may be empty */
-      }
+      editContact = !profile.emailVerified
+      emailVerified = false
     }
 
     const recover = async () => {
@@ -66,10 +90,16 @@
       }
     }
 
-    recover()
-    syncServerStatus()
+    const boot = async () => {
+      await recover()
+      await syncServerStatus()
+    }
+
+    boot()
     const onPageShow = (event) => {
-      if (event.persisted) recover()
+      if (event.persisted) {
+        boot()
+      }
     }
     window.addEventListener("pageshow", onPageShow)
     return () => window.removeEventListener("pageshow", onPageShow)
@@ -85,13 +115,10 @@
   }
 
   function onEmailInput() {
-    const profile = loadGuestProfile()
-    if (profile && profile.email === email.trim().toLowerCase() && profile.emailVerified) {
-      emailVerified = true
-      return
-    }
     emailVerified = false
+    editContact = true
     otpNotice = ""
+    clearEmailVerifiedInProfile()
   }
 
   async function sendCode() {
@@ -144,7 +171,11 @@
     submitting = true
     let redirecting = false
     try {
-      saveGuestProfile({ name, email, emailVerified: true })
+      const serverOk = await syncServerStatus()
+      if (!serverOk) {
+        err = "Подтвердите email кодом из письма"
+        return
+      }
 
       const res = await api("/orders", {
         method: "POST",
@@ -156,6 +187,9 @@
       })
 
       saveGuestOrderSession(res.order_id, res.reconnect_token)
+      saveGuestProfile({ name, email, emailVerified: true })
+      savedProfile = true
+      editContact = false
 
       if (res.payment_url || res.provider_payment_id) {
 
@@ -191,6 +225,12 @@
       push(`/order/${res.order_id}`)
     } catch (e) {
       err = e.message
+      if (/подтвердите email/i.test(e.message || "")) {
+        emailVerified = false
+        editContact = true
+        clearEmailVerifiedInProfile()
+        otpNotice = "Введите код из письма ещё раз"
+      }
     } finally {
       if (!redirecting) submitting = false
     }
