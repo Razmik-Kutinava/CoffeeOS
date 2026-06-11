@@ -143,7 +143,7 @@
 | Цена / промокод на карточке | убраны намеренно | — |
 | Скрины stage2/4 | на диске | этап 5 MCP localhost |
 | Fly B2.1 markup | **PASS** post-deploy 2026-06-11 | — |
-| vitrina→board e2e Fly | OTP fly exec — shell агента без token | `flyctl auth login` в той же сессии |
+| vitrina→board e2e Fly | **PASS** 2026-06-11 (`b21_fly_smoke`, order `8e2bc72e`) | — |
 | Критерии MVP формально | PARTIAL в acceptance json | после deploy + подпись |
 
 ---
