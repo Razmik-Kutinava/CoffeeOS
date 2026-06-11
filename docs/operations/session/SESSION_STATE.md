@@ -24,6 +24,11 @@
 
 **Ops на блок:** commit + SESSION_STATE всегда (без вопроса); `PRACTICES` (CR); `QA_ACCEPTANCE_RUN` + `artifacts/` (QA); `CHANGELOG` + `HANDOFF`; `CHECKLIST` `[x]` только по факту.
 
+### Сессия 2026-06-11 (B2.1 этап 3 — скрины гостя Fly)
+
+- **Скрины:** `stage3_guest_preparing.png`, `stage3_guest_ready.png` — Fly demo A, подзаголовки B2.1.
+- **Скрипты:** `b21_stage3_guest_screenshots_prep.rb`, `b21_stage3_guest_screenshots.mjs`, `b21_stage3_fly_status.rb`.
+
 ### Сессия 2026-06-11 (B2.1 этап 5 — Fly smoke e2e PASS)
 
 - **Smoke:** `FLY_BIN=flyctl ruby bin/b21_barista_board_fly_smoke.rb` — **PASS** (`order_8e2bc72e`, vitrina→табло).

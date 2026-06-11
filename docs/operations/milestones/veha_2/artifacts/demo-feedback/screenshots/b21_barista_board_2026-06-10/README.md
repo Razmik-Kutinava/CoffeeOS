@@ -14,4 +14,7 @@
 | `barista_board_after.png` | Табло после MVP (текущий Fly UI) | Fly MCP 2026-06-11 |
 | `stage5_e2e_vitrina_to_board.png` | Витрина demo tenant A | Fly MCP 2026-06-11 |
 
-**Ожидаются позже:** `stage3_guest_*.png`, `stage3_push_optional.png` (FCM).
+| `stage3_guest_preparing.png` | Этап 3 — гость «Ваш заказ начали готовить» | Fly Playwright 2026-06-11 |
+| `stage3_guest_ready.png` | Этап 3 — гость «Заказ готов, забирайте!» | Fly Playwright 2026-06-11 |
+
+**Ожидается позже:** `stage3_push_optional.png` (FCM на устройстве).

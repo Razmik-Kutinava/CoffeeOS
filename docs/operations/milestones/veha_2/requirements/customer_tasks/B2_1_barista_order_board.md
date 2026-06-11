@@ -71,7 +71,7 @@
 - [x] Retry WS при сбое (3×, интервал 5 с) — `shopOrderCable.js`
 - [x] Артефакт `b21_stage3_guest_notify_2026-06-11.json`
 - [ ] Push на реальном устройстве (FCM) — `stage3_push_optional.png`
-- [ ] Скрины localhost: `stage3_guest_preparing.png`, `stage3_guest_ready.png`
+- [x] Скрины Fly: `stage3_guest_preparing.png`, `stage3_guest_ready.png` *(Playwright, demo A)*
 - [ ] Браузерный e2e витрина→бариста→гость — формально на этапе 5
 
 **Файлы:** `order_status_push_notifier.rb`, `orderStatusProgress.js`, `OrderStatus.svelte`, `shopOrderCable.js`
@@ -219,7 +219,7 @@
 | `barista_board_before.png` | 0 | `[x]` |
 | `stage1_card_*.png`, `stage1_modifiers.png` | 1 | `[x]` |
 | `stage2_fifo_accepted.png`, `stage2_after_status_move.png` | 2 | `[ ]` |
-| `stage3_guest_*.png` | 3 | `[ ]` localhost |
+| `stage3_guest_*.png` | 3 | `[x]` Fly 2026-06-11 |
 | `stage4_cancel_*.png` | 4 | `[ ]` localhost |
 | `barista_board_after.png`, `stage5_e2e_vitrina_to_board.png` | 5 | `[ ]` |
 

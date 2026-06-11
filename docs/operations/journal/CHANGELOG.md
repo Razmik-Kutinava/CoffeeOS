@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## v1.175 — 2026-06-11 (B2.1 этап 3: скрины гостя preparing/ready)
+
+- **Скрины Fly:** `stage3_guest_preparing.png`, `stage3_guest_ready.png` — подзаголовки B2.1 на `/shop`.
+- **Скрипты:** prep + Playwright `b21_stage3_guest_screenshots.mjs`, статус на Fly `b21_stage3_fly_status.rb`.
+
 ## v1.174 — 2026-06-11 (B2.1 этап 5: Fly smoke e2e PASS)
 
 - **Smoke:** vitrina→табло **PASS** — `order_8e2bc72e`, `FLY_BIN=flyctl`, `b21_fly_smoke_2026-06-11.json`.

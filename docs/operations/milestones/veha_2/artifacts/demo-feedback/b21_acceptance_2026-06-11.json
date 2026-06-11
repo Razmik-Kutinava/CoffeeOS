@@ -47,7 +47,9 @@
       "stage2_fifo_accepted.png": true,
       "stage2_after_status_move.png": true,
       "stage4_cancel_overlay.png": true,
-      "stage4_cancel_confirmed.png": true
+      "stage4_cancel_confirmed.png": true,
+      "stage3_guest_preparing.png": true,
+      "stage3_guest_ready.png": true
     }
   },
   "mvp_criteria": [
