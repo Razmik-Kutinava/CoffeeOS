@@ -84,7 +84,7 @@
 
 См. [B2_1_barista_order_board.md](../requirements/customer_tasks/B2_1_barista_order_board.md).
 
-- [ ] **B2.1** Интерактивная карточка + FIFO + модификаторы + связка с B1.1 — этап 1 карточка `[x]` 2026-06-10
+- [ ] **B2.1** Интерактивная карточка + FIFO + модификаторы + связка с B1.1 — этап 1 `[x]` · этап 2 FIFO `[x]` 2026-06-11
 - [ ] **B2.2** Объединить «Меню» + «Создать», стоп-лист с карточки, POS Сбер — ТЗ [`B2_2`](../requirements/customer_tasks/B2_2_barista_menu_create_merge.md) · stage0 `[x]`
 
 ---

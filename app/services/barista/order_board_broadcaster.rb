@@ -3,11 +3,11 @@
 module Barista
   # Live-обновление канбан-табло барista через Turbo Streams / Solid Cable.
   class OrderBoardBroadcaster
+    BOARD_STATUSES = %w[accepted preparing ready].freeze
+
     def self.call(order:, old_status: nil)
       new(order: order, old_status: old_status).call
     end
-
-    CARD_INCLUDES = [:order_items, :order_status_logs, :customer].freeze
 
     def initialize(order:, old_status: nil)
       @order = order
@@ -15,36 +15,8 @@ module Barista
     end
 
     def call
-      @order = Order.includes(*CARD_INCLUDES).find(@order.id)
       tenant_id = @order.tenant_id
-      target_column = column_for(@order.status)
-      source_column = column_for(resolve_old_status)
-
-      if source_column && source_column != target_column
-        Turbo::StreamsChannel.broadcast_remove_to(
-          stream_for(tenant_id),
-          target: dom_id
-        )
-      end
-
-      if target_column
-        if source_column == target_column
-          Turbo::StreamsChannel.broadcast_replace_to(
-            stream_for(tenant_id),
-            target: dom_id,
-            partial: "barista/dashboard/order_card",
-            locals: { order: @order }
-          )
-        else
-          Turbo::StreamsChannel.broadcast_append_to(
-            stream_for(tenant_id),
-            target: target_column,
-            partial: "barista/dashboard/order_card",
-            locals: { order: @order }
-          )
-        end
-      end
-
+      resync_columns(tenant_id, affected_statuses)
       broadcast_counts(tenant_id)
       BroadcastTvColumnsJob.perform_later(tenant_id)
     rescue ActiveRecord::StatementInvalid => e
@@ -53,31 +25,42 @@ module Barista
 
     private
 
-    def dom_id
-      "order_#{@order.id}"
+    def affected_statuses
+      old_s = resolve_old_status
+      new_s = @order.status.to_s
+      [old_s, new_s].select { |s| BOARD_STATUSES.include?(s) }.uniq
+    end
+
+    def resolve_old_status
+      return @old_status.to_s if @old_status.present?
+
+      @order.order_status_logs.order(created_at: :desc).second&.status_to.to_s.presence || "accepted"
+    end
+
+    def resync_columns(tenant_id, statuses)
+      statuses.each do |status|
+        column_id = BoardOrdersQuery.column_dom_id(status)
+        next unless column_id
+
+        Turbo::StreamsChannel.broadcast_replace_to(
+          stream_for(tenant_id),
+          target: column_id,
+          partial: "barista/dashboard/orders_column",
+          locals: {
+            column_id: column_id,
+            orders: Barista::BoardOrdersQuery.for_column(tenant_id: tenant_id, status: status)
+          }
+        )
+      end
     end
 
     def stream_for(tenant_id)
       "orders_#{tenant_id}"
     end
 
-    def resolve_old_status
-      return @old_status if @old_status.present?
-
-      @order.order_status_logs.order(created_at: :desc).second&.status_to || "accepted"
-    end
-
-    def column_for(status)
-      case status.to_s
-      when "accepted" then "orders-new"
-      when "preparing" then "orders-preparing"
-      when "ready" then "orders-ready"
-      end
-    end
-
     def broadcast_counts(tenant_id)
       raw = Order.for_barista_board(tenant_id)
-                 .where(status: %w[accepted preparing ready])
+                 .where(status: BOARD_STATUSES)
                  .group(:status)
                  .count
       counts = {

@@ -1,0 +1,25 @@
+<% tid = Current.tenant_id %>
+<% old_status = @old_status.presence || @order.order_status_logs.order(created_at: :desc).second&.status_to %>
+<% [old_status, @order.status].compact.uniq.each do |status| %>
+  <% column_id = barista_column_dom_id(status) %>
+  <% next unless column_id %>
+  <%= turbo_stream.replace column_id do %>
+    <%= render partial: "barista/dashboard/orders_column",
+               locals: {
+                 column_id: column_id,
+                 orders: Barista::BoardOrdersQuery.for_column(tenant_id: tid, status: status)
+               } %>
+  <% end %>
+<% end %>
+
+<%= turbo_stream.replace "count-new" do %>
+  <%= render partial: "barista/dashboard/count_badge", locals: { count: Order.for_barista_board(tid).where(status: "accepted").count, type: "new" } %>
+<% end %>
+
+<%= turbo_stream.replace "count-preparing" do %>
+  <%= render partial: "barista/dashboard/count_badge", locals: { count: Order.for_barista_board(tid).where(status: "preparing").count, type: "preparing" } %>
+<% end %>
+
+<%= turbo_stream.replace "count-ready" do %>
+  <%= render partial: "barista/dashboard/count_badge", locals: { count: Order.for_barista_board(tid).where(status: "ready").count, type: "ready" } %>
+<% end %>

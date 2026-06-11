@@ -1,0 +1,46 @@
+{
+  "task": "B2_1_barista_order_board",
+  "stage": 2,
+  "date": "2026-06-11",
+  "status": "PASS",
+  "environment": "localhost tests + manual verify when server up",
+  "files_changed": [
+    "app/services/barista/board_orders_query.rb",
+    "app/services/barista/order_board_broadcaster.rb",
+    "app/controllers/barista/dashboard_controller.rb",
+    "app/controllers/barista/orders_controller.rb",
+    "app/helpers/barista/dashboard_helper.rb",
+    "app/views/barista/dashboard/_orders_column.html.erb",
+    "app/views/barista/dashboard/index.html.erb",
+    "app/views/barista/orders/update_status.turbo_stream.erb",
+    "test/services/barista/board_orders_query_test.rb",
+    "test/integration/barista_tablet_regression_test.rb"
+  ],
+  "checklist": {
+    "fifo_sort_created_at_asc": { "result": "PASS", "note": "BoardOrdersQuery.for_column" },
+    "no_drag_hint": { "result": "PASS", "note": "footer: нажмите кнопку на карточке" },
+    "no_drag_drop_js": { "result": "PASS", "note": "нет sortable/drag в barista" },
+    "column_resync_on_status_move": { "result": "PASS", "note": "turbo replace orders-new + orders-preparing; broadcaster resync columns" },
+    "fifo_position_after_move": { "result": "PASS", "note": "карточка вставляется по created_at в целевой колонке, не blind append" }
+  },
+  "not_in_stage_2": [
+    "Этап 3: WS/push гостю, тексты уведомлений, e2e витрина→гость",
+    "Этап 4: overlay отмены на карточке",
+    "Этап 5: fly deploy, barista_board_after.png, smoke bin/b21_*",
+    "Цена/промокод на карточке — убраны (этап 1)",
+    "removed_modifiers — ключ готов, витрина пишет только selected_modifiers",
+    "Скрины stage2 — localhost; Fly после deploy (этап 5)",
+    "Отмена заказа: broadcast_remove одной карточки — полный resync колонки в этапе 4"
+  ],
+  "carry_forward_from_stage_1": [
+    "Этап 3–5 см. not_in_stage_2"
+  ],
+  "screenshots": [
+    "screenshots/b21_barista_board_2026-06-10/stage2_fifo_accepted.png",
+    "screenshots/b21_barista_board_2026-06-10/stage2_after_status_move.png"
+  ],
+  "tests": {
+    "board_orders_query_test": "2 runs PASS",
+    "barista_tablet_fifo_tests": "2 runs PASS"
+  }
+}

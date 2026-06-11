@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## v1.167 — 2026-06-11 (B2.1 этап 2: FIFO табло бариста)
+
+- **FIFO:** `BoardOrdersQuery`, resync колонок в `OrderBoardBroadcaster` и turbo `update_status`.
+- **UX:** убрана подсказка drag; partial `orders_column`.
+- **Fix:** turbo-шаблон перенесён в `barista/orders/update_status.turbo_stream.erb`.
+- **Артефакт:** `b21_stage2_fifo_2026-06-11.json`.
+
 ## v1.166 — 2026-06-10 (B2.1 этап 1: карточка табло бариста)
 
 - **UI:** `_order_card` — цвет по статусу, кнопка 80px (ГОТОВИТСЯ/ГОТОВ/Выдать), модификаторы +/БЕЗ.

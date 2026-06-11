@@ -1,0 +1,7 @@
+<div class="cards" id="<%= column_id %>">
+  <% if orders.any? %>
+    <%= render partial: "barista/dashboard/order_card", collection: orders, as: :order %>
+  <% else %>
+    <div class="empty-column">Нет заказов</div>
+  <% end %>
+</div>

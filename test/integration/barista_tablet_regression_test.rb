@@ -381,5 +381,51 @@ class BaristaTabletRegressionTest < ActionDispatch::IntegrationTest
     refute_includes response.body, "Принять →"
     refute_includes response.body, "Отменить заказ?"
   end
+
+  # 16. B2.1 этап 2 — FIFO и без drag-hint
+  test "dashboard FIFO accepted orders oldest first and no drag hint" do
+    login_as!(@barista)
+
+    older = Order.create!(
+      tenant: @tenant_a, cash_shift: @cash_shift, order_number: "FIFO-OLD",
+      source: "manual", status: "accepted",
+      total_amount: 100, discount_amount: 0, final_amount: 100,
+      created_at: 3.hours.ago
+    )
+    newer = Order.create!(
+      tenant: @tenant_a, cash_shift: @cash_shift, order_number: "FIFO-NEW",
+      source: "manual", status: "accepted",
+      total_amount: 100, discount_amount: 0, final_amount: 100,
+      created_at: 1.hour.ago
+    )
+
+    get "/barista"
+    assert_response :success
+    assert_operator response.body.index("FIFO-OLD"), :<, response.body.index("FIFO-NEW")
+    refute_includes response.body, "Перетащите карточку"
+    assert_includes response.body, "нажмите кнопку на карточке"
+    assert_includes response.body, 'id="orders-new"'
+  end
+
+  test "update_status turbo resyncs source and target columns FIFO" do
+    login_as!(@barista)
+
+    order = Order.create!(
+      tenant: @tenant_a, cash_shift: @cash_shift, order_number: "FIFO-MOVE",
+      source: "manual", status: "accepted",
+      total_amount: 100, discount_amount: 0, final_amount: 100,
+      created_at: 2.hours.ago
+    )
+
+    patch "/barista/orders/#{order.id}/update_status",
+          params: { status: "preparing" },
+          headers: { "ACCEPT" => "text/vnd.turbo-stream.html" }
+
+    assert_response :success
+    assert_equal "preparing", order.reload.status
+    assert_includes response.body, 'target="orders-new"'
+    assert_includes response.body, 'target="orders-preparing"'
+    assert_includes response.body, "FIFO-MOVE"
+  end
 end
 

@@ -109,6 +109,7 @@ module Barista
         ).call!
 
         @order = result[:order]
+        @old_status = result[:old_status]
         Barista::OrderBoardBroadcaster.call(order: @order, old_status: result[:old_status])
 
         respond_to do |format|

@@ -19,13 +19,7 @@
         </div>
         <span class="column-count" id="count-new"><%= @new_orders.count %></span>
       </div>
-      <div class="cards" id="orders-new">
-        <% if @new_orders.any? %>
-          <%= render partial: 'order_card', collection: @new_orders, as: :order %>
-        <% else %>
-          <div class="empty-column">Нет заказов</div>
-        <% end %>
-      </div>
+      <%= render partial: "orders_column", locals: { column_id: "orders-new", orders: @new_orders } %>
     </div>
 
     <!-- Column 2: PREPARING -->
@@ -38,13 +32,7 @@
         </div>
         <span class="column-count" id="count-preparing"><%= @preparing_orders.count %></span>
       </div>
-      <div class="cards" id="orders-preparing">
-        <% if @preparing_orders.any? %>
-          <%= render partial: 'order_card', collection: @preparing_orders, as: :order %>
-        <% else %>
-          <div class="empty-column">Нет заказов</div>
-        <% end %>
-      </div>
+      <%= render partial: "orders_column", locals: { column_id: "orders-preparing", orders: @preparing_orders } %>
     </div>
 
     <!-- Column 3: READY -->
@@ -57,13 +45,7 @@
         </div>
         <span class="column-count" id="count-ready"><%= @ready_orders.count %></span>
       </div>
-      <div class="cards" id="orders-ready">
-        <% if @ready_orders.any? %>
-          <%= render partial: 'order_card', collection: @ready_orders, as: :order %>
-        <% else %>
-          <div class="empty-column">Нет заказов</div>
-        <% end %>
-      </div>
+      <%= render partial: "orders_column", locals: { column_id: "orders-ready", orders: @ready_orders } %>
     </div>
   </div>
   
@@ -73,7 +55,7 @@
       <span>В работе: <strong id="in-progress"><%= @preparing_orders.count %></strong></span>
       <span>К выдаче: <strong id="ready-count"><%= @ready_orders.count %></strong></span>
     </div>
-    <div class="footer-hint">💡 Подсказка: Перетащите карточку или нажмите кнопку</div>
+    <div class="footer-hint">💡 Подсказка: нажмите кнопку на карточке для смены статуса</div>
   </div>
   
   <!-- Turbo Stream подписка на real-time обновления -->

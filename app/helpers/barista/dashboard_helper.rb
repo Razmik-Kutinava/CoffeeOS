@@ -36,5 +36,9 @@ module Barista
       when "ready" then "issued"
       end
     end
+
+    def barista_column_dom_id(status)
+      Barista::BoardOrdersQuery.column_dom_id(status)
+    end
   end
 end
