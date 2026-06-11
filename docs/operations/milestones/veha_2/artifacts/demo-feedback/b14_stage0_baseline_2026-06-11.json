@@ -1,0 +1,36 @@
+{
+  "task": "B14_pwa_stage0_baseline",
+  "run_at": "2026-06-11",
+  "status": "DOCUMENTED",
+  "tz": "B1_4_pwa_shop.md",
+  "gaps": {
+    "manifest_linked": false,
+    "pwa_routes_enabled": false,
+    "shop_service_worker_cache": false,
+    "icons_192_512_png": false,
+    "offline_catalog": false,
+    "offline_checkout_queue": false,
+    "lighthouse_pwa_audit": false
+  },
+  "exists": {
+    "https_fly": true,
+    "shop_svelte_spa": true,
+    "shop_layout_apple_meta": true,
+    "pwa_manifest_erb_stub": "app/views/pwa/manifest.json.erb",
+    "pwa_sw_stub_commented": "app/views/pwa/service-worker.js",
+    "fcm_sw": "/firebase-messaging-sw.js",
+    "firebase_push_register": "app/frontend/lib/firebasePush.js",
+    "public_icon_svg": true
+  },
+  "not_in_scope": {
+    "native_ios_android": true,
+    "barista_offline_pos": "OFFLINE_SYNC.md V3",
+    "payment_logic_changes": true
+  },
+  "next": [
+    "Этап 1: manifest + icons + shop.html.erb",
+    "Этап 2: SW app shell",
+    "Этап 3-4: offline catalog + checkout queue",
+    "Этап 5: Lighthouse + bin/b14_pwa_fly_smoke.rb"
+  ]
+}

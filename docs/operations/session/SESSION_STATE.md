@@ -2,7 +2,7 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-06-11 (checkout OTP fix · B2.1 OPS_PASS)  
+**Дата:** 2026-06-11 (B1.4 PWA ТЗ · B2.1 OPS_PASS)  
 **Предыдущее:** B1.1 закрыта: FIREBASE_* на Fly · smoke + MCP PASS  
 **Веха 1:** официально не закрыта (§ I, H.3 — `[ ]`).  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
@@ -20,7 +20,15 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **Блок 2** — табло баристы | поток 3 тест-приёмка |
+| **B1.4 PWA** — доки готовы, реализация этапы 1–5 | B2.2 после B2.1 приёмки заказчика |
+
+### Сессия 2026-06-11 (B1.4 PWA — только документация)
+
+- **ТЗ:** [`B1_4_pwa_shop.md`](milestones/veha_2/requirements/customer_tasks/B1_4_pwa_shop.md) — полный текст заказчика + этапы 0–5, критерии Lighthouse/LCP/offline.
+- **Runbook:** [`SHOP_PWA.md`](milestones/veha_2/runbooks/SHOP_PWA.md) — кэш, SW vs FCM, политика PII.
+- **Baseline:** `b14_stage0_baseline_2026-06-11.json`.
+- **CHECKLIST / CBR / customer_tasks README** — B1.4 в работе.
+- **Код PWA:** не трогали; заготовки `app/views/pwa/*` остаются отключёнными.
 
 **Ops на блок:** commit + SESSION_STATE всегда (без вопроса); `PRACTICES` (CR); `QA_ACCEPTANCE_RUN` + `artifacts/` (QA); `CHANGELOG` + `HANDOFF`; `CHECKLIST` `[x]` только по факту.
 

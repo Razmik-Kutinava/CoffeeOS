@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## v1.182 — 2026-06-11 (B1.4 PWA: ТЗ + baseline, без кода)
+
+- **ТЗ:** `B1_4_pwa_shop.md` — текст заказчика, этапы 0–5, критерии Lighthouse/LCP/offline checkout.
+- **Runbook:** `SHOP_PWA.md` — политика кэша, SW vs FCM, проверки.
+- **Артефакт:** `b14_stage0_baseline_2026-06-11.json`; папка скринов `b14_pwa_2026-06-11/`.
+- **Ops:** CHECKLIST, CBR, customer_tasks README; B2.1 PWA → ссылка на B1.4.
+
 ## v1.181 — 2026-06-11 (B2.1: push pipeline simulation без устройства)
 
 - **FCM_SIMULATE:** `FcmClient` — отправка без Google; job → `PushNotification.status=sent`.
