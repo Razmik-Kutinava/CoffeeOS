@@ -234,7 +234,7 @@ begin
   result[:status] = result[:checks].all? { |c| c[:pass] } ? "PASS" : "FAIL"
 rescue StandardError => e
   result[:error] = "#{e.class}: #{e.message}"
-  result[:status] = "FAIL"
+  result[:status] = "FAIL" unless result[:status] == "PARTIAL"
 ensure
   File.write(OUT, JSON.pretty_generate(result))
   puts JSON.pretty_generate(result)

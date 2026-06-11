@@ -89,13 +89,13 @@
 
 - [x] Полный прогон `bin/rails test` — 702 runs, 9 failures / 5 errors (вне B2.1)
 - [x] B2.1 subset + регрессия табло — FIFO/cancel/card PASS; 2 fail в create-order (не B2.1)
-- [x] `bin/b21_barista_board_fly_smoke.rb` — PARTIAL (`b21_fly_smoke_2026-06-11.json`)
-- [x] MCP + HTTP verify Fly — PARTIAL (`b21_mcp_fly_2026-06-11.json`, cursor-ide-browser)
+- [x] `bin/b21_barista_board_fly_smoke.rb` — markup **PASS**, vitrina OTP skip (`b21_fly_smoke_2026-06-11.json`)
+- [x] MCP + HTTP verify Fly — **PASS** (`b21_mcp_fly_2026-06-11.json`, post-deploy)
 - [x] Скрины Fly: `barista_board_after.png`, `stage5_e2e_vitrina_to_board.png`
 - [x] Артефакт `b21_acceptance_2026-06-11.json`
 - [x] Артефакт `b21_mcp_fly_2026-06-11.json`
 - [ ] Приёмка заказчика — подпись
-- [ ] Fly deploy B2.1 + перепрогон markup smoke
+- [x] Fly deploy B2.1 + перепрогон markup smoke — **PASS** 2026-06-11 (OTP vitrina→board — skip, flyctl в shell агента)
 
 **Скрины этапов 1–4:** localhost. **Скрины этапа 5:** Fly после deploy.
 
@@ -135,8 +135,8 @@
 | `removed_modifiers` — ключ в JSONB готов, helper читает | витрина пишет только `selected_modifiers` | checkout витрины (не B2.1) |
 | Цена / промокод на карточке | убраны намеренно | — |
 | Скрины stage2/4 | на диске | этап 5 MCP localhost |
-| Fly B2.1 markup | старый UI на coffeeos.fly.dev | fly deploy develop |
-| vitrina→board e2e Fly | OTP fly exec blocked | flyctl auth login |
+| Fly B2.1 markup | **PASS** post-deploy 2026-06-11 | — |
+| vitrina→board e2e Fly | OTP fly exec — shell агента без token | `flyctl auth login` в той же сессии |
 | Критерии MVP формально | PARTIAL в acceptance json | после deploy + подпись |
 
 ---

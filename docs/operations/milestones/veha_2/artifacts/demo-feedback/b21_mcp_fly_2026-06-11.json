@@ -28,12 +28,12 @@
       "step": 4,
       "action": "Проверка разметки B2.1 на табло",
       "result": {
-        "order_card": false,
+        "order_card": true,
         "columns": true,
-        "b21_cancel": false,
-        "stimulus": false
+        "b21_cancel": true,
+        "stimulus": true
       },
-      "verdict": "FAIL",
+      "verdict": "PASS",
       "screenshot": "docs/operations/milestones/veha_2/artifacts/demo-feedback/screenshots/b21_barista_board_2026-06-10/barista_board_after.png",
       "screenshot_required": true
     },
@@ -63,12 +63,12 @@
     },
     {
       "id": "b21_markup_on_fly",
-      "pass": false,
+      "pass": true,
       "markers": {
-        "order_card": false,
+        "order_card": true,
         "columns": true,
-        "b21_cancel": false,
-        "stimulus": false
+        "b21_cancel": true,
+        "stimulus": true
       }
     },
     {
@@ -79,7 +79,7 @@
     {
       "id": "guest_status_bundle",
       "pass": true,
-      "vite_chunk": "/vite/assets/application-DE3YTRIS.js"
+      "vite_chunk": "/vite/assets/application-DNCN2en0.js"
     },
     {
       "id": "screenshots_on_disk",
@@ -95,7 +95,7 @@
       "note": "остальные скрины — обязательны, догоняем по мере MCP прогонов"
     }
   ],
-  "status": "PARTIAL",
+  "status": "PASS",
   "customer_signoff": false,
   "note": "ops gate этапа 5 — не финальная приёмка заказчика"
 }

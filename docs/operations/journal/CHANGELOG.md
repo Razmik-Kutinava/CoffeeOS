@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v1.172 — 2026-06-11 (B2.1 post-deploy Fly: markup smoke PASS)
+
+- **Fly:** B2.1 разметка на `coffeeos.fly.dev` — smoke + MCP verify PASS.
+- **Скрины:** обновлены Fly `barista_board_after`, `stage5_e2e_vitrina_to_board`.
+- **Smoke:** статус PARTIAL при OTP skip (не затирать FAIL).
+
 ## v1.171 — 2026-06-11 (B2.1: Bullet — убрать лишний includes на табло)
 
 - **BoardOrdersQuery:** только `order_items` + `order_status_logs` (без customer/payments).

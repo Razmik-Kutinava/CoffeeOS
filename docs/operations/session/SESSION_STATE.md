@@ -24,6 +24,13 @@
 
 **Ops на блок:** commit + SESSION_STATE всегда (без вопроса); `PRACTICES` (CR); `QA_ACCEPTANCE_RUN` + `artifacts/` (QA); `CHANGELOG` + `HANDOFF`; `CHECKLIST` `[x]` только по факту.
 
+### Сессия 2026-06-11 (B2.1 post-deploy Fly)
+
+- **Deploy:** B2.1 на `coffeeos.fly.dev` — markup smoke **PASS** (ГОТОВИТСЯ, order-card, cancel overlay).
+- **MCP verify:** `b21_mcp_fly_2026-06-11.json` — **PASS**.
+- **Скрины Fly:** пересняты `barista_board_after.png`, `stage5_e2e_vitrina_to_board.png`.
+- **Skip:** vitrina→board OTP — flyctl token не в shell агента.
+
 ### Сессия 2026-06-11 (B2.1 этап 5 — ops gate)
 
 - **Тесты:** полный suite 702 runs (9 fail / 5 err вне B2.1); B2.1 FIFO/cancel/card PASS.
