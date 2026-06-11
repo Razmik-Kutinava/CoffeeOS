@@ -1,0 +1,18 @@
+{
+  "task": "b21_removed_modifiers_vitrina",
+  "run_at": "2026-06-11",
+  "status": "PASS",
+  "scope": "витрина → cart → order → barista_modifier_tags БЕЗ …",
+  "tests": [
+    "test/services/shop/modifier_selection_test.rb",
+    "test/integration/shop/api/removed_modifiers_checkout_test.rb"
+  ],
+  "files": [
+    "app/services/shop/modifier_selection.rb",
+    "app/services/shop/cart_service.rb",
+    "app/services/shop/order_creator.rb",
+    "app/frontend/lib/modifiers.js",
+    "app/frontend/routes/Product.svelte"
+  ],
+  "note": "Fly smoke скрин stage1_modifiers — после деплоя заказ с витрины с модификаторами"
+}

@@ -67,7 +67,10 @@ module Shop
             quantity: qty,
             unit_price: unit,
             total_price: unit * qty,
-            modifier_options: { "selected_modifiers" => line[:selected_modifiers] }
+            modifier_options: {
+              "selected_modifiers" => line[:selected_modifiers],
+              "removed_modifiers" => line[:removed_modifiers] || []
+            }
           )
         end
 

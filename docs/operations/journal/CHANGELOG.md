@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v1.180 — 2026-06-11 (витрина: removed_modifiers на табло бариста)
+
+- **Логика:** все опции товара минус `selected_modifiers` → `removed_modifiers` («БЕЗ …» на карточке).
+- **Код:** `Shop::ModifierSelection`, `CartService`, `OrderCreator`, `Product.svelte` + `modifiers.js`.
+- **Тесты:** `modifier_selection_test`, `removed_modifiers_checkout_test`.
+
 ## v1.179 — 2026-06-11 (витрина: OTP verify в Postgres per tenant)
 
 - **Миграция:** `shop_email_verifications` — `tenant_id` + `session_id` + email, TTL 24ч; FK tenants.

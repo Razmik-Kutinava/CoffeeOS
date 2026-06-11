@@ -6,7 +6,8 @@
   import { favorites } from "../lib/stores/favorites.js"
   import {
     isRadioModifierGroup,
-    defaultSelectionForGroup
+    defaultSelectionForGroup,
+    buildModifierPayload
   } from "../lib/modifiers.js"
 
   useTelegramBack(() => window.history.back())
@@ -131,22 +132,18 @@
     dismissOnboarding()
     adding = true
     try {
-    const selected_modifiers = []
-    for (const g of product.modifier_groups) {
-      if (isRadioModifierGroup(g)) {
-        const mid = selected[g.id]
-        const m = g.modifiers.find((x) => x.id === mid)
-        if (m) selected_modifiers.push({ id: m.id, name: m.name, price: Number(m.price_change) })
-      } else {
-        for (const mid of selected[g.id] || []) {
-          const m = g.modifiers.find((x) => x.id === mid)
-          if (m) selected_modifiers.push({ id: m.id, name: m.name, price: Number(m.price_change) })
-        }
-      }
-    }
+    const { selected_modifiers, removed_modifiers } = buildModifierPayload(
+      product.modifier_groups,
+      selected
+    )
     await api("/cart/add", {
       method: "POST",
-      body: JSON.stringify({ product_id: product.id, quantity: qty, selected_modifiers })
+      body: JSON.stringify({
+        product_id: product.id,
+        quantity: qty,
+        selected_modifiers,
+        removed_modifiers
+      })
     })
     push("/cart")
     } finally {

@@ -24,6 +24,12 @@
 
 **Ops на блок:** commit + SESSION_STATE всегда (без вопроса); `PRACTICES` (CR); `QA_ACCEPTANCE_RUN` + `artifacts/` (QA); `CHANGELOG` + `HANDOFF`; `CHECKLIST` `[x]` только по факту.
 
+### Сессия 2026-06-11 (B2.1 хвост — removed_modifiers с витрины)
+
+- **Фича:** витрина пишет `removed_modifiers` (все опции − выбранные) → корзина → `OrderItem.modifier_options` → табло «БЕЗ …».
+- **Код:** `Shop::ModifierSelection`, `Product.svelte`, тесты checkout.
+- **Деплой:** после push — `flyctl deploy`.
+
 ### Сессия 2026-06-11 (витрина checkout — OTP desync fix)
 
 - **Баг:** localStorage `emailVerified` без серверной session → блок «Контакты» + ошибка «Подтвердите email» (кейс Арам/aramfifa).

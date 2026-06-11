@@ -22,10 +22,12 @@ module Shop
         raise ActiveRecord::RecordNotFound, "Максимум #{MAX_CART_ITEMS} товаров в корзине"
       end
 
+      mods = ModifierSelection.build(product: product, selected_modifiers: selected_modifiers)
       line = {
         "product_id" => product.id,
         "quantity" => quantity.to_i.clamp(1, MAX_ITEM_QUANTITY),
-        "selected_modifiers" => normalize_modifiers(selected_modifiers)
+        "selected_modifiers" => mods[:selected_modifiers],
+        "removed_modifiers" => mods[:removed_modifiers]
       }
       key = line_key(line)
       existing = @session[SESSION_KEY].find_index { |l| line_key(l) == key }
@@ -88,6 +90,7 @@ module Shop
           price: setting.price.to_f,
           image_url: product.image_url,
           selected_modifiers: line["selected_modifiers"],
+          removed_modifiers: line["removed_modifiers"] || [],
           unit_total: unit_price.to_f,
           line_total: (unit_price * qty).to_f
         }
