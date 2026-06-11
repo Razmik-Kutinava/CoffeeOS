@@ -31,7 +31,8 @@
 - **Бэк:** таблица `shop_email_verifications` (`tenant_id` + `session_id` + email, TTL 24ч) — общая между web-инстансами без Redis.
 - **Сервис:** `Shop::EmailVerification` — session + Postgres; verify/status/order читают оба слоя.
 - **Тесты:** `email_verification_test`, `email_verification_db_fallback_test` + регрессия OTP/checkout.
-- **Деплой:** `flyctl deploy` — миграция + фронт; гостю после деплоя при слетевшей session — форма OTP сама.
+- **Деплой:** ✅ Fly **v209** `2026-06-11` — `develop` `77571f9`+`dd3d956`, `/up` 200, миграция `shop_email_verifications` через `fly:release`.
+- **Гостю:** пусть Арам зайдёт и попробует checkout; смотрим результат.
 
 ### Сессия 2026-06-11 (B2.1 — formal acceptance OPS_PASS)
 
