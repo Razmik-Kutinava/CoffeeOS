@@ -484,6 +484,7 @@
 
   /* ===== ORDER CARD (B2.1) ===== */
   .order-card {
+    position: relative;
     display: flex;
     flex-direction: column;
     min-height: 280px;
@@ -520,6 +521,112 @@
     align-items: baseline;
     gap: 8px;
     margin-bottom: 4px;
+  }
+
+  .card-header-end {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  .card-cancel-trigger {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: 1px solid #4a5568;
+    border-radius: 6px;
+    background: rgba(0, 0, 0, 0.35);
+    color: #f0a0a0;
+    font-size: 16px;
+    line-height: 1;
+    cursor: pointer;
+    font-family: inherit;
+  }
+
+  .card-cancel-trigger:hover {
+    background: rgba(180, 50, 50, 0.45);
+    border-color: #c05050;
+  }
+
+  .order-card-cancel-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(28, 32, 36, 0.94);
+    padding: 16px;
+  }
+
+  .order-card-cancel-overlay.is-visible {
+    display: flex;
+  }
+
+  .order-card-cancel-panel {
+    text-align: center;
+    width: 100%;
+  }
+
+  .order-card-cancel-title {
+    margin: 0 0 8px;
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    color: #f5f5f5;
+    text-transform: uppercase;
+  }
+
+  .order-card-cancel-hint {
+    margin: 0 0 16px;
+    font-size: 12px;
+    color: #9aa8b9;
+  }
+
+  .order-card-cancel-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .order-card-cancel-actions form {
+    margin: 0;
+    width: 100%;
+  }
+
+  .card-btn-cancel-confirm {
+    display: block;
+    width: 100%;
+    min-height: 56px;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: #5a5a5a;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    cursor: pointer;
+    font-family: inherit;
+  }
+
+  .card-btn-cancel-confirm:hover {
+    background: #6e6e6e;
+  }
+
+  .card-btn-cancel-back {
+    width: 100%;
+    min-height: 44px;
+    padding: 10px;
+    border: 1px solid #4a5568;
+    border-radius: 8px;
+    background: transparent;
+    color: #b6c4d4;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
   }
 
   .order-number {

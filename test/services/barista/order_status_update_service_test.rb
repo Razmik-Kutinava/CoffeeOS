@@ -4,6 +4,7 @@ require "test_helper"
 
 class Barista::OrderStatusUpdateServiceTest < ActiveSupport::TestCase
   include TestFactories
+  include ActiveJob::TestHelper
 
   setup do
     @tenant = create_tenant!
@@ -37,6 +38,33 @@ class Barista::OrderStatusUpdateServiceTest < ActiveSupport::TestCase
     log = OrderStatusLog.order(created_at: :desc).first
     assert_equal "preparing", log.status_to
     assert_equal "В работу", log.comment
+  end
+
+  test "mobile order preparing triggers b21 guest push body" do
+    customer = create_mobile_customer!(phone: "+79007778899", email: "b21-#{SecureRandom.hex(3)}@example.com")
+    customer.update!(push_enabled: true, push_token: "fcm-b21-token")
+    mobile_order = Order.create!(
+      tenant: @tenant,
+      cash_shift: @shift,
+      customer_id: customer.id,
+      order_number: "B21-M1",
+      source: :mobile,
+      status: "accepted",
+      total_amount: 200,
+      discount_amount: 0,
+      final_amount: 200
+    )
+
+    assert_enqueued_with(job: Shop::SendPushNotificationJob) do
+      Barista::OrderStatusUpdateService.new(
+        order: mobile_order,
+        new_status: "preparing",
+        user_id: @user.id
+      ).call!
+    end
+
+    notification = PushNotification.order(created_at: :desc).first
+    assert_equal "Ваш заказ начали готовить", notification.body
   end
 
   test "rejects invalid transition" do

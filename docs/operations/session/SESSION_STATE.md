@@ -24,6 +24,12 @@
 
 **Ops на блок:** commit + SESSION_STATE всегда (без вопроса); `PRACTICES` (CR); `QA_ACCEPTANCE_RUN` + `artifacts/` (QA); `CHANGELOG` + `HANDOFF`; `CHECKLIST` `[x]` только по факту.
 
+### Сессия 2026-06-11 (B2.1 этап 3–4 — гость + отмена)
+
+- **Этап 3:** push тексты, guest subtitles, WS retry, `b21_stage3_guest_notify`.
+- **Этап 4:** cancel overlay на карточке, resync колонки, `b21_stage4_cancel`.
+- **Дальше:** этап 5 fly/smoke/acceptance.
+
 ### Сессия 2026-06-11 (B2.1 этап 2 — FIFO)
 
 - **FIFO:** `BoardOrdersQuery`, resync колонок при смене статуса, без drag-hint.

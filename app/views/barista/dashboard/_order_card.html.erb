@@ -9,13 +9,22 @@
     ""
   end
   card_status_class = "card--#{order.status}"
+  cancellable = order.can_be_cancelled?
 %>
 
-<div class="card order-card <%= card_status_class %>" id="order_<%= order.id %>">
+<div class="card order-card <%= card_status_class %>" id="order_<%= order.id %>" data-controller="order-card-cancel">
   <div class="card-body">
     <div class="card-header">
       <span class="order-number">#<%= order.order_number %></span>
-      <span class="order-created"><%= l(order.created_at, format: :short) %></span>
+      <div class="card-header-end">
+        <span class="order-created"><%= l(order.created_at, format: :short) %></span>
+        <% if cancellable %>
+          <button type="button"
+                  class="card-cancel-trigger"
+                  aria-label="Отменить заказ"
+                  data-action="order-card-cancel#open">✕</button>
+        <% end %>
+      </div>
     </div>
 
     <div class="card-timer-row">
@@ -59,4 +68,26 @@
           onclick: "event.stopPropagation();" %>
     <% end %>
   </div>
+
+  <% if cancellable %>
+    <div class="order-card-cancel-overlay" data-order-card-cancel-target="overlay" hidden>
+      <div class="order-card-cancel-panel">
+        <p class="order-card-cancel-title">СТОП! ЗАКАЗ ОТМЕНЁН</p>
+        <p class="order-card-cancel-hint">Подтвердите снятие заказа с табло</p>
+        <div class="order-card-cancel-actions">
+          <%= button_to "ПОДТВЕРДИТЬ ОТМЕНУ",
+              cancel_barista_order_path(order),
+              method: :post,
+              params: { reason: "Отменено баристой", reason_code: "barista_cancel" },
+              class: "card-btn-cancel-confirm",
+              data: { turbo_method: :post } %>
+          <button type="button"
+                  class="card-btn-cancel-back"
+                  data-action="order-card-cancel#close">
+            Назад
+          </button>
+        </div>
+      </div>
+    </div>
+  <% end %>
 </div>

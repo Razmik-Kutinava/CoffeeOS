@@ -49,4 +49,25 @@ class Shop::OrderStatusPushNotifierTest < ActiveSupport::TestCase
       Shop::GuestOrderBroadcaster.call(order: @order.reload, old_status: "accepted")
     end
   end
+
+  # B2.1 этап 3 — тексты push при смене статуса баристой
+  test "b21 accepted to preparing push body" do
+    @order.update!(status: :preparing)
+
+    Shop::OrderStatusPushNotifier.call(order: @order.reload, old_status: "accepted")
+
+    notification = PushNotification.order(created_at: :desc).first
+    assert_equal "Ваш заказ начали готовить", notification.body
+    assert_equal "Заказ готовится", notification.title
+  end
+
+  test "b21 preparing to ready push body" do
+    @order.update!(status: :ready)
+
+    Shop::OrderStatusPushNotifier.call(order: @order.reload, old_status: "preparing")
+
+    notification = PushNotification.order(created_at: :desc).first
+    assert_equal "Заказ готов, забирайте!", notification.body
+    assert_equal "Заказ готов", notification.title
+  end
 end

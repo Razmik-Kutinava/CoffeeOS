@@ -379,7 +379,10 @@ class BaristaTabletRegressionTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "БЕЗ Сахар"
     assert_includes response.body, "event.stopPropagation();"
     refute_includes response.body, "Принять →"
-    refute_includes response.body, "Отменить заказ?"
+    assert_includes response.body, "order-card-cancel-overlay"
+    assert_includes response.body, "СТОП! ЗАКАЗ ОТМЕНЁН"
+    assert_includes response.body, "ПОДТВЕРДИТЬ ОТМЕНУ"
+    assert_includes response.body, "order-card-cancel"
   end
 
   # 16. B2.1 этап 2 — FIFO и без drag-hint
@@ -426,6 +429,40 @@ class BaristaTabletRegressionTest < ActionDispatch::IntegrationTest
     assert_includes response.body, 'target="orders-new"'
     assert_includes response.body, 'target="orders-preparing"'
     assert_includes response.body, "FIFO-MOVE"
+  end
+
+  # 18. B2.1 этап 4 — отмена: overlay + resync колонки
+  test "cancel turbo resyncs column and removes order from board" do
+    login_as!(@barista)
+
+    ensure_order_cancel_reason!(
+      code: "barista_cancel",
+      name: "Отменено баристой",
+      description: "Отмена заказа баристой"
+    )
+
+    order = Order.create!(
+      tenant: @tenant_a, cash_shift: @cash_shift, order_number: "B21-CANCEL",
+      source: "manual", status: "accepted",
+      total_amount: 100, discount_amount: 0, final_amount: 100
+    )
+    keep = Order.create!(
+      tenant: @tenant_a, cash_shift: @cash_shift, order_number: "B21-KEEP",
+      source: "manual", status: "accepted",
+      total_amount: 100, discount_amount: 0, final_amount: 100,
+      created_at: 1.hour.ago
+    )
+
+    post "/barista/orders/#{order.id}/cancel",
+         params: { reason: "Отменено баристой", reason_code: "barista_cancel" },
+         headers: { "ACCEPT" => "text/vnd.turbo-stream.html" }
+
+    assert_response :success
+    assert_equal "cancelled", order.reload.status
+    assert_includes response.body, 'target="orders-new"'
+    refute_includes response.body, "B21-CANCEL"
+    assert_includes response.body, "B21-KEEP"
+    assert_not_nil keep.id
   end
 end
 

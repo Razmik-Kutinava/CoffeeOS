@@ -149,7 +149,9 @@
     <div class="status-hero">
       <p class="order-number">Заказ #{order.order_number || order.id}</p>
       <h1 class="status-title">{progress.header}</h1>
-      {#if progress.showEta}
+      {#if progress.subtitle}
+        <p class="status-subtitle">{progress.subtitle}</p>
+      {:else if progress.showEta}
         <p class="eta">Примерно 8–12 минут</p>
       {/if}
     </div>
@@ -319,10 +321,16 @@
     color: #fff;
   }
 
-  .eta {
+  .eta,
+  .status-subtitle {
     margin: 0;
     font-size: 15px;
     color: #a0a0a0;
+  }
+
+  .status-subtitle {
+    color: #ff8c42;
+    font-weight: 600;
   }
 
   .progress-wrap {

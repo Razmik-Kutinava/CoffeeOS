@@ -3,6 +3,12 @@
 module Shop
   # Push при смене статуса mobile-заказа (B1.1).
   class OrderStatusPushNotifier
+    # B2.1 — тексты при смене статуса баристой (accepted→preparing, preparing→ready).
+    BARISTA_TRANSITION_BODIES = {
+      %w[accepted preparing] => "Ваш заказ начали готовить",
+      %w[preparing ready] => "Заказ готов, забирайте!"
+    }.freeze
+
     TITLES = {
       "pending_payment" => "Заказ принят",
       "accepted" => "Заказ оплачен",
@@ -54,6 +60,9 @@ module Shop
     private
 
     def body_for_status
+      transition_body = BARISTA_TRANSITION_BODIES[[@old_status.to_s, @order.status.to_s]]
+      return transition_body if transition_body.present?
+
       number = @order.order_number.presence || @order.id.to_s.first(8)
       case @order.status
       when "ready"

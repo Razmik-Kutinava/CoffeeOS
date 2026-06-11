@@ -57,4 +57,21 @@ class Shop::GuestOrderChannelTest < ActionCable::Channel::TestCase
       Shop::GuestOrderBroadcaster.call(order: @order.reload, old_status: "accepted")
     end
   end
+
+  # B2.1 этап 3 — бариста меняет статус → WS гостю
+  test "b21 barista status update broadcasts to guest" do
+    subscribe order_id: @order.id, tenant_id: @tenant.id, reconnect_token: @token
+
+    barista = create_user!(tenant: @tenant, role_codes: %w[barista])
+    shift = open_cash_shift!(tenant: @tenant, opened_by: barista)
+    @order.update!(cash_shift: shift)
+
+    assert_broadcasts(Shop::GuestOrderChannel.broadcasting_for(@order), 1) do
+      Barista::OrderStatusUpdateService.new(
+        order: @order,
+        new_status: "preparing",
+        user_id: barista.id
+      ).call!
+    end
+  end
 end

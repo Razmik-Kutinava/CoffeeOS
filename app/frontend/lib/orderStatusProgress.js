@@ -7,6 +7,12 @@ export const PROGRESS_STEPS = [
   { id: 4, label: "Готов", icon: "🛍️" }
 ]
 
+/** B2.1 — подзаголовок на экране статуса гостя */
+const STATUS_SUBTITLES = {
+  preparing: "Ваш заказ начали готовить",
+  ready: "Заказ готов, забирайте!"
+}
+
 const CURRENT_INDEX = {
   pending_payment: 0,
   accepted: 1,
@@ -53,13 +59,15 @@ export function orderProgressView(orderOrStatus) {
   })
 
   const header = terminal ? "Готов" : PROGRESS_STEPS[activeIndex].label
+  const subtitle = terminal ? STATUS_SUBTITLES.ready : STATUS_SUBTITLES[status]
   const fillPercent = terminal ? 100 : (activeIndex / (PROGRESS_STEPS.length - 1)) * 100
 
   return {
     cancelled: false,
     header,
+    subtitle: subtitle || null,
     showProgress: true,
-    showEta: !terminal && status !== "ready",
+    showEta: !terminal && status !== "ready" && !subtitle,
     steps,
     fillPercent,
     paymentSettled: status !== "pending_payment"

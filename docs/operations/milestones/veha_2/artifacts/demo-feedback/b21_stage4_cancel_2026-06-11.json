@@ -1,0 +1,45 @@
+{
+  "task": "B2_1_barista_order_board",
+  "stage": 4,
+  "date": "2026-06-11",
+  "status": "PASS",
+  "environment": "rails test",
+  "files_changed": [
+    "app/views/barista/dashboard/_order_card.html.erb",
+    "app/views/barista/shared/_layout.html.erb",
+    "app/javascript/controllers/order_card_cancel_controller.js",
+    "app/controllers/barista/orders_controller.rb",
+    "app/views/barista/orders/cancel.turbo_stream.erb",
+    "test/integration/barista_tablet_regression_test.rb"
+  ],
+  "checklist": {
+    "cancel_overlay_on_card": {
+      "result": "PASS",
+      "note": "тёмно-серый overlay, СТОП! ЗАКАЗ ОТМЕНЁН, ПОДТВЕРДИТЬ ОТМЕНУ"
+    },
+    "cancel_ui_on_card": {
+      "result": "PASS",
+      "note": "кнопка ✕ → overlay, Назад закрывает"
+    },
+    "column_resync_on_cancel": {
+      "result": "PASS",
+      "note": "OrderBoardBroadcaster + cancel.turbo_stream replace orders-*"
+    },
+    "no_sound_no_stock_mvp": {
+      "result": "PASS",
+      "note": "без звука; ingredients_used не передаётся — списание не MVP"
+    }
+  },
+  "not_in_stage_4": [
+    "Скрины stage4_cancel_*.png — localhost",
+    "Этап 5: fly smoke, b21_acceptance, e2e"
+  ],
+  "screenshots": [
+    "screenshots/b21_barista_board_2026-06-10/stage4_cancel_overlay.png",
+    "screenshots/b21_barista_board_2026-06-10/stage4_cancel_confirmed.png"
+  ],
+  "tests": {
+    "barista_tablet_stage4_cancel": "PASS",
+    "barista_tablet_stage1_overlay_markup": "PASS"
+  }
+}

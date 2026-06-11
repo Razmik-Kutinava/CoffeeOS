@@ -1,0 +1,62 @@
+{
+  "task": "B2_1_barista_order_board",
+  "stage": 3,
+  "date": "2026-06-11",
+  "status": "PASS",
+  "environment": "rails test (localhost)",
+  "files_changed": [
+    "app/services/shop/order_status_push_notifier.rb",
+    "app/frontend/lib/orderStatusProgress.js",
+    "app/frontend/routes/OrderStatus.svelte",
+    "app/frontend/lib/shopOrderCable.js",
+    "test/services/shop/order_status_push_notifier_test.rb",
+    "test/services/barista/order_status_update_service_test.rb",
+    "test/integration/b21_guest_notify_test.rb",
+    "test/channels/shop/guest_order_channel_test.rb"
+  ],
+  "checklist": {
+    "push_accepted_to_preparing": {
+      "result": "PASS",
+      "text": "Ваш заказ начали готовить",
+      "file": "order_status_push_notifier.rb BARISTA_TRANSITION_BODIES"
+    },
+    "push_preparing_to_ready": {
+      "result": "PASS",
+      "text": "Заказ готов, забирайте!",
+      "file": "order_status_push_notifier.rb"
+    },
+    "guest_screen_subtitles": {
+      "result": "PASS",
+      "file": "orderStatusProgress.js + OrderStatus.svelte status-subtitle"
+    },
+    "ws_retry_3x_5s": {
+      "result": "PASS",
+      "file": "shopOrderCable.js MAX_WS_RETRIES=3, WS_RETRY_INTERVAL_MS=5000"
+    },
+    "barista_to_guest_ws": {
+      "result": "PASS",
+      "note": "OrderStatusUpdateService → GuestOrderBroadcaster → GuestOrderChannel"
+    },
+    "barista_patch_enqueues_push": {
+      "result": "PASS",
+      "note": "PATCH /barista/orders/:id/update_status → preparing"
+    }
+  },
+  "not_in_stage_3": [
+    "Скрины stage3_guest_*.png — localhost вручную",
+    "stage3_push_optional.png — нужен FCM на устройстве",
+    "Формальное e2e витрина→бариста→гость в браузере — этап 5",
+    "Этап 4: overlay отмены",
+    "Этап 5: fly smoke, b21_acceptance"
+  ],
+  "screenshots": [
+    "screenshots/b21_barista_board_2026-06-10/stage3_guest_preparing.png",
+    "screenshots/b21_barista_board_2026-06-10/stage3_guest_ready.png"
+  ],
+  "tests": {
+    "order_status_push_notifier_test": "b21 push body tests PASS",
+    "order_status_update_service_test": "mobile order push PASS",
+    "b21_guest_notify_test": "3 runs PASS",
+    "guest_order_channel_test": "b21 barista broadcast PASS"
+  }
+}

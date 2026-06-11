@@ -153,6 +153,8 @@ module Barista
         return
       end
 
+      @old_status = @order.status
+
       Barista::OrderCancellationService.new(
         order: @order,
         actor: current_user,
@@ -164,15 +166,11 @@ module Barista
         request_id: request.request_id
       ).call!
 
-      Turbo::StreamsChannel.broadcast_remove_to(
-        "orders_#{Current.tenant_id}",
-        target: "order_#{@order.id}"
-      )
-      broadcast_order_counts
-      BroadcastTvColumnsJob.perform_later(Current.tenant_id)
+      @order = @order.reload
+      Barista::OrderBoardBroadcaster.call(order: @order, old_status: @old_status)
 
       respond_to do |format|
-        format.turbo_stream { render turbo_stream: turbo_stream.remove("order_#{@order.id}") }
+        format.turbo_stream
         format.html { redirect_to barista_dashboard_path, notice: "Заказ отменён" }
       end
     rescue Barista::OrderCancellationService::OrderCancellationError => e

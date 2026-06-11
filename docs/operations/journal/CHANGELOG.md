@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## v1.169 — 2026-06-11 (B2.1 этап 4: overlay отмены на табло)
+
+- **Отмена:** overlay на карточке, Stimulus, resync колонки через `cancel.turbo_stream`.
+- **Артефакт:** `b21_stage4_cancel_2026-06-11.json`.
+
+## v1.168 — 2026-06-11 (B2.1 этап 3: гость WS + push тексты)
+
+- **Push/WS:** тексты B2.1, подзаголовки `OrderStatus.svelte`, retry в `shopOrderCable.js`.
+- **Тесты:** `b21_guest_notify_test`, push notifier.
+- **Артефакт:** `b21_stage3_guest_notify_2026-06-11.json`.
+
 ## v1.167 — 2026-06-11 (B2.1 этап 2: FIFO табло бариста)
 
 - **FIFO:** `BoardOrdersQuery`, resync колонок в `OrderBoardBroadcaster` и turbo `update_status`.
