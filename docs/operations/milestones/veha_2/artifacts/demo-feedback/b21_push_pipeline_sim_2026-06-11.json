@@ -1,9 +1,30 @@
 {
   "task": "b21_push_pipeline_sim",
-  "run_at": "2026-06-11T14:25:32Z",
+  "run_at": "2026-06-11T14:31:41Z",
   "app": "coffeeos",
   "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
   "fcm_simulate": true,
-  "status": "FAIL",
-  "error": "NoMethodError: undefined method 'present?' for an instance of String"
+  "status": "PASS",
+  "fly_release": "v211",
+  "notification": {
+    "order_id": "16631866-f207-453c-8cc5-70b81cf8faac",
+    "notification_id": "7df2428b-f2fa-4f0e-a54d-86f841b0e1e1",
+    "body": "Ваш заказ начали готовить",
+    "status": "sent",
+    "sent_at": "2026-06-11T14:31:49Z",
+    "push_token": "b21-push-sim-01ef0b5ce55d"
+  },
+  "checks": {
+    "push_token": true,
+    "body_b21": true,
+    "status_sent": true
+  },
+  "local_tests": [
+    "test/integration/shop/push_pipeline_simulation_test.rb",
+    "test/services/shop/fcm_client_test.rb"
+  ],
+  "commands": {
+    "fly": "FLY_BIN=flyctl ruby bin/b21_push_pipeline_fly.rb",
+    "local_order": "FCM_SIMULATE=1 bin/rails shop:push:smoke ORDER_ID=<uuid>"
+  }
 }

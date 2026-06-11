@@ -80,13 +80,14 @@ begin
     status: pass ? "PASS" : "FAIL",
     notification: sim,
     checks: {
-      push_token: sim["push_token"].present?,
+      push_token: !sim["push_token"].to_s.empty?,
       body_b21: sim["body"].to_s.include?("начали готовить"),
       status_sent: sim["status"] == "sent"
     }
   )
 rescue StandardError => e
   result[:error] = "#{e.class}: #{e.message}"
+  result[:raw] = raw.to_s[0, 2000] if defined?(raw) && raw
 end
 
 File.write(OUT, JSON.pretty_generate(result))

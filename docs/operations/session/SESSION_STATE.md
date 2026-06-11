@@ -29,7 +29,8 @@
 - **FCM_SIMULATE=1** — полный цикл без Google и без телефона: notifier → job → `sent`.
 - **Скрипты:** `bin/b21_push_pipeline_fly.rb`, `shop:push:smoke ORDER_ID=…`.
 - **Тесты:** `push_pipeline_simulation_test` + `fcm_client_test` simulate.
-- **Артефакт:** `b21_push_pipeline_sim_2026-06-11.json` (после Fly прогона).
+- **Fly:** `b21_push_pipeline_fly.rb` — **PASS** v211, body «начали готовить», `status=sent`.
+- **Артефакт:** `b21_push_pipeline_sim_2026-06-11.json`.
 
 ### Сессия 2026-06-11 (B2.1 хвост — removed_modifiers с витрины)
 
