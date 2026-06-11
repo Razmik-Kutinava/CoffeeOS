@@ -4,7 +4,12 @@
 # Fly smoke: B2.1 табло бариста — login, разметка B2.1, витрина → табло.
 #
 #   ruby bin/b21_barista_board_fly_smoke.rb
-#   FLY_BIN=fly ruby bin/b21_barista_board_fly_smoke.rb
+#   FLY_BIN=flyctl ruby bin/b21_barista_board_fly_smoke.rb
+#
+# Стенд Fly (demo A) — чтобы табло не врало:
+# - На проде: board_scope (смена + витрина с opened_at), без limit(50) — новые заказы не теряются.
+# - Периодически: закрыть смену в панели менеджера ИЛИ перевести старые accepted → issued (демо-уборка).
+# - Перед smoke/e2e: лучше открыть новую смену, чем чистить заказы вручную каждый раз.
 
 require "json"
 require "open3"
