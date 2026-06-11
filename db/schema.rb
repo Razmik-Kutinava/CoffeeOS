@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_09_120000) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_11_140000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_stat_statements"
@@ -777,7 +777,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_09_120000) do
     t.index ["product_id"], name: "index_product_tenant_settings_on_product_id"
     t.index ["tenant_id", "is_enabled", "is_sold_out"], name: "idx_pts_tenant_enabled"
     t.index ["tenant_id"], name: "index_product_tenant_settings_on_tenant_id"
-    t.check_constraint "is_sold_out = false AND sold_out_reason IS NULL OR is_sold_out = true AND (sold_out_reason::text = ANY (ARRAY['manual'::character varying::text, 'stock_empty'::character varying::text]))", name: "chk_sold_out_reason"
+    t.check_constraint "is_sold_out = false AND sold_out_reason IS NULL OR is_sold_out = true AND (sold_out_reason::text = ANY (ARRAY['manual'::character varying, 'stock_empty'::character varying]::text[]))", name: "chk_sold_out_reason"
   end
 
   create_table "production_batches", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -1013,6 +1013,18 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_09_120000) do
     t.index ["email", "is_used"], name: "index_shop_email_otp_codes_on_email_and_is_used"
     t.index ["email"], name: "index_shop_email_otp_codes_on_email"
     t.index ["expires_at"], name: "index_shop_email_otp_codes_on_expires_at"
+  end
+
+  create_table "shop_email_verifications", id: :uuid, default: -> { "gen_random_uuid()" }, comment: "Подтверждённый email гостя на витрине: tenant + browser session, TTL 24ч; общая для всех web-инстансов", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "email", limit: 255, null: false
+    t.datetime "expires_at", null: false
+    t.string "session_id", limit: 64, null: false
+    t.uuid "tenant_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["expires_at"], name: "index_shop_email_verifications_on_expires_at"
+    t.index ["tenant_id", "email"], name: "index_shop_email_verifications_on_tenant_and_email"
+    t.index ["tenant_id", "session_id"], name: "index_shop_email_verifications_on_tenant_and_session", unique: true
   end
 
   create_table "solid_cache_entries", primary_key: ["key", "namespace"], force: :cascade do |t|
@@ -1292,6 +1304,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_09_120000) do
   add_foreign_key "shifts", "tenants", on_delete: :cascade
   add_foreign_key "shifts", "users", column: "closed_by_id", on_delete: :nullify
   add_foreign_key "shifts", "users", column: "opened_by_id", on_delete: :restrict
+  add_foreign_key "shop_email_verifications", "tenants"
   add_foreign_key "stock_movement_items", "ingredients", on_delete: :restrict
   add_foreign_key "stock_movement_items", "stock_movements", column: "movement_id", on_delete: :cascade
   add_foreign_key "stock_movements", "tenants", on_delete: :cascade

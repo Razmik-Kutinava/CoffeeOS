@@ -1,5 +1,18 @@
 # CHANGELOG
 
+## v1.179 — 2026-06-11 (витрина: OTP verify в Postgres per tenant)
+
+- **Миграция:** `shop_email_verifications` — `tenant_id` + `session_id` + email, TTL 24ч; FK tenants.
+- **Сервис:** `Shop::EmailVerification` — session + DB; `EmailOtpController`, `OrderCreator` через единый API.
+- **Зачем:** подтверждение email не слетает между web-инстансами (без Redis); изоляция по точке сохранена.
+- **Тесты:** unit + integration DB fallback при пустой session bucket.
+
+## v1.178 — 2026-06-11 (витрина checkout: sync email verified с сервером)
+
+- **Фронт:** `Checkout.svelte` — `syncServerStatus` сбрасывает ложный verified; preflight перед `POST /orders`.
+- **Профиль:** `clearEmailVerifiedInProfile()` — localStorage не врёт при истёкшей session.
+- **Кейс:** гость видит OTP-форму, а не блок «Контакты» + ошибка при оплате.
+
 ## v1.177 — 2026-06-11 (B2.1: formal acceptance OPS_PASS — критерии 1–9)
 
 - **Acceptance:** `bin/b21_acceptance_fly.rb` — Playwright замеры + скрины stage1–5 на Fly, FCM v1 pipeline.

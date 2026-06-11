@@ -12,14 +12,23 @@ module Shop
 
       def verify
         email = Shop::EmailOtp.verify!(email: params.require(:email), code: params.require(:code))
-        Shop::EmailVerificationSession.mark_verified!(session, @shop_tenant.id, email)
+        Shop::EmailVerification.mark_verified!(
+          session: session,
+          tenant_id: @shop_tenant.id,
+          email: email,
+          session_id: request.session.id
+        )
         render json: { verified: true, email: email }
       rescue Shop::EmailOtp::Error => e
         render json: { error: e.message }, status: :unprocessable_entity
       end
 
       def status
-        email = Shop::EmailVerificationSession.verified_email(session, @shop_tenant.id)
+        email = Shop::EmailVerification.verified_email(
+          session: session,
+          tenant_id: @shop_tenant.id,
+          session_id: request.session.id
+        )
         render json: { verified: email.present?, email: email }
       end
     end

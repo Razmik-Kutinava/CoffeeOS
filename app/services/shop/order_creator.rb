@@ -255,7 +255,11 @@ module Shop
       email = Shop::EmailVerificationSession.normalize(params[:email])
       raise Error, "Укажите email" if email.blank?
 
-      verified = Shop::EmailVerificationSession.verified_email(@session, @tenant.id)
+      verified = Shop::EmailVerification.verified_email(
+        session: @session,
+        tenant_id: @tenant.id,
+        session_id: shop_browser_session_id
+      )
       unless verified == email
         raise Error, "Подтвердите email кодом из письма"
       end
@@ -268,6 +272,10 @@ module Shop
       customer
     rescue ActiveRecord::RecordInvalid => e
       raise Error, e.record.errors.full_messages.join(", ")
+    end
+
+    def shop_browser_session_id
+      @request&.session&.id&.to_s
     end
   end
 end
