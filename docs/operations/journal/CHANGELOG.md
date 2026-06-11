@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## v1.171 — 2026-06-11 (B2.1: Bullet — убрать лишний includes на табло)
+
+- **BoardOrdersQuery:** только `order_items` + `order_status_logs` (без customer/payments).
+- **Карточка:** `first(4)` по preload вместо `.limit(4)` — Bullet AVOID eager loading.
+
 ## v1.170 — 2026-06-11 (B2.1 этап 5: ops gate — smoke, MCP, скрины)
 
 - **Скрипты:** `b21_barista_board_fly_smoke.rb`, `b21_mcp_fly_verify.rb`.
