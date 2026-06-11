@@ -25,6 +25,10 @@ OUT = ENV.fetch(
 )
 NULL_DEV = Gem.win_platform? ? "NUL" : "/dev/null"
 
+def present?(value)
+  !value.nil? && !value.to_s.strip.empty?
+end
+
 def curl(*args)
   out, status = Open3.capture2("curl", "-sS", *args)
   raise "curl failed: #{args.first(6).join(' ')}" unless status.success?
@@ -201,7 +205,7 @@ begin
   order_number = order_body["order_number"]
   result[:checks] << {
     id: "vitrina_create_order",
-    pass: order_http == 200 && order_id.present? && order_body["status"] == "accepted",
+    pass: order_http == 200 && present?(order_id) && order_body["status"] == "accepted",
     http: order_http,
     order_id: order_id,
     order_number: order_number
@@ -227,7 +231,7 @@ begin
   )
   result[:checks] << {
     id: "guest_order_status_api",
-    pass: show_body["status"] == "accepted" && show_body["order_number"].present?,
+    pass: show_body["status"] == "accepted" && present?(show_body["order_number"]),
     status: show_body["status"]
   }
 
