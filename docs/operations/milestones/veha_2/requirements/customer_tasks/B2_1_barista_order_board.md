@@ -89,7 +89,9 @@
 
 - [x] Полный прогон `bin/rails test` — 702 runs, 9 failures / 5 errors (вне B2.1)
 - [x] B2.1 subset + регрессия табло — FIFO/cancel/card PASS; 2 fail в create-order (не B2.1)
-- [x] `bin/b21_barista_board_fly_smoke.rb` — markup **PASS**, vitrina OTP skip (`b21_fly_smoke_2026-06-11.json`)
+- [x] `bin/b21_barista_board_fly_smoke.rb` — markup **PASS** (`b21_fly_smoke_2026-06-11.json`)
+- [x] Fix scope табло (смена+витрина, без `limit(50)`) — regression тест >50 PASS
+- [ ] Fly deploy fix + vitrina→board smoke **PASS** (`order_<uuid>` retry)
 - [x] MCP + HTTP verify Fly — **PASS** (`b21_mcp_fly_2026-06-11.json`, post-deploy)
 - [x] Скрины Fly: `barista_board_after.png`, `stage5_e2e_vitrina_to_board.png`
 - [x] Артефакт `b21_acceptance_2026-06-11.json`

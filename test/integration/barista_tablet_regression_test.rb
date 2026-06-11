@@ -182,7 +182,7 @@ class BaristaTabletRegressionTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "Нет заказов"
   end
 
-  test "dashboard limits 50 orders per column" do
+  test "dashboard shows all shift orders when more than 50 accepted and newest is visible" do
     login_as!(@barista)
     60.times do |i|
       Order.create!(
@@ -193,14 +193,27 @@ class BaristaTabletRegressionTest < ActionDispatch::IntegrationTest
         status: "accepted",
         total_amount: 100,
         discount_amount: 0,
-        final_amount: 100
+        final_amount: 100,
+        created_at: @cash_shift.opened_at + i.seconds
       )
     end
 
+    newest = Order.create!(
+      tenant: @tenant_a,
+      cash_shift: nil,
+      order_number: "VITRINA-NEW",
+      source: "mobile",
+      status: "accepted",
+      total_amount: 100,
+      discount_amount: 0,
+      final_amount: 100,
+      created_at: Time.current
+    )
+
     get "/barista"
     assert_response :success
-    # count badge should show 50 max because controller .limit(50)
-    assert_match(/id="count-new">50<\/span>/, response.body)
+    assert_match(/id="count-new">61<\/span>/, response.body)
+    assert_includes response.body, %(id="order_#{newest.id}")
   end
 
   test "order card shows only first 3 items and 'more' indicator and promo discount" do

@@ -59,10 +59,10 @@ module Barista
     end
 
     def broadcast_counts(tenant_id)
-      raw = Order.for_barista_board(tenant_id)
-                 .where(status: BOARD_STATUSES)
-                 .group(:status)
-                 .count
+      raw = BoardOrdersQuery.board_scope(tenant_id: tenant_id)
+                            .where(status: BOARD_STATUSES)
+                            .group(:status)
+                            .count
       counts = {
         new: raw["accepted"].to_i,
         preparing: raw["preparing"].to_i,

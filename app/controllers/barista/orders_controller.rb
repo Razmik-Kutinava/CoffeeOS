@@ -183,10 +183,10 @@ module Barista
     private
 
     def broadcast_order_counts
-      raw = Order.for_barista_board(Current.tenant_id)
-                 .where(status: %w[accepted preparing ready])
-                 .group(:status)
-                 .count
+      raw = Barista::BoardOrdersQuery.board_scope(tenant_id: Current.tenant_id)
+                                     .where(status: %w[accepted preparing ready])
+                                     .group(:status)
+                                     .count
       counts = { new: raw['accepted'].to_i, preparing: raw['preparing'].to_i, ready: raw['ready'].to_i }
 
       Turbo::StreamsChannel.broadcast_replace_to(

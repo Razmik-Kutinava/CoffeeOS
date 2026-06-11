@@ -211,17 +211,23 @@ begin
     order_number: order_number
   }
 
-  sleep 2
-
-  board_after = curl("-b", jar, "#{BASE}/barista")
-  on_board = board_after.include?(order_id.to_s) ||
-             (!order_number.to_s.empty? && board_after.include?(order_number.to_s)) ||
-             board_after.include?(order_label)
+  order_dom_id = "order_#{order_id}"
+  board_after = nil
+  on_board = false
+  5.times do |attempt|
+    sleep attempt.zero? ? 2 : 1
+    board_after = curl("-b", jar, "#{BASE}/barista")
+    on_board = board_after.include?(%(id="#{order_dom_id}")) ||
+               board_after.include?(%(id='#{order_dom_id}'))
+    break if on_board
+  end
   result[:checks] << {
     id: "vitrina_order_on_barista_board",
     pass: on_board,
     order_id: order_id,
-    order_number: order_number
+    order_dom_id: order_dom_id,
+    order_number: order_number,
+    note: on_board ? nil : "карточка #{order_dom_id} не найдена на /barista после retry"
   }
 
   show_body = curl_json(

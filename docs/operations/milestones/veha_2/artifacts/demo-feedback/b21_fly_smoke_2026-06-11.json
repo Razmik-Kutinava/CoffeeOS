@@ -4,7 +4,7 @@
   "base": "https://coffeeos.fly.dev",
   "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
   "barista_email": "barista-a@demo.coffeeos.local",
-  "vitrina_email": "b21-fly-06110828@coffeeos.dev",
+  "vitrina_email": "b21-fly-06110902@coffeeos.dev",
   "checks": [
     {
       "id": "barista_login",

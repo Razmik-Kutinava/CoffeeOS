@@ -13,13 +13,13 @@
 <% end %>
 
 <%= turbo_stream.replace "count-new" do %>
-  <%= render partial: "barista/dashboard/count_badge", locals: { count: Order.for_barista_board(tid).where(status: "accepted").count, type: "new" } %>
+  <%= render partial: "barista/dashboard/count_badge", locals: { count: Barista::BoardOrdersQuery.column_count(tenant_id: tid, status: "accepted"), type: "new" } %>
 <% end %>
 
 <%= turbo_stream.replace "count-preparing" do %>
-  <%= render partial: "barista/dashboard/count_badge", locals: { count: Order.for_barista_board(tid).where(status: "preparing").count, type: "preparing" } %>
+  <%= render partial: "barista/dashboard/count_badge", locals: { count: Barista::BoardOrdersQuery.column_count(tenant_id: tid, status: "preparing"), type: "preparing" } %>
 <% end %>
 
 <%= turbo_stream.replace "count-ready" do %>
-  <%= render partial: "barista/dashboard/count_badge", locals: { count: Order.for_barista_board(tid).where(status: "ready").count, type: "ready" } %>
+  <%= render partial: "barista/dashboard/count_badge", locals: { count: Barista::BoardOrdersQuery.column_count(tenant_id: tid, status: "ready"), type: "ready" } %>
 <% end %>
