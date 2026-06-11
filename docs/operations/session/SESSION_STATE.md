@@ -2,7 +2,7 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-06-11 (B2.1 fix scope табло · B2.2 ТЗ · B1.7)  
+**Дата:** 2026-06-11 (B2.1 этап 5 smoke PASS · B2.2 ТЗ)  
 **Предыдущее:** B1.1 закрыта: FIREBASE_* на Fly · smoke + MCP PASS  
 **Веха 1:** официально не закрыта (§ I, H.3 — `[ ]`).  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
@@ -24,13 +24,20 @@
 
 **Ops на блок:** commit + SESSION_STATE всегда (без вопроса); `PRACTICES` (CR); `QA_ACCEPTANCE_RUN` + `artifacts/` (QA); `CHANGELOG` + `HANDOFF`; `CHECKLIST` `[x]` только по факту.
 
+### Сессия 2026-06-11 (B2.1 этап 5 — Fly smoke e2e PASS)
+
+- **Smoke:** `FLY_BIN=flyctl ruby bin/b21_barista_board_fly_smoke.rb` — **PASS** (`order_8e2bc72e`, vitrina→табло).
+- **Артефакты:** `b21_fly_smoke_2026-06-11.json`, `b21_acceptance_2026-06-11.json` обновлены.
+- **Этап 5 ops gate:** `[x]` код; приёмка заказчика — потом.
+- **Дальше:** stage3 guest скрины, MCP e2e бариста→гость, FCM устройство.
+
 ### Сессия 2026-06-11 (B2.1 fix — новые заказы на табло при >50 accepted)
 
 - **Баг:** `limit(50)` по всему тенанту — на Fly demo новые витринные заказы не попадали в HTML.
 - **Fix:** `BoardOrdersQuery.board_scope` — текущая смена + витрина с `opened_at`; без лимита; counts/broadcast выровнены.
 - **Тесты:** regression >50 + `order_<uuid>`; unit scope vitrina/FIFO — PASS.
 - **Smoke:** `order_<uuid>` + retry в `b21_barista_board_fly_smoke.rb`.
-- **Блокер:** deploy на Fly + перепрогон vitrina→board smoke.
+- **Коммит:** `24266e0` · deploy пользователем — перепрогон smoke из WSL с `flyctl`.
 
 ### Сессия 2026-06-11 (B2.1 post-deploy Fly)
 

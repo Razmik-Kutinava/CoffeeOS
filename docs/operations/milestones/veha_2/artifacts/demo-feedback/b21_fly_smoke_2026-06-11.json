@@ -4,7 +4,8 @@
   "base": "https://coffeeos.fly.dev",
   "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
   "barista_email": "barista-a@demo.coffeeos.local",
-  "vitrina_email": "b21-fly-06110902@coffeeos.dev",
+  "vitrina_email": "b21-fly-06110906@coffeeos.dev",
+  "fly_bin": "flyctl",
   "checks": [
     {
       "id": "barista_login",
@@ -37,12 +38,30 @@
       "http": 200
     },
     {
-      "id": "vitrina_otp_fetch",
-      "pass": false,
-      "skip": true,
-      "note": "fly machine exec недоступен (flyctl auth login) — vitrina→board не проверен"
+      "id": "vitrina_otp_verify",
+      "pass": true,
+      "http": 200
+    },
+    {
+      "id": "vitrina_create_order",
+      "pass": true,
+      "http": 200,
+      "order_id": "8e2bc72e-3fbd-4995-8a2f-9b0112a60f5d",
+      "order_number": null
+    },
+    {
+      "id": "vitrina_order_on_barista_board",
+      "pass": true,
+      "order_id": "8e2bc72e-3fbd-4995-8a2f-9b0112a60f5d",
+      "order_dom_id": "order_8e2bc72e-3fbd-4995-8a2f-9b0112a60f5d",
+      "order_number": null,
+      "note": null
+    },
+    {
+      "id": "guest_order_status_api",
+      "pass": true,
+      "status": "accepted"
     }
   ],
-  "status": "PARTIAL",
-  "error": "RuntimeError: otp not fetched — fly exec unavailable"
+  "status": "PASS"
 }

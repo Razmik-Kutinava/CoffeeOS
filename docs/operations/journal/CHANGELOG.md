@@ -1,12 +1,18 @@
 # CHANGELOG
 
+## v1.174 — 2026-06-11 (B2.1 этап 5: Fly smoke e2e PASS)
+
+- **Smoke:** vitrina→табло **PASS** — `order_8e2bc72e`, `FLY_BIN=flyctl`, `b21_fly_smoke_2026-06-11.json`.
+- **Acceptance:** критерий 9 формально PASS; этап 5 ops gate закрыт (без подписи заказчика).
+- **Дальше:** stage3 guest скрины, MCP e2e бариста→гость.
+
 ## v1.173 — 2026-06-11 (B2.1: табло — scope смены вместо limit 50)
 
 - **BoardOrdersQuery:** открытая смена + витрина (`cash_shift_id` NULL, `source: mobile`, с `opened_at`); убран слепой `limit(50)` по всему тенанту.
 - **Counts:** `OrderBoardBroadcaster`, turbo `update_status`/`cancel`, `orders_controller#broadcast_order_counts` — тот же `board_scope`.
 - **Тесты:** >50 accepted в смене — новый заказ виден (`order_<uuid>`); unit scope vitrina/FIFO.
 - **Smoke:** проверка `id="order_<uuid>"` с retry вместо `include?` по всей странице.
-- **Дальше:** deploy Fly + перепрогон `b21_fly_smoke_*.json`.
+- **Smoke e2e:** PASS — см. v1.174.
 
 ## v1.172 — 2026-06-11 (B2.1 post-deploy Fly: markup smoke PASS)
 

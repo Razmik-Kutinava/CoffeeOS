@@ -6,10 +6,10 @@
 
 | Сводка | Статус |
 |--------|--------|
-| **MVP B2.1 целиком** | `[~]` ops gate этапа 5 закрыт — ждём deploy Fly + подпись |
-| **Реализация (мы)** | `[~]` ~90% плана этапов |
+| **MVP B2.1 целиком** | `[~]` ops gate этап 5 — smoke e2e PASS, ждём подпись + stage3 скрины |
+| **Реализация (мы)** | `[x]` MVP код этапов 0–5 |
 | **Приёмка заказчика** | `[ ]` дата ______ · комментарий ______ |
-| **Последний коммит** | `49f6d04` — post-deploy Fly markup PASS (2026-06-11) |
+| **Последний коммит** | `02a52fa` — ops стенд Fly (2026-06-11) |
 
 ---
 
@@ -21,7 +21,7 @@
 [✓] 2 — FIFO, без drag-hint, resync колонок                 2026-06-11  885b5e5
 [✓] 3 — гость: тексты push/WS, retry cable, тесты           2026-06-11
 [✓] 4 — отмена: overlay на карточке, resync колонки         2026-06-11
-[~] 5 — ops gate: тесты, smoke, MCP, скрины (PARTIAL Fly)     2026-06-11
+[✓] 5 — ops gate: smoke e2e PASS, MCP, scope fix              2026-06-11
 --- не MVP B2.1 (фаза 2/3) ---
     брак, переделка, возврат, звук, кухня, PWA, defect_reasons
 ```
@@ -85,19 +85,19 @@
 - [x] Артефакт `b21_stage4_cancel_2026-06-11.json`
 - [x] Скрины: `stage4_cancel_overlay.png`, `stage4_cancel_confirmed.png` *(localhost MCP)*
 
-### Этап 5 — ops gate `[~]` 2026-06-11 *(не финальная приёмка)*
+### Этап 5 — ops gate `[x]` 2026-06-11 *(не финальная приёмка заказчика)*
 
 - [x] Полный прогон `bin/rails test` — 702 runs, 9 failures / 5 errors (вне B2.1)
 - [x] B2.1 subset + регрессия табло — FIFO/cancel/card PASS; 2 fail в create-order (не B2.1)
-- [x] `bin/b21_barista_board_fly_smoke.rb` — markup **PASS** (`b21_fly_smoke_2026-06-11.json`)
+- [x] `bin/b21_barista_board_fly_smoke.rb` — **PASS** e2e витрина→табло (`b21_fly_smoke_2026-06-11.json`, `order_<uuid>`)
 - [x] Fix scope табло (смена+витрина, без `limit(50)`) — regression тест >50 PASS
-- [ ] Fly deploy fix + vitrina→board smoke **PASS** (`order_<uuid>` retry)
+- [x] Fly deploy scope fix + vitrina→board smoke **PASS** 2026-06-11 (`FLY_BIN=flyctl`, order `8e2bc72e`)
 - [x] MCP + HTTP verify Fly — **PASS** (`b21_mcp_fly_2026-06-11.json`, post-deploy)
 - [x] Скрины Fly: `barista_board_after.png`, `stage5_e2e_vitrina_to_board.png`
 - [x] Артефакт `b21_acceptance_2026-06-11.json`
 - [x] Артефакт `b21_mcp_fly_2026-06-11.json`
-- [ ] Приёмка заказчика — подпись
-- [x] Fly deploy B2.1 + перепрогон markup smoke — **PASS** 2026-06-11 (OTP vitrina→board — skip, flyctl в shell агента)
+- [ ] Приёмка заказчика — подпись *(потом)*
+- [ ] stage3 guest скрины + MCP e2e бариста→гость *(следующий хвост)*
 
 **Скрины этапов 1–4:** localhost. **Скрины этапа 5:** Fly после deploy.
 
