@@ -2,7 +2,7 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-06-11 (B2.1 браузерный e2e PASS · B2.2 ТЗ)  
+**Дата:** 2026-06-11 (B2.1 OPS_PASS · B2.2 ТЗ)  
 **Предыдущее:** B1.1 закрыта: FIREBASE_* на Fly · smoke + MCP PASS  
 **Веха 1:** официально не закрыта (§ I, H.3 — `[ ]`).  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
@@ -23,6 +23,13 @@
 | **Блок 2** — табло баристы | поток 3 тест-приёмка |
 
 **Ops на блок:** commit + SESSION_STATE всегда (без вопроса); `PRACTICES` (CR); `QA_ACCEPTANCE_RUN` + `artifacts/` (QA); `CHANGELOG` + `HANDOFF`; `CHECKLIST` `[x]` только по факту.
+
+### Сессия 2026-06-11 (B2.1 — formal acceptance OPS_PASS)
+
+- **Прогон:** `bin/b21_acceptance_fly.rb` — критерии MVP **1–9 формально PASS** на Fly.
+- **Скрипты:** `b21_acceptance_prep.rb`, `b21_acceptance_fly.mjs` — замер табло ~850ms, FIFO, модификаторы, FCM pipeline, stage2/4 Fly.
+- **Артефакт:** `b21_acceptance_2026-06-11.json` — `status: OPS_PASS`, `internal_signoff_ready: true`.
+- **Дальше:** внутренняя приёмка (ты) → подпись заказчика → B2.2.
 
 ### Сессия 2026-06-11 (B2.1 — браузерный e2e витрина→бариста→гость Fly)
 

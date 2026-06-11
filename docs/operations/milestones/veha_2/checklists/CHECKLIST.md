@@ -84,7 +84,7 @@
 
 См. [B2_1_barista_order_board.md](../requirements/customer_tasks/B2_1_barista_order_board.md).
 
-- [~] **B2.1** Интерактивная карточка + FIFO + модификаторы + B1.1 — этапы 0–5 ops `[x]` 2026-06-11 · браузерный e2e Fly PASS (`b21_mcp_e2e`) · подпись заказчика `[ ]`
+- [~] **B2.1** Интерактивная карточка + FIFO + модификаторы + B1.1 — **OPS_PASS** 2026-06-11 (`b21_acceptance_fly`, крит. 1–9) · внутренняя приёмка `[ ]` · заказчик `[ ]`
 - [ ] **B2.2** Объединить «Меню» + «Создать», стоп-лист с карточки, POS Сбер — ТЗ [`B2_2`](../requirements/customer_tasks/B2_2_barista_menu_create_merge.md) · stage0 `[x]`
 
 ---

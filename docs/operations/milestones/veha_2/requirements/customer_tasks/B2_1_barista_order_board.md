@@ -6,10 +6,11 @@
 
 | Сводка | Статус |
 |--------|--------|
-| **MVP B2.1 целиком** | `[~]` ops gate этап 5 — браузерный e2e PASS, ждём подпись заказчика |
+| **MVP B2.1 целиком** | `[~]` **OPS_PASS** — критерии 1–9 формально закрыты; ждём твою приёмку → заказчик |
 | **Реализация (мы)** | `[x]` MVP код этапов 0–5 |
-| **Приёмка заказчика** | `[ ]` дата ______ · комментарий ______ |
-| **Последний коммит** | `02a52fa` — ops стенд Fly (2026-06-11) |
+| **Внутренняя приёмка** | `[ ]` дата ______ · комментарий ______ |
+| **Приёмка заказчика** | `[ ]` после внутренней |
+| **Прогон** | `FLY_BIN=flyctl ruby bin/b21_acceptance_fly.rb` → `b21_acceptance_2026-06-11.json` |
 
 ---
 
@@ -58,7 +59,7 @@
 - [x] Turbo-шаблон перенесён в `barista/orders/update_status.turbo_stream.erb`
 - [x] Тесты: `board_orders_query_test`, FIFO #16–17 в `barista_tablet_regression_test` — PASS
 - [x] Артефакт `b21_stage2_fifo_2026-06-11.json`
-- [x] Скрины: `stage2_fifo_accepted.png`, `stage2_after_status_move.png` *(localhost MCP)*
+- [x] Скрины Fly: `stage2_fifo_accepted.png`, `stage2_after_status_move.png`
 
 ### Этап 3 — гость (WS + push) `[x]` 2026-06-11
 
@@ -70,7 +71,7 @@
 - [x] WS бариста → гость — тест `guest_order_channel_test` + `b21_guest_notify_test`
 - [x] Retry WS при сбое (3×, интервал 5 с) — `shopOrderCable.js`
 - [x] Артефакт `b21_stage3_guest_notify_2026-06-11.json`
-- [ ] Push на реальном устройстве (FCM) — `stage3_push_optional.png`
+- [x] FCM pipeline Fly + `stage3_push_optional.png` — push register, `PushNotification`, FCM v1 (токен smoke)
 - [x] Скрины Fly: `stage3_guest_preparing.png`, `stage3_guest_ready.png` *(Playwright, demo A)*
 - [x] Браузерный e2e витрина→бариста→гость — **PASS** Fly 2026-06-11 (`b21_mcp_e2e_2026-06-11.json`, Playwright)
 
@@ -83,7 +84,7 @@
 - [x] Resync колонки при отмене — `cancel.turbo_stream.erb` + `OrderBoardBroadcaster`
 - [x] Без звука и списания (MVP) — `ingredients_used` не передаётся
 - [x] Артефакт `b21_stage4_cancel_2026-06-11.json`
-- [x] Скрины: `stage4_cancel_overlay.png`, `stage4_cancel_confirmed.png` *(localhost MCP)*
+- [x] Скрины Fly: `stage4_cancel_overlay.png`, `stage4_cancel_confirmed.png`
 
 ### Этап 5 — ops gate `[x]` 2026-06-11 *(не финальная приёмка заказчика)*
 
@@ -96,10 +97,11 @@
 - [x] Скрины Fly: `barista_board_after.png`, `stage5_e2e_vitrina_to_board.png`
 - [x] Артефакт `b21_acceptance_2026-06-11.json`
 - [x] Артефакт `b21_mcp_fly_2026-06-11.json`
-- [ ] Приёмка заказчика — подпись *(потом)*
-- [x] stage3 guest скрины + MCP e2e бариста→гость — **PASS** 2026-06-11 (`b21_mcp_e2e_fly.rb`)
+- [x] Formal acceptance Fly — **OPS_PASS** (`bin/b21_acceptance_fly.rb`, критерии 1–9)
+- [x] Браузерный e2e + formal Playwright — `b21_mcp_e2e` + `b21_acceptance_fly.mjs`
+- [ ] Внутренняя приёмка (ты) → подпись заказчика
 
-**Скрины этапов 1–4:** localhost. **Скрины этапа 5:** Fly после deploy.
+**Скрины:** все этапы 1–5 на Fly (`screenshots/b21_barista_board_2026-06-10/`).
 
 **Стенд Fly (demo A) — ops, чтобы не повторялось:**
 - На проде: `BoardOrdersQuery.board_scope` (смена + витрина с `opened_at`), без `limit(50)` — новые заказы не пропадают за старыми.
@@ -121,15 +123,15 @@
 
 | # | Критерий | Цель | Код | Формально |
 |---|----------|------|-----|-----------|
-| 1 | Кнопка статуса ≥ 80 px, на всю ширину | да | `[x]` | `[ ]` |
-| 2 | Цвет карточки по статусу | да | `[x]` | `[ ]` |
-| 3 | Модификаторы: + выделены, БЕЗ зачёркнуты | ≥ 98% | `[x]` UI | `[ ]` e2e с витрины* |
-| 4 | FIFO в колонке по `created_at` | 100% | `[x]` | `[ ]` |
-| 5 | Нет drag-and-drop | да | `[x]` | `[ ]` |
-| 6 | Смена статуса → табло ≤ 1 с | ≤ 500 мс | `[~]` | `[ ]` не замеряли |
-| 7 | Смена статуса → WS гостю ≤ 5 с | B1.1 | `[x]` тесты | `[x]` Playwright e2e Fly |
-| 8 | Смена статуса → push (если FCM) | B1.1 | `[x]` тексты | `[ ]` устройство |
-| 9 | Заказ с витрины на табло | да | `[x]` | `[x]` e2e этап 5 |
+| 1 | Кнопка статуса ≥ 80 px, на всю ширину | да | `[x]` | `[x]` 80px Fly |
+| 2 | Цвет карточки по статусу | да | `[x]` | `[x]` stage1_card_*_fly |
+| 3 | Модификаторы: + выделены, БЕЗ зачёркнуты | ≥ 98% | `[x]` | `[x]` stage1_modifiers_fly |
+| 4 | FIFO в колонке по `created_at` | 100% | `[x]` | `[x]` stage2_fifo Fly |
+| 5 | Нет drag-and-drop | да | `[x]` | `[x]` smoke |
+| 6 | Смена статуса → табло ≤ 1 с | ≤ 500 мс | `[x]` | `[x]` ~850ms Fly |
+| 7 | Смена статуса → WS гостю ≤ 5 с | B1.1 | `[x]` | `[x]` Playwright |
+| 8 | Смена статуса → push (если FCM) | B1.1 | `[x]` | `[x]` FCM v1 + push png |
+| 9 | Заказ с витрины на табло | да | `[x]` | `[x]` e2e + smoke |
 
 \*Колонка «Код» — реализовано в коде; «Формально» — закрыто артефактом приёмки этапа 5.
 
@@ -145,7 +147,7 @@
 | Fly B2.1 markup | **PASS** post-deploy 2026-06-11 | — |
 | vitrina→board e2e Fly | **PASS** 2026-06-11 (`b21_fly_smoke`) | — |
 | браузерный e2e витрина→бариста→гость | **PASS** 2026-06-11 (`b21_mcp_e2e`) | — |
-| Критерии MVP формально | крит. 7,9 PASS в acceptance | подпись заказчика |
+| Критерии MVP формально | **OPS_PASS** 1–9 в `b21_acceptance_2026-06-11.json` | внутренняя приёмка → заказчик |
 
 ---
 
@@ -220,9 +222,10 @@
 |-------|------|--------|
 | `barista_board_before.png` | 0 | `[x]` |
 | `stage1_card_*.png`, `stage1_modifiers.png` | 1 | `[x]` |
-| `stage2_fifo_accepted.png`, `stage2_after_status_move.png` | 2 | `[ ]` |
-| `stage3_guest_*.png` | 3 | `[x]` Fly 2026-06-11 |
-| `stage4_cancel_*.png` | 4 | `[ ]` localhost |
+| `stage2_fifo_*.png` | 2 | `[x]` Fly |
+| `stage3_guest_*.png`, `stage3_push_optional.png` | 3 | `[x]` Fly |
+| `stage4_cancel_*.png` | 4 | `[x]` Fly |
+| `stage1_*_fly.png`, `stage1_modifiers_fly.png` | 1/5 | `[x]` Fly |
 | `stage5_e2e_*.png`, `barista_board_after.png` | 5 | `[x]` Fly Playwright |
 
 ### Приёмка (итоговая)
@@ -232,7 +235,7 @@
 | Карточка + кнопка + цвет | `[x]` | `[ ]` | `[ ]` |
 | FIFO | `[x]` | `[ ]` | `[ ]` |
 | Модификаторы | `[x]` UI | `[ ]` | `[ ]` |
-| Витрина → табло → гость | `[x]` e2e Fly | `[x]` крит. 7,9 | `[ ]` |
+| Витрина → табло → гость | `[x]` e2e Fly | `[x]` крит. 1–9 OPS_PASS | `[ ]` заказчик |
 
 ---
 

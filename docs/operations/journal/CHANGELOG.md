@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v1.177 — 2026-06-11 (B2.1: formal acceptance OPS_PASS — критерии 1–9)
+
+- **Acceptance:** `bin/b21_acceptance_fly.rb` — Playwright замеры + скрины stage1–5 на Fly, FCM v1 pipeline.
+- **Критерии:** 1–9 формально PASS (`b21_acceptance_2026-06-11.json`, `internal_signoff_ready`).
+- **Скрины:** stage2/4 Fly, `stage1_*_fly`, `stage3_push_optional.png`.
+
 ## v1.176 — 2026-06-11 (B2.1: браузерный e2e витрина→бариста→гость Fly PASS)
 
 - **Playwright e2e:** `bin/b21_mcp_e2e_prep.rb`, `b21_mcp_e2e_fly.mjs`, оркестратор `b21_mcp_e2e_fly.rb` — UI-клики бариста + WS гостю ≤5с.
