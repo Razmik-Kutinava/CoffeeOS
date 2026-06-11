@@ -24,6 +24,13 @@
 
 **Ops на блок:** commit + SESSION_STATE всегда (без вопроса); `PRACTICES` (CR); `QA_ACCEPTANCE_RUN` + `artifacts/` (QA); `CHANGELOG` + `HANDOFF`; `CHECKLIST` `[x]` только по факту.
 
+### Сессия 2026-06-11 (B2.1 — push pipeline simulation)
+
+- **FCM_SIMULATE=1** — полный цикл без Google и без телефона: notifier → job → `sent`.
+- **Скрипты:** `bin/b21_push_pipeline_fly.rb`, `shop:push:smoke ORDER_ID=…`.
+- **Тесты:** `push_pipeline_simulation_test` + `fcm_client_test` simulate.
+- **Артефакт:** `b21_push_pipeline_sim_2026-06-11.json` (после Fly прогона).
+
 ### Сессия 2026-06-11 (B2.1 хвост — removed_modifiers с витрины)
 
 - **Фича:** витрина пишет `removed_modifiers` (все опции − выбранные) → корзина → `OrderItem.modifier_options` → табло «БЕЗ …».

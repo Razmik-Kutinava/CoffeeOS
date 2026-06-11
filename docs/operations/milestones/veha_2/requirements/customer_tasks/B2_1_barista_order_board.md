@@ -72,6 +72,7 @@
 - [x] Retry WS при сбое (3×, интервал 5 с) — `shopOrderCable.js`
 - [x] Артефакт `b21_stage3_guest_notify_2026-06-11.json`
 - [x] FCM pipeline Fly + `stage3_push_optional.png` — push register, `PushNotification`, FCM v1 (токен smoke)
+- [x] **Push simulation** — `FCM_SIMULATE=1`, `push_pipeline_simulation_test`, `bin/b21_push_pipeline_fly.rb`, `shop:push:smoke`
 - [x] Скрины Fly: `stage3_guest_preparing.png`, `stage3_guest_ready.png` *(Playwright, demo A)*
 - [x] Браузерный e2e витрина→бариста→гость — **PASS** Fly 2026-06-11 (`b21_mcp_e2e_2026-06-11.json`, Playwright)
 

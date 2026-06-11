@@ -1,0 +1,9 @@
+{
+  "task": "b21_push_pipeline_sim",
+  "run_at": "2026-06-11T14:25:32Z",
+  "app": "coffeeos",
+  "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "fcm_simulate": true,
+  "status": "FAIL",
+  "error": "NoMethodError: undefined method 'present?' for an instance of String"
+}

@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v1.181 — 2026-06-11 (B2.1: push pipeline simulation без устройства)
+
+- **FCM_SIMULATE:** `FcmClient` — отправка без Google; job → `PushNotification.status=sent`.
+- **Тесты:** `push_pipeline_simulation_test` — бариста → job → sent + B2.1 body.
+- **Ops:** `bin/b21_push_pipeline_fly.rb`, `bin/rails shop:push:smoke ORDER_ID=…`.
+
 ## v1.180 — 2026-06-11 (витрина: removed_modifiers на табло бариста)
 
 - **Логика:** все опции товара минус `selected_modifiers` → `removed_modifiers` («БЕЗ …» на карточке).

@@ -18,6 +18,11 @@ module Shop
     end
 
     def deliver!(token:, title:, body:, data: {})
+      if simulate?
+        Rails.logger.info("[Shop::FcmClient] FCM_SIMULATE — #{title}: #{body} (token=#{token.to_s.first(12)}…)")
+        return { simulated: true, token: token }
+      end
+
       account = Shop::FirebaseConfig.service_account
       project_id = Shop::FirebaseConfig.project_id
 
@@ -38,6 +43,10 @@ module Shop
     end
 
     private
+
+    def simulate?
+      ActiveModel::Type::Boolean.new.cast(ENV["FCM_SIMULATE"])
+    end
 
     def fetch_access_token!(account)
       client_email = account["client_email"]
