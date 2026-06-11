@@ -6,10 +6,10 @@
 
 | Сводка | Статус |
 |--------|--------|
-| **MVP B2.1 целиком** | `[ ]` в работе — этапы 0–4 закрыты, этап 5 впереди |
-| **Реализация (мы)** | `[~]` ~80% плана этапов |
+| **MVP B2.1 целиком** | `[~]` ops gate этапа 5 закрыт — ждём deploy Fly + подпись |
+| **Реализация (мы)** | `[~]` ~90% плана этапов |
 | **Приёмка заказчика** | `[ ]` дата ______ · комментарий ______ |
-| **Последний коммит** | `a55c949` — этапы 3–4 (2026-06-11) |
+| **Последний коммит** | *(этап 5 ops)* |
 
 ---
 
@@ -21,7 +21,7 @@
 [✓] 2 — FIFO, без drag-hint, resync колонок                 2026-06-11  885b5e5
 [✓] 3 — гость: тексты push/WS, retry cable, тесты           2026-06-11
 [✓] 4 — отмена: overlay на карточке, resync колонки         2026-06-11
-[ ] 5 — fly smoke, acceptance json, скрины Fly, подпись      ← СЛЕДУЮЩИЙ
+[~] 5 — ops gate: тесты, smoke, MCP, скрины (PARTIAL Fly)     2026-06-11
 --- не MVP B2.1 (фаза 2/3) ---
     брак, переделка, возврат, звук, кухня, PWA, defect_reasons
 ```
@@ -58,7 +58,7 @@
 - [x] Turbo-шаблон перенесён в `barista/orders/update_status.turbo_stream.erb`
 - [x] Тесты: `board_orders_query_test`, FIFO #16–17 в `barista_tablet_regression_test` — PASS
 - [x] Артефакт `b21_stage2_fifo_2026-06-11.json`
-- [ ] Скрины: `stage2_fifo_accepted.png`, `stage2_after_status_move.png` *(localhost, файлов пока нет)*
+- [x] Скрины: `stage2_fifo_accepted.png`, `stage2_after_status_move.png` *(localhost MCP)*
 
 ### Этап 3 — гость (WS + push) `[x]` 2026-06-11
 
@@ -83,17 +83,19 @@
 - [x] Resync колонки при отмене — `cancel.turbo_stream.erb` + `OrderBoardBroadcaster`
 - [x] Без звука и списания (MVP) — `ingredients_used` не передаётся
 - [x] Артефакт `b21_stage4_cancel_2026-06-11.json`
-- [ ] Скрины: `stage4_cancel_overlay.png`, `stage4_cancel_confirmed.png` *(localhost)*
+- [x] Скрины: `stage4_cancel_overlay.png`, `stage4_cancel_confirmed.png` *(localhost MCP)*
 
-### Этап 5 — финальная приёмка `[ ]`
+### Этап 5 — ops gate `[~]` 2026-06-11 *(не финальная приёмка)*
 
-- [ ] Полный прогон тестов B2.1
-- [ ] Создать и прогнать `bin/b21_barista_board_fly_smoke.rb`
-- [ ] MCP Fly на `coffeeos.fly.dev`
-- [ ] Скрины Fly: `barista_board_after.png`, `stage5_e2e_vitrina_to_board.png`
-- [ ] Артефакт `b21_acceptance_YYYY-MM-DD.json` — все критерии MVP PASS/FAIL
-- [ ] Артефакт `b21_mcp_fly_YYYY-MM-DD.json`
+- [x] Полный прогон `bin/rails test` — 702 runs, 9 failures / 5 errors (вне B2.1)
+- [x] B2.1 subset + регрессия табло — FIFO/cancel/card PASS; 2 fail в create-order (не B2.1)
+- [x] `bin/b21_barista_board_fly_smoke.rb` — PARTIAL (`b21_fly_smoke_2026-06-11.json`)
+- [x] MCP + HTTP verify Fly — PARTIAL (`b21_mcp_fly_2026-06-11.json`, cursor-ide-browser)
+- [x] Скрины Fly: `barista_board_after.png`, `stage5_e2e_vitrina_to_board.png`
+- [x] Артефакт `b21_acceptance_2026-06-11.json`
+- [x] Артефакт `b21_mcp_fly_2026-06-11.json`
 - [ ] Приёмка заказчика — подпись
+- [ ] Fly deploy B2.1 + перепрогон markup smoke
 
 **Скрины этапов 1–4:** localhost. **Скрины этапа 5:** Fly после deploy.
 
@@ -132,10 +134,10 @@
 |-------|--------|-----------------|
 | `removed_modifiers` — ключ в JSONB готов, helper читает | витрина пишет только `selected_modifiers` | checkout витрины (не B2.1) |
 | Цена / промокод на карточке | убраны намеренно | — |
-| Скрины stage2 | в артефакте указаны, файлов нет | localhost до/параллельно этапу 3 |
-| Отмена: backend есть, UI отключён | overlay в этапе 4 | этап 4 |
-| `bin/b21_barista_board_fly_smoke.rb` | не создан | этап 5 |
-| Критерии MVP / приёмка заказчика | все `[ ]` | этап 5 |
+| Скрины stage2/4 | на диске | этап 5 MCP localhost |
+| Fly B2.1 markup | старый UI на coffeeos.fly.dev | fly deploy develop |
+| vitrina→board e2e Fly | OTP fly exec blocked | flyctl auth login |
+| Критерии MVP формально | PARTIAL в acceptance json | после deploy + подпись |
 
 ---
 

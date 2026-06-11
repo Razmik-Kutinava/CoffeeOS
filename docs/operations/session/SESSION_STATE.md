@@ -24,11 +24,20 @@
 
 **Ops на блок:** commit + SESSION_STATE всегда (без вопроса); `PRACTICES` (CR); `QA_ACCEPTANCE_RUN` + `artifacts/` (QA); `CHANGELOG` + `HANDOFF`; `CHECKLIST` `[x]` только по факту.
 
+### Сессия 2026-06-11 (B2.1 этап 5 — ops gate)
+
+- **Тесты:** полный suite 702 runs (9 fail / 5 err вне B2.1); B2.1 FIFO/cancel/card PASS.
+- **Скрипты:** `bin/b21_barista_board_fly_smoke.rb`, `bin/b21_mcp_fly_verify.rb`.
+- **MCP:** cursor-ide-browser — скрины stage2/4 localhost + Fly vitrina/board.
+- **Артефакты:** `b21_acceptance_2026-06-11.json`, `b21_mcp_fly_2026-06-11.json`, `b21_fly_smoke_2026-06-11.json`.
+- **Fix:** overlay cancel `display:none` по умолчанию (не торчал без `is-visible`).
+- **Блокер Fly:** deploy B2.1 + `flyctl auth login` для vitrina→board OTP.
+- **Не закрыто:** подпись заказчика, stage3 guest скрины, FCM.
+
 ### Сессия 2026-06-11 (B2.1 этап 3–4 — гость + отмена)
 
 - **Этап 3:** push тексты, guest subtitles, WS retry, `b21_stage3_guest_notify`.
 - **Этап 4:** cancel overlay на карточке, resync колонки, `b21_stage4_cancel`.
-- **Дальше:** этап 5 fly/smoke/acceptance.
 
 ### Сессия 2026-06-11 (B2.1 этап 2 — FIFO)
 

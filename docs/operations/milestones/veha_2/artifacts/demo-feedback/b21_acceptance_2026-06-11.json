@@ -1,0 +1,86 @@
+{
+  "task": "B2_1_barista_order_board",
+  "scenario": "B2.1 — ops gate этапа 5 (не финальная приёмка заказчика)",
+  "run_at": "2026-06-11",
+  "stand_localhost": "http://localhost:3000",
+  "stand_fly": "https://coffeeos.fly.dev",
+  "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "tests": {
+    "full_rails_suite": {
+      "status": "PARTIAL",
+      "runs": 702,
+      "assertions": 3222,
+      "failures": 9,
+      "errors": 5,
+      "skips": 3,
+      "note": "полный bin/rails test — есть падения вне B2.1 (barista create-order, promo и др.)"
+    },
+    "b21_subset": {
+      "status": "PARTIAL",
+      "files": [
+        "test/integration/barista_tablet_regression_test.rb",
+        "test/integration/b21_guest_notify_test.rb",
+        "test/services/barista/board_orders_query_test.rb"
+      ],
+      "runs": 26,
+      "assertions": 202,
+      "failures": 2,
+      "b21_specific": "PASS — FIFO #16–17, cancel #18, card layout, guest notify b21_01–03"
+    }
+  },
+  "scripts": {
+    "b21_barista_board_fly_smoke": {
+      "path": "bin/b21_barista_board_fly_smoke.rb",
+      "status": "PARTIAL",
+      "artifact": "b21_fly_smoke_2026-06-11.json",
+      "blockers": [
+        "Fly без B2.1 markup — нужен fly deploy develop",
+        "vitrina→board OTP: flyctl auth login для machine exec"
+      ]
+    },
+    "b21_mcp_fly_verify": {
+      "path": "bin/b21_mcp_fly_verify.rb",
+      "status": "PARTIAL",
+      "artifact": "b21_mcp_fly_2026-06-11.json",
+      "tool": "cursor-ide-browser MCP + HTTP curl probes"
+    }
+  },
+  "screenshots": {
+    "dir": "docs/operations/milestones/veha_2/artifacts/demo-feedback/screenshots/b21_barista_board_2026-06-10",
+    "status": "PASS",
+    "files": {
+      "barista_board_before.png": true,
+      "stage1_card_accepted.png": true,
+      "stage1_card_preparing.png": true,
+      "stage1_card_ready.png": true,
+      "stage1_modifiers.png": true,
+      "stage2_fifo_accepted.png": true,
+      "stage2_after_status_move.png": true,
+      "stage4_cancel_overlay.png": true,
+      "stage4_cancel_confirmed.png": true,
+      "barista_board_after.png": true,
+      "stage5_e2e_vitrina_to_board.png": true,
+      "stage3_guest_preparing.png": false,
+      "stage3_guest_ready.png": false,
+      "stage3_push_optional.png": false
+    }
+  },
+  "mvp_criteria": [
+    { "id": 1, "criterion": "Кнопка статуса ≥80px", "code": "PASS", "formal": "PARTIAL", "evidence": "stage1_*, localhost MCP" },
+    { "id": 2, "criterion": "Цвет карточки по статусу", "code": "PASS", "formal": "PARTIAL", "evidence": "stage1_*" },
+    { "id": 3, "criterion": "Модификаторы +/БЕЗ", "code": "PASS", "formal": "PARTIAL", "evidence": "stage1_modifiers.png" },
+    { "id": 4, "criterion": "FIFO created_at", "code": "PASS", "formal": "PARTIAL", "evidence": "board_orders_query_test, stage2_*" },
+    { "id": 5, "criterion": "Нет drag-and-drop", "code": "PASS", "formal": "PARTIAL", "evidence": "regression #16–17" },
+    { "id": 6, "criterion": "Табло ≤1с", "code": "PARTIAL", "formal": "FAIL", "note": "не замеряли" },
+    { "id": 7, "criterion": "WS гостю ≤5с", "code": "PASS", "formal": "PARTIAL", "evidence": "b21_guest_notify_test" },
+    { "id": 8, "criterion": "Push FCM", "code": "PASS", "formal": "FAIL", "note": "тексты в notifier, устройство не проверяли" },
+    { "id": 9, "criterion": "Витрина→табло", "code": "PARTIAL", "formal": "FAIL", "note": "Fly smoke OTP blocked; localhost B2.1 OK" }
+  ],
+  "status": "PARTIAL",
+  "customer_signoff": false,
+  "next": [
+    "fly deploy develop + flyctl auth login → перепрогнать smoke/MCP markup",
+    "stage3 guest скрины + FCM опционально",
+    "подпись заказчика — отдельно"
+  ]
+}

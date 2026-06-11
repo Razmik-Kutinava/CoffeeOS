@@ -1,0 +1,48 @@
+{
+  "task": "B2_1_barista_board_fly_smoke",
+  "date": "2026-06-11",
+  "base": "https://coffeeos.fly.dev",
+  "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "barista_email": "barista-a@demo.coffeeos.local",
+  "vitrina_email": "b21-fly-06110654@coffeeos.dev",
+  "checks": [
+    {
+      "id": "barista_login",
+      "pass": true
+    },
+    {
+      "id": "barista_board_http",
+      "pass": true,
+      "http": 200
+    },
+    {
+      "id": "b21_board_markup",
+      "pass": false,
+      "markers": {
+        "order_card": false,
+        "status_button": false,
+        "gotovitsya": false,
+        "kanban_ids": true,
+        "no_drag_hint": false,
+        "footer_hint": false,
+        "cancel_overlay": false,
+        "cancel_confirm": false,
+        "turbo_cable": true
+      },
+      "deploy_note": "нужен fly deploy develop с B2.1"
+    },
+    {
+      "id": "vitrina_otp_send",
+      "pass": true,
+      "http": 200
+    },
+    {
+      "id": "vitrina_otp_fetch",
+      "pass": false,
+      "skip": true,
+      "note": "fly machine exec недоступен (flyctl auth login) — vitrina→board не проверен"
+    }
+  ],
+  "status": "FAIL",
+  "error": "RuntimeError: otp not fetched — fly exec unavailable"
+}

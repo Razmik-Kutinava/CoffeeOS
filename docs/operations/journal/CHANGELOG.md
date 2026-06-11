@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## v1.170 — 2026-06-11 (B2.1 этап 5: ops gate — smoke, MCP, скрины)
+
+- **Скрипты:** `b21_barista_board_fly_smoke.rb`, `b21_mcp_fly_verify.rb`.
+- **Артефакты:** `b21_acceptance_2026-06-11.json`, MCP/Fly smoke JSON; скрины stage2/4/5.
+- **Fix:** cancel overlay скрыт до `is-visible`.
+- **Статус:** PARTIAL — Fly без B2.1 deploy; приёмка заказчика открыта.
+
 ## v1.169 — 2026-06-11 (B2.1 этап 4: overlay отмены на табло)
 
 - **Отмена:** overlay на карточке, Stimulus, resync колонки через `cancel.turbo_stream`.
