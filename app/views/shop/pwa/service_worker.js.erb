@@ -1,0 +1,104 @@
+/* CoffeeOS shop PWA — B1.4 */
+const CACHE_VERSION = "<%= @cache_version %>";
+const SHELL_CACHE = `coffeeos-shop-shell-${CACHE_VERSION}`;
+const API_CACHE = `coffeeos-shop-api-${CACHE_VERSION}`;
+
+const SHELL_URLS = [
+  "/shop",
+  "/pwa/icon-192.png",
+  "/pwa/icon-512.png",
+  "/pwa/apple-touch-icon.png"
+];
+
+const CATALOG_API = /\/shop\/api\/(categories|products)(\?|$)/;
+const CART_API = /\/shop\/api\/cart(\?|$)/;
+
+self.addEventListener("install", (event) => {
+  event.waitUntil(
+    caches
+      .open(SHELL_CACHE)
+      .then((cache) => cache.addAll(SHELL_URLS))
+      .then(() => self.skipWaiting())
+  );
+});
+
+self.addEventListener("activate", (event) => {
+  event.waitUntil(
+    caches
+      .keys()
+      .then((keys) =>
+        Promise.all(
+          keys
+            .filter((key) => key.startsWith("coffeeos-shop-") && !key.endsWith(CACHE_VERSION))
+            .map((key) => caches.delete(key))
+        )
+      )
+      .then(() => self.clients.claim())
+  );
+});
+
+self.addEventListener("fetch", (event) => {
+  const { request } = event;
+  if (request.method !== "GET") return;
+
+  const url = new URL(request.url);
+  if (url.origin !== self.location.origin) return;
+
+  if (url.pathname.startsWith("/vite/")) {
+    event.respondWith(staleWhileRevalidate(request, SHELL_CACHE));
+    return;
+  }
+
+  if (CATALOG_API.test(url.pathname) || CART_API.test(url.pathname)) {
+    event.respondWith(networkFirstApi(request));
+    return;
+  }
+
+  if (url.pathname === "/shop" || url.pathname.startsWith("/shop/")) {
+    const accept = request.headers.get("accept") || "";
+    if (accept.includes("text/html")) {
+      event.respondWith(networkFirstShell(request));
+    }
+  }
+});
+
+async function staleWhileRevalidate(request, cacheName) {
+  const cache = await caches.open(cacheName);
+  const cached = await cache.match(request);
+  const network = fetch(request)
+    .then((response) => {
+      if (response.ok) cache.put(request, response.clone());
+      return response;
+    })
+    .catch(() => null);
+  return cached || network || new Response("", { status: 504 });
+}
+
+async function networkFirstApi(request) {
+  const cache = await caches.open(API_CACHE);
+  try {
+    const response = await fetch(request);
+    if (response.ok) cache.put(request, response.clone());
+    return response;
+  } catch {
+    const cached = await cache.match(request);
+    if (cached) return cached;
+    return new Response(JSON.stringify({ error: "offline" }), {
+      status: 503,
+      headers: { "Content-Type": "application/json" }
+    });
+  }
+}
+
+async function networkFirstShell(request) {
+  const cache = await caches.open(SHELL_CACHE);
+  try {
+    const response = await fetch(request);
+    if (response.ok) cache.put(request, response.clone());
+    return response;
+  } catch {
+    const cached = (await cache.match(request)) || (await cache.match("/shop"));
+    if (cached) return cached;
+    return new Response("Offline", { status: 503, headers: { "Content-Type": "text/plain" } });
+  }
+}

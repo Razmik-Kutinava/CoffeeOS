@@ -1,16 +1,17 @@
 {
   "task": "B14_pwa_stage0_baseline",
   "run_at": "2026-06-11",
-  "status": "DOCUMENTED",
+  "status": "IMPLEMENTED_LOCAL",
   "tz": "B1_4_pwa_shop.md",
   "gaps": {
-    "manifest_linked": false,
-    "pwa_routes_enabled": false,
-    "shop_service_worker_cache": false,
-    "icons_192_512_png": false,
-    "offline_catalog": false,
-    "offline_checkout_queue": false,
-    "lighthouse_pwa_audit": false
+    "manifest_linked": true,
+    "pwa_routes_enabled": true,
+    "shop_service_worker_cache": true,
+    "icons_192_512_png": true,
+    "offline_catalog": true,
+    "offline_checkout_queue": true,
+    "lighthouse_pwa_audit": false,
+    "fly_smoke": false
   },
   "exists": {
     "https_fly": true,

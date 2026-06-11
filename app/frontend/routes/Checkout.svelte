@@ -16,6 +16,8 @@
     saveGuestOrderSession
   } from "../lib/shopGuestSession.js"
   import { savePaymentSession } from "../lib/tbankPayment.js"
+  import { enqueueOrder } from "../lib/shopOfflineQueue.js"
+  import { isOfflineError } from "../lib/shopNetwork.js"
 
   let name = $state("")
   let email = $state("")
@@ -177,14 +179,28 @@
         return
       }
 
-      const res = await api("/orders", {
-        method: "POST",
-        body: JSON.stringify({
-          name,
-          email: email.trim().toLowerCase(),
-          payment_method
+      const orderBody = {
+        name,
+        email: email.trim().toLowerCase(),
+        payment_method,
+        client_order_uuid: crypto.randomUUID()
+      }
+
+      let res
+      try {
+        res = await api("/orders", {
+          method: "POST",
+          body: JSON.stringify(orderBody)
         })
-      })
+      } catch (e) {
+        if (isOfflineError(e)) {
+          await enqueueOrder(orderBody)
+          window.dispatchEvent(new CustomEvent("shop:offline-order-queued"))
+          otpNotice = "Заказ сохранён. Отправим при появлении сети."
+          return
+        }
+        throw e
+      }
 
       saveGuestOrderSession(res.order_id, res.reconnect_token)
       saveGuestProfile({ name, email, emailVerified: true })

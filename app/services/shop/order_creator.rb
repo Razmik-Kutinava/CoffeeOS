@@ -13,11 +13,19 @@ module Shop
     end
 
     def call!(params)
+      if params[:client_order_uuid].present?
+        existing = find_client_order_duplicate!(params[:client_order_uuid])
+        return existing if existing
+      end
+
       cart_data = Shop::CartService.new(@session, @tenant.id).json_lines
       raise Error, "Корзина пуста" if cart_data[:items].empty?
 
       reused = find_reusable_pending_order!(cart_data, params)
-      return reused if reused
+      if reused
+        remember_client_order!(params[:client_order_uuid], reused.id) if params[:client_order_uuid].present?
+        return reused
+      end
 
       subtotal = BigDecimal(cart_data[:total].to_s)
       discount = promo_discount(subtotal, params)
@@ -117,6 +125,8 @@ module Shop
         Shop::GuestOrderBroadcaster.call(order: order, old_status: "pending_payment")
       end
 
+      remember_client_order!(params[:client_order_uuid], order.id) if params[:client_order_uuid].present?
+
       order
     end
 
@@ -196,6 +206,32 @@ module Shop
       Shop::PendingOrderSession.clear!(@session, @tenant.id)
     rescue ActiveRecord::RecordInvalid => e
       Rails.logger.error("[Shop::OrderCreator] void_pending_online_order failed: #{e.message}")
+    end
+
+    def find_client_order_duplicate!(client_order_uuid)
+      order_id = Rails.cache.read(client_order_cache_key(client_order_uuid))
+      return nil if order_id.blank?
+
+      order = Order.where(id: order_id, tenant_id: @tenant.id, source: :mobile).includes(:payments).first
+      return nil unless order
+
+      payment = order.payments.order(created_at: :desc).first
+      if order.pending_payment? && payment&.pending?
+        init_gateway_payment!(order, payment)
+      end
+
+      order
+    rescue Payments::TbankAdapter::Error, Error => e
+      Rails.logger.warn("[Shop::OrderCreator] client_order_uuid reuse failed: #{e.message}")
+      nil
+    end
+
+    def remember_client_order!(client_order_uuid, order_id)
+      Rails.cache.write(client_order_cache_key(client_order_uuid), order_id, expires_in: 7.days)
+    end
+
+    def client_order_cache_key(client_order_uuid)
+      "shop:client_order:#{@tenant.id}:#{client_order_uuid}"
     end
 
     def find_reusable_pending_order!(cart_data, params)

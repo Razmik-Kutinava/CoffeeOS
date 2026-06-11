@@ -163,6 +163,8 @@ Rails.application.routes.draw do
   get "/firebase-messaging-sw.js", to: "shop/firebase_sw#show", defaults: { format: :js }
 
   namespace :shop, path: "shop" do
+    get "manifest.webmanifest", to: "pwa#manifest", defaults: { format: :json }
+    get "service-worker.js", to: "pwa#service_worker", defaults: { format: :js }
     root to: "pages#home"
     namespace :api do
       get "config", to: "config#show"

@@ -12,10 +12,33 @@
   let promoPreview = $state(null)
   let err = $state(null)
 
+  const CART_CACHE_KEY = "coffeeos_shop_cart_v1"
+
+  function readCartCache() {
+    try {
+      const raw = localStorage.getItem(CART_CACHE_KEY)
+      return raw ? JSON.parse(raw) : null
+    } catch {
+      return null
+    }
+  }
+
   async function load() {
-    const data = await api("/cart")
-    items = data.items
-    total = data.total
+    try {
+      const data = await api("/cart")
+      localStorage.setItem(CART_CACHE_KEY, JSON.stringify(data))
+      items = data.items
+      total = data.total
+    } catch (e) {
+      const cached = readCartCache()
+      if (cached?.items) {
+        items = cached.items
+        total = cached.total ?? 0
+        err = navigator.onLine ? e.message : "Показана сохранённая корзина (офлайн)"
+        return
+      }
+      throw e
+    }
   }
 
   onMount(async () => {

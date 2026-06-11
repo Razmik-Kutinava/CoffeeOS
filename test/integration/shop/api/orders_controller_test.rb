@@ -14,6 +14,34 @@ class Shop::Api::OrdersControllerTest < ActionDispatch::IntegrationTest
     @email = @customer.email
   end
 
+  test "POST /shop/api/orders with client_order_uuid is idempotent" do
+    post "/shop/api/cart/add",
+      headers: shop_tenant_headers(@tenant.id),
+      params: { product_id: @product.id, quantity: 1, selected_modifiers: [] },
+      as: :json
+    assert_response :success
+
+    verify_shop_email!(tenant_id: @tenant.id, email: @email)
+
+    uuid = SecureRandom.uuid
+    params = shop_order_params(email: @email, name: "Dup User", payment_method: "cash").merge(client_order_uuid: uuid)
+
+    post "/shop/api/orders",
+      headers: shop_tenant_headers(@tenant.id),
+      params: params,
+      as: :json
+    assert_response :success
+    first_id = response.parsed_body["order_id"]
+
+    post "/shop/api/orders",
+      headers: shop_tenant_headers(@tenant.id),
+      params: params,
+      as: :json
+    assert_response :success
+    assert_equal first_id, response.parsed_body["order_id"]
+    assert_equal 1, Order.where(tenant_id: @tenant.id, source: :mobile, customer_id: @customer.id).count
+  end
+
   test "POST /shop/api/orders creates order" do
     post "/shop/api/cart/add",
       headers: shop_tenant_headers(@tenant.id),

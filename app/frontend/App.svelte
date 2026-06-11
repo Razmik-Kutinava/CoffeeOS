@@ -7,6 +7,8 @@
   import BottomNav from "./components/BottomNav.svelte"
   import RouteLoading from "./components/RouteLoading.svelte"
   import SlowRequestOverlay from "./components/SlowRequestOverlay.svelte"
+  import ShopPwaBanner from "./components/ShopPwaBanner.svelte"
+  import { flushOrderQueue } from "./lib/shopOfflineQueue.js"
   import Catalog from "./routes/Catalog.svelte"
   import { initTelegram } from "./lib/telegram.js"
   import { installSlowRequestTracker } from "./lib/slowRequest.js"
@@ -61,21 +63,32 @@
   }
 
   onMount(() => {
+    flushOrderQueue(api).catch(() => {})
+
     const onPageShow = (event) => {
       if (event.persisted || returningFromPaymentPage()) {
         recoverAfterPaymentReturn()
       }
     }
+    const onOfflineSent = (event) => {
+      const orderId = event.detail?.order_id
+      if (orderId) push(`/order/${orderId}`)
+    }
     window.addEventListener("pageshow", onPageShow)
+    window.addEventListener("shop:offline-order-sent", onOfflineSent)
     recoverAfterPaymentReturn()
 
-    return () => window.removeEventListener("pageshow", onPageShow)
+    return () => {
+      window.removeEventListener("pageshow", onPageShow)
+      window.removeEventListener("shop:offline-order-sent", onOfflineSent)
+    }
   })
 
 </script>
 
 <div class="min-h-screen bg-[#1a1a1a] text-white">
   <SlowRequestOverlay />
+  <ShopPwaBanner />
   <Header />
   <main class="mx-auto max-w-lg px-3 pb-28 pt-14">
     <Router {routes} options={{ hash: true }} />

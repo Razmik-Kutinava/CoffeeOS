@@ -1,6 +1,6 @@
 <script>
   import { onMount } from "svelte"
-  import { loadCatalog, startCatalogPolling, stopCatalogPolling } from "../lib/stores/catalog.js"
+  import { loadCatalog, getCatalogCache, startCatalogPolling, stopCatalogPolling } from "../lib/stores/catalog.js"
   import CategorySection from "../components/CategorySection.svelte"
   import PageSkeleton from "../components/PageSkeleton.svelte"
 
@@ -29,7 +29,11 @@
   <div class="catalog-error py-8 px-4 text-center">
     <p class="text-[#ff8c42] font-medium mb-2">Не удалось загрузить меню</p>
     <p class="text-[#a0a0a0] text-sm">{err}</p>
-    <p class="text-[#888] text-xs mt-3">Проверьте интернет и обновите страницу</p>
+    {#if getCatalogCache()?.length}
+      <p class="text-[#888] text-xs mt-3">Откройте каталог снова — покажем последнее сохранённое меню</p>
+    {:else}
+      <p class="text-[#888] text-xs mt-3">Проверьте интернет и обновите страницу</p>
+    {/if}
   </div>
 {:else if categories.length === 0}
   <div class="no-results">

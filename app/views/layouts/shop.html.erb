@@ -4,7 +4,12 @@
     <title><%= content_for(:title) || "CoffeeOS — витрина" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#ff8c42">
+    <% manifest_tid = shop_layout_tenant_id %>
+    <%= tag.link rel: "manifest", href: shop_pwa_manifest_href(manifest_tid) %>
+    <%= tag.link rel: "apple-touch-icon", href: "/pwa/apple-touch-icon.png", sizes: "180x180" %>
     <% if @shop_tenant %>
       <meta name="shop-tenant-id" content="<%= @shop_tenant.id %>">
     <% end %>

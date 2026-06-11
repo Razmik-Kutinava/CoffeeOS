@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## v1.183 — 2026-06-11 (B1.4 PWA: manifest, SW, offline checkout)
+
+- **PWA:** `/shop/manifest.webmanifest`, `/shop/service-worker.js`, иконки `public/pwa/`.
+- **Фронт:** `shopPwa.js`, `shopOfflineQueue.js`, `ShopPwaBanner`, offline catalog/cart fallback.
+- **Бэк:** `client_order_uuid` idempotency в `OrderCreator`.
+- **Тесты:** `pwa_manifest_test`, orders idempotent; smoke `bin/b14_pwa_fly_smoke.rb`.
+
 ## v1.182 — 2026-06-11 (B1.4 PWA: ТЗ + baseline, без кода)
 
 - **ТЗ:** `B1_4_pwa_shop.md` — текст заказчика, этапы 0–5, критерии Lighthouse/LCP/offline checkout.

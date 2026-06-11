@@ -1,0 +1,23 @@
+{
+  "task": "B14_pwa_acceptance",
+  "run_at": "2026-06-11",
+  "status": "CODE_PASS",
+  "environment": "local_test",
+  "stages": {
+    "0_baseline": { "pass": true, "artifact": "b14_stage0_baseline_2026-06-11.json" },
+    "1_manifest": { "pass": true, "tests": ["Shop::PwaManifestTest#manifest", "shop layout link"] },
+    "2_service_worker": { "pass": true, "tests": ["Shop::PwaManifestTest#service_worker"] },
+    "3_offline_catalog": { "pass": true, "code": ["catalog.js localStorage", "SW api cache", "ShopPwaBanner offline"] },
+    "4_offline_checkout": { "pass": true, "code": ["shopOfflineQueue.js", "client_order_uuid", "orders idempotent test"] },
+    "5_fly_smoke": { "pass": false, "note": "run bin/b14_pwa_fly_smoke.rb after deploy" }
+  },
+  "tests": {
+    "pwa_manifest_test": "3 runs, 0 failures",
+    "client_order_uuid": "1 run, 0 failures"
+  },
+  "pending": [
+    "Fly deploy + b14_pwa_fly_smoke.rb",
+    "Lighthouse PWA audit screenshot on Fly",
+    "заказчик приёмка"
+  ]
+}

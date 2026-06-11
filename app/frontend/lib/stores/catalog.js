@@ -7,13 +7,40 @@ let visibilityHandler = null
 /** Интервал автообновления меню на открытой витрине (планшет без F5). */
 export const CATALOG_POLL_MS = 8_000
 
+const CATALOG_LS_KEY = "coffeeos_shop_catalog_v1"
+
+function readCatalogCache() {
+  try {
+    const raw = localStorage.getItem(CATALOG_LS_KEY)
+    if (!raw) return null
+    const parsed = JSON.parse(raw)
+    return Array.isArray(parsed) ? parsed : null
+  } catch {
+    return null
+  }
+}
+
+function writeCatalogCache(categories) {
+  try {
+    localStorage.setItem(CATALOG_LS_KEY, JSON.stringify(categories))
+  } catch {
+    /* quota */
+  }
+}
+
 /** Каждый заход на витрину — свежий каталог; polling подхватывает изменения из УК. */
 export async function loadCatalog() {
   if (inflight) return inflight
   inflight = (async () => {
     try {
       const res = await api("/categories")
-      return Array.isArray(res) ? res : (res.data ?? [])
+      const categories = Array.isArray(res) ? res : (res.data ?? [])
+      writeCatalogCache(categories)
+      return categories
+    } catch (e) {
+      const cached = readCatalogCache()
+      if (cached?.length) return cached
+      throw e
     } finally {
       inflight = null
     }
@@ -22,7 +49,7 @@ export async function loadCatalog() {
 }
 
 export function getCatalogCache() {
-  return null
+  return readCatalogCache()
 }
 
 /** Сброс in-flight перед принудительным refetch (polling / visibility). */

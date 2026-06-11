@@ -1,7 +1,7 @@
 # PWA витрины `/shop` — runbook
 
 **Задача:** [B1_4_pwa_shop.md](../requirements/customer_tasks/B1_4_pwa_shop.md)  
-**Статус:** ТЗ 2026-06-11 · код `[ ]`
+**Статус:** код этапы 0–4 **2026-06-11** · Fly smoke `[ ]`
 
 ---
 
@@ -19,11 +19,11 @@
 |-----|--------|
 | HTTPS Fly | ✅ |
 | `shop.html.erb` meta apple-mobile | ✅ частично |
-| `manifest.json` подключён | ❌ |
-| SW кэш app shell | ❌ |
-| `firebase-messaging-sw.js` | ✅ только FCM |
-| Офлайн каталог | ❌ |
-| Офлайн checkout queue | ❌ |
+| `manifest.json` подключён | ✅ `/shop/manifest.webmanifest` |
+| SW кэш app shell | ✅ `/shop/service-worker.js` |
+| `firebase-messaging-sw.js` | ✅ только FCM (отдельный SW) |
+| Офлайн каталог | ✅ SW + localStorage |
+| Офлайн checkout queue | ✅ IndexedDB + `client_order_uuid` |
 
 ---
 

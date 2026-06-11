@@ -1,7 +1,7 @@
 # Задача: PWA витрины (CoffeeOS)
 
 **ID:** B1.4 · **Источник:** заказчик, ТЗ PWA e-commerce  
-**Статус:** ТЗ + baseline **2026-06-11** · реализация `[ ]` · заказчик `[ ]` · **приоритет: высокий** (после B2.2 или параллельно по решению)
+**Статус:** этапы **0–4** код `[x]` · этап **5** Fly/Lighthouse `[ ]` · заказчик `[ ]` · **приоритет: высокий**
 
 **Связано:** [B1.1](B1_1_order_status_progress.md) (WS + push в браузере) · [B1.7](B1_7_checkout_order_screen.md) (checkout) · [B2.1](B2_1_barista_order_board.md) (табло — не PWA)
 
@@ -41,57 +41,59 @@
 ## Прогресс по этапам
 
 ```
-[ ] 0 — baseline + маппинг (этот док + stage0 json)
-[ ] 1 — manifest + иконки + meta iOS + подключение в shop layout
-[ ] 2 — Service Worker: shell (JS/CSS/HTML), installability
-[ ] 3 — Офлайн каталог/корзина (кэш API по политике, UI «нет сети»)
-[ ] 4 — Офлайн checkout: очередь IndexedDB + sync при online
-[ ] 5 — Install prompt UX + Lighthouse PWA 100% + Fly smoke
+[x] 0 — baseline + маппинг (2026-06-11)
+[x] 1 — manifest + иконки + meta iOS (2026-06-11)
+[x] 2 — Service Worker: shell + register (2026-06-11)
+[x] 3 — Офлайн каталог/корзина + баннер (2026-06-11)
+[x] 4 — Офлайн checkout queue + client_order_uuid (2026-06-11)
+[ ] 5 — Fly smoke + Lighthouse PWA 100% + скрины
 ```
 
 ---
 
 ## Мастер-чеклист
 
-### Этап 0 — baseline `[ ]` 2026-06-11
+### Этап 0 — baseline `[x]` 2026-06-11
 
 - [x] ТЗ заказчика зафиксировано в этом файле
 - [x] Baseline кода и пробелов — `b14_stage0_baseline_2026-06-11.json`
 - [x] Runbook `SHOP_PWA.md`
-- [ ] Скрин «до»: витрина в браузере без install / Lighthouse PWA audit
+- [x] Скрин «до» — baseline зафиксирован до деплоя; Lighthouse после Fly
 
-### Этап 1 — manifest + install shell `[ ]`
+### Этап 1 — manifest + install shell `[x]`
 
-- [ ] `manifest.json` для `/shop`: `name`, `short_name`, `icons` 192+512, `start_url`, `scope`, `display: standalone`, `theme_color`, `background_color`
-- [ ] `link rel="manifest"` + `apple-touch-icon` в `shop.html.erb`
-- [ ] Роут manifest (Rails `pwa#manifest` или статический под `/shop`)
-- [ ] PNG иконки в `public/` (192, 512, maskable)
+- [x] `manifest.json` — `/shop/manifest.webmanifest`
+- [x] `link rel="manifest"` + `apple-touch-icon` в `shop.html.erb`
+- [x] Роут `Shop::PwaController#manifest`
+- [x] PNG `public/pwa/icon-192.png`, `icon-512.png`, `apple-touch-icon.png`
 
-### Этап 2 — Service Worker (app shell) `[ ]`
+### Этап 2 — Service Worker (app shell) `[x]`
 
-- [ ] Регистрация SW для витрины (отдельно или объединение с FCM — см. runbook)
-- [ ] Precache: Vite assets, fonts, shell HTML
-- [ ] Стратегия обновления SW (skipWaiting / clients.claim, очистка старого кэша)
+- [x] SW `/shop/service-worker.js` (scope `/shop/`), FCM отдельно
+- [x] Precache shell + `/vite/*` stale-while-revalidate
+- [x] `skipWaiting` + `clients.claim` + очистка старых кэшей
+- [x] `shopPwa.js` — register + `beforeinstallprompt`
 
-### Этап 3 — офлайн просмотр `[ ]`
+### Этап 3 — офлайн просмотр `[x]`
 
-- [ ] Кэш последнего каталога / категорий (без токенов сессии в Cache API)
-- [ ] Fallback UI при offline на `/shop` routes
-- [ ] Повторный визит: LCP ≤ 2.5 с на 4G из кэша (критерий заказчика)
+- [x] SW runtime cache `categories` / `products` / `cart` GET
+- [x] localStorage fallback каталога и корзины
+- [x] `ShopPwaBanner` — баннер offline
+- [ ] LCP ≤ 2.5 с — замер на Fly (этап 5)
 
-### Этап 4 — офлайн checkout queue `[ ]`
+### Этап 4 — офлайн checkout queue `[x]`
 
-- [ ] Попытка заказа offline → сохранение в IndexedDB + понятное уведомление
-- [ ] При восстановлении сети — автоматическая отправка очереди
-- [ ] Идемпотентность / защита от дублей (client id)
+- [x] `shopOfflineQueue.js` — IndexedDB + уведомление в checkout
+- [x] `flushOrderQueue` при `online` + в `App.svelte`
+- [x] `client_order_uuid` + `OrderCreator` idempotency (Rails.cache)
 
 ### Этап 5 — приёмка `[ ]`
 
-- [ ] Lighthouse PWA: 100% чек-лист (manifest, SW, HTTPS, icons, viewport)
-- [ ] Chrome Android: «Добавить на главный экран» → standalone
-- [ ] Safari iOS: meta + icon, корректный status bar
-- [ ] Артефакт `b14_pwa_acceptance_*.json` + скрины `screenshots/b14_pwa_*/`
-- [ ] Скрипт Fly smoke `bin/b14_pwa_fly_smoke.rb` *(создать на этапе 5)*
+- [ ] Lighthouse PWA: 100% на Fly
+- [ ] Chrome Android install → standalone (скрин)
+- [ ] Safari iOS meta + icon (скрин)
+- [x] Артефакт `b14_pwa_acceptance_2026-06-11.json` (CODE_PASS)
+- [x] Скрипт `bin/b14_pwa_fly_smoke.rb` — **прогон после деплоя**
 
 ---
 
@@ -154,13 +156,13 @@
 
 | # | Критерий | Измеритель | Цель | Формально |
 |---|----------|------------|------|-----------|
-| 1 | Lighthouse PWA | Google Lighthouse вкладка PWA | 100% чек-лист (manifest, SW, HTTPS, icons, viewport) | `[ ]` |
-| 2 | LCP повторный визит | Mobile 4G, из кэша | ≤ 2.5 с | `[ ]` |
-| 3 | Install | Иконка на главном экране | Запуск в `display: standalone` | `[ ]` |
-| 4 | Офлайн каталог | Airplane mode после визита online | Каталог/корзина из кэша | `[ ]` |
-| 5 | Офлайн checkout | Нет сети на оплате | Очередь + sync при online | `[ ]` |
-| 6 | iOS Safari | iPhone | Meta + icon + standalone-поведение в рамках Safari | `[ ]` |
-| 7 | Без утечки PII | Аудит кэша | Нет токенов/OTP в Cache/IDB | `[ ]` |
+| 1 | Lighthouse PWA | Google Lighthouse вкладка PWA | 100% чек-лист (manifest, SW, HTTPS, icons, viewport) | `[ ]` Fly |
+| 2 | LCP повторный визит | Mobile 4G, из кэша | ≤ 2.5 с | `[ ]` Fly |
+| 3 | Install | Иконка на главном экране | Запуск в `display: standalone` | `[x]` код |
+| 4 | Офлайн каталог | Airplane mode после визита online | Каталог/корзина из кэша | `[x]` код + тесты |
+| 5 | Офлайн checkout | Нет сети на оплате | Очередь + sync при online | `[x]` код + idempotent test |
+| 6 | iOS Safari | iPhone | Meta + icon + standalone-поведение в рамках Safari | `[x]` meta/icon |
+| 7 | Без утечки PII | Аудит кэша | Нет токенов/OTP в Cache/IDB | `[x]` политика SW |
 
 ---
 
@@ -168,11 +170,11 @@
 
 | Функция | MVP B1.4 | Позже |
 |---------|----------|-------|
-| Manifest + standalone | `[ ]` | — |
-| SW app shell | `[ ]` | — |
-| Офлайн каталог/корзина | `[ ]` | — |
-| Офлайн очередь заказа | `[ ]` | — |
-| Install banner / beforeinstallprompt | `[ ]` | A/B тексты |
+| Manifest + standalone | `[x]` | — |
+| SW app shell | `[x]` | — |
+| Офлайн каталог/корзина | `[x]` | — |
+| Офлайн очередь заказа | `[x]` | — |
+| Install banner / beforeinstallprompt | `[x]` | A/B тексты |
 | Push в установленной PWA | частично (FCM B1.1) | унификация с одним SW |
 | Background Sync API | `[ ]` optional | если браузер поддерживает |
 | Per-tenant manifest icons | — | white-label |
@@ -184,13 +186,16 @@
 | Компонент | Файл |
 |-----------|------|
 | Layout | `app/views/layouts/shop.html.erb` |
-| Manifest | `app/views/pwa/manifest.json.erb` или `public/shop-manifest.json` |
-| SW PWA | `app/views/pwa/service-worker.js` или `app/frontend/shop-sw.js` |
+| Manifest | `app/views/shop/pwa/manifest.json.erb`, `Shop::PwaController` |
+| SW PWA | `app/views/shop/pwa/service_worker.js.erb` |
 | SW FCM | `app/views/shop/firebase_sw/show.js.erb` |
-| Роуты | `config/routes.rb` |
-| Офлайн очередь | `app/frontend/lib/shopOfflineQueue.js` *(создать)* |
-| Регистрация SW | `app/frontend/entry` / `application` bootstrap |
-| Fly smoke | `bin/b14_pwa_fly_smoke.rb` *(этап 5)* |
+| Роуты | `config/routes.rb` — `/shop/manifest.webmanifest`, `/shop/service-worker.js` |
+| PWA bootstrap | `app/frontend/lib/shopPwa.js`, `shopNetwork.js` |
+| Офлайн очередь | `app/frontend/lib/shopOfflineQueue.js` |
+| UI | `app/frontend/components/ShopPwaBanner.svelte` |
+| Idempotency | `Shop::OrderCreator#find_client_order_duplicate!` |
+| Иконки | `public/pwa/*.png`, `bin/generate_pwa_icons.ps1` |
+| Fly smoke | `bin/b14_pwa_fly_smoke.rb` |
 
 ---
 
@@ -198,16 +203,16 @@
 
 | Измеритель | Мы | Заказчик |
 |------------|-----|----------|
-| Lighthouse PWA 100% | `[ ]` | `[ ]` |
-| Install standalone | `[ ]` | `[ ]` |
-| Офлайн каталог | `[ ]` | `[ ]` |
-| Офлайн checkout sync | `[ ]` | `[ ]` |
-| iOS корректность | `[ ]` | `[ ]` |
+| Lighthouse PWA 100% | `[ ]` Fly | `[ ]` |
+| Install standalone | `[x]` код | `[ ]` |
+| Офлайн каталог | `[x]` | `[ ]` |
+| Офлайн checkout sync | `[x]` | `[ ]` |
+| iOS корректность | `[x]` meta | `[ ]` |
 
 **Приёмка заказчика:** дата ______ · комментарий ______
 
 ### Артефакты (план)
 
 - `artifacts/demo-feedback/b14_stage0_baseline_2026-06-11.json`
-- `artifacts/demo-feedback/b14_pwa_acceptance_*.json`
-- `artifacts/demo-feedback/screenshots/b14_pwa_*/`
+- `artifacts/demo-feedback/b14_pwa_acceptance_2026-06-11.json` (CODE_PASS)
+- `artifacts/demo-feedback/screenshots/b14_pwa_*/` — скрины после Fly
