@@ -26,8 +26,8 @@
       "path": "bin/b21_barista_board_fly_smoke.rb",
       "status": "PASS",
       "artifact": "b21_fly_smoke_2026-06-11.json",
-      "b21_board_markup": "PASS",
-      "vitrina_to_board": "PASS — order_8e2bc72e-3fbd-4995-8a2f-9b0112a60f5d",
+      "b21_board_markup": "PASS — после заказа на табло (ГОТОВИТСЯ)",
+      "vitrina_to_board": "PASS",
       "fly_bin": "flyctl"
     },
     "b21_mcp_fly_verify": {
@@ -35,6 +35,15 @@
       "status": "PASS",
       "artifact": "b21_mcp_fly_2026-06-11.json",
       "b21_markup_on_fly": true
+    },
+    "b21_mcp_e2e_fly": {
+      "path": "bin/b21_mcp_e2e_fly.rb",
+      "status": "PASS",
+      "artifact": "b21_mcp_e2e_2026-06-11.json",
+      "playwright": "bin/b21_mcp_e2e_fly.mjs",
+      "prep": "bin/b21_mcp_e2e_prep.rb",
+      "order_id": "97746b19-a877-4818-9fa8-db802dedee2e",
+      "note": "витрина → бариста UI (ГОТОВИТСЯ/ГОТОВ) → гость WS ≤5с"
     }
   },
   "screenshots": {
@@ -43,7 +52,12 @@
     "fly_board_after_post_deploy": true,
     "files": {
       "barista_board_after.png": true,
+      "stage5_e2e_vitrina_checkout.png": true,
       "stage5_e2e_vitrina_to_board.png": true,
+      "stage5_e2e_barista_preparing.png": true,
+      "stage5_e2e_barista_ready.png": true,
+      "stage5_e2e_guest_preparing.png": true,
+      "stage5_e2e_guest_ready.png": true,
       "stage2_fifo_accepted.png": true,
       "stage2_after_status_move.png": true,
       "stage4_cancel_overlay.png": true,
@@ -59,16 +73,15 @@
     { "id": 4, "criterion": "FIFO created_at", "code": "PASS", "formal": "PARTIAL", "evidence": "tests + stage2" },
     { "id": 5, "criterion": "Нет drag-and-drop", "code": "PASS", "formal": "PASS", "evidence": "smoke no_drag_hint" },
     { "id": 6, "criterion": "Табло ≤1с", "code": "PARTIAL", "formal": "FAIL", "note": "не замеряли" },
-    { "id": 7, "criterion": "WS гостю ≤5с", "code": "PASS", "formal": "PARTIAL", "evidence": "b21_guest_notify_test" },
+    { "id": 7, "criterion": "WS гостю ≤5с", "code": "PASS", "formal": "PASS", "evidence": "b21_mcp_e2e_2026-06-11.json — ws_ms 5–9, без reload" },
     { "id": 8, "criterion": "Push FCM", "code": "PASS", "formal": "FAIL", "note": "устройство не проверяли" },
-    { "id": 9, "criterion": "Витрина→табло", "code": "PASS", "formal": "PASS", "evidence": "b21_fly_smoke_2026-06-11.json order_8e2bc72e" }
+    { "id": 9, "criterion": "Витрина→табло", "code": "PASS", "formal": "PASS", "evidence": "b21_mcp_e2e_2026-06-11.json + b21_fly_smoke_2026-06-11.json" }
   ],
   "status": "PARTIAL",
   "customer_signoff": false,
   "next": [
     "подпись заказчика",
-    "stage3 guest скрины (preparing/ready)",
-    "MCP e2e витрина→бариста→гость",
-    "FCM на устройстве опционально"
+    "FCM на устройстве опционально",
+    "критерий 6 — замер табло ≤1с"
   ]
 }

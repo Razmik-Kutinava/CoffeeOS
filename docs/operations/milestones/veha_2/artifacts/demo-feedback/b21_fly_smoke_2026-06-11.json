@@ -4,8 +4,7 @@
   "base": "https://coffeeos.fly.dev",
   "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
   "barista_email": "barista-a@demo.coffeeos.local",
-  "vitrina_email": "b21-fly-06110906@coffeeos.dev",
-  "fly_bin": "flyctl",
+  "vitrina_email": "b21-fly-06111213@coffeeos.dev",
   "checks": [
     {
       "id": "barista_login",
@@ -17,20 +16,14 @@
       "http": 200
     },
     {
-      "id": "b21_board_markup",
+      "id": "b21_board_layout",
       "pass": true,
       "markers": {
-        "order_card": true,
-        "status_button": true,
-        "gotovitsya": true,
         "kanban_ids": true,
         "no_drag_hint": true,
         "footer_hint": true,
-        "cancel_overlay": true,
-        "cancel_confirm": true,
         "turbo_cable": true
-      },
-      "deploy_note": null
+      }
     },
     {
       "id": "vitrina_otp_send",
@@ -46,16 +39,28 @@
       "id": "vitrina_create_order",
       "pass": true,
       "http": 200,
-      "order_id": "8e2bc72e-3fbd-4995-8a2f-9b0112a60f5d",
+      "order_id": "51e069f3-0ec6-4322-920c-94cd0d7ffc0e",
       "order_number": null
     },
     {
       "id": "vitrina_order_on_barista_board",
       "pass": true,
-      "order_id": "8e2bc72e-3fbd-4995-8a2f-9b0112a60f5d",
-      "order_dom_id": "order_8e2bc72e-3fbd-4995-8a2f-9b0112a60f5d",
+      "order_id": "51e069f3-0ec6-4322-920c-94cd0d7ffc0e",
+      "order_dom_id": "order_51e069f3-0ec6-4322-920c-94cd0d7ffc0e",
       "order_number": null,
       "note": null
+    },
+    {
+      "id": "b21_board_markup",
+      "pass": true,
+      "markers": {
+        "order_card": true,
+        "status_button": true,
+        "gotovitsya": true,
+        "cancel_overlay": true,
+        "cancel_confirm": true
+      },
+      "deploy_note": null
     },
     {
       "id": "guest_order_status_api",

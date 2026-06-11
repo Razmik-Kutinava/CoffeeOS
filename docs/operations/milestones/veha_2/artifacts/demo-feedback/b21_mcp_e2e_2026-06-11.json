@@ -1,0 +1,214 @@
+{
+  "scenario": "B2.1 MCP e2e — витрина → бариста (UI) → гость (WS)",
+  "task": "B2_1_mcp_e2e_fly",
+  "run_at": "2026-06-11",
+  "stand": {
+    "base": "https://coffeeos.fly.dev",
+    "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+    "barista_email": "barista-a@demo.coffeeos.local",
+    "screen_dir": "docs/operations/milestones/veha_2/artifacts/demo-feedback/screenshots/b21_barista_board_2026-06-10",
+    "deploy_note": "пользователь: deploy develop выполнен"
+  },
+  "order_id": "97746b19-a877-4818-9fa8-db802dedee2e",
+  "e2e_steps": [
+    {
+      "id": "step1_vitrina_catalog",
+      "action": "GET /shop каталог + скрин stage5_e2e_vitrina_checkout.png",
+      "pass": true,
+      "at": "2026-06-11T12:13:28.517Z",
+      "screenshot": "stage5_e2e_vitrina_checkout.png"
+    },
+    {
+      "id": "step1_vitrina_order_accepted",
+      "action": "Заказ accepted на экране гостя (prep API + OTP)",
+      "pass": true,
+      "at": "2026-06-11T12:13:30.350Z",
+      "order_id": "97746b19-a877-4818-9fa8-db802dedee2e",
+      "status_title": "Оплачен"
+    },
+    {
+      "id": "step2_shift_open",
+      "action": "Открытая смена на demo A",
+      "pass": true,
+      "at": "2026-06-11T12:13:33.557Z"
+    },
+    {
+      "id": "step2_barista_board",
+      "action": "Карточка order_97746b19-a877-4818-9fa8-db802dedee2e в НОВЫЕ + скрин",
+      "pass": true,
+      "at": "2026-06-11T12:13:35.142Z",
+      "screenshot": "stage5_e2e_vitrina_to_board.png",
+      "order_dom_id": "order_97746b19-a877-4818-9fa8-db802dedee2e"
+    },
+    {
+      "id": "step3_barista_preparing_ui",
+      "action": "Клик ГОТОВИТСЯ → карточка в PREPARING (turbo)",
+      "pass": true,
+      "at": "2026-06-11T12:13:36.289Z",
+      "screenshot": "stage5_e2e_barista_preparing.png"
+    },
+    {
+      "id": "step4_guest_preparing_ws",
+      "action": "Подзаголовок «Ваш заказ начали готовить» без reload ≤5с",
+      "pass": true,
+      "at": "2026-06-11T12:13:36.485Z",
+      "ws_ms": 6,
+      "title_before": "Готовится",
+      "subtitle": "Ваш заказ начали готовить",
+      "screenshots": [
+        "stage3_guest_preparing.png",
+        "stage5_e2e_guest_preparing.png"
+      ]
+    },
+    {
+      "id": "step5_barista_ready_ui",
+      "action": "Клик ГОТОВ → карточка в READY",
+      "pass": true,
+      "at": "2026-06-11T12:13:37.632Z",
+      "screenshot": "stage5_e2e_barista_ready.png"
+    },
+    {
+      "id": "step6_guest_ready_ws",
+      "action": "«Заказ готов, забирайте!» без reload ≤5с",
+      "pass": true,
+      "at": "2026-06-11T12:13:37.824Z",
+      "ws_ms": 10,
+      "subtitle": "Заказ готов, забирайте!",
+      "screenshots": [
+        "stage3_guest_ready.png",
+        "stage5_e2e_guest_ready.png"
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "id": "flyctl_auth",
+      "pass": true,
+      "whoami": "razmikg1988@gmail.com"
+    },
+    {
+      "id": "stand_constants",
+      "pass": true,
+      "base": "https://coffeeos.fly.dev",
+      "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+      "barista_email": "barista-a@demo.coffeeos.local",
+      "screen_dir": "docs/operations/milestones/veha_2/artifacts/demo-feedback/screenshots/b21_barista_board_2026-06-10",
+      "deploy_note": "пользователь: deploy develop выполнен"
+    },
+    {
+      "id": "demo_shift_and_order",
+      "pass": true,
+      "order_id": "97746b19-a877-4818-9fa8-db802dedee2e",
+      "order_dom_id": "order_97746b19-a877-4818-9fa8-db802dedee2e"
+    },
+    {
+      "id": "playwright_e2e",
+      "pass": true,
+      "steps": [
+        {
+          "id": "step1_vitrina_catalog",
+          "action": "GET /shop каталог + скрин stage5_e2e_vitrina_checkout.png",
+          "pass": true,
+          "at": "2026-06-11T12:13:28.517Z",
+          "screenshot": "stage5_e2e_vitrina_checkout.png"
+        },
+        {
+          "id": "step1_vitrina_order_accepted",
+          "action": "Заказ accepted на экране гостя (prep API + OTP)",
+          "pass": true,
+          "at": "2026-06-11T12:13:30.350Z",
+          "order_id": "97746b19-a877-4818-9fa8-db802dedee2e",
+          "status_title": "Оплачен"
+        },
+        {
+          "id": "step2_shift_open",
+          "action": "Открытая смена на demo A",
+          "pass": true,
+          "at": "2026-06-11T12:13:33.557Z"
+        },
+        {
+          "id": "step2_barista_board",
+          "action": "Карточка order_97746b19-a877-4818-9fa8-db802dedee2e в НОВЫЕ + скрин",
+          "pass": true,
+          "at": "2026-06-11T12:13:35.142Z",
+          "screenshot": "stage5_e2e_vitrina_to_board.png",
+          "order_dom_id": "order_97746b19-a877-4818-9fa8-db802dedee2e"
+        },
+        {
+          "id": "step3_barista_preparing_ui",
+          "action": "Клик ГОТОВИТСЯ → карточка в PREPARING (turbo)",
+          "pass": true,
+          "at": "2026-06-11T12:13:36.289Z",
+          "screenshot": "stage5_e2e_barista_preparing.png"
+        },
+        {
+          "id": "step4_guest_preparing_ws",
+          "action": "Подзаголовок «Ваш заказ начали готовить» без reload ≤5с",
+          "pass": true,
+          "at": "2026-06-11T12:13:36.485Z",
+          "ws_ms": 6,
+          "title_before": "Готовится",
+          "subtitle": "Ваш заказ начали готовить",
+          "screenshots": [
+            "stage3_guest_preparing.png",
+            "stage5_e2e_guest_preparing.png"
+          ]
+        },
+        {
+          "id": "step5_barista_ready_ui",
+          "action": "Клик ГОТОВ → карточка в READY",
+          "pass": true,
+          "at": "2026-06-11T12:13:37.632Z",
+          "screenshot": "stage5_e2e_barista_ready.png"
+        },
+        {
+          "id": "step6_guest_ready_ws",
+          "action": "«Заказ готов, забирайте!» без reload ≤5с",
+          "pass": true,
+          "at": "2026-06-11T12:13:37.824Z",
+          "ws_ms": 10,
+          "subtitle": "Заказ готов, забирайте!",
+          "screenshots": [
+            "stage3_guest_ready.png",
+            "stage5_e2e_guest_ready.png"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fly_smoke",
+      "pass": true,
+      "artifact": "b21_fly_smoke_2026-06-11.json"
+    },
+    {
+      "id": "mcp_fly_verify",
+      "pass": true,
+      "status": "PASS",
+      "artifact": "b21_mcp_fly_2026-06-11.json"
+    },
+    {
+      "id": "b21_guest_notify_test",
+      "pass": true
+    },
+    {
+      "id": "b21_board_subset",
+      "pass": true
+    },
+    {
+      "id": "screenshots_on_disk",
+      "pass": true,
+      "files": {
+        "stage5_e2e_vitrina_checkout.png": true,
+        "stage5_e2e_vitrina_to_board.png": true,
+        "stage5_e2e_barista_preparing.png": true,
+        "stage5_e2e_barista_ready.png": true,
+        "stage5_e2e_guest_preparing.png": true,
+        "stage5_e2e_guest_ready.png": true,
+        "stage3_guest_preparing.png": true,
+        "stage3_guest_ready.png": true
+      }
+    }
+  ],
+  "status": "PASS",
+  "customer_signoff": false
+}

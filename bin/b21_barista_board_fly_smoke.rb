@@ -131,22 +131,16 @@ begin
   board_html = curl("-b", jar, "#{BASE}/barista")
   result[:checks] << { id: "barista_board_http", pass: board_http == 200, http: board_http }
 
-  b21_markers = {
-    order_card: board_html.include?('class="card order-card'),
-    status_button: board_html.include?("card-btn-status"),
-    gotovitsya: board_html.include?("ГОТОВИТСЯ"),
+  layout_markers = {
     kanban_ids: board_html.include?('id="orders-new"') && board_html.include?('id="orders-preparing"'),
     no_drag_hint: !board_html.include?("Перетащите карточку"),
     footer_hint: board_html.include?("нажмите кнопку на карточке"),
-    cancel_overlay: board_html.include?("СТОП! ЗАКАЗ ОТМЕНЁН"),
-    cancel_confirm: board_html.include?("ПОДТВЕРДИТЬ ОТМЕНУ"),
     turbo_cable: board_html.include?("turbo-cable-stream-source")
   }
   result[:checks] << {
-    id: "b21_board_markup",
-    pass: b21_markers.values.all?,
-    markers: b21_markers,
-    deploy_note: b21_markers.values.all? ? nil : "нужен fly deploy develop с B2.1"
+    id: "b21_board_layout",
+    pass: layout_markers.values.all?,
+    markers: layout_markers
   }
 
   api_key = shop_key(TENANT_ID)
@@ -233,6 +227,21 @@ begin
     order_dom_id: order_dom_id,
     order_number: order_number,
     note: on_board ? nil : "карточка #{order_dom_id} не найдена на /barista после retry"
+  }
+
+  card_html = board_after.to_s
+  b21_markers = {
+    order_card: card_html.include?('class="card order-card'),
+    status_button: card_html.include?("card-btn-status"),
+    gotovitsya: card_html.include?("ГОТОВИТСЯ"),
+    cancel_overlay: card_html.include?("СТОП! ЗАКАЗ ОТМЕНЁН"),
+    cancel_confirm: card_html.include?("ПОДТВЕРДИТЬ ОТМЕНУ")
+  }
+  result[:checks] << {
+    id: "b21_board_markup",
+    pass: on_board && b21_markers.values.all?,
+    markers: b21_markers,
+    deploy_note: b21_markers.values.all? ? nil : "нужен accepted-заказ на табло (ГОТОВИТСЯ в карточке)"
   }
 
   show_body = curl_json(

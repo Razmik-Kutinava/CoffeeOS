@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## v1.176 — 2026-06-11 (B2.1: браузерный e2e витрина→бариста→гость Fly PASS)
+
+- **Playwright e2e:** `bin/b21_mcp_e2e_prep.rb`, `b21_mcp_e2e_fly.mjs`, оркестратор `b21_mcp_e2e_fly.rb` — UI-клики бариста + WS гостю ≤5с.
+- **Артефакт:** `b21_mcp_e2e_2026-06-11.json` — **PASS**; acceptance крит. 7, 9 формально PASS.
+- **Smoke:** markup `ГОТОВИТСЯ` после заказа на табло (`b21_board_layout` + `b21_board_markup`).
+- **Скрины:** полный набор `stage5_e2e_*` на Fly.
+
 ## v1.175 — 2026-06-11 (B2.1 этап 3: скрины гостя preparing/ready)
 
 - **Скрины Fly:** `stage3_guest_preparing.png`, `stage3_guest_ready.png` — подзаголовки B2.1 на `/shop`.
