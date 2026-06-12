@@ -1,0 +1,95 @@
+{
+  "task": "B1_1_order_status_revision",
+  "date": "2026-06-12",
+  "base": "https://coffeeos.fly.dev",
+  "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "order_id": "a6ea8c78-a0e1-47cc-b18d-0a9201a753f8",
+  "customer_problem": "После оформления заказа клиент не получает визуальной обратной связи о статусе",
+  "verdict": "PASS",
+  "status": "PASS",
+  "method": "chrome-devtools-mcp + fly prep/status scripts",
+  "ui_checks": {
+    "progress_4_steps": true,
+    "eta_subtitle_8_12_min": true,
+    "composition_qty_1x": true,
+    "pickup_card_samovyvoz": true,
+    "payment_block": true,
+    "cancel_text_button": true,
+    "ws_live_updates_without_reload": true
+  },
+  "steps": [
+    {
+      "step": 1,
+      "action": "Каталог витрины",
+      "verdict": "PASS",
+      "screenshot": "screenshots/b11_revision_fly_2026-06-12/01_catalog_fly.png"
+    },
+    {
+      "step": 2,
+      "action": "Товар → в корзину",
+      "verdict": "PASS",
+      "screenshot": "screenshots/b11_revision_fly_2026-06-12/02_product_fly.png"
+    },
+    {
+      "step": 3,
+      "action": "Корзина",
+      "verdict": "PASS",
+      "screenshot": "screenshots/b11_revision_fly_2026-06-12/03_cart_fly.png"
+    },
+    {
+      "step": 4,
+      "action": "Checkout (оплата картой в UI)",
+      "verdict": "PASS",
+      "screenshot": "screenshots/b11_revision_fly_2026-06-12/04_checkout_fly.png",
+      "note": "заказ для статусов создан prep-скриптом (card API), UI checkout — тот же путь заказчика"
+    },
+    {
+      "step": 5,
+      "action": "Экран статуса: Принят",
+      "verdict": "PASS",
+      "screenshot": "screenshots/b11_revision_fly_2026-06-12/05_step_accepted_fly.png",
+      "db_status": "pending_payment"
+    },
+    {
+      "step": 6,
+      "action": "Экран статуса: Оплачен (WS)",
+      "verdict": "PASS",
+      "screenshot": "screenshots/b11_revision_fly_2026-06-12/06_step_paid_fly.png",
+      "db_status": "accepted",
+      "ws_observed": true
+    },
+    {
+      "step": 7,
+      "action": "Экран статуса: Готовится (WS)",
+      "verdict": "PASS",
+      "screenshot": "screenshots/b11_revision_fly_2026-06-12/07_step_preparing_fly.png",
+      "db_status": "preparing",
+      "ws_observed": true
+    },
+    {
+      "step": 8,
+      "action": "Экран статуса: Готов (WS)",
+      "verdict": "PASS",
+      "screenshot": "screenshots/b11_revision_fly_2026-06-12/08_step_ready_fly.png",
+      "db_status": "ready",
+      "ws_observed": true
+    }
+  ],
+  "screenshots_on_disk": {
+    "01_catalog_fly.png": true,
+    "02_product_fly.png": true,
+    "03_cart_fly.png": true,
+    "04_checkout_fly.png": true,
+    "05_step_accepted_fly.png": true,
+    "06_step_paid_fly.png": true,
+    "07_step_preparing_fly.png": true,
+    "08_step_ready_fly.png": true
+  },
+  "customer_signoff": false,
+  "backlog_not_tested": [
+    "доставка",
+    "табло/кухня ≤500ms",
+    "кнопка «Оплатить 3₽» на макете",
+    "баннер WS при offline (не гоняли в этом прогоне)"
+  ]
+}

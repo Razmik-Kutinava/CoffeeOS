@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v1.187 — 2026-06-12 (B1.1 R4: Fly MCP приёмка ревизии)
+
+- **Приёмка:** chrome-devtools MCP — путь витрина→checkout→статус; 8 скринов на Fly; 4 шага прогресс-бара + WS.
+- **Артефакты:** `b11_revision_acceptance_2026-06-12.json`, `b11_mcp_fly_2026-06-12.json`.
+- **Скрипты:** `bin/b11_revision_fly_prep.rb`, `bin/b11_revision_fly_status.rb`.
+
 ## v1.186 — 2026-06-12 (B1.1 ревизия: экран статуса по макету)
 
 - **UI:** `OrderStatus.svelte` — самовывоз (зелёная карточка), состав `1x`, блок оплаты, отмена текстом.

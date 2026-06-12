@@ -1,0 +1,32 @@
+{
+  "task": "B1_1_order_status_mcp_fly",
+  "date": "2026-06-12",
+  "base": "https://coffeeos.fly.dev",
+  "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "checks": [
+    {
+      "id": "catalog",
+      "pass": true,
+      "http": 200
+    },
+    {
+      "id": "firebase_sw",
+      "pass": true,
+      "http": 200
+    },
+    {
+      "id": "order_status_bundle",
+      "pass": true
+    },
+    {
+      "id": "firebase_meta_tags",
+      "pass": true
+    },
+    {
+      "id": "push_register_smoke",
+      "pass": true,
+      "note": "see b11_fly_smoke same date"
+    }
+  ],
+  "status": "PASS"
+}

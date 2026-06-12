@@ -5,7 +5,7 @@
 | ID | Задача | Статус | Файл |
 |----|--------|--------|------|
 | B1.7 | Доработка экрана оформления заказа | внутр. PASS · BR-fixes · заказчик `[ ]` | [B1_7_checkout_order_screen.md](B1_7_checkout_order_screen.md) |
-| B1.1 | Экран уведомления заказа + прогресс-бар | PASS 2026-06-10 · **ревизия UI** R0–R2 `[x]` · приёмка `[ ]` | [B1_1_order_status_progress.md](B1_1_order_status_progress.md) |
+| B1.1 | Экран уведомления заказа + прогресс-бар | PASS 2026-06-10 · ревизия R0–R4 Fly `[x]` · заказчик `[ ]` | [B1_1_order_status_progress.md](B1_1_order_status_progress.md) |
 | **B2.1** | **Табло бариста — интерактивная карточка** | **ТЗ** 2026-06-10 · реализация `[ ]` | [B2_1_barista_order_board.md](B2_1_barista_order_board.md) |
 | B2.2 | Объединить «Меню» + «Создать» | **ТЗ** 2026-06-10 · реализация `[ ]` | [B2_2_barista_menu_create_merge.md](B2_2_barista_menu_create_merge.md) |
 | **B1.4** | **PWA витрины** (install, offline) | **OPS_PASS** 2026-06-12 · заказчик `[ ]` | [B1_4_pwa_shop.md](B1_4_pwa_shop.md) |
