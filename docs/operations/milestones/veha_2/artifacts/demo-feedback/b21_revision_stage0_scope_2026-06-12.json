@@ -1,0 +1,39 @@
+{
+  "task": "B2_1_barista_board_revision",
+  "stage": "R0_scope_mapping",
+  "date": "2026-06-12",
+  "customer_reports": [
+    "todo_list_instead_of_6_cards",
+    "no_live_without_f5"
+  ],
+  "current_implementation": {
+    "layout": "3_columns_accepted_preparing_ready",
+    "interaction": "status_button_on_card_min_80px",
+    "colors": ["blue_accepted", "orange_preparing", "green_ready"],
+    "live": "OrderBoardBroadcaster_turbo_stream",
+    "slot_limit": null
+  },
+  "customer_expected": {
+    "layout": "6_fixed_slots_grid",
+    "interaction": "tap_whole_card",
+    "colors": ["white_new", "yellow_in_progress", "removed_on_done"],
+    "live": "websocket_or_sse_instant",
+    "slot_limit": 6,
+    "card_fields": ["order_number", "client_name_if_phone", "product_name", "modifier"]
+  },
+  "draft_status_mapping": {
+    "white_card": "accepted",
+    "yellow_card": "preparing",
+    "card_removed": "issued"
+  },
+  "open_questions": [
+    "client_name_vs_phone — checkout is email-first",
+    "yellow_only_preparing_or_two_taps",
+    "7th_order_queue_behavior",
+    "keep_cancel_overlay_from_mvp"
+  ],
+  "in_scope_revision": ["R1_ui_6_cards", "R2_live_broadcast", "R3_tests", "R4_fly_acceptance"],
+  "backlog": ["cancel_overlay_change", "defect_remake", "prep_kitchen_separate", "phone_on_card"],
+  "screenshots_dir": "screenshots/b21_board_revision_2026-06-12",
+  "status": "R0_COMPLETE"
+}
