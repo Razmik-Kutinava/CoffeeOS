@@ -1,7 +1,7 @@
 <script>
   import { onMount } from "svelte"
   import { push } from "svelte-spa-router"
-  import { api } from "../lib/api.js"
+  import { addToCart as shopAddToCart } from "../lib/shopCartAdd.js"
   import { loadCatalog, startCatalogPolling, stopCatalogPolling } from "../lib/stores/catalog.js"
   import { useTelegramBack } from "../lib/telegram.js"
   import { favorites } from "../lib/stores/favorites.js"
@@ -45,14 +45,10 @@
     if (addingId) return
     addingId = product.id
     try {
-      await api("/cart/add", {
-        method: "POST",
-        body: JSON.stringify({
-          product_id: product.id,
-          quantity: 1,
-          selected_modifiers: []
-        })
-      })
+      await shopAddToCart(
+        { product_id: product.id, quantity: 1, selected_modifiers: [] },
+        { product }
+      )
       push("/cart")
     } finally {
       addingId = null

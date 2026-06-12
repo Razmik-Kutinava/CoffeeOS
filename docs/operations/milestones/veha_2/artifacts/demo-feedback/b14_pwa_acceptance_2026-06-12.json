@@ -1,11 +1,11 @@
 {
   "task": "B14_pwa_formal_acceptance",
-  "run_at": "2026-06-12T09:02:01Z",
+  "run_at": "2026-06-12T09:18:12Z",
   "base": "https://coffeeos.fly.dev",
   "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
   "fly_smoke": {
     "task": "B14_pwa_fly_smoke",
-    "run_at": "2026-06-12T09:01:58Z",
+    "run_at": "2026-06-12T09:17:54Z",
     "base": "https://coffeeos.fly.dev",
     "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
     "checks": {

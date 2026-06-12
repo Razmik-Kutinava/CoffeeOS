@@ -1,35 +1,43 @@
 const DB_NAME = "coffeeos_shop_offline"
-const DB_VERSION = 1
-const STORE = "order_queue"
+const DB_VERSION = 2
+export const ORDER_STORE = "order_queue"
+export const CART_STORE = "cart_queue"
 
-function openDb() {
+export function openOfflineDb() {
   return new Promise((resolve, reject) => {
     const req = indexedDB.open(DB_NAME, DB_VERSION)
     req.onerror = () => reject(req.error)
     req.onupgradeneeded = () => {
       const db = req.result
-      if (!db.objectStoreNames.contains(STORE)) {
-        db.createObjectStore(STORE, { keyPath: "id" })
+      if (!db.objectStoreNames.contains(ORDER_STORE)) {
+        db.createObjectStore(ORDER_STORE, { keyPath: "id" })
+      }
+      if (!db.objectStoreNames.contains(CART_STORE)) {
+        db.createObjectStore(CART_STORE, { keyPath: "id" })
       }
     }
     req.onsuccess = () => resolve(req.result)
   })
 }
 
-function txStore(db, mode, fn) {
+function openDb() {
+  return openOfflineDb()
+}
+
+function txStore(db, mode, fn, storeName = ORDER_STORE) {
   return new Promise((resolve, reject) => {
-    const tx = db.transaction(STORE, mode)
-    const store = tx.objectStore(STORE)
+    const tx = db.transaction(storeName, mode)
+    const store = tx.objectStore(storeName)
     fn(store)
     tx.oncomplete = () => resolve()
     tx.onerror = () => reject(tx.error)
   })
 }
 
-function getAll(db) {
+function getAll(db, storeName = ORDER_STORE) {
   return new Promise((resolve, reject) => {
-    const tx = db.transaction(STORE, "readonly")
-    const req = tx.objectStore(STORE).getAll()
+    const tx = db.transaction(storeName, "readonly")
+    const req = tx.objectStore(storeName).getAll()
     req.onsuccess = () => resolve(req.result || [])
     req.onerror = () => reject(req.error)
   })

@@ -9,6 +9,7 @@
   import SlowRequestOverlay from "./components/SlowRequestOverlay.svelte"
   import ShopPwaBanner from "./components/ShopPwaBanner.svelte"
   import { flushOrderQueue } from "./lib/shopOfflineQueue.js"
+  import { flushCartQueue } from "./lib/shopOfflineCart.js"
   import Catalog from "./routes/Catalog.svelte"
   import { initTelegram } from "./lib/telegram.js"
   import { installSlowRequestTracker } from "./lib/slowRequest.js"
@@ -63,6 +64,7 @@
   }
 
   onMount(() => {
+    flushCartQueue(api).catch(() => {})
     flushOrderQueue(api).catch(() => {})
 
     const onPageShow = (event) => {

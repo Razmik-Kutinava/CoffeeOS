@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## v1.185 — 2026-06-12 (B1.4 хвосты: офлайн cart, UUID в БД, промокод UI)
+
+- **Офлайн:** `shopOfflineCart.js`, `shopCartAdd.js` — очередь add в корзину.
+- **Бэк:** `orders.client_order_uuid` unique; idempotency без Rails.cache.
+- **Приёмка:** `b14_pwa_browser_shots.mjs`, `b14_run_acceptance.sh`; удалён flaky `acceptance_fly.mjs`.
+- **UI:** промокод убран из корзины (BR).
+- **Долги:** § в `B1_4_pwa_shop.md` — 2 SW, Background Sync, домен shop, приёмки.
+
 ## v1.184 — 2026-06-12 (B1.4 PWA: OPS_PASS на Fly)
 
 - **Приёмка:** `b14_pwa_acceptance_2026-06-12.json` — smoke PASS, PWA audit 100%, LCP 183 ms.

@@ -62,25 +62,28 @@
 - [x] `skipWaiting` + `clients.claim` + очистка старых кэшей
 - [x] `shopPwa.js` — register + `beforeinstallprompt`
 
-### Этап 3 — офлайн просмотр `[x]`
+### Этап 3 — офлайн просмотр + add в корзину `[x]`
 
 - [x] SW runtime cache `categories` / `products` / `cart` GET
 - [x] localStorage fallback каталога и корзины
+- [x] `shopOfflineCart.js` — очередь `POST /cart/add` офлайн + optimistic cart
 - [x] `ShopPwaBanner` — баннер offline
-- [x] LCP ≤ 2.5 с — **183 ms** Fly repeat visit (`b14_pwa_acceptance_2026-06-12`)
+- [x] LCP ≤ 2.5 с — замер `bin/b14_pwa_browser_shots.mjs` → `tmp/b14_lcp.json`
 
 ### Этап 4 — офлайн checkout queue `[x]`
 
 - [x] `shopOfflineQueue.js` — IndexedDB + уведомление в checkout
 - [x] `flushOrderQueue` при `online` + в `App.svelte`
-- [x] `client_order_uuid` + `OrderCreator` idempotency (Rails.cache)
+- [x] `client_order_uuid` + `OrderCreator` idempotency (`orders.client_order_uuid` unique)
 
 ### Этап 5 — приёмка `[x]` 2026-06-12
 
+- [x] **Полный прогон:** `bash bin/b14_run_acceptance.sh` (= smoke → audit → browser_shots → finalize)
 - [x] PWA audit 100% — `bin/b14_pwa_programmatic_audit.rb` (LH 13+ без категории pwa)
 - [x] Fly smoke PASS — `bin/b14_pwa_fly_smoke.rb`
-- [x] LCP **183 ms** ≤ 2.5 с
+- [x] LCP + скрины — `bin/b14_pwa_browser_shots.mjs` (не только smoke+finalize)
 - [x] Скрины: `lighthouse_pwa_audit`, `standalone_home_screen`, `install_prompt_android`, `offline_catalog`, `offline_checkout_queued`
+- [ ] **Долг:** слить PWA SW + FCM в один worker (сейчас два — не блокер)
 - [ ] iOS add-to-home скрин — после апрува на устройстве
 - [x] Артефакт `b14_pwa_acceptance_2026-06-12.json` — **OPS_PASS**
 
@@ -155,18 +158,36 @@
 
 ---
 
+## Долги (не сейчас — после апрува / отдельные задачи)
+
+| Что | Почему отложено |
+|-----|-----------------|
+| Слить PWA SW + `firebase-messaging-sw.js` в один | Работает; риск регрессии push |
+| Background Sync API | Опционально сверх ТЗ |
+| A/B тексты install-баннера | Опционально |
+| Per-tenant manifest icons (white-label) | Опционально |
+| iOS add-to-home скрин | Физическое устройство |
+| Перепрогон `b14_run_acceptance.sh` шаг 3 | Playwright в WSL тормозит; артефакты OPS_PASS есть |
+| Приёмка заказчика B1.4 | Ждём внутренний апрув |
+| Домен `*.shop…` + DNS + Fly certs | Инфра прод, см. CHECKLIST §витрина |
+
+**Витрина (не B1.4):** промокод убран из корзины и checkout (BR); API `/promo_codes` на бэке остаётся для будущего.
+
+---
+
 ## MVP vs позже
 
 | Функция | MVP B1.4 | Позже |
 |---------|----------|-------|
 | Manifest + standalone | `[x]` | — |
 | SW app shell | `[x]` | — |
-| Офлайн каталог/корзина | `[x]` | — |
+| Офлайн каталог/корзина + add офлайн | `[x]` | — |
 | Офлайн очередь заказа | `[x]` | — |
+| `client_order_uuid` в БД | `[x]` | — |
 | Install banner / beforeinstallprompt | `[x]` | A/B тексты |
 | Push в установленной PWA | частично (FCM B1.1) | унификация с одним SW |
-| Background Sync API | `[ ]` optional | если браузер поддерживает |
-| Per-tenant manifest icons | — | white-label |
+| Background Sync API | долг | если браузер поддерживает |
+| Per-tenant manifest icons | долг | white-label |
 
 ---
 
@@ -180,7 +201,9 @@
 | SW FCM | `app/views/shop/firebase_sw/show.js.erb` |
 | Роуты | `config/routes.rb` — `/shop/manifest.webmanifest`, `/shop/service-worker.js` |
 | PWA bootstrap | `app/frontend/lib/shopPwa.js`, `shopNetwork.js` |
-| Офлайн очередь | `app/frontend/lib/shopOfflineQueue.js` |
+| Офлайн очередь заказа | `app/frontend/lib/shopOfflineQueue.js` |
+| Офлайн add в корзину | `app/frontend/lib/shopOfflineCart.js`, `shopCartAdd.js` |
+| Приёмка Fly | `bin/b14_run_acceptance.sh`, `b14_pwa_browser_shots.mjs` |
 | UI | `app/frontend/components/ShopPwaBanner.svelte` |
 | Idempotency | `Shop::OrderCreator#find_client_order_duplicate!` |
 | Иконки | `public/pwa/*.png`, `bin/generate_pwa_icons.ps1` |

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_11_140000) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_12_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_stat_statements"
@@ -552,6 +552,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_11_140000) do
     t.string "cancel_reason_code", limit: 50
     t.string "cancel_stage", limit: 50
     t.uuid "cash_shift_id"
+    t.uuid "client_order_uuid", comment: "Идемпотентность shop PWA offline queue"
     t.datetime "created_at", null: false
     t.uuid "customer_id"
     t.string "customer_name", limit: 255
@@ -578,6 +579,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_11_140000) do
     t.index ["qr_token"], name: "index_orders_on_qr_token", where: "(qr_token IS NOT NULL)"
     t.index ["ready_at"], name: "idx_orders_ready_at", where: "(ready_at IS NOT NULL)"
     t.index ["status"], name: "index_orders_on_status"
+    t.index ["tenant_id", "client_order_uuid"], name: "idx_orders_tenant_client_order_uuid", unique: true, where: "(client_order_uuid IS NOT NULL)"
     t.index ["tenant_id", "created_at"], name: "index_orders_on_tenant_id_and_created_at", order: { created_at: :desc }
     t.index ["tenant_id", "order_number"], name: "idx_orders_tenant_number", unique: true
     t.index ["tenant_id", "status"], name: "index_orders_on_tenant_id_and_status"

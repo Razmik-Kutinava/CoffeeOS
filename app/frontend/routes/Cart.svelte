@@ -8,8 +8,6 @@
   let total = $state(0)
   let loading = $state(true)
   let busyIndex = $state(null)
-  let promo = $state("")
-  let promoPreview = $state(null)
   let err = $state(null)
 
   const CART_CACHE_KEY = "coffeeos_shop_cart_v1"
@@ -50,18 +48,6 @@
       loading = false
     }
   })
-
-  async function applyPromo() {
-    try {
-      promoPreview = await api("/promo_codes/apply", {
-        method: "POST",
-        body: JSON.stringify({ code: promo, order_total: total })
-      })
-    } catch (e) {
-      err = e.message
-      promoPreview = null
-    }
-  }
 
   async function bump(index, delta) {
     if (busyIndex !== null) return
@@ -151,22 +137,6 @@
       </div>
     </div>
   {/each}
-
-  <div class="mb-4 flex gap-2">
-    <input
-      bind:value={promo}
-      placeholder="Промокод"
-      class="flex-1 rounded-lg border border-[#3a3a3a] bg-[#2a2a2a] px-3 py-2 text-sm"
-    />
-    <button type="button" class="rounded-lg bg-[#3a3a3a] px-3 py-2 text-sm" onclick={applyPromo}>
-      Применить
-    </button>
-  </div>
-  {#if promoPreview?.valid}
-    <p class="mb-2 text-sm text-green-400">
-      Скидка {Math.round(promoPreview.discount)}₽ → итого {Math.round(promoPreview.final_total)}₽
-    </p>
-  {/if}
 
   <div class="mb-4 flex justify-between text-lg">
     <span>Итого</span>

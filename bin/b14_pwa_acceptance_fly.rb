@@ -1,31 +1,28 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-# B1.4 formal acceptance on Fly: smoke + Lighthouse + LCP + screenshots.
+# B1.4 полный прогон приёмки на Fly:
+#   smoke → programmatic_audit → browser_shots → finalize
 #
 #   ruby bin/b14_pwa_acceptance_fly.rb
 
-require "json"
-require "open3"
-
 root = File.expand_path("..", __dir__)
-smoke_path = File.join(root, "docs/operations/milestones/veha_2/artifacts/demo-feedback/b14_pwa_fly_smoke_#{Time.now.utc.strftime('%Y-%m-%d')}.json")
-ENV["OUT"] = smoke_path
-smoke_ok = system("ruby", File.join(root, "bin/b14_pwa_fly_smoke.rb"))
+steps = [
+  [ "fly smoke", %w[ruby bin/b14_pwa_fly_smoke.rb] ],
+  [ "programmatic audit", %w[ruby bin/b14_pwa_programmatic_audit.rb] ],
+  [ "browser shots + LCP", %w[node bin/b14_pwa_browser_shots.mjs] ],
+  [ "finalize", %w[ruby bin/b14_finalize_acceptance.rb] ]
+]
+
+steps.each do |label, cmd|
+  puts "=== #{label} ==="
+  ok = system(*cmd, chdir: root)
+  unless ok
+    warn "FAILED: #{label}"
+    exit 1
+  end
+end
 
 out = File.join(root, "docs/operations/milestones/veha_2/artifacts/demo-feedback/b14_pwa_acceptance_2026-06-12.json")
-existing = File.file?(out) ? JSON.parse(File.read(out)) : {}
-existing[:fly_smoke] = File.file?(smoke_path) ? JSON.parse(File.read(smoke_path)) : nil
-File.write(out, JSON.pretty_generate(existing))
-
-screenshots_ok = system("node", File.join(root, "bin/b14_pwa_acceptance_fly.mjs"), "--screenshots-only")
-lighthouse_ok = system("node", File.join(root, "bin/b14_pwa_acceptance_fly.mjs"), "--lighthouse-only")
-
-merged = File.file?(out) ? JSON.parse(File.read(out)) : {}
-merged[:smoke_ok] = smoke_ok
-merged[:screenshots_ok] = screenshots_ok
-merged[:lighthouse_ok] = lighthouse_ok
-merged[:run_at] = Time.now.utc.strftime("%Y-%m-%dT%H:%M:%SZ")
-File.write(out, JSON.pretty_generate(merged))
-puts JSON.pretty_generate(merged)
-exit(merged["status"] == "OPS_PASS" ? 0 : 1)
+puts File.read(out) if File.file?(out)
+exit 0

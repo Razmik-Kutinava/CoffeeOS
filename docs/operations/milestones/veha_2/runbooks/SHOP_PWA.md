@@ -23,7 +23,9 @@
 | SW кэш app shell | ✅ `/shop/service-worker.js` |
 | `firebase-messaging-sw.js` | ✅ только FCM (отдельный SW) |
 | Офлайн каталог | ✅ SW + localStorage |
-| Офлайн checkout queue | ✅ IndexedDB + `client_order_uuid` |
+| Офлайн add в корзину | ✅ IndexedDB `cart_queue` + optimistic localStorage |
+| Офлайн checkout queue | ✅ IndexedDB + `client_order_uuid` в БД |
+| Два SW (PWA + FCM) | ✅ работает · **долг:** слить в один (вариант A) |
 
 ---
 
@@ -36,8 +38,14 @@
   └── firebase-messaging-sw.js → push (B1.1), scope /
 ```
 
-**Вариант A (рекомендуемый для MVP):** один SW с модулями: precache + FCM importScripts.  
-**Вариант B:** два SW — сложнее scope; только если FCM требует изоляции.
+**Вариант A (рекомендуемый, долг):** один SW с модулями: precache + FCM importScripts.  
+**Вариант B (сейчас):** два SW — работает, не блокер OPS_PASS; минус — два файла/versioning.
+
+### Офлайн add в корзину
+
+- Очередь `cart_queue` в IndexedDB (`shopOfflineCart.js`)
+- Оптимистичное обновление `coffeeos_shop_cart_v1` в localStorage
+- При `online` — `flushCartQueue` → `POST /shop/api/cart/add`
 
 ---
 
@@ -60,7 +68,7 @@
 ### Офлайн checkout
 
 - Тело заказа в **IndexedDB** (не Cache API)
-- При online — `POST /shop/api/orders` + идемпотентный `client_order_uuid`
+- При online — `POST /shop/api/orders` + идемпотентный `client_order_uuid` (unique в `orders.client_order_uuid`)
 - UI: «Заказ сохранён, отправим при появлении сети»
 
 ---
@@ -88,20 +96,35 @@
 2. SW precache + register  
 3. Runtime cache catalog + offline UI  
 4. IndexedDB checkout queue + sync  
-5. Lighthouse + Fly smoke `bin/b14_pwa_fly_smoke.rb`
+5. Formal acceptance (полный прогон)
 
 ---
 
 ## Проверка
 
-```bash
-# Локально / Fly
-# Chrome DevTools → Lighthouse → Progressive Web App
-# Application → Service Workers → Offline checkbox
+**Полный прогон приёмки** (smoke + audit + скрины/LCP + finalize):
 
-# После этапа 5
-FLY_BIN=flyctl ruby bin/b14_pwa_fly_smoke.rb
+```bash
+export BASE="${BASE:-https://coffeeos.fly.dev}"
+export B14_TENANT_ID="${B14_TENANT_ID:-2fdee1ac-4674-41ee-b89e-87b45643f789}"
+
+bash bin/b14_run_acceptance.sh
+# или одной командой:
+ruby bin/b14_pwa_acceptance_fly.rb
 ```
+
+По шагам:
+
+```bash
+ruby bin/b14_pwa_fly_smoke.rb              # 1 — HTTP smoke
+ruby bin/b14_pwa_programmatic_audit.rb     # 2 — PWA checklist 100%
+node bin/b14_pwa_browser_shots.mjs         # 3 — скрины + LCP → tmp/b14_lcp.json
+ruby bin/b14_finalize_acceptance.rb        # 4 — b14_pwa_acceptance_*.json OPS_PASS
+```
+
+Только smoke (без скринов/LCP): первые две команды + finalize **не** дадут свежий LCP.
+
+Ручная проверка: Chrome DevTools → Application → Service Workers → Offline.
 
 ---
 

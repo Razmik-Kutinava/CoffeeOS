@@ -3,15 +3,19 @@
   import { shopOnline } from "../lib/shopNetwork.js"
   import { installPromptAvailable, promptPwaInstall } from "../lib/shopPwa.js"
   import { pendingOrderCount } from "../lib/shopOfflineQueue.js"
+  import { pendingCartAddCount } from "../lib/shopOfflineCart.js"
 
   let installable = $state(false)
   let queuedOrders = $state(0)
+  let queuedCartAdds = $state(0)
 
   async function refreshQueue() {
     try {
       queuedOrders = await pendingOrderCount()
+      queuedCartAdds = await pendingCartAddCount()
     } catch {
       queuedOrders = 0
+      queuedCartAdds = 0
     }
   }
 
@@ -24,11 +28,15 @@
     window.addEventListener("shop:pwa-installable", onInstallable)
     window.addEventListener("shop:offline-order-queued", onQueue)
     window.addEventListener("shop:offline-order-sent", onQueue)
+    window.addEventListener("shop:offline-cart-queued", onQueue)
+    window.addEventListener("shop:offline-cart-sent", onQueue)
     refreshQueue()
     return () => {
       window.removeEventListener("shop:pwa-installable", onInstallable)
       window.removeEventListener("shop:offline-order-queued", onQueue)
       window.removeEventListener("shop:offline-order-sent", onQueue)
+      window.removeEventListener("shop:offline-cart-queued", onQueue)
+      window.removeEventListener("shop:offline-cart-sent", onQueue)
     }
   })
 
@@ -40,7 +48,13 @@
 
 {#if !$shopOnline}
   <div class="shop-pwa-banner shop-pwa-banner--offline" role="status">
-    Нет сети — показываем сохранённое меню. Оплата отправится при подключении.
+    Нет сети — меню и корзина из кэша. Добавления и заказ отправятся при подключении.
+  </div>
+{/if}
+
+{#if queuedCartAdds > 0 && $shopOnline}
+  <div class="shop-pwa-banner shop-pwa-banner--queue" role="status">
+    Синхронизируем корзину ({queuedCartAdds})…
   </div>
 {/if}
 

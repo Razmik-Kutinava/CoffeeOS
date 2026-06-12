@@ -2,6 +2,7 @@
   import { onMount } from "svelte"
   import { push } from "svelte-spa-router"
   import { api } from "../lib/api.js"
+  import { addToCart as shopAddToCart } from "../lib/shopCartAdd.js"
   import { useTelegramBack } from "../lib/telegram.js"
   import { favorites } from "../lib/stores/favorites.js"
   import {
@@ -136,15 +137,14 @@
       product.modifier_groups,
       selected
     )
-    await api("/cart/add", {
-      method: "POST",
-      body: JSON.stringify({
+    await shopAddToCart(
+      {
         product_id: product.id,
         quantity: qty,
-        selected_modifiers,
-        removed_modifiers
-      })
-    })
+        selected_modifiers
+      },
+      { product }
+    )
     push("/cart")
     } finally {
       adding = false

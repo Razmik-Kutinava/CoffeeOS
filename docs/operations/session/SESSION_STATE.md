@@ -2,7 +2,7 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-06-12 (B1.4 PWA OPS_PASS · B2.1 OPS_PASS)  
+**Дата:** 2026-06-12 (B1.4 код+OPS · B2.1 OPS_PASS · ждём апрув)  
 **Предыдущее:** B1.1 закрыта: FIREBASE_* на Fly · smoke + MCP PASS  
 **Веха 1:** официально не закрыта (§ I, H.3 — `[ ]`).  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
@@ -20,7 +20,20 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **B1.4 PWA** | **OPS_PASS** 2026-06-12 · заказчик `[ ]` | B2.2 / приёмка B2.1 заказчик |
+| **B1.4 PWA** | код задеплоен · OPS_PASS · заказчик `[ ]` | апрув → B2.2 |
+| **B2.1 табло** | OPS_PASS · внутр. приёмка `[ ]` | апрув заказчика |
+
+### Сессия 2026-06-12 (B1.4 — хвосты, деплой, промокод)
+
+**Сделано в коде:**
+- Офлайн add в корзину (`shopOfflineCart.js`, `shopCartAdd.js`)
+- `client_order_uuid` → колонка БД + unique index (не Rails.cache)
+- Скрипты приёмки: `b14_run_acceptance.sh`, `b14_pwa_browser_shots.mjs`; удалён flaky `acceptance_fly.mjs`
+- Промокод убран из **корзины** (BR: нет на checkout — нет и в cart UI)
+
+**Не сейчас (долги):** слияние 2 SW, Background Sync, A/B install, per-tenant icons, iOS скрин, перепрогон Playwright шаг 3, приёмки заказчика, домен `*.shop…` — см. [`B1_4_pwa_shop.md`](milestones/veha_2/requirements/customer_tasks/B1_4_pwa_shop.md) §Долги.
+
+**Деплой:** Fly + `db:migrate` (client_order_uuid).
 
 ### Сессия 2026-06-12 (B1.4 PWA — формальное закрытие OPS)
 

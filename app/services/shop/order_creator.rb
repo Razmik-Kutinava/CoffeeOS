@@ -23,7 +23,7 @@ module Shop
 
       reused = find_reusable_pending_order!(cart_data, params)
       if reused
-        remember_client_order!(params[:client_order_uuid], reused.id) if params[:client_order_uuid].present?
+        attach_client_order_uuid!(reused, params[:client_order_uuid])
         return reused
       end
 
@@ -42,17 +42,13 @@ module Shop
       ActiveRecord::Base.transaction do
         # В1 гибрид смены: витрина/shop не привязана к CashShift (cash_shift_id остаётся NULL).
         # Barista POS — только через OrderCreationService с открытой сменой. См. docs/operations/milestones/veha_1/reference/ORDER_ENTRY_AUDIT.md.
-        order = Order.create!(
-          tenant_id: @tenant.id,
-          customer_id: customer.id,
-          customer_name: customer.full_name.presence || params[:name].presence || "Гость",
-          order_number: "",
-          source: :mobile,
-          status: flow[:order_status],
-          total_amount: subtotal,
-          discount_amount: discount,
-          final_amount: total,
-          promo_code_id: nil
+        order = create_shop_order!(
+          customer: customer,
+          params: params,
+          flow: flow,
+          subtotal: subtotal,
+          discount: discount,
+          total: total
         )
 
         product_ids = cart_data[:items].map { |line| line[:product_id] }.uniq
@@ -124,8 +120,6 @@ module Shop
         Barista::OrderBoardBroadcaster.call(order: order, old_status: "pending_payment")
         Shop::GuestOrderBroadcaster.call(order: order, old_status: "pending_payment")
       end
-
-      remember_client_order!(params[:client_order_uuid], order.id) if params[:client_order_uuid].present?
 
       order
     end
@@ -208,11 +202,33 @@ module Shop
       Rails.logger.error("[Shop::OrderCreator] void_pending_online_order failed: #{e.message}")
     end
 
-    def find_client_order_duplicate!(client_order_uuid)
-      order_id = Rails.cache.read(client_order_cache_key(client_order_uuid))
-      return nil if order_id.blank?
+    def create_shop_order!(customer:, params:, flow:, subtotal:, discount:, total:)
+      Order.create!(
+        tenant_id: @tenant.id,
+        customer_id: customer.id,
+        customer_name: customer.full_name.presence || params[:name].presence || "Гость",
+        order_number: "",
+        source: :mobile,
+        status: flow[:order_status],
+        total_amount: subtotal,
+        discount_amount: discount,
+        final_amount: total,
+        promo_code_id: nil,
+        client_order_uuid: params[:client_order_uuid].presence
+      )
+    rescue ActiveRecord::RecordNotUnique
+      find_client_order_duplicate!(params[:client_order_uuid]) ||
+        raise(Error, "Заказ с таким идентификатором уже создан")
+    end
 
-      order = Order.where(id: order_id, tenant_id: @tenant.id, source: :mobile).includes(:payments).first
+    def find_client_order_duplicate!(client_order_uuid)
+      return nil if client_order_uuid.blank?
+
+      order = Order.where(
+        tenant_id: @tenant.id,
+        client_order_uuid: client_order_uuid,
+        source: :mobile
+      ).includes(:payments).first
       return nil unless order
 
       payment = order.payments.order(created_at: :desc).first
@@ -226,12 +242,13 @@ module Shop
       nil
     end
 
-    def remember_client_order!(client_order_uuid, order_id)
-      Rails.cache.write(client_order_cache_key(client_order_uuid), order_id, expires_in: 7.days)
-    end
+    def attach_client_order_uuid!(order, client_order_uuid)
+      return order if client_order_uuid.blank? || order.client_order_uuid == client_order_uuid
 
-    def client_order_cache_key(client_order_uuid)
-      "shop:client_order:#{@tenant.id}:#{client_order_uuid}"
+      order.update!(client_order_uuid: client_order_uuid)
+      order
+    rescue ActiveRecord::RecordNotUnique
+      find_client_order_duplicate!(client_order_uuid) || order
     end
 
     def find_reusable_pending_order!(cart_data, params)

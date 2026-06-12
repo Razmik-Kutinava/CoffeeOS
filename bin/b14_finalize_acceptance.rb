@@ -13,8 +13,8 @@ def read_json(path)
 end
 
 smoke = read_json(Dir[File.join(root, "docs/operations/milestones/veha_2/artifacts/demo-feedback/b14_pwa_fly_smoke_*.json")].max)
-partial = read_json(out) || {}
 programmatic = read_json(File.join(root, "tmp/b14_pwa_programmatic_audit.json"))
+lcp = read_json(File.join(root, "tmp/b14_lcp.json"))
 
 screenshots_dir = "docs/operations/milestones/veha_2/artifacts/demo-feedback/screenshots/b14_pwa_2026-06-11"
 required_shots = %w[
@@ -41,8 +41,9 @@ merged = {
     note: programmatic&.dig("note"),
     checks: programmatic&.dig("checks")
   },
-  lcp_ms_repeat_visit: partial["lcp_ms_repeat_visit"],
-  lcp_pass: partial["lcp_pass"] == true,
+  lcp_ms_repeat_visit: lcp&.dig("lcp_ms_repeat_visit"),
+  lcp_pass: lcp&.dig("lcp_pass") == true,
+  lcp_measured_at: lcp&.dig("measured_at"),
   screenshots: shots_present.to_h { |f| [File.basename(f, ".png"), f] },
   screenshots_dir: screenshots_dir,
   notes: [
