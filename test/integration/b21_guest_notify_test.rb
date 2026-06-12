@@ -31,19 +31,18 @@ class B21GuestNotifyTest < ActionDispatch::IntegrationTest
 
   teardown { Current.reset }
 
-  test "b21_01 vitrina status screen has b21 subtitles" do
+  test "b21_01 vitrina status screen has eta subtitle per b11 revision" do
     progress = File.read(Rails.root.join("app/frontend/lib/orderStatusProgress.js"))
     screen = File.read(Rails.root.join("app/frontend/routes/OrderStatus.svelte"))
 
-    assert_includes progress, "Ваш заказ начали готовить"
-    assert_includes progress, "Заказ готов, забирайте!"
+    assert_includes progress, "Примерно 8–12 минут"
+    assert_includes progress, "ETA_SUBTITLE"
     assert_includes screen, "status-subtitle"
   end
 
   test "b21_02 shop cable has ws retry policy" do
     cable = File.read(Rails.root.join("app/frontend/lib/shopOrderCable.js"))
 
-    assert_includes cable, "MAX_WS_RETRIES = 3"
     assert_includes cable, "WS_RETRY_INTERVAL_MS = 5000"
     assert_includes cable, "scheduleRetry"
   end

@@ -1,6 +1,5 @@
 import { createConsumer } from "@rails/actioncable"
 
-const MAX_WS_RETRIES = 3
 const WS_RETRY_INTERVAL_MS = 5000
 
 function shopTenantId() {
@@ -44,7 +43,7 @@ export function subscribeGuestOrderStatus({ orderId, reconnectToken, onStatus, o
   }
 
   function scheduleRetry() {
-    if (stopped || retryCount >= MAX_WS_RETRIES) return
+    if (stopped) return
 
     clearRetryTimer()
     retryTimer = setTimeout(() => {

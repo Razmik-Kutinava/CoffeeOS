@@ -143,16 +143,13 @@
     </div>
   {:else if order && progress}
     {#if cableState === "disconnected"}
-      <p class="cable-banner" role="status">Обновление статуса…</p>
+      <p class="cable-banner" role="status">Обновление статуса...</p>
     {/if}
 
     <div class="status-hero">
-      <p class="order-number">Заказ #{order.order_number || order.id}</p>
       <h1 class="status-title">{progress.header}</h1>
       {#if progress.subtitle}
         <p class="status-subtitle">{progress.subtitle}</p>
-      {:else if progress.showEta}
-        <p class="eta">Примерно 8–12 минут</p>
       {/if}
     </div>
 
@@ -218,30 +215,32 @@
                 </span>
               {/if}
             </div>
-            <div class="item-side">
-              <span class="item-qty">×{item.quantity}</span>
-              <span class="item-price">{formatMoney(item.line_total ?? item.price * item.quantity)}</span>
-            </div>
+            <span class="item-qty">{item.quantity}x</span>
           </li>
         {/each}
       </ul>
     </section>
 
     <section class="card pickup-card">
-      <div class="pickup-icon" aria-hidden="true">📍</div>
+      <div class="pickup-icon" aria-hidden="true">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 21s7-4.5 7-11a7 7 0 1 0-14 0c0 6.5 7 11 7 11z" />
+          <circle cx="12" cy="10" r="2.5" />
+        </svg>
+      </div>
       <div>
-        <h2 class="card-title compact">Самовывоз</h2>
-        <p class="pickup-name">{order.tenant?.name || "Кофейня"}</p>
-        {#if pickupLine}
-          <p class="pickup-address">{pickupLine}</p>
-        {/if}
+        <h2 class="pickup-title">Самовывоз</h2>
+        <p class="pickup-address">{pickupLine || order.tenant?.name || "Кофейня"}</p>
       </div>
     </section>
 
     <section class="card total-card">
-      <div class="total-row">
-        <span class="total-label">Итого оплачено</span>
-        <span class="total-value">{formatMoney(order.total)}</span>
+      <div class="total-left">
+        <span class="total-icon" aria-hidden="true">💳</span>
+        <div class="total-row">
+          <span class="total-label">Итого оплачено</span>
+          <span class="total-value">{formatMoney(order.total)}</span>
+        </div>
       </div>
       {#if progress.paymentSettled}
         <span class="paid-badge">Оплачен</span>
@@ -308,12 +307,6 @@
     margin-bottom: 28px;
   }
 
-  .order-number {
-    font-size: 13px;
-    color: #a0a0a0;
-    margin: 0 0 8px;
-  }
-
   .status-title {
     font-size: 32px;
     font-weight: 800;
@@ -321,16 +314,10 @@
     color: #fff;
   }
 
-  .eta,
   .status-subtitle {
     margin: 0;
     font-size: 15px;
     color: #a0a0a0;
-  }
-
-  .status-subtitle {
-    color: #ff8c42;
-    font-weight: 600;
   }
 
   .progress-wrap {
@@ -450,6 +437,7 @@
   .item-row {
     display: flex;
     justify-content: space-between;
+    align-items: flex-start;
     gap: 12px;
   }
 
@@ -470,21 +458,10 @@
     margin-top: 2px;
   }
 
-  .item-side {
-    text-align: right;
-    flex-shrink: 0;
-  }
-
   .item-qty {
-    display: block;
-    font-size: 12px;
+    flex-shrink: 0;
+    font-size: 14px;
     color: #a0a0a0;
-  }
-
-  .item-price {
-    font-size: 15px;
-    font-weight: 600;
-    color: #ff8c42;
   }
 
   .push-banner {
@@ -535,38 +512,55 @@
     display: flex;
     gap: 12px;
     align-items: flex-start;
+    background: #e8f5e9;
+    border: 1px solid #c8e6c9;
   }
 
   .pickup-icon {
-    font-size: 22px;
-    line-height: 1;
+    color: #4caf50;
+    flex-shrink: 0;
+    margin-top: 2px;
   }
 
-  .pickup-name {
-    margin: 0;
-    font-size: 15px;
-    color: #fff;
+  .pickup-title {
+    margin: 0 0 4px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #2e7d32;
   }
 
   .pickup-address {
-    margin: 4px 0 0;
-    font-size: 13px;
-    color: #a0a0a0;
+    margin: 0;
+    font-size: 14px;
+    color: #1b5e20;
     line-height: 1.4;
   }
 
   .total-card {
     display: flex;
-    flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
-    gap: 8px;
+    gap: 12px;
+  }
+
+  .total-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+  }
+
+  .total-icon {
+    font-size: 22px;
+    line-height: 1;
+    flex-shrink: 0;
   }
 
   .total-row {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 2px;
+    min-width: 0;
   }
 
   .total-label {
@@ -616,16 +610,18 @@
   }
 
   .cancel-btn {
+    display: block;
     width: 100%;
-    margin-top: 8px;
-    padding: 14px;
-    border-radius: 12px;
-    border: 1px solid #f44336;
+    margin-top: 16px;
+    padding: 12px;
+    border: none;
     background: transparent;
-    color: #f44336;
+    color: #a0a0a0;
     font-size: 15px;
-    font-weight: 600;
+    font-weight: 500;
     cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 3px;
   }
 
   .cancel-btn:disabled {

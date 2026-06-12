@@ -24,11 +24,14 @@ class Shop::OrderStatusAcceptanceCbrTest < ActionDispatch::IntegrationTest
     assert_includes progress, "Оплачен"
     assert_includes progress, "Готовится"
     assert_includes progress, "Готов"
+    assert_includes progress, "🔔"
+    assert_includes progress, "ETA_SUBTITLE"
     assert_includes screen, "#ff8c42"
+    assert_includes screen, "#e8f5e9"
     assert_includes screen, "#4caf50"
     assert_includes screen, "#757575"
     assert_includes screen, "progress-steps"
-    assert_includes screen, "8–12 минут"
+    assert_includes screen, "status-subtitle"
     assert_includes screen, "Состав заказа"
     assert_includes screen, "Самовывоз"
   end
@@ -66,7 +69,7 @@ class Shop::OrderStatusAcceptanceCbrTest < ActionDispatch::IntegrationTest
     cable = File.read(Rails.root.join("app/frontend/lib/shopOrderCable.js"))
     channel = File.read(Rails.root.join("app/channels/shop/guest_order_channel.rb"))
     assert_includes screen, "subscribeGuestOrderStatus"
-    assert_includes screen, "Обновление статуса"
+    assert_includes screen, "Обновление статуса..."
     assert_includes cable, "reconnect_token"
     assert_includes channel, "customer_id"
   end
