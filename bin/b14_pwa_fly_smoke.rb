@@ -13,7 +13,7 @@ BASE = ENV.fetch("BASE", "https://coffeeos.fly.dev")
 TENANT_ID = ENV.fetch("B14_TENANT_ID", "2fdee1ac-4674-41ee-b89e-87b45643f789")
 OUT = ENV.fetch(
   "OUT",
-  "docs/operations/milestones/veha_2/artifacts/demo-feedback/b14_pwa_acceptance_#{Time.now.utc.strftime('%Y-%m-%d')}.json"
+  "docs/operations/milestones/veha_2/artifacts/demo-feedback/b14_pwa_fly_smoke_#{Time.now.utc.strftime('%Y-%m-%d')}.json"
 )
 
 def curl(*args)
@@ -25,7 +25,7 @@ end
 
 result = {
   task: "B14_pwa_fly_smoke",
-  run_at: Time.now.utc.iso8601,
+  run_at: Time.now.utc.strftime("%Y-%m-%dT%H:%M:%SZ"),
   base: BASE,
   tenant_id: TENANT_ID,
   checks: {},

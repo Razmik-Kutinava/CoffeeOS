@@ -1,7 +1,7 @@
 # PWA витрины `/shop` — runbook
 
 **Задача:** [B1_4_pwa_shop.md](../requirements/customer_tasks/B1_4_pwa_shop.md)  
-**Статус:** код этапы 0–4 **2026-06-11** · Fly smoke `[ ]`
+**Статус:** **OPS_PASS** 2026-06-12 · заказчик `[ ]`
 
 ---
 

@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v1.184 — 2026-06-12 (B1.4 PWA: OPS_PASS на Fly)
+
+- **Приёмка:** `b14_pwa_acceptance_2026-06-12.json` — smoke PASS, PWA audit 100%, LCP 183 ms.
+- **Скрины:** `screenshots/b14_pwa_2026-06-11/` (5 файлов).
+- **Скрипты:** `b14_pwa_fly_smoke`, `b14_pwa_programmatic_audit`, `b14_finalize_acceptance`.
+
 ## v1.183 — 2026-06-11 (B1.4 PWA: manifest, SW, offline checkout)
 
 - **PWA:** `/shop/manifest.webmanifest`, `/shop/service-worker.js`, иконки `public/pwa/`.

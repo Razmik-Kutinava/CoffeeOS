@@ -2,7 +2,7 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-06-11 (B1.4 PWA код 0–4 · B2.1 OPS_PASS)  
+**Дата:** 2026-06-12 (B1.4 PWA OPS_PASS · B2.1 OPS_PASS)  
 **Предыдущее:** B1.1 закрыта: FIREBASE_* на Fly · smoke + MCP PASS  
 **Веха 1:** официально не закрыта (§ I, H.3 — `[ ]`).  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
@@ -20,14 +20,16 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **B1.4 PWA** — код 0–4, Fly smoke/Lighthouse | B2.2 после B2.1 приёмки заказчика |
+| **B1.4 PWA** | **OPS_PASS** 2026-06-12 · заказчик `[ ]` | B2.2 / приёмка B2.1 заказчик |
 
-### Сессия 2026-06-11 (B1.4 PWA — реализация этапы 0–4)
+### Сессия 2026-06-12 (B1.4 PWA — формальное закрытие OPS)
 
-- **Код:** manifest + SW + offline catalog/cart + IndexedDB checkout queue + install banner.
-- **Тесты:** `Shop::PwaManifestTest` 3/3, `client_order_uuid` idempotent.
-- **Артефакт:** `b14_pwa_acceptance_2026-06-11.json` (CODE_PASS).
-- **Осталось:** деплой Fly → `bin/b14_pwa_fly_smoke.rb` + Lighthouse скрины.
+- **Fly smoke:** `b14_pwa_fly_smoke.rb` — PASS.
+- **PWA audit:** programmatic 100% (LH 13+ без категории pwa).
+- **LCP:** 183 ms repeat visit (4G throttle).
+- **Скрины:** 5 в `b14_pwa_2026-06-11/`.
+- **Артефакт:** `b14_pwa_acceptance_2026-06-12.json` — OPS_PASS.
+- **Заказчик:** `[ ]` — после апрува.
 
 **Ops на блок:** commit + SESSION_STATE всегда (без вопроса); `PRACTICES` (CR); `QA_ACCEPTANCE_RUN` + `artifacts/` (QA); `CHANGELOG` + `HANDOFF`; `CHECKLIST` `[x]` только по факту.
 

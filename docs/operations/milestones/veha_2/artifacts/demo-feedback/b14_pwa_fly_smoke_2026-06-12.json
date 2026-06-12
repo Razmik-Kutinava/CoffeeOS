@@ -1,0 +1,34 @@
+{
+  "task": "B14_pwa_fly_smoke",
+  "run_at": "2026-06-12T09:01:58Z",
+  "base": "https://coffeeos.fly.dev",
+  "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "checks": {
+    "manifest_json": {
+      "pass": true,
+      "name": "CoffeeOS",
+      "icons": 3
+    },
+    "service_worker": {
+      "pass": true,
+      "bytes": 2960
+    },
+    "shop_shell": {
+      "pass": true,
+      "has_tenant_meta": true
+    },
+    "/pwa/icon-192.png": {
+      "pass": true,
+      "http": "200"
+    },
+    "/pwa/icon-512.png": {
+      "pass": true,
+      "http": "200"
+    },
+    "/pwa/apple-touch-icon.png": {
+      "pass": true,
+      "http": "200"
+    }
+  },
+  "status": "PASS"
+}

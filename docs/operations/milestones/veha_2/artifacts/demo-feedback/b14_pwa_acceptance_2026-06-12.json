@@ -1,0 +1,120 @@
+{
+  "task": "B14_pwa_formal_acceptance",
+  "run_at": "2026-06-12T09:02:01Z",
+  "base": "https://coffeeos.fly.dev",
+  "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "fly_smoke": {
+    "task": "B14_pwa_fly_smoke",
+    "run_at": "2026-06-12T09:01:58Z",
+    "base": "https://coffeeos.fly.dev",
+    "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+    "checks": {
+      "manifest_json": {
+        "pass": true,
+        "name": "CoffeeOS",
+        "icons": 3
+      },
+      "service_worker": {
+        "pass": true,
+        "bytes": 2960
+      },
+      "shop_shell": {
+        "pass": true,
+        "has_tenant_meta": true
+      },
+      "/pwa/icon-192.png": {
+        "pass": true,
+        "http": "200"
+      },
+      "/pwa/icon-512.png": {
+        "pass": true,
+        "http": "200"
+      },
+      "/pwa/apple-touch-icon.png": {
+        "pass": true,
+        "http": "200"
+      }
+    },
+    "status": "PASS"
+  },
+  "lighthouse_pwa": {
+    "score_percent": 100,
+    "pass": true,
+    "method": "programmatic_audit",
+    "note": "LH 13+ убрал категорию pwa; эквивалентный чек-лист",
+    "checks": {
+      "https": {
+        "pass": true,
+        "detail": "https://coffeeos.fly.dev"
+      },
+      "manifest_200": {
+        "pass": true
+      },
+      "display_standalone": {
+        "pass": true
+      },
+      "scope_shop": {
+        "pass": true
+      },
+      "theme_color": {
+        "pass": true
+      },
+      "icons_192_512": {
+        "pass": true
+      },
+      "start_url_tenant": {
+        "pass": true
+      },
+      "service_worker": {
+        "pass": true
+      },
+      "manifest_link": {
+        "pass": true
+      },
+      "viewport_meta": {
+        "pass": true
+      },
+      "theme_color_meta": {
+        "pass": true
+      },
+      "apple_touch_icon": {
+        "pass": true
+      },
+      "apple_mobile_capable": {
+        "pass": true
+      },
+      "/pwa/icon-192.png": {
+        "pass": true,
+        "http": 200
+      },
+      "/pwa/icon-512.png": {
+        "pass": true,
+        "http": 200
+      },
+      "/pwa/apple-touch-icon.png": {
+        "pass": true,
+        "http": 200
+      }
+    }
+  },
+  "lcp_ms_repeat_visit": 183,
+  "lcp_pass": true,
+  "screenshots": {
+    "lighthouse_pwa_audit": "lighthouse_pwa_audit.png",
+    "install_prompt_android": "install_prompt_android.png",
+    "standalone_home_screen": "standalone_home_screen.png",
+    "offline_catalog": "offline_catalog.png",
+    "offline_checkout_queued": "offline_checkout_queued.png"
+  },
+  "screenshots_dir": "docs/operations/milestones/veha_2/artifacts/demo-feedback/screenshots/b14_pwa_2026-06-11",
+  "notes": [
+    "lighthouse_pwa: programmatic_audit (LH 13+ без категории pwa)",
+    "lcp: repeat visit mobile 4G throttling, Playwright",
+    "ios_add_to_home: физическое устройство — после апрува заказчика"
+  ],
+  "customer_signoff": {
+    "pass": false,
+    "note": "после апрува заказчика"
+  },
+  "status": "OPS_PASS"
+}

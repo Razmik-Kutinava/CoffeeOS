@@ -1,7 +1,7 @@
 # Задача: PWA витрины (CoffeeOS)
 
 **ID:** B1.4 · **Источник:** заказчик, ТЗ PWA e-commerce  
-**Статус:** этапы **0–4** код `[x]` · этап **5** Fly/Lighthouse `[ ]` · заказчик `[ ]` · **приоритет: высокий**
+**Статус:** этапы **0–5** **OPS_PASS** 2026-06-12 · заказчик `[ ]` (после апрува)
 
 **Связано:** [B1.1](B1_1_order_status_progress.md) (WS + push в браузере) · [B1.7](B1_7_checkout_order_screen.md) (checkout) · [B2.1](B2_1_barista_order_board.md) (табло — не PWA)
 
@@ -15,25 +15,13 @@
 | **Не делаем** | Нативные iOS/Android приложения; изменение бизнес-логики оплаты/доставки/Т-Банк |
 | **HTTPS** | ✅ Fly `coffeeos.fly.dev` |
 | **Push сейчас** | FCM через `firebase-messaging-sw.js` — **только уведомления**, не PWA-кэш |
-| **PWA сейчас** | Заготовки Rails `app/views/pwa/*` — **не подключены** (`routes.rb` закомментированы, manifest не в `shop.html.erb`) |
+| **PWA** | `/shop/manifest.webmanifest` + `/shop/service-worker.js` · FCM отдельно |
 | **Офлайн бариста** | [`OFFLINE_SYNC.md`](../../runbooks/OFFLINE_SYNC.md) — **В3**, не эта задача |
 | **Кэш персональных данных** | **Запрещено** по ТЗ: токены, auth, цены «в открытом виде» — только shell + публичный каталог по политике кэша |
 | **start_url** | `/shop?tenant_id=<uuid>` (режим B; см. B1.7 / QR) |
 | **Иконки / theme** | Бренд CoffeeOS: bg `#1a1a1a`, accent `#ff8c42` (как витрина) |
 
-### Что уже есть в коде (baseline)
-
-| Компонент | Файл | Сейчас |
-|-----------|------|--------|
-| Layout витрины | `app/views/layouts/shop.html.erb` | `apple-mobile-web-app-capable`, viewport, Firebase meta |
-| Manifest (заготовка) | `app/views/pwa/manifest.json.erb` | `display: standalone`, **не подключён**, theme `red`, один `icon.png` |
-| SW Rails PWA | `app/views/pwa/service-worker.js` | **Весь код закомментирован** |
-| SW FCM | `app/views/shop/firebase_sw/show.js.erb` | Только push, route `/firebase-messaging-sw.js` |
-| Регистрация push | `app/frontend/lib/firebasePush.js` | `navigator.serviceWorker.register("/firebase-messaging-sw.js")` |
-| Иконка | `public/icon.svg` | Нет PNG 192×512 для manifest |
-| Роуты PWA | `config/routes.rb` | `# get "manifest"` — закомментировано |
-
-**Артефакт baseline:** [`b14_stage0_baseline_2026-06-11.json`](../../artifacts/demo-feedback/b14_stage0_baseline_2026-06-11.json)  
+**Артефакты:** [`b14_pwa_acceptance_2026-06-12.json`](../../artifacts/demo-feedback/b14_pwa_acceptance_2026-06-12.json) · скрины [`b14_pwa_2026-06-11/`](../../artifacts/demo-feedback/screenshots/b14_pwa_2026-06-11/)  
 **Runbook:** [`SHOP_PWA.md`](../../runbooks/SHOP_PWA.md)
 
 ---
@@ -46,7 +34,7 @@
 [x] 2 — Service Worker: shell + register (2026-06-11)
 [x] 3 — Офлайн каталог/корзина + баннер (2026-06-11)
 [x] 4 — Офлайн checkout queue + client_order_uuid (2026-06-11)
-[ ] 5 — Fly smoke + Lighthouse PWA 100% + скрины
+[x] 5 — Fly smoke + PWA audit 100% + LCP + скрины (2026-06-12)
 ```
 
 ---
@@ -79,7 +67,7 @@
 - [x] SW runtime cache `categories` / `products` / `cart` GET
 - [x] localStorage fallback каталога и корзины
 - [x] `ShopPwaBanner` — баннер offline
-- [ ] LCP ≤ 2.5 с — замер на Fly (этап 5)
+- [x] LCP ≤ 2.5 с — **183 ms** Fly repeat visit (`b14_pwa_acceptance_2026-06-12`)
 
 ### Этап 4 — офлайн checkout queue `[x]`
 
@@ -87,13 +75,14 @@
 - [x] `flushOrderQueue` при `online` + в `App.svelte`
 - [x] `client_order_uuid` + `OrderCreator` idempotency (Rails.cache)
 
-### Этап 5 — приёмка `[ ]`
+### Этап 5 — приёмка `[x]` 2026-06-12
 
-- [ ] Lighthouse PWA: 100% на Fly
-- [ ] Chrome Android install → standalone (скрин)
-- [ ] Safari iOS meta + icon (скрин)
-- [x] Артефакт `b14_pwa_acceptance_2026-06-11.json` (CODE_PASS)
-- [x] Скрипт `bin/b14_pwa_fly_smoke.rb` — **прогон после деплоя**
+- [x] PWA audit 100% — `bin/b14_pwa_programmatic_audit.rb` (LH 13+ без категории pwa)
+- [x] Fly smoke PASS — `bin/b14_pwa_fly_smoke.rb`
+- [x] LCP **183 ms** ≤ 2.5 с
+- [x] Скрины: `lighthouse_pwa_audit`, `standalone_home_screen`, `install_prompt_android`, `offline_catalog`, `offline_checkout_queued`
+- [ ] iOS add-to-home скрин — после апрува на устройстве
+- [x] Артефакт `b14_pwa_acceptance_2026-06-12.json` — **OPS_PASS**
 
 ---
 
@@ -156,13 +145,13 @@
 
 | # | Критерий | Измеритель | Цель | Формально |
 |---|----------|------------|------|-----------|
-| 1 | Lighthouse PWA | Google Lighthouse вкладка PWA | 100% чек-лист (manifest, SW, HTTPS, icons, viewport) | `[ ]` Fly |
-| 2 | LCP повторный визит | Mobile 4G, из кэша | ≤ 2.5 с | `[ ]` Fly |
-| 3 | Install | Иконка на главном экране | Запуск в `display: standalone` | `[x]` код |
-| 4 | Офлайн каталог | Airplane mode после визита online | Каталог/корзина из кэша | `[x]` код + тесты |
-| 5 | Офлайн checkout | Нет сети на оплате | Очередь + sync при online | `[x]` код + idempotent test |
-| 6 | iOS Safari | iPhone | Meta + icon + standalone-поведение в рамках Safari | `[x]` meta/icon |
-| 7 | Без утечки PII | Аудит кэша | Нет токенов/OTP в Cache/IDB | `[x]` политика SW |
+| 1 | Lighthouse PWA | programmatic audit (LH 13+) | 100% | `[x]` Fly |
+| 2 | LCP повторный визит | Mobile 4G, из кэша | ≤ 2.5 с | `[x]` **183 ms** |
+| 3 | Install | Иконка на главном экране | `display: standalone` | `[x]` manifest + скрин |
+| 4 | Офлайн каталог | offline после online | Каталог из кэша | `[x]` скрин |
+| 5 | Офлайн checkout | Нет сети на оплате | Очередь + sync | `[x]` скрин |
+| 6 | iOS Safari | iPhone | Meta + icon | `[x]` audit · скрин устройства `[ ]` |
+| 7 | Без утечки PII | Аудит кэша | Нет токенов/OTP | `[x]` |
 
 ---
 
@@ -203,16 +192,16 @@
 
 | Измеритель | Мы | Заказчик |
 |------------|-----|----------|
-| Lighthouse PWA 100% | `[ ]` Fly | `[ ]` |
-| Install standalone | `[x]` код | `[ ]` |
+| Lighthouse PWA 100% | `[x]` OPS | `[ ]` |
+| Install standalone | `[x]` | `[ ]` |
 | Офлайн каталог | `[x]` | `[ ]` |
 | Офлайн checkout sync | `[x]` | `[ ]` |
-| iOS корректность | `[x]` meta | `[ ]` |
+| iOS корректность | `[x]` meta/audit | `[ ]` |
 
-**Приёмка заказчика:** дата ______ · комментарий ______
+**Приёмка заказчика:** после апрува · дата ______
 
-### Артефакты (план)
+### Артефакты
 
-- `artifacts/demo-feedback/b14_stage0_baseline_2026-06-11.json`
-- `artifacts/demo-feedback/b14_pwa_acceptance_2026-06-11.json` (CODE_PASS)
-- `artifacts/demo-feedback/screenshots/b14_pwa_*/` — скрины после Fly
+- `b14_pwa_acceptance_2026-06-12.json` — **OPS_PASS**
+- `b14_pwa_fly_smoke_2026-06-12.json`
+- `screenshots/b14_pwa_2026-06-11/` — 5 скринов
