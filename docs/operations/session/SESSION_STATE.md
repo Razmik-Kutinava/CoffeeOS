@@ -33,7 +33,8 @@
 
 **Не сейчас (долги):** слияние 2 SW, Background Sync, A/B install, per-tenant icons, iOS скрин, перепрогон Playwright шаг 3, приёмки заказчика, домен `*.shop…` — см. [`B1_4_pwa_shop.md`](milestones/veha_2/requirements/customer_tasks/B1_4_pwa_shop.md) §Долги.
 
-**Деплой:** Fly + `db:migrate` (client_order_uuid).
+**Git:** push `develop` `9f64e2a` ✅  
+**Деплой Fly:** ⏳ владелец — `flyctl auth login` → `fly deploy -a coffeeos` (release → `client_order_uuid` migrate).
 
 ### Сессия 2026-06-12 (B1.4 PWA — формальное закрытие OPS)
 
