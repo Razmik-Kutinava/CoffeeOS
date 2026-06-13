@@ -40,5 +40,15 @@ module Barista
     def barista_column_dom_id(status)
       Barista::BoardOrdersQuery.column_dom_id(status)
     end
+
+    def barista_board_modifier_label(mods)
+      added = Array(mods[:added]).first
+      return "+ #{added['name']}" if added.present?
+
+      removed = Array(mods[:removed]).first
+      return "БЕЗ #{removed['name']}" if removed.present?
+
+      nil
+    end
   end
 end

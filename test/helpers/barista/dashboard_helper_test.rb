@@ -27,6 +27,16 @@ class Barista::DashboardHelperTest < ActionView::TestCase
     assert_empty tags[:removed]
   end
 
+  test "barista_board_modifier_label" do
+    assert_equal "+ Со льдом", barista_board_modifier_label(
+      added: [{ "name" => "Со льдом" }], removed: []
+    )
+    assert_equal "БЕЗ Сахар", barista_board_modifier_label(
+      added: [], removed: [{ "name" => "Сахар" }]
+    )
+    assert_nil barista_board_modifier_label(added: [], removed: [])
+  end
+
   test "barista_status_button_label and next status" do
     assert_equal "ГОТОВИТСЯ", barista_status_button_label("accepted")
     assert_equal "ГОТОВ", barista_status_button_label("preparing")

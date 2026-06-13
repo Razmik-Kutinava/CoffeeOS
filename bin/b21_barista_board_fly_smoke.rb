@@ -24,9 +24,14 @@ TENANT_ID = ENV.fetch("B21_TENANT_ID", "2fdee1ac-4674-41ee-b89e-87b45643f789")
 BARISTA_EMAIL = ENV.fetch("B21_BARISTA_EMAIL", "barista-a@demo.coffeeos.local")
 PASSWORD = ENV.fetch("STAFF_PASSWORD", "demo123456")
 DATE = Time.now.utc.strftime("%Y-%m-%d")
+REVISION = ENV["REVISION"] == "1"
 OUT = ENV.fetch(
   "OUT",
-  "docs/operations/milestones/veha_2/artifacts/demo-feedback/b21_fly_smoke_#{DATE}.json"
+  if REVISION
+    "docs/operations/milestones/veha_2/artifacts/demo-feedback/b21_revision_fly_smoke_#{DATE}.json"
+  else
+    "docs/operations/milestones/veha_2/artifacts/demo-feedback/b21_fly_smoke_#{DATE}.json"
+  end
 )
 NULL_DEV = Gem.win_platform? ? "NUL" : "/dev/null"
 
@@ -113,7 +118,8 @@ jar = File.join(Dir.tmpdir, "b21-fly-#{suffix}.cookies")
 shop_jar = File.join(Dir.tmpdir, "b21-shop-#{suffix}.cookies")
 
 result = {
-  task: "B2_1_barista_board_fly_smoke",
+  task: REVISION ? "B2_1_barista_board_revision_smoke" : "B2_1_barista_board_fly_smoke",
+  revision: REVISION,
   date: DATE,
   base: BASE,
   tenant_id: TENANT_ID,
@@ -132,9 +138,9 @@ begin
   result[:checks] << { id: "barista_board_http", pass: board_http == 200, http: board_http }
 
   layout_markers = {
-    kanban_ids: board_html.include?('id="orders-new"') && board_html.include?('id="orders-preparing"'),
+    board_slots: board_html.include?('id="barista-board-slots"') && board_html.include?("board-grid"),
     no_drag_hint: !board_html.include?("Перетащите карточку"),
-    footer_hint: board_html.include?("нажмите кнопку на карточке"),
+    footer_hint: board_html.include?("Коснитесь карточки"),
     turbo_cable: board_html.include?("turbo-cable-stream-source")
   }
   result[:checks] << {
@@ -230,18 +236,27 @@ begin
   }
 
   card_html = board_after.to_s
-  b21_markers = {
-    order_card: card_html.include?('class="card order-card'),
-    status_button: card_html.include?("card-btn-status"),
-    gotovitsya: card_html.include?("ГОТОВИТСЯ"),
-    cancel_overlay: card_html.include?("СТОП! ЗАКАЗ ОТМЕНЁН"),
-    cancel_confirm: card_html.include?("ПОДТВЕРДИТЬ ОТМЕНУ")
-  }
+  b21_markers = if REVISION
+                  {
+                    order_card: card_html.include?("board-slot-card"),
+                    board_slot_tap: card_html.include?("board-slot-tap"),
+                    cancel_overlay: card_html.include?("СТОП! ЗАКАЗ ОТМЕНЁН"),
+                    cancel_confirm: card_html.include?("ПОДТВЕРДИТЬ ОТМЕНУ")
+                  }
+                else
+                  {
+                    order_card: card_html.include?("board-slot-card"),
+                    status_button: card_html.include?("card-btn-status"),
+                    gotovitsya: card_html.include?("ГОТОВИТСЯ"),
+                    cancel_overlay: card_html.include?("СТОП! ЗАКАЗ ОТМЕНЁН"),
+                    cancel_confirm: card_html.include?("ПОДТВЕРДИТЬ ОТМЕНУ")
+                  }
+                end
   result[:checks] << {
-    id: "b21_board_markup",
+    id: REVISION ? "b21_revision_board_markup" : "b21_board_markup",
     pass: on_board && b21_markers.values.all?,
     markers: b21_markers,
-    deploy_note: b21_markers.values.all? ? nil : "нужен accepted-заказ на табло (ГОТОВИТСЯ в карточке)"
+    deploy_note: b21_markers.values.all? ? nil : "нужен accepted-заказ на табло"
   }
 
   show_body = curl_json(

@@ -387,7 +387,138 @@
     color: #6e7b8c;
   }
 
-  /* ===== KANBAN BOARD ===== */
+  /* ===== B2.1 REVISION — 6 SLOT BOARD ===== */
+  .board-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 16px;
+    flex: 1;
+    min-height: 0;
+    padding: 4px 0;
+  }
+
+  .board-slot {
+    min-height: 200px;
+    min-width: 0;
+  }
+
+  .board-slot-empty {
+    height: 100%;
+    min-height: 200px;
+    border: 2px dashed #2d3a44;
+    border-radius: 12px;
+    background: rgba(15, 18, 20, 0.5);
+  }
+
+  .board-slot-card {
+    position: relative;
+    height: 100%;
+    min-height: 200px;
+    border-radius: 12px;
+    border: 2px solid #c8c8c0;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  }
+
+  .board-slot-card--accepted {
+    background: #f5f5eb;
+    border-color: #d8d8cc;
+    color: #1a1a1a;
+  }
+
+  .board-slot-card--preparing {
+    background: #fff59d;
+    border-color: #e6d84a;
+    color: #1a1a1a;
+  }
+
+  .board-slot-tap-form {
+    margin: 0;
+    height: 100%;
+    width: 100%;
+  }
+
+  .board-slot-tap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    height: 100%;
+    min-height: 196px;
+    padding: 16px 12px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-family: inherit;
+    text-align: center;
+  }
+
+  .board-slot-tap--static {
+    cursor: default;
+  }
+
+  .board-slot-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #5a5a52;
+  }
+
+  .board-slot-number {
+    font-size: 18px;
+    font-weight: 800;
+    color: #1a1a1a;
+  }
+
+  .board-slot-customer {
+    font-size: 14px;
+    font-weight: 600;
+    color: #2a2a2a;
+  }
+
+  .board-slot-product {
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.35;
+    color: #333;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .board-slot-modifier {
+    font-size: 12px;
+    font-weight: 700;
+    color: #4a4a00;
+  }
+
+  .board-slot-cancel {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    z-index: 2;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border: 1px solid #999;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.85);
+    color: #a04040;
+    font-size: 14px;
+    line-height: 1;
+    cursor: pointer;
+    font-family: inherit;
+  }
+
+  .board-slot-card .order-card-cancel-overlay {
+    background: rgba(28, 32, 36, 0.94);
+  }
+
+  /* ===== KANBAN BOARD (legacy) ===== */
   .kanban {
     display: grid;
     grid-template-columns: repeat(3, 1fr);

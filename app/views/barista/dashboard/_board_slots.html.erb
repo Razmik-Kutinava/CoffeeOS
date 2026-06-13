@@ -1,0 +1,16 @@
+<%
+  orders = Array(local_assigns[:orders])
+  slot_count = Barista::BoardOrdersQuery::MAX_SLOTS
+%>
+<div class="board-grid" id="barista-board-slots">
+  <% slot_count.times do |index| %>
+    <% order = orders[index] %>
+    <div class="board-slot">
+      <% if order %>
+        <%= render partial: "barista/dashboard/order_card", locals: { order: order } %>
+      <% else %>
+        <div class="board-slot-empty" aria-hidden="true"></div>
+      <% end %>
+    </div>
+  <% end %>
+</div>

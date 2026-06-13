@@ -1,76 +1,44 @@
 <%
-  status_start_time = order_status_start_time(order)
-  minutes_in_status = ((Time.current - status_start_time) / 60).floor
-  timer_class = if minutes_in_status > 10
-    "timer-critical"
-  elsif minutes_in_status > 5
-    "timer-warning"
-  else
-    ""
-  end
-  card_status_class = "card--#{order.status}"
+  next_status = barista_next_status(order.status)
+  primary_item = order.order_items.first
+  mods = primary_item ? barista_modifier_tags(primary_item) : { added: [], removed: [] }
+  modifier_label = barista_board_modifier_label(mods)
   cancellable = order.can_be_cancelled?
+  card_status_class = "board-slot-card--#{order.status}"
 %>
 
-<div class="card order-card <%= card_status_class %>" id="order_<%= order.id %>" data-controller="order-card-cancel">
-  <div class="card-body">
-    <div class="card-header">
-      <span class="order-number">#<%= order.order_number %></span>
-      <div class="card-header-end">
-        <span class="order-created"><%= l(order.created_at, format: :short) %></span>
-        <% if cancellable %>
-          <button type="button"
-                  class="card-cancel-trigger"
-                  aria-label="Отменить заказ"
-                  data-action="order-card-cancel#open">✕</button>
-        <% end %>
-      </div>
-    </div>
-
-    <div class="card-timer-row">
-      <span class="order-timer <%= timer_class %>" data-time="<%= status_start_time.iso8601 %>">⏱️ <%= minutes_in_status %> мин</span>
-    </div>
-
-    <div class="card-items">
-      <% board_items = order.order_items.to_a %>
-      <% board_items.first(4).each do |item| %>
-        <% mods = barista_modifier_tags(item) %>
-        <div class="item-block">
-          <div class="item-row">
-            <span class="item-qty"><%= item.quantity %>×</span>
-            <span class="item-name"><%= item.product_name %></span>
-          </div>
-          <% if mods[:added].any? || mods[:removed].any? %>
-            <div class="item-mods">
-              <% mods[:added].each do |mod| %>
-                <span class="mod-added">+ <%= mod["name"].to_s.upcase %></span>
-              <% end %>
-              <% mods[:removed].each do |mod| %>
-                <span class="mod-removed">БЕЗ <%= mod["name"] %></span>
-              <% end %>
-            </div>
-          <% end %>
-        </div>
+<div class="board-slot-card <%= card_status_class %>" id="order_<%= order.id %>" data-controller="order-card-cancel">
+  <% if next_status %>
+    <%= button_to update_status_barista_order_path(order, status: next_status),
+        method: :patch,
+        class: "board-slot-tap",
+        form: { class: "board-slot-tap-form" },
+        data: { turbo_method: :patch } do %>
+      <div class="board-slot-label">Табло заказа</div>
+      <div class="board-slot-number">№ <%= order.order_number %></div>
+      <% if order.customer_name.present? %>
+        <div class="board-slot-customer"><%= order.customer_name %></div>
       <% end %>
-      <% if board_items.size > 4 %>
-        <div class="item-more">...ещё <%= board_items.size - 4 %></div>
+      <% if primary_item %>
+        <div class="board-slot-product"><%= primary_item.product_name %></div>
       <% end %>
-    </div>
-  </div>
-
-  <div class="card-actions">
-    <% next_status = barista_next_status(order.status) %>
-    <% if next_status %>
-      <%= button_to barista_status_button_label(order.status),
-          update_status_barista_order_path(order, status: next_status),
-          method: :patch,
-          class: "card-btn-status card-btn-status--#{order.status}",
-          data: { turbo_method: :patch },
-          onclick: "event.stopPropagation();" %>
+      <% if modifier_label.present? %>
+        <div class="board-slot-modifier"><%= modifier_label %></div>
+      <% end %>
     <% end %>
-  </div>
+  <% else %>
+    <div class="board-slot-tap board-slot-tap--static">
+      <div class="board-slot-label">Табло заказа</div>
+      <div class="board-slot-number">№ <%= order.order_number %></div>
+    </div>
+  <% end %>
 
   <% if cancellable %>
+    <button type="button"
+            class="board-slot-cancel"
+            aria-label="Отменить заказ"
+            data-action="order-card-cancel#open"
+            onclick="event.stopPropagation();">✕</button>
     <div class="order-card-cancel-overlay" data-order-card-cancel-target="overlay" hidden>
       <div class="order-card-cancel-panel">
         <p class="order-card-cancel-title">СТОП! ЗАКАЗ ОТМЕНЁН</p>

@@ -183,30 +183,16 @@ module Barista
     private
 
     def broadcast_order_counts
-      raw = Barista::BoardOrdersQuery.board_scope(tenant_id: Current.tenant_id)
-                                     .where(status: %w[accepted preparing ready])
-                                     .group(:status)
-                                     .count
-      counts = { new: raw['accepted'].to_i, preparing: raw['preparing'].to_i, ready: raw['ready'].to_i }
+      counts = Barista::BoardOrdersQuery.slot_counts(tenant_id: Current.tenant_id)
+      stream = "orders_#{Current.tenant_id}"
 
-      Turbo::StreamsChannel.broadcast_replace_to(
-        "orders_#{Current.tenant_id}",
-        target: "count-new",
-        partial: 'barista/dashboard/count_badge',
-        locals: { count: counts[:new], type: 'new' }
-      )
-      Turbo::StreamsChannel.broadcast_replace_to(
-        "orders_#{Current.tenant_id}",
-        target: "count-preparing",
-        partial: 'barista/dashboard/count_badge',
-        locals: { count: counts[:preparing], type: 'preparing' }
-      )
-      Turbo::StreamsChannel.broadcast_replace_to(
-        "orders_#{Current.tenant_id}",
-        target: "count-ready",
-        partial: 'barista/dashboard/count_badge',
-        locals: { count: counts[:ready], type: 'ready' }
-      )
+      {
+        "count-accepted" => counts[:accepted],
+        "count-preparing" => counts[:preparing],
+        "total-on-board" => counts[:total]
+      }.each do |target, count|
+        Turbo::StreamsChannel.broadcast_replace_to(stream, target: target, html: count.to_s)
+      end
     end
 
     # HTML-форма шлёт cart_items[0][product_id]; интеграционные тесты — массив хэшей.

@@ -6,6 +6,9 @@ module Barista
   class BoardOrdersQuery
     INCLUDES = [:order_items, :order_status_logs].freeze
     VITRINA_WITHOUT_SHIFT_HOURS = 24
+    # B2.1 ревизия 2026-06-12: 6 слотов, только accepted + preparing на табло.
+    SLOT_STATUSES = %w[accepted preparing].freeze
+    MAX_SLOTS = 6
 
     COLUMN_DOM_IDS = {
       "accepted" => "orders-new",
@@ -41,6 +44,27 @@ module Barista
         base.where(cash_shift_id: nil, source: "mobile")
             .where("orders.created_at >= ?", since)
       end
+    end
+
+    def self.for_slots(tenant_id:, cash_shift: :auto, limit: MAX_SLOTS)
+      board_scope(tenant_id: tenant_id, cash_shift: cash_shift)
+        .where(status: SLOT_STATUSES)
+        .includes(*INCLUDES)
+        .order(created_at: :asc)
+        .limit(limit)
+        .to_a
+    end
+
+    def self.slot_counts(tenant_id:, cash_shift: :auto)
+      raw = board_scope(tenant_id: tenant_id, cash_shift: cash_shift)
+            .where(status: SLOT_STATUSES)
+            .group(:status)
+            .count
+      {
+        accepted: raw["accepted"].to_i,
+        preparing: raw["preparing"].to_i,
+        total: raw.values.sum
+      }
     end
 
     def self.for_column(tenant_id:, status:, cash_shift: :auto)

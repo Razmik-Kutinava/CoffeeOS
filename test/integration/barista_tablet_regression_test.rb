@@ -15,20 +15,17 @@ class BaristaTabletRegressionTest < ActionDispatch::IntegrationTest
     @cash_shift = open_cash_shift!(tenant: @tenant_a, opened_by: @barista)
   end
 
-  # 1. Табло заказов (Dashboard): канбан + подписка Turbo Streams
-  test "dashboard renders kanban columns and turbo stream subscription" do
+  # 1. Табло заказов (Dashboard): 6 слотов + подписка Turbo Streams
+  test "dashboard renders six slot board and turbo stream subscription" do
     login_as!(@barista)
     get "/barista"
     assert_response :success
 
-    assert_includes response.body, "id=\"kanban\""
-    assert_includes response.body, "ACCEPTED"
-    assert_includes response.body, "PREPARING"
-    assert_includes response.body, "READY"
-    assert_includes response.body, "id=\"orders-new\""
-    assert_includes response.body, "id=\"orders-preparing\""
-    assert_includes response.body, "id=\"orders-ready\""
-    # turbo_stream_from "orders_#{Current.tenant_id}" рендерит cable stream source в HTML
+    assert_includes response.body, 'id="barista-board-slots"'
+    assert_includes response.body, "board-grid"
+    assert_includes response.body, "board-slot-empty"
+    assert_includes response.body, "Коснитесь карточки"
+    refute_includes response.body, "id=\"kanban\""
     assert_includes response.body, "turbo-cable-stream-source"
   end
 
@@ -175,15 +172,16 @@ class BaristaTabletRegressionTest < ActionDispatch::IntegrationTest
   end
 
   # 10. Граничные случаи
-  test "dashboard with no orders shows empty columns" do
+  test "dashboard with no orders shows six empty slots" do
     login_as!(@barista)
     get "/barista"
     assert_response :success
-    assert_includes response.body, "Нет заказов"
+    assert_select "#barista-board-slots .board-slot-empty", 6
   end
 
-  test "dashboard shows all shift orders when more than 50 accepted and newest is visible" do
+  test "dashboard shows at most six FIFO slots when more than fifty accepted in scope" do
     login_as!(@barista)
+    queue_base = @cash_shift.opened_at
     60.times do |i|
       Order.create!(
         tenant: @tenant_a,
@@ -194,11 +192,11 @@ class BaristaTabletRegressionTest < ActionDispatch::IntegrationTest
         total_amount: 100,
         discount_amount: 0,
         final_amount: 100,
-        created_at: @cash_shift.opened_at + i.seconds
+        created_at: queue_base + i.seconds
       )
     end
 
-    newest = Order.create!(
+    vitrina_newest = Order.create!(
       tenant: @tenant_a,
       cash_shift: nil,
       order_number: "VITRINA-NEW",
@@ -207,16 +205,23 @@ class BaristaTabletRegressionTest < ActionDispatch::IntegrationTest
       total_amount: 100,
       discount_amount: 0,
       final_amount: 100,
-      created_at: Time.current
+      created_at: queue_base + 90.seconds
     )
 
     get "/barista"
     assert_response :success
-    assert_match(/id="count-new">61<\/span>/, response.body)
-    assert_includes response.body, %(id="order_#{newest.id}")
+    assert_select "#count-accepted", text: "61"
+    assert_select "#total-on-board", text: "61"
+    assert_select "#barista-board-slots .board-slot-card", 6
+    %w[L-0 L-1 L-2 L-3 L-4 L-5].each do |num|
+      assert_includes response.body, num
+    end
+    refute_includes response.body, "L-6"
+    refute_includes response.body, "VITRINA-NEW"
+    refute_includes response.body, %(id="order_#{vitrina_newest.id}")
   end
 
-  test "order card shows only first 3 items and 'more' indicator and promo discount" do
+  test "revision board card shows first product line only" do
     login_as!(@barista)
 
     order = Order.create!(
@@ -242,12 +247,14 @@ class BaristaTabletRegressionTest < ActionDispatch::IntegrationTest
 
     get "/barista"
     assert_response :success
-    assert_includes response.body, "...еще 2"
-    assert_includes response.body, "Промокод:"
+    assert_includes response.body, "board-slot-product"
+    assert_includes response.body, "P0"
+    refute_includes response.body, "P4"
+    refute_includes response.body, "...еще"
   end
 
-  # 11. Таймеры и время (проверка разметки/порогов + наличие JS setInterval)
-  test "timer element has data-time and JS updates every second with warning/critical thresholds" do
+  # 11. B2.1 ревизия — таймеры на карточке убраны (макет заказчика)
+  test "revision board card has no per-card timer markup" do
     login_as!(@barista)
 
     order = Order.create!(
@@ -261,24 +268,12 @@ class BaristaTabletRegressionTest < ActionDispatch::IntegrationTest
       final_amount: 100,
       created_at: 12.minutes.ago
     )
-    OrderStatusLog.create!(
-      order: order,
-      status_from: "pending_payment",
-      status_to: "accepted",
-      changed_by_id: @barista.id,
-      source: "barista",
-      comment: "seed",
-      created_at: 12.minutes.ago
-    )
 
     get "/barista"
     assert_response :success
-    assert_match(/class="order-timer[^"]*timer-critical"/, response.body)
-    assert_match(/data-time="[^"]+"/, response.body)
-    js = Rails.root.join("app/javascript/controllers/order_timer_controller.js").read
-    assert_includes js, "setInterval"
-    assert_includes js, "if (diffMins > 10)"
-    assert_includes js, "if (diffMins > 5)"
+    assert_select ".board-slot-card--accepted"
+    assert_select ".board-slot-card .order-timer", false
+    assert_select ".board-slot-card [data-controller~='order-timer']", false
   end
 
   # 12. Безопасность и изоляция данных
@@ -310,24 +305,26 @@ class BaristaTabletRegressionTest < ActionDispatch::IntegrationTest
   test "create order fails if shift not open and if product sold out/disabled" do
     login_as!(@barista)
 
-    # close shift: current_shift should be nil -> "Смена не открыта"
-    @cash_shift.update!(status: "closed")
+    CashShift.where(tenant_id: @tenant_a.id, status: "open").update_all(status: "closed", closed_at: Time.current)
+    assert_nil CashShift.find_by(tenant_id: @tenant_a.id, status: "open")
+
     post "/barista/orders", params: { cart_items: [{ product_id: @product.id, quantity: 1 }], payment_method: "cash" }
-    assert_response :redirect
+    assert_redirected_to barista_new_order_path
+    assert_includes flash[:alert].to_s, "Смена не открыта"
+
     follow_redirect!
-    # UI currently indicates closed shift in status bar (flash may not be rendered on this page)
     assert_includes response.body, "Смена закрыта"
 
-    # open again
-    @cash_shift.update!(status: "open")
+    @cash_shift.reload.update!(status: "open", closed_at: nil, closed_by_id: nil)
 
     setting = ProductTenantSetting.find_by!(tenant: @tenant_a, product: @product)
     setting.update!(is_sold_out: true, sold_out_reason: "stock_empty")
-    post "/barista/orders", params: { cart_items: [{ product_id: @product.id, quantity: 1 }], payment_method: "cash" }
-    assert_response :redirect
-    follow_redirect!
-    # Flash может не рендериться на этой странице; проверяем UI-индикатор "стоп-лист"
-    assert_includes response.body, "Стоп"
+
+    assert_no_difference -> { Order.count } do
+      post "/barista/orders", params: { cart_items: [{ product_id: @product.id, quantity: 1 }], payment_method: "cash" }
+    end
+    assert_redirected_to barista_new_order_path
+    assert_match(/недоступен|закончился/i, flash[:alert].to_s)
   end
 
   test "update_status handles race: if status already changed, invalid transition does not change it" do
@@ -383,14 +380,12 @@ class BaristaTabletRegressionTest < ActionDispatch::IntegrationTest
 
     get "/barista"
     assert_response :success
-    assert_includes response.body, 'class="card order-card card--accepted"'
-    assert_includes response.body, "ГОТОВИТСЯ"
-    assert_includes response.body, "card-btn-status"
-    assert_includes response.body, "mod-added"
-    assert_includes response.body, "+ СО ЛЬДОМ"
-    assert_includes response.body, "mod-removed"
-    assert_includes response.body, "БЕЗ Сахар"
-    assert_includes response.body, "event.stopPropagation();"
+    assert_includes response.body, "board-slot-card--accepted"
+    assert_includes response.body, "board-slot-tap"
+    assert_includes response.body, "Табло заказа"
+    assert_includes response.body, "board-slot-modifier"
+    assert_includes response.body, "+ Со льдом"
+    assert_includes response.body, 'onclick="event.stopPropagation();"'
     refute_includes response.body, "Принять →"
     assert_includes response.body, "order-card-cancel-overlay"
     assert_includes response.body, "СТОП! ЗАКАЗ ОТМЕНЁН"
@@ -419,8 +414,8 @@ class BaristaTabletRegressionTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_operator response.body.index("FIFO-OLD"), :<, response.body.index("FIFO-NEW")
     refute_includes response.body, "Перетащите карточку"
-    assert_includes response.body, "нажмите кнопку на карточке"
-    assert_includes response.body, 'id="orders-new"'
+    assert_includes response.body, "Коснитесь карточки"
+    assert_includes response.body, 'id="barista-board-slots"'
   end
 
   test "update_status turbo resyncs source and target columns FIFO" do
@@ -439,12 +434,56 @@ class BaristaTabletRegressionTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_equal "preparing", order.reload.status
-    assert_includes response.body, 'target="orders-new"'
-    assert_includes response.body, 'target="orders-preparing"'
+    assert_includes response.body, 'target="barista-board-slots"'
+    assert_includes response.body, "board-slot-card--preparing"
     assert_includes response.body, "FIFO-MOVE"
   end
 
-  # 18. B2.1 этап 4 — отмена: overlay + resync колонки
+  # 17. B2.1 ревизия R3 — tap белый (accepted) → жёлтый (preparing)
+  test "revision tap accepted to preparing replaces board slots via turbo" do
+    login_as!(@barista)
+
+    order = Order.create!(
+      tenant: @tenant_a, cash_shift: @cash_shift, order_number: "R3-TAP-1",
+      source: "manual", status: "accepted",
+      total_amount: 100, discount_amount: 0, final_amount: 100
+    )
+
+    patch "/barista/orders/#{order.id}/update_status",
+          params: { status: "preparing" },
+          headers: { "ACCEPT" => "text/vnd.turbo-stream.html" }
+
+    assert_response :success
+    assert_equal "preparing", order.reload.status
+    assert_includes response.body, 'target="barista-board-slots"'
+    assert_includes response.body, "board-slot-card--preparing"
+    assert_includes response.body, "R3-TAP-1"
+    refute_includes response.body, "board-slot-card--accepted"
+  end
+
+  # 18. B2.1 ревизия R3 — tap жёлтый → ready убирает карточку с табло (6 слотов)
+  test "revision tap preparing to ready removes order from board slots" do
+    login_as!(@barista)
+
+    order = Order.create!(
+      tenant: @tenant_a, cash_shift: @cash_shift, order_number: "R3-GONE",
+      source: "manual", status: "preparing",
+      total_amount: 100, discount_amount: 0, final_amount: 100
+    )
+
+    patch "/barista/orders/#{order.id}/update_status",
+          params: { status: "ready" },
+          headers: { "ACCEPT" => "text/vnd.turbo-stream.html" }
+
+    assert_response :success
+    assert_equal "ready", order.reload.status
+    assert_includes response.body, 'target="barista-board-slots"'
+    refute_includes response.body, "R3-GONE"
+    refute_includes response.body, %(id="order_#{order.id}")
+    assert_includes response.body, "board-slot-empty"
+  end
+
+  # 19. B2.1 этап 4 — отмена: overlay + resync колонки
   test "cancel turbo resyncs column and removes order from board" do
     login_as!(@barista)
 
@@ -472,7 +511,7 @@ class BaristaTabletRegressionTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_equal "cancelled", order.reload.status
-    assert_includes response.body, 'target="orders-new"'
+    assert_includes response.body, 'target="barista-board-slots"'
     refute_includes response.body, "B21-CANCEL"
     assert_includes response.body, "B21-KEEP"
     assert_not_nil keep.id

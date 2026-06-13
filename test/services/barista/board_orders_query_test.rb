@@ -11,6 +11,22 @@ class Barista::BoardOrdersQueryTest < ActiveSupport::TestCase
     @shift = open_cash_shift!(tenant: @tenant, opened_by: @barista)
   end
 
+  test "for_slots returns at most six accepted and preparing FIFO" do
+    7.times do |i|
+      Order.create!(
+        tenant: @tenant, cash_shift: @shift, order_number: "SLOT-#{i}",
+        source: "manual", status: "accepted",
+        total_amount: 100, discount_amount: 0, final_amount: 100,
+        created_at: i.hours.ago
+      )
+    end
+
+    slots = Barista::BoardOrdersQuery.for_slots(tenant_id: @tenant.id)
+    assert_equal 6, slots.size
+    assert slots.all? { |o| o.status.in?(%w[accepted preparing]) }
+    assert_equal "SLOT-6", slots.first.order_number
+  end
+
   test "for_column returns orders FIFO by created_at asc" do
     newer = Order.create!(
       tenant: @tenant, cash_shift: @shift, order_number: "FIFO-NEW",

@@ -68,8 +68,8 @@ begin
   steps << { step: 3, action: "GET /barista authenticated", verdict: board_http == 200 ? "PASS" : "FAIL", http: board_http }
 
   markup = {
-    order_card: board_html.include?("order-card"),
-    columns: board_html.include?("orders-new"),
+    board_slots: board_html.include?("barista-board-slots"),
+    board_grid: board_html.include?("board-grid"),
     b21_cancel: board_html.include?("СТОП! ЗАКАЗ ОТМЕНЁН"),
     stimulus: board_html.include?("order-card-cancel")
   }
