@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## v1.191 — 2026-06-13 (B2.1 R3: revision tests + fly smoke)
+
+- **Тесты:** tap white→yellow→gone, limit 6, `OrderBoardBroadcaster` broadcast target.
+- **Smoke:** `bin/b21_revision_fly_smoke.rb` (REVISION=1).
+
 ## v1.190 — 2026-06-13 (B2.1 R2: Fly MCP live без F5)
 
 - **Fly MCP:** разметка `#barista-board-slots` + turbo-cable + turbo-stream 200 — PASS.

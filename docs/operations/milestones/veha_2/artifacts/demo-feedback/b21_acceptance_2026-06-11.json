@@ -7,7 +7,7 @@
   "internal_signoff_ready": true,
   "internal_signoff": false,
   "customer_signoff": false,
-  "order_id": "e0347cad-ac42-476f-8ce0-e9335067096f",
+  "order_id": "a55ee8dd-6abe-40ef-a1bb-f8f0b28de07a",
   "scripts": {
     "b21_acceptance_prep": {
       "path": "bin/b21_acceptance_prep.rb",
@@ -59,12 +59,12 @@
     "6": {
       "pass": true,
       "formal": "PASS",
-      "board_ms": 865
+      "board_ms": 854
     },
     "7": {
       "pass": true,
       "formal": "PASS",
-      "ws_ms": 7
+      "ws_ms": 6
     },
     "8": {
       "pass": true,

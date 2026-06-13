@@ -4,7 +4,7 @@
   "base": "https://coffeeos.fly.dev",
   "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
   "barista_email": "barista-a@demo.coffeeos.local",
-  "vitrina_email": "b21-fly-06111250@coffeeos.dev",
+  "vitrina_email": "b21-fly-06111314@coffeeos.dev",
   "checks": [
     {
       "id": "barista_login",
@@ -39,14 +39,14 @@
       "id": "vitrina_create_order",
       "pass": true,
       "http": 200,
-      "order_id": "4f381762-9942-45f8-b6dc-b8ee7d37df2c",
+      "order_id": "49ee0b47-2673-4c93-88e8-c9c347045662",
       "order_number": null
     },
     {
       "id": "vitrina_order_on_barista_board",
       "pass": true,
-      "order_id": "4f381762-9942-45f8-b6dc-b8ee7d37df2c",
-      "order_dom_id": "order_4f381762-9942-45f8-b6dc-b8ee7d37df2c",
+      "order_id": "49ee0b47-2673-4c93-88e8-c9c347045662",
+      "order_dom_id": "order_49ee0b47-2673-4c93-88e8-c9c347045662",
       "order_number": null,
       "note": null
     },

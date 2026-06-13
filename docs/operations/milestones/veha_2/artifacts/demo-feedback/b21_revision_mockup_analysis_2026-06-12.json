@@ -1,0 +1,35 @@
+{
+  "task": "B2_1_barista_board_revision",
+  "date": "2026-06-12",
+  "source_image": "screenshots/b21_board_revision_2026-06-12/b21_customer_mockup_6_cards.png",
+  "layout": {
+    "grid": "2 rows x 3 columns = 6 fixed slots",
+    "card_shape": "square sticky-note style",
+    "position": "fixed on screen, no drag"
+  },
+  "card_fields": [
+    "Табло заказа (section label)",
+    "Номер заказа",
+    "Имя если введён номер телефона",
+    "Название карточки товара",
+    "модификатор, если имеется"
+  ],
+  "mechanics_verbatim": {
+    "arrival": "Как попал заказ он белого цвета",
+    "first_tap": "приняли нажали пальцем, он жёлтый",
+    "second_tap": "Нажали он удалился, как решили заказ, не коптится"
+  },
+  "coffeeos_mapping": {
+    "white": "accepted",
+    "yellow": "preparing",
+    "removed": "ready (off board; guest B1.1 «Готов»)",
+    "max_slots": 6,
+    "fifo": "created_at ASC among accepted+preparing"
+  },
+  "implementation_notes": [
+    "Whole card tap, not separate button",
+    "Show customer_name from order (checkout name; phone field future)",
+    "First line item + first modifier on card",
+    "Turbo replace barista-board-slots for live without F5"
+  ]
+}
