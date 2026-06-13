@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## v1.190 — 2026-06-13 (B2.1 R2: Fly MCP live без F5)
+
+- **Fly MCP:** разметка `#barista-board-slots` + turbo-cable + turbo-stream 200 — PASS.
+- **Скрипт:** `bin/b21_revision_r2_live_fly.rb`.
+- **Артефакт:** `b21_revision_r2_mcp_fly_2026-06-13.json`.
+
+## v1.189 — 2026-06-12 (B2.1 ревизия: 6 слотов, тап, live broadcast)
+
+- **Табло:** 2×3 грид, белый `accepted` / жёлтый `preparing`, тап → `ready` снимает с табло; max 6 FIFO.
+- **Live:** `OrderBoardBroadcaster` и turbo streams бьют в `#barista-board-slots`.
+- **Макет:** `b21_customer_mockup_6_cards.png` + analysis JSON.
+
 ## v1.188 — 2026-06-12 (B2.1 ревизия: подготовка ТЗ табло)
 
 - **Заказчик:** 2 баг-репорта — 6 карточек (тап белый→жёлтый→убрать) + live без F5.

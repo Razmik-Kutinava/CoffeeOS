@@ -1,0 +1,101 @@
+{
+  "scenario": "B2.1 — табло бариста MCP + HTTP verify",
+  "task": "B2_1_barista_board_mcp_fly",
+  "tool": "chrome-devtools-mcp + b21_mcp_fly_verify.rb",
+  "stand": "https://coffeeos.fly.dev",
+  "run_at": "2026-06-13",
+  "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "barista_email": "barista-a@demo.coffeeos.local",
+  "steps": [
+    {
+      "step": 1,
+      "action": "GET /login",
+      "verdict": "PASS",
+      "http": 200
+    },
+    {
+      "step": 2,
+      "action": "POST /login barista demo",
+      "verdict": "PASS"
+    },
+    {
+      "step": 3,
+      "action": "GET /barista authenticated",
+      "verdict": "PASS",
+      "http": 200
+    },
+    {
+      "step": 4,
+      "action": "Проверка разметки B2.1 на табло",
+      "result": {
+        "board_slots": true,
+        "board_grid": true,
+        "b21_cancel": true,
+        "stimulus": true
+      },
+      "verdict": "PASS",
+      "screenshot": "docs/operations/milestones/veha_2/artifacts/demo-feedback/screenshots/b21_barista_board_2026-06-10/barista_board_after.png",
+      "screenshot_required": true
+    },
+    {
+      "step": 5,
+      "action": "Витрина + bundle OrderStatus",
+      "verdict": "PASS",
+      "screenshot": "docs/operations/milestones/veha_2/artifacts/demo-feedback/screenshots/b21_barista_board_2026-06-10/stage5_e2e_vitrina_to_board.png",
+      "screenshot_required": true,
+      "note": "скрин e2e — MCP chrome-devtools после smoke vitrina→board"
+    }
+  ],
+  "checks": [
+    {
+      "id": "login_page",
+      "pass": true,
+      "http": 200
+    },
+    {
+      "id": "barista_session",
+      "pass": true
+    },
+    {
+      "id": "barista_board",
+      "pass": true,
+      "http": 200
+    },
+    {
+      "id": "b21_markup_on_fly",
+      "pass": true,
+      "markers": {
+        "board_slots": true,
+        "board_grid": true,
+        "b21_cancel": true,
+        "stimulus": true
+      }
+    },
+    {
+      "id": "vitrina_catalog",
+      "pass": true,
+      "http": 200
+    },
+    {
+      "id": "guest_status_bundle",
+      "pass": true,
+      "vite_chunk": "/vite/assets/application-5jZwS4KK.js"
+    },
+    {
+      "id": "screenshots_on_disk",
+      "pass": true,
+      "files": {
+        "barista_board_after.png": true,
+        "stage5_e2e_vitrina_to_board.png": true,
+        "stage2_fifo_accepted.png": true,
+        "stage2_after_status_move.png": true,
+        "stage4_cancel_overlay.png": true,
+        "stage4_cancel_confirmed.png": true
+      },
+      "note": "остальные скрины — обязательны, догоняем по мере MCP прогонов"
+    }
+  ],
+  "status": "PASS",
+  "customer_signoff": false,
+  "note": "ops gate этапа 5 — не финальная приёмка заказчика"
+}

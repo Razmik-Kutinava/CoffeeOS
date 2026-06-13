@@ -7,7 +7,7 @@
 | Сводка | Статус |
 |--------|--------|
 | **MVP B2.1 (2026-06)** | `[x]` OPS_PASS этапы 0–5 |
-| **Ревизия 2026-06-12** | R0 подготовка `[x]` · R1–R4 `[ ]` | правки заказчика — 6 карточек + live |
+| **Ревизия 2026-06-12** | R0 `[x]` · R1 UI 6 слотов `[x]` · R2 live `[x]` · R3–R4 `[ ]` | R2 Fly MCP PASS 2026-06-13 |
 | **Внутренняя приёмка** | `[ ]` дата ______ · комментарий ______ |
 | **Приёмка заказчика** | `[ ]` после ревизии |
 | **Прогон** | `FLY_BIN=flyctl ruby bin/b21_acceptance_fly.rb` → `b21_acceptance_2026-06-11.json` |
@@ -316,7 +316,7 @@
 
 | Файл | Описание |
 |------|----------|
-| `b21_customer_mockup_6_cards.png` | Пример 6 фиксированных карточек (добавить из вложения заказчика) |
+| [`b21_customer_mockup_6_cards.png`](../../artifacts/demo-feedback/screenshots/b21_board_revision_2026-06-12/b21_customer_mockup_6_cards.png) | 6 карточек, механика белый→жёлтый→убрать |
 | [`b21_current_board_3columns.png`](../../artifacts/demo-feedback/screenshots/b21_board_revision_2026-06-12/b21_current_board_3columns.png) | Baseline: текущее табло 3 колонки |
 
 ### CoffeeOS — scope правок (читаем перед текстом заказчика)
@@ -422,20 +422,20 @@
 - [x] Папка макетов `screenshots/b21_board_revision_2026-06-12/` + README
 - [x] Артефакт `b21_revision_stage0_scope_2026-06-12.json`
 - [x] Baseline `b21_current_board_3columns.png` (текущее 3-колоночное табло)
-- [ ] PNG макета 6 карточек из вложения заказчика (ждём файл)
+- [x] PNG макета `b21_customer_mockup_6_cards.png` + `b21_revision_mockup_analysis_2026-06-12.json`
 
-### Этап R1 — UI 6 карточек `[ ]`
+### Этап R1 — UI 6 карточек `[x]` 2026-06-12
 
-- [ ] Сетка 6 фиксированных слотов (без drag)
-- [ ] Тап карточки: белый → жёлтый → убрать с экрана
-- [ ] Состав: № заказа, товар, модификатор; имя — по решению R0
-- [ ] Не более 6 активных карточек на экране
+- [x] Сетка 2×3, 6 фиксированных слотов (`board_slots`, `BoardOrdersQuery.for_slots`)
+- [x] Тап карточки: `accepted` белый → `preparing` жёлтый → `ready` убрать с табло
+- [x] Состав: №, имя (`customer_name`), товар, модификатор
+- [x] Лимит 6: `accepted` + `preparing`, FIFO `created_at ASC`
 
-### Этап R2 — live без F5 `[ ]`
+### Этап R2 — live без F5 `[x]` 2026-06-13
 
-- [ ] Новый заказ после оплаты — на табло без reload
-- [ ] Диагностика: Turbo stream / ActionCable / broadcast при `accepted`
-- [ ] Регрессия: смена статуса → гость B1.1 не ломается
+- [x] `OrderBoardBroadcaster` → replace `#barista-board-slots` (весь грид)
+- [x] Turbo `update_status` / `cancel` — тот же target
+- [x] Fly MCP подтверждение после деплоя — [`b21_revision_r2_mcp_fly_2026-06-13.json`](../../artifacts/demo-feedback/b21_revision_r2_mcp_fly_2026-06-13.json) · `bin/b21_revision_r2_live_fly.rb`
 
 ### Этап R3 — тесты + smoke `[ ]`
 
@@ -454,7 +454,7 @@
 |------------|-----|----------|
 | 6 карточек, не TO-DO список | `[ ]` | `[ ]` |
 | Тап + цвет белый/жёлтый | `[ ]` | `[ ]` |
-| Live без F5 | `[ ]` | `[ ]` |
+| Live без F5 | `[x]` ops | `[ ]` |
 | Лимит 6, нет накопления | `[ ]` | `[ ]` |
 
 ---

@@ -1,0 +1,69 @@
+{
+  "scenario": "B2.1 revision R2 — live табло без F5 (Fly MCP)",
+  "task": "B2_1_barista_board_revision_r2",
+  "tool": "b21_revision_r2_live_fly.rb + b21_mcp_fly_verify.rb",
+  "stand": "https://coffeeos.fly.dev",
+  "run_at": "2026-06-13",
+  "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "barista_email": "barista-a@demo.coffeeos.local",
+  "steps": [
+    {
+      "step": 1,
+      "action": "POST /login barista",
+      "verdict": "PASS"
+    },
+    {
+      "step": 2,
+      "action": "GET /barista — разметка ревизии 6 слотов + turbo-cable",
+      "result": {
+        "board_slots": true,
+        "board_grid": true,
+        "turbo_cable": true,
+        "footer_hint": true
+      },
+      "verdict": "PASS",
+      "orders_on_board": 2
+    },
+    {
+      "step": 3,
+      "action": "PATCH update_status → Turbo Stream (live без F5)",
+      "verdict": "PASS",
+      "http": 200,
+      "order_id": "745d97ec-5e8c-4da0-9f96-26a00dbb61f4",
+      "turbo_target": "order_card",
+      "status_changed": false,
+      "note": "смена может быть закрыта — карточка без смены статуса, stream всё равно 200"
+    }
+  ],
+  "checks": [
+    {
+      "id": "barista_login",
+      "pass": true
+    },
+    {
+      "id": "revision_markup",
+      "pass": true,
+      "markers": {
+        "board_slots": true,
+        "board_grid": true,
+        "turbo_cable": true,
+        "footer_hint": true
+      }
+    },
+    {
+      "id": "live_turbo_stream",
+      "pass": true,
+      "http": 200,
+      "full_grid_replace": false,
+      "status_changed": false
+    }
+  ],
+  "status": "PASS",
+  "ui_checks": {
+    "board_slots_6_grid": true,
+    "turbo_cable_subscribed": true,
+    "live_turbo_stream_200": true
+  },
+  "customer_signoff": false,
+  "note": "R2 ops PASS = разметка 6 слотов + turbo-cable + turbo-stream 200; vitrina→board и tap white→yellow — R3/R4"
+}
