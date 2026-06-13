@@ -31,6 +31,7 @@
   let submitting = $state(false)
   let err = $state(null)
   let savedProfile = $state(false)
+  let hadVerifiedLocally = $state(false)
   let editContact = $state(true)
 
   const canSendCode = $derived(isValidEmail(email) && !sendingCode)
@@ -45,14 +46,18 @@
     if (serverOk) {
       emailVerified = true
       editContact = false
+      hadVerifiedLocally = true
       saveGuestProfile({ name, email, emailVerified: true })
+      otpNotice = ""
       return true
     }
     emailVerified = false
     editContact = true
     clearEmailVerifiedInProfile()
-    if (savedProfile && isValidEmail(email)) {
+    if (hadVerifiedLocally && isValidEmail(email)) {
       otpNotice = "Подтвердите email кодом — сессия истекла"
+    } else {
+      otpNotice = ""
     }
     return false
   }
@@ -63,7 +68,8 @@
       return false
     }
     try {
-      const status = await api("/email_otp/status")
+      const q = encodeURIComponent(email.trim().toLowerCase())
+      const status = await api(`/email_otp/status?email=${q}`)
       return applyServerVerificationStatus(status)
     } catch {
       emailVerified = false
@@ -79,6 +85,7 @@
       name = profile.name
       email = profile.email
       savedProfile = true
+      hadVerifiedLocally = !!profile.emailVerified
       editContact = !profile.emailVerified
       emailVerified = false
     }
@@ -119,6 +126,7 @@
   function onEmailInput() {
     emailVerified = false
     editContact = true
+    hadVerifiedLocally = false
     otpNotice = ""
     clearEmailVerifiedInProfile()
   }
@@ -155,6 +163,7 @@
         })
       })
       emailVerified = true
+      hadVerifiedLocally = true
       otpNotice = "Email подтверждён"
       saveGuestProfile({ name, email, emailVerified: true })
       savedProfile = true

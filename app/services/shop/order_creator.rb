@@ -314,7 +314,8 @@ module Shop
       verified = Shop::EmailVerification.verified_email(
         session: @session,
         tenant_id: @tenant.id,
-        session_id: shop_browser_session_id
+        session_id: shop_browser_session_id,
+        email: email
       )
       unless verified == email
         raise Error, "Подтвердите email кодом из письма"

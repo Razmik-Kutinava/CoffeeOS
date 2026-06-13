@@ -60,6 +60,31 @@ class Shop::EmailVerificationTest < ActiveSupport::TestCase
     )
   end
 
+  test "verified_email restores from database by email when session_id rotated" do
+    other_session_id = SecureRandom.hex(16)
+
+    Shop::EmailVerification.mark_verified!(
+      session: @session,
+      tenant_id: @tenant.id,
+      email: @email,
+      session_id: @session_id
+    )
+    @session.clear
+    fresh_session = {}
+
+    email = Shop::EmailVerification.verified_email(
+      session: fresh_session,
+      tenant_id: @tenant.id,
+      session_id: other_session_id,
+      email: @email
+    )
+
+    assert_equal @email, email
+    assert_equal @email, Shop::EmailVerificationSession.verified_email(fresh_session, @tenant.id)
+    rebound = ShopEmailVerification.active_for(tenant_id: @tenant.id, session_id: other_session_id)
+    assert_equal @email, rebound.email
+  end
+
   test "expired database record is ignored" do
     ShopEmailVerification.upsert_verified!(
       tenant_id: @tenant.id,

@@ -58,6 +58,13 @@
 - **Хвосты:** smoke PARTIAL → не блокер (R4); DevTools login 500 → tech-debt
 - **Дальше:** B2.2 этап 1 (единый layout menu+cart)
 
+### Сессия 2026-06-13 (B1.7 — баг-3 checkout «сессия истекла»)
+
+- **Баг:** повторный checkout — OTP «сессия истекла» при сохранённом email в localStorage
+- **Фикс:** `EmailVerification` fallback по tenant+email; `Checkout.svelte` status?email=; UX сообщения
+- **Fly:** `bin/b17_checkout_session_fly.rb` + `bin/b17_checkout_session_mcp.mjs` — PASS
+- **Артефакт:** [`b17_checkout_session_2026-06-13.json`](milestones/veha_2/artifacts/demo-feedback/b17_checkout_session_2026-06-13.json)
+
 ### Открытый баг заказчика (B1.1, не B2.1)
 
 - **Баг-1 (2026-06-04):** экран статуса гостя — WS без F5 — **FIXED** 2026-06-13 · [`b11_bug1_guest_ws_2026-06-13.json`](milestones/veha_2/artifacts/demo-feedback/b11_bug1_guest_ws_2026-06-13.json)

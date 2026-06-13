@@ -1,0 +1,48 @@
+{
+  "task": "B1_7_checkout_session_expired",
+  "date": "2026-06-13",
+  "status": "PASS",
+  "verdict": "PASS",
+  "base": "https://coffeeos.fly.dev",
+  "email": "b17-session-06131600@coffeeos.dev",
+  "fix": {
+    "root_cause": "OTP verification bound only to session_id; mobile browsers rotate cookies",
+    "files": [
+      "app/services/shop/email_verification.rb",
+      "app/models/shop_email_verification.rb",
+      "app/controllers/shop/api/email_otp_controller.rb",
+      "app/services/shop/order_creator.rb",
+      "app/frontend/routes/Checkout.svelte"
+    ]
+  },
+  "playwright": {
+    "script": "bin/b17_checkout_session_mcp.mjs",
+    "steps": [
+      {
+        "id": "01",
+        "action": "no «сессия истекла» on return visit (new browser session)",
+        "pass": true,
+        "at": "2026-06-13T16:00:34.109Z",
+        "hasExpired": false
+      },
+      {
+        "id": "02",
+        "action": "contacts block or pay enabled after email restore",
+        "pass": true,
+        "at": "2026-06-13T16:00:34.113Z",
+        "hasContacts": true,
+        "payEnabled": true
+      }
+    ],
+    "started_at": "2026-06-13T16:00:28.738Z",
+    "finished_at": "2026-06-13T16:00:34.216Z"
+  },
+  "screen_dir": "docs/operations/milestones/veha_2/artifacts/demo-feedback/screenshots/b17_checkout_session_2026-06-13",
+  "chrome_devtools_mcp": {
+    "status": "PARTIAL",
+    "note": "SPA checkout не монтируется в MCP browser (пустой main); сценарий подтверждён Playwright PASS post-deploy v231",
+    "hasExpired": false,
+    "verified_at": "2026-06-13T16:02:00Z"
+  },
+  "fly_deploy": "deployment-01KV0V5G0NREXJ2CTKY6EZGAZ6"
+}

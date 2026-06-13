@@ -15,6 +15,13 @@ class ShopEmailVerification < ApplicationRecord
     active.find_by(tenant_id: tenant_id, session_id: session_id.to_s)
   end
 
+  def self.active_for_email(tenant_id:, email:)
+    normalized = Shop::EmailVerificationSession.normalize(email)
+    return nil if normalized.blank?
+
+    active.where(tenant_id: tenant_id, email: normalized).order(expires_at: :desc).first
+  end
+
   def self.upsert_verified!(tenant_id:, session_id:, email:, expires_at:)
     normalized = Shop::EmailVerificationSession.normalize(email)
     sid = session_id.to_s

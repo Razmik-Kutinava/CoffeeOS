@@ -185,7 +185,23 @@
 |----|--------|-----|-----|----------|
 | BR-1 | Убрать поле «Промокод (необязательно)» с checkout | `[x]` | `[x]` | `[ ]` |
 | BR-2 | Убрать кнопку «Наличные»; оставить «Картой» + «СБП» (СБП disabled, «Будет позже») | `[x]` | `[x]` | `[ ]` |
+| BR-3 | «Сессия истекла» при повторном checkout после OTP | `[x]` | `[x]` | `[ ]` |
 
 **Артефакты:** [`b17_br_fixes_2026-06-10.json`](../../artifacts/demo-feedback/b17_br_fixes_2026-06-10.json) · скрин [`checkout_no_promo_no_cash_sbp.png`](../../artifacts/demo-feedback/screenshots/b17_br_fixes_2026-06-10/checkout_no_promo_no_cash_sbp.png)
 
 **Приёмка после правок:** дата ______ · комментарий ______
+
+---
+
+### Баг-репорт №3 — «сессия истекла» на checkout `[x]` fixed 2026-06-13
+
+**Источник:** Арам Гюрджян, видео + скрины checkout (email OTP).
+
+| | |
+|--|--|
+| **Суть** | После повторного захода на оформление — «Подтвердите email кодом — сессия истекла», хотя email уже подтверждали; имя/email подставляются из localStorage |
+| **Причина** | OTP-verified привязан к `session_id` cookie; мобильный браузер меняет сессию → сервер не видит verify |
+| **Фикс** | Fallback `EmailVerification` по `tenant+email` (24ч TTL) + re-bind session; checkout `/email_otp/status?email=`; сообщение «сессия истекла» только если раньше был verified локально |
+| **Статус** | `[x]` **FIXED** — Fly PASS 2026-06-13 |
+| **Прогон** | `ruby bin/b17_checkout_session_fly.rb` → `node bin/b17_checkout_session_mcp.mjs` |
+| **Артефакт** | [`b17_checkout_session_2026-06-13.json`](../../artifacts/demo-feedback/b17_checkout_session_2026-06-13.json) · скрины `screenshots/b17_checkout_session_2026-06-13/` |

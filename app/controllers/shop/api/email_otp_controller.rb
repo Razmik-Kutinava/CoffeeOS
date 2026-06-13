@@ -27,7 +27,8 @@ module Shop
         email = Shop::EmailVerification.verified_email(
           session: session,
           tenant_id: @shop_tenant.id,
-          session_id: request.session.id
+          session_id: request.session.id,
+          email: params[:email]
         )
         render json: { verified: email.present?, email: email }
       end
