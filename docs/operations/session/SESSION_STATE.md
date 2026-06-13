@@ -45,6 +45,12 @@
 - **Chrome DevTools MCP:** login на Fly через браузер → HTTP 500; прогон через Playwright (curl/Ruby login OK).
 - **Дальше:** формальная подпись заказчика.
 
+### Сессия 2026-06-13 (B2.1 — сверка скринов и JSON)
+
+- **Скрипт:** `bin/b21_revision_verify_screenshots_json.rb`
+- **Результат:** PASS — 7 PNG `b21_revision_fly_2026-06-13/`, acceptance JSON verdict/status/ui_checks совпадают
+- **Артефакт:** `b21_revision_screenshots_json_verify_2026-06-13.json`
+
 ### Сессия 2026-06-13 (B2.1 R3 — тесты + smoke)
 
 - **Тесты:** tap accepted→preparing→ready off board, limit 6, `OrderBoardBroadcasterTest`.

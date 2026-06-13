@@ -214,5 +214,80 @@
     "customer_signoff": false,
     "customer_signoff_pending": "формальная подпись заказчика после просмотра скринов"
   },
-  "screenshots_customer_mcp": "docs/operations/milestones/veha_2/artifacts/demo-feedback/screenshots/b21_revision_customer_mcp_2026-06-13"
+  "screenshots_customer_mcp": "docs/operations/milestones/veha_2/artifacts/demo-feedback/screenshots/b21_revision_customer_mcp_2026-06-13",
+  "screenshots_json_verification": {
+    "task": "B2_1_barista_board_revision",
+    "check": "screenshots_and_json_reconciliation",
+    "date": "2026-06-13",
+    "verified_at": "2026-06-13T12:45:19Z",
+    "screen_dir": "docs/operations/milestones/veha_2/artifacts/demo-feedback/screenshots/b21_revision_fly_2026-06-13",
+    "acceptance_artifact": "b21_revision_acceptance_2026-06-12.json",
+    "verdict": "PASS",
+    "status": "PASS",
+    "checks": {
+      "png_7_on_disk": {
+        "pass": true,
+        "expected": [
+          "01_board_6_slots_fly.png",
+          "02_tap_white_accepted_fly.png",
+          "03_tap_yellow_preparing_fly.png",
+          "03_tap_yellow_card_fly.png",
+          "04_tap_ready_gone_fly.png",
+          "05_live_before_fly.png",
+          "06_live_new_order_fly.png"
+        ],
+        "on_disk": {
+          "01_board_6_slots_fly.png": true,
+          "02_tap_white_accepted_fly.png": true,
+          "03_tap_yellow_preparing_fly.png": true,
+          "03_tap_yellow_card_fly.png": true,
+          "04_tap_ready_gone_fly.png": true,
+          "05_live_before_fly.png": true,
+          "06_live_new_order_fly.png": true
+        }
+      },
+      "json_verdict_pass": {
+        "pass": true,
+        "value": "PASS"
+      },
+      "json_status_pass": {
+        "pass": true,
+        "value": "PASS"
+      },
+      "json_ui_checks_all_true": {
+        "pass": true,
+        "expected": [
+          "board_slots_6_grid",
+          "tap_white_accepted",
+          "tap_yellow_preparing",
+          "tap_ready_removed",
+          "live_new_order_no_reload",
+          "max_6_slots_fifo"
+        ],
+        "values": {
+          "board_slots_6_grid": true,
+          "tap_white_accepted": true,
+          "tap_yellow_preparing": true,
+          "tap_ready_removed": true,
+          "live_new_order_no_reload": true,
+          "max_6_slots_fifo": true
+        },
+        "false_keys": [],
+        "missing_keys": []
+      },
+      "json_screenshots_on_disk_matches": {
+        "pass": true,
+        "values": {
+          "01_board_6_slots_fly.png": true,
+          "02_tap_white_accepted_fly.png": true,
+          "03_tap_yellow_preparing_fly.png": true,
+          "03_tap_yellow_card_fly.png": true,
+          "04_tap_ready_gone_fly.png": true,
+          "05_live_before_fly.png": true,
+          "06_live_new_order_fly.png": true
+        }
+      }
+    },
+    "comment": "Все 7 PNG на месте; JSON verdict/status PASS; ui_checks — все true."
+  }
 }

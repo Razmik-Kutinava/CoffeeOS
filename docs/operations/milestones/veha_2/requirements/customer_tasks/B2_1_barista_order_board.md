@@ -449,6 +449,19 @@
 - [x] Прогон пути заказчика (MCP) → [`screenshots/b21_revision_customer_mcp_2026-06-13/`](../../artifacts/demo-feedback/screenshots/b21_revision_customer_mcp_2026-06-13/) · `bin/b21_revision_customer_mcp.rb`
 - [ ] Заказчик `[ ]` — формальная подпись после просмотра скринов
 
+### 2. Сверка со скринами и JSON `[x]` 2026-06-13
+
+**Скрипт:** `ruby bin/b21_revision_verify_screenshots_json.rb`  
+**Артефакт:** [`b21_revision_screenshots_json_verify_2026-06-13.json`](../../artifacts/demo-feedback/b21_revision_screenshots_json_verify_2026-06-13.json) — **PASS**
+
+| Проверка | Результат |
+|----------|-----------|
+| 7 PNG в `screenshots/b21_revision_fly_2026-06-13/` | `[x]` все на месте (`01`–`06`, включая `03_tap_yellow_card`) |
+| JSON `"verdict": "PASS"` | `[x]` |
+| JSON `"status": "PASS"` | `[x]` |
+| `ui_checks` — все `true` | `[x]` `board_slots_6_grid`, `tap_white_accepted`, `tap_yellow_preparing`, `tap_ready_removed`, `live_new_order_no_reload`, `max_6_slots_fifo` |
+| Расхождений | нет · комментарий в `screenshots_json_verification` блоке acceptance JSON |
+
 ### Приёмка заказчика — прогон Fly MCP (2026-06-13)
 
 **URL:** `https://coffeeos.fly.dev/barista` · `barista-a@demo.coffeeos.local`  
