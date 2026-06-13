@@ -53,6 +53,11 @@
 !/scripts/scratch/.keep
 /tmp_*
 /-b
+/-F
+/-H
+/curl.exe
+/*lighthouse.*
+/C?Users*
 
 # Coverage reports (e.g. SimpleCov)
 /coverage/

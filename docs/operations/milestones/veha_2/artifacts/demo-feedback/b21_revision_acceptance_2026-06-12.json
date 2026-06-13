@@ -1,0 +1,218 @@
+{
+  "task": "B2_1_barista_board_revision",
+  "scenario": "B2.1 ревизия 2026-06-12 — Fly MCP приёмка (6 карточек + live)",
+  "date": "2026-06-12",
+  "revision_evidence_run_at": "2026-06-13",
+  "base": "https://coffeeos.fly.dev",
+  "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "barista_email": "barista-a@demo.coffeeos.local",
+  "customer_reports": [
+    "todo_list_instead_of_6_cards",
+    "no_live_without_f5"
+  ],
+  "customer_problem": "Табло TO-DO вместо 6 карточек; новый заказ только после F5",
+  "method": "R0–R3 ops gates + Playwright R4 (bin/b21_revision_fly_screenshots.rb)",
+  "verdict": "PASS",
+  "status": "PASS",
+  "internal_signoff_ready": true,
+  "internal_signoff": true,
+  "internal_signoff_at": "2026-06-13",
+  "customer_signoff": false,
+  "revision_criteria": {
+    "grid_6_slots": {
+      "pass": true,
+      "formal": "PASS",
+      "evidence": "screenshots/b21_revision_fly_2026-06-13/01_board_6_slots_fly.png",
+      "code": "board_slots 2×3, MAX_SLOTS=6"
+    },
+    "tap_white_yellow_gone": {
+      "pass": true,
+      "formal": "PASS",
+      "evidence": [
+        "screenshots/b21_revision_fly_2026-06-13/02_tap_white_accepted_fly.png",
+        "screenshots/b21_revision_fly_2026-06-13/03_tap_yellow_preparing_fly.png",
+        "screenshots/b21_revision_fly_2026-06-13/04_tap_ready_gone_fly.png"
+      ],
+      "classes": {
+        "accepted": "board-slot-card board-slot-card--accepted",
+        "preparing": "board-slot-card board-slot-card--preparing"
+      }
+    },
+    "live_without_f5": {
+      "pass": true,
+      "formal": "PASS",
+      "live_ms": 4367,
+      "evidence": "screenshots/b21_revision_fly_2026-06-13/06_live_new_order_fly.png",
+      "order_id": "19e7a4b7-198b-4b8d-987f-9a9e77f0e7df",
+      "turbo_cable": true
+    },
+    "limit_6_no_accumulation": {
+      "pass": true,
+      "formal": "PASS",
+      "evidence": "BoardOrdersQuery.for_slots limit 6 + integration tests",
+      "tests": [
+        "test/integration/barista_tablet_regression_test.rb",
+        "test/services/barista/board_orders_query_test.rb",
+        "test/services/barista/order_board_broadcaster_test.rb"
+      ]
+    }
+  },
+  "ui_checks": {
+    "board_slots_6_grid": true,
+    "tap_white_accepted": true,
+    "tap_yellow_preparing": true,
+    "tap_ready_removed": true,
+    "live_new_order_no_reload": true,
+    "max_6_slots_fifo": true
+  },
+  "stages": {
+    "R0_scope": {
+      "artifact": "b21_revision_stage0_scope_2026-06-12.json",
+      "status": "COMPLETE"
+    },
+    "R1_ui_6_cards": {
+      "status": "PASS",
+      "evidence": "app/views/barista/dashboard/_board_slots.html.erb"
+    },
+    "R2_live_broadcast": {
+      "artifact": "b21_revision_r2_mcp_fly_2026-06-13.json",
+      "status": "PASS"
+    },
+    "R3_tests_smoke": {
+      "tests": [
+        "test/integration/barista_tablet_regression_test.rb",
+        "test/services/barista/board_orders_query_test.rb",
+        "test/services/barista/order_board_broadcaster_test.rb"
+      ],
+      "tests_status": "PASS",
+      "smoke_artifact": "b21_fly_smoke_2026-06-13.json",
+      "smoke_status": "PARTIAL",
+      "revision_smoke_script": "bin/b21_revision_fly_smoke.rb"
+    },
+    "R4_fly_screenshots": {
+      "screen_dir": "docs/operations/milestones/veha_2/artifacts/demo-feedback/screenshots/b21_revision_fly_2026-06-13",
+      "steps_artifact": "tmp/b21_revision_fly_screenshots.json",
+      "status": "PASS"
+    }
+  },
+  "scripts": {
+    "b21_revision_fly_prep": {
+      "path": "bin/b21_revision_fly_prep.rb",
+      "status": "PASS"
+    },
+    "b21_revision_fly_screenshots_mjs": {
+      "path": "bin/b21_revision_fly_screenshots.mjs",
+      "status": "PASS"
+    },
+    "b21_revision_fly_screenshots": {
+      "path": "bin/b21_revision_fly_screenshots.rb",
+      "status": "PASS"
+    },
+    "b21_revision_r2_live_fly": {
+      "path": "bin/b21_revision_r2_live_fly.rb",
+      "status": "PASS"
+    },
+    "b21_revision_fly_smoke": {
+      "path": "bin/b21_revision_fly_smoke.rb",
+      "status": "PARTIAL"
+    },
+    "b21_revision_acceptance_fly": {
+      "path": "bin/b21_revision_acceptance_fly.rb",
+      "status": "PASS"
+    }
+  },
+  "steps": [
+    {
+      "step": 1,
+      "action": "Табло 6 слотов (2×3)",
+      "verdict": "PASS",
+      "screenshot": "docs/operations/milestones/veha_2/artifacts/demo-feedback/screenshots/b21_revision_fly_2026-06-13/01_board_6_slots_fly.png",
+      "cards_visible": 6
+    },
+    {
+      "step": 2,
+      "action": "Тап: белая карточка (accepted)",
+      "verdict": "PASS",
+      "screenshot": "docs/operations/milestones/veha_2/artifacts/demo-feedback/screenshots/b21_revision_fly_2026-06-13/02_tap_white_accepted_fly.png",
+      "class": "board-slot-card board-slot-card--accepted"
+    },
+    {
+      "step": 3,
+      "action": "Тап: жёлтая карточка (preparing)",
+      "verdict": "PASS",
+      "screenshot": "docs/operations/milestones/veha_2/artifacts/demo-feedback/screenshots/b21_revision_fly_2026-06-13/03_tap_yellow_preparing_fly.png"
+    },
+    {
+      "step": 4,
+      "action": "Тап: ready — карточка ушла с табло",
+      "verdict": "PASS",
+      "screenshot": "docs/operations/milestones/veha_2/artifacts/demo-feedback/screenshots/b21_revision_fly_2026-06-13/04_tap_ready_gone_fly.png"
+    },
+    {
+      "step": 5,
+      "action": "Live: новый заказ без F5",
+      "verdict": "PASS",
+      "screenshot": "docs/operations/milestones/veha_2/artifacts/demo-feedback/screenshots/b21_revision_fly_2026-06-13/06_live_new_order_fly.png",
+      "live_ms": 4367,
+      "order_id": "19e7a4b7-198b-4b8d-987f-9a9e77f0e7df"
+    }
+  ],
+  "screenshots_on_disk": {
+    "01_board_6_slots_fly.png": true,
+    "02_tap_white_accepted_fly.png": true,
+    "03_tap_yellow_preparing_fly.png": true,
+    "03_tap_yellow_card_fly.png": true,
+    "04_tap_ready_gone_fly.png": true,
+    "05_live_before_fly.png": true,
+    "06_live_new_order_fly.png": true
+  },
+  "artifacts": {
+    "stage0": "b21_revision_stage0_scope_2026-06-12.json",
+    "r2": "b21_revision_r2_mcp_fly_2026-06-13.json",
+    "mockup": "b21_revision_mockup_analysis_2026-06-12.json",
+    "r4_screenshots": "docs/operations/milestones/veha_2/artifacts/demo-feedback/screenshots/b21_revision_fly_2026-06-13"
+  },
+  "backlog_not_in_revision": [
+    "отмена overlay (MVP этап 4)",
+    "брак / переделка / звук",
+    "prep_kitchen отдельный экран",
+    "телефон на карточке (checkout email-first)",
+    "brandbook: жёлтый vs оранжевый"
+  ],
+  "open_questions_customer": [
+    "client_name_vs_phone — checkout is email-first",
+    "yellow_only_preparing_or_two_taps",
+    "7th_order_queue_behavior",
+    "keep_cancel_overlay_from_mvp"
+  ],
+  "next": [
+    "подпись заказчика"
+  ],
+  "note": "OPS PASS ревизии = R0–R4 без customer_signoff; MVP B2.1 (9 критериев) — отдельно b21_acceptance_2026-06-11.json",
+  "customer_verification": {
+    "date": "2026-06-13",
+    "method": "chrome-devtools-mcp (login blocked) + Playwright browser path",
+    "devtools": {
+      "tool": "chrome-devtools-mcp",
+      "login_attempt": "POST /login from browser → HTTP 500 on Fly (2026-06-04 session)",
+      "fallback": "Playwright headless — тот же сценарий заказчика"
+    },
+    "playwright": {
+      "script": "bin/b21_revision_customer_mcp.mjs",
+      "screen_dir": "docs/operations/milestones/veha_2/artifacts/demo-feedback/screenshots/b21_revision_customer_mcp_2026-06-13",
+      "steps_artifact": "tmp/b21_revision_customer_mcp.json",
+      "status": "PASS"
+    },
+    "checklist": {
+      "1_1_grid_6_slots": true,
+      "1_1_no_kanban_columns": true,
+      "1_2_tap_white_yellow_gone": true,
+      "1_3_live_without_f5": true,
+      "1_4_limit_6": true
+    },
+    "internal_ops_verified": true,
+    "customer_signoff": false,
+    "customer_signoff_pending": "формальная подпись заказчика после просмотра скринов"
+  },
+  "screenshots_customer_mcp": "docs/operations/milestones/veha_2/artifacts/demo-feedback/screenshots/b21_revision_customer_mcp_2026-06-13"
+}

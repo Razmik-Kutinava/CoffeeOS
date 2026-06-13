@@ -22,7 +22,7 @@
 |--------|--------|
 | **B1.1 ревизия** | R0–R4 Fly MCP `[x]` · заказчик `[ ]` | апрув заказчика |
 | **B1.4 PWA** | код задеплоен · OPS_PASS · заказчик `[ ]` | апрув → B2.2 |
-| **B2.1 ревизия** | R0–R3 `[x]` · R4 `[ ]` | Fly скрины + апрув |
+| **B2.1 ревизия** | R0–R4 + MCP path `[x]` · заказчик `[ ]` | апрув заказчика |
 | **B2.1 MVP** | OPS_PASS 2026-06-11 · заменяется ревизией | — |
 
 ### Сессия 2026-06-12 (B2.1 ревизия — 6 карточек + live)
@@ -36,6 +36,14 @@
 - **Скрипт:** `bin/b21_revision_r2_live_fly.rb` — разметка 6 слотов + turbo-cable + turbo-stream 200 на Fly.
 - **Артефакты:** `b21_revision_r2_mcp_fly_2026-06-13.json`, `b21_mcp_fly_2026-06-13.json`.
 - **Дальше:** R4 Fly скрины + приёмка заказчика.
+
+### Сессия 2026-06-13 (B2.1 — приёмка заказчика MCP path)
+
+- **Скрипты:** `bin/b21_revision_customer_mcp.rb`, `bin/b21_revision_customer_mcp.mjs`, `bin/b21_revision_fly_screenshots.*`, `bin/b21_revision_acceptance_fly.rb`.
+- **Скрины:** `screenshots/b21_revision_customer_mcp_2026-06-13/` (01–07, имена как в ТЗ заказчика 1.1–1.4).
+- **Артефакты:** `b21_revision_acceptance_2026-06-12.json` — PASS, `internal_signoff: true`, `customer_signoff: false`.
+- **Chrome DevTools MCP:** login на Fly через браузер → HTTP 500; прогон через Playwright (curl/Ruby login OK).
+- **Дальше:** формальная подпись заказчика.
 
 ### Сессия 2026-06-13 (B2.1 R3 — тесты + smoke)
 

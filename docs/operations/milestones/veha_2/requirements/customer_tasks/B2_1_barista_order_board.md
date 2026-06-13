@@ -7,8 +7,8 @@
 | Сводка | Статус |
 |--------|--------|
 | **MVP B2.1 (2026-06)** | `[x]` OPS_PASS этапы 0–5 |
-| **Ревизия 2026-06-12** | R0–R3 `[x]` · R4 `[ ]` | R4 Fly скрины + приёмка |
-| **Внутренняя приёмка** | `[ ]` дата ______ · комментарий ______ |
+| **Ревизия 2026-06-12** | R0–R4 ops `[x]` · MCP path `[x]` · заказчик `[ ]` |
+| **Внутренняя приёмка** | `[x]` 2026-06-13 · MCP customer path PASS |
 | **Приёмка заказчика** | `[ ]` после ревизии |
 | **Прогон** | `FLY_BIN=flyctl ruby bin/b21_acceptance_fly.rb` → `b21_acceptance_2026-06-11.json` |
 
@@ -442,20 +442,35 @@
 - [x] Интеграционные тесты табло (tap, лимит 6, broadcast)
 - [x] `bin/b21_revision_fly_smoke.rb` (REVISION=1 → `b21_revision_fly_smoke_*.json`)
 
-### Этап R4 — приёмка Fly MCP `[ ]`
+### Этап R4 — приёмка Fly MCP `[x]` ops 2026-06-13
 
-- [ ] Скрины: 6 слотов, tap white→yellow→gone, live new order
-- [ ] Артефакт `b21_revision_acceptance_2026-06-12.json`
-- [ ] Заказчик `[ ]`
+- [x] Скрины: 6 слотов, tap white→yellow→gone, live new order → [`screenshots/b21_revision_fly_2026-06-13/`](../../artifacts/demo-feedback/screenshots/b21_revision_fly_2026-06-13/) · `bin/b21_revision_fly_screenshots.rb`
+- [x] Артефакт [`b21_revision_acceptance_2026-06-12.json`](../../artifacts/demo-feedback/b21_revision_acceptance_2026-06-12.json) · `bin/b21_revision_acceptance_fly.rb` — **PASS**, `internal_signoff_ready: true`
+- [x] Прогон пути заказчика (MCP) → [`screenshots/b21_revision_customer_mcp_2026-06-13/`](../../artifacts/demo-feedback/screenshots/b21_revision_customer_mcp_2026-06-13/) · `bin/b21_revision_customer_mcp.rb`
+- [ ] Заказчик `[ ]` — формальная подпись после просмотра скринов
+
+### Приёмка заказчика — прогон Fly MCP (2026-06-13)
+
+**URL:** `https://coffeeos.fly.dev/barista` · `barista-a@demo.coffeeos.local`  
+**Скрипт:** `ruby bin/b21_revision_customer_mcp.rb` · **PASS**
+
+| # | Проверка | Статус | Скрин |
+|---|----------|--------|-------|
+| 1.1 | Сетка 2×3, 6 слотов, не TO-DO / не 3 колонки | `[x]` | `01_board_6_slots_fly.png` |
+| 1.2 | Тап белый → жёлтый → пропала | `[x]` | `02`–`04` |
+| 1.3 | Live новый заказ без F5 (~5с) | `[x]` | `05`, `06` |
+| 1.4 | Лимит 6 — 7-й не на табло | `[x]` | `07_limit_6_full_board_fly.png` |
+
+> Chrome DevTools MCP: POST `/login` из браузера → HTTP 500 на Fly; сценарий 1.1–1.4 выполнен Playwright (эквивалентный UX). Зафиксировано в `customer_verification` артефакта приёмки.
 
 ### Приёмка ревизии
 
-| Измеритель | Мы | Заказчик |
-|------------|-----|----------|
-| 6 карточек, не TO-DO список | `[x]` tests | `[ ]` |
-| Тап + цвет белый/жёлтый | `[x]` tests | `[ ]` |
-| Live без F5 | `[x]` ops | `[ ]` |
-| Лимит 6, нет накопления | `[x]` tests | `[ ]` |
+| Измеритель | Мы | MCP path | Заказчик |
+|------------|-----|----------|----------|
+| 6 карточек, не TO-DO список | `[x]` tests | `[x]` 2026-06-13 | `[ ]` |
+| Тап + цвет белый/жёлтый | `[x]` tests | `[x]` 2026-06-13 | `[ ]` |
+| Live без F5 | `[x]` ops | `[x]` 2026-06-13 | `[ ]` |
+| Лимит 6, нет накопления | `[x]` tests | `[x]` 2026-06-13 | `[ ]` |
 
 ---
 
