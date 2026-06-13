@@ -62,7 +62,7 @@
 
 - **Баг:** повторный checkout — OTP «сессия истекла» при сохранённом email в localStorage
 - **Фикс:** `EmailVerification` fallback по tenant+email; `Checkout.svelte` status?email=; UX сообщения
-- **Fly:** `bin/b17_checkout_session_fly.rb` + `bin/b17_checkout_session_mcp.mjs` — PASS
+- **Fly:** `bin/b17_checkout_session_fly.rb` + Playwright + **Chrome DevTools MCP PASS** (isolatedContext)
 - **Артефакт:** [`b17_checkout_session_2026-06-13.json`](milestones/veha_2/artifacts/demo-feedback/b17_checkout_session_2026-06-13.json)
 
 ### Открытый баг заказчика (B1.1, не B2.1)

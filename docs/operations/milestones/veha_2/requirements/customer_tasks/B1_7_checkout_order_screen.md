@@ -203,5 +203,5 @@
 | **Причина** | OTP-verified привязан к `session_id` cookie; мобильный браузер меняет сессию → сервер не видит verify |
 | **Фикс** | Fallback `EmailVerification` по `tenant+email` (24ч TTL) + re-bind session; checkout `/email_otp/status?email=`; сообщение «сессия истекла» только если раньше был verified локально |
 | **Статус** | `[x]` **FIXED** — Fly PASS 2026-06-13 |
-| **Прогон** | `ruby bin/b17_checkout_session_fly.rb` → `node bin/b17_checkout_session_mcp.mjs` |
-| **Артефакт** | [`b17_checkout_session_2026-06-13.json`](../../artifacts/demo-feedback/b17_checkout_session_2026-06-13.json) · скрины `screenshots/b17_checkout_session_2026-06-13/` |
+| **Прогон** | `ruby bin/b17_checkout_session_fly.rb` → `node bin/b17_checkout_session_mcp.mjs` · **Chrome DevTools MCP** isolatedContext PASS |
+| **Артефакт** | [`b17_checkout_session_2026-06-13.json`](../../artifacts/demo-feedback/b17_checkout_session_2026-06-13.json) · скрины `screenshots/b17_checkout_session_2026-06-13/` (`03–04` DevTools) |

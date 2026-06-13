@@ -4,7 +4,7 @@
   "status": "PASS",
   "verdict": "PASS",
   "base": "https://coffeeos.fly.dev",
-  "email": "b17-session-06131600@coffeeos.dev",
+  "email": "b17-session-06131605@coffeeos.dev",
   "fix": {
     "root_cause": "OTP verification bound only to session_id; mobile browsers rotate cookies",
     "files": [
@@ -22,27 +22,47 @@
         "id": "01",
         "action": "no «сессия истекла» on return visit (new browser session)",
         "pass": true,
-        "at": "2026-06-13T16:00:34.109Z",
         "hasExpired": false
       },
       {
         "id": "02",
         "action": "contacts block or pay enabled after email restore",
         "pass": true,
-        "at": "2026-06-13T16:00:34.113Z",
         "hasContacts": true,
         "payEnabled": true
       }
+    ]
+  },
+  "chrome_devtools_mcp": {
+    "status": "PASS",
+    "verified_at": "2026-06-13T16:06:00Z",
+    "method": "isolatedContext b17-fresh-session + localStorage profile + cart/add API + #/checkout",
+    "prep": "ruby bin/b17_checkout_session_fly.rb",
+    "steps": [
+      {
+        "id": "D1",
+        "action": "catalog → product → cart → checkout (UI clicks)",
+        "pass": true,
+        "screenshot": "03_devtools_checkout_contacts_pass.png"
+      },
+      {
+        "id": "D2",
+        "action": "isolated context return visit: profile emailVerified + status?email restore",
+        "pass": true,
+        "hasExpired": false,
+        "hasContacts": true,
+        "hasName": true,
+        "payEnabled": true,
+        "screenshot": "04_devtools_isolated_return_visit_pass.png"
+      }
     ],
-    "started_at": "2026-06-13T16:00:28.738Z",
-    "finished_at": "2026-06-13T16:00:34.216Z"
+    "note_first_fail": "Прямой заход на #/checkout без корзины/загрузки SPA давал пустой main — не баг checkout"
   },
   "screen_dir": "docs/operations/milestones/veha_2/artifacts/demo-feedback/screenshots/b17_checkout_session_2026-06-13",
-  "chrome_devtools_mcp": {
-    "status": "PARTIAL",
-    "note": "SPA checkout не монтируется в MCP browser (пустой main); сценарий подтверждён Playwright PASS post-deploy v231",
-    "hasExpired": false,
-    "verified_at": "2026-06-13T16:02:00Z"
-  },
+  "screenshots": [
+    "01_return_visit_no_session_expired.png",
+    "03_devtools_checkout_contacts_pass.png",
+    "04_devtools_isolated_return_visit_pass.png"
+  ],
   "fly_deploy": "deployment-01KV0V5G0NREXJ2CTKY6EZGAZ6"
 }
