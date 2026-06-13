@@ -186,9 +186,23 @@
     "keep_cancel_overlay_from_mvp"
   ],
   "next": [
-    "подпись заказчика"
+    "подпись заказчика (handoff: b21_customer_handoff_2026-06-13.md)",
+    "B2.2 этап 1"
   ],
-  "note": "OPS PASS ревизии = R0–R4 без customer_signoff; MVP B2.1 (9 критериев) — отдельно b21_acceptance_2026-06-11.json",
+  "ops_closed": true,
+  "ops_closed_at": "2026-06-13",
+  "handoff": "docs/operations/milestones/veha_2/artifacts/demo-feedback/b21_customer_handoff_2026-06-13.md",
+  "tails": {
+    "revision_fly_smoke_partial": {
+      "status": "waived",
+      "reason": "live покрыт R4 + bin/b21_revision_customer_mcp.rb PASS"
+    },
+    "devtools_login_500_fly": {
+      "status": "tech_debt",
+      "reason": "Playwright/curl login OK; не блокирует приёмку"
+    }
+  },
+  "note": "OPS CLOSED 2026-06-13 = R0–R4 без customer_signoff; MVP B2.1 (9 критериев) — отдельно b21_acceptance_2026-06-11.json",
   "customer_verification": {
     "date": "2026-06-13",
     "method": "chrome-devtools-mcp (login blocked) + Playwright browser path",
@@ -212,7 +226,7 @@
     },
     "internal_ops_verified": true,
     "customer_signoff": false,
-    "customer_signoff_pending": "формальная подпись заказчика после просмотра скринов"
+    "customer_signoff_pending": "формальная подпись заказчика — handoff b21_customer_handoff_2026-06-13.md"
   },
   "screenshots_customer_mcp": "docs/operations/milestones/veha_2/artifacts/demo-feedback/screenshots/b21_revision_customer_mcp_2026-06-13",
   "screenshots_json_verification": {

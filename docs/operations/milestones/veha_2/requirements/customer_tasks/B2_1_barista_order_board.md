@@ -7,8 +7,8 @@
 | Сводка | Статус |
 |--------|--------|
 | **MVP B2.1 (2026-06)** | `[x]` OPS_PASS этапы 0–5 |
-| **Ревизия 2026-06-12** | R0–R4 ops `[x]` · MCP path `[x]` · заказчик `[ ]` |
-| **Внутренняя приёмка** | `[x]` 2026-06-13 · MCP customer path PASS |
+| **Ревизия 2026-06-12** | R0–R4 ops `[x]` · MCP path `[x]` · сверка JSON `[x]` · заказчик `[ ]` |
+| **Внутренняя приёмка** | `[x]` 2026-06-13 · OPS CLOSED (ждём подпись заказчика) |
 | **Приёмка заказчика** | `[ ]` после ревизии |
 | **Прогон** | `FLY_BIN=flyctl ruby bin/b21_acceptance_fly.rb` → `b21_acceptance_2026-06-11.json` |
 
@@ -440,7 +440,7 @@
 ### Этап R3 — тесты + smoke `[x]` 2026-06-13
 
 - [x] Интеграционные тесты табло (tap, лимит 6, broadcast)
-- [x] `bin/b21_revision_fly_smoke.rb` (REVISION=1 → `b21_revision_fly_smoke_*.json`)
+- [x] `bin/b21_revision_fly_smoke.rb` (REVISION=1) — **PARTIAL**, не блокер: live покрыт R4 + `bin/b21_revision_customer_mcp.rb` (PASS)
 
 ### Этап R4 — приёмка Fly MCP `[x]` ops 2026-06-13
 
@@ -461,6 +461,28 @@
 | JSON `"status": "PASS"` | `[x]` |
 | `ui_checks` — все `true` | `[x]` `board_slots_6_grid`, `tap_white_accepted`, `tap_yellow_preparing`, `tap_ready_removed`, `live_new_order_no_reload`, `max_6_slots_fifo` |
 | Расхождений | нет · комментарий в `screenshots_json_verification` блоке acceptance JSON |
+
+### Пакет для заказчика (handoff)
+
+**Документ:** [`b21_customer_handoff_2026-06-13.md`](../../artifacts/demo-feedback/b21_customer_handoff_2026-06-13.md)  
+**Скрины:** [`screenshots/b21_revision_customer_mcp_2026-06-13/`](../../artifacts/demo-feedback/screenshots/b21_revision_customer_mcp_2026-06-13/)
+
+Что отправить заказчику: таблица 1.1–1.4 + ссылка на Fly `/barista` (demo A). После OK — `customer_signoff: true` в [`b21_revision_acceptance_2026-06-12.json`](../../artifacts/demo-feedback/b21_revision_acceptance_2026-06-12.json).
+
+### Открытые вопросы — ждём ответ заказчика
+
+| # | Вопрос | Блокирует ревизию? | Статус |
+|---|--------|-------------------|--------|
+| Q1 | **Имя vs телефон** на карточке (checkout сейчас email-first) | нет | `[ ]` ждём |
+| Q2 | **7-й заказ** — очередь / скрыт / другое | нет | `[ ]` ждём |
+| Q3 | **Overlay отмены** — оставляем из MVP или убираем | нет | `[ ]` ждём |
+
+### Tech-debt (не блокирует B2.1)
+
+| Что | Статус | Комментарий |
+|-----|--------|-------------|
+| `b21_revision_fly_smoke` PARTIAL | закрыто ops | R4 + customer MCP покрывают live |
+| Login Chrome DevTools MCP → HTTP 500 на Fly | открыт | Playwright/curl login OK; разбор отдельно |
 
 ### Приёмка заказчика — прогон Fly MCP (2026-06-13)
 

@@ -2,7 +2,7 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-06-13 (B2.1 R2 Fly MCP PASS · R3 ждёт апрув)  
+**Дата:** 2026-06-13 (B2.1 OPS CLOSED · B2.2 следующая)  
 **Предыдущее:** B1.1 закрыта: FIREBASE_* на Fly · smoke + MCP PASS  
 **Веха 1:** официально не закрыта (§ I, H.3 — `[ ]`).  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
@@ -22,8 +22,8 @@
 |--------|--------|
 | **B1.1 ревизия** | R0–R4 Fly MCP `[x]` · заказчик `[ ]` | апрув заказчика |
 | **B1.4 PWA** | код задеплоен · OPS_PASS · заказчик `[ ]` | апрув → B2.2 |
-| **B2.1 ревизия** | R0–R4 + MCP path `[x]` · заказчик `[ ]` | апрув заказчика |
-| **B2.1 MVP** | OPS_PASS 2026-06-11 · заменяется ревизией | — |
+| **B2.1 ревизия** | OPS CLOSED 2026-06-13 · заказчик `[ ]` | handoff → B2.2 этап 1 |
+| **B2.2** | stage0 `[x]` · этап 1 `[ ]` | единый экран «Меню» |
 
 ### Сессия 2026-06-12 (B2.1 ревизия — 6 карточек + live)
 
@@ -50,6 +50,17 @@
 - **Скрипт:** `bin/b21_revision_verify_screenshots_json.rb`
 - **Результат:** PASS — 7 PNG `b21_revision_fly_2026-06-13/`, acceptance JSON verdict/status/ui_checks совпадают
 - **Артефакт:** `b21_revision_screenshots_json_verify_2026-06-13.json`
+
+### Сессия 2026-06-13 (B2.1 — закрытие ops, handoff)
+
+- **OPS CLOSED:** R0–R4 + MCP + сверка JSON — PASS; `customer_signoff` ждёт заказчика
+- **Handoff:** `b21_customer_handoff_2026-06-13.md` + скрины `b21_revision_customer_mcp_2026-06-13/`
+- **Хвосты:** smoke PARTIAL → не блокер (R4); DevTools login 500 → tech-debt
+- **Дальше:** B2.2 этап 1 (единый layout menu+cart)
+
+### Tech-debt (B2.1)
+
+- **Fly browser login HTTP 500** (Chrome DevTools MCP) — Playwright/curl OK; разбор отдельно, не блокирует приёмку
 
 ### Сессия 2026-06-13 (B2.1 R3 — тесты + smoke)
 
