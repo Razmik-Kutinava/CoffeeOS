@@ -8,6 +8,13 @@ function shopTenantId() {
   return document.querySelector('meta[name="shop-tenant-id"]')?.getAttribute("content") || ""
 }
 
+function cableUrl() {
+  const meta = document.querySelector('meta[name="action-cable-url"]')?.getAttribute("content")
+  if (meta && meta.trim()) return meta.trim()
+  const proto = window.location.protocol === "https:" ? "wss:" : "ws:"
+  return `${proto}//${window.location.host}/cable`
+}
+
 /**
  * Подписка на live-обновления статуса заказа (B1.1 + B2.1 retry).
  * @returns {() => void} unsubscribe
@@ -19,7 +26,7 @@ export function subscribeGuestOrderStatus({ orderId, reconnectToken, onStatus, o
     return () => {}
   }
 
-  const consumer = createConsumer()
+  const consumer = createConsumer(cableUrl())
   let subscription = null
   let retryCount = 0
   let retryTimer = null

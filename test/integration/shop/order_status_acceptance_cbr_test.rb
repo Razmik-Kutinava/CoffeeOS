@@ -58,6 +58,7 @@ class Shop::OrderStatusAcceptanceCbrTest < ActionDispatch::IntegrationTest
     assert body.dig("tenant", "name").present?
     assert body["items"].is_a?(Array)
     assert_equal "accepted", body["status"]
+    assert body["reconnect_token"].present?
   end
 
   # Критерий: live update — cable channel + broadcaster

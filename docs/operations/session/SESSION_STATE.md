@@ -58,6 +58,10 @@
 - **Хвосты:** smoke PARTIAL → не блокер (R4); DevTools login 500 → tech-debt
 - **Дальше:** B2.2 этап 1 (единый layout menu+cart)
 
+### Открытый баг заказчика (B1.1, не B2.1)
+
+- **Баг-1 (2026-06-04):** экран статуса гостя — WS без F5 — **FIXED** 2026-06-13 · [`b11_bug1_guest_ws_2026-06-13.json`](milestones/veha_2/artifacts/demo-feedback/b11_bug1_guest_ws_2026-06-13.json)
+
 ### Tech-debt (B2.1)
 
 - **Fly browser login HTTP 500** (Chrome DevTools MCP) — Playwright/curl OK; разбор отдельно, не блокирует приёмку

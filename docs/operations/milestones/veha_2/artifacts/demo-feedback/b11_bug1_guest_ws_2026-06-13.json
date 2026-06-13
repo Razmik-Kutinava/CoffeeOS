@@ -1,0 +1,37 @@
+{
+  "task": "B1_1_bug1_guest_ws",
+  "date": "2026-06-13",
+  "status": "PASS",
+  "verdict": "PASS",
+  "fix": {
+    "root_cause": "stale reconnect_token blocked GuestOrderChannel; no per-order token from API",
+    "files": [
+      "app/channels/shop/guest_order_channel.rb",
+      "app/services/shop/guest_order_reconnect.rb",
+      "app/controllers/shop/api/orders_controller.rb",
+      "app/frontend/routes/OrderStatus.svelte",
+      "app/frontend/lib/shopOrderCable.js",
+      "app/views/layouts/shop.html.erb"
+    ]
+  },
+  "playwright": {
+    "method": "dual_tab_stale_token",
+    "script": "bin/b11_bug1_guest_ws_mcp.mjs",
+    "ws_ms": 15,
+    "title_before": "Оплачен",
+    "title_after": "Готовится",
+    "status": "PASS"
+  },
+  "chrome_devtools_mcp": {
+    "status": "PASS",
+    "guest_tab": "без F5: Оплачен → Готовится",
+    "barista_login": "HTTP 500 (известный tech-debt); статус через OrderStatusUpdateService на Fly",
+    "verified_at": "2026-06-13T15:02:00Z"
+  },
+  "screen_dir": "docs/operations/milestones/veha_2/artifacts/demo-feedback/screenshots/b11_bug1_guest_ws_2026-06-13",
+  "scripts": {
+    "prep": "bin/b11_bug1_guest_ws_fly.rb",
+    "mcp": "bin/b11_bug1_guest_ws_mcp.mjs",
+    "tap_fly": "bin/b11_bug1_tap_fly.rb"
+  }
+}

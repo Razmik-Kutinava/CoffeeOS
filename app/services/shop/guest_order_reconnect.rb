@@ -28,6 +28,7 @@ module Shop
 
         if token.present?
           return order if token_matches_order?(order, tenant_id: tenant_id, token: token)
+          # Stale token from another checkout — fall through to customer session below.
         end
 
         if customer_id.present? && order.customer_id.present? && order.customer_id.to_s == customer_id.to_s

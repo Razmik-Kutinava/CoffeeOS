@@ -197,6 +197,7 @@ module Shop
           discount_amount: order.discount_amount.to_f,
           payment_settled: !order.pending_payment?,
           created_at: order.created_at.iso8601,
+          reconnect_token: Shop::GuestOrderReconnect.token_for(order),
           tenant: tenant_pickup_json,
           **Shop::OrderCancellationPresenter.meta_for(order),
           items: order.order_items.map do |item|

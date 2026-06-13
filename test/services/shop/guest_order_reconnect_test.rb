@@ -48,4 +48,28 @@ class Shop::GuestOrderReconnectTest < ActiveSupport::TestCase
       token: "#{token}x"
     )
   end
+
+  test "order_for_cable! accepts customer session when reconnect token is for another order" do
+    other = Order.create!(
+      tenant_id: @tenant.id,
+      customer_id: @customer.id,
+      customer_name: "Other",
+      order_number: "X-2",
+      source: :mobile,
+      status: :accepted,
+      total_amount: 100,
+      discount_amount: 0,
+      final_amount: 100
+    )
+    stale = Shop::GuestOrderReconnect.token_for(other)
+
+    found = Shop::GuestOrderReconnect.order_for_cable!(
+      order_id: @order.id,
+      tenant_id: @tenant.id,
+      token: stale,
+      customer_id: @customer.id
+    )
+
+    assert_equal @order.id, found.id
+  end
 end

@@ -298,6 +298,21 @@
 
 ---
 
+## Баг-репорт заказчика — баг-1 (2026-06-04) `[x]` fixed 2026-06-13
+
+**Источник:** Арам Гюрджян, чат + скрин экрана статуса гостя (`#/order/...`, заказ `##202606-0185`).
+
+| | |
+|--|--|
+| **Суть** | Если **не обновлять страницу** (F5), статусы на экране гостя **не меняются сами** после смены статуса баристой на табло |
+| **Экран** | B1.1 — экран статуса заказа у **гостя** (витрина), **не** табло баристы (B2.1) |
+| **Причина** | Stale `reconnect_token` в sessionStorage + `GuestOrderChannel` не fallback на customer session |
+| **Фикс** | `GuestOrderChannel` + `GuestOrderReconnect` fallback; `reconnect_token` в GET order; `OrderStatus.svelte` token per order |
+| **Статус** | `[x]` **FIXED** — Fly PASS 2026-06-13 |
+| **Прогон** | `ruby bin/b11_bug1_guest_ws_fly.rb` → `node bin/b11_bug1_guest_ws_mcp.mjs` · Chrome DevTools MCP guest tab без F5 |
+| **Артефакт** | [`b11_bug1_guest_ws_2026-06-13.json`](../../artifacts/demo-feedback/b11_bug1_guest_ws_2026-06-13.json) · скрины `screenshots/b11_bug1_guest_ws_2026-06-13/` |
+
+
 ## Бэклог (не в этой правке)
 
 | Что | Почему отложено |

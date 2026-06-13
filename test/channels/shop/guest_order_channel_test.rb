@@ -49,6 +49,30 @@ class Shop::GuestOrderChannelTest < ActionCable::Channel::TestCase
     assert_has_stream_for @order
   end
 
+  test "subscribes with stale reconnect token when customer session matches" do
+    other = Order.create!(
+      tenant_id: @tenant.id,
+      customer_id: @customer.id,
+      customer_name: "Other",
+      order_number: "202606-0002",
+      source: :mobile,
+      status: :accepted,
+      total_amount: 100,
+      discount_amount: 0,
+      final_amount: 100
+    )
+    stale_token = Shop::GuestOrderReconnect.token_for(other)
+
+    shop_session = {}
+    Shop::CustomerSession.set_customer_id!(shop_session, @tenant.id, @customer.id)
+    stub_connection(session: shop_session)
+
+    subscribe order_id: @order.id, tenant_id: @tenant.id, reconnect_token: stale_token
+
+    assert subscription.confirmed?
+    assert_has_stream_for @order
+  end
+
   test "receives status broadcast" do
     subscribe order_id: @order.id, tenant_id: @tenant.id, reconnect_token: @token
 

@@ -15,22 +15,13 @@ module Shop
       tenant_id = params[:tenant_id]
       order_id = params[:order_id]
       token = params[:reconnect_token].presence
-
-      if token.present?
-        return Shop::GuestOrderReconnect.order_for_cable!(
-          order_id: order_id,
-          tenant_id: tenant_id,
-          token: token
-        )
-      end
-
       shop_session = connection.respond_to?(:session) ? connection.session : {}
       customer_id = Shop::CustomerSession.customer_id(shop_session, tenant_id)
-      return nil if customer_id.blank?
 
       Shop::GuestOrderReconnect.order_for_cable!(
         order_id: order_id,
         tenant_id: tenant_id,
+        token: token,
         customer_id: customer_id
       )
     end

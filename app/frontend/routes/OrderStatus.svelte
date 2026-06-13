@@ -2,7 +2,7 @@
   import { onMount, onDestroy } from "svelte"
   import { push } from "svelte-spa-router"
   import { api } from "../lib/api.js"
-  import { reconnectGuestOrder, guestReconnectToken } from "../lib/shopGuestSession.js"
+  import { reconnectGuestOrder, guestReconnectToken, lastGuestOrderId, saveGuestOrderSession } from "../lib/shopGuestSession.js"
   import { subscribeGuestOrderStatus } from "../lib/shopOrderCable.js"
   import { orderProgressView } from "../lib/orderStatusProgress.js"
   import { firebaseClientConfigured, registerShopPush } from "../lib/firebasePush.js"
@@ -90,12 +90,19 @@
     }
 
     try {
-      await reconnectGuestOrder(api)
       order = await api(`/orders/${orderId}`)
+
+      const token =
+        order.reconnect_token ||
+        (lastGuestOrderId() === orderId ? guestReconnectToken() : null)
+      if (token) {
+        saveGuestOrderSession(orderId, token)
+        await reconnectGuestOrder(api)
+      }
 
       unsubscribeCable = subscribeGuestOrderStatus({
         orderId,
-        reconnectToken: guestReconnectToken(),
+        reconnectToken: token,
         onStatus: applyStatusPatch,
         onConnection: (state) => {
           cableState = state
