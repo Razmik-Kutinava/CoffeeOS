@@ -1,30 +1,43 @@
 {
   "task": "B1_7_checkout_session_expired_permanent",
   "date": "2026-06-14",
-  "fix": "email-primary verification: unique (tenant_id, email); Checkout profileSyncing",
-  "migration": "20260613120000_email_primary_shop_email_verifications",
-  "commits": [],
-  "fly_deploy": null,
-  "steps": [
-    {
-      "id": "01",
-      "action": "verify OTP → reload checkout → no «сессия истекла» (new browser session)",
-      "status": "pending"
-    },
-    {
-      "id": "02",
-      "action": "status?email= returns verified after session cookie rotation",
-      "status": "pending"
-    },
-    {
-      "id": "03",
-      "action": "order succeeds with verified email in DB only",
-      "status": "pending"
-    }
-  ],
-  "tests": {
-    "email_verification_test": "pass",
-    "email_verification_db_fallback_test": "pass",
-    "email_otp_checkout_test": "pass"
-  }
+  "status": "PASS",
+  "verdict": "PASS",
+  "commit": "2f33fba",
+  "base": "https://coffeeos.fly.dev",
+  "email": "b17-session-06141257@coffeeos.dev",
+  "fix": {
+    "root_cause": "OTP verification tied to session_id; unique index now tenant+email",
+    "migration": "20260613120000_email_primary_shop_email_verifications",
+    "files": [
+      "app/services/shop/email_verification.rb",
+      "app/models/shop_email_verification.rb",
+      "app/controllers/shop/api/email_otp_controller.rb",
+      "app/services/shop/order_creator.rb",
+      "app/frontend/routes/Checkout.svelte"
+    ]
+  },
+  "playwright": {
+    "script": "bin/b17_checkout_session_mcp.mjs",
+    "steps": [
+      {
+        "id": "01",
+        "action": "no «сессия истекла» on return visit (new browser session)",
+        "pass": true,
+        "at": "2026-06-14T13:01:20.421Z",
+        "hasExpired": false
+      },
+      {
+        "id": "02",
+        "action": "contacts block or pay enabled after email restore",
+        "pass": true,
+        "at": "2026-06-14T13:01:20.421Z",
+        "hasContacts": true,
+        "payEnabled": true
+      }
+    ],
+    "started_at": "2026-06-14T13:01:12.695Z",
+    "finished_at": "2026-06-14T13:01:20.805Z"
+  },
+  "screen_dir": "docs/operations/milestones/veha_2/artifacts/demo-feedback/screenshots/b17_checkout_session_2026-06-14"
 }

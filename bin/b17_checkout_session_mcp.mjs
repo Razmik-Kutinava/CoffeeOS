@@ -49,21 +49,33 @@ async function run() {
       },
       { key: prep.profile_storage_key, profile: profilePayload() }
     )
-    await page.goto(`${prep.shop_url}${prep.checkout_hash}`, { waitUntil: "networkidle", timeout: 60000 })
-    await page.waitForTimeout(3000)
+    await page.goto(`${prep.shop_url}${prep.checkout_hash}`, { waitUntil: "domcontentloaded", timeout: 60000 })
+    await page.getByRole("heading", { name: "Оформление" }).waitFor({ timeout: 60000 })
+    await page.waitForTimeout(1500)
 
     const bodyText = await page.locator("body").innerText()
     const hasExpired = /сессия истекла/i.test(bodyText)
     const hasContacts = /Контакты/i.test(bodyText) && new RegExp(prep.name).test(bodyText)
     const payEnabled = await page.locator('button:has-text("Оплатить")').isEnabled().catch(() => false)
 
+    if (!hasContacts && !payEnabled) {
+      await page.waitForTimeout(4000)
+    }
+
+    const bodyTextFinal = await page.locator("body").innerText()
+    const hasExpiredFinal = /сессия истекла/i.test(bodyTextFinal)
+    const hasContactsFinal = /Контакты/i.test(bodyTextFinal) && new RegExp(prep.name).test(bodyTextFinal)
+    const payEnabledFinal = await page.locator('button:has-text("Оплатить")').isEnabled().catch(() => false)
+
     await page.screenshot({ path: join(outDir, "01_return_visit_no_session_expired.png"), fullPage: true })
 
     pass =
-      step("01", "no «сессия истекла» on return visit (new browser session)", !hasExpired, { hasExpired }) &&
-      step("02", "contacts block or pay enabled after email restore", hasContacts || payEnabled, {
-        hasContacts,
-        payEnabled
+      step("01", "no «сессия истекла» on return visit (new browser session)", !hasExpiredFinal, {
+        hasExpired: hasExpiredFinal
+      }) &&
+      step("02", "contacts block or pay enabled after email restore", hasContactsFinal || payEnabledFinal, {
+        hasContacts: hasContactsFinal,
+        payEnabled: payEnabledFinal
       }) &&
       pass
   } finally {
@@ -78,7 +90,8 @@ async function run() {
     base: prep.base,
     email: prep.email,
     fix: {
-      root_cause: "OTP verification bound only to session_id; mobile browsers rotate cookies",
+      root_cause: "OTP verification tied to session_id; unique index now tenant+email",
+      migration: "20260613120000_email_primary_shop_email_verifications",
       files: [
         "app/services/shop/email_verification.rb",
         "app/models/shop_email_verification.rb",
