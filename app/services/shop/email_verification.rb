@@ -25,7 +25,8 @@ module Shop
       ShopEmailVerification.upsert_verified!(
         tenant_id: tenant_id,
         email: normalized,
-        expires_at: expires_at
+        expires_at: expires_at,
+        session_id: session_id
       )
       normalized
     end

@@ -104,9 +104,13 @@ module Shop
 
       begin
         init_gateway_payment!(order, payment) if flow[:order_status] == :pending_payment
-      rescue Error => e
+      rescue Payments::TbankAdapter::Error, Error => e
         void_pending_online_order!(order, payment)
         raise e
+      rescue StandardError => e
+        Rails.logger.error("[Shop::OrderCreator] gateway init failed: #{e.class}: #{e.message}")
+        void_pending_online_order!(order, payment)
+        raise Error, "Не удалось инициировать оплату. Попробуйте позже."
       end
 
       if order.pending_payment?
@@ -274,6 +278,10 @@ module Shop
       order
     rescue Payments::TbankAdapter::Error, Error => e
       Rails.logger.warn("[Shop::OrderCreator] reuse pending order #{pending_id} failed: #{e.message}")
+      void_pending_online_order!(order, payment) if defined?(order) && order&.pending_payment?
+      nil
+    rescue StandardError => e
+      Rails.logger.error("[Shop::OrderCreator] reuse pending order #{pending_id} failed: #{e.class}: #{e.message}")
       void_pending_online_order!(order, payment) if defined?(order) && order&.pending_payment?
       nil
     end

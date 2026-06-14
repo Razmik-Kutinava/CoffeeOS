@@ -161,4 +161,24 @@ class Payments::TbankAdapterTest < ActiveSupport::TestCase
   ensure
     Payments::CacheCounter.clear_circuit!
   end
+
+  test "socket errors are wrapped as Error" do
+    adapter = Payments::TbankAdapter.new
+    order = Struct.new(:id, :final_amount).new(SecureRandom.uuid, BigDecimal("100.00"))
+
+    adapter.define_singleton_method(:post_json) do |*_args|
+      raise SocketError, "connection refused"
+    end
+
+    error = assert_raises(Payments::TbankAdapter::Error) do
+      adapter.init_payment(
+        order: order,
+        return_base_url: "https://example.com",
+        notification_url: "https://example.com/callbacks/tbank"
+      )
+    end
+    assert_match(/connection refused/i, error.message)
+  ensure
+    Payments::CacheCounter.clear_circuit!
+  end
 end

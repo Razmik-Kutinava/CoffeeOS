@@ -105,12 +105,16 @@ module Payments
       result
     rescue ApiError
       raise
-    rescue Error, Net::OpenTimeout, Net::ReadTimeout
+    rescue Error, Net::OpenTimeout, Net::ReadTimeout, SocketError, Errno::ECONNREFUSED,
+           Errno::EHOSTUNREACH, EOFError, OpenSSL::SSL::SSLError => e
       failures = Payments::CacheCounter.increment(CB_FAILURES_KEY, expires_in: 5.minutes)
       if failures >= CB_THRESHOLD
         Payments::CacheCounter.write(CB_OPEN_KEY, 1, expires_in: CB_OPEN_TTL.seconds)
         Rails.logger.error("[TbankAdapter] Circuit opened after #{failures} failures")
       end
+      raise Error, e.message if e.is_a?(SocketError) || e.is_a?(Errno::ECONNREFUSED) ||
+        e.is_a?(Errno::EHOSTUNREACH) || e.is_a?(EOFError) || e.is_a?(OpenSSL::SSL::SSLError)
+
       raise
     end
 
@@ -138,6 +142,8 @@ module Payments
       raise Error, "Не удалось разобрать ответ Т-Банка: #{e.message}"
     rescue Net::OpenTimeout, Net::ReadTimeout => e
       raise Error, "Таймаут запроса к Т-Банку: #{e.message}"
+    rescue SocketError, Errno::ECONNREFUSED, Errno::EHOSTUNREACH, EOFError, OpenSSL::SSL::SSLError => e
+      raise Error, "Ошибка связи с Т-Банком: #{e.message}"
     end
   end
 end

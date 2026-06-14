@@ -21,6 +21,10 @@ module Shop
         render json: { verified: true, email: email }
       rescue Shop::EmailOtp::Error => e
         render json: { error: e.message }, status: :unprocessable_entity
+      rescue ActiveRecord::ActiveRecordError => e
+        Rails.logger.error("[Shop::EmailOtp] mark_verified failed: #{e.class}: #{e.message}")
+        render json: { error: "Не удалось сохранить подтверждение email. Попробуйте ещё раз." },
+          status: :internal_server_error
       end
 
       def status

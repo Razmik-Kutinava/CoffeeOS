@@ -48,7 +48,9 @@ export async function api(path, opts = {}) {
   })
   const data = await res.json().catch(() => ({}))
   if (!res.ok) {
-    const msg = data.error || data.message || res.statusText
+    const fallback =
+      res.status === 500 ? "Ошибка сервера. Попробуйте позже." : res.statusText
+    const msg = data.error || data.message || fallback
     throw new Error(typeof msg === "string" ? msg : JSON.stringify(msg))
   }
   return data
