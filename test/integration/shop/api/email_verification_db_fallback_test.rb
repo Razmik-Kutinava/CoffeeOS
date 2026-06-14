@@ -23,8 +23,7 @@ class Shop::Api::EmailVerificationDbFallbackTest < ActionDispatch::IntegrationTe
       assert_equal 200, sess.response.status, sess.response.body
 
       verify_shop_email!(tenant_id: @tenant.id, email: @email, session: sess)
-      session_id = sess.request.session.id.to_s
-      assert ShopEmailVerification.active_for(tenant_id: @tenant.id, session_id: session_id)
+      assert ShopEmailVerification.active_for(tenant_id: @tenant.id, email: @email)
 
       sess.request.session.delete(Shop::EmailVerificationSession::KEY)
 
@@ -71,7 +70,7 @@ class Shop::Api::EmailVerificationDbFallbackTest < ActionDispatch::IntegrationTe
 
       verify_shop_email!(tenant_id: @tenant.id, email: @email, session: sess)
       old_session_id = sess.request.session.id.to_s
-      assert ShopEmailVerification.active_for(tenant_id: @tenant.id, session_id: old_session_id)
+      assert ShopEmailVerification.active_for(tenant_id: @tenant.id, email: @email)
     end
 
     open_session do |sess|

@@ -4,31 +4,22 @@ class ShopEmailVerification < ApplicationRecord
   belongs_to :tenant
 
   validates :email, presence: true
-  validates :session_id, presence: true
   validates :expires_at, presence: true
 
   scope :active, -> { where("expires_at > ?", Time.current) }
 
-  def self.active_for(tenant_id:, session_id:)
-    return nil if session_id.blank?
-
-    active.find_by(tenant_id: tenant_id, session_id: session_id.to_s)
-  end
-
-  def self.active_for_email(tenant_id:, email:)
+  def self.active_for(tenant_id:, email:)
     normalized = Shop::EmailVerificationSession.normalize(email)
     return nil if normalized.blank?
 
-    active.where(tenant_id: tenant_id, email: normalized).order(expires_at: :desc).first
+    active.find_by(tenant_id: tenant_id, email: normalized)
   end
 
-  def self.upsert_verified!(tenant_id:, session_id:, email:, expires_at:)
+  def self.upsert_verified!(tenant_id:, email:, expires_at:)
     normalized = Shop::EmailVerificationSession.normalize(email)
-    sid = session_id.to_s
-    raise ArgumentError, "session_id required" if sid.blank?
+    raise ArgumentError, "email required" if normalized.blank?
 
-    record = find_or_initialize_by(tenant_id: tenant_id, session_id: sid)
-    record.email = normalized
+    record = find_or_initialize_by(tenant_id: tenant_id, email: normalized)
     record.expires_at = expires_at
     record.save!
     record

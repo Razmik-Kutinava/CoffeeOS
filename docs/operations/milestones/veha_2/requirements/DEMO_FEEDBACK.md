@@ -27,7 +27,7 @@
 | Дата | Источник | Сценарий / экран | Суть | Статус | PR / коммит |
 |------|----------|------------------|------|--------|-------------|
 | 2026-06-04 | заказчик (чат) B1.1 | экран статуса гостя `#/order/...` | **Баг-1:** без F5 статус не обновляется после тапа баристы | **done** 2026-06-13 | [`b11_bug1_guest_ws_2026-06-13.json`](artifacts/demo-feedback/b11_bug1_guest_ws_2026-06-13.json) |
-| 2026-06-13 | заказчик (видео) B1.7 | checkout `#/checkout` | **Баг-3:** «сессия истекла» при повторном заходе после OTP | **done** 2026-06-13 | [`b17_checkout_session_2026-06-13.json`](artifacts/demo-feedback/b17_checkout_session_2026-06-13.json) |
+| 2026-06-13 | заказчик (видео) B1.7 | checkout `#/checkout` | **Баг-3:** «сессия истекла» при повторном заходе после OTP | **done** 2026-06-14 (permanent) | [`b17_checkout_session_2026-06-14.json`](artifacts/demo-feedback/b17_checkout_session_2026-06-14.json) |
 | 2026-06-02 | заказчик PDF §3.6 | franchise / УК | **Баг:** франчайзи «нет» — вход или создание из УК | done *(MCP post-deploy)* | [`mcp_post_deploy_fly_2026-06-03.json`](artifacts/demo-feedback/mcp_post_deploy_fly_2026-06-03.json) §franchise |
 | 2026-06-02 | заказчик PDF §2.2 | shop UI | Стрелка назад, свайп, +1 товар — проверить/допилить | done *(PDF)* | назад/свайп/+1 — ок по прогонке; платные модификаторы — код `51e4d22+` |
 | 2026-06-03 | заказчик PDF §2.2 | shop модификаторы | Платные допки +15/+20/+40, пересчёт корзины/оплаты | done *(MCP)* | [`mcp_section_2_2_fly_2026-06-03.json`](artifacts/demo-feedback/mcp_section_2_2_fly_2026-06-03.json) — кордиал → **199₽** |

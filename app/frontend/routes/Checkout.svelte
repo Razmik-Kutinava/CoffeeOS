@@ -31,7 +31,7 @@
   let submitting = $state(false)
   let err = $state(null)
   let savedProfile = $state(false)
-  let hadVerifiedLocally = $state(false)
+  let profileSyncing = $state(true)
   let editContact = $state(true)
 
   const canSendCode = $derived(isValidEmail(email) && !sendingCode)
@@ -46,7 +46,6 @@
     if (serverOk) {
       emailVerified = true
       editContact = false
-      hadVerifiedLocally = true
       saveGuestProfile({ name, email, emailVerified: true })
       otpNotice = ""
       return true
@@ -54,11 +53,7 @@
     emailVerified = false
     editContact = true
     clearEmailVerifiedInProfile()
-    if (hadVerifiedLocally && isValidEmail(email)) {
-      otpNotice = "Подтвердите email кодом — сессия истекла"
-    } else {
-      otpNotice = ""
-    }
+    otpNotice = ""
     return false
   }
 
@@ -72,10 +67,7 @@
       const status = await api(`/email_otp/status?email=${q}`)
       return applyServerVerificationStatus(status)
     } catch {
-      emailVerified = false
-      editContact = true
-      clearEmailVerifiedInProfile()
-      return false
+      return emailVerified
     }
   }
 
@@ -85,9 +77,12 @@
       name = profile.name
       email = profile.email
       savedProfile = true
-      hadVerifiedLocally = !!profile.emailVerified
-      editContact = !profile.emailVerified
-      emailVerified = false
+      if (profile.emailVerified) {
+        emailVerified = true
+        editContact = false
+      } else {
+        editContact = true
+      }
     }
 
     const recover = async () => {
@@ -100,8 +95,10 @@
     }
 
     const boot = async () => {
+      profileSyncing = true
       await recover()
       await syncServerStatus()
+      profileSyncing = false
     }
 
     boot()
@@ -126,7 +123,6 @@
   function onEmailInput() {
     emailVerified = false
     editContact = true
-    hadVerifiedLocally = false
     otpNotice = ""
     clearEmailVerifiedInProfile()
   }
@@ -155,19 +151,20 @@
     err = null
     verifyingCode = true
     try {
-      await api("/email_otp/verify", {
+      const res = await api("/email_otp/verify", {
         method: "POST",
         body: JSON.stringify({
           email: email.trim().toLowerCase(),
           code: otpCode.trim()
         })
       })
-      emailVerified = true
-      hadVerifiedLocally = true
-      otpNotice = "Email подтверждён"
-      saveGuestProfile({ name, email, emailVerified: true })
-      savedProfile = true
-      editContact = false
+      if (res?.verified) {
+        emailVerified = true
+        otpNotice = "Email подтверждён"
+        saveGuestProfile({ name, email, emailVerified: true })
+        savedProfile = true
+        editContact = false
+      }
     } catch (e) {
       emailVerified = false
       err = e.message
@@ -254,7 +251,7 @@
         emailVerified = false
         editContact = true
         clearEmailVerifiedInProfile()
-        otpNotice = "Введите код из письма ещё раз"
+        otpNotice = "Подтвердите email кодом из письма"
       }
     } finally {
       if (!redirecting) submitting = false
@@ -270,7 +267,7 @@
     <h1 class="text-xl font-bold">Оформление</h1>
   </div>
 
-  {#if savedProfile && !editContact && emailVerified}
+  {#if savedProfile && !editContact && emailVerified && !profileSyncing}
     <div class="mb-4 rounded-xl border border-[#3a3a3a] bg-[#2a2a2a] p-4">
       <p class="mb-1 text-sm text-[#a0a0a0]">Контакты</p>
       <p class="font-medium text-white">{name}</p>
@@ -375,7 +372,7 @@
   <button
     type="button"
     class="w-full rounded-xl bg-[#ff8c42] py-4 text-lg font-semibold text-black disabled:opacity-50"
-    disabled={!canPay}
+    disabled={!canPay || profileSyncing}
     onclick={submit}
   >
     {submitting ? "Идёт оплата…" : "Оплатить →"}

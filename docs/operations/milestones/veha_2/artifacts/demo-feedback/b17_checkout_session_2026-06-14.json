@@ -1,0 +1,30 @@
+{
+  "task": "B1_7_checkout_session_expired_permanent",
+  "date": "2026-06-14",
+  "fix": "email-primary verification: unique (tenant_id, email); Checkout profileSyncing",
+  "migration": "20260613120000_email_primary_shop_email_verifications",
+  "commits": [],
+  "fly_deploy": null,
+  "steps": [
+    {
+      "id": "01",
+      "action": "verify OTP → reload checkout → no «сессия истекла» (new browser session)",
+      "status": "pending"
+    },
+    {
+      "id": "02",
+      "action": "status?email= returns verified after session cookie rotation",
+      "status": "pending"
+    },
+    {
+      "id": "03",
+      "action": "order succeeds with verified email in DB only",
+      "status": "pending"
+    }
+  ],
+  "tests": {
+    "email_verification_test": "pass",
+    "email_verification_db_fallback_test": "pass",
+    "email_otp_checkout_test": "pass"
+  }
+}

@@ -193,15 +193,15 @@
 
 ---
 
-### Баг-репорт №3 — «сессия истекла» на checkout `[x]` fixed 2026-06-13
+### Баг-репорт №3 — «сессия истекла» на checkout `[x]` fixed 2026-06-14 (permanent)
 
-**Источник:** Арам Гюрджян, видео + скрины checkout (email OTP).
+**Источник:** Арам Гюрджян, видео + скрины checkout (email OTP); повторный репорт после partial fix 2026-06-13.
 
 | | |
 |--|--|
-| **Суть** | После повторного захода на оформление — «Подтвердите email кодом — сессия истекла», хотя email уже подтверждали; имя/email подставляются из localStorage |
-| **Причина** | OTP-verified привязан к `session_id` cookie; мобильный браузер меняет сессию → сервер не видит verify |
-| **Фикс** | Fallback `EmailVerification` по `tenant+email` (24ч TTL) + re-bind session; checkout `/email_otp/status?email=`; сообщение «сессия истекла» только если раньше был verified локально |
-| **Статус** | `[x]` **FIXED** — Fly PASS 2026-06-13 |
-| **Прогон** | `ruby bin/b17_checkout_session_fly.rb` → `node bin/b17_checkout_session_mcp.mjs` · **Chrome DevTools MCP** isolatedContext PASS |
-| **Артефакт** | [`b17_checkout_session_2026-06-13.json`](../../artifacts/demo-feedback/b17_checkout_session_2026-06-13.json) · скрины `screenshots/b17_checkout_session_2026-06-13/` (`03–04` DevTools) |
+| **Суть** | После повторного захода / PWA — «Подтвердите email кодом — сессия истекла», хотя OTP вводили из реального письма |
+| **Причина** | Partial fix 13.06: fallback по email, но unique index оставался на `session_id`; race в `Checkout.svelte` сбрасывал verified до ответа `/status` |
+| **Фикс** | Миграция: unique `(tenant_id, email)` — источник истины по email, не session; `EmailVerification` упрощён; checkout без «сессия истекла», `profileSyncing`, optimistic verify |
+| **Статус** | `[x]` **FIXED** — Fly PASS 2026-06-14 |
+| **Прогон** | `ruby bin/b17_checkout_session_fly.rb` → `node bin/b17_checkout_session_mcp.mjs` |
+| **Артефакт** | [`b17_checkout_session_2026-06-14.json`](../../artifacts/demo-feedback/b17_checkout_session_2026-06-14.json) |

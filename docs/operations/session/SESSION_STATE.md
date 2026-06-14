@@ -58,10 +58,19 @@
 - **Хвосты:** smoke PARTIAL → не блокер (R4); DevTools login 500 → tech-debt
 - **Дальше:** B2.2 этап 1 (единый layout menu+cart)
 
-### Сессия 2026-06-13 (B1.7 — баг-3 checkout «сессия истекла»)
+### Сессия 2026-06-14 (B1.7 — баг-3 checkout «сессия истекла», permanent fix)
+
+- **Баг:** повторный checkout / PWA — «сессия истекла» после реального OTP (заказчик `razmikg1988@gmail.com`)
+- **Корень:** верификация была привязана к `session_id`; при смене cookie/PWA терялась
+- **Фикс:** `shop_email_verifications` unique `(tenant_id, email)` — источник истины по email; `Checkout.svelte` без «сессия истекла», optimistic verify + `profileSyncing`
+- **Миграция:** `20260613120000_email_primary_shop_email_verifications`
+- **Fly:** `bin/b17_checkout_session_fly.rb` + MCP после деплоя
+- **Артефакт:** [`b17_checkout_session_2026-06-14.json`](milestones/veha_2/artifacts/demo-feedback/b17_checkout_session_2026-06-14.json)
+
+### Сессия 2026-06-13 (B1.7 — баг-3 checkout «сессия истекла», partial)
 
 - **Баг:** повторный checkout — OTP «сессия истекла» при сохранённом email в localStorage
-- **Фикс:** `EmailVerification` fallback по tenant+email; `Checkout.svelte` status?email=; UX сообщения
+- **Фикс (partial):** `EmailVerification` fallback по tenant+email; `Checkout.svelte` status?email=; UX сообщения
 - **Fly:** `bin/b17_checkout_session_fly.rb` + Playwright + **Chrome DevTools MCP PASS** (isolatedContext)
 - **Артефакт:** [`b17_checkout_session_2026-06-13.json`](milestones/veha_2/artifacts/demo-feedback/b17_checkout_session_2026-06-13.json)
 
