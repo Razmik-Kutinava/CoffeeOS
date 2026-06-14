@@ -10,6 +10,7 @@ module Shop
       @session = session
       @tenant_id = tenant_id
       @session[SESSION_KEY] ||= []
+      compact_session_cart!
     end
 
     def add!(product_id:, quantity:, selected_modifiers:)
@@ -26,8 +27,7 @@ module Shop
       line = {
         "product_id" => product.id,
         "quantity" => quantity.to_i.clamp(1, MAX_ITEM_QUANTITY),
-        "selected_modifiers" => mods[:selected_modifiers],
-        "removed_modifiers" => mods[:removed_modifiers]
+        "selected_modifiers" => mods[:selected_modifiers]
       }
       key = line_key(line)
       existing = @session[SESSION_KEY].find_index { |l| line_key(l) == key }
@@ -82,6 +82,7 @@ module Shop
 
         unit_price = line_unit_price(product, line, setting)
         qty = line["quantity"]
+        removed_modifiers = removed_modifiers_for(product, line)
         {
           index: idx,
           product_id: product.id,
@@ -90,7 +91,7 @@ module Shop
           price: setting.price.to_f,
           image_url: product.image_url,
           selected_modifiers: line["selected_modifiers"],
-          removed_modifiers: line["removed_modifiers"] || [],
+          removed_modifiers: removed_modifiers,
           unit_total: unit_price.to_f,
           line_total: (unit_price * qty).to_f
         }
@@ -102,7 +103,22 @@ module Shop
 
     # Rails не помечает session dirty при in-place изменении массива — cookie не обновляется между HTTP-запросами.
     def touch_cart_session!
+      compact_session_cart!
       @session[SESSION_KEY] = @session[SESSION_KEY].dup
+    end
+
+    # removed_modifiers не храним в cookie-сессии — иначе ActionDispatch::CookieOverflow (~4KB).
+    def compact_session_cart!
+      @session[SESSION_KEY].each do |line|
+        line.delete("removed_modifiers")
+      end
+    end
+
+    def removed_modifiers_for(product, line)
+      ModifierSelection.build(
+        product: product,
+        selected_modifiers: line["selected_modifiers"]
+      )[:removed_modifiers]
     end
 
     def tenant_setting(product)

@@ -204,4 +204,18 @@
 | **Фикс** | Миграция: unique `(tenant_id, email)` — источник истины по email, не session; `EmailVerification` упрощён; checkout без «сессия истекла», `profileSyncing`, optimistic verify |
 | **Статус** | `[x]` **FIXED** — Fly PASS 2026-06-14 |
 | **Прогон** | `ruby bin/b17_checkout_session_fly.rb` → `node bin/b17_checkout_session_mcp.mjs` |
-| **Артефакт** | [`b17_checkout_session_2026-06-14.json`](../../artifacts/demo-feedback/b17_checkout_session_2026-06-14.json) |
+| **Артефакт** | [`b17_checkout_session_2026-06-14.json`](../../artifacts/demo-feedback/b17_checkout_session_2026-06-14.json)
+
+---
+
+### Баг-репорт №4 — cart/add 500 «Internal Server Error» `[x]` fixed 2026-06-14
+
+**Источник:** заказчик, tenant `655aaccb-004a-4bb9-a50a-ce618854dda3`, кнопка «В корзину».
+
+| | |
+|--|--|
+| **Суть** | После «В корзину» — 500 на `/shop/api/cart/add`, на `/cart` не переходит |
+| **Причина** | `removed_modifiers` в session cookie → переполнение ~4KB |
+| **Фикс** | `CartService`: removed вычисляются при отдаче корзины; compact legacy session |
+| **Не баги** | PWA banner в консоли; 404 картинок товаров на Fly |
+| **Артефакт** | [`b17_cart_cookie_overflow_2026-06-14.json`](../../artifacts/demo-feedback/b17_cart_cookie_overflow_2026-06-14.json) |

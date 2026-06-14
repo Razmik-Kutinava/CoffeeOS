@@ -1,0 +1,23 @@
+{
+  "task": "B1_7_cart_add_cookie_overflow",
+  "date": "2026-06-14",
+  "status": "PASS",
+  "verdict": "PASS",
+  "root_cause": "removed_modifiers stored in Rails session cookie per cart line → ActionDispatch::CookieOverflow (~4KB) → cart/add HTTP 500",
+  "fix": "Compute removed_modifiers on read (json_lines); compact legacy session lines; Product.svelte error handling",
+  "repro": "Fly tenant 655aaccb — add product with modifiers twice → 500 before fix",
+  "files": [
+    "app/services/shop/cart_service.rb",
+    "app/controllers/shop/api/cart_controller.rb",
+    "app/frontend/routes/Product.svelte",
+    "test/services/shop/cart_service_test.rb"
+  ],
+  "tests": {
+    "cart_service_test": "pass",
+    "removed_modifiers_checkout_test": "pass"
+  },
+  "noise_not_bugs": [
+    "beforeinstallprompt PWA banner console info",
+    "404 on /uploads/products/* missing image files on Fly"
+  ]
+}

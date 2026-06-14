@@ -133,19 +133,18 @@
     dismissOnboarding()
     adding = true
     try {
-    const { selected_modifiers, removed_modifiers } = buildModifierPayload(
-      product.modifier_groups,
-      selected
-    )
-    await shopAddToCart(
-      {
-        product_id: product.id,
-        quantity: qty,
-        selected_modifiers
-      },
-      { product }
-    )
-    push("/cart")
+      const { selected_modifiers } = buildModifierPayload(product.modifier_groups, selected)
+      await shopAddToCart(
+        {
+          product_id: product.id,
+          quantity: qty,
+          selected_modifiers
+        },
+        { product }
+      )
+      push("/cart")
+    } catch (e) {
+      error = e.message || "Не удалось добавить в корзину"
     } finally {
       adding = false
     }

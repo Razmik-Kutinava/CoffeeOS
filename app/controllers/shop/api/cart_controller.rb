@@ -15,6 +15,10 @@ module Shop
       rescue ActiveRecord::RecordNotFound => e
         Rails.logger.warn("[Shop::Cart] Failed to add product: #{e.message}")
         render json: { error: e.message }, status: :not_found
+      rescue ActionDispatch::CookieOverflow
+        Shop::CartService.new(session, @shop_tenant.id).clear!
+        render json: { error: "Корзина переполнена. Мы её очистили — добавьте товары снова." },
+          status: :unprocessable_entity
       end
 
       def show

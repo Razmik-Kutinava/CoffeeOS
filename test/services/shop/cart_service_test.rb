@@ -131,6 +131,20 @@ class Shop::CartServiceTest < ActiveSupport::TestCase
   # json_lines
   # ---------------------------------------------------------------------------
 
+  test "add! does not store removed_modifiers in session cookie payload" do
+    group = ProductModifierGroup.create!(product: @product, name: "Добавки", is_required: false, sort_order: 1)
+    sugar = ProductModifierOption.create!(group: group, name: "Сахар", price_delta: 0, sort_order: 1)
+    ProductModifierOption.create!(group: group, name: "Сироп", price_delta: 30, sort_order: 2)
+    selected = [{ id: sugar.id, name: "Сахар", price: 0 }]
+
+    cart.add!(product_id: @product.id, quantity: 1, selected_modifiers: selected)
+    line = @session[:shop_cart].first
+    refute line.key?("removed_modifiers")
+
+    result = cart.json_lines
+    assert_equal "Сироп", result[:items].first[:removed_modifiers].first["name"]
+  end
+
   test "json_lines with no items returns items empty array and total 0" do
     result = cart.json_lines
     assert_equal [], result[:items]

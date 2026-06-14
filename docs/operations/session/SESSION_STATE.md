@@ -58,6 +58,20 @@
 - **Хвосты:** smoke PARTIAL → не блокер (R4); DevTools login 500 → tech-debt
 - **Дальше:** B2.2 этап 1 (единый layout menu+cart)
 
+### Сессия 2026-06-14 (B1.7 — cart/add 500, cookie overflow)
+
+- **Баг:** «В корзину» → `POST /shop/api/cart/add` 500, переход на `/cart` не происходит (tenant `655aaccb…`)
+- **Корень:** `removed_modifiers` писались в Rails session cookie → `ActionDispatch::CookieOverflow` (~4KB)
+- **Фикс:** `CartService` — removed только при `json_lines`; compact legacy session; ошибка в `Product.svelte`
+- **Не баги:** PWA `beforeinstallprompt` info; 404 картинок `/uploads/products/*` на Fly
+- **Артефакт:** [`b17_cart_cookie_overflow_2026-06-14.json`](milestones/veha_2/artifacts/demo-feedback/b17_cart_cookie_overflow_2026-06-14.json)
+
+### Сессия 2026-06-14 (B1.7 — checkout orders 500 после OTP)
+
+- **Баг:** checkout «Оплатить» → `/shop/api/orders` 500 после подтверждения email
+- **Фикс:** T-Bank transport → `OrderCreator::Error` (422); `mark_verified` rescue; api.js 500 message
+- **Коммит:** `e0e0f56`
+
 ### Сессия 2026-06-14 (B1.7 — баг-3 checkout «сессия истекла», permanent fix)
 
 - **Баг:** повторный checkout / PWA — «сессия истекла» после реального OTP (заказчик `razmikg1988@gmail.com`)
