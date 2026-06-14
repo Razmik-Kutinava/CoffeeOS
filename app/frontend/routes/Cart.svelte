@@ -3,6 +3,7 @@
   import { link, push } from "svelte-spa-router"
   import { api } from "../lib/api.js"
   import PageSkeleton from "../components/PageSkeleton.svelte"
+  import { readCartCache, writeCartCache } from "../lib/shopCartCache.js"
 
   let items = $state([])
   let total = $state(0)
@@ -10,21 +11,10 @@
   let busyIndex = $state(null)
   let err = $state(null)
 
-  const CART_CACHE_KEY = "coffeeos_shop_cart_v1"
-
-  function readCartCache() {
-    try {
-      const raw = localStorage.getItem(CART_CACHE_KEY)
-      return raw ? JSON.parse(raw) : null
-    } catch {
-      return null
-    }
-  }
-
   async function load() {
     try {
       const data = await api("/cart")
-      localStorage.setItem(CART_CACHE_KEY, JSON.stringify(data))
+      writeCartCache(data)
       items = data.items
       total = data.total
     } catch (e) {

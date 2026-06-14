@@ -58,6 +58,13 @@
 - **Хвосты:** smoke PARTIAL → не блокер (R4); DevTools login 500 → tech-debt
 - **Дальше:** B2.2 этап 1 (единый layout menu+cart)
 
+### Сессия 2026-06-14 (B1.7 — localStorage TTL 24ч)
+
+- **Задача:** не держать вечно имя/email/корзину/каталог в localStorage на телефоне
+- **Фикс:** `shopLocalStorage.js` — обёртка `{ savedAt, ttlMs, payload }`, TTL **24ч** (как OTP verify на бэке); legacy ключи сбрасываются при чтении
+- **Файлы:** `shopGuestProfile.js`, `shopCartCache.js`, `catalog.js`, `Cart.svelte`
+- **Артефакт:** [`b17_localstorage_ttl_2026-06-14.json`](milestones/veha_2/artifacts/demo-feedback/b17_localstorage_ttl_2026-06-14.json)
+
 ### Сессия 2026-06-14 (B1.7 — cart/add 500, cookie overflow)
 
 - **Баг:** «В корзину» → `POST /shop/api/cart/add` 500, переход на `/cart` не происходит (tenant `655aaccb…`)

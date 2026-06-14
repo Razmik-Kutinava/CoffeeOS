@@ -1,3 +1,9 @@
+import {
+  readShopLocalStorage,
+  removeShopLocalStorage,
+  writeShopLocalStorage
+} from "./shopLocalStorage.js"
+
 function profileStorageKey() {
   const q = new URLSearchParams(window.location.search).get("tenant_id")
   const tid =
@@ -16,22 +22,16 @@ export function maskEmail(email) {
 }
 
 export function isValidEmail(email) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email?.trim() || "")
+  return /^[^\s@]+@[^@\s]+\.[^\s@]+$/.test(email?.trim() || "")
 }
 
 export function loadGuestProfile() {
-  try {
-    const raw = localStorage.getItem(profileStorageKey())
-    if (!raw) return null
-    const data = JSON.parse(raw)
-    if (!data?.name?.trim() || !data?.email?.trim()) return null
-    return {
-      name: data.name.trim(),
-      email: data.email.trim().toLowerCase(),
-      emailVerified: !!data.emailVerified
-    }
-  } catch (_) {
-    return null
+  const data = readShopLocalStorage(profileStorageKey())
+  if (!data?.name?.trim() || !data?.email?.trim()) return null
+  return {
+    name: data.name.trim(),
+    email: data.email.trim().toLowerCase(),
+    emailVerified: !!data.emailVerified
   }
 }
 
@@ -39,22 +39,15 @@ export function saveGuestProfile({ name, email, emailVerified }) {
   const n = name?.trim()
   const e = email?.trim().toLowerCase()
   if (!n || !e) return
-  try {
-    localStorage.setItem(
-      profileStorageKey(),
-      JSON.stringify({ name: n, email: e, emailVerified: !!emailVerified })
-    )
-  } catch (_) {
-    /* ignore */
-  }
+  writeShopLocalStorage(profileStorageKey(), {
+    name: n,
+    email: e,
+    emailVerified: !!emailVerified
+  })
 }
 
 export function clearGuestProfile() {
-  try {
-    localStorage.removeItem(profileStorageKey())
-  } catch (_) {
-    /* ignore */
-  }
+  removeShopLocalStorage(profileStorageKey())
 }
 
 /** Сбросить только флаг OTP — имя/email оставить (session на сервере могла слететь). */

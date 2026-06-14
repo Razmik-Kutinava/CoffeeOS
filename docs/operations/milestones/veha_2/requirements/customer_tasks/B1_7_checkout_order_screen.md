@@ -218,4 +218,14 @@
 | **Причина** | `removed_modifiers` в session cookie → переполнение ~4KB |
 | **Фикс** | `CartService`: removed вычисляются при отдаче корзины; compact legacy session |
 | **Не баги** | PWA banner в консоли; 404 картинок товаров на Fly |
-| **Артефакт** | [`b17_cart_cookie_overflow_2026-06-14.json`](../../artifacts/demo-feedback/b17_cart_cookie_overflow_2026-06-14.json) |
+| **Артефакт** | [`b17_cart_cookie_overflow_2026-06-14.json`](../../artifacts/demo-feedback/b17_cart_cookie_overflow_2026-06-14.json)
+
+---
+
+### Улучшение — localStorage TTL 24ч `[x]` 2026-06-14
+
+| | |
+|--|--|
+| **Суть** | Имя/email/корзина/каталог в localStorage висели без срока → старые данные на телефоне |
+| **Фикс** | `shopLocalStorage.js`: `{ savedAt, payload }`, TTL 24ч; legacy ключи удаляются при чтении |
+| **Артефакт** | [`b17_localstorage_ttl_2026-06-14.json`](../../artifacts/demo-feedback/b17_localstorage_ttl_2026-06-14.json) |

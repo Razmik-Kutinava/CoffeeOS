@@ -16,6 +16,7 @@
     saveGuestOrderSession
   } from "../lib/shopGuestSession.js"
   import { savePaymentSession } from "../lib/tbankPayment.js"
+  import { clearCartCache } from "../lib/shopCartCache.js"
   import { enqueueOrder } from "../lib/shopOfflineQueue.js"
   import { isOfflineError } from "../lib/shopNetwork.js"
 

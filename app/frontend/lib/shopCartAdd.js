@@ -2,25 +2,7 @@ import { api } from "./api.js"
 import { isOfflineError } from "./shopNetwork.js"
 import { getCatalogCache } from "./stores/catalog.js"
 import { enqueueCartAdd } from "./shopOfflineCart.js"
-
-const CART_CACHE_KEY = "coffeeos_shop_cart_v1"
-
-function readCartCache() {
-  try {
-    const raw = localStorage.getItem(CART_CACHE_KEY)
-    return raw ? JSON.parse(raw) : null
-  } catch {
-    return null
-  }
-}
-
-function writeCartCache(data) {
-  try {
-    localStorage.setItem(CART_CACHE_KEY, JSON.stringify(data))
-  } catch {
-    /* quota */
-  }
-}
+import { readCartCache, writeCartCache } from "./shopCartCache.js"
 
 function findProduct(productId) {
   const cats = getCatalogCache() || []

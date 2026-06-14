@@ -1,4 +1,8 @@
 import { api } from "../api.js"
+import {
+  readShopLocalStorage,
+  writeShopLocalStorage
+} from "../lib/shopLocalStorage.js"
 
 let inflight = null
 let pollTimer = null
@@ -10,22 +14,12 @@ export const CATALOG_POLL_MS = 8_000
 const CATALOG_LS_KEY = "coffeeos_shop_catalog_v1"
 
 function readCatalogCache() {
-  try {
-    const raw = localStorage.getItem(CATALOG_LS_KEY)
-    if (!raw) return null
-    const parsed = JSON.parse(raw)
-    return Array.isArray(parsed) ? parsed : null
-  } catch {
-    return null
-  }
+  const parsed = readShopLocalStorage(CATALOG_LS_KEY)
+  return Array.isArray(parsed) ? parsed : null
 }
 
 function writeCatalogCache(categories) {
-  try {
-    localStorage.setItem(CATALOG_LS_KEY, JSON.stringify(categories))
-  } catch {
-    /* quota */
-  }
+  writeShopLocalStorage(CATALOG_LS_KEY, categories)
 }
 
 /** Каждый заход на витрину — свежий каталог; polling подхватывает изменения из УК. */

@@ -1,0 +1,22 @@
+{
+  "task": "B1_7_localstorage_ttl",
+  "date": "2026-06-14",
+  "status": "PASS",
+  "ttl_hours": 24,
+  "keys": [
+    "shop_guest_profile:{tenant_id}",
+    "coffeeos_shop_cart_v1",
+    "coffeeos_shop_catalog_v1"
+  ],
+  "behavior": "Expired or legacy (no savedAt) entries removed on read; fresh write resets clock",
+  "files": [
+    "app/frontend/lib/shopLocalStorage.js",
+    "app/frontend/lib/shopCartCache.js",
+    "app/frontend/lib/shopGuestProfile.js",
+    "app/frontend/lib/stores/catalog.js",
+    "app/frontend/routes/Cart.svelte"
+  ],
+  "tests": {
+    "shop_local_storage_test.mjs": "pass"
+  }
+}
