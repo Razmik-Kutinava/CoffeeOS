@@ -31,8 +31,8 @@
 - **Причина:** `svelte-spa-router` не remount `/product/:id` — `Product.svelte` не перечитывал `params.id`.
 - **Фикс:** `$effect` reload по `params.id`; баннер «добавлен в корзину» на `Cart.svelte`; `CategoryProducts` quick-add не блокирует другой товар.
 - **API Fly:** два разных `product_id` → 200, 2 lines — PASS ([`b17_cart_second_product_api_2026-06-14.json`](milestones/veha_2/artifacts/demo-feedback/b17_cart_second_product_api_2026-06-14.json)).
-- **MCP:** `node bin/b17_br5_cart_second_product_mcp.mjs` — pre-deploy FAIL (repro); post-deploy повторить.
-- **Следующий шаг:** deploy `develop` → MCP PASS → апрув заказчика BR-5.
+- **MCP:** Playwright 7/7 + Chrome DevTools — **PASS** 2026-06-15 ([`b17_cart_second_product_post_deploy_2026-06-15.json`](milestones/veha_2/artifacts/demo-feedback/b17_cart_second_product_post_deploy_2026-06-15.json)).
+- **Статус:** BR-5 **CLOSED** (код + Fly). Апрув заказчика `[ ]`.
 
 ### Сессия 2026-06-12 (B2.1 ревизия — 6 карточек + live)
 

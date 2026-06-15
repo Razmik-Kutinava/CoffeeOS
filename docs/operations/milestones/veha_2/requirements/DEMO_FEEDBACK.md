@@ -27,7 +27,7 @@
 | Дата | Источник | Сценарий / экран | Суть | Статус | PR / коммит |
 |------|----------|------------------|------|--------|-------------|
 | 2026-06-04 | заказчик (чат) B1.1 | экран статуса гостя `#/order/...` | **Баг-1:** без F5 статус не обновляется после тапа баристы | **done** 2026-06-13 | [`b11_bug1_guest_ws_2026-06-13.json`](artifacts/demo-feedback/b11_bug1_guest_ws_2026-06-13.json) |
-| 2026-06-14 | заказчик B1.7 | cart / product | **Баг-5:** второй разный товар — stale `Product.svelte` при `#/product/:id` | **done** *(код; MCP post-deploy)* | [`b17_cart_second_product_2026-06-14.json`](artifacts/demo-feedback/b17_cart_second_product_2026-06-14.json) |
+| 2026-06-15 | заказчик B1.7 | cart / product | **Баг-5:** второй разный товар — stale `Product.svelte` | **done** *(Fly MCP PASS)* | [`b17_cart_second_product_post_deploy_2026-06-15.json`](artifacts/demo-feedback/b17_cart_second_product_post_deploy_2026-06-15.json) |
 | 2026-06-14 | B1.7 | localStorage витрины | TTL 24ч для профиля/корзины/каталога | **done** | [`b17_localstorage_ttl_2026-06-14.json`](artifacts/demo-feedback/b17_localstorage_ttl_2026-06-14.json) |
 | 2026-06-14 | заказчик B1.7 | cart/add | **Баг-4:** 500 при «В корзину» (cookie overflow) | **done** | [`b17_cart_cookie_overflow_2026-06-14.json`](artifacts/demo-feedback/b17_cart_cookie_overflow_2026-06-14.json) |
 | 2026-06-13 | заказчик (видео) B1.7 | checkout `#/checkout` | **Баг-3:** «сессия истекла» при повторном заходе после OTP | **done** 2026-06-14 (permanent) | [`b17_checkout_session_2026-06-14.json`](artifacts/demo-feedback/b17_checkout_session_2026-06-14.json) |

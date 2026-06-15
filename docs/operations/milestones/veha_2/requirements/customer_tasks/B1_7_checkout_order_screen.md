@@ -186,7 +186,7 @@
 | BR-1 | Убрать поле «Промокод (необязательно)» с checkout | `[x]` | `[x]` | `[ ]` |
 | BR-2 | Убрать кнопку «Наличные»; оставить «Картой» + «СБП» (СБП disabled, «Будет позже») | `[x]` | `[x]` | `[ ]` |
 | BR-3 | «Сессия истекла» при повторном checkout после OTP | `[x]` | `[x]` | `[ ]` |
-| BR-5 | Второй (другой) товар в корзину: переход на `/cart` + индикация добавления | `[x]` | `[ ]` post-deploy | `[ ]` |
+| BR-5 | Второй (другой) товар в корзину: переход на `/cart` + индикация добавления | `[x]` | `[x]` 2026-06-15 | `[ ]` |
 
 **Артефакты:** [`b17_br_fixes_2026-06-10.json`](../../artifacts/demo-feedback/b17_br_fixes_2026-06-10.json) · скрин [`checkout_no_promo_no_cash_sbp.png`](../../artifacts/demo-feedback/screenshots/b17_br_fixes_2026-06-10/checkout_no_promo_no_cash_sbp.png)
 
@@ -233,7 +233,7 @@
 
 ---
 
-### Баг-репорт №5 — второй товар в корзину `[x]` fixed 2026-06-14 (post-deploy MCP)
+### Баг-репорт №5 — второй товар в корзину `[x]` fixed 2026-06-15 · Fly MCP PASS
 
 **Источник:** заказчик (текст ниже — как прислал).
 
@@ -255,8 +255,9 @@
 | **Причина** | `svelte-spa-router` не размонтирует `/product/:id` при смене `id` — `Product.svelte` оставался на Товаре 1, повторный add слал `product_id` первого товара (qty+1 вместо второй позиции) |
 | **Фикс** | `Product.svelte`: `$effect` на `params.id` — перезагрузка карточки; `CategoryProducts`: не блокировать quick-add другого товара; `shopCartAdd` + `Cart.svelte`: баннер «добавлен в корзину» |
 | **API** | `POST /cart/add` ×2 разных `product_id` → **200**, 2 lines — [`b17_cart_second_product_api_2026-06-14.json`](../../artifacts/demo-feedback/b17_cart_second_product_api_2026-06-14.json) |
-| **MCP pre-deploy** | FAIL repro: header остаётся P1, cart qty=2 одного товара — [`b17_cart_second_product_2026-06-14.json`](../../artifacts/demo-feedback/b17_cart_second_product_2026-06-14.json) |
-| **Прогон post-deploy** | `node bin/b17_br5_cart_second_product_mcp.mjs` |
+| **MCP pre-deploy** | FAIL repro: header P1, cart qty=2 одного товара |
+| **MCP post-deploy** | **PASS** 2026-06-15 — Playwright 7/7 + Chrome DevTools регрессия — [`b17_cart_second_product_post_deploy_2026-06-15.json`](../../artifacts/demo-feedback/b17_cart_second_product_post_deploy_2026-06-15.json) |
+| **Прогон** | `node bin/b17_br5_cart_second_product_mcp.mjs` |
 
 #### Чеклист (BR-5)
 
@@ -264,7 +265,7 @@
 - [x] **Проверить API:** два разных `product_id` → 200, в корзине **оба**
 - [x] **Точка сбоя:** `Product.svelte` — stale `product` при смене `params.id`
 - [x] **Исправить:** reload по `params.id`; баннер на `#/cart`
-- [ ] **Регрессия MCP post-deploy:** первый товар; тот же +qty; два разных; модификаторы
+- [x] **Регрессия MCP post-deploy:** первый товар; тот же +qty; два разных; модификаторы
 - [x] **Артефакт:** `b17_cart_second_product_*.json`
 
-**Статус:** `[x]` fixed (код) · Fly MCP — после deploy |
+**Статус:** `[x]` **CLOSED** · Fly MCP PASS 2026-06-15 · коммиты `ebbf8a8` + `e936a36` |

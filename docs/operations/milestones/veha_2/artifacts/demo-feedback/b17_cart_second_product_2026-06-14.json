@@ -2,15 +2,15 @@
   "scenario": "b17_br5_second_product_cart",
   "stand": "https://coffeeos.fly.dev",
   "tenant_id": "655aaccb-004a-4bb9-a50a-ce618854dda3",
-  "started_at": "2026-06-15T07:01:08.361Z",
-  "finished_at": "2026-06-15T07:01:16.182Z",
-  "pass": false,
+  "started_at": "2026-06-15T07:51:57.239Z",
+  "finished_at": "2026-06-15T07:52:04.303Z",
+  "pass": true,
   "steps": [
     {
       "id": "00",
       "action": "catalog has 2+ products",
       "pass": true,
-      "at": "2026-06-15T07:01:11.739Z",
+      "at": "2026-06-15T07:52:00.507Z",
       "p1": {
         "id": "3c5259e0-f42f-4d47-953d-2ce82e335f8c",
         "name": "Фильтр-кофе без кофеина (декаф) Гватемала"
@@ -24,56 +24,61 @@
       "id": "01",
       "action": "product 1 add → redirect #/cart",
       "pass": true,
-      "at": "2026-06-15T07:01:13.025Z"
+      "at": "2026-06-15T07:52:01.384Z"
     },
     {
       "id": "02",
       "action": "cart API has 1 line after first add",
       "pass": true,
-      "at": "2026-06-15T07:01:13.232Z",
+      "at": "2026-06-15T07:52:01.564Z",
       "count": 1
     },
     {
       "id": "03",
       "action": "product page shows product 2 after hash switch",
       "pass": true,
-      "at": "2026-06-15T07:01:15.249Z",
-      "headerTitle": "Фильтр-кофе без кофеина (декаф) Гватемала",
+      "at": "2026-06-15T07:52:03.584Z",
+      "headerTitle": "Фильтр-кофе Бразилия",
       "expected": "Фильтр-кофе Бразилия"
     },
     {
       "id": "04",
       "action": "second add → redirect #/cart",
       "pass": true,
-      "at": "2026-06-15T07:01:16.032Z"
+      "at": "2026-06-15T07:52:04.247Z"
     },
     {
       "id": "05",
       "action": "just-added banner visible",
-      "pass": false,
-      "at": "2026-06-15T07:01:16.032Z",
-      "hasBanner": false
+      "pass": true,
+      "at": "2026-06-15T07:52:04.247Z",
+      "hasBanner": true
     },
     {
       "id": "06",
       "action": "cart has both distinct products",
-      "pass": false,
-      "at": "2026-06-15T07:01:16.032Z",
+      "pass": true,
+      "at": "2026-06-15T07:52:04.247Z",
       "items": [
         {
           "product_id": "3c5259e0-f42f-4d47-953d-2ce82e335f8c",
           "name": "Фильтр-кофе без кофеина (декаф) Гватемала",
-          "qty": 2
+          "qty": 1
+        },
+        {
+          "product_id": "24dae391-2199-4959-907e-d08c4cec3329",
+          "name": "Фильтр-кофе Бразилия",
+          "qty": 1
         }
       ]
     },
     {
       "id": "07",
       "action": "cart UI shows both product names",
-      "pass": false,
-      "at": "2026-06-15T07:01:16.032Z",
-      "hasP1": false,
-      "hasP2": false
+      "pass": true,
+      "at": "2026-06-15T07:52:04.247Z",
+      "hasP1": true,
+      "hasP2": true
     }
   ],
   "products": {
