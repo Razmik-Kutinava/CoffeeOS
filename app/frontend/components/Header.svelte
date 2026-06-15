@@ -13,13 +13,6 @@
     >
       CoffeeOS
     </button>
-    <div class="flex items-center gap-3">
-      <a
-        href="/blog"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="text-xs text-[#ff8c42] hover:underline">Блог</a>
-      <span class="text-xs text-[#a0a0a0]">Витрина</span>
-    </div>
+    <span class="text-xs text-[#a0a0a0]">Витрина</span>
   </div>
 </header>

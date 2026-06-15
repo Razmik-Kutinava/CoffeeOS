@@ -1,13 +1,17 @@
 # Задача: Удалить вкладку «Блог» из навигации сайта
 
 **ID:** B1.10 · **Источник:** заказчик, чат 2026-06  
-**Статус:** **ТЗ зафиксировано** · **апрув на старт разработки** `[ ]` · код `[ ]` · Fly `[ ]` · заказчик `[ ]`
+**Статус:** **код + Fly MCP PASS** 2026-06-15 · **апрув заказчика** `[ ]`
 
-**Приоритет:** **выше B1.9** (toggle-модификаторы) — делаем первой.
+**Приоритет:** **выше B1.9** (toggle-модификаторы) — **закрыта**.
 
 **Связано:** [B1.4](B1_4_pwa_shop.md) (LCP / витрина) · [B1.9](B1_9_product_modifier_toggle.md) (следующая после B1.10)
 
 **Скрин «до»:** [`screenshots/b110_blog_nav_before.png`](../../artifacts/demo-feedback/screenshots/b110_blog_nav_before.png) *(шапка витрины: ссылка «Блог»)*
+
+**Скрин «после»:** [`screenshots/b110_blog_nav_after_2026-06-15.png`](../../artifacts/demo-feedback/screenshots/b110_blog_nav_after_2026-06-15.png)
+
+**Артефакт Fly:** [`b110_blog_nav_post_deploy_2026-06-15.json`](../../artifacts/demo-feedback/b110_blog_nav_post_deploy_2026-06-15.json)
 
 **Стенд для приёмки:** `https://coffeeos.fly.dev/shop?tenant_id=655aaccb-004a-4bb9-a50a-ce618854dda3` · WebView Telegram / Instagram (или Chrome mobile emulation)
 
@@ -37,9 +41,9 @@
 
 ```
 [x] 0 — ТЗ + ops-доки (2026-06-15)
-[ ] 1 — апрув заказчика / владельца на старт кода
-[ ] 2 — правка Header.svelte + deploy
-[ ] 3 — Fly: нет «Блог» в шапке + замер загрузки ≤ 1.5 с
+[x] 1 — апрув владельца / заказчика на старт кода (2026-06-15)
+[x] 2 — правка Header.svelte + deploy
+[x] 3 — Fly: нет «Блог» в шапке + замер загрузки ≤ 1.5 с
 [ ] 4 — апрув заказчика
 ```
 
@@ -97,18 +101,18 @@
 
 - [x] ТЗ заказчика перенесено в этот файл
 - [x] Карта файлов и scope зафиксированы
-- [ ] Скрин «до» в `artifacts/screenshots/b110_blog_nav_before.png`
-- [ ] **Апрув владельца / заказчика** на реализацию
+- [x] Скрин «до» в `artifacts/screenshots/b110_blog_nav_before.png`
+- [x] **Апрув владельца / заказчика** на реализацию (2026-06-15)
 
 ## Чеклист реализации (после апрува)
 
-- [ ] Удалить ссылку «Блог» из `Header.svelte`
-- [ ] Убедиться: в шапке остаётся «CoffeeOS» + «Витрина» (и bottom nav без изменений)
-- [ ] `bin/vite build` / deploy Fly
-- [ ] Визуально: шапка без «Блог» (скрин «после»)
-- [ ] Замер LCP или аналог на `/shop` (Telegram WebView или Lighthouse mobile) — записать в JSON
-- [ ] Артефакт `b110_blog_nav_post_deploy_*.json`
-- [ ] Обновить статусы в этом файле + `DEMO_FEEDBACK.md`
+- [x] Удалить ссылку «Блог» из `Header.svelte`
+- [x] Убедиться: в шапке остаётся «CoffeeOS» + «Витрина» (и bottom nav без изменений)
+- [x] `bin/vite build` / deploy Fly
+- [x] Визуально: шапка без «Блог» (скрин «после»)
+- [x] Замер LCP или аналог на `/shop` (Telegram WebView или Lighthouse mobile) — записать в JSON
+- [x] Артефакт `b110_blog_nav_post_deploy_*.json`
+- [x] Обновить статусы в этом файле + `DEMO_FEEDBACK.md`
 
 ---
 
@@ -124,4 +128,4 @@
 
 ---
 
-**Статус:** ожидаем апрув → этап 2 (код). **Следующая задача в очереди:** [B1.9](B1_9_product_modifier_toggle.md).
+**Статус:** **OPS PASS** 2026-06-15 — ждём апрув заказчика. **Следующая задача:** [B1.9](B1_9_product_modifier_toggle.md).
