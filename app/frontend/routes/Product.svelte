@@ -6,9 +6,9 @@
   import { useTelegramBack } from "../lib/telegram.js"
   import { favorites } from "../lib/stores/favorites.js"
   import {
-    isRadioModifierGroup,
     defaultSelectionForGroup,
-    buildModifierPayload
+    buildModifierPayload,
+    selectedModifierIdsForGroup
   } from "../lib/modifiers.js"
 
   useTelegramBack(() => window.history.back())
@@ -26,23 +26,13 @@
   let showMoreMenu = $state(false)
   let isFav = $state(false)
   let adding = $state(false)
-  let showOnboardingHint = $state(false)
-  let modifierHint = $state(null)
-  let highlightGroupId = $state(null)
 
-  function isRequiredGroup(g) {
-    return g.modifier_type === "required"
-  }
-
-  function isGroupFilled(g) {
-    if (!isRequiredGroup(g)) return true
-    if (isRadioModifierGroup(g)) return !!selected[g.id]
-    return (selected[g.id] || []).length > 0
-  }
-
-  function missingRequiredGroups() {
-    if (!product?.modifier_groups) return []
-    return product.modifier_groups.filter((g) => isRequiredGroup(g) && !isGroupFilled(g))
+  function normalizeSelection(value, group) {
+    if (value !== undefined) {
+      if (Array.isArray(value)) return [...value]
+      return value ? [value] : []
+    }
+    return defaultSelectionForGroup(group)
   }
 
   async function loadProduct(keepSelections = false) {
@@ -50,8 +40,7 @@
     const p = await api(`/products/${params.id}`)
     product = p
     for (const g of product.modifier_groups) {
-      if (prev[g.id] !== undefined) selected[g.id] = prev[g.id]
-      else selected[g.id] = defaultSelectionForGroup(g)
+      selected[g.id] = keepSelections ? normalizeSelection(prev[g.id], g) : defaultSelectionForGroup(g)
     }
     selected = { ...selected }
   }
@@ -66,8 +55,6 @@
     let active = true
     loading = true
     error = null
-    modifierHint = null
-    highlightGroupId = null
     qty = 1
     adding = false
     showMoreMenu = false
@@ -93,7 +80,6 @@
   })
 
   onMount(() => {
-    showOnboardingHint = !sessionStorage.getItem("shop_onboarding_dismissed")
     favorites.load()
 
     const tick = async () => {
@@ -114,7 +100,7 @@
     }
   })
 
-  function toggleCheckbox(groupId, modId) {
+  function toggleModifier(groupId, modId) {
     const arr = [...(selected[groupId] || [])]
     const i = arr.indexOf(modId)
     if (i >= 0) arr.splice(i, 1)
@@ -123,42 +109,24 @@
     selected = { ...selected }
   }
 
+  function isModifierSelected(group, modId) {
+    return selectedModifierIdsForGroup(group, selected).includes(modId)
+  }
+
   let totalPrice = $derived.by(() => {
     if (!product) return 0
     let t = Number(product.price)
     for (const g of product.modifier_groups) {
-      if (isRadioModifierGroup(g)) {
-        const mid = selected[g.id]
+      for (const mid of selectedModifierIdsForGroup(g, selected)) {
         const m = g.modifiers.find((x) => x.id === mid)
         if (m) t += Number(m.price_change)
-      } else {
-        for (const mid of selected[g.id] || []) {
-          const m = g.modifiers.find((x) => x.id === mid)
-          if (m) t += Number(m.price_change)
-        }
       }
     }
     return t * qty
   })
 
-  function dismissOnboarding() {
-    sessionStorage.setItem("shop_onboarding_dismissed", "1")
-    showOnboardingHint = false
-  }
-
   async function addToCart() {
     if (adding) return
-    const missing = missingRequiredGroups()
-    if (missing.length > 0) {
-      const g = missing[0]
-      highlightGroupId = g.id
-      modifierHint = `Выберите: ${g.name}`
-      g.id && document.getElementById(`mod-group-${g.id}`)?.scrollIntoView({ behavior: "smooth", block: "center" })
-      return
-    }
-    modifierHint = null
-    highlightGroupId = null
-    dismissOnboarding()
     adding = true
     try {
       const { selected_modifiers } = buildModifierPayload(product.modifier_groups, selected)
@@ -225,69 +193,27 @@
   <h1 class="mb-2 text-xl font-bold leading-tight">{product.name}</h1>
   <p class="mb-4 text-sm text-[#a0a0a0]">{product.description}</p>
 
-  {#if showOnboardingHint && product.modifier_groups?.some(isRequiredGroup)}
-    <div class="onboarding-banner mb-4 rounded-xl border border-[#ff8c42]/40 bg-[#3a2a1a] px-3 py-2 text-sm text-[#e8c4a8]">
-      Сначала выберите параметры с пометкой <strong>обязательно</strong> (вкус, температура и т.д.), затем «В корзину».
-      <button type="button" class="onboarding-dismiss" onclick={dismissOnboarding}>Понятно</button>
-    </div>
-  {/if}
-
-  {#if modifierHint}
-    <p class="modifier-hint mb-3" role="alert">{modifierHint}</p>
-  {/if}
-
   {#each product.modifier_groups as g (g.id)}
-    <div
-      id={"mod-group-" + g.id}
-      class="mb-4 mod-group"
-      class:mod-group--highlight={highlightGroupId === g.id}
-    >
-      <p class="mb-2 text-sm font-medium">
-        {g.name}
-        {#if g.modifier_type === "required"}
-          <span class="ml-1 text-xs font-normal text-[#888]">· обязательно</span>
-        {/if}
-      </p>
-      {#if isRadioModifierGroup(g)}
-        <div class="flex flex-wrap gap-2">
-          {#each g.modifiers as m (m.id)}
-            <label class="cursor-pointer">
-              <input
-                type="radio"
-                name={"mg-" + g.id}
-                checked={selected[g.id] === m.id}
-                onchange={() => { selected[g.id] = m.id; selected = { ...selected }; highlightGroupId = null; modifierHint = null }}
-                class="peer sr-only"
-              />
-              <span class="inline-block rounded-lg border border-[#3a3a3a] px-3 py-2 text-sm peer-checked:border-[#ff8c42] peer-checked:bg-[#3a2a1a]">
-                {m.name}
-                {#if Number(m.price_change) > 0}
-                  <span class="text-[#ff8c42]">+{m.price_change}₽</span>
-                {/if}
-              </span>
-            </label>
-          {/each}
-        </div>
-      {:else}
-        <div class="flex flex-wrap gap-2">
-          {#each g.modifiers as m (m.id)}
-            <label class="cursor-pointer">
-              <input
-                type="checkbox"
-                checked={(selected[g.id] || []).includes(m.id)}
-                onchange={() => toggleCheckbox(g.id, m.id)}
-                class="peer sr-only"
-              />
-              <span class="inline-block rounded-lg border border-[#3a3a3a] px-3 py-2 text-sm peer-checked:border-[#ff8c42] peer-checked:bg-[#3a2a1a]">
-                {m.name}
-                {#if Number(m.price_change) > 0}
-                  <span class="text-[#ff8c42]">+{m.price_change}₽</span>
-                {/if}
-              </span>
-            </label>
-          {/each}
-        </div>
-      {/if}
+    <div id={"mod-group-" + g.id} class="mb-4 mod-group">
+      <p class="mb-2 text-sm font-medium">{g.name}</p>
+      <div class="flex flex-wrap gap-2">
+        {#each g.modifiers as m (m.id)}
+          <button
+            type="button"
+            class="mod-chip"
+            class:mod-chip--selected={isModifierSelected(g, m.id)}
+            onclick={() => toggleModifier(g.id, m.id)}
+          >
+            {#if isModifierSelected(g, m.id)}
+              <span class="mod-chip-plus" aria-hidden="true">+</span>
+            {/if}
+            <span>{m.name}</span>
+            {#if Number(m.price_change) > 0}
+              <span class="mod-chip-price">+{m.price_change}₽</span>
+            {/if}
+          </button>
+        {/each}
+      </div>
     </div>
   {/each}
 
@@ -491,33 +417,41 @@
   .more-menu button:last-child { border-bottom: none; }
   .more-menu button:active { background: #3a3a3a; }
 
-  .onboarding-banner {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .onboarding-dismiss {
-    align-self: flex-start;
-    background: none;
-    border: none;
-    color: #ff8c42;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    padding: 0;
-  }
-
-  .modifier-hint {
-    color: #ff8c42;
+  .mod-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border-radius: 8px;
+    border: 1px solid #3a3a3a;
+    background: transparent;
+    padding: 8px 12px;
     font-size: 14px;
-    font-weight: 600;
+    color: #fff;
+    cursor: pointer;
+    text-align: left;
   }
 
-  .mod-group--highlight {
-    border-radius: 12px;
-    outline: 2px solid #ff8c42;
-    outline-offset: 4px;
-    padding: 4px;
+  .mod-chip--selected {
+    border-color: #ff8c42;
+    background: #3a2a1a;
+  }
+
+  .mod-chip-plus {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    border-radius: 4px;
+    background: #ff8c42;
+    color: #000;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  .mod-chip-price {
+    color: #ff8c42;
   }
 </style>

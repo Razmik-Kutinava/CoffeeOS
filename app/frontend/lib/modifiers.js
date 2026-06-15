@@ -8,10 +8,14 @@ export function isCheckboxModifierGroup(group) {
   return !isRadioModifierGroup(group)
 }
 
-export function defaultSelectionForGroup(group) {
-  if (isRadioModifierGroup(group)) {
-    return group.modifiers[0]?.id ?? null
-  }
+export function defaultSelectionForGroup(_group) {
+  return []
+}
+
+export function selectedModifierIdsForGroup(group, selected) {
+  const value = selected[group.id]
+  if (Array.isArray(value)) return value
+  if (value) return [value]
   return []
 }
 
@@ -19,15 +23,9 @@ export function defaultSelectionForGroup(group) {
 export function buildModifierPayload(modifierGroups, selected) {
   const selected_modifiers = []
   for (const g of modifierGroups || []) {
-    if (isRadioModifierGroup(g)) {
-      const mid = selected[g.id]
+    for (const mid of selectedModifierIdsForGroup(g, selected)) {
       const m = g.modifiers.find((x) => x.id === mid)
       if (m) selected_modifiers.push({ id: m.id, name: m.name, price: Number(m.price_change) })
-    } else {
-      for (const mid of selected[g.id] || []) {
-        const m = g.modifiers.find((x) => x.id === mid)
-        if (m) selected_modifiers.push({ id: m.id, name: m.name, price: Number(m.price_change) })
-      }
     }
   }
 
