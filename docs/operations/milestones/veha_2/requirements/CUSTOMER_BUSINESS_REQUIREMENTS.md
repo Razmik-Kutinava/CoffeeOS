@@ -87,7 +87,8 @@
 | B1.5 | **ТТК + туториал УК** | Блок 1.1 | низкий |
 | B1.6 | **Стоп-лист UI barista** — серый блок «в стопе» | W1.4 backlog; сейчас sold_out скрыт | низкий |
 | B1.7 | **Email verify** — checkout, OTP через **Brevo** | [ТЗ](customer_tasks/B1_7_checkout_order_screen.md) | **`[x]` внутр.** · заказчик `[ ]` |
-| B1.9 | **Карточка товара** — toggle модификаторов, без обязательности | [ТЗ](customer_tasks/B1_9_product_modifier_toggle.md) | **ТЗ** · апрув `[ ]` |
+| B1.10 | **Витрина** — убрать «Блог» из навигации, LCP ≤ 1.5 с WebView | [ТЗ](customer_tasks/B1_10_remove_blog_nav.md) | **ТЗ** · апрув `[ ]` · **первая** |
+| B1.9 | **Карточка товара** — toggle модификаторов, без обязательности | [ТЗ](customer_tasks/B1_9_product_modifier_toggle.md) | **ТЗ** · апрув `[ ]` · после B1.10 |
 | B1.8 | **Свой домен → своя почта для рассылки** | После домена (не `fly.dev`): `noreply@…` / `orders@…`, DNS в Brevo (SPF/DKIM/DMARC), сменить `MAIL_FROM` на Fly | **напоминание** |
 
 > **B1.8 (не забыть):** сейчас письма с **подтверждённого личного sender** в Brevo. Когда будет **свой домен** — завести **кофейную почту** (напр. `noreply@бренд.ru`), аутентифицировать домен в Brevo, обновить `MAIL_FROM` + secrets. Код OTP/ActionMailer менять не нужно.
@@ -105,9 +106,10 @@
 | 3 | **B2.1** | Табло бариста — интерактивная карточка | **ТЗ** · реализация `[ ]` | [B2_1_barista_order_board.md](customer_tasks/B2_1_barista_order_board.md) |
 | 4 | **B2.2** | Меню + Создать (бариста) | **ТЗ** · реализация `[ ]` | [B2_2_barista_menu_create_merge.md](customer_tasks/B2_2_barista_menu_create_merge.md) |
 | 5 | **B1.4** | PWA витрины (install + offline) | **ТЗ** 2026-06-11 · реализация `[ ]` | [B1_4_pwa_shop.md](customer_tasks/B1_4_pwa_shop.md) |
-| 6 | **B1.9** | Toggle-модификаторы на карточке товара | **ТЗ** · апрув на код `[ ]` | [B1_9_product_modifier_toggle.md](customer_tasks/B1_9_product_modifier_toggle.md) |
+| 6 | **B1.10** | Убрать «Блог» из навигации витрины | **ТЗ** · апрув на код `[ ]` | [B1_10_remove_blog_nav.md](customer_tasks/B1_10_remove_blog_nav.md) |
+| 7 | **B1.9** | Toggle-модификаторы на карточке товара | **ТЗ** · апрув на код `[ ]` | [B1_9_product_modifier_toggle.md](customer_tasks/B1_9_product_modifier_toggle.md) |
 
-**Следующий фокус по задачам заказчика:** **B1.9** (после апрува ТЗ) · **B1.4 PWA** · **B2.2** после B2.1 OPS_PASS.
+**Следующий фокус по задачам заказчика:** **B1.10** (после апрува ТЗ) → **B1.9** · **B1.4 PWA** · **B2.2** после B2.1 OPS_PASS.
 
 ---
 

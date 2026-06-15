@@ -25,6 +25,13 @@
 | **B2.1 ревизия** | OPS CLOSED 2026-06-13 · заказчик `[ ]` | handoff → B2.2 этап 1 |
 | **B2.2** | stage0 `[x]` · этап 1 `[ ]` | единый экран «Меню» |
 
+### Сессия 2026-06-15 (B1.10 — убрать «Блог», ТЗ до апрува)
+
+- **Запрос заказчика:** убрать вкладку «Блог» из навигации; LCP ≤ 1.5 с в WebView Telegram/Instagram.
+- **ТЗ:** [`B1_10_remove_blog_nav.md`](milestones/veha_2/requirements/customer_tasks/B1_10_remove_blog_nav.md) — scope: `Header.svelte`, блог в БД не трогаем.
+- **Код:** `[ ]` — **не начинаем** до апрува; **приоритет выше B1.9**.
+- **Следующий шаг:** скрин «до» → апрув → одна правка Header → Fly замер.
+
 ### Сессия 2026-06-15 (B1.9 — toggle модификаторы, ТЗ до апрува)
 
 - **Запрос заказчика:** убрать «обязательно» на карточке товара; toggle модификаторов; add в корзину без выбора опций.
@@ -41,6 +48,7 @@
 - **API Fly:** два разных `product_id` → 200, 2 lines — PASS ([`b17_cart_second_product_api_2026-06-14.json`](milestones/veha_2/artifacts/demo-feedback/b17_cart_second_product_api_2026-06-14.json)).
 - **MCP:** Playwright 7/7 + Chrome DevTools — **PASS** 2026-06-15 ([`b17_cart_second_product_post_deploy_2026-06-15.json`](milestones/veha_2/artifacts/demo-feedback/b17_cart_second_product_post_deploy_2026-06-15.json)).
 - **Статус:** BR-5 **CLOSED** (код + Fly). Апрув заказчика `[ ]`.
+- **Очередь:** B1.10 → B1.9.
 
 ### Сессия 2026-06-12 (B2.1 ревизия — 6 карточек + live)
 

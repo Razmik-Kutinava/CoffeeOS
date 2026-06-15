@@ -27,7 +27,8 @@
 | Дата | Источник | Сценарий / экран | Суть | Статус | PR / коммит |
 |------|----------|------------------|------|--------|-------------|
 | 2026-06-04 | заказчик (чат) B1.1 | экран статуса гостя `#/order/...` | **Баг-1:** без F5 статус не обновляется после тапа баристы | **done** 2026-06-13 | [`b11_bug1_guest_ws_2026-06-13.json`](artifacts/demo-feedback/b11_bug1_guest_ws_2026-06-13.json) |
-| 2026-06-15 | заказчик B1.9 | `#/product` карточка | Toggle модификаторов, убрать «обязательно» | **open** *(ТЗ, ждём апрув)* | [B1_9_product_modifier_toggle.md](customer_tasks/B1_9_product_modifier_toggle.md) |
+| 2026-06-15 | заказчик B1.10 | shop шапка | Убрать «Блог» из навигации, LCP ≤ 1.5 с | **open** *(ТЗ, ждём апрув)* | [B1_10_remove_blog_nav.md](customer_tasks/B1_10_remove_blog_nav.md) |
+| 2026-06-15 | заказчик B1.9 | `#/product` карточка | Toggle модификаторов, убрать «обязательно» | **open** *(ТЗ, после B1.10)* | [B1_9_product_modifier_toggle.md](customer_tasks/B1_9_product_modifier_toggle.md) |
 | 2026-06-15 | заказчик B1.7 | cart / product | **Баг-5:** второй разный товар — stale `Product.svelte` | **done** *(Fly MCP PASS)* | [`b17_cart_second_product_post_deploy_2026-06-15.json`](artifacts/demo-feedback/b17_cart_second_product_post_deploy_2026-06-15.json) |
 | 2026-06-14 | B1.7 | localStorage витрины | TTL 24ч для профиля/корзины/каталога | **done** | [`b17_localstorage_ttl_2026-06-14.json`](artifacts/demo-feedback/b17_localstorage_ttl_2026-06-14.json) |
 | 2026-06-14 | заказчик B1.7 | cart/add | **Баг-4:** 500 при «В корзину» (cookie overflow) | **done** | [`b17_cart_cookie_overflow_2026-06-14.json`](artifacts/demo-feedback/b17_cart_cookie_overflow_2026-06-14.json) |
