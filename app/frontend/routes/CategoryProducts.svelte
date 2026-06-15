@@ -42,7 +42,7 @@
   })
 
   async function quickAddToCart(product) {
-    if (addingId) return
+    if (addingId === product.id) return
     addingId = product.id
     try {
       await shopAddToCart(

@@ -1,0 +1,18 @@
+{
+  "scenario": "two_different_products_api",
+  "stand": "https://coffeeos.fly.dev",
+  "tenant_id": "655aaccb-004a-4bb9-a50a-ce618854dda3",
+  "product1": {
+    "id": "3c5259e0-f42f-4d47-953d-2ce82e335f8c",
+    "name": "Фильтр-кофе без кофеина (декаф) Гватемала"
+  },
+  "product2": {
+    "id": "24dae391-2199-4959-907e-d08c4cec3329",
+    "name": "Фильтр-кофе Бразилия"
+  },
+  "add1_status": 200,
+  "add2_status": 200,
+  "cart_count": 2,
+  "pass": true,
+  "note": "Backend OK — баг только во фронте (SPA Product.svelte не перезагружался при смене params.id)"
+}

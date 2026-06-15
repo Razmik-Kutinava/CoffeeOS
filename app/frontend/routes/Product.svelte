@@ -56,9 +56,46 @@
     selected = { ...selected }
   }
 
-  onMount(async () => {
+  // svelte-spa-router не размонтирует /product/:id при смене id — только обновляет params.
+  let routeKey = $derived(String(params.id ?? ""))
+
+  $effect(() => {
+    const key = routeKey
+    if (!key) return
+
+    let active = true
+    loading = true
+    error = null
+    modifierHint = null
+    highlightGroupId = null
+    qty = 1
+    adding = false
+    showMoreMenu = false
+
+    ;(async () => {
+      try {
+        await loadProduct(false)
+        if (!active) return
+        isFav = favorites.isFavorite(product.id)
+      } catch (e) {
+        if (active) {
+          error = e.message
+          product = null
+        }
+      } finally {
+        if (active) loading = false
+      }
+    })()
+
+    return () => {
+      active = false
+    }
+  })
+
+  onMount(() => {
     showOnboardingHint = !sessionStorage.getItem("shop_onboarding_dismissed")
-    let pollTimer
+    favorites.load()
+
     const tick = async () => {
       try {
         await loadProduct(true)
@@ -66,23 +103,14 @@
         /* keep last product */
       }
     }
-    try {
-      await loadProduct(false)
-      await favorites.load()
-      isFav = favorites.isFavorite(product.id)
-      pollTimer = setInterval(tick, PRODUCT_POLL_MS)
-      const onVisible = () => {
-        if (document.visibilityState === "visible") tick()
-      }
-      document.addEventListener("visibilitychange", onVisible)
-      return () => {
-        clearInterval(pollTimer)
-        document.removeEventListener("visibilitychange", onVisible)
-      }
-    } catch (e) {
-      error = e.message
-    } finally {
-      loading = false
+    const pollTimer = setInterval(tick, PRODUCT_POLL_MS)
+    const onVisible = () => {
+      if (document.visibilityState === "visible") tick()
+    }
+    document.addEventListener("visibilitychange", onVisible)
+    return () => {
+      clearInterval(pollTimer)
+      document.removeEventListener("visibilitychange", onVisible)
     }
   })
 

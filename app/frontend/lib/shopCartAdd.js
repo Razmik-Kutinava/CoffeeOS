@@ -59,6 +59,16 @@ function applyOptimisticAdd(product, quantity, selected_modifiers) {
   return data
 }
 
+export const CART_JUST_ADDED_KEY = "shop_cart_just_added"
+
+function markJustAdded(productName) {
+  try {
+    sessionStorage.setItem(CART_JUST_ADDED_KEY, productName || "Товар")
+  } catch (_) {
+    /* ignore */
+  }
+}
+
 /**
  * POST /cart/add с офлайн-очередью и оптимистичным localStorage.
  */
@@ -76,6 +86,8 @@ export async function addToCart(payload, { product = null } = {}) {
     })
     const data = { items: res.cart || res.items || [], total: res.total ?? 0 }
     writeCartCache(data)
+    const prod = product || findProduct(body.product_id)
+    markJustAdded(prod?.name)
     return data
   } catch (e) {
     if (!isOfflineError(e) && navigator.onLine) throw e
@@ -85,6 +97,7 @@ export async function addToCart(payload, { product = null } = {}) {
 
     await enqueueCartAdd(body)
     const data = applyOptimisticAdd(prod, body.quantity, body.selected_modifiers)
+    markJustAdded(prod?.name)
     window.dispatchEvent(new CustomEvent("shop:offline-cart-queued"))
     return data
   }

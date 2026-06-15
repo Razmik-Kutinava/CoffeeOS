@@ -4,12 +4,14 @@
   import { api } from "../lib/api.js"
   import PageSkeleton from "../components/PageSkeleton.svelte"
   import { readCartCache, writeCartCache } from "../lib/shopCartCache.js"
+  import { CART_JUST_ADDED_KEY } from "../lib/shopCartAdd.js"
 
   let items = $state([])
   let total = $state(0)
   let loading = $state(true)
   let busyIndex = $state(null)
   let err = $state(null)
+  let justAddedName = $state(null)
 
   async function load() {
     try {
@@ -31,6 +33,8 @@
 
   onMount(async () => {
     try {
+      justAddedName = sessionStorage.getItem(CART_JUST_ADDED_KEY)
+      sessionStorage.removeItem(CART_JUST_ADDED_KEY)
       await load()
     } catch (e) {
       err = e.message
@@ -68,6 +72,12 @@
 </script>
 
 <h1 class="mb-4 text-xl font-bold">Корзина</h1>
+
+{#if justAddedName}
+  <p class="mb-4 rounded-xl border border-[#ff8c42]/40 bg-[#3a2a1a] px-3 py-2 text-sm text-[#e8c4a8]" role="status">
+    ✓ «{justAddedName}» добавлен в корзину
+  </p>
+{/if}
 
 {#if loading}
   <PageSkeleton />
