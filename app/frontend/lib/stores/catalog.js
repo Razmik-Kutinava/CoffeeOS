@@ -2,7 +2,7 @@ import { api } from "../api.js"
 import {
   readShopLocalStorage,
   writeShopLocalStorage
-} from "../lib/shopLocalStorage.js"
+} from "../shopLocalStorage.js"
 
 let inflight = null
 let pollTimer = null
