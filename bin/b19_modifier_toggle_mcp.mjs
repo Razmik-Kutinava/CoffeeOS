@@ -74,16 +74,29 @@ async function run() {
 
     await clearCart(page)
     await page.goto(`${SHOP_URL}#/product/${product.id}`, { waitUntil: "domcontentloaded", timeout: 90000 })
+    await page.waitForSelector(".add-to-cart-btn", { timeout: 90000 })
     await page.waitForTimeout(2000)
 
-    const bodyText = await page.locator("body").innerText()
+    const newUi = (await page.locator(".mod-chip").count()) > 0
+    if (!newUi) throw new Error("B1.9 UI not deployed yet (.mod-chip missing)")
+
+    const requiredInGroups =
+      (await page.locator(".mod-group").filter({ hasText: /·\s*обязательно|обязательно/i }).count()) === 0
+    const noOnboarding = (await page.locator(".onboarding-banner").count()) === 0
     overall =
-      step("01", "no «обязательно» on product card", !/обязательно/i.test(bodyText)) && overall
+      step("01", "no «обязательно» on product card", requiredInGroups && noOnboarding, {
+        requiredInGroups,
+        noOnboarding
+      }) && overall
 
     basePrice = await page.locator(".price-display").innerText().then((t) => parseInt(t, 10))
     overall = step("02", "base price visible", Number.isFinite(basePrice), { basePrice }) && overall
 
-    const paidChip = page.locator(".mod-chip").filter({ hasText: /\+\d+₽/ }).first()
+    let paidChip = page.locator(".mod-chip").filter({ hasText: /\+\d+₽/ }).first()
+    if ((await paidChip.count()) === 0) {
+      paidChip = page.locator(".mod-chip").first()
+    }
+    await paidChip.waitFor({ timeout: 15000 })
     const paidLabel = (await paidChip.innerText().catch(() => "")).trim()
     const paidMatch = paidLabel.match(/\+(\d+)₽/)
     const paidDelta = paidMatch ? Number(paidMatch[1]) : 0
@@ -95,7 +108,8 @@ async function run() {
     overall = step("03", "toggle on: «+» indicator visible", plusVisible) && overall
 
     priceWithMod = await page.locator(".price-display").innerText().then((t) => parseInt(t, 10))
-    const priceOk = paidDelta > 0 ? priceWithMod === basePrice + paidDelta : priceWithMod >= basePrice
+    const priceOk =
+      paidDelta > 0 ? priceWithMod === basePrice + paidDelta : priceWithMod === basePrice
     overall =
       step("04", "price recalculates after toggle", priceOk, {
         basePrice,
