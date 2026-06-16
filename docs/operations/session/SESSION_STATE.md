@@ -2,8 +2,8 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-06-04 (BR-5 регрессия — код fixed, ждём Fly deploy + MCP)  
-**Предыдущее:** B1.9 OPS PASS · B1.10 CLOSED · BR-5 v1 fixed 2026-06-15  
+**Дата:** 2026-06-04 (BR-5 регрессия — **CLOSED OPS** · Fly MCP PASS · апрув заказчик `[ ]`)  
+**Предыдущее:** BR-5 fix `e0b4793` · deploy Fly · MCP 7/7 + catalog + quick-add  
 **Предыдущее:** B1.1 закрыта: FIREBASE_* на Fly · smoke + MCP PASS  
 **Веха 1:** официально не закрыта (§ I, H.3 — `[ ]`).  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
@@ -21,11 +21,21 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **B1.7 BR-5 регрессия** | repro `[x]` FAIL banner/UI · код `[x]` · Fly deploy `[ ]` | deploy → MCP 7/7 |
+| **Второй баг заказчика** | ещё не взяли | repro → fix |
+| **B1.9 апрув** | OPS PASS · заказчик `[ ]` | апрув → B2.2 |
+| **B1.7 BR-5** | CLOSED OPS · Fly MCP PASS · заказчик `[ ]` | апрув заказчика |
 | **B1.1 ревизия** | R0–R4 Fly MCP `[x]` · заказчик `[ ]` | апрув заказчика |
 | **B1.4 PWA** | код задеплоен · OPS_PASS · заказчик `[ ]` | апрув → B2.2 |
 | **B2.1 ревизия** | OPS CLOSED 2026-06-13 · заказчик `[ ]` | handoff → B2.2 этап 1 |
 | **B2.2** | stage0 `[x]` · этап 1 `[ ]` | единый экран «Меню» |
+
+### Сессия 2026-06-04 (B1.7 BR-5 — post-deploy PASS, OPS CLOSED)
+
+- **Deploy Fly:** пользователь `fly deploy -a coffeeos` — OK (assets:precompile).
+- **MCP post-deploy:** `b17_br5_cart_second_product_mcp.mjs` **7/7** · `b17_br5_catalog_card_flow_mcp.mjs` **5/5** · `b17_br5_quick_add_category_mcp.mjs` **PASS**.
+- **Артефакт:** [`b17_br5_regression_post_deploy_2026-06-04.json`](milestones/veha_2/artifacts/demo-feedback/b17_br5_regression_post_deploy_2026-06-04.json) — `pass: true`.
+- **Fly warning** «not listening on 0.0.0.0:3000»: **ложное срабатывание при старте** — `fly.toml` / Dockerfile уже `-b 0.0.0.0`, `PORT=3000`, health `/up` PASS; долгий boot (release_command + demo:seed). **Действий не требуется**, мониторить только если `/up` упадёт.
+- **Статус:** OPS **CLOSED** · апрув заказчика `[ ]` · следующий — **второй баг** заказчика.
 
 ### Сессия 2026-06-04 (B1.7 BR-5 — fix cart UI on second product)
 
