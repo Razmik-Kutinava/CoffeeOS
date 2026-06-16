@@ -3,7 +3,7 @@
 **ID:** B1.7 · **Источник:** заказчик, чат 2026-06  
 **Статус:** `[x]` реализация + **внутренняя приёмка PASS** (2026-06-09) · **приёмка заказчика** `[ ]` — ждём прогон
 
-**Активный баг:** **BR-5 регрессия** (2026-06-04) — второй товар в корзину · **код `[ ]`** · **gate:** апрув на фикс · см. [§ BR-5 регрессия](#баг-репорт-5--регрессия-второй-товар-в-корзину-open-2026-06-04)
+**Активный баг:** **BR-5 регрессия** — **FIX в коде** · deploy Fly `[ ]` · см. [§ BR-5 регрессия](#баг-репорт-5--регрессия-второй-товар-в-корзину-open-2026-06-04)
 
 **Стенд:** `https://coffeeos.fly.dev/shop?tenant_id=655aaccb-004a-4bb9-a50a-ce618854dda3`
 
@@ -190,7 +190,7 @@
 | BR-1 | Убрать поле «Промокод (необязательно)» с checkout | `[x]` | `[x]` | `[ ]` |
 | BR-2 | Убрать кнопку «Наличные»; оставить «Картой» + «СБП» (СБП disabled, «Будет позже») | `[x]` | `[x]` | `[ ]` |
 | BR-3 | «Сессия истекла» при повторном checkout после OTP | `[x]` | `[x]` | `[ ]` |
-| BR-5 | Второй (другой) товар в корзину: переход на `/cart` + индикация добавления | `[ ]` **регрессия** | `[ ]` | `[ ]` |
+| BR-5 | Второй (другой) товар в корзину: переход на `/cart` + индикация добавления | `[x]` | `[ ]` deploy | `[ ]` |
 | BR-5v1 | *(история)* тот же баг — fix 2026-06-15 | `[x]` | `[x]` 2026-06-15 | `[ ]` |
 
 **Артефакты:** [`b17_br_fixes_2026-06-10.json`](../../artifacts/demo-feedback/b17_br_fixes_2026-06-10.json) · скрин [`checkout_no_promo_no_cash_sbp.png`](../../artifacts/demo-feedback/screenshots/b17_br_fixes_2026-06-10/checkout_no_promo_no_cash_sbp.png)
@@ -257,27 +257,25 @@
 
 | | |
 |--|--|
-| **Статус** | **OPEN** — доки готовы · **код не трогаем** до апрува |
-| **Контекст** | BR-5 закрывали 2026-06-15 (`ebbf8a8`, `e936a36`); после B1.9 / route-switch — повтор от заказчика |
-| **Гипотеза** | Регрессия `Product.svelte` / quick-add в каталоге / `shopCartAdd` / редирект на `#/cart` |
-| **Scope (черновик)** | `Product.svelte`, `CategoryProducts.svelte`, `shopCartAdd.js`, `Cart.svelte` — уточнить после repro |
-| **Repro** | `node bin/b17_br5_cart_second_product_mcp.mjs` · DevTools на Fly |
-| **Артефакт repro** | `b17_br5_regression_repro_2026-06-04.json` *(после прогона)* |
-| **Артефакт fix** | `b17_br5_regression_post_deploy_2026-06-04.json` *(после фикса)* |
-| **Скрины** | [`screenshots/README_b17_br5_regression_2026-06-04.md`](../../artifacts/demo-feedback/screenshots/README_b17_br5_regression_2026-06-04.md) |
+| **Статус** | **FIXED в коде** 2026-06-04 · Fly deploy `[ ]` → MCP post-deploy |
+| **Repro Fly (до фикса)** | hash-switch: API 2 товара **OK**, баннер + DOM корзины **FAIL** — [`b17_br5_regression_repro_2026-06-04.json`](../../artifacts/demo-feedback/b17_br5_regression_repro_2026-06-04.json) |
+| **Причина** | `Cart.svelte` не перечитывал корзину/баннер при повторном `#/cart` после SPA hash-switch; риск stale `product.id` в `Product.svelte` |
+| **Фикс** | `params.id` в add; `shop:cart-added` + `hashchange` в `Cart.svelte`; событие после `push('/cart')`; ошибки quick-add |
+| **Прогон** | `node bin/b17_br5_cart_second_product_mcp.mjs` · `node bin/b17_br5_catalog_card_flow_mcp.mjs` · `node bin/b17_br5_quick_add_category_mcp.mjs` |
+| **Артефакт fix** | [`b17_br5_regression_post_deploy_2026-06-04.json`](../../artifacts/demo-feedback/b17_br5_regression_post_deploy_2026-06-04.json) |
+| **Скрины** | до: `b17_br5_regression_before_p2_add_2026-06-04.png` · после: `b17_br5_regression_after_2026-06-04.png` |
 
-#### Чеклист (BR-5 регрессия) — до кода
+#### Чеклист (BR-5 регрессия)
 
-- [ ] **Апрув** на начало фикса (gate)
-- [ ] **Воспроизвести** на Fly: Товар 1 в корзине → карточка Товара 2 → add
-- [ ] **Скрин/видео «до»** — нет перехода на `#/cart`, нет индикации
-- [ ] **API:** `POST /cart/add` ×2 разных `product_id` — статус и тело ответа
-- [ ] **Точка сбоя:** stale `product` / блок quick-add / нет `push('/cart')` / баннер
-- [ ] **Исправить** код
+- [x] **Апрув** на фикс
+- [x] **Воспроизвести** на Fly — repro JSON
+- [x] **Скрин «до»** — `b17_br5_regression_before_p2_add_2026-06-04.png`
+- [x] **Точка сбоя:** Cart UI stale при hash-switch
+- [x] **Исправить** код
 - [ ] **Deploy Fly**
-- [ ] **MCP post-deploy:** `node bin/b17_br5_cart_second_product_mcp.mjs` — PASS
-- [ ] **Артефакт + скрин «после»**
-- [ ] **Закрыть** строку в [`DEMO_FEEDBACK.md`](../DEMO_FEEDBACK.md)
+- [ ] **MCP post-deploy** — 7/7 + catalog flow
+- [x] **Скрин «после»** (catalog flow PASS) — `b17_br5_regression_after_2026-06-04.png`
+- [ ] **Закрыть** DEMO_FEEDBACK после deploy MCP
 
 **Связано:** [B1.9](B1_9_product_modifier_toggle.md) (недавние правки `Product.svelte` — возможный триггер регрессии).
 

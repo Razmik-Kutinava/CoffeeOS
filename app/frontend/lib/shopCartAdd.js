@@ -62,11 +62,13 @@ function applyOptimisticAdd(product, quantity, selected_modifiers) {
 export const CART_JUST_ADDED_KEY = "shop_cart_just_added"
 
 function markJustAdded(productName) {
+  const name = productName || "Товар"
   try {
-    sessionStorage.setItem(CART_JUST_ADDED_KEY, productName || "Товар")
+    sessionStorage.setItem(CART_JUST_ADDED_KEY, name)
   } catch (_) {
     /* ignore */
   }
+  window.dispatchEvent(new CustomEvent("shop:cart-added", { detail: { name } }))
 }
 
 /**

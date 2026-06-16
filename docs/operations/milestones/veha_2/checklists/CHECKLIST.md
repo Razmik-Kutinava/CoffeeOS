@@ -129,7 +129,7 @@
 **Активная работа заказчика:** B1.7 BR-5 — второй товар в корзину ([`B1_7_checkout_order_screen.md`](../requirements/customer_tasks/B1_7_checkout_order_screen.md)).
 
 - [x] Процесс: правки PDF → DEMO_FEEDBACK → код/MCP → `done` *(2026-06-04)*
-- [ ] **BR-5 регрессия** — repro → fix → MCP → `done`
+- [ ] **BR-5 регрессия** — deploy Fly → MCP post-deploy → `done`
 - [x] Критичные блокеры демо из PDF прогонки — закрыты *(MCP Fly)*
 
 ---

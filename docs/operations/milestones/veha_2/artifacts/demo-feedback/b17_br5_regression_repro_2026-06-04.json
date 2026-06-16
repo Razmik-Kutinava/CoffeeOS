@@ -1,0 +1,31 @@
+{
+  "scenario": "b17_br5_regression_repro",
+  "stand": "https://coffeeos.fly.dev",
+  "tenant_id": "655aaccb-004a-4bb9-a50a-ce618854dda3",
+  "started_at": "2026-06-16T09:15:30.671Z",
+  "finished_at": "2026-06-16T09:16:36.425Z",
+  "pass": false,
+  "verdict": "API 2 товара OK; баннер и DOM корзины не обновились после hash-switch p1→p2",
+  "steps": [
+    {
+      "id": "05",
+      "action": "just-added banner visible",
+      "pass": false,
+      "hasBanner": false
+    },
+    {
+      "id": "06",
+      "action": "cart has both distinct products (API)",
+      "pass": true
+    },
+    {
+      "id": "07",
+      "action": "cart UI shows both product names",
+      "pass": false,
+      "hasP1": false,
+      "hasP2": false
+    }
+  ],
+  "screenshot_before": "screenshots/b17_br5_regression_before_p2_add_2026-06-04.png",
+  "full_artifact": "b17_cart_second_product_2026-06-14.json"
+}

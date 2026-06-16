@@ -31,15 +31,64 @@
     }
   }
 
-  onMount(async () => {
+  function readJustAddedBanner() {
     try {
-      justAddedName = sessionStorage.getItem(CART_JUST_ADDED_KEY)
-      sessionStorage.removeItem(CART_JUST_ADDED_KEY)
-      await load()
-    } catch (e) {
-      err = e.message
-    } finally {
-      loading = false
+      const name = sessionStorage.getItem(CART_JUST_ADDED_KEY)
+      if (name) {
+        justAddedName = name
+        sessionStorage.removeItem(CART_JUST_ADDED_KEY)
+      }
+    } catch (_) {
+      /* ignore */
+    }
+  }
+
+  function onCartAdded(event) {
+    const name = event.detail?.name
+    if (name) justAddedName = name
+    loading = true
+    err = null
+    load()
+      .catch((e) => {
+        err = e.message
+      })
+      .finally(() => {
+        loading = false
+      })
+  }
+
+  async function refreshFromRoute() {
+    readJustAddedBanner()
+    await load()
+  }
+
+  onMount(() => {
+    const onHash = () => {
+      if (!(window.location.hash || "").includes("/cart")) return
+      loading = true
+      err = null
+      refreshFromRoute()
+        .catch((e) => {
+          err = e.message
+        })
+        .finally(() => {
+          loading = false
+        })
+    }
+
+    window.addEventListener("hashchange", onHash)
+    window.addEventListener("shop:cart-added", onCartAdded)
+    refreshFromRoute()
+      .catch((e) => {
+        err = e.message
+      })
+      .finally(() => {
+        loading = false
+      })
+
+    return () => {
+      window.removeEventListener("hashchange", onHash)
+      window.removeEventListener("shop:cart-added", onCartAdded)
     }
   })
 

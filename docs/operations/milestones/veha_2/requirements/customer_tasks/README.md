@@ -4,7 +4,7 @@
 
 | ID | Задача | Статус | Файл |
 |----|--------|--------|------|
-| **B1.7** | **BR-5 регрессия:** второй товар в корзину | **open** · доки `[x]` · код `[ ]` · gate апрув | [B1_7_checkout_order_screen.md](B1_7_checkout_order_screen.md) |
+| **B1.7** | **BR-5 регрессия:** второй товар в корзину | **код `[x]`** · Fly deploy `[ ]` | [B1_7_checkout_order_screen.md](B1_7_checkout_order_screen.md) |
 | **B1.10** | Убрать «Блог» из навигации витрины | **закрыта** · апрув `[x]` 2026-06-15 | [B1_10_remove_blog_nav.md](B1_10_remove_blog_nav.md) |
 | B1.7 | Доработка экрана оформления заказа (checkout) | внутр. PASS · BR-fixes · заказчик `[ ]` | [B1_7_checkout_order_screen.md](B1_7_checkout_order_screen.md) |
 | **B1.9** | Toggle-модификаторы на карточке товара | **OPS PASS** · апрув `[ ]` | [B1_9_product_modifier_toggle.md](B1_9_product_modifier_toggle.md) |

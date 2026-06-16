@@ -2,7 +2,7 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-06-04 (BR-5 регрессия — доки готовы, ждём апрув на код)  
+**Дата:** 2026-06-04 (BR-5 регрессия — код fixed, ждём Fly deploy + MCP)  
 **Предыдущее:** B1.9 OPS PASS · B1.10 CLOSED · BR-5 v1 fixed 2026-06-15  
 **Предыдущее:** B1.1 закрыта: FIREBASE_* на Fly · smoke + MCP PASS  
 **Веха 1:** официально не закрыта (§ I, H.3 — `[ ]`).  
@@ -21,11 +21,18 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **B1.7 BR-5 регрессия** | доки `[x]` · repro `[ ]` · код `[ ]` · **gate: апрув** | repro → fix → Fly MCP |
+| **B1.7 BR-5 регрессия** | repro `[x]` FAIL banner/UI · код `[x]` · Fly deploy `[ ]` | deploy → MCP 7/7 |
 | **B1.1 ревизия** | R0–R4 Fly MCP `[x]` · заказчик `[ ]` | апрув заказчика |
 | **B1.4 PWA** | код задеплоен · OPS_PASS · заказчик `[ ]` | апрув → B2.2 |
 | **B2.1 ревизия** | OPS CLOSED 2026-06-13 · заказчик `[ ]` | handoff → B2.2 этап 1 |
 | **B2.2** | stage0 `[x]` · этап 1 `[ ]` | единый экран «Меню» |
+
+### Сессия 2026-06-04 (B1.7 BR-5 — fix cart UI on second product)
+
+- **Repro Fly:** hash-switch p1→p2 — API 2 товара OK, баннер + DOM корзины FAIL ([`b17_br5_regression_repro_2026-06-04.json`](milestones/veha_2/artifacts/demo-feedback/b17_br5_regression_repro_2026-06-04.json)).
+- **Фикс:** `Product.svelte` (`params.id`), `Cart.svelte` (`hashchange` + `shop:cart-added`), `shopCartAdd.js`, `CategoryProducts.svelte`.
+- **Скрины:** до `b17_br5_regression_before_p2_add_2026-06-04.png`, после `b17_br5_regression_after_2026-06-04.png`.
+- **Дальше:** `fly deploy` → `node bin/b17_br5_cart_second_product_mcp.mjs`.
 
 ### Сессия 2026-06-04 (B1.7 BR-5 — регрессия, только доки)
 

@@ -138,18 +138,27 @@
 
   async function addToCart() {
     if (adding) return
+    const routeProductId = String(params.id ?? "")
+    if (!routeProductId || !product || String(product.id) !== routeProductId) {
+      error = "Подождите, загружается карточка товара…"
+      return
+    }
     adding = true
+    error = null
     try {
       const { selected_modifiers } = buildModifierPayload(product.modifier_groups, selected)
       await shopAddToCart(
         {
-          product_id: product.id,
+          product_id: routeProductId,
           quantity: qty,
           selected_modifiers
         },
         { product }
       )
       push("/cart")
+      window.dispatchEvent(
+        new CustomEvent("shop:cart-added", { detail: { name: product.name } })
+      )
     } catch (e) {
       error = e.message || "Не удалось добавить в корзину"
     } finally {

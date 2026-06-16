@@ -127,6 +127,7 @@ async function run() {
 
     await page.getByRole("button", { name: /В корзину/ }).click()
     await page.waitForURL(/#\/cart/, { timeout: 30000 })
+    await page.waitForTimeout(800)
 
     const bodyText = await page.locator("body").innerText()
     const hasBanner = bodyText.includes("добавлен в корзину")

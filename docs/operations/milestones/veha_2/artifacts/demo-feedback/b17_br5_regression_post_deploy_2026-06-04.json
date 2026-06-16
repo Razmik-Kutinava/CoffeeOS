@@ -1,0 +1,34 @@
+{
+  "scenario": "b17_br5_regression_post_deploy",
+  "stand": "https://coffeeos.fly.dev",
+  "tenant_id": "655aaccb-004a-4bb9-a50a-ce618854dda3",
+  "started_at": "2026-06-04T09:15:00.000Z",
+  "finished_at": "2026-06-04T09:20:00.000Z",
+  "pass": "pending_fly_deploy",
+  "fix_commits": ["pending"],
+  "fix_summary": [
+    "Product.svelte: product_id из params.id, guard stale product",
+    "Cart.svelte: hashchange + shop:cart-added → reload + баннер",
+    "CategoryProducts: ошибки quick-add + событие после push",
+    "shopCartAdd.js: dispatch shop:cart-added"
+  ],
+  "pre_deploy_fly_repro": {
+    "hash_switch_mcp": {
+      "pass": false,
+      "failed_steps": ["05 just-added banner", "07 cart UI names"],
+      "passed_steps": ["04 redirect #/cart", "06 API 2 distinct products"],
+      "artifact": "b17_cart_second_product_2026-06-14.json"
+    },
+    "note": "API добавляет оба товара, но UI корзины не обновлял баннер/список при SPA hash-switch"
+  },
+  "post_deploy_scripts": [
+    "node bin/b17_br5_cart_second_product_mcp.mjs",
+    "node bin/b17_br5_catalog_card_flow_mcp.mjs",
+    "node bin/b17_br5_quick_add_category_mcp.mjs"
+  ],
+  "screenshots": {
+    "before_p2_add": "screenshots/b17_br5_regression_before_p2_add_2026-06-04.png",
+    "after_two_products": "screenshots/b17_br5_regression_after_2026-06-04.png",
+    "cart_after_p1": "screenshots/b17_br5_regression_after_p1_2026-06-04.png"
+  }
+}

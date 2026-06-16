@@ -44,12 +44,18 @@
   async function quickAddToCart(product) {
     if (addingId === product.id) return
     addingId = product.id
+    error = null
     try {
       await shopAddToCart(
         { product_id: product.id, quantity: 1, selected_modifiers: [] },
         { product }
       )
       push("/cart")
+      window.dispatchEvent(
+        new CustomEvent("shop:cart-added", { detail: { name: product.name } })
+      )
+    } catch (e) {
+      error = e.message || "Не удалось добавить в корзину"
     } finally {
       addingId = null
     }
