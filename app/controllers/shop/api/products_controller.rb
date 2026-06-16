@@ -74,16 +74,20 @@ module Shop
           allergens: nil,
           ingredients: nil,
           nutrition_info: {},
-          modifier_groups: product.product_modifier_groups.ordered.map { |g| modifier_group_json(g) }
+          modifier_groups: modifier_groups_json(product)
         }
       end
 
-      def modifier_group_json(group)
+      def modifier_groups_json(product)
+        Shop::ModifierGroupsPresenter.deduplicated_rows(product).map { |row| modifier_group_row_json(row) }
+      end
+
+      def modifier_group_row_json(row)
         {
-          id: group.id,
-          name: group.name,
-          modifier_type: group.is_required ? "required" : "optional",
-          modifiers: group.product_modifier_options.active.ordered.map do |m|
+          id: row.id,
+          name: row.name,
+          modifier_type: row.is_required ? "required" : "optional",
+          modifiers: row.modifiers.map do |m|
             { id: m.id, name: m.name, price_change: m.price_delta.to_f }
           end
         }

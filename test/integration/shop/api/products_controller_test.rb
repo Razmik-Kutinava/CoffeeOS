@@ -46,4 +46,18 @@ class Shop::Api::ProductsControllerTest < ActionDispatch::IntegrationTest
     get "/shop/api/products/#{@product.id}", headers: { "X-Shop-Tenant" => @tenant.id.to_s }
     assert_response :not_found
   end
+
+  test "GET /shop/api/products/:id deduplicates modifier groups with same name" do
+    dup_group = ProductModifierGroup.create!(product: @product, name: "Размер", is_required: true, sort_order: 2)
+    ProductModifierOption.create!(group: dup_group, name: "XL", price_delta: 70, sort_order: 1)
+
+    get "/shop/api/products/#{@product.id}", headers: { "X-Shop-Tenant" => @tenant.id.to_s }
+    assert_response :success
+
+    json = JSON.parse(response.body)
+    assert_equal 1, json["modifier_groups"].size
+    names = json["modifier_groups"].first["modifiers"].map { |m| m["name"] }
+    assert_includes names, "L"
+    assert_includes names, "XL"
+  end
 end

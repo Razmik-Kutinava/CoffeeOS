@@ -26,6 +26,7 @@
   let showMoreMenu = $state(false)
   let isFav = $state(false)
   let adding = $state(false)
+  let loadedProductId = $state(null)
 
   function normalizeSelection(value, group) {
     if (value !== undefined) {
@@ -36,13 +37,19 @@
   }
 
   async function loadProduct(keepSelections = false) {
-    const prev = keepSelections ? { ...selected } : {}
-    const p = await api(`/products/${params.id}`)
+    const productId = params.id
+    const sameProduct = keepSelections && loadedProductId === productId && product?.id === productId
+    const prev = sameProduct ? { ...selected } : {}
+    const p = await api(`/products/${productId}`)
+    if (params.id !== productId) return
+
     product = p
+    const next = {}
     for (const g of product.modifier_groups) {
-      selected[g.id] = keepSelections ? normalizeSelection(prev[g.id], g) : defaultSelectionForGroup(g)
+      next[g.id] = sameProduct ? normalizeSelection(prev[g.id], g) : defaultSelectionForGroup(g)
     }
-    selected = { ...selected }
+    selected = next
+    loadedProductId = p.id
   }
 
   // svelte-spa-router не размонтирует /product/:id при смене id — только обновляет params.
@@ -55,6 +62,9 @@
     let active = true
     loading = true
     error = null
+    selected = {}
+    loadedProductId = null
+    product = null
     qty = 1
     adding = false
     showMoreMenu = false
@@ -83,6 +93,7 @@
     favorites.load()
 
     const tick = async () => {
+      if (!params.id || params.id !== loadedProductId) return
       try {
         await loadProduct(true)
       } catch {

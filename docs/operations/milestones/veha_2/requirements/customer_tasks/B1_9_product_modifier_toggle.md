@@ -1,7 +1,7 @@
 # Задача: Toggle-модификаторы на карточке товара (без обязательности)
 
 **ID:** B1.9 · **Источник:** заказчик, чат 2026-06  
-**Статус:** **OPS PASS** 2026-06-16 · **апрув заказчика** `[ ]`
+**Статус:** **OPS PASS** 2026-06-16 · хвосты #1–#2 **2026-06-16** · **апрув заказчика** `[ ]`
 
 **Скрин «после»:** [`screenshots/b19_modifier_toggle_product_2026-06-16.png`](../../artifacts/demo-feedback/screenshots/b19_modifier_toggle_product_2026-06-16.png) · корзина: [`b19_modifier_toggle_after_2026-06-15.png`](../../artifacts/demo-feedback/screenshots/b19_modifier_toggle_after_2026-06-15.png)
 
@@ -139,6 +139,18 @@
 - [x] Fly MCP: Бразилия — add без модификаторов; toggle +30₽; цена
 - [x] Артефакт `b19_modifier_toggle_*_fly.json` + скрин «после»
 
+## Хвосты после B1.9 (2026-06-16)
+
+| # | Проблема | Решение | Статус |
+|---|----------|---------|--------|
+| 1 | Дубли групп («Температура» ×2) | `Shop::ModifierGroupsPresenter` — дедуп по `name` в shop API | **PASS** |
+| 2 | Сброс стейта p1→p2 | `Product.svelte`: `selected = {}` при смене route, poll только для того же `product.id` | **PASS** |
+
+**Артефакты хвостов:**
+- [`b19_route_switch_modifiers_2026-06-16.json`](../../artifacts/demo-feedback/b19_route_switch_modifiers_2026-06-16.json)
+- [`b19_modifier_groups_dedup_2026-06-16.json`](../../artifacts/demo-feedback/b19_modifier_groups_dedup_2026-06-16.json)
+- скрины: `screenshots/b19_route_switch_modifiers_2026-06-16.png`, `b19_modifier_groups_dedup_2026-06-16.png`
+
 ---
 
 ## Артефакты
@@ -159,4 +171,4 @@
 2. Убрать ли **полностью** onboarding-баннер про обязательные модификаторы (рекомендуем **да**)?
 3. Группы `modifier_type: "required"` с API — трактуем как **optional в UI** без изменения УК?
 
-**Статус:** ожидаем апрув → этап 2 (код). **Очередь:** после [B1.10](B1_10_remove_blog_nav.md).
+**Статус:** **CLOSED** — toggle + хвосты OPS PASS 2026-06-16. Ждём апрув заказчика `[ ]`.

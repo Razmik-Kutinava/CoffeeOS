@@ -34,6 +34,13 @@
 - **Статус:** OPS **CLOSED** · апрув заказчика `[ ]`.
 - **Следующий шаг:** [B1.9](milestones/veha_2/requirements/customer_tasks/B1_9_product_modifier_toggle.md) toggle-модификаторы.
 
+### Сессия 2026-06-16 (B1.9 — хвосты: route switch + dedup groups)
+
+- **#2 route switch:** `Product.svelte` — сброс `selected` при смене `params.id`, poll только при совпадении `loadedProductId`.
+- **#1 dedup groups:** `Shop::ModifierGroupsPresenter` в `products_controller` — merge групп с одинаковым `name`.
+- **MCP:** `b19_route_switch_modifiers_mcp.mjs`, `b19_modifier_groups_dedup_mcp.mjs` — PASS на Fly.
+- **Тест:** `products_controller_test` — dedup duplicate group names.
+
 ### Сессия 2026-06-16 (B1.9 — toggle модификаторы, OPS PASS)
 
 - **Код:** `Product.svelte` + `modifiers.js` — toggle «+», без «обязательно», add без модификаторов.
