@@ -1,0 +1,55 @@
+{
+  "scenario": "b19_modifier_groups_dedup",
+  "stand": "https://coffeeos.fly.dev",
+  "tenant_id": "655aaccb-004a-4bb9-a50a-ce618854dda3",
+  "product_id": "24dae391-2199-4959-907e-d08c4cec3329",
+  "started_at": "2026-06-16T07:21:14.630Z",
+  "finished_at": "2026-06-16T07:21:22.809Z",
+  "pass": true,
+  "deploy_commits": ["534db90"],
+  "steps": [
+    {
+      "id": "01",
+      "action": "API: unique modifier group names",
+      "pass": true,
+      "at": "2026-06-16T07:21:21.177Z",
+      "names": [
+        "Температура",
+        "Вкус",
+        "Интенсивность"
+      ],
+      "dupes": []
+    },
+    {
+      "id": "02",
+      "action": "DOM: one heading per group name",
+      "pass": true,
+      "at": "2026-06-16T07:21:22.238Z",
+      "domNames": [
+        "Температура",
+        "Вкус",
+        "Интенсивность"
+      ],
+      "domDupes": []
+    },
+    {
+      "id": "03",
+      "action": "Brazil: single Температура and Вкус",
+      "pass": true,
+      "at": "2026-06-16T07:21:22.240Z",
+      "tempCount": 1,
+      "tasteCount": 1
+    }
+  ],
+  "api_group_names": [
+    "Температура",
+    "Вкус",
+    "Интенсивность"
+  ],
+  "dom_group_names": [
+    "Температура",
+    "Вкус",
+    "Интенсивность"
+  ],
+  "screenshot": "b19_modifier_groups_dedup_2026-06-16.png"
+}
