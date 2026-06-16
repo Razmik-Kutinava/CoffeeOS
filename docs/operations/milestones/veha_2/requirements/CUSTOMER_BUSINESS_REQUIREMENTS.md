@@ -86,7 +86,7 @@
 | B1.4 | **PWA витрины** | [ТЗ](customer_tasks/B1_4_pwa_shop.md) · manifest + SW + offline; app/kiosk отдельно | **в работе** ТЗ 2026-06-11 |
 | B1.5 | **ТТК + туториал УК** | Блок 1.1 | низкий |
 | B1.6 | **Стоп-лист UI barista** — серый блок «в стопе» | W1.4 backlog; сейчас sold_out скрыт | низкий |
-| B1.7 | **Email verify** — checkout, OTP через **Brevo**; BR-5 регрессия **CLOSED OPS** | [ТЗ](customer_tasks/B1_7_checkout_order_screen.md) | **`[x]` внутр.** · BR-5 Fly `[x]` · заказчик `[ ]` |
+| B1.7 | **Email verify** — checkout, OTP через **Brevo**; **BR-6 open** (отмена на `#/payment`) | [ТЗ](customer_tasks/B1_7_checkout_order_screen.md) | **`[x]` внутр.** · BR-6 `[ ]` · заказчик `[ ]` |
 | B1.10 | **Витрина** — убрать «Блог» из навигации, LCP ≤ 1.5 с WebView | [ТЗ](customer_tasks/B1_10_remove_blog_nav.md) | **ТЗ** · апрув `[ ]` · **первая** |
 | B1.9 | **Карточка товара** — toggle модификаторов, без обязательности | [ТЗ](customer_tasks/B1_9_product_modifier_toggle.md) | **ТЗ** · апрув `[ ]` · после B1.10 |
 | B1.8 | **Свой домен → своя почта для рассылки** | После домена (не `fly.dev`): `noreply@…` / `orders@…`, DNS в Brevo (SPF/DKIM/DMARC), сменить `MAIL_FROM` на Fly | **напоминание** |

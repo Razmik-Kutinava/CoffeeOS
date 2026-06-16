@@ -2,8 +2,8 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-06-04 (BR-5 регрессия — **CLOSED OPS** · Fly MCP PASS · апрув заказчик `[ ]`)  
-**Предыдущее:** BR-5 fix `e0b4793` · deploy Fly · MCP 7/7 + catalog + quick-add  
+**Дата:** 2026-06-04 (B1.7 **BR-6** — отмена на `#/payment` · **OPEN** · код до апрува `[ ]`)  
+**Предыдущее:** BR-5 **CLOSED OPS** · Fly MCP PASS · апрув заказчик `[ ]`  
 **Предыдущее:** B1.1 закрыта: FIREBASE_* на Fly · smoke + MCP PASS  
 **Веха 1:** официально не закрыта (§ I, H.3 — `[ ]`).  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
@@ -21,13 +21,24 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **Второй баг заказчика** | ещё не взяли | repro → fix |
+| **B1.7 BR-6** | OPEN · регистрация ops · апрув `[ ]` | апрув → repro Fly → fix |
 | **B1.9 апрув** | OPS PASS · заказчик `[ ]` | апрув → B2.2 |
 | **B1.7 BR-5** | CLOSED OPS · Fly MCP PASS · заказчик `[ ]` | апрув заказчика |
 | **B1.1 ревизия** | R0–R4 Fly MCP `[x]` · заказчик `[ ]` | апрув заказчика |
 | **B1.4 PWA** | код задеплоен · OPS_PASS · заказчик `[ ]` | апрув → B2.2 |
 | **B2.1 ревизия** | OPS CLOSED 2026-06-13 · заказчик `[ ]` | handoff → B2.2 этап 1 |
 | **B2.2** | stage0 `[x]` · этап 1 `[ ]` | единый экран «Меню» |
+
+### Сессия 2026-06-04 (B1.7 BR-6 — регистрация бага, только доки)
+
+- **Репорт заказчика:** на `#/payment` кнопка «Отмена заказа» не отменяет заказ; заказ `#3565088f-5af1-48e0-95b6-c456f3bc26f8`, **64₽**.
+- **ТЗ / чеклист:** [`B1_7_checkout_order_screen.md`](milestones/veha_2/requirements/customer_tasks/B1_7_checkout_order_screen.md) § BR-6.
+- **Журнал:** [`DEMO_FEEDBACK.md`](milestones/veha_2/requirements/DEMO_FEEDBACK.md) — строка **open**.
+- **Артефакт:** [`b17_br6_payment_cancel_repro_2026-06-04.json`](milestones/veha_2/artifacts/demo-feedback/b17_br6_payment_cancel_repro_2026-06-04.json) — `pending_customer_approval`.
+- **Скрин:** `screenshots/b17_br6_payment_cancel_customer_2026-06-04.png` — положить из чата заказчика в repo при наличии файла.
+- **Код:** **не трогаем** до апрува на фикс (gate в ТЗ).
+- **Контекст:** CBR §2.3 этап 4.4 abandon ранее PASS — трактуем как регрессию / новый repro.
+- **Дальше (после апрува):** repro на Fly → `bin/b17_br6_payment_cancel_mcp.mjs` (TBD) → fix `Payment.svelte` / abandon.
 
 ### Сессия 2026-06-04 (B1.7 BR-5 — post-deploy PASS, OPS CLOSED)
 

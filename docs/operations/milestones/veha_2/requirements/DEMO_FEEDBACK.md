@@ -26,6 +26,7 @@
 
 | Дата | Источник | Сценарий / экран | Суть | Статус | PR / коммит |
 |------|----------|------------------|------|--------|-------------|
+| 2026-06-04 | заказчик B1.7 | `#/payment` оплата | **BR-6:** кнопка «Отмена заказа» не отменяет заказ | **open** · код `[ ]` до апрува | [b17_br6_payment_cancel_repro_2026-06-04.json](artifacts/demo-feedback/b17_br6_payment_cancel_repro_2026-06-04.json) |
 | 2026-06-04 | заказчик B1.7 | cart / каталог / `#/product` | **BR-5 регрессия:** второй товар — баннер/DOM корзины | **done** *(Fly MCP 7/7 + catalog + quick-add)* | [b17_br5_regression_post_deploy_2026-06-04.json](artifacts/demo-feedback/b17_br5_regression_post_deploy_2026-06-04.json) |
 | 2026-06-04 | заказчик (чат) B1.1 | экран статуса гостя `#/order/...` | **Баг-1:** без F5 статус не обновляется после тапа баристы | **done** 2026-06-13 | [`b11_bug1_guest_ws_2026-06-13.json`](artifacts/demo-feedback/b11_bug1_guest_ws_2026-06-13.json) |
 | 2026-06-15 | заказчик B1.10 | shop шапка | Убрать «Блог» из навигации, LCP ≤ 1.5 с | **done** *(Fly MCP PASS)* | [`b110_blog_nav_post_deploy_2026-06-15.json`](artifacts/demo-feedback/b110_blog_nav_post_deploy_2026-06-15.json) |
