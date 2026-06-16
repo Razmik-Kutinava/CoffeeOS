@@ -34,6 +34,13 @@
 - **Статус:** OPS **CLOSED** · апрув заказчика `[ ]`.
 - **Следующий шаг:** [B1.9](milestones/veha_2/requirements/customer_tasks/B1_9_product_modifier_toggle.md) toggle-модификаторы.
 
+### Сессия 2026-06-16 (B1.9 — toggle модификаторы, OPS PASS)
+
+- **Код:** `Product.svelte` + `modifiers.js` — toggle «+», без «обязательно», add без модификаторов.
+- **Fly MCP:** 6/6 PASS — Бразилия 12₽ → +30₽ → 42₽ → 12₽, add в корзину без модификаторов.
+- **Артефакты:** [`b19_modifier_toggle_post_deploy_2026-06-15.json`](milestones/veha_2/artifacts/demo-feedback/b19_modifier_toggle_post_deploy_2026-06-15.json), скрин [`b19_modifier_toggle_product_2026-06-16.png`](milestones/veha_2/artifacts/demo-feedback/screenshots/b19_modifier_toggle_product_2026-06-16.png).
+- **Коммиты:** `ef90f16`, `2809d7a` · апрув заказчика `[ ]`.
+
 ### Сессия 2026-06-15 (B1.9 — toggle модификаторы, ТЗ до апрува)
 
 - **Запрос заказчика:** убрать «обязательно» на карточке товара; toggle модификаторов; add в корзину без выбора опций.

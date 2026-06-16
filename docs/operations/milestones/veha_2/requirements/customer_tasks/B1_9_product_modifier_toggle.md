@@ -1,7 +1,11 @@
 # Задача: Toggle-модификаторы на карточке товара (без обязательности)
 
 **ID:** B1.9 · **Источник:** заказчик, чат 2026-06  
-**Статус:** **код** `[x]` · Fly `[ ]` · **апрув заказчика** `[ ]`
+**Статус:** **OPS PASS** 2026-06-16 · **апрув заказчика** `[ ]`
+
+**Скрин «после»:** [`screenshots/b19_modifier_toggle_product_2026-06-16.png`](../../artifacts/demo-feedback/screenshots/b19_modifier_toggle_product_2026-06-16.png) · корзина: [`b19_modifier_toggle_after_2026-06-15.png`](../../artifacts/demo-feedback/screenshots/b19_modifier_toggle_after_2026-06-15.png)
+
+**Артефакт Fly:** [`b19_modifier_toggle_post_deploy_2026-06-15.json`](../../artifacts/demo-feedback/b19_modifier_toggle_post_deploy_2026-06-15.json)
 
 **Связано:** [B1.7](B1_7_checkout_order_screen.md) (витрина / корзина) · W1.3 обязательные модификаторы (бэкенд/API — **не меняем**, только UI) · PDF §2.2 модификаторы · [B1.10](B1_10_remove_blog_nav.md) **закрыта**
 
@@ -40,7 +44,7 @@
 [x] 0 — ТЗ + ops-доки + скрин «до» (2026-06-15)
 [x] 1 — апрув заказчика / владельца на старт кода (2026-06-15, после B1.10)
 [x] 2 — реализация Product.svelte + modifiers.js
-[ ] 3 — Fly MCP / DevTools приёмка
+[x] 3 — Fly MCP / DevTools приёмка (2026-06-16, 6/6 PASS)
 [ ] 4 — апрув заказчика
 ```
 
@@ -126,14 +130,14 @@
 
 ## Чеклист реализации (после апрува)
 
-- [ ] Убрать `missingRequiredGroups`, onboarding-баннер, «· обязательно»
-- [ ] Пустой default selection (не автовыбор первого модификатора)
-- [ ] Toggle UI + индикатор «+»
-- [ ] `totalPrice` при пустом/частичном выборе
-- [ ] `addToCart` с `selected_modifiers: []` или выбранными
-- [ ] Обновить `modifiers_payload_test.mjs`
-- [ ] Fly MCP: Бразилия — add без модификаторов; toggle +30₽; цена
-- [ ] Артефакт `b19_modifier_toggle_*_fly.json` + скрин «после»
+- [x] Убрать `missingRequiredGroups`, onboarding-баннер, «· обязательно»
+- [x] Пустой default selection (не автовыбор первого модификатора)
+- [x] Toggle UI + индикатор «+»
+- [x] `totalPrice` при пустом/частичном выборе
+- [x] `addToCart` с `selected_modifiers: []` или выбранными
+- [x] Обновить `modifiers_payload_test.mjs`
+- [x] Fly MCP: Бразилия — add без модификаторов; toggle +30₽; цена
+- [x] Артефакт `b19_modifier_toggle_*_fly.json` + скрин «после»
 
 ---
 
