@@ -26,10 +26,11 @@
 
 | Дата | Источник | Сценарий / экран | Суть | Статус | PR / коммит |
 |------|----------|------------------|------|--------|-------------|
+| 2026-06-04 | заказчик B1.7 | cart / каталог / `#/product` | **BR-5 регрессия:** второй товар — нет перехода в корзину и индикации | **open** · доки `[x]` · код `[ ]` | [B1_7 § BR-5](customer_tasks/B1_7_checkout_order_screen.md#баг-репорт-5--регрессия-второй-товар-в-корзину-open-2026-06-04) |
 | 2026-06-04 | заказчик (чат) B1.1 | экран статуса гостя `#/order/...` | **Баг-1:** без F5 статус не обновляется после тапа баристы | **done** 2026-06-13 | [`b11_bug1_guest_ws_2026-06-13.json`](artifacts/demo-feedback/b11_bug1_guest_ws_2026-06-13.json) |
 | 2026-06-15 | заказчик B1.10 | shop шапка | Убрать «Блог» из навигации, LCP ≤ 1.5 с | **done** *(Fly MCP PASS)* | [`b110_blog_nav_post_deploy_2026-06-15.json`](artifacts/demo-feedback/b110_blog_nav_post_deploy_2026-06-15.json) |
 | 2026-06-16 | заказчик B1.9 | `#/product` карточка | Toggle модификаторов, убрать «обязательно» | **done** *(Fly MCP 6/6)* | [`b19_modifier_toggle_post_deploy_2026-06-15.json`](artifacts/demo-feedback/b19_modifier_toggle_post_deploy_2026-06-15.json) |
-| 2026-06-15 | заказчик B1.7 | cart / product | **Баг-5:** второй разный товар — stale `Product.svelte` | **done** *(Fly MCP PASS)* | [`b17_cart_second_product_post_deploy_2026-06-15.json`](artifacts/demo-feedback/b17_cart_second_product_post_deploy_2026-06-15.json) |
+| 2026-06-15 | заказчик B1.7 | cart / product | **Баг-5 (v1):** второй разный товар — stale `Product.svelte` | **done** *(Fly MCP PASS)* · **регрессия 2026-06-04** | [`b17_cart_second_product_post_deploy_2026-06-15.json`](artifacts/demo-feedback/b17_cart_second_product_post_deploy_2026-06-15.json) |
 | 2026-06-14 | B1.7 | localStorage витрины | TTL 24ч для профиля/корзины/каталога | **done** | [`b17_localstorage_ttl_2026-06-14.json`](artifacts/demo-feedback/b17_localstorage_ttl_2026-06-14.json) |
 | 2026-06-14 | заказчик B1.7 | cart/add | **Баг-4:** 500 при «В корзину» (cookie overflow) | **done** | [`b17_cart_cookie_overflow_2026-06-14.json`](artifacts/demo-feedback/b17_cart_cookie_overflow_2026-06-14.json) |
 | 2026-06-13 | заказчик (видео) B1.7 | checkout `#/checkout` | **Баг-3:** «сессия истекла» при повторном заходе после OTP | **done** 2026-06-14 (permanent) | [`b17_checkout_session_2026-06-14.json`](artifacts/demo-feedback/b17_checkout_session_2026-06-14.json) |

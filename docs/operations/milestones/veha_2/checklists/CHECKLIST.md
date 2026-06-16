@@ -125,10 +125,11 @@
 
 ## E. Полировка по демо (блокер §I)
 
-См. [`DEMO_FEEDBACK.md`](DEMO_FEEDBACK.md) — очередь **§1–3 done** *(2026-06-04)*.  
-**Активная работа заказчика (§2.3 UX):** **done** 2026-06-06 — [`CUSTOMER_BUSINESS_REQUIREMENTS.md`](CUSTOMER_BUSINESS_REQUIREMENTS.md). **Следующее:** блок 2 (табло баристы).
+См. [`DEMO_FEEDBACK.md`](DEMO_FEEDBACK.md) — **BR-5 регрессия open** (2026-06-04).  
+**Активная работа заказчика:** B1.7 BR-5 — второй товар в корзину ([`B1_7_checkout_order_screen.md`](../requirements/customer_tasks/B1_7_checkout_order_screen.md)).
 
 - [x] Процесс: правки PDF → DEMO_FEEDBACK → код/MCP → `done` *(2026-06-04)*
+- [ ] **BR-5 регрессия** — repro → fix → MCP → `done`
 - [x] Критичные блокеры демо из PDF прогонки — закрыты *(MCP Fly)*
 
 ---
