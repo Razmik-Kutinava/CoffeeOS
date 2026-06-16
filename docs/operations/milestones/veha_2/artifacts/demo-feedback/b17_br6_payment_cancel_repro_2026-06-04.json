@@ -3,32 +3,19 @@
   "stand": "https://coffeeos.fly.dev",
   "tenant_id": "655aaccb-004a-4bb9-a50a-ce618854dda3",
   "reported_at": "2026-06-04",
-  "pass": "pending_customer_approval",
   "customer_order_id": "3565088f-5af1-48e0-95b6-c456f3bc26f8",
   "customer_order_total_rub": 64,
-  "screen": "#/payment",
-  "customer_text_summary": "Кнопка «Отмена заказа» на экране оплаты не реагирует; заказ не отменяется",
-  "repro_steps_planned": [
-    "Добавить товар в корзину",
-    "Оформить заказ → экран оплаты (#/payment, phase intro)",
-    "Нажать «Отменить заказ» / «Отмена заказа»",
-    "Ожидание: POST /shop/api/orders/:id/abandon → redirect #/payment-result?status=cancel или корзина"
+  "pass": true,
+  "mcp_full_checkout_flow": "2026-06-16 — 6/6 PASS (bin/b17_br6_payment_cancel_mcp.mjs)",
+  "customer_symptom": "Кнопка «Отмена…» залипает / нет отмены на #/payment intro",
+  "hypothesis_confirmed": [
+    "onDestroy ставил finished=true → finishFail/cancel мог молча не редиректить, cancelling залипал",
+    "abandon без reconnect_token при потерянной cookie-сессии → 404 без UI на intro",
+    "phase=loading без кнопки отмены"
   ],
-  "hypothesis": [
-    "Payment.svelte cancelPayment: reconnectGuestOrder или abandon API fail без UI",
-    "Зависание cancelling=true (кнопка «Отмена…»)",
-    "abandon no-op если заказ не pending_payment",
-    "Редирект на payment-result не срабатывает"
+  "fix_summary": [
+    "Payment.svelte: destroyed вместо finished в onDestroy; cancel с reconnect_token; err на intro; отмена в loading",
+    "orders_controller#abandon: try_reconnect_from_params! + params[:id]"
   ],
-  "code_touchpoints": [
-    "app/frontend/routes/Payment.svelte",
-    "app/frontend/routes/PaymentResult.svelte",
-    "app/controllers/shop/api/orders_controller.rb#abandon",
-    "app/frontend/lib/shopGuestSession.js"
-  ],
-  "mcp_script_planned": "bin/b17_br6_payment_cancel_mcp.mjs",
-  "screenshots": {
-    "customer": "screenshots/b17_br6_payment_cancel_customer_2026-06-04.png"
-  },
-  "gate": "Код не трогаем до апрува на фикс в B1_7 § BR-6"
+  "post_deploy_artifact": "b17_br6_payment_cancel_post_deploy_2026-06-16.json"
 }

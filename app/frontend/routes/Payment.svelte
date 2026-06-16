@@ -10,7 +10,7 @@
     PAYMENT_METHOD_LABELS,
     redirectToPaymentUrl
   } from "../lib/tbankPayment.js"
-  import { reconnectGuestOrder, saveGuestOrderSession } from "../lib/shopGuestSession.js"
+  import { reconnectGuestOrder, saveGuestOrderSession, guestReconnectToken } from "../lib/shopGuestSession.js"
 
   let phase = $state("intro")
   let err = $state(null)
@@ -18,6 +18,7 @@
   let iframeHost = $state(null)
   let cancelling = $state(false)
   let finished = $state(false)
+  let destroyed = $state(false)
   let iframeStarted = $state(false)
 
   const methodLabel = $derived(
@@ -25,31 +26,43 @@
   )
 
   async function finishSuccess() {
-    if (finished) return
+    if (finished || destroyed) return
     finished = true
+    const orderId = session?.order_id
     clearPaymentSession()
-    push(`/payment-result?status=success&order_id=${session.order_id}`)
+    push(`/payment-result?status=success&order_id=${orderId}`)
   }
 
   async function finishFail(reason = "fail") {
-    if (finished) return
+    if (finished || destroyed) return
     finished = true
+    const orderId = session?.order_id
     clearPaymentSession()
-    push(`/payment-result?status=${reason}&order_id=${session.order_id}`)
+    push(`/payment-result?status=${reason}&order_id=${orderId}`)
   }
 
   async function cancelPayment() {
-    if (cancelling || finished || !session?.order_id) return
+    const orderId = session?.order_id
+    if (cancelling || finished || destroyed || !orderId) return
+
     cancelling = true
+    err = null
+    const reconnectToken = session?.reconnect_token || guestReconnectToken()
+
     try {
       await reconnectGuestOrder(api)
-      await api(`/orders/${session.order_id}/abandon`, { method: "POST" })
+      await api(`/orders/${orderId}/abandon`, {
+        method: "POST",
+        body: JSON.stringify({ reconnect_token: reconnectToken })
+      })
+      finished = true
+      clearPaymentSession()
+      push(`/payment-result?status=cancel&order_id=${orderId}`)
     } catch (e) {
-      err = e.message
+      err = e.message || "Не удалось отменить заказ"
+    } finally {
       cancelling = false
-      return
     }
-    await finishFail("cancel")
   }
 
   function continueToPay() {
@@ -71,6 +84,7 @@
           paymentUrl: session.payment_url,
           scriptUrl: session.integration_script_url,
           onStatusChange: (mapped) => {
+            if (destroyed) return
             if (mapped === "success") finishSuccess()
             else if (mapped === "fail") finishFail("fail")
           }
@@ -135,7 +149,7 @@
   })
 
   onDestroy(() => {
-    finished = true
+    destroyed = true
   })
 </script>
 
@@ -176,6 +190,12 @@
       Нажмите кнопку — откроется защищённая форма. Брендинг банка скрыт, интерфейс CoffeeOS.
     {/if}
   </p>
+
+  {#if err}
+    <p class="mb-4 rounded-lg border border-red-500/40 bg-red-500/10 px-3 py-2 text-sm text-red-400" role="alert">
+      {err}
+    </p>
+  {/if}
 
   <button
     type="button"
@@ -219,7 +239,21 @@
     <div class="mb-4 flex flex-col items-center gap-3 py-8">
       <div class="payment-spinner" aria-hidden="true"></div>
       <p class="text-sm text-[#a0a0a0]">Подключаем защищённую форму…</p>
+      <button
+        type="button"
+        class="mt-2 rounded-xl border border-[#3a3a3a] px-4 py-2 text-sm text-[#a0a0a0] disabled:opacity-50"
+        disabled={cancelling}
+        onclick={cancelPayment}
+      >
+        {cancelling ? "Отмена…" : "Отменить заказ"}
+      </button>
     </div>
+  {/if}
+
+  {#if err}
+    <p class="mb-4 rounded-lg border border-red-500/40 bg-red-500/10 px-3 py-2 text-sm text-red-400" role="alert">
+      {err}
+    </p>
   {/if}
 
   <div

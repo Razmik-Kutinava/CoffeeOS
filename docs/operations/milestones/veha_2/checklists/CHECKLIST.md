@@ -125,12 +125,12 @@
 
 ## E. Полировка по демо (блокер §I)
 
-См. [`DEMO_FEEDBACK.md`](DEMO_FEEDBACK.md) — **BR-6 open** (2026-06-04).  
-**Активная работа заказчика:** B1.7 BR-6 — отмена на экране оплаты ([`B1_7_checkout_order_screen.md`](../requirements/customer_tasks/B1_7_checkout_order_screen.md)).
+См. [`DEMO_FEEDBACK.md`](DEMO_FEEDBACK.md) — BR-6 **done** (2026-06-16).  
+**Активная работа заказчика:** deploy BR-6 hardening · B1.9 апрув `[ ]` · B1.7 апрув `[ ]`.
 
 - [x] Процесс: правки PDF → DEMO_FEEDBACK → код/MCP → `done` *(2026-06-04)*
 - [x] **BR-5 регрессия** — deploy Fly → MCP post-deploy → `done`
-- [ ] **BR-6** — апрув → repro Fly → fix → MCP → `done`
+- [x] **BR-6** — fix → MCP 6/6 → `done` · deploy `[ ]`
 - [x] Критичные блокеры демо из PDF прогонки — закрыты *(MCP Fly)*
 
 ---

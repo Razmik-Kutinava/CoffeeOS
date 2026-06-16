@@ -2,8 +2,8 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-06-04 (B1.7 **BR-6** — отмена на `#/payment` · **OPEN** · код до апрува `[ ]`)  
-**Предыдущее:** BR-5 **CLOSED OPS** · Fly MCP PASS · апрув заказчик `[ ]`  
+**Дата:** 2026-06-16 (B1.7 **BR-6 CLOSED OPS** · MCP 6/6 · deploy hardening `[ ]`)  
+**Предыдущее:** BR-5 CLOSED OPS · BR-6 fix Payment.svelte + abandon reconnect  
 **Предыдущее:** B1.1 закрыта: FIREBASE_* на Fly · smoke + MCP PASS  
 **Веха 1:** официально не закрыта (§ I, H.3 — `[ ]`).  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
@@ -21,13 +21,21 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **B1.7 BR-6** | OPEN · регистрация ops · апрув `[ ]` | апрув → repro Fly → fix |
+| **B1.7 BR-6** | CLOSED OPS · MCP 6/6 · deploy `[ ]` | fly deploy hardening |
 | **B1.9 апрув** | OPS PASS · заказчик `[ ]` | апрув → B2.2 |
 | **B1.7 BR-5** | CLOSED OPS · Fly MCP PASS · заказчик `[ ]` | апрув заказчика |
 | **B1.1 ревизия** | R0–R4 Fly MCP `[x]` · заказчик `[ ]` | апрув заказчика |
 | **B1.4 PWA** | код задеплоен · OPS_PASS · заказчик `[ ]` | апрув → B2.2 |
 | **B2.1 ревизия** | OPS CLOSED 2026-06-13 · заказчик `[ ]` | handoff → B2.2 этап 1 |
 | **B2.2** | stage0 `[x]` · этап 1 `[ ]` | единый экран «Меню» |
+
+### Сессия 2026-06-16 (B1.7 BR-6 — fix cancel on #/payment, OPS CLOSED)
+
+- **Симптом заказчика:** `#/payment` — «Отмена…» залипает, заказ `#3565088f-…` 64₽ не отменяется.
+- **Фикс:** `Payment.svelte` — `destroyed` вместо `finished` в `onDestroy`; cancel + `reconnect_token`; err на intro; отмена в `loading`. `orders#abandon` — `try_reconnect_from_params!` с `params[:id]`.
+- **MCP:** `b17_br6_payment_cancel_prep_fly.rb` + `b17_br6_payment_cancel_mcp.mjs` — **6/6 PASS** на Fly tenant заказчика.
+- **Артефакт:** [`b17_br6_payment_cancel_post_deploy_2026-06-16.json`](milestones/veha_2/artifacts/demo-feedback/b17_br6_payment_cancel_post_deploy_2026-06-16.json).
+- **Дальше:** `fly deploy` → повтор MCP · апрув заказчика `[ ]`.
 
 ### Сессия 2026-06-04 (B1.7 BR-6 — регистрация бага, только доки)
 

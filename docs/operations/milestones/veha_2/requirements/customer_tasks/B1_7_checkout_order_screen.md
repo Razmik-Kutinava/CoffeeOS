@@ -3,7 +3,7 @@
 **ID:** B1.7 · **Источник:** заказчик, чат 2026-06  
 **Статус:** `[x]` реализация + **внутренняя приёмка PASS** (2026-06-09) · **приёмка заказчика** `[ ]` — ждём прогон
 
-**Активный баг:** **BR-6** — отмена на экране оплаты · **OPEN** · код `[ ]` до апрува · см. [§ BR-6](#баг-репорт-6--отмена-заказа-на-экране-оплаты-open-2026-06-04)
+**Активный баг:** нет · **BR-6** — **CLOSED OPS** 2026-06-16 · Fly MCP 6/6 · deploy `[ ]` · апрув заказчика `[ ]` · см. [§ BR-6](#баг-репорт-6--отмена-заказа-на-экране-оплаты-closed-ops-2026-06-16)
 
 **BR-5 регрессия:** **CLOSED OPS** 2026-06-04 · Fly MCP 7/7 + catalog + quick-add · апрув заказчика `[ ]` · см. [§ BR-5 регрессия](#баг-репорт-5--регрессия-второй-товар-в-корзину-closed-ops-2026-06-04)
 
@@ -194,7 +194,7 @@
 | BR-3 | «Сессия истекла» при повторном checkout после OTP | `[x]` | `[x]` | `[ ]` |
 | BR-5 | Второй (другой) товар в корзину: переход на `/cart` + индикация добавления | `[x]` | `[x]` 2026-06-04 | `[ ]` |
 | BR-5v1 | *(история)* тот же баг — fix 2026-06-15 | `[x]` | `[x]` 2026-06-15 | `[ ]` |
-| BR-6 | Отмена заказа на `#/payment`: кнопка «Отмена заказа» → abandon + возврат | `[ ]` | `[ ]` | `[ ]` |
+| BR-6 | Отмена заказа на `#/payment`: кнопка «Отмена заказа» → abandon + возврат | `[x]` | `[x]` MCP 6/6 · deploy `[ ]` | `[ ]` |
 
 **Артефакты:** [`b17_br_fixes_2026-06-10.json`](../../artifacts/demo-feedback/b17_br_fixes_2026-06-10.json) · скрин [`checkout_no_promo_no_cash_sbp.png`](../../artifacts/demo-feedback/screenshots/b17_br_fixes_2026-06-10/checkout_no_promo_no_cash_sbp.png)
 
@@ -323,7 +323,7 @@
 
 ---
 
-### Баг-репорт №6 — отмена заказа на экране оплаты **OPEN** 2026-06-04
+### Баг-репорт №6 — отмена заказа на экране оплаты **CLOSED OPS** 2026-06-16
 
 **Источник:** заказчик (текст ниже — **без правок**).
 
@@ -351,13 +351,12 @@
 
 | | |
 |--|--|
-| **Статус** | **OPEN** · регистрация в ops 2026-06-04 · **код `[ ]` до апрува** |
-| **Экран** | `#/payment` (`Payment.svelte`, phase `intro` — «Оплатить …₽» + «Отменить заказ») |
-| **API (ожидание)** | `POST /shop/api/orders/:id/abandon` → `PaymentFailureJournal` + `PendingOrderSession.clear!` → UI `#/payment-result?status=cancel` или корзина |
-| **Контекст** | CBR §2.3 этап **4.4** «Своя кнопка Отмена» был **PASS** (2026-06-06) — возможная **регрессия** или repro только на tenant заказчика |
-| **Repro JSON** | [`b17_br6_payment_cancel_repro_2026-06-04.json`](../../artifacts/demo-feedback/b17_br6_payment_cancel_repro_2026-06-04.json) — `pending_customer_approval` |
-| **Скрин заказчика** | [`b17_br6_payment_cancel_customer_2026-06-04.png`](../../artifacts/demo-feedback/screenshots/b17_br6_payment_cancel_customer_2026-06-04.png) *(положить из чата, если ещё нет в repo)* |
-| **Прогон (после апрува)** | `node bin/b17_br6_payment_cancel_mcp.mjs` *(скрипт — TBD)* |
+| **Статус** | **CLOSED OPS** 2026-06-16 · MCP 6/6 PASS · deploy hardening `[ ]` |
+| **Причина** | `onDestroy` → `finished=true` блокировал редирект после abandon; `cancelling` залипал («Отмена…»); abandon без `reconnect_token` при слабой сессии; ошибки не на intro |
+| **Фикс** | `Payment.svelte`: `destroyed` flag, cancel с token + `finally`, err UI, отмена в `loading`; `orders#abandon` + `try_reconnect_from_params!` (`params[:id]`) |
+| **Прогон** | `ruby bin/b17_br6_payment_cancel_prep_fly.rb` → `node bin/b17_br6_payment_cancel_mcp.mjs` |
+| **Артефакт** | [`b17_br6_payment_cancel_post_deploy_2026-06-16.json`](../../artifacts/demo-feedback/b17_br6_payment_cancel_post_deploy_2026-06-16.json) |
+| **Скрины** | `b17_br6_payment_cancel_before_2026-06-16.png` · `b17_br6_payment_cancel_after_2026-06-16.png` |
 
 #### Гипотезы (не фикс — только для repro)
 
@@ -372,16 +371,15 @@
 
 #### Чеклист (BR-6)
 
-- [ ] **Апрув** на фикс *(gate — код не трогаем до `[x]`)*
-- [ ] **Воспроизвести** на Fly с tenant заказчика — обновить repro JSON (`pass: true/false`)
-- [ ] **Скрин «до»** — `b17_br6_payment_cancel_repro_2026-06-04.png` (MCP/DevTools)
-- [ ] **Точка сбоя:** зафиксировать (Network: abandon, Console, UI state)
-- [ ] **Исправить** код
-- [ ] **Deploy Fly**
-- [ ] **MCP post-deploy** — abandon + возврат в корзину/каталог
-- [ ] **Скрин «после»** — `b17_br6_payment_cancel_after_2026-06-04.png`
-- [ ] **Артефакт post-deploy** — `b17_br6_payment_cancel_post_deploy_2026-06-04.json` (`pass: true`)
-- [ ] **Закрыть** DEMO_FEEDBACK → `done`
+- [x] **Апрув** на фикс
+- [x] **Воспроизвести** на Fly — MCP full checkout 6/6
+- [x] **Скрин «до»** — `b17_br6_payment_cancel_before_2026-06-16.png`
+- [x] **Точка сбоя:** cancel redirect / session / UI feedback
+- [x] **Исправить** код
+- [ ] **Deploy Fly** (hardening)
+- [x] **MCP post-deploy** — 6/6 PASS 2026-06-16
+- [x] **Скрин «после»** — `b17_br6_payment_cancel_after_2026-06-16.png`
+- [x] **Закрыть** DEMO_FEEDBACK → `done`
 - [ ] **Апрув заказчика** `[ ]`
 
 **Связано:** §2.3 оплата · [CUSTOMER_BUSINESS_REQUIREMENTS.md](../CUSTOMER_BUSINESS_REQUIREMENTS.md) этап 4.4.

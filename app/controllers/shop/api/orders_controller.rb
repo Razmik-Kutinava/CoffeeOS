@@ -33,6 +33,7 @@ module Shop
       end
 
       def abandon
+        try_reconnect_from_params!
         order = Order.where(tenant_id: @shop_tenant.id, source: :mobile).find(params[:id])
         unless order_visible_to_session_customer?(order)
           return render json: { error: "Order not found", status: 404 }, status: :not_found
@@ -176,7 +177,7 @@ module Shop
       end
 
       def try_reconnect_from_params!
-        order_id = params[:order_id].presence
+        order_id = params[:order_id].presence || params[:id].presence
         token = params[:reconnect_token].presence
         return if order_id.blank? || token.blank?
 
