@@ -69,7 +69,8 @@
     <div class="empty-shift">
       <p><strong>Смена закрыта</strong></p>
       <p class="muted">Новые заказы на кассе недоступны, пока не откроете смену.</p>
-      <%= form_with url: barista_open_shift_path, method: :post, class: "shift-open-form" do %>
+      <%= form_with url: barista_open_shift_path, method: :post, class: "shift-open-form",
+          data: { action: "submit->barista-board-sound#unlockFromShift" } do %>
         <label class="muted">Сумма в кассе на старте (₽)</label>
         <%= number_field_tag :opening_cash, 0, min: 0, step: 1, class: "shift-cash-input" %>
         <%= submit_tag "Открыть смену", class: "btn-open-shift" %>

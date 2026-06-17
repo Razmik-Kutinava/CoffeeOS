@@ -1,4 +1,4 @@
-<div class="barista-layout">
+<div class="barista-layout" data-controller="barista-board-sound">
   <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="sidebar-header">
@@ -89,6 +89,16 @@
 
   <!-- TOAST CONTAINER -->
   <div class="toast-container" id="toast"></div>
+
+  <div class="barista-sound-banner"
+       id="barista-sound-blocked-banner"
+       data-barista-board-sound-target="banner"
+       data-action="click->barista-board-sound#dismissBanner"
+       hidden
+       aria-hidden="true"
+       role="alert">
+    Звук заблокирован. Кликните по экрану для включения
+  </div>
 </div>
 
 <style>
@@ -1003,6 +1013,29 @@
   @keyframes slideIn {
     from { opacity: 0; transform: translateX(100%); }
     to { opacity: 1; transform: translateX(0); }
+  }
+
+  .barista-sound-banner {
+    position: fixed;
+    top: 72px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 3000;
+    max-width: min(520px, 92vw);
+    padding: 14px 20px;
+    border-radius: 10px;
+    background: #3d2a14;
+    border: 2px solid #f0c97c;
+    color: #fff8e8;
+    font-size: 15px;
+    font-weight: 600;
+    text-align: center;
+    cursor: pointer;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+  }
+
+  .barista-sound-banner[hidden] {
+    display: none !important;
   }
 </style>
 
