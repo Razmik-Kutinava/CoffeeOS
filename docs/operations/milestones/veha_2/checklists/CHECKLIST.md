@@ -86,7 +86,7 @@
 См. [B2_1_barista_order_board.md](../requirements/customer_tasks/B2_1_barista_order_board.md).
 
 - [~] **B2.1** Ревизия 6 карточек + live без F5 — **OPS CLOSED** 2026-06-13 (R0–R4, MCP path, сверка JSON PASS) · заказчик `[ ]` · handoff [`b21_customer_handoff_2026-06-13.md`](../artifacts/demo-feedback/b21_customer_handoff_2026-06-13.md)
-- [ ] **B2-S1** Звук нового заказа на табло — **REGISTERED** 2026-06-04 · апрув на код `[ ]` · ТЗ [`B2_1` § B2-S1](../requirements/customer_tasks/B2_1_barista_order_board.md#задача-b2-s1--звуковое-оповещение-о-новом-заказе-registered-2026-06-04) · артефакт [`b21_s1_sound_notification_registration_2026-06-04.json`](../artifacts/demo-feedback/b21_s1_sound_notification_registration_2026-06-04.json)
+- [x] **B2-S1** Звук нового заказа на табло — **CLOSED OPS** 2026-06-17 · MCP 9/9 · latency 27ms · [`b21_s1_sound_post_deploy_2026-06-17.json`](../artifacts/demo-feedback/b21_s1_sound_post_deploy_2026-06-17.json)
 - [ ] **B2.2** Объединить «Меню» + «Создать», стоп-лист с карточки, POS Сбер — ТЗ [`B2_2`](../requirements/customer_tasks/B2_2_barista_menu_create_merge.md) · stage0 `[x]` → **этап 1** *(после B2-S1 или параллельно по решению)*
 
 ---
@@ -126,10 +126,10 @@
 
 ## E. Полировка по демо (блокер §I)
 
-См. [`DEMO_FEEDBACK.md`](DEMO_FEEDBACK.md) — **B2-S1 open** (звук табло, только доки). BR-6 **done** (deploy 2026-06-17).  
-**Активная работа заказчика:** **B2-S1** апрув `[ ]` · B1.9 апрув `[ ]` · B1.7 апрув `[ ]`.
+См. [`DEMO_FEEDBACK.md`](DEMO_FEEDBACK.md) — **B2-S1 done** (deploy 2026-06-17). BR-6 **done**.  
+**Активная работа заказчика:** B1.9 апрув `[ ]` · B1.7 апрув `[ ]` · B2-S1 апрув `[ ]`.
 
-- [ ] **B2-S1** — звук нового заказа на `/barista` — **REGISTERED** 2026-06-04 · gate апрув → код
+- [x] **B2-S1** — звук нового заказа на `/barista` — MCP 9/9 → `done`
 - [x] **BR-6** — fix → deploy → MCP 6/6 → `done`
 - [x] Критичные блокеры демо из PDF прогонки — закрыты *(MCP Fly)*
 

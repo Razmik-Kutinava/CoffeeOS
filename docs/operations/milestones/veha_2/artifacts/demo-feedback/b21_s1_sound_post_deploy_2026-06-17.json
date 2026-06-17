@@ -1,0 +1,107 @@
+{
+  "scenario": "b21_s1_sound_notification",
+  "task_id": "B2-S1",
+  "stand": "https://coffeeos.fly.dev",
+  "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "date": "2026-06-17",
+  "pass": true,
+  "verdict": "PASS",
+  "tool": "playwright (barista board sound; chrome-devtools path equivalent)",
+  "devtools_note": {
+    "tool": "chrome-devtools-mcp",
+    "note": "Acceptance via Playwright + window.BaristaOrderSound.debugState(); same UX path as manual DevTools console check"
+  },
+  "started_at": "2026-06-17T12:18:09.352Z",
+  "finished_at": "2026-06-17T12:18:26.491Z",
+  "steps": [
+    {
+      "id": "audio_asset",
+      "action": "GET /audio/barista_new_order.wav",
+      "pass": true,
+      "at": "2026-06-17T12:18:10.158Z",
+      "status": 200
+    },
+    {
+      "id": "barista_login",
+      "action": "Login barista-a@demo.coffeeos.local",
+      "pass": true,
+      "at": "2026-06-17T12:18:12.979Z"
+    },
+    {
+      "id": "shift_open",
+      "action": "Смена открыта",
+      "pass": true,
+      "at": "2026-06-17T12:18:14.079Z"
+    },
+    {
+      "id": "sound_module",
+      "action": "window.BaristaOrderSound на табло",
+      "pass": true,
+      "at": "2026-06-17T12:18:15.702Z"
+    },
+    {
+      "id": "audio_unlock",
+      "action": "AudioContext разблокирован кликом",
+      "pass": true,
+      "at": "2026-06-17T12:18:16.571Z"
+    },
+    {
+      "id": "shop_order",
+      "action": "Новый заказ accepted с витрины",
+      "pass": true,
+      "at": "2026-06-17T12:18:21.980Z",
+      "ok": true,
+      "status": "accepted",
+      "order_id": "0b693480-de0c-49b5-821b-d6b0258724d2"
+    },
+    {
+      "id": "live_card",
+      "action": "Карточка на табло без F5",
+      "pass": true,
+      "at": "2026-06-17T12:18:22.030Z"
+    },
+    {
+      "id": "sound_play",
+      "action": "Звук после нового заказа",
+      "pass": true,
+      "at": "2026-06-17T12:18:22.056Z",
+      "playCount": 2,
+      "latencyMs": 27
+    },
+    {
+      "id": "sound_latency",
+      "action": "Задержка play ≤ 1000 ms",
+      "pass": true,
+      "at": "2026-06-17T12:18:22.056Z",
+      "latencyMs": 27
+    },
+    {
+      "id": "blocked_banner",
+      "action": "Баннер NotAllowed: «Звук заблокирован. Кликните по экрану для включения»",
+      "pass": true,
+      "at": "2026-06-17T12:18:22.928Z",
+      "ok": true,
+      "bannerHidden": false,
+      "text": "Звук заблокирован. Кликните по экрану для включения"
+    },
+    {
+      "id": "banner_click_unlock",
+      "action": "Клик по баннеру разблокирует звук",
+      "pass": true,
+      "at": "2026-06-17T12:18:26.490Z"
+    }
+  ],
+  "screenshots": [
+    "docs/operations/milestones/veha_2/artifacts/demo-feedback/screenshots/b21_s1_sound_2026-06-17/01_board_unlocked.png",
+    "docs/operations/milestones/veha_2/artifacts/demo-feedback/screenshots/b21_s1_sound_2026-06-17/02_new_order_sound.png",
+    "docs/operations/milestones/veha_2/artifacts/demo-feedback/screenshots/b21_s1_sound_2026-06-17/03_blocked_banner.png"
+  ],
+  "ui_checks": {
+    "audio_asset_200": true,
+    "sound_module_present": true,
+    "unlock_on_gesture": true,
+    "play_on_new_order": true,
+    "latency_under_1s": true,
+    "blocked_banner_text": true
+  }
+}

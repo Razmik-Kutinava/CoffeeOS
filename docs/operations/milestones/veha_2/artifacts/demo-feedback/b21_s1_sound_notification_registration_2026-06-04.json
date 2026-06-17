@@ -6,9 +6,11 @@
   "tenant_id": "655aaccb-004a-4bb9-a50a-ce618854dda3",
   "reported_at": "2026-06-04",
   "source": "заказчик неделя_2",
-  "status": "registered_docs_only",
+  "status": "closed_ops",
   "pending_customer_approval": true,
-  "pass": null,
+  "pass": true,
+  "post_deploy_artifact": "b21_s1_sound_post_deploy_2026-06-17.json",
+  "mcp": "9/9 PASS 2026-06-17",
   "customer_summary": "Звуковой сигнал при новом заказе на табло бариста; unlock AudioContext по «Открыть смену»; NotAllowedError → баннер",
   "acceptance_targets": {
     "play_success_after_unlock_pct": 100,

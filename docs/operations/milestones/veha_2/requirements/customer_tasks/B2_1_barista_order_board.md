@@ -8,7 +8,7 @@
 |--------|--------|
 | **MVP B2.1 (2026-06)** | `[x]` OPS_PASS этапы 0–5 |
 | **Ревизия 2026-06-12** | R0–R4 ops `[x]` · MCP path `[x]` · сверка JSON `[x]` · заказчик `[ ]` |
-| **B2-S1 звук** | **REGISTERED** 2026-06-04 · апрув на код `[ ]` · см. [§ B2-S1](#задача-b2-s1--звуковое-оповещение-о-новом-заказе-registered-2026-06-04) |
+| **B2-S1 звук** | **CLOSED OPS** 2026-06-17 · MCP 9/9 · deploy `[x]` · апрув `[ ]` · см. [§ B2-S1](#задача-b2-s1--звуковое-оповещение-о-новом-заказе-closed-ops-2026-06-17) |
 | **Внутренняя приёмка** | `[x]` 2026-06-13 · OPS CLOSED (ждём подпись заказчика) |
 | **Приёмка заказчика** | `[ ]` после ревизии |
 | **Прогон** | `FLY_BIN=flyctl ruby bin/b21_acceptance_fly.rb` → `b21_acceptance_2026-06-11.json` |
@@ -24,7 +24,7 @@
 [✓] 3 — гость: тексты push/WS, retry cable, тесты           2026-06-11
 [✓] 4 — отмена: overlay на карточке, resync колонки         2026-06-11
 [✓] 5 — ops gate: smoke e2e PASS, MCP, scope fix              2026-06-11
-[ ] 6 — звук нового заказа (B2-S1)                         gate апрув → код
+[✓] 6 — звук нового заказа (B2-S1)                         2026-06-17
 --- не MVP B2.1 (фаза 2/3) ---
     брак, переделка, возврат, кухня, PWA, defect_reasons
 ```
@@ -517,14 +517,14 @@
 |-----|-----------------|
 | Отмена overlay (этап 4 MVP) | не в баг-репорте; не снимать без решения |
 | Брак / переделка | фаза 2/3 старого B2.1 |
-| Звук нового заказа | **→ B2-S1** (зарегистрировано 2026-06-04) |
+| Звук нового заказа | **B2-S1 CLOSED OPS** 2026-06-17 |
 | `prep_kitchen` отдельный экран | канал = barista, как договорено |
 | Переименование цветов под brandbook | после уточнения жёлтый vs оранжевый |
 | Телефон клиента на карточке | checkout сейчас email-first — уточнить у заказчика |
 
 ---
 
-## Задача B2-S1 — звуковое оповещение о новом заказе **REGISTERED** 2026-06-04
+## Задача B2-S1 — звуковое оповещение о новом заказе **CLOSED OPS** 2026-06-17
 
 **ID:** B2-S1 · **Источник:** заказчик, неделя_2 (текст ниже — **без правок**)  
 **Экран:** `/barista` — табло бариста (браузер / PWA)  
@@ -532,9 +532,12 @@
 
 | | |
 |--|--|
-| **Статус** | **REGISTERED** · только доки · код **не трогаем** до апрува `[ ]` |
-| **Артефакт** | [`b21_s1_sound_notification_registration_2026-06-04.json`](../../artifacts/demo-feedback/b21_s1_sound_notification_registration_2026-06-04.json) |
-| **Журнал** | [`DEMO_FEEDBACK.md`](../DEMO_FEEDBACK.md) — строка **open** |
+| **Статус** | **CLOSED OPS** · MCP 9/9 PASS · deploy `[x]` 2026-06-17 |
+| **Фикс** | `OrderBoardSound` + Stimulus `barista-board-sound`; WAV `public/audio/barista_new_order.wav`; turbo-stream hook на `#barista-board-slots` |
+| **Прогон** | `ruby bin/b21_s1_sound_prep_fly.rb` → `node bin/b21_s1_sound_mcp.mjs` |
+| **Артефакт** | [`b21_s1_sound_post_deploy_2026-06-17.json`](../../artifacts/demo-feedback/b21_s1_sound_post_deploy_2026-06-17.json) |
+| **Скрины** | [`screenshots/b21_s1_sound_2026-06-17/`](../../artifacts/demo-feedback/screenshots/b21_s1_sound_2026-06-17/) |
+| **Журнал** | [`DEMO_FEEDBACK.md`](../DEMO_FEEDBACK.md) — **done** |
 
 ### Текст заказчика (дословно)
 
@@ -620,15 +623,15 @@
 
 - [x] **Текст заказчика** дословно в этом файле
 - [x] **Ссылки** Chrome Autoplay + MDN Web Audio — зафиксированы
-- [x] **DEMO_FEEDBACK** — строка `open`
+- [x] **DEMO_FEEDBACK** — строка `open` → **done**
 - [x] **Артефакт регистрации** — `b21_s1_sound_notification_registration_2026-06-04.json`
-- [ ] **Апрув** на реализацию `[ ]`
-- [ ] **Repro** на Fly — новый заказ + проверка звука / NotAllowed (скрин баннера)
-- [ ] **Аудиофайл** + JS unlock + play на событие нового заказа
-- [ ] **Deploy Fly**
-- [ ] **MCP / ручной прогон** — `bin/b21_s1_sound_mcp.mjs` (TBD)
-- [ ] **Артефакт post-deploy** — `b21_s1_sound_post_deploy_*.json`
-- [ ] **Закрыть** DEMO_FEEDBACK → `done`
+- [x] **Апрув** на реализацию (владелец)
+- [x] **Repro** на Fly — новый заказ + звук / NotAllowed баннер
+- [x] **Аудиофайл** + JS unlock + play на turbo-stream нового заказа
+- [x] **Deploy Fly** 2026-06-17
+- [x] **MCP post-deploy** — 9/9 PASS · latency **27 ms** · [`b21_s1_sound_post_deploy_2026-06-17.json`](../../artifacts/demo-feedback/b21_s1_sound_post_deploy_2026-06-17.json)
+- [x] **Скрины** — `01_board_unlocked` · `02_new_order_sound` · `03_blocked_banner`
+- [x] **Закрыть** DEMO_FEEDBACK → `done`
 - [ ] **Апрув заказчика** `[ ]`
 
 **Связано:** B2.1 этап R2 (live) · [CUSTOMER_BUSINESS_REQUIREMENTS.md](../CUSTOMER_BUSINESS_REQUIREMENTS.md) блок 2.

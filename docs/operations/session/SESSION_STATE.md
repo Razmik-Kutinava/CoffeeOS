@@ -2,8 +2,8 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-06-04 (B2.1 **B2-S1** — регистрация звука табло, только доки)  
-**Предыдущее:** B1.7 BR-6 — deploy `[x]` · MCP 6/6 post-deploy 2026-06-17  
+**Дата:** 2026-06-17 (B2.1 **B2-S1** — CLOSED OPS · MCP 9/9 · deploy)  
+**Предыдущее:** B2-S1 регистрация 2026-06-04 · B1.7 BR-6 deploy  
 **Предыдущее:** B1.1 закрыта: FIREBASE_* на Fly · smoke + MCP PASS  
 **Веха 1:** официально не закрыта (§ I, H.3 — `[ ]`).  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
@@ -21,7 +21,7 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **B2.1 B2-S1** | REGISTERED · апрув на код `[ ]` | repro → реализация звука |
+| **B2.1 B2-S1** | CLOSED OPS · MCP 9/9 · deploy `[x]` · заказчик `[ ]` | апрув заказчика |
 | **B1.7 BR-6** | CLOSED OPS · deploy `[x]` · MCP 6/6 · заказчик `[ ]` | апрув заказчика |
 | **B1.9 апрув** | OPS PASS · заказчик `[ ]` | апрув → B2.2 |
 | **B1.7 BR-5** | CLOSED OPS · Fly MCP PASS · заказчик `[ ]` | апрув заказчика |
@@ -29,6 +29,15 @@
 | **B1.4 PWA** | код задеплоен · OPS_PASS · заказчик `[ ]` | апрув → B2.2 |
 | **B2.1 ревизия** | OPS CLOSED 2026-06-13 · заказчик `[ ]` | handoff → B2.2 этап 1 |
 | **B2.2** | stage0 `[x]` · этап 1 `[ ]` | единый экран «Меню» |
+
+### Сессия 2026-06-17 (B2.1 B2-S1 — звук табло, CLOSED OPS)
+
+- **Реализация:** `OrderBoardSound` + Stimulus `barista-board-sound`; WAV `public/audio/barista_new_order.wav` (2s); turbo-stream hook на `#barista-board-slots`; баннер NotAllowed.
+- **Deploy:** `coffeeos.fly.dev` 2026-06-17.
+- **MCP:** `bin/b21_s1_sound_prep_fly.rb` + `bin/b21_s1_sound_mcp.mjs` — **9/9 PASS** · latency **27 ms**.
+- **Артефакт:** [`b21_s1_sound_post_deploy_2026-06-17.json`](milestones/veha_2/artifacts/demo-feedback/b21_s1_sound_post_deploy_2026-06-17.json).
+- **Скрины:** [`screenshots/b21_s1_sound_2026-06-17/`](milestones/veha_2/artifacts/demo-feedback/screenshots/b21_s1_sound_2026-06-17/).
+- **Дальше:** апрув заказчика `[ ]`.
 
 ### Сессия 2026-06-04 (B2.1 B2-S1 — регистрация звука табло, только доки)
 
