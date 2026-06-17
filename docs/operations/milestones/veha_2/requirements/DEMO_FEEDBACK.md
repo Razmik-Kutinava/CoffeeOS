@@ -4,7 +4,7 @@
 
 **Источник:** PDF [`artifacts/demo-feedback/customer_qa_prog10_2026-06.pdf`](artifacts/demo-feedback/customer_qa_prog10_2026-06.pdf) (продолжение В1: [`../veha_1/artifacts/customer_live_qa_block1_2026-05-30.pdf`](../veha_1/artifacts/customer_live_qa_block1_2026-05-30.pdf)).
 
-**Сейчас (2026-06-06):** **§2.3 закрыт** — апрув заказчика. Следующий фокус: **блок 2** (табло баристы) → [`CUSTOMER_BUSINESS_REQUIREMENTS.md`](CUSTOMER_BUSINESS_REQUIREMENTS.md).
+**Сейчас (2026-06-04):** **B2-S1** — звук нового заказа на табло (**open**, только доки). §2.3 — **done**. См. [`CUSTOMER_BUSINESS_REQUIREMENTS.md`](CUSTOMER_BUSINESS_REQUIREMENTS.md).
 
 **Честно:** §1–3 в таблице ниже — **done** *(выборочно)*. §2.3 — **done** *(этапы 1–5, MCP)*.
 
@@ -26,7 +26,8 @@
 
 | Дата | Источник | Сценарий / экран | Суть | Статус | PR / коммит |
 |------|----------|------------------|------|--------|-------------|
-| 2026-06-04 | заказчик B1.7 | `#/payment` оплата | **BR-6:** кнопка «Отмена заказа» не отменяет заказ | **done** *(Fly MCP 6/6)* | [b17_br6_payment_cancel_post_deploy_2026-06-16.json](artifacts/demo-feedback/b17_br6_payment_cancel_post_deploy_2026-06-16.json) |
+| 2026-06-04 | заказчик B2.1 неделя_2 | `/barista` табло | **B2-S1:** звуковое оповещение о новом заказе (PWA/браузер) | **open** *(только доки · gate апрув)* | [b21_s1_sound_notification_registration_2026-06-04.json](artifacts/demo-feedback/b21_s1_sound_notification_registration_2026-06-04.json) |
+| 2026-06-04 | заказчик B1.7 | `#/payment` оплата | **BR-6:** кнопка «Отмена заказа» не отменяет заказ | **done** *(Fly MCP 6/6 · deploy 2026-06-17)* | [b17_br6_payment_cancel_post_deploy_2026-06-17.json](artifacts/demo-feedback/b17_br6_payment_cancel_post_deploy_2026-06-17.json) |
 | 2026-06-04 | заказчик B1.7 | cart / каталог / `#/product` | **BR-5 регрессия:** второй товар — баннер/DOM корзины | **done** *(Fly MCP 7/7 + catalog + quick-add)* | [b17_br5_regression_post_deploy_2026-06-04.json](artifacts/demo-feedback/b17_br5_regression_post_deploy_2026-06-04.json) |
 | 2026-06-04 | заказчик (чат) B1.1 | экран статуса гостя `#/order/...` | **Баг-1:** без F5 статус не обновляется после тапа баристы | **done** 2026-06-13 | [`b11_bug1_guest_ws_2026-06-13.json`](artifacts/demo-feedback/b11_bug1_guest_ws_2026-06-13.json) |
 | 2026-06-15 | заказчик B1.10 | shop шапка | Убрать «Блог» из навигации, LCP ≤ 1.5 с | **done** *(Fly MCP PASS)* | [`b110_blog_nav_post_deploy_2026-06-15.json`](artifacts/demo-feedback/b110_blog_nav_post_deploy_2026-06-15.json) |

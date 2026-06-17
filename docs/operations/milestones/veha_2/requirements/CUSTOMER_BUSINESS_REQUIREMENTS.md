@@ -103,13 +103,13 @@
 |---------|-----|--------|--------|------|
 | 1 | **B1.7** | Доработка экрана оформления заказа | внутр. PASS · заказчик `[ ]` | [B1_7_checkout_order_screen.md](customer_tasks/B1_7_checkout_order_screen.md) |
 | 2 | **B1.1** | Экран уведомления заказа + прогресс-бар | **`[x]`** 2026-06-10 · Fly + FCM | [B1_1_order_status_progress.md](customer_tasks/B1_1_order_status_progress.md) |
-| 3 | **B2.1** | Табло бариста — интерактивная карточка | **ТЗ** · реализация `[ ]` | [B2_1_barista_order_board.md](customer_tasks/B2_1_barista_order_board.md) |
+| 3 | **B2.1** | Табло бариста — интерактивная карточка | ревизия OPS CLOSED · **B2-S1 звук REGISTERED** | [B2_1_barista_order_board.md](customer_tasks/B2_1_barista_order_board.md) |
 | 4 | **B2.2** | Меню + Создать (бариста) | **ТЗ** · реализация `[ ]` | [B2_2_barista_menu_create_merge.md](customer_tasks/B2_2_barista_menu_create_merge.md) |
 | 5 | **B1.4** | PWA витрины (install + offline) | **ТЗ** 2026-06-11 · реализация `[ ]` | [B1_4_pwa_shop.md](customer_tasks/B1_4_pwa_shop.md) |
 | 6 | **B1.10** | Убрать «Блог» из навигации витрины | **ТЗ** · апрув на код `[ ]` | [B1_10_remove_blog_nav.md](customer_tasks/B1_10_remove_blog_nav.md) |
 | 7 | **B1.9** | Toggle-модификаторы на карточке товара | **ТЗ** · апрув на код `[ ]` | [B1_9_product_modifier_toggle.md](customer_tasks/B1_9_product_modifier_toggle.md) |
 
-**Следующий фокус по задачам заказчика:** **B1.10** (после апрува ТЗ) → **B1.9** · **B1.4 PWA** · **B2.2** после B2.1 OPS_PASS.
+**Следующий фокус по задачам заказчика:** **B2-S1** звук табло (апрув → код) · B1.7/B1.9 апрув `[ ]` · B2.2.
 
 ---
 
@@ -118,7 +118,7 @@
 | Поток | Готово | Открыто |
 |-------|--------|---------|
 | **1 Приём** | Оплата §2.3, W1.1–W1.5, **B1.1**, онбординг | **B1.4 PWA** (ТЗ) · B1.2–B1.3, B1.7 прогон заказчика |
-| **2 Обработка** | 2A.1–2A.4 (УК) | Табло баристы, стоп-лист, отмена/возврат на табло |
+| **2 Обработка** | 2A.1–2A.4 (УК) | B2.1 ревизия · **B2-S1 звук** `[open]` · стоп-лист |
 | **3 Тест-приёмка** | — | Happy path витрина→табло→уведомления; отказы на всех экранах; изоляция точек |
 
 ---
@@ -318,9 +318,10 @@
 
 - **Web** `/barista` (Rails + Hotwire) — MVP; Flutter/TV — позже.
 - **ТЗ:** [B2_1_barista_order_board.md](customer_tasks/B2_1_barista_order_board.md) · [B2_2](customer_tasks/B2_2_barista_menu_create_merge.md).
+- **B2-S1 (звук):** REGISTERED 2026-06-04 — § B2-S1 в B2_1 · gate апрув → код · без изменений бэкенда заказов.
 - Цепочка MVP: **витрина (карта)** → табло → WS/push гостю (B1.1).
 - Кухня / prep_kitchen / PWA / брак-переделка — **фаза 2 (конец) или фаза 3**.
-- **Статус:** B2.1 + B2.2 ТЗ `[x]` 2026-06-10 · код `[ ]` · порядок: B2.1 → B2.2.
+- **Статус:** B2.1 ревизия OPS CLOSED 2026-06-13 · B2-S1 `[open]` · B2.2 ТЗ `[x]` · код B2.2 `[ ]`.
 
 ---
 

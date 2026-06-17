@@ -2,8 +2,8 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-06-16 (B1.7 **BR-6 CLOSED OPS** · MCP 6/6 · deploy hardening `[ ]`)  
-**Предыдущее:** BR-5 CLOSED OPS · BR-6 fix Payment.svelte + abandon reconnect  
+**Дата:** 2026-06-04 (B2.1 **B2-S1** — регистрация звука табло, только доки)  
+**Предыдущее:** B1.7 BR-6 — deploy `[x]` · MCP 6/6 post-deploy 2026-06-17  
 **Предыдущее:** B1.1 закрыта: FIREBASE_* на Fly · smoke + MCP PASS  
 **Веха 1:** официально не закрыта (§ I, H.3 — `[ ]`).  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
@@ -21,7 +21,8 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **B1.7 BR-6** | CLOSED OPS · MCP 6/6 · deploy `[ ]` | fly deploy hardening |
+| **B2.1 B2-S1** | REGISTERED · апрув на код `[ ]` | repro → реализация звука |
+| **B1.7 BR-6** | CLOSED OPS · deploy `[x]` · MCP 6/6 · заказчик `[ ]` | апрув заказчика |
 | **B1.9 апрув** | OPS PASS · заказчик `[ ]` | апрув → B2.2 |
 | **B1.7 BR-5** | CLOSED OPS · Fly MCP PASS · заказчик `[ ]` | апрув заказчика |
 | **B1.1 ревизия** | R0–R4 Fly MCP `[x]` · заказчик `[ ]` | апрув заказчика |
@@ -29,13 +30,23 @@
 | **B2.1 ревизия** | OPS CLOSED 2026-06-13 · заказчик `[ ]` | handoff → B2.2 этап 1 |
 | **B2.2** | stage0 `[x]` · этап 1 `[ ]` | единый экран «Меню» |
 
+### Сессия 2026-06-04 (B2.1 B2-S1 — регистрация звука табло, только доки)
+
+- **Задача заказчика (неделя_2):** звуковое оповещение о новом заказе на `/barista` (PWA/браузер); unlock `AudioContext` по «Открыть смену»; баннер при `NotAllowedError`.
+- **ТЗ / чеклист:** [`B2_1_barista_order_board.md`](milestones/veha_2/requirements/customer_tasks/B2_1_barista_order_board.md) § B2-S1.
+- **Журнал:** [`DEMO_FEEDBACK.md`](milestones/veha_2/requirements/DEMO_FEEDBACK.md) — строка **open**.
+- **Артефакт:** [`b21_s1_sound_notification_registration_2026-06-04.json`](milestones/veha_2/artifacts/demo-feedback/b21_s1_sound_notification_registration_2026-06-04.json) — `pending_customer_approval`.
+- **Ссылки заказчика:** [Chrome Autoplay Policy](https://developer.chrome.com/blog/autoplay) · [MDN Web Audio API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Using_Web_Audio_API).
+- **Код:** **не трогаем** до апрува на реализацию (gate в ТЗ).
+- **Дальше (после апрува):** repro Fly → JS + аудио на табло → `bin/b21_s1_sound_mcp.mjs` (TBD) → deploy.
+
 ### Сессия 2026-06-16 (B1.7 BR-6 — fix cancel on #/payment, OPS CLOSED)
 
 - **Симптом заказчика:** `#/payment` — «Отмена…» залипает, заказ `#3565088f-…` 64₽ не отменяется.
 - **Фикс:** `Payment.svelte` — `destroyed` вместо `finished` в `onDestroy`; cancel + `reconnect_token`; err на intro; отмена в `loading`. `orders#abandon` — `try_reconnect_from_params!` с `params[:id]`.
 - **MCP:** `b17_br6_payment_cancel_prep_fly.rb` + `b17_br6_payment_cancel_mcp.mjs` — **6/6 PASS** на Fly tenant заказчика.
-- **Артефакт:** [`b17_br6_payment_cancel_post_deploy_2026-06-16.json`](milestones/veha_2/artifacts/demo-feedback/b17_br6_payment_cancel_post_deploy_2026-06-16.json).
-- **Дальше:** `fly deploy` → повтор MCP · апрув заказчика `[ ]`.
+- **Артефакт post-deploy:** [`b17_br6_payment_cancel_post_deploy_2026-06-17.json`](milestones/veha_2/artifacts/demo-feedback/b17_br6_payment_cancel_post_deploy_2026-06-17.json) — 6/6 PASS.
+- **Дальше:** апрув заказчика `[ ]`.
 
 ### Сессия 2026-06-04 (B1.7 BR-6 — регистрация бага, только доки)
 
