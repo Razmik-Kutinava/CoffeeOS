@@ -86,7 +86,7 @@
 | B1.4 | **PWA витрины** | [ТЗ](customer_tasks/B1_4_pwa_shop.md) · manifest + SW + offline; app/kiosk отдельно | **в работе** ТЗ 2026-06-11 |
 | B1.5 | **ТТК + туториал УК** | Блок 1.1 | низкий |
 | B1.6 | **Стоп-лист UI barista** — серый блок «в стопе» | W1.4 backlog; сейчас sold_out скрыт | низкий |
-| B1.7 | **Email verify** — checkout; **BR-6 CLOSED OPS** | [ТЗ](customer_tasks/B1_7_checkout_order_screen.md) | **`[x]` внутр.** · BR-6 Fly MCP `[x]` · заказчик `[ ]` |
+| B1.7 | **Email verify** — checkout; **BR-6/BR-7 CLOSED OPS** | [ТЗ](customer_tasks/B1_7_checkout_order_screen.md) | **`[x]` внутр.** · BR-6/BR-7 Fly MCP `[x]` · заказчик `[ ]` |
 | B1.10 | **Витрина** — убрать «Блог» из навигации, LCP ≤ 1.5 с WebView | [ТЗ](customer_tasks/B1_10_remove_blog_nav.md) | **ТЗ** · апрув `[ ]` · **первая** |
 | B1.9 | **Карточка товара** — toggle модификаторов, без обязательности | [ТЗ](customer_tasks/B1_9_product_modifier_toggle.md) | **ТЗ** · апрув `[ ]` · после B1.10 |
 | B1.8 | **Свой домен → своя почта для рассылки** | После домена (не `fly.dev`): `noreply@…` / `orders@…`, DNS в Brevo (SPF/DKIM/DMARC), сменить `MAIL_FROM` на Fly | **напоминание** |
@@ -101,7 +101,7 @@
 
 | Порядок | ID | Задача | Статус | Файл |
 |---------|-----|--------|--------|------|
-| 1 | **B1.7** | Доработка экрана оформления заказа | внутр. PASS · заказчик `[ ]` | [B1_7_checkout_order_screen.md](customer_tasks/B1_7_checkout_order_screen.md) |
+| 1 | **B1.7** | Доработка экрана оформления · **BR-7** «Оплатить» при пустом «Имя» | внутр. PASS · **BR-7 CLOSED OPS** · апрув `[ ]` | [B1_7_checkout_order_screen.md](customer_tasks/B1_7_checkout_order_screen.md) |
 | 2 | **B1.1** | Экран уведомления заказа + прогресс-бар | **`[x]`** 2026-06-10 · Fly + FCM | [B1_1_order_status_progress.md](customer_tasks/B1_1_order_status_progress.md) |
 | 3 | **B2.1** | Табло бариста — интерактивная карточка | ревизия OPS CLOSED · **B2-S1 звук CLOSED OPS** | [B2_1_barista_order_board.md](customer_tasks/B2_1_barista_order_board.md) |
 | 4 | **B2.2** | Меню + Создать (бариста) | **ТЗ** · реализация `[ ]` | [B2_2_barista_menu_create_merge.md](customer_tasks/B2_2_barista_menu_create_merge.md) |
@@ -109,7 +109,7 @@
 | 6 | **B1.10** | Убрать «Блог» из навигации витрины | **ТЗ** · апрув на код `[ ]` | [B1_10_remove_blog_nav.md](customer_tasks/B1_10_remove_blog_nav.md) |
 | 7 | **B1.9** | Toggle-модификаторы на карточке товара | **ТЗ** · апрув на код `[ ]` | [B1_9_product_modifier_toggle.md](customer_tasks/B1_9_product_modifier_toggle.md) |
 
-**Следующий фокус по задачам заказчика:** **B2.2** · B1.7/B1.9/B2-S1 апрув `[ ]`.
+**Следующий фокус по задачам заказчика:** **B2.2** · апрувы BR-7 / B1.9 / B2-S1 `[ ]`.
 
 ---
 
@@ -117,7 +117,7 @@
 
 | Поток | Готово | Открыто |
 |-------|--------|---------|
-| **1 Приём** | Оплата §2.3, W1.1–W1.5, **B1.1**, онбординг | **B1.4 PWA** (ТЗ) · B1.2–B1.3, B1.7 прогон заказчика |
+| **1 Приём** | Оплата §2.3, W1.1–W1.5, **B1.1**, онбординг, **BR-7** | **B1.4 PWA** (ТЗ) · B1.2–B1.3 |
 | **2 Обработка** | 2A.1–2A.4 (УК) · B2.1 · **B2-S1 звук** | B2.2 стоп-лист |
 | **3 Тест-приёмка** | — | Happy path витрина→табло→уведомления; отказы на всех экранах; изоляция точек |
 

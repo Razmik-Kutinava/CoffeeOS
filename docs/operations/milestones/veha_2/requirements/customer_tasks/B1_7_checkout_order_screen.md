@@ -3,7 +3,9 @@
 **ID:** B1.7 · **Источник:** заказчик, чат 2026-06  
 **Статус:** `[x]` реализация + **внутренняя приёмка PASS** (2026-06-09) · **приёмка заказчика** `[ ]` — ждём прогон
 
-**Активный баг:** нет · **BR-6** — **CLOSED OPS** 2026-06-16 · Fly MCP 6/6 · deploy `[ ]` · апрув заказчика `[ ]` · см. [§ BR-6](#баг-репорт-6--отмена-заказа-на-экране-оплаты-closed-ops-2026-06-16)
+**Активный баг:** **BR-7** — **CLOSED OPS** · Fly MCP 7/7 · deploy `[x]` 2026-06-17 · апрув заказчика `[ ]` · см. [§ BR-7](#баг-репорт-7--оплатить-при-пустом-имени-closed-ops-2026-06-17)
+
+**BR-6** — **CLOSED OPS** · Fly MCP 6/6 · deploy `[x]` 2026-06-17 · апрув заказчика `[ ]` · см. [§ BR-6](#баг-репорт-6--отмена-заказа-на-экране-оплаты-closed-ops-2026-06-16)
 
 **BR-5 регрессия:** **CLOSED OPS** 2026-06-04 · Fly MCP 7/7 + catalog + quick-add · апрув заказчика `[ ]` · см. [§ BR-5 регрессия](#баг-репорт-5--регрессия-второй-товар-в-корзину-closed-ops-2026-06-04)
 
@@ -194,7 +196,8 @@
 | BR-3 | «Сессия истекла» при повторном checkout после OTP | `[x]` | `[x]` | `[ ]` |
 | BR-5 | Второй (другой) товар в корзину: переход на `/cart` + индикация добавления | `[x]` | `[x]` 2026-06-04 | `[ ]` |
 | BR-5v1 | *(история)* тот же баг — fix 2026-06-15 | `[x]` | `[x]` 2026-06-15 | `[ ]` |
-| BR-6 | Отмена заказа на `#/payment`: кнопка «Отмена заказа» → abandon + возврат | `[x]` | `[x]` MCP 6/6 · deploy `[ ]` | `[ ]` |
+| BR-6 | Отмена заказа на `#/payment`: кнопка «Отмена заказа» → abandon + возврат | `[x]` | `[x]` 2026-06-17 | `[ ]` |
+| BR-7 | «Оплатить →» неактивна после verify email при пустом «Имя» | `[x]` | `[x]` 2026-06-17 | `[ ]` |
 
 **Артефакты:** [`b17_br_fixes_2026-06-10.json`](../../artifacts/demo-feedback/b17_br_fixes_2026-06-10.json) · скрин [`checkout_no_promo_no_cash_sbp.png`](../../artifacts/demo-feedback/screenshots/b17_br_fixes_2026-06-10/checkout_no_promo_no_cash_sbp.png)
 
@@ -351,12 +354,12 @@
 
 | | |
 |--|--|
-| **Статус** | **CLOSED OPS** 2026-06-16 · MCP 6/6 PASS · deploy hardening `[ ]` |
+| **Статус** | **CLOSED OPS** · MCP 6/6 PASS · deploy `[x]` 2026-06-17 |
 | **Причина** | `onDestroy` → `finished=true` блокировал редирект после abandon; `cancelling` залипал («Отмена…»); abandon без `reconnect_token` при слабой сессии; ошибки не на intro |
 | **Фикс** | `Payment.svelte`: `destroyed` flag, cancel с token + `finally`, err UI, отмена в `loading`; `orders#abandon` + `try_reconnect_from_params!` (`params[:id]`) |
 | **Прогон** | `ruby bin/b17_br6_payment_cancel_prep_fly.rb` → `node bin/b17_br6_payment_cancel_mcp.mjs` |
-| **Артефакт** | [`b17_br6_payment_cancel_post_deploy_2026-06-16.json`](../../artifacts/demo-feedback/b17_br6_payment_cancel_post_deploy_2026-06-16.json) |
-| **Скрины** | `b17_br6_payment_cancel_before_2026-06-16.png` · `b17_br6_payment_cancel_after_2026-06-16.png` |
+| **Артефакт** | [`b17_br6_payment_cancel_post_deploy_2026-06-17.json`](../../artifacts/demo-feedback/b17_br6_payment_cancel_post_deploy_2026-06-17.json) |
+| **Скрины** | `b17_br6_payment_cancel_before_2026-06-17.png` · `b17_br6_payment_cancel_after_2026-06-17.png` |
 
 #### Гипотезы (не фикс — только для repro)
 
@@ -373,13 +376,75 @@
 
 - [x] **Апрув** на фикс
 - [x] **Воспроизвести** на Fly — MCP full checkout 6/6
-- [x] **Скрин «до»** — `b17_br6_payment_cancel_before_2026-06-16.png`
+- [x] **Скрин «до»** — `b17_br6_payment_cancel_before_2026-06-17.png`
 - [x] **Точка сбоя:** cancel redirect / session / UI feedback
 - [x] **Исправить** код
-- [ ] **Deploy Fly** (hardening)
-- [x] **MCP post-deploy** — 6/6 PASS 2026-06-16
-- [x] **Скрин «после»** — `b17_br6_payment_cancel_after_2026-06-16.png`
+- [x] **Deploy Fly** 2026-06-17
+- [x] **MCP post-deploy** — 6/6 PASS 2026-06-17
+- [x] **Скрин «после»** — `b17_br6_payment_cancel_after_2026-06-17.png`
 - [x] **Закрыть** DEMO_FEEDBACK → `done`
 - [ ] **Апрув заказчика** `[ ]`
 
 **Связано:** §2.3 оплата · [CUSTOMER_BUSINESS_REQUIREMENTS.md](../CUSTOMER_BUSINESS_REQUIREMENTS.md) этап 4.4.
+
+---
+
+### Баг-репорт №7 — «Оплатить» при пустом «Имя» **CLOSED OPS** 2026-06-17
+
+**Источник:** заказчик (текст ниже — **без правок**).
+
+> Баг-репорт. Кнопка «Оплатить» не активируется после подтверждения email, если не заполнено поле «Имя», при этом поле «Имя» не помечено как обязательное на экране оформления заказа
+>
+> **Описание**
+>
+> **Шаги к воспроизведению:**
+> 1. Открыть приложение CoffeeOS (coffeeos.fly.dev)
+> 2. Перейти в раздел «Корзина»
+> 3. Нажать кнопку оформления заказа
+> 4. Перейти на экран «Оформление»
+> 5. Оставить поле «Имя» пустым
+> 6. Ввести корректный email в поле «Email»
+> 7. Нажать кнопку «Отправить код»
+> 8. Ввести полученный код в поле «Код из письма»
+> 9. Нажать кнопку «Подтвердить email»
+> 10. Дождаться сообщения «Код отправлен на почту» (зеленый текст)
+>
+> **Фактический результат:**  
+> После успешного подтверждения email кнопка «Оплатить →» остается неактивной (серого/коричневого цвета), оформление заказа невозможно завершить. Поле «Имя» не помечено как обязательное (нет звездочки *, нет текста об обязательности), система не запрашивает его заполнение при первом входе на экран.
+>
+> **Ожидаемый результат:**  
+> После успешного подтверждения email кнопка «Оплатить →» должна стать активной (оранжевого цвета) и доступной для нажатия. Поле «Имя» является не обязательным для оформления заказа, оно не должно быть явно как обязательное и валидация должна происходить до этапа отправки кода на email, либо система должна автоматически подтягивать имя из профиля пользователя, если пользователь указал него в личном кабинете.
+>
+> **Требование:**  
+> Задача на доработку экрана оформления заказа — форма должна позволять завершить оформление заказа после успешной верификации email. Поля, блокирующие завершение действия, должны быть явно помечены как обязательные.
+
+| | |
+|--|--|
+| **Статус** | **CLOSED OPS** · deploy `[x]` 2026-06-17 · MCP **7/7 PASS** |
+| **Фикс** | `canPay` без `name.trim()` — имя необязательно; бэкенд подставляет «Гость» |
+| **Артефакт** | [`b17_br7_checkout_name_pay_post_deploy_2026-06-17.json`](../../artifacts/demo-feedback/b17_br7_checkout_name_pay_post_deploy_2026-06-17.json) |
+| **Скрины до** | [`screenshots/b17_br7_checkout_name_pay_2026-06-17/`](../../artifacts/demo-feedback/screenshots/b17_br7_checkout_name_pay_2026-06-17/) (баг) |
+| **Скрин после** | [`screenshots/b17_br7_checkout_name_pay_after_2026-06-17/01_empty_name_email_verified_pay_enabled.png`](../../artifacts/demo-feedback/screenshots/b17_br7_checkout_name_pay_after_2026-06-17/01_empty_name_email_verified_pay_enabled.png) |
+| **Прогон** | `ruby bin/b17_br7_checkout_name_pay_prep_fly.rb` → `node bin/b17_br7_checkout_name_pay_mcp.mjs` |
+| **Журнал** | [`DEMO_FEEDBACK.md`](../DEMO_FEEDBACK.md) — `done` |
+
+#### Контекст CoffeeOS
+
+| Тема | Было | Стало |
+|------|------|-------|
+| `canPay` | `name.trim()` + email + `emailVerified` | email + `emailVerified` |
+| UI «Имя» | Без `*` | Без `*` (имя необязательно по ТЗ) |
+| Заказ без имени | Кнопка серая | «Гость» на бэкенде (`OrderCreator`) |
+
+#### Чеклист (BR-7)
+
+- [x] **Текст заказчика** дословно в этом файле
+- [x] **Скрины** бага в repo (2 из чата)
+- [x] **Фикс** `Checkout.svelte` — убрать `name` из `canPay`
+- [x] **Deploy Fly** 2026-06-17
+- [x] **MCP post-deploy** — 7/7 PASS
+- [x] **Скрин «после»** — pay enabled при пустом имени
+- [x] **Закрыть** DEMO_FEEDBACK → `done`
+- [ ] **Апрув заказчика** `[ ]`
+
+**Код:** `app/frontend/routes/Checkout.svelte` · скрипты `bin/b17_br7_checkout_name_pay_*` · `bin/fetch_fly_otp.rb`

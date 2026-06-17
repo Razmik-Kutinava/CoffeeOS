@@ -1,0 +1,141 @@
+{
+  "scenario": "b17_br7_checkout_name_pay",
+  "task_id": "BR-7",
+  "date": "2026-06-17",
+  "status": "PASS",
+  "verdict": "PASS",
+  "pass": true,
+  "base": "https://coffeeos.fly.dev",
+  "tenant_id": "655aaccb-004a-4bb9-a50a-ce618854dda3",
+  "email": "b17-br7-06171558@coffeeos.dev",
+  "fix": {
+    "root_cause": "canPay required name.trim() while UI did not mark name as required",
+    "files": [
+      "app/frontend/routes/Checkout.svelte"
+    ]
+  },
+  "playwright": {
+    "script": "bin/b17_br7_checkout_name_pay_mcp.mjs",
+    "prep": "bin/b17_br7_checkout_name_pay_prep_fly.rb",
+    "steps": [
+      {
+        "id": "00",
+        "action": "cart add via API",
+        "pass": true,
+        "at": "2026-06-17T15:58:41.861Z",
+        "status": 200,
+        "body": {
+          "cart": [
+            {
+              "index": 0,
+              "product_id": "3c5259e0-f42f-4d47-953d-2ce82e335f8c",
+              "product_name": "Фильтр-кофе без кофеина (декаф) Гватемала",
+              "quantity": 1,
+              "price": 12.95,
+              "image_url": "/uploads/products/3c5259e0-f42f-4d47-953d-2ce82e335f8c-9bd4b435.png",
+              "selected_modifiers": [],
+              "removed_modifiers": [
+                {
+                  "id": "7c469cb3-43d6-400e-9863-835149ecd4fb",
+                  "name": "Со льдом",
+                  "price": 0
+                },
+                {
+                  "id": "9fd199d3-919d-430a-895c-7f32b7c54812",
+                  "name": "Кардамон и корица — пряный акцент, без сладости",
+                  "price": 0
+                },
+                {
+                  "id": "5704146b-26ce-4f84-aeee-81410d496f16",
+                  "name": "Мёд — натуральная сладость с цветочным оттенком",
+                  "price": 30
+                },
+                {
+                  "id": "9a355275-5b1b-441d-890c-13bca0dec8eb",
+                  "name": "Пивной кордиал — сладкий, глубокий, насыщенный",
+                  "price": 30
+                },
+                {
+                  "id": "a3a6ec13-e4af-47b6-876b-2ba4cc6b1d83",
+                  "name": "Сахар — мягкая сладость",
+                  "price": 0
+                },
+                {
+                  "id": "826e9365-c881-4372-9258-1e43a583589d",
+                  "name": "Топинамбур — нейтральная сладость без послевкусия",
+                  "price": 30
+                },
+                {
+                  "id": "8d4f0d06-43c1-400e-948b-380d897a23f8",
+                  "name": "Яблочный с корицей — мягкий, с лёгкой фруктовостью",
+                  "price": 30
+                },
+                {
+                  "id": "931e3a77-4a4c-4eb1-91b6-89b8c957162c",
+                  "name": "Сахар — мягкая сладость",
+                  "price": 0
+                },
+                {
+                  "id": "ecbc6a35-ad83-4e9e-8aff-73e4600130ff",
+                  "name": "Топинамбур — нейтральная сладость без послевкусия",
+                  "price": 0
+                },
+                {
+                  "id": "745328b4-24f2-42bc-ade3-13b5c506ed20",
+                  "name": "Мёд — натуральная сладость с цветочным оттенком",
+                  "price": 0
+                }
+              ],
+              "unit_total": 12.95,
+              "line_total": 12.95
+            }
+          ],
+          "total": 12.95
+        }
+      },
+      {
+        "id": "01",
+        "action": "name field empty",
+        "pass": true,
+        "at": "2026-06-17T15:58:43.132Z"
+      },
+      {
+        "id": "02",
+        "action": "email filled",
+        "pass": true,
+        "at": "2026-06-17T15:58:43.188Z"
+      },
+      {
+        "id": "03",
+        "action": "otp fetched from Fly",
+        "pass": true,
+        "at": "2026-06-17T15:58:50.808Z",
+        "otp": "***"
+      },
+      {
+        "id": "04",
+        "action": "email verified in UI",
+        "pass": true,
+        "at": "2026-06-17T15:58:52.926Z"
+      },
+      {
+        "id": "05",
+        "action": "pay button enabled with empty name after verify",
+        "pass": true,
+        "at": "2026-06-17T15:58:53.034Z"
+      },
+      {
+        "id": "06",
+        "action": "pay button visually active (enabled)",
+        "pass": true,
+        "at": "2026-06-17T15:58:53.044Z"
+      }
+    ],
+    "started_at": "2026-06-17T15:58:39.541Z",
+    "finished_at": "2026-06-17T15:58:53.142Z"
+  },
+  "screenshots": [
+    "docs/operations/milestones/veha_2/artifacts/demo-feedback/screenshots/b17_br7_checkout_name_pay_after_2026-06-17/01_empty_name_email_verified_pay_enabled.png"
+  ],
+  "repro_artifact": "b17_br7_checkout_name_pay_repro_2026-06-17.json"
+}

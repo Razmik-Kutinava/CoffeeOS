@@ -2,8 +2,8 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-06-17 (B2.1 **B2-S1** — CLOSED OPS · MCP 9/9 · deploy)  
-**Предыдущее:** B2-S1 регистрация 2026-06-04 · B1.7 BR-6 deploy  
+**Дата:** 2026-06-17 (B1.7 **BR-7** — CLOSED OPS · MCP 7/7 · deploy)  
+**Предыдущее:** B2.1 B2-S1 CLOSED OPS  
 **Предыдущее:** B1.1 закрыта: FIREBASE_* на Fly · smoke + MCP PASS  
 **Веха 1:** официально не закрыта (§ I, H.3 — `[ ]`).  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
@@ -21,6 +21,7 @@
 
 | Сейчас | Дальше |
 |--------|--------|
+| **B1.7 BR-7** | CLOSED OPS · MCP 7/7 · deploy `[x]` · заказчик `[ ]` | апрув заказчика |
 | **B2.1 B2-S1** | CLOSED OPS · MCP 9/9 · deploy `[x]` · заказчик `[ ]` | апрув заказчика |
 | **B1.7 BR-6** | CLOSED OPS · deploy `[x]` · MCP 6/6 · заказчик `[ ]` | апрув заказчика |
 | **B1.9 апрув** | OPS PASS · заказчик `[ ]` | апрув → B2.2 |
@@ -29,6 +30,15 @@
 | **B1.4 PWA** | код задеплоен · OPS_PASS · заказчик `[ ]` | апрув → B2.2 |
 | **B2.1 ревизия** | OPS CLOSED 2026-06-13 · заказчик `[ ]` | handoff → B2.2 этап 1 |
 | **B2.2** | stage0 `[x]` · этап 1 `[ ]` | единый экран «Меню» |
+
+### Сессия 2026-06-17 (B1.7 BR-7 — checkout «Оплатить» при пустом «Имя», CLOSED OPS)
+
+- **Фикс:** `Checkout.svelte` — `canPay` без `name.trim()`; email/OTP без изменений.
+- **Deploy:** `coffeeos.fly.dev` 2026-06-17.
+- **MCP:** `bin/b17_br7_checkout_name_pay_prep_fly.rb` + `bin/b17_br7_checkout_name_pay_mcp.mjs` — **7/7 PASS**.
+- **Артефакт:** [`b17_br7_checkout_name_pay_post_deploy_2026-06-17.json`](milestones/veha_2/artifacts/demo-feedback/b17_br7_checkout_name_pay_post_deploy_2026-06-17.json).
+- **Скрин после:** [`screenshots/b17_br7_checkout_name_pay_after_2026-06-17/`](milestones/veha_2/artifacts/demo-feedback/screenshots/b17_br7_checkout_name_pay_after_2026-06-17/).
+- **Дальше:** апрув заказчика `[ ]`.
 
 ### Сессия 2026-06-17 (B2.1 B2-S1 — звук табло, CLOSED OPS)
 

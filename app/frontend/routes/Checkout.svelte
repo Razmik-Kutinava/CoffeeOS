@@ -37,7 +37,7 @@
 
   const canSendCode = $derived(isValidEmail(email) && !sendingCode)
   const canPay = $derived(
-    !!name?.trim() && isValidEmail(email) && emailVerified && !submitting
+    isValidEmail(email) && emailVerified && !submitting
   )
 
   function applyServerVerificationStatus(status) {
@@ -211,6 +211,7 @@
 
       saveGuestOrderSession(res.order_id, res.reconnect_token)
       saveGuestProfile({ name, email, emailVerified: true })
+      clearCartCache()
       savedProfile = true
       editContact = false
 

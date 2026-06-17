@@ -1,0 +1,21 @@
+{
+  "scenario": "b17_br7_checkout_name_pay",
+  "task_id": "BR-7",
+  "stand": "https://coffeeos.fly.dev",
+  "tenant_id": "655aaccb-004a-4bb9-a50a-ce618854dda3",
+  "screen": "#/checkout",
+  "reported_at": "2026-06-17",
+  "source": "заказчик (баг-репорт + скрины в чате)",
+  "status": "fixed_deployed",
+  "pending_fix_approval": false,
+  "pass": null,
+  "customer_symptom": "После verify email кнопка «Оплатить →» неактивна при пустом «Имя»; поле не помечено обязательным",
+  "customer_email_example": "aramfifa100@gmail.com",
+  "screenshots": [
+    "screenshots/b17_br7_checkout_name_pay_2026-06-17/01_name_empty_email_verified_pay_disabled.png",
+    "screenshots/b17_br7_checkout_name_pay_2026-06-17/02_contacts_no_name_pay_disabled.png"
+  ],
+  "code_gate": "no code until approval checkbox in BR-7 checklist",
+  "tz_file": "docs/operations/milestones/veha_2/requirements/customer_tasks/B1_7_checkout_order_screen.md",
+  "suspected_code": "Checkout.svelte canPay requires name.trim(); UI label «Имя» without required marker"
+}

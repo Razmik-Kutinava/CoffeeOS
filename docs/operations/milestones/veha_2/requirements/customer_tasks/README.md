@@ -4,8 +4,8 @@
 
 | ID | Задача | Статус | Файл |
 |----|--------|--------|------|
+| **B1.7** | **BR-7:** «Оплатить» при пустом «Имя» на checkout | **CLOSED OPS** · MCP 7/7 · deploy `[x]` 2026-06-17 · апрув `[ ]` | [B1_7_checkout_order_screen.md](B1_7_checkout_order_screen.md) § BR-7 |
 | **B2.1** | **B2-S1:** звук нового заказа на табло | **CLOSED OPS** · MCP 9/9 · deploy `[x]` 2026-06-17 · апрув `[ ]` | [B2_1_barista_order_board.md](B2_1_barista_order_board.md) § B2-S1 |
-| **B1.7** | **BR-6:** отмена на экране оплаты | **CLOSED OPS** · deploy `[x]` 2026-06-17 · апрув `[ ]` | [B1_7_checkout_order_screen.md](B1_7_checkout_order_screen.md) |
 | **B1.10** | Убрать «Блог» из навигации витрины | **закрыта** · апрув `[x]` 2026-06-15 | [B1_10_remove_blog_nav.md](B1_10_remove_blog_nav.md) |
 | B1.7 | Доработка экрана оформления заказа (checkout) | внутр. PASS · BR-fixes · заказчик `[ ]` | [B1_7_checkout_order_screen.md](B1_7_checkout_order_screen.md) |
 | **B1.9** | Toggle-модификаторы на карточке товара | **OPS PASS** · апрув `[ ]` | [B1_9_product_modifier_toggle.md](B1_9_product_modifier_toggle.md) |
@@ -14,4 +14,4 @@
 | B2.2 | Объединить «Меню» + «Создать» | **ТЗ** 2026-06-10 · реализация `[ ]` | [B2_2_barista_menu_create_merge.md](B2_2_barista_menu_create_merge.md) |
 | **B1.4** | **PWA витрины** (install, offline) | **OPS_PASS** 2026-06-12 · заказчик `[ ]` | [B1_4_pwa_shop.md](B1_4_pwa_shop.md) |
 
-**Порядок работ (2026-06):** **B2.2** · B1.7/B1.9/B2-S1 апрув заказчика `[ ]`.
+**Порядок работ (2026-06):** **B2.2** · апрувы BR-7 / B1.9 / B2-S1 `[ ]`.
