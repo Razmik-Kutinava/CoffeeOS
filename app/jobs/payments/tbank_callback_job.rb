@@ -44,6 +44,10 @@ module Payments
         note:                "Т-Банк: #{tbank_status}"
       ).call!
 
+      if our_status == "succeeded"
+        Payments::SavedCardStore.persist_from_tbank!(payment: payment.reload, payload: payload)
+      end
+
       Rails.logger.info("[TbankCallbackJob] Processed OrderId=#{order_id}, status=#{tbank_status}→#{our_status}")
     end
   end

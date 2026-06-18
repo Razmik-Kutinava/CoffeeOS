@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v1.201 — 2026-06-18 (B1.12-R1: рекуррент бэкенд OPS_PASS)
+
+- **R1:** RebillId в `mobile_payment_methods`, Charge API, `GET saved_cards`, `saved_card_id` на orders.
+- **Тесты:** 8 R1 + regression §2.3 PASS.
+- **Артефакт:** `b112_r1_recurrent_ops_pass_2026-06-18.json`.
+
 ## v1.200 — 2026-06-18 (B1.12: ответы Q2–Q7, все вопросы закрыты)
 
 - **Q2** все карты храним, главная = последняя успешная оплата.

@@ -166,13 +166,17 @@ module Shop
           payload[:terminal_key] = Shop::PaymentConfig.terminal_key if Shop::PaymentConfig.iframe_enabled?
         end
 
+        if payload[:payment_url].blank? && creator.provider_payment_id.present?
+          payload[:recurrent_charge] = true
+        end
+
         payload
       end
 
       def order_params
         params.permit(
           :name, :email, :phone, :comment, :is_car_pickup, :car_number,
-          :promo_code, :payment_method, :pickup_time, :client_order_uuid
+          :promo_code, :payment_method, :pickup_time, :client_order_uuid, :saved_card_id
         )
       end
 

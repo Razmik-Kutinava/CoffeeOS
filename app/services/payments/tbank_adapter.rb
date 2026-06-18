@@ -39,8 +39,9 @@ module Payments
     }.freeze
 
     # Инициализирует платёж в Т-Банке.
+    # recurrent + customer_key — привязка карты (RebillId в webhook).
     # Возвращает { payment_url:, provider_payment_id: }
-    def init_payment(order:, return_base_url:, notification_url:)
+    def init_payment(order:, return_base_url:, notification_url:, customer_key: nil, recurrent: false)
       amount_kopecks = (order.final_amount * 100).to_i
 
       payload = {
@@ -52,6 +53,8 @@ module Payments
         "FailURL"        => "#{return_base_url}/payment/fail?order_id=#{order.id}",
         "NotificationURL" => notification_url
       }
+      payload["CustomerKey"] = customer_key.to_s if customer_key.present?
+      payload["Recurrent"] = "Y" if recurrent
       payload["Token"] = build_token(payload)
 
       response = with_circuit_breaker { post_json("#{BASE_URL}/Init", payload) }
@@ -64,6 +67,31 @@ module Payments
         payment_url: response["PaymentURL"],
         provider_payment_id: response["PaymentId"].to_s
       }
+    end
+
+    # Рекуррентное списание: Init → Charge по RebillId.
+    def charge_recurrent(order:, rebill_id:, return_base_url:, notification_url:, customer_key: nil)
+      init_result = init_payment(
+        order: order,
+        return_base_url: return_base_url,
+        notification_url: notification_url,
+        customer_key: customer_key
+      )
+
+      charge_payload = {
+        "TerminalKey" => terminal_key,
+        "PaymentId"   => init_result[:provider_payment_id],
+        "RebillId"    => rebill_id.to_s
+      }
+      charge_payload["Token"] = build_token(charge_payload)
+
+      response = with_circuit_breaker { post_json("#{BASE_URL}/Charge", charge_payload) }
+      unless response.is_a?(Hash)
+        raise Error, "Некорректный ответ Т-Банка (Charge)"
+      end
+      raise ApiError.new(error_code: response["ErrorCode"], message: response["Message"].to_s) unless response["Success"]
+
+      init_result.merge(charged: true)
     end
 
     # Верифицирует webhook от Т-Банка.

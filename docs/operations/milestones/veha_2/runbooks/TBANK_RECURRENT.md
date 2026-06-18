@@ -1,6 +1,6 @@
 # Т-Банк: рекуррентные платежи и привязка карты (B1.12)
 
-**Статус:** черновик этапа 0 · **код не начат**  
+**Статус:** реализация R1 в коде · **код не начат** на Fly до deploy  
 **ТЗ:** [`B1_12_recurrent_payments.md`](../requirements/customer_tasks/B1_12_recurrent_payments.md)  
 **Связано:** §2.3 (базовая оплата закрыта) · `Payments::TbankAdapter` · `POST /callbacks/tbank`
 
@@ -33,10 +33,10 @@
 
 ## TODO перед реализацией
 
-- [ ] Официальная дока Т-Банк: recurrent / rebill / сохранение карты
-- [ ] Параметры Init для привязки карты (CustomerKey, Recurrent и т.п.)
-- [ ] Поля webhook с `RebillId` / token (уточнить по доке)
-- [ ] Web-iframe / платёжная форма для кастомизации
+- [x] Init с `Recurrent=Y` + `CustomerKey` на первой card-оплате
+- [x] Charge по `RebillId` (`TbankAdapter#charge_recurrent`)
+- [x] Webhook → `SavedCardStore` (RebillId + Pan)
+- [ ] Web-iframe / платёжная форма для кастомизации (R2)
 - [ ] Тестовые карты 3DS в sandbox
 - [ ] Маппинг кодов ошибок → UI R3 (истёк срок / нет средств / retry / идемпотентность)
 

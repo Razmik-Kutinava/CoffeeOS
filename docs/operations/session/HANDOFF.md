@@ -9,8 +9,10 @@
 | Что | Статус |
 |-----|--------|
 | ТЗ этап 0 (R1–R3) | `[x]` 2026-06-18 |
-| Ответы Q1–Q7 | `[x]` 2026-06-18 |
-| Апрув на код + `go` | `[ ]` |
+| **R1 бэкенд** | **OPS_PASS** `[x]` 2026-06-18 |
+| Ответы Q1–Q7 | `[x]` |
+| Fly MCP R1 | `[ ]` после deploy |
+| **Следующий шаг** | **R2** web-фрейм + 3DS → `go` |
 
 ТЗ: [`B1_12_recurrent_payments.md`](../milestones/veha_2/requirements/customer_tasks/B1_12_recurrent_payments.md) · runbook: [`TBANK_RECURRENT.md`](../milestones/veha_2/runbooks/TBANK_RECURRENT.md)
 

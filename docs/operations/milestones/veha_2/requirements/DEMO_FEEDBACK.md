@@ -26,7 +26,8 @@
 
 | Дата | Источник | Сценарий / экран | Суть | Статус | PR / коммит |
 |------|----------|------------------|------|--------|-------------|
-| 2026-06-18 | заказчик B1.12 | `#/payment` / checkout | Рекуррент Т-Банк + 1 клик (R1–R3) | **open** *(ТЗ этап 0)* | [b112_stage0_scope_2026-06-18.json](artifacts/demo-feedback/b112_stage0_scope_2026-06-18.json) |
+| 2026-06-18 | B1.12-R1 | shop API / callback | Рекуррент: RebillId + Charge | **done** *(OPS_PASS local)* | [b112_r1_recurrent_ops_pass_2026-06-18.json](artifacts/demo-feedback/b112_r1_recurrent_ops_pass_2026-06-18.json) |
+| 2026-06-18 | заказчик B1.12 | `#/payment` / checkout | Рекуррент Т-Банк эпик (R2–R3) | **open** | [b112_stage0_scope_2026-06-18.json](artifacts/demo-feedback/b112_stage0_scope_2026-06-18.json) |
 | 2026-06-18 | заказчик B1.11 | УК / shop / barista | Режим работы точки продаж | **open** *(ТЗ этап 0)* | [b111_stage0_scope_2026-06-18.json](artifacts/demo-feedback/b111_stage0_scope_2026-06-18.json) |
 | 2026-06-18 | заказчик B2.1 | `/barista` табло | **B2.1:** интерактивная карточка MVP + ревизия 6 слотов | **done** *(апрув заказчика)* | [b21_customer_approval_2026-06-18.json](artifacts/demo-feedback/b21_customer_approval_2026-06-18.json) |
 | 2026-06-17 | заказчик B1.7 | `#/checkout` оформление | **BR-7:** «Оплатить →» неактивна после verify email при пустом «Имя» | **done** *(Fly MCP 7/7 · deploy 2026-06-17)* | [b17_br7_checkout_name_pay_post_deploy_2026-06-17.json](artifacts/demo-feedback/b17_br7_checkout_name_pay_post_deploy_2026-06-17.json) |

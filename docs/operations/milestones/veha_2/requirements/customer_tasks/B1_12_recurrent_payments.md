@@ -1,7 +1,7 @@
 # Эпик: Рекуррентные платежи и UX оплаты витрины (Т-Банк)
 
 **ID:** B1.12 · **Источник:** заказчик, документы эпика (3 задачи)  
-**Статус:** **этап 0** `[x]` 2026-06-18 · код `[ ]` · апрув на старт `[ ]` · апрув заказчика `[ ]`
+**Статус:** **R1 OPS_PASS** `[x]` 2026-06-18 · **R2** `[ ]` · апрув Fly R1 `[ ]`
 
 **Подзадачи:** **R1** бэкенд + БД · **R2** родной ввод / 3DS · **R3** оплата в 1 клик  
 **Порядок реализации:** R1 → R2 → R3 (R3 зависит от R1–R2)
@@ -20,7 +20,7 @@
 | Тема | Сейчас в коде | План B1.12 |
 |------|---------------|------------|
 | **Шлюз** | `Payments::TbankAdapter` · Init → `payment_url` · редирект на форму банка | Рекуррент API Т-Банка · сохранение токена после webhook |
-| **Сохранённые карты** | **нет** | Таблица `user_cards`: `bank_token`, `masked_pan` (без PAN/CVV) |
+| **Сохранённые карты** | **нет** | `mobile_payment_methods` (UserCards в ТЗ): `card_token`, `card_masked` |
 | **Пользователь ↔ карты** | Email-verify гость (B1.7) | **Все карты храним** · **главная** = последняя успешная оплата (Q2 `[x]`) |
 | **Канал** | Svelte витрина web | **Только веб-витрина** · Flutter / киоск — **вне scope** |
 | **Первая оплата** | Редирект / iframe Т-Банка (§2.3) | R2: **web-фрейм** Т-Банка (Q1 `[x]`) |
@@ -35,8 +35,8 @@
 
 | Зона | R | Файлы (ориентир) |
 |------|---|------------------|
-| БД | R1 | `db/migrate/*` — `user_cards` (несколько на пользователя, `is_primary` / last_paid_at) |
-| Модель | R1 | `app/models/user_card.rb` |
+| БД | R1 | `mobile_payment_methods` (существующая таблица) |
+| Модель | R1 | `app/models/mobile_payment_method.rb` |
 | Адаптер | R1 | `app/services/payments/tbank_adapter.rb` — recurrent charge, token save |
 | Callback | R1 | `app/controllers/callbacks/tbank_controller.rb` · `TbankCallbackJob` |
 | Shop API | R1,R3 | `app/controllers/shop/api/*` — saved card, charge by `card_id` |
@@ -53,13 +53,13 @@
 ```
 [x] 0 — ТЗ + ops + этап 0 JSON (2026-06-18)
 [x] 1 — ответы заказчика Q1–Q7 (2026-06-18)
-[ ] 2 — сверка с официальной докой Т-Банк (рекуррент, iframe, 3DS)
-[ ] 3 — апрув владельца / заказчика на старт кода
-[ ] 4 — B1.12-R1: бэкенд + UserCards + API
+[x] 4 — B1.12-R1: бэкенд + saved cards + API (2026-06-18) OPS_PASS
+[ ] 2 — сверка доки Т-Банк (iframe/3DS — R2)
+[ ] 3 — апрув заказчика Fly MCP R1
 [ ] 5 — B1.12-R2: web-фрейм + 3DS на витрине
 [ ] 6 — B1.12-R3: 1 клик + стейт кнопки «Оплатить»
-[ ] 7 — тесты + Fly MCP + артефакты приёмки
-[ ] 8 — апрув заказчика
+[ ] 7 — тесты Fly MCP + артефакт post-deploy R1
+[ ] 8 — апрув заказчика эпик
 ```
 
 ---
@@ -201,10 +201,10 @@
 
 | № | Критерий | R | Код | Заказчик |
 |---|----------|---|-----|----------|
-| 1 | Webhook → `bank_token` + `masked_pan` в `user_cards` | R1 | `[ ]` | `[ ]` |
-| 2 | API: повторное списание по `card_id` + amount | R1 | `[ ]` | `[ ]` |
-| 3 | PAN/CVV не в БД приложения | R1 | `[ ]` | `[ ]` |
-| 4 | Автотесты R1 — 0% отклонение сохранения | R1 | `[ ]` | `[ ]` |
+| 1 | Webhook → RebillId + masked Pan в `mobile_payment_methods` | R1 | `[x]` | `[ ]` |
+| 2 | API: повторное списание по `saved_card_id` | R1 | `[x]` | `[ ]` |
+| 3 | PAN/CVV не в БД приложения | R1 | `[x]` | `[ ]` |
+| 4 | Автотесты R1 — 0% отклонение сохранения | R1 | `[x]` | `[ ]` |
 | 5 | Стилизованный ввод карты (web-фрейм) | R2 | `[ ]` | `[ ]` |
 | 6 | 3DS (SMS) через окно банка | R2 | `[ ]` | `[ ]` |
 | 7 | Экран «Карта привязана / Оплачено» | R2 | `[ ]` | `[ ]` |
@@ -213,7 +213,7 @@
 | 10 | Редирект успех 1.5 ± 0.2 с | R3 | `[ ]` | `[ ]` |
 | 11 | Ошибки: «Привязать другую» vs «Повторить» + идемпотентность | R3 | `[ ]` | `[ ]` |
 | 12 | Загрузка ≤ 100 мс после клика | R3 | `[ ]` | `[ ]` |
-| 13 | Несколько карт в БД, главная = последняя успешная оплата | R1 | `[ ]` | `[ ]` |
+| 13 | Несколько карт в БД, главная = последняя успешная оплата | R1 | `[x]` | `[ ]` |
 
 ---
 
@@ -259,12 +259,14 @@
 
 ## Чеклист B1.12-R1 (после `go`)
 
-- [ ] Миграция `user_cards` (`bank_token`, `masked_pan`, `last_paid_at` / primary)
-- [ ] Расширение `TbankAdapter` — recurrent API
-- [ ] Callback: извлечение и сохранение токена
-- [ ] Shop API: `GET` saved card · `POST` charge by `card_id`
-- [ ] Unit + integration тесты (webhook mock, 0% fail на save)
-- [ ] Артефакт `b112_r1_recurrent_post_deploy_*.json`
+- [x] Модель `MobilePaymentMethod` + таблица `mobile_payment_methods`
+- [x] `TbankAdapter` — Recurrent Init + `charge_recurrent` (Charge)
+- [x] Callback: `SavedCardStore` из RebillId + Pan
+- [x] Shop API: `GET saved_cards` · `POST orders` + `saved_card_id`
+- [x] Unit + integration тесты (8+30 regression)
+- [x] Артефакт `b112_r1_recurrent_ops_pass_2026-06-18.json`
+- [ ] Fly MCP post-deploy (после push/deploy)
+- [ ] Апрув заказчика R1 на Fly
 
 ## Чеклист B1.12-R2 (после R1)
 
@@ -300,4 +302,4 @@
 
 ---
 
-**Статус:** **этап 0 CLOSED OPS** 2026-06-18 · код **не начинать** без апрува и **`go`**.
+**Статус:** **B1.12-R1 CLOSED OPS** 2026-06-18 · R2 **не начинать** без `go` · Fly MCP R1 после deploy.

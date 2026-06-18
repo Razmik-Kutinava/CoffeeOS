@@ -12,7 +12,11 @@ module Shop
       @request = request
     end
 
-    def call!(params)
+    def call!(params, gateway: true)
+      if params[:saved_card_id].present?
+        return charge_with_saved_card!(params)
+      end
+
       if params[:client_order_uuid].present?
         existing = find_client_order_duplicate!(params[:client_order_uuid])
         return existing if existing
@@ -103,7 +107,7 @@ module Shop
       end
 
       begin
-        init_gateway_payment!(order, payment) if flow[:order_status] == :pending_payment
+        init_gateway_payment!(order, payment) if gateway && flow[:order_status] == :pending_payment
       rescue Payments::TbankAdapter::Error, Error => e
         void_pending_online_order!(order, payment)
         raise e
@@ -125,6 +129,14 @@ module Shop
         Shop::GuestOrderBroadcaster.call(order: order, old_status: "pending_payment")
       end
 
+      order
+    end
+
+    def charge_with_saved_card!(params)
+      creator = Shop::RecurrentOrderCreator.new(@session, tenant: @tenant, request: @request)
+      order = creator.call!(params)
+      @provider_payment_id = creator.provider_payment_id
+      @payment_url = nil
       order
     end
 
@@ -297,11 +309,15 @@ module Shop
     def init_gateway_payment!(order, payment)
       return_base_url = ENV.fetch("TBANK_RETURN_URL", @request&.base_url.to_s)
       notification_url = "#{return_base_url}/callbacks/tbank"
+      customer_key = order.customer_id&.to_s
+      recurrent = payment.card? && customer_key.present?
 
       result = Payments::TbankAdapter.new.init_payment(
         order: order,
         return_base_url: return_base_url,
-        notification_url: notification_url
+        notification_url: notification_url,
+        customer_key: customer_key,
+        recurrent: recurrent
       )
 
       payment.update_columns(
