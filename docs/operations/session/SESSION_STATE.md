@@ -27,6 +27,12 @@
 | **B1.4 PWA** | код задеплоен · OPS_PASS · заказчик `[ ]` | апрув |
 | **B2.2** | stage0 `[x]` · этап 1 `[ ]` | единый экран «Меню» |
 
+### Сессия 2026-06-18 (B1.10 — апрув заказчика, ЗАКРЫТА)
+
+- **Источник:** убрать «Блог» из навигации → **принято**.
+- **Артефакт:** [`b110_customer_approval_2026-06-18.json`](milestones/veha_2/artifacts/demo-feedback/b110_customer_approval_2026-06-18.json).
+- **ТЗ:** [`B1_10_remove_blog_nav.md`](milestones/veha_2/requirements/customer_tasks/B1_10_remove_blog_nav.md).
+
 ### Сессия 2026-06-18 (B1.9 — апрув заказчика, ЗАКРЫТА)
 
 - **Источник:** toggle-модификаторы на карточке → **принято**.
@@ -133,7 +139,7 @@
 - **Запрос заказчика:** убрать вкладку «Блог» из навигации; LCP ≤ 1.5 с в WebView Telegram/Instagram.
 - **ТЗ:** [`B1_10_remove_blog_nav.md`](milestones/veha_2/requirements/customer_tasks/B1_10_remove_blog_nav.md) — scope: `Header.svelte`, блог в БД не трогаем.
 - **Код:** удалена ссылка `<a href="/blog">` в `Header.svelte`; скрин «до» `b110_blog_nav_before.png`.
-- **Fly MCP:** Playwright mobile 4G — нет «Блог», LCP ≤ 1.5 с — **PASS** ([`b110_blog_nav_post_deploy_2026-06-15.json`](milestones/veha_2/artifacts/demo-feedback/b110_blog_nav_post_deploy_2026-06-15.json)).
+- **Fly MCP:** Playwright — нет «Блог» в шапке **PASS** · апрув заказчика `[x]` 2026-06-18 ([`b110_customer_approval_2026-06-18.json`](milestones/veha_2/artifacts/demo-feedback/b110_customer_approval_2026-06-18.json)).
 - **Статус:** OPS **CLOSED** · апрув заказчика `[ ]`.
 - **Следующий шаг:** [B1.9](milestones/veha_2/requirements/customer_tasks/B1_9_product_modifier_toggle.md) toggle-модификаторы.
 

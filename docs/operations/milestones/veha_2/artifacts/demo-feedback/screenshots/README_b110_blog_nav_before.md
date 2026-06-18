@@ -1,6 +1,6 @@
 # B1.10 — скрин «до» (ссылка «Блог» в шапке)
 
-**Задача:** [B1_10_remove_blog_nav.md](../../requirements/customer_tasks/B1_10_remove_blog_nav.md)
+**Задача:** [B1_10_remove_blog_nav.md](../../requirements/customer_tasks/B1_10_remove_blog_nav.md) — **ЗАКРЫТА** · апрув **2026-06-18** · [`b110_customer_approval_2026-06-18.json`](../b110_customer_approval_2026-06-18.json)
 
 **Файл:** `b110_blog_nav_before.png` — шапка витрины Fly: справа «Блог» + «Витрина».
 

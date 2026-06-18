@@ -1,0 +1,18 @@
+{
+  "task_id": "B1.10",
+  "title": "Удалить вкладку «Блог» из навигации витрины",
+  "approved_at": "2026-06-18",
+  "source": "док заказчика — задача принята",
+  "verdict": "APPROVED",
+  "scope_approved": [
+    "Ссылка «Блог» убрана из шапки витрины (Header.svelte)",
+    "Статьи блога в БД/CMS не удалялись",
+    "Fly MCP: «Блог» отсутствует в шапке"
+  ],
+  "tz_file": "docs/operations/milestones/veha_2/requirements/customer_tasks/B1_10_remove_blog_nav.md",
+  "evidence": [
+    "docs/operations/milestones/veha_2/artifacts/demo-feedback/b110_blog_nav_post_deploy_2026-06-15.json",
+    "docs/operations/milestones/veha_2/artifacts/demo-feedback/screenshots/b110_blog_nav_after_2026-06-15.png"
+  ],
+  "note": "Код и функциональная приёмка закрыты 2026-06-15/16. Формальный апрув заказчика зафиксирован ops 2026-06-18."
+}

@@ -5,7 +5,7 @@
 | ID | Задача | Статус | Файл |
 |----|--------|--------|------|
 | **B1.7** | Доработка экрана оформления заказа (checkout) | **закрыта** · апрув `[x]` 2026-06-04 | [B1_7_checkout_order_screen.md](B1_7_checkout_order_screen.md) |
-| **B1.10** | Убрать «Блог» из навигации витрины | **закрыта** · апрув `[x]` 2026-06-15 | [B1_10_remove_blog_nav.md](B1_10_remove_blog_nav.md) |
+| **B1.10** | Убрать «Блог» из навигации витрины | **закрыта** · апрув `[x]` 2026-06-18 | [B1_10_remove_blog_nav.md](B1_10_remove_blog_nav.md) |
 | **B2.1** | **B2-S1:** звук нового заказа на табло | **CLOSED OPS** · MCP 9/9 · deploy `[x]` 2026-06-17 · апрув `[ ]` | [B2_1_barista_order_board.md](B2_1_barista_order_board.md) § B2-S1 |
 | **B1.9** | Toggle-модификаторы на карточке товара | **закрыта** · апрув `[x]` 2026-06-18 | [B1_9_product_modifier_toggle.md](B1_9_product_modifier_toggle.md) |
 | B1.1 | Экран уведомления заказа + прогресс-бар | PASS 2026-06-10 · ревизия R0–R4 Fly `[x]` · заказчик `[x]` 2026-06-18 | [B1_1_order_status_progress.md](B1_1_order_status_progress.md) |

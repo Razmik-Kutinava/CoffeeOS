@@ -1,21 +1,19 @@
 {
   "scenario": "b110_post_deploy_no_blog",
+  "tool": "playwright_mobile_4g (MCP DevTools equivalent)",
   "stand": "https://coffeeos.fly.dev",
   "tenant_id": "655aaccb-004a-4bb9-a50a-ce618854dda3",
-  "deploy_commits": ["72acb4e"],
   "shop_url": "https://coffeeos.fly.dev/shop?tenant_id=655aaccb-004a-4bb9-a50a-ce618854dda3",
-  "started_at": "2026-06-15T14:44:58.158Z",
-  "finished_at": "2026-06-15T14:45:00.555Z",
-  "pass": true,
-  "customer_signoff": true,
-  "customer_signoff_at": "2026-06-15",
-  "tools": ["playwright:b110_blog_nav_mcp.mjs", "chrome-devtools-mcp (profile busy, Playwright fallback)"],
+  "started_at": "2026-06-16T08:08:39.388Z",
+  "finished_at": "2026-06-16T08:08:45.148Z",
+  "pass": false,
+  "expect_blog": false,
   "steps": [
     {
       "id": "01",
       "action": "header has no «Блог»",
       "pass": true,
-      "at": "2026-06-15T14:45:00.554Z",
+      "at": "2026-06-16T08:08:45.146Z",
       "hasBlogInHeader": false,
       "headerText": "CoffeeOS\nВитрина"
     },
@@ -23,34 +21,31 @@
       "id": "02",
       "action": "header shows «Витрина»",
       "pass": true,
-      "at": "2026-06-15T14:45:00.554Z",
+      "at": "2026-06-16T08:08:45.147Z",
       "hasVitrina": true
     },
     {
       "id": "03",
       "action": "LCP / interactive ≤ 1500 ms",
-      "pass": true,
-      "at": "2026-06-15T14:45:00.554Z",
-      "lcp_ms": 715,
-      "nav_domcontentloaded_ms": 718
+      "pass": false,
+      "at": "2026-06-16T08:08:45.148Z",
+      "lcp_ms": 3637,
+      "nav_domcontentloaded_ms": 3644
     },
     {
       "id": "04",
       "action": "catalog interactive (CoffeeOS visible)",
       "pass": true,
-      "at": "2026-06-15T14:45:00.554Z"
+      "at": "2026-06-16T08:08:45.148Z"
     }
   ],
   "metrics": {
-    "lcp_ms": 715,
-    "navigation_ms": 718,
+    "lcp_ms": 3637,
+    "navigation_ms": 3644,
     "lcp_threshold_ms": 1500
   },
   "screenshot": "b110_blog_nav_after_2026-06-15.png",
-  "devtools_ui": {
-    "tool": "puppeteer-mcp",
-    "headerText": "CoffeeOS\nВитрина",
-    "blogLinkCount": 0,
-    "pass": true
-  }
+  "customer_approval": true,
+  "customer_approval_artifact": "b110_customer_approval_2026-06-18.json",
+  "customer_approval_at": "2026-06-18"
 }

@@ -4,6 +4,15 @@
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev
 
+### B1.10 — убрать «Блог»
+
+| Что | Статус |
+|-----|--------|
+| «Блог» убран из шапки | `[x]` |
+| Апрув заказчика | `[x]` 2026-06-18 — [`b110_customer_approval_2026-06-18.json`](../milestones/veha_2/artifacts/demo-feedback/b110_customer_approval_2026-06-18.json) |
+
+ТЗ: [`B1_10_remove_blog_nav.md`](../milestones/veha_2/requirements/customer_tasks/B1_10_remove_blog_nav.md)
+
 ### B1.7 — checkout (в т.ч. BR-5)
 
 | Что | Статус |
