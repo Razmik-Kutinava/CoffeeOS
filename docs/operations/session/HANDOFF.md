@@ -9,7 +9,8 @@
 | Что | Статус |
 |-----|--------|
 | ТЗ этап 0 (R1–R3) | `[x]` 2026-06-18 |
-| Ответы заказчика Q1–Q7 | `[ ]` |
+| Ответы Q1, Q4, Q6 | `[x]` 2026-06-18 |
+| Ответы Q2, Q3, Q5, Q7 | `[ ]` ждём |
 | Апрув на код + `go` | `[ ]` |
 
 ТЗ: [`B1_12_recurrent_payments.md`](../milestones/veha_2/requirements/customer_tasks/B1_12_recurrent_payments.md) · runbook: [`TBANK_RECURRENT.md`](../milestones/veha_2/runbooks/TBANK_RECURRENT.md)

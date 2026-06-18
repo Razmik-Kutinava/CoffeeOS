@@ -17,7 +17,10 @@
     "bank": "T-Bank",
     "cards_per_user": 1,
     "channel": "web_vitrina_svelte_only",
-    "flutter_kiosk": "out_of_scope"
+    "flutter_kiosk": "out_of_scope",
+    "input_ui": "web_frame_only",
+    "user_identity": "verified_email_guest_b17",
+    "design_mockups": "none_use_vitrina_style"
   },
   "existing_in_code": {
     "tbank_adapter_init": true,
@@ -37,15 +40,28 @@
     "no_pan_in_db",
     "no_cvv_in_db"
   ],
-  "open_questions": [
-    "Q1 web-only vs SDK",
-    "Q2 replace card on rebind",
-    "Q3 card vs sbp vs cash",
-    "Q4 user identity (email guest)",
-    "Q5 opt-in save card",
-    "Q6 design mockups",
-    "Q7 critical error codes"
-  ],
-  "blocked_until_customer": ["Q1", "Q2", "Q4"],
-  "next_step": "сверка доки Т-Банк → ответы Q1–Q7 → апрув → go → R1"
+  "customer_answers": {
+    "Q1": {
+      "answered": true,
+      "date": "2026-06-18",
+      "answer": "Только веб-форма (web-фрейм Т-Банка), без iOS/Android SDK"
+    },
+    "Q2": { "answered": false },
+    "Q3": { "answered": false },
+    "Q4": {
+      "answered": true,
+      "date": "2026-06-18",
+      "answer": "Как сейчас — гость с verified email (B1.7 checkout)"
+    },
+    "Q5": { "answered": false },
+    "Q6": {
+      "answered": true,
+      "date": "2026-06-18",
+      "answer": "Макетов нет — рисуем в стиле текущей витрины"
+    },
+    "Q7": { "answered": false }
+  },
+  "open_questions": ["Q2", "Q3", "Q5", "Q7"],
+  "blocked_until_customer": ["Q2", "Q3", "Q5", "Q7"],
+  "next_step": "ответы Q2,Q3,Q5,Q7 → апрув → go → R1"
 }
