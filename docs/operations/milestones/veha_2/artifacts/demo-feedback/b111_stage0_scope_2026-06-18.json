@@ -1,0 +1,37 @@
+{
+  "task_id": "B1.11",
+  "title": "Режим работы точек продаж (УК → витрина → табло)",
+  "stage": 0,
+  "date": "2026-06-18",
+  "status": "TZ_REGISTERED",
+  "tz_file": "docs/operations/milestones/veha_2/requirements/customer_tasks/B1_11_tenant_operating_hours.md",
+  "code_started": false,
+  "existing_in_code": {
+    "tenants_timezone": true,
+    "tenant_operating_hours": false,
+    "shop_closed_banner": false,
+    "checkout_pay_hours_guard": false
+  },
+  "mvp_scope_customer": [
+    "Поле режима работы в УК (пн–вс)",
+    "Учёт timezone точки",
+    "Синхронизация на сайт и табло",
+    "Баннер «Мы закрыты до [время]»",
+    "Кнопка «Оплатить» disabled вне часов",
+    "Каталог остаётся для просмотра"
+  ],
+  "open_questions": [
+    "Q1 дни недели",
+    "Q2 через полночь",
+    "Q3 праздники",
+    "Q4 кто редактирует",
+    "Q5 корзина vs только оплата",
+    "Q6 табло ночью",
+    "Q7 расписание vs смена бариста",
+    "Q8 текст баннера",
+    "Q9 per-tenant",
+    "Q10 дефолт если пусто"
+  ],
+  "blocked_until_customer": ["Q5", "Q6", "Q7", "Q10"],
+  "next_step": "ответы заказчика → апрув на код → go"
+}
