@@ -1,0 +1,160 @@
+{
+  "scenario": "b17_br6_payment_cancel",
+  "stand": "https://coffeeos.fly.dev",
+  "tenant_id": "655aaccb-004a-4bb9-a50a-ce618854dda3",
+  "order_id": "0e440083-ad2e-4072-80e1-a81bbc0f64f2",
+  "started_at": "2026-06-17T11:12:44.309Z",
+  "finished_at": "2026-06-17T11:12:53.778Z",
+  "pass": true,
+  "steps": [
+    {
+      "id": "00",
+      "action": "cart add via API",
+      "pass": true,
+      "at": "2026-06-17T11:12:47.942Z",
+      "status": 200,
+      "body": {
+        "cart": [
+          {
+            "index": 0,
+            "product_id": "3c5259e0-f42f-4d47-953d-2ce82e335f8c",
+            "product_name": "Фильтр-кофе без кофеина (декаф) Гватемала",
+            "quantity": 1,
+            "price": 12.95,
+            "image_url": "/uploads/products/3c5259e0-f42f-4d47-953d-2ce82e335f8c-9bd4b435.png",
+            "selected_modifiers": [],
+            "removed_modifiers": [
+              {
+                "id": "7c469cb3-43d6-400e-9863-835149ecd4fb",
+                "name": "Со льдом",
+                "price": 0
+              },
+              {
+                "id": "9fd199d3-919d-430a-895c-7f32b7c54812",
+                "name": "Кардамон и корица — пряный акцент, без сладости",
+                "price": 0
+              },
+              {
+                "id": "5704146b-26ce-4f84-aeee-81410d496f16",
+                "name": "Мёд — натуральная сладость с цветочным оттенком",
+                "price": 30
+              },
+              {
+                "id": "9a355275-5b1b-441d-890c-13bca0dec8eb",
+                "name": "Пивной кордиал — сладкий, глубокий, насыщенный",
+                "price": 30
+              },
+              {
+                "id": "a3a6ec13-e4af-47b6-876b-2ba4cc6b1d83",
+                "name": "Сахар — мягкая сладость",
+                "price": 0
+              },
+              {
+                "id": "826e9365-c881-4372-9258-1e43a583589d",
+                "name": "Топинамбур — нейтральная сладость без послевкусия",
+                "price": 30
+              },
+              {
+                "id": "8d4f0d06-43c1-400e-948b-380d897a23f8",
+                "name": "Яблочный с корицей — мягкий, с лёгкой фруктовостью",
+                "price": 30
+              },
+              {
+                "id": "931e3a77-4a4c-4eb1-91b6-89b8c957162c",
+                "name": "Сахар — мягкая сладость",
+                "price": 0
+              },
+              {
+                "id": "ecbc6a35-ad83-4e9e-8aff-73e4600130ff",
+                "name": "Топинамбур — нейтральная сладость без послевкусия",
+                "price": 0
+              },
+              {
+                "id": "745328b4-24f2-42bc-ade3-13b5c506ed20",
+                "name": "Мёд — натуральная сладость с цветочным оттенком",
+                "price": 0
+              }
+            ],
+            "unit_total": 12.95,
+            "line_total": 12.95
+          }
+        ],
+        "total": 12.95
+      }
+    },
+    {
+      "id": "01a",
+      "action": "email verified on server",
+      "pass": true,
+      "at": "2026-06-17T11:12:48.546Z",
+      "verified": true,
+      "email": "b17-br6-06171112@coffeeos.dev"
+    },
+    {
+      "id": "01",
+      "action": "checkout pay button enabled",
+      "pass": true,
+      "at": "2026-06-17T11:12:48.624Z"
+    },
+    {
+      "id": "02",
+      "action": "payment intro after checkout",
+      "pass": true,
+      "at": "2026-06-17T11:12:51.062Z",
+      "orderId": "0e440083-ad2e-4072-80e1-a81bbc0f64f2",
+      "url": "https://coffeeos.fly.dev/shop?tenant_id=655aaccb-004a-4bb9-a50a-ce618854dda3#/payment"
+    },
+    {
+      "id": "03",
+      "action": "redirect #/payment-result after cancel",
+      "pass": true,
+      "at": "2026-06-17T11:12:53.327Z"
+    },
+    {
+      "id": "04",
+      "action": "cancel message visible",
+      "pass": true,
+      "at": "2026-06-17T11:12:53.328Z"
+    },
+    {
+      "id": "05",
+      "action": "«В корзину» on result screen",
+      "pass": true,
+      "at": "2026-06-17T11:12:53.333Z"
+    },
+    {
+      "id": "0e440083-ad2e-4072-80e1-a81bbc0f64f2",
+      "action": "order status cancelled in API",
+      "pass": true,
+      "at": "2026-06-17T11:12:53.567Z",
+      "order_number": "#202606-0082",
+      "total": 12.95,
+      "status": "cancelled",
+      "discount_amount": 0,
+      "payment_settled": true,
+      "created_at": "2026-06-17T11:12:49Z",
+      "reconnect_token": "eyJfcmFpbHMiOnsiZGF0YSI6eyJvaWQiOiIwZTQ0MDA4My1hZDJlLTQwNzItODBlMS1hODFiYmMwZjY0ZjIiLCJjaWQiOiI4Y2VmNGJhMi02NWYzLTRjNWItOThkNC03MDRmNWE1NTZjZDUiLCJ0aWQiOiI2NTVhYWNjYi0wMDRhLTRiYjktYTUwYS1jZTYxODg1NGRkYTMifSwiZXhwIjoiMjAyNi0wNi0xOFQxMToxMjo1My4zMTJaIn19--9d2065e1d56d37df9e8b5512ba8ea5eb2e10fdd0",
+      "tenant": {
+        "name": "Demo Coffee Point B",
+        "address": null,
+        "city": null
+      },
+      "can_cancel": false,
+      "cancelled_by": "guest",
+      "cancel_message": "Заказ отменён",
+      "items": [
+        {
+          "product_name": "Фильтр-кофе без кофеина (декаф) Гватемала",
+          "quantity": 1,
+          "price": 12.95,
+          "selected_modifiers": [],
+          "line_total": 12.95
+        }
+      ]
+    }
+  ],
+  "fix_note": "Payment.svelte cancel flow; abandon + reconnect_token",
+  "customer_approval": true,
+  "customer_approval_artifact": "b17_br6_customer_approval_2026-06-18.json",
+  "customer_approval_at": "2026-06-18"
+}

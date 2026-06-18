@@ -5,7 +5,7 @@
 
 **BR-7** — **CLOSED** · MCP 7/7 · deploy `[x]` 2026-06-17 · апрув `[x]` · см. [§ BR-7](#баг-репорт-7--оплатить-при-пустом-имени-closed-ops-2026-06-17)
 
-**BR-6** — **CLOSED** · MCP 6/6 · deploy `[x]` 2026-06-17 · апрув `[x]` · см. [§ BR-6](#баг-репорт-6--отмена-заказа-на-экране-оплаты-closed-ops-2026-06-16)
+**BR-6** — **CLOSED** · MCP 6/6 · deploy `[x]` 2026-06-17 · апрув заказчика `[x]` **2026-06-18** · см. [§ BR-6](#баг-репорт-6--отмена-заказа-на-экране-оплаты-closed-ops-2026-06-16)
 
 **BR-5 регрессия:** **CLOSED** · Fly MCP 7/7 · апрув заказчика `[x]` **2026-06-18** · см. [§ BR-5 регрессия](#баг-репорт-5--регрессия-второй-товар-в-корзину-closed-ops-2026-06-04)
 
@@ -196,7 +196,7 @@
 | BR-3 | «Сессия истекла» при повторном checkout после OTP | `[x]` | `[x]` | `[x]` |
 | BR-5 | Второй (другой) товар в корзину: переход на `/cart` + индикация добавления | `[x]` | `[x]` 2026-06-04 | `[x]` **2026-06-18** |
 | BR-5v1 | *(история)* тот же баг — fix 2026-06-15 | `[x]` | `[x]` 2026-06-15 | `[x]` |
-| BR-6 | Отмена заказа на `#/payment`: кнопка «Отмена заказа» → abandon + возврат | `[x]` | `[x]` 2026-06-17 | `[x]` |
+| BR-6 | Отмена заказа на `#/payment`: кнопка «Отмена заказа» → abandon + возврат | `[x]` | `[x]` 2026-06-17 | `[x]` **2026-06-18** |
 | BR-7 | «Оплатить →» неактивна после verify email при пустом «Имя» | `[x]` | `[x]` 2026-06-17 | `[x]` |
 
 **Артефакты:** [`b17_br_fixes_2026-06-10.json`](../../artifacts/demo-feedback/b17_br_fixes_2026-06-10.json) · [`b17_customer_approval_2026-06-04.json`](../../artifacts/demo-feedback/b17_customer_approval_2026-06-04.json)
@@ -356,7 +356,7 @@
 
 | | |
 |--|--|
-| **Статус** | **CLOSED OPS** · MCP 6/6 PASS · deploy `[x]` 2026-06-17 |
+| **Статус** | **CLOSED** · MCP 6/6 PASS · deploy `[x]` 2026-06-17 · **апрув заказчика `[x]` 2026-06-18** — [`b17_br6_customer_approval_2026-06-18.json`](../../artifacts/demo-feedback/b17_br6_customer_approval_2026-06-18.json) |
 | **Причина** | `onDestroy` → `finished=true` блокировал редирект после abandon; `cancelling` залипал («Отмена…»); abandon без `reconnect_token` при слабой сессии; ошибки не на intro |
 | **Фикс** | `Payment.svelte`: `destroyed` flag, cancel с token + `finally`, err UI, отмена в `loading`; `orders#abandon` + `try_reconnect_from_params!` (`params[:id]`) |
 | **Прогон** | `ruby bin/b17_br6_payment_cancel_prep_fly.rb` → `node bin/b17_br6_payment_cancel_mcp.mjs` |
@@ -385,7 +385,7 @@
 - [x] **MCP post-deploy** — 6/6 PASS 2026-06-17
 - [x] **Скрин «после»** — `b17_br6_payment_cancel_after_2026-06-17.png`
 - [x] **Закрыть** DEMO_FEEDBACK → `done`
-- [x] **Апрув заказчика** `[x]` 2026-06-04
+- [x] **Апрув заказчика** `[x]` 2026-06-18 — [`b17_br6_customer_approval_2026-06-18.json`](../../artifacts/demo-feedback/b17_br6_customer_approval_2026-06-18.json)
 
 **Связано:** §2.3 оплата · [CUSTOMER_BUSINESS_REQUIREMENTS.md](../CUSTOMER_BUSINESS_REQUIREMENTS.md) этап 4.4.
 
