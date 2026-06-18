@@ -15,12 +15,29 @@
   "implementation_order": ["R1", "R2", "R3"],
   "agreed_scope": {
     "bank": "T-Bank",
-    "cards_per_user": 1,
+    "cards_per_user": "all_stored_no_delete",
+    "primary_card_rule": "last_successful_payment",
     "channel": "web_vitrina_svelte_only",
     "flutter_kiosk": "out_of_scope",
+    "recurrent_methods": "card_only",
+    "sbp_recurrent": "later_out_of_scope",
+    "cash": "unchanged",
     "input_ui": "web_frame_only",
     "user_identity": "verified_email_guest_b17",
+    "save_card": "always_after_first_success",
     "design_mockups": "none_use_vitrina_style"
+  },
+  "error_ui_r3": {
+    "attach_another_card": [
+      "card_expired",
+      "insufficient_funds",
+      "no_funds"
+    ],
+    "retry_payment": [
+      "network_failure",
+      "infrastructure_failure"
+    ],
+    "idempotency": "wait_bank_response_no_double_charge"
   },
   "existing_in_code": {
     "tbank_adapter_init": true,
@@ -30,38 +47,32 @@
     "saved_card_ui": false,
     "one_click_payment": false
   },
-  "mvp_scope_customer": [
-    "Сохранение bank_token и masked_pan после успешного webhook",
-    "Повторное списание по card_id без ввода карты",
-    "Стилизованный ввод карты (web) + 3DS",
-    "Оплата в 1 клик с 4 состояниями кнопки"
-  ],
-  "pci_constraints": [
-    "no_pan_in_db",
-    "no_cvv_in_db"
-  ],
   "customer_answers": {
-    "Q1": {
+    "Q1": { "answered": true, "date": "2026-06-18", "answer": "Только web-фрейм" },
+    "Q2": {
       "answered": true,
       "date": "2026-06-18",
-      "answer": "Только веб-форма (web-фрейм Т-Банка), без iOS/Android SDK"
+      "answer": "Все карты храним, не удаляем; главная = последняя успешная оплата"
     },
-    "Q2": { "answered": false },
-    "Q3": { "answered": false },
-    "Q4": {
+    "Q3": {
       "answered": true,
       "date": "2026-06-18",
-      "answer": "Как сейчас — гость с verified email (B1.7 checkout)"
+      "answer": "Рекуррент только card; СБП позже, не в B1.12; наличные без изменений"
     },
-    "Q5": { "answered": false },
-    "Q6": {
+    "Q4": { "answered": true, "date": "2026-06-18", "answer": "Verified email как B1.7" },
+    "Q5": {
       "answered": true,
       "date": "2026-06-18",
-      "answer": "Макетов нет — рисуем в стиле текущей витрины"
+      "answer": "Сохранять после первой успешной оплаты, без галочки"
     },
-    "Q7": { "answered": false }
+    "Q6": { "answered": true, "date": "2026-06-18", "answer": "Без макетов, стиль витрины" },
+    "Q7": {
+      "answered": true,
+      "date": "2026-06-18",
+      "answer": "Истёк срок/нет денег/недостаточно → привязать другую; сеть/инфра → повторить; ждать ответ банка, без двойного списания"
+    }
   },
-  "open_questions": ["Q2", "Q3", "Q5", "Q7"],
-  "blocked_until_customer": ["Q2", "Q3", "Q5", "Q7"],
-  "next_step": "ответы Q2,Q3,Q5,Q7 → апрув → go → R1"
+  "open_questions": [],
+  "blocked_until_customer": [],
+  "next_step": "сверка доки Т-Банк → апрув → go → R1"
 }
