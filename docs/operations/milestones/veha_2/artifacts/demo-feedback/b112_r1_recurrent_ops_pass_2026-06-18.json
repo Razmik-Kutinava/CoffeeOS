@@ -17,6 +17,7 @@
     "POST /shop/api/orders saved_card_id": "recurrent_charge + provider_payment_id",
     "webhook RebillId": "SavedCardStore → mobile_payment_methods"
   },
-  "fly_mcp": "pending_deploy",
+  "fly_mcp": "PASS 5/5 2026-06-18",
+  "fly_artifact": "b112_r1_recurrent_post_deploy_2026-06-18.json",
   "next_step": "B1.12-R2 web-фрейм + 3DS"
 }

@@ -1,6 +1,6 @@
 # Т-Банк: рекуррентные платежи и привязка карты (B1.12)
 
-**Статус:** реализация R1 в коде · **код не начат** на Fly до deploy  
+**Статус:** R1 в коде + Fly MCP 5/5 (2026-06-18) · R2 — web-iframe + 3DS  
 **ТЗ:** [`B1_12_recurrent_payments.md`](../requirements/customer_tasks/B1_12_recurrent_payments.md)  
 **Связано:** §2.3 (базовая оплата закрыта) · `Payments::TbankAdapter` · `POST /callbacks/tbank`
 
@@ -67,5 +67,15 @@
 | `b112_r1_recurrent_post_deploy_*.json` | R1 |
 | `b112_r2_native_card_post_deploy_*.json` | R2 |
 | `b112_r3_one_click_post_deploy_*.json` | R3 |
+
+**R1 Fly MCP (2026-06-18):**
+
+```bash
+ruby bin/b112_r1_recurrent_prep_fly.rb
+node bin/b112_r1_recurrent_mcp.mjs
+```
+
+Prep: OTP + seed `MobilePaymentMethod` + curl smoke → `tmp/b112_r1_recurrent_prep.json`.  
+MCP: Playwright + session cookies — `saved_cards`, recurrent path (fake RebillId → 422 от банка OK), card init `payment_url`.
 
 Регрессия: `bin/rails test test/integration/shop/api/qa_section_2_3_*` + зона shop.

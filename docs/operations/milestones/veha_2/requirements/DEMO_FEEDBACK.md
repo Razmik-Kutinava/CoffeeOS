@@ -26,6 +26,7 @@
 
 | Дата | Источник | Сценарий / экран | Суть | Статус | PR / коммит |
 |------|----------|------------------|------|--------|-------------|
+| 2026-06-18 | B1.12-R1 Fly | shop API Fly MCP | saved_cards + recurrent path + card init | **done** *(5/5 deploy)* | [b112_r1_recurrent_post_deploy_2026-06-18.json](artifacts/demo-feedback/b112_r1_recurrent_post_deploy_2026-06-18.json) |
 | 2026-06-18 | B1.12-R1 | shop API / callback | Рекуррент: RebillId + Charge | **done** *(OPS_PASS local)* | [b112_r1_recurrent_ops_pass_2026-06-18.json](artifacts/demo-feedback/b112_r1_recurrent_ops_pass_2026-06-18.json) |
 | 2026-06-18 | заказчик B1.12 | `#/payment` / checkout | Рекуррент Т-Банк эпик (R2–R3) | **open** | [b112_stage0_scope_2026-06-18.json](artifacts/demo-feedback/b112_stage0_scope_2026-06-18.json) |
 | 2026-06-18 | заказчик B1.11 | УК / shop / barista | Режим работы точки продаж | **open** *(ТЗ этап 0)* | [b111_stage0_scope_2026-06-18.json](artifacts/demo-feedback/b111_stage0_scope_2026-06-18.json) |

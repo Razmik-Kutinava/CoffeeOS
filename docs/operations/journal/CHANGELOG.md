@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## v1.202 — 2026-06-18 (B1.12-R1: Fly MCP post-deploy 5/5)
+
+- **Fly MCP:** `bin/b112_r1_recurrent_prep_fly.rb` + `bin/b112_r1_recurrent_mcp.mjs` — saved_cards, recurrent path, card init regression.
+- **Артефакт:** `b112_r1_recurrent_post_deploy_2026-06-18.json` + screenshot.
+
 ## v1.201 — 2026-06-18 (B1.12-R1: рекуррент бэкенд OPS_PASS)
 
 - **R1:** RebillId в `mobile_payment_methods`, Charge API, `GET saved_cards`, `saved_card_id` на orders.

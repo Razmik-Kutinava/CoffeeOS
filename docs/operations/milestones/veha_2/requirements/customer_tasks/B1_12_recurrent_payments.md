@@ -265,7 +265,7 @@
 - [x] Shop API: `GET saved_cards` · `POST orders` + `saved_card_id`
 - [x] Unit + integration тесты (8+30 regression)
 - [x] Артефакт `b112_r1_recurrent_ops_pass_2026-06-18.json`
-- [ ] Fly MCP post-deploy (после push/deploy)
+- [x] Fly MCP post-deploy — `b112_r1_recurrent_post_deploy_2026-06-18.json` (5/5)
 - [ ] Апрув заказчика R1 на Fly
 
 ## Чеклист B1.12-R2 (после R1)
@@ -302,4 +302,4 @@
 
 ---
 
-**Статус:** **B1.12-R1 CLOSED OPS** 2026-06-18 · R2 **не начинать** без `go` · Fly MCP R1 после deploy.
+**Статус:** **B1.12-R1 CLOSED OPS + Fly MCP 5/5** 2026-06-18 · R2 **не начинать** без `go`.

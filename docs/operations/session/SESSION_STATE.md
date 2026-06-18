@@ -20,7 +20,7 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **B1.12 рекуррент** | **R1 OPS_PASS** `[x]` 2026-06-18 | R2 web-фрейм → `go` |
+| **B1.12 рекуррент** | **R1 OPS_PASS + Fly MCP 5/5** `[x]` 2026-06-18 | R2 web-фрейм → `go` |
 | **B1.11 режим работы** | этап 0 ТЗ `[x]` · код `[ ]` | ответы Q1–Q10 → апрув → `go` |
 | **B2.1 табло** | **ЗАКРЫТА** · апрув `[x]` 2026-06-18 | backlog фаза 2 в CBR |
 | **B2.1 B2-S1** | CLOSED OPS · MCP 9/9 · deploy `[x]` · заказчик `[ ]` | апрув заказчика |
@@ -29,16 +29,21 @@
 | **B1.4 PWA** | код задеплоен · OPS_PASS · заказчик `[ ]` | апрув |
 | **B2.2** | stage0 `[x]` · этап 1 `[ ]` | единый экран «Меню» |
 
+### Сессия 2026-06-18 (B1.12-R1 — Fly MCP post-deploy, 5/5 PASS)
+
+- **Скрипты:** `bin/b112_r1_recurrent_prep_fly.rb` · `bin/b112_r1_recurrent_mcp.mjs`
+- **Fly:** saved_cards primary · recurrent path (422 fake RebillId — ожидаемо) · card init `payment_url`
+- **Артефакт:** [`b112_r1_recurrent_post_deploy_2026-06-18.json`](milestones/veha_2/artifacts/demo-feedback/b112_r1_recurrent_post_deploy_2026-06-18.json) · скрин `screenshots/b112_r1_recurrent_post_deploy_2026-06-18.png`
+- **Следующий:** R2 web-фрейм + 3DS → ждём **`go`**
+
 ### Сессия 2026-06-18 (B1.12-R1 — рекуррент бэкенд, OPS_PASS)
 
 - **Код:** `MobilePaymentMethod`, `SavedCardStore`, `TbankAdapter#charge_recurrent`, `RecurrentOrderCreator`, `GET /shop/api/saved_cards`.
 - **Тесты:** 8 R1 + 30 regression §2.3 — 0 failures.
 - **Артефакт:** [`b112_r1_recurrent_ops_pass_2026-06-18.json`](milestones/veha_2/artifacts/demo-feedback/b112_r1_recurrent_ops_pass_2026-06-18.json).
-- **Fly MCP:** после deploy.
+- **Fly MCP:** 5/5 PASS — [`b112_r1_recurrent_post_deploy_2026-06-18.json`](milestones/veha_2/artifacts/demo-feedback/b112_r1_recurrent_post_deploy_2026-06-18.json).
 
 ### Сессия 2026-06-18 (B1.12 — рекуррент / 1 клик, этап 0 ТЗ)
-
-- **Источник:** заказчик — 3 связанные задачи (бэкенд токены, родной ввод+3DS, 1 клик).
 - **ТЗ:** [`B1_12_recurrent_payments.md`](milestones/veha_2/requirements/customer_tasks/B1_12_recurrent_payments.md) — R1/R2/R3, текст дословно.
 - **Scope:** Т-Банк · 1 user = 1 card · только веб-витрина.
 - **Ответы Q1–Q7:** закрыты 2026-06-18 (все карты храним, главная = последняя оплата; card only; идемпотентность при retry).

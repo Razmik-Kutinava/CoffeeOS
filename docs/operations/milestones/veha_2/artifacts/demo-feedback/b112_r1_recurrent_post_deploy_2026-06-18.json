@@ -1,0 +1,74 @@
+{
+  "scenario": "b112_r1_recurrent_post_deploy",
+  "stand": "https://coffeeos.fly.dev",
+  "tenant_id": "655aaccb-004a-4bb9-a50a-ce618854dda3",
+  "started_at": "2026-06-18T16:08:33.033Z",
+  "finished_at": "2026-06-18T16:08:44.963Z",
+  "pass": true,
+  "prep_summary": {
+    "saved_cards_http": 200,
+    "recurrent_order_http": 422,
+    "card_init_http": 200
+  },
+  "steps": [
+    {
+      "id": "00",
+      "action": "shop shell loads",
+      "pass": true,
+      "at": "2026-06-18T16:08:35.641Z"
+    },
+    {
+      "id": "01",
+      "action": "GET saved_cards 200",
+      "pass": true,
+      "at": "2026-06-18T16:08:38.613Z",
+      "primary": {
+        "id": "3db7f9b9-2184-4af4-905f-64beb71f8875",
+        "payment_system": "Visa",
+        "masked_pan": "430000******1608",
+        "is_primary": true,
+        "last_used_at": "2026-06-18T16:08:23Z"
+      },
+      "cards": [
+        {
+          "id": "3db7f9b9-2184-4af4-905f-64beb71f8875",
+          "payment_system": "Visa",
+          "masked_pan": "430000******1608",
+          "is_primary": true,
+          "last_used_at": "2026-06-18T16:08:23Z"
+        }
+      ]
+    },
+    {
+      "id": "02",
+      "action": "saved_cards primary masked pan",
+      "pass": true,
+      "at": "2026-06-18T16:08:38.640Z",
+      "expected": "430000******1608",
+      "got": "430000******1608"
+    },
+    {
+      "id": "03",
+      "action": "cart add for recurrent",
+      "pass": true,
+      "at": "2026-06-18T16:08:39.437Z"
+    },
+    {
+      "id": "04",
+      "action": "POST orders saved_card_id → recurrent path",
+      "pass": true,
+      "at": "2026-06-18T16:08:42.004Z",
+      "error": "Не удалось списать с сохранённой карты: Т-Банк API error 223: Неверные параметры.",
+      "status": 422
+    },
+    {
+      "id": "05",
+      "action": "card init still returns payment_url (§2.3 regression)",
+      "pass": true,
+      "at": "2026-06-18T16:08:44.030Z",
+      "status": "pending_payment"
+    }
+  ],
+  "screenshot": "screenshots/b112_r1_recurrent_post_deploy_2026-06-18.png",
+  "verdict": "B1.12-R1 API на Fly: saved_cards + recurrent_charge + card init OK"
+}
