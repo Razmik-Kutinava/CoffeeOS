@@ -1,0 +1,13 @@
+{
+  "task_id": "B1.1",
+  "title": "Экран статуса заказа с прогресс-баром",
+  "approved_at": "2026-06-18",
+  "source": "док заказчика — статус done",
+  "verdict": "APPROVED",
+  "tz_file": "docs/operations/milestones/veha_2/requirements/customer_tasks/B1_1_order_status_progress.md",
+  "evidence": [
+    "docs/operations/milestones/veha_2/artifacts/demo-feedback/b11_acceptance_2026-06-10.json",
+    "docs/operations/milestones/veha_2/artifacts/demo-feedback/b11_revision_acceptance_2026-06-12.json"
+  ],
+  "note": "Закрываем только апрув заказчика; код/Fly MCP были закрыты ранее."
+}

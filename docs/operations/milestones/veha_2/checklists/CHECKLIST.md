@@ -79,6 +79,7 @@
 - [x] **W1.4** Сверка категорий: витрина = barista — **PASS** 2026-06-06 ([`mcp_w14_category_sync_fly_2026-06-06.json`](../artifacts/demo-feedback/mcp_w14_category_sync_fly_2026-06-06.json) — FULL A+B; апрув заказчика)
 - [x] **W1.5** Боевые оплаты — §2.3 PASS 2026-06-06
 - [x] **B1.1** Уведомления гостю — экран статуса + push FCM v1 — **PASS** 2026-06-10 ([`b11_acceptance_2026-06-10.json`](../artifacts/demo-feedback/b11_acceptance_2026-06-10.json); smoke + MCP Fly)
+- [x] **B1.1 ревизия UI (2026-06-12)** — апрув заказчика `[x]` 2026-06-18
 - [x] **B1.4** PWA витрины — **OPS_PASS** 2026-06-12 ([`B1_4`](../requirements/customer_tasks/B1_4_pwa_shop.md) · [`b14_pwa_acceptance_2026-06-12.json`](../artifacts/demo-feedback/b14_pwa_acceptance_2026-06-12.json)) · заказчик `[ ]`
 
 ## B2. Поток 2 — табло баристы
