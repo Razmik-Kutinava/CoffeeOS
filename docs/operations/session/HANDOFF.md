@@ -4,6 +4,15 @@
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev
 
+### B1.7 — checkout (в т.ч. BR-5)
+
+| Что | Статус |
+|-----|--------|
+| BR-5 второй товар в корзину | **закрыт** · апрув `[x]` 2026-06-18 — [`b17_br5_customer_approval_2026-06-18.json`](../milestones/veha_2/artifacts/demo-feedback/b17_br5_customer_approval_2026-06-18.json) |
+| B1.7 целиком | **закрыта** · апрув `[x]` 2026-06-04 |
+
+ТЗ: [`B1_7_checkout_order_screen.md`](../milestones/veha_2/requirements/customer_tasks/B1_7_checkout_order_screen.md)
+
 ### B2.1 — табло бариста
 
 | Что | Статус |

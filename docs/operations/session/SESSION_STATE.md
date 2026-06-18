@@ -27,6 +27,13 @@
 | **B1.4 PWA** | код задеплоен · OPS_PASS · заказчик `[ ]` | апрув |
 | **B2.2** | stage0 `[x]` · этап 1 `[ ]` | единый экран «Меню» |
 
+### Сессия 2026-06-18 (B1.7 BR-5 — апрув заказчика)
+
+- **Источник:** баг-репорт №5 — второй товар в корзину → **принят**.
+- **Артефакт:** [`b17_br5_customer_approval_2026-06-18.json`](milestones/veha_2/artifacts/demo-feedback/b17_br5_customer_approval_2026-06-18.json).
+- **ТЗ:** [`B1_7_checkout_order_screen.md`](milestones/veha_2/requirements/customer_tasks/B1_7_checkout_order_screen.md) § BR-5.
+- **Backlog:** нет — scope закрыт.
+
 ### Сессия 2026-06-18 (B2.1 — апрув заказчика, ЗАКРЫТА)
 
 - **Источник:** док заказчика — интерактивное табло баристы → **done** (MVP + ревизия).
@@ -147,7 +154,7 @@
 - **Фикс:** `$effect` reload по `params.id`; баннер «добавлен в корзину» на `Cart.svelte`; `CategoryProducts` quick-add не блокирует другой товар.
 - **API Fly:** два разных `product_id` → 200, 2 lines — PASS ([`b17_cart_second_product_api_2026-06-14.json`](milestones/veha_2/artifacts/demo-feedback/b17_cart_second_product_api_2026-06-14.json)).
 - **MCP:** Playwright 7/7 + Chrome DevTools — **PASS** 2026-06-15 ([`b17_cart_second_product_post_deploy_2026-06-15.json`](milestones/veha_2/artifacts/demo-feedback/b17_cart_second_product_post_deploy_2026-06-15.json)).
-- **Статус:** BR-5 **CLOSED** (код + Fly). Апрув заказчика `[ ]`.
+- **Статус:** BR-5 **CLOSED** (код + Fly) · апрув заказчика `[x]` 2026-06-18.
 - **Очередь:** B1.9 (toggle модификаторы).
 
 ### Сессия 2026-06-12 (B2.1 ревизия — 6 карточек + live)

@@ -23,5 +23,8 @@
       { "product_id": "24dae391-2199-4959-907e-d08c4cec3329", "qty": 1 }
     ]
   },
-  "screenshot": "screenshots/b17_cart_second_product_post_deploy_2026-06-15.png"
+  "screenshot": "screenshots/b17_cart_second_product_post_deploy_2026-06-15.png",
+  "customer_approval": true,
+  "customer_approval_artifact": "b17_br5_customer_approval_2026-06-18.json",
+  "customer_approval_at": "2026-06-18"
 }

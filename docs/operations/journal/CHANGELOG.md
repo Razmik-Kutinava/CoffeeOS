@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## v1.193 — 2026-06-18 (B1.7 BR-5: апрув заказчика)
+
+- **BR-5:** второй товар в корзину — апрув заказчика `b17_br5_customer_approval_2026-06-18.json`.
+- **Артефакты:** обновлены `b17_br5_regression_post_deploy`, `b17_cart_second_product_post_deploy`.
+
 ## v1.192 — 2026-06-18 (B2.1: апрув заказчика + backlog фаза 2)
 
 - **B2.1:** апрув заказчика MVP + ревизия — `b21_customer_approval_2026-06-18.json`.

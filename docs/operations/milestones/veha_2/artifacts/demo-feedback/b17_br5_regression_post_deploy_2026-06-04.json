@@ -46,5 +46,7 @@
     "after_two_products": "screenshots/b17_br5_regression_after_2026-06-04.png",
     "cart_after_p1": "screenshots/b17_br5_regression_after_p1_2026-06-04.png"
   },
-  "customer_approval": false
+  "customer_approval": true,
+  "customer_approval_artifact": "b17_br5_customer_approval_2026-06-18.json",
+  "customer_approval_at": "2026-06-18"
 }

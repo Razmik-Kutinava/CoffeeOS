@@ -1,0 +1,13 @@
+{
+  "task_id": "B1.7-BR-5",
+  "title": "Второй (другой) товар в корзину — переход на /cart и индикация",
+  "approved_at": "2026-06-18",
+  "source": "док заказчика — баг-репорт №5, статус принят",
+  "verdict": "APPROVED",
+  "tz_file": "docs/operations/milestones/veha_2/requirements/customer_tasks/B1_7_checkout_order_screen.md",
+  "evidence": [
+    "docs/operations/milestones/veha_2/artifacts/demo-feedback/b17_br5_regression_post_deploy_2026-06-04.json",
+    "docs/operations/milestones/veha_2/artifacts/demo-feedback/b17_cart_second_product_post_deploy_2026-06-15.json"
+  ],
+  "note": "Код и Fly MCP закрыты ранее (2026-06-04 регрессия + 2026-06-15 v1). Отдельный апрув по баг-репорту."
+}
