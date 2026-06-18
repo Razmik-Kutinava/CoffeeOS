@@ -1,8 +1,18 @@
 # HANDOFF — старт Вехи 2 (Веха 1 **не закрыта официально**)
 
-**Дата:** 2026-06-18 (B1.11 этап 0 · ТЗ режим работы)  
+**Дата:** 2026-06-18 (B1.12 этап 0 · ТЗ рекуррент / 1 клик)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev
+
+### B1.12 — рекуррент + оплата в 1 клик (Т-Банк)
+
+| Что | Статус |
+|-----|--------|
+| ТЗ этап 0 (R1–R3) | `[x]` 2026-06-18 |
+| Ответы заказчика Q1–Q7 | `[ ]` |
+| Апрув на код + `go` | `[ ]` |
+
+ТЗ: [`B1_12_recurrent_payments.md`](../milestones/veha_2/requirements/customer_tasks/B1_12_recurrent_payments.md) · runbook: [`TBANK_RECURRENT.md`](../milestones/veha_2/runbooks/TBANK_RECURRENT.md)
 
 ### B1.11 — режим работы точки
 

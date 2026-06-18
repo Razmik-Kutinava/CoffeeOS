@@ -103,6 +103,17 @@
 - [x] Manager: pending payments при закрытии смены — добавлен блок «Онлайн-платежи (витрина, за 24ч)» в CloseWizard; онлайн-заказы не блокируют, показываются информационно *(2026-05-28)*
 - [x] Тесты: `TbankAdapter` (11) + `TbankController` (8) — 539 runs, 0 failures *(2026-05-28)*
 
+## C2. Рекуррент и 1 клик — B1.12 (надстройка §2.3, этап 0 ТЗ 2026-06-18)
+
+> ТЗ: [`B1_12_recurrent_payments.md`](requirements/customer_tasks/B1_12_recurrent_payments.md) · runbook: [`TBANK_RECURRENT.md`](runbooks/TBANK_RECURRENT.md)  
+> Порядок: **R1 → R2 → R3** · только веб-витрина · 1 пользователь = 1 карта
+
+- [x] **B1.12 этап 0** — ТЗ заказчика (3 задачи) + ops + `b112_stage0_scope_2026-06-18.json`
+- [ ] **B1.12-R1** — `user_cards`, webhook → token, API charge by `card_id`
+- [ ] **B1.12-R2** — web-фрейм ввода карты + 3DS (витрина)
+- [ ] **B1.12-R3** — оплата в 1 клик, стейт-машина кнопки «Оплатить»
+- [ ] Апрув заказчика на эпик B1.12
+
 ---
 
 ## D. Киоск (приоритет 3, с оплатой как shop)

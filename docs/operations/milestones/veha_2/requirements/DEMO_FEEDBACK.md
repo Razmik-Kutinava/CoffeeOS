@@ -4,7 +4,7 @@
 
 **Источник:** PDF [`artifacts/demo-feedback/customer_qa_prog10_2026-06.pdf`](artifacts/demo-feedback/customer_qa_prog10_2026-06.pdf) (продолжение В1: [`../veha_1/artifacts/customer_live_qa_block1_2026-05-30.pdf`](../veha_1/artifacts/customer_live_qa_block1_2026-05-30.pdf)).
 
-**Сейчас (2026-06-18):** **B1.11** — ТЗ этап 0 (режим работы точки) · ждём ответы заказчика.
+**Сейчас (2026-06-18):** **B1.12** — ТЗ этап 0 (рекуррент / 1 клик) · **B1.11** — ждём ответы заказчика.
 
 **Честно:** §1–3 в таблице ниже — **done** *(выборочно)*. §2.3 — **done** *(этапы 1–5, MCP)*.
 
@@ -26,6 +26,7 @@
 
 | Дата | Источник | Сценарий / экран | Суть | Статус | PR / коммит |
 |------|----------|------------------|------|--------|-------------|
+| 2026-06-18 | заказчик B1.12 | `#/payment` / checkout | Рекуррент Т-Банк + 1 клик (R1–R3) | **open** *(ТЗ этап 0)* | [b112_stage0_scope_2026-06-18.json](artifacts/demo-feedback/b112_stage0_scope_2026-06-18.json) |
 | 2026-06-18 | заказчик B1.11 | УК / shop / barista | Режим работы точки продаж | **open** *(ТЗ этап 0)* | [b111_stage0_scope_2026-06-18.json](artifacts/demo-feedback/b111_stage0_scope_2026-06-18.json) |
 | 2026-06-18 | заказчик B2.1 | `/barista` табло | **B2.1:** интерактивная карточка MVP + ревизия 6 слотов | **done** *(апрув заказчика)* | [b21_customer_approval_2026-06-18.json](artifacts/demo-feedback/b21_customer_approval_2026-06-18.json) |
 | 2026-06-17 | заказчик B1.7 | `#/checkout` оформление | **BR-7:** «Оплатить →» неактивна после verify email при пустом «Имя» | **done** *(Fly MCP 7/7 · deploy 2026-06-17)* | [b17_br7_checkout_name_pay_post_deploy_2026-06-17.json](artifacts/demo-feedback/b17_br7_checkout_name_pay_post_deploy_2026-06-17.json) |

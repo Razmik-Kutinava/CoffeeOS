@@ -1,0 +1,51 @@
+{
+  "task_id": "B1.12",
+  "title": "Рекуррентные платежи и UX оплаты витрины (Т-Банк)",
+  "stage": 0,
+  "date": "2026-06-18",
+  "status": "TZ_REGISTERED",
+  "tz_file": "docs/operations/milestones/veha_2/requirements/customer_tasks/B1_12_recurrent_payments.md",
+  "runbook": "docs/operations/milestones/veha_2/runbooks/TBANK_RECURRENT.md",
+  "code_started": false,
+  "subtasks": {
+    "R1": "Бэкенд + UserCards (bank_token, masked_pan)",
+    "R2": "Родной ввод карты + 3DS (web-фрейм)",
+    "R3": "Оплата в 1 клик + стейт кнопки"
+  },
+  "implementation_order": ["R1", "R2", "R3"],
+  "agreed_scope": {
+    "bank": "T-Bank",
+    "cards_per_user": 1,
+    "channel": "web_vitrina_svelte_only",
+    "flutter_kiosk": "out_of_scope"
+  },
+  "existing_in_code": {
+    "tbank_adapter_init": true,
+    "tbank_callback": true,
+    "user_cards_table": false,
+    "recurrent_charge_api": false,
+    "saved_card_ui": false,
+    "one_click_payment": false
+  },
+  "mvp_scope_customer": [
+    "Сохранение bank_token и masked_pan после успешного webhook",
+    "Повторное списание по card_id без ввода карты",
+    "Стилизованный ввод карты (web) + 3DS",
+    "Оплата в 1 клик с 4 состояниями кнопки"
+  ],
+  "pci_constraints": [
+    "no_pan_in_db",
+    "no_cvv_in_db"
+  ],
+  "open_questions": [
+    "Q1 web-only vs SDK",
+    "Q2 replace card on rebind",
+    "Q3 card vs sbp vs cash",
+    "Q4 user identity (email guest)",
+    "Q5 opt-in save card",
+    "Q6 design mockups",
+    "Q7 critical error codes"
+  ],
+  "blocked_until_customer": ["Q1", "Q2", "Q4"],
+  "next_step": "сверка доки Т-Банк → ответы Q1–Q7 → апрув → go → R1"
+}
