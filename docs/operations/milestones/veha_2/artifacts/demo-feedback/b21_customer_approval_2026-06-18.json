@@ -1,0 +1,26 @@
+{
+  "task_id": "B2.1",
+  "title": "Интерактивное табло баристы — карточка заказа",
+  "approved_at": "2026-06-18",
+  "source": "док заказчика — статус done (MVP + ревизия)",
+  "verdict": "APPROVED",
+  "scope_approved": [
+    "MVP этапы 0–5: карточка, FIFO, модификаторы, уведомления гостю, отмена overlay",
+    "Ревизия R0–R4: 6 слотов, тап белый→жёлтый→убрать, live без F5"
+  ],
+  "scope_deferred_backlog": [
+    "брак / переделка / возврат",
+    "defect_reasons",
+    "звук при отмене",
+    "черновик списания при отмене",
+    "отдельные планшеты кухни / prep_kitchen",
+    "эскалация неподтверждённой отмены 5 мин"
+  ],
+  "tz_file": "docs/operations/milestones/veha_2/requirements/customer_tasks/B2_1_barista_order_board.md",
+  "evidence": [
+    "docs/operations/milestones/veha_2/artifacts/demo-feedback/b21_acceptance_2026-06-11.json",
+    "docs/operations/milestones/veha_2/artifacts/demo-feedback/b21_revision_acceptance_2026-06-12.json",
+    "docs/operations/milestones/veha_2/artifacts/demo-feedback/b21_revision_customer_mcp_2026-06-13"
+  ],
+  "note": "Код и Fly MCP были закрыты ранее; апрув заказчика зафиксирован ops 2026-06-18. B2-S1 — отдельная подзадача, апрув не в этом артефакте."
+}

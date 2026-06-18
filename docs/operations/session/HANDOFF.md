@@ -1,8 +1,19 @@
 # HANDOFF — старт Вехи 2 (Веха 1 **не закрыта официально**)
 
-**Дата:** 2026-06-09 (B1.1 этап 0) · было ТЗ в `customer_tasks/`  
+**Дата:** 2026-06-18 (B2.1 **закрыта** · апрув заказчика)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev
+
+### B2.1 — табло бариста
+
+| Что | Статус |
+|-----|--------|
+| MVP этапы 0–5 + ревизия R0–R4 | `[x]` OPS_PASS |
+| Апрув заказчика | `[x]` 2026-06-18 — [`b21_customer_approval_2026-06-18.json`](../milestones/veha_2/artifacts/demo-feedback/b21_customer_approval_2026-06-18.json) |
+| Backlog фаза 2 | CBR «Блок 2 — backlog» (брак, defect_reasons, звук отмены, списание, prep_kitchen, эскалация) |
+| **Следующий шаг** | **B2.2** этап 1 |
+
+ТЗ: [`B2_1_barista_order_board.md`](../milestones/veha_2/requirements/customer_tasks/B2_1_barista_order_board.md)
 
 ### B1.1 — экран статуса заказа
 

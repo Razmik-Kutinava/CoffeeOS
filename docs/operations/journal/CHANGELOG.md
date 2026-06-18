@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## v1.192 — 2026-06-18 (B2.1: апрув заказчика + backlog фаза 2)
+
+- **B2.1:** апрув заказчика MVP + ревизия — `b21_customer_approval_2026-06-18.json`.
+- **Backlog:** брак/переделка, `defect_reasons`, звук отмены, списание, `prep_kitchen`, эскалация 5 мин → CBR + B2_1 § Бэклог.
+
 ## v1.191 — 2026-06-13 (B2.1 R3: revision tests + fly smoke)
 
 - **Тесты:** tap white→yellow→gone, limit 6, `OrderBoardBroadcaster` broadcast target.

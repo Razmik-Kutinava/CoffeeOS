@@ -4,7 +4,7 @@
 
 **Источник:** PDF [`artifacts/demo-feedback/customer_qa_prog10_2026-06.pdf`](artifacts/demo-feedback/customer_qa_prog10_2026-06.pdf) (продолжение В1: [`../veha_1/artifacts/customer_live_qa_block1_2026-05-30.pdf`](../veha_1/artifacts/customer_live_qa_block1_2026-05-30.pdf)).
 
-**Сейчас (2026-06-04):** **B1.7 checkout** — **закрыта** (апрув заказчика). B2-S1 / BR-7 ops **done**.
+**Сейчас (2026-06-18):** **B2.1 табло** — **закрыта** (апрув заказчика). B1.7 checkout — **закрыта**. B2-S1 ops **done**.
 
 **Честно:** §1–3 в таблице ниже — **done** *(выборочно)*. §2.3 — **done** *(этапы 1–5, MCP)*.
 
@@ -26,6 +26,7 @@
 
 | Дата | Источник | Сценарий / экран | Суть | Статус | PR / коммит |
 |------|----------|------------------|------|--------|-------------|
+| 2026-06-18 | заказчик B2.1 | `/barista` табло | **B2.1:** интерактивная карточка MVP + ревизия 6 слотов | **done** *(апрув заказчика)* | [b21_customer_approval_2026-06-18.json](artifacts/demo-feedback/b21_customer_approval_2026-06-18.json) |
 | 2026-06-17 | заказчик B1.7 | `#/checkout` оформление | **BR-7:** «Оплатить →» неактивна после verify email при пустом «Имя» | **done** *(Fly MCP 7/7 · deploy 2026-06-17)* | [b17_br7_checkout_name_pay_post_deploy_2026-06-17.json](artifacts/demo-feedback/b17_br7_checkout_name_pay_post_deploy_2026-06-17.json) |
 | 2026-06-04 | заказчик B2.1 неделя_2 | `/barista` табло | **B2-S1:** звуковое оповещение о новом заказе (PWA/браузер) | **done** *(Fly MCP 9/9 · deploy 2026-06-17)* | [b21_s1_sound_post_deploy_2026-06-17.json](artifacts/demo-feedback/b21_s1_sound_post_deploy_2026-06-17.json) |
 | 2026-06-04 | заказчик B1.7 | `#/payment` оплата | **BR-6:** кнопка «Отмена заказа» не отменяет заказ | **done** *(Fly MCP 6/6 · deploy 2026-06-17)* | [b17_br6_payment_cancel_post_deploy_2026-06-17.json](artifacts/demo-feedback/b17_br6_payment_cancel_post_deploy_2026-06-17.json) |
@@ -177,6 +178,19 @@
 - Путь УК: **Точки** → карточка точки → **«Панель менеджера»** / **«Создать staff →»** → `/manager/staff` (список email + роли).
 - Дашборд УК: ссылки **«Панель менеджера»** в таблице точек — то же самое.
 - Франчайзи: только `/manager` (не `/admin`); **«Персонал» скрыт** — staff только у УК/GM (`7311338`, MCP [`mcp_franchise_staff_fly_2026-06-04.json`](artifacts/demo-feedback/mcp_franchise_staff_fly_2026-06-04.json)).
+
+---
+
+## Backlog B2.1 (вне апрува 2026-06-18)
+
+| Дата | Источник | Сценарий | Суть | Статус | Ссылка |
+|------|----------|----------|------|--------|--------|
+| 2026-06-18 | B2.1 scope cut | `/barista` карточка | Брак / переделка / возврат | `backlog` | CBR B2.1-b1 |
+| 2026-06-18 | B2.1 scope cut | справочник | `defect_reasons` | `backlog` | CBR B2.1-b2 |
+| 2026-06-18 | B2.1 scope cut | отмена | Звук при отмене | `backlog` | CBR B2.1-b3 |
+| 2026-06-18 | B2.1 scope cut | отмена | Черновик списания при подтверждении | `backlog` | CBR B2.1-b4 |
+| 2026-06-18 | B2.1 scope cut | кухня | Отдельные планшеты / `prep_kitchen` | `backlog` | CBR B2.1-b5 |
+| 2026-06-18 | B2.1 scope cut | отмена | Эскалация неподтверждённой отмены 5 мин | `backlog` | CBR B2.1-b6 |
 
 ---
 
