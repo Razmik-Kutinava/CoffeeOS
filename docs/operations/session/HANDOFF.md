@@ -10,6 +10,7 @@
 |-----|--------|
 | BR-5 второй товар в корзину | **закрыт** · апрув `[x]` 2026-06-18 — [`b17_br5_customer_approval_2026-06-18.json`](../milestones/veha_2/artifacts/demo-feedback/b17_br5_customer_approval_2026-06-18.json) |
 | BR-6 отмена на `#/payment` | **закрыт** · апрув `[x]` 2026-06-18 — [`b17_br6_customer_approval_2026-06-18.json`](../milestones/veha_2/artifacts/demo-feedback/b17_br6_customer_approval_2026-06-18.json) |
+| B1.9 toggle-модификаторы | **закрыта** · апрув `[x]` 2026-06-18 — [`b19_customer_approval_2026-06-18.json`](../milestones/veha_2/artifacts/demo-feedback/b19_customer_approval_2026-06-18.json) · CC-2 в backlog |
 | B1.7 целиком | **закрыта** · апрув `[x]` 2026-06-04 |
 
 ТЗ: [`B1_7_checkout_order_screen.md`](../milestones/veha_2/requirements/customer_tasks/B1_7_checkout_order_screen.md)

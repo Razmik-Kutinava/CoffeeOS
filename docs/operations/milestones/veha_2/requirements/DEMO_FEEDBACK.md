@@ -33,7 +33,7 @@
 | 2026-06-04 | заказчик B1.7 | cart / каталог / `#/product` | **BR-5 регрессия:** второй товар — баннер/DOM корзины | **done** *(апрув 2026-06-18)* | [b17_br5_customer_approval_2026-06-18.json](artifacts/demo-feedback/b17_br5_customer_approval_2026-06-18.json) |
 | 2026-06-04 | заказчик (чат) B1.1 | экран статуса гостя `#/order/...` | **Баг-1:** без F5 статус не обновляется после тапа баристы | **done** 2026-06-13 | [`b11_bug1_guest_ws_2026-06-13.json`](artifacts/demo-feedback/b11_bug1_guest_ws_2026-06-13.json) |
 | 2026-06-15 | заказчик B1.10 | shop шапка | Убрать «Блог» из навигации, LCP ≤ 1.5 с | **done** *(Fly MCP PASS)* | [`b110_blog_nav_post_deploy_2026-06-15.json`](artifacts/demo-feedback/b110_blog_nav_post_deploy_2026-06-15.json) |
-| 2026-06-16 | заказчик B1.9 | `#/product` карточка | Toggle модификаторов, убрать «обязательно» | **done** *(Fly MCP 6/6)* | [`b19_modifier_toggle_post_deploy_2026-06-15.json`](artifacts/demo-feedback/b19_modifier_toggle_post_deploy_2026-06-15.json) |
+| 2026-06-16 | заказчик B1.9 | `#/product` карточка | Toggle модификаторов, убрать «обязательно» | **done** *(апрув 2026-06-18)* | [b19_customer_approval_2026-06-18.json](artifacts/demo-feedback/b19_customer_approval_2026-06-18.json) |
 | 2026-06-15 | заказчик B1.7 | cart / product | **Баг-5 (v1):** второй разный товар — stale `Product.svelte` | **done** *(апрув 2026-06-18)* | [`b17_br5_customer_approval_2026-06-18.json`](artifacts/demo-feedback/b17_br5_customer_approval_2026-06-18.json) |
 | 2026-06-14 | B1.7 | localStorage витрины | TTL 24ч для профиля/корзины/каталога | **done** | [`b17_localstorage_ttl_2026-06-14.json`](artifacts/demo-feedback/b17_localstorage_ttl_2026-06-14.json) |
 | 2026-06-14 | заказчик B1.7 | cart/add | **Баг-4:** 500 при «В корзину» (cookie overflow) | **done** | [`b17_cart_cookie_overflow_2026-06-14.json`](artifacts/demo-feedback/b17_cart_cookie_overflow_2026-06-14.json) |
@@ -181,10 +181,11 @@
 
 ---
 
-## Backlog B2.1 (вне апрува 2026-06-18)
+## Backlog (вне апрувов)
 
 | Дата | Источник | Сценарий | Суть | Статус | Ссылка |
 |------|----------|----------|------|--------|--------|
+| 2026-06-18 | B1.9 scope cut | `#/product` карточка | CC-2: восстановить выбор модификаторов после возврата из корзины | `backlog` | CBR B1.9-CC2 |
 | 2026-06-18 | B2.1 scope cut | `/barista` карточка | Брак / переделка / возврат | `backlog` | CBR B2.1-b1 |
 | 2026-06-18 | B2.1 scope cut | справочник | `defect_reasons` | `backlog` | CBR B2.1-b2 |
 | 2026-06-18 | B2.1 scope cut | отмена | Звук при отмене | `backlog` | CBR B2.1-b3 |

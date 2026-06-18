@@ -88,7 +88,8 @@
 | B1.6 | **Стоп-лист UI barista** — серый блок «в стопе» | W1.4 backlog; сейчас sold_out скрыт | низкий |
 | B1.7 | **Email verify** — checkout · **ЗАКРЫТА** | [ТЗ](customer_tasks/B1_7_checkout_order_screen.md) | **`[x]`** внутр. · Fly MCP `[x]` · заказчик `[x]` 2026-06-04 |
 | B1.10 | **Витрина** — убрать «Блог» из навигации, LCP ≤ 1.5 с WebView | [ТЗ](customer_tasks/B1_10_remove_blog_nav.md) | **ТЗ** · апрув `[ ]` · **первая** |
-| B1.9 | **Карточка товара** — toggle модификаторов, без обязательности | [ТЗ](customer_tasks/B1_9_product_modifier_toggle.md) | **ТЗ** · апрув `[ ]` · после B1.10 |
+| B1.9 | **Карточка товара** — toggle модификаторов, без обязательности | [ТЗ](customer_tasks/B1_9_product_modifier_toggle.md) | **`[x]`** апрув 2026-06-18 |
+| B1.9-CC2 | **Карточка товара** — восстановить выбор модификаторов после возврата из корзины | B1.9 CC-2 · backlog | низкий |
 | B1.8 | **Свой домен → своя почта для рассылки** | После домена (не `fly.dev`): `noreply@…` / `orders@…`, DNS в Brevo (SPF/DKIM/DMARC), сменить `MAIL_FROM` на Fly | **напоминание** |
 
 > **B1.8 (не забыть):** сейчас письма с **подтверждённого личного sender** в Brevo. Когда будет **свой домен** — завести **кофейную почту** (напр. `noreply@бренд.ru`), аутентифицировать домен в Brevo, обновить `MAIL_FROM` + secrets. Код OTP/ActionMailer менять не нужно.
@@ -107,9 +108,9 @@
 | 4 | **B2.2** | Меню + Создать (бариста) | **ТЗ** · реализация `[ ]` | [B2_2_barista_menu_create_merge.md](customer_tasks/B2_2_barista_menu_create_merge.md) |
 | 5 | **B1.4** | PWA витрины (install + offline) | **ТЗ** 2026-06-11 · реализация `[ ]` | [B1_4_pwa_shop.md](customer_tasks/B1_4_pwa_shop.md) |
 | 6 | **B1.10** | Убрать «Блог» из навигации витрины | **ТЗ** · апрув на код `[ ]` | [B1_10_remove_blog_nav.md](customer_tasks/B1_10_remove_blog_nav.md) |
-| 7 | **B1.9** | Toggle-модификаторы на карточке товара | **ТЗ** · апрув на код `[ ]` | [B1_9_product_modifier_toggle.md](customer_tasks/B1_9_product_modifier_toggle.md) |
+| 7 | **B1.9** | Toggle-модификаторы на карточке товара | **закрыта** · апрув `[x]` 2026-06-18 | [B1_9_product_modifier_toggle.md](customer_tasks/B1_9_product_modifier_toggle.md) |
 
-**Следующий фокус по задачам заказчика:** **B2.2** · апрувы B1.9 / B2-S1 / B1.4 `[ ]`.
+**Следующий фокус по задачам заказчика:** **B2.2** · апрувы B2-S1 / B1.4 `[ ]`.
 
 ---
 

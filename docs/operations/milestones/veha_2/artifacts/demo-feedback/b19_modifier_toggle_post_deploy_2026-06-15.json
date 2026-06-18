@@ -4,10 +4,9 @@
   "tenant_id": "655aaccb-004a-4bb9-a50a-ce618854dda3",
   "product_id": "24dae391-2199-4959-907e-d08c4cec3329",
   "product_name": "Фильтр-кофе Бразилия",
-  "started_at": "2026-06-16T06:29:53.244Z",
-  "finished_at": "2026-06-16T06:30:06.747Z",
+  "started_at": "2026-06-16T08:08:46.538Z",
+  "finished_at": "2026-06-16T08:08:54.867Z",
   "pass": true,
-  "deploy_commits": ["ef90f16", "2809d7a"],
   "tools": [
     "playwright:b19_modifier_toggle_mcp.mjs"
   ],
@@ -16,7 +15,7 @@
       "id": "01",
       "action": "no «обязательно» on product card",
       "pass": true,
-      "at": "2026-06-16T06:30:03.387Z",
+      "at": "2026-06-16T08:08:51.940Z",
       "requiredInGroups": true,
       "noOnboarding": true
     },
@@ -24,20 +23,20 @@
       "id": "02",
       "action": "base price visible",
       "pass": true,
-      "at": "2026-06-16T06:30:03.405Z",
+      "at": "2026-06-16T08:08:51.955Z",
       "basePrice": 12
     },
     {
       "id": "03",
       "action": "toggle on: «+» indicator visible",
       "pass": true,
-      "at": "2026-06-16T06:30:04.047Z"
+      "at": "2026-06-16T08:08:52.504Z"
     },
     {
       "id": "04",
       "action": "price recalculates after toggle",
       "pass": true,
-      "at": "2026-06-16T06:30:04.059Z",
+      "at": "2026-06-16T08:08:52.519Z",
       "basePrice": 12,
       "priceWithMod": 42,
       "paidDelta": 30,
@@ -47,14 +46,14 @@
       "id": "05",
       "action": "toggle off: «+» removed, price back",
       "pass": true,
-      "at": "2026-06-16T06:30:04.571Z",
+      "at": "2026-06-16T08:08:53.063Z",
       "priceBack": 12
     },
     {
       "id": "06",
       "action": "add to cart without modifiers",
       "pass": true,
-      "at": "2026-06-16T06:30:05.960Z"
+      "at": "2026-06-16T08:08:54.555Z"
     }
   ],
   "metrics": {
@@ -63,5 +62,7 @@
     "paidDelta": 30
   },
   "screenshot": "b19_modifier_toggle_after_2026-06-15.png",
-  "screenshot_product_toggle": "b19_modifier_toggle_product_2026-06-16.png"
+  "customer_approval": true,
+  "customer_approval_artifact": "b19_customer_approval_2026-06-18.json",
+  "customer_approval_at": "2026-06-18"
 }

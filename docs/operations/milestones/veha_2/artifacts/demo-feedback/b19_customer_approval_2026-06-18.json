@@ -1,0 +1,25 @@
+{
+  "task_id": "B1.9",
+  "title": "Toggle-модификаторы на карточке товара (без обязательности)",
+  "approved_at": "2026-06-18",
+  "source": "док заказчика — задача принята",
+  "verdict": "APPROVED",
+  "scope_approved": [
+    "Убрать обязательность модификаторов на карточке",
+    "Toggle-выбор с индикатором «+»",
+    "Add в корзину без модификаторов",
+    "Пересчёт цены на карточке",
+    "Multi-select в группе (CC-1)",
+    "Хвосты: dedup групп API, route switch p1→p2"
+  ],
+  "scope_deferred_backlog": [
+    "CC-2: восстановление выбранных модификаторов при возврате в карточку после add в корзину"
+  ],
+  "tz_file": "docs/operations/milestones/veha_2/requirements/customer_tasks/B1_9_product_modifier_toggle.md",
+  "evidence": [
+    "docs/operations/milestones/veha_2/artifacts/demo-feedback/b19_modifier_toggle_post_deploy_2026-06-15.json",
+    "docs/operations/milestones/veha_2/artifacts/demo-feedback/b19_route_switch_modifiers_2026-06-16.json",
+    "docs/operations/milestones/veha_2/artifacts/demo-feedback/b19_modifier_groups_dedup_2026-06-16.json"
+  ],
+  "note": "Код и Fly MCP 6/6 закрыты 2026-06-16. CC-2 вне апрува — backlog CBR."
+}
