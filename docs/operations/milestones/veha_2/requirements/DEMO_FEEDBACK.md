@@ -4,7 +4,7 @@
 
 **Источник:** PDF [`artifacts/demo-feedback/customer_qa_prog10_2026-06.pdf`](artifacts/demo-feedback/customer_qa_prog10_2026-06.pdf) (продолжение В1: [`../veha_1/artifacts/customer_live_qa_block1_2026-05-30.pdf`](../veha_1/artifacts/customer_live_qa_block1_2026-05-30.pdf)).
 
-**Сейчас (2026-06-17):** **B1.7 BR-7** — checkout «Оплатить» при пустом «Имя» — **done** (MCP 7/7). B2-S1 — **done**.
+**Сейчас (2026-06-04):** **B1.7 checkout** — **закрыта** (апрув заказчика). B2-S1 / BR-7 ops **done**.
 
 **Честно:** §1–3 в таблице ниже — **done** *(выборочно)*. §2.3 — **done** *(этапы 1–5, MCP)*.
 

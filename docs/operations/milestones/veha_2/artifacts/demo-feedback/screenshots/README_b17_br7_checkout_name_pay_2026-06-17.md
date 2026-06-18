@@ -1,7 +1,7 @@
 # B1.7 BR-7 — «Оплатить» при пустом «Имя» (2026-06-17)
 
 **Задача:** [B1_7_checkout_order_screen.md](../../requirements/customer_tasks/B1_7_checkout_order_screen.md) § BR-7  
-**Статус:** **CLOSED OPS** · MCP 7/7 · deploy 2026-06-17 · апрув заказчика `[ ]`
+**Статус:** **CLOSED** · MCP 7/7 · deploy 2026-06-17 · апрув `[x]` 2026-06-04 (B1.7)
 
 ## До (баг)
 

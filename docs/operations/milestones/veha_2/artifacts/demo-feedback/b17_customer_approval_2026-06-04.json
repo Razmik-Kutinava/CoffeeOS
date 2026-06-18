@@ -1,0 +1,18 @@
+{
+  "task_id": "B1.7",
+  "title": "Доработка экрана оформления заказа",
+  "approved_at": "2026-06-04",
+  "source": "док заказчика — статус done",
+  "verdict": "APPROVED",
+  "scope": [
+    "email OTP checkout",
+    "BR-1 промокод",
+    "BR-2 наличные/СБП",
+    "BR-3 сессия истекла",
+    "BR-5 второй товар в корзину",
+    "BR-6 отмена на payment",
+    "BR-7 оплата без имени"
+  ],
+  "tz_file": "docs/operations/milestones/veha_2/requirements/customer_tasks/B1_7_checkout_order_screen.md",
+  "note": "Код и Fly MCP были закрыты ранее; апрув заказчика зафиксирован ops 2026-06-04"
+}

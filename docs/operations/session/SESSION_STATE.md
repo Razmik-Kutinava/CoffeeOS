@@ -2,8 +2,8 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-06-17 (B1.7 **BR-7** — CLOSED OPS · MCP 7/7 · deploy)  
-**Предыдущее:** B2.1 B2-S1 CLOSED OPS  
+**Дата:** 2026-06-04 (B1.7 **ЗАКРЫТА** · апрув заказчика)  
+**Предыдущее:** B1.7 BR-7 CLOSED OPS · MCP 7/7 · deploy 2026-06-17  
 **Предыдущее:** B1.1 закрыта: FIREBASE_* на Fly · smoke + MCP PASS  
 **Веха 1:** официально не закрыта (§ I, H.3 — `[ ]`).  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
@@ -21,15 +21,18 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **B1.7 BR-7** | CLOSED OPS · MCP 7/7 · deploy `[x]` · заказчик `[ ]` | апрув заказчика |
+| **B1.7 checkout** | **ЗАКРЫТА** · апрув `[x]` 2026-06-04 | — |
 | **B2.1 B2-S1** | CLOSED OPS · MCP 9/9 · deploy `[x]` · заказчик `[ ]` | апрув заказчика |
-| **B1.7 BR-6** | CLOSED OPS · deploy `[x]` · MCP 6/6 · заказчик `[ ]` | апрув заказчика |
-| **B1.9 апрув** | OPS PASS · заказчик `[ ]` | апрув → B2.2 |
-| **B1.7 BR-5** | CLOSED OPS · Fly MCP PASS · заказчик `[ ]` | апрув заказчика |
 | **B1.1 ревизия** | R0–R4 Fly MCP `[x]` · заказчик `[ ]` | апрув заказчика |
 | **B1.4 PWA** | код задеплоен · OPS_PASS · заказчик `[ ]` | апрув → B2.2 |
 | **B2.1 ревизия** | OPS CLOSED 2026-06-13 · заказчик `[ ]` | handoff → B2.2 этап 1 |
 | **B2.2** | stage0 `[x]` · этап 1 `[ ]` | единый экран «Меню» |
+
+### Сессия 2026-06-04 (B1.7 — апрув заказчика, ЗАКРЫТА)
+
+- **Источник:** док заказчика — «Доработка экрана оформления заказа» → **done**.
+- **Артефакт:** [`b17_customer_approval_2026-06-04.json`](milestones/veha_2/artifacts/demo-feedback/b17_customer_approval_2026-06-04.json).
+- **ТЗ:** [`B1_7_checkout_order_screen.md`](milestones/veha_2/requirements/customer_tasks/B1_7_checkout_order_screen.md) — BR-1…BR-7, колонка «Заказчик» `[x]`.
 
 ### Сессия 2026-06-17 (B1.7 BR-7 — checkout «Оплатить» при пустом «Имя», CLOSED OPS)
 
@@ -38,9 +41,7 @@
 - **MCP:** `bin/b17_br7_checkout_name_pay_prep_fly.rb` + `bin/b17_br7_checkout_name_pay_mcp.mjs` — **7/7 PASS**.
 - **Артефакт:** [`b17_br7_checkout_name_pay_post_deploy_2026-06-17.json`](milestones/veha_2/artifacts/demo-feedback/b17_br7_checkout_name_pay_post_deploy_2026-06-17.json).
 - **Скрин после:** [`screenshots/b17_br7_checkout_name_pay_after_2026-06-17/`](milestones/veha_2/artifacts/demo-feedback/screenshots/b17_br7_checkout_name_pay_after_2026-06-17/).
-- **Дальше:** апрув заказчика `[ ]`.
-
-### Сессия 2026-06-17 (B2.1 B2-S1 — звук табло, CLOSED OPS)
+- **Дальше:** включено в апрув B1.7 `[x]` 2026-06-04.
 
 - **Реализация:** `OrderBoardSound` + Stimulus `barista-board-sound`; WAV `public/audio/barista_new_order.wav` (2s); turbo-stream hook на `#barista-board-slots`; баннер NotAllowed.
 - **Deploy:** `coffeeos.fly.dev` 2026-06-17.
