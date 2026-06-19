@@ -26,7 +26,8 @@
 | Ответы Q1–Q10 + раунд 2 | `[x]` 2026-06-19 · [`b111_customer_answers_round2_2026-06-19.json`](../milestones/veha_2/artifacts/demo-feedback/b111_customer_answers_round2_2026-06-19.json) |
 | **Статус** | **CLOSED OPS + Fly MCP PASS** · 37/37 · артефакт `[x]` |
 | **Fly MCP** | `[x]` pass 2026-06-19 — [`b111_operating_hours_post_deploy_2026-06-19.json`](../milestones/veha_2/artifacts/demo-feedback/b111_operating_hours_post_deploy_2026-06-19.json) |
-| **Следующий шаг** | **апрув заказчика** |
+| **Следующий шаг** | **стоп — ждём апрув заказчика** · он проверит на Fly · «ок» или правки |
+| **Агент** | **не трогать код** до ответа заказчика |
 
 ТЗ: [`B1_11_tenant_operating_hours.md`](../milestones/veha_2/requirements/customer_tasks/B1_11_tenant_operating_hours.md)
 
