@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## v1.210 — 2026-06-19 (Веха 1 закрыта — заочная приёмка)
+
+- **В1 «Цифровой прилавок»:** формально **закрыта** по апруву владельца (2026-06-19).
+- **CHECKLIST § I + H.3:** `[x]`; живое демо §1 (2026-05-30) принято заочно, блокеров не заявлено.
+- **Хвосты → В2:** QA 5.1 онбординг; `demo:seed` в release_command; полный MCP LIVE_DEMO §2–10.
+- **Ops:** `SESSION_STATE`, `HANDOFF`, `veha_1/README`, `PRACTICES.md`.
+
 ## v1.209 — 2026-06-19 (B1.12-R3 Fly MCP post-deploy 8/8)
 
 - **MCP:** `bin/b112_r3_one_click_prep_fly.rb` + `bin/b112_r3_one_click_mcp.mjs` — checkout saved card + pay FSM на Fly.

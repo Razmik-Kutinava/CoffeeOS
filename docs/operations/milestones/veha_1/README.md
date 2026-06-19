@@ -22,7 +22,7 @@ Stub-файлы удалены. Старые пути → [`../PATH_MAP.md`](../
 | [qa/LIVE_DEMO_SCENARIOS_PLAIN.md](qa/LIVE_DEMO_SCENARIOS_PLAIN.md) | То же простым языком — для заказчика (H.3) |
 | [reference/DEMO_FEEDBACK.md](reference/DEMO_FEEDBACK.md) | Фидбек заказчика; PDF в `artifacts/` |
 
-**В2 стартовала; В1 не закрыта официально** — `docs/operations/session/HANDOFF.md`, `CHANGELOG` v1.54.
+**В1 закрыта** 2026-06-19 (заочная приёмка, апрув владельца). **В2** — в работе — `docs/operations/session/HANDOFF.md`.
 
 **Fly demo-стенд:** [`../demo/FLY_DEMO_STAND.md`](../demo/FLY_DEMO_STAND.md), [`../demo/CUSTOMER_HANDOFF.md`](../demo/CUSTOMER_HANDOFF.md).
 
