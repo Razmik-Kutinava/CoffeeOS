@@ -8,12 +8,14 @@
   import RouteLoading from "./components/RouteLoading.svelte"
   import SlowRequestOverlay from "./components/SlowRequestOverlay.svelte"
   import ShopPwaBanner from "./components/ShopPwaBanner.svelte"
+  import ShopClosedBanner from "./components/ShopClosedBanner.svelte"
   import { flushOrderQueue } from "./lib/shopOfflineQueue.js"
   import { flushCartQueue } from "./lib/shopOfflineCart.js"
   import Catalog from "./routes/Catalog.svelte"
   import { initTelegram } from "./lib/telegram.js"
   import { installSlowRequestTracker } from "./lib/slowRequest.js"
   import { api } from "./lib/api.js"
+  import { loadOperatingHours } from "./lib/shopOperatingHours.js"
   import {
     lastGuestOrderId,
     reconnectGuestOrder,
@@ -64,6 +66,7 @@
   }
 
   onMount(() => {
+    loadOperatingHours(api).catch(() => {})
     flushCartQueue(api).catch(() => {})
     flushOrderQueue(api).catch(() => {})
 
@@ -91,6 +94,7 @@
 <div class="min-h-screen bg-[#1a1a1a] text-white">
   <SlowRequestOverlay />
   <ShopPwaBanner />
+  <ShopClosedBanner />
   <Header />
   <main class="mx-auto max-w-lg px-3 pb-28 pt-14">
     <Router {routes} options={{ hash: true }} />

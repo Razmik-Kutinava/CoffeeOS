@@ -49,7 +49,7 @@
 [x] 3a — миграция + модель `TenantWeekdaySchedule` (2026-06-19)
 [x] 3b — форма УК: **чекбоксы пн–вс** + open/close + timezone (обязательно)
 [x] 3c — сервис `TenantOperatingHours` open_now? / next_open_at (2026-06-19)
-[ ] 4 — shop API + баннер «след. утро раб. дня» + корзина ok / оплата off
+[x] 4 — shop API + баннер + checkout (2026-06-19)
 [ ] 5 — табло: пусто (смена закрыта) · красный баннер + звук (смена открыта, расписание закрыто)
 [ ] 5b — barista POS: заказ в зале → табло вне часов; shop/PWA — блок по расписанию
 [ ] 6 — тесты + Fly MCP + артефакт приёмки
@@ -235,8 +235,8 @@
 - [x] Миграция + модель расписания точки — `tenant_weekday_schedules` · `TenantWeekdaySchedule` · тест 6/6
 - [x] Форма УК: **чекбоксы пн–вс** + open/close + timezone (обязательно) — sync-сервис · partial · controller · тест 7/7 · скрин до: `screenshots/b111_uk_tenant_form_before_2026-06-19.png`
 - [x] Сервис: `open_now?` / `next_open_at` — **след. утро рабочего дня** · `TenantOperatingHours` · тест 6/6
-- [ ] Shop API: `is_open`, `closed_until`, guard **orders/pay** (не cart)
-- [ ] `Checkout.svelte`: баннер + disabled «Оплатить»; корзина **активна**
+- [x] Shop API: `is_open`, `closed_until`, guard **orders/pay** (не cart) — config + categories meta · guard create · тест 7/7
+- [x] `Checkout.svelte`: баннер + disabled «Оплатить»; корзина **активна** · `ShopClosedBanner` · `shopOperatingHours.js`
 - [ ] Табло: пусто (смена закрыта) · красный баннер + звук (конфликт смена/расписание)
 - [ ] Barista POS: заказ в зале → табло **вне** расписания
 - [ ] Logout бариста / «мои точки» → hook принуд. закрытия смены (офис-менеджер) — **уточнить с manager flow**

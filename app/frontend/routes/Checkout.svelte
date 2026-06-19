@@ -30,6 +30,12 @@
     waitForOrderSettled
   } from "../lib/shopOneClickPay.js"
   import CheckoutPayButton from "../components/CheckoutPayButton.svelte"
+  import {
+    getOperatingHours,
+    loadOperatingHours,
+    shopIsOpenForPay,
+    subscribeOperatingHours
+  } from "../lib/shopOperatingHours.js"
 
   let name = $state("")
   let email = $state("")
@@ -50,10 +56,13 @@
   let payState = $state(PAY_BTN.idle)
   let payError = $state(null)
   let clientOrderUuid = $state(null)
+  let operatingHours = $state(getOperatingHours())
 
   const canSendCode = $derived(isValidEmail(email) && !sendingCode)
   const payBusy = $derived(payState === PAY_BTN.loading || payState === PAY_BTN.success)
-  const canPay = $derived(isValidEmail(email) && emailVerified && !payBusy)
+  const canPay = $derived(
+    isValidEmail(email) && emailVerified && !payBusy && shopIsOpenForPay()
+  )
   const showSavedCard = $derived(
     payment_method === "card" && useOneClick && savedCard && emailVerified
   )
@@ -134,17 +143,24 @@
     const boot = async () => {
       profileSyncing = true
       await recover()
+      await loadOperatingHours(api)
       await syncServerStatus()
       await loadSavedCards()
       profileSyncing = false
     }
 
     boot()
+    const offHours = subscribeOperatingHours((next) => {
+      operatingHours = next
+    })
     const onPageShow = (event) => {
       if (event.persisted) boot()
     }
     window.addEventListener("pageshow", onPageShow)
-    return () => window.removeEventListener("pageshow", onPageShow)
+    return () => {
+      window.removeEventListener("pageshow", onPageShow)
+      offHours()
+    }
   })
 
   $effect(() => {
@@ -532,6 +548,16 @@
 
   {#if err}
     <p class="mb-4 text-sm text-red-400">{err}</p>
+  {/if}
+
+  {#if operatingHours.loaded && operatingHours.is_open === false && operatingHours.closed_message}
+    <div
+      class="mb-4 rounded-lg border border-amber-500/40 bg-amber-950/90 px-3 py-2 text-sm text-amber-100"
+      role="status"
+      data-testid="checkout-closed-banner"
+    >
+      {operatingHours.closed_message}
+    </div>
   {/if}
 
   <CheckoutPayButton

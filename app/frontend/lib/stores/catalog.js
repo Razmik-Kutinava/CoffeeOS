@@ -1,4 +1,5 @@
 import { api } from "../api.js"
+import { applyOperatingHours } from "../shopOperatingHours.js"
 import {
   readShopLocalStorage,
   writeShopLocalStorage
@@ -29,6 +30,7 @@ export async function loadCatalog() {
     try {
       const res = await api("/categories")
       const categories = Array.isArray(res) ? res : (res.data ?? [])
+      if (res.meta?.operating_hours) applyOperatingHours(res.meta.operating_hours)
       writeCatalogCache(categories)
       return categories
     } catch (e) {

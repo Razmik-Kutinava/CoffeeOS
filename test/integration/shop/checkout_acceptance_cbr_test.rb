@@ -95,7 +95,7 @@ class Shop::CheckoutAcceptanceCbrTest < ActionDispatch::IntegrationTest
   test "cbr_08 pay blocked until name email and verification" do
     checkout = vitrina_source("routes/Checkout.svelte")
     assert_match(/canPay.*emailVerified/m, checkout.gsub(/\s+/, " "))
-    assert_includes checkout, "disabled={!canPay}"
+    assert_match(/disabled=\{!canPay/, checkout)
   end
 
   # п.9 — код уходит на указанный email (запись OTP + API ok)

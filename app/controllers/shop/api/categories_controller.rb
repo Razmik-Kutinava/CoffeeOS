@@ -12,7 +12,7 @@ module Shop
         # Кэширование с ключом по tenant_id и пагинации
         cache_key = "shop/categories/#{tenant_id}/#{params[:page]}/#{params[:per_page]}"
         cached_data = safe_cache_read(cache_key)
-        return render json: cached_data if cached_data
+        return render json: with_live_operating_hours(cached_data) if cached_data
 
         # 1 запрос: все товары
         all_products = scope.order(:sort_order).to_a
@@ -51,10 +51,18 @@ module Shop
           meta: { page: page, per_page: per_page }
         }
         safe_cache_write(cache_key, response_data)
-        render json: response_data
+        render json: with_live_operating_hours(response_data)
       end
 
       private
+
+      def with_live_operating_hours(payload)
+        body = payload.deep_symbolize_keys
+        body[:meta] = (body[:meta] || {}).merge(
+          operating_hours: Shop::OperatingHours.for(@shop_tenant).client_json
+        )
+        body
+      end
 
       def safe_cache_read(key)
         Rails.cache.read(key)

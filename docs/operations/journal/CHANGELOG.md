@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v1.217 — 2026-06-19 (B1.11 этап 4–5: shop API + checkout)
+
+- **API:** `operating_hours` в `/config` и `categories` meta; guard `POST /orders` вне часов; cart без блока.
+- **Витрина:** `ShopClosedBanner`, checkout баннер + `canPay` off; legacy без расписания = открыто.
+- **Тест:** `b111_operating_hours_test.rb` — 7/7 PASS.
+
 ## v1.216 — 2026-06-19 (B1.11 этап 3c: open_now? / next_open_at)
 
 - **Было:** расписание в БД, без расчёта открыто/закрыто.

@@ -16,5 +16,7 @@ class Shop::Api::ConfigControllerTest < ActionDispatch::IntegrationTest
     assert_includes json.keys, "simulate"
     assert_includes json.keys, "iframe"
     assert_includes json.keys, "integration_script_url"
+    assert_includes json.keys, "operating_hours"
+    assert json.dig("operating_hours", "is_open").in?([true, false])
   end
 end

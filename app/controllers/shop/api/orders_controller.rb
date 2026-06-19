@@ -3,6 +3,10 @@
 module Shop
   module Api
     class OrdersController < Shop::Api::BaseController
+      include Shop::Api::OperatingHoursGuard
+
+      before_action :reject_orders_when_closed!, only: [:create]
+
       def create
         Rails.logger.info("[Shop::Order] Creating order for tenant #{@shop_tenant.id}, email: #{order_params[:email]}")
         creator = Shop::OrderCreator.new(session, tenant: @shop_tenant, request: request)

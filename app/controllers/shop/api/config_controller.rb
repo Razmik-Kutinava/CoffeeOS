@@ -6,7 +6,8 @@ module Shop
       def show
         render json: Shop::PaymentConfig.client_json.merge(
           firebase: Shop::FirebaseConfig.client_json,
-          push_configured: Shop::FirebaseConfig.client_configured?
+          push_configured: Shop::FirebaseConfig.client_configured?,
+          operating_hours: Shop::OperatingHours.for(@shop_tenant).client_json
         )
       end
     end

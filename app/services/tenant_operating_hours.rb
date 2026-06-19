@@ -22,6 +22,7 @@ class TenantOperatingHours
 
   def open_now?
     return true unless tenant.sales_point?
+    return true if enabled_schedules.empty?
 
     row = enabled_schedules[local_weekday]
     return false unless row

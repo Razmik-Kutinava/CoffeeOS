@@ -21,13 +21,20 @@
 | Сейчас | Дальше |
 |--------|--------|
 | **B1.12 рекуррент** | R1–R3 Fly MCP PASS · ответы Q1–Q7 `[x]` 2026-06-19 | апрув эпика |
-| **B1.11 режим работы** | 3b форма УК `[x]` · **3c open_now? `[x]`** 6/6 | shop API (п.4) |
+| **B1.11 режим работы** | **4 shop API + checkout `[x]`** 7/7 | табло (п.5) |
 | **B2.1 табло** | **ЗАКРЫТА** · апрув `[x]` 2026-06-18 | backlog фаза 2 в CBR |
 | **B2.1 B2-S1** | CLOSED OPS · MCP 9/9 · deploy `[x]` · заказчик `[ ]` | апрув заказчика |
 | **B1.1** | апрув `[x]` 2026-06-18 | — |
 | **B1.7 checkout** | **ЗАКРЫТА** · апрув `[x]` 2026-06-04 | — |
 | **B1.4 PWA** | код задеплоен · OPS_PASS · заказчик `[ ]` | апрув |
 | **B2.2** | stage0 `[x]` · этап 1 `[ ]` | единый экран «Меню» |
+
+### Сессия 2026-06-19 (B1.11 этап 4–5 — shop API + checkout)
+
+- **API:** `Shop::OperatingHours`, config/categories meta, guard orders create.
+- **UI:** `ShopClosedBanner`, Checkout disabled pay + баннер.
+- **Тест:** b111 integration 7/7; shop regression (vite/pwa — pre-existing skip).
+- **Дальше:** табло (п.5).
 
 ### Сессия 2026-06-19 (B1.11 этап 3c — open_now? / next_open_at)
 
