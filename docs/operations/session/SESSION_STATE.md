@@ -29,6 +29,12 @@
 | **B1.4 PWA** | код задеплоен · OPS_PASS · заказчик `[ ]` | апрув |
 | **B2.2** | stage0 `[x]` · этап 1 `[ ]` | единый экран «Меню» |
 
+### Сессия 2026-06-19 (B1.12-R2 deploy + Supabase blocker)
+
+- **Deploy:** `ded6371` — `docker-entrypoint` fix; `fly deploy --skip-release-command` → **OK**, `/up` 200.
+- **Блокер:** Supabase `compute time quota exceeded` — `/shop` 500; `fly:release` и MCP R2 не проходят.
+- **Действие:** Supabase Dashboard → restore/upgrade → `fly deploy -a coffeeos` → `bin/b112_r2_native_card_*`.
+
 ### Сессия 2026-06-18 (B1.12-R2 — web-фрейм + card_binding, OPS_PASS local)
 
 - **Код:** `card_binding` в API orders · Checkout/Payment session · PaymentResult «Карта привязана / Оплачено» · Payment intro copy.
