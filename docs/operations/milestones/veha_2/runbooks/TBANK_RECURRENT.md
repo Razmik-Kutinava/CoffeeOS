@@ -1,6 +1,6 @@
 # Т-Банк: рекуррентные платежи и привязка карты (B1.12)
 
-**Статус:** R1 Fly MCP 5/5 · R2 Fly MCP 6/6 · **R3** в коде (OPS_PASS local) · post-deploy R3 — после deploy  
+**Статус:** R1 Fly MCP 5/5 · R2 Fly MCP 6/6 · R3 Fly MCP 8/8 · апрув заказчика `[ ]`  
 **ТЗ:** [`B1_12_recurrent_payments.md`](../requirements/customer_tasks/B1_12_recurrent_payments.md)  
 **Связано:** §2.3 (базовая оплата закрыта) · `Payments::TbankAdapter` · `POST /callbacks/tbank`
 
@@ -67,6 +67,15 @@
 | `b112_r1_recurrent_post_deploy_*.json` | R1 |
 | `b112_r2_native_card_post_deploy_*.json` | R2 |
 | `b112_r3_one_click_post_deploy_*.json` | R3 |
+
+**R3 Fly MCP (после deploy):**
+
+```bash
+ruby bin/b112_r3_one_click_prep_fly.rb
+node bin/b112_r3_one_click_mcp.mjs
+```
+
+Скрины: `screenshots/b112_r3_one_click_checkout_*.png`, `b112_r3_one_click_post_deploy_*.png`.
 
 **R2 Fly MCP (после deploy + починки /shop):**
 

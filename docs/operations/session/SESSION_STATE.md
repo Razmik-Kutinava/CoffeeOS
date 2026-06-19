@@ -20,7 +20,7 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **B1.12 рекуррент** | R3 код `[x]` OPS_PASS local | deploy + MCP R3 по апруву |
+| **B1.12 рекуррент** | R1–R3 Fly MCP PASS `[x]` | апрув заказчика эпик |
 | **B1.11 режим работы** | этап 0 ТЗ `[x]` · код `[ ]` | ответы Q1–Q10 → апрув → `go` |
 | **B2.1 табло** | **ЗАКРЫТА** · апрув `[x]` 2026-06-18 | backlog фаза 2 в CBR |
 | **B2.1 B2-S1** | CLOSED OPS · MCP 9/9 · deploy `[x]` · заказчик `[ ]` | апрув заказчика |
@@ -28,6 +28,13 @@
 | **B1.7 checkout** | **ЗАКРЫТА** · апрув `[x]` 2026-06-04 | — |
 | **B1.4 PWA** | код задеплоен · OPS_PASS · заказчик `[ ]` | апрув |
 | **B2.2** | stage0 `[x]` · этап 1 `[ ]` | единый экран «Меню» |
+
+### Сессия 2026-06-19 (B1.12-R3 Fly MCP 8/8 post-deploy)
+
+- **Deploy:** владелец (до MCP).
+- **MCP:** `ruby bin/b112_r3_one_click_prep_fly.rb` + `node bin/b112_r3_one_click_mcp.mjs` — **8/8 PASS**.
+- **Скрины:** `b112_r3_one_click_checkout_2026-06-19.png`, `b112_r3_one_click_post_deploy_2026-06-19.png`.
+- **Артефакт:** [`b112_r3_one_click_post_deploy_2026-06-19.json`](milestones/veha_2/artifacts/demo-feedback/b112_r3_one_click_post_deploy_2026-06-19.json).
 
 ### Сессия 2026-06-19 (B1.12-R3 — 1 клик + стейт кнопки OPS_PASS local)
 

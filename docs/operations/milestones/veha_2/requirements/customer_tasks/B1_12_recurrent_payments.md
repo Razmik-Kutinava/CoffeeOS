@@ -59,7 +59,7 @@
 [x] 5 — B1.12-R2: web-фрейм + card_binding (2026-06-18) OPS_PASS local
 [x] 5b — Fly MCP R2 (6/6 post-deploy 2026-06-19) — `b112_r2_native_card_post_deploy_2026-06-19.json`
 [x] 6 — B1.12-R3: 1 клик + стейт кнопки «Оплатить» (2026-06-19) OPS_PASS local
-[ ] 6b — Fly MCP R3 post-deploy
+[x] 6b — Fly MCP R3 post-deploy (8/8 2026-06-19) — `b112_r3_one_click_post_deploy_2026-06-19.json`
 [ ] 7 — тесты Fly MCP + артефакт post-deploy R1
 [ ] 8 — апрув заказчика эпик
 ```
@@ -289,7 +289,7 @@
 - [x] Идемпотентность: `client_order_uuid` на recurrent path
 - [x] «Привязать другую карту» при критических кодах
 - [x] Integration тесты `b112_r3_one_click_test.rb` (mock charge OK/422 + idempotency)
-- [ ] Артефакт `b112_r3_one_click_post_deploy_*.json` (после deploy + MCP)
+- [x] Артефакт `b112_r3_one_click_post_deploy_2026-06-19.json` — **PASS** 8/8 Fly
 - [ ] Апрув заказчика на эпик
 
 ---
@@ -305,4 +305,4 @@
 
 ---
 
-**Статус:** **R1** OPS + Fly MCP 5/5 · **R2** Fly MCP 6/6 · **R3** OPS_PASS local · Fly MCP R3 + deploy — по апруву
+**Статус:** **R1** Fly MCP 5/5 · **R2** Fly MCP 6/6 · **R3** Fly MCP 8/8 · апрув заказчика `[ ]`

@@ -18,8 +18,6 @@
     "client_order_uuid idempotency on recurrent path"
   ],
   "not_done": [
-    "Fly MCP post-deploy b112_r3_one_click_post_deploy_*.json",
-    "fly deploy (ждёт апрув владельца)",
     "Апрув заказчика на эпик B1.12"
   ],
   "files": [

@@ -26,7 +26,8 @@
 
 | Дата | Источник | Сценарий / экран | Суть | Статус | PR / коммит |
 |------|----------|------------------|------|--------|-------------|
-| 2026-06-19 | B1.12-R3 | `#/checkout` 1 клик | saved card + pay button FSM | **done** *(OPS_PASS local)* | [b112_r3_one_click_ops_pass_2026-06-19.json](artifacts/demo-feedback/b112_r3_one_click_ops_pass_2026-06-19.json) |
+| 2026-06-19 | B1.12-R3 | `#/checkout` Fly | saved card + FSM 8/8 | **done** *(Fly MCP)* | [b112_r3_one_click_post_deploy_2026-06-19.json](artifacts/demo-feedback/b112_r3_one_click_post_deploy_2026-06-19.json) |
+| 2026-06-19 | B1.12-R3 | `#/checkout` 1 клик | saved card + pay button FSM local | **done** *(OPS_PASS local)* | [b112_r3_one_click_ops_pass_2026-06-19.json](artifacts/demo-feedback/b112_r3_one_click_ops_pass_2026-06-19.json) |
 | 2026-06-18 | B1.12-R2 | `#/payment` iframe | web-фрейм + card_binding local | **done** *(OPS_PASS local)* | [b112_r2_native_card_ops_pass_2026-06-18.json](artifacts/demo-feedback/b112_r2_native_card_ops_pass_2026-06-18.json) |
 | 2026-06-18 | B1.12-R1 | shop API / callback | Рекуррент: RebillId + Charge | **done** *(OPS_PASS local)* | [b112_r1_recurrent_ops_pass_2026-06-18.json](artifacts/demo-feedback/b112_r1_recurrent_ops_pass_2026-06-18.json) |
 | 2026-06-18 | заказчик B1.12 | `#/payment` / checkout | Рекуррент Т-Банк эпик (R2–R3) | **open** | [b112_stage0_scope_2026-06-18.json](artifacts/demo-feedback/b112_stage0_scope_2026-06-18.json) |

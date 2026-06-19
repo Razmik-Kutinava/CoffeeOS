@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v1.209 — 2026-06-19 (B1.12-R3 Fly MCP post-deploy 8/8)
+
+- **MCP:** `bin/b112_r3_one_click_prep_fly.rb` + `bin/b112_r3_one_click_mcp.mjs` — checkout saved card + pay FSM на Fly.
+- **Артефакт:** `b112_r3_one_click_post_deploy_2026-06-19.json` + 2 скрина.
+- **B1.12:** R1–R3 код + Fly MCP закрыты; ждём апрув заказчика.
+
 ## v1.208 — 2026-06-19 (B1.12-R3: оплата в 1 клик + стейт кнопки)
 
 - **Витрина:** saved card block, pay button FSM (idle/loading/success/error), one-click recurrent.
