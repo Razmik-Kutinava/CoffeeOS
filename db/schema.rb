@@ -10,10 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_13_120000) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_19_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
-  # pg_stat_statements — только через миграцию 20260423000001 (rescue без superuser); не в schema:load (Fly MPG).
+  enable_extension "pg_stat_statements"
 
   # Custom types defined in this database.
   # Note that some types may not work with other database engines. Be careful if changing database.
@@ -1127,6 +1127,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_13_120000) do
     t.check_constraint "status::text = ANY (ARRAY['pending'::character varying, 'accepted'::character varying, 'expired'::character varying, 'cancelled'::character varying]::text[])", name: "chk_invitation_status"
   end
 
+  create_table "tenant_weekday_schedules", id: :uuid, default: -> { "gen_random_uuid()" }, comment: "B1.11: часы работы точки по дням недели", force: :cascade do |t|
+    t.time "closes_at"
+    t.datetime "created_at", null: false
+    t.boolean "enabled", default: false, null: false
+    t.time "opens_at"
+    t.uuid "tenant_id", null: false
+    t.datetime "updated_at", null: false
+    t.integer "weekday", null: false, comment: "0=monday … 6=sunday"
+    t.index ["tenant_id", "weekday"], name: "index_tenant_weekday_schedules_on_tenant_id_and_weekday", unique: true
+  end
+
   create_table "tenants", id: :uuid, default: -> { "gen_random_uuid()" }, comment: "Точки продаж (кофейни)", force: :cascade do |t|
     t.text "address"
     t.string "city", limit: 100
@@ -1321,6 +1332,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_13_120000) do
   add_foreign_key "tenant_invitations", "tenants", on_delete: :cascade
   add_foreign_key "tenant_invitations", "users", column: "accepted_by_id", on_delete: :nullify
   add_foreign_key "tenant_invitations", "users", column: "invited_by_id", on_delete: :nullify
+  add_foreign_key "tenant_weekday_schedules", "tenants"
   add_foreign_key "tenants", "billing_plans", column: "plan_id", on_delete: :nullify
   add_foreign_key "tenants", "organizations"
   add_foreign_key "tv_board_settings", "tenants", on_delete: :cascade

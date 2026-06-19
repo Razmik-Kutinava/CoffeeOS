@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## v1.214 — 2026-06-19 (B1.11 этап 3a: миграция + модель расписания)
+
+- **БД:** `tenant_weekday_schedules` — weekday, enabled, opens_at/closes_at, RLS + UK admin.
+- **Модель:** `TenantWeekdaySchedule`; `Tenant#weekday_schedules`.
+- **Тест:** `test/models/tenant_weekday_schedule_test.rb` — 6/6 PASS.
+- **Ops:** B1_11 checklist п.1, SESSION_STATE, HANDOFF.
+
 ## v1.213 — 2026-06-19 (B1.11: ответы раунд 2 — готовность полная)
 
 - **Уточнения:** корзина ok/оплата off; баннер «след. утро раб. дня»; чекбоксы пн–вс; табло красный баннер+звук; barista POS в зале → табло.

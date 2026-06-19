@@ -54,6 +54,7 @@ class Tenant < ApplicationRecord
   has_many :shifts, dependent: :destroy
   has_many :shift_staffs, dependent: :destroy
   has_many :shift_cash_operations, dependent: :destroy
+  has_many :weekday_schedules, class_name: "TenantWeekdaySchedule", dependent: :destroy
 
   validates :name, presence: true
   validates :slug, presence: true, uniqueness: true
