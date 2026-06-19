@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## v1.203 — 2026-06-18 (B1.12-R2: web-фрейм + card_binding OPS_PASS local)
+
+- **API:** `card_binding` на card Init (Recurrent=Y).
+- **Витрина:** PaymentResult «Карта привязана / Оплачено»; Payment intro для привязки.
+- **Тест:** `b112_r2_payment_iframe_test.rb` PASS.
+- **Fly MCP:** blocked — `/shop` 500; артефакт `b112_r2_native_card_post_deploy_2026-06-18.json`.
+
 ## v1.202 — 2026-06-18 (B1.12-R1: Fly MCP post-deploy 5/5)
 
 - **Fly MCP:** `bin/b112_r1_recurrent_prep_fly.rb` + `bin/b112_r1_recurrent_mcp.mjs` — saved_cards, recurrent path, card init regression.

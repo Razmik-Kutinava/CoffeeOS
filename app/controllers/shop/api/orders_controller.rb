@@ -170,6 +170,8 @@ module Shop
           payload[:recurrent_charge] = true
         end
 
+        payload[:card_binding] = true if creator.card_binding
+
         payload
       end
 

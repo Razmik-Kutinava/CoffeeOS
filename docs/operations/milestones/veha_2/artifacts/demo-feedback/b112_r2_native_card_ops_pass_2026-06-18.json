@@ -1,0 +1,20 @@
+{
+  "task_id": "B1.12-R2",
+  "title": "Web-фрейм Т-Банка на #/payment + card_binding",
+  "date": "2026-06-18",
+  "status": "OPS_PASS",
+  "environment": "local_test",
+  "tests": {
+    "b112_r2_payment_iframe_integration": "PASS (1 run, 10 assertions)",
+    "qa_section_2_3_regression": "reuse §2.3 stage4 iframe stack"
+  },
+  "code": {
+    "card_binding_api": "POST /shop/api/orders → card_binding when Recurrent init",
+    "vitrina": "Checkout → Payment session; PaymentResult «Карта привязана / Оплачено»",
+    "iframe": "tbankPayment.js integration.js + Payment.svelte shell"
+  },
+  "fly_mcp": "blocked",
+  "fly_blocker": "https://coffeeos.fly.dev/shop → HTTP 500 (prep: no shop-api-key)",
+  "fly_rerun": "deploy + ruby bin/b112_r2_native_card_prep_fly.rb && node bin/b112_r2_native_card_mcp.mjs",
+  "next_step": "B1.12-R3 one-click UI"
+}

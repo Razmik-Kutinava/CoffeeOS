@@ -20,7 +20,7 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **B1.12 рекуррент** | **R1 OPS_PASS + Fly MCP 5/5** `[x]` 2026-06-18 | R2 web-фрейм → `go` |
+| **B1.12 рекуррент** | **R2 OPS_PASS local** · Fly MCP R2 blocked | R3 one-click → `go` |
 | **B1.11 режим работы** | этап 0 ТЗ `[x]` · код `[ ]` | ответы Q1–Q10 → апрув → `go` |
 | **B2.1 табло** | **ЗАКРЫТА** · апрув `[x]` 2026-06-18 | backlog фаза 2 в CBR |
 | **B2.1 B2-S1** | CLOSED OPS · MCP 9/9 · deploy `[x]` · заказчик `[ ]` | апрув заказчика |
@@ -28,6 +28,14 @@
 | **B1.7 checkout** | **ЗАКРЫТА** · апрув `[x]` 2026-06-04 | — |
 | **B1.4 PWA** | код задеплоен · OPS_PASS · заказчик `[ ]` | апрув |
 | **B2.2** | stage0 `[x]` · этап 1 `[ ]` | единый экран «Меню» |
+
+### Сессия 2026-06-18 (B1.12-R2 — web-фрейм + card_binding, OPS_PASS local)
+
+- **Код:** `card_binding` в API orders · Checkout/Payment session · PaymentResult «Карта привязана / Оплачено» · Payment intro copy.
+- **Тест:** `b112_r2_payment_iframe_test.rb` — PASS.
+- **Скрипты:** `bin/b112_r2_native_card_prep_fly.rb` · `bin/b112_r2_native_card_mcp.mjs`.
+- **Fly MCP:** **blocked** — `/shop` HTTP 500 → [`b112_r2_native_card_post_deploy_2026-06-18.json`](milestones/veha_2/artifacts/demo-feedback/b112_r2_native_card_post_deploy_2026-06-18.json) · ISSUES 🔴.
+- **Локальный OPS:** [`b112_r2_native_card_ops_pass_2026-06-18.json`](milestones/veha_2/artifacts/demo-feedback/b112_r2_native_card_ops_pass_2026-06-18.json).
 
 ### Сессия 2026-06-18 (B1.12-R1 — Fly MCP post-deploy, 5/5 PASS)
 

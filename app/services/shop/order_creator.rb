@@ -4,7 +4,7 @@ module Shop
   class OrderCreator
     class Error < StandardError; end
 
-    attr_reader :payment_url, :provider_payment_id
+    attr_reader :payment_url, :provider_payment_id, :card_binding
 
     def initialize(session, tenant:, request: nil)
       @session = session
@@ -311,6 +311,7 @@ module Shop
       notification_url = "#{return_base_url}/callbacks/tbank"
       customer_key = order.customer_id&.to_s
       recurrent = payment.card? && customer_key.present?
+      @card_binding = recurrent
 
       result = Payments::TbankAdapter.new.init_payment(
         order: order,

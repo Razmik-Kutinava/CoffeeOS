@@ -4,6 +4,12 @@
 
 ## 🔴 Блокеры
 
+[2026-06-18] — Fly: `/shop` HTTP 500 (B1.12-R2 MCP blocked)
+Статус: **open**
+Описание: `https://coffeeos.fly.dev/shop?tenant_id=…` → 500, нет `shop-api-key`; prep/MCP R2 не запускаются.
+Проверка: `curl.exe -sS -w "%{http_code}" "https://coffeeos.fly.dev/shop?tenant_id=655aaccb-004a-4bb9-a50a-ce618854dda3"` → 500.
+Следующий шаг: `fly logs` / deploy develop → повтор `bin/b112_r2_native_card_prep_fly.rb`.
+
 ## 🟡 Важно
 
 [2026-05-30] — Kiosk: POST /kiosk/api/auth

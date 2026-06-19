@@ -110,7 +110,7 @@
 
 - [x] **B1.12 этап 0** — ТЗ заказчика (3 задачи) + ops + `b112_stage0_scope_2026-06-18.json`
 - [x] **B1.12-R1** — `mobile_payment_methods`, webhook RebillId, Charge API, `GET saved_cards` *(OPS_PASS + Fly MCP 5/5 2026-06-18)*
-- [ ] **B1.12-R2** — web-фрейм ввода карты + 3DS (витрина)
+- [x] **B1.12-R2** — iframe `#/payment`, card_binding, PaymentResult *(OPS_PASS local; Fly MCP blocked shop 500)*
 - [ ] **B1.12-R3** — оплата в 1 клик, стейт-машина кнопки «Оплатить»
 - [ ] Апрув заказчика на эпик B1.12
 

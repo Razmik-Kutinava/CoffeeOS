@@ -56,7 +56,8 @@
 [x] 4 — B1.12-R1: бэкенд + saved cards + API (2026-06-18) OPS_PASS
 [ ] 2 — сверка доки Т-Банк (iframe/3DS — R2)
 [ ] 3 — апрув заказчика Fly MCP R1
-[ ] 5 — B1.12-R2: web-фрейм + 3DS на витрине
+[x] 5 — B1.12-R2: web-фрейм + card_binding (2026-06-18) OPS_PASS local
+[ ] 5b — Fly MCP R2 (blocked: /shop 500)
 [ ] 6 — B1.12-R3: 1 клик + стейт кнопки «Оплатить»
 [ ] 7 — тесты Fly MCP + артефакт post-deploy R1
 [ ] 8 — апрув заказчика эпик
@@ -270,12 +271,13 @@
 
 ## Чеклист B1.12-R2 (после R1)
 
-- [ ] Web-фрейм / iframe Т-Банка на `#/payment`
-- [ ] Стилизация в рамках доки банка
-- [ ] 3DS flow (окно банка)
-- [ ] Редирект «Карта привязана / Оплачено»
-- [ ] Integration + MCP витрина
-- [ ] Артефакт `b112_r2_native_card_post_deploy_*.json`
+- [x] Web-фрейм / iframe Т-Банка на `#/payment` (§2.3 + R2 card_binding)
+- [x] Стилизация в рамках доки банка (shell CoffeeOS + setTheme dark)
+- [x] 3DS flow — `deepLinkRedirectCallback` в `tbankPayment.js`
+- [x] Редирект «Карта привязана / Оплачено» — `PaymentResult` + `bound=1`
+- [x] Integration тест `b112_r2_payment_iframe_test.rb`
+- [ ] Fly MCP витрина + скрин (blocked: `/shop` 500)
+- [ ] Артефакт `b112_r2_native_card_post_deploy_*.json` — **PASS** после deploy
 
 ## Чеклист B1.12-R3 (после R2)
 
@@ -302,4 +304,4 @@
 
 ---
 
-**Статус:** **B1.12-R1 CLOSED OPS + Fly MCP 5/5** 2026-06-18 · R2 **не начинать** без `go`.
+**Статус:** **R1** OPS + Fly MCP 5/5 · **R2** OPS_PASS local · Fly MCP R2 blocked · **R3** ждём `go`

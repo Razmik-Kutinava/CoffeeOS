@@ -233,6 +233,7 @@
             reconnect_token: res.reconnect_token,
             payment_iframe: true,
             payment_method,
+            card_binding: res.card_binding === true,
             integration_script_url: config.integration_script_url
           })
           redirecting = true

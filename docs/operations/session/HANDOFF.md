@@ -12,7 +12,8 @@
 | **R1 бэкенд** | **OPS_PASS** `[x]` 2026-06-18 |
 | Ответы Q1–Q7 | `[x]` |
 | Fly MCP R1 | `[x]` 5/5 2026-06-18 — [`b112_r1_recurrent_post_deploy_2026-06-18.json`](../milestones/veha_2/artifacts/demo-feedback/b112_r1_recurrent_post_deploy_2026-06-18.json) |
-| **Следующий шаг** | **R2** web-фрейм + 3DS → `go` |
+| **R2 web-фрейм** | **OPS_PASS** local · Fly MCP **blocked** (`/shop` 500) — [`b112_r2_native_card_ops_pass_2026-06-18.json`](../milestones/veha_2/artifacts/demo-feedback/b112_r2_native_card_ops_pass_2026-06-18.json) |
+| **Следующий шаг** | deploy + Fly MCP R2 → **R3** one-click |
 
 ТЗ: [`B1_12_recurrent_payments.md`](../milestones/veha_2/requirements/customer_tasks/B1_12_recurrent_payments.md) · runbook: [`TBANK_RECURRENT.md`](../milestones/veha_2/runbooks/TBANK_RECURRENT.md)
 

@@ -68,6 +68,15 @@
 | `b112_r2_native_card_post_deploy_*.json` | R2 |
 | `b112_r3_one_click_post_deploy_*.json` | R3 |
 
+**R2 Fly MCP (после deploy + починки /shop):**
+
+```bash
+ruby bin/b112_r2_native_card_prep_fly.rb
+node bin/b112_r2_native_card_mcp.mjs
+```
+
+Скрины: `screenshots/b112_r2_native_card_intro_*.png`, `b112_r2_native_card_post_deploy_*.png`.
+
 **R1 Fly MCP (2026-06-18):**
 
 ```bash

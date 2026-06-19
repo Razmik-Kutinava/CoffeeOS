@@ -29,8 +29,9 @@
     if (finished || destroyed) return
     finished = true
     const orderId = session?.order_id
+    const bound = session?.card_binding ? "&bound=1" : ""
     clearPaymentSession()
-    push(`/payment-result?status=success&order_id=${orderId}`)
+    push(`/payment-result?status=success&order_id=${orderId}${bound}`)
   }
 
   async function finishFail(reason = "fail") {
@@ -186,6 +187,8 @@
   <p class="mb-4 text-sm text-[#a0a0a0]">
     {#if session?.payment_method === "sbp"}
       Нажмите кнопку — откроется оплата через СБП. Данные карты вводятся в защищённой форме банка.
+    {:else if session?.card_binding}
+      Нажмите кнопку — откроется защищённая форма CoffeeOS. После успешной оплаты карта сохранится для следующих заказов.
     {:else}
       Нажмите кнопку — откроется защищённая форма. Брендинг банка скрыт, интерфейс CoffeeOS.
     {/if}
