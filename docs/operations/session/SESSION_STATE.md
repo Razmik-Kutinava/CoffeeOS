@@ -21,13 +21,20 @@
 | Сейчас | Дальше |
 |--------|--------|
 | **B1.12 рекуррент** | R1–R3 Fly MCP PASS · ответы Q1–Q7 `[x]` 2026-06-19 | апрув эпика |
-| **B1.11 режим работы** | **5 табло+POS+logout `[x]`** 16/16 | Fly MCP (п.6) |
+| **B1.11 режим работы** | **CLOSED OPS** 28/28 · артефакт · manager UI | deploy + Fly MCP + апрув |
 | **B2.1 табло** | **ЗАКРЫТА** · апрув `[x]` 2026-06-18 | backlog фаза 2 в CBR |
 | **B2.1 B2-S1** | CLOSED OPS · MCP 9/9 · deploy `[x]` · заказчик `[ ]` | апрув заказчика |
 | **B1.1** | апрув `[x]` 2026-06-18 | — |
 | **B1.7 checkout** | **ЗАКРЫТА** · апрув `[x]` 2026-06-04 | — |
 | **B1.4 PWA** | код задеплоен · OPS_PASS · заказчик `[ ]` | апрув |
 | **B2.2** | stage0 `[x]` · этап 1 `[ ]` | единый экран «Меню» |
+
+### Сессия 2026-06-19 (B1.11 этап 7 — integration + manager UI + артефакт)
+
+- **Manager:** alert «Требуется закрытие смены» на `/manager/shifts`.
+- **Тест:** 28/28 PASS (b111 + manager + block_g fix).
+- **Артефакт:** [`b111_operating_hours_post_deploy_2026-06-19.json`](milestones/veha_2/artifacts/demo-feedback/b111_operating_hours_post_deploy_2026-06-19.json).
+- **Дальше:** deploy → Fly MCP → апрув заказчика.
 
 ### Сессия 2026-06-19 (B1.11 этап 5–6 — табло + POS + logout)
 

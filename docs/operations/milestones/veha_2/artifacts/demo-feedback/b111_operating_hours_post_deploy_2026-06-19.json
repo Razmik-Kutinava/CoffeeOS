@@ -1,0 +1,29 @@
+{
+  "scenario": "b111_operating_hours_post_deploy",
+  "task": "B1.11",
+  "stand": "local_integration",
+  "fly_stand": "https://coffeeos.fly.dev",
+  "tenant_id": "655aaccb-004a-4bb9-a50a-ce618854dda3",
+  "started_at": "2026-06-19T14:00:00.000Z",
+  "finished_at": "2026-06-19T14:30:00.000Z",
+  "pass": true,
+  "fly_mcp": "pending_deploy",
+  "summary": {
+    "integration_runs": 28,
+    "integration_assertions": 96,
+    "failures": 0
+  },
+  "steps": [
+    { "id": "uk", "action": "TenantWeekdaySchedule + UK form sync", "pass": true, "tests": "tenant_weekday_schedule_test + sync 7/7" },
+    { "id": "hours", "action": "TenantOperatingHours open_now / next_open_at", "pass": true, "tests": "6/6" },
+    { "id": "shop_api", "action": "config/categories operating_hours + orders guard", "pass": true, "tests": "b111_operating_hours 7/7" },
+    { "id": "checkout", "action": "ShopClosedBanner + canPay off when closed", "pass": true, "tests": "checkout_acceptance + frontend" },
+    { "id": "board_empty", "action": "Barista board empty when shift closed", "pass": true },
+    { "id": "board_conflict", "action": "Red banner + sound when shift open outside schedule", "pass": true },
+    { "id": "pos", "action": "Barista POS order outside schedule → board", "pass": true },
+    { "id": "logout", "action": "ShiftScheduleLogoutHook → cash_shifts.note [B1.11]", "pass": true },
+    { "id": "manager_ui", "action": "Manager «Требуется закрытие смены» alert", "pass": true, "tests": "b111_shift_close_required 3/3" },
+    { "id": "regression", "action": "block_g shop order without cash shift", "pass": true }
+  ],
+  "customer_approval": "pending"
+}

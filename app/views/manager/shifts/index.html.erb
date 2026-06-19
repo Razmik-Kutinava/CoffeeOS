@@ -10,6 +10,7 @@
         <strong>Смена открыта</strong>
         <span class="muted">с <%= @open_shift.opened_at.strftime("%d.%m %H:%M") %> · открыл <%= @open_shift.opened_by&.name %></span>
       </div>
+      <%= render "manager/shifts/schedule_close_alert", shift: @open_shift, tenant: current_tenant %>
       <div class="shift-actions">
         <%= link_to "Закрыть смену", manager_close_shift_path(@open_shift), class: "btn btn-danger" %>
         <%= link_to "Подробнее", manager_shift_path(@open_shift), class: "btn btn-secondary" %>
@@ -67,4 +68,13 @@
   .btn-secondary { opacity: 0.85; }
   .pill-open { color: #7cf0a0; }
   .link-warn { color: #f0a07c; margin-left: 8px; }
+  .schedule-close-alert {
+    margin: 12px 0 16px;
+    padding: 14px 16px;
+    border-radius: 10px;
+    border: 2px solid #f07c7c;
+    background: rgba(74, 18, 18, 0.55);
+  }
+  .schedule-close-alert strong { color: #ffb4b4; display: block; margin-bottom: 6px; }
+  .schedule-close-alert .btn-danger { margin-top: 10px; display: inline-block; }
 </style>

@@ -5,6 +5,7 @@ require "test_helper"
 # Веха 1 / блок G: гибрид смены — shop без смены, бариста POS только с открытой сменой; отмена с причиной + audit.
 class BlockGCashShiftTest < ActionDispatch::IntegrationTest
   include TestFactories
+  include ShopEmailTestHelper
 
   setup do
     @tenant = create_tenant!(slug: "bg-#{SecureRandom.hex(3)}")
@@ -17,15 +18,18 @@ class BlockGCashShiftTest < ActionDispatch::IntegrationTest
 
   test "shop order succeeds without cash shift" do
     headers = { "X-Shop-Tenant" => @tenant.id.to_s }
+    email = "bg-shop-#{SecureRandom.hex(4)}@test.local"
     post "/shop/api/cart/add",
       headers: headers,
       params: { product_id: @product.id, quantity: 1, selected_modifiers: [] },
       as: :json
     assert_response :success
 
+    verify_shop_email!(tenant_id: @tenant.id, email: email)
+
     post "/shop/api/orders",
       headers: headers,
-      params: { phone: "+7900#{rand(10_000_000..99_999_999)}", name: "BG Shop", payment_method: "mock" },
+      params: { email: email, name: "BG Shop", payment_method: "cash" },
       as: :json
     assert_response :success
 

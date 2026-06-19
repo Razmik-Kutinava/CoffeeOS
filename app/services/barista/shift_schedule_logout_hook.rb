@@ -3,8 +3,6 @@
 module Barista
   # B1.11: бариста вышел при открытой смене вне расписания — пометка для менеджера.
   class ShiftScheduleLogoutHook
-    NOTE_TAG = "[B1.11"
-
     def self.call(user:, tenant_id:)
       new(user: user, tenant_id: tenant_id).call
     end
@@ -22,7 +20,7 @@ module Barista
       return unless tenant
       return unless Barista::OperatingHoursBoard.new(tenant: tenant, shift: shift).schedule_conflict?
 
-      line = "#{NOTE_TAG} #{Time.current.iso8601}] #{user.name} вышел: смена открыта вне расписания — закрыть через менеджера."
+      line = "#{CashShift::SCHEDULE_CLOSE_NOTE_TAG} #{Time.current.iso8601}] #{user.name} вышел: смена открыта вне расписания — закрыть через менеджера."
       note = [shift.note, line].compact.join("\n")
       shift.update!(note: note)
     end

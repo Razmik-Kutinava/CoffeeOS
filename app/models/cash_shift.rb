@@ -1,4 +1,6 @@
 class CashShift < ApplicationRecord
+  SCHEDULE_CLOSE_NOTE_TAG = "[B1.11"
+
   enum :status, { open: 'open', closed: 'closed' }
 
   belongs_to :tenant
@@ -18,6 +20,25 @@ class CashShift < ApplicationRecord
 
   def open?
     status == 'open'
+  end
+
+  # B1.11: бариста вышел вне расписания — note с тегом.
+  def schedule_close_requested?
+    note.to_s.include?(SCHEDULE_CLOSE_NOTE_TAG)
+  end
+
+  # B1.11: смена открыта, расписание точки закрыто.
+  def schedule_conflict?(tenant = nil)
+    return false unless open?
+
+    tenant ||= Tenant.find_by(id: tenant_id)
+    return false unless tenant
+
+    Barista::OperatingHoursBoard.new(tenant: tenant, shift: self).schedule_conflict?
+  end
+
+  def requires_manager_close?(tenant = nil)
+    open? && (schedule_close_requested? || schedule_conflict?(tenant))
   end
 
   # BUG-008 FIX: Вычисляем финансовые итоги смены при закрытии.

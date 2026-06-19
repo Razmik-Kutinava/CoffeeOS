@@ -1,0 +1,15 @@
+<%# B1.11: смена открыта вне расписания или бариста вышел — менеджер должен закрыть %>
+<% if shift&.requires_manager_close?(tenant) %>
+  <div class="schedule-close-alert" data-testid="manager-shift-close-required" role="alert">
+    <strong>⚠ Требуется закрытие смены</strong>
+    <p class="muted">
+      Смена открыта вне режима работы точки.
+      <% if shift.schedule_close_requested? %>
+        Бариста вышел из системы — закройте смену через мастер закрытия.
+      <% else %>
+        Закройте смену, когда работа в зале завершена.
+      <% end %>
+    </p>
+    <%= link_to "Закрыть смену", manager_close_shift_path(shift), class: "btn btn-danger" %>
+  </div>
+<% end %>

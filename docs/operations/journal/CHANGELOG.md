@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## v1.219 — 2026-06-19 (B1.11 этап 7: integration + manager UI + артефакт)
+
+- **Manager UI:** «Требуется закрытие смены» при конфликте / note `[B1.11]`.
+- **CashShift:** `requires_manager_close?`, `schedule_close_requested?`.
+- **Regression:** block_g shop order + email fix.
+- **Артефакт:** `b111_operating_hours_post_deploy_2026-06-19.json` — 28/28 local.
+- **Fly MCP:** pending_deploy.
+
 ## v1.218 — 2026-06-19 (B1.11 этап 5–6: табло + POS + logout)
 
 - **Было:** табло показывало витрину без смены; нет конфликта смена/расписание.

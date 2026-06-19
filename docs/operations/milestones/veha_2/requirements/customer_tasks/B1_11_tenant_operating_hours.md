@@ -51,7 +51,7 @@
 [x] 3c — сервис `TenantOperatingHours` open_now? / next_open_at (2026-06-19)
 [x] 4 — shop API + баннер + checkout (2026-06-19)
 [x] 5 — табло + POS + logout hook (2026-06-19)
-[ ] 6 — integration + Fly MCP + артефакт приёмки
+[x] 6 — integration 28/28 + артефакт · Fly MCP после deploy
 [ ] 7 — апрув заказчика
 ```
 
@@ -239,8 +239,8 @@
 - [x] Табло: пусто (смена закрыта) · красный баннер + звук (конфликт смена/расписание) — `BoardOrdersQuery.none` · banner · sound · тест 16/16
 - [x] Barista POS: заказ в зале → табло **вне** расписания — POS без guard · integration
 - [x] Logout бариста / «мои точки» → hook `ShiftScheduleLogoutHook` (note на смене для менеджера)
-- [ ] Integration-тесты + Fly MCP
-- [ ] Артефакт `b111_operating_hours_post_deploy_*.json`
+- [x] Integration-тесты + Fly MCP — local 28/28 · Fly MCP `pending_deploy`
+- [x] Артефакт `b111_operating_hours_post_deploy_2026-06-19.json`
 - [ ] Апрув заказчика
 
 ---
@@ -252,8 +252,8 @@
 | Праздники / исключения по датам | **не MVP** (Q3) |
 | Интервал через полночь | **не MVP** (Q2) |
 | Email сотрудникам вне часов | **след. итерация** |
-| Принуд. закрытие смены через менеджера | **B1.11** hook + возможно отдельный шаг manager UI |
+| Принуд. закрытие смены через менеджера | **done** — note + UI «Требуется закрытие» · закрытие вручную менеджером |
 
 ---
 
-**Статус:** **этап 1 CLOSED OPS** (раунд 2) 2026-06-19 · **готовность к коду — полная** · ждём **апрув + `go`**.
+**Статус:** **код CLOSED OPS** 2026-06-19 · **28/28 integration** · ждём **deploy + Fly MCP + апрув заказчика**.
