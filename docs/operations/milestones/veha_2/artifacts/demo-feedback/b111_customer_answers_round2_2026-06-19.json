@@ -1,0 +1,37 @@
+{
+  "task_id": "B1.11",
+  "title": "Режим работы — ответы раунд 2 (уточнения)",
+  "date": "2026-06-19",
+  "status": "ANSWERS_COMPLETE",
+  "readiness": "Полная готовность к коду; ждём апрув + go",
+  "source": "владелец (чат)",
+  "do_not_reask": true,
+  "verbatim_owner": [
+    "Режим тот который будет задан а панели ук, в разделе точка продаж",
+    "Достаточно просто сделать чек боксы с днями недели , сами решим как работать",
+    "В корзину можно закинуть ночью нельзя оплатить. Писать следующее утро рабочего дня",
+    "Если по расписанию закрыто а персонал не закрыл, для пользователя правила баннер следущено дня, в табло не скидываем, но на табло выводим баннер красный + звук сигнал что смена открыта, пока барista не вышел из своего аккаунта в ядре, точки мои вышел то принудительное закрытие через офис менеджера.",
+    "Если внутри помещения заказ создаётся значит там есть гость, значит пропускаем заказ до табло баристы, но не через сайт/ pwa"
+  ],
+  "decisions": {
+    "source_of_truth": "UK platform tenants form — точка продаж",
+    "uk_form": "checkboxes per weekday + open/close hours",
+    "shop_outside_hours": {
+      "cart": "allowed",
+      "pay": "blocked",
+      "banner": "следующее утро рабочего дня [время открытия]"
+    },
+    "barista_board_shift_closed": "empty",
+    "barista_board_schedule_closed_shift_open": {
+      "clear_orders": false,
+      "red_banner": true,
+      "alert_sound": true,
+      "until": "barista logout from core",
+      "forced_shift_close": "office manager when barista exits my-points"
+    },
+    "barista_pos_in_store": "order goes to board even outside schedule",
+    "shop_pwa": "blocked by schedule for orders/payment"
+  },
+  "open_questions": [],
+  "next_step": "апрув владельца + go → код"
+}
