@@ -10,7 +10,7 @@
 |-----|--------|
 | ТЗ этап 0 (R1–R3) | `[x]` 2026-06-18 |
 | **R1 бэкенд** | **OPS_PASS** `[x]` 2026-06-18 |
-| Ответы Q1–Q7 | `[x]` |
+| Ответы Q1–Q7 | `[x]` 2026-06-19 — подтверждение владельца · [`b112_customer_answers_confirmed_2026-06-19.json`](../milestones/veha_2/artifacts/demo-feedback/b112_customer_answers_confirmed_2026-06-19.json) |
 | Fly MCP R1 | `[x]` 5/5 2026-06-18 — [`b112_r1_recurrent_post_deploy_2026-06-18.json`](../milestones/veha_2/artifacts/demo-feedback/b112_r1_recurrent_post_deploy_2026-06-18.json) |
 | **R2 web-фрейм** | **OPS_PASS + Fly MCP 6/6** `[x]` 2026-06-19 — [`b112_r2_native_card_post_deploy_2026-06-19.json`](../milestones/veha_2/artifacts/demo-feedback/b112_r2_native_card_post_deploy_2026-06-19.json) |
 | **R3 1 клик** | **Fly MCP 8/8** `[x]` 2026-06-19 — [`b112_r3_one_click_post_deploy_2026-06-19.json`](../milestones/veha_2/artifacts/demo-feedback/b112_r3_one_click_post_deploy_2026-06-19.json) |

@@ -10,9 +10,9 @@
 | **B1.9** | Toggle-модификаторы на карточке товара | **закрыта** · апрув `[x]` 2026-06-18 | [B1_9_product_modifier_toggle.md](B1_9_product_modifier_toggle.md) |
 | B1.1 | Экран уведомления заказа + прогресс-бар | PASS 2026-06-10 · ревизия R0–R4 Fly `[x]` · заказчик `[x]` 2026-06-18 | [B1_1_order_status_progress.md](B1_1_order_status_progress.md) |
 | **B2.1** | **Табло бариста — интерактивная карточка** | **закрыта** · апрув `[x]` 2026-06-18 | [B2_1_barista_order_board.md](B2_1_barista_order_board.md) |
-| **B1.12** | **Рекуррент + 1 клик** (Т-Банк, R1–R3) | **ТЗ этап 0** `[x]` · ждём ответы + апрув на код | [B1_12_recurrent_payments.md](B1_12_recurrent_payments.md) |
+| **B1.12** | **Рекуррент + 1 клик** (Т-Банк, R1–R3) | **R1–R3 Fly MCP PASS** · ответы Q1–Q7 `[x]` 2026-06-19 · апрув эпика `[ ]` | [B1_12_recurrent_payments.md](B1_12_recurrent_payments.md) |
 | **B1.11** | **Режим работы точки** (УК → витрина → табло) | **ТЗ этап 0** `[x]` · ждём ответы + апрув на код | [B1_11_tenant_operating_hours.md](B1_11_tenant_operating_hours.md) |
 | B2.2 | Объединить «Меню» + «Создать» | **ТЗ** 2026-06-10 · реализация `[ ]` | [B2_2_barista_menu_create_merge.md](B2_2_barista_menu_create_merge.md) |
 | **B1.4** | **PWA витрины** (install, offline) | **OPS_PASS** 2026-06-12 · заказчик `[ ]` | [B1_4_pwa_shop.md](B1_4_pwa_shop.md) |
 
-**Порядок работ (2026-06):** **B1.12** (ответы Q1–Q7) · **B1.11** · **B2.2** · апрувы B2-S1 / B1.4 `[ ]`.
+**Порядок работ (2026-06):** **B1.12** апрув эпика · **B1.11** · **B2.2** · апрувы B1.4 `[ ]`.
