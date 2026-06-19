@@ -1,0 +1,357 @@
+{
+  "task": "checkout_otp_fly_multitenant",
+  "base": "https://coffeeos.fly.dev",
+  "at": "2026-06-13T10:05:17Z",
+  "fly_bin": "/home/darks/.fly/bin/flyctl",
+  "otp_fetch": "fly machine exec + rails runner",
+  "fly_machine": "48ee61ea71d948",
+  "points": [
+    {
+      "slug": "demo_a",
+      "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+      "users": [
+        {
+          "email": "mt-demo_a-u1-06131002@coffeeos.dev",
+          "send": {
+            "http": 200,
+            "body": {
+              "ok": true,
+              "email": "mt-demo_a-u1-06131002@coffeeos.dev"
+            }
+          },
+          "status_before": {
+            "verified": false,
+            "email": null
+          },
+          "order_blocked": {
+            "http": 422,
+            "body": {
+              "error": "Подтвердите email кодом из письма",
+              "status": 422
+            }
+          },
+          "verify": {
+            "code_from": "fly_machine_exec",
+            "http": 200,
+            "body": {
+              "verified": true,
+              "email": "mt-demo_a-u1-06131002@coffeeos.dev"
+            }
+          },
+          "order": {
+            "order_id": "745d97ec-5e8c-4da0-9f96-26a00dbb61f4",
+            "total": 385.0,
+            "discount": 0.0,
+            "status": "accepted",
+            "payment_url": null,
+            "reconnect_token": "eyJfcmFpbHMiOnsiZGF0YSI6eyJvaWQiOiI3NDVkOTdlYy01ZThjLTRkYTAtOWY5Ni0yNmEwMGRiYjYxZjQiLCJjaWQiOiJjN2I2NzM0Yi1hZGYzLTQ4ZTYtOTAyNS1jMGRkZTFlNmVlZWYiLCJ0aWQiOiIyZmRlZTFhYy00Njc0LTQxZWUtYjg5ZS04N2I0NTY0M2Y3ODkifSwiZXhwIjoiMjAyNi0wNi0xNFQxMDowMzoxMy43NTdaIn19--f8d1379d4d8dcb0cef6f4dd1009037d0e7767972",
+            "_http": 200
+          },
+          "pass": true
+        },
+        {
+          "email": "mt-demo_a-u2-06131002@coffeeos.dev",
+          "send": {
+            "http": 200,
+            "body": {
+              "ok": true,
+              "email": "mt-demo_a-u2-06131002@coffeeos.dev"
+            }
+          },
+          "status_before": {
+            "verified": false,
+            "email": null
+          },
+          "order_blocked": {
+            "http": 422,
+            "body": {
+              "error": "Подтвердите email кодом из письма",
+              "status": 422
+            }
+          },
+          "verify": {
+            "code_from": "fly_machine_exec",
+            "http": 200,
+            "body": {
+              "verified": true,
+              "email": "mt-demo_a-u2-06131002@coffeeos.dev"
+            }
+          },
+          "order": {
+            "order_id": "82644e38-91aa-47bd-b07a-a44a47da8d6f",
+            "total": 385.0,
+            "discount": 0.0,
+            "status": "accepted",
+            "payment_url": null,
+            "reconnect_token": "eyJfcmFpbHMiOnsiZGF0YSI6eyJvaWQiOiI4MjY0NGUzOC05MWFhLTQ3YmQtYjA3YS1hNDRhNDdkYThkNmYiLCJjaWQiOiIyNDNmODhjMS05YzI2LTQ5MjUtODM1MS1jN2E2ZTc4OTExMWMiLCJ0aWQiOiIyZmRlZTFhYy00Njc0LTQxZWUtYjg5ZS04N2I0NTY0M2Y3ODkifSwiZXhwIjoiMjAyNi0wNi0xNFQxMDowMzoyOS41OTFaIn19--11405bb7e0c3c20e56c2d372503ec86e06b8c655",
+            "_http": 200
+          },
+          "pass": true
+        }
+      ],
+      "pass": true
+    },
+    {
+      "slug": "demo_b",
+      "tenant_id": "655aaccb-004a-4bb9-a50a-ce618854dda3",
+      "users": [
+        {
+          "email": "mt-demo_b-u1-06131002@coffeeos.dev",
+          "send": {
+            "http": 200,
+            "body": {
+              "ok": true,
+              "email": "mt-demo_b-u1-06131002@coffeeos.dev"
+            }
+          },
+          "status_before": {
+            "verified": false,
+            "email": null
+          },
+          "order_blocked": {
+            "http": 422,
+            "body": {
+              "error": "Подтвердите email кодом из письма",
+              "status": 422
+            }
+          },
+          "verify": {
+            "code_from": "fly_machine_exec",
+            "http": 200,
+            "body": {
+              "verified": true,
+              "email": "mt-demo_b-u1-06131002@coffeeos.dev"
+            }
+          },
+          "order": {
+            "order_id": "a4e96261-d3d0-4965-a676-83d6a243d693",
+            "total": 395.0,
+            "discount": 0.0,
+            "status": "accepted",
+            "payment_url": null,
+            "reconnect_token": "eyJfcmFpbHMiOnsiZGF0YSI6eyJvaWQiOiJhNGU5NjI2MS1kM2QwLTQ5NjUtYTY3Ni04M2Q2YTI0M2Q2OTMiLCJjaWQiOiI1OWE0ZTI4Yi05MTVjLTRlNWQtYmZkOS1lZDZiNGYzY2FiZTgiLCJ0aWQiOiI2NTVhYWNjYi0wMDRhLTRiYjktYTUwYS1jZTYxODg1NGRkYTMifSwiZXhwIjoiMjAyNi0wNi0xNFQxMDowMzo0NS4yNDBaIn19--0febaf18db337af3628c0de41758363ac3297d8c",
+            "_http": 200
+          },
+          "pass": true
+        },
+        {
+          "email": "mt-demo_b-u2-06131002@coffeeos.dev",
+          "send": {
+            "http": 200,
+            "body": {
+              "ok": true,
+              "email": "mt-demo_b-u2-06131002@coffeeos.dev"
+            }
+          },
+          "status_before": {
+            "verified": false,
+            "email": null
+          },
+          "order_blocked": {
+            "http": 422,
+            "body": {
+              "error": "Подтвердите email кодом из письма",
+              "status": 422
+            }
+          },
+          "verify": {
+            "code_from": "fly_machine_exec",
+            "http": 200,
+            "body": {
+              "verified": true,
+              "email": "mt-demo_b-u2-06131002@coffeeos.dev"
+            }
+          },
+          "order": {
+            "order_id": "7b55e22d-a0d7-470f-a9ee-11888d639b64",
+            "total": 395.0,
+            "discount": 0.0,
+            "status": "accepted",
+            "payment_url": null,
+            "reconnect_token": "eyJfcmFpbHMiOnsiZGF0YSI6eyJvaWQiOiI3YjU1ZTIyZC1hMGQ3LTQ3MGYtYTllZS0xMTg4OGQ2MzliNjQiLCJjaWQiOiIzMjNkNGQ3Ni0wNTVmLTQzOWUtYjExOC1hODFmMDRkZmZiNGUiLCJ0aWQiOiI2NTVhYWNjYi0wMDRhLTRiYjktYTUwYS1jZTYxODg1NGRkYTMifSwiZXhwIjoiMjAyNi0wNi0xNFQxMDowNDowMy4wNTFaIn19--b8830a83ecfbff0a2e62e54c0a891ffdf49e7101",
+            "_http": 200
+          },
+          "pass": true
+        }
+      ],
+      "pass": true
+    },
+    {
+      "slug": "prep_kitchen",
+      "tenant_id": "d47165db-81c9-4e9d-bc50-e37fe610d86c",
+      "users": [
+        {
+          "email": "mt-prep_kitchen-u1-06131002@coffeeos.dev",
+          "send": {
+            "http": 200,
+            "body": {
+              "ok": true,
+              "email": "mt-prep_kitchen-u1-06131002@coffeeos.dev"
+            }
+          },
+          "status_before": {
+            "verified": false,
+            "email": null
+          },
+          "order_blocked": {
+            "http": 422,
+            "body": {
+              "error": "Подтвердите email кодом из письма",
+              "status": 422
+            }
+          },
+          "verify": {
+            "code_from": "fly_machine_exec",
+            "http": 200,
+            "body": {
+              "verified": true,
+              "email": "mt-prep_kitchen-u1-06131002@coffeeos.dev"
+            }
+          },
+          "order": {
+            "order_id": "1ac006a0-cdaf-4e7f-acf5-dd5752e8213e",
+            "total": 385.0,
+            "discount": 0.0,
+            "status": "accepted",
+            "payment_url": null,
+            "reconnect_token": "eyJfcmFpbHMiOnsiZGF0YSI6eyJvaWQiOiIxYWMwMDZhMC1jZGFmLTRlN2YtYWNmNS1kZDU3NTJlODIxM2UiLCJjaWQiOiJhMzIxY2NkMC02OWMzLTQ4OWYtYTg3ZS02ZjdjZmJkYWU3ODUiLCJ0aWQiOiJkNDcxNjVkYi04MWM5LTRlOWQtYmM1MC1lMzdmZTYxMGQ4NmMifSwiZXhwIjoiMjAyNi0wNi0xNFQxMDowNDoyMy40MDZaIn19--01bb061b0be1a92e063986bcbdb78f8e4c8bb9ad",
+            "_http": 200
+          },
+          "pass": true
+        },
+        {
+          "email": "mt-prep_kitchen-u2-06131002@coffeeos.dev",
+          "send": {
+            "http": 200,
+            "body": {
+              "ok": true,
+              "email": "mt-prep_kitchen-u2-06131002@coffeeos.dev"
+            }
+          },
+          "status_before": {
+            "verified": false,
+            "email": null
+          },
+          "order_blocked": {
+            "http": 422,
+            "body": {
+              "error": "Подтвердите email кодом из письма",
+              "status": 422
+            }
+          },
+          "verify": {
+            "code_from": "fly_machine_exec",
+            "http": 200,
+            "body": {
+              "verified": true,
+              "email": "mt-prep_kitchen-u2-06131002@coffeeos.dev"
+            }
+          },
+          "order": {
+            "order_id": "6975ac6b-edf6-4a49-88e4-298a895f3d72",
+            "total": 385.0,
+            "discount": 0.0,
+            "status": "accepted",
+            "payment_url": null,
+            "reconnect_token": "eyJfcmFpbHMiOnsiZGF0YSI6eyJvaWQiOiI2OTc1YWM2Yi1lZGY2LTRhNDktODhlNC0yOThhODk1ZjNkNzIiLCJjaWQiOiI4M2UyYWM5MC05YzRmLTQ3YmYtODk0OS0yNzMwNTJjMjEyMzkiLCJ0aWQiOiJkNDcxNjVkYi04MWM5LTRlOWQtYmM1MC1lMzdmZTYxMGQ4NmMifSwiZXhwIjoiMjAyNi0wNi0xNFQxMDowNDozOC44MTFaIn19--5aead58d97164ea95ab8d492280a12097f980f21",
+            "_http": 200
+          },
+          "pass": true
+        }
+      ],
+      "pass": true
+    },
+    {
+      "slug": "prog10_alpha",
+      "tenant_id": "1c064640-4301-4435-8ded-c92fb075e9cc",
+      "users": [
+        {
+          "email": "mt-prog10_alpha-u1-06131002@coffeeos.dev",
+          "send": {
+            "http": 200,
+            "body": {
+              "ok": true,
+              "email": "mt-prog10_alpha-u1-06131002@coffeeos.dev"
+            }
+          },
+          "status_before": {
+            "verified": false,
+            "email": null
+          },
+          "order_blocked": {
+            "http": 422,
+            "body": {
+              "error": "Подтвердите email кодом из письма",
+              "status": 422
+            }
+          },
+          "verify": {
+            "code_from": "fly_machine_exec",
+            "http": 200,
+            "body": {
+              "verified": true,
+              "email": "mt-prog10_alpha-u1-06131002@coffeeos.dev"
+            }
+          },
+          "order": {
+            "order_id": "a89a3e10-2a23-424d-abba-d630f10b31be",
+            "total": 385.0,
+            "discount": 0.0,
+            "status": "accepted",
+            "payment_url": null,
+            "reconnect_token": "eyJfcmFpbHMiOnsiZGF0YSI6eyJvaWQiOiJhODlhM2UxMC0yYTIzLTQyNGQtYWJiYS1kNjMwZjEwYjMxYmUiLCJjaWQiOiJiN2UzYjQzOS0yMmJlLTRhMWUtYWUyYS0yZGU4NjRhODg2ZjYiLCJ0aWQiOiIxYzA2NDY0MC00MzAxLTQ0MzUtOGRlZC1jOTJmYjA3NWU5Y2MifSwiZXhwIjoiMjAyNi0wNi0xNFQxMDowNDo1NC44MThaIn19--d1e6dd5afa6d53be2cb7b7157f9f430fa94ba4d7",
+            "_http": 200
+          },
+          "pass": true
+        },
+        {
+          "email": "mt-prog10_alpha-u2-06131002@coffeeos.dev",
+          "send": {
+            "http": 200,
+            "body": {
+              "ok": true,
+              "email": "mt-prog10_alpha-u2-06131002@coffeeos.dev"
+            }
+          },
+          "status_before": {
+            "verified": false,
+            "email": null
+          },
+          "order_blocked": {
+            "http": 422,
+            "body": {
+              "error": "Подтвердите email кодом из письма",
+              "status": 422
+            }
+          },
+          "verify": {
+            "code_from": "fly_machine_exec",
+            "http": 200,
+            "body": {
+              "verified": true,
+              "email": "mt-prog10_alpha-u2-06131002@coffeeos.dev"
+            }
+          },
+          "order": {
+            "order_id": "a2d1e21b-2d5c-4bc0-b913-5304d4426b30",
+            "total": 385.0,
+            "discount": 0.0,
+            "status": "accepted",
+            "payment_url": null,
+            "reconnect_token": "eyJfcmFpbHMiOnsiZGF0YSI6eyJvaWQiOiJhMmQxZTIxYi0yZDVjLTRiYzAtYjkxMy01MzA0ZDQ0MjZiMzAiLCJjaWQiOiIxYTVkNDBhNS1jMjJhLTQ3YTAtYmVhNC0zMTQ3NTRhYWUzYjkiLCJ0aWQiOiIxYzA2NDY0MC00MzAxLTQ0MzUtOGRlZC1jOTJmYjA3NWU5Y2MifSwiZXhwIjoiMjAyNi0wNi0xNFQxMDowNToxMC4xODNaIn19--05515cb2cd776287904aaa1dfe4e4104d6c8b6de",
+            "_http": 200
+          },
+          "pass": true
+        }
+      ],
+      "pass": true
+    }
+  ],
+  "cross_tenant": {
+    "status": "PASS",
+    "verified_on_b": false,
+    "order_b_http": 422,
+    "order_b_error": "Подтвердите email кодом из письма"
+  },
+  "all_pass": true
+}

@@ -20,7 +20,7 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **B1.12 рекуррент** | **R2 OPS_PASS local** · Fly MCP R2 blocked | R3 one-click → `go` |
+| **B1.12 рекуррент** | **R2** — Fly MPG + deploy | MCP R2 после green deploy |
 | **B1.11 режим работы** | этап 0 ТЗ `[x]` · код `[ ]` | ответы Q1–Q10 → апрув → `go` |
 | **B2.1 табло** | **ЗАКРЫТА** · апрув `[x]` 2026-06-18 | backlog фаза 2 в CBR |
 | **B2.1 B2-S1** | CLOSED OPS · MCP 9/9 · deploy `[x]` · заказчик `[ ]` | апрув заказчика |
@@ -29,11 +29,18 @@
 | **B1.4 PWA** | код задеплоен · OPS_PASS · заказчик `[ ]` | апрув |
 | **B2.2** | stage0 `[x]` · этап 1 `[ ]` | единый экран «Меню» |
 
-### Сессия 2026-06-19 (B1.12-R2 deploy + Supabase blocker)
+### Сессия 2026-06-19 (инфра: убран внешний DATABASE_URL → Fly MPG)
 
-- **Deploy:** `ded6371` — `docker-entrypoint` fix; `fly deploy --skip-release-command` → **OK**, `/up` 200.
-- **Блокер:** Supabase `compute time quota exceeded` — `/shop` 500; `fly:release` и MCP R2 не проходят.
-- **Действие:** Supabase Dashboard → restore/upgrade → `fly deploy -a coffeeos` → `bin/b112_r2_native_card_*`.
+- **БД:** создан `coffeeos-db` (Fly Managed Postgres, ams), attach к `coffeeos`; старый `DATABASE_URL` (внешний хост) снят.
+- **Код:** `schema.rb` — без `pg_stat_statements` в schema:load (Fly MPG без superuser).
+- **Docs:** `INFRA_STACK.md` — канон стека; запрет Supabase/Neon/Render без апрува; Supabase вычищен из ops.
+- **Deploy:** `fly deploy -a coffeeos` после фикса schema.
+
+### Сессия 2026-06-19 (B1.12-R2 deploy — внешний Postgres quota)
+
+- **Deploy:** `ded6371` — `docker-entrypoint` fix; временно `--skip-release-command`.
+- **Причина:** случайный внешний `DATABASE_URL` (не Fly) — quota exceeded.
+- **Решение:** миграция на Fly MPG (см. сессию выше).
 
 ### Сессия 2026-06-18 (B1.12-R2 — web-фрейм + card_binding, OPS_PASS local)
 

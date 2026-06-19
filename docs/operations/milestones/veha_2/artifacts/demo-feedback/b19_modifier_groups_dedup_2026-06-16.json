@@ -3,16 +3,15 @@
   "stand": "https://coffeeos.fly.dev",
   "tenant_id": "655aaccb-004a-4bb9-a50a-ce618854dda3",
   "product_id": "24dae391-2199-4959-907e-d08c4cec3329",
-  "started_at": "2026-06-16T07:21:14.630Z",
-  "finished_at": "2026-06-16T07:21:22.809Z",
+  "started_at": "2026-06-16T08:09:03.040Z",
+  "finished_at": "2026-06-16T08:09:08.376Z",
   "pass": true,
-  "deploy_commits": ["534db90"],
   "steps": [
     {
       "id": "01",
       "action": "API: unique modifier group names",
       "pass": true,
-      "at": "2026-06-16T07:21:21.177Z",
+      "at": "2026-06-16T08:09:06.184Z",
       "names": [
         "Температура",
         "Вкус",
@@ -24,7 +23,7 @@
       "id": "02",
       "action": "DOM: one heading per group name",
       "pass": true,
-      "at": "2026-06-16T07:21:22.238Z",
+      "at": "2026-06-16T08:09:08.205Z",
       "domNames": [
         "Температура",
         "Вкус",
@@ -36,7 +35,7 @@
       "id": "03",
       "action": "Brazil: single Температура and Вкус",
       "pass": true,
-      "at": "2026-06-16T07:21:22.240Z",
+      "at": "2026-06-16T08:09:08.206Z",
       "tempCount": 1,
       "tasteCount": 1
     }

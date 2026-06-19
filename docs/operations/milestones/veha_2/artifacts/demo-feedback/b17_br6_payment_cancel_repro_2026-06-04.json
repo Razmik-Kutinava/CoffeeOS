@@ -17,5 +17,5 @@
     "Payment.svelte: destroyed вместо finished в onDestroy; cancel с reconnect_token; err на intro; отмена в loading",
     "orders_controller#abandon: try_reconnect_from_params! + params[:id]"
   ],
-  "post_deploy_artifact": "b17_br6_payment_cancel_post_deploy_2026-06-16.json"
+  "post_deploy_artifact": "b17_br6_payment_cancel_post_deploy_2026-06-17.json"
 }

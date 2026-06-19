@@ -24,6 +24,8 @@
 
 `docs/product/01_Vision.md`, `02_functional.md`, `03_Business_Logic.md`. `ARCHITECTURE.md` — когда канон.
 
+**Инфра:** только Fly + Fly MPG — `docs/operations/dev/INFRA_STACK.md`. Внешние BaaS (Supabase, Neon, …) — **запрещено** без апрува.
+
 ### Риски
 
 Деструктив (DB drop, force push, prod) — только явное «да». Миграции — план + **`go`**.

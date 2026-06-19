@@ -14,7 +14,7 @@
 | [session/](session/) | SESSION_STATE, HANDOFF — память агента |
 | [journal/](journal/) | CHANGELOG — история изменений |
 | [demo/](demo/) | CUSTOMER_HANDOFF, FLY_DEMO_STAND |
-| [dev/](dev/) | LOCAL_DEV, SHOP_URL_MODES |
+| [dev/](dev/) | LOCAL_DEV, SHOP_URL_MODES, **INFRA_STACK** |
 | [reference/](reference/) | GAP_LIST, MILESTONE_PRACTICES |
 | [milestones/](milestones/) | veha_1, veha_2, veha_3 |
 

@@ -4,16 +4,15 @@
   "tenant_id": "655aaccb-004a-4bb9-a50a-ce618854dda3",
   "p1_id": "24dae391-2199-4959-907e-d08c4cec3329",
   "p2_id": "3c5259e0-f42f-4d47-953d-2ce82e335f8c",
-  "started_at": "2026-06-16T07:42:57.619Z",
-  "finished_at": "2026-06-16T07:43:02.440Z",
+  "started_at": "2026-06-16T08:08:56.171Z",
+  "finished_at": "2026-06-16T08:09:01.780Z",
   "pass": true,
-  "deploy_commits": ["534db90"],
   "steps": [
     {
       "id": "01",
       "action": "p1: modifier selected changes price",
       "pass": true,
-      "at": "2026-06-16T07:43:01.653Z",
+      "at": "2026-06-16T08:09:00.941Z",
       "p1Base": 12,
       "p1WithMod": 42
     },
@@ -21,7 +20,7 @@
       "id": "02",
       "action": "hash switch shows product 2 title",
       "pass": true,
-      "at": "2026-06-16T07:43:02.315Z",
+      "at": "2026-06-16T08:09:01.645Z",
       "title": "Фильтр-кофе без кофеина (декаф) Гватемала",
       "expected": "Фильтр-кофе без кофеина (декаф) Гватемала"
     },
@@ -29,14 +28,14 @@
       "id": "03",
       "action": "p2: no selected modifiers after switch",
       "pass": true,
-      "at": "2026-06-16T07:43:02.315Z",
+      "at": "2026-06-16T08:09:01.645Z",
       "selectedCount": 0
     },
     {
       "id": "04",
       "action": "p2: price equals base (no stale modifiers)",
       "pass": true,
-      "at": "2026-06-16T07:43:02.315Z",
+      "at": "2026-06-16T08:09:01.646Z",
       "p2Price": 13,
       "p2DetailBase": 13
     }

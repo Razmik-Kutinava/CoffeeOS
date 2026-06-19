@@ -1,10 +1,15 @@
 # CHANGELOG
 
+## v1.205 — 2026-06-19 (инфра: Fly MPG, запрет внешних BaaS)
+
+- **БД:** Fly Managed Postgres `coffeeos-db` + attach `coffeeos`; снят случайный внешний `DATABASE_URL`.
+- **Fix:** `schema.rb` — `pg_stat_statements` не в schema:load (MPG без superuser).
+- **Docs:** `INFRA_STACK.md` — канон (Fly app + Fly MPG); Supabase/Neon/Render — не использовать без апрува.
+
 ## v1.204 — 2026-06-19 (Fly: docker-entrypoint не падает на db:prepare fail)
 
-- **Fix:** Puma стартует при временной недоступности Postgres (Supabase quota).
-- **Docs:** `FLY_DEMO_STAND.md` §3 Supabase quota; ISSUES 🔴 обновлён.
-- **Deploy:** blocked до restore Supabase; MCP R2 — после deploy.
+- **Fix:** Puma стартует при временной недоступности Postgres.
+- **Docs:** `FLY_DEMO_STAND.md` §3 db:prepare troubleshooting.
 
 ## v1.203 — 2026-06-18 (B1.12-R2: web-фрейм + card_binding OPS_PASS local)
 

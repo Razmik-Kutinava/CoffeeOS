@@ -1,0 +1,65 @@
+{
+  "scenario": "b19_b110_devtools_acceptance",
+  "stand": "https://coffeeos.fly.dev",
+  "tenant_id": "655aaccb-004a-4bb9-a50a-ce618854dda3",
+  "started_at": "2026-06-16T08:10:00.000Z",
+  "finished_at": "2026-06-16T08:12:00.000Z",
+  "pass": true,
+  "tools": [
+    "chrome-devtools-mcp:evaluate_script",
+    "chrome-devtools-mcp:navigate_page",
+    "playwright:b110_blog_nav_mcp.mjs",
+    "playwright:b19_modifier_toggle_mcp.mjs",
+    "playwright:b19_route_switch_modifiers_mcp.mjs",
+    "playwright:b19_modifier_groups_dedup_mcp.mjs"
+  ],
+  "playwright_summary": {
+    "b110": "3/4 PASS (LCP > 1500ms — не функциональный хвост)",
+    "b19_toggle": "6/6 PASS",
+    "b19_route_switch": "4/4 PASS",
+    "b19_groups_dedup": "3/3 PASS"
+  },
+  "devtools_steps": [
+    {
+      "id": "b110_01",
+      "action": "header has no «Блог»",
+      "pass": true,
+      "hasBlogLink": false,
+      "hasBlogText": false,
+      "hasVitrina": true
+    },
+    {
+      "id": "b19_01",
+      "action": "no «обязательно» on Brazil card",
+      "pass": true
+    },
+    {
+      "id": "b19_02",
+      "action": "modifier groups not duplicated (Температура/Вкус ×1)",
+      "pass": true,
+      "tempCount": 1,
+      "tasteCount": 1
+    },
+    {
+      "id": "b19_03",
+      "action": "toggle +30₽ → price 42₽",
+      "pass": true,
+      "basePrice": "12₽",
+      "withModPrice": "42₽"
+    },
+    {
+      "id": "b19_04",
+      "action": "route switch p1→p2: title, no selected mods, base price",
+      "pass": true,
+      "p1WithMod": 42,
+      "p2Title": "Фильтр-кофе без кофеина (декаф) Гватемала",
+      "p2Price": 13,
+      "p2Base": 13,
+      "selectedCount": 0,
+      "notFound": false
+    }
+  ],
+  "loadedProductId_bundle_poll": "skipped — minified prod bundle; behavioral tests PASS instead",
+  "screenshot": "screenshots/b19_b110_devtools_acceptance_2026-06-16.png",
+  "verdict": "B1.9 и B1.10 функциональных хвостов нет"
+}

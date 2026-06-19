@@ -35,19 +35,19 @@ UUID — см. ниже § «Узнать URL без SSH».
 
 **SSH не обязателен** для демо, если деплой и `demo:seed` в release прошли успешно.
 
-### 3. `fly:release` / `db:prepare` → `exceeded the compute time quota` (Supabase)
+### 3. `fly:release` / `db:prepare` failed
 
-**Причина:** Postgres на Supabase (хост `52.29.*`) — исчерпана **compute quota** (free tier / проект на паузе).
+**Канон БД:** только **Fly Managed Postgres** (`coffeeos-db`) — см. [`../dev/INFRA_STACK.md`](../dev/INFRA_STACK.md). Supabase / Neon / Render Postgres **не используем**.
 
-**Симптомы:** deploy `release_command failed`; `/shop` → 500; машины web `stopped` (раньше `docker-entrypoint` падал на `db:prepare`).
+**Частые причины:**
 
-**Что сделать:**
+| Ошибка | Действие |
+|--------|----------|
+| `connection refused` / нет `DATABASE_URL` | `fly mpg list` → `fly mpg attach <cluster-id> -a coffeeos` |
+| `permission denied … pg_stat_statements` | Уже исправлено в `schema.rb` (расширение только через миграцию с rescue) |
+| release упал, образ собран | `fly ssh console -a coffeeos -C "bin/rails fly:release"` |
 
-1. [Supabase Dashboard](https://supabase.com/dashboard) → проект CoffeeOS → **Restore / Upgrade** (разморозить или поднять план).
-2. Повторить деплой: `fly deploy -a coffeeos` (или `--skip-release-command` если миграций нет).
-3. После восстановления БД: `fly ssh console -a coffeeos -C "bin/rails fly:release"` (если release пропускали).
-
-С `2026-06-19`: `bin/docker-entrypoint` **не блокирует** старт Puma при временном `db:prepare` fail — `/up` жив, витрина заработает после восстановления БД.
+С `2026-06-19`: `bin/docker-entrypoint` не блокирует Puma при временном fail `db:prepare` — `/up` может быть 200, витрина без БД → 500.
 
 ---
 

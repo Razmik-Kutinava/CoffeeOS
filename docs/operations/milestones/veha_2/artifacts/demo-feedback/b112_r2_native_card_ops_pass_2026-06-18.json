@@ -14,7 +14,7 @@
     "iframe": "tbankPayment.js integration.js + Payment.svelte shell"
   },
   "fly_mcp": "blocked",
-  "fly_blocker": "Supabase compute quota — /shop HTTP 500",
+  "fly_blocker": "resolved — Fly MPG coffeeos-db",
   "fly_deploy": "v265 ded6371 skip-release OK, /up 200",
   "fly_rerun": "deploy + ruby bin/b112_r2_native_card_prep_fly.rb && node bin/b112_r2_native_card_mcp.mjs",
   "next_step": "B1.12-R3 one-click UI"

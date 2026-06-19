@@ -21,8 +21,8 @@ test:
   <<: *default
   database: coffeeos_test
 
-# Solid Cache / Solid Queue / Solid Cable — именованные БД; один Postgres (Render) = один DATABASE_URL.
-# В продакшн используем только DATABASE_URL (External URL из Render dashboard).
+# Solid Cache / Solid Queue / Solid Cable — один Postgres; на Fly = Fly MPG через DATABASE_URL.
+# В production: ENV["DATABASE_URL"] (fly mpg attach). См. docs/operations/dev/INFRA_STACK.md
 # Не наследуем default чтобы sslmode:disable не блокировал SSL-соединение с Render Postgres.
 production:
   primary: &production_primary
