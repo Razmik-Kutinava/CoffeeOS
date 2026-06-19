@@ -1,6 +1,6 @@
 # Т-Банк: рекуррентные платежи и привязка карты (B1.12)
 
-**Статус:** R1 в коде + Fly MCP 5/5 (2026-06-18) · R2 — web-iframe + 3DS  
+**Статус:** R1 Fly MCP 5/5 · R2 Fly MCP 6/6 · **R3** в коде (OPS_PASS local) · post-deploy R3 — после deploy  
 **ТЗ:** [`B1_12_recurrent_payments.md`](../requirements/customer_tasks/B1_12_recurrent_payments.md)  
 **Связано:** §2.3 (базовая оплата закрыта) · `Payments::TbankAdapter` · `POST /callbacks/tbank`
 

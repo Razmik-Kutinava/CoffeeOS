@@ -19,7 +19,7 @@ module ShopEmailTestHelper
     assert_equal 200, session.response.status, session.response.body
   end
 
-  def shop_order_params(email:, name: "Shop Guest", payment_method: "cash")
-    { email: email, name: name, payment_method: payment_method }
+  def shop_order_params(email:, name: "Shop Guest", payment_method: "cash", **extra)
+    { email: email, name: name, payment_method: payment_method, **extra }
   end
 end

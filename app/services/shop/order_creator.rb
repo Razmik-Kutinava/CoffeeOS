@@ -133,6 +133,16 @@ module Shop
     end
 
     def charge_with_saved_card!(params)
+      if params[:client_order_uuid].present?
+        existing = find_recurrent_order_duplicate!(params[:client_order_uuid])
+        if existing
+          payment = existing.payments.order(created_at: :desc).first
+          @provider_payment_id = payment&.provider_payment_id
+          @payment_url = nil
+          return existing
+        end
+      end
+
       creator = Shop::RecurrentOrderCreator.new(@session, tenant: @tenant, request: @request)
       order = creator.call!(params)
       @provider_payment_id = creator.provider_payment_id
@@ -235,6 +245,16 @@ module Shop
     rescue ActiveRecord::RecordNotUnique
       find_client_order_duplicate!(params[:client_order_uuid]) ||
         raise(Error, "Заказ с таким идентификатором уже создан")
+    end
+
+    def find_recurrent_order_duplicate!(client_order_uuid)
+      return nil if client_order_uuid.blank?
+
+      Order.where(
+        tenant_id: @tenant.id,
+        client_order_uuid: client_order_uuid,
+        source: :mobile
+      ).includes(:payments).first
     end
 
     def find_client_order_duplicate!(client_order_uuid)

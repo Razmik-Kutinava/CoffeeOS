@@ -4,7 +4,7 @@ module Shop
   module Api
     class SavedCardsController < Shop::Api::BaseController
       def index
-        cid = Shop::CustomerSession.customer_id(session, @shop_tenant.id)
+        cid = resolve_customer_id!
         if cid.blank?
           return render json: { primary: nil, cards: [] }
         end
@@ -19,6 +19,28 @@ module Shop
       end
 
       private
+
+      def resolve_customer_id!
+        cid = Shop::CustomerSession.customer_id(session, @shop_tenant.id)
+        return cid if cid.present?
+
+        email = Shop::EmailVerificationSession.normalize(params[:email])
+        return nil if email.blank?
+
+        verified = Shop::EmailVerification.verified_email(
+          session: session,
+          tenant_id: @shop_tenant.id,
+          session_id: request.session.id.to_s,
+          email: email
+        )
+        return nil unless verified == email
+
+        customer = MobileCustomer.find_by(email: email)
+        return nil unless customer
+
+        Shop::CustomerSession.set_customer_id!(session, @shop_tenant.id, customer.id)
+        customer.id.to_s
+      end
 
       def serialize_card(card)
         return nil unless card

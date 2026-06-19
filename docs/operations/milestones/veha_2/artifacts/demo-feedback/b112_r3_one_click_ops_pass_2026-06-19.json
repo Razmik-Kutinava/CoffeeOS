@@ -1,0 +1,32 @@
+{
+  "scenario": "b112_r3_one_click_ops_pass",
+  "date": "2026-06-19",
+  "environment": "local",
+  "pass": true,
+  "scope": "B1.12-R3 checkout one-click + pay button state machine",
+  "tests": {
+    "command": "bin/rails test test/integration/shop/api/b112_r3_one_click_test.rb",
+    "result": "4 runs, 0 failures"
+  },
+  "implemented": [
+    "GET /saved_cards?email= verified → primary card",
+    "Checkout: saved card block [Brand] •••• last4",
+    "Pay button states: idle / loading / success / error",
+    "One-click POST orders + saved_card_id → recurrent_charge",
+    "Success redirect delay 1500ms → /order/:id",
+    "Errors: card → Привязать другую · network → Повторить",
+    "client_order_uuid idempotency on recurrent path"
+  ],
+  "not_done": [
+    "Fly MCP post-deploy b112_r3_one_click_post_deploy_*.json",
+    "fly deploy (ждёт апрув владельца)",
+    "Апрув заказчика на эпик B1.12"
+  ],
+  "files": [
+    "app/frontend/lib/shopOneClickPay.js",
+    "app/frontend/components/CheckoutPayButton.svelte",
+    "app/frontend/routes/Checkout.svelte",
+    "app/controllers/shop/api/saved_cards_controller.rb",
+    "app/services/shop/order_creator.rb"
+  ]
+}

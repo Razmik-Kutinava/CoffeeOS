@@ -20,7 +20,7 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **B1.12 рекуррент** | R2 Fly MCP 6/6 `[x]` 2026-06-19 | **R3** — ждём `go` |
+| **B1.12 рекуррент** | R3 код `[x]` OPS_PASS local | deploy + MCP R3 по апруву |
 | **B1.11 режим работы** | этап 0 ТЗ `[x]` · код `[ ]` | ответы Q1–Q10 → апрув → `go` |
 | **B2.1 табло** | **ЗАКРЫТА** · апрув `[x]` 2026-06-18 | backlog фаза 2 в CBR |
 | **B2.1 B2-S1** | CLOSED OPS · MCP 9/9 · deploy `[x]` · заказчик `[ ]` | апрув заказчика |
@@ -28,6 +28,16 @@
 | **B1.7 checkout** | **ЗАКРЫТА** · апрув `[x]` 2026-06-04 | — |
 | **B1.4 PWA** | код задеплоен · OPS_PASS · заказчик `[ ]` | апрув |
 | **B2.2** | stage0 `[x]` · этап 1 `[ ]` | единый экран «Меню» |
+
+### Сессия 2026-06-19 (B1.12-R3 — 1 клик + стейт кнопки OPS_PASS local)
+
+- **Витрина:** `Checkout.svelte` — блок сохранённой карты, one-click `saved_card_id`, FSM кнопки.
+- **Lib:** `shopOneClickPay.js`, `CheckoutPayButton.svelte`.
+- **API:** `GET saved_cards?email=` — резолв customer по verified email.
+- **Backend:** идемпотентность recurrent по `client_order_uuid`.
+- **Тест:** `b112_r3_one_click_test.rb` — 4/4 PASS.
+- **Артефакт:** [`b112_r3_one_click_ops_pass_2026-06-19.json`](milestones/veha_2/artifacts/demo-feedback/b112_r3_one_click_ops_pass_2026-06-19.json).
+- **Не сделано:** `fly deploy`, Fly MCP R3 post-deploy, апрув заказчика.
 
 ### Сессия 2026-06-19 (B1.12-R2 Fly MCP 6/6 post-deploy)
 

@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## v1.208 — 2026-06-19 (B1.12-R3: оплата в 1 клик + стейт кнопки)
+
+- **Витрина:** saved card block, pay button FSM (idle/loading/success/error), one-click recurrent.
+- **API:** `saved_cards` по verified email; recurrent `client_order_uuid` idempotency.
+- **Тест:** `b112_r3_one_click_test.rb` — 4/4 PASS.
+- **Артефакт:** `b112_r3_one_click_ops_pass_2026-06-19.json` (local).
+- **Не в шаге:** fly deploy, Fly MCP R3 post-deploy — по апруву.
+
 ## v1.207 — 2026-06-19 (B1.12-R2 Fly MCP post-deploy 6/6)
 
 - **MCP:** `bin/b112_r2_native_card_prep_fly.rb` + `bin/b112_r2_native_card_mcp.mjs` — 6/6 PASS на `coffeeos.fly.dev` (Neon).
