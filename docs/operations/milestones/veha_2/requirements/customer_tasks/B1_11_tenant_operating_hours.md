@@ -47,7 +47,8 @@
 [x] 1b — уточнения Q2/Q3/A–E (2026-06-19, раунд 2)
 [ ] 2 — апрув владельца / заказчика на старт кода → **`go`** `[x]` 2026-06-19
 [x] 3a — миграция + модель `TenantWeekdaySchedule` (2026-06-19)
-[ ] 3b — форма УК: **чекбоксы пн–вс** + open/close + timezone (обязательно)
+[x] 3b — форма УК: **чекбоксы пн–вс** + open/close + timezone (обязательно)
+[x] 3c — сервис `TenantOperatingHours` open_now? / next_open_at (2026-06-19)
 [ ] 4 — shop API + баннер «след. утро раб. дня» + корзина ok / оплата off
 [ ] 5 — табло: пусто (смена закрыта) · красный баннер + звук (смена открыта, расписание закрыто)
 [ ] 5b — barista POS: заказ в зале → табло вне часов; shop/PWA — блок по расписанию
@@ -233,7 +234,7 @@
 
 - [x] Миграция + модель расписания точки — `tenant_weekday_schedules` · `TenantWeekdaySchedule` · тест 6/6
 - [x] Форма УК: **чекбоксы пн–вс** + open/close + timezone (обязательно) — sync-сервис · partial · controller · тест 7/7 · скрин до: `screenshots/b111_uk_tenant_form_before_2026-06-19.png`
-- [ ] Сервис: `open_now?` / `next_open_at` — **след. утро рабочего дня**
+- [x] Сервис: `open_now?` / `next_open_at` — **след. утро рабочего дня** · `TenantOperatingHours` · тест 6/6
 - [ ] Shop API: `is_open`, `closed_until`, guard **orders/pay** (не cart)
 - [ ] `Checkout.svelte`: баннер + disabled «Оплатить»; корзина **активна**
 - [ ] Табло: пусто (смена закрыта) · красный баннер + звук (конфликт смена/расписание)

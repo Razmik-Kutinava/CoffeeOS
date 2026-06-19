@@ -24,9 +24,9 @@
 |-----|--------|
 | ТЗ этап 0 | `[x]` 2026-06-18 |
 | Ответы Q1–Q10 + раунд 2 | `[x]` 2026-06-19 · [`b111_customer_answers_round2_2026-06-19.json`](../milestones/veha_2/artifacts/demo-feedback/b111_customer_answers_round2_2026-06-19.json) |
-| **Готовность к коду** | **`go`** 2026-06-19 · этап 3a миграция+модель `[x]` · **3b форма УК `[x]`** |
+| **Готовность к коду** | 3b форма УК `[x]` · **3c open_now? `[x]`** |
 | Апрув на код + `go` | `[x]` 2026-06-19 |
-| **Следующий шаг** | сервис `open_now?` / `next_open_at` (чеклист п.3) |
+| **Следующий шаг** | shop API `is_open` / guard pay (п.4) |
 
 ТЗ: [`B1_11_tenant_operating_hours.md`](../milestones/veha_2/requirements/customer_tasks/B1_11_tenant_operating_hours.md)
 
