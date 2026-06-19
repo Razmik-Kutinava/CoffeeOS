@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## v1.206 — 2026-06-19 (Neon Launch + Fly MPG удалён + deploy по апруву)
+
+- **БД:** канон **Neon** `coffeeos` (Launch); `DATABASE_URL` на Fly; Fly MPG `coffeeos-db` **destroyed**.
+- **Deploy:** `release_command` OK на Neon; GHA deploy — только `workflow_dispatch`.
+- **Ops:** `INFRA_STACK.md` — лимит Neon **$15**, деплой только по апруву, экономия CU-hrs.
+- **Владелец:** Neon Console → Billing → Spending limit **$15** Enable (alerts; suspend when available).
+
 ## v1.205 — 2026-06-19 (инфра: Fly MPG, запрет внешних BaaS)
 
 - **БД:** Fly Managed Postgres `coffeeos-db` + attach `coffeeos`; снят случайный внешний `DATABASE_URL`.

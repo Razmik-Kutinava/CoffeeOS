@@ -8,7 +8,7 @@ CoffeeOS — мульти-тенантная SaaS-система для сети
 
 Rails 8, PostgreSQL, Svelte/Vite, Pundit, Minitest.
 
-**Инфра (стенд develop):** только **Fly app `coffeeos` + Fly Managed Postgres** — [`docs/operations/dev/INFRA_STACK.md`](../operations/dev/INFRA_STACK.md). Supabase, Neon, Render и любые новые облака **без явного апрува владельца не подключать**.
+**Инфра (стенд develop):** **Fly app `coffeeos` + Neon** (проект `coffeeos`, Launch) — [`docs/operations/dev/INFRA_STACK.md`](../operations/dev/INFRA_STACK.md). **`fly deploy`**, смена secrets/БД — **только по явному апруву** владельца; CI deploy — `workflow_dispatch`, не на push.
 
 ## Git ветки
 

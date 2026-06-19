@@ -4,11 +4,11 @@
 
 ## 🔴 Блокеры
 
-[2026-06-19] — Fly: миграция БД на Fly MPG (замена случайного внешнего DATABASE_URL)
+[2026-06-19] — Fly deploy + Neon Launch
 Статус: **resolved**
-Описание: `fly:release` падал на старом `DATABASE_URL`. Создан **Fly Managed Postgres** `coffeeos-db`, attach к `coffeeos`; фикс `schema.rb` (pg_stat_statements).
-**Закрыто:** `fly deploy` OK, `/up` 200, `/shop` 200, release_command success.
-Канон: [`dev/INFRA_STACK.md`](dev/INFRA_STACK.md).
+Описание: `DATABASE_URL` → Neon `coffeeos`; Launch plan; `fly deploy` release_command OK; `/up` + `/shop` 200.
+Fly MPG `coffeeos-db` destroyed. CI deploy → `workflow_dispatch` only.
+**Neon billing:** spending limit $15 — включить в Console (Billing → Spending limit).
 
 ## 🟡 Важно
 

@@ -20,7 +20,7 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **B1.12 рекуррент** | **R2** — Fly MPG + deploy | MCP R2 после green deploy |
+| **B1.12 рекуррент** | deploy OK (Neon) · MCP R2 по `go` | R3 |
 | **B1.11 режим работы** | этап 0 ТЗ `[x]` · код `[ ]` | ответы Q1–Q10 → апрув → `go` |
 | **B2.1 табло** | **ЗАКРЫТА** · апрув `[x]` 2026-06-18 | backlog фаза 2 в CBR |
 | **B2.1 B2-S1** | CLOSED OPS · MCP 9/9 · deploy `[x]` · заказчик `[ ]` | апрув заказчика |
@@ -28,6 +28,14 @@
 | **B1.7 checkout** | **ЗАКРЫТА** · апрув `[x]` 2026-06-04 | — |
 | **B1.4 PWA** | код задеплоен · OPS_PASS · заказчик `[ ]` | апрув |
 | **B2.2** | stage0 `[x]` · этап 1 `[ ]` | единый экран «Меню» |
+
+### Сессия 2026-06-19 (Neon Launch + deploy OK + ops)
+
+- **Neon:** Launch plan; compute Active; deploy `release_command` **OK** (image `01KVFG8VW9Y`).
+- **Fly MPG:** `coffeeos-db` **destroyed** (~$38/мес снято).
+- **CI:** `deploy.yml` — только `workflow_dispatch`; агент — `fly deploy` только по апруву.
+- **Billing:** Neon spending limit **$15** — включить в Console (см. INFRA_STACK).
+- **Дальше:** MCP B1.12-R2 по `go`.
 
 ### Сессия 2026-06-19 (инфра: убран внешний DATABASE_URL → Fly MPG)
 

@@ -1,8 +1,12 @@
+# Deploy to Fly — ТОЛЬКО ручной запуск (workflow_dispatch).
+# Автодеплой на push отключён: каждый deploy будит Neon compute ($).
+# Апрув владельца: GitHub Actions → Deploy to Fly.io → Run workflow.
+# Локально: fly deploy -a coffeeos (тоже только по решению владельца).
+
 name: Deploy to Fly.io
 
 on:
-  push:
-    branches: [ develop ]
+  workflow_dispatch:
 
 jobs:
   deploy:
@@ -10,9 +14,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: superfly/flyctl-actions/setup-flyctl@master
-      - run: flyctl deploy --remote-only
+      - run: flyctl deploy --remote-only -a coffeeos
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
-      - run: flyctl scale count web=1 worker=1 --yes
+      - run: flyctl scale count web=1 worker=1 --yes -a coffeeos
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}

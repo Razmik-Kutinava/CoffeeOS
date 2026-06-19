@@ -39,7 +39,7 @@ Things you may want to cover:
 
 * Services (job queues, cache servers, search engines, etc.)
 
-* **Деплой (Fly, Docker):** **`SECRET_KEY_BASE`** или **`RAILS_MASTER_KEY`**. **`DATABASE_URL`** — **Fly Managed Postgres** (см. `docs/operations/dev/INFRA_STACK.md`). Docker entrypoint делает **`db:prepare`**. Образ слушает **`PORT`** (Puma).
+* **Деплой (Fly):** **`DATABASE_URL`** — **Neon** проект `coffeeos` (см. `docs/operations/dev/INFRA_STACK.md`). **`fly deploy` только по апруву**; CI — ручной workflow.
 
 * **Render (legacy, не используем):** старый URL `https://coffeeos-ii8n.onrender.com` — **не деплоить**, не брать оттуда секреты/БД.
 

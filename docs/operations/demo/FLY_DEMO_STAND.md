@@ -37,15 +37,15 @@ UUID — см. ниже § «Узнать URL без SSH».
 
 ### 3. `fly:release` / `db:prepare` failed
 
-**Канон БД:** только **Fly Managed Postgres** (`coffeeos-db`) — см. [`../dev/INFRA_STACK.md`](../dev/INFRA_STACK.md). Supabase / Neon / Render Postgres **не используем**.
-
-**Частые причины:**
+**Канон БД:** **Neon** проект `coffeeos` — см. [`../dev/INFRA_STACK.md`](../dev/INFRA_STACK.md).
 
 | Ошибка | Действие |
 |--------|----------|
-| `connection refused` / нет `DATABASE_URL` | `fly mpg list` → `fly mpg attach <cluster-id> -a coffeeos` |
-| `permission denied … pg_stat_statements` | Уже исправлено в `schema.rb` (расширение только через миграцию с rescue) |
-| release упал, образ собран | `fly ssh console -a coffeeos -C "bin/rails fly:release"` |
+| `exceeded the compute time quota` | Neon Launch + spending limit $15 |
+| `connection refused` | `fly secrets list` → `DATABASE_URL` |
+| release упал, образ собран | `fly ssh console -a coffeeos -C "bin/rails fly:release"` (**по апруву**) |
+
+**Деплой:** только по апруву владельца (лишний deploy = CU-hrs на Neon).
 
 С `2026-06-19`: `bin/docker-entrypoint` не блокирует Puma при временном fail `db:prepare` — `/up` может быть 200, витрина без БД → 500.
 
