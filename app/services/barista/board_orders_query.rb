@@ -5,7 +5,6 @@ module Barista
   # Только текущая смена + витрина (cash_shift_id NULL) с момента открытия смены — без лимита «50 старых по всему тенанту».
   class BoardOrdersQuery
     INCLUDES = [:order_items, :order_status_logs].freeze
-    VITRINA_WITHOUT_SHIFT_HOURS = 24
     # B2.1 ревизия 2026-06-12: 6 слотов, только accepted + preparing на табло.
     SLOT_STATUSES = %w[accepted preparing].freeze
     MAX_SLOTS = 6
@@ -39,10 +38,8 @@ module Barista
           shift_opened_at: shift.opened_at
         )
       else
-        # Смена закрыта — только недавняя витрина без привязки к смене (POS без смены не создаётся).
-        since = VITRINA_WITHOUT_SHIFT_HOURS.hours.ago
-        base.where(cash_shift_id: nil, source: "mobile")
-            .where("orders.created_at >= ?", since)
+        # B1.11: смена закрыта — табло пусто (ночью ничего не показываем).
+        base.none
       end
     end
 

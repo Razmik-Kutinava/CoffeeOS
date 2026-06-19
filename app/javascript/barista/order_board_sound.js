@@ -61,6 +61,10 @@ export class OrderBoardSound {
     }
   }
 
+  async playScheduleConflictAlert() {
+    return this.playNewOrder()
+  }
+
   async playNewOrder() {
     if (!this.unlocked) {
       this.handlePlaybackError(new DOMException("play() without unlock", "NotAllowedError"))

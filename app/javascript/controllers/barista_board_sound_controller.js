@@ -4,10 +4,11 @@ import { OrderBoardSound, BANNER_TEXT } from "barista/order_board_sound"
 // B2-S1 — звук нового заказа на табло бариста
 export default class extends Controller {
   static values = {
-    audioUrl: { type: String, default: "/audio/barista_new_order.wav" }
+    audioUrl: { type: String, default: "/audio/barista_new_order.wav" },
+    scheduleConflict: { type: Boolean, default: false }
   }
 
-  static targets = ["banner"]
+  static targets = ["banner", "scheduleBanner"]
 
   connect() {
     this.sound = new OrderBoardSound({
@@ -24,6 +25,9 @@ export default class extends Controller {
     document.addEventListener("turbo:render", this.onTurboRender)
     document.addEventListener("turbo:before-stream-render", this.wrapBoardStreamRender)
     this.onTurboLoad()
+    if (this.scheduleConflictValue) {
+      this.sound.playScheduleConflictAlert().catch(() => {})
+    }
   }
 
   disconnect() {

@@ -64,6 +64,11 @@ class Auth::SessionsController < ApplicationController
     role_code = session[:role_code]
     context_tenant_id = session[:manager_tenant_id].presence || user&.tenant_id
     if user
+      if role_code == "barista" && user.tenant_id.present?
+        Barista::ShiftScheduleLogoutHook.call(user: user, tenant_id: user.tenant_id)
+      elsif context_tenant_id.present?
+        Barista::ShiftScheduleLogoutHook.call(user: user, tenant_id: context_tenant_id)
+      end
       Auth::LoginJournal.record_logout!(
         user: user,
         role_code: role_code,

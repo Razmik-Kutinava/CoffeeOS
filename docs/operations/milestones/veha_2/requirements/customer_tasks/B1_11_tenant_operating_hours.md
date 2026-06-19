@@ -50,9 +50,8 @@
 [x] 3b — форма УК: **чекбоксы пн–вс** + open/close + timezone (обязательно)
 [x] 3c — сервис `TenantOperatingHours` open_now? / next_open_at (2026-06-19)
 [x] 4 — shop API + баннер + checkout (2026-06-19)
-[ ] 5 — табло: пусто (смена закрыта) · красный баннер + звук (смена открыта, расписание закрыто)
-[ ] 5b — barista POS: заказ в зале → табло вне часов; shop/PWA — блок по расписанию
-[ ] 6 — тесты + Fly MCP + артефакт приёмки
+[x] 5 — табло + POS + logout hook (2026-06-19)
+[ ] 6 — integration + Fly MCP + артефакт приёмки
 [ ] 7 — апрув заказчика
 ```
 
@@ -237,9 +236,9 @@
 - [x] Сервис: `open_now?` / `next_open_at` — **след. утро рабочего дня** · `TenantOperatingHours` · тест 6/6
 - [x] Shop API: `is_open`, `closed_until`, guard **orders/pay** (не cart) — config + categories meta · guard create · тест 7/7
 - [x] `Checkout.svelte`: баннер + disabled «Оплатить»; корзина **активна** · `ShopClosedBanner` · `shopOperatingHours.js`
-- [ ] Табло: пусто (смена закрыта) · красный баннер + звук (конфликт смена/расписание)
-- [ ] Barista POS: заказ в зале → табло **вне** расписания
-- [ ] Logout бариста / «мои точки» → hook принуд. закрытия смены (офис-менеджер) — **уточнить с manager flow**
+- [x] Табло: пусто (смена закрыта) · красный баннер + звук (конфликт смена/расписание) — `BoardOrdersQuery.none` · banner · sound · тест 16/16
+- [x] Barista POS: заказ в зале → табло **вне** расписания — POS без guard · integration
+- [x] Logout бариста / «мои точки» → hook `ShiftScheduleLogoutHook` (note на смене для менеджера)
 - [ ] Integration-тесты + Fly MCP
 - [ ] Артефакт `b111_operating_hours_post_deploy_*.json`
 - [ ] Апрув заказчика

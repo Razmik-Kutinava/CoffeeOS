@@ -6,8 +6,16 @@ module Barista
     before_action :set_tenant_context
     before_action :require_barista_module!
     before_action :assign_shift_for_layout
+    before_action :assign_board_hours
 
     private
+
+    def assign_board_hours
+      return unless Current.tenant_id
+
+      tenant = current_user.tenant
+      @board_hours = Barista::OperatingHoursBoard.context(tenant: tenant, shift: @shift) if tenant
+    end
 
     def assign_shift_for_layout
       @shift = current_shift

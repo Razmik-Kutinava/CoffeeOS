@@ -1,4 +1,6 @@
-<div class="barista-layout" data-controller="barista-board-sound">
+<div class="barista-layout"
+     data-controller="barista-board-sound"
+     data-barista-board-sound-schedule-conflict-value="<%= @board_hours&.dig(:schedule_conflict) ? 'true' : 'false' %>">
   <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="sidebar-header">
@@ -99,6 +101,16 @@
        role="alert">
     Звук заблокирован. Кликните по экрану для включения
   </div>
+
+  <% if @board_hours&.dig(:schedule_conflict) %>
+    <div class="barista-schedule-conflict-banner"
+         id="barista-schedule-conflict-banner"
+         data-barista-board-sound-target="scheduleBanner"
+         data-testid="barista-schedule-conflict-banner"
+         role="alert">
+      <%= @board_hours[:conflict_message] %>
+    </div>
+  <% end %>
 </div>
 
 <style>
@@ -1036,6 +1048,24 @@
 
   .barista-sound-banner[hidden] {
     display: none !important;
+  }
+
+  .barista-schedule-conflict-banner {
+    position: fixed;
+    top: 72px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2999;
+    max-width: min(640px, 94vw);
+    padding: 14px 20px;
+    border-radius: 10px;
+    background: #4a1212;
+    border: 2px solid #f07c7c;
+    color: #ffe8e8;
+    font-size: 15px;
+    font-weight: 700;
+    text-align: center;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
   }
 </style>
 

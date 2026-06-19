@@ -29,6 +29,14 @@
 | **B1.4 PWA** | код задеплоен · OPS_PASS · заказчик `[ ]` | апрув |
 | **B2.2** | stage0 `[x]` · этап 1 `[ ]` | единый экран «Меню» |
 
+### Сессия 2026-06-19 (B1.11 этап 5–6 — табло + POS + logout)
+
+- **Табло:** `BoardOrdersQuery` → пусто без смены; красный баннер + звук при конфликте.
+- **POS:** заказ в зале вне расписания — без блока (shift open).
+- **Logout:** `ShiftScheduleLogoutHook` → note на смене для менеджера.
+- **Тест:** 16/16 PASS.
+- **Дальше:** Fly MCP + артефакт.
+
 ### Сессия 2026-06-19 (B1.11 этап 4–5 — shop API + checkout)
 
 - **API:** `Shop::OperatingHours`, config/categories meta, guard orders create.

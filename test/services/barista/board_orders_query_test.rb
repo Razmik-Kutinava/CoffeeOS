@@ -52,6 +52,19 @@ class Barista::BoardOrdersQueryTest < ActiveSupport::TestCase
     assert_nil Barista::BoardOrdersQuery.column_dom_id("issued")
   end
 
+  test "board_scope empty when shift closed" do
+    vitrina = Order.create!(
+      tenant: @tenant, cash_shift: nil, order_number: "VIT-CLOSED",
+      source: "mobile", status: "accepted",
+      total_amount: 100, discount_amount: 0, final_amount: 100,
+      created_at: 1.hour.ago
+    )
+
+    ids = Barista::BoardOrdersQuery.board_scope(tenant_id: @tenant.id, cash_shift: nil).pluck(:id)
+    assert_empty ids
+    assert_not_includes ids, vitrina.id
+  end
+
   test "board_scope includes current shift and vitrina since shift opened" do
     in_shift = Order.create!(
       tenant: @tenant, cash_shift: @shift, order_number: "SHIFT-1",
