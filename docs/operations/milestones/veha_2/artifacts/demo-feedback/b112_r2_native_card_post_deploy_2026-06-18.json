@@ -6,7 +6,8 @@
   "finished_at": "2026-06-18T16:50:15.000Z",
   "pass": false,
   "blocked": true,
-  "blocker": "Fly /shop HTTP 500 — prep не получил shop-api-key",
+  "blocker": "Supabase compute quota — /shop HTTP 500, prep: no shop-api-key",
+  "deploy": "v265 ded6371 --skip-release-command OK; /up 200",
   "steps": [
     {
       "id": "prep",
