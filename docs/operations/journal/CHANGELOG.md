@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## v1.212 — 2026-06-19 (B1.11: ответы Q1–Q10, готовность к коду)
+
+- **Режим работы:** ответы владельца Q5–Q10 + дефолты Q1–Q3 → `B1_11_tenant_operating_hours.md`.
+- **Готовность:** READY_FOR_APPROVAL — ждём апрув + `go`; код не начинать.
+- **Артефакт:** `b111_customer_answers_confirmed_2026-06-19.json`.
+- **Ops:** CBR, CHECKLIST, DEMO_FEEDBACK, HANDOFF, SESSION_STATE.
+
 ## v1.211 — 2026-06-19 (B1.12: ответы Q1–Q7 — финальное подтверждение владельца)
 
 - **Q2/Q3/Q5/Q7:** дословные ответы владельца → `B1_12_recurrent_payments.md` (блок «больше не спрашивать»).

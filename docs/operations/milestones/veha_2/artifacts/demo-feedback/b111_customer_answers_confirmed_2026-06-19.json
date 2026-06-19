@@ -1,0 +1,44 @@
+{
+  "task_id": "B1.11",
+  "title": "Режим работы точек — ответы заказчика",
+  "date": "2026-06-19",
+  "status": "READY_FOR_APPROVAL",
+  "readiness": "Готовность к коду — да; ждём апрув владельца + go",
+  "source": "владелец (чат)",
+  "tz_file": "docs/operations/milestones/veha_2/requirements/customer_tasks/B1_11_tenant_operating_hours.md",
+  "do_not_reask": true,
+  "verbatim_owner": [
+    "Оплата не активна есть надпись \"кофейня откроется завтра [время открытия добавить]",
+    "Ничего на табло баристы не показывать если смена закрыта, ночью",
+    "Нет, все в режиме работы, отправить на почту уведомление, это в следующей итерации добавим профили работников, должен, доступы, в ядре",
+    "До завтра, к примеру до завтра к [время открытия из режима]",
+    "Да, настраивается в панели админки УК, раздел точка продаж",
+    "Расписание чего? В панели ук, значить точка не создалась"
+  ],
+  "mapping": {
+    "1": "Q5",
+    "2": "Q6",
+    "3": "Q7",
+    "4": "Q8",
+    "5": "Q9",
+    "6": "Q10"
+  },
+  "customer_answers": {
+    "Q1": { "answered": true, "date": "2026-06-19", "answer": "Да, пн–вс (по ТЗ, дефолт)" },
+    "Q2": { "answered": true, "date": "2026-06-19", "answer": "Не ответил; MVP один интервал/день; через полночь — backlog", "default": true },
+    "Q3": { "answered": true, "date": "2026-06-19", "answer": "Не ответил; MVP пн–вс; праздники — backlog", "default": true },
+    "Q4": { "answered": true, "date": "2026-06-19", "answer": "Только УК, раздел точка продаж" },
+    "Q5": { "answered": true, "date": "2026-06-19", "answer": "Оплата не активна; баннер «кофейня откроется завтра [время]»; просмотр ok", "confirmed_by_owner": true },
+    "Q6": { "answered": true, "date": "2026-06-19", "answer": "Табло пусто при закрытой смене ночью", "confirmed_by_owner": true },
+    "Q7": { "answered": true, "date": "2026-06-19", "answer": "Только режим работы; email — след. итерация", "confirmed_by_owner": true },
+    "Q8": { "answered": true, "date": "2026-06-19", "answer": "До завтра к [время из режима]", "confirmed_by_owner": true },
+    "Q9": { "answered": true, "date": "2026-06-19", "answer": "Да, per-tenant в УК", "confirmed_by_owner": true },
+    "Q10": { "answered": true, "date": "2026-06-19", "answer": "Расписание обязательно при create точки", "confirmed_by_owner": true }
+  },
+  "out_of_scope_b111": [
+    "email уведомления сотрудникам",
+    "профили работников / доступы в ядре"
+  ],
+  "open_questions": [],
+  "next_step": "апрув владельца + go → этап 3 код"
+}

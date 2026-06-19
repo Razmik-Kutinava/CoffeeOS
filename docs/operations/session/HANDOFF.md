@@ -23,7 +23,8 @@
 | Что | Статус |
 |-----|--------|
 | ТЗ этап 0 | `[x]` 2026-06-18 |
-| Ответы заказчика Q1–Q10 | `[ ]` |
+| Ответы Q1–Q10 | `[x]` 2026-06-19 · [`b111_customer_answers_confirmed_2026-06-19.json`](../milestones/veha_2/artifacts/demo-feedback/b111_customer_answers_confirmed_2026-06-19.json) |
+| **Готовность к коду** | **да** — ждём апрув + **`go`** |
 | Апрув на код + `go` | `[ ]` |
 
 ТЗ: [`B1_11_tenant_operating_hours.md`](../milestones/veha_2/requirements/customer_tasks/B1_11_tenant_operating_hours.md)
