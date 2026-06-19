@@ -23,6 +23,8 @@
   <p><%= f.label :currency %> <%= f.text_field :currency, maxlength: 3, style: "width: 4rem;" %></p>
   <p><%= f.label :timezone %> <%= f.text_field :timezone, style: "width: 100%;" %></p>
 
+  <%= render "weekday_schedules_fields", tenant: tenant %>
+
   <h2 style="font-size: 1rem; margin-top: 1.5rem;">Модули</h2>
   <% TenantModuleFlags::LABELS.each do |code, label| %>
     <% ff = tenant.persisted? ? FeatureFlag.find_by(tenant_id: tenant.id, module: code) : nil %>

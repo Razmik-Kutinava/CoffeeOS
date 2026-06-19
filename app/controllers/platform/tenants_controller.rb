@@ -8,13 +8,19 @@ module Platform
 
     def new
       @tenant = Tenant.new(organization_id: params[:organization_id], type: "sales_point", status: "active")
+      build_default_weekday_schedules(@tenant)
     end
 
     def create
       @tenant = Tenant.new(tenant_params)
+      build_default_weekday_schedules(@tenant) unless @tenant.weekday_schedules.any?
       committed = false
       ActiveRecord::Base.transaction do
         unless @tenant.save
+          raise ActiveRecord::Rollback
+        end
+
+        unless sync_weekday_schedules!
           raise ActiveRecord::Rollback
         end
 
@@ -33,6 +39,7 @@ module Platform
       end
 
       unless committed
+        build_default_weekday_schedules(@tenant)
         return render(:new, status: :unprocessable_entity)
       end
 
@@ -49,7 +56,8 @@ module Platform
     end
 
     def edit
-      @tenant = Tenant.includes(:organization, :feature_flags).find(params[:id])
+      @tenant = Tenant.includes(:organization, :feature_flags, :weekday_schedules).find(params[:id])
+      build_default_weekday_schedules(@tenant)
       @entry_points = Platform::TenantOnboarding::EntryPoints.for(
         @tenant,
         host: entry_points_host
@@ -57,10 +65,14 @@ module Platform
     end
 
     def update
-      @tenant = Tenant.find(params[:id])
+      @tenant = Tenant.includes(:weekday_schedules).find(params[:id])
       committed = false
       ActiveRecord::Base.transaction do
         unless @tenant.update(tenant_params)
+          raise ActiveRecord::Rollback
+        end
+
+        unless sync_weekday_schedules!
           raise ActiveRecord::Rollback
         end
 
@@ -79,6 +91,7 @@ module Platform
       end
 
       unless committed
+        build_default_weekday_schedules(@tenant)
         @entry_points = Platform::TenantOnboarding::EntryPoints.for(
           @tenant,
           host: entry_points_host
@@ -110,6 +123,27 @@ module Platform
 
     def module_params
       params.fetch(:modules, ActionController::Parameters.new).permit(*TenantModuleFlags.modules)
+    end
+
+    def weekday_schedule_params
+      params.fetch(:weekday_schedules, ActionController::Parameters.new).permit!
+    end
+
+    def sync_weekday_schedules!
+      Platform::TenantWeekdaySchedulesSync.call(
+        tenant: @tenant,
+        schedule_params: weekday_schedule_params
+      )
+    end
+
+    def build_default_weekday_schedules(tenant)
+      return unless tenant.sales_point?
+
+      TenantWeekdaySchedule::WEEKDAYS.each_value do |weekday|
+        next if tenant.weekday_schedules.any? { |s| s.weekday == weekday }
+
+        tenant.weekday_schedules.build(weekday: weekday, enabled: false)
+      end
     end
 
     def entry_points_host

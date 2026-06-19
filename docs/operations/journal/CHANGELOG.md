@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## v1.215 — 2026-06-19 (B1.11 этап 3b: форма УК — режим работы)
+
+- **Было:** форма точки без расписания пн–вс.
+- **Стало:** блок «Режим работы» (sales_point) — чекбоксы + open/close; sync на create/update; ≥1 день обязателен.
+- **Код:** `TenantWeekdaySchedulesSync`, `_weekday_schedules_fields`, `TenantsController`.
+- **Тест:** sync + controller — 7/7 PASS.
+- **Артефакт:** скрин до — `b111_uk_tenant_form_before_2026-06-19.png`.
+
 ## v1.214 — 2026-06-19 (B1.11 этап 3a: миграция + модель расписания)
 
 - **БД:** `tenant_weekday_schedules` — weekday, enabled, opens_at/closes_at, RLS + UK admin.

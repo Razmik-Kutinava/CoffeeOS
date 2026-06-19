@@ -232,7 +232,7 @@
 ## Чеклист реализации (после `go`)
 
 - [x] Миграция + модель расписания точки — `tenant_weekday_schedules` · `TenantWeekdaySchedule` · тест 6/6
-- [ ] Форма УК: **чекбоксы пн–вс** + open/close + timezone (обязательно)
+- [x] Форма УК: **чекбоксы пн–вс** + open/close + timezone (обязательно) — sync-сервис · partial · controller · тест 7/7 · скрин до: `screenshots/b111_uk_tenant_form_before_2026-06-19.png`
 - [ ] Сервис: `open_now?` / `next_open_at` — **след. утро рабочего дня**
 - [ ] Shop API: `is_open`, `closed_until`, guard **orders/pay** (не cart)
 - [ ] `Checkout.svelte`: баннер + disabled «Оплатить»; корзина **активна**

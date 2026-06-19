@@ -1,0 +1,44 @@
+<%# B1.11: режим работы — чекбоксы пн–вс + часы (только точка продаж) %>
+<% if tenant.sales_point? %>
+  <h2 style="font-size: 1rem; margin-top: 1.5rem;">Режим работы</h2>
+  <p style="font-size: 12px; color: #94a3b8; margin-bottom: 0.75rem;">
+    Часовой пояс точки: <strong><%= tenant.timezone.presence || "Europe/Moscow" %></strong>.
+    Включите хотя бы один рабочий день.
+  </p>
+  <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+    <thead>
+      <tr style="text-align: left; color: #94a3b8;">
+        <th style="padding: 4px 8px 4px 0;">День</th>
+        <th style="padding: 4px 8px;">Работает</th>
+        <th style="padding: 4px 8px;">Открытие</th>
+        <th style="padding: 4px 8px;">Закрытие</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% TenantWeekdaySchedule::WEEKDAYS.each do |key, weekday| %>
+        <% row = tenant.weekday_schedules.find { |s| s.weekday == weekday } ||
+               tenant.weekday_schedules.build(weekday: weekday, enabled: false) %>
+        <tr>
+          <td style="padding: 6px 8px 6px 0;"><%= row.weekday_name %></td>
+          <td style="padding: 6px 8px;">
+            <%= hidden_field_tag "weekday_schedules[#{weekday}][enabled]", "0" %>
+            <%= check_box_tag "weekday_schedules[#{weekday}][enabled]", "1", row.enabled?,
+                id: "wd_#{weekday}_enabled" %>
+          </td>
+          <td style="padding: 6px 8px;">
+            <%= time_field_tag "weekday_schedules[#{weekday}][opens_at]",
+                row.opens_at&.strftime("%H:%M"),
+                id: "wd_#{weekday}_opens",
+                style: "width: 7rem;" %>
+          </td>
+          <td style="padding: 6px 8px;">
+            <%= time_field_tag "weekday_schedules[#{weekday}][closes_at]",
+                row.closes_at&.strftime("%H:%M"),
+                id: "wd_#{weekday}_closes",
+                style: "width: 7rem;" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
