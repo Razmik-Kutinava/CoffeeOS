@@ -57,7 +57,7 @@
 [ ] 2 — сверка доки Т-Банк (iframe/3DS — R2)
 [ ] 3 — апрув заказчика Fly MCP R1
 [x] 5 — B1.12-R2: web-фрейм + card_binding (2026-06-18) OPS_PASS local
-[ ] 5b — Fly MCP R2 (blocked: /shop 500)
+[x] 5b — Fly MCP R2 (6/6 post-deploy 2026-06-19) — `b112_r2_native_card_post_deploy_2026-06-19.json`
 [ ] 6 — B1.12-R3: 1 клик + стейт кнопки «Оплатить»
 [ ] 7 — тесты Fly MCP + артефакт post-deploy R1
 [ ] 8 — апрув заказчика эпик
@@ -276,8 +276,8 @@
 - [x] 3DS flow — `deepLinkRedirectCallback` в `tbankPayment.js`
 - [x] Редирект «Карта привязана / Оплачено» — `PaymentResult` + `bound=1`
 - [x] Integration тест `b112_r2_payment_iframe_test.rb`
-- [ ] Fly MCP витрина + скрин (blocked: `/shop` 500)
-- [ ] Артефакт `b112_r2_native_card_post_deploy_*.json` — **PASS** после deploy
+- [x] Fly MCP витрина + скрин — 6/6 (2026-06-19, Neon)
+- [x] Артефакт `b112_r2_native_card_post_deploy_2026-06-19.json` — **PASS**
 
 ## Чеклист B1.12-R3 (после R2)
 

@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## v1.207 — 2026-06-19 (B1.12-R2 Fly MCP post-deploy 6/6)
+
+- **MCP:** `bin/b112_r2_native_card_prep_fly.rb` + `bin/b112_r2_native_card_mcp.mjs` — 6/6 PASS на `coffeeos.fly.dev` (Neon).
+- **Артефакт:** `b112_r2_native_card_post_deploy_2026-06-19.json` + скрины intro/iframe.
+- **Ops:** CHECKLIST C2 R2, B1_12, DEMO_FEEDBACK, HANDOFF.
+- **Neon:** spending limit $15 включён владельцем в Console.
+
 ## v1.206 — 2026-06-19 (Neon Launch + Fly MPG удалён + deploy по апруву)
 
 - **БД:** канон **Neon** `coffeeos` (Launch); `DATABASE_URL` на Fly; Fly MPG `coffeeos-db` **destroyed**.

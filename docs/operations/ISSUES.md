@@ -8,7 +8,7 @@
 Статус: **resolved**
 Описание: `DATABASE_URL` → Neon `coffeeos`; Launch plan; `fly deploy` release_command OK; `/up` + `/shop` 200.
 Fly MPG `coffeeos-db` destroyed. CI deploy → `workflow_dispatch` only.
-**Neon billing:** spending limit $15 — включить в Console (Billing → Spending limit).
+**Neon billing:** spending limit **$15** — включён владельцем в Console (2026-06-19).
 
 ## 🟡 Важно
 

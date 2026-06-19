@@ -1,6 +1,6 @@
 # HANDOFF — старт Вехи 2 (Веха 1 **не закрыта официально**)
 
-**Дата:** 2026-06-18 (B1.12 этап 0 · ТЗ рекуррент / 1 клик)  
+**Дата:** 2026-06-19 (B1.12-R2 Fly MCP PASS · R3 следующий)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev
 
@@ -12,8 +12,8 @@
 | **R1 бэкенд** | **OPS_PASS** `[x]` 2026-06-18 |
 | Ответы Q1–Q7 | `[x]` |
 | Fly MCP R1 | `[x]` 5/5 2026-06-18 — [`b112_r1_recurrent_post_deploy_2026-06-18.json`](../milestones/veha_2/artifacts/demo-feedback/b112_r1_recurrent_post_deploy_2026-06-18.json) |
-| **R2 web-фрейм** | deploy OK (Neon Launch) · MCP R2 → `go` |
-| **Следующий шаг** | MCP R2 → R3 |
+| **R2 web-фрейм** | **OPS_PASS + Fly MCP 6/6** `[x]` 2026-06-19 — [`b112_r2_native_card_post_deploy_2026-06-19.json`](../milestones/veha_2/artifacts/demo-feedback/b112_r2_native_card_post_deploy_2026-06-19.json) |
+| **Следующий шаг** | **B1.12-R3** (1 клик + стейт кнопки) — ждём `go` |
 
 ТЗ: [`B1_12_recurrent_payments.md`](../milestones/veha_2/requirements/customer_tasks/B1_12_recurrent_payments.md) · runbook: [`TBANK_RECURRENT.md`](../milestones/veha_2/runbooks/TBANK_RECURRENT.md)
 

@@ -4,7 +4,7 @@
 
 **Источник:** PDF [`artifacts/demo-feedback/customer_qa_prog10_2026-06.pdf`](artifacts/demo-feedback/customer_qa_prog10_2026-06.pdf) (продолжение В1: [`../veha_1/artifacts/customer_live_qa_block1_2026-05-30.pdf`](../veha_1/artifacts/customer_live_qa_block1_2026-05-30.pdf)).
 
-**Сейчас (2026-06-18):** **B1.12** — ТЗ этап 0 (рекуррент / 1 клик) · **B1.11** — ждём ответы заказчика.
+**Сейчас (2026-06-19):** **B1.12-R2** Fly MCP PASS · **B1.12-R3** следующий · **B1.11** — ждём ответы заказчика.
 
 **Честно:** §1–3 в таблице ниже — **done** *(выборочно)*. §2.3 — **done** *(этапы 1–5, MCP)*.
 
@@ -26,7 +26,8 @@
 
 | Дата | Источник | Сценарий / экран | Суть | Статус | PR / коммит |
 |------|----------|------------------|------|--------|-------------|
-| 2026-06-18 | B1.12-R2 | `#/payment` iframe | web-фрейм + card_binding | **done** *(OPS_PASS local)* · Fly MCP blocked | [b112_r2_native_card_ops_pass_2026-06-18.json](artifacts/demo-feedback/b112_r2_native_card_ops_pass_2026-06-18.json) |
+| 2026-06-19 | B1.12-R2 | `#/payment` iframe Fly | web-фрейм + card_binding post-deploy | **done** *(Fly MCP 6/6)* | [b112_r2_native_card_post_deploy_2026-06-19.json](artifacts/demo-feedback/b112_r2_native_card_post_deploy_2026-06-19.json) |
+| 2026-06-18 | B1.12-R2 | `#/payment` iframe | web-фрейм + card_binding local | **done** *(OPS_PASS local)* | [b112_r2_native_card_ops_pass_2026-06-18.json](artifacts/demo-feedback/b112_r2_native_card_ops_pass_2026-06-18.json) |
 | 2026-06-18 | B1.12-R1 | shop API / callback | Рекуррент: RebillId + Charge | **done** *(OPS_PASS local)* | [b112_r1_recurrent_ops_pass_2026-06-18.json](artifacts/demo-feedback/b112_r1_recurrent_ops_pass_2026-06-18.json) |
 | 2026-06-18 | заказчик B1.12 | `#/payment` / checkout | Рекуррент Т-Банк эпик (R2–R3) | **open** | [b112_stage0_scope_2026-06-18.json](artifacts/demo-feedback/b112_stage0_scope_2026-06-18.json) |
 | 2026-06-18 | заказчик B1.11 | УК / shop / barista | Режим работы точки продаж | **open** *(ТЗ этап 0)* | [b111_stage0_scope_2026-06-18.json](artifacts/demo-feedback/b111_stage0_scope_2026-06-18.json) |

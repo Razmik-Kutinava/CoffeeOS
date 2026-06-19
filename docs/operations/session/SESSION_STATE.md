@@ -20,7 +20,7 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **B1.12 рекуррент** | deploy OK (Neon) · MCP R2 по `go` | R3 |
+| **B1.12 рекуррент** | R2 Fly MCP 6/6 `[x]` 2026-06-19 | **R3** — ждём `go` |
 | **B1.11 режим работы** | этап 0 ТЗ `[x]` · код `[ ]` | ответы Q1–Q10 → апрув → `go` |
 | **B2.1 табло** | **ЗАКРЫТА** · апрув `[x]` 2026-06-18 | backlog фаза 2 в CBR |
 | **B2.1 B2-S1** | CLOSED OPS · MCP 9/9 · deploy `[x]` · заказчик `[ ]` | апрув заказчика |
@@ -29,13 +29,20 @@
 | **B1.4 PWA** | код задеплоен · OPS_PASS · заказчик `[ ]` | апрув |
 | **B2.2** | stage0 `[x]` · этап 1 `[ ]` | единый экран «Меню» |
 
+### Сессия 2026-06-19 (B1.12-R2 Fly MCP 6/6 post-deploy)
+
+- **MCP:** `ruby bin/b112_r2_native_card_prep_fly.rb` + `node bin/b112_r2_native_card_mcp.mjs` — **6/6 PASS**.
+- **Стенд:** `https://coffeeos.fly.dev` · tenant `655aaccb-004a-4bb9-a50a-ce618854dda3` · Neon DB.
+- **Артефакт:** [`b112_r2_native_card_post_deploy_2026-06-19.json`](milestones/veha_2/artifacts/demo-feedback/b112_r2_native_card_post_deploy_2026-06-19.json).
+- **Скрины:** `screenshots/b112_r2_native_card_intro_2026-06-19.png`, `b112_r2_native_card_post_deploy_2026-06-19.png`.
+- **Дальше:** B1.12-R3 (1 клик + стейт кнопки) — ждём `go`.
+
 ### Сессия 2026-06-19 (Neon Launch + deploy OK + ops)
 
 - **Neon:** Launch plan; compute Active; deploy `release_command` **OK** (image `01KVFG8VW9Y`).
 - **Fly MPG:** `coffeeos-db` **destroyed** (~$38/мес снято).
 - **CI:** `deploy.yml` — только `workflow_dispatch`; агент — `fly deploy` только по апруву.
-- **Billing:** Neon spending limit **$15** — включить в Console (см. INFRA_STACK).
-- **Дальше:** MCP B1.12-R2 по `go`.
+- **Billing:** Neon spending limit **$15** — включён владельцем в Console.
 
 ### Сессия 2026-06-19 (инфра: убран внешний DATABASE_URL → Fly MPG)
 
