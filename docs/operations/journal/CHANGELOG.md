@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## v1.220 — 2026-06-19 (B1.11 Fly MCP post-deploy)
+
+- **Deploy:** владелец вручную на `coffeeos.fly.dev`.
+- **Fly MCP:** API + browser + session — shop `operating_hours`, barista табло, manager shifts, УК «Режим работы».
+- **Тест:** 37 runs, 122 assertions, 0 failures (b111 suite).
+- **Артефакт:** `b111_operating_hours_post_deploy_2026-06-19.json` — `fly_mcp: pass`.
+- **Ожидает:** апрув заказчика.
+
 ## v1.219 — 2026-06-19 (B1.11 этап 7: integration + manager UI + артефакт)
 
 - **Manager UI:** «Требуется закрытие смены» при конфликте / note `[B1.11]`.

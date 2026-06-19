@@ -21,13 +21,21 @@
 | Сейчас | Дальше |
 |--------|--------|
 | **B1.12 рекуррент** | R1–R3 Fly MCP PASS · ответы Q1–Q7 `[x]` 2026-06-19 | апрув эпика |
-| **B1.11 режим работы** | **CLOSED OPS** 28/28 · артефакт · manager UI | deploy + Fly MCP + апрув |
+| **B1.11 режим работы** | **CLOSED OPS + Fly MCP PASS** 37/37 · артефакт `[x]` | **апрув заказчика** |
 | **B2.1 табло** | **ЗАКРЫТА** · апрув `[x]` 2026-06-18 | backlog фаза 2 в CBR |
 | **B2.1 B2-S1** | CLOSED OPS · MCP 9/9 · deploy `[x]` · заказчик `[ ]` | апрув заказчика |
 | **B1.1** | апрув `[x]` 2026-06-18 | — |
 | **B1.7 checkout** | **ЗАКРЫТА** · апрув `[x]` 2026-06-04 | — |
 | **B1.4 PWA** | код задеплоен · OPS_PASS · заказчик `[ ]` | апрув |
 | **B2.2** | stage0 `[x]` · этап 1 `[ ]` | единый экран «Меню» |
+
+### Сессия 2026-06-19 (B1.11 Fly MCP post-deploy)
+
+- **Deploy:** владелец → `coffeeos.fly.dev`.
+- **Fly MCP:** `/up` 200 · categories `meta.operating_hours` (is_open=true) · витрина B каталог · barista-b табло · gm-b shifts · uk «Режим работы» на edit.
+- **Тест:** `ruby bin/rails test` b111 suite — **37 runs, 122 assertions, 0 failures**.
+- **Артефакт:** [`b111_operating_hours_post_deploy_2026-06-19.json`](milestones/veha_2/artifacts/demo-feedback/b111_operating_hours_post_deploy_2026-06-19.json) — `fly_mcp: pass`.
+- **Дальше:** апрув заказчика.
 
 ### Сессия 2026-06-19 (B1.11 этап 7 — integration + manager UI + артефакт)
 

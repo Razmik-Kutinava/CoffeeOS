@@ -239,7 +239,7 @@
 - [x] Табло: пусто (смена закрыта) · красный баннер + звук (конфликт смена/расписание) — `BoardOrdersQuery.none` · banner · sound · тест 16/16
 - [x] Barista POS: заказ в зале → табло **вне** расписания — POS без guard · integration
 - [x] Logout бариста / «мои точки» → hook `ShiftScheduleLogoutHook` (note на смене для менеджера)
-- [x] Integration-тесты + Fly MCP — local 28/28 · Fly MCP `pending_deploy`
+- [x] Integration-тесты + Fly MCP — local 37/37 · Fly MCP **pass** 2026-06-19
 - [x] Артефакт `b111_operating_hours_post_deploy_2026-06-19.json`
 - [ ] Апрув заказчика
 
@@ -256,4 +256,4 @@
 
 ---
 
-**Статус:** **код CLOSED OPS** 2026-06-19 · **28/28 integration** · ждём **deploy + Fly MCP + апрув заказчика**.
+**Статус:** **код CLOSED OPS + Fly MCP PASS** 2026-06-19 · **37/37 tests** · ждём **апрув заказчика**.
