@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v1.204 — 2026-06-19 (Fly: docker-entrypoint не падает на db:prepare fail)
+
+- **Fix:** Puma стартует при временной недоступности Postgres (Supabase quota).
+- **Docs:** `FLY_DEMO_STAND.md` §3 Supabase quota; ISSUES 🔴 обновлён.
+- **Deploy:** blocked до restore Supabase; MCP R2 — после deploy.
+
 ## v1.203 — 2026-06-18 (B1.12-R2: web-фрейм + card_binding OPS_PASS local)
 
 - **API:** `card_binding` на card Init (Recurrent=Y).

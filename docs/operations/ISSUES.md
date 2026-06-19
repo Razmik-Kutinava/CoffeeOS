@@ -4,6 +4,13 @@
 
 ## 🔴 Блокеры
 
+[2026-06-19] — Fly + Supabase: compute quota exceeded (deploy + shop blocked)
+Статус: **open**
+Описание: `fly:release` → `db:prepare` → `PG::ConnectionBad: exceeded the compute time quota` (Supabase `52.29.229.153`). `/shop` HTTP 500; web machine stopped после failed deploy.
+Проверка: логи deploy 2026-06-19; Supabase MCP `execute_sql` → connection timeout.
+**Действие:** Supabase Dashboard → restore/upgrade проект → `fly deploy -a coffeeos` → MCP R2 (`bin/b112_r2_native_card_*`).
+Временный фикс в коде: `bin/docker-entrypoint` — Puma стартует при fail `db:prepare` (см. `FLY_DEMO_STAND.md` §3).
+
 [2026-06-18] — Fly: `/shop` HTTP 500 (B1.12-R2 MCP blocked)
 Статус: **open**
 Описание: `https://coffeeos.fly.dev/shop?tenant_id=…` → 500, нет `shop-api-key`; prep/MCP R2 не запускаются.
