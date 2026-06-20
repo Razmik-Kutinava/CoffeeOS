@@ -4,7 +4,7 @@
 
 **Источник:** PDF [`artifacts/demo-feedback/customer_qa_prog10_2026-06.pdf`](artifacts/demo-feedback/customer_qa_prog10_2026-06.pdf) (продолжение В1: [`../veha_1/artifacts/customer_live_qa_block1_2026-05-30.pdf`](../veha_1/artifacts/customer_live_qa_block1_2026-05-30.pdf)).
 
-**Сейчас (2026-06-19):** **B1.11** ответы Q1–Q10 · **готовность к коду** · **B1.12** R1–R3 PASS.
+**Сейчас (2026-06-20):** **B1.12** баг оплаты **resolved** post-deploy · **апрув эпика** · **B1.11** ждём заказчика.
 
 **Честно:** §1–3 в таблице ниже — **done** *(выборочно)*. §2.3 — **done** *(этапы 1–5, MCP)*.
 
@@ -27,12 +27,13 @@
 | Дата | Источник | Сценарий / экран | Суть | Статус | PR / коммит |
 |------|----------|------------------|------|--------|-------------|
 | 2026-06-19 | владелец B1.12 | Q2–Q7 | Ответы рекуррент: все карты, СБП позже, save после 1-й оплаты, ошибки UI | **done** | [b112_customer_answers_confirmed_2026-06-19.json](artifacts/demo-feedback/b112_customer_answers_confirmed_2026-06-19.json) |
-| 2026-06-19 | заказчик B1.12 | `#/payment` после 3DS | оплата не завершается, UI завис на банке | **open** · 🔴 | [b112_customer_payment_stuck_2026-06-19.json](artifacts/demo-feedback/b112_customer_payment_stuck_2026-06-19.json) |
+| 2026-06-20 | заказчик B1.12 | `#/payment` после 3DS | polling finalize+cable deploy; Fly MCP tenant PASS | **done** | [b112_payment_settle_post_deploy_2026-06-20.json](artifacts/demo-feedback/b112_payment_settle_post_deploy_2026-06-20.json) |
+| 2026-06-19 | заказчик B1.12 | `#/payment` после 3DS | оплата не завершается, UI завис на банке | **done** *(fix 14cdf12)* | [b112_customer_payment_stuck_2026-06-19.json](artifacts/demo-feedback/b112_customer_payment_stuck_2026-06-19.json) |
 | 2026-06-19 | B1.12-R3 | `#/checkout` Fly | saved card + FSM 8/8 | **done** *(Fly MCP)* | [b112_r3_one_click_post_deploy_2026-06-19.json](artifacts/demo-feedback/b112_r3_one_click_post_deploy_2026-06-19.json) |
 | 2026-06-19 | B1.12-R3 | `#/checkout` 1 клик | saved card + pay button FSM local | **done** *(OPS_PASS local)* | [b112_r3_one_click_ops_pass_2026-06-19.json](artifacts/demo-feedback/b112_r3_one_click_ops_pass_2026-06-19.json) |
 | 2026-06-18 | B1.12-R2 | `#/payment` iframe | web-фрейм + card_binding local | **done** *(OPS_PASS local)* | [b112_r2_native_card_ops_pass_2026-06-18.json](artifacts/demo-feedback/b112_r2_native_card_ops_pass_2026-06-18.json) |
 | 2026-06-18 | B1.12-R1 | shop API / callback | Рекуррент: RebillId + Charge | **done** *(OPS_PASS local)* | [b112_r1_recurrent_ops_pass_2026-06-18.json](artifacts/demo-feedback/b112_r1_recurrent_ops_pass_2026-06-18.json) |
-| 2026-06-18 | заказчик B1.12 | `#/payment` / checkout | Рекуррент Т-Банк эпик (R1–R3) | **in_progress** *(код PASS, апрув `[ ]`)* | [b112_stage0_scope_2026-06-18.json](artifacts/demo-feedback/b112_stage0_scope_2026-06-18.json) |
+| 2026-06-18 | заказчик B1.12 | `#/payment` / checkout | Рекуррент Т-Банк эпик (R1–R3) | **done** *(код+баг fix, апрув `[ ]`)* | [b112_stage0_scope_2026-06-18.json](artifacts/demo-feedback/b112_stage0_scope_2026-06-18.json) |
 | 2026-06-19 | Fly MCP B1.11 | coffeeos.fly.dev | Режим работы: API+витрина+barista+УК post-deploy | **done** *(апрув заказчика pending)* | [b111_operating_hours_post_deploy_2026-06-19.json](artifacts/demo-feedback/b111_operating_hours_post_deploy_2026-06-19.json) |
 | 2026-06-19 | владелец B1.11 r2 | УК / shop / barista | Уточнения: корзина, баннер, табло, POS | **done** | [b111_customer_answers_round2_2026-06-19.json](artifacts/demo-feedback/b111_customer_answers_round2_2026-06-19.json) |
 | 2026-06-18 | заказчик B1.11 | УК / shop / barista | Режим работы точки продаж | **in_progress** *(апрув + go)* | [b111_stage0_scope_2026-06-18.json](artifacts/demo-feedback/b111_stage0_scope_2026-06-18.json) |

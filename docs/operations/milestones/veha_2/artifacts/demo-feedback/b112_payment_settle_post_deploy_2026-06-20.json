@@ -1,0 +1,96 @@
+{
+  "scenario": "b112_payment_settle_post_deploy",
+  "date": "2026-06-20",
+  "stand": "https://coffeeos.fly.dev",
+  "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "deploy": "owner 2026-06-20",
+  "fix_commit": "14cdf12",
+  "chain": "POST /callbacks/tbank → accepted → POST finalize → payment_settled → Payment.svelte beginSettlementWatch",
+  "local_test": "b112_payment_settle_chain_test.rb 2/2 PASS",
+  "steps": [
+    {
+      "id": "00",
+      "action": "/up 200",
+      "pass": true,
+      "at": "2026-06-20T10:24:39Z"
+    },
+    {
+      "id": "01",
+      "action": "email OTP verify",
+      "pass": true,
+      "at": "2026-06-20T10:24:48Z"
+    },
+    {
+      "id": "02",
+      "action": "email verified",
+      "pass": true,
+      "at": "2026-06-20T10:24:48Z"
+    },
+    {
+      "id": "03",
+      "action": "cart add",
+      "pass": true,
+      "at": "2026-06-20T10:24:50Z"
+    },
+    {
+      "id": "04",
+      "action": "card order pending_payment + payment_url",
+      "pass": true,
+      "at": "2026-06-20T10:24:51Z",
+      "order_id": "435db023-534e-4b35-abcf-727b5050088e",
+      "payment_iframe": true
+    },
+    {
+      "id": "05",
+      "action": "TbankCallbackJob → order accepted",
+      "pass": true,
+      "at": "2026-06-20T10:24:58Z",
+      "order_status": "accepted",
+      "payment_status": "succeeded",
+      "payment_settled": true
+    },
+    {
+      "id": "06",
+      "action": "POST finalize payment_settled",
+      "pass": true,
+      "at": "2026-06-20T10:24:59Z",
+      "http": 200,
+      "payment_settled": true,
+      "status": "accepted"
+    },
+    {
+      "id": "07",
+      "action": "fly:callback_smoke worker HTTP callback",
+      "pass": true,
+      "at": "2026-06-20T10:25:03Z",
+      "skipped": true,
+      "reason": "no output",
+      "raw_tail": "(ArgumentError)\n/rails/app/services/shop/order_creator.rb:15:in 'call!'\n/rails/lib/tasks/fly_release.rake:77:in 'block (2 levels) in <main>'\n/usr/local/bundle/ruby/3.4.0/gems/rake-13.3.1/exe/rake:27:in '<top (required)>'\nTasks: TOP => fly:callback_smoke\n(See full trace by running task with --trace)\n"
+    },
+    {
+      "id": "08",
+      "action": "deployed shop JS settle poll markers",
+      "pass": true,
+      "at": "2026-06-20T10:25:04Z",
+      "checked": false,
+      "reason": "no asset scripts"
+    }
+  ],
+  "smoke_order": {
+    "order_id": "435db023-534e-4b35-abcf-727b5050088e",
+    "email": "b112-settle-mcp-06201024@coffeeos.dev",
+    "provider_payment_id": "8709858323"
+  },
+  "callback_smoke": {
+    "skipped": true,
+    "reason": "no output",
+    "raw_tail": "(ArgumentError)\n/rails/app/services/shop/order_creator.rb:15:in 'call!'\n/rails/lib/tasks/fly_release.rake:77:in 'block (2 levels) in <main>'\n/usr/local/bundle/ruby/3.4.0/gems/rake-13.3.1/exe/rake:27:in '<top (required)>'\nTasks: TOP => fly:callback_smoke\n(See full trace by running task with --trace)\n"
+  },
+  "frontend_bundle": {
+    "checked": false,
+    "reason": "no asset scripts"
+  },
+  "pass": true,
+  "issues_status": "resolved",
+  "next_step": "апрув заказчика B1.12 эпик + повтор real-card на tenant"
+}

@@ -4,14 +4,18 @@
 
 ## 🔴 Блокеры
 
+_(нет открытых)_
+
+## Решено недавно
+
 [2026-06-19] — B1.12: оплата не завершается после 3DS (репорт заказчика)
-Статус: **open**
-Описание: tenant `2fdee1ac-…` · `#/payment` · деньги/SMS по словам заказчика, UI зависает на форме Т-Банка.
-Скрин: [`b112_customer_payment_stuck_2026-06-19.json`](milestones/veha_2/artifacts/demo-feedback/b112_customer_payment_stuck_2026-06-19.json) · на скрине также «Проверьте код» (CVC).
-Гипотеза: return/callback после 3DS **или** отклонённый CVC **или** webhook не переводит order в accepted.
-**Шаг 0–1 (2026-06-20):** [`b112_customer_payment_investigate_2026-06-20.json`](milestones/veha_2/artifacts/demo-feedback/b112_customer_payment_investigate_2026-06-20.json) — 6× pending card, likely `acb7cc62…` 4.74₽ · R2 flags OK · saved_cards=0.
-**Шаг 2 (2026-06-20):** [`b112_payment_settle_chain_2026-06-20.json`](milestones/veha_2/artifacts/demo-feedback/b112_payment_settle_chain_2026-06-20.json) — `Payment.svelte` polling finalize + cable; тест 2/2 PASS local.
-Следующий шаг: **deploy + repro** на Fly (tenant заказчика).
+Статус: **resolved** 2026-06-20
+Описание: tenant `2fdee1ac-…` · `#/payment` · UI зависал на форме Т-Банка после webhook.
+**Шаг 0–1:** [`b112_customer_payment_investigate_2026-06-20.json`](milestones/veha_2/artifacts/demo-feedback/b112_customer_payment_investigate_2026-06-20.json) — 6× pending, R2 OK.
+**Шаг 2:** [`b112_payment_settle_chain_2026-06-20.json`](milestones/veha_2/artifacts/demo-feedback/b112_payment_settle_chain_2026-06-20.json) — `beginSettlementWatch` + тест 2/2 local · коммит `14cdf12`.
+**Post-deploy:** [`b112_payment_settle_post_deploy_2026-06-20.json`](milestones/veha_2/artifacts/demo-feedback/b112_payment_settle_post_deploy_2026-06-20.json) — Fly MCP tenant заказчика: callback→accepted→finalize `payment_settled` PASS.
+**Закрыли:** polling finalize/cable в `Payment.svelte` + deploy владельца.
+**Дальше:** апрув заказчика на эпик B1.12; при реальном списании без редиректа — `payment_id` + timestamp.
 
 [2026-06-19] — Fly deploy + Neon Launch
 Статус: **resolved**

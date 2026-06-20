@@ -85,7 +85,15 @@
     ],
     "next_engineering_step": "blocked до trace-id; затем repro на tenant 2fdee1ac + цепочка webhook → finalize → Payment.svelte finishSuccess"
   },
-  "status": "open",
+  "status": "done",
+  "resolution": {
+    "date": "2026-06-20",
+    "fix_commit": "14cdf12",
+    "deploy": "owner",
+    "post_deploy_artifact": "b112_payment_settle_post_deploy_2026-06-20.json",
+    "summary": "beginSettlementWatch (poll finalize + cable) после deploy; Fly MCP tenant 2fdee1ac callback→accepted→finalize PASS",
+    "note": "исходный скрин мог быть CVC error; при новом репорте со списанием — нужен payment_id"
+  },
   "investigate_artifact": "b112_customer_payment_investigate_2026-06-20.json",
   "investigate_summary": {
     "date": "2026-06-20",

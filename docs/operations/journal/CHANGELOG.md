@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## v1.225 — 2026-06-20 (B1.12 bug: post-deploy MCP repro + ISSUES closed)
+
+- **Было:** баг 🔴 open — UI зависал на `#/payment` после webhook; fix `14cdf12` не на Fly.
+- **Стало:** deploy владельца · Fly MCP tenant `2fdee1ac-…` — callback→accepted→finalize `payment_settled` PASS · ISSUES **resolved**.
+- **Тест:** `b112_payment_settle_chain_test.rb` — 2/2 PASS (повтор).
+- **Артефакт:** `b112_payment_settle_post_deploy_2026-06-20.json` · скрипт `bin/b112_payment_settle_post_deploy_fly.rb`.
+- **Дальше:** апрув заказчика эпик B1.12; real-card smoke на tenant.
+
 ## v1.224 — 2026-06-20 (B1.12 bug: шаг 2 цепочка settle)
 
 - **Было:** `finishSuccess()` только из `integration.js`; embed fallback без callback — зависание на форме Т-Банка.
