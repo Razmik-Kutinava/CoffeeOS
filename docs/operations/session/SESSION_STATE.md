@@ -30,6 +30,13 @@
 | **B1.4 PWA** | код задеплоен · OPS_PASS · заказчик `[ ]` | апрув |
 | **B2.2** | stage0 `[x]` · этап 1 `[ ]` | единый экран «Меню» |
 
+### Сессия 2026-06-20 (B1.12 bug шаг 3 — 3DS return)
+
+- **Дополнение к шагу 2:** `payment_started` · `awaiting_settlement` после return из 3DS.
+- **deepLinkRedirectCallback:** не меняли (full redirect); resume через sessionStorage.
+- **Тест:** 2/2, 19 assertions PASS.
+- **Дальше:** deploy → Fly MCP repro (шаг 3 return path).
+
 ### Сессия 2026-06-20 (B1.12 bug post-deploy MCP)
 
 - **Deploy:** владелец на Fly.

@@ -122,6 +122,7 @@ export async function openTbankIframe({ container, terminalKey, paymentUrl, scri
       }
     },
     deepLinkRedirectCallback: (url) => {
+      // 3DS/SBP: полный переход в банк; возврат в PWA — sessionStorage + awaiting_settlement в Payment.svelte
       window.location.href = url
     }
   }

@@ -5,6 +5,7 @@
   import {
     clearPaymentSession,
     loadPaymentSession,
+    savePaymentSession,
     embedPaymentUrlIframe,
     openTbankIframe,
     PAYMENT_METHOD_LABELS,
@@ -75,6 +76,23 @@
     phase = "loading"
   }
 
+  function markPaymentStarted() {
+    if (!session) return
+    const next = { ...session, payment_started: true }
+    session = next
+    savePaymentSession(next)
+  }
+
+  async function tryImmediateSettle(orderId, reconnectToken) {
+    const q = reconnectToken ? `?reconnect_token=${encodeURIComponent(reconnectToken)}` : ""
+    const res = await api(`/orders/${orderId}/finalize${q}`, { method: "POST" })
+    if (res.payment_settled || res.status === "accepted") {
+      finishSuccess()
+      return true
+    }
+    return false
+  }
+
   /** Webhook → accepted: polling finalize + cable, если iframe не шлёт success (fallback embed / 3DS). */
   function beginSettlementWatch() {
     stopSettlementWatch()
@@ -95,7 +113,8 @@
     })
 
     const timer = setInterval(async () => {
-      if (destroyed || finished || !active || phase !== "paying") return
+      if (destroyed || finished || !active) return
+      if (phase !== "paying" && phase !== "awaiting_settlement") return
       try {
         const q = reconnectToken ? `?reconnect_token=${encodeURIComponent(reconnectToken)}` : ""
         const res = await api(`/orders/${orderId}/finalize${q}`, { method: "POST" })
@@ -134,6 +153,7 @@
           }
         })
         phase = "paying"
+        markPaymentStarted()
         beginSettlementWatch()
         return
       } catch (e) {
@@ -143,6 +163,7 @@
 
     embedPaymentUrlIframe(iframeHost, session.payment_url)
     phase = "paying"
+    markPaymentStarted()
     beginSettlementWatch()
   }
 
@@ -182,6 +203,15 @@
     await reconnectGuestOrder(api)
 
     if (data.payment_iframe && data.payment_url) {
+      if (data.payment_started) {
+        phase = "awaiting_settlement"
+        beginSettlementWatch()
+        try {
+          await tryImmediateSettle(data.order_id, data.reconnect_token || guestReconnectToken())
+        } catch {
+          /* webhook ещё не пришёл после 3DS return */
+        }
+      }
       return
     }
 
@@ -264,7 +294,9 @@
   </button>
 {:else}
   <div class="mb-4 flex items-center justify-between gap-3">
-    <h1 class="text-xl font-bold">{phase === "loading" ? "Подключаем оплату…" : "Оплата"}</h1>
+    <h1 class="text-xl font-bold">
+      {phase === "loading" ? "Подключаем оплату…" : phase === "awaiting_settlement" ? "Проверяем оплату…" : "Оплата"}
+    </h1>
     {#if phase === "paying"}
       <button
         type="button"
@@ -284,10 +316,12 @@
     </div>
   {/if}
 
-  {#if phase === "loading"}
+  {#if phase === "loading" || phase === "awaiting_settlement"}
     <div class="mb-4 flex flex-col items-center gap-3 py-8">
       <div class="payment-spinner" aria-hidden="true"></div>
-      <p class="text-sm text-[#a0a0a0]">Подключаем защищённую форму…</p>
+      <p class="text-sm text-[#a0a0a0]">
+        {phase === "awaiting_settlement" ? "Проверяем оплату…" : "Подключаем защищённую форму…"}
+      </p>
       <button
         type="button"
         class="mt-2 rounded-xl border border-[#3a3a3a] px-4 py-2 text-sm text-[#a0a0a0] disabled:opacity-50"

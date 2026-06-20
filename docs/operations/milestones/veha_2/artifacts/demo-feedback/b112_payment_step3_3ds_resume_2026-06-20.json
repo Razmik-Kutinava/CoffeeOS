@@ -1,0 +1,14 @@
+{
+  "task": "B1.12 bug шаг 3 — вероятный фикс (код)",
+  "date": "2026-06-20",
+  "status": "ops_pass_local",
+  "plan_items": {
+    "polling_finalize_cable": { "done": true, "commit": "14cdf12", "note": "beginSettlementWatch while paying" },
+    "embed_fallback": { "done": true, "note": "watch стартует и для embedPaymentUrlIframe" },
+    "deepLinkRedirectCallback": { "done": true, "note": "full redirect канон; resume via payment_started + awaiting_settlement" }
+  },
+  "was": "После 3DS return пользователь на intro — poll не работал (phase !== paying)",
+  "now": "payment_started в sessionStorage → awaiting_settlement → watch + immediate finalize",
+  "tests": "b112_payment_settle_chain_test.rb — 2 runs, 19 assertions, 0 failures",
+  "next": "deploy + Fly MCP на tenant 2fdee1ac"
+}

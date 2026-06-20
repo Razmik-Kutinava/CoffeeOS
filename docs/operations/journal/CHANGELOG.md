@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## v1.226 — 2026-06-20 (B1.12 bug шаг 3: 3DS return resume)
+
+- **Было:** polling+cable только при `phase=paying`; после 3DS return (`deepLinkRedirectCallback`) — intro без watch.
+- **Стало:** `payment_started` в session · `awaiting_settlement` + `beginSettlementWatch` + immediate finalize на return.
+- **deepLinkRedirectCallback:** полный redirect в банк (канон T-Bank); возврат через sessionStorage.
+- **Тест:** `b112_payment_settle_chain_test.rb` — 2/2, 19 assertions PASS.
+
 ## v1.225 — 2026-06-20 (B1.12 bug: post-deploy MCP repro + ISSUES closed)
 
 - **Было:** баг 🔴 open — UI зависал на `#/payment` после webhook; fix `14cdf12` не на Fly.
