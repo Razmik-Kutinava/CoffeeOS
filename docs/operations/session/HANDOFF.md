@@ -1,6 +1,6 @@
 # HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-06-19 (B1.12-R3 OPS_PASS local · deploy/MCP по апруву)  
+**Дата:** 2026-06-20 (B1.12 bug шаг 2 settle chain · deploy по апруву)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev
 
@@ -14,7 +14,8 @@
 | Fly MCP R1 | `[x]` 5/5 2026-06-18 — [`b112_r1_recurrent_post_deploy_2026-06-18.json`](../milestones/veha_2/artifacts/demo-feedback/b112_r1_recurrent_post_deploy_2026-06-18.json) |
 | **R2 web-фрейм** | **OPS_PASS + Fly MCP 6/6** `[x]` 2026-06-19 — [`b112_r2_native_card_post_deploy_2026-06-19.json`](../milestones/veha_2/artifacts/demo-feedback/b112_r2_native_card_post_deploy_2026-06-19.json) |
 | **R3 1 клик** | **Fly MCP 8/8** `[x]` 2026-06-19 — [`b112_r3_one_click_post_deploy_2026-06-19.json`](../milestones/veha_2/artifacts/demo-feedback/b112_r3_one_click_post_deploy_2026-06-19.json) |
-| **Следующий шаг** | апрув заказчика на эпик B1.12 |
+| **Баг оплаты (заказчик)** | шаг 2 `[x]` 2026-06-20 — [`b112_payment_settle_chain_2026-06-20.json`](../milestones/veha_2/artifacts/demo-feedback/b112_payment_settle_chain_2026-06-20.json) · ISSUES 🔴 open до deploy |
+| **Следующий шаг** | **go deploy** → repro tenant `2fdee1ac-…` · затем апрув эпика B1.12 |
 
 ТЗ: [`B1_12_recurrent_payments.md`](../milestones/veha_2/requirements/customer_tasks/B1_12_recurrent_payments.md) · runbook: [`TBANK_RECURRENT.md`](../milestones/veha_2/runbooks/TBANK_RECURRENT.md)
 

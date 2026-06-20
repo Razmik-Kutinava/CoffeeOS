@@ -11,6 +11,9 @@
     redirectToPaymentUrl
   } from "../lib/tbankPayment.js"
   import { reconnectGuestOrder, saveGuestOrderSession, guestReconnectToken } from "../lib/shopGuestSession.js"
+  import { subscribeGuestOrderStatus } from "../lib/shopOrderCable.js"
+
+  const SETTLE_POLL_MS = 1500
 
   let phase = $state("intro")
   let err = $state(null)
@@ -20,6 +23,7 @@
   let finished = $state(false)
   let destroyed = $state(false)
   let iframeStarted = $state(false)
+  let stopSettlementWatch = () => {}
 
   const methodLabel = $derived(
     PAYMENT_METHOD_LABELS[session?.payment_method] || PAYMENT_METHOD_LABELS.card
@@ -71,6 +75,45 @@
     phase = "loading"
   }
 
+  /** Webhook → accepted: polling finalize + cable, если iframe не шлёт success (fallback embed / 3DS). */
+  function beginSettlementWatch() {
+    stopSettlementWatch()
+    const orderId = session?.order_id
+    const reconnectToken = session?.reconnect_token || guestReconnectToken()
+    if (!orderId) return
+
+    let active = true
+    const unsubCable = subscribeGuestOrderStatus({
+      orderId,
+      reconnectToken,
+      onStatus: (payload) => {
+        if (destroyed || finished || !active) return
+        if (payload?.payment_settled || payload?.status === "accepted") {
+          finishSuccess()
+        }
+      }
+    })
+
+    const timer = setInterval(async () => {
+      if (destroyed || finished || !active || phase !== "paying") return
+      try {
+        const q = reconnectToken ? `?reconnect_token=${encodeURIComponent(reconnectToken)}` : ""
+        const res = await api(`/orders/${orderId}/finalize${q}`, { method: "POST" })
+        if (res.payment_settled || res.status === "accepted") {
+          finishSuccess()
+        }
+      } catch {
+        /* webhook ещё не пришёл */
+      }
+    }, SETTLE_POLL_MS)
+
+    stopSettlementWatch = () => {
+      active = false
+      clearInterval(timer)
+      unsubCable()
+    }
+  }
+
   async function startIframe() {
     if (iframeStarted || !iframeHost) return
     if (!session?.payment_url) throw new Error("Нет данных для оплаты")
@@ -91,6 +134,7 @@
           }
         })
         phase = "paying"
+        beginSettlementWatch()
         return
       } catch (e) {
         console.warn("[Payment] integration.js mount failed, fallback to PaymentURL embed", e)
@@ -99,6 +143,7 @@
 
     embedPaymentUrlIframe(iframeHost, session.payment_url)
     phase = "paying"
+    beginSettlementWatch()
   }
 
   $effect(() => {
@@ -151,6 +196,7 @@
 
   onDestroy(() => {
     destroyed = true
+    stopSettlementWatch()
   })
 </script>
 

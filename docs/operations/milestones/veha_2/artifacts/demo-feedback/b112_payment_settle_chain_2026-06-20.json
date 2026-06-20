@@ -1,0 +1,10 @@
+{
+  "task": "B1.12 payment stuck — шаг 2 цепочка settle",
+  "date": "2026-06-20",
+  "status": "ops_pass_local",
+  "was": "Payment.svelte finishSuccess() только из integration.js onStatusChange; fallback embedPaymentUrlIframe без callback — UI зависает после webhook",
+  "now": "beginSettlementWatch: poll POST /orders/:id/finalize + subscribeGuestOrderStatus → finishSuccess → #/payment-result",
+  "backend_chain": "POST /callbacks/tbank → TbankCallbackJob → order accepted → finalize payment_settled",
+  "tests": "bin/rails test test/integration/shop/api/b112_payment_settle_chain_test.rb — 2 runs, 15 assertions, 0 failures",
+  "not_done": ["fly deploy", "MCP repro на tenant 2fdee1ac-…", "закрытие ISSUES до post-deploy"]
+}

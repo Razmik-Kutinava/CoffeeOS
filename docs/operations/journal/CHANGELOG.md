@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## v1.224 — 2026-06-20 (B1.12 bug: шаг 2 цепочка settle)
+
+- **Было:** `finishSuccess()` только из `integration.js`; embed fallback без callback — зависание на форме Т-Банка.
+- **Стало:** `beginSettlementWatch()` — poll `POST /orders/:id/finalize` + cable `accepted`/`payment_settled` → `#/payment-result`.
+- **Тест:** `b112_payment_settle_chain_test.rb` — callback→accepted + grep Payment.svelte — 2/2 PASS.
+- **Не делали:** fly deploy, MCP repro tenant `2fdee1ac-…`.
+
 ## v1.223 — 2026-06-20 (B1.12 bug: шаг 0–1 investigate tenant заказчика)
 
 - **Fly:** `bin/b112_customer_payment_investigate_fly.rb` — tenant `2fdee1ac-…`, R2 flags OK, 6 pending card orders.

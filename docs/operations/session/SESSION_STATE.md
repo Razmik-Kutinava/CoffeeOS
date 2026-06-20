@@ -20,7 +20,7 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **B1.12 баг оплаты** | шаг 0–1 investigate `[x]` 2026-06-20 | шаг 2 polling — `go` |
+| **B1.12 баг оплаты** | шаг 2 settle chain `[x]` 2026-06-20 · тест 2/2 | **go deploy** + repro Fly |
 | **B1.12 рекуррент** | R1–R3 Fly MCP PASS · ответы Q1–Q7 `[x]` 2026-06-19 | апрув эпика |
 | **B1.11 режим работы** | **CLOSED OPS + Fly MCP PASS** 37/37 · артефакт `[x]` | **стоп — апрув заказчика** (проверит / правки) |
 | **B2.1 табло** | **ЗАКРЫТА** · апрув `[x]` 2026-06-18 | backlog фаза 2 в CBR |
@@ -29,6 +29,16 @@
 | **B1.7 checkout** | **ЗАКРЫТА** · апрув `[x]` 2026-06-04 | — |
 | **B1.4 PWA** | код задеплоен · OPS_PASS · заказчик `[ ]` | апрув |
 | **B2.2** | stage0 `[x]` · этап 1 `[ ]` | единый экран «Меню» |
+
+### Сессия 2026-06-20 (B1.12 bug шаг 2 — settle chain)
+
+- **Было:** UI зависает — `finishSuccess()` только из `integration.js`; embed fallback молчит.
+- **Стало:** `Payment.svelte` → `beginSettlementWatch()` (poll finalize 1.5s + cable) → `finishSuccess()` → `#/payment-result`.
+- **Бэкенд:** `POST /callbacks/tbank` → accepted → finalize `payment_settled` (тест callback).
+- **Тест:** `b112_payment_settle_chain_test.rb` — **2 runs, 15 assertions, 0 failures**.
+- **Артефакт:** [`b112_payment_settle_chain_2026-06-20.json`](milestones/veha_2/artifacts/demo-feedback/b112_payment_settle_chain_2026-06-20.json).
+- **Не делали:** fly deploy, MCP на tenant заказчика.
+- **Дальше:** **go deploy** → repro.
 
 ### Сессия 2026-06-19 (B1.11 Fly MCP post-deploy)
 
