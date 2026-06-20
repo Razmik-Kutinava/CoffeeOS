@@ -20,7 +20,7 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **B1.12 баг оплаты** | **resolved** post-deploy MCP 2026-06-20 | **апрув эпика B1.12** |
+| **B1.12 баг оплаты** | шаг 3 Fly MCP PASS 2026-06-20 | **апрув эпика B1.12** |
 | **B1.12 рекуррент** | R1–R3 Fly MCP PASS · ответы Q1–Q7 `[x]` 2026-06-19 | апрув эпика |
 | **B1.11 режим работы** | **CLOSED OPS + Fly MCP PASS** 37/37 · артефакт `[x]` | **стоп — апрув заказчика** (проверит / правки) |
 | **B2.1 табло** | **ЗАКРЫТА** · апрув `[x]` 2026-06-18 | backlog фаза 2 в CBR |
@@ -29,6 +29,13 @@
 | **B1.7 checkout** | **ЗАКРЫТА** · апрув `[x]` 2026-06-04 | — |
 | **B1.4 PWA** | код задеплоен · OPS_PASS · заказчик `[ ]` | апрув |
 | **B2.2** | stage0 `[x]` · этап 1 `[ ]` | единый экран «Меню» |
+
+### Сессия 2026-06-20 (B1.12 bug шаг 3 post-deploy MCP)
+
+- **Fly MCP:** tenant `2fdee1ac-…` — immediate `#/order/:id` · poll webhook → redirect · finalize POST в network.
+- **Артефакт:** [`b112_payment_step3_return_post_deploy_2026-06-20.json`](milestones/veha_2/artifacts/demo-feedback/b112_payment_step3_return_post_deploy_2026-06-20.json).
+- **Скрипты:** `bin/b112_payment_step3_return_prep_fly.rb` · `bin/b112_payment_step3_return_mcp.mjs`.
+- **Дальше:** апрув заказчика · real-card.
 
 ### Сессия 2026-06-20 (B1.12 bug шаг 3 — 3DS return)
 

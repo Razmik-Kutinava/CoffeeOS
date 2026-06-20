@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## v1.227 — 2026-06-20 (B1.12 bug шаг 3: Fly MCP return-path post-deploy)
+
+- **Было:** fix `2b15578` локально; post-deploy repro не гоняли.
+- **Стало:** Fly MCP tenant `2fdee1ac-…` — immediate return → `#/order/:id` · poll+webhook → redirect · DevTools: POST finalize.
+- **Артефакт:** `b112_payment_step3_return_post_deploy_2026-06-20.json` + скрины · скрипты prep/mcp/trigger.
+- **Не делали:** real-card 3DS E2E (нужна карта заказчика).
+
 ## v1.226 — 2026-06-20 (B1.12 bug шаг 3: 3DS return resume)
 
 - **Было:** polling+cable только при `phase=paying`; после 3DS return (`deepLinkRedirectCallback`) — intro без watch.

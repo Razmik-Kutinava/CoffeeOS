@@ -1,14 +1,22 @@
 {
   "task": "B1.12 bug шаг 3 — вероятный фикс (код)",
   "date": "2026-06-20",
-  "status": "ops_pass_local",
+  "status": "fly_mcp_pass",
   "plan_items": {
-    "polling_finalize_cable": { "done": true, "commit": "14cdf12", "note": "beginSettlementWatch while paying" },
-    "embed_fallback": { "done": true, "note": "watch стартует и для embedPaymentUrlIframe" },
-    "deepLinkRedirectCallback": { "done": true, "note": "full redirect канон; resume via payment_started + awaiting_settlement" }
+    "polling_finalize_cable": { "done": true, "commit": "14cdf12" },
+    "embed_fallback": { "done": true, "commit": "14cdf12" },
+    "deepLinkRedirectCallback": { "done": true, "commit": "2b15578" }
   },
-  "was": "После 3DS return пользователь на intro — poll не работал (phase !== paying)",
-  "now": "payment_started в sessionStorage → awaiting_settlement → watch + immediate finalize",
-  "tests": "b112_payment_settle_chain_test.rb — 2 runs, 19 assertions, 0 failures",
-  "next": "deploy + Fly MCP на tenant 2fdee1ac"
+  "was": "После 3DS return intro без poll; UI зависал на форме банка",
+  "now": "payment_started → awaiting_settlement → finalize poll → #/payment-result → #/order/:id",
+  "post_deploy": "b112_payment_step3_return_post_deploy_2026-06-20.json",
+  "mcp_results": {
+    "tenant": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+    "immediate_redirect": "PASS → #/order/958bd859-…",
+    "poll_after_webhook": "PASS → #/order/e3d14c59-…",
+    "devtools_finalize_post": "PASS (5 requests)",
+    "ui_awaiting_text": "flaky (не блокер)"
+  },
+  "commits": ["14cdf12", "2b15578", "1fcee6c"],
+  "next": "апрув заказчика B1.12 + real-card smoke"
 }

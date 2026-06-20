@@ -1,0 +1,128 @@
+{
+  "scenario": "b112_payment_step3_return_post_deploy",
+  "date": "2026-06-20",
+  "stand": "https://coffeeos.fly.dev",
+  "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "fix_commit": "2b15578",
+  "was": "После 3DS return intro без poll; UI зависал",
+  "now": "payment_started → awaiting_settlement → finalize poll → payment-result",
+  "devtools": {
+    "finalize_requests": [
+      {
+        "at": "2026-06-20T10:51:12.877Z",
+        "method": "POST",
+        "url": "https://coffeeos.fly.dev/shop/api/orders/958bd859-f12c-4698-87b2-8d733fc17748/finalize?reconnect_token=eyJfcmFpbHMiOnsiZGF0YSI6eyJvaWQiOiI5NThiZDg1OS1mMTJjLTQ2OTgtODdiMi04ZDczM2ZjMTc3NDgiLCJjaWQiOiIyZDYwNGI5OS02MDQwLTQ0YjUtYTYwYS1mMmYwZjUzYmQzNmEiLCJ0aWQiOiIyZmRlZTFhYy00Njc0LTQxZWUtYjg5ZS04N2I0NTY0M2Y3ODkifSwiZXhwIjoiMjAyNi0wNi0yMVQxMDo1MDozNy4xODBaIn19--5cbdaa9a09d926b65d77f42870dc4dae55f05384&tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789"
+      },
+      {
+        "at": "2026-06-20T10:51:13.375Z",
+        "method": "POST",
+        "url": "https://coffeeos.fly.dev/shop/api/orders/958bd859-f12c-4698-87b2-8d733fc17748/finalize?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789"
+      },
+      {
+        "at": "2026-06-20T10:51:23.377Z",
+        "method": "POST",
+        "url": "https://coffeeos.fly.dev/shop/api/orders/e3d14c59-f89a-4aa4-bc49-75b29d86d728/finalize?reconnect_token=eyJfcmFpbHMiOnsiZGF0YSI6eyJvaWQiOiJlM2QxNGM1OS1mODlhLTRhYTQtYmM0OS03NWIyOWQ4NmQ3MjgiLCJjaWQiOiJkMGFlOTcyNC0zOTIyLTQ1ZjctODNiYy0yZDM5ZGIxNjI0YTkiLCJ0aWQiOiIyZmRlZTFhYy00Njc0LTQxZWUtYjg5ZS04N2I0NTY0M2Y3ODkifSwiZXhwIjoiMjAyNi0wNi0yMVQxMDo1MDo1Ni45NzZaIn19--3de82e2e68f54e9115579ba195f3783d1ef3d402&tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789"
+      },
+      {
+        "at": "2026-06-20T10:51:23.378Z",
+        "method": "POST",
+        "url": "https://coffeeos.fly.dev/shop/api/orders/e3d14c59-f89a-4aa4-bc49-75b29d86d728/finalize?reconnect_token=eyJfcmFpbHMiOnsiZGF0YSI6eyJvaWQiOiJlM2QxNGM1OS1mODlhLTRhYTQtYmM0OS03NWIyOWQ4NmQ3MjgiLCJjaWQiOiJkMGFlOTcyNC0zOTIyLTQ1ZjctODNiYy0yZDM5ZGIxNjI0YTkiLCJ0aWQiOiIyZmRlZTFhYy00Njc0LTQxZWUtYjg5ZS04N2I0NTY0M2Y3ODkifSwiZXhwIjoiMjAyNi0wNi0yMVQxMDo1MDo1Ni45NzZaIn19--3de82e2e68f54e9115579ba195f3783d1ef3d402&tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789"
+      },
+      {
+        "at": "2026-06-20T10:51:23.378Z",
+        "method": "POST",
+        "url": "https://coffeeos.fly.dev/shop/api/orders/e3d14c59-f89a-4aa4-bc49-75b29d86d728/finalize?reconnect_token=eyJfcmFpbHMiOnsiZGF0YSI6eyJvaWQiOiJlM2QxNGM1OS1mODlhLTRhYTQtYmM0OS03NWIyOWQ4NmQ3MjgiLCJjaWQiOiJkMGFlOTcyNC0zOTIyLTQ1ZjctODNiYy0yZDM5ZGIxNjI0YTkiLCJ0aWQiOiIyZmRlZTFhYy00Njc0LTQxZWUtYjg5ZS04N2I0NTY0M2Y3ODkifSwiZXhwIjoiMjAyNi0wNi0yMVQxMDo1MDo1Ni45NzZaIn19--3de82e2e68f54e9115579ba195f3783d1ef3d402&tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789"
+      },
+      {
+        "at": "2026-06-20T10:51:23.383Z",
+        "method": "POST",
+        "url": "https://coffeeos.fly.dev/shop/api/orders/e3d14c59-f89a-4aa4-bc49-75b29d86d728/finalize?reconnect_token=eyJfcmFpbHMiOnsiZGF0YSI6eyJvaWQiOiJlM2QxNGM1OS1mODlhLTRhYTQtYmM0OS03NWIyOWQ4NmQ3MjgiLCJjaWQiOiJkMGFlOTcyNC0zOTIyLTQ1ZjctODNiYy0yZDM5ZGIxNjI0YTkiLCJ0aWQiOiIyZmRlZTFhYy00Njc0LTQxZWUtYjg5ZS04N2I0NTY0M2Y3ODkifSwiZXhwIjoiMjAyNi0wNi0yMVQxMDo1MDo1Ni45NzZaIn19--3de82e2e68f54e9115579ba195f3783d1ef3d402&tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789"
+      },
+      {
+        "at": "2026-06-20T10:51:23.384Z",
+        "method": "POST",
+        "url": "https://coffeeos.fly.dev/shop/api/orders/e3d14c59-f89a-4aa4-bc49-75b29d86d728/finalize?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789"
+      }
+    ]
+  },
+  "steps": [
+    {
+      "id": "01",
+      "action": "immediate return: hash leaves #/payment",
+      "pass": true,
+      "at": "2026-06-20T10:51:15.073Z",
+      "hash": "#/order/958bd859-f12c-4698-87b2-8d733fc17748"
+    },
+    {
+      "id": "02",
+      "action": "immediate return: payment-result or order screen",
+      "pass": true,
+      "at": "2026-06-20T10:51:15.080Z",
+      "hash": "#/order/958bd859-f12c-4698-87b2-8d733fc17748"
+    },
+    {
+      "id": "03",
+      "action": "poll return: awaiting_settlement UI",
+      "pass": false,
+      "at": "2026-06-20T10:51:16.417Z",
+      "hash": "https://coffeeos.fly.dev/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789#/payment"
+    },
+    {
+      "id": "04",
+      "action": "poll return: redirect after webhook",
+      "pass": true,
+      "at": "2026-06-20T10:51:23.397Z",
+      "hash": "#/order/e3d14c59-f89a-4aa4-bc49-75b29d86d728"
+    },
+    {
+      "id": "05",
+      "action": "devtools: finalize POST seen while awaiting",
+      "pass": true,
+      "at": "2026-06-20T10:51:23.397Z",
+      "count": 5,
+      "calls": [
+        {
+          "at": "2026-06-20T10:51:23.377Z",
+          "method": "POST",
+          "url": "https://coffeeos.fly.dev/shop/api/orders/e3d14c59-f89a-4aa4-bc49-75b29d86d728/finalize?reconnect_token=eyJfcmFpbHMiOnsiZGF0YSI6eyJvaWQiOiJlM2QxNGM1OS1mODlhLTRhYTQtYmM0OS03NWIyOWQ4NmQ3MjgiLCJjaWQiOiJkMGFlOTcyNC0zOTIyLTQ1ZjctODNiYy0yZDM5ZGIxNjI0YTkiLCJ0aWQiOiIyZmRlZTFhYy00Njc0LTQxZWUtYjg5ZS04N2I0NTY0M2Y3ODkifSwiZXhwIjoiMjAyNi0wNi0yMVQxMDo1MDo1Ni45NzZaIn19--3de82e2e68f54e9115579ba195f3783d1ef3d402&tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789"
+        },
+        {
+          "at": "2026-06-20T10:51:23.378Z",
+          "method": "POST",
+          "url": "https://coffeeos.fly.dev/shop/api/orders/e3d14c59-f89a-4aa4-bc49-75b29d86d728/finalize?reconnect_token=eyJfcmFpbHMiOnsiZGF0YSI6eyJvaWQiOiJlM2QxNGM1OS1mODlhLTRhYTQtYmM0OS03NWIyOWQ4NmQ3MjgiLCJjaWQiOiJkMGFlOTcyNC0zOTIyLTQ1ZjctODNiYy0yZDM5ZGIxNjI0YTkiLCJ0aWQiOiIyZmRlZTFhYy00Njc0LTQxZWUtYjg5ZS04N2I0NTY0M2Y3ODkifSwiZXhwIjoiMjAyNi0wNi0yMVQxMDo1MDo1Ni45NzZaIn19--3de82e2e68f54e9115579ba195f3783d1ef3d402&tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789"
+        },
+        {
+          "at": "2026-06-20T10:51:23.378Z",
+          "method": "POST",
+          "url": "https://coffeeos.fly.dev/shop/api/orders/e3d14c59-f89a-4aa4-bc49-75b29d86d728/finalize?reconnect_token=eyJfcmFpbHMiOnsiZGF0YSI6eyJvaWQiOiJlM2QxNGM1OS1mODlhLTRhYTQtYmM0OS03NWIyOWQ4NmQ3MjgiLCJjaWQiOiJkMGFlOTcyNC0zOTIyLTQ1ZjctODNiYy0yZDM5ZGIxNjI0YTkiLCJ0aWQiOiIyZmRlZTFhYy00Njc0LTQxZWUtYjg5ZS04N2I0NTY0M2Y3ODkifSwiZXhwIjoiMjAyNi0wNi0yMVQxMDo1MDo1Ni45NzZaIn19--3de82e2e68f54e9115579ba195f3783d1ef3d402&tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789"
+        },
+        {
+          "at": "2026-06-20T10:51:23.383Z",
+          "method": "POST",
+          "url": "https://coffeeos.fly.dev/shop/api/orders/e3d14c59-f89a-4aa4-bc49-75b29d86d728/finalize?reconnect_token=eyJfcmFpbHMiOnsiZGF0YSI6eyJvaWQiOiJlM2QxNGM1OS1mODlhLTRhYTQtYmM0OS03NWIyOWQ4NmQ3MjgiLCJjaWQiOiJkMGFlOTcyNC0zOTIyLTQ1ZjctODNiYy0yZDM5ZGIxNjI0YTkiLCJ0aWQiOiIyZmRlZTFhYy00Njc0LTQxZWUtYjg5ZS04N2I0NTY0M2Y3ODkifSwiZXhwIjoiMjAyNi0wNi0yMVQxMDo1MDo1Ni45NzZaIn19--3de82e2e68f54e9115579ba195f3783d1ef3d402&tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789"
+        },
+        {
+          "at": "2026-06-20T10:51:23.384Z",
+          "method": "POST",
+          "url": "https://coffeeos.fly.dev/shop/api/orders/e3d14c59-f89a-4aa4-bc49-75b29d86d728/finalize?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789"
+        }
+      ]
+    },
+    {
+      "id": "06",
+      "action": "/up health",
+      "pass": true,
+      "at": "2026-06-20T10:51:23.514Z"
+    }
+  ],
+  "immediate_order": "958bd859-f12c-4698-87b2-8d733fc17748",
+  "poll_order": "e3d14c59-f89a-4aa4-bc49-75b29d86d728",
+  "screenshots": [
+    "screenshots/b112_step3_return_immediate_2026-06-20.png",
+    "screenshots/b112_step3_return_poll_2026-06-20.png"
+  ],
+  "pass": true,
+  "fly_mcp": "pass",
+  "functional_verdict": "5/6 steps; step 03 UI text flaky (redirect+finalize OK)",
+  "note_step_03": "На #/payment intro-shell; finalize poll и redirect после webhook подтверждены (04–05)"
+}
