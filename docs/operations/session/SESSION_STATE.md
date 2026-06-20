@@ -111,6 +111,12 @@
 - **Ops:** `veha_1/checklists/CHECKLIST.md` § I + H.3 `[x]`; `PRACTICES.md`, `README.md`; `HANDOFF`, `CHANGELOG` v1.210.
 - **Хвосты → В2:** QA 5.1; `demo:seed` в release; полный LIVE_DEMO MCP §2–10.
 
+### Сессия 2026-06-19 (B1.12 — репорт заказчика: оплата зависает после 3DS)
+
+- **Артефакт:** [`b112_customer_payment_stuck_2026-06-19.json`](milestones/veha_2/artifacts/demo-feedback/b112_customer_payment_stuck_2026-06-19.json) + скрин.
+- **Tenant заказчика:** `2fdee1ac-4674-41ee-b89e-87b45643f789` (не MCP-tenant).
+- **ISSUES:** 🔴 open — нужен payment_id/trace для repro.
+
 ### Сессия 2026-06-19 (B1.12-R3 Fly MCP 8/8 post-deploy)
 
 - **Deploy:** владелец (до MCP).

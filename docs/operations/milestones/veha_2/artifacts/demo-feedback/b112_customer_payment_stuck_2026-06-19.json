@@ -1,0 +1,91 @@
+{
+  "scenario": "b112_customer_payment_stuck_after_recurrent",
+  "source": "заказчик",
+  "reported_at": "2026-06-19",
+  "priority": "critical",
+  "stand": "https://coffeeos.fly.dev",
+  "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "url": "https://coffeeos.fly.dev/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789#/payment",
+  "screenshot": "screenshots/b112_customer_payment_stuck_2026-06-19.png",
+  "customer_symptom": {
+    "steps": [
+      "корзина → оформление → Оплатить",
+      "ввод карты во внешней форме банка",
+      "3DS SMS от банка",
+      "экран не меняется, редиректа на успех нет"
+    ],
+    "claims": [
+      "деньги списаны",
+      "SMS от банка получена",
+      "статус в UI не обновился",
+      "нет нативной формы / блока сохранённой карты / FSM кнопки"
+    ],
+    "expected": [
+      "webhook → bank_token в UserCards",
+      "редирект «Карта привязана / Оплачено»",
+      "FSM кнопки + редирект «Спасибо» через 1.5 с"
+    ]
+  },
+  "screenshot_observations": {
+    "route": "#/payment",
+    "coffeeos_shell_visible": true,
+    "shell_copy": "Введите данные карты. Защищённое соединение CoffeeOS",
+    "amount_header_rub": 5,
+    "tbank_iframe_visible": true,
+    "mincifra_warning_in_iframe": true,
+    "tbank_amount_in_iframe_rub": 4.74,
+    "cvc_field_error": "Проверьте код",
+    "card_masked": "*5053",
+    "pwa_install_banner": true
+  },
+  "agent_analysis": {
+    "verdict": "частично не совпадает с репортом; вероятны 2–3 разных сценария",
+    "points": [
+      {
+        "id": "A",
+        "title": "Код R2 частично на стенде",
+        "detail": "На скрине есть CoffeeOS-оболочка #/payment и iframe Т-Банка — это B1.12-R2. Утверждение «код не замержен / откат» для всего эпика — слабое."
+      },
+      {
+        "id": "B",
+        "title": "R3 не на этом экране",
+        "detail": "Блок сохранённой карты и FSM «Оплатить» — на #/checkout, не на #/payment. Заказчик мог ожидать их на форме банка — scope mismatch."
+      },
+      {
+        "id": "C",
+        "title": "Скрин = ошибка CVC, не успех",
+        "detail": "Красное «Проверьте код» под CVC — форма банка не приняла код. Это не post-3DS success. Если деньги всё же списались — нужен trace payment_id + webhook логи отдельной транзакции."
+      },
+      {
+        "id": "D",
+        "title": "Минцифры — внутри iframe банка",
+        "detail": "Предупреждение о сертификатах Минцифры — контент Т-Банка, CoffeeOS не может стилизовать/убрать (Q1: только web-фрейм)."
+      },
+      {
+        "id": "E",
+        "title": "Если после успешного 3DS зависание",
+        "detail": "Проверить: deepLinkRedirectCallback / return URL → finishSuccess в Payment.svelte; POST /callbacks/tbank → order accepted; polling finalize на payment-result."
+      },
+      {
+        "id": "F",
+        "title": "Другой tenant",
+        "detail": "Скрин tenant_id 2fdee1ac-… — MCP гоняли на 655aaccb-…. Нужен repro на том же tenant что у заказчика."
+      }
+    ],
+    "likely_root_causes_ranked": [
+      "Неверный/отклонённый CVC на форме банка (скрин) — оплата не завершена в UI",
+      "После успешного 3DS не срабатывает return/callback → finishSuccess (если есть отдельный кейс со списанием)",
+      "Webhook/callback не доходит или order не переходит в accepted на prod tenant",
+      "Ожидания заказчика по UI (native form vs iframe, R3 на checkout vs payment)"
+    ],
+    "needs_from_customer": [
+      "order_id или payment_id транзакции где деньги списались",
+      "точное время + tenant_id",
+      "повторный скрин ПОСЛЕ успешного SMS если CVC уже прошёл"
+    ],
+    "next_engineering_step": "blocked до trace-id; затем repro на tenant 2fdee1ac + цепочка webhook → finalize → Payment.svelte finishSuccess"
+  },
+  "status": "open",
+  "related": "B1.12 R1–R3",
+  "pass": false
+}

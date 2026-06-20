@@ -4,6 +4,13 @@
 
 ## 🔴 Блокеры
 
+[2026-06-19] — B1.12: оплата не завершается после 3DS (репорт заказчика)
+Статус: **open**
+Описание: tenant `2fdee1ac-…` · `#/payment` · деньги/SMS по словам заказчика, UI зависает на форме Т-Банка.
+Скрин: [`b112_customer_payment_stuck_2026-06-19.json`](milestones/veha_2/artifacts/demo-feedback/b112_customer_payment_stuck_2026-06-19.json) · на скрине также «Проверьте код» (CVC).
+Гипотеза: return/callback после 3DS **или** отклонённый CVC **или** webhook на prod tenant; R3 UI — на checkout, не payment.
+Нужно: payment_id/order_id + webhook trace от заказчика.
+
 [2026-06-19] — Fly deploy + Neon Launch
 Статус: **resolved**
 Описание: `DATABASE_URL` → Neon `coffeeos`; Launch plan; `fly deploy` release_command OK; `/up` + `/shop` 200.
