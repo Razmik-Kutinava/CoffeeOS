@@ -111,6 +111,13 @@
 - **Ops:** `veha_1/checklists/CHECKLIST.md` § I + H.3 `[x]`; `PRACTICES.md`, `README.md`; `HANDOFF`, `CHANGELOG` v1.210.
 - **Хвосты → В2:** QA 5.1; `demo:seed` в release; полный LIVE_DEMO MCP §2–10.
 
+### Сессия 2026-06-20 (B1.12 шаг 0–1 — investigate tenant заказчика)
+
+- **Скрипт:** `bin/b112_customer_payment_investigate_fly.rb`
+- **Артефакт:** [`b112_customer_payment_investigate_2026-06-20.json`](milestones/veha_2/artifacts/demo-feedback/b112_customer_payment_investigate_2026-06-20.json)
+- **Факт:** 6× `pending_payment` card за 7d; likely заказ `acb7cc62…` 4.74₽; R2 OK; saved_cards=0.
+- **Дальше:** шаг 2 — polling `finalize` на `#/payment`.
+
 ### Сессия 2026-06-19 (B1.12 — репорт заказчика: оплата зависает после 3DS)
 
 - **Артефакт:** [`b112_customer_payment_stuck_2026-06-19.json`](milestones/veha_2/artifacts/demo-feedback/b112_customer_payment_stuck_2026-06-19.json) + скрин.

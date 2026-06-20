@@ -86,6 +86,21 @@
     "next_engineering_step": "blocked до trace-id; затем repro на tenant 2fdee1ac + цепочка webhook → finalize → Payment.svelte finishSuccess"
   },
   "status": "open",
+  "investigate_artifact": "b112_customer_payment_investigate_2026-06-20.json",
+  "investigate_summary": {
+    "date": "2026-06-20",
+    "pending_card_orders_7d": 6,
+    "likely_customer_order": {
+      "order_id": "acb7cc62-a0b6-4917-8b0a-4ec8c9100900",
+      "final_amount": 4.74,
+      "provider_payment_id": "8704452356",
+      "status": "pending_payment",
+      "note": "сумма ≈ скрин (5₽ / 4.74 в iframe)"
+    },
+    "r2_on_tenant": "payment_iframe + card_binding OK",
+    "saved_cards_on_tenant": 0,
+    "conclusion": "зависшие pending без webhook/accepted; фронт не редиректит без callback — шаг 2 polling"
+  },
   "related": "B1.12 R1–R3",
   "pass": false
 }

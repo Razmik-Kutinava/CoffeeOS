@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v1.223 — 2026-06-20 (B1.12 bug: шаг 0–1 investigate tenant заказчика)
+
+- **Fly:** `bin/b112_customer_payment_investigate_fly.rb` — tenant `2fdee1ac-…`, R2 flags OK, 6 pending card orders.
+- **Likely repro:** order `acb7cc62…` 4.74₽ · payment `8704452356`.
+- **Следующий:** шаг 2 polling finalize (код не меняли).
+
 ## v1.222 — 2026-06-19 (B1.12: репорт заказчика — оплата зависает после 3DS)
 
 - **Артефакт:** `b112_customer_payment_stuck_2026-06-19.json` + скрин tenant `2fdee1ac-…`.

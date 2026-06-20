@@ -8,8 +8,9 @@
 Статус: **open**
 Описание: tenant `2fdee1ac-…` · `#/payment` · деньги/SMS по словам заказчика, UI зависает на форме Т-Банка.
 Скрин: [`b112_customer_payment_stuck_2026-06-19.json`](milestones/veha_2/artifacts/demo-feedback/b112_customer_payment_stuck_2026-06-19.json) · на скрине также «Проверьте код» (CVC).
-Гипотеза: return/callback после 3DS **или** отклонённый CVC **или** webhook на prod tenant; R3 UI — на checkout, не payment.
-Нужно: payment_id/order_id + webhook trace от заказчика.
+Гипотеза: return/callback после 3DS **или** отклонённый CVC **или** webhook не переводит order в accepted.
+**Шаг 0–1 (2026-06-20):** [`b112_customer_payment_investigate_2026-06-20.json`](milestones/veha_2/artifacts/demo-feedback/b112_customer_payment_investigate_2026-06-20.json) — 6× pending card, likely `acb7cc62…` 4.74₽ · R2 flags OK · saved_cards=0.
+Следующий шаг: **go** — polling finalize в Payment.svelte.
 
 [2026-06-19] — Fly deploy + Neon Launch
 Статус: **resolved**
