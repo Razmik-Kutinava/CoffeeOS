@@ -27,6 +27,7 @@
 | Дата | Источник | Сценарий / экран | Суть | Статус | PR / коммит |
 |------|----------|------------------|------|--------|-------------|
 | 2026-06-19 | владелец B1.12 | Q2–Q7 | Ответы рекуррент: все карты, СБП позже, save после 1-й оплаты, ошибки UI | **done** | [b112_customer_answers_confirmed_2026-06-19.json](artifacts/demo-feedback/b112_customer_answers_confirmed_2026-06-19.json) |
+| 2026-06-21 | B1.12 баг | 2-я оплата / CVC | карта не привязалась: GetState sync + SavedCardStore fallback | **done** *(local)* | ISSUES 2026-06-21 |
 | 2026-06-21 | B1.12-R4 cleanup | `#/payment` route | `Payment.svelte` удалён, оплата только checkout | **done** *(код)* | commit v1.230 |
 | 2026-06-21 | B1.12-R4 UX | `#/checkout` Fly post-deploy #2 | 11/11 после удаления `#/payment` (`75dc252`) | **done** *(Fly MCP)* | [b112_r4_single_screen_post_deploy_2026-06-21.json](artifacts/demo-feedback/b112_r4_single_screen_post_deploy_2026-06-21.json) |
 | 2026-06-20 | B1.12-R4 UX | 3 экрана оплаты | single-screen checkout + кнопка статусов | **done** *(local)* | [b112_checkout_single_screen_2026-06-20.json](artifacts/demo-feedback/b112_checkout_single_screen_2026-06-20.json) |
