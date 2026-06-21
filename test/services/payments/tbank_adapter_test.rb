@@ -181,4 +181,21 @@ class Payments::TbankAdapterTest < ActiveSupport::TestCase
   ensure
     Payments::CacheCounter.clear_circuit!
   end
+
+  test "get_payment_state returns bank response on success" do
+    adapter = Payments::TbankAdapter.new
+    adapter.define_singleton_method(:post_json) do |_url, _payload|
+      {
+        "Success" => true,
+        "ErrorCode" => "0",
+        "Status" => "CONFIRMED",
+        "PaymentId" => "pay-42",
+        "RebillId" => "rebill-42"
+      }
+    end
+
+    response = adapter.get_payment_state(payment_id: "pay-42")
+    assert_equal "CONFIRMED", response["Status"]
+    assert_equal "rebill-42", response["RebillId"]
+  end
 end

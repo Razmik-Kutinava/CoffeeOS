@@ -36,6 +36,7 @@
 - [x] Init с `Recurrent=Y` + `CustomerKey` на первой card-оплате
 - [x] Charge по `RebillId` (`TbankAdapter#charge_recurrent`)
 - [x] Webhook → `SavedCardStore` (RebillId + Pan)
+- [x] Finalize → `TbankPaymentSync` (GetState, если webhook без Pan / задержался)
 - [ ] Web-iframe / платёжная форма для кастомизации (R2)
 - [ ] Тестовые карты 3DS в sandbox
 - [ ] Маппинг кодов ошибок → UI R3 (истёк срок / нет средств / retry / идемпотентность)

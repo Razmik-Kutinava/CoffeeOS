@@ -22,9 +22,7 @@ module Payments
       customer_id = order&.customer_id
       return if customer_id.blank?
 
-      masked = @payload["Pan"].to_s.presence
-      return if masked.blank?
-
+      masked = extract_masked_pan(@payload)
       brand = infer_brand(masked)
 
       MobilePaymentMethod.transaction do
@@ -50,6 +48,15 @@ module Payments
     end
 
     private
+
+    def extract_masked_pan(payload)
+      %w[Pan MaskedPan].each do |key|
+        val = payload[key].to_s.presence
+        return val if val
+      end
+
+      "•••• ****"
+    end
 
     def infer_brand(masked_pan)
       digit = masked_pan.gsub(/\D/, "")[0]

@@ -86,6 +86,11 @@ module Shop
           return render json: { error: "Order not found", status: 404 }, status: :not_found
         end
 
+        unless order.accepted?
+          Payments::TbankPaymentSync.sync_order!(order: order)
+          order.reload
+        end
+
         if order.accepted?
           Shop::CartService.new(session, @shop_tenant.id).clear!
           Shop::PendingOrderSession.clear!(session, @shop_tenant.id)

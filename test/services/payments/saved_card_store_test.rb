@@ -77,6 +77,19 @@ class Payments::SavedCardStoreTest < ActiveSupport::TestCase
     end
   end
 
+  test "persists RebillId with fallback masked pan when Pan missing" do
+    assert_difference -> { MobilePaymentMethod.count }, 1 do
+      Payments::SavedCardStore.persist_from_tbank!(
+        payment: @payment,
+        payload: { "Status" => "CONFIRMED", "RebillId" => "rebill-no-pan" }
+      )
+    end
+
+    card = MobilePaymentMethod.primary_for(@customer.id)
+    assert_equal "rebill-no-pan", card.card_token
+    assert_equal "•••• ****", card.card_masked
+  end
+
   private
 
   def create_shop_order!(tenant:, customer:, status:)

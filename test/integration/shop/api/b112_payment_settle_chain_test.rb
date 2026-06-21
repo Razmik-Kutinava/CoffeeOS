@@ -74,6 +74,60 @@ class Shop::Api::B112PaymentSettleChainTest < ActionDispatch::IntegrationTest
     end
   end
 
+  test "finalize syncs tbank payment via GetState when webhook delayed" do
+    order = Order.create!(
+      tenant_id: @tenant.id,
+      customer_id: @customer.id,
+      customer_name: "Settle Guest",
+      order_number: "",
+      source: :mobile,
+      status: :pending_payment,
+      total_amount: 179,
+      discount_amount: 0,
+      final_amount: 179
+    )
+    payment = Payment.create!(
+      order_id: order.id,
+      tenant_id: @tenant.id,
+      amount: 179,
+      method: :card,
+      provider: "tbank",
+      status: :pending,
+      provider_payment_id: "pay-settle-getstate"
+    )
+
+    adapter = fake_get_state_adapter(
+      "Status" => "CONFIRMED",
+      "PaymentId" => "pay-settle-getstate",
+      "RebillId" => "finalize-rebill",
+      "Pan" => "430000******0888"
+    )
+
+    original_new = Payments::TbankAdapter.method(:new)
+    Payments::TbankAdapter.define_singleton_method(:new) { |*_args| adapter }
+    begin
+      open_session do |sess|
+        bind_customer_session!(sess, order)
+
+        sess.post "/shop/api/orders/#{order.id}/finalize",
+          headers: { "X-Shop-Tenant" => @tenant.id.to_s },
+          as: :json
+
+        assert_equal 200, sess.response.status
+        body = JSON.parse(sess.response.body)
+        assert body["payment_settled"], body.inspect
+        assert_equal "accepted", body["status"]
+      end
+    ensure
+      Payments::TbankAdapter.define_singleton_method(:new, original_new)
+    end
+
+    assert order.reload.accepted?
+    assert payment.reload.succeeded?
+    card = MobilePaymentMethod.primary_for(@customer.id)
+    assert_equal "finalize-rebill", card.card_token
+  end
+
   test "inline checkout polls finalize and resumes after 3DS return" do
     inline = File.read(Rails.root.join("app/frontend/components/CheckoutInlinePayment.svelte"))
     lib = File.read(Rails.root.join("app/frontend/lib/shopCheckoutInlinePay.js"))
@@ -82,11 +136,20 @@ class Shop::Api::B112PaymentSettleChainTest < ActionDispatch::IntegrationTest
     assert_includes inline, "createSettlementWatch"
     assert_includes lib, "/orders/${orderId}/finalize"
     assert_includes lib, "payment_started"
+    assert_includes lib, "SAVED_CARD_RETRY_ATTEMPTS"
     assert_includes checkout, "resumeInlinePayment"
     assert_includes checkout, "payment_started"
   end
 
   private
+
+  def fake_get_state_adapter(fields)
+    adapter = Payments::TbankAdapter.new
+    adapter.define_singleton_method(:get_payment_state) do |**|
+      { "Success" => true, "ErrorCode" => "0" }.merge(fields)
+    end
+    adapter
+  end
 
   def bind_customer_session!(sess, order)
     sess.post "/shop/api/cart/add",

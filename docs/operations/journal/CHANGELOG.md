@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## v1.232 — 2026-06-21 (B1.12: привязка карты — GetState sync + SavedCardStore fallback)
+
+- **Баг:** после 1-й оплаты RebillId не попадал в `mobile_payment_methods` (webhook без Pan / задержка); 2-я оплата — снова iframe банка.
+- **Сделано:** `TbankAdapter#get_payment_state` · `Payments::TbankPaymentSync` на `POST finalize` · `SavedCardStore` без обязательного Pan · retry `saved_cards` на checkout.
+- **Тест:** saved_card_store + tbank_payment_sync + b112_payment_settle_chain — 28 runs, 76 assertions, 0 failures.
+- **Не делали:** deploy Fly · MCP real-card E2E · апрув заказчика.
+
 ## v1.231 — 2026-06-21 (B1.12-R4: Fly MCP post-deploy #2 после удаления `#/payment`)
 
 - **Deploy:** владелец · `75dc252` на coffeeos.fly.dev.

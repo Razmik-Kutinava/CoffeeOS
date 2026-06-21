@@ -8,6 +8,12 @@ _(нет открытых)_
 
 ## Решено недавно
 
+[2026-06-21] — B1.12: карта не привязалась после 1-й оплаты, 2-я снова форма банка + CVC
+Статус: **resolved** local · deploy pending
+Описание: tenant `2fdee1ac-…` · после первой оплаты `saved_cards` пуст · вторая попытка — iframe Т-Банка, CVC `000`, «Проверьте код».
+**Причина:** webhook иногда без `Pan` → `SavedCardStore` молча не сохранял RebillId; finalize не опрашивал GetState.
+**Закрыли:** `TbankPaymentSync` (GetState на finalize) · `SavedCardStore` fallback masked · retry `saved_cards` на checkout · тесты 28/28 local.
+
 [2026-06-19] — B1.12: оплата не завершается после 3DS (репорт заказчика)
 Статус: **resolved** 2026-06-20
 Описание: tenant `2fdee1ac-…` · `#/payment` · UI зависал на форме Т-Банка после webhook.

@@ -4,6 +4,8 @@ import { savePaymentSession } from "./tbankPayment.js"
 import { guestReconnectToken } from "./shopGuestSession.js"
 
 export const SETTLE_POLL_MS = 1500
+export const SAVED_CARD_RETRY_MS = SETTLE_POLL_MS
+export const SAVED_CARD_RETRY_ATTEMPTS = 5
 
 export function buildInlinePaymentSession(res, config = {}) {
   return {

@@ -69,6 +69,23 @@ module Payments
       }
     end
 
+    # Статус платежа в Т-Банке (GetState) — для finalize после 3DS, если webhook опоздал.
+    def get_payment_state(payment_id:)
+      payload = {
+        "TerminalKey" => terminal_key,
+        "PaymentId"   => payment_id.to_s
+      }
+      payload["Token"] = build_token(payload)
+
+      response = with_circuit_breaker { post_json("#{BASE_URL}/GetState", payload) }
+      unless response.is_a?(Hash)
+        raise Error, "Некорректный ответ Т-Банка (GetState)"
+      end
+      raise ApiError.new(error_code: response["ErrorCode"], message: response["Message"].to_s) unless response["Success"]
+
+      response
+    end
+
     # Рекуррентное списание: Init → Charge по RebillId.
     def charge_recurrent(order:, rebill_id:, return_base_url:, notification_url:, customer_key: nil)
       init_result = init_payment(

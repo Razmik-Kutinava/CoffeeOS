@@ -21,7 +21,7 @@
 | Сейчас | Дальше |
 |--------|--------|
 | **B1.12 UX (3 экрана)** | **R4 Fly MCP 11/11 PASS** post-deploy #2 (`75dc252`) | **апрув эпика B1.12** |
-| **B1.12 баг оплаты** | resolved | — |
+| **B1.12 баг оплаты** | **fix local** GetState sync · deploy pending | real-card E2E после deploy |
 | **B1.12 рекуррент** | R1–R3 Fly MCP PASS · ответы Q1–Q7 `[x]` 2026-06-19 | апрув эпика |
 | **B1.11 режим работы** | **Fly MCP header A/B PASS** · артефакт 2026-06-21 | **апрув заказчика** |
 | **B2.1 табло** | **ЗАКРЫТА** · апрув `[x]` 2026-06-18 | backlog фаза 2 в CBR |
@@ -30,6 +30,13 @@
 | **B1.7 checkout** | **ЗАКРЫТА** · апрув `[x]` 2026-06-04 | — |
 | **B1.4 PWA** | код задеплоен · OPS_PASS · заказчик `[ ]` | апрув |
 | **B2.2** | stage0 `[x]` · этап 1 `[ ]` | единый экран «Меню» |
+
+### Сессия 2026-06-21 (B1.12: fix привязки карты — GetState + SavedCardStore)
+
+- **Баг заказчика:** 2-я оплата снова форма банка (CVC), карта не в `saved_cards`.
+- **Fix:** `TbankPaymentSync` на finalize · GetState · fallback Pan · retry saved_cards на checkout.
+- **Тест:** 28/28 PASS local (saved_card_store, tbank_payment_sync, b112_payment_settle_chain).
+- **Дальше:** **deploy Fly** · real-card E2E (1-я оплата → one-click 2-я) · апрув эпика B1.12.
 
 ### Сессия 2026-06-21 (B1.12-R4 Fly MCP post-deploy #2 — после удаления `#/payment`)
 

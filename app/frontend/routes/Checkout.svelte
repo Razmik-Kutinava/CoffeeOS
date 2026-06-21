@@ -31,7 +31,7 @@
   } from "../lib/shopOneClickPay.js"
   import CheckoutPayButton from "../components/CheckoutPayButton.svelte"
   import CheckoutInlinePayment from "../components/CheckoutInlinePayment.svelte"
-  import { buildInlinePaymentSession } from "../lib/shopCheckoutInlinePay.js"
+  import { buildInlinePaymentSession, SAVED_CARD_RETRY_MS, SAVED_CARD_RETRY_ATTEMPTS } from "../lib/shopCheckoutInlinePay.js"
   import {
     getOperatingHours,
     loadOperatingHours,
@@ -282,11 +282,19 @@
     return true
   }
 
+  async function refreshSavedCardsAfterPayment() {
+    for (let attempt = 0; attempt < SAVED_CARD_RETRY_ATTEMPTS; attempt += 1) {
+      await loadSavedCards()
+      if (savedCard) return
+      await new Promise((resolve) => setTimeout(resolve, SAVED_CARD_RETRY_MS))
+    }
+  }
+
   async function completeInlineSuccess(orderId) {
     clearPaymentSession()
     inlineSession = null
     inlineAwaitingOnly = false
-    await loadSavedCards()
+    await refreshSavedCardsAfterPayment()
     await redirectAfterSuccess(orderId)
   }
 
