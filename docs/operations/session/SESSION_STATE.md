@@ -20,7 +20,7 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **B1.12 UX (3 экрана)** | **R4 + роут `#/payment` удалён** 2026-06-21 | **deploy + апрув эпика** |
+| **B1.12 UX (3 экрана)** | **R4 Fly MCP 11/11 PASS** post-deploy #2 (`75dc252`) | **апрув эпика B1.12** |
 | **B1.12 баг оплаты** | resolved | — |
 | **B1.12 рекуррент** | R1–R3 Fly MCP PASS · ответы Q1–Q7 `[x]` 2026-06-19 | апрув эпика |
 | **B1.11 режим работы** | **CLOSED OPS + Fly MCP PASS** 37/37 · артефакт `[x]` | **стоп — апрув заказчика** (проверит / правки) |
@@ -30,6 +30,14 @@
 | **B1.7 checkout** | **ЗАКРЫТА** · апрув `[x]` 2026-06-04 | — |
 | **B1.4 PWA** | код задеплоен · OPS_PASS · заказчик `[ ]` | апрув |
 | **B2.2** | stage0 `[x]` · этап 1 `[ ]` | единый экран «Меню» |
+
+### Сессия 2026-06-21 (B1.12-R4 Fly MCP post-deploy #2 — после удаления `#/payment`)
+
+- **Deploy:** владелец · `75dc252` на coffeeos.fly.dev.
+- **Fly MCP:** tenant `2fdee1ac-…` — **11/11 PASS** (inline checkout, stale `#/payment` пустой, one-click).
+- **Тест:** b112 8/8 PASS local.
+- **Артефакт:** [`b112_r4_single_screen_post_deploy_2026-06-21.json`](milestones/veha_2/artifacts/demo-feedback/b112_r4_single_screen_post_deploy_2026-06-21.json) — обновлён post-deploy #2.
+- **Дальше:** **апрув эпика B1.12** заказчиком · real-card E2E.
 
 ### Сессия 2026-06-21 (B1.12 — удалён роут `#/payment`)
 

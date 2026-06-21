@@ -225,7 +225,7 @@ prep = {
   date: DATE,
   base: BASE,
   tenant_id: TENANT_ID,
-  fix_commit: "783b4ff",
+  fix_commit: "75dc252",
   shop_url: "#{BASE}/shop?tenant_id=#{TENANT_ID}",
   checkout_url: "#{BASE}/shop?tenant_id=#{TENANT_ID}#/checkout",
   profile_storage_key: "shop_guest_profile:#{TENANT_ID}",
