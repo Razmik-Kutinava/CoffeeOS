@@ -2,7 +2,7 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-06-19 (Веха 1 **ЗАКРЫТА** — заочная приёмка, апрув владельца)  
+**Дата:** 2026-06-21 (B1.12-R4 Fly MCP post-deploy · апрув эпика pending)  
 **Предыдущее:** B1.12-R3 Fly MCP 8/8 · B1.11 этап 0 · B1.7 **ЗАКРЫТА**  
 **Веха 1:** **закрыта** 2026-06-19 (CHECKLIST § I, H.3 заочно).  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
@@ -20,7 +20,7 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **B1.12 UX (3 экрана)** | **R4 single-screen** local 2026-06-20 | **deploy + MCP + апрув** |
+| **B1.12 UX (3 экрана)** | **R4 Fly MCP 11/11 PASS** 2026-06-21 | **апрув эпика B1.12** |
 | **B1.12 баг оплаты** | resolved | — |
 | **B1.12 рекуррент** | R1–R3 Fly MCP PASS · ответы Q1–Q7 `[x]` 2026-06-19 | апрув эпика |
 | **B1.11 режим работы** | **CLOSED OPS + Fly MCP PASS** 37/37 · артефакт `[x]` | **стоп — апрув заказчика** (проверит / правки) |
@@ -30,6 +30,15 @@
 | **B1.7 checkout** | **ЗАКРЫТА** · апрув `[x]` 2026-06-04 | — |
 | **B1.4 PWA** | код задеплоен · OPS_PASS · заказчик `[ ]` | апрув |
 | **B2.2** | stage0 `[x]` · этап 1 `[ ]` | единый экран «Меню» |
+
+### Сессия 2026-06-21 (B1.12-R4 Fly MCP post-deploy)
+
+- **Deploy:** владелец на Fly (`783b4ff`).
+- **Fly MCP:** tenant `2fdee1ac-…` — 11/11 PASS: inline iframe на `#/checkout`, legacy `#/payment` → checkout, one-click без `#/payment`.
+- **Тест:** `b112_checkout_single_screen_test.rb` + `b112_r3_one_click_test.rb` — **8 runs, 39 assertions, 0 failures**.
+- **Скрипты:** `bin/b112_r4_single_screen_prep_fly.rb` · `bin/b112_r4_single_screen_mcp.mjs` (prep: cash order перед seed карты).
+- **Артефакт:** [`b112_r4_single_screen_post_deploy_2026-06-21.json`](milestones/veha_2/artifacts/demo-feedback/b112_r4_single_screen_post_deploy_2026-06-21.json).
+- **Дальше:** апрув заказчика эпик B1.12 · real-card 1-я + 2-я оплата на tenant.
 
 ### Сессия 2026-06-20 (B1.12-R4 single-screen checkout)
 

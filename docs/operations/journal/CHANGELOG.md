@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## v1.229 — 2026-06-21 (B1.12-R4: Fly MCP post-deploy single-screen checkout)
+
+- **Deploy:** владелец · `783b4ff` на coffeeos.fly.dev.
+- **Fly MCP:** tenant `2fdee1ac-…` — 11/11 PASS (inline checkout, legacy redirect, one-click без `#/payment`).
+- **Тест:** `b112_checkout_single_screen_test.rb` + `b112_r3_one_click_test.rb` — 8/8 PASS local.
+- **Скрипты:** `bin/b112_r4_single_screen_prep_fly.rb` · `bin/b112_r4_single_screen_mcp.mjs`.
+- **Артефакт:** `b112_r4_single_screen_post_deploy_2026-06-21.json` + скрины.
+- **Не делали:** апрув заказчика эпик · real-card E2E.
+
 ## v1.228 — 2026-06-20 (B1.12-R4: single-screen checkout, убрали лишние экраны)
 
 - **Ошибка (не было сделано):** после R2/R3 оставались экраны Оформление → Оплата → iframe; `push("/payment")`.

@@ -24,4 +24,9 @@ class Shop::Api::B112CheckoutSingleScreenTest < ActionDispatch::IntegrationTest
     assert_includes btn, "Оформляем"
     assert_includes btn, "Ждём банк"
   end
+
+  test "CheckoutInlinePayment exposes data-testid for MCP" do
+    inline = File.read(Rails.root.join("app/frontend/components/CheckoutInlinePayment.svelte"))
+    assert_includes inline, 'data-testid="checkout-inline-payment"'
+  end
 end

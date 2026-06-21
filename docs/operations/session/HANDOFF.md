@@ -1,6 +1,6 @@
 # HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-06-20 (B1.12 bug шаг 2 settle chain · deploy по апруву)  
+**Дата:** 2026-06-21 (B1.12-R4 Fly MCP post-deploy · апрув эпика pending)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev
 
@@ -15,7 +15,7 @@
 | **R2 web-фрейм** | **OPS_PASS + Fly MCP 6/6** `[x]` 2026-06-19 — [`b112_r2_native_card_post_deploy_2026-06-19.json`](../milestones/veha_2/artifacts/demo-feedback/b112_r2_native_card_post_deploy_2026-06-19.json) |
 | **R3 1 клик** | **Fly MCP 8/8** `[x]` 2026-06-19 — [`b112_r3_one_click_post_deploy_2026-06-19.json`](../milestones/veha_2/artifacts/demo-feedback/b112_r3_one_click_post_deploy_2026-06-19.json) |
 | **Баг оплаты (заказчик)** | resolved | — |
-| **UX 3 экрана (R4)** | local `[x]` 2026-06-20 · [`b112_checkout_single_screen_2026-06-20.json`](../milestones/veha_2/artifacts/demo-feedback/b112_checkout_single_screen_2026-06-20.json) | **deploy + апрув B1.12** |
+| **UX 3 экрана (R4)** | **Fly MCP 11/11** `[x]` 2026-06-21 — [`b112_r4_single_screen_post_deploy_2026-06-21.json`](../milestones/veha_2/artifacts/demo-feedback/b112_r4_single_screen_post_deploy_2026-06-21.json) | **апрув эпика B1.12** |
 
 ТЗ: [`B1_12_recurrent_payments.md`](../milestones/veha_2/requirements/customer_tasks/B1_12_recurrent_payments.md) · runbook: [`TBANK_RECURRENT.md`](../milestones/veha_2/runbooks/TBANK_RECURRENT.md)
 

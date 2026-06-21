@@ -1,0 +1,101 @@
+{
+  "scenario": "b112_r4_single_screen_post_deploy",
+  "date": "2026-06-21",
+  "stand": "https://coffeeos.fly.dev",
+  "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "fix_commit": "783b4ff",
+  "was": "push('/payment') — отдельный экран Оплата",
+  "now": "inline iframe на checkout, кнопка статусов, 1 клик без #/payment",
+  "steps": [
+    {
+      "id": "00",
+      "action": "/up 200",
+      "pass": true,
+      "at": "2026-06-21T12:49:06.015Z"
+    },
+    {
+      "id": "01",
+      "action": "new card: checkout loads",
+      "pass": true,
+      "at": "2026-06-21T12:49:09.713Z"
+    },
+    {
+      "id": "02",
+      "action": "new card: no saved-card block",
+      "pass": true,
+      "at": "2026-06-21T12:49:09.748Z"
+    },
+    {
+      "id": "03",
+      "action": "new card: stays on #/checkout (not #/payment)",
+      "pass": true,
+      "at": "2026-06-21T12:49:12.811Z",
+      "url": "https://coffeeos.fly.dev/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789#/checkout"
+    },
+    {
+      "id": "04",
+      "action": "new card: inline payment panel on checkout",
+      "pass": true,
+      "at": "2026-06-21T12:49:13.155Z"
+    },
+    {
+      "id": "05",
+      "action": "new card: button pay state",
+      "pass": true,
+      "at": "2026-06-21T12:49:13.219Z",
+      "text": "Идёт оплата…"
+    },
+    {
+      "id": "06",
+      "action": "legacy #/payment redirects to checkout",
+      "pass": true,
+      "at": "2026-06-21T12:49:17.688Z",
+      "url": "https://coffeeos.fly.dev/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789#/checkout"
+    },
+    {
+      "id": "07a",
+      "action": "one-click: GET saved_cards primary",
+      "pass": true,
+      "at": "2026-06-21T12:49:21.484Z",
+      "status": 200,
+      "primary": {
+        "id": "0f6a8593-660c-41bc-8b06-d445fe7d30a9",
+        "payment_system": "Visa",
+        "masked_pan": "430000******1248",
+        "is_primary": true,
+        "last_used_at": "2026-06-21T12:49:04Z"
+      }
+    },
+    {
+      "id": "07",
+      "action": "one-click: saved card block visible",
+      "pass": true,
+      "at": "2026-06-21T12:49:21.498Z"
+    },
+    {
+      "id": "08",
+      "action": "one-click: button loading state",
+      "pass": true,
+      "at": "2026-06-21T12:49:21.570Z"
+    },
+    {
+      "id": "09",
+      "action": "one-click: never navigates to #/payment",
+      "pass": true,
+      "at": "2026-06-21T12:49:25.582Z",
+      "url": "https://coffeeos.fly.dev/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789#/checkout"
+    },
+    {
+      "id": "10",
+      "action": "one-click: no inline iframe panel",
+      "pass": true,
+      "at": "2026-06-21T12:49:25.616Z"
+    }
+  ],
+  "screenshots": [
+    "screenshots/b112_r4_inline_checkout_2026-06-21.png",
+    "screenshots/b112_r4_one_click_checkout_2026-06-21.png"
+  ],
+  "pass": true,
+  "fly_mcp": "pass"
+}
