@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## v1.228 — 2026-06-20 (B1.12-R4: single-screen checkout, убрали лишние экраны)
+
+- **Ошибка (не было сделано):** после R2/R3 оставались экраны Оформление → Оплата → iframe; `push("/payment")`.
+- **Стало:** inline iframe на `#/checkout`, кнопка со статусами, `#/payment` только redirect legacy.
+- **Тест:** `b112_checkout_single_screen_test.rb` + b112 suite 9/9 PASS local.
+- **Не делали:** Fly MCP post-deploy, апрув заказчика.
+
 ## v1.227 — 2026-06-20 (B1.12 bug шаг 3: Fly MCP return-path post-deploy)
 
 - **Было:** fix `2b15578` локально; post-deploy repro не гоняли.

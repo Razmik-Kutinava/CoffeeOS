@@ -177,6 +177,12 @@
   })
 
   onMount(async () => {
+    const pending = loadPaymentSession()
+    if (pending?.order_id) {
+      push("/checkout")
+      return
+    }
+
     const query = window.location.hash.split("?")[1] || ""
     const params = new URLSearchParams(query)
     let data = loadPaymentSession()

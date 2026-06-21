@@ -17,6 +17,11 @@ _(нет открытых)_
 **Закрыли:** polling finalize/cable в `Payment.svelte` + deploy владельца.
 **Дальше:** апрув заказчика на эпик B1.12; при реальном списании без редиректа — `payment_id` + timestamp.
 
+[2026-06-20] — B1.12 UX: 3 лишних экрана оплаты (scope gap, не баг webhook)
+Статус: **resolved** local · deploy pending
+Описание: заказчик — «всё в одной кнопке», без `#/payment`. R2/R3 сдали с `push("/payment")` и intro — **не было сделано вовремя**.
+**Исправление:** R4 single-screen checkout · [`b112_checkout_single_screen_2026-06-20.json`](milestones/veha_2/artifacts/demo-feedback/b112_checkout_single_screen_2026-06-20.json).
+
 [2026-06-19] — Fly deploy + Neon Launch
 Статус: **resolved**
 Описание: `DATABASE_URL` → Neon `coffeeos`; Launch plan; `fly deploy` release_command OK; `/up` + `/shop` 200.

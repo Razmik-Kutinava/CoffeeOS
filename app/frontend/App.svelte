@@ -59,7 +59,9 @@
     if (hash.includes("payment-result") || hash.includes("/payment")) return
 
     const onCheckout = hash.includes("checkout")
-    if (!onCheckout && !returningFromPaymentPage()) return
+    if (onCheckout) return
+
+    if (!returningFromPaymentPage()) return
 
     await reconnectGuestOrder(api)
     push(`/payment-result?status=fail&order_id=${orderId}`)

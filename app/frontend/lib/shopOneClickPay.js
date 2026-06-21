@@ -2,6 +2,9 @@
 
 export const PAY_BTN = {
   idle: "idle",
+  ordering: "ordering",
+  paying: "paying",
+  awaiting: "awaiting",
   loading: "loading",
   success: "success",
   error: "error"

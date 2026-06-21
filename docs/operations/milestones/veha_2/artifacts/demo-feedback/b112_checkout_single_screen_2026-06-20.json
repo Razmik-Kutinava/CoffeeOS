@@ -1,0 +1,11 @@
+{
+  "task": "B1.12-R4 single-screen checkout",
+  "date": "2026-06-20",
+  "status": "ops_pass_local",
+  "was_error": "Закрыли R2/R3 и баг зависания, но оставили 3 экрана: checkout → #/payment intro → iframe Т-Банка. R3 one-click только при saved card. Заказчик ждал одну кнопку со статусами.",
+  "was_not_done_before": "push('/payment'), intro «Оплатить 4₽», отдельный экран Оплата",
+  "now": "iframe на checkout под кнопкой; статусы в CheckoutPayButton (Оформляем/Идёт оплата/Ждём банк/Оплачено); #/payment → redirect на checkout; 1 клик без экранов при токене",
+  "not_done": ["Fly MCP post-deploy", "апрув заказчика", "real-card E2E"],
+  "tests": "b112_checkout_single_screen_test.rb + b112_r3 + b112_settle — 9 runs, 56 assertions, 0 failures",
+  "commits_before": ["14cdf12", "2b15578", "9d2015a"]
+}

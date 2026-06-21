@@ -60,7 +60,8 @@
 [x] 5b — Fly MCP R2 (6/6 post-deploy 2026-06-19) — `b112_r2_native_card_post_deploy_2026-06-19.json`
 [x] 6 — B1.12-R3: 1 клик + стейт кнопки «Оплатить» (2026-06-19) OPS_PASS local
 [x] 6b — Fly MCP R3 post-deploy (8/8 2026-06-19) — `b112_r3_one_click_post_deploy_2026-06-19.json`
-[ ] 7 — тесты Fly MCP + артефакт post-deploy R1
+[x] 6c — R4 single-screen checkout (2026-06-20) — без `push("/payment")`, inline iframe · `b112_checkout_single_screen_2026-06-20.json`
+[ ] 7 — тесты Fly MCP + артефакт post-deploy R4
 [ ] 8 — апрув заказчика эпик
 ```
 

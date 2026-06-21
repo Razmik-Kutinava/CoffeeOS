@@ -12,10 +12,20 @@
 
   const labels = {
     [PAY_BTN.idle]: "Оплатить →",
+    [PAY_BTN.ordering]: "Оформляем…",
+    [PAY_BTN.paying]: "Идёт оплата…",
+    [PAY_BTN.awaiting]: "Ждём банк…",
     [PAY_BTN.loading]: "Идёт оплата…",
     [PAY_BTN.success]: "Оплачено ✓",
     [PAY_BTN.error]: "Оплатить →"
   }
+
+  const busy =
+    state === PAY_BTN.loading ||
+    state === PAY_BTN.ordering ||
+    state === PAY_BTN.paying ||
+    state === PAY_BTN.awaiting ||
+    state === PAY_BTN.success
 </script>
 
 <button
@@ -25,10 +35,10 @@
     ? 'bg-green-500 text-black'
     : 'bg-[#ff8c42] text-black'}
     disabled:opacity-50"
-  disabled={disabled || state === PAY_BTN.loading || state === PAY_BTN.success}
+  disabled={disabled || busy}
   onclick={onPay}
   aria-live="polite"
-  aria-busy={state === PAY_BTN.loading}
+  aria-busy={busy && state !== PAY_BTN.success}
 >
   {labels[state] || labels[PAY_BTN.idle]}
 </button>
