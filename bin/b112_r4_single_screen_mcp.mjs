@@ -134,28 +134,18 @@ async function run() {
     await pageNew.screenshot({ path: shotNew, fullPage: true })
     await ctxNew.close()
 
-    // —— Legacy #/payment → checkout redirect ——
-    const ctxLegacy = await browser.newContext()
-    const pageLegacy = await ctxLegacy.newPage()
-    await pageLegacy.addInitScript(() => {
-      sessionStorage.setItem(
-        "shop_payment_session",
-        JSON.stringify({
-          order_id: "00000000-0000-0000-0000-000000000099",
-          payment_url: "https://pay.tbank.ru/legacy-test",
-          payment_iframe: true,
-          payment_method: "card"
-        })
-      )
-    })
-    await pageLegacy.goto(`${prep.shop_url}#/payment`, { waitUntil: "domcontentloaded", timeout: 60000 })
-    await pageLegacy.waitForTimeout(2500)
-    const legacyUrl = pageLegacy.url()
+    // —— Stale #/payment: route removed ——
+    const ctxStale = await browser.newContext()
+    const pageStale = await ctxStale.newPage()
+    await pageStale.goto(`${prep.shop_url}#/payment`, { waitUntil: "domcontentloaded", timeout: 60000 })
+    await pageStale.waitForTimeout(1500)
+    const stalePaymentHeading = await pageStale.getByRole("heading", { name: "Оплата", exact: true }).count()
+    const staleCancelBtn = await pageStale.getByRole("button", { name: /Отменить заказ/ }).count()
     overall =
-      step("06", "legacy #/payment redirects to checkout", /#\/checkout/.test(legacyUrl), {
-        url: legacyUrl
+      step("06", "stale #/payment: no legacy payment screen", stalePaymentHeading === 0 && staleCancelBtn === 0, {
+        url: pageStale.url()
       }) && overall
-    await ctxLegacy.close()
+    await ctxStale.close()
 
     // —— One-click: no #/payment, no inline panel ——
     const ctx1c = await browser.newContext()

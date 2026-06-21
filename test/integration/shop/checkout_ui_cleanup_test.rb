@@ -55,7 +55,6 @@ class Shop::CheckoutUiCleanupTest < ActionDispatch::IntegrationTest
     files = [
       root.join("routes/Checkout.svelte"),
       root.join("routes/Cart.svelte"),
-      root.join("routes/Payment.svelte"),
       root.join("routes/PaymentResult.svelte"),
       root.join("components/CategorySection.svelte"),
       root.join("routes/CategoryProducts.svelte")

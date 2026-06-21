@@ -74,14 +74,16 @@ class Shop::Api::B112PaymentSettleChainTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test "Payment.svelte polls finalize while paying and resumes after 3DS return" do
-    src = File.read(Rails.root.join("app/frontend/routes/Payment.svelte"))
-    assert_includes src, "beginSettlementWatch"
-    assert_includes src, "/orders/${orderId}/finalize"
-    assert_includes src, "subscribeGuestOrderStatus"
-    assert_includes src, "finishSuccess"
-    assert_includes src, "payment_started"
-    assert_includes src, "awaiting_settlement"
+  test "inline checkout polls finalize and resumes after 3DS return" do
+    inline = File.read(Rails.root.join("app/frontend/components/CheckoutInlinePayment.svelte"))
+    lib = File.read(Rails.root.join("app/frontend/lib/shopCheckoutInlinePay.js"))
+    checkout = File.read(Rails.root.join("app/frontend/routes/Checkout.svelte"))
+
+    assert_includes inline, "createSettlementWatch"
+    assert_includes lib, "/orders/${orderId}/finalize"
+    assert_includes lib, "payment_started"
+    assert_includes checkout, "resumeInlinePayment"
+    assert_includes checkout, "payment_started"
   end
 
   private

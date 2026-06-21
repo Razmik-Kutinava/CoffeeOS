@@ -11,9 +11,10 @@ class Shop::Api::B112CheckoutSingleScreenTest < ActionDispatch::IntegrationTest
     assert_includes checkout, "beginInlinePayment"
   end
 
-  test "Payment.svelte redirects legacy session to checkout" do
-    payment = File.read(Rails.root.join("app/frontend/routes/Payment.svelte"))
-    assert_includes payment, 'push("/checkout")'
+  test "App.svelte has no /payment route" do
+    app = File.read(Rails.root.join("app/frontend/App.svelte"))
+    refute_includes app, '"/payment"'
+    refute File.exist?(Rails.root.join("app/frontend/routes/Payment.svelte"))
   end
 
   test "CheckoutPayButton has extended pay states" do

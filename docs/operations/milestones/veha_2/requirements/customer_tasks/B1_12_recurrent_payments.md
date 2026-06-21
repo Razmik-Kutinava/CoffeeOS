@@ -8,7 +8,7 @@
 
 **Связано:** [B1.7](B1_7_checkout_order_screen.md) (checkout / `#/payment`) · §2.3 оплата (**закрыта** — B1.12 = надстройка) · `Payments::TbankAdapter` · `POST /callbacks/tbank`
 
-**Стенд для приёмки (после реализации):** `https://coffeeos.fly.dev/shop?tenant_id=655aaccb-004a-4bb9-a50a-ce618854dda3` · `#/checkout` · `#/payment`
+**Стенд для приёмки (после реализации):** `https://coffeeos.fly.dev/shop?tenant_id=655aaccb-004a-4bb9-a50a-ce618854dda3` · `#/checkout`
 
 **Артефакт этапа 0:** [`b112_stage0_scope_2026-06-18.json`](../../artifacts/demo-feedback/b112_stage0_scope_2026-06-18.json)  
 **Runbook (черновик):** [`TBANK_RECURRENT.md`](../../runbooks/TBANK_RECURRENT.md)
@@ -41,7 +41,7 @@
 | Callback | R1 | `app/controllers/callbacks/tbank_controller.rb` · `TbankCallbackJob` |
 | Shop API | R1,R3 | `app/controllers/shop/api/*` — saved card, charge by `card_id` |
 | Order flow | R1 | `app/services/shop/order_creator.rb` |
-| Витрина | R2,R3 | `app/frontend/routes/Payment.svelte`, `Checkout.svelte` |
+| Витрина | R2,R3,R4 | `Checkout.svelte`, `CheckoutInlinePayment.svelte` (`#/payment` удалён 2026-06-21) |
 | Тесты | all | `test/services/payments/`, `test/integration/shop/api/` |
 
 **Не трогаем до `go`:** миграции, `app/`, `app/frontend/`.
@@ -62,6 +62,7 @@
 [x] 6b — Fly MCP R3 post-deploy (8/8 2026-06-19) — `b112_r3_one_click_post_deploy_2026-06-19.json`
 [x] 6c — R4 single-screen checkout (2026-06-20) — без `push("/payment")`, inline iframe · `b112_checkout_single_screen_2026-06-20.json`
 [x] 7 — Fly MCP post-deploy R4 (11/11 2026-06-21) — `b112_r4_single_screen_post_deploy_2026-06-21.json`
+[x] 7b — роут `#/payment` удалён (2026-06-21) — `Payment.svelte` снят с витрины
 [ ] 8 — апрув заказчика эпик
 ```
 

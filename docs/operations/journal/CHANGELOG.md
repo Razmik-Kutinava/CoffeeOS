@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v1.230 — 2026-06-21 (B1.12: удалён роут `#/payment`)
+
+- **Сделано:** `Payment.svelte` удалён; маршрут `/payment` снят из `App.svelte` — оплата только inline на checkout.
+- **Тест:** `b112_checkout_single_screen_test`, `b112_payment_settle_chain`, checkout CBR/cleanup — 18 runs, 159 assertions, 0 failures.
+- **Не делали:** deploy на Fly, повторный MCP post-deploy, апрув заказчика.
+
 ## v1.229 — 2026-06-21 (B1.12-R4: Fly MCP post-deploy single-screen checkout)
 
 - **Deploy:** владелец · `783b4ff` на coffeeos.fly.dev.

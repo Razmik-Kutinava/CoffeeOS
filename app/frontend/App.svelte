@@ -37,7 +37,6 @@
     "/product/:id": lazyRoute(() => import("./routes/Product.svelte")),
     "/cart": lazyRoute(() => import("./routes/Cart.svelte")),
     "/checkout": lazyRoute(() => import("./routes/Checkout.svelte")),
-    "/payment": lazyRoute(() => import("./routes/Payment.svelte")),
     "/payment-result": lazyRoute(() => import("./routes/PaymentResult.svelte")),
     "/profile": lazyRoute(() => import("./routes/Profile.svelte")),
     "/favorites": lazyRoute(() => import("./routes/Favorites.svelte")),
@@ -56,7 +55,7 @@
     if (!orderId) return
 
     const hash = window.location.hash || ""
-    if (hash.includes("payment-result") || hash.includes("/payment")) return
+    if (hash.includes("payment-result")) return
 
     const onCheckout = hash.includes("checkout")
     if (onCheckout) return

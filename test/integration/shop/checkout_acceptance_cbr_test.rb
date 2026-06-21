@@ -9,7 +9,6 @@ class Shop::CheckoutAcceptanceCbrTest < ActionDispatch::IntegrationTest
   VITRINA_FILES = %w[
     routes/Checkout.svelte
     routes/Cart.svelte
-    routes/Payment.svelte
     routes/PaymentResult.svelte
     components/CategorySection.svelte
     routes/CategoryProducts.svelte
@@ -86,7 +85,7 @@ class Shop::CheckoutAcceptanceCbrTest < ActionDispatch::IntegrationTest
 
   # п.7 — крошки скрыты
   test "cbr_07 breadcrumbs hidden on checkout flow pages" do
-    %w[routes/Checkout.svelte routes/Payment.svelte routes/PaymentResult.svelte].each do |rel|
+    %w[routes/Checkout.svelte routes/PaymentResult.svelte].each do |rel|
       refute_includes vitrina_source(rel), "Корзина → Оформление"
     end
   end
