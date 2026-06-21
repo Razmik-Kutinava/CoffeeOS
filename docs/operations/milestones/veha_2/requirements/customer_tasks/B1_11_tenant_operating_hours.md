@@ -236,7 +236,7 @@
 - [x] Сервис: `open_now?` / `next_open_at` — **след. утро рабочего дня** · `TenantOperatingHours` · тест 6/6
 - [x] Shop API: `is_open`, `closed_until`, guard **orders/pay** (не cart) — config + categories meta · guard create · тест 7/7
 - [x] `Checkout.svelte`: баннер + disabled «Оплатить»; корзина **активна** · `ShopClosedBanner` · `shopOperatingHours.js`
-- [x] **Шапка витрины:** `schedule_display` под CoffeeOS · API + `Header.svelte` · demo A/B разное расписание в `demo:seed`
+- [x] **Шапка витрины:** `schedule_display` под CoffeeOS · API + `Header.svelte` · demo A/B · Fly MCP **pass** 2026-06-21
 - [x] Табло: пусто (смена закрыта) · красный баннер + звук (конфликт смена/расписание) — `BoardOrdersQuery.none` · banner · sound · тест 16/16
 - [x] Barista POS: заказ в зале → табло **вне** расписания — POS без guard · integration
 - [x] Logout бариста / «мои точки» → hook `ShiftScheduleLogoutHook` (note на смене для менеджера)
@@ -264,4 +264,4 @@
 
 ---
 
-**Статус:** **код + шапка витрины** 2026-06-21 · **13/13 tests** шага · **deploy + апрув заказчика pending**.
+**Статус:** **код + Fly MCP PASS** (шапка A/B) 2026-06-21 · **стоп — апрув заказчика**.

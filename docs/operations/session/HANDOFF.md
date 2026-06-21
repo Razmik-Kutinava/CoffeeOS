@@ -26,9 +26,9 @@
 | ТЗ этап 0 | `[x]` 2026-06-18 |
 | Ответы Q1–Q10 + раунд 2 | `[x]` 2026-06-19 · [`b111_customer_answers_round2_2026-06-19.json`](../milestones/veha_2/artifacts/demo-feedback/b111_customer_answers_round2_2026-06-19.json) |
 | **Статус** | **+ шапка витрины** `schedule_display` · demo A/B разное расписание · тесты 13/13 шага |
-| **Fly MCP** | `[x]` pass 2026-06-19 · **повтор после deploy** — часы в шапке A vs B |
-| **Следующий шаг** | **deploy** → заказчик проверит витрины A/B · «ок» или правки |
-| **Агент** | **стоп** до deploy/апрува |
+| **Fly MCP** | `[x]` header A/B 2026-06-21 — [`b111_header_schedule_post_deploy_2026-06-21.json`](../milestones/veha_2/artifacts/demo-feedback/b111_header_schedule_post_deploy_2026-06-21.json) |
+| **Следующий шаг** | **апрув заказчика** · «ок» или правки |
+| **Агент** | **стоп** |
 
 ТЗ: [`B1_11_tenant_operating_hours.md`](../milestones/veha_2/requirements/customer_tasks/B1_11_tenant_operating_hours.md)
 

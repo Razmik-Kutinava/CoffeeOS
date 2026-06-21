@@ -70,6 +70,14 @@
 - **Артефакт:** `b112_customer_payment_stuck_2026-06-19.json` + скрин tenant `2fdee1ac-…`.
 - **ISSUES:** 🔴 open — разбор в `agent_analysis`.
 
+## v1.223 — 2026-06-21 (B1.11 Fly MCP: шапка витрины post-deploy)
+
+- **Fly:** demo-point-a `08–20/09–17` · demo-point-b `09–22/10–20` в header + API.
+- **MCP:** browser A (closed banner) + B (open) · API match обе точки.
+- **Тест:** 10/10 PASS.
+- **Артефакт:** `b111_header_schedule_post_deploy_2026-06-21.json`.
+- **Ждём:** апрув заказчика.
+
 ## v1.222 — 2026-06-21 (B1.11: режим работы в шапке витрины)
 
 - **API:** `operating_hours.schedule_display` — компактная строка по дням.

@@ -1,0 +1,39 @@
+{
+  "scenario": "b111_header_schedule_post_deploy",
+  "task": "B1.11",
+  "feature": "shop_header_schedule_display",
+  "stand": "fly",
+  "fly_stand": "https://coffeeos.fly.dev",
+  "deploy": "owner_manual_2026-06-21",
+  "started_at": "2026-06-21T19:00:00.000Z",
+  "finished_at": "2026-06-21T19:05:00.000Z",
+  "pass": true,
+  "fly_mcp": "pass",
+  "summary": {
+    "local_tests": "10 runs, 34 assertions, 0 failures",
+    "api_script": "scripts/scratch/b111_fly_header_mcp_check.rb"
+  },
+  "tenants": {
+    "demo-point-a": {
+      "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+      "schedule_display": "Пн–Пт 08:00–20:00, Сб 09:00–17:00",
+      "browser_header": true,
+      "closed_banner": true
+    },
+    "demo-point-b": {
+      "tenant_id": "655aaccb-004a-4bb9-a50a-ce618854dda3",
+      "schedule_display": "Пн–Пт 09:00–22:00, Сб–Вс 10:00–20:00",
+      "browser_header": true,
+      "closed_banner": false
+    }
+  },
+  "steps": [
+    { "id": "up", "action": "GET /up", "pass": true },
+    { "id": "api_a", "action": "categories meta schedule_display point A", "pass": true },
+    { "id": "api_b", "action": "categories meta schedule_display point B", "pass": true },
+    { "id": "browser_a", "action": "Header under CoffeeOS + closed banner on A", "pass": true, "channel": "MCP" },
+    { "id": "browser_b", "action": "Header under CoffeeOS open on B", "pass": true, "channel": "MCP" },
+    { "id": "regression", "action": "b111 + schedule_text tests", "pass": true, "tests": "10/10" }
+  ],
+  "customer_approval": "pending"
+}

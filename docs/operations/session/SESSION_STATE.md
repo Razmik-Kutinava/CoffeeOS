@@ -23,7 +23,7 @@
 | **B1.12 UX (3 экрана)** | **R4 Fly MCP 11/11 PASS** post-deploy #2 (`75dc252`) | **апрув эпика B1.12** |
 | **B1.12 баг оплаты** | resolved | — |
 | **B1.12 рекуррент** | R1–R3 Fly MCP PASS · ответы Q1–Q7 `[x]` 2026-06-19 | апрув эпика |
-| **B1.11 режим работы** | **+ шапка витрины** demo A/B · тесты шага 13/13 | **deploy → апрув заказчика** |
+| **B1.11 режим работы** | **Fly MCP header A/B PASS** · артефакт 2026-06-21 | **апрув заказчика** |
 | **B2.1 табло** | **ЗАКРЫТА** · апрув `[x]` 2026-06-18 | backlog фаза 2 в CBR |
 | **B2.1 B2-S1** | CLOSED OPS · MCP 9/9 · deploy `[x]` · заказчик `[ ]` | апрув заказчика |
 | **B1.1** | апрув `[x]` 2026-06-18 | — |
@@ -103,6 +103,14 @@
 - **Артефакт:** [`b111_operating_hours_post_deploy_2026-06-19.json`](milestones/veha_2/artifacts/demo-feedback/b111_operating_hours_post_deploy_2026-06-19.json) — `fly_mcp: pass`.
 - **Дальше:** **стоп** — заказчик проверяет на Fly; «ок» закрывает пункт · иначе правки в backlog.
 - **Агент:** ждать, код не менять.
+
+### Сессия 2026-06-21 (B1.11 Fly MCP — шапка витрины post-deploy)
+
+- **Deploy:** владелец → `coffeeos.fly.dev`.
+- **Fly MCP:** API A/B `schedule_display` match · browser header под CoffeeOS · A closed banner · B open.
+- **Тест:** `operating_hours_schedule_text` + b111 — **10 runs, 34 assertions, 0 failures**.
+- **Артефакт:** [`b111_header_schedule_post_deploy_2026-06-21.json`](milestones/veha_2/artifacts/demo-feedback/b111_header_schedule_post_deploy_2026-06-21.json).
+- **Дальше:** апрув заказчика.
 
 ### Сессия 2026-06-21 (B1.11 — часы в шапке витрины + demo A/B)
 
