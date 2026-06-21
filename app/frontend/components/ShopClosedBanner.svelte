@@ -11,7 +11,7 @@
 
 {#if hours.loaded && hours.is_open === false && hours.closed_message}
   <div
-    class="fixed left-0 right-0 top-12 z-40 mx-auto max-w-lg px-3"
+    class="fixed left-0 right-0 top-[4.25rem] z-40 mx-auto max-w-lg px-3"
     role="status"
     data-testid="shop-closed-banner"
   >

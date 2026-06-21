@@ -70,6 +70,14 @@
 - **Артефакт:** `b112_customer_payment_stuck_2026-06-19.json` + скрин tenant `2fdee1ac-…`.
 - **ISSUES:** 🔴 open — разбор в `agent_analysis`.
 
+## v1.222 — 2026-06-21 (B1.11: режим работы в шапке витрины)
+
+- **API:** `operating_hours.schedule_display` — компактная строка по дням.
+- **UI:** `Header.svelte` — часы под CoffeeOS; `ShopClosedBanner` сдвинут ниже.
+- **Demo:** `demo-point-a` Пн–Пт 08–20, Сб 09–17 · `demo-point-b` Пн–Пт 09–22, Сб–Вс 10–20 (`demo:seed`).
+- **Тест:** `operating_hours_schedule_text_test` + b111 + environment_setup — 13 runs PASS.
+- **Дальше:** deploy → апрув заказчика.
+
 ## v1.221 — 2026-06-19 (B1.11 handoff — ждём заказчика)
 
 - **Статус:** код + Fly MCP + 37/37 — done с нашей стороны.

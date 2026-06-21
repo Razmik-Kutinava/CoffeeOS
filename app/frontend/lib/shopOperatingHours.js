@@ -4,6 +4,7 @@ const DEFAULT_HOURS = {
   is_open: true,
   closed_until: null,
   closed_message: null,
+  schedule_display: null,
   timezone: "Europe/Moscow",
   loaded: false
 }

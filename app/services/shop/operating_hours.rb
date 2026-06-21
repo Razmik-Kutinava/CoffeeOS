@@ -27,7 +27,8 @@ module Shop
         is_open: open,
         closed_until: next_at&.iso8601,
         closed_message: closed_message(next_at),
-        timezone: tenant.timezone.presence || TenantOperatingHours::DEFAULT_TIMEZONE
+        timezone: tenant.timezone.presence || TenantOperatingHours::DEFAULT_TIMEZONE,
+        schedule_display: OperatingHoursScheduleText.for(tenant)
       }
     end
 

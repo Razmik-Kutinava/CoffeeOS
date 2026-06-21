@@ -97,7 +97,7 @@
   <ShopPwaBanner />
   <ShopClosedBanner />
   <Header />
-  <main class="mx-auto max-w-lg px-3 pb-28 pt-14">
+  <main class="mx-auto max-w-lg px-3 pb-28 pt-[4.5rem]">
     <Router {routes} options={{ hash: true }} />
   </main>
   <BottomNav />

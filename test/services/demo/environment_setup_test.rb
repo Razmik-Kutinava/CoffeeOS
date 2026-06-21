@@ -65,6 +65,11 @@ class Demo::EnvironmentSetupTest < ActiveSupport::TestCase
     assert_nil CashShift.find_by(tenant_id: result.tenant_b.id, status: "open"),
                  "demo seed: смена B должна быть закрыта"
 
+    assert_equal "Пн–Пт 08:00–20:00, Сб 09:00–17:00",
+                 Shop::OperatingHoursScheduleText.for(result.tenant_a)
+    assert_equal "Пн–Пт 09:00–22:00, Сб–Вс 10:00–20:00",
+                 Shop::OperatingHoursScheduleText.for(result.tenant_b)
+
     ingredient = Ingredient.active.order(:name).first
     if ingredient
       stock = IngredientTenantStock.find_by!(tenant_id: result.tenant_kitchen.id, ingredient_id: ingredient.id)

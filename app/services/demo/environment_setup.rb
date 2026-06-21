@@ -116,6 +116,7 @@ module Demo
         repair_franchise_organization_links!(organization: org)
         ensure_order_cancel_reasons!
         ensure_demo_operations!(tenant_a: tenant_a, tenant_b: tenant_b, tenant_kitchen: tenant_kitchen)
+        ensure_weekday_schedules!(tenant_a: tenant_a, tenant_b: tenant_b)
       end
 
       Result.new(
@@ -357,6 +358,38 @@ module Demo
           .where(product_modifier_groups: { product_id: product.id })
           .where("product_modifier_options.name LIKE ?", pattern)
           .update_all(price_delta: price, updated_at: Time.current)
+      end
+    end
+
+    # B1.11 demo: разное расписание точек A и B для витрины и приёмки.
+    def ensure_weekday_schedules!(tenant_a:, tenant_b:)
+      sync_tenant_schedule!(tenant_a, {
+        0 => { enabled: true, opens_at: "08:00", closes_at: "20:00" },
+        1 => { enabled: true, opens_at: "08:00", closes_at: "20:00" },
+        2 => { enabled: true, opens_at: "08:00", closes_at: "20:00" },
+        3 => { enabled: true, opens_at: "08:00", closes_at: "20:00" },
+        4 => { enabled: true, opens_at: "08:00", closes_at: "20:00" },
+        5 => { enabled: true, opens_at: "09:00", closes_at: "17:00" },
+        6 => { enabled: false }
+      })
+      sync_tenant_schedule!(tenant_b, {
+        0 => { enabled: true, opens_at: "09:00", closes_at: "22:00" },
+        1 => { enabled: true, opens_at: "09:00", closes_at: "22:00" },
+        2 => { enabled: true, opens_at: "09:00", closes_at: "22:00" },
+        3 => { enabled: true, opens_at: "09:00", closes_at: "22:00" },
+        4 => { enabled: true, opens_at: "09:00", closes_at: "22:00" },
+        5 => { enabled: true, opens_at: "10:00", closes_at: "20:00" },
+        6 => { enabled: true, opens_at: "10:00", closes_at: "20:00" }
+      })
+    end
+
+    def sync_tenant_schedule!(tenant, days)
+      with_tenant_rls!(tenant) do
+        days.each do |weekday, attrs|
+          row = tenant.weekday_schedules.find_or_initialize_by(weekday: weekday)
+          row.assign_attributes(attrs)
+          row.save!
+        end
       end
     end
 

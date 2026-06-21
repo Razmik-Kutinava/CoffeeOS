@@ -24,6 +24,7 @@ class Shop::Api::B111OperatingHoursTest < ActionDispatch::IntegrationTest
       assert_equal true, hours["is_open"]
       assert_nil hours["closed_until"]
       assert_nil hours["closed_message"]
+      assert_equal "Пн–Пт 09:00–21:00", hours["schedule_display"]
     end
   end
 
@@ -64,6 +65,7 @@ class Shop::Api::B111OperatingHoursTest < ActionDispatch::IntegrationTest
     travel_to moscow("2026-06-14 15:00") do
       get "/shop/api/config", headers: shop_tenant_headers(@tenant.id)
       assert_equal true, response.parsed_body.dig("operating_hours", "is_open")
+      assert_nil response.parsed_body.dig("operating_hours", "schedule_display")
     end
   end
 
