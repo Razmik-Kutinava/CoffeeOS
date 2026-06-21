@@ -70,6 +70,12 @@
 - **Артефакт:** `b112_customer_payment_stuck_2026-06-19.json` + скрин tenant `2fdee1ac-…`.
 - **ISSUES:** 🔴 open — разбор в `agent_analysis`.
 
+## v1.224 — 2026-06-21 (demo: открытые смены + Сб–Вс точка A)
+
+- **demo:seed:** смены A/B открыты (barista-a/b) · точка A Сб–Вс 10–20, Пн–Пт до 22:00.
+- **Цель:** проверка оплаты на Fly без баннера «закрыты» (воскресенье).
+- **На Fly:** `fly deploy` + `demo:seed` (release или ssh).
+
 ## v1.223 — 2026-06-21 (B1.11 Fly MCP: шапка витрины post-deploy)
 
 - **Fly:** demo-point-a `08–20/09–17` · demo-point-b `09–22/10–20` в header + API.

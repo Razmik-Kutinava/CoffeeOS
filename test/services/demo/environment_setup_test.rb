@@ -60,12 +60,14 @@ class Demo::EnvironmentSetupTest < ActiveSupport::TestCase
     assert OrderCancelReason.exists?(code: "customer_changed_mind")
     assert OrderCancelReason.exists?(code: "other")
 
-    assert_nil CashShift.find_by(tenant_id: result.tenant_a.id, status: "open"),
-                 "demo seed: смена A должна быть закрыта для ручного открытия (§1.3)"
-    assert_nil CashShift.find_by(tenant_id: result.tenant_b.id, status: "open"),
-                 "demo seed: смена B должна быть закрыта"
+    shift_a = CashShift.find_by(tenant_id: result.tenant_a.id, status: "open")
+    shift_b = CashShift.find_by(tenant_id: result.tenant_b.id, status: "open")
+    assert shift_a, "demo seed: смена A открыта для приёмки оплаты"
+    assert shift_b, "demo seed: смена B открыта для приёмки оплаты"
+    assert_equal User.find_by!(email: "barista-a@demo.coffeeos.local").id, shift_a.opened_by_id
+    assert_equal User.find_by!(email: "barista-b@demo.coffeeos.local").id, shift_b.opened_by_id
 
-    assert_equal "Пн–Пт 08:00–20:00, Сб 09:00–17:00",
+    assert_equal "Пн–Пт 08:00–22:00, Сб–Вс 10:00–20:00",
                  Shop::OperatingHoursScheduleText.for(result.tenant_a)
     assert_equal "Пн–Пт 09:00–22:00, Сб–Вс 10:00–20:00",
                  Shop::OperatingHoursScheduleText.for(result.tenant_b)

@@ -104,6 +104,12 @@
 - **Дальше:** **стоп** — заказчик проверяет на Fly; «ок» закрывает пункт · иначе правки в backlog.
 - **Агент:** ждать, код не менять.
 
+### Сессия 2026-06-21 (demo: смены открыты + Сб–Вс A)
+
+- **demo:seed:** `ensure_demo_shifts_open!` · A Пн–Пт 08–22, Сб–Вс 10–20.
+- **Тест:** `environment_setup_test` — 3 runs, 49 assertions, 0 failures.
+- **Fly:** после deploy — `bin/rails demo:seed`.
+
 ### Сессия 2026-06-21 (B1.11 Fly MCP — шапка витрины post-deploy)
 
 - **Deploy:** владелец → `coffeeos.fly.dev`.

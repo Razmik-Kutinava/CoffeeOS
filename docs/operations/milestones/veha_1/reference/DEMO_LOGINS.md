@@ -15,7 +15,7 @@
 | A | https://coffeeos.fly.dev/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789 |
 | B | https://coffeeos.fly.dev/shop?tenant_id=655aaccb-004a-4bb9-a50a-ce618854dda3 |
 
-**Режим работы (B1.11, после `demo:seed`):** под логотипом CoffeeOS — A: Пн–Пт 08:00–20:00, Сб 09:00–17:00 · B: Пн–Пт 09:00–22:00, Сб–Вс 10:00–20:00.
+**Режим работы (B1.11, после `demo:seed`):** под логотипом CoffeeOS — A: Пн–Пт 08:00–22:00, Сб–Вс 10:00–20:00 · B: Пн–Пт 09:00–22:00, Сб–Вс 10:00–20:00. **Смены A/B открыты** (`demo:seed`).
 
 См. [`../../demo/CUSTOMER_HANDOFF.md`](../../demo/CUSTOMER_HANDOFF.md), [`../../dev/SHOP_URL_MODES.md`](../../dev/SHOP_URL_MODES.md).
 

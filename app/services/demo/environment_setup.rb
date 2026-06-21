@@ -271,21 +271,26 @@ module Demo
     end
 
     def ensure_demo_operations!(tenant_a:, tenant_b:, tenant_kitchen:)
-      ensure_demo_shifts_closed!(tenant_a, tenant_b)
+      ensure_demo_shifts_open!(tenant_a, tenant_b)
       ensure_demo_recipes_and_stock!(tenant_a:, tenant_b:)
       ensure_kitchen_stock!(tenant_kitchen)
       reset_demo_pts_availability!([tenant_a, tenant_b])
     end
 
-    # §1.3 демо: смены A/B закрыты — открытие вручную бариста или менеджером смены.
-    def ensure_demo_shifts_closed!(tenant_a, tenant_b)
-      closer = User.find_by!(email: "shift-a@demo.coffeeos.local")
-      [tenant_a, tenant_b].each do |tenant|
-        CashShift.where(tenant_id: tenant.id, status: "open").find_each do |shift|
-          shift.close!(closer, shift.opening_cash || 0)
-        rescue StandardError
-          shift.update!(status: "closed", closed_at: Time.current, closed_by: closer)
+    # Демо: смены A/B открыты — можно проверять оплату и табло без ручного open.
+    def ensure_demo_shifts_open!(tenant_a, tenant_b)
+      {
+        tenant_a => "barista-a@demo.coffeeos.local",
+        tenant_b => "barista-b@demo.coffeeos.local"
+      }.each do |tenant, email|
+        barista = User.find_by!(email: email)
+        with_tenant_rls!(tenant) do
+          next if CashShift.exists?(tenant_id: tenant.id, status: "open")
+
+          CashShifts::OpenService.call(tenant: tenant, opened_by: barista, opening_cash: 0)
         end
+      rescue CashShifts::OpenService::Error
+        next
       end
     end
 
@@ -364,13 +369,13 @@ module Demo
     # B1.11 demo: разное расписание точек A и B для витрины и приёмки.
     def ensure_weekday_schedules!(tenant_a:, tenant_b:)
       sync_tenant_schedule!(tenant_a, {
-        0 => { enabled: true, opens_at: "08:00", closes_at: "20:00" },
-        1 => { enabled: true, opens_at: "08:00", closes_at: "20:00" },
-        2 => { enabled: true, opens_at: "08:00", closes_at: "20:00" },
-        3 => { enabled: true, opens_at: "08:00", closes_at: "20:00" },
-        4 => { enabled: true, opens_at: "08:00", closes_at: "20:00" },
-        5 => { enabled: true, opens_at: "09:00", closes_at: "17:00" },
-        6 => { enabled: false }
+        0 => { enabled: true, opens_at: "08:00", closes_at: "22:00" },
+        1 => { enabled: true, opens_at: "08:00", closes_at: "22:00" },
+        2 => { enabled: true, opens_at: "08:00", closes_at: "22:00" },
+        3 => { enabled: true, opens_at: "08:00", closes_at: "22:00" },
+        4 => { enabled: true, opens_at: "08:00", closes_at: "22:00" },
+        5 => { enabled: true, opens_at: "10:00", closes_at: "20:00" },
+        6 => { enabled: true, opens_at: "10:00", closes_at: "20:00" }
       })
       sync_tenant_schedule!(tenant_b, {
         0 => { enabled: true, opens_at: "09:00", closes_at: "22:00" },
