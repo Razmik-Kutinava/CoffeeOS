@@ -1,0 +1,94 @@
+{
+  "task_id": "B1.13-S2",
+  "epic": "B1.13 — новая навигация витрины",
+  "title": "Поп-ап корзины · 3 состояния · нижний бар · скролл каталога",
+  "date": "2026-06-22",
+  "source": "макеты заказчика — чат Cursor (4 изображения)",
+  "screenshot_set": "b113_s2_customer_01..04",
+  "status": "BASELINE_MOCKUPS_SAVED",
+
+  "current_code_vs_mockup": {
+    "bottom_nav_now": {
+      "component": "app/frontend/components/BottomNav.svelte",
+      "tabs": ["Каталог", "Корзина", "Избранное", "Профиль"],
+      "cart_access": "вкладка → #/cart (отдельный экран)",
+      "cart_popup_on_catalog": false
+    },
+    "bottom_nav_target_s2": {
+      "tabs_per_customer_tz": ["Каталог", "Избранное", "Профиль"],
+      "cart_tab": "удалить",
+      "cart_access": "поп-ап CartSheet над bottom bar",
+      "note_q_epic_1": "после S1 «Профиль» уходит в шапку → финал 2 вкладки + профиль в Header"
+    },
+    "key_visual_diff": "В макетах внизу НЕ иконки «Корзина/Профиль», а панель заказов (поп-ап). Нижний бар в макете — 3 точки / компактная зона под поп-апом, не наш текущий 4-tab bar."
+  },
+
+  "three_states_mapping": {
+    "hidden_chip": {
+      "mockup_ref": "не отдельным кадром — по ТЗ чип с суммой при дальнейшем скролле",
+      "customer_tz": "hidden (чип) — минимальная сумма заказа всегда видна"
+    },
+    "peek": {
+      "mockup_ref": "b113_s2_customer_03_peek_compact_vs_expanded.png (нижний кадр)",
+      "ui": "горизонтальный ряд миниатюр товаров + оранжевая кнопка «+цена» справа; без степперов на карточках"
+    },
+    "expanded": {
+      "mockup_refs": [
+        "b113_s2_customer_02_single_item_popup.png",
+        "b113_s2_customer_03_peek_compact_vs_expanded.png (верхний кадр)",
+        "b113_s2_customer_04_expanded_swipe_up.png"
+      ],
+      "ui": "полные карточки: фото, название, цена×qty, модификаторы; степпер −/+/кол-во; «Удалить»; подсказка «нажми на товар и отредактируй»; кнопка «+цена»"
+    },
+    "empty": {
+      "mockup_ref": "b113_s2_customer_01_empty_catalog_and_add.png (левый кадр)",
+      "ui": "тёмная панель «тут будут твои заказы» — плейсхолдер до первого товара; по ТЗ при пустой корзине поп-ап не показываем"
+    }
+  },
+
+  "scroll_and_swipe_rules": {
+    "scroll_down_catalog": "expanded → peek → hidden (чип)",
+    "swipe_up_on_popup": "раскрыть expanded; аннотация заказчика: «если свайп вверх более одной карточки»",
+    "swipe_down_on_popup": "поп-ап остаётся видимым (hidden)",
+    "scroll_up_catalog": "авто-раскрытия нет — только свайп на поп-апе",
+    "after_add_product": "возврат на каталог · поп-ап expanded"
+  },
+
+  "screenshots": [
+    {
+      "index": 1,
+      "file": "screenshots/b113_s2_customer_01_empty_catalog_and_add.png",
+      "panels": ["каталог: пустая нижняя панель «тут будут твои заказы»", "карточка товара: кнопка «добавить +»"],
+      "s2_relevance": "empty state · триггер add → expanded"
+    },
+    {
+      "index": 2,
+      "file": "screenshots/b113_s2_customer_02_single_item_popup.png",
+      "panels": ["каталог + 1 товар в поп-апе (expanded)", "экран модификаторов товара"],
+      "s2_relevance": "expanded 1 позиция · позиция над каталогом · S3 контролы видны на макете"
+    },
+    {
+      "index": 3,
+      "file": "screenshots/b113_s2_customer_03_peek_compact_vs_expanded.png",
+      "panels": ["верх: expanded 3 товара со степперами", "низ: peek — только миниатюры + «+цена» при скролле каталога"],
+      "s2_relevance": "главный референс expanded↔peek по скроллу"
+    },
+    {
+      "index": 4,
+      "file": "screenshots/b113_s2_customer_04_expanded_swipe_up.png",
+      "panels": ["expanded список 3+ одинаковых позиций", "аннотация свайп вверх", "chevron scroll внутри поп-апа"],
+      "s2_relevance": "multi-item expanded · свайп вверх · внутренний скролл списка"
+    }
+  ],
+
+  "header_note": "На макетах ещё «Блог» + «Витрина» — в коде B1.10 убрал Блог; S1 меняет Витрина→Профиль. Макеты — визуальный референс низа экрана.",
+
+  "implementation_files_planned": [
+    "app/frontend/components/CartSheet.svelte (новый)",
+    "app/frontend/components/BottomNav.svelte",
+    "app/frontend/routes/Catalog.svelte",
+    "app/frontend/App.svelte"
+  ],
+
+  "verdict": "CUSTOMER_MOCKUPS_S2_READY_FOR_GO"
+}

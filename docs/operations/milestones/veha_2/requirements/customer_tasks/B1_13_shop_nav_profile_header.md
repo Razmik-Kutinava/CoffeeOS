@@ -59,7 +59,7 @@
 - [x] JSON этап 0 S2–S4
 - [x] CBR · README · CHECKLIST · HANDOFF · SESSION_STATE · CHANGELOG
 - [x] Скрины «до» — **#1** каталог + шапка «Витрина» → [`screenshots/b113_s1_catalog_before_2026-06-22.png`](../../artifacts/demo-feedback/screenshots/b113_s1_catalog_before_2026-06-22.png) · JSON [`b113_s1_screenshot_baseline_2026-06-22.json`](../../artifacts/demo-feedback/b113_s1_screenshot_baseline_2026-06-22.json)
-- [ ] Скрин «до» bottom nav с «Профиль»
+- [x] Скрины «до» S2 — макеты заказчика (4 шт.) → [`README_b113_s2_customer_mockups_2026-06-22.md`](../../artifacts/demo-feedback/screenshots/README_b113_s2_customer_mockups_2026-06-22.md)
 - [ ] Ответы Q-epic-1…3 + Q1 (S1)
 - [ ] **Апрув заказчика** на эпик → **`go`** на S1
 
@@ -369,6 +369,16 @@
 - режим peek
 - режим expanded
 - режим hidden (чип)
+
+**Макеты заказчика (2026-06-22):** [`screenshots/README_b113_s2_customer_mockups_2026-06-22.md`](../../artifacts/demo-feedback/screenshots/README_b113_s2_customer_mockups_2026-06-22.md) · JSON [`b113_s2_screenshot_baseline_2026-06-22.json`](../../artifacts/demo-feedback/b113_s2_screenshot_baseline_2026-06-22.json)
+
+| # | Файл | Что показывает |
+|---|------|----------------|
+| 1 | `b113_s2_customer_01_empty_catalog_and_add.png` | Пустая панель «тут будут твои заказы» · add на товаре |
+| 2 | `b113_s2_customer_02_single_item_popup.png` | Expanded · 1 позиция |
+| 3 | `b113_s2_customer_03_peek_compact_vs_expanded.png` | Expanded ↔ peek при скролле |
+| 4 | `b113_s2_customer_04_expanded_swipe_up.png` | Expanded multi · свайп вверх |
+
 
 ---
 
