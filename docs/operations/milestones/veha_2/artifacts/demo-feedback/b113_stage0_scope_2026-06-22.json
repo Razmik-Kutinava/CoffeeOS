@@ -1,0 +1,45 @@
+{
+  "task_id": "B1.13",
+  "subtask_id": "B1.13-S1",
+  "title": "Профиль в шапке вместо «Витрина» · убрать «Профиль» из bottom nav",
+  "epic_title": "Новая навигация витрины",
+  "epic_parts": {
+    "S1": "Профиль › ID в Header · убрать Профиль из BottomNav",
+    "S2": "Замена нижнего бара — часть 2 (ТЗ заказчика TBD)",
+    "S3": "Замена нижнего бара — часть 3 (ТЗ заказчика TBD)",
+    "S4": "Замена нижнего бара — часть 4 (ТЗ заказчика TBD)"
+  },
+  "stage": 0,
+  "date": "2026-06-22",
+  "status": "TZ_REGISTERED",
+  "tz_file": "docs/operations/milestones/veha_2/requirements/customer_tasks/B1_13_shop_nav_profile_header.md",
+  "code_started": false,
+  "existing_in_code": {
+    "header_vitrina_label": true,
+    "header_profile_link": false,
+    "bottom_nav_profile_tab": true,
+    "shop_api_profile_id": true,
+    "profile_route": true
+  },
+  "files_planned": [
+    "app/frontend/components/Header.svelte",
+    "app/frontend/components/BottomNav.svelte",
+    "app/frontend/lib/ (formatProfileIdShort or similar)"
+  ],
+  "files_not_in_scope": [
+    "app/frontend/routes/Profile.svelte",
+    "app/controllers/shop/api/profile_controller.rb",
+    "full_bottom_bar_redesign"
+  ],
+  "acceptance_criteria_count": 5,
+  "open_questions": [
+    "Q1 guest auth screen route",
+    "Q2 ID display format UUID vs public number",
+    "Q3 screenshot before deploy"
+  ],
+  "gate_before_code": [
+    "customer approval",
+    "go",
+    "Q1 answer for guest flow"
+  ]
+}

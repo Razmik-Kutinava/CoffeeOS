@@ -1,8 +1,20 @@
 # HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-06-22 (B1.12-R6 one-click hard block · deploy pending)  
+**Дата:** 2026-06-22 (B1.13-S1 ТЗ навигация · B1.12-R6 deploy pending)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev
+
+### B1.13 — новая навигация витрины (эпик, 4 части)
+
+| Что | Статус |
+|-----|--------|
+| **S1 ТЗ** | `[x]` 2026-06-22 — профиль в шапке вместо «Витрина» · убрать «Профиль» из bottom nav |
+| S2–S4 | `[ ]` — отдельные ТЗ заказчика (замена нижнего бара) |
+| Этап 0 JSON | [`b113_stage0_scope_2026-06-22.json`](../milestones/veha_2/artifacts/demo-feedback/b113_stage0_scope_2026-06-22.json) |
+| **Следующий шаг** | ответ Q1 (гость → экран авторизации) · **апрув + `go`** на код S1 |
+| **Агент** | **стоп** — только docs, код не начат |
+
+ТЗ: [`B1_13_shop_nav_profile_header.md`](../milestones/veha_2/requirements/customer_tasks/B1_13_shop_nav_profile_header.md)
 
 ### B1.12 — рекуррент + оплата в 1 клик (Т-Банк)
 

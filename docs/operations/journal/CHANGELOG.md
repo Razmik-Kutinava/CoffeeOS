@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2026-06-22 — B1.13-S1: ТЗ «Профиль в шапке» (эпик навигации витрины)
+
+- **ТЗ:** [`B1_13_shop_nav_profile_header.md`](../milestones/veha_2/requirements/customer_tasks/B1_13_shop_nav_profile_header.md) — текст заказчика дословно · эпик B1.13 (S1–S4) · S1 = Header + BottomNav
+- **Артефакт:** [`b113_stage0_scope_2026-06-22.json`](../milestones/veha_2/artifacts/demo-feedback/b113_stage0_scope_2026-06-22.json)
+- **Индекс:** CBR · `customer_tasks/README.md` · CHECKLIST § B2B
+- **Код:** не начат · стоп до апрува + `go`
+
 ## v1.235 — 2026-06-22 (B1.12-R6: one-click без банка — жёсткий блок + кэш карты)
 
 - **Баг (после deploy заказчика):** 2-я оплата — снова Т-Банк снизу; карта не в блоке «Сохранённая карта» → флоу как первая оплата.
