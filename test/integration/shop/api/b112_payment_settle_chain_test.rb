@@ -128,20 +128,13 @@ class Shop::Api::B112PaymentSettleChainTest < ActionDispatch::IntegrationTest
     assert_equal "finalize-rebill", card.card_token
   end
 
-  test "inline checkout polls finalize and resumes after 3DS return" do
-    inline = File.read(Rails.root.join("app/frontend/components/CheckoutInlinePayment.svelte"))
-    lib = File.read(Rails.root.join("app/frontend/lib/shopCheckoutInlinePay.js"))
+  test "checkout uses bank redirect and payment-result settle path" do
     checkout = File.read(Rails.root.join("app/frontend/routes/Checkout.svelte"))
+    result = File.read(Rails.root.join("app/frontend/routes/PaymentResult.svelte"))
 
-    assert_includes inline, "createSettlementWatch"
-    assert_includes lib, "/orders/${orderId}/finalize"
-    assert_includes lib, "payment_started"
-    assert_includes lib, "SAVED_CARD_RETRY_ATTEMPTS"
-    assert_includes checkout, "resumeInlinePayment"
-    assert_includes checkout, "payment_started"
-    assert_includes checkout, "savedCardsLoading"
-    assert_includes checkout, "guestReconnectToken"
-    assert_includes checkout, "async function submit()"
+    refute_includes checkout, "CheckoutInlinePayment"
+    assert_includes checkout, "redirectToBankPayment"
+    assert_includes result, "/orders/${orderId}/finalize"
   end
 
   test "finalize returns saved_card after GetState backfill on accepted order" do

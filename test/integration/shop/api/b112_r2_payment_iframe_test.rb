@@ -70,7 +70,7 @@ class Shop::Api::B112R2PaymentIframeTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test "card order returns iframe flags and card_binding for recurrent init" do
+  test "card order returns redirect URL and card_binding without iframe embed" do
     open_session do |sess|
       sess.post "/shop/api/cart/add",
         headers: { "X-Shop-Tenant" => @tenant.id.to_s },
@@ -88,8 +88,8 @@ class Shop::Api::B112R2PaymentIframeTest < ActionDispatch::IntegrationTest
       body = JSON.parse(sess.response.body)
       assert_equal 200, sess.response.status, body.inspect
       assert_equal "pending_payment", body["status"]
-      assert body["payment_iframe"], "expected payment_iframe"
-      assert_equal "TestTerminal", body["terminal_key"]
+      assert_equal false, body["payment_iframe"]
+      assert_nil body["terminal_key"]
       assert body["payment_url"].present?
       assert body["card_binding"], "expected card_binding for first card init"
       assert FakeTbankInit.captured_recurrent, "expected Recurrent=Y on init"

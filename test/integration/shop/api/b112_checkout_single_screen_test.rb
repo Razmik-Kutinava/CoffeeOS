@@ -2,13 +2,24 @@
 
 require "test_helper"
 
-# B1.12-R4 — single-screen checkout: без push("/payment"), inline iframe на checkout.
+# B1.12-R4/R5 — checkout: без #/payment, без inline iframe банка снизу.
 class Shop::Api::B112CheckoutSingleScreenTest < ActionDispatch::IntegrationTest
-  test "Checkout.svelte does not navigate to payment route for iframe orders" do
+  include TestFactories
+
+  setup do
+    @tenant = create_tenant!
+    category = create_category!
+    @product = create_product!(category: category)
+    enable_product_for_tenant!(tenant: @tenant, product: @product, price: 179)
+    @email = "b112-r5-#{SecureRandom.hex(4)}@example.com"
+  end
+
+  test "Checkout.svelte redirects to bank instead of inline iframe" do
     checkout = File.read(Rails.root.join("app/frontend/routes/Checkout.svelte"))
     refute_includes checkout, 'push("/payment")'
-    assert_includes checkout, "CheckoutInlinePayment"
-    assert_includes checkout, "beginInlinePayment"
+    refute_includes checkout, "CheckoutInlinePayment"
+    assert_includes checkout, "redirectToBankPayment"
+    assert_includes checkout, "redirectToPaymentUrl"
   end
 
   test "App.svelte has no /payment route" do
@@ -34,8 +45,46 @@ class Shop::Api::B112CheckoutSingleScreenTest < ActionDispatch::IntegrationTest
     assert_includes btn, "Ждём банк"
   end
 
-  test "CheckoutInlinePayment exposes data-testid for MCP" do
-    inline = File.read(Rails.root.join("app/frontend/components/CheckoutInlinePayment.svelte"))
-    assert_includes inline, 'data-testid="checkout-inline-payment"'
+  test "card order API returns payment_url without iframe flag" do
+    old_sim = ENV["SHOP_SIMULATE_PAYMENT"]
+    ENV["SHOP_SIMULATE_PAYMENT"] = "0"
+    ENV["TBANK_TERMINAL_KEY"] = "TestTerminal"
+    ENV["TBANK_PASSWORD"] = "TestPassword"
+    ENV["SHOP_PAYMENT_IFRAME"] = "1"
+
+    klass = Payments::TbankAdapter
+    orig_new = klass.method(:new)
+    klass.define_singleton_method(:new) do
+      inst = orig_new.call
+      inst.define_singleton_method(:init_payment) do |**_kwargs|
+        { payment_url: "https://securepay.tinkoff.ru/test-pay", provider_payment_id: "pay-r5-1" }
+      end
+      inst
+    end
+
+    open_session do |sess|
+      sess.post "/shop/api/cart/add",
+        headers: { "X-Shop-Tenant" => @tenant.id.to_s },
+        params: { product_id: @product.id, quantity: 1, selected_modifiers: [] },
+        as: :json
+      verify_shop_email!(tenant_id: @tenant.id, email: @email, session: sess)
+
+      sess.post "/shop/api/orders",
+        headers: { "X-Shop-Tenant" => @tenant.id.to_s },
+        params: shop_order_params(email: @email, name: "R5", payment_method: "card"),
+        as: :json
+
+      assert_equal 200, sess.response.status
+      body = JSON.parse(sess.response.body)
+      assert_equal false, body["payment_iframe"]
+      assert body["payment_url"].present?
+      assert body["card_binding"]
+    end
+  ensure
+    klass.define_singleton_method(:new, orig_new)
+    ENV["SHOP_SIMULATE_PAYMENT"] = old_sim
+    ENV.delete("TBANK_TERMINAL_KEY")
+    ENV.delete("TBANK_PASSWORD")
+    ENV.delete("SHOP_PAYMENT_IFRAME")
   end
 end

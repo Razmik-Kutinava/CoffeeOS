@@ -27,6 +27,7 @@
 | Дата | Источник | Сценарий / экран | Суть | Статус | PR / коммит |
 |------|----------|------------------|------|--------|-------------|
 | 2026-06-19 | владелец B1.12 | Q2–Q7 | Ответы рекуррент: все карты, СБП позже, save после 1-й оплаты, ошибки UI | **done** | [b112_customer_answers_confirmed_2026-06-19.json](artifacts/demo-feedback/b112_customer_answers_confirmed_2026-06-19.json) |
+| 2026-06-21 | B1.12-R5 UX | iframe банка снизу | редирект на Т-Банк, этапы в кнопке | **done** *(local)* | commit v1.234 |
 | 2026-06-21 | B1.12 баг v2 | 2-я оплата / iframe | one-click: GetState backfill + recurrent без iframe + race fix | **done** *(local)* | ISSUES 2026-06-21 |
 | 2026-06-21 | B1.12 баг | 2-я оплата / CVC | карта не привязалась: GetState sync + SavedCardStore fallback | **done** *(local)* | ISSUES 2026-06-21 |
 | 2026-06-21 | B1.12-R4 cleanup | `#/payment` route | `Payment.svelte` удалён, оплата только checkout | **done** *(код)* | commit v1.230 |

@@ -38,6 +38,7 @@
 - [x] Webhook → `SavedCardStore` (RebillId + Pan)
 - [x] Finalize → `TbankPaymentSync` (GetState, всегда + `saved_card` в ответе)
 - [x] Charge recurrent → немедленный GetState sync
+- [x] **R5:** card init → редирект на `payment_url`, **без** inline iframe на checkout
 - [ ] Web-iframe / платёжная форма для кастомизации (R2)
 - [ ] Тестовые карты 3DS в sandbox
 - [ ] Маппинг кодов ошибок → UI R3 (истёк срок / нет средств / retry / идемпотентность)

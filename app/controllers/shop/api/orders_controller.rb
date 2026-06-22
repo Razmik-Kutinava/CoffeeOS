@@ -178,8 +178,8 @@ module Shop
             payload[:payment_iframe] = false
             payload.delete(:payment_url)
           else
-            payload[:payment_iframe] = Shop::PaymentConfig.iframe_enabled?
-            payload[:terminal_key] = Shop::PaymentConfig.terminal_key if Shop::PaymentConfig.iframe_enabled?
+            # B1.12-R5: только редирект на Т-Банк, без inline iframe на checkout.
+            payload[:payment_iframe] = false
           end
         end
 

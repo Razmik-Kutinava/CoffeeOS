@@ -17,7 +17,12 @@
     clearGuestOrderSession,
     guestReconnectToken
   } from "../lib/shopGuestSession.js"
-  import { savePaymentSession, loadPaymentSession, clearPaymentSession } from "../lib/tbankPayment.js"
+  import {
+    savePaymentSession,
+    loadPaymentSession,
+    clearPaymentSession,
+    redirectToPaymentUrl
+  } from "../lib/tbankPayment.js"
   import { clearCartCache } from "../lib/shopCartCache.js"
   import { enqueueOrder } from "../lib/shopOfflineQueue.js"
   import { isOfflineError } from "../lib/shopNetwork.js"
@@ -31,8 +36,7 @@
     waitForOrderSettled
   } from "../lib/shopOneClickPay.js"
   import CheckoutPayButton from "../components/CheckoutPayButton.svelte"
-  import CheckoutInlinePayment from "../components/CheckoutInlinePayment.svelte"
-  import { buildInlinePaymentSession, SAVED_CARD_RETRY_MS, SAVED_CARD_RETRY_ATTEMPTS } from "../lib/shopCheckoutInlinePay.js"
+  import { SAVED_CARD_RETRY_MS, SAVED_CARD_RETRY_ATTEMPTS } from "../lib/shopCheckoutInlinePay.js"
   import {
     getOperatingHours,
     loadOperatingHours,
@@ -60,8 +64,6 @@
   let payError = $state(null)
   let clientOrderUuid = $state(null)
   let operatingHours = $state(getOperatingHours())
-  let inlineSession = $state(null)
-  let inlineAwaitingOnly = $state(false)
 
   const payBusy = $derived(
     payState === PAY_BTN.loading ||
@@ -147,7 +149,7 @@
     }
 
     const recover = async () => {
-      if (await resumeInlinePayment()) return
+      if (await resumePendingBankPayment()) return
       const orderId = lastGuestOrderId()
       if (!orderId) return
       await reconnectGuestOrder(api)
@@ -264,27 +266,31 @@
     payState = PAY_BTN.ordering
   }
 
-  async function resumeInlinePayment() {
+  /** Возврат с банка без завершения — проверяем finalize, без iframe. */
+  async function resumePendingBankPayment() {
     const pending = loadPaymentSession()
     if (!pending?.order_id || !pending.payment_started) return false
 
-    inlineSession = pending
-    inlineAwaitingOnly = true
     payState = PAY_BTN.awaiting
     await reconnectGuestOrder(api)
 
     try {
-      const token = pending.reconnect_token
+      const token = pending.reconnect_token || guestReconnectToken()
       const q = token ? `?reconnect_token=${encodeURIComponent(token)}` : ""
       const res = await api(`/orders/${pending.order_id}/finalize${q}`, { method: "POST" })
       if (res.payment_settled || res.status === "accepted") {
-        await completeInlineSuccess(pending.order_id)
+        clearPaymentSession()
+        if (res.saved_card) savedCard = res.saved_card
+        push(`/order/${pending.order_id}`)
         return true
       }
     } catch {
-      /* poll via CheckoutInlinePayment */
+      /* оплата ещё не подтверждена */
     }
-    return true
+
+    clearPaymentSession()
+    resetPayIdle()
+    return false
   }
 
   async function refreshSavedCardsAfterPayment() {
@@ -293,31 +299,6 @@
       if (savedCard) return
       await new Promise((resolve) => setTimeout(resolve, SAVED_CARD_RETRY_MS))
     }
-  }
-
-  async function completeInlineSuccess(orderId) {
-    clearPaymentSession()
-    inlineSession = null
-    inlineAwaitingOnly = false
-
-    try {
-      const token = guestReconnectToken()
-      const q = token ? `?reconnect_token=${encodeURIComponent(token)}` : ""
-      const res = await api(`/orders/${orderId}/finalize${q}`, { method: "POST" })
-      if (res.saved_card) savedCard = res.saved_card
-    } catch {
-      /* settlement watch мог уже вызвать finalize */
-    }
-
-    await refreshSavedCardsAfterPayment()
-    await redirectAfterSuccess(orderId)
-  }
-
-  function handleInlineFail(message) {
-    payError = classifyCheckoutPayError(message || "Оплата не прошла")
-    payState = PAY_BTN.error
-    inlineSession = null
-    inlineAwaitingOnly = false
   }
 
   function resetPayIdle() {
@@ -330,6 +311,21 @@
     await new Promise((r) => setTimeout(r, SUCCESS_REDIRECT_MS))
     clearGuestOrderSession()
     push(`/order/${orderId}`)
+  }
+
+  /** Первая оплата: полный редирект на форму Т-Банка, без embed снизу. */
+  function redirectToBankPayment(res) {
+    if (!res.payment_url) return false
+
+    savePaymentSession({
+      order_id: res.order_id,
+      reconnect_token: res.reconnect_token,
+      payment_started: true,
+      card_binding: res.card_binding === true
+    })
+    payState = PAY_BTN.paying
+    redirectToPaymentUrl(res.payment_url)
+    return true
   }
 
   async function submitOneClick() {
@@ -362,6 +358,7 @@
       clientOrderUuid = null
 
       if (res.recurrent_charge || res.provider_payment_id) {
+        payState = PAY_BTN.awaiting
         await waitForOrderSettled(api, {
           orderId: res.order_id,
           reconnectToken: res.reconnect_token,
@@ -372,10 +369,7 @@
         return
       }
 
-      if (res.payment_url) {
-        await handleOnlinePaymentRedirect(res)
-        return
-      }
+      if (redirectToBankPayment(res)) return
 
       await redirectAfterSuccess(res.order_id)
     } catch (e) {
@@ -393,36 +387,11 @@
     }
   }
 
-  async function beginInlinePayment(res) {
-    let config = {}
-    try {
-      config = await api("/config")
-    } catch {
-      config = {}
-    }
-
-    const session = buildInlinePaymentSession(res, config)
-    savePaymentSession(session)
-    inlineSession = session
-    inlineAwaitingOnly = false
-    payState = PAY_BTN.paying
-  }
-
-  async function handleOnlinePaymentRedirect(res) {
-    if (res.payment_iframe && (res.provider_payment_id || res.payment_url)) {
-      await beginInlinePayment(res)
-      return
-    }
-    if (res.payment_url) {
-      window.location.href = res.payment_url
-    }
-  }
-
   async function submitNewCard() {
     if (!canPay) return
     beginPayOrdering()
     if (!clientOrderUuid) clientOrderUuid = crypto.randomUUID()
-    let inlineStarted = false
+    let redirected = false
 
     try {
       const serverOk = await syncServerStatus()
@@ -463,13 +432,11 @@
       editContact = false
       clientOrderUuid = null
 
-      if (res.payment_url || res.provider_payment_id) {
-        inlineStarted = true
-        await handleOnlinePaymentRedirect(res)
+      if (redirectToBankPayment(res)) {
+        redirected = true
         return
       }
 
-      inlineStarted = true
       await redirectAfterSuccess(res.order_id)
     } catch (e) {
       payError = classifyCheckoutPayError(e.message)
@@ -481,7 +448,7 @@
         otpNotice = "Подтвердите email кодом из письма"
       }
     } finally {
-      if (!inlineStarted && payState === PAY_BTN.ordering) resetPayIdle()
+      if (!redirected && payState === PAY_BTN.ordering) resetPayIdle()
     }
   }
 
@@ -647,13 +614,4 @@
     onRetry={submit}
     onBindOther={bindOtherCard}
   />
-
-  {#if inlineSession}
-    <CheckoutInlinePayment
-      session={inlineSession}
-      awaitingOnly={inlineAwaitingOnly}
-      onSettled={() => completeInlineSuccess(inlineSession.order_id)}
-      onFail={handleInlineFail}
-    />
-  {/if}
 </div>

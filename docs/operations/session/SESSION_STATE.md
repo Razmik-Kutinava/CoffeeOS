@@ -31,6 +31,13 @@
 | **B1.4 PWA** | код задеплоен · OPS_PASS · заказчик `[ ]` | апрув |
 | **B2.2** | stage0 `[x]` · этап 1 `[ ]` | единый экран «Меню» |
 
+### Сессия 2026-06-21 (B1.12-R5: убран inline iframe банка с checkout)
+
+- **Было:** Т-Банк embed снизу на checkout (скрин заказчика).
+- **Стало:** редирект на банк · кнопка FSM · `#/payment-result` + finalize · one-click без iframe.
+- **Тест:** 15/15 PASS local (checkout, r2, settle, r3, recurrent).
+- **Дальше:** **deploy Fly** · MCP post-deploy · real-card 1→2.
+
 ### Сессия 2026-06-21 (B1.12: one-click v2 — полный фикс 2-й оплаты)
 
 - **Баг:** 2-я оплата — снова iframe Т-Банка; нет saved card на checkout.
