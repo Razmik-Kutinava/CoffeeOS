@@ -1,0 +1,48 @@
+{
+  "task_id": "B1.13-S1",
+  "epic": "B1.13 — новая навигация витрины",
+  "screenshot_index": 1,
+  "screenshot_role": "baseline_before_code",
+  "date": "2026-06-22",
+  "source": "заказчик / владелец — чат Cursor",
+  "file": "screenshots/b113_s1_catalog_before_2026-06-22.png",
+  "viewport": "mobile (~320–428px), тёмная тема",
+  "page": "каталог витрины (#/ или /)",
+  "tenant_id": "не указан на скрине — уточнить при следующих скринах",
+
+  "visible_for_s1": {
+    "header_left": "CoffeeOS (оранжевый бренд)",
+    "header_right": "Витрина (статичная подпись — **цель S1: заменить на «Профиль › ID»**)",
+    "header_schedule_display": "не видно на кадре (B1.11 — вне scope S1)",
+    "bottom_nav": "не попал в кадр — нужен отдельный скрин для вкладки «Профиль»",
+    "pwa_install_banner": "виден — «Установить CoffeeOS на главный экран» (B1.4, не S1)"
+  },
+
+  "catalog_context": {
+    "sections": ["Чернь", "Фильтр-кофе", "Холодные", "Сезоные напитки"],
+    "notes": [
+      "Секция «Чернь» — цены 2–3₽, битые иконки фото (вероятно тестовые данные)",
+      "Остальные секции — плейсхолдер «Нет фото», цены 179–315₽",
+      "Контент каталога — не в scope S1, фон для приёмки навигации"
+    ]
+  },
+
+  "s1_acceptance_mapping": {
+    "before": {
+      "header_right_label": "Витрина",
+      "bottom_nav_profile_tab": "ожидается 4 вкладки (Каталог·Корзина·Избранное·Профиль) — подтвердить скрином #2"
+    },
+    "after_s1_target": {
+      "header_right": "Профиль › [ID] или «Профиль» для гостя",
+      "bottom_nav": "без вкладки «Профиль» (3 вкладки до S2)"
+    }
+  },
+
+  "next_screenshots_requested": [
+    "b113_s1_bottom_nav_before — нижняя панель с «Профиль»",
+    "b113_s1_header_guest — гость без ID",
+    "b113_s1_header_logged_in — с ID в шапке (после кода)"
+  ],
+
+  "verdict": "BASELINE_S1_HEADER_VITRINA_CONFIRMED"
+}

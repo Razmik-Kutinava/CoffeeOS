@@ -32,6 +32,12 @@
 | **B1.4 PWA** | код задеплоен · OPS_PASS · заказчик `[ ]` | апрув |
 | **B2.2** | stage0 `[x]` · этап 1 `[ ]` | единый экран «Меню» |
 
+### Сессия 2026-06-22 (B1.13-S1: baseline скрин заказчика #1)
+
+- **Скрин #1:** каталог витрины — шапка **CoffeeOS + «Витрина»**, PWA-баннер, секции меню.
+- **Артефакт:** [`b113_s1_catalog_before_2026-06-22.png`](milestones/veha_2/artifacts/demo-feedback/screenshots/b113_s1_catalog_before_2026-06-22.png) · [`b113_s1_screenshot_baseline_2026-06-22.json`](milestones/veha_2/artifacts/demo-feedback/b113_s1_screenshot_baseline_2026-06-22.json).
+- **Дальше:** скрин #2 bottom nav с «Профиль» · апрув + `go` S1.
+
 ### Сессия 2026-06-22 (B1.12-R6: one-click без банка после репорта заказчика post-deploy)
 
 - **Репорт:** после deploy заказчика — 2-я оплата снова Т-Банк снизу, нет «Сохранённая карта».

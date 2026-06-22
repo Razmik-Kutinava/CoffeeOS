@@ -58,7 +58,8 @@
 - [x] Карта scope / файлов по частям
 - [x] JSON этап 0 S2–S4
 - [x] CBR · README · CHECKLIST · HANDOFF · SESSION_STATE · CHANGELOG
-- [ ] Скрины «до» (header, bottom nav, cart)
+- [x] Скрины «до» — **#1** каталог + шапка «Витрина» → [`screenshots/b113_s1_catalog_before_2026-06-22.png`](../../artifacts/demo-feedback/screenshots/b113_s1_catalog_before_2026-06-22.png) · JSON [`b113_s1_screenshot_baseline_2026-06-22.json`](../../artifacts/demo-feedback/b113_s1_screenshot_baseline_2026-06-22.json)
+- [ ] Скрин «до» bottom nav с «Профиль»
 - [ ] Ответы Q-epic-1…3 + Q1 (S1)
 - [ ] **Апрув заказчика** на эпик → **`go`** на S1
 
@@ -98,7 +99,8 @@
 
 - Шапка: слева **CoffeeOS** + часы работы (`data-testid="shop-hours-display"`), справа **«Витрина»** (не ссылка)
 - Bottom nav: **Каталог · Корзина · Избранное · Профиль**
-- Скрин «до»: сделать при старте кода → `artifacts/demo-feedback/screenshots/b113_header_profile_before.png`
+- Скрин «до» #1 (заказчик 2026-06-22): [`artifacts/demo-feedback/screenshots/b113_s1_catalog_before_2026-06-22.png`](../../artifacts/demo-feedback/screenshots/b113_s1_catalog_before_2026-06-22.png) — шапка **«Витрина»**, PWA-баннер, каталог
+- Скрин «до» (полный): [`artifacts/demo-feedback/screenshots/b113_header_profile_before.png`](../../artifacts/demo-feedback/screenshots/b113_header_profile_before.png) — *alias / доп. кадр при старте кода*
 
 ---
 
