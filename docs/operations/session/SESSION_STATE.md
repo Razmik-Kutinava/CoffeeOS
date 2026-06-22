@@ -32,6 +32,11 @@
 | **B1.4 PWA** | код задеплоен · OPS_PASS · заказчик `[ ]` | апрув |
 | **B2.2** | stage0 `[x]` · этап 1 `[ ]` | единый экран «Меню» |
 
+### Сессия 2026-06-22 (B1.13-S3: макеты управления в поп-апе — 3 режима)
+
+- **Скрины:** peek (−/+ под миниатюрами) · expanded (Удалить, модификаторы) · hidden chip.
+- **Артефакт:** [`b113_s3_screenshot_baseline_2026-06-22.json`](milestones/veha_2/artifacts/demo-feedback/b113_s3_screenshot_baseline_2026-06-22.json).
+
 ### Сессия 2026-06-22 (B1.13-S2: макеты поп-апа корзины — 4 скрина)
 
 - **Скрины:** empty · expanded×1 · expanded↔peek · expanded multi + свайп.

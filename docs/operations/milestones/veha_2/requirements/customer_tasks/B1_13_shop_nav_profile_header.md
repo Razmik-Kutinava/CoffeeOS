@@ -403,6 +403,14 @@
 
 **Зависимость:** S2 (поп-ап существует).
 
+**Макеты S3 (2026-06-22):** [`screenshots/README_b113_s3_customer_mockups_2026-06-22.md`](../../artifacts/demo-feedback/screenshots/README_b113_s3_customer_mockups_2026-06-22.md) · JSON [`b113_s3_screenshot_baseline_2026-06-22.json`](../../artifacts/demo-feedback/b113_s3_screenshot_baseline_2026-06-22.json)
+
+| Режим | Файл |
+|-------|------|
+| peek | `b113_s3_customer_peek_mode.png` |
+| expanded | `b113_s3_customer_expanded_mode.png` |
+| hidden (чип) | `b113_s3_customer_hidden_chip_mode.png` |
+
 ## Прогресс S3
 
 ```
