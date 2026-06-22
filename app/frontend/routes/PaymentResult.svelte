@@ -4,6 +4,8 @@
   import { api } from "../lib/api.js"
   import { clearGuestOrderSession, reconnectGuestOrder } from "../lib/shopGuestSession.js"
   import { clearPaymentSession } from "../lib/tbankPayment.js"
+  import { saveCachedSavedCard } from "../lib/shopSavedCardCache.js"
+  import { loadGuestProfile } from "../lib/shopGuestProfile.js"
 
   let status = $state("fail")
   let orderId = $state("")
@@ -44,7 +46,11 @@
         if (bound) {
           successTitle = "Карта привязана / Оплачено"
         }
-        await pollAccepted()
+        const finalized = await pollAccepted()
+        const profile = loadGuestProfile()
+        if (finalized?.saved_card && profile?.email) {
+          saveCachedSavedCard(profile.email, finalized.saved_card)
+        }
         clearGuestOrderSession()
         push(`/order/${orderId}`)
         return

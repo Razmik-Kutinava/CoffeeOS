@@ -81,6 +81,7 @@ class Shop::Api::B112R3OneClickTest < ActionDispatch::IntegrationTest
       assert_equal false, body["payment_iframe"]
       assert_nil body["payment_url"]
       assert_equal "charge-r3-1", body["provider_payment_id"]
+      assert_equal @card.id, body.dig("saved_card", "id")
       assert body["order_id"].present?
     end
   ensure

@@ -1,6 +1,13 @@
 # CHANGELOG
 
-## v1.234 — 2026-06-21 (B1.12-R5: убран inline iframe банка с checkout)
+## v1.235 — 2026-06-22 (B1.12-R6: one-click без банка — жёсткий блок + кэш карты)
+
+- **Баг (после deploy заказчика):** 2-я оплата — снова Т-Банк снизу; карта не в блоке «Сохранённая карта» → флоу как первая оплата.
+- **Причина:** карта не в `saved_cards` после 1-й оплаты (webhook/GetState lag) · `submitOneClick` имел fallback `redirectToBankPayment` · нет локального кэша карты между сессиями.
+- **Сделано:** убран банк из one-click (ошибка в кнопке) · API recurrent никогда не отдаёт `payment_url` · `shopSavedCardCache` после finalize · `saved_card` в ответе recurrent order.
+- **Тест:** b112 checkout/r2/r3/settle + saved_card_store + tbank_sync — **21 runs, 124 assertions, 0 failures**.
+- **Нужен:** повторный **deploy Fly** + real-card 1→2.
+
 
 - **Было:** форма Т-Банка встраивалась снизу на `#/checkout` (скрин заказчика).
 - **Стало:** первая оплата — редирект на `payment_url`; этапы в кнопке; возврат `#/payment-result` + finalize.

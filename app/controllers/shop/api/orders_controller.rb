@@ -189,6 +189,15 @@ module Shop
 
         payload[:card_binding] = true if creator.card_binding
 
+        # B1.12-R6: one-click никогда не отдаёт URL банка — только Charge по RebillId.
+        if recurrent
+          payload.delete(:payment_url)
+          payload[:payment_iframe] = false
+          payload[:recurrent_charge] = true if creator.provider_payment_id.present?
+          saved = primary_saved_card_json(order.customer_id)
+          payload[:saved_card] = saved if saved
+        end
+
         payload
       end
 

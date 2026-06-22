@@ -4,12 +4,16 @@
 
 ## 🔴 Блокеры
 
-_(нет открытых)_
+[2026-06-22] — B1.12: после deploy заказчика 2-я оплата снова Т-Банк (не one-click)
+Статус: **resolved** local · **нужен повторный deploy**
+Описание: заказчик после deploy — на 2-й оплате снова форма Т-Банка снизу + лишний экран; блок «Сохранённая карта» не виден.
+**Причина:** RebillId не успевал в `saved_cards` → checkout шёл в `submitNewCard` · one-click при сбое открывал банк через `redirectToBankPayment` · нет кэша карты после finalize.
+**Закрыли:** B1.12-R6 — жёсткий запрет банка в one-click · `shopSavedCardCache` · API recurrent без `payment_url` · тесты 21/21.
 
 ## Решено недавно
 
 [2026-06-21] — B1.12: карта не привязалась после 1-й оплаты, 2-я снова форма банка + CVC
-Статус: **resolved** local · deploy pending
+Статус: **resolved** · R6 local 2026-06-22 · deploy pending
 Описание: tenant `2fdee1ac-…` · после первой оплаты `saved_cards` пуст · вторая попытка — iframe Т-Банка, CVC `000`, «Проверьте код».
 **Причина:** webhook без Pan / задержка · finalize не backfill на accepted · race savedCardsLoading · one-click открывал iframe.
 **Закрыли:** GetState sync всегда на finalize + saved_card в ответе · Charge→GetState · recurrent API без iframe · фронт race/retry · тесты 17/17 шага.

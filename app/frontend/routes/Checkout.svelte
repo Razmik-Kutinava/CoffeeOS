@@ -35,6 +35,11 @@
     isOfflineLikeError,
     waitForOrderSettled
   } from "../lib/shopOneClickPay.js"
+  import {
+    loadCachedSavedCard,
+    saveCachedSavedCard,
+    clearCachedSavedCard
+  } from "../lib/shopSavedCardCache.js"
   import CheckoutPayButton from "../components/CheckoutPayButton.svelte"
   import { SAVED_CARD_RETRY_MS, SAVED_CARD_RETRY_ATTEMPTS } from "../lib/shopCheckoutInlinePay.js"
   import {
@@ -117,6 +122,16 @@
     }
   }
 
+  function applySavedCardFromSources(primary) {
+    if (primary?.id) {
+      savedCard = primary
+      saveCachedSavedCard(email, primary)
+      return
+    }
+    const cached = loadCachedSavedCard(email)
+    savedCard = cached?.id ? cached : null
+  }
+
   async function loadSavedCards() {
     if (!emailVerified || !isValidEmail(email)) {
       savedCard = null
@@ -126,9 +141,9 @@
     try {
       const q = encodeURIComponent(email.trim().toLowerCase())
       const res = await api(`/saved_cards?email=${q}`)
-      savedCard = res?.primary || null
+      applySavedCardFromSources(res?.primary || null)
     } catch {
-      savedCard = null
+      applySavedCardFromSources(null)
     } finally {
       savedCardsLoading = false
     }
@@ -203,6 +218,7 @@
     editContact = true
     otpNotice = ""
     clearEmailVerifiedInProfile()
+    clearCachedSavedCard(email)
     savedCard = null
     useOneClick = true
   }
@@ -280,7 +296,8 @@
       const res = await api(`/orders/${pending.order_id}/finalize${q}`, { method: "POST" })
       if (res.payment_settled || res.status === "accepted") {
         clearPaymentSession()
-        if (res.saved_card) savedCard = res.saved_card
+        if (res.saved_card) applySavedCardFromSources(res.saved_card)
+        else await refreshSavedCardsAfterPayment()
         push(`/order/${pending.order_id}`)
         return true
       }
@@ -357,21 +374,29 @@
       clearCartCache()
       clientOrderUuid = null
 
+      if (res.payment_url) {
+        payError = classifyCheckoutPayError(
+          "Сохранённая карта не сработала. Оплатите другой картой или повторите позже."
+        )
+        payState = PAY_BTN.error
+        return
+      }
+
       if (res.recurrent_charge || res.provider_payment_id) {
         payState = PAY_BTN.awaiting
-        await waitForOrderSettled(api, {
+        const settled = await waitForOrderSettled(api, {
           orderId: res.order_id,
           reconnectToken: res.reconnect_token,
           subscribe: subscribeGuestOrderStatus
         })
-        await refreshSavedCardsAfterPayment()
+        if (settled?.saved_card) applySavedCardFromSources(settled.saved_card)
+        else await refreshSavedCardsAfterPayment()
         await redirectAfterSuccess(res.order_id)
         return
       }
 
-      if (redirectToBankPayment(res)) return
-
-      await redirectAfterSuccess(res.order_id)
+      payError = classifyCheckoutPayError("Не удалось списать с сохранённой карты")
+      payState = PAY_BTN.error
     } catch (e) {
       if (isOfflineError(e) || isOfflineLikeError(e)) {
         payError = classifyCheckoutPayError("Сбой сети. Повторите позже.")
@@ -460,6 +485,8 @@
 
   function bindOtherCard() {
     useOneClick = false
+    clearCachedSavedCard(email)
+    savedCard = null
     payState = PAY_BTN.idle
     payError = null
     submitNewCard()
@@ -581,6 +608,8 @@
         class="mt-2 text-sm text-[#ff8c42]"
         onclick={() => {
           useOneClick = false
+          clearCachedSavedCard(email)
+          savedCard = null
           payState = PAY_BTN.idle
           payError = null
         }}

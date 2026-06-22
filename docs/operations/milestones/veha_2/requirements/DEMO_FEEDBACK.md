@@ -4,7 +4,7 @@
 
 **Источник:** PDF [`artifacts/demo-feedback/customer_qa_prog10_2026-06.pdf`](artifacts/demo-feedback/customer_qa_prog10_2026-06.pdf) (продолжение В1: [`../veha_1/artifacts/customer_live_qa_block1_2026-05-30.pdf`](../veha_1/artifacts/customer_live_qa_block1_2026-05-30.pdf)).
 
-**Сейчас (2026-06-21):** **B1.11** Fly MCP header A/B PASS · **апрув заказчика** · **B1.12-R4** Fly MCP PASS.
+**Сейчас (2026-06-22):** **B1.12-R6** one-click hard block local · **повторный deploy** после репорта заказчика.
 
 **Честно:** §1–3 в таблице ниже — **done** *(выборочно)*. §2.3 — **done** *(этапы 1–5, MCP)*.
 
@@ -27,6 +27,7 @@
 | Дата | Источник | Сценарий / экран | Суть | Статус | PR / коммит |
 |------|----------|------------------|------|--------|-------------|
 | 2026-06-19 | владелец B1.12 | Q2–Q7 | Ответы рекуррент: все карты, СБП позже, save после 1-й оплаты, ошибки UI | **done** | [b112_customer_answers_confirmed_2026-06-19.json](artifacts/demo-feedback/b112_customer_answers_confirmed_2026-06-19.json) |
+| 2026-06-22 | B1.12 баг post-deploy | 2-я оплата снова Т-Банк | R6: one-click без банка + shopSavedCardCache + API guard | **done** *(local)* | ISSUES 2026-06-22 · v1.235 |
 | 2026-06-21 | B1.12-R5 UX | iframe банка снизу | редирект на Т-Банк, этапы в кнопке | **done** *(local)* | commit v1.234 |
 | 2026-06-21 | B1.12 баг v2 | 2-я оплата / iframe | one-click: GetState backfill + recurrent без iframe + race fix | **done** *(local)* | ISSUES 2026-06-21 |
 | 2026-06-21 | B1.12 баг | 2-я оплата / CVC | карта не привязалась: GetState sync + SavedCardStore fallback | **done** *(local)* | ISSUES 2026-06-21 |

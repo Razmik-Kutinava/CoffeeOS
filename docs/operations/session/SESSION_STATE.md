@@ -2,7 +2,7 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-06-21 (B1.12-R4 Fly MCP post-deploy · апрув эпика pending)  
+**Дата:** 2026-06-22 (B1.12-R6 one-click без банка · deploy pending)  
 **Предыдущее:** B1.12-R3 Fly MCP 8/8 · B1.11 этап 0 · B1.7 **ЗАКРЫТА**  
 **Веха 1:** **закрыта** 2026-06-19 (CHECKLIST § I, H.3 заочно).  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
@@ -20,8 +20,8 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **B1.12 UX (3 экрана)** | **R4 Fly MCP 11/11 PASS** post-deploy #2 (`75dc252`) | **апрув эпика B1.12** |
-| **B1.12 баг оплаты** | **fix v2 local** one-click + GetState backfill · deploy pending | real-card E2E после deploy |
+| **B1.12 UX (3 экрана)** | **R6** one-click hard block + card cache local | **повторный deploy Fly** · real-card 1→2 |
+| **B1.12 баг оплаты** | **R6 local** — после deploy заказчика баг сохранился · fix в коде | deploy + MCP |
 | **B1.12 рекуррент** | R1–R3 Fly MCP PASS · ответы Q1–Q7 `[x]` 2026-06-19 | апрув эпика |
 | **B1.11 режим работы** | **Fly MCP header A/B PASS** · артефакт 2026-06-21 | **апрув заказчика** |
 | **B2.1 табло** | **ЗАКРЫТА** · апрув `[x]` 2026-06-18 | backlog фаза 2 в CBR |
@@ -30,6 +30,14 @@
 | **B1.7 checkout** | **ЗАКРЫТА** · апрув `[x]` 2026-06-04 | — |
 | **B1.4 PWA** | код задеплоен · OPS_PASS · заказчик `[ ]` | апрув |
 | **B2.2** | stage0 `[x]` · этап 1 `[ ]` | единый экран «Меню» |
+
+### Сессия 2026-06-22 (B1.12-R6: one-click без банка после репорта заказчика post-deploy)
+
+- **Репорт:** после deploy заказчика — 2-я оплата снова Т-Банк снизу, нет «Сохранённая карта».
+- **Причина:** карта не в API → new-card path · fallback `redirectToBankPayment` в one-click · lag webhook/GetState.
+- **Fix:** убран банк из one-click · `shopSavedCardCache` · API recurrent без `payment_url` · `saved_card` в ответе.
+- **Тест:** 21/21 PASS local (b112 checkout, r2, r3, settle, saved_card_store, tbank_sync).
+- **Дальше:** **повторный deploy Fly** · real-card 1→2 · апрув B1.12.
 
 ### Сессия 2026-06-21 (B1.12-R5: убран inline iframe банка с checkout)
 

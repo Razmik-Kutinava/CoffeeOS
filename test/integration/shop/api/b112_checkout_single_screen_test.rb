@@ -34,6 +34,8 @@ class Shop::Api::B112CheckoutSingleScreenTest < ActionDispatch::IntegrationTest
     assert_includes checkout, "async function submit()"
     assert_includes checkout, "res.recurrent_charge || res.provider_payment_id"
     assert_includes checkout, "waitForOrderSettled"
+    assert_includes checkout, "shopSavedCardCache"
+    refute_includes checkout, "if (redirectToBankPayment(res)) return"
   end
 
   test "CheckoutPayButton has extended pay states" do
