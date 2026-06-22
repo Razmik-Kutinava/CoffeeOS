@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## v1.234 — 2026-06-21 (B1.12-R5: убран inline iframe банка с checkout)
+
+- **Было:** форма Т-Банка встраивалась снизу на `#/checkout` (скрин заказчика).
+- **Стало:** первая оплата — редирект на `payment_url`; этапы в кнопке; возврат `#/payment-result` + finalize.
+- **API:** `payment_iframe: false` для card init.
+- **Тест:** b112 checkout/r2/settle/r3 — 15 runs, 99 assertions, 0 failures.
+- **Не делали:** deploy Fly · MCP post-deploy.
+
 ## v1.233 — 2026-06-21 (B1.12: one-click — полный фикс привязки и 2-й оплаты)
 
 - **Баг:** 2-я оплата снова iframe Т-Банка; карта не в `saved_cards`; race на кнопке «Оплатить».
