@@ -511,6 +511,14 @@
 
 **Не меняем:** логику выбора модификаторов в карточке товара · структуру данных модификаторов.
 
+**Макеты S4 (2026-06-22):** [`screenshots/README_b113_s4_customer_mockups_2026-06-22.md`](../../artifacts/demo-feedback/screenshots/README_b113_s4_customer_mockups_2026-06-22.md) · JSON [`b113_s4_screenshot_baseline_2026-06-22.json`](../../artifacts/demo-feedback/b113_s4_screenshot_baseline_2026-06-22.json)
+
+| # | Файл |
+|---|------|
+| 1 | `b113_s4_customer_horizontal_scroll_peek.png` |
+| 2 | `b113_s4_customer_horizontal_thumbnails_chip.png` |
+| 3 | `b113_s4_customer_expanded_modifiers_list.png` |
+
 ## Прогресс S4
 
 ```
