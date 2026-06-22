@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2026-06-22 — B1.13: ТЗ S2–S4 эпик навигации (поп-ап корзины)
+
+- **ТЗ:** [`B1_13_shop_nav_profile_header.md`](../milestones/veha_2/requirements/customer_tasks/B1_13_shop_nav_profile_header.md) — S2–S4 текст заказчика дословно · сводка эпика · Q-epic-1…3
+- **Артефакт:** [`b113_stage0_s2_s4_2026-06-22.json`](../milestones/veha_2/artifacts/demo-feedback/b113_stage0_s2_s4_2026-06-22.json)
+- **Порядок кода:** S1 → S2 → S3 → S4
+- **Код:** не начат
+
 ## 2026-06-22 — B1.13-S1: ТЗ «Профиль в шапке» (эпик навигации витрины)
 
 - **ТЗ:** [`B1_13_shop_nav_profile_header.md`](../milestones/veha_2/requirements/customer_tasks/B1_13_shop_nav_profile_header.md) — текст заказчика дословно · эпик B1.13 (S1–S4) · S1 = Header + BottomNav

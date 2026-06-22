@@ -5,13 +5,13 @@
   "epic_title": "Новая навигация витрины",
   "epic_parts": {
     "S1": "Профиль › ID в Header · убрать Профиль из BottomNav",
-    "S2": "Замена нижнего бара — часть 2 (ТЗ заказчика TBD)",
-    "S3": "Замена нижнего бара — часть 3 (ТЗ заказчика TBD)",
-    "S4": "Замена нижнего бара — часть 4 (ТЗ заказчика TBD)"
+    "S2": "Поп-ап корзины expanded/peek/hidden · убрать Корзину из BottomNav · скролл каталога",
+    "S3": "Управление товарами в поп-апе (+/-/Удалить/+цена)",
+    "S4": "Long press модификаторы · горизонтальный скролл >3"
   },
-  "stage": 0,
+  "stage": "0_complete",
   "date": "2026-06-22",
-  "status": "TZ_REGISTERED",
+  "status": "TZ_REGISTERED_ALL",
   "tz_file": "docs/operations/milestones/veha_2/requirements/customer_tasks/B1_13_shop_nav_profile_header.md",
   "code_started": false,
   "existing_in_code": {

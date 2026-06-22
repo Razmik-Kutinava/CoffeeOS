@@ -1,17 +1,20 @@
 # HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-06-22 (B1.13-S1 ТЗ навигация · B1.12-R6 deploy pending)  
+**Дата:** 2026-06-22 (B1.13 эпик S1–S4 ТЗ · B1.12 deploy pending)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev
 
-### B1.13 — новая навигация витрины (эпик, 4 части)
+### B1.13 — новая навигация витрины (эпик S1–S4)
 
 | Что | Статус |
 |-----|--------|
-| **S1 ТЗ** | `[x]` 2026-06-22 — профиль в шапке вместо «Витрина» · убрать «Профиль» из bottom nav |
-| S2–S4 | `[ ]` — отдельные ТЗ заказчика (замена нижнего бара) |
-| Этап 0 JSON | [`b113_stage0_scope_2026-06-22.json`](../milestones/veha_2/artifacts/demo-feedback/b113_stage0_scope_2026-06-22.json) |
-| **Следующий шаг** | ответ Q1 (гость → экран авторизации) · **апрув + `go`** на код S1 |
+| **S1** | ТЗ `[x]` — профиль в шапке · убрать «Профиль» из bottom nav |
+| **S2** | ТЗ `[x]` — поп-ап корзины expanded/peek/hidden · bottom bar · скролл |
+| **S3** | ТЗ `[x]` — +/−/Удалить/+цена в поп-апе |
+| **S4** | ТЗ `[x]` — long press модификаторы · горизонтальный скролл >3 |
+| Нумерация заказчика | B1.14/15/16 — **TBD**, канон **B1.13-S2…S4** |
+| Этап 0 JSON | [`b113_stage0_scope_2026-06-22.json`](../milestones/veha_2/artifacts/demo-feedback/b113_stage0_scope_2026-06-22.json) · [`b113_stage0_s2_s4_2026-06-22.json`](../milestones/veha_2/artifacts/demo-feedback/b113_stage0_s2_s4_2026-06-22.json) |
+| **Следующий шаг** | Q-epic-1 (профиль в баре vs шапка) · **апрув + `go` на S1** |
 | **Агент** | **стоп** — только docs, код не начат |
 
 ТЗ: [`B1_13_shop_nav_profile_header.md`](../milestones/veha_2/requirements/customer_tasks/B1_13_shop_nav_profile_header.md)

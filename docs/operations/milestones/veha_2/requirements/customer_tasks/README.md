@@ -12,7 +12,7 @@
 | **B2.1** | **Табло бариста — интерактивная карточка** | **закрыта** · апрув `[x]` 2026-06-18 | [B2_1_barista_order_board.md](B2_1_barista_order_board.md) |
 | **B1.12** | **Рекуррент + 1 клик** (Т-Банк, R1–R3) | **R1–R3 Fly MCP PASS** · ответы Q1–Q7 `[x]` 2026-06-19 · апрув эпика `[ ]` | [B1_12_recurrent_payments.md](B1_12_recurrent_payments.md) |
 | **B1.11** | **Режим работы точки** (УК → витрина → табло) | **ответы Q1–Q10** `[x]` · **готовность к коду** · апрув + `go` `[ ]` | [B1_11_tenant_operating_hours.md](B1_11_tenant_operating_hours.md) |
-| **B1.13** | **Новая навигация витрины** — S1: «Профиль › ID» в шапке | **ТЗ S1** `[x]` 2026-06-22 · код `[ ]` · апрув + `go` `[ ]` | [B1_13_shop_nav_profile_header.md](B1_13_shop_nav_profile_header.md) |
+| **B1.13** | **Новая навигация витрины** — эпик S1–S4 (профиль в шапке, поп-ап корзины) | **ТЗ S1–S4** `[x]` 2026-06-22 · код `[ ]` · апрув + `go` `[ ]` | [B1_13_shop_nav_profile_header.md](B1_13_shop_nav_profile_header.md) |
 | B2.2 | Объединить «Меню» + «Создать» | **ТЗ** 2026-06-10 · реализация `[ ]` | [B2_2_barista_menu_create_merge.md](B2_2_barista_menu_create_merge.md) |
 | **B1.4** | **PWA витрины** (install, offline) | **OPS_PASS** 2026-06-12 · заказчик `[ ]` | [B1_4_pwa_shop.md](B1_4_pwa_shop.md) |
 
