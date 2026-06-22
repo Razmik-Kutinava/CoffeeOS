@@ -52,6 +52,9 @@ module Shop
         .where.not(id: card.id)
         .update_all(is_default: false)
 
+      # GetState сразу после Charge — не ждём webhook для one-click.
+      Payments::TbankPaymentSync.sync_order!(order: order.reload)
+
       order
     rescue Payments::TbankAdapter::Error, Payments::TbankAdapter::ApiError => e
       raise OrderCreator::Error, map_charge_error(e)

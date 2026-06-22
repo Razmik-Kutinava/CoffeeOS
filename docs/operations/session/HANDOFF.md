@@ -14,7 +14,7 @@
 | Fly MCP R1 | `[x]` 5/5 2026-06-18 — [`b112_r1_recurrent_post_deploy_2026-06-18.json`](../milestones/veha_2/artifacts/demo-feedback/b112_r1_recurrent_post_deploy_2026-06-18.json) |
 | **R2 web-фрейм** | **OPS_PASS + Fly MCP 6/6** `[x]` 2026-06-19 — [`b112_r2_native_card_post_deploy_2026-06-19.json`](../milestones/veha_2/artifacts/demo-feedback/b112_r2_native_card_post_deploy_2026-06-19.json) |
 | **R3 1 клик** | **Fly MCP 8/8** `[x]` 2026-06-19 — [`b112_r3_one_click_post_deploy_2026-06-19.json`](../milestones/veha_2/artifacts/demo-feedback/b112_r3_one_click_post_deploy_2026-06-19.json) |
-| **Баг оплаты (заказчик)** | **fix local** 2026-06-21 — GetState sync + SavedCardStore · deploy pending |
+| **Баг оплаты (заказчик)** | **fix v2 local** 2026-06-21 — one-click + GetState backfill · deploy pending |
 | **UX 3 экрана (R4)** | **Fly MCP 11/11** post-deploy #2 `[x]` 2026-06-21 — [`b112_r4_single_screen_post_deploy_2026-06-21.json`](../milestones/veha_2/artifacts/demo-feedback/b112_r4_single_screen_post_deploy_2026-06-21.json) | **апрув эпика B1.12** |
 
 ТЗ: [`B1_12_recurrent_payments.md`](../milestones/veha_2/requirements/customer_tasks/B1_12_recurrent_payments.md) · runbook: [`TBANK_RECURRENT.md`](../milestones/veha_2/runbooks/TBANK_RECURRENT.md)

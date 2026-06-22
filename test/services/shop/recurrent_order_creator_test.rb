@@ -43,6 +43,9 @@ class Shop::RecurrentOrderCreatorTest < ActionDispatch::IntegrationTest
       inst.define_singleton_method(:charge_recurrent) do |**_kwargs|
         { provider_payment_id: "charge-unit-1", charged: true }
       end
+      inst.define_singleton_method(:get_payment_state) do |**|
+        { "Success" => true, "ErrorCode" => "0", "Status" => "AUTHORIZED", "PaymentId" => "charge-unit-1" }
+      end
       inst
     end
 

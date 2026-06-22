@@ -6,6 +6,10 @@ module Payments
   class TbankPaymentSync
     def self.sync_order!(order:, adapter: nil)
       payment = order.payments.where(provider: "tbank").order(created_at: :desc).first
+      payment ||= order.payments
+        .where.not(provider_payment_id: [nil, ""])
+        .order(created_at: :desc)
+        .first
       return false unless payment
 
       new(payment: payment, adapter: adapter).sync!
@@ -17,8 +21,6 @@ module Payments
     end
 
     def sync!
-      return false unless @payment.provider == "tbank"
-
       provider_id = @payment.provider_payment_id.to_s.presence
       return false if provider_id.blank?
 

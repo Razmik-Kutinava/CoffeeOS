@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## v1.233 — 2026-06-21 (B1.12: one-click — полный фикс привязки и 2-й оплаты)
+
+- **Баг:** 2-я оплата снова iframe Т-Банка; карта не в `saved_cards`; race на кнопке «Оплатить».
+- **Сделано:** finalize всегда GetState + `saved_card` в ответе · Charge→sync · recurrent без `payment_iframe` · фронт: блок кнопки при загрузке карт, one-click только waitForOrderSettled.
+- **Тест:** b112 settle/r3/checkout/recurrent/sync — 17 runs, 105 assertions, 0 failures.
+- **Не делали:** deploy Fly · real-card E2E · апрув заказчика.
+
 ## v1.232 — 2026-06-21 (B1.12: привязка карты — GetState sync + SavedCardStore fallback)
 
 - **Баг:** после 1-й оплаты RebillId не попадал в `mobile_payment_methods` (webhook без Pan / задержка); 2-я оплата — снова iframe банка.

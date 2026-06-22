@@ -56,6 +56,9 @@ class Shop::Api::B112R3OneClickTest < ActionDispatch::IntegrationTest
       inst.define_singleton_method(:charge_recurrent) do |**_kwargs|
         { provider_payment_id: "charge-r3-1", charged: true }
       end
+      inst.define_singleton_method(:get_payment_state) do |**|
+        { "Success" => true, "ErrorCode" => "0", "Status" => "CONFIRMED", "PaymentId" => "charge-r3-1" }
+      end
       inst
     end
 
@@ -75,6 +78,8 @@ class Shop::Api::B112R3OneClickTest < ActionDispatch::IntegrationTest
       assert_equal 200, sess.response.status
       body = JSON.parse(sess.response.body)
       assert body["recurrent_charge"], "expected recurrent_charge flag"
+      assert_equal false, body["payment_iframe"]
+      assert_nil body["payment_url"]
       assert_equal "charge-r3-1", body["provider_payment_id"]
       assert body["order_id"].present?
     end
@@ -123,6 +128,9 @@ class Shop::Api::B112R3OneClickTest < ActionDispatch::IntegrationTest
       inst.define_singleton_method(:charge_recurrent) do |**_kwargs|
         charge_calls += 1
         { provider_payment_id: "charge-dup-#{charge_calls}", charged: true }
+      end
+      inst.define_singleton_method(:get_payment_state) do |**|
+        { "Success" => true, "ErrorCode" => "0", "Status" => "AUTHORIZED", "PaymentId" => "charge-dup-1" }
       end
       inst
     end

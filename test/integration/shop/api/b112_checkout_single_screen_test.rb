@@ -17,6 +17,14 @@ class Shop::Api::B112CheckoutSingleScreenTest < ActionDispatch::IntegrationTest
     refute File.exist?(Rails.root.join("app/frontend/routes/Payment.svelte"))
   end
 
+  test "Checkout blocks pay while saved cards load and one-click uses settlement wait" do
+    checkout = File.read(Rails.root.join("app/frontend/routes/Checkout.svelte"))
+    assert_includes checkout, "savedCardsLoading"
+    assert_includes checkout, "async function submit()"
+    assert_includes checkout, "res.recurrent_charge || res.provider_payment_id"
+    assert_includes checkout, "waitForOrderSettled"
+  end
+
   test "CheckoutPayButton has extended pay states" do
     btn = File.read(Rails.root.join("app/frontend/components/CheckoutPayButton.svelte"))
     one_click = File.read(Rails.root.join("app/frontend/lib/shopOneClickPay.js"))

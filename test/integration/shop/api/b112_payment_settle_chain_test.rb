@@ -139,6 +139,62 @@ class Shop::Api::B112PaymentSettleChainTest < ActionDispatch::IntegrationTest
     assert_includes lib, "SAVED_CARD_RETRY_ATTEMPTS"
     assert_includes checkout, "resumeInlinePayment"
     assert_includes checkout, "payment_started"
+    assert_includes checkout, "savedCardsLoading"
+    assert_includes checkout, "guestReconnectToken"
+    assert_includes checkout, "async function submit()"
+  end
+
+  test "finalize returns saved_card after GetState backfill on accepted order" do
+    order = Order.create!(
+      tenant_id: @tenant.id,
+      customer_id: @customer.id,
+      customer_name: "Settle Guest",
+      order_number: "",
+      source: :mobile,
+      status: :accepted,
+      total_amount: 179,
+      discount_amount: 0,
+      final_amount: 179
+    )
+    Payment.create!(
+      order_id: order.id,
+      tenant_id: @tenant.id,
+      amount: 179,
+      method: :card,
+      provider: "tbank",
+      status: :succeeded,
+      paid_at: Time.current,
+      provider_payment_id: "pay-accepted-backfill"
+    )
+
+    adapter = fake_get_state_adapter(
+      "Status" => "CONFIRMED",
+      "PaymentId" => "pay-accepted-backfill",
+      "RebillId" => "backfill-finalize-rebill",
+      "Pan" => "430000******0888"
+    )
+
+    original_new = Payments::TbankAdapter.method(:new)
+    Payments::TbankAdapter.define_singleton_method(:new) { |*_args| adapter }
+    begin
+      open_session do |sess|
+        bind_customer_session!(sess, order)
+
+        sess.post "/shop/api/orders/#{order.id}/finalize",
+          headers: { "X-Shop-Tenant" => @tenant.id.to_s },
+          as: :json
+
+        assert_equal 200, sess.response.status
+        body = JSON.parse(sess.response.body)
+        assert body["payment_settled"]
+        card = MobilePaymentMethod.primary_for(@customer.id)
+        assert_equal "backfill-finalize-rebill", card.card_token
+        assert_equal card.id, body.dig("saved_card", "id")
+        assert_equal "430000******0888", body.dig("saved_card", "masked_pan")
+      end
+    ensure
+      Payments::TbankAdapter.define_singleton_method(:new, original_new)
+    end
   end
 
   private

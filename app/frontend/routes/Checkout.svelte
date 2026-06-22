@@ -14,7 +14,8 @@
     reconnectGuestOrder,
     returningFromPaymentPage,
     saveGuestOrderSession,
-    clearGuestOrderSession
+    clearGuestOrderSession,
+    guestReconnectToken
   } from "../lib/shopGuestSession.js"
   import { savePaymentSession, loadPaymentSession, clearPaymentSession } from "../lib/tbankPayment.js"
   import { clearCartCache } from "../lib/shopCartCache.js"
@@ -70,7 +71,11 @@
       payState === PAY_BTN.success
   )
   const canPay = $derived(
-    isValidEmail(email) && emailVerified && !payBusy && shopIsOpenForPay()
+    isValidEmail(email) &&
+      emailVerified &&
+      !payBusy &&
+      !savedCardsLoading &&
+      shopIsOpenForPay()
   )
   const showSavedCard = $derived(
     payment_method === "card" && useOneClick && savedCard && emailVerified
@@ -294,6 +299,16 @@
     clearPaymentSession()
     inlineSession = null
     inlineAwaitingOnly = false
+
+    try {
+      const token = guestReconnectToken()
+      const q = token ? `?reconnect_token=${encodeURIComponent(token)}` : ""
+      const res = await api(`/orders/${orderId}/finalize${q}`, { method: "POST" })
+      if (res.saved_card) savedCard = res.saved_card
+    } catch {
+      /* settlement watch мог уже вызвать finalize */
+    }
+
     await refreshSavedCardsAfterPayment()
     await redirectAfterSuccess(orderId)
   }
@@ -346,17 +361,18 @@
       clearCartCache()
       clientOrderUuid = null
 
-      if (res.recurrent_charge) {
+      if (res.recurrent_charge || res.provider_payment_id) {
         await waitForOrderSettled(api, {
           orderId: res.order_id,
           reconnectToken: res.reconnect_token,
           subscribe: subscribeGuestOrderStatus
         })
+        await refreshSavedCardsAfterPayment()
         await redirectAfterSuccess(res.order_id)
         return
       }
 
-      if (res.payment_url || res.provider_payment_id) {
+      if (res.payment_url) {
         await handleOnlinePaymentRedirect(res)
         return
       }
@@ -469,9 +485,10 @@
     }
   }
 
-  function submit() {
-    if (showSavedCard) submitOneClick()
-    else submitNewCard()
+  async function submit() {
+    if (savedCardsLoading) await loadSavedCards()
+    if (showSavedCard) await submitOneClick()
+    else await submitNewCard()
   }
 
   function bindOtherCard() {
@@ -624,7 +641,7 @@
 
   <CheckoutPayButton
     state={payState}
-    disabled={!canPay || profileSyncing}
+    disabled={!canPay || profileSyncing || savedCardsLoading}
     errorInfo={payError}
     onPay={submit}
     onRetry={submit}

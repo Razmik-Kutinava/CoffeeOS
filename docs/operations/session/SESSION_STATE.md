@@ -21,7 +21,7 @@
 | Сейчас | Дальше |
 |--------|--------|
 | **B1.12 UX (3 экрана)** | **R4 Fly MCP 11/11 PASS** post-deploy #2 (`75dc252`) | **апрув эпика B1.12** |
-| **B1.12 баг оплаты** | **fix local** GetState sync · deploy pending | real-card E2E после deploy |
+| **B1.12 баг оплаты** | **fix v2 local** one-click + GetState backfill · deploy pending | real-card E2E после deploy |
 | **B1.12 рекуррент** | R1–R3 Fly MCP PASS · ответы Q1–Q7 `[x]` 2026-06-19 | апрув эпика |
 | **B1.11 режим работы** | **Fly MCP header A/B PASS** · артефакт 2026-06-21 | **апрув заказчика** |
 | **B2.1 табло** | **ЗАКРЫТА** · апрув `[x]` 2026-06-18 | backlog фаза 2 в CBR |
@@ -30,6 +30,13 @@
 | **B1.7 checkout** | **ЗАКРЫТА** · апрув `[x]` 2026-06-04 | — |
 | **B1.4 PWA** | код задеплоен · OPS_PASS · заказчик `[ ]` | апрув |
 | **B2.2** | stage0 `[x]` · этап 1 `[ ]` | единый экран «Меню» |
+
+### Сессия 2026-06-21 (B1.12: one-click v2 — полный фикс 2-й оплаты)
+
+- **Баг:** 2-я оплата — снова iframe Т-Банка; нет saved card на checkout.
+- **Fix:** finalize GetState всегда + `saved_card` · Charge→GetState · recurrent API без iframe · фронт race/retry/one-click без iframe fallback.
+- **Тест:** 17/17 PASS local (settle, r3, checkout, recurrent, sync).
+- **Дальше:** **deploy Fly** · real-card 1→2 оплата · апрув B1.12.
 
 ### Сессия 2026-06-21 (B1.12: fix привязки карты — GetState + SavedCardStore)
 

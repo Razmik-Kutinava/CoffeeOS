@@ -12,7 +12,7 @@ module Shop
         creator = Shop::OrderCreator.new(session, tenant: @shop_tenant, request: request)
         order = creator.call!(order_params.to_h.symbolize_keys)
         Rails.logger.info("[Shop::Order] Order created: #{order.id}, total: #{order.final_amount}, status: #{order.status}")
-        render json: order_create_json(order, creator)
+        render json: order_create_json(order, creator, recurrent: order_params[:saved_card_id].present?)
       rescue Shop::OrderCreator::Error => e
         Rails.logger.error("[Shop::Order] Failed to create order: #{e.message}")
         render json: { error: e.message, status: 422 }, status: :unprocessable_entity
@@ -86,17 +86,19 @@ module Shop
           return render json: { error: "Order not found", status: 404 }, status: :not_found
         end
 
-        unless order.accepted?
-          Payments::TbankPaymentSync.sync_order!(order: order)
-          order.reload
-        end
+        Payments::TbankPaymentSync.sync_order!(order: order)
+        order.reload
 
         if order.accepted?
           Shop::CartService.new(session, @shop_tenant.id).clear!
           Shop::PendingOrderSession.clear!(session, @shop_tenant.id)
         end
 
-        render json: order_json(order).merge(payment_settled: order.accepted?)
+        payload = order_json(order).merge(payment_settled: order.accepted?)
+        saved = primary_saved_card_json(order.customer_id)
+        payload[:saved_card] = saved if saved
+
+        render json: payload
       rescue ActiveRecord::RecordNotFound
         render json: { error: "Order not found", status: 404 }, status: :not_found
       end
@@ -159,7 +161,7 @@ module Shop
         false
       end
 
-      def order_create_json(order, creator)
+      def order_create_json(order, creator, recurrent: false)
         payload = {
           order_id: order.id,
           total: order.final_amount.to_f,
@@ -171,17 +173,38 @@ module Shop
 
         if creator.provider_payment_id.present?
           payload[:provider_payment_id] = creator.provider_payment_id
-          payload[:payment_iframe] = Shop::PaymentConfig.iframe_enabled?
-          payload[:terminal_key] = Shop::PaymentConfig.terminal_key if Shop::PaymentConfig.iframe_enabled?
+          if recurrent
+            payload[:recurrent_charge] = true
+            payload[:payment_iframe] = false
+            payload.delete(:payment_url)
+          else
+            payload[:payment_iframe] = Shop::PaymentConfig.iframe_enabled?
+            payload[:terminal_key] = Shop::PaymentConfig.terminal_key if Shop::PaymentConfig.iframe_enabled?
+          end
         end
 
-        if payload[:payment_url].blank? && creator.provider_payment_id.present?
+        if !recurrent && payload[:payment_url].blank? && creator.provider_payment_id.present?
           payload[:recurrent_charge] = true
         end
 
         payload[:card_binding] = true if creator.card_binding
 
         payload
+      end
+
+      def primary_saved_card_json(customer_id)
+        return nil if customer_id.blank?
+
+        card = MobilePaymentMethod.primary_for(customer_id)
+        return nil unless card
+
+        {
+          id: card.id,
+          payment_system: card.card_brand,
+          masked_pan: card.card_masked,
+          is_primary: card.is_default?,
+          last_used_at: card.last_used_at&.iso8601
+        }
       end
 
       def order_params
