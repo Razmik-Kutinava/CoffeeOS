@@ -117,7 +117,9 @@ module Platform
 
     def tenant_params
       params.require(:tenant).permit(
-        :name, :slug, :organization_id, :type, :status, :city, :address, :country, :currency, :timezone
+        :name, :slug, :organization_id, :type, :status, :city, :address,
+        :latitude, :longitude,
+        :country, :currency, :timezone
       )
     end
 

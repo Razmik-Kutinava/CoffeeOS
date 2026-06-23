@@ -8,9 +8,11 @@ Rails.application.configure do
     policy.object_src  :none
     # Hotwire/Turbo + T-Bank integration.js (§2.3 этап 4 iframe)
     policy.script_src  :self, :unsafe_inline,
+                       "https://unpkg.com",
                        "https://*.tinkoff.ru", "https://*.tcsbank.ru", "https://*.tbank.ru",
                        "https://*.nspk.ru", "https://*.t-static.ru"
     policy.style_src   :self, :unsafe_inline,
+                       "https://unpkg.com",
                        "https://*.tinkoff.ru", "https://*.tcsbank.ru", "https://*.tbank.ru",
                        "https://*.nspk.ru", "https://*.t-static.ru"
     if Rails.env.development?

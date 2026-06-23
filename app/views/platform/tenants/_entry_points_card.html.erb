@@ -4,7 +4,16 @@
   <p style="margin: 0 0 8px;"><strong>Организация:</strong> <%= entry_points[:organization_name].presence || "—" %></p>
   <p style="margin: 0 0 8px;"><strong>Slug:</strong> <%= entry_points[:slug] %></p>
   <p style="margin: 0 0 8px;"><strong>Город:</strong> <%= tenant.city.presence || "—" %></p>
-  <p style="margin: 0 0 16px;"><strong>Адрес:</strong> <%= entry_points[:address].presence || "—" %></p>
+  <p style="margin: 0 0 8px;"><strong>Адрес:</strong> <%= entry_points[:address].presence || "—" %></p>
+  <% if tenant.sales_point? %>
+    <p style="margin: 0 0 16px;"><strong>Координаты:</strong>
+      <% if tenant.latitude.present? && tenant.longitude.present? %>
+        <%= tenant.latitude %>, <%= tenant.longitude %>
+      <% else %>
+        <span style="color: #fbbf24;">не заданы — укажите в настройках точки на карте</span>
+      <% end %>
+    </p>
+  <% end %>
 
   <h3 style="font-size: 0.95rem; margin: 16px 0 8px;">Клиентские каналы</h3>
   <ul style="list-style: none; padding: 0; margin: 0 0 16px;">

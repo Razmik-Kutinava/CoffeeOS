@@ -1,0 +1,40 @@
+<%# B1.14: координаты точки — Leaflet/OSM в форме УК (только sales_point). %>
+<% if tenant.sales_point? %>
+  <div
+    data-controller="tenant-map"
+    data-tenant-map-lat-value="<%= tenant.latitude.presence || 55.7558 %>"
+    data-tenant-map-lng-value="<%= tenant.longitude.presence || 37.6173 %>"
+    style="margin: 16px 0; padding: 12px; border: 1px solid #334155; border-radius: 8px; background: #1e293b;"
+  >
+    <h3 style="font-size: 0.95rem; margin: 0 0 8px;">Координаты на карте</h3>
+    <p style="font-size: 12px; color: #94a3b8; margin: 0 0 12px;">
+      Нужны для сортировки «ближайших» точек в витрине. Клик по карте — маркер и поля ниже.
+    </p>
+
+    <p style="margin: 0 0 12px;">
+      <button type="button" data-action="tenant-map#toggle" style="cursor: pointer;">
+        Указать на карте
+      </button>
+    </p>
+
+    <div data-tenant-map-target="panel" hidden>
+      <div
+        data-tenant-map-target="map"
+        data-testid="tenant-map-canvas"
+        style="height: 320px; width: 100%; border-radius: 6px; margin-bottom: 12px;"
+      ></div>
+      <p style="display: flex; gap: 12px; flex-wrap: wrap; margin: 0;">
+        <span>
+          <%= f.label :latitude, "Широта (lat)" %>
+          <%= f.number_field :latitude, step: "any", style: "width: 10rem;",
+                data: { tenant_map_target: "latitude", action: "input->tenant-map#coordsInput" } %>
+        </span>
+        <span>
+          <%= f.label :longitude, "Долгота (lng)" %>
+          <%= f.number_field :longitude, step: "any", style: "width: 10rem;",
+                data: { tenant_map_target: "longitude", action: "input->tenant-map#coordsInput" } %>
+        </span>
+      </p>
+    </div>
+  </div>
+<% end %>

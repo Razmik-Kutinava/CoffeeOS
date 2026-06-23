@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 2026-06-23 — B1.14-3c: карта координат в УК (Leaflet/OSM)
+
+- **УК:** форма точки — «Указать на карте», поля lat/lng, Stimulus `tenant_map_controller`
+- **Карточка:** отображение координат в блоке «Входы и URL»
+- **CSP:** `unpkg.com` для Leaflet (без геокодера)
+- **Тесты:** `b114_tenant_map_test.rb` — 2 runs, 0 failures
+- **Дальше:** deploy · B1.14-4 cart
+
 ## 2026-06-23 — B1.14-3b: дропдаун точек по городу + координаты
 
 - **Миграция:** `latitude`/`longitude` на `tenants`
