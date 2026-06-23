@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2026-06-23 — ops: Fly deploy Depot 401 + B1.14-2/3 на стенде
+
+- **Проблема:** `fly deploy` → `ensure depot builder failed (401)` на этапе push (Depot, не код приложения)
+- **Фикс:** `bin/fly_deploy.sh` (`--depot=false`) · runbook `FLY_DEMO_STAND.md` · CI `deploy.yml` · `INFRA_STACK.md`
+- **Deploy:** `deployment-01KVT2DYNPBFBXC1JNHETRRQYZ` · `/up` 200 · B1.14 `display_address` в бандле
+- **Дальше:** MCP скрины B1.14 · B1.14-4 cart
+
 ## 2026-06-23 — B1.14-3: Header адрес точки + дропдаун
 
 - **Frontend:** `Header.svelte` · `shopTenantHeader.js` · `App.svelte` bootstrap

@@ -26,7 +26,7 @@
 |-----|---------|
 | **Агент** | `fly deploy`, `fly secrets set`, смена `DATABASE_URL`, новые облака — **только после явного «deploy» / «go»** от владельца |
 | **GitHub Actions** | `.github/workflows/deploy.yml` — **только ручной запуск** (`workflow_dispatch`), **не** на каждый push в `develop` |
-| **Владелец** | Локально: `fly deploy -a coffeeos` когда нужно выкатить |
+| **Владелец** | Локально: `./bin/fly_deploy.sh` или `fly deploy -a coffeeos --depot=false` (Depot 401 → см. `FLY_DEMO_STAND.md`) |
 
 **Экономия Neon:** каждый `fly deploy` → `fly:release` → `db:prepare` + `demo:seed` будит compute. Лишние деплои = лишние CU-hrs. Деплой **после зелёных тестов локально**, не «на каждый коммит».
 

@@ -35,7 +35,27 @@ UUID — см. ниже § «Узнать URL без SSH».
 
 **SSH не обязателен** для демо, если деплой и `demo:seed` в release прошли успешно.
 
-### 3. `fly:release` / `db:prepare` failed
+### 3. `ensure depot builder failed` / `401 Unauthorized` при `fly deploy`
+
+**Симптом:** сборка Dockerfile прошла, push образа падает с `ensure depot builder failed (status 401)` или `401 Unauthorized` от Depot.
+
+**Причина:** удалённый билдер **Depot** (дефолт в новых `flyctl`) — сбой auth/инфра, не баг CoffeeOS.
+
+**Что делать (по порядку):**
+
+1. **Рекомендуемый деплой из репо:** `./bin/fly_deploy.sh` (внутри `--depot=false`).
+2. Вручную: `fly deploy -a coffeeos --depot=false`
+3. Обновить CLI: `fly version update` (старые версии чаще ловят 401).
+4. Если снова 401 на registry: `fly auth docker`, затем повтор.
+5. Запасной вариант (нужен локальный Docker): `fly deploy -a coffeeos --local-only`
+
+**Проверка после деплоя:** `/up` → 200; в логах release — `Shop A:` / `Shop B:`.
+
+**Transient warning** `not listening on 0.0.0.0:3000` во время rolling update — обычно Puma ещё поднимается; если `/up` зелёный через 1–2 мин — ок.
+
+---
+
+### 4. `fly:release` / `db:prepare` failed
 
 **Канон БД:** **Neon** проект `coffeeos` — см. [`../dev/INFRA_STACK.md`](../dev/INFRA_STACK.md).
 

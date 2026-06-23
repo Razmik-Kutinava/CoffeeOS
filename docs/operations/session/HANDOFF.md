@@ -1,6 +1,6 @@
 # HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-06-23 (B1.14 этап 0 ТЗ · B1.13-S1 Fly MCP PASS)  
+**Дата:** 2026-06-23 (B1.14 deploy Fly · B1.13-S1 Fly MCP PASS)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev
 
@@ -12,8 +12,9 @@
 | Этап 0 JSON | [`b114_stage0_scope_2026-06-23.json`](../milestones/veha_2/artifacts/demo-feedback/b114_stage0_scope_2026-06-23.json) · [`b114_screenshot_baseline_2026-06-23.json`](../milestones/veha_2/artifacts/demo-feedback/b114_screenshot_baseline_2026-06-23.json) |
 | Скрины «до» | [`b114_shop_header_coffeeos_before_2026-06-23.png`](../milestones/veha_2/artifacts/demo-feedback/screenshots/b114_shop_header_coffeeos_before_2026-06-23.png) · [`b114_uk_tenants_card_before_2026-06-23.png`](../milestones/veha_2/artifacts/demo-feedback/screenshots/b114_uk_tenants_card_before_2026-06-23.png) |
 | Код | **B1.14-2** `[x]` · **B1.14-3 Header** `[x]` 2026-06-23 · **B1.14-4** cart `[ ]` |
-| **Следующий шаг** | **deploy** владельца → Fly MCP + скрины after · затем `go` B1.14-4 |
-| **Агент** | **стоп** — только docs, код не начат |
+| **Deploy** | `[x]` 2026-06-23 — `deployment-01KVT2DYNPBFBXC1JNHETRRQYZ` · `--depot=false` (Depot 401) |
+| **Следующий шаг** | Fly MCP + скрины after · затем `go` B1.14-4 |
+| **Агент** | **стоп** — MCP скрины или `go` B1.14-4 |
 
 ТЗ: [`B1_14_shop_tenant_address_header.md`](../milestones/veha_2/requirements/customer_tasks/B1_14_shop_tenant_address_header.md)
 
