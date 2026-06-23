@@ -1,6 +1,6 @@
 # HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-06-22 (B1.13 эпик S1–S4 ТЗ · B1.12 deploy pending)  
+**Дата:** 2026-06-22 (B1.13-S1 код · deploy pending)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev
 
@@ -8,14 +8,14 @@
 
 | Что | Статус |
 |-----|--------|
-| **S1** | ТЗ `[x]` — профиль в шапке · убрать «Профиль» из bottom nav |
+| **S1** | **код** `[x]` 2026-06-22 — Header «Профиль › ID» · BottomNav без «Профиль» · тесты 5/5 |
 | **S2** | ТЗ `[x]` — поп-ап корзины expanded/peek/hidden · bottom bar · скролл |
 | **S3** | ТЗ `[x]` — +/−/Удалить/+цена в поп-апе |
 | **S4** | ТЗ `[x]` — long press модификаторы · горизонтальный скролл >3 |
 | Нумерация заказчика | B1.14/15/16 — **TBD**, канон **B1.13-S2…S4** |
 | Этап 0 JSON | [`b113_stage0_scope_2026-06-22.json`](../milestones/veha_2/artifacts/demo-feedback/b113_stage0_scope_2026-06-22.json) · [`b113_stage0_s2_s4_2026-06-22.json`](../milestones/veha_2/artifacts/demo-feedback/b113_stage0_s2_s4_2026-06-22.json) |
-| **Следующий шаг** | **апрув + `go` на S1** (вопросы Q-epic / Q1–Q2 закрыты 2026-06-22) |
-| **Агент** | **стоп** — только docs, код не начат |
+| **Следующий шаг** | **deploy Fly** (владелец) → MCP DevTools S1 |
+| **Агент** | **стоп** — ждём deploy |
 
 ТЗ: [`B1_13_shop_nav_profile_header.md`](../milestones/veha_2/requirements/customer_tasks/B1_13_shop_nav_profile_header.md)
 
