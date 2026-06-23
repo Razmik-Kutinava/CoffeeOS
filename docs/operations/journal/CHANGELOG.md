@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2026-06-23 — B1.14-2: API адрес точки + demo seed
+
+- **API:** `GET /shop/api/config` — блок `tenant` + `last_ordered_tenant_id` · `GET /shop/api/tenants` (история заказов)
+- **Сервисы:** `Shop::TenantAddress`, `Shop::CustomerTenantHistory`
+- **Seed:** `Demo::EnvironmentSetup` — Москва, ул. Ленина/Пушкина у demo A/B
+- **Тесты:** 12 runs, 89 assertions, 0 failures (b114 + tenant_address + customer_tenant_history + config + demo seed)
+- **Runbook:** `FLUTTER_API.md` § B1.14
+- **Дальше:** `go` B1.14-3 Header
+
 ## 2026-06-23 — B1.14: скрины baseline заказчика
 
 - **Скрины:** `b114_shop_header_coffeeos_before_2026-06-23.png` (витрина #1) · `b114_uk_tenants_card_before_2026-06-23.png` (УК #2+#3)

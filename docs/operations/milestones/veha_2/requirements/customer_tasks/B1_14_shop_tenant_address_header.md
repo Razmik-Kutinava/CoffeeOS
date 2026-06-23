@@ -1,7 +1,7 @@
 # Задача: Адрес точки продаж и выбор точки в шапке витрины
 
 **ID:** B1.14 · **Источник:** заказчик, чат 2026-06 (задача 2 — клиентская часть CoffeeOS)  
-**Статус:** **этап 0 ТЗ** `[x]` 2026-06-23 · **код** `[ ]` · **апрув + `go`** `[ ]`
+**Статус:** **B1.14-2 API + seed** `[x]` 2026-06-23 · **B1.14-3 Header** `[ ]` · **апрув + `go`** на UI `[ ]`
 
 **Связано:** [B1.11](B1_11_tenant_operating_hours.md) (`schedule_display` под адресом) · [B1.13](B1_13_shop_nav_profile_header.md) (шапка: «Профиль › ID» справа) · [B1.4](B1_4_pwa_shop.md) (PWA) · онбординг УК (`tenants.city`, `tenants.address`)
 
@@ -20,9 +20,9 @@
 | **Шапка слева** | `Header.svelte` — кнопка **«CoffeeOS»** → `push("/")` | **«Город, Адрес»** текущей точки · клик → дропдаун (если >1 точки в истории) |
 | **Шапка строка 2** | `schedule_display` из B1.11 (`shopOperatingHours.js` → `/shop/api/config`) | **Оставляем** · своё расписание на каждую точку из УК |
 | **Шапка справа** | «Профиль › ID» (B1.13-S1) | **Не меняем** в B1.14 |
-| **Поля точки в БД** | `tenants.city`, `tenants.address` в `schema.rb` · форма УК `platform/tenants` | Используем · **demo:seed** — заполнить city/address у демо-точек для приёмки |
-| **Shop API config** | `GET /shop/api/config` — `operating_hours`, payment flags | Добавить **`tenant`** (или блок): `id`, `city`, `address`, `display_address` |
-| **Список точек для дропдауна** | **Нет** (`FLUTTER_API.md` — `GET /shop/api/tenants` «позже») | **Новый эндпоинт** — точки, где покупатель **уже заказывал** (история заказов / customer) |
+| **Поля точки в БД** | `tenants.city`, `tenants.address` · **demo:seed** Москва/адреса A/B | **done** B1.14-2 |
+| **Shop API config** | `GET /shop/api/config` — `tenant`, `last_ordered_tenant_id` | **done** B1.14-2 |
+| **Список точек для дропдауна** | `GET /shop/api/tenants` — история заказов покупателя | **done** B1.14-2 |
 | **Текущая точка** | `?tenant_id=` в URL · `meta shop-tenant-id` | Выбранная пользователем **или** последняя с **последней покупки** (авторизованный) |
 | **Гость без заказов** | Одна точка из URL | Адрес без переключения (иконка/клик **неактивен**) — по ТЗ заказчика |
 | **Корзина** | Один ключ сессии `:shop_cart` · **не** per-tenant · без TTL 24ч | **Per-tenant корзины** · при смене точки корзина **не переносится** · корзина на старой точке **хранится 24 ч** |
@@ -70,9 +70,9 @@
 [x] 0 — ТЗ + ops + этап 0 JSON (2026-06-23)
 [x] 0b — ответы владельца Q1–Q10 (2026-06-23)
 [x] 0c — скрины «до» заказчика #1–#3 (2026-06-23)
-[ ] 1 — апрув заказчика / владельца на старт кода → **`go`**
-[ ] 2 — API: config tenant + список точек из истории
-[ ] 3 — Header: адрес + дропдаун + localStorage
+[x] 1 — go (владелец) на B1.14-2
+[x] 2 — API: config tenant + GET /shop/api/tenants + demo:seed city/address (2026-06-23)
+[ ] 3 — Header: адрес + дропдаун + localStorage → **`go`**
 [ ] 4 — Cart per-tenant + TTL 24ч
 [ ] 5 — demo:seed city/address · тесты + регрессия shop
 [ ] 6 — Fly MCP + апрув заказчика

@@ -212,9 +212,56 @@ fly ssh console -a coffeeos -C "bin/rake fly:callback_smoke"
 
 ---
 
+## Shop API — tenant / адрес (B1.14)
+
+### `GET /shop/api/config`
+
+Дополнительные поля:
+
+```json
+{
+  "tenant": {
+    "id": "uuid",
+    "name": "Demo Coffee Point A",
+    "city": "Москва",
+    "address": "ул. Ленина, 10",
+    "display_address": "Москва, ул. Ленина, 10"
+  },
+  "last_ordered_tenant_id": "uuid-or-null"
+}
+```
+
+`display_address` = «Город, Адрес»; если оба пустые — `"Адрес не указан"`.
+
+### `GET /shop/api/tenants`
+
+Точки, где покупатель **уже заказывал** (история `orders.source=mobile`). Гость без заказов — одна текущая точка, `switchable: false`.
+
+Заголовок: `X-Shop-Tenant` (текущая точка из URL).
+
+```json
+{
+  "current_tenant_id": "uuid",
+  "last_ordered_tenant_id": "uuid-or-null",
+  "switchable": true,
+  "tenants": [
+    {
+      "id": "uuid",
+      "name": "Demo Coffee Point B",
+      "city": "Москва",
+      "address": "ул. Пушкина, 5",
+      "display_address": "Москва, ул. Пушкина, 5",
+      "last_ordered_at": "2026-06-22T12:00:00Z",
+      "is_current": false
+    }
+  ]
+}
+```
+
+---
+
 ## Позже (не в контракте)
 
-- `GET /shop/api/tenants` — список точек для экрана выбора
 - Customer JWT / mobile login
 - Refund API — В3
 - Stateless cart без session cookie

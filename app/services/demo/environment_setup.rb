@@ -16,6 +16,12 @@ module Demo
     TENANT_KITCHEN_SLUG = "demo-prep-kitchen"
     TENANT_KITCHEN_NAME = "Demo Prep Kitchen"
 
+    DEMO_TENANT_ADDRESSES = {
+      TENANT_A_SLUG => { city: "Москва", address: "ул. Ленина, 10" },
+      TENANT_B_SLUG => { city: "Москва", address: "ул. Пушкина, 5" },
+      TENANT_KITCHEN_SLUG => { city: "Москва", address: "пр-д Заготовочный, 1" }
+    }.freeze
+
     ROLES = [
       { code: "barista", name: "Бариста" },
       { code: "shift_manager", name: "Сменный менеджер" },
@@ -158,6 +164,9 @@ module Demo
         organization: organization
       )
       tenant.save!
+      if (loc = DEMO_TENANT_ADDRESSES[slug])
+        tenant.update!(city: loc[:city], address: loc[:address])
+      end
       tenant
     end
 

@@ -93,7 +93,7 @@
 | B1.12 | **Рекуррент Т-Банк** — токены, 1 клик, UX оплаты (R1–R3) | [ТЗ](customer_tasks/B1_12_recurrent_payments.md) | **R1–R3 Fly MCP PASS** · ответы Q1–Q7 `[x]` 2026-06-19 · апрув эпика `[ ]` |
 | B1.11 | **Режим работы точки** — УК, витрина, табло | [ТЗ](customer_tasks/B1_11_tenant_operating_hours.md) | **ответы Q1–Q10** `[x]` 2026-06-19 · **готовность к коду** · апрув + `go` `[ ]` |
 | B1.13 | **Новая навигация витрины** — эпик S1–S4 (шапка, поп-ап корзины, bottom bar) | [ТЗ](customer_tasks/B1_13_shop_nav_profile_header.md) | **S1 Fly MCP** `[x]` 2026-06-23 · S2–S4 код `[ ]` · апрув S1 `[ ]` |
-| B1.14 | **Адрес точки + выбор точки** в шапке витрины (заказчик «задача 2») | [ТЗ](customer_tasks/B1_14_shop_tenant_address_header.md) | **ТЗ этап 0** `[x]` 2026-06-23 · код `[ ]` · апрув + `go` `[ ]` |
+| B1.14 | **Адрес точки + выбор точки** в шапке витрины (заказчик «задача 2») | [ТЗ](customer_tasks/B1_14_shop_tenant_address_header.md) | **B1.14-2 API** `[x]` 2026-06-23 · Header `[ ]` |
 | B1.8 | **Свой домен → своя почта для рассылки** | После домена (не `fly.dev`): `noreply@…` / `orders@…`, DNS в Brevo (SPF/DKIM/DMARC), сменить `MAIL_FROM` на Fly | **напоминание** |
 
 > **B1.8 (не забыть):** сейчас письма с **подтверждённого личного sender** в Brevo. Когда будет **свой домен** — завести **кофейную почту** (напр. `noreply@бренд.ru`), аутентифицировать домен в Brevo, обновить `MAIL_FROM` + secrets. Код OTP/ActionMailer менять не нужно.
@@ -116,7 +116,7 @@
 | 8 | **B1.11** | Режим работы точек продаж (УК) | **ответы Q1–Q10** `[x]` · **готовность** · апрув + `go` `[ ]` | [B1_11_tenant_operating_hours.md](customer_tasks/B1_11_tenant_operating_hours.md) |
 | 9 | **B1.12** | Рекуррент + оплата в 1 клик (витрина) | **R1–R3 Fly MCP PASS** · ответы Q1–Q7 `[x]` 2026-06-19 · апрув `[ ]` | [B1_12_recurrent_payments.md](customer_tasks/B1_12_recurrent_payments.md) |
 | 10 | **B1.13** | Новая навигация витрины — S1–S4 (шапка + поп-ап корзины) | **S1 Fly MCP** `[x]` 2026-06-23 · S2–S4 код `[ ]` · апрув S1 `[ ]` | [B1_13_shop_nav_profile_header.md](customer_tasks/B1_13_shop_nav_profile_header.md) |
-| 11 | **B1.14** | Адрес точки + выбор точки в шапке витрины | **ТЗ этап 0** `[x]` 2026-06-23 · код `[ ]` · апрув + `go` `[ ]` | [B1_14_shop_tenant_address_header.md](customer_tasks/B1_14_shop_tenant_address_header.md) |
+| 11 | **B1.14** | Адрес точки + выбор точки в шапке витрины | **B1.14-2 API** `[x]` 2026-06-23 · Header `[ ]` | [B1_14_shop_tenant_address_header.md](customer_tasks/B1_14_shop_tenant_address_header.md) |
 
 **Следующий фокус по задачам заказчика:** **B1.11** апрув · **B1.12** апрув эпика · **B1.13-S1** апрув · **B1.14** апрув + `go` · **B2.2** · **B1.4** `[ ]`.
 

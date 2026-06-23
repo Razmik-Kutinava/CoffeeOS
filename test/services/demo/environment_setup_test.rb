@@ -58,6 +58,11 @@ class Demo::EnvironmentSetupTest < ActiveSupport::TestCase
 
     assert OrderCancelReason.exists?(code: "barista_cancel")
     assert OrderCancelReason.exists?(code: "customer_changed_mind")
+
+    assert_equal "Москва", result.tenant_a.city
+    assert_equal "ул. Ленина, 10", result.tenant_a.address
+    assert_equal "Москва", result.tenant_b.city
+    assert_equal "ул. Пушкина, 5", result.tenant_b.address
     assert OrderCancelReason.exists?(code: "other")
 
     shift_a = CashShift.find_by(tenant_id: result.tenant_a.id, status: "open")

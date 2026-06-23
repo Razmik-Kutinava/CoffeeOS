@@ -6,7 +6,8 @@
   "date": "2026-06-23",
   "status": "TZ_REGISTERED",
   "tz_file": "docs/operations/milestones/veha_2/requirements/customer_tasks/B1_14_shop_tenant_address_header.md",
-  "code_started": false,
+  "code_started": true,
+  "code_steps_done": ["B1.14-2"],
   "existing_in_code": {
     "tenants_city_address_db": true,
     "platform_tenant_form_city_address": true,
