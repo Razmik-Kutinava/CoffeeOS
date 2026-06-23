@@ -17,7 +17,7 @@ module TestFactories
     Organization.create!(name: name, slug: slug)
   end
 
-  def create_tenant!(name: "Точка", slug: nil, organization: nil)
+  def create_tenant!(name: "Точка", slug: nil, organization: nil, **attrs)
     disable_rls_once!
     slug ||= "tenant-#{SecureRandom.hex(4)}"
     Tenant.create!(
@@ -28,7 +28,8 @@ module TestFactories
       status: "active",
       currency: "RUB",
       country: "RU",
-      timezone: "Europe/Moscow"
+      timezone: "Europe/Moscow",
+      **attrs
     )
   end
 

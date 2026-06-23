@@ -79,7 +79,7 @@ UUID — см. ниже § «Узнать URL без SSH».
 - `SHOP_BASE_DOMAIN` **не задан** — витрина `?tenant_id=` (режим B)
 - `DEMO_AUTO_SEED=true` — запасной `demo:seed` при старте Puma
 
-В логах release после сида есть строки **`Shop A:`** / **`Shop B:`** с полным URL.
+В логах release после сида есть строки **`Shop A:`** / **`Shop B:`** / **`Shop C:`** с полным URL.
 
 **Чеклист:** [`../milestones/veha_1/checklists/CHECKLIST.md`](../milestones/veha_1/checklists/CHECKLIST.md) § H.0.
 

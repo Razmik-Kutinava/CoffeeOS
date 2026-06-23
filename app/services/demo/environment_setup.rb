@@ -8,18 +8,36 @@ module Demo
 
     ORG_SLUG = "demo-coffeeos"
     ORG_NAME = "Demo CoffeeOS"
+    ORG_ALT_SLUG = "demo-coffeeos-alt"
+    ORG_ALT_NAME = "Demo CoffeeOS Alt"
 
     TENANT_A_SLUG = "demo-point-a"
     TENANT_A_NAME = "Demo Coffee Point A"
     TENANT_B_SLUG = "demo-point-b"
     TENANT_B_NAME = "Demo Coffee Point B"
+    TENANT_C_SLUG = "demo-point-c"
+    TENANT_C_NAME = "Demo Coffee Point C"
     TENANT_KITCHEN_SLUG = "demo-prep-kitchen"
     TENANT_KITCHEN_NAME = "Demo Prep Kitchen"
 
-    DEMO_TENANT_ADDRESSES = {
-      TENANT_A_SLUG => { city: "Москва", address: "ул. Ленина, 10" },
-      TENANT_B_SLUG => { city: "Москва", address: "ул. Пушкина, 5" },
-      TENANT_KITCHEN_SLUG => { city: "Москва", address: "пр-д Заготовочный, 1" }
+    # B1.14-3b: город + координаты для дропдауна «ближайшие в городе».
+    DEMO_TENANT_LOCATIONS = {
+      TENANT_A_SLUG => {
+        city: "Москва", address: "ул. Ленина, 10",
+        latitude: 55.7558, longitude: 37.6173
+      },
+      TENANT_B_SLUG => {
+        city: "Москва", address: "ул. Пушкина, 5",
+        latitude: 55.7619, longitude: 37.6056
+      },
+      TENANT_C_SLUG => {
+        city: "Москва", address: "ул. Тверская, 12",
+        latitude: 55.7568, longitude: 37.6158
+      },
+      TENANT_KITCHEN_SLUG => {
+        city: "Москва", address: "пр-д Заготовочный, 1",
+        latitude: 55.7500, longitude: 37.6200
+      }
     }.freeze
 
     ROLES = [
@@ -70,12 +88,15 @@ module Demo
 
     Result = Data.define(
       :organization,
+      :organization_alt,
       :tenant_a,
       :tenant_b,
+      :tenant_c,
       :tenant_kitchen,
       :products_count,
       :pts_a_count,
       :pts_b_count,
+      :pts_c_count,
       :users_count
     )
 
@@ -92,13 +113,17 @@ module Demo
       org = nil
       tenant_a = nil
       tenant_b = nil
+      tenant_c = nil
       tenant_kitchen = nil
+      org_alt = nil
 
       ActiveRecord::Base.transaction do
         roles = ensure_roles!
         org = ensure_organization!
+        org_alt = ensure_alt_organization!
         tenant_a = ensure_tenant!(slug: TENANT_A_SLUG, name: TENANT_A_NAME, organization: org, type: "sales_point")
         tenant_b = ensure_tenant!(slug: TENANT_B_SLUG, name: TENANT_B_NAME, organization: org, type: "sales_point")
+        tenant_c = ensure_tenant!(slug: TENANT_C_SLUG, name: TENANT_C_NAME, organization: org_alt, type: "sales_point")
         tenant_kitchen = ensure_tenant!(
           slug: TENANT_KITCHEN_SLUG,
           name: TENANT_KITCHEN_NAME,
@@ -107,11 +132,13 @@ module Demo
         )
         ensure_module_flags!(tenant_a, SALES_POINT_MODULES)
         ensure_module_flags!(tenant_b, SALES_POINT_MODULES)
+        ensure_module_flags!(tenant_c, SALES_POINT_MODULES)
         ensure_module_flags!(tenant_kitchen, KITCHEN_MODULES)
         load_catalog! if @load_catalog
         repair_brazil_shop_modifier_prices!
-        ensure_pts_for_tenants!([tenant_a, tenant_b])
-        apply_point_b_price_markup!(tenant_b)
+        ensure_pts_for_tenants!([tenant_a, tenant_b, tenant_c])
+        apply_point_price_markup!(tenant_b, markup: 10)
+        apply_point_price_markup!(tenant_c, markup: 20)
         ensure_users!(
           organization: org,
           tenant_a: tenant_a,
@@ -122,17 +149,20 @@ module Demo
         repair_franchise_organization_links!(organization: org)
         ensure_order_cancel_reasons!
         ensure_demo_operations!(tenant_a: tenant_a, tenant_b: tenant_b, tenant_kitchen: tenant_kitchen)
-        ensure_weekday_schedules!(tenant_a: tenant_a, tenant_b: tenant_b)
+        ensure_weekday_schedules!(tenant_a: tenant_a, tenant_b: tenant_b, tenant_c: tenant_c)
       end
 
       Result.new(
         organization: org,
+        organization_alt: org_alt,
         tenant_a: tenant_a,
         tenant_b: tenant_b,
+        tenant_c: tenant_c,
         tenant_kitchen: tenant_kitchen,
         products_count: Product.where(is_active: true).count,
         pts_a_count: ProductTenantSetting.where(tenant_id: tenant_a.id).count,
         pts_b_count: ProductTenantSetting.where(tenant_id: tenant_b.id).count,
+        pts_c_count: ProductTenantSetting.where(tenant_id: tenant_c.id).count,
         users_count: User.where("email LIKE ?", "%@demo.coffeeos.local").count
       )
     end
@@ -152,6 +182,10 @@ module Demo
       Organization.find_or_create_by!(slug: ORG_SLUG) { |o| o.name = ORG_NAME }
     end
 
+    def ensure_alt_organization!
+      Organization.find_or_create_by!(slug: ORG_ALT_SLUG) { |o| o.name = ORG_ALT_NAME }
+    end
+
     def ensure_tenant!(slug:, name:, organization:, type: "sales_point")
       tenant = Tenant.find_or_initialize_by(slug: slug)
       tenant.assign_attributes(
@@ -164,8 +198,13 @@ module Demo
         organization: organization
       )
       tenant.save!
-      if (loc = DEMO_TENANT_ADDRESSES[slug])
-        tenant.update!(city: loc[:city], address: loc[:address])
+      if (loc = DEMO_TENANT_LOCATIONS[slug])
+        tenant.update!(
+          city: loc[:city],
+          address: loc[:address],
+          latitude: loc[:latitude],
+          longitude: loc[:longitude]
+        )
       end
       tenant
     end
@@ -192,17 +231,17 @@ module Demo
       Current.tenant_id = previous_tid
     end
 
-    # Точка B — цены base_price + 10 ₽ (демо различия PTS между точками).
-    def apply_point_b_price_markup!(tenant_b)
-      with_tenant_rls!(tenant_b) do
+    # Демо: base_price + markup ₽ (разные цены между точками A/B/C).
+    def apply_point_price_markup!(tenant, markup:)
+      with_tenant_rls!(tenant) do
         Product.where(is_active: true).find_each do |product|
           bp = product.base_price.presence&.to_d
           next if bp.blank? || bp <= 0
 
-          pts = ProductTenantSetting.find_by(tenant_id: tenant_b.id, product_id: product.id)
+          pts = ProductTenantSetting.find_by(tenant_id: tenant.id, product_id: product.id)
           next unless pts
 
-          target = bp + 10
+          target = bp + markup
           pts.update!(price: target) if pts.price.to_d != target
         end
       end
@@ -375,8 +414,8 @@ module Demo
       end
     end
 
-    # B1.11 demo: разное расписание точек A и B для витрины и приёмки.
-    def ensure_weekday_schedules!(tenant_a:, tenant_b:)
+    # B1.11 + B1.14-3b demo: разное расписание и цены точек A/B/C.
+    def ensure_weekday_schedules!(tenant_a:, tenant_b:, tenant_c:)
       sync_tenant_schedule!(tenant_a, {
         0 => { enabled: true, opens_at: "08:00", closes_at: "22:00" },
         1 => { enabled: true, opens_at: "08:00", closes_at: "22:00" },
@@ -394,6 +433,15 @@ module Demo
         4 => { enabled: true, opens_at: "09:00", closes_at: "22:00" },
         5 => { enabled: true, opens_at: "10:00", closes_at: "20:00" },
         6 => { enabled: true, opens_at: "10:00", closes_at: "20:00" }
+      })
+      sync_tenant_schedule!(tenant_c, {
+        0 => { enabled: true, opens_at: "07:00", closes_at: "21:00" },
+        1 => { enabled: true, opens_at: "07:00", closes_at: "21:00" },
+        2 => { enabled: true, opens_at: "07:00", closes_at: "21:00" },
+        3 => { enabled: true, opens_at: "07:00", closes_at: "21:00" },
+        4 => { enabled: true, opens_at: "07:00", closes_at: "21:00" },
+        5 => { enabled: true, opens_at: "08:00", closes_at: "18:00" },
+        6 => { enabled: true, opens_at: "08:00", closes_at: "18:00" }
       })
     end
 

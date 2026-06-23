@@ -235,7 +235,7 @@ fly ssh console -a coffeeos -C "bin/rake fly:callback_smoke"
 
 ### `GET /shop/api/tenants`
 
-Точки, где покупатель **уже заказывал** (история `orders.source=mobile`). Гость без заказов — одна текущая точка, `switchable: false`.
+Все активные точки продаж (`sales_point`, `status=active`) в **том же городе**, что текущая (нормализация `city`, без фильтра по организации). Порядок: **текущая** → **ближайшие** по `latitude`/`longitude` (haversine) → точки без координат (по имени). `switchable: true`, если в городе больше одной точки. Гость и авторизованный — одинаковый список; `last_ordered_tenant_id` — только для залогиненного покупателя (история mobile-заказов).
 
 Заголовок: `X-Shop-Tenant` (текущая точка из URL).
 
@@ -247,16 +247,27 @@ fly ssh console -a coffeeos -C "bin/rake fly:callback_smoke"
   "tenants": [
     {
       "id": "uuid",
-      "name": "Demo Coffee Point B",
+      "name": "Demo Coffee Point A",
       "city": "Москва",
-      "address": "ул. Пушкина, 5",
-      "display_address": "Москва, ул. Пушкина, 5",
-      "last_ordered_at": "2026-06-22T12:00:00Z",
-      "is_current": false
+      "address": "ул. Ленина, 10",
+      "display_address": "Москва, ул. Ленина, 10",
+      "is_current": true,
+      "distance_km": null
+    },
+    {
+      "id": "uuid",
+      "name": "Demo Coffee Point C",
+      "city": "Москва",
+      "address": "ул. Тверская, 12",
+      "display_address": "Москва, ул. Тверская, 12",
+      "is_current": false,
+      "distance_km": 0.42
     }
   ]
 }
 ```
+
+**Демо:** `demo-point-a`, `demo-point-b` (org `demo-coffeeos`), `demo-point-c` (org `demo-coffeeos-alt`) — Москва, разные цены (+0/+10/+20 ₽) и расписание.
 
 ---
 

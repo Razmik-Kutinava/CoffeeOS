@@ -15,15 +15,20 @@ class Demo::EnvironmentSetupTest < ActiveSupport::TestCase
     assert_equal Demo::EnvironmentSetup::ORG_SLUG, result.organization.slug
     assert_equal Demo::EnvironmentSetup::TENANT_A_SLUG, result.tenant_a.slug
     assert_equal Demo::EnvironmentSetup::TENANT_B_SLUG, result.tenant_b.slug
+    assert_equal Demo::EnvironmentSetup::TENANT_C_SLUG, result.tenant_c.slug
     assert_equal result.organization.id, result.tenant_a.organization_id
     assert_equal result.organization.id, result.tenant_b.organization_id
+    assert_equal result.organization_alt.id, result.tenant_c.organization_id
 
     pts_a = ProductTenantSetting.find_by(tenant_id: result.tenant_a.id, product_id: p1.id)
     pts_b = ProductTenantSetting.find_by(tenant_id: result.tenant_b.id, product_id: p1.id)
+    pts_c = ProductTenantSetting.find_by(tenant_id: result.tenant_c.id, product_id: p1.id)
     assert pts_a, "PTS for point A expected"
     assert pts_b, "PTS for point B expected"
+    assert pts_c, "PTS for point C expected"
     assert_equal BigDecimal("200"), pts_a.price
     assert_equal BigDecimal("210"), pts_b.price
+    assert_equal BigDecimal("220"), pts_c.price
 
     uk = User.find_by!(email: "uk@demo.coffeeos.local")
     assert uk.uk_global_admin?
@@ -63,6 +68,10 @@ class Demo::EnvironmentSetupTest < ActiveSupport::TestCase
     assert_equal "ул. Ленина, 10", result.tenant_a.address
     assert_equal "Москва", result.tenant_b.city
     assert_equal "ул. Пушкина, 5", result.tenant_b.address
+    assert_equal "Москва", result.tenant_c.city
+    assert_equal "ул. Тверская, 12", result.tenant_c.address
+    assert result.tenant_a.latitude.present?
+    assert result.tenant_c.longitude.present?
     assert OrderCancelReason.exists?(code: "other")
 
     shift_a = CashShift.find_by(tenant_id: result.tenant_a.id, status: "open")
@@ -76,6 +85,8 @@ class Demo::EnvironmentSetupTest < ActiveSupport::TestCase
                  Shop::OperatingHoursScheduleText.for(result.tenant_a)
     assert_equal "Пн–Пт 09:00–22:00, Сб–Вс 10:00–20:00",
                  Shop::OperatingHoursScheduleText.for(result.tenant_b)
+    assert_equal "Пн–Пт 07:00–21:00, Сб–Вс 08:00–18:00",
+                 Shop::OperatingHoursScheduleText.for(result.tenant_c)
 
     ingredient = Ingredient.active.order(:name).first
     if ingredient
@@ -92,9 +103,12 @@ class Demo::EnvironmentSetupTest < ActiveSupport::TestCase
     assert_equal first.organization.id, second.organization.id
     assert_equal first.tenant_a.id, second.tenant_a.id
     assert_equal first.tenant_b.id, second.tenant_b.id
+    assert_equal first.tenant_c.id, second.tenant_c.id
     assert_equal 1, Organization.where(slug: Demo::EnvironmentSetup::ORG_SLUG).count
+    assert_equal 1, Organization.where(slug: Demo::EnvironmentSetup::ORG_ALT_SLUG).count
     assert_equal 2, Tenant.where(organization_id: first.organization.id, type: "sales_point").count
     assert_equal 1, Tenant.where(organization_id: first.organization.id, type: "production_kitchen").count
+    assert_equal 1, Tenant.where(organization_id: first.organization_alt.id, type: "sales_point").count
     assert_equal 3, Tenant.where(organization_id: first.organization.id).count
     assert_equal first.users_count, second.users_count
   end
@@ -105,6 +119,7 @@ class Demo::EnvironmentSetupTest < ActiveSupport::TestCase
     assert result.products_count >= 9
     assert result.pts_a_count >= 9
     assert result.pts_b_count >= 9
+    assert result.pts_c_count >= 9
     assert Category.exists?(slug: "menu-cat-filter")
     assert Product.exists?(slug: "menu-prod-brazil")
   end

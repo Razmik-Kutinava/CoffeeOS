@@ -1,7 +1,7 @@
 # Задача: Адрес точки продаж и выбор точки в шапке витрины
 
 **ID:** B1.14 · **Источник:** заказчик, чат 2026-06 (задача 2 — клиентская часть CoffeeOS)  
-**Статус:** **B1.14-3 Header** `[x]` 2026-06-23 · **B1.14-4 Cart** `[ ]` · Fly MCP `[ ]`
+**Статус:** **B1.14-3b City list** `[x]` 2026-06-23 · **B1.14-4 Cart** `[ ]` · Fly MCP `[ ]`
 
 **Связано:** [B1.11](B1_11_tenant_operating_hours.md) (`schedule_display` под адресом) · [B1.13](B1_13_shop_nav_profile_header.md) (шапка: «Профиль › ID» справа) · [B1.4](B1_4_pwa_shop.md) (PWA) · онбординг УК (`tenants.city`, `tenants.address`)
 
@@ -23,7 +23,8 @@
 | **Шапка справа** | «Профиль › ID» (B1.13-S1) | **Не меняем** в B1.14 |
 | **Поля точки в БД** | `tenants.city`, `tenants.address` · **demo:seed** Москва/адреса A/B | **done** B1.14-2 |
 | **Shop API config** | `GET /shop/api/config` — `tenant`, `last_ordered_tenant_id` | **done** B1.14-2 |
-| **Список точек для дропдауна** | `GET /shop/api/tenants` — история заказов покупателя | **done** B1.14-2 |
+| **Список точек для дропдауна** | `GET /shop/api/tenants` — **все активные точки в городе** · сортировка: текущая → ближайшие (lat/lng) | **done** B1.14-3b |
+| **Координаты точки** | `tenants.latitude`, `tenants.longitude` · демо в `demo:seed` | **done** B1.14-3b |
 | **Текущая точка** | `?tenant_id=` в URL · `meta shop-tenant-id` | Выбранная пользователем **или** последняя с **последней покупки** (авторизованный) |
 | **Гость без заказов** | Одна точка из URL | Адрес без переключения (иконка/клик **неактивен**) — по ТЗ заказчика |
 | **Корзина** | Один ключ сессии `:shop_cart` · **не** per-tenant · без TTL 24ч | **Per-tenant корзины** · при смене точки корзина **не переносится** · корзина на старой точке **хранится 24 ч** |
@@ -36,7 +37,8 @@
 
 | Зона | Файлы (ориентир) |
 |------|------------------|
-| Shop API | `app/controllers/shop/api/config_controller.rb` — tenant block · **новый** `tenants_controller.rb` (или action в profile/orders) — список точек из истории |
+| Shop API | `app/controllers/shop/api/config_controller.rb` — tenant block · `tenants_controller.rb` — список точек **в городе** |
+| Гео | `app/services/shop/tenant_geo.rb` — haversine · `customer_tenant_history.rb` — сортировка дропдауна |
 | Витрина | `app/frontend/components/Header.svelte` — адрес + дропдаун · `app/frontend/lib/shopTenantHeader.js` (format, cache, last tenant) |
 | Корзина | `app/services/shop/cart_service.rb` — ключ сессии **per tenant** + TTL 24ч на неактивную корзину |
 | Сиды | `db/seeds*.rb` — city/address у демо-точек |
@@ -74,6 +76,7 @@
 [x] 1 — go (владелец) на B1.14-2
 [x] 2 — API: config tenant + GET /shop/api/tenants + demo:seed city/address (2026-06-23)
 [x] 3 — Header: адрес + дропдаун + localStorage (2026-06-23)
+[x] 3b — API: все точки в городе + lat/lng + demo-point-c (2026-06-23)
 [ ] 4 — Cart per-tenant + TTL 24ч → **`go`**
 [ ] 5 — demo:seed city/address · тесты + регрессия shop
 [ ] 6 — Fly MCP + апрув заказчика
@@ -188,7 +191,7 @@
 | **Q6** | Демо без нормального tenant | **Заглушка** в шапке |
 | **Q7** | Офлайн | **localStorage** — последний адрес (критерий приёмки заказчика) |
 | **Q8** | Какая точка активна по умолчанию | **Выбранная** пользователем **или** **последняя с прошлой покупки** |
-| **Q9** | Список в дропдауне | Только точки, **где покупатель уже заказывал** (история) |
+| **Q9** | Список в дропдауне | **Обновлено 2026-06-23 (B1.14-3b):** все активные `sales_point` в **том же городе** (любая org) · порядок: текущая → ближайшие по lat/lng → без координат · *ранее: только история заказов* |
 | **Q10** | Корзина при смене точки | **Не переносится** · корзина на прошлой точке **сохраняется до 24 ч** |
 
 ### Уточнение по тексту заказчика (не противоречит приёмке)
@@ -221,4 +224,4 @@
 
 ## Следующий шаг
 
-**Апрув** владельца/заказчика на ТЗ → **`go`** на код (шаг 2 — API + Header).
+**Deploy** владельца (`./bin/fly_deploy.sh`) → проверка 3 точек в дропдауне на Fly → **`go`** B1.14-4 cart · Leaflet в УК — backlog.

@@ -2,7 +2,7 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-06-23 (B1.14 deploy Fly · B1.13-S1 Fly MCP PASS · апрув pending)  
+**Дата:** 2026-06-23 (B1.14-3b city tenants · deploy pending)  
 **Предыдущее:** B1.12-R3 Fly MCP 8/8 · B1.11 этап 0 · B1.7 **ЗАКРЫТА**  
 **Веха 1:** **закрыта** 2026-06-19 (CHECKLIST § I, H.3 заочно).  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
@@ -25,13 +25,22 @@
 | **B1.12 рекуррент** | R1–R3 Fly MCP PASS · ответы Q1–Q7 `[x]` 2026-06-19 | апрув эпика |
 | **B1.11 режим работы** | **Fly MCP header A/B PASS** · артефакт 2026-06-21 | **апрув заказчика** |
 | **B1.13 навигация** | **S1 Fly MCP PASS** 2026-06-23 · 5/5 критериев | **апрув заказчика S1** → `go` S2 |
-| **B1.14 адрес в шапке** | **deploy Fly** `[x]` 2026-06-23 · B1.14-2/3 на стенде | MCP скрины · B1.14-4 cart |
+| **B1.14 адрес в шапке** | **B1.14-3b** city list + lat/lng + demo-point-c `[x]` | **deploy** владельца → B1.14-4 cart |
 | **B2.1 табло** | **ЗАКРЫТА** · апрув `[x]` 2026-06-18 | backlog фаза 2 в CBR |
 | **B2.1 B2-S1** | CLOSED OPS · MCP 9/9 · deploy `[x]` · заказчик `[ ]` | апрув заказчика |
 | **B1.1** | апрув `[x]` 2026-06-18 | — |
 | **B1.7 checkout** | **ЗАКРЫТА** · апрув `[x]` 2026-06-04 | — |
 | **B1.4 PWA** | код задеплоен · OPS_PASS · заказчик `[ ]` | апрув |
 | **B2.2** | stage0 `[x]` · этап 1 `[ ]` | единый экран «Меню» |
+
+### Сессия 2026-06-23 (B1.14-3b: дропдаун по городу + geo + demo C)
+
+- **Миграция:** `tenants.latitude`, `tenants.longitude`
+- **API:** `CustomerTenantHistory` — все `sales_point` в городе · сортировка: текущая → haversine → без координат
+- **Сервис:** `Shop::TenantGeo` (normalize city, haversine)
+- **Demo:** `demo-point-c` (org alt), координаты A/B/C, цены +0/+10/+20, разное расписание
+- **Тесты:** tenant_geo + customer_tenant_history + b114 API + demo seed — **12 runs, 94 assertions, 0 failures**; b114 header — 2 runs, 0 failures
+- **Дальше:** deploy владельца · B1.14-4 cart · Leaflet в УК — backlog
 
 ### Сессия 2026-06-23 (ops: Fly deploy Depot 401 → fix)
 

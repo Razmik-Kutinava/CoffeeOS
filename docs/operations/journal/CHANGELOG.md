@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 2026-06-23 — B1.14-3b: дропдаун точек по городу + координаты
+
+- **Миграция:** `latitude`/`longitude` на `tenants`
+- **API:** `GET /shop/api/tenants` — все активные точки в городе (любая org) · текущая → ближайшие по geo
+- **Demo:** `demo-point-c` (вторая org), координаты, цены +20, расписание 07–21
+- **Тесты:** 12+2 runs, 0 failures (b114 + demo seed)
+- **Дальше:** deploy → B1.14-4 cart
+
 ## 2026-06-23 — ops: Fly deploy Depot 401 + B1.14-2/3 на стенде
 
 - **Проблема:** `fly deploy` → `ensure depot builder failed (401)` на этапе push (Depot, не код приложения)

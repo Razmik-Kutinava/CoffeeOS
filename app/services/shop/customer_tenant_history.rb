@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 module Shop
-  # B1.14: точки продаж, где покупатель уже заказывал (дропдаун в шапке).
+  # B1.14-3b: дропдаун в шапке — все активные точки в том же городе;
+  # порядок: текущая → ближайшие по координатам → без координат (по имени).
   class CustomerTenantHistory
     def self.call(session:, current_tenant:)
       new(session: session, current_tenant: current_tenant).call
@@ -13,15 +14,10 @@ module Shop
     end
 
     def call
-      cid = CustomerSession.customer_id(@session, @current_tenant.id)
-      return guest_payload if cid.blank?
-
-      rows = ordered_tenant_rows(cid)
-      return guest_payload if rows.empty?
-
+      rows = sorted_city_rows
       {
         current_tenant_id: @current_tenant.id,
-        last_ordered_tenant_id: rows.first[:id],
+        last_ordered_tenant_id: last_ordered_tenant_id,
         switchable: rows.size > 1,
         tenants: rows
       }
@@ -29,40 +25,68 @@ module Shop
 
     private
 
-    def guest_payload
-      {
-        current_tenant_id: @current_tenant.id,
-        last_ordered_tenant_id: nil,
-        switchable: false,
-        tenants: [tenant_row(@current_tenant, last_ordered_at: nil)]
-      }
+    def sorted_city_rows
+      peers = city_sales_points
+      peers = [@current_tenant] if peers.empty?
+      peers = peers.uniq(&:id)
+
+      current = peers.find { |t| t.id == @current_tenant.id } || @current_tenant
+      others = peers.reject { |t| t.id == current.id }
+
+      with_coords, without_coords = others.partition { |t| TenantGeo.coordinates?(t) }
+
+      if TenantGeo.coordinates?(current)
+        with_coords.sort_by! { |t| TenantGeo.distance_km(current, t) || Float::INFINITY }
+      else
+        with_coords.sort_by!(&:name)
+      end
+      without_coords.sort_by!(&:name)
+
+      ([current] + with_coords + without_coords).map { |t| tenant_row(t) }
     end
 
-    def ordered_tenant_rows(customer_id)
-      stats = tenant_order_stats(customer_id)
-      return [] if stats.empty?
+    def city_sales_points
+      city_key = TenantGeo.normalize_city(@current_tenant.city)
+      return [] if city_key.blank?
 
-      tenants = Tenant.where(id: stats.keys, type: "sales_point").index_by { |t| t.id.to_s }
-      stats.filter_map do |tid, last_at|
-        tenant = tenants[tid]
-        next unless tenant
-
-        tenant_row(tenant, last_ordered_at: last_at)
-      end.sort_by { |row| row[:last_ordered_at].to_s }.reverse
+      with_rls_off do
+        Tenant.where(status: "active", type: "sales_point").select do |t|
+          TenantGeo.normalize_city(t.city) == city_key
+        end
+      end
     end
 
-    # RLS off: только tenant_id заказов этого customer_id (публичные поля точки).
-    def tenant_order_stats(customer_id)
+    def last_ordered_tenant_id
+      cid = CustomerSession.customer_id(@session, @current_tenant.id)
+      return nil if cid.blank?
+
+      stats = with_rls_off do
+        Order.mobile.where(customer_id: cid).group(:tenant_id).maximum(:created_at)
+      end
+      return nil if stats.blank?
+
+      stats.max_by { |_tid, at| at }&.first
+    end
+
+    def tenant_row(tenant)
+      TenantAddress.client_json(tenant).merge(
+        is_current: tenant.id == @current_tenant.id,
+        distance_km: distance_for_client(tenant)
+      )
+    end
+
+    def distance_for_client(tenant)
+      return nil if tenant.id == @current_tenant.id
+      return nil unless TenantGeo.coordinates?(@current_tenant) && TenantGeo.coordinates?(tenant)
+
+      km = TenantGeo.distance_km(@current_tenant, tenant)
+      km.nil? ? nil : km.round(2)
+    end
+
+    def with_rls_off
       conn = ActiveRecord::Base.connection
       conn.execute("SET LOCAL row_security = off")
-      Order.mobile.where(customer_id: customer_id).group(:tenant_id).maximum(:created_at)
-    end
-
-    def tenant_row(tenant, last_ordered_at:)
-      TenantAddress.client_json(tenant).merge(
-        last_ordered_at: last_ordered_at&.iso8601,
-        is_current: tenant.id == @current_tenant.id
-      )
+      yield
     end
   end
 end
