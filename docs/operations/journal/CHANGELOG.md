@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 2026-06-23 — B1.13-S1: Fly MCP post-deploy (PASS)
+
+- **Стенд:** `coffeeos.fly.dev/shop?tenant_id=655aaccb-…`
+- **MCP:** 5/5 критериев · nav profile **101 ms** · гость «Профиль» без ID · bottom nav без «Профиль»
+- **Артефакт:** [`b113_s1_post_deploy_2026-06-23.json`](../milestones/veha_2/artifacts/demo-feedback/b113_s1_post_deploy_2026-06-23.json)
+- **Скрины:** `b113_s1_post_deploy_{320,360,428,profile}_2026-06-23.png`
+- **Дальше:** апрув заказчика S1 → `go` S2
+
 ## 2026-06-22 — B1.13-S1: профиль в шапке (код)
 
 - **Код:** `Header.svelte` «Профиль › ID» · `BottomNav` без «Профиль» · `shopProfileHeader.js`

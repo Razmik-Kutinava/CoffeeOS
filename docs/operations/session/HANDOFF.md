@@ -1,6 +1,6 @@
 # HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-06-22 (B1.13-S1 код · deploy pending)  
+**Дата:** 2026-06-23 (B1.13-S1 Fly MCP PASS)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev
 
@@ -8,14 +8,14 @@
 
 | Что | Статус |
 |-----|--------|
-| **S1** | **код** `[x]` 2026-06-22 — Header «Профиль › ID» · BottomNav без «Профиль» · тесты 5/5 |
+| **S1** | **Fly MCP** `[x]` 2026-06-23 — 5/5 · скрины post-deploy · апрув `[ ]` |
 | **S2** | ТЗ `[x]` — поп-ап корзины expanded/peek/hidden · bottom bar · скролл |
 | **S3** | ТЗ `[x]` — +/−/Удалить/+цена в поп-апе |
 | **S4** | ТЗ `[x]` — long press модификаторы · горизонтальный скролл >3 |
 | Нумерация заказчика | B1.14/15/16 — **TBD**, канон **B1.13-S2…S4** |
 | Этап 0 JSON | [`b113_stage0_scope_2026-06-22.json`](../milestones/veha_2/artifacts/demo-feedback/b113_stage0_scope_2026-06-22.json) · [`b113_stage0_s2_s4_2026-06-22.json`](../milestones/veha_2/artifacts/demo-feedback/b113_stage0_s2_s4_2026-06-22.json) |
-| **Следующий шаг** | **deploy Fly** (владелец) → MCP DevTools S1 |
-| **Агент** | **стоп** — ждём deploy |
+| **Следующий шаг** | **апрув заказчика S1** → `go` на S2 |
+| **Агент** | **стоп** — ждём апрув S1 |
 
 ТЗ: [`B1_13_shop_nav_profile_header.md`](../milestones/veha_2/requirements/customer_tasks/B1_13_shop_nav_profile_header.md)
 
