@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2026-06-23 — B1.14: этап 0 — ТЗ адрес точки в шапке витрины
+
+- **ТЗ:** [`B1_14_shop_tenant_address_header.md`](../milestones/veha_2/requirements/customer_tasks/B1_14_shop_tenant_address_header.md) — текст заказчика («задача 2») дословно · scope · критерии OPS · ответы владельца Q1–Q10
+- **Артефакт:** [`b114_stage0_scope_2026-06-23.json`](../milestones/veha_2/artifacts/demo-feedback/b114_stage0_scope_2026-06-23.json)
+- **Ops:** CBR · README customer_tasks · CHECKLIST · HANDOFF · SESSION_STATE
+- **Код:** не начат · апрув + `go`
+
 ## 2026-06-23 — B1.13-S1: Fly MCP post-deploy (PASS)
 
 - **Стенд:** `coffeeos.fly.dev/shop?tenant_id=655aaccb-…`

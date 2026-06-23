@@ -1,0 +1,56 @@
+{
+  "task_id": "B1.14",
+  "title": "Адрес точки продаж и выбор точки в шапке витрины",
+  "customer_tracker": "ЗАДАЧА 2 — клиентская часть CoffeeOS",
+  "stage": "0_complete",
+  "date": "2026-06-23",
+  "status": "TZ_REGISTERED",
+  "tz_file": "docs/operations/milestones/veha_2/requirements/customer_tasks/B1_14_shop_tenant_address_header.md",
+  "code_started": false,
+  "existing_in_code": {
+    "tenants_city_address_db": true,
+    "platform_tenant_form_city_address": true,
+    "header_coffeeos_brand_left": true,
+    "header_schedule_display_b111": true,
+    "header_profile_right_b113_s1": true,
+    "shop_api_config_operating_hours": true,
+    "shop_api_config_tenant_address": false,
+    "shop_api_tenants_list": false,
+    "header_tenant_dropdown": false,
+    "address_localstorage_cache": false,
+    "cart_per_tenant_session": false,
+    "cart_24h_ttl_inactive": false,
+    "order_status_tenant_address": true
+  },
+  "files_planned": [
+    "app/frontend/components/Header.svelte",
+    "app/frontend/lib/shopTenantHeader.js",
+    "app/controllers/shop/api/config_controller.rb",
+    "app/controllers/shop/api/tenants_controller.rb",
+    "app/services/shop/cart_service.rb",
+    "db/seeds.rb or db/seeds/demo.rb",
+    "test/integration/shop/b114_tenant_address_header_test.rb"
+  ],
+  "files_not_in_scope": [
+    "platform/tenants new fields",
+    "B1.13-S2 cart popup",
+    "full PWA offline phase 3"
+  ],
+  "owner_answers_date": "2026-06-23",
+  "owner_answers_summary": {
+    "schedule_under_address": true,
+    "dropdown_from_order_history": true,
+    "default_tenant": "selected or last purchase",
+    "cart_per_tenant_no_transfer": true,
+    "cart_ttl_hours": 24,
+    "offline_address_localstorage": true,
+    "guest_single_tenant_no_switch": true,
+    "address_format": "city, address",
+    "empty_address_stub": "Адрес не указан"
+  },
+  "acceptance_criteria_count": 10,
+  "gate_before_code": [
+    "customer or owner approval",
+    "go"
+  ]
+}
