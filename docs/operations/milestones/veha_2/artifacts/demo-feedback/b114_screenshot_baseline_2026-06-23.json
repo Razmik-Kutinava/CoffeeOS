@@ -1,0 +1,55 @@
+{
+  "task_id": "B1.14",
+  "title": "Адрес точки продаж и выбор точки в шапке витрины",
+  "screenshot_role": "baseline_before_code",
+  "date": "2026-06-23",
+  "source": "заказчик — скриншоты в чате Cursor",
+  "tz_file": "docs/operations/milestones/veha_2/requirements/customer_tasks/B1_14_shop_tenant_address_header.md",
+  "readme": "screenshots/README_b114_baseline_2026-06-23.md",
+
+  "screenshots": [
+    {
+      "customer_index": 1,
+      "file": "screenshots/b114_shop_header_coffeeos_before_2026-06-23.png",
+      "viewport": "mobile (~320–428px), тёмная тема",
+      "page": "каталог витрины shop/PWA",
+      "visible": {
+        "header_left": "CoffeeOS (оранжевый бренд) — **цель B1.14: заменить на «Город, Адрес»**",
+        "header_right": "Витрина (на проде после B1.13-S1 — «Профиль › ID»; левая часть B1.14 не менялась)",
+        "pwa_install_banner": "«Установить CoffeeOS на главный экран» — область справа от адреса в критерии приёмки",
+        "bottom_nav": "Каталог · Корзина · Избранное · Профиль"
+      },
+      "b114_mapping": "Критерий приёмки #1 — область слева от кнопки «Установить»"
+    },
+    {
+      "customer_index": "2+3",
+      "file": "screenshots/b114_uk_tenants_card_before_2026-06-23.png",
+      "viewport": "desktop, УК платформа",
+      "page": "/platform/tenants + карточка точки",
+      "visible": {
+        "tenants_list": "Таблица точек: Demo Coffee Point A/B, MCP, Poogli…",
+        "tenant_card": "Demo Coffee Point A — slug demo-point-a",
+        "city": "— (пусто)",
+        "address": "— (пусто)",
+        "entry_points": "Клиентские заказы, киоск, панели /admin /manager /barista"
+      },
+      "b114_mapping": "Источник city+address из УК · corner case «Адрес не указан» · demo:seed заполнит для приёмки"
+    }
+  ],
+
+  "visible_for_b114": {
+    "header_left_target": "Город, Адрес (вместо CoffeeOS)",
+    "header_line2": "schedule_display (B1.11) — оставить",
+    "dropdown": "точки из истории заказов покупателя",
+    "offline": "localStorage последний адрес"
+  },
+
+  "next_screenshots_requested": [
+    "b114_shop_header_address_after — адрес + расписание после кода",
+    "b114_shop_tenant_dropdown — список точек при клике",
+    "b114_shop_address_stub — пустой city/address в УК",
+    "b114_shop_offline_cached — без сети"
+  ],
+
+  "verdict": "BASELINE_B114_CUSTOMER_SCREENSHOTS_SAVED"
+}

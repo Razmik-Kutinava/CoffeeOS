@@ -52,5 +52,13 @@
   "gate_before_code": [
     "customer or owner approval",
     "go"
-  ]
+  ],
+  "screenshots_baseline": {
+    "date": "2026-06-23",
+    "json": "docs/operations/milestones/veha_2/artifacts/demo-feedback/b114_screenshot_baseline_2026-06-23.json",
+    "files": [
+      "screenshots/b114_shop_header_coffeeos_before_2026-06-23.png",
+      "screenshots/b114_uk_tenants_card_before_2026-06-23.png"
+    ]
+  }
 }

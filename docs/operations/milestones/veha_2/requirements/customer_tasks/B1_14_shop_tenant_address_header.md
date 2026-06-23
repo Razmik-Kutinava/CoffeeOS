@@ -7,7 +7,7 @@
 
 **Стенд для приёмки (после реализации):** `https://coffeeos.fly.dev/shop?tenant_id=655aaccb-004a-4bb9-a50a-ce618854dda3` · viewport 320–428 px
 
-**Артефакт этапа 0:** [`b114_stage0_scope_2026-06-23.json`](../../artifacts/demo-feedback/b114_stage0_scope_2026-06-23.json)
+**Артефакты этапа 0:** [`b114_stage0_scope_2026-06-23.json`](../../artifacts/demo-feedback/b114_stage0_scope_2026-06-23.json) · [`b114_screenshot_baseline_2026-06-23.json`](../../artifacts/demo-feedback/b114_screenshot_baseline_2026-06-23.json)
 
 > **Нумерация:** у заказчика в трекере — «ЗАДАЧА 2» (клиентская часть). Канон разработки — **B1.14**. Задача 1 заказчика (поля Город/Адрес в карточке точки УК) — **не в scope B1.14** (поля уже в БД и форме УК).
 
@@ -49,8 +49,18 @@
 ### Наблюдения на витрине (до правки)
 
 - Шапка слева: **CoffeeOS** (оранжевый, клик → каталог) + подпись часов (`data-testid="shop-hours-display"`)
-- Шапка справа: **«Профиль › ID»** / «Профиль» (гость) — B1.13-S1
+- Шапка справа: **«Профиль › ID»** / «Профиль» (гость) — B1.13-S1 *(на скрине заказчика #1 ещё «Витрина» — baseline до S1)*
 - Адрес точки на экране заказа: `OrderStatus.svelte` — `address, city` из `order.tenant` (формат **не** «Город, Адрес» — унифицировать в хелпере)
+- УК: карточка точки — поля **Город** / **Адрес** могут быть пустыми (`—`) → заглушка на витрине
+
+### Скрины «до» (заказчик 2026-06-23)
+
+| # | Файл | Назначение |
+|---|------|------------|
+| 1 | [`b114_shop_header_coffeeos_before_2026-06-23.png`](../../artifacts/demo-feedback/screenshots/b114_shop_header_coffeeos_before_2026-06-23.png) | Витрина: CoffeeOS слева, PWA «Установить» |
+| 2+3 | [`b114_uk_tenants_card_before_2026-06-23.png`](../../artifacts/demo-feedback/screenshots/b114_uk_tenants_card_before_2026-06-23.png) | УК: список точек + карточка Demo A (пустой город/адрес) |
+
+Индекс: [`README_b114_baseline_2026-06-23.md`](../../artifacts/demo-feedback/screenshots/README_b114_baseline_2026-06-23.md) · JSON [`b114_screenshot_baseline_2026-06-23.json`](../../artifacts/demo-feedback/b114_screenshot_baseline_2026-06-23.json)
 
 ---
 
@@ -58,7 +68,8 @@
 
 ```
 [x] 0 — ТЗ + ops + этап 0 JSON (2026-06-23)
-[x] 0b — ответы владельца Q1–Q7 (2026-06-23)
+[x] 0b — ответы владельца Q1–Q10 (2026-06-23)
+[x] 0c — скрины «до» заказчика #1–#3 (2026-06-23)
 [ ] 1 — апрув заказчика / владельца на старт кода → **`go`**
 [ ] 2 — API: config tenant + список точек из истории
 [ ] 3 — Header: адрес + дропдаун + localStorage
@@ -73,8 +84,8 @@
 - [x] Карта scope / файлов
 - [x] JSON этап 0
 - [x] CBR · README · CHECKLIST · HANDOFF · SESSION_STATE · CHANGELOG
-- [x] Ответы владельца Q1–Q7 — 2026-06-23
-- [ ] Скрины «до» — шапка CoffeeOS (можно переиспользовать `b113_s1_*`)
+- [x] Ответы владельца Q1–Q10 — 2026-06-23
+- [x] Скрины «до» — заказчик #1 (витрина) + #2–#3 (УК) → [`README_b114_baseline_2026-06-23.md`](../../artifacts/demo-feedback/screenshots/README_b114_baseline_2026-06-23.md)
 - [ ] **Апрув заказчика** → **`go`** на код
 
 ---

@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2026-06-23 — B1.14: скрины baseline заказчика
+
+- **Скрины:** `b114_shop_header_coffeeos_before_2026-06-23.png` (витрина #1) · `b114_uk_tenants_card_before_2026-06-23.png` (УК #2+#3)
+- **Артефакт:** [`b114_screenshot_baseline_2026-06-23.json`](../milestones/veha_2/artifacts/demo-feedback/b114_screenshot_baseline_2026-06-23.json)
+- **README:** [`README_b114_baseline_2026-06-23.md`](../milestones/veha_2/artifacts/demo-feedback/screenshots/README_b114_baseline_2026-06-23.md)
+- **ТЗ:** gate docs скрины `[x]` · ждём апрув + `go`
+
 ## 2026-06-23 — B1.14: этап 0 — ТЗ адрес точки в шапке витрины
 
 - **ТЗ:** [`B1_14_shop_tenant_address_header.md`](../milestones/veha_2/requirements/customer_tasks/B1_14_shop_tenant_address_header.md) — текст заказчика («задача 2») дословно · scope · критерии OPS · ответы владельца Q1–Q10

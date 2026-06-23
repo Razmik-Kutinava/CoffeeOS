@@ -9,7 +9,8 @@
 | Что | Статус |
 |-----|--------|
 | ТЗ этап 0 | `[x]` 2026-06-23 — текст заказчика дословно + ответы владельца Q1–Q10 |
-| Этап 0 JSON | [`b114_stage0_scope_2026-06-23.json`](../milestones/veha_2/artifacts/demo-feedback/b114_stage0_scope_2026-06-23.json) |
+| Этап 0 JSON | [`b114_stage0_scope_2026-06-23.json`](../milestones/veha_2/artifacts/demo-feedback/b114_stage0_scope_2026-06-23.json) · [`b114_screenshot_baseline_2026-06-23.json`](../milestones/veha_2/artifacts/demo-feedback/b114_screenshot_baseline_2026-06-23.json) |
+| Скрины «до» | [`b114_shop_header_coffeeos_before_2026-06-23.png`](../milestones/veha_2/artifacts/demo-feedback/screenshots/b114_shop_header_coffeeos_before_2026-06-23.png) · [`b114_uk_tenants_card_before_2026-06-23.png`](../milestones/veha_2/artifacts/demo-feedback/screenshots/b114_uk_tenants_card_before_2026-06-23.png) |
 | Код | `[ ]` — ждём **апрув + `go`** |
 | **Следующий шаг** | апрув владельца/заказчика → `go` на API + Header |
 | **Агент** | **стоп** — только docs, код не начат |
