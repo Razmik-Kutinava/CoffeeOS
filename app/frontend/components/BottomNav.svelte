@@ -1,6 +1,6 @@
 <script>
   import { push } from "svelte-spa-router"
-  import { ShoppingCart, User, Home, Heart } from "lucide-svelte"
+  import { ShoppingCart, Home, Heart } from "lucide-svelte"
 
   let hash = $state(typeof window !== 'undefined' ? window.location.hash : '')
 
@@ -47,16 +47,6 @@
     >
       <Heart class="h-6 w-6" />
       <span class="text-xs">Избранное</span>
-    </button>
-
-    <button
-      onclick={() => push('/profile')}
-      class="flex flex-col items-center gap-1 px-3 py-1 transition-colors"
-      class:text-white={isActive('/profile')}
-      class:text-[#a0a0a0]={!isActive('/profile')}
-    >
-      <User class="h-6 w-6" />
-      <span class="text-xs">Профиль</span>
     </button>
   </div>
 </nav>

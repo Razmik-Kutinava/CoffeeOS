@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2026-06-22 — B1.13-S1: профиль в шапке (код)
+
+- **Код:** `Header.svelte` «Профиль › ID» · `BottomNav` без «Профиль» · `shopProfileHeader.js`
+- **Тест:** `b113_s1_profile_header_test.rb` — **5 runs, 37 assertions, 0 failures**
+- **Скрины:** `b113_s1_after_{320,360,428}px_2026-06-22.png` · `b113_s1_local_pre_deploy_2026-06-22.json`
+- **Deploy:** ждём владельца · затем Fly MCP
+
 ## 2026-06-22 — B1.13: ответы Q-epic-1…3, Q1–Q2 (не блокер)
 
 - **Q-epic-1:** профиль в шапке · бар **Каталог + Избранное** · «Профиль» в S2 — опечатка

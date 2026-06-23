@@ -1,0 +1,32 @@
+{
+  "task_id": "B1.13-S1",
+  "date": "2026-06-22",
+  "status": "LOCAL_PRE_DEPLOY",
+  "shop_url": "file://C:/Tools/workarea/CoffeeOS/docs/operations/milestones/veha_2/artifacts/demo-feedback/screenshots/b113_s1_preview_acceptance.html",
+  "screenshots": [
+    {
+      "viewport": "428",
+      "file": "screenshots/b113_s1_after_428px_2026-06-22.png"
+    },
+    {
+      "viewport": "360",
+      "file": "screenshots/b113_s1_after_360px_2026-06-22.png"
+    },
+    {
+      "viewport": "320",
+      "file": "screenshots/b113_s1_after_320px_2026-06-22.png"
+    },
+    {
+      "viewport": "profile_click",
+      "file": null,
+      "nav_ms": null,
+      "note": "post-deploy Fly MCP"
+    }
+  ],
+  "checks": {
+    "vitrina_absent": true,
+    "header_profile_present": true,
+    "bottom_nav_no_profile": true,
+    "profile_nav_ms": null
+  }
+}

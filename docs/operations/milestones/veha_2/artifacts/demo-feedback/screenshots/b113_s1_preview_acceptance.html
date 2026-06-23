@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>B1.13-S1 preview</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>body { background: #1a1a1a; color: #fff; font-family: system-ui, sans-serif; }</style>
+</head>
+<body>
+  <section class="mb-8" data-scenario="guest-428">
+    <p class="px-3 py-1 text-xs text-gray-400">Гость · 428px · критерий 4</p>
+    <header class="border-b border-[#3a3a3a] bg-[#1a1a1a]/95">
+      <div class="mx-auto flex max-w-lg items-start justify-between gap-2 px-3 py-2.5" style="width:428px">
+        <div class="flex min-w-0 flex-1 flex-col gap-0.5">
+          <span class="text-lg font-semibold text-[#ff8c42]">CoffeeOS</span>
+          <span class="text-[10px] text-[#a0a0a0]">пн–пт 08:00–22:00</span>
+        </div>
+        <button type="button" data-testid="shop-header-profile" class="text-xs text-[#a0a0a0]">Профиль</button>
+      </div>
+    </header>
+    <nav class="border-t border-[#3a3a3a] bg-[#2a2a2a]">
+      <div class="mx-auto flex justify-around py-2" style="width:428px">
+        <span class="text-xs text-white">Каталог</span>
+        <span class="text-xs text-gray-400">Корзина</span>
+        <span class="text-xs text-gray-400">Избранное</span>
+      </div>
+    </nav>
+  </section>
+
+  <section class="mb-8" data-scenario="auth-428">
+    <p class="px-3 py-1 text-xs text-gray-400">Авторизован · 428px · критерий 1</p>
+    <header class="border-b border-[#3a3a3a] bg-[#1a1a1a]/95">
+      <div class="mx-auto flex max-w-lg items-start justify-between gap-2 px-3 py-2.5" style="width:428px">
+        <div class="flex min-w-0 flex-1 flex-col gap-0.5">
+          <span class="text-lg font-semibold text-[#ff8c42]">CoffeeOS</span>
+          <span class="text-[10px] text-[#a0a0a0]">пн–пт 08:00–22:00</span>
+        </div>
+        <button type="button" data-testid="shop-header-profile" class="text-xs text-[#a0a0a0]">Профиль › 1002…34</button>
+      </div>
+    </header>
+  </section>
+
+  <section data-scenario="narrow-320">
+    <p class="px-3 py-1 text-xs text-gray-400">320px · критерий 5</p>
+    <header class="border-b border-[#3a3a3a] bg-[#1a1a1a]/95">
+      <div class="mx-auto flex items-start justify-between gap-2 px-3 py-2.5" style="width:320px">
+        <div class="flex min-w-0 flex-1 flex-col gap-0.5">
+          <span class="text-lg font-semibold text-[#ff8c42]">CoffeeOS</span>
+        </div>
+        <button type="button" data-testid="shop-header-profile" class="relative text-[#a0a0a0]">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <span class="absolute -right-2 -top-1.5 rounded-full bg-[#ff8c42] px-0.5 text-[9px] font-medium text-[#1a1a1a]">…34</span>
+        </button>
+      </div>
+    </header>
+  </section>
+</body>
+</html>
