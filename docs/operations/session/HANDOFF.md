@@ -14,7 +14,7 @@
 | **S4** | ТЗ `[x]` — long press модификаторы · горизонтальный скролл >3 |
 | Нумерация заказчика | B1.14/15/16 — **TBD**, канон **B1.13-S2…S4** |
 | Этап 0 JSON | [`b113_stage0_scope_2026-06-22.json`](../milestones/veha_2/artifacts/demo-feedback/b113_stage0_scope_2026-06-22.json) · [`b113_stage0_s2_s4_2026-06-22.json`](../milestones/veha_2/artifacts/demo-feedback/b113_stage0_s2_s4_2026-06-22.json) |
-| **Следующий шаг** | Q-epic-1 (профиль в баре vs шапка) · **апрув + `go` на S1** |
+| **Следующий шаг** | **апрув + `go` на S1** (вопросы Q-epic / Q1–Q2 закрыты 2026-06-22) |
 | **Агент** | **стоп** — только docs, код не начат |
 
 ТЗ: [`B1_13_shop_nav_profile_header.md`](../milestones/veha_2/requirements/customer_tasks/B1_13_shop_nav_profile_header.md)
