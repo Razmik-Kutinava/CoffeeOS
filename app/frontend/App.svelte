@@ -15,6 +15,7 @@
   import { initTelegram } from "./lib/telegram.js"
   import { installSlowRequestTracker } from "./lib/slowRequest.js"
   import { api } from "./lib/api.js"
+  import { bootstrapShopTenant } from "./lib/shopTenantHeader.js"
   import { loadOperatingHours } from "./lib/shopOperatingHours.js"
   import {
     lastGuestOrderId,
@@ -67,7 +68,13 @@
   }
 
   onMount(() => {
-    loadOperatingHours(api).catch(() => {})
+    bootstrapShopTenant(api)
+      .then((cfg) => {
+        if (!cfg?.operating_hours) loadOperatingHours(api).catch(() => {})
+      })
+      .catch(() => {
+        loadOperatingHours(api).catch(() => {})
+      })
     flushCartQueue(api).catch(() => {})
     flushOrderQueue(api).catch(() => {})
 

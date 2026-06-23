@@ -1,7 +1,7 @@
 # Задача: Адрес точки продаж и выбор точки в шапке витрины
 
 **ID:** B1.14 · **Источник:** заказчик, чат 2026-06 (задача 2 — клиентская часть CoffeeOS)  
-**Статус:** **B1.14-2 API + seed** `[x]` 2026-06-23 · **B1.14-3 Header** `[ ]` · **апрув + `go`** на UI `[ ]`
+**Статус:** **B1.14-3 Header** `[x]` 2026-06-23 · **B1.14-4 Cart** `[ ]` · Fly MCP `[ ]`
 
 **Связано:** [B1.11](B1_11_tenant_operating_hours.md) (`schedule_display` под адресом) · [B1.13](B1_13_shop_nav_profile_header.md) (шапка: «Профиль › ID» справа) · [B1.4](B1_4_pwa_shop.md) (PWA) · онбординг УК (`tenants.city`, `tenants.address`)
 
@@ -17,7 +17,8 @@
 
 | Тема | Сейчас в коде | План B1.14 |
 |------|---------------|------------|
-| **Шапка слева** | `Header.svelte` — кнопка **«CoffeeOS»** → `push("/")` | **«Город, Адрес»** текущей точки · клик → дропдаун (если >1 точки в истории) |
+| **Шапка слева** | `Header.svelte` — адрес + дропдаун · `shopTenantHeader.js` | **done** B1.14-3 |
+| **Офлайн адрес** | `localStorage` per tenant · fallback при ошибке API | **done** B1.14-3 |
 | **Шапка строка 2** | `schedule_display` из B1.11 (`shopOperatingHours.js` → `/shop/api/config`) | **Оставляем** · своё расписание на каждую точку из УК |
 | **Шапка справа** | «Профиль › ID» (B1.13-S1) | **Не меняем** в B1.14 |
 | **Поля точки в БД** | `tenants.city`, `tenants.address` · **demo:seed** Москва/адреса A/B | **done** B1.14-2 |
@@ -72,8 +73,8 @@
 [x] 0c — скрины «до» заказчика #1–#3 (2026-06-23)
 [x] 1 — go (владелец) на B1.14-2
 [x] 2 — API: config tenant + GET /shop/api/tenants + demo:seed city/address (2026-06-23)
-[ ] 3 — Header: адрес + дропдаун + localStorage → **`go`**
-[ ] 4 — Cart per-tenant + TTL 24ч
+[x] 3 — Header: адрес + дропдаун + localStorage (2026-06-23)
+[ ] 4 — Cart per-tenant + TTL 24ч → **`go`**
 [ ] 5 — demo:seed city/address · тесты + регрессия shop
 [ ] 6 — Fly MCP + апрув заказчика
 ```

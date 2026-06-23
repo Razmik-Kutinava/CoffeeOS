@@ -25,13 +25,20 @@
 | **B1.12 рекуррент** | R1–R3 Fly MCP PASS · ответы Q1–Q7 `[x]` 2026-06-19 | апрув эпика |
 | **B1.11 режим работы** | **Fly MCP header A/B PASS** · артефакт 2026-06-21 | **апрув заказчика** |
 | **B1.13 навигация** | **S1 Fly MCP PASS** 2026-06-23 · 5/5 критериев | **апрув заказчика S1** → `go` S2 |
-| **B1.14 адрес в шапке** | **B1.14-2** API + seed `[x]` 2026-06-23 | **`go`** B1.14-3 Header |
+| **B1.14 адрес в шапке** | **B1.14-3 Header** `[x]` 2026-06-23 | **deploy** → MCP скрины · B1.14-4 cart |
 | **B2.1 табло** | **ЗАКРЫТА** · апрув `[x]` 2026-06-18 | backlog фаза 2 в CBR |
 | **B2.1 B2-S1** | CLOSED OPS · MCP 9/9 · deploy `[x]` · заказчик `[ ]` | апрув заказчика |
 | **B1.1** | апрув `[x]` 2026-06-18 | — |
 | **B1.7 checkout** | **ЗАКРЫТА** · апрув `[x]` 2026-06-04 | — |
 | **B1.4 PWA** | код задеплоен · OPS_PASS · заказчик `[ ]` | апрув |
 | **B2.2** | stage0 `[x]` · этап 1 `[ ]` | единый экран «Меню» |
+
+### Сессия 2026-06-23 (B1.14-3: Header адрес точки + дропдаун)
+
+- **Frontend:** `Header.svelte` — `display_address` вместо CoffeeOS · дропдаун `/shop/api/tenants` · `shopTenantHeader.js` (localStorage, bootstrap redirect)
+- **App.svelte:** `bootstrapShopTenant` при старте
+- **Тесты:** `b114_header_tenant_address_test.rb` + b113 + b114 API — **10 runs, 75 assertions, 0 failures**
+- **Дальше:** deploy → MCP скрины · B1.14-4 cart
 
 ### Сессия 2026-06-23 (B1.14-2: API tenant address + demo seed)
 

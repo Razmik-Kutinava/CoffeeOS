@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2026-06-23 — B1.14-3: Header адрес точки + дропдаун
+
+- **Frontend:** `Header.svelte` · `shopTenantHeader.js` · `App.svelte` bootstrap
+- **UX:** адрес «Город, Адрес» · дропдаун при `switchable` · localStorage офлайн · редирект на выбранную/последнюю точку
+- **Тесты:** `b114_header_tenant_address_test.rb` + регрессия b113/b114 API — 10 runs, 0 failures
+- **Дальше:** deploy → MCP скрины · B1.14-4 cart
+
 ## 2026-06-23 — B1.14-2: API адрес точки + demo seed
 
 - **API:** `GET /shop/api/config` — блок `tenant` + `last_ordered_tenant_id` · `GET /shop/api/tenants` (история заказов)
