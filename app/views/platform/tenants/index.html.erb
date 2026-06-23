@@ -1,5 +1,8 @@
 <h1>Точки</h1>
 <p><%= link_to "Новая", new_platform_tenant_path, style: "color: #93c5fd;" %></p>
+
+<%= render "tenants_index_map", map_pins: @map_pins %>
+
 <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
   <thead>
     <tr style="text-align: left; border-bottom: 1px solid #334155;">

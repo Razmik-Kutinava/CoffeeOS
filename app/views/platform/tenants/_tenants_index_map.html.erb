@@ -1,0 +1,20 @@
+<%# B1.14-3d: карта всех точек продаж с координатами на списке УК. %>
+<section
+  style="margin: 0 0 24px; padding: 12px; border: 1px solid #334155; border-radius: 8px; background: #1e293b;"
+  data-controller="tenants-map"
+  data-tenants-map-tenants-value="<%= h(map_pins.to_json) %>"
+  data-testid="tenants-index-map"
+>
+  <h2 style="font-size: 1rem; margin: 0 0 8px;">Точки на карте</h2>
+  <p
+    data-tenants-map-target="empty"
+    style="font-size: 13px; color: #94a3b8; margin: 0 0 8px;"
+    hidden
+  >
+    Нет точек продаж с координатами. Задайте lat/lng в карточке точки («Указать на карте»).
+  </p>
+  <div
+    data-tenants-map-target="map"
+    style="height: 400px; width: 100%; border-radius: 6px;"
+  ></div>
+</section>

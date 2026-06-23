@@ -1,4 +1,5 @@
 import { Controller } from "@hotwired/stimulus"
+import { addOsmTileLayer, loadLeaflet } from "platform/leaflet_setup"
 
 // B1.14: карта точки в УК (Leaflet + OSM). Клик → lat/lng в поля формы.
 export default class extends Controller {
@@ -12,7 +13,6 @@ export default class extends Controller {
     this.leaflet = null
     this.map = null
     this.marker = null
-    this.ensureStylesheet()
   }
 
   disconnect() {
@@ -32,8 +32,7 @@ export default class extends Controller {
 
   async openMap() {
     if (!this.leaflet) {
-      this.leaflet = (await import("leaflet")).default
-      this.fixDefaultIcons(this.leaflet)
+      this.leaflet = await loadLeaflet()
     }
     if (this.map) return
 
@@ -41,12 +40,7 @@ export default class extends Controller {
     const lng = this.readCoord(this.longitudeTarget.value, this.lngValue)
 
     this.map = this.leaflet.map(this.mapTarget).setView([lat, lng], 14)
-    this.leaflet
-      .tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        maxZoom: 19,
-        attribution: "&copy; OpenStreetMap"
-      })
-      .addTo(this.map)
+    addOsmTileLayer(this.leaflet, this.map)
 
     if (this.hasCoordinates()) this.placeMarker(lat, lng)
 
@@ -93,25 +87,5 @@ export default class extends Controller {
       this.map = null
       this.marker = null
     }
-  }
-
-  ensureStylesheet() {
-    if (document.getElementById("leaflet-css")) return
-    const link = document.createElement("link")
-    link.id = "leaflet-css"
-    link.rel = "stylesheet"
-    link.href = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    link.integrity = "sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-    link.crossOrigin = ""
-    document.head.appendChild(link)
-  }
-
-  fixDefaultIcons(L) {
-    delete L.Icon.Default.prototype._getIconUrl
-    L.Icon.Default.mergeOptions({
-      iconRetinaUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png",
-      iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
-      shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png"
-    })
   }
 }

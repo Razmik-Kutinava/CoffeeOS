@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2026-06-23 — B1.14-3d: карта всех точек на списке УК
+
+- **УК:** `/admin/tenants` — Leaflet/OSM, маркеры sales_point с lat/lng, popup → карточка
+- **Сервис:** `Platform::TenantsMapPins` · shared `leaflet_setup.js`
+- **Тесты:** 2 новых + регрессия 3c — 4 runs, 0 failures
+- **Дальше:** deploy · B1.14-4 cart
+
 ## 2026-06-23 — B1.14-3c: карта координат в УК (Leaflet/OSM)
 
 - **УК:** форма точки — «Указать на карте», поля lat/lng, Stimulus `tenant_map_controller`

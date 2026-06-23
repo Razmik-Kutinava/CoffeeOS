@@ -4,6 +4,7 @@ module Platform
   class TenantsController < BaseController
     def index
       @tenants = Tenant.includes(:organization).order(:name).limit(500)
+      @map_pins = Platform::TenantsMapPins.build(@tenants, url_helpers: self)
     end
 
     def new

@@ -1,7 +1,7 @@
 # Задача: Адрес точки продаж и выбор точки в шапке витрины
 
 **ID:** B1.14 · **Источник:** заказчик, чат 2026-06 (задача 2 — клиентская часть CoffeeOS)  
-**Статус:** **B1.14-3b City list** `[x]` · **B1.14-3c UK map** `[x]` 2026-06-23 · **B1.14-4 Cart** `[ ]`
+**Статус:** **B1.14-3d UK index map** `[x]` 2026-06-23 · **B1.14-4 Cart** `[ ]`
 
 **Связано:** [B1.11](B1_11_tenant_operating_hours.md) (`schedule_display` под адресом) · [B1.13](B1_13_shop_nav_profile_header.md) (шапка: «Профиль › ID» справа) · [B1.4](B1_4_pwa_shop.md) (PWA) · онбординг УК (`tenants.city`, `tenants.address`)
 
@@ -25,7 +25,7 @@
 | **Shop API config** | `GET /shop/api/config` — `tenant`, `last_ordered_tenant_id` | **done** B1.14-2 |
 | **Список точек для дропдауна** | `GET /shop/api/tenants` — **все активные точки в городе** · сортировка: текущая → ближайшие (lat/lng) | **done** B1.14-3b |
 | **Координаты точки** | `tenants.latitude`, `tenants.longitude` · демо в `demo:seed` | **done** B1.14-3b |
-| **Карта в УК** | Leaflet + OSM · кнопка «Указать на карте» в форме точки | **done** B1.14-3c |
+| **Карта в УК** | Leaflet + OSM · форма точки + **список точек** (`/admin/tenants`) | **done** B1.14-3c / 3d |
 | **Текущая точка** | `?tenant_id=` в URL · `meta shop-tenant-id` | Выбранная пользователем **или** последняя с **последней покупки** (авторизованный) |
 | **Гость без заказов** | Одна точка из URL | Адрес без переключения (иконка/клик **неактивен**) — по ТЗ заказчика |
 | **Корзина** | Один ключ сессии `:shop_cart` · **не** per-tenant · без TTL 24ч | **Per-tenant корзины** · при смене точки корзина **не переносится** · корзина на старой точке **хранится 24 ч** |
@@ -41,7 +41,7 @@
 | Shop API | `app/controllers/shop/api/config_controller.rb` — tenant block · `tenants_controller.rb` — список точек **в городе** |
 | Гео | `app/services/shop/tenant_geo.rb` — haversine · `customer_tenant_history.rb` — сортировка дропдауна |
 | Витрина | `app/frontend/components/Header.svelte` — адрес + дропдаун · `app/frontend/lib/shopTenantHeader.js` |
-| УК | `platform/tenants/_tenant_map_fields.html.erb` · `tenant_map_controller.js` (Leaflet/OSM) |
+| УК | `_tenant_map_fields` · `tenants_map_controller` · `TenantsMapPins` на index |
 | Корзина | `app/services/shop/cart_service.rb` — ключ сессии **per tenant** + TTL 24ч на неактивную корзину |
 | Сиды | `db/seeds*.rb` — city/address у демо-точек |
 | Тесты | `test/integration/shop/b114_*` · регрессия `test/integration/shop/` |
@@ -80,6 +80,7 @@
 [x] 3 — Header: адрес + дропдаун + localStorage (2026-06-23)
 [x] 3b — API: все точки в городе + lat/lng + demo-point-c (2026-06-23)
 [x] 3c — УК: Leaflet карта в форме точки (2026-06-23)
+[x] 3d — УК: карта всех точек на списке /admin/tenants (2026-06-23)
 [ ] 4 — Cart per-tenant + TTL 24ч → **`go`**
 [ ] 5 — demo:seed city/address · тесты + регрессия shop
 [ ] 6 — Fly MCP + апрув заказчика
@@ -210,8 +211,8 @@
 
 | # | Вопрос | Статус |
 |---|--------|--------|
-| UK-1 | Геокодер Яндекс (адрес → точка) | **backlog** — не в B1.14-3c |
-| UK-2 | Карта со всеми точками на списке УК | **backlog** — сейчас только форма точки |
+| UK-1 | Геокодер Яндекс (адрес → точка) | **backlog** |
+| UK-2 | Карта со всеми точками на списке УК | **закрыто** B1.14-3d |
 
 ---
 
