@@ -37,6 +37,7 @@
 
 | Что | Статус |
 |-----|--------|
+| **Макеты заказчика** | [`1000008924.png`](../milestones/veha_2/artifacts/demo-feedback/screenshots/1000008924.png) R3 · [`1000008925.png`](../milestones/veha_2/artifacts/demo-feedback/screenshots/1000008925.png) R2 |
 | ТЗ этап 0 (R1–R3) | `[x]` 2026-06-18 |
 | **R1 бэкенд** | **OPS_PASS** `[x]` 2026-06-18 |
 | Ответы Q1–Q7 | `[x]` 2026-06-19 — подтверждение владельца · [`b112_customer_answers_confirmed_2026-06-19.json`](../milestones/veha_2/artifacts/demo-feedback/b112_customer_answers_confirmed_2026-06-19.json) |

@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 2026-06-24 — B1.12: макеты заказчика 1000008924 / 1000008925
+
+- **Артефакты:** `screenshots/1000008924.png` (R3 — способ оплаты + кнопка) · `1000008925.png` (R2 — форма новой карты)
+
 ## 2026-06-24 — ops: fly_deploy WSL (docker.sock + /mnt/c/)
 
 - **Проблема:** WSL `/mnt/c/` — `load build context` timeout; retry → `unix:///var/run/docker.sock: missing hostname`

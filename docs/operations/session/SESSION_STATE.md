@@ -27,6 +27,11 @@
 | **B1.13 навигация** | **S1 Fly MCP PASS** 2026-06-23 · 5/5 критериев | **апрув заказчика S1** → `go` S2 |
 | **B1.14 адрес в шапке** | **B1.14-3d** index map `[x]` | deploy (`./bin/fly_deploy.sh`) · B1.14-4 cart |
 
+### Сессия 2026-06-24 (B1.12: макеты заказчика)
+
+- **Скрины:** [`1000008924.png`](milestones/veha_2/artifacts/demo-feedback/screenshots/1000008924.png) — R3 способ оплаты · [`1000008925.png`](milestones/veha_2/artifacts/demo-feedback/screenshots/1000008925.png) — R2 новая карта
+- **Дальше:** сверка нового ТЗ B1.12 · `go` на реализацию
+
 ### Сессия 2026-06-24 (ops: fly_deploy WSL)
 
 - **Проблема:** `./bin/fly_deploy.sh` из WSL `/mnt/c/` — `load build context` ERROR; retry → `docker.sock missing hostname`
