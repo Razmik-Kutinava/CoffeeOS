@@ -51,11 +51,13 @@
 
 ## Подзадачи rev2
 
-| ID | Что | Зависимости |
-|----|-----|-------------|
-| **R1** | UserCards, FinishAuthorize, Charge API, 3DS proxy, ErrorCode | — |
-| **R2** | Кастомная форма + RSA (8925) | R1 |
-| **R3** | FSM 0–7 + экран 8924 | R1, R2 |
+> **Workflow:** один документ заказчика = один `go` = один R = commit/ops/стоп. Апрув эпика — после R3.
+
+| ID | Что | `go` | Зависимости |
+|----|-----|------|-------------|
+| **R1** | UserCards, FinishAuthorize, Charge API, 3DS proxy, ErrorCode | **`go` R1** | Q-R2-1 |
+| **R2** | Кастомная форма + RSA (8925) | **`go` R2** | R1 `[x]` · Q-R2-2, Q-R2-3 |
+| **R3** | FSM 0–7 + экран 8924 | **`go` R3** | R1+R2 `[x]` |
 
 ---
 
@@ -90,4 +92,4 @@ ruby bin/b112_r3_one_click_prep_fly.rb && node bin/b112_r3_one_click_mcp.mjs
 | `b112_r2_custom_card_ops_pass_*.json` | R2 |
 | `b112_r3_fsm_ops_pass_*.json` | R3 |
 
-**Следующий шаг:** ответы владельца Q-R2-1..3 → `go` → R1.
+**Следующий шаг:** Q-R2-1 → **`go` R1** (только документ 1) → стоп → Q-R2-2 → **`go` R2** → …

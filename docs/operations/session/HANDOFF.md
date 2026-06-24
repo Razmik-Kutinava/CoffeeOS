@@ -41,11 +41,12 @@
 | **JSON этап 0** | [`b112_revision2_stage0_scope_2026-06-24.json`](../milestones/veha_2/artifacts/demo-feedback/b112_revision2_stage0_scope_2026-06-24.json) |
 | **Сверка Т-Банк** | [`b112_tbank_nonpci_review_2026-06-24.json`](../milestones/veha_2/artifacts/demo-feedback/b112_tbank_nonpci_review_2026-06-24.json) |
 | **Макеты** | [`1000008924.png`](../milestones/veha_2/artifacts/demo-feedback/screenshots/1000008924.png) R3 · [`1000008925.png`](../milestones/veha_2/artifacts/demo-feedback/screenshots/1000008925.png) R2 |
-| **Конфликты** | Q-R2-1 (iframe vs nonPCI) · Q-R2-2 (галочка) · Q-R2-3 (макеты) — **`[ ]` владелец** |
-| **Код rev2** | R1 FinishAuthorize · R2 RSA форма · R3 FSM 0–7 — **`[ ]` ждём `go`** |
-| **Legacy v1** | R1–R6 OPS_PASS iframe path · баг 2-й оплаты — **не закрывает rev2** |
-| **Следующий шаг** | **Ответы Q-R2-1..3** → **`go` B1.12-R1 rev2** |
-| **Агент** | **стоп** — ждём владельца |
+| **Workflow** | **Документ 1→R1→стоп → документ 2→R2→стоп → документ 3→R3** · один `go` на R |
+| **Конфликты** | Q-R2-1 до `go` R1 · Q-R2-2 до `go` R2 · Q-R2-3 до R2/R3 — **`[ ]`** |
+| **Код rev2** | R1 `[ ]` · R2 `[ ]` · R3 `[ ]` |
+| **Legacy v1** | R1–R6 OPS_PASS iframe — **не закрывает rev2** |
+| **Следующий шаг** | **Q-R2-1** → **`go` R1** (документ 1 только) |
+| **Агент** | **стоп** — ждём Q-R2-1 + `go` R1 |
 
 ТЗ: [`B1_12_recurrent_payments.md`](../milestones/veha_2/requirements/customer_tasks/B1_12_recurrent_payments.md) · runbook: [`TBANK_RECURRENT.md`](../milestones/veha_2/runbooks/TBANK_RECURRENT.md)
 

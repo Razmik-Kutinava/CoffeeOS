@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026-06-24 — B1.12 rev2: workflow по документам (go R1 → R2 → R3)
+
+- **Правило:** один документ заказчика = один `go` = один R = commit/ops/стоп
+- **Доки:** `B1_12` прогресс 1a–3c · CHECKLIST C2c · JSON scope · HANDOFF · TBANK_RECURRENT
+- **Дальше:** Q-R2-1 → `go` R1
+
 ## 2026-06-24 — B1.12 rev2: этап 0 docs (nonPCI ТЗ заказчика)
 
 - **ТЗ:** `B1_12_recurrent_payments.md` — ревизия v2: 3 задачи дословно, FSM 0–7, nonPCI

@@ -57,7 +57,10 @@
     }
   },
   "customer_answers_still_valid": ["Q2", "Q3", "Q4", "Q7"],
+  "workflow": "one_customer_document_per_step: go R1 → close R1 → stop → go R2 → close R2 → stop → go R3 → epic approval",
   "open_questions": ["Q-R2-1", "Q-R2-2", "Q-R2-3"],
-  "blocked_until_owner": ["Q-R2-1", "Q-R2-2", "Q-R2-3"],
-  "next_step": "Ответы владельца Q-R2-1..3 → go → R1 nonPCI"
+  "blocked_until_owner": ["Q-R2-1"],
+  "blocked_before_r2": ["Q-R2-2"],
+  "blocked_before_r3": ["Q-R2-3"],
+  "next_step": "Q-R2-1 (до go R1) → go R1 → документ 1 только"
 }
