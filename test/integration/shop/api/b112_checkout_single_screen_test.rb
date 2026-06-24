@@ -33,7 +33,7 @@ class Shop::Api::B112CheckoutSingleScreenTest < ActionDispatch::IntegrationTest
   test "Checkout blocks pay while saved cards load and one-click uses settlement wait" do
     checkout = File.read(Rails.root.join("app/frontend/routes/Checkout.svelte"))
     assert_includes checkout, "savedCardsLoading"
-    assert_includes checkout, "async function submit()"
+    assert_includes checkout, "async function handlePayFromSheet()"
     assert_includes checkout, "res.recurrent_charge || res.provider_payment_id"
     assert_includes checkout, "waitForOrderSettled"
     assert_includes checkout, "shopSavedCardCache"

@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2026-06-24 — B1.12 rev2 R3 фаза 1: UI «Способ оплаты» (8924)
+
+- **UI:** `PaymentMethodsSheet.svelte` — список карт, СБП disabled, «Новая карта», кнопка в шторке
+- **Checkout:** summary-ряд «Способ оплаты» · убран legacy `saved-card-block` и таб «Картой»
+- **FSM:** `shopPayFsm.js` State 0 + `resetPaymentFsm` при смене карты
+- **Тесты:** `b112_r3_payment_methods_test.rb` + регрессия checkout CBR/cleanup
+- **Артефакт:** `b112_r3_phase1_payment_methods_2026-06-24.json`
+- **Дальше:** фаза 2 — FSM 0–7 · one_click · 3DS overlay
+
 ## 2026-06-24 — B1.12 rev2 R3: фаза 0 gate (Q-R2 + gap 8924)
 
 - **Решения:** Q-R2-1..3 закрыты в `B1_12_recurrent_payments.md` (nonPCI, тумблер on, макеты канон)

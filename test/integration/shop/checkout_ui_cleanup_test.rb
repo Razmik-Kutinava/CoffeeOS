@@ -68,8 +68,10 @@ class Shop::CheckoutUiCleanupTest < ActionDispatch::IntegrationTest
     end
 
     checkout = File.read(root.join("routes/Checkout.svelte"))
-    assert_includes checkout, "Будет позже"
-    assert_includes checkout, "СБП"
+    sheet = File.read(root.join("components/PaymentMethodsSheet.svelte"))
+    assert_includes checkout, "Способ оплаты"
+    assert_includes sheet, "СБП"
+    assert_includes sheet, "Будет позже"
     refute_includes checkout, "is_car_pickup"
     assert_includes checkout, "Email"
     refute_includes checkout, "Телефон"
@@ -77,6 +79,5 @@ class Shop::CheckoutUiCleanupTest < ActionDispatch::IntegrationTest
     refute_includes checkout, "promo_code"
     refute_includes checkout, "Наличные"
     refute_includes checkout, '"cash"'
-    assert_includes checkout, "Картой"
   end
 end

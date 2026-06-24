@@ -28,17 +28,18 @@
   import {
     PAY_BTN,
     SUCCESS_REDIRECT_MS,
-    formatSavedCardLabel,
     classifyCheckoutPayError,
     isOfflineLikeError,
     waitForOrderSettled
   } from "../lib/shopOneClickPay.js"
+  import { formatCardListLabel } from "../lib/paymentMethodLabels.js"
+  import { PAY_FSM } from "../lib/shopPayFsm.js"
   import {
     loadCachedSavedCard,
     saveCachedSavedCard,
     clearCachedSavedCard
   } from "../lib/shopSavedCardCache.js"
-  import CheckoutPayButton from "../components/CheckoutPayButton.svelte"
+  import PaymentMethodsSheet from "../components/PaymentMethodsSheet.svelte"
   import NewCardSheet from "../components/NewCardSheet.svelte"
   import { SAVED_CARD_RETRY_MS, SAVED_CARD_RETRY_ATTEMPTS } from "../lib/shopCheckoutInlinePay.js"
   import {
@@ -51,8 +52,6 @@
   let name = $state("")
   let email = $state("")
   let otpCode = $state("")
-  let payment_method = $state("card")
-  let sbpNotice = $state(false)
   let emailVerified = $state(false)
   let sendingCode = $state(false)
   let verifyingCode = $state(false)
@@ -62,11 +61,16 @@
   let profileSyncing = $state(true)
   let editContact = $state(true)
   let savedCard = $state(null)
+  let savedCards = $state([])
   let savedCardsLoading = $state(false)
+  let selectedCardId = $state(null)
+  let selectionMode = $state("new_card")
+  let payFsmState = $state(PAY_FSM.DEFAULT)
   let useOneClick = $state(true)
   let payState = $state(PAY_BTN.idle)
   let payError = $state(null)
   let clientOrderUuid = $state(null)
+  let showPaymentMethodsSheet = $state(false)
   let showNewCardSheet = $state(false)
   let operatingHours = $state(getOperatingHours())
 
@@ -84,10 +88,16 @@
       !savedCardsLoading &&
       shopIsOpenForPay()
   )
-  const showSavedCard = $derived(
-    payment_method === "card" && useOneClick && savedCard && emailVerified
+  const paymentSummaryLabel = $derived(
+    selectionMode === "saved_card" && savedCard
+      ? formatCardListLabel(savedCard)
+      : selectionMode === "new_card"
+        ? "Новая карта"
+        : "Выберите способ оплаты"
   )
-  const savedCardLabel = $derived(formatSavedCardLabel(savedCard))
+  const canOpenPaymentSheet = $derived(
+    isValidEmail(email) && emailVerified && !profileSyncing
+  )
   const canSendCode = $derived(isValidEmail(email) && !sendingCode)
 
   function applyServerVerificationStatus(status) {
@@ -122,28 +132,67 @@
     }
   }
 
-  function applySavedCardFromSources(primary) {
+  function resetPaymentFsm() {
+    payState = PAY_BTN.idle
+    payError = null
+    payFsmState = PAY_FSM.DEFAULT
+  }
+
+  function selectSavedCard(card) {
+    if (!card?.id) return
+    savedCard = card
+    selectedCardId = card.id
+    selectionMode = "saved_card"
+    useOneClick = true
+    saveCachedSavedCard(email, card)
+    resetPaymentFsm()
+  }
+
+  function selectNewCardOption() {
+    selectionMode = "new_card"
+    useOneClick = false
+    selectedCardId = null
+    resetPaymentFsm()
+  }
+
+  function applySavedCardFromSources(primary, cards = null) {
+    if (Array.isArray(cards)) savedCards = cards
     if (primary?.id) {
-      savedCard = primary
-      saveCachedSavedCard(email, primary)
+      if (!savedCards.some((c) => c.id === primary.id)) {
+        savedCards = [...savedCards, primary]
+      }
+      selectSavedCard(primary)
       return
     }
     const cached = loadCachedSavedCard(email)
-    savedCard = cached?.id ? cached : null
+    if (cached?.id) {
+      selectSavedCard(cached)
+      return
+    }
+    savedCard = null
+    selectedCardId = null
+    if (cards.length > 0) {
+      selectSavedCard(cards[0])
+      return
+    }
+    selectNewCardOption()
   }
 
   async function loadSavedCards() {
     if (!emailVerified || !isValidEmail(email)) {
       savedCard = null
+      savedCards = []
+      selectedCardId = null
+      selectionMode = "new_card"
       return
     }
     savedCardsLoading = true
     try {
       const q = encodeURIComponent(email.trim().toLowerCase())
       const res = await api(`/saved_cards?email=${q}`)
-      applySavedCardFromSources(res?.primary || null)
+      applySavedCardFromSources(res?.primary || null, res?.cards || [])
     } catch {
-      applySavedCardFromSources(null)
+      applySavedCardFromSources(null, [])
     } finally {
       savedCardsLoading = false
     }
@@ -204,15 +253,6 @@
     }
   })
 
-  function selectPayment(val) {
-    if (val === "sbp") {
-      sbpNotice = true
-      return
-    }
-    sbpNotice = false
-    payment_method = val
-  }
-
   function onEmailInput() {
     emailVerified = false
     editContact = true
@@ -220,7 +260,12 @@
     clearEmailVerifiedInProfile()
     clearCachedSavedCard(email)
     savedCard = null
+    savedCards = []
+    selectedCardId = null
+    selectionMode = "new_card"
     useOneClick = true
+    showPaymentMethodsSheet = false
+    resetPaymentFsm()
   }
 
   async function sendCode() {
@@ -319,8 +364,7 @@
   }
 
   function resetPayIdle() {
-    payState = PAY_BTN.idle
-    payError = null
+    resetPaymentFsm()
   }
 
   async function redirectAfterSuccess(orderId) {
@@ -424,29 +468,32 @@
     })
   }
 
+  function openPaymentMethodsSheet() {
+    if (!canOpenPaymentSheet) return
+    err = null
+    showPaymentMethodsSheet = true
+  }
+
   function openNewCardSheet() {
     if (!canPay) return
     err = null
-    payError = null
     showNewCardSheet = true
   }
 
-  async function submitNewCard() {
+  async function handlePayFromSheet() {
+    if (savedCardsLoading) await loadSavedCards()
+    if (selectionMode === "saved_card") {
+      await submitOneClick()
+      return
+    }
+    showPaymentMethodsSheet = false
     openNewCardSheet()
   }
 
-  async function submit() {
-    if (savedCardsLoading) await loadSavedCards()
-    if (showSavedCard) await submitOneClick()
-    else await submitNewCard()
-  }
-
   function bindOtherCard() {
-    useOneClick = false
     clearCachedSavedCard(email)
-    savedCard = null
-    payState = PAY_BTN.idle
-    payError = null
+    selectNewCardOption()
+    showPaymentMethodsSheet = false
     openNewCardSheet()
   }
 </script>
@@ -530,53 +577,24 @@
     {/if}
   {/if}
 
-  <div class="mb-6">
-    <span class="mb-2 block text-sm text-[#a0a0a0]">Способ оплаты</span>
-    <div class="flex gap-3">
-      {#each [["card", "Картой"]] as [val, label]}
-        <button
-          type="button"
-          class="flex flex-1 items-center justify-center gap-2 rounded-lg border px-3 py-2 text-sm
-            {payment_method === val ? 'border-[#ff8c42] bg-[#ff8c42]/10 text-[#ff8c42]' : 'border-[#3a3a3a] text-[#a0a0a0]'}"
-          onclick={() => selectPayment(val)}
-        >
-          {label}
-        </button>
-      {/each}
-      <button
-        type="button"
-        class="flex flex-1 items-center justify-center gap-2 rounded-lg border border-[#3a3a3a] px-3 py-2 text-sm text-[#757575] opacity-60"
-        aria-disabled="true"
-        onclick={() => selectPayment("sbp")}
-      >
-        СБП
-      </button>
-    </div>
-    {#if sbpNotice}
-      <p class="mt-2 text-sm text-[#a0a0a0]" role="status">Будет позже</p>
-    {/if}
-  </div>
-
-  {#if showSavedCard}
-    <div class="mb-4 rounded-xl border border-[#ff8c42]/30 bg-[#2a2a2a] p-4" data-testid="saved-card-block">
-      <p class="mb-1 text-sm text-[#a0a0a0]">Сохранённая карта</p>
-      <p class="font-medium text-white">{savedCardLabel}</p>
-      <button
-        type="button"
-        class="mt-2 text-sm text-[#ff8c42]"
-        onclick={() => {
-          useOneClick = false
-          clearCachedSavedCard(email)
-          savedCard = null
-          payState = PAY_BTN.idle
-          payError = null
-        }}
-      >
-        Оплатить другой картой
-      </button>
-    </div>
-  {:else if savedCardsLoading && emailVerified}
-    <p class="mb-4 text-sm text-[#a0a0a0]">Проверяем сохранённые карты…</p>
+  {#if emailVerified}
+    <button
+      type="button"
+      class="mb-6 w-full rounded-xl border border-[#3a3a3a] bg-[#2a2a2a] p-4 text-left disabled:opacity-50"
+      disabled={!canOpenPaymentSheet}
+      data-testid="payment-method-summary"
+      onclick={openPaymentMethodsSheet}
+    >
+      <span class="mb-1 block text-sm text-[#a0a0a0]">Способ оплаты</span>
+      <span class="flex items-center justify-between gap-2 font-medium text-white">
+        {#if savedCardsLoading}
+          Проверяем карты…
+        {:else}
+          {paymentSummaryLabel}
+        {/if}
+        <span class="text-[#ff8c42]" aria-hidden="true">›</span>
+      </span>
+    </button>
   {/if}
 
   {#if err}
@@ -593,12 +611,22 @@
     </div>
   {/if}
 
-  <CheckoutPayButton
-    state={payState}
-    disabled={!canPay || profileSyncing || savedCardsLoading}
-    errorInfo={payError}
-    onPay={submit}
-    onRetry={submit}
+  <PaymentMethodsSheet
+    open={showPaymentMethodsSheet}
+    cards={savedCards}
+    loading={savedCardsLoading}
+    {selectedCardId}
+    {selectionMode}
+    {payState}
+    {payError}
+    {canPay}
+    onClose={() => {
+      showPaymentMethodsSheet = false
+    }}
+    onSelectCard={selectSavedCard}
+    onSelectNewCard={selectNewCardOption}
+    onPay={handlePayFromSheet}
+    onRetry={handlePayFromSheet}
     onBindOther={bindOtherCard}
   />
 
