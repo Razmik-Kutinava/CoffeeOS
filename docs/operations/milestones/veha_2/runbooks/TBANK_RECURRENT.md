@@ -15,7 +15,7 @@
 | Повторная | Init → Charge по RebillId |
 | UI | Макеты [`8925`](../artifacts/demo-feedback/screenshots/1000008925.png) (форма) · [`8924`](../artifacts/demo-feedback/screenshots/1000008924.png) (способы оплаты) |
 | FSM кнопки | Состояния **0–7** |
-| Блокеры docs | Q-R2-1..3 (конфликты Q1/Q5/Q6) |
+| Блокеры docs | Q-R2-1..3 **`[x]`** 2026-06-24 · gate [`b112_r3_phase0_gate_2026-06-24.json`](../artifacts/demo-feedback/b112_r3_phase0_gate_2026-06-24.json) |
 
 **Артефакты rev2:**
 - [`b112_revision2_stage0_scope_2026-06-24.json`](../artifacts/demo-feedback/b112_revision2_stage0_scope_2026-06-24.json)

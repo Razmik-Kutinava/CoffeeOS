@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2026-06-24 — B1.12 rev2 R3: фаза 0 gate (Q-R2 + gap 8924)
+
+- **Решения:** Q-R2-1..3 закрыты в `B1_12_recurrent_payments.md` (nonPCI, тумблер on, макеты канон)
+- **Gap-анализ:** макет 8924 vs текущий `Checkout.svelte` перед кодом FSM
+- **Артефакт:** `b112_r3_phase0_gate_2026-06-24.json`
+- **Дальше:** `go` R3 код · deploy после R3
+
 ## 2026-06-24 — B1.12 rev2 R2: кастомная форма карты + RSA
 
 - **UI:** `NewCardSheet.svelte` по макету 8925 — маски, Luhn, тумблер save_card
