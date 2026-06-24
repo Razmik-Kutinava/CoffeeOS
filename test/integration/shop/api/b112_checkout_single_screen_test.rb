@@ -14,12 +14,14 @@ class Shop::Api::B112CheckoutSingleScreenTest < ActionDispatch::IntegrationTest
     @email = "b112-r5-#{SecureRandom.hex(4)}@example.com"
   end
 
-  test "Checkout.svelte redirects to bank instead of inline iframe" do
+  test "Checkout uses custom NewCardSheet instead of bank redirect" do
     checkout = File.read(Rails.root.join("app/frontend/routes/Checkout.svelte"))
     refute_includes checkout, 'push("/payment")'
     refute_includes checkout, "CheckoutInlinePayment"
-    assert_includes checkout, "redirectToBankPayment"
-    assert_includes checkout, "redirectToPaymentUrl"
+    assert_includes checkout, "NewCardSheet"
+    assert_includes checkout, "openNewCardSheet"
+    refute_includes checkout, "redirectToBankPayment"
+    refute_includes checkout, "redirectToPaymentUrl"
   end
 
   test "App.svelte has no /payment route" do

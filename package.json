@@ -15,6 +15,7 @@
   "dependencies": {
     "@rails/actioncable": "^8.0.200",
     "firebase": "^11.0.0",
+    "jsencrypt": "^3.5.4",
     "lucide-svelte": "^1.0.1",
     "svelte": "^5.55.1",
     "svelte-spa-router": "^5.0.1"

@@ -51,7 +51,10 @@ export async function api(path, opts = {}) {
     const fallback =
       res.status === 500 ? "Ошибка сервера. Попробуйте позже." : res.statusText
     const msg = data.error || data.message || fallback
-    throw new Error(typeof msg === "string" ? msg : JSON.stringify(msg))
+    const err = new Error(typeof msg === "string" ? msg : JSON.stringify(msg))
+    if (data.error_code) err.error_code = data.error_code
+    if (data.tbank_status) err.tbank_status = data.tbank_status
+    throw err
   }
   return data
 }

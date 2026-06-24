@@ -1,6 +1,6 @@
 # HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-06-24 (B1.12 rev2 R1 код)  
+**Дата:** 2026-06-24 (B1.12 rev2 R2 форма карты)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev
 
@@ -43,11 +43,11 @@
 | **Макеты** | [`1000008924.png`](../milestones/veha_2/artifacts/demo-feedback/screenshots/1000008924.png) R3 · [`1000008925.png`](../milestones/veha_2/artifacts/demo-feedback/screenshots/1000008925.png) R2 |
 | **Workflow** | **Документ 1→R1→стоп → документ 2→R2→стоп → документ 3→R3** · один `go` на R |
 | **Конфликты** | Q-R2-1 до `go` R1 · Q-R2-2 до `go` R2 · Q-R2-3 до R2/R3 — **`[ ]`** |
-| **Код rev2** | R1 `[x]` OPS_PASS 2026-06-24 · R2 `[ ]` · R3 `[ ]` |
+| **Код rev2** | R1 `[x]` · R2 `[x]` OPS_PASS 2026-06-24 · R3 `[ ]` |
 | **Legacy v1** | R1–R6 OPS_PASS iframe — **не закрывает rev2** |
-| **Артефакт R1** | [`b112_r1_nonpci_ops_pass_2026-06-24.json`](../milestones/veha_2/artifacts/demo-feedback/b112_r1_nonpci_ops_pass_2026-06-24.json) |
-| **Следующий шаг** | **`go` R2** (документ 2 — форма + RSA) |
-| **Агент** | **стоп** — ждём `go` R2 |
+| **Артефакт R2** | [`b112_r2_custom_card_ops_pass_2026-06-24.json`](../milestones/veha_2/artifacts/demo-feedback/b112_r2_custom_card_ops_pass_2026-06-24.json) |
+| **Следующий шаг** | **`go` R3** (документ 3 — FSM 0–7 + экран 8924) · deploy **после R3** |
+| **Агент** | **стоп** — ждём `go` R3 |
 
 ТЗ: [`B1_12_recurrent_payments.md`](../milestones/veha_2/requirements/customer_tasks/B1_12_recurrent_payments.md) · runbook: [`TBANK_RECURRENT.md`](../milestones/veha_2/runbooks/TBANK_RECURRENT.md)
 

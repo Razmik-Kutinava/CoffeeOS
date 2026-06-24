@@ -7,6 +7,11 @@ module Shop
 
       before_action :reject_orders_when_closed!, only: %i[new_card one_click]
 
+      # GET /shop/api/payments/card_config — публичный RSA-ключ для CardData (B1.12-R2).
+      def card_config
+        render json: Shop::PaymentCryptoConfig.as_api_json
+      end
+
       # POST /shop/api/payments/new_card — Init + FinishAuthorize (документ 1, эндпоинт 1).
       def new_card
         result = Shop::NewCardPaymentService.new(session, tenant: @shop_tenant, request: request)

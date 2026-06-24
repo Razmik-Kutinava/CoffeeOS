@@ -267,7 +267,7 @@
 |------|----------------------|-----------------|
 | **Charge** | Init + Charge + RebillId | **Есть** (`charge_recurrent`) |
 | **FinishAuthorize** | `POST /v2/FinishAuthorize` — PaymentId + CardData | **R1 `[x]`** 2026-06-24 |
-| **CardData** | RSA-2048 на клиенте (R2) | **R2 `[ ]`** — API принимает `card_data` |
+| **CardData** | RSA-2048 на клиенте (R2) | **R2 `[x]`** `NewCardSheet` + `tbankCardEncrypt.js` |
 | **3DS** | `3DS_CHECKING` → ACSUrl, PaReq, MD | **R1 `[x]`** API proxy · **R3 `[ ]`** FSM |
 | **ErrorCode** | Коды в ответе API | **R1 `[x]`** проброс + friendly для 1051/1014 |
 
@@ -284,10 +284,10 @@
 | 3 | Эндпоинт 1 клик: Init + Charge по RebillId | R1 | `[x]` | `[ ]` |
 | 4 | 3DS_CHECKING → ACSUrl, PaReq, MD на фронт | R1 | `[x]` | `[ ]` |
 | 5 | ErrorCode банка на фронт без искажения | R1,R3 | `[x]` R1 API | `[ ]` |
-| 6 | PAN/CVV не в БД и не в Network открытым текстом | R1,R2 | `[ ]` | `[ ]` |
-| 7 | Форма новой карты = макет 8925 | R2 | `[ ]` | `[ ]` |
-| 8 | RSA CardData на клиенте | R2 | `[ ]` | `[ ]` |
-| 9 | Luhn + маски + блок кнопки | R2 | `[ ]` | `[ ]` |
+| 6 | PAN/CVV не в БД и не в Network открытым текстом | R1,R2 | `[x]` | `[ ]` |
+| 7 | Форма новой карты = макет 8925 | R2 | `[x]` | `[ ]` |
+| 8 | RSA CardData на клиенте | R2 | `[x]` | `[ ]` |
+| 9 | Luhn + маски + блок кнопки | R2 | `[x]` | `[ ]` |
 | 10 | Экран способов оплаты = макет 8924 | R3 | `[ ]` | `[ ]` |
 | 11 | FSM состояния 0–7 по матрице | R3 | `[ ]` | `[ ]` |
 | 12 | Anti-flicker 600 ms · shake · сброс при смене карты | R3 | `[ ]` | `[ ]` |
@@ -310,13 +310,13 @@
 
 ## Чеклист B1.12-R2 rev2 (после **`go` R2** — только документ 2; R1 `[x]`)
 
-- [ ] UI «Новая карта» по 8925
-- [ ] `tbankCardEncrypt.js` RSA-2048
-- [ ] Маски, Luhn, тумблер save_card
-- [ ] Network audit: нет открытого PAN/CVV
-- [ ] Integration / e2e тест
-- [ ] Артефакт `b112_r2_custom_card_ops_pass_*.json`
-- [ ] **Шаг закрыт:** commit + ops → **стоп до `go` R3**
+- [x] UI «Новая карта» по 8925
+- [x] `tbankCardEncrypt.js` RSA-2048
+- [x] Маски, Luhn, тумблер save_card
+- [x] Network audit: нет открытого PAN/CVV
+- [x] Integration / e2e тест
+- [x] Артефакт `b112_r2_custom_card_ops_pass_2026-06-24.json`
+- [x] **Шаг закрыт:** commit + ops → **стоп до `go` R3**
 
 ## Чеклист B1.12-R3 rev2 (после **`go` R3** — только документ 3; R1+R2 `[x]`)
 

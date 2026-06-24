@@ -20,11 +20,9 @@
   import {
     savePaymentSession,
     loadPaymentSession,
-    clearPaymentSession,
-    redirectToPaymentUrl
+    clearPaymentSession
   } from "../lib/tbankPayment.js"
   import { clearCartCache } from "../lib/shopCartCache.js"
-  import { enqueueOrder } from "../lib/shopOfflineQueue.js"
   import { isOfflineError } from "../lib/shopNetwork.js"
   import { subscribeGuestOrderStatus } from "../lib/shopOrderCable.js"
   import {
@@ -41,6 +39,7 @@
     clearCachedSavedCard
   } from "../lib/shopSavedCardCache.js"
   import CheckoutPayButton from "../components/CheckoutPayButton.svelte"
+  import NewCardSheet from "../components/NewCardSheet.svelte"
   import { SAVED_CARD_RETRY_MS, SAVED_CARD_RETRY_ATTEMPTS } from "../lib/shopCheckoutInlinePay.js"
   import {
     getOperatingHours,
@@ -68,6 +67,7 @@
   let payState = $state(PAY_BTN.idle)
   let payError = $state(null)
   let clientOrderUuid = $state(null)
+  let showNewCardSheet = $state(false)
   let operatingHours = $state(getOperatingHours())
 
   const payBusy = $derived(
@@ -330,21 +330,6 @@
     push(`/order/${orderId}`)
   }
 
-  /** Первая оплата: полный редирект на форму Т-Банка, без embed снизу. */
-  function redirectToBankPayment(res) {
-    if (!res.payment_url) return false
-
-    savePaymentSession({
-      order_id: res.order_id,
-      reconnect_token: res.reconnect_token,
-      payment_started: true,
-      card_binding: res.card_binding === true
-    })
-    payState = PAY_BTN.paying
-    redirectToPaymentUrl(res.payment_url)
-    return true
-  }
-
   async function submitOneClick() {
     if (!canPay || !savedCard?.id) return
     beginPayLoading()
@@ -412,69 +397,42 @@
     }
   }
 
-  async function submitNewCard() {
+  async function handleNewCardSuccess(res) {
+    showNewCardSheet = false
+    saveGuestProfile({ name, email, emailVerified: true })
+    savedProfile = true
+    editContact = false
+    if (res.saved_card) applySavedCardFromSources(res.saved_card)
+    else await refreshSavedCardsAfterPayment()
+    await redirectAfterSuccess(res.order_id)
+  }
+
+  function handleNewCardError(info) {
+    payError = info
+    payState = PAY_BTN.error
+    showNewCardSheet = false
+  }
+
+  function handleNewCardThreeDs(res) {
+    showNewCardSheet = false
+    payState = PAY_BTN.paying
+    savePaymentSession({
+      order_id: res.order_id,
+      reconnect_token: res.reconnect_token,
+      payment_started: true,
+      card_binding: res.save_card === true
+    })
+  }
+
+  function openNewCardSheet() {
     if (!canPay) return
-    beginPayOrdering()
-    if (!clientOrderUuid) clientOrderUuid = crypto.randomUUID()
-    let redirected = false
+    err = null
+    payError = null
+    showNewCardSheet = true
+  }
 
-    try {
-      const serverOk = await syncServerStatus()
-      if (!serverOk) {
-        payError = classifyCheckoutPayError("Подтвердите email кодом из письма")
-        payState = PAY_BTN.error
-        return
-      }
-
-      const orderBody = {
-        name,
-        email: email.trim().toLowerCase(),
-        payment_method,
-        client_order_uuid: clientOrderUuid
-      }
-
-      let res
-      try {
-        res = await api("/orders", {
-          method: "POST",
-          body: JSON.stringify(orderBody)
-        })
-      } catch (e) {
-        if (isOfflineError(e)) {
-          await enqueueOrder(orderBody)
-          window.dispatchEvent(new CustomEvent("shop:offline-order-queued"))
-          otpNotice = "Заказ сохранён. Отправим при появлении сети."
-          resetPayIdle()
-          return
-        }
-        throw e
-      }
-
-      saveGuestOrderSession(res.order_id, res.reconnect_token)
-      saveGuestProfile({ name, email, emailVerified: true })
-      clearCartCache()
-      savedProfile = true
-      editContact = false
-      clientOrderUuid = null
-
-      if (redirectToBankPayment(res)) {
-        redirected = true
-        return
-      }
-
-      await redirectAfterSuccess(res.order_id)
-    } catch (e) {
-      payError = classifyCheckoutPayError(e.message)
-      payState = PAY_BTN.error
-      if (/подтвердите email/i.test(e.message || "")) {
-        emailVerified = false
-        editContact = true
-        clearEmailVerifiedInProfile()
-        otpNotice = "Подтвердите email кодом из письма"
-      }
-    } finally {
-      if (!redirected && payState === PAY_BTN.ordering) resetPayIdle()
-    }
+  async function submitNewCard() {
+    openNewCardSheet()
   }
 
   async function submit() {
@@ -489,7 +447,7 @@
     savedCard = null
     payState = PAY_BTN.idle
     payError = null
-    submitNewCard()
+    openNewCardSheet()
   }
 </script>
 
@@ -642,5 +600,18 @@
     onPay={submit}
     onRetry={submit}
     onBindOther={bindOtherCard}
+  />
+
+  <NewCardSheet
+    open={showNewCardSheet}
+    {name}
+    {email}
+    cardHolderName={name}
+    onClose={() => {
+      showNewCardSheet = false
+    }}
+    onSuccess={handleNewCardSuccess}
+    onError={handleNewCardError}
+    onThreeDs={handleNewCardThreeDs}
   />
 </div>

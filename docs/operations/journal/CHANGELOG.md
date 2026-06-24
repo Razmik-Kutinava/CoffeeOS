@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 2026-06-24 — B1.12 rev2 R2: кастомная форма карты + RSA
+
+- **UI:** `NewCardSheet.svelte` по макету 8925 — маски, Luhn, тумблер save_card
+- **Crypto:** `tbankCardEncrypt.js` (RSA PKCS#1) · `GET /payments/card_config`
+- **Checkout:** убран редирект на iframe/URL банка для новой карты
+- **Тесты:** 18 Rails + 6 node + vite build · артефакт `b112_r2_custom_card_ops_pass_2026-06-24.json`
+- **Дальше:** `go` R3 · deploy после R3
+
 ## 2026-06-24 — B1.12 rev2 R1: nonPCI бэкенд (документ 1)
 
 - **API:** `POST /shop/api/payments/new_card` · `one_click` — Init+FinishAuthorize / Charge

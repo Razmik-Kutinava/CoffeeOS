@@ -1,0 +1,34 @@
+{
+  "task_id": "B1.12-R2-rev2",
+  "title": "Кастомная форма карты + RSA CardData (nonPCI)",
+  "date": "2026-06-24",
+  "status": "OPS_PASS",
+  "environment": "local_test",
+  "mockup": "1000008925.png",
+  "tests": {
+    "rails": "bin/rails test test/integration/shop/api/b112_r2_custom_card_test.rb test/services/shop/payment_crypto_config_test.rb test/integration/shop/api/b112_checkout_single_screen_test.rb test/integration/shop/api/b112_r1_nonpci_test.rb",
+    "rails_result": "18 runs, 125 assertions, 0 failures",
+    "frontend": "node --test test/frontend/tbank_card_format_test.mjs",
+    "frontend_result": "6 tests, 0 failures",
+    "vite_build": "PASS"
+  },
+  "frontend": {
+    "NewCardSheet.svelte": "шторка «Новая карта» — pan, MM/YY, CVV, тумблер save_card",
+    "tbankCardFormat.js": "маски, Luhn, buildCardDataString, assertNoPlainCardInPayload",
+    "tbankCardEncrypt.js": "RSA-2048 PKCS#1 via jsencrypt, submitThreeDsChallenge",
+    "checkout_flow": "POST /shop/api/payments/new_card с card_data only"
+  },
+  "api": {
+    "GET /shop/api/payments/card_config": "rsa_public_key + card_data_ready (ENV TBANK_RSA_PUBLIC_KEY)"
+  },
+  "security": {
+    "network": "PAN/CVV не в JSON body — только card_data (encrypted)",
+    "cardholder": "из имени гостя на checkout (поле CardHolder Т-Банка)"
+  },
+  "open_before_fly_demo": [
+    "TBANK_RSA_PUBLIC_KEY в Fly secrets (из ЛК Т-Бизнес)",
+    "R3 FSM + экран 8924",
+    "deploy после R3 (по плану владельца)"
+  ],
+  "next_step": "go R3 — документ 3 (FSM 0-7 + способ оплаты 8924)"
+}
