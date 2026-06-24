@@ -34,19 +34,19 @@ class Shop::Api::B112CheckoutSingleScreenTest < ActionDispatch::IntegrationTest
     checkout = File.read(Rails.root.join("app/frontend/routes/Checkout.svelte"))
     assert_includes checkout, "savedCardsLoading"
     assert_includes checkout, "async function handlePayFromSheet()"
-    assert_includes checkout, "res.recurrent_charge || res.provider_payment_id"
+    assert_includes checkout, '"/payments/one_click"'
     assert_includes checkout, "waitForOrderSettled"
     assert_includes checkout, "shopSavedCardCache"
     refute_includes checkout, "if (redirectToBankPayment(res)) return"
   end
 
-  test "CheckoutPayButton has extended pay states" do
+  test "CheckoutPayButton uses FSM 0-7 matrix" do
     btn = File.read(Rails.root.join("app/frontend/components/CheckoutPayButton.svelte"))
-    one_click = File.read(Rails.root.join("app/frontend/lib/shopOneClickPay.js"))
-    assert_includes one_click, "ordering"
-    assert_includes one_click, "awaiting"
-    assert_includes btn, "Оформляем"
-    assert_includes btn, "Ждём банк"
+    fsm = File.read(Rails.root.join("app/frontend/lib/shopPayFsm.js"))
+    assert_includes fsm, "PAY_FSM_LABELS"
+    assert_includes fsm, "Оплачено ✔"
+    assert_includes fsm, "Установка соединения"
+    assert_includes btn, "pay-fsm-btn--5"
   end
 
   test "card order API returns payment_url without iframe flag" do

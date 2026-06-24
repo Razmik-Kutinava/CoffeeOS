@@ -6,19 +6,28 @@
     validateCardFields,
     assertNoPlainCardInPayload
   } from "../lib/tbankCardFormat.js"
-  import { encryptCardPayload, submitThreeDsChallenge } from "../lib/tbankCardEncrypt.js"
+  import { encryptCardPayload } from "../lib/tbankCardEncrypt.js"
   import { clearCartCache } from "../lib/shopCartCache.js"
   import { saveGuestOrderSession } from "../lib/shopGuestSession.js"
-  import { classifyCheckoutPayError } from "../lib/shopOneClickPay.js"
+  import CheckoutPayButton from "./CheckoutPayButton.svelte"
+  import {
+    PAY_FSM,
+    MIN_LOADER_MS,
+    withMinLoaderMs,
+    apiWithPayTimeout,
+    fsmFromPaymentError,
+    isPayFsmClickable
+  } from "../lib/shopPayFsm.js"
 
   let {
     open = false,
     name = "",
     email = "",
     cardHolderName = "",
+    fsmState = PAY_FSM.DEFAULT,
+    onFsmChange = () => {},
     onClose = () => {},
     onSuccess = () => {},
-    onError = () => {},
     onThreeDs = () => {}
   } = $props()
 
@@ -40,7 +49,8 @@
       !submitting &&
       !configLoading &&
       rsaPublicKey &&
-      !configError
+      !configError &&
+      isPayFsmClickable(fsmState)
   )
 
   async function loadCryptoConfig() {
@@ -89,16 +99,18 @@
   }
 
   function closeSheet() {
-    if (submitting) return
+    if (submitting || !isPayFsmClickable(fsmState)) return
     onClose()
   }
 
   async function submit() {
     touched = true
     refreshFieldErrors()
-    if (!validation.valid || !rsaPublicKey) return
+    if (!validation.valid || !rsaPublicKey || !isPayFsmClickable(fsmState)) return
 
     submitting = true
+    onFsmChange(PAY_FSM.CONNECTING)
+
     try {
       const card_data = encryptCardPayload(
         {
@@ -119,9 +131,14 @@
       }
       assertNoPlainCardInPayload(body, pan, cvv)
 
-      const res = await api("/payments/new_card", {
-        method: "POST",
-        body: JSON.stringify(body)
+      const res = await withMinLoaderMs(MIN_LOADER_MS, async () => {
+        onFsmChange(PAY_FSM.CONNECTING)
+        const payload = await apiWithPayTimeout(api, "/payments/new_card", {
+          method: "POST",
+          body: JSON.stringify(body)
+        })
+        onFsmChange(PAY_FSM.PROCESSING)
+        return payload
       })
 
       saveGuestOrderSession(res.order_id, res.reconnect_token)
@@ -129,15 +146,12 @@
 
       if (res.tbank_status === "3DS_CHECKING" && res.three_ds?.acs_url) {
         onThreeDs(res)
-        submitThreeDsChallenge(res.three_ds)
         return
       }
 
       onSuccess(res)
     } catch (e) {
-      const info = classifyCheckoutPayError(e.message)
-      if (e.error_code) info.error_code = e.error_code
-      onError(info)
+      onFsmChange(fsmFromPaymentError(e, { httpStatus: e.httpStatus }))
     } finally {
       submitting = false
     }
@@ -238,7 +252,7 @@
     </div>
 
     {#if configError}
-      <p class="new-card-sheet__banner new-card-sheet__banner--error" role="alert">{configError}</p>
+      <p class="new-card-sheet__banner new-card-sheet__banner--error" role="status">{configError}</p>
     {/if}
 
     <div class="new-card-sheet__badges" aria-hidden="true">
@@ -248,15 +262,14 @@
       <span>3-D Secure</span>
     </div>
 
-    <button
-      type="button"
-      class="new-card-sheet__pay"
-      disabled={!canSubmit}
-      data-testid="new-card-pay"
-      onclick={submit}
-    >
-      {submitting ? "Оплачиваем…" : configLoading ? "Загрузка…" : "Оплатить"}
-    </button>
+    <div class="new-card-sheet__pay-wrap">
+      <CheckoutPayButton
+        fsmState={configLoading ? PAY_FSM.CONNECTING : fsmState}
+        disabled={!canSubmit && fsmState === PAY_FSM.DEFAULT}
+        onPay={submit}
+        onRetry={submit}
+      />
+    </div>
 
     <button type="button" class="new-card-sheet__cancel" onclick={closeSheet}>Отмена</button>
   </section>
@@ -402,22 +415,8 @@
     transform: translateX(1.2rem);
   }
 
-  .new-card-sheet__pay {
-    width: 100%;
+  .new-card-sheet__pay-wrap {
     margin-top: 1rem;
-    border: 0;
-    border-radius: 0.75rem;
-    background: #ff8c42;
-    color: #fff;
-    font-weight: 600;
-    font-size: 1rem;
-    padding: 0.875rem 1rem;
-    cursor: pointer;
-  }
-
-  .new-card-sheet__pay:disabled {
-    opacity: 0.45;
-    cursor: not-allowed;
   }
 
   .new-card-sheet__cancel {

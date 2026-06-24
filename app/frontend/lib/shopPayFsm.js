@@ -1,6 +1,6 @@
-/** B1.12-R3 — FSM кнопки оплаты (0–7). Фаза 1: State 0 + сброс при смене карты. */
+/** B1.12-R3 — FSM кнопки оплаты (states 0–7). */
 
-import { PAY_BTN } from "./shopOneClickPay.js"
+import { isOfflineError } from "./shopNetwork.js"
 
 export const PAY_FSM = {
   DEFAULT: 0,
@@ -13,17 +13,139 @@ export const PAY_FSM = {
   NET_ERROR: 7
 }
 
-/** Сброс в State 0 (Default) — при смене сохранённой карты. */
-export function createState0() {
-  return { payState: PAY_BTN.idle, payError: null, fsmState: PAY_FSM.DEFAULT }
+export const MIN_LOADER_MS = 600
+export const NET_TIMEOUT_MS = 10_000
+export const SUCCESS_REDIRECT_MS = 1500
+
+export const PAY_FSM_LABELS = {
+  [PAY_FSM.DEFAULT]: "Оплатить",
+  [PAY_FSM.CONNECTING]: "Установка соединения…",
+  [PAY_FSM.PROCESSING]: "Обработка банком…",
+  [PAY_FSM.THREE_DS]: "Подтвердите по СМС",
+  [PAY_FSM.SUCCESS]: "Оплачено ✔",
+  [PAY_FSM.CLIENT_ERROR]: "Отказ: смените карту",
+  [PAY_FSM.BANK_ERROR]: "Сбой банка: позже",
+  [PAY_FSM.NET_ERROR]: "Нет сети: повторить"
 }
 
-export function isPayBusy(payState) {
+/** Коды Т-Банка: отказ по карте пользователя → State 5. */
+const CLIENT_ERROR_CODES = new Set([
+  "1005",
+  "1013",
+  "1014",
+  "1041",
+  "1051",
+  "1053",
+  "1054",
+  "1057",
+  "1061",
+  "1062",
+  "1078"
+])
+
+export function payFsmLabel(state) {
+  return PAY_FSM_LABELS[state] || PAY_FSM_LABELS[PAY_FSM.DEFAULT]
+}
+
+export function isPayFsmBusy(state) {
   return (
-    payState === PAY_BTN.loading ||
-    payState === PAY_BTN.ordering ||
-    payState === PAY_BTN.paying ||
-    payState === PAY_BTN.awaiting ||
-    payState === PAY_BTN.success
+    state === PAY_FSM.CONNECTING ||
+    state === PAY_FSM.PROCESSING ||
+    state === PAY_FSM.THREE_DS ||
+    state === PAY_FSM.SUCCESS
   )
+}
+
+export function isPayFsmClickable(state) {
+  return (
+    state === PAY_FSM.DEFAULT ||
+    state === PAY_FSM.CLIENT_ERROR ||
+    state === PAY_FSM.BANK_ERROR ||
+    state === PAY_FSM.NET_ERROR
+  )
+}
+
+export function shouldLockPaymentMethods(state) {
+  return isPayFsmBusy(state)
+}
+
+/** Сброс в State 0 — при смене сохранённой карты. */
+export function createState0() {
+  return { payFsmState: PAY_FSM.DEFAULT }
+}
+
+/** ErrorCode / HTTP / сеть → FSM 5–7. */
+export function fsmFromPaymentError(error, { httpStatus } = {}) {
+  if (!navigator.onLine || isOfflineError(error)) {
+    return PAY_FSM.NET_ERROR
+  }
+
+  const msg = String(error?.message || error || "").toLowerCase()
+  if (/timeout|timed out|abort/i.test(msg)) {
+    return PAY_FSM.NET_ERROR
+  }
+  if (/failed to fetch|network|offline/i.test(msg)) {
+    return PAY_FSM.NET_ERROR
+  }
+
+  const status = Number(httpStatus || error?.httpStatus || 0)
+  if (status >= 500 || status === 502 || status === 503 || status === 504) {
+    return PAY_FSM.BANK_ERROR
+  }
+
+  const code = String(error?.error_code || "").trim()
+  if (code && CLIENT_ERROR_CODES.has(code)) {
+    return PAY_FSM.CLIENT_ERROR
+  }
+
+  if (/истёк|истек|expir|недостаточно|средств|заблокирован|блокир|отклон|лимит|cvv|cvc|карт/i.test(msg)) {
+    return PAY_FSM.CLIENT_ERROR
+  }
+  if (/сеть|network|offline|повторить/i.test(msg)) {
+    return PAY_FSM.NET_ERROR
+  }
+  if (/сервер|шлюз|банк|инфра|позже|недоступн/i.test(msg)) {
+    return PAY_FSM.BANK_ERROR
+  }
+
+  return PAY_FSM.BANK_ERROR
+}
+
+/** Anti-flicker: удерживаем Connecting+Processing минимум ms. */
+export async function withMinLoaderMs(ms, fn) {
+  const started = Date.now()
+  const result = await fn()
+  const elapsed = Date.now() - started
+  if (elapsed < ms) {
+    await new Promise((resolve) => setTimeout(resolve, ms - elapsed))
+  }
+  return result
+}
+
+export async function apiWithPayTimeout(api, path, opts = {}, timeoutMs = NET_TIMEOUT_MS) {
+  let timer
+  try {
+    return await Promise.race([
+      api(path, opts),
+      new Promise((_, reject) => {
+        timer = setTimeout(() => {
+          const err = new Error("timeout")
+          err.kind = "timeout"
+          reject(err)
+        }, timeoutMs)
+      })
+    ])
+  } finally {
+    clearTimeout(timer)
+  }
+}
+
+/** fetch с пробросом httpStatus для классификации FSM 6. */
+export async function apiWithStatus(api, path, opts = {}) {
+  try {
+    return await apiWithPayTimeout(api, path, opts)
+  } catch (error) {
+    if (error?.httpStatus) throw error
+    throw error
+  }
 }

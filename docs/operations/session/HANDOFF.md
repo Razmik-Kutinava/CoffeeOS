@@ -1,6 +1,6 @@
 # HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-06-24 (B1.12 rev2 R3 фаза 1 UI 8924)  
+**Дата:** 2026-06-24 (B1.12 rev2 R3 фаза 2 FSM 0–7)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev
 
@@ -43,11 +43,11 @@
 | **Макеты** | [`1000008924.png`](../milestones/veha_2/artifacts/demo-feedback/screenshots/1000008924.png) R3 · [`1000008925.png`](../milestones/veha_2/artifacts/demo-feedback/screenshots/1000008925.png) R2 |
 | **Workflow** | **Документ 1→R1→стоп → документ 2→R2→стоп → документ 3→R3** · один `go` на R |
 | **Конфликты** | Q-R2-1..3 **`[x]`** зафиксированы 2026-06-24 (фаза 0 gate R3) |
-| **Код rev2** | R1 `[x]` · R2 `[x]` · R3 фаза 1 `[x]` · R3 фаза 2 `[ ]` |
-| **Gate R3** | [`b112_r3_phase0_gate_2026-06-24.json`](../milestones/veha_2/artifacts/demo-feedback/b112_r3_phase0_gate_2026-06-24.json) |
-| **Фаза 1** | [`b112_r3_phase1_payment_methods_2026-06-24.json`](../milestones/veha_2/artifacts/demo-feedback/b112_r3_phase1_payment_methods_2026-06-24.json) — `PaymentMethodsSheet` |
-| **Следующий шаг** | **фаза 2 R3** — FSM 0–7 · `one_click` · 3DS overlay · deploy **после R3** |
-| **Агент** | **стоп** — ждём `go` фаза 2 |
+| **Код rev2** | R1 `[x]` · R2 `[x]` · R3 фаза 1+2 `[x]` · R3 фаза 3 Fly `[ ]` |
+| **Фаза 1** | [`b112_r3_phase1_payment_methods_2026-06-24.json`](../milestones/veha_2/artifacts/demo-feedback/b112_r3_phase1_payment_methods_2026-06-24.json) |
+| **Фаза 2** | [`b112_r3_phase2_fsm_2026-06-24.json`](../milestones/veha_2/artifacts/demo-feedback/b112_r3_phase2_fsm_2026-06-24.json) — FSM 0–7 |
+| **Следующий шаг** | **фаза 3** — `TBANK_RSA_PUBLIC_KEY` · `fly deploy` · MCP · апрув |
+| **Агент** | **стоп** — deploy только по явному апруву |
 
 ТЗ: [`B1_12_recurrent_payments.md`](../milestones/veha_2/requirements/customer_tasks/B1_12_recurrent_payments.md) · runbook: [`TBANK_RECURRENT.md`](../milestones/veha_2/runbooks/TBANK_RECURRENT.md)
 

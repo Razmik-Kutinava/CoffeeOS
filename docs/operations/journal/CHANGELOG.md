@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## 2026-06-24 — B1.12 rev2 R3 фаза 2: FSM 0–7 + one_click + 3DS iframe
+
+- **FSM:** `shopPayFsm.js` states 0–7, ErrorCode→5/6/7, `withMinLoaderMs(600)`
+- **UI:** `CheckoutPayButton` — синяя/зелёная/красная/серая, loader, shake State 5
+- **API:** one-click `POST /payments/one_click` (не legacy `/orders`)
+- **3DS:** `ThreeDsOverlay` + iframe ACS (`THREE_DS_FRAME_NAME`)
+- **NewCardSheet:** общий FSM через `onFsmChange`, без alert под кнопкой
+- **Тесты:** `b112_r3_fsm_test.rb` + регрессия — 32 runs, 0 failures
+- **Артефакт:** `b112_r3_phase2_fsm_2026-06-24.json`
+- **Дальше:** фаза 3 — Fly deploy + MCP
+
 ## 2026-06-24 — B1.12 rev2 R3 фаза 1: UI «Способ оплаты» (8924)
 
 - **UI:** `PaymentMethodsSheet.svelte` — список карт, СБП disabled, «Новая карта», кнопка в шторке

@@ -62,7 +62,7 @@ class Shop::Api::B112R3PaymentMethodsTest < ActionDispatch::IntegrationTest
     assert_includes checkout, "payment-method-summary"
     assert_includes checkout, "selectSavedCard"
     assert_includes checkout, "resetPaymentFsm"
-    assert_includes checkout, "PAY_FSM.DEFAULT"
+    assert_includes checkout, '"/payments/one_click"'
     refute_includes checkout, "saved-card-block"
     refute_includes checkout, '["card", "Картой"]'
     assert_includes fsm, "PAY_FSM"

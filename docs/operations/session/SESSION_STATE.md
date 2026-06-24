@@ -2,7 +2,7 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-06-24 (B1.12 rev2 R3 фаза 1 UI 8924)  
+**Дата:** 2026-06-24 (B1.12 rev2 R3 фаза 2 FSM 0–7)  
 **Предыдущее:** B1.12-R3 Fly MCP 8/8 · B1.11 этап 0 · B1.7 **ЗАКРЫТА**  
 **Веха 1:** **закрыта** 2026-06-19 (CHECKLIST § I, H.3 заочно).  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
@@ -20,10 +20,19 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **B1.12 rev2** | R3 фаза 1 `[x]` UI 8924 | фаза 2 FSM 0–7 · deploy после R3 |
+| **B1.12 rev2** | R3 фаза 1+2 `[x]` FSM + one_click | фаза 3 Fly deploy + MCP |
 | **B1.11 режим работы** | **Fly MCP header A/B PASS** · артефакт 2026-06-21 | **апрув заказчика** |
 | **B1.13 навигация** | **S1 Fly MCP PASS** 2026-06-23 · 5/5 критериев | **апрув заказчика S1** → `go` S2 |
 | **B1.14 адрес в шапке** | **B1.14-3d** index map `[x]` | deploy (`./bin/fly_deploy.sh`) · B1.14-4 cart |
+
+### Сессия 2026-06-24 (B1.12 rev2 R3: фаза 2 FSM 0–7)
+
+- **FSM:** `shopPayFsm.js`, `CheckoutPayButton`, anti-flicker 600 ms, shake State 5
+- **API:** checkout one-click → `POST /payments/one_click`
+- **3DS:** `ThreeDsOverlay` iframe ACS
+- **Тесты:** 32 runs, 296 assertions, 0 failures
+- **Артефакт:** `b112_r3_phase2_fsm_2026-06-24.json`
+- **Дальше:** фаза 3 Fly deploy + MCP
 
 ### Сессия 2026-06-24 (B1.12 rev2 R3: фаза 1 UI «Способ оплаты»)
 

@@ -19,8 +19,10 @@ export function encryptCardPayload({ pan, expDate, cvv, cardHolder }, publicKeyP
   return encryptCardDataString(plain, publicKeyPem)
 }
 
-/** 3DS: POST на ACS банка (PaReq + MD). */
-export function submitThreeDsChallenge(threeDs, { target = "_self" } = {}) {
+/** 3DS: POST на ACS банка (PaReq + MD) — в iframe overlay (B1.12-R3). */
+export const THREE_DS_FRAME_NAME = "coffeeos-three-ds-frame"
+
+export function submitThreeDsChallenge(threeDs, { target = THREE_DS_FRAME_NAME } = {}) {
   const acsUrl = threeDs?.acs_url
   const paReq = threeDs?.pa_req
   const md = threeDs?.md

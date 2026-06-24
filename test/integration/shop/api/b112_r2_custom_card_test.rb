@@ -46,7 +46,7 @@ class Shop::Api::B112R2CustomCardTest < ActionDispatch::IntegrationTest
     sheet = File.read(Rails.root.join("app/frontend/components/NewCardSheet.svelte"))
     assert_includes checkout, "NewCardSheet"
     assert_includes checkout, "openNewCardSheet"
-    assert_includes sheet, 'api("/payments/new_card"'
+    assert_includes sheet, 'apiWithPayTimeout(api, "/payments/new_card"'
     refute_includes checkout, "redirectToBankPayment"
   end
 

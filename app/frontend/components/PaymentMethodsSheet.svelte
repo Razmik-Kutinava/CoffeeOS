@@ -1,7 +1,7 @@
 <script>
   import CheckoutPayButton from "./CheckoutPayButton.svelte"
   import { formatCardListLabel, cardBrandShort } from "../lib/paymentMethodLabels.js"
-  import { PAY_BTN } from "../lib/shopOneClickPay.js"
+  import { PAY_FSM, shouldLockPaymentMethods } from "../lib/shopPayFsm.js"
 
   let {
     open = false,
@@ -9,20 +9,19 @@
     loading = false,
     selectedCardId = null,
     selectionMode = "saved_card",
-    payState = PAY_BTN.idle,
-    payError = null,
+    fsmState = PAY_FSM.DEFAULT,
     canPay = false,
     onClose = () => {},
     onSelectCard = () => {},
     onSelectNewCard = () => {},
     onPay = () => {},
-    onRetry = () => {},
-    onBindOther = () => {}
+    onRetry = () => {}
   } = $props()
 
   let sbpNotice = $state(false)
 
   const payDisabled = $derived(!canPay || loading)
+  const cardsLocked = $derived(shouldLockPaymentMethods(fsmState))
 
   function isCardSelected(card) {
     return selectionMode === "saved_card" && selectedCardId === card.id
@@ -66,6 +65,7 @@
               class:pm-row--selected={isCardSelected(card)}
               role="radio"
               aria-checked={isCardSelected(card)}
+              disabled={cardsLocked}
               data-testid="payment-method-card-{card.id}"
               onclick={() => onSelectCard(card)}
             >
@@ -97,6 +97,7 @@
             class:pm-row--selected={selectionMode === "new_card"}
             role="radio"
             aria-checked={selectionMode === "new_card"}
+            disabled={cardsLocked}
             data-testid="payment-method-new-card"
             onclick={onSelectNewCard}
           >
@@ -113,12 +114,10 @@
 
     <div class="pm-sheet__pay">
       <CheckoutPayButton
-        state={payState}
+        {fsmState}
         disabled={payDisabled}
-        errorInfo={payError}
         onPay={onPay}
         onRetry={onRetry}
-        onBindOther={onBindOther}
       />
     </div>
   </section>

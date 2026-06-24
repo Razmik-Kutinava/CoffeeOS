@@ -128,12 +128,13 @@ class Shop::Api::B112PaymentSettleChainTest < ActionDispatch::IntegrationTest
     assert_equal "finalize-rebill", card.card_token
   end
 
-  test "checkout uses bank redirect and payment-result settle path" do
+  test "checkout uses FSM settle path without bank redirect" do
     checkout = File.read(Rails.root.join("app/frontend/routes/Checkout.svelte"))
     result = File.read(Rails.root.join("app/frontend/routes/PaymentResult.svelte"))
 
     refute_includes checkout, "CheckoutInlinePayment"
-    assert_includes checkout, "redirectToBankPayment"
+    refute_includes checkout, "redirectToBankPayment"
+    assert_includes checkout, "waitForOrderSettled"
     assert_includes result, "/orders/${orderId}/finalize"
   end
 
