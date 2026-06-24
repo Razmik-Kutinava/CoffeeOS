@@ -4,7 +4,7 @@
 
 **Источник:** PDF [`artifacts/demo-feedback/customer_qa_prog10_2026-06.pdf`](artifacts/demo-feedback/customer_qa_prog10_2026-06.pdf) (продолжение В1: [`../veha_1/artifacts/customer_live_qa_block1_2026-05-30.pdf`](../veha_1/artifacts/customer_live_qa_block1_2026-05-30.pdf)).
 
-**Сейчас (2026-06-24):** **B1.12 rev2** этап 0 docs — nonPCI ТЗ заказчика · Q-R2-1..3 ждут владельца.
+**Сейчас (2026-06-24):** **B1.12 rev2 R3** — Fly MCP 9/10 post-deploy · апрув заказчика `[ ]`.
 
 **Честно:** §1–3 в таблице ниже — **done** *(выборочно)*. §2.3 — **done** *(этапы 1–5, MCP)*.
 
@@ -36,7 +36,8 @@
 | 2026-06-21 | B1.12-R4 UX | `#/checkout` Fly post-deploy #2 | 11/11 после удаления `#/payment` (`75dc252`) | **done** *(Fly MCP)* | [b112_r4_single_screen_post_deploy_2026-06-21.json](artifacts/demo-feedback/b112_r4_single_screen_post_deploy_2026-06-21.json) |
 | 2026-06-20 | B1.12-R4 UX | 3 экрана оплаты | single-screen checkout + кнопка статусов | **done** *(local)* | [b112_checkout_single_screen_2026-06-20.json](artifacts/demo-feedback/b112_checkout_single_screen_2026-06-20.json) |
 | 2026-06-19 | заказчик B1.12 | `#/payment` после 3DS | оплата не завершается, UI завис на банке | **done** *(fix 14cdf12)* | [b112_customer_payment_stuck_2026-06-19.json](artifacts/demo-feedback/b112_customer_payment_stuck_2026-06-19.json) |
-| 2026-06-19 | B1.12-R3 | `#/checkout` Fly | saved card + FSM 8/8 | **done** *(Fly MCP)* | [b112_r3_one_click_post_deploy_2026-06-19.json](artifacts/demo-feedback/b112_r3_one_click_post_deploy_2026-06-19.json) |
+| 2026-06-24 | B1.12-R3 rev2 | `#/checkout` Fly | PaymentMethodsSheet + FSM 0–7 MCP 9/10 | **done** *(Fly MCP post-deploy)* | [b112_r3_fsm_ops_pass_2026-06-24.json](artifacts/demo-feedback/b112_r3_fsm_ops_pass_2026-06-24.json) |
+| 2026-06-19 | B1.12-R3 | `#/checkout` Fly | saved card + FSM 8/8 | **done** *(Fly MCP v1)* | [b112_r3_one_click_post_deploy_2026-06-19.json](artifacts/demo-feedback/b112_r3_one_click_post_deploy_2026-06-19.json) |
 | 2026-06-19 | B1.12-R3 | `#/checkout` 1 клик | saved card + pay button FSM local | **done** *(OPS_PASS local)* | [b112_r3_one_click_ops_pass_2026-06-19.json](artifacts/demo-feedback/b112_r3_one_click_ops_pass_2026-06-19.json) |
 | 2026-06-18 | B1.12-R2 | `#/payment` iframe | web-фрейм + card_binding local | **done** *(OPS_PASS local)* | [b112_r2_native_card_ops_pass_2026-06-18.json](artifacts/demo-feedback/b112_r2_native_card_ops_pass_2026-06-18.json) |
 | 2026-06-18 | B1.12-R1 | shop API / callback | Рекуррент: RebillId + Charge | **done** *(OPS_PASS local)* | [b112_r1_recurrent_ops_pass_2026-06-18.json](artifacts/demo-feedback/b112_r1_recurrent_ops_pass_2026-06-18.json) |

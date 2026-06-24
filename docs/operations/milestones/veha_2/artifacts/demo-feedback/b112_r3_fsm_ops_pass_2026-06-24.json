@@ -1,0 +1,105 @@
+{
+  "scenario": "b112_r3_fsm_ops_pass",
+  "stand": "https://coffeeos.fly.dev",
+  "tenant_id": "655aaccb-004a-4bb9-a50a-ce618854dda3",
+  "email": "b112-r3-06241307@coffeeos.dev",
+  "saved_card_id": "e59f1736-c92d-4493-baca-2e5b16589e2e",
+  "started_at": "2026-06-24T13:11:01.644Z",
+  "finished_at": "2026-06-24T13:11:11.803Z",
+  "pass": true,
+  "rsa_tail": {
+    "pass": false,
+    "action": "set TBANK_RSA_PUBLIC_KEY on Fly"
+  },
+  "steps_pass": 9,
+  "steps_total": 10,
+  "prep_summary": {
+    "card_config": false,
+    "reaction_ms": 119,
+    "terminal_state": "6"
+  },
+  "steps": [
+    {
+      "id": "00",
+      "action": "checkout #/checkout loads",
+      "pass": true,
+      "at": "2026-06-24T13:11:04.639Z"
+    },
+    {
+      "id": "01",
+      "action": "GET saved_cards 200 + primary",
+      "pass": true,
+      "at": "2026-06-24T13:11:04.813Z",
+      "status": 200
+    },
+    {
+      "id": "02",
+      "action": "GET card_config (TBANK_RSA_PUBLIC_KEY on Fly)",
+      "pass": false,
+      "at": "2026-06-24T13:11:04.961Z",
+      "status": 200,
+      "card_data_ready": false,
+      "note": "tail 3.1: fly secrets set TBANK_RSA_PUBLIC_KEY"
+    },
+    {
+      "id": "03",
+      "action": "payment method summary shows saved card",
+      "pass": true,
+      "at": "2026-06-24T13:11:04.996Z",
+      "summaryText": "Способ оплаты\nКарта *1307\n›",
+      "last4": "1307"
+    },
+    {
+      "id": "04",
+      "action": "PaymentMethodsSheet opens with card list",
+      "pass": true,
+      "at": "2026-06-24T13:11:05.177Z",
+      "sheetText": "Способ оплаты\n×\nVISA\nКарта *1307\nСБП\nСБП\nНовая карта\n⌄\nОплатить"
+    },
+    {
+      "id": "05",
+      "action": "FSM State 0 default Оплатить",
+      "pass": true,
+      "at": "2026-06-24T13:11:05.454Z",
+      "idleState": "0",
+      "idleLabel": "Оплатить"
+    },
+    {
+      "id": "06",
+      "action": "FSM State 1 ≤500ms after tap",
+      "pass": true,
+      "at": "2026-06-24T13:11:05.690Z",
+      "connectingSeen": true,
+      "reactionMs": 119
+    },
+    {
+      "id": "07",
+      "action": "FSM terminal state after pay attempt",
+      "pass": true,
+      "at": "2026-06-24T13:11:11.716Z",
+      "terminalState": "6",
+      "terminalLabel": "Сбой банка: позже",
+      "stillOnCheckout": true,
+      "url": "https://coffeeos.fly.dev/shop?tenant_id=655aaccb-004a-4bb9-a50a-ce618854dda3#/checkout"
+    },
+    {
+      "id": "08",
+      "action": "no payment error alert under button (FSM only)",
+      "pass": true,
+      "at": "2026-06-24T13:11:11.716Z",
+      "paymentAlerts": 0
+    },
+    {
+      "id": "09",
+      "action": "no bank redirect / legacy iframe on checkout",
+      "pass": true,
+      "at": "2026-06-24T13:11:11.716Z",
+      "url": "https://coffeeos.fly.dev/shop?tenant_id=655aaccb-004a-4bb9-a50a-ce618854dda3#/checkout"
+    }
+  ],
+  "screenshots": {
+    "checkout": "screenshots/b112_r3_fsm_checkout_2026-06-24.png",
+    "after_pay": "screenshots/b112_r3_fsm_after_pay_2026-06-24.png"
+  },
+  "verdict": "B1.12-R3 rev2 UI/FSM PASS on Fly · хвост TBANK_RSA_PUBLIC_KEY"
+}

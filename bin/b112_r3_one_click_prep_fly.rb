@@ -207,7 +207,7 @@ _, refill_http = curl_post_json(
 raise "cart refill failed #{refill_http}" unless refill_http == 200
 
 last4 = masked.gsub(/\D/, "")[-4..]
-expected_label = "Visa •••• #{last4}"
+expected_label = "Карта *#{last4}"
 
 prep = {
   scenario: "b112_r3_one_click",

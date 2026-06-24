@@ -178,3 +178,43 @@ Slug в БД **не меняется** — при своём домене буд
 1. В `fly.toml` убрать `demo:seed` из `release_command`.
 2. `DEMO_AUTO_SEED=false`.
 3. Отметить § H.0 в чеклисте В1.
+
+---
+
+## Секреты Fly (B1.12 nonPCI)
+
+| Secret | Назначение | Обязательно |
+|--------|------------|-------------|
+| `TBANK_TERMINAL_KEY` | Терминал Т-Банка | да (card) |
+| `TBANK_PASSWORD` | Пароль терминала | да |
+| `TBANK_RETURN_URL` | Return URL callback | да |
+| **`TBANK_RSA_PUBLIC_KEY`** | Публичный RSA ключ терминала для **CardData** (новая карта) | **да для R2** |
+
+**Где взять `TBANK_RSA_PUBLIC_KEY`:** ЛК Т-Бизнес → Магазины → терминал → настройки nonPCI / публичный ключ.  
+**Формат:** PEM целиком (`-----BEGIN PUBLIC KEY-----` … `-----END PUBLIC KEY-----`).
+
+```bash
+# Пример (по апруву владельца):
+fly secrets set TBANK_RSA_PUBLIC_KEY="$(cat path/to/tbank_public.pem)" -a coffeeos
+```
+
+**Проверка после deploy:**
+
+```bash
+# На витрине с tenant_id — в DevTools Network:
+GET /shop/api/payments/card_config → card_data_ready: true, rsa_public_key present
+```
+
+Без ключа: `NewCardSheet` показывает «Оплата новой картой временно недоступна»; **one-click** (сохранённая карта) работает.
+
+Runbook: [`../milestones/veha_2/runbooks/TBANK_RECURRENT.md`](../milestones/veha_2/runbooks/TBANK_RECURRENT.md)
+
+### Fly MCP B1.12-R3 (после deploy)
+
+```powershell
+$env:FLY_BIN = "C:\Users\darks\.fly\bin\flyctl.exe"
+ruby bin/b112_r3_one_click_prep_fly.rb
+node bin/b112_r3_fsm_mcp.mjs
+```
+
+Артефакт: `docs/operations/milestones/veha_2/artifacts/demo-feedback/b112_r3_fsm_ops_pass_<date>.json`

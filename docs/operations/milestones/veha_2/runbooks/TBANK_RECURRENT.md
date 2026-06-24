@@ -1,6 +1,6 @@
 # Т-Банк: рекуррентные платежи и привязка карты (B1.12)
 
-**Статус:** **rev2 R1+R2** `[x]` OPS_PASS 2026-06-24 · R3 `[ ]` · legacy v1 R1–R6 OPS_PASS  
+**Статус:** **rev2 R1+R2+R3** `[x]` OPS_PASS 2026-06-24 · Fly MCP 9/10 (RSA хвост) · legacy v1 R1–R6 OPS_PASS  
 **ТЗ:** [`B1_12_recurrent_payments.md`](../requirements/customer_tasks/B1_12_recurrent_payments.md)  
 **Связано:** §2.3 (базовая оплата) · `Payments::TbankAdapter` · `POST /callbacks/tbank`
 
@@ -29,8 +29,8 @@
 | Публичный ключ | ЛК Т-Бизнес → Магазины → терминал | **R2 `[x]`** `TBANK_RSA_PUBLIC_KEY` · `GET /payments/card_config` |
 | Новая карта | Init + FinishAuthorize | **R1 `[x]`** `POST /shop/api/payments/new_card` |
 | 1 клик | Init + Charge | **R1 `[x]`** `POST /shop/api/payments/one_click` |
-| 3DS | `3DS_CHECKING` → ACSUrl, PaReq, MD | **R1 `[x]`** API · **R3 `[ ]`** FSM State 3 |
-| Ошибки | ErrorCode в ответе | **R1 `[x]`** проброс + friendly 1051/1014 |
+| 3DS | `3DS_CHECKING` → ACSUrl, PaReq, MD | **R1 `[x]`** API · **R3 `[x]`** `ThreeDsOverlay` iframe |
+| Ошибки | ErrorCode в ответе | **R1 `[x]`** · **R3 `[x]`** FSM 5–7 |
 
 Официально: [FinishAuthorize](https://developer.tinkoff.ru/eacq/api/finish-authorize)
 
@@ -57,7 +57,7 @@
 |----|-----|------|-------------|
 | **R1** | UserCards, FinishAuthorize, Charge API, 3DS proxy, ErrorCode | **`[x]`** 2026-06-24 | Q-R2-1 |
 | **R2** | Кастомная форма + RSA (8925) | **`[x]`** 2026-06-24 | R1 `[x]` · Q-R2-2 default on |
-| **R3** | FSM 0–7 + экран 8924 | **`go` R3** | R1+R2 `[x]` |
+| **R3** | FSM 0–7 + экран 8924 | **`[x]`** 2026-06-24 | R1+R2 `[x]` |
 
 ---
 
@@ -65,6 +65,17 @@
 
 Реализовано 2026-06-18…21: Init → payment_url, webhook → SavedCardStore, Charge, iframe, R4–R6.  
 **Не соответствует** ТЗ v2 заказчика. См. секцию legacy в ТЗ.
+
+### Fly MCP rev2 R3 (канон)
+
+```bash
+# Windows (flyctl в PATH):
+#   $env:FLY_BIN = "C:\Users\darks\.fly\bin\flyctl.exe"
+ruby bin/b112_r3_one_click_prep_fly.rb
+node bin/b112_r3_fsm_mcp.mjs
+```
+
+Артефакты: `b112_r3_fsm_ops_pass_*.json` · скрины `screenshots/b112_r3_fsm_*`
 
 ### Fly MCP v1 (устарели для приёмки rev2)
 
@@ -82,6 +93,15 @@ ruby bin/b112_r3_one_click_prep_fly.rb && node bin/b112_r3_one_click_mcp.mjs
 
 **План rev2:** `TBANK_RSA_PUBLIC_KEY` — публичный ключ терминала для CardData (не в git).
 
+```bash
+fly secrets set TBANK_RSA_PUBLIC_KEY="$(cat tbank_public.pem)" -a coffeeos
+```
+
+Проверка: `GET /shop/api/payments/card_config` → `card_data_ready: true`.  
+Док: [`FLY_DEMO_STAND.md`](../../demo/FLY_DEMO_STAND.md) § «Секреты Fly».
+
+**CardHolder (R2 хвост):** поле в форме 8925 нет — берётся из **имени на checkout** (`cardHolderName={name}` в `NewCardSheet`).
+
 ---
 
 ## Приёмка rev2 (после кода)
@@ -92,4 +112,4 @@ ruby bin/b112_r3_one_click_prep_fly.rb && node bin/b112_r3_one_click_mcp.mjs
 | `b112_r2_custom_card_ops_pass_*.json` | R2 |
 | `b112_r3_fsm_ops_pass_*.json` | R3 |
 
-**Следующий шаг:** Q-R2-1 → **`go` R1** (только документ 1) → стоп → Q-R2-2 → **`go` R2** → …
+**Следующий шаг:** апрув заказчика на эпик B1.12 rev2 · при необходимости `fly secrets set TBANK_RSA_PUBLIC_KEY`.

@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2026-06-24 — B1.12 rev2 R3 фаза 3: deploy + Fly MCP + хвосты R2
+
+- **Deploy:** владелец · стенд `coffeeos.fly.dev`
+- **MCP:** `b112_r3_fsm_mcp.mjs` — 9/10 PASS (UI/FSM); хвост `TBANK_RSA_PUBLIC_KEY` на Fly
+- **Доки:** `TBANK_RECURRENT.md`, `FLY_DEMO_STAND.md` — RSA secret, CardHolder, MCP команды
+- **Тесты:** `b112_r3_phase3_test.rb` — legacy iframe guard
+- **Артефакт:** `b112_r3_fsm_ops_pass_2026-06-24.json` + скрины
+- **Дальше:** апрув заказчика · `fly secrets set TBANK_RSA_PUBLIC_KEY`
+
 ## 2026-06-24 — B1.12 rev2 R3 фаза 2: FSM 0–7 + one_click + 3DS iframe
 
 - **FSM:** `shopPayFsm.js` states 0–7, ErrorCode→5/6/7, `withMinLoaderMs(600)`
