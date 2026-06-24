@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026-06-24 — ops: fly_deploy WSL (docker.sock + /mnt/c/)
+
+- **Проблема:** WSL `/mnt/c/` — `load build context` timeout; retry → `unix:///var/run/docker.sock: missing hostname`
+- **Фикс:** `--remote-only` (как CI) · `unset DOCKER_HOST` · WSL `/mnt/*`: `git archive` + overlay → `~/.cache/coffeeos-fly-deploy`
+- **Доки:** `FLY_DEMO_STAND.md` § WSL deploy · `bin/README.md`
+
 ## 2026-06-23 — B1.14-3d: карта всех точек на списке УК
 
 - **УК:** `/admin/tenants` — Leaflet/OSM, маркеры sales_point с lat/lng, popup → карточка

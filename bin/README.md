@@ -22,7 +22,7 @@
 
 | Скрипт | Назначение |
 |--------|------------|
-| `fly_deploy.sh` | Деплой на Fly (`coffeeos`), `--depot=false` — обход Depot 401 |
+| `fly_deploy.sh` | Деплой на Fly (`coffeeos`): `--remote-only --depot=false`; WSL `/mnt/c/` → staging в `~/.cache/coffeeos-fly-deploy` |
 | `kamal` | Деплой на Fly через Kamal |
 | `docker-entrypoint` | Entrypoint контейнера |
 | `ensure-server` | Проверка/подъём сервера |

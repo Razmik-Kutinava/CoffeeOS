@@ -43,8 +43,8 @@ UUID — см. ниже § «Узнать URL без SSH».
 
 **Что делать (по порядку):**
 
-1. **Рекомендуемый деплой из репо:** `./bin/fly_deploy.sh` (внутри `--depot=false`).
-2. Вручную: `fly deploy -a coffeeos --depot=false`
+1. **Рекомендуемый деплой из репо:** `./bin/fly_deploy.sh` (`--remote-only --depot=false`, как CI).
+2. Вручную: `fly deploy -a coffeeos --remote-only --depot=false`
 3. Обновить CLI: `fly version update` (старые версии чаще ловят 401).
 4. Если снова 401 на registry: `fly auth docker`, затем повтор.
 5. Запасной вариант (нужен локальный Docker): `fly deploy -a coffeeos --local-only`
@@ -55,7 +55,26 @@ UUID — см. ниже § «Узнать URL без SSH».
 
 ---
 
-### 4. `fly:release` / `db:prepare` failed
+### 4. WSL: `docker.sock` / `load build context` / `missing hostname`
+
+**Симптомы:**
+
+- `ERROR [internal] load build context` при деплое из `/mnt/c/...`
+- `failed to parse daemon host "unix:///var/run/docker.sock": missing hostname`
+- `WARN Failed to start remote builder heartbeat`
+
+**Причина:** репо на **Windows mount** (`/mnt/c/`) — медленный upload контекста; плюс `flyctl` пытается трогать локальный Docker (на WSL часто нет daemon или битый `DOCKER_HOST`).
+
+**Что делать:**
+
+1. **`./bin/fly_deploy.sh`** — скрипт сам: `unset DOCKER_HOST`, `--remote-only`, при `/mnt/*` — `git archive` → `~/.cache/coffeeos-fly-deploy` + overlay незакоммиченных файлов.
+2. Без staging (если репо уже в `~/CoffeeOS`): `FLY_DEPLOY_NO_STAGE=1 ./bin/fly_deploy.sh`
+3. Обновить CLI: `fly version update`
+4. Запасной вариант: GitHub Actions → **Deploy to Fly.io** (workflow_dispatch)
+
+---
+
+### 5. `fly:release` / `db:prepare` failed
 
 **Канон БД:** **Neon** проект `coffeeos` — см. [`../dev/INFRA_STACK.md`](../dev/INFRA_STACK.md).
 

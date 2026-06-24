@@ -1,6 +1,6 @@
 # HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-06-23 (B1.14-3b city tenants · deploy pending)  
+**Дата:** 2026-06-24 (fly_deploy WSL fix)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev
 
@@ -12,7 +12,7 @@
 | Этап 0 JSON | [`b114_stage0_scope_2026-06-23.json`](../milestones/veha_2/artifacts/demo-feedback/b114_stage0_scope_2026-06-23.json) · [`b114_screenshot_baseline_2026-06-23.json`](../milestones/veha_2/artifacts/demo-feedback/b114_screenshot_baseline_2026-06-23.json) |
 | Скрины «до» | [`b114_shop_header_coffeeos_before_2026-06-23.png`](../milestones/veha_2/artifacts/demo-feedback/screenshots/b114_shop_header_coffeeos_before_2026-06-23.png) · [`b114_uk_tenants_card_before_2026-06-23.png`](../milestones/veha_2/artifacts/demo-feedback/screenshots/b114_uk_tenants_card_before_2026-06-23.png) |
 | Код | **B1.14-3d index map** `[x]` 2026-06-23 · **B1.14-4** cart `[ ]` |
-| **Deploy** | 3c/3d — deploy владельца при необходимости |
+| **Deploy** | `bin/fly_deploy.sh` — WSL fix (`--remote-only`, staging `/mnt/c/`) · повторить деплой |
 | **Следующий шаг** | **`go` B1.14-4** cart |
 | **Агент** | **стоп** — deploy владельца |
 
