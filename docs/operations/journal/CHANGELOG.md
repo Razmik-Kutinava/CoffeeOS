@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## 2026-06-24 — B1.12 rev2 R3 фаза 3: deploy + Fly MCP + хвосты R2
+## 2026-06-24 — B1.12 rev2 R3 фаза 3: deploy + Fly MCP + хвосты R2 (`c27eb7c`)
 
 - **Deploy:** владелец · стенд `coffeeos.fly.dev`
 - **MCP:** `b112_r3_fsm_mcp.mjs` — 9/10 PASS (UI/FSM); хвост `TBANK_RSA_PUBLIC_KEY` на Fly

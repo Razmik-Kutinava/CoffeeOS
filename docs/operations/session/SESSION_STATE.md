@@ -27,6 +27,7 @@
 
 ### Сессия 2026-06-24 (B1.12 rev2 R3: фаза 3 deploy + Fly MCP)
 
+- **Коммит:** `c27eb7c`
 - **Deploy:** владелец на `coffeeos.fly.dev`
 - **MCP:** prep + `b112_r3_fsm_mcp.mjs` — 9/10 (core PASS, RSA хвост)
 - **Артефакт:** `b112_r3_fsm_ops_pass_2026-06-24.json` + скрины

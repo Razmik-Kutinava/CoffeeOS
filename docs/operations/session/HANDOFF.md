@@ -44,6 +44,7 @@
 | **Workflow** | **Документ 1→R1→стоп → документ 2→R2→стоп → документ 3→R3** · один `go` на R |
 | **Конфликты** | Q-R2-1..3 **`[x]`** зафиксированы 2026-06-24 (фаза 0 gate R3) |
 | **Код rev2** | R1+R2+R3 `[x]` OPS_PASS |
+| **Коммит** | `c27eb7c` — фаза 3 MCP + хвосты R2 |
 | **Fly MCP** | [`b112_r3_fsm_ops_pass_2026-06-24.json`](../milestones/veha_2/artifacts/demo-feedback/b112_r3_fsm_ops_pass_2026-06-24.json) — 9/10 |
 | **Deploy** | `[x]` владелец 2026-06-24 |
 | **Хвост** | `TBANK_RSA_PUBLIC_KEY` на Fly — см. `FLY_DEMO_STAND.md` |
