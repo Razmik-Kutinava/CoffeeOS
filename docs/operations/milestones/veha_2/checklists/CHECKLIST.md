@@ -105,16 +105,32 @@
 - [x] Manager: pending payments при закрытии смены — добавлен блок «Онлайн-платежи (витрина, за 24ч)» в CloseWizard; онлайн-заказы не блокируют, показываются информационно *(2026-05-28)*
 - [x] Тесты: `TbankAdapter` (11) + `TbankController` (8) — 539 runs, 0 failures *(2026-05-28)*
 
-## C2. Рекуррент и 1 клик — B1.12 (надстройка §2.3, этап 0 ТЗ 2026-06-18)
+## C2. Рекуррент и 1 клик — B1.12 (надстройка §2.3)
 
 > ТЗ: [`B1_12_recurrent_payments.md`](requirements/customer_tasks/B1_12_recurrent_payments.md) · runbook: [`TBANK_RECURRENT.md`](runbooks/TBANK_RECURRENT.md)  
-> Порядок: **R1 → R2 → R3** · только веб-витрина · все карты храним, главная = последняя успешная оплата
+> **Rev2 (2026-06-24):** nonPCI + кастомный UI + FSM 0–7 · макеты 8924/8925
 
-- [x] **B1.12 этап 0** — ТЗ заказчика (3 задачи) + ops + `b112_stage0_scope_2026-06-18.json`
-- [x] **B1.12-R1** — `mobile_payment_methods`, webhook RebillId, Charge API, `GET saved_cards` *(OPS_PASS + Fly MCP 5/5 2026-06-18)*
-- [x] **B1.12-R2** — iframe `#/payment`, card_binding, PaymentResult *(OPS_PASS + Fly MCP 6/6 2026-06-19)*
-- [x] **B1.12-R3** — 1 клик checkout, стейт кнопки *(OPS_PASS + Fly MCP 8/8 2026-06-19)*
-- [ ] Апрув заказчика на эпик B1.12
+### C2a. Этап 0 rev2 (docs)
+
+- [x] **B1.12 rev2 ТЗ** — дословные тексты заказчика + конфликты Q-R2-1..3
+- [x] **Макеты** — `screenshots/1000008924.png`, `1000008925.png`
+- [x] **Сверка Т-Банк nonPCI** — `b112_tbank_nonpci_review_2026-06-24.json`
+- [x] **JSON этап 0** — `b112_revision2_stage0_scope_2026-06-24.json`
+- [ ] **Ответы владельца** Q-R2-1..3 → **`go`**
+
+### C2b. Legacy v1 (iframe, 2026-06-18…21) — не закрывает rev2
+
+- [x] **B1.12 этап 0 v1** — `b112_stage0_scope_2026-06-18.json`
+- [x] **B1.12-R1 v1** — webhook RebillId, Charge, `saved_cards` *(Fly MCP 5/5)*
+- [x] **B1.12-R2 v1** — iframe card_binding *(Fly MCP 6/6)*
+- [x] **B1.12-R3 v1** — 1 клик, 4-state кнопка *(Fly MCP 8/8)*
+
+### C2c. Реализация rev2 (после `go`)
+
+- [ ] **B1.12-R1 rev2** — FinishAuthorize, UserCards, 3DS proxy, ErrorCode
+- [ ] **B1.12-R2 rev2** — кастомная форма + RSA (макет 8925)
+- [ ] **B1.12-R3 rev2** — FSM 0–7 (макет 8924)
+- [ ] Апрув заказчика B1.12 rev2
 
 ---
 

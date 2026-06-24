@@ -1,6 +1,6 @@
 # HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-06-24 (fly_deploy WSL fix)  
+**Дата:** 2026-06-24 (B1.12 rev2 этап 0 docs)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev
 
@@ -33,19 +33,19 @@
 
 ТЗ: [`B1_13_shop_nav_profile_header.md`](../milestones/veha_2/requirements/customer_tasks/B1_13_shop_nav_profile_header.md)
 
-### B1.12 — рекуррент + оплата в 1 клик (Т-Банк)
+### B1.12 — рекуррент + оплата в 1 клик (Т-Банк, **rev2 nonPCI**)
 
 | Что | Статус |
 |-----|--------|
-| **Макеты заказчика** | [`1000008924.png`](../milestones/veha_2/artifacts/demo-feedback/screenshots/1000008924.png) R3 · [`1000008925.png`](../milestones/veha_2/artifacts/demo-feedback/screenshots/1000008925.png) R2 |
-| ТЗ этап 0 (R1–R3) | `[x]` 2026-06-18 |
-| **R1 бэкенд** | **OPS_PASS** `[x]` 2026-06-18 |
-| Ответы Q1–Q7 | `[x]` 2026-06-19 — подтверждение владельца · [`b112_customer_answers_confirmed_2026-06-19.json`](../milestones/veha_2/artifacts/demo-feedback/b112_customer_answers_confirmed_2026-06-19.json) |
-| Fly MCP R1 | `[x]` 5/5 2026-06-18 — [`b112_r1_recurrent_post_deploy_2026-06-18.json`](../milestones/veha_2/artifacts/demo-feedback/b112_r1_recurrent_post_deploy_2026-06-18.json) |
-| **R2 web-фрейм** | **OPS_PASS + Fly MCP 6/6** `[x]` 2026-06-19 — [`b112_r2_native_card_post_deploy_2026-06-19.json`](../milestones/veha_2/artifacts/demo-feedback/b112_r2_native_card_post_deploy_2026-06-19.json) |
-| **R3 1 клик** | **Fly MCP 8/8** `[x]` 2026-06-19 — [`b112_r3_one_click_post_deploy_2026-06-19.json`](../milestones/veha_2/artifacts/demo-feedback/b112_r3_one_click_post_deploy_2026-06-19.json) |
-| **Баг оплаты (заказчик)** | **R6 fix local** 2026-06-22 — one-click без банка + кэш карты · **повторный deploy** |
-| **UX 3 экрана (R4)** | **R5 redirect** + **R6 one-click guard** · deploy pending |
+| **ТЗ rev2** | **этап 0 docs** `[x]` 2026-06-24 — дословные 3 задачи заказчика |
+| **JSON этап 0** | [`b112_revision2_stage0_scope_2026-06-24.json`](../milestones/veha_2/artifacts/demo-feedback/b112_revision2_stage0_scope_2026-06-24.json) |
+| **Сверка Т-Банк** | [`b112_tbank_nonpci_review_2026-06-24.json`](../milestones/veha_2/artifacts/demo-feedback/b112_tbank_nonpci_review_2026-06-24.json) |
+| **Макеты** | [`1000008924.png`](../milestones/veha_2/artifacts/demo-feedback/screenshots/1000008924.png) R3 · [`1000008925.png`](../milestones/veha_2/artifacts/demo-feedback/screenshots/1000008925.png) R2 |
+| **Конфликты** | Q-R2-1 (iframe vs nonPCI) · Q-R2-2 (галочка) · Q-R2-3 (макеты) — **`[ ]` владелец** |
+| **Код rev2** | R1 FinishAuthorize · R2 RSA форма · R3 FSM 0–7 — **`[ ]` ждём `go`** |
+| **Legacy v1** | R1–R6 OPS_PASS iframe path · баг 2-й оплаты — **не закрывает rev2** |
+| **Следующий шаг** | **Ответы Q-R2-1..3** → **`go` B1.12-R1 rev2** |
+| **Агент** | **стоп** — ждём владельца |
 
 ТЗ: [`B1_12_recurrent_payments.md`](../milestones/veha_2/requirements/customer_tasks/B1_12_recurrent_payments.md) · runbook: [`TBANK_RECURRENT.md`](../milestones/veha_2/runbooks/TBANK_RECURRENT.md)
 

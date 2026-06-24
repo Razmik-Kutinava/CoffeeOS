@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2026-06-24 — B1.12 rev2: этап 0 docs (nonPCI ТЗ заказчика)
+
+- **ТЗ:** `B1_12_recurrent_payments.md` — ревизия v2: 3 задачи дословно, FSM 0–7, nonPCI
+- **Конфликты:** Q-R2-1..3 (ex Q1/Q5/Q6) — блокер до ответов владельца
+- **Артефакты:** `b112_revision2_stage0_scope_2026-06-24.json` · `b112_tbank_nonpci_review_2026-06-24.json`
+- **Runbook:** `TBANK_RECURRENT.md` — секция rev2 + nonPCI
+- **CHECKLIST:** C2a (docs) · C2b (legacy v1) · C2c (rev2 код)
+- **Дальше:** Q-R2-1..3 → `go` R1
+
 ## 2026-06-24 — B1.12: макеты заказчика 1000008924 / 1000008925
 
 - **Артефакты:** `screenshots/1000008924.png` (R3 — способ оплаты + кнопка) · `1000008925.png` (R2 — форма новой карты)

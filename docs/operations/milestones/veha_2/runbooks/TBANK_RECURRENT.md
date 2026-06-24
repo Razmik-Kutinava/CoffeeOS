@@ -1,102 +1,93 @@
 # Т-Банк: рекуррентные платежи и привязка карты (B1.12)
 
-**Статус:** R1 Fly MCP 5/5 · R2 Fly MCP 6/6 · R3 Fly MCP 8/8 · апрув заказчика `[ ]`  
+**Статус:** **rev2 этап 0 docs** `[x]` 2026-06-24 · legacy v1 R1–R6 OPS_PASS · код rev2 `[ ]`  
 **ТЗ:** [`B1_12_recurrent_payments.md`](../requirements/customer_tasks/B1_12_recurrent_payments.md)  
-**Связано:** §2.3 (базовая оплата закрыта) · `Payments::TbankAdapter` · `POST /callbacks/tbank`
+**Связано:** §2.3 (базовая оплата) · `Payments::TbankAdapter` · `POST /callbacks/tbank`
 
 ---
 
-## Scope CoffeeOS
+## Ревизия 2 (канон заказчика 2026-06-24)
+
+| Параметр | Значение |
+|----------|----------|
+| Сценарий | **nonPCI** — кастомная форма + RSA CardData |
+| Первая оплата | Init → **FinishAuthorize** (не redirect на PaymentURL) |
+| Повторная | Init → Charge по RebillId |
+| UI | Макеты [`8925`](../artifacts/demo-feedback/screenshots/1000008925.png) (форма) · [`8924`](../artifacts/demo-feedback/screenshots/1000008924.png) (способы оплаты) |
+| FSM кнопки | Состояния **0–7** |
+| Блокеры docs | Q-R2-1..3 (конфликты Q1/Q5/Q6) |
+
+**Артефакты rev2:**
+- [`b112_revision2_stage0_scope_2026-06-24.json`](../artifacts/demo-feedback/b112_revision2_stage0_scope_2026-06-24.json)
+- [`b112_tbank_nonpci_review_2026-06-24.json`](../artifacts/demo-feedback/b112_tbank_nonpci_review_2026-06-24.json)
+
+### nonPCI — сверка с докой (кратко)
+
+| Шаг | API Т-Банка | CoffeeOS |
+|-----|-------------|----------|
+| CardData | `PAN=…;ExpDate=…;CardHolder=…;CVV=…` → RSA-2048 → Base64 | **TODO** R2 encrypt + R1 FinishAuthorize |
+| Публичный ключ | ЛК Т-Бизнес → Магазины → терминал | **TODO** `TBANK_RSA_PUBLIC_KEY` (Fly secrets) |
+| Новая карта | Init + FinishAuthorize | **TODO** |
+| 1 клик | Init + Charge | **Частично** (`charge_recurrent`) |
+| 3DS | `3DS_CHECKING` → ACSUrl, PaReq, MD | **TODO** FSM State 3 |
+| Ошибки | ErrorCode в ответе | **TODO** проброс без маппинга |
+
+Официально: [FinishAuthorize](https://developer.tinkoff.ru/eacq/api/finish-authorize)
+
+---
+
+## Scope без изменений (Q2, Q3, Q4, Q7)
 
 | Параметр | Значение |
 |----------|----------|
 | Банк | Т-Банк |
-| Канал | Веб-витрина (Svelte) |
 | Карт на пользователя | Все храним; **главная** = последняя успешная оплата |
-| Рекуррент | Только **card** (СБП — позже, не B1.12) |
-| Сохранение | После первой успешной оплаты, без галочки |
-| Ошибки R3 | Карта → «Привязать другую» · сеть/инфра → «Повторить» · идемпотентность |
-| Храним в БД | `bank_token`, `masked_pan` только |
+| Рекуррент | Только **card** (СБП — позже) |
+| Идентификация | Verified email (B1.7) |
+| Храним в БД | rebill_id, card_id, masked pan, exp, brand |
 | Не храним | PAN, CVV/CVC |
 
 ---
 
-## Подзадачи
+## Подзадачи rev2
 
 | ID | Что | Зависимости |
 |----|-----|-------------|
-| **R1** | `user_cards`, webhook → token, API charge by `card_id` | — |
-| **R2** | Web-фрейм ввода + 3DS | R1 |
-| **R3** | 1 клик, стейт кнопки | R1, R2 |
+| **R1** | UserCards, FinishAuthorize, Charge API, 3DS proxy, ErrorCode | — |
+| **R2** | Кастомная форма + RSA (8925) | R1 |
+| **R3** | FSM 0–7 + экран 8924 | R1, R2 |
 
 ---
 
-## TODO перед реализацией
+## Legacy v1 (iframe + webhook) — справочно
 
-- [x] Init с `Recurrent=Y` + `CustomerKey` на первой card-оплате
-- [x] Charge по `RebillId` (`TbankAdapter#charge_recurrent`)
-- [x] Webhook → `SavedCardStore` (RebillId + Pan)
-- [x] Finalize → `TbankPaymentSync` (GetState, всегда + `saved_card` в ответе)
-- [x] Charge recurrent → немедленный GetState sync
-- [x] **R5:** card init → редирект на `payment_url`, **без** inline iframe на checkout
-- [ ] Web-iframe / платёжная форма для кастомизации (R2)
-- [ ] Тестовые карты 3DS в sandbox
-- [ ] Маппинг кодов ошибок → UI R3 (истёк срок / нет средств / retry / идемпотентность)
+Реализовано 2026-06-18…21: Init → payment_url, webhook → SavedCardStore, Charge, iframe, R4–R6.  
+**Не соответствует** ТЗ v2 заказчика. См. секцию legacy в ТЗ.
 
----
+### Fly MCP v1 (устарели для приёмки rev2)
 
-## Текущий флоу (§2.3, до B1.12)
+```bash
+ruby bin/b112_r3_one_click_prep_fly.rb && node bin/b112_r3_one_click_mcp.mjs
+```
 
-1. `Shop::OrderCreator` → `TbankAdapter#init_payment` → `payment_url`
-2. Редирект гостя на форму Т-Банка
-3. `POST /callbacks/tbank` → `PaymentStatusUpdater` → order `accepted`
-
-**B1.12** добавляет сохранение токена и повторное списание без полного редиректа.
+Регрессия зоны: `bin/rails test test/integration/shop/api/qa_section_2_3_*` + `b112_*`
 
 ---
 
-## Секреты / ENV (существующие)
+## Секреты / ENV
 
-См. [`FLY_DEMO_STAND.md`](../../demo/FLY_DEMO_STAND.md) · `TBANK_*` · `SHOP_SIMULATE_PAYMENT=0` на стенде.
+Существующие: `TBANK_TERMINAL_KEY`, `TBANK_PASSWORD`, `TBANK_RETURN_URL` — см. [`FLY_DEMO_STAND.md`](../../demo/FLY_DEMO_STAND.md)
 
-Новые переменные — зафиксировать здесь после сверки с докой банка.
+**План rev2:** `TBANK_RSA_PUBLIC_KEY` — публичный ключ терминала для CardData (не в git).
 
 ---
 
-## Приёмка (после кода)
+## Приёмка rev2 (после кода)
 
 | Артефакт | Подзадача |
 |----------|-----------|
-| `b112_r1_recurrent_post_deploy_*.json` | R1 |
-| `b112_r2_native_card_post_deploy_*.json` | R2 |
-| `b112_r3_one_click_post_deploy_*.json` | R3 |
+| `b112_r1_nonpci_ops_pass_*.json` | R1 |
+| `b112_r2_custom_card_ops_pass_*.json` | R2 |
+| `b112_r3_fsm_ops_pass_*.json` | R3 |
 
-**R3 Fly MCP (после deploy):**
-
-```bash
-ruby bin/b112_r3_one_click_prep_fly.rb
-node bin/b112_r3_one_click_mcp.mjs
-```
-
-Скрины: `screenshots/b112_r3_one_click_checkout_*.png`, `b112_r3_one_click_post_deploy_*.png`.
-
-**R2 Fly MCP (после deploy + починки /shop):**
-
-```bash
-ruby bin/b112_r2_native_card_prep_fly.rb
-node bin/b112_r2_native_card_mcp.mjs
-```
-
-Скрины: `screenshots/b112_r2_native_card_intro_*.png`, `b112_r2_native_card_post_deploy_*.png`.
-
-**R1 Fly MCP (2026-06-18):**
-
-```bash
-ruby bin/b112_r1_recurrent_prep_fly.rb
-node bin/b112_r1_recurrent_mcp.mjs
-```
-
-Prep: OTP + seed `MobilePaymentMethod` + curl smoke → `tmp/b112_r1_recurrent_prep.json`.  
-MCP: Playwright + session cookies — `saved_cards`, recurrent path (fake RebillId → 422 от банка OK), card init `payment_url`.
-
-Регрессия: `bin/rails test test/integration/shop/api/qa_section_2_3_*` + зона shop.
+**Следующий шаг:** ответы владельца Q-R2-1..3 → `go` → R1.
