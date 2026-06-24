@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 2026-06-24 — B1.12 rev2 R1: nonPCI бэкенд (документ 1)
+
+- **API:** `POST /shop/api/payments/new_card` · `one_click` — Init+FinishAuthorize / Charge
+- **Адаптер:** `TbankAdapter#finish_authorize` · `TbankPaymentResult` · `charge_response` в recurrent
+- **Хранение:** `bank_card_id`, `card_expires_at`, `pan_display` в `mobile_payment_methods`
+- **Тесты:** 38 runs, 0 failures · артефакт `b112_r1_nonpci_ops_pass_2026-06-24.json`
+- **Дальше:** `go` R2 (кастомная форма + RSA, макет 8925)
+
 ## 2026-06-24 — B1.12 rev2: workflow по документам (go R1 → R2 → R3)
 
 - **Правило:** один документ заказчика = один `go` = один R = commit/ops/стоп

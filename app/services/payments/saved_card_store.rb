@@ -24,6 +24,8 @@ module Payments
 
       masked = extract_masked_pan(@payload)
       brand = infer_brand(masked)
+      bank_card_id = @payload["CardId"].to_s.presence
+      exp_date = @payload["ExpDate"].to_s.presence
 
       MobilePaymentMethod.transaction do
         card = MobilePaymentMethod.find_or_initialize_by(
@@ -33,6 +35,8 @@ module Payments
         )
         card.card_masked = masked
         card.card_brand = brand
+        card.bank_card_id = bank_card_id if bank_card_id
+        card.card_expires_at = exp_date if exp_date
         card.is_active = true
         card.last_used_at = Time.current
         card.save!
@@ -52,10 +56,17 @@ module Payments
     def extract_masked_pan(payload)
       %w[Pan MaskedPan].each do |key|
         val = payload[key].to_s.presence
-        return val if val
+        return format_pan_display(val) if val
       end
 
       "•••• ****"
+    end
+
+    def format_pan_display(masked)
+      digits = masked.gsub(/\D/, "")
+      return "*#{digits[-4..]}" if digits.length >= 4 && !masked.include?("*")
+
+      masked
     end
 
     def infer_brand(masked_pan)

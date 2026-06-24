@@ -1,0 +1,35 @@
+{
+  "task_id": "B1.12-R1-rev2",
+  "title": "nonPCI бэкенд: FinishAuthorize, Charge, UserCards, 3DS, ErrorCode",
+  "date": "2026-06-24",
+  "status": "OPS_PASS",
+  "environment": "local_test",
+  "commit_scope": "R1 document 1 only — no R2 RSA UI / no R3 FSM",
+  "migration": "20260624120000_add_bank_card_id_to_mobile_payment_methods",
+  "tests": {
+    "command": "bin/rails test test/integration/shop/api/b112_r1_nonpci_test.rb test/services/payments/tbank_adapter_test.rb test/services/payments/tbank_adapter_recurrent_test.rb test/services/payments/saved_card_store_test.rb test/services/shop/recurrent_order_creator_test.rb test/integration/shop/api/b112_r3_one_click_test.rb",
+    "result": "38 runs, 120 assertions, 0 failures, 0 errors, 0 skips"
+  },
+  "api": {
+    "POST /shop/api/payments/new_card": "Init + FinishAuthorize + save_card → tbank_status, error_code, three_ds, saved_card.pan",
+    "POST /shop/api/payments/one_click": "Init + Charge by card_id → recurrent_charge, tbank_status, error_code, three_ds",
+    "GET /shop/api/saved_cards": "pan field *last4",
+    "POST /shop/api/orders saved_card_id": "legacy path — ErrorCode 1051 → friendly RU message + error_code"
+  },
+  "adapter": {
+    "finish_authorize": "POST /v2/FinishAuthorize — PaymentId + CardData",
+    "charge": "POST /v2/Charge — RebillId",
+    "charge_recurrent": "Init + Charge + charge_response + 3DS_CHECKING"
+  },
+  "storage": {
+    "table": "mobile_payment_methods",
+    "fields": ["card_token (RebillId)", "bank_card_id (CardId)", "card_expires_at", "pan_display *last4"]
+  },
+  "open_before_customer_demo": [
+    "deploy to Fly (owner go)",
+    "R2: RSA CardData on client + UI mockup 8925",
+    "R3: FSM 0-7 + UI mockup 8924",
+    "Q-R2-1 formal owner answer (implementation follows nonPCI v2)"
+  ],
+  "next_step": "go R2 — document 2 (custom card form + RSA)"
+}

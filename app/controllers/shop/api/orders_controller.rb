@@ -211,6 +211,7 @@ module Shop
           id: card.id,
           payment_system: card.card_brand,
           masked_pan: card.card_masked,
+          pan: card.pan_display,
           is_primary: card.is_default?,
           last_used_at: card.last_used_at&.iso8601
         }

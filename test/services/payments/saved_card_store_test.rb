@@ -77,6 +77,23 @@ class Payments::SavedCardStoreTest < ActiveSupport::TestCase
     end
   end
 
+  test "persists CardId and ExpDate when present" do
+    payload = {
+      "Status" => "CONFIRMED",
+      "RebillId" => "rebill-meta",
+      "Pan" => "220070******5953",
+      "CardId" => "tbank-card-99",
+      "ExpDate" => "1228"
+    }
+
+    Payments::SavedCardStore.persist_from_tbank!(payment: @payment, payload: payload)
+
+    card = MobilePaymentMethod.primary_for(@customer.id)
+    assert_equal "tbank-card-99", card.bank_card_id
+    assert_equal "1228", card.card_expires_at
+    assert_equal "*5953", card.pan_display
+  end
+
   test "persists RebillId with fallback masked pan when Pan missing" do
     assert_difference -> { MobilePaymentMethod.count }, 1 do
       Payments::SavedCardStore.persist_from_tbank!(

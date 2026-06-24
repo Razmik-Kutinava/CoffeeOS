@@ -131,7 +131,7 @@
 
 - [ ] **Q-R2-1..3** — ответы владельца (Q-R2-1 до `go` R1)
 - [ ] **`go` R1** — документ 1 заказчика
-- [ ] **B1.12-R1 rev2** — FinishAuthorize, UserCards, 3DS proxy, ErrorCode · ops PASS JSON · **стоп**
+- [x] **B1.12-R1 rev2** — FinishAuthorize, UserCards, 3DS proxy, ErrorCode · ops PASS JSON · **стоп**
 - [ ] **`go` R2** — документ 2 заказчика
 - [ ] **B1.12-R2 rev2** — кастомная форма + RSA (макет 8925) · ops PASS JSON · **стоп**
 - [ ] **`go` R3** — документ 3 заказчика

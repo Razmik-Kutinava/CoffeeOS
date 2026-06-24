@@ -87,6 +87,7 @@ module Payments
     end
 
     # Рекуррентное списание: Init → Charge по RebillId.
+    # Возвращает provider_payment_id, charge_response (сырой ответ Charge), status.
     def charge_recurrent(order:, rebill_id:, return_base_url:, notification_url:, customer_key: nil)
       init_result = init_payment(
         order: order,
@@ -95,9 +96,28 @@ module Payments
         customer_key: customer_key
       )
 
+      charge_response = charge(
+        payment_id: init_result[:provider_payment_id],
+        rebill_id: rebill_id
+      )
+      result = TbankPaymentResult.new(charge_response)
+      unless result.success?
+        raise ApiError.new(error_code: result.error_code, message: result.message)
+      end
+
+      init_result.merge(
+        charged: true,
+        charge_response: charge_response,
+        status: result.status,
+        three_ds: result.three_ds?
+      )
+    end
+
+    # Списание по RebillId (шаг 2 рекуррента).
+    def charge(payment_id:, rebill_id:)
       charge_payload = {
         "TerminalKey" => terminal_key,
-        "PaymentId"   => init_result[:provider_payment_id],
+        "PaymentId"   => payment_id.to_s,
         "RebillId"    => rebill_id.to_s
       }
       charge_payload["Token"] = build_token(charge_payload)
@@ -106,9 +126,23 @@ module Payments
       unless response.is_a?(Hash)
         raise Error, "Некорректный ответ Т-Банка (Charge)"
       end
-      raise ApiError.new(error_code: response["ErrorCode"], message: response["Message"].to_s) unless response["Success"]
+      response
+    end
 
-      init_result.merge(charged: true)
+    # nonPCI: передача зашифрованного CardData после Init.
+    def finish_authorize(payment_id:, card_data:)
+      payload = {
+        "TerminalKey" => terminal_key,
+        "PaymentId"   => payment_id.to_s,
+        "CardData"    => card_data.to_s
+      }
+      payload["Token"] = build_token(payload)
+
+      response = with_circuit_breaker { post_json("#{BASE_URL}/FinishAuthorize", payload) }
+      unless response.is_a?(Hash)
+        raise Error, "Некорректный ответ Т-Банка (FinishAuthorize)"
+      end
+      response
     end
 
     # Верифицирует webhook от Т-Банка.

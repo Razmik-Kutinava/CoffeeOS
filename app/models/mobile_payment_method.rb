@@ -20,4 +20,17 @@ class MobilePaymentMethod < ApplicationRecord
     scope = for_customer(customer_id)
     scope.find_by(is_default: true) || scope.first
   end
+
+  # UserCards.pan в ТЗ: *5953
+  def pan_display
+    digits = card_masked.to_s.gsub(/\D/, "")
+    return "*#{digits[-4..]}" if digits.length >= 4
+
+    card_masked
+  end
+
+  # UserCards.rebill_id в ТЗ
+  def rebill_id
+    card_token
+  end
 end

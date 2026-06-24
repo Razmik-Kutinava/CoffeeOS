@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_23_120000) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_24_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_stat_statements"
@@ -420,6 +420,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_23_120000) do
   end
 
   create_table "mobile_payment_methods", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "bank_card_id", limit: 64
     t.string "card_brand", limit: 20
     t.string "card_expires_at", limit: 7
     t.string "card_masked", limit: 20
@@ -779,7 +780,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_23_120000) do
     t.index ["product_id"], name: "index_product_tenant_settings_on_product_id"
     t.index ["tenant_id", "is_enabled", "is_sold_out"], name: "idx_pts_tenant_enabled"
     t.index ["tenant_id"], name: "index_product_tenant_settings_on_tenant_id"
-    t.check_constraint "is_sold_out = false AND sold_out_reason IS NULL OR is_sold_out = true AND (sold_out_reason::text = ANY (ARRAY['manual'::character varying, 'stock_empty'::character varying]::text[]))", name: "chk_sold_out_reason"
+    t.check_constraint "is_sold_out = false AND sold_out_reason IS NULL OR is_sold_out = true AND (sold_out_reason::text = ANY (ARRAY['manual'::character varying::text, 'stock_empty'::character varying::text]))", name: "chk_sold_out_reason"
   end
 
   create_table "production_batches", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

@@ -1,6 +1,6 @@
 # Т-Банк: рекуррентные платежи и привязка карты (B1.12)
 
-**Статус:** **rev2 этап 0 docs** `[x]` 2026-06-24 · legacy v1 R1–R6 OPS_PASS · код rev2 `[ ]`  
+**Статус:** **rev2 R1** `[x]` OPS_PASS 2026-06-24 · R2/R3 `[ ]` · legacy v1 R1–R6 OPS_PASS  
 **ТЗ:** [`B1_12_recurrent_payments.md`](../requirements/customer_tasks/B1_12_recurrent_payments.md)  
 **Связано:** §2.3 (базовая оплата) · `Payments::TbankAdapter` · `POST /callbacks/tbank`
 
@@ -25,12 +25,12 @@
 
 | Шаг | API Т-Банка | CoffeeOS |
 |-----|-------------|----------|
-| CardData | `PAN=…;ExpDate=…;CardHolder=…;CVV=…` → RSA-2048 → Base64 | **TODO** R2 encrypt + R1 FinishAuthorize |
-| Публичный ключ | ЛК Т-Бизнес → Магазины → терминал | **TODO** `TBANK_RSA_PUBLIC_KEY` (Fly secrets) |
-| Новая карта | Init + FinishAuthorize | **TODO** |
-| 1 клик | Init + Charge | **Частично** (`charge_recurrent`) |
-| 3DS | `3DS_CHECKING` → ACSUrl, PaReq, MD | **TODO** FSM State 3 |
-| Ошибки | ErrorCode в ответе | **TODO** проброс без маппинга |
+| CardData | `PAN=…;ExpDate=…;CardHolder=…;CVV=…` → RSA-2048 → Base64 | **R2 `[ ]`** encrypt · **R1 `[x]`** API `card_data` |
+| Публичный ключ | ЛК Т-Бизнес → Магазины → терминал | **R2 `[ ]`** `TBANK_RSA_PUBLIC_KEY` |
+| Новая карта | Init + FinishAuthorize | **R1 `[x]`** `POST /shop/api/payments/new_card` |
+| 1 клик | Init + Charge | **R1 `[x]`** `POST /shop/api/payments/one_click` |
+| 3DS | `3DS_CHECKING` → ACSUrl, PaReq, MD | **R1 `[x]`** API · **R3 `[ ]`** FSM State 3 |
+| Ошибки | ErrorCode в ответе | **R1 `[x]`** проброс + friendly 1051/1014 |
 
 Официально: [FinishAuthorize](https://developer.tinkoff.ru/eacq/api/finish-authorize)
 
@@ -55,7 +55,7 @@
 
 | ID | Что | `go` | Зависимости |
 |----|-----|------|-------------|
-| **R1** | UserCards, FinishAuthorize, Charge API, 3DS proxy, ErrorCode | **`go` R1** | Q-R2-1 |
+| **R1** | UserCards, FinishAuthorize, Charge API, 3DS proxy, ErrorCode | **`[x]`** 2026-06-24 | Q-R2-1 |
 | **R2** | Кастомная форма + RSA (8925) | **`go` R2** | R1 `[x]` · Q-R2-2, Q-R2-3 |
 | **R3** | FSM 0–7 + экран 8924 | **`go` R3** | R1+R2 `[x]` |
 

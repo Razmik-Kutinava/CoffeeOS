@@ -265,12 +265,11 @@
 
 | Тема | Документация Т-Банка | CoffeeOS сейчас |
 |------|----------------------|-----------------|
-| **FinishAuthorize** | `POST /v2/FinishAuthorize` — PaymentId + CardData | **Нет** |
-| **CardData** | `PAN=…;ExpDate=…;CardHolder=…;CVV=…` → RSA-2048 → Base64 | **Нет** |
-| **Публичный ключ** | ЛК Т-Бизнес → Магазины → терминал | **Нет ENV** (`TBANK_RSA_PUBLIC_KEY` — план) |
 | **Charge** | Init + Charge + RebillId | **Есть** (`charge_recurrent`) |
-| **3DS** | `3DS_CHECKING` → ACSUrl, PaReq, MD | Частично (redirect, не FSM R3) |
-| **ErrorCode** | Коды в ответе API | Маппинг в человекочитаемые тексты |
+| **FinishAuthorize** | `POST /v2/FinishAuthorize` — PaymentId + CardData | **R1 `[x]`** 2026-06-24 |
+| **CardData** | RSA-2048 на клиенте (R2) | **R2 `[ ]`** — API принимает `card_data` |
+| **3DS** | `3DS_CHECKING` → ACSUrl, PaReq, MD | **R1 `[x]`** API proxy · **R3 `[ ]`** FSM |
+| **ErrorCode** | Коды в ответе API | **R1 `[x]`** проброс + friendly для 1051/1014 |
 
 **Открыто перед кодом:** подтвердить nonPCI на терминале Fly · формат CardData на sandbox · поле CardHolder в UI R2.
 
@@ -280,11 +279,11 @@
 
 | № | Критерий | R | Код | Заказчик |
 |---|----------|---|-----|----------|
-| 1 | UserCards: rebill_id, card_id, pan, exp_date, card_type | R1 | `[ ]` | `[ ]` |
-| 2 | Эндпоинт новая карта: Init + FinishAuthorize + save_card | R1 | `[ ]` | `[ ]` |
-| 3 | Эндпоинт 1 клик: Init + Charge по RebillId | R1 | `[ ]` | `[ ]` |
-| 4 | 3DS_CHECKING → ACSUrl, PaReq, MD на фронт | R1 | `[ ]` | `[ ]` |
-| 5 | ErrorCode банка на фронт без искажения | R1,R3 | `[ ]` | `[ ]` |
+| 1 | UserCards: rebill_id, card_id, pan, exp_date, card_type | R1 | `[x]` | `[ ]` |
+| 2 | Эндпоинт новая карта: Init + FinishAuthorize + save_card | R1 | `[x]` | `[ ]` |
+| 3 | Эндпоинт 1 клик: Init + Charge по RebillId | R1 | `[x]` | `[ ]` |
+| 4 | 3DS_CHECKING → ACSUrl, PaReq, MD на фронт | R1 | `[x]` | `[ ]` |
+| 5 | ErrorCode банка на фронт без искажения | R1,R3 | `[x]` R1 API | `[ ]` |
 | 6 | PAN/CVV не в БД и не в Network открытым текстом | R1,R2 | `[ ]` | `[ ]` |
 | 7 | Форма новой карты = макет 8925 | R2 | `[ ]` | `[ ]` |
 | 8 | RSA CardData на клиенте | R2 | `[ ]` | `[ ]` |
@@ -300,14 +299,14 @@
 
 ## Чеклист B1.12-R1 rev2 (после **`go` R1** — только документ 1)
 
-- [ ] Миграция/алиасы полей UserCards ↔ `mobile_payment_methods`
-- [ ] `TbankAdapter#finish_authorize`
-- [ ] Shop API: init new card (CardData, save_card)
-- [ ] Shop API: charge by internal card_id
-- [ ] Проброс 3DS_CHECKING + ErrorCode
-- [ ] Unit + integration тесты
-- [ ] Артефакт `b112_r1_nonpci_ops_pass_*.json`
-- [ ] **Шаг закрыт:** commit + SESSION_STATE + CHANGELOG + HANDOFF → **стоп до `go` R2**
+- [x] Миграция/алиасы полей UserCards ↔ `mobile_payment_methods`
+- [x] `TbankAdapter#finish_authorize`
+- [x] Shop API: init new card (CardData, save_card)
+- [x] Shop API: charge by internal card_id
+- [x] Проброс 3DS_CHECKING + ErrorCode
+- [x] Unit + integration тесты
+- [x] Артефакт `b112_r1_nonpci_ops_pass_2026-06-24.json`
+- [x] **Шаг закрыт:** commit + SESSION_STATE + CHANGELOG + HANDOFF → **стоп до `go` R2**
 
 ## Чеклист B1.12-R2 rev2 (после **`go` R2** — только документ 2; R1 `[x]`)
 

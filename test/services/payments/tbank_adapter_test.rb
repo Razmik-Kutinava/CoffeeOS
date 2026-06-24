@@ -182,6 +182,33 @@ class Payments::TbankAdapterTest < ActiveSupport::TestCase
     Payments::CacheCounter.clear_circuit!
   end
 
+  test "finish_authorize posts CardData to FinishAuthorize endpoint" do
+    adapter = Payments::TbankAdapter.new
+    captured = nil
+    adapter.define_singleton_method(:post_json) do |url, payload|
+      captured = { url: url, payload: payload }
+      { "Success" => true, "ErrorCode" => "0", "Status" => "CONFIRMED", "PaymentId" => "fa-1" }
+    end
+
+    response = adapter.finish_authorize(payment_id: "fa-1", card_data: "base64-encrypted")
+    assert captured[:url].end_with?("/FinishAuthorize")
+    assert_equal "base64-encrypted", captured[:payload]["CardData"]
+    assert_equal "CONFIRMED", response["Status"]
+  end
+
+  test "charge posts RebillId to Charge endpoint" do
+    adapter = Payments::TbankAdapter.new
+    captured = nil
+    adapter.define_singleton_method(:post_json) do |url, payload|
+      captured = { url: url, payload: payload }
+      { "Success" => true, "ErrorCode" => "0", "Status" => "CONFIRMED" }
+    end
+
+    adapter.charge(payment_id: "pay-9", rebill_id: "rebill-9")
+    assert captured[:url].end_with?("/Charge")
+    assert_equal "rebill-9", captured[:payload]["RebillId"]
+  end
+
   test "get_payment_state returns bank response on success" do
     adapter = Payments::TbankAdapter.new
     adapter.define_singleton_method(:post_json) do |_url, _payload|
