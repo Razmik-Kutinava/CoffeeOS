@@ -40,7 +40,6 @@ class Shop::B113S1ProfileHeaderTest < ActionDispatch::IntegrationTest
     refute_includes bottom, ">Профиль<"
     refute_includes bottom, "push('/profile')"
     assert_includes bottom, "Каталог"
-    assert_includes bottom, "Корзина"
     assert_includes bottom, "Избранное"
   end
 

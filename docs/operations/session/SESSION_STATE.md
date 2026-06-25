@@ -22,8 +22,14 @@
 |--------|--------|
 | **B1.12 rev2** | R3 `[x]` Fly MCP 9/10 · deploy `[x]` | апрув заказчика · `TBANK_RSA_PUBLIC_KEY` на Fly |
 | **B1.11 режим работы** | **Fly MCP header A/B PASS** · артефакт 2026-06-21 | **апрув заказчика** |
-| **B1.13 навигация** | **S1 Fly MCP PASS** 2026-06-23 · 5/5 критериев | **апрув заказчика S1** → `go` S2 |
+| **B1.13 навигация** | **S1 Fly MCP PASS** 2026-06-23 · **S2 тесты** `[x]` 2026-06-24 | **S2 Fly MCP** · апрув S1 |
 | **B1.14 адрес в шапке** | **B1.14-3d** index map `[x]` | deploy (`./bin/fly_deploy.sh`) · B1.14-4 cart |
+
+### Сессия 2026-06-24 (B1.13-S2: фаза 2 автотесты)
+
+- **Тесты:** `b113_s2_cart_popup_test.rb` — 8 runs · `b113_s1` — 5 runs · регрессия `test/integration/shop/` — 147 runs, 0 failures (после фикса b11_02 assertion)
+- **Фикс:** `order_status_acceptance_cbr_test.rb` — redirect `orderId` после B1.12 FSM
+- **Дальше:** фаза 3 Fly MCP + deploy
 
 ### Сессия 2026-06-24 (B1.12 rev2 R3: фаза 3 deploy + Fly MCP)
 

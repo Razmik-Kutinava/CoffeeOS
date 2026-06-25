@@ -42,7 +42,7 @@ class Shop::OrderStatusAcceptanceCbrTest < ActionDispatch::IntegrationTest
     checkout = vitrina_source("routes/Checkout.svelte")
 
     assert_includes app, '"/order/:id"'
-    assert_includes checkout, "push(`/order/${res.order_id}`)"
+    assert_includes checkout, "push(`/order/${orderId}`)"
   end
 
   # Критерий: API отдаёт поля для экрана статуса

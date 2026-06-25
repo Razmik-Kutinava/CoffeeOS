@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 2026-06-24 — B1.13-S2 фаза 2: автотесты поп-ап корзины
+
+- **Тесты:** `b113_s2_cart_popup_test.rb` — bottom bar 2 вкладки, CartSheet, пороги, cart API
+- **S1:** `b113_s1_profile_header_test.rb` — убрана проверка вкладки «Корзина»
+- **Регрессия:** `test/integration/shop/` — 147 runs, 0 failures
+- **Фикс:** `order_status_acceptance_cbr_test.rb` — `push(\`/order/${orderId}\`)` после B1.12
+- **Дальше:** фаза 3 Fly MCP
+
 ## 2026-06-24 — B1.12 rev2 R3 фаза 3: deploy + Fly MCP + хвосты R2 (`c27eb7c`)
 
 - **Deploy:** владелец · стенд `coffeeos.fly.dev`
