@@ -23,12 +23,12 @@
 | Что | Статус |
 |-----|--------|
 | **S1** | **Fly MCP** `[x]` 2026-06-23 — 5/5 · скрины post-deploy · апрув `[ ]` |
-| **S2** | ТЗ `[x]` — поп-ап корзины expanded/peek/hidden · bottom bar · скролл |
+| **S2** | ТЗ `[x]` · **чеклисты gate+реализация** `[x]` 2026-06-24 · код `[ ]` |
 | **S3** | ТЗ `[x]` — +/−/Удалить/+цена в поп-апе |
 | **S4** | ТЗ `[x]` — long press модификаторы · горизонтальный скролл >3 |
 | Нумерация заказчика | «Задача 2» клиентская часть → канон **B1.14** · B1.13-S2…S4 — поп-ап корзины |
 | Этап 0 JSON | [`b113_stage0_scope_2026-06-22.json`](../milestones/veha_2/artifacts/demo-feedback/b113_stage0_scope_2026-06-22.json) · [`b113_stage0_s2_s4_2026-06-22.json`](../milestones/veha_2/artifacts/demo-feedback/b113_stage0_s2_s4_2026-06-22.json) |
-| **Следующий шаг** | **апрув заказчика S1** → `go` на S2 |
+| **Следующий шаг** | **`go` на S2** (поп-ап корзины) |
 | **Агент** | **стоп** — ждём апрув S1 |
 
 ТЗ: [`B1_13_shop_nav_profile_header.md`](../milestones/veha_2/requirements/customer_tasks/B1_13_shop_nav_profile_header.md)

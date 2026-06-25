@@ -168,6 +168,12 @@
 - **Ops:** CBR · README customer_tasks · CHECKLIST · HANDOFF · CHANGELOG
 - **Код:** не начат · ждём апрув + `go`
 
+### Сессия 2026-06-24 (B1.13: чеклисты S2–S4)
+
+- **ТЗ:** gate + чеклист реализации для S2, S3, S4 в `B1_13_shop_nav_profile_header.md`
+- **S1:** Fly MCP в чеклисте `[x]`
+- **Дальше:** `go` на S2
+
 ### Сессия 2026-06-23 (B1.13-S1: Fly MCP post-deploy)
 
 - **MCP chrome-devtools:** 5/5 критериев PASS на `coffeeos.fly.dev`

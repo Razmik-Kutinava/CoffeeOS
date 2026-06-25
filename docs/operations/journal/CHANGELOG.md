@@ -137,6 +137,12 @@
 - **Ops:** CBR · README customer_tasks · CHECKLIST · HANDOFF · SESSION_STATE
 - **Код:** не начат · апрув + `go`
 
+## 2026-06-24 — B1.13-S2/S3/S4: чеклисты реализации в ТЗ
+
+- **Файл:** `B1_13_shop_nav_profile_header.md` — gate + реализация для S2, S3, S4
+- **S1:** чеклист Fly MCP отмечен `[x]`
+- **Дальше:** ждём `go` на S2
+
 ## 2026-06-23 — B1.13-S1: Fly MCP post-deploy (PASS)
 
 - **Стенд:** `coffeeos.fly.dev/shop?tenant_id=655aaccb-…`
