@@ -29,7 +29,7 @@
         { product: selectedProduct }
       )
       showModal = false
-      push('/cart')
+      push("/")
     } finally {
       addingToCart = false
     }

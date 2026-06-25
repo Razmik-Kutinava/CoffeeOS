@@ -137,6 +137,11 @@
 - **Ops:** CBR · README customer_tasks · CHECKLIST · HANDOFF · SESSION_STATE
 - **Код:** не начат · апрув + `go`
 
+## 2026-06-24 — B1.13-S2: CartSheet поп-ап корзины (фаза 1 код)
+
+- **Код:** `CartSheet.svelte` · `cartSheetStore.js` · `cartSheetThresholds.js` · BottomNav 2 вкладки · `#/cart` → redirect
+- **Фаза 2:** тесты + Fly MCP — ждём команды
+
 ## 2026-06-24 — B1.13-S2: ответы закрыты + пропорции макетов
 
 - **Скрины:** 4 макета уже в `screenshots/b113_s2_customer_01..04.png`

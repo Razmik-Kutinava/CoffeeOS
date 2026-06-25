@@ -503,7 +503,7 @@
 
 <div>
   <div class="mb-4 flex items-center gap-3">
-    <button type="button" class="text-2xl text-[#ff8c42]" onclick={() => push("/cart")} aria-label="Назад в корзину">
+    <button type="button" class="text-2xl text-[#ff8c42]" onclick={() => push("/")} aria-label="Назад в каталог">
       ‹
     </button>
     <h1 class="text-xl font-bold">Оформление</h1>

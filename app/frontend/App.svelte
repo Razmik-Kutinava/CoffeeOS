@@ -5,6 +5,7 @@
   import { onMount } from "svelte"
   import Header from "./components/Header.svelte"
   import BottomNav from "./components/BottomNav.svelte"
+  import CartSheet from "./components/CartSheet.svelte"
   import RouteLoading from "./components/RouteLoading.svelte"
   import SlowRequestOverlay from "./components/SlowRequestOverlay.svelte"
   import ShopPwaBanner from "./components/ShopPwaBanner.svelte"
@@ -12,6 +13,7 @@
   import { flushOrderQueue } from "./lib/shopOfflineQueue.js"
   import { flushCartQueue } from "./lib/shopOfflineCart.js"
   import Catalog from "./routes/Catalog.svelte"
+  import CartRedirect from "./routes/CartRedirect.svelte"
   import { initTelegram } from "./lib/telegram.js"
   import { installSlowRequestTracker } from "./lib/slowRequest.js"
   import { api } from "./lib/api.js"
@@ -36,7 +38,7 @@
   const routes = {
     "/": Catalog,
     "/product/:id": lazyRoute(() => import("./routes/Product.svelte")),
-    "/cart": lazyRoute(() => import("./routes/Cart.svelte")),
+    "/cart": CartRedirect,
     "/checkout": lazyRoute(() => import("./routes/Checkout.svelte")),
     "/payment-result": lazyRoute(() => import("./routes/PaymentResult.svelte")),
     "/profile": lazyRoute(() => import("./routes/Profile.svelte")),
@@ -107,5 +109,6 @@
   <main class="mx-auto max-w-lg px-3 pb-28 pt-[4.5rem]">
     <Router {routes} options={{ hash: true }} />
   </main>
+  <CartSheet />
   <BottomNav />
 </div>

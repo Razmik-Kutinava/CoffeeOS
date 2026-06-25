@@ -168,6 +168,11 @@
 - **Ops:** CBR · README customer_tasks · CHECKLIST · HANDOFF · CHANGELOG
 - **Код:** не начат · ждём апрув + `go`
 
+### Сессия 2026-06-24 (B1.13-S2: фаза 1 код)
+
+- **Файлы:** CartSheet, cartSheetStore, cartSheetThresholds, BottomNav, Catalog scroll, CartRedirect
+- **Стоп:** фаза 2 — тесты + Fly MCP по команде
+
 ### Сессия 2026-06-24 (B1.13-S2: ответы + пропорции)
 
 - **Ответы Q-S2-2…10** закрыты в `B1_13` · открытых вопросов нет

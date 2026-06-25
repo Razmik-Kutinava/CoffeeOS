@@ -1,6 +1,6 @@
 <script>
   import { push } from "svelte-spa-router"
-  import { ShoppingCart, Home, Heart } from "lucide-svelte"
+  import { Home, Heart } from "lucide-svelte"
 
   let hash = $state(typeof window !== 'undefined' ? window.location.hash : '')
 
@@ -27,16 +27,6 @@
     >
       <Home class="h-6 w-6" />
       <span class="text-xs">Каталог</span>
-    </button>
-
-    <button
-      onclick={() => push('/cart')}
-      class="flex flex-col items-center gap-1 px-3 py-1 transition-colors"
-      class:text-white={isActive('/cart')}
-      class:text-[#a0a0a0]={!isActive('/cart')}
-    >
-      <ShoppingCart class="h-6 w-6" />
-      <span class="text-xs">Корзина</span>
     </button>
 
     <button

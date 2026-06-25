@@ -155,10 +155,7 @@
         },
         { product }
       )
-      push("/cart")
-      window.dispatchEvent(
-        new CustomEvent("shop:cart-added", { detail: { name: product.name } })
-      )
+      push("/")
     } catch (e) {
       error = e.message || "Не удалось добавить в корзину"
     } finally {

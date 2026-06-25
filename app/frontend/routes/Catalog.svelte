@@ -1,6 +1,7 @@
 <script>
   import { onMount } from "svelte"
   import { loadCatalog, getCatalogCache, startCatalogPolling, stopCatalogPolling } from "../lib/stores/catalog.js"
+  import { handleCatalogScroll, refreshCartSheet } from "../lib/cartSheetStore.js"
   import CategorySection from "../components/CategorySection.svelte"
   import PageSkeleton from "../components/PageSkeleton.svelte"
 
@@ -8,18 +9,28 @@
   let loading = $state(true)
   let err = $state(null)
 
-  onMount(async () => {
-    try {
-      categories = await loadCatalog()
-      startCatalogPolling((cats) => {
-        categories = cats
-      })
-    } catch (e) {
-      err = e.message
-    } finally {
-      loading = false
+  onMount(() => {
+    const onScroll = () => handleCatalogScroll()
+    window.addEventListener("scroll", onScroll, { passive: true })
+    refreshCartSheet().catch(() => {})
+
+    ;(async () => {
+      try {
+        categories = await loadCatalog()
+        startCatalogPolling((cats) => {
+          categories = cats
+        })
+      } catch (e) {
+        err = e.message
+      } finally {
+        loading = false
+      }
+    })()
+
+    return () => {
+      stopCatalogPolling()
+      window.removeEventListener("scroll", onScroll)
     }
-    return () => stopCatalogPolling()
   })
 </script>
 
@@ -40,9 +51,11 @@
     <p>Пока нет товаров</p>
   </div>
 {:else}
+  <div class="catalog-with-sheet pb-[42vh]">
   {#each categories as cat (cat.id)}
     <CategorySection category={cat} />
   {/each}
+  </div>
 {/if}
 
 <style>
