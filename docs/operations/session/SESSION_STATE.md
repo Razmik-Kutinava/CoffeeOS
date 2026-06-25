@@ -2,7 +2,7 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-06-25 (B1.12 rev2 — RSA на Fly + MCP 10/10)  
+**Дата:** 2026-06-25 (B1.13-S3 — код + тесты + MCP pre-deploy probe)  
 **Предыдущее:** B1.12-R3 Fly MCP 8/8 · B1.11 этап 0 · B1.7 **ЗАКРЫТА**  
 **Веха 1:** **закрыта** 2026-06-19 (CHECKLIST § I, H.3 заочно).  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
@@ -22,8 +22,18 @@
 |--------|--------|
 | **B1.12 rev2** | R3 `[x]` Fly MCP **10/10** · RSA Fly `[x]` | **апрув заказчика** |
 | **B1.11 режим работы** | **Fly MCP header A/B PASS** · артефакт 2026-06-21 | **апрув заказчика** |
-| **B1.13 навигация** | **S2 Fly MCP 9/9** `[x]` 2026-06-25 | апрув S2 · `go` S3 |
+| **B1.13 навигация** | **S3 код+тесты** `[x]` 2026-06-25 · MCP pre-deploy FAIL | deploy → MCP PASS · `go` S4 |
 | **B1.14 адрес в шапке** | **B1.14-3d** index map `[x]` | deploy (`./bin/fly_deploy.sh`) · B1.14-4 cart |
+
+### Сессия 2026-06-25 (B1.13-S3: управление в поп-апе корзины)
+
+- **Код:** `CartSheet` peek +/- · expanded +/- Удалить · hidden миниатюра · `MAX_ITEM_QUANTITY=99`
+- **API:** guard max qty на `CartService#update_quantity!`
+- **Тесты:** `b113_s3_cart_controls_test.rb` (5 критериев) + `cart_service_test` max qty
+- **Макеты:** `b113_s3_customer_{peek,expanded,hidden_chip}_mode.png`
+- **MCP pre-deploy:** `b113_s3_post_deploy_2026-06-25.json` — step 01 PASS · step 02 FAIL (нет `shop-cart-expanded-plus` на Fly)
+- **Скрипт:** `bin/b113_s3_cart_controls_mcp.mjs`
+- **Дальше:** deploy → повтор MCP PASS · `go` S4
 
 ### Сессия 2026-06-25 (B1.12 rev2: RSA на Fly + MCP 10/10)
 

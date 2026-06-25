@@ -23,6 +23,16 @@
 - **Фикс:** `order_status_acceptance_cbr_test.rb` — `push(\`/order/${orderId}\`)` после B1.12
 - **Дальше:** фаза 3 Fly MCP
 
+## 2026-06-25 — B1.13-S3: управление товарами в поп-апе корзины
+
+- **UI:** `CartSheet.svelte` — peek +/-, expanded +/- Удалить, hidden chip миниатюра
+- **API:** `CartService#update_quantity!` — guard `MAX_ITEM_QUANTITY` (99)
+- **Тесты:** `b113_s3_cart_controls_test.rb` (5) + `cart_service_test` max qty
+- **MCP скрипт:** `bin/b113_s3_cart_controls_mcp.mjs`
+- **Макеты заказчика:** `b113_s3_customer_{peek,expanded,hidden_chip}_mode.png`
+- **Pre-deploy probe Fly:** `b113_s3_post_deploy_2026-06-25.json` — **FAIL** (step 02, нет testid на стенде) · скрин `b113_s3_post_deploy_expanded_2026-06-25.png`
+- **Дальше:** deploy → повтор MCP S3 PASS · `go` S4
+
 ## 2026-06-25 — B1.12 rev2: RSA на Fly + MCP 10/10
 
 - **RSA:** `TBANK_RSA_PUBLIC_KEY` на Fly · `card_config` → `card_data_ready: true`

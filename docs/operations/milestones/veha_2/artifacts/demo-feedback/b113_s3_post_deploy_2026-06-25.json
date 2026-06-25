@@ -1,0 +1,27 @@
+{
+  "task_id": "B1.13-S3",
+  "pass": false,
+  "error": "locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"shop-cart-expanded-plus\"]').first()\n",
+  "steps": [
+    {
+      "id": "01",
+      "action": "add product → sheet expanded",
+      "pass": true,
+      "at": "2026-06-25T15:03:23.525Z"
+    },
+    {
+      "id": "02",
+      "action": "expanded: +/−/Удалить visible",
+      "pass": false,
+      "at": "2026-06-25T15:03:23.822Z"
+    },
+    {
+      "id": "ERR",
+      "action": "locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"shop-cart-expanded-plus\"]').first()\n",
+      "pass": false,
+      "at": "2026-06-25T15:03:55.700Z"
+    }
+  ],
+  "started_at": "2026-06-25T15:02:57.083Z",
+  "finished_at": "2026-06-25T15:03:55.700Z"
+}

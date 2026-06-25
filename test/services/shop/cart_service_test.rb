@@ -114,6 +114,14 @@ class Shop::CartServiceTest < ActiveSupport::TestCase
     assert_equal 0, @session[:shop_cart].size
   end
 
+  test "update_quantity! rejects delta above MAX_ITEM_QUANTITY" do
+    @session[:shop_cart] = [
+      { "product_id" => @product.id, "quantity" => Shop::CartService::MAX_ITEM_QUANTITY, "selected_modifiers" => [] }
+    ]
+    svc = cart
+    assert_raises(ActiveRecord::RecordNotFound) { svc.update_quantity!(0, 1) }
+  end
+
   # ---------------------------------------------------------------------------
   # clear!
   # ---------------------------------------------------------------------------

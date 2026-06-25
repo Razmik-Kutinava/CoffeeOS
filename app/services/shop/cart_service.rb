@@ -57,8 +57,16 @@ module Shop
       i = index.to_i
       return unless @session[SESSION_KEY][i]
 
-      @session[SESSION_KEY][i]["quantity"] += delta.to_i
-      @session[SESSION_KEY].delete_at(i) if @session[SESSION_KEY][i]["quantity"] < 1
+      new_qty = @session[SESSION_KEY][i]["quantity"] + delta.to_i
+      if delta.to_i.positive? && new_qty > MAX_ITEM_QUANTITY
+        raise ActiveRecord::RecordNotFound, "Максимум #{MAX_ITEM_QUANTITY} единиц товара"
+      end
+
+      if new_qty < 1
+        @session[SESSION_KEY].delete_at(i)
+      else
+        @session[SESSION_KEY][i]["quantity"] = new_qty
+      end
       touch_cart_session!
     end
 

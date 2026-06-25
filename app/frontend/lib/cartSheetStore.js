@@ -17,6 +17,9 @@ export const cartTotal = writable(0)
 export const cartSheetMode = writable(MODE_EMPTY)
 export const cartSheetBusy = writable(false)
 
+/** Синхрон с Shop::CartService::MAX_ITEM_QUANTITY */
+export const MAX_ITEM_QUANTITY = 99
+
 let scrollAnchorY = 0
 let eventsBound = false
 
