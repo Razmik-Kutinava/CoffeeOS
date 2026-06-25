@@ -22,8 +22,16 @@
 |--------|--------|
 | **B1.12 rev2** | R3 `[x]` Fly MCP 9/10 · deploy `[x]` | апрув заказчика · `TBANK_RSA_PUBLIC_KEY` на Fly |
 | **B1.11 режим работы** | **Fly MCP header A/B PASS** · артефакт 2026-06-21 | **апрув заказчика** |
-| **B1.13 навигация** | **S2** код+тесты `[x]` · MCP скрипт `[x]` · **deploy** `[ ]` | повтор MCP после deploy |
+| **B1.13 навигация** | **S2 Fly MCP 9/9** `[x]` 2026-06-25 | апрув S2 · `go` S3 |
 | **B1.14 адрес в шапке** | **B1.14-3d** index map `[x]` | deploy (`./bin/fly_deploy.sh`) · B1.14-4 cart |
+
+### Сессия 2026-06-25 (B1.13-S2: фаза 3 Fly MCP PASS 9/9)
+
+- **Deploy:** владелец · стенд `coffeeos.fly.dev`
+- **MCP:** `b113_s2_cart_popup_mcp.mjs` — **9/9 PASS**
+- **Артефакт:** `b113_s2_post_deploy_2026-06-25.json` + скрины 320/360/428
+- **ISSUES:** deploy blocker → **resolved**
+- **Дальше:** апрув заказчика S2 · `go` S3
 
 ### Сессия 2026-06-25 (B1.13-S2: фаза 3 MCP скрипт + pre-deploy probe)
 

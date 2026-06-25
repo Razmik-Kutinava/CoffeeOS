@@ -23,13 +23,13 @@
 | Что | Статус |
 |-----|--------|
 | **S1** | **Fly MCP** `[x]` 2026-06-23 — 5/5 · скрины post-deploy · апрув `[ ]` |
-| **B1.13-S2** | **код** `[x]` · **тесты** `[x]` · **MCP скрипт** `[x]` · **Fly deploy** `[ ]` · MCP PASS `[ ]` |
+| **B1.13-S2** | **код + тесты + Fly MCP** `[x]` 2026-06-25 — **9/9** · апрув `[ ]` |
 | **S3** | ТЗ `[x]` — +/−/Удалить/+цена в поп-апе |
 | **S4** | ТЗ `[x]` — long press модификаторы · горизонтальный скролл >3 |
 | Нумерация заказчика | «Задача 2» клиентская часть → канон **B1.14** · B1.13-S2…S4 — поп-ап корзины |
 | Этап 0 JSON | [`b113_stage0_scope_2026-06-22.json`](../milestones/veha_2/artifacts/demo-feedback/b113_stage0_scope_2026-06-22.json) · [`b113_stage0_s2_s4_2026-06-22.json`](../milestones/veha_2/artifacts/demo-feedback/b113_stage0_s2_s4_2026-06-22.json) |
-| **Следующий шаг** | **deploy** владельца → повтор MCP (`b113_s2_post_deploy` 9/9) |
-| **Агент** | **стоп** — ждём deploy + `go` на повтор MCP |
+| **Следующий шаг** | **апрув заказчика S2** · `go` S3 |
+| **Агент** | **стоп** |
 
 ТЗ: [`B1_13_shop_nav_profile_header.md`](../milestones/veha_2/requirements/customer_tasks/B1_13_shop_nav_profile_header.md)
 

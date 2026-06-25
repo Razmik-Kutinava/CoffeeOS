@@ -1,7 +1,7 @@
 {
   "task_id": "B1.13-S2",
   "date": "2026-06-25",
-  "status": "PRE_DEPLOY_PROBE",
+  "status": "POST_DEPLOY_FLY_MCP",
   "shop_url": "https://coffeeos.fly.dev/shop?tenant_id=655aaccb-004a-4bb9-a50a-ce618854dda3",
   "method": "playwright (MCP DevTools equivalent)",
   "product_id": "3c5259e0-f42f-4d47-953d-2ce82e335f8c",
@@ -35,20 +35,19 @@
   "checks": {
     "bottom_nav_labels": [
       "Каталог",
-      "Корзина",
       "Избранное"
     ],
-    "empty_placeholder": "",
-    "after_add_mode": null
+    "empty_placeholder": "тут будут твои заказы",
+    "after_add_mode": "expanded"
   },
   "criteria_s2": {
-    "c1_bottom_nav_two_tabs": "fail",
-    "c2_empty_placeholder": "fail",
-    "c_cart_redirect": "fail",
-    "c3_add_expanded": "fail",
-    "c5_scroll_peek": "fail",
-    "c6_scroll_hidden": "fail",
-    "c7_tab_state_preserved": "fail",
+    "c1_bottom_nav_two_tabs": "pass",
+    "c2_empty_placeholder": "pass",
+    "c_cart_redirect": "pass",
+    "c3_add_expanded": "pass",
+    "c5_scroll_peek": "pass",
+    "c6_scroll_hidden": "pass",
+    "c7_tab_state_preserved": "pass",
     "c_s1_profile_header": "pass"
   },
   "steps": [
@@ -56,84 +55,80 @@
       "id": "00",
       "action": "/up 200",
       "pass": true,
-      "at": "2026-06-25T12:59:51.447Z"
+      "at": "2026-06-25T13:15:10.771Z"
     },
     {
       "id": "01",
       "action": "bottom nav: Каталог + Избранное only",
-      "pass": false,
-      "at": "2026-06-25T12:59:56.266Z",
+      "pass": true,
+      "at": "2026-06-25T13:15:17.003Z",
       "labels": [
         "Каталог",
-        "Корзина",
         "Избранное"
       ]
     },
     {
       "id": "02",
       "action": "empty cart placeholder on catalog",
-      "pass": false,
-      "at": "2026-06-25T13:00:26.290Z",
-      "text": ""
+      "pass": true,
+      "at": "2026-06-25T13:15:17.091Z",
+      "text": "тут будут твои заказы"
     },
     {
       "id": "03",
       "action": "#/cart redirects to catalog (no legacy cart screen)",
-      "pass": false,
-      "at": "2026-06-25T13:00:27.765Z",
-      "url": "https://coffeeos.fly.dev/shop?tenant_id=655aaccb-004a-4bb9-a50a-ce618854dda3#/cart"
+      "pass": true,
+      "at": "2026-06-25T13:15:18.997Z",
+      "url": "https://coffeeos.fly.dev/shop?tenant_id=655aaccb-004a-4bb9-a50a-ce618854dda3#/"
     },
     {
       "id": "04",
       "action": "add product → catalog + sheet expanded",
-      "pass": false,
-      "at": "2026-06-25T13:00:31.348Z",
-      "url": "https://coffeeos.fly.dev/shop?tenant_id=655aaccb-004a-4bb9-a50a-ce618854dda3#/cart",
-      "mode": null
+      "pass": true,
+      "at": "2026-06-25T13:15:22.630Z",
+      "url": "https://coffeeos.fly.dev/shop?tenant_id=655aaccb-004a-4bb9-a50a-ce618854dda3#/",
+      "mode": "expanded"
     },
     {
       "id": "05",
       "action": "scroll down → peek mode",
-      "pass": false,
-      "at": "2026-06-25T13:00:31.970Z",
-      "mode": null
+      "pass": true,
+      "at": "2026-06-25T13:15:23.334Z",
+      "mode": "peek"
     },
     {
       "id": "06",
       "action": "scroll down → hidden chip",
-      "pass": false,
-      "at": "2026-06-25T13:00:32.385Z",
-      "mode": null
+      "pass": true,
+      "at": "2026-06-25T13:15:23.757Z",
+      "mode": "hidden"
     },
     {
       "id": "07",
       "action": "favorites: cart sheet hidden",
       "pass": true,
-      "at": "2026-06-25T13:00:33.850Z",
+      "at": "2026-06-25T13:15:25.321Z",
       "url": "https://coffeeos.fly.dev/shop?tenant_id=655aaccb-004a-4bb9-a50a-ce618854dda3#/favorites"
     },
     {
       "id": "08",
       "action": "return catalog: sheet state preserved",
-      "pass": false,
-      "at": "2026-06-25T13:00:35.097Z",
-      "mode": null
+      "pass": true,
+      "at": "2026-06-25T13:15:26.585Z",
+      "mode": "hidden"
     },
     {
       "id": "09",
       "action": "S1 intact: profile in header",
       "pass": true,
-      "at": "2026-06-25T13:00:36.812Z",
+      "at": "2026-06-25T13:15:28.428Z",
       "header": "Москва, ул. Пушкина, 5\nПн–Пт 09:00–22:00, Сб–Вс 10:00–20:00\nПрофиль"
     }
   ],
-  "pass": false,
-  "started_at": "2026-06-25T12:59:49.963Z",
-  "finished_at": "2026-06-25T13:00:36.816Z",
+  "pass": true,
+  "started_at": "2026-06-25T13:15:07.333Z",
+  "finished_at": "2026-06-25T13:15:28.436Z",
   "pending": [
-    "fly_deploy",
-    "mcp_rerun_after_deploy",
     "customer_approval"
-  ],
-  "deploy_note": "Fly still on pre-S2 build (bottom nav has Корзина). Agent: flyctl auth unavailable — deploy владельца."
+  ]
 }

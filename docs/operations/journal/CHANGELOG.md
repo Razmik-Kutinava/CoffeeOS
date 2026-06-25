@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2026-06-25 — B1.13-S2 фаза 3: Fly MCP PASS 9/9 (post-deploy)
+
+- **Deploy:** владелец 2026-06-25
+- **MCP:** `b113_s2_cart_popup_mcp.mjs` — bottom bar 2 вкладки, CartSheet empty/expanded/peek/hidden, #/cart redirect, favorites state
+- **Артефакт:** `b113_s2_post_deploy_2026-06-25.json` + 5 скринов
+- **Дальше:** апрув заказчика S2 · `go` S3
+
 ## 2026-06-25 — B1.13-S2 фаза 3: MCP скрипт + pre-deploy probe (blocked deploy)
 
 - **Скрипты:** `b113_s2_cart_popup_prep_fly.rb` · `b113_s2_cart_popup_mcp.mjs` (9 шагов критериев S2)
