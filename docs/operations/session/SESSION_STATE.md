@@ -33,6 +33,7 @@
 - **Макеты:** `b113_s3_customer_{peek,expanded,hidden_chip}_mode.png`
 - **MCP pre-deploy:** `b113_s3_post_deploy_2026-06-25.json` — step 01 PASS · step 02 FAIL (нет `shop-cart-expanded-plus` на Fly)
 - **Скрипт:** `bin/b113_s3_cart_controls_mcp.mjs`
+- **Коммит:** `6fcc9d8`
 - **Дальше:** deploy → повтор MCP PASS · `go` S4
 
 ### Сессия 2026-06-25 (B1.12 rev2: RSA на Fly + MCP 10/10)

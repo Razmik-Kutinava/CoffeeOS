@@ -42,6 +42,7 @@
 | **Макеты** | [`b113_s3_customer_peek_mode.png`](../milestones/veha_2/artifacts/demo-feedback/screenshots/b113_s3_customer_peek_mode.png) · [`expanded`](../milestones/veha_2/artifacts/demo-feedback/screenshots/b113_s3_customer_expanded_mode.png) · [`hidden_chip`](../milestones/veha_2/artifacts/demo-feedback/screenshots/b113_s3_customer_hidden_chip_mode.png) |
 | **Fly MCP pre-deploy** | [`b113_s3_post_deploy_2026-06-25.json`](../milestones/veha_2/artifacts/demo-feedback/b113_s3_post_deploy_2026-06-25.json) — **FAIL** step 02 (стенд без S3) |
 | **Скрипт** | `ruby bin/b113_s2_cart_popup_prep_fly.rb` → `node bin/b113_s3_cart_controls_mcp.mjs` |
+| **Коммит** | `6fcc9d8` — S3 код + тесты + MCP pre-deploy probe |
 | **Следующий шаг** | deploy владельца → повтор MCP → PASS |
 
 ### B1.12 — рекуррент + оплата в 1 клик (Т-Банк, **rev2 nonPCI**)
