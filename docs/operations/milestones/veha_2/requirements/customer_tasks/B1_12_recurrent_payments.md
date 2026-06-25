@@ -2,7 +2,7 @@
 
 **ID:** B1.12 · **Источник:** заказчик, документы эпика (3 задачи)  
 **Ревизия ТЗ:** **v2** (2026-06-24) — nonPCI + кастомный UI + FSM 0–7 · **заменяет** тексты v1 (2026-06-18)  
-**Статус:** **R1/R2/R3 rev2** `[x]` OPS_PASS · **Fly MCP** 9/10 · **апрув заказчика** `[ ]` · хвост: `TBANK_RSA_PUBLIC_KEY` на Fly
+**Статус:** **R1/R2/R3 rev2** `[x]` OPS_PASS · **Fly MCP** 10/10 · **апрув заказчика** `[ ]` · RSA Fly `[x]`
 
 **Подзадачи:** **R1** бэкенд + СУБД · **R2** кастомный ввод карты · **R3** стейт-машина кнопки  
 **Порядок:** R1 → R2 → R3 · **один документ заказчика = один шаг = один `go` = commit/ops/стоп**
@@ -254,7 +254,7 @@
 | **Q-R2-2** | **A)** тумблер «Использовать карту…», **default on** | `NewCardSheet.svelte` `[x]` реализовано по v2 |
 | **Q-R2-3** | **A)** макеты 8924/8925 — канон UI; пиксель-перфект — приёмка заказчика после Fly MCP | R2+R3 `[x]` реализовано по v2 · Fly MCP 2026-06-24 |
 | **Deploy** | **`fly deploy` после R3** | **`[x]`** владелец 2026-06-24 |
-| **TBANK_RSA_PUBLIC_KEY** | Fly secrets · форма «временно недоступна» без ключа | **`[x]`** док + MCP хвост · secret на Fly `[ ]` |
+| **TBANK_RSA_PUBLIC_KEY** | Fly secrets · форма «временно недоступна» без ключа | **`[x]`** Fly 2026-06-25 · MCP step 02 PASS |
 | **CardHolder** | Из **имени на checkout** | **`[x]`** `cardHolderName \|\| name` · runbook |
 
 **Артефакт gate:** [`b112_r3_phase0_gate_2026-06-24.json`](../../artifacts/demo-feedback/b112_r3_phase0_gate_2026-06-24.json)
@@ -283,14 +283,14 @@
 
 | # | Хвост | Статус |
 |---|-------|--------|
-| 3.1 | `TBANK_RSA_PUBLIC_KEY` | **`[x]`** док `TBANK_RECURRENT.md` + `FLY_DEMO_STAND.md` · Fly secret — хвост (MCP step 02) |
+| 3.1 | `TBANK_RSA_PUBLIC_KEY` | **`[x]`** Fly secret 2026-06-25 · `card_data_ready: true` |
 | 3.2 | CardHolder | **`[x]`** имя с checkout → `encryptCardPayload` · задокументировано |
 | 3.3 | Q-R2-1..3 | **`[x]`** реализовано по v2 (см. gate + таблица конфликтов) |
 | 3.4 | Legacy iframe | **`[x]`** checkout без `redirectToBankPayment` · `tbankPayment.js` только session resume |
 
-**Fly MCP:** `ruby bin/b112_r3_one_click_prep_fly.rb` + `node bin/b112_r3_fsm_mcp.mjs` — **9/10 PASS** (core UI/FSM).  
-**Артефакт:** [`b112_r3_fsm_ops_pass_2026-06-24.json`](../../artifacts/demo-feedback/b112_r3_fsm_ops_pass_2026-06-24.json)  
-**Скрины:** `screenshots/b112_r3_fsm_checkout_2026-06-24.png`, `b112_r3_fsm_after_pay_2026-06-24.png`
+**Fly MCP:** `ruby bin/b112_r3_one_click_prep_fly.rb` + `node bin/b112_r3_fsm_mcp.mjs` — **10/10 PASS** (2026-06-25).  
+**Артефакт:** [`b112_r3_fsm_ops_pass_2026-06-25.json`](../../artifacts/demo-feedback/b112_r3_fsm_ops_pass_2026-06-25.json)  
+**Скрины:** `screenshots/b112_r3_fsm_checkout_2026-06-25.png`, `b112_r3_fsm_after_pay_2026-06-25.png`
 
 ---
 
@@ -381,8 +381,8 @@
 - [x] FSM 0–7 в кнопке (фаза 2 — `shopPayFsm.js`, `CheckoutPayButton`)
 - [x] 3DS iframe overlay (State 3)
 - [x] Anti-flicker 600 ms
-- [x] Fly MCP прогон · артефакт `b112_r3_fsm_ops_pass_2026-06-24.json`
-- [ ] **Шаг закрыт:** апрув заказчика на эпик · хвост `TBANK_RSA_PUBLIC_KEY` на Fly
+- [x] Fly MCP прогон · артефакт `b112_r3_fsm_ops_pass_2026-06-25.json` (**10/10**)
+- [ ] **Шаг закрыт:** апрув заказчика на эпик
 
 ---
 

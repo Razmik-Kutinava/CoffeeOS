@@ -1,6 +1,6 @@
 # Т-Банк: рекуррентные платежи и привязка карты (B1.12)
 
-**Статус:** **rev2 R1+R2+R3** `[x]` OPS_PASS 2026-06-24 · Fly MCP 9/10 (RSA хвост) · legacy v1 R1–R6 OPS_PASS  
+**Статус:** **rev2 R1+R2+R3** `[x]` OPS_PASS 2026-06-25 · Fly MCP **10/10** · RSA Fly `[x]`  
 **ТЗ:** [`B1_12_recurrent_payments.md`](../requirements/customer_tasks/B1_12_recurrent_payments.md)  
 **Связано:** §2.3 (базовая оплата) · `Payments::TbankAdapter` · `POST /callbacks/tbank`
 
@@ -112,4 +112,4 @@ fly secrets set TBANK_RSA_PUBLIC_KEY="$(cat tbank_public.pem)" -a coffeeos
 | `b112_r2_custom_card_ops_pass_*.json` | R2 |
 | `b112_r3_fsm_ops_pass_*.json` | R3 |
 
-**Следующий шаг:** апрув заказчика на эпик B1.12 rev2 · при необходимости `fly secrets set TBANK_RSA_PUBLIC_KEY`.
+**Следующий шаг:** апрув заказчика на эпик B1.12 rev2.

@@ -23,6 +23,13 @@
 - **Фикс:** `order_status_acceptance_cbr_test.rb` — `push(\`/order/${orderId}\`)` после B1.12
 - **Дальше:** фаза 3 Fly MCP
 
+## 2026-06-25 — B1.12 rev2: RSA на Fly + MCP 10/10
+
+- **RSA:** `TBANK_RSA_PUBLIC_KEY` на Fly · `card_config` → `card_data_ready: true`
+- **MCP:** `b112_r3_fsm_mcp.mjs` — **10/10 PASS** (step 02 ok)
+- **Артефакт:** `b112_r3_fsm_ops_pass_2026-06-25.json` + скрины
+- **Дальше:** апрув заказчика на эпик B1.12 rev2
+
 ## 2026-06-24 — B1.12 rev2 R3 фаза 3: deploy + Fly MCP + хвосты R2 (`c27eb7c`)
 
 - **Deploy:** владелец · стенд `coffeeos.fly.dev`

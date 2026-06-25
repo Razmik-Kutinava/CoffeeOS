@@ -1,6 +1,6 @@
 # HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-06-24 (B1.12 rev2 R3 фаза 3 Fly MCP)  
+**Дата:** 2026-06-25 (B1.12 rev2 RSA Fly + MCP 10/10)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev
 
@@ -45,9 +45,9 @@
 | **Конфликты** | Q-R2-1..3 **`[x]`** зафиксированы 2026-06-24 (фаза 0 gate R3) |
 | **Код rev2** | R1+R2+R3 `[x]` OPS_PASS |
 | **Коммит** | `c27eb7c` — фаза 3 MCP + хвосты R2 |
-| **Fly MCP** | [`b112_r3_fsm_ops_pass_2026-06-24.json`](../milestones/veha_2/artifacts/demo-feedback/b112_r3_fsm_ops_pass_2026-06-24.json) — 9/10 |
-| **Deploy** | `[x]` владелец 2026-06-24 |
-| **Хвост** | `TBANK_RSA_PUBLIC_KEY` на Fly — см. `FLY_DEMO_STAND.md` |
+| **Fly MCP** | [`b112_r3_fsm_ops_pass_2026-06-25.json`](../milestones/veha_2/artifacts/demo-feedback/b112_r3_fsm_ops_pass_2026-06-25.json) — **10/10** |
+| **RSA Fly** | `[x]` `TBANK_RSA_PUBLIC_KEY` · `card_data_ready: true` |
+| **Хвост** | — |
 | **Следующий шаг** | **апрув заказчика** на эпик B1.12 rev2 |
 | **Агент** | **стоп** |
 
