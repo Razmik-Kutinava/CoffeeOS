@@ -48,6 +48,18 @@
 
 Запуск: `ruby bin/prog10_fly_smoke.rb` или `./bin/prog10_fly_smoke.rb` (если executable).
 
+## Fly MCP (приёмка витрины)
+
+| Скрипт | Назначение |
+|--------|------------|
+| `b113_s2_cart_popup_prep_fly.rb` | B1.13-S2: очистка корзины + product_id для MCP |
+| `b113_s2_cart_popup_mcp.mjs` | B1.13-S2: поп-ап корзины на Fly (после deploy) |
+
+```bash
+ruby bin/b113_s2_cart_popup_prep_fly.rb
+node bin/b113_s2_cart_popup_mcp.mjs
+```
+
 ## Остальное
 
 `puma`, `vite`, `jobs`, `irb`, `dotenv` и т.д. — **gem binstubs** от Bundler; не редактировать вручную, обновляются через `bundle binstubs`.

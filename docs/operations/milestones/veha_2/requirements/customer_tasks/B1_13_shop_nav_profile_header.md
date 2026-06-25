@@ -306,7 +306,8 @@
 [x] 2 — CartSheet + BottomNav
 [x] 3 — скролл каталога + свайпы
 [x] 4a — тесты b113_s2 (8/8) + b113_s1 fix bottom nav
-[ ] 4b — Fly MCP
+[x] 4b — MCP скрипт + probe 2026-06-25 (deploy pending)
+[ ] 4c — Fly MCP PASS после deploy
 ```
 
 ## Чеклист перед стартом кода (gate S2)
@@ -339,8 +340,9 @@
 - [x] `App.svelte` + `cartSheetStore.js` + `cartSheetThresholds.js`
 - [x] Не ломать S1: профиль в шапке · без «Профиль» в баре
 - [x] Тест: `test/integration/shop/b113_s2_cart_popup_test.rb` — **фаза 2** (2026-06-24)
-- [ ] Регрессия: `bin/rails test test/integration/shop/` — **фаза 2**
-- [ ] Скрины vs макеты + Fly MCP — **фаза 2**
+- [ ] Регрессия: `bin/rails test test/integration/shop/` — **фаза 2** `[x]` 2026-06-24
+- [x] Скрипты Fly MCP — `bin/b113_s2_cart_popup_prep_fly.rb` · `bin/b113_s2_cart_popup_mcp.mjs` (2026-06-25)
+- [ ] Fly MCP PASS post-deploy — **blocked deploy** · probe [`b113_s2_post_deploy_2026-06-25.json`](../../artifacts/demo-feedback/b113_s2_post_deploy_2026-06-25.json)
 
 ## Текст заказчика (дословно)
 

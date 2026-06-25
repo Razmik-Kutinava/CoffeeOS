@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 2026-06-25 — B1.13-S2 фаза 3: MCP скрипт + pre-deploy probe (blocked deploy)
+
+- **Скрипты:** `b113_s2_cart_popup_prep_fly.rb` · `b113_s2_cart_popup_mcp.mjs` (9 шагов критериев S2)
+- **Probe Fly:** 2/9 PASS — на стенде ещё pre-S2 (вкладка «Корзина»)
+- **Deploy:** blocked — нет `flyctl` auth у агента
+- **Артефакт:** `b113_s2_post_deploy_2026-06-25.json` + 5 скринов
+- **Дальше:** владелец `bin/fly_deploy.sh` → повтор MCP
+
 ## 2026-06-24 — B1.13-S2 фаза 2: автотесты поп-ап корзины
 
 - **Тесты:** `b113_s2_cart_popup_test.rb` — bottom bar 2 вкладки, CartSheet, пороги, cart API

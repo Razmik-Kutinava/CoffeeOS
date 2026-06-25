@@ -4,6 +4,13 @@
 
 ## 🔴 Блокеры
 
+[2026-06-25] — B1.13-S2 фаза 3: Fly MCP FAIL — S2 не задеплоен
+Статус: **open** · **blocked deploy**
+Описание: на `coffeeos.fly.dev` bottom nav всё ещё **Каталог / Корзина / Избранное**; `shop-cart-sheet` отсутствует. MCP probe 2/9 PASS (только S1 header + favorites без sheet).
+**Причина:** `flyctl deploy` — `no access token` у агента; код S2 в `develop` (коммиты `cad8670`, `61edcbd`), на Fly старая сборка.
+**Артефакт:** [`b113_s2_post_deploy_2026-06-25.json`](milestones/veha_2/artifacts/demo-feedback/b113_s2_post_deploy_2026-06-25.json) · скрины `b113_s2_post_deploy_*_2026-06-25.png`
+**Закрыть:** владелец `flyctl auth login` → `bin/fly_deploy.sh` → `ruby bin/b113_s2_cart_popup_prep_fly.rb` → `node bin/b113_s2_cart_popup_mcp.mjs` (ожидание 9/9 PASS).
+
 [2026-06-22] — B1.12: после deploy заказчика 2-я оплата снова Т-Банк (не one-click)
 Статус: **resolved** local · **нужен повторный deploy**
 Описание: заказчик после deploy — на 2-й оплате снова форма Т-Банка снизу + лишний экран; блок «Сохранённая карта» не виден.

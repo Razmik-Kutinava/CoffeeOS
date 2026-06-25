@@ -22,8 +22,16 @@
 |--------|--------|
 | **B1.12 rev2** | R3 `[x]` Fly MCP 9/10 · deploy `[x]` | апрув заказчика · `TBANK_RSA_PUBLIC_KEY` на Fly |
 | **B1.11 режим работы** | **Fly MCP header A/B PASS** · артефакт 2026-06-21 | **апрув заказчика** |
-| **B1.13 навигация** | **S1 Fly MCP PASS** 2026-06-23 · **S2 тесты** `[x]` 2026-06-24 | **S2 Fly MCP** · апрув S1 |
+| **B1.13 навигация** | **S2** код+тесты `[x]` · MCP скрипт `[x]` · **deploy** `[ ]` | повтор MCP после deploy |
 | **B1.14 адрес в шапке** | **B1.14-3d** index map `[x]` | deploy (`./bin/fly_deploy.sh`) · B1.14-4 cart |
+
+### Сессия 2026-06-25 (B1.13-S2: фаза 3 MCP скрипт + pre-deploy probe)
+
+- **Скрипты:** `bin/b113_s2_cart_popup_prep_fly.rb` · `bin/b113_s2_cart_popup_mcp.mjs`
+- **Deploy:** **blocked** — `flyctl auth login` недоступен агенту
+- **MCP probe:** 2/9 PASS на текущем Fly (pre-S2) · артефакт `b113_s2_post_deploy_2026-06-25.json`
+- **ISSUES:** 🔴 deploy pending
+- **Дальше:** владелец deploy → повтор MCP
 
 ### Сессия 2026-06-24 (B1.13-S2: фаза 2 автотесты)
 
