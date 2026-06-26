@@ -1,6 +1,6 @@
 # HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-06-25 (B1.13-S3 код + тесты + MCP pre-deploy probe)  
+**Дата:** 2026-06-25 (B1.13 rev2 — 4 дока заказчика в B1_13)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev
 
@@ -18,32 +18,23 @@
 
 ТЗ: [`B1_14_shop_tenant_address_header.md`](../milestones/veha_2/requirements/customer_tasks/B1_14_shop_tenant_address_header.md)
 
-### B1.13 — новая навигация витрины (эпик S1–S4)
+### B1.13 — новая навигация витрины (эпик S1–S4 + rev2)
 
 | Что | Статус |
 |-----|--------|
-| **S1** | **Fly MCP** `[x]` 2026-06-23 — 5/5 · скрины post-deploy · апрув `[ ]` |
-| **B1.13-S2** | **код + тесты + Fly MCP** `[x]` 2026-06-25 — **9/9** · апрув `[ ]` |
-| **B1.13-S3** | **код + тесты** `[x]` 2026-06-25 — peek +/- · expanded Удалить · +цена → checkout |
-| **S4** | ТЗ `[x]` — long press модификаторы · горизонтальный скролл >3 |
-| Нумерация заказчика | «Задача 2» клиентская часть → канон **B1.14** · B1.13-S2…S4 — поп-ап корзины |
-| Этап 0 JSON | [`b113_stage0_scope_2026-06-22.json`](../milestones/veha_2/artifacts/demo-feedback/b113_stage0_scope_2026-06-22.json) · [`b113_stage0_s2_s4_2026-06-22.json`](../milestones/veha_2/artifacts/demo-feedback/b113_stage0_s2_s4_2026-06-22.json) |
-| **Следующий шаг** | **deploy** → Fly MCP S3 PASS · `go` S4 |
+| **rev1** | S1 MCP `[x]` · S2 MCP 9/9 `[x]` · S3 код `[x]` |
+| **rev2 docs** | 4 текста дословно: **S1-R1, S2a, S2b, S3-rev2** `[x]` 2026-06-25 |
+| **Q-rev1** | 2 вкладки + профиль в шапке — **ЗАКРЫТО** |
+| **Q-rev2…6** | открыты до скринов / `go` |
+| **S4** | после закрытия rev2 |
+| **Следующий шаг** | скрины rev2 от заказчика → `go` S2a/S2b/S3-rev2 |
 | **Агент** | **стоп** |
 
 ТЗ: [`B1_13_shop_nav_profile_header.md`](../milestones/veha_2/requirements/customer_tasks/B1_13_shop_nav_profile_header.md)
 
-### B1.13-S3 — управление в поп-апе (2026-06-25)
+### B1.13 rev1-S3 (архив)
 
-| Что | Статус |
-|-----|--------|
-| **Код** | peek +/- · expanded +/- Удалить · hidden chip · `MAX_ITEM_QUANTITY` `[x]` |
-| **Тесты** | `b113_s3_cart_controls_test.rb` (5) · `cart_service_test` max qty `[x]` |
-| **Макеты** | [`b113_s3_customer_peek_mode.png`](../milestones/veha_2/artifacts/demo-feedback/screenshots/b113_s3_customer_peek_mode.png) · [`expanded`](../milestones/veha_2/artifacts/demo-feedback/screenshots/b113_s3_customer_expanded_mode.png) · [`hidden_chip`](../milestones/veha_2/artifacts/demo-feedback/screenshots/b113_s3_customer_hidden_chip_mode.png) |
-| **Fly MCP pre-deploy** | [`b113_s3_post_deploy_2026-06-25.json`](../milestones/veha_2/artifacts/demo-feedback/b113_s3_post_deploy_2026-06-25.json) — **FAIL** step 02 (стенд без S3) |
-| **Скрипт** | `ruby bin/b113_s2_cart_popup_prep_fly.rb` → `node bin/b113_s3_cart_controls_mcp.mjs` |
-| **Коммит** | `6fcc9d8` — S3 код + тесты + MCP pre-deploy probe |
-| **Следующий шаг** | deploy владельца → повтор MCP → PASS |
+Код `6fcc9d8` — приёмка перенесена в § **S3-rev2** в [`B1_13`](../milestones/veha_2/requirements/customer_tasks/B1_13_shop_nav_profile_header.md).
 
 ### B1.12 — рекуррент + оплата в 1 клик (Т-Банк, **rev2 nonPCI**)
 

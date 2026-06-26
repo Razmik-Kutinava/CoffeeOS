@@ -23,6 +23,13 @@
 - **Фикс:** `order_status_acceptance_cbr_test.rb` — `push(\`/order/${orderId}\`)` после B1.12
 - **Дальше:** фаза 3 Fly MCP
 
+## 2026-06-25 — B1.13 rev2: 4 документа заказчика в B1_13 (только docs)
+
+- **Разделы:** S1-R1 · S2a · S2b · S3-rev2 — тексты дословно + чеклисты приёмки
+- **Rev1:** S2/S3 помечены superseded; код rev1 без изменений
+- **Конфликты:** Q-rev1…6 в `B1_13_shop_nav_profile_header.md`
+- **Дальше:** скрины rev2 → `go` на код-дельты
+
 ## 2026-06-25 — B1.13-S3: управление товарами в поп-апе корзины
 
 - **UI:** `CartSheet.svelte` — peek +/-, expanded +/- Удалить, hidden chip миниатюра
