@@ -22,7 +22,7 @@ class Shop::B113S3Rev2CartControlsTest < ActionDispatch::IntegrationTest
     assert_includes sheet, 'data-testid="shop-cart-expanded-delete"'
     assert_includes sheet, "atMinQty"
     assert_includes sheet, "atMaxQty"
-    assert_includes sheet, "disabled={busy || atMinQty(line)}"
+    assert_includes sheet, "disabled={atMinQty(line)}"
     refute_includes sheet, 'data-testid="shop-cart-peek-delete"'
     assert_includes store, "export function atMinQty"
     assert_includes store, "optimisticBump"

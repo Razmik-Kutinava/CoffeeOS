@@ -22,6 +22,26 @@ export const MAX_ITEM_QUANTITY = 99
 
 let scrollAnchorY = 0
 let eventsBound = false
+let bumpChain = Promise.resolve()
+let bumpInFlight = 0
+
+function enqueueBump(index, delta) {
+  bumpInFlight += 1
+  cartSheetBusy.set(true)
+  bumpChain = bumpChain
+    .then(() =>
+      api(`/cart/items/${index}`, {
+        method: "PATCH",
+        body: JSON.stringify({ delta })
+      })
+    )
+    .then(() => refreshCartSheet())
+    .catch(() => refreshCartSheet())
+    .finally(() => {
+      bumpInFlight -= 1
+      if (bumpInFlight <= 0) cartSheetBusy.set(false)
+    })
+}
 
 export function isCatalogRoute(hash = null) {
   const h = (hash ?? (typeof window !== "undefined" ? window.location.hash : "")).replace("#", "") || "/"
@@ -150,21 +170,8 @@ export function bindCartSheetEvents() {
 }
 
 export async function bumpCartLine(index, delta) {
-  if (get(cartSheetBusy)) return
   if (!optimisticBump(index, delta)) return
-
-  cartSheetBusy.set(true)
-  try {
-    await api(`/cart/items/${index}`, {
-      method: "PATCH",
-      body: JSON.stringify({ delta })
-    })
-    await refreshCartSheet()
-  } catch (_e) {
-    await refreshCartSheet()
-  } finally {
-    cartSheetBusy.set(false)
-  }
+  enqueueBump(index, delta)
 }
 
 export async function removeCartLine(index) {

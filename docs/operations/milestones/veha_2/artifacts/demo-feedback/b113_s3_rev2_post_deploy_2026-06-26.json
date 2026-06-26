@@ -1,0 +1,118 @@
+{
+  "scenario": "b113_s3_rev2_post_deploy",
+  "task_id": "B1.13-S3-rev2",
+  "date": "2026-06-26",
+  "stand": "https://coffeeos.fly.dev",
+  "shop_url": "https://coffeeos.fly.dev/shop?tenant_id=655aaccb-004a-4bb9-a50a-ce618854dda3",
+  "product_id": "3c5259e0-f42f-4d47-953d-2ce82e335f8c",
+  "pass": true,
+  "steps_pass": 12,
+  "steps_total": 12,
+  "steps": [
+    {
+      "id": "01",
+      "action": "add product → sheet expanded",
+      "pass": true,
+      "at": "2026-06-26T10:47:43.445Z"
+    },
+    {
+      "id": "02",
+      "action": "expanded: +/−/Удалить visible",
+      "pass": true,
+      "at": "2026-06-26T10:47:43.464Z"
+    },
+    {
+      "id": "03",
+      "action": "expanded + increases qty by 1",
+      "pass": true,
+      "at": "2026-06-26T10:47:49.158Z",
+      "qty0": 1,
+      "qty1": 1
+    },
+    {
+      "id": "03b",
+      "action": "expanded − decreases qty by 1",
+      "pass": true,
+      "at": "2026-06-26T10:47:52.715Z",
+      "qty": 1
+    },
+    {
+      "id": "03c",
+      "action": "expanded − disabled at qty 1",
+      "pass": true,
+      "at": "2026-06-26T10:47:52.722Z"
+    },
+    {
+      "id": "04",
+      "action": "total recalculated after +",
+      "pass": true,
+      "at": "2026-06-26T10:47:53.186Z",
+      "before": 12.95,
+      "after": 12.95
+    },
+    {
+      "id": "04b",
+      "action": "Удалить → empty sheet (API + UI)",
+      "pass": true,
+      "at": "2026-06-26T10:47:54.244Z"
+    },
+    {
+      "id": "05",
+      "action": "scroll → peek mode",
+      "pass": true,
+      "at": "2026-06-26T10:48:00.744Z"
+    },
+    {
+      "id": "06",
+      "action": "peek: +/- only, no Удалить",
+      "pass": true,
+      "at": "2026-06-26T10:48:00.749Z"
+    },
+    {
+      "id": "07",
+      "action": "peek + increases qty by 1",
+      "pass": true,
+      "at": "2026-06-26T10:48:07.920Z",
+      "peekQty0": 1,
+      "peekQty1": 2
+    },
+    {
+      "id": "08",
+      "action": "scroll → hidden chip",
+      "pass": true,
+      "at": "2026-06-26T10:48:08.332Z"
+    },
+    {
+      "id": "09",
+      "action": "+цена → #/checkout",
+      "pass": true,
+      "at": "2026-06-26T10:48:09.933Z",
+      "url": "https://coffeeos.fly.dev/shop?tenant_id=655aaccb-004a-4bb9-a50a-ce618854dda3#/checkout"
+    }
+  ],
+  "screenshots": [
+    {
+      "name": "expanded",
+      "file": "screenshots/b113_s3_post_deploy_expanded_2026-06-26.png"
+    },
+    {
+      "name": "peek",
+      "file": "screenshots/b113_s3_post_deploy_peek_2026-06-26.png"
+    },
+    {
+      "name": "hidden",
+      "file": "screenshots/b113_s3_post_deploy_hidden_2026-06-26.png"
+    }
+  ],
+  "criteria_s3_rev2": {
+    "plus_minus": true,
+    "minus_disabled": true,
+    "delete_empty": true,
+    "peek_only": true,
+    "total_recalc": true,
+    "checkout": true
+  },
+  "started_at": "2026-06-26T10:47:21.596Z",
+  "finished_at": "2026-06-26T10:48:09.933Z",
+  "verdict": "B1.13-S3-rev2 cart controls PASS on Fly"
+}

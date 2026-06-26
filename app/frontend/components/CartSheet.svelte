@@ -133,7 +133,7 @@
                   type="button"
                   data-testid="shop-cart-peek-minus"
                   class="rounded bg-[#3a3a3a] px-1.5 py-0.5 text-[10px] leading-none disabled:opacity-40"
-                  disabled={busy || atMinQty(line)}
+                  disabled={atMinQty(line)}
                   aria-label="Уменьшить"
                   onclick={() => bumpCartLine(line.index, -1)}
                 >
@@ -144,7 +144,7 @@
                   type="button"
                   data-testid="shop-cart-peek-plus"
                   class="rounded bg-[#3a3a3a] px-1.5 py-0.5 text-[10px] leading-none disabled:opacity-40"
-                  disabled={busy || atMaxQty(line)}
+                  disabled={atMaxQty(line)}
                   aria-label="Увеличить"
                   onclick={() => bumpCartLine(line.index, 1)}
                 >
@@ -186,7 +186,7 @@
                     type="button"
                     data-testid="shop-cart-expanded-minus"
                     class="rounded bg-[#3a3a3a] px-2 py-0.5 text-xs disabled:opacity-40"
-                    disabled={busy || atMinQty(line)}
+                    disabled={atMinQty(line)}
                     onclick={() => bumpCartLine(line.index, -1)}
                   >
                     −
@@ -196,7 +196,7 @@
                     type="button"
                     data-testid="shop-cart-expanded-plus"
                     class="rounded bg-[#3a3a3a] px-2 py-0.5 text-xs disabled:opacity-40"
-                    disabled={busy || atMaxQty(line)}
+                    disabled={atMaxQty(line)}
                     onclick={() => bumpCartLine(line.index, 1)}
                   >
                     +

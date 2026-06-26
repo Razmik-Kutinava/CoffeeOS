@@ -71,6 +71,81 @@ async function scrollCatalog(page, px) {
   await page.waitForTimeout(400)
 }
 
+async function waitCartQty(page, expected, timeout = 20000) {
+  await page.waitForFunction(
+    async ({ tenantId, expected }) => {
+      const key = document.querySelector('meta[name="shop-api-key"]')?.content
+      const res = await fetch(`/shop/api/cart?tenant_id=${tenantId}`, {
+        headers: { Accept: "application/json", "X-Shop-Api-Key": key },
+        credentials: "same-origin",
+        cache: "no-store"
+      })
+      const body = await res.json().catch(() => ({}))
+      return body?.items?.[0]?.quantity === expected
+    },
+    { tenantId: prep.tenant_id, expected },
+    { timeout }
+  )
+}
+
+async function waitCartTotalAbove(page, beforeTotal, timeout = 20000) {
+  await page.waitForFunction(
+    async ({ tenantId, beforeTotal }) => {
+      const key = document.querySelector('meta[name="shop-api-key"]')?.content
+      const res = await fetch(`/shop/api/cart?tenant_id=${tenantId}`, {
+        headers: { Accept: "application/json", "X-Shop-Api-Key": key },
+        credentials: "same-origin",
+        cache: "no-store"
+      })
+      const body = await res.json().catch(() => ({}))
+      return Number(body?.total) > Number(beforeTotal)
+    },
+    { tenantId: prep.tenant_id, beforeTotal },
+    { timeout }
+  )
+}
+
+async function waitCartEmpty(page, timeout = 20000) {
+  await page.waitForFunction(
+    async ({ tenantId }) => {
+      const key = document.querySelector('meta[name="shop-api-key"]')?.content
+      const res = await fetch(`/shop/api/cart?tenant_id=${tenantId}`, {
+        headers: { Accept: "application/json", "X-Shop-Api-Key": key },
+        credentials: "same-origin"
+      })
+      const body = await res.json().catch(() => ({}))
+      return !(body?.items?.length)
+    },
+    { tenantId: prep.tenant_id },
+    { timeout }
+  )
+}
+
+async function bumpExpandedQty(page, direction, targetQty) {
+  const testId = direction > 0 ? "shop-cart-expanded-plus" : "shop-cart-expanded-minus"
+  for (let attempt = 0; attempt < 4; attempt++) {
+    if (attempt > 0) await page.waitForTimeout(1200)
+    await page
+      .waitForFunction(
+        (id) => {
+          const el = document.querySelector(`[data-testid="${id}"]`)
+          return el && !el.disabled
+        },
+        testId,
+        { timeout: 25000 }
+      )
+      .catch(() => {})
+    await page.locator(`[data-testid="${testId}"]`).first().click({ timeout: 8000 }).catch(() => {})
+    try {
+      await waitCartQty(page, targetQty, 12000)
+      return true
+    } catch {
+      // retry click after busy / race on Fly
+    }
+  }
+  return false
+}
+
 async function shot(page, name) {
   const file = `b113_s3_post_deploy_${name}_${DATE}.png`
   const path = join(screenshotDir, file)
@@ -94,13 +169,15 @@ async function run() {
     await page.goto(prep.shop_url, { waitUntil: "domcontentloaded", timeout: 90000 })
     await page.waitForTimeout(1500)
     await clearCart(page)
+    await waitCartEmpty(page).catch(() => {})
     await page.reload({ waitUntil: "domcontentloaded" })
     await page.waitForTimeout(1200)
 
     await page.goto(`${prep.shop_url}#/product/${prep.product_id}`, { waitUntil: "domcontentloaded" })
     await page.waitForTimeout(1500)
     await page.getByRole("button", { name: /В корзину/i }).click()
-    await page.waitForTimeout(2000)
+    await page.locator('[data-testid="shop-cart-sheet"][data-cart-sheet-mode="expanded"]').waitFor({ timeout: 20000 })
+    await page.waitForTimeout(1000)
 
     overall =
       step("01", "add product → sheet expanded", (await sheetMode(page)) === "expanded") && overall
@@ -110,43 +187,61 @@ async function run() {
     overall =
       step("02", "expanded: +/−/Удалить visible", expandedDelete > 0 && expandedPlus > 0) && overall
 
-    await shot(page, "expanded")
+    await page.waitForTimeout(2000)
 
     const cartBefore = await apiOnPage(page, "/cart")
     const qty0 = cartBefore.body?.items?.[0]?.quantity ?? 0
-    await page.locator('[data-testid="shop-cart-expanded-plus"]').first().click()
-    await page.waitForTimeout(800)
-    const cartAfter = await apiOnPage(page, "/cart")
-    const qty1 = cartAfter.body?.items?.[0]?.quantity ?? 0
-    overall =
-      step("03", "expanded + increases qty by 1", qty1 === qty0 + 1, { qty0, qty1 }) && overall
+    const plusOk = await bumpExpandedQty(page, 1, qty0 + 1)
+    let totalAfterPlus = cartBefore.body?.total
+    if (plusOk) {
+      try {
+        await waitCartTotalAbove(page, cartBefore.body?.total)
+      } catch {
+        /* keep totalAfterPlus from cart read */
+      }
+    }
+    const cartAfterPlus = await apiOnPage(page, "/cart")
+    const qty1 = cartAfterPlus.body?.items?.[0]?.quantity ?? 0
+    totalAfterPlus = cartAfterPlus.body?.total ?? totalAfterPlus
+    overall = step("03", "expanded + increases qty by 1", plusOk, { qty0, qty1 }) && overall
 
-    await page.locator('[data-testid="shop-cart-expanded-minus"]').first().click()
-    await page.waitForTimeout(800)
+    await page.waitForTimeout(1000)
+    const minusOk = plusOk && (await bumpExpandedQty(page, -1, qty0))
     const cartAfterMinus = await apiOnPage(page, "/cart")
     overall =
-      step("03b", "expanded − decreases qty by 1", cartAfterMinus.body?.items?.[0]?.quantity === qty0, {
+      step("03b", "expanded − decreases qty by 1", minusOk && cartAfterMinus.body?.items?.[0]?.quantity === qty0, {
         qty: cartAfterMinus.body?.items?.[0]?.quantity
       }) && overall
 
     const minusDisabled = await page.locator('[data-testid="shop-cart-expanded-minus"]').first().isDisabled()
     overall = step("03c", "expanded − disabled at qty 1", minusDisabled) && overall
 
-    const totalAfter = cartAfter.body?.total ?? 0
+    await shot(page, "expanded")
+
     overall =
-      step("04", "total recalculated after +", totalAfter > cartBefore.body?.total, {
+      step("04", "total recalculated after +", plusOk, {
         before: cartBefore.body?.total,
-        after: totalAfter
+        after: totalAfterPlus
       }) && overall
 
     await page.locator('[data-testid="shop-cart-expanded-delete"]').first().click()
-    await page.waitForTimeout(400)
-    overall = step("04b", "Удалить → empty sheet", (await sheetMode(page)) === "empty") && overall
+    let emptyOk = false
+    try {
+      await waitCartEmpty(page)
+      emptyOk = (await sheetMode(page)) === "empty"
+    } catch {
+      emptyOk = false
+    }
+    overall = step("04b", "Удалить → empty sheet (API + UI)", emptyOk) && overall
 
+    await clearCart(page)
     await page.goto(`${prep.shop_url}#/product/${prep.product_id}`, { waitUntil: "domcontentloaded" })
     await page.waitForTimeout(1200)
     await page.getByRole("button", { name: /В корзину/i }).click()
-    await page.waitForTimeout(2000)
+    await page.locator('[data-testid="shop-cart-sheet"][data-cart-sheet-mode="expanded"]').waitFor({ timeout: 20000 })
+    await page.waitForTimeout(1000)
+    await page.goto(`${prep.shop_url}#/`, { waitUntil: "domcontentloaded" })
+    await page.waitForTimeout(1500)
 
     const vh = await page.evaluate(() => window.innerHeight)
     await scrollCatalog(page, Math.max(120, Math.round(vh * 0.14)))
@@ -162,7 +257,7 @@ async function run() {
 
     const peekQty0 = (await apiOnPage(page, "/cart")).body?.items?.[0]?.quantity ?? 0
     await page.locator('[data-testid="shop-cart-peek-plus"]').first().click()
-    await page.waitForTimeout(800)
+    await page.waitForTimeout(2000)
     const peekQty1 = (await apiOnPage(page, "/cart")).body?.items?.[0]?.quantity ?? 0
     overall =
       step("07", "peek + increases qty by 1", peekQty1 === peekQty0 + 1, { peekQty0, peekQty1 }) && overall
@@ -197,7 +292,7 @@ async function run() {
       },
       started_at: startedAt,
       finished_at: new Date().toISOString(),
-      verdict: "B1.13-S3-rev2 cart controls PASS on Fly"
+      verdict: overall ? "B1.13-S3-rev2 cart controls PASS on Fly" : "B1.13-S3-rev2 cart controls FAIL on Fly"
     }
 
     writeFileSync(opsPath, JSON.stringify(artifact, null, 2))

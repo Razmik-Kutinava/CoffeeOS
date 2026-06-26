@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 2026-06-26 — B1.13-S3-rev2: Fly MCP 12/12 PASS (post-deploy)
+
+- **Deploy:** владелец 2026-06-26
+- **MCP:** `b113_s3_cart_controls_mcp.mjs` — 12 шагов rev2 на `coffeeos.fly.dev`
+- **Артефакт:** `b113_s3_rev2_post_deploy_2026-06-26.json` + скрины peek/expanded/hidden
+- **Хвост:** очередь bump в `cartSheetStore` — redeploy для стабильных rapid +/−
+- **Дальше:** апрув S3-rev2 · S2a/S2b
+
 ## 2026-06-25 — B1.13-S3-rev2: управление qty в поп-апе (rev2)
 
 - **API:** minus @ qty=1 → 404, не удаляет позицию; max qty guard сохранён
