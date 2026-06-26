@@ -32,6 +32,14 @@ export function cartLineCount(items) {
   return (items || []).length
 }
 
+export function atMinQty(line) {
+  return Number(line?.quantity) <= 1
+}
+
+export function atMaxQty(line) {
+  return Number(line?.quantity) >= MAX_ITEM_QUANTITY
+}
+
 function applyCartData(data) {
   const items = data?.items || []
   cartItems.set(items)
@@ -45,6 +53,36 @@ function applyCartData(data) {
     cartSheetMode.set(MODE_EXPANDED)
     resetScrollAnchor()
   }
+}
+
+function optimisticBump(index, delta) {
+  const items = get(cartItems)
+  const line = items.find((l) => l.index === index)
+  if (!line) return false
+  if (delta < 0 && atMinQty(line)) return false
+  if (delta > 0 && atMaxQty(line)) return false
+
+  const qty = Number(line.quantity) + delta
+  const unit = Number(line.unit_total) || Number(line.line_total) / Number(line.quantity)
+  const next = items.map((l) => {
+    if (l.index !== index) return l
+    return { ...l, quantity: qty, line_total: unit * qty }
+  })
+  cartItems.set(next)
+  cartTotal.set(next.reduce((sum, l) => sum + Number(l.line_total), 0))
+  writeCartCache({ items: next, total: get(cartTotal) })
+  return true
+}
+
+function optimisticRemove(index) {
+  const next = get(cartItems)
+    .filter((l) => l.index !== index)
+    .map((l, i) => ({ ...l, index: i }))
+  cartItems.set(next)
+  const total = next.reduce((sum, l) => sum + Number(l.line_total), 0)
+  cartTotal.set(total)
+  writeCartCache({ items: next, total })
+  if (!next.length) cartSheetMode.set(MODE_EMPTY)
 }
 
 export function resetScrollAnchor() {
@@ -113,12 +151,16 @@ export function bindCartSheetEvents() {
 
 export async function bumpCartLine(index, delta) {
   if (get(cartSheetBusy)) return
+  if (!optimisticBump(index, delta)) return
+
   cartSheetBusy.set(true)
   try {
     await api(`/cart/items/${index}`, {
       method: "PATCH",
       body: JSON.stringify({ delta })
     })
+    await refreshCartSheet()
+  } catch (_e) {
     await refreshCartSheet()
   } finally {
     cartSheetBusy.set(false)
@@ -127,9 +169,13 @@ export async function bumpCartLine(index, delta) {
 
 export async function removeCartLine(index) {
   if (get(cartSheetBusy)) return
+  optimisticRemove(index)
+
   cartSheetBusy.set(true)
   try {
     await api(`/cart/items/${index}`, { method: "DELETE" })
+    await refreshCartSheet()
+  } catch (_e) {
     await refreshCartSheet()
   } finally {
     cartSheetBusy.set(false)

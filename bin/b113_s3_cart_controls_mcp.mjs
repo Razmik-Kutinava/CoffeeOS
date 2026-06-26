@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * B1.13-S3 — Fly MCP: +/- / Удалить / +цена в поп-апе корзины.
+ * B1.13-S3-rev2 — Fly MCP: +/- / Удалить / +цена / minus disabled @1.
  *
  *   ruby bin/b113_s2_cart_popup_prep_fly.rb
  *   node bin/b113_s3_cart_controls_mcp.mjs
@@ -21,7 +21,7 @@ const DATE = prep.date || new Date().toISOString().slice(0, 10)
 
 const artifactDir = join(root, "docs/operations/milestones/veha_2/artifacts/demo-feedback")
 const screenshotDir = join(artifactDir, "screenshots")
-const opsPath = join(artifactDir, `b113_s3_post_deploy_${DATE}.json`)
+const opsPath = join(artifactDir, `b113_s3_rev2_post_deploy_${DATE}.json`)
 
 const steps = []
 const screenshots = []
@@ -121,12 +121,32 @@ async function run() {
     overall =
       step("03", "expanded + increases qty by 1", qty1 === qty0 + 1, { qty0, qty1 }) && overall
 
+    await page.locator('[data-testid="shop-cart-expanded-minus"]').first().click()
+    await page.waitForTimeout(800)
+    const cartAfterMinus = await apiOnPage(page, "/cart")
+    overall =
+      step("03b", "expanded − decreases qty by 1", cartAfterMinus.body?.items?.[0]?.quantity === qty0, {
+        qty: cartAfterMinus.body?.items?.[0]?.quantity
+      }) && overall
+
+    const minusDisabled = await page.locator('[data-testid="shop-cart-expanded-minus"]').first().isDisabled()
+    overall = step("03c", "expanded − disabled at qty 1", minusDisabled) && overall
+
     const totalAfter = cartAfter.body?.total ?? 0
     overall =
       step("04", "total recalculated after +", totalAfter > cartBefore.body?.total, {
         before: cartBefore.body?.total,
         after: totalAfter
       }) && overall
+
+    await page.locator('[data-testid="shop-cart-expanded-delete"]').first().click()
+    await page.waitForTimeout(400)
+    overall = step("04b", "Удалить → empty sheet", (await sheetMode(page)) === "empty") && overall
+
+    await page.goto(`${prep.shop_url}#/product/${prep.product_id}`, { waitUntil: "domcontentloaded" })
+    await page.waitForTimeout(1200)
+    await page.getByRole("button", { name: /В корзину/i }).click()
+    await page.waitForTimeout(2000)
 
     const vh = await page.evaluate(() => window.innerHeight)
     await scrollCatalog(page, Math.max(120, Math.round(vh * 0.14)))
@@ -156,8 +176,8 @@ async function run() {
     overall = step("09", "+цена → #/checkout", /#\/checkout/.test(page.url()), { url: page.url() }) && overall
 
     const artifact = {
-      scenario: "b113_s3_post_deploy",
-      task_id: "B1.13-S3",
+      scenario: "b113_s3_rev2_post_deploy",
+      task_id: "B1.13-S3-rev2",
       date: DATE,
       stand: prep.base,
       shop_url: prep.shop_url,
@@ -167,15 +187,17 @@ async function run() {
       steps_total: steps.length,
       steps,
       screenshots,
-      criteria_s3: {
-        plus_minus: steps.find((s) => s.id === "03")?.pass && steps.find((s) => s.id === "07")?.pass,
-        delete_expanded_only: steps.find((s) => s.id === "06")?.pass,
+      criteria_s3_rev2: {
+        plus_minus: steps.find((s) => s.id === "03")?.pass && steps.find((s) => s.id === "03b")?.pass,
+        minus_disabled: steps.find((s) => s.id === "03c")?.pass,
+        delete_empty: steps.find((s) => s.id === "04b")?.pass,
+        peek_only: steps.find((s) => s.id === "06")?.pass,
         total_recalc: steps.find((s) => s.id === "04")?.pass,
         checkout: steps.find((s) => s.id === "09")?.pass
       },
       started_at: startedAt,
       finished_at: new Date().toISOString(),
-      verdict: "B1.13-S3 cart controls PASS on Fly"
+      verdict: "B1.13-S3-rev2 cart controls PASS on Fly"
     }
 
     writeFileSync(opsPath, JSON.stringify(artifact, null, 2))
@@ -189,7 +211,7 @@ async function run() {
       opsPath,
       JSON.stringify(
         {
-          task_id: "B1.13-S3",
+          task_id: "B1.13-S3-rev2",
           pass: false,
           error: e.message || String(e),
           steps,

@@ -107,11 +107,11 @@ class Shop::CartServiceTest < ActiveSupport::TestCase
     assert_equal 5, @session[:shop_cart].first["quantity"]
   end
 
-  test "update_quantity! negative delta that makes qty below 1 removes item" do
+  test "update_quantity! rejects negative delta below minimum quantity" do
     svc = cart
     svc.add!(product_id: @product.id, quantity: 1, selected_modifiers: [])
-    svc.update_quantity!(0, -1)
-    assert_equal 0, @session[:shop_cart].size
+    assert_raises(ActiveRecord::RecordNotFound) { svc.update_quantity!(0, -1) }
+    assert_equal 1, @session[:shop_cart].first["quantity"]
   end
 
   test "update_quantity! rejects delta above MAX_ITEM_QUANTITY" do

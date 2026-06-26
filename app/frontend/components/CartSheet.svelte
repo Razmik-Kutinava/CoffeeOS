@@ -12,8 +12,8 @@
     bumpCartLine,
     removeCartLine,
     bindCartSheetEvents,
-    cartLineCount,
-    MAX_ITEM_QUANTITY
+    atMinQty,
+    atMaxQty
   } from "../lib/cartSheetStore.js"
   import { MODE_EMPTY, MODE_EXPANDED, MODE_PEEK, MODE_HIDDEN, sheetHeightVh, SWIPE_UP_PX } from "../lib/cartSheetThresholds.js"
 
@@ -35,10 +35,6 @@
   function modifierLabel(mod) {
     const extra = Number(mod.price) > 0 ? ` (+${roundPrice(mod.price)}₽)` : ""
     return `${mod.name}${extra}`
-  }
-
-  function atMaxQty(line) {
-    return Number(line.quantity) >= MAX_ITEM_QUANTITY
   }
 
   function onTouchStart(event) {
@@ -137,7 +133,7 @@
                   type="button"
                   data-testid="shop-cart-peek-minus"
                   class="rounded bg-[#3a3a3a] px-1.5 py-0.5 text-[10px] leading-none disabled:opacity-40"
-                  disabled={busy}
+                  disabled={busy || atMinQty(line)}
                   aria-label="Уменьшить"
                   onclick={() => bumpCartLine(line.index, -1)}
                 >
@@ -190,7 +186,7 @@
                     type="button"
                     data-testid="shop-cart-expanded-minus"
                     class="rounded bg-[#3a3a3a] px-2 py-0.5 text-xs disabled:opacity-40"
-                    disabled={busy}
+                    disabled={busy || atMinQty(line)}
                     onclick={() => bumpCartLine(line.index, -1)}
                   >
                     −

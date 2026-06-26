@@ -46,6 +46,8 @@ module Shop
         Shop::CartService.new(session, @shop_tenant.id).update_quantity!(params[:index], params.require(:delta))
         data = Shop::CartService.new(session, @shop_tenant.id).json_lines
         render json: { items: data[:items], total: data[:total] }
+      rescue ActiveRecord::RecordNotFound => e
+        render json: { error: e.message }, status: :not_found
       end
     end
   end

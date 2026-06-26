@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2026-06-25 — B1.13-S3-rev2: управление qty в поп-апе (rev2)
+
+- **API:** minus @ qty=1 → 404, не удаляет позицию; max qty guard сохранён
+- **UI:** optimistic bump/remove · minus disabled @1 · `atMaxQty` @99
+- **Тесты:** `b113_s3_rev2_cart_controls_test.rb` (rev1 `b113_s3_cart_controls_test` удалён)
+- **Регрессия:** S3-rev2 + cart_service + S2 — 30 runs, 0 failures
+- **MCP:** скрипт обновлён под rev2 (post-deploy после deploy владельца)
+- **Дальше:** deploy → Fly MCP → S2a/S2b
+
 ## 2026-06-25 — B1.13-S2 фаза 3: Fly MCP PASS 9/9 (post-deploy)
 
 - **Deploy:** владелец 2026-06-25

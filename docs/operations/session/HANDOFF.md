@@ -1,6 +1,6 @@
 # HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-06-25 (B1.13 rev2 — 4 дока заказчика в B1_13)  
+**Дата:** 2026-06-25 (B1.13 S3-rev2 код)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev
 
@@ -24,10 +24,12 @@
 |-----|--------|
 | **rev1** | S1 MCP `[x]` · S2 MCP 9/9 `[x]` · S3 код `[x]` |
 | **rev2 docs** | 4 текста дословно: **S1-R1, S2a, S2b, S3-rev2** `[x]` 2026-06-25 |
+| **S3-rev2 код** | `[x]` 2026-06-25 — minus disabled @1 · optimistic UI · тесты 30/30 |
 | **Q-rev1** | 2 вкладки + профиль в шапке — **ЗАКРЫТО** |
-| **Q-rev2…6** | открыты до скринов / `go` |
+| **Q-rev5** | minus @1 disabled — **ЗАКРЫТО** (S3-rev2) |
+| **Q-rev2…4,6** | открыты до скринов / S2a/S2b |
 | **S4** | после закрытия rev2 |
-| **Следующий шаг** | скрины rev2 от заказчика → `go` S2a/S2b/S3-rev2 |
+| **Следующий шаг** | deploy → MCP S3-rev2 · `go` S2a/S2b |
 | **Агент** | **стоп** |
 
 ТЗ: [`B1_13_shop_nav_profile_header.md`](../milestones/veha_2/requirements/customer_tasks/B1_13_shop_nav_profile_header.md)

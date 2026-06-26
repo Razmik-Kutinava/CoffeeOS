@@ -63,10 +63,10 @@ module Shop
       end
 
       if new_qty < 1
-        @session[SESSION_KEY].delete_at(i)
-      else
-        @session[SESSION_KEY][i]["quantity"] = new_qty
+        raise ActiveRecord::RecordNotFound, "Минимум 1 единица товара"
       end
+
+      @session[SESSION_KEY][i]["quantity"] = new_qty
       touch_cart_session!
     end
 

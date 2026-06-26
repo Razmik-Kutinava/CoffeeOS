@@ -2,7 +2,7 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-06-25 (B1.13 — КАНОН bottom bar закрыт навсегда)  
+**Дата:** 2026-06-25 (B1.13 — S3-rev2 код)  
 **Предыдущее:** B1.12-R3 Fly MCP 8/8 · B1.11 этап 0 · B1.7 **ЗАКРЫТА**  
 **Веха 1:** **закрыта** 2026-06-19 (CHECKLIST § I, H.3 заочно).  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
@@ -22,8 +22,17 @@
 |--------|--------|
 | **B1.12 rev2** | R3 `[x]` Fly MCP **10/10** · RSA Fly `[x]` | **апрув заказчика** |
 | **B1.11 режим работы** | **Fly MCP header A/B PASS** · артефакт 2026-06-21 | **апрув заказчика** |
-| **B1.13 навигация** | **rev2 docs** `[x]` S1-R1/S2a/S2b/S3-rev2 · скрины `[ ]` | `go` rev2 код · S4 |
+| **B1.13 навигация** | **S3-rev2 код** `[x]` · Q-rev5 закрыт | deploy → MCP S3-rev2 · `go` S2a/S2b |
 | **B1.14 адрес в шапке** | **B1.14-3d** index map `[x]` | deploy (`./bin/fly_deploy.sh`) · B1.14-4 cart |
+
+### Сессия 2026-06-25 (B1.13-S3-rev2: +/- disabled @1, Удалить, optimistic UI)
+
+- **Backend:** `CartService#update_quantity!` — qty&lt;1 → 404 «Минимум 1» (не удаляет строку)
+- **Frontend:** `cartSheetStore` — `atMinQty`/`atMaxQty`, `optimisticBump`/`optimisticRemove`, `MODE_EMPTY` при последней позиции
+- **UI:** `CartSheet` — minus disabled @1 (peek + expanded)
+- **Тесты:** `b113_s3_rev2_cart_controls_test.rb` (6) + `cart_service_test` + `b113_s2_cart_popup_test` — **30 runs, 0 failures**
+- **MCP:** `bin/b113_s3_cart_controls_mcp.mjs` обновлён (rev2 шаги 03b/03c/04b)
+- **Дальше:** deploy владельца → `node bin/b113_s3_cart_controls_mcp.mjs` → `go` S2a/S2b
 
 ### Сессия 2026-06-25 (B1.13: КАНОН 2 вкладки + профиль в шапке — закрыто навсегда)
 
