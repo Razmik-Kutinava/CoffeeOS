@@ -598,7 +598,7 @@
 - [x] «+цена» → оформление (`#/checkout`)
 - [ ] Последняя позиция удалена → поп-ап закрыт ≤300ms ±50ms (optimistic `MODE_EMPTY`; Fly MCP)
 - [x] Тест `b113_s3_rev2_cart_controls_test.rb` — 6 runs PASS
-- [x] Fly MCP `b113_s3_rev2_post_deploy_2026-06-26.json` — **12/12 PASS**
+- [x] Fly MCP `b113_s3_rev2_post_deploy_2026-06-26.json` — **12/12 PASS** (post-redeploy bump-queue)
 
 ## Текст заказчика (дословно, rev2 №4)
 

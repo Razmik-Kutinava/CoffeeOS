@@ -13,19 +13,19 @@
       "id": "01",
       "action": "add product → sheet expanded",
       "pass": true,
-      "at": "2026-06-26T10:47:43.445Z"
+      "at": "2026-06-26T15:36:00.202Z"
     },
     {
       "id": "02",
       "action": "expanded: +/−/Удалить visible",
       "pass": true,
-      "at": "2026-06-26T10:47:43.464Z"
+      "at": "2026-06-26T15:36:00.208Z"
     },
     {
       "id": "03",
       "action": "expanded + increases qty by 1",
       "pass": true,
-      "at": "2026-06-26T10:47:49.158Z",
+      "at": "2026-06-26T15:36:03.108Z",
       "qty0": 1,
       "qty1": 1
     },
@@ -33,20 +33,20 @@
       "id": "03b",
       "action": "expanded − decreases qty by 1",
       "pass": true,
-      "at": "2026-06-26T10:47:52.715Z",
+      "at": "2026-06-26T15:36:04.544Z",
       "qty": 1
     },
     {
       "id": "03c",
       "action": "expanded − disabled at qty 1",
       "pass": true,
-      "at": "2026-06-26T10:47:52.722Z"
+      "at": "2026-06-26T15:36:04.548Z"
     },
     {
       "id": "04",
       "action": "total recalculated after +",
       "pass": true,
-      "at": "2026-06-26T10:47:53.186Z",
+      "at": "2026-06-26T15:36:04.854Z",
       "before": 12.95,
       "after": 12.95
     },
@@ -54,25 +54,25 @@
       "id": "04b",
       "action": "Удалить → empty sheet (API + UI)",
       "pass": true,
-      "at": "2026-06-26T10:47:54.244Z"
+      "at": "2026-06-26T15:36:05.070Z"
     },
     {
       "id": "05",
       "action": "scroll → peek mode",
       "pass": true,
-      "at": "2026-06-26T10:48:00.744Z"
+      "at": "2026-06-26T15:36:09.655Z"
     },
     {
       "id": "06",
       "action": "peek: +/- only, no Удалить",
       "pass": true,
-      "at": "2026-06-26T10:48:00.749Z"
+      "at": "2026-06-26T15:36:09.660Z"
     },
     {
       "id": "07",
       "action": "peek + increases qty by 1",
       "pass": true,
-      "at": "2026-06-26T10:48:07.920Z",
+      "at": "2026-06-26T15:36:12.301Z",
       "peekQty0": 1,
       "peekQty1": 2
     },
@@ -80,13 +80,13 @@
       "id": "08",
       "action": "scroll → hidden chip",
       "pass": true,
-      "at": "2026-06-26T10:48:08.332Z"
+      "at": "2026-06-26T15:36:12.710Z"
     },
     {
       "id": "09",
       "action": "+цена → #/checkout",
       "pass": true,
-      "at": "2026-06-26T10:48:09.933Z",
+      "at": "2026-06-26T15:36:14.146Z",
       "url": "https://coffeeos.fly.dev/shop?tenant_id=655aaccb-004a-4bb9-a50a-ce618854dda3#/checkout"
     }
   ],
@@ -112,7 +112,7 @@
     "total_recalc": true,
     "checkout": true
   },
-  "started_at": "2026-06-26T10:47:21.596Z",
-  "finished_at": "2026-06-26T10:48:09.933Z",
+  "started_at": "2026-06-26T15:35:52.334Z",
+  "finished_at": "2026-06-26T15:36:14.147Z",
   "verdict": "B1.13-S3-rev2 cart controls PASS on Fly"
 }

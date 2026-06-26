@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2026-06-26 — B1.13-S3-rev2: post-redeploy Fly MCP 12/12 PASS
+
+- **Deploy:** владелец — bump-queue на `coffeeos.fly.dev`
+- **MCP:** повтор `b113_s3_cart_controls_mcp.mjs` — **12/12 PASS**
+- **Артефакт:** `b113_s3_rev2_post_deploy_2026-06-26.json` (обновлён)
+- **Дальше:** апрув S3-rev2 · S2a/S2b
+
 ## 2026-06-26 — B1.13-S3-rev2: Fly MCP 12/12 PASS (post-deploy)
 
 - **Deploy:** владелец 2026-06-26

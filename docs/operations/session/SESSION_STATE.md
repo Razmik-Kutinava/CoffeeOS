@@ -22,8 +22,15 @@
 |--------|--------|
 | **B1.12 rev2** | R3 `[x]` Fly MCP **10/10** · RSA Fly `[x]` | **апрув заказчика** |
 | **B1.11 режим работы** | **Fly MCP header A/B PASS** · артефакт 2026-06-21 | **апрув заказчика** |
-| **B1.13 навигация** | **S3-rev2** код + **Fly MCP 12/12** `[x]` | апрув · `go` S2a/S2b · redeploy bump-queue |
+| **B1.13 навигация** | **S3-rev2** post-redeploy MCP **12/12** `[x]` | апрув · `go` S2a/S2b |
 | **B1.14 адрес в шапке** | **B1.14-3d** index map `[x]` | deploy (`./bin/fly_deploy.sh`) · B1.14-4 cart |
+
+### Сессия 2026-06-26 (B1.13-S3-rev2: post-redeploy Fly MCP 12/12)
+
+- **Deploy:** владелец (bump-queue `cartSheetStore` на стенде)
+- **MCP:** повтор `b113_s3_cart_controls_mcp.mjs` — **12/12 PASS**
+- **Артефакт:** `b113_s3_rev2_post_deploy_2026-06-26.json` (обновлён timestamp)
+- **Дальше:** апрув S3-rev2 · `go` S2a/S2b
 
 ### Сессия 2026-06-26 (B1.13-S3-rev2: Fly MCP 12/12 PASS)
 
