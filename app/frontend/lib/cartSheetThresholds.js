@@ -20,6 +20,15 @@ export const SCROLL_TO_HIDDEN_PX = 200
 
 export const SWIPE_UP_PX = 48
 
+/** B1.13-S2a — анимация перехода между состояниями */
+export const SHEET_TRANSITION_MS = 300
+
+/** B1.13-S2a — поп-ап над bottom bar (совпадает с высотой BottomNav) */
+export const CART_SHEET_BOTTOM_REM = 3.5
+
+/** B1.13-S2a — адаптация viewport 320–414px */
+export const CART_SHEET_MAX_WIDTH_PX = 414
+
 export function sheetHeightVh(mode, itemCount = 0) {
   if (mode === MODE_EMPTY) return SHEET_VH.empty
   if (mode === MODE_EXPANDED) {

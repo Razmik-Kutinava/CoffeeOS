@@ -16,7 +16,7 @@
     atMinQty,
     atMaxQty
   } from "../lib/cartSheetStore.js"
-  import { MODE_EMPTY, MODE_EXPANDED, MODE_PEEK, MODE_HIDDEN, sheetHeightVh, SWIPE_UP_PX } from "../lib/cartSheetThresholds.js"
+  import { MODE_EMPTY, MODE_EXPANDED, MODE_PEEK, MODE_HIDDEN, sheetHeightVh, SWIPE_UP_PX, SHEET_TRANSITION_MS, CART_SHEET_BOTTOM_REM, CART_SHEET_MAX_WIDTH_PX } from "../lib/cartSheetThresholds.js"
 
   let hash = $state(typeof window !== "undefined" ? window.location.hash : "")
   let items = $state([])
@@ -88,9 +88,11 @@
   <div
     data-testid="shop-cart-sheet"
     data-cart-sheet-mode={mode}
-    class="cart-sheet fixed left-0 right-0 z-50 mx-auto max-w-lg border-t border-[#3a3a3a] bg-[#2a2a2a]/98 backdrop-blur transition-[height] duration-300 ease-out"
+    class="cart-sheet fixed left-0 right-0 z-50 mx-auto border-t border-[#3a3a3a] bg-[#2a2a2a]/98 backdrop-blur transition-[height] ease-out"
     style:height="{heightVh}vh"
-    style:bottom="3.5rem"
+    style:bottom="{CART_SHEET_BOTTOM_REM}rem"
+    style:max-width="{CART_SHEET_MAX_WIDTH_PX}px"
+    style:transition-duration="{SHEET_TRANSITION_MS}ms"
     ontouchstart={onTouchStart}
     ontouchend={onTouchEnd}
   >
@@ -114,7 +116,7 @@
             {/if}
           </div>
         {/if}
-        <span class="ml-auto text-sm font-semibold text-[#ff8c42]">{roundPrice(total)}₽</span>
+        <span data-testid="shop-cart-hidden-total" class="ml-auto text-sm font-semibold text-[#ff8c42]">{roundPrice(total)}₽</span>
         <button
           type="button"
           data-testid="shop-cart-sheet-checkout"
@@ -160,6 +162,7 @@
             </div>
           {/each}
         </div>
+        <span data-testid="shop-cart-peek-total" class="shrink-0 text-sm font-semibold text-[#ff8c42]">{roundPrice(total)}₽</span>
         <button
           type="button"
           data-testid="shop-cart-sheet-checkout"
@@ -173,7 +176,7 @@
       <div class="flex h-[calc(100%-0.75rem)] flex-col overflow-hidden px-3 pb-2 pt-1">
         <div class="min-h-0 flex-1 space-y-2 overflow-y-auto">
           {#each items as line (line.index)}
-            <div class="flex gap-2 rounded-xl border border-[#3a3a3a] bg-[#1f1f1f] p-2">
+            <div class="flex gap-2 rounded-xl border border-[#3a3a3a] bg-[#1f1f1f] p-2" data-testid="shop-cart-expanded-line">
               {#if line.image_url}
                 <img src={line.image_url} alt="" class="h-16 w-16 shrink-0 rounded-lg object-cover" decoding="async" />
               {/if}

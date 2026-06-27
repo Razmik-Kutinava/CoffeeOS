@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2026-06-24 — B1.13-S2a прогон 3: сверка приёмки (с товаром)
+
+- **Дотянуто:** сумма в peek; константы layout/анимации S2a; `setCartSheetMode`
+- **Тест:** `b113_s2a_cart_sheet_acceptance_test.rb` + регрессия — PASS
+- **Не трогали:** Q-rev2 пустая корзина · deploy · MCP
+- **Дальше:** deploy + Fly MCP прогон 4
+
 ## 2026-06-24 — B1.13-S2b прогон 2: localStorage режима (Q-rev4)
 
 - **Код:** `cartSheetModeCache.js` + `onCatalogRouteChange` — peek/expanded/hidden при уходе на Избранное/Профиль и обратно

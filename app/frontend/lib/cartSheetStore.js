@@ -152,6 +152,10 @@ export async function refreshCartSheet() {
   }
 }
 
+export function setCartSheetMode(mode) {
+  cartSheetMode.set(mode)
+}
+
 export function onCartAdded() {
   cartSheetMode.set(MODE_EXPANDED)
   resetScrollAnchor()

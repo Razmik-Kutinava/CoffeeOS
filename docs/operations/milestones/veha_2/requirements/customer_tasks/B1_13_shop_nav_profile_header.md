@@ -405,14 +405,24 @@
 
 ## Чеклист приёмки S2a
 
-- [ ] После add → поп-ап **expanded** (100%)
-- [ ] Карточка: изображение, название, цена × количество, модификаторы (100%)
-- [ ] Переключение expanded / peek / hidden — **программно** / testid (100%)
-- [ ] Анимация перехода **300ms ± 50ms** (100%)
-- [ ] Поп-ап закреплён над bottom bar · 320–414px
-- [ ] Corner: пустая корзина — по Q-rev2
-- [ ] Corner: Избранное/Профиль — состояние сохраняется (см. также S2b localStorage)
-- [ ] Тест + MCP step (после скринов)
+- [ ] После add → поп-ап **expanded** (100%) — код `[x]` · MCP `[ ]`
+- [ ] Карточка: изображение, название, цена × количество, модификаторы (100%) — код `[x]` · MCP `[ ]`
+- [ ] Переключение expanded / peek / hidden — testid / `setCartSheetMode` (100%) — код `[x]` · MCP `[ ]`
+- [ ] Анимация перехода **300ms ± 50ms** (100%) — код `[x]` · MCP `[ ]`
+- [ ] Поп-ап над bottom bar · 320–414px — код `[x]` · MCP `[ ]`
+- [ ] Corner: пустая корзина — **Q-rev2** (не трогали)
+- [ ] Corner: Избранное/Профиль — localStorage (S2b прогон 2) — код `[x]` · MCP `[ ]`
+- [ ] Тест + MCP step — тесты `[x]` · MCP `[ ]`
+
+### Прогон 3 — S2a сверка (2026-06-24)
+
+- [x] add → expanded (`onCartAdded`, `shop:cart-added`, `push("/")`)
+- [x] expanded карточка: image, name, unit_total×qty, modifiers
+- [x] peek/hidden — сумма (`shop-cart-peek-total`, `shop-cart-hidden-total`)
+- [x] `SHEET_TRANSITION_MS=300`, `CART_SHEET_BOTTOM_REM=3.5`, `max-width 414px`
+- [x] `setCartSheetMode` + `data-cart-sheet-mode`
+- [x] тест `b113_s2a_cart_sheet_acceptance_test.rb`
+- [ ] Fly MCP (прогон 4)
 
 ## Текст заказчика (дословно, rev2 №2)
 
