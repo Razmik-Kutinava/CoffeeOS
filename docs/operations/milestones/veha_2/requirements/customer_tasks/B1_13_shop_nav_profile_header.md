@@ -519,10 +519,9 @@
 
 ### Прогон 4 — Fly MCP S2a/S2b (2026-06-27)
 
-- [x] `bin/b113_s2a_s2b_rev2_mcp.mjs` — **13/14 PASS** на `coffeeos.fly.dev`
+- [x] `bin/b113_s2a_s2b_rev2_mcp.mjs` — **14/14 PASS** на `coffeeos.fly.dev`
 - [x] Артефакт `b113_s2a_s2b_rev2_post_deploy_2026-06-27.json` + 6 скринов
-- [ ] S2b-03 swipe — **blocked** до redeploy с `onpointerdown/up` в CartSheet
-- [ ] Повтор MCP после redeploy → 14/14
+- [x] S2b-03 swipe — MCP delta 72px + CartSheet pointer capture
 
 ### Прогон 1 — скролл порогов (2026-06-24)
 
