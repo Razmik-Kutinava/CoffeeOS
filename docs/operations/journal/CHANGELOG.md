@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2026-06-24 — B1.13-S2b прогон 2: localStorage режима (Q-rev4)
+
+- **Код:** `cartSheetModeCache.js` + `onCatalogRouteChange` — peek/expanded/hidden при уходе на Избранное/Профиль и обратно
+- **Тест:** `b113_s2b_mode_persistence_test.rb` + регрессия S2b/S2 — PASS
+- **Не сделано:** deploy · Fly MCP (прогон 4)
+- **Дальше:** S2a сверка · deploy + MCP
+
 ## 2026-06-24 — B1.13-S2b прогон 1: скролл 100/200 px (Q-rev3)
 
 - **Код:** `cartSheetThresholds.js` + `cartSheetStore.js` — фиксированные пороги 100→peek, 200→hidden от якоря

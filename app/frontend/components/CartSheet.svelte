@@ -7,6 +7,7 @@
     cartSheetMode,
     cartSheetBusy,
     isCatalogRoute,
+    onCatalogRouteChange,
     refreshCartSheet,
     expandFromSwipe,
     bumpCartLine,
@@ -61,7 +62,12 @@
       busy = v
     })
     const onHash = () => {
-      hash = window.location.hash
+      const next = window.location.hash
+      const wasCatalog = isCatalogRoute(hash)
+      hash = next
+      if (wasCatalog !== isCatalogRoute(hash)) {
+        onCatalogRouteChange(isCatalogRoute(hash))
+      }
     }
 
     bindCartSheetEvents()

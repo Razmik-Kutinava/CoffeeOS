@@ -2,7 +2,7 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-06-24 (B1.13-S2b прогон 1 — скролл 100/200 px)  
+**Дата:** 2026-06-24 (B1.13-S2b прогон 2 — localStorage режима)  
 **Предыдущее:** B1.12-R3 Fly MCP 8/8 · B1.11 этап 0 · B1.7 **ЗАКРЫТА**  
 **Веха 1:** **закрыта** 2026-06-19 (CHECKLIST § I, H.3 заочно).  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
@@ -22,8 +22,17 @@
 |--------|--------|
 | **B1.12 rev2** | R3 `[x]` Fly MCP **10/10** · RSA Fly `[x]` | **апрув заказчика** |
 | **B1.11 режим работы** | **Fly MCP header A/B PASS** · артефакт 2026-06-21 | **апрув заказчика** |
-| **B1.13 навигация** | S2b прогон 1 код `[x]` · Q-rev2 открыт | **`go` S2b прогон 2** localStorage |
+| **B1.13 навигация** | S2b прогон 1–2 код `[x]` · Q-rev2 открыт | **`go` S2a** сверка приёмки · прогон 4 Fly MCP |
 | **B1.14 адрес в шапке** | **B1.14-3d** index map `[x]` | deploy (`./bin/fly_deploy.sh`) · B1.14-4 cart |
+
+### Сессия 2026-06-24 (B1.13-S2b прогон 2: localStorage режима peek/expanded/hidden)
+
+- **Код:** `cartSheetModeCache.js` — ключ `coffeeos_shop_cart_sheet_mode_v1`, TTL `shopLocalStorage`
+- **Код:** `cartSheetStore.js` — `onCatalogRouteChange`, persist на уходе, restore при возврате на каталог
+- **Код:** `CartSheet.svelte` — hashchange → `onCatalogRouteChange`
+- **Тесты:** `b113_s2b_mode_persistence_test.rb` (6 tests) + регрессия S2b/S2 — **17 runs, 0 failures**
+- **Не сделано:** deploy · Fly MCP DevTools (прогон 4)
+- **Дальше:** S2a сверка приёмки · deploy + MCP в конце
 
 ### Сессия 2026-06-24 (B1.13-S2b прогон 1: скролл 100/200 px)
 

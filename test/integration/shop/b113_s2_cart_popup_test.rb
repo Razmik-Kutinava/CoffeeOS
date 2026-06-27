@@ -50,6 +50,8 @@ class Shop::B113S2CartPopupTest < ActionDispatch::IntegrationTest
     assert_includes store, "handleCatalogScroll"
     assert_includes store, "expandFromSwipe"
     assert_includes store, "cartLineCount(get(cartItems)) <= 1"
+    assert_includes store, "onCatalogRouteChange"
+    assert_includes store, "cartSheetModeCache.js"
   end
 
   test "catalog wires scroll handler and cart refresh" do

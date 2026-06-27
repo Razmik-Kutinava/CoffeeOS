@@ -499,19 +499,27 @@
 
 ## Чеклист приёмки S2b
 
-- [ ] Скролл вниз 100px ± 10px → **peek** (100%)
-- [ ] Скролл вниз 200px ± 10px → **hidden** (100%)
-- [ ] Свайп вверх на поп-апе → **expanded** (100%)
-- [ ] Скролл вверх — состояние **сохраняется** (100%)
-- [ ] 1 товар: свайп вверх **не** раскрывает (100%)
-- [ ] Навигация между экранами + возврат — состояние из **localStorage** (100%)
-- [ ] Тест + MCP step
+- [ ] Скролл вниз 100px ± 10px → **peek** (100%) — код прогон 1 `[x]` · MCP `[ ]`
+- [ ] Скролл вниз 200px ± 10px → **hidden** (100%) — код прогон 1 `[x]` · MCP `[ ]`
+- [ ] Свайп вверх на поп-апе → **expanded** (100%) — код `[x]` · MCP `[ ]`
+- [ ] Скролл вверх — состояние **сохраняется** (100%) — код `[x]` · MCP `[ ]`
+- [ ] 1 товар: свайп вверх **не** раскрывает (100%) — код `[x]` · MCP `[ ]`
+- [ ] Навигация между экранами + возврат — состояние из **localStorage** (100%) — код прогон 2 `[x]` · MCP `[ ]`
+- [ ] Тест + MCP step — тесты `[x]` · MCP `[ ]`
 
 ### Прогон 1 — скролл порогов (2026-06-24)
 
 - [x] `SCROLL_TO_PEEK_PX = 100`, `SCROLL_TO_HIDDEN_PX = 200` — код (`cartSheetThresholds.js`)
 - [x] `handleCatalogScroll`: hidden @200 проверяется до peek @100 (`cartSheetStore.js`)
 - [x] тест `b113_s2b_scroll_thresholds_test.rb` + регрессия `b113_s2_cart_popup_test.rb`
+- [ ] Fly MCP (прогон 4)
+
+### Прогон 2 — localStorage режима (2026-06-24)
+
+- [x] `cartSheetModeCache.js` — `coffeeos_shop_cart_sheet_mode_v1`, TTL 24ч
+- [x] `onCatalogRouteChange` — save на уходе, restore при `#/`
+- [x] `CartSheet.svelte` — hashchange hook
+- [x] тест `b113_s2b_mode_persistence_test.rb` (свайп, скролл вверх, 1 товар, persistence)
 - [ ] Fly MCP (прогон 4)
 
 ## Текст заказчика (дословно, rev2 №3)

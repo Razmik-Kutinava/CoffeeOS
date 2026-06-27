@@ -2,6 +2,11 @@ import { get, writable } from "svelte/store"
 import { api } from "./api.js"
 import { readCartCache, writeCartCache } from "./shopCartCache.js"
 import {
+  clearPersistedCartSheetMode,
+  readPersistedCartSheetMode,
+  writePersistedCartSheetMode
+} from "./cartSheetModeCache.js"
+import {
   MODE_EMPTY,
   MODE_EXPANDED,
   MODE_HIDDEN,
@@ -22,6 +27,21 @@ let scrollAnchorY = 0
 let eventsBound = false
 let bumpChain = Promise.resolve()
 let bumpInFlight = 0
+let modePersistBound = false
+
+function persistCartSheetMode(mode) {
+  if (!get(cartItems).length || mode === MODE_EMPTY) {
+    clearPersistedCartSheetMode()
+    return
+  }
+  writePersistedCartSheetMode(mode)
+}
+
+function restoreCartSheetModeFromStorage() {
+  const saved = readPersistedCartSheetMode()
+  if (saved) cartSheetMode.set(saved)
+  return saved
+}
 
 function enqueueBump(index, delta) {
   bumpInFlight += 1
@@ -65,10 +85,11 @@ function applyCartData(data) {
   const mode = get(cartSheetMode)
   if (!items.length) {
     cartSheetMode.set(MODE_EMPTY)
+    clearPersistedCartSheetMode()
     return
   }
   if (mode === MODE_EMPTY) {
-    cartSheetMode.set(MODE_EXPANDED)
+    cartSheetMode.set(restoreCartSheetModeFromStorage() || MODE_EXPANDED)
     resetScrollAnchor()
   }
 }
@@ -100,7 +121,10 @@ function optimisticRemove(index) {
   const total = next.reduce((sum, l) => sum + Number(l.line_total), 0)
   cartTotal.set(total)
   writeCartCache({ items: next, total })
-  if (!next.length) cartSheetMode.set(MODE_EMPTY)
+  if (!next.length) {
+    cartSheetMode.set(MODE_EMPTY)
+    clearPersistedCartSheetMode()
+  }
 }
 
 export function resetScrollAnchor() {
@@ -123,6 +147,7 @@ export async function refreshCartSheet() {
     cartItems.set([])
     cartTotal.set(0)
     cartSheetMode.set(MODE_EMPTY)
+    clearPersistedCartSheetMode()
     throw _e
   }
 }
@@ -131,6 +156,24 @@ export function onCartAdded() {
   cartSheetMode.set(MODE_EXPANDED)
   resetScrollAnchor()
   refreshCartSheet().catch(() => {})
+}
+
+export function onCatalogRouteChange(nowOnCatalog) {
+  const items = get(cartItems)
+  if (!items.length) return
+
+  if (!nowOnCatalog) {
+    persistCartSheetMode(get(cartSheetMode))
+    return
+  }
+
+  const current = get(cartSheetMode)
+  if (current === MODE_EMPTY) {
+    restoreCartSheetModeFromStorage() || cartSheetMode.set(MODE_EXPANDED)
+  } else {
+    restoreCartSheetModeFromStorage()
+  }
+  resetScrollAnchor()
 }
 
 export function handleCatalogScroll() {
@@ -161,6 +204,10 @@ export function bindCartSheetEvents() {
   if (eventsBound || typeof window === "undefined") return
   eventsBound = true
   window.addEventListener("shop:cart-added", onCartAdded)
+  if (!modePersistBound) {
+    modePersistBound = true
+    cartSheetMode.subscribe((mode) => persistCartSheetMode(mode))
+  }
 }
 
 export async function bumpCartLine(index, delta) {
