@@ -1,6 +1,6 @@
 # HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-06-27 (B1.13 прогон 4 — Fly MCP 13/14)  
+**Дата:** 2026-06-27 (B1.13 Fly MCP **14/14**)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev
 
@@ -32,9 +32,9 @@
 | **S2b прогон 1** | скролл 100/200 px — **код `[x]`** |
 | **S2b прогон 2** | localStorage режима — **код `[x]`** |
 | **S2a прогон 3** | приёмка с товаром — **код `[x]`** |
-| **Прогон 4 Fly MCP** | **13/14** · артефакт 2026-06-27 · swipe **blocked** |
+| **Прогон 4 Fly MCP** | **14/14** · артефакт 2026-06-27 |
 | **S4** | после закрытия rev2 |
-| **Следующий шаг** | **redeploy** (pointer swipe) → re-run MCP → апрув S2a/S2b |
+| **Следующий шаг** | **redeploy** (CartSheet swipe UX) · апрув S2a/S2b · Q-rev2 |
 | **Агент** | **стоп** |
 
 ТЗ: [`B1_13_shop_nav_profile_header.md`](../milestones/veha_2/requirements/customer_tasks/B1_13_shop_nav_profile_header.md)

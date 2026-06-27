@@ -54,7 +54,7 @@
     "scroll_100_peek": "pass",
     "scroll_up_preserve": "pass",
     "scroll_200_hidden": "pass",
-    "swipe_up_expanded": "fail",
+    "swipe_up_expanded": "pass",
     "single_item_no_swipe_expand": "pass",
     "ls_peek_tab": "pass",
     "ls_expanded_profile": "pass"
@@ -64,34 +64,34 @@
       "id": "00",
       "action": "/up 200",
       "pass": true,
-      "at": "2026-06-27T10:10:02.940Z"
+      "at": "2026-06-27T10:38:12.081Z"
     },
     {
       "id": "S2a-01",
       "action": "add → catalog + sheet expanded",
       "pass": true,
-      "at": "2026-06-27T10:10:11.929Z",
+      "at": "2026-06-27T10:38:24.180Z",
       "mode": "expanded"
     },
     {
       "id": "S2a-02",
       "action": "expanded card: image, name, price×qty",
       "pass": true,
-      "at": "2026-06-27T10:10:11.980Z",
+      "at": "2026-06-27T10:38:24.244Z",
       "preview": "Фильтр-кофе без кофеина (декаф) Гватемала\n\n13₽ × 1\n\n−\n1\n+\nУдалить"
     },
     {
       "id": "S2a-03",
       "action": "transition duration ~300ms",
       "pass": true,
-      "at": "2026-06-27T10:10:12.949Z",
+      "at": "2026-06-27T10:38:25.510Z",
       "transitionDuration": "0.3s"
     },
     {
       "id": "S2a-04",
       "action": "sheet above bottom bar, max-width 414px",
       "pass": true,
-      "at": "2026-06-27T10:10:12.988Z",
+      "at": "2026-06-27T10:38:25.593Z",
       "bottom": "56px",
       "maxWidth": "414px",
       "zIndex": "50"
@@ -100,20 +100,20 @@
       "id": "S2b-01",
       "action": "scroll 100px → peek",
       "pass": true,
-      "at": "2026-06-27T10:10:14.539Z",
+      "at": "2026-06-27T10:38:27.168Z",
       "mode": "peek"
     },
     {
       "id": "S2a-05",
       "action": "peek shows order total",
       "pass": true,
-      "at": "2026-06-27T10:10:14.554Z"
+      "at": "2026-06-27T10:38:27.192Z"
     },
     {
       "id": "S2b-04",
       "action": "scroll up preserves peek",
       "pass": true,
-      "at": "2026-06-27T10:10:15.630Z",
+      "at": "2026-06-27T10:38:28.242Z",
       "before": "peek",
       "after": "peek"
     },
@@ -121,21 +121,21 @@
       "id": "S2b-02",
       "action": "scroll 200px total → hidden",
       "pass": true,
-      "at": "2026-06-27T10:10:16.141Z",
+      "at": "2026-06-27T10:38:28.797Z",
       "mode": "hidden"
     },
     {
       "id": "S2a-06",
       "action": "hidden chip shows total",
       "pass": true,
-      "at": "2026-06-27T10:10:16.156Z"
+      "at": "2026-06-27T10:38:28.827Z"
     },
     {
       "id": "S2b-03",
       "action": "swipe up on sheet → expanded (2+ lines)",
-      "pass": false,
-      "at": "2026-06-27T10:10:29.823Z",
-      "mode": "hidden",
+      "pass": true,
+      "at": "2026-06-27T10:38:42.051Z",
+      "mode": "expanded",
       "second_product": true,
       "cart_lines": 2
     },
@@ -143,7 +143,7 @@
       "id": "S2b-05",
       "action": "1 item: swipe up does not expand",
       "pass": true,
-      "at": "2026-06-27T10:10:38.664Z",
+      "at": "2026-06-27T10:38:50.443Z",
       "before": "hidden",
       "after": "hidden"
     },
@@ -151,25 +151,22 @@
       "id": "S2b-06",
       "action": "Избранное→Каталог: peek restored",
       "pass": true,
-      "at": "2026-06-27T10:10:49.112Z",
+      "at": "2026-06-27T10:38:59.864Z",
       "mode": "peek"
     },
     {
       "id": "S2b-07",
       "action": "Профиль→Каталог: expanded restored",
       "pass": true,
-      "at": "2026-06-27T10:10:57.076Z",
+      "at": "2026-06-27T10:39:07.917Z",
       "mode": "expanded"
     }
   ],
-  "pass": false,
-  "steps_pass": 13,
+  "pass": true,
+  "steps_pass": 14,
   "steps_total": 14,
-  "blocked": {
-    "S2b-03": "swipe_up_expanded — redeploy с pointer handlers (коммит прогон 4) + re-run MCP"
-  },
-  "started_at": "2026-06-27T10:10:02.264Z",
-  "finished_at": "2026-06-27T10:10:58.538Z",
+  "started_at": "2026-06-27T10:38:11.061Z",
+  "finished_at": "2026-06-27T10:39:09.275Z",
   "pending": [
     "customer_approval"
   ]

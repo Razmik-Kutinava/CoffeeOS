@@ -405,14 +405,14 @@
 
 ## Чеклист приёмки S2a
 
-- [x] После add → поп-ап **expanded** (100%) — код `[x]` · MCP **13/14** `[x]` · артефакт `b113_s2a_s2b_rev2_post_deploy_2026-06-27.json`
+- [x] После add → поп-ап **expanded** (100%) — MCP **14/14** · `b113_s2a_s2b_rev2_post_deploy_2026-06-27.json`
 - [x] Карточка: изображение, название, цена × количество, модификаторы (100%) — MCP `[x]`
 - [x] Переключение expanded / peek / hidden — testid / `setCartSheetMode` (100%) — MCP `[x]`
 - [x] Анимация перехода **300ms ± 50ms** (100%) — MCP `[x]` (0.3s на Fly)
 - [x] Поп-ап над bottom bar · 320–414px — MCP `[x]`
 - [ ] Corner: пустая корзина — **Q-rev2** (не трогали)
 - [x] Corner: Избранное/Профиль — localStorage (S2b) — MCP `[x]`
-- [x] Тест + MCP step — тесты `[x]` · MCP **13/14** (свайп — после redeploy pointer)
+- [x] Тест + MCP step — **14/14 PASS**
 
 ### Прогон 3 — S2a сверка (2026-06-24)
 
@@ -422,7 +422,7 @@
 - [x] `SHEET_TRANSITION_MS=300`, `CART_SHEET_BOTTOM_REM=3.5`, `max-width 414px`
 - [x] `setCartSheetMode` + `data-cart-sheet-mode`
 - [x] тест `b113_s2a_cart_sheet_acceptance_test.rb`
-- [x] Fly MCP прогон 4 — **13/14** (swipe после redeploy pointer)
+- [x] Fly MCP прогон 4 — **14/14**
 
 ## Текст заказчика (дословно, rev2 №2)
 
@@ -511,11 +511,11 @@
 
 - [x] Скролл вниз 100px ± 10px → **peek** (100%) — MCP `[x]`
 - [x] Скролл вниз 200px ± 10px → **hidden** (100%) — MCP `[x]`
-- [ ] Свайп вверх на поп-апе → **expanded** (100%) — код pointer `[x]` · MCP **blocked** (redeploy)
+- [x] Свайп вверх на поп-апе → **expanded** (100%) — MCP `[x]`
 - [x] Скролл вверх — состояние **сохраняется** (100%) — MCP `[x]`
 - [x] 1 товар: свайп вверх **не** раскрывает (100%) — MCP `[x]`
 - [x] Навигация между экранами + возврат — localStorage (100%) — MCP `[x]`
-- [x] Тест + MCP step — тесты `[x]` · MCP **13/14**
+- [x] Тест + MCP step — **14/14 PASS**
 
 ### Прогон 4 — Fly MCP S2a/S2b (2026-06-27)
 
@@ -529,7 +529,7 @@
 - [x] `SCROLL_TO_PEEK_PX = 100`, `SCROLL_TO_HIDDEN_PX = 200` — код (`cartSheetThresholds.js`)
 - [x] `handleCatalogScroll`: hidden @200 проверяется до peek @100 (`cartSheetStore.js`)
 - [x] тест `b113_s2b_scroll_thresholds_test.rb` + регрессия `b113_s2_cart_popup_test.rb`
-- [x] Fly MCP прогон 4 — **13/14** (swipe после redeploy pointer)
+- [x] Fly MCP прогон 4 — **14/14**
 
 ### Прогон 2 — localStorage режима (2026-06-24)
 
@@ -537,7 +537,7 @@
 - [x] `onCatalogRouteChange` — save на уходе, restore при `#/`
 - [x] `CartSheet.svelte` — hashchange hook
 - [x] тест `b113_s2b_mode_persistence_test.rb` (свайп, скролл вверх, 1 товар, persistence)
-- [x] Fly MCP прогон 4 — **13/14** (swipe после redeploy pointer)
+- [x] Fly MCP прогон 4 — **14/14**
 
 ## Текст заказчика (дословно, rev2 №3)
 

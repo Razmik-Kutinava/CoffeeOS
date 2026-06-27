@@ -89,7 +89,9 @@ class Shop::B113S2aCartSheetAcceptanceTest < ActionDispatch::IntegrationTest
 
     assert_includes sheet, "onpointerdown"
     assert_includes sheet, "onpointerup"
+    assert_includes sheet, "onpointercancel"
     assert_includes sheet, "tryExpandFromSwipe"
+    assert_includes sheet, 'touch-action="none"'
   end
 
   test "cart api returns expanded card payload fields" do

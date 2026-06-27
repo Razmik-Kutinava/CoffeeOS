@@ -53,10 +53,16 @@
 
   function onPointerDown(event) {
     touchStartY = event.clientY
+    event.currentTarget?.setPointerCapture?.(event.pointerId)
   }
 
   function onPointerUp(event) {
     tryExpandFromSwipe(touchStartY, event.clientY)
+    event.currentTarget?.releasePointerCapture?.(event.pointerId)
+  }
+
+  function onPointerCancel() {
+    touchStartY = 0
   }
 
   onMount(() => {
@@ -104,10 +110,12 @@
     style:bottom="{CART_SHEET_BOTTOM_REM}rem"
     style:max-width="{CART_SHEET_MAX_WIDTH_PX}px"
     style:transition-duration="{SHEET_TRANSITION_MS}ms"
+    style:touch-action="none"
     ontouchstart={onTouchStart}
     ontouchend={onTouchEnd}
     onpointerdown={onPointerDown}
     onpointerup={onPointerUp}
+    onpointercancel={onPointerCancel}
   >
     <div class="drag-handle mx-auto mt-1.5 h-1 w-10 rounded-full bg-[#555]" aria-hidden="true"></div>
 

@@ -73,16 +73,32 @@ async function scrollCatalog(page, px) {
 
 async function swipeUpOnSheet(page) {
   const sheet = page.locator('[data-testid="shop-cart-sheet"]')
-  const box = await sheet.boundingBox()
-  if (!box) return
-  const x = box.x + box.width / 2
-  const y0 = box.y + box.height - 20
-  const y1 = box.y + 20
-  await page.mouse.move(x, y0)
-  await page.mouse.down()
-  await page.mouse.move(x, y1, { steps: 10 })
-  await page.mouse.up()
-  await page.waitForTimeout(500)
+  await sheet.waitFor({ state: "visible", timeout: 10000 })
+  await sheet.evaluate((el) => {
+    const r = el.getBoundingClientRect()
+    const cx = r.left + r.width / 2
+    const y0 = r.bottom - 10
+    const y1 = y0 - 72
+    const ptrDown = {
+      bubbles: true,
+      cancelable: true,
+      clientX: cx,
+      clientY: y0,
+      pointerId: 1,
+      pointerType: "touch",
+      isPrimary: true
+    }
+    const ptrUp = { ...ptrDown, clientY: y1 }
+    el.dispatchEvent(new PointerEvent("pointerdown", ptrDown))
+    el.dispatchEvent(new PointerEvent("pointerup", ptrUp))
+    const t0 = new Touch({ identifier: 0, target: el, clientX: cx, clientY: y0 })
+    const t1 = new Touch({ identifier: 0, target: el, clientX: cx, clientY: y1 })
+    el.dispatchEvent(new TouchEvent("touchstart", { bubbles: true, cancelable: true, touches: [t0] }))
+    el.dispatchEvent(
+      new TouchEvent("touchend", { bubbles: true, cancelable: true, touches: [], changedTouches: [t1] })
+    )
+  })
+  await page.waitForTimeout(600)
 }
 
 async function addProductFromCatalog(page, productId) {

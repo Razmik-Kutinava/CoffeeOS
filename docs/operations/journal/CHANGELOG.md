@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026-06-27 — B1.13: Fly MCP S2a/S2b **14/14** (swipe fix)
+
+- **MCP:** swipe delta 72px + Pointer/Touch dispatch — **14/14 PASS**
+- **Код:** CartSheet pointer capture + touch-action none
+- **Дальше:** redeploy UX · апрув S2a/S2b
+
 ## 2026-06-27 — B1.13 прогон 4: Fly MCP S2a/S2b (13/14)
 
 - **MCP:** `b113_s2a_s2b_rev2_mcp.mjs` — 13/14 на Fly после deploy владельца
