@@ -84,6 +84,14 @@ class Shop::B113S2aCartSheetAcceptanceTest < ActionDispatch::IntegrationTest
     assert_includes sheet, "roundPrice(total)"
   end
 
+  test "CartSheet swipe handlers touch and pointer" do
+    sheet = File.read(Rails.root.join("app/frontend/components/CartSheet.svelte"))
+
+    assert_includes sheet, "onpointerdown"
+    assert_includes sheet, "onpointerup"
+    assert_includes sheet, "tryExpandFromSwipe"
+  end
+
   test "cart api returns expanded card payload fields" do
     open_session do |sess|
       sess.post "/shop/api/cart/add",

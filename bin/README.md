@@ -54,10 +54,11 @@
 |--------|------------|
 | `b113_s2_cart_popup_prep_fly.rb` | B1.13-S2: очистка корзины + product_id для MCP |
 | `b113_s2_cart_popup_mcp.mjs` | B1.13-S2: поп-ап корзины на Fly (после deploy) |
+| `b113_s2a_s2b_rev2_mcp.mjs` | B1.13-S2a/S2b rev2: приёмка на Fly (после deploy) |
 
 ```bash
 ruby bin/b113_s2_cart_popup_prep_fly.rb
-node bin/b113_s2_cart_popup_mcp.mjs
+node bin/b113_s2a_s2b_rev2_mcp.mjs
 ```
 
 ## Остальное

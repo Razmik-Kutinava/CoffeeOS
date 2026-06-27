@@ -1,0 +1,176 @@
+{
+  "scenario": "b113_s2a_s2b_rev2_post_deploy",
+  "task_id": "B1.13-S2a+S2b-rev2",
+  "date": "2026-06-27",
+  "status": "POST_DEPLOY_FLY_MCP",
+  "stand": "https://coffeeos.fly.dev",
+  "shop_url": "https://coffeeos.fly.dev/shop?tenant_id=655aaccb-004a-4bb9-a50a-ce618854dda3",
+  "product_id": "3c5259e0-f42f-4d47-953d-2ce82e335f8c",
+  "method": "playwright (MCP DevTools equivalent)",
+  "skipped": [
+    "empty_cart_q_rev2"
+  ],
+  "screenshots": [
+    {
+      "name": "expanded_360",
+      "file": "screenshots/b113_s2a_s2b_rev2_expanded_360_2026-06-27.png",
+      "viewport": "360"
+    },
+    {
+      "name": "peek_360",
+      "file": "screenshots/b113_s2a_s2b_rev2_peek_360_2026-06-27.png",
+      "viewport": "360"
+    },
+    {
+      "name": "hidden_360",
+      "file": "screenshots/b113_s2a_s2b_rev2_hidden_360_2026-06-27.png",
+      "viewport": "360"
+    },
+    {
+      "name": "swipe_expanded_360",
+      "file": "screenshots/b113_s2a_s2b_rev2_swipe_expanded_360_2026-06-27.png",
+      "viewport": "360"
+    },
+    {
+      "name": "320px",
+      "file": "screenshots/b113_s2a_s2b_rev2_320px_2026-06-27.png",
+      "viewport": "320"
+    },
+    {
+      "name": "414px",
+      "file": "screenshots/b113_s2a_s2b_rev2_414px_2026-06-27.png",
+      "viewport": "414"
+    }
+  ],
+  "criteria_s2a": {
+    "add_expanded": "pass",
+    "expanded_card_fields": "pass",
+    "animation_300ms": "pass",
+    "layout_above_nav": "pass",
+    "peek_total": "pass",
+    "hidden_total": "pass"
+  },
+  "criteria_s2b": {
+    "scroll_100_peek": "pass",
+    "scroll_up_preserve": "pass",
+    "scroll_200_hidden": "pass",
+    "swipe_up_expanded": "fail",
+    "single_item_no_swipe_expand": "pass",
+    "ls_peek_tab": "pass",
+    "ls_expanded_profile": "pass"
+  },
+  "steps": [
+    {
+      "id": "00",
+      "action": "/up 200",
+      "pass": true,
+      "at": "2026-06-27T10:10:02.940Z"
+    },
+    {
+      "id": "S2a-01",
+      "action": "add → catalog + sheet expanded",
+      "pass": true,
+      "at": "2026-06-27T10:10:11.929Z",
+      "mode": "expanded"
+    },
+    {
+      "id": "S2a-02",
+      "action": "expanded card: image, name, price×qty",
+      "pass": true,
+      "at": "2026-06-27T10:10:11.980Z",
+      "preview": "Фильтр-кофе без кофеина (декаф) Гватемала\n\n13₽ × 1\n\n−\n1\n+\nУдалить"
+    },
+    {
+      "id": "S2a-03",
+      "action": "transition duration ~300ms",
+      "pass": true,
+      "at": "2026-06-27T10:10:12.949Z",
+      "transitionDuration": "0.3s"
+    },
+    {
+      "id": "S2a-04",
+      "action": "sheet above bottom bar, max-width 414px",
+      "pass": true,
+      "at": "2026-06-27T10:10:12.988Z",
+      "bottom": "56px",
+      "maxWidth": "414px",
+      "zIndex": "50"
+    },
+    {
+      "id": "S2b-01",
+      "action": "scroll 100px → peek",
+      "pass": true,
+      "at": "2026-06-27T10:10:14.539Z",
+      "mode": "peek"
+    },
+    {
+      "id": "S2a-05",
+      "action": "peek shows order total",
+      "pass": true,
+      "at": "2026-06-27T10:10:14.554Z"
+    },
+    {
+      "id": "S2b-04",
+      "action": "scroll up preserves peek",
+      "pass": true,
+      "at": "2026-06-27T10:10:15.630Z",
+      "before": "peek",
+      "after": "peek"
+    },
+    {
+      "id": "S2b-02",
+      "action": "scroll 200px total → hidden",
+      "pass": true,
+      "at": "2026-06-27T10:10:16.141Z",
+      "mode": "hidden"
+    },
+    {
+      "id": "S2a-06",
+      "action": "hidden chip shows total",
+      "pass": true,
+      "at": "2026-06-27T10:10:16.156Z"
+    },
+    {
+      "id": "S2b-03",
+      "action": "swipe up on sheet → expanded (2+ lines)",
+      "pass": false,
+      "at": "2026-06-27T10:10:29.823Z",
+      "mode": "hidden",
+      "second_product": true,
+      "cart_lines": 2
+    },
+    {
+      "id": "S2b-05",
+      "action": "1 item: swipe up does not expand",
+      "pass": true,
+      "at": "2026-06-27T10:10:38.664Z",
+      "before": "hidden",
+      "after": "hidden"
+    },
+    {
+      "id": "S2b-06",
+      "action": "Избранное→Каталог: peek restored",
+      "pass": true,
+      "at": "2026-06-27T10:10:49.112Z",
+      "mode": "peek"
+    },
+    {
+      "id": "S2b-07",
+      "action": "Профиль→Каталог: expanded restored",
+      "pass": true,
+      "at": "2026-06-27T10:10:57.076Z",
+      "mode": "expanded"
+    }
+  ],
+  "pass": false,
+  "steps_pass": 13,
+  "steps_total": 14,
+  "blocked": {
+    "S2b-03": "swipe_up_expanded — redeploy с pointer handlers (коммит прогон 4) + re-run MCP"
+  },
+  "started_at": "2026-06-27T10:10:02.264Z",
+  "finished_at": "2026-06-27T10:10:58.538Z",
+  "pending": [
+    "customer_approval"
+  ]
+}

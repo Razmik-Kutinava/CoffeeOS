@@ -44,8 +44,19 @@
 
   function onTouchEnd(event) {
     const endY = event.changedTouches[0]?.clientY ?? touchStartY
-    const dy = touchStartY - endY
-    if (dy >= SWIPE_UP_PX) expandFromSwipe()
+    tryExpandFromSwipe(touchStartY, endY)
+  }
+
+  function tryExpandFromSwipe(startY, endY) {
+    if (startY - endY >= SWIPE_UP_PX) expandFromSwipe()
+  }
+
+  function onPointerDown(event) {
+    touchStartY = event.clientY
+  }
+
+  function onPointerUp(event) {
+    tryExpandFromSwipe(touchStartY, event.clientY)
   }
 
   onMount(() => {
@@ -95,6 +106,8 @@
     style:transition-duration="{SHEET_TRANSITION_MS}ms"
     ontouchstart={onTouchStart}
     ontouchend={onTouchEnd}
+    onpointerdown={onPointerDown}
+    onpointerup={onPointerUp}
   >
     <div class="drag-handle mx-auto mt-1.5 h-1 w-10 rounded-full bg-[#555]" aria-hidden="true"></div>
 

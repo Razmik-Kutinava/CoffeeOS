@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2026-06-27 — B1.13 прогон 4: Fly MCP S2a/S2b (13/14)
+
+- **MCP:** `b113_s2a_s2b_rev2_mcp.mjs` — 13/14 на Fly после deploy владельца
+- **Артефакт:** `b113_s2a_s2b_rev2_post_deploy_2026-06-27.json` + скрины
+- **Blocked:** S2b-03 swipe — pointer handlers в CartSheet (коммит) → redeploy + re-run
+- **Дальше:** redeploy → MCP 14/14 → апрув
+
 ## 2026-06-24 — B1.13-S2a прогон 3: сверка приёмки (с товаром)
 
 - **Дотянуто:** сумма в peek; константы layout/анимации S2a; `setCartSheetMode`
