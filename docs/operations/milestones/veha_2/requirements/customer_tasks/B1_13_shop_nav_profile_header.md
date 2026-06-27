@@ -507,6 +507,13 @@
 - [ ] Навигация между экранами + возврат — состояние из **localStorage** (100%)
 - [ ] Тест + MCP step
 
+### Прогон 1 — скролл порогов (2026-06-24)
+
+- [x] `SCROLL_TO_PEEK_PX = 100`, `SCROLL_TO_HIDDEN_PX = 200` — код (`cartSheetThresholds.js`)
+- [x] `handleCatalogScroll`: hidden @200 проверяется до peek @100 (`cartSheetStore.js`)
+- [x] тест `b113_s2b_scroll_thresholds_test.rb` + регрессия `b113_s2_cart_popup_test.rb`
+- [ ] Fly MCP (прогон 4)
+
 ## Текст заказчика (дословно, rev2 №3)
 
 ### Задача

@@ -155,13 +155,12 @@ async function run() {
 
     await shot(page, "expanded_360", { width: 360, height: 780 })
 
-    const vh = await page.evaluate(() => window.innerHeight)
-    await scrollCatalog(page, Math.max(120, Math.round(vh * 0.14)))
+    await scrollCatalog(page, 100)
     const modePeek = (await sheetMode(page)) === "peek"
     overall = step("05", "scroll down → peek mode", modePeek, { mode: await sheetMode(page) }) && overall
     criteria.c5_scroll_peek = modePeek ? "pass" : "fail"
 
-    await scrollCatalog(page, Math.max(100, Math.round(vh * 0.12)))
+    await scrollCatalog(page, 100)
     const modeHidden = (await sheetMode(page)) === "hidden"
     overall = step("06", "scroll down → hidden chip", modeHidden, { mode: await sheetMode(page) }) && overall
     criteria.c6_scroll_hidden = modeHidden ? "pass" : "fail"

@@ -1,4 +1,4 @@
-/** B1.13-S2: пороги из макетов b113_s2_customer_* */
+/** B1.13-S2b rev2 — пороги скролла каталога (Q-rev3, от якоря) */
 
 export const MODE_EMPTY = "empty"
 export const MODE_EXPANDED = "expanded"
@@ -13,10 +13,10 @@ export const SHEET_VH = {
   hidden: 9
 }
 
-export const SCROLL_TO_PEEK_VH = 0.12
-export const SCROLL_TO_HIDDEN_VH = 0.1
-export const SCROLL_TO_PEEK_PX = 80
-export const SCROLL_TO_HIDDEN_PX = 80
+/** Суммарный скролл вниз от якоря: expanded → peek */
+export const SCROLL_TO_PEEK_PX = 100
+/** Суммарный скролл вниз от якоря: → hidden (чип) */
+export const SCROLL_TO_HIDDEN_PX = 200
 
 export const SWIPE_UP_PX = 48
 

@@ -7,9 +7,7 @@ import {
   MODE_HIDDEN,
   MODE_PEEK,
   SCROLL_TO_HIDDEN_PX,
-  SCROLL_TO_HIDDEN_VH,
-  SCROLL_TO_PEEK_PX,
-  SCROLL_TO_PEEK_VH
+  SCROLL_TO_PEEK_PX
 } from "./cartSheetThresholds.js"
 
 export const cartItems = writable([])
@@ -146,14 +144,10 @@ export function handleCatalogScroll() {
   const delta = y - scrollAnchorY
   if (delta < 0) return
 
-  const vh = window.innerHeight || 800
-  const toPeek = Math.max(SCROLL_TO_PEEK_PX, vh * SCROLL_TO_PEEK_VH)
-  const toHidden = toPeek + Math.max(SCROLL_TO_HIDDEN_PX, vh * SCROLL_TO_HIDDEN_VH)
-
-  if (mode === MODE_EXPANDED && delta >= toPeek) {
-    cartSheetMode.set(MODE_PEEK)
-  } else if (delta >= toHidden) {
+  if (delta >= SCROLL_TO_HIDDEN_PX) {
     cartSheetMode.set(MODE_HIDDEN)
+  } else if (mode === MODE_EXPANDED && delta >= SCROLL_TO_PEEK_PX) {
+    cartSheetMode.set(MODE_PEEK)
   }
 }
 

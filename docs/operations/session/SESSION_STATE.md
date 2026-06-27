@@ -2,7 +2,7 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-06-26 (B1.13 — канон peek, Q-rev6 снят)  
+**Дата:** 2026-06-24 (B1.13-S2b прогон 1 — скролл 100/200 px)  
 **Предыдущее:** B1.12-R3 Fly MCP 8/8 · B1.11 этап 0 · B1.7 **ЗАКРЫТА**  
 **Веха 1:** **закрыта** 2026-06-19 (CHECKLIST § I, H.3 заочно).  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
@@ -22,8 +22,16 @@
 |--------|--------|
 | **B1.12 rev2** | R3 `[x]` Fly MCP **10/10** · RSA Fly `[x]` | **апрув заказчика** |
 | **B1.11 режим работы** | **Fly MCP header A/B PASS** · артефакт 2026-06-21 | **апрув заказчика** |
-| **B1.13 навигация** | Q-rev3/4 закрыты · peek = S2a сумма + S3 +/- | Q-rev2 → `go` S2a/S2b |
+| **B1.13 навигация** | S2b прогон 1 код `[x]` · Q-rev2 открыт | **`go` S2b прогон 2** localStorage |
 | **B1.14 адрес в шапке** | **B1.14-3d** index map `[x]` | deploy (`./bin/fly_deploy.sh`) · B1.14-4 cart |
+
+### Сессия 2026-06-24 (B1.13-S2b прогон 1: скролл 100/200 px)
+
+- **Код:** `cartSheetThresholds.js` — `SCROLL_TO_PEEK_PX=100`, `SCROLL_TO_HIDDEN_PX=200`; убраны vh-пороги
+- **Код:** `cartSheetStore.js` — `handleCatalogScroll`: hidden @200 до peek @100 (Q-rev3)
+- **Тесты:** `b113_s2b_scroll_thresholds_test.rb` (3 tests) + регрессия `b113_s2_cart_popup_test.rb` — **11 runs, 0 failures**
+- **MCP:** `b113_s2_cart_popup_mcp.mjs`, `b113_s3_cart_controls_mcp.mjs` — scroll 100+100 px (не Fly)
+- **Дальше:** **`go` S2b прогон 2** — localStorage режима peek/expanded
 
 ### Сессия 2026-06-26 (B1.13: убран Q-rev6 — peek S2a+S3 без противоречия)
 

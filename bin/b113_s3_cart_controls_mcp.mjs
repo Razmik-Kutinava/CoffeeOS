@@ -243,8 +243,7 @@ async function run() {
     await page.goto(`${prep.shop_url}#/`, { waitUntil: "domcontentloaded" })
     await page.waitForTimeout(1500)
 
-    const vh = await page.evaluate(() => window.innerHeight)
-    await scrollCatalog(page, Math.max(120, Math.round(vh * 0.14)))
+    await scrollCatalog(page, 100)
     const peekOk = (await sheetMode(page)) === "peek"
     overall = step("05", "scroll → peek mode", peekOk) && overall
 
@@ -262,7 +261,7 @@ async function run() {
     overall =
       step("07", "peek + increases qty by 1", peekQty1 === peekQty0 + 1, { peekQty0, peekQty1 }) && overall
 
-    await scrollCatalog(page, Math.max(100, Math.round(vh * 0.12)))
+    await scrollCatalog(page, 100)
     overall = step("08", "scroll → hidden chip", (await sheetMode(page)) === "hidden") && overall
     await shot(page, "hidden")
 

@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2026-06-24 — B1.13-S2b прогон 1: скролл 100/200 px (Q-rev3)
+
+- **Код:** `cartSheetThresholds.js` + `cartSheetStore.js` — фиксированные пороги 100→peek, 200→hidden от якоря
+- **Тест:** `b113_s2b_scroll_thresholds_test.rb` · регрессия `b113_s2_cart_popup_test.rb` — PASS
+- **MCP скрипты:** scroll 100+100 px (деплой/Fly — прогон 4)
+- **Дальше:** S2b прогон 2 — localStorage режима peek/expanded
+
 ## 2026-06-26 — B1.13: снят Q-rev6, канон peek S2a + S3-rev2
 
 - **B1_13:** удалён ложный конфликт Q-rev6; peek = сумма/+цена (S2a) + +/- (S3-rev2, код сдан)
