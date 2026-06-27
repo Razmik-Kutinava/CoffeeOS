@@ -1,6 +1,6 @@
 # HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-06-26 (B1.13 S3-rev2 post-redeploy MCP 12/12)  
+**Дата:** 2026-06-26 (B1.13 rev2 gate — ответы Q-rev3/4/6)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev
 
@@ -27,9 +27,10 @@
 | **S3-rev2** | код `[x]` · **Fly MCP 12/12** post-redeploy 2026-06-26 (bump-queue на стенде) |
 | **Q-rev1** | 2 вкладки + профиль в шапке — **ЗАКРЫТО** |
 | **Q-rev5** | minus @1 disabled — **ЗАКРЫТО** (S3-rev2) |
-| **Q-rev2…4,6** | открыты до скринов / S2a/S2b |
+| **Q-rev2** | пустая корзина — **ОТКРЫТО** |
+| **Q-rev3,4,6** | **ЗАКРЫТО** 2026-06-26 — § ответы в `B1_13` |
 | **S4** | после закрытия rev2 |
-| **Следующий шаг** | апрув S3-rev2 · `go` S2a/S2b |
+| **Следующий шаг** | Q-rev2 → **`go` S2a** → S2b |
 | **Агент** | **стоп** |
 
 ТЗ: [`B1_13_shop_nav_profile_header.md`](../milestones/veha_2/requirements/customer_tasks/B1_13_shop_nav_profile_header.md)

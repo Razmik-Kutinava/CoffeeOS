@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2026-06-26 — B1.13 rev2 gate: ответы владельца Q-rev3, Q-rev4, Q-rev6
+
+- **B1_13:** § ответы владельца + статусы Q-rev3/4/6 **ЗАКРЫТО**
+- **Q-rev3:** скролл 100/200 px · **Q-rev4:** localStorage режима sheet · **Q-rev6:** peek сумма на S2a
+- **Q-rev2:** открыт
+- **Дальше:** Q-rev2 → `go` S2a → S2b
+
 ## 2026-06-26 — B1.13-S3-rev2: post-redeploy Fly MCP 12/12 PASS
 
 - **Deploy:** владелец — bump-queue на `coffeeos.fly.dev`
