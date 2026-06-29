@@ -189,7 +189,7 @@
     <div
       bind:this={gestureZoneEl}
       data-testid="shop-cart-sheet-gesture-zone"
-      class="cart-sheet-gesture-zone flex min-h-11 w-full shrink-0 touch-none select-none flex-col items-center justify-center border-b border-[#3a3a3a]/60"
+      class="cart-sheet-gesture-zone flex min-h-14 w-full shrink-0 touch-none select-none flex-col items-center justify-center border-b border-[#3a3a3a]/60"
       style:touch-action="none"
       role="button"
       tabindex="-1"
@@ -209,15 +209,15 @@
         тут будут твои заказы
       </p>
     {:else if mode === MODE_HIDDEN}
-      <div class="flex flex-1 min-h-0 items-end justify-between gap-2 px-3 pb-2 pt-0.5">
+      <div class="flex flex-1 min-h-0 items-center justify-between gap-2 px-3 pb-1 pt-1">
         <div
-          class="flex min-w-0 flex-1 flex-col gap-0.5 overflow-hidden"
+          class="flex min-w-0 flex-1 flex-row gap-1.5 overflow-x-hidden"
           data-testid="shop-cart-hidden-heads"
-          data-cart-layout="vertical"
+          data-cart-layout="horizontal"
         >
           {#each items as line (line.index)}
-            <div class="h-2.5 overflow-hidden rounded-t-lg" data-testid="shop-cart-hidden-head">
-              {@render lineThumb(line, "h-8 w-full", "object-top")}
+            <div class="h-9 w-11 shrink-0 overflow-hidden rounded-lg" data-testid="shop-cart-hidden-head">
+              {@render lineThumb(line, "h-full w-full", "object-top")}
             </div>
           {/each}
         </div>
@@ -225,7 +225,7 @@
         <button
           type="button"
           data-testid="shop-cart-sheet-checkout"
-          class="shrink-0 rounded-lg bg-[#ff8c42] px-4 py-2 text-sm font-semibold text-black"
+          class="shrink-0 rounded-lg bg-[#ff8c42] px-3 py-1.5 text-sm font-semibold text-black"
           onclick={() => push("/checkout")}
         >
           +цена

@@ -10,17 +10,17 @@ export const EXPANDED_LAYOUT_HORIZONTAL = "horizontal"
 
 export const SHEET_VH = {
   empty: 12,
-  expanded: 40,
-  expandedMulti: 36,
-  expandedMultiHorizontal: 42,
-  peek: 16,
-  hidden: 9
+  expanded: 42,
+  expandedMulti: 38,
+  expandedMultiHorizontal: 44,
+  peek: 18,
+  hidden: 14
 }
 
 /** Суммарный скролл вниз от якоря: expanded → peek */
-export const SCROLL_TO_PEEK_PX = 100
+export const SCROLL_TO_PEEK_PX = 60
 /** Суммарный скролл вниз от якоря: → hidden (чип) */
-export const SCROLL_TO_HIDDEN_PX = 200
+export const SCROLL_TO_HIDDEN_PX = 130
 
 /** Минимальный сдвиг пальца на gesture-zone (px) */
 export const SWIPE_UP_PX = 32

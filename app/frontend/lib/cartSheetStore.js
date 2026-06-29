@@ -111,13 +111,11 @@ function applyCartData(data) {
     clearPersistedCartSheetLayout()
     return
   }
-  if (cartLineCount(items) <= 1) {
-    resetExpandedLayoutVertical()
-  }
+  // Всегда сбрасываем horizontal при загрузке — localStorage не должен делать
+  // горизонтальный default. Горизонтальный только после явного свайпа вверх.
+  resetExpandedLayoutVertical()
   if (mode === MODE_EMPTY) {
-    // Cold load on catalog: always expanded + vertical (restore only on tab return).
     cartSheetMode.set(MODE_EXPANDED)
-    resetExpandedLayoutVertical()
     resetScrollAnchor()
   }
 }
