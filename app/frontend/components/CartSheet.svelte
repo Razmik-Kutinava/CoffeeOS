@@ -287,21 +287,28 @@
         >
           {#each items as line (line.index)}
             <div
-              class="flex w-[min(85vw,280px)] shrink-0 flex-col gap-2 rounded-xl border border-[#3a3a3a] bg-[#1f1f1f] p-2"
+              class="flex w-[min(28vw,110px)] shrink-0 flex-col gap-1 rounded-xl border border-[#3a3a3a] bg-[#1f1f1f] p-1.5"
               data-testid="shop-cart-expanded-line"
             >
-              {@render lineThumb(line, "h-24 w-full")}
-              <div class="min-w-0 flex-1">
-                <p class="line-clamp-2 text-sm font-medium">{line.product_name}</p>
-                <p class="text-xs text-[#a0a0a0]">{roundPrice(line.unit_total)}₽ × {line.quantity}</p>
-                {#if line.selected_modifiers?.length}
-                  <ul class="mt-0.5 space-y-0.5 text-[11px] text-[#888]">
-                    {#each line.selected_modifiers as mod (mod.id)}
-                      <li>{modifierLabel(mod)}</li>
-                    {/each}
-                  </ul>
-                {/if}
-                {@render lineControls(line)}
+              {@render lineThumb(line, "h-16 w-full rounded-lg")}
+              <div class="min-w-0">
+                <p class="line-clamp-2 text-[11px] font-medium leading-tight">{line.product_name}</p>
+                <p class="mt-0.5 text-[10px] text-[#a0a0a0]">{roundPrice(line.unit_total)}₽ × {line.quantity}</p>
+                <div class="mt-1 flex items-center justify-between gap-0.5">
+                  <button
+                    type="button"
+                    class="rounded bg-[#3a3a3a] px-1.5 py-0.5 text-[10px] leading-none disabled:opacity-40"
+                    disabled={atMinQty(line)}
+                    onclick={() => bumpCartLine(line.index, -1)}
+                  >−</button>
+                  <span class="text-[10px]">{line.quantity}</span>
+                  <button
+                    type="button"
+                    class="rounded bg-[#3a3a3a] px-1.5 py-0.5 text-[10px] leading-none disabled:opacity-40"
+                    disabled={atMaxQty(line)}
+                    onclick={() => bumpCartLine(line.index, 1)}
+                  >+</button>
+                </div>
               </div>
             </div>
           {/each}

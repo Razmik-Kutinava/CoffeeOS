@@ -208,11 +208,15 @@ export function onCatalogRouteChange(nowOnCatalog) {
     return
   }
 
-  restoreCartSheetStateFromStorage()
-  if (get(cartSheetMode) === MODE_EMPTY) {
+  // При возврате на каталог восстанавливаем только mode (peek/hidden/expanded),
+  // но layout всегда вертикальный — горизонтальный только после явного свайпа вверх.
+  const savedMode = readPersistedCartSheetMode()
+  if (savedMode && savedMode !== MODE_EMPTY) {
+    cartSheetMode.set(savedMode)
+  } else {
     cartSheetMode.set(MODE_EXPANDED)
-    resetExpandedLayoutVertical()
   }
+  resetExpandedLayoutVertical()
   resetScrollAnchor()
 }
 
