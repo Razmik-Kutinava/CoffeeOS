@@ -165,7 +165,7 @@
     data-testid="shop-cart-sheet"
     data-cart-sheet-mode={mode}
     data-cart-sheet-layout={expandedLayout}
-    class="cart-sheet fixed left-0 right-0 z-50 mx-auto border-t border-[#3a3a3a] bg-[#2a2a2a]/98 backdrop-blur transition-[height] ease-out"
+    class="cart-sheet fixed left-0 right-0 z-50 mx-auto flex flex-col overflow-hidden border-t border-[#3a3a3a] bg-[#2a2a2a]/98 backdrop-blur transition-[height] ease-out"
     style:height="{heightVh}vh"
     style:bottom="{CART_SHEET_BOTTOM_REM}rem"
     style:max-width="{CART_SHEET_MAX_WIDTH_PX}px"
@@ -195,7 +195,7 @@
         тут будут твои заказы
       </p>
     {:else if mode === MODE_HIDDEN}
-      <div class="flex h-[calc(100%-0.75rem)] items-end justify-between gap-2 px-3 pb-2 pt-0.5">
+      <div class="flex flex-1 min-h-0 items-end justify-between gap-2 px-3 pb-2 pt-0.5">
         <div
           class="flex min-w-0 flex-1 flex-col gap-0.5 overflow-hidden"
           data-testid="shop-cart-hidden-heads"
@@ -218,7 +218,7 @@
         </button>
       </div>
     {:else if mode === MODE_PEEK}
-      <div class="flex h-[calc(100%-0.75rem)] items-end justify-between gap-2 px-3 pb-2 pt-1">
+      <div class="flex flex-1 min-h-0 items-end justify-between gap-2 px-3 pb-2 pt-1">
         <div
           class="flex min-w-0 flex-1 gap-2 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           data-cart-layout="horizontal"
@@ -264,7 +264,7 @@
       </div>
     {:else if expandedHorizontal}
       <div
-        class="flex h-[calc(100%-0.75rem)] flex-col overflow-hidden px-3 pb-2 pt-1"
+        class="flex flex-1 min-h-0 flex-col overflow-hidden px-3 pb-2 pt-1"
         data-cart-layout="horizontal"
         data-testid="shop-cart-expanded-horizontal"
       >
@@ -305,7 +305,7 @@
         </div>
       </div>
     {:else if singleItem}
-      <div class="flex h-[calc(100%-0.75rem)] flex-col overflow-hidden px-3 pb-2 pt-1" data-cart-layout="horizontal">
+      <div class="flex flex-1 min-h-0 flex-col overflow-hidden px-3 pb-2 pt-1" data-cart-layout="horizontal">
         <div
           class="flex min-h-0 flex-1 gap-2 rounded-xl border border-[#3a3a3a] bg-[#1f1f1f] p-2"
           data-testid="shop-cart-expanded-single"
@@ -337,7 +337,7 @@
         </div>
       </div>
     {:else}
-      <div class="flex h-[calc(100%-0.75rem)] flex-col overflow-hidden px-3 pb-2 pt-1" data-cart-layout="vertical">
+      <div class="flex flex-1 min-h-0 flex-col overflow-hidden px-3 pb-2 pt-1" data-cart-layout="vertical">
         <div class="min-h-0 flex-1 space-y-2 overflow-y-auto">
           {#each items as line (line.index)}
             <div class="flex gap-2 rounded-xl border border-[#3a3a3a] bg-[#1f1f1f] p-2" data-testid="shop-cart-expanded-line">
