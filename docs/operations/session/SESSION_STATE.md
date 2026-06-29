@@ -30,7 +30,9 @@
 - **Диагноз Fly MCP DevTools:** `gestureZone: false` — на Fly старый бандл без gesture-zone (prog5b не задеплоен)
 - **Новый баг найден:** `h-[calc(100%-0.75rem)]` считал gesture-zone 12px, а она стала `min-h-11`=44px → overflow в hidden/peek; фикс: `flex flex-col overflow-hidden` на контейнере + `flex-1 min-h-0` на content-дивах
 - **Коммит:** `829764b`
-- **Дальше:** `git push` + GitHub Actions Deploy to Fly → re-MCP → апрув
+- **Fly deploy:** `829764b` + `e6c9a7b` задеплоены — MCP DevTools PASS (`gestureZone: true`, `flex column`, новый бандл `DiTk_YEX`)
+- **Push заблокирован:** PAT без `workflow` scope — нужен `gh auth refresh -s workflow` или push через браузер GitHub
+- **Дальше:** re-MCP ручная проверка → апрув заказчика
 
 ### Сессия 2026-06-24 (B1.13 прогон 5b: gesture-zone UX)
 
