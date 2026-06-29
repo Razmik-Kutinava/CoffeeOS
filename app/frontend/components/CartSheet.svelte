@@ -36,6 +36,7 @@
   let expandedLayout = $state("vertical")
   let busy = $state(false)
   let gestureStartY = 0
+  let gestureZoneEl = $state(null)
 
   let onCatalog = $derived(isCatalogRoute(hash))
   let count = $derived(items.length)
@@ -103,6 +104,15 @@
     window.addEventListener("hashchange", onHash)
     refreshCartSheet().catch(() => {})
 
+    // Touch-события с { passive: false } — нельзя передать через Svelte-шаблон.
+    // Нужно для preventDefault() при свайпе, иначе браузер скроллит страницу.
+    const gz = gestureZoneEl
+    if (gz) {
+      gz.addEventListener("touchstart", onGestureStart, { passive: false })
+      gz.addEventListener("touchend", onGestureEnd, { passive: false })
+      gz.addEventListener("touchcancel", onGestureCancel, { passive: true })
+    }
+
     return () => {
       unsubItems()
       unsubTotal()
@@ -110,6 +120,11 @@
       unsubLayout()
       unsubBusy()
       window.removeEventListener("hashchange", onHash)
+      if (gz) {
+        gz.removeEventListener("touchstart", onGestureStart)
+        gz.removeEventListener("touchend", onGestureEnd)
+        gz.removeEventListener("touchcancel", onGestureCancel)
+      }
     }
   })
 </script>
@@ -172,14 +187,13 @@
     style:transition-duration="{SHEET_TRANSITION_MS}ms"
   >
     <div
+      bind:this={gestureZoneEl}
       data-testid="shop-cart-sheet-gesture-zone"
       class="cart-sheet-gesture-zone flex min-h-11 w-full shrink-0 touch-none select-none flex-col items-center justify-center border-b border-[#3a3a3a]/60"
       style:touch-action="none"
       role="button"
       tabindex="-1"
       aria-label="Потяните вверх или вниз, чтобы изменить высоту корзины"
-      ontouchstart={onGestureStart}
-      ontouchend={onGestureEnd}
       onpointerdown={onGestureStart}
       onpointerup={onGestureEnd}
       onpointercancel={onGestureCancel}
