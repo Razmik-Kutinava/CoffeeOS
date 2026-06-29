@@ -210,57 +210,14 @@
         >+цена</button>
       </div>
 
-    <!-- PEEK 2+ товаров — вертикальный компактный список -->
+    <!-- PEEK 2+ товаров — горизонтальный ряд карточек (дефолт при добавлении) -->
     {:else if mode === MODE_PEEK && count >= 2}
-      <div class="flex flex-1 min-h-0 flex-col overflow-hidden px-3 pb-2 pt-1">
-        <div class="min-h-0 flex-1 space-y-1.5 overflow-y-auto" data-testid="shop-cart-peek-list">
-          {#each items as line (line.index)}
-            <div
-              class="flex items-center gap-2 rounded-lg border border-[#3a3a3a] bg-[#1f1f1f] px-2 py-1.5"
-              data-testid="shop-cart-peek-line"
-            >
-              {@render lineThumb(line, "h-10 w-10 shrink-0")}
-              <div class="min-w-0 flex-1">
-                <p class="line-clamp-1 text-xs font-medium">{line.product_name}</p>
-                <p class="text-[10px] text-[#a0a0a0]">{roundPrice(line.unit_total)}₽ × {line.quantity}</p>
-              </div>
-              <div class="flex shrink-0 items-center gap-1">
-                <button
-                  type="button"
-                  class="rounded bg-[#3a3a3a] px-1.5 py-0.5 text-[10px] leading-none disabled:opacity-40"
-                  disabled={atMinQty(line)}
-                  onclick={() => bumpCartLine(line.index, -1)}
-                >−</button>
-                <span class="min-w-[1rem] text-center text-[10px]">{line.quantity}</span>
-                <button
-                  type="button"
-                  class="rounded bg-[#3a3a3a] px-1.5 py-0.5 text-[10px] leading-none disabled:opacity-40"
-                  disabled={atMaxQty(line)}
-                  onclick={() => bumpCartLine(line.index, 1)}
-                >+</button>
-              </div>
-            </div>
-          {/each}
-        </div>
-        <div class="mt-2 flex shrink-0 items-center justify-end gap-2 border-t border-[#3a3a3a] pt-2">
-          <span class="text-sm font-semibold text-[#ff8c42]">{roundPrice(total)}₽</span>
-          <button
-            type="button"
-            data-testid="shop-cart-sheet-checkout"
-            class="rounded-lg bg-[#ff8c42] px-4 py-2 text-sm font-semibold text-black"
-            onclick={() => push("/checkout")}
-          >Оформить</button>
-        </div>
-      </div>
-
-    <!-- EXPANDED 2+ товаров — горизонтальный ряд карточек (свайп вниз → peek) -->
-    {:else if mode === MODE_EXPANDED && count >= 2}
-      <div class="flex flex-1 min-h-0 flex-col overflow-hidden px-3 pb-2 pt-1" data-testid="shop-cart-expanded-horizontal">
+      <div class="flex flex-1 min-h-0 flex-col overflow-hidden px-3 pb-2 pt-1" data-testid="shop-cart-peek-horizontal">
         <div class="flex min-h-0 flex-1 gap-2 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {#each items as line (line.index)}
             <div
               class="flex w-[min(28vw,110px)] shrink-0 flex-col gap-1 rounded-xl border border-[#3a3a3a] bg-[#1f1f1f] p-1.5"
-              data-testid="shop-cart-expanded-line"
+              data-testid="shop-cart-peek-line"
             >
               {@render lineThumb(line, "h-16 w-full rounded-lg")}
               <div class="min-w-0">
@@ -281,6 +238,41 @@
                     onclick={() => bumpCartLine(line.index, 1)}
                   >+</button>
                 </div>
+              </div>
+            </div>
+          {/each}
+        </div>
+        {@render checkoutBar()}
+      </div>
+
+    <!-- EXPANDED 2+ товаров — вертикальный список (свайп вверх из peek) -->
+    {:else if mode === MODE_EXPANDED && count >= 2}
+      <div class="flex flex-1 min-h-0 flex-col overflow-hidden px-3 pb-2 pt-1" data-testid="shop-cart-expanded-vertical">
+        <div class="min-h-0 flex-1 space-y-1.5 overflow-y-auto">
+          {#each items as line (line.index)}
+            <div
+              class="flex items-center gap-2 rounded-lg border border-[#3a3a3a] bg-[#1f1f1f] px-2 py-1.5"
+              data-testid="shop-cart-expanded-line"
+            >
+              {@render lineThumb(line, "h-10 w-10 shrink-0")}
+              <div class="min-w-0 flex-1">
+                <p class="line-clamp-1 text-xs font-medium">{line.product_name}</p>
+                <p class="text-[10px] text-[#a0a0a0]">{roundPrice(line.unit_total)}₽ × {line.quantity}</p>
+              </div>
+              <div class="flex shrink-0 items-center gap-1">
+                <button
+                  type="button"
+                  class="rounded bg-[#3a3a3a] px-1.5 py-0.5 text-[10px] leading-none disabled:opacity-40"
+                  disabled={atMinQty(line)}
+                  onclick={() => bumpCartLine(line.index, -1)}
+                >−</button>
+                <span class="min-w-[1rem] text-center text-[10px]">{line.quantity}</span>
+                <button
+                  type="button"
+                  class="rounded bg-[#3a3a3a] px-1.5 py-0.5 text-[10px] leading-none disabled:opacity-40"
+                  disabled={atMaxQty(line)}
+                  onclick={() => bumpCartLine(line.index, 1)}
+                >+</button>
               </div>
             </div>
           {/each}
