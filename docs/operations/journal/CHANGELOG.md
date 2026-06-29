@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-06-29 — B1.13 prog7: layout restore fix (2d89bf3)
+
+- `onCatalogRouteChange`: восстанавливает только mode, layout всегда vertical (horizontal только после явного свайпа)
+- expanded horizontal карточки `w-[min(28vw,110px)]` — 3 видны одновременно, компактный вид
+
 ## 2026-06-29 — B1.13 prog6: UX fixes (6cdb5ed)
 
 - **vertical default:** `applyCartData` всегда сбрасывает layout → vertical; localStorage не делает горизонтальный default
