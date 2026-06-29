@@ -91,8 +91,8 @@ class Shop::B113S2aCartSheetAcceptanceTest < ActionDispatch::IntegrationTest
     assert_includes sheet, "onpointerdown"
     assert_includes sheet, "onpointerup"
     assert_includes sheet, "onpointercancel"
-    assert_includes sheet, "applySheetGesture"
-    assert_includes sheet, 'data-testid="shop-cart-sheet-drag-handle"'
+    assert_includes sheet, "handleSheetGestureDelta"
+    assert_includes sheet, 'data-testid="shop-cart-sheet-gesture-zone"'
     assert_includes sheet, "collapseFromSwipe"
   end
 

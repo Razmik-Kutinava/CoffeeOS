@@ -78,7 +78,7 @@ async function scrollCatalog(page, px) {
 }
 
 async function swipeOnSheetHandle(page, direction = "up") {
-  const handle = page.locator('[data-testid="shop-cart-sheet-drag-handle"]')
+  const handle = page.locator('[data-testid="shop-cart-sheet-gesture-zone"]')
   await handle.waitFor({ state: "visible", timeout: 10000 })
   await handle.evaluate((el, dir) => {
     const r = el.getBoundingClientRect()

@@ -26,8 +26,8 @@ class Shop::B113S2bModePersistenceTest < ActionDispatch::IntegrationTest
     assert_includes sheet, "onCatalogRouteChange"
   end
 
-  test "applyCartData mirror restores peek or expanded from storage when mode empty" do
-    assert_equal "peek", apply_cart_mode_after_load(%w[line], "empty", persisted: "peek")
+  test "applyCartData mirror cold load always expanded vertical" do
+    assert_equal "expanded", apply_cart_mode_after_load(%w[line], "empty", persisted: "peek")
     assert_equal "expanded", apply_cart_mode_after_load(%w[line], "empty", persisted: "expanded")
     assert_equal "expanded", apply_cart_mode_after_load(%w[line], "empty", persisted: nil)
     assert_equal "peek", apply_cart_mode_after_load(%w[line], "peek", persisted: "peek")
@@ -70,7 +70,7 @@ class Shop::B113S2bModePersistenceTest < ActionDispatch::IntegrationTest
   def apply_cart_mode_after_load(items, mode, persisted:)
     return "empty" if items.empty?
 
-    return persisted || "expanded" if mode == "empty"
+    return "expanded" if mode == "empty"
 
     mode
   end
@@ -79,8 +79,8 @@ class Shop::B113S2bModePersistenceTest < ActionDispatch::IntegrationTest
     return if state[:items].to_i <= 0
 
     if now_on_catalog
-      state[:mode] = state[:persisted] if state[:mode] == "empty" && state[:persisted]
-      state[:mode] = state[:persisted] || "expanded" if state[:mode] == "empty"
+      state[:mode] = state[:persisted] if state[:persisted]
+      state[:mode] = "expanded" if state[:mode] == "empty"
     else
       state[:persisted] = state[:mode]
     end

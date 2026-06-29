@@ -54,13 +54,14 @@ class Shop::B113S2LayoutGesturesTest < ActionDispatch::IntegrationTest
     assert_includes sheet, 'data-testid="shop-cart-hidden-head"'
   end
 
-  test "gestures on drag handle swipe up and down" do
+  test "gestures on wide gesture zone swipe up and down" do
     sheet = File.read(Rails.root.join("app/frontend/components/CartSheet.svelte"))
     store = File.read(Rails.root.join("app/frontend/lib/cartSheetStore.js"))
 
-    assert_includes sheet, 'data-testid="shop-cart-sheet-drag-handle"'
-    assert_includes store, "export function collapseFromSwipe"
-    assert_includes store, "export function expandFromSwipe"
+    assert_includes sheet, 'data-testid="shop-cart-sheet-gesture-zone"'
+    assert_includes sheet, "min-h-11"
+    assert_includes store, "handleSheetGestureDelta"
+    assert_includes store, "Cold load on catalog"
   end
 
   test "expandFromSwipe mirror hidden and peek restore expanded vertical" do

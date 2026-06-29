@@ -667,16 +667,28 @@
 | `data-cart-sheet-layout`, testid horizontal | `CartSheet.svelte` | `[x]` |
 | Тесты | `b113_s2_layout_gestures_test.rb`, регрессия b113_s2* | `[x]` |
 | MCP обновлён | `b113_s2a_s2b_rev2_mcp.mjs` | `[x]` код · `[ ]` Fly |
+| **Прогон 5b — UX жестов** | gesture-zone 44px, SWIPE 32px, cold load expanded | `[x]` |
 | Fly redeploy + re-MCP | — | `[ ]` |
 | Апрув заказчика | — | `[ ]` |
 
 **Коммиты:** `8038cf5` (частичный layout) → прогон 5 (полный канон жестов).
 
+### Прогон 5b — почему на Fly «не свайпалось» (2026-06-24)
+
+| Проблема | Исправление |
+|----------|-------------|
+| Жест только на пилюле 4px | **gesture-zone** `min-h-11` на всю ширину поп-апа |
+| localStorage поднимал **peek** при заходе | **Cold load** → всегда `expanded` + `vertical`; restore только `onCatalogRouteChange` (Избранное/Профиль) |
+| Порог 48px на маленькой зоне | **SWIPE_UP_PX = 32** |
+| iOS съедал touch | `touch-action: none` + `preventDefault` на gesture-zone |
+
+**Как тестировать после deploy:** тяни **серую полосу-зону** над карточками (не за текст товара). ↑↓ по канону § выше.
+
 ### Чеклист приёмки прогона 5 (обязателен перед `[x]` S2a/S2b)
 
 - [ ] Fly deploy
 - [ ] MCP PASS с шагами horizontal + 1-item hidden↔expanded
-- [ ] Ручная проверка на телефоне: drag-handle ↑↓
+- [ ] Ручная проверка на телефоне: **gesture-zone** ↑↓
 - [ ] «ок» заказчика
 
 **S4** — только после закрытия прогона 5.

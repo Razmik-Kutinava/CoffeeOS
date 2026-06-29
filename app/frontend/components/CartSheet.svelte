@@ -10,8 +10,7 @@
     isCatalogRoute,
     onCatalogRouteChange,
     refreshCartSheet,
-    expandFromSwipe,
-    collapseFromSwipe,
+    handleSheetGestureDelta,
     bumpCartLine,
     removeCartLine,
     bindCartSheetEvents,
@@ -25,7 +24,6 @@
     MODE_HIDDEN,
     EXPANDED_LAYOUT_HORIZONTAL,
     sheetHeightVh,
-    SWIPE_UP_PX,
     SHEET_TRANSITION_MS,
     CART_SHEET_BOTTOM_REM,
     CART_SHEET_MAX_WIDTH_PX
@@ -57,16 +55,12 @@
   }
 
   function applySheetGesture(startY, endY) {
-    const delta = startY - endY
-    if (delta >= SWIPE_UP_PX) {
-      expandFromSwipe()
-    } else if (endY - startY >= SWIPE_UP_PX) {
-      collapseFromSwipe()
-    }
+    handleSheetGestureDelta(startY, endY)
   }
 
   function onGestureStart(event) {
     gestureStartY = event.touches?.[0]?.clientY ?? event.clientY
+    if (event.cancelable) event.preventDefault()
     event.currentTarget?.setPointerCapture?.(event.pointerId)
   }
 
@@ -178,15 +172,19 @@
     style:transition-duration="{SHEET_TRANSITION_MS}ms"
   >
     <div
-      data-testid="shop-cart-sheet-drag-handle"
-      class="flex shrink-0 touch-none flex-col items-center pb-2 pt-1.5"
+      data-testid="shop-cart-sheet-gesture-zone"
+      class="cart-sheet-gesture-zone flex min-h-11 w-full shrink-0 touch-none select-none flex-col items-center justify-center border-b border-[#3a3a3a]/60"
+      style:touch-action="none"
+      role="button"
+      tabindex="-1"
+      aria-label="Потяните вверх или вниз, чтобы изменить высоту корзины"
       ontouchstart={onGestureStart}
       ontouchend={onGestureEnd}
       onpointerdown={onGestureStart}
       onpointerup={onGestureEnd}
       onpointercancel={onGestureCancel}
     >
-      <div class="drag-handle h-1 w-10 rounded-full bg-[#555]" aria-hidden="true"></div>
+      <div class="drag-handle h-1.5 w-12 rounded-full bg-[#777]" aria-hidden="true"></div>
     </div>
 
     {#if mode === MODE_EMPTY || !count}

@@ -25,6 +25,12 @@
 | **B1.13 навигация** | layout+gestures fix `[x]` · MCP 14/14 (до fix) | **redeploy** · re-MCP · апрув · Q-rev2 · S4 |
 | **B1.14 адрес в шапке** | **B1.14-3d** index map `[x]` | deploy (`./bin/fly_deploy.sh`) · B1.14-4 cart |
 
+### Сессия 2026-06-24 (B1.13 прогон 5b: gesture-zone UX)
+
+- **gesture-zone** min-h-11, SWIPE 32px, cold load → expanded vertical
+- **Тесты** b113_s2* — PASS
+- **Дальше:** deploy владельца → re-MCP → ручная проверка
+
 ### Сессия 2026-06-24 (B1.13 прогон 5: канон положений + жесты)
 
 - **Канон:** § B1_13 «S2-prog5» — таблицы mode×layout×жест; gap прогонов 1–4 задокументирован

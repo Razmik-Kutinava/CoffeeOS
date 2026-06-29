@@ -19,7 +19,8 @@ import {
   MODE_HIDDEN,
   MODE_PEEK,
   SCROLL_TO_HIDDEN_PX,
-  SCROLL_TO_PEEK_PX
+  SCROLL_TO_PEEK_PX,
+  SWIPE_UP_PX
 } from "./cartSheetThresholds.js"
 
 export const cartItems = writable([])
@@ -114,8 +115,9 @@ function applyCartData(data) {
     resetExpandedLayoutVertical()
   }
   if (mode === MODE_EMPTY) {
-    restoreCartSheetStateFromStorage() || cartSheetMode.set(MODE_EXPANDED)
-    if (!readPersistedCartSheetLayout()) resetExpandedLayoutVertical()
+    // Cold load on catalog: always expanded + vertical (restore only on tab return).
+    cartSheetMode.set(MODE_EXPANDED)
+    resetExpandedLayoutVertical()
     resetScrollAnchor()
   }
 }
@@ -195,6 +197,7 @@ export function onCartAdded() {
   cartSheetMode.set(MODE_EXPANDED)
   resetExpandedLayoutVertical()
   resetScrollAnchor()
+  persistCartSheetState()
   refreshCartSheet().catch(() => {})
 }
 
@@ -207,12 +210,10 @@ export function onCatalogRouteChange(nowOnCatalog) {
     return
   }
 
-  const current = get(cartSheetMode)
-  if (current === MODE_EMPTY) {
-    restoreCartSheetStateFromStorage() || cartSheetMode.set(MODE_EXPANDED)
-    if (!readPersistedCartSheetLayout()) resetExpandedLayoutVertical()
-  } else {
-    restoreCartSheetStateFromStorage()
+  restoreCartSheetStateFromStorage()
+  if (get(cartSheetMode) === MODE_EMPTY) {
+    cartSheetMode.set(MODE_EXPANDED)
+    resetExpandedLayoutVertical()
   }
   resetScrollAnchor()
 }
@@ -297,6 +298,16 @@ export function collapseFromSwipe() {
     cartSheetMode.set(MODE_HIDDEN)
     resetExpandedLayoutVertical()
     resetScrollAnchor()
+  }
+}
+
+/** Жест на gesture-zone: delta = startY − endY (вверх — положительный). */
+export function handleSheetGestureDelta(startY, endY) {
+  const delta = startY - endY
+  if (delta >= SWIPE_UP_PX) {
+    expandFromSwipe()
+  } else if (endY - startY >= SWIPE_UP_PX) {
+    collapseFromSwipe()
   }
 }
 

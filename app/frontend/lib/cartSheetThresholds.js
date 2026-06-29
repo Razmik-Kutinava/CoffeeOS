@@ -22,7 +22,8 @@ export const SCROLL_TO_PEEK_PX = 100
 /** Суммарный скролл вниз от якоря: → hidden (чип) */
 export const SCROLL_TO_HIDDEN_PX = 200
 
-export const SWIPE_UP_PX = 48
+/** Минимальный сдвиг пальца на gesture-zone (px) */
+export const SWIPE_UP_PX = 32
 
 /** B1.13-S2a — анимация перехода между состояниями */
 export const SHEET_TRANSITION_MS = 300

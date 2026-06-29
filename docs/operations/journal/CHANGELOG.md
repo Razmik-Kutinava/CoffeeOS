@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-06-24 — B1.13 прогон 5b: gesture-zone + cold load expanded
+
+- gesture-zone 44px, SWIPE 32px, localStorage не ломает дефолт на заходе
+- Тесты b113_s2* PASS · deploy → re-MCP
+
 ## 2026-06-24 — B1.13 прогон 5: канон положений поп-апа (layout + жесты)
 
 - **Док:** B1_13 § S2-prog5 — gap приёмки прогонов 1–4, таблицы mode×layout×жест
