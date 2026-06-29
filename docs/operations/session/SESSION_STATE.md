@@ -25,6 +25,13 @@
 | **B1.13 навигация** | layout+gestures fix `[x]` · MCP 14/14 (до fix) | **redeploy** · re-MCP · апрув · Q-rev2 · S4 |
 | **B1.14 адрес в шапке** | **B1.14-3d** index map `[x]` | deploy (`./bin/fly_deploy.sh`) · B1.14-4 cart |
 
+### Сессия 2026-06-29 (B1.13 диагноз + flex layout bug)
+
+- **Диагноз Fly MCP DevTools:** `gestureZone: false` — на Fly старый бандл без gesture-zone (prog5b не задеплоен)
+- **Новый баг найден:** `h-[calc(100%-0.75rem)]` считал gesture-zone 12px, а она стала `min-h-11`=44px → overflow в hidden/peek; фикс: `flex flex-col overflow-hidden` на контейнере + `flex-1 min-h-0` на content-дивах
+- **Коммит:** `829764b`
+- **Дальше:** `git push` + GitHub Actions Deploy to Fly → re-MCP → апрув
+
 ### Сессия 2026-06-24 (B1.13 прогон 5b: gesture-zone UX)
 
 - **gesture-zone** min-h-11, SWIPE 32px, cold load → expanded vertical

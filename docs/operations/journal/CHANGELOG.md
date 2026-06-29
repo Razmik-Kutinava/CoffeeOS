@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2026-06-29 — B1.13 flex layout bug fix (829764b)
+
+- **Диагноз MCP DevTools:** `gestureZone: false` — Fly держит старый бандл, прогон 5b не задеплоен
+- **Баг:** `h-[calc(100%-0.75rem)]` предполагал gesture-zone ~12px, но она стала `min-h-11`=44px → в hidden/peek контент переполнял контейнер и не был виден
+- **Фикс:** `flex flex-col overflow-hidden` на внешнем контейнере шита + `flex-1 min-h-0` на всех content-дивах (5 мест)
+- **Нужно:** `git push` → GitHub Actions Deploy to Fly → re-MCP
+
 ## 2026-06-24 — B1.13 прогон 5b: gesture-zone + cold load expanded
 
 - gesture-zone 44px, SWIPE 32px, localStorage не ломает дефолт на заходе
