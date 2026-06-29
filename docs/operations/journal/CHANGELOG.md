@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2026-06-29 — B1.13 prog6: UX fixes (6cdb5ed)
+
+- **vertical default:** `applyCartData` всегда сбрасывает layout → vertical; localStorage не делает горизонтальный default
+- **hidden heads:** `flex-row` горизонтальный ряд компактных верхушек (`w-11 h-9`), не широкие полосы
+- **gesture zone:** `min-h-14` (56px) — шире зона свайпа
+- **scroll:** 60px → peek, 130px → hidden (было 100/200, слишком много)
+
 ## 2026-06-29 — B1.13 passive touch fix (a889249)
 
 - `touchstart`/`touchend` → `addEventListener({ passive: false })` в `onMount` через `bind:this`

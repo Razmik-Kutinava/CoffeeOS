@@ -33,7 +33,8 @@
 - **Fly deploy:** `829764b` + `e6c9a7b` задеплоены — MCP DevTools PASS (`gestureZone: true`, `flex column`, новый бандл `DiTk_YEX`)
 - **Push:** `a889249` — PAT обновлён (+ workflow scope), push прошёл
 - **passive fix:** `a889249` — `touchstart`/`touchend` через `addEventListener({ passive: false })`, свайп больше не блокируется браузером
-- **Дальше:** ручная проверка на телефоне → апрув заказчика
+- **prog6 fixes `6cdb5ed`:** vertical default at load, hidden flex-row heads (w-11 compact), gesture zone 56px, scroll thresholds 60/130px
+- **Дальше:** deploy → ручная проверка → апрув заказчика
 
 ### Сессия 2026-06-24 (B1.13 прогон 5b: gesture-zone UX)
 
