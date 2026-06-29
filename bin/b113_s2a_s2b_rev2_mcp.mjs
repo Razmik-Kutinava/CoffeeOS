@@ -71,14 +71,15 @@ async function scrollCatalog(page, px) {
   await page.waitForTimeout(450)
 }
 
-async function swipeUpOnSheet(page) {
-  const sheet = page.locator('[data-testid="shop-cart-sheet"]')
-  await sheet.waitFor({ state: "visible", timeout: 10000 })
-  await sheet.evaluate((el) => {
+async function swipeOnSheetHandle(page, direction = "up") {
+  const handle = page.locator('[data-testid="shop-cart-sheet-drag-handle"]')
+  await handle.waitFor({ state: "visible", timeout: 10000 })
+  await handle.evaluate((el, dir) => {
     const r = el.getBoundingClientRect()
     const cx = r.left + r.width / 2
-    const y0 = r.bottom - 10
-    const y1 = y0 - 72
+    const y0 = r.top + r.height / 2
+    const delta = dir === "up" ? -72 : 72
+    const y1 = y0 + delta
     const ptrDown = {
       bubbles: true,
       cancelable: true,
@@ -97,7 +98,7 @@ async function swipeUpOnSheet(page) {
     el.dispatchEvent(
       new TouchEvent("touchend", { bubbles: true, cancelable: true, touches: [], changedTouches: [t1] })
     )
-  })
+  }, direction)
   await page.waitForTimeout(600)
 }
 
@@ -154,9 +155,18 @@ async function run() {
       step("S2a-01", "add → catalog + sheet expanded", modeExpanded, { mode: await sheetMode(page) }) && overall
     criteriaS2a.add_expanded = modeExpanded ? "pass" : "fail"
 
-    const lineCount = await page.locator('[data-testid="shop-cart-expanded-line"]').count()
-    const lineText = await page.locator('[data-testid="shop-cart-expanded-line"]').first().innerText().catch(() => "")
-    const hasImage = (await page.locator('[data-testid="shop-cart-expanded-line"] img').count()) > 0
+    const lineCount = await page
+      .locator('[data-testid="shop-cart-expanded-line"], [data-testid="shop-cart-expanded-single"]')
+      .count()
+    const lineText = await page
+      .locator('[data-testid="shop-cart-expanded-line"], [data-testid="shop-cart-expanded-single"]')
+      .first()
+      .innerText()
+      .catch(() => "")
+    const hasImage =
+      (await page
+        .locator('[data-testid="shop-cart-expanded-line"] img, [data-testid="shop-cart-expanded-single"] img')
+        .count()) > 0
     const hasPriceQty = /₽\s*×/.test(lineText)
     const cardOk = lineCount > 0 && hasImage && lineText.length > 3 && hasPriceQty
     overall =
@@ -229,7 +239,7 @@ async function run() {
     await scrollCatalog(page, 100)
     const cartBeforeSwipe = await apiOnPage(page, "/cart")
     const cartLines = cartBeforeSwipe.body?.items?.length || 0
-    await swipeUpOnSheet(page)
+    await swipeOnSheetHandle(page, "up")
     const swipeExpanded = (await sheetMode(page)) === "expanded"
     overall =
       step("S2b-03", "swipe up on sheet → expanded (2+ lines)", swipeExpanded && cartLines >= 2, {
@@ -251,7 +261,7 @@ async function run() {
     await scrollCatalog(page, 100)
     await scrollCatalog(page, 100)
     const beforeSingleSwipe = await sheetMode(page)
-    await swipeUpOnSheet(page)
+    await swipeOnSheetHandle(page, "up")
     const afterSingleSwipe = await sheetMode(page)
     const singleSwipeOk = beforeSingleSwipe === "hidden" && afterSingleSwipe === "hidden"
     overall =

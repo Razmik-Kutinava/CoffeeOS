@@ -10,24 +10,36 @@
     onCatalogRouteChange,
     refreshCartSheet,
     expandFromSwipe,
+    collapseFromSwipe,
     bumpCartLine,
     removeCartLine,
     bindCartSheetEvents,
     atMinQty,
     atMaxQty
   } from "../lib/cartSheetStore.js"
-  import { MODE_EMPTY, MODE_EXPANDED, MODE_PEEK, MODE_HIDDEN, sheetHeightVh, SWIPE_UP_PX, SHEET_TRANSITION_MS, CART_SHEET_BOTTOM_REM, CART_SHEET_MAX_WIDTH_PX } from "../lib/cartSheetThresholds.js"
+  import {
+    MODE_EMPTY,
+    MODE_EXPANDED,
+    MODE_PEEK,
+    MODE_HIDDEN,
+    sheetHeightVh,
+    SWIPE_UP_PX,
+    SHEET_TRANSITION_MS,
+    CART_SHEET_BOTTOM_REM,
+    CART_SHEET_MAX_WIDTH_PX
+  } from "../lib/cartSheetThresholds.js"
 
   let hash = $state(typeof window !== "undefined" ? window.location.hash : "")
   let items = $state([])
   let total = $state(0)
   let mode = $state(MODE_EMPTY)
   let busy = $state(false)
-  let touchStartY = 0
+  let gestureStartY = 0
 
   let onCatalog = $derived(isCatalogRoute(hash))
   let count = $derived(items.length)
   let heightVh = $derived(sheetHeightVh(mode, count))
+  let singleItem = $derived(count === 1 ? items[0] : null)
 
   function roundPrice(n) {
     return Math.round(Number(n) || 0)
@@ -38,31 +50,28 @@
     return `${mod.name}${extra}`
   }
 
-  function onTouchStart(event) {
-    touchStartY = event.touches[0]?.clientY ?? 0
+  function applySheetGesture(startY, endY) {
+    const delta = startY - endY
+    if (delta >= SWIPE_UP_PX) {
+      expandFromSwipe()
+    } else if (endY - startY >= SWIPE_UP_PX) {
+      collapseFromSwipe()
+    }
   }
 
-  function onTouchEnd(event) {
-    const endY = event.changedTouches[0]?.clientY ?? touchStartY
-    tryExpandFromSwipe(touchStartY, endY)
-  }
-
-  function tryExpandFromSwipe(startY, endY) {
-    if (startY - endY >= SWIPE_UP_PX) expandFromSwipe()
-  }
-
-  function onPointerDown(event) {
-    touchStartY = event.clientY
+  function onGestureStart(event) {
+    gestureStartY = event.touches?.[0]?.clientY ?? event.clientY
     event.currentTarget?.setPointerCapture?.(event.pointerId)
   }
 
-  function onPointerUp(event) {
-    tryExpandFromSwipe(touchStartY, event.clientY)
+  function onGestureEnd(event) {
+    const endY = event.changedTouches?.[0]?.clientY ?? event.clientY
+    applySheetGesture(gestureStartY, endY)
     event.currentTarget?.releasePointerCapture?.(event.pointerId)
   }
 
-  function onPointerCancel() {
-    touchStartY = 0
+  function onGestureCancel() {
+    gestureStartY = 0
   }
 
   onMount(() => {
@@ -101,6 +110,52 @@
   })
 </script>
 
+{#snippet lineControls(line)}
+  <div class="mt-1 flex items-center gap-1.5">
+    <button
+      type="button"
+      data-testid="shop-cart-expanded-minus"
+      class="rounded bg-[#3a3a3a] px-2 py-0.5 text-xs disabled:opacity-40"
+      disabled={atMinQty(line)}
+      onclick={() => bumpCartLine(line.index, -1)}
+    >
+      −
+    </button>
+    <span class="text-xs">{line.quantity}</span>
+    <button
+      type="button"
+      data-testid="shop-cart-expanded-plus"
+      class="rounded bg-[#3a3a3a] px-2 py-0.5 text-xs disabled:opacity-40"
+      disabled={atMaxQty(line)}
+      onclick={() => bumpCartLine(line.index, 1)}
+    >
+      +
+    </button>
+    <button
+      type="button"
+      data-testid="shop-cart-expanded-delete"
+      class="ml-auto text-xs text-red-400 disabled:opacity-40"
+      disabled={busy}
+      onclick={() => removeCartLine(line.index)}
+    >
+      Удалить
+    </button>
+  </div>
+{/snippet}
+
+{#snippet lineThumb(line, sizeClass, objectPosition = "")}
+  {#if line.image_url}
+    <img
+      src={line.image_url}
+      alt=""
+      class="{sizeClass} rounded-lg object-cover {objectPosition}"
+      decoding="async"
+    />
+  {:else}
+    <div class="flex {sizeClass} items-center justify-center rounded-lg bg-[#333] text-[10px] text-[#888]">нет</div>
+  {/if}
+{/snippet}
+
 {#if onCatalog}
   <div
     data-testid="shop-cart-sheet"
@@ -110,14 +165,18 @@
     style:bottom="{CART_SHEET_BOTTOM_REM}rem"
     style:max-width="{CART_SHEET_MAX_WIDTH_PX}px"
     style:transition-duration="{SHEET_TRANSITION_MS}ms"
-    style:touch-action="none"
-    ontouchstart={onTouchStart}
-    ontouchend={onTouchEnd}
-    onpointerdown={onPointerDown}
-    onpointerup={onPointerUp}
-    onpointercancel={onPointerCancel}
   >
-    <div class="drag-handle mx-auto mt-1.5 h-1 w-10 rounded-full bg-[#555]" aria-hidden="true"></div>
+    <div
+      data-testid="shop-cart-sheet-drag-handle"
+      class="flex shrink-0 touch-none flex-col items-center pb-2 pt-1.5"
+      ontouchstart={onGestureStart}
+      ontouchend={onGestureEnd}
+      onpointerdown={onGestureStart}
+      onpointerup={onGestureEnd}
+      onpointercancel={onGestureCancel}
+    >
+      <div class="drag-handle h-1 w-10 rounded-full bg-[#555]" aria-hidden="true"></div>
+    </div>
 
     {#if mode === MODE_EMPTY || !count}
       <p
@@ -127,17 +186,19 @@
         тут будут твои заказы
       </p>
     {:else if mode === MODE_HIDDEN}
-      <div class="flex items-center justify-between gap-3 px-4 py-2">
-        {#if items[0]}
-          <div class="w-10 shrink-0">
-            {#if items[0].image_url}
-              <img src={items[0].image_url} alt="" class="h-10 w-10 rounded-lg object-cover" decoding="async" />
-            {:else}
-              <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-[#333] text-[9px] text-[#888]">нет</div>
-            {/if}
-          </div>
-        {/if}
-        <span data-testid="shop-cart-hidden-total" class="ml-auto text-sm font-semibold text-[#ff8c42]">{roundPrice(total)}₽</span>
+      <div class="flex h-[calc(100%-0.75rem)] items-end justify-between gap-2 px-3 pb-2 pt-0.5">
+        <div
+          class="flex min-w-0 flex-1 flex-col gap-0.5 overflow-hidden"
+          data-testid="shop-cart-hidden-heads"
+          data-cart-layout="vertical"
+        >
+          {#each items as line (line.index)}
+            <div class="h-2.5 overflow-hidden rounded-t-lg" data-testid="shop-cart-hidden-head">
+              {@render lineThumb(line, "h-8 w-full", "object-top")}
+            </div>
+          {/each}
+        </div>
+        <span data-testid="shop-cart-hidden-total" class="shrink-0 text-sm font-semibold text-[#ff8c42]">{roundPrice(total)}₽</span>
         <button
           type="button"
           data-testid="shop-cart-sheet-checkout"
@@ -148,15 +209,14 @@
         </button>
       </div>
     {:else if mode === MODE_PEEK}
-      <div class="flex items-end justify-between gap-2 px-3 pb-2 pt-1">
-        <div class="flex min-w-0 flex-1 gap-2 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      <div class="flex h-[calc(100%-0.75rem)] items-end justify-between gap-2 px-3 pb-2 pt-1">
+        <div
+          class="flex min-w-0 flex-1 gap-2 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          data-cart-layout="horizontal"
+        >
           {#each items as line (line.index)}
             <div class="w-14 shrink-0" data-testid="shop-cart-peek-line">
-              {#if line.image_url}
-                <img src={line.image_url} alt="" class="h-14 w-14 rounded-lg object-cover" decoding="async" />
-              {:else}
-                <div class="flex h-14 w-14 items-center justify-center rounded-lg bg-[#333] text-[10px] text-[#888]">нет</div>
-              {/if}
+              {@render lineThumb(line, "h-14 w-14")}
               <div class="mt-0.5 flex items-center justify-center gap-0.5">
                 <button
                   type="button"
@@ -193,14 +253,44 @@
           +цена
         </button>
       </div>
+    {:else if singleItem}
+      <div class="flex h-[calc(100%-0.75rem)] flex-col overflow-hidden px-3 pb-2 pt-1" data-cart-layout="horizontal">
+        <div
+          class="flex min-h-0 flex-1 gap-2 rounded-xl border border-[#3a3a3a] bg-[#1f1f1f] p-2"
+          data-testid="shop-cart-expanded-single"
+        >
+          {@render lineThumb(singleItem, "h-16 w-16 shrink-0")}
+          <div class="min-w-0 flex-1">
+            <p class="line-clamp-2 text-sm font-medium">{singleItem.product_name}</p>
+            <p class="text-xs text-[#a0a0a0]">{roundPrice(singleItem.unit_total)}₽ × {singleItem.quantity}</p>
+            {#if singleItem.selected_modifiers?.length}
+              <ul class="mt-0.5 space-y-0.5 text-[11px] text-[#888]">
+                {#each singleItem.selected_modifiers as mod (mod.id)}
+                  <li>{modifierLabel(mod)}</li>
+                {/each}
+              </ul>
+            {/if}
+            {@render lineControls(singleItem)}
+          </div>
+        </div>
+        <div class="mt-2 flex items-center justify-end gap-2 border-t border-[#3a3a3a] pt-2">
+          <span class="text-sm text-[#a0a0a0]">{roundPrice(total)}₽</span>
+          <button
+            type="button"
+            data-testid="shop-cart-sheet-checkout"
+            class="rounded-lg bg-[#ff8c42] px-4 py-2 text-sm font-semibold text-black"
+            onclick={() => push("/checkout")}
+          >
+            +цена
+          </button>
+        </div>
+      </div>
     {:else}
-      <div class="flex h-[calc(100%-0.75rem)] flex-col overflow-hidden px-3 pb-2 pt-1">
+      <div class="flex h-[calc(100%-0.75rem)] flex-col overflow-hidden px-3 pb-2 pt-1" data-cart-layout="vertical">
         <div class="min-h-0 flex-1 space-y-2 overflow-y-auto">
           {#each items as line (line.index)}
             <div class="flex gap-2 rounded-xl border border-[#3a3a3a] bg-[#1f1f1f] p-2" data-testid="shop-cart-expanded-line">
-              {#if line.image_url}
-                <img src={line.image_url} alt="" class="h-16 w-16 shrink-0 rounded-lg object-cover" decoding="async" />
-              {/if}
+              {@render lineThumb(line, "h-16 w-16 shrink-0")}
               <div class="min-w-0 flex-1">
                 <p class="line-clamp-2 text-sm font-medium">{line.product_name}</p>
                 <p class="text-xs text-[#a0a0a0]">{roundPrice(line.unit_total)}₽ × {line.quantity}</p>
@@ -211,36 +301,7 @@
                     {/each}
                   </ul>
                 {/if}
-                <div class="mt-1 flex items-center gap-1.5">
-                  <button
-                    type="button"
-                    data-testid="shop-cart-expanded-minus"
-                    class="rounded bg-[#3a3a3a] px-2 py-0.5 text-xs disabled:opacity-40"
-                    disabled={atMinQty(line)}
-                    onclick={() => bumpCartLine(line.index, -1)}
-                  >
-                    −
-                  </button>
-                  <span class="text-xs">{line.quantity}</span>
-                  <button
-                    type="button"
-                    data-testid="shop-cart-expanded-plus"
-                    class="rounded bg-[#3a3a3a] px-2 py-0.5 text-xs disabled:opacity-40"
-                    disabled={atMaxQty(line)}
-                    onclick={() => bumpCartLine(line.index, 1)}
-                  >
-                    +
-                  </button>
-                  <button
-                    type="button"
-                    data-testid="shop-cart-expanded-delete"
-                    class="ml-auto text-xs text-red-400 disabled:opacity-40"
-                    disabled={busy}
-                    onclick={() => removeCartLine(line.index)}
-                  >
-                    Удалить
-                  </button>
-                </div>
+                {@render lineControls(line)}
               </div>
             </div>
           {/each}

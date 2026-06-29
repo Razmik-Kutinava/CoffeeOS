@@ -22,8 +22,15 @@
 |--------|--------|
 | **B1.12 rev2** | R3 `[x]` Fly MCP **10/10** · RSA Fly `[x]` | **апрув заказчика** |
 | **B1.11 режим работы** | **Fly MCP header A/B PASS** · артефакт 2026-06-21 | **апрув заказчика** |
-| **B1.13 навигация** | Fly MCP S2a/S2b **14/14** · S3-rev2 12/12 | redeploy CartSheet swipe UX · апрув · Q-rev2 |
+| **B1.13 навигация** | layout+gestures fix `[x]` · MCP 14/14 (до fix) | **redeploy** · re-MCP · апрув · Q-rev2 · S4 |
 | **B1.14 адрес в шапке** | **B1.14-3d** index map `[x]` | deploy (`./bin/fly_deploy.sh`) · B1.14-4 cart |
+
+### Сессия 2026-06-24 (B1.13: layout поп-апа по макетам + жесты)
+
+- **Раскладка:** expanded 1 товар — горизонтальная карточка; 2+ — вертикальный список; peek — горизонтальные миниатюры; hidden — вертикальные «головки» всех позиций
+- **Жесты:** drag-handle — свайп вверх (peek/hidden→expanded, 2+ поз.) / вниз (expanded→peek→hidden); убран `touch-action:none` с всего sheet
+- **Тест:** `b113_s2_layout_gestures_test.rb` + регрессия b113_s2* — PASS
+- **Дальше:** redeploy → re-run MCP → апрув заказчика · S4
 
 ### Сессия 2026-06-27 (B1.13: MCP S2a/S2b 14/14 — swipe fix)
 

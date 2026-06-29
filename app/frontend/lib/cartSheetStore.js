@@ -198,10 +198,29 @@ export function handleCatalogScroll() {
   }
 }
 
+/** Свайп вверх на поп-апе: peek/hidden → expanded (Q-S2-8: не для 1 позиции). */
 export function expandFromSwipe() {
-  if (cartLineCount(get(cartItems)) <= 1) return
+  const mode = get(cartSheetMode)
+  const items = get(cartItems)
+  if (!items.length || mode === MODE_EXPANDED || mode === MODE_EMPTY) return
+  if (cartLineCount(items) <= 1) return
+
   cartSheetMode.set(MODE_EXPANDED)
   resetScrollAnchor()
+}
+
+/** Свайп вниз на поп-апе: expanded → peek → hidden. */
+export function collapseFromSwipe() {
+  const mode = get(cartSheetMode)
+  if (!get(cartItems).length) return
+
+  if (mode === MODE_EXPANDED) {
+    cartSheetMode.set(MODE_PEEK)
+    resetScrollAnchor()
+  } else if (mode === MODE_PEEK) {
+    cartSheetMode.set(MODE_HIDDEN)
+    resetScrollAnchor()
+  }
 }
 
 export function bindCartSheetEvents() {

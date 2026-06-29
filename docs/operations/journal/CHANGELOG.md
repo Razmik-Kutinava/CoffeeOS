@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2026-06-24 — B1.13: layout поп-апа по макетам + жесты drag-handle
+
+- **Раскладка:** expanded (1=horizontal, 2+=vertical) · peek horizontal · hidden vertical heads
+- **Жесты:** `collapseFromSwipe` + свайп на drag-handle; каталог снова скроллится вне handle
+- **Тест:** `b113_s2_layout_gestures_test.rb` + b113_s2* — PASS
+- **Дальше:** redeploy · re-MCP · апрув · S4
+
 ## 2026-06-27 — B1.13: Fly MCP S2a/S2b **14/14** (swipe fix)
 
 - **MCP:** swipe delta 72px + Pointer/Touch dispatch — **14/14 PASS**

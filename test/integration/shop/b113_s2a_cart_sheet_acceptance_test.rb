@@ -33,6 +33,7 @@ class Shop::B113S2aCartSheetAcceptanceTest < ActionDispatch::IntegrationTest
     sheet = File.read(Rails.root.join("app/frontend/components/CartSheet.svelte"))
 
     assert_includes sheet, 'data-testid="shop-cart-expanded-line"'
+    assert_includes sheet, 'data-testid="shop-cart-expanded-single"'
     assert_includes sheet, "line.image_url"
     assert_includes sheet, "line.product_name"
     assert_includes sheet, "line.unit_total"
@@ -90,8 +91,9 @@ class Shop::B113S2aCartSheetAcceptanceTest < ActionDispatch::IntegrationTest
     assert_includes sheet, "onpointerdown"
     assert_includes sheet, "onpointerup"
     assert_includes sheet, "onpointercancel"
-    assert_includes sheet, "tryExpandFromSwipe"
-    assert_includes sheet, 'touch-action="none"'
+    assert_includes sheet, "applySheetGesture"
+    assert_includes sheet, 'data-testid="shop-cart-sheet-drag-handle"'
+    assert_includes sheet, "collapseFromSwipe"
   end
 
   test "cart api returns expanded card payload fields" do
