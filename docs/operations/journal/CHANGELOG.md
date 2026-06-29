@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026-06-29 — B1.13 passive touch fix (a889249)
+
+- `touchstart`/`touchend` → `addEventListener({ passive: false })` в `onMount` через `bind:this`
+- Убраны `ontouchstart`/`ontouchend` из Svelte-шаблона (нельзя передать passive через атрибуты)
+- Fly deploy + push `[x]`
+
 ## 2026-06-29 — B1.13 flex layout bug fix (829764b)
 
 - **Диагноз MCP DevTools:** `gestureZone: false` — Fly держит старый бандл, прогон 5b не задеплоен
