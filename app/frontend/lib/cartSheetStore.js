@@ -2,11 +2,18 @@ import { get, writable } from "svelte/store"
 import { api } from "./api.js"
 import { readCartCache, writeCartCache } from "./shopCartCache.js"
 import {
+  clearPersistedCartSheetLayout,
+  readPersistedCartSheetLayout,
+  writePersistedCartSheetLayout
+} from "./cartSheetLayoutCache.js"
+import {
   clearPersistedCartSheetMode,
   readPersistedCartSheetMode,
   writePersistedCartSheetMode
 } from "./cartSheetModeCache.js"
 import {
+  EXPANDED_LAYOUT_HORIZONTAL,
+  EXPANDED_LAYOUT_VERTICAL,
   MODE_EMPTY,
   MODE_EXPANDED,
   MODE_HIDDEN,
@@ -18,6 +25,7 @@ import {
 export const cartItems = writable([])
 export const cartTotal = writable(0)
 export const cartSheetMode = writable(MODE_EMPTY)
+export const cartSheetExpandedLayout = writable(EXPANDED_LAYOUT_VERTICAL)
 export const cartSheetBusy = writable(false)
 
 /** Синхрон с Shop::CartService::MAX_ITEM_QUANTITY */
@@ -28,19 +36,32 @@ let eventsBound = false
 let bumpChain = Promise.resolve()
 let bumpInFlight = 0
 let modePersistBound = false
+let layoutPersistBound = false
 
-function persistCartSheetMode(mode) {
-  if (!get(cartItems).length || mode === MODE_EMPTY) {
+function persistCartSheetState() {
+  const items = get(cartItems)
+  const mode = get(cartSheetMode)
+  if (!items.length || mode === MODE_EMPTY) {
     clearPersistedCartSheetMode()
+    clearPersistedCartSheetLayout()
     return
   }
   writePersistedCartSheetMode(mode)
+  if (mode === MODE_EXPANDED) {
+    writePersistedCartSheetLayout(get(cartSheetExpandedLayout))
+  }
 }
 
-function restoreCartSheetModeFromStorage() {
-  const saved = readPersistedCartSheetMode()
-  if (saved) cartSheetMode.set(saved)
-  return saved
+function restoreCartSheetStateFromStorage() {
+  const savedMode = readPersistedCartSheetMode()
+  const savedLayout = readPersistedCartSheetLayout()
+  if (savedMode) cartSheetMode.set(savedMode)
+  if (savedLayout) cartSheetExpandedLayout.set(savedLayout)
+  return savedMode
+}
+
+function resetExpandedLayoutVertical() {
+  cartSheetExpandedLayout.set(EXPANDED_LAYOUT_VERTICAL)
 }
 
 function enqueueBump(index, delta) {
@@ -86,10 +107,15 @@ function applyCartData(data) {
   if (!items.length) {
     cartSheetMode.set(MODE_EMPTY)
     clearPersistedCartSheetMode()
+    clearPersistedCartSheetLayout()
     return
   }
+  if (cartLineCount(items) <= 1) {
+    resetExpandedLayoutVertical()
+  }
   if (mode === MODE_EMPTY) {
-    cartSheetMode.set(restoreCartSheetModeFromStorage() || MODE_EXPANDED)
+    restoreCartSheetStateFromStorage() || cartSheetMode.set(MODE_EXPANDED)
+    if (!readPersistedCartSheetLayout()) resetExpandedLayoutVertical()
     resetScrollAnchor()
   }
 }
@@ -124,6 +150,9 @@ function optimisticRemove(index) {
   if (!next.length) {
     cartSheetMode.set(MODE_EMPTY)
     clearPersistedCartSheetMode()
+    clearPersistedCartSheetLayout()
+  } else if (cartLineCount(next) <= 1) {
+    resetExpandedLayoutVertical()
   }
 }
 
@@ -148,16 +177,23 @@ export async function refreshCartSheet() {
     cartTotal.set(0)
     cartSheetMode.set(MODE_EMPTY)
     clearPersistedCartSheetMode()
+    clearPersistedCartSheetLayout()
     throw _e
   }
 }
 
 export function setCartSheetMode(mode) {
   cartSheetMode.set(mode)
+  if (mode !== MODE_EXPANDED) resetExpandedLayoutVertical()
+}
+
+export function setCartSheetExpandedLayout(layout) {
+  cartSheetExpandedLayout.set(layout)
 }
 
 export function onCartAdded() {
   cartSheetMode.set(MODE_EXPANDED)
+  resetExpandedLayoutVertical()
   resetScrollAnchor()
   refreshCartSheet().catch(() => {})
 }
@@ -167,15 +203,16 @@ export function onCatalogRouteChange(nowOnCatalog) {
   if (!items.length) return
 
   if (!nowOnCatalog) {
-    persistCartSheetMode(get(cartSheetMode))
+    persistCartSheetState()
     return
   }
 
   const current = get(cartSheetMode)
   if (current === MODE_EMPTY) {
-    restoreCartSheetModeFromStorage() || cartSheetMode.set(MODE_EXPANDED)
+    restoreCartSheetStateFromStorage() || cartSheetMode.set(MODE_EXPANDED)
+    if (!readPersistedCartSheetLayout()) resetExpandedLayoutVertical()
   } else {
-    restoreCartSheetModeFromStorage()
+    restoreCartSheetStateFromStorage()
   }
   resetScrollAnchor()
 }
@@ -184,7 +221,8 @@ export function handleCatalogScroll() {
   if (!isCatalogRoute()) return
   const mode = get(cartSheetMode)
   const items = get(cartItems)
-  if (!items.length) return
+  const lines = cartLineCount(items)
+  if (!lines) return
   if (mode !== MODE_EXPANDED && mode !== MODE_PEEK) return
 
   const y = window.scrollY || 0
@@ -193,32 +231,71 @@ export function handleCatalogScroll() {
 
   if (delta >= SCROLL_TO_HIDDEN_PX) {
     cartSheetMode.set(MODE_HIDDEN)
+    resetExpandedLayoutVertical()
   } else if (mode === MODE_EXPANDED && delta >= SCROLL_TO_PEEK_PX) {
-    cartSheetMode.set(MODE_PEEK)
+    if (lines <= 1) {
+      cartSheetMode.set(MODE_HIDDEN)
+      resetExpandedLayoutVertical()
+    } else {
+      cartSheetMode.set(MODE_PEEK)
+      resetExpandedLayoutVertical()
+    }
   }
 }
 
-/** Свайп вверх на поп-апе: peek/hidden → expanded (Q-S2-8: не для 1 позиции). */
+/**
+ * Свайп вверх на drag-handle (канон прогон 5):
+ * hidden/peek → expanded vertical; 2+ vertical → horizontal; иначе noop.
+ */
 export function expandFromSwipe() {
   const mode = get(cartSheetMode)
   const items = get(cartItems)
-  if (!items.length || mode === MODE_EXPANDED || mode === MODE_EMPTY) return
-  if (cartLineCount(items) <= 1) return
+  const lines = cartLineCount(items)
+  if (!lines || mode === MODE_EMPTY) return
 
-  cartSheetMode.set(MODE_EXPANDED)
-  resetScrollAnchor()
+  if (mode === MODE_HIDDEN || mode === MODE_PEEK) {
+    cartSheetMode.set(MODE_EXPANDED)
+    resetExpandedLayoutVertical()
+    resetScrollAnchor()
+    return
+  }
+
+  if (mode === MODE_EXPANDED && lines >= 2 && get(cartSheetExpandedLayout) === EXPANDED_LAYOUT_VERTICAL) {
+    cartSheetExpandedLayout.set(EXPANDED_LAYOUT_HORIZONTAL)
+    resetScrollAnchor()
+  }
 }
 
-/** Свайп вниз на поп-апе: expanded → peek → hidden. */
+/**
+ * Свайп вниз на drag-handle (канон прогон 5):
+ * 1 товар: expanded → hidden; 2+ horizontal → vertical → hidden; peek → hidden.
+ */
 export function collapseFromSwipe() {
   const mode = get(cartSheetMode)
-  if (!get(cartItems).length) return
+  const lines = cartLineCount(get(cartItems))
+  if (!lines) return
 
   if (mode === MODE_EXPANDED) {
-    cartSheetMode.set(MODE_PEEK)
-    resetScrollAnchor()
-  } else if (mode === MODE_PEEK) {
+    if (lines <= 1) {
+      cartSheetMode.set(MODE_HIDDEN)
+      resetExpandedLayoutVertical()
+      resetScrollAnchor()
+      return
+    }
+    if (get(cartSheetExpandedLayout) === EXPANDED_LAYOUT_HORIZONTAL) {
+      cartSheetExpandedLayout.set(EXPANDED_LAYOUT_VERTICAL)
+      resetScrollAnchor()
+      return
+    }
     cartSheetMode.set(MODE_HIDDEN)
+    resetExpandedLayoutVertical()
+    resetScrollAnchor()
+    return
+  }
+
+  if (mode === MODE_PEEK) {
+    cartSheetMode.set(MODE_HIDDEN)
+    resetExpandedLayoutVertical()
     resetScrollAnchor()
   }
 }
@@ -229,7 +306,11 @@ export function bindCartSheetEvents() {
   window.addEventListener("shop:cart-added", onCartAdded)
   if (!modePersistBound) {
     modePersistBound = true
-    cartSheetMode.subscribe((mode) => persistCartSheetMode(mode))
+    cartSheetMode.subscribe(() => persistCartSheetState())
+  }
+  if (!layoutPersistBound) {
+    layoutPersistBound = true
+    cartSheetExpandedLayout.subscribe(() => persistCartSheetState())
   }
 }
 

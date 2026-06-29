@@ -23,26 +23,26 @@ class Shop::B113S2bScrollThresholdsTest < ActionDispatch::IntegrationTest
     assert_includes store, "mode === MODE_EXPANDED && delta >= SCROLL_TO_PEEK_PX"
   end
 
-  test "handleCatalogScroll mirror: 100 peek, 200 hidden, scroll up unchanged" do
-    assert_equal "expanded", catalog_scroll_mode("expanded", 0)
-    assert_equal "expanded", catalog_scroll_mode("expanded", 99)
-    assert_equal "peek", catalog_scroll_mode("expanded", 100)
-    assert_equal "peek", catalog_scroll_mode("expanded", 150)
-    assert_equal "hidden", catalog_scroll_mode("expanded", 200)
-    assert_equal "hidden", catalog_scroll_mode("peek", 200)
-    assert_equal "peek", catalog_scroll_mode("peek", 150)
-    assert_equal "peek", catalog_scroll_mode("peek", -10)
+  test "handleCatalogScroll mirror: 100 peek or hidden, 200 hidden, scroll up unchanged" do
+    assert_equal "expanded", catalog_scroll_mode("expanded", 0, 2)
+    assert_equal "peek", catalog_scroll_mode("expanded", 100, 2)
+    assert_equal "hidden", catalog_scroll_mode("expanded", 100, 1)
+    assert_equal "hidden", catalog_scroll_mode("expanded", 200, 2)
+    assert_equal "peek", catalog_scroll_mode("peek", 150, 2)
+    assert_equal "peek", catalog_scroll_mode("peek", -10, 2)
   end
 
   private
 
-  # Зеркало app/frontend/lib/cartSheetStore.js#handleCatalogScroll (пороги S2b).
-  def catalog_scroll_mode(mode, delta)
+  def catalog_scroll_mode(mode, delta, lines)
     return mode if delta.negative?
 
     return "hidden" if delta >= 200
-    return "peek" if mode == "expanded" && delta >= 100
+    if mode == "expanded" && delta >= 100
+      return "hidden" if lines <= 1
 
+      return "peek"
+    end
     mode
   end
 end

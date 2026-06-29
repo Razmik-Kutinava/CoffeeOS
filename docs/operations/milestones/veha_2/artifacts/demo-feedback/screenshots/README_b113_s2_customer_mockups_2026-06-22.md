@@ -19,11 +19,18 @@ JSON: [`../b113_s2_screenshot_baseline_2026-06-22.json`](../b113_s2_screenshot_b
 |-----------|-----------------|
 | empty | ~12% |
 | expanded (1) | ~40% |
-| expanded (3+) | ~36% |
+| expanded (3+) vertical | ~36% |
+| expanded (3+) horizontal | ~42% |
 | peek | ~16% |
-| hidden (чип) | ~9% |
+| hidden (головки) | ~9% |
 
-Скролл каталога вниз: expanded → peek (~12% scroll) → hidden (+~10%).
+## Жесты drag-handle (канон прогон 5 — см. B1_13 § S2-prog5)
+
+**1 товар:** expanded (horizontal) ⇄ hidden (головка). Peek нет. Свайп ↑ в expanded — noop.
+
+**2+ товара:** hidden →↑ vertical →↑ horizontal; horizontal →↓ vertical →↓ hidden. Peek — только скролл каталога 100px.
+
+Скролл каталога: **1 товар** 100px → hidden; **2+** 100px → peek, 200px → hidden.
 
 ## Сейчас в коде vs макет
 

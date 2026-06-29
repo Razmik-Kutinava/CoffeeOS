@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2026-06-24 — B1.13 прогон 5: канон положений поп-апа (layout + жесты)
+
+- **Док:** B1_13 § S2-prog5 — gap приёмки прогонов 1–4, таблицы mode×layout×жест
+- **Код:** `cartSheetExpandedLayout`, horizontal expanded, жесты 1 vs 2+, 1 товар без peek
+- **Тест:** b113_s2* — PASS · MCP скрипт обновлён
+- **Дальше:** Fly deploy · re-MCP · апрув
+
 ## 2026-06-24 — B1.13: layout поп-апа по макетам + жесты drag-handle
 
 - **Раскладка:** expanded (1=horizontal, 2+=vertical) · peek horizontal · hidden vertical heads

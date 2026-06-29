@@ -5,6 +5,7 @@
     cartItems,
     cartTotal,
     cartSheetMode,
+    cartSheetExpandedLayout,
     cartSheetBusy,
     isCatalogRoute,
     onCatalogRouteChange,
@@ -22,6 +23,7 @@
     MODE_EXPANDED,
     MODE_PEEK,
     MODE_HIDDEN,
+    EXPANDED_LAYOUT_HORIZONTAL,
     sheetHeightVh,
     SWIPE_UP_PX,
     SHEET_TRANSITION_MS,
@@ -33,13 +35,17 @@
   let items = $state([])
   let total = $state(0)
   let mode = $state(MODE_EMPTY)
+  let expandedLayout = $state("vertical")
   let busy = $state(false)
   let gestureStartY = 0
 
   let onCatalog = $derived(isCatalogRoute(hash))
   let count = $derived(items.length)
-  let heightVh = $derived(sheetHeightVh(mode, count))
+  let heightVh = $derived(sheetHeightVh(mode, count, expandedLayout))
   let singleItem = $derived(count === 1 ? items[0] : null)
+  let expandedHorizontal = $derived(
+    mode === MODE_EXPANDED && count >= 2 && expandedLayout === EXPANDED_LAYOUT_HORIZONTAL
+  )
 
   function roundPrice(n) {
     return Math.round(Number(n) || 0)
@@ -84,6 +90,9 @@
     const unsubMode = cartSheetMode.subscribe((v) => {
       mode = v
     })
+    const unsubLayout = cartSheetExpandedLayout.subscribe((v) => {
+      expandedLayout = v
+    })
     const unsubBusy = cartSheetBusy.subscribe((v) => {
       busy = v
     })
@@ -104,6 +113,7 @@
       unsubItems()
       unsubTotal()
       unsubMode()
+      unsubLayout()
       unsubBusy()
       window.removeEventListener("hashchange", onHash)
     }
@@ -160,6 +170,7 @@
   <div
     data-testid="shop-cart-sheet"
     data-cart-sheet-mode={mode}
+    data-cart-sheet-layout={expandedLayout}
     class="cart-sheet fixed left-0 right-0 z-50 mx-auto border-t border-[#3a3a3a] bg-[#2a2a2a]/98 backdrop-blur transition-[height] ease-out"
     style:height="{heightVh}vh"
     style:bottom="{CART_SHEET_BOTTOM_REM}rem"
@@ -252,6 +263,48 @@
         >
           +цена
         </button>
+      </div>
+    {:else if expandedHorizontal}
+      <div
+        class="flex h-[calc(100%-0.75rem)] flex-col overflow-hidden px-3 pb-2 pt-1"
+        data-cart-layout="horizontal"
+        data-testid="shop-cart-expanded-horizontal"
+      >
+        <div
+          class="flex min-h-0 flex-1 gap-2 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        >
+          {#each items as line (line.index)}
+            <div
+              class="flex w-[min(85vw,280px)] shrink-0 flex-col gap-2 rounded-xl border border-[#3a3a3a] bg-[#1f1f1f] p-2"
+              data-testid="shop-cart-expanded-line"
+            >
+              {@render lineThumb(line, "h-24 w-full")}
+              <div class="min-w-0 flex-1">
+                <p class="line-clamp-2 text-sm font-medium">{line.product_name}</p>
+                <p class="text-xs text-[#a0a0a0]">{roundPrice(line.unit_total)}₽ × {line.quantity}</p>
+                {#if line.selected_modifiers?.length}
+                  <ul class="mt-0.5 space-y-0.5 text-[11px] text-[#888]">
+                    {#each line.selected_modifiers as mod (mod.id)}
+                      <li>{modifierLabel(mod)}</li>
+                    {/each}
+                  </ul>
+                {/if}
+                {@render lineControls(line)}
+              </div>
+            </div>
+          {/each}
+        </div>
+        <div class="mt-2 flex items-center justify-end gap-2 border-t border-[#3a3a3a] pt-2">
+          <span class="text-sm text-[#a0a0a0]">{roundPrice(total)}₽</span>
+          <button
+            type="button"
+            data-testid="shop-cart-sheet-checkout"
+            class="rounded-lg bg-[#ff8c42] px-4 py-2 text-sm font-semibold text-black"
+            onclick={() => push("/checkout")}
+          >
+            +цена
+          </button>
+        </div>
       </div>
     {:else if singleItem}
       <div class="flex h-[calc(100%-0.75rem)] flex-col overflow-hidden px-3 pb-2 pt-1" data-cart-layout="horizontal">

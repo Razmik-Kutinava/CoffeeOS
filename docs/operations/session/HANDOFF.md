@@ -32,7 +32,7 @@
 | **S2b прогон 1** | скролл 100/200 px — **код `[x]`** |
 | **S2b прогон 2** | localStorage режима — **код `[x]`** |
 | **S2a прогон 3** | приёмка с товаром — **код `[x]`** |
-| **S2a/S2b** | **код layout+gestures fix** `[x]` 2026-06-24 | Fly MCP после redeploy · апрув · Q-rev2 |
+| **S2a/S2b** | прогон 5 layout+жесты `[x]` код | **redeploy** · re-MCP · апрув · S4 |
 | **Агент** | **стоп** |
 
 ТЗ: [`B1_13_shop_nav_profile_header.md`](../milestones/veha_2/requirements/customer_tasks/B1_13_shop_nav_profile_header.md)

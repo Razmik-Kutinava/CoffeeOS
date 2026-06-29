@@ -5,10 +5,14 @@ export const MODE_EXPANDED = "expanded"
 export const MODE_PEEK = "peek"
 export const MODE_HIDDEN = "hidden"
 
+export const EXPANDED_LAYOUT_VERTICAL = "vertical"
+export const EXPANDED_LAYOUT_HORIZONTAL = "horizontal"
+
 export const SHEET_VH = {
   empty: 12,
   expanded: 40,
   expandedMulti: 36,
+  expandedMultiHorizontal: 42,
   peek: 16,
   hidden: 9
 }
@@ -29,10 +33,12 @@ export const CART_SHEET_BOTTOM_REM = 3.5
 /** B1.13-S2a — адаптация viewport 320–414px */
 export const CART_SHEET_MAX_WIDTH_PX = 414
 
-export function sheetHeightVh(mode, itemCount = 0) {
+export function sheetHeightVh(mode, itemCount = 0, expandedLayout = EXPANDED_LAYOUT_VERTICAL) {
   if (mode === MODE_EMPTY) return SHEET_VH.empty
   if (mode === MODE_EXPANDED) {
-    return itemCount > 1 ? SHEET_VH.expandedMulti : SHEET_VH.expanded
+    if (itemCount <= 1) return SHEET_VH.expanded
+    if (expandedLayout === EXPANDED_LAYOUT_HORIZONTAL) return SHEET_VH.expandedMultiHorizontal
+    return SHEET_VH.expandedMulti
   }
   if (mode === MODE_PEEK) return SHEET_VH.peek
   if (mode === MODE_HIDDEN) return SHEET_VH.hidden

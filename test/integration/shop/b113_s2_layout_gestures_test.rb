@@ -2,79 +2,131 @@
 
 require "test_helper"
 
-# B1.13-S2 — раскладка поп-апа по макетам + жесты свайпа на drag-handle.
+# B1.13-S2 прогон 5 — канон жестов и раскладок по макетам заказчика.
 class Shop::B113S2LayoutGesturesTest < ActionDispatch::IntegrationTest
+  test "expanded layout store and cache exported" do
+    store = File.read(Rails.root.join("app/frontend/lib/cartSheetStore.js"))
+    cache = File.read(Rails.root.join("app/frontend/lib/cartSheetLayoutCache.js"))
+    thresholds = File.read(Rails.root.join("app/frontend/lib/cartSheetThresholds.js"))
+
+    assert_includes store, "cartSheetExpandedLayout"
+    assert_includes store, "EXPANDED_LAYOUT_VERTICAL"
+    assert_includes store, "EXPANDED_LAYOUT_HORIZONTAL"
+    assert_includes cache, "coffeeos_shop_cart_sheet_layout_v1"
+    assert_includes thresholds, "expandedMultiHorizontal"
+  end
+
   test "expanded single item uses horizontal layout marker" do
     sheet = File.read(Rails.root.join("app/frontend/components/CartSheet.svelte"))
 
     assert_includes sheet, 'data-testid="shop-cart-expanded-single"'
     assert_includes sheet, "singleItem"
-    assert_includes sheet, 'data-cart-layout="horizontal"'
   end
 
-  test "expanded multi items use vertical list layout marker" do
+  test "expanded multi vertical list layout marker" do
     sheet = File.read(Rails.root.join("app/frontend/components/CartSheet.svelte"))
 
     assert_includes sheet, 'data-cart-layout="vertical"'
     assert_includes sheet, 'data-testid="shop-cart-expanded-line"'
   end
 
-  test "peek uses horizontal thumbnails row" do
+  test "expanded multi horizontal layout after swipe up" do
     sheet = File.read(Rails.root.join("app/frontend/components/CartSheet.svelte"))
 
-    assert_includes sheet, "MODE_PEEK"
-    assert_includes sheet, 'data-testid="shop-cart-peek-line"'
-    assert_includes sheet, "overflow-x-auto"
+    assert_includes sheet, 'data-testid="shop-cart-expanded-horizontal"'
+    assert_includes sheet, "expandedHorizontal"
+    assert_includes sheet, 'data-cart-sheet-layout={expandedLayout}'
   end
 
-  test "hidden shows vertical heads for all lines" do
+  test "peek horizontal thumbnails only for catalog scroll path" do
+    sheet = File.read(Rails.root.join("app/frontend/components/CartSheet.svelte"))
+    store = File.read(Rails.root.join("app/frontend/lib/cartSheetStore.js"))
+
+    assert_includes sheet, 'data-testid="shop-cart-peek-line"'
+    assert_includes store, "lines <= 1"
+    assert_includes store, "MODE_HIDDEN"
+  end
+
+  test "hidden vertical heads for all lines" do
     sheet = File.read(Rails.root.join("app/frontend/components/CartSheet.svelte"))
 
     assert_includes sheet, 'data-testid="shop-cart-hidden-heads"'
     assert_includes sheet, 'data-testid="shop-cart-hidden-head"'
-    assert_includes sheet, 'data-cart-layout="vertical"'
   end
 
-  test "sheet gestures on drag handle with swipe up and down" do
+  test "gestures on drag handle swipe up and down" do
     sheet = File.read(Rails.root.join("app/frontend/components/CartSheet.svelte"))
     store = File.read(Rails.root.join("app/frontend/lib/cartSheetStore.js"))
 
     assert_includes sheet, 'data-testid="shop-cart-sheet-drag-handle"'
-    assert_includes sheet, "applySheetGesture"
-    assert_includes sheet, "collapseFromSwipe"
-    assert_includes sheet, "expandFromSwipe"
-    refute_includes sheet, 'style:touch-action="none"'
     assert_includes store, "export function collapseFromSwipe"
+    assert_includes store, "export function expandFromSwipe"
   end
 
-  test "collapseFromSwipe mirror expanded to peek to hidden" do
-    assert_equal "peek", collapse_from_swipe_mirror("expanded")
-    assert_equal "hidden", collapse_from_swipe_mirror("peek")
-    assert_equal "hidden", collapse_from_swipe_mirror("hidden")
+  test "expandFromSwipe mirror hidden and peek restore expanded vertical" do
+    assert_equal ["expanded", "vertical"], expand_mirror(1, "hidden", "vertical")
+    assert_equal ["expanded", "vertical"], expand_mirror(2, "hidden", "vertical")
+    assert_equal ["expanded", "vertical"], expand_mirror(2, "peek", "vertical")
   end
 
-  test "expandFromSwipe mirror only from peek or hidden with 2+ lines" do
-    assert_equal "expanded", expand_from_swipe_mirror(2, "peek")
-    assert_equal "expanded", expand_from_swipe_mirror(2, "hidden")
-    assert_equal "peek", expand_from_swipe_mirror(1, "peek")
-    assert_equal "hidden", expand_from_swipe_mirror(1, "hidden")
-    assert_equal "expanded", expand_from_swipe_mirror(2, "expanded")
+  test "expandFromSwipe mirror multi vertical to horizontal" do
+    assert_equal ["expanded", "horizontal"], expand_mirror(2, "expanded", "vertical")
+    assert_equal ["expanded", "vertical"], expand_mirror(1, "expanded", "vertical")
+    assert_equal ["expanded", "horizontal"], expand_mirror(2, "expanded", "horizontal")
+  end
+
+  test "collapseFromSwipe mirror one item expanded to hidden" do
+    assert_equal ["hidden", "vertical"], collapse_mirror(1, "expanded", "vertical")
+    assert_equal ["hidden", "vertical"], collapse_mirror(1, "expanded", "horizontal")
+  end
+
+  test "collapseFromSwipe mirror multi horizontal to vertical then hidden" do
+    assert_equal ["expanded", "vertical"], collapse_mirror(2, "expanded", "horizontal")
+    assert_equal ["hidden", "vertical"], collapse_mirror(2, "expanded", "vertical")
+    assert_equal ["hidden", "vertical"], collapse_mirror(2, "peek", "vertical")
+  end
+
+  test "catalog scroll mirror one item skips peek" do
+    assert_equal "hidden", scroll_mirror(1, "expanded", 100)
+    assert_equal "peek", scroll_mirror(2, "expanded", 100)
+    assert_equal "hidden", scroll_mirror(2, "expanded", 200)
   end
 
   private
 
-  def collapse_from_swipe_mirror(mode)
-    case mode
-    when "expanded" then "peek"
-    when "peek" then "hidden"
-    else mode
+  def expand_mirror(lines, mode, layout)
+    return [mode, layout] if lines.zero?
+
+    if mode == "hidden" || mode == "peek"
+      return ["expanded", "vertical"]
     end
+    if mode == "expanded" && lines >= 2 && layout == "vertical"
+      return ["expanded", "horizontal"]
+    end
+
+    [mode, layout]
   end
 
-  def expand_from_swipe_mirror(item_count, mode)
-    return mode if mode == "expanded" || mode == "empty"
-    return mode if item_count <= 1
+  def collapse_mirror(lines, mode, layout)
+    if mode == "expanded"
+      return ["hidden", "vertical"] if lines <= 1
+      return ["expanded", "vertical"] if layout == "horizontal"
+      return ["hidden", "vertical"]
+    end
+    return ["hidden", "vertical"] if mode == "peek"
 
-    "expanded"
+    [mode, layout]
+  end
+
+  def scroll_mirror(lines, mode, delta)
+    return mode if delta.negative?
+
+    return "hidden" if delta >= 200
+    if mode == "expanded" && delta >= 100
+      return "hidden" if lines <= 1
+
+      return "peek"
+    end
+    mode
   end
 end

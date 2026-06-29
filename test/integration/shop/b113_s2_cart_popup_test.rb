@@ -48,9 +48,10 @@ class Shop::B113S2CartPopupTest < ActionDispatch::IntegrationTest
     assert_includes sheet, "+цена"
     assert_includes sheet, "isCatalogRoute"
     assert_includes store, "handleCatalogScroll"
+    assert_includes store, "cartSheetExpandedLayout"
     assert_includes store, "collapseFromSwipe"
     assert_includes store, "expandFromSwipe"
-    assert_includes store, "cartLineCount(get(cartItems)) <= 1"
+    assert_includes store, "cartLineCount(items) <= 1"
     assert_includes store, "onCatalogRouteChange"
     assert_includes store, "cartSheetModeCache.js"
   end

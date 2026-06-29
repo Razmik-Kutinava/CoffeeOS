@@ -25,6 +25,14 @@
 | **B1.13 навигация** | layout+gestures fix `[x]` · MCP 14/14 (до fix) | **redeploy** · re-MCP · апрув · Q-rev2 · S4 |
 | **B1.14 адрес в шапке** | **B1.14-3d** index map `[x]` | deploy (`./bin/fly_deploy.sh`) · B1.14-4 cart |
 
+### Сессия 2026-06-24 (B1.13 прогон 5: канон положений + жесты)
+
+- **Канон:** § B1_13 «S2-prog5» — таблицы mode×layout×жест; gap прогонов 1–4 задокументирован
+- **Код:** `cartSheetExpandedLayout` vertical|horizontal; expand/collapse по канону; 1 товар без peek
+- **Тест:** `b113_s2_layout_gestures_test.rb` + b113_s2* — PASS
+- **MCP:** скрипт обновлён (horizontal, 1-item hidden↔expanded); Fly `[ ]`
+- **Дальше:** deploy → re-MCP → апрув → S4
+
 ### Сессия 2026-06-24 (B1.13: layout поп-апа по макетам + жесты)
 
 - **Раскладка:** expanded 1 товар — горизонтальная карточка; 2+ — вертикальный список; peek — горизонтальные миниатюры; hidden — вертикальные «головки» всех позиций

@@ -115,18 +115,23 @@ class Shop::B113S2aCartSheetAcceptanceTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test "sheetHeightVh mirrors S2a viewport heights" do
+  test "sheetHeightVh mirrors S2a viewport heights and horizontal expanded" do
     assert_equal 40, sheet_height_vh("expanded", 1)
-    assert_equal 36, sheet_height_vh("expanded", 2)
+    assert_equal 36, sheet_height_vh("expanded", 2, "vertical")
+    assert_equal 42, sheet_height_vh("expanded", 2, "horizontal")
     assert_equal 16, sheet_height_vh("peek", 1)
     assert_equal 9, sheet_height_vh("hidden", 1)
   end
 
   private
 
-  def sheet_height_vh(mode, item_count)
+  def sheet_height_vh(mode, item_count, layout = "vertical")
     case mode
-    when "expanded" then item_count > 1 ? 36 : 40
+    when "expanded"
+      return 40 if item_count <= 1
+      return 42 if layout == "horizontal"
+
+      36
     when "peek" then 16
     when "hidden" then 9
     else 12

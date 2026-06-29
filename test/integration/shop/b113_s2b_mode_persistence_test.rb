@@ -56,10 +56,13 @@ class Shop::B113S2bModePersistenceTest < ActionDispatch::IntegrationTest
     assert_equal "expanded", catalog_scroll_mode("expanded", 50)
   end
 
-  test "expandFromSwipe mirror: multi item expands, single item ignored" do
+  test "expandFromSwipe mirror: hidden restores expanded for any line count" do
+    assert_equal "expanded", expand_from_swipe_mirror(1, "hidden")
+    assert_equal "expanded", expand_from_swipe_mirror(2, "hidden")
     assert_equal "expanded", expand_from_swipe_mirror(2, "peek")
-    assert_equal "peek", expand_from_swipe_mirror(1, "peek")
-    assert_equal "hidden", expand_from_swipe_mirror(1, "hidden")
+    assert_equal "expanded", expand_from_swipe_mirror(1, "peek")
+    assert_equal "expanded", expand_from_swipe_mirror(2, "expanded", "vertical", to_horizontal: true)
+    assert_equal "expanded", expand_from_swipe_mirror(1, "expanded", "vertical", to_horizontal: true)
   end
 
   private
@@ -92,9 +95,10 @@ class Shop::B113S2bModePersistenceTest < ActionDispatch::IntegrationTest
     mode
   end
 
-  def expand_from_swipe_mirror(item_count, mode)
-    return mode if item_count <= 1
+  def expand_from_swipe_mirror(item_count, mode, layout = "vertical", to_horizontal: false)
+    return "expanded" if mode == "hidden" || mode == "peek"
+    return "expanded" if to_horizontal && mode == "expanded" && item_count >= 2 && layout == "vertical"
 
-    "expanded"
+    mode
   end
 end
