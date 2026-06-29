@@ -2,18 +2,11 @@ import { get, writable } from "svelte/store"
 import { api } from "./api.js"
 import { readCartCache, writeCartCache } from "./shopCartCache.js"
 import {
-  clearPersistedCartSheetLayout,
-  readPersistedCartSheetLayout,
-  writePersistedCartSheetLayout
-} from "./cartSheetLayoutCache.js"
-import {
   clearPersistedCartSheetMode,
   readPersistedCartSheetMode,
   writePersistedCartSheetMode
 } from "./cartSheetModeCache.js"
 import {
-  EXPANDED_LAYOUT_HORIZONTAL,
-  EXPANDED_LAYOUT_VERTICAL,
   MODE_EMPTY,
   MODE_EXPANDED,
   MODE_HIDDEN,
@@ -26,7 +19,6 @@ import {
 export const cartItems = writable([])
 export const cartTotal = writable(0)
 export const cartSheetMode = writable(MODE_EMPTY)
-export const cartSheetExpandedLayout = writable(EXPANDED_LAYOUT_VERTICAL)
 export const cartSheetBusy = writable(false)
 
 /** Синхрон с Shop::CartService::MAX_ITEM_QUANTITY */
@@ -37,44 +29,22 @@ let eventsBound = false
 let bumpChain = Promise.resolve()
 let bumpInFlight = 0
 let modePersistBound = false
-let layoutPersistBound = false
 
-function persistCartSheetState() {
+function persistCartSheetMode() {
   const items = get(cartItems)
   const mode = get(cartSheetMode)
   if (!items.length || mode === MODE_EMPTY) {
     clearPersistedCartSheetMode()
-    clearPersistedCartSheetLayout()
     return
   }
   writePersistedCartSheetMode(mode)
-  if (mode === MODE_EXPANDED) {
-    writePersistedCartSheetLayout(get(cartSheetExpandedLayout))
-  }
-}
-
-function restoreCartSheetStateFromStorage() {
-  const savedMode = readPersistedCartSheetMode()
-  const savedLayout = readPersistedCartSheetLayout()
-  if (savedMode) cartSheetMode.set(savedMode)
-  if (savedLayout) cartSheetExpandedLayout.set(savedLayout)
-  return savedMode
-}
-
-function resetExpandedLayoutVertical() {
-  cartSheetExpandedLayout.set(EXPANDED_LAYOUT_VERTICAL)
 }
 
 function enqueueBump(index, delta) {
   bumpInFlight += 1
   cartSheetBusy.set(true)
   bumpChain = bumpChain
-    .then(() =>
-      api(`/cart/items/${index}`, {
-        method: "PATCH",
-        body: JSON.stringify({ delta })
-      })
-    )
+    .then(() => api(`/cart/items/${index}`, { method: "PATCH", body: JSON.stringify({ delta }) }))
     .then(() => refreshCartSheet())
     .catch(() => refreshCartSheet())
     .finally(() => {
@@ -108,14 +78,10 @@ function applyCartData(data) {
   if (!items.length) {
     cartSheetMode.set(MODE_EMPTY)
     clearPersistedCartSheetMode()
-    clearPersistedCartSheetLayout()
     return
   }
-  // Всегда сбрасываем horizontal при загрузке — localStorage не должен делать
-  // горизонтальный default. Горизонтальный только после явного свайпа вверх.
-  resetExpandedLayoutVertical()
   if (mode === MODE_EMPTY) {
-    cartSheetMode.set(MODE_EXPANDED)
+    cartSheetMode.set(MODE_PEEK)
     resetScrollAnchor()
   }
 }
@@ -150,9 +116,6 @@ function optimisticRemove(index) {
   if (!next.length) {
     cartSheetMode.set(MODE_EMPTY)
     clearPersistedCartSheetMode()
-    clearPersistedCartSheetLayout()
-  } else if (cartLineCount(next) <= 1) {
-    resetExpandedLayoutVertical()
   }
 }
 
@@ -177,46 +140,27 @@ export async function refreshCartSheet() {
     cartTotal.set(0)
     cartSheetMode.set(MODE_EMPTY)
     clearPersistedCartSheetMode()
-    clearPersistedCartSheetLayout()
     throw _e
   }
 }
 
-export function setCartSheetMode(mode) {
-  cartSheetMode.set(mode)
-  if (mode !== MODE_EXPANDED) resetExpandedLayoutVertical()
-}
-
-export function setCartSheetExpandedLayout(layout) {
-  cartSheetExpandedLayout.set(layout)
-}
-
+/** Добавили товар: переходим в peek (дефолт) */
 export function onCartAdded() {
-  cartSheetMode.set(MODE_EXPANDED)
-  resetExpandedLayoutVertical()
+  cartSheetMode.set(MODE_PEEK)
   resetScrollAnchor()
-  persistCartSheetState()
+  persistCartSheetMode()
   refreshCartSheet().catch(() => {})
 }
 
 export function onCatalogRouteChange(nowOnCatalog) {
   const items = get(cartItems)
   if (!items.length) return
-
   if (!nowOnCatalog) {
-    persistCartSheetState()
+    persistCartSheetMode()
     return
   }
-
-  // При возврате на каталог восстанавливаем только mode (peek/hidden/expanded),
-  // но layout всегда вертикальный — горизонтальный только после явного свайпа вверх.
   const savedMode = readPersistedCartSheetMode()
-  if (savedMode && savedMode !== MODE_EMPTY) {
-    cartSheetMode.set(savedMode)
-  } else {
-    cartSheetMode.set(MODE_EXPANDED)
-  }
-  resetExpandedLayoutVertical()
+  cartSheetMode.set(savedMode && savedMode !== MODE_EMPTY ? savedMode : MODE_PEEK)
   resetScrollAnchor()
 }
 
@@ -234,76 +178,59 @@ export function handleCatalogScroll() {
 
   if (delta >= SCROLL_TO_HIDDEN_PX) {
     cartSheetMode.set(MODE_HIDDEN)
-    resetExpandedLayoutVertical()
   } else if (mode === MODE_EXPANDED && delta >= SCROLL_TO_PEEK_PX) {
-    if (lines <= 1) {
-      cartSheetMode.set(MODE_HIDDEN)
-      resetExpandedLayoutVertical()
-    } else {
-      cartSheetMode.set(MODE_PEEK)
-      resetExpandedLayoutVertical()
-    }
+    // 1 товар — пик пропускаем, сразу в hidden
+    cartSheetMode.set(lines <= 1 ? MODE_HIDDEN : MODE_PEEK)
   }
 }
 
 /**
- * Свайп вверх на drag-handle (канон прогон 5):
- * hidden/peek → expanded vertical; 2+ vertical → horizontal; иначе noop.
+ * Свайп вверх:
+ *   hidden       → peek
+ *   peek (2+)    → expanded (горизонтальные карточки)
+ *   peek (1)     → noop (1 товар не раскрывается в expanded)
+ *   expanded     → noop (уже максимум)
  */
 export function expandFromSwipe() {
   const mode = get(cartSheetMode)
-  const items = get(cartItems)
-  const lines = cartLineCount(items)
+  const lines = cartLineCount(get(cartItems))
   if (!lines || mode === MODE_EMPTY) return
 
-  if (mode === MODE_HIDDEN || mode === MODE_PEEK) {
-    cartSheetMode.set(MODE_EXPANDED)
-    resetExpandedLayoutVertical()
+  if (mode === MODE_HIDDEN) {
+    cartSheetMode.set(MODE_PEEK)
     resetScrollAnchor()
     return
   }
 
-  if (mode === MODE_EXPANDED && lines >= 2 && get(cartSheetExpandedLayout) === EXPANDED_LAYOUT_VERTICAL) {
-    cartSheetExpandedLayout.set(EXPANDED_LAYOUT_HORIZONTAL)
+  if (mode === MODE_PEEK && lines >= 2) {
+    cartSheetMode.set(MODE_EXPANDED)
     resetScrollAnchor()
   }
 }
 
 /**
- * Свайп вниз на drag-handle (канон прогон 5):
- * 1 товар: expanded → hidden; 2+ horizontal → vertical → hidden; peek → hidden.
+ * Свайп вниз:
+ *   expanded → peek
+ *   peek     → hidden
+ *   hidden   → noop
  */
 export function collapseFromSwipe() {
   const mode = get(cartSheetMode)
-  const lines = cartLineCount(get(cartItems))
-  if (!lines) return
+  if (!cartLineCount(get(cartItems))) return
 
   if (mode === MODE_EXPANDED) {
-    if (lines <= 1) {
-      cartSheetMode.set(MODE_HIDDEN)
-      resetExpandedLayoutVertical()
-      resetScrollAnchor()
-      return
-    }
-    if (get(cartSheetExpandedLayout) === EXPANDED_LAYOUT_HORIZONTAL) {
-      cartSheetExpandedLayout.set(EXPANDED_LAYOUT_VERTICAL)
-      resetScrollAnchor()
-      return
-    }
-    cartSheetMode.set(MODE_HIDDEN)
-    resetExpandedLayoutVertical()
+    cartSheetMode.set(MODE_PEEK)
     resetScrollAnchor()
     return
   }
 
   if (mode === MODE_PEEK) {
     cartSheetMode.set(MODE_HIDDEN)
-    resetExpandedLayoutVertical()
     resetScrollAnchor()
   }
 }
 
-/** Жест на gesture-zone: delta = startY − endY (вверх — положительный). */
+/** Жест на gesture-zone: delta = startY − endY (вверх положительный). */
 export function handleSheetGestureDelta(startY, endY) {
   const delta = startY - endY
   if (delta >= SWIPE_UP_PX) {
@@ -319,11 +246,7 @@ export function bindCartSheetEvents() {
   window.addEventListener("shop:cart-added", onCartAdded)
   if (!modePersistBound) {
     modePersistBound = true
-    cartSheetMode.subscribe(() => persistCartSheetState())
-  }
-  if (!layoutPersistBound) {
-    layoutPersistBound = true
-    cartSheetExpandedLayout.subscribe(() => persistCartSheetState())
+    cartSheetMode.subscribe(() => persistCartSheetMode())
   }
 }
 
