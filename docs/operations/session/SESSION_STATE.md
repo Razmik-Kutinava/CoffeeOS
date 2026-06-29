@@ -25,6 +25,15 @@
 | **B1.13 навигация** | layout+gestures fix `[x]` · MCP 14/14 (до fix) | **redeploy** · re-MCP · апрув · Q-rev2 · S4 |
 | **B1.14 адрес в шапке** | **B1.14-3d** index map `[x]` | deploy (`./bin/fly_deploy.sh`) · B1.14-4 cart |
 
+### Сессия 2026-06-29 (B1.13 финальный канон peek/expanded/hidden)
+
+- **Финальный канон принят:** PEEK = дефолт (добавление), EXPANDED = только 2+ горизонтальные карточки, HIDDEN = шапки
+- **Свайпы:** hidden↑→peek, peek(2+)↑→expanded, expanded↓→peek, peek↓→hidden
+- **Удалён** `cartSheetExpandedLayout` и `EXPANDED_LAYOUT_*` — лишняя сложность
+- **Пороги** скролла 100/200px восстановлены (по ТЗ заказчика)
+- **Коммит:** `9177aed` — fly deploy запущен
+- **Дальше:** ждать deploy → ручная проверка → апрув заказчика
+
 ### Сессия 2026-06-29 (B1.13 диагноз + flex layout bug)
 
 - **Диагноз Fly MCP DevTools:** `gestureZone: false` — на Fly старый бандл без gesture-zone (prog5b не задеплоен)

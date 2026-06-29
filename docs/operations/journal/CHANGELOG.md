@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## 2026-06-29 — B1.13 prog8: финальный канон режимов (9177aed)
+
+- **PEEK** = дефолт при добавлении товара (было EXPANDED — ошибка)
+- **EXPANDED** = только 2+ товаров, всегда горизонтальные карточки (28vw)
+- **PEEK 2+** = вертикальный компактный список (имя + цена + ±)
+- **PEEK 1** = широкая горизонтальная карточка
+- **Свайпы:** hidden↑→peek, peek(2+)↑→expanded, expanded↓→peek, peek↓→hidden
+- Удалён `cartSheetExpandedLayout` / `EXPANDED_LAYOUT_*` — убрана лишняя сложность
+- Пороги скролла 100/200px по ТЗ заказчика
+
 ## 2026-06-29 — B1.13 prog7: layout restore fix (2d89bf3)
 
 - `onCatalogRouteChange`: восстанавливает только mode, layout всегда vertical (horizontal только после явного свайпа)
