@@ -25,6 +25,14 @@
 | **B1.13 навигация** | § **S2-канон** в B1_13 · код prog11 | re-MCP S2a/S2b · апрув · S4 |
 | **B1.14 адрес в шапке** | **B1.14-3d** index map `[x]` | deploy (`./bin/fly_deploy.sh`) · B1.14-4 cart |
 
+### Сессия 2026-06-30 prog15 (swap peek/expanded layouts)
+
+- **Изменение:** PEEK 2+ = горизонтальный скролл карточек (фото сверху); EXPANDED 2+ = компактный список строками.
+- **Файлы:** `CartSheet.svelte`, `cartSheetThresholds.js` (peekMulti=44vh, expandedMulti=30vh).
+- **Тесты:** 21 runs, 0 failures (`b113_s2_layout_gestures_test.rb`, `b113_s2a`, `b113_s2b`).
+- **Коммит:** `43a8189`
+- **Статус:** ожидает деплоя и MCP-проверки.
+
 ### Сессия 2026-06-30 prog14 (двойной свайп touch+pointer)
 
 - **Корень бага:** inline `onpointerdown/up` в Svelte-шаблоне + `addEventListener touchstart/end` в `$effect` — оба срабатывали при одном касании.

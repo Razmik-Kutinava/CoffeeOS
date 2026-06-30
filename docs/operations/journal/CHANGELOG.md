@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2026-06-30 — B1.13 prog15: swap peek/expanded layouts
+
+- **PEEK 2+:** горизонтальный скролл карточек (фото сверху, 28vw, horizontal scroll). `peekMulti=44vh`.
+- **EXPANDED 2+:** компактный список строками (thumbnail слева, текст справа). `expandedMulti=30vh`.
+- Тесты b113 s2/s2a/s2b — 21 runs, 0 failures ✅
+- Коммит: `43a8189`
+
 ## 2026-06-30 — B1.13 prog14: double-swipe touch+pointer fix
 
 - **Корень бага:** Svelte `onpointerdown/up` в шаблоне + `addEventListener touchstart/end` в `$effect` — двойной вызов `collapseFromSwipe` за одно касание. Expanded→peek→hidden за одну гесту.
