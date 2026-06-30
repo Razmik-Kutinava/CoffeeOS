@@ -94,6 +94,8 @@ class Shop::B113S2aCartSheetAcceptanceTest < ActionDispatch::IntegrationTest
     assert_includes sheet, "onpointerdown"
     assert_includes sheet, "onpointerup"
     assert_includes sheet, "onpointercancel"
+    assert_includes sheet, "$effect"
+    assert_includes sheet, "touchstart"
     assert_includes sheet, "handleSheetGestureDelta"
     assert_includes sheet, 'data-testid="shop-cart-sheet-gesture-zone"'
     assert_includes store, "collapseFromSwipe"
@@ -119,25 +121,21 @@ class Shop::B113S2aCartSheetAcceptanceTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test "sheetHeightVh mirrors S2a viewport heights and horizontal expanded" do
+  test "sheetHeightVh mirrors S2-канон viewport heights" do
     assert_equal 40, sheet_height_vh("expanded", 1)
-    assert_equal 36, sheet_height_vh("expanded", 2, "vertical")
-    assert_equal 42, sheet_height_vh("expanded", 2, "horizontal")
-    assert_equal 16, sheet_height_vh("peek", 1)
-    assert_equal 9, sheet_height_vh("hidden", 1)
+    assert_equal 44, sheet_height_vh("expanded", 2)
+    assert_equal 28, sheet_height_vh("peek", 1)
+    assert_equal 30, sheet_height_vh("peek", 2)
+    assert_equal 20, sheet_height_vh("hidden", 1)
   end
 
   private
 
-  def sheet_height_vh(mode, item_count, layout = "vertical")
+  def sheet_height_vh(mode, item_count)
     case mode
-    when "expanded"
-      return 40 if item_count <= 1
-      return 42 if layout == "horizontal"
-
-      36
-    when "peek" then 16
-    when "hidden" then 9
+    when "expanded" then item_count <= 1 ? 40 : 44
+    when "peek" then item_count <= 1 ? 28 : 30
+    when "hidden" then 20
     else 12
     end
   end

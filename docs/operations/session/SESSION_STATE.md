@@ -25,7 +25,13 @@
 | **B1.13 навигация** | § **S2-канон** в B1_13 · код prog11 | re-MCP S2a/S2b · апрув · S4 |
 | **B1.14 адрес в шапке** | **B1.14-3d** index map `[x]` | deploy (`./bin/fly_deploy.sh`) · B1.14-4 cart |
 
-### Сессия 2026-06-30 (B1.13 docs: единый канон S2)
+### Сессия 2026-06-30 (B1.13 prog12 touch swipe fix)
+
+- **MCP DevTools Fly (prog11):** цепочка свайпов peek↔expanded↔hidden **работает** (pointer)
+- **Баг:** `touchstart/touchend` в `onMount` — `gestureZoneEl` был `null` → на телефоне свайп не срабатывал
+- **Фикс:** `$effect` для touch listeners; gesture-zone всегда `min-h-14`; удалён `cartSheetLayoutCache.js`
+- **MCP скрипт** `b113_s2a_s2b_rev2_mcp.mjs` — сверка с § S2-канон (не prog5)
+- **Дальше:** deploy → `data-cart-sheet-build=prog12` на Fly
 
 - **Док:** § **B1.13-S2-канон** — единственный источник раскладки/жестов поп-апа
 - **Удалено:** § S2-prog5, rev1 S2 (монолит), противоречащие формулировки в S2a/S2b

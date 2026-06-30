@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 2026-06-30 — B1.13 prog12: touch swipe fix + MCP канон
+
+- CartSheet: `$effect` вешает touch listeners когда `gestureZoneEl` готов (баг onMount)
+- gesture-zone всегда min-h-14 (hidden тоже)
+- Удалён мёртвый `cartSheetLayoutCache.js` (ссылался на удалённые layout-константы)
+- MCP `b113_s2a_s2b_rev2_mcp.mjs` — тесты по § S2-канон (peek после add, цепочка свайпов)
+- `CART_SHEET_BUILD=prog12`
+
 ## 2026-06-30 — B1.13 docs: единый канон S2 (Variant B)
 
 - § **B1.13-S2-канон** в `B1_13_shop_nav_profile_header.md` — единственный источник раскладки и жестов

@@ -63,7 +63,7 @@ class Shop::B113S2LayoutGesturesTest < ActionDispatch::IntegrationTest
   end
 
   test "collapseFromSwipe mirror expanded to peek then hidden" do
-    assert_equal "hidden", collapse_mirror(1, "expanded")
+    assert_equal "peek", collapse_mirror(1, "expanded")
     assert_equal "peek", collapse_mirror(2, "expanded")
     assert_equal "hidden", collapse_mirror(2, "peek")
     assert_equal "hidden", collapse_mirror(1, "peek")

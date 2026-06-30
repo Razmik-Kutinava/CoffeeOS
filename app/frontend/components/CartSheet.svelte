@@ -40,7 +40,22 @@
   let count = $derived(items.length)
   let heightVh = $derived(sheetHeightVh(mode, count))
   let singleItem = $derived(count === 1 ? items[0] : null)
-  let gestureZoneMinH = $derived(mode === MODE_HIDDEN ? "min-h-8" : "min-h-14")
+  let gestureZoneMinH = $derived("min-h-14")
+
+  $effect(() => {
+    const gz = gestureZoneEl
+    if (!gz) return
+
+    gz.addEventListener("touchstart", onGestureStart, { passive: false })
+    gz.addEventListener("touchend", onGestureEnd, { passive: false })
+    gz.addEventListener("touchcancel", onGestureCancel, { passive: true })
+
+    return () => {
+      gz.removeEventListener("touchstart", onGestureStart)
+      gz.removeEventListener("touchend", onGestureEnd)
+      gz.removeEventListener("touchcancel", onGestureCancel)
+    }
+  })
 
   function roundPrice(n) {
     return Math.round(Number(n) || 0)
@@ -86,22 +101,9 @@
     window.addEventListener("hashchange", onHash)
     refreshCartSheet().catch(() => {})
 
-    // Touch-события с { passive: false } — нужно для preventDefault() при свайпе
-    const gz = gestureZoneEl
-    if (gz) {
-      gz.addEventListener("touchstart",  onGestureStart, { passive: false })
-      gz.addEventListener("touchend",    onGestureEnd,   { passive: false })
-      gz.addEventListener("touchcancel", onGestureCancel, { passive: true })
-    }
-
     return () => {
       unsubItems(); unsubTotal(); unsubMode(); unsubBusy()
       window.removeEventListener("hashchange", onHash)
-      if (gz) {
-        gz.removeEventListener("touchstart",  onGestureStart)
-        gz.removeEventListener("touchend",    onGestureEnd)
-        gz.removeEventListener("touchcancel", onGestureCancel)
-      }
     }
   })
 </script>

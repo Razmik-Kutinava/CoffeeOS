@@ -62,10 +62,14 @@ async function sheetMode(page) {
   return el.getAttribute("data-cart-sheet-mode")
 }
 
-async function sheetLayout(page) {
+async function sheetLayoutMarker(page) {
+  return page.evaluate(() => document.querySelector("[data-cart-layout]")?.getAttribute("data-cart-layout") || null)
+}
+
+async function sheetBuild(page) {
   const el = page.locator('[data-testid="shop-cart-sheet"]')
   if ((await el.count()) === 0) return null
-  return el.getAttribute("data-cart-sheet-layout")
+  return el.getAttribute("data-cart-sheet-build")
 }
 
 async function clearCart(page) {
@@ -154,32 +158,35 @@ async function run() {
     await page.reload({ waitUntil: "domcontentloaded" })
     await page.waitForTimeout(1500)
 
-    // --- S2a: add → expanded ---
+    // --- S2a: add → peek (§ S2-канон) ---
     await addProductFromCatalog(page, prep.product_id)
-    const modeExpanded = (await sheetMode(page)) === "expanded"
+    const modePeek = (await sheetMode(page)) === "peek"
     overall =
-      step("S2a-01", "add → catalog + sheet expanded", modeExpanded, { mode: await sheetMode(page) }) && overall
-    criteriaS2a.add_expanded = modeExpanded ? "pass" : "fail"
+      step("S2a-01", "add → catalog + sheet peek", modePeek, {
+        mode: await sheetMode(page),
+        build: await sheetBuild(page)
+      }) && overall
+    criteriaS2a.add_peek = modePeek ? "pass" : "fail"
 
     const lineCount = await page
-      .locator('[data-testid="shop-cart-expanded-line"], [data-testid="shop-cart-expanded-single"]')
+      .locator('[data-testid="shop-cart-peek-line"], [data-testid="shop-cart-expanded-single"]')
       .count()
     const lineText = await page
-      .locator('[data-testid="shop-cart-expanded-line"], [data-testid="shop-cart-expanded-single"]')
+      .locator('[data-testid="shop-cart-peek-line"], [data-testid="shop-cart-expanded-single"]')
       .first()
       .innerText()
       .catch(() => "")
     const hasImage =
       (await page
-        .locator('[data-testid="shop-cart-expanded-line"] img, [data-testid="shop-cart-expanded-single"] img')
+        .locator('[data-testid="shop-cart-peek-line"] img, [data-testid="shop-cart-expanded-single"] img')
         .count()) > 0
     const hasPriceQty = /₽\s*×/.test(lineText)
     const cardOk = lineCount > 0 && hasImage && lineText.length > 3 && hasPriceQty
     overall =
-      step("S2a-02", "expanded card: image, name, price×qty", cardOk, { preview: lineText.slice(0, 80) }) && overall
-    criteriaS2a.expanded_card_fields = cardOk ? "pass" : "fail"
+      step("S2a-02", "peek card: image, name, price×qty", cardOk, { preview: lineText.slice(0, 80) }) && overall
+    criteriaS2a.peek_card_fields = cardOk ? "pass" : "fail"
 
-    await shot(page, "expanded_360", { width: 360, height: 780 })
+    await shot(page, "peek_single_360", { width: 360, height: 780 })
 
     const transitionMs = await page
       .locator('[data-testid="shop-cart-sheet"]')
@@ -212,24 +219,23 @@ async function run() {
     criteriaS2b.scroll_100_single_hidden = singleScrollHidden ? "pass" : "fail"
 
     await swipeOnSheetHandle(page, "up")
-    const singleRestoreExpanded =
-      (await sheetMode(page)) === "expanded" && (await sheetLayout(page)) === "vertical"
+    const singleRestorePeek =
+      (await sheetMode(page)) === "peek" && (await sheetLayoutMarker(page)) === "horizontal"
     overall =
-      step("S2b-01b", "1 item hidden swipe up → expanded vertical", singleRestoreExpanded, {
+      step("S2b-01b", "1 item hidden swipe up → peek horizontal", singleRestorePeek, {
         mode: await sheetMode(page),
-        layout: await sheetLayout(page)
+        layout: await sheetLayoutMarker(page)
       }) && overall
-    criteriaS2b.single_hidden_swipe_up = singleRestoreExpanded ? "pass" : "fail"
+    criteriaS2b.single_hidden_swipe_up = singleRestorePeek ? "pass" : "fail"
 
     await swipeOnSheetHandle(page, "up")
-    const singleExpandedNoop =
-      (await sheetMode(page)) === "expanded" && (await sheetLayout(page)) === "vertical"
+    const singlePeekNoop = (await sheetMode(page)) === "peek"
     overall =
-      step("S2b-05", "1 item expanded swipe up noop (Q-S2-8)", singleExpandedNoop, {
+      step("S2b-05", "1 item peek swipe up noop", singlePeekNoop, {
         mode: await sheetMode(page),
-        layout: await sheetLayout(page)
+        layout: await sheetLayoutMarker(page)
       }) && overall
-    criteriaS2b.single_expanded_swipe_noop = singleExpandedNoop ? "pass" : "fail"
+    criteriaS2b.single_peek_swipe_noop = singlePeekNoop ? "pass" : "fail"
 
     const peekTotal = await page.locator('[data-testid="shop-cart-peek-total"]').isVisible().catch(() => false)
     overall = step("S2a-05", "peek total testid present in bundle", true) && overall
@@ -279,7 +285,7 @@ async function run() {
 
     await shot(page, "hidden_360", { width: 360, height: 780 })
 
-    // --- S2b: swipe up (2 lines) — отдельная корзина ---
+    // --- S2b: swipe chain 2+ (peek ↔ expanded ↔ hidden) ---
     await clearCart(page)
     await page.reload({ waitUntil: "domcontentloaded" })
     await page.waitForTimeout(1200)
@@ -288,42 +294,56 @@ async function run() {
     if (pid2) await addProductFromCatalog(page, pid2)
     await page.goto(`${prep.shop_url}#/`, { waitUntil: "domcontentloaded" })
     await page.waitForTimeout(1000)
-    await scrollCatalog(page, 100)
-    await scrollCatalog(page, 100)
+
     const cartBeforeSwipe = await apiOnPage(page, "/cart")
     const cartLines = cartBeforeSwipe.body?.items?.length || 0
-    await swipeOnSheetHandle(page, "up")
-    const swipeExpanded = (await sheetMode(page)) === "expanded"
-    const layoutAfterHidden = (await sheetLayout(page)) === "vertical"
-    overall =
-      step("S2b-03", "swipe up hidden → expanded vertical (2+ lines)", swipeExpanded && cartLines >= 2 && layoutAfterHidden, {
-        mode: await sheetMode(page),
-        layout: await sheetLayout(page),
-        second_product: Boolean(pid2),
-        cart_lines: cartLines
-      }) && overall
-    criteriaS2b.swipe_up_expanded = swipeExpanded && cartLines >= 2 ? "pass" : "fail"
+    const startPeek =
+      (await sheetMode(page)) === "peek" && (await sheetLayoutMarker(page)) === "vertical"
 
     await swipeOnSheetHandle(page, "up")
-    const horizontalLayout = (await sheetLayout(page)) === "horizontal"
-    const horizontalVisible =
+    const peekToExpanded =
+      (await sheetMode(page)) === "expanded" &&
+      (await sheetLayoutMarker(page)) === "horizontal" &&
       (await page.locator('[data-testid="shop-cart-expanded-horizontal"]').count()) > 0
     overall =
-      step("S2b-03b", "swipe up expanded vertical → horizontal (2+)", horizontalLayout && horizontalVisible, {
+      step("S2b-03", "swipe up peek → expanded horizontal (2+)", startPeek && peekToExpanded && cartLines >= 2, {
         mode: await sheetMode(page),
-        layout: await sheetLayout(page)
+        layout: await sheetLayoutMarker(page),
+        cart_lines: cartLines
       }) && overall
-    criteriaS2b.swipe_up_horizontal = horizontalLayout && horizontalVisible ? "pass" : "fail"
+    criteriaS2b.swipe_peek_to_expanded = peekToExpanded && cartLines >= 2 ? "pass" : "fail"
+
+    await swipeOnSheetHandle(page, "up")
+    const expandedNoop = (await sheetMode(page)) === "expanded"
+    overall =
+      step("S2b-03b", "swipe up expanded noop", expandedNoop, { mode: await sheetMode(page) }) && overall
+    criteriaS2b.swipe_expanded_noop = expandedNoop ? "pass" : "fail"
 
     await swipeOnSheetHandle(page, "down")
-    const backVertical = (await sheetLayout(page)) === "vertical"
+    const expandedToPeek =
+      (await sheetMode(page)) === "peek" && (await sheetLayoutMarker(page)) === "vertical"
     overall =
-      step("S2b-03c", "swipe down horizontal → expanded vertical", backVertical, {
-        layout: await sheetLayout(page)
+      step("S2b-03c", "swipe down expanded → peek vertical", expandedToPeek, {
+        mode: await sheetMode(page),
+        layout: await sheetLayoutMarker(page)
       }) && overall
-    criteriaS2b.swipe_down_to_vertical = backVertical ? "pass" : "fail"
+    criteriaS2b.swipe_expanded_to_peek = expandedToPeek ? "pass" : "fail"
 
-    await shot(page, "swipe_expanded_360", { width: 360, height: 780 })
+    await swipeOnSheetHandle(page, "down")
+    const peekToHidden = (await sheetMode(page)) === "hidden"
+    overall =
+      step("S2b-03d", "swipe down peek → hidden chip", peekToHidden, { mode: await sheetMode(page) }) && overall
+    criteriaS2b.swipe_peek_to_hidden = peekToHidden ? "pass" : "fail"
+
+    await swipeOnSheetHandle(page, "up")
+    const hiddenToPeek = (await sheetMode(page)) === "peek"
+    overall =
+      step("S2b-03e", "swipe up hidden → peek (not expanded)", hiddenToPeek, {
+        mode: await sheetMode(page)
+      }) && overall
+    criteriaS2b.swipe_hidden_to_peek = hiddenToPeek ? "pass" : "fail"
+
+    await shot(page, "swipe_chain_360", { width: 360, height: 780 })
 
     // --- S2b: localStorage peek via Избранное (2+ items) ---
     await clearCart(page)
@@ -352,6 +372,11 @@ async function run() {
     await page.reload({ waitUntil: "domcontentloaded" })
     await page.waitForTimeout(1200)
     await addProductFromCatalog(page, prep.product_id)
+    const pidExp = await secondProductId(page)
+    if (pidExp) await addProductFromCatalog(page, pidExp)
+    await page.goto(`${prep.shop_url}#/`, { waitUntil: "domcontentloaded" })
+    await page.waitForTimeout(800)
+    await swipeOnSheetHandle(page, "up")
     const expandedBeforeProfile = (await sheetMode(page)) === "expanded"
     await page.locator('[data-testid="shop-header-profile"]').click()
     await page.waitForTimeout(1200)
