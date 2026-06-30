@@ -3,45 +3,37 @@
   "epic": "B1.13",
   "title": "Редактирование модификаторов и горизонтальный скролл в поп-апе",
   "date": "2026-06-22",
+  "updated": "2026-06-30",
+  "layout_canon": "B1_13 § B1.13-S2-канон",
   "source": "макеты заказчика — 3 кадра",
   "depends_on": ["B1.13-S2", "B1.13-S3"],
-  "status": "BASELINE_MOCKUPS_SAVED",
+  "status": "HORIZONTAL_SCROLL_IN_EXPANDED_ONLY",
 
-  "how_i_understood": {
-    "bottom_layout": "Та же нижняя панель корзины (не bottom nav). «+цена» всегда справа внизу поп-апа.",
-    "horizontal_scroll": {
-      "when": ">3 позиций в поп-апе (peek/chip — горизонтальный ряд миниатюр со степперами)",
-      "ui": "Карточки в ряд, листаются влево-вправо; в chip-режиме — только миниатюры без степперов",
-      "indicators": "На expanded multi — chevron «<< >>» справа (вертикальный скролл списка или подсказка позиции)"
-    },
-    "modifier_edit": {
-      "trigger": "Long press ~0,5 с на изображение товара (peek / expanded / chip) — по ТЗ; на макете expanded также текст «нажми на товар и отредактируй»",
-      "flow": "Открыть #/product/:id с уже выбранными модификаторами → изменить → сохранить → вернуться в каталог, корзина обновлена",
-      "expanded_list": "В expanded видны строки модификаторов под названием («Со льдом», «Кардамон и корица…»)"
-    }
+  "horizontal_scroll": {
+    "when": ">3 позиций в корзине",
+    "mode": "expanded (2+ товара) — горизонтальный ряд 28vw, § S2-канон",
+    "not_in": ["peek", "hidden"]
+  },
+
+  "modifier_edit": {
+    "trigger": "long press / тап по товару",
+    "flow": "#/product/:id с выбранными модификаторами → сохранить → каталог"
   },
 
   "screenshots": [
     {
       "file": "screenshots/b113_s4_customer_horizontal_scroll_peek.png",
-      "shows": "Peek: >3 товаров в горизонтальном ряду, под каждым − qty +, +цена справа"
+      "note": "иллюстрация; канон: expanded horizontal scroll"
     },
     {
       "file": "screenshots/b113_s4_customer_horizontal_thumbnails_chip.png",
-      "shows": "Компактный ряд из 3+ миниатюр (без степперов) + +цена — горизонтальный скролл в свёрнутом виде"
+      "note": "иллюстрация ряда миниатюр"
     },
     {
       "file": "screenshots/b113_s4_customer_expanded_modifiers_list.png",
-      "shows": "Expanded: вертикальный список одинаковых позиций с модификаторами, Удалить, chevron справа, +цена"
+      "note": "модификаторы в карточках expanded"
     }
   ],
 
-  "positioning_notes": {
-    "popup_anchor": "fixed bottom, rounded top corners, над каталогом",
-    "cta": "+цена — orange pill, bottom-right внутри поп-апа",
-    "item_row_peek": "thumbnail top, stepper bar bottom, equal-width tiles in horizontal scroll",
-    "item_row_expanded": "thumbnail left, text+modifiers center-left, controls bottom row"
-  },
-
-  "verdict": "CUSTOMER_MOCKUPS_S4_READY_FOR_GO_AFTER_S3"
+  "verdict": "ALIGNED_S2_CANON_2026_06_30"
 }

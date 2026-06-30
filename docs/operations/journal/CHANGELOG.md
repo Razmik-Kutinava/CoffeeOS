@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2026-06-30 — B1.13 docs: единый канон S2 (Variant B)
+
+- § **B1.13-S2-канон** в `B1_13_shop_nav_profile_header.md` — единственный источник раскладки и жестов
+- Удалены § S2-prog5 и rev1 S2 (противоречащие таблицы layout/popup)
+- S2a/S2b scope и приёмка сверены с каноном (peek после add, hidden=чип)
+- JSON/README S2/S3/S4 — ссылка на S2-канон, убраны «головки» и старые жесты
+
 ## 2026-06-30 — B1.13 prog11: hidden chip видимый + build stamp Fly
 
 - hidden vh 14→20, gesture-zone min-h-8 в hidden

@@ -1,6 +1,6 @@
 # HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-06-30 (B1.13 prog11 hidden chip + Fly verify)  
+**Дата:** 2026-06-30 (B1.13 docs S2-канон)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev
 
@@ -32,8 +32,8 @@
 | **S2b прогон 1** | скролл 100/200 px — **код `[x]`** |
 | **S2b прогон 2** | localStorage режима — **код `[x]`** |
 | **S2a прогон 3** | приёмка с товаром — **код `[x]`** |
-| **S2a/S2b** | прогон 5b+6 `[x]` flex/passive/vertical/heads/gesture | **deploy `6cdb5ed`** · ручная проверка · апрув |
-| **S4** | после апрува прогона 5 |
+| **S2a/S2b** | канон § **S2-канон** в B1_13 · код prog11 | re-MCP · апрув · Q-rev2 |
+| **S4** | после апрува S2 |
 | **Агент** | **стоп** |
 
 ТЗ: [`B1_13_shop_nav_profile_header.md`](../milestones/veha_2/requirements/customer_tasks/B1_13_shop_nav_profile_header.md)

@@ -1,41 +1,34 @@
-# B1.13-S2 — макеты заказчика (поп-ап корзины)
+# B1.13-S2 — макеты заказчика (иллюстрации)
 
-**Задача:** поп-ап 3 состояния · bottom bar **Каталог + Избранное** (2 вкладки) · профиль в шапке (S1) · скролл каталога.
+**Канон раскладки, жестов и порогов:** [`B1_13_shop_nav_profile_header.md`](../../requirements/customer_tasks/B1_13_shop_nav_profile_header.md) § **B1.13-S2-канон** — единственный источник истины.
 
-JSON: [`../b113_s2_screenshot_baseline_2026-06-22.json`](../b113_s2_screenshot_baseline_2026-06-22.json) · ответы S2: [`B1_13_shop_nav_profile_header.md`](../../requirements/customer_tasks/B1_13_shop_nav_profile_header.md) § Ответы S2.
+JSON: [`../b113_s2_screenshot_baseline_2026-06-22.json`](../b113_s2_screenshot_baseline_2026-06-22.json)
 
 **Скрины на диске (4 шт.):**
 
-| # | Файл | Состояние |
-|---|------|-----------|
-| 1 | `b113_s2_customer_01_empty_catalog_and_add.png` | Плейсхолдер «тут будут твои заказы» + add |
-| 2 | `b113_s2_customer_02_single_item_popup.png` | Expanded · 1 товар (~40% экрана) |
-| 3 | `b113_s2_customer_03_peek_compact_vs_expanded.png` | Expanded (~36%) ↔ peek (~16%) |
-| 4 | `b113_s2_customer_04_expanded_swipe_up.png` | Expanded multi · свайп вверх |
+| # | Файл | Назначение |
+|---|------|------------|
+| 1 | `b113_s2_customer_01_empty_catalog_and_add.png` | Пустой каталог + add |
+| 2 | `b113_s2_customer_02_single_item_popup.png` | 1 товар в поп-апе |
+| 3 | `b113_s2_customer_03_peek_compact_vs_expanded.png` | Два кадра поп-апа |
+| 4 | `b113_s2_customer_04_expanded_swipe_up.png` | Multi + свайп |
 
-## Пропорции (канон 2026-06-24)
+Макеты — **визуальный референс заказчика**, не переопределяют § S2-канон.
 
-| Состояние | % высоты экрана |
-|-----------|-----------------|
-| empty | ~12% |
-| expanded (1) | ~40% |
-| expanded (3+) vertical | ~36% |
-| expanded (3+) horizontal | ~42% |
-| peek | ~16% |
-| hidden (головки) | ~9% |
+## Высоты (ориентир для `cartSheetThresholds.js`)
 
-## Жесты drag-handle (канон прогон 5 — см. B1_13 § S2-prog5)
+| Режим | vh |
+|-------|-----|
+| empty | 12 |
+| peek (1 товар) | 28 |
+| peek (2+) | 30 |
+| expanded (2+) | 44 |
+| hidden (чип) | 20 |
 
-**1 товар:** expanded (horizontal) ⇄ hidden (головка). Peek нет. Свайп ↑ в expanded — noop.
+## Bottom bar (канон эпика)
 
-**2+ товара:** hidden →↑ vertical →↑ horizontal; horizontal →↓ vertical →↓ hidden. Peek — только скролл каталога 100px.
-
-Скролл каталога: **1 товар** 100px → hidden; **2+** 100px → peek, 200px → hidden.
-
-## Сейчас в коде vs макет
-
-| | **Сейчас** | **Макет / S2** |
-|---|------------|----------------|
-| Низ | 4 вкладки + `#/cart` | 2 вкладки + поп-ап над баром |
-| Пусто | — | «тут будут твои заказы» |
-| Профиль | шапка (S1) | шапка, не в баре |
+| | Целевое |
+|---|---------|
+| Вкладки | **Каталог + Избранное** |
+| Профиль | только в шапке (S1) |
+| Корзина | поп-ап на каталоге, не `#/cart` |

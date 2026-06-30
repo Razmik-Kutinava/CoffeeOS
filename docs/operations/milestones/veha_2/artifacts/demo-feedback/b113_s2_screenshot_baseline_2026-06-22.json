@@ -3,10 +3,11 @@
   "epic": "B1.13 — новая навигация витрины",
   "title": "Поп-ап корзины · 3 состояния · нижний бар · скролл каталога",
   "date": "2026-06-22",
-  "updated": "2026-06-24",
+  "updated": "2026-06-30",
+  "canon": "B1_13_shop_nav_profile_header.md § B1.13-S2-канон",
   "source": "макеты заказчика — 4 изображения (чат Cursor)",
   "screenshot_set": "b113_s2_customer_01..04",
-  "status": "BASELINE_MOCKUPS_SAVED",
+  "status": "CANON_S2_2026_06_30",
 
   "screenshots_on_disk": [
     "screenshots/b113_s2_customer_01_empty_catalog_and_add.png",
@@ -16,97 +17,76 @@
   ],
 
   "current_code_vs_mockup": {
-    "bottom_nav_now": {
-      "component": "app/frontend/components/BottomNav.svelte",
-      "tabs": ["Каталог", "Корзина", "Избранное", "Профиль"],
-      "cart_access": "вкладка → #/cart (отдельный экран)",
-      "cart_popup_on_catalog": false
-    },
-    "bottom_nav_target_s2": {
+    "bottom_nav_target": {
       "tabs_canon": ["Каталог", "Избранное"],
       "profile": "только в шапке (S1)",
-      "cart_tab": "удалить",
-      "cart_route": "#/cart убрать из UX",
       "cart_access": "поп-ап CartSheet над bottom bar на каталоге"
     }
   },
 
-  "answers_closed_2026_06_24": {
-    "empty_cart": "плейсхолдер «тут будут твои заказы» на каталоге (макет #01), не скрывать панель",
-    "ui_scope": "как на макетах, без искусственного отсечения S3-контролов",
-    "popup_visibility": "только на каталоге; на избранное/профиль скрыт, state сохранён",
-    "swipe_up_one_item": "не раскрывает expanded",
-    "scroll_thresholds": "считаем сами по макетам — см. viewport_proportions"
-  },
-
   "viewport_proportions": {
-    "note": "ориентиры для cartSheetThresholds.js; уточнить на 320–428px",
-    "empty_placeholder_vh": 0.12,
-    "expanded_single_vh": 0.4,
-    "expanded_multi_vh": 0.36,
-    "peek_vh": 0.16,
-    "hidden_chip_vh": 0.09,
-    "catalog_scroll_to_peek": { "vh": 0.12, "px_fallback": 80 },
-    "catalog_scroll_to_hidden": { "vh": 0.1, "px_fallback": 80, "cumulative_after_peek": true }
+    "note": "канон § S2-канон; код: cartSheetThresholds.js",
+    "empty_vh": 0.12,
+    "peek_single_vh": 0.28,
+    "peek_multi_vh": 0.30,
+    "expanded_multi_vh": 0.44,
+    "hidden_chip_vh": 0.20,
+    "scroll_to_peek_px": 100,
+    "scroll_to_hidden_px": 200
   },
 
   "three_states_mapping": {
     "empty": {
-      "mockup_ref": "b113_s2_customer_01_empty_catalog_and_add.png (левый кадр)",
-      "ui": "тёмная панель «тут будут твои заказы» — всегда на каталоге без товаров"
-    },
-    "expanded": {
-      "mockup_refs": [
-        "b113_s2_customer_02_single_item_popup.png",
-        "b113_s2_customer_03_peek_compact_vs_expanded.png (верх)",
-        "b113_s2_customer_04_expanded_swipe_up.png"
-      ],
-      "ui": "полные карточки, степперы, «Удалить» где на макете, «+цена»"
+      "mockup_ref": "b113_s2_customer_01_empty_catalog_and_add.png",
+      "ui": "плейсхолдер «тут будут твои заказы»"
     },
     "peek": {
-      "mockup_ref": "b113_s2_customer_03_peek_compact_vs_expanded.png (нижний кадр)",
-      "ui": "миниатюры в ряд + «+цена»; без степперов"
+      "mockup_ref": "b113_s2_customer_02..03",
+      "ui_2plus": "вертикальный компактный список (миниатюра + имя + цена + ±)",
+      "ui_1": "одна горизонтальная широкая карточка",
+      "default_after_add": true
     },
-    "hidden_chip": {
-      "mockup_ref": "вывод из peek — минимальная полоска",
-      "ui": "чип с суммой + оранжевая «+цена», без миниатюр"
+    "expanded": {
+      "mockup_ref": "b113_s2_customer_04",
+      "ui": "только 2+ товара: горизонтальный ряд карточек 28vw, горизонтальный скролл при >3",
+      "ui_1": "режима нет"
+    },
+    "hidden": {
+      "ui": "чип: «Корзина» + сумма + кнопка «+цена», без списка товаров"
     }
   },
 
   "scroll_and_swipe_rules": {
-    "scroll_down_catalog": "expanded → peek → hidden (чип)",
-    "swipe_up_on_popup": "→ expanded только если >1 позиции",
-    "swipe_down_on_popup": "остаётся видимым (hidden)",
-    "scroll_up_catalog": "авто-раскрытия нет",
-    "after_add_product": "каталог · поп-ап expanded"
+    "after_add": "peek",
+    "scroll_2plus": "expanded --100px--> peek --200px total--> hidden; from peek --200px--> hidden",
+    "scroll_1item": "100px и 200px --> hidden",
+    "swipe_2plus": "hidden --up--> peek --up--> expanded; expanded --down--> peek --down--> hidden",
+    "swipe_1item": "peek <--> hidden only",
+    "scroll_up_catalog": "режим не меняет"
   },
 
   "screenshots": [
     {
       "index": 1,
       "file": "screenshots/b113_s2_customer_01_empty_catalog_and_add.png",
-      "panels": ["каталог: «тут будут твои заказы»", "карточка: «добавить +»"],
-      "s2_relevance": "empty placeholder · add → expanded"
+      "note": "empty placeholder"
     },
     {
       "index": 2,
       "file": "screenshots/b113_s2_customer_02_single_item_popup.png",
-      "panels": ["expanded 1 товар ~40% vh", "экран модификаторов"],
-      "s2_relevance": "expanded 1 позиция"
+      "note": "1 товар — peek horizontal card"
     },
     {
       "index": 3,
       "file": "screenshots/b113_s2_customer_03_peek_compact_vs_expanded.png",
-      "panels": ["верх expanded ~36% vh", "низ peek ~16% vh"],
-      "s2_relevance": "главный референс expanded↔peek"
+      "note": "иллюстрация; канон — § S2-канон"
     },
     {
       "index": 4,
       "file": "screenshots/b113_s2_customer_04_expanded_swipe_up.png",
-      "panels": ["expanded multi · свайп вверх · внутренний скролл"],
-      "s2_relevance": "multi-item · свайп >1 карточки"
+      "note": "2+ expanded horizontal row"
     }
   ],
 
-  "verdict": "MOCKUPS_SAVED_ANSWERS_CLOSED_READY_FOR_GO"
+  "verdict": "CANON_ALIGNED_S2_2026_06_30"
 }

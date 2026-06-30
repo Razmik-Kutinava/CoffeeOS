@@ -3,44 +3,40 @@
   "epic": "B1.13",
   "title": "Управление товарами в поп-апе корзины",
   "date": "2026-06-22",
+  "updated": "2026-06-30",
+  "layout_canon": "B1_13 § B1.13-S2-канон",
   "source": "макеты заказчика — 3 кадра (подписи режимов)",
   "depends_on": "B1.13-S2 CartSheet",
-  "status": "BASELINE_MOCKUPS_SAVED",
+  "status": "CONTROLS_ONLY_LAYOUT_IN_S2_CANON",
 
-  "how_i_understood": {
-    "bottom_zone": "Внизу не вкладки навигации — панель корзины. Управление товарами встроено в неё, без перехода на #/cart.",
-    "controls_by_mode": {
-      "peek": "Горизонтальный ряд: миниатюра + под ней степпер (− qty +) на каждый товар. Справа оранжевая «+цена».",
-      "expanded": "Полная карточка: фото, название, цена×qty, модификаторы, степпер, красное «Удалить». Подсказка «нажми на товар и отредактируй». «+цена» внизу справа.",
-      "hidden_chip": "Минимум: одна миниатюра слева + «+цена» справа (сумма/CTA в checkout)."
-    },
-    "actions": {
-      "plus_minus": "peek + expanded — меняют qty на ±1, пересчёт суммы сразу",
-      "delete": "только expanded — убрать позицию",
-      "plus_price": "все режимы — итог и переход на оформление (#/checkout)",
-      "qty_zero": "позиция исчезает, пустая корзина — панель скрыта"
-    }
+  "controls_by_mode": {
+    "peek": "± в каждой строке позиции · «+цена» (раскладка — § S2-канон)",
+    "expanded": "± · «Удалить» · «+цена»",
+    "hidden_chip": "чип: сумма + «+цена», без списка товаров"
+  },
+
+  "actions": {
+    "plus_minus": "peek + expanded — qty ±1",
+    "delete": "только expanded (2+)",
+    "plus_price": "все режимы с суммой → #/checkout",
+    "qty_zero": "позиция удалена; пустая корзина → empty"
   },
 
   "screenshots": [
     {
       "file": "screenshots/b113_s3_customer_peek_mode.png",
       "label": "режим peek",
-      "shows": "3 товара в ряд, степперы под миниатюрами, +цена"
+      "note": "иллюстрация контролов; layout — § S2-канон"
     },
     {
       "file": "screenshots/b113_s3_customer_expanded_mode.png",
-      "label": "режим expanded",
-      "shows": "1 карточка, модификаторы, −/+, Удалить, +цена"
+      "label": "режим expanded"
     },
     {
       "file": "screenshots/b113_s3_customer_hidden_chip_mode.png",
-      "label": "режим hidden (чип)",
-      "shows": "миниатюра + +цена, каталог на фоне"
+      "label": "режим hidden (чип)"
     }
   ],
 
-  "vs_current_code": "Сейчас: BottomNav «Корзина» → #/cart, +/- на отдельном экране. Цель: те же действия в CartSheet по режимам S2.",
-
-  "verdict": "CUSTOMER_MOCKUPS_S3_READY_FOR_GO_AFTER_S2"
+  "verdict": "CONTROLS_ALIGNED_S2_CANON_2026_06_30"
 }
