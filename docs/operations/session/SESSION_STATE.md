@@ -25,6 +25,13 @@
 | **B1.13 навигация** | layout+gestures fix `[x]` · MCP 14/14 (до fix) | **redeploy** · re-MCP · апрув · Q-rev2 · S4 |
 | **B1.14 адрес в шапке** | **B1.14-3d** index map `[x]` | deploy (`./bin/fly_deploy.sh`) · B1.14-4 cart |
 
+### Сессия 2026-06-30 (B1.13 prog11 hidden chip + Fly verify)
+
+- hidden: vh 20, pill-чип «Корзина» + сумма + кнопка
+- `data-cart-sheet-build=prog11` на шите
+- layout peek/expanded — канон prog10 (не меняли)
+- **Дальше:** deploy → проверить `data-cart-sheet-build` на Fly
+
 ### Сессия 2026-06-29 (B1.13 prog10 канон layout + hidden chip)
 
 - **PEEK 2+** vertical · **EXPANDED 2+** horizontal (откат prog9)

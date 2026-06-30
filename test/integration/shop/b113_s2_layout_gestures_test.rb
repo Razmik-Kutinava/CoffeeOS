@@ -10,6 +10,7 @@ class Shop::B113S2LayoutGesturesTest < ActionDispatch::IntegrationTest
     assert_includes sheet, 'data-testid="shop-cart-peek-list"'
     assert_includes sheet, 'data-testid="shop-cart-peek-line"'
     assert_includes sheet, "MODE_PEEK && count >= 2"
+    assert_includes sheet, 'data-cart-layout="vertical"'
     assert_includes sheet, "overflow-y-auto"
   end
 
@@ -21,6 +22,8 @@ class Shop::B113S2LayoutGesturesTest < ActionDispatch::IntegrationTest
     assert_includes sheet, "MODE_EXPANDED && count >= 2"
     assert_includes sheet, "overflow-x-auto"
     assert_includes sheet, "w-[min(28vw,110px)]"
+    assert_includes sheet, 'data-cart-layout="horizontal"'
+    assert_includes sheet, "CART_SHEET_BUILD"
   end
 
   test "expanded single item uses horizontal layout marker" do
@@ -34,6 +37,7 @@ class Shop::B113S2LayoutGesturesTest < ActionDispatch::IntegrationTest
     sheet = File.read(Rails.root.join("app/frontend/components/CartSheet.svelte"))
 
     assert_includes sheet, 'data-testid="shop-cart-hidden-chip"'
+    assert_includes sheet, "Корзина"
     assert_includes sheet, 'data-testid="shop-cart-hidden-total"'
     refute_includes sheet, 'data-testid="shop-cart-hidden-heads"'
     refute_includes sheet, 'data-testid="shop-cart-hidden-head"'

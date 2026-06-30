@@ -1,6 +1,13 @@
 # CHANGELOG
 
-## 2026-06-29 — B1.13 prog10: канон layout + hidden chip (pending deploy)
+## 2026-06-30 — B1.13 prog11: hidden chip видимый + build stamp Fly
+
+- hidden vh 14→20, gesture-zone min-h-8 в hidden
+- чип: pill «Корзина» + сумма + «+цена»
+- `data-cart-sheet-build=prog11` для верификации бандла на Fly
+- layout peek vertical / expanded horizontal — без изменений (канон prog10)
+
+## 2026-06-29 — B1.13 prog10: канон layout + hidden chip (d408730)
 
 - **PEEK 2+** → вертикальный список (дефолт)
 - **EXPANDED 2+** → горизонтальные карточки 28vw

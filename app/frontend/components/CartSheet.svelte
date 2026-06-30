@@ -24,7 +24,8 @@
     sheetHeightVh,
     SHEET_TRANSITION_MS,
     CART_SHEET_BOTTOM_REM,
-    CART_SHEET_MAX_WIDTH_PX
+    CART_SHEET_MAX_WIDTH_PX,
+    CART_SHEET_BUILD
   } from "../lib/cartSheetThresholds.js"
 
   let hash = $state(typeof window !== "undefined" ? window.location.hash : "")
@@ -39,6 +40,7 @@
   let count = $derived(items.length)
   let heightVh = $derived(sheetHeightVh(mode, count))
   let singleItem = $derived(count === 1 ? items[0] : null)
+  let gestureZoneMinH = $derived(mode === MODE_HIDDEN ? "min-h-8" : "min-h-14")
 
   function roundPrice(n) {
     return Math.round(Number(n) || 0)
@@ -160,6 +162,7 @@
   <div
     data-testid="shop-cart-sheet"
     data-cart-sheet-mode={mode}
+    data-cart-sheet-build={CART_SHEET_BUILD}
     class="cart-sheet fixed left-0 right-0 z-50 mx-auto flex flex-col overflow-hidden border-t border-[#3a3a3a] bg-[#2a2a2a]/98 backdrop-blur transition-[height] ease-out"
     style:height="{heightVh}vh"
     style:bottom="{CART_SHEET_BOTTOM_REM}rem"
@@ -170,7 +173,7 @@
     <div
       bind:this={gestureZoneEl}
       data-testid="shop-cart-sheet-gesture-zone"
-      class="cart-sheet-gesture-zone flex min-h-14 w-full shrink-0 touch-none select-none flex-col items-center justify-center border-b border-[#3a3a3a]/60"
+      class="cart-sheet-gesture-zone flex w-full shrink-0 touch-none select-none flex-col items-center justify-center border-b border-[#3a3a3a]/60 {gestureZoneMinH}"
       style:touch-action="none"
       role="button"
       tabindex="-1"
@@ -191,21 +194,28 @@
     <!-- HIDDEN — чип с суммой (ТЗ S2a) -->
     {:else if mode === MODE_HIDDEN}
       <div
-        class="flex flex-1 min-h-0 items-center justify-between gap-2 px-3 pb-1 pt-1"
+        class="flex flex-1 min-h-0 items-center justify-between gap-2 px-3 py-1.5"
         data-testid="shop-cart-hidden-chip"
       >
-        <span data-testid="shop-cart-hidden-total" class="text-sm font-semibold text-[#ff8c42]">{roundPrice(total)}₽</span>
+        <div class="flex min-w-0 flex-1 items-center gap-2 rounded-full border border-[#3a3a3a] bg-[#1f1f1f] px-3 py-1.5">
+          <span class="shrink-0 text-xs text-[#888]">Корзина</span>
+          <span data-testid="shop-cart-hidden-total" class="truncate text-sm font-semibold text-[#ff8c42]">{roundPrice(total)}₽</span>
+        </div>
         <button
           type="button"
           data-testid="shop-cart-sheet-checkout"
-          class="shrink-0 rounded-lg bg-[#ff8c42] px-3 py-1.5 text-sm font-semibold text-black"
+          class="shrink-0 rounded-full bg-[#ff8c42] px-3 py-1.5 text-sm font-semibold text-black"
           onclick={() => push("/checkout")}
         >+цена</button>
       </div>
 
     <!-- PEEK 2+ — вертикальный компактный список (дефолт при добавлении) -->
     {:else if mode === MODE_PEEK && count >= 2}
-      <div class="flex flex-1 min-h-0 flex-col overflow-hidden px-3 pb-2 pt-1" data-testid="shop-cart-peek-list">
+      <div
+        class="flex flex-1 min-h-0 flex-col overflow-hidden px-3 pb-2 pt-1"
+        data-testid="shop-cart-peek-list"
+        data-cart-layout="vertical"
+      >
         <div class="min-h-0 flex-1 space-y-1.5 overflow-y-auto">
           {#each items as line (line.index)}
             <div
@@ -240,7 +250,11 @@
 
     <!-- EXPANDED 2+ — горизонтальный ряд карточек (свайп вверх из peek) -->
     {:else if mode === MODE_EXPANDED && count >= 2}
-      <div class="flex flex-1 min-h-0 flex-col overflow-hidden px-3 pb-2 pt-1" data-testid="shop-cart-expanded-horizontal">
+      <div
+        class="flex flex-1 min-h-0 flex-col overflow-hidden px-3 pb-2 pt-1"
+        data-testid="shop-cart-expanded-horizontal"
+        data-cart-layout="horizontal"
+      >
         <div class="flex min-h-0 flex-1 gap-2 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {#each items as line (line.index)}
             <div
@@ -273,9 +287,12 @@
         {@render checkoutBar()}
       </div>
 
-    <!-- PEEK 1 товар / EXPANDED 1 товар — широкая горизонтальная карточка -->
+    <!-- 1 товар — широкая горизонтальная карточка (только peek/hidden, expanded недоступен) -->
     {:else if singleItem}
-      <div class="flex flex-1 min-h-0 flex-col overflow-hidden px-3 pb-2 pt-1">
+      <div
+        class="flex flex-1 min-h-0 flex-col overflow-hidden px-3 pb-2 pt-1"
+        data-cart-layout="horizontal"
+      >
         <div
           class="flex min-h-0 flex-1 gap-2 rounded-xl border border-[#3a3a3a] bg-[#1f1f1f] p-2"
           data-testid="shop-cart-expanded-single"

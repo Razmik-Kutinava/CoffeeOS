@@ -11,8 +11,11 @@ export const SHEET_VH = {
   expandedMulti:  44,
   peekSingle:    28,
   peekMulti:     30,
-  hidden:        14
+  hidden:        20
 }
+
+/** Маркер сборки cart sheet — менять при каждом UX-фиксе для верификации на Fly */
+export const CART_SHEET_BUILD = "prog11"
 
 /** Суммарный скролл вниз от якоря: expanded → peek (1 item → hidden) */
 export const SCROLL_TO_PEEK_PX = 100

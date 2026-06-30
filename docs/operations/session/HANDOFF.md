@@ -1,6 +1,6 @@
 # HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-06-29 (B1.13 prog10 канон layout + hidden chip)  
+**Дата:** 2026-06-30 (B1.13 prog11 hidden chip + Fly verify)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev
 
