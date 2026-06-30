@@ -48,10 +48,9 @@ class Shop::B113S2CartPopupTest < ActionDispatch::IntegrationTest
     assert_includes sheet, "+цена"
     assert_includes sheet, "isCatalogRoute"
     assert_includes store, "handleCatalogScroll"
-    assert_includes store, "cartSheetExpandedLayout"
     assert_includes store, "collapseFromSwipe"
     assert_includes store, "expandFromSwipe"
-    assert_includes store, "cartLineCount(items) <= 1"
+    refute_includes store, "cartSheetExpandedLayout"
     assert_includes store, "onCatalogRouteChange"
     assert_includes store, "cartSheetModeCache.js"
   end
@@ -79,17 +78,18 @@ class Shop::B113S2CartPopupTest < ActionDispatch::IntegrationTest
     thresholds = File.read(Rails.root.join("app/frontend/lib/cartSheetThresholds.js"))
 
     assert_includes thresholds, "empty: 12"
-    assert_includes thresholds, "expanded: 40"
-    assert_includes thresholds, "peek: 16"
-    assert_includes thresholds, "hidden: 9"
+    assert_includes thresholds, "expandedSingle: 40"
+    assert_includes thresholds, "expandedMulti: 44"
+    assert_includes thresholds, "peekMulti: 30"
+    assert_includes thresholds, "hidden: 14"
     assert_includes thresholds, "SCROLL_TO_PEEK_PX = 100"
     assert_includes thresholds, "SCROLL_TO_HIDDEN_PX = 200"
     assert_includes thresholds, "SWIPE_UP_PX = 32"
 
     assert_equal 40, sheet_height_vh("expanded", 1)
-    assert_equal 36, sheet_height_vh("expanded", 3)
-    assert_equal 16, sheet_height_vh("peek", 2)
-    assert_equal 9, sheet_height_vh("hidden", 2)
+    assert_equal 44, sheet_height_vh("expanded", 3)
+    assert_equal 30, sheet_height_vh("peek", 2)
+    assert_equal 14, sheet_height_vh("hidden", 2)
     assert_equal 12, sheet_height_vh("empty", 0)
   end
 
@@ -127,9 +127,9 @@ class Shop::B113S2CartPopupTest < ActionDispatch::IntegrationTest
   def sheet_height_vh(mode, item_count)
     case mode
     when "empty" then 12
-    when "expanded" then item_count > 1 ? 36 : 40
-    when "peek" then 16
-    when "hidden" then 9
+    when "expanded" then item_count <= 1 ? 40 : 44
+    when "peek" then item_count <= 1 ? 28 : 30
+    when "hidden" then 14
     else 12
     end
   end

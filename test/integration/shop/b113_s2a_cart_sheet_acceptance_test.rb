@@ -13,11 +13,11 @@ class Shop::B113S2aCartSheetAcceptanceTest < ActionDispatch::IntegrationTest
     enable_product_for_tenant!(tenant: @tenant, product: @product, price: 320)
   end
 
-  test "onCartAdded expands sheet after add to cart" do
+  test "onCartAdded opens sheet in peek after add to cart" do
     store = File.read(Rails.root.join("app/frontend/lib/cartSheetStore.js"))
 
     assert_includes store, "export function onCartAdded"
-    assert_includes store, "cartSheetMode.set(MODE_EXPANDED)"
+    assert_includes store, "cartSheetMode.set(MODE_PEEK)"
     assert_includes store, 'shop:cart-added'
   end
 
@@ -55,11 +55,13 @@ class Shop::B113S2aCartSheetAcceptanceTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test "programmatic mode switch via setCartSheetMode" do
+  test "programmatic mode via cartSheetMode store" do
     store = File.read(Rails.root.join("app/frontend/lib/cartSheetStore.js"))
 
-    assert_includes store, "export function setCartSheetMode"
     assert_includes store, "export const cartSheetMode"
+    assert_includes store, "MODE_PEEK"
+    assert_includes store, "MODE_EXPANDED"
+    assert_includes store, "MODE_HIDDEN"
   end
 
   test "S2a animation 300ms and layout above bottom bar 320-414px" do
@@ -87,13 +89,15 @@ class Shop::B113S2aCartSheetAcceptanceTest < ActionDispatch::IntegrationTest
 
   test "CartSheet swipe handlers touch and pointer" do
     sheet = File.read(Rails.root.join("app/frontend/components/CartSheet.svelte"))
+    store = File.read(Rails.root.join("app/frontend/lib/cartSheetStore.js"))
 
     assert_includes sheet, "onpointerdown"
     assert_includes sheet, "onpointerup"
     assert_includes sheet, "onpointercancel"
     assert_includes sheet, "handleSheetGestureDelta"
     assert_includes sheet, 'data-testid="shop-cart-sheet-gesture-zone"'
-    assert_includes sheet, "collapseFromSwipe"
+    assert_includes store, "collapseFromSwipe"
+    assert_includes store, "expandFromSwipe"
   end
 
   test "cart api returns expanded card payload fields" do

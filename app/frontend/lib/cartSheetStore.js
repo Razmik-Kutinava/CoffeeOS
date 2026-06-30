@@ -187,7 +187,7 @@ export function handleCatalogScroll() {
 /**
  * Свайп вверх:
  *   hidden       → peek
- *   peek (2+)    → expanded (горизонтальные карточки)
+ *   peek (2+)    → expanded (горизонтальный ряд карточек)
  *   peek (1)     → noop (1 товар не раскрывается в expanded)
  *   expanded     → noop (уже максимум)
  */

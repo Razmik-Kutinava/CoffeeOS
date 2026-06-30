@@ -25,6 +25,14 @@
 | **B1.13 навигация** | layout+gestures fix `[x]` · MCP 14/14 (до fix) | **redeploy** · re-MCP · апрув · Q-rev2 · S4 |
 | **B1.14 адрес в шапке** | **B1.14-3d** index map `[x]` | deploy (`./bin/fly_deploy.sh`) · B1.14-4 cart |
 
+### Сессия 2026-06-29 (B1.13 prog10 канон layout + hidden chip)
+
+- **PEEK 2+** vertical · **EXPANDED 2+** horizontal (откат prog9)
+- **HIDDEN** — чип с суммой по ТЗ, шапки убраны
+- Логика свайпов/скролла/1 товар — без изменений
+- Тесты b113_s2* — PASS
+- **Дальше:** deploy → проверка заказчиком
+
 ### Сессия 2026-06-29 (B1.13 финальный канон peek/expanded/hidden)
 
 - **Финальный канон принят:** PEEK = дефолт (добавление), EXPANDED = только 2+ горизонтальные карточки, HIDDEN = шапки

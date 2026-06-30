@@ -26,10 +26,10 @@ class Shop::B113S2bModePersistenceTest < ActionDispatch::IntegrationTest
     assert_includes sheet, "onCatalogRouteChange"
   end
 
-  test "applyCartData mirror cold load always expanded vertical" do
-    assert_equal "expanded", apply_cart_mode_after_load(%w[line], "empty", persisted: "peek")
-    assert_equal "expanded", apply_cart_mode_after_load(%w[line], "empty", persisted: "expanded")
-    assert_equal "expanded", apply_cart_mode_after_load(%w[line], "empty", persisted: nil)
+  test "applyCartData mirror cold load opens peek when cart has items" do
+    assert_equal "peek", apply_cart_mode_after_load(%w[line], "empty", persisted: "peek")
+    assert_equal "peek", apply_cart_mode_after_load(%w[line], "empty", persisted: "expanded")
+    assert_equal "peek", apply_cart_mode_after_load(%w[line], "empty", persisted: nil)
     assert_equal "peek", apply_cart_mode_after_load(%w[line], "peek", persisted: "peek")
     assert_equal "empty", apply_cart_mode_after_load([], "peek", persisted: "peek")
   end
@@ -56,13 +56,12 @@ class Shop::B113S2bModePersistenceTest < ActionDispatch::IntegrationTest
     assert_equal "expanded", catalog_scroll_mode("expanded", 50)
   end
 
-  test "expandFromSwipe mirror: hidden restores expanded for any line count" do
-    assert_equal "expanded", expand_from_swipe_mirror(1, "hidden")
-    assert_equal "expanded", expand_from_swipe_mirror(2, "hidden")
+  test "expandFromSwipe mirror hidden to peek and peek to expanded for multi" do
+    assert_equal "peek", expand_from_swipe_mirror(1, "hidden")
+    assert_equal "peek", expand_from_swipe_mirror(2, "hidden")
     assert_equal "expanded", expand_from_swipe_mirror(2, "peek")
-    assert_equal "expanded", expand_from_swipe_mirror(1, "peek")
-    assert_equal "expanded", expand_from_swipe_mirror(2, "expanded", "vertical", to_horizontal: true)
-    assert_equal "expanded", expand_from_swipe_mirror(1, "expanded", "vertical", to_horizontal: true)
+    assert_equal "peek", expand_from_swipe_mirror(1, "peek")
+    assert_equal "expanded", expand_from_swipe_mirror(2, "expanded")
   end
 
   private
@@ -70,7 +69,7 @@ class Shop::B113S2bModePersistenceTest < ActionDispatch::IntegrationTest
   def apply_cart_mode_after_load(items, mode, persisted:)
     return "empty" if items.empty?
 
-    return "expanded" if mode == "empty"
+    return "peek" if mode == "empty"
 
     mode
   end
@@ -80,7 +79,7 @@ class Shop::B113S2bModePersistenceTest < ActionDispatch::IntegrationTest
 
     if now_on_catalog
       state[:mode] = state[:persisted] if state[:persisted]
-      state[:mode] = "expanded" if state[:mode] == "empty"
+      state[:mode] = "peek" if state[:mode] == "empty"
     else
       state[:persisted] = state[:mode]
     end
@@ -95,9 +94,11 @@ class Shop::B113S2bModePersistenceTest < ActionDispatch::IntegrationTest
     mode
   end
 
-  def expand_from_swipe_mirror(item_count, mode, layout = "vertical", to_horizontal: false)
-    return "expanded" if mode == "hidden" || mode == "peek"
-    return "expanded" if to_horizontal && mode == "expanded" && item_count >= 2 && layout == "vertical"
+  def expand_from_swipe_mirror(item_count, mode)
+    return mode if mode == "empty" || item_count.zero?
+
+    return "peek" if mode == "hidden"
+    return "expanded" if mode == "peek" && item_count >= 2
 
     mode
   end
