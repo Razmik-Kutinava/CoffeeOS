@@ -248,7 +248,13 @@ async function run() {
     const pid2scroll = await secondProductId(page)
     if (pid2scroll) await addProductFromCatalog(page, pid2scroll)
     await page.goto(`${prep.shop_url}#/`, { waitUntil: "domcontentloaded" })
-    await page.waitForTimeout(1000)
+    await page.waitForTimeout(1500)
+    // debug: проверяем режим и scrollY до скролла
+    const preScrollState = await page.evaluate(() => ({
+      mode: document.querySelector("[data-cart-sheet-mode]")?.getAttribute("data-cart-sheet-mode") || null,
+      scrollY: window.scrollY
+    }))
+    console.log(`[debug S2b-01c] pre-scroll: mode=${preScrollState.mode} scrollY=${preScrollState.scrollY}`)
     await scrollCatalog(page, 100)
     const peekMode = (await sheetMode(page)) === "peek"
     overall =

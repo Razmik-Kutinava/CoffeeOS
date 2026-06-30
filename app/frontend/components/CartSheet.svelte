@@ -55,16 +55,17 @@
     handleSheetGestureDelta(gestureStartY, e.changedTouches[0].clientY)
   }
 
-  // Pointer-события — для десктопной мыши; пропускаются, если touch уже обрабатывает жест.
+  // Pointer-события — ТОЛЬКО для мыши (desktop); touch-устройства используют touch-обработчики выше.
+  // pointerType="touch" приходит от браузера параллельно с touch-событиями → игнорируем.
   function onPointerDown(e) {
-    if (gestureActive || !e.isPrimary) return
+    if (e.pointerType !== "mouse" || !e.isPrimary) return
     gestureActive = true
     gestureStartY = e.clientY
     e.currentTarget.setPointerCapture(e.pointerId)
   }
 
   function onPointerUp(e) {
-    if (!gestureActive || !e.isPrimary) return
+    if (e.pointerType !== "mouse" || !e.isPrimary || !gestureActive) return
     gestureActive = false
     handleSheetGestureDelta(gestureStartY, e.clientY)
   }
