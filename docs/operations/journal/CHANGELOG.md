@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2026-06-30 — B1.13 prog14: double-swipe touch+pointer fix
+
+- **Корень бага:** Svelte `onpointerdown/up` в шаблоне + `addEventListener touchstart/end` в `$effect` — двойной вызов `collapseFromSwipe` за одно касание. Expanded→peek→hidden за одну гесту.
+- **Фикс:** флаг `gestureActive`; touch-обработчики блокируют pointer. Inline `onpointerdown/up/cancel` удалены из шаблона.
+- `CART_SHEET_BUILD=prog14`; тесты S2a/S2b/layout_gestures 21/21 ✅
+- Коммит: `9c43fdc`
+
 ## 2026-06-30 — B1.13 prog13: scroll 1 товар 100px → hidden
 
 - `handleCatalogScroll`: из peek при 1 товаре 100px → hidden (§ S2-канон)

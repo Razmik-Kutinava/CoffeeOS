@@ -25,6 +25,15 @@
 | **B1.13 навигация** | § **S2-канон** в B1_13 · код prog11 | re-MCP S2a/S2b · апрув · S4 |
 | **B1.14 адрес в шапке** | **B1.14-3d** index map `[x]` | deploy (`./bin/fly_deploy.sh`) · B1.14-4 cart |
 
+### Сессия 2026-06-30 prog14 (двойной свайп touch+pointer)
+
+- **Корень бага:** inline `onpointerdown/up` в Svelte-шаблоне + `addEventListener touchstart/end` в `$effect` — оба срабатывали при одном касании.
+- **Эффект:** каждый свайп вниз = 2 вызова `collapseFromSwipe` → expanded→peek→hidden за одно касание.
+- **Фикс prog14:** флаг `gestureActive`; touch-обработчики приоритетны и блокируют pointer; inline `onpointerdown/up/cancel` удалены из шаблона.
+- **Тесты:** 21/21 pass (S2a/S2b/layout_gestures).
+- **Коммит:** `9c43fdc`
+- **Деплой:** ожидает push от пользователя.
+
 ### Сессия 2026-06-30 (B1.13 Fly MCP post-deploy prog12)
 
 - **Fly:** `data-cart-sheet-build=prog12` ✓
