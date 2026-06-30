@@ -178,9 +178,11 @@ export function handleCatalogScroll() {
 
   if (delta >= SCROLL_TO_HIDDEN_PX) {
     cartSheetMode.set(MODE_HIDDEN)
+  } else if (lines <= 1 && delta >= SCROLL_TO_PEEK_PX) {
+    // 1 товар: 100px и 200px → hidden (peek при скролле пропускаем)
+    cartSheetMode.set(MODE_HIDDEN)
   } else if (mode === MODE_EXPANDED && delta >= SCROLL_TO_PEEK_PX) {
-    // 1 товар — пик пропускаем, сразу в hidden
-    cartSheetMode.set(lines <= 1 ? MODE_HIDDEN : MODE_PEEK)
+    cartSheetMode.set(MODE_PEEK)
   }
 }
 

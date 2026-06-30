@@ -98,11 +98,9 @@ class Shop::B113S2LayoutGesturesTest < ActionDispatch::IntegrationTest
     return mode if delta.negative?
 
     return "hidden" if delta >= 200
-    if mode == "expanded" && delta >= 100
-      return "hidden" if lines <= 1
+    return "hidden" if lines <= 1 && delta >= 100
+    return "peek" if mode == "expanded" && delta >= 100
 
-      return "peek"
-    end
     mode
   end
 end

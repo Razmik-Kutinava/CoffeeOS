@@ -25,7 +25,13 @@
 | **B1.13 навигация** | § **S2-канон** в B1_13 · код prog11 | re-MCP S2a/S2b · апрув · S4 |
 | **B1.14 адрес в шапке** | **B1.14-3d** index map `[x]` | deploy (`./bin/fly_deploy.sh`) · B1.14-4 cart |
 
-### Сессия 2026-06-30 (B1.13 prog12 touch swipe fix)
+### Сессия 2026-06-30 (B1.13 Fly MCP post-deploy prog12)
+
+- **Fly:** `data-cart-sheet-build=prog12` ✓
+- **Touch-свайпы 2+:** цепочка peek↔expanded↔hidden — **6/6 PASS**
+- **Скролл 2+:** expanded→peek@100px, hidden@200px — PASS
+- **Баг:** 1 товар + скролл 100px остаётся в peek (должен hidden) → **prog13** фикс в коде
+- **Дальше:** deploy prog13 → re-MCP
 
 - **MCP DevTools Fly (prog11):** цепочка свайпов peek↔expanded↔hidden **работает** (pointer)
 - **Баг:** `touchstart/touchend` в `onMount` — `gestureZoneEl` был `null` → на телефоне свайп не срабатывал

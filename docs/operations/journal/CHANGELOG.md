@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-06-30 — B1.13 prog13: scroll 1 товар 100px → hidden
+
+- `handleCatalogScroll`: из peek при 1 товаре 100px → hidden (§ S2-канон)
+- Fly MCP prog12: свайпы touch OK; найден баг скролла 1-item
+
 ## 2026-06-30 — B1.13 prog12: touch swipe fix + MCP канон
 
 - CartSheet: `$effect` вешает touch listeners когда `gestureZoneEl` готов (баг onMount)

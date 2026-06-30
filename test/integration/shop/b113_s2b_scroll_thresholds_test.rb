@@ -20,14 +20,16 @@ class Shop::B113S2bScrollThresholdsTest < ActionDispatch::IntegrationTest
     assert_includes store, "SCROLL_TO_HIDDEN_PX"
     refute_includes store, "SCROLL_TO_PEEK_VH"
     assert_includes store, "delta >= SCROLL_TO_HIDDEN_PX"
-    assert_includes store, "mode === MODE_EXPANDED && delta >= SCROLL_TO_PEEK_PX"
+    assert_includes store, "lines <= 1 && delta >= SCROLL_TO_PEEK_PX"
   end
 
   test "handleCatalogScroll mirror: 100 peek or hidden, 200 hidden, scroll up unchanged" do
     assert_equal "expanded", catalog_scroll_mode("expanded", 0, 2)
     assert_equal "peek", catalog_scroll_mode("expanded", 100, 2)
     assert_equal "hidden", catalog_scroll_mode("expanded", 100, 1)
+    assert_equal "hidden", catalog_scroll_mode("peek", 100, 1)
     assert_equal "hidden", catalog_scroll_mode("expanded", 200, 2)
+    assert_equal "hidden", catalog_scroll_mode("peek", 200, 2)
     assert_equal "peek", catalog_scroll_mode("peek", 150, 2)
     assert_equal "peek", catalog_scroll_mode("peek", -10, 2)
   end
@@ -38,11 +40,9 @@ class Shop::B113S2bScrollThresholdsTest < ActionDispatch::IntegrationTest
     return mode if delta.negative?
 
     return "hidden" if delta >= 200
-    if mode == "expanded" && delta >= 100
-      return "hidden" if lines <= 1
+    return "hidden" if lines <= 1 && delta >= 100
+    return "peek" if mode == "expanded" && delta >= 100
 
-      return "peek"
-    end
     mode
   end
 end
