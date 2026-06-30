@@ -32,7 +32,7 @@ class Shop::B113S2aCartSheetAcceptanceTest < ActionDispatch::IntegrationTest
   test "CartSheet S2a expanded card fields image name price modifiers" do
     sheet = File.read(Rails.root.join("app/frontend/components/CartSheet.svelte"))
 
-    assert_includes sheet, 'data-testid="shop-cart-expanded-line"'
+    assert_includes sheet, 'data-testid="shop-cart-expanded-list"'
     assert_includes sheet, 'data-testid="shop-cart-expanded-single"'
     assert_includes sheet, "line.image_url"
     assert_includes sheet, "line.product_name"
@@ -123,9 +123,9 @@ class Shop::B113S2aCartSheetAcceptanceTest < ActionDispatch::IntegrationTest
 
   test "sheetHeightVh mirrors S2-канон viewport heights" do
     assert_equal 40, sheet_height_vh("expanded", 1)
-    assert_equal 44, sheet_height_vh("expanded", 2)
+    assert_equal 30, sheet_height_vh("expanded", 2)
     assert_equal 28, sheet_height_vh("peek", 1)
-    assert_equal 30, sheet_height_vh("peek", 2)
+    assert_equal 44, sheet_height_vh("peek", 2)
     assert_equal 20, sheet_height_vh("hidden", 1)
   end
 
@@ -133,8 +133,8 @@ class Shop::B113S2aCartSheetAcceptanceTest < ActionDispatch::IntegrationTest
 
   def sheet_height_vh(mode, item_count)
     case mode
-    when "expanded" then item_count <= 1 ? 40 : 44
-    when "peek" then item_count <= 1 ? 28 : 30
+    when "expanded" then item_count <= 1 ? 40 : 30
+    when "peek" then item_count <= 1 ? 28 : 44
     when "hidden" then 20
     else 12
     end

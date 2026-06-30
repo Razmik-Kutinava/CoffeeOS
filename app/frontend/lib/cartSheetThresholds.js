@@ -8,14 +8,14 @@ export const MODE_HIDDEN = "hidden"
 export const SHEET_VH = {
   empty:         12,
   expandedSingle: 40,
-  expandedMulti:  44,
+  expandedMulti:  30,
   peekSingle:    28,
-  peekMulti:     30,
+  peekMulti:     44,
   hidden:        20
 }
 
 /** Маркер сборки cart sheet — менять при каждом UX-фиксе для верификации на Fly */
-export const CART_SHEET_BUILD = "prog14"
+export const CART_SHEET_BUILD = "prog15"
 
 /** Суммарный скролл вниз от якоря: expanded → peek (1 item → hidden) */
 export const SCROLL_TO_PEEK_PX = 100
