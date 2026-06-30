@@ -27,7 +27,7 @@ module Shop
       line = {
         "product_id" => product.id,
         "quantity" => quantity.to_i.clamp(1, MAX_ITEM_QUANTITY),
-        "selected_modifiers" => mods[:selected_modifiers]
+        "selected_modifiers" => compact_modifiers(mods[:selected_modifiers])
       }
       key = line_key(line)
       existing = @session[SESSION_KEY].find_index { |l| line_key(l) == key }
@@ -80,6 +80,8 @@ module Shop
       product_ids = @session[SESSION_KEY].map { |line| line["product_id"] }
       products = Product.where(id: product_ids).index_by(&:id)
       tenant_settings = ProductTenantSetting.where(product_id: product_ids, tenant_id: @tenant_id).index_by(&:product_id)
+      # В cookie храним только id модификаторов — name/price восстанавливаем из БД одним запросом.
+      option_lookup = modifier_option_lookup
 
       lines = @session[SESSION_KEY].map.with_index do |line, idx|
         product = products[line["product_id"]]
@@ -98,7 +100,7 @@ module Shop
           quantity: qty,
           price: setting.price.to_f,
           image_url: product.image_url,
-          selected_modifiers: line["selected_modifiers"],
+          selected_modifiers: hydrate_modifiers(line["selected_modifiers"], option_lookup),
           removed_modifiers: removed_modifiers,
           unit_total: unit_price.to_f,
           line_total: (unit_price * qty).to_f
@@ -116,9 +118,45 @@ module Shop
     end
 
     # removed_modifiers не храним в cookie-сессии — иначе ActionDispatch::CookieOverflow (~4KB).
+    # selected_modifiers сжимаем до одних id — name/price восстанавливаются из БД в json_lines.
     def compact_session_cart!
       @session[SESSION_KEY].each do |line|
         line.delete("removed_modifiers")
+        line["selected_modifiers"] = compact_modifiers(line["selected_modifiers"]) if line.key?("selected_modifiers")
+      end
+    end
+
+    # В cookie кладём только id (или name/price когда id отсутствует — кастомный модификатор).
+    def compact_modifiers(mods)
+      Array(mods).map do |m|
+        h = m.respond_to?(:to_unsafe_h) ? m.to_unsafe_h : m
+        id = (h["id"] || h[:id]).presence
+        if id
+          { "id" => id }
+        else
+          { "id" => nil, "name" => h["name"] || h[:name], "price" => (h["price"] || h[:price]).to_f }
+        end
+      end
+    end
+
+    # Карта id опции → {name, price} для всех модификаторов корзины (1 запрос).
+    def modifier_option_lookup
+      ids = @session[SESSION_KEY].flat_map { |l| Array(l["selected_modifiers"]).filter_map { |m| m["id"].presence } }
+      return {} if ids.empty?
+
+      ProductModifierOption.where(id: ids).index_by { |o| o.id.to_s }
+    end
+
+    # Восстанавливаем полный модификатор {id, name, price} по id из карты опций.
+    def hydrate_modifiers(mods, option_lookup)
+      Array(mods).map do |m|
+        id = m["id"].presence
+        opt = id && option_lookup[id.to_s]
+        if opt
+          { "id" => opt.id, "name" => opt.name, "price" => opt.price_delta.to_f }
+        else
+          { "id" => m["id"], "name" => m["name"], "price" => m["price"].to_f }
+        end
       end
     end
 

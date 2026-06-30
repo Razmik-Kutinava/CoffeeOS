@@ -13,7 +13,7 @@ class Shop::B113S3Rev2CartControlsTest < ActionDispatch::IntegrationTest
     enable_product_for_tenant!(tenant: @tenant, product: @product, price: 300)
   end
 
-  test "CartSheet rev2 controls testids minus disabled at min qty" do
+  test "CartSheet rev2 controls testids minus removes at min qty" do
     sheet = File.read(Rails.root.join("app/frontend/components/CartSheet.svelte"))
     store = File.read(Rails.root.join("app/frontend/lib/cartSheetStore.js"))
 
@@ -22,7 +22,10 @@ class Shop::B113S3Rev2CartControlsTest < ActionDispatch::IntegrationTest
     assert_includes sheet, 'data-testid="shop-cart-expanded-delete"'
     assert_includes sheet, "atMinQty"
     assert_includes sheet, "atMaxQty"
-    assert_includes sheet, "disabled={atMinQty(line)}"
+    # «−» при qty=1 удаляет товар (decrementLine), а не disabled
+    assert_includes sheet, "function decrementLine(line)"
+    assert_includes sheet, "removeCartLine(line.index)"
+    refute_includes sheet, "disabled={atMinQty(line)}"
     refute_includes sheet, 'data-testid="shop-cart-peek-delete"'
     assert_includes store, "export function atMinQty"
     assert_includes store, "optimisticBump"

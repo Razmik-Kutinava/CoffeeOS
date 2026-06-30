@@ -153,6 +153,29 @@ class Shop::CartServiceTest < ActiveSupport::TestCase
     assert_equal "Сироп", result[:items].first[:removed_modifiers].first["name"]
   end
 
+  test "add! stores only modifier id in session to avoid cookie overflow" do
+    group = ProductModifierGroup.create!(product: @product, name: "Молоко", is_required: false, sort_order: 1)
+    oat = ProductModifierOption.create!(group: group, name: "Овсяное молоко", price_delta: 50, sort_order: 1)
+    selected = [{ id: oat.id, name: "Овсяное молоко", price: 50 }]
+
+    cart.add!(product_id: @product.id, quantity: 1, selected_modifiers: selected)
+    stored = @session[:shop_cart].first["selected_modifiers"].first
+    assert_equal({ "id" => oat.id }, stored)
+    refute stored.key?("name"), "name не должен храниться в cookie"
+    refute stored.key?("price"), "price не должен храниться в cookie"
+  end
+
+  test "json_lines hydrates modifier name and price from id" do
+    group = ProductModifierGroup.create!(product: @product, name: "Молоко", is_required: false, sort_order: 1)
+    oat = ProductModifierOption.create!(group: group, name: "Овсяное молоко", price_delta: 50, sort_order: 1)
+
+    cart.add!(product_id: @product.id, quantity: 1, selected_modifiers: [{ id: oat.id, name: "Овсяное молоко", price: 50 }])
+    mod = cart.json_lines[:items].first[:selected_modifiers].first
+    assert_equal oat.id, mod["id"]
+    assert_equal "Овсяное молоко", mod["name"]
+    assert_equal 50.0, mod["price"]
+  end
+
   test "json_lines with no items returns items empty array and total 0" do
     result = cart.json_lines
     assert_equal [], result[:items]

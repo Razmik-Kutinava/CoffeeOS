@@ -15,10 +15,11 @@ module Shop
     def self.normalize_modifiers(mods)
       Array(mods).map do |m|
         h = ActiveSupport::HashWithIndifferentAccess.new(m.respond_to?(:to_unsafe_h) ? m.to_unsafe_h : m)
+        # price может отсутствовать (в cookie храним только id) — тогда 0, восстановим из БД позже.
         {
           "id" => h[:id],
           "name" => h[:name],
-          "price" => BigDecimal(h[:price].to_s).to_f
+          "price" => h[:price].present? ? BigDecimal(h[:price].to_s).to_f : 0.0
         }
       end
     end

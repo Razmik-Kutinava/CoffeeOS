@@ -98,6 +98,15 @@
     return Math.round(Number(n) || 0)
   }
 
+  // «−» при quantity = 1 удаляет товар из корзины; иначе уменьшает на 1.
+  function decrementLine(line) {
+    if (atMinQty(line)) {
+      removeCartLine(line.index)
+    } else {
+      bumpCartLine(line.index, -1)
+    }
+  }
+
   function modifierLabel(mod) {
     const extra = Number(mod.price) > 0 ? ` (+${roundPrice(mod.price)}₽)` : ""
     return `${mod.name}${extra}`
@@ -135,8 +144,8 @@
       type="button"
       data-testid="shop-cart-expanded-minus"
       class="rounded bg-[#3a3a3a] px-2 py-0.5 text-xs disabled:opacity-40"
-      disabled={atMinQty(line)}
-      onclick={() => bumpCartLine(line.index, -1)}
+      disabled={busy}
+      onclick={() => decrementLine(line)}
     >−</button>
     <span class="text-xs">{line.quantity}</span>
     <button
@@ -249,13 +258,15 @@
                 <div class="mt-1 flex items-center justify-between gap-0.5">
                   <button
                     type="button"
+                    data-testid="shop-cart-peek-minus"
                     class="rounded bg-[#3a3a3a] px-1.5 py-0.5 text-[10px] leading-none disabled:opacity-40"
-                    disabled={atMinQty(line)}
-                    onclick={() => bumpCartLine(line.index, -1)}
+                    disabled={busy}
+                    onclick={() => decrementLine(line)}
                   >−</button>
                   <span class="text-[10px]">{line.quantity}</span>
                   <button
                     type="button"
+                    data-testid="shop-cart-peek-plus"
                     class="rounded bg-[#3a3a3a] px-1.5 py-0.5 text-[10px] leading-none disabled:opacity-40"
                     disabled={atMaxQty(line)}
                     onclick={() => bumpCartLine(line.index, 1)}
@@ -289,9 +300,10 @@
               <div class="flex shrink-0 items-center gap-1">
                 <button
                   type="button"
+                  data-testid="shop-cart-expanded-list-minus"
                   class="rounded bg-[#3a3a3a] px-1.5 py-0.5 text-[10px] leading-none disabled:opacity-40"
-                  disabled={atMinQty(line)}
-                  onclick={() => bumpCartLine(line.index, -1)}
+                  disabled={busy}
+                  onclick={() => decrementLine(line)}
                 >−</button>
                 <span class="min-w-[1rem] text-center text-[10px]">{line.quantity}</span>
                 <button

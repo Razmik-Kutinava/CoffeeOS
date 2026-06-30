@@ -45,7 +45,9 @@ self.addEventListener("fetch", (event) => {
   if (url.origin !== self.location.origin) return;
 
   if (url.pathname.startsWith("/vite/")) {
-    event.respondWith(staleWhileRevalidate(request, SHELL_CACHE));
+    // networkFirst: онлайн всегда берём свежий JS/CSS, кеш — только фолбек офлайн.
+    // staleWhileRevalidate раздавал устаревший бандл после деплоя (B1.13 prog15-17).
+    event.respondWith(networkFirstAsset(request));
     return;
   }
 
@@ -72,6 +74,19 @@ async function staleWhileRevalidate(request, cacheName) {
     })
     .catch(() => null);
   return cached || network || new Response("", { status: 504 });
+}
+
+// Сетевой запрос первым; кеш — только если сеть недоступна (офлайн).
+async function networkFirstAsset(request) {
+  const cache = await caches.open(SHELL_CACHE);
+  try {
+    const response = await fetch(request);
+    if (response.ok) cache.put(request, response.clone());
+    return response;
+  } catch {
+    const cached = await cache.match(request);
+    return cached || new Response("", { status: 504 });
+  }
 }
 
 async function networkFirstApi(request) {

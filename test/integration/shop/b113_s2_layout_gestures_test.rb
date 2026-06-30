@@ -15,6 +15,16 @@ class Shop::B113S2LayoutGesturesTest < ActionDispatch::IntegrationTest
     assert_includes sheet, "w-[min(28vw,110px)]"
   end
 
+  test "minus button removes line at quantity 1 via decrementLine" do
+    sheet = File.read(Rails.root.join("app/frontend/components/CartSheet.svelte"))
+
+    assert_includes sheet, "function decrementLine(line)"
+    assert_includes sheet, "removeCartLine(line.index)"
+    assert_includes sheet, "onclick={() => decrementLine(line)}"
+    assert_includes sheet, 'data-testid="shop-cart-peek-minus"'
+    assert_includes sheet, 'data-testid="shop-cart-expanded-list-minus"'
+  end
+
   test "expanded multi uses vertical list layout" do
     sheet = File.read(Rails.root.join("app/frontend/components/CartSheet.svelte"))
 
