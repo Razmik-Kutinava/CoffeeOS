@@ -25,6 +25,13 @@
 | **B1.13 навигация** | § **S2-канон** в B1_13 · код prog11 | re-MCP S2a/S2b · апрув · S4 |
 | **B1.14 адрес в шапке** | **B1.14-3d** index map `[x]` | deploy (`./bin/fly_deploy.sh`) · B1.14-4 cart |
 
+### Сессия 2026-06-30 prog18 (cookie overflow + минус удаляет + SW networkFirst)
+
+- **P5:** session cookie overflow при 3+ товарах с модификаторами → корзина чистилась. Фикс: в cookie только id модификаторов, name/price из БД в `json_lines`.
+- **P6:** `decrementLine` — «−» при qty=1 удаляет товар (PEEK/EXPANDED/single).
+- **P1:** SW `/vite/` → `networkFirst` (свежий JS онлайн).
+- Регрессия shop 220/0, оплата 3/3. MCP 20/20 PASS, build=prog18. Коммит: `1185d90`
+
 ### Сессия 2026-06-30 prog17 (SW cache fix: auto version от Vite manifest)
 
 - **Корень:** `SHOP_PWA_CACHE_VERSION` был хардкод `b14-1` → SW раздавал старый JS через staleWhileRevalidate.

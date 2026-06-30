@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2026-06-30 — B1.13 prog18: cookie overflow fix + минус удаляет + SW networkFirst
+
+- **P5 (3+ товар пропадал):** корень — `ActionDispatch::CookieOverflow` (session cookie ~4KB). В cookie хранили полные `selected_modifiers` (id+name+price). Теперь храним **только id**, name/price восстанавливаем из БД в `json_lines` (1 запрос). `compact_modifiers` + `modifier_option_lookup` + `hydrate_modifiers`.
+- **P6 (минус не удалял):** `decrementLine(line)` — при qty=1 вызывает `removeCartLine`, иначе `bumpCartLine(-1)`. Применён в PEEK-карточках, EXPANDED-списке, single-item. Убран `disabled={atMinQty}` с «−».
+- **P1 (старый JS):** SW-стратегия для `/vite/` сменена `staleWhileRevalidate` → `networkFirst` — онлайн всегда свежий бандл.
+- `ModifierSelection.normalize_modifiers` — терпим к отсутствию price (compact-хранение).
+- Тесты: shop регрессия 220 runs 0 failures; оплата §2.3 3/3; cart_service +2 теста. MCP **20/20 PASS** build=prog18.
+- Коммит: `1185d90`
+
 ## 2026-06-30 — B1.13 prog17: SW cache_version auto от Vite manifest
 
 - **Корень проблемы:** `SHOP_PWA_CACHE_VERSION="b14-1"` никогда не менялся → service worker раздавал старый JS через `staleWhileRevalidate` даже после деплоя.
