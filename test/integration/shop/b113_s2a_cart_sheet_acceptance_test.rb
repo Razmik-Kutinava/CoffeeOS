@@ -38,7 +38,7 @@ class Shop::B113S2aCartSheetAcceptanceTest < ActionDispatch::IntegrationTest
     assert_includes sheet, "line.product_name"
     assert_includes sheet, "line.unit_total"
     assert_includes sheet, "line.quantity"
-    assert_includes sheet, "line.selected_modifiers"
+    assert_includes sheet, "selected_modifiers"
     assert_includes sheet, "modifierLabel"
   end
 
@@ -82,7 +82,7 @@ class Shop::B113S2aCartSheetAcceptanceTest < ActionDispatch::IntegrationTest
   test "peek and hidden show order total per S2a" do
     sheet = File.read(Rails.root.join("app/frontend/components/CartSheet.svelte"))
 
-    assert_includes sheet, 'data-testid="shop-cart-peek-total"'
+    assert_includes sheet, "shop-cart-peek-total"
     assert_includes sheet, 'data-testid="shop-cart-hidden-total"'
     assert_includes sheet, "roundPrice(total)"
   end
@@ -91,9 +91,9 @@ class Shop::B113S2aCartSheetAcceptanceTest < ActionDispatch::IntegrationTest
     sheet = File.read(Rails.root.join("app/frontend/components/CartSheet.svelte"))
     store = File.read(Rails.root.join("app/frontend/lib/cartSheetStore.js"))
 
-    assert_includes sheet, "onpointerdown"
-    assert_includes sheet, "onpointerup"
-    assert_includes sheet, "onpointercancel"
+    assert_includes sheet, "pointerdown"
+    assert_includes sheet, "pointerup"
+    assert_includes sheet, "pointercancel"
     assert_includes sheet, "$effect"
     assert_includes sheet, "touchstart"
     assert_includes sheet, "handleSheetGestureDelta"

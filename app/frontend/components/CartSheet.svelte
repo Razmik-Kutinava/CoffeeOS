@@ -34,26 +34,62 @@
   let mode = $state(MODE_EMPTY)
   let busy = $state(false)
   let gestureStartY = 0
+  let gestureActive = false
   let gestureZoneEl = $state(null)
 
   let onCatalog = $derived(isCatalogRoute(hash))
   let count = $derived(items.length)
   let heightVh = $derived(sheetHeightVh(mode, count))
   let singleItem = $derived(count === 1 ? items[0] : null)
-  let gestureZoneMinH = $derived("min-h-14")
+
+  // Touch-события должны перехватываться первыми и блокировать pointer-дубли.
+  function onTouchStart(e) {
+    gestureActive = true
+    gestureStartY = e.touches[0].clientY
+    if (e.cancelable) e.preventDefault()
+  }
+
+  function onTouchEnd(e) {
+    if (!gestureActive) return
+    gestureActive = false
+    handleSheetGestureDelta(gestureStartY, e.changedTouches[0].clientY)
+  }
+
+  // Pointer-события — для десктопной мыши; пропускаются, если touch уже обрабатывает жест.
+  function onPointerDown(e) {
+    if (gestureActive || !e.isPrimary) return
+    gestureActive = true
+    gestureStartY = e.clientY
+    e.currentTarget.setPointerCapture(e.pointerId)
+  }
+
+  function onPointerUp(e) {
+    if (!gestureActive || !e.isPrimary) return
+    gestureActive = false
+    handleSheetGestureDelta(gestureStartY, e.clientY)
+  }
+
+  function onGestureCancel() {
+    gestureActive = false
+    gestureStartY = 0
+  }
 
   $effect(() => {
     const gz = gestureZoneEl
     if (!gz) return
-
-    gz.addEventListener("touchstart", onGestureStart, { passive: false })
-    gz.addEventListener("touchend", onGestureEnd, { passive: false })
-    gz.addEventListener("touchcancel", onGestureCancel, { passive: true })
-
+    gz.addEventListener("touchstart",  onTouchStart,    { passive: false })
+    gz.addEventListener("touchend",    onTouchEnd,      { passive: false })
+    gz.addEventListener("touchcancel", onGestureCancel, { passive: true  })
+    gz.addEventListener("pointerdown", onPointerDown)
+    gz.addEventListener("pointerup",   onPointerUp)
+    gz.addEventListener("pointercancel", onGestureCancel)
     return () => {
-      gz.removeEventListener("touchstart", onGestureStart)
-      gz.removeEventListener("touchend", onGestureEnd)
-      gz.removeEventListener("touchcancel", onGestureCancel)
+      gz.removeEventListener("touchstart",   onTouchStart)
+      gz.removeEventListener("touchend",     onTouchEnd)
+      gz.removeEventListener("touchcancel",  onGestureCancel)
+      gz.removeEventListener("pointerdown",  onPointerDown)
+      gz.removeEventListener("pointerup",    onPointerUp)
+      gz.removeEventListener("pointercancel", onGestureCancel)
     }
   })
 
@@ -64,22 +100,6 @@
   function modifierLabel(mod) {
     const extra = Number(mod.price) > 0 ? ` (+${roundPrice(mod.price)}₽)` : ""
     return `${mod.name}${extra}`
-  }
-
-  function onGestureStart(event) {
-    gestureStartY = event.touches?.[0]?.clientY ?? event.clientY
-    if (event.cancelable) event.preventDefault()
-    event.currentTarget?.setPointerCapture?.(event.pointerId)
-  }
-
-  function onGestureEnd(event) {
-    const endY = event.changedTouches?.[0]?.clientY ?? event.clientY
-    handleSheetGestureDelta(gestureStartY, endY)
-    event.currentTarget?.releasePointerCapture?.(event.pointerId)
-  }
-
-  function onGestureCancel() {
-    gestureStartY = 0
   }
 
   onMount(() => {
@@ -175,14 +195,11 @@
     <div
       bind:this={gestureZoneEl}
       data-testid="shop-cart-sheet-gesture-zone"
-      class="cart-sheet-gesture-zone flex w-full shrink-0 touch-none select-none flex-col items-center justify-center border-b border-[#3a3a3a]/60 {gestureZoneMinH}"
+      class="cart-sheet-gesture-zone flex w-full min-h-14 shrink-0 touch-none select-none flex-col items-center justify-center border-b border-[#3a3a3a]/60"
       style:touch-action="none"
       role="button"
       tabindex="-1"
       aria-label="Потяните вверх или вниз, чтобы изменить высоту корзины"
-      onpointerdown={onGestureStart}
-      onpointerup={onGestureEnd}
-      onpointercancel={onGestureCancel}
     >
       <div class="drag-handle h-1.5 w-12 rounded-full bg-[#777]" aria-hidden="true"></div>
     </div>
