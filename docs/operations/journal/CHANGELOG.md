@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026-06-30 — B1.13 prog16: fix double-swipe pointer mouse-only
+
+- **Фикс:** `onPointerDown/Up` теперь возвращают early если `e.pointerType !== "mouse"`. Touch-жесты обрабатывает только touchstart/touchend.
+- MCP: **20/20 PASS** — свайпы, scroll, layout, localStorage — всё зелёное.
+- Коммит: `7449ea3`
+
 ## 2026-06-30 — B1.13 prog15: swap peek/expanded layouts
 
 - **PEEK 2+:** горизонтальный скролл карточек (фото сверху, 28vw, horizontal scroll). `peekMulti=44vh`.

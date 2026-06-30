@@ -25,6 +25,13 @@
 | **B1.13 навигация** | § **S2-канон** в B1_13 · код prog11 | re-MCP S2a/S2b · апрув · S4 |
 | **B1.14 адрес в шапке** | **B1.14-3d** index map `[x]` | deploy (`./bin/fly_deploy.sh`) · B1.14-4 cart |
 
+### Сессия 2026-06-30 prog16 (fix double-swipe: pointer mouse-only)
+
+- **Корень бага:** браузер стреляет pointer (pointerType="touch") + touch события одновременно → двойной вызов collapseFromSwipe/expandFromSwipe.
+- **Фикс:** `onPointerDown`/`onPointerUp` в CartSheet.svelte проверяют `e.pointerType !== "mouse"` → выходят. Touch-устройства теперь обрабатываются только через touchstart/touchend.
+- **MCP результат:** 20/20 PASS — все свайпы, скроллы, раскладки, localStorage.
+- **Коммит:** `7449ea3` · **Deploy:** prog16
+
 ### Сессия 2026-06-30 prog15 (swap peek/expanded layouts)
 
 - **Изменение:** PEEK 2+ = горизонтальный скролл карточек (фото сверху); EXPANDED 2+ = компактный список строками.
