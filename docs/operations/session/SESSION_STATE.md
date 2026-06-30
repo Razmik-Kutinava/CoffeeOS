@@ -25,6 +25,13 @@
 | **B1.13 навигация** | § **S2-канон** в B1_13 · код prog11 | re-MCP S2a/S2b · апрув · S4 |
 | **B1.14 адрес в шапке** | **B1.14-3d** index map `[x]` | deploy (`./bin/fly_deploy.sh`) · B1.14-4 cart |
 
+### Сессия 2026-06-30 prog17 (SW cache fix: auto version от Vite manifest)
+
+- **Корень:** `SHOP_PWA_CACHE_VERSION` был хардкод `b14-1` → SW раздавал старый JS через staleWhileRevalidate.
+- **Фикс:** `pwa_controller.rb` теперь вычисляет версию как MD5[0..7] от Vite manifest.json — меняется автоматически с каждым деплоем.
+- **no-store** на `/service_worker.js` маршруте.
+- MCP 20/20 PASS. Коммит: `df03f37`
+
 ### Сессия 2026-06-30 prog16 (fix double-swipe: pointer mouse-only)
 
 - **Корень бага:** браузер стреляет pointer (pointerType="touch") + touch события одновременно → двойной вызов collapseFromSwipe/expandFromSwipe.

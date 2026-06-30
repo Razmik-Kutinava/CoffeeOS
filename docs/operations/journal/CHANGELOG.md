@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 2026-06-30 — B1.13 prog17: SW cache_version auto от Vite manifest
+
+- **Корень проблемы:** `SHOP_PWA_CACHE_VERSION="b14-1"` никогда не менялся → service worker раздавал старый JS через `staleWhileRevalidate` даже после деплоя.
+- **Фикс:** `pwa_controller.rb#vite_manifest_cache_version` = MD5[0..7] от `public/vite/.vite/manifest.json`. Автоматически меняется при каждом деплое с новыми ассетами.
+- Добавлен `Cache-Control: no-store` для `/sw.js` маршрута чтобы SW файл всегда забирался свежим.
+- MCP: **20/20 PASS**, build=prog17 ✅
+- Коммит: `df03f37`
+
 ## 2026-06-30 — B1.13 prog16: fix double-swipe pointer mouse-only
 
 - **Фикс:** `onPointerDown/Up` теперь возвращают early если `e.pointerType !== "mouse"`. Touch-жесты обрабатывает только touchstart/touchend.

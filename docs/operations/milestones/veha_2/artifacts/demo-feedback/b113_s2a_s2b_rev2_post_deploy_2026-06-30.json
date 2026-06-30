@@ -70,35 +70,35 @@
       "id": "00",
       "action": "/up 200",
       "pass": true,
-      "at": "2026-06-30T13:42:25.219Z"
+      "at": "2026-06-30T14:10:28.447Z"
     },
     {
       "id": "S2a-01",
       "action": "add → catalog + sheet peek",
       "pass": true,
-      "at": "2026-06-30T13:42:42.579Z",
+      "at": "2026-06-30T14:10:45.364Z",
       "mode": "peek",
-      "build": "prog16"
+      "build": "prog17"
     },
     {
       "id": "S2a-02",
       "action": "peek card: image, name, price×qty",
       "pass": true,
-      "at": "2026-06-30T13:42:42.601Z",
+      "at": "2026-06-30T14:10:45.384Z",
       "preview": "Фильтр-кофе без кофеина (декаф) Гватемала\n\n13₽ × 1\n\n−\n1\n+\nУдалить"
     },
     {
       "id": "S2a-03",
       "action": "transition duration ~300ms",
       "pass": true,
-      "at": "2026-06-30T13:42:42.979Z",
+      "at": "2026-06-30T14:10:45.729Z",
       "transitionDuration": "0.3s"
     },
     {
       "id": "S2a-04",
       "action": "sheet above bottom bar, max-width 414px",
       "pass": true,
-      "at": "2026-06-30T13:42:42.989Z",
+      "at": "2026-06-30T14:10:45.742Z",
       "bottom": "56px",
       "maxWidth": "414px",
       "zIndex": "50"
@@ -107,14 +107,14 @@
       "id": "S2b-01",
       "action": "scroll 100px · 1 item → hidden (no peek)",
       "pass": true,
-      "at": "2026-06-30T13:42:44.510Z",
+      "at": "2026-06-30T14:10:47.243Z",
       "mode": "hidden"
     },
     {
       "id": "S2b-01b",
       "action": "1 item hidden swipe up → peek",
       "pass": true,
-      "at": "2026-06-30T13:42:45.178Z",
+      "at": "2026-06-30T14:10:47.894Z",
       "mode": "peek",
       "layout": "horizontal"
     },
@@ -122,7 +122,7 @@
       "id": "S2b-05",
       "action": "1 item peek swipe up noop",
       "pass": true,
-      "at": "2026-06-30T13:42:45.843Z",
+      "at": "2026-06-30T14:10:48.560Z",
       "mode": "peek",
       "layout": "horizontal"
     },
@@ -130,13 +130,13 @@
       "id": "S2a-05",
       "action": "peek total testid present in bundle",
       "pass": true,
-      "at": "2026-06-30T13:42:45.851Z"
+      "at": "2026-06-30T14:10:48.566Z"
     },
     {
       "id": "S2b-01c",
       "action": "scroll 100px · 2+ items → peek",
       "pass": true,
-      "at": "2026-06-30T13:42:56.795Z",
+      "at": "2026-06-30T14:10:59.449Z",
       "mode": "peek",
       "second_product": true
     },
@@ -144,13 +144,13 @@
       "id": "S2a-05b",
       "action": "peek shows order total",
       "pass": true,
-      "at": "2026-06-30T13:42:56.803Z"
+      "at": "2026-06-30T14:10:59.452Z"
     },
     {
       "id": "S2b-04",
       "action": "scroll up preserves mode",
       "pass": true,
-      "at": "2026-06-30T13:42:57.660Z",
+      "at": "2026-06-30T14:11:00.215Z",
       "before": "peek",
       "after": "peek"
     },
@@ -158,20 +158,20 @@
       "id": "S2b-02",
       "action": "scroll 200px total → hidden",
       "pass": true,
-      "at": "2026-06-30T13:42:58.146Z",
+      "at": "2026-06-30T14:11:00.686Z",
       "mode": "hidden"
     },
     {
       "id": "S2a-06",
       "action": "hidden chip shows total",
       "pass": true,
-      "at": "2026-06-30T13:42:58.150Z"
+      "at": "2026-06-30T14:11:00.691Z"
     },
     {
       "id": "S2b-03",
       "action": "swipe up peek → expanded vertical list (2+)",
       "pass": true,
-      "at": "2026-06-30T13:43:09.206Z",
+      "at": "2026-06-30T14:11:11.784Z",
       "mode": "expanded",
       "layout": "vertical",
       "cart_lines": 2
@@ -180,14 +180,14 @@
       "id": "S2b-03b",
       "action": "swipe up expanded noop",
       "pass": true,
-      "at": "2026-06-30T13:43:09.842Z",
+      "at": "2026-06-30T14:11:12.422Z",
       "mode": "expanded"
     },
     {
       "id": "S2b-03c",
       "action": "swipe down expanded → peek cards",
       "pass": true,
-      "at": "2026-06-30T13:43:10.493Z",
+      "at": "2026-06-30T14:11:13.077Z",
       "mode": "peek",
       "layout": "horizontal"
     },
@@ -195,36 +195,36 @@
       "id": "S2b-03d",
       "action": "swipe down peek → hidden chip",
       "pass": true,
-      "at": "2026-06-30T13:43:11.144Z",
+      "at": "2026-06-30T14:11:13.723Z",
       "mode": "hidden"
     },
     {
       "id": "S2b-03e",
       "action": "swipe up hidden → peek (not expanded)",
       "pass": true,
-      "at": "2026-06-30T13:43:11.777Z",
+      "at": "2026-06-30T14:11:14.364Z",
       "mode": "peek"
     },
     {
       "id": "S2b-06",
       "action": "Избранное→Каталог: peek restored",
       "pass": true,
-      "at": "2026-06-30T13:43:24.723Z",
+      "at": "2026-06-30T14:11:27.442Z",
       "mode": "peek"
     },
     {
       "id": "S2b-07",
       "action": "Профиль→Каталог: expanded restored",
       "pass": true,
-      "at": "2026-06-30T13:43:37.671Z",
+      "at": "2026-06-30T14:11:40.336Z",
       "mode": "expanded"
     }
   ],
   "pass": true,
   "steps_pass": 21,
   "steps_total": 21,
-  "started_at": "2026-06-30T13:42:24.469Z",
-  "finished_at": "2026-06-30T13:43:38.335Z",
+  "started_at": "2026-06-30T14:10:27.983Z",
+  "finished_at": "2026-06-30T14:11:40.913Z",
   "pending": [
     "customer_approval"
   ]
