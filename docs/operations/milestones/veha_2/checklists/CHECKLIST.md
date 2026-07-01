@@ -90,7 +90,7 @@
 - [x] **B2-S1** Звук нового заказа на табло — **CLOSED OPS** 2026-06-17 · MCP 9/9 · latency 27ms · [`b21_s1_sound_post_deploy_2026-06-17.json`](../artifacts/demo-feedback/b21_s1_sound_post_deploy_2026-06-17.json)
 - [ ] **B2.2** Объединить «Меню» + «Создать», стоп-лист с карточки, POS Сбер — ТЗ [`B2_2`](../requirements/customer_tasks/B2_2_barista_menu_create_merge.md) · stage0 `[x]` → **этап 1**
 - [ ] **B1.11** Режим работы точки (УК → витрина → табло) — ответы Q1–Q10 `[x]` 2026-06-19 · **готовность к коду** · апрув + `go` · [`B1_11`](../requirements/customer_tasks/B1_11_tenant_operating_hours.md)
-- [ ] **B1.13** Новая навигация витрины — **rev1** S1–S3 код `[x]` · **rev2** docs `[x]` 2026-06-25 (S1-R1, S2a, S2b, S3-rev2) · скрины rev2 `[ ]` · код rev2 `[ ]` · S4 `[ ]` · [`B1_13`](../requirements/customer_tasks/B1_13_shop_nav_profile_header.md)
+- [x] **B1.13** Новая навигация витрины — **rev2 S1-R1/S2a/S2b/S3-rev2** `[x]` апрув телефон 2026-07-01 · MCP 22/22 · **S4** `[ ]` · [`B1_13`](../requirements/customer_tasks/B1_13_shop_nav_profile_header.md)
 - [ ] **B1.14** Адрес точки + выбор точки в шапке витрины — **B1.14-2 API** `[x]` 2026-06-23 · Header `[ ]` · [`B1_14`](../requirements/customer_tasks/B1_14_shop_tenant_address_header.md)
 
 ---
