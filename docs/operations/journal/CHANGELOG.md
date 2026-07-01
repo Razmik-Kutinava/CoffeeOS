@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2026-07-01 — B1.13 prog19: push + Fly deploy
+
+- **Push:** `develop` → `origin/develop` (13 commits, tip `283d12f`).
+- **Fly:** `coffeeos` · image `deployment-01KWEABJGANTFHS49XY11EKFBX` · release_command OK · rolling 2/2 ✓
+- **Verify:** `/up` green · JS bundle `application-DXnKClqo.js` содержит `prog19`, `shop-cart-peek-list`, `shop-cart-expanded-horizontal`.
+- **MCP:** после апрува владельца (`node bin/b113_s2a_s2b_rev2_mcp.mjs`).
+
 ## 2026-07-01 — B1.13 prog19: код CartSheet по § S2-канон
 
 - **vh:** peek 30 / expanded 44 (2+); peek 1 = 28; hidden = 20.

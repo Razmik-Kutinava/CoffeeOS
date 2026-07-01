@@ -32,7 +32,10 @@
 - **Add-flow:** `CART_JUST_ADDED_KEY` — peek после add, localStorage не перебивает.
 - **Тесты:** b113_s2* — 36 runs, 0 failures.
 - **Дальше:** deploy → MCP · апрув · S4
-- **Коммит:** `d136f16` · ops `84847b7`
+- **Коммит:** `d136f16` · ops `84847b7`, `283d12f`
+- **Push:** `283d12f` → `origin/develop` ✓
+- **Fly deploy:** `deployment-01KWEABJGANTFHS49XY11EKFBX` · bundle `application-DXnKClqo.js` · **build=prog19** ✓ · `/up` green
+- **MCP:** ждём **go** владельца после ручной проверки
 
 ### Сессия 2026-06-30 (B1.13 docs: канон S2 — устранение противоречий)
 
