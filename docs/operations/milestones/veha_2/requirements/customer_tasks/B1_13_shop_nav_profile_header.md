@@ -381,9 +381,9 @@
 
 # B1.13-S2-канон — поп-ап корзины (единственный источник истины)
 
-**ID:** B1.13-S2-канон · **зафиксировано владельцем:** 2026-06-30
+**ID:** B1.13-S2-канон · **зафиксировано владельцем:** 2026-06-30 · **актуальный build:** `prog20` (2026-07-01)
 
-> **Приёмка S2a / S2b / S3-rev2 / код / Fly MCP** — только эта секция. Противоречащие формулировки раскладки и жестов из файла **удалены**.
+> **Приёмка S2a / S2b / S3-rev2 / код / Fly MCP** — только эта секция. Противоречащие формулировки раскладки и жестов из файла **удалены**. Артефакты до 2026-07-01 с другой раскладкой — **история**, см. MCP `b113_s2a_s2b_rev2_post_deploy_2026-07-01.json`.
 
 ## Переменные в коде
 
@@ -472,9 +472,11 @@ HIDDEN  →  PEEK  →  EXPANDED
 
 ## testid (приёмка)
 
+> **Имена testid исторические** (не переименовывать без отдельного `go`): `shop-cart-peek-list` рендерит **horizontal**, `shop-cart-expanded-horizontal` — **vertical**. Источник истины — **`data-cart-layout`** и таблица ниже.
+
 | Режим | Маркеры |
 |-------|---------|
-| шит | `data-testid="shop-cart-sheet"` · `data-cart-sheet-mode` · `data-cart-sheet-build` |
+| шит | `data-testid="shop-cart-sheet"` · `data-cart-sheet-mode` · `data-cart-sheet-build` (ожидается `prog20`) |
 | gesture | `data-testid="shop-cart-sheet-gesture-zone"` |
 | peek 2+ | `data-testid="shop-cart-peek-list"` · `data-cart-layout="horizontal"` |
 | expanded 2+ | `data-testid="shop-cart-expanded-horizontal"` · `data-cart-layout="vertical"` |

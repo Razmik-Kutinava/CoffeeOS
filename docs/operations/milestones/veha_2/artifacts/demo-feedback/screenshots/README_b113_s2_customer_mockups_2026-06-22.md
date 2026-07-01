@@ -25,6 +25,16 @@ JSON: [`../b113_s2_screenshot_baseline_2026-06-22.json`](../b113_s2_screenshot_b
 | expanded (2+) | 44 |
 | hidden (чип) | 20 |
 
+## Раскладка 2+ (build prog20)
+
+| Режим | UI | vh | `data-cart-layout` | testid |
+|-------|-----|-----|-------------------|--------|
+| **peek** | горизонтальный ряд 28vw, scroll 3–4+ | 30 | `horizontal` | `shop-cart-peek-list` |
+| **expanded** | вертикальный список + «Удалить», scroll >3 | 44 | `vertical` | `shop-cart-expanded-horizontal` |
+| **hidden** | чип | 20 | — | `shop-cart-hidden-chip` |
+
+Имена testid исторические — приёмка по **`data-cart-layout`** и § S2-канон.
+
 ## Bottom bar (канон эпика)
 
 | | Целевое |

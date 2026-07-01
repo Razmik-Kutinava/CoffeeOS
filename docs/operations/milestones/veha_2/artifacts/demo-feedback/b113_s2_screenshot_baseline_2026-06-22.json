@@ -3,11 +3,12 @@
   "epic": "B1.13 — новая навигация витрины",
   "title": "Поп-ап корзины · 3 состояния · нижний бар · скролл каталога",
   "date": "2026-06-22",
-  "updated": "2026-06-30",
+  "updated": "2026-07-01",
   "canon": "B1_13_shop_nav_profile_header.md § B1.13-S2-канон",
+  "build_canon": "prog20",
   "source": "макеты заказчика — 4 изображения (чат Cursor)",
   "screenshot_set": "b113_s2_customer_01..04",
-  "status": "CANON_S2_2026_06_30",
+  "status": "CANON_S2_2026_07_01",
 
   "screenshots_on_disk": [
     "screenshots/b113_s2_customer_01_empty_catalog_and_add.png",
@@ -25,7 +26,7 @@
   },
 
   "viewport_proportions": {
-    "note": "канон § S2-канон; код: cartSheetThresholds.js",
+    "note": "канон § S2-канон; код: cartSheetThresholds.js · build=prog20",
     "empty_vh": 0.12,
     "peek_single_vh": 0.28,
     "peek_multi_vh": 0.30,
@@ -42,19 +43,26 @@
     },
     "peek": {
       "mockup_ref": "b113_s2_customer_02..03",
-      "ui_2plus": "вертикальный компактный список карточек товара (миниатюра + имя + цена + ±); при 3–4+ — горизонтальный скролл списка",
+      "ui_2plus": "горизонтальный ряд карточек товара (28vw); при 3–4+ — горизонтальный скролл",
       "ui_1": "одна горизонтальная широкая карточка",
+      "data_cart_layout": "horizontal",
+      "data_testid": "shop-cart-peek-list",
       "default_after_add": true
     },
     "expanded": {
       "mockup_ref": "b113_s2_customer_04",
-      "ui": "только 2+ товара: горизонтальный ряд карточек товара 28vw; при >3 — вертикальный скролл",
+      "ui": "только 2+ товара: вертикальный компактный список (миниатюра + имя + цена + ± + «Удалить»); при >3 — вертикальный скролл",
+      "data_cart_layout": "vertical",
+      "data_testid": "shop-cart-expanded-horizontal",
       "ui_1": "режима нет"
     },
     "hidden": {
-      "ui": "чип: «Корзина» + сумма + кнопка «+цена», без списка товаров"
+      "ui": "чип: «Корзина» + сумма + кнопка «+цена», без списка товаров",
+      "data_testid": "shop-cart-hidden-chip"
     }
   },
+
+  "testid_note": "Имена testid исторические (peek-list = horizontal, expanded-horizontal = vertical). Приёмка — data-cart-layout + § S2-канон.",
 
   "scroll_and_swipe_rules": {
     "after_add": "peek",
@@ -79,14 +87,14 @@
     {
       "index": 3,
       "file": "screenshots/b113_s2_customer_03_peek_compact_vs_expanded.png",
-      "note": "иллюстрация; канон — § S2-канон"
+      "note": "иллюстрация; канон peek=horizontal cards · expanded=vertical list"
     },
     {
       "index": 4,
       "file": "screenshots/b113_s2_customer_04_expanded_swipe_up.png",
-      "note": "2+ expanded horizontal row"
+      "note": "2+ expanded vertical list (+ «Удалить»)"
     }
   ],
 
-  "verdict": "CANON_ALIGNED_S2_2026_06_30"
+  "verdict": "CANON_ALIGNED_S2_PROG20"
 }

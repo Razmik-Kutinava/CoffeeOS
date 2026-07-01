@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## 2026-07-01 — B1.13 docs: канон prog20 — убраны хвосты противоречий
+
+- **Канон (без изменений кода):** peek=horizontal cards 28vw · expanded=vertical list + «Удалить» · vh 30/44 · build **prog20**.
+- **B1_13 § S2-канон:** build prog20, примечание про исторические testid; MCP-артефакт 2026-07-01 — эталон приёмки.
+- **JSON baseline S2/S4:** раскладки и scroll-режимы выровнены с prog20.
+- **MCP 2026-06-30:** помечен `SUPERSEDED` → `b113_s2a_s2b_rev2_post_deploy_2026-07-01.json`.
+- **README макетов S2/S4:** таблица раскладок; S4 horizontal scroll только в peek.
+- **HANDOFF / SESSION_STATE:** единая строка S2-канон prog20, без ссылок на prog19 как «текущий код».
+- Коммит: `5031285`
+
 ## 2026-07-01 — B1.13 prog20: swap peek/expanded layouts + MCP 21/21
 
 - **prog19 MCP (до swap):** peek=vertical, expanded=horizontal — совпало со скрином (expanded=карточки+Удалить), владелец: нужно наоборот.
@@ -10,12 +20,16 @@
 
 ## 2026-07-01 — B1.13 prog19: push + Fly deploy
 
+> **История (не канон):** раскладки prog19 (peek=vertical, expanded=horizontal) заменены **prog20** 2026-07-01. Актуальный MCP: `b113_s2a_s2b_rev2_post_deploy_2026-07-01.json`.
+
 - **Push:** `develop` → `origin/develop` (13 commits, tip `283d12f`).
 - **Fly:** `coffeeos` · image `deployment-01KWEABJGANTFHS49XY11EKFBX` · release_command OK · rolling 2/2 ✓
 - **Verify:** `/up` green · JS bundle `application-DXnKClqo.js` содержит `prog19`, `shop-cart-peek-list`, `shop-cart-expanded-horizontal`.
 - **MCP:** после апрува владельца (`node bin/b113_s2a_s2b_rev2_mcp.mjs`).
 
 ## 2026-07-01 — B1.13 prog19: код CartSheet по § S2-канон
+
+> **История (не канон):** описание раскладок ниже отражало промежуточный prog19; **текущий канон — prog20** (§ B1.13-S2-канон).
 
 - **vh:** peek 30 / expanded 44 (2+); peek 1 = 28; hidden = 20.
 - **PEEK 2+:** вертикальный компактный список (`shop-cart-peek-list`, `vertical`).
@@ -27,6 +41,8 @@
 - Коммит: `d136f16`
 
 ## 2026-06-30 — B1.13 docs: канон S2 — устранение противоречий
+
+> **История:** формулировки peek=vertical / expanded=horizontal из этого шага **не актуальны** — финальный канон зафиксирован **prog20** (2026-07-01).
 
 - § **B1.13-S2-канon** — единственный источник: PEEK 2+ vertical list · EXPANDED 2+ horizontal row 28vw · vh 30/44 · testid `shop-cart-peek-list` / `shop-cart-expanded-horizontal`.
 - **B1_13:** унифицированы формулировки PEEK/EXPANDED; persistence — после add всегда `peek`, localStorage только при возврате с вкладок.
@@ -58,6 +74,8 @@
 - Коммит: `7449ea3`
 
 ## 2026-06-30 — B1.13 prog15: раскладки peek/expanded по § S2-канон
+
+> **История:** описание раскладок ниже — промежуточная попытка; **канон prog20** — peek horizontal · expanded vertical.
 
 - **PEEK 2+ (канон):** вертикальный компактный список карточек товара (миниатюра + имя + цена + ±); при 3–4+ — горизонтальный скролл списка. **`peekMulti=30vh`**.
 - **EXPANDED 2+ (канон):** горизонтальный ряд карточек товара (`28vw`); при >3 — вертикальный скролл. **`expandedMulti=44vh`**.

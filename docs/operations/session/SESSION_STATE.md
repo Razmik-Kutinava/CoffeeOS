@@ -2,8 +2,8 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-01 (B1.13 prog20 — swap peek/expanded layouts)  
-**Предыдущее:** B1.12-R3 Fly MCP 8/8 · B1.11 этап 0 · B1.7 **ЗАКРЫТА**  
+**Дата:** 2026-07-01 (B1.13 docs: канон prog20 — убраны хвосты)  
+**Предыдущее:** B1.13 prog20 swap layouts · MCP 21/21  
 **Веха 1:** **закрыта** 2026-06-19 (CHECKLIST § I, H.3 заочно).  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
 **§2.3 оплата витрина:** **done** 2026-06-06 — [`CUSTOMER_BUSINESS_REQUIREMENTS.md`](milestones/veha_2/requirements/CUSTOMER_BUSINESS_REQUIREMENTS.md).
@@ -22,13 +22,29 @@
 |--------|--------|
 | **B1.12 rev2** | R3 `[x]` Fly MCP **10/10** · RSA Fly `[x]` | **апрув заказчика** |
 | **B1.11 режим работы** | **Fly MCP header A/B PASS** · артефакт 2026-06-21 | **апрув заказчика** |
-| **B1.13 навигация** | **prog20** swap layouts · MCP 21/21 · build=prog20 | апрув телефон · S4 |
+| **B1.13 навигация** | **prog20** канон docs+код · MCP 21/21 · build=prog20 | апрув телефон · S4 |
 | **B1.14 адрес в шапке** | **B1.14-3d** index map `[x]` | deploy (`./bin/fly_deploy.sh`) · B1.14-4 cart |
 
-### Сессия 2026-07-01 (B1.13 prog19: код по § S2-канон)
+### Сессия 2026-07-01 (B1.13 docs: канон prog20 — хвосты)
+
+- **Без изменений кода** — только docs/JSON/README/HANDOFF.
+- **Канон:** § S2-канон = prog20 (peek horizontal · expanded vertical · vh 30/44).
+- **Артефакты:** S2 baseline JSON, S4 baseline, MCP 2026-06-30 → SUPERSEDED.
+- **testid:** задокументированы исторические имена; приёмка по `data-cart-layout`.
+- **Коммит:** `5031285`
+
+### Сессия 2026-07-01 (B1.13 prog20: swap peek/expanded + MCP)
+
+- **prog19 MCP (утро):** expanded=horizontal cards + Удалить — как на скрине; владелец: expanded должен быть vertical list.
+- **prog20:** swap UI — peek=horizontal cards · expanded=vertical list + Удалить.
+- **MCP post-deploy:** 21/21 · S2b-03 build=prog20 layout=vertical has_delete=true
+- **Deploy:** `deployment-01KWEC4BRDSEK248M67X13NVKD` · `application-DwJhUPfQ.js`
+- **Коммит:** `66c4352` · ops `d771184`
+
+### Сессия 2026-07-01 (B1.13 prog19: код — **история, superseded prog20**)
 
 - **vh:** peekMulti=30, expandedMulti=44.
-- **UI:** PEEK 2+ vertical list · EXPANDED 2+ horizontal row 28vw; testid по канону.
+- **UI (prog19, не канон):** PEEK 2+ vertical · EXPANDED 2+ horizontal — заменено prog20.
 - **Add-flow:** `CART_JUST_ADDED_KEY` — peek после add, localStorage не перебивает.
 - **Тесты:** b113_s2* — 36 runs, 0 failures.
 - **Дальше:** deploy → MCP · апрув · S4
@@ -37,12 +53,12 @@
 - **Fly deploy:** `deployment-01KWEABJGANTFHS49XY11EKFBX` · bundle `application-DXnKClqo.js` · **build=prog19** ✓ · `/up` green
 - **MCP:** ждём **go** владельца после ручной проверки
 
-### Сессия 2026-06-30 (B1.13 docs: канон S2 — устранение противоречий)
+### Сессия 2026-06-30 (B1.13 docs: канон S2 — **история**)
 
 - **Канон:** § **B1.13-S2-канон** — единственный источник раскладки, vh, testid, persistence.
 - **Исправлено:** PEEK/EXPANDED в B1_13; prog9/prog15/prog5 в CHANGELOG; JSON baseline; MCP artifact; SESSION_STATE prog15.
 - **Persistence:** после add → `peek`; localStorage — только возврат с Избранное/Профиль.
-- **Код:** prog15/prog18 UI/vh ещё не совпадают с каноном → prog19.
+- **Финал:** раскладки закреплены **prog20** 2026-07-01 (docs cleanup).
 
 ### Сессия 2026-06-30 prog18 (cookie overflow + минус удаляет + SW networkFirst)
 
@@ -65,11 +81,10 @@
 - **MCP результат:** 20/20 PASS — все свайпы, скроллы, раскладки, localStorage.
 - **Коммит:** `7449ea3` · **Deploy:** prog16
 
-### Сессия 2026-06-30 prog15 (раскладки peek/expanded — § S2-канон)
+### Сессия 2026-06-30 prog15 (раскладки — **история, superseded prog20**)
 
-- **Канон (цель прогона):** PEEK 2+ = вертикальный компактный список карточек; EXPANDED 2+ = горизонтальный ряд карточек 28vw.
-- **vh (канон):** peekMulti=**30**vh, expandedMulti=**44**vh.
-- **Деплой (баг):** в коде vh были **перепутаны** (44/30) и UI-блоки не совпали с testid канона — см. § S2-канон, фикс → prog19.
+- **Цель прогона (устарело):** PEEK 2+ vertical · EXPANDED 2+ horizontal — не финальный канон.
+- **vh (актуально):** peekMulti=**30**vh, expandedMulti=**44**vh — без изменений в prog20.
 - **Файлы:** `CartSheet.svelte`, `cartSheetThresholds.js`.
 - **Тесты:** 21 runs, 0 failures (`b113_s2_layout_gestures_test.rb`, `b113_s2a`, `b113_s2b`).
 - **Коммит:** `43a8189`

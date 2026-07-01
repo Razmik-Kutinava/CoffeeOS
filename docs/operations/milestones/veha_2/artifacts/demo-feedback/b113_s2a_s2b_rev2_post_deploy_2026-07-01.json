@@ -6,7 +6,8 @@
   "stand": "https://coffeeos.fly.dev",
   "shop_url": "https://coffeeos.fly.dev/shop?tenant_id=655aaccb-004a-4bb9-a50a-ce618854dda3",
   "product_id": "3c5259e0-f42f-4d47-953d-2ce82e335f8c",
-  "method": "playwright (MCP DevTools equivalent)",
+  "build_canon": "prog20",
+  "canon_ref": "B1_13 § B1.13-S2-канон",
   "skipped": [
     "empty_cart_q_rev2"
   ],
