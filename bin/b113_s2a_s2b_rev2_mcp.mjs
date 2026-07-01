@@ -303,20 +303,26 @@ async function run() {
     const cartBeforeSwipe = await apiOnPage(page, "/cart")
     const cartLines = cartBeforeSwipe.body?.items?.length || 0
     const startPeek =
-      (await sheetMode(page)) === "peek" && (await sheetLayoutMarker(page)) === "vertical"
+      (await sheetMode(page)) === "peek" && (await sheetLayoutMarker(page)) === "horizontal"
 
     await swipeOnSheetHandle(page, "up")
     const peekToExpanded =
       (await sheetMode(page)) === "expanded" &&
-      (await sheetLayoutMarker(page)) === "horizontal" &&
+      (await sheetLayoutMarker(page)) === "vertical" &&
       (await page.locator('[data-testid="shop-cart-expanded-horizontal"]').count()) > 0
+    const expandedHasDelete =
+      (await page.locator('[data-testid="shop-cart-expanded-delete"]').count()) > 0
     overall =
-      step("S2b-03", "swipe up peek → expanded horizontal row (2+)", startPeek && peekToExpanded && cartLines >= 2, {
+      step("S2b-03", "swipe up peek → expanded vertical list (2+)", startPeek && peekToExpanded && expandedHasDelete && cartLines >= 2, {
         mode: await sheetMode(page),
         layout: await sheetLayoutMarker(page),
-        cart_lines: cartLines
+        build: await sheetBuild(page),
+        cart_lines: cartLines,
+        has_delete: expandedHasDelete
       }) && overall
-    criteriaS2b.swipe_peek_to_expanded = peekToExpanded && cartLines >= 2 ? "pass" : "fail"
+    criteriaS2b.swipe_peek_to_expanded = peekToExpanded && expandedHasDelete && cartLines >= 2 ? "pass" : "fail"
+
+    await shot(page, "expanded_layout_check", { width: 360, height: 780 })
 
     await swipeOnSheetHandle(page, "up")
     const expandedNoop = (await sheetMode(page)) === "expanded"
@@ -326,9 +332,9 @@ async function run() {
 
     await swipeOnSheetHandle(page, "down")
     const expandedToPeek =
-      (await sheetMode(page)) === "peek" && (await sheetLayoutMarker(page)) === "vertical"
+      (await sheetMode(page)) === "peek" && (await sheetLayoutMarker(page)) === "horizontal"
     overall =
-      step("S2b-03c", "swipe down expanded → peek vertical list", expandedToPeek, {
+      step("S2b-03c", "swipe down expanded → peek horizontal cards", expandedToPeek, {
         mode: await sheetMode(page),
         layout: await sheetLayoutMarker(page)
       }) && overall

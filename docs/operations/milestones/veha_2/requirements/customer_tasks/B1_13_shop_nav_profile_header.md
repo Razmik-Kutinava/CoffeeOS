@@ -414,7 +414,7 @@ HIDDEN  →  PEEK  →  EXPANDED
 
 | Позиций | Раскладка |
 |---------|-----------|
-| **2+** | **Вертикальный компактный список карточек товара** (строка: миниатюра + имя + цена + ±); при **3–4+** позициях — **горизонтальный скролл** списка |
+| **2+** | **Горизонтальный ряд карточек товара** (`28vw`); при **3–4+** — **горизонтальный скролл** |
 | **1** | **Одна широкая горизонтальная** карточка (фото слева, текст справа) |
 
 **Свайп ↑:** при **2+** → `expanded`; при **1** → **noop** (в expanded не переходим).  
@@ -426,10 +426,10 @@ HIDDEN  →  PEEK  →  EXPANDED
 
 | Раскладка |
 |-----------|
-| **Горизонтальный ряд карточек товара** (`28vw`); при **>3** позициях — **вертикальный скролл** |
+| **Вертикальный компактный список карточек товара** (строка: миниатюра + имя + цена + ± + «Удалить»); при **>3** — **вертикальный скролл** |
 
 **Свайп ↑:** noop (уже максимум).  
-**Свайп ↓:** → `peek` (вертикальный компактный список карточек).
+**Свайп ↓:** → `peek` (горизонтальный ряд карточек).
 
 ### HIDDEN — низ, чип
 
@@ -476,8 +476,8 @@ HIDDEN  →  PEEK  →  EXPANDED
 |-------|---------|
 | шит | `data-testid="shop-cart-sheet"` · `data-cart-sheet-mode` · `data-cart-sheet-build` |
 | gesture | `data-testid="shop-cart-sheet-gesture-zone"` |
-| peek 2+ | `data-testid="shop-cart-peek-list"` · `data-cart-layout="vertical"` |
-| expanded 2+ | `data-testid="shop-cart-expanded-horizontal"` · `data-cart-layout="horizontal"` |
+| peek 2+ | `data-testid="shop-cart-peek-list"` · `data-cart-layout="horizontal"` |
+| expanded 2+ | `data-testid="shop-cart-expanded-horizontal"` · `data-cart-layout="vertical"` |
 | 1 товар | `data-testid="shop-cart-expanded-single"` · `data-cart-layout="horizontal"` |
 | hidden | `data-testid="shop-cart-hidden-chip"` · `shop-cart-hidden-total` |
 | суммы | `shop-cart-peek-total` (peek 2+) |
@@ -502,9 +502,9 @@ HIDDEN  →  PEEK  →  EXPANDED
 |------|----------|
 | Канон | **§ B1.13-S2-канон** — единственный источник раскладки и жестов |
 | Состояния | `peek` · `expanded` (только 2+) · `hidden` (чип) |
-| Peek 2+ | Вертикальный компактный список карточек товара |
+| Peek 2+ | Горизонтальный ряд карточек товара (`28vw`) |
 | Peek 1 | Горизонтальная широкая карточка |
-| Expanded 2+ | Горизонтальный ряд карточек товара (`28vw`) |
+| Expanded 2+ | Вертикальный компактный список карточек товара |
 | Hidden | Чип: «Корзина» + сумма + «+цена» |
 | После add | Авто **`peek`** |
 | Анимация | **300ms ± 50ms** |
@@ -532,7 +532,7 @@ HIDDEN  →  PEEK  →  EXPANDED
 ### Прогон 3 — S2a сверка (2026-06-24)
 
 - [x] add → **peek** (`onCartAdded`, `shop:cart-added`, `push("/")`)
-- [x] peek 2+: `shop-cart-peek-list` · `data-cart-layout="vertical"`; expanded 2+: `shop-cart-expanded-horizontal` · `horizontal`; 1 товар: `shop-cart-expanded-single`
+- [x] peek 2+: `shop-cart-peek-list` · `horizontal`; expanded 2+: `shop-cart-expanded-horizontal` · `vertical`; 1 товар: `shop-cart-expanded-single`
 - [x] hidden: chip total + «+цена» (`shop-cart-hidden-chip`, `shop-cart-hidden-total`)
 - [x] `SHEET_TRANSITION_MS=300`, `CART_SHEET_BOTTOM_REM=3.5`, `max-width 414px`
 - [x] `setCartSheetMode` + `data-cart-sheet-mode`
