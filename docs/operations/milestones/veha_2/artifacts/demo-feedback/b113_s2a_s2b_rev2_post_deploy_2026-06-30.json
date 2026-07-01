@@ -169,11 +169,11 @@
     },
     {
       "id": "S2b-03",
-      "action": "swipe up peek → expanded vertical list (2+)",
+      "action": "swipe up peek → expanded horizontal list (2+)",
       "pass": true,
       "at": "2026-06-30T14:44:47.443Z",
       "mode": "expanded",
-      "layout": "vertical",
+      "layout": "horizontal",
       "cart_lines": 2
     },
     {
@@ -185,11 +185,11 @@
     },
     {
       "id": "S2b-03c",
-      "action": "swipe down expanded → peek cards",
+      "action": "swipe down expanded → peek vertical list (2+)",
       "pass": true,
       "at": "2026-06-30T14:44:48.721Z",
       "mode": "peek",
-      "layout": "horizontal"
+      "layout": "vertical"
     },
     {
       "id": "S2b-03d",

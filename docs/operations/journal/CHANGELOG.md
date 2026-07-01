@@ -1,9 +1,17 @@
 # CHANGELOG
 
+## 2026-06-30 — B1.13 docs: канон S2 — устранение противоречий
+
+- § **B1.13-S2-канon** — единственный источник: PEEK 2+ vertical list · EXPANDED 2+ horizontal row 28vw · vh 30/44 · testid `shop-cart-peek-list` / `shop-cart-expanded-horizontal`.
+- **B1_13:** унифицированы формулировки PEEK/EXPANDED; persistence — после add всегда `peek`, localStorage только при возврате с вкладок.
+- **CHANGELOG:** prog9 помечен «не канон»; prog15 — канон vh 30/44 и раскладки; prog5/макеты — «устарело».
+- **Артефакты:** `b113_s2_screenshot_baseline` — expanded vertical scroll при >3; MCP JSON action strings.
+- **SESSION_STATE:** prog15 vh 44/30 зафиксирован как баг деплоя; код → prog19.
+
 ## 2026-06-30 — B1.13 prog18: cookie overflow fix + минус удаляет + SW networkFirst
 
 - **P5 (3+ товар пропадал):** корень — `ActionDispatch::CookieOverflow` (session cookie ~4KB). В cookie хранили полные `selected_modifiers` (id+name+price). Теперь храним **только id**, name/price восстанавливаем из БД в `json_lines` (1 запрос). `compact_modifiers` + `modifier_option_lookup` + `hydrate_modifiers`.
-- **P6 (минус не удалял):** `decrementLine(line)` — при qty=1 вызывает `removeCartLine`, иначе `bumpCartLine(-1)`. Применён в PEEK-карточках, EXPANDED-списке, single-item. Убран `disabled={atMinQty}` с «−».
+- **P6 (минус не удалял):** `decrementLine(line)` — при qty=1 вызывает `removeCartLine`, иначе `bumpCartLine(-1)`. Применён в PEEK-списке, EXPANDED-карточках, single-item. Убран `disabled={atMinQty}` с «−».
 - **P1 (старый JS):** SW-стратегия для `/vite/` сменена `staleWhileRevalidate` → `networkFirst` — онлайн всегда свежий бандл.
 - `ModifierSelection.normalize_modifiers` — терпим к отсутствию price (compact-хранение).
 - Тесты: shop регрессия 220 runs 0 failures; оплата §2.3 3/3; cart_service +2 теста. MCP **20/20 PASS** build=prog18.
@@ -23,10 +31,11 @@
 - MCP: **20/20 PASS** — свайпы, scroll, layout, localStorage — всё зелёное.
 - Коммит: `7449ea3`
 
-## 2026-06-30 — B1.13 prog15: swap peek/expanded layouts
+## 2026-06-30 — B1.13 prog15: раскладки peek/expanded по § S2-канон
 
-- **PEEK 2+:** горизонтальный скролл карточек (фото сверху, 28vw, horizontal scroll). `peekMulti=44vh`.
-- **EXPANDED 2+:** компактный список строками (thumbnail слева, текст справа). `expandedMulti=30vh`.
+- **PEEK 2+ (канон):** вертикальный компактный список карточек товара (миниатюра + имя + цена + ±); при 3–4+ — горизонтальный скролл списка. **`peekMulti=30vh`**.
+- **EXPANDED 2+ (канон):** горизонтальный ряд карточек товара (`28vw`); при >3 — вертикальный скролл. **`expandedMulti=44vh`**.
+- **Деплой:** в `cartSheetThresholds.js` vh были перепутаны (44/30) — **канон § S2-канон: peek 30 / expanded 44**; UI-блоки в коде требуют сверки с testid (→ prog19).
 - Тесты b113 s2/s2a/s2b — 21 runs, 0 failures ✅
 - Коммит: `43a8189`
 
@@ -74,8 +83,10 @@
 
 ## 2026-06-29 — B1.13 prog9: swap peek/expanded layouts (c56b1c5)
 
-- PEEK 2+ → горизонтальные карточки (28vw, дефолт при добавлении)
-- EXPANDED 2+ → вертикальный компактный список (свайп вверх из peek)
+> ⚠️ **Не канон.** Ошибочный прогон; откачен **prog10**. Единственный источник раскладки — § **B1.13-S2-канon** в `B1_13_shop_nav_profile_header.md`.
+
+- PEEK 2+ → горизонтальные карточки (28vw) — **ошибка**
+- EXPANDED 2+ → вертикальный компактный список — **ошибка**
 
 ## 2026-06-29 — B1.13 prog8: финальный канон режимов (9177aed)
 
@@ -119,6 +130,8 @@
 
 ## 2026-06-24 — B1.13 прогон 5: канон положений поп-апа (layout + жесты)
 
+> ⚠️ **Устарело.** § S2-prog5 удалён; актуальный канон — § **B1.13-S2-канon** (2026-06-30).
+
 - **Док:** B1_13 § S2-prog5 — gap приёмки прогонов 1–4, таблицы mode×layout×жест
 - **Код:** `cartSheetExpandedLayout`, horizontal expanded, жесты 1 vs 2+, 1 товар без peek
 - **Тест:** b113_s2* — PASS · MCP скрипт обновлён
@@ -126,7 +139,9 @@
 
 ## 2026-06-24 — B1.13: layout поп-апа по макетам + жесты drag-handle
 
-- **Раскладка:** expanded (1=horizontal, 2+=vertical) · peek horizontal · hidden vertical heads
+> ⚠️ **Устарело.** Раскладка и hidden — только § **B1.13-S2-канон** (hidden = чип, не «головки»).
+
+- **Раскладка (история):** expanded (1=horizontal, 2+=vertical) · peek horizontal · hidden vertical heads
 - **Жесты:** `collapseFromSwipe` + свайп на drag-handle; каталог снова скроллится вне handle
 - **Тест:** `b113_s2_layout_gestures_test.rb` + b113_s2* — PASS
 - **Дальше:** redeploy · re-MCP · апрув · S4
