@@ -9,6 +9,7 @@
 - **MCP:** `b113_s2a_s2b_rev2_mcp.mjs` — layout assertions по канону.
 - **Тесты:** b113_s2* — 36 runs, 0 failures.
 - `CART_SHEET_BUILD=prog19`
+- Коммит: `d136f16`
 
 ## 2026-06-30 — B1.13 docs: канон S2 — устранение противоречий
 
