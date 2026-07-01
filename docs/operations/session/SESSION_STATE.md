@@ -31,7 +31,7 @@
 - **Канон:** § S2-канон = prog20 (peek horizontal · expanded vertical · vh 30/44).
 - **Артефакты:** S2 baseline JSON, S4 baseline, MCP 2026-06-30 → SUPERSEDED.
 - **testid:** задокументированы исторические имена; приёмка по `data-cart-layout`.
-- **Коммит:** `5031285`
+- **Коммит:** `9c147b5`
 
 ### Сессия 2026-07-01 (B1.13 prog20: swap peek/expanded + MCP)
 

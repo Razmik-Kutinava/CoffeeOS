@@ -8,7 +8,7 @@
 - **MCP 2026-06-30:** помечен `SUPERSEDED` → `b113_s2a_s2b_rev2_post_deploy_2026-07-01.json`.
 - **README макетов S2/S4:** таблица раскладок; S4 horizontal scroll только в peek.
 - **HANDOFF / SESSION_STATE:** единая строка S2-канон prog20, без ссылок на prog19 как «текущий код».
-- Коммит: `5031285`
+- Коммит: `9c147b5`
 
 ## 2026-07-01 — B1.13 prog20: swap peek/expanded layouts + MCP 21/21
 
