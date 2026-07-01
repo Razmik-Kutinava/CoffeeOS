@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 2026-07-01 — B1.13 prog20: swap peek/expanded layouts + MCP 21/21
+
+- **prog19 MCP (до swap):** peek=vertical, expanded=horizontal — совпало со скрином (expanded=карточки+Удалить), владелец: нужно наоборот.
+- **prog20:** peek=горизонтальные карточки 28vw · expanded=вертикальный список + «Удалить»; vh/жесты без изменений.
+- **Fly MCP:** 21/21 PASS · build=prog20 · S2b-03: expanded layout=vertical, has_delete=true.
+- **Deploy:** `deployment-01KWEC4BRDSEK248M67X13NVKD` · `application-DwJhUPfQ.js`
+- Коммит: `66c4352`
+
 ## 2026-07-01 — B1.13 prog19: push + Fly deploy
 
 - **Push:** `develop` → `origin/develop` (13 commits, tip `283d12f`).
