@@ -2,17 +2,16 @@
 
 require "test_helper"
 
-# B1.13-S2 — канон раскладок peek/expanded/hidden (prog10).
+# B1.13-S2 — канон раскладок peek/expanded/hidden (§ S2-канон).
 class Shop::B113S2LayoutGesturesTest < ActionDispatch::IntegrationTest
-  test "peek multi uses horizontal card row" do
+  test "peek multi uses vertical compact list" do
     sheet = File.read(Rails.root.join("app/frontend/components/CartSheet.svelte"))
 
-    assert_includes sheet, 'data-testid="shop-cart-peek-cards"'
-    assert_includes sheet, 'data-testid="shop-cart-peek-card"'
+    assert_includes sheet, 'data-testid="shop-cart-peek-list"'
+    assert_includes sheet, 'data-testid="shop-cart-peek-line"'
     assert_includes sheet, "MODE_PEEK && count >= 2"
-    assert_includes sheet, 'data-cart-layout="horizontal"'
-    assert_includes sheet, "overflow-x-auto"
-    assert_includes sheet, "w-[min(28vw,110px)]"
+    assert_includes sheet, 'data-cart-layout="vertical"'
+    assert_includes sheet, "overflow-y-auto"
   end
 
   test "minus button removes line at quantity 1 via decrementLine" do
@@ -22,17 +21,18 @@ class Shop::B113S2LayoutGesturesTest < ActionDispatch::IntegrationTest
     assert_includes sheet, "removeCartLine(line.index)"
     assert_includes sheet, "onclick={() => decrementLine(line)}"
     assert_includes sheet, 'data-testid="shop-cart-peek-minus"'
-    assert_includes sheet, 'data-testid="shop-cart-expanded-list-minus"'
+    assert_includes sheet, 'data-testid="shop-cart-expanded-minus"'
   end
 
-  test "expanded multi uses vertical list layout" do
+  test "expanded multi uses horizontal card row 28vw" do
     sheet = File.read(Rails.root.join("app/frontend/components/CartSheet.svelte"))
 
-    assert_includes sheet, 'data-testid="shop-cart-expanded-list"'
-    assert_includes sheet, 'data-testid="shop-cart-expanded-line"'
+    assert_includes sheet, 'data-testid="shop-cart-expanded-horizontal"'
+    assert_includes sheet, 'data-testid="shop-cart-expanded-card"'
     assert_includes sheet, "MODE_EXPANDED && count >= 2"
-    assert_includes sheet, "overflow-y-auto"
-    assert_includes sheet, 'data-cart-layout="vertical"'
+    assert_includes sheet, "overflow-x-auto"
+    assert_includes sheet, 'data-cart-layout="horizontal"'
+    assert_includes sheet, "w-[min(28vw,110px)]"
     assert_includes sheet, "CART_SHEET_BUILD"
   end
 

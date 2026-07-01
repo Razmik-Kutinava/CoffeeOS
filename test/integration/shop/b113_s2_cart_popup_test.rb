@@ -78,17 +78,18 @@ class Shop::B113S2CartPopupTest < ActionDispatch::IntegrationTest
     thresholds = File.read(Rails.root.join("app/frontend/lib/cartSheetThresholds.js"))
 
     assert_includes thresholds, "empty:         12"
-    assert_includes thresholds, "expandedSingle: 40"
-    assert_includes thresholds, "expandedMulti:  30"
-    assert_includes thresholds, "peekMulti:     44"
+    assert_includes thresholds, "expandedMulti:  44"
+    assert_includes thresholds, "peekMulti:     30"
+    assert_includes thresholds, "peekSingle:    28"
     assert_includes thresholds, "hidden:        20"
     assert_includes thresholds, "SCROLL_TO_PEEK_PX = 100"
     assert_includes thresholds, "SCROLL_TO_HIDDEN_PX = 200"
     assert_includes thresholds, "SWIPE_UP_PX = 32"
+    assert_includes thresholds, 'CART_SHEET_BUILD = "prog19"'
 
-    assert_equal 40, sheet_height_vh("expanded", 1)
-    assert_equal 30, sheet_height_vh("expanded", 3)
-    assert_equal 44, sheet_height_vh("peek", 2)
+    assert_equal 44, sheet_height_vh("expanded", 3)
+    assert_equal 30, sheet_height_vh("peek", 2)
+    assert_equal 28, sheet_height_vh("peek", 1)
     assert_equal 20, sheet_height_vh("hidden", 2)
     assert_equal 12, sheet_height_vh("empty", 0)
   end
@@ -127,8 +128,8 @@ class Shop::B113S2CartPopupTest < ActionDispatch::IntegrationTest
   def sheet_height_vh(mode, item_count)
     case mode
     when "empty" then 12
-    when "expanded" then item_count <= 1 ? 40 : 30
-    when "peek" then item_count <= 1 ? 28 : 44
+    when "expanded" then 44
+    when "peek" then item_count <= 1 ? 28 : 30
     when "hidden" then 20
     else 12
     end

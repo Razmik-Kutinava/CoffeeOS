@@ -303,15 +303,15 @@ async function run() {
     const cartBeforeSwipe = await apiOnPage(page, "/cart")
     const cartLines = cartBeforeSwipe.body?.items?.length || 0
     const startPeek =
-      (await sheetMode(page)) === "peek" && (await sheetLayoutMarker(page)) === "horizontal"
+      (await sheetMode(page)) === "peek" && (await sheetLayoutMarker(page)) === "vertical"
 
     await swipeOnSheetHandle(page, "up")
     const peekToExpanded =
       (await sheetMode(page)) === "expanded" &&
-      (await sheetLayoutMarker(page)) === "vertical" &&
-      (await page.locator('[data-testid="shop-cart-expanded-list"]').count()) > 0
+      (await sheetLayoutMarker(page)) === "horizontal" &&
+      (await page.locator('[data-testid="shop-cart-expanded-horizontal"]').count()) > 0
     overall =
-      step("S2b-03", "swipe up peek → expanded vertical list (2+)", startPeek && peekToExpanded && cartLines >= 2, {
+      step("S2b-03", "swipe up peek → expanded horizontal row (2+)", startPeek && peekToExpanded && cartLines >= 2, {
         mode: await sheetMode(page),
         layout: await sheetLayoutMarker(page),
         cart_lines: cartLines
@@ -326,9 +326,9 @@ async function run() {
 
     await swipeOnSheetHandle(page, "down")
     const expandedToPeek =
-      (await sheetMode(page)) === "peek" && (await sheetLayoutMarker(page)) === "horizontal"
+      (await sheetMode(page)) === "peek" && (await sheetLayoutMarker(page)) === "vertical"
     overall =
-      step("S2b-03c", "swipe down expanded → peek cards", expandedToPeek, {
+      step("S2b-03c", "swipe down expanded → peek vertical list", expandedToPeek, {
         mode: await sheetMode(page),
         layout: await sheetLayoutMarker(page)
       }) && overall

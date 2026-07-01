@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## 2026-07-01 — B1.13 prog19: код CartSheet по § S2-канон
+
+- **vh:** peek 30 / expanded 44 (2+); peek 1 = 28; hidden = 20.
+- **PEEK 2+:** вертикальный компактный список (`shop-cart-peek-list`, `vertical`).
+- **EXPANDED 2+:** горизонтальный ряд карточек 28vw (`shop-cart-expanded-horizontal`, `horizontal`).
+- **Add-flow:** после add всегда peek — `writePersistedCartSheetMode(PEEK)` + guard по `CART_JUST_ADDED_KEY` в `onCatalogRouteChange`.
+- **MCP:** `b113_s2a_s2b_rev2_mcp.mjs` — layout assertions по канону.
+- **Тесты:** b113_s2* — 36 runs, 0 failures.
+- `CART_SHEET_BUILD=prog19`
+
 ## 2026-06-30 — B1.13 docs: канон S2 — устранение противоречий
 
 - § **B1.13-S2-канon** — единственный источник: PEEK 2+ vertical list · EXPANDED 2+ horizontal row 28vw · vh 30/44 · testid `shop-cart-peek-list` / `shop-cart-expanded-horizontal`.

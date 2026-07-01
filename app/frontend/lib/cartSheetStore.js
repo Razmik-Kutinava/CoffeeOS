@@ -1,5 +1,6 @@
 import { get, writable } from "svelte/store"
 import { api } from "./api.js"
+import { CART_JUST_ADDED_KEY } from "./shopCartAdd.js"
 import { readCartCache, writeCartCache } from "./shopCartCache.js"
 import {
   clearPersistedCartSheetMode,
@@ -144,11 +145,11 @@ export async function refreshCartSheet() {
   }
 }
 
-/** Добавили товар: переходим в peek (дефолт) */
+/** Добавили товар: всегда peek (localStorage не переопределяет add-flow) */
 export function onCartAdded() {
   cartSheetMode.set(MODE_PEEK)
   resetScrollAnchor()
-  persistCartSheetMode()
+  writePersistedCartSheetMode(MODE_PEEK)
   refreshCartSheet().catch(() => {})
 }
 
@@ -158,6 +159,17 @@ export function onCatalogRouteChange(nowOnCatalog) {
   if (!nowOnCatalog) {
     persistCartSheetMode()
     return
+  }
+  try {
+    if (typeof sessionStorage !== "undefined" && sessionStorage.getItem(CART_JUST_ADDED_KEY)) {
+      sessionStorage.removeItem(CART_JUST_ADDED_KEY)
+      cartSheetMode.set(MODE_PEEK)
+      resetScrollAnchor()
+      writePersistedCartSheetMode(MODE_PEEK)
+      return
+    }
+  } catch (_e) {
+    /* ignore */
   }
   const savedMode = readPersistedCartSheetMode()
   cartSheetMode.set(savedMode && savedMode !== MODE_EMPTY ? savedMode : MODE_PEEK)
