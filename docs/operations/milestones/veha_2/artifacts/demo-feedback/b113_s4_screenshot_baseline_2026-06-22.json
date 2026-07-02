@@ -8,10 +8,16 @@
   "layout_canon": "B1_13 § B1.13-S2-канон · build=prog20",
   "source": "макеты заказчика — 3 кадра",
   "depends_on": ["B1.13-S2", "B1.13-S3"],
-  "status": "CANON_S4_2026_07_01",
+  "status": "CANON_S4_2026_07_01_REV0B",
+
+  "popup_vs_product": {
+    "popup": "только ±qty, Удалить, +цена — без inline-edit модификаторов",
+    "product": "tap → Product → В корзину → PATCH update"
+  },
 
   "tap_vs_swipe": {
-    "tap": "карточка/фото в peek или expanded → Product + update cart line",
+    "tap": "вся карточка peek (1+ и 2+) и expanded → Product + cart_line",
+    "tap_exclude": "блок − / число / + · кнопка Удалить",
     "not_tap": ["hidden→peek", "peek→expanded", "long press 0.5s"],
     "modes": "только свайп — § S2-канон"
   },
@@ -24,8 +30,16 @@
   },
 
   "modifier_edit": {
-    "trigger": "tap на карточку/фото товара",
-    "flow": "#/product/:id?cart_line=N → изменить → update корзины → каталог"
+    "trigger": "tap на карточку (не ±)",
+    "flow": "#/product/:id?cart_line=N → изменить → PATCH selected_modifiers → каталог",
+    "merge_duplicate_lines": true,
+    "merge_note": "новая комбинация = другая строка → qty суммируется, исходная убирается"
+  },
+
+  "api": {
+    "edit": "PATCH /shop/api/cart/items/:index + selected_modifiers",
+    "qty_only": "PATCH + delta (как сейчас)",
+    "no_add_on_edit": "POST /cart/add не вызывать при cart_line"
   },
 
   "screenshots": [
@@ -43,5 +57,5 @@
     }
   ],
 
-  "verdict": "ALIGNED_S4_CANON_2026_07_01"
+  "verdict": "ALIGNED_S4_CANON_2026_07_01_REV0B"
 }

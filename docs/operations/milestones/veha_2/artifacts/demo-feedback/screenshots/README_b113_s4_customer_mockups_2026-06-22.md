@@ -10,9 +10,12 @@ JSON: [`../b113_s4_screenshot_baseline_2026-06-22.json`](../b113_s4_screenshot_b
 | 2 | `b113_s4_customer_horizontal_thumbnails_chip.png` | Иллюстрация ряда миниатюр + **+цена** |
 | 3 | `b113_s4_customer_expanded_modifiers_list.png` | vertical list **expanded** (tap → Product для edit) |
 
-**Суть S4 (канон 2026-07-01):**
+**Суть S4 (канон 2026-07-01, уточнения 0b):**
 
-- **Tap** на карточку/фото в peek или expanded → **Product** с модификаторами → update корзины.
+- **В поп-апе** — только ±qty; модификаторы **не** редактируем inline.
+- **Tap** — **вся карточка** в peek (1+ и 2+) и expanded; блок **− / +** только для количества.
+- Tap → **Product** → «В корзину» → **PATCH** update строки (не add).
+- При совпадении комбинации модификаторов — **склеить** qty с существующей строкой.
 - **Не tap** для hidden→peek / peek→expanded — только **свайп** (§ S2-канон).
 - **Long press — не используем.**
-- Скролл карточек — **peek**; индикаторы — S4.
+- Скролл карточек — **peek** 4+; индикаторы — S4.

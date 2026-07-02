@@ -90,7 +90,7 @@ Content-Type: application/json
 | GET | `/shop/api/products/:id` | Карточка |
 | POST | `/shop/api/cart/add` | В корзину |
 | GET | `/shop/api/cart` | Корзина |
-| PATCH | `/shop/api/cart/items/:index` | Кол-во |
+| PATCH | `/shop/api/cart/items/:index` | Кол-во (`delta`) · **B1.13-S4:** + `selected_modifiers` (edit из Product) |
 | DELETE | `/shop/api/cart/items/:index` | Удалить |
 | POST | `/shop/api/orders` | Создать заказ |
 | GET | `/shop/api/orders/:id` | Статус |

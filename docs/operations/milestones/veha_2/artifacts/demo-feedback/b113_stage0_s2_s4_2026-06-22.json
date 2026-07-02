@@ -50,7 +50,12 @@
   "open_questions": [
     "Q-epic-1 bottom bar 3 tabs vs S1 profile in header",
     "Q-epic-2 keep #/cart route",
-    "Q-epic-3 scroll thresholds px",
-    "S4-block-2: PATCH cart/items/:index — расширить selected_modifiers vs replace-line endpoint"
-  ]
+    "Q-epic-3 scroll thresholds px"
+  ],
+  "s4_resolved_2026_07_01": {
+    "edit_location": "только Product, не в поп-апе",
+    "tap_zone": "вся карточка peek+expanded, кроме ± и Удалить",
+    "merge_lines": "склеить qty при совпадении line_key",
+    "api": "PATCH cart/items/:index + selected_modifiers"
+  }
 }
