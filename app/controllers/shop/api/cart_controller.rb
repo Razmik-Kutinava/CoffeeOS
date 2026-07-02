@@ -43,7 +43,15 @@ module Shop
       def update
         index = params[:index].to_i
         return render json: { error: "Неверный индекс" }, status: :unprocessable_entity if index < 0
-        Shop::CartService.new(session, @shop_tenant.id).update_quantity!(params[:index], params.require(:delta))
+
+        svc = Shop::CartService.new(session, @shop_tenant.id)
+        if params.key?(:selected_modifiers)
+          # S4-блок-2: замена модификаторов (edit из Product)
+          svc.replace_line!(index, selected_modifiers: params[:selected_modifiers] || [], quantity: params[:quantity])
+        else
+          svc.update_quantity!(index, params.require(:delta))
+        end
+
         data = Shop::CartService.new(session, @shop_tenant.id).json_lines
         render json: { items: data[:items], total: data[:total] }
       rescue ActiveRecord::RecordNotFound => e

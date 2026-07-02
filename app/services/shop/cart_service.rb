@@ -48,6 +48,42 @@ module Shop
       self
     end
 
+    # S4-блок-2: замена модификаторов строки корзины.
+    # Если новая комбинация совпадает с другой строкой — слияние количества, старая строка удаляется.
+    def replace_line!(index, selected_modifiers:, quantity: nil)
+      i = index.to_i
+      old_line = @session[SESSION_KEY][i]
+      raise ActiveRecord::RecordNotFound, "Строка корзины не найдена" unless old_line
+
+      product = Product.find(old_line["product_id"])
+      raise ActiveRecord::RecordNotFound, "Товар не найден" unless shop_available?(product)
+
+      mods = ModifierSelection.build(product: product, selected_modifiers: selected_modifiers)
+      new_qty = quantity ? quantity.to_i.clamp(1, MAX_ITEM_QUANTITY) : old_line["quantity"]
+
+      new_line = {
+        "product_id" => old_line["product_id"],
+        "quantity"   => new_qty,
+        "selected_modifiers" => compact_modifiers(mods[:selected_modifiers])
+      }
+      new_key = line_key(new_line)
+
+      # Ищем другую строку с той же сигнатурой (product_id + modifiers)
+      other_indices = (0...@session[SESSION_KEY].size).reject { |j| j == i }
+      merge_idx = other_indices.find { |j| line_key(@session[SESSION_KEY][j]) == new_key }
+
+      if merge_idx
+        merged_qty = (@session[SESSION_KEY][merge_idx]["quantity"] + new_qty).clamp(1, MAX_ITEM_QUANTITY)
+        @session[SESSION_KEY][merge_idx]["quantity"] = merged_qty
+        @session[SESSION_KEY].delete_at(i)
+      else
+        @session[SESSION_KEY][i] = new_line
+      end
+
+      touch_cart_session!
+      self
+    end
+
     def remove!(index)
       @session[SESSION_KEY].delete_at(index.to_i)
       touch_cart_session!

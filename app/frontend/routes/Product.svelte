@@ -3,6 +3,8 @@
   import { push } from "svelte-spa-router"
   import { api } from "../lib/api.js"
   import { addToCart as shopAddToCart } from "../lib/shopCartAdd.js"
+  import { readCartCache, writeCartCache } from "../lib/shopCartCache.js"
+  import { cartItems, cartTotal } from "../lib/cartSheetStore.js"
   import { useTelegramBack } from "../lib/telegram.js"
   import { favorites } from "../lib/stores/favorites.js"
   import {
@@ -27,6 +29,28 @@
   let isFav = $state(false)
   let adding = $state(false)
   let loadedProductId = $state(null)
+  // S4-блок-2: индекс строки корзины, если открыли из поп-апа для редактирования
+  let cartLineIndex = $state(null)
+  let editMode = $derived(cartLineIndex !== null && !Number.isNaN(cartLineIndex))
+
+  // Разбираем ?cart_line=N из хэша URL (#/product/123?cart_line=2)
+  function parseCartLine() {
+    if (typeof window === "undefined") return null
+    const qi = window.location.hash.indexOf('?')
+    if (qi < 0) return null
+    const val = new URLSearchParams(window.location.hash.slice(qi + 1)).get('cart_line')
+    return val !== null ? parseInt(val, 10) : null
+  }
+
+  // Инициализируем selected из массива модификаторов строки корзины
+  function initSelectedFromCartLine(cartMods, modifierGroups) {
+    const modIds = new Set((cartMods || []).map(m => String(m.id)).filter(Boolean))
+    const result = {}
+    for (const g of modifierGroups) {
+      result[g.id] = g.modifiers.filter(m => modIds.has(String(m.id))).map(m => m.id)
+    }
+    return result
+  }
 
   function normalizeSelection(value, group) {
     if (value !== undefined) {
@@ -68,12 +92,23 @@
     qty = 1
     adding = false
     showMoreMenu = false
+    cartLineIndex = parseCartLine()
 
     ;(async () => {
       try {
         await loadProduct(false)
         if (!active) return
         isFav = favorites.isFavorite(product.id)
+
+        // Если открыли из поп-апа (cart_line) — подставляем модификаторы и количество из кэша
+        if (cartLineIndex !== null && !Number.isNaN(cartLineIndex)) {
+          const cached = readCartCache()
+          const line = cached?.items?.[cartLineIndex]
+          if (line && product.modifier_groups?.length) {
+            selected = initSelectedFromCartLine(line.selected_modifiers, product.modifier_groups)
+            qty = line.quantity || 1
+          }
+        }
       } catch (e) {
         if (active) {
           error = e.message
@@ -147,17 +182,24 @@
     error = null
     try {
       const { selected_modifiers } = buildModifierPayload(product.modifier_groups, selected)
-      await shopAddToCart(
-        {
-          product_id: routeProductId,
-          quantity: qty,
-          selected_modifiers
-        },
-        { product }
-      )
+
+      if (editMode) {
+        // S4-блок-2: редактирование строки корзины → PATCH (не POST)
+        const res = await api(`/cart/items/${cartLineIndex}`, {
+          method: "PATCH",
+          body: JSON.stringify({ selected_modifiers, quantity: qty })
+        })
+        const data = { items: res.items || [], total: res.total ?? 0 }
+        writeCartCache(data)
+        cartItems.set(data.items)
+        cartTotal.set(Number(data.total))
+      } else {
+        await shopAddToCart({ product_id: routeProductId, quantity: qty, selected_modifiers }, { product })
+      }
+
       push("/")
     } catch (e) {
-      error = e.message || "Не удалось добавить в корзину"
+      error = e.message || "Не удалось обновить корзину"
     } finally {
       adding = false
     }
@@ -249,10 +291,15 @@
     </div>
     <button
       class="add-to-cart-btn"
+      data-testid="shop-product-add-btn"
       disabled={product.stock <= 0 || adding}
       onclick={addToCart}
     >
-      {adding ? "Добавляем…" : "В корзину 🛒"}
+      {#if adding}
+        {editMode ? "Сохраняем…" : "Добавляем…"}
+      {:else}
+        {editMode ? "Сохранить" : "В корзину 🛒"}
+      {/if}
     </button>
     <button class="more-btn" onclick={() => showMoreMenu = !showMoreMenu}>⋮</button>
   </div>
