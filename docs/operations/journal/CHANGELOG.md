@@ -5,6 +5,7 @@
 - § S4-канон: поток 1+ позиция · таблица API (PATCH сейчас только delta).
 - HANDOFF, CBR, README — статус rev2 закрыт · S4 docs `[x]`.
 - stage0 JSON: open question S4-block-2 (modifier update API).
+- Коммит: `efb69c3`
 
 ## 2026-07-01 — B1.13 docs: канон S4 (tap → Product, без long press)
 

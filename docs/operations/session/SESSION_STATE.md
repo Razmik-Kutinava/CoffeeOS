@@ -30,8 +30,7 @@
 - § S4-канон: API gap (PATCH только delta) · поток 1+ позиция.
 - CBR, README, HANDOFF — статус S4-канон docs.
 - Код не меняли.
-
-### Сессия 2026-07-01 (B1.13 docs: канон S4)
+- **Коммит:** `efb69c3`
 
 - § **S4-канон:** tap на карточку → Product + update line; режимы — только свайп; long press убран.
 - Архив rev1 помечен; baseline S4, README, stage0 обновлены.
