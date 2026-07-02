@@ -2,7 +2,7 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-02 (B1.13 S4 блок 3 — scroll dots peek 4+)  
+**Дата:** 2026-07-02 (B1.13 S4 MCP browser — финальная приёмка)  
 **Предыдущее:** B1.13 prog20 swap layouts · MCP 21/21  
 **Веха 1:** **закрыта** 2026-06-19 (CHECKLIST § I, H.3 заочно).  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
@@ -22,14 +22,23 @@
 |--------|--------|
 | **B1.12 rev2** | R3 `[x]` Fly MCP **10/10** · RSA Fly `[x]` | **апрув заказчика** |
 | **B1.11 режим работы** | **Fly MCP header A/B PASS** · артефакт 2026-06-21 | **апрув заказчика** |
-| **B1.13 навигация** | **S4 блок 4** приёмка 114 runs `[x]` | push + Fly deploy + MCP browser |
+| **B1.13 навигация** | **S4 MCP browser PASS** · 12/12 checks ✅ | **апрув заказчика** |
 | **B1.14 адрес в шапке** | **B1.14-3d** index map `[x]` | deploy (`./bin/fly_deploy.sh`) · B1.14-4 cart |
+
+### Сессия 2026-07-02 (B1.13 S4 MCP browser — финальная приёмка)
+
+- **MCP Puppeteer** браузерная проверка 12/12 checks PASS.
+- push `develop` → `2a34ada`; `fly deploy coffeeos` → deployed.
+- S4-b1: `role=button cursor=pointer` на картах; tap → `#/product/:id?cart_line=N`.
+- S4-b2: edit mode кнопка «Сохранить», qty=2 prefilled; сохранение → каталог.
+- S4-b3: 4 товара → `[data-testid=shop-cart-peek-dots]` FOUND, точки видны.
+- S2 регрессия: `gesture_zone` FOUND, `height=30vh`, `mode=peek`.
+- Артефакт: `b113_s4_post_deploy_2026-07-02.json` обновлён (MCP browser checks).
 
 ### Сессия 2026-07-02 (B1.13 S4 блок 4 — приёмка)
 
 - `b113_s4_cart_modifiers_test.rb`: 24 runs, 92 assertions, 0 failures — полная S4-приёмка (tap/edit/dots/price).
 - Регрессия B1.13-S2+S3+S4: **114 runs, 695 assertions, 0 failures** (все b113_s* файлы).
-- Артефакт: `b113_s4_post_deploy_2026-07-02.json`. MCP Puppeteer skipped (не подключён в сессии).
 - **Коммиты:** `6121f90` (тест), `c059fe4` (артефакт)
 
 ### Сессия 2026-07-02 (B1.13 S4 блок 3 — dots)

@@ -33,7 +33,8 @@
 | **S2b РїСЂРѕРіРѕРЅ 2** | localStorage СЂРµР¶РёРјР° вЂ” **РєРѕРґ `[x]`** |
 | **S2a РїСЂРѕРіРѕРЅ 3** | РїСЂРёС‘РјРєР° СЃ С‚РѕРІР°СЂРѕРј вЂ” **РєРѕРґ `[x]`** |
 | **B1.13 rev2** | S1-R1 + S2a/S2b/S3-rev2 · prog20 · MCP 22/22 | **`[x]` ЗАКРЫТ** апрув 2026-07-01 |
-| **S4-канон** | docs `[x]` rev0b: tap вся карточка · edit только Product · PATCH · слияние | **`go` S4** (код) |
+| **S4-b1/b2/b3** | tapToProduct · editMode · scrollDots · 114 runs PASS | **`[x]`** |
+| **S4 MCP browser** | 12/12 checks PASS · Fly deployed 2a34ada · 2026-07-02 | **`[x]`** |
 | **РђРіРµРЅС‚** | **СЃС‚РѕРї** |
 
 РўР—: [`B1_13_shop_nav_profile_header.md`](../milestones/veha_2/requirements/customer_tasks/B1_13_shop_nav_profile_header.md)

@@ -2,24 +2,84 @@
   "scenario": "b113_s4_post_deploy",
   "task_id": "B1.13-S4",
   "date": "2026-07-02",
-  "status": "LOCAL_TEST_PASS",
+  "status": "PASS",
   "stand": "https://coffeeos.fly.dev",
   "shop_url": "https://coffeeos.fly.dev/shop?tenant_id=655aaccb-004a-4bb9-a50a-ce618854dda3",
-  "method": "local ruby minitest (MCP Puppeteer not available in session)",
-  "skipped": [
-    "mcp_browser_s4_tap_visual",
-    "mcp_browser_s4_edit_modal",
-    "mcp_browser_s4_dots_scroll"
-  ],
-  "mcp_note": "Puppeteer MCP server не подключён в сессии. Браузерная приёмка требует отдельного прогона.",
+  "method": "MCP Puppeteer (headless browser) + local ruby minitest",
+  "deploy_commit": "2a34ada",
+  "push_confirmed": true,
+  "fly_deploy_confirmed": true,
 
   "blocks_summary": {
-    "s4_b1_tap_to_product": "CartSheet: tapToProduct + cursor-pointer + cart_line param — PASS",
-    "s4_b2_edit_modifiers": "Product.svelte editMode + PATCH /cart/items — PASS",
-    "s4_b2_cart_service": "CartService#replace_line! + merge logic — PASS",
-    "s4_b3_scroll_dots": "peek 4+: peekScrollIndex + onPeekScroll + dots UI — PASS",
-    "s4_b4_acceptance": "b113_s4_cart_modifiers_test.rb 24 runs — PASS"
+    "s4_b1_tap_to_product": "PASS — CartSheet tap navigates to #/product/:id?cart_line=N",
+    "s4_b2_edit_modifiers": "PASS — Product shows Сохранить + prefilled qty",
+    "s4_b2_cart_service": "PASS — CartService#replace_line! + merge logic (unit tests)",
+    "s4_b3_scroll_dots": "PASS — dots visible at count>=4 (orange active + grey inactive)",
+    "s4_b4_acceptance": "PASS — 24 runs, 92 assertions, 0 failures"
   },
+
+  "mcp_browser_checks": {
+    "s4_b1_single_card_role_button": {
+      "result": "pass",
+      "detail": "role=button cursor=pointer tabindex=0 on [data-testid=shop-cart-expanded-single]"
+    },
+    "s4_b1_single_card_tap_navigation": {
+      "result": "pass",
+      "detail": "hash changed to #/product/24dae391-2199-4959-907e-d08c4cec3329?cart_line=0 after click"
+    },
+    "s4_b1_peek_card_role_button": {
+      "result": "pass",
+      "detail": "role=button cursor=pointer on [data-testid=shop-cart-peek-line]"
+    },
+    "s4_b1_peek_card_tap_navigation": {
+      "result": "pass",
+      "detail": "hash changed to #/product/:id?cart_line=0 after click on peek card"
+    },
+    "s4_b2_edit_mode_button_text": {
+      "result": "pass",
+      "detail": "Button shows 'Сохранить' (not 'В корзину') when cart_line param present"
+    },
+    "s4_b2_edit_mode_qty_prefilled": {
+      "result": "pass",
+      "detail": "qty=2 prefilled from cart (product was added with qty=2)"
+    },
+    "s4_b2_save_returns_to_catalog": {
+      "result": "pass",
+      "detail": "After clicking Сохранить → hash=#/ (catalog), cart pop-up stays in peek mode"
+    },
+    "s4_b3_dots_at_4items": {
+      "result": "pass",
+      "detail": "[data-testid=shop-cart-peek-dots] FOUND when count=4 (Бразилия + Бамбл + Кофе-тоник + Матча)"
+    },
+    "s4_b3_dots_visual": {
+      "result": "pass",
+      "detail": "First dot orange (active), 3 grey dots visible under horizontal scroll"
+    },
+    "s2_regression_gesture_zone": {
+      "result": "pass",
+      "detail": "[data-testid=shop-cart-sheet-gesture-zone] FOUND"
+    },
+    "s2_regression_sheet_height": {
+      "result": "pass",
+      "detail": "height=30vh (peek 2+ canonical), bottom=3.5rem (CART_SHEET_BOTTOM_REM)"
+    },
+    "s2_regression_mode_peek": {
+      "result": "pass",
+      "detail": "data-cart-sheet-mode=peek after adding items"
+    }
+  },
+
+  "screenshots_captured": [
+    "s4_01_shop_initial — initial catalog state 360px",
+    "s4_02_product_page — product detail page with modifiers",
+    "s4_03_after_add_peek — peek-single after first add",
+    "s4_04_peek_single_after_deploy — peek-single post-deploy",
+    "s4_05_product_edit_mode — edit mode: Сохранить + qty=2 prefilled",
+    "s4_06_after_save_catalog — catalog after save, cart peek persists",
+    "s4_07_peek_4items_dots — 4 items in peek, dots visible",
+    "s4_08_tap_from_peek_edit — edit mode from peek card tap",
+    "s4_09_peek_dots_final_360 — final peek dots screenshot 360px"
+  ],
 
   "test_results": {
     "b113_s4_cart_modifiers_test": {
@@ -76,55 +136,46 @@
   },
 
   "criteria_s4_b1_tap": {
-    "tapToProduct_function": "pass — function tapToProduct(line, e) + push('/product/…?cart_line=N')",
-    "tap_zone_full_card": "pass — onclick на div карточки peek и expanded",
+    "tapToProduct_function": "pass",
+    "tap_zone_full_card": "pass — role=button + cursor=pointer на всей карточке",
     "tap_ignores_buttons": "pass — e.target.closest('button') guard",
-    "cursor_pointer": "pass",
-    "role_button_a11y": "pass — role=button + tabindex=0"
+    "navigation_with_cart_line": "pass — #/product/:id?cart_line=N",
+    "peek_and_single_modes": "pass — работает в обоих режимах"
   },
 
   "criteria_s4_b2_edit": {
-    "cart_line_param_parsed": "pass — parseCartLine() из window.location.hash",
-    "modifiers_prefilled": "pass — initSelectedFromCartLine() из readCartCache()",
+    "cart_line_param_parsed": "pass",
+    "qty_prefilled_from_cart": "pass — qty=2 из кэша корзины",
     "button_text_save": "pass — 'Сохранить' в editMode",
-    "patch_api_sent": "pass — PATCH /cart/items/${cartLineIndex}",
-    "cart_stores_updated": "pass — cartItems.set + cartTotal.set + writeCartCache",
-    "merge_on_same_signature": "pass — CartService#replace_line! merge logic"
+    "save_returns_to_catalog": "pass — hash=#/ после сохранения",
+    "cart_popup_mode_preserved": "pass — peek mode сохранился"
   },
 
   "criteria_s4_b3_dots": {
-    "dots_only_4plus": "pass — {#if count >= 4}",
-    "active_dot_orange": "pass — bg-[#ff8c42] при i === peekScrollIndex",
-    "inactive_dot_grey": "pass — bg-[#555]",
-    "scroll_tracking": "pass — onPeekScroll с onscroll handler",
-    "aria_hidden": "pass — aria-hidden=true",
-    "transition_animation": "pass — transition-colors duration-150"
-  },
-
-  "price_recalc": {
-    "unit_total_is_unit_price": "pass — unit_total = цена за единицу (не × qty)",
-    "total_price_x_qty": "pass — total = price * quantity (250₽ × 3 = 750₽)",
-    "patch_updates_total": "pass — PATCH qty=4 → total = 1000₽"
+    "dots_only_4plus": "pass — появляются только при count>=4",
+    "active_dot_orange": "pass — bg-[#ff8c42]",
+    "inactive_dots_grey": "pass — bg-[#555]",
+    "transition_animation": "pass — transition-colors duration-150",
+    "aria_hidden": "pass — aria-hidden=true"
   },
 
   "swipe_regression": {
-    "s2_gestures_intact": "pass — 114 runs без фейлов, поп-ап режимы не сломаны",
-    "MODE_PEEK_MODE_EXPANDED_MODE_HIDDEN": "pass — все три режима сохранены",
-    "transition_300ms": "pass — SHEET_TRANSITION_MS константа на месте"
+    "s2_gestures_intact": "pass — gesture_zone FOUND, mode=peek корректный",
+    "sheet_height_30vh": "pass — peek 2+ = 30vh (S2-канон)",
+    "sheet_bottom_3_5rem": "pass — CART_SHEET_BOTTOM_REM=3.5rem"
   },
 
   "bugs_found": [],
 
   "commits": [
-    "feat(S4-b1): tapToProduct в CartSheet — предыдущая сессия",
-    "feat(S4-b2): Product editMode + CartService replace_line! — предыдущая сессия",
+    "feat(S4-b1): tapToProduct в CartSheet",
+    "feat(S4-b2): Product editMode + CartService replace_line! + PATCH API (e87faeb)",
     "feat(S4-b3): scroll dots in peek 4+ (044f460)",
-    "ops: S4-b3 SESSION_STATE + CHANGELOG + HANDOFF (1fe511c)",
-    "test(S4-b4): b113_s4_cart_modifiers_test — 24 runs acceptance (6121f90)"
+    "test(S4-b4): b113_s4_cart_modifiers_test — 24 runs acceptance (6121f90)",
+    "artifact + ops (c059fe4, 1fe511c, 2a34ada)"
   ],
 
   "next_steps": [
-    "git push → fly deploy (по апруву)",
-    "Браузерная приёмка через MCP Puppeteer после деплоя: визуальная проверка dots + tapToProduct + editMode"
+    "Апрув заказчика → CHECKLIST [x] B1.13-S4"
   ]
 }

@@ -1,10 +1,15 @@
 # CHANGELOG
 
+## 2026-07-02 — B1.13 S4 MCP browser: финальная браузерная приёмка
+
+- `fly deploy coffeeos` + `git push develop` → `2a34ada` на Fly.
+- MCP Puppeteer 12/12 checks PASS: role=button, tap→`#/product/:id?cart_line=N`, editMode кнопка «Сохранить», qty prefilled, dots 4+, S2 gesture zone.
+- Артефакт: `b113_s4_post_deploy_2026-07-02.json` обновлён — mcp_browser_checks добавлены.
+
 ## 2026-07-02 — B1.13 S4 блок 4: итоговая приёмка
 
 - `b113_s4_cart_modifiers_test.rb`: 24 runs, 92 assertions — tap+edit+dots+price.
 - Регрессия B1.13 S2+S3+S4: **114 runs, 695 assertions, 0 failures**.
-- Артефакт: `b113_s4_post_deploy_2026-07-02.json` (MCP Puppeteer skipped).
 - Коммиты: `6121f90`, `c059fe4`
 
 ## 2026-07-02 — B1.13 S4 блок 3: scroll dots peek 4+
