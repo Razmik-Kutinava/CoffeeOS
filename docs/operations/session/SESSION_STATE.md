@@ -2,7 +2,7 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-01 (B1.13 docs: S4 rev0b — уточнения владельца)  
+**Дата:** 2026-07-02 (B1.13 S4 блок 1 — tapToProduct в CartSheet)  
 **Предыдущее:** B1.13 prog20 swap layouts · MCP 21/21  
 **Веха 1:** **закрыта** 2026-06-19 (CHECKLIST § I, H.3 заочно).  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
@@ -22,8 +22,15 @@
 |--------|--------|
 | **B1.12 rev2** | R3 `[x]` Fly MCP **10/10** · RSA Fly `[x]` | **апрув заказчика** |
 | **B1.11 режим работы** | **Fly MCP header A/B PASS** · артефакт 2026-06-21 | **апрув заказчика** |
-| **B1.13 навигация** | **S4-канон** rev0b docs `[x]` | **`go` S4** (код) |
+| **B1.13 навигация** | **S4 блок 1** tapToProduct `[x]` | **S4 блок 2** (Product + API) |
 | **B1.14 адрес в шапке** | **B1.14-3d** index map `[x]` | deploy (`./bin/fly_deploy.sh`) · B1.14-4 cart |
+
+### Сессия 2026-07-02 (B1.13 S4 блок 1 — tapToProduct)
+
+- CartSheet.svelte: `tapToProduct(line, e)` — tap по карточке (peek 2+, expanded 2+, single) → `/product/:id?cart_line=N`.
+- Кнопки ± исключены через `e.target.closest("button")`, gestureZone не тронут.
+- test: `b113_s4_tap_to_product_test.rb` 16 runs зелёных · регрессия S2/S3: 9 runs OK.
+- **Коммит:** `8ac3f0b`
 
 ### Сессия 2026-07-01 (B1.13 docs: S4 rev0b)
 

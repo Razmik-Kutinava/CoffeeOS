@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2026-07-02 — B1.13 S4 блок 1: tapToProduct в CartSheet
+
+- `CartSheet.svelte`: `tapToProduct(line, e)` — tap на карточку (peek 2+, expanded 2+, single) открывает `/product/:id?cart_line=N`.
+- Кнопки ± не тапают в Product (`e.target.closest("button")`); gestureZone без изменений.
+- Тест: `b113_s4_tap_to_product_test.rb` 16 runs зелёных; регрессия S2/S3 9 runs OK.
+- Коммит: `8ac3f0b`
+
 ## 2026-07-01 — B1.13 docs: S4 rev0b — уточнения владельца
 
 - § S4-канон: edit только через Product (в поп-апе ±qty); зона tap — вся карточка кроме ±; слияние строк; PATCH `selected_modifiers`.
