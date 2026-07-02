@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 2026-07-02 — B1.13 S4 блок 2: edit mode Product + CartService replace_line
+
+- `CartService#replace_line!`: замена модификаторов строки, слияние при одинаковой сигнатуре.
+- `CartController#update`: ветка `selected_modifiers` → `replace_line!`; delta-ветка без изменений.
+- `Product.svelte`: parseCartLine(), editMode, initSelectedFromCartLine(), PATCH в edit, кнопка «Сохранить», возврат на `/` с восстановлением режима поп-апа.
+- Тесты: 6 + 15 runs зелёные; регрессия CartService OK.
+- Коммит: `e87faeb`
+
 ## 2026-07-02 — B1.13 S4 блок 1: tapToProduct в CartSheet
 
 - `CartSheet.svelte`: `tapToProduct(line, e)` — tap на карточку (peek 2+, expanded 2+, single) открывает `/product/:id?cart_line=N`.
