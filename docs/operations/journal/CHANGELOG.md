@@ -5,7 +5,7 @@
 - § **B1.13-S4-канон** — tap на карточку peek/expanded → Product + update корзины; режимы поп-апа только свайп.
 - Убраны противоречия: long press 0,5 с, tap hidden→peek, tap peek→expanded.
 - JSON baseline S4, README макетов, stage0 — выровнены.
-- Коммит: TBD
+- Коммит: `2c940e8`
 
 ## 2026-07-01 — B1.13 docs: уточнения канона S2 (без кода)
 
