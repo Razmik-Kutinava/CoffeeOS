@@ -4,6 +4,7 @@
 
 - § S4-канон: edit только через Product (в поп-апе ±qty); зона tap — вся карточка кроме ±; слияние строк; PATCH `selected_modifiers`.
 - JSON baseline S4, stage0 `s4_resolved`, README макетов, FLUTTER_API.
+- Коммит: `fe20065`
 
 ## 2026-07-01 — B1.13 docs: S4 — API gap + индексы CBR/README
 
