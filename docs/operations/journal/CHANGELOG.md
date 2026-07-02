@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2026-07-02 — B1.13 S4 блок 3: scroll dots peek 4+
+
+- `CartSheet.svelte`: `peekScrollIndex` + `onPeekScroll` + dots (оранжевый активный, серые неактивные, `transition-colors`).
+- Показываются только при `count >= 4`; `aria-hidden="true"`.
+- Тест: 12 runs зелёных; регрессия OK.
+- Коммит: `044f460`
+
 ## 2026-07-02 — B1.13 S4 блок 2: edit mode Product + CartService replace_line
 
 - `CartService#replace_line!`: замена модификаторов строки, слияние при одинаковой сигнатуре.
