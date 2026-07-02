@@ -75,6 +75,17 @@
     gestureStartY = 0
   }
 
+  // S4-блок-3: индикаторы прокрутки в peek 4+
+  let peekScrollIndex = $state(0)
+
+  function onPeekScroll(e) {
+    const el = e.currentTarget
+    const maxScroll = el.scrollWidth - el.clientWidth
+    peekScrollIndex = maxScroll > 0
+      ? Math.round((el.scrollLeft / maxScroll) * (count - 1))
+      : 0
+  }
+
   $effect(() => {
     const gz = gestureZoneEl
     if (!gz) return
@@ -252,7 +263,10 @@
         data-testid="shop-cart-peek-list"
         data-cart-layout="horizontal"
       >
-        <div class="flex min-h-0 flex-1 gap-2 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <div
+          class="flex min-h-0 flex-1 gap-2 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          onscroll={onPeekScroll}
+        >
           {#each items as line (line.index)}
             <div
               class="flex w-[min(28vw,110px)] shrink-0 flex-col gap-1 rounded-xl border border-[#3a3a3a] bg-[#1f1f1f] p-1.5 cursor-pointer"
@@ -286,6 +300,19 @@
             </div>
           {/each}
         </div>
+        {#if count >= 4}
+          <div
+            class="flex justify-center gap-1 py-1 shrink-0"
+            data-testid="shop-cart-peek-dots"
+            aria-hidden="true"
+          >
+            {#each items as _, i}
+              <div
+                class="h-1.5 rounded-full transition-colors duration-150 {i === peekScrollIndex ? 'w-3 bg-[#ff8c42]' : 'w-1.5 bg-[#555]'}"
+              ></div>
+            {/each}
+          </div>
+        {/if}
         {@render checkoutBar("shop-cart-peek-total")}
       </div>
 
