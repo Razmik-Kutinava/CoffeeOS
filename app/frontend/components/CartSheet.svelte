@@ -98,6 +98,13 @@
     return Math.round(Number(n) || 0)
   }
 
+  // S4: tap по карточке → Product (редактирование модификаторов).
+  // Если клик по кнопке (− / + / Удалить) — игнорируем; кнопки обрабатывают себя сами.
+  function tapToProduct(line, e) {
+    if (e.target.closest("button")) return
+    push(`/product/${line.product_id}?cart_line=${line.index}`)
+  }
+
   // «−» при quantity = 1 удаляет товар из корзины; иначе уменьшает на 1.
   function decrementLine(line) {
     if (atMinQty(line)) {
@@ -248,8 +255,11 @@
         <div class="flex min-h-0 flex-1 gap-2 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {#each items as line (line.index)}
             <div
-              class="flex w-[min(28vw,110px)] shrink-0 flex-col gap-1 rounded-xl border border-[#3a3a3a] bg-[#1f1f1f] p-1.5"
+              class="flex w-[min(28vw,110px)] shrink-0 flex-col gap-1 rounded-xl border border-[#3a3a3a] bg-[#1f1f1f] p-1.5 cursor-pointer"
               data-testid="shop-cart-peek-line"
+              role="button"
+              tabindex="0"
+              onclick={(e) => tapToProduct(line, e)}
             >
               {@render lineThumb(line, "h-16 w-full rounded-lg")}
               <div class="min-w-0">
@@ -289,8 +299,11 @@
         <div class="min-h-0 flex-1 space-y-1.5 overflow-y-auto">
           {#each items as line (line.index)}
             <div
-              class="flex items-center gap-2 rounded-lg border border-[#3a3a3a] bg-[#1f1f1f] px-2 py-1.5"
+              class="flex items-center gap-2 rounded-lg border border-[#3a3a3a] bg-[#1f1f1f] px-2 py-1.5 cursor-pointer"
               data-testid="shop-cart-expanded-card"
+              role="button"
+              tabindex="0"
+              onclick={(e) => tapToProduct(line, e)}
             >
               {@render lineThumb(line, "h-10 w-10 shrink-0")}
               <div class="min-w-0 flex-1">
@@ -333,10 +346,13 @@
         class="flex flex-1 min-h-0 flex-col overflow-hidden px-3 pb-2 pt-1"
         data-cart-layout="horizontal"
       >
-        <div
-          class="flex min-h-0 flex-1 gap-2 rounded-xl border border-[#3a3a3a] bg-[#1f1f1f] p-2"
-          data-testid="shop-cart-expanded-single"
-        >
+          <div
+            class="flex min-h-0 flex-1 gap-2 rounded-xl border border-[#3a3a3a] bg-[#1f1f1f] p-2 cursor-pointer"
+            data-testid="shop-cart-expanded-single"
+            role="button"
+            tabindex="0"
+            onclick={(e) => tapToProduct(singleItem, e)}
+          >
           {@render lineThumb(singleItem, "h-16 w-16 shrink-0")}
           <div class="min-w-0 flex-1">
             <p class="line-clamp-2 text-sm font-medium">{singleItem.product_name}</p>
