@@ -35,6 +35,8 @@ JSON: [`../b113_s2_screenshot_baseline_2026-06-22.json`](../b113_s2_screenshot_b
 
 Имена testid исторические — приёмка по **`data-cart-layout`** и § S2-канон.
 
+**Уточнения (2026-07-01):** после add → **peek**; свайп **hidden→peek→expanded** (по одному шагу); пустая корзина — цель скрыт (Q-rev2); 1 товар + скролл каталога 100px → hidden.
+
 ## Bottom bar (канон эпика)
 
 | | Целевое |
