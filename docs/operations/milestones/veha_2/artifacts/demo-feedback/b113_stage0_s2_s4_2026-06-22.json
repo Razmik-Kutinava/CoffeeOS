@@ -50,6 +50,7 @@
   "open_questions": [
     "Q-epic-1 bottom bar 3 tabs vs S1 profile in header",
     "Q-epic-2 keep #/cart route",
-    "Q-epic-3 scroll thresholds px"
+    "Q-epic-3 scroll thresholds px",
+    "S4-block-2: PATCH cart/items/:index — расширить selected_modifiers vs replace-line endpoint"
   ]
 }

@@ -12,7 +12,7 @@
 | **B2.1** | **Табло бариста — интерактивная карточка** | **закрыта** · апрув `[x]` 2026-06-18 | [B2_1_barista_order_board.md](B2_1_barista_order_board.md) |
 | **B1.12** | **Рекуррент + 1 клик** (Т-Банк nonPCI, R1–R3 **rev2**) | **этап 0 rev2 docs** `[x]` 2026-06-24 · Q-R2-1..3 `[ ]` · legacy v1 Fly MCP · апрув `[ ]` | [B1_12_recurrent_payments.md](B1_12_recurrent_payments.md) |
 | **B1.11** | **Режим работы точки** (УК → витрина → табло) | **ответы Q1–Q10** `[x]` · **готовность к коду** · апрув + `go` `[ ]` | [B1_11_tenant_operating_hours.md](B1_11_tenant_operating_hours.md) |
-| **B1.13** | **Новая навигация витрины** — эпик S1–S4 (профиль в шапке, поп-ап корзины) | **S1 Fly MCP** `[x]` 2026-06-23 · S2–S4 код `[ ]` · апрув S1 `[ ]` | [B1_13_shop_nav_profile_header.md](B1_13_shop_nav_profile_header.md) |
+| **B1.13** | **Новая навигация витрины** — эпик S1–S4 | **rev2** `[x]` апрув 2026-07-01 · **S4-канон** docs `[x]` · **S4 код** `[ ]` | [B1_13_shop_nav_profile_header.md](B1_13_shop_nav_profile_header.md) |
 | **B1.14** | **Адрес точки + выбор точки** в шапке витрины (заказчик «задача 2») | **B1.14-3 Header** `[x]` 2026-06-23 · cart `[ ]` | [B1_14_shop_tenant_address_header.md](B1_14_shop_tenant_address_header.md) |
 | B2.2 | Объединить «Меню» + «Создать» | **ТЗ** 2026-06-10 · реализация `[ ]` | [B2_2_barista_menu_create_merge.md](B2_2_barista_menu_create_merge.md) |
 | **B1.4** | **PWA витрины** (install, offline) | **OPS_PASS** 2026-06-12 · заказчик `[ ]` | [B1_4_pwa_shop.md](B1_4_pwa_shop.md) |

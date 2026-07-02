@@ -25,6 +25,12 @@
 | **B1.13 навигация** | rev2 закрыт · **S4-канон** docs | **`go` S4** (tap → Product) |
 | **B1.14 адрес в шапке** | **B1.14-3d** index map `[x]` | deploy (`./bin/fly_deploy.sh`) · B1.14-4 cart |
 
+### Сессия 2026-07-01 (B1.13 docs: S4 хвост — API + индексы)
+
+- § S4-канон: API gap (PATCH только delta) · поток 1+ позиция.
+- CBR, README, HANDOFF — статус S4-канон docs.
+- Код не меняли.
+
 ### Сессия 2026-07-01 (B1.13 docs: канон S4)
 
 - § **S4-канон:** tap на карточку → Product + update line; режимы — только свайп; long press убран.
