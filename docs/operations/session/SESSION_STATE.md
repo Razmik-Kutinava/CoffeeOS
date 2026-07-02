@@ -30,7 +30,7 @@
 - Уточнения владельца: edit только Product · tap вся карточка · PATCH modifiers · слияние строк.
 - baseline S4, stage0, README, FLUTTER_API.
 - Код не меняли.
-- **Коммит:** `fe20065`
+- **Коммит:** `fe20065` · ops `6cc33c5`
 
 ### Сессия 2026-07-01 (B1.13 docs: S4 хвост — API + индексы)
 
