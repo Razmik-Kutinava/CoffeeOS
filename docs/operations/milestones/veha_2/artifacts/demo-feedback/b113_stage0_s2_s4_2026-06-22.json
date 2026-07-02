@@ -25,7 +25,8 @@
       "customer_tracker_alias": "B1.15 (TBD)"
     },
     "S4": {
-      "title": "Модификаторы long press · горизонтальный скролл >3",
+      "title": "Tap → Product (модификаторы) · горизонтальный скролл peek 4+",
+      "canon": "B1_13 § S4-канон 2026-07-01",
       "tz_status": "registered",
       "acceptance_criteria_count": 6,
       "depends_on": "S2",

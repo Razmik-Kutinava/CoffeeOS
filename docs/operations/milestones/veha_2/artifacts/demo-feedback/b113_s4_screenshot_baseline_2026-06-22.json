@@ -4,27 +4,34 @@
   "title": "Редактирование модификаторов и горизонтальный скролл в поп-апе",
   "date": "2026-06-22",
   "updated": "2026-07-01",
+  "canon": "B1_13 § B1.13-S4-канон",
   "layout_canon": "B1_13 § B1.13-S2-канон · build=prog20",
   "source": "макеты заказчика — 3 кадра",
   "depends_on": ["B1.13-S2", "B1.13-S3"],
-  "status": "HORIZONTAL_SCROLL_IN_PEEK_ONLY",
+  "status": "CANON_S4_2026_07_01",
+
+  "tap_vs_swipe": {
+    "tap": "карточка/фото в peek или expanded → Product + update cart line",
+    "not_tap": ["hidden→peek", "peek→expanded", "long press 0.5s"],
+    "modes": "только свайп — § S2-канон"
+  },
 
   "horizontal_scroll": {
-    "when": ">3 позиций в корзине",
-    "mode": "peek (2+ товара) — горизонтальный ряд 28vw, § S2-канон",
+    "when": "4+ позиций (3 видны, с 4-й — скролл)",
+    "mode": "peek (2+ товара) — § S2-канон",
     "not_in": ["expanded", "hidden"],
-    "expanded_scroll": "вертикальный скролл списка при >3 (не горизонтальный)"
+    "indicators": "S4 — точки под рядом"
   },
 
   "modifier_edit": {
-    "trigger": "long press / тап по товару",
-    "flow": "#/product/:id с выбранными модификаторами → сохранить → каталог"
+    "trigger": "tap на карточку/фото товара",
+    "flow": "#/product/:id?cart_line=N → изменить → update корзины → каталог"
   },
 
   "screenshots": [
     {
       "file": "screenshots/b113_s4_customer_horizontal_scroll_peek.png",
-      "note": "иллюстрация; канон: peek horizontal scroll при >3"
+      "note": "peek horizontal scroll 4+"
     },
     {
       "file": "screenshots/b113_s4_customer_horizontal_thumbnails_chip.png",
@@ -32,9 +39,9 @@
     },
     {
       "file": "screenshots/b113_s4_customer_expanded_modifiers_list.png",
-      "note": "модификаторы в vertical list expanded"
+      "note": "expanded vertical list — tap → Product"
     }
   ],
 
-  "verdict": "ALIGNED_S2_CANON_PROG20"
+  "verdict": "ALIGNED_S4_CANON_2026_07_01"
 }

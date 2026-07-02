@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2026-07-01 — B1.13 docs: канон S4 (tap → Product, без long press)
+
+- § **B1.13-S4-канон** — tap на карточку peek/expanded → Product + update корзины; режимы поп-апа только свайп.
+- Убраны противоречия: long press 0,5 с, tap hidden→peek, tap peek→expanded.
+- JSON baseline S4, README макетов, stage0 — выровнены.
+- Коммит: TBD
+
 ## 2026-07-01 — B1.13 docs: уточнения канона S2 (без кода)
 
 - § **S2-канон:** таблица уточнений — peek после add; свайп по шагам; модификаторы 2+ не в S2; Q-rev2 отложено; скролл каталога при 1 товаре.
