@@ -1,0 +1,130 @@
+{
+  "scenario": "b113_s4_post_deploy",
+  "task_id": "B1.13-S4",
+  "date": "2026-07-02",
+  "status": "LOCAL_TEST_PASS",
+  "stand": "https://coffeeos.fly.dev",
+  "shop_url": "https://coffeeos.fly.dev/shop?tenant_id=655aaccb-004a-4bb9-a50a-ce618854dda3",
+  "method": "local ruby minitest (MCP Puppeteer not available in session)",
+  "skipped": [
+    "mcp_browser_s4_tap_visual",
+    "mcp_browser_s4_edit_modal",
+    "mcp_browser_s4_dots_scroll"
+  ],
+  "mcp_note": "Puppeteer MCP server не подключён в сессии. Браузерная приёмка требует отдельного прогона.",
+
+  "blocks_summary": {
+    "s4_b1_tap_to_product": "CartSheet: tapToProduct + cursor-pointer + cart_line param — PASS",
+    "s4_b2_edit_modifiers": "Product.svelte editMode + PATCH /cart/items — PASS",
+    "s4_b2_cart_service": "CartService#replace_line! + merge logic — PASS",
+    "s4_b3_scroll_dots": "peek 4+: peekScrollIndex + onPeekScroll + dots UI — PASS",
+    "s4_b4_acceptance": "b113_s4_cart_modifiers_test.rb 24 runs — PASS"
+  },
+
+  "test_results": {
+    "b113_s4_cart_modifiers_test": {
+      "runs": 24,
+      "assertions": 92,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "status": "PASS"
+    },
+    "b113_s4_tap_to_product_test": {
+      "runs": 16,
+      "assertions": 42,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "status": "PASS"
+    },
+    "b113_s4_b2_product_edit_test": {
+      "runs": 14,
+      "assertions": 28,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "status": "PASS"
+    },
+    "b113_s4_b3_peek_dots_test": {
+      "runs": 12,
+      "assertions": 36,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "status": "PASS"
+    },
+    "cart_service_replace_line_test": {
+      "runs": 6,
+      "assertions": 11,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "status": "PASS"
+    }
+  },
+
+  "regression_b113_s2_s3_s4_all": {
+    "command": "ruby -Itest -e \"Dir['test/integration/shop/b113_s*.rb'].each{|f| require File.expand_path(f)}\"",
+    "runs": 114,
+    "assertions": 695,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0,
+    "status": "PASS",
+    "note": "Охватывает S2a, S2b, S2 layout+gestures, S2 popup, S3 rev2, S4-b1, S4-b2, S4-b3, S4-b4"
+  },
+
+  "criteria_s4_b1_tap": {
+    "tapToProduct_function": "pass — function tapToProduct(line, e) + push('/product/…?cart_line=N')",
+    "tap_zone_full_card": "pass — onclick на div карточки peek и expanded",
+    "tap_ignores_buttons": "pass — e.target.closest('button') guard",
+    "cursor_pointer": "pass",
+    "role_button_a11y": "pass — role=button + tabindex=0"
+  },
+
+  "criteria_s4_b2_edit": {
+    "cart_line_param_parsed": "pass — parseCartLine() из window.location.hash",
+    "modifiers_prefilled": "pass — initSelectedFromCartLine() из readCartCache()",
+    "button_text_save": "pass — 'Сохранить' в editMode",
+    "patch_api_sent": "pass — PATCH /cart/items/${cartLineIndex}",
+    "cart_stores_updated": "pass — cartItems.set + cartTotal.set + writeCartCache",
+    "merge_on_same_signature": "pass — CartService#replace_line! merge logic"
+  },
+
+  "criteria_s4_b3_dots": {
+    "dots_only_4plus": "pass — {#if count >= 4}",
+    "active_dot_orange": "pass — bg-[#ff8c42] при i === peekScrollIndex",
+    "inactive_dot_grey": "pass — bg-[#555]",
+    "scroll_tracking": "pass — onPeekScroll с onscroll handler",
+    "aria_hidden": "pass — aria-hidden=true",
+    "transition_animation": "pass — transition-colors duration-150"
+  },
+
+  "price_recalc": {
+    "unit_total_is_unit_price": "pass — unit_total = цена за единицу (не × qty)",
+    "total_price_x_qty": "pass — total = price * quantity (250₽ × 3 = 750₽)",
+    "patch_updates_total": "pass — PATCH qty=4 → total = 1000₽"
+  },
+
+  "swipe_regression": {
+    "s2_gestures_intact": "pass — 114 runs без фейлов, поп-ап режимы не сломаны",
+    "MODE_PEEK_MODE_EXPANDED_MODE_HIDDEN": "pass — все три режима сохранены",
+    "transition_300ms": "pass — SHEET_TRANSITION_MS константа на месте"
+  },
+
+  "bugs_found": [],
+
+  "commits": [
+    "feat(S4-b1): tapToProduct в CartSheet — предыдущая сессия",
+    "feat(S4-b2): Product editMode + CartService replace_line! — предыдущая сессия",
+    "feat(S4-b3): scroll dots in peek 4+ (044f460)",
+    "ops: S4-b3 SESSION_STATE + CHANGELOG + HANDOFF (1fe511c)",
+    "test(S4-b4): b113_s4_cart_modifiers_test — 24 runs acceptance (6121f90)"
+  ],
+
+  "next_steps": [
+    "git push → fly deploy (по апруву)",
+    "Браузерная приёмка через MCP Puppeteer после деплоя: визуальная проверка dots + tapToProduct + editMode"
+  ]
+}
