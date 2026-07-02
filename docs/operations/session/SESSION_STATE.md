@@ -22,8 +22,15 @@
 |--------|--------|
 | **B1.12 rev2** | R3 `[x]` Fly MCP **10/10** · RSA Fly `[x]` | **апрув заказчика** |
 | **B1.11 режим работы** | **Fly MCP header A/B PASS** · артефакт 2026-06-21 | **апрув заказчика** |
-| **B1.13 навигация** | **S4 блок 3** dots peek 4+ `[x]` | **S4 блок 4** (проверка / MCP) |
+| **B1.13 навигация** | **S4 блок 4** приёмка 114 runs `[x]` | push + Fly deploy + MCP browser |
 | **B1.14 адрес в шапке** | **B1.14-3d** index map `[x]` | deploy (`./bin/fly_deploy.sh`) · B1.14-4 cart |
+
+### Сессия 2026-07-02 (B1.13 S4 блок 4 — приёмка)
+
+- `b113_s4_cart_modifiers_test.rb`: 24 runs, 92 assertions, 0 failures — полная S4-приёмка (tap/edit/dots/price).
+- Регрессия B1.13-S2+S3+S4: **114 runs, 695 assertions, 0 failures** (все b113_s* файлы).
+- Артефакт: `b113_s4_post_deploy_2026-07-02.json`. MCP Puppeteer skipped (не подключён в сессии).
+- **Коммиты:** `6121f90` (тест), `c059fe4` (артефакт)
 
 ### Сессия 2026-07-02 (B1.13 S4 блок 3 — dots)
 

@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2026-07-02 — B1.13 S4 блок 4: итоговая приёмка
+
+- `b113_s4_cart_modifiers_test.rb`: 24 runs, 92 assertions — tap+edit+dots+price.
+- Регрессия B1.13 S2+S3+S4: **114 runs, 695 assertions, 0 failures**.
+- Артефакт: `b113_s4_post_deploy_2026-07-02.json` (MCP Puppeteer skipped).
+- Коммиты: `6121f90`, `c059fe4`
+
 ## 2026-07-02 — B1.13 S4 блок 3: scroll dots peek 4+
 
 - `CartSheet.svelte`: `peekScrollIndex` + `onPeekScroll` + dots (оранжевый активный, серые неактивные, `transition-colors`).
