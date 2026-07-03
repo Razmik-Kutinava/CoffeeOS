@@ -8,6 +8,13 @@ _Открытых блокеров нет (2026-06-25)._
 
 ## Решено недавно
 
+[2026-07-03] — Sentry RUBY-9: Manager::OrdersController#show 500
+Статус: **resolved** 2026-07-03
+Описание: `Association named 'product' was not found on OrderItem` — `@order.order_items.includes(:product)` при отсутствии `belongs_to :product` (снимок `product_name`/`product_id`).
+**Sentry:** RUBY-9 · 1 event · `Manager::OrdersController#show` · 0 users.
+**Закрыли:** убрали `.includes(:product)` · тест `manager_orders_show_test.rb` 1 run PASS.
+**Archive в Sentry:** RUBY-9 (код) · RUBY-Q/M/N/K/P/R (Neon quota, квота оплачена 2026-07-03) · RUBY-S (pg_stat_statements) · RUBY-T/D (smoke rake).
+
 [2026-06-25] — B1.13-S2 фаза 3: Fly MCP FAIL — S2 не задеплоен
 Статус: **resolved** 2026-06-25
 Описание: pre-deploy probe 2/9 — на Fly старая сборка (вкладка «Корзина»).

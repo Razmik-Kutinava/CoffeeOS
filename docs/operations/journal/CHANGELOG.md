@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2026-07-03 — Sentry triage + fix RUBY-9 (manager orders show)
+
+- **Sentry (9 issues):** Neon compute quota exceeded (RUBY-Q/M/N/K/P/R) — инфра, квота оплачена; smoke/pg_stat_statements (RUBY-T/S/D) — шум деплоя.
+- **Код:** `Manager::OrdersController#show` — убран `includes(:product)` (OrderItem без `belongs_to :product`).
+- **Тест:** `manager_orders_show_test.rb` — 1 run, 6 assertions, PASS.
+- **ISSUES.md:** запись RUBY-9 resolved + список Archive в Sentry.
+
 ## 2026-07-02 — B1.13 S4 MCP browser: финальная браузерная приёмка
 
 - `fly deploy coffeeos` + `git push develop` → `2a34ada` на Fly.

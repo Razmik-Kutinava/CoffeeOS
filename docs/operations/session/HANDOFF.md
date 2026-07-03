@@ -4,6 +4,16 @@
 **Р’РµС‚РєР°:** `develop`  
 **РџСЂРѕРґ:** https://coffeeos.fly.dev
 
+### Sentry triage (2026-07-03)
+
+| Issue | Суть | Действие |
+|-------|------|----------|
+| RUBY-9 | `includes(:product)` на OrderItem без ассоциации | **fixed** commit |
+| RUBY-Q/M/N/K/P/R | Neon compute quota exceeded (~2wk ago) | **Archive** — квота оплачена |
+| RUBY-S | pg_stat_statements без superuser | **Archive** — известно |
+| RUBY-T/D | fly smoke rake (403/ArgumentError) | **Archive** — не user-facing |
+| RUBY-R | db:migrate queue local socket (при quota outage) | **Archive** |
+
 ### B1.14 вЂ” Р°РґСЂРµСЃ С‚РѕС‡РєРё + РІС‹Р±РѕСЂ С‚РѕС‡РєРё РІ С€Р°РїРєРµ РІРёС‚СЂРёРЅС‹
 
 | Р§С‚Рѕ | РЎС‚Р°С‚СѓСЃ |

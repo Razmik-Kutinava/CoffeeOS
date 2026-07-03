@@ -2,7 +2,7 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-02 (B1.13 S4 MCP browser — финальная приёмка)  
+**Дата:** 2026-07-03 (Sentry RUBY-9 — manager orders show fix)  
 **Предыдущее:** B1.13 prog20 swap layouts · MCP 21/21  
 **Веха 1:** **закрыта** 2026-06-19 (CHECKLIST § I, H.3 заочно).  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
@@ -24,6 +24,15 @@
 | **B1.11 режим работы** | **Fly MCP header A/B PASS** · артефакт 2026-06-21 | **апрув заказчика** |
 | **B1.13 навигация** | **S4 MCP browser PASS** · 12/12 checks ✅ | **апрув заказчика** |
 | **B1.14 адрес в шапке** | **B1.14-3d** index map `[x]` | deploy (`./bin/fly_deploy.sh`) · B1.14-4 cart |
+
+| **Sentry triage** | RUBY-9 fix `[x]` · Neon quota OK (оплачено) | Archive RUBY-Q…R в Sentry UI |
+
+### Сессия 2026-07-03 (Sentry RUBY-9 — manager orders show)
+
+- **Sentry triage** (9 issues): главный шум — Neon `compute time quota` (RUBY-Q/M/N/K/P/R, ~153 events, 2wk ago); квота оплачена, сайт живой.
+- **Код-баг RUBY-9:** `Manager::OrdersController#show` — `includes(:product)` на `OrderItem` без ассоциации → 500.
+- **Фикс:** `@items = @order.order_items` (product_name — снимок, не join).
+- **Тест:** `test/integration/manager/manager_orders_show_test.rb` — 1 run, 6 assertions, 0 failures.
 
 ### Сессия 2026-07-02 (B1.13 S4 MCP browser — финальная приёмка)
 
