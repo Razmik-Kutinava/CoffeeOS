@@ -129,7 +129,8 @@ module Platform
     end
 
     def weekday_schedule_params
-      params.fetch(:weekday_schedules, ActionController::Parameters.new).permit!
+      day_permit = TenantWeekdaySchedule::WEEKDAYS.values.map(&:to_s).index_with { %i[enabled opens_at closes_at] }
+      params.fetch(:weekday_schedules, ActionController::Parameters.new).permit(day_permit)
     end
 
     def sync_weekday_schedules!

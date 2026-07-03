@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 2026-07-03 — Security hygiene: permit! + gem CVEs (rack, view_component)
+
+- **Код:** `Platform::TenantsController#weekday_schedule_params` — явный permit `"0".."6"` → `enabled/opens_at/closes_at` вместо `permit!`.
+- **Тест:** `tenants_controller_test.rb` — кейс «unpermitted keys ignored»; 5 runs controller + 3 sync — PASS.
+- **Гемы:** `rack` 3.2.5→3.2.6, `rack-session` 2.1.1→2.1.2, `view_component` 3.24.0→3.25.0.
+- **Регрессия:** shop integration 249 runs PASS; `b114_tenant_map_test` PASS.
+- **Backlog:** bundler-audit — остаются CVE Rails 8.1.2.1, nokogiri, puma и др. (отдельный шаг).
+
 ## 2026-07-03 — Sentry triage + fix RUBY-9 (manager orders show)
 
 - **Sentry (9 issues):** Neon compute quota exceeded (RUBY-Q/M/N/K/P/R) — инфра, квота оплачена; smoke/pg_stat_statements (RUBY-T/S/D) — шум деплоя.

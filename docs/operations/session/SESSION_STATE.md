@@ -2,8 +2,8 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-03 (Sentry RUBY-9 — manager orders show fix)  
-**Предыдущее:** B1.13 prog20 swap layouts · MCP 21/21  
+**Дата:** 2026-07-03 (security hygiene — permit! + gem CVEs)  
+**Предыдущее:** Sentry RUBY-9 — manager orders show fix  
 **Веха 1:** **закрыта** 2026-06-19 (CHECKLIST § I, H.3 заочно).  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
 **§2.3 оплата витрина:** **done** 2026-06-06 — [`CUSTOMER_BUSINESS_REQUIREMENTS.md`](milestones/veha_2/requirements/CUSTOMER_BUSINESS_REQUIREMENTS.md).
@@ -26,6 +26,14 @@
 | **B1.14 адрес в шапке** | **B1.14-3d** index map `[x]` | deploy (`./bin/fly_deploy.sh`) · B1.14-4 cart |
 
 | **Sentry triage** | RUBY-9 fix `[x]` · Neon quota OK (оплачено) | Archive RUBY-Q…R в Sentry UI |
+| **Security hygiene** | permit! → explicit weekday permit `[x]` · rack/view_component bump `[x]` | Rails 8.1.2.1 / puma / nokogiri — backlog |
+
+### Сессия 2026-07-03 (security hygiene — permit! + gem CVEs)
+
+- **Код:** `weekday_schedule_params` — строковые ключи `"0".."6"`, без `permit!`.
+- **Тесты:** `tenants_controller_test` 5/5 · `tenant_weekday_schedules_sync_test` 3/3 · shop integration 249 runs 0 failures · `b114_tenant_map_test` PASS.
+- **Гемы:** rack 3.2.6, rack-session 2.1.2, view_component 3.25.0.
+- **Не в scope:** onboarding_* integration (422 без weekday_schedules в payload) — pre-existing, не регрессия permit.
 
 ### Сессия 2026-07-03 (Sentry RUBY-9 — manager orders show)
 

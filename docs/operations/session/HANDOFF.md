@@ -1,8 +1,17 @@
 ﻿# HANDOFF вЂ” Р’РµС…Р° 2 (Р’РµС…Р° 1 **Р·Р°РєСЂС‹С‚Р°** 2026-06-19)
 
-**Р”Р°С‚Р°:** 2026-07-02 (B1.13 S4 блок 2 — edit mode + replace_line)  
+**Р”Р°С‚Р°:** 2026-07-03 (security hygiene — permit! + gem CVEs)  
 **Р’РµС‚РєР°:** `develop`  
 **РџСЂРѕРґ:** https://coffeeos.fly.dev
+
+### Security hygiene (2026-07-03)
+
+| Что | Статус |
+|-----|--------|
+| `permit!` → explicit weekday permit | `[x]` |
+| rack / rack-session / view_component CVE | `[x]` |
+| Регрессия shop + tenants controller | PASS |
+| **Следующий шаг** | баги по списку · deploy по `go` |
 
 ### Sentry triage (2026-07-03)
 

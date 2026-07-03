@@ -102,6 +102,37 @@ class Platform::TenantsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "08:00", mon.opens_at.strftime("%H:%M")
   end
 
+  test "update ignores unpermitted weekday schedule keys" do
+    other = create_tenant!(organization: @org, slug: "other-#{SecureRandom.hex(4)}")
+    tenant = create_tenant!(organization: @org, slug: "secure-#{SecureRandom.hex(4)}")
+    Platform::TenantWeekdaySchedulesSync.call(
+      tenant: tenant,
+      schedule_params: { "0" => { enabled: "1", opens_at: "09:00", closes_at: "18:00" } }
+    )
+
+    patch "/admin/tenants/#{tenant.id}", params: {
+      tenant: {
+        name: tenant.name,
+        slug: tenant.slug,
+        organization_id: @org.id,
+        type: "sales_point",
+        status: "active",
+        country: "RU",
+        currency: "RUB",
+        timezone: "Europe/Moscow"
+      },
+      weekday_schedules: {
+        "0" => { enabled: "1", opens_at: "10:00", closes_at: "20:00", tenant_id: other.id, weekday: 3 }
+      }
+    }
+
+    assert_response :redirect
+    mon = tenant.weekday_schedules.find_by!(weekday: 0)
+    assert_equal tenant.id, mon.tenant_id
+    assert_equal 0, mon.weekday
+    assert_equal "10:00", mon.opens_at.strftime("%H:%M")
+  end
+
   private
 
   def tenant_create_params(slug:, name: "Точка", weekday_schedules: default_weekday_schedules, modules: nil)
