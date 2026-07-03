@@ -11,7 +11,8 @@
 | `permit!` → explicit weekday permit | `[x]` |
 | rack / rack-session / view_component CVE | `[x]` |
 | Регрессия shop + tenants controller | PASS |
-| **Следующий шаг** | баги по списку · deploy по `go` |
+| **V2-SEC-08** bundler-audit CVE (rails/puma/nokogiri) | **open — обязательно** → `PRACTICES.md` |
+| **Следующий шаг** | баги по списку · V2-SEC-08 · deploy по `go` |
 
 ### Sentry triage (2026-07-03)
 

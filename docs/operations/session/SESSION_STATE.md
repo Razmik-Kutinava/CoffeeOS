@@ -26,7 +26,7 @@
 | **B1.14 адрес в шапке** | **B1.14-3d** index map `[x]` | deploy (`./bin/fly_deploy.sh`) · B1.14-4 cart |
 
 | **Sentry triage** | RUBY-9 fix `[x]` · Neon quota OK (оплачено) | Archive RUBY-Q…R в Sentry UI |
-| **Security hygiene** | permit! → explicit weekday permit `[x]` · rack/view_component bump `[x]` | Rails 8.1.2.1 / puma / nokogiri — backlog |
+| **Security hygiene** | permit! → explicit weekday permit `[x]` · rack/view_component bump `[x]` | **V2-SEC-08** bundler-audit CVE — обязательно (`PRACTICES.md`) |
 
 ### Сессия 2026-07-03 (security hygiene — permit! + gem CVEs)
 

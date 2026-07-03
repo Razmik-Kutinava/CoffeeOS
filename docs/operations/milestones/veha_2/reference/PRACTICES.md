@@ -87,6 +87,7 @@
 | V2-CR-04 | `CacheCounter` MemoryStore | **accepted / wontfix** *(2026-06-02, блок 3)* | Fly **1 pod** — in-process OK; при **2+ серверах** или смене хостинга → **Redis** (или Solid Cache) для общего счётчика |
 | V2-CR-05 | Kiosk `KioskSetting` без tenant GUC | **done** *(2026-06-02, блок 3)* | `SET LOCAL` в `kiosk/api/auth` |
 | V2-SEC-07 | `shop.html.erb` meta `shop-api-key` | **deferred → В3** *(2026-06-02)* | Задача **V3-SEC-07** — [`veha_3/CHECKLIST.md`](../veha_3/CHECKLIST.md) § E. В2 блок 4: wontfix для demo Fly |
+| V2-SEC-08 | **bundler-audit: CVE в гемах (prod)** | **open — обязательно** *(2026-07-03)* | Отдельный шаг до следующего deploy: см. § V2-SEC-08 ниже |
 | V2-P10-01 | Прогон 10: 3 org × 3 точки | **done** *(2026-06-01)* | [`PROG10_TENANTS.md`](PROG10_TENANTS.md) |
 | V2-P10-02 | Прогон 10: kiosk curl | **done** *(2026-06-01)* | `bin/prog10_fly_smoke.rb` + Prog10 Kiosk MCP |
 | V2-P10-03 | Прогон 10: RBAC AUTH-01…09 | **done** *(2026-06-01)* | MCP + регрессия прогон 5 |
@@ -103,6 +104,30 @@
 | V2-P10-14 | Блок 14 Postmortem | **done** *(2026-06-02)* | `POSTMORTEM_2026-05-28.md` § Прогон 10 |
 
 **Когда править V2-P10-08:** после закрытия QA-блоков 10–14 и §E; отдельный кодовый PR (не смешивать с витриной/RBAC). Иначе отчёты и табло врут про канал заказа.
+
+### V2-SEC-08 — bundler-audit CVE (обязательный техдолг)
+
+**Зафиксировано:** 2026-07-03 · после коммита `b7481dc` (закрыты только `rack`, `rack-session`, `view_component`).
+
+**Почему обязательно:** `bin/bundler-audit check` всё ещё падает — уязвимости в **production**-стеке (Fly), не только dev. Откладывать нельзя: следующий осознанный deploy должен включать патчи.
+
+**Приоритет обновления (prod-hot):**
+
+| Гем / группа | Сейчас (ориентир) | Цель | Риск если не сделать |
+|--------------|-------------------|------|----------------------|
+| **rails** (actionpack, actionview, activestorage, activesupport) | 8.1.2 | **≥ 8.1.2.1** | XSS, bypass загрузок, DoS в Active Storage |
+| **puma** | 7.2.0 | **≥ 7.2.1** | DoS через PROXY protocol (память) |
+| **nokogiri** | 1.19.1 | **≥ 1.19.4** | ReDoS, use-after-free при разборе HTML/XML |
+| addressable, bcrypt, crass, erb, loofah | ниже advisory | по `bundler-audit` | ReDoS / парсинг — второй проход |
+
+**Порядок шага (отдельно от фич B1.x):**
+
+1. `bundle update rails puma nokogiri` (+ транзитивные по lock).
+2. `bin/bundler-audit check` — убедиться, что prod-группа чиста или остаток задокументирован.
+3. Регрессия: минимум `bin/rails test` или зоны shop + platform + payment + callbacks.
+4. **Deploy на Fly** — только с явным `go` владельца.
+
+**Не делать:** массовый `bundle update` в одном коммите с фичами заказчика; RuboCop mass-fix.
 
 ---
 

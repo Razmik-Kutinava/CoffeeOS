@@ -1,12 +1,17 @@
 # CHANGELOG
 
+## 2026-07-03 — docs: V2-SEC-08 bundler-audit (обязательный техдолг)
+
+- **PRACTICES.md:** строка V2-SEC-08 + § с приоритетом rails 8.1.2.1, puma, nokogiri и порядком шага.
+- **HANDOFF / SESSION_STATE:** ссылка на V2-SEC-08 как обязательный backlog до deploy.
+
 ## 2026-07-03 — Security hygiene: permit! + gem CVEs (rack, view_component)
 
 - **Код:** `Platform::TenantsController#weekday_schedule_params` — явный permit `"0".."6"` → `enabled/opens_at/closes_at` вместо `permit!`.
 - **Тест:** `tenants_controller_test.rb` — кейс «unpermitted keys ignored»; 5 runs controller + 3 sync — PASS.
 - **Гемы:** `rack` 3.2.5→3.2.6, `rack-session` 2.1.1→2.1.2, `view_component` 3.24.0→3.25.0.
 - **Регрессия:** shop integration 249 runs PASS; `b114_tenant_map_test` PASS.
-- **Backlog:** bundler-audit — остаются CVE Rails 8.1.2.1, nokogiri, puma и др. (отдельный шаг).
+- **Backlog:** bundler-audit остаток → **V2-SEC-08** в `PRACTICES.md` (обязательно).
 
 ## 2026-07-03 — Sentry triage + fix RUBY-9 (manager orders show)
 
