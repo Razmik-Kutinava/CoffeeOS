@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026-07-04 — B1.12-BUG-SAVE D1: deploy Fly PASS
+
+- Fly release **v327** (2026-07-02) ≈ `origin/develop` `2a34ada` (B1.12 R1–R3 в истории).
+- `card_config` на стенде → 401 (эндпоинт есть). Баг **не** «не задеплоили save_card».
+- Артефакт: `b112_bug_save_card_d1_deploy_2026-07-04.json`. Чеклист D1 `[x]`. **Стоп до go D2.**
+
 ## 2026-07-04 — docs: B1.12-BUG-SAVE текст заказчика + скрин + чеклист
 
 - Полный баг-репорт заказчика (дословно) в `B1_12_recurrent_payments.md` § B1.12-BUG-SAVE.

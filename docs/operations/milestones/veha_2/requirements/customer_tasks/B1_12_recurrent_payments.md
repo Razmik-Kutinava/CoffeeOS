@@ -96,7 +96,7 @@
 
 ### Чеклист работ по багу (агент — по порядку)
 
-- [ ] **D1** — Сверить deploy Fly: на стенде тот же коммит, что с B1.12 rev2 nonPCI / `save_card`
+- [x] **D1** — Сверить deploy Fly: на стенде тот же коммит, что с B1.12 rev2 nonPCI / `save_card` · **PASS** 2026-07-04 — Fly v327 (2026-07-02) ≈ `origin/develop` `2a34ada` (R1–R3 в истории); `card_config` → 401 не 404 · [`b112_bug_save_card_d1_deploy_2026-07-04.json`](../../artifacts/demo-feedback/b112_bug_save_card_d1_deploy_2026-07-04.json) · **баг не из-за отсутствия деплоя фичи**
 - [ ] **D2** — Один прогон оплаты: Network `POST …/payments/new_card` (или актуальный эндпоинт) — есть ли `save_card: true` и зашифрованный `card_data` (без открытого PAN/CVV)
 - [ ] **D3** — Ответ Т-Банка / наш API после оплаты: есть ли **RebillId** при CONFIRMED (FinishAuthorize, webhook, GetState/finalize)
 - [ ] **D4** — SQL: строка в `mobile_payment_methods` для `customer_id` заказа; если нет — где оборвался `SavedCardStore`

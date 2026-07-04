@@ -11,6 +11,7 @@
 **Скрин:** [`b112_save_card_toggle_on_customer_2026-07-04.png`](milestones/veha_2/artifacts/demo-feedback/screenshots/b112_save_card_toggle_on_customer_2026-07-04.png)
 **JSON:** [`b112_bug_save_card_customer_2026-07-04.json`](milestones/veha_2/artifacts/demo-feedback/b112_bug_save_card_customer_2026-07-04.json)
 **Канон имён:** `mobile_payment_methods` / `customer_id` / `card_token` (= RebillId).
+**D1 (2026-07-04):** PASS — Fly release **v327** (2026-07-02) содержит B1.12 R1–R3 (`origin/develop` `2a34ada`); `GET …/payments/card_config` → 401 (эндпоинт есть). Баг **не** «не задеплоили». Артефакт: [`b112_bug_save_card_d1_deploy_2026-07-04.json`](milestones/veha_2/artifacts/demo-feedback/b112_bug_save_card_d1_deploy_2026-07-04.json). **Дальше:** D2.
 
 ## Решено недавно
 

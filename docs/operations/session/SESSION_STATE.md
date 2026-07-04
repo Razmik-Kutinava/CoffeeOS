@@ -2,8 +2,8 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-04 (B1.12-BUG-SAVE — текст заказчика + скрин + чеклист)  
-**Предыдущее:** B1.12 docs canon — один статус  
+**Дата:** 2026-07-04 (B1.12-BUG-SAVE D1 deploy PASS)  
+**Предыдущее:** B1.12-BUG-SAVE — текст заказчика + скрин + чеклист  
 **Веха 1:** **закрыта** 2026-06-19 (CHECKLIST § I, H.3 заочно).  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
 **§2.3 оплата витрина:** **done** 2026-06-06 — [`CUSTOMER_BUSINESS_REQUIREMENTS.md`](milestones/veha_2/requirements/CUSTOMER_BUSINESS_REQUIREMENTS.md).
@@ -20,13 +20,23 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **B1.12 rev2** | код R1–R3 `[x]` · Q-R2 `[x]` · MCP **10/10** | **B1.12-BUG-SAVE open** · чеклист D1–A1 в B1_12 · апрув `[ ]` |
+| **B1.12 rev2** | код R1–R3 `[x]` · **D1 PASS** (Fly v327 ≈ `2a34ada`) | **BUG-SAVE:** D2 Network `save_card` · апрув `[ ]` |
 | **B1.11 режим работы** | **Fly MCP header A/B PASS** · артефакт 2026-06-21 | **апрув заказчика** |
 | **B1.13 навигация** | **S4 MCP browser PASS** · 12/12 checks ✅ | **апрув заказчика** |
 | **B1.14 адрес в шапке** | **B1.14-3d** index map `[x]` | deploy (`./bin/fly_deploy.sh`) · B1.14-4 cart |
 
 | **Sentry triage** | RUBY-9 fix `[x]` · Neon quota OK (оплачено) | Archive RUBY-Q…R в Sentry UI |
 | **Security hygiene** | permit! → explicit weekday permit `[x]` · rack/view_component bump `[x]` | **V2-SEC-08** bundler-audit CVE — обязательно (`PRACTICES.md`) |
+
+### Сессия 2026-07-04 (B1.12-BUG-SAVE D1 — deploy)
+
+- **Fly:** release **v327** · `2026-07-02T12:36:14Z` · image `deployment-01KWHD36…`
+- **Git на стенде (по ops):** `origin/develop` **`2a34ada`** — в истории R1 `18c7a45`, R2 `776a495`, R3 `c27eb7c`, RSA `0390ca5`
+- **Probe:** `/up` 200 · `GET /shop/api/payments/card_config` → **401** (не 404) — nonPCI API на стенде
+- **Local ahead 6:** только docs + gems + RUBY-9 — **не** код save_card
+- **Вердикт D1:** PASS — баг **не** из-за отсутствия деплоя B1.12
+- **Артефакт:** `b112_bug_save_card_d1_deploy_2026-07-04.json`
+- **Стоп:** ждём `go` на **D2**
 
 ### Сессия 2026-07-04 (B1.12-BUG-SAVE — артефакты приёмки)
 
