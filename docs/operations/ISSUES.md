@@ -4,9 +4,16 @@
 
 ## 🔴 Блокеры
 
-_Открытых блокеров нет (2026-06-25)._
+[2026-07-04] — B1.12-BUG-SAVE: карта не сохраняется после 1-й оплаты (тумблер on)
+Приоритет: 🔴 | Статус: **open**
+Описание: заказчик — после успешной оплаты «Новая карта» с тумблером «Использовать карту для будущих заказов» на 2-м заказе карты нет; запись UserCards/`mobile_payment_methods` не создаётся (или без привязки).
+**Текст дословно + чеклист D1–A1:** [`B1_12_recurrent_payments.md`](milestones/veha_2/requirements/customer_tasks/B1_12_recurrent_payments.md) § «Баг приёмки B1.12-BUG-SAVE».
+**Скрин:** [`b112_save_card_toggle_on_customer_2026-07-04.png`](milestones/veha_2/artifacts/demo-feedback/screenshots/b112_save_card_toggle_on_customer_2026-07-04.png)
+**JSON:** [`b112_bug_save_card_customer_2026-07-04.json`](milestones/veha_2/artifacts/demo-feedback/b112_bug_save_card_customer_2026-07-04.json)
+**Канон имён:** `mobile_payment_methods` / `customer_id` / `card_token` (= RebillId).
 
 ## Решено недавно
+
 
 [2026-07-03] — Sentry RUBY-9: Manager::OrdersController#show 500
 Статус: **resolved** 2026-07-03

@@ -129,7 +129,7 @@
 - [x] **B1.12-R1 rev2** — FinishAuthorize, `mobile_payment_methods`, 3DS proxy, ErrorCode
 - [x] **B1.12-R2 rev2** — кастомная форма + RSA (макет 8925)
 - [x] **B1.12-R3 rev2** — FSM 8924 + Fly MCP **10/10** · RSA Fly `[x]`
-- [ ] **Приёмка:** карта сохраняется после 1-й оплаты (тумблер on) → видна на 2-м заказе
+- [ ] **Приёмка / B1.12-BUG-SAVE:** карта сохраняется после 1-й оплаты (тумблер on) → видна на 2-м заказе · чеклист D1–A1 в [`B1_12_recurrent_payments.md`](requirements/customer_tasks/B1_12_recurrent_payments.md)
 - [ ] Апрув заказчика B1.12 rev2 (эпик целиком)
 
 ---

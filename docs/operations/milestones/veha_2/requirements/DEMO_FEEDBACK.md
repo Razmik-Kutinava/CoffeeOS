@@ -28,7 +28,7 @@
 
 | Дата | Источник | Сценарий / экран | Суть | Статус | PR / коммит |
 |------|----------|------------------|------|--------|-------------|
-| 2026-07-04 | заказчик B1.12 приёмка | `#/checkout` новая карта | Тумблер on → оплата OK → на 2-м заказе карты нет (`mobile_payment_methods`) | **open** | баг-репорт заказчика · канон B1.12 шапка |
+| 2026-07-04 | заказчик B1.12 приёмка | `#/checkout` новая карта | Тумблер on → оплата OK → на 2-м заказе карты нет | **open** | [B1.12-BUG-SAVE](customer_tasks/B1_12_recurrent_payments.md) · [скрин](artifacts/demo-feedback/screenshots/b112_save_card_toggle_on_customer_2026-07-04.png) · [JSON](artifacts/demo-feedback/b112_bug_save_card_customer_2026-07-04.json) · ISSUES 🔴 |
 | 2026-06-24 | заказчик B1.12 rev2 | nonPCI / макеты 8924–8925 | Новое ТЗ: кастомная карта + RSA + FSM 0–7; конфликты Q1/Q5/Q6 | **done** *(код R1–R3)* | [b112_revision2_stage0_scope_2026-06-24.json](artifacts/demo-feedback/b112_revision2_stage0_scope_2026-06-24.json) |
 | 2026-06-19 | владелец B1.12 | Q2–Q7 | Ответы рекуррент: все карты, СБП позже, save после 1-й оплаты, ошибки UI | **done** | [b112_customer_answers_confirmed_2026-06-19.json](artifacts/demo-feedback/b112_customer_answers_confirmed_2026-06-19.json) |
 | 2026-06-22 | B1.12 баг post-deploy | 2-я оплата снова Т-Банк | R6: one-click без банка + shopSavedCardCache + API guard | **done** *(local)* | ISSUES 2026-06-22 · v1.235 |

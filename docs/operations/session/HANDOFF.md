@@ -11,8 +11,8 @@
 | ТЗ | **rev2 only** — v1 iframe / «без галочки» = архив |
 | Код R1–R3 · Q-R2 | **`[x]`** · MCP 10/10 · RSA Fly `[x]` |
 | Имена | `mobile_payment_methods` · `customer_id` · `card_token` (= RebillId) |
-| **Открыто** | **приёмка:** карта не сохраняется после 1-й оплаты |
-| **Следующий шаг** | диагностика/фикс сохранения карты · апрув эпика |
+| **Открыто** | **B1.12-BUG-SAVE** — карта не сохраняется (текст+скрин+чеклист D1–A1 в B1_12) |
+| **Следующий шаг** | `go` на D1–D5 диагностики · потом F1 фикс |
 | ТЗ файл | [`B1_12_recurrent_payments.md`](../milestones/veha_2/requirements/customer_tasks/B1_12_recurrent_payments.md) |
 
 ### Security hygiene (2026-07-03)
