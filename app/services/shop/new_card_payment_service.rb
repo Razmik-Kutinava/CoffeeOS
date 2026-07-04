@@ -94,8 +94,14 @@ module Shop
         note: "FinishAuthorize CONFIRMED"
       ).call!
       order.reload
-      if save_card && raw["RebillId"].to_s.present?
-        Payments::SavedCardStore.persist_from_tbank!(payment: payment.reload, payload: raw)
+      if save_card
+        if raw["RebillId"].to_s.present?
+          Payments::SavedCardStore.persist_from_tbank!(payment: payment.reload, payload: raw)
+        else
+          # T-Bank nonPCI: RebillId приходит в webhook или GetState, не в FinishAuthorize.
+          # Синхронизируем сразу, чтобы не зависеть от задержки webhook.
+          Payments::TbankPaymentSync.sync_order!(order: order)
+        end
       end
       Shop::CartService.new(@session, @tenant.id).clear! if order.accepted?
       Shop::PendingOrderSession.clear!(@session, @tenant.id)

@@ -60,6 +60,30 @@ class Shop::Api::B112R1NonpciTest < ActionDispatch::IntegrationTest
     end
   end
 
+  test "POST payments/new_card saves card when RebillId comes via GetState, not FinishAuthorize" do
+    stub_tbank_new_card_rebill_via_getstate!(rebill_id: "rebill-getstate-1", pan: "220000******7777")
+
+    open_session do |sess|
+      prepare_cart_and_email!(sess)
+
+      sess.post "/shop/api/payments/new_card",
+        headers: { "X-Shop-Tenant" => @tenant.id.to_s },
+        params: shop_order_params(email: @email, name: "R1 GetState Guest", payment_method: "card").merge(
+          card_data: "encrypted-card-data",
+          save_card: true
+        ),
+        as: :json
+
+      assert_equal 200, sess.response.status
+      body = JSON.parse(sess.response.body)
+      assert_equal "CONFIRMED", body["tbank_status"]
+      saved = MobilePaymentMethod.find_by(card_token: "rebill-getstate-1")
+      assert saved, "карта должна быть сохранена через GetState fallback"
+      assert_equal "rebill-getstate-1", saved.card_token
+      assert_equal "*7777", body.dig("saved_card", "pan")
+    end
+  end
+
   test "POST payments/new_card returns 3DS_CHECKING with ACS fields" do
     stub_tbank_new_card!(finish_status: "3DS_CHECKING", acs: true)
 
@@ -178,6 +202,26 @@ class Shop::Api::B112R1NonpciTest < ActionDispatch::IntegrationTest
       inst = orig_new.call
       yield inst
       inst
+    end
+  end
+
+  def stub_tbank_new_card_rebill_via_getstate!(rebill_id:, pan: nil)
+    with_tbank_adapter_stub do |inst|
+      inst.define_singleton_method(:init_payment) do |**_kwargs|
+        { payment_url: "https://pay.example/", provider_payment_id: "init-r1-gs" }
+      end
+      inst.define_singleton_method(:finish_authorize) do |**_kwargs|
+        # T-Bank nonPCI: RebillId отсутствует в синхронном FinishAuthorize (реальное поведение)
+        { "Success" => true, "ErrorCode" => "0", "Status" => "CONFIRMED", "PaymentId" => "init-r1-gs" }
+      end
+      inst.define_singleton_method(:get_payment_state) do |**_kwargs|
+        # RebillId приходит через GetState после подтверждения
+        {
+          "Success" => true, "ErrorCode" => "0",
+          "Status" => "CONFIRMED", "PaymentId" => "init-r1-gs",
+          "RebillId" => rebill_id, "Pan" => pan, "CardId" => "card-gs-1"
+        }
+      end
     end
   end
 
