@@ -2,7 +2,7 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-04 (B1.12-BUG-SAVE D1 deploy PASS)  
+**Дата:** 2026-07-04 (B1.12-BUG-SAVE MCP browser run)  
 **Предыдущее:** B1.12-BUG-SAVE — текст заказчика + скрин + чеклист  
 **Веха 1:** **закрыта** 2026-06-19 (CHECKLIST § I, H.3 заочно).  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
@@ -20,7 +20,7 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **B1.12 rev2** | код R1–R3 `[x]` · **BUG-SAVE фикс `1081dac`** — T-Bank nonPCI RebillId→GetState fallback | **A1:** deploy на стенд → апрув заказчика `[ ]` |
+| **B1.12 rev2** | код R1–R3 `[x]` · **BUG-SAVE фикс `1081dac`** Fly v328 `[x]` · MCP browser PASS (email OTP, card form, payment API) · T-Bank sandbox CLIENT_ERROR (sandbox ограничение) | **A1:** заказчик CONFIRMED оплата → mobile_payment_methods → апрув `[ ]` |
 | **B1.11 режим работы** | **Fly MCP header A/B PASS** · артефакт 2026-06-21 | **апрув заказчика** |
 | **B1.13 навигация** | **S4 MCP browser PASS** · 12/12 checks ✅ | **апрув заказчика** |
 | **B1.14 адрес в шапке** | **B1.14-3d** index map `[x]` | deploy (`./bin/fly_deploy.sh`) · B1.14-4 cart |

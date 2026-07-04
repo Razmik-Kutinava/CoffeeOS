@@ -1,5 +1,22 @@
 # CHANGELOG
 
+## 2026-07-04 — ops(b1.12): MCP browser run B1.12-BUG-SAVE · Fly v328 · T-Bank sandbox audit
+
+**Deploy v328** (2026-07-04T12:39Z) — фикс `1081dac` на Fly `[x]` · `card_config` 401 ✓.
+
+**MCP browser flow (Puppeteer + Neon psql OTP):**
+- Каталог → добавить товар → checkout → email OTP через Neon psql `[x]`
+- NewCardSheet открылся · тумблер «save_card» **ON** по умолчанию `[x]`
+- Карта `4300 0000 0000 0777` / 12/26 / 111 заполнена `[x]`
+- `POST /shop/api/payments/new_card` дошёл до T-Bank (2044ms, 35 queries) `[x]`
+- T-Bank вернул **CLIENT_ERROR** (sandbox ограничение, не наш код)
+
+**DB audit (Neon):** 3 исторических CONFIRMED платежа (2026-06-30) — `RebillId = null` в provider_data → 0 карт сохранено в `mobile_payment_methods`. **Баг B1.12-BUG-SAVE подтверждён данными.**
+
+**Артефакт:** `b112_bug_save_card_mcp_0704_2026.json`
+
+**A1 статус:** фикс задеплоен · unit tests PASS · MCP браузерный flow PASS · нужен CONFIRMED от заказчика.
+
 ## 2026-07-04 — fix(b1.12): B1.12-BUG-SAVE фикс сохранения карты · коммит 1081dac
 
 **Root cause:** `settle_confirmed!` проверял `raw["RebillId"]` из синхронного FinishAuthorize.

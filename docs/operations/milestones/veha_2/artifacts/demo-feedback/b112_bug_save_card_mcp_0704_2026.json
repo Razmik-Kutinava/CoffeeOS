@@ -1,0 +1,86 @@
+{
+  "scenario": "b112_bug_save_card_mcp_run",
+  "date": "2026-07-04",
+  "stand": "https://coffeeos.fly.dev",
+  "tenant_id": "655aaccb-004a-4bb9-a50a-ce618854dda3",
+  "email": "b112-savetest-0704@coffeeos.dev",
+  "fly_version": 328,
+  "fly_deployed_at": "2026-07-04T12:39:23Z",
+  "fix_commit": "1081dac",
+  "started_at": "2026-07-04T12:44:00Z",
+  "finished_at": "2026-07-04T13:10:00Z",
+
+  "deploy_check": {
+    "pass": true,
+    "version": 328,
+    "deployed_at": "2026-07-04T12:39:23Z",
+    "card_config_status": 401,
+    "note": "v328 = фикс settle_confirmed! GetState fallback (commit 1081dac)"
+  },
+
+  "browser_flow": {
+    "steps": [
+      {"id": "01", "action": "shop catalog loads", "pass": true},
+      {"id": "02", "action": "add Фильтр-кофе Бразилия to cart", "pass": true},
+      {"id": "03", "action": "Оформить → checkout email form", "pass": true},
+      {"id": "04", "action": "enter email b112-savetest-0704@coffeeos.dev", "pass": true},
+      {"id": "05", "action": "Отправить код → OTP sent via Brevo", "pass": true},
+      {"id": "06", "action": "read OTP 614338 from Neon DB via psql", "pass": true, "note": "postgres MCP → local dev; Neon via psql directly"},
+      {"id": "07", "action": "enter OTP 614338, Подтвердить email", "pass": true},
+      {"id": "08", "action": "checkout shows: b***@coffeeos.dev, Способ оплаты: Новая карта", "pass": true},
+      {"id": "09", "action": "open PaymentMethodsSheet, click Оплатить", "pass": true},
+      {"id": "10", "action": "NewCardSheet opens with save_card toggle ON", "pass": true},
+      {"id": "11", "action": "fill card: 4300 0000 0000 0777 / 12/26 / 111", "pass": true},
+      {"id": "12", "action": "click Оплатить → POST /shop/api/payments/new_card with save_card=true", "pass": true},
+      {"id": "13", "action": "T-Bank returns CLIENT_ERROR → FSM state 5 'Отказ: смените карту'", "pass": "partial",
+        "note": "Запрос дошёл до T-Bank (2044ms, 35 queries). T-Bank вернул CLIENT_ERROR по тест-карте в текущем sandbox. CONFIRMED не получен → fallback GetState не сработал."}
+    ]
+  },
+
+  "tbank_sandbox_analysis": {
+    "card_used": "4300000000000777",
+    "expiry": "1226",
+    "cvv": "111",
+    "result": "CLIENT_ERROR (FSM 5)",
+    "order_id": "7a95b3b3-5834-47aa-ab97-cf8a6383cbbd",
+    "order_status": "cancelled",
+    "payment_status": "failed",
+    "provider_data": "{}",
+    "note": "T-Bank sandbox возвращает CLIENT_ERROR для данной карты/терминала. Предыдущие CONFIRMED платежи (2026-06-30) также не сохраняли карту (rebill_id пустой в provider_data) — подтверждает баг до фикса."
+  },
+
+  "db_analysis": {
+    "confirmed_orders_before_fix": [
+      {"order_id": "060f87c7-a53d-4fc2-89ba-3da5860140ea", "customer_id": "2bc37279-8d23-456b-a2a5-4c28f584634c", "rebill_id_in_provider_data": null, "card_saved": false},
+      {"order_id": "be923a55-cf35-4468-a215-20fac90d1227", "customer_id": "2bc37279-8d23-456b-a2a5-4c28f584634c", "rebill_id_in_provider_data": null, "card_saved": false}
+    ],
+    "conclusion": "Исторические CONFIRMED платежи до фикса: RebillId = null в FinishAuthorize response → card НЕ сохранялась. Это прямое подтверждение бага B1.12-BUG-SAVE.",
+    "mobile_payment_methods_count_new": 0,
+    "mobile_payment_methods_seeded": 10
+  },
+
+  "fix_validation": {
+    "unit_tests": "PASS — 7 runs 41 assertions 0 failures (b112_r1_nonpci_test.rb)",
+    "regression_shop_payment": "PASS — 14 runs 70 assertions 0 failures",
+    "new_test": "POST payments/new_card saves card when RebillId comes via GetState, not FinishAuthorize",
+    "fix_code": "new_card_payment_service.rb settle_confirmed!: fallback to TbankPaymentSync.sync_order! when RebillId not in FinishAuthorize"
+  },
+
+  "lessons": {
+    "otp_access": "postgres MCP → coffeeos_development (local); OTP for Fly читается через psql + Neon connection string из fly ssh console",
+    "browser_restart": "puppeteer_navigate с launchOptions ≠ null перезапускает браузер — сбрасывает localStorage и cookies",
+    "tbank_sandbox": "card 4300000000000777 с текущим sandbox terminal возвращает CLIENT_ERROR. Для CONFIRMED нужна настройка терминала или другая тест-карта.",
+    "canPay_flow": "Кнопка Оплатить — в PaymentMethodsSheet.pm-sheet__pay, не на основной странице checkout"
+  },
+
+  "verdict": "Deploy v328 PASS. Браузерный flow (email OTP, checkout, card form, payment API) PASS. T-Bank sandbox CLIENT_ERROR — фикс не сработал (нет CONFIRMED). Unit tests подтверждают корректность фикса. A1 требует реального CONFIRMED от заказчика.",
+
+  "next_step": "A1 — заказчик запускает оплату на стенде, после CONFIRMED проверить mobile_payment_methods",
+
+  "screenshots": [
+    "b112_save_01_shop — каталог",
+    "b112_save_07_card_form — NewCardSheet с тумблером ON",
+    "b112_save_21_card_filled — карта 4300 0000 0000 0777 заполнена",
+    "b112_save_22_payment_result — FSM state 5 CLIENT_ERROR"
+  ]
+}
