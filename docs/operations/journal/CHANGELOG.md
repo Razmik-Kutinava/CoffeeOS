@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## 2026-07-04 — docs(b1.11): B1.11-BUG-OVERNIGHT канон · ночная смена в scope
+
+- Баг заказчика: УК create точки, пн `09:23`–`01:24` → `must be after opens_at`.
+- **Канон:** ночная смена **в scope**; старый Q2/R2-2 «полночь не MVP» — **архив**.
+- Статус B1.11 везде выровнен: код MVP `[x]`, не «готовность к коду».
+- Текст бага + root cause + чеклист F1–A1 в `B1_11_tenant_operating_hours.md`.
+- ISSUES 🔴 · DEMO_FEEDBACK · CBR · CHECKLIST · README · SESSION_STATE · HANDOFF.
+- Артефакт: `b111_bug_overnight_customer_2026-07-04.json`.
+- **Код не трогали** — стоп до `go` на F1–F4.
+
 ## 2026-07-04 — ops(b1.12): MCP browser run B1.12-BUG-SAVE · Fly v328 · T-Bank sandbox audit
 
 **Deploy v328** (2026-07-04T12:39Z) — фикс `1081dac` на Fly `[x]` · `card_config` 401 ✓.

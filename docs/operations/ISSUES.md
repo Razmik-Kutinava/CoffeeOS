@@ -4,15 +4,24 @@
 
 ## 🔴 Блокеры
 
+[2026-07-04] — B1.11-BUG-OVERNIGHT: нельзя создать точку с ночной сменой (`must be after opens_at`)
+Приоритет: 🔴 | Статус: **open — docs готовы · код ждёт `go`**
+Описание: УК create точки, пн opens 09:23 / closes 01:24 → ошибка `Понедельник: must be after opens_at`. Блокирует создание точек с работой через полночь.
+**Канон + текст заказчика + чеклист F1–A1:** [`B1_11_tenant_operating_hours.md`](milestones/veha_2/requirements/customer_tasks/B1_11_tenant_operating_hours.md) § B1.11-BUG-OVERNIGHT.
+**Артефакт:** [`b111_bug_overnight_customer_2026-07-04.json`](milestones/veha_2/artifacts/demo-feedback/b111_bug_overnight_customer_2026-07-04.json)
+**Root cause:** `TenantWeekdaySchedule#closes_after_opens` требует `closes_at > opens_at`; `TenantOperatingHours` тоже same-day only. Старый Q2 «полночь не MVP» **отменён** — ночная смена **в scope** с 2026-07-04.
+**Фикс (после go):** F1 модель · F2 `TenantOperatingHours` · F3 тесты · F4 регрессия · A1 deploy+апрув.
+**Не путать с:** B1.12-BUG-SAVE (карта) — отдельный баг, ждёт живую оплату заказчика.
+
 [2026-07-04] — B1.12-BUG-SAVE: карта не сохраняется после 1-й оплаты (тумблер on)
-Приоритет: 🔴 | Статус: **fixed — ждёт деплоя + апрув заказчика**
+Приоритет: 🔴 | Статус: **fixed на Fly v328 — ждёт A1 (живая CONFIRMED оплата заказчика)**
 Описание: заказчик — после успешной оплаты «Новая карта» с тумблером «Использовать карту для будущих заказов» на 2-м заказе карты нет; запись UserCards/`mobile_payment_methods` не создаётся.
 **Текст дословно + чеклист D1–A1:** [`B1_12_recurrent_payments.md`](milestones/veha_2/requirements/customer_tasks/B1_12_recurrent_payments.md) § «Баг приёмки B1.12-BUG-SAVE».
 **Скрин:** [`b112_save_card_toggle_on_customer_2026-07-04.png`](milestones/veha_2/artifacts/demo-feedback/screenshots/b112_save_card_toggle_on_customer_2026-07-04.png)
 **Канон имён:** `mobile_payment_methods` / `customer_id` / `card_token` (= RebillId).
-**D1:** PASS — Fly v327 содержит B1.12 R1–R3; баг **не** из-за деплоя.
-**D2–F1 (2026-07-04):** ROOT CAUSE — `settle_confirmed!` проверял `raw["RebillId"]` из FinishAuthorize, а T-Bank nonPCI возвращает RebillId **только в webhook/GetState**. Фикс: fallback на `TbankPaymentSync.sync_order!` (GetState) если RebillId нет в raw. Тест добавлен. Коммит: **1081dac**.
-**Дальше:** деплой на стенд → A1 апрув заказчика.
+**D1:** PASS — Fly v327 содержал B1.12 R1–R3; баг **не** из-за деплоя.
+**D2–F1 (2026-07-04):** ROOT CAUSE — `settle_confirmed!` проверял `raw["RebillId"]` из FinishAuthorize, а T-Bank nonPCI возвращает RebillId **только в webhook/GetState**. Фикс: fallback на `TbankPaymentSync.sync_order!` (GetState) если RebillId нет в raw. Тест добавлен. Коммит: **1081dac**. Deploy **v328**. MCP browser: flow до банка PASS; sandbox CLIENT_ERROR — A1 только живая оплата.
+**Дальше:** A1 апрув заказчика после CONFIRMED.
 
 ## Решено недавно
 

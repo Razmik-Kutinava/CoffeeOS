@@ -4,7 +4,7 @@
 
 **Источник:** PDF [`artifacts/demo-feedback/customer_qa_prog10_2026-06.pdf`](artifacts/demo-feedback/customer_qa_prog10_2026-06.pdf) (продолжение В1: [`../veha_1/artifacts/customer_live_qa_block1_2026-05-30.pdf`](../veha_1/artifacts/customer_live_qa_block1_2026-05-30.pdf)).
 
-**Сейчас (2026-07-04):** **B1.12 rev2** — код R1–R3 `[x]` · MCP **10/10** · RSA Fly `[x]` · **открыто: карта не сохраняется на приёмке** · апрув `[ ]`.
+**Сейчас (2026-07-04):** **B1.12** — фикс карты на Fly v328 · ждёт живую оплату (A1). **B1.11** — MVP `[x]` · **открыт B1.11-BUG-OVERNIGHT** (ночная смена, docs готовы, код ждёт `go`).
 
 > **Архив B1.12:** строки ниже с iframe / «save без галочки» / v1 — **история**, не канон. Канон: [`B1_12_recurrent_payments.md`](customer_tasks/B1_12_recurrent_payments.md) (rev2, `mobile_payment_methods`).
 
@@ -28,7 +28,7 @@
 
 | Дата | Источник | Сценарий / экран | Суть | Статус | PR / коммит |
 |------|----------|------------------|------|--------|-------------|
-| 2026-07-04 | заказчик B1.12 приёмка | `#/checkout` новая карта | Тумблер on → оплата OK → на 2-м заказе карты нет | **open** · D1 PASS | [B1.12-BUG-SAVE](customer_tasks/B1_12_recurrent_payments.md) · [D1](artifacts/demo-feedback/b112_bug_save_card_d1_deploy_2026-07-04.json) · [скрин](artifacts/demo-feedback/screenshots/b112_save_card_toggle_on_customer_2026-07-04.png) · ISSUES 🔴 |
+| 2026-07-04 | заказчик B1.12 приёмка | `#/checkout` новая карта | Тумблер on → оплата OK → на 2-м заказе карты нет | **fixed на Fly v328** · ждёт A1 живая оплата | [B1.12-BUG-SAVE](customer_tasks/B1_12_recurrent_payments.md) · [MCP](artifacts/demo-feedback/b112_bug_save_card_mcp_0704_2026.json) · ISSUES 🔴 |
 | 2026-06-24 | заказчик B1.12 rev2 | nonPCI / макеты 8924–8925 | Новое ТЗ: кастомная карта + RSA + FSM 0–7; конфликты Q1/Q5/Q6 | **done** *(код R1–R3)* | [b112_revision2_stage0_scope_2026-06-24.json](artifacts/demo-feedback/b112_revision2_stage0_scope_2026-06-24.json) |
 | 2026-06-19 | владелец B1.12 | Q2–Q7 | Ответы рекуррент: все карты, СБП позже, save после 1-й оплаты, ошибки UI | **done** | [b112_customer_answers_confirmed_2026-06-19.json](artifacts/demo-feedback/b112_customer_answers_confirmed_2026-06-19.json) |
 | 2026-06-22 | B1.12 баг post-deploy | 2-я оплата снова Т-Банк | R6: one-click без банка + shopSavedCardCache + API guard | **done** *(local)* | ISSUES 2026-06-22 · v1.235 |
@@ -48,11 +48,12 @@
 | 2026-06-18 | B1.12-R2 | `#/payment` iframe | web-фрейм + card_binding local | **done** *(OPS_PASS local)* | [b112_r2_native_card_ops_pass_2026-06-18.json](artifacts/demo-feedback/b112_r2_native_card_ops_pass_2026-06-18.json) |
 | 2026-06-18 | B1.12-R1 | shop API / callback | Рекуррент: RebillId + Charge | **done** *(OPS_PASS local)* | [b112_r1_recurrent_ops_pass_2026-06-18.json](artifacts/demo-feedback/b112_r1_recurrent_ops_pass_2026-06-18.json) |
 | 2026-06-18 | заказчик B1.12 | `#/payment` / checkout | Рекуррент Т-Банк эпик (R1–R3) | **done** *(код+баг fix, апрув `[ ]`)* | [b112_stage0_scope_2026-06-18.json](artifacts/demo-feedback/b112_stage0_scope_2026-06-18.json) |
-| 2026-06-21 | Fly MCP B1.11 header | coffeeos.fly.dev | Часы под CoffeeOS · A vs B разное | **done** *(апрув pending)* | [b111_header_schedule_post_deploy_2026-06-21.json](artifacts/demo-feedback/b111_header_schedule_post_deploy_2026-06-21.json) |
+| 2026-07-04 | заказчик B1.11 | УК create точки | **B1.11-BUG-OVERNIGHT:** пн 09:23–01:24 → `must be after opens_at`; ночная смена **в scope** (Q2 «не MVP» отменён) | **open** *(docs · код ждёт go)* | [b111_bug_overnight_customer_2026-07-04.json](artifacts/demo-feedback/b111_bug_overnight_customer_2026-07-04.json) · [B1_11](customer_tasks/B1_11_tenant_operating_hours.md) |
+| 2026-06-21 | Fly MCP B1.11 header | coffeeos.fly.dev | Часы под CoffeeOS · A vs B разное | **done** *(апрув эпика pending)* | [b111_header_schedule_post_deploy_2026-06-21.json](artifacts/demo-feedback/b111_header_schedule_post_deploy_2026-06-21.json) |
 | 2026-06-21 | заказчик B1.11 | shop header | Часы под CoffeeOS · разное расписание A/B | **done** *(Fly MCP)* | commit `4d7043d` |
-| 2026-06-19 | Fly MCP B1.11 | coffeeos.fly.dev | Режим работы: API+витрина+barista+УК post-deploy | **done** *(апрув pending)* | [b111_operating_hours_post_deploy_2026-06-19.json](artifacts/demo-feedback/b111_operating_hours_post_deploy_2026-06-19.json) |
+| 2026-06-19 | Fly MCP B1.11 | coffeeos.fly.dev | Режим работы: API+витрина+barista+УК post-deploy | **done** *(апрув эпика pending · блокер overnight)* | [b111_operating_hours_post_deploy_2026-06-19.json](artifacts/demo-feedback/b111_operating_hours_post_deploy_2026-06-19.json) |
 | 2026-06-19 | владелец B1.11 r2 | УК / shop / barista | Уточнения: корзина, баннер, табло, POS | **done** | [b111_customer_answers_round2_2026-06-19.json](artifacts/demo-feedback/b111_customer_answers_round2_2026-06-19.json) |
-| 2026-06-18 | заказчик B1.11 | УК / shop / barista | Режим работы точки продаж | **in_progress** *(апрув + go)* | [b111_stage0_scope_2026-06-18.json](artifacts/demo-feedback/b111_stage0_scope_2026-06-18.json) |
+| 2026-06-18 | заказчик B1.11 | УК / shop / barista | Режим работы точки продаж | **done** *(MVP код; апрув + overnight open)* | [b111_stage0_scope_2026-06-18.json](artifacts/demo-feedback/b111_stage0_scope_2026-06-18.json) |
 | 2026-06-18 | заказчик B2.1 | `/barista` табло | **B2.1:** интерактивная карточка MVP + ревизия 6 слотов | **done** *(апрув заказчика)* | [b21_customer_approval_2026-06-18.json](artifacts/demo-feedback/b21_customer_approval_2026-06-18.json) |
 | 2026-06-17 | заказчик B1.7 | `#/checkout` оформление | **BR-7:** «Оплатить →» неактивна после verify email при пустом «Имя» | **done** *(Fly MCP 7/7 · deploy 2026-06-17)* | [b17_br7_checkout_name_pay_post_deploy_2026-06-17.json](artifacts/demo-feedback/b17_br7_checkout_name_pay_post_deploy_2026-06-17.json) |
 | 2026-06-04 | заказчик B2.1 неделя_2 | `/barista` табло | **B2-S1:** звуковое оповещение о новом заказе (PWA/браузер) | **done** *(Fly MCP 9/9 · deploy 2026-06-17)* | [b21_s1_sound_post_deploy_2026-06-17.json](artifacts/demo-feedback/b21_s1_sound_post_deploy_2026-06-17.json) |

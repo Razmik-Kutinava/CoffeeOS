@@ -1,0 +1,28 @@
+{
+  "id": "B1.11-BUG-OVERNIGHT",
+  "task_id": "B1.11",
+  "date": "2026-07-04",
+  "priority": "high",
+  "status": "open",
+  "title": "Не сохраняется форма создания новой точки продаж — must be after opens_at",
+  "customer_task": "Добавить поле режима работы для точек продаж в админ панели УК",
+  "repro": {
+    "panel": "УК /platform/tenants (admin.coffeeos.local)",
+    "action": "Новая точка продаж",
+    "monday": { "opens_at": "09:23", "closes_at": "01:24", "note": "ночная смена" },
+    "error": "Понедельник: must be after opens_at"
+  },
+  "expected": "Точка создаётся; closes_at < opens_at = работа до следующего дня",
+  "scope_change": {
+    "was_q2_2026_06_19": "через полночь — не MVP",
+    "now_2026_07_04": "ночная смена в scope"
+  },
+  "root_cause": {
+    "model": "TenantWeekdaySchedule#closes_after_opens",
+    "runtime": "TenantOperatingHours open_now?/next_open_at same-day only",
+    "not_root": "checkbox Работает alone"
+  },
+  "fix_checklist": ["F1 model", "F2 TenantOperatingHours", "F3 tests", "F4 regression", "A1 deploy+approve"],
+  "canon_doc": "requirements/customer_tasks/B1_11_tenant_operating_hours.md",
+  "issues": "docs/operations/ISSUES.md"
+}

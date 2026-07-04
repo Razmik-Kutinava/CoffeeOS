@@ -1,10 +1,22 @@
 ﻿# HANDOFF вЂ” Р’РµС…Р° 2 (Р’РµС…Р° 1 **Р·Р°РєСЂС‹С‚Р°** 2026-06-19)
 
-**Дата:** 2026-07-04 (B1.12 MCP browser run)  
+**Дата:** 2026-07-04 (B1.11-BUG-OVERNIGHT docs)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev
 
-### B1.12 — BUG-SAVE фикс (2026-07-04)
+### B1.11 — BUG-OVERNIGHT docs (2026-07-04)
+
+| Что | Статус |
+|-----|--------|
+| Канон | код MVP `[x]` · ночная смена **в scope** (Q2 «полночь не MVP» — **архив**) |
+| Баг | УК create: `09:23`–`01:24` → `must be after opens_at` |
+| Root cause | `TenantWeekdaySchedule#closes_after_opens` + `TenantOperatingHours` same-day |
+| Docs | `B1_11` § BUG-OVERNIGHT · ISSUES · DEMO_FEEDBACK · CBR/CHECKLIST/README выровнены |
+| Артефакт | `b111_bug_overnight_customer_2026-07-04.json` |
+| **Следующий шаг** | **`go`** → F1 модель · F2 TenantOperatingHours · F3 тесты · F4 регрессия · A1 |
+| ТЗ файл | [`B1_11_tenant_operating_hours.md`](../milestones/veha_2/requirements/customer_tasks/B1_11_tenant_operating_hours.md) |
+
+### B1.12 — BUG-SAVE фикс (2026-07-04) · пауза до живой оплаты
 
 | Что | Статус |
 |-----|--------|
@@ -14,7 +26,7 @@
 | **BUG-SAVE root cause** | `settle_confirmed!` проверял `raw["RebillId"]` — T-Bank nonPCI отдаёт его в webhook/GetState, не в FinishAuthorize |
 | **Фикс** | fallback `TbankPaymentSync.sync_order!` (GetState) в `settle_confirmed!` · коммит **`1081dac`** |
 | **Тесты** | 7 + 14 runs, 0 failures |
-| **Следующий шаг** | **A1** — деплой на стенд → апрув заказчика → ISSUES close |
+| **Следующий шаг** | **A1** — живая CONFIRMED оплата заказчика → ISSUES close (Fly v328 уже есть) |
 | ТЗ файл | [`B1_12_recurrent_payments.md`](../milestones/veha_2/requirements/customer_tasks/B1_12_recurrent_payments.md) |
 
 ### Security hygiene (2026-07-03)
