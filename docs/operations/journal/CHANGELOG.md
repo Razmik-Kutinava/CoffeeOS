@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2026-07-04 — docs: B1.12 единый канон (статусы + имена)
+
+- **Канон:** rev2 код R1–R3 `[x]` · Q-R2 `[x]` · открыто только приёмка «карта не сохраняется».
+- **Имена:** `mobile_payment_methods` / `customer_id` / `card_token` (= UserCards в тексте заказчика).
+- **Файлы:** `B1_12_recurrent_payments.md`, CBR, CHECKLIST, DEMO_FEEDBACK, customer_tasks README, SESSION_STATE, HANDOFF.
+- **Не трогали:** код app/, баг-фикс карты.
+
 ## 2026-07-03 — docs: V2-SEC-08 bundler-audit (обязательный техдолг)
 
 - **PRACTICES.md:** строка V2-SEC-08 + § с приоритетом rails 8.1.2.1, puma, nokogiri и порядком шага.

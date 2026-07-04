@@ -108,34 +108,28 @@
 ## C2. Рекуррент и 1 клик — B1.12 (надстройка §2.3)
 
 > ТЗ: [`B1_12_recurrent_payments.md`](requirements/customer_tasks/B1_12_recurrent_payments.md) · runbook: [`TBANK_RECURRENT.md`](runbooks/TBANK_RECURRENT.md)  
-> **Rev2 (2026-06-24):** nonPCI + кастомный UI + FSM 0–7 · макеты 8924/8925
+> **Канон:** rev2 (2026-06-24) — nonPCI + тумблер `save_card` + FSM · таблица **`mobile_payment_methods`** (не UserCards)
 
-### C2a. Этап 0 rev2 (docs)
+### C2a. Этап 0 rev2 (docs) — закрыт
 
-- [x] **B1.12 rev2 ТЗ** — дословные тексты заказчика + конфликты Q-R2-1..3
+- [x] **B1.12 rev2 ТЗ** — дословные тексты заказчика + Q-R2-1..3
 - [x] **Макеты** — `screenshots/1000008924.png`, `1000008925.png`
 - [x] **Сверка Т-Банк nonPCI** — `b112_tbank_nonpci_review_2026-06-24.json`
 - [x] **JSON этап 0** — `b112_revision2_stage0_scope_2026-06-24.json`
-- [ ] **Ответы владельца** Q-R2-1..3 → **`go` R1** (документ 1)
+- [x] **Ответы владельца** Q-R2-1..3 · **`go` R1–R3** выполнены
 
-### C2b. Legacy v1 (iframe, 2026-06-18…21) — не закрывает rev2
+### C2b. Legacy v1 (архив, 2026-06-18…21)
 
-- [x] **B1.12 этап 0 v1** — `b112_stage0_scope_2026-06-18.json`
-- [x] **B1.12-R1 v1** — webhook RebillId, Charge, `saved_cards` *(Fly MCP 5/5)*
-- [x] **B1.12-R2 v1** — iframe card_binding *(Fly MCP 6/6)*
-- [x] **B1.12-R3 v1** — 1 клик, 4-state кнопка *(Fly MCP 8/8)*
+- [x] **B1.12 этап 0 v1** — `b112_stage0_scope_2026-06-18.json` *(не канон)*
+- [x] **B1.12-R1…R3 v1** — iframe / webhook *(заменено rev2)*
 
-### C2c. Реализация rev2 — **по одному документу заказчика**
+### C2c. Реализация rev2 — код закрыт
 
-> **Порядок:** R1 → стоп → R2 → стоп → R3. Один `go` = один R. Апрув эпика — только после R3.
-
-- [ ] **Q-R2-1..3** — ответы владельца (Q-R2-1 до `go` R1)
-- [ ] **`go` R1** — документ 1 заказчика
-- [x] **B1.12-R1 rev2** — FinishAuthorize, UserCards, 3DS proxy, ErrorCode · ops PASS JSON · **стоп**
-- [ ] **`go` R2** — документ 2 заказчика
-- [x] **B1.12-R2 rev2** — кастомная форма + RSA (макет 8925) · ops PASS JSON · **стоп**
-- [ ] **`go` R3** — документ 3 заказчика
-- [x] **B1.12-R3 rev2** — FSM 8924 + Fly MCP **10/10** · RSA Fly `[x]` · **стоп до апрува**
+- [x] **Q-R2-1..3** · **`go` R1 / R2 / R3**
+- [x] **B1.12-R1 rev2** — FinishAuthorize, `mobile_payment_methods`, 3DS proxy, ErrorCode
+- [x] **B1.12-R2 rev2** — кастомная форма + RSA (макет 8925)
+- [x] **B1.12-R3 rev2** — FSM 8924 + Fly MCP **10/10** · RSA Fly `[x]`
+- [ ] **Приёмка:** карта сохраняется после 1-й оплаты (тумблер on) → видна на 2-м заказе
 - [ ] Апрув заказчика B1.12 rev2 (эпик целиком)
 
 ---

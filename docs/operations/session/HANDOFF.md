@@ -1,8 +1,19 @@
 ﻿# HANDOFF вЂ” Р’РµС…Р° 2 (Р’РµС…Р° 1 **Р·Р°РєСЂС‹С‚Р°** 2026-06-19)
 
-**Р”Р°С‚Р°:** 2026-07-03 (security hygiene — permit! + gem CVEs)  
-**Р’РµС‚РєР°:** `develop`  
-**РџСЂРѕРґ:** https://coffeeos.fly.dev
+**Дата:** 2026-07-04 (B1.12 docs canon)  
+**Ветка:** `develop`  
+**Прод:** https://coffeeos.fly.dev
+
+### B1.12 — канон (2026-07-04)
+
+| Что | Статус |
+|-----|--------|
+| ТЗ | **rev2 only** — v1 iframe / «без галочки» = архив |
+| Код R1–R3 · Q-R2 | **`[x]`** · MCP 10/10 · RSA Fly `[x]` |
+| Имена | `mobile_payment_methods` · `customer_id` · `card_token` (= RebillId) |
+| **Открыто** | **приёмка:** карта не сохраняется после 1-й оплаты |
+| **Следующий шаг** | диагностика/фикс сохранения карты · апрув эпика |
+| ТЗ файл | [`B1_12_recurrent_payments.md`](../milestones/veha_2/requirements/customer_tasks/B1_12_recurrent_payments.md) |
 
 ### Security hygiene (2026-07-03)
 
@@ -63,25 +74,9 @@
 
 РљРѕРґ `6fcc9d8` вЂ” РїСЂРёС‘РјРєР° РїРµСЂРµРЅРµСЃРµРЅР° РІ В§ **S3-rev2** РІ [`B1_13`](../milestones/veha_2/requirements/customer_tasks/B1_13_shop_nav_profile_header.md).
 
-### B1.12 вЂ” СЂРµРєСѓСЂСЂРµРЅС‚ + РѕРїР»Р°С‚Р° РІ 1 РєР»РёРє (Рў-Р‘Р°РЅРє, **rev2 nonPCI**)
+### B1.12 — рекуррент + 1 клик (архив-блок; канон в шапке HANDOFF)
 
-| Р§С‚Рѕ | РЎС‚Р°С‚СѓСЃ |
-|-----|--------|
-| **РўР— rev2** | **СЌС‚Р°Рї 0 docs** `[x]` 2026-06-24 вЂ” РґРѕСЃР»РѕРІРЅС‹Рµ 3 Р·Р°РґР°С‡Рё Р·Р°РєР°Р·С‡РёРєР° |
-| **JSON СЌС‚Р°Рї 0** | [`b112_revision2_stage0_scope_2026-06-24.json`](../milestones/veha_2/artifacts/demo-feedback/b112_revision2_stage0_scope_2026-06-24.json) |
-| **РЎРІРµСЂРєР° Рў-Р‘Р°РЅРє** | [`b112_tbank_nonpci_review_2026-06-24.json`](../milestones/veha_2/artifacts/demo-feedback/b112_tbank_nonpci_review_2026-06-24.json) |
-| **РњР°РєРµС‚С‹** | [`1000008924.png`](../milestones/veha_2/artifacts/demo-feedback/screenshots/1000008924.png) R3 В· [`1000008925.png`](../milestones/veha_2/artifacts/demo-feedback/screenshots/1000008925.png) R2 |
-| **Workflow** | **Р”РѕРєСѓРјРµРЅС‚ 1в†’R1в†’СЃС‚РѕРї в†’ РґРѕРєСѓРјРµРЅС‚ 2в†’R2в†’СЃС‚РѕРї в†’ РґРѕРєСѓРјРµРЅС‚ 3в†’R3** В· РѕРґРёРЅ `go` РЅР° R |
-| **РљРѕРЅС„Р»РёРєС‚С‹** | Q-R2-1..3 **`[x]`** Р·Р°С„РёРєСЃРёСЂРѕРІР°РЅС‹ 2026-06-24 (С„Р°Р·Р° 0 gate R3) |
-| **РљРѕРґ rev2** | R1+R2+R3 `[x]` OPS_PASS |
-| **РљРѕРјРјРёС‚** | `c27eb7c` вЂ” С„Р°Р·Р° 3 MCP + С…РІРѕСЃС‚С‹ R2 |
-| **Fly MCP** | [`b112_r3_fsm_ops_pass_2026-06-25.json`](../milestones/veha_2/artifacts/demo-feedback/b112_r3_fsm_ops_pass_2026-06-25.json) вЂ” **10/10** |
-| **RSA Fly** | `[x]` `TBANK_RSA_PUBLIC_KEY` В· `card_data_ready: true` |
-| **РҐРІРѕСЃС‚** | вЂ” |
-| **РЎР»РµРґСѓСЋС‰РёР№ С€Р°Рі** | **Р°РїСЂСѓРІ Р·Р°РєР°Р·С‡РёРєР°** РЅР° СЌРїРёРє B1.12 rev2 |
-| **РђРіРµРЅС‚** | **СЃС‚РѕРї** |
-
-РўР—: [`B1_12_recurrent_payments.md`](../milestones/veha_2/requirements/customer_tasks/B1_12_recurrent_payments.md) В· runbook: [`TBANK_RECURRENT.md`](../milestones/veha_2/runbooks/TBANK_RECURRENT.md)
+См. **§ B1.12 — канон (2026-07-04)** выше. Код R1–R3 `[x]` · открыта приёмка сохранения карты.
 
 ### B1.11 вЂ” СЂРµР¶РёРј СЂР°Р±РѕС‚С‹ С‚РѕС‡РєРё
 

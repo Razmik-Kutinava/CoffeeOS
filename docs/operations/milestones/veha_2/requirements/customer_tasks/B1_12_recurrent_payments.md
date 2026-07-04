@@ -1,114 +1,99 @@
 # Эпик: Рекуррентные платежи и UX оплаты витрины (Т-Банк)
 
-**ID:** B1.12 · **Источник:** заказчик, документы эпика (3 задачи)  
-**Ревизия ТЗ:** **v2** (2026-06-24) — nonPCI + кастомный UI + FSM 0–7 · **заменяет** тексты v1 (2026-06-18)  
-**Статус:** **R1/R2/R3 rev2** `[x]` OPS_PASS · **Fly MCP** 10/10 · **апрув заказчика** `[ ]` · RSA Fly `[x]`
+**ID:** B1.12 · **Источник:** заказчик, документы эпика (3 задачи)
 
-**Подзадачи:** **R1** бэкенд + СУБД · **R2** кастомный ввод карты · **R3** стейт-машина кнопки  
-**Порядок:** R1 → R2 → R3 · **один документ заказчика = один шаг = один `go` = commit/ops/стоп**
+### Канон (читать только это)
 
-**Workflow:** закрываем **документ 1 (R1)** полностью → стоп → **`go` документ 2 (R2)** → … → после R3 — апрув эпика.
+| | |
+|--|--|
+| **ТЗ** | **rev2** (2026-06-24) — nonPCI + кастомный UI + FSM 0–7. Тексты **v1** (iframe, «всегда без галочки») — **архив**, не ТЗ. |
+| **Код** | R1 + R2 + R3 **`[x]`** OPS_PASS · Fly MCP **10/10** · RSA Fly **`[x]`** |
+| **Q-R2-1..3** | **`[x]`** закрыты 2026-06-24 (nonPCI, тумблер default on, макеты 8924/8925) |
+| **Открыто** | **Приёмка:** после 1-й оплаты с тумблером «Использовать карту…» карта **не появляется** на 2-м заказе (стенд заказчика). Эпик **не закрыт** до фикса + апрува. |
+| **Апрув** | `[ ]` |
 
-**Связано:** [B1.7](B1_7_checkout_order_screen.md) · §2.3 оплата (база) · `Payments::TbankAdapter` · `POST /callbacks/tbank`
+**Имена (канон ops / код / SQL):**
 
-**Стенд:** `https://coffeeos.fly.dev/shop?tenant_id=655aaccb-004a-4bb9-a50a-ce618854dda3` · `#/checkout`
+| В тексте заказчика | У нас |
+|--------------------|--------|
+| таблица **UserCards** | **`mobile_payment_methods`** |
+| **user_id** | **`customer_id`** → `MobileCustomer` (гость витрины, не `users`) |
+| **rebill_id** | **`card_token`** |
+| **card_id** (банка) | **`bank_card_id`** |
+| **pan** (маска) | **`card_masked`** / `pan_display` |
 
-**Артефакты этап 0 rev2:**
+Дальше в ops и коде — **только наши имена**.
+
+**Подзадачи (история):** R1 бэкенд · R2 форма карты · R3 FSM — **все `[x]`**.  
+**Связано:** [B1.7](B1_7_checkout_order_screen.md) · §2.3 · `Payments::TbankAdapter` · `POST /callbacks/tbank`  
+**Стенд:** `https://coffeeos.fly.dev/shop?tenant_id=655aaccb-004a-4bb9-a50a-ce618854dda3` · `#/checkout`  
+**Runbook:** [`TBANK_RECURRENT.md`](../../runbooks/TBANK_RECURRENT.md)
+
+**Артефакты rev2 (канон):**
 - [`b112_revision2_stage0_scope_2026-06-24.json`](../../artifacts/demo-feedback/b112_revision2_stage0_scope_2026-06-24.json)
 - [`b112_tbank_nonpci_review_2026-06-24.json`](../../artifacts/demo-feedback/b112_tbank_nonpci_review_2026-06-24.json)
-- Макеты: [`1000008925.png`](../../artifacts/demo-feedback/screenshots/1000008925.png) (R2) · [`1000008924.png`](../../artifacts/demo-feedback/screenshots/1000008924.png) (R3) · [README](](../../artifacts/demo-feedback/screenshots/README_b112_mockups_2026-06-24.md)
+- Макеты: [`1000008925.png`](../../artifacts/demo-feedback/screenshots/1000008925.png) (R2) · [`1000008924.png`](../../artifacts/demo-feedback/screenshots/1000008924.png) (R3)
 
-**Артефакт этап 0 v1 (устарел):** [`b112_stage0_scope_2026-06-18.json`](../../artifacts/demo-feedback/b112_stage0_scope_2026-06-18.json)  
-**Runbook:** [`TBANK_RECURRENT.md`](../../runbooks/TBANK_RECURRENT.md)
+**Архив v1 (не читать как ТЗ):** [`b112_stage0_scope_2026-06-18.json`](../../artifacts/demo-feedback/b112_stage0_scope_2026-06-18.json) · строки DEMO_FEEDBACK до 2026-06-24 с iframe / «без галочки».
 
 ---
 
-## CoffeeOS — scope rev2 (читаем перед кодом)
+## Что в коде сейчас (rev2 — канон)
 
-| Тема | Сейчас в коде (legacy v1) | План rev2 (ТЗ заказчика 2026-06-24) |
-|------|---------------------------|-------------------------------------|
-| **Первая оплата** | Init → `payment_url` / редирект · iframe (§2.3) | **nonPCI:** Init → **FinishAuthorize** + `CardData` (RSA на клиенте) |
-| **Повторная** | Init → Charge по `RebillId` | Init → Charge · silent · FSM в кнопке |
-| **Сохранённые карты** | `mobile_payment_methods` (`card_token`, `card_masked`) | **UserCards:** `rebill_id`, `card_id`, `pan`, `exp_date`, `card_type` |
-| **Ввод карты** | Web-iframe Т-Банка | **Кастомная форма** по макету 8925 · без iframe виджета |
-| **Кнопка оплаты** | 4–7 внутренних стейтов · ошибки под кнопкой | **FSM 0–7** в кнопке · тексты/цвета по матрице · макет 8924 |
-| **3DS** | `deepLinkRedirectCallback` / редирект | `3DS_CHECKING` → `ACSUrl` + iframe поверх экрана |
-| **Ошибки** | `classifyCheckoutPayError` (наши тексты) | **ErrorCode Т-Банка без изменений** на фронт |
-| **Сохранение карты** | Всегда после 1-й оплаты (Q5 v1) | Тумблер `save_card` (по умолчанию вкл.) — **конфликт Q5** |
-| **Дизайн** | Стиль витрины (Q6 v1) | **100% макеты 8924/8925** — **конфликт Q6** |
-| **Канал** | Svelte web | Только веб-витрина |
-| **Карты на пользователя** | Все храним · главная = последняя успешная (Q2 `[x]`) | Без изменений |
-| **СБП / наличные** | Card recurrent only (Q3 `[x]`) | Без изменений |
+| Тема | Реализация |
+|------|------------|
+| **Первая оплата** | nonPCI: Init → FinishAuthorize + `CardData` (RSA на клиенте) |
+| **Повторная** | Init → Charge по RebillId · silent · FSM в кнопке |
+| **Сохранённые карты** | `mobile_payment_methods` (`card_token`, `card_masked`, `bank_card_id`) |
+| **Ввод карты** | `NewCardSheet.svelte` по макету 8925 · без iframe виджета банка |
+| **Кнопка оплаты** | FSM 0–7 · макет 8924 |
+| **3DS** | `3DS_CHECKING` → ACSUrl + overlay iframe |
+| **Ошибки** | ErrorCode Т-Банка на фронт без искажения |
+| **Сохранение карты** | Тумблер «Использовать карту…» · `save_card` · **default on** |
+| **Карты на гостя** | Все храним · главная = последняя успешная (Q2) |
+| **СБП / наличные** | Card recurrent only (Q3) |
 
-### Карта кода (rev2 — после `go`)
+### Карта кода
 
-| Зона | R | Файлы (ориентир) |
-|------|---|------------------|
-| БД | R1 | `mobile_payment_methods` — поля `bank_card_id`, alias `rebill_id`→`card_token` |
-| Адаптер | R1 | `tbank_adapter.rb` — `finish_authorize`, проброс 3DS |
-| Shop API | R1,R2,R3 | новые/расширенные эндпоинты card init + charge by `card_id` |
-| Фронт форма | R2 | `NewCardSheet.svelte` (рабочее имя) · `tbankCardEncrypt.js` |
-| Фронт checkout | R3 | `PaymentMethodsSheet.svelte` · `shopPayButtonFsm.js` |
-| Тесты | all | `test/services/payments/` · `test/integration/shop/api/b112_*` |
-
-**Не трогаем до `go` на rev2:** `app/`, `app/frontend/`, миграции.
+| Зона | R | Файлы |
+|------|---|--------|
+| БД | R1 | `mobile_payment_methods` — `bank_card_id`, RebillId → `card_token` |
+| Адаптер | R1 | `tbank_adapter.rb` — `finish_authorize`, 3DS |
+| Shop API | R1–R3 | new card + charge by `saved_card_id` · `GET /saved_cards` |
+| Фронт форма | R2 | `NewCardSheet.svelte` · `tbankCardEncrypt.js` |
+| Фронт checkout | R3 | `PaymentMethodsSheet.svelte` · `shopPayFsm.js` |
+| Сохранение | R1 | `Payments::SavedCardStore` · webhook / GetState / FinishAuthorize |
 
 ---
 
 ## Прогресс
 
-### Ревизия 2 (канон заказчика 2026-06-24)
-
-**Правило:** не пакетируем R1+R2+R3 в один проход. После каждого R — тесты, commit, ops, отчёт, **стоп до следующего `go`**.
+### Ревизия 2 — **код закрыт**, открыта приёмка
 
 ```
-[x] 0  — новые тексты ТЗ дословно + ops (2026-06-24)
-[x] 0b — макеты 8924/8925 в artifacts (2026-06-24)
-[x] 0c — сверка доки Т-Банк nonPCI → JSON (2026-06-24)
-[x] 0d — ответы Q-R2-1..3 зафиксированы (2026-06-24, фаза 0 gate R3 — см. ниже)
-
---- Документ 1 заказчика → B1.12-R1 ---
-[x] 1a — `go` на R1 (документ 1)
-[x] 1b — R1 rev2: код + тесты + ops PASS JSON (`b112_r1_nonpci_ops_pass_2026-06-24.json`)
-[x] 1c — стоп · HANDOFF «ждём go R2»
-
---- Документ 2 заказчика → B1.12-R2 ---
-[x] 2a — `go` на R2 (документ 2)
-[x] 2b — R2 rev2: код + тесты + ops PASS JSON (`b112_r2_custom_card_ops_pass_2026-06-24.json`)
-[x] 2c — стоп · HANDOFF «ждём go R3»
-
---- Документ 3 заказчика → B1.12-R3 ---
-[x] 3a-prep — фаза 0 gate R3: решения Q-R2, gap 8924 vs Checkout (2026-06-24)
-[>] 3a — R3 rev2 код `[x]` 2026-06-24
-[x] 3a-f1 — фаза 1 UI «Способ оплаты» 8924
-[x] 3a-f2 — фаза 2 FSM 0–7 + one_click + 3DS iframe
-[x] 3a-f3 — фаза 3 deploy + Fly MCP + хвосты R2 (RSA doc, CardHolder, legacy guard)
-[ ] 3b — апрув заказчика на эпик B1.12 rev2
+[x] 0…0d — docs + Q-R2-1..3
+[x] R1 — nonPCI бэкенд (`b112_r1_nonpci_ops_pass_2026-06-24.json`)
+[x] R2 — кастомная форма (`b112_r2_custom_card_ops_pass_2026-06-24.json`)
+[x] R3 — FSM + Fly MCP 10/10 (`b112_r3_fsm_ops_pass_2026-06-25.json`) · RSA Fly
+[ ] Приёмка: карта сохраняется после 1-й оплаты (тумблер on) → видна на 2-м заказе
+[ ] Апрув заказчика на эпик B1.12 rev2
 ```
 
-### Legacy v1 (iframe + webhook, 2026-06-18…21) — не закрывает rev2
+**Следующий шаг агента:** диагностика/фикс сохранения карты на стенде (не переписывать R1–R3 с нуля).
 
-```
-[x] R1–R3 OPS_PASS + Fly MCP
-[x] R4 single-screen checkout
-[x] R5 redirect вместо inline iframe
-[x] R6 one-click guard + card cache (local, deploy pending)
-[ ] апрув заказчика — баг 2-й оплаты сохраняется → причина: scope v1 ≠ ТЗ v2
-```
+### Legacy v1 (архив, 2026-06-18…21)
+
+Реализовано и заменено rev2. Старые баги 2-й оплаты (iframe / CVC) чинились в v1/R4–R6; **текущий открытый баг приёмки** — см. блок «Открыто» в шапке (не «scope v1 ≠ v2»).
 
 ---
 
-## Чеклист подготовки gate (docs rev2)
+## Чеклист gate (docs rev2) — **закрыт**
 
 - [x] ТЗ v2 — дословный текст заказчика (3 задачи) в этом файле
-- [x] Таблица scope v1 vs v2
-- [x] Конфликты Q1/Q5/Q6 → Q-R2-1..3
-- [x] JSON `b112_revision2_stage0_scope_2026-06-24.json`
-- [x] Сверка Т-Банк nonPCI → `b112_tbank_nonpci_review_2026-06-24.json`
-- [x] Макеты 8924/8925 + README
-- [x] CBR · CHECKLIST · README · HANDOFF · SESSION_STATE · CHANGELOG
-- [ ] **Ответы владельца Q-R2-1..3** (Q-R2-1 — до `go` R1)
-- [ ] **`go` R1** → документ 1 · после закрытия R1 — **`go` R2** → документ 2 · после R2 — **`go` R3** → документ 3
+- [x] Scope rev2 + имена `mobile_payment_methods`
+- [x] Конфликты Q1/Q5/Q6 → Q-R2-1..3 **закрыты**
+- [x] JSON / сверка Т-Банк / макеты / ops-индексы
+- [x] Q-R2-1..3 · `go` R1 · R2 · R3 — **выполнены**
 
 ---
 
@@ -323,12 +308,12 @@
 | **Charge** | Init + Charge + RebillId | **Есть** (`charge_recurrent`) |
 | **FinishAuthorize** | `POST /v2/FinishAuthorize` — PaymentId + CardData | **R1 `[x]`** 2026-06-24 |
 | **CardData** | RSA-2048 на клиенте (R2) | **R2 `[x]`** `NewCardSheet` + `tbankCardEncrypt.js` |
-| **3DS** | `3DS_CHECKING` → ACSUrl, PaReq, MD | **R1 `[x]`** API proxy · **R3 `[ ]`** FSM |
+| **3DS** | `3DS_CHECKING` → ACSUrl, PaReq, MD | **R1 `[x]`** API proxy · **R3 `[x]`** FSM overlay |
 | **ErrorCode** | Коды в ответе API | **R1 `[x]`** проброс + friendly для 1051/1014 |
 
-**Открыто перед R3:** nonPCI на терминале Fly (sandbox) · `TBANK_RSA_PUBLIC_KEY` при deploy · CardHolder = имя checkout.
+**Закрыто R2–R3:** CardData RSA · `TBANK_RSA_PUBLIC_KEY` на Fly · CardHolder = имя checkout.
 
-**Закрыто R2:** формат CardData `PAN=…;ExpDate=…;CardHolder=…;CVV=…` · RSA на клиенте.
+**Открыто (приёмка):** RebillId → `mobile_payment_methods` после успешной 1-й оплаты на стенде заказчика.
 
 ---
 
@@ -336,7 +321,7 @@
 
 | № | Критерий | R | Код | Заказчик |
 |---|----------|---|-----|----------|
-| 1 | UserCards: rebill_id, card_id, pan, exp_date, card_type | R1 | `[x]` | `[ ]` |
+| 1 | `mobile_payment_methods` (= UserCards в ТЗ): token, bank_card_id, mask, exp | R1 | `[x]` | `[ ]` приёмка |
 | 2 | Эндпоинт новая карта: Init + FinishAuthorize + save_card | R1 | `[x]` | `[ ]` |
 | 3 | Эндпоинт 1 клик: Init + Charge по RebillId | R1 | `[x]` | `[ ]` |
 | 4 | 3DS_CHECKING → ACSUrl, PaReq, MD на фронт | R1 | `[x]` | `[ ]` |
@@ -386,27 +371,17 @@
 
 ---
 
-## Ответы заказчика v1 (2026-06-18) — частично устарели
+## Ответы заказчика v1 (2026-06-18) — архив
 
-| # | Ответ v1 | Статус rev2 |
-|---|----------|-------------|
-| Q1 | Только web-фрейм | **Конфликт** → Q-R2-1 |
-| Q2 | Все карты, главная = последняя | **`[x]`** |
-| Q3 | Card only, СБП позже | **`[x]`** |
-| Q4 | Verified email | **`[x]`** |
-| Q5 | Без галочки, всегда save | **Конфликт** → Q-R2-2 |
-| Q6 | Без макетов | **Конфликт** → Q-R2-3 |
-| Q7 | Привязать другую / Повторить | **`[x]`** (адаптировать под FSM 5–7) |
-
-**Артефакт v1:** [`b112_customer_answers_confirmed_2026-06-19.json`](../../artifacts/demo-feedback/b112_customer_answers_confirmed_2026-06-19.json)
+Q1/Q5/Q6 заменены Q-R2-1..3 (закрыты). Q2–Q4, Q7 действуют.  
+Артефакт: [`b112_customer_answers_confirmed_2026-06-19.json`](../../artifacts/demo-feedback/b112_customer_answers_confirmed_2026-06-19.json)
 
 ---
 
 ## ТЗ v1 (2026-06-18) — архив
 
-Тексты v1 (webhook + iframe + 4 состояния кнопки) заменены ревизией 2026-06-24.  
-История реализации v1: git до коммита rev2 docs · артефакты `b112_r1_*` … `b112_r4_*`.
+Тексты v1 (webhook + iframe + «всегда без галочки») **не канон**. История: артефакты `b112_*` до 2026-06-24.
 
 ---
 
-**Статус:** **R1/R2/R3 rev2** `[x]` OPS_PASS · **Fly MCP** 9/10 · **апрув** `[ ]` · хвост: `TBANK_RSA_PUBLIC_KEY` на Fly
+**Статус:** код R1–R3 **`[x]`** · MCP **10/10** · RSA Fly **`[x]`** · **открыто:** приёмка сохранения карты · апрув `[ ]`

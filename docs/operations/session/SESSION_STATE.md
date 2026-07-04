@@ -2,8 +2,8 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-03 (security hygiene — permit! + gem CVEs)  
-**Предыдущее:** Sentry RUBY-9 — manager orders show fix  
+**Дата:** 2026-07-04 (B1.12 docs canon — один статус)  
+**Предыдущее:** security hygiene — permit! + gem CVEs  
 **Веха 1:** **закрыта** 2026-06-19 (CHECKLIST § I, H.3 заочно).  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
 **§2.3 оплата витрина:** **done** 2026-06-06 — [`CUSTOMER_BUSINESS_REQUIREMENTS.md`](milestones/veha_2/requirements/CUSTOMER_BUSINESS_REQUIREMENTS.md).
@@ -20,13 +20,19 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **B1.12 rev2** | R3 `[x]` Fly MCP **10/10** · RSA Fly `[x]` | **апрув заказчика** |
+| **B1.12 rev2** | код R1–R3 `[x]` · Q-R2 `[x]` · MCP **10/10** · RSA Fly `[x]` | **приёмка: карта не сохраняется** · апрув `[ ]` |
 | **B1.11 режим работы** | **Fly MCP header A/B PASS** · артефакт 2026-06-21 | **апрув заказчика** |
 | **B1.13 навигация** | **S4 MCP browser PASS** · 12/12 checks ✅ | **апрув заказчика** |
 | **B1.14 адрес в шапке** | **B1.14-3d** index map `[x]` | deploy (`./bin/fly_deploy.sh`) · B1.14-4 cart |
 
 | **Sentry triage** | RUBY-9 fix `[x]` · Neon quota OK (оплачено) | Archive RUBY-Q…R в Sentry UI |
 | **Security hygiene** | permit! → explicit weekday permit `[x]` · rack/view_component bump `[x]` | **V2-SEC-08** bundler-audit CVE — обязательно (`PRACTICES.md`) |
+
+### Сессия 2026-07-04 (B1.12 — единый канон в доках)
+
+- **Только docs:** CBR, B1_12, CHECKLIST, DEMO_FEEDBACK, README customer_tasks, HANDOFF, SESSION_STATE.
+- **Канон:** rev2 код `[x]` · имена `mobile_payment_methods` / `customer_id` · открыто только приёмка сохранения карты.
+- **Не трогали:** app/, гемы, баг-фикс карты.
 
 ### Сессия 2026-07-03 (security hygiene — permit! + gem CVEs)
 

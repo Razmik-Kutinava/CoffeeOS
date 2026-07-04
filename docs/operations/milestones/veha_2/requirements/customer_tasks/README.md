@@ -10,11 +10,11 @@
 | **B1.9** | Toggle-модификаторы на карточке товара | **закрыта** · апрув `[x]` 2026-06-18 | [B1_9_product_modifier_toggle.md](B1_9_product_modifier_toggle.md) |
 | B1.1 | Экран уведомления заказа + прогресс-бар | PASS 2026-06-10 · ревизия R0–R4 Fly `[x]` · заказчик `[x]` 2026-06-18 | [B1_1_order_status_progress.md](B1_1_order_status_progress.md) |
 | **B2.1** | **Табло бариста — интерактивная карточка** | **закрыта** · апрув `[x]` 2026-06-18 | [B2_1_barista_order_board.md](B2_1_barista_order_board.md) |
-| **B1.12** | **Рекуррент + 1 клик** (Т-Банк nonPCI, R1–R3 **rev2**) | **этап 0 rev2 docs** `[x]` 2026-06-24 · Q-R2-1..3 `[ ]` · legacy v1 Fly MCP · апрув `[ ]` | [B1_12_recurrent_payments.md](B1_12_recurrent_payments.md) |
+| **B1.12** | **Рекуррент + 1 клик** (Т-Банк nonPCI, R1–R3 **rev2**) | код R1–R3 **`[x]`** · Q-R2 **`[x]`** · **приёмка: карта не сохраняется** · апрув `[ ]` | [B1_12_recurrent_payments.md](B1_12_recurrent_payments.md) |
 | **B1.11** | **Режим работы точки** (УК → витрина → табло) | **ответы Q1–Q10** `[x]` · **готовность к коду** · апрув + `go` `[ ]` | [B1_11_tenant_operating_hours.md](B1_11_tenant_operating_hours.md) |
 | **B1.13** | **Новая навигация витрины** — эпик S1–S4 | **rev2** `[x]` апрув 2026-07-01 · **S4-канон** docs `[x]` · **S4 код** `[ ]` | [B1_13_shop_nav_profile_header.md](B1_13_shop_nav_profile_header.md) |
 | **B1.14** | **Адрес точки + выбор точки** в шапке витрины (заказчик «задача 2») | **B1.14-3 Header** `[x]` 2026-06-23 · cart `[ ]` | [B1_14_shop_tenant_address_header.md](B1_14_shop_tenant_address_header.md) |
 | B2.2 | Объединить «Меню» + «Создать» | **ТЗ** 2026-06-10 · реализация `[ ]` | [B2_2_barista_menu_create_merge.md](B2_2_barista_menu_create_merge.md) |
 | **B1.4** | **PWA витрины** (install, offline) | **OPS_PASS** 2026-06-12 · заказчик `[ ]` | [B1_4_pwa_shop.md](B1_4_pwa_shop.md) |
 
-**Порядок работ (2026-06):** **B1.12 rev2** — `go` R1 → R2 → R3 (по одному документу) · **B1.11** · **B1.13-S1** · **B1.14** · **B2.2** · **B1.4** `[ ]`.
+**Порядок работ:** **B1.12** — фикс приёмки (сохранение карты) · **B1.11** апрув · **B1.13/B1.14** · **B2.2** · **B1.4**.
