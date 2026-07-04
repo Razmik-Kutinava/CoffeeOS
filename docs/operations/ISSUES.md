@@ -5,13 +5,14 @@
 ## 🔴 Блокеры
 
 [2026-07-04] — B1.12-BUG-SAVE: карта не сохраняется после 1-й оплаты (тумблер on)
-Приоритет: 🔴 | Статус: **open**
-Описание: заказчик — после успешной оплаты «Новая карта» с тумблером «Использовать карту для будущих заказов» на 2-м заказе карты нет; запись UserCards/`mobile_payment_methods` не создаётся (или без привязки).
+Приоритет: 🔴 | Статус: **fixed — ждёт деплоя + апрув заказчика**
+Описание: заказчик — после успешной оплаты «Новая карта» с тумблером «Использовать карту для будущих заказов» на 2-м заказе карты нет; запись UserCards/`mobile_payment_methods` не создаётся.
 **Текст дословно + чеклист D1–A1:** [`B1_12_recurrent_payments.md`](milestones/veha_2/requirements/customer_tasks/B1_12_recurrent_payments.md) § «Баг приёмки B1.12-BUG-SAVE».
 **Скрин:** [`b112_save_card_toggle_on_customer_2026-07-04.png`](milestones/veha_2/artifacts/demo-feedback/screenshots/b112_save_card_toggle_on_customer_2026-07-04.png)
-**JSON:** [`b112_bug_save_card_customer_2026-07-04.json`](milestones/veha_2/artifacts/demo-feedback/b112_bug_save_card_customer_2026-07-04.json)
 **Канон имён:** `mobile_payment_methods` / `customer_id` / `card_token` (= RebillId).
-**D1 (2026-07-04):** PASS — Fly release **v327** (2026-07-02) содержит B1.12 R1–R3 (`origin/develop` `2a34ada`); `GET …/payments/card_config` → 401 (эндпоинт есть). Баг **не** «не задеплоили». Артефакт: [`b112_bug_save_card_d1_deploy_2026-07-04.json`](milestones/veha_2/artifacts/demo-feedback/b112_bug_save_card_d1_deploy_2026-07-04.json). **Дальше:** D2.
+**D1:** PASS — Fly v327 содержит B1.12 R1–R3; баг **не** из-за деплоя.
+**D2–F1 (2026-07-04):** ROOT CAUSE — `settle_confirmed!` проверял `raw["RebillId"]` из FinishAuthorize, а T-Bank nonPCI возвращает RebillId **только в webhook/GetState**. Фикс: fallback на `TbankPaymentSync.sync_order!` (GetState) если RebillId нет в raw. Тест добавлен. Коммит: **1081dac**.
+**Дальше:** деплой на стенд → A1 апрув заказчика.
 
 ## Решено недавно
 

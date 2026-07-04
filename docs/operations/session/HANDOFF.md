@@ -4,16 +4,17 @@
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev
 
-### B1.12 — канон (2026-07-04)
+### B1.12 — BUG-SAVE фикс (2026-07-04)
 
 | Что | Статус |
 |-----|--------|
 | ТЗ | **rev2 only** — v1 iframe / «без галочки» = архив |
 | Код R1–R3 · Q-R2 | **`[x]`** · MCP 10/10 · RSA Fly `[x]` |
 | Имена | `mobile_payment_methods` · `customer_id` · `card_token` (= RebillId) |
-| **Открыто** | **B1.12-BUG-SAVE** — карта не сохраняется |
-| **D1** | **PASS** — Fly v327 ≈ `2a34ada`, R1–R3 на стенде · [`b112_bug_save_card_d1_deploy_2026-07-04.json`](../milestones/veha_2/artifacts/demo-feedback/b112_bug_save_card_d1_deploy_2026-07-04.json) |
-| **Следующий шаг** | **`go` D2** — Network `save_card` + CardData |
+| **BUG-SAVE root cause** | `settle_confirmed!` проверял `raw["RebillId"]` — T-Bank nonPCI отдаёт его в webhook/GetState, не в FinishAuthorize |
+| **Фикс** | fallback `TbankPaymentSync.sync_order!` (GetState) в `settle_confirmed!` · коммит **`1081dac`** |
+| **Тесты** | 7 + 14 runs, 0 failures |
+| **Следующий шаг** | **A1** — деплой на стенд → апрув заказчика → ISSUES close |
 | ТЗ файл | [`B1_12_recurrent_payments.md`](../milestones/veha_2/requirements/customer_tasks/B1_12_recurrent_payments.md) |
 
 ### Security hygiene (2026-07-03)

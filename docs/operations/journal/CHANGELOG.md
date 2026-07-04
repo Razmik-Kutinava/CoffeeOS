@@ -1,5 +1,19 @@
 # CHANGELOG
 
+## 2026-07-04 — fix(b1.12): B1.12-BUG-SAVE фикс сохранения карты · коммит 1081dac
+
+**Root cause:** `settle_confirmed!` проверял `raw["RebillId"]` из синхронного FinishAuthorize.
+T-Bank nonPCI возвращает RebillId **только в webhook/GetState** — поле пустое → `SavedCardStore` не вызывался → карта не сохранялась.
+
+**Фикс:** `new_card_payment_service.rb` `settle_confirmed!`:
+- если `raw["RebillId"]` есть → `SavedCardStore.persist_from_tbank!` (как раньше)
+- если пусто → `TbankPaymentSync.sync_order!(order:)` (GetState → `persist_card_if_needed!`)
+
+**Тест:** `b112_r1_nonpci_test.rb` «saves card when RebillId comes via GetState, not FinishAuthorize»
+7 runs 41 assertions 0 failures · регрессия 14 runs 70 assertions 0 failures.
+
+**Дальше:** деплой на стенд → A1 апрув заказчика.
+
 ## 2026-07-04 — B1.12-BUG-SAVE D1: deploy Fly PASS
 
 - Fly release **v327** (2026-07-02) ≈ `origin/develop` `2a34ada` (B1.12 R1–R3 в истории).

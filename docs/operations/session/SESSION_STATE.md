@@ -20,7 +20,7 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **B1.12 rev2** | код R1–R3 `[x]` · **D1 PASS** (Fly v327 ≈ `2a34ada`) | **BUG-SAVE:** D2 Network `save_card` · апрув `[ ]` |
+| **B1.12 rev2** | код R1–R3 `[x]` · **BUG-SAVE фикс `1081dac`** — T-Bank nonPCI RebillId→GetState fallback | **A1:** deploy на стенд → апрув заказчика `[ ]` |
 | **B1.11 режим работы** | **Fly MCP header A/B PASS** · артефакт 2026-06-21 | **апрув заказчика** |
 | **B1.13 навигация** | **S4 MCP browser PASS** · 12/12 checks ✅ | **апрув заказчика** |
 | **B1.14 адрес в шапке** | **B1.14-3d** index map `[x]` | deploy (`./bin/fly_deploy.sh`) · B1.14-4 cart |
