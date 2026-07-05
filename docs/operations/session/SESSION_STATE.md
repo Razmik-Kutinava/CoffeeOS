@@ -21,12 +21,20 @@
 | Сейчас | Дальше |
 |--------|--------|
 | **B1.12 rev2** | код R1–R3 `[x]` · **BUG-SAVE фикс `1081dac`** Fly v328 `[x]` · MCP browser PASS · sandbox CLIENT_ERROR | **A1:** заказчик CONFIRMED оплата (пауза до живой оплаты) |
-| **B1.11 режим работы** | код MVP `[x]` · **BUG-OVERNIGHT F1–F4 `[x]`** · MCP локально PASS · 36 tests | **A1:** deploy Fly + апрув заказчика |
+| **B1.11 режим работы** | **BUG-OVERNIGHT Fly MCP PASS** · F1–F4 `[x]` · deploy `[x]` | **апрув заказчика** «ок» → close ISSUES |
 | **B1.13 навигация** | **S4 MCP browser PASS** · 12/12 checks ✅ | **апрув заказчика** |
 | **B1.14 адрес в шапке** | **B1.14-3d** index map `[x]` | deploy (`./bin/fly_deploy.sh`) · B1.14-4 cart |
 
 | **Sentry triage** | RUBY-9 fix `[x]` · Neon quota OK (оплачено) | Archive RUBY-Q…R в Sentry UI |
 | **Security hygiene** | permit! → explicit weekday permit `[x]` · rack/view_component bump `[x]` | **V2-SEC-08** bundler-audit CVE — обязательно (`PRACTICES.md`) |
+
+### Сессия 2026-07-05 (B1.11-BUG-OVERNIGHT Fly MCP post-deploy)
+
+- **Fly:** `coffeeos.fly.dev/up` OK · deploy commit `546a9f1`.
+- **MCP:** create точки пн 09:23–01:24 → «Точка создана» · tenant `af4f78d6-c66b-428e-8ee4-5a609c5c9131`.
+- **Edit verify:** mon enabled · 09:23/01:24 · без validation error.
+- **Артефакты:** `b111_bug_overnight_fly_post_deploy_2026-07-05.json` · 3 скрина Fly.
+- **Стоп:** апрув заказчика.
 
 ### Сессия 2026-07-05 (B1.11-BUG-OVERNIGHT fix + MCP)
 

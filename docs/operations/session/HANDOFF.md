@@ -4,6 +4,15 @@
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev
 
+### B1.11 — BUG-OVERNIGHT Fly MCP (2026-07-05)
+
+| Что | Статус |
+|-----|--------|
+| Deploy | **`[x]`** (заказчик) |
+| Fly MCP | **PASS** — create пн 09:23–01:24 · tenant `af4f78d6-c66b-428e-8ee4-5a609c5c9131` |
+| Артефакты | `b111_bug_overnight_fly_post_deploy_2026-07-05.json` · 3 скрина Fly |
+| **Следующий шаг** | **апрув заказчика** «ок» → close ISSUES |
+
 ### B1.11 — BUG-OVERNIGHT fix (2026-07-05)
 
 | Что | Статус |

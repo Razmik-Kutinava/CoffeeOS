@@ -121,7 +121,8 @@
 - [x] **F2** — `TenantOperatingHours`: `open_now?` и `next_open_at` для overnight (если `closes <= opens` → закрытие на **следующий** календарный день; после полуночи до `closes` — ещё открыто по вчерашнему дню)
 - [x] **F3** — тесты: model overnight save · `TenantOperatingHours` overnight · integration create/update tenant УК с пн 09:23–01:24
 - [x] **F4** — регрессия: обычный день 09:00–22:00 · disabled день · «хотя бы один день» · shop `is_open` / баннер — **36 runs, 0 failures**
-- [ ] **A1** — deploy + апрув заказчика (create точки с ночной сменой) · закрыть ISSUES · MCP локально PASS [`b111_bug_overnight_mcp_2026-07-05.json`](../artifacts/demo-feedback/b111_bug_overnight_mcp_2026-07-05.json)
+- [x] **A1 deploy** — Fly MCP PASS [`b111_bug_overnight_fly_post_deploy_2026-07-05.json`](../artifacts/demo-feedback/b111_bug_overnight_fly_post_deploy_2026-07-05.json) · локально [`b111_bug_overnight_mcp_2026-07-05.json`](../artifacts/demo-feedback/b111_bug_overnight_mcp_2026-07-05.json)
+- [ ] **A1 апрув заказчика** — «ок» на create точки с ночной сменой на Fly · закрыть ISSUES
 
 **Файлы (ориентир):**
 

@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2026-07-05 — ops(b1.11): Fly post-deploy MCP — overnight shift PASS
+
+- **Fly MCP Chrome DevTools:** `coffeeos.fly.dev` · login УК → create пн 09:23–01:24 → «Точка создана».
+- Tenant `af4f78d6-c66b-428e-8ee4-5a609c5c9131` · edit: opens/closes сохранены.
+- **Артефакт:** `b111_bug_overnight_fly_post_deploy_2026-07-05.json` · 3 скрина Fly.
+- **A1:** deploy `[x]` · апрув заказчика pending.
+
 ## 2026-07-05 — fix(b1.11): B1.11-BUG-OVERNIGHT ночная смена · MCP PASS
 
 - **F1–F4:** `TenantWeekdaySchedule#overnight?` · `opens_and_closes_distinct` (убран `closes_after_opens`) · `TenantOperatingHours` overnight `open_now?` · тесты 36 runs PASS.

@@ -5,13 +5,14 @@
 ## 🔴 Блокеры
 
 [2026-07-04] — B1.11-BUG-OVERNIGHT: нельзя создать точку с ночной сменой (`must be after opens_at`)
-Приоритет: 🔴 | Статус: **fixed локально — MCP PASS · A1 deploy+апрув заказчика pending**
+Приоритет: 🔴 | Статус: **fixed Fly MCP PASS · ждёт апрув заказчика (A1)**
 Описание: УК create точки, пн opens 09:23 / closes 01:24 → ошибка `Понедельник: must be after opens_at`. Блокирует создание точек с работой через полночь.
 **Канон + текст заказчика + чеклист F1–A1:** [`B1_11_tenant_operating_hours.md`](milestones/veha_2/requirements/customer_tasks/B1_11_tenant_operating_hours.md) § B1.11-BUG-OVERNIGHT.
-**Артефакты:** [`b111_bug_overnight_customer_2026-07-04.json`](milestones/veha_2/artifacts/demo-feedback/b111_bug_overnight_customer_2026-07-04.json) · [`b111_bug_overnight_mcp_2026-07-05.json`](milestones/veha_2/artifacts/demo-feedback/b111_bug_overnight_mcp_2026-07-05.json)
+**Артефакты:** [`b111_bug_overnight_customer_2026-07-04.json`](milestones/veha_2/artifacts/demo-feedback/b111_bug_overnight_customer_2026-07-04.json) · [`b111_bug_overnight_mcp_2026-07-05.json`](milestones/veha_2/artifacts/demo-feedback/b111_bug_overnight_mcp_2026-07-05.json) · [`b111_bug_overnight_fly_post_deploy_2026-07-05.json`](milestones/veha_2/artifacts/demo-feedback/b111_bug_overnight_fly_post_deploy_2026-07-05.json)
 **Root cause:** `TenantWeekdaySchedule#closes_after_opens` требует `closes_at > opens_at`; `TenantOperatingHours` тоже same-day only.
 **Фикс (2026-07-05):** F1–F4 `[x]` — `overnight?` + `opens_and_closes_distinct` · `TenantOperatingHours` overnight · 36 tests PASS · MCP Chrome DevTools: create точки пн 09:23–01:24 → «Точка создана», DB `overnight: true`.
-**Дальше:** A1 `fly deploy` + апрув заказчика на Fly → close ISSUES.
+**Fly MCP (2026-07-05):** create пн 09:23–01:24 → «Точка создана» · tenant `af4f78d6-c66b-428e-8ee4-5a609c5c9131` · edit 09:23/01:24 сохранено.
+**Дальше:** апрув заказчика «ок» → close ISSUES.
 **Не путать с:** B1.12-BUG-SAVE (карта) — отдельный баг, ждёт живую оплату заказчика.
 
 [2026-07-04] — B1.12-BUG-SAVE: карта не сохраняется после 1-й оплаты (тумблер on)

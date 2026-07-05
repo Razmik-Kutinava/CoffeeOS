@@ -1,0 +1,53 @@
+{
+  "id": "B1.11-BUG-OVERNIGHT",
+  "task_id": "B1.11",
+  "date": "2026-07-05",
+  "type": "post_deploy_mcp",
+  "status": "pass",
+  "environment": {
+    "host": "https://coffeeos.fly.dev",
+    "panel": "/admin/tenants/new",
+    "login": "uk@demo.coffeeos.local",
+    "deploy_commit": "546a9f1"
+  },
+  "checks": [
+    { "step": "health", "url": "/up", "result": "pass" },
+    { "step": "uk_login", "result": "pass" },
+    { "step": "create_tenant_overnight", "result": "pass" },
+    { "step": "edit_schedule_persisted", "result": "pass" }
+  ],
+  "scenario": {
+    "organization": "Demo CoffeeOS",
+    "name": "Fly Overnight 1783239109276",
+    "slug": "fly-overnight-1783239109276",
+    "monday": { "enabled": true, "opens_at": "09:23", "closes_at": "01:24" }
+  },
+  "results": {
+    "form_error_must_be_after_opens_at": false,
+    "tenant_created": true,
+    "tenant_id": "af4f78d6-c66b-428e-8ee4-5a609c5c9131",
+    "flash": "Точка создана",
+    "edit_verify": {
+      "mon_enabled": true,
+      "opens": "09:23",
+      "closes": "01:24",
+      "validation_error": null
+    },
+    "shop_url": "https://coffeeos.fly.dev/shop?tenant_id=af4f78d6-c66b-428e-8ee4-5a609c5c9131"
+  },
+  "screenshots": [
+    "screenshots/b111_bug_overnight_fly_form_2026-07-05.png",
+    "screenshots/b111_bug_overnight_fly_success_2026-07-05.png",
+    "screenshots/b111_bug_overnight_fly_edit_2026-07-05.png"
+  ],
+  "fix_checklist": {
+    "F1_model": "done",
+    "F2_tenant_operating_hours": "done",
+    "F3_tests": "done",
+    "F4_regression": "done",
+    "A1_deploy": "done",
+    "A1_customer_approve": "pending"
+  },
+  "mcp_tool": "chrome-devtools",
+  "prior_local_artifact": "b111_bug_overnight_mcp_2026-07-05.json"
+}
