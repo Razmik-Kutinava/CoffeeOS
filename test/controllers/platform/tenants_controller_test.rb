@@ -71,6 +71,29 @@ class Platform::TenantsControllerTest < ActionDispatch::IntegrationTest
     assert_nil Tenant.find_by(slug: slug)
   end
 
+  test "create accepts overnight weekday schedule" do
+    slug = "overnight-#{SecureRandom.hex(4)}"
+
+    assert_difference -> { Tenant.count }, +1 do
+      post "/admin/tenants", params: tenant_create_params(
+        slug: slug,
+        name: "Жид",
+        weekday_schedules: {
+          "0" => { enabled: "1", opens_at: "09:23", closes_at: "01:24" }
+        }
+      )
+    end
+
+    assert_response :redirect
+    tenant = Tenant.find_by!(slug: slug)
+    mon = tenant.weekday_schedules.find_by!(weekday: 0)
+    assert mon.enabled?
+    assert mon.overnight?
+    assert_equal "09:23", mon.opens_at.strftime("%H:%M")
+    assert_equal "01:24", mon.closes_at.strftime("%H:%M")
+  end
+
+
   test "update saves weekday schedules" do
     tenant = create_tenant!(organization: @org, slug: "hours-#{SecureRandom.hex(4)}")
     Platform::TenantWeekdaySchedulesSync.call(

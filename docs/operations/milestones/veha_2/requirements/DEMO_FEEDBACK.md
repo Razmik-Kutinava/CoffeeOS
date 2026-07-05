@@ -4,7 +4,7 @@
 
 **Источник:** PDF [`artifacts/demo-feedback/customer_qa_prog10_2026-06.pdf`](artifacts/demo-feedback/customer_qa_prog10_2026-06.pdf) (продолжение В1: [`../veha_1/artifacts/customer_live_qa_block1_2026-05-30.pdf`](../veha_1/artifacts/customer_live_qa_block1_2026-05-30.pdf)).
 
-**Сейчас (2026-07-04):** **B1.12** — фикс карты на Fly v328 · ждёт живую оплату (A1). **B1.11** — MVP `[x]` · **открыт B1.11-BUG-OVERNIGHT** (ночная смена, docs готовы, код ждёт `go`).
+**Сейчас (2026-07-05):** **B1.12** — фикс карты на Fly v328 · ждёт живую оплату (A1). **B1.11** — **BUG-OVERNIGHT fixed локально** · MCP PASS · A1 deploy+апрув pending.
 
 > **Архив B1.12:** строки ниже с iframe / «save без галочки» / v1 — **история**, не канон. Канон: [`B1_12_recurrent_payments.md`](customer_tasks/B1_12_recurrent_payments.md) (rev2, `mobile_payment_methods`).
 
@@ -48,7 +48,8 @@
 | 2026-06-18 | B1.12-R2 | `#/payment` iframe | web-фрейм + card_binding local | **done** *(OPS_PASS local)* | [b112_r2_native_card_ops_pass_2026-06-18.json](artifacts/demo-feedback/b112_r2_native_card_ops_pass_2026-06-18.json) |
 | 2026-06-18 | B1.12-R1 | shop API / callback | Рекуррент: RebillId + Charge | **done** *(OPS_PASS local)* | [b112_r1_recurrent_ops_pass_2026-06-18.json](artifacts/demo-feedback/b112_r1_recurrent_ops_pass_2026-06-18.json) |
 | 2026-06-18 | заказчик B1.12 | `#/payment` / checkout | Рекуррент Т-Банк эпик (R1–R3) | **done** *(код+баг fix, апрув `[ ]`)* | [b112_stage0_scope_2026-06-18.json](artifacts/demo-feedback/b112_stage0_scope_2026-06-18.json) |
-| 2026-07-04 | заказчик B1.11 | УК create точки | **B1.11-BUG-OVERNIGHT:** пн 09:23–01:24 → `must be after opens_at`; ночная смена **в scope** (Q2 «не MVP» отменён) | **open** *(docs · код ждёт go)* | [b111_bug_overnight_customer_2026-07-04.json](artifacts/demo-feedback/b111_bug_overnight_customer_2026-07-04.json) · [B1_11](customer_tasks/B1_11_tenant_operating_hours.md) |
+| 2026-07-05 | MCP B1.11 overnight | localhost УК create | **B1.11-BUG-OVERNIGHT fix:** пн 09:23–01:24 → «Точка создана» · DB overnight true · 36 tests PASS | **fixed_local** *(A1 deploy pending)* | [b111_bug_overnight_mcp_2026-07-05.json](artifacts/demo-feedback/b111_bug_overnight_mcp_2026-07-05.json) |
+| 2026-07-04 | заказчик B1.11 | УК create точки | **B1.11-BUG-OVERNIGHT:** пн 09:23–01:24 → `must be after opens_at`; ночная смена **в scope** (Q2 «не MVP» отменён) | **fixed_local** | [b111_bug_overnight_customer_2026-07-04.json](artifacts/demo-feedback/b111_bug_overnight_customer_2026-07-04.json) · [B1_11](customer_tasks/B1_11_tenant_operating_hours.md) |
 | 2026-06-21 | Fly MCP B1.11 header | coffeeos.fly.dev | Часы под CoffeeOS · A vs B разное | **done** *(апрув эпика pending)* | [b111_header_schedule_post_deploy_2026-06-21.json](artifacts/demo-feedback/b111_header_schedule_post_deploy_2026-06-21.json) |
 | 2026-06-21 | заказчик B1.11 | shop header | Часы под CoffeeOS · разное расписание A/B | **done** *(Fly MCP)* | commit `4d7043d` |
 | 2026-06-19 | Fly MCP B1.11 | coffeeos.fly.dev | Режим работы: API+витрина+barista+УК post-deploy | **done** *(апрув эпика pending · блокер overnight)* | [b111_operating_hours_post_deploy_2026-06-19.json](artifacts/demo-feedback/b111_operating_hours_post_deploy_2026-06-19.json) |

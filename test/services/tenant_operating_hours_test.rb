@@ -59,7 +59,61 @@ class TenantOperatingHoursTest < ActiveSupport::TestCase
     end
   end
 
+  # B1.11-BUG-OVERNIGHT: пн 09:23–01:24 (вт)
+  test "overnight open during evening of schedule day" do
+    seed_overnight_monday!
+
+    travel_to utc_for_moscow("2026-06-15 23:00") do # пн
+      assert TenantOperatingHours.open_now?(@tenant)
+      assert_nil TenantOperatingHours.next_open_at(@tenant)
+    end
+  end
+
+  test "overnight open after midnight before closes" do
+    seed_overnight_monday!
+
+    travel_to utc_for_moscow("2026-06-16 00:30") do # вт
+      assert TenantOperatingHours.open_now?(@tenant)
+    end
+  end
+
+  test "overnight closed after closes until next open" do
+    seed_overnight_monday!
+
+    travel_to utc_for_moscow("2026-06-16 02:00") do # вт после 01:24
+      assert_not TenantOperatingHours.open_now?(@tenant)
+      next_at = TenantOperatingHours.next_open_at(@tenant)
+      assert_equal "2026-06-22 09:23:00 +0300", next_at.to_s # след. пн
+    end
+  end
+
+  test "overnight closed before opens same day" do
+    seed_overnight_monday!
+
+    travel_to utc_for_moscow("2026-06-15 08:00") do # пн до 09:23
+      assert_not TenantOperatingHours.open_now?(@tenant)
+      next_at = TenantOperatingHours.next_open_at(@tenant)
+      assert_equal "2026-06-15 09:23:00 +0300", next_at.to_s
+    end
+  end
+
   private
+
+  def seed_overnight_monday!
+    @tenant.weekday_schedules.delete_all
+    TenantWeekdaySchedule.create!(
+      tenant: @tenant,
+      weekday: 0,
+      enabled: true,
+      opens_at: "09:23",
+      closes_at: "01:24"
+    )
+    (1..6).each do |wd|
+      TenantWeekdaySchedule.create!(tenant: @tenant, weekday: wd, enabled: false)
+    end
+    @tenant.weekday_schedules.reset
+  end
+
 
   def seed_weekdays(mon_fri:)
     @tenant.weekday_schedules.delete_all

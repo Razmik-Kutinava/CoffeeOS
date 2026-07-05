@@ -1,0 +1,52 @@
+{
+  "id": "B1.11-BUG-OVERNIGHT",
+  "task_id": "B1.11",
+  "date": "2026-07-05",
+  "priority": "high",
+  "status": "fixed_local_mcp_pass",
+  "title": "Ночная смена УК create — MCP прогон PASS",
+  "environment": {
+    "host": "http://127.0.0.1:3000",
+    "panel": "УК /admin/tenants/new",
+    "login": "uk@demo.coffeeos.local"
+  },
+  "scenario": {
+    "action": "Создать точку продаж с ночной сменой",
+    "organization": "Demo CoffeeOS",
+    "name": "MCP Overnight 1783238349726",
+    "slug": "mcp-overnight-1783238349726",
+    "monday": { "enabled": true, "opens_at": "09:23", "closes_at": "01:24" }
+  },
+  "results": {
+    "form_error_must_be_after_opens_at": false,
+    "tenant_created": true,
+    "tenant_id": "b5830353-42d4-4321-a8c9-5e9efd2bb071",
+    "flash": "Точка создана",
+    "db_verify": {
+      "mon_enabled": true,
+      "opens": "09:23",
+      "closes": "01:24",
+      "overnight": true
+    }
+  },
+  "tests": {
+    "command": "bin/rails test test/models/tenant_weekday_schedule_test.rb test/services/tenant_operating_hours_test.rb test/services/platform/tenant_weekday_schedules_sync_test.rb test/controllers/platform/tenants_controller_test.rb test/integration/shop/api/b111_operating_hours_test.rb",
+    "runs": 36,
+    "failures": 0,
+    "errors": 0
+  },
+  "screenshots": [
+    "screenshots/b111_bug_overnight_mcp_form_2026-07-05.png",
+    "screenshots/b111_bug_overnight_mcp_success_2026-07-05.png",
+    "screenshots/b111_bug_overnight_mcp_edit_2026-07-05.png"
+  ],
+  "fix_checklist": {
+    "F1_model": "done",
+    "F2_tenant_operating_hours": "done",
+    "F3_tests": "done",
+    "F4_regression": "done",
+    "A1_deploy_approve": "pending"
+  },
+  "canon_doc": "requirements/customer_tasks/B1_11_tenant_operating_hours.md",
+  "mcp_tool": "chrome-devtools"
+}

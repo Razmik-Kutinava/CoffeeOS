@@ -41,6 +41,20 @@ class Platform::TenantWeekdaySchedulesSyncTest < ActiveSupport::TestCase
     assert_empty kitchen.weekday_schedules
   end
 
+  test "saves overnight shift closes before opens" do
+    ok = Platform::TenantWeekdaySchedulesSync.call(
+      tenant: @tenant,
+      schedule_params: weekday_params(mon: ["09:23", "01:24"])
+    )
+
+    assert ok, @tenant.errors.full_messages.join(", ")
+    mon = @tenant.weekday_schedules.find_by!(weekday: 0)
+    assert mon.enabled?
+    assert mon.overnight?
+    assert_equal "09:23", mon.opens_at.strftime("%H:%M")
+    assert_equal "01:24", mon.closes_at.strftime("%H:%M")
+  end
+
   private
 
   def weekday_params(**days)

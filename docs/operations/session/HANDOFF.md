@@ -1,8 +1,18 @@
 ﻿# HANDOFF вЂ” Р’РµС…Р° 2 (Р’РµС…Р° 1 **Р·Р°РєСЂС‹С‚Р°** 2026-06-19)
 
-**Дата:** 2026-07-04 (B1.11-BUG-OVERNIGHT docs)  
+**Дата:** 2026-07-05 (B1.11-BUG-OVERNIGHT fix + MCP)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev
+
+### B1.11 — BUG-OVERNIGHT fix (2026-07-05)
+
+| Что | Статус |
+|-----|--------|
+| F1–F4 | **`[x]`** · 36 tests PASS |
+| MCP | Chrome DevTools локально PASS — create пн 09:23–01:24 |
+| Артефакты | `b111_bug_overnight_mcp_2026-07-05.json` · 3 скрина |
+| **Следующий шаг** | **A1** — `fly deploy` + апрув заказчика на Fly |
+| ТЗ файл | [`B1_11_tenant_operating_hours.md`](../milestones/veha_2/requirements/customer_tasks/B1_11_tenant_operating_hours.md) |
 
 ### B1.11 — BUG-OVERNIGHT docs (2026-07-04)
 
@@ -13,7 +23,7 @@
 | Root cause | `TenantWeekdaySchedule#closes_after_opens` + `TenantOperatingHours` same-day |
 | Docs | `B1_11` § BUG-OVERNIGHT · ISSUES · DEMO_FEEDBACK · CBR/CHECKLIST/README выровнены |
 | Артефакт | `b111_bug_overnight_customer_2026-07-04.json` |
-| **Следующий шаг** | **`go`** → F1 модель · F2 TenantOperatingHours · F3 тесты · F4 регрессия · A1 |
+| **Следующий шаг** | ~~**`go`** → F1–F4~~ → **A1 deploy+апрув** |
 | ТЗ файл | [`B1_11_tenant_operating_hours.md`](../milestones/veha_2/requirements/customer_tasks/B1_11_tenant_operating_hours.md) |
 
 ### B1.12 — BUG-SAVE фикс (2026-07-04) · пауза до живой оплаты

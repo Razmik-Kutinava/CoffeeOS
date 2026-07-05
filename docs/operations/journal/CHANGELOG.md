@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2026-07-05 — fix(b1.11): B1.11-BUG-OVERNIGHT ночная смена · MCP PASS
+
+- **F1–F4:** `TenantWeekdaySchedule#overnight?` · `opens_and_closes_distinct` (убран `closes_after_opens`) · `TenantOperatingHours` overnight `open_now?` · тесты 36 runs PASS.
+- **MCP Chrome DevTools:** УК `/admin/tenants/new` · пн 09:23–01:24 → «Точка создана» · DB `overnight: true`.
+- **Артефакты:** `b111_bug_overnight_mcp_2026-07-05.json` · 3 скрина в `screenshots/`.
+- **A1 pending:** deploy Fly + апрув заказчика.
+
 ## 2026-07-04 — docs(b1.11): B1.11-BUG-OVERNIGHT канон · ночная смена в scope
 
 - Баг заказчика: УК create точки, пн `09:23`–`01:24` → `must be after opens_at`.

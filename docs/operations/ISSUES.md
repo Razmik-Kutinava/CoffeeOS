@@ -5,12 +5,13 @@
 ## 🔴 Блокеры
 
 [2026-07-04] — B1.11-BUG-OVERNIGHT: нельзя создать точку с ночной сменой (`must be after opens_at`)
-Приоритет: 🔴 | Статус: **open — docs готовы · код ждёт `go`**
+Приоритет: 🔴 | Статус: **fixed локально — MCP PASS · A1 deploy+апрув заказчика pending**
 Описание: УК create точки, пн opens 09:23 / closes 01:24 → ошибка `Понедельник: must be after opens_at`. Блокирует создание точек с работой через полночь.
 **Канон + текст заказчика + чеклист F1–A1:** [`B1_11_tenant_operating_hours.md`](milestones/veha_2/requirements/customer_tasks/B1_11_tenant_operating_hours.md) § B1.11-BUG-OVERNIGHT.
-**Артефакт:** [`b111_bug_overnight_customer_2026-07-04.json`](milestones/veha_2/artifacts/demo-feedback/b111_bug_overnight_customer_2026-07-04.json)
-**Root cause:** `TenantWeekdaySchedule#closes_after_opens` требует `closes_at > opens_at`; `TenantOperatingHours` тоже same-day only. Старый Q2 «полночь не MVP» **отменён** — ночная смена **в scope** с 2026-07-04.
-**Фикс (после go):** F1 модель · F2 `TenantOperatingHours` · F3 тесты · F4 регрессия · A1 deploy+апрув.
+**Артефакты:** [`b111_bug_overnight_customer_2026-07-04.json`](milestones/veha_2/artifacts/demo-feedback/b111_bug_overnight_customer_2026-07-04.json) · [`b111_bug_overnight_mcp_2026-07-05.json`](milestones/veha_2/artifacts/demo-feedback/b111_bug_overnight_mcp_2026-07-05.json)
+**Root cause:** `TenantWeekdaySchedule#closes_after_opens` требует `closes_at > opens_at`; `TenantOperatingHours` тоже same-day only.
+**Фикс (2026-07-05):** F1–F4 `[x]` — `overnight?` + `opens_and_closes_distinct` · `TenantOperatingHours` overnight · 36 tests PASS · MCP Chrome DevTools: create точки пн 09:23–01:24 → «Точка создана», DB `overnight: true`.
+**Дальше:** A1 `fly deploy` + апрув заказчика на Fly → close ISSUES.
 **Не путать с:** B1.12-BUG-SAVE (карта) — отдельный баг, ждёт живую оплату заказчика.
 
 [2026-07-04] — B1.12-BUG-SAVE: карта не сохраняется после 1-й оплаты (тумблер on)

@@ -28,6 +28,22 @@ class Shop::Api::B111OperatingHoursTest < ActionDispatch::IntegrationTest
     end
   end
 
+  test "GET config is_open during overnight morning leg" do
+    @tenant.weekday_schedules.delete_all
+    TenantWeekdaySchedule.create!(
+      tenant: @tenant, weekday: 0, enabled: true, opens_at: "09:23", closes_at: "01:24"
+    )
+    (1..6).each { |wd| TenantWeekdaySchedule.create!(tenant: @tenant, weekday: wd, enabled: false) }
+    @tenant.weekday_schedules.reset
+
+    travel_to moscow("2026-06-16 00:30") do # вт, ещё ночная смена пн
+      get "/shop/api/config", headers: shop_tenant_headers(@tenant.id)
+      assert_response :success
+      assert_equal true, response.parsed_body.dig("operating_hours", "is_open")
+    end
+  end
+
+
   test "GET config exposes closed_until when closed" do
     travel_to moscow("2026-06-15 22:00") do
       get "/shop/api/config", headers: shop_tenant_headers(@tenant.id)

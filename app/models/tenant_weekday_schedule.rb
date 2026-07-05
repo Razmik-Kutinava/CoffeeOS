@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 # B1.11: один день недели в расписании точки продаж (чекбокс + часы).
+# Ночная смена: closes_at < opens_at (например 09:23–01:24 = до следующего дня).
 class TenantWeekdaySchedule < ApplicationRecord
   WEEKDAYS = {
     monday: 0,
@@ -28,7 +29,7 @@ class TenantWeekdaySchedule < ApplicationRecord
                       inclusion: { in: WEEKDAYS.values },
                       uniqueness: { scope: :tenant_id }
   validates :opens_at, :closes_at, presence: true, if: :enabled?
-  validate :closes_after_opens, if: :enabled?
+  validate :opens_and_closes_distinct, if: :enabled?
 
   scope :enabled, -> { where(enabled: true) }
   scope :ordered, -> { order(:weekday) }
@@ -37,12 +38,24 @@ class TenantWeekdaySchedule < ApplicationRecord
     WEEKDAY_LABELS_RU[weekday]
   end
 
+  # closes раньше opens → смена через полночь (закрытие на следующий календарный день).
+  def overnight?
+    return false if opens_at.blank? || closes_at.blank?
+
+    clock_seconds(closes_at) < clock_seconds(opens_at)
+  end
+
   private
 
-  def closes_after_opens
+  def opens_and_closes_distinct
     return if opens_at.blank? || closes_at.blank?
-    return if closes_at > opens_at
+    return if clock_seconds(opens_at) != clock_seconds(closes_at)
 
-    errors.add(:closes_at, "must be after opens_at")
+    errors.add(:closes_at, "must differ from opens_at")
+  end
+
+  def clock_seconds(value)
+    t = value.is_a?(String) ? Time.zone.parse(value) : value
+    t.hour * 3600 + t.min * 60 + t.sec
   end
 end

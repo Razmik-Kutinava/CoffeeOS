@@ -2,7 +2,7 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-04 (B1.11-BUG-OVERNIGHT docs canon)  
+**Дата:** 2026-07-05 (B1.11-BUG-OVERNIGHT fix + MCP)  
 **Предыдущее:** B1.12-BUG-SAVE MCP browser run · Fly v328  
 **Веха 1:** **закрыта** 2026-06-19 (CHECKLIST § I, H.3 заочно).  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
@@ -21,12 +21,20 @@
 | Сейчас | Дальше |
 |--------|--------|
 | **B1.12 rev2** | код R1–R3 `[x]` · **BUG-SAVE фикс `1081dac`** Fly v328 `[x]` · MCP browser PASS · sandbox CLIENT_ERROR | **A1:** заказчик CONFIRMED оплата (пауза до живой оплаты) |
-| **B1.11 режим работы** | код MVP `[x]` · Fly MCP PASS · **B1.11-BUG-OVERNIGHT** docs canon (ночная смена **в scope**, Q2 «не MVP» отменён) | **`go` на F1–F4** → deploy → A1 апрув |
+| **B1.11 режим работы** | код MVP `[x]` · **BUG-OVERNIGHT F1–F4 `[x]`** · MCP локально PASS · 36 tests | **A1:** deploy Fly + апрув заказчика |
 | **B1.13 навигация** | **S4 MCP browser PASS** · 12/12 checks ✅ | **апрув заказчика** |
 | **B1.14 адрес в шапке** | **B1.14-3d** index map `[x]` | deploy (`./bin/fly_deploy.sh`) · B1.14-4 cart |
 
 | **Sentry triage** | RUBY-9 fix `[x]` · Neon quota OK (оплачено) | Archive RUBY-Q…R в Sentry UI |
 | **Security hygiene** | permit! → explicit weekday permit `[x]` · rack/view_component bump `[x]` | **V2-SEC-08** bundler-audit CVE — обязательно (`PRACTICES.md`) |
+
+### Сессия 2026-07-05 (B1.11-BUG-OVERNIGHT fix + MCP)
+
+- **Код:** `TenantWeekdaySchedule` overnight · `TenantOperatingHours#open_now?` overnight · тесты.
+- **Тесты:** 36 runs, 121 assertions, 0 failures.
+- **MCP Chrome DevTools:** login УК → create точки пн 09:23–01:24 → «Точка создана» · tenant `b5830353-42d4-4321-a8c9-5e9efd2bb071`.
+- **Артефакты:** `b111_bug_overnight_mcp_2026-07-05.json` · 3 скрина.
+- **Стоп:** A1 deploy Fly + апрув заказчика.
 
 ### Сессия 2026-07-04 (B1.12-BUG-SAVE D1 — deploy)
 

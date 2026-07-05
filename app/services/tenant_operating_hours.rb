@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 # B1.11: открыта ли точка сейчас и когда следующее открытие (timezone точки).
+# Ночная смена (closes < opens): вечер текущего дня + утро следующего до closes.
 class TenantOperatingHours
   DEFAULT_TIMEZONE = "Europe/Moscow"
   LOOKAHEAD_DAYS = 7
@@ -24,14 +25,27 @@ class TenantOperatingHours
     return true unless tenant.sales_point?
     return true if enabled_schedules.empty?
 
+    today = local_now.to_date
+    now_t = time_on_date(today, local_now)
+
+    # Утро после ночной смены вчерашнего дня (например вт 00:30 при пн 09:23–01:24).
+    prev_row = enabled_schedules[weekday_for(today - 1)]
+    if prev_row&.overnight?
+      closes_t = time_on_date(today, prev_row.closes_at)
+      return true if now_t < closes_t
+    end
+
     row = enabled_schedules[local_weekday]
     return false unless row
 
-    now_t = time_on_date(local_now.to_date, local_now)
-    opens_t = time_on_date(local_now.to_date, row.opens_at)
-    closes_t = time_on_date(local_now.to_date, row.closes_at)
+    opens_t = time_on_date(today, row.opens_at)
 
-    now_t >= opens_t && now_t < closes_t
+    if row.overnight?
+      now_t >= opens_t
+    else
+      closes_t = time_on_date(today, row.closes_at)
+      now_t >= opens_t && now_t < closes_t
+    end
   end
 
   def next_open_at

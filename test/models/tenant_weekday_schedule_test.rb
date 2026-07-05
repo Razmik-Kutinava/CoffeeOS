@@ -46,17 +46,44 @@ class TenantWeekdayScheduleTest < ActiveSupport::TestCase
     assert_includes row.errors[:closes_at], "can't be blank"
   end
 
-  test "closes_at must be after opens_at on same day" do
+  test "overnight shift closes_at before opens_at is valid" do
+    row = TenantWeekdaySchedule.create!(
+      tenant: @tenant,
+      weekday: TenantWeekdaySchedule::WEEKDAYS[:monday],
+      enabled: true,
+      opens_at: "09:23",
+      closes_at: "01:24"
+    )
+
+    assert row.persisted?
+    assert row.overnight?
+  end
+
+  test "equal opens_at and closes_at is invalid" do
     row = TenantWeekdaySchedule.new(
       tenant: @tenant,
       weekday: TenantWeekdaySchedule::WEEKDAYS[:tuesday],
       enabled: true,
-      opens_at: "18:00",
-      closes_at: "09:00"
+      opens_at: "10:00",
+      closes_at: "10:00"
     )
 
     assert_not row.valid?
-    assert_includes row.errors[:closes_at], "must be after opens_at"
+    assert_includes row.errors[:closes_at], "must differ from opens_at"
+    assert_not row.overnight?
+  end
+
+  test "same-day shift is not overnight" do
+    row = TenantWeekdaySchedule.new(
+      tenant: @tenant,
+      weekday: TenantWeekdaySchedule::WEEKDAYS[:wednesday],
+      enabled: true,
+      opens_at: "09:00",
+      closes_at: "22:00"
+    )
+
+    assert row.valid?
+    assert_not row.overnight?
   end
 
   test "unique weekday per tenant" do
