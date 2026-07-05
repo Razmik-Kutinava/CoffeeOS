@@ -1,0 +1,17 @@
+{
+  "task_id": "B1.11",
+  "title": "Режим работы точек продаж + ночная смена (BUG-OVERNIGHT)",
+  "approved_at": "2026-07-05",
+  "source": "трекер заказчика «проверено» + апрув владельца",
+  "verdict": "APPROVED",
+  "scope_approved": [
+    "MVP режима работы: УК, витрина, табло",
+    "B1.11-BUG-OVERNIGHT: create точки пн 09:23–01:24 на Fly",
+    "Fly MCP post-deploy 2026-07-05"
+  ],
+  "tz_file": "docs/operations/milestones/veha_2/requirements/customer_tasks/B1_11_tenant_operating_hours.md",
+  "evidence": [
+    "docs/operations/milestones/veha_2/artifacts/demo-feedback/b111_operating_hours_post_deploy_2026-06-19.json",
+    "docs/operations/milestones/veha_2/artifacts/demo-feedback/b111_bug_overnight_fly_post_deploy_2026-07-05.json"
+  ]
+}

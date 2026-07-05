@@ -1,7 +1,7 @@
 # Задача: PWA витрины (CoffeeOS)
 
 **ID:** B1.4 · **Источник:** заказчик, ТЗ PWA e-commerce  
-**Статус:** этапы **0–5** **OPS_PASS** 2026-06-12 · заказчик `[ ]` (после апрува)
+**Статус:** этапы **0–5** **OPS_PASS** 2026-06-12 · **апрув заказчика `[x]` 2026-07-05** — [`b14_customer_approval_2026-07-05.json`](../../artifacts/demo-feedback/b14_customer_approval_2026-07-05.json)
 
 **Связано:** [B1.1](B1_1_order_status_progress.md) (WS + push в браузере) · [B1.7](B1_7_checkout_order_screen.md) (checkout) · [B2.1](B2_1_barista_order_board.md) (табло — не PWA)
 
@@ -221,7 +221,7 @@
 | Офлайн checkout sync | `[x]` | `[ ]` |
 | iOS корректность | `[x]` meta/audit | `[ ]` |
 
-**Приёмка заказчика:** после апрува · дата ______
+**Приёмка заказчика:** **`[x]` 2026-07-05** — [`b14_customer_approval_2026-07-05.json`](../../artifacts/demo-feedback/b14_customer_approval_2026-07-05.json)
 
 ### Артефакты
 

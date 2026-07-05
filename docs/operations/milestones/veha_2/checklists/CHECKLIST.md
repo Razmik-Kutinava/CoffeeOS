@@ -80,18 +80,18 @@
 - [x] **W1.5** Боевые оплаты — §2.3 PASS 2026-06-06
 - [x] **B1.1** Уведомления гостю — экран статуса + push FCM v1 — **PASS** 2026-06-10 ([`b11_acceptance_2026-06-10.json`](../artifacts/demo-feedback/b11_acceptance_2026-06-10.json); smoke + MCP Fly)
 - [x] **B1.1 ревизия UI (2026-06-12)** — апрув заказчика `[x]` 2026-06-18
-- [x] **B1.4** PWA витрины — **OPS_PASS** 2026-06-12 ([`B1_4`](../requirements/customer_tasks/B1_4_pwa_shop.md) · [`b14_pwa_acceptance_2026-06-12.json`](../artifacts/demo-feedback/b14_pwa_acceptance_2026-06-12.json)) · заказчик `[ ]`
+- [x] **B1.4** PWA витрины — **OPS_PASS** 2026-06-12 · **апрув заказчика `[x]` 2026-07-05** ([`B1_4`](../requirements/customer_tasks/B1_4_pwa_shop.md) · [`b14_customer_approval_2026-07-05.json`](../artifacts/demo-feedback/b14_customer_approval_2026-07-05.json))
 
 ## B2. Поток 2 — табло баристы
 
 См. [B2_1_barista_order_board.md](../requirements/customer_tasks/B2_1_barista_order_board.md).
 
 - [x] **B2.1** Табло бариста — MVP + ревизия 6 карточек + live без F5 — **закрыта** · апрув заказчика `[x]` 2026-06-18 · [`b21_customer_approval_2026-06-18.json`](../artifacts/demo-feedback/b21_customer_approval_2026-06-18.json)
-- [x] **B2-S1** Звук нового заказа на табло — **CLOSED OPS** 2026-06-17 · MCP 9/9 · latency 27ms · [`b21_s1_sound_post_deploy_2026-06-17.json`](../artifacts/demo-feedback/b21_s1_sound_post_deploy_2026-06-17.json)
+- [x] **B2-S1** Звук нового заказа на табло — **CLOSED** · MCP 9/9 · **апрув `[x]` 2026-07-05** · [`b21_s1_customer_approval_2026-07-05.json`](../artifacts/demo-feedback/b21_s1_customer_approval_2026-07-05.json)
 - [ ] **B2.2** Объединить «Меню» + «Создать», стоп-лист с карточки, POS Сбер — ТЗ [`B2_2`](../requirements/customer_tasks/B2_2_barista_menu_create_merge.md) · stage0 `[x]` → **этап 1**
-- [ ] **B1.11** Режим работы точки (УК → витрина → табло) — код MVP `[x]` · Fly MCP PASS · **B1.11-BUG-OVERNIGHT** open (ночная смена, docs готовы, код ждёт `go`) · апрув эпика `[ ]` · [`B1_11`](../requirements/customer_tasks/B1_11_tenant_operating_hours.md)
-- [x] **B1.13** Новая навигация витрины — **rev2 полностью** `[x]` (S1-R1 + S2a/S2b/S3-rev2, апрув 2026-07-01) · **S4** `[ ]` · [`B1_13`](../requirements/customer_tasks/B1_13_shop_nav_profile_header.md)
-- [ ] **B1.14** Адрес точки + выбор точки в шапке витрины — **B1.14-2 API** `[x]` 2026-06-23 · Header `[ ]` · [`B1_14`](../requirements/customer_tasks/B1_14_shop_tenant_address_header.md)
+- [x] **B1.11** Режим работы точки (УК → витрина → табло) — **ЗАКРЫТА** · overnight fix · **апрув `[x]` 2026-07-05** · [`B1_11`](../requirements/customer_tasks/B1_11_tenant_operating_hours.md)
+- [x] **B1.13** Новая навигация витрины — **rev2** `[x]` (апрув 2026-07-01) · **S1 апрув `[x]` 2026-07-05** · **S4** `[ ]` · [`B1_13`](../requirements/customer_tasks/B1_13_shop_nav_profile_header.md)
+- [x] **B1.14** Адрес точки + выбор точки в шапке — **клиент `[x]`** · **апрув `[x]` 2026-07-05** · **B1.14-4 Cart** `[ ]` · [`B1_14`](../requirements/customer_tasks/B1_14_shop_tenant_address_header.md)
 
 ---
 
@@ -157,8 +157,7 @@
 
 ## E. Полировка по демо (блокер §I)
 
-См. [`DEMO_FEEDBACK.md`](DEMO_FEEDBACK.md) — **BR-7 done** (deploy 2026-06-17). B2-S1 **done**. BR-6 **done**.  
-**Активная работа заказчика:** B2-S1 апрув `[ ]` · B1.4 апрув `[ ]`.
+См. [`DEMO_FEEDBACK.md`](DEMO_FEEDBACK.md) — **BR-7 done** (deploy 2026-06-17). B2-S1 **done** · B1.4 **done** · B1.11 **done** 2026-07-05.
 
 - [x] **B1.7** — доработка checkout — апрув заказчика `[x]` 2026-06-04
 - [x] **B2-S1** — звук нового заказа на `/barista` — MCP 9/9 → `done`

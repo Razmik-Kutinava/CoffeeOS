@@ -1,7 +1,7 @@
 # Задача: Адрес точки продаж и выбор точки в шапке витрины
 
 **ID:** B1.14 · **Источник:** заказчик, чат 2026-06 (задача 2 — клиентская часть CoffeeOS)  
-**Статус:** **B1.14-3d UK index map** `[x]` 2026-06-23 · **B1.14-4 Cart** `[ ]`
+**Статус:** **клиентская часть ЗАКРЫТА** · Header/API/УК `[x]` · **апрув `[x]` 2026-07-05** · **B1.14-4 Cart** `[ ]`
 
 **Связано:** [B1.11](B1_11_tenant_operating_hours.md) (`schedule_display` под адресом) · [B1.13](B1_13_shop_nav_profile_header.md) (шапка: «Профиль › ID» справа) · [B1.4](B1_4_pwa_shop.md) (PWA) · онбординг УК (`tenants.city`, `tenants.address`)
 
@@ -83,7 +83,7 @@
 [x] 3d — УК: карта всех точек на списке /admin/tenants (2026-06-23)
 [ ] 4 — Cart per-tenant + TTL 24ч → **`go`**
 [ ] 5 — demo:seed city/address · тесты + регрессия shop
-[ ] 6 — Fly MCP + апрув заказчика
+[x] 6 — Fly MCP + апрув заказчика **`[x]`** 2026-07-05 — [`b114_customer_approval_2026-07-05.json`](../../artifacts/demo-feedback/b114_customer_approval_2026-07-05.json)
 ```
 
 ## Чеклист подготовки (gate docs)
@@ -94,7 +94,7 @@
 - [x] CBR · README · CHECKLIST · HANDOFF · SESSION_STATE · CHANGELOG
 - [x] Ответы владельца Q1–Q10 — 2026-06-23
 - [x] Скрины «до» — заказчик #1 (витрина) + #2–#3 (УК) → [`README_b114_baseline_2026-06-23.md`](../../artifacts/demo-feedback/screenshots/README_b114_baseline_2026-06-23.md)
-- [ ] **Апрув заказчика** → **`go`** на код
+- [x] **Апрув заказчика** (клиентская часть) **`[x]`** 2026-07-05
 
 ---
 

@@ -8,7 +8,7 @@
 |--------|--------|
 | **MVP B2.1 (2026-06)** | `[x]` OPS_PASS этапы 0–5 |
 | **Ревизия 2026-06-12** | R0–R4 ops `[x]` · MCP path `[x]` · сверка JSON `[x]` · заказчик `[x]` 2026-06-18 |
-| **B2-S1 звук** | **CLOSED OPS** 2026-06-17 · MCP 9/9 · deploy `[x]` · апрув `[ ]` · см. [§ B2-S1](#задача-b2-s1--звуковое-оповещение-о-новом-заказе-closed-ops-2026-06-17) |
+| **B2-S1 звук** | **CLOSED** · MCP 9/9 · deploy `[x]` · **апрув `[x]` 2026-07-05** — [`b21_s1_customer_approval_2026-07-05.json`](../../artifacts/demo-feedback/b21_s1_customer_approval_2026-07-05.json) |
 | **Внутренняя приёмка** | `[x]` 2026-06-13 · OPS CLOSED |
 | **Приёмка заказчика** | **`[x]` 2026-06-18** · [`b21_customer_approval_2026-06-18.json`](../../artifacts/demo-feedback/b21_customer_approval_2026-06-18.json) |
 | **Прогон** | `FLY_BIN=flyctl ruby bin/b21_acceptance_fly.rb` → `b21_acceptance_2026-06-11.json` |
@@ -638,6 +638,6 @@
 - [x] **MCP post-deploy** — 9/9 PASS · latency **27 ms** · [`b21_s1_sound_post_deploy_2026-06-17.json`](../../artifacts/demo-feedback/b21_s1_sound_post_deploy_2026-06-17.json)
 - [x] **Скрины** — `01_board_unlocked` · `02_new_order_sound` · `03_blocked_banner`
 - [x] **Закрыть** DEMO_FEEDBACK → `done`
-- [ ] **Апрув заказчика** `[ ]`
+- [x] **Апрув заказчика** `[x]` 2026-07-05 — [`b21_s1_customer_approval_2026-07-05.json`](../../artifacts/demo-feedback/b21_s1_customer_approval_2026-07-05.json)
 
 **Связано:** B2.1 этап R2 (live) · [CUSTOMER_BUSINESS_REQUIREMENTS.md](../CUSTOMER_BUSINESS_REQUIREMENTS.md) блок 2.

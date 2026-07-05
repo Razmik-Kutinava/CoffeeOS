@@ -1,0 +1,19 @@
+{
+  "task_id": "B1.13-S1",
+  "title": "Профиль в шапке вместо «Витрина»",
+  "approved_at": "2026-07-05",
+  "source": "трекер заказчика «проверено» + апрув владельца",
+  "verdict": "APPROVED",
+  "scope_approved": [
+    "Header: «Профиль › ID» вместо «Витрина»",
+    "BottomNav: убрана вкладка «Профиль»",
+    "Fly MCP 5/5 post-deploy 2026-06-23"
+  ],
+  "open_scope": [
+    "B1.13-S4 код"
+  ],
+  "tz_file": "docs/operations/milestones/veha_2/requirements/customer_tasks/B1_13_shop_nav_profile_header.md",
+  "evidence": [
+    "docs/operations/milestones/veha_2/artifacts/demo-feedback/b113_s1_post_deploy_2026-06-23.json"
+  ]
+}

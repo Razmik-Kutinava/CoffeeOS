@@ -1,0 +1,17 @@
+{
+  "task_id": "B1.4",
+  "title": "PWA витрины (install + offline)",
+  "approved_at": "2026-07-05",
+  "source": "трекер заказчика «проверено» + апрув владельца",
+  "verdict": "APPROVED",
+  "scope_approved": [
+    "manifest.webmanifest + service-worker",
+    "install prompt / standalone",
+    "offline shell + публичный каталог",
+    "OPS_PASS 2026-06-12"
+  ],
+  "tz_file": "docs/operations/milestones/veha_2/requirements/customer_tasks/B1_4_pwa_shop.md",
+  "evidence": [
+    "docs/operations/milestones/veha_2/artifacts/demo-feedback/b14_pwa_acceptance_2026-06-12.json"
+  ]
+}

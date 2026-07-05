@@ -21,12 +21,19 @@
 | Сейчас | Дальше |
 |--------|--------|
 | **B1.12 rev2** | код R1–R3 `[x]` · **BUG-SAVE фикс `1081dac`** Fly v328 `[x]` · MCP browser PASS · sandbox CLIENT_ERROR | **A1:** заказчик CONFIRMED оплата (пауза до живой оплаты) |
-| **B1.11 режим работы** | **BUG-OVERNIGHT Fly MCP PASS** · F1–F4 `[x]` · deploy `[x]` | **апрув заказчика** «ок» → close ISSUES |
+| **B1.11 режим работы** | **ЗАКРЫТА** · апрув 2026-07-05 | **B1.12** A1 · **B1.13 S4** · **B1.14-4** |
 | **B1.13 навигация** | **S4 MCP browser PASS** · 12/12 checks ✅ | **апрув заказчика** |
 | **B1.14 адрес в шапке** | **B1.14-3d** index map `[x]` | deploy (`./bin/fly_deploy.sh`) · B1.14-4 cart |
 
 | **Sentry triage** | RUBY-9 fix `[x]` · Neon quota OK (оплачено) | Archive RUBY-Q…R в Sentry UI |
 | **Security hygiene** | permit! → explicit weekday permit `[x]` · rack/view_component bump `[x]` | **V2-SEC-08** bundler-audit CVE — обязательно (`PRACTICES.md`) |
+
+### Сессия 2026-07-05 (batch апрув — задачи со скринов трекера)
+
+- **Апрув:** B1.4 PWA · B2-S1 звук · B1.11 эпик+overnight · B1.14 client · B1.13-S1.
+- **ISSUES:** B1.11-BUG-OVERNIGHT → resolved.
+- **Артефакт:** `customer_verified_batch_2026-07-05.json` + 5 approval JSON.
+- **Не закрывали:** B1.12 (BUG-SAVE/A1) · B1.13-S4 · B1.14-4.
 
 ### Сессия 2026-07-05 (B1.11-BUG-OVERNIGHT Fly MCP post-deploy)
 

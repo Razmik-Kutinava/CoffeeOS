@@ -1,8 +1,17 @@
 ﻿# HANDOFF вЂ” Р’РµС…Р° 2 (Р’РµС…Р° 1 **Р·Р°РєСЂС‹С‚Р°** 2026-06-19)
 
-**Дата:** 2026-07-05 (B1.11-BUG-OVERNIGHT fix + MCP)  
+**Дата:** 2026-07-05 (batch апрув задач трекера)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev
+
+### Batch апрув 2026-07-05 (задачи «проверено»)
+
+| Что | Статус |
+|-----|--------|
+| B1.4 PWA · B2-S1 · B1.11 · B1.14-client · B1.13-S1 | **апрув `[x]`** |
+| ISSUES B1.11-BUG-OVERNIGHT | **resolved** |
+| Артефакт | `customer_verified_batch_2026-07-05.json` |
+| **Открыто** | B1.12 A1 · B1.13-S4 · B1.14-4 |
 
 ### B1.11 — BUG-OVERNIGHT Fly MCP (2026-07-05)
 
@@ -11,7 +20,7 @@
 | Deploy | **`[x]`** (заказчик) |
 | Fly MCP | **PASS** — create пн 09:23–01:24 · tenant `af4f78d6-c66b-428e-8ee4-5a609c5c9131` |
 | Артефакты | `b111_bug_overnight_fly_post_deploy_2026-07-05.json` · 3 скрина Fly |
-| **Следующий шаг** | **апрув заказчика** «ок» → close ISSUES |
+| **Следующий шаг** | ~~апрув~~ **`[x]` 2026-07-05** · ISSUES closed |
 
 ### B1.11 — BUG-OVERNIGHT fix (2026-07-05)
 

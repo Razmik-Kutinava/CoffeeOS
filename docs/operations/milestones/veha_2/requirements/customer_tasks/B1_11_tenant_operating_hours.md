@@ -1,7 +1,7 @@
 # Задача: Режим работы точек продаж (УК → витрина → табло)
 
 **ID:** B1.11 · **Источник:** заказчик, чат 2026-06  
-**Статус:** код MVP `[x]` · Fly MCP PASS · **открыт баг B1.11-BUG-OVERNIGHT** (ночная смена) · апрув эпика `[ ]`
+**Статус:** **ЗАКРЫТА** · код MVP + overnight `[x]` · Fly MCP PASS · **апрув эпика `[x]` 2026-07-05**
 
 **Связано:** [B1.7](B1_7_checkout_order_screen.md) (checkout / «Оплатить») · [B2.1](B2_1_barista_order_board.md) (табло бариста) · блок 2A УК (`platform/tenants`)
 
@@ -16,7 +16,7 @@
 | Тема | Канон 2026-07-04 |
 |------|------------------|
 | **Статус кода** | MVP режима работы **сделан** (миграция, УК, `TenantOperatingHours`, витрина, табло). Не «готовность к коду». |
-| **Апрув эпика** | `[ ]` — ждём заказчика; **блокер приёмки:** B1.11-BUG-OVERNIGHT |
+| **Апрув эпика** | **`[x]` 2026-07-05** — [`b111_customer_approval_2026-07-05.json`](../../artifacts/demo-feedback/b111_customer_approval_2026-07-05.json) |
 | **Ночная смена** (`closes_at` ≤ `opens_at`, напр. 09:23–01:24) | **В scope** — заказчик 2026-07-04. Старый Q2 «полночь не MVP» — **архив**, не применять. |
 | **Праздники / исключения по датам** | По-прежнему **не MVP** (Q3) |
 | **Чекбокс «Работает»** | День сохраняется только если `enabled: true`. Без галочки время в sync обнуляется. Ошибка `must be after opens_at` бывает **только при включённом дне**. |
@@ -67,8 +67,8 @@
 [x] 4 — shop API + баннер + checkout (2026-06-19)
 [x] 5 — табло + POS + logout hook (2026-06-19)
 [x] 6 — integration 28/28 + артефакт · Fly MCP после deploy
-[ ] 7a — **B1.11-BUG-OVERNIGHT** — ночная смена (docs 2026-07-04 · код ждёт `go`)
-[ ] 7 — апрув заказчика (эпик + overnight)
+[x] 7a — **B1.11-BUG-OVERNIGHT** — ночная смена **`[x]`** 2026-07-05
+[x] 7 — апрув заказчика (эпик + overnight) **`[x]`** 2026-07-05
 ```
 
 ---
@@ -121,8 +121,8 @@
 - [x] **F2** — `TenantOperatingHours`: `open_now?` и `next_open_at` для overnight (если `closes <= opens` → закрытие на **следующий** календарный день; после полуночи до `closes` — ещё открыто по вчерашнему дню)
 - [x] **F3** — тесты: model overnight save · `TenantOperatingHours` overnight · integration create/update tenant УК с пн 09:23–01:24
 - [x] **F4** — регрессия: обычный день 09:00–22:00 · disabled день · «хотя бы один день» · shop `is_open` / баннер — **36 runs, 0 failures**
-- [x] **A1 deploy** — Fly MCP PASS [`b111_bug_overnight_fly_post_deploy_2026-07-05.json`](../artifacts/demo-feedback/b111_bug_overnight_fly_post_deploy_2026-07-05.json) · локально [`b111_bug_overnight_mcp_2026-07-05.json`](../artifacts/demo-feedback/b111_bug_overnight_mcp_2026-07-05.json)
-- [ ] **A1 апрув заказчика** — «ок» на create точки с ночной сменой на Fly · закрыть ISSUES
+- [x] **A1 deploy** — Fly MCP PASS [`b111_bug_overnight_fly_post_deploy_2026-07-05.json`](../artifacts/demo-feedback/b111_bug_overnight_fly_post_deploy_2026-07-05.json)
+- [x] **A1 апрув заказчика** — [`b111_customer_approval_2026-07-05.json`](../artifacts/demo-feedback/b111_customer_approval_2026-07-05.json)
 
 **Файлы (ориентир):**
 
@@ -346,4 +346,4 @@
 
 ---
 
-**Статус:** код MVP + Fly MCP PASS (шапка A/B) 2026-06-21 · **открыт B1.11-BUG-OVERNIGHT** (docs готовы · код ждёт `go`) · апрув эпика `[ ]`.
+**Статус:** код MVP + overnight **ЗАКРЫТО** · Fly MCP PASS · **апрув эпика `[x]` 2026-07-05**.

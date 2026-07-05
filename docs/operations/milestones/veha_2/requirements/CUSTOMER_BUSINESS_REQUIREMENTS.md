@@ -83,7 +83,7 @@
 | B1.1 | **Уведомления гостю** — экран статуса + прогресс-бар | [ТЗ](customer_tasks/B1_1_order_status_progress.md) · PDF §1.7 | **`[x]`** 2026-06-10 · FCM v1 на Fly · smoke `push_register` PASS |
 | B1.2 | **Юр.** — оферта, согласия на витрине | Регистрация / оплата | средний |
 | B1.3 | **Чек / ОФД на почту** | После оплаты | средний |
-| B1.4 | **PWA витрины** | [ТЗ](customer_tasks/B1_4_pwa_shop.md) · manifest + SW + offline; app/kiosk отдельно | **в работе** ТЗ 2026-06-11 |
+| B1.4 | **PWA витрины** | [ТЗ](customer_tasks/B1_4_pwa_shop.md) · manifest + SW + offline; app/kiosk отдельно | **`[x]`** апрув 2026-07-05 |
 | B1.5 | **ТТК + туториал УК** | Блок 1.1 | низкий |
 | B1.6 | **Стоп-лист UI barista** — серый блок «в стопе» | W1.4 backlog; сейчас sold_out скрыт | низкий |
 | B1.7 | **Email verify** — checkout · **ЗАКРЫТА** | [ТЗ](customer_tasks/B1_7_checkout_order_screen.md) | **`[x]`** внутр. · Fly MCP `[x]` · заказчик `[x]` 2026-06-04 |
@@ -91,9 +91,9 @@
 | B1.9 | **Карточка товара** — toggle модификаторов, без обязательности | [ТЗ](customer_tasks/B1_9_product_modifier_toggle.md) | **`[x]`** апрув 2026-06-18 |
 | B1.9-CC2 | **Карточка товара** — восстановить выбор модификаторов после возврата из корзины | B1.9 CC-2 · backlog | низкий |
 | B1.12 | **Рекуррент Т-Банк** — nonPCI, 1 клик, FSM (R1–R3 **rev2**) | [ТЗ](customer_tasks/B1_12_recurrent_payments.md) | код R1–R3 **`[x]`** · Q-R2 **`[x]`** · MCP 10/10 · **приёмка: карта не сохраняется** · апрув `[ ]` |
-| B1.11 | **Режим работы точки** — УК, витрина, табло | [ТЗ](customer_tasks/B1_11_tenant_operating_hours.md) | код MVP `[x]` · **B1.11-BUG-OVERNIGHT** open (ночная смена) · апрув `[ ]` |
+| B1.11 | **Режим работы точки** — УК, витрина, табло | [ТЗ](customer_tasks/B1_11_tenant_operating_hours.md) | **`[x]`** апрув 2026-07-05 |
 | B1.13 | **Новая навигация витрины** — эпик S1–S4 (шапка, поп-ап корзины, bottom bar) | [ТЗ](customer_tasks/B1_13_shop_nav_profile_header.md) | **rev2** `[x]` апрув 2026-07-01 · **S4-канон** docs `[x]` · **S4 код** `[ ]` |
-| B1.14 | **Адрес точки + выбор точки** в шапке витрины (заказчик «задача 2») | [ТЗ](customer_tasks/B1_14_shop_tenant_address_header.md) | **B1.14-2 API** `[x]` 2026-06-23 · Header `[ ]` |
+| B1.14 | **Адрес точки + выбор точки** в шапке витрины (заказчик «задача 2») | [ТЗ](customer_tasks/B1_14_shop_tenant_address_header.md) | **клиент `[x]`** · апрув 2026-07-05 · **B1.14-4** `[ ]` |
 | B1.8 | **Свой домен → своя почта для рассылки** | После домена (не `fly.dev`): `noreply@…` / `orders@…`, DNS в Brevo (SPF/DKIM/DMARC), сменить `MAIL_FROM` на Fly | **напоминание** |
 
 > **B1.8 (не забыть):** сейчас письма с **подтверждённого личного sender** в Brevo. Когда будет **свой домен** — завести **кофейную почту** (напр. `noreply@бренд.ru`), аутентифицировать домен в Brevo, обновить `MAIL_FROM` + secrets. Код OTP/ActionMailer менять не нужно.
@@ -110,15 +110,15 @@
 | 2 | **B1.1** | Экран уведомления заказа + прогресс-бар | **`[x]`** 2026-06-10 · Fly + FCM | [B1_1_order_status_progress.md](customer_tasks/B1_1_order_status_progress.md) |
 | 3 | **B2.1** | Табло бариста — интерактивная карточка | **закрыта** · апрув `[x]` 2026-06-18 · B2-S1 CLOSED OPS | [B2_1_barista_order_board.md](customer_tasks/B2_1_barista_order_board.md) |
 | 4 | **B2.2** | Меню + Создать (бариста) | **ТЗ** · реализация `[ ]` | [B2_2_barista_menu_create_merge.md](customer_tasks/B2_2_barista_menu_create_merge.md) |
-| 5 | **B1.4** | PWA витрины (install + offline) | **ТЗ** 2026-06-11 · реализация `[ ]` | [B1_4_pwa_shop.md](customer_tasks/B1_4_pwa_shop.md) |
+| 5 | **B1.4** | PWA витрины (install + offline) | **закрыта** · апрув `[x]` 2026-07-05 | [B1_4_pwa_shop.md](customer_tasks/B1_4_pwa_shop.md) |
 | 6 | **B1.10** | Убрать «Блог» из навигации витрины | **закрыта** · апрув `[x]` 2026-06-18 | [B1_10_remove_blog_nav.md](customer_tasks/B1_10_remove_blog_nav.md) |
 | 7 | **B1.9** | Toggle-модификаторы на карточке товара | **закрыта** · апрув `[x]` 2026-06-18 | [B1_9_product_modifier_toggle.md](customer_tasks/B1_9_product_modifier_toggle.md) |
-| 8 | **B1.11** | Режим работы точек продаж (УК) | код MVP `[x]` · **BUG-OVERNIGHT** open · апрув `[ ]` | [B1_11_tenant_operating_hours.md](customer_tasks/B1_11_tenant_operating_hours.md) |
+| 8 | **B1.11** | Режим работы точек продаж (УК) | **закрыта** · апрув `[x]` 2026-07-05 | [B1_11_tenant_operating_hours.md](customer_tasks/B1_11_tenant_operating_hours.md) |
 | 9 | **B1.12** | Рекуррент + оплата в 1 клик (витрина, **rev2 nonPCI**) | код R1–R3 **`[x]`** · Q-R2 **`[x]`** · **приёмка: карта не сохраняется** · апрув `[ ]` | [B1_12_recurrent_payments.md](customer_tasks/B1_12_recurrent_payments.md) |
 | 10 | **B1.13** | Новая навигация витрины — S1–S4 (шапка + поп-ап корзины) | **rev2** `[x]` апрув 2026-07-01 · **S4-канон** docs `[x]` · **S4 код** `[ ]` | [B1_13_shop_nav_profile_header.md](customer_tasks/B1_13_shop_nav_profile_header.md) |
-| 11 | **B1.14** | Адрес точки + выбор точки в шапке витрины | **B1.14-2 API** `[x]` 2026-06-23 · Header `[ ]` | [B1_14_shop_tenant_address_header.md](customer_tasks/B1_14_shop_tenant_address_header.md) |
+| 11 | **B1.14** | Адрес точки + выбор точки в шапке витрины | **клиент закрыт** · апрув 2026-07-05 · Cart `[ ]` | [B1_14_shop_tenant_address_header.md](customer_tasks/B1_14_shop_tenant_address_header.md) |
 
-**Следующий фокус по задачам заказчика:** **B1.11-BUG-OVERNIGHT** (docs готовы · код после `go`) · **B1.12** A1 живая оплата · **B1.13/B1.14** · **B2.2** · **B1.4**.
+**Следующий фокус по задачам заказчика:** **B1.12** A1 живая оплата · **B1.13 S4** · **B1.14-4** · **B2.2** · **B1.4** iOS backlog.
 
 ---
 

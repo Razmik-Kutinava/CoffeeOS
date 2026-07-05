@@ -1,0 +1,16 @@
+{
+  "task_id": "B2-S1",
+  "title": "Звуковое оповещение о новом заказе на табло бариста",
+  "approved_at": "2026-07-05",
+  "source": "трекер заказчика «проверено» + апрув владельца",
+  "verdict": "APPROVED",
+  "scope_approved": [
+    "Звук при новом заказе через WebSocket",
+    "AudioContext unlock + баннер при блокировке autoplay",
+    "MCP 9/9 post-deploy 2026-06-17"
+  ],
+  "tz_file": "docs/operations/milestones/veha_2/requirements/customer_tasks/B2_1_barista_order_board.md",
+  "evidence": [
+    "docs/operations/milestones/veha_2/artifacts/demo-feedback/b21_s1_sound_post_deploy_2026-06-17.json"
+  ]
+}

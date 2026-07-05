@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2026-07-05 — ops: batch апрув задач трекера «проверено»
+
+- **Закрыто апрувом:** B1.4 PWA · B2-S1 звук · B1.11 (+ overnight) · B1.14 client · B1.13-S1.
+- **ISSUES:** B1.11-BUG-OVERNIGHT → resolved.
+- **Артефакты:** `customer_verified_batch_2026-07-05.json` + 5 `*_customer_approval_2026-07-05.json`.
+- **Не трогали:** B1.12 · B1.13-S4 · B1.14-4.
+
 ## 2026-07-05 — ops(b1.11): Fly post-deploy MCP — overnight shift PASS
 
 - **Fly MCP Chrome DevTools:** `coffeeos.fly.dev` · login УК → create пн 09:23–01:24 → «Точка создана».
