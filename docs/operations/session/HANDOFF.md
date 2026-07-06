@@ -1,8 +1,34 @@
-﻿# HANDOFF вЂ” Р’РµС…Р° 2 (Р’РµС…Р° 1 **Р·Р°РєСЂС‹С‚Р°** 2026-06-19)
+﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-05 (batch апрув задач трекера)  
-**Ветка:** `develop`  
+**Дата:** 2026-07-06 (B1.13-CR-BOTTOM-NAV docs)  
+**Ветка:** `develop` (pushed `221447c`)  
 **Прод:** https://coffeeos.fly.dev
+
+### B1.13-CR-BOTTOM-NAV — нижний бар без «Каталог»/«Избранное» (docs only)
+
+| Что | Статус |
+|-----|--------|
+| ТЗ / конфликт канона | **`[x]`** § [B1_13](../milestones/veha_2/requirements/customer_tasks/B1_13_shop_nav_profile_header.md#багрепорт--change-request-b113-cr-bottom-nav-2026-07-06) |
+| JSON | **`[x]`** `b113_cr_bottom_nav_customer_2026-07-06.json` |
+| DEMO_FEEDBACK | **`[x]`** open · scope_change |
+| Код | **`[ ]`** ждём ответы заказчика + **`go`** + смена канона |
+
+### B1.15 — checkout payment bottom sheet (этап 0 docs + PNG)
+
+| Что | Статус |
+|-----|--------|
+| ТЗ | [`B1_15_checkout_payment_bottom_sheet.md`](../milestones/veha_2/requirements/customer_tasks/B1_15_checkout_payment_bottom_sheet.md) |
+| Детальный разбор S01–S07 + user flow | **`[x]`** |
+| PNG 7 шт. | **`[x]`** `screenshots/b115_mock_s*.png` |
+| **Следующий шаг** | deploy A2 · MCP re-check · апрув B1.15 |
+| Код A1 | **`[x]`** Fly MCP PASS · 7 скринов · JSON артефакт |
+| Код F1 | **`[x]`** peek shell |
+| Код F2 | **`[x]`** expanded + tap/swipe переходы |
+| Код F3 | **`[x]`** expanded+ payment-list |
+| Код F4 | **`[x]`** expanded+ card-form inline |
+| Код F5 | **`[x]`** expanded+ 3DS iframe |
+| Код F6 | **`[x]`** Checkout integration без модалок |
+| Тесты T* | **`[x]`** `b115_f1…f6` + umbrella suite · shop 295 PASS |
 
 ### Batch апрув 2026-07-05 (задачи «проверено»)
 

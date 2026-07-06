@@ -1,0 +1,31 @@
+{
+  "id": "B1.13-CR-BOTTOM-NAV",
+  "task_id": "B1.13",
+  "date": "2026-07-06",
+  "priority": "tbd",
+  "status": "open",
+  "type": "scope_change",
+  "title": "Убрать из нижнего бара кнопки Каталог и Избранное",
+  "customer_text": {
+    "name": "Баг-репорт: убрать в нижнем баре отображаются кнопки «Каталог» и «Избранное»",
+    "repro": [
+      "Открыть мобильное приложение",
+      "Перейти на любой экран приложения",
+      "Обратить внимание на нижний бар (навигационную панель)"
+    ],
+    "actual": "В нижнем баре отображаются две кнопки: «Каталог» (слева), «Избранное» (справа)",
+    "expected": "Нижний бар не должен содержать кнопки «Каталог» и «Избранное»",
+    "requirement_link": null,
+    "screenshot": "приложен заказчиком (чат 2026-07-06)"
+  },
+  "canon_conflict": {
+    "canon": "Bottom bar = ровно 2 вкладки: Каталог + Избранное (S1-R1 апрув 2026-07-01)",
+    "q_rev1": "закрыто в пользу 2 вкладок",
+    "code": "BottomNav.svelte — 2 кнопки; соответствует канону",
+    "verdict": "не баг кода — change request или уточнение формулировки"
+  },
+  "hypotheses": ["H1: убрать весь бар", "H2: бар только на части экранов", "H3: старый билд", "H4: rev3 макет"],
+  "fix_checklist": ["D1 answers", "F1 BottomNav/App", "F2 favorites entry", "F3 tests", "F4 regression", "A1 approve"],
+  "canon_doc": "requirements/customer_tasks/B1_13_shop_nav_profile_header.md#багрепорт--change-request-b113-cr-bottom-nav-2026-07-06",
+  "issues": null
+}
