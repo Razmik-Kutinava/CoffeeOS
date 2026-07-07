@@ -1,7 +1,7 @@
 # Эпик B1.13 — Новая навигация витрины
 
 **ID эпика:** B1.13 · **Источник:** заказчик, чат 2026-06  
-**Статус эпика:** **rev1 код** S1–S3 `[x]` · **rev2** `[x]` · **S4** `[ ]` · **CR-BOTTOM-NAV** O1–O3 **`[x]`** · **docs gate closed** · код ждёт **`go`** владельца
+**Статус эпика:** **rev1** `[x]` · **rev2** `[x]` · **S4** `[ ]` · **CR-BOTTOM-NAV** код **`[x]`** · A1 **`[ ]`**
 
 **Связано:** [B1.10](B1_10_remove_blog_nav.md) (шапка) · [B1.11](B1_11_tenant_operating_hours.md) (`schedule_display`) · [B1.4](B1_4_pwa_shop.md) (PWA / mobile) · [B1.7](B1_7_checkout_order_screen.md) (checkout) · **CR:** § [B1.13-CR-BOTTOM-NAV](#багрепорт--change-request-b113-cr-bottom-nav-2026-07-06) **стр. ~69**
 
@@ -20,7 +20,7 @@
 | S4 (отдельный шаг, не этот CR) | § **S4-канон** и ниже | **~1091–1260** |
 | S1-R1 (история: убрали Корзину) | § S1-R1 | **~420–490** |
 
-**Код (не в этом md):** `app/frontend/components/BottomNav.svelte` · `app/frontend/App.svelte` · `app/frontend/routes/Favorites.svelte`
+**Код (rev3):** `app/frontend/App.svelte` · `app/frontend/routes/Profile.svelte` · ♥ API без изменений
 
 **Стенд для приёмки:** `https://coffeeos.fly.dev/shop?tenant_id=655aaccb-004a-4bb9-a50a-ce618854dda3` · viewport 320–428 px
 
@@ -91,7 +91,7 @@
 ## Баг-репорт / Change Request: B1.13-CR-BOTTOM-NAV (2026-07-06)
 
 **ID:** B1.13-CR-BOTTOM-NAV · **Приоритет:** высокий (смена канона навигации)  
-**Статус:** **gate_closed** — O1–O3 **`[x]`** · scope O2 **`[x]`** · код ждёт **`go`** владельца (без апрува не начинаем)  
+**Статус:** **code_done** — F1–F4 **`[x]`** · ждёт deploy + **A1** апрув  
 **Артефакты:** [`b113_cr_bottom_nav_customer_2026-07-06.json`](../../artifacts/demo-feedback/b113_cr_bottom_nav_customer_2026-07-06.json) · [`b113_cr_bottom_nav_answers_2026-07-07.json`](../../artifacts/demo-feedback/b113_cr_bottom_nav_answers_2026-07-07.json)  
 **DEMO_FEEDBACK:** [`DEMO_FEEDBACK.md`](../DEMO_FEEDBACK.md)  
 **Тип:** **change request** (не баг кода — заказчик: «надо убрать», Fly + PWA)
@@ -185,10 +185,9 @@
 
 | Зона | Сейчас | Файл |
 |------|--------|------|
-| Нижний бар | Каталог · Избранное | `app/frontend/components/BottomNav.svelte` |
-| Рендер бара | На всех экранах, кроме checkout/payment-result | `app/frontend/App.svelte` (`hideBottomNav`) |
-| Профиль | Только в шапке «Профиль › ID» | `app/frontend/components/Header.svelte` |
-| Избранное (экран) | `#/favorites` → **удалить** (O3) | `app/frontend/routes/Favorites.svelte` · роут в `App.svelte` |
+| Нижний бар | **удалён** | `BottomNav.svelte` удалён · `App.svelte` без импорта |
+| Рендер бара | — | `App.svelte` |
+| Избранное (экран) | **удалён** | `Favorites.svelte` удалён · роут убран |
 | Корзина | Поп-ап на каталоге (S2a–S3) | `CartSheet.svelte` · не вкладка в баре |
 | Checkout | Бар скрыт | `App.svelte` комментарий B1.15 UX |
 
@@ -206,10 +205,10 @@
 - [x] **D1** — ответы заказчика 1–7 зафиксированы 2026-07-07
 - [x] **D2a** — O1 **`[x]`** · O3 **`[x]`** 2026-07-07
 - [x] **D2b** — O2 **`[x]`** 2026-07-07 · § **КАНОН rev3** + **Scope шага**
-- [ ] **F1** — убрать `BottomNav` из `App.svelte` (не рендерить)
-- [ ] **F2** — удалить `#/favorites` (роут `App.svelte`, `Favorites.svelte`, ссылка в `Profile.svelte`)
-- [ ] **F3** — тесты: `test/integration/shop/b113_s1_*` · `b113_s2_*` · обновить ожидания bottom nav
-- [ ] **F4** — регрессия `bin/rails test test/integration/shop/` · Fly MCP · скрин
+- [x] **F1** — убрать `BottomNav` из `App.svelte` (не рендерить)
+- [x] **F2** — удалить `#/favorites` (роут `App.svelte`, `Favorites.svelte`, ссылка в `Profile.svelte`)
+- [x] **F3** — тесты: `b113_s1_*` · `b113_s2_*` · `b115_t_*`
+- [x] **F4** — регрессия `bin/rails test test/integration/shop/` — **297 runs, 0 failures**
 - [ ] **A1** — апрув заказчика после deploy
 
 **Файлы (ориентир):**

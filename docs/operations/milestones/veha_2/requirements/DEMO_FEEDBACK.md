@@ -4,7 +4,7 @@
 
 **Источник:** PDF [`artifacts/demo-feedback/customer_qa_prog10_2026-06.pdf`](artifacts/demo-feedback/customer_qa_prog10_2026-06.pdf) (продолжение В1: [`../veha_1/artifacts/customer_live_qa_block1_2026-05-30.pdf`](../veha_1/artifacts/customer_live_qa_block1_2026-05-30.pdf)).
 
-**Сейчас (2026-07-07):** **B1.13-CR-BOTTOM-NAV** — gate **`[x]`** (O1–O3) · scope: только бар + удалить `#/favorites` · код ждёт **`go`**.
+**Сейчас (2026-07-07):** **B1.13-CR-BOTTOM-NAV** — код **`[x]`** локально · ждёт deploy + апрув A1.
 
 > **Архив B1.12:** строки ниже с iframe / «save без галочки» / v1 — **история**, не канон. Канон: [`B1_12_recurrent_payments.md`](customer_tasks/B1_12_recurrent_payments.md) (rev2, `mobile_payment_methods`).
 

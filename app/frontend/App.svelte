@@ -4,7 +4,6 @@
   import { push } from "svelte-spa-router"
   import { onMount } from "svelte"
   import Header from "./components/Header.svelte"
-  import BottomNav from "./components/BottomNav.svelte"
   import CartSheet from "./components/CartSheet.svelte"
   import RouteLoading from "./components/RouteLoading.svelte"
   import SlowRequestOverlay from "./components/SlowRequestOverlay.svelte"
@@ -42,7 +41,6 @@
     "/checkout": lazyRoute(() => import("./routes/Checkout.svelte")),
     "/payment-result": lazyRoute(() => import("./routes/PaymentResult.svelte")),
     "/profile": lazyRoute(() => import("./routes/Profile.svelte")),
-    "/favorites": lazyRoute(() => import("./routes/Favorites.svelte")),
     "/orders": lazyRoute(() => import("./routes/Orders.svelte")),
     "/order/:id": lazyRoute(() => import("./routes/OrderStatus.svelte")),
     "/reviews": lazyRoute(() => import("./routes/Reviews.svelte")),
@@ -106,9 +104,8 @@
   <ShopPwaBanner />
   <ShopClosedBanner />
   <Header />
-  <main class="mx-auto max-w-lg px-3 pb-28 pt-[4.5rem]">
+  <main class="mx-auto max-w-lg px-3 pb-4 pt-[4.5rem]">
     <Router {routes} options={{ hash: true }} />
   </main>
   <CartSheet />
-  <BottomNav />
 </div>

@@ -34,13 +34,12 @@ class Shop::B113S1ProfileHeaderTest < ActionDispatch::IntegrationTest
     assert_includes lib, "formatProfileIdShort"
   end
 
-  test "bottom nav source: no profile tab" do
-    bottom = File.read(Rails.root.join("app/frontend/components/BottomNav.svelte"))
+  test "app source: no bottom nav (B1.13-CR-BOTTOM-NAV rev3)" do
+    app = File.read(Rails.root.join("app/frontend/App.svelte"))
 
-    refute_includes bottom, ">Профиль<"
-    refute_includes bottom, "push('/profile')"
-    assert_includes bottom, "Каталог"
-    assert_includes bottom, "Избранное"
+    refute_includes app, "BottomNav"
+    refute_includes app, '"/favorites"'
+    refute_includes app, "Favorites.svelte"
   end
 
   test "formatProfileIdShort matches acceptance truncation rule" do

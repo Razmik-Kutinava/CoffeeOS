@@ -47,14 +47,6 @@
 
     <!-- Menu list -->
     <div class="menu-list">
-      <a href="/#/favorites" class="menu-item">
-        <div class="menu-item-left">
-          <span class="menu-icon">♡</span>
-          <span>Избранное</span>
-        </div>
-        <span class="menu-arrow">›</span>
-      </a>
-
       <a href="/#/orders" class="menu-item">
         <div class="menu-item-left">
           <span class="menu-icon">📦</span>

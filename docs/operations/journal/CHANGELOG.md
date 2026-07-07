@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026-07-07 — feat(b1.13): CR-BOTTOM-NAV remove bottom nav and #/favorites
+
+- Удалён `BottomNav.svelte` · роут `#/favorites` · `Favorites.svelte` · ссылка в Profile.
+- `App.svelte`: без bottom nav · `pb-4` на main.
+- Тесты: `b113_s1` · `b113_s2` · `b115_t` · shop **297 runs, 0 failures**.
+
 ## 2026-07-07 — docs(b1.13): O2 gate closed CR-BOTTOM-NAV
 
 - **O2:** только убрать бар; peek без изменений; рекомендации — backlog.

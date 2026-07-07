@@ -13,16 +13,14 @@ class Shop::B113S2CartPopupTest < ActionDispatch::IntegrationTest
     enable_product_for_tenant!(tenant: @tenant, product: @product, price: 250)
   end
 
-  test "bottom nav: catalog and favorites only, no cart or profile tab" do
-    bottom = File.read(Rails.root.join("app/frontend/components/BottomNav.svelte"))
+  test "app: no bottom nav, no favorites route (B1.13-CR-BOTTOM-NAV rev3)" do
+    app = File.read(Rails.root.join("app/frontend/App.svelte"))
+    profile = File.read(Rails.root.join("app/frontend/routes/Profile.svelte"))
 
-    assert_includes bottom, "Каталог"
-    assert_includes bottom, "Избранное"
-    refute_includes bottom, ">Корзина<"
-    refute_includes bottom, "push('/cart')"
-    refute_includes bottom, ">Профиль<"
-    refute_includes bottom, "push('/profile')"
-    refute_includes bottom, "ShoppingCart"
+    refute_includes app, "BottomNav"
+    refute_includes app, '"/favorites"'
+    refute File.exist?(Rails.root.join("app/frontend/routes/Favorites.svelte"))
+    refute_includes profile, "/#/favorites"
   end
 
   test "app mounts CartSheet and redirects legacy cart route" do
@@ -65,12 +63,10 @@ class Shop::B113S2CartPopupTest < ActionDispatch::IntegrationTest
 
   test "add to cart navigates to catalog not legacy cart screen" do
     product = File.read(Rails.root.join("app/frontend/routes/Product.svelte"))
-    favorites = File.read(Rails.root.join("app/frontend/routes/Favorites.svelte"))
     category_products = File.read(Rails.root.join("app/frontend/routes/CategoryProducts.svelte"))
 
     refute_includes product, 'push("/cart")'
     assert_includes product, 'push("/")'
-    refute_includes favorites, "push('/cart')"
     refute_includes category_products, 'push("/cart")'
   end
 

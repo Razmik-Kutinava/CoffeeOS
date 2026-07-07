@@ -90,7 +90,7 @@
 - [x] **B2-S1** Звук нового заказа на табло — **CLOSED** · MCP 9/9 · **апрув `[x]` 2026-07-05** · [`b21_s1_customer_approval_2026-07-05.json`](../artifacts/demo-feedback/b21_s1_customer_approval_2026-07-05.json)
 - [ ] **B2.2** Объединить «Меню» + «Создать», стоп-лист с карточки, POS Сбер — ТЗ [`B2_2`](../requirements/customer_tasks/B2_2_barista_menu_create_merge.md) · stage0 `[x]` → **этап 1**
 - [x] **B1.11** Режим работы точки (УК → витрина → табло) — **ЗАКРЫТА** · overnight fix · **апрув `[x]` 2026-07-05** · [`B1_11`](../requirements/customer_tasks/B1_11_tenant_operating_hours.md)
-- [x] **B1.13** — **CR-BOTTOM-NAV** gate **`[x]`** · код **`[ ]`** ждёт `go` · [`B1_13`](../requirements/customer_tasks/B1_13_shop_nav_profile_header.md) **стр. ~134 Scope**
+- [x] **B1.13** — **CR-BOTTOM-NAV** код **`[x]`** · A1 **`[ ]`** · [`B1_13`](../requirements/customer_tasks/B1_13_shop_nav_profile_header.md) **стр. ~134**
 - [x] **B1.14** Адрес точки + выбор точки в шапке — **клиент `[x]`** · **апрув `[x]` 2026-07-05** · **B1.14-4 Cart** `[ ]` · [`B1_14`](../requirements/customer_tasks/B1_14_shop_tenant_address_header.md)
 
 ---
