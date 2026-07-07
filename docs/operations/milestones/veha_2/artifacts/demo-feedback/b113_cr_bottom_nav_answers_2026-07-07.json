@@ -1,7 +1,7 @@
 {
   "id": "B1.13-CR-BOTTOM-NAV",
   "answers_date": "2026-07-07",
-  "status": "answers_received",
+  "status": "gate_closed",
   "type": "change_request",
   "answers": {
     "1_remove_bar": "Да — нижний бар убрать полностью; мешает peek/expanded/hidden",
@@ -14,28 +14,24 @@
   },
   "open_questions": {
     "O1_swipe": {
-      "question": "Свайп между экранами",
       "answer": "Да",
       "status": "closed",
-      "date": "2026-07-07"
+      "note": "Реализация свайпа — не в scope этого шага (O2)"
     },
     "O2_peek_cards_scope": {
-      "question": "Только убрать бар или заглушка карточек в peek",
-      "status": "open"
-    },
-    "O3_favorites_route": {
-      "question": "Удалить #/favorites или deep link",
-      "answer": "Да, удаляем",
+      "answer": "Только убрать нижний бар; peek без изменений; рекомендации в peek — следующие задачи",
       "status": "closed",
       "date": "2026-07-07"
+    },
+    "O3_favorites_route": {
+      "answer": "Да, удаляем",
+      "status": "closed"
     }
   },
-  "canon_rev3": {
-    "bottom_bar": "none",
-    "nav": "swipe_confirmed",
-    "favorites_route": "delete",
-    "repeat_purchase": "peek_on_catalog",
-    "platforms": ["fly", "pwa"]
+  "step_scope": {
+    "in": ["remove BottomNav", "delete #/favorites route and UI links", "update b113 tests", "shop regression"],
+    "out": ["peek recommendation cards", "swipe navigation implementation", "S4"]
   },
+  "code_blocked_until": "owner go",
   "canon_doc": "requirements/customer_tasks/B1_13_shop_nav_profile_header.md"
 }

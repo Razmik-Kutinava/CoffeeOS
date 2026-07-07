@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-07-07 — docs(b1.13): O2 gate closed CR-BOTTOM-NAV
+
+- **O2:** только убрать бар; peek без изменений; рекомендации — backlog.
+- Gate closed; код ждёт `go` владельца.
+
 ## 2026-07-07 — docs(b1.13): O1 O3 answers CR-BOTTOM-NAV
 
 - **O1:** «Да» — свайп подтверждён.
