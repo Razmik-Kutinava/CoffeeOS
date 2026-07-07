@@ -4,7 +4,7 @@
 
 **Источник:** PDF [`artifacts/demo-feedback/customer_qa_prog10_2026-06.pdf`](artifacts/demo-feedback/customer_qa_prog10_2026-06.pdf) (продолжение В1: [`../veha_1/artifacts/customer_live_qa_block1_2026-05-30.pdf`](../veha_1/artifacts/customer_live_qa_block1_2026-05-30.pdf)).
 
-**Сейчас (2026-07-07):** **B1.13-CR-BOTTOM-NAV** — ответы заказчика **`[x]`** · 3 open (свайп / peek / favorites) · ждём `go`. **B1.12** — ждёт живую оплату (A1).
+**Сейчас (2026-07-07):** **B1.13-CR-BOTTOM-NAV** — O1 **`[x]`** · O3 **`[x]`** (удалить `#/favorites`) · **O2 open** · ждём `go`.
 
 > **Архив B1.12:** строки ниже с iframe / «save без галочки» / v1 — **история**, не канон. Канон: [`B1_12_recurrent_payments.md`](customer_tasks/B1_12_recurrent_payments.md) (rev2, `mobile_payment_methods`).
 
@@ -48,7 +48,7 @@
 | 2026-06-18 | B1.12-R2 | `#/payment` iframe | web-фрейм + card_binding local | **done** *(OPS_PASS local)* | [b112_r2_native_card_ops_pass_2026-06-18.json](artifacts/demo-feedback/b112_r2_native_card_ops_pass_2026-06-18.json) |
 | 2026-06-18 | B1.12-R1 | shop API / callback | Рекуррент: RebillId + Charge | **done** *(OPS_PASS local)* | [b112_r1_recurrent_ops_pass_2026-06-18.json](artifacts/demo-feedback/b112_r1_recurrent_ops_pass_2026-06-18.json) |
 | 2026-06-18 | заказчик B1.12 | `#/payment` / checkout | Рекуррент Т-Банк эпик (R1–R3) | **done** *(код+баг fix, апрув `[ ]`)* | [b112_stage0_scope_2026-06-18.json](artifacts/demo-feedback/b112_stage0_scope_2026-06-18.json) |
-| 2026-07-07 | заказчик B1.13 | shop bottom bar | **B1.13-CR-BOTTOM-NAV answers:** убрать бар везде · свайп · peek для повторных · не баг · S4 отдельно | **answers_received** · O1–O3 open | [b113_cr_bottom_nav_answers_2026-07-07.json](artifacts/demo-feedback/b113_cr_bottom_nav_answers_2026-07-07.json) |
+| 2026-07-07 | заказчик B1.13 | O1 O3 | **O1:** «Да» (свайп) · **O3:** «Да, удаляем» `#/favorites` | **partial** · O2 open | [b113_cr_bottom_nav_answers_2026-07-07.json](artifacts/demo-feedback/b113_cr_bottom_nav_answers_2026-07-07.json) |
 | 2026-07-06 | заказчик B1.13 | shop bottom bar | **B1.13-CR-BOTTOM-NAV:** убрать «Каталог» и «Избранное» из нижнего бара — **конфликт** с каноном S1-R1 (2 вкладки апрув 2026-07-01) | **scope_change** | [b113_cr_bottom_nav_customer_2026-07-06.json](artifacts/demo-feedback/b113_cr_bottom_nav_customer_2026-07-06.json) · [B1_13](customer_tasks/B1_13_shop_nav_profile_header.md) |
 | 2026-07-05 | batch апрув | трекер заказчика | B1.4 · B2-S1 · B1.11 · B1.14-client · B1.13-S1 — «проверено» | **done** | [customer_verified_batch_2026-07-05.json](artifacts/demo-feedback/customer_verified_batch_2026-07-05.json) |
 | 2026-07-05 | Fly MCP B1.11 overnight | coffeeos.fly.dev УК create | **B1.11-BUG-OVERNIGHT post-deploy:** пн 09:23–01:24 → «Точка создана» | **done** *(апрув 2026-07-05)* | [b111_bug_overnight_fly_post_deploy_2026-07-05.json](artifacts/demo-feedback/b111_bug_overnight_fly_post_deploy_2026-07-05.json) |

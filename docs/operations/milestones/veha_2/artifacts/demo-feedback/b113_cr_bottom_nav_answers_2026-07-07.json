@@ -13,13 +13,27 @@
     "7_s4": "Отдельный шаг; канон нижнего бара сдвигаем"
   },
   "open_questions": {
-    "O1_swipe_routes": "Между какими экранами свайп?",
-    "O2_peek_cards_scope": "Только убрать бар или заглушка карточек в peek в этом шаге?",
-    "O3_favorites_route": "Удалить #/favorites или оставить deep link?"
+    "O1_swipe": {
+      "question": "Свайп между экранами",
+      "answer": "Да",
+      "status": "closed",
+      "date": "2026-07-07"
+    },
+    "O2_peek_cards_scope": {
+      "question": "Только убрать бар или заглушка карточек в peek",
+      "status": "open"
+    },
+    "O3_favorites_route": {
+      "question": "Удалить #/favorites или deep link",
+      "answer": "Да, удаляем",
+      "status": "closed",
+      "date": "2026-07-07"
+    }
   },
   "canon_rev3": {
     "bottom_bar": "none",
-    "nav": "swipe",
+    "nav": "swipe_confirmed",
+    "favorites_route": "delete",
     "repeat_purchase": "peek_on_catalog",
     "platforms": ["fly", "pwa"]
   },

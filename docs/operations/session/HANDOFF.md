@@ -10,7 +10,7 @@
 |-----|--------|
 | ТЗ | **`[x]`** B1_13 § CR стр. **~69** · **КАРТА** стр. **~14** |
 | Ответы 1–7 | **`[x]`** 2026-07-07 · [`b113_cr_bottom_nav_answers_2026-07-07.json`](../milestones/veha_2/artifacts/demo-feedback/b113_cr_bottom_nav_answers_2026-07-07.json) |
-| Open O1–O3 | **`[ ]`** свайп · peek scope · #/favorites |
+| Open O1–O3 | O1 **`[x]`** · O3 **`[x]`** · **O2 open** |
 | Код | **`[ ]`** ждём O1–O3 + **`go`** |
 
 ### B1.15 — checkout payment bottom sheet (этап 0 docs + PNG)
