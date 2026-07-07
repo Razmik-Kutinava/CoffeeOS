@@ -1,8 +1,8 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-07 (B1.13-CR-BOTTOM-NAV код)  
-**Ветка:** `develop`  
-**Прод:** https://coffeeos.fly.dev
+**Дата:** 2026-07-07 (B1.13-CR deploy Fly)  
+**Ветка:** `develop` pushed `4e1d923`  
+**Прод:** https://coffeeos.fly.dev · deploy `deployment-01KWXSGYSBZDNGSC6ABJAATFX6`
 
 ### B1.13-CR-BOTTOM-NAV — убрать нижний бар (rev3)
 
@@ -11,7 +11,7 @@
 | ТЗ | **`[x]`** B1_13 § CR стр. **~69** · **КАРТА** стр. **~14** |
 | Ответы 1–7 | **`[x]`** 2026-07-07 · [`b113_cr_bottom_nav_answers_2026-07-07.json`](../milestones/veha_2/artifacts/demo-feedback/b113_cr_bottom_nav_answers_2026-07-07.json) |
 | Код F1–F4 | **`[x]`** · shop 297 PASS |
-| Deploy / A1 | **`[ ]`** |
+| Deploy / A1 | **`[x]`** deploy 2026-07-07 · **A1 апрув `[ ]`** |
 
 ### B1.15 — checkout payment bottom sheet (этап 0 docs + PNG)
 

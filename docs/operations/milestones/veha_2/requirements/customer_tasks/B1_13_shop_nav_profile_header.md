@@ -209,7 +209,7 @@
 - [x] **F2** — удалить `#/favorites` (роут `App.svelte`, `Favorites.svelte`, ссылка в `Profile.svelte`)
 - [x] **F3** — тесты: `b113_s1_*` · `b113_s2_*` · `b115_t_*`
 - [x] **F4** — регрессия `bin/rails test test/integration/shop/` — **297 runs, 0 failures**
-- [ ] **A1** — апрув заказчика после deploy
+- [ ] **A1** — апрув заказчика после deploy **`[x]`** Fly 2026-07-07
 
 **Файлы (ориентир):**
 

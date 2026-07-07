@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026-07-07 — deploy(b1.13): CR-BOTTOM-NAV on Fly
+
+- **Push:** `develop` → `4e1d923`
+- **Fly:** `coffeeos` · image `deployment-01KWXSGYSBZDNGSC6ABJAATFX6` · https://coffeeos.fly.dev
+- **Проверка:** shop 200 · `application-*.js` без BottomNav/Каталог/Избранное
+
 ## 2026-07-07 — feat(b1.13): CR-BOTTOM-NAV remove bottom nav and #/favorites
 
 - Удалён `BottomNav.svelte` · роут `#/favorites` · `Favorites.svelte` · ссылка в Profile.

@@ -1,0 +1,15 @@
+{
+  "id": "B1.13-CR-BOTTOM-NAV",
+  "date": "2026-07-07",
+  "commit": "4e1d923",
+  "fly_image": "deployment-01KWXSGYSBZDNGSC6ABJAATFX6",
+  "url": "https://coffeeos.fly.dev/shop?tenant_id=655aaccb-004a-4bb9-a50a-ce618854dda3",
+  "checks": {
+    "shop_http": 200,
+    "application_bundle_no_bottom_nav": true,
+    "favorites_page_chunk_removed": true,
+    "favorites_api_store_chunk_remains": true
+  },
+  "status": "deployed",
+  "approval": "pending"
+}
