@@ -1,0 +1,27 @@
+{
+  "id": "B1.13-CR-BOTTOM-NAV",
+  "answers_date": "2026-07-07",
+  "status": "answers_received",
+  "type": "change_request",
+  "answers": {
+    "1_remove_bar": "Да — нижний бар убрать полностью; мешает peek/expanded/hidden",
+    "2_favorites": "В peek на каталоге — карточки повторной покупки; алгоритм позже; возможно ЛК/история",
+    "3_catalog_nav": "Свайп влево/вправо",
+    "4_screens": "Бар скрыт везде",
+    "5_mockup": "Нет макета",
+    "6_not_a_bug": "Требование убрать Каталог и Избранное на Fly и PWA",
+    "7_s4": "Отдельный шаг; канон нижнего бара сдвигаем"
+  },
+  "open_questions": {
+    "O1_swipe_routes": "Между какими экранами свайп?",
+    "O2_peek_cards_scope": "Только убрать бар или заглушка карточек в peek в этом шаге?",
+    "O3_favorites_route": "Удалить #/favorites или оставить deep link?"
+  },
+  "canon_rev3": {
+    "bottom_bar": "none",
+    "nav": "swipe",
+    "repeat_purchase": "peek_on_catalog",
+    "platforms": ["fly", "pwa"]
+  },
+  "canon_doc": "requirements/customer_tasks/B1_13_shop_nav_profile_header.md"
+}

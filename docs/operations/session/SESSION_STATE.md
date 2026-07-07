@@ -2,7 +2,7 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-06 (B1.13-CR-BOTTOM-NAV docs)  
+**Дата:** 2026-07-07 (B1.13-CR answers rev3)  
 **Предыдущее:** B1.15 deploy `572fd85` · A2 nav overlap  
 **Веха 1:** **закрыта** 2026-06-19 (CHECKLIST § I, H.3 заочно).  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
@@ -23,7 +23,7 @@
 | **B1.12 rev2** | код R1–R3 `[x]` · **BUG-SAVE фикс `1081dac`** Fly v328 `[x]` | **A1:** заказчик CONFIRMED оплата |
 | **B1.15 checkout sheet** | **A2 fix** nav overlap · build `b115-a2` | deploy + MCP re-check |
 | **B1.11 режим работы** | **ЗАКРЫТА** · апрув 2026-07-05 | **B1.12** A1 · **B1.15** F1 · **B1.13 S4** · **B1.14-4** |
-| **B1.13 навигация** | **S4 MCP browser PASS** · **CR-BOTTOM-NAV open** (конфликт канона) | ответы заказчика · `go` · S4 апрув |
+| **B1.13 навигация** | **CR-BOTTOM-NAV** answers **`[x]`** · O1–O3 open | `go` после O1–O3 · S4 отдельно |
 | **B1.14 адрес в шапке** | **B1.14-3d** index map `[x]` | deploy (`./bin/fly_deploy.sh`) · B1.14-4 cart |
 
 | **Sentry triage** | RUBY-9 fix `[x]` · Neon quota OK (оплачено) | Archive RUBY-Q…R в Sentry UI |
