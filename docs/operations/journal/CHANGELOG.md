@@ -9,6 +9,11 @@
 
 ## 2026-07-07 — deploy(b1.13): CR-BOTTOM-NAV on Fly
 
+## 2026-07-08 — feat(b1.13): dynamic +X₽ label on cart checkout button
+
+- `CartSheet.svelte`: checkout button now renders `+X₽` from `cartTotal`, with `disabled` when total is `0` (+ removed `Оформить`/`+цена`).
+- `cartSheetStore.js`: added `cartUndoLine` / `cartSheetError` and `undoRemoveCartLine()`; `refreshCartSheet()` sets error message on API failures.
+
 - **Push:** `develop` → `4e1d923`
 - **Fly:** `coffeeos` · image `deployment-01KWXSGYSBZDNGSC6ABJAATFX6` · https://coffeeos.fly.dev
 - **Проверка:** shop 200 · `application-*.js` без BottomNav/Каталог/Избранное

@@ -35,6 +35,14 @@
 - **Тесты:** `test/integration/shop/cart_expanded_image_open_edit_card_test.rb` — PASS.
 - **Коммит:** `ae0fd0e`
 
+### Сессия 2026-07-08 (B1.13-S2/S2.1 — динамический total на кнопке + undo/error)
+
+- **Код:** `CartSheet.svelte` — кнопка `shop-cart-sheet-checkout` теперь показывает `+X₽` из `cartTotal` (вместо `Оформить`/`+цена`), отключается при `total == 0`; добавлены блоки `shop-cart-undo` и `shop-cart-error`.
+- **Store:** `cartSheetStore.js` — реактивные стейты `cartUndoLine`, `cartSheetError` + `undoRemoveCartLine()`, установка `cartSheetError` в `refreshCartSheet()` при ошибке.
+- **Тесты:** `test/integration/shop/cart_checkout_button_total_dynamic_test.rb`, обновлён `test/integration/shop/b113_s2_cart_popup_test.rb`.
+- **Прогон:** `bin/rails test test/integration/shop/cart_checkout_button_total_dynamic_test.rb` — PASS.
+- **Коммит:** `e1f34eb`
+
 ### Сессия 2026-07-06 (B1.15 A1 — Fly MCP приёмка checkout sheet)
 
 - **MCP:** coffeeos.fly.dev 360px — peek/expanded/expanded+ card-form; OTP via fly ssh; 11/14 критериев pass, 3 skip (3DS live, scroll>3, post-3DS card).

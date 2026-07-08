@@ -20,6 +20,13 @@
 | Код | `ae0fd0e` · `CartSheet.svelte` + `cartSheetStore.js` |
 | Тест | `test/integration/shop/cart_expanded_image_open_edit_card_test.rb` — PASS |
 
+### B1.13 — S2/S2.1: dynamic +X₽ on checkout button (undo/error)
+
+| Что | Статус |
+|-----|--------|
+| Код | `e1f34eb` · `CartSheet.svelte` + `cartSheetStore.js` |
+| Тесты | `test/integration/shop/cart_checkout_button_total_dynamic_test.rb` — PASS; `b113_s2_cart_popup_test.rb` updated |
+
 ### B1.15 — checkout payment bottom sheet (этап 0 docs + PNG)
 
 | Что | Статус |
