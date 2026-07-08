@@ -14,6 +14,12 @@
 - `CartSheet.svelte`: checkout button now renders `+X₽` from `cartTotal`, with `disabled` when total is `0` (+ removed `Оформить`/`+цена`).
 - `cartSheetStore.js`: added `cartUndoLine` / `cartSheetError` and `undoRemoveCartLine()`; `refreshCartSheet()` sets error message on API failures.
 
+## 2026-07-08 — feat(b1.13): cart button overflow + unavailable cart UX
+
+- `CartSheet.svelte`: auto font shrinking helper `checkoutButtonFontSizePx(total)` для больших сумм.
+- `cartSheetStore.js`: при ошибке `Товар недоступен` корзина очищается (не используется кэш) и `shop-cart-error` показывает нормализованное сообщение.
+- **Коммит:** `ff0a42c`
+
 - **Push:** `develop` → `4e1d923`
 - **Fly:** `coffeeos` · image `deployment-01KWXSGYSBZDNGSC6ABJAATFX6` · https://coffeeos.fly.dev
 - **Проверка:** shop 200 · `application-*.js` без BottomNav/Каталог/Избранное

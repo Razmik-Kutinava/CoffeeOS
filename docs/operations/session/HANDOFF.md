@@ -27,6 +27,13 @@
 | Код | `e1f34eb` · `CartSheet.svelte` + `cartSheetStore.js` |
 | Тесты | `test/integration/shop/cart_checkout_button_total_dynamic_test.rb` — PASS; `b113_s2_cart_popup_test.rb` updated |
 
+### B1.13 — S2 экстремумы: auto font + unavailable cart UX
+
+| Что | Статус |
+|-----|--------|
+| Код | `ff0a42c` · `CartSheet.svelte` + `cartSheetStore.js` |
+| Тесты | `cart_checkout_button_total_dynamic_test.rb` — PASS |
+
 ### B1.15 — checkout payment bottom sheet (этап 0 docs + PNG)
 
 | Что | Статус |

@@ -43,6 +43,13 @@
 - **Прогон:** `bin/rails test test/integration/shop/cart_checkout_button_total_dynamic_test.rb` — PASS.
 - **Коммит:** `e1f34eb`
 
+### Сессия 2026-07-08 (B1.13-S2 экстремумы — авто-шрифт + товар недоступен)
+
+- **Код:** `CartSheet.svelte` — `checkoutButtonFontSizePx(total)` для авто-уменьшения шрифта на больших суммах (без изменения геометрии кнопки).
+- **Store:** `cartSheetStore.js` — при ошибке `Товар недоступен` корзина очищается вместо кэша, `shop-cart-error` показывает нормализованное сообщение.
+- **Тесты:** `cart_checkout_button_total_dynamic_test.rb` — PASS.
+- **Коммит:** `ff0a42c`
+
 ### Сессия 2026-07-06 (B1.15 A1 — Fly MCP приёмка checkout sheet)
 
 - **MCP:** coffeeos.fly.dev 360px — peek/expanded/expanded+ card-form; OTP via fly ssh; 11/14 критериев pass, 3 skip (3DS live, scroll>3, post-3DS card).
