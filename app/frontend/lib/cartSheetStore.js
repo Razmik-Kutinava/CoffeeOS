@@ -1,6 +1,7 @@
 import { get, writable } from "svelte/store"
 import { api } from "./api.js"
 import { CART_JUST_ADDED_KEY } from "./shopCartAdd.js"
+import { addToCart } from "./shopCartAdd.js"
 import { readCartCache, writeCartCache } from "./shopCartCache.js"
 import {
   clearPersistedCartSheetMode,
@@ -21,6 +22,22 @@ export const cartItems = writable([])
 export const cartTotal = writable(0)
 export const cartSheetMode = writable(MODE_EMPTY)
 export const cartSheetBusy = writable(false)
+export const cartUndoLine = writable(null)
+export const cartSheetError = writable(null)
+
+let undoClearTimer = null
+
+function clearCartUndo() {
+  cartUndoLine.set(null)
+  if (undoClearTimer) {
+    clearTimeout(undoClearTimer)
+    undoClearTimer = null
+  }
+}
+
+export function clearCartSheetError() {
+  cartSheetError.set(null)
+}
 
 /** Синхрон с Shop::CartService::MAX_ITEM_QUANTITY */
 export const MAX_ITEM_QUANTITY = 99
@@ -141,11 +158,13 @@ export function resetScrollAnchor() {
 
 export async function refreshCartSheet() {
   try {
+    cartSheetError.set(null)
     const data = await api("/cart")
     writeCartCache(data)
     applyCartData(data)
     return data
   } catch (_e) {
+    cartSheetError.set(_e?.message || "Ошибка обновления корзины")
     const cached = readCartCache()
     if (cached?.items) {
       applyCartData(cached)
@@ -161,6 +180,7 @@ export async function refreshCartSheet() {
 
 /** Добавили товар: всегда peek (localStorage не переопределяет add-flow) */
 export function onCartAdded() {
+  clearCartUndo()
   cartSheetMode.set(MODE_PEEK)
   resetScrollAnchor()
   writePersistedCartSheetMode(MODE_PEEK)
@@ -280,11 +300,26 @@ export function bindCartSheetEvents() {
 
 export async function bumpCartLine(index, delta) {
   if (!optimisticBump(index, delta)) return
+  clearCartUndo()
   enqueueBump(index, delta)
 }
 
 export async function removeCartLine(index) {
   if (get(cartSheetBusy)) return
+  clearCartUndo()
+
+  const removedLine = get(cartItems).find((l) => l.index === index)
+  if (removedLine) {
+    cartUndoLine.set({
+      product_id: removedLine.product_id,
+      quantity: removedLine.quantity,
+      selected_modifiers: removedLine.selected_modifiers || []
+    })
+    undoClearTimer = setTimeout(() => {
+      clearCartUndo()
+    }, 30_000)
+  }
+
   optimisticRemove(index)
 
   cartSheetBusy.set(true)
@@ -296,4 +331,27 @@ export async function removeCartLine(index) {
   } finally {
     cartSheetBusy.set(false)
   }
+}
+
+export async function undoRemoveCartLine() {
+  const line = get(cartUndoLine)
+  if (!line) return
+
+  clearCartUndo()
+  try {
+    await addToCart(
+      {
+        product_id: line.product_id,
+        quantity: line.quantity,
+        selected_modifiers: line.selected_modifiers
+      },
+      {}
+    )
+  } catch (_e) {
+    // Если не смогли восстановить — вернём управление на UI (сумма уже держится на кэше).
+    cartUndoLine.set(line)
+    return
+  }
+
+  await refreshCartSheet().catch(() => {})
 }

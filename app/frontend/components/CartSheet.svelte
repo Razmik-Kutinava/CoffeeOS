@@ -6,6 +6,8 @@
     cartTotal,
     cartSheetMode,
     cartSheetBusy,
+    cartUndoLine,
+    cartSheetError,
     isCatalogRoute,
     onCatalogRouteChange,
     refreshCartSheet,
@@ -15,7 +17,8 @@
     bindCartSheetEvents,
     atMinQty,
     atMaxQty,
-    openEditCard
+    openEditCard,
+    undoRemoveCartLine
   } from "../lib/cartSheetStore.js"
   import {
     MODE_EMPTY,
@@ -34,6 +37,8 @@
   let total = $state(0)
   let mode = $state(MODE_EMPTY)
   let busy = $state(false)
+  let undoLine = $state(null)
+  let sheetError = $state(null)
   let gestureStartY = 0
   let gestureActive = false
   let gestureZoneEl = $state(null)
@@ -110,6 +115,17 @@
     return Math.round(Number(n) || 0)
   }
 
+  let checkoutDisabled = $derived(roundPrice(total) <= 0)
+
+  function formatThousands(n) {
+    const s = String(roundPrice(n))
+    return s.replace(/\B(?=(\d{3})+(?!\d))/g, " ")
+  }
+
+  function formatCartButtonTotal(n) {
+    return `+${formatThousands(n)}₽`
+  }
+
   // S4: tap по карточке → Product (редактирование модификаторов).
   // Если клик по кнопке (− / + / Удалить) — игнорируем; кнопки обрабатывают себя сами.
   function tapToProduct(line, e) {
@@ -136,6 +152,8 @@
     const unsubTotal = cartTotal.subscribe((v) => { total = v })
     const unsubMode  = cartSheetMode.subscribe((v) => { mode = v })
     const unsubBusy  = cartSheetBusy.subscribe((v) => { busy = v })
+    const unsubUndo  = cartUndoLine.subscribe((v) => { undoLine = v })
+    const unsubErr   = cartSheetError.subscribe((v) => { sheetError = v })
 
     const onHash = () => {
       const next = window.location.hash
@@ -152,6 +170,7 @@
 
     return () => {
       unsubItems(); unsubTotal(); unsubMode(); unsubBusy()
+      unsubUndo(); unsubErr()
       window.removeEventListener("hashchange", onHash)
     }
   })
@@ -204,8 +223,9 @@
       type="button"
       data-testid="shop-cart-sheet-checkout"
       class="rounded-lg bg-[#ff8c42] px-4 py-2 text-sm font-semibold text-black"
+      disabled={checkoutDisabled}
       onclick={() => push("/checkout")}
-    >Оформить</button>
+    >{formatCartButtonTotal(total)}</button>
   </div>
 {/snippet}
 
@@ -220,6 +240,35 @@
     style:max-width="{CART_SHEET_MAX_WIDTH_PX}px"
     style:transition-duration="{SHEET_TRANSITION_MS}ms"
   >
+    {#if sheetError}
+      <div
+        data-testid="shop-cart-error"
+        role="status"
+        class="mx-3 mt-2 rounded-lg border border-[#3a3a3a] bg-[#1f1f1f] px-3 py-2 text-[12px] text-[#ff8c42]"
+      >
+        {sheetError}
+      </div>
+    {/if}
+
+    {#if undoLine}
+      <div
+        data-testid="shop-cart-undo"
+        role="status"
+        class="mx-3 mt-2 flex items-center justify-between gap-3 rounded-lg border border-[#3a3a3a] bg-[#1f1f1f] px-3 py-2 text-[12px]"
+      >
+        <span class="text-[#a0a0a0]">Удаление можно отменить</span>
+        <button
+          type="button"
+          data-testid="shop-cart-undo-button"
+          class="shrink-0 rounded bg-[#ff8c42] px-3 py-1.5 text-[12px] font-semibold text-black"
+          disabled={busy}
+          onclick={() => undoRemoveCartLine()}
+        >
+          Отменить
+        </button>
+      </div>
+    {/if}
+
     <!-- Drag-handle / gesture zone -->
     <div
       bind:this={gestureZoneEl}
@@ -238,6 +287,7 @@
       <p data-testid="shop-cart-sheet-empty" class="px-4 py-6 text-center text-sm italic text-[#888]">
         тут будут твои заказы
       </p>
+      {@render checkoutBar("shop-cart-empty-total")}
 
     <!-- HIDDEN — чип с суммой (ТЗ S2a) -->
     {:else if mode === MODE_HIDDEN}
@@ -253,8 +303,9 @@
           type="button"
           data-testid="shop-cart-sheet-checkout"
           class="shrink-0 rounded-full bg-[#ff8c42] px-3 py-1.5 text-sm font-semibold text-black"
+          disabled={checkoutDisabled}
           onclick={() => push("/checkout")}
-        >+цена</button>
+        >{formatCartButtonTotal(total)}</button>
       </div>
 
     <!-- PEEK 2+ — горизонтальный ряд карточек 28vw (§ S2-канон: компактный peek) -->
