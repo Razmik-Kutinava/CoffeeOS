@@ -48,5 +48,16 @@ class Shop::CartCheckoutButtonTotalDynamicTest < ActionDispatch::IntegrationTest
     assert_includes store, "cartUndoLine.set"
     assert_includes store, "cartSheetError.set"
   end
+
+  test "checkout button auto font shrinking helper is present" do
+    assert_includes sheet, "function checkoutButtonFontSizePx"
+    assert_includes sheet, "checkoutButtonFontSizePx(total)"
+  end
+
+  test "unavailable cart error clears cached cart and shows normalized message" do
+    assert_includes store, "function isUnavailableCartError"
+    assert_includes store, "isUnavailableCartError"
+    assert_includes store, "Товар недоступен. Корзина обновлена."
+  end
 end
 

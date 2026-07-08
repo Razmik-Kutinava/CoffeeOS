@@ -156,6 +156,11 @@ export function resetScrollAnchor() {
   scrollAnchorY = window.scrollY || 0
 }
 
+function isUnavailableCartError(err) {
+  const msg = String(err?.message || err || "").toLowerCase()
+  return msg.includes("товар недоступен") || msg.includes("законч") || msg.includes("out of stock")
+}
+
 export async function refreshCartSheet() {
   try {
     cartSheetError.set(null)
@@ -165,6 +170,17 @@ export async function refreshCartSheet() {
     return data
   } catch (_e) {
     cartSheetError.set(_e?.message || "Ошибка обновления корзины")
+
+    if (isUnavailableCartError(_e)) {
+      cartItems.set([])
+      cartTotal.set(0)
+      cartSheetMode.set(MODE_EMPTY)
+      clearPersistedCartSheetMode()
+      writeCartCache({ items: [], total: 0 })
+      cartSheetError.set("Товар недоступен. Корзина обновлена.")
+      return { items: [], total: 0 }
+    }
+
     const cached = readCartCache()
     if (cached?.items) {
       applyCartData(cached)

@@ -126,6 +126,17 @@
     return `+${formatThousands(n)}₽`
   }
 
+  // Авто-уменьшение шрифта для больших сумм: вместо измерения DOM используем число цифр.
+  // Геометрия кнопки не меняется (adjust-only: font-size).
+  function checkoutButtonFontSizePx(n) {
+    const digits = String(roundPrice(n)).length
+    if (digits >= 9) return 10
+    if (digits >= 8) return 11
+    if (digits >= 7) return 12
+    if (digits >= 5) return 13
+    return 14
+  }
+
   // S4: tap по карточке → Product (редактирование модификаторов).
   // Если клик по кнопке (− / + / Удалить) — игнорируем; кнопки обрабатывают себя сами.
   function tapToProduct(line, e) {
@@ -225,7 +236,14 @@
       class="rounded-lg bg-[#ff8c42] px-4 py-2 text-sm font-semibold text-black"
       disabled={checkoutDisabled}
       onclick={() => push("/checkout")}
-    >{formatCartButtonTotal(total)}</button>
+    >
+      <span
+        class="whitespace-nowrap leading-none"
+        style:font-size={`${checkoutButtonFontSizePx(total)}px`}
+      >
+        {formatCartButtonTotal(total)}
+      </span>
+    </button>
   </div>
 {/snippet}
 
@@ -305,7 +323,14 @@
           class="shrink-0 rounded-full bg-[#ff8c42] px-3 py-1.5 text-sm font-semibold text-black"
           disabled={checkoutDisabled}
           onclick={() => push("/checkout")}
-        >{formatCartButtonTotal(total)}</button>
+        >
+          <span
+            class="whitespace-nowrap leading-none"
+            style:font-size={`${checkoutButtonFontSizePx(total)}px`}
+          >
+            {formatCartButtonTotal(total)}
+          </span>
+        </button>
       </div>
 
     <!-- PEEK 2+ — горизонтальный ряд карточек 28vw (§ S2-канон: компактный peek) -->
