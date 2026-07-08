@@ -71,6 +71,20 @@ export function atMaxQty(line) {
   return Number(line?.quantity) >= MAX_ITEM_QUANTITY
 }
 
+/**
+ * Открыть карточку товара на редактирование модификаторов.
+ * В Product.svelte используется query `cart_line` для загрузки selected_modifiers из кэша.
+ */
+export function openEditCard(line) {
+  const productId = line?.product_id
+  const cart_line = line?.index
+  const selected_modifiers = line?.selected_modifiers
+  void selected_modifiers
+
+  if (!productId || cart_line === undefined || cart_line === null) return "/"
+  return `/product/${productId}?cart_line=${cart_line}`
+}
+
 function applyCartData(data) {
   const items = data?.items || []
   cartItems.set(items)

@@ -14,7 +14,8 @@
     removeCartLine,
     bindCartSheetEvents,
     atMinQty,
-    atMaxQty
+    atMaxQty,
+    openEditCard
   } from "../lib/cartSheetStore.js"
   import {
     MODE_EMPTY,
@@ -332,7 +333,20 @@
               tabindex="0"
               onclick={(e) => tapToProduct(line, e)}
             >
-              {@render lineThumb(line, "h-10 w-10 shrink-0")}
+              <div
+                data-testid="shop-cart-expanded-product-image"
+                class="shrink-0"
+                onclick={(e) => {
+                  e.stopPropagation()
+                  const cart_line = line.index
+                  const selected_modifiers = line.selected_modifiers
+                  void cart_line
+                  void selected_modifiers
+                  push(openEditCard(line))
+                }}
+              >
+                {@render lineThumb(line, "h-10 w-10 shrink-0")}
+              </div>
               <div class="min-w-0 flex-1">
                 <p class="line-clamp-1 text-xs font-medium">{line.product_name}</p>
                 <p class="text-[10px] text-[#a0a0a0]">{roundPrice(line.unit_total)}₽ × {line.quantity}</p>
