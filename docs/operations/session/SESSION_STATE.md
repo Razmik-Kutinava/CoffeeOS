@@ -29,6 +29,12 @@
 | **Sentry triage** | RUBY-9 fix `[x]` · Neon quota OK (оплачено) | Archive RUBY-Q…R в Sentry UI |
 | **Security hygiene** | permit! → explicit weekday permit `[x]` · rack/view_component bump `[x]` | **V2-SEC-08** bundler-audit CVE — обязательно (`PRACTICES.md`) |
 
+### Сессия 2026-07-08 (B1.13-S4 блок 1.1 — openEditCard по клику на картинку)
+
+- **Код:** `cartSheetStore.js` — экспорт `openEditCard(line)` (переход с query `cart_line`) · `CartSheet.svelte` — отдельная кликабельная зона картинки в `MODE_EXPANDED` (`data-testid="shop-cart-expanded-product-image"`) + `stopPropagation()`.
+- **Тесты:** `test/integration/shop/cart_expanded_image_open_edit_card_test.rb` — PASS.
+- **Коммит:** `ae0fd0e`
+
 ### Сессия 2026-07-06 (B1.15 A1 — Fly MCP приёмка checkout sheet)
 
 - **MCP:** coffeeos.fly.dev 360px — peek/expanded/expanded+ card-form; OTP via fly ssh; 11/14 критериев pass, 3 skip (3DS live, scroll>3, post-3DS card).

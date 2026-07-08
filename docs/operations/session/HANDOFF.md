@@ -13,6 +13,13 @@
 | Код F1–F4 | **`[x]`** · shop 297 PASS |
 | Deploy / A1 | **`[x]`** deploy 2026-07-07 · **A1 апрув `[ ]`** |
 
+### B1.13 — S4: openEditCard trigger (Expanded cart image)
+
+| Что | Статус |
+|-----|--------|
+| Код | `ae0fd0e` · `CartSheet.svelte` + `cartSheetStore.js` |
+| Тест | `test/integration/shop/cart_expanded_image_open_edit_card_test.rb` — PASS |
+
 ### B1.15 — checkout payment bottom sheet (этап 0 docs + PNG)
 
 | Что | Статус |

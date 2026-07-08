@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2026-07-08 — feat(b1.13): openEditCard from cart expanded image
+
+- **Код:** `CartSheet.svelte` — отдельный кликабельный target картинки в `MODE_EXPANDED` (`data-testid="shop-cart-expanded-product-image"`) → `openEditCard`.
+- **Store:** `cartSheetStore.js` — добавлен экспорт `openEditCard(line)` для перехода с query `cart_line`.
+- **Тест:** `cart_expanded_image_open_edit_card_test.rb` — PASS.
+- **Коммит:** `ae0fd0e`
+
 ## 2026-07-07 — deploy(b1.13): CR-BOTTOM-NAV on Fly
 
 - **Push:** `develop` → `4e1d923`
