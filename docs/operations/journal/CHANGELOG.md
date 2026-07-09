@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-07-09 — fix(b1.13): сумма только внутри кнопки checkout
+
+- `CartSheet.svelte`: убран дубль цены рядом с кнопкой в `checkoutBar`; `+X₽` только внутри `shop-cart-sheet-checkout`.
+- Тесты: `cart_checkout_button_total_dynamic_test.rb` + b113_s2* — PASS.
+
 ## 2026-07-08 — feat(b1.13): openEditCard from cart expanded image
 
 - **Код:** `CartSheet.svelte` — отдельный кликабельный target картинки в `MODE_EXPANDED` (`data-testid="shop-cart-expanded-product-image"`) → `openEditCard`.

@@ -18,6 +18,11 @@ class Shop::CartCheckoutButtonTotalDynamicTest < ActionDispatch::IntegrationTest
     refute_includes sheet, ">Оформить</button>"
     assert_includes sheet, "formatCartButtonTotal(total)"
     assert_includes sheet, "disabled={checkoutDisabled}"
+    # Сумма только внутри кнопки — отдельный span рядом с кнопкой убран
+    refute_match(
+      /checkoutBar[\s\S]*?<span class="text-sm text-\[#a0a0a0\]"[^>]*>\{roundPrice\(total\)\}₽<\/span>/,
+      sheet
+    )
   end
 
   test "empty mode renders disabled checkout with +0₽" do

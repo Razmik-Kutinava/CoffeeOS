@@ -229,7 +229,6 @@
 
 {#snippet checkoutBar(totalTestId = null)}
   <div class="mt-2 flex shrink-0 items-center justify-end gap-2 border-t border-[#3a3a3a] pt-2">
-    <span class="text-sm text-[#a0a0a0]" data-testid={totalTestId}>{roundPrice(total)}₽</span>
     <button
       type="button"
       data-testid="shop-cart-sheet-checkout"
@@ -239,6 +238,7 @@
     >
       <span
         class="whitespace-nowrap leading-none"
+        data-testid={totalTestId}
         style:font-size={`${checkoutButtonFontSizePx(total)}px`}
       >
         {formatCartButtonTotal(total)}

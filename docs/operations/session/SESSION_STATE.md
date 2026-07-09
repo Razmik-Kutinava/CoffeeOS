@@ -50,6 +50,12 @@
 - **Тесты:** `cart_checkout_button_total_dynamic_test.rb` — PASS.
 - **Коммит:** `ff0a42c`
 
+### Сессия 2026-07-09 (B1.13 — сумма только внутри кнопки checkout)
+
+- **Код:** `CartSheet.svelte` — убран серый span `roundPrice(total)₽` рядом с кнопкой в `checkoutBar`; `data-testid` суммы перенесён внутрь кнопки.
+- **Тесты:** `cart_checkout_button_total_dynamic_test.rb` + b113_s2/s2a/s4_b3 — PASS.
+- **Коммит:** (см. ниже)
+
 ### Сессия 2026-07-06 (B1.15 A1 — Fly MCP приёмка checkout sheet)
 
 - **MCP:** coffeeos.fly.dev 360px — peek/expanded/expanded+ card-form; OTP via fly ssh; 11/14 критериев pass, 3 skip (3DS live, scroll>3, post-3DS card).

@@ -34,6 +34,13 @@
 | Код | `ff0a42c` · `CartSheet.svelte` + `cartSheetStore.js` |
 | Тесты | `cart_checkout_button_total_dynamic_test.rb` — PASS |
 
+### B1.13 — сумма только внутри кнопки checkout
+
+| Что | Статус |
+|-----|--------|
+| Код | `CartSheet.svelte` — убран серый span рядом с кнопкой |
+| Тесты | `cart_checkout_button_total_dynamic_test.rb` + b113_s2* — PASS |
+
 ### B1.15 — checkout payment bottom sheet (этап 0 docs + PNG)
 
 | Что | Статус |
