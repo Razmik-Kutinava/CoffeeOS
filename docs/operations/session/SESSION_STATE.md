@@ -54,7 +54,7 @@
 
 - **Код:** `CartSheet.svelte` — убран серый span `roundPrice(total)₽` рядом с кнопкой в `checkoutBar`; `data-testid` суммы перенесён внутрь кнопки.
 - **Тесты:** `cart_checkout_button_total_dynamic_test.rb` + b113_s2/s2a/s4_b3 — PASS.
-- **Коммит:** (см. ниже)
+- **Коммит:** `46e8f0b`
 
 ### Сессия 2026-07-06 (B1.15 A1 — Fly MCP приёмка checkout sheet)
 
