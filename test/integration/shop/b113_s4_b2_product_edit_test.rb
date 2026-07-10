@@ -58,8 +58,8 @@ class Shop::B113S4B2ProductEditTest < ActionDispatch::IntegrationTest
     assert_includes svelte, "editMode"
   end
 
-  test "Product: кнопка В корзину в обычном режиме" do
-    assert_includes svelte, "В корзину"
+  test "Product: кнопка добавить к заказу в обычном режиме" do
+    assert_includes svelte, "добавить к заказу"
   end
 
   test "Product: data-testid на кнопке добавления" do

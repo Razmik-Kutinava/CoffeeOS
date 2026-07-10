@@ -31,6 +31,13 @@
 | **Sentry triage** | RUBY-9 fix `[x]` · Neon quota OK (оплачено) | Archive RUBY-Q…R в Sentry UI |
 | **Security hygiene** | permit! → explicit weekday permit `[x]` · rack/view_component bump `[x]` | **V2-SEC-08** bundler-audit CVE — обязательно (`PRACTICES.md`) |
 
+### Сессия 2026-07-10 (product card peek cart — S1+S2 green / Шаг 4)
+
+- **Код:** `Product.svelte` — `inOrderQty` + `data-testid="shop-product-in-order"`; кнопка «добавить к заказу».
+- **Код:** `ProductCartPeek.svelte` — peek-list из `cartItems` (имя/qty/цена), gate по `items.length`.
+- **Тесты:** S1 + S2 — **PASS** (4+4, 0 failures). Обновлён b113 assert копирайта кнопки.
+- **Стоп:** ждать апрув → **Шаг 5** (полный suite shop).
+
 ### Сессия 2026-07-10 (product card peek cart — S2 red test)
 
 - **Шаг 3 / Сценарий 2:** только тест (код Product/peek не трогали).

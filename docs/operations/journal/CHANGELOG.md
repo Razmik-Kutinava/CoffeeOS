@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026-07-10 — feat(product-peek): S1 индикатор + S2 peek на карточке (Шаг 4)
+
+- `Product.svelte`: `inOrderQty` из `cartItems` (фильтр по `product_id`), badge «уже в заказе: N», кнопка «добавить к заказу», mount `ProductCartPeek`.
+- Новый: `ProductCartPeek.svelte` — горизонтальный peek-list (имя/qty/цена), только при непустой корзине.
+- Тесты S1+S2 PASS; b113_s4_b2 — копирайт кнопки обновлён под ТЗ.
+
 ## 2026-07-10 — test(product-peek): S2 red — peek-список на карточке товара
 
 - Новый: `test/integration/shop/product_card_s2_peek_list_test.rb` — Gherkin Сценария 2 (peek-list, строки с именем/qty/ценой, gate по непустой корзине).

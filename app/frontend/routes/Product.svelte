@@ -7,6 +7,7 @@
   import { cartItems, cartTotal } from "../lib/cartSheetStore.js"
   import { useTelegramBack } from "../lib/telegram.js"
   import { favorites } from "../lib/stores/favorites.js"
+  import ProductCartPeek from "../components/ProductCartPeek.svelte"
   import {
     defaultSelectionForGroup,
     buildModifierPayload,
@@ -32,6 +33,14 @@
   // S4-блок-2: индекс строки корзины, если открыли из поп-апа для редактирования
   let cartLineIndex = $state(null)
   let editMode = $derived(cartLineIndex !== null && !Number.isNaN(cartLineIndex))
+  // S1: зеркало корзины для индикатора «уже в заказе»
+  let cartLines = $state([])
+  let inOrderQty = $derived(
+    cartLines
+      .filter((l) => String(l.product_id) === String(params.id))
+      .reduce((sum, l) => sum + Number(l.quantity || 0), 0)
+  )
+  let hasPeekItems = $derived(cartLines.length > 0)
 
   // Разбираем ?cart_line=N из хэша URL (#/product/123?cart_line=2)
   function parseCartLine() {
@@ -126,6 +135,9 @@
 
   onMount(() => {
     favorites.load()
+    const unsubCart = cartItems.subscribe((v) => {
+      cartLines = v || []
+    })
 
     const tick = async () => {
       if (!params.id || params.id !== loadedProductId) return
@@ -141,6 +153,7 @@
     }
     document.addEventListener("visibilitychange", onVisible)
     return () => {
+      unsubCart()
       clearInterval(pollTimer)
       document.removeEventListener("visibilitychange", onVisible)
     }
@@ -250,6 +263,11 @@
     <img src={product.image_url} alt="" class="mb-4 w-full rounded-xl object-cover" decoding="async" />
   {/if}
   <h1 class="mb-2 text-xl font-bold leading-tight">{product.name}</h1>
+  {#if inOrderQty > 0}
+    <p data-testid="shop-product-in-order" class="mb-3 text-sm font-medium text-[#ff8c42]">
+      уже в заказе: {inOrderQty}
+    </p>
+  {/if}
   <p class="mb-4 text-sm text-[#a0a0a0]">{product.description}</p>
 
   {#each product.modifier_groups as g (g.id)}
@@ -276,11 +294,11 @@
     </div>
   {/each}
 
-  <!-- Пустое место чтоб контент не залазил под закреп -->
-  <div class="bottom-spacer"></div>
+  <!-- Пустое место чтоб контент не залазил под закреп + peek -->
+  <div class="bottom-spacer" class:bottom-spacer--peek={hasPeekItems}></div>
 
   <!-- ЗАКРЕПЛЁННЫЙ НИЖНИЙ БАР -->
-  <div class="bottom-bar">
+  <div class="bottom-bar" class:bottom-bar--peek={hasPeekItems}>
     <div class="bar-left">
       <div class="price-display">{Math.round(totalPrice)}₽</div>
       <div class="qty-controls">
@@ -298,15 +316,17 @@
       {#if adding}
         {editMode ? "Сохраняем…" : "Добавляем…"}
       {:else}
-        {editMode ? "Сохранить" : "В корзину 🛒"}
+        {editMode ? "Сохранить" : "добавить к заказу"}
       {/if}
     </button>
     <button class="more-btn" onclick={() => showMoreMenu = !showMoreMenu}>⋮</button>
   </div>
 
+  <ProductCartPeek />
+
   <!-- Выпадающее меню от "⋮" -->
   {#if showMoreMenu}
-    <div class="more-menu">
+    <div class="more-menu" class:more-menu--peek={hasPeekItems}>
       {#if shopTelegramUrl}
         <button onclick={writeToTelegram}>
           <span>✈️</span> Написать в Telegram
@@ -362,10 +382,14 @@
     height: 90px;
   }
 
+  .bottom-spacer--peek {
+    height: 230px;
+  }
+
   /* === ЗАКРЕПЛЁННЫЙ НИЖНИЙ БАР === */
   .bottom-bar {
     position: fixed;
-    bottom: 60px;
+    bottom: 0;
     left: 0;
     right: 0;
     z-index: 50;
@@ -377,6 +401,10 @@
     border-top: 1px solid #3a3a3a;
     max-width: 480px;
     margin: 0 auto;
+  }
+
+  .bottom-bar--peek {
+    bottom: 140px;
   }
 
   .bar-left {
@@ -452,7 +480,7 @@
 
   .more-menu {
     position: fixed;
-    bottom: 130px;
+    bottom: 80px;
     right: 16px;
     background: #2a2a2a;
     border: 1px solid #3a3a3a;
@@ -461,6 +489,10 @@
     z-index: 100;
     min-width: 220px;
     box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+  }
+
+  .more-menu--peek {
+    bottom: 220px;
   }
 
   .more-menu button {
