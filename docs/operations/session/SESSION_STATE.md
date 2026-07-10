@@ -2,7 +2,7 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-10 (checkout payment — clean slate reset)  
+**Дата:** 2026-07-10 (checkout payment — history purge + Fly deploy)  
 **Предыдущее:** 2026-07-10 (product card peek cart S4–S7)  
 **Предыдущее:** 2026-07-07 (B1.13-CR answers rev3)  
 **Веха 1:** **закрыта** 2026-06-19 (CHECKLIST § I, H.3 заочно).  
@@ -30,6 +30,14 @@
 
 | **Sentry triage** | RUBY-9 fix `[x]` · Neon quota OK (оплачено) | Archive RUBY-Q…R в Sentry UI |
 | **Security hygiene** | permit! → explicit weekday permit `[x]` · rack/view_component bump `[x]` | **V2-SEC-08** bundler-audit CVE — обязательно (`PRACTICES.md`) |
+
+### Сессия 2026-07-10 (checkout payment — history purge + Fly deploy)
+
+- Git: вырезан блок старых checkout-sheet коммитов из develop (
+ebase --onto); force-push.
+- Deploy: Fly coffeeos — clean slate (без sheet UI).
+- Канон: новое ТЗ + артефакты; B1.12 оплата сохранена.
+- **Стоп:** ждать go на реализацию с нуля.
 
 ### Сессия 2026-07-10 (checkout payment — clean slate reset)
 

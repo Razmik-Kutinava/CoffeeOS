@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 2026-07-10 — ops(checkout-payment): history purge + Fly deploy clean slate
+
+- **Git:** 
+ebase --onto — вырезан сплошной блок старых checkout-sheet коммитов (stage0→A2); develop force-push.
+- **Канон:** новое ТЗ + rtifacts/checkout_payment_method_card/; Checkout = B1.12 (PaymentMethodsSheet / NewCardSheet).
+- **Deploy:** ly deploy -a coffeeos --remote-only --depot=false (после push).
+- **Не опираться** на старые sheet-коммиты в reflog/origin — NON-CANON.
+
 ## 2026-07-10 — reset(checkout-payment): clean slate — удалён старый sheet
 
 - Удалены старый checkout payment sheet (компонент + store + thresholds + integration-тесты + артефакты/ТЗ).

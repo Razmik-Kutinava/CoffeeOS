@@ -1,6 +1,6 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-10 (checkout payment — clean slate reset)  
+**Дата:** 2026-07-10 (checkout payment — history purge + Fly deploy)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev
 
