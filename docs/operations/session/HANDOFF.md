@@ -12,6 +12,8 @@
 | Скрины 7 шт. | **`[x]`** `artifacts/checkout_payment_method_card/screenshots/` (s01–s07) |
 | Код / тесты | **`[ ]`** — clean slate 2026-07-10 (старый sheet удалён) |
 | Checkout UI | B1.12: `PaymentMethodsSheet` + `NewCardSheet` |
+| Git history | старый sheet-блок **вырезан** из `develop` (force-push) |
+| Fly deploy | **`[x]`** v340 · `deployment-01KX66W1GSN3SP6N4SDG1QY345` · `/up` 200 |
 | **Следующий шаг** | ждать `go` на реализацию с нуля |
 
 ### Product card peek cart — отображение набранных позиций в карточке товара

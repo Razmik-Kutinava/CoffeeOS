@@ -21,7 +21,7 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **Checkout payment** | **clean slate** — ТЗ + 7 скринов; старый sheet-код удалён | ждать `go` на реализацию с нуля |
+| **Checkout payment** | **clean slate на Fly v340** — ТЗ + 7 скринов; sheet вырезан из git | ждать `go` на реализацию с нуля |
 | **B1.12 rev2** | код R1–R3 `[x]` · **BUG-SAVE фикс `1081dac`** Fly v328 `[x]` | **A1:** заказчик CONFIRMED оплата |
 | **B1.11 режим работы** | **ЗАКРЫТА** · апрув 2026-07-05 | **B1.12** A1 · **B1.13 S4** · **B1.14-4** |
 | **B1.13 CR-BOTTOM-NAV** | deploy **`[x]`** Fly 2026-07-07 | A1 апрув заказчика |
@@ -33,11 +33,10 @@
 
 ### Сессия 2026-07-10 (checkout payment — history purge + Fly deploy)
 
-- Git: вырезан блок старых checkout-sheet коммитов из develop (
-ebase --onto); force-push.
-- Deploy: Fly coffeeos — clean slate (без sheet UI).
+- Git: вырезан блок старых checkout-sheet коммитов из `develop` (`rebase --onto`); force-push.
+- Deploy: Fly `coffeeos` **v340** · image `deployment-01KX66W1GSN3SP6N4SDG1QY345` · `/up` **200**.
 - Канон: новое ТЗ + артефакты; B1.12 оплата сохранена.
-- **Стоп:** ждать go на реализацию с нуля.
+- **Стоп:** ждать `go` на реализацию с нуля.
 
 ### Сессия 2026-07-10 (checkout payment — clean slate reset)
 
