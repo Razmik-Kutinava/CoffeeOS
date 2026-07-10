@@ -31,6 +31,13 @@
 | **Sentry triage** | RUBY-9 fix `[x]` · Neon quota OK (оплачено) | Archive RUBY-Q…R в Sentry UI |
 | **Security hygiene** | permit! → explicit weekday permit `[x]` · rack/view_component bump `[x]` | **V2-SEC-08** bundler-audit CVE — обязательно (`PRACTICES.md`) |
 
+### Сессия 2026-07-10 (product card peek cart — S1 red test)
+
+- **Шаг 1 / Сценарий 1:** только тест (код Product не трогали).
+- **Тест:** `test/integration/shop/product_card_s1_in_order_indicator_test.rb` — Gherkin «уже в заказе: N» + реактивность `cartItems`.
+- **Прогон:** `bin/rails test test/integration/shop/product_card_s1_in_order_indicator_test.rb` — **4 runs, 4 failures** (красная зона, ожидаемо).
+- **Стоп:** апрув теста разработчиком → `go` на реализацию индикатора в `Product.svelte`.
+
 ### Сессия 2026-07-10 (product card peek cart — артефакты)
 
 - **Новая задача:** [`отображение набранных позиций и функциональность в режиме pee.md`](../milestones/veha_2/requirements/customer_tasks/отображение%20набранных%20позиций%20и%20функциональность%20в%20режиме%20pee.md) — карточка товара: индикатор «уже в заказе», peek с горизонтальным скроллом и ±1.

@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-07-10 — test(product-peek): S1 red — индикатор «уже в заказе»
+
+- Новый: `test/integration/shop/product_card_s1_in_order_indicator_test.rb` — Gherkin Сценария 1 (DOM testid + qty из cartItems + реактивность).
+- Код `Product.svelte` не менялся; прогон: 4 failures (красная зона).
+
 ## 2026-07-10 — docs: новая задача product card peek cart (артефакты)
 
 - **ТЗ:** `customer_tasks/отображение набранных позиций и функциональность в режиме pee.md` — карточка товара + режим peek (индикатор «уже в заказе», горизонтальный скролл, ±1).
