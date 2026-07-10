@@ -1,7 +1,7 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-10 (checkout payment — S1–S7+E green)  
-**Ветка:** `develop` · HEAD `4740013`  
+**Дата:** 2026-07-10 (checkout payment — shop suite PASS)  
+**Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev (**v340** — без нового sheet до deploy)
 
 ### Checkout payment method card — выбор оплаты / прикрепление карты
@@ -13,8 +13,9 @@
 | Clean slate + Fly | **`[x]`** v340 · history purge |
 | S1–S7 + E1–E10 | **`[x]`** green 23 PASS · `4740013` |
 | Код sheet | **`[x]`** CheckoutPaymentSheet + store + thresholds |
-| MCP browser | **`[x]`** Fly checkout открыт — peek sheet **не** на стенде (нужен deploy) |
-| **Следующий шаг** | апрув: полный shop suite · затем deploy для UI peek |
+| Shop suite | **`[x]`** `test/integration/shop/` — **304 PASS** (0 fail/err, 3 skip) |
+| MCP browser | **`[x]`** Fly checkout — peek sheet **не** на стенде (нужен deploy) |
+| **Следующий шаг** | апрув: deploy для UI peek на Fly |
 
 ### Product card peek cart — отображение набранных позиций в карточке товара
 

@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-07-10 — fix(checkout-payment): nested button + shop suite PASS
+
+- `CheckoutPaymentSheet`: строка карты — `div[role=button]` вместо nested `<button>` (vite build).
+- `bin/rails test test/integration/shop/` — **304 runs, 2019 assertions, 0 failures, 0 errors, 3 skips**.
+
 ## 2026-07-10 — feat(checkout-payment): S1–S7+E green — CheckoutPaymentSheet
 
 - Новые: `CheckoutPaymentSheet.svelte` · `checkoutPaymentSheetStore.js` · `checkoutPaymentSheetThresholds.js`

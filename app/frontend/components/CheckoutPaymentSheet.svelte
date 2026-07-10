@@ -376,14 +376,16 @@
         </div>
         <div class="min-h-0 flex-1 space-y-2 overflow-y-auto px-3" data-testid="checkout-payment-list">
           {#each savedCards as card}
-            <button
-              type="button"
-              class="flex w-full items-center justify-between rounded-xl border px-3 py-3 text-left {selectedCardId === card.id ? 'border-[#ff8c42] text-[#ff8c42]' : 'border-[#3a3a3a] text-white'}"
+            <div
+              role="button"
+              tabindex="0"
+              class="flex w-full items-center justify-between rounded-xl border px-3 py-3 text-left cursor-pointer {selectedCardId === card.id ? 'border-[#ff8c42] text-[#ff8c42]' : 'border-[#3a3a3a] text-white'}"
               onclick={() => onSelectCard(card)}
+              onkeydown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onSelectCard(card) } }}
             >
               <span>{formatCardListLabel(card)}</span>
               <button type="button" class="text-xs text-red-400" onclick={(e) => { e.stopPropagation(); onRemoveCard(card) }}>Удалить карту</button>
-            </button>
+            </div>
           {/each}
           <button type="button" class="w-full rounded-xl border border-[#3a3a3a] px-3 py-3 text-[#888]" disabled data-testid="checkout-payment-sbp-list">СБП</button>
           <button type="button" class="w-full rounded-xl border border-[#ff8c42] px-3 py-3 text-[#ff8c42]" onclick={handleCardPlus}>Картой +</button>
