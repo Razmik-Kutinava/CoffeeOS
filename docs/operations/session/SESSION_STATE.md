@@ -2,7 +2,8 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-07 (B1.13-CR answers rev3)  
+**Дата:** 2026-07-10 (новая задача: product card peek cart)  
+**Предыдущее:** 2026-07-07 (B1.13-CR answers rev3)  
 **Предыдущее:** B1.15 deploy `572fd85` · A2 nav overlap  
 **Веха 1:** **закрыта** 2026-06-19 (CHECKLIST § I, H.3 заочно).  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
@@ -25,9 +26,16 @@
 | **B1.11 режим работы** | **ЗАКРЫТА** · апрув 2026-07-05 | **B1.12** A1 · **B1.15** F1 · **B1.13 S4** · **B1.14-4** |
 | **B1.13 CR-BOTTOM-NAV** | deploy **`[x]`** Fly 2026-07-07 | A1 апрув заказчика |
 | **B1.14 адрес в шапке** | **B1.14-3d** index map `[x]` | deploy (`./bin/fly_deploy.sh`) · B1.14-4 cart |
+| **Product card peek cart** | **НОВАЯ** — ТЗ + 2 скрина в артефактах | ждать `go` на реализацию |
 
 | **Sentry triage** | RUBY-9 fix `[x]` · Neon quota OK (оплачено) | Archive RUBY-Q…R в Sentry UI |
 | **Security hygiene** | permit! → explicit weekday permit `[x]` · rack/view_component bump `[x]` | **V2-SEC-08** bundler-audit CVE — обязательно (`PRACTICES.md`) |
+
+### Сессия 2026-07-10 (product card peek cart — артефакты)
+
+- **Новая задача:** [`отображение набранных позиций и функциональность в режиме pee.md`](../milestones/veha_2/requirements/customer_tasks/отображение%20набранных%20позиций%20и%20функциональность%20в%20режиме%20pee.md) — карточка товара: индикатор «уже в заказе», peek с горизонтальным скроллом и ±1.
+- **Артефакты:** `artifacts/product_card_peek_cart/screenshots/` — `concept_layout_wireframe.png`, `product_card_peek_mockup.png`.
+- **Статус:** ТЗ готово · скрины сохранены · код не начат.
 
 ### Сессия 2026-07-08 (B1.13-S4 блок 1.1 — openEditCard по клику на картинку)
 

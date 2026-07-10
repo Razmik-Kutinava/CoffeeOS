@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-07-10 — docs: новая задача product card peek cart (артефакты)
+
+- **ТЗ:** `customer_tasks/отображение набранных позиций и функциональность в режиме pee.md` — карточка товара + режим peek (индикатор «уже в заказе», горизонтальный скролл, ±1).
+- **Артефакты:** `artifacts/product_card_peek_cart/screenshots/` — wireframe концепта + mockup карточки товара.
+
 ## 2026-07-09 — fix(b1.13): сумма только внутри кнопки checkout
 
 - `CartSheet.svelte`: убран дубль цены рядом с кнопкой в `checkoutBar`; `+X₽` только внутри `shop-cart-sheet-checkout`.

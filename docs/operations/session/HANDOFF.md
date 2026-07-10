@@ -1,8 +1,17 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-07 (B1.13-CR deploy Fly)  
-**Ветка:** `develop` pushed `4e1d923`  
-**Прод:** https://coffeeos.fly.dev · deploy `deployment-01KWXSGYSBZDNGSC6ABJAATFX6`
+**Дата:** 2026-07-10 (новая задача product card peek cart)  
+**Ветка:** `develop`  
+**Прод:** https://coffeeos.fly.dev
+
+### Product card peek cart — отображение набранных позиций в карточке товара
+
+| Что | Статус |
+|-----|--------|
+| ТЗ | [`отображение набранных позиций и функциональность в режиме pee.md`](../milestones/veha_2/requirements/customer_tasks/отображение%20набранных%20позиций%20и%20функциональность%20в%20режиме%20pee.md) |
+| Скрины 2 шт. | **`[x]`** `artifacts/product_card_peek_cart/screenshots/` |
+| Код | **`[ ]`** — ждать `go` |
+| **Следующий шаг** | разбор ТЗ · план шага 1 · `go` |
 
 ### B1.13-CR-BOTTOM-NAV — убрать нижний бар (rev3)
 
