@@ -2,7 +2,8 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-10 (новая задача: product card peek cart)  
+**Дата:** 2026-07-10 (checkout payment method card — этап 0 артефакты)  
+**Предыдущее:** 2026-07-10 (product card peek cart S4–S7)  
 **Предыдущее:** 2026-07-07 (B1.13-CR answers rev3)  
 **Предыдущее:** B1.15 deploy `572fd85` · A2 nav overlap  
 **Веха 1:** **закрыта** 2026-06-19 (CHECKLIST § I, H.3 заочно).  
@@ -21,15 +22,23 @@
 
 | Сейчас | Дальше |
 |--------|--------|
+| **Checkout payment method card** | **НОВАЯ** — ТЗ + 7 скринов в `artifacts/checkout_payment_method_card/` | ждать `go` на разбор/код |
 | **B1.12 rev2** | код R1–R3 `[x]` · **BUG-SAVE фикс `1081dac`** Fly v328 `[x]` | **A1:** заказчик CONFIRMED оплата |
 | **B1.15 checkout sheet** | **A2 fix** nav overlap · build `b115-a2` | deploy + MCP re-check |
 | **B1.11 режим работы** | **ЗАКРЫТА** · апрув 2026-07-05 | **B1.12** A1 · **B1.15** F1 · **B1.13 S4** · **B1.14-4** |
 | **B1.13 CR-BOTTOM-NAV** | deploy **`[x]`** Fly 2026-07-07 | A1 апрув заказчика |
 | **B1.14 адрес в шапке** | **B1.14-3d** index map `[x]` | deploy (`./bin/fly_deploy.sh`) · B1.14-4 cart |
-| **Product card peek cart** | **НОВАЯ** — ТЗ + 2 скрина в артефактах | ждать `go` на реализацию |
+| **Product card peek cart** | S1–S7 код `[x]` · MCP Fly `[ ]` | апрув заказчика |
 
 | **Sentry triage** | RUBY-9 fix `[x]` · Neon quota OK (оплачено) | Archive RUBY-Q…R в Sentry UI |
 | **Security hygiene** | permit! → explicit weekday permit `[x]` · rack/view_component bump `[x]` | **V2-SEC-08** bundler-audit CVE — обязательно (`PRACTICES.md`) |
+
+### Сессия 2026-07-10 (checkout payment method card — этап 0 артефакты)
+
+- **ТЗ:** `customer_tasks/Выбор способа оплаты и прикрепление банковской карты на экране оформления заказа.md`
+- **Артефакты:** `artifacts/checkout_payment_method_card/screenshots/` — 7 PNG (s01–s07)
+- **Код:** не трогали
+- **Стоп:** ждать `go` на следующий шаг
 
 ### Сессия 2026-07-10 (product card peek — S4–S7 extremes)
 

@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026-07-10 — docs(checkout-payment): этап 0 — ТЗ + 7 скринов в артефактах
+
+- ТЗ: `customer_tasks/Выбор способа оплаты и прикрепление банковской карты на экране оформления заказа.md`
+- Артефакты: `artifacts/checkout_payment_method_card/screenshots/` — s01–s07 (peek 1/2/3, card+3DS, expanded+ 1/multi cards)
+- Код не трогали — только подготовка.
+
 ## 2026-07-10 — feat(product-peek): S4–S7 скролл, empty, error, out-of-stock
 
 - `ProductCartPeek`: horizontal scroll testid + touch-action; error banner; out-of-stock line.
