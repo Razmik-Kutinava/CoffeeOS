@@ -54,15 +54,19 @@ class Shop::Api::B112R3PaymentMethodsTest < ActionDispatch::IntegrationTest
     assert_includes labels, "Карта"
   end
 
-  test "Checkout uses PaymentMethodsSheet instead of legacy card tabs" do
+  test "Checkout uses CheckoutPaymentSheet + NewCardSheet (B1.12 real pay)" do
     checkout = File.read(Rails.root.join("app/frontend/routes/Checkout.svelte"))
     fsm = File.read(Rails.root.join("app/frontend/lib/shopPayFsm.js"))
 
-    assert_includes checkout, "PaymentMethodsSheet"
-    assert_includes checkout, "payment-method-summary"
+    assert_includes checkout, "CheckoutPaymentSheet"
+    assert_includes checkout, "NewCardSheet"
+    assert_includes checkout, "ThreeDsOverlay"
+    assert_includes checkout, "onAddCard"
     assert_includes checkout, "selectSavedCard"
     assert_includes checkout, "resetPaymentFsm"
     assert_includes checkout, '"/payments/one_click"'
+    refute_includes checkout, "PaymentMethodsSheet"
+    refute_includes checkout, "payment-method-summary"
     refute_includes checkout, "saved-card-block"
     refute_includes checkout, '["card", "Картой"]'
     assert_includes fsm, "PAY_FSM"

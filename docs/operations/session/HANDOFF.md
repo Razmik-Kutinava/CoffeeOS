@@ -1,6 +1,6 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-10 (checkout payment — Было/Стало)  
+**Дата:** 2026-07-10 (checkout payment — real B1.12 wiring)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev (**v340** — без нового sheet до deploy)
 
@@ -9,15 +9,16 @@
 | Что | Статус |
 |-----|--------|
 | ТЗ | [`Выбор способа оплаты…`](../milestones/veha_2/requirements/customer_tasks/Выбор%20способа%20оплаты%20и%20прикрепление%20банковской%20карты%20на%20экране%20оформления%20заказа.md) |
-| Скрины 7 шт. | **`[x]`** `artifacts/checkout_payment_method_card/screenshots/` (s01–s07) |
-| Clean slate + Fly | **`[x]`** v340 · history purge |
-| S1–S7 + E1–E10 | **`[x]`** green 23 PASS · `4740013` |
-| Код sheet | **`[x]`** CheckoutPaymentSheet + store + thresholds |
-| Shop suite | **`[x]`** `test/integration/shop/` — **304 PASS** (0 fail/err, 3 skip) |
-| MCP browser | **`[x]`** Fly checkout — peek sheet **не** на стенде (нужен deploy) |
-| Было/Стало в ТЗ | **`[x]`** отчёт по S1–S7+E |
-| Галочки Gherkin | **`[x]`** S1–S7 + E1–E10 |
-| **Следующий шаг** | апрув → `/review` → затем deploy |
+| `/review` | **блокеры закрыты** — mock 3DS/dual UI убраны; wiring → B1.12 |
+| Картой + | **`[x]`** → `NewCardSheet` (RSA) |
+| 3DS | **`[x]`** → `ThreeDsOverlay` ACS |
+| Оплатить | **`[x]`** one-click only |
+| Dual UI | **убран** |
+| Тест wiring | **`[x]`** `checkout_payment_sheet_real_b112_test.rb` · 12 PASS |
+| Shop suite | **`[x]`** **293 PASS** (0 fail/err, 3 skip) |
+| Deploy / MCP | **`[ ]`** ждать `go` |
+| Живая оплата заказчиком | **после deploy** |
+| **Следующий шаг** | **`go` на deploy** → MCP UI → заказчик жмёт живую карту |
 
 ### Product card peek cart — отображение набранных позиций в карточке товара
 

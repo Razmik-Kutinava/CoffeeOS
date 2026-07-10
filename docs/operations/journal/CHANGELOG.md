@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2026-07-10 — fix(checkout-payment): wire sheet → real B1.12 (до deploy)
+
+- **Картой +** → `NewCardSheet` (RSA); mock form/SMS-keypad 3DS удалены.
+- **Оплатить** → только one-click; dual UI (`PaymentMethodsSheet`/summary) убран.
+- Лимит 10: `assertCanAddCard`; fake «Удалить карту» убрана (нет API).
+- Тест: `checkout_payment_sheet_real_b112_test.rb` (12 PASS); старый mock-suite удалён.
+- Регрессия: `test/integration/shop/` — **293 runs, 0 failures, 3 skips**.
+- Следующий шаг: deploy (`go`) → живая оплата заказчиком.
+
 ## 2026-07-10 — docs(checkout-payment): Gherkin [x] S1–S7 + E1–E10
 
 - В ТЗ отмечены все сценарии реализации и экстремалы.

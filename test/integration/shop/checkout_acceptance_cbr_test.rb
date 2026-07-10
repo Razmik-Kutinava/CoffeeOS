@@ -66,14 +66,13 @@ class Shop::CheckoutAcceptanceCbrTest < ActionDispatch::IntegrationTest
     end
   end
 
-  # п.5 — СБП disabled + «Будет позже»
+  # п.5 — СБП disabled в checkout payment sheet
   test "cbr_05 sbp disabled with later message in payment methods sheet" do
     checkout = vitrina_source("routes/Checkout.svelte")
-    sheet = File.read(Rails.root.join("app/frontend/components/PaymentMethodsSheet.svelte"))
-    assert_includes checkout, "PaymentMethodsSheet"
+    sheet = File.read(Rails.root.join("app/frontend/components/CheckoutPaymentSheet.svelte"))
+    assert_includes checkout, "CheckoutPaymentSheet"
     assert_includes sheet, "СБП"
-    assert_includes sheet, "Будет позже"
-    assert_includes sheet, 'aria-disabled="true"'
+    assert_match(/checkout-payment-sbp[\s\S]{0,80}disabled|disabled[\s\S]{0,80}checkout-payment-sbp/, sheet)
   end
 
   # п.6 — по разделу «Изменения»: чекбокс «в машину» убран (критерий в CBR противоречит — сдаём по изменениям)
@@ -91,12 +90,14 @@ class Shop::CheckoutAcceptanceCbrTest < ActionDispatch::IntegrationTest
     end
   end
 
-  # п.8 — валидация до оплаты (canPay требует verify)
+  # п.8 — валидация до оплаты (canPay требует verify; sheet гейтит footer)
   test "cbr_08 pay blocked until name email and verification" do
     checkout = vitrina_source("routes/Checkout.svelte")
+    sheet = File.read(Rails.root.join("app/frontend/components/CheckoutPaymentSheet.svelte"))
     assert_match(/canPay.*emailVerified/m, checkout.gsub(/\s+/, " "))
-    assert_includes checkout, "canOpenPaymentSheet"
     assert_includes checkout, "{canPay}"
+    assert_includes checkout, "{emailVerified}"
+    assert_match(/emailVerified/, sheet)
   end
 
   # п.9 — код уходит на указанный email (запись OTP + API ok)

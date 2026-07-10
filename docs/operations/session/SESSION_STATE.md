@@ -2,7 +2,8 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-10 (checkout payment — Было/Стало)  
+**Дата:** 2026-07-10 (checkout payment — real B1.12 wiring до deploy)  
+**Предыдущее:** 2026-07-10 (checkout payment — Было/Стало)  
 **Предыдущее:** 2026-07-10 (checkout payment — S1–S7 red tests)  
 **Предыдущее:** 2026-07-10 (history purge + Fly v340)  
 **Предыдущее:** 2026-07-10 (product card peek cart S4–S7)  
@@ -23,7 +24,7 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **Checkout payment** | S1–S7+E green · suite 304 · Было/Стало в ТЗ | апрув → `/review` → deploy |
+| **Checkout payment** | wiring → B1.12 **готово** · shop 293 PASS | **`go` deploy** → живая оплата заказчиком |
 | **B1.12 rev2** | код R1–R3 `[x]` · **BUG-SAVE фикс `1081dac`** Fly v328 `[x]` | **A1:** заказчик CONFIRMED оплата |
 | **B1.11 режим работы** | **ЗАКРЫТА** · апрув 2026-07-05 | **B1.12** A1 · **B1.13 S4** · **B1.14-4** |
 | **B1.13 CR-BOTTOM-NAV** | deploy **`[x]`** Fly 2026-07-07 | A1 апрув заказчика |
@@ -32,6 +33,13 @@
 
 | **Sentry triage** | RUBY-9 fix `[x]` · Neon quota OK (оплачено) | Archive RUBY-Q…R в Sentry UI |
 | **Security hygiene** | permit! → explicit weekday permit `[x]` · rack/view_component bump `[x]` | **V2-SEC-08** bundler-audit CVE — обязательно (`PRACTICES.md`) |
+
+### Сессия 2026-07-10 (checkout payment — real B1.12 wiring)
+
+- `/review` блокеры закрыты: mock 3DS/form убраны; Card+ → NewCardSheet; Pay → one-click; dual UI убран.
+- Тест: `checkout_payment_sheet_real_b112_test.rb` · 12 PASS. Shop: **293 PASS**.
+- E7 delete card API — отложено (кнопка-обман убрана).
+- **Стоп:** ждать `go` на deploy → живая оплата заказчиком.
 
 ### Сессия 2026-07-10 (checkout payment — Gherkin [x])
 

@@ -41,7 +41,6 @@
     saveCachedSavedCard,
     clearCachedSavedCard
   } from "../lib/shopSavedCardCache.js"
-  import PaymentMethodsSheet from "../components/PaymentMethodsSheet.svelte"
   import NewCardSheet from "../components/NewCardSheet.svelte"
   import ThreeDsOverlay from "../components/ThreeDsOverlay.svelte"
   import CheckoutPaymentSheet from "../components/CheckoutPaymentSheet.svelte"
@@ -73,7 +72,6 @@
   let payFsmState = $state(PAY_FSM.DEFAULT)
   let useOneClick = $state(true)
   let clientOrderUuid = $state(null)
-  let showPaymentMethodsSheet = $state(false)
   let showNewCardSheet = $state(false)
   let showThreeDsOverlay = $state(false)
   let operatingHours = $state(getOperatingHours())
@@ -85,16 +83,6 @@
       !payBusy &&
       !savedCardsLoading &&
       shopIsOpenForPay()
-  )
-  const paymentSummaryLabel = $derived(
-    selectionMode === "saved_card" && savedCard
-      ? formatCardListLabel(savedCard)
-      : selectionMode === "new_card"
-        ? "Новая карта"
-        : "Выберите способ оплаты"
-  )
-  const canOpenPaymentSheet = $derived(
-    isValidEmail(email) && emailVerified && !profileSyncing
   )
   const canSendCode = $derived(isValidEmail(email) && !sendingCode)
 
@@ -261,7 +249,6 @@
     selectedCardId = null
     selectionMode = "new_card"
     useOneClick = true
-    showPaymentMethodsSheet = false
     resetPaymentFsm()
   }
 
@@ -365,7 +352,6 @@
     await new Promise((r) => setTimeout(r, SUCCESS_REDIRECT_MS))
     clearGuestOrderSession()
     showThreeDsOverlay = false
-    showPaymentMethodsSheet = false
     showNewCardSheet = false
     push(`/order/${orderId}`)
   }
@@ -471,18 +457,11 @@
 
   async function handleNewCardThreeDs(res) {
     showNewCardSheet = false
-    showPaymentMethodsSheet = false
     await handleThreeDsResponse(res)
   }
 
   function handleNewCardFsmChange(state) {
     payFsmState = state
-  }
-
-  function openPaymentMethodsSheet() {
-    if (!canOpenPaymentSheet) return
-    err = null
-    showPaymentMethodsSheet = true
   }
 
   function openNewCardSheet() {
@@ -491,14 +470,18 @@
     showNewCardSheet = true
   }
 
+  /** Картой + → реальный NewCardSheet (RSA + ACS), не mock form */
+  function handleAddCard() {
+    selectNewCardOption()
+    openNewCardSheet()
+  }
+
+  /** Оплатить — только one-click по сохранённой карте */
   async function handlePayFromSheet() {
     if (savedCardsLoading) await loadSavedCards()
-    if (selectionMode === "saved_card") {
+    if (selectionMode === "saved_card" && savedCard?.id) {
       await submitOneClick()
-      return
     }
-    showPaymentMethodsSheet = false
-    openNewCardSheet()
   }
 </script>
 
@@ -581,26 +564,6 @@
     {/if}
   {/if}
 
-  {#if emailVerified}
-    <button
-      type="button"
-      class="mb-6 w-full rounded-xl border border-[#3a3a3a] bg-[#2a2a2a] p-4 text-left disabled:opacity-50"
-      disabled={!canOpenPaymentSheet}
-      data-testid="payment-method-summary"
-      onclick={openPaymentMethodsSheet}
-    >
-      <span class="mb-1 block text-sm text-[#a0a0a0]">Способ оплаты</span>
-      <span class="flex items-center justify-between gap-2 font-medium text-white">
-        {#if savedCardsLoading}
-          Проверяем карты…
-        {:else}
-          {paymentSummaryLabel}
-        {/if}
-        <span class="text-[#ff8c42]" aria-hidden="true">›</span>
-      </span>
-    </button>
-  {/if}
-
   {#if err}
     <p class="mb-4 text-sm text-red-400">{err}</p>
   {/if}
@@ -614,23 +577,6 @@
       {operatingHours.closed_message}
     </div>
   {/if}
-
-  <PaymentMethodsSheet
-    open={showPaymentMethodsSheet}
-    cards={savedCards}
-    loading={savedCardsLoading}
-    {selectedCardId}
-    {selectionMode}
-    fsmState={payFsmState}
-    {canPay}
-    onClose={() => {
-      if (isPayFsmClickable(payFsmState)) showPaymentMethodsSheet = false
-    }}
-    onSelectCard={selectSavedCard}
-    onSelectNewCard={selectNewCardOption}
-    onPay={handlePayFromSheet}
-    onRetry={handlePayFromSheet}
-  />
 
   <NewCardSheet
     open={showNewCardSheet}
@@ -666,5 +612,6 @@
     onPay={handlePayFromSheet}
     onSelectCard={selectSavedCard}
     onSelectNewCard={selectNewCardOption}
+    onAddCard={handleAddCard}
   />
 </div>
