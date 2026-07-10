@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026-07-10 — test(checkout-payment): S1–S7 red — sheet ещё нет
+
+- Новый: `test/integration/shop/checkout_payment_sheet_s1_s7_red_test.rb` — Gherkin шагов 1–7 (peek→expanded→expanded+/form/3DS/pay/X/openEditCard).
+- Прогон: **13 runs, 13 failures** (красная зона, ожидаемо) — нет `CheckoutPaymentSheet` / store.
+- Код UI не меняли.
+
 ## 2026-07-10 — ops(checkout-payment): history purge + Fly deploy clean slate
 
 - **Git:** `rebase --onto` — вырезан сплошной блок старых checkout-sheet коммитов; `develop` force-push (`9db1406`).

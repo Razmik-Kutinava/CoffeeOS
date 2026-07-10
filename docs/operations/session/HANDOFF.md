@@ -1,6 +1,6 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-10 (checkout payment — history purge + Fly deploy)  
+**Дата:** 2026-07-10 (checkout payment — S1–S7 red tests)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev
 
@@ -8,13 +8,12 @@
 
 | Что | Статус |
 |-----|--------|
-| ТЗ | [`Выбор способа оплаты и прикрепление банковской карты на экране оформления заказа.md`](../milestones/veha_2/requirements/customer_tasks/Выбор%20способа%20оплаты%20и%20прикрепление%20банковской%20карты%20на%20экране%20оформления%20заказа.md) |
+| ТЗ | [`Выбор способа оплаты…`](../milestones/veha_2/requirements/customer_tasks/Выбор%20способа%20оплаты%20и%20прикрепление%20банковской%20карты%20на%20экране%20оформления%20заказа.md) |
 | Скрины 7 шт. | **`[x]`** `artifacts/checkout_payment_method_card/screenshots/` (s01–s07) |
-| Код / тесты | **`[ ]`** — clean slate 2026-07-10 (старый sheet удалён) |
-| Checkout UI | B1.12: `PaymentMethodsSheet` + `NewCardSheet` |
-| Git history | старый sheet-блок **вырезан** из `develop` (force-push) |
-| Fly deploy | **`[x]`** v340 · `deployment-01KX66W1GSN3SP6N4SDG1QY345` · `/up` 200 |
-| **Следующий шаг** | ждать `go` на реализацию с нуля |
+| Clean slate + Fly | **`[x]`** v340 · history purge |
+| S1–S7 red-тесты | **`[x]`** `checkout_payment_sheet_s1_s7_red_test.rb` — **13 FAIL** (ожидаемо) |
+| Код sheet | **`[ ]`** |
+| **Следующий шаг** | `go` на реализацию (зелёная зона) |
 
 ### Product card peek cart — отображение набранных позиций в карточке товара
 
