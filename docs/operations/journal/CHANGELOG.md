@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-07-10 — docs(checkout-payment): Было/Стало S1–S7+E в ТЗ
+
+- Отчёт Было/Стало + таблица статуса в customer_tasks (галочки Gherkin ждут апрува).
+- Следующий шаг: `/review` после апрува.
+
 ## 2026-07-10 — fix(checkout-payment): nested button + shop suite PASS
 
 - `CheckoutPaymentSheet`: строка карты — `div[role=button]` вместо nested `<button>` (vite build).

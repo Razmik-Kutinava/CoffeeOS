@@ -1,6 +1,6 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-10 (checkout payment — shop suite PASS)  
+**Дата:** 2026-07-10 (checkout payment — Было/Стало)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev (**v340** — без нового sheet до deploy)
 
@@ -15,7 +15,8 @@
 | Код sheet | **`[x]`** CheckoutPaymentSheet + store + thresholds |
 | Shop suite | **`[x]`** `test/integration/shop/` — **304 PASS** (0 fail/err, 3 skip) |
 | MCP browser | **`[x]`** Fly checkout — peek sheet **не** на стенде (нужен deploy) |
-| **Следующий шаг** | апрув: deploy для UI peek на Fly |
+| Было/Стало в ТЗ | **`[x]`** отчёт по S1–S7+E (галочки Gherkin ждут апрува) |
+| **Следующий шаг** | апрув → `/review` → затем deploy |
 
 ### Product card peek cart — отображение набранных позиций в карточке товара
 

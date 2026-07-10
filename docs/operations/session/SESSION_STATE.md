@@ -2,7 +2,7 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-10 (checkout payment — shop suite PASS)  
+**Дата:** 2026-07-10 (checkout payment — Было/Стало)  
 **Предыдущее:** 2026-07-10 (checkout payment — S1–S7 red tests)  
 **Предыдущее:** 2026-07-10 (history purge + Fly v340)  
 **Предыдущее:** 2026-07-10 (product card peek cart S4–S7)  
@@ -23,7 +23,7 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **Checkout payment** | S1–S7+E green · shop suite **304 PASS** | апрув: deploy Fly |
+| **Checkout payment** | S1–S7+E green · suite 304 · Было/Стало в ТЗ | апрув → `/review` → deploy |
 | **B1.12 rev2** | код R1–R3 `[x]` · **BUG-SAVE фикс `1081dac`** Fly v328 `[x]` | **A1:** заказчик CONFIRMED оплата |
 | **B1.11 режим работы** | **ЗАКРЫТА** · апрув 2026-07-05 | **B1.12** A1 · **B1.13 S4** · **B1.14-4** |
 | **B1.13 CR-BOTTOM-NAV** | deploy **`[x]`** Fly 2026-07-07 | A1 апрув заказчика |
@@ -32,6 +32,12 @@
 
 | **Sentry triage** | RUBY-9 fix `[x]` · Neon quota OK (оплачено) | Archive RUBY-Q…R в Sentry UI |
 | **Security hygiene** | permit! → explicit weekday permit `[x]` · rack/view_component bump `[x]` | **V2-SEC-08** bundler-audit CVE — обязательно (`PRACTICES.md`) |
+
+### Сессия 2026-07-10 (checkout payment — Было/Стало)
+
+- В ТЗ customer_tasks добавлен отчёт Было/Стало по S1–S7 + E1–E10.
+- Галочки `[x]` в Gherkin **не** ставили — ждут апрува + `/review`.
+- **Стоп:** апрув → независимый `/review`.
 
 ### Сессия 2026-07-10 (checkout payment — shop suite)
 
