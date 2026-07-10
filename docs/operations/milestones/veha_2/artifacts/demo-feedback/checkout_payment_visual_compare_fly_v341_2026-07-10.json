@@ -43,11 +43,11 @@
     {
       "mock": "s04_card_form_3ds.png",
       "expect": "Внутри шторки: форма PAN/ММГГ/CVV + свитч + экран SMS 3DS + keypad + Разрешить",
-      "fly": "DEVIATION",
+      "fly": "ACCEPTED_DEVIATION",
       "gaps": [
-        "после /review: Card+ → NewCardSheet (RSA) + ACS iframe, не mock SMS-keypad",
-        "визуал s04 на Fly не воспроизводится — осознанный PCI-путь B1.12",
-        "нужно согласовать с заказчиком: макет SMS vs банк ACS"
+        "канон 2026-07-10 (владелец): ACS банка (ThreeDsOverlay), не SMS-keypad из макета",
+        "Card+ → NewCardSheet (RSA) + ACS iframe B1.12 — реальнее и безопаснее",
+        "mock keypad / UI 3DS в шторке — wontfix"
       ]
     },
     {
@@ -87,19 +87,26 @@
     },
     {
       "step": 4,
-      "what": "Визуал footer/кнопок ближе к макету (бордер Картой +, «оплатить»)"
+      "what": "Визуал footer/кнопок ближе к макету (бордер Картой +, «оплатить») — код [x]"
     },
     {
       "step": 5,
-      "what": "Решение заказчика по s04: оставить ACS NewCardSheet (рекомендуем) ИЛИ встраивать UI формы в sheet с тем же RSA/ACS под капотом"
+      "what": "s04: ACS принят владельцем 2026-07-10 (не keypad) — done"
     },
     {
       "step": 6,
-      "what": "После email: MCP expanded+ vs s05–s07 (список карт, X, Оплатить)"
+      "what": "go deploy → MCP OTP/Card+/expanded+ vs s05–s07"
     },
     {
       "step": 7,
-      "what": "Deploy + повторный MCP pixel-compare + живая оплата заказчиком"
+      "what": "Живая оплата заказчиком на стенде"
     }
-  ]
+  ],
+  "s04_decision": {
+    "date": "2026-07-10",
+    "by": "owner",
+    "choice": "ACS",
+    "rejected": "in-sheet SMS keypad UI from s04 mock",
+    "reason_ru": "реальнее и безопаснее; посмотрим на стенде"
+  }
 }

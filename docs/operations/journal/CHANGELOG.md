@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026-07-10 — docs(checkout-payment): s04 канон = ACS (не keypad)
+
+- Владелец: 3DS = страница банка (`ThreeDsOverlay`), SMS-keypad из макета s04 — wontfix.
+- Артефакт: `checkout_payment_s04_acs_decision_2026-07-10.json`.
+- Следующий: **апрув → `go` deploy** (без go не деплоить).
+
 ## 2026-07-10 — fix(checkout-payment): footer Card+ border closer to mock
 
 - «Картой +»: `border-2 #ff8c42`, без `opacity-40` (не коричневеет disabled).

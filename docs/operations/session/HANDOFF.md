@@ -1,8 +1,8 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-10 (checkout payment — footer Card+ border)  
+**Дата:** 2026-07-10 (checkout payment — s04 ACS accepted)  
 **Ветка:** `develop`  
-**Прод:** https://coffeeos.fly.dev (**v341** — peek+footer фиксы ещё не на Fly)
+**Прод:** https://coffeeos.fly.dev (**v341** — peek/footer/ACS-канон в коде, ждёт deploy)
 
 ### Checkout payment method card — выбор оплаты / прикрепление карты
 
@@ -12,10 +12,11 @@
 | Wiring B1.12 | **`[x]`** Card+→NewCardSheet · ACS · one-click · `b4fe9c3` |
 | Peek parity s01–s03 | **`[x]` код** · peek 30/36/40 · 1–2 full · ≥3 thumbs · pad формы |
 | Footer mock | **`[x]` код** · Card+ `border-2` без opacity-wash |
-| Deploy | **`[ ]`** ждёт `go` deploy (сейчас Fly **v341**) |
+| **s04 3DS** | **`[x]` ACS** · keypad mock **wontfix** · владелец 2026-07-10 |
+| Deploy | **`[ ]`** ждёт **апрув / `go` deploy** |
 | MCP UI | **PARTIAL** на v341 · повтор после redeploy |
 | Живая оплата заказчиком | **`[ ]`** |
-| **Следующий шаг** | **`go` deploy** → MCP OTP/Card+ → заказчик |
+| **Следующий шаг** | **апрув → `go` deploy** → MCP OTP/Card+ → заказчик |
 
 ### Product card peek cart — отображение набранных позиций в карточке товара
 
