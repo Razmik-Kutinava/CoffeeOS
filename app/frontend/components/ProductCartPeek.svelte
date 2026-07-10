@@ -4,14 +4,19 @@
   import {
     cartItems,
     cartSheetBusy,
+    cartSheetError,
+    clearCartSheetError,
     bumpCartLine,
     removeCartLine,
     atMinQty,
     atMaxQty
   } from "../lib/cartSheetStore.js"
 
+  let { outOfStockProductId = null } = $props()
+
   let items = $state([])
   let busy = $state(false)
+  let sheetError = $state(null)
 
   onMount(() => {
     const unsubItems = cartItems.subscribe((v) => {
@@ -20,14 +25,23 @@
     const unsubBusy = cartSheetBusy.subscribe((v) => {
       busy = v
     })
+    const unsubErr = cartSheetError.subscribe((v) => {
+      sheetError = v
+    })
     return () => {
       unsubItems()
       unsubBusy()
+      unsubErr()
     }
   })
 
   function roundPrice(n) {
     return Math.round(Number(n) || 0)
+  }
+
+  function lineUnavailable(line) {
+    if (outOfStockProductId == null || outOfStockProductId === "") return false
+    return String(line?.product_id) === String(outOfStockProductId)
   }
 
   function openLine(line, e) {
@@ -36,8 +50,8 @@
     push(`/product/${line.product_id}?cart_line=${line.index}`)
   }
 
-  // «−» при quantity = 1 удаляет строку; иначе −1 (как CartSheet).
   function decrementLine(line) {
+    if (lineUnavailable(line)) return
     if (atMinQty(line)) {
       removeCartLine(line.index)
     } else {
@@ -52,10 +66,29 @@
     data-testid="shop-product-peek-list"
   >
     <p class="peek-title">уже в заказе</p>
-    <div class="peek-row">
+
+    {#if sheetError}
+      <div
+        data-testid="shop-product-peek-error"
+        role="status"
+        class="peek-error"
+      >
+        <span>{sheetError}</span>
+        <button type="button" class="peek-error-dismiss" onclick={() => clearCartSheetError()}>
+          закрыть
+        </button>
+      </div>
+    {/if}
+
+    <div
+      class="peek-row"
+      data-testid="shop-product-peek-scroll"
+    >
       {#each items as line (line.index)}
+        {@const unavailable = lineUnavailable(line)}
         <div
           class="peek-line"
+          class:peek-line--unavailable={unavailable}
           data-testid="shop-product-peek-line"
           role="button"
           tabindex="0"
@@ -68,13 +101,17 @@
             <div class="peek-thumb peek-thumb--empty">нет</div>
           {/if}
           <p class="peek-name">{line.product_name}</p>
-          <p class="peek-meta">{roundPrice(line.unit_total)}₽ × {line.quantity}</p>
+          {#if unavailable}
+            <p data-testid="shop-product-peek-out-of-stock" class="peek-oos">нет в наличии</p>
+          {:else}
+            <p class="peek-meta">{roundPrice(line.unit_total)}₽ × {line.quantity}</p>
+          {/if}
           <div class="peek-qty">
             <button
               type="button"
               data-testid="shop-product-peek-minus"
               class="peek-qty-btn"
-              disabled={busy}
+              disabled={busy || unavailable}
               onclick={(e) => {
                 e.stopPropagation()
                 decrementLine(line)
@@ -85,7 +122,7 @@
               type="button"
               data-testid="shop-product-peek-plus"
               class="peek-qty-btn"
-              disabled={busy || atMaxQty(line)}
+              disabled={busy || unavailable || atMaxQty(line)}
               onclick={(e) => {
                 e.stopPropagation()
                 bumpCartLine(line.index, 1)
@@ -119,12 +156,38 @@
     color: #a0a0a0;
   }
 
+  .peek-error {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 6px;
+    padding: 6px 8px;
+    border-radius: 8px;
+    border: 1px solid #3a3a3a;
+    background: #1f1f1f;
+    font-size: 11px;
+    color: #ff8c42;
+  }
+
+  .peek-error-dismiss {
+    border: none;
+    background: transparent;
+    color: #a0a0a0;
+    font-size: 10px;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
   .peek-row {
     display: flex;
     gap: 8px;
     overflow-x: auto;
     -ms-overflow-style: none;
     scrollbar-width: none;
+    touch-action: pan-x;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
   }
 
   .peek-row::-webkit-scrollbar {
@@ -139,6 +202,10 @@
     border: 1px solid #3a3a3a;
     background: #1f1f1f;
     padding: 6px;
+  }
+
+  .peek-line--unavailable {
+    opacity: 0.75;
   }
 
   .peek-thumb {
@@ -173,6 +240,13 @@
     margin: 2px 0 0;
     font-size: 10px;
     color: #a0a0a0;
+  }
+
+  .peek-oos {
+    margin: 2px 0 0;
+    font-size: 10px;
+    color: #ff8c42;
+    font-weight: 600;
   }
 
   .peek-qty {

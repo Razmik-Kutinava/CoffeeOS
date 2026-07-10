@@ -31,6 +31,16 @@
 | **Sentry triage** | RUBY-9 fix `[x]` · Neon quota OK (оплачено) | Archive RUBY-Q…R в Sentry UI |
 | **Security hygiene** | permit! → explicit weekday permit `[x]` · rack/view_component bump `[x]` | **V2-SEC-08** bundler-audit CVE — обязательно (`PRACTICES.md`) |
 
+### Сессия 2026-07-10 (product card peek — S4–S7 extremes)
+
+- **S4:** `shop-product-peek-scroll` · `overflow-x: auto` · `touch-action: pan-x`.
+- **S5:** peek не открывается при `items.length === 0`.
+- **S6:** `enqueueBump` catch → refresh + `cartSheetError`; UI `shop-product-peek-error`.
+- **S7:** `shop-product-out-of-stock` + peek `outOfStockProductId` → disabled ±.
+- **Тест:** `product_card_s4_s7_peek_extremes_test.rb` — 9 PASS; S1–S3 регрессия PASS.
+- **Типы:** JS/Svelte — typecheck N/A.
+- **Стоп:** MCP Fly — ждать `go`.
+
 ### Сессия 2026-07-10 (product card peek — S3 ±1 qty edit)
 
 - **Код:** `ProductCartPeek.svelte` — −/+ через `bumpCartLine` / `removeCartLine` (как CartSheet); `stopPropagation` на кнопках.

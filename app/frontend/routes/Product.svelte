@@ -268,6 +268,11 @@
       уже в заказе: {inOrderQty}
     </p>
   {/if}
+  {#if product.stock <= 0}
+    <p data-testid="shop-product-out-of-stock" class="mb-3 text-sm font-medium text-[#ff8c42]">
+      нет в наличии
+    </p>
+  {/if}
   <p class="mb-4 text-sm text-[#a0a0a0]">{product.description}</p>
 
   {#each product.modifier_groups as g (g.id)}
@@ -302,9 +307,9 @@
     <div class="bar-left">
       <div class="price-display">{Math.round(totalPrice)}₽</div>
       <div class="qty-controls">
-        <button class="qty-btn" onclick={() => (qty = Math.max(1, qty - 1))}>−</button>
+        <button class="qty-btn" disabled={product.stock <= 0} onclick={() => (qty = Math.max(1, qty - 1))}>−</button>
         <span class="qty-value">{qty}</span>
-        <button class="qty-btn" onclick={() => (qty = qty + 1)}>+</button>
+        <button class="qty-btn" disabled={product.stock <= 0} onclick={() => (qty = qty + 1)}>+</button>
       </div>
     </div>
     <button
@@ -322,7 +327,7 @@
     <button class="more-btn" onclick={() => showMoreMenu = !showMoreMenu}>⋮</button>
   </div>
 
-  <ProductCartPeek />
+  <ProductCartPeek outOfStockProductId={product.stock <= 0 ? product.id : null} />
 
   <!-- Выпадающее меню от "⋮" -->
   {#if showMoreMenu}

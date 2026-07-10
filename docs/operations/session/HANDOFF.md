@@ -12,10 +12,10 @@
 | Скрины 2 шт. | **`[x]`** `artifacts/product_card_peek_cart/screenshots/` |
 | S1 red-тест | **`[x]`** → **green** после Шага 4 |
 | S2 red-тест | **`[x]`** → **green** после Шага 4 |
-| Код Product + ProductCartPeek | **`[x]`** S1 индикатор · S2 peek-list · **S3 ±1** |
-| Shop suite регрессия | **`[x]`** 313 runs PASS (до S3) · S1–S3 + b113_s2 PASS |
+| Код Product + ProductCartPeek | **`[x]`** S1–S7 |
+| Shop suite регрессия | **`[x]`** 313 PASS (до S3) · S1–S7 unit PASS |
 | Отчёт Было/Стало (Шаг 5) | **`[x]`** в ТЗ customer_tasks |
-| **Следующий шаг** | Сценарий 4 (скролл) или MCP UI — ждать `go` |
+| **Следующий шаг** | MCP UI на Fly / апрув заказчика — ждать `go` |
 
 ### B1.13-CR-BOTTOM-NAV — убрать нижний бар (rev3)
 

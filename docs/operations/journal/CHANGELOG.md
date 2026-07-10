@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2026-07-10 — feat(product-peek): S4–S7 скролл, empty, error, out-of-stock
+
+- `ProductCartPeek`: horizontal scroll testid + touch-action; error banner; out-of-stock line.
+- `cartSheetStore`: bump catch → refresh + `cartSheetError`.
+- `Product.svelte`: «нет в наличии», `outOfStockProductId` в peek.
+- Тест: `product_card_s4_s7_peek_extremes_test.rb` PASS; ТЗ S4–S7 закрыты.
+
 ## 2026-07-10 — feat(product-peek): S3 ±1 редактирование qty в peek
 
 - `ProductCartPeek.svelte`: кнопки −/+ (`shop-product-peek-minus/plus`) → `bumpCartLine` / `removeCartLine`.

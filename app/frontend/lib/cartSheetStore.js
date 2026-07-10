@@ -64,7 +64,15 @@ function enqueueBump(index, delta) {
   bumpChain = bumpChain
     .then(() => api(`/cart/items/${index}`, { method: "PATCH", body: JSON.stringify({ delta }) }))
     .then(() => refreshCartSheet())
-    .catch(() => refreshCartSheet())
+    .catch(async (err) => {
+      // Откат optimistic qty через refresh; сообщение — после refresh, иначе set(null) сотрёт.
+      try {
+        await refreshCartSheet()
+      } catch (_e) {
+        /* ignore */
+      }
+      cartSheetError.set(err?.message || "Не удалось изменить количество")
+    })
     .finally(() => {
       bumpInFlight -= 1
       if (bumpInFlight <= 0) cartSheetBusy.set(false)
