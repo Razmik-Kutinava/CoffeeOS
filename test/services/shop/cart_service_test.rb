@@ -203,4 +203,12 @@ class Shop::CartServiceTest < ActiveSupport::TestCase
     result = svc.json_lines
     assert_equal 500.0, result[:total]
   end
+
+  test "json_lines includes product description for peek full card" do
+    @product.update!(description: "Кардамон и корица — пряный акцент")
+    cart.add!(product_id: @product.id, quantity: 1, selected_modifiers: [])
+    line = cart.json_lines[:items].first
+    assert_equal "Кардамон и корица — пряный акцент", line[:description]
+    assert_equal @product.name, line[:product_name]
+  end
 end

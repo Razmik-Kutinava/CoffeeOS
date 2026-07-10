@@ -66,5 +66,6 @@ export function assertCanAddCard(savedCardsCount = 0) {
 }
 
 export function currentSheetHeightVh() {
-  return sheetHeightVh(get(checkoutPaymentMode))
+  const items = get(checkoutPaymentItems) || []
+  return sheetHeightVh(get(checkoutPaymentMode), items.length)
 }

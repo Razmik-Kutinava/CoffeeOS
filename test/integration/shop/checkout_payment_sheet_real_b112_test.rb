@@ -135,7 +135,7 @@ class Shop::CheckoutPaymentSheetRealB112Test < ActionDispatch::IntegrationTest
     assert_match(/expandSheet/, st)
     assert_match(/openPaymentList/, st)
     assert_includes sh, 'data-testid="checkout-payment-sheet"'
-    assert_includes sh, 'data-testid="checkout-payment-peek-single"'
+    assert_match(/checkout-payment-peek-single/, sh)
     assert_includes sh, 'data-testid="checkout-payment-sbp"'
     assert_match(/emailVerified/, sh)
   end
@@ -152,5 +152,49 @@ class Shop::CheckoutPaymentSheetRealB112Test < ActionDispatch::IntegrationTest
     sh = sheet
     assert_match(/items\.slice\(0,\s*2\)/, sh,
       "ТЗ: в expanded+ видны 2 миниатюры")
+  end
+
+  # --- Peek visual parity s01–s03 --------------------------------------------
+
+  test "S0 peek vh lowered so registration stays clickable" do
+    th = thresholds
+    assert_match(/peek:\s*30/, th, "peek ≥3 ≤30vh (s01, OTP кликабелен)")
+    assert_match(/peekOne:\s*36/, th)
+    assert_match(/peekTwo:\s*40/, th)
+    refute_match(/peek:\s*42/, th, "42vh перекрывал Отправить код")
+  end
+
+  test "S0 sheetHeightVh uses itemCount for peek 1/2/3+" do
+    th = thresholds
+    assert_match(/function sheetHeightVh\(mode,\s*itemCount/, th)
+    assert_match(/itemCount === 1[\s\S]*peekOne/, th)
+    assert_match(/itemCount === 2[\s\S]*peekTwo/, th)
+  end
+
+  test "S0 peek 1 item: full card with name, modifiers, description, photo" do
+    sh = sheet
+    assert_match(/checkout-payment-peek-single/, sh)
+    assert_includes sh, 'data-testid="checkout-payment-peek-full-card"'
+    assert_includes sh, 'data-testid="checkout-payment-peek-name"'
+    assert_includes sh, "product_name", "Имя из cart JSON (product_name)"
+    assert_includes sh, 'data-testid="checkout-payment-peek-modifier"'
+    assert_includes sh, 'data-testid="checkout-payment-peek-description"'
+    assert_includes sh, 'data-testid="checkout-payment-peek-remove"'
+    assert_match(/unit_total|unitPrice/, sh)
+  end
+
+  test "S0 peek 2 items: two full cards; thumbs only at 3+" do
+    sh = sheet
+    assert_match(/checkout-payment-peek-two/, sh)
+    assert_match(/count <= 2|peekFullCards/, sh,
+      "1–2 товара — полные карточки")
+    assert_includes sh, 'data-testid="checkout-payment-peek-multi"'
+    assert_includes sh, 'data-testid="checkout-payment-peek-thumb"'
+  end
+
+  test "S0 Checkout pads form above peek sheet" do
+    co = checkout
+    assert_includes co, "checkout-form-pad"
+    assert_match(/currentSheetHeightVh|sheetPadVh/, co)
   end
 end

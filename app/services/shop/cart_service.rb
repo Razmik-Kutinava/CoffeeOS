@@ -133,6 +133,7 @@ module Shop
           index: idx,
           product_id: product.id,
           product_name: product.name,
+          description: product.description.to_s.presence,
           quantity: qty,
           price: setting.price.to_f,
           image_url: product.image_url,

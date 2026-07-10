@@ -1,8 +1,8 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-10 (checkout payment — visual compare mocks vs Fly)  
+**Дата:** 2026-07-10 (checkout payment — peek vh + full cards 1/2)  
 **Ветка:** `develop`  
-**Прод:** https://coffeeos.fly.dev (**v341**)
+**Прод:** https://coffeeos.fly.dev (**v341** — код peek-фикса ещё не на Fly)
 
 ### Checkout payment method card — выбор оплаты / прикрепление карты
 
@@ -10,11 +10,11 @@
 |-----|--------|
 | ТЗ | [`Выбор способа оплаты…`](../milestones/veha_2/requirements/customer_tasks/Выбор%20способа%20оплаты%20и%20прикрепление%20банковской%20карты%20на%20экране%20оформления%20заказа.md) |
 | Wiring B1.12 | **`[x]`** Card+→NewCardSheet · ACS · one-click · `b4fe9c3` |
-| Deploy | **`[x]`** Fly **v341** |
-| MCP UI | **PARTIAL** · peek ≠ макеты s01–s07 · [visual compare](../milestones/veha_2/artifacts/demo-feedback/checkout_payment_visual_compare_fly_v341_2026-07-10.json) |
-| UX bug | peek перекрывает OTP; peek 1/2 ≠ полные карточки макета |
+| Peek parity s01–s03 | **`[x]` код** · peek 30/36/40 · 1–2 full · ≥3 thumbs · pad формы |
+| Deploy | **`[ ]`** фикс peek — ждёт `go` deploy (сейчас Fly **v341**) |
+| MCP UI | **PARTIAL** на v341 · повтор после redeploy |
 | Живая оплата заказчиком | **`[ ]`** |
-| **Следующий шаг** | визуальный паритет s01–s03 (+ решение s04) → MCP → заказчик |
+| **Следующий шаг** | **`go` deploy** → MCP OTP/Card+ → заказчик |
 
 ### Product card peek cart — отображение набранных позиций в карточке товара
 

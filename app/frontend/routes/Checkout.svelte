@@ -52,6 +52,10 @@
     shopIsOpenForPay,
     subscribeOperatingHours
   } from "../lib/shopOperatingHours.js"
+  import {
+    checkoutPaymentItems,
+    currentSheetHeightVh
+  } from "../lib/checkoutPaymentSheetStore.js"
 
   let name = $state("")
   let email = $state("")
@@ -75,6 +79,7 @@
   let showNewCardSheet = $state(false)
   let showThreeDsOverlay = $state(false)
   let operatingHours = $state(getOperatingHours())
+  let sheetPadVh = $state(30)
 
   const payBusy = $derived(isPayFsmBusy(payFsmState))
   const canPay = $derived(
@@ -220,6 +225,9 @@
     const offHours = subscribeOperatingHours((next) => {
       operatingHours = next
     })
+    const offSheetPad = checkoutPaymentItems.subscribe(() => {
+      sheetPadVh = currentSheetHeightVh()
+    })
     const onPageShow = (event) => {
       if (event.persisted) boot()
     }
@@ -227,6 +235,7 @@
     return () => {
       window.removeEventListener("pageshow", onPageShow)
       offHours()
+      offSheetPad()
     }
   })
 
@@ -485,7 +494,7 @@
   }
 </script>
 
-<div>
+<div style="padding-bottom: calc({sheetPadVh}vh + 1rem);" data-testid="checkout-form-pad">
   <div class="mb-4 flex items-center gap-3">
     <button type="button" class="text-2xl text-[#ff8c42]" onclick={() => push("/")} aria-label="Назад в каталог">
       ‹

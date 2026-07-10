@@ -50,12 +50,14 @@
   let gestureStartY = 0
 
   const count = $derived(items.length)
-  const heightVh = $derived(sheetHeightVh(mode))
+  const heightVh = $derived(sheetHeightVh(mode, count))
   const footerLocked = $derived(!emailVerified)
   const payEnabled = $derived(
     emailVerified && (hasSavedCard || savedCards.length > 0) && canPay
   )
   const cardPlusEnabled = $derived(emailVerified)
+  /** 1–2: полные карточки (s02/s03); ≥3: миниатюры (s01) */
+  const peekFullCards = $derived(count > 0 && count <= 2)
 
   onMount(() => {
     bindCheckoutPaymentCart()
@@ -66,10 +68,23 @@
     return () => { u1(); u2(); u3(); u4() }
   })
 
+  function lineName(line) {
+    return line?.product_name || line?.name || ""
+  }
+
+  function unitPrice(line) {
+    const unit = Number(line?.unit_total)
+    if (Number.isFinite(unit) && unit > 0) return Math.round(unit)
+    const qty = Math.max(1, Number(line?.quantity) || 1)
+    return Math.round(Number(line?.line_total) / qty) || 0
+  }
+
+  function modifierLines(line) {
+    return (line?.selected_modifiers || []).map((m) => m.name).filter(Boolean)
+  }
+
   function modifiersLabel(line) {
-    const mods = line?.selected_modifiers || []
-    if (!mods.length) return ""
-    return mods.map((m) => m.name).filter(Boolean).join(", ")
+    return modifierLines(line).join(", ")
   }
 
   function handleCardPlus() {
@@ -184,8 +199,8 @@
                 />
               </button>
               <div class="min-w-0 flex-1">
-                <p class="truncate text-sm text-white">{line.name}</p>
-                <p class="text-xs text-[#888]">{line.line_total}₽ × {line.quantity}</p>
+                <p class="truncate text-sm text-white">{lineName(line)}</p>
+                <p class="text-xs text-[#888]">{unitPrice(line)}₽ × {line.quantity}</p>
                 {#if modifiersLabel(line)}
                   <p class="text-xs text-[#888]">{modifiersLabel(line)}</p>
                 {/if}
@@ -213,22 +228,42 @@
 
     {:else}
       <div class="flex min-h-0 flex-1 flex-col">
-        {#if count === 1}
-          <div class="min-h-0 flex-1 overflow-y-auto px-3" data-testid="checkout-payment-peek-single">
+        {#if peekFullCards}
+          <div
+            class="min-h-0 flex-1 space-y-2 overflow-y-auto px-3"
+            data-testid={count === 1 ? "checkout-payment-peek-single" : "checkout-payment-peek-two"}
+          >
             {#each items as line}
-              <div class="flex gap-3">
-                <img src={line.image_url || ""} alt="" class="h-20 w-20 rounded-lg object-cover" />
+              <div class="flex gap-3 rounded-xl bg-[#1f1f1f] p-2" data-testid="checkout-payment-peek-full-card">
+                <button type="button" class="shrink-0" onclick={() => handleImageClick(line)}>
+                  {#if line.image_url}
+                    <img
+                      src={line.image_url}
+                      alt=""
+                      class="h-20 w-20 rounded-lg object-cover bg-[#1a1a1a]"
+                      data-testid="checkout-payment-peek-image"
+                    />
+                  {:else}
+                    <div
+                      class="flex h-20 w-20 items-center justify-center rounded-lg bg-[#1a1a1a] text-[10px] text-[#666]"
+                      data-testid="checkout-payment-peek-image-empty"
+                    >нет</div>
+                  {/if}
+                </button>
                 <div class="min-w-0 flex-1">
-                  <p class="text-sm text-white">{line.name}</p>
-                  <p class="text-xs text-[#888]">{line.line_total}₽ × {line.quantity}</p>
-                  {#if modifiersLabel(line)}
-                    <p class="text-xs text-[#888]">{modifiersLabel(line)}</p>
+                  <p class="line-clamp-2 text-sm text-white" data-testid="checkout-payment-peek-name">{lineName(line)}</p>
+                  <p class="text-xs text-[#888]" data-testid="checkout-payment-peek-price">{unitPrice(line)}₽ × {line.quantity}</p>
+                  {#each modifierLines(line) as modName}
+                    <p class="text-xs text-[#888]" data-testid="checkout-payment-peek-modifier">{modName}</p>
+                  {/each}
+                  {#if line.description}
+                    <p class="line-clamp-2 text-xs text-[#888]" data-testid="checkout-payment-peek-description">{line.description}</p>
                   {/if}
                   <div class="mt-1 flex items-center gap-2">
                     <button type="button" data-testid="checkout-payment-peek-minus" disabled={atMinQty(line)} onclick={() => bumpCartLine(line.index, -1)}>−</button>
                     <span>{line.quantity}</span>
                     <button type="button" data-testid="checkout-payment-peek-plus" disabled={atMaxQty(line)} onclick={() => bumpCartLine(line.index, 1)}>+</button>
-                    <button type="button" class="text-xs text-red-400" onclick={() => removeCartLine(line.index)}>Удалить</button>
+                    <button type="button" class="text-xs text-red-400" data-testid="checkout-payment-peek-remove" onclick={() => removeCartLine(line.index)}>Удалить</button>
                   </div>
                 </div>
               </div>
@@ -241,8 +276,12 @@
             style="overflow-x: auto; touch-action: pan-x;"
           >
             {#each items as line}
-              <div class="w-[28vw] shrink-0">
-                <img src={line.image_url || ""} alt="" class="mb-1 aspect-square w-full rounded-lg object-cover bg-[#1a1a1a]" />
+              <div class="w-[28vw] shrink-0" data-testid="checkout-payment-peek-thumb">
+                {#if line.image_url}
+                  <img src={line.image_url} alt="" class="mb-1 aspect-square w-full rounded-lg object-cover bg-[#1a1a1a]" />
+                {:else}
+                  <div class="mb-1 flex aspect-square w-full items-center justify-center rounded-lg bg-[#1a1a1a] text-[10px] text-[#666]">нет</div>
+                {/if}
                 <div class="flex items-center justify-center gap-1 text-sm">
                   <button type="button" data-testid="checkout-payment-peek-minus" disabled={atMinQty(line)} onclick={() => bumpCartLine(line.index, -1)}>−</button>
                   <span>{line.quantity}</span>

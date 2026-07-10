@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 2026-07-10 — fix(checkout-payment): peek vh + full cards 1/2 (s01–s03)
+
+- `SHEET_VH.peek` 42→30; peekOne 36; peekTwo 40; высота зависит от числа позиций.
+- Peek 1–2: полные карточки (имя, mods, description, фото, −/+/Удалить); ≥3 — миниатюры.
+- Cart JSON: `description`; Checkout: padding-bottom под sheet.
+- Тесты: `checkout_payment_sheet_real_b112_test.rb` 17 PASS; `cart_service_test.rb` 19 PASS.
+- Следующий: **`go` deploy** → MCP OTP/Card+.
+
 ## 2026-07-10 — ops(checkout-payment): visual compare mocks vs Fly — NOT identical
 
 - MCP: Fly v341 vs `checkout_payment_method_card/screenshots/s01–s07`.
