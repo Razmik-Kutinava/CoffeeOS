@@ -41,10 +41,11 @@
     saveCachedSavedCard,
     clearCachedSavedCard
   } from "../lib/shopSavedCardCache.js"
-  import { formatCardListLabel } from "../lib/paymentMethodLabels.js"
   import PaymentMethodsSheet from "../components/PaymentMethodsSheet.svelte"
   import NewCardSheet from "../components/NewCardSheet.svelte"
   import ThreeDsOverlay from "../components/ThreeDsOverlay.svelte"
+  import CheckoutPaymentSheet from "../components/CheckoutPaymentSheet.svelte"
+  import { formatCardListLabel } from "../lib/paymentMethodLabels.js"
   import { SAVED_CARD_RETRY_MS, SAVED_CARD_RETRY_ATTEMPTS } from "../lib/shopCheckoutInlinePay.js"
   import {
     getOperatingHours,
@@ -653,5 +654,17 @@
         payFsmState = PAY_FSM.BANK_ERROR
       }
     }}
+  />
+
+  <CheckoutPaymentSheet
+    {emailVerified}
+    {savedCards}
+    hasSavedCard={!!savedCard?.id || savedCards.length > 0}
+    cardLabel={savedCard ? formatCardListLabel(savedCard) : null}
+    {selectedCardId}
+    {canPay}
+    onPay={handlePayFromSheet}
+    onSelectCard={selectSavedCard}
+    onSelectNewCard={selectNewCardOption}
   />
 </div>

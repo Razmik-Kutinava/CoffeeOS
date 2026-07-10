@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026-07-10 — feat(checkout-payment): S1–S7+E green — CheckoutPaymentSheet
+
+- Новые: `CheckoutPaymentSheet.svelte` · `checkoutPaymentSheetStore.js` · `checkoutPaymentSheetThresholds.js`
+- `Checkout.svelte`: mount sheet + `onPay={handlePayFromSheet}`
+- Тест: `checkout_payment_sheet_s1_s7_red_test.rb` — **23 runs, 0 failures**
+
 ## 2026-07-10 — test(checkout-payment): S1–S7 + E1–E10 red в одном файле
 
 - `checkout_payment_sheet_s1_s7_red_test.rb`: шаги 1–7 + экстремалы E1–E10 (тот же файл).

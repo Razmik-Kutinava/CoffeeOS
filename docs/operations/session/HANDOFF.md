@@ -11,9 +11,9 @@
 | ТЗ | [`Выбор способа оплаты…`](../milestones/veha_2/requirements/customer_tasks/Выбор%20способа%20оплаты%20и%20прикрепление%20банковской%20карты%20на%20экране%20оформления%20заказа.md) |
 | Скрины 7 шт. | **`[x]`** `artifacts/checkout_payment_method_card/screenshots/` (s01–s07) |
 | Clean slate + Fly | **`[x]`** v340 · history purge |
-| S1–S7 + E1–E10 red | **`[x]`** тот же файл — **23 FAIL** (ожидаемо) |
-| Код sheet | **`[ ]`** |
-| **Следующий шаг** | `go` на реализацию (зелёная зона) |
+| S1–S7 + E1–E10 | **`[x]`** green 23 PASS |
+| Код sheet | **`[x]`** CheckoutPaymentSheet + store |
+| **Следующий шаг** | полный shop suite по апруву · MCP UI · deploy |
 
 ### Product card peek cart — отображение набранных позиций в карточке товара
 
