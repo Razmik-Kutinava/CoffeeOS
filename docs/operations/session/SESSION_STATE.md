@@ -31,6 +31,13 @@
 | **Sentry triage** | RUBY-9 fix `[x]` · Neon quota OK (оплачено) | Archive RUBY-Q…R в Sentry UI |
 | **Security hygiene** | permit! → explicit weekday permit `[x]` · rack/view_component bump `[x]` | **V2-SEC-08** bundler-audit CVE — обязательно (`PRACTICES.md`) |
 
+### Сессия 2026-07-10 (product card peek cart — S2 red test)
+
+- **Шаг 3 / Сценарий 2:** только тест (код Product/peek не трогали).
+- **Тест:** `test/integration/shop/product_card_s2_peek_list_test.rb` — Gherkin peek-list на карточке: все позиции, имя/qty/цена из `cartItems`.
+- **Прогон:** `bin/rails test test/integration/shop/product_card_s2_peek_list_test.rb` — **4 runs, 4 failures** (красная зона, ожидаемо).
+- **Стоп:** апрув теста → `go` на Шаг 4 (код peek UI).
+
 ### Сессия 2026-07-10 (product card peek cart — S1 red test)
 
 - **Шаг 1 / Сценарий 1:** только тест (код Product не трогали).

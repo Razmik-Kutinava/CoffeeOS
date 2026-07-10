@@ -11,8 +11,9 @@
 | ТЗ | [`отображение набранных позиций и функциональность в режиме pee.md`](../milestones/veha_2/requirements/customer_tasks/отображение%20набранных%20позиций%20и%20функциональность%20в%20режиме%20pee.md) |
 | Скрины 2 шт. | **`[x]`** `artifacts/product_card_peek_cart/screenshots/` |
 | S1 red-тест | **`[x]`** `product_card_s1_in_order_indicator_test.rb` · 4 FAIL (ожидаемо) |
-| Код Product | **`[ ]`** — ждать апрув теста + `go` |
-| **Следующий шаг** | апрув теста → реализация индикатора «уже в заказе» в `Product.svelte` |
+| S2 red-тест | **`[x]`** `product_card_s2_peek_list_test.rb` · 4 FAIL (ожидаемо) |
+| Код Product | **`[ ]`** — ждать апрув тестов + `go` на Шаг 4 |
+| **Следующий шаг** | апрув S2 → Шаг 4 код peek; или апрув S1 → индикатор |
 
 ### B1.13-CR-BOTTOM-NAV — убрать нижний бар (rev3)
 

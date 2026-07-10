@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-07-10 — test(product-peek): S2 red — peek-список на карточке товара
+
+- Новый: `test/integration/shop/product_card_s2_peek_list_test.rb` — Gherkin Сценария 2 (peek-list, строки с именем/qty/ценой, gate по непустой корзине).
+- Код UI не менялся; прогон: 4 failures (красная зона).
+
 ## 2026-07-10 — test(product-peek): S1 red — индикатор «уже в заказе»
 
 - Новый: `test/integration/shop/product_card_s1_in_order_indicator_test.rb` — Gherkin Сценария 1 (DOM testid + qty из cartItems + реактивность).
