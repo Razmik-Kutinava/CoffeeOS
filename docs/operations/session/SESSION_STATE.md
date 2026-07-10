@@ -31,6 +31,14 @@
 | **Sentry triage** | RUBY-9 fix `[x]` · Neon quota OK (оплачено) | Archive RUBY-Q…R в Sentry UI |
 | **Security hygiene** | permit! → explicit weekday permit `[x]` · rack/view_component bump `[x]` | **V2-SEC-08** bundler-audit CVE — обязательно (`PRACTICES.md`) |
 
+### Сессия 2026-07-10 (product card peek — S3 ±1 qty edit)
+
+- **Код:** `ProductCartPeek.svelte` — −/+ через `bumpCartLine` / `removeCartLine` (как CartSheet); `stopPropagation` на кнопках.
+- **Тест:** `product_card_s3_peek_qty_edit_test.rb` — 6 runs PASS.
+- **ТЗ:** галочка «редактирование количества» + критерии S3 `[x]`.
+- **Типы:** фронт JS/Svelte без TS — отдельного typecheck нет.
+- **Стоп:** S4 скролл / S5–S7 / MCP — ждать `go`.
+
 ### Сессия 2026-07-10 (product card peek — Шаг 5 отчёт Было/Стало)
 
 - **ТЗ:** галочки S1+S2 `[x]`; отчёт Было/Стало + «не доделано» в customer_tasks.

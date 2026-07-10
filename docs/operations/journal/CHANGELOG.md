@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-07-10 — feat(product-peek): S3 ±1 редактирование qty в peek
+
+- `ProductCartPeek.svelte`: кнопки −/+ (`shop-product-peek-minus/plus`) → `bumpCartLine` / `removeCartLine`.
+- Тест: `product_card_s3_peek_qty_edit_test.rb` PASS; ТЗ S3 закрыт.
+
 ## 2026-07-10 — docs(product-peek): Шаг 5 отчёт Было/Стало, галочки S1+S2
 
 - ТЗ: закрыты критерии S1+S2; статус-таблица, Было/Стало, список недоделок (S3–S7).

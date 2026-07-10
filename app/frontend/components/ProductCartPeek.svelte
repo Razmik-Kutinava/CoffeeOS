@@ -1,24 +1,48 @@
 <script>
   import { onMount } from "svelte"
   import { push } from "svelte-spa-router"
-  import { cartItems } from "../lib/cartSheetStore.js"
+  import {
+    cartItems,
+    cartSheetBusy,
+    bumpCartLine,
+    removeCartLine,
+    atMinQty,
+    atMaxQty
+  } from "../lib/cartSheetStore.js"
 
   let items = $state([])
+  let busy = $state(false)
 
   onMount(() => {
-    const unsub = cartItems.subscribe((v) => {
+    const unsubItems = cartItems.subscribe((v) => {
       items = v || []
     })
-    return () => unsub()
+    const unsubBusy = cartSheetBusy.subscribe((v) => {
+      busy = v
+    })
+    return () => {
+      unsubItems()
+      unsubBusy()
+    }
   })
 
   function roundPrice(n) {
     return Math.round(Number(n) || 0)
   }
 
-  function openLine(line) {
+  function openLine(line, e) {
+    if (e?.target?.closest?.("button")) return
     if (!line?.product_id && line?.product_id !== 0) return
     push(`/product/${line.product_id}?cart_line=${line.index}`)
+  }
+
+  // «−» при quantity = 1 удаляет строку; иначе −1 (как CartSheet).
+  function decrementLine(line) {
+    if (atMinQty(line)) {
+      removeCartLine(line.index)
+    } else {
+      bumpCartLine(line.index, -1)
+    }
   }
 </script>
 
@@ -35,8 +59,8 @@
           data-testid="shop-product-peek-line"
           role="button"
           tabindex="0"
-          onclick={() => openLine(line)}
-          onkeydown={(e) => e.key === "Enter" && openLine(line)}
+          onclick={(e) => openLine(line, e)}
+          onkeydown={(e) => e.key === "Enter" && openLine(line, e)}
         >
           {#if line.image_url}
             <img src={line.image_url} alt="" class="peek-thumb" decoding="async" />
@@ -45,6 +69,29 @@
           {/if}
           <p class="peek-name">{line.product_name}</p>
           <p class="peek-meta">{roundPrice(line.unit_total)}₽ × {line.quantity}</p>
+          <div class="peek-qty">
+            <button
+              type="button"
+              data-testid="shop-product-peek-minus"
+              class="peek-qty-btn"
+              disabled={busy}
+              onclick={(e) => {
+                e.stopPropagation()
+                decrementLine(line)
+              }}
+            >−</button>
+            <span class="peek-qty-val">{line.quantity}</span>
+            <button
+              type="button"
+              data-testid="shop-product-peek-plus"
+              class="peek-qty-btn"
+              disabled={busy || atMaxQty(line)}
+              onclick={(e) => {
+                e.stopPropagation()
+                bumpCartLine(line.index, 1)
+              }}
+            >+</button>
+          </div>
         </div>
       {/each}
     </div>
@@ -126,5 +173,36 @@
     margin: 2px 0 0;
     font-size: 10px;
     color: #a0a0a0;
+  }
+
+  .peek-qty {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2px;
+    margin-top: 4px;
+  }
+
+  .peek-qty-btn {
+    border: none;
+    border-radius: 4px;
+    background: #3a3a3a;
+    color: #fff;
+    font-size: 10px;
+    line-height: 1;
+    padding: 2px 6px;
+    cursor: pointer;
+  }
+
+  .peek-qty-btn:disabled {
+    opacity: 0.4;
+    cursor: default;
+  }
+
+  .peek-qty-val {
+    font-size: 10px;
+    color: #fff;
+    min-width: 1rem;
+    text-align: center;
   }
 </style>
