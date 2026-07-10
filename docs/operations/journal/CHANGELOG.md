@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026-07-10 — fix(checkout-payment): footer Card+ border closer to mock
+
+- «Картой +»: `border-2 #ff8c42`, без `opacity-40` (не коричневеет disabled).
+- СБП / оплатить: rounded-2xl, py-2.5; disabled через цвет, не opacity.
+- Тест: `checkout_payment_sheet_real_b112_test.rb` 18 PASS.
+
 ## 2026-07-10 — fix(checkout-payment): peek vh + full cards 1/2 (s01–s03)
 
 - `SHEET_VH.peek` 42→30; peekOne 36; peekTwo 40; высота зависит от числа позиций.
