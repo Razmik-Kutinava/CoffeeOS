@@ -1,0 +1,55 @@
+{
+  "date": "2026-07-10",
+  "task": "checkout_payment_sheet_mcp_fly",
+  "stand": "https://coffeeos.fly.dev",
+  "fly_version": 341,
+  "image": "coffeeos:deployment-01KX6BTRCV1CW6WE3D4DVPQVEK",
+  "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "url": "https://coffeeos.fly.dev/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789#/checkout",
+  "commit_wiring": "b4fe9c3",
+  "screenshot": "artifacts/demo-feedback/screenshots/checkout_payment_peek_fly_v341.png",
+  "checks": [
+    {
+      "id": "S1_peek_visible",
+      "status": "PASS",
+      "note": "Bottom sheet на checkout: товар 1 шт, −/+, Удалить, footer СБП/Картой+/оплатить"
+    },
+    {
+      "id": "E9_footer_disabled_before_email",
+      "status": "PASS",
+      "note": "СБП, Картой +, оплатить — states disabled до verify email (a11y snapshot)"
+    },
+    {
+      "id": "dual_ui_gone",
+      "status": "PASS",
+      "note": "Нет payment-method-summary / legacy PaymentMethodsSheet на экране"
+    },
+    {
+      "id": "S1_peek_not_blocking_registration",
+      "status": "FAIL",
+      "note": "peek ~42vh перекрывает кнопку «Отправить код» (click intercepted by gesture-zone y≈278; send button bbox y=276). ТЗ: peek не должен мешать форме регистрации."
+    },
+    {
+      "id": "S4_card_plus_new_card_sheet",
+      "status": "BLOCKED",
+      "note": "Не дошли: email OTP не отправлен из UI из-за перекрытия peek. Живая Card+→NewCardSheet — заказчику после фикса высоты peek или ручного verify."
+    },
+    {
+      "id": "S6_live_pay",
+      "status": "NOT_RUN",
+      "note": "Живая оплата — приёмка заказчиком"
+    },
+    {
+      "id": "product_images",
+      "status": "KNOWN",
+      "note": "404 /uploads/products/* — эфемерно на Fly (не блокер этой задачи)"
+    }
+  ],
+  "verdict": "PARTIAL_PASS",
+  "summary_ru": "Шторка peek на Fly v341 есть, гейты disabled до email ок, dual UI нет. Блокер UX: peek перекрывает OTP. Card+/ACS/живая оплата — после фикса высоты или ручной приёмки заказчиком.",
+  "next": [
+    "Снизить SHEET_VH.peek (или padding формы), чтобы «Отправить код» был кликабелен",
+    "Повторный MCP: verify email → Card+ → NewCardSheet",
+    "Заказчик: живая карта + ACS + one-click"
+  ]
+}

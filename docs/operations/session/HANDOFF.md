@@ -1,24 +1,20 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-10 (checkout payment — real B1.12 wiring)  
+**Дата:** 2026-07-10 (checkout payment — MCP Fly v341)  
 **Ветка:** `develop`  
-**Прод:** https://coffeeos.fly.dev (**v340** — без нового sheet до deploy)
+**Прод:** https://coffeeos.fly.dev (**v341**)
 
 ### Checkout payment method card — выбор оплаты / прикрепление карты
 
 | Что | Статус |
 |-----|--------|
 | ТЗ | [`Выбор способа оплаты…`](../milestones/veha_2/requirements/customer_tasks/Выбор%20способа%20оплаты%20и%20прикрепление%20банковской%20карты%20на%20экране%20оформления%20заказа.md) |
-| `/review` | **блокеры закрыты** — mock 3DS/dual UI убраны; wiring → B1.12 |
-| Картой + | **`[x]`** → `NewCardSheet` (RSA) |
-| 3DS | **`[x]`** → `ThreeDsOverlay` ACS |
-| Оплатить | **`[x]`** one-click only |
-| Dual UI | **убран** |
-| Тест wiring | **`[x]`** `checkout_payment_sheet_real_b112_test.rb` · 12 PASS |
-| Shop suite | **`[x]`** **293 PASS** (0 fail/err, 3 skip) |
-| Deploy / MCP | **`[ ]`** ждать `go` |
-| Живая оплата заказчиком | **после deploy** |
-| **Следующий шаг** | **`go` на deploy** → MCP UI → заказчик жмёт живую карту |
+| Wiring B1.12 | **`[x]`** Card+→NewCardSheet · ACS · one-click · `b4fe9c3` |
+| Deploy | **`[x]`** Fly **v341** |
+| MCP UI | **PARTIAL** · peek PASS · OTP перекрыт peek · [JSON](../milestones/veha_2/artifacts/demo-feedback/checkout_payment_sheet_mcp_fly_v341_2026-07-10.json) |
+| UX bug | peek 42vh перекрывает «Отправить код» |
+| Живая оплата заказчиком | **`[ ]`** |
+| **Следующий шаг** | фикс `SHEET_VH.peek` → MCP OTP→Card+ → заказчик живая карта |
 
 ### Product card peek cart — отображение набранных позиций в карточке товара
 

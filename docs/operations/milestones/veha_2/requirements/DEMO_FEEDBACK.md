@@ -28,6 +28,7 @@
 
 | Дата | Источник | Сценарий / экран | Суть | Статус | PR / коммит |
 |------|----------|------------------|------|--------|-------------|
+| 2026-07-10 | MCP Fly v341 | `#/checkout` peek sheet | Peek на стенде; OTP перекрыт peek 42vh | **partial** · ждёт фикс vh + живая оплата | [mcp json](artifacts/demo-feedback/checkout_payment_sheet_mcp_fly_v341_2026-07-10.json) |
 | 2026-07-10 | `/review` checkout sheet | `#/checkout` peek/pay | Wiring → real B1.12 (NewCardSheet/ACS); mock 3DS убран; E7 delete API отложено | **готово к deploy** · ждёт живую оплату | ТЗ customer_tasks · shop 293 PASS |
 | 2026-07-04 | заказчик B1.12 приёмка | `#/checkout` новая карта | Тумблер on → оплата OK → на 2-м заказе карты нет | **fixed на Fly v328** · ждёт A1 живая оплата | [B1.12-BUG-SAVE](customer_tasks/B1_12_recurrent_payments.md) · [MCP](artifacts/demo-feedback/b112_bug_save_card_mcp_0704_2026.json) · ISSUES 🔴 |
 | 2026-06-24 | заказчик B1.12 rev2 | nonPCI / макеты 8924–8925 | Новое ТЗ: кастомная карта + RSA + FSM 0–7; конфликты Q1/Q5/Q6 | **done** *(код R1–R3)* | [b112_revision2_stage0_scope_2026-06-24.json](artifacts/demo-feedback/b112_revision2_stage0_scope_2026-06-24.json) |

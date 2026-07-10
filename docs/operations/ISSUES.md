@@ -66,6 +66,12 @@ Fly MPG `coffeeos-db` destroyed. CI deploy → `workflow_dispatch` only.
 
 ## 🟡 Важно
 
+[2026-07-10] — Checkout payment peek перекрывает OTP («Отправить код»)
+Статус: open
+Описание: На Fly v341 `CheckoutPaymentSheet` peek (`SHEET_VH.peek=42`) перекрывает кнопку «Отправить код» на `#/checkout` (click intercepted gesture-zone). ТЗ: peek не должен мешать форме регистрации.
+Следующий шаг: снизить peek vh / padding формы → повтор MCP OTP→Card+.
+Артефакт: `checkout_payment_sheet_mcp_fly_v341_2026-07-10.json`.
+
 [2026-05-30] — Kiosk: POST /kiosk/api/auth
 Статус: resolved
 Описание: Flutter/планшет нужен tenant по device_token; отдельного эндпоинта не было.

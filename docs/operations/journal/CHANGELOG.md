@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 2026-07-10 — ops(checkout-payment): MCP Fly v341 PARTIAL
+
+- Deploy: Fly **v341** — `CheckoutPaymentSheet` peek на `#/checkout` **виден**.
+- MCP PASS: footer disabled до email; dual UI нет; 1 товар в peek.
+- MCP FAIL: peek перекрывает «Отправить код» (ТЗ: не мешать регистрации).
+- Артефакт: `checkout_payment_sheet_mcp_fly_v341_2026-07-10.json` + скрин.
+- Следующий: снизить `SHEET_VH.peek` → повтор MCP → живая оплата заказчиком.
+
 ## 2026-07-10 — fix(checkout-payment): wire sheet → real B1.12 (до deploy)
 
 - **Картой +** → `NewCardSheet` (RSA); mock form/SMS-keypad 3DS удалены.
