@@ -31,6 +31,13 @@
 | **Sentry triage** | RUBY-9 fix `[x]` · Neon quota OK (оплачено) | Archive RUBY-Q…R в Sentry UI |
 | **Security hygiene** | permit! → explicit weekday permit `[x]` · rack/view_component bump `[x]` | **V2-SEC-08** bundler-audit CVE — обязательно (`PRACTICES.md`) |
 
+### Сессия 2026-07-10 (product card peek — регрессия shop suite)
+
+- **Команда:** `bin/rails test test/integration/shop/`
+- **Результат:** **313 runs, 2300 assertions, 0 failures, 0 errors, 3 skips** PASS
+- **Фикс регрессии:** `b113_s4_cart_modifiers_test.rb` — assert «В корзину» → «добавить к заказу»
+- **Стоп:** suite зелёный · ждать `go` на следующий шаг (Шаг 5 / UI / S3)
+
 ### Сессия 2026-07-10 (product card peek cart — S1+S2 green / Шаг 4)
 
 - **Код:** `Product.svelte` — `inOrderQty` + `data-testid="shop-product-in-order"`; кнопка «добавить к заказу».

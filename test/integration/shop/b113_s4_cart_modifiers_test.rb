@@ -70,7 +70,7 @@ class Shop::B113S4CartModifiersTest < ActionDispatch::IntegrationTest
   test "S4-b2: кнопка показывает Сохранить в editMode" do
     assert_includes product_svelte, "Сохранить"
     assert_includes product_svelte, "editMode"
-    assert_includes product_svelte, "В корзину"
+    assert_includes product_svelte, "добавить к заказу"
   end
 
   test "S4-b2: stores обновляются после PATCH" do

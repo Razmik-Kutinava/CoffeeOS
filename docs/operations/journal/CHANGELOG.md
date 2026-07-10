@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-07-10 — test(product-peek): shop suite PASS после S1+S2
+
+- Регрессия: `bin/rails test test/integration/shop/` — **313 runs, 0 failures**.
+- `b113_s4_cart_modifiers_test.rb`: копирайт кнопки «добавить к заказу».
+
 ## 2026-07-10 — feat(product-peek): S1 индикатор + S2 peek на карточке (Шаг 4)
 
 - `Product.svelte`: `inOrderQty` из `cartItems` (фильтр по `product_id`), badge «уже в заказе: N», кнопка «добавить к заказу», mount `ProductCartPeek`.

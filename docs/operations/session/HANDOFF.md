@@ -13,7 +13,8 @@
 | S1 red-тест | **`[x]`** → **green** после Шага 4 |
 | S2 red-тест | **`[x]`** → **green** после Шага 4 |
 | Код Product + ProductCartPeek | **`[x]`** S1 индикатор · S2 peek-list |
-| **Следующий шаг** | **Шаг 5:** апрув → полный suite `bin/rails test test/integration/shop/` |
+| Shop suite регрессия | **`[x]`** 313 runs PASS |
+| **Следующий шаг** | ждать `go` — Шаг 5 / UI / Сценарий 3 |
 
 ### B1.13-CR-BOTTOM-NAV — убрать нижний бар (rev3)
 
