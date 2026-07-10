@@ -5,6 +5,7 @@
 - Новые: `CheckoutPaymentSheet.svelte` · `checkoutPaymentSheetStore.js` · `checkoutPaymentSheetThresholds.js`
 - `Checkout.svelte`: mount sheet + `onPay={handlePayFromSheet}`
 - Тест: `checkout_payment_sheet_s1_s7_red_test.rb` — **23 runs, 0 failures**
+- Коммит: `4740013`. MCP Fly: checkout без нового peek (стенд v340 до deploy).
 
 ## 2026-07-10 — test(checkout-payment): S1–S7 + E1–E10 red в одном файле
 

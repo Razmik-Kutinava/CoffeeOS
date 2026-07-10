@@ -35,8 +35,9 @@
 ### Сессия 2026-07-10 (checkout payment — S1–S7+E green)
 
 - Код: `CheckoutPaymentSheet` + store + thresholds; mount в `Checkout.svelte`.
-- Тест: **23 runs, 0 failures**.
-- **Стоп:** апрув на полный `test/integration/shop/` · MCP/deploy.
+- Тест: **23 runs, 0 failures**. Коммит: `4740013`.
+- MCP: Fly `coffeeos.fly.dev` checkout — старый UI (v340); новый peek только после deploy.
+- **Стоп:** апрув на полный `test/integration/shop/` (регрессия).
 
 ### Сессия 2026-07-10 (checkout payment — S1–S7 + E1–E10 red)
 
