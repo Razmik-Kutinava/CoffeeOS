@@ -197,4 +197,15 @@ class Shop::CheckoutPaymentSheetRealB112Test < ActionDispatch::IntegrationTest
     assert_includes co, "checkout-form-pad"
     assert_match(/currentSheetHeightVh|sheetPadVh/, co)
   end
+
+  test "S0 footer Card+ has orange border-2 like mock (not opacity wash)" do
+    sh = sheet
+    assert_includes sh, "border-2 border-[#ff8c42]",
+      "Картой +: border-2 #ff8c42 как макет s01/s02"
+    assert_includes sh, 'data-testid="checkout-payment-card-plus"'
+    refute_match(/data-testid="checkout-payment-card-plus"[^>]*(?:disabled:)?opacity-40|opacity-40[^>]*checkout-payment-card-plus/, sh,
+      "opacity-40 на Card+ делает бордер коричневым — не использовать")
+    assert_includes sh, 'data-testid="checkout-payment-pay"'
+    assert_match(/bg-\[#ff8c42\]/, sh)
+  end
 end

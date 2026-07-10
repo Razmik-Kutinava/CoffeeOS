@@ -219,9 +219,9 @@
             Способ оплаты: {cardLabel || (hasSavedCard ? "Картой" : "Выберите")}
           </button>
           <div class="flex gap-2">
-            <button type="button" class="flex-1 rounded-xl border border-[#3a3a3a] py-2 text-[#888]" data-testid="checkout-payment-sbp" disabled>СБП</button>
-            <button type="button" class="flex-1 rounded-xl border border-[#ff8c42] py-2 text-[#ff8c42] disabled:opacity-40" data-testid="checkout-payment-card-plus" disabled={!cardPlusEnabled} onclick={handleCardPlus}>Картой +</button>
-            <button type="button" class="flex-[1.4] rounded-xl bg-[#ff8c42] py-2 font-semibold text-black disabled:opacity-40" data-testid="checkout-payment-pay" disabled={footerLocked || !payEnabled} onclick={handlePayClick}>оплатить</button>
+            <button type="button" class="flex-1 rounded-2xl border border-[#555] bg-[#1f1f1f] py-2.5 text-sm text-[#888]" data-testid="checkout-payment-sbp" disabled>СБП</button>
+            <button type="button" class="flex-1 rounded-2xl border-2 border-[#ff8c42] bg-transparent py-2.5 text-sm font-medium text-[#ff8c42] disabled:border-[#ff8c42]/55 disabled:text-[#ff8c42]/55" data-testid="checkout-payment-card-plus" disabled={!cardPlusEnabled} onclick={handleCardPlus}>Картой +</button>
+            <button type="button" class="flex-[1.35] rounded-2xl bg-[#ff8c42] py-2.5 text-sm font-semibold text-black disabled:bg-[#ff8c42]/45 disabled:text-black/50" data-testid="checkout-payment-pay" disabled={footerLocked || !payEnabled} onclick={handlePayClick}>оплатить</button>
           </div>
         </div>
       </div>
@@ -291,10 +291,10 @@
             {/each}
           </div>
         {/if}
-        <div class="mt-auto flex gap-2 border-t border-[#3a3a3a] p-3" data-testid="checkout-payment-footer">
-          <button type="button" class="flex-1 rounded-xl border border-[#3a3a3a] py-2 text-[#888]" data-testid="checkout-payment-sbp" disabled>СБП</button>
-          <button type="button" class="flex-1 rounded-xl border border-[#ff8c42] py-2 text-[#ff8c42] disabled:opacity-40" data-testid="checkout-payment-card-plus" disabled={!emailVerified || !cardPlusEnabled} onclick={handleCardPlus}>Картой +</button>
-          <button type="button" class="flex-[1.4] rounded-xl bg-[#ff8c42] py-2 font-semibold text-black disabled:opacity-40" data-testid="checkout-payment-pay" disabled={!emailVerified || !payEnabled} onclick={handlePayClick}>оплатить</button>
+        <div class="mt-auto flex gap-2 border-t border-[#3a3a3a] px-3 py-3" data-testid="checkout-payment-footer">
+          <button type="button" class="flex-1 rounded-2xl border border-[#555] bg-[#1f1f1f] py-2.5 text-sm text-[#888]" data-testid="checkout-payment-sbp" disabled>СБП</button>
+          <button type="button" class="flex-1 rounded-2xl border-2 border-[#ff8c42] bg-transparent py-2.5 text-sm font-medium text-[#ff8c42] disabled:border-[#ff8c42]/55 disabled:text-[#ff8c42]/55" data-testid="checkout-payment-card-plus" disabled={!emailVerified || !cardPlusEnabled} onclick={handleCardPlus}>Картой +</button>
+          <button type="button" class="flex-[1.35] rounded-2xl bg-[#ff8c42] py-2.5 text-sm font-semibold text-black disabled:bg-[#ff8c42]/45 disabled:text-black/50" data-testid="checkout-payment-pay" disabled={!emailVerified || !payEnabled} onclick={handlePayClick}>оплатить</button>
         </div>
       </div>
     {/if}
