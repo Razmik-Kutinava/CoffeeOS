@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2026-07-10 — ops(checkout-payment): visual compare mocks vs Fly — NOT identical
+
+- MCP: Fly v341 vs `checkout_payment_method_card/screenshots/s01–s07`.
+- Вердикт: **не идентично** — s02/s03 FAIL (карточки), s01 OTP перекрыт, s04 ACS≠SMS mock, s05–s07 не достигнуты.
+- Артефакт: `checkout_payment_visual_compare_fly_v341_2026-07-10.json` + fly_vs_s02/s03 скрины.
+- План: peek vh → full cards 1/2 → thumbs ≥3 → апрув s04 → expanded+ MCP → живая оплата.
+
 ## 2026-07-10 — ops(checkout-payment): MCP Fly v341 PARTIAL
 
 - Deploy: Fly **v341** — `CheckoutPaymentSheet` peek на `#/checkout` **виден**.

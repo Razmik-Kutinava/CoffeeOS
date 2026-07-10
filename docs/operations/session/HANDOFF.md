@@ -1,6 +1,6 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-10 (checkout payment — MCP Fly v341)  
+**Дата:** 2026-07-10 (checkout payment — visual compare mocks vs Fly)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev (**v341**)
 
@@ -11,10 +11,10 @@
 | ТЗ | [`Выбор способа оплаты…`](../milestones/veha_2/requirements/customer_tasks/Выбор%20способа%20оплаты%20и%20прикрепление%20банковской%20карты%20на%20экране%20оформления%20заказа.md) |
 | Wiring B1.12 | **`[x]`** Card+→NewCardSheet · ACS · one-click · `b4fe9c3` |
 | Deploy | **`[x]`** Fly **v341** |
-| MCP UI | **PARTIAL** · peek PASS · OTP перекрыт peek · [JSON](../milestones/veha_2/artifacts/demo-feedback/checkout_payment_sheet_mcp_fly_v341_2026-07-10.json) |
-| UX bug | peek 42vh перекрывает «Отправить код» |
+| MCP UI | **PARTIAL** · peek ≠ макеты s01–s07 · [visual compare](../milestones/veha_2/artifacts/demo-feedback/checkout_payment_visual_compare_fly_v341_2026-07-10.json) |
+| UX bug | peek перекрывает OTP; peek 1/2 ≠ полные карточки макета |
 | Живая оплата заказчиком | **`[ ]`** |
-| **Следующий шаг** | фикс `SHEET_VH.peek` → MCP OTP→Card+ → заказчик живая карта |
+| **Следующий шаг** | визуальный паритет s01–s03 (+ решение s04) → MCP → заказчик |
 
 ### Product card peek cart — отображение набранных позиций в карточке товара
 

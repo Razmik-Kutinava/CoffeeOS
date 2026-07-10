@@ -28,6 +28,7 @@
 
 | Дата | Источник | Сценарий / экран | Суть | Статус | PR / коммит |
 |------|----------|------------------|------|--------|-------------|
+| 2026-07-10 | MCP visual | `#/checkout` vs s01–s07 | Fly ≠ макеты заказчика (peek cards, OTP, 3DS path) | **open** · план паритета в compare JSON | [visual compare](artifacts/demo-feedback/checkout_payment_visual_compare_fly_v341_2026-07-10.json) |
 | 2026-07-10 | MCP Fly v341 | `#/checkout` peek sheet | Peek на стенде; OTP перекрыт peek 42vh | **partial** · ждёт фикс vh + живая оплата | [mcp json](artifacts/demo-feedback/checkout_payment_sheet_mcp_fly_v341_2026-07-10.json) |
 | 2026-07-10 | `/review` checkout sheet | `#/checkout` peek/pay | Wiring → real B1.12 (NewCardSheet/ACS); mock 3DS убран; E7 delete API отложено | **готово к deploy** · ждёт живую оплату | ТЗ customer_tasks · shop 293 PASS |
 | 2026-07-04 | заказчик B1.12 приёмка | `#/checkout` новая карта | Тумблер on → оплата OK → на 2-м заказе карты нет | **fixed на Fly v328** · ждёт A1 живая оплата | [B1.12-BUG-SAVE](customer_tasks/B1_12_recurrent_payments.md) · [MCP](artifacts/demo-feedback/b112_bug_save_card_mcp_0704_2026.json) · ISSUES 🔴 |
