@@ -15,7 +15,8 @@
 | Код sheet | **`[x]`** CheckoutPaymentSheet + store + thresholds |
 | Shop suite | **`[x]`** `test/integration/shop/` — **304 PASS** (0 fail/err, 3 skip) |
 | MCP browser | **`[x]`** Fly checkout — peek sheet **не** на стенде (нужен deploy) |
-| Было/Стало в ТЗ | **`[x]`** отчёт по S1–S7+E (галочки Gherkin ждут апрува) |
+| Было/Стало в ТЗ | **`[x]`** отчёт по S1–S7+E |
+| Галочки Gherkin | **`[x]`** S1–S7 + E1–E10 |
 | **Следующий шаг** | апрув → `/review` → затем deploy |
 
 ### Product card peek cart — отображение набранных позиций в карточке товара

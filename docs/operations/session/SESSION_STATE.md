@@ -33,10 +33,15 @@
 | **Sentry triage** | RUBY-9 fix `[x]` · Neon quota OK (оплачено) | Archive RUBY-Q…R в Sentry UI |
 | **Security hygiene** | permit! → explicit weekday permit `[x]` · rack/view_component bump `[x]` | **V2-SEC-08** bundler-audit CVE — обязательно (`PRACTICES.md`) |
 
+### Сессия 2026-07-10 (checkout payment — Gherkin [x])
+
+- В ТЗ: все сценарии S1–S7 + E1–E10 отмечены `[x]`.
+- **Стоп:** апрув → `/review`.
+
 ### Сессия 2026-07-10 (checkout payment — Было/Стало)
 
 - В ТЗ customer_tasks добавлен отчёт Было/Стало по S1–S7 + E1–E10.
-- Галочки `[x]` в Gherkin **не** ставили — ждут апрува + `/review`.
+- Галочки `[x]` в Gherkin — сделаны отдельным шагом.
 - **Стоп:** апрув → независимый `/review`.
 
 ### Сессия 2026-07-10 (checkout payment — shop suite)
