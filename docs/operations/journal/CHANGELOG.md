@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-07-10 — docs(product-peek): Шаг 5 отчёт Было/Стало, галочки S1+S2
+
+- ТЗ: закрыты критерии S1+S2; статус-таблица, Было/Стало, список недоделок (S3–S7).
+- Волна: `a1c9aa3` (код) · `5188b74` (suite 313 PASS).
+
 ## 2026-07-10 — test(product-peek): shop suite PASS после S1+S2
 
 - Регрессия: `bin/rails test test/integration/shop/` — **313 runs, 0 failures**.
