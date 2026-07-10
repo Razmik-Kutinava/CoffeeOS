@@ -2,7 +2,8 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-10 (checkout payment — s04 ACS accepted)  
+**Дата:** 2026-07-10 (checkout payment — MCP visual vs mocks)  
+**Предыдущее:** 2026-07-10 (checkout payment — s04 ACS accepted)  
 **Предыдущее:** 2026-07-10 (checkout payment — footer Card+ border)  
 **Предыдущее:** 2026-07-10 (checkout payment — peek vh + full cards 1/2)  
 **Предыдущее:** 2026-07-10 (checkout payment — visual compare mocks vs Fly)  
@@ -29,7 +30,7 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **Checkout payment** | peek+footer+s04 ACS **код/канон `[x]`** | **апрув → `go` deploy** → MCP → живая оплата |
+| **Checkout payment** | MCP vs макеты **NOT_IDENTICAL** (Fly v341) | **`go` deploy** → повтор MCP → живая оплата |
 | **B1.12 rev2** | код R1–R3 `[x]` · **BUG-SAVE фикс `1081dac`** Fly v328 `[x]` | **A1:** заказчик CONFIRMED оплата |
 | **B1.11 режим работы** | **ЗАКРЫТА** · апрув 2026-07-05 | **B1.12** A1 · **B1.13 S4** · **B1.14-4** |
 | **B1.13 CR-BOTTOM-NAV** | deploy **`[x]`** Fly 2026-07-07 | A1 апрув заказчика |
@@ -38,6 +39,13 @@
 
 | **Sentry triage** | RUBY-9 fix `[x]` · Neon quota OK (оплачено) | Archive RUBY-Q…R в Sentry UI |
 | **Security hygiene** | permit! → explicit weekday permit `[x]` · rack/view_component bump `[x]` | **V2-SEC-08** bundler-audit CVE — обязательно (`PRACTICES.md`) |
+
+### Сессия 2026-07-10 (checkout payment — MCP visual vs mocks)
+
+- MCP: `cursor-ide-browser` (chrome-devtools MCP недоступен).
+- Fly v341 vs s01–s07: **NOT_IDENTICAL** — артефакт `checkout_payment_mcp_visual_compare_2026-07-10.json`.
+- s01 PARTIAL · s02 FAIL · s03 FAIL · s04 ACCEPTED ACS · s05–s07 NOT_REACHED.
+- **Стоп:** ждать **`go` deploy** (фиксы уже в develop).
 
 ### Сессия 2026-07-10 (checkout payment — s04 ACS accepted)
 

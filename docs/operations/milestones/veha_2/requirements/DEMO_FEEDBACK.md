@@ -28,6 +28,7 @@
 
 | Дата | Источник | Сценарий / экран | Суть | Статус | PR / коммит |
 |------|----------|------------------|------|--------|-------------|
+| 2026-07-10 | MCP browser | `#/checkout` vs s01–s07 | Fly v341 ≠ идеал заказчика (s02/s03 FAIL, OTP) | **open** · ждёт deploy фиксов | [mcp compare](artifacts/demo-feedback/checkout_payment_mcp_visual_compare_2026-07-10.json) |
 | 2026-07-10 | владелец | checkout s04 3DS | Канон: **ACS банка**, не SMS-keypad из макета s04 | **done** · wontfix mock keypad | ТЗ customer_tasks · NewCardSheet+ThreeDsOverlay |
 | 2026-07-10 | MCP visual | `#/checkout` vs s01–s07 | Fly ≠ макеты; peek/footer фикс в коде; s04 ACS accepted | **in_progress** · ждёт `go` deploy | [visual compare](artifacts/demo-feedback/checkout_payment_visual_compare_fly_v341_2026-07-10.json) |
 | 2026-07-10 | MCP Fly v341 | `#/checkout` peek sheet | Peek на стенде; OTP перекрыт peek 42vh | **partial** · фикс vh в коде · ждёт deploy | [mcp json](artifacts/demo-feedback/checkout_payment_sheet_mcp_fly_v341_2026-07-10.json) |

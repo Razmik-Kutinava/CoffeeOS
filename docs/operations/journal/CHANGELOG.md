@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2026-07-10 — ops(checkout-payment): MCP visual vs customer mocks — NOT identical
+
+- MCP: `cursor-ide-browser` на Fly v341 vs s01–s07.
+- Вердикт: **не идентично** — s02/s03 FAIL; s01 PARTIAL (OTP); s04 ACS accepted; s05–s07 NOT_REACHED.
+- Артефакт: `checkout_payment_mcp_visual_compare_2026-07-10.json`.
+- Следующий: **`go` deploy** (фиксы уже в develop) → повтор MCP.
+
 ## 2026-07-10 — docs(checkout-payment): s04 канон = ACS (не keypad)
 
 - Владелец: 3DS = страница банка (`ThreeDsOverlay`), SMS-keypad из макета s04 — wontfix.
