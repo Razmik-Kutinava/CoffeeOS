@@ -26,7 +26,7 @@
 
 **Артефакты этапа 0:** [`b113_stage0_scope_2026-06-22.json`](../../artifacts/demo-feedback/b113_stage0_scope_2026-06-22.json) · [`b113_stage0_s2_s4_2026-06-22.json`](../../artifacts/demo-feedback/b113_stage0_s2_s4_2026-06-22.json)
 
-> **Нумерация:** у заказчика «задача 2» (адрес в шапке) → канон **B1.14** — см. [`B1_14_shop_tenant_address_header.md`](B1_14_shop_tenant_address_header.md). Эпик **B1.13** (S1–S4) — навигация и поп-ап корзины; S2–S4 в трекере заказчика могут быть B1.15 / B1.16.
+> **Нумерация:** у заказчика «задача 2» (адрес в шапке) → канон **B1.14** — см. [`B1_14_shop_tenant_address_header.md`](B1_14_shop_tenant_address_header.md). Эпик **B1.13** (S1–S4) — навигация и поп-ап корзины.
 
 ---
 
@@ -189,7 +189,7 @@
 | Рендер бара | — | `App.svelte` |
 | Избранное (экран) | **удалён** | `Favorites.svelte` удалён · роут убран |
 | Корзина | Поп-ап на каталоге (S2a–S3) | `CartSheet.svelte` · не вкладка в баре |
-| Checkout | Бар скрыт | `App.svelte` комментарий B1.15 UX |
+| Checkout | Бар скрыт | `App.svelte` (checkout route) |
 
 ### Гипотезы — закрыты ответами 2026-07-07
 
@@ -207,7 +207,7 @@
 - [x] **D2b** — O2 **`[x]`** 2026-07-07 · § **КАНОН rev3** + **Scope шага**
 - [x] **F1** — убрать `BottomNav` из `App.svelte` (не рендерить)
 - [x] **F2** — удалить `#/favorites` (роут `App.svelte`, `Favorites.svelte`, ссылка в `Profile.svelte`)
-- [x] **F3** — тесты: `b113_s1_*` · `b113_s2_*` · `b115_t_*`
+- [x] **F3** — тесты: `b113_s1_*` · `b113_s2_*`
 - [x] **F4** — регрессия `bin/rails test test/integration/shop/` — **297 runs, 0 failures**
 - [ ] **A1** — апрув заказчика после deploy **`[x]`** Fly 2026-07-07
 

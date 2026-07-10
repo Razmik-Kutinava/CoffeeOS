@@ -2,10 +2,9 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-10 (checkout payment method card — этап 0 артефакты)  
+**Дата:** 2026-07-10 (checkout payment — clean slate reset)  
 **Предыдущее:** 2026-07-10 (product card peek cart S4–S7)  
 **Предыдущее:** 2026-07-07 (B1.13-CR answers rev3)  
-**Предыдущее:** B1.15 deploy `572fd85` · A2 nav overlap  
 **Веха 1:** **закрыта** 2026-06-19 (CHECKLIST § I, H.3 заочно).  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
 **§2.3 оплата витрина:** **done** 2026-06-06 — [`CUSTOMER_BUSINESS_REQUIREMENTS.md`](milestones/veha_2/requirements/CUSTOMER_BUSINESS_REQUIREMENTS.md).
@@ -22,16 +21,22 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **Checkout payment method card** | **НОВАЯ** — ТЗ + 7 скринов в `artifacts/checkout_payment_method_card/` | ждать `go` на разбор/код |
+| **Checkout payment** | **clean slate** — ТЗ + 7 скринов; старый sheet-код удалён | ждать `go` на реализацию с нуля |
 | **B1.12 rev2** | код R1–R3 `[x]` · **BUG-SAVE фикс `1081dac`** Fly v328 `[x]` | **A1:** заказчик CONFIRMED оплата |
-| **B1.15 checkout sheet** | **A2 fix** nav overlap · build `b115-a2` | deploy + MCP re-check |
-| **B1.11 режим работы** | **ЗАКРЫТА** · апрув 2026-07-05 | **B1.12** A1 · **B1.15** F1 · **B1.13 S4** · **B1.14-4** |
+| **B1.11 режим работы** | **ЗАКРЫТА** · апрув 2026-07-05 | **B1.12** A1 · **B1.13 S4** · **B1.14-4** |
 | **B1.13 CR-BOTTOM-NAV** | deploy **`[x]`** Fly 2026-07-07 | A1 апрув заказчика |
 | **B1.14 адрес в шапке** | **B1.14-3d** index map `[x]` | deploy (`./bin/fly_deploy.sh`) · B1.14-4 cart |
 | **Product card peek cart** | S1–S7 код `[x]` · MCP Fly `[ ]` | апрув заказчика |
 
 | **Sentry triage** | RUBY-9 fix `[x]` · Neon quota OK (оплачено) | Archive RUBY-Q…R в Sentry UI |
 | **Security hygiene** | permit! → explicit weekday permit `[x]` · rack/view_component bump `[x]` | **V2-SEC-08** bundler-audit CVE — обязательно (`PRACTICES.md`) |
+
+### Сессия 2026-07-10 (checkout payment — clean slate reset)
+
+- Удалены код/тесты/артефакты/ТЗ старого checkout payment sheet.
+- `Checkout.svelte` → B1.12 UI (`PaymentMethodsSheet` / `NewCardSheet` / `ThreeDsOverlay`).
+- Канон: новое ТЗ + `artifacts/checkout_payment_method_card/` — старт с нуля.
+- **Стоп:** ждать `go` на реализацию.
 
 ### Сессия 2026-07-10 (checkout payment method card — этап 0 артефакты)
 
@@ -125,83 +130,6 @@
 - **Код:** `CartSheet.svelte` — убран серый span `roundPrice(total)₽` рядом с кнопкой в `checkoutBar`; `data-testid` суммы перенесён внутрь кнопки.
 - **Тесты:** `cart_checkout_button_total_dynamic_test.rb` + b113_s2/s2a/s4_b3 — PASS.
 - **Коммит:** `46e8f0b`
-
-### Сессия 2026-07-06 (B1.15 A1 — Fly MCP приёмка checkout sheet)
-
-- **MCP:** coffeeos.fly.dev 360px — peek/expanded/expanded+ card-form; OTP via fly ssh; 11/14 критериев pass, 3 skip (3DS live, scroll>3, post-3DS card).
-- **Баг:** verify email перекрывался sheet → fix `checkout-contact-form mb-[48vh]` + scroll on OTP focus.
-- **Артефакты:** `b115_a1_post_deploy_2026-07-06.json` + 7 PNG в screenshots/.
-- **Стоп:** redeploy overlap fix · апрув заказчика.
-
-### Сессия 2026-07-06 (B1.15 T* — integration tests checkout sheet)
-
-- **Новый:** `b115_t_checkout_sheet_suite_test.rb` — umbrella: F1–F6 files, build tag, MCP testids, API cart+saved_cards, отделение от CartSheet B1.13.
-- **Прогон:** `b115_*` **45 runs PASS** · shop **295 runs PASS**.
-- **Стоп:** `go` A1 Fly MCP + скрины 7 макетов.
-
-### Сессия 2026-07-06 (B1.15 F6 — Checkout integration, без дублей модалок)
-
-- **Checkout.svelte:** единый UI через `CheckoutCartSheet`; удалены `PaymentMethodsSheet`, modal `NewCardSheet`, fullscreen `ThreeDsOverlay`.
-- **Оплата:** `handlePayFromSheet` — saved card → one-click; new card → `openCheckoutCardForm`; 3DS всегда `openCheckoutThreeDs()`.
-- **Build:** `CHECKOUT_SHEET_BUILD = b115-f6`.
-- **Тесты:** `b115_f6_checkout_integration_test.rb` · legacy b112/b115/cbr обновлены · shop **288 runs PASS**.
-- **Стоп:** `go` A1 Fly MCP + скрины 7 макетов.
-
-### Сессия 2026-07-06 (B1.15 F5 — 3DS iframe в expanded+ sheet)
-
-- **ThreeDsOverlay:** prop `embedded` — ACS iframe внутри sheet (Q-B115-1), не fullscreen.
-- **CheckoutCartSheet:** `subView=three-ds` · header + (X) · `coffeeos-three-ds-frame`.
-- **Checkout:** inline 3DS при expanded+ / new card; overlay только вне sheet; `handleSheetThreeDsClose`.
-- **Store:** `openCheckoutThreeDs` / `closeCheckoutThreeDs` · vh 92.
-- **Тесты:** `b115_f5_three_ds_sheet_test.rb` · shop 284 runs PASS.
-- **Стоп:** `go` F6 убрать PaymentMethodsSheet/NewCardSheet модалки.
-
-### Сессия 2026-07-06 (B1.15 F4 — expanded+ card-form S04)
-
-- **NewCardSheet:** prop `embedded` — форма без backdrop/fixed; reuse encrypt + POST `/payments/new_card`.
-- **CheckoutCartSheet:** `subView=card-form` · сумма + disabled pay сверху · (X) → payment-list · swipe down → payment-list.
-- **Store:** `openCheckoutCardForm` / `closeCheckoutCardForm` · vh 85.
-- **Checkout:** peek «Картой +» → inline card-form; `NewCardSheet` modal остаётся fallback до F6.
-- **Тесты:** `b115_f4_card_form_test.rb` · shop 278 runs PASS.
-- **Стоп:** `go` F5 3DS iframe в sheet.
-
-### Сессия 2026-07-06 (B1.15 F3 — expanded+ payment-list S05–S07)
-
-- **Код:** `mode=expanded_plus` · `subView=payment-list` · mini/full cart top · список карт (max 10) · (X) → expanded · CheckoutPayButton.
-- **Store:** `openCheckoutPaymentList` / `closeCheckoutPaymentList` · swipe down из expanded+ → expanded.
-- **Checkout:** wire `savedCards`, `selectSavedCard`, `handlePayFromSheet`, `pb-[78vh]`.
-- **Тесты:** `b115_f3_expanded_plus_payment_list_test.rb` · shop 271 runs PASS.
-- **Стоп:** `go` F4 card-form в sheet.
-
-### Сессия 2026-07-06 (B1.15 F2 — expanded + переходы)
-
-- **Код:** `mode=expanded` · vh 58/66 · swipe up/down + tap peek → expanded · expanded vertical list.
-- **Store:** `expandCheckoutSheet` / `collapseCheckoutSheet` / `handleCheckoutSheetGestureDelta`; refresh не сбрасывает expanded.
-- **Footer:** «Картой *XXXX» при savedCard · `cardLabel` prop из Checkout.
-- **Тесты:** `b115_f2_expanded_sheet_test.rb` · shop 264 runs PASS.
-- **Стоп:** `go` F3 expanded+ payment-list.
-
-### Сессия 2026-07-06 (B1.15 F1 — peek bottom sheet на checkout)
-
-- **Код:** `CheckoutCartSheet.svelte` · `checkoutSheetStore.js` · `checkoutSheetThresholds.js` · mount в `Checkout.svelte`.
-- **Peek layouts:** single (S02) · double (S03) · multi horizontal (S01); footer СБП/Картой+/Оплатить (disabled rules).
-- **Тесты:** `test/integration/shop/b115_f1_peek_sheet_test.rb` · 7 runs PASS (fix assert multi layout).
-- **Стоп:** `go` F2 expanded + переходы ≤400ms.
-
-### Сессия 2026-07-05 (B1.15 — PNG + детальный разбор макетов)
-
-- **PNG:** 7 макетов сохранены в `screenshots/b115_mock_s01…s07_2026-07-05.png`.
-- **ТЗ:** расширен § детальный разбор S01–S07 + полный user flow + таблица компонентов.
-- **CHECKLIST:** C3a PNG `[x]`.
-- **Стоп:** `go` F1 код.
-
-### Сессия 2026-07-05 (B1.15 этап 0 — checkout payment bottom sheet)
-
-- **ТЗ:** `B1_15_checkout_payment_bottom_sheet.md` — дословный текст заказчика + канон peek/expanded/expanded+ по 7 макетам.
-- **Артефакты:** `b115_stage0_scope_2026-07-05.json` · `README_b115_customer_mockups_2026-07-05.md`.
-- **Индексы:** CHECKLIST §C3 · CBR · B1.12 ссылка · customer_tasks/README.
-- **PNG:** не в репо (чат Cursor) — 7 слотов, копия из Figma pending.
-- **Стоп:** `go` на F1 код.
 
 ### Сессия 2026-07-05 (batch апрув — задачи со скринов трекера)
 

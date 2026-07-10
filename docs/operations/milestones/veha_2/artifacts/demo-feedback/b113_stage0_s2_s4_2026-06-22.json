@@ -1,4 +1,4 @@
-{
+﻿{
   "task_id": "B1.13",
   "stage": "0b",
   "date": "2026-06-22",
@@ -22,7 +22,7 @@
       "tz_status": "registered",
       "acceptance_criteria_count": 6,
       "depends_on": "S2",
-      "customer_tracker_alias": "B1.15 (TBD)"
+      "customer_tracker_alias": "B1.13-S2/S4"
     },
     "S4": {
       "title": "Tap → Product (модификаторы) · горизонтальный скролл peek 4+",

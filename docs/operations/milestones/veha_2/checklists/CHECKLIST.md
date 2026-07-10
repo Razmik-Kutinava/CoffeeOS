@@ -132,6 +132,16 @@
 - [ ] **Приёмка / B1.12-BUG-SAVE:** карта сохраняется после 1-й оплаты (тумблер on) → видна на 2-м заказе · чеклист D1–A1 в [`B1_12_recurrent_payments.md`](requirements/customer_tasks/B1_12_recurrent_payments.md)
 - [ ] Апрув заказчика B1.12 rev2 (эпик целиком)
 
+## C3. Выбор способа оплаты / прикрепление карты (checkout)
+
+> ТЗ: [`Выбор способа оплаты и прикрепление банковской карты на экране оформления заказа.md`](requirements/customer_tasks/Выбор%20способа%20оплаты%20и%20прикрепление%20банковской%20карты%20на%20экране%20оформления%20заказа.md) · макеты: `artifacts/checkout_payment_method_card/screenshots/` · API: B1.12
+
+### C3a. Этап 0 (docs) — подготовка
+
+- [x] **ТЗ** — customer_tasks (Gherkin peek / expanded / expanded+)
+- [x] **7 PNG** — `artifacts/checkout_payment_method_card/screenshots/s01–s07`
+- [ ] **Реализация** — после `go` (чистый лист; старый sheet-код удалён 2026-07-10)
+
 ---
 
 ## D. Киоск (приоритет 3, с оплатой как shop)

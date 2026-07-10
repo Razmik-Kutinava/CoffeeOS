@@ -25,7 +25,7 @@
 Дальше в ops и коде — **только наши имена**.
 
 **Подзадачи (история):** R1 бэкенд · R2 форма карты · R3 FSM — **все `[x]`**.  
-**Связано:** [B1.7](B1_7_checkout_order_screen.md) · §2.3 · `Payments::TbankAdapter` · `POST /callbacks/tbank`  
+**Связано:** [B1.7](B1_7_checkout_order_screen.md) · [Checkout payment](Выбор%20способа%20оплаты%20и%20прикрепление%20банковской%20карты%20на%20экране%20оформления%20заказа.md) (UX checkout — reuse API R2–R3) · §2.3 · `Payments::TbankAdapter` · `POST /callbacks/tbank`  
 **Стенд:** `https://coffeeos.fly.dev/shop?tenant_id=655aaccb-004a-4bb9-a50a-ce618854dda3` · `#/checkout`  
 **Runbook:** [`TBANK_RECURRENT.md`](../../runbooks/TBANK_RECURRENT.md)
 

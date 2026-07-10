@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026-07-10 — reset(checkout-payment): clean slate — удалён старый sheet
+
+- Удалены старый checkout payment sheet (компонент + store + thresholds + integration-тесты + артефакты/ТЗ).
+- `Checkout.svelte` возвращён к B1.12: `PaymentMethodsSheet` + `NewCardSheet` + `ThreeDsOverlay`.
+- Канон задачи: новое ТЗ + `artifacts/checkout_payment_method_card/` — реализация с нуля после `go`.
+
 ## 2026-07-10 — docs(checkout-payment): этап 0 — ТЗ + 7 скринов в артефактах
 
 - ТЗ: `customer_tasks/Выбор способа оплаты и прикрепление банковской карты на экране оформления заказа.md`
@@ -78,12 +84,6 @@
 - **Fly:** `coffeeos` · image `deployment-01KWXSGYSBZDNGSC6ABJAATFX6` · https://coffeeos.fly.dev
 - **Проверка:** shop 200 · `application-*.js` без BottomNav/Каталог/Избранное
 
-## 2026-07-07 — feat(b1.13): CR-BOTTOM-NAV remove bottom nav and #/favorites
-
-- Удалён `BottomNav.svelte` · роут `#/favorites` · `Favorites.svelte` · ссылка в Profile.
-- `App.svelte`: без bottom nav · `pb-4` на main.
-- Тесты: `b113_s1` · `b113_s2` · `b115_t` · shop **297 runs, 0 failures**.
-
 ## 2026-07-07 — docs(b1.13): O2 gate closed CR-BOTTOM-NAV
 
 - **O2:** только убрать бар; peek без изменений; рекомендации — backlog.
@@ -108,90 +108,6 @@
 - **Конфликт:** канон S1-R1 = ровно 2 вкладки (апрув 2026-07-01); код соответствует.
 - **Docs:** § B1.13-CR-BOTTOM-NAV · JSON · DEMO_FEEDBACK · CHECKLIST.
 - **Код:** не трогали — ждём ответы + `go`.
-
-## 2026-07-06 — fix(b1.15): A2 hide bottom nav on checkout + dynamic sheet padding
-
-- **MCP:** nav перекрывал «Картой+» / «оплатить» — клики уходили в BottomNav.
-- **Fix:** скрыть BottomNav на `#/checkout` · sheet z-50 · padding от `checkoutSheetHeightVh`.
-- **Build:** `b115-a2` · b115_* 47 runs PASS.
-
-## 2026-07-06 — deploy(b1.15): push develop + Fly coffeeos `572fd85`
-
-- **Push:** `develop` → `572fd85` (26 commits).
-- **Fly:** `fly deploy -a coffeeos --remote-only --depot=false` — release_command OK · rolling update OK · `/up` 200.
-- **Image:** `deployment-01KWVH3DA7HGBQWH1XDJNFC07N`.
-
-## 2026-07-06 — feat(b1.15): A1 Fly MCP + fix checkout email overlap
-
-- **MCP:** 360px на coffeeos.fly.dev — peek/expanded/expanded+/card-form; 7 PNG + JSON артефакт.
-- **Fix:** `checkout-contact-form mb-[48vh]`, scroll OTP focus, `checkout-verify-email` testid.
-- **Build:** `CHECKOUT_SHEET_BUILD = b115-a1`.
-- **Тесты:** b115_* 46 runs PASS.
-
-## 2026-07-06 — test(b1.15): T* checkout sheet integration suite
-
-- **Новый:** `b115_t_checkout_sheet_suite_test.rb` — umbrella over F1–F6: file inventory, build tag, modes/subviews, MCP testids, API cart+saved_cards, isolation from B1.13 CartSheet.
-- **Прогон:** `b115_*` 45 runs · shop 295 runs PASS.
-
-## 2026-07-06 — feat(b1.15): F6 Checkout integration — single sheet, no duplicate modals
-
-- **Checkout.svelte:** оплата только через `CheckoutCartSheet`; удалены `PaymentMethodsSheet`, modal `NewCardSheet`, fullscreen `ThreeDsOverlay`.
-- **Handlers:** `handlePayFromSheet` (one-click / card-form) · 3DS всегда inline через `openCheckoutThreeDs`.
-- **Build:** `CHECKOUT_SHEET_BUILD = b115-f6`.
-- **Тесты:** `b115_f6_checkout_integration_test.rb` · legacy b112/cbr обновлены · shop **288 runs PASS**.
-
-## 2026-07-06 — feat(b1.15): F5 3DS iframe inside checkout expanded+ sheet
-
-- **ThreeDsOverlay:** `embedded` mode — ACS iframe target `coffeeos-three-ds-frame` в sheet.
-- **CheckoutCartSheet:** `subView=three-ds` (S04) · close → card-form · swipe down.
-- **Checkout:** inline 3DS when `expanded_plus`; fullscreen overlay только вне sheet.
-- **Store:** `openCheckoutThreeDs` / `closeCheckoutThreeDs` · vh `expandedPlusThreeDs` 92.
-- **Тесты:** `b115_f5_three_ds_sheet_test.rb` · shop 284 runs PASS.
-
-## 2026-07-06 — feat(b1.15): F4 expanded+ card-form inline in checkout sheet
-
-- **NewCardSheet:** `embedded` mode — PAN/expiry/CVV, save toggle, RSA encrypt, POST `/payments/new_card`.
-- **CheckoutCartSheet:** `subView=card-form` (S04) · cart total + disabled pay bar · (X)/swipe → payment-list.
-- **Store:** `openCheckoutCardForm` / `closeCheckoutCardForm` · vh `expandedPlusCardForm` 85.
-- **Checkout:** peek «Картой +» opens inline form; handlers reuse `handleNewCardSuccess` / ThreeDs.
-- **Тесты:** `b115_f4_card_form_test.rb` · shop 278 runs PASS.
-
-## 2026-07-06 — feat(b1.15): F3 expanded+ payment-list on checkout sheet
-
-- **UI:** `expanded_plus` + `payment-list` — mini/full cart top (S05–S07), saved cards list (max 10), СБП disabled, «Картой +», CheckoutPayButton, (X) → expanded.
-- **Store:** `openCheckoutPaymentList` / `closeCheckoutPaymentList` / `checkoutSheetSubView`.
-- **Checkout:** wire savedCards, selectSavedCard, handlePayFromSheet; `pb-[78vh]`.
-- **Тесты:** `b115_f3_expanded_plus_payment_list_test.rb` · shop 271 runs PASS.
-
-## 2026-07-06 — feat(b1.15): F2 checkout expanded mode + transitions
-
-- **Thresholds:** `expandedSingle` 58vh · `expandedMulti` 66vh · `SWIPE_UP_PX` · build `b115-f2`.
-- **Store:** `expandCheckoutSheet` / `collapseCheckoutSheet` / gesture delta; refresh не сбрасывает expanded.
-- **UI:** expanded vertical list · tap peek / swipe up → expanded · swipe down → peek · «Картой *XXXX» label.
-- **Тесты:** `b115_f2_expanded_sheet_test.rb` · shop 264 runs PASS.
-
-## 2026-07-06 — feat(b1.15): F1 checkout peek bottom sheet
-
-- **Frontend:** `CheckoutCartSheet.svelte` — peek layouts single/double/multi (S01–S03), footer СБП/Картой+/Оплатить.
-- **Lib:** `checkoutSheetStore.js` · `checkoutSheetThresholds.js` — отдельный store от каталога, vh peek.
-- **Checkout:** mount sheet + `pb-[52vh]`; wire `onCardPlus` / `onPay` к существующим handlers.
-- **Тесты:** `b115_f1_peek_sheet_test.rb` · `bin/rails test test/integration/shop/` PASS.
-- **Не в scope F1:** expanded/expanded+, убрать дубли модалок (F6).
-
-## 2026-07-05 — docs(b1.15): PNG макетов + детальный разбор S01–S07
-
-- **PNG:** 7 файлов `screenshots/b115_mock_s01…s07_2026-07-05.png` из чата заказчика.
-- **ТЗ:** § детальный разбор каждого макета (что видим / состояние / что в коде) + полный user flow + таблица компонентов.
-- **JSON/README/CHECKLIST:** screenshots_saved `[x]`.
-- **Код:** не трогали.
-
-## 2026-07-05 — docs(b1.15): этап 0 checkout payment bottom sheet
-
-- **ТЗ:** `B1_15_checkout_payment_bottom_sheet.md` — текст заказчика дословно + канон 7 макетов (peek/expanded/expanded+).
-- **Артефакты:** `b115_stage0_scope_2026-07-05.json` · `screenshots/README_b115_customer_mockups_2026-07-05.md`.
-- **Индексы:** CHECKLIST §C3 · CBR backlog · `customer_tasks/README` · ссылка из B1.12.
-- **PNG:** 7 макетов — слоты в README; бинарники из чата не в репо — копия из Figma pending.
-- **Код:** не трогали — стоп до `go` F1.
 
 ## 2026-07-05 — ops: batch апрув задач трекера «проверено»
 
