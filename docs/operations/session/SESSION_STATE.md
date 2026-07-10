@@ -22,7 +22,7 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **Checkout payment** | S1–S7 **red** 13 FAIL · Fly v340 clean slate | `go` на код sheet |
+| **Checkout payment** | S1–S7+E **red** 23 FAIL · Fly v340 clean slate | `go` на код sheet |
 | **B1.12 rev2** | код R1–R3 `[x]` · **BUG-SAVE фикс `1081dac`** Fly v328 `[x]` | **A1:** заказчик CONFIRMED оплата |
 | **B1.11 режим работы** | **ЗАКРЫТА** · апрув 2026-07-05 | **B1.12** A1 · **B1.13 S4** · **B1.14-4** |
 | **B1.13 CR-BOTTOM-NAV** | deploy **`[x]`** Fly 2026-07-07 | A1 апрув заказчика |
@@ -31,6 +31,13 @@
 
 | **Sentry triage** | RUBY-9 fix `[x]` · Neon quota OK (оплачено) | Archive RUBY-Q…R в Sentry UI |
 | **Security hygiene** | permit! → explicit weekday permit `[x]` · rack/view_component bump `[x]` | **V2-SEC-08** bundler-audit CVE — обязательно (`PRACTICES.md`) |
+
+### Сессия 2026-07-10 (checkout payment — S1–S7 + E1–E10 red)
+
+- Тест: `checkout_payment_sheet_s1_s7_red_test.rb` — шаги 1–7 + экстремалы E1–E10 (один файл).
+- Прогон: **23 runs, 23 failures** (красная зона).
+- Код UI не трогали.
+- **Стоп:** ждать `go` на реализацию.
 
 ### Сессия 2026-07-10 (checkout payment — S1–S7 red tests)
 

@@ -11,7 +11,7 @@
 | ТЗ | [`Выбор способа оплаты…`](../milestones/veha_2/requirements/customer_tasks/Выбор%20способа%20оплаты%20и%20прикрепление%20банковской%20карты%20на%20экране%20оформления%20заказа.md) |
 | Скрины 7 шт. | **`[x]`** `artifacts/checkout_payment_method_card/screenshots/` (s01–s07) |
 | Clean slate + Fly | **`[x]`** v340 · history purge |
-| S1–S7 red-тесты | **`[x]`** `checkout_payment_sheet_s1_s7_red_test.rb` — **13 FAIL** (ожидаемо) |
+| S1–S7 + E1–E10 red | **`[x]`** тот же файл — **23 FAIL** (ожидаемо) |
 | Код sheet | **`[ ]`** |
 | **Следующий шаг** | `go` на реализацию (зелёная зона) |
 

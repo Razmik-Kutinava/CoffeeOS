@@ -2,13 +2,14 @@
 
 require "test_helper"
 
-# Checkout payment method card — Шаги 1–7 (red zone)
+# Checkout payment method card — Шаги 1–7 + экстремалы (red zone)
 # ТЗ: customer_tasks/Выбор способа оплаты и прикрепление банковской карты
 #      на экране оформления заказа.md
 # Макеты: artifacts/checkout_payment_method_card/screenshots/s01–s07
 #
 # Код UI пока НЕ реализован — ожидаем FAIL (красная зона).
 # Паттерн: static asserts по исходникам (как product_card_s1 / cart_expanded_image).
+# E1–E10: § «Экстремальные сценарии» того же ТЗ — в этом же файле.
 class Shop::CheckoutPaymentSheetS1S7RedTest < ActionDispatch::IntegrationTest
   SHEET = "app/frontend/components/CheckoutPaymentSheet.svelte"
   STORE = "app/frontend/lib/checkoutPaymentSheetStore.js"
@@ -214,5 +215,106 @@ class Shop::CheckoutPaymentSheetS1S7RedTest < ActionDispatch::IntegrationTest
       "Шаг 7: клик по изображению вызывает openEditCard(line…)"
     assert_match(/selected_modifiers|cart_line/, sh,
       "Шаг 7: в openEditCard передаётся line с модификаторами / cart_line")
+  end
+
+  # --- Экстремальные сценарии (Error & Edge States) -------------------------
+
+  test "E1 3DS timer 00:00: Allow disabled; restart add-card flow" do
+    sh = sheet
+    assert_match(/00:00|timerExpired|threeDsExpired|timer.*===.*0/i, sh,
+      "E1: при истечении таймера 3DS есть состояние 00:00 / expired")
+    assert_match(
+      /Разрешить[\s\S]{0,120}disabled|disabled[\s\S]{0,120}Разрешить|allowDisabled|timerExpired/,
+      sh,
+      "E1: кнопка «Разрешить» блокируется при 00:00"
+    )
+    assert_match(/openCardForm|closeThreeDs|restart|заново|card_form/i, sh + store,
+      "E1: после expiry — возврат к добавлению карты заново")
+  end
+
+  test "E2 wrong SMS code: error message, clear field, timer keeps running" do
+    sh = sheet
+    assert_includes sh, 'data-testid="checkout-payment-three-ds-error"',
+      "E2: сообщение об ошибке неверного СМС"
+    assert_match(/clear|otpCode\s*=\s*[\"']{2}|smsCode\s*=\s*[\"']{2}|resetCode/i, sh,
+      "E2: поле СМС очищается после ошибки")
+  end
+
+  test "E3 network fail during 3DS: connection error + retry" do
+    sh = sheet
+    assert_match(/checkout-payment-three-ds-(network|connection)-error|threeDsNetworkError/i, sh,
+      "E3: UI ошибки соединения при 3DS")
+    assert_match(/Повторить|retry|onRetry/i, sh,
+      "E3: возможность повторить попытку")
+  end
+
+  test "E4 close empty card form: back to payment_list; form data not persisted" do
+    st = store
+    sh = sheet
+    assert_match(/closeCardForm/, st,
+      "E4: store closeCardForm → payment_list")
+    assert_match(/reset|clearForm|pan\s*=\s*[\"']{2}|resetFields/i, sh,
+      "E4: при закрытии пустой формы поля сбрасываются")
+  end
+
+  test "E5 11th card: limit 10 — form does not open; limit message" do
+    st = store
+    sh = sheet
+    assert_match(/MAX_.*CARD|maxCards|10/, st + sh,
+      "E5: лимит 10 сохранённых карт")
+    assert_match(/openCardForm[\s\S]{0,200}length|savedCards\.length[\s\S]{0,80}>=?\s*10|limitReached/i, st + sh,
+      "E5: guard — не открывать форму при ≥10 картах")
+    assert_includes sh, 'data-testid="checkout-payment-card-limit-error"',
+      "E5: сообщение о достижении лимита карт"
+  end
+
+  test "E6 email verify network fail: footer stays disabled + err visible" do
+    co = checkout
+    sh = sheet
+    assert_match(/emailVerified/, sh,
+      "E6: footer завязан на emailVerified")
+    assert_match(/err/, co,
+      "E6: Checkout показывает ошибку сети при verify")
+  end
+
+  test "E7 delete all saved cards: Pay becomes disabled" do
+    sh = sheet
+    assert_match(/removeCard|deleteCard|onRemoveCard|Удалить.*карт/i, sh,
+      "E7: возможность удалить сохранённую карту в expanded+")
+    assert_match(/savedCards\.length|hasSavedCard|canPay/, sh,
+      "E7: Оплатить зависит от наличия карт после удаления")
+  end
+
+  test "E8 invalid card form: Next stays disabled + field validation" do
+    sh = sheet
+    assert_match(/refreshFieldErrors|fieldErrors|invalid|disabled.*[Дд]алее|[Дд]алее[\s\S]{0,80}disabled/i, sh,
+      "E8: «Далее» disabled при невалидных PAN/expiry/CVV")
+    assert_match(/Номер карты|expiry|CVV|cvv/i, sh,
+      "E8: валидация полей формы карты")
+  end
+
+  test "E9 peek before email: footer buttons no-op (disabled)" do
+    sh = sheet
+    %w[checkout-payment-sbp checkout-payment-card-plus checkout-payment-pay].each do |tid|
+      block = sh[/data-testid="#{tid}"[\s\S]{0,180}/]
+      assert block, "E9: кнопка #{tid}"
+      assert_match(/disabled/, block,
+        "E9: #{tid} disabled до подтверждения email")
+    end
+  end
+
+  test "E10 empty cart: sheet hidden or empty state" do
+    st = store
+    sh = sheet
+    assert_match(/items\.length|cartItems|MODE_EMPTY|hidden|empty/i, st,
+      "E10: store — gate при 0 товаров")
+    empty_gate =
+      sh.match?(/items\.length\s*===?\s*0/) ||
+      sh.match?(/!items\.length/) ||
+      sh.include?("{#if items") ||
+      sh.include?("checkout-payment-empty") ||
+      sh.match?(/return null/)
+    assert empty_gate,
+      "E10: sheet не рендерится или empty state при пустой корзине"
   end
 end

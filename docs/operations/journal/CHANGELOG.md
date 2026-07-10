@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2026-07-10 — test(checkout-payment): S1–S7 + E1–E10 red в одном файле
+
+- `checkout_payment_sheet_s1_s7_red_test.rb`: шаги 1–7 + экстремалы E1–E10 (тот же файл).
+- Прогон: **23 runs, 23 failures** (красная зона). Код UI не меняли.
+
 ## 2026-07-10 — test(checkout-payment): S1–S7 red — sheet ещё нет
 
 - Новый: `test/integration/shop/checkout_payment_sheet_s1_s7_red_test.rb` — Gherkin шагов 1–7 (peek→expanded→expanded+/form/3DS/pay/X/openEditCard).
