@@ -120,6 +120,11 @@ class Shop::CheckoutPaymentSheetRealB112Test < ActionDispatch::IntegrationTest
     assert_match(/z-index:\s*6[5-9]/, nc, "backdrop выше peek")
   end
 
+  test "S5 ThreeDsOverlay present for ACS iframe" do
+    assert_match(/acs|iframe|three.?ds/i, three_ds, "ACS overlay")
+    assert_match(/z-index:\s*8[0-9]/, three_ds, "ACS выше NewCardSheet")
+  end
+
   test "S5 limit 10 cards before opening NewCardSheet" do
     st = store
     sh = sheet
