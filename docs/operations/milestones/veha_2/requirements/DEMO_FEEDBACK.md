@@ -28,6 +28,8 @@
 
 | Дата | Источник | Сценарий / экран | Суть | Статус | PR / коммит |
 |------|----------|------------------|------|--------|-------------|
+| 2026-07-13 | заказчик + MCP | `#/checkout` Card+ форма | Клавиатура: шторка выше + Pay видно; свайп вниз expanded+→peek | **done** · Fly **v354** · скрин | [mcp json](artifacts/demo-feedback/checkout_payment_mcp_step4_7_keyboard_swipe_fly_v354_2026-07-13.json) · `12a3c9f` |
+| 2026-07-13 | заказчик + MCP | `#/checkout` Card+ | Форма внутри шторки — корзина/thumbs не пропадают | **done** · Fly **v353/v354** | [step4 cart](artifacts/demo-feedback/checkout_payment_mcp_step4_cart_keep_fly_v353_2026-07-13.json) |
 | 2026-07-10 | MCP browser | `#/checkout` vs s01–s07 | Fly v341 ≠ идеал заказчика (s02/s03 FAIL, OTP) | **open** · ждёт deploy фиксов | [mcp compare](artifacts/demo-feedback/checkout_payment_mcp_visual_compare_2026-07-10.json) |
 | 2026-07-10 | владелец | checkout s04 3DS | Канон: **ACS банка**, не SMS-keypad из макета s04 | **done** · wontfix mock keypad | ТЗ customer_tasks · NewCardSheet+ThreeDsOverlay |
 | 2026-07-10 | MCP visual | `#/checkout` vs s01–s07 | Fly ≠ макеты; peek/footer фикс в коде; s04 ACS accepted | **in_progress** · ждёт `go` deploy | [visual compare](artifacts/demo-feedback/checkout_payment_visual_compare_fly_v341_2026-07-10.json) |

@@ -1,0 +1,38 @@
+{
+  "date": "2026-07-13",
+  "task": "checkout_payment_step4_7_keyboard_lift_and_swipe_to_peek",
+  "complaints": [
+    "Фокус номера карты → Оплатить под клавиатурой / нужен скролл",
+    "Свайп вниз с expanded+ → должен быть peek (корзина), не expanded"
+  ],
+  "canon_tz": "Шаг 4 форма в expanded+; Шаг 7 свайп вниз → peek",
+  "mcp": "cursor-ide-browser",
+  "stand": "https://coffeeos.fly.dev",
+  "fly_version": 354,
+  "image": "coffeeos:deployment-01KXDY54RE7D8KWKDXTJQD5NK2",
+  "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "url": "https://coffeeos.fly.dev/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789#/checkout",
+  "viewport": "390x844",
+  "commit": "12a3c9f",
+  "fix": {
+    "keyboard_lift": "focus card field → keyboardLift → sheetHeightVh 92 (expandedPlusKeyboard); Pay sticky + scrollIntoView",
+    "swipe_down": "expanded+ gesture delta down → collapseToPeek (not closePaymentList)"
+  },
+  "checks": {
+    "Card+_form_in_sheet_with_cart_thumbs": "PASS",
+    "price_chip_visible": "PASS",
+    "Pay_visible_with_form": "PASS",
+    "focus_PAN_sheet_raised": "PASS",
+    "handle_top_y_after_focus": 106,
+    "note_handle_y": "~87–92vh (viewport 844); ближе к expandedPlusKeyboard чем к 78",
+    "swipe_down_MCP": "NOT_SIMULATED",
+    "swipe_down_code_test": "PASS"
+  },
+  "screenshots": [
+    "screenshots/mcp_step4_7_keyboard_lift_form_fly_v354_2026-07-13.png",
+    "screenshots/mcp_step4_card_form_cart_keep_fly_v354_2026-07-13.png",
+    "screenshots/mcp_step4_card_form_keeps_cart_fly_v353_2026-07-13.png"
+  ],
+  "verdict": "STEP4_7_KEYBOARD_PASS",
+  "summary_ru": "На Fly v354 после Картой +: форма в шторке, миниатюра+цена 3₽, Оплатить видно. Фокус PAN поднимает шторку. Свайп вниз → peek закрыт тестом исходников (MCP drag не эмулирует touch/mouseup delta)."
+}

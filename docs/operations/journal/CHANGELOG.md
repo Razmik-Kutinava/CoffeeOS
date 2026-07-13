@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 2026-07-13 — fix(checkout-payment): keyboard lift + swipe expanded+→peek
+
+- Фокус полей карты → шторка `92vh` (`expandedPlusKeyboard`) + sticky Pay.
+- Свайп вниз с expanded+ → `collapseToPeek` (корзина), не expanded.
+- Тесты sheet **32 PASS**. Fly **v354**. MCP STEP4_7_KEYBOARD_PASS.
+- Скрины заказчику: `mcp_step4_7_keyboard_lift_form_fly_v354_*.png`.
+- Артефакт: `checkout_payment_mcp_step4_7_keyboard_swipe_fly_v354_2026-07-13.json`.
+
 ## 2026-07-13 — fix(checkout-payment): Card+ form inside expanded+ keeps cart
 
 - Жалоба заказчика: после «Картой +» корзина пропадала (fullscreen NewCardSheet).

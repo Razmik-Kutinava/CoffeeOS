@@ -1,8 +1,8 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-13 (checkout payment — Step4 form keeps cart)  
+**Дата:** 2026-07-13 (checkout payment — Step4/7 keyboard + swipe)  
 **Ветка:** `develop`  
-**Прод:** https://coffeeos.fly.dev (**v353** — Card+ форма внутри expanded+)
+**Прод:** https://coffeeos.fly.dev (**v354** — keyboard lift + swipe→peek)
 
 ### Checkout payment method card — выбор оплаты / прикрепление карты
 
@@ -12,7 +12,8 @@
 | Wiring B1.12 | **`[x]`** Card+→embedded NewCardSheet · ACS · one-click |
 | A–C Peek/Expanded/Expanded+ | layout PASS · v344–v348 |
 | D Form/ACS | PARTIAL · v350 |
-| **Step4: форма + корзина** | **`STEP4_CART_KEEP_PASS`** · Fly **v353** · [JSON](../milestones/veha_2/artifacts/demo-feedback/checkout_payment_mcp_step4_cart_keep_fly_v353_2026-07-13.json) |
+| **Step4: форма + корзина** | **`STEP4_CART_KEEP_PASS`** · Fly **v353/v354** · [скрин](../milestones/veha_2/artifacts/demo-feedback/screenshots/mcp_step4_card_form_cart_keep_fly_v354_2026-07-13.png) |
+| **Step4/7: клавиатура + свайп** | **`STEP4_7_KEYBOARD_PASS`** · Fly **v354** · [JSON](../milestones/veha_2/artifacts/demo-feedback/checkout_payment_mcp_step4_7_keyboard_swipe_fly_v354_2026-07-13.json) |
 | s04 ACS | **`[x]`** канон B · форма в шторке (не оверлей) |
 | Битые фото | **отложено** |
 | **Следующий шаг** | **A1** живая карта · Шаг E Оплатить/X/scroll |

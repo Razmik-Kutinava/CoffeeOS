@@ -2,7 +2,8 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-13 (checkout payment — Step4 form keeps cart)  
+**Дата:** 2026-07-13 (checkout payment — Step4/7 keyboard lift + swipe→peek)  
+**Предыдущее:** 2026-07-13 (checkout payment — Step4 form keeps cart)  
 **Предыдущее:** 2026-07-13 (B1.13 cart sheet pinned bottom)  
 **Предыдущее:** 2026-07-13 (checkout payment — D.Step4–5 Form/ACS runtime)  
 **Предыдущее:** 2026-07-13 (checkout payment — C.Step3 Expanded+ vs s05/s07)  
@@ -36,7 +37,7 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **Checkout payment** | Fly **v353** · Card+ форма в expanded+ · корзина видна | A1 живая карта · Шаг E |
+| **Checkout payment** | Fly **v354** · keyboard lift + swipe→peek код · MCP form PASS | A1 живая карта · Шаг E |
 | **B1.12 rev2** | код R1–R3 `[x]` · **BUG-SAVE фикс `1081dac`** Fly v328 `[x]` | **A1:** заказчик CONFIRMED оплата |
 | **B1.11 режим работы** | **ЗАКРЫТА** · апрув 2026-07-05 | **B1.12** A1 · **B1.13 S4** · **B1.14-4** |
 | **B1.13 CR-BOTTOM-NAV** | бар убран · cart `BOTTOM_REM=0` код `[x]` | **`go` deploy** · A1 апрув |
@@ -45,6 +46,14 @@
 
 | **Sentry triage** | RUBY-9 fix `[x]` · Neon quota OK (оплачено) | Archive RUBY-Q…R в Sentry UI |
 | **Security hygiene** | permit! → explicit weekday permit `[x]` · rack/view_component bump `[x]` | **V2-SEC-08** bundler-audit CVE — обязательно (`PRACTICES.md`) |
+
+### Сессия 2026-07-13 (checkout payment — Step4/7 keyboard + swipe)
+
+- Жалобы: Pay под клавиатурой; свайп вниз с expanded+ → peek.
+- Код: `expandedPlusKeyboard: 92` · focus/blur → `keyboardLift` · swipe down → `collapseToPeek`.
+- Тесты sheet **32 PASS**. Fly **v354**. MCP **STEP4_7_KEYBOARD_PASS** (swipe — code/test).
+- Скрины: `mcp_step4_7_keyboard_lift_form_fly_v354_*.png` · JSON артефакт.
+- **Стоп:** A1 / Шаг E.
 
 ### Сессия 2026-07-13 (checkout payment — Step4 form keeps cart)
 
