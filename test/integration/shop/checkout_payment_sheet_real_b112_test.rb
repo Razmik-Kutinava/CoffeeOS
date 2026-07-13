@@ -42,29 +42,36 @@ class Shop::CheckoutPaymentSheetRealB112Test < ActionDispatch::IntegrationTest
     @three_ds ||= read_src(THREE_DS)
   end
 
-  # --- Шаг 1: Card+ → NewCardSheet (не mock form) -----------------------------
+  # --- Шаг 1: Card+ → форма внутри expanded+ (корзина сверху) ----------------
 
-  test "S1 Card+: sheet calls onAddCard; no embedded card_form / keypad 3DS" do
+  test "S1 Card+: openCardForm + embedded NewCardSheet; no SMS keypad" do
     sh = sheet
-    assert_match(/onAddCard/, sh, "Card+ должен вызывать onAddCard → NewCardSheet")
-    refute_includes sh, 'data-testid="checkout-payment-card-form"',
-      "Embedded mock-форма карты запрещена — только NewCardSheet"
+    st = store
+    assert_match(/openCardForm/, sh + st, "Card+ → openCardForm (expanded+)")
+    assert_includes sh, 'data-testid="checkout-payment-card-form"',
+      "Форма внутри expanded+ — корзина/thumbs остаются"
+    assert_match(/embedded=\{true\}|embedded=\{true\}/, sh,
+      "NewCardSheet embedded внутри шторки")
+    assert_includes sh, "NewCardSheet"
     refute_includes sh, 'data-testid="checkout-payment-three-ds-keypad"',
       "Mock SMS-keypad 3DS запрещён — только ACS ThreeDsOverlay"
     refute_match(/openThreeDs|SUBVIEW_THREE_DS|threeDsTimer/, sh,
       "Локальный mock-таймер 3DS не должен жить в sheet")
   end
 
-  test "S1 Checkout wires onAddCard to openNewCardSheet; mounts NewCardSheet + ThreeDsOverlay" do
+  test "S1 Checkout wires Card+ gate + ThreeDsOverlay; form lives in sheet" do
     co = checkout
-    assert_match(/CheckoutPaymentSheet[\s\S]{0,600}onAddCard/, co,
+    sh = sheet
+    assert_match(/CheckoutPaymentSheet[\s\S]{0,900}onAddCard/, co,
       "Checkout прокидывает onAddCard в sheet")
-    assert_match(/onAddCard=\{[^}]*openNewCardSheet|function handleAddCard|openNewCardSheet/, co,
-      "onAddCard открывает NewCardSheet")
-    assert_includes co, "NewCardSheet", "NewCardSheet смонтирован"
+    assert_match(/function handleAddCard|onAddCard=\{handleAddCard\}/, co)
+    refute_match(/<NewCardSheet/, co,
+      "Оверлей NewCardSheet убран с Checkout — форма в CheckoutPaymentSheet")
+    assert_includes sh, "NewCardSheet", "NewCardSheet смонтирован в sheet (embedded)"
     assert_includes co, "ThreeDsOverlay", "ThreeDsOverlay смонтирован для ACS"
     assert_includes co, "Подтвердите email, чтобы добавить карту",
       "Card+ без email — явная ошибка, не silent no-op"
+    assert_match(/onCardSuccess|onCardThreeDs/, co)
   end
 
   # --- Шаг 2: Pay = one-click only -------------------------------------------
@@ -114,10 +121,11 @@ class Shop::CheckoutPaymentSheetRealB112Test < ActionDispatch::IntegrationTest
     assert_includes nc, 'data-testid="new-card-sheet"'
   end
 
-  test "S5 NewCardSheet above CheckoutPaymentSheet (z-index)" do
+  test "S5 NewCardSheet supports embedded mode inside expanded+" do
     nc = File.read(Rails.root.join(NEW_CARD))
-    assert_match(/z-index:\s*7[0-9]/, nc, "NewCardSheet выше peek z-50")
-    assert_match(/z-index:\s*6[5-9]/, nc, "backdrop выше peek")
+    assert_match(/embedded/, nc, "prop embedded для формы в шторке")
+    assert_match(/new-card-sheet--embedded/, nc, "CSS без fixed overlay")
+    assert_match(/z-index:\s*7[0-9]/, nc, "overlay-режим выше peek (legacy path)")
   end
 
   test "S5 ThreeDsOverlay present for ACS iframe" do

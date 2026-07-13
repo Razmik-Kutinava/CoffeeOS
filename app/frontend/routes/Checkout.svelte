@@ -41,10 +41,10 @@
     saveCachedSavedCard,
     clearCachedSavedCard
   } from "../lib/shopSavedCardCache.js"
-  import NewCardSheet from "../components/NewCardSheet.svelte"
   import ThreeDsOverlay from "../components/ThreeDsOverlay.svelte"
   import CheckoutPaymentSheet from "../components/CheckoutPaymentSheet.svelte"
   import { formatCardListLabel } from "../lib/paymentMethodLabels.js"
+  import { closeCardForm } from "../lib/checkoutPaymentSheetStore.js"
   import { SAVED_CARD_RETRY_MS, SAVED_CARD_RETRY_ATTEMPTS } from "../lib/shopCheckoutInlinePay.js"
   import {
     getOperatingHours,
@@ -76,7 +76,6 @@
   let payFsmState = $state(PAY_FSM.DEFAULT)
   let useOneClick = $state(true)
   let clientOrderUuid = $state(null)
-  let showNewCardSheet = $state(false)
   let showThreeDsOverlay = $state(false)
   let operatingHours = $state(getOperatingHours())
   let sheetPadVh = $state(30)
@@ -361,7 +360,7 @@
     await new Promise((r) => setTimeout(r, SUCCESS_REDIRECT_MS))
     clearGuestOrderSession()
     showThreeDsOverlay = false
-    showNewCardSheet = false
+    closeCardForm()
     push(`/order/${orderId}`)
   }
 
@@ -460,12 +459,12 @@
   }
 
   async function handleNewCardSuccess(res) {
-    showNewCardSheet = false
+    closeCardForm()
     await handlePaymentResponse(res)
   }
 
   async function handleNewCardThreeDs(res) {
-    showNewCardSheet = false
+    closeCardForm()
     await handleThreeDsResponse(res)
   }
 
@@ -473,8 +472,10 @@
     payFsmState = state
   }
 
-  function openNewCardSheet() {
+  /** Картой +: форма уже открыта в expanded+; здесь только gate canPay */
+  function handleAddCard() {
     if (!canPay) {
+      closeCardForm()
       if (!emailVerified) err = "Подтвердите email, чтобы добавить карту"
       else if (!shopIsOpenForPay()) err = "Сейчас точка закрыта — карту добавить нельзя"
       else if (savedCardsLoading) err = "Загружаем сохранённые карты…"
@@ -483,13 +484,6 @@
       return
     }
     err = null
-    showNewCardSheet = true
-  }
-
-  /** Картой + → реальный NewCardSheet (RSA + ACS), не mock form */
-  function handleAddCard() {
-    selectNewCardOption()
-    openNewCardSheet()
   }
 
   /** Оплатить — только one-click по сохранённой карте */
@@ -594,20 +588,6 @@
     </div>
   {/if}
 
-  <NewCardSheet
-    open={showNewCardSheet}
-    {name}
-    {email}
-    cardHolderName={name}
-    fsmState={payFsmState}
-    onFsmChange={handleNewCardFsmChange}
-    onClose={() => {
-      if (isPayFsmClickable(payFsmState)) showNewCardSheet = false
-    }}
-    onSuccess={handleNewCardSuccess}
-    onThreeDs={handleNewCardThreeDs}
-  />
-
   <ThreeDsOverlay
     open={showThreeDsOverlay}
     onClose={() => {
@@ -625,9 +605,15 @@
     cardLabel={savedCard ? formatCardListLabel(savedCard) : null}
     {selectedCardId}
     {canPay}
+    guestName={name}
+    guestEmail={email}
+    {payFsmState}
     onPay={handlePayFromSheet}
     onSelectCard={selectSavedCard}
     onSelectNewCard={selectNewCardOption}
     onAddCard={handleAddCard}
+    onCardFsmChange={handleNewCardFsmChange}
+    onCardSuccess={handleNewCardSuccess}
+    onCardThreeDs={handleNewCardThreeDs}
   />
 </div>

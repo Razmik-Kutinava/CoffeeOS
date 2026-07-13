@@ -21,6 +21,7 @@
 
   let {
     open = false,
+    embedded = false,
     name = "",
     email = "",
     cardHolderName = "",
@@ -159,18 +160,24 @@
 </script>
 
 {#if open}
-  <div
-    class="new-card-backdrop"
-    role="presentation"
-    onclick={closeSheet}
-    data-testid="new-card-sheet-backdrop"
-  ></div>
+  {#if !embedded}
+    <div
+      class="new-card-backdrop"
+      role="presentation"
+      onclick={closeSheet}
+      data-testid="new-card-sheet-backdrop"
+    ></div>
+  {/if}
   <section
     class="new-card-sheet"
+    class:new-card-sheet--embedded={embedded}
     aria-label="Новая карта"
     data-testid="new-card-sheet"
+    data-embedded={embedded ? "true" : "false"}
   >
-    <div class="new-card-sheet__handle" aria-hidden="true"></div>
+    {#if !embedded}
+      <div class="new-card-sheet__handle" aria-hidden="true"></div>
+    {/if}
 
     <div class="new-card-sheet__fields">
       <label class="new-card-field" class:new-card-field--error={fieldErrors.pan}>
@@ -271,7 +278,9 @@
       />
     </div>
 
-    <button type="button" class="new-card-sheet__cancel" onclick={closeSheet}>Отмена</button>
+    {#if !embedded}
+      <button type="button" class="new-card-sheet__cancel" onclick={closeSheet}>Отмена</button>
+    {/if}
   </section>
 {/if}
 
@@ -295,6 +304,20 @@
     border-top: 1px solid #3a3a3a;
     padding: 0.75rem 1rem 1.25rem;
     box-shadow: 0 -8px 32px rgb(0 0 0 / 0.45);
+  }
+
+  /* Внутри expanded+: корзина/thumbs сверху остаются видимыми */
+  .new-card-sheet--embedded {
+    position: relative;
+    left: auto;
+    right: auto;
+    bottom: auto;
+    z-index: auto;
+    border-radius: 0;
+    border-top: none;
+    box-shadow: none;
+    padding: 0 0 0.5rem;
+    background: transparent;
   }
 
   .new-card-sheet__handle {
