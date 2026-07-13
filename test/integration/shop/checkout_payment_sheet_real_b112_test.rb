@@ -217,6 +217,13 @@ class Shop::CheckoutPaymentSheetRealB112Test < ActionDispatch::IntegrationTest
       "Peek→Expanded только после email (ТЗ Шаг 2)")
   end
 
+  test "S2 gesture zone is activatable for expand (swipe or click)" do
+    sh = sheet
+    assert_includes sh, 'data-testid="checkout-payment-gesture-zone"'
+    assert_match(/onGestureActivate|expandSheet/, sh)
+    assert_match(/aria-label=.*высот/i, sh)
+  end
+
   test "S2 expanded shows all products as full cards not thumbs-only" do
     sh = sheet
     assert_includes sh, 'data-testid="checkout-payment-expanded"'

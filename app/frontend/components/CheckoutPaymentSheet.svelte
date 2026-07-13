@@ -116,6 +116,12 @@
       else if (mode === MODE_EXPANDED) collapseToPeek()
     }
   }
+
+  /** Клик по handle: Peek→Expanded (email) — для desktop/MCP без swipe */
+  function onGestureActivate() {
+    if (mode === MODE_PEEK && emailVerified) expandSheet()
+    else if (mode === MODE_EXPANDED) openPaymentList()
+  }
 </script>
 
 {#if !items.length}
@@ -127,17 +133,19 @@
     class="checkout-payment-sheet fixed bottom-0 left-0 right-0 z-50 mx-auto flex max-w-lg flex-col overflow-hidden rounded-t-2xl border-t border-[#3a3a3a] bg-[#2a2a2a]"
     style="height: {heightVh}vh; transition: height {SHEET_TRANSITION_MS}ms ease-out;"
   >
-    <div
-      class="flex shrink-0 justify-center py-2"
+    <button
+      type="button"
+      class="flex w-full shrink-0 cursor-grab justify-center py-2 active:cursor-grabbing"
       data-testid="checkout-payment-gesture-zone"
+      aria-label="Потяните вверх или вниз, чтобы изменить высоту шторки"
       ontouchstart={onGestureStart}
       ontouchend={onGestureEnd}
       onmousedown={onGestureStart}
       onmouseup={onGestureEnd}
-      role="presentation"
+      onclick={onGestureActivate}
     >
-      <div class="h-1 w-10 rounded-full bg-[#555]"></div>
-    </div>
+      <div class="h-1 w-10 rounded-full bg-[#555]" aria-hidden="true"></div>
+    </button>
 
     {#if limitError}
       <p class="px-3 pb-1 text-sm text-red-400" data-testid="checkout-payment-card-limit-error" role="alert">
