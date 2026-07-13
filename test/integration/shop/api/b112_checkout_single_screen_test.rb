@@ -16,10 +16,12 @@ class Shop::Api::B112CheckoutSingleScreenTest < ActionDispatch::IntegrationTest
 
   test "Checkout uses custom NewCardSheet instead of bank redirect" do
     checkout = File.read(Rails.root.join("app/frontend/routes/Checkout.svelte"))
+    sheet = File.read(Rails.root.join("app/frontend/components/CheckoutPaymentSheet.svelte"))
+    store = File.read(Rails.root.join("app/frontend/lib/checkoutPaymentSheetStore.js"))
     refute_includes checkout, 'push("/payment")'
     refute_includes checkout, "CheckoutInlinePayment"
-    assert_includes checkout, "NewCardSheet"
-    assert_includes checkout, "openNewCardSheet"
+    assert_includes sheet, "NewCardSheet"
+    assert_includes store, "openCardForm"
     refute_includes checkout, "redirectToBankPayment"
     refute_includes checkout, "redirectToPaymentUrl"
   end
