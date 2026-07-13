@@ -2,7 +2,8 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-13 (B1.13 cart sheet pinned bottom)  
+**Дата:** 2026-07-13 (checkout payment — Step4 form keeps cart)  
+**Предыдущее:** 2026-07-13 (B1.13 cart sheet pinned bottom)  
 **Предыдущее:** 2026-07-13 (checkout payment — D.Step4–5 Form/ACS runtime)  
 **Предыдущее:** 2026-07-13 (checkout payment — C.Step3 Expanded+ vs s05/s07)  
 **Предыдущее:** 2026-07-13 (checkout payment — B.Step2 Expanded vs s06)  
@@ -35,7 +36,7 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **Checkout payment** | Fly **v350** · D Card+/форма PASS · ACS/saved_card ждёт реальную карту | **A1** заказчик |
+| **Checkout payment** | Fly **v353** · Card+ форма в expanded+ · корзина видна | A1 живая карта · Шаг E |
 | **B1.12 rev2** | код R1–R3 `[x]` · **BUG-SAVE фикс `1081dac`** Fly v328 `[x]` | **A1:** заказчик CONFIRMED оплата |
 | **B1.11 режим работы** | **ЗАКРЫТА** · апрув 2026-07-05 | **B1.12** A1 · **B1.13 S4** · **B1.14-4** |
 | **B1.13 CR-BOTTOM-NAV** | бар убран · cart `BOTTOM_REM=0` код `[x]` | **`go` deploy** · A1 апрув |
@@ -44,6 +45,14 @@
 
 | **Sentry triage** | RUBY-9 fix `[x]` · Neon quota OK (оплачено) | Archive RUBY-Q…R в Sentry UI |
 | **Security hygiene** | permit! → explicit weekday permit `[x]` · rack/view_component bump `[x]` | **V2-SEC-08** bundler-audit CVE — обязательно (`PRACTICES.md`) |
+
+### Сессия 2026-07-13 (checkout payment — Step4 form keeps cart)
+
+- Жалоба: Картой + → корзина пропала (оверлей NewCardSheet).
+- Фикс: `openCardForm` → NewCardSheet `embedded` внутри expanded+ (thumbs + цена).
+- Тесты sheet 29 PASS · single-screen 5 PASS. Fly **v353**. MCP **STEP4_CART_KEEP_PASS**.
+- Артефакт: `checkout_payment_mcp_step4_cart_keep_fly_v353_2026-07-13.json`.
+- **Стоп:** A1 / Шаг E.
 
 ### Сессия 2026-07-13 (B1.13 — cart sheet прижат к низу)
 

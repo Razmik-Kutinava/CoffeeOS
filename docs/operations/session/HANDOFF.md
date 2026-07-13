@@ -1,22 +1,21 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-13 (B1.13 cart sheet pinned bottom)  
+**Дата:** 2026-07-13 (checkout payment — Step4 form keeps cart)  
 **Ветка:** `develop`  
-**Прод:** https://coffeeos.fly.dev (**v350** — cart bottom=0 ещё не на Fly)
+**Прод:** https://coffeeos.fly.dev (**v353** — Card+ форма внутри expanded+)
 
 ### Checkout payment method card — выбор оплаты / прикрепление карты
 
 | Что | Статус |
 |-----|--------|
 | ТЗ | [`Выбор способа оплаты…`](../milestones/veha_2/requirements/customer_tasks/Выбор%20способа%20оплаты%20и%20прикрепление%20банковской%20карты%20на%20экране%20оформления%20заказа.md) |
-| Wiring B1.12 | **`[x]`** Card+→NewCardSheet · ACS · one-click |
-| A.Step1 Peek vs s01–s03 | **`PEEK_PASS`** · Fly v344 |
-| B.Step2 Peek→Expanded vs s06 | **`EXPANDED_PASS_layout`** · Fly v346 |
-| C.Step3 Expanded→Expanded+ vs s05/s07 | **`EXPANDED_PLUS_PASS_layout`** · Fly v348 |
-| s04 ACS | **`[x]`** канон **B** (не keypad) |
-| D.Step4–5 Form/ACS runtime | **`D_RUNTIME_PARTIAL`** · Fly **v350** · [JSON](../milestones/veha_2/artifacts/demo-feedback/checkout_payment_mcp_step_d_s04_acs_fly_v350_2026-07-13.json) |
+| Wiring B1.12 | **`[x]`** Card+→embedded NewCardSheet · ACS · one-click |
+| A–C Peek/Expanded/Expanded+ | layout PASS · v344–v348 |
+| D Form/ACS | PARTIAL · v350 |
+| **Step4: форма + корзина** | **`STEP4_CART_KEEP_PASS`** · Fly **v353** · [JSON](../milestones/veha_2/artifacts/demo-feedback/checkout_payment_mcp_step4_cart_keep_fly_v353_2026-07-13.json) |
+| s04 ACS | **`[x]`** канон B · форма в шторке (не оверлей) |
 | Битые фото | **отложено** |
-| **Следующий шаг** | **A1** живая карта заказчика → ACS → saved_card (sandbox на prod → отказ) |
+| **Следующий шаг** | **A1** живая карта · Шаг E Оплатить/X/scroll |
 
 ### Product card peek cart — отображение набранных позиций в карточке товара
 

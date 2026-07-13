@@ -1,0 +1,24 @@
+{
+  "date": "2026-07-13",
+  "task": "checkout_payment_step4_card_form_keeps_cart",
+  "complaint": "Картой + → экран сменился, корзина пропала",
+  "canon_tz": "Шаг 4: форма внутри expanded+; миниатюры/цена сверху",
+  "mcp": "cursor-ide-browser",
+  "stand": "https://coffeeos.fly.dev",
+  "fly_version": 353,
+  "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "viewport": "390x844",
+  "commits": ["59e2c31", "ecf3ae2"],
+  "fix": "Card+ → openCardForm → NewCardSheet embedded in expanded+ (thumbs + price remain)",
+  "checks": {
+    "peek_after_email": "PASS",
+    "Card+_opens_form_in_sheet": "PASS",
+    "thumbs_or_cart_visible_with_form": "PASS",
+    "price_chip_on_form": "PASS",
+    "no_fullscreen_overlay_hiding_cart": "PASS",
+    "no_SMS_keypad": "PASS"
+  },
+  "screenshot": "screenshots/mcp_step4_card_form_keeps_cart_fly_v353_2026-07-13.png",
+  "verdict": "STEP4_CART_KEEP_PASS",
+  "summary_ru": "После Картой + форма в той же шторке expanded+: миниатюра товара + цена 3₽ + поля карты. Корзина не пропадает."
+}

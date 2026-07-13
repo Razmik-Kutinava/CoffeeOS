@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 2026-07-13 — fix(checkout-payment): Card+ form inside expanded+ keeps cart
+
+- Жалоба заказчика: после «Картой +» корзина пропадала (fullscreen NewCardSheet).
+- ТЗ Шаг 4: форма **внутри** expanded+; thumbs + цена сверху.
+- `openCardForm` + `NewCardSheet embedded`; оверлей с Checkout убран.
+- Тесты sheet **29 PASS**. MCP Fly **v353** STEP4_CART_KEEP_PASS.
+- Артефакт: `checkout_payment_mcp_step4_cart_keep_fly_v353_2026-07-13.json`.
+
 ## 2026-07-13 — fix(b1.13): pin cart sheet to bottom (no float gap)
 
 - `CART_SHEET_BOTTOM_REM` 3.5 → **0** (бар навигации уже убран; 3.5rem давал «воздух»).
