@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2026-07-13 — feat(checkout-payment): C.Step3 Expanded+ vs s05/s07 на Fly v348
+
+- Expanded+: 2 thumbs с −/+ сверху; «Способ оплаты» + X; список карт (Картой orange + *XXXX italic); СБП; Картой|+; Оплатить.
+- Тап «Способ оплаты» из expanded → expanded+; X → expanded.
+- Compact thumbs (h-16) — методы не уезжают за Pay.
+- Тесты sheet **28 PASS**. MCP layout PASS; multi-card s07 runtime без saved cards.
+- Артефакт: `checkout_payment_mcp_expanded_plus_s05_s07_fly_v348_2026-07-13.json`.
+- Следующий: **`go`** Шаг D (Card+/ACS).
+
 ## 2026-07-13 — feat(checkout-payment): B.Step2 Expanded vs s06 на Fly v346
 
 - Expanded: все товары full cards; блок «Способ оплаты» (Картой *XXXX / СБП / Картой +); Оплатить full-width.
