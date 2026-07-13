@@ -29,7 +29,9 @@
     onFsmChange = () => {},
     onClose = () => {},
     onSuccess = () => {},
-    onThreeDs = () => {}
+    onThreeDs = () => {},
+    onFieldFocus = () => {},
+    onFieldBlur = () => {}
   } = $props()
 
   let pan = $state("")
@@ -189,6 +191,8 @@
           placeholder="Номер карты"
           value={pan}
           oninput={onPanInput}
+          onfocus={onFieldFocus}
+          onblur={onFieldBlur}
           class="new-card-input"
           data-testid="new-card-pan"
         />
@@ -207,6 +211,8 @@
             placeholder="ММ / ГГ"
             value={expiry}
             oninput={onExpiryInput}
+            onfocus={onFieldFocus}
+            onblur={onFieldBlur}
             class="new-card-input"
             data-testid="new-card-expiry"
           />
@@ -224,6 +230,8 @@
             placeholder="CVC/CVV"
             value={cvv}
             oninput={onCvvInput}
+            onfocus={onFieldFocus}
+            onblur={onFieldBlur}
             class="new-card-input"
             data-testid="new-card-cvv"
           />
@@ -441,6 +449,15 @@
 
   .new-card-sheet__pay-wrap {
     margin-top: 1rem;
+  }
+
+  .new-card-sheet--embedded .new-card-sheet__pay-wrap {
+    position: sticky;
+    bottom: 0;
+    z-index: 1;
+    padding-top: 0.5rem;
+    padding-bottom: 0.25rem;
+    background: #2a2a2a;
   }
 
   .new-card-sheet__cancel {

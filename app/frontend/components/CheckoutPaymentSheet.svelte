@@ -59,10 +59,14 @@
   let total = $state(0)
   let limitError = $state(null)
   let cardFormOpen = $state(false)
+  let keyboardLift = $state(false)
   let gestureStartY = 0
+  let formScrollEl = $state(null)
 
   const count = $derived(items.length)
-  const heightVh = $derived(sheetHeightVh(mode, count))
+  const heightVh = $derived(
+    sheetHeightVh(mode, count, { cardFormOpen, keyboardLift })
+  )
   const footerLocked = $derived(!emailVerified)
   const payEnabled = $derived(
     emailVerified && (hasSavedCard || savedCards.length > 0) && canPay
@@ -107,6 +111,7 @@
   function handlePlusClose() {
     if (cardFormOpen) {
       if (!isPayFsmClickable(payFsmState)) return
+      keyboardLift = false
       closeCardForm()
       return
     }
@@ -115,7 +120,25 @@
 
   function handleEmbeddedCardClose() {
     if (!isPayFsmClickable(payFsmState)) return
+    keyboardLift = false
     closeCardForm()
+  }
+
+  function handleCardFieldFocus() {
+    keyboardLift = true
+    queueMicrotask(() => {
+      const pay = formScrollEl?.querySelector?.("[data-testid='checkout-pay-button'], .new-card-sheet__pay-wrap")
+      pay?.scrollIntoView?.({ block: "nearest", behavior: "smooth" })
+    })
+  }
+
+  function handleCardFieldBlur() {
+    // delay: focus может уйти на другое поле формы
+    setTimeout(() => {
+      const active = document.activeElement
+      const inForm = formScrollEl?.contains?.(active)
+      if (!inForm) keyboardLift = false
+    }, 80)
   }
 
   function handlePayClick() {
@@ -140,8 +163,13 @@
       if (mode === MODE_PEEK && emailVerified) expandSheet()
       else if (mode === MODE_EXPANDED) openPaymentList()
     } else if (delta <= -SWIPE_UP_PX) {
-      if (mode === MODE_EXPANDED_PLUS) closePaymentList()
-      else if (mode === MODE_EXPANDED) collapseToPeek()
+      // Заказчик: expanded+ свайп вниз → peek (корзина)
+      if (mode === MODE_EXPANDED_PLUS) {
+        keyboardLift = false
+        collapseToPeek()
+      } else if (mode === MODE_EXPANDED) {
+        collapseToPeek()
+      }
     }
   }
 
@@ -158,6 +186,7 @@
   <div
     data-testid="checkout-payment-sheet"
     data-checkout-sheet-mode={mode === "peek" ? "peek" : mode}
+    data-checkout-keyboard-lift={keyboardLift ? "1" : "0"}
     class="checkout-payment-sheet fixed bottom-0 left-0 right-0 z-50 mx-auto flex max-w-lg flex-col overflow-hidden rounded-t-2xl border-t border-[#3a3a3a] bg-[#2a2a2a]"
     style="height: {heightVh}vh; transition: height {SHEET_TRANSITION_MS}ms ease-out;"
   >
@@ -228,7 +257,11 @@
           >✕</button>
         </div>
         {#if cardFormOpen}
-          <div class="min-h-0 flex-1 overflow-y-auto px-3" data-testid="checkout-payment-card-form">
+          <div
+            class="min-h-0 flex-1 overflow-y-auto px-3"
+            data-testid="checkout-payment-card-form"
+            bind:this={formScrollEl}
+          >
             <NewCardSheet
               open={true}
               embedded={true}
@@ -240,6 +273,8 @@
               onClose={handleEmbeddedCardClose}
               onSuccess={onCardSuccess}
               onThreeDs={onCardThreeDs}
+              onFieldFocus={handleCardFieldFocus}
+              onFieldBlur={handleCardFieldBlur}
             />
           </div>
         {:else}

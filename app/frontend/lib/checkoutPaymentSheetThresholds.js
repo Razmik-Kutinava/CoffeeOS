@@ -13,7 +13,9 @@ export const SHEET_VH = {
   peekOne: 36,
   peekTwo: 40,
   expanded: 62,
-  expandedPlus: 78
+  expandedPlus: 78,
+  /** Фокус полей карты: шторка выше, не fullscreen — «Оплатить» над клавиатурой */
+  expandedPlusKeyboard: 92
 }
 
 /** Анимация переходов ≤ 400 мс (ТЗ) */
@@ -22,8 +24,16 @@ export const SWIPE_UP_PX = 32
 
 export const MAX_SAVED_CARDS = 10
 
-export function sheetHeightVh(mode, itemCount = 0) {
-  if (mode === MODE_EXPANDED_PLUS) return SHEET_VH.expandedPlus
+/**
+ * @param {string} mode
+ * @param {number} itemCount
+ * @param {{ cardFormOpen?: boolean, keyboardLift?: boolean }} [opts]
+ */
+export function sheetHeightVh(mode, itemCount = 0, opts = {}) {
+  if (mode === MODE_EXPANDED_PLUS) {
+    if (opts.cardFormOpen && opts.keyboardLift) return SHEET_VH.expandedPlusKeyboard
+    return SHEET_VH.expandedPlus
+  }
   if (mode === MODE_EXPANDED) return SHEET_VH.expanded
   if (itemCount === 1) return SHEET_VH.peekOne
   if (itemCount === 2) return SHEET_VH.peekTwo

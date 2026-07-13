@@ -310,4 +310,36 @@ class Shop::CheckoutPaymentSheetRealB112Test < ActionDispatch::IntegrationTest
     assert_match(/Оплатить/, sh)
     assert_match(/italic text-white|text-white.*italic/, sh)
   end
+
+  # --- Шаг 4/7: клавиатура + свайп expanded+ → peek ---------------------------
+
+  test "S4 keyboard lift raises expanded+ to expandedPlusKeyboard vh" do
+    th = thresholds
+    assert_match(/expandedPlusKeyboard:\s*92/, th)
+    assert_match(/keyboardLift/, th)
+    assert_match(/cardFormOpen && opts\.keyboardLift/, th)
+    sh = sheet
+    assert_match(/keyboardLift/, sh)
+    assert_match(/handleCardFieldFocus/, sh)
+    assert_match(/data-checkout-keyboard-lift/, sh)
+    assert_match(/onFieldFocus=\{handleCardFieldFocus\}/, sh)
+  end
+
+  test "S4 NewCardSheet wires field focus/blur for keyboard lift" do
+    nc = read_src(NEW_CARD)
+    assert_match(/onFieldFocus/, nc)
+    assert_match(/onFieldBlur/, nc)
+    assert_match(/onfocus=\{onFieldFocus\}/, nc)
+    assert_match(/onblur=\{onFieldBlur\}/, nc)
+    assert_match(/new-card-sheet--embedded[\s\S]*sticky/, nc,
+      "Pay sticky в embedded при скролле формы")
+  end
+
+  test "S7 swipe down from expanded+ collapses to peek not expanded" do
+    sh = sheet
+    assert_match(/MODE_EXPANDED_PLUS[\s\S]{0,120}collapseToPeek/, sh,
+      "Заказчик: свайп вниз с expanded+ → peek (корзина)")
+    refute_match(/MODE_EXPANDED_PLUS[\s\S]{0,80}closePaymentList\(\)/, sh,
+      "свайп вниз не должен оставлять на expanded")
+  end
 end
