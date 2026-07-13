@@ -2,7 +2,8 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-10 (checkout payment — MCP visual vs mocks)  
+**Дата:** 2026-07-13 (checkout payment — A.Step1 Peek MCP s01–s03)  
+**Предыдущее:** 2026-07-10 (checkout payment — MCP visual vs mocks)  
 **Предыдущее:** 2026-07-10 (checkout payment — s04 ACS accepted)  
 **Предыдущее:** 2026-07-10 (checkout payment — footer Card+ border)  
 **Предыдущее:** 2026-07-10 (checkout payment — peek vh + full cards 1/2)  
@@ -30,7 +31,7 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **Checkout payment** | MCP vs макеты **NOT_IDENTICAL** (Fly v341) | **`go` deploy** → повтор MCP → живая оплата |
+| **Checkout payment** | Fly **v344** · Peek **s01–s03 PASS** | **`go`** Шаг B (expanded) / апрув peek |
 | **B1.12 rev2** | код R1–R3 `[x]` · **BUG-SAVE фикс `1081dac`** Fly v328 `[x]` | **A1:** заказчик CONFIRMED оплата |
 | **B1.11 режим работы** | **ЗАКРЫТА** · апрув 2026-07-05 | **B1.12** A1 · **B1.13 S4** · **B1.14-4** |
 | **B1.13 CR-BOTTOM-NAV** | deploy **`[x]`** Fly 2026-07-07 | A1 апрув заказчика |

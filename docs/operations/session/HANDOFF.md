@@ -1,8 +1,8 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-10 (checkout payment — MCP visual vs mocks)  
+**Дата:** 2026-07-13 (checkout payment — A.Step1 Peek MCP s01–s03)  
 **Ветка:** `develop`  
-**Прод:** https://coffeeos.fly.dev (**v341** — фиксы peek/footer в коде, не на Fly)
+**Прод:** https://coffeeos.fly.dev (**v344** — peek/footer на Fly)
 
 ### Checkout payment method card — выбор оплаты / прикрепление карты
 
@@ -10,11 +10,12 @@
 |-----|--------|
 | ТЗ | [`Выбор способа оплаты…`](../milestones/veha_2/requirements/customer_tasks/Выбор%20способа%20оплаты%20и%20прикрепление%20банковской%20карты%20на%20экране%20оформления%20заказа.md) |
 | Wiring B1.12 | **`[x]`** Card+→NewCardSheet · ACS · one-click |
-| Peek/footer код | **`[x]`** локально · **не на Fly** |
+| Peek/footer код | **`[x]`** на Fly **v344** |
+| A.Step1 Peek vs s01–s03 | **`PEEK_PASS`** · [JSON](../milestones/veha_2/artifacts/demo-feedback/checkout_payment_mcp_peek_s01_s03_fly_v344_2026-07-13.json) |
 | s04 ACS | **`[x]`** канон принят |
-| MCP vs макеты s01–s07 | **NOT_IDENTICAL** · [compare JSON](../milestones/veha_2/artifacts/demo-feedback/checkout_payment_mcp_visual_compare_2026-07-10.json) |
-| Deploy | **`[ ]`** ждёт **`go` deploy** |
-| **Следующий шаг** | **`go` deploy** → повтор MCP → живая оплата |
+| Битые фото | **отложено** |
+| Шаги B–D (expanded / s04–s07) | **`[ ]`** |
+| **Следующий шаг** | **`go`** на Шаг B (Peek→Expanded) или апрув peek заказчиком |
 
 ### Product card peek cart — отображение набранных позиций в карточке товара
 

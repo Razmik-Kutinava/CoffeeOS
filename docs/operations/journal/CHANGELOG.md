@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 2026-07-13 — ops(checkout-payment): A.Step1 Peek MCP s01–s03 на Fly v344
+
+- Deploy: `fly deploy -a coffeeos --remote-only --depot=false` → **v344** · `/up` 200.
+- MCP `cursor-ide-browser` 390×844 vs канон s01/s02/s03: **PEEK_PASS**.
+- s01 ≥3 thumbs + OTP кликабелен + footer disabled; s02 1 full card; s03 2 full cards (не thumbs).
+- Битые фото — отложено. Артефакт: `checkout_payment_mcp_peek_s01_s03_fly_v344_2026-07-13.json`.
+- Следующий: **`go`** Шаг B (Peek→Expanded) — не начинать без go.
+
 ## 2026-07-10 — ops(checkout-payment): MCP visual vs customer mocks — NOT identical
 
 - MCP: `cursor-ide-browser` на Fly v341 vs s01–s07.
