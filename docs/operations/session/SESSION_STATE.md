@@ -2,7 +2,8 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-13 (checkout payment — C.Step3 Expanded+ vs s05/s07)  
+**Дата:** 2026-07-13 (checkout payment — D.Step4–5 Form/ACS runtime)  
+**Предыдущее:** 2026-07-13 (checkout payment — C.Step3 Expanded+ vs s05/s07)  
 **Предыдущее:** 2026-07-13 (checkout payment — B.Step2 Expanded vs s06)  
 **Предыдущее:** 2026-07-13 (checkout payment — A.Step1 Peek MCP s01–s03)  
 **Предыдущее:** 2026-07-10 (checkout payment — MCP visual vs mocks)  
@@ -33,7 +34,7 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **Checkout payment** | Fly **v348** · Peek/Expanded/Expanded+ layout PASS | **`go`** Шаг D / Card+ |
+| **Checkout payment** | Fly **v350** · D Card+/форма PASS · ACS/saved_card ждёт реальную карту | **A1** заказчик |
 | **B1.12 rev2** | код R1–R3 `[x]` · **BUG-SAVE фикс `1081dac`** Fly v328 `[x]` | **A1:** заказчик CONFIRMED оплата |
 | **B1.11 режим работы** | **ЗАКРЫТА** · апрув 2026-07-05 | **B1.12** A1 · **B1.13 S4** · **B1.14-4** |
 | **B1.13 CR-BOTTOM-NAV** | deploy **`[x]`** Fly 2026-07-07 | A1 апрув заказчика |
@@ -42,6 +43,13 @@
 
 | **Sentry triage** | RUBY-9 fix `[x]` · Neon quota OK (оплачено) | Archive RUBY-Q…R в Sentry UI |
 | **Security hygiene** | permit! → explicit weekday permit `[x]` · rack/view_component bump `[x]` | **V2-SEC-08** bundler-audit CVE — обязательно (`PRACTICES.md`) |
+
+### Сессия 2026-07-13 (checkout payment — D.Step4–5 Form/ACS)
+
+- Канон **B ACS** (не keypad). Фиксы: cable→finalize; NewCardSheet z>peek. Fly **v350**.
+- MCP: Card+→форма PASS; sandbox → «Отказ: смените карту»; ACS/saved_card NOT_REACHED.
+- Артефакт: `checkout_payment_mcp_step_d_s04_acs_fly_v350_2026-07-13.json`.
+- **Стоп:** A1 живая карта заказчика.
 
 ### Сессия 2026-07-10 (checkout payment — MCP visual vs mocks)
 

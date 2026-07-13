@@ -1,8 +1,8 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-13 (checkout payment — C.Step3 Expanded+ vs s05/s07)  
+**Дата:** 2026-07-13 (checkout payment — D.Step4–5 Form/ACS runtime)  
 **Ветка:** `develop`  
-**Прод:** https://coffeeos.fly.dev (**v348** — expanded+ thumbs + methods)
+**Прод:** https://coffeeos.fly.dev (**v350** — NewCardSheet z-index + settle finalize)
 
 ### Checkout payment method card — выбор оплаты / прикрепление карты
 
@@ -12,11 +12,11 @@
 | Wiring B1.12 | **`[x]`** Card+→NewCardSheet · ACS · one-click |
 | A.Step1 Peek vs s01–s03 | **`PEEK_PASS`** · Fly v344 |
 | B.Step2 Peek→Expanded vs s06 | **`EXPANDED_PASS_layout`** · Fly v346 |
-| C.Step3 Expanded→Expanded+ vs s05/s07 | **`EXPANDED_PLUS_PASS_layout`** · Fly **v348** · [JSON](../milestones/veha_2/artifacts/demo-feedback/checkout_payment_mcp_expanded_plus_s05_s07_fly_v348_2026-07-13.json) |
-| s04 ACS | **`[x]`** канон принят |
+| C.Step3 Expanded→Expanded+ vs s05/s07 | **`EXPANDED_PLUS_PASS_layout`** · Fly v348 |
+| s04 ACS | **`[x]`** канон **B** (не keypad) |
+| D.Step4–5 Form/ACS runtime | **`D_RUNTIME_PARTIAL`** · Fly **v350** · [JSON](../milestones/veha_2/artifacts/demo-feedback/checkout_payment_mcp_step_d_s04_acs_fly_v350_2026-07-13.json) |
 | Битые фото | **отложено** |
-| Шаг D (Card+ / ACS runtime) | **`[ ]`** |
-| **Следующий шаг** | **`go`** Шаг D или saved cards → s07 multi |
+| **Следующий шаг** | **A1** живая карта заказчика → ACS → saved_card (sandbox на prod → отказ) |
 
 ### Product card peek cart — отображение набранных позиций в карточке товара
 

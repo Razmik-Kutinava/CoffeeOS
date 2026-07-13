@@ -1,0 +1,41 @@
+{
+  "date": "2026-07-13",
+  "task": "D.Step4_5_Form_3DS_ACS_runtime",
+  "canon": {
+    "decision": "B_ACS",
+    "not": "A_SMS_keypad_s04",
+    "owner_decision": "2026-07-10",
+    "reason": "реальная привязка карты требует ACS банка; keypad = заглушка"
+  },
+  "mcp": "cursor-ide-browser",
+  "stand": "https://coffeeos.fly.dev",
+  "fly_version": 350,
+  "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "viewport": "390x844",
+  "email": "peek-exp-0713b@coffeeos.dev",
+  "commits": ["4da63ac", "d42f032", "feb759a"],
+  "code_fixes": [
+    "waitForOrderSettled: cable accepted → всегда finalize (GetState + saved_card)",
+    "openNewCardSheet: явная ошибка вместо silent no-op",
+    "NewCardSheet z-index 70 / backdrop 65 / ThreeDs 80 — выше peek z-50"
+  ],
+  "checks": {
+    "Card+_opens_NewCardSheet": "PASS",
+    "RSA_form_PAN_expiry_CVC_save_toggle": "PASS",
+    "no_SMS_keypad": "PASS",
+    "peek_no_longer_blocks_Pay": "PASS_v350",
+    "peek_blocked_Pay_before_fix": "FAIL_v349_overlap",
+    "POST_new_card_live": "REACHED",
+    "ACS_iframe": "NOT_REACHED",
+    "saved_card_in_list": "NOT_REACHED",
+    "TBank_sandbox_on_prod_terminal": "422 Отказ: смените карту (ожидаемо)"
+  },
+  "screenshots": [
+    "screenshots/mcp_vs_s04_new_card_overlap_bug_fly_v349.png",
+    "screenshots/mcp_vs_s04_new_card_sheet_fly_v350_2026-07-13.png",
+    "screenshots/mcp_vs_s04_new_card_pay_result_fly_v350_2026-07-13.png"
+  ],
+  "verdict": "D_RUNTIME_PARTIAL",
+  "summary_ru": "Канон B (ACS). Card+→NewCardSheet на Fly v350 работает без перекрытия peek. Живой sandbox-PAN отвергнут терминалом (CLIENT/отказ) — ACS и saved_card ждут реальную карту заказчика (A1). Race cable→без finalize закрыт в коде.",
+  "next": "A1 живая карта заказчика → ACS → saved_card в expanded/expanded+"
+}

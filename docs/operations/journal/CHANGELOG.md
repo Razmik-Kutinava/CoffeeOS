@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2026-07-13 — fix(checkout-payment): D.Step4–5 Form/ACS runtime на Fly v350
+
+- Канон **B ACS** (не SMS-keypad s04).
+- `waitForOrderSettled`: cable accepted → всегда `finalize` (GetState + `saved_card`).
+- Card+: явная ошибка вместо silent no-op; NewCardSheet z-index выше peek.
+- Тесты: settle unit 2 PASS · sheet **29 PASS**.
+- MCP: Card+→форма PASS; sandbox → «Отказ: смените карту»; ACS/saved_card ждёт A1.
+- Артефакт: `checkout_payment_mcp_step_d_s04_acs_fly_v350_2026-07-13.json`.
+
 ## 2026-07-13 — feat(checkout-payment): C.Step3 Expanded+ vs s05/s07 на Fly v348
 
 - Expanded+: 2 thumbs с −/+ сверху; «Способ оплаты» + X; список карт (Картой orange + *XXXX italic); СБП; Картой|+; Оплатить.
