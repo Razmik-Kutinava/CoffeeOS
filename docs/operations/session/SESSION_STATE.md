@@ -2,7 +2,8 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-13 (checkout payment — D.Step4–5 Form/ACS runtime)  
+**Дата:** 2026-07-13 (B1.13 cart sheet pinned bottom)  
+**Предыдущее:** 2026-07-13 (checkout payment — D.Step4–5 Form/ACS runtime)  
 **Предыдущее:** 2026-07-13 (checkout payment — C.Step3 Expanded+ vs s05/s07)  
 **Предыдущее:** 2026-07-13 (checkout payment — B.Step2 Expanded vs s06)  
 **Предыдущее:** 2026-07-13 (checkout payment — A.Step1 Peek MCP s01–s03)  
@@ -37,12 +38,20 @@
 | **Checkout payment** | Fly **v350** · D Card+/форма PASS · ACS/saved_card ждёт реальную карту | **A1** заказчик |
 | **B1.12 rev2** | код R1–R3 `[x]` · **BUG-SAVE фикс `1081dac`** Fly v328 `[x]` | **A1:** заказчик CONFIRMED оплата |
 | **B1.11 режим работы** | **ЗАКРЫТА** · апрув 2026-07-05 | **B1.12** A1 · **B1.13 S4** · **B1.14-4** |
-| **B1.13 CR-BOTTOM-NAV** | deploy **`[x]`** Fly 2026-07-07 | A1 апрув заказчика |
+| **B1.13 CR-BOTTOM-NAV** | бар убран · cart `BOTTOM_REM=0` код `[x]` | **`go` deploy** · A1 апрув |
 | **B1.14 адрес в шапке** | **B1.14-3d** index map `[x]` | deploy (`./bin/fly_deploy.sh`) · B1.14-4 cart |
 | **Product card peek cart** | S1–S7 код `[x]` · MCP Fly `[ ]` | апрув заказчика |
 
 | **Sentry triage** | RUBY-9 fix `[x]` · Neon quota OK (оплачено) | Archive RUBY-Q…R в Sentry UI |
 | **Security hygiene** | permit! → explicit weekday permit `[x]` · rack/view_component bump `[x]` | **V2-SEC-08** bundler-audit CVE — обязательно (`PRACTICES.md`) |
+
+### Сессия 2026-07-13 (B1.13 — cart sheet прижат к низу)
+
+- Жалоба: peek корзины «висит в воздухе» (остаток `bottom: 3.5rem` под снятый бар).
+- Фикс: `CART_SHEET_BOTTOM_REM=0`, build `prog21`.
+- Тест: `b113_s2a_cart_sheet_acceptance_test.rb` 10 PASS.
+- Запись: DEMO_FEEDBACK + B1_13.
+- **Стоп:** ждать **`go` deploy** на Fly.
 
 ### Сессия 2026-07-13 (checkout payment — D.Step4–5 Form/ACS)
 

@@ -1,8 +1,8 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-13 (checkout payment — D.Step4–5 Form/ACS runtime)  
+**Дата:** 2026-07-13 (B1.13 cart sheet pinned bottom)  
 **Ветка:** `develop`  
-**Прод:** https://coffeeos.fly.dev (**v350** — NewCardSheet z-index + settle finalize)
+**Прод:** https://coffeeos.fly.dev (**v350** — cart bottom=0 ещё не на Fly)
 
 ### Checkout payment method card — выбор оплаты / прикрепление карты
 
@@ -38,7 +38,8 @@
 | ТЗ | **`[x]`** B1_13 § CR стр. **~69** · **КАРТА** стр. **~14** |
 | Ответы 1–7 | **`[x]`** 2026-07-07 · [`b113_cr_bottom_nav_answers_2026-07-07.json`](../milestones/veha_2/artifacts/demo-feedback/b113_cr_bottom_nav_answers_2026-07-07.json) |
 | Код F1–F4 | **`[x]`** · shop 297 PASS |
-| Deploy / A1 | **`[x]`** deploy 2026-07-07 · **A1 апрув `[ ]`** |
+| Cart sheet прижат к низу | **`[x]`** `CART_SHEET_BOTTOM_REM=0` · build `prog21` · 2026-07-13 |
+| Deploy / A1 | deploy **`[ ]`** (ждёт go) · **A1 апрув `[ ]`** |
 
 ### B1.13 — S4: openEditCard trigger (Expanded cart image)
 

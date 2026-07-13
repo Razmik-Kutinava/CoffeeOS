@@ -715,7 +715,8 @@ HIDDEN  →  PEEK  →  EXPANDED
 - [x] add → **peek** (`onCartAdded`, `shop:cart-added`, `push("/")`)
 - [x] peek 2+: `shop-cart-peek-list` · `horizontal`; expanded 2+: `shop-cart-expanded-horizontal` · `vertical`; 1 товар: `shop-cart-expanded-single`
 - [x] hidden: chip total + «+цена» (`shop-cart-hidden-chip`, `shop-cart-hidden-total`)
-- [x] `SHEET_TRANSITION_MS=300`, `CART_SHEET_BOTTOM_REM=3.5`, `max-width 414px`
+- [x] `SHEET_TRANSITION_MS=300`, `CART_SHEET_BOTTOM_REM=0` (прижат к низу; был 3.5 под бар), `max-width 414px`
+- [x] **2026-07-13:** жалоба «шторка висит в воздухе» → `CART_SHEET_BOTTOM_REM=0` · build `prog21`
 - [x] `setCartSheetMode` + `data-cart-sheet-mode`
 - [x] тест `b113_s2a_cart_sheet_acceptance_test.rb`
 - [x] Fly MCP прогон 4 — **14/14**

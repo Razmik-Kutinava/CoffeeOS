@@ -66,12 +66,12 @@ class Shop::B113S2aCartSheetAcceptanceTest < ActionDispatch::IntegrationTest
     assert_includes store, "MODE_HIDDEN"
   end
 
-  test "S2a animation 300ms and layout above bottom bar 320-414px" do
+  test "S2a animation 300ms and cart sheet pinned to bottom" do
     sheet = File.read(Rails.root.join("app/frontend/components/CartSheet.svelte"))
     thresholds = File.read(Rails.root.join("app/frontend/lib/cartSheetThresholds.js"))
 
     assert_includes thresholds, "SHEET_TRANSITION_MS = 300"
-    assert_includes thresholds, "CART_SHEET_BOTTOM_REM = 3.5"
+    assert_includes thresholds, "CART_SHEET_BOTTOM_REM = 0"
     assert_includes thresholds, "CART_SHEET_MAX_WIDTH_PX = 414"
     assert_includes sheet, "SHEET_TRANSITION_MS"
     assert_includes sheet, "CART_SHEET_BOTTOM_REM"

@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026-07-13 — fix(b1.13): pin cart sheet to bottom (no float gap)
+
+- `CART_SHEET_BOTTOM_REM` 3.5 → **0** (бар навигации уже убран; 3.5rem давал «воздух»).
+- Build marker `prog21`. Тест S2a 10 PASS.
+- DEMO_FEEDBACK + B1_13: жалоба заказчика закрыта в коде (deploy ждёт go).
+
 ## 2026-07-13 — fix(checkout-payment): D.Step4–5 Form/ACS runtime на Fly v350
 
 - Канон **B ACS** (не SMS-keypad s04).

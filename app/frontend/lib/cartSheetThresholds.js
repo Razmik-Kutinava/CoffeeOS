@@ -15,7 +15,7 @@ export const SHEET_VH = {
 }
 
 /** Маркер сборки cart sheet — менять при каждом UX-фиксе для верификации на Fly */
-export const CART_SHEET_BUILD = "prog20"
+export const CART_SHEET_BUILD = "prog21"
 
 /** Суммарный скролл вниз от якоря: expanded → peek (1 item → hidden) */
 export const SCROLL_TO_PEEK_PX = 100
@@ -26,7 +26,8 @@ export const SCROLL_TO_HIDDEN_PX = 200
 export const SWIPE_UP_PX = 32
 
 export const SHEET_TRANSITION_MS = 300
-export const CART_SHEET_BOTTOM_REM = 3.5
+/** 0 — прижать к низу экрана (бар навигации убран B1.13-CR; 3.5rem оставлял «воздух») */
+export const CART_SHEET_BOTTOM_REM = 0
 export const CART_SHEET_MAX_WIDTH_PX = 414
 
 export function sheetHeightVh(mode, itemCount = 0) {
