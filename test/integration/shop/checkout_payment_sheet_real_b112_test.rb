@@ -208,4 +208,45 @@ class Shop::CheckoutPaymentSheetRealB112Test < ActionDispatch::IntegrationTest
     assert_includes sh, 'data-testid="checkout-payment-pay"'
     assert_match(/bg-\[#ff8c42\]/, sh)
   end
+
+  # --- Шаг 2 Peek → Expanded (s06) -------------------------------------------
+
+  test "S2 expand gated by emailVerified" do
+    sh = sheet
+    assert_match(/MODE_PEEK && emailVerified/, sh,
+      "Peek→Expanded только после email (ТЗ Шаг 2)")
+  end
+
+  test "S2 expanded shows all products as full cards not thumbs-only" do
+    sh = sheet
+    assert_includes sh, 'data-testid="checkout-payment-expanded"'
+    assert_includes sh, 'data-testid="checkout-payment-expanded-items"'
+    assert_includes sh, 'data-testid="checkout-payment-expanded-full-card"'
+    assert_match(/\{#each items as line\}/, sh)
+  end
+
+  test "S2 expanded methods: Картой *XXXX / СБП disabled / Картой +" do
+    sh = sheet
+    assert_includes sh, 'data-testid="checkout-payment-expanded-methods"'
+    assert_match(/Способ оплаты/, sh)
+    assert_match(/formatCardMethodLabel|Картой \$\{/, sh + read_src("app/frontend/lib/paymentMethodLabels.js"),
+      "Лейбл Картой *XXXX (s06)")
+    assert_includes sh, 'data-testid="checkout-payment-expanded-card"'
+    assert_match(/checkout-payment-sbp[\s\S]{0,80}disabled/, sh)
+    assert_includes sh, 'data-testid="checkout-payment-card-plus"'
+  end
+
+  test "S2 expanded Pay Оплатить disabled without card, active with card" do
+    sh = sheet
+    assert_match(/Оплатить/, sh)
+    assert_match(/payEnabled/, sh)
+    assert_match(/hasSavedCard|savedCards\.length/, sh)
+    assert_match(/disabled=\{footerLocked \|\| !payEnabled\}/, sh)
+  end
+
+  test "S2 sheet transition ≤400ms" do
+    th = thresholds
+    assert_match(/SHEET_TRANSITION_MS\s*=\s*400/, th)
+    assert_match(/transition: height \{SHEET_TRANSITION_MS\}ms/, sheet)
+  end
 end

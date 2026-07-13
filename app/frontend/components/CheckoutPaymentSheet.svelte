@@ -28,7 +28,7 @@
     atMinQty,
     atMaxQty
   } from "../lib/cartSheetStore.js"
-  import { formatCardListLabel } from "../lib/paymentMethodLabels.js"
+  import { formatCardMethodLabel } from "../lib/paymentMethodLabels.js"
 
   let {
     emailVerified = false,
@@ -83,10 +83,6 @@
     return (line?.selected_modifiers || []).map((m) => m.name).filter(Boolean)
   }
 
-  function modifiersLabel(line) {
-    return modifierLines(line).join(", ")
-  }
-
   function handleCardPlus() {
     if (!cardPlusEnabled) return
     if (!assertCanAddCard(savedCards.length)) return
@@ -112,7 +108,8 @@
     const endY = e.changedTouches?.[0]?.clientY ?? e.clientY ?? 0
     const delta = gestureStartY - endY
     if (delta >= SWIPE_UP_PX) {
-      if (mode === MODE_PEEK) expandSheet()
+      // ТЗ Шаг 2: Peek→Expanded только после подтверждённого email
+      if (mode === MODE_PEEK && emailVerified) expandSheet()
       else if (mode === MODE_EXPANDED) openPaymentList()
     } else if (delta <= -SWIPE_UP_PX) {
       if (mode === MODE_EXPANDED_PLUS) closePaymentList()
@@ -168,7 +165,7 @@
               onclick={() => onSelectCard(card)}
               onkeydown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onSelectCard(card) } }}
             >
-              <span>{formatCardListLabel(card)}</span>
+              <span>{formatCardMethodLabel(card)}</span>
             </div>
           {/each}
           <button type="button" class="w-full rounded-xl border border-[#3a3a3a] px-3 py-3 text-[#888]" disabled data-testid="checkout-payment-sbp-list">СБП</button>
@@ -186,24 +183,36 @@
       </div>
 
     {:else if mode === MODE_EXPANDED}
+      <!-- s06 / ТЗ Шаг 2: все товары + вертикальный блок методов + Оплатить -->
       <div class="flex min-h-0 flex-1 flex-col" data-testid="checkout-payment-expanded">
-        <div class="min-h-0 flex-1 space-y-2 overflow-y-auto px-3">
+        <div
+          class="min-h-0 flex-1 overflow-y-auto px-3 {count > 3 ? 'flex gap-2 overflow-x-auto' : 'space-y-2'}"
+          data-testid="checkout-payment-expanded-items"
+          style={count > 3 ? "overflow-x: auto; touch-action: pan-x;" : undefined}
+        >
           {#each items as line}
-            <div class="flex gap-3 rounded-xl bg-[#1f1f1f] p-2">
+            <div
+              class="flex gap-3 rounded-xl bg-[#1f1f1f] p-2 {count > 3 ? 'w-[72vw] shrink-0' : ''}"
+              data-testid="checkout-payment-expanded-full-card"
+            >
               <button type="button" class="shrink-0" onclick={() => handleImageClick(line)}>
-                <img
-                  src={line.image_url || ""}
-                  alt=""
-                  class="h-16 w-16 rounded-lg object-cover"
-                  data-testid="checkout-payment-expanded-product-image"
-                />
+                {#if line.image_url}
+                  <img
+                    src={line.image_url}
+                    alt=""
+                    class="h-16 w-16 rounded-lg object-cover bg-[#1a1a1a]"
+                    data-testid="checkout-payment-expanded-product-image"
+                  />
+                {:else}
+                  <div class="flex h-16 w-16 items-center justify-center rounded-lg bg-[#1a1a1a] text-[10px] text-[#666]">нет</div>
+                {/if}
               </button>
               <div class="min-w-0 flex-1">
-                <p class="truncate text-sm text-white">{lineName(line)}</p>
+                <p class="line-clamp-2 text-sm text-white">{lineName(line)}</p>
                 <p class="text-xs text-[#888]">{unitPrice(line)}₽ × {line.quantity}</p>
-                {#if modifiersLabel(line)}
-                  <p class="text-xs text-[#888]">{modifiersLabel(line)}</p>
-                {/if}
+                {#each modifierLines(line) as modName}
+                  <p class="text-xs text-[#888]">{modName}</p>
+                {/each}
                 <div class="mt-1 flex items-center gap-2">
                   <button type="button" disabled={atMinQty(line)} onclick={() => bumpCartLine(line.index, -1)}>−</button>
                   <span>{line.quantity}</span>
@@ -214,15 +223,36 @@
             </div>
           {/each}
         </div>
-        <div class="shrink-0 space-y-2 border-t border-[#3a3a3a] p-3">
-          <button type="button" class="w-full rounded-xl border border-[#3a3a3a] py-2 text-left text-white" onclick={() => openPaymentList()}>
-            Способ оплаты: {cardLabel || (hasSavedCard ? "Картой" : "Выберите")}
-          </button>
-          <div class="flex gap-2">
-            <button type="button" class="flex-1 rounded-2xl border border-[#555] bg-[#1f1f1f] py-2.5 text-sm text-[#888]" data-testid="checkout-payment-sbp" disabled>СБП</button>
-            <button type="button" class="flex-1 rounded-2xl border-2 border-[#ff8c42] bg-transparent py-2.5 text-sm font-medium text-[#ff8c42] disabled:border-[#ff8c42]/55 disabled:text-[#ff8c42]/55" data-testid="checkout-payment-card-plus" disabled={!cardPlusEnabled} onclick={handleCardPlus}>Картой +</button>
-            <button type="button" class="flex-[1.35] rounded-2xl bg-[#ff8c42] py-2.5 text-sm font-semibold text-black disabled:bg-[#ff8c42]/45 disabled:text-black/50" data-testid="checkout-payment-pay" disabled={footerLocked || !payEnabled} onclick={handlePayClick}>оплатить</button>
+        <div class="shrink-0 space-y-2 border-t border-[#3a3a3a] px-3 pt-2" data-testid="checkout-payment-expanded-methods">
+          <div class="flex items-center justify-between pb-1">
+            <h2 class="text-base font-semibold text-white">Способ оплаты</h2>
+            <button type="button" class="text-[#a0a0a0]" data-testid="checkout-payment-expanded-close" onclick={() => collapseToPeek()} aria-label="Закрыть">✕</button>
           </div>
+          {#each savedCards as card}
+            <button
+              type="button"
+              class="flex w-full items-center rounded-xl border-2 px-3 py-3 text-left {selectedCardId === card.id ? 'border-[#ff8c42] text-[#ff8c42]' : 'border-[#ff8c42]/70 text-[#ff8c42]'}"
+              data-testid="checkout-payment-expanded-card"
+              onclick={() => onSelectCard(card)}
+            >{formatCardMethodLabel(card)}</button>
+          {/each}
+          <button type="button" class="w-full rounded-xl border border-[#555] bg-[#1f1f1f] px-3 py-3 text-left text-[#888]" data-testid="checkout-payment-sbp" disabled>СБП</button>
+          <button
+            type="button"
+            class="flex w-full items-center justify-between rounded-xl border-2 border-[#ff8c42] px-3 py-3 text-[#ff8c42] disabled:border-[#ff8c42]/55 disabled:text-[#ff8c42]/55"
+            data-testid="checkout-payment-card-plus"
+            disabled={!cardPlusEnabled}
+            onclick={handleCardPlus}
+          ><span>Картой</span><span aria-hidden="true">+</span></button>
+        </div>
+        <div class="shrink-0 p-3">
+          <button
+            type="button"
+            class="w-full rounded-2xl bg-[#ff8c42] py-3 text-base font-semibold text-black disabled:bg-[#ff8c42]/45 disabled:text-black/50"
+            data-testid="checkout-payment-pay"
+            disabled={footerLocked || !payEnabled}
+            onclick={handlePayClick}
+          >Оплатить</button>
         </div>
       </div>
 

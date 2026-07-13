@@ -12,6 +12,11 @@ export function formatCardListLabel(card) {
   return `Карта ${panFromCard(card)}`
 }
 
+/** «Картой *1594» — checkout sheet s06 / ТЗ Шаг 2. */
+export function formatCardMethodLabel(card) {
+  return `Картой ${panFromCard(card)}`
+}
+
 export function cardBrandShort(brand) {
   const b = String(brand || "").toUpperCase()
   if (b.includes("MIR") || b.includes("МИР")) return "MIR"
