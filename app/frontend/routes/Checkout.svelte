@@ -474,7 +474,14 @@
   }
 
   function openNewCardSheet() {
-    if (!canPay) return
+    if (!canPay) {
+      if (!emailVerified) err = "Подтвердите email, чтобы добавить карту"
+      else if (!shopIsOpenForPay()) err = "Сейчас точка закрыта — карту добавить нельзя"
+      else if (savedCardsLoading) err = "Загружаем сохранённые карты…"
+      else if (payBusy) err = "Дождитесь завершения оплаты"
+      else err = "Нельзя добавить карту сейчас"
+      return
+    }
     err = null
     showNewCardSheet = true
   }

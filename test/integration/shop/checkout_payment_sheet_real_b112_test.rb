@@ -63,6 +63,8 @@ class Shop::CheckoutPaymentSheetRealB112Test < ActionDispatch::IntegrationTest
       "onAddCard открывает NewCardSheet")
     assert_includes co, "NewCardSheet", "NewCardSheet смонтирован"
     assert_includes co, "ThreeDsOverlay", "ThreeDsOverlay смонтирован для ACS"
+    assert_includes co, "Подтвердите email, чтобы добавить карту",
+      "Card+ без email — явная ошибка, не silent no-op"
   end
 
   # --- Шаг 2: Pay = one-click only -------------------------------------------

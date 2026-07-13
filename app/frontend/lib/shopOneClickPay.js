@@ -47,8 +47,16 @@ export function isOfflineLikeError(error) {
   return /failed to fetch|network|offline|timeout/i.test(msg)
 }
 
+function finalizePath(orderId, reconnectToken) {
+  const q = reconnectToken
+    ? `?reconnect_token=${encodeURIComponent(reconnectToken)}`
+    : ""
+  return `/orders/${orderId}/finalize${q}`
+}
+
 /**
  * Ждём accepted после recurrent Charge (webhook / finalize).
+ * Cable accepted → всё равно finalize (GetState + saved_card), иначе RebillId может не успеть.
  * @returns {Promise<object>} finalize или show response
  */
 export async function waitForOrderSettled(api, { orderId, reconnectToken, subscribe }) {
@@ -68,14 +76,22 @@ export async function waitForOrderSettled(api, { orderId, reconnectToken, subscr
       finish(reject, new Error("Оплата ещё обрабатывается. Проверьте историю заказов."))
     }, SETTLE_MAX_ATTEMPTS * SETTLE_POLL_MS + 5000)
 
+    const tryFinalize = async () => {
+      const res = await api(finalizePath(orderId, reconnectToken), { method: "POST" })
+      if (res?.payment_settled || res?.status === "accepted") return res
+      return null
+    }
+
     unsub =
       subscribe?.({
         orderId,
         reconnectToken,
         onStatus: (payload) => {
-          if (payload?.payment_settled || payload?.status === "accepted") {
-            finish(resolve, { payment_settled: true, status: payload.status })
-          }
+          if (!(payload?.payment_settled || payload?.status === "accepted")) return
+          // Не resolve только из cable — нужен finalize для GetState/RebillId → saved_card
+          tryFinalize()
+            .then((res) => finish(resolve, res || { payment_settled: true, status: payload.status }))
+            .catch(() => finish(resolve, { payment_settled: true, status: payload.status }))
         }
       }) || (() => {})
 
@@ -83,11 +99,8 @@ export async function waitForOrderSettled(api, { orderId, reconnectToken, subscr
       for (let i = 0; i < SETTLE_MAX_ATTEMPTS; i += 1) {
         if (done) return
         try {
-          const q = reconnectToken
-            ? `?reconnect_token=${encodeURIComponent(reconnectToken)}`
-            : ""
-          const res = await api(`/orders/${orderId}/finalize${q}`, { method: "POST" })
-          if (res.payment_settled || res.status === "accepted") {
+          const res = await tryFinalize()
+          if (res) {
             finish(resolve, res)
             return
           }

@@ -131,11 +131,15 @@ class Shop::Api::B112PaymentSettleChainTest < ActionDispatch::IntegrationTest
   test "checkout uses FSM settle path without bank redirect" do
     checkout = File.read(Rails.root.join("app/frontend/routes/Checkout.svelte"))
     result = File.read(Rails.root.join("app/frontend/routes/PaymentResult.svelte"))
+    settle = File.read(Rails.root.join("app/frontend/lib/shopOneClickPay.js"))
 
     refute_includes checkout, "CheckoutInlinePayment"
     refute_includes checkout, "redirectToBankPayment"
     assert_includes checkout, "waitForOrderSettled"
     assert_includes result, "/orders/${orderId}/finalize"
+    # Cable accepted → finalize (GetState + saved_card), не resolve только из cable
+    assert_includes settle, "Не resolve только из cable"
+    assert_match %r{tryFinalize}, settle
   end
 
   test "finalize returns saved_card after GetState backfill on accepted order" do
