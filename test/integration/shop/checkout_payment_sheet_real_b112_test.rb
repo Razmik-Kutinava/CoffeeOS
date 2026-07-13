@@ -114,8 +114,10 @@ class Shop::CheckoutPaymentSheetRealB112Test < ActionDispatch::IntegrationTest
     assert_includes nc, 'data-testid="new-card-sheet"'
   end
 
-  test "S5 ThreeDsOverlay present for ACS iframe" do
-    assert_match(/acs|iframe|three.?ds/i, three_ds, "ACS overlay")
+  test "S5 NewCardSheet above CheckoutPaymentSheet (z-index)" do
+    nc = File.read(Rails.root.join(NEW_CARD))
+    assert_match(/z-index:\s*7[0-9]/, nc, "NewCardSheet выше peek z-50")
+    assert_match(/z-index:\s*6[5-9]/, nc, "backdrop выше peek")
   end
 
   test "S5 limit 10 cards before opening NewCardSheet" do

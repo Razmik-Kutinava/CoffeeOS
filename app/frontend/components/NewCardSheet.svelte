@@ -279,7 +279,8 @@
   .new-card-backdrop {
     position: fixed;
     inset: 0;
-    z-index: 40;
+    /* Выше CheckoutPaymentSheet (z-50), иначе peek перекрывает «Оплатить» */
+    z-index: 65;
     background: rgb(0 0 0 / 0.55);
   }
 
@@ -288,7 +289,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    z-index: 50;
+    z-index: 70;
     border-radius: 1.25rem 1.25rem 0 0;
     background: #1a1a1a;
     border-top: 1px solid #3a3a3a;

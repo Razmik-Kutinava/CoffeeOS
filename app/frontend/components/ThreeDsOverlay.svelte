@@ -25,7 +25,7 @@
   .three-ds-overlay {
     position: fixed;
     inset: 0;
-    z-index: 60;
+    z-index: 80;
     display: flex;
     flex-direction: column;
     background: #0f0f0f;
