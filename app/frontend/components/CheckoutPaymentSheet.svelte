@@ -157,20 +157,20 @@
       <!-- s05/s07: 2 thumbs сверху → Способ оплаты + X → список карт / СБП / Картой + → Оплатить -->
       <div class="flex min-h-0 flex-1 flex-col" data-testid="checkout-payment-expanded-plus">
         <div
-          class="mb-2 flex gap-3 overflow-x-auto px-3"
+          class="mb-2 flex gap-3 overflow-x-auto px-3 pb-1"
           data-testid="checkout-payment-plus-thumbs"
           style="overflow-x: auto; touch-action: pan-x;"
         >
           {#each items.slice(0, 2) as line}
-            <div class="w-[28vw] shrink-0" data-testid="checkout-payment-plus-thumb">
+            <div class="w-20 shrink-0" data-testid="checkout-payment-plus-thumb">
               <button type="button" class="block w-full" onclick={() => handleImageClick(line)}>
                 {#if line.image_url}
-                  <img src={line.image_url} alt="" class="mb-1 aspect-square w-full rounded-lg object-cover bg-[#1a1a1a]" />
+                  <img src={line.image_url} alt="" class="mb-1 h-16 w-16 rounded-lg object-cover bg-[#1a1a1a]" />
                 {:else}
-                  <div class="mb-1 flex aspect-square w-full items-center justify-center rounded-lg bg-[#1a1a1a] text-[10px] text-[#666]">нет</div>
+                  <div class="mb-1 flex h-16 w-16 items-center justify-center rounded-lg bg-[#1a1a1a] text-[10px] text-[#666]">нет</div>
                 {/if}
               </button>
-              <div class="flex items-center justify-center gap-1 text-sm text-white">
+              <div class="flex w-16 items-center justify-center gap-1 text-sm text-white">
                 <button type="button" data-testid="checkout-payment-plus-minus" disabled={atMinQty(line)} onclick={() => bumpCartLine(line.index, -1)}>−</button>
                 <span>{line.quantity}</span>
                 <button type="button" data-testid="checkout-payment-plus-plus" disabled={atMaxQty(line)} onclick={() => bumpCartLine(line.index, 1)}>+</button>
