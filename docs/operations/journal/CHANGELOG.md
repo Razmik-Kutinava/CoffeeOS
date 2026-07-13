@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## 2026-07-13 — feat(checkout-payment): B.Step2 Expanded vs s06 на Fly v346
+
+- Expanded: все товары full cards; блок «Способ оплаты» (Картой *XXXX / СБП / Картой +); Оплатить full-width.
+- Peek→Expanded только после email; gesture handle clickable (MCP/desktop).
+- `formatCardMethodLabel` → «Картой *XXXX».
+- Тесты: sheet real_b112 **24 PASS**.
+- MCP Fly v346 verified email → expanded: layout PASS; *XXXX/Pay active — нет saved cards.
+- Артефакт: `checkout_payment_mcp_expanded_s06_fly_v346_2026-07-13.json`.
+- Следующий: **`go`** Шаг C (Expanded→Expanded+).
+
 ## 2026-07-13 — ops(checkout-payment): A.Step1 Peek MCP s01–s03 на Fly v344
 
 - Deploy: `fly deploy -a coffeeos --remote-only --depot=false` → **v344** · `/up` 200.

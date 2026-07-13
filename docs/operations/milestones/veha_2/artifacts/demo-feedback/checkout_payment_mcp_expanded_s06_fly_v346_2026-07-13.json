@@ -1,0 +1,57 @@
+{
+  "date": "2026-07-13",
+  "task": "B.Step2_Peek_to_Expanded_vs_s06",
+  "mcp": "cursor-ide-browser",
+  "viewport": "390x844",
+  "stand": "https://coffeeos.fly.dev",
+  "fly_version": 346,
+  "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "ideal": "artifacts/checkout_payment_method_card/screenshots/s06_expanded_plus_payment_1card_alt.png",
+  "commits": ["fa694f0", "3d98b10"],
+  "verdict": "EXPANDED_PASS_layout",
+  "summary_ru": "После verified email клик/swipe handle → expanded ≤400ms. Все товары как full cards (не thumbs). Блок «Способ оплаты»: СБП disabled, Картой +. Оплатить disabled без карты. Картой *XXXX / Pay active — на стенде нет сохранённых карт (код готов).",
+  "checks": [
+    {
+      "id": "email_verified",
+      "status": "PASS",
+      "note": "OTP peek-exp-0713b@coffeeos.dev → Контакты verified"
+    },
+    {
+      "id": "peek_to_expanded_ms",
+      "status": "PASS",
+      "note": "SHEET_TRANSITION_MS=400; gesture click → expanded"
+    },
+    {
+      "id": "all_products_full_cards",
+      "status": "PASS",
+      "note": "3 позиции: full cards + Удалить/−/+; не peek thumbs"
+    },
+    {
+      "id": "methods_block",
+      "status": "PASS",
+      "note": "Способ оплаты + X; СБП disabled; Картой +"
+    },
+    {
+      "id": "pay_disabled_no_card",
+      "status": "PASS",
+      "note": "Оплатить disabled без сохранённой карты"
+    },
+    {
+      "id": "card_star_xxxx_and_pay_active",
+      "status": "NOT_REACHED_RUNTIME",
+      "note": "Нет saved cards на email; formatCardMethodLabel + payEnabled в коде; нужен Card+/ACS для runtime"
+    }
+  ],
+  "screenshots": [
+    "artifacts/demo-feedback/screenshots/mcp_vs_s06_expanded_fly_v346_2026-07-13.png",
+    "artifacts/demo-feedback/screenshots/mcp_vs_s06_expanded_methods_fly_v346_2026-07-13.png"
+  ],
+  "vs_s06_delta": [
+    "s06: 1 товар + Картой *1594 + Оплатить active",
+    "Fly MCP: 3 товара + нет saved card → нет *XXXX, Pay disabled (корректно по ТЗ)"
+  ],
+  "next": [
+    "go Шаг C Expanded→Expanded+ (s05/s07)",
+    "или Card+ → saved card → MCP Pay active vs s06"
+  ]
+}
