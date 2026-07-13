@@ -28,7 +28,7 @@
     atMinQty,
     atMaxQty
   } from "../lib/cartSheetStore.js"
-  import { formatCardMethodLabel } from "../lib/paymentMethodLabels.js"
+  import { cardMethodParts } from "../lib/paymentMethodLabels.js"
 
   let {
     emailVerified = false,
@@ -154,35 +154,71 @@
     {/if}
 
     {#if mode === MODE_EXPANDED_PLUS}
+      <!-- s05/s07: 2 thumbs сверху → Способ оплаты + X → список карт / СБП / Картой + → Оплатить -->
       <div class="flex min-h-0 flex-1 flex-col" data-testid="checkout-payment-expanded-plus">
+        <div
+          class="mb-2 flex gap-3 overflow-x-auto px-3"
+          data-testid="checkout-payment-plus-thumbs"
+          style="overflow-x: auto; touch-action: pan-x;"
+        >
+          {#each items.slice(0, 2) as line}
+            <div class="w-[28vw] shrink-0" data-testid="checkout-payment-plus-thumb">
+              <button type="button" class="block w-full" onclick={() => handleImageClick(line)}>
+                {#if line.image_url}
+                  <img src={line.image_url} alt="" class="mb-1 aspect-square w-full rounded-lg object-cover bg-[#1a1a1a]" />
+                {:else}
+                  <div class="mb-1 flex aspect-square w-full items-center justify-center rounded-lg bg-[#1a1a1a] text-[10px] text-[#666]">нет</div>
+                {/if}
+              </button>
+              <div class="flex items-center justify-center gap-1 text-sm text-white">
+                <button type="button" data-testid="checkout-payment-plus-minus" disabled={atMinQty(line)} onclick={() => bumpCartLine(line.index, -1)}>−</button>
+                <span>{line.quantity}</span>
+                <button type="button" data-testid="checkout-payment-plus-plus" disabled={atMaxQty(line)} onclick={() => bumpCartLine(line.index, 1)}>+</button>
+              </div>
+            </div>
+          {/each}
+        </div>
         <div class="flex items-center justify-between px-3 pb-2">
           <h2 class="text-base font-semibold text-white">Способ оплаты</h2>
-          <button type="button" class="text-[#a0a0a0]" data-testid="checkout-payment-close" onclick={() => closePaymentList()} aria-label="Закрыть">✕</button>
-        </div>
-        <div class="mb-2 flex gap-2 overflow-x-auto px-3" style="overflow-x: auto; touch-action: pan-x;">
-          {#each items.slice(0, 2) as line}
-            <img src={line.image_url || ""} alt="" class="h-14 w-14 shrink-0 rounded-lg object-cover bg-[#1a1a1a]" />
-          {/each}
+          <button
+            type="button"
+            class="flex h-8 w-8 items-center justify-center rounded-full bg-[#3a3a3a] text-white"
+            data-testid="checkout-payment-close"
+            onclick={() => closePaymentList()}
+            aria-label="Закрыть"
+          >✕</button>
         </div>
         <div class="min-h-0 flex-1 space-y-2 overflow-y-auto px-3" data-testid="checkout-payment-list">
           {#each savedCards as card}
-            <div
-              role="button"
-              tabindex="0"
-              class="flex w-full items-center justify-between rounded-xl border px-3 py-3 text-left cursor-pointer {selectedCardId === card.id ? 'border-[#ff8c42] text-[#ff8c42]' : 'border-[#3a3a3a] text-white'}"
+            {@const parts = cardMethodParts(card)}
+            <button
+              type="button"
+              class="flex w-full items-center rounded-2xl border-2 border-[#ff8c42] bg-[#1f1f1f] px-4 py-3.5 text-left"
+              data-testid="checkout-payment-plus-card"
               onclick={() => onSelectCard(card)}
-              onkeydown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onSelectCard(card) } }}
             >
-              <span>{formatCardMethodLabel(card)}</span>
-            </div>
+              <span class="text-[#ff8c42]">{parts.word}</span>
+              <span class="ml-1 italic text-white">{parts.pan}</span>
+            </button>
           {/each}
-          <button type="button" class="w-full rounded-xl border border-[#3a3a3a] px-3 py-3 text-[#888]" disabled data-testid="checkout-payment-sbp-list">СБП</button>
-          <button type="button" class="w-full rounded-xl border border-[#ff8c42] px-3 py-3 text-[#ff8c42]" onclick={handleCardPlus}>Картой +</button>
+          <button
+            type="button"
+            class="w-full rounded-2xl border border-[#555] bg-[#1f1f1f] px-4 py-3.5 text-center text-lg font-semibold text-white disabled:opacity-60"
+            disabled
+            data-testid="checkout-payment-sbp-list"
+          >СБП</button>
+          <button
+            type="button"
+            class="flex w-full items-center justify-between rounded-2xl border-2 border-[#ff8c42] bg-[#1f1f1f] px-4 py-3.5 text-[#ff8c42] disabled:border-[#ff8c42]/55 disabled:text-[#ff8c42]/55"
+            data-testid="checkout-payment-card-plus"
+            disabled={!cardPlusEnabled}
+            onclick={handleCardPlus}
+          ><span>Картой</span><span aria-hidden="true">+</span></button>
         </div>
         <div class="shrink-0 p-3">
           <button
             type="button"
-            class="w-full rounded-xl bg-[#ff8c42] py-3 font-semibold text-black disabled:opacity-40"
+            class="w-full rounded-2xl bg-[#ff8c42] py-3.5 text-base font-semibold text-black disabled:bg-[#ff8c42]/45 disabled:text-black/50"
             data-testid="checkout-payment-pay"
             disabled={footerLocked || !payEnabled}
             onclick={handlePayClick}
@@ -233,16 +269,25 @@
         </div>
         <div class="shrink-0 space-y-2 border-t border-[#3a3a3a] px-3 pt-2" data-testid="checkout-payment-expanded-methods">
           <div class="flex items-center justify-between pb-1">
-            <h2 class="text-base font-semibold text-white">Способ оплаты</h2>
-            <button type="button" class="text-[#a0a0a0]" data-testid="checkout-payment-expanded-close" onclick={() => collapseToPeek()} aria-label="Закрыть">✕</button>
-          </div>
-          {#each savedCards as card}
             <button
               type="button"
-              class="flex w-full items-center rounded-xl border-2 px-3 py-3 text-left {selectedCardId === card.id ? 'border-[#ff8c42] text-[#ff8c42]' : 'border-[#ff8c42]/70 text-[#ff8c42]'}"
+              class="text-base font-semibold text-white"
+              data-testid="checkout-payment-open-plus"
+              onclick={() => openPaymentList()}
+            >Способ оплаты</button>
+            <button type="button" class="flex h-8 w-8 items-center justify-center rounded-full bg-[#3a3a3a] text-white" data-testid="checkout-payment-expanded-close" onclick={() => collapseToPeek()} aria-label="Закрыть">✕</button>
+          </div>
+          {#each savedCards as card}
+            {@const parts = cardMethodParts(card)}
+            <button
+              type="button"
+              class="flex w-full items-center rounded-xl border-2 border-[#ff8c42] bg-[#1f1f1f] px-3 py-3 text-left"
               data-testid="checkout-payment-expanded-card"
               onclick={() => onSelectCard(card)}
-            >{formatCardMethodLabel(card)}</button>
+            >
+              <span class="text-[#ff8c42]">{parts.word}</span>
+              <span class="ml-1 italic text-white">{parts.pan}</span>
+            </button>
           {/each}
           <button type="button" class="w-full rounded-xl border border-[#555] bg-[#1f1f1f] px-3 py-3 text-left text-[#888]" data-testid="checkout-payment-sbp" disabled>СБП</button>
           <button

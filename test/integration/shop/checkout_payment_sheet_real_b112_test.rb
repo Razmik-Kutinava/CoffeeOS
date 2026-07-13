@@ -256,4 +256,41 @@ class Shop::CheckoutPaymentSheetRealB112Test < ActionDispatch::IntegrationTest
     assert_match(/SHEET_TRANSITION_MS\s*=\s*400/, th)
     assert_match(/transition: height \{SHEET_TRANSITION_MS\}ms/, sheet)
   end
+
+  # --- Шаг 3 Expanded → Expanded+ (s05 / s07) --------------------------------
+
+  test "S3 openPaymentList from Способ оплаты / swipe" do
+    sh = sheet
+    assert_match(/openPaymentList/, sh)
+    assert_includes sh, 'data-testid="checkout-payment-open-plus"'
+    assert_match(/MODE_EXPANDED\) openPaymentList|openPaymentList\(\)/, sh)
+  end
+
+  test "S3 expanded+ shows at most 2 thumbs with qty −/+" do
+    sh = sheet
+    assert_includes sh, 'data-testid="checkout-payment-expanded-plus"'
+    assert_includes sh, 'data-testid="checkout-payment-plus-thumbs"'
+    assert_includes sh, 'data-testid="checkout-payment-plus-thumb"'
+    assert_match(/items\.slice\(0,\s*2\)/, sh)
+    assert_includes sh, 'data-testid="checkout-payment-plus-minus"'
+    assert_includes sh, 'data-testid="checkout-payment-plus-plus"'
+  end
+
+  test "S3 expanded+ header Способ оплаты + X closes to expanded" do
+    sh = sheet
+    assert_match(/Способ оплаты/, sh)
+    assert_includes sh, 'data-testid="checkout-payment-close"'
+    assert_match(/closePaymentList/, sh)
+  end
+
+  test "S3 expanded+ list: cards Картой *XXXX / СБП / Картой + / Оплатить" do
+    sh = sheet
+    labels = read_src("app/frontend/lib/paymentMethodLabels.js")
+    assert_match(/cardMethodParts/, sh + labels)
+    assert_includes sh, 'data-testid="checkout-payment-plus-card"'
+    assert_includes sh, 'data-testid="checkout-payment-sbp-list"'
+    assert_includes sh, 'data-testid="checkout-payment-card-plus"'
+    assert_match(/Оплатить/, sh)
+    assert_match(/italic text-white|text-white.*italic/, sh)
+  end
 end

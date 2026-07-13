@@ -17,6 +17,11 @@ export function formatCardMethodLabel(card) {
   return `Картой ${panFromCard(card)}`
 }
 
+/** Части лейбла для стиля s05/s07: «Картой» orange + «*1594» white italic */
+export function cardMethodParts(card) {
+  return { word: "Картой", pan: panFromCard(card) }
+}
+
 export function cardBrandShort(brand) {
   const b = String(brand || "").toUpperCase()
   if (b.includes("MIR") || b.includes("МИР")) return "MIR"
