@@ -183,6 +183,8 @@ Rails.application.routes.draw do
       post "email_otp/verify", to: "email_otp#verify"
       get "email_otp/status", to: "email_otp#status"
       post "orders", to: "orders#create"
+      post "payments/new_card", to: "payments#new_card"
+      get "payments/card_config", to: "payments#card_config"
       get "orders/history", to: "orders#history"
       post "session/reconnect", to: "session#reconnect"
       post "orders/:id/abandon", to: "orders#abandon"

@@ -46,12 +46,24 @@
 ### Шаг 2. Оплата новой карты с сохранением
 
 
-- [ ] **Given:** Форма 1000008924.png заполнена, тумблер ON, стейт кнопки = `Default` (синяя, текст «Оплатить»).
-- [ ] **When:** Пользователь нажимает «Оплатить». Фронт шифрует CardData (RSA-2048), отправляет на бэкенд: `{ CardData, amount, save_card: true }`.
-- [ ] **Then:** 
+- [x] **Given:** Форма 1000008924.png заполнена, тумблер ON, стейт кнопки = `Default` (синяя, текст «Оплатить»).
+- [x] **When:** Пользователь нажимает «Оплатить». Фронт шифрует CardData (RSA-2048), отправляет на бэкенд: `{ CardData, amount, save_card: true }`.
+- [x] **Then:** 
   - Бэкенд вызывает `/Init` → получает PaymentId
   - Вызывает `/FinishAuthorize` с CardData → получает `CONFIRMED`, `RebillId`, `CardId`, маску PAN, тип карты
   - Создаётся запись в `UserCards` с полями: `user_id`, `rebill_id`, `card_id`, `pan` (формат `*5953`), `exp_date` (ММ/ГГ), `card_type` (MIR/VISA/MASTERCARD)
+
+**Отчёт Шаг 2 (Было → Стало):**
+
+| Было (после WIPE / Шаг 1) | Стало |
+|---|---|
+| `finish_authorize` stub wipe | `TbankAdapter#finish_authorize` → `/FinishAuthorize` + CardData |
+| Нет записи карты | `SavedCardStore` → `mobile_payment_methods` (= UserCards): `*5953`, `09/27`, `MIR` |
+| Нет nonPCI оркестрации | `NewCardPaymentService` + `POST /shop/api/payments/new_card` |
+| Нет RSA на фронте | `tbankCardFormat.js` + `tbankCardEncrypt.js` (jsencrypt) + `GET …/card_config` |
+| — | Тест: `shop_new_card_payment_step2_test.rb` + adapter/sync — зона **39 runs PASS** |
+
+**Не сделано в Шаге 2:** Checkout ещё не монтирует форму / не дергает `payments/new_card` (список карт + кнопка «Новая карта» — Шаг 3; Charge — Шаг 4).
 
 
 ### Шаг 3. Отображение сохранённой карты в списке (макет 1000008925.png)

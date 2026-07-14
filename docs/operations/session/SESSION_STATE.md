@@ -2,7 +2,7 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-14 (UserCards / save_card — Шаг 1 done)  
+**Дата:** 2026-07-14 (UserCards / save_card — Шаг 2 done)  
 **Веха 1:** **закрыта** 2026-06-19.  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
 **§2.3 оплата витрина (Init→payment_url→callback):** **done** — базовый redirect на банк остаётся.
@@ -11,10 +11,19 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **UserCards / save_card** | **Шаг 1 [x]** форма 1000008924 (lib+UI+тесты) | **Шаг 2** — оплата + запись UserCards (`go`) |
+| **UserCards / save_card** | **Шаг 1–2 [x]** | **Шаг 3** — список карт GET + UI 1000008925 (`go`) |
 | **B1.13 CR-BOTTOM-NAV** | бар убран · cart BOTTOM_REM=0 код [x] | **go deploy** · A1 апрув |
 | **B1.14 адрес в шапке** | **B1.14-3d** index map [x] | deploy · B1.14-4 cart |
 | **Product card peek cart** | S1–S7 код [x] · MCP Fly [ ] | апрув заказчика |
+
+### Сессия 2026-07-14 (Шаг 2 — Init→FinishAuthorize→UserCards)
+
+- TDD green: `shop_new_card_payment_step2_test` + adapter + sync + step1 — **39 runs, 173 assertions, 0 fail**.
+- Backend: `finish_authorize`, `SavedCardStore`, `NewCardPaymentService`, `POST payments/new_card`, `GET payments/card_config`.
+- UserCards = `mobile_payment_methods` (без DDL).
+- Frontend: `tbankCardFormat.js` + `tbankCardEncrypt.js` (RSA).
+- Vite build PASS. Checkout UI wiring — **не в этом шаге** (Шаг 3).
+- **Стоп:** ждать **`go`** на **Шаг 3**.
 
 ### Сессия 2026-07-14 (Шаг 1 — форма новой карты)
 
@@ -34,6 +43,7 @@
 
 
 ### Сессия 2026-07-13 (B1.13 — cart sheet прижат к низу)
+
 
 
 - Жалоба: peek корзины «висит в воздухе» (остаток `bottom: 3.5rem` под снятый бар).

@@ -86,7 +86,7 @@ module Payments
       response
     end
 
-    # Снесено 2026-07-14 — повторная реализация только по новому ТЗ заказчика.
+    # Снесено 2026-07-14 — Charge/рекуррент = Шаг 4 ТЗ (пока stub).
     def charge_recurrent(**)
       raise Error, "wiped: reimplement from new customer TZ"
     end
@@ -95,8 +95,20 @@ module Payments
       raise Error, "wiped: reimplement from new customer TZ"
     end
 
-    def finish_authorize(**)
-      raise Error, "wiped: reimplement from new customer TZ"
+    # nonPCI: зашифрованный CardData после Init (Шаг 2 ТЗ).
+    def finish_authorize(payment_id:, card_data:)
+      payload = {
+        "TerminalKey" => terminal_key,
+        "PaymentId"   => payment_id.to_s,
+        "CardData"    => card_data.to_s
+      }
+      payload["Token"] = build_token(payload)
+
+      response = with_circuit_breaker { post_json("#{BASE_URL}/FinishAuthorize", payload) }
+      unless response.is_a?(Hash)
+        raise Error, "Некорректный ответ Т-Банка (FinishAuthorize)"
+      end
+      response
     end
 
     # Верифицирует webhook от Т-Банка.

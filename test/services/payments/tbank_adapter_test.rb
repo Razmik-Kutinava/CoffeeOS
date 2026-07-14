@@ -182,14 +182,21 @@ class Payments::TbankAdapterTest < ActiveSupport::TestCase
     Payments::CacheCounter.clear_circuit!
   end
 
-  test "finish_authorize is wiped pending new customer TZ" do
-    error = assert_raises(Payments::TbankAdapter::Error) do
-      Payments::TbankAdapter.new.finish_authorize(payment_id: "fa-1", card_data: "x")
+  test "finish_authorize posts CardData to FinishAuthorize endpoint" do
+    adapter = Payments::TbankAdapter.new
+    captured = nil
+    adapter.define_singleton_method(:post_json) do |url, payload|
+      captured = { url: url, payload: payload }
+      { "Success" => true, "ErrorCode" => "0", "Status" => "CONFIRMED", "PaymentId" => "fa-1" }
     end
-    assert_match(/wiped/i, error.message)
+
+    response = adapter.finish_authorize(payment_id: "fa-1", card_data: "base64-encrypted")
+    assert captured[:url].end_with?("/FinishAuthorize")
+    assert_equal "base64-encrypted", captured[:payload]["CardData"]
+    assert_equal "CONFIRMED", response["Status"]
   end
 
-  test "charge is wiped pending new customer TZ" do
+  test "charge is wiped pending new customer TZ step 4" do
     error = assert_raises(Payments::TbankAdapter::Error) do
       Payments::TbankAdapter.new.charge(payment_id: "pay-9", rebill_id: "rebill-9")
     end

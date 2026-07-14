@@ -1,5 +1,14 @@
 ﻿# CHANGELOG
 
+## 2026-07-14 — feat(shop): Шаг 2 — Init→FinishAuthorize→UserCards (save_card)
+
+- `TbankAdapter#finish_authorize` → `/FinishAuthorize` с CardData.
+- `SavedCardStore` + `MobilePaymentMethod` → `mobile_payment_methods` (*5953, 09/27, MIR).
+- `NewCardPaymentService` + `POST /shop/api/payments/new_card` + `GET …/card_config`.
+- Frontend RSA: `tbankCardFormat.js` + `tbankCardEncrypt.js` (jsencrypt).
+- Тесты step2+adapter+sync+step1: **39 runs, 0 fail**. Vite build PASS.
+- Checkout UI wiring / список карт — Шаг 3.
+
 ## 2026-07-14 — feat(shop): Шаг 1 — форма новой карты (маска, Луна, save_card)
 
 - Lib: `app/frontend/lib/shopNewCardForm.js` — PAN маска/Luhn, ММ/ГГ автослэш, CVV, `save_card: true`, `isPayEnabled`, `formNetworkSnapshot` без открытого PAN/CVV.
