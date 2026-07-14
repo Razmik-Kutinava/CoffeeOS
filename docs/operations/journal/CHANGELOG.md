@@ -1,4 +1,10 @@
-# CHANGELOG
+﻿# CHANGELOG
+
+## 2026-07-14 — test(wipe): регрессия после сноса — PASS
+
+- Boot не зависал: `initialize` ~26 с (локально медленно, не hang).
+- `tbank_adapter` + `tbank_payment_sync` + checkout UI/CBR + `tbank_controller`: **44 runs, 0 failures**.
+- `order_creator` + `test/integration/shop/api/`: **105 runs, 0 failures, 3 skips**.
 
 ## 2026-07-14 — chore(wipe): снос старой реализации сохранения карты / checkout card UX
 

@@ -1,4 +1,4 @@
-# SESSION_STATE
+﻿# SESSION_STATE
 
 ## Текущее состояние
 
@@ -21,7 +21,8 @@
 - Снесены старые customer_tasks (рекуррент + выбор оплаты), runbook, артефакты, dedicated код/тесты/роуты.
 - Checkout снова базовый: OTP + redirect payment_url.
 - Агент **не** опирается на старые коммиты/артефакты этой темы.
-- **Стоп:** ждать **go** на новое ТЗ.
+- **Регрессия wipe (перепрогон):** boot не висел (~25–30 с init) · payment/checkout **44 runs 0 fail** · shop API + order_creator **105 runs 0 fail 3 skip**.
+- **Стоп:** ждать **`go`** на новое ТЗ.
 
 
 ### Сессия 2026-07-13 (B1.13 — cart sheet прижат к низу)
