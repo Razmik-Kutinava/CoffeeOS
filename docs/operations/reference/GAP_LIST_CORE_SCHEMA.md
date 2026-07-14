@@ -1,4 +1,4 @@
-# GAP LIST: core -> schema
+﻿# GAP LIST: core -> schema
 
 Дата: 2026-05-11  
 Источник сравнения: `docs/product/core/*.md` vs `db/schema.rb`
@@ -32,7 +32,6 @@
 
 ### Прогресс после запуска B3.5 (2026-05-11)
 
-- Созданы таблицы: `mobile_carts`, `mobile_payment_methods`.
 - Тесты: `324 runs, 1065 assertions, 0 failures, 0 errors, 0 skips`.
 - Покрытие с учётом согласованного rename-mapping: `55/62` (≈ `88.7%`), остаётся `7`.
 
@@ -94,7 +93,6 @@
   - status: `missing-table`
   - progress: `done-in-b3.5`
   - batch: B3.5 (mobile)
-- `mobile_payment_methods`
   - status: `missing-table`
   - progress: `done-in-b3.5`
   - batch: B3.5 (mobile)
@@ -196,7 +194,6 @@
 2. **B1 (audit/security):** `admin_audit_log`, `feature_flags_log`.
 3. **B2 (billing/admin):** `billing_plans`, `billing_subscriptions`, `tenant_invitations`.
 4. **B3 (loyalty/promo/push):** `loyalty_*`, `promo_code_usages`, `push_notifications`, `order_feedback`.
-5. **B3.5 (mobile addon):** `mobile_carts`, `mobile_payment_methods`.
 6. **B4 (pickup):** `pickup_*`.
 7. **B5 (production/supply):** `production_*`, `supply_*`.
 8. Каждый батч: `db:migrate` -> целевые тесты -> smoke (`orders/payments/shop`) -> запись в operations.

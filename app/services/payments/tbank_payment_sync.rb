@@ -69,7 +69,6 @@ module Payments
         "OrderId" => @payment.order_id.to_s,
         "PaymentId" => state["PaymentId"].to_s.presence || @payment.provider_payment_id.to_s
       )
-      SavedCardStore.persist_from_tbank!(payment: @payment.reload, payload: payload)
     end
 
     def adapter

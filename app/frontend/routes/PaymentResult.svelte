@@ -4,15 +4,10 @@
   import { api } from "../lib/api.js"
   import { clearGuestOrderSession, reconnectGuestOrder } from "../lib/shopGuestSession.js"
   import { clearPaymentSession } from "../lib/tbankPayment.js"
-  import { saveCachedSavedCard } from "../lib/shopSavedCardCache.js"
-  import { loadGuestProfile } from "../lib/shopGuestProfile.js"
 
   let status = $state("fail")
   let orderId = $state("")
-  let bound = $state(false)
-
   let message = $state("")
-  let successTitle = $state("")
   let err = $state(null)
   let loading = $state(true)
 
@@ -30,7 +25,6 @@
     const params = new URLSearchParams(query)
     status = params.get("status") || "fail"
     orderId = params.get("order_id") || ""
-    bound = params.get("bound") === "1"
 
     if (!orderId) {
       err = "Не найден заказ"
@@ -43,14 +37,7 @@
       clearPaymentSession()
 
       if (status === "success") {
-        if (bound) {
-          successTitle = "Карта привязана / Оплачено"
-        }
-        const finalized = await pollAccepted()
-        const profile = loadGuestProfile()
-        if (finalized?.saved_card && profile?.email) {
-          saveCachedSavedCard(profile.email, finalized.saved_card)
-        }
+        await pollAccepted()
         clearGuestOrderSession()
         push(`/order/${orderId}`)
         return
@@ -70,25 +57,14 @@
 
 {#if loading}
   <div class="py-8 text-center">
-    {#if successTitle}
-      <p class="mb-2 text-lg font-semibold text-white">{successTitle}</p>
-    {/if}
     <p class="text-[#a0a0a0]">Проверяем оплату…</p>
   </div>
 {:else if err}
   <p class="mb-4 text-red-400">{err}</p>
   <button type="button" class="text-[#ff8c42]" onclick={() => push("/orders")}>История заказов</button>
 {:else}
-  <p class="mb-4 text-[#a0a0a0]">{message}</p>
-  <div class="flex flex-col gap-3">
-    <button type="button" class="rounded-xl bg-[#ff8c42] py-3 font-semibold text-black" onclick={() => push("/orders")}>
-      История заказов
-    </button>
-    <button type="button" class="rounded-xl bg-[#ff8c42]/90 py-3 font-semibold text-black" onclick={() => push("/")}>
-      В корзину
-    </button>
-    <button type="button" class="rounded-xl border border-[#3a3a3a] py-3 text-[#a0a0a0]" onclick={() => push("/checkout")}>
-      Оформление
-    </button>
+  <div class="py-8 text-center">
+    <p class="mb-4 text-[#a0a0a0]">{message}</p>
+    <button type="button" class="text-[#ff8c42]" onclick={() => push("/")}>В каталог</button>
   </div>
 {/if}

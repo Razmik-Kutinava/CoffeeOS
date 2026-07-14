@@ -1,4 +1,4 @@
-# Fly demo-стенд (develop → coffeeos.fly.dev)
+﻿# Fly demo-стенд (develop → coffeeos.fly.dev)
 
 **Назначение:** живое демо и ручной прогон В1/H.3 на стенде **develop**, не на main/prod.
 
@@ -181,7 +181,6 @@ Slug в БД **не меняется** — при своём домене буд
 
 ---
 
-## Секреты Fly (B1.12 nonPCI)
 
 | Secret | Назначение | Обязательно |
 |--------|------------|-------------|
@@ -202,19 +201,12 @@ fly secrets set TBANK_RSA_PUBLIC_KEY="$(cat path/to/tbank_public.pem)" -a coffee
 
 ```bash
 # На витрине с tenant_id — в DevTools Network:
-GET /shop/api/payments/card_config → card_data_ready: true, rsa_public_key present
 ```
 
-Без ключа: `NewCardSheet` показывает «Оплата новой картой временно недоступна»; **one-click** (сохранённая карта) работает.
 
-Runbook: [`../milestones/veha_2/runbooks/TBANK_RECURRENT.md`](../milestones/veha_2/runbooks/TBANK_RECURRENT.md)
 
-### Fly MCP B1.12-R3 (после deploy)
 
 ```powershell
 $env:FLY_BIN = "C:\Users\darks\.fly\bin\flyctl.exe"
-ruby bin/b112_r3_one_click_prep_fly.rb
-node bin/b112_r3_fsm_mcp.mjs
 ```
 
-Артефакт: `docs/operations/milestones/veha_2/artifacts/demo-feedback/b112_r3_fsm_ops_pass_<date>.json`

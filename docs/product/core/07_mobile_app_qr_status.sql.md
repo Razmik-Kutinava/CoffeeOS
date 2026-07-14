@@ -1,4 +1,4 @@
-
+﻿
 -- ============================================================================
 -- SQL МИГРАЦИИ ДЛЯ СИСТЕМЫ КОФЕЕН (POSTGRESQL)
 -- ЭТАП 8: МОБИЛЬНОЕ APP + QR-СТАТУС
@@ -161,11 +161,9 @@ CREATE INDEX idx_mobile_sessions_active ON mobile_sessions(customer_id, expires_
 
 
 -- ============================================================================
--- ЧАСТЬ D: ТАБЛИЦА mobile_payment_methods
 -- Токены карт и методов оплаты для повторного заказа без чекаута
 -- ============================================================================
 
-CREATE TABLE IF NOT EXISTS mobile_payment_methods (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     customer_id UUID NOT NULL REFERENCES mobile_customers(id) ON DELETE CASCADE,
     -- [F] apple_pay убран (рынок РФ). Доступны: card, sbp, ya_pay
@@ -186,17 +184,8 @@ CREATE TABLE IF NOT EXISTS mobile_payment_methods (
     )
 );
 
-COMMENT ON TABLE mobile_payment_methods IS 'Сохранённые методы оплаты. Нужны для «Купить сейчас» в Ghost Bar без открытия чекаута.';
-COMMENT ON COLUMN mobile_payment_methods.card_token IS '⚠️ Токен от эквайера. НЕ является номером карты. Хранить зашифрованным (pgcrypto/application-level encryption).';
-COMMENT ON COLUMN mobile_payment_methods.card_masked IS 'Маска **** 1234 — показывается пользователю в Ghost Bar и чекауте';
-COMMENT ON COLUMN mobile_payment_methods.is_default IS 'Метод по умолчанию для «Купить сейчас»';
-COMMENT ON COLUMN mobile_payment_methods.is_active IS 'FALSE = токен отозван банком или пользователь удалил карту';
-COMMENT ON COLUMN mobile_payment_methods.last_used_at IS 'Последнее успешное списание — для определения протухшего токена ДО показа кнопки (v3.0)';
 
-CREATE INDEX idx_pm_customer ON mobile_payment_methods(customer_id);
-CREATE INDEX idx_pm_default ON mobile_payment_methods(customer_id)
     WHERE is_default = TRUE AND is_active = TRUE;
-CREATE INDEX idx_pm_active ON mobile_payment_methods(customer_id, is_active)
     WHERE is_active = TRUE;
 
 
@@ -993,7 +982,6 @@ COMMENT ON VIEW v_mobile_active_orders IS 'Активные мобильные �
 
 ALTER TABLE mobile_customers        ENABLE ROW LEVEL SECURITY;
 ALTER TABLE mobile_sessions         ENABLE ROW LEVEL SECURITY;
-ALTER TABLE mobile_payment_methods  ENABLE ROW LEVEL SECURITY;
 ALTER TABLE mobile_carts            ENABLE ROW LEVEL SECURITY;
 ALTER TABLE order_feedback          ENABLE ROW LEVEL SECURITY;
 
@@ -1033,8 +1021,6 @@ CREATE POLICY rls_ms_write ON mobile_sessions FOR ALL USING (
     )
 );
 
--- mobile_payment_methods: только свои карты
-CREATE POLICY rls_pm_read ON mobile_payment_methods FOR SELECT USING (
     customer_id = NULLIF(current_setting('app.current_customer_id', TRUE), '')::UUID
     OR EXISTS (
         SELECT 1 FROM user_roles ur JOIN roles r ON ur.role_id = r.id
@@ -1042,7 +1028,6 @@ CREATE POLICY rls_pm_read ON mobile_payment_methods FOR SELECT USING (
         AND r.code IN ('ук_global_admin')
     )
 );
-CREATE POLICY rls_pm_write ON mobile_payment_methods FOR ALL USING (
     customer_id = NULLIF(current_setting('app.current_customer_id', TRUE), '')::UUID
 );
 
@@ -1096,12 +1081,10 @@ ON CONFLICT (phone) DO UPDATE SET
     city                = EXCLUDED.city;
 
 -- 2. Тестовый метод оплаты
-INSERT INTO mobile_payment_methods (customer_id, payment_type, card_masked, card_brand, is_default)
 SELECT mc.id, 'card', '**** 0001', 'Mir', TRUE
 FROM mobile_customers mc
 WHERE mc.phone = '+79000000001'
   AND NOT EXISTS (
-      SELECT 1 FROM mobile_payment_methods pm WHERE pm.customer_id = mc.id
   );
 
 -- 3. Тестовый заказ
@@ -1192,7 +1175,6 @@ QR-СТАТУС (публичный, без авторизации)
       2, 'Кофе был холодный');
 
 КАРТЫ
-  SELECT * FROM mobile_payment_methods
   WHERE customer_id = 'customer-uuid' AND is_active = TRUE;
 
 ЧАЕВЫЕ НЕТМОНЕТ  [E]

@@ -1,22 +1,19 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-13 (checkout payment — Step4/7 keyboard + swipe)  
+**Дата:** 2026-07-14 (WIPE card/save — чистый лист)  
 **Ветка:** `develop`  
-**Прод:** https://coffeeos.fly.dev (**v354** — keyboard lift + swipe→peek)
+**Прод:** https://coffeeos.fly.dev
 
-### Checkout payment method card — выбор оплаты / прикрепление карты
+### WIPE 2026-07-14 — сохранение карты / checkout card UX
+
+Старые ТЗ и реализация **снесены**. Не читать git-историю / удалённые артефакты как канон.
 
 | Что | Статус |
 |-----|--------|
-| ТЗ | [`Выбор способа оплаты…`](../milestones/veha_2/requirements/customer_tasks/Выбор%20способа%20оплаты%20и%20прикрепление%20банковской%20карты%20на%20экране%20оформления%20заказа.md) |
-| Wiring B1.12 | **`[x]`** Card+→embedded NewCardSheet · ACS · one-click |
-| A–C Peek/Expanded/Expanded+ | layout PASS · v344–v348 |
-| D Form/ACS | PARTIAL · v350 |
-| **Step4: форма + корзина** | **`STEP4_CART_KEEP_PASS`** · Fly **v353/v354** · [скрин](../milestones/veha_2/artifacts/demo-feedback/screenshots/mcp_step4_card_form_cart_keep_fly_v354_2026-07-13.png) |
-| **Step4/7: клавиатура + свайп** | **`STEP4_7_KEYBOARD_PASS`** · Fly **v354** · [JSON](../milestones/veha_2/artifacts/demo-feedback/checkout_payment_mcp_step4_7_keyboard_swipe_fly_v354_2026-07-13.json) |
-| s04 ACS | **`[x]`** канон B · форма в шторке (не оверлей) |
-| Битые фото | **отложено** |
-| **Следующий шаг** | **A1** живая карта · Шаг E Оплатить/X/scroll |
+| Канон-ТЗ | [`Исправление сохранения карты в UserCards после успешной оплаты.md`](../milestones/veha_2/requirements/customer_tasks/Исправление%20сохранения%20карты%20в%20UserCards%20после%20успешной%20оплаты.md) |
+| Код / старые ТЗ / артефакты | **удалены / stub wipe** |
+| **Следующий шаг** | ждать **`go`** — реализация **только** по новому ТЗ |
+
 
 ### Product card peek cart — отображение набранных позиций в карточке товара
 
@@ -76,7 +73,6 @@
 | B1.4 PWA · B2-S1 · B1.11 · B1.14-client · B1.13-S1 | **апрув `[x]`** |
 | ISSUES B1.11-BUG-OVERNIGHT | **resolved** |
 | Артефакт | `customer_verified_batch_2026-07-05.json` |
-| **Открыто** | B1.12 A1 · B1.13-S4 · B1.14-4 |
 
 ### B1.11 — BUG-OVERNIGHT Fly MCP (2026-07-05)
 
@@ -109,18 +105,14 @@
 | **Следующий шаг** | ~~**`go`** → F1–F4~~ → **A1 deploy+апрув** |
 | ТЗ файл | [`B1_11_tenant_operating_hours.md`](../milestones/veha_2/requirements/customer_tasks/B1_11_tenant_operating_hours.md) |
 
-### B1.12 — BUG-SAVE фикс (2026-07-04) · пауза до живой оплаты
 
 | Что | Статус |
 |-----|--------|
 | ТЗ | **rev2 only** — v1 iframe / «без галочки» = архив |
 | Код R1–R3 · Q-R2 | **`[x]`** · MCP 10/10 · RSA Fly `[x]` |
-| Имена | `mobile_payment_methods` · `customer_id` · `card_token` (= RebillId) |
-| **BUG-SAVE root cause** | `settle_confirmed!` проверял `raw["RebillId"]` — T-Bank nonPCI отдаёт его в webhook/GetState, не в FinishAuthorize |
 | **Фикс** | fallback `TbankPaymentSync.sync_order!` (GetState) в `settle_confirmed!` · коммит **`1081dac`** |
 | **Тесты** | 7 + 14 runs, 0 failures |
 | **Следующий шаг** | **A1** — живая CONFIRMED оплата заказчика → ISSUES close (Fly v328 уже есть) |
-| ТЗ файл | [`B1_12_recurrent_payments.md`](../milestones/veha_2/requirements/customer_tasks/B1_12_recurrent_payments.md) |
 
 ### Security hygiene (2026-07-03)
 
@@ -181,9 +173,7 @@
 
 РљРѕРґ `6fcc9d8` вЂ” РїСЂРёС‘РјРєР° РїРµСЂРµРЅРµСЃРµРЅР° РІ В§ **S3-rev2** РІ [`B1_13`](../milestones/veha_2/requirements/customer_tasks/B1_13_shop_nav_profile_header.md).
 
-### B1.12 — рекуррент + 1 клик (архив-блок; канон в шапке HANDOFF)
 
-См. **§ B1.12 — канон (2026-07-04)** выше. Код R1–R3 `[x]` · открыта приёмка сохранения карты.
 
 ### B1.11 вЂ” СЂРµР¶РёРј СЂР°Р±РѕС‚С‹ С‚РѕС‡РєРё
 

@@ -1,5 +1,5 @@
-<script>
-  import { onMount, tick } from "svelte"
+﻿<script>
+  import { onMount } from "svelte"
   import { push } from "svelte-spa-router"
   import { api } from "../lib/api.js"
   import {
@@ -13,196 +13,60 @@
     lastGuestOrderId,
     reconnectGuestOrder,
     returningFromPaymentPage,
-    saveGuestOrderSession,
-    clearGuestOrderSession,
-    guestReconnectToken
+    saveGuestOrderSession
   } from "../lib/shopGuestSession.js"
-  import {
-    savePaymentSession,
-    loadPaymentSession,
-    clearPaymentSession
-  } from "../lib/tbankPayment.js"
-  import { clearCartCache } from "../lib/shopCartCache.js"
-  import { submitThreeDsChallenge } from "../lib/tbankCardEncrypt.js"
-  import { subscribeGuestOrderStatus } from "../lib/shopOrderCable.js"
-  import { waitForOrderSettled } from "../lib/shopOneClickPay.js"
-  import {
-    PAY_FSM,
-    MIN_LOADER_MS,
-    SUCCESS_REDIRECT_MS,
-    withMinLoaderMs,
-    apiWithPayTimeout,
-    fsmFromPaymentError,
-    isPayFsmBusy,
-    isPayFsmClickable
-  } from "../lib/shopPayFsm.js"
-  import {
-    loadCachedSavedCard,
-    saveCachedSavedCard,
-    clearCachedSavedCard
-  } from "../lib/shopSavedCardCache.js"
-  import ThreeDsOverlay from "../components/ThreeDsOverlay.svelte"
-  import CheckoutPaymentSheet from "../components/CheckoutPaymentSheet.svelte"
-  import { formatCardListLabel } from "../lib/paymentMethodLabels.js"
-  import { closeCardForm } from "../lib/checkoutPaymentSheetStore.js"
-  import { SAVED_CARD_RETRY_MS, SAVED_CARD_RETRY_ATTEMPTS } from "../lib/shopCheckoutInlinePay.js"
+  import { savePaymentSession } from "../lib/tbankPayment.js"
   import {
     getOperatingHours,
     loadOperatingHours,
     shopIsOpenForPay,
     subscribeOperatingHours
   } from "../lib/shopOperatingHours.js"
-  import {
-    checkoutPaymentItems,
-    currentSheetHeightVh
-  } from "../lib/checkoutPaymentSheetStore.js"
 
   let name = $state("")
   let email = $state("")
   let otpCode = $state("")
+  let payment_method = $state("card")
+  let sbpNotice = $state(false)
   let emailVerified = $state(false)
   let sendingCode = $state(false)
   let verifyingCode = $state(false)
   let otpNotice = $state("")
+  let submitting = $state(false)
   let err = $state(null)
   let savedProfile = $state(false)
-  let profileSyncing = $state(true)
   let editContact = $state(true)
-  let savedCard = $state(null)
-  let savedCards = $state([])
-  let savedCardsLoading = $state(false)
-  let selectedCardId = $state(null)
-  let selectionMode = $state("new_card")
-  let payFsmState = $state(PAY_FSM.DEFAULT)
-  let useOneClick = $state(true)
-  let clientOrderUuid = $state(null)
-  let showThreeDsOverlay = $state(false)
   let operatingHours = $state(getOperatingHours())
-  let sheetPadVh = $state(30)
 
-  const payBusy = $derived(isPayFsmBusy(payFsmState))
-  const canPay = $derived(
-    isValidEmail(email) &&
-      emailVerified &&
-      !payBusy &&
-      !savedCardsLoading &&
-      shopIsOpenForPay()
-  )
   const canSendCode = $derived(isValidEmail(email) && !sendingCode)
-
-  function applyServerVerificationStatus(status) {
-    const normalized = email.trim().toLowerCase()
-    const serverOk =
-      status?.verified === true && status?.email === normalized && isValidEmail(email)
-    if (serverOk) {
-      emailVerified = true
-      editContact = false
-      saveGuestProfile({ name, email, emailVerified: true })
-      otpNotice = ""
-      return true
-    }
-    emailVerified = false
-    editContact = true
-    clearEmailVerifiedInProfile()
-    otpNotice = ""
-    return false
-  }
-
-  async function syncServerStatus() {
-    if (!isValidEmail(email)) {
-      emailVerified = false
-      return false
-    }
-    try {
-      const q = encodeURIComponent(email.trim().toLowerCase())
-      const status = await api(`/email_otp/status?email=${q}`)
-      return applyServerVerificationStatus(status)
-    } catch {
-      return emailVerified
-    }
-  }
-
-  function resetPaymentFsm() {
-    payFsmState = PAY_FSM.DEFAULT
-    showThreeDsOverlay = false
-  }
-
-  function selectSavedCard(card) {
-    if (!card?.id) return
-    savedCard = card
-    selectedCardId = card.id
-    selectionMode = "saved_card"
-    useOneClick = true
-    saveCachedSavedCard(email, card)
-    resetPaymentFsm()
-  }
-
-  function selectNewCardOption() {
-    selectionMode = "new_card"
-    useOneClick = false
-    selectedCardId = null
-    resetPaymentFsm()
-  }
-
-  function applySavedCardFromSources(primary, cards = null) {
-    if (Array.isArray(cards)) savedCards = cards
-    if (primary?.id) {
-      if (!savedCards.some((c) => c.id === primary.id)) {
-        savedCards = [...savedCards, primary]
-      }
-      selectSavedCard(primary)
-      return
-    }
-    const cached = loadCachedSavedCard(email)
-    if (cached?.id) {
-      selectSavedCard(cached)
-      return
-    }
-    savedCard = null
-    selectedCardId = null
-    if (savedCards.length > 0) {
-      selectSavedCard(savedCards[0])
-      return
-    }
-    selectNewCardOption()
-  }
-
-  async function loadSavedCards() {
-    if (!emailVerified || !isValidEmail(email)) {
-      savedCard = null
-      savedCards = []
-      selectedCardId = null
-      selectionMode = "new_card"
-      return
-    }
-    savedCardsLoading = true
-    try {
-      const q = encodeURIComponent(email.trim().toLowerCase())
-      const res = await api(`/saved_cards?email=${q}`)
-      applySavedCardFromSources(res?.primary || null, res?.cards || [])
-    } catch {
-      applySavedCardFromSources(null, [])
-    } finally {
-      savedCardsLoading = false
-    }
-  }
+  const canPay = $derived(
+    isValidEmail(email) && emailVerified && !submitting && shopIsOpenForPay()
+  )
 
   onMount(() => {
     const profile = loadGuestProfile()
     if (profile) {
       name = profile.name
       email = profile.email
+      emailVerified = profile.emailVerified
       savedProfile = true
-      if (profile.emailVerified) {
-        emailVerified = true
-        editContact = false
-      } else {
-        editContact = true
+      editContact = false
+    }
+
+    const syncServerStatus = async () => {
+      if (!isValidEmail(email)) return
+      try {
+        const q = encodeURIComponent(email.trim().toLowerCase())
+        const status = await api(`/email_otp/status?email=${q}`)
+        if (status.verified && status.email === email.trim().toLowerCase()) {
+          emailVerified = true
+        }
+      } catch {
+        /* session may be empty */
       }
     }
 
     const recover = async () => {
-      if (await resumePendingBankPayment()) return
       const orderId = lastGuestOrderId()
       if (!orderId) return
       await reconnectGuestOrder(api)
@@ -211,53 +75,40 @@
       }
     }
 
-    const boot = async () => {
-      profileSyncing = true
-      await recover()
-      await loadOperatingHours(api)
-      await syncServerStatus()
-      await loadSavedCards()
-      profileSyncing = false
-    }
-
-    boot()
+    recover()
+    syncServerStatus()
+    loadOperatingHours(api)
     const offHours = subscribeOperatingHours((next) => {
       operatingHours = next
     })
-    const offSheetPad = checkoutPaymentItems.subscribe(() => {
-      sheetPadVh = currentSheetHeightVh()
-    })
+
     const onPageShow = (event) => {
-      if (event.persisted) boot()
+      if (event.persisted) recover()
     }
     window.addEventListener("pageshow", onPageShow)
     return () => {
       window.removeEventListener("pageshow", onPageShow)
-      offHours()
-      offSheetPad()
+      offHours?.()
     }
   })
 
-  $effect(() => {
-    if (emailVerified && isValidEmail(email)) {
-      loadSavedCards()
-    } else {
-      savedCard = null
+  function selectPayment(val) {
+    if (val === "sbp") {
+      sbpNotice = true
+      return
     }
-  })
+    sbpNotice = false
+    payment_method = val
+  }
 
   function onEmailInput() {
+    const profile = loadGuestProfile()
+    if (profile && profile.email === email.trim().toLowerCase() && profile.emailVerified) {
+      emailVerified = true
+      return
+    }
     emailVerified = false
-    editContact = true
     otpNotice = ""
-    clearEmailVerifiedInProfile()
-    clearCachedSavedCard(email)
-    savedCard = null
-    savedCards = []
-    selectedCardId = null
-    selectionMode = "new_card"
-    useOneClick = true
-    resetPaymentFsm()
   }
 
   async function sendCode() {
@@ -284,21 +135,18 @@
     err = null
     verifyingCode = true
     try {
-      const res = await api("/email_otp/verify", {
+      await api("/email_otp/verify", {
         method: "POST",
         body: JSON.stringify({
           email: email.trim().toLowerCase(),
           code: otpCode.trim()
         })
       })
-      if (res?.verified) {
-        emailVerified = true
-        otpNotice = "Email подтверждён"
-        saveGuestProfile({ name, email, emailVerified: true })
-        savedProfile = true
-        editContact = false
-        await loadSavedCards()
-      }
+      emailVerified = true
+      otpNotice = "Email подтверждён"
+      saveGuestProfile({ name, email, emailVerified: true })
+      savedProfile = true
+      editContact = false
     } catch (e) {
       emailVerified = false
       err = e.message
@@ -307,195 +155,67 @@
     }
   }
 
-  function beginPayConnecting() {
+  async function submit() {
+    if (!canPay) return
     err = null
-    payFsmState = PAY_FSM.CONNECTING
-  }
-
-  /** Возврат с банка без завершения — проверяем finalize. */
-  async function resumePendingBankPayment() {
-    const pending = loadPaymentSession()
-    if (!pending?.order_id || !pending.payment_started) return false
-
-    payFsmState = PAY_FSM.PROCESSING
-    await reconnectGuestOrder(api)
-
+    submitting = true
+    let redirecting = false
     try {
-      const token = pending.reconnect_token || guestReconnectToken()
-      const q = token ? `?reconnect_token=${encodeURIComponent(token)}` : ""
-      const res = await api(`/orders/${pending.order_id}/finalize${q}`, { method: "POST" })
-      if (res.payment_settled || res.status === "accepted") {
-        clearPaymentSession()
-        if (res.saved_card) applySavedCardFromSources(res.saved_card)
-        else await refreshSavedCardsAfterPayment()
-        push(`/order/${pending.order_id}`)
-        return true
-      }
-    } catch {
-      /* оплата ещё не подтверждена */
-    }
+      saveGuestProfile({ name, email, emailVerified: true })
 
-    clearPaymentSession()
-    resetPayIdle()
-    return false
-  }
+      const res = await api("/orders", {
+        method: "POST",
+        body: JSON.stringify({
+          name,
+          email: email.trim().toLowerCase(),
+          payment_method
+        })
+      })
 
-  async function refreshSavedCardsAfterPayment() {
-    for (let attempt = 0; attempt < SAVED_CARD_RETRY_ATTEMPTS; attempt += 1) {
-      await loadSavedCards()
-      if (savedCard) return
-      await new Promise((resolve) => setTimeout(resolve, SAVED_CARD_RETRY_MS))
-    }
-  }
+      saveGuestOrderSession(res.order_id, res.reconnect_token)
 
-  function resetPayIdle() {
-    resetPaymentFsm()
-  }
-
-  async function completePaymentSuccess(orderId, savedCardPayload) {
-    if (savedCardPayload) applySavedCardFromSources(savedCardPayload)
-    else await refreshSavedCardsAfterPayment()
-    payFsmState = PAY_FSM.SUCCESS
-    clearPaymentSession()
-    await new Promise((r) => setTimeout(r, SUCCESS_REDIRECT_MS))
-    clearGuestOrderSession()
-    showThreeDsOverlay = false
-    closeCardForm()
-    push(`/order/${orderId}`)
-  }
-
-  async function settleAfterCharge(orderId, reconnectToken) {
-    payFsmState = PAY_FSM.PROCESSING
-    const settled = await waitForOrderSettled(api, {
-      orderId,
-      reconnectToken,
-      subscribe: subscribeGuestOrderStatus
-    })
-    await completePaymentSuccess(orderId, settled?.saved_card)
-  }
-
-  async function handleThreeDsResponse(res) {
-    payFsmState = PAY_FSM.THREE_DS
-    showThreeDsOverlay = true
-    savePaymentSession({
-      order_id: res.order_id,
-      reconnect_token: res.reconnect_token,
-      payment_started: true,
-      card_binding: res.save_card === true
-    })
-    try {
-      await tick()
-      submitThreeDsChallenge(res.three_ds)
-      await settleAfterCharge(res.order_id, res.reconnect_token)
-    } catch (e) {
-      showThreeDsOverlay = false
-      payFsmState = fsmFromPaymentError(e, { httpStatus: e.httpStatus })
-    }
-  }
-
-  async function handlePaymentResponse(res) {
-    saveGuestOrderSession(res.order_id, res.reconnect_token)
-    saveGuestProfile({ name, email, emailVerified: true })
-    clearCartCache()
-    clientOrderUuid = null
-
-    if (res.tbank_status === "3DS_CHECKING" && res.three_ds?.acs_url) {
-      await handleThreeDsResponse(res)
-      return
-    }
-
-    if (res.tbank_status === "CONFIRMED" || res.status === "accepted") {
-      await completePaymentSuccess(res.order_id, res.saved_card)
-      return
-    }
-
-    if (res.recurrent_charge || res.provider_payment_id) {
-      await settleAfterCharge(res.order_id, res.reconnect_token)
-      return
-    }
-
-    payFsmState = PAY_FSM.BANK_ERROR
-  }
-
-  async function submitOneClick() {
-    if (!canPay || !savedCard?.id) return
-    if (!isPayFsmClickable(payFsmState)) return
-
-    beginPayConnecting()
-    if (!clientOrderUuid) clientOrderUuid = crypto.randomUUID()
-
-    try {
-      const serverOk = await syncServerStatus()
-      if (!serverOk) {
-        payFsmState = PAY_FSM.CLIENT_ERROR
+      if (res.payment_url) {
+        redirecting = true
+        window.location.href = res.payment_url
         return
       }
 
-      const res = await withMinLoaderMs(MIN_LOADER_MS, async () => {
-        payFsmState = PAY_FSM.CONNECTING
-        const payload = await apiWithPayTimeout(api, "/payments/one_click", {
-          method: "POST",
-          body: JSON.stringify({
-            name,
-            email: email.trim().toLowerCase(),
-            payment_method: "card",
-            card_id: savedCard.id,
-            client_order_uuid: clientOrderUuid
-          })
+      if (res.provider_payment_id) {
+        let config = {}
+        try {
+          config = await api("/config")
+        } catch {
+          config = {}
+        }
+        savePaymentSession({
+          order_id: res.order_id,
+          total: res.total,
+          provider_payment_id: res.provider_payment_id,
+          terminal_key: res.terminal_key || config.terminal_key,
+          payment_url: res.payment_url,
+          reconnect_token: res.reconnect_token,
+          payment_iframe: false,
+          payment_method,
+          integration_script_url: config.integration_script_url
         })
-        payFsmState = PAY_FSM.PROCESSING
-        return payload
-      })
+      }
 
-      await handlePaymentResponse(res)
+      redirecting = true
+      push(`/order/${res.order_id}`)
     } catch (e) {
-      payFsmState = fsmFromPaymentError(e, { httpStatus: e.httpStatus })
+      err = e.message
       if (/подтвердите email/i.test(e.message || "")) {
         emailVerified = false
         editContact = true
         clearEmailVerifiedInProfile()
       }
-    }
-  }
-
-  async function handleNewCardSuccess(res) {
-    closeCardForm()
-    await handlePaymentResponse(res)
-  }
-
-  async function handleNewCardThreeDs(res) {
-    closeCardForm()
-    await handleThreeDsResponse(res)
-  }
-
-  function handleNewCardFsmChange(state) {
-    payFsmState = state
-  }
-
-  /** Картой +: форма уже открыта в expanded+; здесь только gate canPay */
-  function handleAddCard() {
-    if (!canPay) {
-      closeCardForm()
-      if (!emailVerified) err = "Подтвердите email, чтобы добавить карту"
-      else if (!shopIsOpenForPay()) err = "Сейчас точка закрыта — карту добавить нельзя"
-      else if (savedCardsLoading) err = "Загружаем сохранённые карты…"
-      else if (payBusy) err = "Дождитесь завершения оплаты"
-      else err = "Нельзя добавить карту сейчас"
-      return
-    }
-    err = null
-  }
-
-  /** Оплатить — только one-click по сохранённой карте */
-  async function handlePayFromSheet() {
-    if (savedCardsLoading) await loadSavedCards()
-    if (selectionMode === "saved_card" && savedCard?.id) {
-      await submitOneClick()
+    } finally {
+      if (!redirecting) submitting = false
     }
   }
 </script>
 
-<div style="padding-bottom: calc({sheetPadVh}vh + 1rem);" data-testid="checkout-form-pad">
+<div>
   <div class="mb-4 flex items-center gap-3">
     <button type="button" class="text-2xl text-[#ff8c42]" onclick={() => push("/")} aria-label="Назад в каталог">
       ‹
@@ -503,7 +223,7 @@
     <h1 class="text-xl font-bold">Оформление</h1>
   </div>
 
-  {#if savedProfile && !editContact && emailVerified && !profileSyncing}
+  {#if savedProfile && !editContact && emailVerified}
     <div class="mb-4 rounded-xl border border-[#3a3a3a] bg-[#2a2a2a] p-4">
       <p class="mb-1 text-sm text-[#a0a0a0]">Контакты</p>
       <p class="font-medium text-white">{name}</p>
@@ -574,6 +294,33 @@
     {/if}
   {/if}
 
+  <div class="mb-6">
+    <span class="mb-2 block text-sm text-[#a0a0a0]">Способ оплаты</span>
+    <div class="flex gap-3">
+      {#each [["card", "Картой"]] as [val, label]}
+        <button
+          type="button"
+          class="flex flex-1 items-center justify-center gap-2 rounded-lg border px-3 py-2 text-sm
+            {payment_method === val ? 'border-[#ff8c42] bg-[#ff8c42]/10 text-[#ff8c42]' : 'border-[#3a3a3a] text-[#a0a0a0]'}"
+          onclick={() => selectPayment(val)}
+        >
+          {label}
+        </button>
+      {/each}
+      <button
+        type="button"
+        class="flex flex-1 items-center justify-center gap-2 rounded-lg border border-[#3a3a3a] px-3 py-2 text-sm text-[#757575] opacity-60"
+        aria-disabled="true"
+        onclick={() => selectPayment("sbp")}
+      >
+        СБП
+      </button>
+    </div>
+    {#if sbpNotice}
+      <p class="mt-2 text-sm text-[#a0a0a0]" role="status">Будет позже</p>
+    {/if}
+  </div>
+
   {#if err}
     <p class="mb-4 text-sm text-red-400">{err}</p>
   {/if}
@@ -588,32 +335,12 @@
     </div>
   {/if}
 
-  <ThreeDsOverlay
-    open={showThreeDsOverlay}
-    onClose={() => {
-      if (payFsmState === PAY_FSM.THREE_DS) {
-        showThreeDsOverlay = false
-        payFsmState = PAY_FSM.BANK_ERROR
-      }
-    }}
-  />
-
-  <CheckoutPaymentSheet
-    {emailVerified}
-    {savedCards}
-    hasSavedCard={!!savedCard?.id || savedCards.length > 0}
-    cardLabel={savedCard ? formatCardListLabel(savedCard) : null}
-    {selectedCardId}
-    {canPay}
-    guestName={name}
-    guestEmail={email}
-    {payFsmState}
-    onPay={handlePayFromSheet}
-    onSelectCard={selectSavedCard}
-    onSelectNewCard={selectNewCardOption}
-    onAddCard={handleAddCard}
-    onCardFsmChange={handleNewCardFsmChange}
-    onCardSuccess={handleNewCardSuccess}
-    onCardThreeDs={handleNewCardThreeDs}
-  />
+  <button
+    type="button"
+    class="w-full rounded-xl bg-[#ff8c42] py-4 text-lg font-semibold text-black disabled:opacity-50"
+    disabled={!canPay}
+    onclick={submit}
+  >
+    {submitting ? "Идёт оплата…" : "Оплатить →"}
+  </button>
 </div>

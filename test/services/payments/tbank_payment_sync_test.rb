@@ -39,47 +39,14 @@ class Payments::TbankPaymentSyncTest < ActiveSupport::TestCase
     ENV.delete("TBANK_PASSWORD")
   end
 
-  test "sync accepts order and saves card when GetState returns CONFIRMED" do
+  test "sync accepts order when GetState returns CONFIRMED" do
     assert sync_with_state(
       "Status" => "CONFIRMED",
-      "PaymentId" => "pay-sync-1",
-      "RebillId" => "sync-rebill-1",
-      "Pan" => "430000******5953"
+      "PaymentId" => "pay-sync-1"
     )
 
     assert @order.reload.accepted?
     assert @payment.reload.succeeded?
-
-    card = MobilePaymentMethod.primary_for(@customer.id)
-    assert_equal "sync-rebill-1", card.card_token
-    assert_equal "430000******5953", card.card_masked
-  end
-
-  test "sync saves card without Pan when RebillId present in GetState" do
-    assert sync_with_state(
-      "Status" => "CONFIRMED",
-      "PaymentId" => "pay-sync-1",
-      "RebillId" => "sync-rebill-no-pan"
-    )
-
-    card = MobilePaymentMethod.primary_for(@customer.id)
-    assert_equal "sync-rebill-no-pan", card.card_token
-    assert_equal "•••• ****", card.card_masked
-  end
-
-  test "sync on accepted order backfills missing saved card" do
-    @payment.update!(status: :succeeded, paid_at: Time.current)
-    @order.update!(status: :accepted)
-
-    assert sync_with_state(
-      "Status" => "CONFIRMED",
-      "PaymentId" => "pay-sync-1",
-      "RebillId" => "backfill-rebill",
-      "Pan" => "555555******4444"
-    )
-
-    card = MobilePaymentMethod.primary_for(@customer.id)
-    assert_equal "backfill-rebill", card.card_token
   end
 
   private

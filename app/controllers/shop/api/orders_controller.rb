@@ -12,7 +12,7 @@ module Shop
         creator = Shop::OrderCreator.new(session, tenant: @shop_tenant, request: request)
         order = creator.call!(order_params.to_h.symbolize_keys)
         Rails.logger.info("[Shop::Order] Order created: #{order.id}, total: #{order.final_amount}, status: #{order.status}")
-        render json: order_create_json(order, creator, recurrent: order_params[:saved_card_id].present?)
+        render json: order_create_json(order, creator)
       rescue Shop::OrderCreator::Error => e
         Rails.logger.error("[Shop::Order] Failed to create order: #{e.message}")
         render json: { error: e.message, status: 422 }, status: :unprocessable_entity
@@ -95,8 +95,6 @@ module Shop
         end
 
         payload = order_json(order).merge(payment_settled: order.accepted?)
-        saved = primary_saved_card_json(order.customer_id)
-        payload[:saved_card] = saved if saved
 
         render json: payload
       rescue ActiveRecord::RecordNotFound
@@ -161,7 +159,7 @@ module Shop
         false
       end
 
-      def order_create_json(order, creator, recurrent: false)
+      def order_create_json(order, creator)
         payload = {
           order_id: order.id,
           total: order.final_amount.to_f,
@@ -173,54 +171,16 @@ module Shop
 
         if creator.provider_payment_id.present?
           payload[:provider_payment_id] = creator.provider_payment_id
-          if recurrent
-            payload[:recurrent_charge] = true
-            payload[:payment_iframe] = false
-            payload.delete(:payment_url)
-          else
-            # B1.12-R5: только редирект на Т-Банк, без inline iframe на checkout.
-            payload[:payment_iframe] = false
-          end
-        end
-
-        if !recurrent && payload[:payment_url].blank? && creator.provider_payment_id.present?
-          payload[:recurrent_charge] = true
-        end
-
-        payload[:card_binding] = true if creator.card_binding
-
-        # B1.12-R6: one-click никогда не отдаёт URL банка — только Charge по RebillId.
-        if recurrent
-          payload.delete(:payment_url)
           payload[:payment_iframe] = false
-          payload[:recurrent_charge] = true if creator.provider_payment_id.present?
-          saved = primary_saved_card_json(order.customer_id)
-          payload[:saved_card] = saved if saved
         end
 
         payload
       end
 
-      def primary_saved_card_json(customer_id)
-        return nil if customer_id.blank?
-
-        card = MobilePaymentMethod.primary_for(customer_id)
-        return nil unless card
-
-        {
-          id: card.id,
-          payment_system: card.card_brand,
-          masked_pan: card.card_masked,
-          pan: card.pan_display,
-          is_primary: card.is_default?,
-          last_used_at: card.last_used_at&.iso8601
-        }
-      end
-
       def order_params
         params.permit(
           :name, :email, :phone, :comment, :is_car_pickup, :car_number,
-          :promo_code, :payment_method, :pickup_time, :client_order_uuid, :saved_card_id
+          :promo_code, :payment_method, :pickup_time, :client_order_uuid
         )
       end
 

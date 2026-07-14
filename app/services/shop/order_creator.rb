@@ -13,10 +13,6 @@ module Shop
     end
 
     def call!(params, gateway: true)
-      if params[:saved_card_id].present?
-        return charge_with_saved_card!(params)
-      end
-
       if params[:client_order_uuid].present?
         existing = find_client_order_duplicate!(params[:client_order_uuid])
         return existing if existing
@@ -132,24 +128,6 @@ module Shop
       order
     end
 
-    def charge_with_saved_card!(params)
-      if params[:client_order_uuid].present?
-        existing = find_recurrent_order_duplicate!(params[:client_order_uuid])
-        if existing
-          payment = existing.payments.order(created_at: :desc).first
-          @provider_payment_id = payment&.provider_payment_id
-          @payment_url = nil
-          return existing
-        end
-      end
-
-      creator = Shop::RecurrentOrderCreator.new(@session, tenant: @tenant, request: @request)
-      order = creator.call!(params)
-      @provider_payment_id = creator.provider_payment_id
-      @payment_url = nil
-      order
-    end
-
     private
 
     # В1: реального платёжного шлюза нет — имитация успешной оплаты (SHOP_SIMULATE_PAYMENT=1 по умолчанию).
@@ -247,16 +225,6 @@ module Shop
         raise(Error, "Заказ с таким идентификатором уже создан")
     end
 
-    def find_recurrent_order_duplicate!(client_order_uuid)
-      return nil if client_order_uuid.blank?
-
-      Order.where(
-        tenant_id: @tenant.id,
-        client_order_uuid: client_order_uuid,
-        source: :mobile
-      ).includes(:payments).first
-    end
-
     def find_client_order_duplicate!(client_order_uuid)
       return nil if client_order_uuid.blank?
 
@@ -330,15 +298,14 @@ module Shop
       return_base_url = ENV.fetch("TBANK_RETURN_URL", @request&.base_url.to_s)
       notification_url = "#{return_base_url}/callbacks/tbank"
       customer_key = order.customer_id&.to_s
-      recurrent = payment.card? && customer_key.present?
-      @card_binding = recurrent
+      @card_binding = false
 
       result = Payments::TbankAdapter.new.init_payment(
         order: order,
         return_base_url: return_base_url,
         notification_url: notification_url,
         customer_key: customer_key,
-        recurrent: recurrent
+        recurrent: false
       )
 
       payment.update_columns(

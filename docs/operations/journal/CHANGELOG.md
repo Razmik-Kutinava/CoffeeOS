@@ -1,20 +1,11 @@
 # CHANGELOG
 
-## 2026-07-13 — fix(checkout-payment): keyboard lift + swipe expanded+→peek
+## 2026-07-14 — chore(wipe): снос старой реализации сохранения карты / checkout card UX
 
-- Фокус полей карты → шторка `92vh` (`expandedPlusKeyboard`) + sticky Pay.
-- Свайп вниз с expanded+ → `collapseToPeek` (корзина), не expanded.
-- Тесты sheet **32 PASS**. Fly **v354**. MCP STEP4_7_KEYBOARD_PASS.
-- Скрины заказчику: `mcp_step4_7_keyboard_lift_form_fly_v354_*.png`.
-- Артефакт: `checkout_payment_mcp_step4_7_keyboard_swipe_fly_v354_2026-07-13.json`.
-
-## 2026-07-13 — fix(checkout-payment): Card+ form inside expanded+ keeps cart
-
-- Жалоба заказчика: после «Картой +» корзина пропадала (fullscreen NewCardSheet).
-- ТЗ Шаг 4: форма **внутри** expanded+; thumbs + цена сверху.
-- `openCardForm` + `NewCardSheet embedded`; оверлей с Checkout убран.
-- Тесты sheet **29 PASS**. MCP Fly **v353** STEP4_CART_KEEP_PASS.
-- Артефакт: `checkout_payment_mcp_step4_cart_keep_fly_v353_2026-07-13.json`.
+- Удалены старые ТЗ, артефакты, dedicated код/тесты/роуты по теме.
+- Checkout: базовый OTP + redirect на банк (payment_url).
+- Канон для новой работы: customer_tasks/Исправление сохранения карты в UserCards после успешной оплаты.md.
+- Дальше: только реализация по новому ТЗ после go (не восстанавливать снесённое из git).
 
 ## 2026-07-13 — fix(b1.13): pin cart sheet to bottom (no float gap)
 
@@ -22,187 +13,98 @@
 - Build marker `prog21`. Тест S2a 10 PASS.
 - DEMO_FEEDBACK + B1_13: жалоба заказчика закрыта в коде (deploy ждёт go).
 
-## 2026-07-13 — fix(checkout-payment): D.Step4–5 Form/ACS runtime на Fly v350
 
-- Канон **B ACS** (не SMS-keypad s04).
-- `waitForOrderSettled`: cable accepted → всегда `finalize` (GetState + `saved_card`).
-- Card+: явная ошибка вместо silent no-op; NewCardSheet z-index выше peek.
 - Тесты: settle unit 2 PASS · sheet **29 PASS**.
-- MCP: Card+→форма PASS; sandbox → «Отказ: смените карту»; ACS/saved_card ждёт A1.
-- Артефакт: `checkout_payment_mcp_step_d_s04_acs_fly_v350_2026-07-13.json`.
 
-## 2026-07-13 — feat(checkout-payment): C.Step3 Expanded+ vs s05/s07 на Fly v348
 
-- Expanded+: 2 thumbs с −/+ сверху; «Способ оплаты» + X; список карт (Картой orange + *XXXX italic); СБП; Картой|+; Оплатить.
-- Тап «Способ оплаты» из expanded → expanded+; X → expanded.
 - Compact thumbs (h-16) — методы не уезжают за Pay.
 - Тесты sheet **28 PASS**. MCP layout PASS; multi-card s07 runtime без saved cards.
-- Артефакт: `checkout_payment_mcp_expanded_plus_s05_s07_fly_v348_2026-07-13.json`.
-- Следующий: **`go`** Шаг D (Card+/ACS).
 
-## 2026-07-13 — feat(checkout-payment): B.Step2 Expanded vs s06 на Fly v346
 
-- Expanded: все товары full cards; блок «Способ оплаты» (Картой *XXXX / СБП / Картой +); Оплатить full-width.
-- Peek→Expanded только после email; gesture handle clickable (MCP/desktop).
 - `formatCardMethodLabel` → «Картой *XXXX».
 - Тесты: sheet real_b112 **24 PASS**.
 - MCP Fly v346 verified email → expanded: layout PASS; *XXXX/Pay active — нет saved cards.
-- Артефакт: `checkout_payment_mcp_expanded_s06_fly_v346_2026-07-13.json`.
-- Следующий: **`go`** Шаг C (Expanded→Expanded+).
 
-## 2026-07-13 — ops(checkout-payment): A.Step1 Peek MCP s01–s03 на Fly v344
 
 - Deploy: `fly deploy -a coffeeos --remote-only --depot=false` → **v344** · `/up` 200.
-- MCP `cursor-ide-browser` 390×844 vs канон s01/s02/s03: **PEEK_PASS**.
 - s01 ≥3 thumbs + OTP кликабелен + footer disabled; s02 1 full card; s03 2 full cards (не thumbs).
-- Битые фото — отложено. Артефакт: `checkout_payment_mcp_peek_s01_s03_fly_v344_2026-07-13.json`.
-- Следующий: **`go`** Шаг B (Peek→Expanded) — не начинать без go.
 
-## 2026-07-10 — ops(checkout-payment): MCP visual vs customer mocks — NOT identical
 
 - MCP: `cursor-ide-browser` на Fly v341 vs s01–s07.
-- Вердикт: **не идентично** — s02/s03 FAIL; s01 PARTIAL (OTP); s04 ACS accepted; s05–s07 NOT_REACHED.
-- Артефакт: `checkout_payment_mcp_visual_compare_2026-07-10.json`.
 - Следующий: **`go` deploy** (фиксы уже в develop) → повтор MCP.
 
-## 2026-07-10 — docs(checkout-payment): s04 канон = ACS (не keypad)
 
-- Владелец: 3DS = страница банка (`ThreeDsOverlay`), SMS-keypad из макета s04 — wontfix.
-- Артефакт: `checkout_payment_s04_acs_decision_2026-07-10.json`.
 - Следующий: **апрув → `go` deploy** (без go не деплоить).
 
-## 2026-07-10 — fix(checkout-payment): footer Card+ border closer to mock
 
-- «Картой +»: `border-2 #ff8c42`, без `opacity-40` (не коричневеет disabled).
 - СБП / оплатить: rounded-2xl, py-2.5; disabled через цвет, не opacity.
-- Тест: `checkout_payment_sheet_real_b112_test.rb` 18 PASS.
 
-## 2026-07-10 — fix(checkout-payment): peek vh + full cards 1/2 (s01–s03)
 
-- `SHEET_VH.peek` 42→30; peekOne 36; peekTwo 40; высота зависит от числа позиций.
-- Peek 1–2: полные карточки (имя, mods, description, фото, −/+/Удалить); ≥3 — миниатюры.
 - Cart JSON: `description`; Checkout: padding-bottom под sheet.
-- Тесты: `checkout_payment_sheet_real_b112_test.rb` 17 PASS; `cart_service_test.rb` 19 PASS.
-- Следующий: **`go` deploy** → MCP OTP/Card+.
 
-## 2026-07-10 — ops(checkout-payment): visual compare mocks vs Fly — NOT identical
 
-- MCP: Fly v341 vs `checkout_payment_method_card/screenshots/s01–s07`.
-- Вердикт: **не идентично** — s02/s03 FAIL (карточки), s01 OTP перекрыт, s04 ACS≠SMS mock, s05–s07 не достигнуты.
-- Артефакт: `checkout_payment_visual_compare_fly_v341_2026-07-10.json` + fly_vs_s02/s03 скрины.
-- План: peek vh → full cards 1/2 → thumbs ≥3 → апрув s04 → expanded+ MCP → живая оплата.
 
-## 2026-07-10 — ops(checkout-payment): MCP Fly v341 PARTIAL
 
-- Deploy: Fly **v341** — `CheckoutPaymentSheet` peek на `#/checkout` **виден**.
-- MCP PASS: footer disabled до email; dual UI нет; 1 товар в peek.
-- MCP FAIL: peek перекрывает «Отправить код» (ТЗ: не мешать регистрации).
-- Артефакт: `checkout_payment_sheet_mcp_fly_v341_2026-07-10.json` + скрин.
-- Следующий: снизить `SHEET_VH.peek` → повтор MCP → живая оплата заказчиком.
 
-## 2026-07-10 — fix(checkout-payment): wire sheet → real B1.12 (до deploy)
 
-- **Картой +** → `NewCardSheet` (RSA); mock form/SMS-keypad 3DS удалены.
-- **Оплатить** → только one-click; dual UI (`PaymentMethodsSheet`/summary) убран.
 - Лимит 10: `assertCanAddCard`; fake «Удалить карту» убрана (нет API).
-- Тест: `checkout_payment_sheet_real_b112_test.rb` (12 PASS); старый mock-suite удалён.
 - Регрессия: `test/integration/shop/` — **293 runs, 0 failures, 3 skips**.
 - Следующий шаг: deploy (`go`) → живая оплата заказчиком.
 
-## 2026-07-10 — docs(checkout-payment): Gherkin [x] S1–S7 + E1–E10
 
 - В ТЗ отмечены все сценарии реализации и экстремалы.
 - Следующий шаг: `/review` после апрува.
 
-## 2026-07-10 — docs(checkout-payment): Было/Стало S1–S7+E в ТЗ
 
 - Отчёт Было/Стало + таблица статуса в customer_tasks (галочки Gherkin ждут апрува).
 - Следующий шаг: `/review` после апрува.
 
-## 2026-07-10 — fix(checkout-payment): nested button + shop suite PASS
 
-- `CheckoutPaymentSheet`: строка карты — `div[role=button]` вместо nested `<button>` (vite build).
 - `bin/rails test test/integration/shop/` — **304 runs, 2019 assertions, 0 failures, 0 errors, 3 skips**.
 
-## 2026-07-10 — feat(checkout-payment): S1–S7+E green — CheckoutPaymentSheet
 
-- Новые: `CheckoutPaymentSheet.svelte` · `checkoutPaymentSheetStore.js` · `checkoutPaymentSheetThresholds.js`
 - `Checkout.svelte`: mount sheet + `onPay={handlePayFromSheet}`
-- Тест: `checkout_payment_sheet_s1_s7_red_test.rb` — **23 runs, 0 failures**
-- Коммит: `4740013`. MCP Fly: checkout без нового peek (стенд v340 до deploy).
 
-## 2026-07-10 — test(checkout-payment): S1–S7 + E1–E10 red в одном файле
 
-- `checkout_payment_sheet_s1_s7_red_test.rb`: шаги 1–7 + экстремалы E1–E10 (тот же файл).
 - Прогон: **23 runs, 23 failures** (красная зона). Код UI не меняли.
 
-## 2026-07-10 — test(checkout-payment): S1–S7 red — sheet ещё нет
 
-- Новый: `test/integration/shop/checkout_payment_sheet_s1_s7_red_test.rb` — Gherkin шагов 1–7 (peek→expanded→expanded+/form/3DS/pay/X/openEditCard).
-- Прогон: **13 runs, 13 failures** (красная зона, ожидаемо) — нет `CheckoutPaymentSheet` / store.
 - Код UI не меняли.
 
-## 2026-07-10 — ops(checkout-payment): history purge + Fly deploy clean slate
 
 - **Git:** `rebase --onto` — вырезан сплошной блок старых checkout-sheet коммитов; `develop` force-push (`9db1406`).
-- **Канон:** новое ТЗ + `artifacts/checkout_payment_method_card/`; Checkout = B1.12 (`PaymentMethodsSheet` / `NewCardSheet`).
 - **Deploy:** Fly `coffeeos` **v340** · image `deployment-01KX66W1GSN3SP6N4SDG1QY345` · `/up` **200**.
 - **Не опираться** на старые sheet-коммиты в reflog — NON-CANON.
 
-## 2026-07-10 — reset(checkout-payment): clean slate — удалён старый sheet
 
-- Удалены старый checkout payment sheet (компонент + store + thresholds + integration-тесты + артефакты/ТЗ).
-- `Checkout.svelte` возвращён к B1.12: `PaymentMethodsSheet` + `NewCardSheet` + `ThreeDsOverlay`.
-- Канон задачи: новое ТЗ + `artifacts/checkout_payment_method_card/` — реализация с нуля после `go`.
 
-## 2026-07-10 — docs(checkout-payment): этап 0 — ТЗ + 7 скринов в артефактах
 
-- ТЗ: `customer_tasks/Выбор способа оплаты и прикрепление банковской карты на экране оформления заказа.md`
-- Артефакты: `artifacts/checkout_payment_method_card/screenshots/` — s01–s07 (peek 1/2/3, card+3DS, expanded+ 1/multi cards)
 - Код не трогали — только подготовка.
 
-## 2026-07-10 — feat(product-peek): S4–S7 скролл, empty, error, out-of-stock
 
-- `ProductCartPeek`: horizontal scroll testid + touch-action; error banner; out-of-stock line.
 - `cartSheetStore`: bump catch → refresh + `cartSheetError`.
-- `Product.svelte`: «нет в наличии», `outOfStockProductId` в peek.
-- Тест: `product_card_s4_s7_peek_extremes_test.rb` PASS; ТЗ S4–S7 закрыты.
 
-## 2026-07-10 — feat(product-peek): S3 ±1 редактирование qty в peek
 
-- `ProductCartPeek.svelte`: кнопки −/+ (`shop-product-peek-minus/plus`) → `bumpCartLine` / `removeCartLine`.
-- Тест: `product_card_s3_peek_qty_edit_test.rb` PASS; ТЗ S3 закрыт.
 
-## 2026-07-10 — docs(product-peek): Шаг 5 отчёт Было/Стало, галочки S1+S2
 
 - ТЗ: закрыты критерии S1+S2; статус-таблица, Было/Стало, список недоделок (S3–S7).
 - Волна: `a1c9aa3` (код) · `5188b74` (suite 313 PASS).
 
-## 2026-07-10 — test(product-peek): shop suite PASS после S1+S2
 
 - Регрессия: `bin/rails test test/integration/shop/` — **313 runs, 0 failures**.
 - `b113_s4_cart_modifiers_test.rb`: копирайт кнопки «добавить к заказу».
 
-## 2026-07-10 — feat(product-peek): S1 индикатор + S2 peek на карточке (Шаг 4)
 
-- `Product.svelte`: `inOrderQty` из `cartItems` (фильтр по `product_id`), badge «уже в заказе: N», кнопка «добавить к заказу», mount `ProductCartPeek`.
-- Новый: `ProductCartPeek.svelte` — горизонтальный peek-list (имя/qty/цена), только при непустой корзине.
 - Тесты S1+S2 PASS; b113_s4_b2 — копирайт кнопки обновлён под ТЗ.
 
-## 2026-07-10 — test(product-peek): S2 red — peek-список на карточке товара
 
-- Новый: `test/integration/shop/product_card_s2_peek_list_test.rb` — Gherkin Сценария 2 (peek-list, строки с именем/qty/ценой, gate по непустой корзине).
 - Код UI не менялся; прогон: 4 failures (красная зона).
 
-## 2026-07-10 — test(product-peek): S1 red — индикатор «уже в заказе»
 
 - Новый: `test/integration/shop/product_card_s1_in_order_indicator_test.rb` — Gherkin Сценария 1 (DOM testid + qty из cartItems + реактивность).
 - Код `Product.svelte` не менялся; прогон: 4 failures (красная зона).
 
-## 2026-07-10 — docs: новая задача product card peek cart (артефакты)
 
-- **ТЗ:** `customer_tasks/отображение набранных позиций и функциональность в режиме pee.md` — карточка товара + режим peek (индикатор «уже в заказе», горизонтальный скролл, ±1).
-- **Артефакты:** `artifacts/product_card_peek_cart/screenshots/` — wireframe концепта + mockup карточки товара.
 
 ## 2026-07-09 — fix(b1.13): сумма только внутри кнопки checkout
 
@@ -235,20 +137,16 @@
 
 ## 2026-07-07 — docs(b1.13): O2 gate closed CR-BOTTOM-NAV
 
-- **O2:** только убрать бар; peek без изменений; рекомендации — backlog.
 - Gate closed; код ждёт `go` владельца.
 
 ## 2026-07-07 — docs(b1.13): O1 O3 answers CR-BOTTOM-NAV
 
 - **O1:** «Да» — свайп подтверждён.
 - **O3:** «Да, удаляем» — `#/favorites` удаляем.
-- **O2:** open (peek scope).
 
 ## 2026-07-07 — docs(b1.13): ответы заказчика CR-BOTTOM-NAV rev3
 
-- Зафиксированы ответы 1–7: убрать бар везде (Fly+PWA), свайп, peek для повторных, не баг, S4 отдельно.
 - КАРТА ФАЙЛА в B1_13 (стр. ~14) — куда смотреть без листания 1300 строк.
-- Open: O1 свайп-маршруты · O2 peek в этом шаге · O3 #/favorites.
 - JSON: `b113_cr_bottom_nav_answers_2026-07-07.json`.
 
 ## 2026-07-06 — docs(b1.13): B1.13-CR-BOTTOM-NAV customer bug report
@@ -263,7 +161,6 @@
 - **Закрыто апрувом:** B1.4 PWA · B2-S1 звук · B1.11 (+ overnight) · B1.14 client · B1.13-S1.
 - **ISSUES:** B1.11-BUG-OVERNIGHT → resolved.
 - **Артефакты:** `customer_verified_batch_2026-07-05.json` + 5 `*_customer_approval_2026-07-05.json`.
-- **Не трогали:** B1.12 · B1.13-S4 · B1.14-4.
 
 ## 2026-07-05 — ops(b1.11): Fly post-deploy MCP — overnight shift PASS
 
@@ -289,56 +186,35 @@
 - Артефакт: `b111_bug_overnight_customer_2026-07-04.json`.
 - **Код не трогали** — стоп до `go` на F1–F4.
 
-## 2026-07-04 — ops(b1.12): MCP browser run B1.12-BUG-SAVE · Fly v328 · T-Bank sandbox audit
 
-**Deploy v328** (2026-07-04T12:39Z) — фикс `1081dac` на Fly `[x]` · `card_config` 401 ✓.
 
 **MCP browser flow (Puppeteer + Neon psql OTP):**
 - Каталог → добавить товар → checkout → email OTP через Neon psql `[x]`
-- NewCardSheet открылся · тумблер «save_card» **ON** по умолчанию `[x]`
 - Карта `4300 0000 0000 0777` / 12/26 / 111 заполнена `[x]`
 - `POST /shop/api/payments/new_card` дошёл до T-Bank (2044ms, 35 queries) `[x]`
 - T-Bank вернул **CLIENT_ERROR** (sandbox ограничение, не наш код)
 
-**DB audit (Neon):** 3 исторических CONFIRMED платежа (2026-06-30) — `RebillId = null` в provider_data → 0 карт сохранено в `mobile_payment_methods`. **Баг B1.12-BUG-SAVE подтверждён данными.**
 
-**Артефакт:** `b112_bug_save_card_mcp_0704_2026.json`
 
 **A1 статус:** фикс задеплоен · unit tests PASS · MCP браузерный flow PASS · нужен CONFIRMED от заказчика.
 
-## 2026-07-04 — fix(b1.12): B1.12-BUG-SAVE фикс сохранения карты · коммит 1081dac
 
-**Root cause:** `settle_confirmed!` проверял `raw["RebillId"]` из синхронного FinishAuthorize.
-T-Bank nonPCI возвращает RebillId **только в webhook/GetState** — поле пустое → `SavedCardStore` не вызывался → карта не сохранялась.
 
 **Фикс:** `new_card_payment_service.rb` `settle_confirmed!`:
-- если `raw["RebillId"]` есть → `SavedCardStore.persist_from_tbank!` (как раньше)
 - если пусто → `TbankPaymentSync.sync_order!(order:)` (GetState → `persist_card_if_needed!`)
 
-**Тест:** `b112_r1_nonpci_test.rb` «saves card when RebillId comes via GetState, not FinishAuthorize»
 7 runs 41 assertions 0 failures · регрессия 14 runs 70 assertions 0 failures.
 
 **Дальше:** деплой на стенд → A1 апрув заказчика.
 
-## 2026-07-04 — B1.12-BUG-SAVE D1: deploy Fly PASS
 
-- Fly release **v327** (2026-07-02) ≈ `origin/develop` `2a34ada` (B1.12 R1–R3 в истории).
-- `card_config` на стенде → 401 (эндпоинт есть). Баг **не** «не задеплоили save_card».
-- Артефакт: `b112_bug_save_card_d1_deploy_2026-07-04.json`. Чеклист D1 `[x]`. **Стоп до go D2.**
 
-## 2026-07-04 — docs: B1.12-BUG-SAVE текст заказчика + скрин + чеклист
 
-- Полный баг-репорт заказчика (дословно) в `B1_12_recurrent_payments.md` § B1.12-BUG-SAVE.
-- Скрин: `b112_save_card_toggle_on_customer_2026-07-04.png`
-- JSON: `b112_bug_save_card_customer_2026-07-04.json`
 - Чеклист работ D1–A1; ISSUES 🔴 open.
 - Код не трогали.
 
-## 2026-07-04 — docs: B1.12 единый канон (статусы + имена)
 
 - **Канон:** rev2 код R1–R3 `[x]` · Q-R2 `[x]` · открыто только приёмка «карта не сохраняется».
-- **Имена:** `mobile_payment_methods` / `customer_id` / `card_token` (= UserCards в тексте заказчика).
-- **Файлы:** `B1_12_recurrent_payments.md`, CBR, CHECKLIST, DEMO_FEEDBACK, customer_tasks README, SESSION_STATE, HANDOFF.
 - **Не трогали:** код app/, баг-фикс карты.
 
 ## 2026-07-03 — docs: V2-SEC-08 bundler-audit (обязательный техдолг)
@@ -373,9 +249,7 @@ T-Bank nonPCI возвращает RebillId **только в webhook/GetState**
 - Регрессия B1.13 S2+S3+S4: **114 runs, 695 assertions, 0 failures**.
 - Коммиты: `6121f90`, `c059fe4`
 
-## 2026-07-02 — B1.13 S4 блок 3: scroll dots peek 4+
 
-- `CartSheet.svelte`: `peekScrollIndex` + `onPeekScroll` + dots (оранжевый активный, серые неактивные, `transition-colors`).
 - Показываются только при `count >= 4`; `aria-hidden="true"`.
 - Тест: 12 runs зелёных; регрессия OK.
 - Коммит: `044f460`
@@ -390,7 +264,6 @@ T-Bank nonPCI возвращает RebillId **только в webhook/GetState**
 
 ## 2026-07-02 — B1.13 S4 блок 1: tapToProduct в CartSheet
 
-- `CartSheet.svelte`: `tapToProduct(line, e)` — tap на карточку (peek 2+, expanded 2+, single) открывает `/product/:id?cart_line=N`.
 - Кнопки ± не тапают в Product (`e.target.closest("button")`); gestureZone без изменений.
 - Тест: `b113_s4_tap_to_product_test.rb` 16 runs зелёных; регрессия S2/S3 9 runs OK.
 - Коммит: `8ac3f0b`
@@ -410,14 +283,11 @@ T-Bank nonPCI возвращает RebillId **только в webhook/GetState**
 
 ## 2026-07-01 — B1.13 docs: канон S4 (tap → Product, без long press)
 
-- § **B1.13-S4-канон** — tap на карточку peek/expanded → Product + update корзины; режимы поп-апа только свайп.
-- Убраны противоречия: long press 0,5 с, tap hidden→peek, tap peek→expanded.
 - JSON baseline S4, README макетов, stage0 — выровнены.
 - Коммит: `2c940e8`
 
 ## 2026-07-01 — B1.13 docs: уточнения канона S2 (без кода)
 
-- § **S2-канон:** таблица уточнений — peek после add; свайп по шагам; модификаторы 2+ не в S2; Q-rev2 отложено; скролл каталога при 1 товаре.
 - **S2a/S2b/S4:** выровнены corner cases, use case, чеклисты; исправлен мусор в S4 checklist.
 - **README** макетов S2 — краткая отсылка к уточнениям.
 - Коммит: `62dfc3e`
@@ -437,39 +307,29 @@ T-Bank nonPCI возвращает RebillId **только в webhook/GetState**
 
 ## 2026-07-01 — B1.13 docs: канон prog20 — убраны хвосты противоречий
 
-- **Канон (без изменений кода):** peek=horizontal cards 28vw · expanded=vertical list + «Удалить» · vh 30/44 · build **prog20**.
 - **B1_13 § S2-канон:** build prog20, примечание про исторические testid; MCP-артефакт 2026-07-01 — эталон приёмки.
 - **JSON baseline S2/S4:** раскладки и scroll-режимы выровнены с prog20.
 - **MCP 2026-06-30:** помечен `SUPERSEDED` → `b113_s2a_s2b_rev2_post_deploy_2026-07-01.json`.
-- **README макетов S2/S4:** таблица раскладок; S4 horizontal scroll только в peek.
 - **HANDOFF / SESSION_STATE:** единая строка S2-канон prog20, без ссылок на prog19 как «текущий код».
 - Коммит: `9c147b5`
 
-## 2026-07-01 — B1.13 prog20: swap peek/expanded layouts + MCP 21/21
 
-- **prog19 MCP (до swap):** peek=vertical, expanded=horizontal — совпало со скрином (expanded=карточки+Удалить), владелец: нужно наоборот.
-- **prog20:** peek=горизонтальные карточки 28vw · expanded=вертикальный список + «Удалить»; vh/жесты без изменений.
 - **Fly MCP:** 21/21 PASS · build=prog20 · S2b-03: expanded layout=vertical, has_delete=true.
 - **Deploy:** `deployment-01KWEC4BRDSEK248M67X13NVKD` · `application-DwJhUPfQ.js`
 - Коммит: `66c4352`
 
 ## 2026-07-01 — B1.13 prog19: push + Fly deploy
 
-> **История (не канон):** раскладки prog19 (peek=vertical, expanded=horizontal) заменены **prog20** 2026-07-01. Актуальный MCP: `b113_s2a_s2b_rev2_post_deploy_2026-07-01.json`.
 
 - **Push:** `develop` → `origin/develop` (13 commits, tip `283d12f`).
 - **Fly:** `coffeeos` · image `deployment-01KWEABJGANTFHS49XY11EKFBX` · release_command OK · rolling 2/2 ✓
-- **Verify:** `/up` green · JS bundle `application-DXnKClqo.js` содержит `prog19`, `shop-cart-peek-list`, `shop-cart-expanded-horizontal`.
 - **MCP:** после апрува владельца (`node bin/b113_s2a_s2b_rev2_mcp.mjs`).
 
 ## 2026-07-01 — B1.13 prog19: код CartSheet по § S2-канон
 
 > **История (не канон):** описание раскладок ниже отражало промежуточный prog19; **текущий канон — prog20** (§ B1.13-S2-канон).
 
-- **vh:** peek 30 / expanded 44 (2+); peek 1 = 28; hidden = 20.
-- **PEEK 2+:** вертикальный компактный список (`shop-cart-peek-list`, `vertical`).
 - **EXPANDED 2+:** горизонтальный ряд карточек 28vw (`shop-cart-expanded-horizontal`, `horizontal`).
-- **Add-flow:** после add всегда peek — `writePersistedCartSheetMode(PEEK)` + guard по `CART_JUST_ADDED_KEY` в `onCatalogRouteChange`.
 - **MCP:** `b113_s2a_s2b_rev2_mcp.mjs` — layout assertions по канону.
 - **Тесты:** b113_s2* — 36 runs, 0 failures.
 - `CART_SHEET_BUILD=prog19`
@@ -477,10 +337,7 @@ T-Bank nonPCI возвращает RebillId **только в webhook/GetState**
 
 ## 2026-06-30 — B1.13 docs: канон S2 — устранение противоречий
 
-> **История:** формулировки peek=vertical / expanded=horizontal из этого шага **не актуальны** — финальный канон зафиксирован **prog20** (2026-07-01).
 
-- § **B1.13-S2-канon** — единственный источник: PEEK 2+ vertical list · EXPANDED 2+ horizontal row 28vw · vh 30/44 · testid `shop-cart-peek-list` / `shop-cart-expanded-horizontal`.
-- **B1_13:** унифицированы формулировки PEEK/EXPANDED; persistence — после add всегда `peek`, localStorage только при возврате с вкладок.
 - **CHANGELOG:** prog9 помечен «не канон»; prog15 — канон vh 30/44 и раскладки; prog5/макеты — «устарело».
 - **Артефакты:** `b113_s2_screenshot_baseline` — expanded vertical scroll при >3; MCP JSON action strings.
 - **SESSION_STATE:** prog15 vh 44/30 зафиксирован как баг деплоя; код → prog19.
@@ -488,7 +345,6 @@ T-Bank nonPCI возвращает RebillId **только в webhook/GetState**
 ## 2026-06-30 — B1.13 prog18: cookie overflow fix + минус удаляет + SW networkFirst
 
 - **P5 (3+ товар пропадал):** корень — `ActionDispatch::CookieOverflow` (session cookie ~4KB). В cookie хранили полные `selected_modifiers` (id+name+price). Теперь храним **только id**, name/price восстанавливаем из БД в `json_lines` (1 запрос). `compact_modifiers` + `modifier_option_lookup` + `hydrate_modifiers`.
-- **P6 (минус не удалял):** `decrementLine(line)` — при qty=1 вызывает `removeCartLine`, иначе `bumpCartLine(-1)`. Применён в PEEK-списке, EXPANDED-карточках, single-item. Убран `disabled={atMinQty}` с «−».
 - **P1 (старый JS):** SW-стратегия для `/vite/` сменена `staleWhileRevalidate` → `networkFirst` — онлайн всегда свежий бандл.
 - `ModifierSelection.normalize_modifiers` — терпим к отсутствию price (compact-хранение).
 - Тесты: shop регрессия 220 runs 0 failures; оплата §2.3 3/3; cart_service +2 теста. MCP **20/20 PASS** build=prog18.
@@ -502,47 +358,36 @@ T-Bank nonPCI возвращает RebillId **только в webhook/GetState**
 - MCP: **20/20 PASS**, build=prog17 ✅
 - Коммит: `df03f37`
 
-## 2026-06-30 — B1.13 prog16: fix double-swipe pointer mouse-only
 
 - **Фикс:** `onPointerDown/Up` теперь возвращают early если `e.pointerType !== "mouse"`. Touch-жесты обрабатывает только touchstart/touchend.
 - MCP: **20/20 PASS** — свайпы, scroll, layout, localStorage — всё зелёное.
 - Коммит: `7449ea3`
 
-## 2026-06-30 — B1.13 prog15: раскладки peek/expanded по § S2-канон
 
-> **История:** описание раскладок ниже — промежуточная попытка; **канон prog20** — peek horizontal · expanded vertical.
 
-- **PEEK 2+ (канон):** вертикальный компактный список карточек товара (миниатюра + имя + цена + ±); при 3–4+ — горизонтальный скролл списка. **`peekMulti=30vh`**.
 - **EXPANDED 2+ (канон):** горизонтальный ряд карточек товара (`28vw`); при >3 — вертикальный скролл. **`expandedMulti=44vh`**.
-- **Деплой:** в `cartSheetThresholds.js` vh были перепутаны (44/30) — **канон § S2-канон: peek 30 / expanded 44**; UI-блоки в коде требуют сверки с testid (→ prog19).
 - Тесты b113 s2/s2a/s2b — 21 runs, 0 failures ✅
 - Коммит: `43a8189`
 
-## 2026-06-30 — B1.13 prog14: double-swipe touch+pointer fix
 
-- **Корень бага:** Svelte `onpointerdown/up` в шаблоне + `addEventListener touchstart/end` в `$effect` — двойной вызов `collapseFromSwipe` за одно касание. Expanded→peek→hidden за одну гесту.
 - **Фикс:** флаг `gestureActive`; touch-обработчики блокируют pointer. Inline `onpointerdown/up/cancel` удалены из шаблона.
 - `CART_SHEET_BUILD=prog14`; тесты S2a/S2b/layout_gestures 21/21 ✅
 - Коммит: `9c43fdc`
 
 ## 2026-06-30 — B1.13 prog13: scroll 1 товар 100px → hidden
 
-- `handleCatalogScroll`: из peek при 1 товаре 100px → hidden (§ S2-канон)
 - Fly MCP prog12: свайпы touch OK; найден баг скролла 1-item
 
-## 2026-06-30 — B1.13 prog12: touch swipe fix + MCP канон
 
 - CartSheet: `$effect` вешает touch listeners когда `gestureZoneEl` готов (баг onMount)
 - gesture-zone всегда min-h-14 (hidden тоже)
 - Удалён мёртвый `cartSheetLayoutCache.js` (ссылался на удалённые layout-константы)
-- MCP `b113_s2a_s2b_rev2_mcp.mjs` — тесты по § S2-канон (peek после add, цепочка свайпов)
 - `CART_SHEET_BUILD=prog12`
 
 ## 2026-06-30 — B1.13 docs: единый канон S2 (Variant B)
 
 - § **B1.13-S2-канон** в `B1_13_shop_nav_profile_header.md` — единственный источник раскладки и жестов
 - Удалены § S2-prog5 и rev1 S2 (противоречащие таблицы layout/popup)
-- S2a/S2b scope и приёмка сверены с каноном (peek после add, hidden=чип)
 - JSON/README S2/S3/S4 — ссылка на S2-канон, убраны «головки» и старые жесты
 
 ## 2026-06-30 — B1.13 prog11: hidden chip видимый + build stamp Fly
@@ -550,30 +395,22 @@ T-Bank nonPCI возвращает RebillId **только в webhook/GetState**
 - hidden vh 14→20, gesture-zone min-h-8 в hidden
 - чип: pill «Корзина» + сумма + «+цена»
 - `data-cart-sheet-build=prog11` для верификации бандла на Fly
-- layout peek vertical / expanded horizontal — без изменений (канон prog10)
 
 ## 2026-06-29 — B1.13 prog10: канон layout + hidden chip (d408730)
 
-- **PEEK 2+** → вертикальный список (дефолт)
 - **EXPANDED 2+** → горизонтальные карточки 28vw
 - **HIDDEN** → чип с суммой по ТЗ (без шапок товаров)
 - Свайпы/скролл/1 товар — без изменений
 - Тесты b113_s2* обновлены под канон
 
-## 2026-06-29 — B1.13 prog9: swap peek/expanded layouts (c56b1c5)
 
 > ⚠️ **Не канон.** Ошибочный прогон; откачен **prog10**. Единственный источник раскладки — § **B1.13-S2-канon** в `B1_13_shop_nav_profile_header.md`.
 
-- PEEK 2+ → горизонтальные карточки (28vw) — **ошибка**
 - EXPANDED 2+ → вертикальный компактный список — **ошибка**
 
 ## 2026-06-29 — B1.13 prog8: финальный канон режимов (9177aed)
 
-- **PEEK** = дефолт при добавлении товара (было EXPANDED — ошибка)
 - **EXPANDED** = только 2+ товаров, всегда горизонтальные карточки (28vw)
-- **PEEK 2+** = вертикальный компактный список (имя + цена + ±)
-- **PEEK 1** = широкая горизонтальная карточка
-- **Свайпы:** hidden↑→peek, peek(2+)↑→expanded, expanded↓→peek, peek↓→hidden
 - Удалён `cartSheetExpandedLayout` / `EXPANDED_LAYOUT_*` — убрана лишняя сложность
 - Пороги скролла 100/200px по ТЗ заказчика
 
@@ -587,9 +424,7 @@ T-Bank nonPCI возвращает RebillId **только в webhook/GetState**
 - **vertical default:** `applyCartData` всегда сбрасывает layout → vertical; localStorage не делает горизонтальный default
 - **hidden heads:** `flex-row` горизонтальный ряд компактных верхушек (`w-11 h-9`), не широкие полосы
 - **gesture zone:** `min-h-14` (56px) — шире зона свайпа
-- **scroll:** 60px → peek, 130px → hidden (было 100/200, слишком много)
 
-## 2026-06-29 — B1.13 passive touch fix (a889249)
 
 - `touchstart`/`touchend` → `addEventListener({ passive: false })` в `onMount` через `bind:this`
 - Убраны `ontouchstart`/`ontouchend` из Svelte-шаблона (нельзя передать passive через атрибуты)
@@ -598,13 +433,11 @@ T-Bank nonPCI возвращает RebillId **только в webhook/GetState**
 ## 2026-06-29 — B1.13 flex layout bug fix (829764b)
 
 - **Диагноз MCP DevTools:** `gestureZone: false` — Fly держит старый бандл, прогон 5b не задеплоен
-- **Баг:** `h-[calc(100%-0.75rem)]` предполагал gesture-zone ~12px, но она стала `min-h-11`=44px → в hidden/peek контент переполнял контейнер и не был виден
 - **Фикс:** `flex flex-col overflow-hidden` на внешнем контейнере шита + `flex-1 min-h-0` на всех content-дивах (5 мест)
 - **Нужно:** `git push` → GitHub Actions Deploy to Fly → re-MCP
 
 ## 2026-06-24 — B1.13 прогон 5b: gesture-zone + cold load expanded
 
-- gesture-zone 44px, SWIPE 32px, localStorage не ломает дефолт на заходе
 - Тесты b113_s2* PASS · deploy → re-MCP
 
 ## 2026-06-24 — B1.13 прогон 5: канон положений поп-апа (layout + жесты)
@@ -612,7 +445,6 @@ T-Bank nonPCI возвращает RebillId **только в webhook/GetState**
 > ⚠️ **Устарело.** § S2-prog5 удалён; актуальный канон — § **B1.13-S2-канon** (2026-06-30).
 
 - **Док:** B1_13 § S2-prog5 — gap приёмки прогонов 1–4, таблицы mode×layout×жест
-- **Код:** `cartSheetExpandedLayout`, horizontal expanded, жесты 1 vs 2+, 1 товар без peek
 - **Тест:** b113_s2* — PASS · MCP скрипт обновлён
 - **Дальше:** Fly deploy · re-MCP · апрув
 
@@ -620,14 +452,10 @@ T-Bank nonPCI возвращает RebillId **только в webhook/GetState**
 
 > ⚠️ **Устарело.** Раскладка и hidden — только § **B1.13-S2-канон** (hidden = чип, не «головки»).
 
-- **Раскладка (история):** expanded (1=horizontal, 2+=vertical) · peek horizontal · hidden vertical heads
-- **Жесты:** `collapseFromSwipe` + свайп на drag-handle; каталог снова скроллится вне handle
 - **Тест:** `b113_s2_layout_gestures_test.rb` + b113_s2* — PASS
 - **Дальше:** redeploy · re-MCP · апрув · S4
 
-## 2026-06-27 — B1.13: Fly MCP S2a/S2b **14/14** (swipe fix)
 
-- **MCP:** swipe delta 72px + Pointer/Touch dispatch — **14/14 PASS**
 - **Код:** CartSheet pointer capture + touch-action none
 - **Дальше:** redeploy UX · апрув S2a/S2b
 
@@ -635,33 +463,26 @@ T-Bank nonPCI возвращает RebillId **только в webhook/GetState**
 
 - **MCP:** `b113_s2a_s2b_rev2_mcp.mjs` — 13/14 на Fly после deploy владельца
 - **Артефакт:** `b113_s2a_s2b_rev2_post_deploy_2026-06-27.json` + скрины
-- **Blocked:** S2b-03 swipe — pointer handlers в CartSheet (коммит) → redeploy + re-run
 - **Дальше:** redeploy → MCP 14/14 → апрув
 
 ## 2026-06-24 — B1.13-S2a прогон 3: сверка приёмки (с товаром)
 
-- **Дотянуто:** сумма в peek; константы layout/анимации S2a; `setCartSheetMode`
 - **Тест:** `b113_s2a_cart_sheet_acceptance_test.rb` + регрессия — PASS
 - **Не трогали:** Q-rev2 пустая корзина · deploy · MCP
 - **Дальше:** deploy + Fly MCP прогон 4
 
 ## 2026-06-24 — B1.13-S2b прогон 2: localStorage режима (Q-rev4)
 
-- **Код:** `cartSheetModeCache.js` + `onCatalogRouteChange` — peek/expanded/hidden при уходе на Избранное/Профиль и обратно
 - **Тест:** `b113_s2b_mode_persistence_test.rb` + регрессия S2b/S2 — PASS
 - **Не сделано:** deploy · Fly MCP (прогон 4)
 - **Дальше:** S2a сверка · deploy + MCP
 
 ## 2026-06-24 — B1.13-S2b прогон 1: скролл 100/200 px (Q-rev3)
 
-- **Код:** `cartSheetThresholds.js` + `cartSheetStore.js` — фиксированные пороги 100→peek, 200→hidden от якоря
 - **Тест:** `b113_s2b_scroll_thresholds_test.rb` · регрессия `b113_s2_cart_popup_test.rb` — PASS
 - **MCP скрипты:** scroll 100+100 px (деплой/Fly — прогон 4)
-- **Дальше:** S2b прогон 2 — localStorage режима peek/expanded
 
-## 2026-06-26 — B1.13: снят Q-rev6, канон peek S2a + S3-rev2
 
-- **B1_13:** удалён ложный конфликт Q-rev6; peek = сумма/+цена (S2a) + +/- (S3-rev2, код сдан)
 - **Дальше:** Q-rev2 → `go` S2a/S2b
 
 ## 2026-06-26 — B1.13 rev2 gate: ответы владельца Q-rev3, Q-rev4
@@ -681,7 +502,6 @@ T-Bank nonPCI возвращает RebillId **только в webhook/GetState**
 
 - **Deploy:** владелец 2026-06-26
 - **MCP:** `b113_s3_cart_controls_mcp.mjs` — 12 шагов rev2 на `coffeeos.fly.dev`
-- **Артефакт:** `b113_s3_rev2_post_deploy_2026-06-26.json` + скрины peek/expanded/hidden
 - **Хвост:** очередь bump в `cartSheetStore` — redeploy для стабильных rapid +/−
 - **Дальше:** апрув S3-rev2 · S2a/S2b
 
@@ -697,7 +517,6 @@ T-Bank nonPCI возвращает RebillId **только в webhook/GetState**
 ## 2026-06-25 — B1.13-S2 фаза 3: Fly MCP PASS 9/9 (post-deploy)
 
 - **Deploy:** владелец 2026-06-25
-- **MCP:** `b113_s2_cart_popup_mcp.mjs` — bottom bar 2 вкладки, CartSheet empty/expanded/peek/hidden, #/cart redirect, favorites state
 - **Артефакт:** `b113_s2_post_deploy_2026-06-25.json` + 5 скринов
 - **Дальше:** апрув заказчика S2 · `go` S3
 
@@ -714,7 +533,6 @@ T-Bank nonPCI возвращает RebillId **только в webhook/GetState**
 - **Тесты:** `b113_s2_cart_popup_test.rb` — bottom bar 2 вкладки, CartSheet, пороги, cart API
 - **S1:** `b113_s1_profile_header_test.rb` — убрана проверка вкладки «Корзина»
 - **Регрессия:** `test/integration/shop/` — 147 runs, 0 failures
-- **Фикс:** `order_status_acceptance_cbr_test.rb` — `push(\`/order/${orderId}\`)` после B1.12
 - **Дальше:** фаза 3 Fly MCP
 
 ## 2026-06-25 — B1.13: КАНОН bottom bar (2 вкладки, профиль в шапке) закрыт навсегда
@@ -730,91 +548,44 @@ T-Bank nonPCI возвращает RebillId **только в webhook/GetState**
 
 ## 2026-06-25 — B1.13-S3: управление товарами в поп-апе корзины
 
-- **UI:** `CartSheet.svelte` — peek +/-, expanded +/- Удалить, hidden chip миниатюра
 - **API:** `CartService#update_quantity!` — guard `MAX_ITEM_QUANTITY` (99)
 - **Тесты:** `b113_s3_cart_controls_test.rb` (5) + `cart_service_test` max qty
 - **MCP скрипт:** `bin/b113_s3_cart_controls_mcp.mjs`
-- **Макеты заказчика:** `b113_s3_customer_{peek,expanded,hidden_chip}_mode.png`
 - **Pre-deploy probe Fly:** `b113_s3_post_deploy_2026-06-25.json` — **FAIL** (step 02, нет testid на стенде) · скрин `b113_s3_post_deploy_expanded_2026-06-25.png`
 - **Дальше:** deploy → повтор MCP S3 PASS · `go` S4
 
-## 2026-06-25 — B1.12 rev2: RSA на Fly + MCP 10/10
 
-- **RSA:** `TBANK_RSA_PUBLIC_KEY` на Fly · `card_config` → `card_data_ready: true`
-- **MCP:** `b112_r3_fsm_mcp.mjs` — **10/10 PASS** (step 02 ok)
-- **Артефакт:** `b112_r3_fsm_ops_pass_2026-06-25.json` + скрины
-- **Дальше:** апрув заказчика на эпик B1.12 rev2
 
-## 2026-06-24 — B1.12 rev2 R3 фаза 3: deploy + Fly MCP + хвосты R2 (`c27eb7c`)
 
 - **Deploy:** владелец · стенд `coffeeos.fly.dev`
-- **MCP:** `b112_r3_fsm_mcp.mjs` — 9/10 PASS (UI/FSM); хвост `TBANK_RSA_PUBLIC_KEY` на Fly
-- **Доки:** `TBANK_RECURRENT.md`, `FLY_DEMO_STAND.md` — RSA secret, CardHolder, MCP команды
-- **Тесты:** `b112_r3_phase3_test.rb` — legacy iframe guard
-- **Артефакт:** `b112_r3_fsm_ops_pass_2026-06-24.json` + скрины
 - **Дальше:** апрув заказчика · `fly secrets set TBANK_RSA_PUBLIC_KEY`
 
-## 2026-06-24 — B1.12 rev2 R3 фаза 2: FSM 0–7 + one_click + 3DS iframe
 
-- **FSM:** `shopPayFsm.js` states 0–7, ErrorCode→5/6/7, `withMinLoaderMs(600)`
 - **UI:** `CheckoutPayButton` — синяя/зелёная/красная/серая, loader, shake State 5
-- **API:** one-click `POST /payments/one_click` (не legacy `/orders`)
-- **3DS:** `ThreeDsOverlay` + iframe ACS (`THREE_DS_FRAME_NAME`)
-- **NewCardSheet:** общий FSM через `onFsmChange`, без alert под кнопкой
-- **Тесты:** `b112_r3_fsm_test.rb` + регрессия — 32 runs, 0 failures
-- **Артефакт:** `b112_r3_phase2_fsm_2026-06-24.json`
 - **Дальше:** фаза 3 — Fly deploy + MCP
 
-## 2026-06-24 — B1.12 rev2 R3 фаза 1: UI «Способ оплаты» (8924)
 
-- **UI:** `PaymentMethodsSheet.svelte` — список карт, СБП disabled, «Новая карта», кнопка в шторке
 - **Checkout:** summary-ряд «Способ оплаты» · убран legacy `saved-card-block` и таб «Картой»
-- **FSM:** `shopPayFsm.js` State 0 + `resetPaymentFsm` при смене карты
-- **Тесты:** `b112_r3_payment_methods_test.rb` + регрессия checkout CBR/cleanup
-- **Артефакт:** `b112_r3_phase1_payment_methods_2026-06-24.json`
-- **Дальше:** фаза 2 — FSM 0–7 · one_click · 3DS overlay
 
-## 2026-06-24 — B1.12 rev2 R3: фаза 0 gate (Q-R2 + gap 8924)
 
-- **Решения:** Q-R2-1..3 закрыты в `B1_12_recurrent_payments.md` (nonPCI, тумблер on, макеты канон)
-- **Gap-анализ:** макет 8924 vs текущий `Checkout.svelte` перед кодом FSM
-- **Артефакт:** `b112_r3_phase0_gate_2026-06-24.json`
 - **Дальше:** `go` R3 код · deploy после R3
 
-## 2026-06-24 — B1.12 rev2 R2: кастомная форма карты + RSA
 
-- **UI:** `NewCardSheet.svelte` по макету 8925 — маски, Luhn, тумблер save_card
-- **Crypto:** `tbankCardEncrypt.js` (RSA PKCS#1) · `GET /payments/card_config`
 - **Checkout:** убран редирект на iframe/URL банка для новой карты
-- **Тесты:** 18 Rails + 6 node + vite build · артефакт `b112_r2_custom_card_ops_pass_2026-06-24.json`
 - **Дальше:** `go` R3 · deploy после R3
 
-## 2026-06-24 — B1.12 rev2 R1: nonPCI бэкенд (документ 1)
 
-- **API:** `POST /shop/api/payments/new_card` · `one_click` — Init+FinishAuthorize / Charge
-- **Адаптер:** `TbankAdapter#finish_authorize` · `TbankPaymentResult` · `charge_response` в recurrent
-- **Хранение:** `bank_card_id`, `card_expires_at`, `pan_display` в `mobile_payment_methods`
-- **Тесты:** 38 runs, 0 failures · артефакт `b112_r1_nonpci_ops_pass_2026-06-24.json`
-- **Дальше:** `go` R2 (кастомная форма + RSA, макет 8925)
 
-## 2026-06-24 — B1.12 rev2: workflow по документам (go R1 → R2 → R3)
 
 - **Правило:** один документ заказчика = один `go` = один R = commit/ops/стоп
-- **Доки:** `B1_12` прогресс 1a–3c · CHECKLIST C2c · JSON scope · HANDOFF · TBANK_RECURRENT
 - **Дальше:** Q-R2-1 → `go` R1
 
-## 2026-06-24 — B1.12 rev2: этап 0 docs (nonPCI ТЗ заказчика)
 
-- **ТЗ:** `B1_12_recurrent_payments.md` — ревизия v2: 3 задачи дословно, FSM 0–7, nonPCI
 - **Конфликты:** Q-R2-1..3 (ex Q1/Q5/Q6) — блокер до ответов владельца
-- **Артефакты:** `b112_revision2_stage0_scope_2026-06-24.json` · `b112_tbank_nonpci_review_2026-06-24.json`
-- **Runbook:** `TBANK_RECURRENT.md` — секция rev2 + nonPCI
 - **CHECKLIST:** C2a (docs) · C2b (legacy v1) · C2c (rev2 код)
 - **Дальше:** Q-R2-1..3 → `go` R1
 
-## 2026-06-24 — B1.12: макеты заказчика 1000008924 / 1000008925
 
-- **Артефакты:** `screenshots/1000008924.png` (R3 — способ оплаты + кнопка) · `1000008925.png` (R2 — форма новой карты)
 
 ## 2026-06-24 — ops: fly_deploy WSL (docker.sock + /mnt/c/)
 
@@ -949,12 +720,10 @@ T-Bank nonPCI возвращает RebillId **только в webhook/GetState**
 
 ## v1.238 — 2026-06-22 (B1.13-S3: макеты управления в поп-апе — 3 режима)
 
-- **Сохранено:** peek / expanded / hidden chip — +/- · Удалить · +цена.
 - **Не делали:** код S3 (после S2).
 
 ## v1.237 — 2026-06-22 (B1.13-S2: макеты поп-апа корзины — 4 скрина)
 
-- **Сохранено:** 4 PNG макетов заказчика (empty / expanded / peek / swipe-up).
 - **Анализ:** сейчас bottom bar 4 вкладки + `#/cart`; цель — CartSheet 3 состояния без вкладки «Корзина».
 - **Не делали:** код S2.
 
@@ -964,12 +733,8 @@ T-Bank nonPCI возвращает RebillId **только в webhook/GetState**
 - **Артефакты:** `b113_s1_catalog_before_2026-06-22.png` · `b113_s1_screenshot_baseline_2026-06-22.json`.
 - **Не делали:** код S1 · скрин bottom nav.
 
-## v1.235 — 2026-06-22 (B1.12-R6: one-click без банка — жёсткий блок + кэш карты)
 
 - **Баг (после deploy заказчика):** 2-я оплата — снова Т-Банк снизу; карта не в блоке «Сохранённая карта» → флоу как первая оплата.
-- **Причина:** карта не в `saved_cards` после 1-й оплаты (webhook/GetState lag) · `submitOneClick` имел fallback `redirectToBankPayment` · нет локального кэша карты между сессиями.
-- **Сделано:** убран банк из one-click (ошибка в кнопке) · API recurrent никогда не отдаёт `payment_url` · `shopSavedCardCache` после finalize · `saved_card` в ответе recurrent order.
-- **Тест:** b112 checkout/r2/r3/settle + saved_card_store + tbank_sync — **21 runs, 124 assertions, 0 failures**.
 - **Нужен:** повторный **deploy Fly** + real-card 1→2.
 
 
@@ -979,88 +744,53 @@ T-Bank nonPCI возвращает RebillId **только в webhook/GetState**
 - **Тест:** b112 checkout/r2/settle/r3 — 15 runs, 99 assertions, 0 failures.
 - **Не делали:** deploy Fly · MCP post-deploy.
 
-## v1.233 — 2026-06-21 (B1.12: one-click — полный фикс привязки и 2-й оплаты)
 
-- **Баг:** 2-я оплата снова iframe Т-Банка; карта не в `saved_cards`; race на кнопке «Оплатить».
-- **Сделано:** finalize всегда GetState + `saved_card` в ответе · Charge→sync · recurrent без `payment_iframe` · фронт: блок кнопки при загрузке карт, one-click только waitForOrderSettled.
-- **Тест:** b112 settle/r3/checkout/recurrent/sync — 17 runs, 105 assertions, 0 failures.
 - **Не делали:** deploy Fly · real-card E2E · апрув заказчика.
 
-## v1.232 — 2026-06-21 (B1.12: привязка карты — GetState sync + SavedCardStore fallback)
 
-- **Баг:** после 1-й оплаты RebillId не попадал в `mobile_payment_methods` (webhook без Pan / задержка); 2-я оплата — снова iframe банка.
-- **Сделано:** `TbankAdapter#get_payment_state` · `Payments::TbankPaymentSync` на `POST finalize` · `SavedCardStore` без обязательного Pan · retry `saved_cards` на checkout.
-- **Тест:** saved_card_store + tbank_payment_sync + b112_payment_settle_chain — 28 runs, 76 assertions, 0 failures.
 - **Не делали:** deploy Fly · MCP real-card E2E · апрув заказчика.
 
-## v1.231 — 2026-06-21 (B1.12-R4: Fly MCP post-deploy #2 после удаления `#/payment`)
 
 - **Deploy:** владелец · `75dc252` на coffeeos.fly.dev.
-- **Fly MCP:** tenant `2fdee1ac-…` — 11/11 PASS (inline checkout, stale `#/payment` без экрана, one-click).
-- **Тест:** b112 checkout single-screen + r3 one-click — 8/8 PASS local.
-- **Артефакт:** `b112_r4_single_screen_post_deploy_2026-06-21.json` + скрины (обновлены).
 - **Не делали:** апрув заказчика эпик · real-card E2E.
 
-## v1.230 — 2026-06-21 (B1.12: удалён роут `#/payment`)
 
 - **Сделано:** `Payment.svelte` удалён; маршрут `/payment` снят из `App.svelte` — оплата только inline на checkout.
-- **Тест:** `b112_checkout_single_screen_test`, `b112_payment_settle_chain`, checkout CBR/cleanup — 18 runs, 159 assertions, 0 failures.
 - **Не делали:** deploy на Fly, повторный MCP post-deploy, апрув заказчика.
 
-## v1.229 — 2026-06-21 (B1.12-R4: Fly MCP post-deploy single-screen checkout)
 
 - **Deploy:** владелец · `783b4ff` на coffeeos.fly.dev.
-- **Fly MCP:** tenant `2fdee1ac-…` — 11/11 PASS (inline checkout, legacy redirect, one-click без `#/payment`).
-- **Тест:** `b112_checkout_single_screen_test.rb` + `b112_r3_one_click_test.rb` — 8/8 PASS local.
-- **Скрипты:** `bin/b112_r4_single_screen_prep_fly.rb` · `bin/b112_r4_single_screen_mcp.mjs`.
-- **Артефакт:** `b112_r4_single_screen_post_deploy_2026-06-21.json` + скрины.
 - **Не делали:** апрув заказчика эпик · real-card E2E.
 
-## v1.228 — 2026-06-20 (B1.12-R4: single-screen checkout, убрали лишние экраны)
 
 - **Ошибка (не было сделано):** после R2/R3 оставались экраны Оформление → Оплата → iframe; `push("/payment")`.
 - **Стало:** inline iframe на `#/checkout`, кнопка со статусами, `#/payment` только redirect legacy.
-- **Тест:** `b112_checkout_single_screen_test.rb` + b112 suite 9/9 PASS local.
 - **Не делали:** Fly MCP post-deploy, апрув заказчика.
 
-## v1.227 — 2026-06-20 (B1.12 bug шаг 3: Fly MCP return-path post-deploy)
 
 - **Было:** fix `2b15578` локально; post-deploy repro не гоняли.
 - **Стало:** Fly MCP tenant `2fdee1ac-…` — immediate return → `#/order/:id` · poll+webhook → redirect · DevTools: POST finalize.
-- **Артефакт:** `b112_payment_step3_return_post_deploy_2026-06-20.json` + скрины · скрипты prep/mcp/trigger.
 - **Не делали:** real-card 3DS E2E (нужна карта заказчика).
 
-## v1.226 — 2026-06-20 (B1.12 bug шаг 3: 3DS return resume)
 
 - **Было:** polling+cable только при `phase=paying`; после 3DS return (`deepLinkRedirectCallback`) — intro без watch.
 - **Стало:** `payment_started` в session · `awaiting_settlement` + `beginSettlementWatch` + immediate finalize на return.
 - **deepLinkRedirectCallback:** полный redirect в банк (канон T-Bank); возврат через sessionStorage.
-- **Тест:** `b112_payment_settle_chain_test.rb` — 2/2, 19 assertions PASS.
 
-## v1.225 — 2026-06-20 (B1.12 bug: post-deploy MCP repro + ISSUES closed)
 
 - **Было:** баг 🔴 open — UI зависал на `#/payment` после webhook; fix `14cdf12` не на Fly.
 - **Стало:** deploy владельца · Fly MCP tenant `2fdee1ac-…` — callback→accepted→finalize `payment_settled` PASS · ISSUES **resolved**.
-- **Тест:** `b112_payment_settle_chain_test.rb` — 2/2 PASS (повтор).
-- **Артефакт:** `b112_payment_settle_post_deploy_2026-06-20.json` · скрипт `bin/b112_payment_settle_post_deploy_fly.rb`.
-- **Дальше:** апрув заказчика эпик B1.12; real-card smoke на tenant.
 
-## v1.224 — 2026-06-20 (B1.12 bug: шаг 2 цепочка settle)
 
 - **Было:** `finishSuccess()` только из `integration.js`; embed fallback без callback — зависание на форме Т-Банка.
 - **Стало:** `beginSettlementWatch()` — poll `POST /orders/:id/finalize` + cable `accepted`/`payment_settled` → `#/payment-result`.
-- **Тест:** `b112_payment_settle_chain_test.rb` — callback→accepted + grep Payment.svelte — 2/2 PASS.
 - **Не делали:** fly deploy, MCP repro tenant `2fdee1ac-…`.
 
-## v1.223 — 2026-06-20 (B1.12 bug: шаг 0–1 investigate tenant заказчика)
 
-- **Fly:** `bin/b112_customer_payment_investigate_fly.rb` — tenant `2fdee1ac-…`, R2 flags OK, 6 pending card orders.
 - **Likely repro:** order `acb7cc62…` 4.74₽ · payment `8704452356`.
 - **Следующий:** шаг 2 polling finalize (код не меняли).
 
-## v1.222 — 2026-06-19 (B1.12: репорт заказчика — оплата зависает после 3DS)
 
-- **Артефакт:** `b112_customer_payment_stuck_2026-06-19.json` + скрин tenant `2fdee1ac-…`.
 - **ISSUES:** 🔴 open — разбор в `agent_analysis`.
 
 ## v1.224 — 2026-06-21 (demo: открытые смены + Сб–Вс точка A)
@@ -1153,10 +883,7 @@ T-Bank nonPCI возвращает RebillId **только в webhook/GetState**
 - **Артефакт:** `b111_customer_answers_confirmed_2026-06-19.json`.
 - **Ops:** CBR, CHECKLIST, DEMO_FEEDBACK, HANDOFF, SESSION_STATE.
 
-## v1.211 — 2026-06-19 (B1.12: ответы Q1–Q7 — финальное подтверждение владельца)
 
-- **Q2/Q3/Q5/Q7:** дословные ответы владельца → `B1_12_recurrent_payments.md` (блок «больше не спрашивать»).
-- **Артефакт:** `b112_customer_answers_confirmed_2026-06-19.json`.
 - **Ops:** CBR, DEMO_FEEDBACK, `customer_tasks/README`, SESSION_STATE, HANDOFF.
 
 ## v1.210 — 2026-06-19 (Веха 1 закрыта — заочная приёмка)
@@ -1166,25 +893,12 @@ T-Bank nonPCI возвращает RebillId **только в webhook/GetState**
 - **Хвосты → В2:** QA 5.1 онбординг; `demo:seed` в release_command; полный MCP LIVE_DEMO §2–10.
 - **Ops:** `SESSION_STATE`, `HANDOFF`, `veha_1/README`, `PRACTICES.md`.
 
-## v1.209 — 2026-06-19 (B1.12-R3 Fly MCP post-deploy 8/8)
 
-- **MCP:** `bin/b112_r3_one_click_prep_fly.rb` + `bin/b112_r3_one_click_mcp.mjs` — checkout saved card + pay FSM на Fly.
-- **Артефакт:** `b112_r3_one_click_post_deploy_2026-06-19.json` + 2 скрина.
-- **B1.12:** R1–R3 код + Fly MCP закрыты; ждём апрув заказчика.
 
-## v1.208 — 2026-06-19 (B1.12-R3: оплата в 1 клик + стейт кнопки)
 
-- **Витрина:** saved card block, pay button FSM (idle/loading/success/error), one-click recurrent.
-- **API:** `saved_cards` по verified email; recurrent `client_order_uuid` idempotency.
-- **Тест:** `b112_r3_one_click_test.rb` — 4/4 PASS.
-- **Артефакт:** `b112_r3_one_click_ops_pass_2026-06-19.json` (local).
 - **Не в шаге:** fly deploy, Fly MCP R3 post-deploy — по апруву.
 
-## v1.207 — 2026-06-19 (B1.12-R2 Fly MCP post-deploy 6/6)
 
-- **MCP:** `bin/b112_r2_native_card_prep_fly.rb` + `bin/b112_r2_native_card_mcp.mjs` — 6/6 PASS на `coffeeos.fly.dev` (Neon).
-- **Артефакт:** `b112_r2_native_card_post_deploy_2026-06-19.json` + скрины intro/iframe.
-- **Ops:** CHECKLIST C2 R2, B1_12, DEMO_FEEDBACK, HANDOFF.
 - **Neon:** spending limit $15 включён владельцем в Console.
 
 ## v1.206 — 2026-06-19 (Neon Launch + Fly MPG удалён + deploy по апруву)
@@ -1205,39 +919,24 @@ T-Bank nonPCI возвращает RebillId **только в webhook/GetState**
 - **Fix:** Puma стартует при временной недоступности Postgres.
 - **Docs:** `FLY_DEMO_STAND.md` §3 db:prepare troubleshooting.
 
-## v1.203 — 2026-06-18 (B1.12-R2: web-фрейм + card_binding OPS_PASS local)
 
-- **API:** `card_binding` на card Init (Recurrent=Y).
 - **Витрина:** PaymentResult «Карта привязана / Оплачено»; Payment intro для привязки.
-- **Тест:** `b112_r2_payment_iframe_test.rb` PASS.
-- **Fly MCP:** blocked — `/shop` 500; артефакт `b112_r2_native_card_post_deploy_2026-06-18.json`.
 
-## v1.202 — 2026-06-18 (B1.12-R1: Fly MCP post-deploy 5/5)
 
-- **Fly MCP:** `bin/b112_r1_recurrent_prep_fly.rb` + `bin/b112_r1_recurrent_mcp.mjs` — saved_cards, recurrent path, card init regression.
-- **Артефакт:** `b112_r1_recurrent_post_deploy_2026-06-18.json` + screenshot.
 
-## v1.201 — 2026-06-18 (B1.12-R1: рекуррент бэкенд OPS_PASS)
 
-- **R1:** RebillId в `mobile_payment_methods`, Charge API, `GET saved_cards`, `saved_card_id` на orders.
 - **Тесты:** 8 R1 + regression §2.3 PASS.
-- **Артефакт:** `b112_r1_recurrent_ops_pass_2026-06-18.json`.
 
-## v1.200 — 2026-06-18 (B1.12: ответы Q2–Q7, все вопросы закрыты)
 
 - **Q2** все карты храним, главная = последняя успешная оплата.
-- **Q3** recurrent card only; СБП позже.
 - **Q5** сохранять после первой успешной оплаты.
 - **Q7** ошибки карты vs retry + идемпотентность.
 
-## v1.199 — 2026-06-18 (B1.12: ответы Q1, Q4, Q6)
 
 - **Q1** только web-фрейм · **Q4** verified email (B1.7) · **Q6** без макетов, стиль витрины.
 - Ждём: Q2, Q3, Q5, Q7.
 
-## v1.198 — 2026-06-18 (B1.12: этап 0 — ТЗ рекуррент / 1 клик)
 
-- **B1.12:** эпик R1–R3 · тексты заказчика дословно · `b112_stage0_scope_2026-06-18.json` · runbook `TBANK_RECURRENT.md` · код не начат.
 
 ## v1.197 — 2026-06-18 (B1.11: этап 0 — ТЗ режим работы точки)
 
@@ -2831,7 +2530,6 @@ T-Bank nonPCI возвращает RebillId **только в webhook/GetState**
 
 - Миграция `db/migrate/20260511183000_create_mobile_carts_and_payment_methods.rb`:
   - `mobile_carts`;
-  - `mobile_payment_methods`.
 
 ### Проверка
 

@@ -1,4 +1,4 @@
-# Фидбек заказчика после демо (В2)
+﻿# Фидбек заказчика после демо (В2)
 
 **Зачем:** очередь правок из PDF «Прогонка сценариев» заказчика (все разделы в файле ниже).
 
@@ -6,7 +6,6 @@
 
 **Сейчас (2026-07-07):** **B1.13-CR-BOTTOM-NAV** — код **`[x]`** локально · ждёт deploy + апрув A1.
 
-> **Архив B1.12:** строки ниже с iframe / «save без галочки» / v1 — **история**, не канон. Канон: [`B1_12_recurrent_payments.md`](customer_tasks/B1_12_recurrent_payments.md) (rev2, `mobile_payment_methods`).
 
 **Честно:** §1–3 в таблице ниже — **done** *(выборочно)*. §2.3 — **done** *(этапы 1–5, MCP)*.
 
@@ -28,35 +27,8 @@
 
 | Дата | Источник | Сценарий / экран | Суть | Статус | PR / коммит |
 |------|----------|------------------|------|--------|-------------|
-| 2026-07-13 | заказчик + MCP | `#/checkout` Card+ форма | Клавиатура: шторка выше + Pay видно; свайп вниз expanded+→peek | **done** · Fly **v354** · скрин | [mcp json](artifacts/demo-feedback/checkout_payment_mcp_step4_7_keyboard_swipe_fly_v354_2026-07-13.json) · `12a3c9f` |
-| 2026-07-13 | заказчик + MCP | `#/checkout` Card+ | Форма внутри шторки — корзина/thumbs не пропадают | **done** · Fly **v353/v354** | [step4 cart](artifacts/demo-feedback/checkout_payment_mcp_step4_cart_keep_fly_v353_2026-07-13.json) |
-| 2026-07-10 | MCP browser | `#/checkout` vs s01–s07 | Fly v341 ≠ идеал заказчика (s02/s03 FAIL, OTP) | **open** · ждёт deploy фиксов | [mcp compare](artifacts/demo-feedback/checkout_payment_mcp_visual_compare_2026-07-10.json) |
-| 2026-07-10 | владелец | checkout s04 3DS | Канон: **ACS банка**, не SMS-keypad из макета s04 | **done** · wontfix mock keypad | ТЗ customer_tasks · NewCardSheet+ThreeDsOverlay |
-| 2026-07-10 | MCP visual | `#/checkout` vs s01–s07 | Fly ≠ макеты; peek/footer фикс в коде; s04 ACS accepted | **in_progress** · ждёт `go` deploy | [visual compare](artifacts/demo-feedback/checkout_payment_visual_compare_fly_v341_2026-07-10.json) |
-| 2026-07-10 | MCP Fly v341 | `#/checkout` peek sheet | Peek на стенде; OTP перекрыт peek 42vh | **partial** · фикс vh в коде · ждёт deploy | [mcp json](artifacts/demo-feedback/checkout_payment_sheet_mcp_fly_v341_2026-07-10.json) |
-| 2026-07-10 | `/review` checkout sheet | `#/checkout` peek/pay | Wiring → real B1.12 (NewCardSheet/ACS); mock 3DS убран; E7 delete API отложено | **готово к deploy** · ждёт живую оплату | ТЗ customer_tasks · shop 293 PASS |
-| 2026-07-04 | заказчик B1.12 приёмка | `#/checkout` новая карта | Тумблер on → оплата OK → на 2-м заказе карты нет | **fixed на Fly v328** · ждёт A1 живая оплата | [B1.12-BUG-SAVE](customer_tasks/B1_12_recurrent_payments.md) · [MCP](artifacts/demo-feedback/b112_bug_save_card_mcp_0704_2026.json) · ISSUES 🔴 |
-| 2026-06-24 | заказчик B1.12 rev2 | nonPCI / макеты 8924–8925 | Новое ТЗ: кастомная карта + RSA + FSM 0–7; конфликты Q1/Q5/Q6 | **done** *(код R1–R3)* | [b112_revision2_stage0_scope_2026-06-24.json](artifacts/demo-feedback/b112_revision2_stage0_scope_2026-06-24.json) |
-| 2026-06-19 | владелец B1.12 | Q2–Q7 | Ответы рекуррент: все карты, СБП позже, save после 1-й оплаты, ошибки UI | **done** | [b112_customer_answers_confirmed_2026-06-19.json](artifacts/demo-feedback/b112_customer_answers_confirmed_2026-06-19.json) |
-| 2026-06-22 | B1.12 баг post-deploy | 2-я оплата снова Т-Банк | R6: one-click без банка + shopSavedCardCache + API guard | **done** *(local)* | ISSUES 2026-06-22 · v1.235 |
-| 2026-06-21 | B1.12-R5 UX | iframe банка снизу | редирект на Т-Банк, этапы в кнопке | **done** *(local)* | commit v1.234 |
-| 2026-06-21 | B1.12 баг v2 | 2-я оплата / iframe | one-click: GetState backfill + recurrent без iframe + race fix | **done** *(local)* | ISSUES 2026-06-21 |
-| 2026-06-21 | B1.12 баг | 2-я оплата / CVC | карта не привязалась: GetState sync + SavedCardStore fallback | **done** *(local)* | ISSUES 2026-06-21 |
-| 2026-06-21 | B1.12-R4 cleanup | `#/payment` route | `Payment.svelte` удалён, оплата только checkout | **done** *(код)* | commit v1.230 |
-| 2026-06-21 | B1.12-R4 UX | `#/checkout` Fly post-deploy #2 | 11/11 после удаления `#/payment` (`75dc252`) | **done** *(Fly MCP)* | [b112_r4_single_screen_post_deploy_2026-06-21.json](artifacts/demo-feedback/b112_r4_single_screen_post_deploy_2026-06-21.json) |
-| 2026-06-20 | B1.12-R4 UX | 3 экрана оплаты | single-screen checkout + кнопка статусов | **done** *(local)* | [b112_checkout_single_screen_2026-06-20.json](artifacts/demo-feedback/b112_checkout_single_screen_2026-06-20.json) |
-| 2026-06-19 | заказчик B1.12 | `#/payment` после 3DS | оплата не завершается, UI завис на банке | **done** *(fix 14cdf12)* | [b112_customer_payment_stuck_2026-06-19.json](artifacts/demo-feedback/b112_customer_payment_stuck_2026-06-19.json) |
 | 2026-06-25 | B1.13 rev2 | навигация + поп-ап | 4 дока заказчика → S1-R1/S2a/S2b/S3-rev2 | **docs done** · код rev2 `[ ]` | см. коммит rev2 docs |
 | 2026-06-25 | B1.13-S3 rev1 | поп-ап корзины | peek +/- (старое ТЗ) | superseded → S3-rev2 | `6fcc9d8` |
-| 2026-06-25 | B1.12 rev2 | `#/checkout` Fly | RSA Fly + MCP **10/10** (step 02 ok) | **done** *(Fly MCP)* | [b112_r3_fsm_ops_pass_2026-06-25.json](artifacts/demo-feedback/b112_r3_fsm_ops_pass_2026-06-25.json) |
-| 2026-06-24 | B1.12-R3 rev2 | `#/checkout` Fly | PaymentMethodsSheet + FSM 0–7 MCP 9/10 | **done** *(Fly MCP post-deploy)* | [b112_r3_fsm_ops_pass_2026-06-24.json](artifacts/demo-feedback/b112_r3_fsm_ops_pass_2026-06-24.json) |
-| 2026-06-19 | B1.12-R3 | `#/checkout` Fly | saved card + FSM 8/8 | **done** *(Fly MCP v1)* | [b112_r3_one_click_post_deploy_2026-06-19.json](artifacts/demo-feedback/b112_r3_one_click_post_deploy_2026-06-19.json) |
-| 2026-06-19 | B1.12-R3 | `#/checkout` 1 клик | saved card + pay button FSM local | **done** *(OPS_PASS local)* | [b112_r3_one_click_ops_pass_2026-06-19.json](artifacts/demo-feedback/b112_r3_one_click_ops_pass_2026-06-19.json) |
-| 2026-06-18 | B1.12-R2 | `#/payment` iframe | web-фрейм + card_binding local | **done** *(OPS_PASS local)* | [b112_r2_native_card_ops_pass_2026-06-18.json](artifacts/demo-feedback/b112_r2_native_card_ops_pass_2026-06-18.json) |
-| 2026-06-18 | B1.12-R1 | shop API / callback | Рекуррент: RebillId + Charge | **done** *(OPS_PASS local)* | [b112_r1_recurrent_ops_pass_2026-06-18.json](artifacts/demo-feedback/b112_r1_recurrent_ops_pass_2026-06-18.json) |
-| 2026-06-18 | заказчик B1.12 | `#/payment` / checkout | Рекуррент Т-Банк эпик (R1–R3) | **done** *(код+баг fix, апрув `[ ]`)* | [b112_stage0_scope_2026-06-18.json](artifacts/demo-feedback/b112_stage0_scope_2026-06-18.json) |
-| 2026-07-13 | заказчик checkout | Card+ | После «Картой +» **пропадала корзина** (оверлей) → форма **внутри expanded+** thumbs+цена | **done** *(Fly v353 MCP)* | [checkout_payment_mcp_step4_cart_keep_fly_v353…](artifacts/demo-feedback/checkout_payment_mcp_step4_cart_keep_fly_v353_2026-07-13.json) |
-| 2026-07-13 | заказчик B1.13 | cart peek sheet | Шторка корзины «висит в воздухе» (bottom 3.5rem после снятия бара) → **прижать к низу** `CART_SHEET_BOTTOM_REM=0` | **done** *(код, deploy ждёт go)* | B1_13 · build `prog21` |
 | 2026-07-07 | владелец/заказчик B1.13 | O2 | **O2:** только убрать бар; peek без изменений; рекомендации — backlog | **gate_closed** | [b113_cr_bottom_nav_answers_2026-07-07.json](artifacts/demo-feedback/b113_cr_bottom_nav_answers_2026-07-07.json) |
 | 2026-07-06 | заказчик B1.13 | shop bottom bar | **B1.13-CR-BOTTOM-NAV:** убрать «Каталог» и «Избранное» из нижнего бара — **конфликт** с каноном S1-R1 (2 вкладки апрув 2026-07-01) | **scope_change** | [b113_cr_bottom_nav_customer_2026-07-06.json](artifacts/demo-feedback/b113_cr_bottom_nav_customer_2026-07-06.json) · [B1_13](customer_tasks/B1_13_shop_nav_profile_header.md) |
 | 2026-07-05 | batch апрув | трекер заказчика | B1.4 · B2-S1 · B1.11 · B1.14-client · B1.13-S1 — «проверено» | **done** | [customer_verified_batch_2026-07-05.json](artifacts/demo-feedback/customer_verified_batch_2026-07-05.json) |

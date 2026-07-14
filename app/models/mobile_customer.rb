@@ -1,6 +1,5 @@
 class MobileCustomer < ApplicationRecord
   has_many :mobile_sessions, dependent: :destroy
-  has_many :mobile_payment_methods, foreign_key: :customer_id, dependent: :destroy, inverse_of: :customer
   has_many :orders, dependent: :nullify
   has_many :push_notifications, foreign_key: :customer_id, dependent: :destroy
 

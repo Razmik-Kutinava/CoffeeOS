@@ -1,4 +1,4 @@
-# Веха 2 — чеклист закрытия «Scale & Stability»
+﻿# Веха 2 — чеклист закрытия «Scale & Stability»
 
 **Цель:** сеть точек **из коробки**, реальная оплата на клиентских каналах, киоск, связные админки.
 
@@ -105,42 +105,15 @@
 - [x] Manager: pending payments при закрытии смены — добавлен блок «Онлайн-платежи (витрина, за 24ч)» в CloseWizard; онлайн-заказы не блокируют, показываются информационно *(2026-05-28)*
 - [x] Тесты: `TbankAdapter` (11) + `TbankController` (8) — 539 runs, 0 failures *(2026-05-28)*
 
-## C2. Рекуррент и 1 клик — B1.12 (надстройка §2.3)
 
-> ТЗ: [`B1_12_recurrent_payments.md`](requirements/customer_tasks/B1_12_recurrent_payments.md) · runbook: [`TBANK_RECURRENT.md`](runbooks/TBANK_RECURRENT.md)  
-> **Канон:** rev2 (2026-06-24) — nonPCI + тумблер `save_card` + FSM · таблица **`mobile_payment_methods`** (не UserCards)
 
-### C2a. Этап 0 rev2 (docs) — закрыт
+## C2–C3. Сохранение карты / checkout card
 
-- [x] **B1.12 rev2 ТЗ** — дословные тексты заказчика + Q-R2-1..3
-- [x] **Макеты** — `screenshots/1000008924.png`, `1000008925.png`
-- [x] **Сверка Т-Банк nonPCI** — `b112_tbank_nonpci_review_2026-06-24.json`
-- [x] **JSON этап 0** — `b112_revision2_stage0_scope_2026-06-24.json`
-- [x] **Ответы владельца** Q-R2-1..3 · **`go` R1–R3** выполнены
-
-### C2b. Legacy v1 (архив, 2026-06-18…21)
-
-- [x] **B1.12 этап 0 v1** — `b112_stage0_scope_2026-06-18.json` *(не канон)*
-- [x] **B1.12-R1…R3 v1** — iframe / webhook *(заменено rev2)*
-
-### C2c. Реализация rev2 — код закрыт
-
-- [x] **Q-R2-1..3** · **`go` R1 / R2 / R3**
-- [x] **B1.12-R1 rev2** — FinishAuthorize, `mobile_payment_methods`, 3DS proxy, ErrorCode
-- [x] **B1.12-R2 rev2** — кастомная форма + RSA (макет 8925)
-- [x] **B1.12-R3 rev2** — FSM 8924 + Fly MCP **10/10** · RSA Fly `[x]`
-- [ ] **Приёмка / B1.12-BUG-SAVE:** карта сохраняется после 1-й оплаты (тумблер on) → видна на 2-м заказе · чеклист D1–A1 в [`B1_12_recurrent_payments.md`](requirements/customer_tasks/B1_12_recurrent_payments.md)
-- [ ] Апрув заказчика B1.12 rev2 (эпик целиком)
-
-## C3. Выбор способа оплаты / прикрепление карты (checkout)
-
-> ТЗ: [`Выбор способа оплаты и прикрепление банковской карты на экране оформления заказа.md`](requirements/customer_tasks/Выбор%20способа%20оплаты%20и%20прикрепление%20банковской%20карты%20на%20экране%20оформления%20заказа.md) · макеты: `artifacts/checkout_payment_method_card/screenshots/` · API: B1.12
-
-### C3a. Этап 0 (docs) — подготовка
-
-- [x] **ТЗ** — customer_tasks (Gherkin peek / expanded / expanded+)
-- [x] **7 PNG** — `artifacts/checkout_payment_method_card/screenshots/s01–s07`
-- [ ] **Реализация** — после `go` (чистый лист; старый sheet-код удалён 2026-07-10)
+> **WIPE 2026-07-14:** старые ТЗ и код снесены. Чистый лист.
+>
+> Канон: [\customer_tasks/Исправление сохранения карты в UserCards после успешной оплаты.md\](requirements/customer_tasks/Исправление%20сохранения%20карты%20в%20UserCards%20после%20успешной%20оплаты.md)
+>
+> - [ ] Реализация строго по новому ТЗ (после \go\)
 
 ---
 
