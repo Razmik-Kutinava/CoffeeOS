@@ -1,5 +1,12 @@
 ﻿# CHANGELOG
 
+## 2026-07-14 — feat(shop): Шаг 1 — форма новой карты (маска, Луна, save_card)
+
+- Lib: `app/frontend/lib/shopNewCardForm.js` — PAN маска/Luhn, ММ/ГГ автослэш, CVV, `save_card: true`, `isPayEnabled`, `formNetworkSnapshot` без открытого PAN/CVV.
+- UI: `app/frontend/components/NewCardForm.svelte` (макет 1000008924).
+- Тест: `shop_new_card_form_step1_test.rb` — **12 runs, 99 assertions, 0 fail** (Node ESM unit + File.read UI).
+- Vite build PASS. ТЗ Шаг 1 `[x]`. Дальше: Шаг 2 по `go`.
+
 ## 2026-07-14 — test(wipe): регрессия после сноса — PASS
 
 - Boot не зависал: `initialize` ~26 с (локально медленно, не hang).

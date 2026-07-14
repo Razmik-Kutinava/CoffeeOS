@@ -2,7 +2,7 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-14 (WIPE — сохранение карты / checkout card: чистый лист)  
+**Дата:** 2026-07-14 (UserCards / save_card — Шаг 1 done)  
 **Веха 1:** **закрыта** 2026-06-19.  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
 **§2.3 оплата витрина (Init→payment_url→callback):** **done** — базовый redirect на банк остаётся.
@@ -11,10 +11,18 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **UserCards / save_card** | WIPE done · канон = новое ТЗ | ждать **go** на реализацию заново |
+| **UserCards / save_card** | **Шаг 1 [x]** форма 1000008924 (lib+UI+тесты) | **Шаг 2** — оплата + запись UserCards (`go`) |
 | **B1.13 CR-BOTTOM-NAV** | бар убран · cart BOTTOM_REM=0 код [x] | **go deploy** · A1 апрув |
 | **B1.14 адрес в шапке** | **B1.14-3d** index map [x] | deploy · B1.14-4 cart |
 | **Product card peek cart** | S1–S7 код [x] · MCP Fly [ ] | апрув заказчика |
+
+### Сессия 2026-07-14 (Шаг 1 — форма новой карты)
+
+- TDD: red → green · `shop_new_card_form_step1_test.rb` **12 runs, 99 assertions, 0 fail**.
+- Код: `app/frontend/lib/shopNewCardForm.js` · `app/frontend/components/NewCardForm.svelte`.
+- Vite build PASS (tsc в проекте нет — JS/Svelte).
+- ТЗ: Gherkin Шаг 1 отмечен `[x]` + Было/Стало.
+- **Стоп:** ждать **`go`** на **Шаг 2**.
 
 ### Сессия 2026-07-14 (WIPE)
 
@@ -26,6 +34,7 @@
 
 
 ### Сессия 2026-07-13 (B1.13 — cart sheet прижат к низу)
+
 
 - Жалоба: peek корзины «висит в воздухе» (остаток `bottom: 3.5rem` под снятый бар).
 - Фикс: `CART_SHEET_BOTTOM_REM=0`, build `prog21`.
