@@ -22,6 +22,11 @@
     shopIsOpenForPay,
     subscribeOperatingHours
   } from "../lib/shopOperatingHours.js"
+  import {
+    createNewCardFormState,
+    isPayEnabled as isNewCardPayEnabled
+  } from "../lib/shopNewCardForm.js"
+  import PaymentMethodsSheet from "../components/PaymentMethodsSheet.svelte"
 
   let name = $state("")
   let email = $state("")
@@ -38,9 +43,23 @@
   let editContact = $state(true)
   let operatingHours = $state(getOperatingHours())
 
+  // Шаг 3: экран выбора карт (1000008925)
+  let paymentSheetOpen = $state(false)
+  let savedCards = $state([])
+  let cardsLoading = $state(false)
+  let selectedCardId = $state(null)
+  let selectionMode = $state("saved_card") // saved_card | new_card
+  let newCardState = $state(createNewCardFormState())
+
   const canSendCode = $derived(isValidEmail(email) && !sendingCode)
   const canPay = $derived(
     isValidEmail(email) && emailVerified && !submitting && shopIsOpenForPay()
+  )
+  const sheetCanPay = $derived(
+    canPay &&
+      (selectionMode === "saved_card"
+        ? !!selectedCardId
+        : isNewCardPayEnabled(newCardState))
   )
 
   onMount(() => {
@@ -92,13 +111,44 @@
     }
   })
 
-  function selectPayment(val) {
+  async function loadSavedCards() {
+    if (!isValidEmail(email) || !emailVerified) {
+      savedCards = []
+      return
+    }
+    cardsLoading = true
+    try {
+      const q = encodeURIComponent(email.trim().toLowerCase())
+      const res = await api(`/user/cards?email=${q}`)
+      savedCards = Array.isArray(res?.cards) ? res.cards : []
+      const primary = res?.primary
+      if (primary?.id) {
+        selectedCardId = primary.id
+        selectionMode = "saved_card"
+      } else if (savedCards[0]?.id) {
+        selectedCardId = savedCards[0].id
+        selectionMode = "saved_card"
+      } else {
+        selectedCardId = null
+      }
+    } catch {
+      savedCards = []
+    } finally {
+      cardsLoading = false
+    }
+  }
+
+  async function selectPayment(val) {
     if (val === "sbp") {
       sbpNotice = true
       return
     }
     sbpNotice = false
     payment_method = val
+    if (val === "card" && emailVerified) {
+      paymentSheetOpen = true
+      await loadSavedCards()
+    }
   }
 
   function onEmailInput() {
@@ -153,6 +203,17 @@
     } finally {
       verifyingCode = false
     }
+  }
+
+  function onSelectCard(card) {
+    selectionMode = "saved_card"
+    selectedCardId = card.id
+  }
+
+  function onSelectNewCard() {
+    selectionMode = "new_card"
+    selectedCardId = null
+    newCardState = createNewCardFormState()
   }
 
   async function submit() {
@@ -212,6 +273,13 @@
     } finally {
       if (!redirecting) submitting = false
     }
+  }
+
+  async function onSheetPay() {
+    if (!sheetCanPay) return
+    paymentSheetOpen = false
+    // Шаг 4 — charge по card_id; пока базовый submit (redirect).
+    await submit()
   }
 </script>
 
@@ -339,8 +407,22 @@
     type="button"
     class="w-full rounded-xl bg-[#ff8c42] py-4 text-lg font-semibold text-black disabled:opacity-50"
     disabled={!canPay}
-    onclick={submit}
+    onclick={() => selectPayment("card")}
   >
     {submitting ? "Идёт оплата…" : "Оплатить →"}
   </button>
+
+  <PaymentMethodsSheet
+    open={paymentSheetOpen}
+    cards={savedCards}
+    loading={cardsLoading}
+    {selectedCardId}
+    {selectionMode}
+    canPay={sheetCanPay}
+    bind:newCardState
+    onClose={() => (paymentSheetOpen = false)}
+    {onSelectCard}
+    {onSelectNewCard}
+    onPay={onSheetPay}
+  />
 </div>

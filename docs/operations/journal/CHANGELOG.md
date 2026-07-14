@@ -1,5 +1,12 @@
 ﻿# CHANGELOG
 
+## 2026-07-14 — feat(shop): Шаг 3 — список сохранённых карт (1000008925)
+
+- API: `GET /shop/api/user/cards` (+ filter expired by exp_date).
+- UI: `PaymentMethodsSheet.svelte` + `paymentMethodLabels.js` («МИР Карта *XXXX»).
+- Checkout: открывает sheet, грузит cards, «Новая карта» → NewCardForm, Pay при выборе.
+- Тесты step1–3 + CBR: **35 runs, 0 fail**. Vite build PASS. Дальше: Шаг 4 Charge.
+
 ## 2026-07-14 — feat(shop): Шаг 2 — Init→FinishAuthorize→UserCards (save_card)
 
 - `TbankAdapter#finish_authorize` → `/FinishAuthorize` с CardData.

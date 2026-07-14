@@ -185,6 +185,7 @@ Rails.application.routes.draw do
       post "orders", to: "orders#create"
       post "payments/new_card", to: "payments#new_card"
       get "payments/card_config", to: "payments#card_config"
+      get "user/cards", to: "user_cards#index"
       get "orders/history", to: "orders#history"
       post "session/reconnect", to: "session#reconnect"
       post "orders/:id/abandon", to: "orders#abandon"

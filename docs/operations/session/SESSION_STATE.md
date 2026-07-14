@@ -2,7 +2,7 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-14 (UserCards / save_card — Шаг 2 done)  
+**Дата:** 2026-07-14 (UserCards / save_card — Шаг 3 done)  
 **Веха 1:** **закрыта** 2026-06-19.  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
 **§2.3 оплата витрина (Init→payment_url→callback):** **done** — базовый redirect на банк остаётся.
@@ -11,10 +11,16 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **UserCards / save_card** | **Шаг 1–2 [x]** | **Шаг 3** — список карт GET + UI 1000008925 (`go`) |
+| **UserCards / save_card** | **Шаг 1–3 [x]** | **Шаг 4** — 1 клик Charge (`go`) |
 | **B1.13 CR-BOTTOM-NAV** | бар убран · cart BOTTOM_REM=0 код [x] | **go deploy** · A1 апрув |
 | **B1.14 адрес в шапке** | **B1.14-3d** index map [x] | deploy · B1.14-4 cart |
 | **Product card peek cart** | S1–S7 код [x] · MCP Fly [ ] | апрув заказчика |
+
+### Сессия 2026-07-14 (Шаг 3 — список карт 1000008925)
+
+- `GET /shop/api/user/cards` · filter expired · `PaymentMethodsSheet` · labels · Checkout wiring.
+- Тесты step1–3 + CBR: **35 runs, 246 assertions, 0 fail**. Vite build PASS.
+- **Стоп:** ждать **`go`** на **Шаг 4**.
 
 ### Сессия 2026-07-14 (Шаг 2 — Init→FinishAuthorize→UserCards)
 
@@ -43,6 +49,7 @@
 
 
 ### Сессия 2026-07-13 (B1.13 — cart sheet прижат к низу)
+
 
 
 
