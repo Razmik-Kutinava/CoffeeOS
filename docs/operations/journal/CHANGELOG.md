@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-07-15 — test(shop): Шаг 6 — save_card=false не пишет UserCards
+
+- Тест: `shop_save_card_false_step6_test` — CONFIRMED без записи; Init `recurrent:false`; GET без новой карты.
+- Checkout/toggle уже передавали `save_card`; комментарий в `NewCardPaymentService`.
+- Gherkin S1–S6 `[x]`. Регрессия step1–6 + CBR: **47 runs, 0 fail**. Vite PASS.
+
 ## 2026-07-15 — feat(shop): Шаг 5 — вторая карта (RSA new_card, без дублей)
 
 - Checkout: «Новая карта» → `card_config` + `encryptCardPayload` → `POST payments/new_card` + reload list.

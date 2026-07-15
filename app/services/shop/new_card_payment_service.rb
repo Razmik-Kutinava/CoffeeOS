@@ -94,6 +94,7 @@ module Shop
         note: "FinishAuthorize CONFIRMED"
       ).call!
       order.reload
+      # Шаг 6: save_card=false — UserCards НЕ создаём, даже если банк вернул RebillId.
       if save_card
         if raw["RebillId"].to_s.present?
           Payments::SavedCardStore.persist_from_tbank!(payment: payment.reload, payload: raw)
