@@ -11,7 +11,7 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **UserCards / save_card** | S1–S6 + extremes + **FSM/3DS [x]** | deploy · MCP UI · апрув |
+| **UserCards / save_card** | S1–S6 + extremes + **FSM/3DS [x]** · deploy **[x]** · MCP **[x]** | **приёмка заказчика** |
 | **B1.13 CR-BOTTOM-NAV** | бар убран · cart BOTTOM_REM=0 код [x] | **go deploy** · A1 апрув |
 | **B1.14 адрес в шапке** | **B1.14-3d** index map [x] | deploy · B1.14-4 cart |
 | **Product card peek cart** | S1–S7 код [x] · MCP Fly [ ] | апрув заказчика |
@@ -21,7 +21,8 @@
 - `shopPayFsm` + `CheckoutPayButton` + `ThreeDsOverlay` + `shopPaySettle`.
 - Close 3DS → CLIENT_ERROR «Отказ: смените карту»; Net Error State 7.
 - Тесты FSM+extremes zone **30 PASS**. Vite PASS.
-- Дальше: deploy + MCP browser.
+- Deploy `25b1c6a` OK. MCP: sheet empty + NewCard + FSM Default blue «Оплатить».
+- Дальше: **приёмка заказчика**.
 
 ### Сессия 2026-07-15 (UserCards extremes)
 

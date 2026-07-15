@@ -12,10 +12,10 @@
 | WIPE | **done** · не восстанавливать старое из git |
 | **Шаг 1–6** Gherkin | **`[x]`** |
 | **Extremes + FSM 0–7 / 3DS** | **`[x]`** webhook · soft DB · Net Error · Client Error overlay |
-| Deploy Fly | in flight после коммита FSM |
-| MCP browser | следующий шаг после deploy |
+| Deploy Fly | **`[x]`** `25b1c6a` → coffeeos.fly.dev |
+| MCP browser | **`[x]`** sheet: empty list + NewCard form + FSM Default blue «Оплатить»; `/up` 200 |
 | UserCards storage | `mobile_payment_methods` |
-| **Следующий шаг** | deploy → MCP UI → **апрув заказчика** |
+| **Следующий шаг** | **приёмка / апрув заказчика** |
 
 ### WIPE 2026-07-14 — сохранение карты / checkout card UX
 

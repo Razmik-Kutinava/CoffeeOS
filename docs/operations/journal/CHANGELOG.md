@@ -5,6 +5,7 @@
 - `shopPayFsm.js` + `CheckoutPayButton` + `ThreeDsOverlay` + settle poll.
 - Checkout/sheet: Connecting→Processing→3DS→Success; close 3DS → «Отказ: смените карту»; Net Error State 7.
 - Тесты: `shop_pay_fsm_3ds_test` + extremes **30 runs PASS**. Vite PASS.
+- Deploy Fly `25b1c6a` OK; MCP sheet/NewCard/FSM Default verified; bundle has Client/Net/3DS labels.
 
 ## 2026-07-15 — feat(shop): UserCards extremes (webhook upsert, soft DB fail, Net Error)
 
