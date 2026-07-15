@@ -2,7 +2,7 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-15 (checkout: шторка+заказ по эталону)  
+**Дата:** 2026-07-15 (UserCards review fixes БАГ-1/2/3)  
 **Веха 1:** **закрыта** 2026-06-19.  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
 **§2.3 оплата витрина (Init→payment_url→callback):** **done** — базовый redirect на банк остаётся.
@@ -11,11 +11,19 @@
 
 | Сейчас | Дальше |
 |--------|--------|
+| **UserCards review fixes** | БАГ-1/2/3 [x] · step1–6+review **50 PASS** | **`go`** → push/deploy + повторный review |
 | **Checkout CartSheet UX** | код [x] · тесты PASS · **deploy [ ]** | **`go`** → push/deploy + MCP |
-| **UserCards / save_card** | S1–S6 + FSM [x] · шторка на checkout [x] | MCP Fly после deploy · апрув |
 | **B1.13 CR-BOTTOM-NAV** | бар убран · cart BOTTOM_REM=0 · catalog+checkout | A1 апрув [ ] |
 | **B1.14 адрес в шапке** | **B1.14-3d** index map [x] | deploy · B1.14-4 cart |
 | **Product card peek cart** | S1–S7 код [x] · MCP Fly [ ] | апрув заказчика |
+
+### Сессия 2026-07-15 (UserCards review: БАГ-1/2/3)
+
+- **БАГ-1:** `provider_data["save_card"]` + `SavedCardStore.allowed_for?` в webhook/GetState/call!.
+- **БАГ-2:** `loadSavedCardsWithRetry` после 3DS; тумблер OFF только если список пуст.
+- **БАГ-3:** brand BIN не по last4-only (`*5953` → CARD).
+- Тесты: step1–6 + extremes + `shop_usercards_review_fixes` — **50 runs, 354 assertions, 0 fail**.
+- **Стоп:** ждать **`go`** на push/deploy / повторный `/review`.
 
 ### Сессия 2026-07-15 (go: шторка+заказ на оформлении)
 

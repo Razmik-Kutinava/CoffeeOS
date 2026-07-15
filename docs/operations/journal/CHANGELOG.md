@@ -1,5 +1,13 @@
 ﻿# CHANGELOG
 
+## 2026-07-15 — fix(shop): UserCards review БАГ-1/2/3 (save_card gate + 3DS list)
+
+- `SavedCardStore.allowed_for?` + intent `provider_data["save_card"]` (NewCardPaymentService).
+- Webhook / GetState не пишут карту при `save_card=false` (Шаг 6).
+- Checkout: `loadSavedCardsWithRetry` после 3DS; тумблер OFF только если список пуст.
+- Brand: last4-only без CardType → `CARD` (не MASTERCARD).
+- Тесты: S6-webhook + `shop_usercards_review_fixes` + step1–6 — **50 PASS**.
+
 ## 2026-07-15 — fix(shop): шторка+заказ на checkout по эталону заказчика
 
 - `ensureCheckoutCartPeek` + `requestCheckoutPay` / `CHECKOUT_PAY_EVENT`.

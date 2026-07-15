@@ -10,6 +10,7 @@ require "open3"
 # Then:  UserCards НЕ создаётся; GET user/cards без новой карты
 class Shop::ShopSaveCardFalseStep6Test < ActionDispatch::IntegrationTest
   include TestFactories
+  include ActiveJob::TestHelper
 
   CHECKOUT = Rails.root.join("app/frontend/routes/Checkout.svelte")
   FORM_LIB = Rails.root.join("app/frontend/lib/shopNewCardForm.js")
@@ -121,6 +122,10 @@ class Shop::ShopSaveCardFalseStep6Test < ActionDispatch::IntegrationTest
       after = MobilePaymentMethod.where(customer_id: @customer.id).count
       assert_equal before, after, "UserCards не должна пополниться"
 
+      payment = Payment.order(created_at: :desc).first
+      assert_equal false, payment.provider_data["save_card"],
+        "intent save_card=false должен быть в provider_data"
+
       sess.get "/shop/api/user/cards",
         headers: shop_headers,
         params: { email: @email }
@@ -130,6 +135,64 @@ class Shop::ShopSaveCardFalseStep6Test < ActionDispatch::IntegrationTest
       refute_includes pans, "*9999",
         "на экране 1000008925 новая карта не должна появиться"
     end
+  end
+
+  test "S6 webhook with RebillId does not upsert when save_card false" do
+    FakeTbankNoSave.enabled = true
+    order_id = nil
+    payment_id = nil
+
+    open_session do |sess|
+      sess.post "/shop/api/cart/add",
+        headers: shop_headers,
+        params: { product_id: @product.id, quantity: 1, selected_modifiers: [] },
+        as: :json
+      verify_shop_email!(tenant_id: @tenant.id, email: @email, session: sess)
+
+      sess.post "/shop/api/payments/new_card",
+        headers: shop_headers,
+        params: {
+          name: "Step6 WH",
+          email: @email,
+          payment_method: "card",
+          CardData: "encrypted-no-save",
+          save_card: false
+        },
+        as: :json
+
+      body = JSON.parse(sess.response.body)
+      assert_equal 200, sess.response.status, body.inspect
+      order_id = body["order_id"]
+      payment = Payment.find_by!(order_id: order_id)
+      payment_id = payment.provider_payment_id
+      assert_equal false, payment.provider_data["save_card"]
+      assert_equal 0, MobilePaymentMethod.where(customer_id: @customer.id).count
+    end
+
+    payload = {
+      "TerminalKey" => "TestTerminal",
+      "OrderId" => order_id.to_s,
+      "PaymentId" => payment_id,
+      "Status" => "CONFIRMED",
+      "Amount" => 17_900,
+      "RebillId" => "rebill-s6-should-not-persist",
+      "CardId" => "card-s6-9999",
+      "Pan" => "430000******9999",
+      "ExpDate" => "1229",
+      "CardType" => "VISA"
+    }
+    payload["Token"] = Payments::TbankAdapter.new.build_token(payload)
+
+    Payments::CacheCounter.clear!
+    perform_enqueued_jobs do
+      post "/callbacks/tbank",
+        params: payload.to_json,
+        headers: { "Content-Type" => "application/json" }
+      assert_response :ok
+    end
+
+    assert_equal 0, MobilePaymentMethod.where(customer_id: @customer.id).count,
+      "webhook не должен создать UserCards при save_card=false"
   end
 
   test "S6 Given/When: form toggle OFF sets save_card false in state" do

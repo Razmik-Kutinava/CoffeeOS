@@ -161,7 +161,8 @@ class Shop::ShopUserCardsExtremesTest < ActionDispatch::IntegrationTest
   test "E2 Checkout resets save_card toggle OFF when no saved_card returned" do
     src = File.read(CHECKOUT)
     assert_includes src, "setSaveCard"
-    assert_match(/wantedSave && !savedCard/, src)
+    assert_includes src, "loadSavedCardsWithRetry"
+    assert_match(/wantedSave && !savedCard && !appeared/, src)
     assert_match(/setSaveCard\(createNewCardFormState\(\),\s*false\)/, src)
   end
 

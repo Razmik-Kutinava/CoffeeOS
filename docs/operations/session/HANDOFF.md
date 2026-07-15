@@ -1,8 +1,21 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-15 (checkout шторка+заказ — код done, deploy по go)  
+**Дата:** 2026-07-15 (UserCards review fixes БАГ-1/2/3)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev
+
+### UserCards / save_card — канон ТЗ
+
+| Что | Статус |
+|-----|--------|
+| Канон-ТЗ | [`Исправление сохранения карты в UserCards…`](../milestones/veha_2/requirements/customer_tasks/Исправление%20сохранения%20карты%20в%20UserCards%20после%20успешной%20оплаты.md) |
+| WIPE | **done** · не восстанавливать старое из git |
+| **Шаг 1–6** Gherkin | **`[x]`** |
+| **Extremes + FSM 0–7 / 3DS** | **`[x]`** |
+| **Review fixes БАГ-1/2/3** | **`[x]`** save_card gate · 3DS list retry · brand last4 |
+| Тесты | **`[x]`** step1–6 + review + extremes **50 PASS** |
+| Deploy Fly | **`[ ]`** — ждать явный **`go` / deploy** |
+| **Следующий шаг** | повторный `/review` или **deploy** по go |
 
 ### Checkout CartSheet UX (эталон заказчика)
 
@@ -13,19 +26,6 @@
 | ISSUES 🔴 | **resolved** (код) |
 | Deploy / MCP Fly | **`[ ]`** — только по явному **`go` / deploy** |
 | **Следующий шаг** | владелец: **deploy** → MCP `#/checkout` (peek под оплатой) |
-
-### UserCards / save_card — канон ТЗ
-
-| Что | Статус |
-|-----|--------|
-| Канон-ТЗ | [`Исправление сохранения карты в UserCards…`](../milestones/veha_2/requirements/customer_tasks/Исправление%20сохранения%20карты%20в%20UserCards%20после%20успешной%20оплаты.md) |
-| WIPE | **done** · не восстанавливать старое из git |
-| **Шаг 1–6** Gherkin | **`[x]`** |
-| **Extremes + FSM 0–7 / 3DS** | **`[x]`** webhook · soft DB · Net Error · Client Error overlay |
-| Deploy Fly (FSM) | **`[x]`** `25b1c6a` · шторка UX — **ещё не на Fly** |
-| MCP browser | FSM sheet **`[x]`**; checkout+CartSheet — после нового deploy |
-| B1.13 gate «шторка только каталог» | **снят** · catalog+checkout |
-| UserCards storage | `mobile_payment_methods` |
 
 ### WIPE 2026-07-14 — сохранение карты / checkout card UX
 

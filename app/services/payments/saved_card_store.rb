@@ -7,6 +7,15 @@ module Payments
       new(payment: payment, payload: payload).call!
     end
 
+    # Шаг 6: webhook/GetState пишут карту только если гость просил save_card.
+    # Ключ пишется в payment.provider_data["save_card"] из NewCardPaymentService.
+    # Legacy / one-click без ключа → true (idempotent upsert существующей карты).
+    def self.allowed_for?(payment)
+      data = payment&.provider_data
+      data = {} unless data.is_a?(Hash)
+      ActiveModel::Type::Boolean.new.cast(data.fetch("save_card", true))
+    end
+
     def initialize(payment:, payload:)
       @payment = payment
       @payload = payload.stringify_keys
@@ -14,6 +23,7 @@ module Payments
 
     def call!
       return unless @payload["Status"].to_s.upcase == "CONFIRMED"
+      return unless self.class.allowed_for?(@payment)
 
       rebill_id = @payload["RebillId"].to_s.presence
       return if rebill_id.blank?
@@ -100,8 +110,12 @@ module Payments
         return "MASTERCARD" if up.include?("MASTER") || up.include?("MC")
       end
 
-      digit = extract_masked_pan(payload).gsub(/\D/, "")[0]
-      case digit
+      # BIN только из полного/маскированного PAN; last4 (*5953) не угадываем.
+      raw = payload["Pan"].presence || payload["MaskedPan"].presence || ""
+      digits = raw.to_s.gsub(/\D/, "")
+      return "CARD" if digits.length <= 4
+
+      case digits[0]
       when "4" then "VISA"
       when "5" then "MASTERCARD"
       when "2" then "MIR"

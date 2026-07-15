@@ -63,6 +63,7 @@ module Payments
     def persist_card_if_needed!(state, tbank_status)
       return unless tbank_status.upcase == "CONFIRMED"
       return if state["RebillId"].to_s.blank?
+      return unless Payments::SavedCardStore.allowed_for?(@payment)
 
       payload = state.merge(
         "Status" => tbank_status,

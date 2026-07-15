@@ -39,6 +39,7 @@
     withMinLoaderMs
   } from "../lib/shopPayFsm.js"
   import { waitForOrderSettled } from "../lib/shopPaySettle.js"
+  import { loadSavedCardsWithRetry } from "../lib/shopSavedCards.js"
   import {
     cartItems,
     ensureCheckoutCartPeek,
@@ -269,13 +270,27 @@
 
   async function completePaySuccess(orderId, { wantedSave = false, savedCard = null } = {}) {
     payFsmState = PAY_FSM.SUCCESS
+    selectionMode = "saved_card"
+    // После 3DS/soft-fail: stale saved_card из FA-ответа ненадёжен — ретраим GET.
+    let cards = []
     if (wantedSave && !savedCard) {
+      cards = await loadSavedCardsWithRetry(
+        async () => {
+          await loadSavedCards()
+          return savedCards
+        },
+        { attempts: 5, delayMs: 400 }
+      )
+    } else {
+      await loadSavedCards()
+      cards = savedCards
+    }
+    const appeared = Array.isArray(cards) && cards.length > 0
+    if (wantedSave && !savedCard && !appeared) {
       newCardState = setSaveCard(createNewCardFormState(), false)
-    } else if (selectionMode === "new_card") {
+    } else {
       newCardState = createNewCardFormState()
     }
-    selectionMode = "saved_card"
-    await loadSavedCards()
     await new Promise((r) => setTimeout(r, SUCCESS_REDIRECT_MS))
     paymentSheetOpen = false
     push(`/payment-result?status=ok&order_id=${orderId}`)
@@ -302,9 +317,10 @@
       })
       if (threeDsAborted) return
       showThreeDsOverlay = false
+      // FA 3DS-ответ ещё без saved_card — completePaySuccess ретраит список.
       await completePaySuccess(res.order_id, {
         wantedSave: res.save_card === true,
-        savedCard: res.saved_card
+        savedCard: null
       })
     } catch (e) {
       showThreeDsOverlay = false

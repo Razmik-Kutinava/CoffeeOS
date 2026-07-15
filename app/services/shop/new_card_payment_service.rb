@@ -21,6 +21,9 @@ module Shop
       payment = order.payments.order(created_at: :desc).first
       raise OrderCreator::Error, "Платёж не создан" unless payment&.pending?
 
+      # Intent для webhook/GetState (Шаг 6) — до Init, чтобы async-пути видели флаг.
+      stamp_save_card_intent!(payment, save_card)
+
       adapter = Payments::TbankAdapter.new
       urls = gateway_urls
 
@@ -31,7 +34,10 @@ module Shop
         customer_key: order.customer_id.to_s,
         recurrent: save_card
       )
-      payment.update_columns(provider: "tbank", provider_payment_id: init[:provider_payment_id])
+      payment.update_columns(
+        provider: "tbank",
+        provider_payment_id: init[:provider_payment_id]
+      )
 
       raw = adapter.finish_authorize(
         payment_id: init[:provider_payment_id],
@@ -51,6 +57,7 @@ module Shop
       if result.confirmed?
         settle_confirmed!(order, payment, raw, save_card: save_card)
       elsif result.three_ds?
+        stamp_save_card_intent!(payment.reload, save_card)
         Shop::PendingOrderSession.set!(@session, @tenant.id, order.id)
       else
         void_order!(order, payment)
@@ -85,11 +92,19 @@ module Shop
       { return_base_url: base, notification_url: "#{base}/callbacks/tbank" }
     end
 
+    def stamp_save_card_intent!(payment, save_card)
+      data = (payment.provider_data.is_a?(Hash) ? payment.provider_data : {}).merge(
+        "save_card" => save_card
+      )
+      payment.update_columns(provider_data: data)
+    end
+
     def settle_confirmed!(order, payment, raw, save_card:)
+      stamp_save_card_intent!(payment, save_card)
       Callbacks::PaymentStatusUpdater.new(
         payment: payment,
         new_status: "succeeded",
-        provider_data: raw.except("Token", "Password"),
+        provider_data: raw.except("Token", "Password").merge("save_card" => save_card),
         provider_payment_id: raw["PaymentId"].to_s.presence || payment.provider_payment_id,
         note: "FinishAuthorize CONFIRMED"
       ).call!

@@ -97,7 +97,7 @@
 
   <!-- Кнопка «Оплатить» активируется снаружи по isPayEnabled / data-pay-enabled -->
   <p class="pay-hint" hidden={!payEnabled} data-testid="shop-new-card-pay-ready">
-    Готово к оплате · save_card={state.save_card}
+    Готово к оплате
   </p>
 </div>
 

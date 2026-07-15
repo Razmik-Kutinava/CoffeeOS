@@ -45,11 +45,17 @@ module Payments
       ).call!
 
       # Extreme/Exit#7: webhook upsert UserCards (idempotent по RebillId / pan+exp).
+      # Шаг 6: только если payment.provider_data["save_card"] разрешает (SavedCardStore.allowed_for?).
       if tbank_status.to_s.upcase == "CONFIRMED" && payload["RebillId"].to_s.present?
-        begin
-          Payments::SavedCardStore.persist_from_tbank!(payment: payment.reload, payload: payload)
-        rescue StandardError => e
-          Rails.logger.error("[TbankCallbackJob] UserCards persist failed: #{e.class}: #{e.message}")
+        payment = payment.reload
+        if Payments::SavedCardStore.allowed_for?(payment)
+          begin
+            Payments::SavedCardStore.persist_from_tbank!(payment: payment, payload: payload)
+          rescue StandardError => e
+            Rails.logger.error("[TbankCallbackJob] UserCards persist failed: #{e.class}: #{e.message}")
+          end
+        else
+          Rails.logger.info("[TbankCallbackJob] skip UserCards: save_card=false OrderId=#{order_id}")
         end
       end
 
