@@ -1,6 +1,6 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-15 (UserCards — Шаг 4 один клик Charge)  
+**Дата:** 2026-07-15 (UserCards — Шаг 5 вторая карта)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev
 
@@ -10,10 +10,10 @@
 |-----|--------|
 | Канон-ТЗ | [`Исправление сохранения карты в UserCards…`](../milestones/veha_2/requirements/customer_tasks/Исправление%20сохранения%20карты%20в%20UserCards%20после%20успешной%20оплаты.md) |
 | WIPE | **done** · не восстанавливать старое из git |
-| **Шаг 1–3** форма / FA / список | **`[x]`** |
-| **Шаг 4** 1 клик Charge | **`[x]`** · `POST payments/one_click` · Init→Charge · 60 PASS |
+| **Шаг 1–4** | **`[x]`** |
+| **Шаг 5** вторая карта | **`[x]`** · RSA new_card + upsert no-dup · 44 PASS |
 | UserCards storage | `mobile_payment_methods` |
-| **Следующий шаг** | ждать **`go`** — **Шаг 5** (вторая карта) |
+| **Следующий шаг** | ждать **`go`** — **Шаг 6** (save_card=false) |
 
 ### WIPE 2026-07-14 — сохранение карты / checkout card UX
 

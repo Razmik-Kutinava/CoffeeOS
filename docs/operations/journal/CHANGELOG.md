@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-07-15 — feat(shop): Шаг 5 — вторая карта (RSA new_card, без дублей)
+
+- Checkout: «Новая карта» → `card_config` + `encryptCardPayload` → `POST payments/new_card` + reload list.
+- `SavedCardStore`: upsert по rebill и pan+exp (без дублей); новые сверху.
+- Тесты step1–5 + CBR: **44 runs, 0 fail**. Vite PASS. Дальше: Шаг 6.
+
 ## 2026-07-15 — feat(shop): Шаг 4 — оплата в 1 клик (Init→Charge)
 
 - `TbankAdapter#charge` + `charge_recurrent`.

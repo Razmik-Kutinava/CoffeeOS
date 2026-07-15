@@ -2,7 +2,7 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-15 (UserCards / save_card — Шаг 4 done)  
+**Дата:** 2026-07-15 (UserCards / save_card — Шаг 5 done)  
 **Веха 1:** **закрыта** 2026-06-19.  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
 **§2.3 оплата витрина (Init→payment_url→callback):** **done** — базовый redirect на банк остаётся.
@@ -11,10 +11,17 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **UserCards / save_card** | **Шаг 1–4 [x]** | **Шаг 5** — вторая карта (`go`) |
+| **UserCards / save_card** | **Шаг 1–5 [x]** | **Шаг 6** — save_card=false (`go`) |
 | **B1.13 CR-BOTTOM-NAV** | бар убран · cart BOTTOM_REM=0 код [x] | **go deploy** · A1 апрув |
 | **B1.14 адрес в шапке** | **B1.14-3d** index map [x] | deploy · B1.14-4 cart |
 | **Product card peek cart** | S1–S7 код [x] · MCP Fly [ ] | апрув заказчика |
+
+### Сессия 2026-07-15 (Шаг 5 — вторая карта)
+
+- Checkout: «Новая карта» → RSA + `POST payments/new_card` + reload list.
+- `SavedCardStore`: upsert without pan+exp / rebill duplicates; new cards on top.
+- Тесты step1–5 + CBR: **44 runs, 297 assertions, 0 fail**. Vite PASS.
+- **Стоп:** ждать **`go`** на **Шаг 6**.
 
 ### Сессия 2026-07-15 (Шаг 4 — 1 клик Charge)
 
@@ -56,6 +63,7 @@
 
 
 ### Сессия 2026-07-13 (B1.13 — cart sheet прижат к низу)
+
 
 
 

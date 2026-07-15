@@ -28,11 +28,23 @@ module Payments
       exp_date = normalize_exp_date(@payload["ExpDate"].to_s.presence)
 
       MobilePaymentMethod.transaction do
-        card = MobilePaymentMethod.find_or_initialize_by(
+        card = MobilePaymentMethod.find_by(
           customer_id: customer_id,
           card_token: rebill_id,
           payment_type: "card"
         )
+        # Дубликат по pan + exp_date (extreme ТЗ) — обновляем RebillId, не создаём второй ряд.
+        if card.nil? && masked.present? && exp_date.present?
+          card = MobilePaymentMethod.find_by(
+            customer_id: customer_id,
+            card_masked: masked,
+            card_expires_at: exp_date,
+            payment_type: "card"
+          )
+        end
+        card ||= MobilePaymentMethod.new(customer_id: customer_id, payment_type: "card")
+
+        card.card_token = rebill_id
         card.card_masked = masked
         card.card_brand = brand
         card.bank_card_id = bank_card_id if bank_card_id

@@ -26,6 +26,8 @@
     createNewCardFormState,
     isPayEnabled as isNewCardPayEnabled
   } from "../lib/shopNewCardForm.js"
+  import { encryptCardPayload } from "../lib/tbankCardEncrypt.js"
+  import { digitsOnly } from "../lib/tbankCardFormat.js"
   import PaymentMethodsSheet from "../components/PaymentMethodsSheet.svelte"
 
   let name = $state("")
@@ -281,15 +283,51 @@
     submitting = true
     let redirecting = false
     try {
+      saveGuestProfile({ name, email, emailVerified: true })
+
       if (selectionMode === "new_card") {
-        // Шаг 5+/RSA new_card — пока базовый submit; форма 1000008924 видна только здесь.
+        // Шаг 5: «Новая карта» → RSA CardData → payments/new_card (save_card).
+        const cfg = await api("/payments/card_config")
+        if (!cfg?.rsa_public_key) {
+          throw new Error("Ключ шифрования карты не настроен")
+        }
+        const CardData = encryptCardPayload(
+          {
+            pan: digitsOnly(newCardState.pan_masked),
+            expDate: newCardState.exp_date,
+            cvv: newCardState.cvv,
+            cardHolder: name
+          },
+          cfg.rsa_public_key
+        )
+        const res = await api("/payments/new_card", {
+          method: "POST",
+          body: JSON.stringify({
+            name,
+            email: email.trim().toLowerCase(),
+            payment_method: "card",
+            CardData,
+            save_card: !!newCardState.save_card
+          })
+        })
+
         paymentSheetOpen = false
-        await submit()
+        newCardState = createNewCardFormState()
+        selectionMode = "saved_card"
+        saveGuestOrderSession(res.order_id, res.reconnect_token)
+        await loadSavedCards()
+
+        if (res.three_ds) {
+          redirecting = true
+          push(`/order/${res.order_id}`)
+          return
+        }
+        redirecting = true
+        push(`/payment-result?status=ok&order_id=${res.order_id}`)
         return
       }
 
-      // Шаг 4: 1 клик — { card_id, amount } → Init → Charge; форму новой карты не показываем.
-      saveGuestProfile({ name, email, emailVerified: true })
+      // Шаг 4: 1 клик — { card_id } → Init → Charge; форму новой карты не показываем.
       const res = await api("/payments/one_click", {
         method: "POST",
         body: JSON.stringify({
@@ -304,7 +342,6 @@
       saveGuestOrderSession(res.order_id, res.reconnect_token)
 
       if (res.three_ds) {
-        // 3DS — отдельный overlay в следующих шагах; оставляем order pending.
         redirecting = true
         push(`/order/${res.order_id}`)
         return
