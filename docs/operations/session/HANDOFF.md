@@ -1,31 +1,27 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-15 (UserCards review fixes БАГ-1/2/3)  
-**Ветка:** `develop`  
-**Прод:** https://coffeeos.fly.dev
-
-### UserCards / save_card — канон ТЗ
-
-| Что | Статус |
-|-----|--------|
-| Канон-ТЗ | [`Исправление сохранения карты в UserCards…`](../milestones/veha_2/requirements/customer_tasks/Исправление%20сохранения%20карты%20в%20UserCards%20после%20успешной%20оплаты.md) |
-| WIPE | **done** · не восстанавливать старое из git |
-| **Шаг 1–6** Gherkin | **`[x]`** |
-| **Extremes + FSM 0–7 / 3DS** | **`[x]`** |
-| **Review fixes БАГ-1/2/3** | **`[x]`** save_card gate · 3DS list retry · brand last4 |
-| Тесты | **`[x]`** step1–6 + review + extremes **50 PASS** |
-| Deploy Fly | **`[ ]`** — ждать явный **`go` / deploy** |
-| **Следующий шаг** | повторный `/review` или **deploy** по go |
+**Дата:** 2026-07-15 (Fly **v359** — шторка checkout + UserCards review)  
+**Ветка:** `develop` @ `671ba86`  
+**Прод:** https://coffeeos.fly.dev · image `deployment-01KXK3MZJS8KQWW29R6SPV6J7V`
 
 ### Checkout CartSheet UX (эталон заказчика)
 
 | Что | Статус |
 |-----|--------|
 | Код peek + pay event | **`[x]`** `ensureCheckoutCartPeek` · `goCheckoutOrPay` · pad |
-| Тесты | **`[x]`** `shop_checkout_cart_sheet_ux` + B1.13 S2/S2b/S3 PASS |
-| ISSUES 🔴 | **resolved** (код) |
-| Deploy / MCP Fly | **`[ ]`** — только по явному **`go` / deploy** |
-| **Следующий шаг** | владелец: **deploy** → MCP `#/checkout` (peek под оплатой) |
+| Тесты | **`[x]`** |
+| Push + Deploy Fly | **`[x]`** **v359** · бандл: `shop:checkout-pay` + peek testid |
+| MCP / hard-refresh | **`[ ]`** — проверить `#/checkout` после deploy |
+| **Следующий шаг** | MCP / апрув заказчика |
+
+### UserCards / save_card — канон ТЗ
+
+| Что | Статус |
+|-----|--------|
+| Канон-ТЗ | [`Исправление сохранения карты в UserCards…`](../milestones/veha_2/requirements/customer_tasks/Исправление%20сохранения%20карты%20в%20UserCards%20после%20успешной%20оплаты.md) |
+| Review БАГ-1/2/3 | **`[x]`** · deploy **v359** |
+| Тесты | **`[x]`** 50 PASS (до deploy) |
+| **Следующий шаг** | MCP оплата / апрув |
 
 ### WIPE 2026-07-14 — сохранение карты / checkout card UX
 

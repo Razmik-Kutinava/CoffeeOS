@@ -2,7 +2,7 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-15 (UserCards review fixes БАГ-1/2/3)  
+**Дата:** 2026-07-15 (push+deploy Fly v359 — шторка+UserCards)  
 **Веха 1:** **закрыта** 2026-06-19.  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
 **§2.3 оплата витрина (Init→payment_url→callback):** **done** — базовый redirect на банк остаётся.
@@ -11,11 +11,19 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **UserCards review fixes** | БАГ-1/2/3 [x] · step1–6+review **50 PASS** | **`go`** → push/deploy + повторный review |
-| **Checkout CartSheet UX** | код [x] · тесты PASS · **deploy [ ]** | **`go`** → push/deploy + MCP |
+| **Checkout CartSheet + UserCards** | push+deploy **[x]** Fly **v359** | MCP UI на `#/checkout` / апрув |
 | **B1.13 CR-BOTTOM-NAV** | бар убран · cart BOTTOM_REM=0 · catalog+checkout | A1 апрув [ ] |
-| **B1.14 адрес в шапке** | **B1.14-3d** index map [x] | deploy · B1.14-4 cart |
-| **Product card peek cart** | S1–S7 код [x] · MCP Fly [ ] | апрув заказчика |
+| **B1.14 адрес в шапке** | **B1.14-3d** index map [x] | B1.14-4 cart |
+| **Product card peek cart** | S1–S7 код [x] | апрув заказчика |
+
+### Сессия 2026-07-15 (push + fly deploy — 4 коммита догнали Fly)
+
+- Причина «нет шторки»: код был в `develop` **ahead 4**, на Fly стоял **v358** (FSM), без CartSheet peek/UserCards review.
+- `git push origin develop` `511d79c..671ba86`.
+- `fly deploy -a coffeeos --remote-only --depot=false` → image `deployment-01KXK3MZJS8KQWW29R6SPV6J7V`, **v359**.
+- Smoke: `/up` 200 · `/shop` 200 · web checks passing.
+- Бандл Fly: `Checkout-13ZTVigo.js` (`pb-[32vh]`, `payments/new_card`, `payment-methods-sheet`); `application-EFlHHrd0.js` (`shop:checkout-pay`, `shop-cart-peek-line`, `/checkout`).
+- origin/develop = HEAD `671ba86`. **Стоп:** MCP / hard-refresh браузера.
 
 ### Сессия 2026-07-15 (UserCards review: БАГ-1/2/3)
 

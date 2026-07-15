@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-07-15 — ops: push+deploy Fly v359 (шторка checkout + UserCards)
+
+- Причина «нет шторки на Fly»: local `develop` was **ahead 4**, прод **v358** без peek/UserCards review.
+- Push `511d79c..671ba86`; deploy image `deployment-01KXK3MZJS8KQWW29R6SPV6J7V` → **v359**.
+- Smoke `/up` `/shop` 200; бандл: `shop:checkout-pay`, peek testid, Checkout `pb-[32vh]` + `payments/new_card`.
+
 ## 2026-07-15 — fix(shop): UserCards review БАГ-1/2/3 (save_card gate + 3DS list)
 
 - `SavedCardStore.allowed_for?` + intent `provider_data["save_card"]` (NewCardPaymentService).
