@@ -277,9 +277,51 @@
 
   async function onSheetPay() {
     if (!sheetCanPay) return
-    paymentSheetOpen = false
-    // Шаг 4 — charge по card_id; пока базовый submit (redirect).
-    await submit()
+    err = null
+    submitting = true
+    let redirecting = false
+    try {
+      if (selectionMode === "new_card") {
+        // Шаг 5+/RSA new_card — пока базовый submit; форма 1000008924 видна только здесь.
+        paymentSheetOpen = false
+        await submit()
+        return
+      }
+
+      // Шаг 4: 1 клик — { card_id, amount } → Init → Charge; форму новой карты не показываем.
+      saveGuestProfile({ name, email, emailVerified: true })
+      const res = await api("/payments/one_click", {
+        method: "POST",
+        body: JSON.stringify({
+          name,
+          email: email.trim().toLowerCase(),
+          payment_method: "card",
+          card_id: selectedCardId
+        })
+      })
+
+      paymentSheetOpen = false
+      saveGuestOrderSession(res.order_id, res.reconnect_token)
+
+      if (res.three_ds) {
+        // 3DS — отдельный overlay в следующих шагах; оставляем order pending.
+        redirecting = true
+        push(`/order/${res.order_id}`)
+        return
+      }
+
+      redirecting = true
+      push(`/payment-result?status=ok&order_id=${res.order_id}`)
+    } catch (e) {
+      err = e.message
+      if (/подтвердите email/i.test(e.message || "")) {
+        emailVerified = false
+        editContact = true
+        clearEmailVerifiedInProfile()
+      }
+    } finally {
+      if (!redirecting) submitting = false
+    }
   }
 </script>
 

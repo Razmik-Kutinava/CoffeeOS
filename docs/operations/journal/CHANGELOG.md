@@ -1,5 +1,12 @@
 ﻿# CHANGELOG
 
+## 2026-07-15 — feat(shop): Шаг 4 — оплата в 1 клик (Init→Charge)
+
+- `TbankAdapter#charge` + `charge_recurrent`.
+- `OneClickPaymentService` + `RecurrentOrderCreator` + `POST /shop/api/payments/one_click`.
+- Checkout: saved card → `{ card_id }` one_click; NewCardForm только на пути new_card.
+- Тесты step1–4 + adapter + CBR: **60 runs, 0 fail**. Vite PASS. Дальше: Шаг 5.
+
 ## 2026-07-14 — feat(shop): Шаг 3 — список сохранённых карт (1000008925)
 
 - API: `GET /shop/api/user/cards` (+ filter expired by exp_date).

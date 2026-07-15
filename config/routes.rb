@@ -184,6 +184,7 @@ Rails.application.routes.draw do
       get "email_otp/status", to: "email_otp#status"
       post "orders", to: "orders#create"
       post "payments/new_card", to: "payments#new_card"
+      post "payments/one_click", to: "payments#one_click"
       get "payments/card_config", to: "payments#card_config"
       get "user/cards", to: "user_cards#index"
       get "orders/history", to: "orders#history"

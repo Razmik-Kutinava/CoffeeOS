@@ -2,7 +2,7 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-14 (UserCards / save_card — Шаг 3 done)  
+**Дата:** 2026-07-15 (UserCards / save_card — Шаг 4 done)  
 **Веха 1:** **закрыта** 2026-06-19.  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
 **§2.3 оплата витрина (Init→payment_url→callback):** **done** — базовый redirect на банк остаётся.
@@ -11,10 +11,17 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **UserCards / save_card** | **Шаг 1–3 [x]** | **Шаг 4** — 1 клик Charge (`go`) |
+| **UserCards / save_card** | **Шаг 1–4 [x]** | **Шаг 5** — вторая карта (`go`) |
 | **B1.13 CR-BOTTOM-NAV** | бар убран · cart BOTTOM_REM=0 код [x] | **go deploy** · A1 апрув |
 | **B1.14 адрес в шапке** | **B1.14-3d** index map [x] | deploy · B1.14-4 cart |
 | **Product card peek cart** | S1–S7 код [x] · MCP Fly [ ] | апрув заказчика |
+
+### Сессия 2026-07-15 (Шаг 4 — 1 клик Charge)
+
+- `charge` + `charge_recurrent` · `OneClickPaymentService` · `POST payments/one_click`.
+- Checkout: saved card → one_click `{ card_id }` · NewCardForm не на этом пути.
+- Тесты step1–4 + adapter + CBR: **60 runs, 301 assertions, 0 fail**. Vite PASS.
+- **Стоп:** ждать **`go`** на **Шаг 5**.
 
 ### Сессия 2026-07-14 (Шаг 3 — список карт 1000008925)
 
@@ -49,6 +56,7 @@
 
 
 ### Сессия 2026-07-13 (B1.13 — cart sheet прижат к низу)
+
 
 
 

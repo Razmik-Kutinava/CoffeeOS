@@ -92,9 +92,21 @@
 ### Шаг 4. Оплата в 1 клик по сохранённой карте
 
 
-- [ ] **Given:** Пользователь выбрал сохранённую карту из списка (например, «МИР Карта *5953»), стейт кнопки = `Default`.
-- [ ] **When:** Пользователь нажимает «Оплатить».
-- [ ] **Then:** Фронт отправляет `{ card_id, amount }` на эндпоинт оплаты по токену. Бэкенд достаёт `RebillId` из `UserCards`, вызывает `/Init` → `/Charge`. Форма 1000008924.png не показывается.
+- [x] **Given:** Пользователь выбрал сохранённую карту из списка (например, «МИР Карта *5953»), стейт кнопки = `Default`.
+- [x] **When:** Пользователь нажимает «Оплатить».
+- [x] **Then:** Фронт отправляет `{ card_id, amount }` на эндпоинт оплаты по токену. Бэкенд достаёт `RebillId` из `UserCards`, вызывает `/Init` → `/Charge`. Форма 1000008924.png не показывается.
+
+**Отчёт Шаг 4 (Было → Стало):**
+
+| Было | Стало |
+|---|---|
+| `charge` / `charge_recurrent` wipe-stub | `TbankAdapter#charge` → `/Charge` + `charge_recurrent` Init→Charge |
+| Sheet Pay → redirect `/orders` | Sheet Pay (saved) → `POST /payments/one_click` `{ card_id }` |
+| Нет 1-клик сервиса | `OneClickPaymentService` + `RecurrentOrderCreator` → RebillId → CONFIRMED |
+| Форма могла мешать | NewCardForm только при `selectionMode === "new_card"` |
+| — | Тесты step1–4 + adapter + CBR: **60 runs PASS** · vite PASS |
+
+**Не сделано в Шаге 4:** 3DS overlay UI; Pay по «Новая карта» через RSA `new_card` (Шаг 5/2 wiring); `save_card: false` (Шаг 6).
 
 
 ### Шаг 5. Добавление второй карты (дублирование сценария)

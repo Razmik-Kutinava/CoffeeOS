@@ -196,11 +196,17 @@ class Payments::TbankAdapterTest < ActiveSupport::TestCase
     assert_equal "CONFIRMED", response["Status"]
   end
 
-  test "charge is wiped pending new customer TZ step 4" do
-    error = assert_raises(Payments::TbankAdapter::Error) do
-      Payments::TbankAdapter.new.charge(payment_id: "pay-9", rebill_id: "rebill-9")
+  test "charge posts RebillId to Charge endpoint" do
+    adapter = Payments::TbankAdapter.new
+    captured = nil
+    adapter.define_singleton_method(:post_json) do |url, payload|
+      captured = { url: url, payload: payload }
+      { "Success" => true, "ErrorCode" => "0", "Status" => "CONFIRMED" }
     end
-    assert_match(/wiped/i, error.message)
+
+    adapter.charge(payment_id: "pay-9", rebill_id: "rebill-9")
+    assert captured[:url].end_with?("/Charge")
+    assert_equal "rebill-9", captured[:payload]["RebillId"]
   end
 
   test "get_payment_state returns bank response on success" do

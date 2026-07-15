@@ -86,13 +86,47 @@ module Payments
       response
     end
 
-    # Снесено 2026-07-14 — Charge/рекуррент = Шаг 4 ТЗ (пока stub).
-    def charge_recurrent(**)
-      raise Error, "wiped: reimplement from new customer TZ"
+    # Рекуррент: Init → Charge по RebillId (Шаг 4 ТЗ).
+    def charge_recurrent(order:, rebill_id:, return_base_url:, notification_url:, customer_key: nil)
+      init_result = init_payment(
+        order: order,
+        return_base_url: return_base_url,
+        notification_url: notification_url,
+        customer_key: customer_key,
+        recurrent: false
+      )
+
+      charge_response = charge(
+        payment_id: init_result[:provider_payment_id],
+        rebill_id: rebill_id
+      )
+      result = TbankPaymentResult.new(charge_response)
+      unless result.success?
+        raise ApiError.new(error_code: result.error_code, message: result.message)
+      end
+
+      init_result.merge(
+        charged: true,
+        charge_response: charge_response,
+        status: result.status,
+        three_ds: result.three_ds?
+      )
     end
 
-    def charge(**)
-      raise Error, "wiped: reimplement from new customer TZ"
+    # Списание по RebillId после Init.
+    def charge(payment_id:, rebill_id:)
+      charge_payload = {
+        "TerminalKey" => terminal_key,
+        "PaymentId"   => payment_id.to_s,
+        "RebillId"    => rebill_id.to_s
+      }
+      charge_payload["Token"] = build_token(charge_payload)
+
+      response = with_circuit_breaker { post_json("#{BASE_URL}/Charge", charge_payload) }
+      unless response.is_a?(Hash)
+        raise Error, "Некорректный ответ Т-Банка (Charge)"
+      end
+      response
     end
 
     # nonPCI: зашифрованный CardData после Init (Шаг 2 ТЗ).
