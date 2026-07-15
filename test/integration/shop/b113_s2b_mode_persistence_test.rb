@@ -20,10 +20,11 @@ class Shop::B113S2bModePersistenceTest < ActionDispatch::IntegrationTest
     sheet = File.read(Rails.root.join("app/frontend/components/CartSheet.svelte"))
 
     assert_includes store, "onCatalogRouteChange"
+    assert_includes store, "onCartSheetRouteChange"
     assert_includes store, "readPersistedCartSheetMode"
     assert_includes store, "writePersistedCartSheetMode"
     assert_includes store, "clearPersistedCartSheetMode"
-    assert_includes sheet, "onCatalogRouteChange"
+    assert_includes sheet, "onCartSheetRouteChange"
   end
 
   test "applyCartData mirror cold load opens peek when cart has items" do

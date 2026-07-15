@@ -8,8 +8,8 @@
     cartSheetBusy,
     cartUndoLine,
     cartSheetError,
-    isCatalogRoute,
-    onCatalogRouteChange,
+    isCartSheetRoute,
+    onCartSheetRouteChange,
     refreshCartSheet,
     handleSheetGestureDelta,
     bumpCartLine,
@@ -43,7 +43,7 @@
   let gestureActive = false
   let gestureZoneEl = $state(null)
 
-  let onCatalog = $derived(isCatalogRoute(hash))
+  let showSheet = $derived(isCartSheetRoute(hash))
   let count = $derived(items.length)
   let heightVh = $derived(sheetHeightVh(mode, count))
   let singleItem = $derived(count === 1 ? items[0] : null)
@@ -168,10 +168,10 @@
 
     const onHash = () => {
       const next = window.location.hash
-      const wasCatalog = isCatalogRoute(hash)
+      const wasSheet = isCartSheetRoute(hash)
       hash = next
-      if (wasCatalog !== isCatalogRoute(hash)) {
-        onCatalogRouteChange(isCatalogRoute(hash))
+      if (wasSheet !== isCartSheetRoute(hash)) {
+        onCartSheetRouteChange(isCartSheetRoute(hash))
       }
     }
 
@@ -247,7 +247,7 @@
   </div>
 {/snippet}
 
-{#if onCatalog}
+{#if showSheet}
   <div
     data-testid="shop-cart-sheet"
     data-cart-sheet-mode={mode}

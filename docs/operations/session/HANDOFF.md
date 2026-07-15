@@ -14,8 +14,9 @@
 | **Extremes + FSM 0–7 / 3DS** | **`[x]`** webhook · soft DB · Net Error · Client Error overlay |
 | Deploy Fly | **`[x]`** `25b1c6a` → coffeeos.fly.dev |
 | MCP browser | **`[x]`** sheet: empty list + NewCard form + FSM Default blue «Оплатить»; `/up` 200 |
+| B1.13 gate «шторка только каталог» | **снят** для checkout · `isCartSheetRoute` · **не** опираться на «by design нет шторки» |
 | UserCards storage | `mobile_payment_methods` |
-| **Следующий шаг** | **приёмка / апрув заказчика** |
+| **Следующий шаг** | ждать **`go`** — вернуть UX шторки+заказ как на скринах заказчика |
 
 ### WIPE 2026-07-14 — сохранение карты / checkout card UX
 
@@ -47,7 +48,7 @@
 | ТЗ | **`[x]`** B1_13 § CR стр. **~69** · **КАРТА** стр. **~14** |
 | Ответы 1–7 | **`[x]`** 2026-07-07 · [`b113_cr_bottom_nav_answers_2026-07-07.json`](../milestones/veha_2/artifacts/demo-feedback/b113_cr_bottom_nav_answers_2026-07-07.json) |
 | Код F1–F4 | **`[x]`** · shop 297 PASS |
-| Cart sheet прижат к низу | **`[x]`** `CART_SHEET_BOTTOM_REM=0` · build `prog21` · 2026-07-13 |
+| Cart sheet прижат к низу | **`[x]`** `CART_SHEET_BOTTOM_REM=0` · build `prog22` · visibility catalog+checkout |
 | Deploy / A1 | deploy **`[ ]`** (ждёт go) · **A1 апрув `[ ]`** |
 
 ### B1.13 — S4: openEditCard trigger (Expanded cart image)

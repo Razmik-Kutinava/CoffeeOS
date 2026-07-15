@@ -84,6 +84,17 @@ export function isCatalogRoute(hash = null) {
   return h === "/" || h === ""
 }
 
+/**
+ * Где видна шторка корзины.
+ * Каталог + checkout (эталон заказчика: позиции под шторкой оплаты).
+ * B1.13 «только каталог» — не блокер для UserCards / оформление.
+ */
+export function isCartSheetRoute(hash = null) {
+  const h = (hash ?? (typeof window !== "undefined" ? window.location.hash : "")).replace("#", "") || "/"
+  if (h === "/" || h === "") return true
+  return h === "/checkout" || h.startsWith("/checkout?")
+}
+
 export function cartLineCount(items) {
   return (items || []).length
 }
@@ -232,6 +243,11 @@ export function onCatalogRouteChange(nowOnCatalog) {
   const savedMode = readPersistedCartSheetMode()
   cartSheetMode.set(savedMode && savedMode !== MODE_EMPTY ? savedMode : MODE_PEEK)
   resetScrollAnchor()
+}
+
+/** Вход/выход с маршрутов, где видна CartSheet (каталог + checkout). */
+export function onCartSheetRouteChange(nowOnSheetRoute) {
+  onCatalogRouteChange(nowOnSheetRoute)
 }
 
 export function handleCatalogScroll() {

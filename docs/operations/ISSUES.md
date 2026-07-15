@@ -4,7 +4,10 @@
 
 ## 🔴 Блокеры
 
-_(нет открытых по wipe card/save 2026-07-14)_
+[2026-07-15] — Checkout: нет шторки с заказами под оплатой (эталон заказчика)
+Статус: **in_progress** (блокер B1.13 снят; ждём `go` на полный возврат UX)
+Описание: на `#/checkout` заказчик ждёт CartSheet peek **под** шторкой оплаты (скрины UserCards 13:19/13:23). Gate B1.13 «шторка только каталог» мешал — **снят** (`isCartSheetRoute` = catalog+checkout). Полный визуал/связка с PaymentMethodsSheet — следующий `go`.
+Эталон: `artifacts/usercards_save_card/screenshots/` · ТЗ UserCards.
 
 ## Решено недавно
 

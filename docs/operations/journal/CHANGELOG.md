@@ -1,5 +1,12 @@
 ﻿# CHANGELOG
 
+## 2026-07-15 — fix(shop): снят B1.13 catalog-only gate для CartSheet на checkout
+
+- `isCartSheetRoute`: каталог + `#/checkout` (эталон UserCards / шторка с заказами).
+- PaymentMethodsSheet z-index выше CartSheet.
+- Тесты B1.13-S2/S2b обновлены. **Стоп** до `go` на полный UX-restore.
+- ISSUES 🔴 in_progress.
+
 ## 2026-07-15 — docs: скрины UserCards save_card → artifacts
 
 - Папка `artifacts/usercards_save_card/screenshots/` (макеты 8924/8925 + баг 13:19/13:23).

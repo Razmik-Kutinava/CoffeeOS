@@ -32,7 +32,7 @@ class Shop::B113S2CartPopupTest < ActionDispatch::IntegrationTest
     refute_includes app, 'import("./routes/Cart.svelte")'
   end
 
-  test "CartSheet source: empty placeholder, three modes, catalog-only visibility" do
+  test "CartSheet source: empty placeholder, three modes, catalog+checkout visibility" do
     sheet = File.read(Rails.root.join("app/frontend/components/CartSheet.svelte"))
     store = File.read(Rails.root.join("app/frontend/lib/cartSheetStore.js"))
 
@@ -45,12 +45,13 @@ class Shop::B113S2CartPopupTest < ActionDispatch::IntegrationTest
     assert_includes sheet, "handleSheetGestureDelta"
     assert_includes sheet, "formatCartButtonTotal"
     assert_includes sheet, "shop-cart-sheet-checkout"
-    assert_includes sheet, "isCatalogRoute"
+    assert_includes sheet, "isCartSheetRoute"
+    assert_includes store, "isCartSheetRoute"
     assert_includes store, "handleCatalogScroll"
     assert_includes store, "collapseFromSwipe"
     assert_includes store, "expandFromSwipe"
     refute_includes store, "cartSheetExpandedLayout"
-    assert_includes store, "onCatalogRouteChange"
+    assert_includes store, "onCartSheetRouteChange"
     assert_includes store, "cartSheetModeCache.js"
   end
 
@@ -82,7 +83,7 @@ class Shop::B113S2CartPopupTest < ActionDispatch::IntegrationTest
     assert_includes thresholds, "SCROLL_TO_PEEK_PX = 100"
     assert_includes thresholds, "SCROLL_TO_HIDDEN_PX = 200"
     assert_includes thresholds, "SWIPE_UP_PX = 32"
-    assert_includes thresholds, 'CART_SHEET_BUILD = "prog20"'
+    assert_includes thresholds, 'CART_SHEET_BUILD = "prog22"'
 
     assert_equal 44, sheet_height_vh("expanded", 3)
     assert_equal 30, sheet_height_vh("peek", 2)
@@ -91,13 +92,14 @@ class Shop::B113S2CartPopupTest < ActionDispatch::IntegrationTest
     assert_equal 12, sheet_height_vh("empty", 0)
   end
 
-  test "isCatalogRoute mirror accepts only home catalog hash" do
-    assert catalog_route?("#/")
-    assert catalog_route?("#")
-    assert catalog_route?("")
-    refute catalog_route?("#/favorites")
-    refute catalog_route?("#/profile")
-    refute catalog_route?("#/product/1")
+  test "isCartSheetRoute mirror: catalog + checkout, not product/profile" do
+    assert cart_sheet_route?("#/")
+    assert cart_sheet_route?("#")
+    assert cart_sheet_route?("")
+    assert cart_sheet_route?("#/checkout")
+    refute cart_sheet_route?("#/favorites")
+    refute cart_sheet_route?("#/profile")
+    refute cart_sheet_route?("#/product/1")
   end
 
   test "cart api supports CartSheet after add" do
@@ -132,10 +134,10 @@ class Shop::B113S2CartPopupTest < ActionDispatch::IntegrationTest
     end
   end
 
-  # Зеркало app/frontend/lib/cartSheetStore.js#isCatalogRoute
-  def catalog_route?(hash)
+  # Зеркало app/frontend/lib/cartSheetStore.js#isCartSheetRoute
+  def cart_sheet_route?(hash)
     h = hash.to_s.delete_prefix("#")
     h = "/" if h.blank?
-    h == "/"
+    h == "/" || h == "/checkout" || h.start_with?("/checkout?")
   end
 end

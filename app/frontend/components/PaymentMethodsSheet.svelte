@@ -148,7 +148,7 @@
   .pm-backdrop {
     position: fixed;
     inset: 0;
-    z-index: 35;
+    z-index: 55;
     background: rgb(0 0 0 / 0.55);
   }
 
@@ -157,7 +157,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    z-index: 40;
+    z-index: 56;
     max-height: 90vh;
     overflow: auto;
     border-radius: 1.25rem 1.25rem 0 0;
