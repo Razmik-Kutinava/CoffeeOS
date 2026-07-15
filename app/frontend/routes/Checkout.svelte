@@ -39,6 +39,11 @@
     withMinLoaderMs
   } from "../lib/shopPayFsm.js"
   import { waitForOrderSettled } from "../lib/shopPaySettle.js"
+  import {
+    cartItems,
+    ensureCheckoutCartPeek,
+    CHECKOUT_PAY_EVENT
+  } from "../lib/cartSheetStore.js"
   import PaymentMethodsSheet from "../components/PaymentMethodsSheet.svelte"
   import ThreeDsOverlay from "../components/ThreeDsOverlay.svelte"
 
@@ -67,6 +72,7 @@
   let payFsmState = $state(PAY_FSM.DEFAULT)
   let showThreeDsOverlay = $state(false)
   let threeDsAborted = $state(false)
+  let cartCount = $state(0)
 
   const canSendCode = $derived(isValidEmail(email) && !sendingCode)
   const canPay = $derived(
@@ -78,6 +84,8 @@
         ? !!selectedCardId
         : isNewCardPayEnabled(newCardState))
   )
+  /** Место под peek-шторку заказа (эталон заказчика). */
+  const checkoutPadClass = $derived(cartCount > 0 ? "pb-[32vh]" : "pb-8")
 
   onMount(() => {
     const profile = loadGuestProfile()
@@ -88,6 +96,16 @@
       savedProfile = true
       editContact = false
     }
+
+    const unsubCart = cartItems.subscribe((items) => {
+      cartCount = Array.isArray(items) ? items.length : 0
+    })
+    ensureCheckoutCartPeek().catch(() => {})
+
+    const onCheckoutPay = () => {
+      if (emailVerified) selectPayment("card")
+    }
+    window.addEventListener(CHECKOUT_PAY_EVENT, onCheckoutPay)
 
     const syncServerStatus = async () => {
       if (!isValidEmail(email)) return
@@ -124,6 +142,8 @@
     window.addEventListener("pageshow", onPageShow)
     return () => {
       window.removeEventListener("pageshow", onPageShow)
+      window.removeEventListener(CHECKOUT_PAY_EVENT, onCheckoutPay)
+      unsubCart()
       offHours?.()
     }
   })
@@ -388,7 +408,7 @@
   }
 </script>
 
-<div>
+<div class={checkoutPadClass} data-testid="checkout-page">
   <div class="mb-4 flex items-center gap-3">
     <button type="button" class="text-2xl text-[#ff8c42]" onclick={() => push("/")} aria-label="Назад в каталог">
       ‹

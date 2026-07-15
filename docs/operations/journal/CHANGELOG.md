@@ -1,5 +1,13 @@
 ﻿# CHANGELOG
 
+## 2026-07-15 — fix(shop): шторка+заказ на checkout по эталону заказчика
+
+- `ensureCheckoutCartPeek` + `requestCheckoutPay` / `CHECKOUT_PAY_EVENT`.
+- CartSheet на checkout открывает оплату (не повторный `push /checkout`).
+- Checkout: нижний pad `pb-[32vh]`; ISSUES 🔴 resolved (код).
+- Тест: `shop_checkout_cart_sheet_ux_test` + B1.13 S2/S2b/S3 PASS.
+- **Deploy не делали** — ждать явный go.
+
 ## 2026-07-15 — fix(shop): снят B1.13 catalog-only gate для CartSheet на checkout
 
 - `isCartSheetRoute`: каталог + `#/checkout` (эталон UserCards / шторка с заказами).

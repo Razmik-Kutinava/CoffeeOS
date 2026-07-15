@@ -1,8 +1,18 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-15 (UserCards — FSM 0–7 + 3DS → deploy/MCP)  
+**Дата:** 2026-07-15 (checkout шторка+заказ — код done, deploy по go)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev
+
+### Checkout CartSheet UX (эталон заказчика)
+
+| Что | Статус |
+|-----|--------|
+| Код peek + pay event | **`[x]`** `ensureCheckoutCartPeek` · `goCheckoutOrPay` · pad |
+| Тесты | **`[x]`** `shop_checkout_cart_sheet_ux` + B1.13 S2/S2b/S3 PASS |
+| ISSUES 🔴 | **resolved** (код) |
+| Deploy / MCP Fly | **`[ ]`** — только по явному **`go` / deploy** |
+| **Следующий шаг** | владелец: **deploy** → MCP `#/checkout` (peek под оплатой) |
 
 ### UserCards / save_card — канон ТЗ
 
@@ -12,11 +22,10 @@
 | WIPE | **done** · не восстанавливать старое из git |
 | **Шаг 1–6** Gherkin | **`[x]`** |
 | **Extremes + FSM 0–7 / 3DS** | **`[x]`** webhook · soft DB · Net Error · Client Error overlay |
-| Deploy Fly | **`[x]`** `25b1c6a` → coffeeos.fly.dev |
-| MCP browser | **`[x]`** sheet: empty list + NewCard form + FSM Default blue «Оплатить»; `/up` 200 |
-| B1.13 gate «шторка только каталог» | **снят** для checkout · `isCartSheetRoute` · **не** опираться на «by design нет шторки» |
+| Deploy Fly (FSM) | **`[x]`** `25b1c6a` · шторка UX — **ещё не на Fly** |
+| MCP browser | FSM sheet **`[x]`**; checkout+CartSheet — после нового deploy |
+| B1.13 gate «шторка только каталог» | **снят** · catalog+checkout |
 | UserCards storage | `mobile_payment_methods` |
-| **Следующий шаг** | ждать **`go`** — вернуть UX шторки+заказ как на скринах заказчика |
 
 ### WIPE 2026-07-14 — сохранение карты / checkout card UX
 

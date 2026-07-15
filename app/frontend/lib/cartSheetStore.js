@@ -95,6 +95,28 @@ export function isCartSheetRoute(hash = null) {
   return h === "/checkout" || h.startsWith("/checkout?")
 }
 
+export function isCheckoutRoute(hash = null) {
+  const h = (hash ?? (typeof window !== "undefined" ? window.location.hash : "")).replace("#", "") || "/"
+  return h === "/checkout" || h.startsWith("/checkout?")
+}
+
+/** Эталон заказчика: на оформлении шторка с позициями в peek. */
+export async function ensureCheckoutCartPeek() {
+  await refreshCartSheet().catch(() => {})
+  const items = get(cartItems)
+  if (!items.length) return
+  cartSheetMode.set(MODE_PEEK)
+  resetScrollAnchor()
+  writePersistedCartSheetMode(MODE_PEEK)
+}
+
+export const CHECKOUT_PAY_EVENT = "shop:checkout-pay"
+
+export function requestCheckoutPay() {
+  if (typeof window === "undefined") return
+  window.dispatchEvent(new CustomEvent(CHECKOUT_PAY_EVENT))
+}
+
 export function cartLineCount(items) {
   return (items || []).length
 }

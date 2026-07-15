@@ -4,12 +4,16 @@
 
 ## 🔴 Блокеры
 
-[2026-07-15] — Checkout: нет шторки с заказами под оплатой (эталон заказчика)
-Статус: **in_progress** (блокер B1.13 снят; ждём `go` на полный возврат UX)
-Описание: на `#/checkout` заказчик ждёт CartSheet peek **под** шторкой оплаты (скрины UserCards 13:19/13:23). Gate B1.13 «шторка только каталог» мешал — **снят** (`isCartSheetRoute` = catalog+checkout). Полный визуал/связка с PaymentMethodsSheet — следующий `go`.
-Эталон: `artifacts/usercards_save_card/screenshots/` · ТЗ UserCards.
+_нет_
 
 ## Решено недавно
+
+[2026-07-15] — Checkout: нет шторки с заказами под оплатой (эталон заказчика)
+Статус: **resolved** 2026-07-15 (код; MCP на Fly — после deploy по go)
+Описание: на `#/checkout` CartSheet peek **под** PaymentMethodsSheet.
+**Закрыли:** `isCartSheetRoute` catalog+checkout · `ensureCheckoutCartPeek` · `requestCheckoutPay`/`CHECKOUT_PAY_EVENT` · pad `pb-[32vh]` · z-index 56>50 · тест `shop_checkout_cart_sheet_ux_test` + B1.13-S2/S2b/S3 PASS.
+Эталон: `artifacts/usercards_save_card/screenshots/` · ТЗ UserCards.
+
 
 [2026-07-04] — B1.11-BUG-OVERNIGHT: нельзя создать точку с ночной сменой (`must be after opens_at`)
 Статус: **resolved** 2026-07-05

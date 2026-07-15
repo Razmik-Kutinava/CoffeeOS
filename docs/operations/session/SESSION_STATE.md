@@ -2,7 +2,7 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-15 (UserCards — FSM 0–7 + 3DS overlay)  
+**Дата:** 2026-07-15 (checkout: шторка+заказ по эталону)  
 **Веха 1:** **закрыта** 2026-06-19.  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
 **§2.3 оплата витрина (Init→payment_url→callback):** **done** — базовый redirect на банк остаётся.
@@ -11,17 +11,25 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **UserCards / save_card** | S1–S6 + FSM [x] · **B1.13 catalog-gate снят** | **`go`** вернуть шторку+заказ на checkout |
-| **B1.13 CR-BOTTOM-NAV** | бар убран · cart BOTTOM_REM=0 · **visibility: catalog+checkout** | не блокер UserCards |
+| **Checkout CartSheet UX** | код [x] · тесты PASS · **deploy [ ]** | **`go`** → push/deploy + MCP |
+| **UserCards / save_card** | S1–S6 + FSM [x] · шторка на checkout [x] | MCP Fly после deploy · апрув |
+| **B1.13 CR-BOTTOM-NAV** | бар убран · cart BOTTOM_REM=0 · catalog+checkout | A1 апрув [ ] |
 | **B1.14 адрес в шапке** | **B1.14-3d** index map [x] | deploy · B1.14-4 cart |
 | **Product card peek cart** | S1–S7 код [x] · MCP Fly [ ] | апрув заказчика |
+
+### Сессия 2026-07-15 (go: шторка+заказ на оформлении)
+
+- `ensureCheckoutCartPeek` → MODE_PEEK на `#/checkout`.
+- CartSheet `goCheckoutOrPay`: на checkout → `requestCheckoutPay` (откроет PaymentMethodsSheet).
+- Checkout: pad `pb-[32vh]`, слушатель `CHECKOUT_PAY_EVENT`.
+- Тесты: `shop_checkout_cart_sheet_ux` + b113 S2/S2b **18 PASS**; S3 **6 PASS**.
+- ISSUES 🔴 закрыт (код). **Deploy / MCP — только по явному go.**
 
 ### Сессия 2026-07-15 (снят блокер B1.13: шторка на checkout)
 
 - Причина жалобы «нет шторки»: B1.13 `{#if onCatalog}` скрывал CartSheet на `#/checkout`.
-- Канон по этой жалобе: скрины заказчика UserCards, **не** «B1.13 by design».
-- Сделано: `isCartSheetRoute` (каталог + checkout); PaymentMethodsSheet z > CartSheet; тесты B1.13 обновлены.
-- **Стоп:** ждать **`go`** на полный возврат UX (как 13:19 — позиции под шторкой оплаты).
+- Канон: скрины заказчика UserCards, **не** «B1.13 by design».
+- `isCartSheetRoute` catalog+checkout; PaymentMethodsSheet z > CartSheet.
 
 ### Сессия 2026-07-15 (Pay FSM 0–7 + 3DS Client Error)
 

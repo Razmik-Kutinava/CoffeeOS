@@ -9,7 +9,9 @@
     cartUndoLine,
     cartSheetError,
     isCartSheetRoute,
+    isCheckoutRoute,
     onCartSheetRouteChange,
+    requestCheckoutPay,
     refreshCartSheet,
     handleSheetGestureDelta,
     bumpCartLine,
@@ -44,6 +46,7 @@
   let gestureZoneEl = $state(null)
 
   let showSheet = $derived(isCartSheetRoute(hash))
+  let onCheckout = $derived(isCheckoutRoute(hash))
   let count = $derived(items.length)
   let heightVh = $derived(sheetHeightVh(mode, count))
   let singleItem = $derived(count === 1 ? items[0] : null)
@@ -116,6 +119,14 @@
   }
 
   let checkoutDisabled = $derived(roundPrice(total) <= 0)
+
+  function goCheckoutOrPay() {
+    if (onCheckout) {
+      requestCheckoutPay()
+      return
+    }
+    push("/checkout")
+  }
 
   function formatThousands(n) {
     const s = String(roundPrice(n))
@@ -234,7 +245,7 @@
       data-testid="shop-cart-sheet-checkout"
       class="rounded-lg bg-[#ff8c42] px-4 py-2 text-sm font-semibold text-black"
       disabled={checkoutDisabled}
-      onclick={() => push("/checkout")}
+      onclick={goCheckoutOrPay}
     >
       <span
         class="whitespace-nowrap leading-none"
@@ -322,7 +333,7 @@
           data-testid="shop-cart-sheet-checkout"
           class="shrink-0 rounded-full bg-[#ff8c42] px-3 py-1.5 text-sm font-semibold text-black"
           disabled={checkoutDisabled}
-          onclick={() => push("/checkout")}
+          onclick={goCheckoutOrPay}
         >
           <span
             class="whitespace-nowrap leading-none"
