@@ -32,3 +32,35 @@ export function encryptCardPayload({ pan, expDate, cvv, cardHolder }, publicKeyP
   })
   return encryptCardDataString(plain, publicKeyPem)
 }
+
+/** 3DS: POST на ACS банка (PaReq + MD) — в iframe overlay. */
+export const THREE_DS_FRAME_NAME = "coffeeos-three-ds-frame"
+
+export function submitThreeDsChallenge(threeDs, { target = THREE_DS_FRAME_NAME } = {}) {
+  const acsUrl = threeDs?.acs_url
+  const paReq = threeDs?.pa_req
+  const md = threeDs?.md
+  if (!acsUrl || !paReq) throw new Error("Неполные данные 3-D Secure")
+
+  const form = document.createElement("form")
+  form.method = "POST"
+  form.action = acsUrl
+  form.target = target
+  form.style.display = "none"
+
+  const add = (name, value) => {
+    const input = document.createElement("input")
+    input.type = "hidden"
+    input.name = name
+    input.value = value
+    form.appendChild(input)
+  }
+
+  add("PaReq", paReq)
+  if (md) add("MD", md)
+  add("TermUrl", window.location.href)
+
+  document.body.appendChild(form)
+  form.submit()
+  form.remove()
+}

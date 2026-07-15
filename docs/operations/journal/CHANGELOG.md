@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-07-15 — feat(shop): Pay FSM 0–7 + 3DS overlay (Client Error)
+
+- `shopPayFsm.js` + `CheckoutPayButton` + `ThreeDsOverlay` + settle poll.
+- Checkout/sheet: Connecting→Processing→3DS→Success; close 3DS → «Отказ: смените карту»; Net Error State 7.
+- Тесты: `shop_pay_fsm_3ds_test` + extremes **30 runs PASS**. Vite PASS.
+
 ## 2026-07-15 — feat(shop): UserCards extremes (webhook upsert, soft DB fail, Net Error)
 
 - `TbankCallbackJob`: CONFIRMED+RebillId → `SavedCardStore` (soft-fail).

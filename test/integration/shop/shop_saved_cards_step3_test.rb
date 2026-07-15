@@ -96,7 +96,7 @@ class Shop::ShopSavedCardsStep3Test < ActionDispatch::IntegrationTest
     assert_includes src, 'data-testid="payment-method-new-card"'
     assert_includes src, "Новая карта"
     assert_match(/formatCardFullLabel|formatCardListLabel/, src)
-    assert_match(/Оплатить|payment-methods-pay/, src)
+    assert_match(/Оплатить|checkout-pay-fsm|CheckoutPayButton/, src)
     assert_includes src, "СБП"
   end
 

@@ -161,7 +161,7 @@ class Shop::ShopUserCardsExtremesTest < ActionDispatch::IntegrationTest
   test "E2 Checkout resets save_card toggle OFF when no saved_card returned" do
     src = File.read(CHECKOUT)
     assert_includes src, "setSaveCard"
-    assert_match(/wantedSave && !res\.saved_card/, src)
+    assert_match(/wantedSave && !savedCard/, src)
     assert_match(/setSaveCard\(createNewCardFormState\(\),\s*false\)/, src)
   end
 
@@ -202,8 +202,10 @@ class Shop::ShopUserCardsExtremesTest < ActionDispatch::IntegrationTest
 
   test "E6 Checkout maps offline errors to Net Error message" do
     src = File.read(CHECKOUT)
-    assert_includes src, "isOfflineError"
-    assert_match(/Нет сети: повторить/, src)
+    fsm = File.read(Rails.root.join("app/frontend/lib/shopPayFsm.js"))
+    assert_includes fsm, "Нет сети: повторить"
+    assert_includes fsm, "NET_ERROR: 7"
+    assert_match(/fsmFromPaymentError|PAY_FSM\.NET_ERROR/, src)
   end
 
   # --- E7: empty list UI ----------------------------------------------------
@@ -212,7 +214,7 @@ class Shop::ShopUserCardsExtremesTest < ActionDispatch::IntegrationTest
     src = File.read(SHEET)
     assert_includes src, "Новая карта"
     assert_includes src, "СБП"
-    assert_includes src, "payment-methods-pay"
+    assert_includes src, "CheckoutPayButton"
     assert_includes src, "{#each cards as card"
   end
 

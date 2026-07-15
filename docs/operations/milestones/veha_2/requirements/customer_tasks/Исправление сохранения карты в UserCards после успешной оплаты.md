@@ -154,17 +154,17 @@
 | Нет RebillId → нет строки + тумблер OFF | **[x]** | BE E2 · FE `setSaveCard(..., false)` |
 | Дубликат PAN+exp | **[x]** | Step 5 / SavedCardStore |
 | Истёкший срок | **[x]** | Step 3 GET filter |
-| 3DS_CHECKING → карта не пишется | **[x]** partial | E5 backend; **UI Client Error overlay — отложен** (FSM 0–7 без go) |
-| Net Error «Нет сети: повторить» | **[x]** | Checkout `isOfflineError` · E6; форма не сбрасывается в catch |
+| 3DS_CHECKING → карта не пишется | **[x]** | E5 backend + **UI Client Error / overlay FSM 0–7** |
+| Net Error «Нет сети: повторить» | **[x]** | FSM State 7 · `shopPayFsm` |
 | Пустой список | **[x]** | E7 sheet labels |
 
-Тесты: `shop_user_cards_extremes_test.rb` — **7 runs PASS**.
+Тесты: `shop_user_cards_extremes_test.rb` — **7 runs PASS** · `shop_pay_fsm_3ds_test.rb` PASS.
 
 - **Ошибка БД при записи в UserCards (500):** Платёж прошёл, но запись карты упала. Фронт показывает стейт кнопки `Success` → редирект. При следующем заходе на 1000008925.png карта не появилась. Webhook от Т-Банка выполняет upsert.
 - **Т-Банк не вернул RebillId:** Бэкенд не создаёт запись в `UserCards`. Фронт не показывает карту на 1000008925.png. Тумблер на форме 1000008924.png сбрасывается в OFF.
 - **Дубликат карты (тот же PAN + exp_date):** Upsert по `(user_id, pan_last4, exp_date)`. На 1000008925.png не появляется дубль «МИР Карта *5953».
 - **Истёкший срок карты:** При `GET /api/user/cards` бэкенд фильтрует карты с `exp_date < текущий месяц`. На 1000008925.png карта не отображается.
-- **3D-Secure прерван:** Стейт кнопки = `3D-Secure` → пользователь закрыл iframe. Кнопка → `Client Error` («Отказ: смените карту»). Карта не сохраняется. *(UI Client Error — backlog без go на FSM)*
+- **3D-Secure прерван:** Стейт кнопки = `3D-Secure` → пользователь закрыл iframe. Кнопка → `Client Error` («Отказ: смените карту»). Карта не сохраняется. **`[x]`** overlay + FSM.
 - **Сеть пропала (State 1 → Net Error):** Запрос не дошёл. Кнопка = `Net Error` («Нет сети: повторить»). Форма 1000008924.png остаётся заполненной, данные не потеряны.
 - **Пустой список карт (первый вход):** На 1000008925.png отображаются только: «СБП», «Новая карта», кнопка «Оплатить» (disabled или активна только для СБП).
 

@@ -1,14 +1,16 @@
 <script>
   /**
    * Список способов оплаты — макет 1000008925.png
-   * Шаг 3: сохранённые карты + СБП + «Новая карта» + Pay при выборе.
+   * Шаг 3: сохранённые карты + СБП + «Новая карта» + Pay FSM 0–7.
    */
   import {
     formatCardFullLabel,
     formatCardListLabel,
     cardBrandShort
   } from "../lib/paymentMethodLabels.js"
+  import { PAY_FSM, shouldLockPaymentMethods } from "../lib/shopPayFsm.js"
   import NewCardForm from "./NewCardForm.svelte"
+  import CheckoutPayButton from "./CheckoutPayButton.svelte"
 
   let {
     open = false,
@@ -17,16 +19,19 @@
     selectedCardId = null,
     selectionMode = "saved_card", // saved_card | new_card
     canPay = false,
+    fsmState = PAY_FSM.DEFAULT,
     newCardState = $bindable(undefined),
     onClose = undefined,
     onSelectCard = undefined,
     onSelectNewCard = undefined,
-    onPay = undefined
+    onPay = undefined,
+    onRetry = undefined
   } = $props()
 
   let sbpNotice = $state(false)
 
-  const payDisabled = $derived(!canPay || loading)
+  const locked = $derived(shouldLockPaymentMethods(fsmState))
+  const payDisabled = $derived(!canPay || loading || locked)
 
   function isCardSelected(card) {
     return selectionMode === "saved_card" && selectedCardId === card.id
@@ -41,7 +46,9 @@
   <div
     class="pm-backdrop"
     role="presentation"
-    onclick={() => onClose?.()}
+    onclick={() => {
+      if (!locked) onClose?.()
+    }}
     data-testid="payment-methods-backdrop"
   ></div>
   <section class="pm-sheet" aria-label="Способ оплаты" data-testid="payment-methods-sheet">
@@ -52,6 +59,7 @@
         class="pm-sheet__close"
         aria-label="Закрыть"
         data-testid="payment-methods-close"
+        disabled={locked}
         onclick={() => onClose?.()}
       >
         ×
@@ -71,6 +79,7 @@
               role="radio"
               aria-checked={isCardSelected(card)}
               data-testid="payment-method-card-{card.id}"
+              disabled={locked}
               onclick={() => onSelectCard?.(card)}
             >
               <span class="pm-row__brand" aria-hidden="true">{cardBrandShort(card.payment_system || card.card_type)}</span>
@@ -103,6 +112,7 @@
             role="radio"
             aria-checked={selectionMode === "new_card"}
             data-testid="payment-method-new-card"
+            disabled={locked}
             onclick={() => onSelectNewCard?.()}
           >
             <span class="pm-row__label pm-row__label--solo">Новая карта</span>
@@ -123,15 +133,12 @@
     {/if}
 
     <div class="pm-sheet__pay">
-      <button
-        type="button"
-        class="pm-pay"
-        data-testid="payment-methods-pay"
-        disabled={payDisabled}
-        onclick={() => onPay?.()}
-      >
-        Оплатить
-      </button>
+      <CheckoutPayButton
+        {fsmState}
+        disabled={payDisabled && fsmState === PAY_FSM.DEFAULT}
+        onPay={() => onPay?.()}
+        onRetry={() => onRetry?.()}
+      />
     </div>
   </section>
 {/if}
@@ -191,6 +198,11 @@
     cursor: pointer;
   }
 
+  .pm-sheet__close:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
   .pm-sheet__loading,
   .pm-sheet__hint {
     margin: 0 0 1rem;
@@ -221,6 +233,11 @@
     text-align: left;
     cursor: pointer;
     position: relative;
+  }
+
+  .pm-row:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
   }
 
   .pm-row--selected {
@@ -294,22 +311,5 @@
     padding: 0.75rem;
     border-radius: 0.75rem;
     background: #242424;
-  }
-
-  .pm-pay {
-    width: 100%;
-    border: 0;
-    border-radius: 999px;
-    background: #ff8c42;
-    color: #000;
-    font-size: 1.125rem;
-    font-weight: 600;
-    padding: 1rem;
-    cursor: pointer;
-  }
-
-  .pm-pay:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
   }
 </style>

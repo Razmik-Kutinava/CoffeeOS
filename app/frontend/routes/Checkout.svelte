@@ -1,5 +1,5 @@
 ﻿<script>
-  import { onMount } from "svelte"
+  import { onMount, tick } from "svelte"
   import { push } from "svelte-spa-router"
   import { api } from "../lib/api.js"
   import {
@@ -27,9 +27,20 @@
     isPayEnabled as isNewCardPayEnabled,
     setSaveCard
   } from "../lib/shopNewCardForm.js"
-  import { encryptCardPayload } from "../lib/tbankCardEncrypt.js"
+  import { encryptCardPayload, submitThreeDsChallenge } from "../lib/tbankCardEncrypt.js"
   import { digitsOnly } from "../lib/tbankCardFormat.js"
+  import {
+    PAY_FSM,
+    MIN_LOADER_MS,
+    SUCCESS_REDIRECT_MS,
+    apiWithPayTimeout,
+    fsmFromPaymentError,
+    isPayFsmClickable,
+    withMinLoaderMs
+  } from "../lib/shopPayFsm.js"
+  import { waitForOrderSettled } from "../lib/shopPaySettle.js"
   import PaymentMethodsSheet from "../components/PaymentMethodsSheet.svelte"
+  import ThreeDsOverlay from "../components/ThreeDsOverlay.svelte"
 
   let name = $state("")
   let email = $state("")
@@ -53,6 +64,9 @@
   let selectedCardId = $state(null)
   let selectionMode = $state("saved_card") // saved_card | new_card
   let newCardState = $state(createNewCardFormState())
+  let payFsmState = $state(PAY_FSM.DEFAULT)
+  let showThreeDsOverlay = $state(false)
+  let threeDsAborted = $state(false)
 
   const canSendCode = $derived(isValidEmail(email) && !sendingCode)
   const canPay = $derived(
@@ -64,13 +78,6 @@
         ? !!selectedCardId
         : isNewCardPayEnabled(newCardState))
   )
-
-  /** Extreme: сеть пропала → Net Error, форма не сбрасывается. */
-  function isOfflineError(e) {
-    if (typeof navigator !== "undefined" && navigator.onLine === false) return true
-    const msg = String(e?.message || e || "")
-    return /Failed to fetch|NetworkError|network|offline|Load failed|ERR_NETWORK/i.test(msg)
-  }
 
   onMount(() => {
     const profile = loadGuestProfile()
@@ -218,162 +225,166 @@
   function onSelectCard(card) {
     selectionMode = "saved_card"
     selectedCardId = card.id
+    payFsmState = PAY_FSM.DEFAULT
   }
 
   function onSelectNewCard() {
     selectionMode = "new_card"
     selectedCardId = null
     newCardState = createNewCardFormState()
+    payFsmState = PAY_FSM.DEFAULT
   }
 
-  async function submit() {
-    if (!canPay) return
-    err = null
-    submitting = true
-    let redirecting = false
+  /** 3DS прерван (закрыли overlay) → Client Error, карта не сохранена на FE. */
+  function onThreeDsClose() {
+    if (payFsmState !== PAY_FSM.THREE_DS && payFsmState !== PAY_FSM.PROCESSING) {
+      showThreeDsOverlay = false
+      return
+    }
+    threeDsAborted = true
+    showThreeDsOverlay = false
+    payFsmState = PAY_FSM.CLIENT_ERROR
+    submitting = false
+  }
+
+  async function completePaySuccess(orderId, { wantedSave = false, savedCard = null } = {}) {
+    payFsmState = PAY_FSM.SUCCESS
+    if (wantedSave && !savedCard) {
+      newCardState = setSaveCard(createNewCardFormState(), false)
+    } else if (selectionMode === "new_card") {
+      newCardState = createNewCardFormState()
+    }
+    selectionMode = "saved_card"
+    await loadSavedCards()
+    await new Promise((r) => setTimeout(r, SUCCESS_REDIRECT_MS))
+    paymentSheetOpen = false
+    push(`/payment-result?status=ok&order_id=${orderId}`)
+  }
+
+  async function handleThreeDsResponse(res) {
+    threeDsAborted = false
+    payFsmState = PAY_FSM.THREE_DS
+    showThreeDsOverlay = true
+    saveGuestOrderSession(res.order_id, res.reconnect_token)
+    savePaymentSession({
+      order_id: res.order_id,
+      reconnect_token: res.reconnect_token,
+      payment_started: true
+    })
     try {
-      saveGuestProfile({ name, email, emailVerified: true })
-
-      const res = await api("/orders", {
-        method: "POST",
-        body: JSON.stringify({
-          name,
-          email: email.trim().toLowerCase(),
-          payment_method
-        })
+      await tick()
+      submitThreeDsChallenge(res.three_ds)
+      payFsmState = PAY_FSM.PROCESSING
+      await waitForOrderSettled(api, {
+        orderId: res.order_id,
+        reconnectToken: res.reconnect_token,
+        isCancelled: () => threeDsAborted
       })
-
-      saveGuestOrderSession(res.order_id, res.reconnect_token)
-
-      if (res.payment_url) {
-        redirecting = true
-        window.location.href = res.payment_url
+      if (threeDsAborted) return
+      showThreeDsOverlay = false
+      await completePaySuccess(res.order_id, {
+        wantedSave: res.save_card === true,
+        savedCard: res.saved_card
+      })
+    } catch (e) {
+      showThreeDsOverlay = false
+      if (threeDsAborted || e?.kind === "three_ds_abort") {
+        payFsmState = PAY_FSM.CLIENT_ERROR
         return
       }
-
-      if (res.provider_payment_id) {
-        let config = {}
-        try {
-          config = await api("/config")
-        } catch {
-          config = {}
-        }
-        savePaymentSession({
-          order_id: res.order_id,
-          total: res.total,
-          provider_payment_id: res.provider_payment_id,
-          terminal_key: res.terminal_key || config.terminal_key,
-          payment_url: res.payment_url,
-          reconnect_token: res.reconnect_token,
-          payment_iframe: false,
-          payment_method,
-          integration_script_url: config.integration_script_url
-        })
+      if (payFsmState !== PAY_FSM.CLIENT_ERROR) {
+        payFsmState = fsmFromPaymentError(e, { httpStatus: e.httpStatus })
       }
-
-      redirecting = true
-      push(`/order/${res.order_id}`)
-    } catch (e) {
-      err = e.message
-      if (/подтвердите email/i.test(e.message || "")) {
-        emailVerified = false
-        editContact = true
-        clearEmailVerifiedInProfile()
-      }
-    } finally {
-      if (!redirecting) submitting = false
     }
   }
 
   async function onSheetPay() {
     if (!sheetCanPay) return
+    if (!isPayFsmClickable(payFsmState)) return
     err = null
     submitting = true
-    let redirecting = false
+    payFsmState = PAY_FSM.CONNECTING
+    const formSnapshot = { ...newCardState }
+    const wantedSave = selectionMode === "new_card" ? !!newCardState.save_card : false
+
     try {
       saveGuestProfile({ name, email, emailVerified: true })
 
-      if (selectionMode === "new_card") {
-        // Шаг 5: «Новая карта» → RSA CardData → payments/new_card (save_card).
-        const cfg = await api("/payments/card_config")
-        if (!cfg?.rsa_public_key) {
-          throw new Error("Ключ шифрования карты не настроен")
-        }
-        const wantedSave = !!newCardState.save_card
-        const CardData = encryptCardPayload(
-          {
-            pan: digitsOnly(newCardState.pan_masked),
-            expDate: newCardState.exp_date,
-            cvv: newCardState.cvv,
-            cardHolder: name
-          },
-          cfg.rsa_public_key
-        )
-        const res = await api("/payments/new_card", {
-          method: "POST",
-          body: JSON.stringify({
-            name,
-            email: email.trim().toLowerCase(),
-            payment_method: "card",
-            CardData,
-            save_card: wantedSave
+      const res = await withMinLoaderMs(MIN_LOADER_MS, async () => {
+        payFsmState = PAY_FSM.CONNECTING
+        let payload
+        if (selectionMode === "new_card") {
+          const cfg = await apiWithPayTimeout(api, "/payments/card_config")
+          if (!cfg?.rsa_public_key) {
+            throw new Error("Ключ шифрования карты не настроен")
+          }
+          const CardData = encryptCardPayload(
+            {
+              pan: digitsOnly(newCardState.pan_masked),
+              expDate: newCardState.exp_date,
+              cvv: newCardState.cvv,
+              cardHolder: name
+            },
+            cfg.rsa_public_key
+          )
+          payload = await apiWithPayTimeout(api, "/payments/new_card", {
+            method: "POST",
+            body: JSON.stringify({
+              name,
+              email: email.trim().toLowerCase(),
+              payment_method: "card",
+              CardData,
+              save_card: wantedSave
+            })
           })
-        })
-
-        paymentSheetOpen = false
-        // Extreme E2: нет RebillId / нет saved_card → тумблер OFF (не теряем форму при Net Error — только здесь после OK).
-        if (wantedSave && !res.saved_card) {
-          newCardState = setSaveCard(createNewCardFormState(), false)
         } else {
-          newCardState = createNewCardFormState()
+          payload = await apiWithPayTimeout(api, "/payments/one_click", {
+            method: "POST",
+            body: JSON.stringify({
+              name,
+              email: email.trim().toLowerCase(),
+              payment_method: "card",
+              card_id: selectedCardId
+            })
+          })
         }
-        selectionMode = "saved_card"
-        saveGuestOrderSession(res.order_id, res.reconnect_token)
-        await loadSavedCards()
-
-        if (res.three_ds) {
-          redirecting = true
-          push(`/order/${res.order_id}`)
-          return
-        }
-        redirecting = true
-        push(`/payment-result?status=ok&order_id=${res.order_id}`)
-        return
-      }
-
-      // Шаг 4: 1 клик — { card_id } → Init → Charge; форму новой карты не показываем.
-      const res = await api("/payments/one_click", {
-        method: "POST",
-        body: JSON.stringify({
-          name,
-          email: email.trim().toLowerCase(),
-          payment_method: "card",
-          card_id: selectedCardId
-        })
+        payFsmState = PAY_FSM.PROCESSING
+        return payload
       })
 
-      paymentSheetOpen = false
       saveGuestOrderSession(res.order_id, res.reconnect_token)
 
-      if (res.three_ds) {
-        redirecting = true
-        push(`/order/${res.order_id}`)
+      if (res.three_ds?.acs_url || res.tbank_status === "3DS_CHECKING") {
+        await handleThreeDsResponse(res)
         return
       }
 
-      redirecting = true
-      push(`/payment-result?status=ok&order_id=${res.order_id}`)
+      await completePaySuccess(res.order_id, {
+        wantedSave,
+        savedCard: res.saved_card
+      })
     } catch (e) {
-      // Extreme E6: Net Error — форма остаётся заполненной (newCardState не трогаем).
-      err = isOfflineError(e) ? "Нет сети: повторить" : e.message
+      // Net/Client Error: форма новой карты остаётся заполненной.
+      if (selectionMode === "new_card") {
+        newCardState = formSnapshot
+      }
+      payFsmState = fsmFromPaymentError(e, { httpStatus: e.httpStatus })
       if (/подтвердите email/i.test(e.message || "")) {
         emailVerified = false
         editContact = true
         clearEmailVerifiedInProfile()
+        err = e.message
       }
     } finally {
-      if (!redirecting) submitting = false
+      if (payFsmState !== PAY_FSM.SUCCESS && payFsmState !== PAY_FSM.THREE_DS) {
+        submitting = false
+      }
     }
+  }
+
+  function onSheetPayRetry() {
+    payFsmState = PAY_FSM.DEFAULT
+    onSheetPay()
   }
 </script>
 
@@ -513,10 +524,16 @@
     {selectedCardId}
     {selectionMode}
     canPay={sheetCanPay}
+    fsmState={payFsmState}
     bind:newCardState
-    onClose={() => (paymentSheetOpen = false)}
+    onClose={() => {
+      if (isPayFsmClickable(payFsmState)) paymentSheetOpen = false
+    }}
     {onSelectCard}
     {onSelectNewCard}
     onPay={onSheetPay}
+    onRetry={onSheetPayRetry}
   />
+
+  <ThreeDsOverlay open={showThreeDsOverlay} onClose={onThreeDsClose} />
 </div>

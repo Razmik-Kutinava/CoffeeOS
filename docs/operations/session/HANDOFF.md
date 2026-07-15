@@ -1,6 +1,6 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-15 (UserCards — extremes + deploy/MCP)  
+**Дата:** 2026-07-15 (UserCards — FSM 0–7 + 3DS → deploy/MCP)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev
 
@@ -10,12 +10,12 @@
 |-----|--------|
 | Канон-ТЗ | [`Исправление сохранения карты в UserCards…`](../milestones/veha_2/requirements/customer_tasks/Исправление%20сохранения%20карты%20в%20UserCards%20после%20успешной%20оплаты.md) |
 | WIPE | **done** · не восстанавливать старое из git |
-| **Шаг 1–6** Gherkin | **`[x]`** · форма → FA → список → Charge → 2-я карта → save_card=false |
-| **Extremes** | **`[x]`** soft DB + webhook upsert · no RebillId · Net Error · empty list · 3DS no-save (UI Client Error deferred) |
-| Deploy Fly | **`[x]`** `29fbe63` → https://coffeeos.fly.dev · `/up` 200 · Checkout bundle contains «Нет сети: повторить» |
-| MCP browser | **blocked** — MCP servers unavailable в сессии; smoke HTTP + asset needles |
+| **Шаг 1–6** Gherkin | **`[x]`** |
+| **Extremes + FSM 0–7 / 3DS** | **`[x]`** webhook · soft DB · Net Error · Client Error overlay |
+| Deploy Fly | in flight после коммита FSM |
+| MCP browser | следующий шаг после deploy |
 | UserCards storage | `mobile_payment_methods` |
-| **Следующий шаг** | **апрув заказчика** (Exit 3–9 visual); backlog: 3DS Client Error FSM |
+| **Следующий шаг** | deploy → MCP UI → **апрув заказчика** |
 
 ### WIPE 2026-07-14 — сохранение карты / checkout card UX
 

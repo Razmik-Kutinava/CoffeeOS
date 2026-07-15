@@ -2,7 +2,7 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-15 (UserCards — extremes done · deploy+MCP in flight)  
+**Дата:** 2026-07-15 (UserCards — FSM 0–7 + 3DS overlay)  
 **Веха 1:** **закрыта** 2026-06-19.  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
 **§2.3 оплата витрина (Init→payment_url→callback):** **done** — базовый redirect на банк остаётся.
@@ -11,10 +11,17 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **UserCards / save_card** | S1–S6 + **extremes [x]** · deploy **[x]** `29fbe63` | апрув заказчика · MCP UI вручную (MCP n/a) |
+| **UserCards / save_card** | S1–S6 + extremes + **FSM/3DS [x]** | deploy · MCP UI · апрув |
 | **B1.13 CR-BOTTOM-NAV** | бар убран · cart BOTTOM_REM=0 код [x] | **go deploy** · A1 апрув |
 | **B1.14 адрес в шапке** | **B1.14-3d** index map [x] | deploy · B1.14-4 cart |
 | **Product card peek cart** | S1–S7 код [x] · MCP Fly [ ] | апрув заказчика |
+
+### Сессия 2026-07-15 (Pay FSM 0–7 + 3DS Client Error)
+
+- `shopPayFsm` + `CheckoutPayButton` + `ThreeDsOverlay` + `shopPaySettle`.
+- Close 3DS → CLIENT_ERROR «Отказ: смените карту»; Net Error State 7.
+- Тесты FSM+extremes zone **30 PASS**. Vite PASS.
+- Дальше: deploy + MCP browser.
 
 ### Сессия 2026-07-15 (UserCards extremes)
 
