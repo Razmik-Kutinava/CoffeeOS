@@ -184,16 +184,14 @@
    - 1000008924.png: поля «Номер карты», «ММ/ГГ», «CMC/CVV», тумблер ON
    - 1000008925.png: список карт с иконками (МИР, Mastercard), текст «Карта *XXXX», кнопка «Новая карта»
 
+## Скрины к задаче (артефакты)
 
-макет 1000008925.png
+Канон: [`artifacts/usercards_save_card/screenshots/`](../../artifacts/usercards_save_card/screenshots/)
 
-
-
-макет 1000008924.png
-
-
-13:19 время оплаты - оплата прошла успешно
-
-
-13:23 - повторная покупка - карта не прикреплена
+| Скрин | Файл |
+|-------|------|
+| макет 1000008925.png | [`1000008925_payment_methods_list.png`](../../artifacts/usercards_save_card/screenshots/1000008925_payment_methods_list.png) |
+| макет 1000008924.png | [`1000008924_new_card_form.png`](../../artifacts/usercards_save_card/screenshots/1000008924_new_card_form.png) |
+| 13:19 время оплаты — оплата прошла успешно | [`bug_13-19_payment_success_save_card_on.png`](../../artifacts/usercards_save_card/screenshots/bug_13-19_payment_success_save_card_on.png) |
+| 13:23 — повторная покупка — карта не прикреплена | [`bug_13-23_repeat_purchase_card_missing.png`](../../artifacts/usercards_save_card/screenshots/bug_13-23_repeat_purchase_card_missing.png) |
 

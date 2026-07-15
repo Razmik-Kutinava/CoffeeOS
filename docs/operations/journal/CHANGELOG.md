@@ -1,5 +1,10 @@
 ﻿# CHANGELOG
 
+## 2026-07-15 — docs: скрины UserCards save_card → artifacts
+
+- Папка `artifacts/usercards_save_card/screenshots/` (макеты 8924/8925 + баг 13:19/13:23).
+- Ссылки из ТЗ customer_tasks. Дубликатов вне папки не найдено.
+
 ## 2026-07-15 — feat(shop): Pay FSM 0–7 + 3DS overlay (Client Error)
 
 - `shopPayFsm.js` + `CheckoutPayButton` + `ThreeDsOverlay` + settle poll.
