@@ -11,7 +11,7 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **UserCards / save_card** | S1–S6 + **extremes [x]** | deploy Fly · MCP · апрув заказчика |
+| **UserCards / save_card** | S1–S6 + **extremes [x]** · deploy **[x]** `29fbe63` | апрув заказчика · MCP UI вручную (MCP n/a) |
 | **B1.13 CR-BOTTOM-NAV** | бар убран · cart BOTTOM_REM=0 код [x] | **go deploy** · A1 апрув |
 | **B1.14 адрес в шапке** | **B1.14-3d** index map [x] | deploy · B1.14-4 cart |
 | **Product card peek cart** | S1–S7 код [x] · MCP Fly [ ] | апрув заказчика |
@@ -22,6 +22,8 @@
 - `NewCardPaymentService`: persist rescue → Success без `saved_card`.
 - Checkout: нет `saved_card` → тумблер OFF; `isOfflineError` → «Нет сети: повторить».
 - Тест: `shop_user_cards_extremes_test` **7 runs PASS**; step6+callback **21 runs PASS**.
+- Deploy: `git push` + `fly deploy -a coffeeos --remote-only --depot=false` **OK** · `/up` 200 · shop 200.
+- MCP: browser MCP **недоступен** в сессии; smoke: Checkout JS на Fly содержит «Нет сети: повторить» + `Failed to fetch`.
 - Backlog: UI Client Error / 3DS overlay FSM — без go.
 
 ### Сессия 2026-07-15 (Шаг 6 — save_card=false)

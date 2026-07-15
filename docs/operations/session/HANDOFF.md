@@ -12,8 +12,10 @@
 | WIPE | **done** · не восстанавливать старое из git |
 | **Шаг 1–6** Gherkin | **`[x]`** · форма → FA → список → Charge → 2-я карта → save_card=false |
 | **Extremes** | **`[x]`** soft DB + webhook upsert · no RebillId · Net Error · empty list · 3DS no-save (UI Client Error deferred) |
+| Deploy Fly | **`[x]`** `29fbe63` → https://coffeeos.fly.dev · `/up` 200 · Checkout bundle contains «Нет сети: повторить» |
+| MCP browser | **blocked** — MCP servers unavailable в сессии; smoke HTTP + asset needles |
 | UserCards storage | `mobile_payment_methods` |
-| **Следующий шаг** | MCP на Fly / **апрув заказчика**; backlog: 3DS Client Error FSM |
+| **Следующий шаг** | **апрув заказчика** (Exit 3–9 visual); backlog: 3DS Client Error FSM |
 
 ### WIPE 2026-07-14 — сохранение карты / checkout card UX
 

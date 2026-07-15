@@ -6,6 +6,7 @@
 - `NewCardPaymentService`: persist failure не валит Success.
 - Checkout: нет `saved_card` → тумблер OFF; `isOfflineError` → «Нет сети: повторить».
 - Тест: `shop_user_cards_extremes_test` **7 PASS**; step6+callback **21 PASS**.
+- Deploy Fly `29fbe63` OK; MCP browser n/a → HTTP/asset smoke.
 - Backlog: UI Client Error / 3DS overlay FSM без go.
 
 ## 2026-07-15 — test(shop): Шаг 6 — save_card=false не пишет UserCards
