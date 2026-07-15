@@ -1,5 +1,13 @@
 ﻿# CHANGELOG
 
+## 2026-07-15 — feat(shop): UserCards extremes (webhook upsert, soft DB fail, Net Error)
+
+- `TbankCallbackJob`: CONFIRMED+RebillId → `SavedCardStore` (soft-fail).
+- `NewCardPaymentService`: persist failure не валит Success.
+- Checkout: нет `saved_card` → тумблер OFF; `isOfflineError` → «Нет сети: повторить».
+- Тест: `shop_user_cards_extremes_test` **7 PASS**; step6+callback **21 PASS**.
+- Backlog: UI Client Error / 3DS overlay FSM без go.
+
 ## 2026-07-15 — test(shop): Шаг 6 — save_card=false не пишет UserCards
 
 - Тест: `shop_save_card_false_step6_test` — CONFIRMED без записи; Init `recurrent:false`; GET без новой карты.

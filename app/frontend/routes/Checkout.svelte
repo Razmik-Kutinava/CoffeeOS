@@ -24,7 +24,8 @@
   } from "../lib/shopOperatingHours.js"
   import {
     createNewCardFormState,
-    isPayEnabled as isNewCardPayEnabled
+    isPayEnabled as isNewCardPayEnabled,
+    setSaveCard
   } from "../lib/shopNewCardForm.js"
   import { encryptCardPayload } from "../lib/tbankCardEncrypt.js"
   import { digitsOnly } from "../lib/tbankCardFormat.js"
@@ -63,6 +64,13 @@
         ? !!selectedCardId
         : isNewCardPayEnabled(newCardState))
   )
+
+  /** Extreme: сеть пропала → Net Error, форма не сбрасывается. */
+  function isOfflineError(e) {
+    if (typeof navigator !== "undefined" && navigator.onLine === false) return true
+    const msg = String(e?.message || e || "")
+    return /Failed to fetch|NetworkError|network|offline|Load failed|ERR_NETWORK/i.test(msg)
+  }
 
   onMount(() => {
     const profile = loadGuestProfile()
@@ -291,6 +299,7 @@
         if (!cfg?.rsa_public_key) {
           throw new Error("Ключ шифрования карты не настроен")
         }
+        const wantedSave = !!newCardState.save_card
         const CardData = encryptCardPayload(
           {
             pan: digitsOnly(newCardState.pan_masked),
@@ -307,12 +316,17 @@
             email: email.trim().toLowerCase(),
             payment_method: "card",
             CardData,
-            save_card: !!newCardState.save_card
+            save_card: wantedSave
           })
         })
 
         paymentSheetOpen = false
-        newCardState = createNewCardFormState()
+        // Extreme E2: нет RebillId / нет saved_card → тумблер OFF (не теряем форму при Net Error — только здесь после OK).
+        if (wantedSave && !res.saved_card) {
+          newCardState = setSaveCard(createNewCardFormState(), false)
+        } else {
+          newCardState = createNewCardFormState()
+        }
         selectionMode = "saved_card"
         saveGuestOrderSession(res.order_id, res.reconnect_token)
         await loadSavedCards()
@@ -350,7 +364,8 @@
       redirecting = true
       push(`/payment-result?status=ok&order_id=${res.order_id}`)
     } catch (e) {
-      err = e.message
+      // Extreme E6: Net Error — форма остаётся заполненной (newCardState не трогаем).
+      err = isOfflineError(e) ? "Нет сети: повторить" : e.message
       if (/подтвердите email/i.test(e.message || "")) {
         emailVerified = false
         editContact = true

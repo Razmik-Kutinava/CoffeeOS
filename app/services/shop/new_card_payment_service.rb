@@ -95,11 +95,16 @@ module Shop
       ).call!
       order.reload
       # Шаг 6: save_card=false — UserCards НЕ создаём, даже если банк вернул RebillId.
+      # Extreme E1: падение записи карты не должно валить уже успешный платёж (Soft success).
       if save_card
-        if raw["RebillId"].to_s.present?
-          Payments::SavedCardStore.persist_from_tbank!(payment: payment.reload, payload: raw)
-        else
-          Payments::TbankPaymentSync.sync_order!(order: order)
+        begin
+          if raw["RebillId"].to_s.present?
+            Payments::SavedCardStore.persist_from_tbank!(payment: payment.reload, payload: raw)
+          else
+            Payments::TbankPaymentSync.sync_order!(order: order)
+          end
+        rescue StandardError => e
+          Rails.logger.error("[NewCardPaymentService] UserCards persist failed: #{e.class}: #{e.message}")
         end
       end
       Shop::CartService.new(@session, @tenant.id).clear! if order.accepted?

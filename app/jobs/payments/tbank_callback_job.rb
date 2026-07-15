@@ -44,6 +44,15 @@ module Payments
         note:                "Т-Банк: #{tbank_status}"
       ).call!
 
+      # Extreme/Exit#7: webhook upsert UserCards (idempotent по RebillId / pan+exp).
+      if tbank_status.to_s.upcase == "CONFIRMED" && payload["RebillId"].to_s.present?
+        begin
+          Payments::SavedCardStore.persist_from_tbank!(payment: payment.reload, payload: payload)
+        rescue StandardError => e
+          Rails.logger.error("[TbankCallbackJob] UserCards persist failed: #{e.class}: #{e.message}")
+        end
+      end
+
       Rails.logger.info("[TbankCallbackJob] Processed OrderId=#{order_id}, status=#{tbank_status}→#{our_status}")
     end
   end

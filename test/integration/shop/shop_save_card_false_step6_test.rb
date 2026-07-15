@@ -160,7 +160,10 @@ class Shop::ShopSaveCardFalseStep6Test < ActionDispatch::IntegrationTest
 
   test "S6 When: Checkout posts save_card from form toggle" do
     src = File.read(CHECKOUT)
-    assert_match(/save_card:\s*!!newCardState\.save_card|save_card:\s*newCardState\.save_card/, src)
+    assert_match(
+      /save_card:\s*!!newCardState\.save_card|save_card:\s*newCardState\.save_card|save_card:\s*wantedSave/,
+      src
+    )
     assert_match(%r{payments/new_card}, src)
   end
 

@@ -2,7 +2,7 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-15 (UserCards / save_card — Шаг 6 done · Gherkin S1–S6 [x])  
+**Дата:** 2026-07-15 (UserCards — extremes done · deploy+MCP in flight)  
 **Веха 1:** **закрыта** 2026-06-19.  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
 **§2.3 оплата витрина (Init→payment_url→callback):** **done** — базовый redirect на банк остаётся.
@@ -11,10 +11,18 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **UserCards / save_card** | **Шаг 1–6 [x]** Gherkin | extremes / MCP Fly / апрув (`go`) |
+| **UserCards / save_card** | S1–S6 + **extremes [x]** | deploy Fly · MCP · апрув заказчика |
 | **B1.13 CR-BOTTOM-NAV** | бар убран · cart BOTTOM_REM=0 код [x] | **go deploy** · A1 апрув |
 | **B1.14 адрес в шапке** | **B1.14-3d** index map [x] | deploy · B1.14-4 cart |
 | **Product card peek cart** | S1–S7 код [x] · MCP Fly [ ] | апрув заказчика |
+
+### Сессия 2026-07-15 (UserCards extremes)
+
+- `TbankCallbackJob`: CONFIRMED+RebillId → `SavedCardStore` soft-fail.
+- `NewCardPaymentService`: persist rescue → Success без `saved_card`.
+- Checkout: нет `saved_card` → тумблер OFF; `isOfflineError` → «Нет сети: повторить».
+- Тест: `shop_user_cards_extremes_test` **7 runs PASS**; step6+callback **21 runs PASS**.
+- Backlog: UI Client Error / 3DS overlay FSM — без go.
 
 ### Сессия 2026-07-15 (Шаг 6 — save_card=false)
 
