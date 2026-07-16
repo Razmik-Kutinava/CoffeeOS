@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-07-16 — ops: UserCards расследование 2-й оплаты aramfifa (Fly prod)
+
+- `bin/usercards_fly_payment_investigate.rb` + `usercards_fly_payment_investigate_2026-07-16.json`.
+- 2× succeeded сегодня: 08:42 *5953 с RebillId; 09:56 save_card=true **без Pan/RebillId** (GetState пустой).
+- ISSUES/SESSION_STATE обновлены.
+
 ## 2026-07-16 — fix(shop): UserCards Фаза 2 — stacked checkout pay UX
 
 - **Docs:** ISSUES/HANDOFF/SESSION_STATE/TZ — сняты ложные `[x]` по канону UX; Фаза 2 в ТЗ.

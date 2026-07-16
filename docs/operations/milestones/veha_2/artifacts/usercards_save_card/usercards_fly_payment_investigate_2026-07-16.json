@@ -1,0 +1,54 @@
+{
+  "date": "2026-07-16",
+  "fly_app": "coffeeos",
+  "machine_id": "9080d40db67238",
+  "email": "aramfifa100@gmail.com",
+  "investigation": {
+    "email": "aramfifa100@gmail.com",
+    "customer_id": "2bc37279-8d23-456b-a2a5-4c28f584634c",
+    "payments_today": [
+      {
+        "payment_id": "f7a61e93-0d6f-4f05-9221-e3461b01dd30",
+        "order_id": "72c26576-99c1-4ad0-adf3-39faf93f4320",
+        "created_at": "2026-07-16T09:56:36Z",
+        "status": "succeeded",
+        "provider": "tbank",
+        "provider_payment_id": "8866531465",
+        "amount": "4.74",
+        "save_card": true,
+        "rebill_id": null,
+        "pan": null,
+        "card_id": null,
+        "tbank_status": "CONFIRMED"
+      },
+      {
+        "payment_id": "bff277bd-6e18-468c-8758-5d8e3bca4422",
+        "order_id": "910b4e8b-3b5f-44db-b859-5cbdd9e7e5cf",
+        "created_at": "2026-07-16T08:42:07Z",
+        "status": "succeeded",
+        "provider": "tbank",
+        "provider_payment_id": "8866059239",
+        "amount": "4.74",
+        "save_card": true,
+        "rebill_id": 1846699802,
+        "pan": "220196******5953",
+        "card_id": 566291000,
+        "tbank_status": "CONFIRMED"
+      }
+    ],
+    "unique_pans_today": [
+      "220196******5953"
+    ],
+    "different_cards_today": false,
+    "saved_cards": [
+      {
+        "id": "4c5569dd-994c-4146-86d2-ed4d78bebcd6",
+        "card_masked": "*5953",
+        "card_token": "1846699802",
+        "is_default": true,
+        "created_at": "2026-07-16T09:02:55Z"
+      }
+    ]
+  },
+  "verdict": "SECOND_PAYMENT_NO_PAN_FROM_TBANK"
+}

@@ -18,8 +18,9 @@
 [2026-07-16] — Checkout Фаза 2 UX: нет одной шторки (peek сверху + PaymentMethodsSheet expanded снизу)
 **Статус:** **код done** · **MCP Fly [ ]** · **апрув заказчика [ ]**
 **Источник:** заказчик · [`Исправление сохранения карты…`](../milestones/veha_2/requirements/customer_tasks/Исправление%20сохранения%20карты%20в%20UserCards%20после%20успешной%20оплаты.md) § **Канон UX checkout** · макеты **1000008924/8925**
-**Фикс Фаза 2 (код):** `openCheckoutPayStack` + `PaymentMethodsSheet stacked` (без backdrop) + peek strip z-52 · `prog25`
-**Осталось:** deploy · MCP Fly stacked скрин · апрув заказчика «ок».
+**Фикс Фаза 2 (код):** `openCheckoutPayStack` + stacked UX · `prog25`
+**Расследование 2026-07-16:** [`usercards_fly_payment_investigate_2026-07-16.json`](../milestones/veha_2/artifacts/usercards_save_card/usercards_fly_payment_investigate_2026-07-16.json) — 2× succeeded сегодня; **09:56** без Pan/RebillId (GetState тоже); **08:42** = *5953.
+**Осталось:** fix Init/recurrent или GetState persist · MCP · апрув.
 
 ## Решено недавно
 
