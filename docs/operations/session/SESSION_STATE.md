@@ -2,7 +2,7 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-16 (MCP Fly checkout peek PASS)  
+**Дата:** 2026-07-16 (UserCards Фаза 0 Fly diagnose)  
 **Веха 1:** **закрыта** 2026-06-19.  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
 **§2.3 оплата витрина (Init→payment_url→callback):** **done** — базовый redirect на банк остаётся.
@@ -12,10 +12,21 @@
 | Сейчас | Дальше |
 |--------|--------|
 | **Checkout CartSheet UX** | MCP Fly **[x]** peek/no inline pay | PaymentMethodsSheet + апрув заказчика |
-| **UserCards / save_card** | review БАГ-1/2/3 **[x]** | MCP оплата с verified email |
+| **UserCards / save_card** | Фаза 0 diagnose **[x]** | **Фаза 1** fix persist + worker |
 | **B1.13 CR-BOTTOM-NAV** | бар убран · cart BOTTOM_REM=0 | A1 апрув [ ] |
 | **B1.14 адрес в шапке** | **B1.14-3d** index map [x] | B1.14-4 cart |
 | **Product card peek cart** | S1–S7 код [x] | апрув заказчика |
+
+### Сессия 2026-07-16 (UserCards Фаза 0 — Fly diagnose read-only)
+
+- **Скрипт:** `bin/usercards_fly_diagnose.rb` → `usercards_fly_diagnose_2026-07-16.json`.
+- **Release:** v361 · web started · **worker stopped**.
+- **DB prod:** 14 card rows global; **aramfifa100@gmail.com → 0 cards**.
+- **Payment:** `0a7e0f8e…` 2026-07-15 save_card=true succeeded — row не создан (H3b).
+- **Env:** SHOP_SIMULATE=0; TBANK secrets present; bundle D1E05YN_ без inline pay.
+- **Logs:** TbankCallbackJob enqueued CONFIRMED+RebillId; 0 hits payments/new_card.
+- **ISSUES:** 🔴 UserCards save bug_13-23 открыт.
+- **Стоп:** ждать **`go`** на Фаза 1 (backend fix).
 
 ### Сессия 2026-07-16 (MCP Fly — checkout UX после deploy)
 

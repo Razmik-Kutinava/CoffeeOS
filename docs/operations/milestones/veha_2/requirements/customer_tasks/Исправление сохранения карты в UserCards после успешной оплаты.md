@@ -213,3 +213,18 @@
 | 13:19 время оплаты — оплата прошла успешно | [`bug_13-19_payment_success_save_card_on.png`](../../artifacts/usercards_save_card/screenshots/bug_13-19_payment_success_save_card_on.png) |
 | 13:23 — повторная покупка — карта не прикреплена | [`bug_13-23_repeat_purchase_card_missing.png`](../../artifacts/usercards_save_card/screenshots/bug_13-23_repeat_purchase_card_missing.png) |
 
+## Фаза 0 — диагностика Fly (2026-07-16, read-only)
+
+**Артефакт:** [`usercards_fly_diagnose_2026-07-16.json`](../../artifacts/usercards_save_card/usercards_fly_diagnose_2026-07-16.json) · скрипт `bin/usercards_fly_diagnose.rb`
+
+| Проверка | Результат | Вывод |
+|----------|-----------|-------|
+| Release v361, bundle | `application-D1E05YN_.js`, prog24, без inline pay | UX-код на Fly актуален |
+| `mobile_payment_methods` (card) | 14 rows | Глобально save работал (dev smoke) |
+| `aramfifa100@gmail.com` cards | **0** | **bug_13-23 подтверждён per-customer** |
+| Payment 2026-07-15 save_card=true | succeeded, row нет | H3b: persist hook не создал UserCards |
+| Worker | **stopped** | async callback риск (H2) |
+| SHOP_SIMULATE_PAYMENT | 0 | simulate не блокирует |
+
+**Exit criteria §3–4 на Fly:** **не пройдены** для email заказчика — ждать Фазу 1.
+

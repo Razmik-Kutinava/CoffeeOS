@@ -1,5 +1,13 @@
 ﻿# CHANGELOG
 
+## 2026-07-16 — ops: UserCards Фаза 0 Fly diagnose (read-only)
+
+- `bin/usercards_fly_diagnose.rb` — prod Neon stats via `fly machine exec`.
+- Артефакт: `usercards_fly_diagnose_2026-07-16.json`.
+- **Факты:** 14 cards global; aramfifa100@gmail.com 0 cards; payment save_card=true 2026-07-15 без row; worker stopped; v361.
+- **ISSUES:** 🔴 UserCards bug_13-23.
+- **Следующий шаг:** Фаза 1 fix persist.
+
 ## 2026-07-16 — ops: MCP Fly checkout UX (peek, без inline pay)
 
 - Fly `#/checkout` 390×844: peek 2 позиции · нет «Способ оплаты»/«Оплатить →».
