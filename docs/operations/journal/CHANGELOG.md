@@ -1,5 +1,13 @@
 ﻿# CHANGELOG
 
+## 2026-07-16 — ops: UserCards Фаза 1 Fly приёмка (replay 0₽ + MCP)
+
+- Deploy **v362** (заказчик).
+- Replay webhook CONFIRMED+RebillId для order `fc18c88e…` — aramfifa **MIR *5953** (без нового списания).
+- MCP Fly: корзина 2+3₽, PaymentMethodsSheet «МИР Карта *5953» — PASS.
+- Артефакты: `usercards_fly_phase1_verify_2026-07-16.json`, `usercards_phase1_mcp_2026-07-16.json` + 2 PNG.
+- **Апрув заказчика:** pending.
+
 ## 2026-07-16 — fix(shop): UserCards Фаза 1 — persist RebillId без worker
 
 - **Root cause:** TbankCallbackJob enqueue при stopped worker; GetState finalize без RebillId.

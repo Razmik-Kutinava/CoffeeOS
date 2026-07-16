@@ -1,0 +1,48 @@
+{
+  "date": "2026-07-16",
+  "phase": "1_post_deploy_acceptance",
+  "deploy": {
+    "version": 362,
+    "image": "registry.fly.io/coffeeos:deployment-01KXN2BR7PZ23AFY0E7Y6G5H55"
+  },
+  "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "email": "aramfifa100@gmail.com",
+  "cart": {
+    "items": [
+      "Фильтр-кофе Бразилия 2₽",
+      "Фильтр-кофе без кофеина (декаф) Гватемала 3₽"
+    ],
+    "total": "5₽",
+    "note": "Дешёвые товары demo A — реальная оплата НЕ выполнялась"
+  },
+  "checks": [
+    {
+      "id": "webhook_replay",
+      "status": "PASS",
+      "artifact": "usercards_fly_phase1_verify_2026-07-16.json",
+      "detail": "Replay CONFIRMED+RebillId → aramfifa MIR *5953 в БД (0₽)"
+    },
+    {
+      "id": "mcp_checkout_peek",
+      "status": "PASS",
+      "screenshot": "screenshots/usercards_phase1_mcp_2026-07-16_checkout_peek_5rub.png",
+      "detail": "peek 2+3₽, +5₽, verified email MOMENTUM"
+    },
+    {
+      "id": "mcp_payment_methods_sheet",
+      "status": "PASS",
+      "screenshot": "screenshots/usercards_phase1_mcp_2026-07-16_payment_sheet_mir_5953.png",
+      "detail": "PaymentMethodsSheet: «МИР Карта *5953» selected, СБП, Новая карта — канон 1000008925"
+    },
+    {
+      "id": "new_charge_5rub",
+      "status": "NOT_RUN",
+      "detail": "Оплатить не нажимали — экономия; one-click доступен"
+    }
+  ],
+  "verdict": "PASS",
+  "maps_to_customer_screens": {
+    "1000008925": "screenshots/usercards_phase1_mcp_2026-07-16_payment_sheet_mir_5953.png",
+    "bug_13-23_fixed": true
+  }
+}

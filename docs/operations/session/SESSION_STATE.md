@@ -2,7 +2,7 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-16 (UserCards Фаза 1 fix persist)  
+**Дата:** 2026-07-16 (UserCards Фаза 1 Fly приёмка PASS)  
 **Веха 1:** **закрыта** 2026-06-19.  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
 **§2.3 оплата витрина (Init→payment_url→callback):** **done** — базовый redirect на банк остаётся.
@@ -12,10 +12,18 @@
 | Сейчас | Дальше |
 |--------|--------|
 | **Checkout CartSheet UX** | MCP Fly **[x]** peek/no inline pay | PaymentMethodsSheet + апрув заказчика |
-| **UserCards / save_card** | Фаза 1 код **[x]** | deploy Fly + E2E prod |
+| **UserCards / save_card** | Fly приёмка v362 **[x]** | апрув заказчика |
 | **B1.13 CR-BOTTOM-NAV** | бар убран · cart BOTTOM_REM=0 | A1 апрув [ ] |
 | **B1.14 адрес в шапке** | **B1.14-3d** index map [x] | B1.14-4 cart |
 | **Product card peek cart** | S1–S7 код [x] | апрув заказчика |
+
+### Сессия 2026-07-16 (UserCards Фаза 1 — Fly приёмка после deploy v362)
+
+- **Replay webhook** 0₽: aramfifa **MIR *5953** в `mobile_payment_methods` — PASS.
+- **MCP:** корзина 2+3₽ (5₽), verified email, PaymentMethodsSheet «МИР Карта *5953» — PASS.
+- **Новая оплата:** NOT_RUN (экономия).
+- **Артефакты:** `usercards_fly_phase1_verify_2026-07-16.json`, `usercards_phase1_mcp_2026-07-16.json`, 2 PNG.
+- **Стоп:** апрув заказчика.
 
 ### Сессия 2026-07-16 (UserCards Фаза 1 — fix persist)
 

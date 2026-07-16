@@ -5,15 +5,15 @@
 ## 🔴 Блокеры
 
 [2026-07-16] — UserCards: карта не сохранилась после оплаты с save_card ON (bug_13-23)
-**Статус:** **код Фаза 1 done** · **deploy Fly [ ]** · **E2E prod aramfifa [ ]**
+**Статус:** **MCP PASS** 2026-07-16 v362 · **апрув заказчика [ ]**
 **Источник:** заказчик · [`bug_13-23_repeat_purchase_card_missing.png`](../milestones/veha_2/artifacts/usercards_save_card/screenshots/bug_13-23_repeat_purchase_card_missing.png)
 **Root cause (Фаза 0):** webhook RebillId enqueued, worker stopped → SavedCardStore не вызван; finalize/GetState без RebillId.
-**Фикс Фаза 1 (код):**
-- `TbankController` → `TbankCallbackJob.perform_now` (webhook RebillId сразу на web)
-- `fly.toml` → `SOLID_QUEUE_IN_PUMA=true` (fallback очереди)
-- `OrderCreator#init_gateway_payment!` → `recurrent: save_card` + intent в provider_data
-- Тесты: `shop_usercards_phase1_persist_test` 3 PASS + callback/sync regression 22 PASS
-**Осталось:** deploy Fly → replay webhook / новая оплата aramfifa → GET /user/cards
+**Фикс Фаза 1 (код + deploy v362):**
+- `TbankController` perform_now · `SOLID_QUEUE_IN_PUMA` · `OrderCreator` recurrent save_card
+**Приёмка Fly 2026-07-16:**
+- Replay webhook 0₽ → [`usercards_fly_phase1_verify_2026-07-16.json`](../milestones/veha_2/artifacts/usercards_save_card/usercards_fly_phase1_verify_2026-07-16.json) — aramfifa **MIR *5953**
+- MCP: [`usercards_phase1_mcp_2026-07-16.json`](../milestones/veha_2/artifacts/usercards_save_card/usercards_phase1_mcp_2026-07-16.json) — PaymentMethodsSheet «МИР Карта *5953», корзина 2+3₽, **оплата не списывали**
+**Осталось:** апрув заказчика (скрин «ок»)
 
 [2026-07-16] — Checkout: нет сплошной шторки (peek позиций + оплата снизу)
 **Статус:** **MCP PASS** 2026-07-16 · **апрув заказчика [ ]**

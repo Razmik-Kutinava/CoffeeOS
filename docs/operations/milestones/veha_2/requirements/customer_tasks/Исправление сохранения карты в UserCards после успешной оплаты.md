@@ -239,3 +239,13 @@
 
 **После deploy:** повторная оплата aramfifa или replay webhook → `GET /user/cards` с `*5953`.
 
+## Приёмка Fly v362 (2026-07-16)
+
+| Проверка | Результат | Артефакт |
+|----------|-----------|----------|
+| Replay webhook 0₽ | PASS — MIR *5953 | `usercards_fly_phase1_verify_2026-07-16.json` |
+| MCP PaymentMethodsSheet | PASS — «МИР Карта *5953» | `usercards_phase1_mcp_2026-07-16.json` |
+| Новая оплата 5₽ | NOT_RUN | экономия |
+
+**Exit criteria §3–4:** MCP PASS для aramfifa · апрув заказчика **[ ]**
+

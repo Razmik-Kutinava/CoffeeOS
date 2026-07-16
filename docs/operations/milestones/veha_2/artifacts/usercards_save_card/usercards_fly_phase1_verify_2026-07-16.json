@@ -1,0 +1,80 @@
+{
+  "date": "2026-07-16",
+  "phase": "1_post_deploy_verify",
+  "deploy": {
+    "version": 362,
+    "status": "complete",
+    "image": "registry.fly.io/coffeeos:deployment-01KXN2BR7PZ23AFY0E7Y6G5H55",
+    "created_at": "2026-07-16T09:00:28Z"
+  },
+  "method": "replay_webhook_no_new_charge",
+  "order_id": "fc18c88e-a5be-4a6e-a327-3314364053f3",
+  "payment_id": "8861552152",
+  "email": "aramfifa100@gmail.com",
+  "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "before": {
+    "email": "aramfifa100@gmail.com",
+    "customer_id": "2bc37279-8d23-456b-a2a5-4c28f584634c",
+    "cards": [
+      {
+        "id": "4c5569dd-994c-4146-86d2-ed4d78bebcd6",
+        "pan": "*5953",
+        "token_present": true
+      }
+    ]
+  },
+  "payment": {
+    "found": true,
+    "id": "0a7e0f8e-f839-49d9-b5bd-c8a799fcaaca",
+    "status": "processing",
+    "save_card": true,
+    "provider_payment_id": "8861552152"
+  },
+  "webhook_request": {
+    "http": 200,
+    "body": {
+      "ok": true
+    }
+  },
+  "after": {
+    "email": "aramfifa100@gmail.com",
+    "customer_id": "2bc37279-8d23-456b-a2a5-4c28f584634c",
+    "cards": [
+      {
+        "id": "4c5569dd-994c-4146-86d2-ed4d78bebcd6",
+        "pan": "*5953",
+        "brand": "MIR",
+        "token_present": true,
+        "is_default": true
+      }
+    ]
+  },
+  "cards_api_shape": {
+    "primary": {
+      "id": "4c5569dd-994c-4146-86d2-ed4d78bebcd6",
+      "payment_system": "MIR",
+      "masked_pan": "*5953",
+      "pan": "*5953",
+      "exp_date": "09/27",
+      "card_type": "MIR",
+      "bank_card_id": "566291000",
+      "is_primary": true,
+      "last_used_at": "2026-07-16T09:07:41Z"
+    },
+    "cards": [
+      {
+        "id": "4c5569dd-994c-4146-86d2-ed4d78bebcd6",
+        "payment_system": "MIR",
+        "masked_pan": "*5953",
+        "pan": "*5953",
+        "exp_date": "09/27",
+        "card_type": "MIR",
+        "bank_card_id": "566291000",
+        "is_primary": true,
+        "last_used_at": "2026-07-16T09:07:41Z"
+      }
+    ]
+  },
+  "pass": true,
+  "cheap_products_note": "Новая оплата не выполнялась — replay webhook CONFIRMED+RebillId (0₽)"
+}
