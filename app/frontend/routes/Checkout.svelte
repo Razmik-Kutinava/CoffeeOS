@@ -41,7 +41,6 @@
   import { waitForOrderSettled } from "../lib/shopPaySettle.js"
   import { loadSavedCardsWithRetry } from "../lib/shopSavedCards.js"
   import {
-    cartItems,
     ensureCheckoutCartPeek,
     CHECKOUT_PAY_EVENT
   } from "../lib/cartSheetStore.js"
@@ -51,8 +50,6 @@
   let name = $state("")
   let email = $state("")
   let otpCode = $state("")
-  let payment_method = $state("card")
-  let sbpNotice = $state(false)
   let emailVerified = $state(false)
   let sendingCode = $state(false)
   let verifyingCode = $state(false)
@@ -73,7 +70,6 @@
   let payFsmState = $state(PAY_FSM.DEFAULT)
   let showThreeDsOverlay = $state(false)
   let threeDsAborted = $state(false)
-  let cartCount = $state(0)
 
   const canSendCode = $derived(isValidEmail(email) && !sendingCode)
   const canPay = $derived(
@@ -85,8 +81,8 @@
         ? !!selectedCardId
         : isNewCardPayEnabled(newCardState))
   )
-  /** Место под peek-шторку заказа (эталон заказчика). */
-  const checkoutPadClass = $derived(cartCount > 0 ? "pb-[32vh]" : "pb-8")
+  /** Место под peek-шторку заказа (эталон заказчика — всегда pad на checkout). */
+  const checkoutPadClass = "pb-[32vh]"
 
   onMount(() => {
     const profile = loadGuestProfile()
@@ -98,13 +94,10 @@
       editContact = false
     }
 
-    const unsubCart = cartItems.subscribe((items) => {
-      cartCount = Array.isArray(items) ? items.length : 0
-    })
     ensureCheckoutCartPeek().catch(() => {})
 
     const onCheckoutPay = () => {
-      if (emailVerified) selectPayment("card")
+      openPaymentSheet()
     }
     window.addEventListener(CHECKOUT_PAY_EVENT, onCheckoutPay)
 
@@ -144,7 +137,6 @@
     return () => {
       window.removeEventListener("pageshow", onPageShow)
       window.removeEventListener(CHECKOUT_PAY_EVENT, onCheckoutPay)
-      unsubCart()
       offHours?.()
     }
   })
@@ -176,17 +168,25 @@
     }
   }
 
-  async function selectPayment(val) {
-    if (val === "sbp") {
-      sbpNotice = true
+  async function openPaymentSheet() {
+    err = null
+    if (!isValidEmail(email)) {
+      err = "Укажите email"
+      editContact = true
       return
     }
-    sbpNotice = false
-    payment_method = val
-    if (val === "card" && emailVerified) {
-      paymentSheetOpen = true
-      await loadSavedCards()
+    if (!emailVerified) {
+      err = "Подтвердите email кодом из письма"
+      editContact = true
+      return
     }
+    if (!shopIsOpenForPay()) {
+      err = operatingHours.closed_message || "Сейчас нельзя оформить заказ"
+      return
+    }
+    if (submitting) return
+    paymentSheetOpen = true
+    await loadSavedCards()
   }
 
   function onEmailInput() {
@@ -503,35 +503,8 @@
     {/if}
   {/if}
 
-  <div class="mb-6">
-    <span class="mb-2 block text-sm text-[#a0a0a0]">Способ оплаты</span>
-    <div class="flex gap-3">
-      {#each [["card", "Картой"]] as [val, label]}
-        <button
-          type="button"
-          class="flex flex-1 items-center justify-center gap-2 rounded-lg border px-3 py-2 text-sm
-            {payment_method === val ? 'border-[#ff8c42] bg-[#ff8c42]/10 text-[#ff8c42]' : 'border-[#3a3a3a] text-[#a0a0a0]'}"
-          onclick={() => selectPayment(val)}
-        >
-          {label}
-        </button>
-      {/each}
-      <button
-        type="button"
-        class="flex flex-1 items-center justify-center gap-2 rounded-lg border border-[#3a3a3a] px-3 py-2 text-sm text-[#757575] opacity-60"
-        aria-disabled="true"
-        onclick={() => selectPayment("sbp")}
-      >
-        СБП
-      </button>
-    </div>
-    {#if sbpNotice}
-      <p class="mt-2 text-sm text-[#a0a0a0]" role="status">Будет позже</p>
-    {/if}
-  </div>
-
   {#if err}
-    <p class="mb-4 text-sm text-red-400">{err}</p>
+    <p class="mb-4 text-sm text-red-400" role="alert">{err}</p>
   {/if}
 
   {#if operatingHours.loaded && operatingHours.is_open === false && operatingHours.closed_message}
@@ -544,14 +517,9 @@
     </div>
   {/if}
 
-  <button
-    type="button"
-    class="w-full rounded-xl bg-[#ff8c42] py-4 text-lg font-semibold text-black disabled:opacity-50"
-    disabled={!canPay}
-    onclick={() => selectPayment("card")}
-  >
-    {submitting ? "Идёт оплата…" : "Оплатить →"}
-  </button>
+  <p class="mb-2 text-sm text-[#a0a0a0]" data-testid="checkout-pay-via-cart-hint">
+    Оплата — кнопка «+сумма» в шторке заказа внизу экрана.
+  </p>
 
   <PaymentMethodsSheet
     open={paymentSheetOpen}

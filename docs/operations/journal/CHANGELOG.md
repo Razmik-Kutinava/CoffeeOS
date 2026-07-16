@@ -1,5 +1,13 @@
 ﻿# CHANGELOG
 
+## 2026-07-16 — fix(shop): checkout UX — канон заказчика (peek + оплата из шторки)
+
+- **ТЗ UserCards:** § **Канон UX checkout** — скрины заказчика > B1.13 «только каталог» > ops resolved.
+- **Код:** `onCartSheetRouteChange` → `ensureCheckoutCartPeek` на `#/checkout`; убран inline «Оплатить →» / «Способ оплаты» из Checkout; `openPaymentSheet` + hint; `CART_SHEET_BUILD=prog24`.
+- **ISSUES:** 🔴 reopen checkout sheet; ложная resolved 2026-07-15 → superseded.
+- **Тест:** `shop_checkout_cart_sheet_ux_test` — refute «Оплатить →», assert peek canon.
+- **Deploy:** не делали — ждать go.
+
 ## 2026-07-15 — ops: push+deploy Fly v359 (шторка checkout + UserCards)
 
 - Причина «нет шторки на Fly»: local `develop` was **ahead 4**, прод **v358** без peek/UserCards review.

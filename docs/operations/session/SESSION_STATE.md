@@ -2,7 +2,7 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-15 (push+deploy Fly v359 — шторка+UserCards)  
+**Дата:** 2026-07-16 (checkout UX — канон заказчика)  
 **Веха 1:** **закрыта** 2026-06-19.  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
 **§2.3 оплата витрина (Init→payment_url→callback):** **done** — базовый redirect на банк остаётся.
@@ -11,12 +11,20 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **Checkout CartSheet + UserCards** | push+deploy **[x]** Fly **v359** | MCP UI на `#/checkout` / апрув |
+| **Checkout CartSheet UX** | код+ТЗ канон **[x]** · ISSUES **🔴 open** | push/deploy · MCP заказчика |
+| **UserCards / save_card** | review БАГ-1/2/3 **[x]** v359 | MCP оплата |
 | **B1.13 CR-BOTTOM-NAV** | бар убран · cart BOTTOM_REM=0 · catalog+checkout | A1 апрув [ ] |
 | **B1.14 адрес в шапке** | **B1.14-3d** index map [x] | B1.14-4 cart |
 | **Product card peek cart** | S1–S7 код [x] | апрув заказчика |
 
-### Сессия 2026-07-15 (push + fly deploy — 4 коммита догнали Fly)
+### Сессия 2026-07-16 (checkout UX — только канон заказчика)
+
+- **Проблема:** заказчик отклонил UX — нет peek позиций; была ложная «resolved» по grep/deploy v359.
+- **ТЗ:** § **Канон UX checkout** — скрины заказчика > B1.13 «только каталог» > HANDOFF resolved.
+- **Код:** `onCartSheetRouteChange` → `ensureCheckoutCartPeek` на `#/checkout`; убран inline «Оплатить →» / «Способ оплаты» из `Checkout.svelte`; оплата через `openPaymentSheet` + `CHECKOUT_PAY_EVENT`; `CART_SHEET_BUILD=prog24`.
+- **ISSUES:** 🔴 reopen checkout sheet; старая resolved → superseded.
+- **Тесты:** `shop_checkout_cart_sheet_ux_test` — refute «Оплатить →», assert peek canon.
+- **Стоп:** push/deploy + MCP на Fly.
 
 - Причина «нет шторки»: код был в `develop` **ahead 4**, на Fly стоял **v358** (FSM), без CartSheet peek/UserCards review.
 - `git push origin develop` `511d79c..671ba86`.

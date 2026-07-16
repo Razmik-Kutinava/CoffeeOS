@@ -1,18 +1,19 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-15 (Fly **v359** — шторка checkout + UserCards review)  
-**Ветка:** `develop` @ `671ba86`  
-**Прод:** https://coffeeos.fly.dev · image `deployment-01KXK3MZJS8KQWW29R6SPV6J7V`
+**Дата:** 2026-07-16 (checkout UX — канон заказчика, без inline «Оплатить →»)  
+**Ветка:** `develop` (после коммита шага)  
+**Прод:** https://coffeeos.fly.dev · **нужен deploy** после push
 
 ### Checkout CartSheet UX (эталон заказчика)
 
 | Что | Статус |
 |-----|--------|
-| Код peek + pay event | **`[x]`** `ensureCheckoutCartPeek` · `goCheckoutOrPay` · pad |
-| Тесты | **`[x]`** |
-| Push + Deploy Fly | **`[x]`** **v359** · бандл: `shop:checkout-pay` + peek testid |
-| MCP / hard-refresh | **`[ ]`** — проверить `#/checkout` после deploy |
-| **Следующий шаг** | MCP / апрув заказчика |
+| Канон в ТЗ | **`[x]`** § **Канон UX checkout** (скрины > B1.13 / ops) |
+| Код peek + pay из шторки | **`[x]`** `ensureCheckoutCartPeek` на checkout · без «Оплатить →» в теле |
+| ISSUES | **🔴 open** — ложная «resolved» снята |
+| Тесты grep | **`[x]`** `shop_checkout_cart_sheet_ux_test` |
+| Push + Deploy Fly | **`[ ]`** |
+| MCP / апрув заказчика | **`[ ]`** |
 
 ### UserCards / save_card — канон ТЗ
 

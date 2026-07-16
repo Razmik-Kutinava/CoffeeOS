@@ -4,16 +4,18 @@
 
 ## 🔴 Блокеры
 
-_нет_
+[2026-07-16] — Checkout: нет сплошной шторки (peek позиций + оплата снизу)
+**Статус:** **open**
+**Источник:** заказчик · канон → [`Исправление сохранения карты…`](../milestones/veha_2/requirements/customer_tasks/Исправление%20сохранения%20карты%20в%20UserCards%20после%20успешной%20оплаты.md) § **Канон UX checkout**
+**Суть:** на `#/checkout` нет peek с позициями под PaymentMethodsSheet; была ложная «resolved» по grep/deploy без MCP заказчика.
+**Ожидание:** CartSheet peek внизу · оплата только из шторки (`+сумма`) · без «Оплатить →» в теле Checkout.
+**Закрыть:** MCP Fly / скрин заказчика + `[x]` в ТЗ § Канон UX checkout.
 
 ## Решено недавно
 
-[2026-07-15] — Checkout: нет шторки с заказами под оплатой (эталон заказчика)
-Статус: **resolved** 2026-07-15 (код; MCP на Fly — после deploy по go)
-Описание: на `#/checkout` CartSheet peek **под** PaymentMethodsSheet.
-**Закрыли:** `isCartSheetRoute` catalog+checkout · `ensureCheckoutCartPeek` · `requestCheckoutPay`/`CHECKOUT_PAY_EVENT` · pad `pb-[32vh]` · z-index 56>50 · тест `shop_checkout_cart_sheet_ux_test` + B1.13-S2/S2b/S3 PASS.
-Эталон: `artifacts/usercards_save_card/screenshots/` · ТЗ UserCards.
-
+[2026-07-15] — Checkout CartSheet (промежуточный код, не приёмка)
+**Статус:** **superseded** 2026-07-16 — см. 🔴 выше
+**Было:** `isCartSheetRoute` catalog+checkout · deploy v359 · grep-тесты PASS — **заказчик не принял**.
 
 [2026-07-04] — B1.11-BUG-OVERNIGHT: нельзя создать точку с ночной сменой (`must be after opens_at`)
 Статус: **resolved** 2026-07-05
@@ -35,13 +37,13 @@ _нет_
 Статус: **resolved**
 Описание: `DATABASE_URL` → Neon `coffeeos`; Launch plan; `fly deploy` release_command OK; `/up` + `/shop` 200.
 Fly MPG `coffeeos-db` destroyed. CI deploy → `workflow_dispatch` only.
-**Neon billing:** spending limit **$15** — включён владельцем в Console (2026-06-19).
+**Neon billing:** spending limit **$15** — поднять заказчиком в Console (2026-06-19).
 
-## 🟡 Важно
+## 🟡 Жёлтые
 
 [2026-05-30] — Kiosk: POST /kiosk/api/auth
 Статус: resolved
-Описание: Flutter/планшет нужен tenant по device_token; отдельного эндпоинта не было.
+Описание: Flutter/киоск нужен tenant по device_token; отдельного контроллера не было.
 Решение: `Kiosk::Api::AuthController`, контракт [`FLUTTER_API.md`](milestones/veha_2/runbooks/FLUTTER_API.md); shop API без дублирования.
 Проверка: 6 tests; curl smoke в FLUTTER_API.md.
 

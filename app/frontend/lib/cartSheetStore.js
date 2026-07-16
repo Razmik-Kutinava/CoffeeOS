@@ -100,11 +100,15 @@ export function isCheckoutRoute(hash = null) {
   return h === "/checkout" || h.startsWith("/checkout?")
 }
 
-/** Эталон заказчика: на оформлении шторка с позициями в peek. */
+/** Эталон заказчика (UserCards): на #/checkout — peek с позициями, не hidden с каталога. */
 export async function ensureCheckoutCartPeek() {
   await refreshCartSheet().catch(() => {})
   const items = get(cartItems)
-  if (!items.length) return
+  if (!items.length) {
+    cartSheetMode.set(MODE_EMPTY)
+    clearPersistedCartSheetMode()
+    return
+  }
   cartSheetMode.set(MODE_PEEK)
   resetScrollAnchor()
   writePersistedCartSheetMode(MODE_PEEK)
@@ -269,6 +273,12 @@ export function onCatalogRouteChange(nowOnCatalog) {
 
 /** Вход/выход с маршрутов, где видна CartSheet (каталог + checkout). */
 export function onCartSheetRouteChange(nowOnSheetRoute) {
+  if (!nowOnSheetRoute) return
+  // На checkout — канон заказчика: всегда peek, не MODE_HIDDEN из localStorage каталога.
+  if (isCheckoutRoute()) {
+    void ensureCheckoutCartPeek()
+    return
+  }
   onCatalogRouteChange(nowOnSheetRoute)
 }
 
