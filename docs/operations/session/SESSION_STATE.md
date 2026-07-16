@@ -12,7 +12,7 @@
 | Сейчас | Дальше |
 |--------|--------|
 | **Checkout CartSheet UX** | Фаза 2 stacked код **[x]** | deploy · MCP · апрув |
-| **UserCards / save_card** | backend v362 **[x]** | MCP stacked · апрув |
+| **UserCards / save_card** | 2× pay сегодня · 09:56 без Pan/RebillId 🔴 | fix recurrent/GetState |
 | **B1.13 CR-BOTTOM-NAV** | бар убран · cart BOTTOM_REM=0 | A1 апрув [ ] |
 | **B1.14 адрес в шапке** | **B1.14-3d** index map [x] | B1.14-4 cart |
 | **Product card peek cart** | S1–S7 код [x] | апрув заказчика |
