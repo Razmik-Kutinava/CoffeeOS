@@ -2,9 +2,10 @@
 
 require "test_helper"
 
-# Канон заказчика (UserCards § Канон UX checkout): peek внизу, оплата из CartSheet, без «Оплатить →» в теле.
+# Канон заказчика (UserCards § Канон UX checkout): peek + stacked PaymentMethodsSheet, без inline pay.
 class Shop::ShopCheckoutCartSheetUxTest < ActionDispatch::IntegrationTest
   STORE = Rails.root.join("app/frontend/lib/cartSheetStore.js")
+  THRESH = Rails.root.join("app/frontend/lib/cartSheetThresholds.js")
   SHEET = Rails.root.join("app/frontend/components/CartSheet.svelte")
   CHECKOUT = Rails.root.join("app/frontend/routes/Checkout.svelte")
   PAY = Rails.root.join("app/frontend/components/PaymentMethodsSheet.svelte")
@@ -45,18 +46,34 @@ class Shop::ShopCheckoutCartSheetUxTest < ActionDispatch::IntegrationTest
     assert_includes src, "CHECKOUT_PAY_EVENT"
     assert_includes src, "openPaymentSheet"
     assert_includes src, "checkout-pay-via-cart-hint"
-    assert_includes src, "pb-[32vh]"
     assert_includes src, "PaymentMethodsSheet"
+    assert_includes src, "openCheckoutPayStack"
+    assert_includes src, "closeCheckoutPayStack"
   end
 
-  THRESH = Rails.root.join("app/frontend/lib/cartSheetThresholds.js")
+  test "Phase 2 stacked checkout: peek strip above payment sheet without backdrop" do
+    store = File.read(STORE)
+    assert_includes store, "checkoutPayOpen"
+    assert_includes store, "openCheckoutPayStack"
+    assert_includes store, "closeCheckoutPayStack"
 
-  test "PaymentMethodsSheet sits above CartSheet z-index" do
+    cart = File.read(SHEET)
+    assert_includes cart, "data-checkout-pay-stack"
+    assert_includes cart, "payStackActive"
+    assert_includes cart, "shop-cart-peek-list"
+
     pay = File.read(PAY)
-    assert_includes pay, "z-index: 56"
-    assert_includes pay, "z-index: 55"
-    sheet = File.read(SHEET)
-    assert_includes sheet, "z-50"
-    assert_includes File.read(THRESH), 'CART_SHEET_BUILD = "prog24"'
+    assert_includes pay, "stacked"
+    assert_includes pay, "pm-sheet--stacked"
+    assert_includes pay, "data-payment-sheet-stacked"
+    assert_match(/#if !stacked/, pay, "backdrop только вне stacked checkout")
+
+    checkout = File.read(CHECKOUT)
+    assert_includes checkout, "stacked={paymentSheetOpen}"
+
+    thresh = File.read(THRESH)
+    assert_includes thresh, 'CART_SHEET_BUILD = "prog25"'
+    assert_includes thresh, "CHECKOUT_PAY_STACK_VH"
+    assert_includes thresh, "CHECKOUT_PEEK_VH"
   end
 end

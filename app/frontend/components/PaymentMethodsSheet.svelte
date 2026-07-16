@@ -14,6 +14,7 @@
 
   let {
     open = false,
+    stacked = false,
     cards = [],
     loading = false,
     selectedCardId = null,
@@ -43,6 +44,7 @@
 </script>
 
 {#if open}
+  {#if !stacked}
   <div
     class="pm-backdrop"
     role="presentation"
@@ -51,7 +53,14 @@
     }}
     data-testid="payment-methods-backdrop"
   ></div>
-  <section class="pm-sheet" aria-label="Способ оплаты" data-testid="payment-methods-sheet">
+  {/if}
+  <section
+    class="pm-sheet"
+    class:pm-sheet--stacked={stacked}
+    aria-label="Способ оплаты"
+    data-testid="payment-methods-sheet"
+    data-payment-sheet-stacked={stacked ? "true" : "false"}
+  >
     <header class="pm-sheet__header">
       <h2 class="pm-sheet__title">Способ оплаты</h2>
       <button
@@ -304,6 +313,15 @@
 
   .pm-sheet__pay {
     margin-top: 1.25rem;
+  }
+
+  .pm-sheet--stacked {
+    z-index: 51;
+    max-height: none;
+    height: calc(var(--checkout-pay-stack-h, 92vh) - var(--checkout-cart-peek-h, 15vh));
+    border-radius: 0;
+    border-top: 1px solid #3a3a3a;
+    box-shadow: none;
   }
 
   .pm-new-card {

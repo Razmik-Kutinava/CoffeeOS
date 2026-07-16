@@ -2,7 +2,7 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-16 (UserCards Фаза 1 Fly приёмка PASS)  
+**Дата:** 2026-07-16 (UserCards Фаза 2 UX — stacked checkout pay)  
 **Веха 1:** **закрыта** 2026-06-19.  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
 **§2.3 оплата витрина (Init→payment_url→callback):** **done** — базовый redirect на банк остаётся.
@@ -11,11 +11,18 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **Checkout CartSheet UX** | MCP Fly **[x]** peek/no inline pay | PaymentMethodsSheet + апрув заказчика |
-| **UserCards / save_card** | Fly приёмка v362 **[x]** | апрув заказчика |
+| **Checkout CartSheet UX** | Фаза 2 stacked код **[x]** | deploy · MCP · апрув |
+| **UserCards / save_card** | backend v362 **[x]** | MCP stacked · апрув |
 | **B1.13 CR-BOTTOM-NAV** | бар убран · cart BOTTOM_REM=0 | A1 апрув [ ] |
 | **B1.14 адрес в шапке** | **B1.14-3d** index map [x] | B1.14-4 cart |
 | **Product card peek cart** | S1–S7 код [x] | апрув заказчика |
+
+### Сессия 2026-07-16 (UserCards Фаза 2 — stacked checkout UX)
+
+- **Docs:** ISSUES/HANDOFF — сняты ложные MCP PASS по stacked; checkout → код done, MCP pending.
+- **Код:** `openCheckoutPayStack`; CartSheet peek strip; PaymentMethodsSheet `stacked` без backdrop; `prog25`.
+- **Тесты:** `shop_checkout_cart_sheet_ux_test` — **5 runs, 0 fail**.
+- **Стоп:** deploy Fly + MCP vs 1000008924/8925.
 
 ### Сессия 2026-07-16 (UserCards Фаза 1 — Fly приёмка после deploy v362)
 

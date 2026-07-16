@@ -1,5 +1,5 @@
 ﻿<script>
-  import { onMount, tick } from "svelte"
+  import { onMount, onDestroy, tick } from "svelte"
   import { push } from "svelte-spa-router"
   import { api } from "../lib/api.js"
   import {
@@ -42,7 +42,9 @@
   import { loadSavedCardsWithRetry } from "../lib/shopSavedCards.js"
   import {
     ensureCheckoutCartPeek,
-    CHECKOUT_PAY_EVENT
+    CHECKOUT_PAY_EVENT,
+    openCheckoutPayStack,
+    closeCheckoutPayStack
   } from "../lib/cartSheetStore.js"
   import PaymentMethodsSheet from "../components/PaymentMethodsSheet.svelte"
   import ThreeDsOverlay from "../components/ThreeDsOverlay.svelte"
@@ -81,8 +83,13 @@
         ? !!selectedCardId
         : isNewCardPayEnabled(newCardState))
   )
-  /** Место под peek-шторку заказа (эталон заказчика — всегда pad на checkout). */
-  const checkoutPadClass = "pb-[32vh]"
+  /** Место под peek-шторку заказа; при оплате — полный stacked stack. */
+  const checkoutPadClass = $derived(paymentSheetOpen ? "pb-[92vh]" : "pb-[32vh]")
+
+  function closePaymentSheet() {
+    paymentSheetOpen = false
+    closeCheckoutPayStack()
+  }
 
   onMount(() => {
     const profile = loadGuestProfile()
@@ -138,7 +145,12 @@
       window.removeEventListener("pageshow", onPageShow)
       window.removeEventListener(CHECKOUT_PAY_EVENT, onCheckoutPay)
       offHours?.()
+      closeCheckoutPayStack()
     }
+  })
+
+  onDestroy(() => {
+    closeCheckoutPayStack()
   })
 
   async function loadSavedCards() {
@@ -185,6 +197,7 @@
       return
     }
     if (submitting) return
+    openCheckoutPayStack()
     paymentSheetOpen = true
     await loadSavedCards()
   }
@@ -292,7 +305,7 @@
       newCardState = createNewCardFormState()
     }
     await new Promise((r) => setTimeout(r, SUCCESS_REDIRECT_MS))
-    paymentSheetOpen = false
+    closePaymentSheet()
     push(`/payment-result?status=ok&order_id=${orderId}`)
   }
 
@@ -523,6 +536,7 @@
 
   <PaymentMethodsSheet
     open={paymentSheetOpen}
+    stacked={paymentSheetOpen}
     cards={savedCards}
     loading={cardsLoading}
     {selectedCardId}
@@ -531,7 +545,7 @@
     fsmState={payFsmState}
     bind:newCardState
     onClose={() => {
-      if (isPayFsmClickable(payFsmState)) paymentSheetOpen = false
+      if (isPayFsmClickable(payFsmState)) closePaymentSheet()
     }}
     {onSelectCard}
     {onSelectNewCard}

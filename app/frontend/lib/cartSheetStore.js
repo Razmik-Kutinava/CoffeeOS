@@ -13,6 +13,9 @@ import {
   MODE_EXPANDED,
   MODE_HIDDEN,
   MODE_PEEK,
+  CHECKOUT_PEEK_REM,
+  CHECKOUT_PEEK_VH,
+  CHECKOUT_PAY_STACK_VH,
   SCROLL_TO_HIDDEN_PX,
   SCROLL_TO_PEEK_PX,
   SWIPE_UP_PX
@@ -24,6 +27,8 @@ export const cartSheetMode = writable(MODE_EMPTY)
 export const cartSheetBusy = writable(false)
 export const cartUndoLine = writable(null)
 export const cartSheetError = writable(null)
+/** Фаза 2 UX: peek корзины + PaymentMethodsSheet в одной шторке на #/checkout */
+export const checkoutPayOpen = writable(false)
 
 let undoClearTimer = null
 
@@ -119,6 +124,29 @@ export const CHECKOUT_PAY_EVENT = "shop:checkout-pay"
 export function requestCheckoutPay() {
   if (typeof window === "undefined") return
   window.dispatchEvent(new CustomEvent(CHECKOUT_PAY_EVENT))
+}
+
+/** Фаза 2: одна шторка — peek корзины сверху, PaymentMethodsSheet снизу (без backdrop). */
+export function openCheckoutPayStack() {
+  checkoutPayOpen.set(true)
+  const items = get(cartItems)
+  if (items.length) {
+    cartSheetMode.set(MODE_PEEK)
+    writePersistedCartSheetMode(MODE_PEEK)
+  }
+  if (typeof document !== "undefined") {
+    document.documentElement.style.setProperty("--checkout-cart-peek-h", `${CHECKOUT_PEEK_VH}vh`)
+    document.documentElement.style.setProperty("--checkout-pay-stack-h", `${CHECKOUT_PAY_STACK_VH}vh`)
+  }
+}
+
+export function closeCheckoutPayStack() {
+  checkoutPayOpen.set(false)
+  if (typeof document !== "undefined") {
+    document.documentElement.style.removeProperty("--checkout-cart-peek-h")
+    document.documentElement.style.removeProperty("--checkout-pay-stack-h")
+  }
+  if (isCheckoutRoute()) void ensureCheckoutCartPeek()
 }
 
 export function cartLineCount(items) {
@@ -352,6 +380,7 @@ export function collapseFromSwipe() {
 
 /** Жест на gesture-zone: delta = startY − endY (вверх положительный). */
 export function handleSheetGestureDelta(startY, endY) {
+  if (get(checkoutPayOpen) && isCheckoutRoute()) return
   const delta = startY - endY
   if (delta >= SWIPE_UP_PX) {
     expandFromSwipe()

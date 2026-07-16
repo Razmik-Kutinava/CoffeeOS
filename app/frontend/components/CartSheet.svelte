@@ -8,6 +8,7 @@
     cartSheetBusy,
     cartUndoLine,
     cartSheetError,
+    checkoutPayOpen,
     isCartSheetRoute,
     isCheckoutRoute,
     onCartSheetRouteChange,
@@ -31,7 +32,9 @@
     SHEET_TRANSITION_MS,
     CART_SHEET_BOTTOM_REM,
     CART_SHEET_MAX_WIDTH_PX,
-    CART_SHEET_BUILD
+    CART_SHEET_BUILD,
+    CHECKOUT_PAY_STACK_VH,
+    CHECKOUT_PEEK_VH
   } from "../lib/cartSheetThresholds.js"
 
   let hash = $state(typeof window !== "undefined" ? window.location.hash : "")
@@ -41,6 +44,7 @@
   let busy = $state(false)
   let undoLine = $state(null)
   let sheetError = $state(null)
+  let payStackOpen = $state(false)
   let gestureStartY = 0
   let gestureActive = false
   let gestureZoneEl = $state(null)
@@ -48,7 +52,9 @@
   let showSheet = $derived(isCartSheetRoute(hash))
   let onCheckout = $derived(isCheckoutRoute(hash))
   let count = $derived(items.length)
-  let heightVh = $derived(sheetHeightVh(mode, count))
+  let payStackActive = $derived(onCheckout && payStackOpen && count > 0)
+  let heightVh = $derived(payStackActive ? CHECKOUT_PEEK_VH : sheetHeightVh(mode, count))
+  let stackBottomVh = $derived(CHECKOUT_PAY_STACK_VH - CHECKOUT_PEEK_VH)
   let singleItem = $derived(count === 1 ? items[0] : null)
 
   // Touch-события должны перехватываться первыми и блокировать pointer-дубли.
@@ -176,6 +182,7 @@
     const unsubBusy  = cartSheetBusy.subscribe((v) => { busy = v })
     const unsubUndo  = cartUndoLine.subscribe((v) => { undoLine = v })
     const unsubErr   = cartSheetError.subscribe((v) => { sheetError = v })
+    const unsubPay   = checkoutPayOpen.subscribe((v) => { payStackOpen = v })
 
     const onHash = () => {
       const next = window.location.hash
@@ -192,7 +199,7 @@
 
     return () => {
       unsubItems(); unsubTotal(); unsubMode(); unsubBusy()
-      unsubUndo(); unsubErr()
+      unsubUndo(); unsubErr(); unsubPay()
       window.removeEventListener("hashchange", onHash)
     }
   })
@@ -238,7 +245,8 @@
   {/if}
 {/snippet}
 
-{#snippet checkoutBar(totalTestId = null)}
+{#snippet checkoutBar(totalTestId = null, hidden = false)}
+  {#if !hidden}
   <div class="mt-2 flex shrink-0 items-center justify-end gap-2 border-t border-[#3a3a3a] pt-2">
     <button
       type="button"
@@ -256,6 +264,7 @@
       </span>
     </button>
   </div>
+  {/if}
 {/snippet}
 
 {#if showSheet}
@@ -263,11 +272,14 @@
     data-testid="shop-cart-sheet"
     data-cart-sheet-mode={mode}
     data-cart-sheet-build={CART_SHEET_BUILD}
-    class="cart-sheet fixed left-0 right-0 z-50 mx-auto flex flex-col overflow-hidden border-t border-[#3a3a3a] bg-[#2a2a2a]/98 backdrop-blur transition-[height] ease-out"
+    data-checkout-pay-stack={payStackActive ? "true" : "false"}
+    class="cart-sheet fixed left-0 right-0 z-50 mx-auto flex flex-col overflow-hidden border-t border-[#3a3a3a] bg-[#2a2a2a]/98 backdrop-blur transition-[height,bottom] ease-out"
+    class:cart-sheet--pay-stack-peek={payStackActive}
     style:height="{heightVh}vh"
-    style:bottom="{CART_SHEET_BOTTOM_REM}rem"
+    style:bottom={payStackActive ? `${stackBottomVh}vh` : `${CART_SHEET_BOTTOM_REM}rem`}
     style:max-width="{CART_SHEET_MAX_WIDTH_PX}px"
     style:transition-duration="{SHEET_TRANSITION_MS}ms"
+    style:z-index={payStackActive ? 52 : 50}
   >
     {#if sheetError}
       <div
@@ -299,6 +311,7 @@
     {/if}
 
     <!-- Drag-handle / gesture zone -->
+    {#if !payStackActive}
     <div
       bind:this={gestureZoneEl}
       data-testid="shop-cart-sheet-gesture-zone"
@@ -310,6 +323,7 @@
     >
       <div class="drag-handle h-1.5 w-12 rounded-full bg-[#777]" aria-hidden="true"></div>
     </div>
+    {/if}
 
     <!-- EMPTY -->
     {#if mode === MODE_EMPTY || !count}
@@ -345,7 +359,7 @@
       </div>
 
     <!-- PEEK 2+ — горизонтальный ряд карточек 28vw (§ S2-канон: компактный peek) -->
-    {:else if mode === MODE_PEEK && count >= 2}
+    {:else if (mode === MODE_PEEK || payStackActive) && count >= 2}
       <div
         class="flex flex-1 min-h-0 flex-col overflow-hidden px-3 pb-2 pt-1"
         data-testid="shop-cart-peek-list"
@@ -401,7 +415,7 @@
             {/each}
           </div>
         {/if}
-        {@render checkoutBar("shop-cart-peek-total")}
+        {@render checkoutBar("shop-cart-peek-total", payStackActive)}
       </div>
 
     <!-- EXPANDED 2+ — вертикальный компактный список (§ S2-канон: развёрнутый вид) -->
@@ -465,7 +479,7 @@
             </div>
           {/each}
         </div>
-        {@render checkoutBar()}
+        {@render checkoutBar(null, payStackActive)}
       </div>
 
     <!-- 1 товар — широкая горизонтальная карточка (только peek/hidden, expanded недоступен) -->
@@ -473,6 +487,7 @@
       <div
         class="flex flex-1 min-h-0 flex-col overflow-hidden px-3 pb-2 pt-1"
         data-cart-layout="horizontal"
+        data-testid={payStackActive ? "shop-cart-peek-list" : undefined}
       >
           <div
             class="flex min-h-0 flex-1 gap-2 rounded-xl border border-[#3a3a3a] bg-[#1f1f1f] p-2 cursor-pointer"
@@ -495,7 +510,7 @@
             {@render lineControls(singleItem)}
           </div>
         </div>
-        {@render checkoutBar()}
+        {@render checkoutBar(null, payStackActive)}
       </div>
     {/if}
   </div>

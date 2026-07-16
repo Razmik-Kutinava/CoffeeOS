@@ -239,6 +239,19 @@
 
 **После deploy:** повторная оплата aramfifa или replay webhook → `GET /user/cards` с `*5953`.
 
+## Фаза 2 — stacked UX checkout (2026-07-16)
+
+| Шаг | Что | Статус |
+|-----|-----|--------|
+| 2.1 | Ops: снять ложные `[x]` HANDOFF/ISSUES | `[x]` |
+| 2.2 | `openCheckoutPayStack` — peek strip + без backdrop | `[x]` |
+| 2.3 | `PaymentMethodsSheet stacked` — expanded снизу | `[x]` |
+| 2.4 | Тест `shop_checkout_cart_sheet_ux_test` | `[x]` |
+| 2.5 | MCP Fly vs 1000008924/8925 | `[ ]` NOT_RUN |
+| 2.6 | Апрув заказчика | `[ ]` |
+
+**Приёмка:** peek `shop-cart-peek-list` виден **одновременно** с `payment-methods-sheet` (`data-payment-sheet-stacked=true`), без `payment-methods-backdrop`.
+
 ## Приёмка Fly v362 (2026-07-16)
 
 | Проверка | Результат | Артефакт |

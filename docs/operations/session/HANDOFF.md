@@ -1,6 +1,6 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-16 (UserCards Фаза 1 Fly приёмка PASS)  
+**Дата:** 2026-07-16 (UserCards Фаза 2 UX — stacked checkout pay)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev · release **v362**
 
@@ -8,11 +8,10 @@
 
 | Что | Статус |
 |-----|--------|
-| Канон в ТЗ | **`[x]`** § **Канон UX checkout** |
-| Код peek + pay из шторки | **`[x]`** |
-| Push + Deploy Fly | **`[x]`** (заказчик) |
-| MCP Fly 2026-07-16 | **`[x]`** peek + нет inline pay · [`usercards_checkout_mcp_2026-07-16.json`](../milestones/veha_2/artifacts/demo-feedback/usercards_checkout_mcp_2026-07-16.json) |
-| PaymentMethodsSheet (verified email) | **`[ ]`** MCP NOT_RUN |
+| Канон в ТЗ | **`[ ]`** § **Канон UX checkout** — stacked peek+pay |
+| Код peek + pay из шторки (без inline) | **`[x]`** |
+| **Фаза 2 stacked** (одна шторка, без backdrop) | **`[x]`** код · MCP **`[ ]`** |
+| MCP Fly stacked + 8924/8925 | **`[ ]`** NOT_RUN |
 | **Апрув заказчика** | **`[ ]`** |
 
 ### UserCards / save_card — канон ТЗ
@@ -24,7 +23,7 @@
 | Fly Фаза 0 diagnose | **`[x]`** [`usercards_fly_diagnose_2026-07-16.json`](../milestones/veha_2/artifacts/usercards_save_card/usercards_fly_diagnose_2026-07-16.json) |
 | Фаза 1 fix persist | **`[x]`** deploy **v362** |
 | Fly приёмка replay + MCP | **`[x]`** MIR *5953 в sheet · 0₽ charge |
-| **Следующий шаг** | **апрув заказчика** (скрин «ок») |
+| **Следующий шаг** | **Фаза 2 UX stacked** → MCP → апрув заказчика |
 
 ### WIPE 2026-07-14 — сохранение карты / checkout card UX
 

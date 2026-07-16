@@ -1,5 +1,12 @@
 ﻿# CHANGELOG
 
+## 2026-07-16 — fix(shop): UserCards Фаза 2 — stacked checkout pay UX
+
+- **Docs:** ISSUES/HANDOFF/SESSION_STATE/TZ — сняты ложные `[x]` по канону UX; Фаза 2 в ТЗ.
+- **Код:** `openCheckoutPayStack` / `checkoutPayOpen`; CartSheet peek strip z-52; `PaymentMethodsSheet stacked` без backdrop; `prog25`.
+- **Тесты:** `shop_checkout_cart_sheet_ux_test` — 5 runs PASS.
+- **MCP Fly / deploy / апрув:** pending.
+
 ## 2026-07-16 — ops: UserCards Фаза 1 Fly приёмка (replay 0₽ + MCP)
 
 - Deploy **v362** (заказчик).

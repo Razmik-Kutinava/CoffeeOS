@@ -15,7 +15,14 @@ export const SHEET_VH = {
 }
 
 /** Маркер сборки cart sheet — менять при каждом UX-фиксе для верификации на Fly */
-export const CART_SHEET_BUILD = "prog24"
+export const CART_SHEET_BUILD = "prog25"
+
+/** Высота единой шторки checkout: peek корзины + PaymentMethodsSheet (Фаза 2 UX) */
+export const CHECKOUT_PAY_STACK_VH = 92
+/** Высота peek-полосы в stacked checkout (vh) */
+export const CHECKOUT_PEEK_VH = 15
+/** @deprecated use CHECKOUT_PEEK_VH — CSS var legacy rem fallback */
+export const CHECKOUT_PEEK_REM = 7.5
 
 /** Суммарный скролл вниз от якоря: expanded → peek (1 item → hidden) */
 export const SCROLL_TO_PEEK_PX = 100
