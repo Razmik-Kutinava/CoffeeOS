@@ -1,8 +1,8 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-16 (UserCards Фаза 0 Fly diagnose)  
+**Дата:** 2026-07-16 (UserCards Фаза 1 fix persist)  
 **Ветка:** `develop`  
-**Прод:** https://coffeeos.fly.dev · release **v361**
+**Прод:** https://coffeeos.fly.dev · release **v361** (deploy Фазы 1 pending)
 
 ### Checkout CartSheet UX (эталон заказчика)
 
@@ -22,7 +22,8 @@
 | Канон-ТЗ | [`Исправление сохранения карты в UserCards…`](../milestones/veha_2/requirements/customer_tasks/Исправление%20сохранения%20карты%20в%20UserCards%20после%20успешной%20оплаты.md) |
 | Review БАГ-1/2/3 | **`[x]`** · deploy **v359** |
 | Fly Фаза 0 diagnose | **`[x]`** [`usercards_fly_diagnose_2026-07-16.json`](../milestones/veha_2/artifacts/usercards_save_card/usercards_fly_diagnose_2026-07-16.json) |
-| **Следующий шаг** | **Фаза 1** — fix persist (aramfifa save_card=true без row) + worker |
+| Фаза 1 fix persist | **`[x]`** webhook perform_now + SOLID_QUEUE_IN_PUMA + recurrent save_card |
+| **Следующий шаг** | **deploy Fly** → E2E save_card aramfifa / апрув |
 
 ### WIPE 2026-07-14 — сохранение карты / checkout card UX
 

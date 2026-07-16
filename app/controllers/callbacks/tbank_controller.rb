@@ -33,13 +33,18 @@ module Callbacks
         return render json: { ok: true }
       end
 
-      # Enqueue — 200 Т-Банку сразу; worker обрабатывает с retry x5.
-      # perform_now — только если таблицы queue ещё не созданы (до первого fly:release).
+      # Обработка на web-процессе: worker на Fly часто stopped → perform_later не бежит,
+      # RebillId из webhook теряется (finalize/GetState без RebillId). Retry через очередь — fallback.
       begin
-        Payments::TbankCallbackJob.perform_later(payload.to_h)
-      rescue SolidQueue::Job::EnqueueError, ActiveRecord::StatementInvalid => e
-        Rails.logger.warn("[Tbank::Callback] Queue unavailable, perform_now: #{e.class}")
         Payments::TbankCallbackJob.perform_now(payload.to_h)
+      rescue StandardError => e
+        Rails.logger.error("[Tbank::Callback] perform_now failed, enqueue: #{e.class} #{e.message}")
+        begin
+          Payments::TbankCallbackJob.perform_later(payload.to_h)
+        rescue SolidQueue::Job::EnqueueError, ActiveRecord::StatementInvalid => enqueue_err
+          Rails.logger.warn("[Tbank::Callback] Queue unavailable: #{enqueue_err.class}")
+          raise e
+        end
       end
 
       Rails.logger.info("[Tbank::Callback] Enqueued OrderId=#{payload['OrderId']}, status=#{tbank_status}")

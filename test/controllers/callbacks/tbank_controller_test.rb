@@ -81,34 +81,30 @@ class Callbacks::TbankControllerTest < ActionDispatch::IntegrationTest
   # CONFIRMED → job enqueued → order accepted
   # ---------------------------------------------------------------------------
 
-  test "CONFIRMED enqueues TbankCallbackJob" do
-    assert_enqueued_with(job: Payments::TbankCallbackJob) do
+  test "CONFIRMED performs TbankCallbackJob inline (worker optional)" do
+    assert_no_enqueued_jobs(only: Payments::TbankCallbackJob) do
       post_notify(tbank_payload(status: "CONFIRMED"))
     end
     assert_response :ok
+    assert_equal "succeeded", @payment.reload.status
+    assert_equal "accepted", @order.reload.status
   end
 
   test "CONFIRMED transitions order to accepted and payment to succeeded after job" do
-    perform_enqueued_jobs do
-      post_notify(tbank_payload(status: "CONFIRMED"))
-    end
+    post_notify(tbank_payload(status: "CONFIRMED"))
     assert_equal "succeeded", @payment.reload.status
     assert_equal "accepted",  @order.reload.status
   end
 
   test "CONFIRMED broadcasts synchronously (no BroadcastOrderBoardJob)" do
     assert_no_enqueued_jobs(only: Barista::BroadcastOrderBoardJob) do
-      perform_enqueued_jobs(only: Payments::TbankCallbackJob) do
-        post_notify(tbank_payload(status: "CONFIRMED"))
-      end
+      post_notify(tbank_payload(status: "CONFIRMED"))
     end
     assert_equal "accepted", @order.reload.status
   end
 
   test "CONFIRMED stores provider_payment_id after job" do
-    perform_enqueued_jobs do
-      post_notify(tbank_payload(status: "CONFIRMED"))
-    end
+    post_notify(tbank_payload(status: "CONFIRMED"))
     assert_equal "tbank_pay_777", @payment.reload.provider_payment_id
   end
 
@@ -122,9 +118,7 @@ class Callbacks::TbankControllerTest < ActionDispatch::IntegrationTest
   # ---------------------------------------------------------------------------
 
   test "REJECTED transitions payment to failed after job" do
-    perform_enqueued_jobs do
-      post_notify(tbank_payload(status: "REJECTED"))
-    end
+    post_notify(tbank_payload(status: "REJECTED"))
     assert_response :ok
     assert_equal "failed",   @payment.reload.status
     assert_equal "cancelled", @order.reload.status
@@ -137,8 +131,6 @@ class Callbacks::TbankControllerTest < ActionDispatch::IntegrationTest
   test "duplicate webhook returns ok with duplicate: true" do
     post_notify(tbank_payload(status: "CONFIRMED"))
     assert_response :ok
-
-    perform_enqueued_jobs
 
     post_notify(tbank_payload(status: "CONFIRMED"))
     assert_response :ok
@@ -161,8 +153,8 @@ class Callbacks::TbankControllerTest < ActionDispatch::IntegrationTest
   # Payment not found — job logs warning, no error
   # ---------------------------------------------------------------------------
 
-  test "unknown order enqueues job that silently skips" do
-    assert_enqueued_with(job: Payments::TbankCallbackJob) do
+  test "unknown order runs job inline and returns ok" do
+    assert_no_enqueued_jobs(only: Payments::TbankCallbackJob) do
       post_notify(tbank_payload(order_id: 999999, payment_id: "no_such_id"))
     end
     assert_response :ok

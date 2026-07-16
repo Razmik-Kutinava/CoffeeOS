@@ -226,5 +226,16 @@
 | Worker | **stopped** | async callback риск (H2) |
 | SHOP_SIMULATE_PAYMENT | 0 | simulate не блокирует |
 
-**Exit criteria §3–4 на Fly:** **не пройдены** для email заказчика — ждать Фазу 1.
+**Exit criteria §3–4 на Fly:** **не пройдены** для email заказчика — ждать deploy Фазы 1.
+
+## Фаза 1 — fix persist (2026-07-16)
+
+| Изменение | Файл | Зачем |
+|-----------|------|-------|
+| Webhook `perform_now` | `callbacks/tbank_controller.rb` | RebillId → SavedCardStore без worker |
+| `SOLID_QUEUE_IN_PUMA` | `fly.toml` | очередь на web если worker stopped |
+| `recurrent: save_card` | `order_creator.rb` | legacy redirect с сохранением карты |
+| E2E | `shop_usercards_phase1_persist_test.rb` | 3 сценария: webhook, replay, finalize |
+
+**После deploy:** повторная оплата aramfifa или replay webhook → `GET /user/cards` с `*5953`.
 

@@ -21,8 +21,9 @@ primary_region = "ams"
   # Период живого демо на develop→Fly: идемпотентный demo:seed после каждого деплоя.
   # Убрать demo:seed из release_command после закрытия H.3 (см. veha_1/CHECKLIST § H.0).
   DEMO_AUTO_SEED    = "true"
-  # SOLID_QUEUE_IN_PUMA не включаем — отдельный process worker (bin/jobs).
-  # После первого деплоя с [processes]: fly scale count worker=1
+  # Solid Queue на web — fallback если worker machine stopped (UserCards webhook RebillId).
+  SOLID_QUEUE_IN_PUMA = "true"
+  # Отдельный worker (bin/jobs) — fly scale count worker=1 при нагрузке.
 
 [processes]
   web    = "./bin/rails server -b 0.0.0.0"

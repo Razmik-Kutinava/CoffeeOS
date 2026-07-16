@@ -5,16 +5,15 @@
 ## 🔴 Блокеры
 
 [2026-07-16] — UserCards: карта не сохранилась после оплаты с save_card ON (bug_13-23)
-**Статус:** **диагностика Фаза 0 done** · **фикс Фаза 1 [ ]**
+**Статус:** **код Фаза 1 done** · **deploy Fly [ ]** · **E2E prod aramfifa [ ]**
 **Источник:** заказчик · [`bug_13-23_repeat_purchase_card_missing.png`](../milestones/veha_2/artifacts/usercards_save_card/screenshots/bug_13-23_repeat_purchase_card_missing.png)
-**Fly diagnose:** [`usercards_fly_diagnose_2026-07-16.json`](../milestones/veha_2/artifacts/usercards_save_card/usercards_fly_diagnose_2026-07-16.json)
-**Факты prod (Neon via Fly v361):**
-- `mobile_payment_methods` (card) = **14** глобально, но **`aramfifa100@gmail.com` → 0 cards**
-- Payment `0a7e0f8e…` 2026-07-15: `save_card=true`, `succeeded`, email aramfifa — **row не создан**
-- Worker machine **stopped**; TbankCallbackJob enqueue на web (SolidQueue critical)
-- `SHOP_SIMULATE_PAYMENT=0`; tbank secrets OK; бандл без inline pay
-**Гипотезы:** H1b + H3b (SavedCardStore/webhook/finalize); H2 worker stopped
-**Осталось:** Фаза 1 — worker, persist path, E2E Fly save_card → row + GET /user/cards
+**Root cause (Фаза 0):** webhook RebillId enqueued, worker stopped → SavedCardStore не вызван; finalize/GetState без RebillId.
+**Фикс Фаза 1 (код):**
+- `TbankController` → `TbankCallbackJob.perform_now` (webhook RebillId сразу на web)
+- `fly.toml` → `SOLID_QUEUE_IN_PUMA=true` (fallback очереди)
+- `OrderCreator#init_gateway_payment!` → `recurrent: save_card` + intent в provider_data
+- Тесты: `shop_usercards_phase1_persist_test` 3 PASS + callback/sync regression 22 PASS
+**Осталось:** deploy Fly → replay webhook / новая оплата aramfifa → GET /user/cards
 
 [2026-07-16] — Checkout: нет сплошной шторки (peek позиций + оплата снизу)
 **Статус:** **MCP PASS** 2026-07-16 · **апрув заказчика [ ]**

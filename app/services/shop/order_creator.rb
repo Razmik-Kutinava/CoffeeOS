@@ -103,7 +103,8 @@ module Shop
       end
 
       begin
-        init_gateway_payment!(order, payment) if gateway && flow[:order_status] == :pending_payment
+        save_card = ActiveModel::Type::Boolean.new.cast(params.fetch(:save_card, false))
+        init_gateway_payment!(order, payment, save_card: save_card) if gateway && flow[:order_status] == :pending_payment
       rescue Payments::TbankAdapter::Error, Error => e
         void_pending_online_order!(order, payment)
         raise e
@@ -294,7 +295,10 @@ module Shop
       @session[Shop::CartService::SESSION_KEY] = []
     end
 
-    def init_gateway_payment!(order, payment)
+    def init_gateway_payment!(order, payment, save_card: false)
+      save_card = ActiveModel::Type::Boolean.new.cast(save_card)
+      stamp_save_card_intent!(payment, save_card)
+
       return_base_url = ENV.fetch("TBANK_RETURN_URL", @request&.base_url.to_s)
       notification_url = "#{return_base_url}/callbacks/tbank"
       customer_key = order.customer_id&.to_s
@@ -305,7 +309,7 @@ module Shop
         return_base_url: return_base_url,
         notification_url: notification_url,
         customer_key: customer_key,
-        recurrent: false
+        recurrent: save_card
       )
 
       payment.update_columns(
@@ -317,6 +321,13 @@ module Shop
       @provider_payment_id = result[:provider_payment_id]
     rescue Payments::TbankAdapter::Error => e
       raise Error, "Не удалось инициировать оплату: #{e.message}"
+    end
+
+    def stamp_save_card_intent!(payment, save_card)
+      data = (payment.provider_data.is_a?(Hash) ? payment.provider_data : {}).merge(
+        "save_card" => save_card
+      )
+      payment.update_columns(provider_data: data)
     end
 
     def find_or_create_customer!(params)

@@ -180,7 +180,7 @@ module Shop
       def order_params
         params.permit(
           :name, :email, :phone, :comment, :is_car_pickup, :car_number,
-          :promo_code, :payment_method, :pickup_time, :client_order_uuid
+          :promo_code, :payment_method, :pickup_time, :client_order_uuid, :save_card
         )
       end
 

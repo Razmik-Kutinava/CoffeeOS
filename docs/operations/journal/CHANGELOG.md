@@ -1,5 +1,14 @@
 ﻿# CHANGELOG
 
+## 2026-07-16 — fix(shop): UserCards Фаза 1 — persist RebillId без worker
+
+- **Root cause:** TbankCallbackJob enqueue при stopped worker; GetState finalize без RebillId.
+- `TbankController`: `perform_now` webhook (fallback perform_later).
+- `fly.toml`: `SOLID_QUEUE_IN_PUMA=true` на web.
+- `OrderCreator#init_gateway_payment!`: `recurrent: save_card` + intent provider_data.
+- Тесты: `shop_usercards_phase1_persist_test` 3 PASS; callback/sync 22 PASS.
+- **Deploy:** не делали — ждать go.
+
 ## 2026-07-16 — ops: UserCards Фаза 0 Fly diagnose (read-only)
 
 - `bin/usercards_fly_diagnose.rb` — prod Neon stats via `fly machine exec`.

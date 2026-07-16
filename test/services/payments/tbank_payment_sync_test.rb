@@ -49,6 +49,24 @@ class Payments::TbankPaymentSyncTest < ActiveSupport::TestCase
     assert @payment.reload.succeeded?
   end
 
+  test "sync persists UserCards when GetState CONFIRMED includes RebillId and save_card true" do
+    @payment.update!(provider_data: { "save_card" => true })
+
+    assert sync_with_state(
+      "Status" => "CONFIRMED",
+      "PaymentId" => "pay-sync-1",
+      "RebillId" => "rebill-sync-5953",
+      "Pan" => "220220******5953",
+      "ExpDate" => "0927",
+      "CardType" => "MIR"
+    )
+
+    card = MobilePaymentMethod.find_by(customer_id: @customer.id, card_token: "rebill-sync-5953")
+    assert card, "finalize/GetState должен создать UserCards при RebillId"
+    assert_equal "*5953", card.pan_display
+    assert_equal "MIR", card.card_brand
+  end
+
   private
 
   def sync_with_state(fields)
