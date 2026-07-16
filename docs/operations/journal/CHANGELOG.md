@@ -1,5 +1,13 @@
 ﻿# CHANGELOG
 
+## 2026-07-16 — ops: MCP Fly checkout UX (peek, без inline pay)
+
+- Fly `#/checkout` 390×844: peek 2 позиции · нет «Способ оплаты»/«Оплатить →».
+- `+5₽` → валидация email, не форма карты сразу.
+- Бандл `application-D1E05YN_.js`: `shop:checkout-pay`, `prog24`.
+- Артефакт: `usercards_checkout_mcp_2026-07-16.json` + 2 скрина.
+- **Апрув заказчика:** pending.
+
 ## 2026-07-16 — fix(shop): checkout UX — канон заказчика (peek + оплата из шторки)
 
 - **ТЗ UserCards:** § **Канон UX checkout** — скрины заказчика > B1.13 «только каталог» > ops resolved.

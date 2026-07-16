@@ -5,11 +5,10 @@
 ## 🔴 Блокеры
 
 [2026-07-16] — Checkout: нет сплошной шторки (peek позиций + оплата снизу)
-**Статус:** **open**
+**Статус:** **MCP PASS** 2026-07-16 · **апрув заказчика [ ]**
 **Источник:** заказчик · канон → [`Исправление сохранения карты…`](../milestones/veha_2/requirements/customer_tasks/Исправление%20сохранения%20карты%20в%20UserCards%20после%20успешной%20оплаты.md) § **Канон UX checkout**
-**Суть:** на `#/checkout` нет peek с позициями под PaymentMethodsSheet; была ложная «resolved» по grep/deploy без MCP заказчика.
-**Ожидание:** CartSheet peek внизу · оплата только из шторки (`+сумма`) · без «Оплатить →» в теле Checkout.
-**Закрыть:** MCP Fly / скрин заказчика + `[x]` в ТЗ § Канон UX checkout.
+**MCP:** [`usercards_checkout_mcp_2026-07-16.json`](../milestones/veha_2/artifacts/demo-feedback/usercards_checkout_mcp_2026-07-16.json) — peek 2 позиции · нет «Оплатить →»/«Способ оплаты» · `+5₽` → валидация email (не форма карты).
+**Осталось:** PaymentMethodsSheet с verified email · скрин заказчика «ок».
 
 ## Решено недавно
 

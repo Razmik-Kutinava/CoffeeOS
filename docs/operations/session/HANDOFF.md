@@ -1,19 +1,19 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-16 (checkout UX — канон заказчика, без inline «Оплатить →»)  
-**Ветка:** `develop` (после коммита шага)  
-**Прод:** https://coffeeos.fly.dev · **нужен deploy** после push
+**Дата:** 2026-07-16 (MCP Fly — checkout peek PASS)  
+**Ветка:** `develop` @ `5782685`+  
+**Прод:** https://coffeeos.fly.dev · deploy заказчиком **[x]**
 
 ### Checkout CartSheet UX (эталон заказчика)
 
 | Что | Статус |
 |-----|--------|
-| Канон в ТЗ | **`[x]`** § **Канон UX checkout** (скрины > B1.13 / ops) |
-| Код peek + pay из шторки | **`[x]`** `ensureCheckoutCartPeek` на checkout · без «Оплатить →» в теле |
-| ISSUES | **🔴 open** — ложная «resolved» снята |
-| Тесты grep | **`[x]`** `shop_checkout_cart_sheet_ux_test` |
-| Push + Deploy Fly | **`[ ]`** |
-| MCP / апрув заказчика | **`[ ]`** |
+| Канон в ТЗ | **`[x]`** § **Канон UX checkout** |
+| Код peek + pay из шторки | **`[x]`** |
+| Push + Deploy Fly | **`[x]`** (заказчик) |
+| MCP Fly 2026-07-16 | **`[x]`** peek + нет inline pay · [`usercards_checkout_mcp_2026-07-16.json`](../milestones/veha_2/artifacts/demo-feedback/usercards_checkout_mcp_2026-07-16.json) |
+| PaymentMethodsSheet (verified email) | **`[ ]`** MCP NOT_RUN |
+| **Апрув заказчика** | **`[ ]`** |
 
 ### UserCards / save_card — канон ТЗ
 

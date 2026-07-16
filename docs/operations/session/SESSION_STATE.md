@@ -2,7 +2,7 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-16 (checkout UX — канон заказчика)  
+**Дата:** 2026-07-16 (MCP Fly checkout peek PASS)  
 **Веха 1:** **закрыта** 2026-06-19.  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
 **§2.3 оплата витрина (Init→payment_url→callback):** **done** — базовый redirect на банк остаётся.
@@ -11,11 +11,21 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **Checkout CartSheet UX** | код+ТЗ канон **[x]** · ISSUES **🔴 open** | push/deploy · MCP заказчика |
-| **UserCards / save_card** | review БАГ-1/2/3 **[x]** v359 | MCP оплата |
-| **B1.13 CR-BOTTOM-NAV** | бар убран · cart BOTTOM_REM=0 · catalog+checkout | A1 апрув [ ] |
+| **Checkout CartSheet UX** | MCP Fly **[x]** peek/no inline pay | PaymentMethodsSheet + апрув заказчика |
+| **UserCards / save_card** | review БАГ-1/2/3 **[x]** | MCP оплата с verified email |
+| **B1.13 CR-BOTTOM-NAV** | бар убран · cart BOTTOM_REM=0 | A1 апрув [ ] |
 | **B1.14 адрес в шапке** | **B1.14-3d** index map [x] | B1.14-4 cart |
 | **Product card peek cart** | S1–S7 код [x] | апрув заказчика |
+
+### Сессия 2026-07-16 (MCP Fly — checkout UX после deploy)
+
+- **URL:** `#/checkout` · tenant `2fdee1ac…` · viewport 390×844.
+- **PASS:** peek 2 позиции (2₽+3₽) · нет «Способ оплаты»/«Оплатить →» · hint «+сумма в шторке».
+- **PASS:** `+5₽` → `openPaymentSheet` → alert «Укажите email» (не форма карты сразу).
+- **Бандл:** `application-D1E05YN_.js` — `shop:checkout-pay`, `prog24`, без inline pay strings.
+- **NOT_RUN:** PaymentMethodsSheet (нет verified guest в MCP).
+- **Артефакт:** `usercards_checkout_mcp_2026-07-16.json` + 2 PNG.
+- **Стоп:** апрув заказчика.
 
 ### Сессия 2026-07-16 (checkout UX — только канон заказчика)
 

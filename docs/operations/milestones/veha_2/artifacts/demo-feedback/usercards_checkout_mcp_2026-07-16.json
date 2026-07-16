@@ -1,0 +1,47 @@
+{
+  "date": "2026-07-16",
+  "source": "MCP cursor-ide-browser",
+  "base": "https://coffeeos.fly.dev",
+  "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "url": "https://coffeeos.fly.dev/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789#/checkout",
+  "viewport": "390x844",
+  "bundle": {
+    "application_js": "/vite/assets/application-D1E05YN_.js",
+    "shop_checkout_pay_event": true,
+    "prog24": true,
+    "inline_pay_button": false,
+    "payment_method_block": false
+  },
+  "scenario": "2 позиции в корзине (Фильтр-кофе Бразилия 2₽ + декаф 3₽) → #/checkout",
+  "checks": [
+    {
+      "id": "peek_visible",
+      "expect": "CartSheet peek с позициями внизу",
+      "result": "PASS",
+      "evidence": "screenshots/usercards_checkout_mcp_2026-07-16/01_checkout_peek_no_inline_pay.png"
+    },
+    {
+      "id": "no_inline_pay",
+      "expect": "Нет «Способ оплаты» / «Оплатить →» в теле Checkout",
+      "result": "PASS",
+      "evidence": "snapshot: только Контакты + hint «Оплата — кнопка +сумма…»"
+    },
+    {
+      "id": "pay_from_sheet",
+      "expect": "+5₽ на checkout → openPaymentSheet, не форма карты сразу",
+      "result": "PASS",
+      "evidence": "alert «Укажите email» (screenshots/.../02_checkout_pay_requires_email_not_card_form.png)"
+    },
+    {
+      "id": "payment_methods_sheet",
+      "expect": "PaymentMethodsSheet со списком карт после verified email",
+      "result": "NOT_RUN",
+      "note": "MCP-сессия без verified guest profile; нужен OTP или prep b17"
+    }
+  ],
+  "verdict": "UX checkout (peek + без inline pay) — PASS на Fly. PaymentMethodsSheet — не проверен без email. Апрув заказчика — pending.",
+  "screenshots": [
+    "screenshots/usercards_checkout_mcp_2026-07-16/01_checkout_peek_no_inline_pay.png",
+    "screenshots/usercards_checkout_mcp_2026-07-16/02_checkout_pay_requires_email_not_card_form.png"
+  ]
+}
