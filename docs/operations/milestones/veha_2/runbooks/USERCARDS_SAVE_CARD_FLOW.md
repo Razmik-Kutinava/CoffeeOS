@@ -97,8 +97,8 @@ flowchart TD
 
 ## Следующие шаги (Фаза 3 — RebillId)
 
-1. ~~Runbook (этот файл)~~ **`[x]`** — апрув текста.
-2. Root cause платежа без RebillId на Fly.
-3. Retry GetState + логирование; тесты.
-4. Реальная новая оплата → 2+ карты в списке.
+1. ~~Runbook (этот файл)~~ **`[x]`**
+2. ~~Root cause Fly 8866531465~~ **`[x]`** — `usercards_fly_payment_root_cause_2026-07-18.json`
+3. ~~Retry GetState~~ **`[x]`** — `TbankPaymentSync#sync_for_rebill!` (5×, `TBANK_REBILL_SYNC_*`); log `[UserCards] missing RebillId payment_id=…`
+4. Deploy + реальная новая оплата → 2+ карты в списке.
 5. Апрув заказчика.

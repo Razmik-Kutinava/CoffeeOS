@@ -86,7 +86,12 @@ module Shop
           return render json: { error: "Order not found", status: 404 }, status: :not_found
         end
 
-        Payments::TbankPaymentSync.sync_order!(order: order)
+        payment = order.payments.where(provider: "tbank").order(created_at: :desc).first
+        if payment && Payments::SavedCardStore.allowed_for?(payment)
+          Payments::TbankPaymentSync.sync_order_for_rebill!(order: order)
+        else
+          Payments::TbankPaymentSync.sync_order!(order: order)
+        end
         order.reload
 
         if order.accepted?

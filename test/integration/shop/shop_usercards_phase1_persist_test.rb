@@ -61,11 +61,15 @@ class Shop::ShopUsercardsPhase1PersistTest < ActionDispatch::IntegrationTest
     @old_simulate = ENV["SHOP_SIMULATE_PAYMENT"]
     @old_key = ENV["TBANK_TERMINAL_KEY"]
     @old_pass = ENV["TBANK_PASSWORD"]
+    @old_pause = ENV["TBANK_REBILL_SYNC_PAUSE_SEC"]
     ENV["SHOP_SIMULATE_PAYMENT"] = "0"
     ENV["TBANK_TERMINAL_KEY"] = "TestTerminal"
     ENV["TBANK_PASSWORD"] = "TestPassword"
+    ENV["TBANK_REBILL_SYNC_PAUSE_SEC"] = "0"
     Fake3dsThenConfirm.install!
     Fake3dsThenConfirm.enabled = false
+    FakeFaNoRebillRetry.install!
+    FakeFaNoRebillRetry.enabled = false
     Payments::CacheCounter.clear!
   end
 
@@ -77,6 +81,7 @@ class Shop::ShopUsercardsPhase1PersistTest < ActionDispatch::IntegrationTest
     ENV["SHOP_SIMULATE_PAYMENT"] = @old_simulate
     restore_env("TBANK_TERMINAL_KEY", @old_key)
     restore_env("TBANK_PASSWORD", @old_pass)
+    restore_env("TBANK_REBILL_SYNC_PAUSE_SEC", @old_pause)
     Payments::CacheCounter.clear!
   end
 
@@ -227,6 +232,97 @@ class Shop::ShopUsercardsPhase1PersistTest < ActionDispatch::IntegrationTest
 
     card = MobilePaymentMethod.find_by(customer_id: @customer.id, card_token: "rebill-fin-5953")
     assert card, "finalize/GetState с RebillId должен создать UserCards"
+  end
+
+  test "P1 FA CONFIRMED without RebillId GetState retry persists UserCards" do
+    FakeFaNoRebillRetry.install!
+    FakeFaNoRebillRetry.enabled = true
+    FakeFaNoRebillRetry.attempts = 0
+    order_id = nil
+
+    open_session do |sess|
+      sess.post "/shop/api/cart/add",
+        headers: shop_headers,
+        params: { product_id: @product.id, quantity: 1, selected_modifiers: [] },
+        as: :json
+      verify_shop_email!(tenant_id: @tenant.id, email: @email, session: sess)
+
+      sess.post "/shop/api/payments/new_card",
+        headers: shop_headers,
+        params: {
+          name: "RetryRebill",
+          email: @email,
+          payment_method: "card",
+          CardData: "encrypted-retry",
+          save_card: true
+        },
+        as: :json
+
+      body = JSON.parse(sess.response.body)
+      assert_equal 200, sess.response.status, body.inspect
+      assert_equal "accepted", body["status"]
+      order_id = body["order_id"]
+    end
+
+    payment = Payment.find_by!(order_id: order_id)
+    card = MobilePaymentMethod.find_by(
+      customer_id: payment.order.customer_id,
+      card_token: "rebill-fa-retry-8782"
+    )
+    assert card, "FA без RebillId + retry GetState должен создать UserCards (attempts=#{FakeFaNoRebillRetry.attempts})"
+    assert_equal "*8782", card.pan_display
+    assert_operator FakeFaNoRebillRetry.attempts, :>=, 2
+  ensure
+    FakeFaNoRebillRetry.enabled = false
+    FakeFaNoRebillRetry.attempts = 0
+  end
+
+  module FakeFaNoRebillRetry
+    mattr_accessor :enabled, default: false
+    mattr_accessor :attempts, default: 0
+
+    module Override
+      def init_payment(**)
+        return super unless FakeFaNoRebillRetry.enabled
+
+        { payment_url: "https://x", provider_payment_id: "pay-fa-retry-#{SecureRandom.hex(3)}" }
+      end
+
+      def finish_authorize(payment_id:, card_data:)
+        return super unless FakeFaNoRebillRetry.enabled
+
+        {
+          "Success" => true,
+          "ErrorCode" => "0",
+          "Status" => "CONFIRMED",
+          "PaymentId" => payment_id
+        }
+      end
+
+      def get_payment_state(payment_id:)
+        return super unless FakeFaNoRebillRetry.enabled
+
+        FakeFaNoRebillRetry.attempts += 1
+        base = { "Success" => true, "ErrorCode" => "0", "Status" => "CONFIRMED", "PaymentId" => payment_id.to_s }
+        if FakeFaNoRebillRetry.attempts >= 2
+          base.merge(
+            "RebillId" => "rebill-fa-retry-8782",
+            "Pan" => "220196******8782",
+            "ExpDate" => "1029",
+            "CardType" => "MIR"
+          )
+        else
+          base
+        end
+      end
+    end
+
+    def self.install!
+      return if @done
+
+      Payments::TbankAdapter.prepend(Override)
+      @done = true
+    end
   end
 
   private

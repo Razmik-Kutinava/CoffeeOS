@@ -117,7 +117,7 @@
 >
 > - [x] Код по ТЗ шаги 1–6 (Init/Recurrent, FA, SavedCardStore, 1-click, save_card toggle, Фаза 2 UX)
 > - [ ] Fly E2E: новая карта в 8925 **сразу** после оплаты (не replay *5953)
-> - [ ] Fix 3.3 retry GetState после FA без RebillId
+> - [x] Fix 3.3 retry GetState после FA без RebillId (`sync_for_rebill!`)
 > - [ ] MCP Fly stacked + PaymentMethodsSheet 8925
 > - [ ] Апрув заказчика
 

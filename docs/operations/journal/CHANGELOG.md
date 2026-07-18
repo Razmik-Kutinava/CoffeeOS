@@ -1,5 +1,12 @@
 ﻿# CHANGELOG
 
+## 2026-07-18 — fix(payments): UserCards Фаза 3.3 retry GetState для RebillId
+
+- `TbankPaymentSync#sync_for_rebill!` — до 5× GetState с паузой после FA/webhook CONFIRMED без RebillId.
+- `NewCardPaymentService`, `TbankCallbackJob`, `orders#finalize` — вызов retry sync.
+- Log `[UserCards] missing RebillId payment_id=…` если RebillId так и не пришёл.
+- Тесты: `tbank_payment_sync_test`, `shop_usercards_phase1_persist_test` P1 FA retry.
+
 ## 2026-07-18 — ops: UserCards Фаза 3.2 root cause платёж 8866531465 (Fly)
 
 - `bin/usercards_fly_payment_root_cause.rb` + [`usercards_fly_payment_root_cause_2026-07-18.json`](milestones/veha_2/artifacts/usercards_save_card/usercards_fly_payment_root_cause_2026-07-18.json).

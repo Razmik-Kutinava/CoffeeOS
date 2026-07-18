@@ -116,7 +116,7 @@ module Shop
           if raw["RebillId"].to_s.present?
             Payments::SavedCardStore.persist_from_tbank!(payment: payment.reload, payload: raw)
           else
-            Payments::TbankPaymentSync.sync_order!(order: order)
+            Payments::TbankPaymentSync.sync_order_for_rebill!(order: order)
           end
         rescue StandardError => e
           Rails.logger.error("[NewCardPaymentService] UserCards persist failed: #{e.class}: #{e.message}")

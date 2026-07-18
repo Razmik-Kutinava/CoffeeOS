@@ -67,6 +67,53 @@ class Payments::TbankPaymentSyncTest < ActiveSupport::TestCase
     assert_equal "MIR", card.card_brand
   end
 
+  test "sync_for_rebill retries GetState until RebillId then persists UserCards" do
+    @payment.update!(provider_data: { "save_card" => true }, status: :succeeded)
+    @order.update!(status: :accepted)
+    attempts = 0
+    adapter = Payments::TbankAdapter.new
+    adapter.define_singleton_method(:get_payment_state) do |**|
+      attempts += 1
+      base = { "Success" => true, "ErrorCode" => "0", "Status" => "CONFIRMED", "PaymentId" => "pay-sync-1" }
+      if attempts >= 3
+        base.merge(
+          "RebillId" => "rebill-retry-8782",
+          "Pan" => "220196******8782",
+          "ExpDate" => "1029",
+          "CardType" => "MIR"
+        )
+      else
+        base
+      end
+    end
+
+    sync = Payments::TbankPaymentSync.new(payment: @payment.reload, adapter: adapter)
+    assert sync.sync_for_rebill!(retries: 5, pause: 0)
+    assert_equal 3, attempts
+
+    card = MobilePaymentMethod.find_by(customer_id: @customer.id, card_token: "rebill-retry-8782")
+    assert card, "retry GetState должен создать UserCards"
+    assert_equal "*8782", card.pan_display
+  end
+
+  test "sync_for_rebill logs missing RebillId when retries exhausted" do
+    @payment.update!(provider_data: { "save_card" => true }, status: :succeeded)
+    @order.update!(status: :accepted)
+
+    logs = StringIO.new
+    old_logger = Rails.logger
+    Rails.logger = ActiveSupport::Logger.new(logs)
+
+    sync = Payments::TbankPaymentSync.new(
+      payment: @payment.reload,
+      adapter: fake_adapter("Status" => "CONFIRMED", "PaymentId" => "pay-sync-1")
+    )
+    assert_not sync.sync_for_rebill!(retries: 3, pause: 0)
+    assert_match(/\[UserCards\] missing RebillId payment_id=#{@payment.id}/, logs.string)
+  ensure
+    Rails.logger = old_logger
+  end
+
   private
 
   def sync_with_state(fields)

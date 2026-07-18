@@ -24,9 +24,9 @@
 | Фаза 1 fix persist | **`[x]`** deploy **v362** |
 | Runbook привязки (Фаза 3.1) | **`[x]`** [`USERCARDS_SAVE_CARD_FLOW.md`](../milestones/veha_2/runbooks/USERCARDS_SAVE_CARD_FLOW.md) |
 | Root cause 8866531465 (Фаза 3.2) | **`[x]`** [`usercards_fly_payment_root_cause_2026-07-18.json`](../milestones/veha_2/artifacts/usercards_save_card/usercards_fly_payment_root_cause_2026-07-18.json) |
-| Fix retry GetState (Фаза 3.3) | **`[ ]`** — ждёт **go** |
+| Fix retry GetState (Фаза 3.3) | **`[x]`** код · deploy **`[ ]`** |
 
-**Следующий шаг UserCards:** апрув root cause 3.2 → **`go` 3.3** (retry GetState + delayed sync + тесты).
+**Следующий шаг UserCards:** deploy Fly → E2E 2-я карта в 8925 → MCP → апрув.
 
 ### WIPE 2026-07-14 — сохранение карты / checkout card UX
 
