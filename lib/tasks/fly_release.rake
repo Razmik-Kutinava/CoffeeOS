@@ -23,6 +23,19 @@ module FlyRelease
   rescue StandardError => e
     puts "[fly:release] WARN schema #{db_name}: #{e.class} #{e.message}"
   end
+
+  def migrate_with_retry!(task_name, attempts: 5)
+    attempts.times do |i|
+      Rake::Task[task_name].reenable
+      Rake::Task[task_name].invoke
+      return
+    rescue ActiveRecord::ConcurrentMigrationError => e
+      puts "[fly:release] #{task_name} lock busy (attempt #{i + 1}/#{attempts}): #{e.message}"
+      raise e if i >= attempts - 1
+
+      sleep(2 * (i + 1))
+    end
+  end
 end
 
 namespace :fly do
@@ -46,7 +59,7 @@ namespace :fly do
       next unless Rake::Task.task_defined?(name)
 
       puts "[fly:release] #{name}..."
-      Rake::Task[name].invoke
+      FlyRelease.migrate_with_retry!(name)
     end
 
     if ActiveModel::Type::Boolean.new.cast(ENV.fetch("DEMO_AUTO_SEED", "false"))
