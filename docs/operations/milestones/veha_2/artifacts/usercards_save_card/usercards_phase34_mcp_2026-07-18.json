@@ -1,0 +1,52 @@
+{
+  "date": "2026-07-18",
+  "phase": "3.4_fly_e2e",
+  "deploy": {
+    "version": 366,
+    "image": "registry.fly.io/coffeeos:deployment-01KXT8NR80HW40FKBRKFJCMDT7",
+    "deployed_at": "2026-07-18T09:27:29Z",
+    "commits": [
+      "6a73473 fix(payments): UserCards retry GetState for RebillId (phase 3.3)",
+      "3e9c0c3 fix(ops): retry solid migrations on Fly release lock conflict"
+    ]
+  },
+  "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "email": "aramfifa100@gmail.com",
+  "artifacts": {
+    "investigate": "usercards_fly_payment_investigate_2026-07-18.json",
+    "diagnose": "usercards_fly_diagnose_2026-07-18.json",
+    "root_cause": "usercards_fly_payment_root_cause_2026-07-18.json"
+  },
+  "saved_cards_db": [
+    { "pan": "*5953", "rebill_id": "1846699802", "created_at": "2026-07-16T09:02:55Z" },
+    { "pan": "*8782", "rebill_id": "1851861115", "created_at": "2026-07-17T09:57:17Z" }
+  ],
+  "checks": [
+    {
+      "id": "deploy_v366_sync_for_rebill",
+      "status": "PASS",
+      "detail": "Fly release 366 после 6a73473; web machine 9080d40db67238 started"
+    },
+    {
+      "id": "investigate_two_cards",
+      "status": "PASS",
+      "detail": "aramfifa saved_cards: *5953 + *8782; payments_today: 0"
+    },
+    {
+      "id": "mcp_payment_methods_sheet",
+      "status": "PASS",
+      "screenshot": "screenshots/usercards_phase34_mcp_2026-07-18_payment_sheet_two_cards.png",
+      "detail": "PaymentMethodsSheet: «МИР Карта *5953» + «МИР Карта *8782», СБП, Новая карта — канон 8925"
+    },
+    {
+      "id": "new_payment_today_different_pan",
+      "status": "NOT_RUN",
+      "detail": "Живая оплата «Новая карта» save ON не выполнялась (экономия + нужен ввод PAN в T-Bank). Карта *8782 уже в БД с оплаты 2026-07-16/17 (delayed webhook)."
+    }
+  ],
+  "verdict": "PARTIAL_PASS",
+  "verdict_plain": "UI 8925 и БД: 2 карты PASS. Живая новая оплата сегодня NOT_RUN — go шаг 5 после апрува скрина; для полного E2E fix 3.3 нужна оплата заказчиком «Новая карта».",
+  "maps_to_customer_screens": {
+    "1000008925": "screenshots/usercards_phase34_mcp_2026-07-18_payment_sheet_two_cards.png"
+  }
+}

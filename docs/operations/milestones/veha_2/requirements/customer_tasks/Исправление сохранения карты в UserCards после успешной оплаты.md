@@ -259,8 +259,8 @@
 | 3.1 | Runbook [`USERCARDS_SAVE_CARD_FLOW.md`](../runbooks/USERCARDS_SAVE_CARD_FLOW.md) | `[x]` |
 | 3.2 | Root cause платежа 8866531465 (Fly) | `[x]` — [`usercards_fly_payment_root_cause_2026-07-18.json`](../artifacts/usercards_save_card/usercards_fly_payment_root_cause_2026-07-18.json) |
 | 3.3 | Fix retry GetState + тесты | `[x]` — `sync_for_rebill!` 5× pause 1s · log `[UserCards] missing RebillId` |
-| 3.4 | Fly: реальная 2-я карта в списке | `[ ]` |
-| 3.5 | Апрув заказчика | `[ ]` |
+| 3.4 | Fly: реальная 2-я карта в списке | `[x]` PARTIAL — MCP 2 строки · [`usercards_phase34_mcp_2026-07-18.json`](../artifacts/usercards_save_card/usercards_phase34_mcp_2026-07-18.json) · живая оплата сегодня NOT_RUN |
+| 3.5 | Апрув заказчика | `[ ]` — скрин 8925 |
 
 Runbook: **оплата ≠ привязка**; без RebillId карта в 8925 не появится.
 

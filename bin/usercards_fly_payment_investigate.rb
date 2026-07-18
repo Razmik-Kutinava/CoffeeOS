@@ -90,7 +90,9 @@ report = {
   machine_id: machine_id,
   email: EMAIL,
   investigation: data,
-  verdict: if data["payments_today"].empty?
+  verdict: if data["payments_today"].empty? && data["saved_cards"].size >= 2
+             "TWO_SAVED_CARDS_NO_PAYMENT_TODAY"
+           elsif data["payments_today"].empty?
              "NO_PAYMENTS_TODAY"
            elsif data["different_cards_today"]
              "MULTIPLE_PANS_TODAY"

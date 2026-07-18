@@ -2,7 +2,7 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-18 (UserCards Фаза 3.3 — retry GetState RebillId)  
+**Дата:** 2026-07-18 (UserCards deploy v366 + Fly MCP 3.4)  
 **Веха 1:** **закрыта** 2026-06-19.  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
 **§2.3 оплата витрина (Init→payment_url→callback):** **done** — базовый redirect на банк остаётся.
@@ -12,30 +12,34 @@
 | Сейчас | Дальше |
 |--------|--------|
 | **Checkout CartSheet UX** | Фаза 2 stacked код **[x]** | deploy · MCP · апрув |
-| **UserCards / save_card** | 3.3 fix код **[x]** · 🔴 до deploy/E2E | deploy Fly → 3.4 E2E |
+| **UserCards / save_card** | deploy v366 **[x]** · MCP 2 карты **[x]** | апрув скрин 8925 → 3.5 |
 | **B1.13 CR-BOTTOM-NAV** | бар убран · cart BOTTOM_REM=0 | A1 апрув [ ] |
 | **B1.14 адрес в шапке** | **B1.14-3d** index map [x] | B1.14-4 cart |
 | **Product card peek cart** | S1–S7 код [x] | апрув заказчика |
 
+### Сессия 2026-07-18 (UserCards deploy v366 + Fly MCP 3.4)
+
+- **Deploy:** Fly **v366** `deployment-01KXT8NR80HW40FKBRKFJCMDT7` · web 9080d40db67238
+- **Investigate:** aramfifa saved_cards *5953 + *8782 (`usercards_fly_payment_investigate_2026-07-18.json`)
+- **MCP:** PaymentMethodsSheet 2 строки — `screenshots/usercards_phase34_mcp_2026-07-18_payment_sheet_two_cards.png`
+- **Артефакт:** `usercards_phase34_mcp_2026-07-18.json` — PARTIAL (живая оплата сегодня NOT_RUN)
+- **Стоп:** апрув скрина 8925 → go 3.5
+
+### Сессия 2026-07-18 (UserCards Фаза 3.3 — retry GetState RebillId)
+
+- **Код:** `TbankPaymentSync#sync_for_rebill!` — 5× GetState
+- **Тесты:** 26 runs payment/UserCards — 0 fail
+- **Deploy:** v366 (3e9c0c3 fly_release retry)
+
 ### Сессия 2026-07-18 (SBR — spec-build-review + todo.md)
 
 - **Правила:** `.cursor/rules/workflow/spec-build-review.mdc` — SBR ENGINE (SPEC→RED→GREEN→REVIEW)
-- **Связка:** `docs/operations/session/todo.md` (живой чеклист); RED/GREEN substep в `coffeeos-commit-ops`, `coffeeos-task-workflow`
-- **RED:** коммит `[RED]` без CHANGELOG/HANDOFF · **GREEN:** регрессия зоны · **REVIEW:** полный ops
-
-
-- **Код:** `TbankPaymentSync#sync_for_rebill!` — 5× GetState (`TBANK_REBILL_SYNC_RETRIES` / `TBANK_REBILL_SYNC_PAUSE_SEC`); FA/webhook/finalize без RebillId → retry; log `[UserCards] missing RebillId payment_id=…`
-- **Тесты:** `tbank_payment_sync_test` + `shop_usercards_phase1_persist_test` P1 FA retry — **26 runs, 0 fail** (зона payment/UserCards)
-- **Стоп:** deploy Fly → E2E 3.4
+- **Связка:** `docs/operations/session/todo.md` (живой чеклист); RED/GREEN substep в commit-ops / task-workflow
 
 ### Сессия 2026-07-18 (UserCards Фаза 3.2 — root cause 8866531465)
 
 - **Скрипт:** `bin/usercards_fly_payment_root_cause.rb` · **артефакт:** `usercards_fly_payment_root_cause_2026-07-18.json`
-- **Init:** save_card=true → Recurrent=Y (inferred, Init body не в БД)
-- **FA 09:56:39:** CONFIRMED без RebillId/Pan → settle + GetState не дожали
-- **Delayed webhook 2026-07-17:** RebillId 1851861115, Pan *8782 → provider_data заполнен позже
-- **Вердикт:** `OUR_FA_WITHOUT_REBILL_DELAYED_WEBHOOK_LATE` — **наш баг** (retry GetState / delayed sync)
-- **Стоп:** апрув root cause → **go 3.3**
+- **Вердикт:** `OUR_FA_WITHOUT_REBILL_DELAYED_WEBHOOK_LATE` — retry GetState (3.3)
 
 ### Сессия 2026-07-18 (UserCards Фаза 3.1 — runbook привязки)
 

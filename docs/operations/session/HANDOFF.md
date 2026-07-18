@@ -1,8 +1,8 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-18 (SBR spec-build-review)  
+**Дата:** 2026-07-18 (UserCards deploy v366 + Fly MCP 3.4)  
 **Ветка:** `develop`  
-**Прод:** https://coffeeos.fly.dev · release **v363**
+**Прод:** https://coffeeos.fly.dev · release **v366**
 
 ### SBR workflow (новое)
 
@@ -36,9 +36,10 @@
 | Фаза 1 fix persist | **`[x]`** deploy **v362** |
 | Runbook привязки (Фаза 3.1) | **`[x]`** [`USERCARDS_SAVE_CARD_FLOW.md`](../milestones/veha_2/runbooks/USERCARDS_SAVE_CARD_FLOW.md) |
 | Root cause 8866531465 (Фаза 3.2) | **`[x]`** [`usercards_fly_payment_root_cause_2026-07-18.json`](../milestones/veha_2/artifacts/usercards_save_card/usercards_fly_payment_root_cause_2026-07-18.json) |
-| Fix retry GetState (Фаза 3.3) | **`[x]`** код · deploy **`[ ]`** |
+| Deploy v366 + 3.4 MCP 2 карты | **`[x]`** [`usercards_phase34_mcp_2026-07-18.json`](../milestones/veha_2/artifacts/usercards_save_card/usercards_phase34_mcp_2026-07-18.json) |
+| Апрув заказчика (3.5) | **`[ ]`** — скрин 8925 |
 
-**Следующий шаг UserCards:** deploy Fly → E2E 2-я карта в 8925 → MCP → апрув.
+**Следующий шаг UserCards:** апрув скрина 8925 → **go 3.5** · опционально живая «Новая карта» для полного E2E 3.3.
 
 ### WIPE 2026-07-14 — сохранение карты / checkout card UX
 

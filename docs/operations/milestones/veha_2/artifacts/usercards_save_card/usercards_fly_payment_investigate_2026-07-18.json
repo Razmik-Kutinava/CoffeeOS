@@ -1,0 +1,30 @@
+{
+  "date": "2026-07-18",
+  "fly_app": "coffeeos",
+  "machine_id": "9080d40db67238",
+  "email": "aramfifa100@gmail.com",
+  "investigation": {
+    "email": "aramfifa100@gmail.com",
+    "customer_id": "2bc37279-8d23-456b-a2a5-4c28f584634c",
+    "payments_today": [],
+    "unique_pans_today": [],
+    "different_cards_today": false,
+    "saved_cards": [
+      {
+        "id": "4c5569dd-994c-4146-86d2-ed4d78bebcd6",
+        "card_masked": "*5953",
+        "card_token": "1846699802",
+        "is_default": true,
+        "created_at": "2026-07-16T09:02:55Z"
+      },
+      {
+        "id": "9016caa2-1cb4-4f33-afab-2a857313b7b5",
+        "card_masked": "*8782",
+        "card_token": "1851861115",
+        "is_default": false,
+        "created_at": "2026-07-17T09:57:17Z"
+      }
+    ]
+  },
+  "verdict": "TWO_SAVED_CARDS_NO_PAYMENT_TODAY"
+}

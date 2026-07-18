@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-07-18 — deploy + ops: UserCards Fly v366, MCP 3.4 две карты в 8925
+
+- Deploy **v366** (3.3 retry GetState + fly_release migration retry 3e9c0c3).
+- MCP PaymentMethodsSheet *5953 + *8782; `usercards_phase34_mcp_2026-07-18.json` + screenshot.
+- Живая «Новая карта» сегодня NOT_RUN (экономия).
+
 ## 2026-07-18 — rules: SBR spec-build-review + todo.md + RED/GREEN substep
 
 - Новый `.cursor/rules/workflow/spec-build-review.mdc` — TDD-цикл SPEC→RED→GREEN→REVIEW.
