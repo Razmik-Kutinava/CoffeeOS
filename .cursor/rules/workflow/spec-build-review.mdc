@@ -1,0 +1,91 @@
+---
+description: "SBR Engine: Интеграция гибридного цикла разработки Spec-Build-Review в инфраструктуру CoffeeOS"
+globs: ["*"]
+alwaysApply: true
+---
+
+# COFFEEOS SBR ENGINE (SPEC-BUILD-REVIEW)
+
+Этот файл интегрирует TDD-цикл SBR в общую структуру правил CoffeeOS. Приоритет выполнения правил: coffeeos-commit-ops -> coffeeos-task-workflow -> coffeeos-dev-gates -> spec-build-review.
+
+**Связка файлов состояния:**
+- `docs/operations/session/todo.md` — живой чеклист текущей работы (не заменяет `CHECKLIST.md` вехи).
+- `docs/operations/session/SESSION_STATE.md` / `HANDOFF.md` — макро-память сессий (полное обновление — в PHASE 3: REVIEW).
+
+**Два режима коммита:**
+- **RED-substep:** коммит падающих тестов, **без** CHANGELOG/HANDOFF, статус `in_progress`, стоп до `go`.
+- **GREEN-substep:** коммит реализации + зелёные тесты + регрессия зоны; полный ops (CHANGELOG/HANDOFF) — в PHASE 3: REVIEW.
+- **Шаг закрыт (`done`)** — только когда тесты зелёные (после GREEN + регрессии).
+
+**TDD-RED ≠ баг:** намеренный RED `[TDD]` не писать в `ISSUES.md`. В ISSUES — только реальные поломки.
+
+---
+
+## PHASE 1: SPEC (Личность: Архитектор)
+Используй: coffeeos-task-workflow, coffeeos-repo-layout
+
+Когда пользователь передает тебе спецификацию (из Qwen):
+1. **Анализ лимитов и RLS:** Сверься с coffeeos-core.mdc (проверь Current.tenant_id) и coffeeos-file-size-split.mdc (лимиты файлов).
+2. **Создание todo-трекера:** Обнови `docs/operations/session/todo.md` — общий живой чеклист текущей работы (пункты, фазы, галочки). Не путать с `CHECKLIST.md` вехи.
+3. **Запись в Ops-память:** Инициализируй сессию в `docs/operations/session/SESSION_STATE.md` (кратко: что начали, ссылка на todo).
+4. **Блокировка (Gate 1):** СТОП. Выведи структуру todo.md в чат и жди команду.
+   > "### 📋 [PHASE 1: SPEC] Спецификация импортирована в todo.md и SESSION_STATE.md.
+   > Напишите **go**, чтобы я перешел к написанию тестов (PHASE 2: BUILD -> RED)."
+
+---
+
+## PHASE 2: BUILD (Личность: Разработчик)
+Используй: coffeeos-tests, coffeeos-commit-ops, coffeeos-dev-gates
+
+### Шаг 2.1: RED (Написание тестов)
+1. **Действие:** Создай/дополни тесты в папке test/ (зеркально структуре приложения по coffeeos-repo-layout).
+2. **Запуск:** Запусти тесты. Убедись, что они падают именно на новой логике (намеренный RED — не ISSUES).
+3. **Commit Ops (RED-substep):** Сделай коммит `test: add failing tests for [feature] [RED]` БЕЗ вопросов. **Не обновляй** CHANGELOG.md и HANDOFF.md.
+4. **Блокировка (Gate 2):** СТОП. Покажи лог падения теста и жди команду.
+   > "### 🔴 [PHASE 2: BUILD] Тесты написаны и закоммичены (RED).
+   > Напишите **go**, чтобы я написал код реализации для перехода в GREEN."
+
+### Шаг 2.2: GREEN (Реализация)
+1. **Действие:** Напиши чистый код (контроллеры строго в namespace по coffeeos-http, бизнес-логика в app/services/{panel}/ по coffeeos-services).
+2. **Loop-самопроверка:** Запусти тесты. У тебя есть 3 попытки исправить код локально. Если завис — откати **только файлы реализации** (не тесты, не todo.md, не ops), например `git checkout -- app/services/...`, и проси помощи.
+3. **Регрессия зоны (обязательно):** После зелёного теста задачи — прогон по таблице зон в coffeeos-dev-gates.mdc (shop/оплата/platform и т.д. по затронутой зоне). Запиши команду и результат в отчёт.
+4. **Фиксация:** Тесты и регрессия прошли? Отметь чекпоинт в todo.md как выполненный [x].
+5. **Commit Ops (GREEN-substep):** Сделай коммит `feat: implement [step] [GREEN]` БЕЗ вопросов. CHANGELOG/HANDOFF — в PHASE 3.
+
+---
+
+## PHASE 3: REVIEW (Личность: Тимлид / Критик)
+Используй: coffeeos-code-review, coffeeos-dev-gates
+
+После закрытия всех задач в todo.md:
+1. **Проверка качества (Sanity Check):** N+1 (coffeeos-performance), RLS (coffeeos-core), `bin/rails test` по зоне, `rubocop` при изменениях Ruby.
+2. **Синхронизация Ops-памяти:**
+   - Обнови `docs/operations/session/SESSION_STATE.md` (итог фичи).
+   - Обнови `docs/operations/journal/CHANGELOG.md` (кратко, что изменилось).
+   - Заполни `docs/operations/session/HANDOFF.md` (итог работы, готовность к деплою / что блокирует).
+3. **Отчёт (Финал):** Выведи отчет в чат (формат coffeeos-task-workflow):
+   > "### 🟢 [PHASE 3: REVIEW] Фича успешно реализована!
+   >
+   > | Сделано | Не сделано |
+   > |---|---|
+   > | … | … |
+   >
+   > **Статус:** done · **Коммит:** [хеш] · **Ops:** SESSION_STATE, CHANGELOG, HANDOFF
+   >
+   > Регрессия: [команда] — PASS/FAIL
+   >
+   > Жду **go** на следующий пункт или деплой (push/deploy — только по явной просьбе)."
+
+---
+
+## Инициализация (кратко)
+
+Открываешь Composer в Cursor (Agent Mode), прикрепляешь @spec-build-review.mdc и закидываешь SPEC из Qwen.
+
+**Старт:** агент обновляет `docs/operations/session/todo.md`, пишет в SESSION_STATE.md и замирает: «Жду **go**».
+
+**Разработка (TDD):**
+- `go` → тесты → RED → коммит `[RED]` → стоп → «Жду **go**».
+- `go` → код → GREEN → регрессия зоны → коммит `[GREEN]` → галочка в todo.md.
+
+**Сдача:** REVIEW → N+1/RLS → `bin/rails test` + rubocop → CHANGELOG/HANDOFF/SESSION_STATE → финальный отчёт с хешем коммита.

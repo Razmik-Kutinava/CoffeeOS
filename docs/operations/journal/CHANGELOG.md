@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-07-18 — rules: SBR spec-build-review + todo.md + RED/GREEN substep
+
+- Новый `.cursor/rules/workflow/spec-build-review.mdc` — TDD-цикл SPEC→RED→GREEN→REVIEW.
+- `docs/operations/session/todo.md` — живой чеклист (не CHECKLIST вехи).
+- `coffeeos-commit-ops` / `coffeeos-task-workflow` — RED-substep (коммит без CHANGELOG/HANDOFF), GREEN + регрессия, TDD-RED ≠ ISSUES.
+
 ## 2026-07-18 — fix(payments): UserCards Фаза 3.3 retry GetState для RebillId
 
 - `TbankPaymentSync#sync_for_rebill!` — до 5× GetState с паузой после FA/webhook CONFIRMED без RebillId.

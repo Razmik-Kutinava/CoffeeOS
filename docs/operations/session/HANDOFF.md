@@ -1,8 +1,20 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-18 (UserCards Фаза 3.2 — root cause 8866531465)  
+**Дата:** 2026-07-18 (SBR spec-build-review)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev · release **v363**
+
+### SBR workflow (новое)
+
+| Что | Статус |
+|-----|--------|
+| `spec-build-review.mdc` | **`[x]`** |
+| `todo.md` в `docs/operations/session/` | **`[x]`** |
+| RED/GREEN substep в commit-ops / task-workflow | **`[x]`** |
+
+**Использование:** Agent Mode + `@spec-build-review.mdc` + SPEC → ждёт **go** на каждую фазу.
+
+**Следующий шаг:** применить SBR на следующую фичу по CHECKLIST/CBR.
 
 ### Checkout CartSheet UX (эталон заказчика)
 

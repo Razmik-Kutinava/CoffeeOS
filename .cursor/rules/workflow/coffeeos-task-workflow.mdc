@@ -17,6 +17,7 @@ alwaysApply: true
 
 - `docs/operations/session/HANDOFF.md`
 - `docs/operations/session/SESSION_STATE.md`
+- `docs/operations/session/todo.md` (живой чеклист текущей работы; не путать с CHECKLIST вехи)
 - `docs/operations/ISSUES.md` (🔴)
 - `docs/operations/milestones/veha_2/checklists/CHECKLIST.md`
 - `docs/operations/milestones/veha_2/requirements/CUSTOMER_BUSINESS_REQUIREMENTS.md` (индекс)
@@ -47,7 +48,8 @@ alwaysApply: true
 
 - У **каждой** новой или изменённой фичи, сервиса, роута, контроллера — **свой тест** в том же шаге.
 - Порядок: **тест под задачу** → код → **регрессия зоны** ([`coffeeos-dev-gates.mdc`](coffeeos-dev-gates.mdc)).
-- Красные тесты → **`ISSUES.md`** → фикс (после `go`) → снова тесты. Шаг не закрывать без зелёного **или** явного `blocked` + запись в ISSUES.
+- **SBR/TDD** ([`spec-build-review.mdc`](spec-build-review.mdc)): RED → коммит `[RED]` → `go` → GREEN → регрессия → коммит `[GREEN]`. Намеренный RED `[TDD]` — **не** ISSUES.
+- Случайные красные / регрессия → **`ISSUES.md`** → фикс (после `go`) → снова тесты. Шаг не закрывать без зелёного **или** явного `blocked` + запись в ISSUES.
 
 ---
 

@@ -17,7 +17,12 @@
 | **B1.14 адрес в шапке** | **B1.14-3d** index map [x] | B1.14-4 cart |
 | **Product card peek cart** | S1–S7 код [x] | апрув заказчика |
 
-### Сессия 2026-07-18 (UserCards Фаза 3.3 — retry GetState RebillId)
+### Сессия 2026-07-18 (SBR — spec-build-review + todo.md)
+
+- **Правила:** `.cursor/rules/workflow/spec-build-review.mdc` — SBR ENGINE (SPEC→RED→GREEN→REVIEW)
+- **Связка:** `docs/operations/session/todo.md` (живой чеклист); RED/GREEN substep в `coffeeos-commit-ops`, `coffeeos-task-workflow`
+- **RED:** коммит `[RED]` без CHANGELOG/HANDOFF · **GREEN:** регрессия зоны · **REVIEW:** полный ops
+
 
 - **Код:** `TbankPaymentSync#sync_for_rebill!` — 5× GetState (`TBANK_REBILL_SYNC_RETRIES` / `TBANK_REBILL_SYNC_PAUSE_SEC`); FA/webhook/finalize без RebillId → retry; log `[UserCards] missing RebillId payment_id=…`
 - **Тесты:** `tbank_payment_sync_test` + `shop_usercards_phase1_persist_test` P1 FA retry — **26 runs, 0 fail** (зона payment/UserCards)

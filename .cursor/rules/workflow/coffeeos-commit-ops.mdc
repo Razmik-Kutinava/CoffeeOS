@@ -36,6 +36,22 @@ Read-only шаг (файлы не менялись): **«read-only, файлы �
 
 ---
 
+## SBR: RED / GREEN substep (spec-build-review.mdc)
+
+TDD-цикл SBR — **два коммита**, один логический шаг закрывается только на GREEN.
+
+| Substep | Коммит | Ops |
+|---------|--------|-----|
+| **RED** | `test: … [RED]` — обязателен | **Только** `git commit`. **Не** CHANGELOG, **не** HANDOFF. Статус `in_progress`, стоп до `go`. |
+| **GREEN** | `feat: … [GREEN]` — обязателен | Коммит + регрессия зоны. CHANGELOG/HANDOFF — в **PHASE 3: REVIEW** (конец фичи) или при обычном шаге без SBR — полный ops ниже. |
+| **REVIEW / обычный шаг** | как обычно | Полный ops: SESSION_STATE + CHANGELOG + HANDOFF |
+
+**TDD-RED `[TDD]`** — намеренный падающий тест, **не** баг → **не** `ISSUES.md`.
+
+На RED-substep в отчёте: **Статус:** `in_progress` · тесты могут быть красными (ожидаемо).
+
+---
+
 ## Только с явной просьбой пользователя
 
 - **`git push`**
@@ -48,7 +64,7 @@ Read-only шаг (файлы не менялись): **«read-only, файлы �
 
 ## Проверка перед отчётом
 
-- Релевантные тесты зелёные (`bin/rails test …`, smoke — `project/coffeeos-tests.mdc`)
+- Релевантные тесты зелёные (`bin/rails test …`, smoke — `project/coffeeos-tests.mdc`) — **кроме RED-substep** (там красный ожидаем)
 - `git status` — нет незакоммиченных файлов по задаче
 
 Скриптов `check_agent_step.py` в репозитории **нет** — не требовать.

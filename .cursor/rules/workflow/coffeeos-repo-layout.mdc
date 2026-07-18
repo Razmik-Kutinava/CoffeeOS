@@ -19,7 +19,7 @@ alwaysApply: true
 | Стек | `docs/stack/` | `Frontend.md`, `Turbo.md` |
 | Гайды | `docs/guides/` | `TESTING_STRATEGY.md`, `UI_GUIDELINES.md` |
 | Агенты | `docs/agents/` | `AGENTS.md` |
-| Ops сессий | `docs/operations/session/` | `SESSION_STATE.md`, `HANDOFF.md` |
+| Ops сессий | `docs/operations/session/` | `SESSION_STATE.md`, `HANDOFF.md`, `todo.md` (живой чеклист, не CHECKLIST вехи) |
 | Ops журнал | `docs/operations/journal/` | `CHANGELOG.md` |
 | Вехи, чеклисты, runbooks | `docs/operations/milestones/veha_*/` | `checklists/`, `runbooks/`, `requirements/` |
 | MCP / прогоны | `docs/operations/milestones/veha_2/artifacts/` | `demo-feedback/*.json` |
