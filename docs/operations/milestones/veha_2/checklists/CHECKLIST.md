@@ -113,7 +113,13 @@
 >
 > Канон: [\customer_tasks/Исправление сохранения карты в UserCards после успешной оплаты.md\](requirements/customer_tasks/Исправление%20сохранения%20карты%20в%20UserCards%20после%20успешной%20оплаты.md)
 >
-> - [ ] Реализация строго по новому ТЗ (после \go\)
+> **Легенда:** `[x]` в ТЗ §шаги 1–6 = **код**; пункты ниже = **приёмка Fly + апрув** (не противоречат друг другу).
+>
+> - [x] Код по ТЗ шаги 1–6 (Init/Recurrent, FA, SavedCardStore, 1-click, save_card toggle, Фаза 2 UX)
+> - [ ] Fly E2E: новая карта в 8925 **сразу** после оплаты (не replay *5953)
+> - [ ] Fix 3.3 retry GetState после FA без RebillId
+> - [ ] MCP Fly stacked + PaymentMethodsSheet 8925
+> - [ ] Апрув заказчика
 
 ---
 

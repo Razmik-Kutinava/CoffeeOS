@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-07-18 — ops: UserCards Фаза 3.2 root cause платёж 8866531465 (Fly)
+
+- `bin/usercards_fly_payment_root_cause.rb` + [`usercards_fly_payment_root_cause_2026-07-18.json`](milestones/veha_2/artifacts/usercards_save_card/usercards_fly_payment_root_cause_2026-07-18.json).
+- FA 09:56 без RebillId; delayed webhook *8782 на следующий день; вердict **наш баг** (нет retry GetState).
+- ISSUES/CHECKLIST/HANDOFF/TZ — сняты противоречия «backend resolved» vs 🔴 открыт.
+
 ## 2026-07-18 — docs: UserCards runbook привязки карты (Фаза 3.1)
 
 - Runbook [`USERCARDS_SAVE_CARD_FLOW.md`](milestones/veha_2/runbooks/USERCARDS_SAVE_CARD_FLOW.md): цепочка Init→RebillId→список 8925; оплата vs привязка.

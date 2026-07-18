@@ -256,9 +256,9 @@
 
 | Шаг | Что | Статус |
 |-----|-----|--------|
-| 3.1 | Runbook [`USERCARDS_SAVE_CARD_FLOW.md`](../runbooks/USERCARDS_SAVE_CARD_FLOW.md) | `[x]` — ждёт апрув текста |
-| 3.2 | Root cause платежа без Pan/RebillId (Fly) | `[ ]` |
-| 3.3 | Fix retry GetState + тесты | `[ ]` |
+| 3.1 | Runbook [`USERCARDS_SAVE_CARD_FLOW.md`](../runbooks/USERCARDS_SAVE_CARD_FLOW.md) | `[x]` |
+| 3.2 | Root cause платежа 8866531465 (Fly) | `[x]` — [`usercards_fly_payment_root_cause_2026-07-18.json`](../artifacts/usercards_save_card/usercards_fly_payment_root_cause_2026-07-18.json) |
+| 3.3 | Fix retry GetState + тесты | `[ ]` — **go после апрува root cause** |
 | 3.4 | Fly: реальная 2-я карта в списке | `[ ]` |
 | 3.5 | Апрув заказчика | `[ ]` |
 
@@ -272,5 +272,7 @@ Runbook: **оплата ≠ привязка**; без RebillId карта в 89
 | MCP PaymentMethodsSheet | PASS — «МИР Карта *5953» | `usercards_phase1_mcp_2026-07-16.json` |
 | Новая оплата 5₽ | NOT_RUN | экономия |
 
-**Exit criteria §3–4:** MCP PASS для aramfifa · апрув заказчика **[ ]**
+**Exit criteria §3–4:** **не пройдены** для E2E 2-й карты (*8782). Replay/MCP *5953 — только smoke Фазы 1, не закрывает bug_13-23 полностью. Апрув заказчика **[ ]**
+
+**Root cause 3.2 (8866531465):** FA 09:56 без RebillId → наш gap (нет retry GetState); RebillId *8782 от банка — 2026-07-17. См. [`usercards_fly_payment_root_cause_2026-07-18.json`](../../artifacts/usercards_save_card/usercards_fly_payment_root_cause_2026-07-18.json).
 

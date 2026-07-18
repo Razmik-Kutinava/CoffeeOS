@@ -5,22 +5,24 @@
 ## 🔴 Блокеры
 
 [2026-07-16] — UserCards: карта не сохранилась после оплаты с save_card ON (bug_13-23)
-**Статус:** **backend resolved** v362 (replay + MCP *5953) · **апрув заказчика [ ]**
+**Статус:** 🔴 **открыт** · Фаза 3.2 root cause **done** · fix **3.3 pending** · апрув заказчика **[ ]**
 **Источник:** заказчик · [`bug_13-23_repeat_purchase_card_missing.png`](../milestones/veha_2/artifacts/usercards_save_card/screenshots/bug_13-23_repeat_purchase_card_missing.png)
-**Root cause (Фаза 0):** webhook RebillId enqueued, worker stopped → SavedCardStore не вызван; finalize/GetState без RebillId.
-**Фикс Фаза 1 (код + deploy v362):**
-- `TbankController` perform_now · `SOLID_QUEUE_IN_PUMA` · `OrderCreator` recurrent save_card
-**Приёмка Fly 2026-07-16:**
-- Replay webhook 0₽ → [`usercards_fly_phase1_verify_2026-07-16.json`](../milestones/veha_2/artifacts/usercards_save_card/usercards_fly_phase1_verify_2026-07-16.json) — aramfifa **MIR *5953**
-- MCP: [`usercards_phase1_mcp_2026-07-16.json`](../milestones/veha_2/artifacts/usercards_save_card/usercards_phase1_mcp_2026-07-16.json) — PaymentMethodsSheet «МИР Карта *5953», корзина 2+3₽, **оплата не списывали**
-**Осталось:** апрув заказчика (скрин «ок»)
+**Root cause (Фаза 0):** webhook RebillId enqueued, worker stopped → SavedCardStore не вызван.
+**Root cause (Фаза 3.2, платёж 8866531465 / 09:56):** FA CONFIRMED **без RebillId/Pan** → settle + однократный GetState не дожали; банк прислал RebillId *8782 только **2026-07-17** (delayed webhook). Init Recurrent=Y ожидаем при save_card=true. **Наш баг:** нет retry GetState / delayed sync — карта не в 8925 в день оплаты.
+**Артефакт:** [`usercards_fly_payment_root_cause_2026-07-18.json`](../milestones/veha_2/artifacts/usercards_save_card/usercards_fly_payment_root_cause_2026-07-18.json)
+**Фикс Фаза 1 (код + deploy v362):** `TbankController` perform_now · `SOLID_QUEUE_IN_PUMA` · `OrderCreator` recurrent save_card — **не закрывает** кейс FA без RebillId.
+**Приёмка Fly 2026-07-16 (частичная):**
+- Replay webhook 0₽ → [`usercards_fly_phase1_verify_2026-07-16.json`](../milestones/veha_2/artifacts/usercards_save_card/usercards_fly_phase1_verify_2026-07-16.json) — aramfifa **MIR *5953** (replay, не E2E 2-й карты)
+- MCP: [`usercards_phase1_mcp_2026-07-16.json`](../milestones/veha_2/artifacts/usercards_save_card/usercards_phase1_mcp_2026-07-16.json) — *5953 в списке
+**Осталось:** **go 3.3** retry GetState + delayed sync · Fly E2E 2-я карта · MCP · апрув заказчика
 
 [2026-07-16] — Checkout Фаза 2 UX: нет одной шторки (peek сверху + PaymentMethodsSheet expanded снизу)
 **Статус:** **код done** · **MCP Fly [ ]** · **апрув заказчика [ ]**
 **Источник:** заказчик · [`Исправление сохранения карты…`](../milestones/veha_2/requirements/customer_tasks/Исправление%20сохранения%20карты%20в%20UserCards%20после%20успешной%20оплаты.md) § **Канон UX checkout** · макеты **1000008924/8925**
 **Фикс Фаза 2 (код):** `openCheckoutPayStack` + stacked UX · `prog25`
-**Расследование 2026-07-16:** [`usercards_fly_payment_investigate_2026-07-16.json`](../milestones/veha_2/artifacts/usercards_save_card/usercards_fly_payment_investigate_2026-07-16.json) — 2× succeeded сегодня; **09:56** без Pan/RebillId (GetState тоже); **08:42** = *5953.
-**Осталось:** fix Init/recurrent или GetState persist · MCP · апрув.
+**Расследование 2026-07-16:** [`usercards_fly_payment_investigate_2026-07-16.json`](../milestones/veha_2/artifacts/usercards_save_card/usercards_fly_payment_investigate_2026-07-16.json) — 2× succeeded; **09:56** без Pan/RebillId в момент FA.
+**Root cause 3.2:** [`usercards_fly_payment_root_cause_2026-07-18.json`](../milestones/veha_2/artifacts/usercards_save_card/usercards_fly_payment_root_cause_2026-07-18.json) — см. 🔴 UserCards (общий поток).
+**Осталось:** MCP stacked · апрув заказчика (после UserCards 3.4).
 
 ## Решено недавно
 

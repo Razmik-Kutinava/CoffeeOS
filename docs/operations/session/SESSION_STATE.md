@@ -2,7 +2,7 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-16 (UserCards Фаза 2 UX — stacked checkout pay)  
+**Дата:** 2026-07-18 (UserCards Фаза 3.2 — root cause Fly 8866531465)  
 **Веха 1:** **закрыта** 2026-06-19.  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
 **§2.3 оплата витрина (Init→payment_url→callback):** **done** — базовый redirect на банк остаётся.
@@ -12,10 +12,19 @@
 | Сейчас | Дальше |
 |--------|--------|
 | **Checkout CartSheet UX** | Фаза 2 stacked код **[x]** | deploy · MCP · апрув |
-| **UserCards / save_card** | Runbook 3.1 **[x]** · 09:56 без RebillId 🔴 | апрув runbook → go 3.2 |
+| **UserCards / save_card** | 3.2 root cause **[x]** · 🔴 bug открыт | **go 3.3** retry GetState |
 | **B1.13 CR-BOTTOM-NAV** | бар убран · cart BOTTOM_REM=0 | A1 апрув [ ] |
 | **B1.14 адрес в шапке** | **B1.14-3d** index map [x] | B1.14-4 cart |
 | **Product card peek cart** | S1–S7 код [x] | апрув заказчика |
+
+### Сессия 2026-07-18 (UserCards Фаза 3.2 — root cause 8866531465)
+
+- **Скрипт:** `bin/usercards_fly_payment_root_cause.rb` · **артефакт:** `usercards_fly_payment_root_cause_2026-07-18.json`
+- **Init:** save_card=true → Recurrent=Y (inferred, Init body не в БД)
+- **FA 09:56:39:** CONFIRMED без RebillId/Pan → settle + GetState не дожали
+- **Delayed webhook 2026-07-17:** RebillId 1851861115, Pan *8782 → provider_data заполнен позже
+- **Вердикт:** `OUR_FA_WITHOUT_REBILL_DELAYED_WEBHOOK_LATE` — **наш баг** (retry GetState / delayed sync)
+- **Стоп:** апрув root cause → **go 3.3**
 
 ### Сессия 2026-07-18 (UserCards Фаза 3.1 — runbook привязки)
 

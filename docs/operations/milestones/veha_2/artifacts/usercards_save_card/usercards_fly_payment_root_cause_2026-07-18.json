@@ -1,0 +1,733 @@
+{
+  "date": "2026-07-18",
+  "phase": "3.2_root_cause",
+  "fly_app": "coffeeos",
+  "machine_id": "9080d40db67238",
+  "target_tbank_payment_id": "8866531465",
+  "target_payment_uuid": "f7a61e93-0d6f-4f05-9221-e3461b01dd30",
+  "control_payment_uuid": "bff277bd-6e18-468c-8758-5d8e3bca4422",
+  "target": {
+    "payment_uuid": "f7a61e93-0d6f-4f05-9221-e3461b01dd30",
+    "order_id": "72c26576-99c1-4ad0-adf3-39faf93f4320",
+    "created_at": "2026-07-16T09:56:36Z",
+    "status": "succeeded",
+    "method": "card",
+    "provider": "tbank",
+    "provider_payment_id": "8866531465",
+    "amount": "4.74",
+    "customer_email": "aramfifa100@gmail.com",
+    "save_card_intent": true,
+    "provider_data_keys": [
+      "Amount",
+      "CardId",
+      "ErrorCode",
+      "ExpDate",
+      "OrderId",
+      "Pan",
+      "PaymentId",
+      "RebillId",
+      "Status",
+      "Success",
+      "TerminalKey",
+      "save_card"
+    ],
+    "provider_data": {
+      "Pan": "220196******8782",
+      "Amount": 474,
+      "CardId": 658859281,
+      "Status": "CONFIRMED",
+      "ExpDate": "1029",
+      "OrderId": "72c26576-99c1-4ad0-adf3-39faf93f4320",
+      "Success": true,
+      "RebillId": 1851861115,
+      "ErrorCode": "0",
+      "PaymentId": 8866531465,
+      "save_card": true,
+      "TerminalKey": "1719235292309"
+    },
+    "status_logs": [
+      {
+        "at": "2026-07-16T09:56:39Z",
+        "source": "callback",
+        "note": "FinishAuthorize CONFIRMED",
+        "status_to": "succeeded",
+        "rebill_id": null,
+        "pan": null,
+        "card_id": null,
+        "response_keys": [
+          "Amount",
+          "ErrorCode",
+          "OrderId",
+          "PaymentId",
+          "Status",
+          "Success",
+          "TerminalKey",
+          "save_card"
+        ]
+      },
+      {
+        "at": "2026-07-17T09:57:13Z",
+        "source": "callback",
+        "note": "Т-Банк: AUTHORIZED",
+        "status_to": "processing",
+        "rebill_id": 1851861115,
+        "pan": "220196******8782",
+        "card_id": 658859281,
+        "response_keys": [
+          "Amount",
+          "CardId",
+          "ErrorCode",
+          "ExpDate",
+          "OrderId",
+          "Pan",
+          "PaymentId",
+          "RebillId",
+          "Status",
+          "Success",
+          "TerminalKey"
+        ]
+      },
+      {
+        "at": "2026-07-17T09:57:17Z",
+        "source": "callback",
+        "note": "Т-Банк: CONFIRMED",
+        "status_to": "succeeded",
+        "rebill_id": 1851861115,
+        "pan": "220196******8782",
+        "card_id": 658859281,
+        "response_keys": [
+          "Amount",
+          "CardId",
+          "ErrorCode",
+          "ExpDate",
+          "OrderId",
+          "Pan",
+          "PaymentId",
+          "RebillId",
+          "Status",
+          "Success",
+          "TerminalKey"
+        ]
+      }
+    ],
+    "finish_authorize_note": true,
+    "webhook_logs": [
+      {
+        "at": "2026-07-16T09:56:39Z",
+        "source": "callback",
+        "note": "FinishAuthorize CONFIRMED",
+        "status_to": "succeeded",
+        "rebill_id": null,
+        "pan": null,
+        "card_id": null,
+        "response_keys": [
+          "Amount",
+          "ErrorCode",
+          "OrderId",
+          "PaymentId",
+          "Status",
+          "Success",
+          "TerminalKey",
+          "save_card"
+        ]
+      },
+      {
+        "at": "2026-07-17T09:57:13Z",
+        "source": "callback",
+        "note": "Т-Банк: AUTHORIZED",
+        "status_to": "processing",
+        "rebill_id": 1851861115,
+        "pan": "220196******8782",
+        "card_id": 658859281,
+        "response_keys": [
+          "Amount",
+          "CardId",
+          "ErrorCode",
+          "ExpDate",
+          "OrderId",
+          "Pan",
+          "PaymentId",
+          "RebillId",
+          "Status",
+          "Success",
+          "TerminalKey"
+        ]
+      },
+      {
+        "at": "2026-07-17T09:57:17Z",
+        "source": "callback",
+        "note": "Т-Банк: CONFIRMED",
+        "status_to": "succeeded",
+        "rebill_id": 1851861115,
+        "pan": "220196******8782",
+        "card_id": 658859281,
+        "response_keys": [
+          "Amount",
+          "CardId",
+          "ErrorCode",
+          "ExpDate",
+          "OrderId",
+          "Pan",
+          "PaymentId",
+          "RebillId",
+          "Status",
+          "Success",
+          "TerminalKey"
+        ]
+      }
+    ],
+    "get_state_now": {
+      "Status": "CONFIRMED",
+      "PaymentId": "8866531465",
+      "ErrorCode": "0"
+    },
+    "saved_cards_count": 2,
+    "saved_cards": [
+      {
+        "card_masked": "*5953",
+        "card_token_prefix": "18466998",
+        "is_default": true,
+        "created_at": "2026-07-16T09:02:55Z"
+      },
+      {
+        "card_masked": "*8782",
+        "card_token_prefix": "18518611",
+        "is_default": false,
+        "created_at": "2026-07-17T09:57:17Z"
+      }
+    ],
+    "init_recurrent_inferred": "Recurrent=Y expected (NewCardPaymentService init_payment recurrent: save_card); Init payload not stored in DB"
+  },
+  "control": {
+    "payment_uuid": "bff277bd-6e18-468c-8758-5d8e3bca4422",
+    "order_id": "910b4e8b-3b5f-44db-b859-5cbdd9e7e5cf",
+    "created_at": "2026-07-16T08:42:07Z",
+    "status": "processing",
+    "method": "card",
+    "provider": "tbank",
+    "provider_payment_id": "8866059239",
+    "amount": "4.74",
+    "customer_email": "aramfifa100@gmail.com",
+    "save_card_intent": true,
+    "provider_data_keys": [
+      "Amount",
+      "CardId",
+      "ErrorCode",
+      "ExpDate",
+      "OrderId",
+      "Pan",
+      "PaymentId",
+      "RebillId",
+      "Status",
+      "Success",
+      "TerminalKey",
+      "save_card"
+    ],
+    "provider_data": {
+      "Pan": "220196******5953",
+      "Amount": 474,
+      "CardId": 566291000,
+      "Status": "AUTHORIZED",
+      "ExpDate": "0927",
+      "OrderId": "910b4e8b-3b5f-44db-b859-5cbdd9e7e5cf",
+      "Success": true,
+      "RebillId": 1846699802,
+      "ErrorCode": "0",
+      "PaymentId": 8866059239,
+      "save_card": true,
+      "TerminalKey": "1719235292309"
+    },
+    "status_logs": [
+      {
+        "at": "2026-07-16T08:42:10Z",
+        "source": "callback",
+        "note": "FinishAuthorize CONFIRMED",
+        "status_to": "succeeded",
+        "rebill_id": null,
+        "pan": null,
+        "card_id": null,
+        "response_keys": [
+          "Amount",
+          "ErrorCode",
+          "OrderId",
+          "PaymentId",
+          "Status",
+          "Success",
+          "TerminalKey",
+          "save_card"
+        ]
+      },
+      {
+        "at": "2026-07-16T09:03:49Z",
+        "source": "callback",
+        "note": "Т-Банк: AUTHORIZED",
+        "status_to": "processing",
+        "rebill_id": 1846699802,
+        "pan": "220196******5953",
+        "card_id": 566291000,
+        "response_keys": [
+          "Amount",
+          "CardId",
+          "ErrorCode",
+          "ExpDate",
+          "OrderId",
+          "Pan",
+          "PaymentId",
+          "RebillId",
+          "Status",
+          "Success",
+          "TerminalKey"
+        ]
+      },
+      {
+        "at": "2026-07-16T09:03:49Z",
+        "source": "callback",
+        "note": "Т-Банк: CONFIRMED",
+        "status_to": "succeeded",
+        "rebill_id": 1846699802,
+        "pan": "220196******5953",
+        "card_id": 566291000,
+        "response_keys": [
+          "Amount",
+          "CardId",
+          "ErrorCode",
+          "ExpDate",
+          "OrderId",
+          "Pan",
+          "PaymentId",
+          "RebillId",
+          "Status",
+          "Success",
+          "TerminalKey"
+        ]
+      },
+      {
+        "at": "2026-07-16T09:12:14Z",
+        "source": "callback",
+        "note": "Т-Банк: AUTHORIZED",
+        "status_to": "processing",
+        "rebill_id": 1846699802,
+        "pan": "220196******5953",
+        "card_id": 566291000,
+        "response_keys": [
+          "Amount",
+          "CardId",
+          "ErrorCode",
+          "ExpDate",
+          "OrderId",
+          "Pan",
+          "PaymentId",
+          "RebillId",
+          "Status",
+          "Success",
+          "TerminalKey"
+        ]
+      },
+      {
+        "at": "2026-07-16T09:12:15Z",
+        "source": "callback",
+        "note": "Т-Банк: CONFIRMED",
+        "status_to": "succeeded",
+        "rebill_id": 1846699802,
+        "pan": "220196******5953",
+        "card_id": 566291000,
+        "response_keys": [
+          "Amount",
+          "CardId",
+          "ErrorCode",
+          "ExpDate",
+          "OrderId",
+          "Pan",
+          "PaymentId",
+          "RebillId",
+          "Status",
+          "Success",
+          "TerminalKey"
+        ]
+      },
+      {
+        "at": "2026-07-16T09:42:18Z",
+        "source": "callback",
+        "note": "Т-Банк: AUTHORIZED",
+        "status_to": "processing",
+        "rebill_id": 1846699802,
+        "pan": "220196******5953",
+        "card_id": 566291000,
+        "response_keys": [
+          "Amount",
+          "CardId",
+          "ErrorCode",
+          "ExpDate",
+          "OrderId",
+          "Pan",
+          "PaymentId",
+          "RebillId",
+          "Status",
+          "Success",
+          "TerminalKey"
+        ]
+      },
+      {
+        "at": "2026-07-16T09:42:18Z",
+        "source": "callback",
+        "note": "Т-Банк: CONFIRMED",
+        "status_to": "succeeded",
+        "rebill_id": 1846699802,
+        "pan": "220196******5953",
+        "card_id": 566291000,
+        "response_keys": [
+          "Amount",
+          "CardId",
+          "ErrorCode",
+          "ExpDate",
+          "OrderId",
+          "Pan",
+          "PaymentId",
+          "RebillId",
+          "Status",
+          "Success",
+          "TerminalKey"
+        ]
+      },
+      {
+        "at": "2026-07-18T08:42:49Z",
+        "source": "callback",
+        "note": "Т-Банк: AUTHORIZED",
+        "status_to": "processing",
+        "rebill_id": 1846699802,
+        "pan": "220196******5953",
+        "card_id": 566291000,
+        "response_keys": [
+          "Amount",
+          "CardId",
+          "ErrorCode",
+          "ExpDate",
+          "OrderId",
+          "Pan",
+          "PaymentId",
+          "RebillId",
+          "Status",
+          "Success",
+          "TerminalKey"
+        ]
+      }
+    ],
+    "finish_authorize_note": true,
+    "webhook_logs": [
+      {
+        "at": "2026-07-16T08:42:10Z",
+        "source": "callback",
+        "note": "FinishAuthorize CONFIRMED",
+        "status_to": "succeeded",
+        "rebill_id": null,
+        "pan": null,
+        "card_id": null,
+        "response_keys": [
+          "Amount",
+          "ErrorCode",
+          "OrderId",
+          "PaymentId",
+          "Status",
+          "Success",
+          "TerminalKey",
+          "save_card"
+        ]
+      },
+      {
+        "at": "2026-07-16T09:03:49Z",
+        "source": "callback",
+        "note": "Т-Банк: AUTHORIZED",
+        "status_to": "processing",
+        "rebill_id": 1846699802,
+        "pan": "220196******5953",
+        "card_id": 566291000,
+        "response_keys": [
+          "Amount",
+          "CardId",
+          "ErrorCode",
+          "ExpDate",
+          "OrderId",
+          "Pan",
+          "PaymentId",
+          "RebillId",
+          "Status",
+          "Success",
+          "TerminalKey"
+        ]
+      },
+      {
+        "at": "2026-07-16T09:03:49Z",
+        "source": "callback",
+        "note": "Т-Банк: CONFIRMED",
+        "status_to": "succeeded",
+        "rebill_id": 1846699802,
+        "pan": "220196******5953",
+        "card_id": 566291000,
+        "response_keys": [
+          "Amount",
+          "CardId",
+          "ErrorCode",
+          "ExpDate",
+          "OrderId",
+          "Pan",
+          "PaymentId",
+          "RebillId",
+          "Status",
+          "Success",
+          "TerminalKey"
+        ]
+      },
+      {
+        "at": "2026-07-16T09:12:14Z",
+        "source": "callback",
+        "note": "Т-Банк: AUTHORIZED",
+        "status_to": "processing",
+        "rebill_id": 1846699802,
+        "pan": "220196******5953",
+        "card_id": 566291000,
+        "response_keys": [
+          "Amount",
+          "CardId",
+          "ErrorCode",
+          "ExpDate",
+          "OrderId",
+          "Pan",
+          "PaymentId",
+          "RebillId",
+          "Status",
+          "Success",
+          "TerminalKey"
+        ]
+      },
+      {
+        "at": "2026-07-16T09:12:15Z",
+        "source": "callback",
+        "note": "Т-Банк: CONFIRMED",
+        "status_to": "succeeded",
+        "rebill_id": 1846699802,
+        "pan": "220196******5953",
+        "card_id": 566291000,
+        "response_keys": [
+          "Amount",
+          "CardId",
+          "ErrorCode",
+          "ExpDate",
+          "OrderId",
+          "Pan",
+          "PaymentId",
+          "RebillId",
+          "Status",
+          "Success",
+          "TerminalKey"
+        ]
+      },
+      {
+        "at": "2026-07-16T09:42:18Z",
+        "source": "callback",
+        "note": "Т-Банк: AUTHORIZED",
+        "status_to": "processing",
+        "rebill_id": 1846699802,
+        "pan": "220196******5953",
+        "card_id": 566291000,
+        "response_keys": [
+          "Amount",
+          "CardId",
+          "ErrorCode",
+          "ExpDate",
+          "OrderId",
+          "Pan",
+          "PaymentId",
+          "RebillId",
+          "Status",
+          "Success",
+          "TerminalKey"
+        ]
+      },
+      {
+        "at": "2026-07-16T09:42:18Z",
+        "source": "callback",
+        "note": "Т-Банк: CONFIRMED",
+        "status_to": "succeeded",
+        "rebill_id": 1846699802,
+        "pan": "220196******5953",
+        "card_id": 566291000,
+        "response_keys": [
+          "Amount",
+          "CardId",
+          "ErrorCode",
+          "ExpDate",
+          "OrderId",
+          "Pan",
+          "PaymentId",
+          "RebillId",
+          "Status",
+          "Success",
+          "TerminalKey"
+        ]
+      },
+      {
+        "at": "2026-07-18T08:42:49Z",
+        "source": "callback",
+        "note": "Т-Банк: AUTHORIZED",
+        "status_to": "processing",
+        "rebill_id": 1846699802,
+        "pan": "220196******5953",
+        "card_id": 566291000,
+        "response_keys": [
+          "Amount",
+          "CardId",
+          "ErrorCode",
+          "ExpDate",
+          "OrderId",
+          "Pan",
+          "PaymentId",
+          "RebillId",
+          "Status",
+          "Success",
+          "TerminalKey"
+        ]
+      }
+    ],
+    "get_state_now": {
+      "Status": "CONFIRMED",
+      "PaymentId": "8866059239",
+      "ErrorCode": "0"
+    },
+    "saved_cards_count": 2,
+    "saved_cards": [
+      {
+        "card_masked": "*5953",
+        "card_token_prefix": "18466998",
+        "is_default": true,
+        "created_at": "2026-07-16T09:02:55Z"
+      },
+      {
+        "card_masked": "*8782",
+        "card_token_prefix": "18518611",
+        "is_default": false,
+        "created_at": "2026-07-17T09:57:17Z"
+      }
+    ],
+    "init_recurrent_inferred": "Recurrent=Y expected (NewCardPaymentService init_payment recurrent: save_card); Init payload not stored in DB"
+  },
+  "comparison": {
+    "control_has_pan": true,
+    "control_has_rebill": true,
+    "target_has_pan": true,
+    "target_has_rebill": true
+  },
+  "init_recurrent": {
+    "inferred": "Recurrent=Y expected (NewCardPaymentService init_payment recurrent: save_card); Init payload not stored in DB",
+    "save_card_intent": true,
+    "new_card_flow": true,
+    "recurrent_in_init": "Y expected when save_card=true (TbankAdapter#init_payment recurrent: true); Init body not logged in DB"
+  },
+  "timeline_at_incident": {
+    "finish_authorize_at": "2026-07-16T09:56:39Z",
+    "finish_authorize_rebill_id": null,
+    "finish_authorize_pan": null,
+    "finish_authorize_keys": [
+      "Amount",
+      "ErrorCode",
+      "OrderId",
+      "PaymentId",
+      "Status",
+      "Success",
+      "TerminalKey",
+      "save_card"
+    ],
+    "customer_visible_gap": "13:23 same day — карта *8782 не в списке; RebillId пришёл только 2026-07-17T09:57:17Z"
+  },
+  "delayed_webhooks": [
+    {
+      "at": "2026-07-17T09:57:17Z",
+      "source": "callback",
+      "note": "Т-Банк: CONFIRMED",
+      "status_to": "succeeded",
+      "rebill_id": 1851861115,
+      "pan": "220196******8782",
+      "card_id": 658859281,
+      "response_keys": [
+        "Amount",
+        "CardId",
+        "ErrorCode",
+        "ExpDate",
+        "OrderId",
+        "Pan",
+        "PaymentId",
+        "RebillId",
+        "Status",
+        "Success",
+        "TerminalKey"
+      ]
+    }
+  ],
+  "finish_authorize": {
+    "first_callback": {
+      "at": "2026-07-16T09:56:39Z",
+      "source": "callback",
+      "note": "FinishAuthorize CONFIRMED",
+      "status_to": "succeeded",
+      "rebill_id": null,
+      "pan": null,
+      "card_id": null,
+      "response_keys": [
+        "Amount",
+        "ErrorCode",
+        "OrderId",
+        "PaymentId",
+        "Status",
+        "Success",
+        "TerminalKey",
+        "save_card"
+      ]
+    },
+    "stored_in_provider_data_now": {
+      "Pan": "220196******8782",
+      "Amount": 474,
+      "CardId": 658859281,
+      "Status": "CONFIRMED",
+      "ExpDate": "1029",
+      "OrderId": "72c26576-99c1-4ad0-adf3-39faf93f4320",
+      "Success": true,
+      "RebillId": 1851861115,
+      "ErrorCode": "0",
+      "PaymentId": 8866531465,
+      "save_card": true,
+      "TerminalKey": "1719235292309"
+    },
+    "rebill_in_provider_data_now": 1851861115
+  },
+  "webhook": {
+    "callback_log_count": 3,
+    "rebill_ids_in_callbacks": [
+      1851861115,
+      1851861115
+    ]
+  },
+  "get_state_now": {
+    "Status": "CONFIRMED",
+    "PaymentId": "8866531465",
+    "ErrorCode": "0"
+  },
+  "fly_logs": {
+    "payment_id": {
+      "pattern": "8866531465|72c26576-99c1-4ad0-adf3-39faf93f4320|f7a61e93-0d6f-4f05-9221-e3461b01dd30",
+      "count": 0,
+      "sample": []
+    },
+    "rebill": {
+      "pattern": "RebillId.*8866531465|OrderId.*72c26576-99c1-4ad0-adf3-39faf93f4320",
+      "count": 0,
+      "sample": []
+    }
+  },
+  "root_cause": "OUR_FA_WITHOUT_REBILL_DELAYED_WEBHOOK_LATE",
+  "root_cause_plain": "Наш баг: FA 09:56 без RebillId/Pan → settle + однократный GetState не дожали; банк прислал RebillId *8782 только на следующий день. Init Recurrent=Y (ожидаем). Фикс: retry GetState + delayed sync.",
+  "fix_plan": [
+    "Retry GetState 3–5× с паузой после FA CONFIRMED без RebillId (NewCardPaymentService#settle_confirmed → TbankPaymentSync)",
+    "Background job: отложенный sync если save_card && succeeded && RebillId blank через 30s/2m/5m",
+    "TbankCallbackJob уже persist на delayed CONFIRMED+RebillId — проверить idempotent upsert *8782",
+    "E2E Fly: новая карта видна в 8925 в течение минуты после оплаты (не на следующий день)"
+  ]
+}
