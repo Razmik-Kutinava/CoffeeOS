@@ -47,15 +47,15 @@
     "counts": {
       "mobile_payment_methods_card": 16,
       "mobile_customers": 425,
-      "payments_tbank_30d": 46,
+      "payments_tbank_30d": 47,
       "payments_tbank_succeeded_30d": 8,
       "payments_shop_30d": 20
     },
     "gmail_customers_sample": [
       {
         "email": "aramfifa100@gmail.com",
-        "name": "MOMENTUM",
-        "updated_at": "2026-07-10T10:20:13Z"
+        "name": "Aram",
+        "updated_at": "2026-07-18T09:43:28Z"
       },
       {
         "email": "razmikg1988@gmail.com",
@@ -117,6 +117,13 @@
     ],
     "recent_tbank_payments": [
       {
+        "id": "c3b96206-35c1-4220-9a0a-5e979e9eb6dd",
+        "status": "failed",
+        "save_card": true,
+        "email": "aramfifa100@gmail.com",
+        "created_at": "2026-07-18T09:43:28Z"
+      },
+      {
         "id": "f7a61e93-0d6f-4f05-9221-e3461b01dd30",
         "status": "succeeded",
         "save_card": true,
@@ -143,31 +150,9 @@
         "save_card": null,
         "email": "aramfifa100@gmail.com",
         "created_at": "2026-07-14T09:24:33Z"
-      },
-      {
-        "id": "a50d336a-ce6a-4152-aa41-a554ecb9aae7",
-        "status": "succeeded",
-        "save_card": null,
-        "email": "aramfifa100@gmail.com",
-        "created_at": "2026-07-14T09:19:42Z"
       }
     ],
-    "aramfifa_cards": [
-      {
-        "id": "4c5569dd-994c-4146-86d2-ed4d78bebcd6",
-        "card_masked": "*5953",
-        "is_active": true,
-        "is_default": true,
-        "last_used_at": "2026-07-18T09:25:27Z"
-      },
-      {
-        "id": "9016caa2-1cb4-4f33-afab-2a857313b7b5",
-        "card_masked": "*8782",
-        "is_active": true,
-        "is_default": false,
-        "last_used_at": "2026-07-17T09:57:17Z"
-      }
-    ]
+    "aramfifa_cards": []
   },
   "code_paths": {
     "save_card_api": "POST /shop/api/payments/new_card → NewCardPaymentService (Recurrent=save_card)",
@@ -203,10 +188,22 @@
   ],
   "hypotheses": [
     {
+      "id": "H1b_customer_no_cards",
+      "severity": "critical",
+      "finding": "aramfifa100@gmail.com — 0 saved cards",
+      "meaning": "оплата save_card=true 2026-07-15 но карта не в UserCards этого email"
+    },
+    {
       "id": "H2_worker_stopped",
       "severity": "high",
       "finding": "worker stopped",
       "meaning": "webhook/async save не обрабатывается"
+    },
+    {
+      "id": "H3b_save_card_without_persist",
+      "severity": "critical",
+      "finding": "save_card payment succeeded but customer cards empty",
+      "meaning": "SavedCardStore/webhook/finalize не создал row"
     }
   ],
   "next_phase": {

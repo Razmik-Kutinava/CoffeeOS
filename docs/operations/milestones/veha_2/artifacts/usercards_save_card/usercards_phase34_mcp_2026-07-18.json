@@ -8,7 +8,9 @@
     "commits": [
       "6a73473 fix(payments): UserCards retry GetState for RebillId (phase 3.3)",
       "3e9c0c3 fix(ops): retry solid migrations on Fly release lock conflict"
-    ]
+    ],
+    "verified_at": "2026-07-18T09:45:00Z",
+    "note": "Redeploy не требовался — v366 уже содержит 6a73473; ops 2be702a без изменений app/"
   },
   "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
   "email": "aramfifa100@gmail.com",
@@ -21,6 +23,20 @@
     { "pan": "*5953", "rebill_id": "1846699802", "created_at": "2026-07-16T09:02:55Z" },
     { "pan": "*8782", "rebill_id": "1851861115", "created_at": "2026-07-17T09:57:17Z" }
   ],
+  "live_payment_attempt": {
+    "status": "FAILED",
+    "at": "2026-07-18T09:43:28Z",
+    "flow": "Новая карта + save ON",
+    "test_pan_last4": "0777",
+    "pan_not_5953": true,
+    "provider_payment_id": "8878842078",
+    "payment_status": "failed",
+    "pan_in_payment": null,
+    "rebill_in_payment": null,
+    "ui_error": "Отказ: смените карту",
+    "api_http": 422,
+    "reason": "Prod terminal 1719235292309 отклоняет generic test Visa 4300*0777 (см. PAYMENT.md ACTIVATION_ERROR на prod). Нужна реальная MIR карта заказчика ≠ *5953."
+  },
   "checks": [
     {
       "id": "deploy_v366_sync_for_rebill",
@@ -30,23 +46,23 @@
     {
       "id": "investigate_two_cards",
       "status": "PASS",
-      "detail": "aramfifa saved_cards: *5953 + *8782; payments_today: 0"
+      "detail": "aramfifa saved_cards: *5953 + *8782"
     },
     {
       "id": "mcp_payment_methods_sheet",
       "status": "PASS",
-      "screenshot": "screenshots/usercards_phase34_mcp_2026-07-18_payment_sheet_two_cards.png",
+      "screenshot": "screenshots/usercards_phase34_live_2026-07-18_payment_sheet_two_cards.png",
       "detail": "PaymentMethodsSheet: «МИР Карта *5953» + «МИР Карта *8782», СБП, Новая карта — канон 8925"
     },
     {
       "id": "new_payment_today_different_pan",
-      "status": "NOT_RUN",
-      "detail": "Живая оплата «Новая карта» save ON не выполнялась (экономия + нужен ввод PAN в T-Bank). Карта *8782 уже в БД с оплаты 2026-07-16/17 (delayed webhook)."
+      "status": "FAIL",
+      "detail": "MCP: 4300*0777 отклонена банком; payment 8878842078 failed без Pan/RebillId. E2E fix 3.3 на prod — только реальная карта."
     }
   ],
   "verdict": "PARTIAL_PASS",
-  "verdict_plain": "UI 8925 и БД: 2 карты PASS. Живая новая оплата сегодня NOT_RUN — go шаг 5 после апрува скрина; для полного E2E fix 3.3 нужна оплата заказчиком «Новая карта».",
+  "verdict_plain": "8925 UI + БД: 2 карты PASS (скрин для апрува 3.5). Живая «Новая карта» сегодня FAIL — prod test PAN; для Pan+RebillId в день оплаты нужна карта заказчика.",
   "maps_to_customer_screens": {
-    "1000008925": "screenshots/usercards_phase34_mcp_2026-07-18_payment_sheet_two_cards.png"
+    "1000008925": "screenshots/usercards_phase34_live_2026-07-18_payment_sheet_two_cards.png"
   }
 }

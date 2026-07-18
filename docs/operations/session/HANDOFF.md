@@ -1,6 +1,6 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-18 (UserCards deploy v366 + Fly MCP 3.4)  
+**Дата:** 2026-07-18 (UserCards v366 + MCP 8925 скрин для апрува 3.5)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev · release **v366**
 
@@ -36,10 +36,10 @@
 | Фаза 1 fix persist | **`[x]`** deploy **v362** |
 | Runbook привязки (Фаза 3.1) | **`[x]`** [`USERCARDS_SAVE_CARD_FLOW.md`](../milestones/veha_2/runbooks/USERCARDS_SAVE_CARD_FLOW.md) |
 | Root cause 8866531465 (Фаза 3.2) | **`[x]`** [`usercards_fly_payment_root_cause_2026-07-18.json`](../milestones/veha_2/artifacts/usercards_save_card/usercards_fly_payment_root_cause_2026-07-18.json) |
-| Deploy v366 + 3.4 MCP 2 карты | **`[x]`** [`usercards_phase34_mcp_2026-07-18.json`](../milestones/veha_2/artifacts/usercards_save_card/usercards_phase34_mcp_2026-07-18.json) |
-| Апрув заказчика (3.5) | **`[ ]`** — скрин 8925 |
+| Deploy v366 + 3.4 MCP 2 карты | **`[x]`** [`usercards_phase34_mcp_2026-07-18.json`](../milestones/veha_2/artifacts/usercards_save_card/usercards_phase34_mcp_2026-07-18.json) · скрин [`usercards_phase34_live_2026-07-18_payment_sheet_two_cards.png`](../milestones/veha_2/artifacts/usercards_save_card/screenshots/usercards_phase34_live_2026-07-18_payment_sheet_two_cards.png) |
+| Апрув заказчика (3.5) | **`[ ]`** — скрин 8925 (2 строки *5953 + *8782) |
 
-**Следующий шаг UserCards:** апрув скрина 8925 → **go 3.5** · опционально живая «Новая карта» для полного E2E 3.3.
+**Следующий шаг UserCards:** апрув скрина 8925 → **go 3.5** · E2E fix 3.3 — живая MIR карта заказчика ≠ *5953 (prod отклоняет test PAN).
 
 ### WIPE 2026-07-14 — сохранение карты / checkout card UX
 

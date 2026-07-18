@@ -116,7 +116,7 @@
 > **Легенда:** `[x]` в ТЗ §шаги 1–6 = **код**; пункты ниже = **приёмка Fly + апрув** (не противоречат друг другу).
 >
 > - [x] Код по ТЗ шаги 1–6 (Init/Recurrent, FA, SavedCardStore, 1-click, save_card toggle, Фаза 2 UX)
-> - [x] Fly E2E: 2 карты в 8925 MCP (v366) — живая оплата сегодня NOT_RUN
+> - [x] Fly E2E: 2 карты в 8925 MCP (v366) — живая оплата сегодня FAIL (prod test PAN)
 > - [x] Fix 3.3 retry GetState после FA без RebillId (`sync_for_rebill!`)
 > - [ ] MCP Fly stacked + PaymentMethodsSheet 8925
 > - [ ] Апрув заказчика

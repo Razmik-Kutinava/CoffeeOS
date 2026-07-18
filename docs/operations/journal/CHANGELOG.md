@@ -1,5 +1,12 @@
 ﻿# CHANGELOG
 
+## 2026-07-18 — ops: UserCards MCP live attempt + скрин 8925 для апрува 3.5
+
+- Fly **v366** verified (fix 3.3 уже на prod).
+- MCP PaymentMethodsSheet *5953 + *8782 — скрин `usercards_phase34_live_2026-07-18_payment_sheet_two_cards.png`.
+- Живая «Новая карта» 4300*0777 → payment `8878842078` failed (prod test PAN).
+- `usercards_fly_payment_investigate_2026-07-18.json` обновлён.
+
 ## 2026-07-18 — deploy + ops: UserCards Fly v366, MCP 3.4 две карты в 8925
 
 - Deploy **v366** (3.3 retry GetState + fly_release migration retry 3e9c0c3).

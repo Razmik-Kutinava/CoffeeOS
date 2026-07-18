@@ -14,7 +14,8 @@
 **Приёмка Fly 2026-07-16 (частичная):**
 - Replay webhook 0₽ → [`usercards_fly_phase1_verify_2026-07-16.json`](../milestones/veha_2/artifacts/usercards_save_card/usercards_fly_phase1_verify_2026-07-16.json) — aramfifa **MIR *5953** (replay, не E2E 2-й карты)
 - MCP: [`usercards_phase1_mcp_2026-07-16.json`](../milestones/veha_2/artifacts/usercards_save_card/usercards_phase1_mcp_2026-07-16.json) — *5953 в списке
-**Осталось:** апрув скрина 8925 (шаг 3.5) · опционально живая «Новая карта» для E2E fix 3.3
+**Живая оплата 2026-07-18:** MCP «Новая карта» 4300*0777 → payment `8878842078` **failed**, Pan/RebillId nil (prod отклоняет test PAN).
+**Осталось:** апрув скрина 8925 (шаг 3.5) · E2E fix 3.3 — реальная MIR карта заказчика ≠ *5953
 **Deploy Fly v366 (2026-07-18):** release `deployment-01KXT8NR80HW40FKBRKFJCMDT7` · 3.3 retry GetState на prod
 **Приёмка 3.4:** MCP 2 карты (*5953 + *8782) — [`usercards_phase34_mcp_2026-07-18.json`](../milestones/veha_2/artifacts/usercards_save_card/usercards_phase34_mcp_2026-07-18.json)
 

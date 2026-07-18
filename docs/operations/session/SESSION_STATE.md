@@ -2,7 +2,7 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-18 (UserCards deploy v366 + Fly MCP 3.4)  
+**Дата:** 2026-07-18 (UserCards v366 verified + MCP 8925 скрин + live pay FAIL)  
 **Веха 1:** **закрыта** 2026-06-19.  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
 **§2.3 оплата витрина (Init→payment_url→callback):** **done** — базовый redirect на банк остаётся.
@@ -12,17 +12,21 @@
 | Сейчас | Дальше |
 |--------|--------|
 | **Checkout CartSheet UX** | Фаза 2 stacked код **[x]** | deploy · MCP · апрув |
-| **UserCards / save_card** | deploy v366 **[x]** · MCP 2 карты **[x]** | апрув скрин 8925 → 3.5 |
+| **UserCards / save_card** | deploy v366 **[x]** · MCP 2 карты **[x]** · скрин 8925 **[x]** | апрув → 3.5 · E2E real MIR |
 | **B1.13 CR-BOTTOM-NAV** | бар убран · cart BOTTOM_REM=0 | A1 апрув [ ] |
 | **B1.14 адрес в шапке** | **B1.14-3d** index map [x] | B1.14-4 cart |
 | **Product card peek cart** | S1–S7 код [x] | апрув заказчика |
 
-### Сессия 2026-07-18 (UserCards deploy v366 + Fly MCP 3.4)
+### Сессия 2026-07-18 (UserCards deploy v366 + Fly MCP 3.4 + live attempt)
 
-- **Deploy:** Fly **v366** `deployment-01KXT8NR80HW40FKBRKFJCMDT7` · web 9080d40db67238
-- **Investigate:** aramfifa saved_cards *5953 + *8782 (`usercards_fly_payment_investigate_2026-07-18.json`)
-- **MCP:** PaymentMethodsSheet 2 строки — `screenshots/usercards_phase34_mcp_2026-07-18_payment_sheet_two_cards.png`
-- **Артефакт:** `usercards_phase34_mcp_2026-07-18.json` — PARTIAL (живая оплата сегодня NOT_RUN)
+- **Deploy:** Fly **v366** verified (6a73473 на prod, redeploy не нужен)
+- **Investigate:** `usercards_fly_payment_investigate_2026-07-18.json` — saved *5953+*8782; payment today `8878842078` failed без Pan/RebillId
+- **MCP live:** «Новая карта» 4300*0777 save ON → «Отказ: смените карту» (prod terminal)
+- **MCP скрин 8925:** `screenshots/usercards_phase34_live_2026-07-18_payment_sheet_two_cards.png`
+- **Артефакт:** `usercards_phase34_mcp_2026-07-18.json` — PARTIAL_PASS
+- **Стоп:** апрув скрина → go 3.5
+
+### Сессия 2026-07-18 (UserCards deploy v366 + Fly MCP 3.4 — ранее)
 - **Стоп:** апрув скрина 8925 → go 3.5
 
 ### Сессия 2026-07-18 (UserCards Фаза 3.3 — retry GetState RebillId)
