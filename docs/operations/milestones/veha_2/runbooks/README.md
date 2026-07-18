@@ -6,6 +6,7 @@
 | [ONBOARDING_DEVTOOLS_SCENARIOS.md](ONBOARDING_DEVTOOLS_SCENARIOS.md) | 58 MCP-сценариев онбординга |
 | [ONBOARDING_DEVTOOLS_RUN.md](ONBOARDING_DEVTOOLS_RUN.md) | Журнал прогона devtools |
 | [PAYMENT.md](PAYMENT.md) | Реальная оплата, env, callbacks |
+| [USERCARDS_SAVE_CARD_FLOW.md](USERCARDS_SAVE_CARD_FLOW.md) | Привязка карты: Init → RebillId → список 8925 |
 | [HANDOFF_UK_MENU_VITRINA.md](HANDOFF_UK_MENU_VITRINA.md) | УК → меню → витрина |
 | [STAFF_ACCESS.md](STAFF_ACCESS.md) | Кто как заводится на точку |
 | [INFRA_URLS.md](INFRA_URLS.md) | Поддомены, DNS, `SHOP_BASE_DOMAIN` |

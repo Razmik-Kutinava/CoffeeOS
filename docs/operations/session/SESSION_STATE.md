@@ -12,10 +12,23 @@
 | Сейчас | Дальше |
 |--------|--------|
 | **Checkout CartSheet UX** | Фаза 2 stacked код **[x]** | deploy · MCP · апрув |
-| **UserCards / save_card** | 2× pay сегодня · 09:56 без Pan/RebillId 🔴 | fix recurrent/GetState |
+| **UserCards / save_card** | Runbook 3.1 **[x]** · 09:56 без RebillId 🔴 | апрув runbook → go 3.2 |
 | **B1.13 CR-BOTTOM-NAV** | бар убран · cart BOTTOM_REM=0 | A1 апрув [ ] |
 | **B1.14 адрес в шапке** | **B1.14-3d** index map [x] | B1.14-4 cart |
 | **Product card peek cart** | S1–S7 код [x] | апрув заказчика |
+
+### Сессия 2026-07-18 (UserCards Фаза 3.1 — runbook привязки)
+
+- **Runbook:** [`USERCARDS_SAVE_CARD_FLOW.md`](../milestones/veha_2/runbooks/USERCARDS_SAVE_CARD_FLOW.md) — Init Recurrent → RebillId → SavedCardStore → 8925; **оплата ≠ привязка**.
+- **ТЗ:** § Фаза 3 · runbooks/README.
+- **Стоп:** апрув текста → **go** 3.2 root cause Fly.
+
+### Сессия 2026-07-16 (UserCards — расследование 2-й оплаты aramfifa)
+
+- **Скрипт:** `bin/usercards_fly_payment_investigate.rb` · **артефакт:** `usercards_fly_payment_investigate_2026-07-16.json`
+- **08:42** `8866059239` — Pan *5953, RebillId ok.
+- **09:56** `8866531465` — succeeded, save_card=true, **Pan/RebillId nil** (GetState тоже).
+- **Стоп:** fix Init/recurrent new_card.
 
 ### Сессия 2026-07-16 (UserCards Фаза 2 — stacked checkout UX)
 

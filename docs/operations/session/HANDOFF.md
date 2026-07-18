@@ -22,8 +22,7 @@
 | Review БАГ-1/2/3 | **`[x]`** · deploy **v359** |
 | Fly Фаза 0 diagnose | **`[x]`** [`usercards_fly_diagnose_2026-07-16.json`](../milestones/veha_2/artifacts/usercards_save_card/usercards_fly_diagnose_2026-07-16.json) |
 | Фаза 1 fix persist | **`[x]`** deploy **v362** |
-| Fly приёмка replay + MCP | **`[x]`** MIR *5953 в sheet · 0₽ charge |
-| **Следующий шаг** | **Фаза 2 UX stacked** → MCP → апрув заказчика |
+| Runbook привязки (Фаза 3.1) | **`[x]`** [`USERCARDS_SAVE_CARD_FLOW.md`](../milestones/veha_2/runbooks/USERCARDS_SAVE_CARD_FLOW.md) · апрув → go 3.2 |
 
 ### WIPE 2026-07-14 — сохранение карты / checkout card UX
 

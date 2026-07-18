@@ -1,5 +1,10 @@
 ﻿# CHANGELOG
 
+## 2026-07-18 — docs: UserCards runbook привязки карты (Фаза 3.1)
+
+- Runbook [`USERCARDS_SAVE_CARD_FLOW.md`](milestones/veha_2/runbooks/USERCARDS_SAVE_CARD_FLOW.md): цепочка Init→RebillId→список 8925; оплата vs привязка.
+- ТЗ § Фаза 3 · runbooks/README · HANDOFF/SESSION_STATE.
+
 ## 2026-07-16 — ops: UserCards расследование 2-й оплаты aramfifa (Fly prod)
 
 - `bin/usercards_fly_payment_investigate.rb` + `usercards_fly_payment_investigate_2026-07-16.json`.

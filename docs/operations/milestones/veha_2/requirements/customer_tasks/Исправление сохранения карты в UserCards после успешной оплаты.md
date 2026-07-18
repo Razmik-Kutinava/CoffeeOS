@@ -252,6 +252,18 @@
 
 **Приёмка:** peek `shop-cart-peek-list` виден **одновременно** с `payment-methods-sheet` (`data-payment-sheet-stacked=true`), без `payment-methods-backdrop`.
 
+## Фаза 3 — RebillId / вторая карта (2026-07-18)
+
+| Шаг | Что | Статус |
+|-----|-----|--------|
+| 3.1 | Runbook [`USERCARDS_SAVE_CARD_FLOW.md`](../runbooks/USERCARDS_SAVE_CARD_FLOW.md) | `[x]` — ждёт апрув текста |
+| 3.2 | Root cause платежа без Pan/RebillId (Fly) | `[ ]` |
+| 3.3 | Fix retry GetState + тесты | `[ ]` |
+| 3.4 | Fly: реальная 2-я карта в списке | `[ ]` |
+| 3.5 | Апрув заказчика | `[ ]` |
+
+Runbook: **оплата ≠ привязка**; без RebillId карта в 8925 не появится.
+
 ## Приёмка Fly v362 (2026-07-16)
 
 | Проверка | Результат | Артефакт |
