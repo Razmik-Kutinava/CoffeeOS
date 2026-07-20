@@ -34,8 +34,8 @@
 ### PHASE 2: BUILD → GREEN
 - [x] Реализация crop/высоты в hidden (`CategorySection.svelte`)
 - [x] Зелёные тесты задачи (`catalog_hidden_card_test` 7/0)
-- [ ] Регрессия зоны shop
-- [ ] Коммит `feat: … [GREEN]`
+- [x] Регрессия зоны shop — PARTIAL: 311 runs / 8 fail **pre-existing** (не CategorySection)
+- [x] Коммит `feat: … [GREEN]` `71d6eb6`
 
 ### PHASE 3: REVIEW
 - [ ] Sanity + ops (CHANGELOG / HANDOFF / SESSION_STATE)
@@ -43,6 +43,7 @@
 
 ## Заметки
 
-- Команда продолжения: **go** → REVIEW
-- Тест: `test/integration/shop/catalog_hidden_card_test.rb`
+- Команда продолжения: **go** → PHASE 3 REVIEW
+- Тест задачи: `catalog_hidden_card_test` — PASS
 - CartSheet peek/expanded не меняли
+- Pre-existing shop fails: CBR SBP/canPay, B113 `MODE_PEEK &&`, CART_SHEET_BUILD prog23, order_status CBR
