@@ -8,6 +8,6 @@ JSON: [`../b113_s3_screenshot_baseline_2026-06-22.json`](../b113_s3_screenshot_b
 |-------|------|-----------------|
 | **peek** | `b113_s3_customer_peek_mode.png` | **±** в строке каждой позиции · **+цена** |
 | **expanded** | `b113_s3_customer_expanded_mode.png` | **±** · **Удалить** · **+цена** |
-| **hidden (чип)** | `b113_s3_customer_hidden_chip_mode.png` | только **+цена** (сумма на чипе) |
+| **hidden (чипы)** | `b113_s3_customer_hidden_chip_mode.png` | ряд миниатюр + **+цена** (канон 2026-07-20; не «только сумма») |
 
 Макеты — иллюстрация контролов; раскладка peek/expanded/hidden — только § S2-канон.

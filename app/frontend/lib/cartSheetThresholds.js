@@ -1,21 +1,25 @@
-/** B1.13-S2b — пороги и высоты cart sheet (канон финальный) */
+/** B1.13-S2b — пороги и высоты cart sheet (канон: карточки −15%, hidden = чипы) */
 
 export const MODE_EMPTY = "empty"
 export const MODE_EXPANDED = "expanded"
 export const MODE_PEEK = "peek"
 export const MODE_HIDDEN = "hidden"
 
+/**
+ * Высоты под сетку каталога (карточки ~8.5rem):
+ * expanded — верх шторки у 1-го ряда; peek — середина 2-го ряда; hidden — ниже, ряд чипов.
+ */
 export const SHEET_VH = {
   empty:         12,
-  expandedSingle: 44,
-  expandedMulti:  44,
-  peekSingle:    28,
-  peekMulti:     30,
-  hidden:        20
+  expandedSingle: 52,
+  expandedMulti:  56,
+  peekSingle:    34,
+  peekMulti:     38,
+  hidden:        24
 }
 
 /** Маркер сборки cart sheet — менять при каждом UX-фиксе для верификации на Fly */
-export const CART_SHEET_BUILD = "prog25"
+export const CART_SHEET_BUILD = "prog26"
 
 /** Высота единой шторки checkout: peek корзины + PaymentMethodsSheet (Фаза 2 UX) */
 export const CHECKOUT_PAY_STACK_VH = 92

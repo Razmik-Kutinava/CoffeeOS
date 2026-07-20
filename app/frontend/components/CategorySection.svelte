@@ -45,11 +45,11 @@
         data-testid="shop-catalog-card"
         data-catalog-card-mode={sheetMode}
         onclick={() => push(`/product/${product.id}`)}
-        class="w-40 shrink-0 overflow-hidden rounded-xl border border-[#3a3a3a] bg-[#2a2a2a] text-left cursor-pointer"
+        class="w-[8.5rem] shrink-0 overflow-hidden rounded-xl border border-[#3a3a3a] bg-[#2a2a2a] text-left cursor-pointer"
       >
         <div
           data-testid="shop-catalog-card-media"
-          class="catalog-card-media aspect-[4/3] min-h-28 w-full overflow-hidden bg-[#333]"
+          class="catalog-card-media aspect-[4/3] min-h-24 w-full overflow-hidden bg-[#333]"
         >
           {#if hasImage(product)}
             <img
@@ -63,7 +63,7 @@
           {:else}
             <div
               data-testid="shop-catalog-card-no-photo"
-              class="flex h-full min-h-28 w-full items-center justify-center bg-[#333] text-xs text-[#a0a0a0]"
+              class="flex h-full min-h-24 w-full items-center justify-center bg-[#333] text-xs text-[#a0a0a0]"
             >
               Нет фото
             </div>

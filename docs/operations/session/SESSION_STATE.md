@@ -2,11 +2,17 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-20 (fix fly:release ConcurrentMigrationError — ждать передеплой)  
+**Дата:** 2026-07-20 (catalog −15% + hidden chips + sheet vh — локальная приёмка)  
 
 | Сейчас | Дальше |
 |--------|--------|
-| **fly:release** | skip empty queue/cable migrate + lock skip | **ты** `bin/fly_deploy.sh` → `demo:catalog_images` |
+| **Cart UX** | cards −15% · hidden chips · vh prog26 | **ты** локально → push/deploy → `demo:catalog_images` |
+
+### Сессия 2026-07-20 (catalog size + sheet heights + hidden chips)
+
+- CategorySection `w-[8.5rem]`; SHEET_VH expanded/peek/hidden; Hidden миниатюры; B1.13-S2 канон.
+- Тесты: 53 runs / 0 fail (catalog_hidden + b113 s2/s2a/s4 + checkout ux).
+- Push/deploy — владелец.
 
 ### Сессия 2026-07-20 (fix fly:release ConcurrentMigrationError)
 

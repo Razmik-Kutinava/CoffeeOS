@@ -1,5 +1,12 @@
 ﻿# CHANGELOG
 
+## 2026-07-20 — feat(shop): catalog cards −15%, sheet heights, hidden image chips
+
+- Каталог: карточки `w-[8.5rem]` (~−15% от w-40).
+- Шторка vh: expanded 52/56 · peek 34/38 · hidden 24 (build `prog26`).
+- Hidden: ряд миниатюр + «+цена» (канон B1.13-S2 обновлён; не «только сумма»).
+- Peek: компактнее, ± крупнее. Тесты B1.13/S2a/layout обновлены.
+
 ## 2026-07-20 — fix(fly): release ConcurrentMigrationError on solid migrate
 
 - `fly:release`: skip empty `db:migrate:queue/cable`; named `SolidSchemaConnection` (Rails 8); lock busy + marker table → WARN skip (Neon shared URL).

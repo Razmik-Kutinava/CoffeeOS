@@ -85,8 +85,22 @@ class Shop::B113S2aCartSheetAcceptanceTest < ActionDispatch::IntegrationTest
     assert_includes sheet, "CART_SHEET_BOTTOM_REM"
     assert_includes sheet, "CART_SHEET_MAX_WIDTH_PX"
     assert_includes sheet, "z-50"
-    assert_includes sheet, "transition-[height]"
+    assert_match(/transition-\[height(?:,bottom)?\]/, sheet)
     assert_includes sheet, "transition-duration"
+  end
+
+  test "hidden mode shows product image chips not price-only chip" do
+    sheet = File.read(Rails.root.join("app/frontend/components/CartSheet.svelte"))
+    thresholds = File.read(Rails.root.join("app/frontend/lib/cartSheetThresholds.js"))
+
+    assert_includes sheet, 'data-testid="shop-cart-hidden-chips"'
+    assert_includes sheet, 'data-testid="shop-cart-hidden-thumb"'
+    assert_includes sheet, 'data-cart-layout="hidden-chips"'
+    refute_includes sheet, ">Корзина</span>"
+    assert_includes thresholds, "CART_SHEET_BUILD = \"prog26\""
+    assert_match(/hidden:\s*24/, thresholds)
+    assert_match(/expandedMulti:\s*56/, thresholds)
+    assert_match(/peekMulti:\s*38/, thresholds)
   end
 
   test "peek and hidden show order total per S2a" do
@@ -94,7 +108,7 @@ class Shop::B113S2aCartSheetAcceptanceTest < ActionDispatch::IntegrationTest
 
     assert_includes sheet, "shop-cart-peek-total"
     assert_includes sheet, 'data-testid="shop-cart-hidden-total"'
-    assert_includes sheet, "roundPrice(total)"
+    assert_includes sheet, "formatCartButtonTotal(total)"
   end
 
   test "CartSheet swipe handlers touch and pointer" do

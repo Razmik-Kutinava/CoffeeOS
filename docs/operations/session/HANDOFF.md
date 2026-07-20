@@ -1,19 +1,22 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-20 (fly:release ConcurrentMigrationError fix — **передеплой**)  
+**Дата:** 2026-07-20 (catalog −15% + hidden chips + sheet vh — **локально**, ждём push/deploy)  
 **Ветка:** `develop`  
-**Прод:** https://coffeeos.fly.dev · **v368** (твой deploy aborted на release)
+**Прод:** https://coffeeos.fly.dev · до твоего push/deploy
 
-### Fly release lock (сейчас)
+### Cart sheet / каталог (сейчас)
 
 | Что | Статус |
 |-----|--------|
-| Причина fail | `db:migrate:queue` ConcurrentMigrationError (общий Neon URL) |
-| Фикс `fly_release.rake` | **`[x]`** skip empty + lock+marker skip |
-| Твой `bin/fly_deploy.sh` снова | **`[ ]`** |
-| Затем `demo:catalog_images` на Fly | **`[ ]`** |
+| Карточки каталога −15% (`w-[8.5rem]`) | **`[x]`** |
+| VH: expanded 56 / peek 38 / hidden 24 (`prog26`) | **`[x]`** |
+| Hidden = чипы с фото + «+цена» | **`[x]`** канон B1.13 обновлён |
+| Тесты B1.13 зона | **`[x]`** 53/0 |
+| Push / Fly deploy | **`[ ]`** ты |
+| `demo:catalog_images` на Fly | **`[ ]`** после deploy |
 
-**Следующий шаг:** передеплой → `fly ssh console -a coffeeos -C "bin/rails demo:catalog_images"`.
+**Локально:** `bin/dev` → витрина, свайп hidden/peek/expanded.  
+**Следующий шаг:** твой push + deploy → `demo:catalog_images`.
 
 ### SBR workflow (новое)
 

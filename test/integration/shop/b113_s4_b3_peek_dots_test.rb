@@ -54,7 +54,7 @@ class Shop::B113S4B3PeekDotsTest < ActionDispatch::IntegrationTest
   end
 
   test "у S2-регрессии: peek 2+ mode и карточки не тронуты" do
-    assert_includes sheet, "MODE_PEEK && count >= 2"
+    assert_includes sheet, "MODE_PEEK || payStackActive"
     assert_includes sheet, 'data-testid="shop-cart-peek-line"'
     assert_includes sheet, "tapToProduct(line, e)"
   end

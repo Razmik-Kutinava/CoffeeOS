@@ -9,10 +9,10 @@ class Shop::B113S2LayoutGesturesTest < ActionDispatch::IntegrationTest
 
     assert_includes sheet, 'data-testid="shop-cart-peek-list"'
     assert_includes sheet, 'data-testid="shop-cart-peek-line"'
-    assert_includes sheet, "MODE_PEEK && count >= 2"
+    assert_includes sheet, "MODE_PEEK || payStackActive"
     assert_includes sheet, 'data-cart-layout="horizontal"'
     assert_includes sheet, "overflow-x-auto"
-    assert_includes sheet, "w-[min(28vw,110px)]"
+    assert_includes sheet, "w-[min(30vw,118px)]"
   end
 
   test "minus button removes line at quantity 1 via decrementLine" do
@@ -44,12 +44,14 @@ class Shop::B113S2LayoutGesturesTest < ActionDispatch::IntegrationTest
     assert_includes sheet, "singleItem"
   end
 
-  test "hidden chip shows total only per S2a" do
+  test "hidden chips show product thumbs and checkout total" do
     sheet = File.read(Rails.root.join("app/frontend/components/CartSheet.svelte"))
 
     assert_includes sheet, 'data-testid="shop-cart-hidden-chip"'
-    assert_includes sheet, "Корзина"
+    assert_includes sheet, 'data-testid="shop-cart-hidden-chips"'
+    assert_includes sheet, 'data-testid="shop-cart-hidden-thumb"'
     assert_includes sheet, 'data-testid="shop-cart-hidden-total"'
+    refute_includes sheet, ">Корзина</span>"
     refute_includes sheet, 'data-testid="shop-cart-hidden-heads"'
     refute_includes sheet, 'data-testid="shop-cart-hidden-head"'
   end

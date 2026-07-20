@@ -101,6 +101,10 @@ class Shop::CatalogHiddenCardTest < ActionDispatch::IntegrationTest
     # Одинаковая высота media у всех карточек ряда — общий класс/aspect, не «полоска».
     assert_match(/shop-catalog-card-media|catalog-card-media|aspect-\[/, src,
       "S4: общий media-box / aspect для равной высоты карточек в ряду")
+
+    # −15%: карточки уже w-40 (10rem) → ~8.5rem
+    assert_match(/w-\[8\.5rem\]|w-36/, src,
+      "S4: карточки каталога уменьшены (~15% от w-40)")
   end
 
   # --- Edge: 404 → fallback; длинное имя → одна строка с ellipsis -------------

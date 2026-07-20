@@ -345,16 +345,36 @@
       </p>
       {@render checkoutBar("shop-cart-empty-total")}
 
-    <!-- HIDDEN — чип с суммой (ТЗ S2a) -->
+    <!-- HIDDEN — ряд чипов с фото + сумма (канон заказчика 2026-07-20) -->
     {:else if mode === MODE_HIDDEN}
       <div
-        class="flex flex-1 min-h-0 items-center justify-between gap-2 px-3 py-1.5"
+        class="flex flex-1 min-h-0 items-center gap-2 px-3 py-1.5"
         data-testid="shop-cart-hidden-chip"
+        data-cart-layout="hidden-chips"
       >
-        <div class="flex min-w-0 flex-1 items-center gap-2 rounded-full border border-[#3a3a3a] bg-[#1f1f1f] px-3 py-1.5">
-          <span class="shrink-0 text-xs text-[#888]">Корзина</span>
-          <span data-testid="shop-cart-hidden-total" class="truncate text-sm font-semibold text-[#ff8c42]">{roundPrice(total)}₽</span>
+        <div
+          class="flex min-h-0 min-w-0 flex-1 items-center gap-2 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          data-testid="shop-cart-hidden-chips"
+        >
+          {#each items as line (line.index)}
+            <button
+              type="button"
+              class="relative h-12 w-12 shrink-0 overflow-hidden rounded-lg border border-[#3a3a3a] bg-[#1f1f1f]"
+              data-testid="shop-cart-hidden-thumb"
+              onclick={() => push(`/product/${line.product_id}?cart_line=${line.index}`)}
+              aria-label={line.product_name}
+            >
+              {@render lineThumb(line, "h-12 w-12")}
+              {#if line.quantity > 1}
+                <span
+                  class="absolute bottom-0.5 right-0.5 rounded bg-black/70 px-1 text-[9px] font-semibold text-[#ff8c42]"
+                  data-testid="shop-cart-hidden-qty"
+                >{line.quantity}</span>
+              {/if}
+            </button>
+          {/each}
         </div>
+        <span data-testid="shop-cart-hidden-total" class="sr-only">{roundPrice(total)}₽</span>
         <button
           type="button"
           data-testid="shop-cart-sheet-checkout"
@@ -384,33 +404,31 @@
         >
           {#each items as line (line.index)}
             <div
-              class="flex w-[min(28vw,110px)] shrink-0 flex-col gap-1 rounded-xl border border-[#3a3a3a] bg-[#1f1f1f] p-1.5 cursor-pointer"
+              class="flex w-[min(30vw,118px)] shrink-0 flex-col gap-1 rounded-xl border border-[#3a3a3a] bg-[#1f1f1f] p-1.5 cursor-pointer"
               data-testid="shop-cart-peek-line"
               role="button"
               tabindex="0"
               onclick={(e) => tapToProduct(line, e)}
             >
-              {@render lineThumb(line, "h-16 w-full rounded-lg")}
-              <div class="min-w-0">
-                <p class="line-clamp-2 text-[11px] font-medium leading-tight">{line.product_name}</p>
-                <p class="mt-0.5 text-[10px] text-[#a0a0a0]">{roundPrice(line.unit_total)}₽ × {line.quantity}</p>
-                <div class="mt-1 flex items-center justify-between gap-0.5">
+              {@render lineThumb(line, "h-14 w-full rounded-lg")}
+              <p class="line-clamp-1 text-[11px] font-medium leading-tight">{line.product_name}</p>
+              <p class="text-[10px] text-[#a0a0a0]">{roundPrice(line.unit_total)}₽ × {line.quantity}</p>
+              <div class="mt-0.5 flex items-center justify-between gap-0.5">
                   <button
                     type="button"
                     data-testid="shop-cart-peek-minus"
-                    class="rounded bg-[#3a3a3a] px-1.5 py-0.5 text-[10px] leading-none disabled:opacity-40"
+                    class="min-h-6 min-w-6 rounded bg-[#3a3a3a] px-1.5 py-0.5 text-[12px] leading-none disabled:opacity-40"
                     disabled={busy}
                     onclick={() => decrementLine(line)}
                   >−</button>
-                  <span class="text-[10px]">{line.quantity}</span>
+                  <span class="min-w-[1rem] text-center text-[11px] font-medium">{line.quantity}</span>
                   <button
                     type="button"
                     data-testid="shop-cart-peek-plus"
-                    class="rounded bg-[#3a3a3a] px-1.5 py-0.5 text-[10px] leading-none disabled:opacity-40"
+                    class="min-h-6 min-w-6 rounded bg-[#3a3a3a] px-1.5 py-0.5 text-[12px] leading-none disabled:opacity-40"
                     disabled={atMaxQty(line)}
                     onclick={() => bumpCartLine(line.index, 1)}
                   >+</button>
-                </div>
               </div>
             </div>
           {/each}
