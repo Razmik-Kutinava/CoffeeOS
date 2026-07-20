@@ -6,7 +6,7 @@
 
 ## Текущая фаза
 
-**PHASE 2: BUILD → RED** · Gate 2 · ждать **go** → GREEN
+**PHASE 2: BUILD → GREEN done** · ждать **go** → PHASE 3 REVIEW
 
 ## Анализ (SPEC)
 
@@ -14,10 +14,10 @@
 |------|---------|
 | RLS / tenant | UI-only (Svelte). Данные товаров не меняем. `Current.tenant_id` / API не трогаем |
 | Структура данных | Не менять (ограничение ТЗ) |
-| Файлы (оценка) | `CategorySection.svelte` (~41 стр.) — норма; возможно CSS/маркеры testid. `CartSheet` peek/expanded — **не ломать** |
-| Зона регрессии | `bin/rails test test/integration/shop/` (+ существующие product_card / b113 cart sheet) |
+| Файлы (оценка) | `CategorySection.svelte` — crop/testid/mode/onerror |
+| Зона регрессии | `bin/rails test test/integration/shop/` |
 | Эталон | `01_target_hidden_crop_as_should_be.png` |
-| Баг as-is | `02_as_is_broken_hidden_sliver.png` — тонкая полоска / пустой crop в hidden |
+| Баг as-is | `02_as_is_broken_hidden_sliver.png` |
 
 ## Пункты SBR
 
@@ -28,16 +28,12 @@
 - [x] Gate 1 — **go** → RED
 
 ### PHASE 2: BUILD → RED
-- [x] S1 — тест: hidden + image → crop (object-fit cover / фиксированная высота превью)
-- [x] S2 — тест: hidden без image → placeholder «Нет фото»
-- [x] S3 — тест: переход hidden ↔ peek/expanded не ломает маркеры peek/expanded
-- [x] S4 — тест: гориз. ряд — одинаковая высота карточек + имя + цена
-- [x] Edge — 404 → «Нет фото»; длинное имя → ellipsis/line-clamp
-- [x] Коммит `test: … [RED]` · стоп Gate 2
+- [x] S1–S4 + edge тесты
+- [x] Коммит `test: … [RED]` · Gate 2
 
 ### PHASE 2: BUILD → GREEN
-- [ ] Реализация crop/высоты в hidden (не трогать peek/expanded UX)
-- [ ] Зелёные тесты задачи
+- [x] Реализация crop/высоты в hidden (`CategorySection.svelte`)
+- [x] Зелёные тесты задачи (`catalog_hidden_card_test` 7/0)
 - [ ] Регрессия зоны shop
 - [ ] Коммит `feat: … [GREEN]`
 
@@ -47,7 +43,6 @@
 
 ## Заметки
 
-- Команда продолжения: **go**
-- Намеренный RED `[TDD]` ≠ ISSUES
+- Команда продолжения: **go** → REVIEW
 - Тест: `test/integration/shop/catalog_hidden_card_test.rb`
-- Skeleton / orientation / empty category — в edge backlog при необходимости
+- CartSheet peek/expanded не меняли
