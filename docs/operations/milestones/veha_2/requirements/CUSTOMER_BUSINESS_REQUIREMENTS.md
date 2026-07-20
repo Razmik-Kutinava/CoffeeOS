@@ -95,6 +95,7 @@
 | B1.13 | **Новая навигация витрины** — эпик S1–S4 (шапка, поп-ап корзины, bottom bar) | [ТЗ](customer_tasks/B1_13_shop_nav_profile_header.md) | **rev2** `[x]` апрув 2026-07-01 · **S4-канон** docs `[x]` · **S4 код** `[ ]` |
 | B1.14 | **Адрес точки + выбор точки** в шапке витрины (заказчик «задача 2») | [ТЗ](customer_tasks/B1_14_shop_tenant_address_header.md) | **клиент `[x]`** · апрув 2026-07-05 · **B1.14-4** `[ ]` |
 | B1.8 | **Свой домен → своя почта для рассылки** | После домена (не `fly.dev`): `noreply@…` / `orders@…`, DNS в Brevo (SPF/DKIM/DMARC), сменить `MAIL_FROM` на Fly | **напоминание** |
+| Hidden mode cards | **Витрина** — режим hidden: crop превью карточек (не ломать peek/expanded) | [ТЗ](customer_tasks/Исправление%20режима%20отображения%20Hidden%20для%20карточек%20товаров.md) · скрины [`artifacts/product_card_hidden_mode/`](../artifacts/product_card_hidden_mode/README.md) | **ТЗ `[x]`** · код `[ ]` · апрув `[ ]` |
 
 > **B1.8 (не забыть):** сейчас письма с **подтверждённого личного sender** в Brevo. Когда будет **свой домен** — завести **кофейную почту** (напр. `noreply@бренд.ru`), аутентифицировать домен в Brevo, обновить `MAIL_FROM` + secrets. Код OTP/ActionMailer менять не нужно.
 
@@ -116,6 +117,7 @@
 | 8 | **B1.11** | Режим работы точек продаж (УК) | **закрыта** · апрув `[x]` 2026-07-05 | [B1_11_tenant_operating_hours.md](customer_tasks/B1_11_tenant_operating_hours.md) |
 | 10 | **B1.13** | Новая навигация витрины — S1–S4 (шапка + поп-ап корзины) | **rev2** `[x]` апрув 2026-07-01 · **S4-канон** docs `[x]` · **S4 код** `[ ]` | [B1_13_shop_nav_profile_header.md](customer_tasks/B1_13_shop_nav_profile_header.md) |
 | 11 | **B1.14** | Адрес точки + выбор точки в шапке витрины | **клиент закрыт** · апрув 2026-07-05 · Cart `[ ]` | [B1_14_shop_tenant_address_header.md](customer_tasks/B1_14_shop_tenant_address_header.md) |
+| 12 | **Hidden mode cards** | Режим hidden — crop превью карточек товаров | **ТЗ `[x]`** · код `[ ]` · апрув `[ ]` | [Исправление режима отображения Hidden…](customer_tasks/Исправление%20режима%20отображения%20Hidden%20для%20карточек%20товаров.md) |
 
 
 ---

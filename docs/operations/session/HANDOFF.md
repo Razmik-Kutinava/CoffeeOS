@@ -1,8 +1,19 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-18 (UserCards v366 + MCP 8925 скрин для апрува 3.5)  
+**Дата:** 2026-07-20 (ТЗ Hidden mode cards — docs only)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev · release **v366**
+
+### Hidden mode cards (каталог витрины)
+
+| Что | Статус |
+|-----|--------|
+| Канон-ТЗ | [`Исправление режима отображения Hidden…`](../milestones/veha_2/requirements/customer_tasks/Исправление%20режима%20отображения%20Hidden%20для%20карточек%20товаров.md) |
+| Скрины | **`[x]`** [`artifacts/product_card_hidden_mode/screenshots/`](../milestones/veha_2/artifacts/product_card_hidden_mode/screenshots/README.md) — эталон + «как сейчас» |
+| Код | **`[ ]`** — не трогать до апрува / **go** |
+| Апрув ТЗ | **`[ ]`** |
+
+**Следующий шаг:** апрув ТЗ → **go** на реализацию (crop в hidden, не ломать peek/expanded).
 
 ### SBR workflow (новое)
 

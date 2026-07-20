@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-07-20 — docs: ТЗ Hidden mode карточек товаров + скрины
+
+- ТЗ: `customer_tasks/Исправление режима отображения Hidden для карточек товаров.md` (полный текст заказчика).
+- Артефакты: `artifacts/product_card_hidden_mode/` — эталон crop + «как сейчас»; README папки и screenshots.
+- Индекс: `customer_tasks/README.md` · CBR backlog. Код не меняли.
+
 ## 2026-07-18 — ops: UserCards MCP live attempt + скрин 8925 для апрува 3.5
 
 - Fly **v366** verified (fix 3.3 уже на prod).
