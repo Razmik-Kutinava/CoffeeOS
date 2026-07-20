@@ -6,44 +6,20 @@
 
 ## Текущая фаза
 
-**PHASE 2: BUILD → GREEN done** · ждать **go** → PHASE 3 REVIEW
-
-## Анализ (SPEC)
-
-| Тема | Вердикт |
-|------|---------|
-| RLS / tenant | UI-only (Svelte). Данные товаров не меняем. `Current.tenant_id` / API не трогаем |
-| Структура данных | Не менять (ограничение ТЗ) |
-| Файлы (оценка) | `CategorySection.svelte` — crop/testid/mode/onerror |
-| Зона регрессии | `bin/rails test test/integration/shop/` |
-| Эталон | `01_target_hidden_crop_as_should_be.png` |
-| Баг as-is | `02_as_is_broken_hidden_sliver.png` |
+**PHASE 3: REVIEW done** · код на develop · апрув заказчика / MCP / deploy — отдельно
 
 ## Пункты SBR
 
-### PHASE 1: SPEC
-- [x] Импорт ТЗ заказчика в todo
-- [x] Анализ RLS / лимитов файлов
-- [x] SESSION_STATE — старт SBR Hidden
-- [x] Gate 1 — **go** → RED
-
-### PHASE 2: BUILD → RED
-- [x] S1–S4 + edge тесты
-- [x] Коммит `test: … [RED]` · Gate 2
-
-### PHASE 2: BUILD → GREEN
-- [x] Реализация crop/высоты в hidden (`CategorySection.svelte`)
-- [x] Зелёные тесты задачи (`catalog_hidden_card_test` 7/0)
-- [x] Регрессия зоны shop — PARTIAL: 311 runs / 8 fail **pre-existing** (не CategorySection)
-- [x] Коммит `feat: … [GREEN]` `71d6eb6`
-
-### PHASE 3: REVIEW
-- [ ] Sanity + ops (CHANGELOG / HANDOFF / SESSION_STATE)
-- [ ] Апрув заказчика / MCP при необходимости
+### PHASE 1: SPEC — [x]
+### PHASE 2: RED — [x] `986c304`
+### PHASE 2: GREEN — [x] `71d6eb6` · `catalog_hidden_card_test` 7/0
+### PHASE 3: REVIEW — [x]
+- [x] Sanity: UI-only · без N+1/RLS · `CategorySection` 89 строк · CartSheet не тронут
+- [x] Тесты задачи PASS
+- [x] Ops: SESSION_STATE / CHANGELOG / HANDOFF
+- [ ] Апрув заказчика / MCP Fly / deploy — ждать **go**
 
 ## Заметки
 
-- Команда продолжения: **go** → PHASE 3 REVIEW
-- Тест задачи: `catalog_hidden_card_test` — PASS
-- CartSheet peek/expanded не меняли
-- Pre-existing shop fails: CBR SBP/canPay, B113 `MODE_PEEK &&`, CART_SHEET_BUILD prog23, order_status CBR
+- Pre-existing shop 8 fail (не этот шаг) — не чинили
+- Backlog edge: skeleton loader, orientation, empty category message

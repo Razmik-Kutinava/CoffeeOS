@@ -1,21 +1,22 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-20 (SBR PHASE 1 SPEC — Hidden mode cards)  
+**Дата:** 2026-07-20 (SBR REVIEW — Hidden mode cards done)  
 **Ветка:** `develop`  
-**Прод:** https://coffeeos.fly.dev · release **v366**
+**Прод:** https://coffeeos.fly.dev · release **v366** (Hidden **не** задеплоен)
 
-### Hidden mode cards (SBR)
+### Hidden mode cards (SBR) — **REVIEW done**
 
 | Что | Статус |
 |-----|--------|
 | Канон-ТЗ | [`Исправление режима отображения Hidden…`](../milestones/veha_2/requirements/customer_tasks/Исправление%20режима%20отображения%20Hidden%20для%20карточек%20товаров.md) |
 | Скрины | **`[x]`** [`product_card_hidden_mode/screenshots/`](../milestones/veha_2/artifacts/product_card_hidden_mode/screenshots/README.md) |
-| **PHASE 1 SPEC** | **`[x]`** · [`todo.md`](todo.md) |
-| PHASE 2 RED | **`[ ]`** — ждать **go** |
-| PHASE 2 GREEN | **`[ ]`** |
-| PHASE 3 REVIEW | **`[ ]`** |
+| PHASE 1 SPEC | **`[x]`** |
+| PHASE 2 RED | **`[x]`** `986c304` |
+| PHASE 2 GREEN | **`[x]`** `71d6eb6` · `CategorySection.svelte` |
+| PHASE 3 REVIEW | **`[x]`** · тесты 7/0 |
+| Deploy / MCP / апрув | **`[ ]`** |
 
-**Следующий шаг:** **go** → RED-тесты (crop/placeholder/равная высота; peek/expanded не ломать).
+**Следующий шаг:** апрув визуала / MCP на Fly / **go** deploy (push — только по просьбе).
 
 ### SBR workflow (новое)
 

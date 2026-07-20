@@ -1,6 +1,6 @@
 # Исправление режима отображения "Hidden" для карточек товаров
 
-> **Статус:** **SBR PHASE 1 SPEC** импортирован · код пока не трогаем · ждать **go** → RED  
+> **Статус:** **SBR REVIEW done** · код `71d6eb6` · тесты 7/0 · апрув заказчика / MCP / deploy **[ ]**  
 > **Дата ТЗ:** 2026-07-20  
 > **Источник:** заказчик (чат)  
 > **SBR todo:** [`docs/operations/session/todo.md`](../../../session/todo.md)  
@@ -99,13 +99,14 @@
 | Сценарий | Статус | Артефакт / коммит |
 |----------|--------|-------------------|
 | Docs / ТЗ + скрины | **done** | этот файл · `product_card_hidden_mode/` |
-| SBR PHASE 1 SPEC | **done** | `todo.md` · Gate 1 |
-| S1 — crop с фото в hidden | `[ ]` | RED → GREEN |
-| S2 — placeholder «Нет фото» | `[ ]` | RED → GREEN |
-| S3 — hidden → peek → expanded | `[ ]` | RED → GREEN |
-| S4 — гориз. скролл, равная высота | `[ ]` | RED → GREEN |
-| Edge (skeleton / 404 / ellipsis / orient / empty) | `[ ]` | RED → GREEN (часть может в backlog) |
-| Регрессия shop / peek / expanded | `[ ]` | после GREEN |
-| Апрув заказчика | `[ ]` | после REVIEW |
+| SBR PHASE 1 SPEC | **done** | `todo.md` |
+| S1 — crop с фото в hidden | **done** | GREEN `71d6eb6` |
+| S2 — placeholder «Нет фото» | **done** | + onerror fallback |
+| S3 — hidden → peek → expanded | **done** | `data-catalog-card-mode` · CartSheet guard PASS |
+| S4 — гориз. скролл, равная высота | **done** | aspect-[4/3] media |
+| Edge (404 / ellipsis) | **done** | onerror · truncate |
+| Edge (skeleton / orient / empty) | backlog | не в этом шаге |
+| Регрессия shop / peek / expanded | PARTIAL | задача 7/0 · suite 8 pre-existing fail |
+| Апрув заказчика | `[ ]` | MCP / визуал |
 
-**Следующий шаг:** **go** → PHASE 2 BUILD RED (падающие тесты).
+**Следующий шаг:** апрув / MCP Fly / **go** deploy.

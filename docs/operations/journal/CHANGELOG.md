@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-07-20 — feat(shop): Hidden catalog cards crop [SBR REVIEW]
+
+- `CategorySection.svelte`: фиксированный media-box (aspect-[4/3]), `object-cover object-top`, placeholder «Нет фото», onerror fallback, truncate имени, `data-catalog-card-mode` от `cartSheetMode`.
+- Тесты: `catalog_hidden_card_test` 7/0. CartSheet peek/expanded не меняли.
+- SBR: SPEC → RED `986c304` → GREEN `71d6eb6` → REVIEW.
+
 ## 2026-07-20 — SBR SPEC: Hidden mode cards (Phase 1)
 
 - Импорт ТЗ в `todo.md` (S1–S4 + edge); SESSION_STATE / HANDOFF — Gate 1.

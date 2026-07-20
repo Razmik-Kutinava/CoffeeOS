@@ -2,7 +2,7 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-20 (SBR PHASE 1 SPEC — Hidden mode cards)  
+**Дата:** 2026-07-20 (SBR PHASE 3 REVIEW — Hidden mode cards **done**)  
 **Веха 1:** **закрыта** 2026-06-19.  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
 **§2.3 оплата витрина (Init→payment_url→callback):** **done** — базовый redirect на банк остаётся.
@@ -11,12 +11,21 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **Hidden mode cards (SBR)** | **PHASE 1 SPEC [x]** · todo импорт | **go** → PHASE 2 RED |
+| **Hidden mode cards (SBR)** | SPEC→RED→GREEN→**REVIEW [x]** · код `71d6eb6` | апрув / MCP / deploy |
 | **Checkout CartSheet UX** | Фаза 2 stacked код **[x]** | deploy · MCP · апрув |
 | **UserCards / save_card** | deploy v366 **[x]** · MCP 2 карты **[x]** · скрин 8925 **[x]** | апрув → 3.5 · E2E real MIR |
 | **B1.13 CR-BOTTOM-NAV** | бар убран · cart BOTTOM_REM=0 | A1 апрув [ ] |
 | **B1.14 адрес в шапке** | **B1.14-3d** index map [x] | B1.14-4 cart |
 | **Product card peek cart** | S1–S7 код [x] | апрув заказчика |
+
+### Сессия 2026-07-20 (SBR PHASE 3 REVIEW — Hidden mode cards)
+
+- **Код:** `CategorySection.svelte` — media aspect-[4/3], object-cover object-top, onerror→«Нет фото», truncate, `data-catalog-card-mode` + `cartSheetMode`
+- **Тесты:** `catalog_hidden_card_test` **7 runs / 0 fail**
+- **Sanity:** UI-only · RLS/N+1 N/A · файл 89 строк · CartSheet peek/expanded не меняли
+- **Регрессия shop:** 311 runs / 8 fail **pre-existing** (не этот шаг)
+- **Коммиты:** RED `986c304` · GREEN `71d6eb6`
+- **Стоп:** апрув заказчика / MCP Fly / deploy — только по **go**
 
 ### Сессия 2026-07-20 (SBR PHASE 1 SPEC — Hidden mode cards)
 
