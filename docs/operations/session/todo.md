@@ -6,7 +6,7 @@
 
 ## Текущая фаза
 
-**PHASE 1: SPEC** — импортировано · Gate 1 · ждать **go** → PHASE 2 RED
+**PHASE 2: BUILD → RED** · Gate 2 · ждать **go** → GREEN
 
 ## Анализ (SPEC)
 
@@ -25,15 +25,15 @@
 - [x] Импорт ТЗ заказчика в todo
 - [x] Анализ RLS / лимитов файлов
 - [x] SESSION_STATE — старт SBR Hidden
-- [ ] Gate 1 — **go** → RED
+- [x] Gate 1 — **go** → RED
 
 ### PHASE 2: BUILD → RED
-- [ ] S1 — тест: hidden + image → crop (object-fit cover / фиксированная высота превью)
-- [ ] S2 — тест: hidden без image → placeholder «Нет фото»
-- [ ] S3 — тест: переход hidden ↔ peek/expanded не ломает маркеры peek/expanded
-- [ ] S4 — тест: гориз. ряд — одинаковая высота карточек + имя + цена
-- [ ] Edge — 404 → «Нет фото»; длинное имя → ellipsis/line-clamp
-- [ ] Коммит `test: … [RED]` · стоп Gate 2
+- [x] S1 — тест: hidden + image → crop (object-fit cover / фиксированная высота превью)
+- [x] S2 — тест: hidden без image → placeholder «Нет фото»
+- [x] S3 — тест: переход hidden ↔ peek/expanded не ломает маркеры peek/expanded
+- [x] S4 — тест: гориз. ряд — одинаковая высота карточек + имя + цена
+- [x] Edge — 404 → «Нет фото»; длинное имя → ellipsis/line-clamp
+- [x] Коммит `test: … [RED]` · стоп Gate 2
 
 ### PHASE 2: BUILD → GREEN
 - [ ] Реализация crop/высоты в hidden (не трогать peek/expanded UX)
@@ -49,4 +49,5 @@
 
 - Команда продолжения: **go**
 - Намеренный RED `[TDD]` ≠ ISSUES
-- Skeleton / orientation / empty category — в edge; если вылезает за шаг — backlog в ТЗ
+- Тест: `test/integration/shop/catalog_hidden_card_test.rb`
+- Skeleton / orientation / empty category — в edge backlog при необходимости
