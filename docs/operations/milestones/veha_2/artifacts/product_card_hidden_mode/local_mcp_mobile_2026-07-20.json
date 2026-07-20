@@ -1,0 +1,18 @@
+{
+  "task": "product_card_hidden_mode",
+  "date": "2026-07-20",
+  "scope": "local MCP mobile only",
+  "url": "http://127.0.0.1:3001/shop?tenant_id=8c7f5bc7-f2b4-43f0-991c-5ede0f480b20",
+  "tenant_slug": "demo-point-a",
+  "viewport": "390x844x3,mobile,touch",
+  "screenshot": "screenshots/03_local_mcp_mobile_hidden_crop_2026-07-20.png",
+  "first_5_products": [
+    {"name": "Фильтр-кофе Гватемала, без кофеина", "hasImg": true, "mediaH": 119, "mediaW": 158},
+    {"name": "Фильтр-кофе Бразилия", "hasImg": true, "mediaH": 119, "mediaW": 158},
+    {"name": "Бамбл", "hasImg": true, "mediaH": 119, "mediaW": 158},
+    {"name": "Кофе-тоник", "hasImg": true, "mediaH": 119, "mediaW": 158},
+    {"name": "Матча тоник", "hasImg": true, "mediaH": 119, "mediaW": 158}
+  ],
+  "verdict": "PASS",
+  "notes": "5 Unsplash coffee photos attached to public/uploads (gitignored) + product.image_url local DB. Equal media height 119px. Crop visible on screenshot."
+}

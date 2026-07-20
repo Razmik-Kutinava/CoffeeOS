@@ -7,8 +7,9 @@
 
 | Файл | Роль | Что видно |
 |------|------|-----------|
-| `01_target_hidden_crop_as_should_be.png` | **Эталон — как нужно** | Разделы «Черный», «Холодные», «Сезонные»: crop фото (верх/центр чашки), placeholder «Нет фото», одинаковая высота карточек, название + цена |
-| `02_as_is_broken_hidden_sliver.png` | **Баг — как сейчас** | Подпись «как сейчас»: в hidden («Холодные») тонкая полоска вместо превью; broken-image / сжатый «Нет фото» |
+| `01_target_hidden_crop_as_should_be.png` | **Эталон — как нужно** | Разделы «Черный», «Холодные»: crop фото, placeholder «Нет фото», одинаковая высота |
+| `02_as_is_broken_hidden_sliver.png` | **Баг — как сейчас** | Подпись «как сейчас»: тонкая полоска / broken-image |
+| `03_local_mcp_mobile_hidden_crop_2026-07-20.png` | **Доказательство MCP local mobile** | Chrome DevTools `390×844 mobile+touch` · `/shop?tenant_id=demo-point-a` · первые 5 товаров с фото Unsplash · crop media виден |
 
 Не путать с:
 

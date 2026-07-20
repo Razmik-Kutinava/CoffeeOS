@@ -1,5 +1,10 @@
 ﻿# CHANGELOG
 
+## 2026-07-20 — ops: Hidden local MCP mobile proof
+
+- 5 Unsplash фото → первые товары demo-point-a (`public/uploads`, gitignored).
+- MCP Chrome: viewport `390×844 mobile+touch` · скрин `03_local_mcp_mobile_hidden_crop_2026-07-20.png` · JSON `local_mcp_mobile_2026-07-20.json` — PASS (media 119×158, hasImg×5).
+
 ## 2026-07-20 — feat(shop): Hidden catalog cards crop [SBR REVIEW]
 
 - `CategorySection.svelte`: фиксированный media-box (aspect-[4/3]), `object-cover object-top`, placeholder «Нет фото», onerror fallback, truncate имени, `data-catalog-card-mode` от `cartSheetMode`.

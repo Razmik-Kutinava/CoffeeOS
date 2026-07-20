@@ -14,9 +14,9 @@
 | PHASE 2 RED | **`[x]`** `986c304` |
 | PHASE 2 GREEN | **`[x]`** `71d6eb6` · `CategorySection.svelte` |
 | PHASE 3 REVIEW | **`[x]`** · тесты 7/0 |
-| Deploy / MCP / апрув | **`[ ]`** |
+| Deploy / MCP / апрув | MCP local mobile **`[x]`** · скрин `03_…` · апрув заказчика / deploy **`[ ]`** |
 
-**Следующий шаг:** апрув визуала / MCP на Fly / **go** deploy (push — только по просьбе).
+**Следующий шаг:** апрув заказчика по скрину `03_local_mcp_mobile_hidden_crop_2026-07-20.png` · deploy — только по **go**.
 
 ### SBR workflow (новое)
 
