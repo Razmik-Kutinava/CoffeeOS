@@ -11,7 +11,7 @@
 | **UI-код** | `a1abfa0` — catalog −15% · vh prog26 · hidden chips |
 | **Артефакт** | [`../milestones/veha_2/artifacts/product_card_hidden_mode/CHECKPOINT.md`](../milestones/veha_2/artifacts/product_card_hidden_mode/CHECKPOINT.md) |
 | **Скрин принятого** | `04_fly_accepted_hidden_chips_2026-07-20.png` |
-| **Ops-коммит** | этот шаг (docs only) — hash в CHANGELOG / `git log -1` |
+| **Ops-коммит** | **`fa4ae08`** |
 
 ```bash
 git checkout a1abfa0   # код UI этого положения

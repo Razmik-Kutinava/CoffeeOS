@@ -7,19 +7,17 @@
 ## Откат (код)
 
 ```bash
-git checkout <HASH_ЭТОГО_КОММИТА>
-# или только UI-фича:
-git checkout a1abfa0
+git checkout fa4ae08   # ops-checkpoint (docs + этот скрин; код UI = a1abfa0)
+git checkout a1abfa0   # только UI-фича (без последующих docs)
 ```
 
 | Коммит | Что |
 |--------|-----|
+| **`fa4ae08`** | **RESTORE ops-checkpoint** (этот файл + скрин 04) |
 | `a1abfa0` | catalog −15% · sheet vh prog26 · hidden chips |
 | `8f74bac` | fly:release ConcurrentMigrationError |
 | `b6b8927` | CartSheet onerror · `demo:catalog_images` |
-| `7124c16` | docs WSL rolldown (до ops-checkpoint) |
-
-Точный hash ops-checkpoint — в `HANDOFF.md` / CHANGELOG после коммита этого файла.
+| `7124c16` | docs WSL rolldown |
 
 ## Что принято (визуал Fly)
 
