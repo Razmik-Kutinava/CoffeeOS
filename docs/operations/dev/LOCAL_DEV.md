@@ -143,7 +143,7 @@ http://127.0.0.1:3001/shop/api/debug?tenant_id=<uuid>
 | **Пустая витрина, жёлтый баннер** | нет `tenant_id` / точка не в БД | `/shop?tenant_id=...` или `SHOP_DEFAULT_TENANT_ID` в `.env` |
 | **CSP: ws://127.0.0.1:3036 blocked** | CSP режет WebSocket Vite | В **development** CSP разрешает ws :3036; после pull — **перезапустить `bin/dev`** |
 | **Заказ barista без order_number** | триггер не в schema.rb | `bin/rails db:ensure_triggers` (или `db:migrate`); в test/dev — auto на boot |
-| **Vite / rolldown binding** | `npm install` делали в Windows на том же `node_modules` | `rm -rf node_modules && npm install` **только в WSL** |
+| **Vite / rolldown binding** (`Cannot find module '@rolldown/binding-linux-arm64-gnu'`) | `npm install` делали в **Windows/PowerShell** на том же `node_modules`, а `bin/dev` — в **WSL** | В WSL: `rm -rf node_modules && npm install`, затем `ruby bin/dev`. **Не** мешать `npm` Windows и WSL в одном каталоге |
 | **Долго «Booting Puma»** | проект на `/mnt/c/` (медленный I/O) | подождать; опционально клон в `~/projects/` на ext4 |
 
 ---
