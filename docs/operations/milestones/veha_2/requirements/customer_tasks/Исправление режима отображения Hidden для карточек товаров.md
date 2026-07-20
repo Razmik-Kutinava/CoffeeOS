@@ -1,8 +1,9 @@
 # Исправление режима отображения "Hidden" для карточек товаров
 
-> **Статус:** ТЗ зафиксировано · код **не трогали** · ждём апрув / **go** на реализацию  
+> **Статус:** **SBR PHASE 1 SPEC** импортирован · код пока не трогаем · ждать **go** → RED  
 > **Дата ТЗ:** 2026-07-20  
 > **Источник:** заказчик (чат)  
+> **SBR todo:** [`docs/operations/session/todo.md`](../../../session/todo.md)  
 > **Артефакты / скрины:** [`../../artifacts/product_card_hidden_mode/`](../../artifacts/product_card_hidden_mode/README.md)
 
 ---
@@ -98,12 +99,13 @@
 | Сценарий | Статус | Артефакт / коммит |
 |----------|--------|-------------------|
 | Docs / ТЗ + скрины | **done** | этот файл · `product_card_hidden_mode/` |
-| S1 — crop с фото в hidden | `[ ]` | — |
-| S2 — placeholder «Нет фото» | `[ ]` | — |
-| S3 — hidden → peek → expanded | `[ ]` | — |
-| S4 — гориз. скролл, равная высота | `[ ]` | — |
-| Edge (skeleton / 404 / ellipsis / orient / empty) | `[ ]` | — |
-| Регрессия shop / peek / expanded | `[ ]` | — |
-| Апрув заказчика | `[ ]` | — |
+| SBR PHASE 1 SPEC | **done** | `todo.md` · Gate 1 |
+| S1 — crop с фото в hidden | `[ ]` | RED → GREEN |
+| S2 — placeholder «Нет фото» | `[ ]` | RED → GREEN |
+| S3 — hidden → peek → expanded | `[ ]` | RED → GREEN |
+| S4 — гориз. скролл, равная высота | `[ ]` | RED → GREEN |
+| Edge (skeleton / 404 / ellipsis / orient / empty) | `[ ]` | RED → GREEN (часть может в backlog) |
+| Регрессия shop / peek / expanded | `[ ]` | после GREEN |
+| Апрув заказчика | `[ ]` | после REVIEW |
 
-**Следующий шаг:** апрув ТЗ → **go** на реализацию (код до апрува не трогать).
+**Следующий шаг:** **go** → PHASE 2 BUILD RED (падающие тесты).

@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-07-20 — SBR SPEC: Hidden mode cards (Phase 1)
+
+- Импорт ТЗ в `todo.md` (S1–S4 + edge); SESSION_STATE / HANDOFF — Gate 1.
+- Анализ: UI-only, RLS не трогаем; зона shop; peek/expanded вне scope поломки.
+- Ждём **go** → PHASE 2 RED.
+
 ## 2026-07-20 — docs: ТЗ Hidden mode карточек товаров + скрины
 
 - ТЗ: `customer_tasks/Исправление режима отображения Hidden для карточек товаров.md` (полный текст заказчика).

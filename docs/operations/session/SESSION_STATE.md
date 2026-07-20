@@ -2,7 +2,7 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-20 (ТЗ Hidden mode cards — docs only, код не трогали)  
+**Дата:** 2026-07-20 (SBR PHASE 1 SPEC — Hidden mode cards)  
 **Веха 1:** **закрыта** 2026-06-19.  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
 **§2.3 оплата витрина (Init→payment_url→callback):** **done** — базовый redirect на банк остаётся.
@@ -11,19 +11,25 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **Hidden mode cards** | ТЗ + скрины **[x]** · код **[ ]** | апрув ТЗ → **go** реализация |
+| **Hidden mode cards (SBR)** | **PHASE 1 SPEC [x]** · todo импорт | **go** → PHASE 2 RED |
 | **Checkout CartSheet UX** | Фаза 2 stacked код **[x]** | deploy · MCP · апрув |
 | **UserCards / save_card** | deploy v366 **[x]** · MCP 2 карты **[x]** · скрин 8925 **[x]** | апрув → 3.5 · E2E real MIR |
 | **B1.13 CR-BOTTOM-NAV** | бар убран · cart BOTTOM_REM=0 | A1 апрув [ ] |
 | **B1.14 адрес в шапке** | **B1.14-3d** index map [x] | B1.14-4 cart |
 | **Product card peek cart** | S1–S7 код [x] | апрув заказчика |
 
+### Сессия 2026-07-20 (SBR PHASE 1 SPEC — Hidden mode cards)
+
+- **Режим:** Spec-Build-Review (`spec-build-review.mdc`)
+- **ТЗ:** [`Исправление режима отображения Hidden…`](../milestones/veha_2/requirements/customer_tasks/Исправление%20режима%20отображения%20Hidden%20для%20карточек%20товаров.md)
+- **todo:** [`todo.md`](todo.md) — S1–S4 + edge; UI-only; peek/expanded не ломать
+- **Анализ:** RLS/данные не трогаем; зона shop; точка касания `CategorySection.svelte` (+ тесты grep/DOM)
+- **Стоп Gate 1:** ждать **go** → PHASE 2 RED (падающие тесты)
+
 ### Сессия 2026-07-20 (ТЗ Hidden mode — docs only)
 
-- **ТЗ:** [`Исправление режима отображения Hidden для карточек товаров.md`](../milestones/veha_2/requirements/customer_tasks/Исправление%20режима%20отображения%20Hidden%20для%20карточек%20товаров.md) — полный текст заказчика
-- **Артефакты:** [`product_card_hidden_mode/`](../milestones/veha_2/artifacts/product_card_hidden_mode/README.md) — эталон + «как сейчас»
-- **Код:** не меняли
-- **Стоп:** апрув ТЗ → **go** на реализацию
+- **ТЗ + скрины** зафиксированы · код не меняли
+- **Снято:** стоп «апрув ТЗ» — владелец дал **go на SPEC**
 
 ### Сессия 2026-07-18 (UserCards deploy v366 + Fly MCP 3.4 + live attempt)
 

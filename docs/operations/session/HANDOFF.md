@@ -1,19 +1,21 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-20 (ТЗ Hidden mode cards — docs only)  
+**Дата:** 2026-07-20 (SBR PHASE 1 SPEC — Hidden mode cards)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev · release **v366**
 
-### Hidden mode cards (каталог витрины)
+### Hidden mode cards (SBR)
 
 | Что | Статус |
 |-----|--------|
 | Канон-ТЗ | [`Исправление режима отображения Hidden…`](../milestones/veha_2/requirements/customer_tasks/Исправление%20режима%20отображения%20Hidden%20для%20карточек%20товаров.md) |
-| Скрины | **`[x]`** [`artifacts/product_card_hidden_mode/screenshots/`](../milestones/veha_2/artifacts/product_card_hidden_mode/screenshots/README.md) — эталон + «как сейчас» |
-| Код | **`[ ]`** — не трогать до апрува / **go** |
-| Апрув ТЗ | **`[ ]`** |
+| Скрины | **`[x]`** [`product_card_hidden_mode/screenshots/`](../milestones/veha_2/artifacts/product_card_hidden_mode/screenshots/README.md) |
+| **PHASE 1 SPEC** | **`[x]`** · [`todo.md`](todo.md) |
+| PHASE 2 RED | **`[ ]`** — ждать **go** |
+| PHASE 2 GREEN | **`[ ]`** |
+| PHASE 3 REVIEW | **`[ ]`** |
 
-**Следующий шаг:** апрув ТЗ → **go** на реализацию (crop в hidden, не ломать peek/expanded).
+**Следующий шаг:** **go** → RED-тесты (crop/placeholder/равная высота; peek/expanded не ломать).
 
 ### SBR workflow (новое)
 
