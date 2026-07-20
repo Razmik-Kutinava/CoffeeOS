@@ -82,6 +82,7 @@ UUID — см. ниже § «Узнать URL без SSH».
 |--------|----------|
 | `exceeded the compute time quota` | Neon Launch + spending limit $15 |
 | `connection refused` | `fly secrets list` → `DATABASE_URL` |
+| `ConcurrentMigrationError` / `db:migrate:queue` lock busy | queue/cache/cable = тот же Neon URL; в `fly:release` пустые migrate skip, lock+marker → WARN skip. Передеплой с фиксом; не руками unlock |
 | release упал, образ собран | `fly ssh console -a coffeeos -C "bin/rails fly:release"` (**по апруву**) |
 
 **Деплой:** только по апруву владельца (лишний deploy = CU-hrs на Neon).

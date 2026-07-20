@@ -2,11 +2,17 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-20 (Hidden: CartSheet onerror + demo:catalog_images — ждать твой deploy)  
+**Дата:** 2026-07-20 (fix fly:release ConcurrentMigrationError — ждать передеплой)  
 
 | Сейчас | Дальше |
 |--------|--------|
-| **Hidden** | crop + onerror + rake HTTPS | **ты** deploy → `demo:catalog_images` на Fly → апрув |
+| **fly:release** | skip empty queue/cable migrate + lock skip | **ты** `bin/fly_deploy.sh` → `demo:catalog_images` |
+
+### Сессия 2026-07-20 (fix fly:release ConcurrentMigrationError)
+
+- Deploy abort: `db:migrate:queue` lock busy ×5 (Neon shared URL + empty queue migrate).
+- Fix: named SolidSchemaConnection; skip empty migrates; on lock+marker → WARN skip.
+- Test: `fly_release_test` PASS. Деплой — владелец.
 
 ### Сессия 2026-07-20 (fix Hidden photos for Fly)
 

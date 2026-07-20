@@ -1,25 +1,19 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-20 (Hidden: HTTPS demo images + CartSheet onerror — **ты деплоишь**)  
+**Дата:** 2026-07-20 (fly:release ConcurrentMigrationError fix — **передеплой**)  
 **Ветка:** `develop`  
-**Прод:** https://coffeeos.fly.dev · release **v368** (до твоего деплоя)
+**Прод:** https://coffeeos.fly.dev · **v368** (твой deploy aborted на release)
 
-### Hidden mode cards — фикс фото после ложного MCP
+### Fly release lock (сейчас)
 
 | Что | Статус |
 |-----|--------|
-| Crop `CategorySection` | **`[x]`** на v368 |
-| CartSheet `onerror` → «нет» (не broken-icon) | **`[x]`** код · ждать твой deploy |
-| `demo:catalog_images` — HTTPS Unsplash в БД | **`[x]`** rake · локально прогнан |
-| Почему REVIEW/MCP «ок» раньше | Локальные uploads ≠ Fly Neon/`/uploads` |
-| Твой deploy + на Fly `bin/rails demo:catalog_images` | **`[ ]`** |
+| Причина fail | `db:migrate:queue` ConcurrentMigrationError (общий Neon URL) |
+| Фикс `fly_release.rake` | **`[x]`** skip empty + lock+marker skip |
+| Твой `bin/fly_deploy.sh` снова | **`[ ]`** |
+| Затем `demo:catalog_images` на Fly | **`[ ]`** |
 
-**После твоего deploy на Fly:**
-```
-fly ssh console -a coffeeos -C "bin/rails demo:catalog_images"
-```
-
-**Следующий шаг:** ты деплоишь → rake на Fly → апрув.
+**Следующий шаг:** передеплой → `fly ssh console -a coffeeos -C "bin/rails demo:catalog_images"`.
 
 ### SBR workflow (новое)
 

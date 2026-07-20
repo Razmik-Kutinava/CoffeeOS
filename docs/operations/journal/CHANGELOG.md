@@ -1,5 +1,10 @@
 ﻿# CHANGELOG
 
+## 2026-07-20 — fix(fly): release ConcurrentMigrationError on solid migrate
+
+- `fly:release`: skip empty `db:migrate:queue/cable`; named `SolidSchemaConnection` (Rails 8); lock busy + marker table → WARN skip (Neon shared URL).
+- Test: `test/lib/fly_release_test.rb`. Runbook: FLY_DEMO_STAND §5.
+
 ## 2026-07-20 — fix(shop): CartSheet thumb onerror + demo:catalog_images
 
 - `CartSheet` lineThumb: 404 → placeholder «нет» (не broken-icon); object-top.

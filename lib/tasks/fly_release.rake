@@ -1,7 +1,22 @@
 # frozen_string_literal: true
 
+# Fly release: db:prepare + solid schemas/migrates.
+# queue/cache/cable в production делят DATABASE_URL с primary (Neon) —
+# повторный db:migrate:* после prepare часто ловит ConcurrentMigrationError
+# (advisory lock + connection pool). Пустые migrate-папки и уже накатанная
+# схема не должны валить деплой.
+
 module FlyRelease
   module_function
+
+  # Именованный класс: Rails 8 запрещает Class.new(ActiveRecord::Base).
+  class SolidSchemaConnection < ActiveRecord::Base
+    self.abstract_class = true
+  end
+
+  def migration_files_for(db_name)
+    Dir[Rails.root.join("db/#{db_name}_migrate/*.rb")]
+  end
 
   def load_solid_schema!(db_name, schema_path, marker_table:)
     cfg = ActiveRecord::Base.configurations.configs_for(env_name: Rails.env, name: db_name)
@@ -10,10 +25,9 @@ module FlyRelease
     path = Rails.root.join(schema_path)
     return unless path.exist?
 
-    conn_class = Class.new(ActiveRecord::Base) { self.abstract_class = true }
-    conn_class.establish_connection(cfg.configuration_hash)
+    SolidSchemaConnection.establish_connection(cfg.configuration_hash)
 
-    if conn_class.connection.table_exists?(marker_table)
+    if SolidSchemaConnection.connection.table_exists?(marker_table)
       puts "[fly:release] #{marker_table} exists (#{db_name}) — skip load_schema"
       return
     end
@@ -24,17 +38,46 @@ module FlyRelease
     puts "[fly:release] WARN schema #{db_name}: #{e.class} #{e.message}"
   end
 
-  def migrate_with_retry!(task_name, attempts: 5)
+  def migrate_with_retry!(task_name, marker_table: nil, attempts: 5)
     attempts.times do |i|
       Rake::Task[task_name].reenable
       Rake::Task[task_name].invoke
       return
     rescue ActiveRecord::ConcurrentMigrationError => e
       puts "[fly:release] #{task_name} lock busy (attempt #{i + 1}/#{attempts}): #{e.message}"
-      raise e if i >= attempts - 1
+      if i >= attempts - 1
+        if marker_table.present? && solid_marker_present?(marker_table)
+          puts "[fly:release] WARN #{task_name}: lock stuck, but #{marker_table} exists — skip (same Neon URL as primary)"
+          return
+        end
+        raise e
+      end
 
       sleep(2 * (i + 1))
     end
+  end
+
+  def solid_marker_present?(marker_table)
+    ActiveRecord::Base.connection.table_exists?(marker_table)
+  rescue StandardError
+    false
+  end
+
+  def migrate_solid!(db_name, marker_table:)
+    files = migration_files_for(db_name)
+    if files.empty?
+      puts "[fly:release] db:migrate:#{db_name} — no migration files, skip"
+      return
+    end
+
+    name = "db:migrate:#{db_name}"
+    unless Rake::Task.task_defined?(name)
+      puts "[fly:release] #{name} — task missing, skip"
+      return
+    end
+
+    puts "[fly:release] #{name} (#{files.size} file(s))..."
+    migrate_with_retry!(name, marker_table: marker_table)
   end
 end
 
@@ -54,13 +97,9 @@ namespace :fly do
     FlyRelease.load_solid_schema!("cache", "db/cache_schema.rb", marker_table: "solid_cache_entries")
     FlyRelease.load_solid_schema!("cable", "db/cable_schema.rb", marker_table: "solid_cable_messages")
 
-    %w[queue cache cable].each do |db|
-      name = "db:migrate:#{db}"
-      next unless Rake::Task.task_defined?(name)
-
-      puts "[fly:release] #{name}..."
-      FlyRelease.migrate_with_retry!(name)
-    end
+    FlyRelease.migrate_solid!("queue", marker_table: "solid_queue_jobs")
+    FlyRelease.migrate_solid!("cache", marker_table: "solid_cache_entries")
+    FlyRelease.migrate_solid!("cable", marker_table: "solid_cable_messages")
 
     if ActiveModel::Type::Boolean.new.cast(ENV.fetch("DEMO_AUTO_SEED", "false"))
       puts "[fly:release] demo:seed..."
