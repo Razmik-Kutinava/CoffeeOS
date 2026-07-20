@@ -107,8 +107,8 @@
 | Edge (404 / ellipsis) | **done** | onerror · truncate |
 | Edge (skeleton / orient / empty) | backlog | не в этом шаге |
 | Регрессия shop / peek / expanded | PARTIAL | задача 7/0 · suite 8 pre-existing fail |
-| Апрув заказчика | `[ ]` | MCP / визуал |
-| Фикс Fly-фото (HTTPS rake + CartSheet onerror) | **код done** | ты deploy + `demo:catalog_images` на Fly |
+| Апрув заказчика | **принято положение** 2026-07-20 | скрин `04_fly_accepted_hidden_chips_2026-07-20.png` · [`CHECKPOINT.md`](../../artifacts/product_card_hidden_mode/CHECKPOINT.md) |
+| Фикс Fly-фото (HTTPS rake + CartSheet onerror) | **done** | `demo:catalog_images` на Fly OK · onerror «нет» |
 
-**Почему local MCP «PASS» не = Fly:** фото жили в gitignored `uploads` + локальная БД.  
-**Следующий шаг:** твой deploy → `fly ssh console -a coffeeos -C "bin/rails demo:catalog_images"`.
+**Точка отката:** см. [`CHECKPOINT.md`](../../artifacts/product_card_hidden_mode/CHECKPOINT.md) (код UI `a1abfa0` + этот ops-коммит).  
+Код в этом шаге **не меняли** — только docs/ops.

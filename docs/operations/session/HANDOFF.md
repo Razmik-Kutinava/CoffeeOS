@@ -1,22 +1,31 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-20 (catalog −15% + hidden chips + sheet vh — **локально**, ждём push/deploy)  
+**Дата:** 2026-07-20 (**CHECKPOINT** Hidden/cart chips — принято на Fly, docs only)  
 **Ветка:** `develop`  
-**Прод:** https://coffeeos.fly.dev · до твоего push/deploy
+**Прод:** https://coffeeos.fly.dev  
 
-### Cart sheet / каталог (сейчас)
+### Точка отката (не потерять)
+
+| | |
+|--|--|
+| **UI-код** | `a1abfa0` — catalog −15% · vh prog26 · hidden chips |
+| **Артефакт** | [`../milestones/veha_2/artifacts/product_card_hidden_mode/CHECKPOINT.md`](../milestones/veha_2/artifacts/product_card_hidden_mode/CHECKPOINT.md) |
+| **Скрин принятого** | `04_fly_accepted_hidden_chips_2026-07-20.png` |
+| **Ops-коммит** | этот шаг (docs only) — hash в CHANGELOG / `git log -1` |
+
+```bash
+git checkout a1abfa0   # код UI этого положения
+```
+
+### Cart sheet / каталог — **принято**
 
 | Что | Статус |
 |-----|--------|
-| Карточки каталога −15% (`w-[8.5rem]`) | **`[x]`** |
-| VH: expanded 56 / peek 38 / hidden 24 (`prog26`) | **`[x]`** |
-| Hidden = чипы с фото + «+цена» | **`[x]`** канон B1.13 обновлён |
-| Тесты B1.13 зона | **`[x]`** 53/0 |
-| Push / Fly deploy | **`[ ]`** ты |
-| `demo:catalog_images` на Fly | **`[ ]`** после deploy |
+| Карточки −15% · vh prog26 · hidden chips | **`[x]`** на Fly |
+| `demo:catalog_images` | **`[x]`** |
+| Код в checkpoint-шаге | **не меняли** |
 
-**Локально:** `bin/dev` → витрина, свайп hidden/peek/expanded.  
-**Следующий шаг:** твой push + deploy → `demo:catalog_images`.
+**Следующий шаг:** новые фичи отдельно; откат сюда — таблица выше.
 
 ### SBR workflow (новое)
 

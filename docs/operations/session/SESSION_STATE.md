@@ -2,11 +2,16 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-20 (catalog −15% + hidden chips + sheet vh — локальная приёмка)  
+**Дата:** 2026-07-20 (**CHECKPOINT** Hidden/cart — принято на Fly, docs only)  
 
 | Сейчас | Дальше |
 |--------|--------|
-| **Cart UX** | cards −15% · hidden chips · vh prog26 | **ты** локально → push/deploy → `demo:catalog_images` |
+| **Hidden/cart** | принято · откат `a1abfa0` + CHECKPOINT.md | следующая фича по go |
+
+### Сессия 2026-07-20 (CHECKPOINT docs — без кода)
+
+- Скрин `04_fly_accepted_hidden_chips_2026-07-20.png` · `CHECKPOINT.md`
+- UI-код точки: `a1abfa0`. Код не меняли.
 
 ### Сессия 2026-07-20 (catalog size + sheet heights + hidden chips)
 

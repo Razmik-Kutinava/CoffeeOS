@@ -7,7 +7,8 @@
 |--|--|
 | **ТЗ (канон текста заказчика)** | [`../../requirements/customer_tasks/Исправление режима отображения Hidden для карточек товаров.md`](../../requirements/customer_tasks/Исправление%20режима%20отображения%20Hidden%20для%20карточек%20товаров.md) |
 | **Скрины заказчика** | [`screenshots/`](screenshots/README.md) |
-| **Код** | не трогаем до апрува ТЗ / **go** |
+| **Код** | см. [`CHECKPOINT.md`](CHECKPOINT.md) — точка отката |
+| **Принято на Fly** | [`screenshots/04_fly_accepted_hidden_chips_2026-07-20.png`](screenshots/04_fly_accepted_hidden_chips_2026-07-20.png) |
 
 ### Зачем папка
 

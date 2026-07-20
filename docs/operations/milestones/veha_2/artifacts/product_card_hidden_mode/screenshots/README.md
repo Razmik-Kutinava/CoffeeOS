@@ -9,7 +9,8 @@
 |------|------|-----------|
 | `01_target_hidden_crop_as_should_be.png` | **Эталон — как нужно** | Разделы «Черный», «Холодные»: crop фото, placeholder «Нет фото», одинаковая высота |
 | `02_as_is_broken_hidden_sliver.png` | **Баг — как сейчас** | Подпись «как сейчас»: тонкая полоска / broken-image |
-| `03_local_mcp_mobile_hidden_crop_2026-07-20.png` | **Доказательство MCP local mobile** | Chrome DevTools `390×844 mobile+touch` · `/shop?tenant_id=demo-point-a` · первые 5 товаров с фото Unsplash · crop media виден |
+| `03_local_mcp_mobile_hidden_crop_2026-07-20.png` | **Доказательство MCP local mobile** | Chrome DevTools `390×844 mobile+touch` · crop media |
+| `04_fly_accepted_hidden_chips_2026-07-20.png` | **Принято на Fly** | Hidden-чипы + «+сумма»; каталог crop; точка отката → [`../CHECKPOINT.md`](../CHECKPOINT.md) |
 
 Не путать с:
 

@@ -1,5 +1,10 @@
 ﻿# CHANGELOG
 
+## 2026-07-20 — ops: CHECKPOINT Hidden/cart chips accepted on Fly
+
+- Docs only: `CHECKPOINT.md` + скрин `04_fly_accepted_…` · UI-код отката **`a1abfa0`**.
+- ТЗ Hidden: принято положение. Код приложения не меняли.
+
 ## 2026-07-20 — feat(shop): catalog cards −15%, sheet heights, hidden image chips
 
 - Каталог: карточки `w-[8.5rem]` (~−15% от w-40).
