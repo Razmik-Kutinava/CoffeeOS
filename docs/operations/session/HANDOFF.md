@@ -1,21 +1,25 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-20 (Hidden deploy Fly **v368**)  
+**Дата:** 2026-07-20 (Hidden: HTTPS demo images + CartSheet onerror — **ты деплоишь**)  
 **Ветка:** `develop`  
-**Прод:** https://coffeeos.fly.dev · release **v368** · image `deployment-01KXZYCJN44WFB2M0JP5CQXTBS` · HEAD `7505912`
+**Прод:** https://coffeeos.fly.dev · release **v368** (до твоего деплоя)
 
-### Hidden mode cards (SBR) — **REVIEW done** · deploy **v368**
+### Hidden mode cards — фикс фото после ложного MCP
 
 | Что | Статус |
 |-----|--------|
-| Канон-ТЗ | [`Исправление режима отображения Hidden…`](../milestones/veha_2/requirements/customer_tasks/Исправление%20режима%20отображения%20Hidden%20для%20карточек%20товаров.md) |
-| Скрины | **`[x]`** эталон + as-is + local MCP `03_…` |
-| PHASE 1–3 SBR | **`[x]`** |
-| Push develop | **`[x]`** `7505912` |
-| Deploy Fly | **`[x]`** **v368** (1-й attempt fail lock → retry OK) |
-| Апрув заказчика | **`[ ]`** — проверяет на Fly |
+| Crop `CategorySection` | **`[x]`** на v368 |
+| CartSheet `onerror` → «нет» (не broken-icon) | **`[x]`** код · ждать твой deploy |
+| `demo:catalog_images` — HTTPS Unsplash в БД | **`[x]`** rake · локально прогнан |
+| Почему REVIEW/MCP «ок» раньше | Локальные uploads ≠ Fly Neon/`/uploads` |
+| Твой deploy + на Fly `bin/rails demo:catalog_images` | **`[ ]`** |
 
-**Следующий шаг:** апрув заказчика на Fly (фото на prod могут быть пустыми — uploads локальные; код crop на месте).
+**После твоего deploy на Fly:**
+```
+fly ssh console -a coffeeos -C "bin/rails demo:catalog_images"
+```
+
+**Следующий шаг:** ты деплоишь → rake на Fly → апрув.
 
 ### SBR workflow (новое)
 

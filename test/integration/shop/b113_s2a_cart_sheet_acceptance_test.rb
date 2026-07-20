@@ -44,6 +44,14 @@ class Shop::B113S2aCartSheetAcceptanceTest < ActionDispatch::IntegrationTest
     assert_includes sheet, "modifierLabel"
   end
 
+  test "CartSheet lineThumb falls back to empty placeholder on image error" do
+    sheet = File.read(Rails.root.join("app/frontend/components/CartSheet.svelte"))
+
+    assert_match(/onerror/, sheet)
+    assert_includes sheet, 'data-testid="shop-cart-line-thumb-empty"'
+    assert_includes sheet, "brokenThumbUrls"
+  end
+
   test "CartSheet three modes exposed via data-cart-sheet-mode" do
     sheet = File.read(Rails.root.join("app/frontend/components/CartSheet.svelte"))
     thresholds = File.read(Rails.root.join("app/frontend/lib/cartSheetThresholds.js"))

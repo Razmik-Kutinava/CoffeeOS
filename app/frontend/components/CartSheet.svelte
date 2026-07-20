@@ -48,6 +48,8 @@
   let gestureStartY = 0
   let gestureActive = false
   let gestureZoneEl = $state(null)
+  /** URL с 404 — не показывать broken-icon в шторке */
+  let brokenThumbUrls = $state(/** @type {Set<string>} */ (new Set()))
 
   let showSheet = $derived(isCartSheetRoute(hash))
   let onCheckout = $derived(isCheckoutRoute(hash))
@@ -233,15 +235,26 @@
 {/snippet}
 
 {#snippet lineThumb(line, sizeClass, objectPosition = "")}
-  {#if line.image_url}
+  {@const thumbUrl = line.image_url || ""}
+  {@const showImg = Boolean(thumbUrl) && !brokenThumbUrls.has(thumbUrl)}
+  {#if showImg}
     <img
-      src={line.image_url}
+      data-testid="shop-cart-line-thumb"
+      src={thumbUrl}
       alt=""
-      class="{sizeClass} rounded-lg object-cover {objectPosition}"
+      class="{sizeClass} rounded-lg object-cover object-top {objectPosition}"
       decoding="async"
+      onerror={() => {
+        const next = new Set(brokenThumbUrls)
+        next.add(thumbUrl)
+        brokenThumbUrls = next
+      }}
     />
   {:else}
-    <div class="flex {sizeClass} items-center justify-center rounded-lg bg-[#333] text-[10px] text-[#888]">нет</div>
+    <div
+      data-testid="shop-cart-line-thumb-empty"
+      class="flex {sizeClass} items-center justify-center rounded-lg bg-[#333] text-[10px] text-[#888]"
+    >нет</div>
   {/if}
 {/snippet}
 

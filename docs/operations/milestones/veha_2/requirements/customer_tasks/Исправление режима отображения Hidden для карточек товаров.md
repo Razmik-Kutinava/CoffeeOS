@@ -108,5 +108,7 @@
 | Edge (skeleton / orient / empty) | backlog | не в этом шаге |
 | Регрессия shop / peek / expanded | PARTIAL | задача 7/0 · suite 8 pre-existing fail |
 | Апрув заказчика | `[ ]` | MCP / визуал |
+| Фикс Fly-фото (HTTPS rake + CartSheet onerror) | **код done** | ты deploy + `demo:catalog_images` на Fly |
 
-**Следующий шаг:** апрув / MCP Fly / **go** deploy.
+**Почему local MCP «PASS» не = Fly:** фото жили в gitignored `uploads` + локальная БД.  
+**Следующий шаг:** твой deploy → `fly ssh console -a coffeeos -C "bin/rails demo:catalog_images"`.

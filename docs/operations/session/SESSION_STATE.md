@@ -2,21 +2,18 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-20 (Hidden Fly **v368** deploy)  
-**Веха 1:** **закрыта** 2026-06-19.  
-**Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
-**§2.3 оплата витрина (Init→payment_url→callback):** **done** — базовый redirect на банк остаётся.
-
-**Навигация ops:** [../README.md](../README.md) · [milestones/PATH_MAP.md](milestones/PATH_MAP.md).
+**Дата:** 2026-07-20 (Hidden: CartSheet onerror + demo:catalog_images — ждать твой deploy)  
 
 | Сейчас | Дальше |
 |--------|--------|
-| **Hidden mode cards** | SBR **[x]** · deploy **v368** | апрув заказчика на Fly |
-| **Checkout CartSheet UX** | Фаза 2 stacked код **[x]** | MCP · апрув |
-| **UserCards / save_card** | deploy v366→**v368** поверх | апрув 3.5 |
-| **B1.13 CR-BOTTOM-NAV** | бар убран · cart BOTTOM_REM=0 | A1 апрув [ ] |
-| **B1.14 адрес в шапке** | **B1.14-3d** index map [x] | B1.14-4 cart |
-| **Product card peek cart** | S1–S7 код [x] | апрув заказчика |
+| **Hidden** | crop + onerror + rake HTTPS | **ты** deploy → `demo:catalog_images` на Fly → апрув |
+
+### Сессия 2026-07-20 (fix Hidden photos for Fly)
+
+- **CartSheet:** onerror → `shop-cart-line-thumb-empty`
+- **Rake:** `demo:catalog_images` (Unsplash HTTPS) — прогнан локально на demo-point-a
+- **Не деплоим** — деплой заказчик/владелец сам
+- **Урок:** local MCP с uploads ≠ приёмка на Fly
 
 ### Сессия 2026-07-20 (Hidden Fly deploy v368)
 

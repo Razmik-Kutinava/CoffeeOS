@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-07-20 — fix(shop): CartSheet thumb onerror + demo:catalog_images
+
+- `CartSheet` lineThumb: 404 → placeholder «нет» (не broken-icon); object-top.
+- `bin/rails demo:catalog_images` — первые 5 товаров demo-point-a → HTTPS Unsplash (локально и на Fly после деплоя).
+- Урок: local MCP с `public/uploads` ≠ Fly; приёмка Hidden должна включать prod assets / HTTPS URL.
+
 ## 2026-07-20 — deploy: Fly coffeeos v368 (Hidden crop)
 
 - Push `develop` `7505912` · `fly deploy` → **v368** (retry после ConcurrentMigrationError solid cache).
