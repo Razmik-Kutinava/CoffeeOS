@@ -117,7 +117,7 @@
 | 8 | **B1.11** | Режим работы точек продаж (УК) | **закрыта** · апрув `[x]` 2026-07-05 | [B1_11_tenant_operating_hours.md](customer_tasks/B1_11_tenant_operating_hours.md) |
 | 10 | **B1.13** | Новая навигация витрины — S1–S4 (шапка + поп-ап корзины) | **rev2** `[x]` апрув 2026-07-01 · **S4-канон** docs `[x]` · **S4 код** `[ ]` | [B1_13_shop_nav_profile_header.md](customer_tasks/B1_13_shop_nav_profile_header.md) |
 | 11 | **B1.14** | Адрес точки + выбор точки в шапке витрины | **клиент закрыт** · апрув 2026-07-05 · Cart `[ ]` | [B1_14_shop_tenant_address_header.md](customer_tasks/B1_14_shop_tenant_address_header.md) |
-| 12 | **Hidden mode cards** | Режим hidden — crop превью карточек товаров | **ТЗ `[x]`** · код `[ ]` · апрув `[ ]` | [Исправление режима отображения Hidden…](customer_tasks/Исправление%20режима%20отображения%20Hidden%20для%20карточек%20товаров.md) |
+| 12 | **Hidden mode cards** | Режим hidden — crop превью карточек товаров | **SBR SPEC `[x]`** · RED `[ ]` · код `[ ]` | [Исправление режима отображения Hidden…](customer_tasks/Исправление%20режима%20отображения%20Hidden%20для%20карточек%20товаров.md) |
 
 
 ---
