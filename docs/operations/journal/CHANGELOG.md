@@ -1,5 +1,10 @@
 ﻿# CHANGELOG
 
+## 2026-07-20 — deploy: Fly coffeeos v368 (Hidden crop)
+
+- Push `develop` `7505912` · `fly deploy` → **v368** (retry после ConcurrentMigrationError solid cache).
+- Hidden `CategorySection` crop на prod; локальные Unsplash-файлы на Fly **не** уезжают (uploads gitignored).
+
 ## 2026-07-20 — ops: Hidden local MCP mobile proof
 
 - 5 Unsplash фото → первые товары demo-point-a (`public/uploads`, gitignored).

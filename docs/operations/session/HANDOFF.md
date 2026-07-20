@@ -1,22 +1,21 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-20 (SBR REVIEW — Hidden mode cards done)  
+**Дата:** 2026-07-20 (Hidden deploy Fly **v368**)  
 **Ветка:** `develop`  
-**Прод:** https://coffeeos.fly.dev · release **v366** (Hidden **не** задеплоен)
+**Прод:** https://coffeeos.fly.dev · release **v368** · image `deployment-01KXZYCJN44WFB2M0JP5CQXTBS` · HEAD `7505912`
 
-### Hidden mode cards (SBR) — **REVIEW done**
+### Hidden mode cards (SBR) — **REVIEW done** · deploy **v368**
 
 | Что | Статус |
 |-----|--------|
 | Канон-ТЗ | [`Исправление режима отображения Hidden…`](../milestones/veha_2/requirements/customer_tasks/Исправление%20режима%20отображения%20Hidden%20для%20карточек%20товаров.md) |
-| Скрины | **`[x]`** [`product_card_hidden_mode/screenshots/`](../milestones/veha_2/artifacts/product_card_hidden_mode/screenshots/README.md) |
-| PHASE 1 SPEC | **`[x]`** |
-| PHASE 2 RED | **`[x]`** `986c304` |
-| PHASE 2 GREEN | **`[x]`** `71d6eb6` · `CategorySection.svelte` |
-| PHASE 3 REVIEW | **`[x]`** · тесты 7/0 |
-| Deploy / MCP / апрув | MCP local mobile **`[x]`** · скрин `03_…` · апрув заказчика / deploy **`[ ]`** |
+| Скрины | **`[x]`** эталон + as-is + local MCP `03_…` |
+| PHASE 1–3 SBR | **`[x]`** |
+| Push develop | **`[x]`** `7505912` |
+| Deploy Fly | **`[x]`** **v368** (1-й attempt fail lock → retry OK) |
+| Апрув заказчика | **`[ ]`** — проверяет на Fly |
 
-**Следующий шаг:** апрув заказчика по скрину `03_local_mcp_mobile_hidden_crop_2026-07-20.png` · deploy — только по **go**.
+**Следующий шаг:** апрув заказчика на Fly (фото на prod могут быть пустыми — uploads локальные; код crop на месте).
 
 ### SBR workflow (новое)
 

@@ -2,7 +2,7 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-20 (SBR PHASE 3 REVIEW — Hidden mode cards **done**)  
+**Дата:** 2026-07-20 (Hidden Fly **v368** deploy)  
 **Веха 1:** **закрыта** 2026-06-19.  
 **Веха 2:** прогон 10 блоки **0–14** ✅ (ops); **§I не закрыта** (§E).  
 **§2.3 оплата витрина (Init→payment_url→callback):** **done** — базовый redirect на банк остаётся.
@@ -11,12 +11,19 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **Hidden mode cards (SBR)** | SPEC→RED→GREEN→**REVIEW [x]** · код `71d6eb6` | апрув / MCP / deploy |
-| **Checkout CartSheet UX** | Фаза 2 stacked код **[x]** | deploy · MCP · апрув |
-| **UserCards / save_card** | deploy v366 **[x]** · MCP 2 карты **[x]** · скрин 8925 **[x]** | апрув → 3.5 · E2E real MIR |
+| **Hidden mode cards** | SBR **[x]** · deploy **v368** | апрув заказчика на Fly |
+| **Checkout CartSheet UX** | Фаза 2 stacked код **[x]** | MCP · апрув |
+| **UserCards / save_card** | deploy v366→**v368** поверх | апрув 3.5 |
 | **B1.13 CR-BOTTOM-NAV** | бар убран · cart BOTTOM_REM=0 | A1 апрув [ ] |
 | **B1.14 адрес в шапке** | **B1.14-3d** index map [x] | B1.14-4 cart |
 | **Product card peek cart** | S1–S7 код [x] | апрув заказчика |
+
+### Сессия 2026-07-20 (Hidden Fly deploy v368)
+
+- **Push:** `develop` → `7505912`
+- **Deploy:** 1-й fail `ConcurrentMigrationError` solid cache lock → retry → **v368** OK
+- **Image:** `deployment-01KXZYCJN44WFB2M0JP5CQXTBS` · web checks passing
+- **Стоп:** заказчик проверяет на https://coffeeos.fly.dev
 
 ### Сессия 2026-07-20 (SBR PHASE 3 REVIEW — Hidden mode cards)
 
