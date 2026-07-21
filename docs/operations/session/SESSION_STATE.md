@@ -2,11 +2,18 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-21 (интейк Quick Repeat Bottom Sheet — PHASE 0 done, ждём go на SPEC)  
+**Дата:** 2026-07-21 (Quick Repeat Bottom Sheet — PHASE 1: SPEC done, Gate 1: жду go на B1-RED)  
 
 | Сейчас | Дальше |
 |--------|--------|
-| Интейк ТЗ «Быстрый повтор частых покупок» завершён: док 1:1, 6 скринов, индексы | **go** → PHASE 1: SPEC (todo.md, маппинг тестов RSpec/Vitest → Minitest) |
+| SPEC в todo.md: 4 backend-пары (B1–B4) + 5 frontend-пар (F1–F5), маппинг ТЗ→стек, 3 вопроса владельцу | **go** → PHASE 2: BUILD, B1-RED (тесты `Shop::CustomerFrequentProductsService`) |
+
+### Сессия 2026-07-21 (PHASE 1: SPEC Quick Repeat Bottom Sheet — docs only)
+
+- `todo.md` переписан под фичу: пары RED/GREEN — B1 сервис частых товаров · B2 категории (переиспользуем существующий API) · B3 кэш `shop/freq/…` TTL 30 мин + bust в `OrderCreator` (hot-path, минимальный дифф) · B4 `GET /shop/api/frequent_products` · F1 `shopFrequentCache.js` · F2 `RepeatSection.svelte` (peek/expanded/hidden, канон высот не трогаем) · F3 счётчики · F4 «повторить в 1 клик»/«+ещё» · F5 «полатить в 1 клик» (scope-вопрос).
+- Маппинг ТЗ→стек: RSpec/Vitest → Minitest (`test/services/shop/`, `test/integration/shop/api/`); 401 для гостя → пустой массив (витрина гостевая, `Shop::CustomerSession`); Timecop → `travel_to`; tsc → eslint+svelte compile.
+- Разведка: схема БД достаточна (`order_items.modifier_options` jsonb + `orders.customer_id/source/created_at`); `CartSheet.svelte` 514 строк → новая секция только отдельным компонентом; кэш-паттерн `Rails.cache` как в `categories_controller` (5 мин) — наш с TTL 30 мин.
+- Код приложения не менялся.
 
 ### Сессия 2026-07-21 (intake Quick Repeat Bottom Sheet — без кода)
 

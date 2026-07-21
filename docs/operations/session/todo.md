@@ -1,52 +1,85 @@
-# todo — Bottom sheet expanded grid (SBR)
+# todo — Quick Repeat Bottom Sheet (SBR)
 
 > Не путать с `CHECKLIST.md` вехи.  
-> **ТЗ:** [`customer_tasks/Bottom Sheet expanded mode и внутренняя сетка 4 в ряд.md`](../milestones/veha_2/requirements/customer_tasks/Bottom%20Sheet%20expanded%20mode%20и%20внутренняя%20сетка%204%20в%20ряд.md)  
-> **Скрины:** [`artifacts/bottom_sheet_expanded_grid/`](../milestones/veha_2/artifacts/bottom_sheet_expanded_grid/README.md)  
-> Предыдущая фича (Hidden mode cards): PHASE 3 done, апрув заказчика `[ ]` — см. ТЗ Hidden.
+> **ТЗ:** [`customer_tasks/Быстрый повтор частых покупок Quick Repeat Bottom Sheet.md`](../milestones/veha_2/requirements/customer_tasks/Быстрый%20повтор%20частых%20покупок%20Quick%20Repeat%20Bottom%20Sheet.md)  
+> **Скрины:** [`artifacts/quick_repeat_bottom_sheet/`](../milestones/veha_2/artifacts/quick_repeat_bottom_sheet/README.md)  
+> Предыдущая фича (Bottom sheet expanded grid): закрыта 2026-07-21, deploy `[ ]` по апруву.
 
 ## Текущая фаза
 
-**ЗАКРЫТА 2026-07-21 (решение владельца)** · текущий UX принят как канон: expanded — 1-й ряд сетки · peek — 2-й ряд · hidden — половина · код не менялся · deploy `[ ]` только по апруву
+**PHASE 1: SPEC — `[x]` 2026-07-21 · Gate 1: жду go на B1-RED**
 
-## Закрытие (после RESTART)
+## Маппинг ТЗ → наш стек (решения SPEC)
 
-- [x] Владелец поправил текст ТЗ («внутри сетки»), упоминания правок шторки удалены из сценариев
-- [x] Фиксирующие тесты канона: `bottom_sheet_heights_canon_test.rb` — высоты 52/56·34/38·24 + prog26, layout шторки без grid, каталог 8.5rem — **3 runs / 0 fail** (намеренного RED нет: фича уже соответствует канону, тесты сразу зелёные)
-- [x] Регрессия cart sheet (8 файлов): **59 runs / 486 assertions / 0 failures**
-- [ ] Deploy — только по явному апруву владельца
+| ТЗ | Наш стек | Почему |
+|---|---|---|
+| RSpec `spec/…` | Minitest: `test/services/shop/`, `test/integration/shop/api/`, `test/integration/shop/` | В репо нет RSpec; канон — зеркало `test/` (все прошлые задачи так) |
+| Vitest + Svelte Testing Library `src/lib/…` | Integration-тесты на разметку/логику Svelte-исходников (паттерн `bottom_sheet_heights_canon_test.rb`, `b113_s2b_mode_persistence_test.rb`) | Vitest-инфраструктуры нет; лимит < 50 мс и 60fps — MCP-чек на Fly, не unit |
+| `GET /shop/api/frequent_products` → 401 без авторизации | Гость без `customer_id` → `{ frequent_items: [] }` (как `orders#history` → `[]`) | Витрина гостевая (`Shop::CustomerSession`), 401 сломал бы UX каталога |
+| «Timecop» | `travel_to` (ActiveSupport::Testing::TimeHelpers) | Стандарт Minitest/Rails |
+| tsc | eslint + svelte compile check | Фронт на JS (решение владельца в прошлой задаче) |
+| Bottom sheet «занимает ~90% высоты» / «peek ~200-250px» | Канон высот шторки НЕ трогаем (`bottom_sheet_heights_canon_test.rb`: 52/56 · 34/38 · 24) | Канон принят владельцем 2026-07-21; секция «повторить» встраивается в существующие режимы |
 
-## Решения владельца (2026-07-21)
+## Ограничения (проверено по коду)
 
-1. Размеры карточек сетки — канон peek-карточек: `w ~118px` (grid-cols-4 внутри 414px), gap-2, фото сверху, название 1 строка ellipsis, цена × кол-во, кнопки −/+.
-2. Кнопка «Удалить» в карточках сетки — **убираем** («−» при кол-ве 1 удаляет, undo остаётся); показать заказчику — финальное слово за ним.
-3. Tablet/desktop: шторка остаётся `max-width: 414px`, «4 в ряд» внутри неё; полноширинный пересчёт не делаем.
-4. Вместо tsc (фронт на JS) — линт + сборка Vite.
+- Схема БД не меняется: агрегация по `orders` (customer_id, tenant_id, source: :mobile, created_at) + `order_items` (`product_id`, `modifier_options` jsonb, `product_name`) — всё есть.
+- Без тяжёлых JOIN: 2 запроса (orders window → order_items по order_ids) + агрегация в Ruby (`group_by` по `[product_id, modifier_options]`) — паттерн `coffeeos-performance`.
+- Лимиты в константах сервиса: `WINDOW_DAYS = 45` (диапазон 30–60), `MAX_REPEAT_ITEMS = 3`, `CACHE_TTL = 30.minutes`.
+- RLS: сервис вызывается из `Shop::Api::BaseController` (tenant context уже установлен); запросы только с `tenant_id`.
+- `CartSheet.svelte` = 514 строк (> 200) — секцию «повторить» НЕ вписываем внутрь: отдельный компонент `RepeatSection.svelte` + отдельный store/lib.
+- Hot-path: инвалидация кэша касается `Shop::OrderCreator` — минимальный дифф (одна строка bust после commit), регрессия оплаты обязательна.
 
-## Пункты SBR
+## Пункты SBR (пары RED → go → GREEN)
 
-### PHASE 1: SPEC — [x] 2026-07-21
+### B1 — сервис частых товаров (ТЗ Шаг 1)
+- [ ] RED: `test/services/shop/customer_frequent_products_service_test.rb` — 5 заказов/45 дней, 3 с одинаковым напитком+модификаторами → топ-1..3 по частоте+свежести (`product_id, name, price, image_url, modifier_options`); 0 заказов → `[]`; > 3 частых → топ-3; граничные даты окна
+- [ ] GREEN: `app/services/shop/customer_frequent_products_service.rb` (константы `WINDOW_DAYS`, `MAX_REPEAT_ITEMS`; 2 запроса + группировка в Ruby)
 
-### PHASE 2: RED — [x] 2026-07-21
-- [x] `test/integration/shop/bottom_sheet_expanded_grid_test.rb`: grid-cols-4 + `shop-cart-expanded-grid` + `data-cart-layout="grid"`; карточка `shop-cart-grid-card` (−/+ без «Удалить»); высоты 52/56 + bump `CART_SHEET_BUILD` prog27
-- [x] Прогон: 3 runs / 3 failures — падают именно на новой разметке (RED ожидаем)
+### B2 — категории витрины (ТЗ Шаг 2): переиспользуем существующее
+- [ ] Существующий `shop/api/categories` + `products` уже отдают категории/товары с кэшем 5 мин и placeholder — НОВЫЙ сервис не пишем
+- [ ] RED/GREEN: тест-фиксация формата payload `frequent_products` (см. B4) — категории в ответе из существующего пути
 
-### PHASE 2: GREEN — [x] 2026-07-21
-- [x] Шаг A: высоты 52/56 оставлены (Шаг 1 ТЗ подтверждён скрином) + bump `CART_SHEET_BUILD` prog27
-- [x] Шаг B: ветка expanded → `grid-cols-4 content-start gap-2 overflow-y-auto`; карточки канон peek (фото → openEditCard, line-clamp-1, цена × кол-во, −/+ без «Удалить»); файл стал короче (−13 строк)
-- [x] Store/корзина, +/−, checkout, HIDDEN/PEEK/single, header — не тронуты
-- [x] Обновлены 5 старых тестов на новые testid/prog27 (expanded-horizontal→expanded-grid, expanded-card→grid-card)
-- [x] Регрессия cart sheet: 8 файлов — 59 runs / 0 failures; Svelte compile OK (5 a11y warn — pre-existing класс)
-- [!] Полный `test/integration/shop/` завис локально после 43 тестов (убит) — env-проблема, не этот дифф → ISSUES
-- [x] Коммит `feat: … [GREEN]`
+### B3 — кэш + инвалидация (ТЗ Шаг 3)
+- [ ] RED: тест кэша `shop/freq/#{tenant_id}/#{customer_id}` TTL 30 мин (`travel_to`); тест инвалидации при создании заказа
+- [ ] GREEN: `Rails.cache` в сервисе (`fetch`/`bust_cache!`); bust-хук: `Shop::OrderCreator` (после commit, 1 строка — hot-path, минимальный дифф) + settle оплаты (`TbankCallbackJob`/`settle_confirmed!` — уточнить точку на GREEN)
 
-### PHASE 3: REVIEW — [x] 2026-07-21
-- [x] Sanity: UI-only (Svelte + JS-константа), без N+1/RLS; rubocop новых правок чист
-- [x] Ops: SESSION_STATE / CHANGELOG / HANDOFF / ISSUES (🟡 зависание полного shop-прогона)
-- [ ] Скрины для заказчика (expanded: 1 ряд каталога; сетка 4 в ряд; скролл при 5+) — MCP Fly после деплоя, по go
-- [ ] Апрув заказчика (в т.ч. решение по «Удалить» в карточках) / MCP Fly / deploy — ждать go
+### B4 — API endpoint (ТЗ Шаг 4)
+- [ ] RED: `test/integration/shop/api/frequent_products_test.rb` — 200 `{ frequent_items: [...], categories: {...} }`; гость без customer_id → `frequent_items: []`; изоляция тенантов (customer A ≠ B)
+- [ ] GREEN: роут `get "frequent_products"` в `namespace :shop/api` + `Shop::Api::FrequentProductsController` (тонкий: сервис → JSON)
+
+### F1 — клиентский кэш + инициализация (ТЗ Шаг 5)
+- [ ] RED: `test/integration/shop/quick_repeat_bottom_sheet_test.rb` — фиксация `shopFrequentCache.js` (ключ `coffeeos_shop_frequent_v1`, паттерн `shopCartCache.js`) + фоновый refresh + fallback на кэш при offline/500
+- [ ] GREEN: `app/frontend/lib/shopFrequentCache.js` + загрузка в store при открытии шторки
+
+### F2 — секция «повторить» в режимах peek/expanded/hidden (ТЗ Шаги 6–8, скрины 01–05)
+- [ ] RED: разметка `RepeatSection.svelte` — 1–3 мини-карточки (фото, название ellipsis, цена, −1+), drag-handle есть; hidden: превью повтора + «+цена» (скрины 04–05); expanded: секция «повторить» внизу (скрины 02–03); восстановление последнего режима (уже есть `cartSheetModeCache.js` — переиспользуем)
+- [ ] GREEN: `app/frontend/components/RepeatSection.svelte` + встройка в `CartSheet.svelte` (минимальные точки входа, канон высот не трогаем)
+
+### F3 — карточки повтора: счётчики и localStorage (ТЗ Шаги 9–10)
+- [ ] RED: −1+ на карточке повтора мгновенно пишет в localStorage; клик по карточке категории → добавление в корзину с дефолтами (существующий `shopCartAdd.js`); ошибка сети → тост
+- [ ] GREEN: логика в `app/frontend/lib/frequentRepeatStore.js` (лимит ≤ 120 строк)
+
+### F4 — действия «повторить в 1 клик» / «+ещё» / кастомизация (ТЗ Шаги 11–12, скрин 06)
+- [ ] RED: «повторить в 1 клик» → все позиции повтора в корзину с сохранёнными `modifier_options` → hidden + success-тост; «+ещё» → expanded; ошибка → error-тост без смены состояния; кастомизация — существующий флоу `Product.svelte` (`cart_line`/модификаторы) — фиксация перехода
+- [ ] GREEN: реализация в store + `RepeatSection.svelte`
+
+### F5 — «полатить в 1 клик» на карточке повтора (скрин 06) — **SCOPE-ВОПРОС**
+- [ ] В 12 шагах ТЗ нет, на скрине 6 есть (кнопка под каждой карточкой). Существует `POST /shop/api/payments/one_click`. Предложение: отдельным шагом после F4, по явному go владельца (оплата = hot-path)
+
+### PHASE 3: REVIEW
+- [ ] Sanity: N+1 / RLS / rubocop / eslint + svelte compile
+- [ ] Регрессия зон: `bin/rails test test/integration/shop/` (таргетные списки — полный прогон зависает, ISSUES 🟡) + оплата §2.3 (тронут `OrderCreator`)
+- [ ] Ops: SESSION_STATE / CHANGELOG / HANDOFF
+- [ ] MCP Fly скрины по состояниям (peek/expanded/hidden + повтор) — после деплоя по go
+
+## Вопросы владельцу (не блокируют B1–B4)
+
+1. **F5 «полатить в 1 клик»** — делать? (скрин есть, в шагах ТЗ нет).
+2. **401 → пустой массив** для гостя — принять адаптацию (иначе ломаем гостевой каталог)?
+3. Секция «повторить» показывается только при наличии частых заказов? (0 заказов → шторка без секции, как сейчас).
 
 ## Заметки
 
-- Пустая корзина: уже есть MODE_EMPTY «тут будут твои заказы» — текст «Корзина пуста» из ТЗ не меняем без слова заказчика (backlog-вопрос).
-- Pre-existing shop fails (если всплывут) — фиксировать в ISSUES, не чинить молча.
+- Категории «Черный / Холодные / Сезонные напитки» — demo-контент, в коде не хардкодим: берём реальные категории тенанта.
+- Race condition localStorage + «Повторить» — паттерн `bumpChain` из `cartSheetStore.js`.
+- Pre-existing shop fails — в ISSUES, не чинить молча.
