@@ -1,5 +1,13 @@
 ﻿# CHANGELOG
 
+## 2026-07-21 — fix(shop): Quick Repeat — фиксы код-ревью (ключ счётчика, честный тост, hot-path rescue)
+
+- Код-ревью диффа фичи (`coffeeos-code-review.mdc`): блокеров нет, 3 замечания → исправлены парой RED (`397dd5c`) / GREEN (`9afdff7`).
+- **Ключ счётчика** — был `product_id-индекс` (qty «переезжал» на чужую карточку при смене порядка топ-3 после refresh) → стабильный `product_id:JSON(modifier_options)`; компонент использует общий `frequentCardKey` из store (дубль `keyOf` удалён).
+- **Частичное добавление** — `repeatAllToCart` при падении на середине теперь показывает «Добавлено N из M — проверьте корзину» вместо общего «не удалось» (повторный клик давал бы дубли).
+- **`bust_cache!`** — rescue + warn-лог внутри сервиса: деградация кэш-хранилища больше не роняет создание заказа/callback оплаты (hot-path), худший случай — устаревший топ-3 до TTL.
+- Тесты: 3 файла фиксов 20/0 · остальная фича 29/0 · оплата §2.3 24/0 (2 pre-existing skips) · T-Bank callback 31/0 · svelte compile + compileModule OK · rubocop 0 offenses.
+
 ## 2026-07-21 — docs(ops): Quick Repeat — реальный MCP-прогон на Fly без стабов + чеклист заказчику
 
 - Демо-стенд: посеян клиент `mcp-quickrepeat@example.com` с 4 mobile-заказами (Neon, через локальный `pg`: `fly ssh console -C` теряет аргументы команды); вход в витрину штатным email-OTP (код из `shop_email_otp_codes`).

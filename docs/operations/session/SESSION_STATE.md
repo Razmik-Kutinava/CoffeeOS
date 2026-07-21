@@ -2,11 +2,20 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-21 (Quick Repeat Bottom Sheet — задеплоено + два MCP-прогона: стаб 6/6 и реальный 8/8 без стабов; ждёт апрув заказчика)  
+**Дата:** 2026-07-21 (Quick Repeat — MCP real-run 8/8 + код-ревью пройдено, 3 замечания исправлены RED/GREEN; ждёт апрув заказчика)  
 
 | Сейчас | Дальше |
 |--------|--------|
-| Deploy Fly OK · MCP стаб 6/6 · **MCP real-run 8/8 PASS без стабов** (посеян клиент с историей, вход email-OTP) + чеклист заказчику в `fly_real_run_mcp_2026-07-21.json` · UX-1/UX-2/UX-3 в DEMO_FEEDBACK open | Передать заказчику чеклист (`customer_checklist`) + скрины `fly_real_run/` · решение владельца по UX-1/2/3 · живая оплата в рабочие часы точки |
+| Deploy Fly OK · MCP стаб 6/6 + real-run 8/8 без стабов · **код-ревью: блокеров нет, 3 замечания исправлены** (`397dd5c`/`9afdff7`), регрессия оплаты/callback/фичи зелёная · UX-1/2/3 в DEMO_FEEDBACK open | Передать заказчику чеклист + скрины · решение владельца по UX-1/2/3 · **редеплой на Fly** (фиксы ревью пока только локально) — по явному апруву |
+
+### Сессия 2026-07-21 (код-ревью Quick Repeat + фиксы замечаний 1–3)
+
+- Ревью диффа `bae3fef..HEAD` по `coffeeos-code-review.mdc`: блокеров нет; RLS/N+1/секреты чисто; 3 замечания.
+- RED `397dd5c`: стабильный ключ счётчика (не индекс), честный тост «Добавлено N из M», bust_cache! не роняет hot-path (подмена singleton `Rails.cache.delete` — `minitest/mock` в minitest 6 ломает optparse, стабим руками).
+- GREEN `9afdff7`: `frequentCardKey(item)` = `product_id:JSON(modifier_options)` (store 120 строк, лимит ок); `RepeatSection` импортирует ключ из store (дубль keyOf удалён); `repeatAllToCart` считает added; rescue+warn в `bust_cache!`.
+- Прогоны: фиксы 20/0 · фича 29/0 · оплата §2.3 24/0 (2 skips pre-existing) · T-Bank callback 31/0 · svelte compile OK · rubocop 4 файла 0 offenses.
+- Nits отложены: общий кэш categories_by_name, константа тост-таймера → PRACTICES.
+- ⚠️ Фиксы **не задеплоены** — на Fly пока версия до ревью.
 
 ### Сессия 2026-07-21 (MCP real-run Quick Repeat — без стабов)
 
