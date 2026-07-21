@@ -60,12 +60,32 @@ class Shop::QuickRepeatActionsTest < ActionDispatch::IntegrationTest
     assert_includes product, "selected_modifiers"
   end
 
+  # Ревью (замечание 2): последовательное добавление может упасть на середине —
+  # часть позиций уже в корзине. Тост обязан говорить «Добавлено N из M»,
+  # а не общее «не удалось» (иначе повторный клик даёт дубли первых позиций).
+  test "partial add failure reports honest added-of-total toast" do
+    store = File.read(Rails.root.join("app/frontend/lib/frequentRepeatStore.js"))
+
+    assert_includes store, "added", "store считает успешно добавленные позиции"
+    assert_includes store, "Добавлено ${added} из ${items.length}",
+      "error-тост при частичном добавлении честный: N из M"
+    assert_includes store, "Не удалось повторить заказ",
+      "полный провал (0 добавлено) — прежнее сообщение"
+  end
+
   # Зеркало контракта действий (как mirror-тесты F1–F3)
   test "actions mirror: success hides sheet, error keeps mode" do
     assert_equal [ :hidden, :success ], repeat_outcome(ok: true, mode: :peek)
     assert_equal [ :peek, :error ], repeat_outcome(ok: false, mode: :peek)
     assert_equal [ :expanded, :error ], repeat_outcome(ok: false, mode: :expanded)
     assert_equal :expanded, more_outcome
+  end
+
+  # Зеркало сообщения частичного добавления
+  test "partial add mirror: message depends on added count" do
+    assert_equal "Не удалось повторить заказ", partial_message(0, 3)
+    assert_equal "Добавлено 1 из 3 — проверьте корзину", partial_message(1, 3)
+    assert_equal "Добавлено 2 из 3 — проверьте корзину", partial_message(2, 3)
   end
 
   private
@@ -76,5 +96,9 @@ class Shop::QuickRepeatActionsTest < ActionDispatch::IntegrationTest
 
   def more_outcome
     :expanded
+  end
+
+  def partial_message(added, total)
+    added.positive? ? "Добавлено #{added} из #{total} — проверьте корзину" : "Не удалось повторить заказ"
   end
 end

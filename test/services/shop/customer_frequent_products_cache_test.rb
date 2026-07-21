@@ -59,6 +59,20 @@ class Shop::CustomerFrequentProductsCacheTest < ActiveSupport::TestCase
     end
   end
 
+  # Ревью (замечание 3): bust_cache! вызывается в hot-path (создание заказа,
+  # callback оплаты) — деградация кэш-хранилища не должна ронять заказ/оплату.
+  test "bust_cache! never raises when cache store fails (hot-path safety)" do
+    cache = Rails.cache
+    cache.define_singleton_method(:delete) { |*_a, **_kw| raise StandardError, "cache store down" }
+    begin
+      assert_nothing_raised do
+        Shop::CustomerFrequentProductsService.bust_cache!(tenant_id: @tenant.id, customer_id: @customer.id)
+      end
+    ensure
+      cache.singleton_class.remove_method(:delete)
+    end
+  end
+
   test "bust_cache! forces recompute" do
     create_paid_order!(created_at: 1.day.ago)
     cached_call
