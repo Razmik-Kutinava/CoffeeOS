@@ -1,6 +1,11 @@
 import { writable } from "svelte/store"
 import { api } from "./api.js"
-import { readFrequentCache, writeFrequentCache } from "./shopFrequentCache.js"
+import {
+  readFrequentCache,
+  writeFrequentCache,
+  readFrequentQty,
+  writeFrequentQty
+} from "./shopFrequentCache.js"
 
 /** Секция «повторить»: 1–3 частых товара клиента (GET /shop/api/frequent_products) */
 export const frequentItems = writable([])
@@ -8,6 +13,22 @@ export const frequentItems = writable([])
 export const frequentCategories = writable({})
 /** true после первой инициализации (из кэша или сети) */
 export const frequentLoaded = writable(false)
+/** Счётчики карточек повтора: ключ карточки → количество (минимум 1) */
+export const frequentQuantities = writable({})
+
+let currentQuantities = {}
+frequentQuantities.subscribe((v) => { currentQuantities = v })
+
+/**
+ * Изменение счётчика −1+: минимум 1 (удаления из повтора нет),
+ * мгновенная синхронная запись в localStorage — переживает перезагрузку.
+ */
+export function setFrequentQty(key, qty) {
+  const next = { ...currentQuantities, [key]: Math.max(1, Number(qty) || 1) }
+  frequentQuantities.set(next)
+  writeFrequentQty(next)
+  return next
+}
 
 /**
  * Мгновенный старт из localStorage (< 50 мс, без сети) — вызывать при
@@ -20,6 +41,10 @@ export function initFrequentFromCache() {
   }
   if (cached && cached.categories && typeof cached.categories === "object") {
     frequentCategories.set(cached.categories)
+  }
+  const qty = readFrequentQty()
+  if (qty && typeof qty === "object") {
+    frequentQuantities.set(qty)
   }
   frequentLoaded.set(true)
   return cached

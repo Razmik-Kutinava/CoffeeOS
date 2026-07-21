@@ -7,7 +7,7 @@
 
 ## Текущая фаза
 
-**PHASE 2: BUILD — F3-RED `[x]` 2026-07-21 (5 runs / 3 failures — qty-персиста нет, ожидаемо) · Gate 2: жду go на F3-GREEN**
+**PHASE 2: BUILD — F3 GREEN `[x]` 2026-07-21 (F1–F3 13/0 · регрессия шторки 27/0 · esbuild + svelte compile OK) · жду go на F4-RED («повторить в 1 клик» / «+ещё»)**
 
 ## Маппинг ТЗ → наш стек (решения SPEC)
 
@@ -57,7 +57,7 @@
 
 ### F3 — карточки повтора: счётчики и localStorage (ТЗ Шаги 9–10)
 - [x] RED 2026-07-21: `test/integration/shop/quick_repeat_counters_test.rb` — 5 тестов (отдельный ключ `coffeeos_shop_frequent_qty_v1` + read/writeFrequentQty в `shopFrequentCache.js` · store `frequentQuantities` + `setFrequentQty` с мгновенным `writeFrequentQty` и `Math.max(1,` + восстановление через `readFrequentQty` при init + лимит ≤120 строк · `RepeatSection` на store вместо `let quantities = $state` · фиксация клика каталога → Product · mirror clamp-логики). Прогон: **5 runs / 3 failures** (qty-персиста нет — намеренный RED `[TDD]`; фиксации Product-клика и mirror зелёные сразу). Решение: «клик по карточке категории → сразу в корзину с дефолтами» (ТЗ Шаг 9) противоречит Шагу 12 (клик → модалка модификаторов) — оставляем канон перехода в Product, вопрос заказчику
-- [ ] GREEN: qty-хранилище в `shopFrequentCache.js` + store в `frequentRepeatStore.js` (≤ 120 строк) + `RepeatSection.svelte` на store
+- [x] GREEN 2026-07-21: `shopFrequentCache.js` +`FREQUENT_QTY_KEY`/read/writeFrequentQty (отдельный ключ — refresh данных счётчики не затирает); `frequentRepeatStore.js` (61 строка ≤ 120) — store `frequentQuantities` + `setFrequentQty` (clamp `Math.max(1,`, синхронный `writeFrequentQty` на каждое изменение) + восстановление qty в `initFrequentFromCache`; `RepeatSection.svelte` — bump через `setFrequentQty`, локальное зеркало `storeQty` только из подписки на store. Тесты F1–F3 **13 runs / 116 assertions / 0 failures**; регрессия шторки+каталог (heights canon, b113, checkout UX, catalog hidden card) **27 runs / 265 assertions / 0 failures**; esbuild + svelte compile OK
 
 ### F4 — действия «повторить в 1 клик» / «+ещё» / кастомизация (ТЗ Шаги 11–12, скрин 06)
 - [ ] RED: «повторить в 1 клик» → все позиции повтора в корзину с сохранёнными `modifier_options` → hidden + success-тост; «+ещё» → expanded; ошибка → error-тост без смены состояния; кастомизация — существующий флоу `Product.svelte` (`cart_line`/модификаторы) — фиксация перехода

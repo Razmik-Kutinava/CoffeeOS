@@ -2,11 +2,17 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-21 (Quick Repeat Bottom Sheet — PHASE 2: BUILD, F2 GREEN done, жду go на F3-RED)  
+**Дата:** 2026-07-21 (Quick Repeat Bottom Sheet — PHASE 2: BUILD, F3 GREEN done, жду go на F4-RED)  
 
 | Сейчас | Дальше |
 |--------|--------|
-| B1–B4 + F1–F2 закрыты GREEN (сервис, кэш, API, клиентский кэш/store, секция «повторить» в шторке); коммит F2 `71ab631` | **go** → F3-RED (expanded: каталог по категориям из frequentCategories) |
+| B1–B4 + F1–F3 закрыты GREEN (сервис, кэш, API, клиентский кэш/store, секция «повторить», счётчики с персистом) | **go** → F4-RED («повторить в 1 клик» / «+ещё» / кастомизация) |
+
+### Сессия 2026-07-21 (F3 — счётчики карточек повтора + localStorage)
+
+- RED `abac6eb`: `test/integration/shop/quick_repeat_counters_test.rb` — 5 тестов (qty-ключ в кэше, store `frequentQuantities`+`setFrequentQty` с clamp и персистом, RepeatSection на store, фиксация клика каталога → Product, mirror clamp). Решение: конфликт ТЗ Шаг 9 (клик → сразу в корзину) vs Шаг 12 (клик → модалка модификаторов) — оставлен канон Product, вопрос заказчику.
+- GREEN: `shopFrequentCache.js` + `FREQUENT_QTY_KEY`/read/writeFrequentQty; `frequentRepeatStore.js` (61 строка) + `frequentQuantities`/`setFrequentQty` (Math.max(1,…), синхронная запись) + восстановление в init; `RepeatSection.svelte` — bump через store.
+- Тесты: F1–F3 **13 runs / 116 assertions / 0 failures**; регрессия шторки+каталог **27 runs / 265 assertions / 0 failures**; esbuild + svelte compile OK.
 
 ### Сессия 2026-07-21 (F2 — секция «повторить» в CartSheet)
 

@@ -1,28 +1,32 @@
 <script>
   import { onMount } from "svelte"
-  import { frequentItems } from "../lib/frequentRepeatStore.js"
+  import { frequentItems, frequentQuantities, setFrequentQty } from "../lib/frequentRepeatStore.js"
 
   let items = $state([])
-  /** Счётчики карточек: ключ карточки → количество (локально, до add-to-cart в F4) */
-  let quantities = $state({})
+  /** Зеркало store frequentQuantities — источник истины store + localStorage (F3, ТЗ Шаг 10) */
+  let storeQty = $state({})
   /** URL с 404 — не показывать broken-icon */
   let brokenUrls = $state(/** @type {Set<string>} */ (new Set()))
 
   // Клиентский предохранитель поверх бэкового MAX_REPEAT_ITEMS
   let topItems = $derived(items.slice(0, 3))
 
-  onMount(() => frequentItems.subscribe((v) => { items = Array.isArray(v) ? v : [] }))
+  onMount(() => {
+    const unsubItems = frequentItems.subscribe((v) => { items = Array.isArray(v) ? v : [] })
+    const unsubQty = frequentQuantities.subscribe((v) => { storeQty = v || {} })
+    return () => { unsubItems(); unsubQty() }
+  })
 
   function keyOf(item, i) {
     return `${item.product_id}-${i}`
   }
 
   function qtyOf(key) {
-    return quantities[key] || 1
+    return storeQty[key] || 1
   }
 
   function bump(key, delta) {
-    quantities = { ...quantities, [key]: Math.max(1, qtyOf(key) + delta) }
+    setFrequentQty(key, qtyOf(key) + delta)
   }
 
   function roundPrice(n) {
