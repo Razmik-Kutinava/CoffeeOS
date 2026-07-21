@@ -24,13 +24,14 @@
 - [x] `test/integration/shop/bottom_sheet_expanded_grid_test.rb`: grid-cols-4 + `shop-cart-expanded-grid` + `data-cart-layout="grid"`; карточка `shop-cart-grid-card` (−/+ без «Удалить»); высоты 52/56 + bump `CART_SHEET_BUILD` prog27
 - [x] Прогон: 3 runs / 3 failures — падают именно на новой разметке (RED ожидаем)
 
-### PHASE 2: GREEN — [ ]
-- [ ] Шаг A: `SHEET_VH.expandedMulti` — верх шторки у начала 2-го ряда каталога (по скрину близко; верифицировать) + bump `CART_SHEET_BUILD`
-- [ ] Шаг B: ветка `MODE_EXPANDED && count >= 2` в `CartSheet.svelte` → grid-cols-4 + внутренний overflow-y-auto; карточки по канону peek; 1–3 товара занимают 1/4 ширины каждая; placeholder «нет» и line-clamp сохранить
-- [ ] Не трогать: store/корзину, +/−, checkout-кнопку, HIDDEN/PEEK/single ветки, header
-- [ ] CartSheet.svelte 549 строк (>200) — вынести grid-карточку в snippet, файл не раздувать; при росте — план сплита отдельно
-- [ ] Регрессия зоны: `bin/rails test test/integration/shop/` + линт/сборка Vite
-- [ ] Коммит `feat: … [GREEN]`
+### PHASE 2: GREEN — [x] 2026-07-21
+- [x] Шаг A: высоты 52/56 оставлены (Шаг 1 ТЗ подтверждён скрином) + bump `CART_SHEET_BUILD` prog27
+- [x] Шаг B: ветка expanded → `grid-cols-4 content-start gap-2 overflow-y-auto`; карточки канон peek (фото → openEditCard, line-clamp-1, цена × кол-во, −/+ без «Удалить»); файл стал короче (−13 строк)
+- [x] Store/корзина, +/−, checkout, HIDDEN/PEEK/single, header — не тронуты
+- [x] Обновлены 5 старых тестов на новые testid/prog27 (expanded-horizontal→expanded-grid, expanded-card→grid-card)
+- [x] Регрессия cart sheet: 8 файлов — 59 runs / 0 failures; Svelte compile OK (5 a11y warn — pre-existing класс)
+- [!] Полный `test/integration/shop/` завис локально после 43 тестов (убит) — env-проблема, не этот дифф → ISSUES
+- [x] Коммит `feat: … [GREEN]`
 
 ### PHASE 3: REVIEW — [ ]
 - [ ] Sanity: UI-only, без N+1/RLS

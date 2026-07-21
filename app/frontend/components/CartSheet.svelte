@@ -449,63 +449,50 @@
         {@render checkoutBar("shop-cart-peek-total", payStackActive)}
       </div>
 
-    <!-- EXPANDED 2+ — вертикальный компактный список (§ S2-канон: развёрнутый вид) -->
+    <!-- EXPANDED 2+ — сетка 4 в ряд, вертикальный скролл внутри (канон заказчика 2026-07-21).
+         «Удалить» в карточках нет: «−» при количестве 1 удаляет, undo остаётся. -->
     {:else if mode === MODE_EXPANDED && count >= 2}
       <div
         class="flex flex-1 min-h-0 flex-col overflow-hidden px-3 pb-2 pt-1"
-        data-testid="shop-cart-expanded-horizontal"
-        data-cart-layout="vertical"
+        data-testid="shop-cart-expanded-grid"
+        data-cart-layout="grid"
       >
-        <div class="min-h-0 flex-1 space-y-1.5 overflow-y-auto">
+        <div class="grid min-h-0 flex-1 grid-cols-4 content-start gap-2 overflow-y-auto">
           {#each items as line (line.index)}
             <div
-              class="flex items-center gap-2 rounded-lg border border-[#3a3a3a] bg-[#1f1f1f] px-2 py-1.5 cursor-pointer"
-              data-testid="shop-cart-expanded-card"
+              class="flex flex-col gap-1 rounded-xl border border-[#3a3a3a] bg-[#1f1f1f] p-1.5 cursor-pointer"
+              data-testid="shop-cart-grid-card"
               role="button"
               tabindex="0"
               onclick={(e) => tapToProduct(line, e)}
             >
               <div
                 data-testid="shop-cart-expanded-product-image"
-                class="shrink-0"
                 onclick={(e) => {
                   e.stopPropagation()
-                  const cart_line = line.index
-                  const selected_modifiers = line.selected_modifiers
-                  void cart_line
-                  void selected_modifiers
                   push(openEditCard(line))
                 }}
               >
-                {@render lineThumb(line, "h-10 w-10 shrink-0")}
+                {@render lineThumb(line, "h-14 w-full rounded-lg")}
               </div>
-              <div class="min-w-0 flex-1">
-                <p class="line-clamp-1 text-xs font-medium">{line.product_name}</p>
-                <p class="text-[10px] text-[#a0a0a0]">{roundPrice(line.unit_total)}₽ × {line.quantity}</p>
-              </div>
-              <div class="flex shrink-0 items-center gap-1">
+              <p class="line-clamp-1 text-[11px] font-medium leading-tight">{line.product_name}</p>
+              <p class="text-[10px] text-[#a0a0a0]">{roundPrice(line.unit_total)}₽ × {line.quantity}</p>
+              <div class="mt-auto flex items-center justify-between gap-0.5">
                 <button
                   type="button"
-                  data-testid="shop-cart-expanded-minus"
-                  class="rounded bg-[#3a3a3a] px-1.5 py-0.5 text-[10px] leading-none disabled:opacity-40"
+                  data-testid="shop-cart-grid-minus"
+                  class="min-h-6 min-w-6 rounded bg-[#3a3a3a] px-1.5 py-0.5 text-[12px] leading-none disabled:opacity-40"
                   disabled={busy}
                   onclick={() => decrementLine(line)}
                 >−</button>
-                <span class="min-w-[1rem] text-center text-[10px]">{line.quantity}</span>
+                <span class="min-w-[1rem] text-center text-[11px] font-medium">{line.quantity}</span>
                 <button
                   type="button"
-                  data-testid="shop-cart-expanded-plus"
-                  class="rounded bg-[#3a3a3a] px-1.5 py-0.5 text-[10px] leading-none disabled:opacity-40"
+                  data-testid="shop-cart-grid-plus"
+                  class="min-h-6 min-w-6 rounded bg-[#3a3a3a] px-1.5 py-0.5 text-[12px] leading-none disabled:opacity-40"
                   disabled={atMaxQty(line)}
                   onclick={() => bumpCartLine(line.index, 1)}
                 >+</button>
-                <button
-                  type="button"
-                  data-testid="shop-cart-expanded-delete"
-                  class="ml-1 text-[10px] text-red-400 disabled:opacity-40"
-                  disabled={busy}
-                  onclick={() => removeCartLine(line.index)}
-                >Удалить</button>
               </div>
             </div>
           {/each}

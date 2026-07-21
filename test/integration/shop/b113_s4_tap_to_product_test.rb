@@ -41,7 +41,7 @@ class Shop::B113S4TapToProductTest < ActionDispatch::IntegrationTest
   # --- expanded 2+ строка ----------------------------------------------------
 
   test "expanded card has tapToProduct onclick" do
-    assert_includes sheet, 'data-testid="shop-cart-expanded-card"'
+    assert_includes sheet, 'data-testid="shop-cart-grid-card"'
     assert_includes sheet, "tapToProduct(line, e)"
   end
 
