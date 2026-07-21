@@ -7,7 +7,7 @@
 
 ## Текущая фаза
 
-**PHASE 1: SPEC — `[x]` 2026-07-21 · Gate 1: жду go на B1-RED**
+**PHASE 2: BUILD — B1-RED `[x]` 2026-07-21 (12 runs / 12 errors, NameError на сервисе — ожидаемо) · Gate 2: жду go на B1-GREEN**
 
 ## Маппинг ТЗ → наш стек (решения SPEC)
 
@@ -32,7 +32,7 @@
 ## Пункты SBR (пары RED → go → GREEN)
 
 ### B1 — сервис частых товаров (ТЗ Шаг 1)
-- [ ] RED: `test/services/shop/customer_frequent_products_service_test.rb` — 5 заказов/45 дней, 3 с одинаковым напитком+модификаторами → топ-1..3 по частоте+свежести (`product_id, name, price, image_url, modifier_options`); 0 заказов → `[]`; > 3 частых → топ-3; граничные даты окна
+- [x] RED 2026-07-21: `test/services/shop/customer_frequent_products_service_test.rb` — 12 тестов (агрегация 3/5 заказов · пустой массив · топ-3 по частоте · свежесть при равной частоте · раздельные модификаторы · окно WINDOW_DAYS · только mobile · без pending/cancelled · изоляция тенантов · disabled исключён · image_url nil placeholder · лимиты в константах). Прогон: **12 runs / 12 errors** — все `NameError: uninitialized constant Shop::CustomerFrequentProductsService` (намеренный RED `[TDD]`, не ISSUES)
 - [ ] GREEN: `app/services/shop/customer_frequent_products_service.rb` (константы `WINDOW_DAYS`, `MAX_REPEAT_ITEMS`; 2 запроса + группировка в Ruby)
 
 ### B2 — категории витрины (ТЗ Шаг 2): переиспользуем существующее
