@@ -8,11 +8,29 @@ module Shop
   class CustomerFrequentProductsService
     WINDOW_DAYS = 45
     MAX_REPEAT_ITEMS = 3
+    CACHE_TTL = 30.minutes
     # Учитываем только оформленные заказы (оплаченные/выданные), не черновики и не отмены
     COUNTED_STATUSES = %w[accepted preparing ready issued closed].freeze
 
     def self.call(customer_id:, tenant_id:)
       new(customer_id: customer_id, tenant_id: tenant_id).call
+    end
+
+    def self.cache_key(tenant_id:, customer_id:)
+      "shop/freq/#{tenant_id}/#{customer_id}"
+    end
+
+    def self.cached_call(customer_id:, tenant_id:)
+      Rails.cache.fetch(cache_key(tenant_id: tenant_id, customer_id: customer_id), expires_in: CACHE_TTL) do
+        call(customer_id: customer_id, tenant_id: tenant_id)
+      end
+    end
+
+    # Сброс при создании заказа (OrderCreator) и подтверждении оплаты (PaymentStatusUpdater)
+    def self.bust_cache!(tenant_id:, customer_id:)
+      return if customer_id.blank?
+
+      Rails.cache.delete(cache_key(tenant_id: tenant_id, customer_id: customer_id))
     end
 
     def initialize(customer_id:, tenant_id:)

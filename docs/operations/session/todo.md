@@ -7,7 +7,7 @@
 
 ## Текущая фаза
 
-**PHASE 2: BUILD — B3-RED `[x]` 2026-07-21 (6 runs / 6 errors, нет cached_call/cache_key — ожидаемо) · Gate 2: жду go на B3-GREEN**
+**PHASE 2: BUILD — B3 GREEN `[x]` 2026-07-21 (18/18 · регрессия §2.3 24/0 · tbank 31/0 · services 112/0 · rubocop чист) · жду go на B4-RED (API)**
 
 ## Маппинг ТЗ → наш стек (решения SPEC)
 
@@ -41,7 +41,7 @@
 
 ### B3 — кэш + инвалидация (ТЗ Шаг 3)
 - [x] RED 2026-07-21: `test/services/shop/customer_frequent_products_cache_test.rb` — 6 тестов (формат ключа + CACHE_TTL=30 мин · cached_call пишет в Rails.cache и отдаёт stale внутри TTL · истечение TTL через `travel 31.minutes` · `bust_cache!` · инвалидация в `OrderCreator.call!` · инвалидация в `PaymentStatusUpdater` при succeeded). Прогон: **6 runs / 6 errors** — `NoMethodError: cached_call/cache_key` (намеренный RED `[TDD]`)
-- [ ] GREEN: `cache_key`/`cached_call`/`bust_cache!` в сервисе; bust-хуки: `Shop::OrderCreator` (после транзакции, 1 строка) + `Callbacks::PaymentStatusUpdater#accept_order_if_paid!` (1 строка) — оба hot-path, минимальный дифф + регрессия оплаты §2.3
+- [x] GREEN 2026-07-21: `cache_key`/`cached_call`/`bust_cache!` (+`CACHE_TTL=30.minutes`) в сервисе; bust-хуки по 1 строке (+комментарий): `OrderCreator#call!` после транзакции · `PaymentStatusUpdater#accept_order_if_paid!`. Тесты **18 runs / 0 fail** (кэш 6 + сервис 12); регрессия: оплата §2.3 **24/0 (2 skips pre-existing)** · T-Bank callback **31/0** · services **112/0**; rubocop 4 файла чист
 
 ### B4 — API endpoint (ТЗ Шаг 4)
 - [ ] RED: `test/integration/shop/api/frequent_products_test.rb` — 200 `{ frequent_items: [...], categories: {...} }`; гость без customer_id → `frequent_items: []`; изоляция тенантов (customer A ≠ B)

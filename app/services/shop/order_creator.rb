@@ -102,6 +102,9 @@ module Shop
         clear_cart! if flow[:order_status] == :accepted
       end
 
+      # Quick Repeat: новый заказ меняет частоту покупок — сбрасываем кэш секции «повторить»
+      Shop::CustomerFrequentProductsService.bust_cache!(tenant_id: @tenant.id, customer_id: customer.id)
+
       begin
         save_card = ActiveModel::Type::Boolean.new.cast(params.fetch(:save_card, false))
         init_gateway_payment!(order, payment, save_card: save_card) if gateway && flow[:order_status] == :pending_payment

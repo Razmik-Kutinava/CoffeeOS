@@ -64,6 +64,8 @@ module Callbacks
       Inventory::OrderRecipeDeduction.call!(order: order)
       Barista::OrderBoardBroadcaster.call(order: order, old_status: "pending_payment")
       Shop::GuestOrderBroadcaster.call(order: order, old_status: "pending_payment")
+      # Quick Repeat: оплаченный заказ меняет частоту покупок — сбрасываем кэш секции «повторить»
+      Shop::CustomerFrequentProductsService.bust_cache!(tenant_id: order.tenant_id, customer_id: order.customer_id)
     end
 
     def fail_order_if_rejected!
