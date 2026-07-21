@@ -7,7 +7,7 @@
 
 ## Текущая фаза
 
-**PHASE 2: BUILD — B4 GREEN `[x]` 2026-07-21 (5/5 · регрессия shop api таргетно 21/0 · rubocop чист) · backend B1–B4 закрыт · жду go на F1-RED (фронт)**
+**PHASE 2: BUILD — F1-RED `[x]` 2026-07-21 (4 runs / 3 errors, файлов нет — ожидаемо) · Gate 2: жду go на F1-GREEN**
 
 ## Маппинг ТЗ → наш стек (решения SPEC)
 
@@ -48,8 +48,8 @@
 - [x] GREEN 2026-07-21: роут `get "frequent_products"` + `Shop::Api::FrequentProductsController` (52 строки: `cached_call` сервиса + `categories_by_name` — 3 плоских запроса как в categories#index). Тесты **5 runs / 0 fail**; регрессия shop api таргетно: categories 4/0 · products 4/0 · orders 9/0 · mvp_flow 2/0 · tenant_isolation 2/0; rubocop чист. Env: `cart_persistence_test.rb` виснет локально на рендере shell `GET /shop?tenant_id=` (та же 🟡 ISSUES-грабля, не этот дифф — файл не трогает frequent_products)
 
 ### F1 — клиентский кэш + инициализация (ТЗ Шаг 5)
-- [ ] RED: `test/integration/shop/quick_repeat_bottom_sheet_test.rb` — фиксация `shopFrequentCache.js` (ключ `coffeeos_shop_frequent_v1`, паттерн `shopCartCache.js`) + фоновый refresh + fallback на кэш при offline/500
-- [ ] GREEN: `app/frontend/lib/shopFrequentCache.js` + загрузка в store при открытии шторки
+- [x] RED 2026-07-21: `test/integration/shop/quick_repeat_frequent_cache_test.rb` — 4 теста (фиксация `shopFrequentCache.js` ключ `coffeeos_shop_frequent_v1` + read/write/clear · фиксация `frequentRepeatStore.js` init-из-кэша + `api("/frequent_products")` + writeFrequentCache · catch не обнуляет секцию · mirror init/refresh/error). Прогон: **4 runs / 3 errors** (ENOENT — файлов нет, намеренный RED `[TDD]`; mirror-тест чистой логики зелёный сразу)
+- [ ] GREEN: `app/frontend/lib/shopFrequentCache.js` + `app/frontend/lib/frequentRepeatStore.js` (stores frequentItems/frequentCategories, init + background refresh)
 
 ### F2 — секция «повторить» в режимах peek/expanded/hidden (ТЗ Шаги 6–8, скрины 01–05)
 - [ ] RED: разметка `RepeatSection.svelte` — 1–3 мини-карточки (фото, название ellipsis, цена, −1+), drag-handle есть; hidden: превью повтора + «+цена» (скрины 04–05); expanded: секция «повторить» внизу (скрины 02–03); восстановление последнего режима (уже есть `cartSheetModeCache.js` — переиспользуем)
