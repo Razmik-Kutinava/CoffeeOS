@@ -77,7 +77,7 @@ class Shop::CatalogHiddenCardTest < ActionDispatch::IntegrationTest
     sheet = cart_sheet
 
     assert_includes sheet, 'data-testid="shop-cart-peek-list"'
-    assert_includes sheet, 'data-testid="shop-cart-grid-card"'
+    assert_includes sheet, 'data-testid="shop-cart-expanded-card"'
     assert_includes sheet, 'data-testid="shop-cart-hidden-chip"'
     assert_includes sheet, "MODE_PEEK"
     assert_includes sheet, "MODE_EXPANDED"

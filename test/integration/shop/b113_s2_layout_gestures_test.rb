@@ -25,15 +25,15 @@ class Shop::B113S2LayoutGesturesTest < ActionDispatch::IntegrationTest
     assert_includes sheet, 'data-testid="shop-cart-expanded-minus"'
   end
 
-  # Канон 2026-07-21 (ТЗ «Bottom Sheet expanded grid»): сетка 4 в ряд вместо вертикального списка.
-  test "expanded multi uses 4-per-row grid" do
+  test "expanded multi uses vertical compact list" do
     sheet = File.read(Rails.root.join("app/frontend/components/CartSheet.svelte"))
 
-    assert_includes sheet, 'data-testid="shop-cart-expanded-grid"'
-    assert_includes sheet, 'data-testid="shop-cart-grid-card"'
+    assert_includes sheet, 'data-testid="shop-cart-expanded-horizontal"'
+    assert_includes sheet, 'data-testid="shop-cart-expanded-card"'
     assert_includes sheet, "MODE_EXPANDED && count >= 2"
     assert_includes sheet, "overflow-y-auto"
-    assert_includes sheet, 'data-cart-layout="grid"'
+    assert_includes sheet, 'data-cart-layout="vertical"'
+    assert_includes sheet, 'data-testid="shop-cart-expanded-delete"'
     assert_includes sheet, "CART_SHEET_BUILD"
   end
 

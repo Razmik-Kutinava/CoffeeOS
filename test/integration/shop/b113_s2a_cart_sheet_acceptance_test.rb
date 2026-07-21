@@ -34,7 +34,7 @@ class Shop::B113S2aCartSheetAcceptanceTest < ActionDispatch::IntegrationTest
     sheet = File.read(Rails.root.join("app/frontend/components/CartSheet.svelte"))
 
     assert_includes sheet, 'data-testid="shop-cart-peek-list"'
-    assert_includes sheet, 'data-testid="shop-cart-expanded-grid"'
+    assert_includes sheet, 'data-testid="shop-cart-expanded-horizontal"'
     assert_includes sheet, 'data-testid="shop-cart-expanded-single"'
     assert_includes sheet, "line.image_url"
     assert_includes sheet, "line.product_name"
@@ -97,7 +97,7 @@ class Shop::B113S2aCartSheetAcceptanceTest < ActionDispatch::IntegrationTest
     assert_includes sheet, 'data-testid="shop-cart-hidden-thumb"'
     assert_includes sheet, 'data-cart-layout="hidden-chips"'
     refute_includes sheet, ">Корзина</span>"
-    assert_includes thresholds, "CART_SHEET_BUILD = \"prog27\""
+    assert_includes thresholds, "CART_SHEET_BUILD = \"prog26\""
     assert_match(/hidden:\s*24/, thresholds)
     assert_match(/expandedMulti:\s*56/, thresholds)
     assert_match(/peekMulti:\s*38/, thresholds)

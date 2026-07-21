@@ -96,7 +96,7 @@
 | B1.14 | **Адрес точки + выбор точки** в шапке витрины (заказчик «задача 2») | [ТЗ](customer_tasks/B1_14_shop_tenant_address_header.md) | **клиент `[x]`** · апрув 2026-07-05 · **B1.14-4** `[ ]` |
 | B1.8 | **Свой домен → своя почта для рассылки** | После домена (не `fly.dev`): `noreply@…` / `orders@…`, DNS в Brevo (SPF/DKIM/DMARC), сменить `MAIL_FROM` на Fly | **напоминание** |
 | Hidden mode cards | **Витрина** — режим hidden: crop превью карточек (не ломать peek/expanded) | [ТЗ](customer_tasks/Исправление%20режима%20отображения%20Hidden%20для%20карточек%20товаров.md) · скрины [`artifacts/product_card_hidden_mode/`](../artifacts/product_card_hidden_mode/README.md) | **SBR REVIEW `[x]`** · код `[x]` · апрув `[ ]` |
-| Bottom sheet expanded grid | **Витрина** — expanded до 1-го ряда каталога + сетка товаров 4 в ряд со скроллом | [ТЗ](customer_tasks/Bottom%20Sheet%20expanded%20mode%20и%20внутренняя%20сетка%204%20в%20ряд.md) · скрины [`artifacts/bottom_sheet_expanded_grid/`](../artifacts/bottom_sheet_expanded_grid/README.md) | **SBR REVIEW `[x]`** · код `[x]` 7683dee · апрув `[ ]` |
+| Bottom sheet expanded grid | **Витрина** — expanded до 1-го ряда каталога + сетка товаров 4 в ряд со скроллом | [ТЗ](customer_tasks/Bottom%20Sheet%20expanded%20mode%20и%20внутренняя%20сетка%204%20в%20ряд.md) · скрины [`artifacts/bottom_sheet_expanded_grid/`](../artifacts/bottom_sheet_expanded_grid/README.md) | **RESTART** 2026-07-21 · код откачен · уточнение: сетка = каталог, не шторка |
 
 > **B1.8 (не забыть):** сейчас письма с **подтверждённого личного sender** в Brevo. Когда будет **свой домен** — завести **кофейную почту** (напр. `noreply@бренд.ru`), аутентифицировать домен в Brevo, обновить `MAIL_FROM` + secrets. Код OTP/ActionMailer менять не нужно.
 
@@ -119,7 +119,7 @@
 | 10 | **B1.13** | Новая навигация витрины — S1–S4 (шапка + поп-ап корзины) | **rev2** `[x]` апрув 2026-07-01 · **S4-канон** docs `[x]` · **S4 код** `[ ]` | [B1_13_shop_nav_profile_header.md](customer_tasks/B1_13_shop_nav_profile_header.md) |
 | 11 | **B1.14** | Адрес точки + выбор точки в шапке витрины | **клиент закрыт** · апрув 2026-07-05 · Cart `[ ]` | [B1_14_shop_tenant_address_header.md](customer_tasks/B1_14_shop_tenant_address_header.md) |
 | 12 | **Hidden mode cards** | Режим hidden — crop превью карточек товаров | **SBR REVIEW `[x]`** · код `[x]` · апрув `[ ]` | [Исправление режима отображения Hidden…](customer_tasks/Исправление%20режима%20отображения%20Hidden%20для%20карточек%20товаров.md) |
-| 13 | **Bottom sheet expanded grid** | Expanded до 1-го ряда каталога + сетка товаров 4 в ряд со скроллом | **SBR REVIEW `[x]`** · код `[x]` · апрув `[ ]` | [Bottom Sheet expanded mode и внутренняя сетка 4 в ряд.md](customer_tasks/Bottom%20Sheet%20expanded%20mode%20и%20внутренняя%20сетка%204%20в%20ряд.md) |
+| 13 | **Bottom sheet expanded grid** | Expanded до 1-го ряда каталога + сетка товаров 4 в ряд со скроллом | **RESTART** · код откачен · новое SPEC `[ ]` | [Bottom Sheet expanded mode и внутренняя сетка 4 в ряд.md](customer_tasks/Bottom%20Sheet%20expanded%20mode%20и%20внутренняя%20сетка%204%20в%20ряд.md) |
 
 
 ---

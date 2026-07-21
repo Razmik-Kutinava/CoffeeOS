@@ -2,11 +2,19 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-21 (**SBR REVIEW done** Bottom sheet expanded grid)  
+**Дата:** 2026-07-21 (**RESTART** Bottom sheet expanded grid — код откачен)  
 
 | Сейчас | Дальше |
 |--------|--------|
-| Bottom sheet expanded grid: код `7683dee`, тесты 59/0 | апрув заказчика / MCP Fly / deploy — по go |
+| Код `7683dee` откачен (сетка = каталог, не шторка) | уточнённое ТЗ от владельца → новое SPEC |
+
+### Сессия 2026-07-21 (RESTART — откат grid из шторки)
+
+- **Уточнение владельца:** «сетка 4 в ряд» в ТЗ относится к **каталогу на главной**, не к expanded-корзине; expanded остаётся горизонтальными строками (канон S2).
+- Откат: `git checkout 273a43c^` для `CartSheet.svelte`, `cartSheetThresholds.js` (prog26) и 5 тестов; `bottom_sheet_expanded_grid_test.rb` удалён.
+- Регрессия cart sheet после отката: **56 runs / 0 failures**.
+- Текст заказчика в ТЗ-доке не тронут; в «Заметки агента» добавлен блок RESTART.
+- Открытый вопрос до нового SPEC: вид каталога («4 в ряд» на 414px = карточки ~93px против текущих 8.5rem).
 
 ### Сессия 2026-07-21 (RED+GREEN+REVIEW Bottom sheet expanded grid)
 
