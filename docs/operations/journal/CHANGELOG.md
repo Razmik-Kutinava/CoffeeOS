@@ -1,5 +1,12 @@
 ﻿# CHANGELOG
 
+## 2026-07-21 — feat(shop): Quick Repeat Bottom Sheet — быстрый повтор частых покупок (B1–B4, F1–F5)
+
+- **Backend:** `Shop::CustomerFrequentProductsService` (окно 45 дней, топ-3 по частоте/свежести, группировка `[product_id, modifier_options]`, 4 плоских запроса без JOIN) · кэш `shop/freq/{tenant}/{customer}` TTL 30 мин + bust в `OrderCreator` и `PaymentStatusUpdater` · `GET /shop/api/frequent_products` (гость → пустой список, категории из существующего пути).
+- **Frontend:** `shopFrequentCache.js` (localStorage, отдельный ключ счётчиков) · `frequentRepeatStore.js` (init < 50 мс из кэша + фоновый refresh, счётчики −1+ с персистом, `repeatAllToCart`, `repeatMore`, `repeatPayOneClick`) · `RepeatSection.svelte` в шторке (empty/peek/expanded, не hidden) с кнопками «повторить в 1 клик» / «оплатить в 1 клик» / «+ещё» и тостами · `Checkout.svelte` — autopay-флаг открывает шит оплаты (списание — канон one_click с подтверждением).
+- **Тесты:** 10 пар RED/GREEN; фича 38 runs (сервис 12 + кэш 6 + API 5 + фронт F1–F5 21) / 0 fail · регрессия: оплата §2.3 + one_click 29/0 (2 pre-existing skips) · services+API+RLS 123/0 · шторка+каталог 27/0 · rubocop 0 offenses.
+- **ISSUES 🟡:** pre-existing конфликт `checkout_ui_cleanup_test.rb` с каноном «оплата через шторку» (падает и на чистом HEAD).
+
 ## 2026-07-21 — test(shop): закрытие «Bottom sheet expanded grid» — канон зафиксирован тестами
 
 - Владелец принял текущий UX как канон (expanded — 1-й ряд сетки, peek — 2-й ряд, hidden — половина); код приложения не менялся.

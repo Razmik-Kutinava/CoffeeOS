@@ -1,8 +1,23 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-21 (**закрыта** Bottom sheet expanded grid — UX принят как канон)  
+**Дата:** 2026-07-21 (**Quick Repeat Bottom Sheet — код done, REVIEW пройден; дальше deploy Fly + MCP DevTools по плану владельца**)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev  
+
+### Quick Repeat Bottom Sheet (2026-07-21) — код DONE, ждёт deploy + MCP
+
+| Что | Статус |
+|-----|--------|
+| ТЗ + 6 скринов в артефактах (`quick_repeat_bottom_sheet/`) | **`[x]`** |
+| B1 сервис · B2 категории · B3 кэш+bust (hot-path OrderCreator/PaymentStatusUpdater) · B4 API | **`[x]`** GREEN |
+| F1 клиентский кэш · F2 секция «повторить» · F3 счётчики · F4 действия+тосты · F5 «оплатить в 1 клик» | **`[x]`** GREEN |
+| REVIEW: rubocop 0 offenses · services+API+RLS 123/0 · оплата §2.3+one_click 29/0 · шторка 27/0 | **`[x]`** |
+| **Deploy Fly** (апрув владельца дан 2026-07-21 «потом деплой на флай») | **`[ ]`** следующий шаг |
+| **MCP DevTools на Fly** — приёмка peek/expanded/hidden + повтор + оплата, скрины | **`[ ]`** после деплоя |
+| Апрув заказчика / `[x]` в CBR | **`[ ]`** |
+
+**Решения, требующие сверки на приёмке:** hidden — без секции повтора (канонные чипы корзины) · клик по карточке каталога — переход в Product (конфликт Шагов 9/12 ТЗ) · «оплатить в 1 клик» — автооткрытие шита оплаты, списание с подтверждением «Оплатить».
+**Pre-existing (не блокер):** `checkout_ui_cleanup_test.rb` конфликтует с каноном оплаты через шторку → ISSUES 🟡.
 
 ### Bottom sheet expanded grid (2026-07-21) — ЗАКРЫТА
 

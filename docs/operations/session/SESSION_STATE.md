@@ -2,11 +2,17 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-21 (Quick Repeat Bottom Sheet — PHASE 2: BUILD, F5 GREEN done; план владельца: REVIEW → deploy Fly → MCP DevTools)  
+**Дата:** 2026-07-21 (Quick Repeat Bottom Sheet — PHASE 3: REVIEW пройден; следующий шаг: deploy Fly → MCP DevTools)  
 
 | Сейчас | Дальше |
 |--------|--------|
-| B1–B4 + F1–F5 закрыты GREEN — фича целиком: сервис, кэш, API, клиентский кэш, секция «повторить», счётчики, действия, «оплатить в 1 клик» | PHASE 3: REVIEW (sanity N+1/RLS/rubocop, CHANGELOG/HANDOFF) → deploy Fly (апрув дан) → MCP DevTools приёмка |
+| Фича целиком GREEN (B1–B4, F1–F5) + REVIEW: rubocop 0 offenses, services+API+RLS 123/0, оплата §2.3 29/0, шторка 27/0; CHANGELOG/HANDOFF обновлены | deploy Fly (апрув владельца дан) → MCP DevTools приёмка (peek/expanded/hidden + повтор + оплата) → апрув заказчика |
+
+### Сессия 2026-07-21 (PHASE 3: REVIEW Quick Repeat)
+
+- Sanity: rubocop 12 файлов фичи 0 offenses; N+1 нет (pluck + index_by, `coffeeos-performance` соблюдён); RLS-регрессия 123/0.
+- Регрессии зон: оплата §2.3 + one_click step4 29/0 (2 pre-existing skips), шторка+каталог 27/0, F1–F5 21/0.
+- Ops: CHANGELOG (сводка фичи), HANDOFF (таблица статуса + решения для приёмки), todo.md PHASE 3 закрыта.
 
 ### Сессия 2026-07-21 (F5 — «оплатить в 1 клик» на секции повтора)
 

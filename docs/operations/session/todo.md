@@ -7,7 +7,7 @@
 
 ## Текущая фаза
 
-**PHASE 2: BUILD — F5 GREEN `[x]` 2026-07-21 (F1–F5 21/0 · оплата §2.3 + one_click 29/0 · шторка 27/0) · дальше: PHASE 3 REVIEW → deploy Fly → MCP DevTools (по плану владельца)**
+**PHASE 3: REVIEW `[x]` 2026-07-21 (sanity + регрессии зелёные) · следующий шаг: deploy Fly → MCP DevTools приёмка**
 
 ## Маппинг ТЗ → наш стек (решения SPEC)
 
@@ -69,10 +69,10 @@
 - [x] GREEN 2026-07-21: `frequentRepeatStore.js` (119 строк ≤ 120, сжаты комментарии) — `REPEAT_AUTOPAY_KEY` + `repeatPayOneClick` (`repeatAllToCart()` → sessionStorage-флаг → `push("/checkout")`, при ошибке добавления навигации нет); `RepeatSection.svelte` — кнопка `shop-repeat-pay-one-click` «оплатить в 1 клик» (outline-оранж, общий busy-guard); `Checkout.svelte` — в onMount consume флага → `openPaymentSheet()` (existing канон Шага 3/4: преселект primary-карты, подтверждение «Оплатить»). Тесты: F1–F5 **21 runs / 192 assertions / 0 failures**; регрессия оплаты §2.3 + one_click step4 **29 runs / 0 failures (2 pre-existing skips)**; шторка+каталог **27 runs / 0 failures**; svelte compile (RepeatSection, Checkout) + esbuild OK. Найден pre-existing конфликт `checkout_ui_cleanup_test.rb` vs канон «оплата через шторку» (падает и на чистом HEAD, проверено git stash) → 🟡 ISSUES
 
 ### PHASE 3: REVIEW
-- [ ] Sanity: N+1 / RLS / rubocop / eslint + svelte compile
-- [ ] Регрессия зон: `bin/rails test test/integration/shop/` (таргетные списки — полный прогон зависает, ISSUES 🟡) + оплата §2.3 (тронут `OrderCreator`)
-- [ ] Ops: SESSION_STATE / CHANGELOG / HANDOFF
-- [ ] MCP Fly скрины по состояниям (peek/expanded/hidden + повтор) — после деплоя по go
+- [x] Sanity 2026-07-21: rubocop 12 файлов фичи — 0 offenses · N+1 нет (4 плоских pluck + index_by, фронт без запросов в циклах) · RLS: 123/0 (services + frequent_products API + tenant_isolation + rls_tenant_isolation) · svelte compile + esbuild OK
+- [x] Регрессия зон 2026-07-21: оплата §2.3 + one_click step4 **29/0 (2 pre-existing skips)** · шторка+каталог **27/0** · фича F1–F5 **21/0**
+- [x] Ops: SESSION_STATE / CHANGELOG / HANDOFF обновлены
+- [ ] Deploy Fly (апрув дан) → MCP DevTools скрины по состояниям (peek/expanded/hidden + повтор + оплата)
 
 ## Вопросы владельцу (не блокируют B1–B4)
 
