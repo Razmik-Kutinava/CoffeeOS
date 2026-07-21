@@ -12,6 +12,7 @@
 | `coffeeos-dev-gates.mdc` | DoD, регрессия по зонам, hot-path, миграции |
 | `coffeeos-repo-layout.mdc` | Куда класть файлы; `scripts/scratch/` |
 | `coffeeos-file-size-split.mdc` | Лимиты 50/120/200, сплит |
+| `coffeeos-customer-intake.mdc` | PHASE 0: текст заказчика → док 1:1 в `customer_tasks/`, артефакты в `artifacts/<slug>/`, потом SPEC |
 
 ## Project — `.cursor/rules/project/`
 

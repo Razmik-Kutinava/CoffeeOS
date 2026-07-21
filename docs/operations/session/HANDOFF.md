@@ -1,8 +1,17 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-20 (**CHECKPOINT** Hidden/cart chips — принято на Fly, docs only)  
+**Дата:** 2026-07-21 (правило intake PHASE 0 — docs only)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev  
+
+### Intake-правило (новое, 2026-07-21)
+
+| Что | Статус |
+|-----|--------|
+| `coffeeos-customer-intake.mdc` (PHASE 0: доки до SPEC) | **`[x]`** |
+| `RULES_INDEX.md` строка | **`[x]`** |
+
+**Следующий шаг:** intake задачи «Bottom Sheet: expanded mode + grid 4 в ряд» по новому правилу (док в `customer_tasks/`, скрин в `artifacts/bottom_sheet_expanded_grid/`), затем PHASE 1: SPEC.
 
 ### Точка отката (не потерять)
 

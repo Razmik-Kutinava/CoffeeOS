@@ -1,5 +1,10 @@
 ﻿# CHANGELOG
 
+## 2026-07-21 — docs(rules): customer intake PHASE 0 (доки до SPEC)
+
+- Новое правило `coffeeos-customer-intake.mdc`: текст заказчика 1:1 → `customer_tasks/<Название>.md`, артефакты → `artifacts/<slug>/` (slug латиницей, понятные слова), строка в CBR, коммит intake, стоп до `go` → PHASE 1: SPEC.
+- `RULES_INDEX.md` обновлён.
+
 ## 2026-07-20 — ops: CHECKPOINT Hidden/cart chips accepted on Fly
 
 - Docs only: `CHECKPOINT.md` + скрин `04_fly_accepted_…` · UI-код отката **`a1abfa0`**.

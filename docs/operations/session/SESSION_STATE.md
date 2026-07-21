@@ -2,11 +2,17 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-20 (**CHECKPOINT** Hidden/cart — принято на Fly, docs only)  
+**Дата:** 2026-07-21 (правило intake PHASE 0 — docs only)  
 
 | Сейчас | Дальше |
 |--------|--------|
-| **Hidden/cart** | принято · откат `a1abfa0` + CHECKPOINT.md | следующая фича по go |
+| Правило `coffeeos-customer-intake.mdc` создано | intake задачи «Bottom Sheet expanded grid» по новому правилу, затем SPEC |
+
+### Сессия 2026-07-21 (правило customer intake — без кода)
+
+- Новое правило `.cursor/rules/workflow/coffeeos-customer-intake.mdc` (alwaysApply): текст заказчика → док 1:1 в `customer_tasks/`, артефакты в `artifacts/<slug>/` (slug латиницей, понятные слова), строка в CBR, коммит `docs: intake …`, стоп до `go` → PHASE 1: SPEC.
+- `RULES_INDEX.md` — строка в таблицу workflow.
+- Код приложения не менялся.
 
 ### Сессия 2026-07-20 (CHECKPOINT docs — без кода)
 
