@@ -7,7 +7,7 @@
 
 ## Текущая фаза
 
-**PHASE 2: BUILD — B1-RED `[x]` 2026-07-21 (12 runs / 12 errors, NameError на сервисе — ожидаемо) · Gate 2: жду go на B1-GREEN**
+**PHASE 2: BUILD — B1 GREEN `[x]` 2026-07-21 (12/12 зелёные, регрессия services/shop 103/0, rubocop чист) · жду go на B3-RED (кэш) или B4-RED (API)**
 
 ## Маппинг ТЗ → наш стек (решения SPEC)
 
@@ -33,7 +33,7 @@
 
 ### B1 — сервис частых товаров (ТЗ Шаг 1)
 - [x] RED 2026-07-21: `test/services/shop/customer_frequent_products_service_test.rb` — 12 тестов (агрегация 3/5 заказов · пустой массив · топ-3 по частоте · свежесть при равной частоте · раздельные модификаторы · окно WINDOW_DAYS · только mobile · без pending/cancelled · изоляция тенантов · disabled исключён · image_url nil placeholder · лимиты в константах). Прогон: **12 runs / 12 errors** — все `NameError: uninitialized constant Shop::CustomerFrequentProductsService` (намеренный RED `[TDD]`, не ISSUES)
-- [ ] GREEN: `app/services/shop/customer_frequent_products_service.rb` (константы `WINDOW_DAYS`, `MAX_REPEAT_ITEMS`; 2 запроса + группировка в Ruby)
+- [x] GREEN 2026-07-21: `app/services/shop/customer_frequent_products_service.rb` (86 строк) — `WINDOW_DAYS=45`, `MAX_REPEAT_ITEMS=3`, `COUNTED_STATUSES` (без pending/cancelled); 4 плоских запроса без JOIN (orders pluck → order_items pluck → PTS index_by → products index_by), группировка `[product_id, modifier_options]`, сортировка частота↓ свежесть↓. Тесты **12 runs / 0 fail**; регрессия `test/services/shop/` **103 runs / 0 fail**; rubocop 0 offenses
 
 ### B2 — категории витрины (ТЗ Шаг 2): переиспользуем существующее
 - [ ] Существующий `shop/api/categories` + `products` уже отдают категории/товары с кэшем 5 мин и placeholder — НОВЫЙ сервис не пишем

@@ -24,7 +24,7 @@ class Shop::CustomerFrequentProductsServiceTest < ActiveSupport::TestCase
     @tonic = create_product!(category: @category, name: "Кофе-тоник")
     @matcha = create_product!(category: @category, name: "Матча тоник")
 
-    [@filter, @bumble, @tonic, @matcha].each do |product|
+    [ @filter, @bumble, @tonic, @matcha ].each do |product|
       enable_product_for_tenant!(tenant: @tenant, product: product, price: 250)
     end
   end
@@ -68,7 +68,7 @@ class Shop::CustomerFrequentProductsServiceTest < ActiveSupport::TestCase
     items = call_service
 
     assert_equal 3, items.length
-    assert_equal [@bumble.id, @filter.id, @tonic.id], items.map { |i| i[:product_id] }
+    assert_equal [ @bumble.id, @filter.id, @tonic.id ], items.map { |i| i[:product_id] }
     refute_includes items.map { |i| i[:product_id] }, @matcha.id
   end
 
@@ -77,7 +77,7 @@ class Shop::CustomerFrequentProductsServiceTest < ActiveSupport::TestCase
     2.times { |i| create_paid_order!(product: @bumble, created_at: (1 + i).days.ago) }
 
     items = call_service
-    assert_equal [@bumble.id, @tonic.id], items.map { |i| i[:product_id] }
+    assert_equal [ @bumble.id, @tonic.id ], items.map { |i| i[:product_id] }
   end
 
   test "same product with different modifiers makes separate entries" do
@@ -87,7 +87,7 @@ class Shop::CustomerFrequentProductsServiceTest < ActiveSupport::TestCase
     items = call_service
 
     assert_equal 2, items.length
-    assert_equal [SYRUP_CARAMEL, SYRUP_VANILLA], items.map { |i| i[:modifier_options] }
+    assert_equal [ SYRUP_CARAMEL, SYRUP_VANILLA ], items.map { |i| i[:modifier_options] }
   end
 
   test "orders outside window are ignored" do
@@ -96,7 +96,7 @@ class Shop::CustomerFrequentProductsServiceTest < ActiveSupport::TestCase
     create_paid_order!(product: @bumble, created_at: (window - 1).days.ago)
 
     items = call_service
-    assert_equal [@bumble.id], items.map { |i| i[:product_id] }
+    assert_equal [ @bumble.id ], items.map { |i| i[:product_id] }
   end
 
   test "only mobile source orders are counted" do
