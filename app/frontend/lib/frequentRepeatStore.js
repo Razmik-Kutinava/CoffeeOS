@@ -1,5 +1,8 @@
 import { writable } from "svelte/store"
 import { api } from "./api.js"
+import { addToCart } from "./shopCartAdd.js"
+import { cartSheetMode } from "./cartSheetStore.js"
+import { MODE_HIDDEN, MODE_EXPANDED } from "./cartSheetThresholds.js"
 import {
   readFrequentCache,
   writeFrequentCache,
@@ -15,9 +18,18 @@ export const frequentCategories = writable({})
 export const frequentLoaded = writable(false)
 /** Счётчики карточек повтора: ключ карточки → количество (минимум 1) */
 export const frequentQuantities = writable({})
+/** Тост секции «повторить»: { type: "success"|"error", message } | null */
+export const repeatFeedback = writable(null)
 
 let currentQuantities = {}
 frequentQuantities.subscribe((v) => { currentQuantities = v })
+let currentItems = []
+frequentItems.subscribe((v) => { currentItems = Array.isArray(v) ? v : [] })
+
+/** Ключ карточки — тот же формат, что в RepeatSection.svelte */
+export function frequentCardKey(item, i) {
+  return `${item.product_id}-${i}`
+}
 
 /**
  * Изменение счётчика −1+: минимум 1 (удаления из повтора нет),
@@ -48,6 +60,37 @@ export function initFrequentFromCache() {
   }
   frequentLoaded.set(true)
   return cached
+}
+
+/**
+ * «Повторить в 1 клик» (ТЗ Шаг 11): все позиции повтора в корзину с
+ * сохранёнными модификаторами заказа и счётчиками F3. Успех → шторка
+ * hidden + success-тост; ошибка → error-тост, режим шторки не меняется.
+ */
+export async function repeatAllToCart() {
+  const items = currentItems.slice(0, 3)
+  if (!items.length) return false
+  try {
+    // Последовательно: addToCart оптимистично пишет cart-кэш, гонки не нужны
+    for (const [ i, item ] of items.entries()) {
+      await addToCart({
+        product_id: item.product_id,
+        quantity: currentQuantities[frequentCardKey(item, i)] || 1,
+        selected_modifiers: item.modifier_options?.selected_modifiers || []
+      })
+    }
+    cartSheetMode.set(MODE_HIDDEN)
+    repeatFeedback.set({ type: "success", message: "Заказ добавлен в корзину" })
+    return true
+  } catch (_e) {
+    repeatFeedback.set({ type: "error", message: "Не удалось повторить заказ" })
+    return false
+  }
+}
+
+/** «+ещё» (ТЗ Шаг 11): развернуть шторку в expanded */
+export function repeatMore() {
+  cartSheetMode.set(MODE_EXPANDED)
 }
 
 /** Фоновый GET: успех — перезапись stores и кэша; offline/500 — кэш остаётся, UI не блокируем */

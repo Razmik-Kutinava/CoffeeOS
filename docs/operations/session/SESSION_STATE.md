@@ -2,11 +2,17 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-21 (Quick Repeat Bottom Sheet — PHASE 2: BUILD, F3 GREEN done, жду go на F4-RED)  
+**Дата:** 2026-07-21 (Quick Repeat Bottom Sheet — PHASE 2: BUILD, F4 GREEN done; осталось F5 (scope-вопрос) → PHASE 3: REVIEW)  
 
 | Сейчас | Дальше |
 |--------|--------|
-| B1–B4 + F1–F3 закрыты GREEN (сервис, кэш, API, клиентский кэш/store, секция «повторить», счётчики с персистом) | **go** → F4-RED («повторить в 1 клик» / «+ещё» / кастомизация) |
+| B1–B4 + F1–F4 закрыты GREEN — вся фича по 12 шагам ТЗ реализована, кроме F5 «полатить в 1 клик» (в ТЗ нет, только скрин 06) | Решение владельца по F5 → PHASE 3: REVIEW (sanity, полный ops, финальный отчёт) |
+
+### Сессия 2026-07-21 (F4 — «повторить в 1 клик» / «+ещё» / тосты)
+
+- RED `29dacad`: `test/integration/shop/quick_repeat_actions_test.rb` — 4 теста (repeatAllToCart с сохранёнными модификаторами и счётчиками, repeatMore → expanded, repeatFeedback-тосты, кнопки/тост в секции, фиксация кастомизации Product cart_line, mirror контракта).
+- GREEN: `frequentRepeatStore.js` (101 строка) — `repeatAllToCart` (последовательный `addToCart` с `modifier_options.selected_modifiers` + qty из F3-счётчиков; успех → MODE_HIDDEN + success-тост; ошибка → error-тост, режим не меняется), `repeatMore` → MODE_EXPANDED, `repeatFeedback`; `RepeatSection.svelte` (134 строки) — оранжевая «повторить в 1 клик» с busy-guard, «+ещё», тост с автоскрытием 2.5с.
+- Тесты: F1–F4 **17 runs / 166 assertions / 0 failures**; регрессия шторки+каталог **27 runs / 265 assertions / 0 failures**; esbuild + svelte compile OK.
 
 ### Сессия 2026-07-21 (F3 — счётчики карточек повтора + localStorage)
 

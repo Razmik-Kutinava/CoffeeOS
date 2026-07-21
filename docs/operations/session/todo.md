@@ -7,7 +7,7 @@
 
 ## Текущая фаза
 
-**PHASE 2: BUILD — F4-RED `[x]` 2026-07-21 (4 runs / 2 failures — действий нет, ожидаемо) · Gate 2: жду go на F4-GREEN**
+**PHASE 2: BUILD — F4 GREEN `[x]` 2026-07-21 (F1–F4 17/0 · регрессия шторки 27/0 · esbuild + svelte compile OK) · осталось: F5 (scope-вопрос) → PHASE 3: REVIEW**
 
 ## Маппинг ТЗ → наш стек (решения SPEC)
 
@@ -61,7 +61,7 @@
 
 ### F4 — действия «повторить в 1 клик» / «+ещё» / кастомизация (ТЗ Шаги 11–12, скрин 06)
 - [x] RED 2026-07-21: `test/integration/shop/quick_repeat_actions_test.rb` — 4 теста (store: `repeatAllToCart` через канонный `addToCart` с `modifier_options.selected_modifiers` + qty из frequentQuantities, успех → `MODE_HIDDEN`, `repeatMore` → `MODE_EXPANDED`, тосты через `repeatFeedback`, лимит ≤120 строк · RepeatSection: оранжевая `shop-repeat-one-click` «повторить в 1 клик» + `shop-repeat-more` «+ещё» + `shop-repeat-toast` · фиксация кастомизации `Product.svelte` cart_line/initSelectedFromCartLine · mirror: success → hidden+success, error → режим не меняется, more → expanded). Прогон: **4 runs / 2 failures** (нет действий в store и кнопок в секции — намеренный RED `[TDD]`; фиксация Product и mirror зелёные сразу)
-- [ ] GREEN: реализация в `frequentRepeatStore.js` (≤120 строк) + кнопки/тост в `RepeatSection.svelte`
+- [x] GREEN 2026-07-21: `frequentRepeatStore.js` (101 строка ≤ 120) — `repeatFeedback` store, `frequentCardKey` (общий формат ключа), `repeatAllToCart` (последовательный `addToCart` с `modifier_options.selected_modifiers` + qty из счётчиков → успех `MODE_HIDDEN` + success-тост, ошибка → error-тост без смены режима), `repeatMore` → `MODE_EXPANDED`; `RepeatSection.svelte` (134 строки — warning-зона 121–200, одна ответственность) — тост `shop-repeat-toast` с автоскрытием 2.5с, оранжевая `shop-repeat-one-click` (busy-guard от даблкликов) + `shop-repeat-more`. Тесты F1–F4 **17 runs / 166 assertions / 0 failures**; регрессия шторки+каталог **27 runs / 265 assertions / 0 failures**; esbuild + svelte compile OK. Нюанс: `addToCart` диспатчит `shop:cart-added` → PEEK, но `repeatAllToCart` ставит HIDDEN после всех добавлений — порядок корректный
 
 ### F5 — «полатить в 1 клик» на карточке повтора (скрин 06) — **SCOPE-ВОПРОС**
 - [ ] В 12 шагах ТЗ нет, на скрине 6 есть (кнопка под каждой карточкой). Существует `POST /shop/api/payments/one_click`. Предложение: отдельным шагом после F4, по явному go владельца (оплата = hot-path)
