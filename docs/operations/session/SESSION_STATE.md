@@ -2,11 +2,18 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-21 (Quick Repeat Bottom Sheet — PHASE 1: SPEC done, Gate 1: жду go на B1-RED)  
+**Дата:** 2026-07-21 (Quick Repeat Bottom Sheet — PHASE 2: BUILD, F2 GREEN done, жду go на F3-RED)  
 
 | Сейчас | Дальше |
 |--------|--------|
-| SPEC в todo.md: 4 backend-пары (B1–B4) + 5 frontend-пар (F1–F5), маппинг ТЗ→стек, 3 вопроса владельцу | **go** → PHASE 2: BUILD, B1-RED (тесты `Shop::CustomerFrequentProductsService`) |
+| B1–B4 + F1–F2 закрыты GREEN (сервис, кэш, API, клиентский кэш/store, секция «повторить» в шторке); коммит F2 `71ab631` | **go** → F3-RED (expanded: каталог по категориям из frequentCategories) |
+
+### Сессия 2026-07-21 (F2 — секция «повторить» в CartSheet)
+
+- RED `92274e2`: `test/integration/shop/quick_repeat_section_test.rb` — 4 теста (разметка RepeatSection, слоты в CartSheet empty/peek/expanded и НЕ hidden, один drag-handle, mirror видимости).
+- GREEN `71ab631`: новый `app/frontend/components/RepeatSection.svelte` (до 3 карточек из `frequentItems`: thumb/«Нет фото», line-clamp, цена оранжевым, локальный счётчик −1+); в `CartSheet.svelte` — import, `initFrequentFromCache()` + `refreshFrequentProducts()` в onMount, слоты `shop-repeat-slot-empty/peek/expanded` перед checkoutBar. Канон высот и hidden-чипы не тронуты.
+- Тесты: F2 **4 runs / 48 assertions / 0 failures**; регрессия шторки (heights canon, b113, checkout UX, F1 cache) **24 runs / 263 assertions / 0 failures**; svelte compile обоих файлов OK.
+- Решение: в hidden секция не рендерится (там канонные чипы корзины) — сверить с заказчиком на приёмке. Отложено в F4: синк счётчика с localStorage + add-to-cart.
 
 ### Сессия 2026-07-21 (PHASE 1: SPEC Quick Repeat Bottom Sheet — docs only)
 
