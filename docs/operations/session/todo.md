@@ -7,7 +7,7 @@
 
 ## Текущая фаза
 
-**PHASE 2: BUILD — F2-RED `[x]` 2026-07-21 (4 runs / 1 failure + 2 errors — компонента нет, ожидаемо) · Gate 2: жду go на F2-GREEN**
+**PHASE 2: BUILD — F2 GREEN `[x]` 2026-07-21 (4/4 · регрессия шторки 24/0 · svelte compile OK) · жду go на F3-RED (expanded: каталог по категориям)**
 
 ## Маппинг ТЗ → наш стек (решения SPEC)
 
@@ -53,7 +53,7 @@
 
 ### F2 — секция «повторить» в режимах empty/peek/expanded (ТЗ Шаги 6–8, скрины 01–05)
 - [x] RED 2026-07-21: `test/integration/shop/quick_repeat_section_test.rb` — 4 теста (разметка `RepeatSection.svelte`: заголовок «повторить» italic, карточки shop-repeat-card с thumb/«Нет фото»/line-clamp/цена/−1+/slice(0,3), данные из frequentItems · встройка в CartSheet: init+refresh, слоты empty/peek/expanded, НЕ hidden · один drag-handle · mirror видимости). Прогон: **4 runs / 1 failure + 2 errors** (ENOENT компонента + нет слотов — намеренный RED `[TDD]`). Решение: в hidden секцию не показываем — там существующие чипы корзины (скрины 04–05 трактуем как чипы, вопрос заказчику на приёмке)
-- [ ] GREEN: `app/frontend/components/RepeatSection.svelte` + встройка в `CartSheet.svelte` (слоты-маркеры, канон высот не трогаем)
+- [x] GREEN 2026-07-21: `app/frontend/components/RepeatSection.svelte` (~95 строк: заголовок «повторить» italic, до 3 карточек slice(0,3) из frequentItems, thumb/«Нет фото», line-clamp название, цена оранжевым, локальный счётчик −1+ с минимумом 1) + встройка в `CartSheet.svelte`: import + init/refresh в onMount, слоты shop-repeat-slot-empty/peek/expanded перед checkoutBar (hidden не трогали, drag-handle один). Тесты **4 runs / 48 assertions / 0 failures**, регрессия шторки (heights canon + b113 + checkout UX + F1 cache) **24 runs / 263 assertions / 0 failures**, svelte compile обоих файлов OK. Отложено: счётчик пишет только в локальный state — синк с localStorage и add-to-cart идут в F4 (кнопки действий); слот в ветке singleItem — решим в F3/F4 по скрину 01
 
 ### F3 — карточки повтора: счётчики и localStorage (ТЗ Шаги 9–10)
 - [ ] RED: −1+ на карточке повтора мгновенно пишет в localStorage; клик по карточке категории → добавление в корзину с дефолтами (существующий `shopCartAdd.js`); ошибка сети → тост

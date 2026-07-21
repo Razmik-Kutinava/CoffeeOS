@@ -23,6 +23,8 @@
     openEditCard,
     undoRemoveCartLine
   } from "../lib/cartSheetStore.js"
+  import RepeatSection from "./RepeatSection.svelte"
+  import { initFrequentFromCache, refreshFrequentProducts } from "../lib/frequentRepeatStore.js"
   import {
     MODE_EMPTY,
     MODE_EXPANDED,
@@ -198,6 +200,9 @@
     bindCartSheetEvents()
     window.addEventListener("hashchange", onHash)
     refreshCartSheet().catch(() => {})
+    // Секция «повторить»: мгновенно из localStorage, актуализация — фоном
+    initFrequentFromCache()
+    refreshFrequentProducts()
 
     return () => {
       unsubItems(); unsubTotal(); unsubMode(); unsubBusy()
@@ -343,6 +348,9 @@
       <p data-testid="shop-cart-sheet-empty" class="px-4 py-6 text-center text-sm italic text-[#888]">
         тут будут твои заказы
       </p>
+      <div data-testid="shop-repeat-slot-empty" class="shrink-0 px-2">
+        <RepeatSection />
+      </div>
       {@render checkoutBar("shop-cart-empty-total")}
 
     <!-- HIDDEN — ряд чипов с фото + сумма (канон заказчика 2026-07-20) -->
@@ -446,6 +454,9 @@
             {/each}
           </div>
         {/if}
+        <div data-testid="shop-repeat-slot-peek" class="shrink-0">
+          <RepeatSection />
+        </div>
         {@render checkoutBar("shop-cart-peek-total", payStackActive)}
       </div>
 
@@ -509,6 +520,9 @@
               </div>
             </div>
           {/each}
+        </div>
+        <div data-testid="shop-repeat-slot-expanded" class="shrink-0">
+          <RepeatSection />
         </div>
         {@render checkoutBar(null, payStackActive)}
       </div>
