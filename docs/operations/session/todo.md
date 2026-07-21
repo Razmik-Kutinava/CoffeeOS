@@ -7,7 +7,7 @@
 
 ## Текущая фаза
 
-**PHASE 2: BUILD — F1 GREEN `[x]` 2026-07-21 (4/4 · канон шторки 9/0 · esbuild syntax OK) · жду go на F2-RED (секция «повторить» в шторке)**
+**PHASE 2: BUILD — F2-RED `[x]` 2026-07-21 (4 runs / 1 failure + 2 errors — компонента нет, ожидаемо) · Gate 2: жду go на F2-GREEN**
 
 ## Маппинг ТЗ → наш стек (решения SPEC)
 
@@ -51,9 +51,9 @@
 - [x] RED 2026-07-21: `test/integration/shop/quick_repeat_frequent_cache_test.rb` — 4 теста (фиксация `shopFrequentCache.js` ключ `coffeeos_shop_frequent_v1` + read/write/clear · фиксация `frequentRepeatStore.js` init-из-кэша + `api("/frequent_products")` + writeFrequentCache · catch не обнуляет секцию · mirror init/refresh/error). Прогон: **4 runs / 3 errors** (ENOENT — файлов нет, намеренный RED `[TDD]`; mirror-тест чистой логики зелёный сразу)
 - [x] GREEN 2026-07-21: `shopFrequentCache.js` (20 строк, зеркало shopCartCache) + `frequentRepeatStore.js` (42 строки: stores frequentItems/frequentCategories/frequentLoaded, `initFrequentFromCache` синхронный, `refreshFrequentProducts` фоновый с catch-без-очистки). Тесты **4 runs / 0 fail**; регрессия канона шторки + persistence **9 runs / 0 fail**; esbuild syntax OK
 
-### F2 — секция «повторить» в режимах peek/expanded/hidden (ТЗ Шаги 6–8, скрины 01–05)
-- [ ] RED: разметка `RepeatSection.svelte` — 1–3 мини-карточки (фото, название ellipsis, цена, −1+), drag-handle есть; hidden: превью повтора + «+цена» (скрины 04–05); expanded: секция «повторить» внизу (скрины 02–03); восстановление последнего режима (уже есть `cartSheetModeCache.js` — переиспользуем)
-- [ ] GREEN: `app/frontend/components/RepeatSection.svelte` + встройка в `CartSheet.svelte` (минимальные точки входа, канон высот не трогаем)
+### F2 — секция «повторить» в режимах empty/peek/expanded (ТЗ Шаги 6–8, скрины 01–05)
+- [x] RED 2026-07-21: `test/integration/shop/quick_repeat_section_test.rb` — 4 теста (разметка `RepeatSection.svelte`: заголовок «повторить» italic, карточки shop-repeat-card с thumb/«Нет фото»/line-clamp/цена/−1+/slice(0,3), данные из frequentItems · встройка в CartSheet: init+refresh, слоты empty/peek/expanded, НЕ hidden · один drag-handle · mirror видимости). Прогон: **4 runs / 1 failure + 2 errors** (ENOENT компонента + нет слотов — намеренный RED `[TDD]`). Решение: в hidden секцию не показываем — там существующие чипы корзины (скрины 04–05 трактуем как чипы, вопрос заказчику на приёмке)
+- [ ] GREEN: `app/frontend/components/RepeatSection.svelte` + встройка в `CartSheet.svelte` (слоты-маркеры, канон высот не трогаем)
 
 ### F3 — карточки повтора: счётчики и localStorage (ТЗ Шаги 9–10)
 - [ ] RED: −1+ на карточке повтора мгновенно пишет в localStorage; клик по карточке категории → добавление в корзину с дефолтами (существующий `shopCartAdd.js`); ошибка сети → тост
