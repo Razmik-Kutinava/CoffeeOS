@@ -12,8 +12,9 @@
 | B1 сервис · B2 категории · B3 кэш+bust (hot-path OrderCreator/PaymentStatusUpdater) · B4 API | **`[x]`** GREEN |
 | F1 клиентский кэш · F2 секция «повторить» · F3 счётчики · F4 действия+тосты · F5 «оплатить в 1 клик» | **`[x]`** GREEN |
 | REVIEW: rubocop 0 offenses · services+API+RLS 123/0 · оплата §2.3+one_click 29/0 · шторка 27/0 | **`[x]`** |
-| **Deploy Fly** (апрув владельца дан 2026-07-21 «потом деплой на флай») | **`[ ]`** следующий шаг |
-| **MCP DevTools на Fly** — приёмка peek/expanded/hidden + повтор + оплата, скрины | **`[ ]`** после деплоя |
+| **Deploy Fly** — `deployment-01KY2FKAVV4MDDXR3ANANCCCJE` (release + smoke OK) | **`[x]`** 2026-07-21 |
+| **MCP на Fly** — 6/6 PASS · [`fly_acceptance_mcp_2026-07-21.json`](../milestones/veha_2/artifacts/quick_repeat_bottom_sheet/fly_acceptance_mcp_2026-07-21.json) + 6 скринов | **`[x]`** 2026-07-21 |
+| UX-вопросы владельцу: UX-1 (empty клипает повтор) · UX-2 (peek 2+ повтор вытесняет корзину) | **open** → DEMO_FEEDBACK |
 | Апрув заказчика / `[x]` в CBR | **`[ ]`** |
 
 **Решения, требующие сверки на приёмке:** hidden — без секции повтора (канонные чипы корзины) · клик по карточке каталога — переход в Product (конфликт Шагов 9/12 ТЗ) · «оплатить в 1 клик» — автооткрытие шита оплаты, списание с подтверждением «Оплатить».

@@ -27,6 +27,9 @@
 
 | Дата | Источник | Сценарий / экран | Суть | Статус | PR / коммит |
 |------|----------|------------------|------|--------|-------------|
+| 2026-07-21 | MCP Fly Quick Repeat | шторка empty (корзина пуста) | **UX-1:** секция «повторить» в empty-шторке (12vh) клипается за нижней границей — на пустой корзине не видна. Поднять высоту empty при наличии frequent_items? | open | [fly_acceptance_mcp_2026-07-21.json](artifacts/quick_repeat_bottom_sheet/fly_acceptance_mcp_2026-07-21.json) |
+| 2026-07-21 | MCP Fly Quick Repeat | шторка peek 2+ | **UX-2:** секция «повторить» + кнопки вытесняют ряд карточек корзины из peek (38vh) — виден только повтор + чек-бар. Приоритет корзина vs повтор — решение владельца | open | скрин `03_fly_peek_repeat_section_2026-07-21.png` |
+| 2026-07-21 | MCP Fly Quick Repeat | витрина + checkout | Приёмка фичи 6/6 PASS (peek/expanded/«повторить»/«оплатить в 1 клик»); живое списание не гонялось (точка закрыта, prod T-Bank) — покрыто локальной симуляцией §2.3 | **ждёт апрув заказчика** | [fly_acceptance_mcp_2026-07-21.json](artifacts/quick_repeat_bottom_sheet/fly_acceptance_mcp_2026-07-21.json) |
 | 2026-06-25 | B1.13 rev2 | навигация + поп-ап | 4 дока заказчика → S1-R1/S2a/S2b/S3-rev2 | **docs done** · код rev2 `[ ]` | см. коммит rev2 docs |
 | 2026-06-25 | B1.13-S3 rev1 | поп-ап корзины | peek +/- (старое ТЗ) | superseded → S3-rev2 | `6fcc9d8` |
 | 2026-07-07 | владелец/заказчик B1.13 | O2 | **O2:** только убрать бар; peek без изменений; рекомендации — backlog | **gate_closed** | [b113_cr_bottom_nav_answers_2026-07-07.json](artifacts/demo-feedback/b113_cr_bottom_nav_answers_2026-07-07.json) |

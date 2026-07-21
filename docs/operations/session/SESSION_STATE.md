@@ -2,11 +2,18 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-21 (Quick Repeat Bottom Sheet — PHASE 3: REVIEW пройден; следующий шаг: deploy Fly → MCP DevTools)  
+**Дата:** 2026-07-21 (Quick Repeat Bottom Sheet — задеплоено на Fly + MCP-приёмка 6/6 PASS; ждёт апрув заказчика)  
 
 | Сейчас | Дальше |
 |--------|--------|
-| Фича целиком GREEN (B1–B4, F1–F5) + REVIEW: rubocop 0 offenses, services+API+RLS 123/0, оплата §2.3 29/0, шторка 27/0; CHANGELOG/HANDOFF обновлены | deploy Fly (апрув владельца дан) → MCP DevTools приёмка (peek/expanded/hidden + повтор + оплата) → апрув заказчика |
+| Deploy Fly `deployment-01KY2FKAVV4MDDXR3ANANCCCJE` OK · MCP-приёмка 6/6 PASS (артефакт + 6 скринов) · UX-1/UX-2 (empty/peek высоты vs секция повтора) в DEMO_FEEDBACK open | Апрув заказчика по скринам · решение владельца по UX-1/UX-2 · опционально живая оплата в рабочие часы точки |
+
+### Сессия 2026-07-21 (deploy Fly + MCP-приёмка Quick Repeat)
+
+- Deploy: `bin/fly_deploy.sh` через WSL (fix: PATH к `~/.fly/bin`); release + миграции + smoke checks OK.
+- Smoke: `/up` 200; `GET /shop/api/frequent_products` — 401 без сессии (канон Shop::Api::Auth), 200 из браузерной сессии витрины.
+- MCP (cursor-ide-browser + CDP): frequent_items засеяны fetch-стабом (у стенда нет клиентов с историей mobile-заказов); секция «повторить» в peek/expanded, «+ещё» → expanded, «повторить в 1 клик» → hidden + 3 позиции (+304₽), «оплатить в 1 клик» → checkout + шит оплаты (гость → «Укажите email», канон). Артефакт `fly_acceptance_mcp_2026-07-21.json`, 6 скринов `screenshots/fly_acceptance/`.
+- Находки: UX-1 (empty 12vh клипает секцию), UX-2 (peek 2+ — повтор вытесняет карточки корзины) → DEMO_FEEDBACK open, решение владельца.
 
 ### Сессия 2026-07-21 (PHASE 3: REVIEW Quick Repeat)
 

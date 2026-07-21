@@ -1,0 +1,29 @@
+{
+  "task": "Quick Repeat Bottom Sheet — MCP-приёмка на Fly",
+  "date": "2026-07-21",
+  "deploy": "deployment-01KY2FKAVV4MDDXR3ANANCCCJE (fly deploy через WSL, release + миграции OK, smoke checks passed)",
+  "stand": "https://coffeeos.fly.dev/shop?tenant_id=af4f78d6-c66b-428e-8ee4-5a609c5c9131",
+  "note_stub": "У tenant нет клиентов с историей mobile-заказов — frequent_items засеяны стабом fetch (CDP addScriptToEvaluateOnNewDocument) из реальных товаров каталога. Бэкенд-агрегация покрыта unit/integration тестами локально.",
+  "checks": [
+    { "id": 1, "check": "GET /shop/api/frequent_products из браузерной сессии витрины", "result": "PASS — 200, JSON { frequent_items, categories } (гость: frequent_items=[]); curl без сессии/ключа — 401 (Shop::Api::Auth, ожидаемо)" },
+    { "id": 2, "check": "Секция «повторить» в peek: 3 карточки (фото/«Нет фото», имя line-clamp, цена, счётчик −1+), кнопки «повторить в 1 клик» / «оплатить в 1 клик» / «+ещё»", "result": "PASS — скрин 03" },
+    { "id": 3, "check": "«+ещё» → шторка expanded, корзина списком + секция повтора внизу", "result": "PASS — скрин 04" },
+    { "id": 4, "check": "«повторить в 1 клик» → 3 позиции добавлены в корзину, шторка hidden (чипы + сумма +304₽)", "result": "PASS — скрин 05" },
+    { "id": 5, "check": "«оплатить в 1 клик» → позиции в корзину, переход #/checkout, autopay-флаг снят, шит оплаты открыт; гость без email → «Укажите email» (канон)", "result": "PASS — скрин 06" },
+    { "id": 6, "check": "Счётчики −1+ на карточках повтора рендерятся, минимум 1 (− disabled при 1)", "result": "PASS — скрины 03/04/06" }
+  ],
+  "screenshots": [
+    "screenshots/fly_acceptance/01_fly_shop_peek_repeat_2026-07-21.png",
+    "screenshots/fly_acceptance/02_fly_peek_single_item_2026-07-21.png",
+    "screenshots/fly_acceptance/03_fly_peek_repeat_section_2026-07-21.png",
+    "screenshots/fly_acceptance/04_fly_expanded_after_more_2026-07-21.png",
+    "screenshots/fly_acceptance/05_fly_hidden_after_one_click_repeat_2026-07-21.png",
+    "screenshots/fly_acceptance/06_fly_checkout_after_pay_one_click_2026-07-21.png"
+  ],
+  "findings_for_owner": [
+    "UX-1: в empty-шторке (12vh) секция повтора есть в DOM, но клипается за нижней границей — на пустой корзине секцию не видно. Поднять высоту empty при наличии frequent_items?",
+    "UX-2: в peek 2+ (38vh) секция повтора + кнопки вытесняют ряд карточек корзины (flex-1 ужимается до 0) — виден только повтор + чек-бар. Согласовать приоритет: корзина vs повтор в peek.",
+    "NOTE-1: живое списание «оплатить в 1 клик» на Fly не проверялось (точка закрыта по расписанию + prod T-Bank); списание покрыто локальной симуляцией §2.3 (29/0).",
+    "NOTE-2: реальные frequent_items появятся после первого оплаченного заказа клиента с verified email (окно 45 дней, source mobile)."
+  ]
+}

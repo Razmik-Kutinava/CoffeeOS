@@ -72,7 +72,9 @@
 - [x] Sanity 2026-07-21: rubocop 12 файлов фичи — 0 offenses · N+1 нет (4 плоских pluck + index_by, фронт без запросов в циклах) · RLS: 123/0 (services + frequent_products API + tenant_isolation + rls_tenant_isolation) · svelte compile + esbuild OK
 - [x] Регрессия зон 2026-07-21: оплата §2.3 + one_click step4 **29/0 (2 pre-existing skips)** · шторка+каталог **27/0** · фича F1–F5 **21/0**
 - [x] Ops: SESSION_STATE / CHANGELOG / HANDOFF обновлены
-- [ ] Deploy Fly (апрув дан) → MCP DevTools скрины по состояниям (peek/expanded/hidden + повтор + оплата)
+- [x] Deploy Fly 2026-07-21: `deployment-01KY2FKAVV4MDDXR3ANANCCCJE` (WSL, release + smoke OK)
+- [x] MCP-приёмка на Fly 2026-07-21: 6/6 PASS — `fly_acceptance_mcp_2026-07-21.json` + 6 скринов (`screenshots/fly_acceptance/`); UX-1/UX-2 → DEMO_FEEDBACK open
+- [ ] Апрув заказчика + решение по UX-1/UX-2 (высоты empty/peek vs секция повтора)
 
 ## Вопросы владельцу (не блокируют B1–B4)
 
