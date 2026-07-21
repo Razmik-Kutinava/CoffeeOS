@@ -7,7 +7,7 @@
 
 ## Текущая фаза
 
-**PHASE 2: BUILD — F4 GREEN `[x]` 2026-07-21 (F1–F4 17/0 · регрессия шторки 27/0 · esbuild + svelte compile OK) · осталось: F5 (scope-вопрос) → PHASE 3: REVIEW**
+**PHASE 2: BUILD — F5-RED `[x]` 2026-07-21 (4 runs / 3 failures — autopay-флоу нет, ожидаемо) · Gate 2: жду go на F5-GREEN · после: REVIEW → deploy Fly (по go) → MCP DevTools**
 
 ## Маппинг ТЗ → наш стек (решения SPEC)
 
@@ -63,8 +63,10 @@
 - [x] RED 2026-07-21: `test/integration/shop/quick_repeat_actions_test.rb` — 4 теста (store: `repeatAllToCart` через канонный `addToCart` с `modifier_options.selected_modifiers` + qty из frequentQuantities, успех → `MODE_HIDDEN`, `repeatMore` → `MODE_EXPANDED`, тосты через `repeatFeedback`, лимит ≤120 строк · RepeatSection: оранжевая `shop-repeat-one-click` «повторить в 1 клик» + `shop-repeat-more` «+ещё» + `shop-repeat-toast` · фиксация кастомизации `Product.svelte` cart_line/initSelectedFromCartLine · mirror: success → hidden+success, error → режим не меняется, more → expanded). Прогон: **4 runs / 2 failures** (нет действий в store и кнопок в секции — намеренный RED `[TDD]`; фиксация Product и mirror зелёные сразу)
 - [x] GREEN 2026-07-21: `frequentRepeatStore.js` (101 строка ≤ 120) — `repeatFeedback` store, `frequentCardKey` (общий формат ключа), `repeatAllToCart` (последовательный `addToCart` с `modifier_options.selected_modifiers` + qty из счётчиков → успех `MODE_HIDDEN` + success-тост, ошибка → error-тост без смены режима), `repeatMore` → `MODE_EXPANDED`; `RepeatSection.svelte` (134 строки — warning-зона 121–200, одна ответственность) — тост `shop-repeat-toast` с автоскрытием 2.5с, оранжевая `shop-repeat-one-click` (busy-guard от даблкликов) + `shop-repeat-more`. Тесты F1–F4 **17 runs / 166 assertions / 0 failures**; регрессия шторки+каталог **27 runs / 265 assertions / 0 failures**; esbuild + svelte compile OK. Нюанс: `addToCart` диспатчит `shop:cart-added` → PEEK, но `repeatAllToCart` ставит HIDDEN после всех добавлений — порядок корректный
 
-### F5 — «полатить в 1 клик» на карточке повтора (скрин 06) — **SCOPE-ВОПРОС**
-- [ ] В 12 шагах ТЗ нет, на скрине 6 есть (кнопка под каждой карточкой). Существует `POST /shop/api/payments/one_click`. Предложение: отдельным шагом после F4, по явному go владельца (оплата = hot-path)
+### F5 — «оплатить в 1 клик» на секции повтора (скрин 06) — go владельца 2026-07-21
+- Решение по scope: кнопка = repeatAllToCart → флаг `shop_repeat_autopay` в sessionStorage → `push("/checkout")` → Checkout снимает флаг и автооткрывает шит оплаты (existing `openPaymentSheet` с преселектом primary-карты). **Само списание — существующий канон one_click с подтверждением «Оплатить»**: молча деньги не снимаем (безопасность), бэкенд-оплату не трогаем. Ошибка добавления → error-тост F4, навигации нет
+- [x] RED 2026-07-21: `test/integration/shop/quick_repeat_pay_one_click_test.rb` — 4 теста (store: `repeatPayOneClick` через `repeatAllToCart()` + `REPEAT_AUTOPAY_KEY` + push("/checkout"), лимит ≤120 · секция: `shop-repeat-pay-one-click` «оплатить в 1 клик» · Checkout: consume флага + removeItem · mirror: success → checkout+autopay, error → stay). Прогон: **4 runs / 3 failures** (флоу нет — намеренный RED `[TDD]`; mirror зелёный сразу)
+- [ ] GREEN: `repeatPayOneClick` в store + кнопка в секции + consume-флаг в `Checkout.svelte` (минимальный дифф в onMount) + регрессия оплаты §2.3 + one_click step4
 
 ### PHASE 3: REVIEW
 - [ ] Sanity: N+1 / RLS / rubocop / eslint + svelte compile
