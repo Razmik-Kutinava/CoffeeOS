@@ -7,7 +7,7 @@
 
 ## Текущая фаза
 
-**PHASE 2: BUILD — F3 GREEN `[x]` 2026-07-21 (F1–F3 13/0 · регрессия шторки 27/0 · esbuild + svelte compile OK) · жду go на F4-RED («повторить в 1 клик» / «+ещё»)**
+**PHASE 2: BUILD — F4-RED `[x]` 2026-07-21 (4 runs / 2 failures — действий нет, ожидаемо) · Gate 2: жду go на F4-GREEN**
 
 ## Маппинг ТЗ → наш стек (решения SPEC)
 
@@ -60,8 +60,8 @@
 - [x] GREEN 2026-07-21: `shopFrequentCache.js` +`FREQUENT_QTY_KEY`/read/writeFrequentQty (отдельный ключ — refresh данных счётчики не затирает); `frequentRepeatStore.js` (61 строка ≤ 120) — store `frequentQuantities` + `setFrequentQty` (clamp `Math.max(1,`, синхронный `writeFrequentQty` на каждое изменение) + восстановление qty в `initFrequentFromCache`; `RepeatSection.svelte` — bump через `setFrequentQty`, локальное зеркало `storeQty` только из подписки на store. Тесты F1–F3 **13 runs / 116 assertions / 0 failures**; регрессия шторки+каталог (heights canon, b113, checkout UX, catalog hidden card) **27 runs / 265 assertions / 0 failures**; esbuild + svelte compile OK
 
 ### F4 — действия «повторить в 1 клик» / «+ещё» / кастомизация (ТЗ Шаги 11–12, скрин 06)
-- [ ] RED: «повторить в 1 клик» → все позиции повтора в корзину с сохранёнными `modifier_options` → hidden + success-тост; «+ещё» → expanded; ошибка → error-тост без смены состояния; кастомизация — существующий флоу `Product.svelte` (`cart_line`/модификаторы) — фиксация перехода
-- [ ] GREEN: реализация в store + `RepeatSection.svelte`
+- [x] RED 2026-07-21: `test/integration/shop/quick_repeat_actions_test.rb` — 4 теста (store: `repeatAllToCart` через канонный `addToCart` с `modifier_options.selected_modifiers` + qty из frequentQuantities, успех → `MODE_HIDDEN`, `repeatMore` → `MODE_EXPANDED`, тосты через `repeatFeedback`, лимит ≤120 строк · RepeatSection: оранжевая `shop-repeat-one-click` «повторить в 1 клик» + `shop-repeat-more` «+ещё» + `shop-repeat-toast` · фиксация кастомизации `Product.svelte` cart_line/initSelectedFromCartLine · mirror: success → hidden+success, error → режим не меняется, more → expanded). Прогон: **4 runs / 2 failures** (нет действий в store и кнопок в секции — намеренный RED `[TDD]`; фиксация Product и mirror зелёные сразу)
+- [ ] GREEN: реализация в `frequentRepeatStore.js` (≤120 строк) + кнопки/тост в `RepeatSection.svelte`
 
 ### F5 — «полатить в 1 клик» на карточке повтора (скрин 06) — **SCOPE-ВОПРОС**
 - [ ] В 12 шагах ТЗ нет, на скрине 6 есть (кнопка под каждой карточкой). Существует `POST /shop/api/payments/one_click`. Предложение: отдельным шагом после F4, по явному go владельца (оплата = hot-path)
