@@ -7,7 +7,7 @@
 
 ## Текущая фаза
 
-**PHASE 2: BUILD — F1-RED `[x]` 2026-07-21 (4 runs / 3 errors, файлов нет — ожидаемо) · Gate 2: жду go на F1-GREEN**
+**PHASE 2: BUILD — F1 GREEN `[x]` 2026-07-21 (4/4 · канон шторки 9/0 · esbuild syntax OK) · жду go на F2-RED (секция «повторить» в шторке)**
 
 ## Маппинг ТЗ → наш стек (решения SPEC)
 
@@ -49,7 +49,7 @@
 
 ### F1 — клиентский кэш + инициализация (ТЗ Шаг 5)
 - [x] RED 2026-07-21: `test/integration/shop/quick_repeat_frequent_cache_test.rb` — 4 теста (фиксация `shopFrequentCache.js` ключ `coffeeos_shop_frequent_v1` + read/write/clear · фиксация `frequentRepeatStore.js` init-из-кэша + `api("/frequent_products")` + writeFrequentCache · catch не обнуляет секцию · mirror init/refresh/error). Прогон: **4 runs / 3 errors** (ENOENT — файлов нет, намеренный RED `[TDD]`; mirror-тест чистой логики зелёный сразу)
-- [ ] GREEN: `app/frontend/lib/shopFrequentCache.js` + `app/frontend/lib/frequentRepeatStore.js` (stores frequentItems/frequentCategories, init + background refresh)
+- [x] GREEN 2026-07-21: `shopFrequentCache.js` (20 строк, зеркало shopCartCache) + `frequentRepeatStore.js` (42 строки: stores frequentItems/frequentCategories/frequentLoaded, `initFrequentFromCache` синхронный, `refreshFrequentProducts` фоновый с catch-без-очистки). Тесты **4 runs / 0 fail**; регрессия канона шторки + persistence **9 runs / 0 fail**; esbuild syntax OK
 
 ### F2 — секция «повторить» в режимах peek/expanded/hidden (ТЗ Шаги 6–8, скрины 01–05)
 - [ ] RED: разметка `RepeatSection.svelte` — 1–3 мини-карточки (фото, название ellipsis, цена, −1+), drag-handle есть; hidden: превью повтора + «+цена» (скрины 04–05); expanded: секция «повторить» внизу (скрины 02–03); восстановление последнего режима (уже есть `cartSheetModeCache.js` — переиспользуем)
