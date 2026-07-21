@@ -2,11 +2,19 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-21 (**закрыта** Bottom sheet expanded grid — UX принят как канон)  
+**Дата:** 2026-07-21 (интейк Quick Repeat Bottom Sheet — PHASE 0 done, ждём go на SPEC)  
 
 | Сейчас | Дальше |
 |--------|--------|
-| Задача закрыта: канон зафиксирован тестами, код не менялся | deploy — только по апруву владельца; следующая задача по go |
+| Интейк ТЗ «Быстрый повтор частых покупок» завершён: док 1:1, 6 скринов, индексы | **go** → PHASE 1: SPEC (todo.md, маппинг тестов RSpec/Vitest → Minitest) |
+
+### Сессия 2026-07-21 (intake Quick Repeat Bottom Sheet — без кода)
+
+- ТЗ заказчика 1:1 → `customer_tasks/Быстрый повтор частых покупок Quick Repeat Bottom Sheet.md` (12 TDD-шагов: backend сервис частых товаров + кэш + API, frontend bottom sheet peek/expanded/hidden + «повторить в 1 клик»).
+- 6 скринов → `artifacts/quick_repeat_bottom_sheet/screenshots/` (01 peek+повтор, 02–03 expanded, 04–05 hidden, 06 «полатить в 1 клик») + README с привязкой подписей.
+- Индексы: CBR (backlog + таблица задач №14), `customer_tasks/README.md`.
+- Заметки агента в ТЗ: тестовые пути из ТЗ (RSpec/Vitest) не совпадают со стеком репо (Minitest/`test/`) — решение на SPEC; «оплата в 1 клик» на скрине 6 отсутствует в чек-листе шагов — уточнить scope; интеграция с существующей `CartSheet.svelte` (канон высот не ломать).
+- Код приложения не менялся.
 
 ### Сессия 2026-07-21 (закрытие Bottom sheet expanded grid)
 
