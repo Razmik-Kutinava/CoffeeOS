@@ -7,7 +7,7 @@
 
 ## Текущая фаза
 
-**PHASE 2: BUILD — F5-RED `[x]` 2026-07-21 (4 runs / 3 failures — autopay-флоу нет, ожидаемо) · Gate 2: жду go на F5-GREEN · после: REVIEW → deploy Fly (по go) → MCP DevTools**
+**PHASE 2: BUILD — F5 GREEN `[x]` 2026-07-21 (F1–F5 21/0 · оплата §2.3 + one_click 29/0 · шторка 27/0) · дальше: PHASE 3 REVIEW → deploy Fly → MCP DevTools (по плану владельца)**
 
 ## Маппинг ТЗ → наш стек (решения SPEC)
 
@@ -66,7 +66,7 @@
 ### F5 — «оплатить в 1 клик» на секции повтора (скрин 06) — go владельца 2026-07-21
 - Решение по scope: кнопка = repeatAllToCart → флаг `shop_repeat_autopay` в sessionStorage → `push("/checkout")` → Checkout снимает флаг и автооткрывает шит оплаты (existing `openPaymentSheet` с преселектом primary-карты). **Само списание — существующий канон one_click с подтверждением «Оплатить»**: молча деньги не снимаем (безопасность), бэкенд-оплату не трогаем. Ошибка добавления → error-тост F4, навигации нет
 - [x] RED 2026-07-21: `test/integration/shop/quick_repeat_pay_one_click_test.rb` — 4 теста (store: `repeatPayOneClick` через `repeatAllToCart()` + `REPEAT_AUTOPAY_KEY` + push("/checkout"), лимит ≤120 · секция: `shop-repeat-pay-one-click` «оплатить в 1 клик» · Checkout: consume флага + removeItem · mirror: success → checkout+autopay, error → stay). Прогон: **4 runs / 3 failures** (флоу нет — намеренный RED `[TDD]`; mirror зелёный сразу)
-- [ ] GREEN: `repeatPayOneClick` в store + кнопка в секции + consume-флаг в `Checkout.svelte` (минимальный дифф в onMount) + регрессия оплаты §2.3 + one_click step4
+- [x] GREEN 2026-07-21: `frequentRepeatStore.js` (119 строк ≤ 120, сжаты комментарии) — `REPEAT_AUTOPAY_KEY` + `repeatPayOneClick` (`repeatAllToCart()` → sessionStorage-флаг → `push("/checkout")`, при ошибке добавления навигации нет); `RepeatSection.svelte` — кнопка `shop-repeat-pay-one-click` «оплатить в 1 клик» (outline-оранж, общий busy-guard); `Checkout.svelte` — в onMount consume флага → `openPaymentSheet()` (existing канон Шага 3/4: преселект primary-карты, подтверждение «Оплатить»). Тесты: F1–F5 **21 runs / 192 assertions / 0 failures**; регрессия оплаты §2.3 + one_click step4 **29 runs / 0 failures (2 pre-existing skips)**; шторка+каталог **27 runs / 0 failures**; svelte compile (RepeatSection, Checkout) + esbuild OK. Найден pre-existing конфликт `checkout_ui_cleanup_test.rb` vs канон «оплата через шторку» (падает и на чистом HEAD, проверено git stash) → 🟡 ISSUES
 
 ### PHASE 3: REVIEW
 - [ ] Sanity: N+1 / RLS / rubocop / eslint + svelte compile

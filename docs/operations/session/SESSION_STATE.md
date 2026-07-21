@@ -2,11 +2,19 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-21 (Quick Repeat Bottom Sheet — PHASE 2: BUILD, F4 GREEN done; осталось F5 (scope-вопрос) → PHASE 3: REVIEW)  
+**Дата:** 2026-07-21 (Quick Repeat Bottom Sheet — PHASE 2: BUILD, F5 GREEN done; план владельца: REVIEW → deploy Fly → MCP DevTools)  
 
 | Сейчас | Дальше |
 |--------|--------|
-| B1–B4 + F1–F4 закрыты GREEN — вся фича по 12 шагам ТЗ реализована, кроме F5 «полатить в 1 клик» (в ТЗ нет, только скрин 06) | Решение владельца по F5 → PHASE 3: REVIEW (sanity, полный ops, финальный отчёт) |
+| B1–B4 + F1–F5 закрыты GREEN — фича целиком: сервис, кэш, API, клиентский кэш, секция «повторить», счётчики, действия, «оплатить в 1 клик» | PHASE 3: REVIEW (sanity N+1/RLS/rubocop, CHANGELOG/HANDOFF) → deploy Fly (апрув дан) → MCP DevTools приёмка |
+
+### Сессия 2026-07-21 (F5 — «оплатить в 1 клик» на секции повтора)
+
+- Scope-решение (go владельца): кнопка = позиции повтора в корзину → checkout с автооткрытым шитом оплаты (флаг `shop_repeat_autopay` в sessionStorage); списание — существующий канон one_click с подтверждением «Оплатить», молча деньги не снимаем, бэкенд оплаты не тронут.
+- RED `ad620b8`: `test/integration/shop/quick_repeat_pay_one_click_test.rb` — 4 теста (store repeatPayOneClick + REPEAT_AUTOPAY_KEY + push("/checkout"), кнопка в секции, consume-флаг в Checkout, mirror).
+- GREEN: store 119 строк (сжаты комментарии под лимит 120); кнопка `shop-repeat-pay-one-click`; `Checkout.svelte` onMount — минимальный дифф (consume флага → `openPaymentSheet()`).
+- Тесты: F1–F5 **21 runs / 192 assertions / 0 failures**; **регрессия оплаты §2.3 + one_click step4: 29 runs / 0 failures (2 pre-existing skips)** — симуляция T-Bank локально (FakeTbank, SHOP_SIMULATE_PAYMENT); шторка+каталог **27 runs / 0 failures**; svelte compile + esbuild OK.
+- Pre-existing: `checkout_ui_cleanup_test.rb` конфликтует с каноном «оплата через шторку» (падает и на чистом HEAD) → 🟡 ISSUES, чинить отдельным шагом.
 
 ### Сессия 2026-07-21 (F4 — «повторить в 1 клик» / «+ещё» / тосты)
 

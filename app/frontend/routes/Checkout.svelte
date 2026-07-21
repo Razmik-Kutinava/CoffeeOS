@@ -46,6 +46,7 @@
     openCheckoutPayStack,
     closeCheckoutPayStack
   } from "../lib/cartSheetStore.js"
+  import { REPEAT_AUTOPAY_KEY } from "../lib/frequentRepeatStore.js"
   import PaymentMethodsSheet from "../components/PaymentMethodsSheet.svelte"
   import ThreeDsOverlay from "../components/ThreeDsOverlay.svelte"
 
@@ -107,6 +108,16 @@
       openPaymentSheet()
     }
     window.addEventListener(CHECKOUT_PAY_EVENT, onCheckoutPay)
+
+    // «Оплатить в 1 клик» из секции повтора: снять флаг и сразу открыть шит оплаты
+    try {
+      if (sessionStorage.getItem(REPEAT_AUTOPAY_KEY)) {
+        sessionStorage.removeItem(REPEAT_AUTOPAY_KEY)
+        openPaymentSheet()
+      }
+    } catch (_e) {
+      /* ignore */
+    }
 
     const syncServerStatus = async () => {
       if (!isValidEmail(email)) return

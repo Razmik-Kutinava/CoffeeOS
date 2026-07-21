@@ -6,6 +6,7 @@
     setFrequentQty,
     repeatAllToCart,
     repeatMore,
+    repeatPayOneClick,
     repeatFeedback
   } from "../lib/frequentRepeatStore.js"
 
@@ -41,6 +42,16 @@
     repeatBusy = true
     try {
       await repeatAllToCart()
+    } finally {
+      repeatBusy = false
+    }
+  }
+
+  async function onPayClick() {
+    if (repeatBusy) return
+    repeatBusy = true
+    try {
+      await repeatPayOneClick()
     } finally {
       repeatBusy = false
     }
@@ -132,6 +143,13 @@
         disabled={repeatBusy}
         onclick={onRepeatClick}
       >повторить в 1 клик</button>
+      <button
+        type="button"
+        data-testid="shop-repeat-pay-one-click"
+        class="min-h-8 flex-1 rounded-lg border border-[#ff8c42] px-3 py-1.5 text-[12px] font-semibold text-[#ff8c42] disabled:opacity-40"
+        disabled={repeatBusy}
+        onclick={onPayClick}
+      >оплатить в 1 клик</button>
       <button
         type="button"
         data-testid="shop-repeat-more"

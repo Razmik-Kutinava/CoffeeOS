@@ -1,14 +1,10 @@
 import { writable } from "svelte/store"
+import { push } from "svelte-spa-router"
 import { api } from "./api.js"
 import { addToCart } from "./shopCartAdd.js"
 import { cartSheetMode } from "./cartSheetStore.js"
 import { MODE_HIDDEN, MODE_EXPANDED } from "./cartSheetThresholds.js"
-import {
-  readFrequentCache,
-  writeFrequentCache,
-  readFrequentQty,
-  writeFrequentQty
-} from "./shopFrequentCache.js"
+import { readFrequentCache, writeFrequentCache, readFrequentQty, writeFrequentQty } from "./shopFrequentCache.js"
 
 /** Секция «повторить»: 1–3 частых товара клиента (GET /shop/api/frequent_products) */
 export const frequentItems = writable([])
@@ -31,10 +27,7 @@ export function frequentCardKey(item, i) {
   return `${item.product_id}-${i}`
 }
 
-/**
- * Изменение счётчика −1+: минимум 1 (удаления из повтора нет),
- * мгновенная синхронная запись в localStorage — переживает перезагрузку.
- */
+/** Счётчик −1+: минимум 1, мгновенная запись в localStorage (переживает перезагрузку) */
 export function setFrequentQty(key, qty) {
   const next = { ...currentQuantities, [key]: Math.max(1, Number(qty) || 1) }
   frequentQuantities.set(next)
@@ -42,10 +35,7 @@ export function setFrequentQty(key, qty) {
   return next
 }
 
-/**
- * Мгновенный старт из localStorage (< 50 мс, без сети) — вызывать при
- * открытии шторки; фоновую актуализацию запускать отдельно.
- */
+/** Мгновенный старт из localStorage (< 50 мс, без сети); актуализация — refreshFrequentProducts */
 export function initFrequentFromCache() {
   const cached = readFrequentCache()
   if (cached && Array.isArray(cached.frequent_items)) {
@@ -63,9 +53,8 @@ export function initFrequentFromCache() {
 }
 
 /**
- * «Повторить в 1 клик» (ТЗ Шаг 11): все позиции повтора в корзину с
- * сохранёнными модификаторами заказа и счётчиками F3. Успех → шторка
- * hidden + success-тост; ошибка → error-тост, режим шторки не меняется.
+ * «Повторить в 1 клик» (ТЗ Шаг 11): позиции повтора в корзину с сохранёнными
+ * модификаторами и счётчиками. Успех → hidden + success-тост; ошибка → error-тост, режим не меняется.
  */
 export async function repeatAllToCart() {
   const items = currentItems.slice(0, 3)
@@ -91,6 +80,25 @@ export async function repeatAllToCart() {
 /** «+ещё» (ТЗ Шаг 11): развернуть шторку в expanded */
 export function repeatMore() {
   cartSheetMode.set(MODE_EXPANDED)
+}
+
+/** Флаг «оплатить в 1 клик»: Checkout снимает его и автооткрывает шит оплаты */
+export const REPEAT_AUTOPAY_KEY = "shop_repeat_autopay"
+
+/**
+ * «Оплатить в 1 клик» (скрин 06): повтор в корзину → checkout с автооткрытым шитом
+ * оплаты. Списание — канон one_click с подтверждением; при ошибке добавления навигации нет.
+ */
+export async function repeatPayOneClick() {
+  const ok = await repeatAllToCart()
+  if (!ok) return false
+  try {
+    sessionStorage.setItem(REPEAT_AUTOPAY_KEY, "1")
+  } catch (_e) {
+    /* приватный режим: без автооткрытия, просто checkout */
+  }
+  push("/checkout")
+  return true
 }
 
 /** Фоновый GET: успех — перезапись stores и кэша; offline/500 — кэш остаётся, UI не блокируем */
