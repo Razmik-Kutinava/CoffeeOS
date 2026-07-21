@@ -172,6 +172,7 @@ Rails.application.routes.draw do
       post "push/register", to: "push#register"
       get "debug", to: "debug#index" unless Rails.env.production?
       get "categories", to: "categories#index"
+      get "frequent_products", to: "frequent_products#index"
       get "products", to: "products#index"
       get "products/:id", to: "products#show"
       post "cart/add", to: "cart#add"

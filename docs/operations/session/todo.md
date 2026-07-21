@@ -7,7 +7,7 @@
 
 ## Текущая фаза
 
-**PHASE 2: BUILD — B4-RED `[x]` 2026-07-21 (5 runs / 5 failures, 404 — роута нет, ожидаемо) · Gate 2: жду go на B4-GREEN**
+**PHASE 2: BUILD — B4 GREEN `[x]` 2026-07-21 (5/5 · регрессия shop api таргетно 21/0 · rubocop чист) · backend B1–B4 закрыт · жду go на F1-RED (фронт)**
 
 ## Маппинг ТЗ → наш стек (решения SPEC)
 
@@ -45,7 +45,7 @@
 
 ### B4 — API endpoint (ТЗ Шаг 4)
 - [x] RED 2026-07-21: `test/integration/shop/api/frequent_products_test.rb` — 5 тестов (гость → 200 + `frequent_items: []` + categories hash · карточки категорий id/name/price/image_url + nil placeholder · customer после полного checkout-флоу видит frequent_items · изоляция тенантов · неизвестный tenant → error payload). Прогон: **5 runs / 5 failures** — 404, роута нет (намеренный RED `[TDD]`). Грабля env: GET без `as: :json` уходит в SPA catch-all `pages#home` и вешает прогон — во всех тестах `as: :json`
-- [ ] GREEN: роут `get "frequent_products"` в `namespace :shop/api` + `Shop::Api::FrequentProductsController` (тонкий: сервис → JSON)
+- [x] GREEN 2026-07-21: роут `get "frequent_products"` + `Shop::Api::FrequentProductsController` (52 строки: `cached_call` сервиса + `categories_by_name` — 3 плоских запроса как в categories#index). Тесты **5 runs / 0 fail**; регрессия shop api таргетно: categories 4/0 · products 4/0 · orders 9/0 · mvp_flow 2/0 · tenant_isolation 2/0; rubocop чист. Env: `cart_persistence_test.rb` виснет локально на рендере shell `GET /shop?tenant_id=` (та же 🟡 ISSUES-грабля, не этот дифф — файл не трогает frequent_products)
 
 ### F1 — клиентский кэш + инициализация (ТЗ Шаг 5)
 - [ ] RED: `test/integration/shop/quick_repeat_bottom_sheet_test.rb` — фиксация `shopFrequentCache.js` (ключ `coffeeos_shop_frequent_v1`, паттерн `shopCartCache.js`) + фоновый refresh + fallback на кэш при offline/500
