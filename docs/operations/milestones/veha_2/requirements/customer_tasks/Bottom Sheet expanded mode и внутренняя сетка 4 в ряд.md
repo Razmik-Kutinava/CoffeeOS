@@ -1,6 +1,6 @@
 # Bottom Sheet: Expanded Mode Layout Fix & Internal Grid Refactor
 
-> **Статус:** **intake** · ТЗ принято · SPEC / код `[ ]`  
+> **Статус:** **SBR REVIEW done** · код `7683dee` · тесты 59/0 · апрув заказчика / MCP / deploy **[ ]**  
 > **Дата ТЗ:** 2026-07-21  
 > **Источник:** заказчик (чат)  
 > **Артефакты / скрины:** [`../../artifacts/bottom_sheet_expanded_grid/`](../../artifacts/bottom_sheet_expanded_grid/README.md)

@@ -1,5 +1,12 @@
 ﻿# CHANGELOG
 
+## 2026-07-21 — feat(shop): bottom sheet expanded — сетка товаров 4 в ряд (prog27)
+
+- `CartSheet.svelte` expanded 2+: вертикальный список → `grid-cols-4` с внутренним `overflow-y-auto`; карточки по канону peek (фото → openEditCard, line-clamp-1, цена × кол-во, −/+); «Удалить» из карточек убран («−» при 1 удаляет, undo остаётся) — финальное слово заказчика.
+- Высоты expanded 52/56 без изменений (Шаг 1 ТЗ подтверждён скрином заказчика). `CART_SHEET_BUILD` → prog27.
+- Тесты: новый `bottom_sheet_expanded_grid_test.rb` (RED `273a43c` → GREEN `7683dee`); регрессия cart sheet 59/0.
+- ISSUES 🟡: полный локальный прогон `test/integration/shop/` зависает (env Windows) — таргетные списки как обход.
+
 ## 2026-07-21 — docs(rules): customer intake PHASE 0 (доки до SPEC)
 
 - Новое правило `coffeeos-customer-intake.mdc`: текст заказчика 1:1 → `customer_tasks/<Название>.md`, артефакты → `artifacts/<slug>/` (slug латиницей, понятные слова), строка в CBR, коммит intake, стоп до `go` → PHASE 1: SPEC.

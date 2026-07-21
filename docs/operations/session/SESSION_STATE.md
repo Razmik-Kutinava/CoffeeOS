@@ -2,11 +2,19 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-21 (SPEC «Bottom sheet expanded grid»)  
+**Дата:** 2026-07-21 (**SBR REVIEW done** Bottom sheet expanded grid)  
 
 | Сейчас | Дальше |
 |--------|--------|
-| PHASE 1: SPEC done (todo.md) | `go` → PHASE 2: RED (тесты) |
+| Bottom sheet expanded grid: код `7683dee`, тесты 59/0 | апрув заказчика / MCP Fly / deploy — по go |
+
+### Сессия 2026-07-21 (RED+GREEN+REVIEW Bottom sheet expanded grid)
+
+- **RED `273a43c`:** `bottom_sheet_expanded_grid_test.rb` — 3 runs / 3 fail (ожидаемо).
+- **GREEN `7683dee`:** `CartSheet.svelte` expanded-ветка → `grid-cols-4` + `overflow-y-auto`, карточки канон peek (фото → openEditCard, line-clamp-1, −/+ без «Удалить»); `CART_SHEET_BUILD` prog27; 5 старых тестов обновлены на новые testid.
+- **Регрессия cart sheet (8 файлов):** 59 runs / 478 assertions / **0 fail**. Svelte compile OK (5 a11y warn — класс pre-existing). Rubocop новых правок чист (3 offenses — старые строки s2a, не трогали).
+- **ISSUES:** 🟡 полный `test/integration/shop/` завис локально после 43 тестов (env Windows) — обход: таргетные списки; локализация по go.
+- **Vite build:** зациклился локально («Building with Vite» рекурсия vite-plugin-ruby на Windows) — компиляцию проверили через svelte/compiler напрямую.
 
 ### Сессия 2026-07-21 (PHASE 1: SPEC Bottom sheet expanded grid — docs only)
 

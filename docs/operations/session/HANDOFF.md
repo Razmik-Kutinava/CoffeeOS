@@ -1,8 +1,20 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-21 (правило intake PHASE 0 — docs only)  
+**Дата:** 2026-07-21 (**SBR REVIEW done** Bottom sheet expanded grid)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev  
+
+### Bottom sheet expanded grid (2026-07-21)
+
+| Что | Статус |
+|-----|--------|
+| ТЗ + скрин заказчика (intake `948648e`) | **`[x]`** |
+| RED `273a43c` → GREEN **`7683dee`** (grid 4 в ряд, prog27) | **`[x]`** |
+| Регрессия cart sheet 59 runs / 0 fail | **`[x]`** |
+| «Удалить» в карточках сетки убран — показать заказчику, финал за ним | **`[ ]`** |
+| Апрув заказчика / MCP Fly / deploy | **`[ ]`** — только по go |
+
+**Не деплоили.** Локальные env-грабли (не блокеры): полный `test/integration/shop/` зависает (ISSUES 🟡), `vite build` зациклен на Windows — компиляция проверена через svelte/compiler.
 
 ### Intake-правило (новое, 2026-07-21)
 
@@ -11,7 +23,7 @@
 | `coffeeos-customer-intake.mdc` (PHASE 0: доки до SPEC) | **`[x]`** |
 | `RULES_INDEX.md` строка | **`[x]`** |
 
-**Следующий шаг:** intake задачи «Bottom Sheet: expanded mode + grid 4 в ряд» по новому правилу (док в `customer_tasks/`, скрин в `artifacts/bottom_sheet_expanded_grid/`), затем PHASE 1: SPEC.
+**Следующий шаг:** апрув/MCP «Bottom sheet expanded grid» по go владельца; либо следующая задача по CHECKLIST/CBR.
 
 ### Точка отката (не потерять)
 

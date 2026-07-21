@@ -7,7 +7,7 @@
 
 ## Текущая фаза
 
-**PHASE 1: SPEC done** · жду **go** на PHASE 2: RED
+**PHASE 3: REVIEW done** · код `7683dee` на develop · апрув заказчика / MCP / deploy — по go
 
 ## Решения владельца (2026-07-21)
 
@@ -33,10 +33,10 @@
 - [!] Полный `test/integration/shop/` завис локально после 43 тестов (убит) — env-проблема, не этот дифф → ISSUES
 - [x] Коммит `feat: … [GREEN]`
 
-### PHASE 3: REVIEW — [ ]
-- [ ] Sanity: UI-only, без N+1/RLS
-- [ ] Ops: SESSION_STATE / CHANGELOG / HANDOFF
-- [ ] Скрины для заказчика (expanded: 1 ряд каталога виден; сетка 4 в ряд; скролл при 5+) → артефакты
+### PHASE 3: REVIEW — [x] 2026-07-21
+- [x] Sanity: UI-only (Svelte + JS-константа), без N+1/RLS; rubocop новых правок чист
+- [x] Ops: SESSION_STATE / CHANGELOG / HANDOFF / ISSUES (🟡 зависание полного shop-прогона)
+- [ ] Скрины для заказчика (expanded: 1 ряд каталога; сетка 4 в ряд; скролл при 5+) — MCP Fly после деплоя, по go
 - [ ] Апрув заказчика (в т.ч. решение по «Удалить» в карточках) / MCP Fly / deploy — ждать go
 
 ## Заметки
