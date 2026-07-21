@@ -2,11 +2,19 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-21 (правило intake PHASE 0 — docs only)  
+**Дата:** 2026-07-21 (intake «Bottom sheet expanded grid» — docs only)  
 
 | Сейчас | Дальше |
 |--------|--------|
-| Правило `coffeeos-customer-intake.mdc` создано | intake задачи «Bottom Sheet expanded grid» по новому правилу, затем SPEC |
+| Intake задачи «Bottom sheet expanded grid» готов | `go` → PHASE 1: SPEC (todo.md), затем RED/GREEN |
+
+### Сессия 2026-07-21 (intake Bottom sheet expanded grid — без кода)
+
+- ТЗ заказчика 1:1 → `customer_tasks/Bottom Sheet expanded mode и внутренняя сетка 4 в ряд.md`.
+- Скрин заказчика → `artifacts/bottom_sheet_expanded_grid/01_customer_expanded_current_2026-07-21.png` + README.
+- Строки в CBR (backlog + таблица задач, №13) и `customer_tasks/README.md`.
+- Разведка: работа — ветка `MODE_EXPANDED && count >= 2` в `CartSheet.svelte` + `SHEET_VH.expandedMulti`; по скрину Шаг 1 (высота) уже близок к цели.
+- Код приложения не менялся.
 
 ### Сессия 2026-07-21 (правило customer intake — без кода)
 

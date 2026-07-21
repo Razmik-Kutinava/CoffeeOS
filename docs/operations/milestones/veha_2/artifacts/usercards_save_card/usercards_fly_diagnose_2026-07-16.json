@@ -7,15 +7,15 @@
   "machine_id": "9080d40db67238",
   "worker_state": "stopped",
   "release": {
-    "version": 361,
+    "version": 363,
     "status": "complete",
-    "image": "registry.fly.io/coffeeos:deployment-01KXMY68CY6XYB6BGAW8CFF450",
-    "created_at": "2026-07-16T07:45:36Z"
+    "image": "registry.fly.io/coffeeos:deployment-01KXN4KW6XG5NFQHV5TS1MCGSE",
+    "created_at": "2026-07-16T09:39:55Z"
   },
   "bundle_probe": {
-    "application_js": "/vite/assets/application-D1E05YN_.js",
+    "application_js": "/vite/assets/application-7rAY2DiD.js",
     "shop_checkout_pay_event": true,
-    "prog24": true,
+    "prog24": false,
     "inline_pay_string": false,
     "payment_method_string": false
   },
@@ -27,15 +27,19 @@
     },
     "tbank_callback": {
       "pattern": "TbankCallback|SavedCardStore",
-      "count": 1,
+      "count": 3,
       "sample": [
-        "\u001b[2m2026-07-16T08:36:39Z\u001b[0m app[9080d40db67238] \u001b[32mams\u001b[0m [\u001b[34minfo\u001b[0m][cab42346-3d3b-4d94-a53b-ed4171f1745c] [ActiveJob] Enqueued Payments::TbankCallbackJob (Job ID: dbd1013f-4728-480d-9036-7c227fa08d0b) to SolidQueue(critical) with arguments: {\"TerminalKey\" => \"1719235292309\", \"OrderId\" => \"fc18c88e-a5be-4a6e-a327-3314364053f3\", \"Success\" => true, \"Status\" => \"CONFIRMED\", \"PaymentId\" => 8861552152, \"ErrorCode\" => \"0\", \"Amount\" => 474, \"CardId\" => 566291000, \"Pan\" => \"220196******5953\", \"ExpDate\" => \"0927\", \"RebillId\" => 1846699802, \"Token\" => \"eb6148d862d918d5b3e30b663ca498ced08a2a001bcd2612df63c4db83f5b0b6\"}"
+        "\u001b[2m2026-07-16T10:21:08Z\u001b[0m app[9080d40db67238] \u001b[32mams\u001b[0m [\u001b[34minfo\u001b[0m][31222eba-1ef0-42fd-8d6b-46284daf709f] [ActiveJob] [Payments::TbankCallbackJob] [b909eed2-c8b3-4be8-8d1d-22902e4cf547] Performing Payments::TbankCallbackJob (Job ID: b909eed2-c8b3-4be8-8d1d-22902e4cf547) from SolidQueue(critical) with arguments: {\"TerminalKey\" => \"1719235292309\", \"OrderId\" => \"8bddda4d-d021-4401-9323-b2e44a11f6df\", \"Success\" => true, \"Status\" => \"CONFIRMED\", \"PaymentId\" => 8830672538, \"ErrorCode\" => \"0\", \"Amount\" => 474, \"CardId\" => 566291000, \"Pan\" => \"220196******5953\", \"ExpDate\" => \"0927\", \"RebillId\" => 1846699802, \"Token\" => \"ffa806cc1f5de48aeaf7322761000a650aacdb92a4bfd342d44e3cb2812d59e2\"}",
+        "\u001b[2m2026-07-16T10:21:08Z\u001b[0m app[9080d40db67238] \u001b[32mams\u001b[0m [\u001b[34minfo\u001b[0m][31222eba-1ef0-42fd-8d6b-46284daf709f] [ActiveJob] [Payments::TbankCallbackJob] [b909eed2-c8b3-4be8-8d1d-22902e4cf547] Performed Payments::TbankCallbackJob (Job ID: b909eed2-c8b3-4be8-8d1d-22902e4cf547) from SolidQueue(critical) in 260.27ms",
+        "\u001b[2m2026-07-16T10:21:08Z\u001b[0m app[9080d40db67238] \u001b[32mams\u001b[0m [\u001b[34minfo\u001b[0m][e47eced2-98db-4a4e-a8c3-8eb1f1954ee1] [ActiveJob] [Payments::TbankCallbackJob] [07e2acfd-ce12-4703-abb0-fbee99dad78c] Performed Payments::TbankCallbackJob (Job ID: 07e2acfd-ce12-4703-abb0-fbee99dad78c) from SolidQueue(critical) in 97.91ms"
       ]
     },
     "user_cards_api": {
       "pattern": "user/cards|UserCards",
-      "count": 0,
-      "sample": []
+      "count": 1,
+      "sample": [
+        "\u001b[2m2026-07-16T09:58:46Z\u001b[0m app[9080d40db67238] \u001b[32mams\u001b[0m [\u001b[34minfo\u001b[0m][2c554ad4-eb4e-490e-8c73-92f21c40e512] Started GET \"/shop/api/user/cards?email=[FILTERED]&tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789\" for 66.241.125.17 at 2026-07-16 09:58:46 +0000"
+      ]
     }
   },
   "db": {
@@ -45,10 +49,10 @@
       "tbank_rsa_set": "true"
     },
     "counts": {
-      "mobile_payment_methods_card": 14,
+      "mobile_payment_methods_card": 15,
       "mobile_customers": 425,
-      "payments_tbank_30d": 58,
-      "payments_tbank_succeeded_30d": 13,
+      "payments_tbank_30d": 60,
+      "payments_tbank_succeeded_30d": 12,
       "payments_shop_30d": 22
     },
     "gmail_customers_sample": [
@@ -64,6 +68,16 @@
       }
     ],
     "recent_cards": [
+      {
+        "id": "4c5569dd-994c-4146-86d2-ed4d78bebcd6",
+        "email": "aramfifa100@gmail.com",
+        "card_masked": "*5953",
+        "card_token_present": true,
+        "is_active": true,
+        "is_default": true,
+        "last_used_at": "2026-07-16T10:21:08Z",
+        "created_at": "2026-07-16T09:02:55Z"
+      },
       {
         "id": "5f89ee51-cb2e-4e5d-8cf9-d92b30bee5c2",
         "email": "b112-r3-06251501@coffeeos.dev",
@@ -103,22 +117,26 @@
         "is_default": true,
         "last_used_at": "2026-06-21T13:13:34Z",
         "created_at": "2026-06-21T13:13:34Z"
-      },
-      {
-        "id": "0f6a8593-660c-41bc-8b06-d445fe7d30a9",
-        "email": "b112-r4-1click-06211248@coffeeos.dev",
-        "card_masked": "430000******1248",
-        "card_token_present": true,
-        "is_active": true,
-        "is_default": true,
-        "last_used_at": "2026-06-21T12:49:04Z",
-        "created_at": "2026-06-21T12:49:04Z"
       }
     ],
     "recent_tbank_payments": [
       {
-        "id": "0a7e0f8e-f839-49d9-b5bd-c8a799fcaaca",
+        "id": "f7a61e93-0d6f-4f05-9221-e3461b01dd30",
         "status": "succeeded",
+        "save_card": true,
+        "email": "aramfifa100@gmail.com",
+        "created_at": "2026-07-16T09:56:36Z"
+      },
+      {
+        "id": "bff277bd-6e18-468c-8758-5d8e3bca4422",
+        "status": "succeeded",
+        "save_card": true,
+        "email": "aramfifa100@gmail.com",
+        "created_at": "2026-07-16T08:42:07Z"
+      },
+      {
+        "id": "0a7e0f8e-f839-49d9-b5bd-c8a799fcaaca",
+        "status": "processing",
         "save_card": true,
         "email": "aramfifa100@gmail.com",
         "created_at": "2026-07-15T14:36:10Z"
@@ -136,23 +154,17 @@
         "save_card": null,
         "email": "aramfifa100@gmail.com",
         "created_at": "2026-07-14T09:19:42Z"
-      },
-      {
-        "id": "c3c1752b-c299-4f6b-a5dd-8a7464d1abe3",
-        "status": "failed",
-        "save_card": null,
-        "email": "peek-exp-0713b@coffeeos.dev",
-        "created_at": "2026-07-13T10:50:55Z"
-      },
-      {
-        "id": "0dcbe5b6-0d4d-4386-b320-6123228381b1",
-        "status": "succeeded",
-        "save_card": null,
-        "email": "aramfifa100@gmail.com",
-        "created_at": "2026-07-10T10:20:14Z"
       }
     ],
-    "aramfifa_cards": []
+    "aramfifa_cards": [
+      {
+        "id": "4c5569dd-994c-4146-86d2-ed4d78bebcd6",
+        "card_masked": "*5953",
+        "is_active": true,
+        "is_default": true,
+        "last_used_at": "2026-07-16T10:21:08Z"
+      }
+    ]
   },
   "code_paths": {
     "save_card_api": "POST /shop/api/payments/new_card → NewCardPaymentService (Recurrent=save_card)",
@@ -167,8 +179,8 @@
   "root_cause_table": [
     {
       "check": "0.2 mobile_payment_methods",
-      "result": "has rows (14 card)",
-      "implication": "Глобально карты есть; у aramfifa100@gmail.com — 0 → bug_13-23 per-customer"
+      "result": "has rows (15 card)",
+      "implication": "Глобально карты есть; проверить aramfifa_cards per-customer"
     },
     {
       "check": "0.3 payment path",
@@ -188,22 +200,10 @@
   ],
   "hypotheses": [
     {
-      "id": "H1b_customer_no_cards",
-      "severity": "critical",
-      "finding": "aramfifa100@gmail.com — 0 saved cards",
-      "meaning": "оплата save_card=true 2026-07-15 но карта не в UserCards этого email"
-    },
-    {
       "id": "H2_worker_stopped",
       "severity": "high",
       "finding": "worker stopped",
       "meaning": "webhook/async save не обрабатывается"
-    },
-    {
-      "id": "H3b_save_card_without_persist",
-      "severity": "critical",
-      "finding": "save_card payment succeeded but customer cards empty",
-      "meaning": "SavedCardStore/webhook/finalize не создал row"
     }
   ],
   "next_phase": {

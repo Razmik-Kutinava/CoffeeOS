@@ -17,6 +17,7 @@
 | B2.2 | Объединить «Меню» + «Создать» | **ТЗ** 2026-06-10 · реализация `[ ]` | [B2_2_barista_menu_create_merge.md](B2_2_barista_menu_create_merge.md) |
 | **B1.4** | **PWA витрины** (install, offline) | **OPS_PASS** 2026-06-12 · заказчик `[ ]` | [B1_4_pwa_shop.md](B1_4_pwa_shop.md) |
 | **Hidden mode cards** | Режим **hidden**: crop превью товаров (эталон vs «как сейчас») | **SBR REVIEW `[x]`** · код `[x]` · апрув / MCP / deploy `[ ]` | [Исправление режима отображения Hidden для карточек товаров.md](Исправление%20режима%20отображения%20Hidden%20для%20карточек%20товаров.md) |
+| **Bottom sheet expanded grid** | Expanded до 1-го ряда каталога + **сетка товаров 4 в ряд** со скроллом | **intake `[x]`** 2026-07-21 · SPEC / код `[ ]` | [Bottom Sheet expanded mode и внутренняя сетка 4 в ряд.md](Bottom%20Sheet%20expanded%20mode%20и%20внутренняя%20сетка%204%20в%20ряд.md) |
 
 **Порядок работ:** апрув ТЗ Hidden → **go** код · новое ТЗ UserCards (после `go`) · **B1.13 S4** · **B1.14-4** · **B2.2** · **B1.4**.
 
