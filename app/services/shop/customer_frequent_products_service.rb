@@ -26,11 +26,16 @@ module Shop
       end
     end
 
-    # Сброс при создании заказа (OrderCreator) и подтверждении оплаты (PaymentStatusUpdater)
+    # Сброс при создании заказа (OrderCreator) и подтверждении оплаты (PaymentStatusUpdater).
+    # Вызывается в hot-path заказа/callback: деградация кэш-хранилища не должна ронять оплату,
+    # худший случай — клиент видит устаревший топ-3 до TTL (30 мин).
     def self.bust_cache!(tenant_id:, customer_id:)
       return if customer_id.blank?
 
       Rails.cache.delete(cache_key(tenant_id: tenant_id, customer_id: customer_id))
+    rescue StandardError => e
+      Rails.logger.warn("[Shop::FrequentProducts] bust_cache! failed: #{e.class}: #{e.message}")
+      nil
     end
 
     def initialize(customer_id:, tenant_id:)

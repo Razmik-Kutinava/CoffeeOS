@@ -3,6 +3,7 @@
   import {
     frequentItems,
     frequentQuantities,
+    frequentCardKey,
     setFrequentQty,
     repeatAllToCart,
     repeatMore,
@@ -57,10 +58,6 @@
     }
   }
 
-  function keyOf(item, i) {
-    return `${item.product_id}-${i}`
-  }
-
   function qtyOf(key) {
     return storeQty[key] || 1
   }
@@ -88,8 +85,8 @@
       >{feedback.message}</div>
     {/if}
     <div class="flex gap-2 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-      {#each topItems as item, i (keyOf(item, i))}
-        {@const key = keyOf(item, i)}
+      {#each topItems as item (frequentCardKey(item))}
+        {@const key = frequentCardKey(item)}
         {@const url = item.image_url || ""}
         <div
           data-testid="shop-repeat-card"

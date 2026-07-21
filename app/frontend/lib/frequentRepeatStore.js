@@ -22,9 +22,9 @@ frequentQuantities.subscribe((v) => { currentQuantities = v })
 let currentItems = []
 frequentItems.subscribe((v) => { currentItems = Array.isArray(v) ? v : [] })
 
-/** Ключ карточки — тот же формат, что в RepeatSection.svelte */
-export function frequentCardKey(item, i) {
-  return `${item.product_id}-${i}`
+/** Стабильный ключ карточки: товар + модификаторы (не позиция — порядок топ-3 меняется при refresh) */
+export function frequentCardKey(item) {
+  return `${item.product_id}:${JSON.stringify(item.modifier_options || {})}`
 }
 
 /** Счётчик −1+: минимум 1, мгновенная запись в localStorage (переживает перезагрузку) */
@@ -59,20 +59,23 @@ export function initFrequentFromCache() {
 export async function repeatAllToCart() {
   const items = currentItems.slice(0, 3)
   if (!items.length) return false
+  let added = 0
   try {
     // Последовательно: addToCart оптимистично пишет cart-кэш, гонки не нужны
-    for (const [ i, item ] of items.entries()) {
+    for (const item of items) {
       await addToCart({
         product_id: item.product_id,
-        quantity: currentQuantities[frequentCardKey(item, i)] || 1,
+        quantity: currentQuantities[frequentCardKey(item)] || 1,
         selected_modifiers: item.modifier_options?.selected_modifiers || []
       })
+      added += 1
     }
     cartSheetMode.set(MODE_HIDDEN)
     repeatFeedback.set({ type: "success", message: "Заказ добавлен в корзину" })
     return true
   } catch (_e) {
-    repeatFeedback.set({ type: "error", message: "Не удалось повторить заказ" })
+    // Частичное добавление — честный тост: повторный клик даст дубли первых позиций
+    repeatFeedback.set({ type: "error", message: added ? `Добавлено ${added} из ${items.length} — проверьте корзину` : "Не удалось повторить заказ" })
     return false
   }
 }
