@@ -7,7 +7,7 @@
 
 ## Текущая фаза
 
-**PHASE 2: BUILD — F2 GREEN `[x]` 2026-07-21 (4/4 · регрессия шторки 24/0 · svelte compile OK) · жду go на F3-RED (expanded: каталог по категориям)**
+**PHASE 2: BUILD — F3-RED `[x]` 2026-07-21 (5 runs / 3 failures — qty-персиста нет, ожидаемо) · Gate 2: жду go на F3-GREEN**
 
 ## Маппинг ТЗ → наш стек (решения SPEC)
 
@@ -56,8 +56,8 @@
 - [x] GREEN 2026-07-21: `app/frontend/components/RepeatSection.svelte` (~95 строк: заголовок «повторить» italic, до 3 карточек slice(0,3) из frequentItems, thumb/«Нет фото», line-clamp название, цена оранжевым, локальный счётчик −1+ с минимумом 1) + встройка в `CartSheet.svelte`: import + init/refresh в onMount, слоты shop-repeat-slot-empty/peek/expanded перед checkoutBar (hidden не трогали, drag-handle один). Тесты **4 runs / 48 assertions / 0 failures**, регрессия шторки (heights canon + b113 + checkout UX + F1 cache) **24 runs / 263 assertions / 0 failures**, svelte compile обоих файлов OK. Отложено: счётчик пишет только в локальный state — синк с localStorage и add-to-cart идут в F4 (кнопки действий); слот в ветке singleItem — решим в F3/F4 по скрину 01
 
 ### F3 — карточки повтора: счётчики и localStorage (ТЗ Шаги 9–10)
-- [ ] RED: −1+ на карточке повтора мгновенно пишет в localStorage; клик по карточке категории → добавление в корзину с дефолтами (существующий `shopCartAdd.js`); ошибка сети → тост
-- [ ] GREEN: логика в `app/frontend/lib/frequentRepeatStore.js` (лимит ≤ 120 строк)
+- [x] RED 2026-07-21: `test/integration/shop/quick_repeat_counters_test.rb` — 5 тестов (отдельный ключ `coffeeos_shop_frequent_qty_v1` + read/writeFrequentQty в `shopFrequentCache.js` · store `frequentQuantities` + `setFrequentQty` с мгновенным `writeFrequentQty` и `Math.max(1,` + восстановление через `readFrequentQty` при init + лимит ≤120 строк · `RepeatSection` на store вместо `let quantities = $state` · фиксация клика каталога → Product · mirror clamp-логики). Прогон: **5 runs / 3 failures** (qty-персиста нет — намеренный RED `[TDD]`; фиксации Product-клика и mirror зелёные сразу). Решение: «клик по карточке категории → сразу в корзину с дефолтами» (ТЗ Шаг 9) противоречит Шагу 12 (клик → модалка модификаторов) — оставляем канон перехода в Product, вопрос заказчику
+- [ ] GREEN: qty-хранилище в `shopFrequentCache.js` + store в `frequentRepeatStore.js` (≤ 120 строк) + `RepeatSection.svelte` на store
 
 ### F4 — действия «повторить в 1 клик» / «+ещё» / кастомизация (ТЗ Шаги 11–12, скрин 06)
 - [ ] RED: «повторить в 1 клик» → все позиции повтора в корзину с сохранёнными `modifier_options` → hidden + success-тост; «+ещё» → expanded; ошибка → error-тост без смены состояния; кастомизация — существующий флоу `Product.svelte` (`cart_line`/модификаторы) — фиксация перехода
