@@ -20,10 +20,9 @@
 
 ### PHASE 1: SPEC — [x] 2026-07-21
 
-### PHASE 2: RED — [ ]
-- [ ] Тест (Rails integration, стиль b113): expanded-ветка CartSheet — grid 4 в ряд (`grid-cols-4`), вертикальный `overflow-y-auto`, testid `shop-cart-expanded-grid`, line-clamp названия
-- [ ] Тест: `cartSheetThresholds.js` — высота expanded / маркер `CART_SHEET_BUILD` обновлён
-- [ ] Прогон: падают именно на новой разметке → коммит `test: … [RED]` → стоп до go
+### PHASE 2: RED — [x] 2026-07-21
+- [x] `test/integration/shop/bottom_sheet_expanded_grid_test.rb`: grid-cols-4 + `shop-cart-expanded-grid` + `data-cart-layout="grid"`; карточка `shop-cart-grid-card` (−/+ без «Удалить»); высоты 52/56 + bump `CART_SHEET_BUILD` prog27
+- [x] Прогон: 3 runs / 3 failures — падают именно на новой разметке (RED ожидаем)
 
 ### PHASE 2: GREEN — [ ]
 - [ ] Шаг A: `SHEET_VH.expandedMulti` — верх шторки у начала 2-го ряда каталога (по скрину близко; верифицировать) + bump `CART_SHEET_BUILD`
