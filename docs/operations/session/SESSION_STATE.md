@@ -2,11 +2,17 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-21 (intake «Bottom sheet expanded grid» — docs only)  
+**Дата:** 2026-07-21 (SPEC «Bottom sheet expanded grid»)  
 
 | Сейчас | Дальше |
 |--------|--------|
-| Intake задачи «Bottom sheet expanded grid» готов | `go` → PHASE 1: SPEC (todo.md), затем RED/GREEN |
+| PHASE 1: SPEC done (todo.md) | `go` → PHASE 2: RED (тесты) |
+
+### Сессия 2026-07-21 (PHASE 1: SPEC Bottom sheet expanded grid — docs only)
+
+- `todo.md` переписан под фичу: RED/GREEN план, файлы (`CartSheet.svelte` expanded-ветка, `SHEET_VH.expandedMulti`).
+- Решения владельца: размеры = канон peek (~118px, gap-2); «Удалить» из карточек сетки убрать («−»=1 удаляет), финал за заказчиком; шторка остаётся 414px; вместо tsc — линт+Vite build.
+- Код приложения не менялся.
 
 ### Сессия 2026-07-21 (intake Bottom sheet expanded grid — без кода)
 
