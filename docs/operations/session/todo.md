@@ -7,7 +7,7 @@
 
 ## Текущая фаза
 
-**PHASE 2: BUILD — B3 GREEN `[x]` 2026-07-21 (18/18 · регрессия §2.3 24/0 · tbank 31/0 · services 112/0 · rubocop чист) · жду go на B4-RED (API)**
+**PHASE 2: BUILD — B4-RED `[x]` 2026-07-21 (5 runs / 5 failures, 404 — роута нет, ожидаемо) · Gate 2: жду go на B4-GREEN**
 
 ## Маппинг ТЗ → наш стек (решения SPEC)
 
@@ -44,7 +44,7 @@
 - [x] GREEN 2026-07-21: `cache_key`/`cached_call`/`bust_cache!` (+`CACHE_TTL=30.minutes`) в сервисе; bust-хуки по 1 строке (+комментарий): `OrderCreator#call!` после транзакции · `PaymentStatusUpdater#accept_order_if_paid!`. Тесты **18 runs / 0 fail** (кэш 6 + сервис 12); регрессия: оплата §2.3 **24/0 (2 skips pre-existing)** · T-Bank callback **31/0** · services **112/0**; rubocop 4 файла чист
 
 ### B4 — API endpoint (ТЗ Шаг 4)
-- [ ] RED: `test/integration/shop/api/frequent_products_test.rb` — 200 `{ frequent_items: [...], categories: {...} }`; гость без customer_id → `frequent_items: []`; изоляция тенантов (customer A ≠ B)
+- [x] RED 2026-07-21: `test/integration/shop/api/frequent_products_test.rb` — 5 тестов (гость → 200 + `frequent_items: []` + categories hash · карточки категорий id/name/price/image_url + nil placeholder · customer после полного checkout-флоу видит frequent_items · изоляция тенантов · неизвестный tenant → error payload). Прогон: **5 runs / 5 failures** — 404, роута нет (намеренный RED `[TDD]`). Грабля env: GET без `as: :json` уходит в SPA catch-all `pages#home` и вешает прогон — во всех тестах `as: :json`
 - [ ] GREEN: роут `get "frequent_products"` в `namespace :shop/api` + `Shop::Api::FrequentProductsController` (тонкий: сервис → JSON)
 
 ### F1 — клиентский кэш + инициализация (ТЗ Шаг 5)
