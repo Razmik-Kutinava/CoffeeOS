@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-07-21 — docs(ops): Quick Repeat — реальный MCP-прогон на Fly без стабов + чеклист заказчику
+
+- Демо-стенд: посеян клиент `mcp-quickrepeat@example.com` с 4 mobile-заказами (Neon, через локальный `pg`: `fly ssh console -C` теряет аргументы команды); вход в витрину штатным email-OTP (код из `shop_email_otp_codes`).
+- Реальный E2E 8/8 PASS: гость без секции → OTP-вход → `frequent_products` из реальной истории (сортировка частота/свежесть подтверждена) → счётчики с localStorage → «+ещё» expanded → «повторить в 1 клик» +1 440₽ (qty учтён) → «оплатить в 1 клик» → checkout + guard «Укажите email». Живое списание SKIP (точка закрыта, прод T-Bank).
+- Артефакт `fly_real_run_mcp_2026-07-21.json` + 5 скринов + `customer_checklist` (что проверять заказчику); DEMO_FEEDBACK: **UX-3** — секция повтора перекрывает форму email на Оформлении (open, решение владельца).
+
 ## 2026-07-21 — feat(shop): Quick Repeat Bottom Sheet — быстрый повтор частых покупок (B1–B4, F1–F5)
 
 - **Backend:** `Shop::CustomerFrequentProductsService` (окно 45 дней, топ-3 по частоте/свежести, группировка `[product_id, modifier_options]`, 4 плоских запроса без JOIN) · кэш `shop/freq/{tenant}/{customer}` TTL 30 мин + bust в `OrderCreator` и `PaymentStatusUpdater` · `GET /shop/api/frequent_products` (гость → пустой список, категории из существующего пути).

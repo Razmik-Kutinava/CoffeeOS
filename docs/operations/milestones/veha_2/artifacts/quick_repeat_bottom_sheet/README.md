@@ -16,3 +16,7 @@
 ## Приёмка на Fly (MCP, 2026-07-21)
 
 **Прогон:** [`fly_acceptance_mcp_2026-07-21.json`](fly_acceptance_mcp_2026-07-21.json) — 6/6 PASS (frequent_items засеяны стабом: у стенда нет клиентов с историей mobile-заказов), скрины в `screenshots/fly_acceptance/`. UX-вопросы владельцу: empty/peek высоты vs секция повтора — см. `findings_for_owner` в JSON и DEMO_FEEDBACK.
+
+## Реальный прогон на Fly без стабов (MCP, 2026-07-21)
+
+**Прогон:** [`fly_real_run_mcp_2026-07-21.json`](fly_real_run_mcp_2026-07-21.json) — 8/8 PASS + 1 SKIP (живое списание: точка закрыта, прод T-Bank). На стенде засеян клиент `mcp-quickrepeat@example.com` с историей mobile-заказов; вход штатным email-OTP, данные секции «повторить» — из реального API. Скрины в `screenshots/fly_real_run/`. Там же — **чеклист заказчику** (`customer_checklist`) и новые находки UX-3 / NOTE про guard «Укажите email».

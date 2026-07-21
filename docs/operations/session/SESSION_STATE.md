@@ -2,11 +2,19 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-21 (Quick Repeat Bottom Sheet — задеплоено на Fly + MCP-приёмка 6/6 PASS; ждёт апрув заказчика)  
+**Дата:** 2026-07-21 (Quick Repeat Bottom Sheet — задеплоено + два MCP-прогона: стаб 6/6 и реальный 8/8 без стабов; ждёт апрув заказчика)  
 
 | Сейчас | Дальше |
 |--------|--------|
-| Deploy Fly `deployment-01KY2FKAVV4MDDXR3ANANCCCJE` OK · MCP-приёмка 6/6 PASS (артефакт + 6 скринов) · UX-1/UX-2 (empty/peek высоты vs секция повтора) в DEMO_FEEDBACK open | Апрув заказчика по скринам · решение владельца по UX-1/UX-2 · опционально живая оплата в рабочие часы точки |
+| Deploy Fly OK · MCP стаб 6/6 · **MCP real-run 8/8 PASS без стабов** (посеян клиент с историей, вход email-OTP) + чеклист заказчику в `fly_real_run_mcp_2026-07-21.json` · UX-1/UX-2/UX-3 в DEMO_FEEDBACK open | Передать заказчику чеклист (`customer_checklist`) + скрины `fly_real_run/` · решение владельца по UX-1/2/3 · живая оплата в рабочие часы точки |
+
+### Сессия 2026-07-21 (MCP real-run Quick Repeat — без стабов)
+
+- Посев на Neon (демо-стенд): клиент `mcp-quickrepeat@example.com` (8d8f3872…919e) + 4 mobile-заказа accepted за 45 дней (Cold Brew клюква ×2 — частота, кордиал ×2 — свежесть); скрипты в `scripts/scratch/mcp_quick_repeat_seed*.rb` (не коммитятся). `fly ssh console -C` теряет аргументы → сеял локальным `pg` по DATABASE_URL.
+- Вход штатным email-OTP из браузера: send_code → код из таблицы `shop_email_otp_codes` → verify 200 → `user/cards` привязал customer к сессии.
+- Реальный API: `frequent_products` вернул 3 позиции из реальной истории (335₽ первым по частоте 2, далее 385₽ по свежести). Секция «повторить» отрисована из API (стаб выключен, чистая вкладка).
+- E2E: гость — секции нет ✓; счётчик «+» → qty 2 в localStorage мгновенно ✓; «+ещё» → expanded ✓; «повторить в 1 клик» → корзина **+1 440₽ = 335×2+385+385** (qty учтён) ✓; «оплатить в 1 клик» → #/checkout, autopay-флаг снят, guard «Укажите email» (канон) ✓. Живое списание SKIP (точка закрыта + прод T-Bank).
+- Артефакт `fly_real_run_mcp_2026-07-21.json` (+5 скринов `screenshots/fly_real_run/`) с **чеклистом заказчику**; DEMO_FEEDBACK: real-run строка + **UX-3** (повтор перекрывает форму email на Оформлении).
 
 ### Сессия 2026-07-21 (deploy Fly + MCP-приёмка Quick Repeat)
 

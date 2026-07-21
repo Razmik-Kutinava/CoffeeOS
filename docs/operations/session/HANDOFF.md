@@ -14,7 +14,8 @@
 | REVIEW: rubocop 0 offenses · services+API+RLS 123/0 · оплата §2.3+one_click 29/0 · шторка 27/0 | **`[x]`** |
 | **Deploy Fly** — `deployment-01KY2FKAVV4MDDXR3ANANCCCJE` (release + smoke OK) | **`[x]`** 2026-07-21 |
 | **MCP на Fly** — 6/6 PASS · [`fly_acceptance_mcp_2026-07-21.json`](../milestones/veha_2/artifacts/quick_repeat_bottom_sheet/fly_acceptance_mcp_2026-07-21.json) + 6 скринов | **`[x]`** 2026-07-21 |
-| UX-вопросы владельцу: UX-1 (empty клипает повтор) · UX-2 (peek 2+ повтор вытесняет корзину) | **open** → DEMO_FEEDBACK |
+| **MCP real-run без стабов** — 8/8 PASS + 1 SKIP (живое списание) · [`fly_real_run_mcp_2026-07-21.json`](../milestones/veha_2/artifacts/quick_repeat_bottom_sheet/fly_real_run_mcp_2026-07-21.json) + 5 скринов + **чеклист заказчику** (`customer_checklist`). Посеян клиент `mcp-quickrepeat@example.com` с историей (4 mobile-заказа, Neon), вход штатным email-OTP | **`[x]`** 2026-07-21 |
+| UX-вопросы владельцу: UX-1 (empty клипает повтор) · UX-2 (peek 2+ повтор вытесняет корзину) · UX-3 (повтор перекрывает форму email на checkout) | **open** → DEMO_FEEDBACK |
 | Апрув заказчика / `[x]` в CBR | **`[ ]`** |
 
 **Решения, требующие сверки на приёмке:** hidden — без секции повтора (канонные чипы корзины) · клик по карточке каталога — переход в Product (конфликт Шагов 9/12 ТЗ) · «оплатить в 1 клик» — автооткрытие шита оплаты, списание с подтверждением «Оплатить».
