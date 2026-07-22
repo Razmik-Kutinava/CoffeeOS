@@ -7,7 +7,13 @@
 
 ## Текущая фаза
 
-**PHASE 3: REVIEW `[x]` · FIX-A…F `[x]` · MCP Fly после redeploy `[x]` 2026-07-22 · следующий шаг: чеклист заказчику → «ок»**
+**PHASE 3: REVIEW `[x]` · FIX-A…F `[x]` · layout канон prog28 `[x]` 2026-07-22 · следующий шаг: redeploy → MCP визуал → «ок» заказчика**
+
+### Layout канон (скрины 01–05) — 2026-07-22
+- [x] Hidden без «повторить»
+- [x] Peek/single: заказ → +цена → embedded repeat (одна шторка)
+- [x] Высоты peekWithRepeat · prog28 · тесты 57/0
+- [ ] Redeploy + MCP визуал
 
 ### FIX-A…F — жалоба «зарегался — повторов нет» (2026-07-22)
 - [x] FIX-A: OTP verify → `customer_id` в сессии (`EmailVerifiedCustomerLinker`) — `6ab3081`
