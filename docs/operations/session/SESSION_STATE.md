@@ -2,11 +2,17 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-22 (rules: апрув = намерение из текста, не культ `go`; layout Quick Repeat — dirty WIP, не коммитили)  
+**Дата:** 2026-07-22 (Quick Repeat layout канон заказчика: одна шторка peek; hidden без повтора — prog28)  
 
 | Сейчас | Дальше |
 |--------|--------|
-| Rules починены: `coffeeos-task-workflow` + SBR + agent/commit-ops + RULES_INDEX | После апрува владельца — добить layout шторки (заказ+повторить одна сущность; hidden без повтора) по ТЗ/скринам |
+| Layout FIX: hidden без «повторить» · peek/single = заказ → +цена → embedded repeat · высоты peekWithRepeat 46/50 · prog28 · тесты 57/0 + sheet 48/0 | Redeploy Fly → MCP визуал · чеклист заказчику |
+
+### Сессия 2026-07-22 (layout шторки = канон скринов заказчика)
+
+- Проблема: заказ и «повторить» выглядели как две полосы; в «почти hidden» торчал повтор.
+- Fix: `RepeatSection layout=embedded|full`; checkout **перед** repeat; hidden без RepeatSection; peek высота `peekSingleWithRepeat`/`peekMultiWithRepeat` при frequentCount>0; build `prog28`.
+- Тесты: `quick_repeat_sheet_layout_canon_test` + обновлены heights/b113/checkout UX · quick_repeat **57/0** · sheet zone **48/0**.
 
 ### Сессия 2026-07-22 (rules: намерение ≠ литерал go)
 

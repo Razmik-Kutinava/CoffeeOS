@@ -29,20 +29,21 @@ class Shop::QuickRepeatCustomerFixesTest < ActionDispatch::IntegrationTest
     assert_includes categories, "frequentCategories"
   end
 
-  test "empty sheet grows when frequent items exist (UX-1)" do
+  test "empty sheet grows when frequent items exist (UX-1 / one-entity peek)" do
     sheet = File.read(Rails.root.join("app/frontend/components/CartSheet.svelte"))
 
     assert_includes sheet, "frequentCount"
-    assert_includes sheet, "SHEET_VH.peekSingle"
+    assert_includes sheet, "peekSingleWithRepeat"
   end
 
-  test "RepeatSection has per-card pay button (screenshot 06)" do
+  test "RepeatSection has per-card pay in full layout only (screenshot 06)" do
     section = File.read(Rails.root.join("app/frontend/components/RepeatSection.svelte"))
     store = File.read(Rails.root.join("app/frontend/lib/frequentRepeatStore.js"))
 
     assert_includes section, 'data-testid="shop-repeat-card-pay"'
     assert_includes section, "оплатить в 1 клик"
     assert_includes store, "repeatPayOneClickItem"
+    assert_includes section, "!embedded"
     refute_includes section, 'data-testid="shop-repeat-pay-one-click"',
       "глобальная кнопка оплаты заменена на per-card (скрин 06)"
   end

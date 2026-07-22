@@ -11,18 +11,18 @@
     repeatFeedback
   } from "../lib/frequentRepeatStore.js"
 
+  /** full — empty/expanded (скрин 06); embedded — peek с заказом (скрины 01–02: thumb+qty) */
+  let { layout = "full" } = $props()
+
   let items = $state([])
-  /** Зеркало store frequentQuantities — источник истины store + localStorage (F3, ТЗ Шаг 10) */
   let storeQty = $state({})
-  /** URL с 404 — не показывать broken-icon */
   let brokenUrls = $state(/** @type {Set<string>} */ (new Set()))
-  /** Тост «повторить»: success/error из repeatFeedback (F4, ТЗ Шаг 11) */
   let feedback = $state(null)
   let repeatBusy = $state(false)
   let toastTimer = null
 
-  // Клиентский предохранитель поверх бэкового MAX_REPEAT_ITEMS
   let topItems = $derived(items.slice(0, 3))
+  let embedded = $derived(layout === "embedded")
 
   onMount(() => {
     const unsubItems = frequentItems.subscribe((v) => { items = Array.isArray(v) ? v : [] })
@@ -74,7 +74,8 @@
 {#if topItems.length}
   <div
     data-testid="shop-repeat-section"
-    class="shrink-0 px-1 pt-1.5"
+    data-repeat-layout={layout}
+    class="shrink-0 px-1 {embedded ? 'pt-1' : 'pt-1.5'}"
   >
     <p class="mb-1 px-1 text-[11px] italic text-[#888]">повторить</p>
     {#if feedback}
@@ -90,14 +91,14 @@
         {@const url = item.image_url || ""}
         <div
           data-testid="shop-repeat-card"
-          class="flex w-[min(28vw,110px)] shrink-0 flex-col gap-1 rounded-xl border border-[#3a3a3a] bg-[#1f1f1f] p-1.5"
+          class="flex shrink-0 flex-col gap-1 {embedded ? 'w-[4.5rem]' : 'w-[min(28vw,110px)] rounded-xl border border-[#3a3a3a] bg-[#1f1f1f] p-1.5'}"
         >
           {#if url && !brokenUrls.has(url)}
             <img
               data-testid="shop-repeat-thumb"
               src={url}
               alt=""
-              class="h-12 w-full rounded-lg object-cover object-top"
+              class="{embedded ? 'h-12 w-12' : 'h-12 w-full'} rounded-lg object-cover object-top"
               decoding="async"
               onerror={() => {
                 const next = new Set(brokenUrls)
@@ -108,12 +109,14 @@
           {:else}
             <div
               data-testid="shop-repeat-thumb-empty"
-              class="flex h-12 w-full items-center justify-center rounded-lg bg-[#333] text-[9px] text-[#888]"
+              class="flex {embedded ? 'h-12 w-12' : 'h-12 w-full'} items-center justify-center rounded-lg bg-[#333] text-[9px] text-[#888]"
             >Нет фото</div>
           {/if}
-          <p class="line-clamp-1 text-[11px] font-medium leading-tight">{item.name}</p>
-          <p class="text-[10px] text-[#ff8c42]">{roundPrice(item.price)}₽</p>
-          <div class="mt-0.5 flex items-center justify-between gap-0.5">
+          {#if !embedded}
+            <p class="line-clamp-1 text-[11px] font-medium leading-tight">{item.name}</p>
+            <p class="text-[10px] text-[#ff8c42]">{roundPrice(item.price)}₽</p>
+          {/if}
+          <div class="mt-0.5 flex items-center justify-between gap-0.5 {embedded ? 'w-12' : ''}">
             <button
               type="button"
               data-testid="shop-repeat-minus"
@@ -129,13 +132,15 @@
               onclick={() => bump(key, 1)}
             >+</button>
           </div>
-          <button
-            type="button"
-            data-testid="shop-repeat-card-pay"
-            class="mt-0.5 min-h-7 w-full rounded-lg bg-[#ff8c42] px-2 py-1 text-[10px] font-semibold text-black disabled:opacity-40"
-            disabled={repeatBusy}
-            onclick={() => onPayCardClick(item)}
-          >оплатить в 1 клик</button>
+          {#if !embedded}
+            <button
+              type="button"
+              data-testid="shop-repeat-card-pay"
+              class="mt-0.5 min-h-7 w-full rounded-lg bg-[#ff8c42] px-2 py-1 text-[10px] font-semibold text-black disabled:opacity-40"
+              disabled={repeatBusy}
+              onclick={() => onPayCardClick(item)}
+            >оплатить в 1 клик</button>
+          {/if}
         </div>
       {/each}
     </div>

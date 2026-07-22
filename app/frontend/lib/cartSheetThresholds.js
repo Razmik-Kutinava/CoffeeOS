@@ -15,11 +15,14 @@ export const SHEET_VH = {
   expandedMulti:  56,
   peekSingle:    34,
   peekMulti:     38,
+  /** Peek с секцией «повторить» внутри одной шторки (скрины 01–02) */
+  peekSingleWithRepeat: 46,
+  peekMultiWithRepeat:  50,
   hidden:        24
 }
 
 /** Маркер сборки cart sheet — менять при каждом UX-фиксе для верификации на Fly */
-export const CART_SHEET_BUILD = "prog26"
+export const CART_SHEET_BUILD = "prog28"
 
 /** Высота единой шторки checkout: peek корзины + PaymentMethodsSheet (Фаза 2 UX) */
 export const CHECKOUT_PAY_STACK_VH = 92

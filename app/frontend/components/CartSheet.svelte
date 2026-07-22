@@ -62,8 +62,11 @@
   let payStackActive = $derived(onCheckout && payStackOpen && count > 0)
   let heightVh = $derived.by(() => {
     if (payStackActive) return CHECKOUT_PEEK_VH
-    // UX-1: empty 12vh обрезает секцию «повторить» — с историей показываем peek-высоту
-    if (mode === MODE_EMPTY && frequentCount > 0) return SHEET_VH.peekSingle
+    // Одна сущность заказ+«повторить»: выше peek, чтобы не выглядело как две шторки
+    if (frequentCount > 0 && (mode === MODE_PEEK || mode === MODE_EMPTY)) {
+      if (mode === MODE_EMPTY || count <= 1) return SHEET_VH.peekSingleWithRepeat
+      return SHEET_VH.peekMultiWithRepeat
+    }
     return sheetHeightVh(mode, count)
   })
   let stackBottomVh = $derived(CHECKOUT_PAY_STACK_VH - CHECKOUT_PEEK_VH)
@@ -356,13 +359,13 @@
 
     <!-- EMPTY -->
     {#if mode === MODE_EMPTY || !count}
-      <p data-testid="shop-cart-sheet-empty" class="px-4 py-6 text-center text-sm italic text-[#888]">
+      <p data-testid="shop-cart-sheet-empty" class="px-4 py-2 text-center text-sm italic text-[#888]">
         тут будут твои заказы
       </p>
-      <div data-testid="shop-repeat-slot-empty" class="shrink-0 px-2">
-        {#if !onCheckout}<RepeatSection />{/if}
-      </div>
       {@render checkoutBar("shop-cart-empty-total")}
+      <div data-testid="shop-repeat-slot-empty" class="shrink-0 px-2">
+        {#if !onCheckout}<RepeatSection layout="full" />{/if}
+      </div>
 
     <!-- HIDDEN — ряд чипов с фото + сумма (канон заказчика 2026-07-20) -->
     {:else if mode === MODE_HIDDEN}
@@ -410,15 +413,16 @@
         </button>
       </div>
 
-    <!-- PEEK 2+ — горизонтальный ряд карточек 28vw (§ S2-канон: компактный peek) -->
+    <!-- PEEK 2+ — одна сущность: заказ → +цена → «повторить» (скрины 01–02) -->
     {:else if (mode === MODE_PEEK || payStackActive) && count >= 2}
       <div
         class="flex flex-1 min-h-0 flex-col overflow-hidden px-3 pb-2 pt-1"
         data-testid="shop-cart-peek-list"
         data-cart-layout="horizontal"
+        data-sheet-entity="order-and-repeat"
       >
         <div
-          class="flex min-h-0 flex-1 gap-2 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          class="flex min-h-0 shrink gap-2 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           onscroll={onPeekScroll}
         >
           {#each items as line (line.index)}
@@ -465,10 +469,10 @@
             {/each}
           </div>
         {/if}
-        <div data-testid="shop-repeat-slot-peek" class="shrink-0">
-          {#if !onCheckout}<RepeatSection />{/if}
-        </div>
         {@render checkoutBar("shop-cart-peek-total", payStackActive)}
+        <div data-testid="shop-repeat-slot-peek" class="shrink-0 border-t border-[#3a3a3a]/40">
+          {#if !onCheckout}<RepeatSection layout="embedded" />{/if}
+        </div>
       </div>
 
     <!-- EXPANDED 2+ — вертикальный компактный список (§ S2-канон: развёрнутый вид) -->
@@ -533,21 +537,22 @@
             </div>
           {/each}
         </div>
-        <div data-testid="shop-repeat-slot-expanded" class="shrink-0">
-          {#if !onCheckout}<RepeatSection />{/if}
-        </div>
         {@render checkoutBar(null, payStackActive)}
+        <div data-testid="shop-repeat-slot-expanded" class="shrink-0 border-t border-[#3a3a3a]/40">
+          {#if !onCheckout}<RepeatSection layout="embedded" />{/if}
+        </div>
       </div>
 
-    <!-- 1 товар — широкая горизонтальная карточка (только peek/hidden, expanded недоступен) -->
+    <!-- 1 товар — одна шторка: заказ → +цена → «повторить» (скрин 02) -->
     {:else if singleItem}
       <div
         class="flex flex-1 min-h-0 flex-col overflow-hidden px-3 pb-2 pt-1"
         data-cart-layout="horizontal"
+        data-sheet-entity="order-and-repeat"
         data-testid={payStackActive ? "shop-cart-peek-list" : undefined}
       >
           <div
-            class="flex min-h-0 flex-1 gap-2 rounded-xl border border-[#3a3a3a] bg-[#1f1f1f] p-2 cursor-pointer"
+            class="flex min-h-0 shrink gap-2 rounded-xl border border-[#3a3a3a] bg-[#1f1f1f] p-2 cursor-pointer"
             data-testid="shop-cart-expanded-single"
             role="button"
             tabindex="0"
@@ -567,10 +572,10 @@
             {@render lineControls(singleItem)}
           </div>
         </div>
-        <div data-testid="shop-repeat-slot-single" class="shrink-0">
-          {#if !onCheckout}<RepeatSection />{/if}
-        </div>
         {@render checkoutBar(null, payStackActive)}
+        <div data-testid="shop-repeat-slot-single" class="shrink-0 border-t border-[#3a3a3a]/40">
+          {#if !onCheckout}<RepeatSection layout="embedded" />{/if}
+        </div>
       </div>
     {/if}
   </div>

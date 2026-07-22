@@ -19,8 +19,8 @@ class Shop::BottomSheetHeightsCanonTest < ActionDispatch::IntegrationTest
     assert_match(/peekSingle:\s*34/, thresholds)
     assert_match(/peekMulti:\s*38/, thresholds)
     assert_match(/hidden:\s*24/, thresholds)
-    assert_includes thresholds, 'CART_SHEET_BUILD = "prog26"',
-      "принятый канон — сборка prog26; менять маркер только вместе с новым UX-решением владельца"
+    assert_includes thresholds, 'CART_SHEET_BUILD = "prog28"',
+      "канон шторки 2026-07-22 — prog28 (заказ+повторить одна сущность); менять только с UX-решением"
   end
 
   test "sheet internals stay untouched (expanded rows list, no grid inside sheet)" do

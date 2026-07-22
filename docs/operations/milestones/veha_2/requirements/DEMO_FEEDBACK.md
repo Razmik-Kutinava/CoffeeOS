@@ -27,7 +27,7 @@
 
 | Дата | Источник | Сценарий / экран | Суть | Статус | PR / коммит |
 |------|----------|------------------|------|--------|-------------|
-| 2026-07-22 | заказчик Quick Repeat | витрина после регистрации | «Зарегался на точке — система должна вытащить из БД одинаковые предложения, но нихуя». Корень: OTP ≠ customer_id в сессии; UI не как на скринах. Фикс-пакет FIX-A…F | **done** *(MCP PASS)* | код `6ab3081`/`ac1f894` · MCP [`fly_fix_af_mcp_2026-07-22.json`](../artifacts/quick_repeat_bottom_sheet/fly_fix_af_mcp_2026-07-22.json) 9/9 · ждёт «ок» заказчика |
+| 2026-07-22 | заказчик Quick Repeat | витрина после регистрации | «Зарегался — повторов нет» + layout: две полосы / повтор в hidden | **in_progress** | FIX-A…F MCP PASS · layout prog28 локально — ждёт redeploy + визуал |
 | 2026-07-21 | MCP Fly Quick Repeat | шторка empty (корзина пуста) | **UX-1:** секция «повторить» в empty-шторке (12vh) клипается за нижней границей — на пустой корзине не видна. Поднять высоту empty при наличии frequent_items? | open | [fly_acceptance_mcp_2026-07-21.json](artifacts/quick_repeat_bottom_sheet/fly_acceptance_mcp_2026-07-21.json) |
 | 2026-07-21 | MCP Fly Quick Repeat | шторка peek 2+ | **UX-2:** секция «повторить» + кнопки вытесняют ряд карточек корзины из peek (38vh) — виден только повтор + чек-бар. Приоритет корзина vs повтор — решение владельца | open | скрин `03_fly_peek_repeat_section_2026-07-21.png` |
 | 2026-07-21 | MCP Fly Quick Repeat | витрина + checkout | Приёмка фичи 6/6 PASS (peek/expanded/«повторить»/«оплатить в 1 клик»); живое списание не гонялось (точка закрыта, prod T-Bank) — покрыто локальной симуляцией §2.3 | **ждёт апрув заказчика** | [fly_acceptance_mcp_2026-07-21.json](artifacts/quick_repeat_bottom_sheet/fly_acceptance_mcp_2026-07-21.json) |

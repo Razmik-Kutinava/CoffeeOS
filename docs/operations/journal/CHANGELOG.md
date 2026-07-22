@@ -1,5 +1,13 @@
 ﻿# CHANGELOG
 
+## 2026-07-22 — fix(shop): Quick Repeat layout — одна шторка peek, hidden без повтора (prog28)
+
+- **Hidden:** только чипы заказа + «+цена» (скрины 04–05), секции «повторить» нет.
+- **Peek/single:** одна сущность — заказ → checkout (+цена) → компактный `RepeatSection layout=embedded` (thumb+qty, скрины 01–02).
+- **Empty:** `layout=full` с per-card «оплатить в 1 клик» (скрин 06).
+- Высоты: `peekSingleWithRepeat=46` / `peekMultiWithRepeat=50` при `frequentCount>0`; `CART_SHEET_BUILD=prog28`.
+- Тесты: layout canon 6 + регрессия quick_repeat 57/0 · sheet/heights/b113 48/0.
+
 ## 2026-07-22 — docs(rules): апрув шага = намерение из текста, не культ `go`
 
 - `coffeeos-task-workflow.mdc`: таблица намерений («ебашь/сделай» = работа; «что думаешь» = без кода).
