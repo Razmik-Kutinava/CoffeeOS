@@ -42,7 +42,7 @@ TDD-цикл SBR — **два коммита**, один логический ш
 
 | Substep | Коммит | Ops |
 |---------|--------|-----|
-| **RED** | `test: … [RED]` — обязателен | **Только** `git commit`. **Не** CHANGELOG, **не** HANDOFF. Статус `in_progress`, стоп до `go`. |
+| **RED** | `test: … [RED]` — обязателен | **Только** `git commit`. **Не** CHANGELOG, **не** HANDOFF. Статус `in_progress`, стоп до намерения продолжать (не культ `go`). |
 | **GREEN** | `feat: … [GREEN]` — обязателен | Коммит + регрессия зоны. CHANGELOG/HANDOFF — в **PHASE 3: REVIEW** (конец фичи) или при обычном шаге без SBR — полный ops ниже. |
 | **REVIEW / обычный шаг** | как обычно | Полный ops: SESSION_STATE + CHANGELOG + HANDOFF |
 

@@ -5,7 +5,7 @@ alwaysApply: true
 
 # CoffeeOS — рабочий процесс агента (краткий)
 
-**Задачи, go, честный отчёт:** [`coffeeos-task-workflow.mdc`](coffeeos-task-workflow.mdc) — канон для CHECKLIST/CBR/фич.
+**Задачи, намерение шага, честный отчёт:** [`coffeeos-task-workflow.mdc`](coffeeos-task-workflow.mdc) — канон для CHECKLIST/CBR/фич. Апрув = смысл текста («ебашь/сделай»), не культ слова `go`.
 
 **Коммит и ops:** только [`coffeeos-commit-ops.mdc`](coffeeos-commit-ops.mdc).
 
@@ -23,7 +23,7 @@ alwaysApply: true
 | 2 | Тесты (`coffeeos-dev-gates.mdc`) |
 | 3 | **`git commit`** + **ops** (`coffeeos-commit-ops.mdc`) |
 | 4 | **Отчёт** — таблица Сделано \| Не сделано + коммит (`coffeeos-task-workflow.mdc`) |
-| 5 | **Стоп** — ждать **`go`** |
+| 5 | **Стоп** — ждать **намерения** на следующий шаг (не литерал `go`) |
 
 Срочность не отменяет коммит, тесты и ops.
 

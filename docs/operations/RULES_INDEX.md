@@ -7,8 +7,9 @@
 | Файл | Назначение |
 |------|------------|
 | `coffeeos-commit-ops.mdc` | **Канон:** commit + ops всегда (без вопроса); push только по явной просьбе |
-| `coffeeos-task-workflow.mdc` | go, тесты, отчёт **Сделано \| Не сделано**, старт сессии, CHECKLIST/CBR |
+| `coffeeos-task-workflow.mdc` | намерение шага (не культ `go`), тесты, отчёт **Сделано \| Не сделано**, старт сессии, CHECKLIST/CBR |
 | `coffeeos-agent-workflow.mdc` | Краткий порядок шага |
+| `spec-build-review.mdc` | SBR: порядок фаз SPEC→RED→GREEN→REVIEW; gate = намерение |
 | `coffeeos-dev-gates.mdc` | DoD, регрессия по зонам, hot-path, миграции |
 | `coffeeos-repo-layout.mdc` | Куда класть файлы; `scripts/scratch/` |
 | `coffeeos-file-size-split.mdc` | Лимиты 50/120/200, сплит |

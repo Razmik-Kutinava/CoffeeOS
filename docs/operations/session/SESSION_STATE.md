@@ -2,11 +2,16 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-22 (Quick Repeat FIX-A…F — MCP на Fly PASS; чеклист заказчику готов)  
+**Дата:** 2026-07-22 (rules: апрув = намерение из текста, не культ `go`; layout Quick Repeat — dirty WIP, не коммитили)  
 
 | Сейчас | Дальше |
 |--------|--------|
-| Redeploy owner OK (v377) · MCP FIX-A…F **9/9 PASS** · после OTP `frequent_items=3` без нового заказа · per-card pay · checkout без повтора | Передать заказчику чеклист из `fly_fix_af_mcp_2026-07-22.json` · ждать «ок» / `[x]` в CBR |
+| Rules починены: `coffeeos-task-workflow` + SBR + agent/commit-ops + RULES_INDEX | После апрува владельца — добить layout шторки (заказ+повторить одна сущность; hidden без повтора) по ТЗ/скринам |
+
+### Сессия 2026-07-22 (rules: намерение ≠ литерал go)
+
+- Баг агента: ждал/не ждал слово `go` вместо смысла («ебашь/сделай»).
+- Канон: § «Апрув шага = намерение» в `coffeeos-task-workflow.mdc`; SBR — порядок фаз, gate по намерению; push/deploy по-прежнему явные.
 
 ### Сессия 2026-07-22 (MCP DevTools после redeploy FIX-A…F)
 

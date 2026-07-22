@@ -1,5 +1,10 @@
 ﻿# CHANGELOG
 
+## 2026-07-22 — docs(rules): апрув шага = намерение из текста, не культ `go`
+
+- `coffeeos-task-workflow.mdc`: таблица намерений («ебашь/сделай» = работа; «что думаешь» = без кода).
+- `spec-build-review.mdc` / agent / commit-ops / RULES_INDEX: SBR — порядок фаз; gate по смыслу; push/deploy по-прежнему явные.
+
 ## 2026-07-22 — docs(ops): Quick Repeat FIX-A…F — MCP на Fly PASS после redeploy
 
 - Owner deploy `01KY4MHZPD7YS2D9NS4NP54B09` (v377). MCP DevTools: **9/9 PASS** (OTP→frequent_items без нового заказа, UX-1 34vh, per-card pay, expanded categories, checkout без повтора).
