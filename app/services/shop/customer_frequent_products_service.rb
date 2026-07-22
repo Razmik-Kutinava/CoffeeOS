@@ -71,15 +71,39 @@ module Shop
         .pluck(:order_id, :product_id, :modifier_options)
     end
 
-    # Группировка [product_id, modifier_options] → сортировка частота ↓, свежесть ↓
+    # Группировка [product_id, canonical modifiers] → сортировка частота ↓, свежесть ↓
     def top_groups(item_rows, order_dates)
       item_rows
-        .group_by { |(_oid, product_id, modifiers)| [ product_id, modifiers ] }
+        .group_by { |(_oid, product_id, modifiers)| [ product_id, normalize_modifier_options(modifiers) ] }
         .map do |(product_id, modifiers), rows|
           last_at = rows.map { |(oid, *)| order_dates[oid] }.compact.max
           { product_id: product_id, modifier_options: modifiers, count: rows.size, last_at: last_at }
         end
         .sort_by { |g| [ -g[:count], -g[:last_at].to_f ] }
+    end
+
+    # FIX-B: {} и {"selected_modifiers":[]} — одна карточка; legacy-плоский jsonb не трогаем
+    def normalize_modifier_options(modifiers)
+      return { "selected_modifiers" => [] } if modifiers.blank? || !modifiers.is_a?(Hash)
+
+      legacy_only = modifiers.except("removed_modifiers", :removed_modifiers)
+      if modifiers.key?("selected_modifiers") || modifiers.key?(:selected_modifiers)
+        raw = modifiers["selected_modifiers"] || modifiers[:selected_modifiers]
+        selected = Array(raw).filter_map do |mod|
+          next unless mod.is_a?(Hash)
+
+          id = mod["id"] || mod[:id]
+          next if id.blank?
+
+          { "id" => id.to_s, "name" => (mod["name"] || mod[:name]).to_s }
+        end.sort_by { |m| m["id"] }
+
+        return { "selected_modifiers" => selected }
+      end
+
+      return { "selected_modifiers" => [] } if legacy_only.blank?
+
+      legacy_only.stringify_keys.sort.to_h
     end
 
     def build_items(groups)

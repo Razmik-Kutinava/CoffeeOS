@@ -18,6 +18,11 @@ module Shop
           email: email,
           session_id: request.session.id
         )
+        Shop::EmailVerifiedCustomerLinker.link!(
+          session: session,
+          tenant_id: @shop_tenant.id,
+          email: email
+        )
         render json: { verified: true, email: email }
       rescue Shop::EmailOtp::Error => e
         render json: { error: e.message }, status: :unprocessable_entity

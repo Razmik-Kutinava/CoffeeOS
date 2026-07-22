@@ -80,6 +80,21 @@ class Shop::CustomerFrequentProductsServiceTest < ActiveSupport::TestCase
     assert_equal [ @bumble.id, @tonic.id ], items.map { |i| i[:product_id] }
   end
 
+  test "equivalent modifier_options variants aggregate into one frequent item" do
+    create_paid_order!(product: @filter, modifiers: {}, created_at: 3.days.ago)
+    create_paid_order!(product: @filter, modifiers: { "selected_modifiers" => [] }, created_at: 2.days.ago)
+    create_paid_order!(
+      product: @filter,
+      modifiers: { "removed_modifiers" => [], "selected_modifiers" => [] },
+      created_at: 1.day.ago
+    )
+
+    items = call_service
+
+    assert_equal 1, items.length
+    assert_equal({ "selected_modifiers" => [] }, items.first[:modifier_options])
+  end
+
   test "same product with different modifiers makes separate entries" do
     2.times { |i| create_paid_order!(product: @filter, modifiers: SYRUP_CARAMEL, created_at: (i + 1).days.ago) }
     create_paid_order!(product: @filter, modifiers: SYRUP_VANILLA, created_at: 1.day.ago)
