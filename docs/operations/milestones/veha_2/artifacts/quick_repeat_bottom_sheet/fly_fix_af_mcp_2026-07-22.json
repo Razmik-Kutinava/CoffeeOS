@@ -1,0 +1,43 @@
+{
+  "task": "Quick Repeat — MCP-приёмка FIX-A…F после redeploy (жалоба заказчика «зарегался — повторов нет»)",
+  "date": "2026-07-22",
+  "stand": "https://coffeeos.fly.dev/shop?tenant_id=af4f78d6-c66b-428e-8ee4-5a609c5c9131",
+  "deploy": "deployment-01KY4MHZPD7YS2D9NS4NP54B09 · machine version 377 · owner deploy",
+  "setup": "Клиент mcp-quickrepeat@example.com (id 8d8f3872…919e) с 4 mobile-заказами accepted. Вход: email-OTP (send → код из shop_email_otp_codes → verify). Без fetch-стабов. FIX-A: customer_id в сессии сразу после verify.",
+  "checks": [
+    { "id": 1, "check": "Гость: секции «повторить» нет (DOM shop-repeat-section отсутствует)", "result": "PASS", "evidence": "скрин 01" },
+    { "id": 2, "check": "OTP verify → profile.id = seeded customer, без нового заказа", "result": "PASS", "evidence": "profile id 8d8f3872…919e, orders_count=4" },
+    { "id": 3, "check": "FIX-A: GET frequent_products сразу после verify → 200, frequent_items=3 (Cold Brew клюква 335₽ + кордиал 385₽×2)", "result": "PASS" },
+    { "id": 4, "check": "UX-1 / FIX-C: empty-шторка с frequent → высота 34vh (peekSingle), секция «повторить» видна", "result": "PASS", "evidence": "sheetH=34vh, скрин 02" },
+    { "id": 5, "check": "FIX-E: под каждой карточкой «оплатить в 1 клик» (shop-repeat-card-pay ×3), глобальной shop-repeat-pay-one-click нет", "result": "PASS", "evidence": "cardPay=3, globalPay=false" },
+    { "id": 6, "check": "«повторить в 1 клик» → корзина +1 105₽ (335+385+385), hidden-чипы ×3", "result": "PASS", "evidence": "скрин 04" },
+    { "id": 7, "check": "FIX-D: expanded (корзина 2+) → FrequentSheetCategories: 4 категории, 15 карточек", "result": "PASS", "evidence": "cats=true catBlocks=4 products=15 h=56vh" },
+    { "id": 8, "check": "FIX-F / UX-3: на #/checkout секции «повторить» нет, форма Контакты видна", "result": "PASS", "evidence": "скрин 06, repeat=false" },
+    { "id": 9, "check": "FIX-E: клик shop-repeat-card-pay → навигация #/checkout (autopay consume)", "result": "PASS" },
+    { "id": 10, "check": "Живое списание T-Bank", "result": "SKIP — не в scope приёмки фикса; канон one_click с подтверждением" }
+  ],
+  "screenshots": [
+    "screenshots/fly_fix_af_2026-07-22/01_guest_empty_no_repeat_2026-07-22.png",
+    "screenshots/fly_fix_af_2026-07-22/02_after_otp_repeat_visible_2026-07-22.png",
+    "screenshots/fly_fix_af_2026-07-22/03_expanded_categories_after_more_2026-07-22.png",
+    "screenshots/fly_fix_af_2026-07-22/04_hidden_after_repeat_one_click_2026-07-22.png",
+    "screenshots/fly_fix_af_2026-07-22/05_expanded_with_categories_2026-07-22.png",
+    "screenshots/fly_fix_af_2026-07-22/06_checkout_no_repeat_ux3_2026-07-22.png"
+  ],
+  "customer_checklist": [
+    "1. Открыть витрину своей точки: https://coffeeos.fly.dev/shop?tenant_id=<id_точки>. Без входа секции «повторить» нет — норма.",
+    "2. Оформление → свой email → «Отправить код» → код из письма → «Подтвердить email».",
+    "3. Вернуться в каталог (Назад). Если за 45 дней были оплаченные mobile-заказы на этой точке — в шторке появится «повторить» (1–3 напитка) без нового заказа. Это и был корень жалобы.",
+    "4. Проверить карточки: фото/«Нет фото», цена, −1+, под каждой — «оплатить в 1 клик»; снизу «повторить в 1 клик» и «+ещё».",
+    "5. «повторить в 1 клик» → позиции в корзине, шторка в чипы с суммой.",
+    "6. «+ещё» при 2+ позициях в корзине → expanded: категории сверху + «повторить» снизу.",
+    "7. На экране Оформления секции «повторить» быть не должно (форма email/контакты не перекрыта).",
+    "8. Если истории нет: оформить 2–3 одинаковых напитка → после оплаты секция появится (кэш до 30 мин)."
+  ],
+  "findings_for_owner": [
+    "FIX-D нюанс: сетка категорий в шторке рендерится только в ветке expanded при count≥2. На пустой корзине «+ещё» поднимает высоту, но категории не показывает (ветка empty). Не блокер жалобы «повторов нет».",
+    "UX-2 (peek 2+: повтор рядом с карточками корзины) — без изменения канона высот, open по желанию.",
+    "Жалоба заказчика закрыта по факту стенда: OTP → customer_id → frequent_items без нового заказа."
+  ],
+  "verdict": "PASS — 9/9 checks (1 SKIP live pay). Можно отдавать заказчику."
+}

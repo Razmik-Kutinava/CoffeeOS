@@ -2,11 +2,19 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-22 (Quick Repeat — FIX-A…F по жалобе заказчика; ждёт redeploy Fly + приёмка)  
+**Дата:** 2026-07-22 (Quick Repeat FIX-A…F — MCP на Fly PASS; чеклист заказчику готов)  
 
 | Сейчас | Дальше |
 |--------|--------|
-| FIX-A…F закодированы (`6ab3081`/`ac1f894`): OTP→customer_id, нормализация modifier_options, UI (single-item repeat, expanded categories, per-card pay, hide repeat on checkout, refresh после verify) · регрессия quick_repeat **54/0** | **Redeploy Fly** по апруву → проверка сценария заказчика (регистрация + история) → апрув / `[x]` в CBR |
+| Redeploy owner OK (v377) · MCP FIX-A…F **9/9 PASS** · после OTP `frequent_items=3` без нового заказа · per-card pay · checkout без повтора | Передать заказчику чеклист из `fly_fix_af_mcp_2026-07-22.json` · ждать «ок» / `[x]` в CBR |
+
+### Сессия 2026-07-22 (MCP DevTools после redeploy FIX-A…F)
+
+- Deploy: `deployment-01KY4MHZPD7YS2D9NS4NP54B09` (v377), `/up` 200.
+- Клиент `mcp-quickrepeat@example.com`: OTP verify → profile id + `frequent_products` 3 позиции **без нового заказа** (корень жалобы закрыт).
+- UI: empty 34vh с повтором · card-pay ×3 · repeat → +1 105₽ · expanded categories 4×15 · checkout без «повторить».
+- Артефакт `fly_fix_af_mcp_2026-07-22.json` + 6 скринов; DEMO_FEEDBACK → done *(MCP PASS)*.
+- Finding: категории в шторке только при expanded+count≥2 (не блокер).
 
 ### Сессия 2026-07-22 (FIX-A…F — жалоба заказчика Quick Repeat)
 

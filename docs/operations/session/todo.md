@@ -7,7 +7,7 @@
 
 ## Текущая фаза
 
-**PHASE 3: REVIEW `[x]` · FIX-A…F жалоба заказчика `[x]` 2026-07-22 · следующий шаг: redeploy Fly → приёмка заказчиком**
+**PHASE 3: REVIEW `[x]` · FIX-A…F `[x]` · MCP Fly после redeploy `[x]` 2026-07-22 · следующий шаг: чеклист заказчику → «ок»**
 
 ### FIX-A…F — жалоба «зарегался — повторов нет» (2026-07-22)
 - [x] FIX-A: OTP verify → `customer_id` в сессии (`EmailVerifiedCustomerLinker`) — `6ab3081`
@@ -16,7 +16,8 @@
 - [x] FIX-D: `FrequentSheetCategories` в expanded — `ac1f894`
 - [x] FIX-E: per-card «оплатить в 1 клик» (скрин 06) — `ac1f894`
 - [x] FIX-F: скрыть repeat на checkout (UX-3) + refresh после verify — `ac1f894`
-- [ ] Redeploy Fly + MCP/приёмка заказчика
+- [x] Redeploy Fly (owner) + MCP DevTools 9/9 PASS — `fly_fix_af_mcp_2026-07-22.json`
+- [ ] «ок» заказчика / `[x]` в CBR
 
 ## Маппинг ТЗ → наш стек (решения SPEC)
 

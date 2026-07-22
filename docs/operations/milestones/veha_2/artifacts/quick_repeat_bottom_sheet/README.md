@@ -20,3 +20,7 @@
 ## Реальный прогон на Fly без стабов (MCP, 2026-07-21)
 
 **Прогон:** [`fly_real_run_mcp_2026-07-21.json`](fly_real_run_mcp_2026-07-21.json) — 8/8 PASS + 1 SKIP (живое списание: точка закрыта, прод T-Bank). На стенде засеян клиент `mcp-quickrepeat@example.com` с историей mobile-заказов; вход штатным email-OTP, данные секции «повторить» — из реального API. Скрины в `screenshots/fly_real_run/`. Там же — **чеклист заказчику** (`customer_checklist`) и новые находки UX-3 / NOTE про guard «Укажите email».
+
+## MCP после redeploy FIX-A…F (2026-07-22)
+
+**Прогон:** [`fly_fix_af_mcp_2026-07-22.json`](fly_fix_af_mcp_2026-07-22.json) — **9/9 PASS** + 1 SKIP (живое списание). Deploy `01KY4MHZPD7YS2D9NS4NP54B09` (v377). Жалоба «зарегался — повторов нет»: после OTP `frequent_items=3` без нового заказа; per-card pay; checkout без секции повтора; expanded + категории. Скрины: `screenshots/fly_fix_af_2026-07-22/`. **Чеклист заказчику** — в JSON (`customer_checklist`).

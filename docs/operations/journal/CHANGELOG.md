@@ -1,5 +1,10 @@
 ﻿# CHANGELOG
 
+## 2026-07-22 — docs(ops): Quick Repeat FIX-A…F — MCP на Fly PASS после redeploy
+
+- Owner deploy `01KY4MHZPD7YS2D9NS4NP54B09` (v377). MCP DevTools: **9/9 PASS** (OTP→frequent_items без нового заказа, UX-1 34vh, per-card pay, expanded categories, checkout без повтора).
+- Артефакт [`fly_fix_af_mcp_2026-07-22.json`](../milestones/veha_2/artifacts/quick_repeat_bottom_sheet/fly_fix_af_mcp_2026-07-22.json) + 6 скринов; DEMO_FEEDBACK жалоба → done *(MCP PASS)*; чеклист заказчику в JSON.
+
 ## 2026-07-22 — fix(shop): Quick Repeat — жалоба заказчика «зарегался — повторов нет» (FIX-A…F)
 
 - **FIX-A:** после `email_otp/verify` — `EmailVerifiedCustomerLinker` привязывает `MobileCustomer` к сессии (`CustomerSession.set_customer_id!`); `frequent_products` видит историю без нового заказа.

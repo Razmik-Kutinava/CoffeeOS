@@ -1,6 +1,6 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-22 (**Quick Repeat — фикс-пакет жалобы заказчика FIX-A…F закодирован; ждёт redeploy Fly + приёмка**)  
+**Дата:** 2026-07-22 (**Quick Repeat FIX-A…F — MCP на Fly PASS; можно отдавать заказчику**)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev  
 
@@ -17,8 +17,9 @@
 | **MCP real-run без стабов** — 8/8 PASS + 1 SKIP (живое списание) · [`fly_real_run_mcp_2026-07-21.json`](../milestones/veha_2/artifacts/quick_repeat_bottom_sheet/fly_real_run_mcp_2026-07-21.json) + 5 скринов + **чеклист заказчику** (`customer_checklist`). Посеян клиент `mcp-quickrepeat@example.com` с историей (4 mobile-заказа, Neon), вход штатным email-OTP | **`[x]`** 2026-07-21 |
 | UX-вопросы владельцу: UX-1 (empty клипает повтор) · UX-2 (peek 2+ повтор вытесняет корзину) · UX-3 (повтор перекрывает форму email на checkout) | **open** → DEMO_FEEDBACK |
 | **Код-ревью** (SBR): блокеров нет; 3 замечания исправлены — стабильный ключ счётчика, тост «Добавлено N из M», rescue в `bust_cache!` (RED `397dd5c` / GREEN `9afdff7`); регрессия оплаты §2.3 24/0 + callback 31/0 | **`[x]`** 2026-07-21 |
-| **Редеплой фиксов ревью + FIX-A…F на Fly** | **`[ ]`** по апруву |
-| **FIX-A…F жалоба заказчика** — OTP→customer_id, нормализация модификаторов, UI по скринам (single-item repeat, expanded categories, per-card pay, hide on checkout) | **`[x]`** код `6ab3081`/`ac1f894` · регрессия quick_repeat 54/0 |
+| **Редеплой фиксов ревью + FIX-A…F на Fly** | **`[x]`** owner deploy `01KY4MHZPD7YS2D9NS4NP54B09` (v377) |
+| **FIX-A…F жалоба заказчика** — OTP→customer_id, нормализация модификаторов, UI по скринам | **`[x]`** код `6ab3081`/`ac1f894` |
+| **MCP DevTools после redeploy** — FIX-A…F на Fly | **`[x]`** 9/9 PASS · [`fly_fix_af_mcp_2026-07-22.json`](../milestones/veha_2/artifacts/quick_repeat_bottom_sheet/fly_fix_af_mcp_2026-07-22.json) |
 | Апрув заказчика / `[x]` в CBR | **`[ ]`** |
 
 **Решения, требующие сверки на приёмке:** hidden — без секции повтора (канонные чипы корзины) · клик по карточке каталога — переход в Product (конфликт Шагов 9/12 ТЗ) · «оплатить в 1 клик» — автооткрытие шита оплаты, списание с подтверждением «Оплатить».
