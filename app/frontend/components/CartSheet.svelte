@@ -24,13 +24,15 @@
     undoRemoveCartLine
   } from "../lib/cartSheetStore.js"
   import RepeatSection from "./RepeatSection.svelte"
-  import { initFrequentFromCache, refreshFrequentProducts } from "../lib/frequentRepeatStore.js"
+  import FrequentSheetCategories from "./FrequentSheetCategories.svelte"
+  import { initFrequentFromCache, refreshFrequentProducts, frequentItems } from "../lib/frequentRepeatStore.js"
   import {
     MODE_EMPTY,
     MODE_EXPANDED,
     MODE_PEEK,
     MODE_HIDDEN,
     sheetHeightVh,
+    SHEET_VH,
     SHEET_TRANSITION_MS,
     CART_SHEET_BOTTOM_REM,
     CART_SHEET_MAX_WIDTH_PX,
@@ -52,12 +54,18 @@
   let gestureZoneEl = $state(null)
   /** URL с 404 — не показывать broken-icon в шторке */
   let brokenThumbUrls = $state(/** @type {Set<string>} */ (new Set()))
+  let frequentCount = $state(0)
 
   let showSheet = $derived(isCartSheetRoute(hash))
   let onCheckout = $derived(isCheckoutRoute(hash))
   let count = $derived(items.length)
   let payStackActive = $derived(onCheckout && payStackOpen && count > 0)
-  let heightVh = $derived(payStackActive ? CHECKOUT_PEEK_VH : sheetHeightVh(mode, count))
+  let heightVh = $derived.by(() => {
+    if (payStackActive) return CHECKOUT_PEEK_VH
+    // UX-1: empty 12vh обрезает секцию «повторить» — с историей показываем peek-высоту
+    if (mode === MODE_EMPTY && frequentCount > 0) return SHEET_VH.peekSingle
+    return sheetHeightVh(mode, count)
+  })
   let stackBottomVh = $derived(CHECKOUT_PAY_STACK_VH - CHECKOUT_PEEK_VH)
   let singleItem = $derived(count === 1 ? items[0] : null)
 
@@ -187,6 +195,9 @@
     const unsubUndo  = cartUndoLine.subscribe((v) => { undoLine = v })
     const unsubErr   = cartSheetError.subscribe((v) => { sheetError = v })
     const unsubPay   = checkoutPayOpen.subscribe((v) => { payStackOpen = v })
+    const unsubFrequent = frequentItems.subscribe((v) => {
+      frequentCount = Array.isArray(v) ? v.length : 0
+    })
 
     const onHash = () => {
       const next = window.location.hash
@@ -206,7 +217,7 @@
 
     return () => {
       unsubItems(); unsubTotal(); unsubMode(); unsubBusy()
-      unsubUndo(); unsubErr(); unsubPay()
+      unsubUndo(); unsubErr(); unsubPay(); unsubFrequent()
       window.removeEventListener("hashchange", onHash)
     }
   })
@@ -349,7 +360,7 @@
         тут будут твои заказы
       </p>
       <div data-testid="shop-repeat-slot-empty" class="shrink-0 px-2">
-        <RepeatSection />
+        {#if !onCheckout}<RepeatSection />{/if}
       </div>
       {@render checkoutBar("shop-cart-empty-total")}
 
@@ -455,7 +466,7 @@
           </div>
         {/if}
         <div data-testid="shop-repeat-slot-peek" class="shrink-0">
-          <RepeatSection />
+          {#if !onCheckout}<RepeatSection />{/if}
         </div>
         {@render checkoutBar("shop-cart-peek-total", payStackActive)}
       </div>
@@ -468,6 +479,7 @@
         data-cart-layout="vertical"
       >
         <div class="min-h-0 flex-1 space-y-1.5 overflow-y-auto">
+          <FrequentSheetCategories />
           {#each items as line (line.index)}
             <div
               class="flex items-center gap-2 rounded-lg border border-[#3a3a3a] bg-[#1f1f1f] px-2 py-1.5 cursor-pointer"
@@ -522,7 +534,7 @@
           {/each}
         </div>
         <div data-testid="shop-repeat-slot-expanded" class="shrink-0">
-          <RepeatSection />
+          {#if !onCheckout}<RepeatSection />{/if}
         </div>
         {@render checkoutBar(null, payStackActive)}
       </div>
@@ -554,6 +566,9 @@
             {/if}
             {@render lineControls(singleItem)}
           </div>
+        </div>
+        <div data-testid="shop-repeat-slot-single" class="shrink-0">
+          {#if !onCheckout}<RepeatSection />{/if}
         </div>
         {@render checkoutBar(null, payStackActive)}
       </div>

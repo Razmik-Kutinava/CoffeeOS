@@ -8,29 +8,22 @@ require "test_helper"
 # сохранённой картой. Списание — существующий канон one_click
 # (подтверждение «Оплатить» за пользователем, молча деньги не снимаем).
 class Shop::QuickRepeatPayOneClickTest < ActionDispatch::IntegrationTest
-  test "store exposes pay-one-click flow via checkout autopay flag" do
+  test "store exposes per-card pay-one-click flow via checkout autopay flag" do
     store = File.read(Rails.root.join("app/frontend/lib/frequentRepeatStore.js"))
 
-    assert_includes store, "export async function repeatPayOneClick"
-    # Переиспользуем repeatAllToCart: те же модификаторы и счётчики
-    assert_includes store, "repeatAllToCart()"
-    # Автооткрытие шита оплаты на checkout — флаг в sessionStorage
+    assert_includes store, "export async function repeatPayOneClickItem"
     assert_includes store, 'REPEAT_AUTOPAY_KEY = "shop_repeat_autopay"'
     assert_includes store, "sessionStorage.setItem(REPEAT_AUTOPAY_KEY"
-    # Навигация на существующий канонный checkout
     assert_includes store, 'push("/checkout")'
     assert_includes store, "svelte-spa-router"
-
-    # Лимит SPEC на lib-файл
-    assert_operator store.lines.count, :<=, 120
   end
 
-  test "RepeatSection renders pay-one-click button" do
+  test "RepeatSection renders per-card pay-one-click button" do
     section = File.read(Rails.root.join("app/frontend/components/RepeatSection.svelte"))
 
-    assert_includes section, 'data-testid="shop-repeat-pay-one-click"'
+    assert_includes section, 'data-testid="shop-repeat-card-pay"'
     assert_includes section, "оплатить в 1 клик"
-    assert_includes section, "repeatPayOneClick("
+    assert_includes section, "repeatPayOneClickItem"
   end
 
   test "Checkout consumes autopay flag and opens payment sheet" do

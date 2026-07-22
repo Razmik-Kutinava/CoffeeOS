@@ -7,7 +7,7 @@
     setFrequentQty,
     repeatAllToCart,
     repeatMore,
-    repeatPayOneClick,
+    repeatPayOneClickItem,
     repeatFeedback
   } from "../lib/frequentRepeatStore.js"
 
@@ -48,22 +48,22 @@
     }
   }
 
-  async function onPayClick() {
-    if (repeatBusy) return
-    repeatBusy = true
-    try {
-      await repeatPayOneClick()
-    } finally {
-      repeatBusy = false
-    }
-  }
-
   function qtyOf(key) {
     return storeQty[key] || 1
   }
 
   function bump(key, delta) {
     setFrequentQty(key, qtyOf(key) + delta)
+  }
+
+  async function onPayCardClick(item) {
+    if (repeatBusy) return
+    repeatBusy = true
+    try {
+      await repeatPayOneClickItem(item)
+    } finally {
+      repeatBusy = false
+    }
   }
 
   function roundPrice(n) {
@@ -129,6 +129,13 @@
               onclick={() => bump(key, 1)}
             >+</button>
           </div>
+          <button
+            type="button"
+            data-testid="shop-repeat-card-pay"
+            class="mt-0.5 min-h-7 w-full rounded-lg bg-[#ff8c42] px-2 py-1 text-[10px] font-semibold text-black disabled:opacity-40"
+            disabled={repeatBusy}
+            onclick={() => onPayCardClick(item)}
+          >оплатить в 1 клик</button>
         </div>
       {/each}
     </div>
@@ -140,13 +147,6 @@
         disabled={repeatBusy}
         onclick={onRepeatClick}
       >повторить в 1 клик</button>
-      <button
-        type="button"
-        data-testid="shop-repeat-pay-one-click"
-        class="min-h-8 flex-1 rounded-lg border border-[#ff8c42] px-3 py-1.5 text-[12px] font-semibold text-[#ff8c42] disabled:opacity-40"
-        disabled={repeatBusy}
-        onclick={onPayClick}
-      >оплатить в 1 клик</button>
       <button
         type="button"
         data-testid="shop-repeat-more"

@@ -46,7 +46,7 @@
     openCheckoutPayStack,
     closeCheckoutPayStack
   } from "../lib/cartSheetStore.js"
-  import { REPEAT_AUTOPAY_KEY } from "../lib/frequentRepeatStore.js"
+  import { REPEAT_AUTOPAY_KEY, refreshFrequentProducts } from "../lib/frequentRepeatStore.js"
   import PaymentMethodsSheet from "../components/PaymentMethodsSheet.svelte"
   import ThreeDsOverlay from "../components/ThreeDsOverlay.svelte"
 
@@ -259,6 +259,7 @@
       saveGuestProfile({ name, email, emailVerified: true })
       savedProfile = true
       editContact = false
+      await refreshFrequentProducts()
     } catch (e) {
       emailVerified = false
       err = e.message
