@@ -2,11 +2,19 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-21 (Quick Repeat — MCP real-run 8/8 + код-ревью пройдено, 3 замечания исправлены RED/GREEN; ждёт апрув заказчика)  
+**Дата:** 2026-07-22 (Quick Repeat — FIX-A…F по жалобе заказчика; ждёт redeploy Fly + приёмка)  
 
 | Сейчас | Дальше |
 |--------|--------|
-| Deploy Fly OK · MCP стаб 6/6 + real-run 8/8 без стабов · **код-ревью: блокеров нет, 3 замечания исправлены** (`397dd5c`/`9afdff7`), регрессия оплаты/callback/фичи зелёная · UX-1/2/3 в DEMO_FEEDBACK open | Передать заказчику чеклист + скрины · решение владельца по UX-1/2/3 · **редеплой на Fly** (фиксы ревью пока только локально) — по явному апруву |
+| FIX-A…F закодированы (`6ab3081`/`ac1f894`): OTP→customer_id, нормализация modifier_options, UI (single-item repeat, expanded categories, per-card pay, hide repeat on checkout, refresh после verify) · регрессия quick_repeat **54/0** | **Redeploy Fly** по апруву → проверка сценария заказчика (регистрация + история) → апрув / `[x]` в CBR |
+
+### Сессия 2026-07-22 (FIX-A…F — жалоба заказчика Quick Repeat)
+
+- **FIX-A:** `Shop::EmailVerifiedCustomerLinker` в `email_otp#verify` — `find_or_initialize_by(email)` + `CustomerSession.set_customer_id!`; тест `email_verify_customer_link_test` 2/0.
+- **FIX-B:** `normalize_modifier_options` в `CustomerFrequentProductsService` — склейка пустых вариантов, legacy jsonb без поломки.
+- **FIX-C…F:** `FrequentSheetCategories` в expanded; `shop-repeat-slot-single`; empty→peekSingle при frequentCount>0; per-card `shop-repeat-card-pay`; `{#if !onCheckout}` на RepeatSection; `refreshFrequentProducts` после verify на Checkout.
+- Прогоны: quick_repeat **54/0** · email_verify 2/0 · сервис 13/0.
+- ⚠️ **Не задеплоено на Fly** — нужен redeploy по апруву владельца.
 
 ### Сессия 2026-07-21 (код-ревью Quick Repeat + фиксы замечаний 1–3)
 

@@ -1,5 +1,12 @@
 ﻿# CHANGELOG
 
+## 2026-07-22 — fix(shop): Quick Repeat — жалоба заказчика «зарегался — повторов нет» (FIX-A…F)
+
+- **FIX-A:** после `email_otp/verify` — `EmailVerifiedCustomerLinker` привязывает `MobileCustomer` к сессии (`CustomerSession.set_customer_id!`); `frequent_products` видит историю без нового заказа.
+- **FIX-B:** нормализация `modifier_options` в `CustomerFrequentProductsService` — `{}` и `{"selected_modifiers":[]}` склеиваются; legacy-плоский jsonb сохранён.
+- **FIX-C…F (frontend):** секция «повторить» в ветке 1 товара; empty-шторка растёт до peek-высоты при наличии frequent_items (UX-1); категории в expanded (`FrequentSheetCategories`); «оплатить в 1 клик» под каждой карточкой (скрин 06); секция скрыта на `#/checkout` (UX-3); `refreshFrequentProducts` после OTP verify на Checkout.
+- Тесты: FIX-A 2/0 · сервис +1 (нормализация) · `quick_repeat_customer_fixes_test` 6/0 · регрессия quick_repeat 54/0.
+
 ## 2026-07-21 — fix(shop): Quick Repeat — фиксы код-ревью (ключ счётчика, честный тост, hot-path rescue)
 
 - Код-ревью диффа фичи (`coffeeos-code-review.mdc`): блокеров нет, 3 замечания → исправлены парой RED (`397dd5c`) / GREEN (`9afdff7`).

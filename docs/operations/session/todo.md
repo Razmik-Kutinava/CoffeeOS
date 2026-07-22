@@ -7,7 +7,16 @@
 
 ## Текущая фаза
 
-**PHASE 3: REVIEW `[x]` 2026-07-21 (sanity + регрессии зелёные) · следующий шаг: deploy Fly → MCP DevTools приёмка**
+**PHASE 3: REVIEW `[x]` · FIX-A…F жалоба заказчика `[x]` 2026-07-22 · следующий шаг: redeploy Fly → приёмка заказчиком**
+
+### FIX-A…F — жалоба «зарегался — повторов нет» (2026-07-22)
+- [x] FIX-A: OTP verify → `customer_id` в сессии (`EmailVerifiedCustomerLinker`) — `6ab3081`
+- [x] FIX-B: нормализация `modifier_options` в сервисе — `6ab3081`
+- [x] FIX-C: repeat в single-item + empty peek-высота при frequent items — `ac1f894`
+- [x] FIX-D: `FrequentSheetCategories` в expanded — `ac1f894`
+- [x] FIX-E: per-card «оплатить в 1 клик» (скрин 06) — `ac1f894`
+- [x] FIX-F: скрыть repeat на checkout (UX-3) + refresh после verify — `ac1f894`
+- [ ] Redeploy Fly + MCP/приёмка заказчика
 
 ## Маппинг ТЗ → наш стек (решения SPEC)
 
