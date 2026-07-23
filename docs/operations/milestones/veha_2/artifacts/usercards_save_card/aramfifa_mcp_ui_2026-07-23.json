@@ -6,34 +6,44 @@
   "tenant_name": "Demo Coffee Point A",
   "email": "aramfifa100@gmail.com",
   "customer_id_prefix": "2bc3…4c",
-  "otp": "from Fly ShopEmailOtpCode (not emailed to owner)",
-  "note": "OTP-fix fea1215 NOT deployed — current Fly build. Screenshots via Chrome DevTools MCP (attached in chat).",
+  "otp": "from Fly ShopEmailOtpCode via scripts/scratch/fetch_aram_otp.sh",
+  "note": "OTP-fix fea1215 NOT deployed — Fly UI is pre-fix. Screenshots saved as PNG under screenshots/aramfifa_mcp_2026-07-23/ (puppeteer headless).",
+  "screenshots_dir": "docs/operations/milestones/veha_2/artifacts/usercards_save_card/screenshots/aramfifa_mcp_2026-07-23/",
+  "screenshots": [
+    "01_home_guest.png",
+    "02_cart_with_item.png",
+    "03_checkout_verified.png",
+    "04_payment_sheet_two_cards.png",
+    "05_catalog_repeat.png",
+    "06_profile_aram.png",
+    "07_orders_today.png"
+  ],
   "checks": [
     {
       "id": "otp_login",
       "status": "PASS",
-      "detail": "Checkout: Aram / a***@gmail.com verified"
+      "detail": "Checkout: Aram / a***@gmail.com verified — 03_checkout_verified.png"
     },
     {
       "id": "payment_sheet_two_cards",
       "status": "PASS",
-      "detail": "МИР *5953 (selected) + МИР *8782 + СБП + Новая карта"
+      "detail": "МИР *5953 (selected) + МИР *8782 + СБП + Новая карта — 04_payment_sheet_two_cards.png"
     },
     {
       "id": "repeat_section_catalog",
       "status": "PASS",
-      "detail": "After OTP: «повторить» ×3 thumbs + «повторить в 1 клик» + «+ещё» under cart sheet"
+      "detail": "After OTP: «повторить» thumbs + 1-click pay — 05_catalog_repeat.png"
     },
     {
       "id": "orders_today",
       "status": "EMPTY",
-      "detail": "«Заказы за сегодня» — пусто (экран только сегодня; история частот в «повторить» есть)"
+      "detail": "«Заказы за сегодня» — пусто (только сегодня); история частот в «повторить» — 07_orders_today.png"
     },
     {
       "id": "profile",
       "status": "PASS",
-      "detail": "Профиль Aram, id 2bc3…4c; баланс/баллы 0 (UI)"
+      "detail": "Профиль Aram; баланс/баллы 0 — 06_profile_aram.png"
     }
   ],
-  "verdict": "У Арама на Demo Point A после OTP видны 2 карты и блок «повторить». Это не пустой клиент."
+  "verdict": "У Арама на Demo Point A после OTP в артефактах есть PNG: 2 карты (*5953/*8782) и блок «повторить». Это не пустой клиент."
 }

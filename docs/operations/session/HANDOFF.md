@@ -1,8 +1,17 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-23 (**worker up · OTP session restore — ждёт redeploy**)  
+**Дата:** 2026-07-23 (**Aram PNG в артефактах · OTP restore ждёт redeploy**)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev  
+
+### MCP UI Арама — скрины на диске (2026-07-23)
+
+| Что | Факт |
+|-----|------|
+| PNG | [`screenshots/aramfifa_mcp_2026-07-23/`](../milestones/veha_2/artifacts/usercards_save_card/screenshots/aramfifa_mcp_2026-07-23/) 01…07 |
+| JSON | [`aramfifa_mcp_ui_2026-07-23.json`](../milestones/veha_2/artifacts/usercards_save_card/aramfifa_mcp_ui_2026-07-23.json) |
+| Карты UI | **\*5953** + **\*8782** (04_payment_sheet_two_cards.png) |
+| Redeploy OTP-fix | **`[ ]`** по апруву |
 
 ### Worker + OTP/session restore (2026-07-23)
 

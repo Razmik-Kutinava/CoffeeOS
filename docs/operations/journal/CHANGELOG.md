@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-07-23 — ops: MCP UI Арама — PNG в артефактах
+
+- Повторный прогон Demo Point A: OTP → Aram verified → шторка **\*5953 + \*8782** → «повторить» → профиль → заказы сегодня.
+- PNG: [`screenshots/aramfifa_mcp_2026-07-23/`](../milestones/veha_2/artifacts/usercards_save_card/screenshots/aramfifa_mcp_2026-07-23/) (01…07).
+- JSON: [`aramfifa_mcp_ui_2026-07-23.json`](../milestones/veha_2/artifacts/usercards_save_card/aramfifa_mcp_ui_2026-07-23.json).
+
 ## 2026-07-23 — ops: MCP UI Арама на Demo Point A
 
 - OTP `aramfifa100@gmail.com` → payment sheet **\*5953 + \*8782**; каталог — **«повторить»** ×3 + «в 1 клик».
