@@ -1,5 +1,10 @@
 ﻿# CHANGELOG
 
+## 2026-07-23 — ops: MCP UI Арама на Demo Point A
+
+- OTP `aramfifa100@gmail.com` → payment sheet **\*5953 + \*8782**; каталог — **«повторить»** ×3 + «в 1 клик».
+- «Заказы за сегодня» пусто (только сегодняшний день). Артефакт [`aramfifa_mcp_ui_2026-07-23.json`](../milestones/veha_2/artifacts/usercards_save_card/aramfifa_mcp_ui_2026-07-23.json).
+
 ## 2026-07-23 — fix(shop): restore guest session after F5 without re-OTP + worker up
 
 - **Worker Fly:** machine `48ee61ea…` started (SolidQueue); restart policy always; после deploy проверять `worker=started`.
