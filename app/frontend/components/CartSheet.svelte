@@ -24,7 +24,6 @@
     undoRemoveCartLine
   } from "../lib/cartSheetStore.js"
   import RepeatSection from "./RepeatSection.svelte"
-  import FrequentSheetCategories from "./FrequentSheetCategories.svelte"
   import { initFrequentFromCache, refreshFrequentProducts, frequentItems } from "../lib/frequentRepeatStore.js"
   import {
     MODE_EMPTY,
@@ -476,7 +475,7 @@
         </div>
       </div>
 
-    <!-- EXPANDED 2+ — вертикальный компактный список (§ S2-канон: развёрнутый вид) -->
+    <!-- EXPANDED 2+ — только список заказов (сетка каталога убрана 2026-07-23) -->
     {:else if mode === MODE_EXPANDED && count >= 2}
       <div
         class="flex flex-1 min-h-0 flex-col overflow-hidden px-3 pb-2 pt-1"
@@ -484,7 +483,6 @@
         data-cart-layout="vertical"
       >
         <div class="min-h-0 flex-1 space-y-1.5 overflow-y-auto">
-          <FrequentSheetCategories />
           {#each items as line (line.index)}
             <div
               class="flex items-center gap-2 rounded-lg border border-[#3a3a3a] bg-[#1f1f1f] px-2 py-1.5 cursor-pointer"

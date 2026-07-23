@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-07-23 — fix(shop): expanded cart sheet — remove catalog grid (prog30)
+
+- Expanded: убрана сетка `FrequentSheetCategories` (выглядела как «пропал expanded»).
+- Остался только список позиций заказа (`shop-cart-expanded-card`) как был.
+- `CART_SHEET_BUILD=prog30` · тесты sheet zone 51/0.
+
 ## 2026-07-23 — docs(ops): cart sheet gesture hit area — MCP на Fly PASS (prog29)
 
 - Owner deploy `01KY7BWBJW2NQPAY336P1STVJJ` (v380). MCP: зона **80×414** full-strip; свайпы left/center/right → hidden↔peek↔expanded **7/7 PASS**.

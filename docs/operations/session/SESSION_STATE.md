@@ -2,11 +2,17 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-23 (gesture hit area prog29 — MCP PASS на Fly)  
+**Дата:** 2026-07-23 (expanded шторка — без сетки каталога, prog30)  
 
 | Сейчас | Дальше |
 |--------|--------|
-| prog29 на Fly v380 · MCP свайпы L/C/R 7/7 PASS · зона 80×414 | «ок» заказчика · вторая правка (текста нет) |
+| Expanded: убрана `FrequentSheetCategories`, только список заказов · prog30 · тесты 51/0 | Redeploy Fly → MCP |
+
+### Сессия 2026-07-23 (убрать сетку из expanded)
+
+- Диагноз: expanded не пропал — сетка каталога поверх списка заказов.
+- Fix: удалены `<FrequentSheetCategories />` и компонент; список `shop-cart-expanded-card` без изменений; `CART_SHEET_BUILD=prog30`.
+- Тесты: customer_fixes + sheet zone **51/0**.
 
 ### Сессия 2026-07-23 (MCP gesture hit area на Fly)
 

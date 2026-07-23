@@ -1,8 +1,15 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-23 (**gesture hit area prog29 — MCP PASS на Fly**)  
+**Дата:** 2026-07-23 (**expanded без сетки prog30 — ждёт redeploy**)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev  
+
+### Expanded no catalog grid (2026-07-23)
+
+| Что | Статус |
+|-----|--------|
+| Убрать сетку из expanded · оставить список заказов | **`[x]`** код prog30 · тесты 51/0 |
+| Redeploy + MCP | **`[ ]`** по апруву |
 
 ### Cart sheet gesture hit area (2026-07-23)
 

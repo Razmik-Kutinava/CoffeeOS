@@ -20,13 +20,14 @@ class Shop::QuickRepeatCustomerFixesTest < ActionDispatch::IntegrationTest
     assert_includes sheet, "shop-repeat-slot-empty"
   end
 
-  test "expanded sheet renders frequent categories from API (FIX-D)" do
+  test "expanded sheet has order cards only without catalog grid" do
     sheet = File.read(Rails.root.join("app/frontend/components/CartSheet.svelte"))
-    categories = File.read(Rails.root.join("app/frontend/components/FrequentSheetCategories.svelte"))
 
-    assert_includes sheet, "FrequentSheetCategories"
-    assert_includes categories, 'data-testid="shop-sheet-frequent-categories"'
-    assert_includes categories, "frequentCategories"
+    assert_includes sheet, 'data-testid="shop-cart-expanded-card"'
+    assert_includes sheet, "MODE_EXPANDED && count >= 2"
+    refute_includes sheet, "FrequentSheetCategories",
+      "сетка каталога в expanded убрана (заказчик 2026-07-23)"
+    refute_includes sheet, "shop-sheet-frequent-categories"
   end
 
   test "empty sheet grows when frequent items exist (UX-1 / one-entity peek)" do
