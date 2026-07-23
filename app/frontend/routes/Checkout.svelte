@@ -47,6 +47,7 @@
     closeCheckoutPayStack
   } from "../lib/cartSheetStore.js"
   import { REPEAT_AUTOPAY_KEY, refreshFrequentProducts } from "../lib/frequentRepeatStore.js"
+  import { restoreGuestSession } from "../lib/restoreGuestSession.js"
   import PaymentMethodsSheet from "../components/PaymentMethodsSheet.svelte"
   import ThreeDsOverlay from "../components/ThreeDsOverlay.svelte"
 
@@ -120,16 +121,18 @@
     }
 
     const syncServerStatus = async () => {
-      if (!isValidEmail(email)) return
-      try {
-        const q = encodeURIComponent(email.trim().toLowerCase())
-        const status = await api(`/email_otp/status?email=${q}`)
-        if (status.verified && status.email === email.trim().toLowerCase()) {
-          emailVerified = true
-        }
-      } catch {
-        /* session may be empty */
+      const result = await restoreGuestSession()
+      if (result.verified) {
+        emailVerified = true
+        return
       }
+      // Сеть упала — локальный флаг не сбрасываем; сервер «не verified» — уже сбросил в profile
+      const profile = loadGuestProfile()
+      emailVerified = !!(
+        profile &&
+        profile.email === email.trim().toLowerCase() &&
+        profile.emailVerified
+      )
     }
 
     const recover = async () => {
@@ -259,7 +262,7 @@
       saveGuestProfile({ name, email, emailVerified: true })
       savedProfile = true
       editContact = false
-      await refreshFrequentProducts()
+      await refreshFrequentProducts(email.trim().toLowerCase())
     } catch (e) {
       emailVerified = false
       err = e.message

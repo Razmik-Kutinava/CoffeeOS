@@ -39,6 +39,14 @@ module Shop
           session_id: request.session.id,
           email: params[:email]
         )
+        # F5 / новая cookie: verification в БД есть — вернуть customer_id в сессию без нового OTP
+        if email.present?
+          Shop::EmailVerifiedCustomerLinker.link!(
+            session: session,
+            tenant_id: @shop_tenant.id,
+            email: email
+          )
+        end
         render json: { verified: email.present?, email: email }
       end
     end

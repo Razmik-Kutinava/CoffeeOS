@@ -95,9 +95,13 @@ export async function repeatPayOneClickItem(item) {
   }
 }
 
-export async function refreshFrequentProducts() {
+/** @param {string} [email] — после F5: восстановить frequent по verified email, если сессия пуста */
+export async function refreshFrequentProducts(email) {
   try {
-    const data = await api("/frequent_products")
+    let path = "/frequent_products"
+    const e = email && String(email).trim().toLowerCase()
+    if (e) path += `?email=${encodeURIComponent(e)}`
+    const data = await api(path)
     frequentItems.set(data?.frequent_items || [])
     frequentCategories.set(data?.categories || {})
     writeFrequentCache(data)

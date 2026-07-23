@@ -2,18 +2,25 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-23 (diag: aramfifa UserCards — карты в БД есть)  
+**Дата:** 2026-07-23 (worker Fly started · OTP/session restore без re-OTP)  
 
 | Сейчас | Дальше |
 |--------|--------|
-| Read-only Fly diag aramfifa: **2 карты привязаны** · 53 заказа на Demo Point A | Почему UI пустой у заказчика (OTP/tenant) · worker stopped |
-| Expanded prog30 · тесты 51/0 | Redeploy Fly → MCP |
+| Worker `48ee61ea…` **started** (SolidQueue) · restart always | После следующего deploy — проверить worker=started |
+| Guest session restore: status → linker + frequent/cards по email | **Redeploy Fly** OTP-фикса по апруву · MCP Арама |
+
+### Сессия 2026-07-23 (worker + OTP/session restore)
+
+- Fly: `fly machines start 48ee61ea71d948` · SolidQueue supervisor/worker up · `--restart always`.
+- Корень «OTP на каждый F5»: `email_otp/status` восстанавливал verified из БД, но **не** `customer_id` → frequent пустой; UI снова просил код.
+- Fix: `GuestCustomerResolver` · status вызывает `EmailVerifiedCustomerLinker` · frequent/cards через resolver · фронт `restoreGuestSession` на CartSheet/Checkout.
+- Тесты: guest restore + resolver + email OTP/cards **26/0**.
 
 ### Сессия 2026-07-23 (diag aramfifa — без правок кода)
 
 - Email `aramfifa100@gmail.com` · customer `2bc37279…` · карты **\*5953** (default) + **\*8782**, last_used сегодня.
 - Заказы/оплаты: **53 / 53**, succeeded **10** — всё на tenant `2fdee1ac…` (Demo Coffee Point A); на Fly Test (`af4f78d6…`) — **0**.
-- Worker Fly: **stopped**. Артефакт: `artifacts/usercards_save_card/aramfifa_full_diag_2026-07-23.json`.
+- Worker Fly: был **stopped** → поднят в этой сессии. Артефакт: `artifacts/usercards_save_card/aramfifa_full_diag_2026-07-23.json`.
 
 ### Сессия 2026-07-23 (убрать сетку из expanded)
 

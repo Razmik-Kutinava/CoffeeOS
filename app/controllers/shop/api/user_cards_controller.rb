@@ -22,25 +22,11 @@ module Shop
       private
 
       def resolve_customer_id!
-        cid = Shop::CustomerSession.customer_id(session, @shop_tenant.id)
-        return cid if cid.present?
-
-        email = Shop::EmailVerificationSession.normalize(params[:email])
-        return nil if email.blank?
-
-        verified = Shop::EmailVerification.verified_email(
+        Shop::GuestCustomerResolver.call(
           session: session,
           tenant_id: @shop_tenant.id,
-          session_id: request.session.id.to_s,
-          email: email
+          email: params[:email]
         )
-        return nil unless verified == email
-
-        customer = MobileCustomer.find_by(email: email)
-        return nil unless customer
-
-        Shop::CustomerSession.set_customer_id!(session, @shop_tenant.id, customer.id)
-        customer.id.to_s
       end
 
       # Карта валидна до конца месяца exp_date (ММ/ГГ или MMYY).

@@ -6,7 +6,11 @@ module Shop
     # + каталог по категориям для expanded-режима шторки.
     class FrequentProductsController < Shop::Api::BaseController
       def index
-        customer_id = Shop::CustomerSession.customer_id(session, @shop_tenant.id)
+        customer_id = Shop::GuestCustomerResolver.call(
+          session: session,
+          tenant_id: @shop_tenant.id,
+          email: params[:email]
+        )
 
         frequent_items =
           if customer_id.present?
@@ -15,7 +19,7 @@ module Shop
               tenant_id: @shop_tenant.id
             )
           else
-            # Витрина гостевая: без customer в сессии секция «повторить» пуста (не 401)
+            # Витрина гостевая: без customer / без verified email — «повторить» пуста (не 401)
             []
           end
 

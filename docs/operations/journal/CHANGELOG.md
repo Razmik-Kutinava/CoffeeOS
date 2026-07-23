@@ -1,9 +1,17 @@
 ﻿# CHANGELOG
 
+## 2026-07-23 — fix(shop): restore guest session after F5 without re-OTP + worker up
+
+- **Worker Fly:** machine `48ee61ea…` started (SolidQueue); restart policy always; после deploy проверять `worker=started`.
+- **OTP/F5:** `email_otp/status` при verified email снова вызывает `EmailVerifiedCustomerLinker` (customer_id в сессию).
+- `Shop::GuestCustomerResolver` — session или verified email → customer; используют frequent_products и user/cards.
+- Фронт: `restoreGuestSession` на CartSheet + Checkout (status → profile emailVerified → refresh frequent).
+- Тесты: `guest_session_restore_test` + `guest_customer_resolver_test` · регрессия OTP/cards **26/0**.
+
 ## 2026-07-23 — ops: diag Fly — aramfifa UserCards (read-only)
 
 - Prod Neon: `aramfifa100@gmail.com` — **2 карты** (*5953 default, *8782), 53 заказа / 10 succeeded, всё на **Demo Coffee Point A** (`2fdee1ac…`); на Fly Test — 0.
-- Worker Fly **stopped**. Артефакт [`aramfifa_full_diag_2026-07-23.json`](../milestones/veha_2/artifacts/usercards_save_card/aramfifa_full_diag_2026-07-23.json). Код не менялся.
+- Worker Fly **stopped** (на момент diag). Артефакт [`aramfifa_full_diag_2026-07-23.json`](../milestones/veha_2/artifacts/usercards_save_card/aramfifa_full_diag_2026-07-23.json). Код не менялся.
 
 ## 2026-07-23 — fix(shop): expanded cart sheet — remove catalog grid (prog30)
 

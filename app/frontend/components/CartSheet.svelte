@@ -24,7 +24,8 @@
     undoRemoveCartLine
   } from "../lib/cartSheetStore.js"
   import RepeatSection from "./RepeatSection.svelte"
-  import { initFrequentFromCache, refreshFrequentProducts, frequentItems } from "../lib/frequentRepeatStore.js"
+  import { initFrequentFromCache, frequentItems } from "../lib/frequentRepeatStore.js"
+  import { restoreGuestSession } from "../lib/restoreGuestSession.js"
   import {
     MODE_EMPTY,
     MODE_EXPANDED,
@@ -213,9 +214,9 @@
     bindCartSheetEvents()
     window.addEventListener("hashchange", onHash)
     refreshCartSheet().catch(() => {})
-    // Секция «повторить»: мгновенно из localStorage, актуализация — фоном
+    // Секция «повторить»: кэш сразу; status+customer_id без нового OTP после F5
     initFrequentFromCache()
-    refreshFrequentProducts()
+    restoreGuestSession()
 
     return () => {
       unsubItems(); unsubTotal(); unsubMode(); unsubBusy()

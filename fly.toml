@@ -23,7 +23,8 @@ primary_region = "ams"
   DEMO_AUTO_SEED    = "true"
   # Solid Queue на web — fallback если worker machine stopped (UserCards webhook RebillId).
   SOLID_QUEUE_IN_PUMA = "true"
-  # Отдельный worker (bin/jobs) — fly scale count worker=1 при нагрузке.
+  # Отдельный worker (bin/jobs). После deploy проверить: fly machines list — worker=started.
+  # Если stopped: fly machines start <id> -a coffeeos  (scale count worker=1 уже задан).
 
 [processes]
   web    = "./bin/rails server -b 0.0.0.0"
