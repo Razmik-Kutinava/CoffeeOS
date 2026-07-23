@@ -1,8 +1,18 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-23 (**expanded без сетки prog30 — ждёт redeploy**)  
+**Дата:** 2026-07-23 (**diag aramfifa: карты в БД есть; expanded prog30 ждёт redeploy**)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev  
+
+### Diag aramfifa UserCards (2026-07-23) — read-only
+
+| Что | Факт |
+|-----|------|
+| Customer | `aramfifa100@gmail.com` → `2bc37279…` |
+| Карты в БД | **\*5953** (default) + **\*8782**, active, last_used сегодня |
+| Заказы | 53 на **Demo Coffee Point A** only; Fly Test = 0 |
+| Worker | **stopped** |
+| Артефакт | [`aramfifa_full_diag_2026-07-23.json`](../milestones/veha_2/artifacts/usercards_save_card/aramfifa_full_diag_2026-07-23.json) |
 
 ### Expanded no catalog grid (2026-07-23)
 

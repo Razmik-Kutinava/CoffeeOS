@@ -1,5 +1,10 @@
 ﻿# CHANGELOG
 
+## 2026-07-23 — ops: diag Fly — aramfifa UserCards (read-only)
+
+- Prod Neon: `aramfifa100@gmail.com` — **2 карты** (*5953 default, *8782), 53 заказа / 10 succeeded, всё на **Demo Coffee Point A** (`2fdee1ac…`); на Fly Test — 0.
+- Worker Fly **stopped**. Артефакт [`aramfifa_full_diag_2026-07-23.json`](../milestones/veha_2/artifacts/usercards_save_card/aramfifa_full_diag_2026-07-23.json). Код не менялся.
+
 ## 2026-07-23 — fix(shop): expanded cart sheet — remove catalog grid (prog30)
 
 - Expanded: убрана сетка `FrequentSheetCategories` (выглядела как «пропал expanded»).

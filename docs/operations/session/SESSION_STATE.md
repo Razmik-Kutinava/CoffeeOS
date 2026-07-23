@@ -2,11 +2,18 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-23 (expanded шторка — без сетки каталога, prog30)  
+**Дата:** 2026-07-23 (diag: aramfifa UserCards — карты в БД есть)  
 
 | Сейчас | Дальше |
 |--------|--------|
-| Expanded: убрана `FrequentSheetCategories`, только список заказов · prog30 · тесты 51/0 | Redeploy Fly → MCP |
+| Read-only Fly diag aramfifa: **2 карты привязаны** · 53 заказа на Demo Point A | Почему UI пустой у заказчика (OTP/tenant) · worker stopped |
+| Expanded prog30 · тесты 51/0 | Redeploy Fly → MCP |
+
+### Сессия 2026-07-23 (diag aramfifa — без правок кода)
+
+- Email `aramfifa100@gmail.com` · customer `2bc37279…` · карты **\*5953** (default) + **\*8782**, last_used сегодня.
+- Заказы/оплаты: **53 / 53**, succeeded **10** — всё на tenant `2fdee1ac…` (Demo Coffee Point A); на Fly Test (`af4f78d6…`) — **0**.
+- Worker Fly: **stopped**. Артефакт: `artifacts/usercards_save_card/aramfifa_full_diag_2026-07-23.json`.
 
 ### Сессия 2026-07-23 (убрать сетку из expanded)
 
