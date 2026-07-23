@@ -1,0 +1,44 @@
+{
+  "task": "Cart sheet gesture hit area — MCP на Fly после redeploy prog29",
+  "date": "2026-07-23",
+  "stand": "https://coffeeos.fly.dev/shop?tenant_id=af4f78d6-c66b-428e-8ee4-5a609c5c9131",
+  "deploy": "deployment-01KY7BWBJW2NQPAY336P1STVJJ · machine version 380 · owner deploy",
+  "before_vs_after": {
+    "before_prog28": {
+      "zone_min_height": "min-h-14 ≈ 56px",
+      "swipe_threshold_px": 32,
+      "hit_attr": "none"
+    },
+    "after_prog29": {
+      "zone_min_height": "min-h-20 = 80px measured",
+      "swipe_threshold_px": 20,
+      "hit_attr": "data-gesture-hit-area=full-strip",
+      "zone_width_px": 414
+    }
+  },
+  "checks": [
+    { "id": 1, "check": "DOM: data-cart-sheet-build=prog29", "result": "PASS" },
+    { "id": 2, "check": "Gesture zone full-strip: w=414 h=80, min-h-20, data-gesture-hit-area=full-strip", "result": "PASS", "evidence": "скрин 06 (outline hit-area)" },
+    { "id": 3, "check": "Swipe DOWN left side of strip: peek→hidden", "result": "PASS", "evidence": "скрин 03" },
+    { "id": 4, "check": "Swipe UP right edge of strip: hidden→peek", "result": "PASS", "evidence": "скрин 04" },
+    { "id": 5, "check": "Swipe UP center of strip: peek→expanded", "result": "PASS", "evidence": "скрин 05" },
+    { "id": 6, "check": "Swipe DOWN far-left: expanded→peek", "result": "PASS" },
+    { "id": 7, "check": "Swipe DOWN far-right: peek→hidden", "result": "PASS", "evidence": "скрин 06" }
+  ],
+  "swipe_log": [
+    "left-side down → hidden (24vh)",
+    "right-edge up → peek (38vh)",
+    "center up → expanded (56vh)",
+    "far-left down → peek",
+    "far-right down → hidden"
+  ],
+  "screenshots": [
+    "screenshots/fly_mcp_prog29_2026-07-23/01_prog29_expanded_before_swipes_2026-07-23.png",
+    "screenshots/fly_mcp_prog29_2026-07-23/02_peek_strip_full_width_2026-07-23.png",
+    "screenshots/fly_mcp_prog29_2026-07-23/03_hidden_after_swipe_down_left_2026-07-23.png",
+    "screenshots/fly_mcp_prog29_2026-07-23/04_peek_after_swipe_up_right_edge_2026-07-23.png",
+    "screenshots/fly_mcp_prog29_2026-07-23/05_expanded_after_swipe_up_center_2026-07-23.png",
+    "screenshots/fly_mcp_prog29_2026-07-23/06_hidden_hit_area_highlighted_80px_2026-07-23.png"
+  ],
+  "verdict": "PASS — 7/7. Hit-area прямоугольник 80×414 реагирует по всей ширине (лево/центр/право); порог чувствительнее (20px)."
+}

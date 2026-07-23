@@ -2,11 +2,18 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-23 (Cart sheet gesture hit area GREEN prog29)  
+**Дата:** 2026-07-23 (gesture hit area prog29 — MCP PASS на Fly)  
 
 | Сейчас | Дальше |
 |--------|--------|
-| Hit-area полосы `min-h-20` · порог свайпа 20px · build prog29 · тесты 45/0 | Redeploy Fly → MCP · вторая правка заказчика (текста нет) |
+| prog29 на Fly v380 · MCP свайпы L/C/R 7/7 PASS · зона 80×414 | «ок» заказчика · вторая правка (текста нет) |
+
+### Сессия 2026-07-23 (MCP gesture hit area на Fly)
+
+- Deploy: `01KY7BWBJW2NQPAY336P1STVJJ` (v380), build prog29.
+- До: min-h-14≈56px / порог 32px. После: **80×414** full-strip / порог 20px.
+- Свайпы: left↓ hidden · right↑ peek · center↑ expanded · far-left↓ peek · far-right↓ hidden.
+- Артефакт `fly_gesture_hit_area_mcp_2026-07-23.json` + 6 скринов.
 
 ### Сессия 2026-07-23 (GREEN: gesture hit area)
 

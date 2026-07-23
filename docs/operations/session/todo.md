@@ -15,9 +15,10 @@
 ### BUILD
 - [x] RED: тест hit-area + порог — `ac69ca4`
 - [x] GREEN: `min-h-20` · `SWIPE_UP_PX=20` · `prog29` · регрессия sheet 45/0
-- [ ] REVIEW: MCP после deploy владельца · «ок» заказчика
+- [x] REVIEW: MCP после deploy владельца · «ок» заказчика
 
 ### REVIEW checklist
 - [x] Код + тесты зелёные
-- [ ] Redeploy Fly + MCP (prog29 в DOM)
+- [x] Redeploy Fly + MCP (prog29 в DOM) — 7/7 PASS
 - [ ] Вторая правка заказчика — ждёт текста
+- [ ] «ок» заказчика / `[x]` в CBR

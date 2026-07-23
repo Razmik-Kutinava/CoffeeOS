@@ -1,6 +1,6 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-23 (**Cart sheet gesture hit area prog29 — код GREEN, ждёт redeploy**)  
+**Дата:** 2026-07-23 (**gesture hit area prog29 — MCP PASS на Fly**)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev  
 
@@ -10,7 +10,7 @@
 |-----|--------|
 | Intake ТЗ + CBR | **`[x]`** `d5fec5e` |
 | Hit-area `min-h-20` · `SWIPE_UP_PX=20` · prog29 | **`[x]`** код · тесты 45/0 |
-| Redeploy Fly + MCP | **`[ ]`** по апруву |
+| Redeploy Fly + MCP | **`[x]`** v380 · 7/7 PASS · [`fly_gesture_hit_area_mcp_2026-07-23.json`](../milestones/veha_2/artifacts/cart_sheet_gesture_hit_area/fly_gesture_hit_area_mcp_2026-07-23.json) |
 | Вторая правка заказчика | **`[ ]`** текста нет |
 
 ### Rules (2026-07-22)

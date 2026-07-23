@@ -1,5 +1,10 @@
 ﻿# CHANGELOG
 
+## 2026-07-23 — docs(ops): cart sheet gesture hit area — MCP на Fly PASS (prog29)
+
+- Owner deploy `01KY7BWBJW2NQPAY336P1STVJJ` (v380). MCP: зона **80×414** full-strip; свайпы left/center/right → hidden↔peek↔expanded **7/7 PASS**.
+- Артефакт [`fly_gesture_hit_area_mcp_2026-07-23.json`](../milestones/veha_2/artifacts/cart_sheet_gesture_hit_area/fly_gesture_hit_area_mcp_2026-07-23.json) + 6 скринов. До/после: 56px/32px → 80px/20px.
+
 ## 2026-07-23 — fix(shop): cart sheet gesture — taller hit-area + sensitive swipe (prog29)
 
 - Полоса свайпа: `min-h-14`→`min-h-20`, `data-gesture-hit-area=full-strip` (весь прямоугольник, не только крючок).

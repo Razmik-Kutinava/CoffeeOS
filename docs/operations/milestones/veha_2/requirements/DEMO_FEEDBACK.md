@@ -27,7 +27,7 @@
 
 | Дата | Источник | Сценарий / экран | Суть | Статус | PR / коммит |
 |------|----------|------------------|------|--------|-------------|
-| 2026-07-23 | заказчик cart sheet | свайп шторки | Hit-area: реагировать на весь прямоугольник полосы (не только крючок), чувствительнее | **in_progress** *(код prog29 — ждёт redeploy+MCP)* | [ТЗ](customer_tasks/Чувствительность%20свайпа%20шторки%20hit%20area%20прямоугольник.md) |
+| 2026-07-23 | заказчик cart sheet | свайп шторки | Hit-area: реагировать на весь прямоугольник полосы (не только крючок), чувствительнее | **done** *(MCP prog29 PASS)* | [`fly_gesture_hit_area_mcp_2026-07-23.json`](../artifacts/cart_sheet_gesture_hit_area/fly_gesture_hit_area_mcp_2026-07-23.json) |
 | 2026-07-22 | заказчик Quick Repeat | витрина после регистрации | «Зарегался — повторов нет» + layout: две полосы / повтор в hidden | **done** *(MCP layout prog28 PASS 2026-07-23)* | FIX-A…F + prog28 на Fly v378 · [`fly_layout_prog28_mcp_2026-07-23.json`](../artifacts/quick_repeat_bottom_sheet/fly_layout_prog28_mcp_2026-07-23.json) |
 | 2026-07-21 | MCP Fly Quick Repeat | шторка empty (корзина пуста) | **UX-1:** секция «повторить» в empty-шторке (12vh) клипается за нижней границей — на пустой корзине не видна. Поднять высоту empty при наличии frequent_items? | open | [fly_acceptance_mcp_2026-07-21.json](artifacts/quick_repeat_bottom_sheet/fly_acceptance_mcp_2026-07-21.json) |
 | 2026-07-21 | MCP Fly Quick Repeat | шторка peek 2+ | **UX-2:** секция «повторить» + кнопки вытесняют ряд карточек корзины из peek (38vh) — виден только повтор + чек-бар. Приоритет корзина vs повтор — решение владельца | open | скрин `03_fly_peek_repeat_section_2026-07-21.png` |
