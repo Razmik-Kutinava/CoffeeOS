@@ -9,6 +9,14 @@
 | Worker `48ee61ea…` **started** (SolidQueue) · restart always | После следующего deploy — проверить worker=started |
 | Guest session restore: status → linker + frequent/cards по email | **Redeploy Fly** OTP-фикса по апруву · MCP Арама |
 
+### Сессия 2026-07-23 (MCP UI Арама на Fly)
+
+- OTP `aramfifa100@gmail.com` на Demo Point A → checkout verified.
+- Payment sheet: **МИР *5953** + ***8782** PASS.
+- Каталог: секция **«повторить»** (3 + 1 клик) PASS.
+- «Заказы за сегодня» — пусто (только сегодня).
+- Артефакт: `artifacts/usercards_save_card/aramfifa_mcp_ui_2026-07-23.json` (скрины в чате MCP).
+
 ### Сессия 2026-07-23 (worker + OTP/session restore)
 
 - Fly: `fly machines start 48ee61ea71d948` · SolidQueue supervisor/worker up · `--restart always`.

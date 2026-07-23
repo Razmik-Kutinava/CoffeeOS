@@ -1,0 +1,39 @@
+{
+  "date": "2026-07-23",
+  "kind": "mcp_aramfifa_ui_walkthrough",
+  "stand": "https://coffeeos.fly.dev",
+  "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "tenant_name": "Demo Coffee Point A",
+  "email": "aramfifa100@gmail.com",
+  "customer_id_prefix": "2bc3…4c",
+  "otp": "from Fly ShopEmailOtpCode (not emailed to owner)",
+  "note": "OTP-fix fea1215 NOT deployed — current Fly build. Screenshots via Chrome DevTools MCP (attached in chat).",
+  "checks": [
+    {
+      "id": "otp_login",
+      "status": "PASS",
+      "detail": "Checkout: Aram / a***@gmail.com verified"
+    },
+    {
+      "id": "payment_sheet_two_cards",
+      "status": "PASS",
+      "detail": "МИР *5953 (selected) + МИР *8782 + СБП + Новая карта"
+    },
+    {
+      "id": "repeat_section_catalog",
+      "status": "PASS",
+      "detail": "After OTP: «повторить» ×3 thumbs + «повторить в 1 клик» + «+ещё» under cart sheet"
+    },
+    {
+      "id": "orders_today",
+      "status": "EMPTY",
+      "detail": "«Заказы за сегодня» — пусто (экран только сегодня; история частот в «повторить» есть)"
+    },
+    {
+      "id": "profile",
+      "status": "PASS",
+      "detail": "Профиль Aram, id 2bc3…4c; баланс/баллы 0 (UI)"
+    }
+  ],
+  "verdict": "У Арама на Demo Point A после OTP видны 2 карты и блок «повторить». Это не пустой клиент."
+}
