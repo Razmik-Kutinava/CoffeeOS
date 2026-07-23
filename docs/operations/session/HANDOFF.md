@@ -1,6 +1,6 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-22 (**Quick Repeat layout канон prog28 — ждёт redeploy + MCP**)  
+**Дата:** 2026-07-23 (**Quick Repeat layout prog28 — MCP PASS на Fly**)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev  
 
@@ -10,12 +10,12 @@
 |-----|--------|
 | Апрув шага = смысл текста («ебашь/сделай»), не культ `go` | **`[x]`** `a1d9383` |
 
-### Quick Repeat layout = скрины заказчика (2026-07-22)
+### Quick Repeat layout = скрины заказчика (2026-07-22 → 2026-07-23)
 
 | Что | Статус |
 |-----|--------|
 | Hidden без «повторить» · peek одна шторка заказ→+цена→embedded repeat · prog28 | **`[x]`** код · тесты 57/0 |
-| Redeploy Fly + MCP визуал | **`[ ]`** по апруву |
+| Redeploy Fly + MCP визуал | **`[x]`** v378 · 6/6 PASS · [`fly_layout_prog28_mcp_2026-07-23.json`](../milestones/veha_2/artifacts/quick_repeat_bottom_sheet/fly_layout_prog28_mcp_2026-07-23.json) |
 
 ### Quick Repeat Bottom Sheet (2026-07-21) — код DONE, ждёт deploy + MCP
 

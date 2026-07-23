@@ -1,0 +1,30 @@
+{
+  "task": "Quick Repeat layout канон prog28 — MCP-приёмка после redeploy (одна шторка peek; hidden без повтора)",
+  "date": "2026-07-23",
+  "stand": "https://coffeeos.fly.dev/shop?tenant_id=af4f78d6-c66b-428e-8ee4-5a609c5c9131",
+  "deploy": "deployment-01KY5BN0JKEW31V9GHAKSX6YXF · machine version 378 · owner deploy · CART_SHEET_BUILD=prog28 confirmed in DOM",
+  "setup": "Клиент mcp-quickrepeat@example.com. Вход email-OTP (код из shop_email_otp_codes). Без fetch-стабов. Точка «Мы закрыты» — live T-Bank SKIP.",
+  "checks": [
+    { "id": 1, "check": "Гость: empty 12vh, секции «повторить» нет", "result": "PASS", "evidence": "скрин 01" },
+    { "id": 2, "check": "OTP verify → frequent_items=3, layout=full, empty+frequent height=46vh (peekSingleWithRepeat)", "result": "PASS", "evidence": "sheetH=46vh, cardPay×3, скрин 02" },
+    { "id": 3, "check": "Peek +1 товар: mode=peek, layout=embedded, payOnCards=0; порядок заказ → +цена → компактный повтор", "result": "PASS", "evidence": "скрин 03, text: товар +3₽ повторить thumbs" },
+    { "id": 4, "check": "Hidden: mode=hidden 24vh, чипы + «+цена», секции «повторить» нет", "result": "PASS", "evidence": "скрин 04" },
+    { "id": 5, "check": "«повторить в 1 клик» → +3 frequent к корзине, mode=hidden, 4 chips, без «повторить»", "result": "PASS", "evidence": "chips=4, +1108₽, скрин 05" },
+    { "id": 6, "check": "Checkout (#/checkout): pageHasRepeat=false, форма Контакты (MCP Repeat / m***@example.com)", "result": "PASS", "evidence": "скрин 06" },
+    { "id": 7, "check": "Живое списание T-Bank", "result": "SKIP — точка закрыта" }
+  ],
+  "screenshots": [
+    "screenshots/fly_layout_prog28_2026-07-23/01_guest_empty_no_repeat_prog28_2026-07-23.png",
+    "screenshots/fly_layout_prog28_2026-07-23/02_empty_with_frequent_full_46vh_2026-07-23.png",
+    "screenshots/fly_layout_prog28_2026-07-23/03_peek_order_then_embedded_repeat_2026-07-23.png",
+    "screenshots/fly_layout_prog28_2026-07-23/04_hidden_chips_no_repeat_2026-07-23.png",
+    "screenshots/fly_layout_prog28_2026-07-23/05_hidden_after_repeat_one_click_4chips_2026-07-23.png",
+    "screenshots/fly_layout_prog28_2026-07-23/06_checkout_no_repeat_2026-07-23.png"
+  ],
+  "layout_canon_confirmed": {
+    "hidden": "chips + price only, no RepeatSection",
+    "peek_with_cart": "single sheet: order → +price → embedded repeat (no per-card pay)",
+    "empty_with_frequent": "full layout + per-card pay, 46vh"
+  },
+  "verdict": "PASS — 6/6 layout checks (1 SKIP live pay). Layout канон заказчика на Fly OK."
+}

@@ -7,13 +7,13 @@
 
 ## Текущая фаза
 
-**PHASE 3: REVIEW `[x]` · FIX-A…F `[x]` · layout канон prog28 `[x]` 2026-07-22 · следующий шаг: redeploy → MCP визуал → «ок» заказчика**
+**PHASE 3: REVIEW `[x]` · FIX-A…F `[x]` · layout prog28 MCP PASS `[x]` 2026-07-23 · следующий шаг: «ок» заказчика / CBR**
 
-### Layout канон (скрины 01–05) — 2026-07-22
+### Layout канон (скрины 01–05) — 2026-07-22 → 2026-07-23
 - [x] Hidden без «повторить»
 - [x] Peek/single: заказ → +цена → embedded repeat (одна шторка)
 - [x] Высоты peekWithRepeat · prog28 · тесты 57/0
-- [ ] Redeploy + MCP визуал
+- [x] Redeploy + MCP визуал — Fly v378 · `fly_layout_prog28_mcp_2026-07-23.json` 6/6 PASS
 
 ### FIX-A…F — жалоба «зарегался — повторов нет» (2026-07-22)
 - [x] FIX-A: OTP verify → `customer_id` в сессии (`EmailVerifiedCustomerLinker`) — `6ab3081`

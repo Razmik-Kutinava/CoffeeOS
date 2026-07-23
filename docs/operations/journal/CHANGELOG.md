@@ -1,5 +1,10 @@
 ﻿# CHANGELOG
 
+## 2026-07-23 — docs(ops): Quick Repeat layout prog28 — MCP на Fly PASS
+
+- Owner deploy `01KY5BN0JKEW31V9GHAKSX6YXF` (v378). MCP DevTools: **6/6 PASS** (guest / empty 46vh full / peek embedded / hidden / repeat→4 chips / checkout без повтора).
+- Артефакт [`fly_layout_prog28_mcp_2026-07-23.json`](../milestones/veha_2/artifacts/quick_repeat_bottom_sheet/fly_layout_prog28_mcp_2026-07-23.json) + 6 скринов `fly_layout_prog28_2026-07-23/`.
+
 ## 2026-07-22 — fix(shop): Quick Repeat layout — одна шторка peek, hidden без повтора (prog28)
 
 - **Hidden:** только чипы заказа + «+цена» (скрины 04–05), секции «повторить» нет.

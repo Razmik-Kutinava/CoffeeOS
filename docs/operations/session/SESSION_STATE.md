@@ -2,11 +2,17 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-22 (Quick Repeat layout канон заказчика: одна шторка peek; hidden без повтора — prog28)  
+**Дата:** 2026-07-23 (Quick Repeat layout prog28 — MCP на Fly PASS)  
 
 | Сейчас | Дальше |
 |--------|--------|
-| Layout FIX: hidden без «повторить» · peek/single = заказ → +цена → embedded repeat · высоты peekWithRepeat 46/50 · prog28 · тесты 57/0 + sheet 48/0 | Redeploy Fly → MCP визуал · чеклист заказчику |
+| prog28 на Fly v378 · MCP layout 6/6 PASS · артефакт `fly_layout_prog28_mcp_2026-07-23.json` | Апрув заказчика / `[x]` в CBR |
+
+### Сессия 2026-07-23 (MCP layout prog28 после owner redeploy)
+
+- Deploy: `01KY5BN0JKEW31V9GHAKSX6YXF` (v378), `data-cart-sheet-build=prog28`.
+- OTP `mcp-quickrepeat@example.com` → empty+frequent **46vh** `layout=full` · peek **embedded** (заказ→+цена→повтор, payOnCards=0) · hidden чипы без повтора · «повторить в 1 клик» → 4 chips +1108₽ · checkout без «повтор».
+- Скрины: `screenshots/fly_layout_prog28_2026-07-23/` (6 шт). Live T-Bank SKIP (точка закрыта).
 
 ### Сессия 2026-07-22 (layout шторки = канон скринов заказчика)
 
