@@ -61,7 +61,7 @@ class Shop::B113S2LayoutGesturesTest < ActionDispatch::IntegrationTest
     store = File.read(Rails.root.join("app/frontend/lib/cartSheetStore.js"))
 
     assert_includes sheet, 'data-testid="shop-cart-sheet-gesture-zone"'
-    assert_includes sheet, "min-h-14"
+    assert_includes sheet, "min-h-20"
     assert_includes store, "handleSheetGestureDelta"
     assert_includes store, "expandFromSwipe"
     assert_includes store, "collapseFromSwipe"

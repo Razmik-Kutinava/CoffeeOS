@@ -1,6 +1,6 @@
 # Чувствительность свайпа шторки — hit area прямоугольник
 
-> **Статус:** intake `[x]` · SPEC/BUILD in progress  
+> **Статус:** GREEN код `[x]` · redeploy/MCP `[ ]`  
 > **Дата ТЗ:** 2026-07-23  
 > **Источник:** заказчик (чат)  
 > **Артефакты:** docs/operations/milestones/veha_2/artifacts/cart_sheet_gesture_hit_area/  

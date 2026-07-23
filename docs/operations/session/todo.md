@@ -13,6 +13,11 @@
 - [x] Риски: ложные свайпы при тапе по полосе; конфликт со скроллом — зона только полоса
 
 ### BUILD
-- [ ] RED: тест hit-area + порог
-- [ ] GREEN: код + регрессия sheet zone
-- [ ] REVIEW: ops + DEMO_FEEDBACK; MCP после deploy владельца
+- [x] RED: тест hit-area + порог — `ac69ca4`
+- [x] GREEN: `min-h-20` · `SWIPE_UP_PX=20` · `prog29` · регрессия sheet 45/0
+- [ ] REVIEW: MCP после deploy владельца · «ок» заказчика
+
+### REVIEW checklist
+- [x] Код + тесты зелёные
+- [ ] Redeploy Fly + MCP (prog29 в DOM)
+- [ ] Вторая правка заказчика — ждёт текста

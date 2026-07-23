@@ -82,8 +82,8 @@ class Shop::B113S2CartPopupTest < ActionDispatch::IntegrationTest
     assert_includes thresholds, "hidden:        24"
     assert_includes thresholds, "SCROLL_TO_PEEK_PX = 100"
     assert_includes thresholds, "SCROLL_TO_HIDDEN_PX = 200"
-    assert_includes thresholds, "SWIPE_UP_PX = 32"
-    assert_includes thresholds, 'CART_SHEET_BUILD = "prog28"'
+    assert_includes thresholds, "SWIPE_UP_PX = 20"
+    assert_includes thresholds, 'CART_SHEET_BUILD = "prog29"'
 
     assert_equal 56, sheet_height_vh("expanded", 3)
     assert_equal 38, sheet_height_vh("peek", 2)

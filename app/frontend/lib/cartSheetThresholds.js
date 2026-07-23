@@ -22,7 +22,7 @@ export const SHEET_VH = {
 }
 
 /** Маркер сборки cart sheet — менять при каждом UX-фиксе для верификации на Fly */
-export const CART_SHEET_BUILD = "prog28"
+export const CART_SHEET_BUILD = "prog29"
 
 /** Высота единой шторки checkout: peek корзины + PaymentMethodsSheet (Фаза 2 UX) */
 export const CHECKOUT_PAY_STACK_VH = 92
@@ -36,8 +36,8 @@ export const SCROLL_TO_PEEK_PX = 100
 /** Суммарный скролл вниз от якоря: → hidden */
 export const SCROLL_TO_HIDDEN_PX = 200
 
-/** Минимальный сдвиг пальца на gesture-zone для засчёта свайпа (px) */
-export const SWIPE_UP_PX = 32
+/** Минимальный сдвиг пальца на gesture-zone для засчёта свайпа (px); 20 — чувствительнее (заказчик 2026-07-23) */
+export const SWIPE_UP_PX = 20
 
 export const SHEET_TRANSITION_MS = 300
 /** 0 — прижать к низу экрана (бар навигации убран B1.13-CR; 3.5rem оставлял «воздух») */

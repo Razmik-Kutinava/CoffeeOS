@@ -2,11 +2,17 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-23 (Cart sheet gesture hit area — intake + build)  
+**Дата:** 2026-07-23 (Cart sheet gesture hit area GREEN prog29)  
 
 | Сейчас | Дальше |
 |--------|--------|
-| Intake правки заказчика: свайп шторки на весь прямоугольник полосы | SPEC → RED/GREEN hit-area + порог |
+| Hit-area полосы `min-h-20` · порог свайпа 20px · build prog29 · тесты 45/0 | Redeploy Fly → MCP · вторая правка заказчика (текста нет) |
+
+### Сессия 2026-07-23 (GREEN: gesture hit area)
+
+- Заказчик: свайп на весь прямоугольник полосы, чувствительнее.
+- Код: `data-gesture-hit-area=full-strip`, `min-h-14`→`min-h-20`, `SWIPE_UP_PX` 32→20, `CART_SHEET_BUILD=prog29`.
+- RED `ac69ca4` · тесты зоны шторки **45/0**.
 
 ### Сессия 2026-07-23 (intake: чувствительность свайпа шторки)
 

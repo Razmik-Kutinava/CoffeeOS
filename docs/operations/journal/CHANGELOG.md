@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-07-23 — fix(shop): cart sheet gesture — taller hit-area + sensitive swipe (prog29)
+
+- Полоса свайпа: `min-h-14`→`min-h-20`, `data-gesture-hit-area=full-strip` (весь прямоугольник, не только крючок).
+- Порог: `SWIPE_UP_PX` 32→20; `CART_SHEET_BUILD=prog29`.
+- ТЗ заказчика + тесты `cart_sheet_gesture_hit_area_test` · регрессия sheet zone 45/0.
+
 ## 2026-07-23 — docs(ops): Quick Repeat layout prog28 — MCP на Fly PASS
 
 - Owner deploy `01KY5BN0JKEW31V9GHAKSX6YXF` (v378). MCP DevTools: **6/6 PASS** (guest / empty 46vh full / peek embedded / hidden / repeat→4 chips / checkout без повтора).

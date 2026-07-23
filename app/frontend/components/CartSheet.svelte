@@ -347,7 +347,8 @@
     <div
       bind:this={gestureZoneEl}
       data-testid="shop-cart-sheet-gesture-zone"
-      class="cart-sheet-gesture-zone flex w-full min-h-14 shrink-0 touch-none select-none flex-col items-center justify-center border-b border-[#3a3a3a]/60"
+      data-gesture-hit-area="full-strip"
+      class="cart-sheet-gesture-zone flex w-full min-h-20 shrink-0 touch-none select-none flex-col items-center justify-center border-b border-[#3a3a3a]/60"
       style:touch-action="none"
       role="button"
       tabindex="-1"
