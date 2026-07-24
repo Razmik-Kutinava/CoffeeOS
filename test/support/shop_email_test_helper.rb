@@ -5,7 +5,14 @@ module ShopEmailTestHelper
     { "X-Shop-Tenant" => tenant_id.to_s }
   end
 
+  # Сброс cooldown 60с для повторного send в тестах (без ожидания).
+  def clear_email_otp_cooldown!(email)
+    normalized = email.to_s.strip.downcase
+    ShopEmailOtpCode.where(email: normalized).update_all(created_at: 2.minutes.ago)
+  end
+
   def verify_shop_email!(tenant_id:, email:, session: self)
+    clear_email_otp_cooldown!(email)
     session.post "/shop/api/email_otp/send",
       headers: shop_tenant_headers(tenant_id),
       params: { email: email },

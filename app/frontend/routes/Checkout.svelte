@@ -49,6 +49,12 @@
   } from "../lib/cartSheetStore.js"
   import { REPEAT_AUTOPAY_KEY, refreshFrequentProducts } from "../lib/frequentRepeatStore.js"
   import { restoreGuestSession } from "../lib/restoreGuestSession.js"
+  import {
+    formatPhoneMask,
+    normalizePhoneToE164Ru,
+    flashCallHint,
+    PHONE_OTP_COOLDOWN_SEC
+  } from "../lib/phoneOtp.js"
   import PaymentMethodsSheet from "../components/PaymentMethodsSheet.svelte"
   import ThreeDsOverlay from "../components/ThreeDsOverlay.svelte"
 
@@ -59,6 +65,15 @@
   let sendingCode = $state(false)
   let verifyingCode = $state(false)
   let otpNotice = $state("")
+  let phoneDisplay = $state("+7")
+  let phoneChannel = $state("sms") // sms | flash_call
+  let phoneOtpCode = $state("")
+  let phoneVerified = $state(false)
+  let sendingPhoneCode = $state(false)
+  let verifyingPhoneCode = $state(false)
+  let phoneOtpNotice = $state("")
+  let phoneCooldownLeft = $state(0)
+  let phoneCooldownTimer = null
   let submitting = $state(false)
   let err = $state(null)
   let savedProfile = $state(false)
@@ -77,6 +92,8 @@
   let threeDsAborted = $state(false)
 
   const canSendCode = $derived(isValidEmail(email) && !sendingCode)
+  const phoneE164 = $derived(normalizePhoneToE164Ru(phoneDisplay))
+  const canSendPhoneCode = $derived(!!phoneE164 && !sendingPhoneCode && phoneCooldownLeft <= 0)
   const canPay = $derived(
     isValidEmail(email) && emailVerified && !submitting && shopIsOpenForPay()
   )
@@ -165,6 +182,7 @@
   })
 
   onDestroy(() => {
+    if (phoneCooldownTimer) clearInterval(phoneCooldownTimer)
     closeCheckoutPayStack()
   })
 
@@ -270,6 +288,68 @@
       err = e.message
     } finally {
       verifyingCode = false
+    }
+  }
+
+  function onPhoneInput(e) {
+    phoneDisplay = formatPhoneMask(e.target.value)
+    phoneVerified = false
+    phoneOtpNotice = ""
+  }
+
+  function startPhoneCooldown(sec = PHONE_OTP_COOLDOWN_SEC) {
+    phoneCooldownLeft = sec
+    if (phoneCooldownTimer) clearInterval(phoneCooldownTimer)
+    phoneCooldownTimer = setInterval(() => {
+      phoneCooldownLeft = Math.max(0, phoneCooldownLeft - 1)
+      if (phoneCooldownLeft <= 0 && phoneCooldownTimer) {
+        clearInterval(phoneCooldownTimer)
+        phoneCooldownTimer = null
+      }
+    }, 1000)
+  }
+
+  async function sendPhoneCode() {
+    if (!canSendPhoneCode) return
+    err = null
+    phoneOtpNotice = ""
+    sendingPhoneCode = true
+    try {
+      await api("/phone_otp/send", {
+        method: "POST",
+        body: JSON.stringify({ phone: phoneE164, channel: phoneChannel })
+      })
+      phoneVerified = false
+      phoneOtpNotice =
+        phoneChannel === "flash_call" ? "Ожидайте звонок" : "Код отправлен по SMS"
+      startPhoneCooldown()
+    } catch (e) {
+      err = e.message
+    } finally {
+      sendingPhoneCode = false
+    }
+  }
+
+  async function verifyPhoneCode() {
+    if (!phoneE164 || !phoneOtpCode.trim()) return
+    err = null
+    verifyingPhoneCode = true
+    try {
+      const verifyRes = await api("/phone_otp/verify", {
+        method: "POST",
+        body: JSON.stringify({
+          phone: phoneE164,
+          code: phoneOtpCode.trim()
+        })
+      })
+      if (verifyRes?.refresh_token) saveShopRefreshToken(verifyRes.refresh_token)
+      phoneVerified = true
+      phoneOtpNotice = "Телефон подтверждён"
+    } catch (e) {
+      phoneVerified = false
+      err = e.message
+    } finally {
+      verifyingPhoneCode = false
     }
   }
 
@@ -531,6 +611,72 @@
     {#if otpNotice}
       <p class="mb-3 text-sm text-green-400" role="status">{otpNotice}</p>
     {/if}
+
+    <div class="mb-4 border-t border-[#3a3a3a] pt-4" data-testid="phone-otp-block">
+      <p class="mb-2 text-sm font-medium text-white">Вход по телефону</p>
+      <label class="mb-3 block">
+        <span class="mb-1 block text-sm text-[#a0a0a0]">Телефон</span>
+        <input
+          value={phoneDisplay}
+          oninput={onPhoneInput}
+          type="tel"
+          inputmode="tel"
+          autocomplete="tel"
+          class="w-full rounded-lg border border-[#3a3a3a] bg-[#2a2a2a] px-3 py-2"
+          placeholder="+7 (900) 123-45-67"
+        />
+      </label>
+      <div class="mb-3 flex gap-4 text-sm text-[#a0a0a0]">
+        <label class="flex items-center gap-2">
+          <input type="radio" bind:group={phoneChannel} value="sms" />
+          SMS
+        </label>
+        <label class="flex items-center gap-2">
+          <input type="radio" bind:group={phoneChannel} value="flash_call" />
+          Звонок
+        </label>
+      </div>
+      <button
+        type="button"
+        class="mb-3 rounded-lg bg-[#3a3a3a] px-4 py-2 text-sm text-white disabled:opacity-50"
+        disabled={!canSendPhoneCode}
+        onclick={sendPhoneCode}
+      >
+        {#if sendingPhoneCode}
+          Отправляем…
+        {:else if phoneCooldownLeft > 0}
+          Повтор через {phoneCooldownLeft} с
+        {:else}
+          Получить код
+        {/if}
+      </button>
+      <label class="mb-3 block">
+        <span class="mb-1 block text-sm text-[#a0a0a0]">
+          {phoneChannel === "flash_call" ? flashCallHint() : "Код из SMS"}
+        </span>
+        <input
+          bind:value={phoneOtpCode}
+          inputmode="numeric"
+          maxlength={phoneChannel === "flash_call" ? "4" : "6"}
+          class="w-full rounded-lg border border-[#3a3a3a] bg-[#2a2a2a] px-3 py-2 tracking-widest"
+          placeholder={phoneChannel === "flash_call" ? "1234" : "123456"}
+        />
+      </label>
+      <button
+        type="button"
+        class="mb-2 w-full rounded-lg border border-[#ff8c42] py-2 text-sm text-[#ff8c42] disabled:opacity-50"
+        disabled={verifyingPhoneCode || !phoneOtpCode.trim() || !phoneE164}
+        onclick={verifyPhoneCode}
+      >
+        {verifyingPhoneCode ? "Проверяем…" : "Подтвердить телефон"}
+      </button>
+      {#if phoneOtpNotice}
+        <p class="mb-1 text-sm text-green-400" role="status">{phoneOtpNotice}</p>
+      {/if}
+      {#if phoneVerified}
+        <p class="text-sm text-green-400" data-testid="phone-verified">Телефон подтверждён</p>
+      {/if}
+    </div>
   {/if}
 
   {#if err}

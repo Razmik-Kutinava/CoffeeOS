@@ -122,6 +122,8 @@ class Shop::Api::EmailOtpTenantIsolationTest < ActionDispatch::IntegrationTest
         as: :json
       assert_equal 200, sess.response.status
 
+      clear_email_otp_cooldown!(@email1)
+
       sess.post "/shop/api/email_otp/send",
         headers: shop_tenant_headers(@tenant_b.id),
         params: { email: @email1 },

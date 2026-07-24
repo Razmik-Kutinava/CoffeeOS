@@ -1,5 +1,13 @@
 ﻿# CHANGELOG
 
+## 2026-07-24 — feat(shop): Phone OTP SMS / Flash Call [GREEN]
+
+- Нормализация `+79…`; `Shop::PhoneOtp` send/verify; SMS.ru + Flash Call клиенты (ENV / log-fallback)
+- Cooldown 60с для phone и email OTP; rack_attack `shop/phone_otp`
+- Linker phone↔email без silent merge; `refresh_token` через MobileSessionIssuer
+- Checkout UI: маска, SMS/Flash Call, timer, LS token
+- Тесты: 41/0 (OTP зона) + JS 5/0
+
 ## 2026-07-24 — docs: SPEC Phone OTP SMS / Flash Call
 
 - `todo.md`: as-is/gap, шаги 1–8, решения (без DDL, SMS.ru+FlashCall ENV, cooldown email+phone, linker без silent merge)

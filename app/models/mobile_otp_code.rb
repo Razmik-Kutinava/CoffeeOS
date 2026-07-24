@@ -1,17 +1,18 @@
 class MobileOtpCode < ApplicationRecord
   validates :phone, presence: true, format: { with: /\A[+]?[0-9]{10,15}\z/ }
-  validates :code, presence: true, format: { with: /\A[0-9]{6}\z/ }
+  validates :code, presence: true, format: { with: /\A[0-9]{4,6}\z/ }
   validates :attempts, numericality: { less_than_or_equal_to: 5 }
 
-  scope :active, -> { where(is_used: false).where('expires_at > ?', Time.current) }
-  scope :expired, -> { where('expires_at <= ?', Time.current) }
+  scope :active, -> { where(is_used: false).where("expires_at > ?", Time.current) }
+  scope :expired, -> { where("expires_at <= ?", Time.current) }
   scope :used, -> { where(is_used: true) }
 
   def expired?
     expires_at <= Time.current
   end
 
-  def valid?
+  # Не путать с ActiveRecord#valid?
+  def otp_usable?
     !is_used && !expired? && attempts < 5
   end
 

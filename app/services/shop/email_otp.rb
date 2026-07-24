@@ -6,6 +6,7 @@ module Shop
 
     CODE_TTL = 10.minutes
     MAX_ATTEMPTS = 5
+    COOLDOWN = 60.seconds
     EMAIL_FORMAT = /\A[^@\s]+@[^@\s]+\.[^@\s]+\z/
 
     def self.send_code!(email:)
@@ -19,6 +20,8 @@ module Shop
     def send_code!(email:)
       normalized = EmailVerificationSession.normalize(email)
       raise Error, "Укажите корректный email" unless normalized.match?(EMAIL_FORMAT)
+
+      enforce_cooldown!(normalized)
 
       ShopEmailOtpCode.where(email: normalized, is_used: false).update_all(is_used: true)
 
@@ -79,6 +82,14 @@ module Shop
 
     def otp_log_fallback?
       ActiveModel::Type::Boolean.new.cast(ENV["SHOP_OTP_LOG_FALLBACK"])
+    end
+
+    def enforce_cooldown!(normalized_email)
+      last = ShopEmailOtpCode.where(email: normalized_email).order(created_at: :desc).first
+      return if last.nil?
+      return if last.created_at <= COOLDOWN.ago
+
+      raise Error, "Подождите 60 секунд перед повторной отправкой кода"
     end
   end
 end

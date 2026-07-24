@@ -79,5 +79,6 @@
 
 - Интейк 2026-07-24 (PHASE 0). Код / SPEC / todo.md — не трогали; ждём go → PHASE 1: SPEC.
 - SPEC 2026-07-24: `todo.md` as-is/gap + решения; RED ждёт go.
-- В репозитории тесты бэка — Minitest (`test/`), не RSpec/`spec/`; фронт PWA — Svelte в `app/frontend/`. Уточнить пути тестов на SPEC.
+- GREEN 2026-07-24: PhoneNormalizer/Sms/FlashCall/PhoneOtp/API/Checkout; тесты 41/0 + JS 5/0; redeploy/MCP по апруву.
+- В репозитории тесты бэка — Minitest (`test/`), не RSpec/`spec/`; фронт PWA — Svelte в `app/frontend/`.
 - Связано с уже сделанным Email OTP + `mobile_sessions` / Silent Refresh (PWA durable sessions).

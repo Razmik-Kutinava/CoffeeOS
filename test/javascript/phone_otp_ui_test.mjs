@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 /**
  * Маска и нормализация телефона для PWA (зеркало бэкенд-формата +7).
  * Node: node --test test/javascript/phone_otp_ui_test.mjs

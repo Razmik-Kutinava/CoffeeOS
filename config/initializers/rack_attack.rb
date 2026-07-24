@@ -43,6 +43,15 @@ class Rack::Attack
       JSON.parse(body)['email'].to_s.downcase.presence rescue nil
     end
   end
+
+  # Лимит phone OTP витрины: 5 send в минуту на телефон
+  throttle('shop/phone_otp', limit: 5, period: 1.minute) do |req|
+    if req.path == '/shop/api/phone_otp/send' && req.post?
+      body = req.body.read
+      req.body.rewind if req.body.respond_to?(:rewind)
+      JSON.parse(body)['phone'].to_s.presence rescue nil
+    end
+  end
   
   # Лимит на создание заказов баристой: 30 заказов в минуту с одного IP
   throttle('barista/orders', limit: 30, period: 1.minute) do |req|

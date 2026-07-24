@@ -2,12 +2,19 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-24 (SPEC Phone OTP SMS/Flash Call)  
+**Дата:** 2026-07-24 (GREEN Phone OTP SMS/Flash Call)  
 
 | Сейчас | Дальше |
 |--------|--------|
-| SPEC Phone OTP **`[x]`** · `todo.md` | **go / ебашь** → RED (тесты) |
-| Fly **v389** · Silent Refresh MCP PASS | Апрув durable sessions (опц.) |
+| Phone OTP GREEN **`[x]`** · тесты OTP зона PASS | Push/deploy + MCP — по апруву |
+| Fly **v389** · Silent Refresh MCP PASS | — |
+
+### Сессия 2026-07-24 (GREEN Phone OTP SMS/Flash Call)
+
+- Backend: PhoneNormalizer, SmsClient, FlashCallClient, PhoneOtp, PhoneVerifiedCustomerLinker, API + rack_attack, cooldown email+phone
+- Frontend: Checkout phone block (маска, SMS/Flash Call, timer 60с, refresh_token LS)
+- Тесты: phone suite + email OTP regression **41/0**; JS phone_otp_ui **5/0**
+- Без DDL; `SHOP_OTP_LOG_FALLBACK` / без ключей → только лог
 
 ### Сессия 2026-07-24 (SPEC Phone OTP SMS/Flash Call)
 

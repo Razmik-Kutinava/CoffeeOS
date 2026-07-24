@@ -1,6 +1,6 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-24 (**интейк Phone OTP** · PWA durable sessions MCP PASS v389)  
+**Дата:** 2026-07-24 (**GREEN Phone OTP** · PWA durable sessions MCP PASS v389)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev  
 
@@ -9,8 +9,9 @@
 | Что | Статус |
 |-----|--------|
 | Intake ТЗ + CBR | **`[x]`** |
-| PHASE 1: SPEC | **`[x]`** · `todo.md` as-is/gap + решения |
-| RED / GREEN | **`[ ]`** ждёт go |
+| PHASE 1: SPEC | **`[x]`** |
+| RED / GREEN | **`[x]`** · OTP зона 41/0 · JS 5/0 |
+| Redeploy + MCP | **`[ ]`** по апруву |
 | Артефакты | [`phone_otp_sms_flash_call/`](../milestones/veha_2/artifacts/phone_otp_sms_flash_call/) |
 | ТЗ | [`Вход и регистрация по номеру телефона SMS Flash Call.md`](../milestones/veha_2/requirements/customer_tasks/Вход%20и%20регистрация%20по%20номеру%20телефона%20SMS%20Flash%20Call.md) |
 
