@@ -2,12 +2,18 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-24 (интейк Phone OTP SMS/Flash Call)  
+**Дата:** 2026-07-24 (SPEC Phone OTP SMS/Flash Call)  
 
 | Сейчас | Дальше |
 |--------|--------|
-| Интейк Phone OTP (SMS / Flash Call) **`[x]`** | **go** → PHASE 1: SPEC |
-| Fly **v389** · Silent Refresh MCP Aram **PASS** | Апрув заказчика (durable sessions) |
+| SPEC Phone OTP **`[x]`** · `todo.md` | **go / ебашь** → RED (тесты) |
+| Fly **v389** · Silent Refresh MCP PASS | Апрув durable sessions (опц.) |
+
+### Сессия 2026-07-24 (SPEC Phone OTP SMS/Flash Call)
+
+- As-is: Email OTP + Brevo есть; `mobile_otp_codes`/`mobile_customers` есть без phone-сервиса; cooldown 60с нет
+- Решения: без DDL; SMS.ru + FlashCall ENV; log fallback; linker без silent merge конфликтов; тесты Minitest
+- `todo.md` — чеклист шагов 1–8; код не писали
 
 ### Сессия 2026-07-24 (интейк Phone OTP SMS/Flash Call)
 

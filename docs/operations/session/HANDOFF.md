@@ -9,8 +9,8 @@
 | Что | Статус |
 |-----|--------|
 | Intake ТЗ + CBR | **`[x]`** |
-| PHASE 1: SPEC | **`[ ]`** ждёт go |
-| Код / RED / GREEN | **`[ ]`** |
+| PHASE 1: SPEC | **`[x]`** · `todo.md` as-is/gap + решения |
+| RED / GREEN | **`[ ]`** ждёт go |
 | Артефакты | [`phone_otp_sms_flash_call/`](../milestones/veha_2/artifacts/phone_otp_sms_flash_call/) |
 | ТЗ | [`Вход и регистрация по номеру телефона SMS Flash Call.md`](../milestones/veha_2/requirements/customer_tasks/Вход%20и%20регистрация%20по%20номеру%20телефона%20SMS%20Flash%20Call.md) |
 

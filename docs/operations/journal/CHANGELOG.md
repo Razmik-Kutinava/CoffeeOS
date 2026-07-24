@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-07-24 — docs: SPEC Phone OTP SMS / Flash Call
+
+- `todo.md`: as-is/gap, шаги 1–8, решения (без DDL, SMS.ru+FlashCall ENV, cooldown email+phone, linker без silent merge)
+- Тесты: Minitest + `test/javascript/` (адаптация от RSpec/Vitest в ТЗ)
+- CBR / HANDOFF / SESSION_STATE — статус SPEC `[x]`, RED ждёт
+
 ## 2026-07-24 — docs: intake Phone OTP SMS / Flash Call
 
 - ТЗ: `customer_tasks/Вход и регистрация по номеру телефона SMS Flash Call.md`
