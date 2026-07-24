@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-07-24 — deploy+MCP: Phone OTP SMS/Flash Call (Fly v390)
+
+- Push `32fe23a`; Fly **v390**; secret `SHOP_OTP_LOG_FALLBACK=true`
+- MCP: SMS send/verify + token; cooldown 422; Flash Call verify; checkout UI блок
+- Артефакт: `artifacts/phone_otp_sms_flash_call/fly_mcp_phone_otp_2026-07-24.json`
+
 ## 2026-07-24 — feat(shop): Phone OTP SMS / Flash Call [GREEN]
 
 - Нормализация `+79…`; `Shop::PhoneOtp` send/verify; SMS.ru + Flash Call клиенты (ENV / log-fallback)

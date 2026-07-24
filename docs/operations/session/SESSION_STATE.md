@@ -2,12 +2,19 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-24 (GREEN Phone OTP SMS/Flash Call)  
+**Дата:** 2026-07-24 (MCP Phone OTP Fly v390 PASS)  
 
 | Сейчас | Дальше |
 |--------|--------|
-| Phone OTP GREEN **`[x]`** · тесты OTP зона PASS | Push/deploy + MCP — по апруву |
-| Fly **v389** · Silent Refresh MCP PASS | — |
+| Fly **v390** · Phone OTP MCP **PASS** | Апрув заказчика |
+| Push `32fe23a` + `SHOP_OTP_LOG_FALLBACK=true` | — |
+
+### Сессия 2026-07-24 (MCP Phone OTP SMS/Flash Call)
+
+- Push develop → deploy **v390**; secret `SHOP_OTP_LOG_FALLBACK=true`
+- SMS send/verify + refresh_token 64; cooldown 422; Flash Call 4675 verify PASS
+- UI checkout: блок телефона + hint flash call
+- Артефакт: `artifacts/phone_otp_sms_flash_call/fly_mcp_phone_otp_2026-07-24.json`
 
 ### Сессия 2026-07-24 (GREEN Phone OTP SMS/Flash Call)
 

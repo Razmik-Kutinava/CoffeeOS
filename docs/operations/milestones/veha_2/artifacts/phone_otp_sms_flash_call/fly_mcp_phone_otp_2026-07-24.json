@@ -1,0 +1,44 @@
+{
+  "date": "2026-07-24",
+  "kind": "mcp_phone_otp_sms_flash_call",
+  "fly_release": "v390",
+  "commit": "32fe23a",
+  "stand": "https://coffeeos.fly.dev",
+  "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "tenant_name": "Demo Coffee Point A",
+  "secrets": {
+    "SHOP_OTP_LOG_FALLBACK": "true (staged + deployed with v390)"
+  },
+  "checks": [
+    {
+      "id": "deploy_v390",
+      "status": "PASS",
+      "detail": "fly status web/worker VERSION 390 started; health checks passing; push develop 32fe23a"
+    },
+    {
+      "id": "sms_send_log_fallback",
+      "status": "PASS",
+      "detail": "POST /shop/api/phone_otp/send phone=+79001119876 channel=sms → 200; Fly log [Shop::SmsClient] OTP SMS …: 171745 (no paid SMS)"
+    },
+    {
+      "id": "sms_verify_refresh_token",
+      "status": "PASS",
+      "detail": "verify → 200 verified + refresh_token length 64; status verified=true; LS shop_refresh_token length 64"
+    },
+    {
+      "id": "cooldown_60s",
+      "status": "PASS",
+      "detail": "Immediate second send → 422 «Подождите 60 секунд…»"
+    },
+    {
+      "id": "flash_call_send_verify",
+      "status": "PASS",
+      "detail": "channel=flash_call phone=+79001119877 → 200; log code=4675; verify → 200 + refresh_token 64"
+    },
+    {
+      "id": "checkout_ui_phone_block",
+      "status": "PASS",
+      "detail": "Checkout «Изменить»: блок «Вход по телефону», SMS/Звонок radios, hint «Введите последние 4 цифры…» for flash_call; data-testid=phone-otp-block"
+    }
+  ]
+}

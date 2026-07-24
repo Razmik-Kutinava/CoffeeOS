@@ -1,6 +1,6 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-24 (**GREEN Phone OTP** · PWA durable sessions MCP PASS v389)  
+**Дата:** 2026-07-24 (**MCP Phone OTP PASS v390**)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev  
 
@@ -8,12 +8,10 @@
 
 | Что | Статус |
 |-----|--------|
-| Intake ТЗ + CBR | **`[x]`** |
-| PHASE 1: SPEC | **`[x]`** |
-| RED / GREEN | **`[x]`** · OTP зона 41/0 · JS 5/0 |
-| Redeploy + MCP | **`[ ]`** по апруву |
-| Артефакты | [`phone_otp_sms_flash_call/`](../milestones/veha_2/artifacts/phone_otp_sms_flash_call/) |
-| ТЗ | [`Вход и регистрация по номеру телефона SMS Flash Call.md`](../milestones/veha_2/requirements/customer_tasks/Вход%20и%20регистрация%20по%20номеру%20телефона%20SMS%20Flash%20Call.md) |
+| Intake / SPEC / RED / GREEN | **`[x]`** |
+| Push + Fly deploy | **`[x]`** v390 · `SHOP_OTP_LOG_FALLBACK=true` |
+| MCP Fly | **`[x]` PASS** · [`fly_mcp_phone_otp_2026-07-24.json`](../milestones/veha_2/artifacts/phone_otp_sms_flash_call/fly_mcp_phone_otp_2026-07-24.json) |
+| Апрув заказчика | **`[ ]`** |
 
 ### Долговечные сессии PWA (2026-07-24)
 
