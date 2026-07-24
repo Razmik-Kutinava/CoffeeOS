@@ -2,12 +2,19 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-24 (MCP Fly: PWA durable sessions PASS)  
+**Дата:** 2026-07-24 (интейк Phone OTP SMS/Flash Call)  
 
 | Сейчас | Дальше |
 |--------|--------|
-| Fly **v389** · Silent Refresh MCP Aram **PASS** | Апрув заказчика / следующий пункт |
-| Hotfix: silent refresh CSRF+API key `7de10c2` | — |
+| Интейк Phone OTP (SMS / Flash Call) **`[x]`** | **go** → PHASE 1: SPEC |
+| Fly **v389** · Silent Refresh MCP Aram **PASS** | Апрув заказчика (durable sessions) |
+
+### Сессия 2026-07-24 (интейк Phone OTP SMS/Flash Call)
+
+- ТЗ: `Вход и регистрация по номеру телефона SMS Flash Call.md`
+- Артефакты: `artifacts/phone_otp_sms_flash_call/`
+- CBR + customer_tasks README обновлены
+- Код / todo.md / SPEC — не трогали (ждём go)
 
 ### Сессия 2026-07-24 (MCP PWA durable sessions)
 

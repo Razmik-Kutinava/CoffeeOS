@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-07-24 — docs: intake Phone OTP SMS / Flash Call
+
+- ТЗ: `customer_tasks/Вход и регистрация по номеру телефона SMS Flash Call.md`
+- Артефакты: `artifacts/phone_otp_sms_flash_call/`
+- CBR / customer_tasks README — строка индекса; код / SPEC не трогали
+
 ## 2026-07-24 — fix+MCP: PWA silent refresh CSRF/API key (Fly v389)
 
 - Hotfix: `silentRefreshSession` шлёт CSRF + `X-Shop-Api-Key` (иначе Fly Auth 401)

@@ -1,8 +1,18 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-24 (**PWA durable sessions MCP PASS v389** · анализ Т-Банк `[x]`)  
+**Дата:** 2026-07-24 (**интейк Phone OTP** · PWA durable sessions MCP PASS v389)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev  
+
+### Phone OTP SMS / Flash Call (2026-07-24)
+
+| Что | Статус |
+|-----|--------|
+| Intake ТЗ + CBR | **`[x]`** |
+| PHASE 1: SPEC | **`[ ]`** ждёт go |
+| Код / RED / GREEN | **`[ ]`** |
+| Артефакты | [`phone_otp_sms_flash_call/`](../milestones/veha_2/artifacts/phone_otp_sms_flash_call/) |
+| ТЗ | [`Вход и регистрация по номеру телефона SMS Flash Call.md`](../milestones/veha_2/requirements/customer_tasks/Вход%20и%20регистрация%20по%20номеру%20телефона%20SMS%20Flash%20Call.md) |
 
 ### Долговечные сессии PWA (2026-07-24)
 
