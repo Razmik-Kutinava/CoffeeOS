@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-07-24 — fix+MCP: PWA silent refresh CSRF/API key (Fly v389)
+
+- Hotfix: `silentRefreshSession` шлёт CSRF + `X-Shop-Api-Key` (иначе Fly Auth 401)
+- MCP Aram: OTP → refresh_token; rotate 200/401; isolated context restore → профиль Aram
+- Артефакт: `artifacts/pwa_durable_sessions_silent_refresh/fly_mcp_aram_silent_refresh_2026-07-24.json`
+
 ## 2026-07-24 — feat(shop): PWA durable sessions + Silent Refresh
 
 - Cookie: `_coffeeos_session`, TTL 90 дней, `same_site: :lax`

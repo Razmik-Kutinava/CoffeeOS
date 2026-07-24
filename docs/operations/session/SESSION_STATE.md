@@ -2,20 +2,18 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-24 (GREEN+REVIEW: PWA durable sessions)  
+**Дата:** 2026-07-24 (MCP Fly: PWA durable sessions PASS)  
 
 | Сейчас | Дальше |
 |--------|--------|
-| PWA durable sessions + Silent Refresh **код `[x]`** · тесты 13+18 / 0 | Redeploy Fly + MCP приёмка (по апруву) |
-| Peek embedded + → cart prog35 локально | Redeploy Fly → MCP Aram |
+| Fly **v389** · Silent Refresh MCP Aram **PASS** | Апрув заказчика / следующий пункт |
+| Hotfix: silent refresh CSRF+API key `7de10c2` | — |
 
-### Сессия 2026-07-24 (GREEN PWA durable sessions)
+### Сессия 2026-07-24 (MCP PWA durable sessions)
 
-- session_store `_coffeeos_session` 90d lax
-- `Shop::MobileSessionIssuer` на OTP verify → `refresh_token`
-- `POST /shop/api/session/refresh` + ротация; LS без 24h burn; silent refresh на старте
-- Тесты: session suite **13/0**; JS PASS; регрессия OTP/guest **18/0**
-- Коммиты: RED `c084667` · GREEN (этот шаг)
+- Push `8c990c9` + deploy **v388**; MCP нашёл баг Auth (нет CSRF/API key) → fix `7de10c2` → **v389**
+- Aram OTP → `shop_refresh_token`; refresh rotate 200/401; isolated context silent refresh → профиль Aram
+- Артефакт: `artifacts/pwa_durable_sessions_silent_refresh/fly_mcp_aram_silent_refresh_2026-07-24.json`
 
 ### Сессия 2026-07-24 (интейк PWA durable sessions)
 

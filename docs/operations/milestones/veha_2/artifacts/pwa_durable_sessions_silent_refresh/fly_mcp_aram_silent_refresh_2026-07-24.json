@@ -1,0 +1,48 @@
+{
+  "date": "2026-07-24",
+  "kind": "mcp_aram_pwa_durable_sessions_silent_refresh",
+  "fly_release": "v389",
+  "commits": {
+    "feature": "8c990c9",
+    "auth_fix": "7de10c2"
+  },
+  "stand": "https://coffeeos.fly.dev",
+  "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "tenant_name": "Demo Coffee Point A",
+  "email": "aramfifa100@gmail.com",
+  "customer_id": "2bc37279-8d23-456b-a2a5-4c28f584634c",
+  "otp": "902574 (Fly ShopEmailOtpCode)",
+  "screenshots_note": "Chrome DevTools MCP blocked filePath writes outside its sandbox; screenshots captured in session chat (profile Aram after silent refresh; checkout verified contacts).",
+  "checks": [
+    {
+      "id": "deploy_v389",
+      "status": "PASS",
+      "detail": "fly status web/worker VERSION 389 started; health passing"
+    },
+    {
+      "id": "otp_verify_refresh_token",
+      "status": "PASS",
+      "detail": "After OTP verify: shop_refresh_token length 64 in localStorage; MobileSession active expires 2026-10-22 (~90d); token prefix matched DB"
+    },
+    {
+      "id": "session_refresh_rotate",
+      "status": "PASS",
+      "detail": "POST /shop/api/session/refresh → 200 profile Aram; old token → 401 Unauthorized; profile API orders_count=53"
+    },
+    {
+      "id": "silent_refresh_isolated_context",
+      "status": "PASS",
+      "detail": "Isolated browser context with ONLY shop_refresh_token (no cookies, no guest profile LS). After reload: token rotated, profile_ls Aram emailVerified, profile API name=Aram id=2bc37279… orders_count=53. UI #/profile heading Aram."
+    },
+    {
+      "id": "auth_fix_csrf_apikey",
+      "status": "PASS",
+      "detail": "v388 silentRefresh lacked CSRF/API key → Fly Auth 401 cleared token. Fixed 7de10c2, redeployed v389 — MCP re-proof PASS"
+    },
+    {
+      "id": "ls_no_24h_burn_meta",
+      "status": "PASS",
+      "detail": "shop_guest_profile ttlMs=7776000000 (90d) after write; hard 24h burn removed"
+    }
+  ]
+}
