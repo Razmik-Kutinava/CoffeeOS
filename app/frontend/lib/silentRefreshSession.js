@@ -4,6 +4,16 @@ import {
   saveShopRefreshToken
 } from "./shopLocalStorage.js"
 
+function csrfToken() {
+  return document.querySelector('meta[name="csrf-token"]')?.getAttribute("content") || ""
+}
+
+function shopApiKey() {
+  const meta = document.querySelector('meta[name="shop-api-key"]')?.getAttribute("content")
+  if (meta && meta.trim()) return meta.trim()
+  return ""
+}
+
 function shopRefreshUrl() {
   const tid =
     (typeof window !== "undefined" &&
@@ -17,6 +27,7 @@ function shopRefreshUrl() {
 
 /**
  * Silent Refresh по shop_refresh_token.
+ * CSRF + API key — как у app/frontend/lib/api.js (иначе Fly Auth → 401).
  * @returns {Promise<{ verified: boolean, email?: string, profile?: object }>}
  */
 export async function silentRefreshSession() {
@@ -24,13 +35,18 @@ export async function silentRefreshSession() {
   if (!token) return { verified: false }
 
   try {
+    const headers = {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      "X-CSRF-Token": csrfToken()
+    }
+    const apiKey = shopApiKey()
+    if (apiKey) headers["X-Shop-Api-Key"] = apiKey
+
     const res = await fetch(shopRefreshUrl(), {
       method: "POST",
       credentials: "same-origin",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      },
+      headers,
       body: JSON.stringify({ refresh_token: token }),
       cache: "no-store"
     })

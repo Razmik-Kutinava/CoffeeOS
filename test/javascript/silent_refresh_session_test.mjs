@@ -17,7 +17,12 @@ function mockStorage() {
 
 globalThis.localStorage = mockStorage()
 globalThis.document = {
-  querySelector: () => ({ getAttribute: () => "tenant-test" })
+  querySelector: (sel) => {
+    if (sel === 'meta[name="csrf-token"]') return { getAttribute: () => "test-csrf" }
+    if (sel === 'meta[name="shop-api-key"]') return { getAttribute: () => "test-key" }
+    if (sel === 'meta[name="shop-tenant-id"]') return { getAttribute: () => "tenant-test" }
+    return { getAttribute: () => "tenant-test" }
+  }
 }
 globalThis.window = { location: { search: "" } }
 
