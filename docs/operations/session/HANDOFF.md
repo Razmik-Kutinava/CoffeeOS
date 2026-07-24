@@ -1,8 +1,17 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-24 (**empty placeholder prog32 + undo prog31 — ждёт redeploy**)  
+**Дата:** 2026-07-24 (**prog33 без общей кнопки/ещё — ждёт redeploy**)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev  
+
+### Repeat remove global pay (2026-07-24)
+
+| Что | Статус |
+|-----|--------|
+| Intake ТЗ + CBR | **`[x]`** |
+| Убрать «повторить в 1 клик» + «+ещё» · prog33 | **`[x]`** код · structural PASS |
+| `bin/rails test` | **blocked** local PG (Windows) |
+| Redeploy + MCP | **`[ ]`** по апруву |
 
 ### Empty orders placeholder (2026-07-24)
 

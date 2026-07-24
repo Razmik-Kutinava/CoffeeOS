@@ -47,6 +47,9 @@ class Shop::QuickRepeatCustomerFixesTest < ActionDispatch::IntegrationTest
     assert_includes section, "!embedded"
     refute_includes section, 'data-testid="shop-repeat-pay-one-click"',
       "глобальная кнопка оплаты заменена на per-card (скрин 06)"
+    refute_includes section, 'data-testid="shop-repeat-one-click"'
+    refute_includes section, 'data-testid="shop-repeat-more"'
+    refute_includes section, "+ещё"
   end
 
   test "Checkout refreshes frequent products after email verify" do

@@ -5,8 +5,6 @@
     frequentQuantities,
     frequentCardKey,
     setFrequentQty,
-    repeatAllToCart,
-    repeatMore,
     repeatPayOneClickItem,
     repeatFeedback
   } from "../lib/frequentRepeatStore.js"
@@ -37,16 +35,6 @@
       if (toastTimer) clearTimeout(toastTimer)
     }
   })
-
-  async function onRepeatClick() {
-    if (repeatBusy) return
-    repeatBusy = true
-    try {
-      await repeatAllToCart()
-    } finally {
-      repeatBusy = false
-    }
-  }
 
   function qtyOf(key) {
     return storeQty[key] || 1
@@ -143,21 +131,6 @@
           {/if}
         </div>
       {/each}
-    </div>
-    <div class="mt-1.5 flex items-center gap-2">
-      <button
-        type="button"
-        data-testid="shop-repeat-one-click"
-        class="min-h-8 flex-1 rounded-lg bg-[#ff8c42] px-3 py-1.5 text-[12px] font-semibold text-black disabled:opacity-40"
-        disabled={repeatBusy}
-        onclick={onRepeatClick}
-      >повторить в 1 клик</button>
-      <button
-        type="button"
-        data-testid="shop-repeat-more"
-        class="min-h-8 shrink-0 rounded-lg bg-[#3a3a3a] px-3 py-1.5 text-[12px]"
-        onclick={() => repeatMore()}
-      >+ещё</button>
     </div>
   </div>
 {/if}

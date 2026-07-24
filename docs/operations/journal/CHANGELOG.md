@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-07-24 — fix(shop): remove global repeat pay and +ещё (prog33)
+
+- Убраны нижние «повторить в 1 клик» и «+ещё» из `RepeatSection.svelte`.
+- Остаются карточки с «оплатить в 1 клик». `CART_SHEET_BUILD=prog33`.
+- ТЗ: `repeat_remove_global_pay_button/`. Rails test: local PG unavailable — structural assert PASS.
+
 ## 2026-07-24 — fix(shop): empty cart placeholder only without order history (prog32)
 
 - «тут будут твои заказы» только при `frequentCount === 0`; при истории — только «повторить».

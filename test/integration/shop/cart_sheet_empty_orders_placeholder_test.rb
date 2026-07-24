@@ -29,7 +29,7 @@ class Shop::CartSheetEmptyOrdersPlaceholderTest < ActionDispatch::IntegrationTes
     )
   end
 
-  test "build marker prog32" do
-    assert_includes thresholds, 'CART_SHEET_BUILD = "prog32"'
+  test "build marker prog33" do
+    assert_includes thresholds, 'CART_SHEET_BUILD = "prog33"'
   end
 end

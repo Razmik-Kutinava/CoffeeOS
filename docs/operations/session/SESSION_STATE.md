@@ -2,12 +2,18 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-24 (empty-надпись только без истории · prog32)  
+**Дата:** 2026-07-24 (убраны общая «повторить в 1 клик» и «+ещё» · prog33)  
 
 | Сейчас | Дальше |
 |--------|--------|
-| Empty: «тут будут твои заказы» iff `frequentCount===0`; иначе «повторить» · prog32 · **52/0** | Redeploy Fly → MCP |
-| Undo «Отменить» убрана (prog31) | В том же deploy |
+| RepeatSection: только per-card «оплатить в 1 клик» · prog33 | Redeploy Fly → MCP |
+| `bin/rails test` локально: PG connection fail (Windows) | Прогнать тесты когда PG ок / на CI |
+
+### Сессия 2026-07-24 (убрать общую кнопку и «ещё»)
+
+- ТЗ: `Убрать общую кнопку повтора и ещё.md`
+- UI: удалены `shop-repeat-one-click` + `shop-repeat-more` из `RepeatSection.svelte`.
+- Structural check PASS; rails test blocked: Postgres closed connection from Windows client.
 
 ### Сессия 2026-07-24 (empty placeholder vs повторить)
 
