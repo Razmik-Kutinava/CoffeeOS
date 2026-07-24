@@ -32,13 +32,15 @@ class Shop::B113S2CartPopupTest < ActionDispatch::IntegrationTest
     refute_includes app, 'import("./routes/Cart.svelte")'
   end
 
-  test "CartSheet source: empty placeholder, three modes, catalog+checkout visibility" do
+  test "CartSheet source: empty placeholder gated by frequentCount, three modes" do
     sheet = File.read(Rails.root.join("app/frontend/components/CartSheet.svelte"))
     store = File.read(Rails.root.join("app/frontend/lib/cartSheetStore.js"))
 
     assert_includes sheet, 'data-testid="shop-cart-sheet"'
     assert_includes sheet, 'data-testid="shop-cart-sheet-empty"'
     assert_includes sheet, "тут будут твои заказы"
+    assert_includes sheet, "frequentCount === 0"
+    assert_includes sheet, "frequentCount > 0 && !onCheckout"
     assert_includes sheet, "MODE_EXPANDED"
     assert_includes sheet, "MODE_PEEK"
     assert_includes sheet, "MODE_HIDDEN"
@@ -48,6 +50,7 @@ class Shop::B113S2CartPopupTest < ActionDispatch::IntegrationTest
     assert_includes sheet, "isCartSheetRoute"
     assert_includes store, "isCartSheetRoute"
     assert_includes store, "handleCatalogScroll"
+
     assert_includes store, "collapseFromSwipe"
     assert_includes store, "expandFromSwipe"
     refute_includes store, "cartSheetExpandedLayout"
@@ -83,7 +86,7 @@ class Shop::B113S2CartPopupTest < ActionDispatch::IntegrationTest
     assert_includes thresholds, "SCROLL_TO_PEEK_PX = 100"
     assert_includes thresholds, "SCROLL_TO_HIDDEN_PX = 200"
     assert_includes thresholds, "SWIPE_UP_PX = 20"
-    assert_includes thresholds, 'CART_SHEET_BUILD = "prog31"'
+    assert_includes thresholds, 'CART_SHEET_BUILD = "prog32"'
 
     assert_equal 56, sheet_height_vh("expanded", 3)
     assert_equal 38, sheet_height_vh("peek", 2)

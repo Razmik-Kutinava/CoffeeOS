@@ -101,6 +101,7 @@
 | Cart sheet gesture hit area | **Витрина** — свайп шторки чувствительнее: реагирует на весь прямоугольник полосы (не только «крючок») | [ТЗ](customer_tasks/Чувствительность%20свайпа%20шторки%20hit%20area%20прямоугольник.md) · [`artifacts/cart_sheet_gesture_hit_area/`](../artifacts/cart_sheet_gesture_hit_area/README.md) | **MCP PASS `[x]`** 2026-07-23 · апрув заказчика `[ ]` |
 | Expanded no catalog grid | **Витрина** — в expanded шторке убрать сетку товаров, оставить только список заказов | [ТЗ](customer_tasks/Убрать%20сетку%20товаров%20из%20expanded%20шторки.md) · [`artifacts/cart_sheet_expanded_no_grid/`](../artifacts/cart_sheet_expanded_no_grid/README.md) | **GREEN `[x]`** 2026-07-23 · redeploy/MCP `[ ]` |
 | Cart sheet remove undo | **Витрина** — убрать кнопку «Отменить» (undo удаления) в шторке | [ТЗ](customer_tasks/Убрать%20кнопку%20Отменить%20в%20шторке%20корзины.md) · [`artifacts/cart_sheet_remove_undo_button/`](../artifacts/cart_sheet_remove_undo_button/README.md) | **GREEN `[x]`** 2026-07-24 · redeploy/MCP `[ ]` |
+| Empty orders placeholder | **Витрина** — «тут будут твои заказы» только без истории заказов; иначе «повторить» | [ТЗ](customer_tasks/Empty%20надпись%20тут%20будут%20твои%20заказы%20только%20без%20истории.md) · [`artifacts/cart_sheet_empty_orders_placeholder/`](../artifacts/cart_sheet_empty_orders_placeholder/README.md) | **GREEN `[x]`** 2026-07-24 · redeploy/MCP `[ ]` |
 
 > **B1.8 (не забыть):** сейчас письма с **подтверждённого личного sender** в Brevo. Когда будет **свой домен** — завести **кофейную почту** (напр. `noreply@бренд.ru`), аутентифицировать домен в Brevo, обновить `MAIL_FROM` + secrets. Код OTP/ActionMailer менять не нужно.
 
@@ -128,6 +129,7 @@
 | 15 | **Cart sheet gesture hit area** | Свайп шторки — вся полоса-прямоугольник чувствительна | **MCP PASS `[x]`** · апрув `[ ]` | [Чувствительность свайпа шторки hit area прямоугольник.md](customer_tasks/Чувствительность%20свайпа%20шторки%20hit%20area%20прямоугольник.md) |
 | 16 | **Expanded no catalog grid** | Expanded шторка — без сетки каталога, только список заказов | **GREEN `[x]`** · redeploy/MCP `[ ]` | [Убрать сетку товаров из expanded шторки.md](customer_tasks/Убрать%20сетку%20товаров%20из%20expanded%20шторки.md) |
 | 17 | **Cart sheet remove undo** | Убрать кнопку «Отменить» в шторке корзины | **GREEN `[x]`** · redeploy/MCP `[ ]` | [Убрать кнопку Отменить в шторке корзины.md](customer_tasks/Убрать%20кнопку%20Отменить%20в%20шторке%20корзины.md) |
+| 18 | **Empty orders placeholder** | «тут будут твои заказы» только без истории | **GREEN `[x]`** · redeploy/MCP `[ ]` | [Empty надпись…](customer_tasks/Empty%20надпись%20тут%20будут%20твои%20заказы%20только%20без%20истории.md) |
 
 
 ---

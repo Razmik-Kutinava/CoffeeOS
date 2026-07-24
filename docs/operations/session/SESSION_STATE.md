@@ -2,12 +2,18 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-24 (убрана кнопка «Отменить» undo в шторке · prog31)  
+**Дата:** 2026-07-24 (empty-надпись только без истории · prog32)  
 
 | Сейчас | Дальше |
 |--------|--------|
-| Cart sheet: нет полоски undo / «Отменить» · prog31 · sheet **43/0** | Redeploy Fly → MCP |
-| Worker started · OTP restore в коде | Redeploy OTP+prog31 по апруву |
+| Empty: «тут будут твои заказы» iff `frequentCount===0`; иначе «повторить» · prog32 · **52/0** | Redeploy Fly → MCP |
+| Undo «Отменить» убрана (prog31) | В том же deploy |
+
+### Сессия 2026-07-24 (empty placeholder vs повторить)
+
+- ТЗ: `Empty надпись тут будут твои заказы только без истории.md`
+- `CartSheet`: надпись при `frequentCount === 0`; RepeatSection empty-slot при `frequentCount > 0`.
+- Тесты: `cart_sheet_empty_orders_placeholder_test` + sheet zone **52/0**.
 
 ### Сессия 2026-07-24 (убрать «Отменить» в шторке)
 

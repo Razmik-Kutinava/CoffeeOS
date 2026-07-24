@@ -335,15 +335,19 @@
     </div>
     {/if}
 
-    <!-- EMPTY -->
+    <!-- EMPTY — надпись только без истории заказов; иначе «повторить» -->
     {#if mode === MODE_EMPTY || !count}
-      <p data-testid="shop-cart-sheet-empty" class="px-4 py-2 text-center text-sm italic text-[#888]">
-        тут будут твои заказы
-      </p>
+      {#if frequentCount === 0}
+        <p data-testid="shop-cart-sheet-empty" class="px-4 py-2 text-center text-sm italic text-[#888]">
+          тут будут твои заказы
+        </p>
+      {/if}
       {@render checkoutBar("shop-cart-empty-total")}
-      <div data-testid="shop-repeat-slot-empty" class="shrink-0 px-2">
-        {#if !onCheckout}<RepeatSection layout="full" />{/if}
-      </div>
+      {#if frequentCount > 0 && !onCheckout}
+        <div data-testid="shop-repeat-slot-empty" class="shrink-0 px-2">
+          <RepeatSection layout="full" />
+        </div>
+      {/if}
 
     <!-- HIDDEN — ряд чипов с фото + сумма (канон заказчика 2026-07-20) -->
     {:else if mode === MODE_HIDDEN}

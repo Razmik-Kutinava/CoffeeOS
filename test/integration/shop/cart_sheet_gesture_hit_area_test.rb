@@ -19,6 +19,6 @@ class Shop::CartSheetGestureHitAreaTest < ActionDispatch::IntegrationTest
 
     assert_includes thresholds, "SWIPE_UP_PX = 20"
     refute_includes thresholds, "SWIPE_UP_PX = 32"
-    assert_includes thresholds, 'CART_SHEET_BUILD = "prog31"'
+    assert_includes thresholds, 'CART_SHEET_BUILD = "prog32"'
   end
 end

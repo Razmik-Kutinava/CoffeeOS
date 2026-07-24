@@ -1,8 +1,16 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-24 (**убрана «Отменить» в шторке prog31 — ждёт redeploy**)  
+**Дата:** 2026-07-24 (**empty placeholder prog32 + undo prog31 — ждёт redeploy**)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev  
+
+### Empty orders placeholder (2026-07-24)
+
+| Что | Статус |
+|-----|--------|
+| Intake ТЗ + CBR | **`[x]`** |
+| Надпись только без истории · prog32 | **`[x]`** код · тесты 52/0 |
+| Redeploy + MCP | **`[ ]`** по апруву |
 
 ### Cart sheet remove undo button (2026-07-24)
 

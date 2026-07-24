@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-07-24 — fix(shop): empty cart placeholder only without order history (prog32)
+
+- «тут будут твои заказы» только при `frequentCount === 0`; при истории — только «повторить».
+- `CART_SHEET_BUILD=prog32` · sheet zone 52/0.
+- ТЗ: `cart_sheet_empty_orders_placeholder/`.
+
 ## 2026-07-24 — fix(shop): remove cart sheet undo «Отменить» button (prog31)
 
 - Убрана полоска «Удаление можно отменить» + кнопка «Отменить» из `CartSheet.svelte` (ТЗ заказчика).
