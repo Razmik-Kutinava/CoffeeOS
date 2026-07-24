@@ -1,6 +1,6 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-24 (**PWA durable sessions GREEN** · анализ Т-Банк `[x]` · prog35 ждёт redeploy)  
+**Дата:** 2026-07-24 (**PWA durable sessions MCP PASS v389** · анализ Т-Банк `[x]`)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev  
 
@@ -11,7 +11,8 @@
 | Intake ТЗ + CBR | **`[x]`** |
 | PHASE 1: SPEC | **`[x]`** · `todo.md` |
 | RED / GREEN | **`[x]`** · тесты 13+18 / 0 |
-| Redeploy + MCP | **`[ ]`** по апруву |
+| Push + Fly deploy | **`[x]`** v388 → fix → **v389** |
+| MCP Aram Silent Refresh | **`[x]` PASS** · [`fly_mcp_aram_silent_refresh_2026-07-24.json`](../milestones/veha_2/artifacts/pwa_durable_sessions_silent_refresh/fly_mcp_aram_silent_refresh_2026-07-24.json) |
 
 ### Анализ статусной модели платежей (2026-07-24)
 
