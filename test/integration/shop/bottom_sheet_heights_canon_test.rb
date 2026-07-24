@@ -19,7 +19,7 @@ class Shop::BottomSheetHeightsCanonTest < ActionDispatch::IntegrationTest
     assert_match(/peekSingle:\s*34/, thresholds)
     assert_match(/peekMulti:\s*38/, thresholds)
     assert_match(/hidden:\s*24/, thresholds)
-    assert_includes thresholds, 'CART_SHEET_BUILD = "prog33"',
+    assert_includes thresholds, 'CART_SHEET_BUILD = "prog34"',
       "канон шторки — prog31 (без кнопки Отменить undo); менять только с UX-решением"
   end
 

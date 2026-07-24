@@ -32,7 +32,8 @@ class Shop::B113S2bModePersistenceTest < ActionDispatch::IntegrationTest
     assert_equal "peek", apply_cart_mode_after_load(%w[line], "empty", persisted: "expanded")
     assert_equal "peek", apply_cart_mode_after_load(%w[line], "empty", persisted: nil)
     assert_equal "peek", apply_cart_mode_after_load(%w[line], "peek", persisted: "peek")
-    assert_equal "empty", apply_cart_mode_after_load([], "peek", persisted: "peek")
+    assert_equal "peek", apply_cart_mode_after_load([], "peek", persisted: "peek")
+    assert_equal "peek", apply_cart_mode_after_load([], "hidden", persisted: "hidden")
   end
 
   test "onCatalogRouteChange mirror saves on leave and restores on return" do
@@ -68,7 +69,7 @@ class Shop::B113S2bModePersistenceTest < ActionDispatch::IntegrationTest
   private
 
   def apply_cart_mode_after_load(items, mode, persisted:)
-    return "empty" if items.empty?
+    return "peek" if items.empty?
 
     return "peek" if mode == "empty"
 
@@ -76,7 +77,13 @@ class Shop::B113S2bModePersistenceTest < ActionDispatch::IntegrationTest
   end
 
   def on_catalog_route_change_mirror(state, now_on_catalog:)
-    return if state[:items].to_i <= 0
+    if state[:items].to_i <= 0
+      if now_on_catalog
+        state[:mode] = "peek"
+        state[:persisted] = "peek"
+      end
+      return
+    end
 
     if now_on_catalog
       state[:mode] = state[:persisted] if state[:persisted]

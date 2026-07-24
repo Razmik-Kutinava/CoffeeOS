@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-07-24 — fix(shop): empty cart sheet defaults to peek (prog34)
+
+- Пустая корзина: режим **peek** (не hidden/empty 12vh); высота `empty` = 34 (= peekSingle).
+- Без истории — «тут будут твои заказы»; с историей — «повторить» как раньше.
+- `CART_SHEET_BUILD=prog34` · tests 23/0.
+
 ## 2026-07-24 — ops: MCP Арам — cart sheet fixes prog33 на Fly PASS
 
 - Fly v384 · OTP Aram на Demo Point A.

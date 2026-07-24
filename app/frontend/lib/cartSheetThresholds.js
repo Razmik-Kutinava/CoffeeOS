@@ -10,7 +10,8 @@ export const MODE_HIDDEN = "hidden"
  * expanded — верх шторки у 1-го ряда; peek — середина 2-го ряда; hidden — ниже, ряд чипов.
  */
 export const SHEET_VH = {
-  empty:         12,
+  /** Пустая корзина = peek-высота (текст «тут будут твои заказы» виден) */
+  empty:         34,
   expandedSingle: 52,
   expandedMulti:  56,
   peekSingle:    34,
@@ -22,7 +23,7 @@ export const SHEET_VH = {
 }
 
 /** Маркер сборки cart sheet — менять при каждом UX-фиксе для верификации на Fly */
-export const CART_SHEET_BUILD = "prog33"
+export const CART_SHEET_BUILD = "prog34"
 
 /** Высота единой шторки checkout: peek корзины + PaymentMethodsSheet (Фаза 2 UX) */
 export const CHECKOUT_PAY_STACK_VH = 92

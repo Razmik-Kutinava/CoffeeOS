@@ -103,6 +103,7 @@
 | Cart sheet remove undo | **Витрина** — убрать кнопку «Отменить» (undo удаления) в шторке | [ТЗ](customer_tasks/Убрать%20кнопку%20Отменить%20в%20шторке%20корзины.md) · [`artifacts/cart_sheet_remove_undo_button/`](../artifacts/cart_sheet_remove_undo_button/README.md) | **GREEN `[x]`** 2026-07-24 · redeploy/MCP `[ ]` |
 | Empty orders placeholder | **Витрина** — «тут будут твои заказы» только без истории заказов; иначе «повторить» | [ТЗ](customer_tasks/Empty%20надпись%20тут%20будут%20твои%20заказы%20только%20без%20истории.md) · [`artifacts/cart_sheet_empty_orders_placeholder/`](../artifacts/cart_sheet_empty_orders_placeholder/README.md) | **GREEN `[x]`** 2026-07-24 · redeploy/MCP `[ ]` |
 | Repeat remove global pay | **Витрина** — убрать общую «повторить в 1 клик» и «+ещё»; только pay на карточке | [ТЗ](customer_tasks/Убрать%20общую%20кнопку%20повтора%20и%20ещё.md) · [`artifacts/repeat_remove_global_pay_button/`](../artifacts/repeat_remove_global_pay_button/README.md) | **GREEN `[x]`** 2026-07-24 · redeploy/MCP `[ ]` |
+| Default peek empty | **Витрина** — дефолт шторки peek; без истории текст «тут будут твои заказы» | [ТЗ](customer_tasks/Дефолт%20шторки%20peek%20и%20текст%20без%20истории.md) · [`artifacts/cart_sheet_default_peek_empty/`](../artifacts/cart_sheet_default_peek_empty/README.md) | **GREEN `[x]`** 2026-07-24 · redeploy/MCP `[ ]` |
 
 > **B1.8 (не забыть):** сейчас письма с **подтверждённого личного sender** в Brevo. Когда будет **свой домен** — завести **кофейную почту** (напр. `noreply@бренд.ru`), аутентифицировать домен в Brevo, обновить `MAIL_FROM` + secrets. Код OTP/ActionMailer менять не нужно.
 
@@ -132,6 +133,7 @@
 | 17 | **Cart sheet remove undo** | Убрать кнопку «Отменить» в шторке корзины | **GREEN `[x]`** · redeploy/MCP `[ ]` | [Убрать кнопку Отменить в шторке корзины.md](customer_tasks/Убрать%20кнопку%20Отменить%20в%20шторке%20корзины.md) |
 | 18 | **Empty orders placeholder** | «тут будут твои заказы» только без истории | **GREEN `[x]`** · redeploy/MCP `[ ]` | [Empty надпись…](customer_tasks/Empty%20надпись%20тут%20будут%20твои%20заказы%20только%20без%20истории.md) |
 | 19 | **Repeat remove global pay** | Убрать общую «повторить в 1 клик» и «+ещё» | **GREEN `[x]`** · redeploy/MCP `[ ]` | [Убрать общую кнопку повтора и ещё.md](customer_tasks/Убрать%20общую%20кнопку%20повтора%20и%20ещё.md) |
+| 20 | **Default peek empty** | Дефолт peek + текст без истории | **GREEN `[x]`** · redeploy/MCP `[ ]` | [Дефолт шторки peek…](customer_tasks/Дефолт%20шторки%20peek%20и%20текст%20без%20истории.md) |
 
 
 ---

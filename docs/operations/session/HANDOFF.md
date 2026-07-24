@@ -1,8 +1,16 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-24 (**MCP Арам prog33 PASS на Fly v384**)  
+**Дата:** 2026-07-24 (**prog34 default peek empty — ждёт redeploy**)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev  
+
+### Default peek empty (2026-07-24)
+
+| Что | Статус |
+|-----|--------|
+| Intake ТЗ + CBR | **`[x]`** |
+| Empty → peek · prog34 | **`[x]`** код · тесты 23/0 |
+| Redeploy + MCP guest | **`[ ]`** по апруву |
 
 ### MCP Арам — cart sheet fixes (2026-07-24)
 

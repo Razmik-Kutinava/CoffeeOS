@@ -2,12 +2,18 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-24 (MCP Арам: cart sheet fixes prog33 на Fly v384)  
+**Дата:** 2026-07-24 (дефолт empty-шторки = peek · prog34)  
 
 | Сейчас | Дальше |
 |--------|--------|
-| MCP Арам Demo Point A: **5/5 PASS** · скрины в `cart_sheet_fixes_mcp_2026-07-24/` | Апрув заказчика |
-| prog33 на Fly (`data-cart-sheet-build`) | — |
+| Пустая корзина → **peek** + «тут будут твои заказы» / «повторить» · prog34 · tests 23/0 | Redeploy Fly → MCP guest |
+| MCP Арам prog33 на v384 | После deploy проверить guest peek |
+
+### Сессия 2026-07-24 (default peek empty)
+
+- ТЗ: `Дефолт шторки peek и текст без истории.md`
+- Store: empty → `MODE_PEEK` (не EMPTY/HIDDEN); `empty` vh = 34 (= peekSingle).
+- Тесты: `cart_sheet_default_peek_empty_test` + zone **23/0**.
 
 ### Сессия 2026-07-24 (MCP Арам — проверка фиксов шторки)
 

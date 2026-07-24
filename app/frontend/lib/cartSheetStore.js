@@ -23,7 +23,7 @@ import {
 
 export const cartItems = writable([])
 export const cartTotal = writable(0)
-export const cartSheetMode = writable(MODE_EMPTY)
+export const cartSheetMode = writable(MODE_PEEK)
 export const cartSheetBusy = writable(false)
 export const cartUndoLine = writable(null)
 export const cartSheetError = writable(null)
@@ -110,8 +110,8 @@ export async function ensureCheckoutCartPeek() {
   await refreshCartSheet().catch(() => {})
   const items = get(cartItems)
   if (!items.length) {
-    cartSheetMode.set(MODE_EMPTY)
-    clearPersistedCartSheetMode()
+    cartSheetMode.set(MODE_PEEK)
+    writePersistedCartSheetMode(MODE_PEEK)
     return
   }
   cartSheetMode.set(MODE_PEEK)
@@ -181,8 +181,9 @@ function applyCartData(data) {
   cartTotal.set(Number(data?.total ?? 0))
   const mode = get(cartSheetMode)
   if (!items.length) {
-    cartSheetMode.set(MODE_EMPTY)
-    clearPersistedCartSheetMode()
+    // Пустая корзина: дефолт peek (текст / «повторить»), не empty/hidden
+    cartSheetMode.set(MODE_PEEK)
+    writePersistedCartSheetMode(MODE_PEEK)
     return
   }
   if (mode === MODE_EMPTY) {
@@ -219,8 +220,8 @@ function optimisticRemove(index) {
   cartTotal.set(total)
   writeCartCache({ items: next, total })
   if (!next.length) {
-    cartSheetMode.set(MODE_EMPTY)
-    clearPersistedCartSheetMode()
+    cartSheetMode.set(MODE_PEEK)
+    writePersistedCartSheetMode(MODE_PEEK)
   }
 }
 
@@ -247,8 +248,8 @@ export async function refreshCartSheet() {
     if (isUnavailableCartError(_e)) {
       cartItems.set([])
       cartTotal.set(0)
-      cartSheetMode.set(MODE_EMPTY)
-      clearPersistedCartSheetMode()
+      cartSheetMode.set(MODE_PEEK)
+      writePersistedCartSheetMode(MODE_PEEK)
       writeCartCache({ items: [], total: 0 })
       cartSheetError.set("Товар недоступен. Корзина обновлена.")
       return { items: [], total: 0 }
@@ -261,8 +262,8 @@ export async function refreshCartSheet() {
     }
     cartItems.set([])
     cartTotal.set(0)
-    cartSheetMode.set(MODE_EMPTY)
-    clearPersistedCartSheetMode()
+    cartSheetMode.set(MODE_PEEK)
+    writePersistedCartSheetMode(MODE_PEEK)
     throw _e
   }
 }
@@ -278,7 +279,15 @@ export function onCartAdded() {
 
 export function onCatalogRouteChange(nowOnCatalog) {
   const items = get(cartItems)
-  if (!items.length) return
+  if (!items.length) {
+    // Без товаров — всегда peek (не поднимать hidden из localStorage)
+    if (nowOnCatalog) {
+      cartSheetMode.set(MODE_PEEK)
+      writePersistedCartSheetMode(MODE_PEEK)
+      resetScrollAnchor()
+    }
+    return
+  }
   if (!nowOnCatalog) {
     persistCartSheetMode()
     return

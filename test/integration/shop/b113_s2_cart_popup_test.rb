@@ -78,7 +78,7 @@ class Shop::B113S2CartPopupTest < ActionDispatch::IntegrationTest
   test "sheetHeightVh thresholds match catalog rows (cards -15%)" do
     thresholds = File.read(Rails.root.join("app/frontend/lib/cartSheetThresholds.js"))
 
-    assert_includes thresholds, "empty:         12"
+    assert_includes thresholds, "empty:         34"
     assert_includes thresholds, "expandedMulti:  56"
     assert_includes thresholds, "peekMulti:     38"
     assert_includes thresholds, "peekSingle:    34"
@@ -86,7 +86,7 @@ class Shop::B113S2CartPopupTest < ActionDispatch::IntegrationTest
     assert_includes thresholds, "SCROLL_TO_PEEK_PX = 100"
     assert_includes thresholds, "SCROLL_TO_HIDDEN_PX = 200"
     assert_includes thresholds, "SWIPE_UP_PX = 20"
-    assert_includes thresholds, 'CART_SHEET_BUILD = "prog33"'
+    assert_includes thresholds, 'CART_SHEET_BUILD = "prog34"'
 
     assert_equal 56, sheet_height_vh("expanded", 3)
     assert_equal 38, sheet_height_vh("peek", 2)

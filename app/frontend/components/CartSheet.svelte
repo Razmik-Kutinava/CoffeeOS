@@ -59,9 +59,14 @@
   let payStackActive = $derived(onCheckout && payStackOpen && count > 0)
   let heightVh = $derived.by(() => {
     if (payStackActive) return CHECKOUT_PEEK_VH
+    // Пустая корзина: peek-высота (placeholder или «повторить»)
+    if (!count) {
+      if (frequentCount > 0 && !onCheckout) return SHEET_VH.peekSingleWithRepeat
+      return SHEET_VH.peekSingle
+    }
     // Одна сущность заказ+«повторить»: выше peek, чтобы не выглядело как две шторки
     if (frequentCount > 0 && (mode === MODE_PEEK || mode === MODE_EMPTY)) {
-      if (mode === MODE_EMPTY || count <= 1) return SHEET_VH.peekSingleWithRepeat
+      if (count <= 1) return SHEET_VH.peekSingleWithRepeat
       return SHEET_VH.peekMultiWithRepeat
     }
     return sheetHeightVh(mode, count)
