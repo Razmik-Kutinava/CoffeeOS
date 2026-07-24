@@ -70,6 +70,6 @@
 
 ## Заметки агента
 
-- Интейк 2026-07-24: док 1:1.
-- SPEC 2026-07-24: `docs/operations/session/todo.md` — MobileSession после linker; refresh-сервис; убрать 24h burn LS; тесты Minitest + `test/javascript/` (не RSpec).
-- Ждёт намерение → PHASE 2 RED.
+- Интейк + SPEC 2026-07-24.
+- GREEN 2026-07-24: session_store, MobileSessionIssuer, SessionRefresh, LS, silent restore.
+- Redeploy Fly + MCP приёмка — по апруву.

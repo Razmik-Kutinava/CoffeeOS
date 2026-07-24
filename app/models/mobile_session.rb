@@ -15,6 +15,6 @@ class MobileSession < ApplicationRecord
   end
 
   def update_last_used!
-    update!(last_used_at: Time.current)
+    update!(last_used_at: Time.current, expires_at: 90.days.from_now)
   end
 end

@@ -18,12 +18,16 @@ module Shop
           email: email,
           session_id: request.session.id
         )
-        Shop::EmailVerifiedCustomerLinker.link!(
+        customer_id = Shop::EmailVerifiedCustomerLinker.link!(
           session: session,
           tenant_id: @shop_tenant.id,
           email: email
         )
-        render json: { verified: true, email: email }
+        payload = { verified: true, email: email }
+        if customer_id.present?
+          payload[:refresh_token] = Shop::MobileSessionIssuer.call!(customer_id: customer_id)
+        end
+        render json: payload
       rescue Shop::EmailOtp::Error => e
         render json: { error: e.message }, status: :unprocessable_entity
       rescue ActiveRecord::ActiveRecordError => e

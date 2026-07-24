@@ -22,6 +22,17 @@ module Shop
           render json: { error: "Не удалось восстановить сессию заказа" }, status: :unprocessable_entity
         end
       end
+
+      def refresh
+        result = Shop::SessionRefresh.call!(
+          session: session,
+          tenant_id: @shop_tenant.id,
+          refresh_token: params[:refresh_token]
+        )
+        render json: result
+      rescue Shop::SessionRefresh::Unauthorized
+        render json: { error: "Unauthorized" }, status: :unauthorized
+      end
     end
   end
 end

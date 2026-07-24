@@ -4,8 +4,13 @@ require "test_helper"
 
 # Шаг 5 (structural): фронт вызывает silent refresh и хранит shop_refresh_token.
 class Shop::SilentRefreshFrontendStructuralTest < ActiveSupport::TestCase
-  test "restoreGuestSession tries session refresh when token present" do
+  test "restoreGuestSession uses silentRefreshSession helper" do
     src = File.read(Rails.root.join("app/frontend/lib/restoreGuestSession.js"))
+    assert_includes src, "silentRefreshSession"
+  end
+
+  test "silentRefreshSession posts to session refresh endpoint" do
+    src = File.read(Rails.root.join("app/frontend/lib/silentRefreshSession.js"))
     assert_includes src, "/session/refresh"
     assert_includes src, "shop_refresh_token"
   end

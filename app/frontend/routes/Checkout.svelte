@@ -9,6 +9,7 @@
     maskEmail,
     isValidEmail
   } from "../lib/shopGuestProfile.js"
+  import { saveShopRefreshToken } from "../lib/shopLocalStorage.js"
   import {
     lastGuestOrderId,
     reconnectGuestOrder,
@@ -250,13 +251,14 @@
     err = null
     verifyingCode = true
     try {
-      await api("/email_otp/verify", {
+      const verifyRes = await api("/email_otp/verify", {
         method: "POST",
         body: JSON.stringify({
           email: email.trim().toLowerCase(),
           code: otpCode.trim()
         })
       })
+      if (verifyRes?.refresh_token) saveShopRefreshToken(verifyRes.refresh_token)
       emailVerified = true
       otpNotice = "Email подтверждён"
       saveGuestProfile({ name, email, emailVerified: true })

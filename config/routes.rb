@@ -190,6 +190,7 @@ Rails.application.routes.draw do
       get "user/cards", to: "user_cards#index"
       get "orders/history", to: "orders#history"
       post "session/reconnect", to: "session#reconnect"
+      post "session/refresh", to: "session#refresh"
       post "orders/:id/abandon", to: "orders#abandon"
       post "orders/:id/cancel", to: "orders#cancel"
       post "orders/:id/finalize", to: "orders#finalize"

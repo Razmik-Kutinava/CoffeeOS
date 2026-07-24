@@ -1,5 +1,13 @@
 ﻿# CHANGELOG
 
+## 2026-07-24 — feat(shop): PWA durable sessions + Silent Refresh
+
+- Cookie: `_coffeeos_session`, TTL 90 дней, `same_site: :lax`
+- OTP verify → `MobileSession` + `refresh_token` в ответе
+- `POST /shop/api/session/refresh` — ротация токена, restore customer_id, продление email verification
+- Фронт: `shop_refresh_token` без 24h burn; `silentRefreshSession` при старте PWA
+- Тесты: 13/0 (suite) + JS PASS; регрессия OTP/guest 18/0
+
 ## 2026-07-24 — docs: SPEC PWA durable sessions + Silent Refresh
 
 - `todo.md`: as-is/gap, шаги 1–5, решения (issuer после linker, refresh TTL 90d, убрать 24h LS burn)

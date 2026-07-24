@@ -1,19 +1,15 @@
-/** TTL localStorage для витрины — как OTP/email verification на бэке (24ч). */
-export const SHOP_LS_TTL_MS = 24 * 60 * 60 * 1000
+/** Метаданные TTL (для touch/скольжения). Hard burn через 24ч убран. */
+export const SHOP_LS_TTL_MS = 90 * 24 * 60 * 60 * 1000
 
-export function readShopLocalStorage(key, ttlMs = SHOP_LS_TTL_MS) {
+const REFRESH_TOKEN_KEY = "shop_refresh_token"
+
+export function readShopLocalStorage(key, _ttlMs = SHOP_LS_TTL_MS) {
   try {
     const raw = localStorage.getItem(key)
     if (!raw) return null
 
     const parsed = JSON.parse(raw)
     if (!parsed || typeof parsed !== "object" || parsed.savedAt == null || !("payload" in parsed)) {
-      localStorage.removeItem(key)
-      return null
-    }
-
-    const savedAt = new Date(parsed.savedAt).getTime()
-    if (Number.isNaN(savedAt) || Date.now() - savedAt > ttlMs) {
       localStorage.removeItem(key)
       return null
     }
@@ -44,9 +40,41 @@ export function writeShopLocalStorage(key, payload, ttlMs = SHOP_LS_TTL_MS) {
   }
 }
 
+/** Скользящий TTL: обновить savedAt без смены payload. */
+export function touchShopLocalStorage(key) {
+  const payload = readShopLocalStorage(key)
+  if (payload == null) return
+  writeShopLocalStorage(key, payload)
+}
+
 export function removeShopLocalStorage(key) {
   try {
     localStorage.removeItem(key)
+  } catch {
+    /* ignore */
+  }
+}
+
+export function saveShopRefreshToken(token) {
+  if (!token) return
+  try {
+    localStorage.setItem(REFRESH_TOKEN_KEY, String(token))
+  } catch {
+    /* quota */
+  }
+}
+
+export function loadShopRefreshToken() {
+  try {
+    return localStorage.getItem(REFRESH_TOKEN_KEY) || null
+  } catch {
+    return null
+  }
+}
+
+export function clearShopRefreshToken() {
+  try {
+    localStorage.removeItem(REFRESH_TOKEN_KEY)
   } catch {
     /* ignore */
   }
