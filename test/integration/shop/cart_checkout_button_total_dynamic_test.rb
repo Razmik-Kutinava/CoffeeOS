@@ -37,20 +37,18 @@ class Shop::CartCheckoutButtonTotalDynamicTest < ActionDispatch::IntegrationTest
     assert_includes store, "cartTotal.set(total)"
   end
 
-  test "undo and error UI are wired in CartSheet" do
-    assert_includes sheet, 'data-testid="shop-cart-undo"'
-    assert_includes sheet, 'data-testid="shop-cart-undo-button"'
-    assert_includes sheet, "onclick={() => undoRemoveCartLine()}"
+  test "undo cancel button removed from CartSheet; error UI remains" do
+    refute_includes sheet, 'data-testid="shop-cart-undo"'
+    refute_includes sheet, 'data-testid="shop-cart-undo-button"'
+    refute_includes sheet, "Удаление можно отменить"
+    refute_includes sheet, "undoRemoveCartLine"
 
     assert_includes sheet, 'data-testid="shop-cart-error"'
     assert_includes sheet, "role=\"status\""
   end
 
-  test "undo/error stores exist and are set from cart actions" do
-    assert_includes store, "export const cartUndoLine"
+  test "error store remains; undo store may exist without sheet UI" do
     assert_includes store, "export const cartSheetError"
-    assert_includes store, "export async function undoRemoveCartLine"
-    assert_includes store, "cartUndoLine.set"
     assert_includes store, "cartSheetError.set"
   end
 

@@ -6,7 +6,6 @@
     cartTotal,
     cartSheetMode,
     cartSheetBusy,
-    cartUndoLine,
     cartSheetError,
     checkoutPayOpen,
     isCartSheetRoute,
@@ -20,8 +19,7 @@
     bindCartSheetEvents,
     atMinQty,
     atMaxQty,
-    openEditCard,
-    undoRemoveCartLine
+    openEditCard
   } from "../lib/cartSheetStore.js"
   import RepeatSection from "./RepeatSection.svelte"
   import { initFrequentFromCache, frequentItems } from "../lib/frequentRepeatStore.js"
@@ -46,7 +44,6 @@
   let total = $state(0)
   let mode = $state(MODE_EMPTY)
   let busy = $state(false)
-  let undoLine = $state(null)
   let sheetError = $state(null)
   let payStackOpen = $state(false)
   let gestureStartY = 0
@@ -195,7 +192,6 @@
     const unsubTotal = cartTotal.subscribe((v) => { total = v })
     const unsubMode  = cartSheetMode.subscribe((v) => { mode = v })
     const unsubBusy  = cartSheetBusy.subscribe((v) => { busy = v })
-    const unsubUndo  = cartUndoLine.subscribe((v) => { undoLine = v })
     const unsubErr   = cartSheetError.subscribe((v) => { sheetError = v })
     const unsubPay   = checkoutPayOpen.subscribe((v) => { payStackOpen = v })
     const unsubFrequent = frequentItems.subscribe((v) => {
@@ -220,7 +216,7 @@
 
     return () => {
       unsubItems(); unsubTotal(); unsubMode(); unsubBusy()
-      unsubUndo(); unsubErr(); unsubPay(); unsubFrequent()
+      unsubErr(); unsubPay(); unsubFrequent()
       window.removeEventListener("hashchange", onHash)
     }
   })
@@ -320,25 +316,6 @@
         class="mx-3 mt-2 rounded-lg border border-[#3a3a3a] bg-[#1f1f1f] px-3 py-2 text-[12px] text-[#ff8c42]"
       >
         {sheetError}
-      </div>
-    {/if}
-
-    {#if undoLine}
-      <div
-        data-testid="shop-cart-undo"
-        role="status"
-        class="mx-3 mt-2 flex items-center justify-between gap-3 rounded-lg border border-[#3a3a3a] bg-[#1f1f1f] px-3 py-2 text-[12px]"
-      >
-        <span class="text-[#a0a0a0]">Удаление можно отменить</span>
-        <button
-          type="button"
-          data-testid="shop-cart-undo-button"
-          class="shrink-0 rounded bg-[#ff8c42] px-3 py-1.5 text-[12px] font-semibold text-black"
-          disabled={busy}
-          onclick={() => undoRemoveCartLine()}
-        >
-          Отменить
-        </button>
       </div>
     {/if}
 

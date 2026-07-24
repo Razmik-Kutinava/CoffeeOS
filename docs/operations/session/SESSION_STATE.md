@@ -2,14 +2,20 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-23 (worker Fly started · OTP/session restore без re-OTP)  
+**Дата:** 2026-07-24 (убрана кнопка «Отменить» undo в шторке · prog31)  
 
 | Сейчас | Дальше |
 |--------|--------|
-| Worker `48ee61ea…` **started** (SolidQueue) · restart always | После следующего deploy — проверить worker=started |
-| Guest session restore: status → linker + frequent/cards по email | **Redeploy Fly** OTP-фикса по апруву · MCP Арама |
+| Cart sheet: нет полоски undo / «Отменить» · prog31 · sheet **43/0** | Redeploy Fly → MCP |
+| Worker started · OTP restore в коде | Redeploy OTP+prog31 по апруву |
 
-### Сессия 2026-07-23 (MCP UI Арама — PNG в артефактах)
+### Сессия 2026-07-24 (убрать «Отменить» в шторке)
+
+- ТЗ: `Убрать кнопку Отменить в шторке корзины.md` · `artifacts/cart_sheet_remove_undo_button/`.
+- UI: удалён блок `shop-cart-undo` из `CartSheet.svelte`; `CART_SHEET_BUILD=prog31`.
+- Тесты sheet zone: **43 runs / 0 failures**.
+
+### Сессия 2026-07-23 (worker Fly started · OTP/session restore без re-OTP)  
 
 - Повторный прогон: OTP → checkout Aram → шторка **МИР *5953 + *8782** → «повторить» → профиль → заказы сегодня.
 - PNG на диске: `artifacts/usercards_save_card/screenshots/aramfifa_mcp_2026-07-23/` (01…07).

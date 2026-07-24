@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-07-24 — fix(shop): remove cart sheet undo «Отменить» button (prog31)
+
+- Убрана полоска «Удаление можно отменить» + кнопка «Отменить» из `CartSheet.svelte` (ТЗ заказчика).
+- `CART_SHEET_BUILD=prog31` · sheet zone tests 43/0.
+- ТЗ + артефакты: `cart_sheet_remove_undo_button/`.
+
 ## 2026-07-23 — ops: MCP UI Арама — PNG в артефактах
 
 - Повторный прогон Demo Point A: OTP → Aram verified → шторка **\*5953 + \*8782** → «повторить» → профиль → заказы сегодня.
