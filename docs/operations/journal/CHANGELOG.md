@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-07-24 — docs: intake + анализ статусной модели Т-Банк
+
+- ТЗ: `customer_tasks/Анализ статусной модели платежей и заказов Т-Банк.md`
+- Вывод: одностадийная оплата (Init без PayType); заказ `accepted` только на CONFIRMED; webhook + GetState; Cancel/Refund API банка нет.
+- Артефакты: `artifacts/payment_status_model_analysis/`.
+
 ## 2026-07-24 — fix(shop): peek repeat «+» adds to cart (prog35)
 
 - **Баг:** в peek `+` на карточке «повторить» крутил только локальный qty, позиция не попадала в заказ.

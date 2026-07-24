@@ -2,12 +2,19 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-24 (peek «+» на повторе → в заказ · prog35)  
+**Дата:** 2026-07-24 (анализ статусной модели Т-Банк)  
 
 | Сейчас | Дальше |
 |--------|--------|
-| Peek embedded: `+`/`−` на «повторить» → `addToCart` / `bumpCartLine` · prog35 · tests 52/0 | Redeploy Fly → MCP Aram |
-| Default empty peek prog34 локально | После deploy проверить guest peek + Aram + |
+| Intake + read-only анализ эквайринга (одностадийный, webhook + GetState, Cancel/Refund API нет) | Ждёт намерения заказчика по отменам/возвратам |
+| Peek embedded + → cart prog35 локально | Redeploy Fly → MCP Aram |
+
+### Сессия 2026-07-24 (анализ статусной модели платежей Т-Банк)
+
+- ТЗ: `Анализ статусной модели платежей и заказов Т-Банк.md`
+- Init без `PayType` → одностадийная; заказ → `accepted` только на `CONFIRMED`→`succeeded`
+- Webhook `POST /callbacks/tbank` → `TbankCallbackJob`; fallback `GetState` в `TbankPaymentSync`
+- API Cancel/Refund Т-Банка в коде **нет**; есть внутренняя модель `Refund` + отмена заказа barista/guest без банка
 
 ### Сессия 2026-07-24 (peek repeat plus → cart)
 
