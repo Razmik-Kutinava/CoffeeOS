@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-07-24 — docs: intake PWA durable sessions + Silent Refresh
+
+- ТЗ: `customer_tasks/Долговечные сессии PWA и фикс авто-разлогина.md`
+- Артефакты: `artifacts/pwa_durable_sessions_silent_refresh/`
+- CBR / customer_tasks README — строка индекса; код не менялся
+
 ## 2026-07-24 — docs: intake + анализ статусной модели Т-Банк
 
 - ТЗ: `customer_tasks/Анализ статусной модели платежей и заказов Т-Банк.md`

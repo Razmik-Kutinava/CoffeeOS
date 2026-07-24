@@ -106,6 +106,7 @@
 | Default peek empty | **Витрина** — дефолт шторки peek; без истории текст «тут будут твои заказы» | [ТЗ](customer_tasks/Дефолт%20шторки%20peek%20и%20текст%20без%20истории.md) · [`artifacts/cart_sheet_default_peek_empty/`](../artifacts/cart_sheet_default_peek_empty/README.md) | **GREEN `[x]`** 2026-07-24 · redeploy/MCP `[ ]` |
 | Peek repeat plus | **Витрина** — в peek «+» на карточке «повторить» добавляет в заказ | [ТЗ](customer_tasks/Peek%20плюс%20на%20повторе%20не%20добавляет%20в%20заказ.md) · [`artifacts/peek_repeat_plus_add_to_cart/`](../artifacts/peek_repeat_plus_add_to_cart/) | **GREEN `[x]`** 2026-07-24 · redeploy/MCP `[ ]` |
 | Payment status model | **Эквайринг** — анализ статусной модели платежей/заказов (Т-Банк) | [ТЗ](customer_tasks/Анализ%20статусной%20модели%20платежей%20и%20заказов%20Т-Банк.md) · [`artifacts/payment_status_model_analysis/`](../artifacts/payment_status_model_analysis/) | **анализ `[x]`** 2026-07-24 · код не менялся |
+| PWA durable sessions | **Витрина / PWA** — долговечные сессии + Silent Refresh (без авто-разлогина 24ч) | [ТЗ](customer_tasks/Долговечные%20сессии%20PWA%20и%20фикс%20авто-разлогина.md) · [`artifacts/pwa_durable_sessions_silent_refresh/`](../artifacts/pwa_durable_sessions_silent_refresh/) | **интейк `[x]`** 2026-07-24 · SPEC `[ ]` ждёт go |
 
 > **B1.8 (не забыть):** сейчас письма с **подтверждённого личного sender** в Brevo. Когда будет **свой домен** — завести **кофейную почту** (напр. `noreply@бренд.ru`), аутентифицировать домен в Brevo, обновить `MAIL_FROM` + secrets. Код OTP/ActionMailer менять не нужно.
 
@@ -138,6 +139,7 @@
 | 20 | **Default peek empty** | Дефолт peek + текст без истории | **GREEN `[x]`** · redeploy/MCP `[ ]` | [Дефолт шторки peek…](customer_tasks/Дефолт%20шторки%20peek%20и%20текст%20без%20истории.md) |
 | 21 | **Peek repeat plus** | Peek: «+» на повторе → в заказ | **GREEN `[x]`** · redeploy/MCP `[ ]` | [Peek плюс на повторе…](customer_tasks/Peek%20плюс%20на%20повторе%20не%20добавляет%20в%20заказ.md) |
 | 22 | **Payment status model** | Анализ статусной модели платежей/заказов (Т-Банк) | **анализ `[x]`** 2026-07-24 | [Анализ статусной модели…](customer_tasks/Анализ%20статусной%20модели%20платежей%20и%20заказов%20Т-Банк.md) |
+| 23 | **PWA durable sessions** | Долговечные сессии PWA + Silent Refresh | **интейк `[x]`** 2026-07-24 · SPEC `[ ]` ждёт go | [Долговечные сессии PWA…](customer_tasks/Долговечные%20сессии%20PWA%20и%20фикс%20авто-разлогина.md) |
 
 
 ---
