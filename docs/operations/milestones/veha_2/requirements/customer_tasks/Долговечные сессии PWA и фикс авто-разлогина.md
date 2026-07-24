@@ -70,6 +70,6 @@
 
 ## Заметки агента
 
-- Интейк 2026-07-24: док 1:1, код/SPEC не начинались.
-- Ждёт **go** → PHASE 1: SPEC (`todo.md` + SESSION_STATE).
-- В ТЗ указаны RSpec/`spec/` и Jest/Vitest — в CoffeeOS канон тестов: `test/` (Minitest) и structural/integration для shop; адаптация — в SPEC.
+- Интейк 2026-07-24: док 1:1.
+- SPEC 2026-07-24: `docs/operations/session/todo.md` — MobileSession после linker; refresh-сервис; убрать 24h burn LS; тесты Minitest + `test/javascript/` (не RSpec).
+- Ждёт намерение → PHASE 2 RED.

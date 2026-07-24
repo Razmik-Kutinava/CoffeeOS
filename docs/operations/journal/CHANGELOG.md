@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-07-24 — docs: SPEC PWA durable sessions + Silent Refresh
+
+- `todo.md`: as-is/gap, шаги 1–5, решения (issuer после linker, refresh TTL 90d, убрать 24h LS burn)
+- Тесты: Minitest + `test/javascript/` (адаптация от RSpec/Jest в ТЗ)
+- CBR / HANDOFF / SESSION_STATE — статус SPEC `[x]`, RED ждёт
+
 ## 2026-07-24 — docs: intake PWA durable sessions + Silent Refresh
 
 - ТЗ: `customer_tasks/Долговечные сессии PWA и фикс авто-разлогина.md`

@@ -2,13 +2,20 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-24 (интейк: долговечные сессии PWA)  
+**Дата:** 2026-07-24 (SPEC: долговечные сессии PWA)  
 
 | Сейчас | Дальше |
 |--------|--------|
-| Intake ТЗ «Долговечные сессии PWA и фикс авто-разлогина» | Ждёт **go** → PHASE 1: SPEC |
+| PHASE 1: SPEC `[x]` — `todo.md` по PWA durable sessions + Silent Refresh | Ждёт намерение → PHASE 2 RED |
 | Peek embedded + → cart prog35 локально | Redeploy Fly → MCP Aram |
 | Анализ статусной модели Т-Банк `[x]` | Ждёт намерения заказчика по отменам/возвратам |
+
+### Сессия 2026-07-24 (SPEC PWA durable sessions)
+
+- ТЗ: `Долговечные сессии PWA и фикс авто-разлогина.md`
+- Чеклист: `docs/operations/session/todo.md`
+- Ключевые решения SPEC: MobileSession **после** linker (не внутри `verify!`); refresh-сервис продлевает `expires_at` + email verification 90d; убрать 24h burn в `shopLocalStorage`; тесты Minitest + `test/javascript/…` (не RSpec)
+- Код / RED — не начинали
 
 ### Сессия 2026-07-24 (интейк PWA durable sessions)
 
