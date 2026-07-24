@@ -2,12 +2,18 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-24 (убраны общая «повторить в 1 клик» и «+ещё» · prog33)  
+**Дата:** 2026-07-24 (MCP Арам: cart sheet fixes prog33 на Fly v384)  
 
 | Сейчас | Дальше |
 |--------|--------|
-| RepeatSection: только per-card «оплатить в 1 клик» · prog33 | Redeploy Fly → MCP |
-| `bin/rails test` локально: PG connection fail (Windows) | Прогнать тесты когда PG ок / на CI |
+| MCP Арам Demo Point A: **5/5 PASS** · скрины в `cart_sheet_fixes_mcp_2026-07-24/` | Апрув заказчика |
+| prog33 на Fly (`data-cart-sheet-build`) | — |
+
+### Сессия 2026-07-24 (MCP Арам — проверка фиксов шторки)
+
+- Fly **v384** · build **prog33** · OTP `aramfifa100@gmail.com`.
+- PASS: нет «тут будут твои заказы» при истории; нет глобальной «повторить в 1 клик»/«+ещё»; 3× card pay; undo баннер нет; профиль Aram.
+- Артефакт: `fly_mcp_aram_fixes_2026-07-24.json` + screenshots 01–04.
 
 ### Сессия 2026-07-24 (убрать общую кнопку и «ещё»)
 

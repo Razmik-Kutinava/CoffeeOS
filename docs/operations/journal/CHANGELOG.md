@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-07-24 — ops: MCP Арам — cart sheet fixes prog33 на Fly PASS
+
+- Fly v384 · OTP Aram на Demo Point A.
+- PASS: placeholder скрыт при истории; нет глобальной pay/«+ещё»; 3× «оплатить в 1 клик»; undo баннер нет.
+- [`fly_mcp_aram_fixes_2026-07-24.json`](../milestones/veha_2/artifacts/cart_sheet_fixes_mcp_2026-07-24/fly_mcp_aram_fixes_2026-07-24.json) + screenshots/.
+
 ## 2026-07-24 — fix(shop): remove global repeat pay and +ещё (prog33)
 
 - Убраны нижние «повторить в 1 клик» и «+ещё» из `RepeatSection.svelte`.

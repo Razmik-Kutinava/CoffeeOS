@@ -1,0 +1,45 @@
+{
+  "date": "2026-07-24",
+  "kind": "mcp_aram_cart_sheet_fixes",
+  "fly_release": "v384",
+  "build": "prog33",
+  "stand": "https://coffeeos.fly.dev",
+  "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "tenant_name": "Demo Coffee Point A",
+  "email": "aramfifa100@gmail.com",
+  "otp": "793694 (Fly ShopEmailOtpCode)",
+  "screenshots_dir": "docs/operations/milestones/veha_2/artifacts/cart_sheet_fixes_mcp_2026-07-24/screenshots/",
+  "screenshots": [
+    "01_aram_empty_repeat_no_placeholder.png",
+    "02_aram_repeat_card_pay_no_global.png",
+    "03_aram_sheet_no_empty_text.png",
+    "04_aram_profile.png"
+  ],
+  "checks": [
+    {
+      "id": "build_prog33",
+      "status": "PASS",
+      "detail": "data-cart-sheet-build=prog33 on Fly"
+    },
+    {
+      "id": "otp_aram",
+      "status": "PASS",
+      "detail": "Checkout verified Aram / a***@gmail.com → profile Aram"
+    },
+    {
+      "id": "empty_placeholder_hidden_with_history",
+      "status": "PASS",
+      "detail": "hasEmpty=false; no «тут будут твои заказы»; только «повторить»"
+    },
+    {
+      "id": "no_global_pay_or_more",
+      "status": "PASS",
+      "detail": "no shop-repeat-one-click / shop-repeat-more; 3× «оплатить в 1 клик»"
+    },
+    {
+      "id": "no_undo_banner_after_delete",
+      "status": "PASS",
+      "detail": "after delete line: undo=false, no «Удаление можно отменить»"
+    }
+  ]
+}

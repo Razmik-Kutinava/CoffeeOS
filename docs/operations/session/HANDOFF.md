@@ -1,17 +1,26 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-24 (**prog33 без общей кнопки/ещё — ждёт redeploy**)  
+**Дата:** 2026-07-24 (**MCP Арам prog33 PASS на Fly v384**)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev  
+
+### MCP Арам — cart sheet fixes (2026-07-24)
+
+| Что | Статус |
+|-----|--------|
+| Fly deploy | **v384** · build prog33 |
+| OTP Aram Demo Point A | **`[x]`** |
+| Скрины | [`screenshots/`](../milestones/veha_2/artifacts/cart_sheet_fixes_mcp_2026-07-24/screenshots/) 01–04 |
+| JSON | [`fly_mcp_aram_fixes_2026-07-24.json`](../milestones/veha_2/artifacts/cart_sheet_fixes_mcp_2026-07-24/fly_mcp_aram_fixes_2026-07-24.json) |
+| Checks | **5/5 PASS** |
 
 ### Repeat remove global pay (2026-07-24)
 
 | Что | Статус |
 |-----|--------|
 | Intake ТЗ + CBR | **`[x]`** |
-| Убрать «повторить в 1 клик» + «+ещё» · prog33 | **`[x]`** код · structural PASS |
-| `bin/rails test` | **blocked** local PG (Windows) |
-| Redeploy + MCP | **`[ ]`** по апруву |
+| Убрать «повторить в 1 клик» + «+ещё» · prog33 | **`[x]`** код |
+| Redeploy + MCP | **`[x]`** v384 · 5/5 PASS |
 
 ### Empty orders placeholder (2026-07-24)
 
