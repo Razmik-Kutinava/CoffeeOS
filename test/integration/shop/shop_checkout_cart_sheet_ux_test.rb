@@ -72,7 +72,7 @@ class Shop::ShopCheckoutCartSheetUxTest < ActionDispatch::IntegrationTest
     assert_includes checkout, "stacked={paymentSheetOpen}"
 
     thresh = File.read(THRESH)
-    assert_includes thresh, 'CART_SHEET_BUILD = "prog34"'
+    assert_includes thresh, 'CART_SHEET_BUILD = "prog35"'
     assert_includes thresh, "CHECKOUT_PAY_STACK_VH"
     assert_includes thresh, "CHECKOUT_PEEK_VH"
   end

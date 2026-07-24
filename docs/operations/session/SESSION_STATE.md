@@ -2,12 +2,19 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-24 (дефолт empty-шторки = peek · prog34)  
+**Дата:** 2026-07-24 (peek «+» на повторе → в заказ · prog35)  
 
 | Сейчас | Дальше |
 |--------|--------|
-| Пустая корзина → **peek** + «тут будут твои заказы» / «повторить» · prog34 · tests 23/0 | Redeploy Fly → MCP guest |
-| MCP Арам prog33 на v384 | После deploy проверить guest peek |
+| Peek embedded: `+`/`−` на «повторить» → `addToCart` / `bumpCartLine` · prog35 · tests 52/0 | Redeploy Fly → MCP Aram |
+| Default empty peek prog34 локально | После deploy проверить guest peek + Aram + |
+
+### Сессия 2026-07-24 (peek repeat plus → cart)
+
+- ТЗ: `Peek плюс на повторе не добавляет в заказ.md`
+- Корневая причина: embedded `+` только `setFrequentQty`, без `addToCart`.
+- Fix: `repeatEmbeddedCart.js` + wire в `RepeatSection`; full layout без изменений (qty под 1-click).
+- Тесты: `peek_repeat_plus_adds_to_cart_test` + sheet zone **52/0**.
 
 ### Сессия 2026-07-24 (default peek empty)
 

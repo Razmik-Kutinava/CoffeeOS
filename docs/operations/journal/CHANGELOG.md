@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-07-24 — fix(shop): peek repeat «+» adds to cart (prog35)
+
+- **Баг:** в peek `+` на карточке «повторить» крутил только локальный qty, позиция не попадала в заказ.
+- **Fix:** `repeatEmbeddedCart.js` — embedded `+` → `addToCart`, `−` → `bumpCartLine`; wire в `RepeatSection`; `CART_SHEET_BUILD=prog35`.
+- Тесты: `peek_repeat_plus_adds_to_cart_test` + sheet zone 52/0.
+
 ## 2026-07-24 — fix(shop): empty cart sheet defaults to peek (prog34)
 
 - Пустая корзина: режим **peek** (не hidden/empty 12vh); высота `empty` = 34 (= peekSingle).

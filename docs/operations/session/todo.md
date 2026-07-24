@@ -1,13 +1,13 @@
-# todo — Убрать сетку из expanded шторки
+# todo — Peek: плюс на повторе → в заказ
 
-> **ТЗ:** [`customer_tasks/Убрать сетку товаров из expanded шторки.md`](../milestones/veha_2/requirements/customer_tasks/Убрать%20сетку%20товаров%20из%20expanded%20шторки.md)
+> **ТЗ:** [`customer_tasks/Peek плюс на повторе не добавляет в заказ.md`](../milestones/veha_2/requirements/customer_tasks/Peek%20плюс%20на%20повторе%20не%20добавляет%20в%20заказ.md)
 
 ## Текущая фаза
 
-**PHASE 2: BUILD** («ебашь»)
+**PHASE 2: BUILD** (заказчик: «исправь»)
 
-- [x] Диагноз: expanded не пропал — сверху `FrequentSheetCategories` (сетка), список заказов ниже скролла
-- [x] Убрать `<FrequentSheetCategories />` из ветки `MODE_EXPANDED`
-- [x] Оставить список `shop-cart-expanded-card` как есть
-- [x] Тесты + prog30 + ops
+- [x] Intake + CBR + скрин
+- [x] `repeatEmbeddedCart.js`: embedded `+` → `addToCart`, `−` → `bumpCartLine`
+- [x] `RepeatSection` wire + prog35
+- [x] Тесты structural · sheet zone 52/0
 - [ ] Redeploy Fly + MCP

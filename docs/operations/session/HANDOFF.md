@@ -1,8 +1,16 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-24 (**prog34 default peek empty — ждёт redeploy**)  
+**Дата:** 2026-07-24 (**prog35 peek repeat + → cart — ждёт redeploy**)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev  
+
+### Peek repeat plus → cart (2026-07-24)
+
+| Что | Статус |
+|-----|--------|
+| Intake ТЗ + CBR | **`[x]`** |
+| Embedded `+` → `addToCart` · prog35 | **`[x]`** код · тесты 52/0 |
+| Redeploy + MCP Aram | **`[ ]`** по апруву |
 
 ### Default peek empty (2026-07-24)
 

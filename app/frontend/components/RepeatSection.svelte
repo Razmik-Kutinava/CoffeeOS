@@ -8,6 +8,7 @@
     repeatPayOneClickItem,
     repeatFeedback
   } from "../lib/frequentRepeatStore.js"
+  import { repeatBumpEmbeddedToCart } from "../lib/repeatEmbeddedCart.js"
 
   /** full — empty/expanded (скрин 06); embedded — peek с заказом (скрины 01–02: thumb+qty) */
   let { layout = "full" } = $props()
@@ -40,7 +41,18 @@
     return storeQty[key] || 1
   }
 
-  function bump(key, delta) {
+  async function bump(item, delta) {
+    const key = frequentCardKey(item)
+    if (embedded) {
+      if (repeatBusy) return
+      repeatBusy = true
+      try {
+        await repeatBumpEmbeddedToCart(item, delta)
+      } finally {
+        repeatBusy = false
+      }
+      return
+    }
     setFrequentQty(key, qtyOf(key) + delta)
   }
 
@@ -109,15 +121,16 @@
               type="button"
               data-testid="shop-repeat-minus"
               class="min-h-6 min-w-6 rounded bg-[#3a3a3a] px-1.5 py-0.5 text-[12px] leading-none disabled:opacity-40"
-              disabled={qtyOf(key) <= 1}
-              onclick={() => bump(key, -1)}
+              disabled={qtyOf(key) <= 1 || repeatBusy}
+              onclick={() => bump(item, -1)}
             >−</button>
             <span data-testid="shop-repeat-qty" class="min-w-[1rem] text-center text-[11px] font-medium">{qtyOf(key)}</span>
             <button
               type="button"
               data-testid="shop-repeat-plus"
-              class="min-h-6 min-w-6 rounded bg-[#3a3a3a] px-1.5 py-0.5 text-[12px] leading-none"
-              onclick={() => bump(key, 1)}
+              class="min-h-6 min-w-6 rounded bg-[#3a3a3a] px-1.5 py-0.5 text-[12px] leading-none disabled:opacity-40"
+              disabled={repeatBusy}
+              onclick={() => bump(item, 1)}
             >+</button>
           </div>
           {#if !embedded}
