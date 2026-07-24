@@ -1,0 +1,27 @@
+# frozen_string_literal: true
+
+require "test_helper"
+
+# Шаг 5 (structural): фронт вызывает silent refresh и хранит shop_refresh_token.
+class Shop::SilentRefreshFrontendStructuralTest < ActiveSupport::TestCase
+  test "restoreGuestSession tries session refresh when token present" do
+    src = File.read(Rails.root.join("app/frontend/lib/restoreGuestSession.js"))
+    assert_includes src, "/session/refresh"
+    assert_includes src, "shop_refresh_token"
+  end
+
+  test "shopLocalStorage exports refresh token helpers without 24h hard burn default" do
+    src = File.read(Rails.root.join("app/frontend/lib/shopLocalStorage.js"))
+    assert_includes src, "shop_refresh_token"
+    assert_includes src, "saveShopRefreshToken"
+    assert_includes src, "loadShopRefreshToken"
+    assert_includes src, "clearShopRefreshToken"
+    refute_match(/Date\.now\(\)\s*-\s*savedAt\s*>\s*ttlMs/, src)
+  end
+
+  test "Checkout saves refresh_token after OTP verify" do
+    src = File.read(Rails.root.join("app/frontend/routes/Checkout.svelte"))
+    assert_includes src, "saveShopRefreshToken"
+    assert_includes src, "refresh_token"
+  end
+end
