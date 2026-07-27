@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-07-27 — docs: SPEC SBP Deep Link + card tokenization
+
+- `todo.md`: as-is/gap, маппинг `/shop/api` + `/callbacks/tbank`, волны A–D (11 шагов)
+- Решения: ReceiptBuilder + QrFetcher + SbpPaymentInitiator; UI `shopSbpPay.js`; poll SBP 60s/2s
+- CBR / customer_tasks: статус **SPEC `[x]`**
+
 ## 2026-07-27 — docs: intake SBP Deep Link + card tokenization (Т-Касса v2)
 
 - ТЗ: `customer_tasks/Интеграция оплаты СБП Deep Link и токенизации карт Т-Касса v2.md`

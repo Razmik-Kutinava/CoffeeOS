@@ -99,3 +99,14 @@
 - PHASE 0 only: док + артефакты + CBR. Код / `todo.md` / SPEC — **не трогали**.
 - Эпик большой: 4 сценария, 11 атомарных шагов TDD. После **go** — PHASE 1: SPEC (as-is стека CoffeeOS: Rails 8 + Svelte PWA, не Jest/React-пути из ТЗ).
 - Связанные задачи: §2.3 оплата, UserCards / RebillId, Repeat invalid token sheet, Payment status model.
+
+## Заметки агента (SPEC 2026-07-27)
+
+→ Полный as-is/gap, волны A–D, файлы: [`docs/operations/session/todo.md`](../../../session/todo.md)
+
+Ключевое:
+- Стек **Rails + Svelte**; пути `/shop/api/...` и `/callbacks/tbank` (не `/api/v1/...`).
+- **Уже есть:** SHA-256 Token, webhook+идемпотентность, Recurrent, Charge, one_click, UserCards.
+- **Главный gap:** Receipt 54-ФЗ, GetQr → `qr.nspk.ru`, `POST .../sbp/init`, UI SBP + poll 60s/2s.
+- `tbank_adapter.rb` 228 строк — GetQr/Receipt в **новых** сервисах.
+- Invalid webhook Token: канон проекта **401** (не 403 из ТЗ).

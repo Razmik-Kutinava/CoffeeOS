@@ -1,6 +1,6 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-27 (**интейк SBP Deep Link + card tokenization**)  
+**Дата:** 2026-07-27 (**SPEC SBP Deep Link + card tokenization**)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev  
 
@@ -9,13 +9,13 @@
 | Что | Статус |
 |-----|--------|
 | Intake ТЗ + CBR + артефакты | **`[x]`** |
-| PHASE 1: SPEC | **`[ ]`** ждёт go |
-| RED / GREEN | **`[ ]`** |
+| PHASE 1: SPEC | **`[x]`** · `todo.md` волны A–D |
+| RED / GREEN | **`[ ]`** · следующий: Шаг 1 Receipt |
 | Push / Fly deploy | **`[ ]`** |
 | MCP / UI приёмка на Fly | **`[ ]`** |
 | Апрув заказчика | **`[ ]`** |
 
-**Эпик:** 4 сценария · 11 атомарных TDD-шагов (Init/GetQr/SBP init · webhook SHA-256 · Recurrent/Charge · UI CODE:BLACK + polling).
+**SPEC кратко:** gap = Receipt + GetQr + `sbp/init` + UI SBP; webhook/Charge/one_click — reuse. Первый RED — Шаг 1.
 
 ### Repeat order invalid token · PaymentMethodsSheet (2026-07-27)
 

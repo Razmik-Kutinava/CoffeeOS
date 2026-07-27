@@ -2,12 +2,19 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-27 (интейк SBP Deep Link + card tokenization)
+**Дата:** 2026-07-27 (SPEC SBP Deep Link + card tokenization)
 
 | Сейчас | Дальше |
 |--------|--------|
-| Интейк: СБП deep link + токенизация карт (Т-Касса v2) — док + CBR + артефакты | **go** → PHASE 1: SPEC (эпик 11 шагов) |
-| Fly **v393** · Repeat invalid token MCP **PASS** | Апрув заказчика · CHECKLIST `[x]` |
+| SPEC `[x]`: СБП + токенизация — as-is/gap в `todo.md` (волны A–D) | **go** → RED Шаг 1 (Receipt 54-ФЗ) |
+| Уже есть webhook/Charge/one_click; gap = Receipt + GetQr + sbp/init + UI SBP | |
+
+### Сессия 2026-07-27 (SPEC SBP Deep Link + card tokenization)
+
+- As-is: Init без Receipt; нет GetQr; SBP UI disabled; Token/webhook/Recurrent/Charge готовы
+- Решения: `TbankReceiptBuilder`, `TbankQrFetcher`, `SbpPaymentInitiator`, route `/shop/api/payments/sbp/init`
+- Пути ТЗ → CoffeeOS; webhook 401 (не 403); adapter 228 — не раздувать
+- Код не писали — ждём RED
 
 ### Сессия 2026-07-27 (интейк SBP Deep Link + card tokenization)
 
