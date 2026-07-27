@@ -2,12 +2,19 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-27 (push + Fly v394 + MCP SBP epic)
+**Дата:** 2026-07-27 (intake CODE:BLACK T-Kassa SBP PWA lifecycle)
 
 | Сейчас | Дальше |
 |--------|--------|
-| Эпик SBP задеплоен: push `6154539`, Fly **v394**, MCP PASS (OTP sheet SKIP) | апрув заказчика / полный E2E OTP+NSPK вручную |
-| | |
+| Интейк ревизии ТЗ (PWA lifecycle поверх v2/Fly v394) | SPEC → RED/GREEN дельты: `codeblack_pending_order`, visibilitychange, WAITING_FOR_BANK |
+| v2 SBP epic на Fly v394 · апрув заказчика `[ ]` | |
+
+### Сессия 2026-07-27 (intake CODE:BLACK T-Kassa SBP PWA lifecycle)
+
+- ТЗ: `customer_tasks/Интеграция Т-Кассы СБП и токенизации в PWA CODE BLACK.md`
+- Артефакты: `artifacts/codeblack_t_kassa_sbp_tokenization/`
+- CBR #28 + backlog row; README customer_tasks
+- Gap vs v2: LS pending + visibilitychange + cold start 15м + экран «Я оплатил»
 
 ### Сессия 2026-07-27 (push / Fly / MCP SBP epic)
 
