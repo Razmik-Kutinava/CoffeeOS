@@ -2,8 +2,7 @@
 
 require "test_helper"
 
-# RED [TDD] Шаг 2: GetQr PAYMENT_LINK → deep link qr.nspk.ru.
-# Реализации ещё нет — ожидаем падение (NameError / assert).
+# GREEN [TDD] Шаг 2: GetQr PAYMENT_LINK → deep link qr.nspk.ru.
 class Payments::TbankQrFetcherTest < ActiveSupport::TestCase
   setup do
     ENV["TBANK_TERMINAL_KEY"] = "TestTerminal"

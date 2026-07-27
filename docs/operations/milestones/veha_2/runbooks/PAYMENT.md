@@ -71,6 +71,11 @@
 - `TbankAdapter#init_payment(..., receipt:)` кладёт Receipt в payload; **Token** считается без nested Hash/Array (канон Т-Кассы).
 - Подключение Receipt в OrderCreator / SBP init — следующие шаги эпика.
 
+### GetQr / SBP deep link (2026-07-27, Шаг 2)
+
+- `Payments::TbankQrFetcher` → `POST /v2/GetQr` с `DataType=PAYMENT_LINK` → `{ payment_url: Data }` (`https://qr.nspk.ru/...`).
+- Оркестрация Init→GetQr — `Shop::SbpPaymentInitiator` (Шаг 3).
+
 ---
 
 ## Итог реализации (2026-05-28)

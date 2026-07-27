@@ -2,12 +2,18 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-27 (RED Шаг 2 GetQr)
+**Дата:** 2026-07-27 (GREEN Шаг 2 GetQr)
 
 | Сейчас | Дальше |
 |--------|--------|
-| RED Шаг 2: GetQr — тесты падают (`NameError TbankQrFetcher`) | **go** → GREEN: `TbankQrFetcher` → `/v2/GetQr` PAYMENT_LINK |
-| Шаг 1 Receipt GREEN `[x]` | |
+| GREEN Шаг 2: `TbankQrFetcher` → `/v2/GetQr` PAYMENT_LINK · nspk URL | **go** → RED Шаг 3 `POST .../sbp/init` |
+| qr+adapter **28/0** | |
+
+### Сессия 2026-07-27 (GREEN Шаг 2 GetQr)
+
+- `Payments::TbankQrFetcher` — GetQr + Token через adapter; `{ payment_url:, data: }`
+- Тесты: qr+adapter **28/0**
+- Runbook PAYMENT.md — GetQr section
 
 ### Сессия 2026-07-27 (RED Шаг 2 GetQr)
 

@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-07-27 — feat(payments): T-Kassa GetQr PAYMENT_LINK for SBP [GREEN]
+
+- `Payments::TbankQrFetcher` — `/v2/GetQr` → `qr.nspk.ru` deep link
+- Тесты: qr+adapter 28/0
+- Runbook `PAYMENT.md` — GetQr
+
 ## 2026-07-27 — feat(payments): T-Kassa Receipt 54-FZ for Init [GREEN]
 
 - `Payments::TbankReceiptBuilder` — чек Items/Taxation (`TBANK_TAXATION`, `TBANK_TAX`)

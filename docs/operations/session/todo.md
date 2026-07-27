@@ -6,7 +6,7 @@
 
 ## Текущая фаза
 
-**PHASE 2: RED** — `[x]` Шаг 2 GetQr · 5 runs / 2 failures / 3 errors (NameError `TbankQrFetcher`) · ждём GREEN
+**PHASE 2: GREEN** — `[x]` Шаг 2 GetQr · qr+adapter 28/0 · дальше RED Шаг 3 `sbp/init`
 
 ---
 
@@ -134,7 +134,7 @@
 
 ### Сценарий 1 — Init / GetQr / SBP init
 - [x] Шаг 1: Init + Receipt 54-ФЗ (builder + payload; 400/500) — **GREEN**
-- [ ] Шаг 2: GetQr `PAYMENT_LINK` → `qr.nspk.ru` (400/500) — **RED** тесты написаны
+- [x] Шаг 2: GetQr `PAYMENT_LINK` → `qr.nspk.ru` (400/500) — **GREEN**
 - [ ] Шаг 3: `POST /shop/api/payments/sbp/init` → `{ payment_url }`
 
 ### Сценарий 2 — Webhook / status

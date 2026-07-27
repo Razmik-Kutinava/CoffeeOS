@@ -1,6 +1,6 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-27 (**GREEN Шаг 1 Receipt · SBP Deep Link**)  
+**Дата:** 2026-07-27 (**GREEN Шаг 2 GetQr · SBP Deep Link**)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev  
 
@@ -10,13 +10,14 @@
 |-----|--------|
 | Intake ТЗ + CBR + артефакты | **`[x]`** |
 | PHASE 1: SPEC | **`[x]`** · `todo.md` волны A–D |
-| RED / GREEN Шаг 1 Receipt | **`[x]`** · 27/0 + регрессия 56/0 |
-| RED / GREEN Шаг 2+ | **`[ ]`** · следующий: GetQr |
+| RED / GREEN Шаг 1 Receipt | **`[x]`** |
+| RED / GREEN Шаг 2 GetQr | **`[x]`** · 28/0 |
+| RED / GREEN Шаг 3+ | **`[ ]`** · следующий: `sbp/init` |
 | Push / Fly deploy | **`[ ]`** |
 | MCP / UI приёмка на Fly | **`[ ]`** |
 | Апрув заказчика | **`[ ]`** |
 
-**Шаг 1:** `TbankReceiptBuilder` + `init_payment(receipt:)`. Дальше — RED GetQr.
+**Шаг 2:** `TbankQrFetcher` → nspk deep link. Дальше — RED `POST /shop/api/payments/sbp/init`.
 
 ### Repeat order invalid token · PaymentMethodsSheet (2026-07-27)
 
