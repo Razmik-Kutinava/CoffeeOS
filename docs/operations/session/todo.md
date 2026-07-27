@@ -6,7 +6,8 @@
 
 ## Текущая фаза
 
-**PHASE 3: REVIEW** — lifecycle GREEN · регрессия оплаты PASS · ждём push/MCP/апрув
+**PHASE 3: REVIEW** — Fly **v395** · MCP PASS · ждём апрув заказчика  
+*(код `[x]`; push+deploy `[x]`; MCP `[x]`)*
 
 ---
 

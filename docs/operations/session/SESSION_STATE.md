@@ -2,12 +2,19 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-27 (GREEN CODE:BLACK PWA lifecycle)
+**Дата:** 2026-07-27 (push + Fly v395 + MCP CODE:BLACK lifecycle)
 
 | Сейчас | Дальше |
 |--------|--------|
-| Lifecycle GREEN: pending LS + visibility + status API + WAITING_FOR_BANK | push / Fly / MCP · апрув заказчика |
-| v2 SBP epic Fly v394 · апрув `[ ]` | |
+| Lifecycle на Fly **v395** · MCP PASS (bank E2E SKIP) | апрув заказчика |
+| v2 SBP epic тоже на стенде | |
+
+### Сессия 2026-07-27 (push / Fly / MCP CODE:BLACK lifecycle)
+
+- `git push origin develop` → `d4f4369`
+- `fly deploy -a coffeeos` → **v395**
+- MCP: WAITING_FOR_BANK + «Я оплатил» → `payments/status` 404; cold start LS → waiting
+- Артефакт: `artifacts/codeblack_t_kassa_sbp_tokenization/fly_mcp_pwa_lifecycle_2026-07-27.json`
 
 ### Сессия 2026-07-27 (GREEN CODE:BLACK PWA lifecycle)
 

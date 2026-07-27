@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-07-27 — deploy: CODE:BLACK PWA lifecycle to Fly v395
+
+- Push `develop` → `d4f4369`; Fly **v395**
+- MCP: WAITING_FOR_BANK + status + cold start LS — PASS (bank E2E SKIP)
+- Артефакт `fly_mcp_pwa_lifecycle_2026-07-27.json`
+
 ## 2026-07-27 — feat(shop): CODE:BLACK PWA payment lifecycle [GREEN]
 
 - `codeblack_pending_order` LS (TTL 15м) · visibilitychange / cold start · `checkOrderStatus`

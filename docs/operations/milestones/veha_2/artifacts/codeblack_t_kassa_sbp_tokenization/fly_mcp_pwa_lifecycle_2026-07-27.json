@@ -1,0 +1,51 @@
+{
+  "at": "2026-07-27T12:45:00Z",
+  "epic": "codeblack_t_kassa_sbp_tokenization",
+  "stand": "https://coffeeos.fly.dev",
+  "fly_version": 395,
+  "git_head": "d4f4369",
+  "tenant_id": "af4f78d6-c66b-428e-8ee4-5a609c5c9131",
+  "shop_url": "https://coffeeos.fly.dev/shop?tenant_id=af4f78d6-c66b-428e-8ee4-5a609c5c9131",
+  "checks": [
+    { "name": "git push develop", "result": "PASS", "detail": "7e47857..d4f4369 (3 commits lifecycle)" },
+    { "name": "fly deploy", "result": "PASS", "detail": "v395 complete" },
+    { "name": "GET /up", "result": "PASS", "detail": "HTTP 200" },
+    {
+      "name": "vite manifest PaymentResult + application",
+      "result": "PASS",
+      "detail": "PaymentResult-BJQbaVZD.js · application-DtlKNzxK.js (после unregister SW)"
+    },
+    {
+      "name": "WAITING_FOR_BANK UI",
+      "result": "PASS",
+      "detail": "#/payment-result?status=waiting → текст «Завершите оплату…» + кнопка [ Я оплатил ]"
+    },
+    {
+      "name": "Я оплатил → GET payments/status",
+      "result": "PASS",
+      "detail": "browser fetch /shop/api/payments/status/:id → 404 Order not found (роут жив; fake UUID); UI остаётся WAITING"
+    },
+    {
+      "name": "curl payments/status without CSRF",
+      "result": "PASS",
+      "detail": "HTTP 401 Требуется авторизация (не 404) — endpoint deployed, auth as designed"
+    },
+    {
+      "name": "cold start codeblack_pending_order",
+      "result": "PASS",
+      "detail": "LS set pending → navigate /shop → auto #/payment-result?status=waiting"
+    },
+    {
+      "name": "FE markers codeblack + visibility + sbp/init",
+      "result": "PASS",
+      "detail": "application-DtlKNzxK.js contains codeblack_pending_order, visibilitychange, sbp/init, nspk.ru"
+    },
+    {
+      "name": "Full SBP bank redirect E2E",
+      "result": "SKIP",
+      "detail": "requires email OTP + real/NSPK bank app on device"
+    }
+  ],
+  "verdict": "PASS",
+  "notes": "Initial load served stale SW cache (old PaymentResult-C697); after unregister+hard nav — new bundle. Curl sbp/init without session may 401/500; browser path validated."
+}
