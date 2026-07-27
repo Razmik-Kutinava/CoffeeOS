@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Shop
-  # После phone OTP: find/create MobileCustomer по phone, связать с email-сессией если возможно.
+  # После phone OTP: find/create MobileCustomer по phone; при конфликте — soft-merge.
   class PhoneVerifiedCustomerLinker
     class Error < StandardError; end
 
@@ -20,12 +20,15 @@ module Shop
       session_customer = session_cid.present? ? MobileCustomer.find_by(id: session_cid) : nil
       phone_customer = MobileCustomer.find_by(phone: @phone)
 
-      if phone_customer && session_customer && phone_customer.id != session_customer.id
-        raise Error, "Этот телефон уже привязан к другому аккаунту (конфликт с email)"
-      end
+      customer =
+        if phone_customer && session_customer && phone_customer.id != session_customer.id
+          CustomerProfileMerger.merge!(survivor: session_customer, donor: phone_customer)
+        else
+          phone_customer || session_customer || MobileCustomer.new
+        end
 
-      customer = phone_customer || session_customer || MobileCustomer.new
       customer.phone = @phone
+      customer.phone_verified = true
       customer.first_name = "Гость" if customer.first_name.blank?
       customer.is_active = true
       customer.save!
@@ -33,6 +36,8 @@ module Shop
       CustomerSession.set_customer_id!(@session, @tenant_id, customer.id)
       customer.id
     rescue PhoneNormalizer::Error => e
+      raise Error, e.message
+    rescue CustomerProfileMerger::Error => e
       raise Error, e.message
     rescue ActiveRecord::RecordInvalid => e
       raise Error, e.record.errors.full_messages.to_sentence.presence || e.message

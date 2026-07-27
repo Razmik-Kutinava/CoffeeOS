@@ -1,5 +1,15 @@
 ﻿# CHANGELOG
 
+## 2026-07-27 — feat(shop): Profile Email↔Phone merge [GREEN]
+
+- DDL: `email_verified` / `phone_verified` на `mobile_customers` (+ backfill)
+- `Shop::CustomerProfileMerger` — soft-merge без destroy; освобождение unique contacts
+- API: GET/PATCH `/shop/api/profile`, POST `link_email` / `link_phone` (OTP)
+- Phone/Email linkers: конфликт → merge (не raise)
+- `OrderCreator`: autofill verified contacts из сессионного профиля
+- PWA Profile: контакты, verified, OTP-допривязка, toast; Checkout autofill + «Сохранить в профиль»
+- Тесты: 47/0 (profile/merge/OTP) · регрессия оплаты/refresh 30/0
+
 ## 2026-07-27 — docs: intake+SPEC Profile Email↔Phone merge
 
 - ТЗ: `customer_tasks/Связка профилей Email Phone и управление данными пользователя в PWA.md`

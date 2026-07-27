@@ -334,22 +334,50 @@ module Shop
     end
 
     def find_or_create_customer!(params)
+      session_cid = Shop::CustomerSession.customer_id(@session, @tenant.id)
+      session_customer = MobileCustomer.find_by(id: session_cid, is_active: true) if session_cid.present?
+
       email = Shop::EmailVerificationSession.normalize(params[:email])
+      if email.blank? && session_customer&.email_verified && session_customer.email.present?
+        email = session_customer.email
+      end
       raise Error, "Укажите email" if email.blank?
 
-      verified = Shop::EmailVerification.verified_email(
-        session: @session,
-        tenant_id: @tenant.id,
-        session_id: shop_browser_session_id,
-        email: email
-      )
-      unless verified == email
-        raise Error, "Подтвердите email кодом из письма"
+      verified_ok =
+        if session_customer&.email_verified && session_customer.email == email
+          true
+        else
+          verified = Shop::EmailVerification.verified_email(
+            session: @session,
+            tenant_id: @tenant.id,
+            session_id: shop_browser_session_id,
+            email: email
+          )
+          verified == email
+        end
+      raise Error, "Подтвердите email кодом из письма" unless verified_ok
+
+      customer =
+        if session_customer && (session_customer.email.blank? || session_customer.email == email)
+          session_customer
+        else
+          MobileCustomer.find_or_initialize_by(email: email)
+        end
+
+      customer.email = email
+      customer.email_verified = true
+      if session_customer&.phone_verified && session_customer.phone.present?
+        customer.phone = session_customer.phone if customer.phone.blank?
+        customer.phone_verified = true if customer.phone == session_customer.phone
       end
 
-      customer = MobileCustomer.find_or_initialize_by(email: email)
-      customer.first_name = params[:name].to_s.split(/\s+/).first.presence || "Гость"
-      customer.last_name = params[:name].to_s.split(/\s+/)[1..]&.join(" ").presence
+      name_parts = params[:name].to_s.split(/\s+/)
+      if name_parts.first.present?
+        customer.first_name = name_parts.first
+        customer.last_name = name_parts[1..].join(" ").presence
+      elsif customer.first_name.blank?
+        customer.first_name = "Гость"
+      end
       customer.is_active = true
       customer.save!
       customer

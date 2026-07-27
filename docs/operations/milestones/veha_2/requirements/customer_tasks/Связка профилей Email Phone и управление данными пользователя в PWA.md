@@ -83,9 +83,8 @@
 ## Заметки агента
 
 - Интейк 2026-07-27 (PHASE 0). Док + артефакты + CBR.
-- SPEC 2026-07-27: as-is/gap в `todo.md`; RED ждёт намерения («го / ебашь / сделай»).
-- В репозитории тесты бэка — **Minitest** (`test/`), не RSpec/`spec/`; фронт PWA — **Svelte** в `app/frontend/` (не `src/features/`).
-- As-is: `GET /shop/api/profile` уже есть, но payload другой (loyalty-style); `PATCH` / `link_email` / `link_phone` — нет.
-- As-is: `PhoneVerifiedCustomerLinker` при конфликте phone↔email **raises** (merge запрещён) — ТЗ требует бесшовный Merge.
-- As-is: в `mobile_customers` **нет** колонок `email_verified` / `phone_verified` — для ТЗ нужен DDL (Migration Gate + `go`).
+- SPEC 2026-07-27: as-is/gap в `todo.md`.
+- GREEN 2026-07-27: merger + profile API + OrderCreator autofill + PWA UI; тесты 47/0; регрессия 30/0; push/MCP по апруву.
+- В репозитории тесты бэка — **Minitest** (`test/`), не RSpec/`spec/`; фронт PWA — **Svelte** в `app/frontend/`.
+- As-is до GREEN: `PhoneVerifiedCustomerLinker` raise на конфликт — заменён soft-merge.
 - Связано: Email OTP, Phone OTP SMS/Flash Call, PWA durable sessions, `Shop::OrderCreator`.

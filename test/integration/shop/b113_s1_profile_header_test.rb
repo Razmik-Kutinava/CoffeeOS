@@ -83,11 +83,8 @@ class Shop::B113S1ProfileHeaderTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test "profile api guest has no id" do
+  test "profile api guest returns 401 without customer session" do
     get "/shop/api/profile", headers: { "X-Shop-Tenant" => @tenant.id.to_s }
-    assert_response :success
-    body = response.parsed_body
-    assert_nil body["id"]
-    assert_equal "Гость", body["name"]
+    assert_response :unauthorized
   end
 end

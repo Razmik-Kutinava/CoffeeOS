@@ -1,6 +1,6 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-27 (**Intake + SPEC Profile Email↔Phone merge**)  
+**Дата:** 2026-07-27 (**GREEN Profile Email↔Phone merge**)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev  
 
@@ -9,10 +9,11 @@
 | Что | Статус |
 |-----|--------|
 | Intake ТЗ + CBR + артефакты | **`[x]`** |
-| PHASE 1: SPEC | **`[x]`** · `todo.md` |
-| RED / GREEN | **`[ ]`** ждёт намерение |
-| DDL `email_verified`/`phone_verified` | **Migration Gate** — ждёт `go` |
+| PHASE 1: SPEC | **`[x]`** |
+| RED / GREEN | **`[x]`** · тесты 47/0 + регрессия 30/0 |
+| DDL verified flags | **`[x]`** `20260727100000` |
 | Push / Fly / MCP | **`[ ]`** по апруву |
+| Апрув заказчика | **`[ ]`** |
 
 ### Phone OTP SMS / Flash Call (2026-07-24)
 

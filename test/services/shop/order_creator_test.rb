@@ -332,4 +332,35 @@ class Shop::OrderCreatorTest < ActiveSupport::TestCase
       pass "DB trigger not installed; skipping"
     end
   end
+
+  test "autofills verified email and phone from session profile customer" do
+    email = "profile-fill-#{SecureRandom.hex(3)}@example.com"
+    phone = "+7900#{rand(1000000..9999999)}"
+    customer = MobileCustomer.create!(
+      email: email,
+      phone: phone,
+      first_name: "Профиль",
+      last_name: "Юзер",
+      is_active: true,
+      email_verified: true,
+      phone_verified: true
+    )
+    session = build_session_with_item
+    Shop::CustomerSession.set_customer_id!(session, @tenant.id, customer.id)
+
+    begin
+      order = Shop::OrderCreator.new(session, tenant: @tenant).call!({
+        payment_method: "cash",
+        email: "",
+        name: ""
+      })
+      assert_equal customer.id, order.customer_id
+      assert_equal "Профиль Юзер", order.customer_name
+      assert_equal email, customer.reload.email
+      assert_equal phone, customer.phone
+    rescue Shop::OrderCreator::Error => e
+      raise unless e.message.match?(/order_number/i)
+      pass "DB trigger not installed; skipping"
+    end
+  end
 end

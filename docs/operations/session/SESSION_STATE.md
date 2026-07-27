@@ -2,20 +2,26 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-27 (Intake + SPEC: Profile Email↔Phone merge)  
+**Дата:** 2026-07-27 (GREEN Profile Email↔Phone merge)  
 
 | Сейчас | Дальше |
 |--------|--------|
-| Intake + SPEC Profile Email↔Phone merge | RED (тесты) по намерению; **DDL verified flags — Migration Gate `go`** |
+| Profile Email↔Phone merge **GREEN** (код + тесты) | Push / Fly / MCP по апруву |
 | Fly **v390** · Phone OTP MCP PASS | Апрув заказчика (Phone OTP) |
+
+### Сессия 2026-07-27 (GREEN Profile Email↔Phone merge)
+
+- DDL: `email_verified` / `phone_verified` на `mobile_customers`
+- `Shop::CustomerProfileMerger` — soft-merge (orders/cards/carts/sessions)
+- API: GET/PATCH profile, POST link_email/link_phone; linkers merge вместо raise
+- `OrderCreator` — autofill verified email/phone из сессионного профиля
+- PWA: Profile.svelte контакты+OTP; Checkout autofill + «Сохранить в профиль»
+- Тесты: profile/merge/OTP зона **47/0**; оплата+refresh **30/0** (2 skips)
+- Push/deploy — не делали
 
 ### Сессия 2026-07-27 (Intake + SPEC Profile Email↔Phone merge)
 
-- ТЗ: `Связка профилей Email Phone и управление данными пользователя в PWA.md`
-- Артефакты: `artifacts/profile_email_phone_merge/`
-- CBR + customer_tasks README обновлены
-- `todo.md`: as-is/gap, шаги 0–9, решения (Minitest, soft-merge, unique phone, Migration Gate)
-- Код / RED — не трогали (ждём намерение)
+- ТЗ + артефакты + CBR + `todo.md` as-is/gap
 
 ### Сессия 2026-07-24 (MCP Phone OTP SMS/Flash Call)
 

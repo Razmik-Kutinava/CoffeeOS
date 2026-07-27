@@ -38,21 +38,25 @@ class Shop::PhoneVerifiedCustomerLinkerTest < ActiveSupport::TestCase
     assert_equal email, existing.email
   end
 
-  test "attaches email from session customer conflict-free when phone customer has no email" do
+  test "merges phone customer into session email customer on conflict" do
     email = "merge-email-#{SecureRandom.hex(3)}@example.com"
-    email_customer = MobileCustomer.create!(email: email, first_name: "Mail", is_active: true)
+    email_customer = MobileCustomer.create!(email: email, first_name: "Mail", is_active: true, email_verified: true)
     Shop::CustomerSession.set_customer_id!(@session, @tenant.id, email_customer.id)
 
-    phone_customer = MobileCustomer.create!(phone: @phone, first_name: "Phone", is_active: true)
+    phone_customer = MobileCustomer.create!(phone: @phone, first_name: "Phone", is_active: true, phone_verified: true)
 
-    err = assert_raises(Shop::PhoneVerifiedCustomerLinker::Error) do
-      Shop::PhoneVerifiedCustomerLinker.link!(
-        session: @session,
-        tenant_id: @tenant.id,
-        phone: @phone
-      )
-    end
-    assert_match(/уже|занят|конфликт/i, err.message)
-    assert phone_customer.reload.email.blank?
+    cid = Shop::PhoneVerifiedCustomerLinker.link!(
+      session: @session,
+      tenant_id: @tenant.id,
+      phone: @phone
+    )
+    assert_equal email_customer.id, cid
+    email_customer.reload
+    phone_customer.reload
+    assert_equal @phone, email_customer.phone
+    assert email_customer.phone_verified
+    assert_equal email, email_customer.email
+    assert_equal false, phone_customer.is_active
+    assert_nil phone_customer.phone
   end
 end

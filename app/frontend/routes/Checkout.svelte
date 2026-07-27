@@ -74,6 +74,8 @@
   let phoneOtpNotice = $state("")
   let phoneCooldownLeft = $state(0)
   let phoneCooldownTimer = null
+  let offerSaveToProfile = $state(false)
+  let savingToProfile = $state(false)
   let submitting = $state(false)
   let err = $state(null)
   let savedProfile = $state(false)
@@ -120,6 +122,28 @@
       savedProfile = true
       editContact = false
     }
+
+    // Автозаполнение из серверного профиля (Email↔Phone merge)
+    api("profile")
+      .then((p) => {
+        if (!p?.id) return
+        if (p.first_name || p.last_name) {
+          name = [p.first_name, p.last_name].filter(Boolean).join(" ")
+        } else if (p.name) {
+          name = p.name
+        }
+        if (p.email) {
+          email = p.email
+          emailVerified = !!p.email_verified
+        }
+        if (p.phone) {
+          phoneDisplay = formatPhoneMask(p.phone)
+          phoneVerified = !!p.phone_verified
+        }
+        savedProfile = true
+        editContact = false
+      })
+      .catch(() => {})
 
     ensureCheckoutCartPeek().catch(() => {})
 
@@ -243,6 +267,34 @@
     }
     emailVerified = false
     otpNotice = ""
+    offerSaveToProfile = true
+  }
+
+  async function saveContactToProfile() {
+    savingToProfile = true
+    err = null
+    try {
+      const e164 = normalizePhoneToE164Ru(phoneDisplay)
+      if (emailVerified && isValidEmail(email)) {
+        await api("profile", {
+          method: "PATCH",
+          body: JSON.stringify({
+            first_name: name.trim().split(/\s+/)[0] || "Гость",
+            last_name: name.trim().split(/\s+/).slice(1).join(" ")
+          })
+        })
+      }
+      offerSaveToProfile = false
+      otpNotice = "Сохранено в профиль"
+    } catch (e) {
+      if (e.httpStatus === 401) {
+        offerSaveToProfile = false
+      } else {
+        err = e.message
+      }
+    } finally {
+      savingToProfile = false
+    }
   }
 
   async function sendCode() {
@@ -295,6 +347,7 @@
     phoneDisplay = formatPhoneMask(e.target.value)
     phoneVerified = false
     phoneOtpNotice = ""
+    offerSaveToProfile = true
   }
 
   function startPhoneCooldown(sec = PHONE_OTP_COOLDOWN_SEC) {
@@ -610,6 +663,17 @@
     </button>
     {#if otpNotice}
       <p class="mb-3 text-sm text-green-400" role="status">{otpNotice}</p>
+    {/if}
+    {#if offerSaveToProfile}
+      <button
+        type="button"
+        class="mb-4 w-full rounded-lg bg-[#3a3a3a] py-2 text-sm text-white disabled:opacity-50"
+        disabled={savingToProfile}
+        onclick={saveContactToProfile}
+        data-testid="checkout-save-to-profile"
+      >
+        {savingToProfile ? "Сохраняем…" : "Сохранить в профиль"}
+      </button>
     {/if}
 
     <div class="mb-4 border-t border-[#3a3a3a] pt-4" data-testid="phone-otp-block">
