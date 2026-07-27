@@ -1,8 +1,21 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-27 (**MCP Repeat invalid token payment sheet PASS v393**)  
+**Дата:** 2026-07-27 (**интейк SBP Deep Link + card tokenization**)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev  
+
+### SBP Deep Link + card tokenization · Т-Касса v2 (2026-07-27)
+
+| Что | Статус |
+|-----|--------|
+| Intake ТЗ + CBR + артефакты | **`[x]`** |
+| PHASE 1: SPEC | **`[ ]`** ждёт go |
+| RED / GREEN | **`[ ]`** |
+| Push / Fly deploy | **`[ ]`** |
+| MCP / UI приёмка на Fly | **`[ ]`** |
+| Апрув заказчика | **`[ ]`** |
+
+**Эпик:** 4 сценария · 11 атомарных TDD-шагов (Init/GetQr/SBP init · webhook SHA-256 · Recurrent/Charge · UI CODE:BLACK + polling).
 
 ### Repeat order invalid token · PaymentMethodsSheet (2026-07-27)
 

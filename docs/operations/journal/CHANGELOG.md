@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-07-27 — docs: intake SBP Deep Link + card tokenization (Т-Касса v2)
+
+- ТЗ: `customer_tasks/Интеграция оплаты СБП Deep Link и токенизации карт Т-Касса v2.md`
+- Артефакты: `artifacts/sbp_deep_link_card_tokenization/`
+- CBR индекс + customer_tasks README — строка **интейк `[x]`**, SPEC ждёт go
+
 ## 2026-07-27 — deploy+MCP: Repeat invalid token payment sheet (Fly v393)
 
 - Push `f0877ac`; Fly **v393**; `/up` 200

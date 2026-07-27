@@ -2,12 +2,19 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-27 (GREEN Repeat order invalid token payment sheet)
+**Дата:** 2026-07-27 (интейк SBP Deep Link + card tokenization)
 
 | Сейчас | Дальше |
 |--------|--------|
-| GREEN: repeat invalid token payment sheet — Fly **v393** MCP **PASS** | Апрув заказчика · CHECKLIST `[x]` |
-| Fly **v392** · Profile merge MCP **PASS** | Backlog: proactive `rebill_valid` на backend (cold start) |
+| Интейк: СБП deep link + токенизация карт (Т-Касса v2) — док + CBR + артефакты | **go** → PHASE 1: SPEC (эпик 11 шагов) |
+| Fly **v393** · Repeat invalid token MCP **PASS** | Апрув заказчика · CHECKLIST `[x]` |
+
+### Сессия 2026-07-27 (интейк SBP Deep Link + card tokenization)
+
+- ТЗ: `customer_tasks/Интеграция оплаты СБП Deep Link и токенизации карт Т-Касса v2.md`
+- Артефакты: `artifacts/sbp_deep_link_card_tokenization/` (скринов в сообщении не было)
+- CBR + customer_tasks README обновлены
+- Код / todo.md / SPEC — не трогали (ждём go)
 
 ### Сессия 2026-07-27 (deploy+MCP Repeat invalid token payment sheet)
 
