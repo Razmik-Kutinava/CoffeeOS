@@ -2,12 +2,19 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-27 (GREEN Шаг 2 GetQr)
+**Дата:** 2026-07-27 (RED Шаг 3 sbp/init)
 
 | Сейчас | Дальше |
 |--------|--------|
-| GREEN Шаг 2: `TbankQrFetcher` → `/v2/GetQr` PAYMENT_LINK · nspk URL | **go** → RED Шаг 3 `POST .../sbp/init` |
-| qr+adapter **28/0** | |
+| RED Шаг 3: `SbpPaymentInitiator` + `POST .../sbp/init` — тесты падают | **go** → GREEN |
+| Шаги 1–2 GREEN `[x]` | |
+
+### Сессия 2026-07-27 (RED Шаг 3 sbp/init)
+
+- Тесты: `sbp_payment_initiator_test.rb` + `api/sbp_payment_init_test.rb`
+- Прогон: 10 runs, 4 failures, 5 errors — NameError + route 404
+- Simulate: fictional `qr.nspk.ru/…SIMULATE…`; live: Init+Receipt→GetQr
+- Код реализации не писали
 
 ### Сессия 2026-07-27 (GREEN Шаг 2 GetQr)
 
