@@ -4,13 +4,13 @@
 
 ## 🔴 Блокеры
 
-[2026-07-27] — SBP live Init на Fly: Т-Касса **329 Неверные параметры**
-**Статус:** 🟡 **открыт** · UI/OTP PASS · фикс Receipt.Email в коде (ожидает/после deploy)
-**Источник:** MCP Aram E2E · `fly_mcp_aram_sbp_e2e_2026-07-27.json` · скрин `06_after_sbp_pay.png`
-**Улика:** `POST /shop/api/payments/sbp/init` → 500 · `Payments::TbankAdapter::ApiError 329`
-**Гипотеза:** Receipt 54-ФЗ уходил **без Email/Phone** (заказчик OTP есть, но builder не получал email).
-**Фикс в коде:** `SbpPaymentInitiator` передаёт `order.customer&.email` в `TbankReceiptBuilder`; ApiError включает `Details`.
-**Осталось:** deploy → повторный MCP Aram → получить `qr.nspk.ru` · если 329 останется — сверить `TBANK_TAXATION` с кабинетом терминала.
+[2026-07-27] — SBP live на Fly: банк отклоняет СБП
+**Статус:** 🟡 **открыт** · UI/OTP/WAITING PASS · код Receipt.Email **задеплоен v396**
+**Источник:** MCP Aram E2E · скрины `screenshots/01–07`
+**Улика v395:** `ErrorCode 329` Неверные параметры (Receipt без Email) — **закрыто кодом** `d1328b9`
+**Улика v396:** `ErrorCode 3001` **«Оплата через СБП недоступна»** — ответ Т-Кассы после успешного Formal Init path
+**Root cause 3001:** на терминале `TBANK_TERMINAL_KEY=1719235292309` в кабинете Т-Банка **не включён СБП** / нет тарифа NSPK (не баг приложения).
+**Осталось:** владелец включает СБП в кабинете Т-Кассы → повторный MCP → `qr.nspk.ru`
 
 [2026-07-16] — UserCards: карта не сохранилась после оплаты с save_card ON (bug_13-23)
 **Статус:** 🔴 **открыт** · deploy v366 **[x]** · MCP 2 карты **[x]** · апрув 3.5 **[ ]**

@@ -1,21 +1,21 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-27 (**Aram SBP E2E screenshots · 329 blocker**)  
-**Ветка:** `develop`  
-**Прод:** https://coffeeos.fly.dev · **Fly:** v395 (+ фикс Receipt.Email к деплою)
+**Дата:** 2026-07-27 (**Aram screenshots · Fly v396 · банк 3001**)  
+**Ветка:** `develop` @ `d1328b9`  
+**Прод:** https://coffeeos.fly.dev · **Fly:** v396  
 
 ### CODE:BLACK T-Kassa SBP · PWA lifecycle (2026-07-27)
 
 | Что | Статус |
 |-----|--------|
-| Intake / SPEC / GREEN | **`[x]`** |
-| Push / Fly v395 | **`[x]`** |
-| MCP lifecycle markers | **`[x]`** PASS |
-| Aram OTP → SBP sheet screenshots | **`[x]`** · `screenshots/01–07` |
-| Live `sbp/init` → nspk | **`[ ]`** BLOCKED 329 · фикс Email в коде |
+| Intake / SPEC / GREEN / lifecycle MCP | **`[x]`** |
+| Push / Fly | **`[x]`** v396 · Receipt.Email |
+| Aram OTP → SBP screenshots 01–07 | **`[x]`** |
+| Live nspk deep link | **`[ ]`** банк **3001** СБП недоступна на терминале |
 | Апрув заказчика | **`[ ]`** |
 
-**Заказчику:** папка [`screenshots/`](../milestones/veha_2/artifacts/codeblack_t_kassa_sbp_tokenization/screenshots/) + JSON E2E.
+**Заказчику:** [`screenshots/`](../milestones/veha_2/artifacts/codeblack_t_kassa_sbp_tokenization/screenshots/)  
+**Блокер NSPK:** включить СБП в кабинете Т-Кассы (не код).
 
 ### SBP Deep Link + card tokenization · Т-Касса v2 (2026-07-27)
 

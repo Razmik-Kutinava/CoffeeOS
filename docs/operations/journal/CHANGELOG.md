@@ -1,5 +1,10 @@
 ﻿# CHANGELOG
 
+## 2026-07-27 — deploy: Receipt.Email fix v396; Aram E2E 3001
+
+- Fly **v396**; повтор Aram SBP → банк `3001 СБП недоступна` (терминал)
+- Скрины 01–07 обновлены; ISSUES: 329 закрыт кодом, 3001 — кабинет Т-Кассы
+
 ## 2026-07-27 — fix(shop): SBP Receipt Email for T-Bank 329 + Aram E2E screenshots
 
 - `SbpPaymentInitiator` передаёт `customer.email` в Receipt 54-ФЗ

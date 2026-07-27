@@ -1,9 +1,9 @@
 {
-  "at": "2026-07-27T13:10:00Z",
+  "at": "2026-07-27T13:18:00Z",
   "epic": "codeblack_t_kassa_sbp_tokenization",
   "stand": "https://coffeeos.fly.dev",
-  "fly_version_at_run": 395,
-  "git_head_code": "pending_receipt_email_fix",
+  "fly_version": 396,
+  "git_head": "d1328b9",
   "tenant_id": "af4f78d6-c66b-428e-8ee4-5a609c5c9131",
   "email": "aramfifa100@gmail.com",
   "screenshots_dir": "docs/operations/milestones/veha_2/artifacts/codeblack_t_kassa_sbp_tokenization/screenshots/",
@@ -18,17 +18,17 @@
     "07_waiting_for_bank.png"
   ],
   "checks": [
-    { "name": "OTP Aram login", "result": "PASS", "detail": "email_otp send+verify aramfifa100@gmail.com" },
-    { "name": "Payment sheet cards MIR *5953/*8782", "result": "PASS", "detail": "04_payment_sheet.png" },
-    { "name": "SBP selected + CTA Оплатить быстро", "result": "PASS", "detail": "05_sbp_selected.png" },
+    { "name": "OTP Aram login", "result": "PASS" },
+    { "name": "Payment sheet MIR + SBP", "result": "PASS" },
+    { "name": "SBP CTA Оплатить быстро", "result": "PASS" },
     {
-      "name": "POST sbp/init live T-Bank",
-      "result": "FAIL",
-      "detail": "HTTP 500 · ErrorCode 329 Неверные параметры (Receipt без Email на v395). Fix: pass customer.email into Receipt — redeploy pending"
+      "name": "sbp/init after Receipt.Email fix",
+      "result": "FAIL_TERMINAL",
+      "detail": "v396: ErrorCode 3001 Оплата через СБП недоступна (кабинет Т-Кассы). 329 закрыт."
     },
-    { "name": "WAITING_FOR_BANK UI", "result": "PASS", "detail": "07_waiting_for_bank.png — текст + [ Я оплатил ]" },
-    { "name": "NSPK bank app E2E", "result": "BLOCKED", "detail": "не достигнуто из-за 329 на Init" }
+    { "name": "WAITING_FOR_BANK UI", "result": "PASS" },
+    { "name": "NSPK deep link", "result": "BLOCKED", "detail": "ждёт включение СБП на терминале" }
   ],
-  "verdict": "PARTIAL — UI/OTP/WAITING PASS; live sbp/init 329 blocker",
-  "customer_note": "Скрины 01–07 для приёмки UI. Боевой NSPK deep link заблокирован ответом Т-Кассы 329; фикс Receipt.Email готов к деплою."
+  "verdict": "PARTIAL — UI готово к заказчику; NSPK blocked by T-Bank terminal 3001",
+  "customer_note": "Скрины 01–07. UI CODE:BLACK/SBP готов. Боевой NSPK: включить СБП в кабинете Т-Кассы для терминала 1719235292309."
 }
