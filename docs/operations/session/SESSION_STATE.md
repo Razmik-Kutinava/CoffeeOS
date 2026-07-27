@@ -2,12 +2,18 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-27 (GREEN Шаг 1 Receipt 54-ФЗ)
+**Дата:** 2026-07-27 (RED Шаг 2 GetQr)
 
 | Сейчас | Дальше |
 |--------|--------|
-| GREEN Шаг 1: `TbankReceiptBuilder` + `init_payment(receipt:)` · Token без nested | **go** → RED Шаг 2 GetQr |
-| Регрессия T-Bank + OrderCreator **56/0** | |
+| RED Шаг 2: GetQr — тесты падают (`NameError TbankQrFetcher`) | **go** → GREEN: `TbankQrFetcher` → `/v2/GetQr` PAYMENT_LINK |
+| Шаг 1 Receipt GREEN `[x]` | |
+
+### Сессия 2026-07-27 (RED Шаг 2 GetQr)
+
+- Тесты: `test/services/payments/tbank_qr_fetcher_test.rb` (5 кейсов)
+- Прогон: 5 runs, 2 failures, 3 errors — намеренный RED
+- Код реализации не писали
 
 ### Сессия 2026-07-27 (GREEN Шаг 1 Receipt)
 
