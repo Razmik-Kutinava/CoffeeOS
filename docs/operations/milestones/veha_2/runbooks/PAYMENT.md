@@ -60,8 +60,16 @@
 | `TBANK_TERMINAL_KEY` | TerminalKey терминала (тест: `1719235292292DEMO`) |
 | `TBANK_PASSWORD` | Password терминала |
 | `TBANK_RETURN_URL` | Базовый URL приложения для SuccessURL/FailURL (напр. `https://coffeeos.fly.dev`) |
+| `TBANK_TAXATION` | Система налогообложения в Receipt 54-ФЗ (`osn`, `usn_income`, …); default `usn_income` |
+| `TBANK_TAX` | НДС позиции чека (`none`, `vat20`, …); default `none` |
 
 Не коммитить секреты.
+
+### Receipt 54-ФЗ (2026-07-27, Шаг 1 SBP эпик)
+
+- `Payments::TbankReceiptBuilder` → объект `Receipt` (Items, Taxation) для Init.
+- `TbankAdapter#init_payment(..., receipt:)` кладёт Receipt в payload; **Token** считается без nested Hash/Array (канон Т-Кассы).
+- Подключение Receipt в OrderCreator / SBP init — следующие шаги эпика.
 
 ---
 

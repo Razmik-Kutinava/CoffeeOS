@@ -1,5 +1,12 @@
 ﻿# CHANGELOG
 
+## 2026-07-27 — feat(payments): T-Kassa Receipt 54-FZ for Init [GREEN]
+
+- `Payments::TbankReceiptBuilder` — чек Items/Taxation (`TBANK_TAXATION`, `TBANK_TAX`)
+- `TbankAdapter#init_payment(receipt:)` — Receipt в Init; Token без nested объектов
+- Тесты: 27/0 · регрессия tbank+order_creator 56/0
+- Runbook `PAYMENT.md` — ENV чека
+
 ## 2026-07-27 — docs: SPEC SBP Deep Link + card tokenization
 
 - `todo.md`: as-is/gap, маппинг `/shop/api` + `/callbacks/tbank`, волны A–D (11 шагов)

@@ -2,8 +2,7 @@
 
 require "test_helper"
 
-# RED [TDD] Шаг 1: Receipt 54-ФЗ для Init Т-Кассы.
-# Реализации ещё нет — ожидаем падение (NameError / assert).
+# GREEN [TDD] Шаг 1: Receipt 54-ФЗ для Init Т-Кассы.
 class Payments::TbankReceiptBuilderTest < ActiveSupport::TestCase
   ItemStub = Struct.new(:product_name, :unit_price, :quantity, :total_price, keyword_init: true)
   OrderStub = Struct.new(:id, :final_amount, :order_items, keyword_init: true)

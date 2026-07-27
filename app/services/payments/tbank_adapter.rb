@@ -40,8 +40,9 @@ module Payments
 
     # Инициализирует платёж в Т-Банке.
     # recurrent + customer_key — привязка карты (RebillId в webhook).
+    # receipt — опциональный объект 54-ФЗ (вложенный; в Token не входит).
     # Возвращает { payment_url:, provider_payment_id: }
-    def init_payment(order:, return_base_url:, notification_url:, customer_key: nil, recurrent: false)
+    def init_payment(order:, return_base_url:, notification_url:, customer_key: nil, recurrent: false, receipt: nil)
       amount_kopecks = (order.final_amount * 100).to_i
 
       payload = {
@@ -55,6 +56,7 @@ module Payments
       }
       payload["CustomerKey"] = customer_key.to_s if customer_key.present?
       payload["Recurrent"] = "Y" if recurrent
+      payload["Receipt"] = receipt if receipt.present?
       payload["Token"] = build_token(payload)
 
       response = with_circuit_breaker { post_json("#{BASE_URL}/Init", payload) }
@@ -161,11 +163,12 @@ module Payments
       TBANK_STATUS_MAP[tbank_status.to_s.upcase]
     end
 
-    # Публичный метод для использования в верификации (в т.ч. из self-методов)
+    # Публичный метод для использования в верификации (в т.ч. из self-методов).
+    # Вложенные объекты (Receipt, DATA, …) в расчёт Token не входят — канон Т-Кассы.
     def build_token(params)
       values = params
         .merge("Password" => password)
-        .reject { |k, _| k.to_s == "Token" }
+        .reject { |k, v| k.to_s == "Token" || v.is_a?(Hash) || v.is_a?(Array) }
         .sort_by { |k, _| k.to_s }
         .map { |_, v| v.to_s }
         .join

@@ -2,12 +2,19 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-27 (RED Шаг 1 Receipt 54-ФЗ)
+**Дата:** 2026-07-27 (GREEN Шаг 1 Receipt 54-ФЗ)
 
 | Сейчас | Дальше |
 |--------|--------|
-| RED Шаг 1: Receipt — тесты падают (NameError / `:receipt`) | **go** → GREEN: `TbankReceiptBuilder` + `init_payment(receipt:)` |
-| Postgres: убиты 266 leaked ruby (max_connections) | |
+| GREEN Шаг 1: `TbankReceiptBuilder` + `init_payment(receipt:)` · Token без nested | **go** → RED Шаг 2 GetQr |
+| Регрессия T-Bank + OrderCreator **56/0** | |
+
+### Сессия 2026-07-27 (GREEN Шаг 1 Receipt)
+
+- `Payments::TbankReceiptBuilder` — Items/Taxation из order + `TBANK_TAXATION`/`TBANK_TAX`
+- `TbankAdapter#init_payment` — опц. `receipt:`; `build_token` исключает Hash/Array
+- Тесты: receipt+adapter **27/0**; регрессия callback+adapter+order_creator **56/0**
+- Runbook PAYMENT.md — ENV Taxation/Tax
 
 ### Сессия 2026-07-27 (RED Шаг 1 Receipt)
 

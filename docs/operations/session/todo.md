@@ -6,7 +6,7 @@
 
 ## Текущая фаза
 
-**PHASE 2: RED** — `[x]` Шаг 1 Receipt · 27 runs / 1 failure / 6 errors (NameError + unknown keyword `:receipt`) · ждём GREEN
+**PHASE 2: GREEN** — `[x]` Шаг 1 Receipt · unit 27/0 · регрессия tbank+order_creator 56/0 · дальше RED Шаг 2 GetQr
 
 ---
 
@@ -133,7 +133,7 @@
 ## Чеклист TDD (из ТЗ)
 
 ### Сценарий 1 — Init / GetQr / SBP init
-- [ ] Шаг 1: Init + Receipt 54-ФЗ (builder + payload; 400/500) — **RED** тесты написаны
+- [x] Шаг 1: Init + Receipt 54-ФЗ (builder + payload; 400/500) — **GREEN**
 - [ ] Шаг 2: GetQr `PAYMENT_LINK` → `qr.nspk.ru` (400/500)
 - [ ] Шаг 3: `POST /shop/api/payments/sbp/init` → `{ payment_url }`
 
