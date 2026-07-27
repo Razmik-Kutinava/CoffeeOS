@@ -2,12 +2,18 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-27 (GREEN Шаг 9 UI SBP)
+**Дата:** 2026-07-27 (GREEN Шаг 11 SBP return polling)
 
 | Сейчас | Дальше |
 |--------|--------|
-| GREEN Шаг 9: SBP UI + `shopSbpPay` + Checkout wire | намерение → Шаг 11 polling / 7–8 char / 10 polish |
-| OrderCreator: sbp всегда `pending_payment`, без Init gateway | |
+| GREEN Шаг 11: poll 2s×30 на PaymentResult | 7–8 char / 10 polish / push·Fly по просьбе |
+| Шаг 9 UI SBP — GREEN | |
+
+### Сессия 2026-07-27 (GREEN Шаг 11 SBP return polling)
+
+- `pollSbpPaymentStatus` + `SBP_INCOMPLETE_MESSAGE`; PaymentResult wired
+- Тесты: Node shop_sbp_pay **13/0**; return UI **2/0**
+- success/ok → finalize poll → order; timeout/fail → «Оплата не завершена…»
 
 ### Сессия 2026-07-27 (GREEN Шаг 9 UI SBP)
 

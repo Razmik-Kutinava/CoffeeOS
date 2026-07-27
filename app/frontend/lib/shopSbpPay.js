@@ -3,9 +3,58 @@
  */
 
 export const SBP_LOADING_LABEL = "Оплата через СБП…"
+export const SBP_INCOMPLETE_MESSAGE = "Оплата не завершена, попробовать снова"
+
+const SBP_TERMINAL_STATUSES = new Set([
+  "cancelled",
+  "canceled",
+  "rejected",
+  "failed"
+])
 
 export function sbpPollOptions() {
   return { intervalMs: 2000, maxAttempts: 30 }
+}
+
+/** SuccessURL → success; Checkout completePaySuccess → ok. */
+export function isSbpReturnSuccessStatus(status) {
+  const s = String(status || "").toLowerCase()
+  return s === "success" || s === "ok"
+}
+
+function isSbpTerminalFailure(res) {
+  const status = String(res?.status || "").toLowerCase()
+  if (SBP_TERMINAL_STATUSES.has(status)) return true
+  const pay = String(res?.payment_status || "").toLowerCase()
+  return SBP_TERMINAL_STATUSES.has(pay)
+}
+
+/**
+ * Poll finalize после возврата из банка / NSPK (макс. 60с, шаг 2с).
+ * Без бесконечного Loading: timeout / terminal → SBP_INCOMPLETE_MESSAGE.
+ *
+ * @param {(path: string, opts?: object) => Promise<object>} api
+ * @param {{ orderId: string, sleep?: (ms: number) => Promise<void> }} params
+ */
+export async function pollSbpPaymentStatus(api, { orderId, sleep } = {}) {
+  const { intervalMs, maxAttempts } = sbpPollOptions()
+  const wait =
+    sleep ||
+    ((ms) =>
+      new Promise((r) => {
+        setTimeout(r, ms)
+      }))
+
+  for (let i = 0; i < maxAttempts; i += 1) {
+    const res = await api(`/orders/${orderId}/finalize`, { method: "POST" })
+    if (res?.payment_settled || res?.status === "accepted") return res
+    if (isSbpTerminalFailure(res)) {
+      throw Object.assign(new Error(SBP_INCOMPLETE_MESSAGE), { kind: "sbp_terminal" })
+    }
+    if (i < maxAttempts - 1) await wait(intervalMs)
+  }
+
+  throw Object.assign(new Error(SBP_INCOMPLETE_MESSAGE), { kind: "sbp_timeout" })
 }
 
 export function mapSbpInitError(status, body = {}) {

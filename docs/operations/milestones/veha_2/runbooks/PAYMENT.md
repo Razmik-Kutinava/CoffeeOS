@@ -88,6 +88,12 @@
 - Checkout: `POST /orders` `payment_method=sbp` (всегда `pending_payment`, без Init в OrderCreator) → sbp/init → redirect.
 - CTA: «Оплатить быстро»; loading: «Оплата через СБП…». Poll return 2s×30 — Шаг 11.
 
+### SBP return polling (2026-07-27, Шаг 11)
+
+- `pollSbpPaymentStatus` → `POST /orders/:id/finalize`, интервал **2с × 30** (60с).
+- SuccessURL/`status=ok|success` → poll → `/order/:id`; timeout / cancelled / fail → «Оплата не завершена, попробовать снова».
+- `PaymentResult.svelte` — без бесконечного Loading (`finally` снимает loader).
+
 ---
 
 ## Итог реализации (2026-05-28)

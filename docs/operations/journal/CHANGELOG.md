@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-07-27 — feat(shop): SBP return polling 60s/2s [GREEN]
+
+- `pollSbpPaymentStatus` — finalize poll 2s×30; timeout/terminal → «Оплата не завершена…»
+- `PaymentResult.svelte` — success/ok через shopSbpPay; без infinite Loading
+- Тесты: Node 13/0 · return UI 2/0
+
 ## 2026-07-27 — feat(shop): SBP UI «Оплатить быстро» deep link [GREEN]
 
 - `shopSbpPay.js` — init `/payments/sbp/init` → redirect `*.nspk.ru`; poll opts 2s×30

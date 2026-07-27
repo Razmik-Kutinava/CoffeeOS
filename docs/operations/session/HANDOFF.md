@@ -1,6 +1,6 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-27 (**GREEN Шаг 9 UI SBP**)  
+**Дата:** 2026-07-27 (**GREEN Шаг 11 SBP return polling**)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev  
 
@@ -12,13 +12,13 @@
 | PHASE 1: SPEC | **`[x]`** |
 | Волна A Шаги 1–3 (Receipt/GetQr/sbp/init) | **`[x]`** GREEN |
 | Шаг 9 UI «Оплатить быстро» | **`[x]`** GREEN |
-| Шаг 11 return polling 60s/2s | **`[ ]`** следующий |
+| Шаг 11 return polling 60s/2s | **`[x]`** GREEN |
 | Шаги 7–8 / 10 characterization·polish | **`[ ]`** |
 | Push / Fly deploy | **`[ ]`** |
 | MCP / UI приёмка на Fly | **`[ ]`** |
 | Апрув заказчика | **`[ ]`** |
 
-**UI SBP:** выбор СБП → заказ `pending_payment` → `sbp/init` → redirect NSPK. Polling return — Шаг 11.
+**Return:** SuccessURL → `#/payment-result` → poll finalize 2s×30 → order или «Оплата не завершена…».
 
 ### Repeat order invalid token · PaymentMethodsSheet (2026-07-27)
 

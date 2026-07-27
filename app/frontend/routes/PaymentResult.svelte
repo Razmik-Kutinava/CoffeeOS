@@ -4,21 +4,17 @@
   import { api } from "../lib/api.js"
   import { clearGuestOrderSession, reconnectGuestOrder } from "../lib/shopGuestSession.js"
   import { clearPaymentSession } from "../lib/tbankPayment.js"
+  import {
+    pollSbpPaymentStatus,
+    isSbpReturnSuccessStatus,
+    SBP_INCOMPLETE_MESSAGE
+  } from "../lib/shopSbpPay.js"
 
   let status = $state("fail")
   let orderId = $state("")
   let message = $state("")
   let err = $state(null)
   let loading = $state(true)
-
-  async function pollAccepted(maxAttempts = 20) {
-    for (let i = 0; i < maxAttempts; i += 1) {
-      const res = await api(`/orders/${orderId}/finalize`, { method: "POST" })
-      if (res.payment_settled) return res
-      await new Promise((r) => setTimeout(r, 1500))
-    }
-    throw new Error("Оплата ещё обрабатывается. Проверьте историю заказов через минуту.")
-  }
 
   onMount(async () => {
     const query = window.location.hash.split("?")[1] || ""
@@ -36,19 +32,31 @@
       await reconnectGuestOrder(api)
       clearPaymentSession()
 
-      if (status === "success") {
-        await pollAccepted()
+      if (isSbpReturnSuccessStatus(status)) {
+        await pollSbpPaymentStatus(api, { orderId })
         clearGuestOrderSession()
         push(`/order/${orderId}`)
         return
-      } else if (status === "cancel") {
-        message = "Оплата отменена. Корзина сохранена — можно попробовать снова."
+      }
+
+      if (status === "cancel") {
+        message = SBP_INCOMPLETE_MESSAGE
       } else {
-        await api(`/orders/${orderId}/abandon`, { method: "POST" })
-        message = "Оплата не завершена. Корзина сохранена — можно попробовать снова."
+        try {
+          await api(`/orders/${orderId}/abandon`, { method: "POST" })
+        } catch {
+          /* abandon best-effort */
+        }
+        message = SBP_INCOMPLETE_MESSAGE
       }
     } catch (e) {
-      err = e.message
+      // timeout / terminal / network — без бесконечного Loading
+      if (e?.kind === "sbp_timeout" || e?.kind === "sbp_terminal") {
+        message = e.message || SBP_INCOMPLETE_MESSAGE
+        err = null
+      } else {
+        err = e.message || SBP_INCOMPLETE_MESSAGE
+      }
     } finally {
       loading = false
     }
@@ -56,14 +64,14 @@
 </script>
 
 {#if loading}
-  <div class="py-8 text-center">
+  <div class="py-8 text-center" data-testid="payment-result-loading">
     <p class="text-[#a0a0a0]">Проверяем оплату…</p>
   </div>
 {:else if err}
-  <p class="mb-4 text-red-400">{err}</p>
+  <p class="mb-4 text-red-400" role="alert">{err}</p>
   <button type="button" class="text-[#ff8c42]" onclick={() => push("/orders")}>История заказов</button>
 {:else}
-  <div class="py-8 text-center">
+  <div class="py-8 text-center" data-testid="payment-result-incomplete">
     <p class="mb-4 text-[#a0a0a0]">{message}</p>
     <button type="button" class="text-[#ff8c42]" onclick={() => push("/")}>В каталог</button>
   </div>

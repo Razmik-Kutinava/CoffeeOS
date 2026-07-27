@@ -6,8 +6,8 @@
 
 ## Текущая фаза
 
-**PHASE 2: GREEN** — `[x]` Шаг 9 UI SBP · Node 8/0 · Ruby UI+repeat 11/0 · order_creator 22/0 · регрессия оплаты 59/0  
-*(Шаги 4–5 webhook — characterization; Шаг 6 status — reuse; Шаг 11 polling — следующий)*
+**PHASE 2: GREEN** — `[x]` Шаг 11 return polling 60s/2s · Node 13/0 · return UI 2/0  
+*(Шаг 9 UI SBP — GREEN; Шаги 7–8 / 10 — по желанию; epic UI core закрыт)*
 
 ---
 
@@ -150,7 +150,7 @@
 ### Сценарий 4 — UI CODE:BLACK
 - [x] Шаг 9: «Оплатить быстро» / SBP → init → redirect — **GREEN**
 - [ ] Шаг 10: маска карты + 1-tap (polish при необходимости)
-- [ ] Шаг 11: return + polling ≤60s / 2s; нет infinite Loading
+- [x] Шаг 11: return + polling ≤60s / 2s; нет infinite Loading — **GREEN**
 
 ---
 
