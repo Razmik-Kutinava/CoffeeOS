@@ -63,7 +63,10 @@ module Payments
       unless response.is_a?(Hash)
         raise Error, "Некорректный ответ Т-Банка"
       end
-      raise ApiError.new(error_code: response["ErrorCode"], message: response["Message"].to_s) unless response["Success"]
+      raise ApiError.new(
+        error_code: response["ErrorCode"],
+        message: [response["Message"], response["Details"]].compact_blank.join(" — ")
+      ) unless response["Success"]
 
       {
         payment_url: response["PaymentURL"],
@@ -83,7 +86,10 @@ module Payments
       unless response.is_a?(Hash)
         raise Error, "Некорректный ответ Т-Банка (GetState)"
       end
-      raise ApiError.new(error_code: response["ErrorCode"], message: response["Message"].to_s) unless response["Success"]
+      raise ApiError.new(
+        error_code: response["ErrorCode"],
+        message: [response["Message"], response["Details"]].compact_blank.join(" — ")
+      ) unless response["Success"]
 
       response
     end

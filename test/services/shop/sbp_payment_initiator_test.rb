@@ -115,6 +115,33 @@ class Shop::SbpPaymentInitiatorTest < ActiveSupport::TestCase
     assert order.payments.reload.first.provider_payment_id == "pay-sbp-1"
   end
 
+  test "call! live puts customer email into Receipt for 54-ФЗ" do
+    ENV["SHOP_SIMULATE_PAYMENT"] = "0"
+    customer = create_mobile_customer!(email: "aram-sbp@example.com")
+    order = build_pending_order!
+    order.update_columns(customer_id: customer.id)
+    order = Order.includes(:order_items, :payments, :customer).find(order.id)
+
+    captured_init = nil
+    adapter = Payments::TbankAdapter.new
+    adapter.define_singleton_method(:init_payment) do |**kwargs|
+      captured_init = kwargs
+      { payment_url: "https://pay.tbank.ru/unused", provider_payment_id: "pay-sbp-mail" }
+    end
+    qr = Object.new
+    qr.define_singleton_method(:call!) do |payment_id:, adapter: nil|
+      { payment_url: "https://qr.nspk.ru/AS10000MAIL", data: "https://qr.nspk.ru/AS10000MAIL" }
+    end
+
+    Shop::SbpPaymentInitiator.new(tenant: @tenant, adapter: adapter, qr_fetcher: qr).call!(
+      order_id: order.id,
+      return_base_url: "https://example.com",
+      notification_url: "https://example.com/callbacks/tbank"
+    )
+
+    assert_equal "aram-sbp@example.com", captured_init[:receipt]["Email"]
+  end
+
   test "call! raises Error when order is missing" do
     ENV["SHOP_SIMULATE_PAYMENT"] = "1"
     assert_raises(Shop::SbpPaymentInitiator::Error) do

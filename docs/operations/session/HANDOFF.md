@@ -1,21 +1,21 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-27 (**push + Fly v395 + MCP CODE:BLACK lifecycle**)  
-**Ветка:** `develop` @ `d4f4369`  
-**Прод:** https://coffeeos.fly.dev · **Fly:** v395  
+**Дата:** 2026-07-27 (**Aram SBP E2E screenshots · 329 blocker**)  
+**Ветка:** `develop`  
+**Прод:** https://coffeeos.fly.dev · **Fly:** v395 (+ фикс Receipt.Email к деплою)
 
 ### CODE:BLACK T-Kassa SBP · PWA lifecycle (2026-07-27)
 
 | Что | Статус |
 |-----|--------|
-| Intake ТЗ + CBR + артефакты | **`[x]`** |
-| PHASE 1: SPEC | **`[x]`** |
-| RED / GREEN (status + pending LS + waiting UI) | **`[x]`** · Node 25/0 · Ruby 23/0 · регрессия 59/0 |
-| Push / Fly deploy | **`[x]`** v395 · `d4f4369` |
-| MCP / UI приёмка на Fly | **`[x]` PASS** (bank E2E SKIP) · [`fly_mcp_pwa_lifecycle_2026-07-27.json`](../milestones/veha_2/artifacts/codeblack_t_kassa_sbp_tokenization/fly_mcp_pwa_lifecycle_2026-07-27.json) |
+| Intake / SPEC / GREEN | **`[x]`** |
+| Push / Fly v395 | **`[x]`** |
+| MCP lifecycle markers | **`[x]`** PASS |
+| Aram OTP → SBP sheet screenshots | **`[x]`** · `screenshots/01–07` |
+| Live `sbp/init` → nspk | **`[ ]`** BLOCKED 329 · фикс Email в коде |
 | Апрув заказчика | **`[ ]`** |
 
-**Deploy:** WAITING_FOR_BANK + `payments/status` + `codeblack_pending_order` cold start на Fly.
+**Заказчику:** папка [`screenshots/`](../milestones/veha_2/artifacts/codeblack_t_kassa_sbp_tokenization/screenshots/) + JSON E2E.
 
 ### SBP Deep Link + card tokenization · Т-Касса v2 (2026-07-27)
 

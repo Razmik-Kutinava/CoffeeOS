@@ -1,5 +1,12 @@
 ﻿# CHANGELOG
 
+## 2026-07-27 — fix(shop): SBP Receipt Email for T-Bank 329 + Aram E2E screenshots
+
+- `SbpPaymentInitiator` передаёт `customer.email` в Receipt 54-ФЗ
+- `TbankAdapter` ApiError включает `Details`
+- Скрины Aram: `artifacts/codeblack_t_kassa_sbp_tokenization/screenshots/` (01–07)
+- ISSUES: SBP 329 на Fly v395
+
 ## 2026-07-27 — deploy: CODE:BLACK PWA lifecycle to Fly v395
 
 - Push `develop` → `d4f4369`; Fly **v395**

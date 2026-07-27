@@ -4,6 +4,14 @@
 
 ## 🔴 Блокеры
 
+[2026-07-27] — SBP live Init на Fly: Т-Касса **329 Неверные параметры**
+**Статус:** 🟡 **открыт** · UI/OTP PASS · фикс Receipt.Email в коде (ожидает/после deploy)
+**Источник:** MCP Aram E2E · `fly_mcp_aram_sbp_e2e_2026-07-27.json` · скрин `06_after_sbp_pay.png`
+**Улика:** `POST /shop/api/payments/sbp/init` → 500 · `Payments::TbankAdapter::ApiError 329`
+**Гипотеза:** Receipt 54-ФЗ уходил **без Email/Phone** (заказчик OTP есть, но builder не получал email).
+**Фикс в коде:** `SbpPaymentInitiator` передаёт `order.customer&.email` в `TbankReceiptBuilder`; ApiError включает `Details`.
+**Осталось:** deploy → повторный MCP Aram → получить `qr.nspk.ru` · если 329 останется — сверить `TBANK_TAXATION` с кабинетом терминала.
+
 [2026-07-16] — UserCards: карта не сохранилась после оплаты с save_card ON (bug_13-23)
 **Статус:** 🔴 **открыт** · deploy v366 **[x]** · MCP 2 карты **[x]** · апрув 3.5 **[ ]**
 **Источник:** заказчик · [`bug_13-23_repeat_purchase_card_missing.png`](../milestones/veha_2/artifacts/usercards_save_card/screenshots/bug_13-23_repeat_purchase_card_missing.png)

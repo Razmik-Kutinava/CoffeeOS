@@ -2,12 +2,18 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-27 (push + Fly v395 + MCP CODE:BLACK lifecycle)
+**Дата:** 2026-07-27 (Aram SBP E2E screenshots + Receipt.Email fix)
 
 | Сейчас | Дальше |
 |--------|--------|
-| Lifecycle на Fly **v395** · MCP PASS (bank E2E SKIP) | апрув заказчика |
-| v2 SBP epic тоже на стенде | |
+| Скрины 01–07 для заказчика · sbp/init **329** на v395 | deploy фикса Receipt.Email → повтор NSPK |
+| ISSUES: SBP 329 открыт | |
+
+### Сессия 2026-07-27 (Aram SBP E2E screenshots)
+
+- OTP Aram → sheet MIR+SBP → «Оплатить быстро» → **329**
+- WAITING_FOR_BANK UI снят; артефакты в `codeblack_t_kassa_sbp_tokenization/screenshots/`
+- Фикс: Receipt.Email из `order.customer` + Details в ApiError
 
 ### Сессия 2026-07-27 (push / Fly / MCP CODE:BLACK lifecycle)
 
