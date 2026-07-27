@@ -2,12 +2,19 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-27 (SPEC Repeat order invalid token payment sheet)
+**Дата:** 2026-07-27 (RED Repeat order invalid token payment sheet)
 
 | Сейчас | Дальше |
 |--------|--------|
-| SPEC as-is/gap + `todo.md` (repeat invalid token payment sheet) | RED (тесты) по намерению |
+| RED: 7 fail Ruby + 1 fail Node (`repeat_invalid_token_payment_test`) | GREEN по намерению |
 | Fly **v392** · Profile merge MCP **PASS** | Апрув заказчика Profile merge |
+
+### Сессия 2026-07-27 (RED Repeat order invalid token payment sheet)
+
+- Тесты: `test/javascript/repeat_invalid_token_payment_test.mjs`, `test/integration/shop/repeat_invalid_token_payment_test.rb`
+- Node: ERR_MODULE_NOT_FOUND `paymentMethodI18n.js` / `repeatInvalidTokenStore.js`
+- Ruby: 7 runs, 7 failures (mirror grep CartSheet/Sheet/Checkout)
+- Коммит `51d4560` · код не писали
 
 ### Сессия 2026-07-27 (SPEC Repeat order invalid token payment sheet)
 
