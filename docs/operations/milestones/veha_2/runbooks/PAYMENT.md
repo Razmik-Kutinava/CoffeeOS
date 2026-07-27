@@ -100,6 +100,11 @@
 - Charge `/v2/Charge` + `POST /shop/api/payments/one_click`; invalid token → **422** + `error_code` (FE `isInvalidRebillPaymentError`).
 - Тесты: `sbp_epic_card_tokenization_char_test.rb` (+ step2/step4/adapter).
 
+### Card mask 1-tap (2026-07-27, Шаг 10)
+
+- Sheet label: `formatMaskedPan` → `**** 1234` (бренд отдельно в `cardBrandShort`).
+- 1-tap: `POST /payments/one_click` + FSM Loading; invalid rebill → CTA «Добавить карту».
+
 ---
 
 ## Итог реализации (2026-05-28)
