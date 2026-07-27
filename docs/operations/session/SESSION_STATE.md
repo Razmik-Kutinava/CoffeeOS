@@ -2,12 +2,18 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-27 (SPEC SBP Deep Link + card tokenization)
+**Дата:** 2026-07-27 (RED Шаг 1 Receipt 54-ФЗ)
 
 | Сейчас | Дальше |
 |--------|--------|
-| SPEC `[x]`: СБП + токенизация — as-is/gap в `todo.md` (волны A–D) | **go** → RED Шаг 1 (Receipt 54-ФЗ) |
-| Уже есть webhook/Charge/one_click; gap = Receipt + GetQr + sbp/init + UI SBP | |
+| RED Шаг 1: Receipt — тесты падают (NameError / `:receipt`) | **go** → GREEN: `TbankReceiptBuilder` + `init_payment(receipt:)` |
+| Postgres: убиты 266 leaked ruby (max_connections) | |
+
+### Сессия 2026-07-27 (RED Шаг 1 Receipt)
+
+- Тесты: `tbank_receipt_builder_test.rb` + 3 кейса в `tbank_adapter_test.rb`
+- Прогон: 27 runs, 1 failure, 6 errors — намеренный RED
+- Код реализации не писали
 
 ### Сессия 2026-07-27 (SPEC SBP Deep Link + card tokenization)
 

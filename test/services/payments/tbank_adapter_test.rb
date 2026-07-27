@@ -223,4 +223,88 @@ class Payments::TbankAdapterTest < ActiveSupport::TestCase
     response = adapter.get_payment_state(payment_id: "pay-42")
     assert_equal "CONFIRMED", response["Status"]
   end
+
+  # ---------------------------------------------------------------------------
+  # Init + Receipt 54-ФЗ (Шаг 1 RED)
+  # ---------------------------------------------------------------------------
+
+  test "init_payment includes Receipt in payload before Token" do
+    adapter = Payments::TbankAdapter.new
+    order = Struct.new(:id, :final_amount).new(SecureRandom.uuid, BigDecimal("200.00"))
+    receipt = {
+      "Taxation" => "usn_income",
+      "Items" => [
+        {
+          "Name" => "Американо",
+          "Price" => 20_000,
+          "Quantity" => 1.0,
+          "Amount" => 20_000,
+          "Tax" => "none",
+          "PaymentMethod" => "full_payment",
+          "PaymentObject" => "commodity"
+        }
+      ]
+    }
+
+    captured = nil
+    adapter.define_singleton_method(:post_json) do |url, payload|
+      captured = { url: url, payload: payload }
+      { "Success" => true, "PaymentURL" => "https://pay.tbank.ru/x", "PaymentId" => "pid-1" }
+    end
+
+    result = adapter.init_payment(
+      order: order,
+      return_base_url: "https://example.com",
+      notification_url: "https://example.com/callbacks/tbank",
+      customer_key: "cust-1",
+      receipt: receipt
+    )
+
+    assert captured[:url].end_with?("/Init")
+    assert_equal receipt, captured[:payload]["Receipt"]
+    assert_equal "cust-1", captured[:payload]["CustomerKey"]
+    assert_equal "pid-1", result[:provider_payment_id]
+    assert captured[:payload]["Token"].present?
+  end
+
+  test "init_payment Token excludes nested Receipt from SHA-256" do
+    adapter = Payments::TbankAdapter.new
+    order = Struct.new(:id, :final_amount).new("order-token-1", BigDecimal("100.00"))
+    receipt = { "Taxation" => "osn", "Items" => [] }
+
+    captured = nil
+    adapter.define_singleton_method(:post_json) do |_url, payload|
+      captured = payload
+      { "Success" => true, "PaymentURL" => "https://pay.tbank.ru/x", "PaymentId" => "pid-2" }
+    end
+
+    adapter.init_payment(
+      order: order,
+      return_base_url: "https://example.com",
+      notification_url: "https://example.com/callbacks/tbank",
+      receipt: receipt
+    )
+
+    expected_token = adapter.build_token(captured.except("Token", "Receipt"))
+    assert_equal expected_token, captured["Token"]
+  end
+
+  test "init_payment raises ApiError on bank validation failure" do
+    adapter = Payments::TbankAdapter.new
+    order = Struct.new(:id, :final_amount).new(SecureRandom.uuid, BigDecimal("100.00"))
+
+    adapter.define_singleton_method(:post_json) do |*_args|
+      { "Success" => false, "ErrorCode" => "3001", "Message" => "Неверный чек" }
+    end
+
+    error = assert_raises(Payments::TbankAdapter::ApiError) do
+      adapter.init_payment(
+        order: order,
+        return_base_url: "https://example.com",
+        notification_url: "https://example.com/callbacks/tbank",
+        receipt: { "Taxation" => "osn", "Items" => [] }
+      )
+    end
+    assert_equal "3001", error.error_code
+  end
 end
