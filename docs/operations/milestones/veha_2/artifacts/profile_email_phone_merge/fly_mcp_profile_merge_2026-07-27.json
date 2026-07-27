@@ -1,0 +1,55 @@
+{
+  "date": "2026-07-27",
+  "kind": "mcp_profile_email_phone_merge",
+  "fly_release": "v392",
+  "commit": "9184cde",
+  "stand": "https://coffeeos.fly.dev",
+  "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "tenant_name": "Demo Coffee Point A",
+  "customer": {
+    "id": "2bc37279-8d23-456b-a2a5-4c28f584634c",
+    "email": "aramfifa100@gmail.com",
+    "phone": "+79001119877"
+  },
+  "deploy_notes": {
+    "first_attempt": "release_command failed ConcurrentMigrationError after successful DDL (advisory lock)",
+    "retry": "fly deploy --remote-only --depot=false → v392 PASS; migration already applied"
+  },
+  "checks": [
+    {
+      "id": "deploy_v392",
+      "status": "PASS",
+      "detail": "push develop 9184cde; Fly web/worker VERSION 392 started; /up 200; health checks passing"
+    },
+    {
+      "id": "profile_get_contract",
+      "status": "PASS",
+      "detail": "GET /shop/api/profile → 200 keys id,email,email_verified,phone,phone_verified,first_name,last_name; Aram email_verified+phone_verified true"
+    },
+    {
+      "id": "profile_get_401",
+      "status": "PASS",
+      "detail": "GET /shop/api/profile credentials:omit → 401 {error: Требуется авторизация}"
+    },
+    {
+      "id": "profile_patch_names",
+      "status": "PASS",
+      "detail": "PATCH first_name=Aram last_name=Demo → 200; name=Aram Demo"
+    },
+    {
+      "id": "profile_ui_contacts",
+      "status": "PASS",
+      "detail": "#/profile: Контакты email aramfifa100@gmail.com Подтвержден; phone +79001119877 Подтвержден; fields Имя/Фамилия + Сохранить"
+    },
+    {
+      "id": "checkout_autofill",
+      "status": "PASS",
+      "detail": "#/checkout: Контакты Aram Demo + masked email; Изменить → name/email/phone fields prefilled (+7 (900) 111-98-77), Телефон подтверждён"
+    },
+    {
+      "id": "link_otp_400",
+      "status": "PASS",
+      "detail": "POST link_email/link_phone with bad OTP → 400 «Код не найден или истёк…»"
+    }
+  ]
+}

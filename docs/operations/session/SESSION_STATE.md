@@ -2,12 +2,18 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-27 (GREEN Profile Email↔Phone merge)  
+**Дата:** 2026-07-27 (MCP Profile Email↔Phone merge Fly v392 PASS)  
 
 | Сейчас | Дальше |
 |--------|--------|
-| Profile Email↔Phone merge **GREEN** (код + тесты) | Push / Fly / MCP по апруву |
-| Fly **v390** · Phone OTP MCP PASS | Апрув заказчика (Phone OTP) |
+| Fly **v392** · Profile merge MCP **PASS** | Апрув заказчика |
+| Push `9184cde` | — |
+
+### Сессия 2026-07-27 (push+deploy+MCP Profile Email↔Phone merge)
+
+- Push develop `9184cde` → Fly **v392** (1-й release: DDL ok, advisory lock fail; retry ok)
+- MCP: GET/PATCH profile, 401, UI контакты, checkout autofill, link_* 400
+- Артефакт: `artifacts/profile_email_phone_merge/fly_mcp_profile_merge_2026-07-27.json`
 
 ### Сессия 2026-07-27 (GREEN Profile Email↔Phone merge)
 
@@ -17,7 +23,6 @@
 - `OrderCreator` — autofill verified email/phone из сессионного профиля
 - PWA: Profile.svelte контакты+OTP; Checkout autofill + «Сохранить в профиль»
 - Тесты: profile/merge/OTP зона **47/0**; оплата+refresh **30/0** (2 skips)
-- Push/deploy — не делали
 
 ### Сессия 2026-07-27 (Intake + SPEC Profile Email↔Phone merge)
 

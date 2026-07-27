@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-07-27 — deploy+MCP: Profile Email↔Phone merge (Fly v392)
+
+- Push `9184cde`; Fly **v392** (retry после ConcurrentMigrationError на release; DDL уже применён)
+- MCP: profile GET/PATCH/401, UI контакты, checkout autofill, link_* 400
+- Артефакт: `artifacts/profile_email_phone_merge/fly_mcp_profile_merge_2026-07-27.json`
+
 ## 2026-07-27 — feat(shop): Profile Email↔Phone merge [GREEN]
 
 - DDL: `email_verified` / `phone_verified` на `mobile_customers` (+ backfill)

@@ -5,26 +5,9 @@
 
 ## Текущая фаза
 
-**PHASE 3: REVIEW** — GREEN done · ждём push/MCP по апруву
+**DONE** — MCP Fly PASS (v392)
 
-- [x] PHASE 0: Intake
-- [x] PHASE 1: SPEC
-- [x] PHASE 2: RED/GREEN (реализация в одном проходе по «ебашь»)
-- [x] Регрессия зоны shop/order + phone/email OTP
-- [ ] Push / Fly deploy / MCP — только по явному апруву
-- [ ] Апрув заказчика
-
-## Чек-лист
-
-### Бэкенд
-- [x] Шаг 0: DDL `email_verified` / `phone_verified`
-- [x] Шаг 1: GET `/shop/api/profile` + 401
-- [x] Шаг 2: PATCH `/shop/api/profile`
-- [x] Шаг 3–4: POST `link_email` (clean + merge)
-- [x] Шаг 5: POST `link_phone` + soft-merge в linkers
-- [x] Шаг 6: `Shop::OrderCreator` autofill из профиля
-
-### Фронтенд
-- [x] Шаг 7: Экран профиля (контакты + verified + имена + toast)
-- [x] Шаг 8: OTP-допривязка без reload
-- [x] Шаг 9: Autofill checkout + «Сохранить в профиль»
+- [x] Intake / SPEC / GREEN
+- [x] Push + deploy v392
+- [x] MCP Profile merge PASS
+- [ ] Апрув заказчика (опционально)

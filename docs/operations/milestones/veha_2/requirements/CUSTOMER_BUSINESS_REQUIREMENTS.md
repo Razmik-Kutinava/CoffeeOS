@@ -108,7 +108,7 @@
 | Payment status model | **Эквайринг** — анализ статусной модели платежей/заказов (Т-Банк) | [ТЗ](customer_tasks/Анализ%20статусной%20модели%20платежей%20и%20заказов%20Т-Банк.md) · [`artifacts/payment_status_model_analysis/`](../artifacts/payment_status_model_analysis/) | **анализ `[x]`** 2026-07-24 · код не менялся |
 | PWA durable sessions | **Витрина / PWA** — долговечные сессии + Silent Refresh (без авто-разлогина 24ч) | [ТЗ](customer_tasks/Долговечные%20сессии%20PWA%20и%20фикс%20авто-разлогина.md) · [`artifacts/pwa_durable_sessions_silent_refresh/`](../artifacts/pwa_durable_sessions_silent_refresh/) | **MCP PASS `[x]`** 2026-07-24 · Fly v389 · апрув заказчика `[ ]` |
 | Phone OTP SMS/Flash Call | **Витрина / PWA** — вход и регистрация по телефону (SMS / Flash Call) + антиспам cooldown | [ТЗ](customer_tasks/Вход%20и%20регистрация%20по%20номеру%20телефона%20SMS%20Flash%20Call.md) · [`artifacts/phone_otp_sms_flash_call/`](../artifacts/phone_otp_sms_flash_call/) | **MCP PASS `[x]`** 2026-07-24 · Fly v390 · апрув заказчика `[ ]` |
-| Profile Email↔Phone merge | **Витрина / PWA** — связка профилей Email↔Phone, merge без потери заказов/карт, UI профиля | [ТЗ](customer_tasks/Связка%20профилей%20Email%20Phone%20и%20управление%20данными%20пользователя%20в%20PWA.md) · [`artifacts/profile_email_phone_merge/`](../artifacts/profile_email_phone_merge/) | **GREEN `[x]`** 2026-07-27 · push/MCP `[ ]` |
+| Profile Email↔Phone merge | **Витрина / PWA** — связка профилей Email↔Phone, merge без потери заказов/карт, UI профиля | [ТЗ](customer_tasks/Связка%20профилей%20Email%20Phone%20и%20управление%20данными%20пользователя%20в%20PWA.md) · [`artifacts/profile_email_phone_merge/`](../artifacts/profile_email_phone_merge/) | **MCP PASS `[x]`** 2026-07-27 · Fly v392 · апрув заказчика `[ ]` |
 
 > **B1.8 (не забыть):** сейчас письма с **подтверждённого личного sender** в Brevo. Когда будет **свой домен** — завести **кофейную почту** (напр. `noreply@бренд.ru`), аутентифицировать домен в Brevo, обновить `MAIL_FROM` + secrets. Код OTP/ActionMailer менять не нужно.
 
@@ -143,7 +143,7 @@
 | 22 | **Payment status model** | Анализ статусной модели платежей/заказов (Т-Банк) | **анализ `[x]`** 2026-07-24 | [Анализ статусной модели…](customer_tasks/Анализ%20статусной%20модели%20платежей%20и%20заказов%20Т-Банк.md) |
 | 23 | **PWA durable sessions** | Долговечные сессии PWA + Silent Refresh | **MCP PASS `[x]`** 2026-07-24 · Fly v389 | [Долговечные сессии PWA…](customer_tasks/Долговечные%20сессии%20PWA%20и%20фикс%20авто-разлогина.md) |
 | 24 | **Phone OTP SMS/Flash Call** | Вход/регистрация по телефону (SMS / Flash Call) + cooldown | **MCP PASS `[x]`** 2026-07-24 · Fly v390 | [Вход и регистрация по номеру телефона…](customer_tasks/Вход%20и%20регистрация%20по%20номеру%20телефона%20SMS%20Flash%20Call.md) |
-| 25 | **Profile Email↔Phone merge** | Связка Email↔Phone, soft-merge, UI профиля / автозаполнение checkout | **GREEN `[x]`** 2026-07-27 · push/MCP `[ ]` | [Связка профилей Email Phone…](customer_tasks/Связка%20профилей%20Email%20Phone%20и%20управление%20данными%20пользователя%20в%20PWA.md) |
+| 25 | **Profile Email↔Phone merge** | Связка Email↔Phone, soft-merge, UI профиля / автозаполнение checkout | **MCP PASS `[x]`** 2026-07-27 · Fly v392 | [Связка профилей Email Phone…](customer_tasks/Связка%20профилей%20Email%20Phone%20и%20управление%20данными%20пользователя%20в%20PWA.md) |
 
 
 ---

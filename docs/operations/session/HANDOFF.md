@@ -1,6 +1,6 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-27 (**GREEN Profile Email↔Phone merge**)  
+**Дата:** 2026-07-27 (**MCP Profile Email↔Phone merge PASS v392**)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev  
 
@@ -12,7 +12,8 @@
 | PHASE 1: SPEC | **`[x]`** |
 | RED / GREEN | **`[x]`** · тесты 47/0 + регрессия 30/0 |
 | DDL verified flags | **`[x]`** `20260727100000` |
-| Push / Fly / MCP | **`[ ]`** по апруву |
+| Push / Fly deploy | **`[x]`** v392 · `9184cde` |
+| MCP Fly | **`[x]` PASS** · [`fly_mcp_profile_merge_2026-07-27.json`](../milestones/veha_2/artifacts/profile_email_phone_merge/fly_mcp_profile_merge_2026-07-27.json) |
 | Апрув заказчика | **`[ ]`** |
 
 ### Phone OTP SMS / Flash Call (2026-07-24)

@@ -84,7 +84,8 @@
 
 - Интейк 2026-07-27 (PHASE 0). Док + артефакты + CBR.
 - SPEC 2026-07-27: as-is/gap в `todo.md`.
-- GREEN 2026-07-27: merger + profile API + OrderCreator autofill + PWA UI; тесты 47/0; регрессия 30/0; push/MCP по апруву.
+- GREEN 2026-07-27: merger + profile API + OrderCreator autofill + PWA UI; тесты 47/0; регрессия 30/0.
+- Push+deploy+MCP 2026-07-27: Fly **v392** · MCP PASS · `fly_mcp_profile_merge_2026-07-27.json`.
 - В репозитории тесты бэка — **Minitest** (`test/`), не RSpec/`spec/`; фронт PWA — **Svelte** в `app/frontend/`.
 - As-is до GREEN: `PhoneVerifiedCustomerLinker` raise на конфликт — заменён soft-merge.
 - Связано: Email OTP, Phone OTP SMS/Flash Call, PWA durable sessions, `Shop::OrderCreator`.
