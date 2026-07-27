@@ -5,7 +5,7 @@
 
 ## Текущая фаза
 
-**PHASE 1: SPEC** — `[x]` · код не трогали · ждём намерения на RED
+**PHASE 2: RED** — `[x]` · 7 failures Ruby + 1 fail Node (ожидаемо) · ждём GREEN
 
 ---
 
