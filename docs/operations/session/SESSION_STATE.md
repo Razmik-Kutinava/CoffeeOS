@@ -2,12 +2,18 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-27 (RED Шаг 3 sbp/init)
+**Дата:** 2026-07-27 (GREEN Шаг 3 sbp/init · Волна A закрыта)
 
 | Сейчас | Дальше |
 |--------|--------|
-| RED Шаг 3: `SbpPaymentInitiator` + `POST .../sbp/init` — тесты падают | **go** → GREEN |
-| Шаги 1–2 GREEN `[x]` | |
+| GREEN Шаг 3: `SbpPaymentInitiator` + `POST /shop/api/payments/sbp/init` | **go** → RED Шаг 4 (webhook) или Волна D UI SBP |
+| Волна A (1–3) **done** · регрессия 56/0 | |
+
+### Сессия 2026-07-27 (GREEN Шаг 3 sbp/init)
+
+- `Shop::SbpPaymentInitiator` — simulate nspk / live Init+Receipt+GetQr
+- Route + `payments#sbp_init`
+- Тесты: initiator+api **10/0**; wave A **19/0**; tbank+order_creator **56/0**
 
 ### Сессия 2026-07-27 (RED Шаг 3 sbp/init)
 

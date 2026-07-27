@@ -6,7 +6,7 @@
 
 ## Текущая фаза
 
-**PHASE 2: RED** — `[x]` Шаг 3 sbp/init · 10 runs / 4 failures / 5 errors (NameError + route 404) · ждём GREEN
+**PHASE 2: GREEN** — `[x]` Шаг 3 sbp/init · initiator+api 10/0 · wave A unit 19/0 · регрессия 56/0 · дальше RED Шаг 4 (webhook Token) или Волна D UI
 
 ---
 
@@ -135,7 +135,7 @@
 ### Сценарий 1 — Init / GetQr / SBP init
 - [x] Шаг 1: Init + Receipt 54-ФЗ (builder + payload; 400/500) — **GREEN**
 - [x] Шаг 2: GetQr `PAYMENT_LINK` → `qr.nspk.ru` (400/500) — **GREEN**
-- [ ] Шаг 3: `POST /shop/api/payments/sbp/init` → `{ payment_url }` — **RED** тесты написаны
+- [x] Шаг 3: `POST /shop/api/payments/sbp/init` → `{ payment_url }` — **GREEN**
 
 ### Сценарий 2 — Webhook / status
 - [ ] Шаг 4: SHA-256 Token — подделка → reject (канон **401**)

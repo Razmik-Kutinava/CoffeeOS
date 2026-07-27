@@ -2,8 +2,7 @@
 
 require "test_helper"
 
-# RED [TDD] Шаг 3: POST /shop/api/payments/sbp/init → { payment_url }.
-# Реализации ещё нет — ожидаем падение (routing / NameError / assert).
+# GREEN [TDD] Шаг 3: POST /shop/api/payments/sbp/init → { payment_url }.
 class Shop::Api::SbpPaymentInitTest < ActionDispatch::IntegrationTest
   include TestFactories
 

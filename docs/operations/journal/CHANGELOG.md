@@ -1,5 +1,12 @@
 ﻿# CHANGELOG
 
+## 2026-07-27 — feat(shop): SBP payment init Init+GetQr endpoint [GREEN]
+
+- `Shop::SbpPaymentInitiator` — Receipt+Init+GetQr / simulate nspk URL
+- `POST /shop/api/payments/sbp/init` → `{ payment_url }`
+- Тесты: 10/0 · wave A 19/0 · регрессия tbank+order_creator 56/0
+- Runbook `PAYMENT.md` — SBP init
+
 ## 2026-07-27 — feat(payments): T-Kassa GetQr PAYMENT_LINK for SBP [GREEN]
 
 - `Payments::TbankQrFetcher` — `/v2/GetQr` → `qr.nspk.ru` deep link

@@ -5,7 +5,7 @@ module Shop
     class PaymentsController < Shop::Api::BaseController
       include Shop::Api::OperatingHoursGuard
 
-      before_action :reject_orders_when_closed!, only: %i[new_card one_click]
+      before_action :reject_orders_when_closed!, only: %i[new_card one_click sbp_init]
 
       # GET /shop/api/payments/card_config — RSA public key для CardData.
       def card_config
@@ -34,13 +34,28 @@ module Shop
         render json: { error: e.message, status: 422 }, status: :unprocessable_entity
       end
 
+      # POST /shop/api/payments/sbp/init — Init+Receipt → GetQr → { payment_url }.
+      def sbp_init
+        result = Shop::SbpPaymentInitiator.new(tenant: @shop_tenant, request: request)
+          .call!(order_id: params.require(:order_id))
+        render json: {
+          payment_url: result[:payment_url],
+          order_id: result[:order_id],
+          provider_payment_id: result[:provider_payment_id]
+        }
+      rescue ActionController::ParameterMissing => e
+        render json: { error: e.message }, status: :bad_request
+      rescue Shop::SbpPaymentInitiator::Error => e
+        render json: { error: e.message }, status: e.http_status
+      end
+
       private
 
       def payment_params
         params.permit(
           :name, :email, :phone, :comment, :payment_method, :pickup_time,
           :client_order_uuid, :card_data, :CardData, :save_card, :amount,
-          :card_id, :saved_card_id
+          :card_id, :saved_card_id, :order_id
         )
       end
 

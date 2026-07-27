@@ -2,8 +2,7 @@
 
 require "test_helper"
 
-# RED [TDD] Шаг 3: SbpPaymentInitiator — Init+Receipt → GetQr → payment_url.
-# Реализации ещё нет — ожидаем падение (NameError / assert).
+# GREEN [TDD] Шаг 3: SbpPaymentInitiator — Init+Receipt → GetQr → payment_url.
 class Shop::SbpPaymentInitiatorTest < ActiveSupport::TestCase
   include TestFactories
 
@@ -85,6 +84,7 @@ class Shop::SbpPaymentInitiatorTest < ActiveSupport::TestCase
     order = Order.includes(:order_items, :payments).find(order.id)
 
     captured_init = nil
+    captured_qr_payment_id = nil
     adapter = Payments::TbankAdapter.new
     adapter.define_singleton_method(:init_payment) do |**kwargs|
       captured_init = kwargs
@@ -93,7 +93,7 @@ class Shop::SbpPaymentInitiatorTest < ActiveSupport::TestCase
 
     qr = Object.new
     qr.define_singleton_method(:call!) do |payment_id:, adapter: nil|
-      assert_equal "pay-sbp-1", payment_id
+      captured_qr_payment_id = payment_id
       { payment_url: "https://qr.nspk.ru/AS10000SBP", data: "https://qr.nspk.ru/AS10000SBP" }
     end
 
@@ -109,6 +109,7 @@ class Shop::SbpPaymentInitiatorTest < ActiveSupport::TestCase
 
     assert_equal "https://qr.nspk.ru/AS10000SBP", result[:payment_url]
     assert_equal "pay-sbp-1", result[:provider_payment_id]
+    assert_equal "pay-sbp-1", captured_qr_payment_id
     assert captured_init[:receipt].is_a?(Hash), "Init должен получить Receipt 54-ФЗ"
     assert_equal "usn_income", captured_init[:receipt]["Taxation"]
     assert order.payments.reload.first.provider_payment_id == "pay-sbp-1"

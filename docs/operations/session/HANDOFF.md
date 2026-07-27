@@ -1,6 +1,6 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-27 (**GREEN Шаг 2 GetQr · SBP Deep Link**)  
+**Дата:** 2026-07-27 (**GREEN Шаг 3 sbp/init · Волна A**)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev  
 
@@ -9,15 +9,14 @@
 | Что | Статус |
 |-----|--------|
 | Intake ТЗ + CBR + артефакты | **`[x]`** |
-| PHASE 1: SPEC | **`[x]`** · `todo.md` волны A–D |
-| RED / GREEN Шаг 1 Receipt | **`[x]`** |
-| RED / GREEN Шаг 2 GetQr | **`[x]`** · 28/0 |
-| RED / GREEN Шаг 3+ | **`[ ]`** · следующий: `sbp/init` |
+| PHASE 1: SPEC | **`[x]`** |
+| Волна A Шаги 1–3 (Receipt/GetQr/sbp/init) | **`[x]`** GREEN |
+| Волна B–D (webhook/Charge/UI) | **`[ ]`** · следующий RED Шаг 4 или UI |
 | Push / Fly deploy | **`[ ]`** |
 | MCP / UI приёмка на Fly | **`[ ]`** |
 | Апрув заказчика | **`[ ]`** |
 
-**Шаг 2:** `TbankQrFetcher` → nspk deep link. Дальше — RED `POST /shop/api/payments/sbp/init`.
+**Волна A:** `POST /shop/api/payments/sbp/init` отдаёт nspk `payment_url`. Дальше — characterization webhook или UI SBP.
 
 ### Repeat order invalid token · PaymentMethodsSheet (2026-07-27)
 

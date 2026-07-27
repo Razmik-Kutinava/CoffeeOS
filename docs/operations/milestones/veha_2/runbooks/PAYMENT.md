@@ -76,6 +76,12 @@
 - `Payments::TbankQrFetcher` → `POST /v2/GetQr` с `DataType=PAYMENT_LINK` → `{ payment_url: Data }` (`https://qr.nspk.ru/...`).
 - Оркестрация Init→GetQr — `Shop::SbpPaymentInitiator` (Шаг 3).
 
+### SBP init endpoint (2026-07-27, Шаг 3)
+
+- `POST /shop/api/payments/sbp/init` `{ order_id }` → `{ payment_url }` (nspk deep link).
+- `Shop::SbpPaymentInitiator`: simulate → fictional nspk; live → Receipt+Init+GetQr.
+- Заказ должен быть `pending_payment` тенанта; 404/422/500 по `Error#http_status`.
+
 ---
 
 ## Итог реализации (2026-05-28)
