@@ -68,3 +68,11 @@
 ## Exit Criteria (Критерии выхода)
 1. Все новые тесты проходят (зеленый статус).
 2. Линтер и тайпчекер (tsc) выполняются без ошибок.
+
+---
+
+## Заметки агента (SPEC 2026-07-27)
+
+→ Полный as-is/gap, файлы, чеклист: [`docs/operations/session/todo.md`](../../../session/todo.md)
+
+Ключевое: стек **Svelte** (`app/frontend/`), не React; `isTokenInvalid` = **RebillId карты**, не auth refresh; MVP — флаг после fail `one_click`, без DDL.

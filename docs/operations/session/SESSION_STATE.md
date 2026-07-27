@@ -2,12 +2,19 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-27 (интейк Repeat order invalid token payment sheet)
+**Дата:** 2026-07-27 (SPEC Repeat order invalid token payment sheet)
 
 | Сейчас | Дальше |
 |--------|--------|
-| Intake ТЗ + CBR + артефакты (repeat invalid token payment sheet) | SPEC → go |
+| SPEC as-is/gap + `todo.md` (repeat invalid token payment sheet) | RED (тесты) по намерению |
 | Fly **v392** · Profile merge MCP **PASS** | Апрув заказчика Profile merge |
+
+### Сессия 2026-07-27 (SPEC Repeat order invalid token payment sheet)
+
+- As-is: Svelte `PaymentMethodsSheet`, repeat → checkout autopay, нет `isTokenInvalid`
+- Решения: `repeatInvalidTokenStore.js`, `paymentMethodI18n.js`, inline errors в sheet, CTA peek
+- Тесты: `test/javascript/repeat_invalid_token_payment_test.mjs` (не React path из ТЗ)
+- Код не писали — ждём RED
 
 ### Сессия 2026-07-27 (интейк Repeat order invalid token payment sheet)
 
