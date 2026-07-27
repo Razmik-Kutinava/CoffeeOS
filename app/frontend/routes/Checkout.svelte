@@ -51,6 +51,7 @@
   import { REPEAT_AUTOPAY_KEY, refreshFrequentProducts } from "../lib/frequentRepeatStore.js"
   import { restoreGuestSession } from "../lib/restoreGuestSession.js"
   import { paymentMethodLoadErrorMessage } from "../lib/paymentMethodI18n.js"
+  import { initSbpPayment, redirectToSbp } from "../lib/shopSbpPay.js"
   import {
     setTokenInvalid,
     clearTokenInvalid,
@@ -99,7 +100,7 @@
   let savedCards = $state([])
   let cardsLoading = $state(false)
   let selectedCardId = $state(null)
-  let selectionMode = $state("saved_card") // saved_card | new_card
+  let selectionMode = $state("saved_card") // saved_card | new_card | sbp
   let newCardState = $state(createNewCardFormState())
   let payFsmState = $state(PAY_FSM.DEFAULT)
   let showThreeDsOverlay = $state(false)
@@ -115,9 +116,11 @@
   )
   const sheetCanPay = $derived(
     canPay &&
-      (selectionMode === "saved_card"
-        ? !!selectedCardId
-        : isNewCardPayEnabled(newCardState))
+      (selectionMode === "sbp"
+        ? true
+        : selectionMode === "saved_card"
+          ? !!selectedCardId
+          : isNewCardPayEnabled(newCardState))
   )
   /** Место под peek-шторку заказа; при оплате — полный stacked stack. */
   const checkoutPadClass = $derived(paymentSheetOpen ? "pb-[92vh]" : "pb-[32vh]")
@@ -464,6 +467,29 @@
     persistPaymentSelection({ selectedCardId: null, selectionMode: "new_card" })
   }
 
+  function onSelectSbp() {
+    selectionMode = "sbp"
+    selectedCardId = null
+    payFsmState = PAY_FSM.DEFAULT
+    sheetInlineError = null
+    persistPaymentSelection({ selectedCardId: null, selectionMode: "sbp" })
+  }
+
+  /** api-адаптер для shopSbpPay: body объектом (unit-контракт), наружу — JSON.stringify. */
+  async function sbpApi(path, opts = {}) {
+    const next = { ...opts }
+    if (next.body != null && typeof next.body === "object") {
+      next.body = JSON.stringify(next.body)
+    }
+    try {
+      return await apiWithPayTimeout(api, path, next)
+    } catch (e) {
+      e.status = e.httpStatus
+      e.body = { error: e.message }
+      throw e
+    }
+  }
+
   /** 3DS прерван (закрыли overlay) → Client Error, карта не сохранена на FE. */
   function onThreeDsClose() {
     if (payFsmState !== PAY_FSM.THREE_DS && payFsmState !== PAY_FSM.PROCESSING) {
@@ -556,6 +582,26 @@
 
     try {
       saveGuestProfile({ name, email, emailVerified: true })
+
+      if (selectionMode === "sbp") {
+        const orderRes = await withMinLoaderMs(MIN_LOADER_MS, async () => {
+          payFsmState = PAY_FSM.CONNECTING
+          const payload = await apiWithPayTimeout(api, "/orders", {
+            method: "POST",
+            body: JSON.stringify({
+              name,
+              email: email.trim().toLowerCase(),
+              payment_method: "sbp"
+            })
+          })
+          payFsmState = PAY_FSM.PROCESSING
+          return payload
+        })
+        saveGuestOrderSession(orderRes.order_id, orderRes.reconnect_token)
+        const paymentUrl = await initSbpPayment(sbpApi, { orderId: orderRes.order_id })
+        redirectToSbp(paymentUrl)
+        return
+      }
 
       const res = await withMinLoaderMs(MIN_LOADER_MS, async () => {
         payFsmState = PAY_FSM.CONNECTING
@@ -832,6 +878,7 @@
     }}
     {onSelectCard}
     {onSelectNewCard}
+    {onSelectSbp}
     onPay={onSheetPay}
     onRetry={onSheetPayRetry}
     onRetryLoad={retryLoadSavedCards}

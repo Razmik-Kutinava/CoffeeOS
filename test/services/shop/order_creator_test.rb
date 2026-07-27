@@ -182,23 +182,23 @@ class Shop::OrderCreatorTest < ActiveSupport::TestCase
   # SBP payment → pending_payment + pending
   # ---------------------------------------------------------------------------
 
-  test "sbp payment creates order with accepted status when payment is simulated" do
+  test "sbp payment creates order with pending_payment (deep link path, even when simulated)" do
     session = build_session_with_item
     begin
       order = run_creator(session, payment_method: "sbp")
-      assert_equal "accepted", order.status
+      assert_equal "pending_payment", order.status
     rescue Shop::OrderCreator::Error => e
       raise unless e.message.match?(/order_number/i)
       pass "DB trigger not installed; skipping"
     end
   end
 
-  test "sbp payment creates payment with succeeded status when payment is simulated" do
+  test "sbp payment creates payment with pending status (awaits sbp/init + webhook)" do
     session = build_session_with_item
     begin
       order   = run_creator(session, payment_method: "sbp")
       payment = order.payments.first
-      assert_equal "succeeded", payment.status
+      assert_equal "pending", payment.status
     rescue Shop::OrderCreator::Error => e
       raise unless e.message.match?(/order_number/i)
       pass "DB trigger not installed; skipping"

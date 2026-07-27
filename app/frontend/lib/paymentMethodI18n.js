@@ -22,6 +22,11 @@ export function labelSbp() {
   return "СБП"
 }
 
+/** CTA кнопки оплаты при выбранном СБП (CODE:BLACK / deep link). */
+export function ctaSbpFastPay() {
+  return "Оплатить быстро"
+}
+
 export function sbpUnavailable() {
   return "СБП временно недоступно"
 }

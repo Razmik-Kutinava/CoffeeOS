@@ -8,6 +8,8 @@
   let {
     fsmState = PAY_FSM.DEFAULT,
     disabled = false,
+    idleLabel = null,
+    loadingLabel = null,
     onPay = () => {},
     onRetry = () => {}
   } = $props()
@@ -29,6 +31,13 @@
   const busy = $derived(isPayFsmBusy(fsmState))
   const showLoader = $derived(
     fsmState === PAY_FSM.CONNECTING || fsmState === PAY_FSM.PROCESSING
+  )
+  const label = $derived(
+    showLoader && loadingLabel
+      ? loadingLabel
+      : fsmState === PAY_FSM.DEFAULT && idleLabel
+        ? idleLabel
+        : payFsmLabel(fsmState)
   )
 
   function handleClick() {
@@ -61,7 +70,7 @@
   {#if showLoader}
     <span class="pay-fsm-btn__loader" aria-hidden="true"></span>
   {/if}
-  <span class="pay-fsm-btn__label">{payFsmLabel(fsmState)}</span>
+  <span class="pay-fsm-btn__label">{label}</span>
 </button>
 
 <style>

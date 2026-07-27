@@ -6,8 +6,8 @@
 
 ## Текущая фаза
 
-**PHASE 2: RED** — `[x]` Шаг 9 UI SBP · Node ERR_MODULE_NOT_FOUND · Ruby UI 4 failures · ждём GREEN  
-*(Шаги 4–5 webhook — уже покрыты `tbank_controller_test`; Шаг 6 status — reuse orders/finalize)*
+**PHASE 2: GREEN** — `[x]` Шаг 9 UI SBP · Node 8/0 · Ruby UI+repeat 11/0 · order_creator 22/0 · регрессия оплаты 59/0  
+*(Шаги 4–5 webhook — characterization; Шаг 6 status — reuse; Шаг 11 polling — следующий)*
 
 ---
 
@@ -148,7 +148,7 @@
 - [ ] Шаг 8: Charge one_click — **characterization** + ошибки невалидного токена
 
 ### Сценарий 4 — UI CODE:BLACK
-- [ ] Шаг 9: «Оплатить быстро» / SBP → init → redirect — **RED** тесты написаны
+- [x] Шаг 9: «Оплатить быстро» / SBP → init → redirect — **GREEN**
 - [ ] Шаг 10: маска карты + 1-tap (polish при необходимости)
 - [ ] Шаг 11: return + polling ≤60s / 2s; нет infinite Loading
 

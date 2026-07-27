@@ -82,6 +82,12 @@
 - `Shop::SbpPaymentInitiator`: simulate → fictional nspk; live → Receipt+Init+GetQr.
 - Заказ должен быть `pending_payment` тенанта; 404/422/500 по `Error#http_status`.
 
+### SBP UI «Оплатить быстро» (2026-07-27, Шаг 9)
+
+- FE: `shopSbpPay.js` → `POST /shop/api/payments/sbp/init` → `window.location` только на `*.nspk.ru`.
+- Checkout: `POST /orders` `payment_method=sbp` (всегда `pending_payment`, без Init в OrderCreator) → sbp/init → redirect.
+- CTA: «Оплатить быстро»; loading: «Оплата через СБП…». Poll return 2s×30 — Шаг 11.
+
 ---
 
 ## Итог реализации (2026-05-28)

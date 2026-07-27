@@ -1,16 +1,17 @@
 <script>
   /**
-   * Список способов оплаты — макет 1000008925.png + repeat invalid token UX.
+   * Список способов оплаты — макет 1000008925.png + repeat invalid token UX + SBP deep link.
    */
   import { cardBrandShort } from "../lib/paymentMethodLabels.js"
   import {
     formatCardRowLabel,
     labelAddCard,
     labelSbp,
-    sbpUnavailable,
+    ctaSbpFastPay,
     paymentMethodLoadErrorMessage,
     paymentMethodRetryLabel
   } from "../lib/paymentMethodI18n.js"
+  import { SBP_LOADING_LABEL } from "../lib/shopSbpPay.js"
   import { PAY_FSM, shouldLockPaymentMethods } from "../lib/shopPayFsm.js"
   import NewCardForm from "./NewCardForm.svelte"
   import CheckoutPayButton from "./CheckoutPayButton.svelte"
@@ -23,29 +24,31 @@
     loadError = null,
     inlineError = null,
     selectedCardId = null,
-    selectionMode = "saved_card", // saved_card | new_card
+    selectionMode = "saved_card", // saved_card | new_card | sbp
     canPay = false,
     fsmState = PAY_FSM.DEFAULT,
     newCardState = $bindable(undefined),
     onClose = undefined,
     onSelectCard = undefined,
     onSelectNewCard = undefined,
+    onSelectSbp = undefined,
     onPay = undefined,
     onRetry = undefined,
     onRetryLoad = undefined
   } = $props()
 
-  let sbpNotice = $state(false)
-
   const locked = $derived(shouldLockPaymentMethods(fsmState))
   const payDisabled = $derived(!canPay || loading || locked)
+  const idlePayLabel = $derived(selectionMode === "sbp" ? ctaSbpFastPay() : null)
+  const loadingPayLabel = $derived(selectionMode === "sbp" ? SBP_LOADING_LABEL : null)
 
   function isCardSelected(card) {
     return selectionMode === "saved_card" && selectedCardId === card.id
   }
 
   function handleSbpClick() {
-    sbpNotice = true
+    if (locked) return
+    onSelectSbp?.()
   }
 </script>
 
@@ -119,13 +122,16 @@
           <button
             type="button"
             class="pm-row pm-row--sbp"
-            disabled
-            aria-disabled="true"
+            class:pm-row--selected={selectionMode === "sbp"}
+            role="radio"
+            aria-checked={selectionMode === "sbp"}
             data-testid="payment-method-sbp"
+            disabled={locked}
             onclick={handleSbpClick}
           >
             <span class="pm-row__brand pm-row__brand--sbp" aria-hidden="true">{labelSbp()}</span>
             <span class="pm-row__label">{labelSbp()}</span>
+            <span class="pm-row__radio" aria-hidden="true"></span>
           </button>
         </li>
 
@@ -151,10 +157,6 @@
           <NewCardForm bind:state={newCardState} />
         </div>
       {/if}
-
-      {#if sbpNotice}
-        <p class="pm-sheet__hint" role="status">{sbpUnavailable()}</p>
-      {/if}
     {/if}
 
     {#if inlineError}
@@ -167,6 +169,8 @@
       <CheckoutPayButton
         {fsmState}
         disabled={payDisabled && fsmState === PAY_FSM.DEFAULT}
+        idleLabel={idlePayLabel}
+        loadingLabel={loadingPayLabel}
         onPay={() => onPay?.()}
         onRetry={() => onRetry?.()}
       />

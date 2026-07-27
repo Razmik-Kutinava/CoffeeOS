@@ -2,12 +2,19 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-27 (RED Шаг 9 UI SBP)
+**Дата:** 2026-07-27 (GREEN Шаг 9 UI SBP)
 
 | Сейчас | Дальше |
 |--------|--------|
-| RED Шаг 9: `shopSbpPay.js` + enable SBP UI — тесты падают | **go** → GREEN UI SBP |
-| Шаги 4–6: characterization / reuse — отмечены `[x]` без нового кода | |
+| GREEN Шаг 9: SBP UI + `shopSbpPay` + Checkout wire | намерение → Шаг 11 polling / 7–8 char / 10 polish |
+| OrderCreator: sbp всегда `pending_payment`, без Init gateway | |
+
+### Сессия 2026-07-27 (GREEN Шаг 9 UI SBP)
+
+- `app/frontend/lib/shopSbpPay.js` — init / redirect / poll opts / errors
+- i18n `ctaSbpFastPay`; sheet SBP enabled; Checkout: order→sbp/init→nspk
+- OrderCreator: sbp не simulate-accept; skip `init_gateway` для sbp
+- Тесты: Node **8/0**; UI+repeat **11/0**; order_creator **22/0**; регрессия оплаты **59/0**
 
 ### Сессия 2026-07-27 (RED Шаг 9 UI SBP)
 

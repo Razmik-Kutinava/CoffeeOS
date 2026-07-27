@@ -1,5 +1,12 @@
 ﻿# CHANGELOG
 
+## 2026-07-27 — feat(shop): SBP UI «Оплатить быстро» deep link [GREEN]
+
+- `shopSbpPay.js` — init `/payments/sbp/init` → redirect `*.nspk.ru`; poll opts 2s×30
+- Sheet: SBP enabled + CTA; Checkout: `POST /orders` (sbp) → init → redirect
+- OrderCreator: sbp всегда `pending_payment`, без gateway Init (делает initiator)
+- Тесты: Node 8/0 · UI+repeat 11/0 · регрессия оплаты 59/0
+
 ## 2026-07-27 — feat(shop): SBP payment init Init+GetQr endpoint [GREEN]
 
 - `Shop::SbpPaymentInitiator` — Receipt+Init+GetQr / simulate nspk URL

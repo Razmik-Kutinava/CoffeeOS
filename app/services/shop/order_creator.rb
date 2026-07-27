@@ -107,7 +107,10 @@ module Shop
 
       begin
         save_card = ActiveModel::Type::Boolean.new.cast(params.fetch(:save_card, false))
-        init_gateway_payment!(order, payment, save_card: save_card) if gateway && flow[:order_status] == :pending_payment
+        # SBP deep link: Init+GetQr делает Shop::SbpPaymentInitiator (не PaymentURL iframe).
+        if gateway && flow[:order_status] == :pending_payment && payment_method != :sbp
+          init_gateway_payment!(order, payment, save_card: save_card)
+        end
       rescue Payments::TbankAdapter::Error, Error => e
         void_pending_online_order!(order, payment)
         raise e
@@ -141,6 +144,16 @@ module Shop
     end
 
     def payment_flow(payment_method)
+      # SBP: всегда pending_payment — deep link через POST .../sbp/init (даже при SIMULATE).
+      if payment_method == :sbp
+        return {
+          order_status: :pending_payment,
+          payment_status: :pending,
+          paid_at: nil,
+          comment: "Ожидание подтверждения оплаты СБП (deep link / GetQr)"
+        }
+      end
+
       if simulate_shop_payment?
         return {
           order_status: :accepted,

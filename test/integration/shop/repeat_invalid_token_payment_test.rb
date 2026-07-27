@@ -32,11 +32,16 @@ class Shop::RepeatInvalidTokenPaymentTest < ActionDispatch::IntegrationTest
     assert_includes src, "onRetryLoad"
   end
 
-  test "step3 PaymentMethodsSheet keeps SBP disabled with a11y" do
+  test "step3 PaymentMethodsSheet enables SBP deep link row" do
     src = File.read(SHEET)
     assert_includes src, 'data-testid="payment-method-sbp"'
-    assert_match(/aria-disabled="true"/, src)
-    assert_includes src, "sbpUnavailable"
+    assert_includes src, "shopSbpPay"
+    assert_includes src, "onSelectSbp"
+    refute_match(
+      /data-testid="payment-method-sbp"[\s\S]{0,120}?^\s*disabled\s*$/m,
+      src,
+      "SBP больше не permanently disabled (эпик deep link)"
+    )
   end
 
   test "step5 Checkout wires invalid rebill store and sheet inline errors" do
