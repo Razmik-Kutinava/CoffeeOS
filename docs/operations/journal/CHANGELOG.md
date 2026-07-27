@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-07-27 — test(shop): characterize Recurrent/Charge card tokenization [GREEN]
+
+- `sbp_epic_card_tokenization_char_test.rb` — Шаги 7–8 эпика SBP (без новой прод-логики)
+- Fake Tbank stubs: `receipt:` keyword (изоляция с adapter)
+- Тесты: 38/0 · Node invalid rebill 14/0
+
 ## 2026-07-27 — feat(shop): SBP return polling 60s/2s [GREEN]
 
 - `pollSbpPaymentStatus` — finalize poll 2s×30; timeout/terminal → «Оплата не завершена…»

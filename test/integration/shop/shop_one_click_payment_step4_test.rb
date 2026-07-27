@@ -18,7 +18,7 @@ class Shop::ShopOneClickPaymentStep4Test < ActionDispatch::IntegrationTest
     mattr_accessor :last_init_recurrent, default: nil
 
     module Override
-      def init_payment(order:, return_base_url:, notification_url:, customer_key: nil, recurrent: false)
+      def init_payment(order:, return_base_url:, notification_url:, customer_key: nil, recurrent: false, receipt: nil)
         return super unless FakeTbankOneClick.enabled
 
         FakeTbankOneClick.last_init_recurrent = recurrent

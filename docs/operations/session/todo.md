@@ -6,8 +6,8 @@
 
 ## Текущая фаза
 
-**PHASE 2: GREEN** — `[x]` Шаг 11 return polling 60s/2s · Node 13/0 · return UI 2/0  
-*(Шаг 9 UI SBP — GREEN; Шаги 7–8 / 10 — по желанию; epic UI core закрыт)*
+**PHASE 2: GREEN** — `[x]` Шаги 7–8 characterization Recurrent/Charge · char **4/0** + suites  
+*(Шаги 9+11 UI/poll — GREEN; Шаг 10 polish — опционально)*
 
 ---
 
@@ -144,8 +144,8 @@
 - [x] Шаг 6: Status fallback — **reuse** `GET orders/:id` + finalize (alias не делаем)
 
 ### Сценарий 3 — Карта / токен
-- [ ] Шаг 7: Recurrent → RebillId в БД — **characterization**
-- [ ] Шаг 8: Charge one_click — **characterization** + ошибки невалидного токена
+- [x] Шаг 7: Recurrent → RebillId в БД — **characterization**
+- [x] Шаг 8: Charge one_click — **characterization** + ошибки невалидного токена
 
 ### Сценарий 4 — UI CODE:BLACK
 - [x] Шаг 9: «Оплатить быстро» / SBP → init → redirect — **GREEN**

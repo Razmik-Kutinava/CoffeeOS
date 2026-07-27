@@ -94,6 +94,12 @@
 - SuccessURL/`status=ok|success` → poll → `/order/:id`; timeout / cancelled / fail → «Оплата не завершена, попробовать снова».
 - `PaymentResult.svelte` — без бесконечного Loading (`finally` снимает loader).
 
+### Card tokenization characterization (2026-07-27, Шаги 7–8)
+
+- Init `Recurrent=Y` + `SavedCardStore` → `mobile_payment_methods.card_token` (= RebillId).
+- Charge `/v2/Charge` + `POST /shop/api/payments/one_click`; invalid token → **422** + `error_code` (FE `isInvalidRebillPaymentError`).
+- Тесты: `sbp_epic_card_tokenization_char_test.rb` (+ step2/step4/adapter).
+
 ---
 
 ## Итог реализации (2026-05-28)

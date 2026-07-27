@@ -2,12 +2,18 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-27 (GREEN Шаг 11 SBP return polling)
+**Дата:** 2026-07-27 (GREEN Шаги 7–8 card tokenization characterization)
 
 | Сейчас | Дальше |
 |--------|--------|
-| GREEN Шаг 11: poll 2s×30 на PaymentResult | 7–8 char / 10 polish / push·Fly по просьбе |
-| Шаг 9 UI SBP — GREEN | |
+| GREEN 7–8: Recurrent→RebillId + Charge + invalid token (char) | Шаг 10 polish / push·Fly по просьбе |
+| Шаги 9+11 UI/poll — GREEN | |
+
+### Сессия 2026-07-27 (GREEN Шаги 7–8 characterization)
+
+- `sbp_epic_card_tokenization_char_test.rb` — Recurrent=Y, SavedCardStore, Charge, one_click 422/`1014`
+- Fake one_click/new_card stubs: `receipt:` для изоляции с adapter
+- Тесты: char+one_click+new_card+adapter **38/0**; Node invalid rebill **14/0**
 
 ### Сессия 2026-07-27 (GREEN Шаг 11 SBP return polling)
 

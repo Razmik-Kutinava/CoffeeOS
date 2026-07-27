@@ -1,6 +1,6 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-27 (**GREEN Шаг 11 SBP return polling**)  
+**Дата:** 2026-07-27 (**GREEN Шаги 7–8 card tokenization characterization**)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev  
 
@@ -11,14 +11,15 @@
 | Intake ТЗ + CBR + артефакты | **`[x]`** |
 | PHASE 1: SPEC | **`[x]`** |
 | Волна A Шаги 1–3 (Receipt/GetQr/sbp/init) | **`[x]`** GREEN |
+| Шаги 7–8 Recurrent/Charge characterization | **`[x]`** GREEN |
 | Шаг 9 UI «Оплатить быстро» | **`[x]`** GREEN |
 | Шаг 11 return polling 60s/2s | **`[x]`** GREEN |
-| Шаги 7–8 / 10 characterization·polish | **`[ ]`** |
+| Шаг 10 polish маски карты | **`[ ]`** опционально |
 | Push / Fly deploy | **`[ ]`** |
 | MCP / UI приёмка на Fly | **`[ ]`** |
 | Апрув заказчика | **`[ ]`** |
 
-**Return:** SuccessURL → `#/payment-result` → poll finalize 2s×30 → order или «Оплата не завершена…».
+**Карты:** Recurrent=Y → RebillId в `mobile_payment_methods`; Charge one_click; invalid token → 422 + `error_code`.
 
 ### Repeat order invalid token · PaymentMethodsSheet (2026-07-27)
 
