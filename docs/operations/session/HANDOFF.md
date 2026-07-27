@@ -1,8 +1,21 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-27 (**MCP Profile Email↔Phone merge PASS v392**)  
+**Дата:** 2026-07-27 (**GREEN Repeat invalid token payment sheet**)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev  
+
+### Repeat order invalid token · PaymentMethodsSheet (2026-07-27)
+
+| Что | Статус |
+|-----|--------|
+| Intake ТЗ + CBR + артефакты | **`[x]`** |
+| PHASE 1: SPEC | **`[x]`** |
+| RED / GREEN | **`[x]`** · Node 14/0 · Ruby repeat+payment 27/0 |
+| Push / Fly deploy | **`[ ]`** |
+| MCP / UI приёмка на Fly | **`[ ]`** |
+| Апрув заказчика | **`[ ]`** |
+
+**Backlog:** proactive `rebill_valid` в API карт (cold start без prior one_click fail) — отдельный шаг + migration gate.
 
 ### Profile Email↔Phone merge (2026-07-27)
 

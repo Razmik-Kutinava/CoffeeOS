@@ -1,5 +1,14 @@
 ﻿# CHANGELOG
 
+## 2026-07-27 — feat(shop): repeat invalid token payment sheet [GREEN]
+
+- `paymentMethodI18n.js` — подписи «Картой *XXXX», «Картой +», СБП, CTA
+- `repeatInvalidTokenStore.js` — invalid RebillId flag, persist selection, open-sheet marker
+- `CartSheet`: CTA «Добавить карту» при invalid token в repeat context
+- `PaymentMethodsSheet`: inline/load error UI, i18n, SBP unavailable toast
+- `Checkout.svelte`: preload cards fail → toast; pay fail → inline + setTokenInvalid
+- Тесты: Node 14/0 · Ruby repeat+payment mirror 27/0
+
 ## 2026-07-27 — deploy+MCP: Profile Email↔Phone merge (Fly v392)
 
 - Push `9184cde`; Fly **v392** (retry после ConcurrentMigrationError на release; DDL уже применён)

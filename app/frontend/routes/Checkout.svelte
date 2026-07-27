@@ -45,10 +45,22 @@
     ensureCheckoutCartPeek,
     CHECKOUT_PAY_EVENT,
     openCheckoutPayStack,
-    closeCheckoutPayStack
+    closeCheckoutPayStack,
+    cartSheetError
   } from "../lib/cartSheetStore.js"
   import { REPEAT_AUTOPAY_KEY, refreshFrequentProducts } from "../lib/frequentRepeatStore.js"
   import { restoreGuestSession } from "../lib/restoreGuestSession.js"
+  import { paymentMethodLoadErrorMessage } from "../lib/paymentMethodI18n.js"
+  import {
+    setTokenInvalid,
+    clearTokenInvalid,
+    persistPaymentSelection,
+    loadPaymentSelection,
+    consumeOpenPaymentSheet,
+    mapPaymentErrorSurface,
+    isInvalidRebillPaymentError,
+    refreshInvalidRebillFlag
+  } from "../lib/repeatInvalidTokenStore.js"
   import {
     formatPhoneMask,
     normalizePhoneToE164Ru,
@@ -92,6 +104,8 @@
   let payFsmState = $state(PAY_FSM.DEFAULT)
   let showThreeDsOverlay = $state(false)
   let threeDsAborted = $state(false)
+  let sheetInlineError = $state(null)
+  let cardsLoadError = $state(null)
 
   const canSendCode = $derived(isValidEmail(email) && !sendingCode)
   const phoneE164 = $derived(normalizePhoneToE164Ru(phoneDisplay))
@@ -109,7 +123,9 @@
   const checkoutPadClass = $derived(paymentSheetOpen ? "pb-[92vh]" : "pb-[32vh]")
 
   function closePaymentSheet() {
+    persistPaymentSelection({ selectedCardId, selectionMode })
     paymentSheetOpen = false
+    sheetInlineError = null
     closeCheckoutPayStack()
   }
 
@@ -156,6 +172,8 @@
     try {
       if (sessionStorage.getItem(REPEAT_AUTOPAY_KEY)) {
         sessionStorage.removeItem(REPEAT_AUTOPAY_KEY)
+        openPaymentSheet()
+      } else if (consumeOpenPaymentSheet()) {
         openPaymentSheet()
       }
     } catch (_e) {
@@ -213,15 +231,21 @@
   async function loadSavedCards() {
     if (!isValidEmail(email) || !emailVerified) {
       savedCards = []
-      return
+      cardsLoadError = null
+      return true
     }
     cardsLoading = true
+    cardsLoadError = null
     try {
       const q = encodeURIComponent(email.trim().toLowerCase())
       const res = await api(`/user/cards?email=${q}`)
       savedCards = Array.isArray(res?.cards) ? res.cards : []
       const primary = res?.primary
-      if (primary?.id) {
+      const persisted = loadPaymentSelection()
+      if (persisted.selectedCardId && savedCards.some((c) => c.id === persisted.selectedCardId)) {
+        selectedCardId = persisted.selectedCardId
+        selectionMode = persisted.selectionMode || "saved_card"
+      } else if (primary?.id) {
         selectedCardId = primary.id
         selectionMode = "saved_card"
       } else if (savedCards[0]?.id) {
@@ -230,8 +254,11 @@
       } else {
         selectedCardId = null
       }
-    } catch {
+      return true
+    } catch (e) {
       savedCards = []
+      cardsLoadError = e?.message || paymentMethodLoadErrorMessage()
+      return false
     } finally {
       cardsLoading = false
     }
@@ -239,6 +266,8 @@
 
   async function openPaymentSheet() {
     err = null
+    sheetInlineError = null
+    cardsLoadError = null
     if (!isValidEmail(email)) {
       err = "Укажите email"
       editContact = true
@@ -254,8 +283,20 @@
       return
     }
     if (submitting) return
+    const loaded = await loadSavedCards()
+    if (!loaded) {
+      cartSheetError.set(cardsLoadError || paymentMethodLoadErrorMessage())
+      paymentSheetOpen = false
+      closeCheckoutPayStack()
+      return
+    }
     openCheckoutPayStack()
     paymentSheetOpen = true
+  }
+
+  async function retryLoadSavedCards() {
+    cardsLoadError = null
+    sheetInlineError = null
     await loadSavedCards()
   }
 
@@ -410,6 +451,8 @@
     selectionMode = "saved_card"
     selectedCardId = card.id
     payFsmState = PAY_FSM.DEFAULT
+    sheetInlineError = null
+    persistPaymentSelection({ selectedCardId: card.id, selectionMode: "saved_card" })
   }
 
   function onSelectNewCard() {
@@ -417,6 +460,8 @@
     selectedCardId = null
     newCardState = createNewCardFormState()
     payFsmState = PAY_FSM.DEFAULT
+    sheetInlineError = null
+    persistPaymentSelection({ selectedCardId: null, selectionMode: "new_card" })
   }
 
   /** 3DS прерван (закрыли overlay) → Client Error, карта не сохранена на FE. */
@@ -434,6 +479,8 @@
   async function completePaySuccess(orderId, { wantedSave = false, savedCard = null } = {}) {
     payFsmState = PAY_FSM.SUCCESS
     selectionMode = "saved_card"
+    clearTokenInvalid(selectedCardId)
+    refreshInvalidRebillFlag()
     // После 3DS/soft-fail: stale saved_card из FA-ответа ненадёжен — ретраим GET.
     let cards = []
     if (wantedSave && !savedCard) {
@@ -501,6 +548,7 @@
     if (!sheetCanPay) return
     if (!isPayFsmClickable(payFsmState)) return
     err = null
+    sheetInlineError = null
     submitting = true
     payFsmState = PAY_FSM.CONNECTING
     const formSnapshot = { ...newCardState }
@@ -568,6 +616,12 @@
         newCardState = formSnapshot
       }
       payFsmState = fsmFromPaymentError(e, { httpStatus: e.httpStatus })
+      if (isInvalidRebillPaymentError(e)) {
+        setTokenInvalid(selectedCardId)
+      }
+      if (mapPaymentErrorSurface({ httpStatus: e.httpStatus, phase: "pay" }) === "inline") {
+        sheetInlineError = e.message || paymentMethodLoadErrorMessage()
+      }
       if (/подтвердите email/i.test(e.message || "")) {
         emailVerified = false
         editContact = true
@@ -766,6 +820,8 @@
     stacked={paymentSheetOpen}
     cards={savedCards}
     loading={cardsLoading}
+    loadError={cardsLoadError}
+    inlineError={sheetInlineError}
     {selectedCardId}
     {selectionMode}
     canPay={sheetCanPay}
@@ -778,6 +834,7 @@
     {onSelectNewCard}
     onPay={onSheetPay}
     onRetry={onSheetPayRetry}
+    onRetryLoad={retryLoadSavedCards}
   />
 
   <ThreeDsOverlay open={showThreeDsOverlay} onClose={onThreeDsClose} />

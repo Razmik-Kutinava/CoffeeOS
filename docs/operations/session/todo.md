@@ -5,7 +5,7 @@
 
 ## Текущая фаза
 
-**PHASE 2: RED** — `[x]` · 7 failures Ruby + 1 fail Node (ожидаемо) · ждём GREEN
+**PHASE 2: GREEN** — `[x]` · Node 14/14 · Ruby repeat+payment mirror 27/27 · REVIEW ops
 
 ---
 
@@ -66,30 +66,30 @@
 ## Чеклист шагов (из ТЗ)
 
 ### Шаг 1 — CTA «Добавить карту» в peek при invalid token
-- [ ] Given: главный экран (`/` или `#/checkout`), repeat context, `isTokenInvalid`, mode peek
-- [ ] Then: «Оплатить» / `+сумма` скрыты → CTA «Добавить карту»
-- [ ] Click → open PaymentMethodsSheet (через checkout stack)
-- [ ] Pre-open API 400/500 → тост, sheet не открывается
+- [x] Given: главный экран (`/` или `#/checkout`), repeat context, `isTokenInvalid`, mode peek
+- [x] Then: «Оплатить» / `+сумма` скрыты → CTA «Добавить карту»
+- [x] Click → open PaymentMethodsSheet (через checkout stack)
+- [x] Pre-open API 400/500 → тост, sheet не открывается
 
 ### Шаг 2 — Рендер BottomSheet «Способ оплаты»
-- [ ] Header + close (X)
-- [ ] Список: «Картой *1594» selected, СБП disabled, «Картой +»
-- [ ] Load error 400/500 → inline stub + «Повторить»
+- [x] Header + close (X)
+- [x] Список: «Картой *1594» selected, СБП disabled, «Картой +»
+- [x] Load error 400/500 → inline stub + «Повторить»
 
 ### Шаг 3 — Выбор существующей карты
-- [ ] Tap card → selected (orange border)
-- [ ] CTA sheet → «Оплатить» active
-- [ ] СБП tap ignored
+- [x] Tap card → selected (orange border)
+- [x] CTA sheet → «Оплатить» active
+- [x] СБП tap ignored
 
 ### Шаг 4 — «+ Картой» / новая карта
-- [ ] NewCardForm inline; success → refresh list, «Оплатить» active
-- [ ] Add error 400/500 → inline в форме, sheet open, данные сохранены
+- [x] NewCardForm inline; success → refresh list, «Оплатить» active
+- [x] Add error 400/500 → inline в форме, sheet open, данные сохранены
 
 ### Шаг 5 — Ошибки при оплате inline
-- [ ] Pay 400/500 → sheet open, banner с текстом, selection сохранён, retry enabled
+- [x] Pay 400/500 → sheet open, banner с текстом, selection сохранён, retry enabled
 
 ### Шаг 6 — Закрытие sheet
-- [ ] X / swipe down → peek; CTA «Добавить карту» если token still invalid; selection persisted
+- [x] X / swipe down → peek; CTA «Добавить карту» если token still invalid; selection persisted
 
 ---
 
@@ -119,5 +119,5 @@
 
 ## Exit Criteria (из ТЗ)
 
-- [ ] Все новые тесты зелёные
-- [ ] Линтер / tsc (если есть) без ошибок — для JS: `node --test` + mirror Ruby PASS
+- [x] Все новые тесты зелёные
+- [x] Линтер / tsc (если есть) без ошибок — для JS: `node --test` + mirror Ruby PASS

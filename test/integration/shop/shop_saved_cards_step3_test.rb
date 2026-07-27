@@ -94,10 +94,9 @@ class Shop::ShopSavedCardsStep3Test < ActionDispatch::IntegrationTest
     src = File.read(SHEET)
     assert_includes src, 'data-testid="payment-methods-sheet"'
     assert_includes src, 'data-testid="payment-method-new-card"'
-    assert_includes src, "Новая карта"
-    assert_match(/formatCardFullLabel|formatCardListLabel/, src)
+    assert_match(/labelAddCard|formatCardRowLabel/, src)
     assert_match(/Оплатить|checkout-pay-fsm|CheckoutPayButton/, src)
-    assert_includes src, "СБП"
+    assert_match(/labelSbp|СБП/, src)
   end
 
   test "S3 When: Checkout loads user/cards and opens payment methods sheet" do

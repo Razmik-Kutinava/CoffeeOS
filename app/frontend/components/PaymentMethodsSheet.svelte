@@ -1,13 +1,16 @@
 <script>
   /**
-   * Список способов оплаты — макет 1000008925.png
-   * Шаг 3: сохранённые карты + СБП + «Новая карта» + Pay FSM 0–7.
+   * Список способов оплаты — макет 1000008925.png + repeat invalid token UX.
    */
+  import { cardBrandShort } from "../lib/paymentMethodLabels.js"
   import {
-    formatCardFullLabel,
-    formatCardListLabel,
-    cardBrandShort
-  } from "../lib/paymentMethodLabels.js"
+    formatCardRowLabel,
+    labelAddCard,
+    labelSbp,
+    sbpUnavailable,
+    paymentMethodLoadErrorMessage,
+    paymentMethodRetryLabel
+  } from "../lib/paymentMethodI18n.js"
   import { PAY_FSM, shouldLockPaymentMethods } from "../lib/shopPayFsm.js"
   import NewCardForm from "./NewCardForm.svelte"
   import CheckoutPayButton from "./CheckoutPayButton.svelte"
@@ -17,6 +20,8 @@
     stacked = false,
     cards = [],
     loading = false,
+    loadError = null,
+    inlineError = null,
     selectedCardId = null,
     selectionMode = "saved_card", // saved_card | new_card
     canPay = false,
@@ -26,7 +31,8 @@
     onSelectCard = undefined,
     onSelectNewCard = undefined,
     onPay = undefined,
-    onRetry = undefined
+    onRetry = undefined,
+    onRetryLoad = undefined
   } = $props()
 
   let sbpNotice = $state(false)
@@ -77,6 +83,17 @@
 
     {#if loading}
       <p class="pm-sheet__loading">Загружаем карты…</p>
+    {:else if loadError}
+      <div class="pm-sheet__error-block" data-testid="payment-method-load-retry">
+        <p class="pm-sheet__hint" role="status">{loadError || paymentMethodLoadErrorMessage()}</p>
+        <button
+          type="button"
+          class="pm-sheet__retry"
+          onclick={() => onRetryLoad?.()}
+        >
+          {paymentMethodRetryLabel()}
+        </button>
+      </div>
     {:else}
       <ul class="pm-sheet__list" role="radiogroup" aria-label="Сохранённые карты">
         {#each cards as card (card.id)}
@@ -92,8 +109,7 @@
               onclick={() => onSelectCard?.(card)}
             >
               <span class="pm-row__brand" aria-hidden="true">{cardBrandShort(card.payment_system || card.card_type)}</span>
-              <span class="pm-row__label">{formatCardFullLabel(card)}</span>
-              <span class="pm-row__hint" aria-hidden="true">{formatCardListLabel(card)}</span>
+              <span class="pm-row__label">{formatCardRowLabel(card)}</span>
               <span class="pm-row__radio" aria-hidden="true"></span>
             </button>
           </li>
@@ -108,8 +124,8 @@
             data-testid="payment-method-sbp"
             onclick={handleSbpClick}
           >
-            <span class="pm-row__brand pm-row__brand--sbp" aria-hidden="true">СБП</span>
-            <span class="pm-row__label">СБП</span>
+            <span class="pm-row__brand pm-row__brand--sbp" aria-hidden="true">{labelSbp()}</span>
+            <span class="pm-row__label">{labelSbp()}</span>
           </button>
         </li>
 
@@ -124,7 +140,7 @@
             disabled={locked}
             onclick={() => onSelectNewCard?.()}
           >
-            <span class="pm-row__label pm-row__label--solo">Новая карта</span>
+            <span class="pm-row__label pm-row__label--solo">{labelAddCard()}</span>
             <span class="pm-row__chevron" aria-hidden="true">⌄</span>
           </button>
         </li>
@@ -137,8 +153,14 @@
       {/if}
 
       {#if sbpNotice}
-        <p class="pm-sheet__hint" role="status">Будет позже</p>
+        <p class="pm-sheet__hint" role="status">{sbpUnavailable()}</p>
       {/if}
+    {/if}
+
+    {#if inlineError}
+      <p class="pm-sheet__inline-error" role="alert" data-testid="payment-method-inline-error">
+        {inlineError}
+      </p>
     {/if}
 
     <div class="pm-sheet__pay">
@@ -220,6 +242,31 @@
     text-align: center;
   }
 
+  .pm-sheet__error-block {
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+
+  .pm-sheet__retry {
+    margin-top: 0.5rem;
+    border: 1px solid #ff8c42;
+    border-radius: 999px;
+    background: transparent;
+    color: #ff8c42;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+  }
+
+  .pm-sheet__inline-error {
+    margin: 0 0 0.75rem;
+    padding: 0.625rem 0.75rem;
+    border-radius: 0.5rem;
+    background: rgb(127 29 29 / 0.35);
+    border: 1px solid rgb(248 113 113 / 0.45);
+    color: #fca5a5;
+    font-size: 0.875rem;
+  }
+
   .pm-sheet__list {
     list-style: none;
     margin: 0;
@@ -277,14 +324,6 @@
     flex: 1;
     font-size: 1rem;
     font-weight: 500;
-  }
-
-  .pm-row__hint {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip: rect(0 0 0 0);
   }
 
   .pm-row__label--solo {

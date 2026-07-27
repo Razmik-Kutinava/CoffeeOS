@@ -2,12 +2,21 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-27 (RED Repeat order invalid token payment sheet)
+**Дата:** 2026-07-27 (GREEN Repeat order invalid token payment sheet)
 
 | Сейчас | Дальше |
 |--------|--------|
-| RED: 7 fail Ruby + 1 fail Node (`repeat_invalid_token_payment_test`) | GREEN по намерению |
-| Fly **v392** · Profile merge MCP **PASS** | Апрув заказчика Profile merge |
+| GREEN: repeat invalid token payment sheet — Node 14/14, Ruby repeat+payment 27/27 | PHASE 3 REVIEW · MCP приёмка · апрув заказчика |
+| Fly **v392** · Profile merge MCP **PASS** | Backlog: proactive `rebill_valid` на backend (cold start) |
+
+### Сессия 2026-07-27 (GREEN Repeat order invalid token payment sheet)
+
+- `paymentMethodI18n.js`, `repeatInvalidTokenStore.js` — i18n + invalid RebillId store
+- `CartSheet`: CTA «Добавить карту» при invalid token + repeat context
+- `PaymentMethodsSheet`: inline/load errors, i18n labels, SBP toast
+- `Checkout.svelte`: wire store, preload fail → toast, pay fail → inline + setTokenInvalid
+- Тесты: `node --test repeat_invalid_token_payment_test.mjs` **14/0**; repeat+payment mirror **27/0**
+- Полная shop-регрессия: 2 pre-existing mirror fail (`order_status_acceptance_cbr`, `quick_repeat_frequent_cache`) — не из этой задачи
 
 ### Сессия 2026-07-27 (RED Repeat order invalid token payment sheet)
 

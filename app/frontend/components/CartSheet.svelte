@@ -24,6 +24,13 @@
   import RepeatSection from "./RepeatSection.svelte"
   import { initFrequentFromCache, frequentItems } from "../lib/frequentRepeatStore.js"
   import { restoreGuestSession } from "../lib/restoreGuestSession.js"
+  import { ctaAddCard } from "../lib/paymentMethodI18n.js"
+  import {
+    shouldShowAddCardCta,
+    markOpenPaymentSheet,
+    invalidRebillActive,
+    refreshInvalidRebillFlag
+  } from "../lib/repeatInvalidTokenStore.js"
   import {
     MODE_EMPTY,
     MODE_EXPANDED,
@@ -52,10 +59,18 @@
   /** URL с 404 — не показывать broken-icon в шторке */
   let brokenThumbUrls = $state(/** @type {Set<string>} */ (new Set()))
   let frequentCount = $state(0)
+  let tokenInvalid = $state(false)
 
   let showSheet = $derived(isCartSheetRoute(hash))
   let onCheckout = $derived(isCheckoutRoute(hash))
   let count = $derived(items.length)
+  let showAddCardCta = $derived(
+    shouldShowAddCardCta({
+      isTokenInvalid: tokenInvalid,
+      hasRepeatContext: frequentCount > 0,
+      cartItemCount: count
+    })
+  )
   let payStackActive = $derived(onCheckout && payStackOpen && count > 0)
   let heightVh = $derived.by(() => {
     if (payStackActive) return CHECKOUT_PEEK_VH
@@ -151,6 +166,15 @@
     push("/checkout")
   }
 
+  function goAddCard() {
+    markOpenPaymentSheet()
+    if (onCheckout) {
+      requestCheckoutPay()
+      return
+    }
+    push("/checkout")
+  }
+
   function formatThousands(n) {
     const s = String(roundPrice(n))
     return s.replace(/\B(?=(\d{3})+(?!\d))/g, " ")
@@ -202,6 +226,10 @@
     const unsubFrequent = frequentItems.subscribe((v) => {
       frequentCount = Array.isArray(v) ? v.length : 0
     })
+    refreshInvalidRebillFlag()
+    const unsubInvalid = invalidRebillActive.subscribe((v) => {
+      tokenInvalid = v
+    })
 
     const onHash = () => {
       const next = window.location.hash
@@ -221,7 +249,7 @@
 
     return () => {
       unsubItems(); unsubTotal(); unsubMode(); unsubBusy()
-      unsubErr(); unsubPay(); unsubFrequent()
+      unsubErr(); unsubPay(); unsubFrequent(); unsubInvalid()
       window.removeEventListener("hashchange", onHash)
     }
   })
@@ -281,6 +309,17 @@
 {#snippet checkoutBar(totalTestId = null, hidden = false)}
   {#if !hidden}
   <div class="mt-2 flex shrink-0 items-center justify-end gap-2 border-t border-[#3a3a3a] pt-2">
+    {#if showAddCardCta}
+      <button
+        type="button"
+        data-testid="shop-cart-add-card"
+        class="rounded-lg bg-[#ff8c42] px-4 py-2 text-sm font-semibold text-black"
+        disabled={checkoutDisabled}
+        onclick={goAddCard}
+      >
+        {ctaAddCard()}
+      </button>
+    {:else}
     <button
       type="button"
       data-testid="shop-cart-sheet-checkout"
@@ -296,6 +335,7 @@
         {formatCartButtonTotal(total)}
       </span>
     </button>
+    {/if}
   </div>
   {/if}
 {/snippet}
@@ -384,6 +424,17 @@
           {/each}
         </div>
         <span data-testid="shop-cart-hidden-total" class="sr-only">{roundPrice(total)}₽</span>
+        {#if showAddCardCta}
+          <button
+            type="button"
+            data-testid="shop-cart-add-card"
+            class="shrink-0 rounded-full bg-[#ff8c42] px-3 py-1.5 text-sm font-semibold text-black"
+            disabled={checkoutDisabled}
+            onclick={goAddCard}
+          >
+            {ctaAddCard()}
+          </button>
+        {:else}
         <button
           type="button"
           data-testid="shop-cart-sheet-checkout"
@@ -398,6 +449,7 @@
             {formatCartButtonTotal(total)}
           </span>
         </button>
+        {/if}
       </div>
 
     <!-- PEEK 2+ — одна сущность: заказ → +цена → «повторить» (скрины 01–02) -->
