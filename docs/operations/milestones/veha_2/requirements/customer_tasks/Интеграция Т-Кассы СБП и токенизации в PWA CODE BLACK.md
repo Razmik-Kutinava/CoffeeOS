@@ -95,3 +95,11 @@
 - Ревизия поверх v2 (Fly v394): бэкенд Init/GetQr/`sbp/init`, webhook, Recurrent/Charge, UI SBP CTA + poll на `#/payment-result` — **уже есть**.
 - **Главный gap этой ревизии:** PWA lifecycle — `codeblack_pending_order`, `visibilitychange`, cold start ≤15 мин, экран `WAITING_FOR_BANK` + «Я оплатил».
 - Стек CoffeeOS: Rails 8 + Svelte (не Jest/React-пути из ТЗ). Пути `/shop/api/...`, webhook `/callbacks/tbank`.
+
+## Заметки агента (SPEC 2026-07-27)
+
+→ [`docs/operations/session/todo.md`](../../../session/todo.md)
+
+- 1–3 / 5.1 — **reuse** v2; 3.2 — тонкий `GET /shop/api/payments/status/:order_id`.
+- Волна E1: LS pending + visibility guard + WAITING_FOR_BANK.
+- Invalid Token webhook: канон **401** (не 403). Charge — через `one_click` + `card_id`, не raw RebillId с клиента.

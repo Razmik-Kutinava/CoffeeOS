@@ -1,13 +1,13 @@
-# todo — СБП Deep Link + токенизация карт (Т-Касса v2) · CODE:BLACK
+# todo — CODE:BLACK T-Kassa SBP · PWA lifecycle (ревизия)
 
-> **ТЗ:** [`customer_tasks/Интеграция оплаты СБП Deep Link и токенизации карт Т-Касса v2.md`](../milestones/veha_2/requirements/customer_tasks/Интеграция%20оплаты%20СБП%20Deep%20Link%20и%20токенизации%20карт%20Т-Касса%20v2.md)  
-> **Артефакты:** [`artifacts/sbp_deep_link_card_tokenization/`](../milestones/veha_2/artifacts/sbp_deep_link_card_tokenization/)  
-> **Runbook:** [`runbooks/PAYMENT.md`](../milestones/veha_2/runbooks/PAYMENT.md)
+> **ТЗ:** [`customer_tasks/Интеграция Т-Кассы СБП и токенизации в PWA CODE BLACK.md`](../milestones/veha_2/requirements/customer_tasks/Интеграция%20Т-Кассы%20СБП%20и%20токенизации%20в%20PWA%20CODE%20BLACK.md)  
+> **Артефакты:** [`artifacts/codeblack_t_kassa_sbp_tokenization/`](../milestones/veha_2/artifacts/codeblack_t_kassa_sbp_tokenization/)  
+> **Предшественник v2:** [`todo` волны A–D закрыты](todo.md) · Fly v394 · [`sbp_deep_link_card_tokenization/`](../milestones/veha_2/artifacts/sbp_deep_link_card_tokenization/)
 
 ## Текущая фаза
 
-**PHASE 3: REVIEW** — эпик SBP на Fly **v394** · MCP PASS (OTP sheet SKIP) · ждём апрув заказчика  
-*(код шагов 1–11 `[x]`; push+deploy `[x]`)*
+**PHASE 2: BUILD** — дельта PWA lifecycle (шаги 4.x / 5.2)  
+Бэкенд 1–3 / UI 5.1 — **characterization / reuse** v2.
 
 ---
 
@@ -15,142 +15,73 @@
 
 | ТЗ | Канон CoffeeOS | Решение SPEC |
 |----|----------------|--------------|
-| `POST /api/v1/payments/sbp/init` | `POST /shop/api/payments/sbp/init` | **новый** route + тонкий controller + сервис |
-| `POST /api/v1/payments/webhook` | `POST /callbacks/tbank` | **уже есть** — не дублировать |
-| `GET /api/v1/payments/status/:order_id` | `GET /shop/api/orders/:id` + `POST .../finalize` | **reuse**; опционально тонкий alias `GET /shop/api/payments/status/:order_id` |
-| Jest / Vitest / React paths | `test/services/…`, `test/integration/…`, `test/javascript/*.mjs` + Svelte | стек **Rails 8 + Svelte** |
-| `SecretKey` | `TBANK_PASSWORD` | один Password терминала для Token; хардкод запрещён |
+| `POST /api/v1/payments/sbp/init` | `POST /shop/api/payments/sbp/init` | **уже есть** (v2) |
+| `POST .../card/init` | `POST /shop/api/payments/new_card` | **reuse** |
+| `POST .../charge-recurrent` | `POST /shop/api/payments/one_click` | **reuse** (RebillId серверно, не с клиента plaintext) |
+| `POST .../webhook` | `POST /callbacks/tbank` | **reuse**; invalid Token → **401** (канон) |
+| `GET .../payments/status/:orderId` | новый тонкий `GET /shop/api/payments/status/:order_id` | **добавить** → `{ status: PENDING\|CONFIRMED\|REJECTED\|CANCELED }` |
+| `codeblack_pending_order` | `localStorage` ключ тот же | **новый** `lib/codeblackPendingOrder.js` |
+| Jest/React paths | `test/javascript/*.mjs` + Rails integration | стек **Rails 8 + Svelte** |
 
 ---
 
-## As-is (2026-07-27)
+## As-is → Gap (только дельта)
 
-| Область | Сейчас | Файлы | Строк |
-|---------|--------|-------|------:|
-| Init | `TbankAdapter#init_payment` — Amount/OrderId/URLs/CustomerKey/Recurrent; **без Receipt** | `app/services/payments/tbank_adapter.rb` | 228 ⚠ |
-| GetQr / NSPK | **нет** | — | — |
-| Charge / Recurrent | `charge`, `charge_recurrent`; NewCard `Recurrent=Y`; one_click | adapter + `shop/one_click_payment_service.rb` + `new_card_payment_service.rb` | ok |
-| Token SHA-256 | `build_token` / `verify_notification` (sort + Password + SHA-256) | adapter | ok |
-| Webhook | `Callbacks::TbankController` → job → `PaymentStatusUpdater`; idempotency `CacheCounter`; invalid Token → **401** (не 403) | `callbacks/tbank_controller.rb` | 80 |
-| RebillId | webhook → `SavedCardStore` → `MobilePaymentMethod` | `payments/saved_card_store.rb` | ok |
-| SBP API | `payment_method: sbp` в OrderCreator → обычный `PaymentURL`, не deep link | `shop/order_creator.rb` | 392 ⚠ |
-| Shop payments API | `new_card`, `one_click`, `card_config`; **нет** `sbp/init` | `shop/api/payments_controller.rb` | 57 |
-| Status / poll | finalize + Cable; settle **1.2s × 25 (~30s)** | `shopPaySettle.js`, `orders#finalize` | 74 |
-| UI SBP | disabled + тост «СБП временно недоступно» | `PaymentMethodsSheet.svelte` | 372 ⚠ |
-| 1-tap карта | маска `Картой *XXXX` + one_click + invalid-token UX | sheet + `repeatInvalidTokenStore.js` | ok |
-| Iframe | legacy `tbankPayment.js`; happy path — FinishAuthorize / Charge | **не использовать** в этом эпике | — |
+| # | Есть (v2) | Gap этой ревизии |
+|---|-----------|------------------|
+| B1–B3 | Init+Receipt, GetQr, sbp/init, webhook, Recurrent, Charge, SBP CTA, poll 60s/2s | Characterization; тонкий status GET |
+| G10 | SuccessURL → `#/payment-result` + poll finalize | Нет `codeblack_pending_order` до redirect |
+| G11 | `pageshow` + guest session recover | Нет `visibilitychange` по pending LS; нет TTL 15 мин |
+| G12 | PaymentResult loading / incomplete | Нет экрана WAITING_FOR_BANK + «Я оплатил» |
 
-**CSP:** `*.nspk.ru` уже разрешён.
+### Ограничения (соблюдать)
 
----
+- Нет iframe/виджета Т-Банка.
+- В LS только `{ orderId, timestamp }` (+ маска карты уже в UI, не RebillId).
+- Race: повторный `visibilitychange` не запускает параллельные poll (mutex/in-flight flag).
+- Expired pending (>15 мин) — игнорировать и чистить.
 
-## Gap → решения SPEC
+### File-size
 
-| # | Gap | Решение | Не делать |
-|---|-----|---------|-----------|
-| G1 | Нет Receipt 54-ФЗ | Новый `Payments::TbankReceiptBuilder` → hash `Receipt` (Items, Taxation). `init_payment` принимает опциональный `receipt:` и кладёт в payload **до** Token. Структура Items/Taxation — как требует Т-Касса; не ломать поля. | Хардкод Taxation без конфига; менять чужие Init без теста |
-| G2 | Нет GetQr | Новый `Payments::TbankQrFetcher#call(payment_id:)` → `POST /v2/GetQr` `DataType=PAYMENT_LINK` → `Data` (`https://qr.nspk.ru/...`). **Не** раздувать `tbank_adapter.rb` (уже 228). | Копипаста Token/HTTP в третий раз — переиспользовать `build_token`/`post_json` через adapter instance methods или thin delegate |
-| G3 | Нет SBP init endpoint | `Shop::SbpPaymentInitiator#call!(order:)`: Init (с Receipt) → GetQr → `{ payment_url: Data }`. Route `POST /shop/api/payments/sbp/init` (`order_id`). Controller тонкий. Simulate: при `SHOP_SIMULATE_PAYMENT=1` — фиктивный nspk-like URL **или** сразу settled (зафиксировать в RED). | Новый `/api/v1/...` namespace |
-| G4 | Webhook 401 vs 403 | Оставить **401** как канон проекта (уже тесты). В отчёте SPEC: отклонение от ТЗ осознанное. Идемпотентность уже есть. | Дублирующий `POST .../webhook` |
-| G5 | Status GET | MVP: документировать `GET orders/:id` + finalize. Если приёмка требует литерал — тонкий `GET /shop/api/payments/status/:order_id` → тот же JSON статуса. | Long-poll на сервере |
-| G6 | Steps 7–8 | **Characterization**: тесты подтверждают Recurrent + Charge + SavedCardStore. Код не переписывать, кроме дыр из ISSUES (delayed RebillId — **вне** MVP этого эпика, уже в ISSUES). | Wipe UserCards / новый iframe |
-| G7 | UI «Оплатить быстро» | Включить SBP в sheet: убрать disabled; CTA → `sbp/init` → Loading (монохром) → `window.location.href = payment_url`. Ошибки 400/500 — терминальный inline/toast, **не** бесконечный Loading. Логику вынести в `lib/shopSbpPay.js` (sheet 372 строк — не раздувать). | iframe Т-Банка |
-| G8 | 1-tap карта | Уже есть; мелкий polish копирайта/маски `**** 1234` vs `Картой *XXXX` — только если ломает приёмку. Invalid token — reuse `repeatInvalidTokenStore`. | Новый BottomSheet |
-| G9 | Return + polling 60s/2s | SBP return → `#/payment-result` (существующие Success/Fail URL). Для SBP-пути: poll **2000 ms × 30** (60s) через параметры/`shopSbpPay.js` (не ломать one_click settle 1.2s×25). Timeout / CANCELED / REJECTED → экран «Оплата не завершена». | Бесконечный Loading |
+| Файл | План |
+|------|------|
+| `codeblackPendingOrder.js` | **create** ≤80 |
+| `shopSbpPay.js` | extend: `checkOrderStatus`, waiting copy; не раздувать |
+| `PaymentResult.svelte` | waiting UI + «Я оплатил» |
+| `App.svelte` | cold start + visibilitychange hook |
+| `Checkout.svelte` | save pending перед redirect |
+| `payments_controller#status` | тонкий show |
 
-### Ограничения ТЗ (соблюдать)
-
-- Нет iframe/UI-виджета Т-Банка.
-- `RebillId` / `CustomerKey` только в БД / серверном контексте (не localStorage plaintext).
-- Receipt Items/Taxation не ломать под 54-ФЗ.
-- Password только из `TBANK_PASSWORD`.
-- Нет бесконечного Loading.
-
-### File-size / RLS
-
-| Файл | Лимит | План |
-|------|-------|------|
-| `tbank_adapter.rb` (228) | стоп >200 | GetQr + Receipt **в новых** файлах; в adapter — минимум (опц. `receipt:` в Init) |
-| `PaymentMethodsSheet.svelte` (372) | legacy | только вызов lib + enable SBP row |
-| `order_creator.rb` (392) | не трогать в MVP SBP | SBP идёт через отдельный initiator после созданного order |
-| RLS | — | `sbp/init` только с `Current.tenant_id` shop session; order принадлежит tenant |
-
-**DDL / Migration Gate:** не требуется для MVP (RebillId уже в `mobile_payment_methods`).
+**DDL:** не требуется.
 
 ---
 
-## Волны реализации (после SPEC)
+## Волны
 
 | Волна | Шаги ТЗ | Суть |
 |-------|---------|------|
-| **A** | 1–3 | Receipt + GetQr + `POST .../sbp/init` |
-| **B** | 4–6 | Characterization webhook Token + status alias (если нужен) |
-| **C** | 7–8 | Characterization Recurrent/Charge (без новой логики) |
-| **D** | 9–11 | UI SBP + return polling 60s/2s |
+| **E0** | 1–3, 5.1 | Characterization / reuse (без нового кода кроме status GET) |
+| **E1** | 4.1–4.3, 5.2 | Pending LS + visibility + cold start + WAITING_FOR_BANK |
 
-Каждый шаг = RED → GREEN → регрессия зоны оплаты (§2.3). **Первый RED после go:** Шаг 1 (Receipt/Init payload).
+Первый RED: `codeblackPendingOrder` + status mapping + waiting UI tests.
 
 ---
 
-## Файлы (план GREEN, по волнам)
+## Чеклист TDD
 
-### Волна A
+### Backend (reuse / thin)
+- [x] 1.1 sbp/init — **reuse v2**
+- [x] 2.1 card/init — **reuse** `new_card`
+- [x] 2.2 charge-recurrent — **reuse** `one_click`
+- [x] 3.1 webhook — **reuse** `/callbacks/tbank`
+- [ ] 3.2 `GET /shop/api/payments/status/:order_id` → PENDING/CONFIRMED/REJECTED/CANCELED
 
-| Файл | Действие |
-|------|----------|
-| `app/services/payments/tbank_receipt_builder.rb` | **create** |
-| `app/services/payments/tbank_qr_fetcher.rb` | **create** |
-| `app/services/shop/sbp_payment_initiator.rb` | **create** |
-| `app/services/payments/tbank_adapter.rb` | **extend** минимально: `receipt:` в Init |
-| `app/controllers/shop/api/payments_controller.rb` | `sbp_init` |
-| `config/routes.rb` | `post payments/sbp/init` |
-| `test/services/payments/tbank_receipt_builder_test.rb` | RED→GREEN |
-| `test/services/payments/tbank_qr_fetcher_test.rb` | RED→GREEN |
-| `test/services/shop/sbp_payment_initiator_test.rb` | RED→GREEN |
-| `test/integration/shop/api/sbp_payment_init_test.rb` | RED→GREEN |
-
-### Волна B–C
-
-| Файл | Действие |
-|------|----------|
-| `test/controllers/callbacks/tbank_controller_test.rb` | extend: подделка Token |
-| `test/integration/shop/api/payment_status_test.rb` | optional alias |
-| existing one_click / usercards / adapter tests | characterization |
-
-### Волна D
-
-| Файл | Действие |
-|------|----------|
-| `app/frontend/lib/shopSbpPay.js` | **create** — init + redirect + poll opts |
-| `app/frontend/lib/shopPaySettle.js` | optional configurable interval/max |
-| `app/frontend/components/PaymentMethodsSheet.svelte` | enable SBP |
-| `app/frontend/routes/Checkout.svelte` | wire SBP |
-| `app/frontend/routes/PaymentResult.svelte` | fail/timeout copy |
-| `test/javascript/shop_sbp_pay_test.mjs` | unit |
-| `test/integration/shop/sbp_payment_ui_test.rb` | mirror/grep |
-
----
-
-## Чеклист TDD (из ТЗ)
-
-### Сценарий 1 — Init / GetQr / SBP init
-- [x] Шаг 1: Init + Receipt 54-ФЗ (builder + payload; 400/500) — **GREEN**
-- [x] Шаг 2: GetQr `PAYMENT_LINK` → `qr.nspk.ru` (400/500) — **GREEN**
-- [x] Шаг 3: `POST /shop/api/payments/sbp/init` → `{ payment_url }` — **GREEN**
-
-### Сценарий 2 — Webhook / status
-- [x] Шаг 4: SHA-256 Token — подделка → reject (канон **401**) — **characterization** existing
-- [x] Шаг 5: Webhook CONFIRMED/… + идемпотентность — **characterization** `/callbacks/tbank`
-- [x] Шаг 6: Status fallback — **reuse** `GET orders/:id` + finalize (alias не делаем)
-
-### Сценарий 3 — Карта / токен
-- [x] Шаг 7: Recurrent → RebillId в БД — **characterization**
-- [x] Шаг 8: Charge one_click — **characterization** + ошибки невалидного токена
-
-### Сценарий 4 — UI CODE:BLACK
-- [x] Шаг 9: «Оплатить быстро» / SBP → init → redirect — **GREEN**
-- [x] Шаг 10: маска карты + 1-tap (polish `**** 1234`) — **GREEN**
-- [x] Шаг 11: return + polling ≤60s / 2s; нет infinite Loading — **GREEN**
+### Frontend lifecycle (gap)
+- [ ] 4.1 save `codeblack_pending_order` перед redirect + WAITING_FOR_BANK
+- [ ] 4.2 `visibilitychange` → `checkOrderStatus`; clear на финале
+- [ ] 4.3 cold start: TTL &lt; 15 мин → status + экран
+- [x] 5.1 checkout SBP/card CTA — **reuse v2**
+- [ ] 5.2 экран ожидания + «Я оплатил»
 
 ---
 
@@ -158,10 +89,9 @@
 
 | Зона | Команда |
 |------|---------|
-| Новые unit | `bin/rails test test/services/payments/tbank_receipt_builder_test.rb test/services/payments/tbank_qr_fetcher_test.rb test/services/shop/sbp_payment_initiator_test.rb` |
+| JS pending + status | `node --test test/javascript/codeblack_pending_order_test.mjs test/javascript/shop_sbp_pay_test.mjs` |
+| Status API | `bin/rails test test/integration/shop/api/payment_status_test.rb` |
 | Оплата §2.3 | по `coffeeos-dev-gates.mdc` (payment cart + stage5 + order_creator) |
-| T-Bank callback | `bin/rails test test/controllers/callbacks/tbank_controller_test.rb test/services/payments/tbank_adapter_test.rb` |
-| JS | `node --test test/javascript/shop_sbp_pay_test.mjs` |
 
 ---
 
@@ -169,17 +99,6 @@
 
 | Риск | Митигация |
 |------|-----------|
-| GetQr недоступен на DEMO-терминале | stub HTTP в unit; MCP на Fly с боевым/тестовым ключом |
-| Receipt отвергнут банком (Taxation/FFD) | конфиг Taxation из env/`PaymentConfig`; тест спецсимволов в имени товара |
-| Двойной Init (OrderCreator + sbp/init) | initiator работает по **уже созданному** `pending_payment` order; не создавать второй Order |
-| `tbank_adapter` ещё толще | GetQr/Receipt вне файла; при касании >+20 строк — план сплита + go |
-| Путаница iframe PaymentURL vs NSPK | SBP только `Data` из GetQr; card path без iframe |
-
----
-
-## Exit (из ТЗ + проект)
-
-1. Зелёные тесты шагов + регрессия зоны оплаты.
-2. Rubocop на изменённый Ruby (ESLint/tsc из ТЗ — N/A для Svelte path; JS — node:test).
-3. Ручная/MCP: `qr.nspk.ru` deep link, банк picker, Charge по RebillId.
-4. Апрув заказчика / CHECKLIST `[x]` — только после MCP + «ок».
+| Двойной poll (payment-result + visibility) | in-flight guard; clear pending после terminal |
+| Клиент шлёт RebillId в charge | one_click принимает `card_id`, не raw RebillId — **не** менять контракт под plaintext из ТЗ |
+| Status enum ≠ order.status | явный mapper payment/order → 4 статуса ТЗ |
