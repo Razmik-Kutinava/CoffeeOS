@@ -1,5 +1,13 @@
 ﻿# CHANGELOG
 
+## 2026-07-27 — docs: intake+SPEC Profile Email↔Phone merge
+
+- ТЗ: `customer_tasks/Связка профилей Email Phone и управление данными пользователя в PWA.md`
+- Артефакты: `artifacts/profile_email_phone_merge/`
+- CBR + customer_tasks README; `todo.md` as-is/gap шаги 0–9
+- Ключевые gap: нет verified-колонок; `PhoneVerifiedCustomerLinker` запрещает merge; GET profile — другой контракт
+- Код не меняли; RED + DDL ждут go
+
 ## 2026-07-24 — deploy+MCP: Phone OTP SMS/Flash Call (Fly v390)
 
 - Push `32fe23a`; Fly **v390**; secret `SHOP_OTP_LOG_FALLBACK=true`

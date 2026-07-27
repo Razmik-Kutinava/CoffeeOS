@@ -2,12 +2,20 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-24 (MCP Phone OTP Fly v390 PASS)  
+**Дата:** 2026-07-27 (Intake + SPEC: Profile Email↔Phone merge)  
 
 | Сейчас | Дальше |
 |--------|--------|
-| Fly **v390** · Phone OTP MCP **PASS** | Апрув заказчика |
-| Push `32fe23a` + `SHOP_OTP_LOG_FALLBACK=true` | — |
+| Intake + SPEC Profile Email↔Phone merge | RED (тесты) по намерению; **DDL verified flags — Migration Gate `go`** |
+| Fly **v390** · Phone OTP MCP PASS | Апрув заказчика (Phone OTP) |
+
+### Сессия 2026-07-27 (Intake + SPEC Profile Email↔Phone merge)
+
+- ТЗ: `Связка профилей Email Phone и управление данными пользователя в PWA.md`
+- Артефакты: `artifacts/profile_email_phone_merge/`
+- CBR + customer_tasks README обновлены
+- `todo.md`: as-is/gap, шаги 0–9, решения (Minitest, soft-merge, unique phone, Migration Gate)
+- Код / RED — не трогали (ждём намерение)
 
 ### Сессия 2026-07-24 (MCP Phone OTP SMS/Flash Call)
 

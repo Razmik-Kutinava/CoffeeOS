@@ -1,8 +1,18 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-24 (**MCP Phone OTP PASS v390**)  
+**Дата:** 2026-07-27 (**Intake + SPEC Profile Email↔Phone merge**)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev  
+
+### Profile Email↔Phone merge (2026-07-27)
+
+| Что | Статус |
+|-----|--------|
+| Intake ТЗ + CBR + артефакты | **`[x]`** |
+| PHASE 1: SPEC | **`[x]`** · `todo.md` |
+| RED / GREEN | **`[ ]`** ждёт намерение |
+| DDL `email_verified`/`phone_verified` | **Migration Gate** — ждёт `go` |
+| Push / Fly / MCP | **`[ ]`** по апруву |
 
 ### Phone OTP SMS / Flash Call (2026-07-24)
 
