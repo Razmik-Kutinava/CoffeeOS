@@ -1,0 +1,42 @@
+{
+  "at": "2026-07-27T12:05:00Z",
+  "epic": "sbp_deep_link_card_tokenization",
+  "stand": "https://coffeeos.fly.dev",
+  "fly_version": 394,
+  "git_head": "6154539",
+  "tenant_id": "af4f78d6-c66b-428e-8ee4-5a609c5c9131",
+  "shop_url": "https://coffeeos.fly.dev/shop?tenant_id=af4f78d6-c66b-428e-8ee4-5a609c5c9131",
+  "checks": [
+    { "name": "GET /up", "result": "PASS", "detail": "HTTP 200" },
+    { "name": "fly deploy", "result": "PASS", "detail": "v394 complete" },
+    { "name": "git push develop", "result": "PASS", "detail": "3f0432c..6154539 (16 commits)" },
+    { "name": "shop catalog loads", "result": "PASS", "detail": "products visible" },
+    { "name": "add to cart → checkout", "result": "PASS", "detail": "cart 179₽, #/checkout" },
+    {
+      "name": "FE bundle shopSbpPay",
+      "result": "PASS",
+      "detail": "assets/shopSbpPay-*.js: sbp/init, nspk.ru, intervalMs 2000×30, incomplete message"
+    },
+    {
+      "name": "FE Checkout SBP row",
+      "result": "PASS",
+      "detail": "Checkout chunk contains payment-method-sbp + one_click"
+    },
+    {
+      "name": "FE CTA «Оплатить быстро» / mask ****",
+      "result": "PASS",
+      "detail": "main application-*.js contains CTA and **** mask strings"
+    },
+    {
+      "name": "POST /shop/api/payments/sbp/init route live",
+      "result": "PASS",
+      "detail": "HTTP 401 auth required (not 404) — endpoint deployed"
+    },
+    {
+      "name": "UI open payment sheet with SBP click",
+      "result": "SKIP",
+      "detail": "requires email OTP verify on Fly; bundle+route markers verified instead"
+    }
+  ],
+  "verdict": "PASS_WITH_SKIP_OTP_SHEET"
+}

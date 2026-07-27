@@ -2,12 +2,19 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-27 (GREEN Шаг 10 card mask **** 1234)
+**Дата:** 2026-07-27 (push + Fly v394 + MCP SBP epic)
 
 | Сейчас | Дальше |
 |--------|--------|
-| GREEN Шаг 10: маска `**** 1234` в PaymentMethodsSheet | push / Fly / MCP по просьбе; апрув заказчика |
-| Эпик SBP 1–11 — закрыт по коду | |
+| Эпик SBP задеплоен: push `6154539`, Fly **v394**, MCP PASS (OTP sheet SKIP) | апрув заказчика / полный E2E OTP+NSPK вручную |
+| | |
+
+### Сессия 2026-07-27 (push / Fly / MCP SBP epic)
+
+- `git push origin develop` — 16 коммитов → `6154539`
+- `fly deploy -a coffeeos` — **v394** complete
+- MCP: `/up` 200 · catalog+checkout · bundle shopSbpPay/Checkout · `sbp/init` → 401 (есть роут)
+- Артефакт: `artifacts/sbp_deep_link_card_tokenization/fly_mcp_sbp_epic_2026-07-27.json`
 
 ### Сессия 2026-07-27 (GREEN Шаг 10 card mask)
 

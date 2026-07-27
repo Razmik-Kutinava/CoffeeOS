@@ -6,8 +6,8 @@
 
 ## Текущая фаза
 
-**PHASE 2: GREEN** — `[x]` Шаг 10 маска `**** 1234` · Node 17/0 · Ruby mask+repeat 10/0  
-*(Эпик SBP Deep Link + card tokenization — чеклист 1–11 закрыт)*
+**PHASE 3: REVIEW** — эпик SBP на Fly **v394** · MCP PASS (OTP sheet SKIP) · ждём апрув заказчика  
+*(код шагов 1–11 `[x]`; push+deploy `[x]`)*
 
 ---
 

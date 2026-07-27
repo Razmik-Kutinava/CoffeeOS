@@ -1,8 +1,8 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-27 (**GREEN Шаг 10 card mask **** 1234 · эпик закрыт по коду**)  
-**Ветка:** `develop`  
-**Прод:** https://coffeeos.fly.dev  
+**Дата:** 2026-07-27 (**push + Fly v394 + MCP SBP epic**)  
+**Ветка:** `develop` @ `6154539`  
+**Прод:** https://coffeeos.fly.dev · **Fly:** v394  
 
 ### SBP Deep Link + card tokenization · Т-Касса v2 (2026-07-27)
 
@@ -10,16 +10,12 @@
 |-----|--------|
 | Intake ТЗ + CBR + артефакты | **`[x]`** |
 | PHASE 1: SPEC | **`[x]`** |
-| Волна A Шаги 1–3 (Receipt/GetQr/sbp/init) | **`[x]`** GREEN |
-| Шаги 7–8 Recurrent/Charge characterization | **`[x]`** GREEN |
-| Шаг 9 UI «Оплатить быстро» | **`[x]`** GREEN |
-| Шаг 10 маска `**** 1234` + 1-tap | **`[x]`** GREEN |
-| Шаг 11 return polling 60s/2s | **`[x]`** GREEN |
-| Push / Fly deploy | **`[ ]`** |
-| MCP / UI приёмка на Fly | **`[ ]`** |
+| Волна A + UI/poll/char/mask (1–11) | **`[x]`** GREEN |
+| Push / Fly deploy | **`[x]`** v394 · `6154539` |
+| MCP / UI приёмка на Fly | **`[x]` PASS** (OTP sheet SKIP) · [`fly_mcp_sbp_epic_2026-07-27.json`](../milestones/veha_2/artifacts/sbp_deep_link_card_tokenization/fly_mcp_sbp_epic_2026-07-27.json) |
 | Апрув заказчика | **`[ ]`** |
 
-**Маска:** sheet показывает `**** 1234`; бренд слева; 1-tap → one_click; invalid token → «Добавить карту».
+**Deploy:** shopSbpPay в бандле; `POST .../sbp/init` отвечает 401 без сессии (роут жив). Полный клик SBP — после email OTP / вручную.
 
 ### Repeat order invalid token · PaymentMethodsSheet (2026-07-27)
 

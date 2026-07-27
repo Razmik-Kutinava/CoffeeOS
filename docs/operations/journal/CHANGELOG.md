@@ -1,5 +1,10 @@
 ﻿# CHANGELOG
 
+## 2026-07-27 — deploy: SBP Deep Link epic to Fly v394
+
+- Push `develop` → `6154539` (16 commits эпика)
+- Fly `coffeeos` **v394**; MCP artifact `fly_mcp_sbp_epic_2026-07-27.json`
+
 ## 2026-07-27 — feat(shop): card mask **** 1234 for 1-tap sheet [GREEN]
 
 - `formatMaskedPan` / `formatCardRowLabel` — маска по ТЗ Шаг 10
