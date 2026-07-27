@@ -6,7 +6,8 @@
 
 ## Текущая фаза
 
-**PHASE 2: GREEN** — `[x]` Шаг 3 sbp/init · initiator+api 10/0 · wave A unit 19/0 · регрессия 56/0 · дальше RED Шаг 4 (webhook Token) или Волна D UI
+**PHASE 2: RED** — `[x]` Шаг 9 UI SBP · Node ERR_MODULE_NOT_FOUND · Ruby UI 4 failures · ждём GREEN  
+*(Шаги 4–5 webhook — уже покрыты `tbank_controller_test`; Шаг 6 status — reuse orders/finalize)*
 
 ---
 
@@ -138,16 +139,16 @@
 - [x] Шаг 3: `POST /shop/api/payments/sbp/init` → `{ payment_url }` — **GREEN**
 
 ### Сценарий 2 — Webhook / status
-- [ ] Шаг 4: SHA-256 Token — подделка → reject (канон **401**)
-- [ ] Шаг 5: Webhook CONFIRMED/… + идемпотентность — **characterization** `/callbacks/tbank`
-- [ ] Шаг 6: Status fallback — orders show/finalize (± alias)
+- [x] Шаг 4: SHA-256 Token — подделка → reject (канон **401**) — **characterization** existing
+- [x] Шаг 5: Webhook CONFIRMED/… + идемпотентность — **characterization** `/callbacks/tbank`
+- [x] Шаг 6: Status fallback — **reuse** `GET orders/:id` + finalize (alias не делаем)
 
 ### Сценарий 3 — Карта / токен
 - [ ] Шаг 7: Recurrent → RebillId в БД — **characterization**
 - [ ] Шаг 8: Charge one_click — **characterization** + ошибки невалидного токена
 
 ### Сценарий 4 — UI CODE:BLACK
-- [ ] Шаг 9: «Оплатить быстро» / SBP → init → redirect
+- [ ] Шаг 9: «Оплатить быстро» / SBP → init → redirect — **RED** тесты написаны
 - [ ] Шаг 10: маска карты + 1-tap (polish при необходимости)
 - [ ] Шаг 11: return + polling ≤60s / 2s; нет infinite Loading
 

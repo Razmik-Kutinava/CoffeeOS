@@ -2,14 +2,20 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-27 (GREEN Шаг 3 sbp/init · Волна A закрыта)
+**Дата:** 2026-07-27 (RED Шаг 9 UI SBP)
 
 | Сейчас | Дальше |
 |--------|--------|
-| GREEN Шаг 3: `SbpPaymentInitiator` + `POST /shop/api/payments/sbp/init` | **go** → RED Шаг 4 (webhook) или Волна D UI SBP |
-| Волна A (1–3) **done** · регрессия 56/0 | |
+| RED Шаг 9: `shopSbpPay.js` + enable SBP UI — тесты падают | **go** → GREEN UI SBP |
+| Шаги 4–6: characterization / reuse — отмечены `[x]` без нового кода | |
 
-### Сессия 2026-07-27 (GREEN Шаг 3 sbp/init)
+### Сессия 2026-07-27 (RED Шаг 9 UI SBP)
+
+- Тесты: `shop_sbp_pay_test.mjs` (ERR_MODULE_NOT_FOUND) + `sbp_payment_ui_test.rb` (4 failures)
+- Шаги 4–5 уже в `tbank_controller_test`; Шаг 6 — reuse orders/finalize
+- Код UI не писали
+
+### Сессия 2026-07-27 (GREEN Шаг 3 sbp/init · Волна A закрыта)
 
 - `Shop::SbpPaymentInitiator` — simulate nspk / live Init+Receipt+GetQr
 - Route + `payments#sbp_init`
