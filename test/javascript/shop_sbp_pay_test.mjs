@@ -1,5 +1,5 @@
 /**
- * SBP pay — init + redirect + poll opts (RED Шаг 9).
+ * SBP return polling — Шаг 11 (RED→GREEN).
  * node --test test/javascript/shop_sbp_pay_test.mjs
  */
 import assert from "node:assert/strict"
@@ -9,7 +9,10 @@ import {
   redirectToSbp,
   sbpPollOptions,
   mapSbpInitError,
-  SBP_LOADING_LABEL
+  SBP_LOADING_LABEL,
+  SBP_INCOMPLETE_MESSAGE,
+  pollSbpPaymentStatus,
+  isSbpReturnSuccessStatus
 } from "../../app/frontend/lib/shopSbpPay.js"
 import { ctaSbpFastPay, labelSbp } from "../../app/frontend/lib/paymentMethodI18n.js"
 
@@ -68,5 +71,67 @@ describe("shopSbpPay — init + redirect", () => {
 
   it("exports monochrome loading label", () => {
     assert.match(SBP_LOADING_LABEL, /оплат|сбп|загруз/i)
+  })
+})
+
+describe("shopSbpPay — return polling (Шаг 11)", () => {
+  it("exports incomplete message for timeout / reject", () => {
+    assert.match(SBP_INCOMPLETE_MESSAGE, /не завершен|попробовать/i)
+  })
+
+  it("isSbpReturnSuccessStatus accepts success and ok", () => {
+    assert.equal(isSbpReturnSuccessStatus("success"), true)
+    assert.equal(isSbpReturnSuccessStatus("ok"), true)
+    assert.equal(isSbpReturnSuccessStatus("fail"), false)
+    assert.equal(isSbpReturnSuccessStatus("cancel"), false)
+  })
+
+  it("pollSbpPaymentStatus resolves when finalize settles", async () => {
+    let n = 0
+    const sleeps = []
+    const api = async (path) => {
+      n += 1
+      assert.match(path, /\/orders\/ord-1\/finalize/)
+      if (n < 3) return { status: "pending_payment", payment_settled: false }
+      return { status: "accepted", payment_settled: true }
+    }
+    const res = await pollSbpPaymentStatus(api, {
+      orderId: "ord-1",
+      sleep: async (ms) => {
+        sleeps.push(ms)
+      }
+    })
+    assert.equal(res.payment_settled, true)
+    assert.equal(n, 3)
+    assert.deepEqual(sleeps, [2000, 2000])
+  })
+
+  it("pollSbpPaymentStatus stops on cancelled/rejected with incomplete message", async () => {
+    const api = async () => ({ status: "cancelled", payment_settled: false })
+    await assert.rejects(
+      () => pollSbpPaymentStatus(api, { orderId: "x", sleep: async () => {} }),
+      (err) => {
+        assert.match(err.message, /не завершен|попробовать/i)
+        assert.equal(err.kind, "sbp_terminal")
+        return true
+      }
+    )
+  })
+
+  it("pollSbpPaymentStatus times out after maxAttempts without infinite loop", async () => {
+    let n = 0
+    const api = async () => {
+      n += 1
+      return { status: "pending_payment", payment_settled: false }
+    }
+    await assert.rejects(
+      () => pollSbpPaymentStatus(api, { orderId: "x", sleep: async () => {} }),
+      (err) => {
+        assert.match(err.message, /не завершен|попробовать/i)
+        assert.equal(err.kind, "sbp_timeout")
+        return true
+      }
+    )
+    assert.equal(n, 30)
   })
 })
