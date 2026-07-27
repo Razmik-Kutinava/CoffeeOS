@@ -2,12 +2,19 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-27 (MCP Profile Email↔Phone merge Fly v392 PASS)  
+**Дата:** 2026-07-27 (интейк Repeat order invalid token payment sheet)
 
 | Сейчас | Дальше |
 |--------|--------|
-| Fly **v392** · Profile merge MCP **PASS** | Апрув заказчика |
-| Push `9184cde` | — |
+| Intake ТЗ + CBR + артефакты (repeat invalid token payment sheet) | SPEC → go |
+| Fly **v392** · Profile merge MCP **PASS** | Апрув заказчика Profile merge |
+
+### Сессия 2026-07-27 (интейк Repeat order invalid token payment sheet)
+
+- ТЗ: `Главный экран — повторный заказ (невалидный токен) BottomSheet выбора способа оплаты.md`
+- Артефакты: `artifacts/repeat_order_invalid_token_payment_sheet/` (скрин BottomSheet «Способ оплаты»)
+- CBR + customer_tasks README обновлены
+- Код / todo.md / SPEC — не трогали (ждём go)
 
 ### Сессия 2026-07-27 (push+deploy+MCP Profile Email↔Phone merge)
 
