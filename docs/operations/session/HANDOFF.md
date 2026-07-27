@@ -1,6 +1,6 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-27 (**GREEN Repeat invalid token payment sheet**)  
+**Дата:** 2026-07-27 (**MCP Repeat invalid token payment sheet PASS v393**)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev  
 
@@ -11,8 +11,8 @@
 | Intake ТЗ + CBR + артефакты | **`[x]`** |
 | PHASE 1: SPEC | **`[x]`** |
 | RED / GREEN | **`[x]`** · Node 14/0 · Ruby repeat+payment 27/0 |
-| Push / Fly deploy | **`[ ]`** |
-| MCP / UI приёмка на Fly | **`[ ]`** |
+| Push / Fly deploy | **`[x]`** v393 · `f0877ac` |
+| MCP / UI приёмка на Fly | **`[x]` PASS** · [`fly_mcp_repeat_invalid_token_2026-07-27.json`](../milestones/veha_2/artifacts/repeat_order_invalid_token_payment_sheet/fly_mcp_repeat_invalid_token_2026-07-27.json) |
 | Апрув заказчика | **`[ ]`** |
 
 **Backlog:** proactive `rebill_valid` в API карт (cold start без prior one_click fail) — отдельный шаг + migration gate.

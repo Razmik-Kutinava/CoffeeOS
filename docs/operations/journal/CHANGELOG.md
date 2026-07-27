@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-07-27 — deploy+MCP: Repeat invalid token payment sheet (Fly v393)
+
+- Push `f0877ac`; Fly **v393**; `/up` 200
+- MCP: peek CTA «Добавить карту», PaymentMethodsSheet i18n labels, NewCardForm, selection persist
+- Артефакт: `artifacts/repeat_order_invalid_token_payment_sheet/fly_mcp_repeat_invalid_token_2026-07-27.json`
+
 ## 2026-07-27 — feat(shop): repeat invalid token payment sheet [GREEN]
 
 - `paymentMethodI18n.js` — подписи «Картой *XXXX», «Картой +», СБП, CTA

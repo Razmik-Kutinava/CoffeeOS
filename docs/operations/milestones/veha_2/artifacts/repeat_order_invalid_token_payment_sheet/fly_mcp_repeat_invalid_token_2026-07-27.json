@@ -1,0 +1,65 @@
+{
+  "date": "2026-07-27",
+  "kind": "mcp_repeat_invalid_token_payment_sheet",
+  "fly_release": "v393",
+  "commit": "f0877ac",
+  "stand": "https://coffeeos.fly.dev/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "tenant_name": "Demo Coffee Point A",
+  "customer": {
+    "email": "aramfifa100@gmail.com",
+    "profile": "Aram Demo"
+  },
+  "deploy_notes": {
+    "push": "develop f0877ac (5 commits: intake, SPEC, RED, GREEN)",
+    "deploy": "fly deploy --remote-only --depot=false → v393 PASS; release_command ok; /up 200"
+  },
+  "checks": [
+    {
+      "id": "deploy_v393",
+      "status": "PASS",
+      "detail": "push develop f0877ac; Fly v393 complete; /up 200"
+    },
+    {
+      "id": "step1_add_card_cta_peek",
+      "status": "PASS",
+      "detail": "invalid rebill flag + repeat context + cart item → peek CTA «Добавить карту» (data-testid shop-cart-add-card); +сумма скрыта"
+    },
+    {
+      "id": "step1_cta_opens_sheet",
+      "status": "PASS",
+      "detail": "tap «Добавить карту» → stacked PaymentMethodsSheet «Способ оплаты»"
+    },
+    {
+      "id": "step2_sheet_labels",
+      "status": "PASS",
+      "detail": "«Картой *5953» selected, «Картой *8782», «Картой +», СБП disabled (aria-disabled)"
+    },
+    {
+      "id": "step3_card_selection",
+      "status": "PASS",
+      "detail": "tap card → radio checked; CTA «Оплатить» active"
+    },
+    {
+      "id": "step4_new_card_form",
+      "status": "PASS",
+      "detail": "tap «Картой +» → NewCardForm inline (номер, ММ/ГГ, CVV, save checkbox)"
+    },
+    {
+      "id": "step6_persist_selection",
+      "status": "PASS",
+      "detail": "close/reopen sheet → «Картой *5953» restored; sessionStorage shop_repeat_payment_selection saved"
+    },
+    {
+      "id": "checkout_contacts",
+      "status": "PASS",
+      "detail": "#/checkout: Aram Demo + masked email; saved cards loaded (2 MIR)"
+    }
+  ],
+  "screenshots": [
+    "docs/operations/milestones/veha_2/artifacts/repeat_order_invalid_token_payment_sheet/screenshots/02_fly_add_card_cta_invalid_token_2026-07-27.png"
+  ],
+  "not_run": [
+    "step5 inline pay error 400/500 — не симулировали live charge fail на Fly (покрыто unit + mirror Ruby)"
+  ]
+}

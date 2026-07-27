@@ -6,8 +6,15 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| GREEN: repeat invalid token payment sheet — Node 14/14, Ruby repeat+payment 27/27 | PHASE 3 REVIEW · MCP приёмка · апрув заказчика |
+| GREEN: repeat invalid token payment sheet — Fly **v393** MCP **PASS** | Апрув заказчика · CHECKLIST `[x]` |
 | Fly **v392** · Profile merge MCP **PASS** | Backlog: proactive `rebill_valid` на backend (cold start) |
+
+### Сессия 2026-07-27 (deploy+MCP Repeat invalid token payment sheet)
+
+- Push develop `f0877ac`; Fly **v393** (`fly deploy --remote-only --depot=false`)
+- MCP: CTA «Добавить карту», PaymentMethodsSheet labels, NewCardForm, persist selection
+- Артефакт: `artifacts/repeat_order_invalid_token_payment_sheet/fly_mcp_repeat_invalid_token_2026-07-27.json`
+- Скрин: `screenshots/02_fly_add_card_cta_invalid_token_2026-07-27.png`
 
 ### Сессия 2026-07-27 (GREEN Repeat order invalid token payment sheet)
 
