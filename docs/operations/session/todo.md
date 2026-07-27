@@ -6,8 +6,7 @@
 
 ## Текущая фаза
 
-**PHASE 2: BUILD** — дельта PWA lifecycle (шаги 4.x / 5.2)  
-Бэкенд 1–3 / UI 5.1 — **characterization / reuse** v2.
+**PHASE 3: REVIEW** — lifecycle GREEN · регрессия оплаты PASS · ждём push/MCP/апрув
 
 ---
 
@@ -74,14 +73,14 @@
 - [x] 2.1 card/init — **reuse** `new_card`
 - [x] 2.2 charge-recurrent — **reuse** `one_click`
 - [x] 3.1 webhook — **reuse** `/callbacks/tbank`
-- [ ] 3.2 `GET /shop/api/payments/status/:order_id` → PENDING/CONFIRMED/REJECTED/CANCELED
+- [x] 3.2 `GET /shop/api/payments/status/:order_id` → PENDING/CONFIRMED/REJECTED/CANCELED
 
 ### Frontend lifecycle (gap)
-- [ ] 4.1 save `codeblack_pending_order` перед redirect + WAITING_FOR_BANK
-- [ ] 4.2 `visibilitychange` → `checkOrderStatus`; clear на финале
-- [ ] 4.3 cold start: TTL &lt; 15 мин → status + экран
+- [x] 4.1 save `codeblack_pending_order` перед redirect + WAITING_FOR_BANK
+- [x] 4.2 `visibilitychange` → `checkOrderStatus`; clear на финале
+- [x] 4.3 cold start: TTL &lt; 15 мин → status + экран
 - [x] 5.1 checkout SBP/card CTA — **reuse v2**
-- [ ] 5.2 экран ожидания + «Я оплатил»
+- [x] 5.2 экран ожидания + «Я оплатил»
 
 ---
 

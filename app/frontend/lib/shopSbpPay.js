@@ -1,9 +1,17 @@
 /**
  * SBP deep link: init → redirect на qr.nspk.ru + опции polling return (Шаг 9/11).
+ * CODE:BLACK lifecycle: checkOrderStatus + WAITING_FOR_BANK (ревизия 4.x / 5.2).
  */
+
+import { clearPendingOrder } from "./codeblackPendingOrder.js"
 
 export const SBP_LOADING_LABEL = "Оплата через СБП…"
 export const SBP_INCOMPLETE_MESSAGE = "Оплата не завершена, попробовать снова"
+export const SBP_WAITING_FOR_BANK_MESSAGE =
+  "Завершите оплату в приложении банка и вернитесь в приложение"
+export const SBP_I_PAID_LABEL = "Я оплатил"
+
+const TERMINAL_PAYMENT_STATUSES = new Set(["CONFIRMED", "REJECTED", "CANCELED"])
 
 const SBP_TERMINAL_STATUSES = new Set([
   "cancelled",
@@ -108,4 +116,40 @@ export function redirectToSbp(url, assignFn) {
       window.location.assign(u)
     })
   go(href)
+}
+
+/**
+ * Нормализация ответа GET /payments/status/:id → PENDING|CONFIRMED|REJECTED|CANCELED.
+ * @param {{ status?: string }} body
+ */
+export function mapPaymentStatusPayload(body = {}) {
+  const raw = String(body?.status || "").trim().toUpperCase()
+  if (raw === "CANCELLED") return "CANCELED"
+  if (raw === "PENDING" || raw === "CONFIRMED" || raw === "REJECTED" || raw === "CANCELED") {
+    return raw
+  }
+  const lower = String(body?.status || "").toLowerCase()
+  if (lower === "pending" || lower === "pending_payment" || lower === "processing") return "PENDING"
+  if (lower === "accepted" || lower === "succeeded" || lower === "confirmed" || lower === "ok") {
+    return "CONFIRMED"
+  }
+  if (lower === "failed" || lower === "rejected") return "REJECTED"
+  if (lower === "cancelled" || lower === "canceled") return "CANCELED"
+  return "PENDING"
+}
+
+/**
+ * @param {(path: string, opts?: object) => Promise<object>} api
+ * @param {{ orderId: string, storage?: Storage }} params
+ * @returns {Promise<"PENDING"|"CONFIRMED"|"REJECTED"|"CANCELED">}
+ */
+export async function checkOrderStatus(api, { orderId, storage } = {}) {
+  const id = String(orderId || "").trim()
+  if (!id) throw new Error("Не указан orderId")
+  const data = await api(`/payments/status/${id}`)
+  const status = mapPaymentStatusPayload(data)
+  if (TERMINAL_PAYMENT_STATUSES.has(status)) {
+    clearPendingOrder({ storage })
+  }
+  return status
 }

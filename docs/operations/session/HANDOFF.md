@@ -1,8 +1,21 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-27 (**push + Fly v394 + MCP SBP epic**)  
-**Ветка:** `develop` @ `6154539`  
-**Прод:** https://coffeeos.fly.dev · **Fly:** v394  
+**Дата:** 2026-07-27 (**CODE:BLACK PWA lifecycle GREEN**)  
+**Ветка:** `develop` (ahead of origin; lifecycle не на Fly)  
+**Прод:** https://coffeeos.fly.dev · **Fly:** v394 (SBP v2 без lifecycle)
+
+### CODE:BLACK T-Kassa SBP · PWA lifecycle (2026-07-27)
+
+| Что | Статус |
+|-----|--------|
+| Intake ТЗ + CBR + артефакты | **`[x]`** |
+| PHASE 1: SPEC | **`[x]`** |
+| RED / GREEN (status + pending LS + waiting UI) | **`[x]`** · Node 25/0 · Ruby 23/0 · регрессия 59/0 |
+| Push / Fly deploy | **`[ ]`** |
+| MCP / UI приёмка на Fly | **`[ ]`** |
+| Апрув заказчика | **`[ ]`** |
+
+**Код:** `codeblackPendingOrder.js` · `GET .../payments/status/:order_id` · App visibility · PaymentResult WAITING_FOR_BANK.
 
 ### SBP Deep Link + card tokenization · Т-Касса v2 (2026-07-27)
 

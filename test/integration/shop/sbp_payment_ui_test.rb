@@ -40,5 +40,6 @@ class Shop::SbpPaymentUiTest < ActionDispatch::IntegrationTest
     src = File.read(CHECKOUT)
     assert_includes src, "shopSbpPay"
     assert_includes src, "initSbpPayment"
+    assert_includes src, "savePendingOrder"
   end
 end

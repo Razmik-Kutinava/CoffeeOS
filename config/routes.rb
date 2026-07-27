@@ -190,6 +190,7 @@ Rails.application.routes.draw do
       post "payments/new_card", to: "payments#new_card"
       post "payments/one_click", to: "payments#one_click"
       post "payments/sbp/init", to: "payments#sbp_init"
+      get "payments/status/:order_id", to: "payments#status"
       get "payments/card_config", to: "payments#card_config"
       get "user/cards", to: "user_cards#index"
       get "orders/history", to: "orders#history"

@@ -52,6 +52,7 @@
   import { restoreGuestSession } from "../lib/restoreGuestSession.js"
   import { paymentMethodLoadErrorMessage } from "../lib/paymentMethodI18n.js"
   import { initSbpPayment, redirectToSbp } from "../lib/shopSbpPay.js"
+  import { savePendingOrder } from "../lib/codeblackPendingOrder.js"
   import {
     setTokenInvalid,
     clearTokenInvalid,
@@ -599,6 +600,7 @@
         })
         saveGuestOrderSession(orderRes.order_id, orderRes.reconnect_token)
         const paymentUrl = await initSbpPayment(sbpApi, { orderId: orderRes.order_id })
+        savePendingOrder(orderRes.order_id)
         redirectToSbp(paymentUrl)
         return
       }

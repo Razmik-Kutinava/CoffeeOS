@@ -1,5 +1,15 @@
 ﻿# CHANGELOG
 
+## 2026-07-27 — feat(shop): CODE:BLACK PWA payment lifecycle [GREEN]
+
+- `codeblack_pending_order` LS (TTL 15м) · visibilitychange / cold start · `checkOrderStatus`
+- `GET /shop/api/payments/status/:order_id` · WAITING_FOR_BANK + «Я оплатил»
+- Тесты: Node 25/0 · status+UI 23/0 · регрессия §2.3+callback 59/0
+
+## 2026-07-27 — docs: intake CODE:BLACK T-Kassa SBP PWA lifecycle
+
+- ТЗ ревизии + CBR #28 + artifacts `codeblack_t_kassa_sbp_tokenization/`
+
 ## 2026-07-27 — deploy: SBP Deep Link epic to Fly v394
 
 - Push `develop` → `6154539` (16 commits эпика)

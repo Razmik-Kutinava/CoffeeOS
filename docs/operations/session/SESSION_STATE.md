@@ -2,12 +2,18 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-27 (intake CODE:BLACK T-Kassa SBP PWA lifecycle)
+**Дата:** 2026-07-27 (GREEN CODE:BLACK PWA lifecycle)
 
 | Сейчас | Дальше |
 |--------|--------|
-| Интейк ревизии ТЗ (PWA lifecycle поверх v2/Fly v394) | SPEC → RED/GREEN дельты: `codeblack_pending_order`, visibilitychange, WAITING_FOR_BANK |
-| v2 SBP epic на Fly v394 · апрув заказчика `[ ]` | |
+| Lifecycle GREEN: pending LS + visibility + status API + WAITING_FOR_BANK | push / Fly / MCP · апрув заказчика |
+| v2 SBP epic Fly v394 · апрув `[ ]` | |
+
+### Сессия 2026-07-27 (GREEN CODE:BLACK PWA lifecycle)
+
+- `codeblackPendingOrder.js` · `checkOrderStatus` · App visibility/cold start
+- `GET /shop/api/payments/status/:order_id` · PaymentResult WAITING_FOR_BANK + «Я оплатил»
+- Тесты: Node **25/0**; status+UI **23/0**; регрессия §2.3+callback **59/0** (2 skips)
 
 ### Сессия 2026-07-27 (intake CODE:BLACK T-Kassa SBP PWA lifecycle)
 

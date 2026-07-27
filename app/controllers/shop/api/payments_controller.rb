@@ -49,6 +49,14 @@ module Shop
         render json: { error: e.message }, status: e.http_status
       end
 
+      # GET /shop/api/payments/status/:order_id — PENDING|CONFIRMED|REJECTED|CANCELED.
+      def status
+        order = Order.includes(:payments).find_by(id: params[:order_id], tenant_id: @shop_tenant.id)
+        return render json: { error: "Order not found" }, status: :not_found unless order
+
+        render json: Shop::PaymentStatusPresenter.call(order)
+      end
+
       private
 
       def payment_params

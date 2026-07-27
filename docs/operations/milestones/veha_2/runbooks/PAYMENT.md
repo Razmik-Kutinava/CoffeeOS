@@ -105,6 +105,13 @@
 - Sheet label: `formatMaskedPan` → `**** 1234` (бренд отдельно в `cardBrandShort`).
 - 1-tap: `POST /payments/one_click` + FSM Loading; invalid rebill → CTA «Добавить карту».
 
+### CODE:BLACK PWA lifecycle (2026-07-27, ревизия)
+
+- `GET /shop/api/payments/status/:order_id` → `{ order_id, status: PENDING|CONFIRMED|REJECTED|CANCELED }` (`Shop::PaymentStatusPresenter`).
+- Перед redirect СБП: `localStorage.codeblack_pending_order = { orderId, timestamp }` (`codeblackPendingOrder.js`); TTL **15 мин**.
+- Cold start + `visibilitychange` → `checkOrderStatus`; terminal → clear LS; PENDING → `#/payment-result?status=waiting`.
+- Экран WAITING_FOR_BANK: текст «Завершите оплату…» + кнопка «Я оплатил» (`PaymentResult.svelte`).
+
 ---
 
 ## Итог реализации (2026-05-28)

@@ -21,4 +21,21 @@ class Shop::SbpPaymentReturnUiTest < ActionDispatch::IntegrationTest
     assert_includes src, "SBP_INCOMPLETE_MESSAGE"
     refute_includes src, "pollAccepted"
   end
+
+  test "PaymentResult WAITING_FOR_BANK and Я оплатил" do
+    src = File.read(RESULT)
+    assert_includes src, "SBP_WAITING_FOR_BANK_MESSAGE"
+    assert_includes src, "SBP_I_PAID_LABEL"
+    assert_includes src, 'data-testid="payment-waiting-for-bank"'
+    assert_includes src, "checkOrderStatus"
+  end
+
+  test "App recovers codeblack_pending_order on visibility and cold start" do
+    app = File.read(Rails.root.join("app/frontend/App.svelte"))
+    pending = File.read(Rails.root.join("app/frontend/lib/codeblackPendingOrder.js"))
+    assert_includes pending, 'codeblack_pending_order'
+    assert_includes app, "loadPendingOrder"
+    assert_includes app, "visibilitychange"
+    assert_includes app, "recoverCodeblackPendingOrder"
+  end
 end

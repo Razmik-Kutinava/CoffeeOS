@@ -23,9 +23,16 @@
     reconnectGuestOrder,
     returningFromPaymentPage
   } from "./lib/shopGuestSession.js"
+  import {
+    loadPendingOrder,
+    createVisibilityStatusGuard
+  } from "./lib/codeblackPendingOrder.js"
+  import { checkOrderStatus } from "./lib/shopSbpPay.js"
 
   installSlowRequestTracker()
   initTelegram()
+
+  const pendingStatusGuard = createVisibilityStatusGuard()
 
   function lazyRoute(importer) {
     return wrap({
@@ -67,6 +74,37 @@
     push(`/payment-result?status=fail&order_id=${orderId}`)
   }
 
+  async function recoverCodeblackPendingOrder() {
+    const pending = loadPendingOrder()
+    if (!pending?.orderId) return
+
+    const hash = window.location.hash || ""
+    if (hash.includes("payment-result")) return
+
+    return pendingStatusGuard.run(async () => {
+      try {
+        await reconnectGuestOrder(api)
+        const st = await checkOrderStatus(api, { orderId: pending.orderId })
+        if (st === "CONFIRMED") {
+          push(`/payment-result?status=ok&order_id=${pending.orderId}`)
+          return
+        }
+        if (st === "REJECTED" || st === "CANCELED") {
+          push(`/payment-result?status=fail&order_id=${pending.orderId}`)
+          return
+        }
+        push(`/payment-result?status=waiting&order_id=${pending.orderId}`)
+      } catch {
+        push(`/payment-result?status=waiting&order_id=${pending.orderId}`)
+      }
+    })
+  }
+
+  function onVisibilityChange() {
+    if (document.visibilityState !== "visible") return
+    recoverCodeblackPendingOrder()
+  }
+
   onMount(() => {
     bootstrapShopTenant(api)
       .then((cfg) => {
@@ -89,11 +127,14 @@
     }
     window.addEventListener("pageshow", onPageShow)
     window.addEventListener("shop:offline-order-sent", onOfflineSent)
+    document.addEventListener("visibilitychange", onVisibilityChange)
     recoverAfterPaymentReturn()
+    recoverCodeblackPendingOrder()
 
     return () => {
       window.removeEventListener("pageshow", onPageShow)
       window.removeEventListener("shop:offline-order-sent", onOfflineSent)
+      document.removeEventListener("visibilitychange", onVisibilityChange)
     }
   })
 

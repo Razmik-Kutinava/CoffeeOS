@@ -4,10 +4,14 @@
   import { api } from "../lib/api.js"
   import { clearGuestOrderSession, reconnectGuestOrder } from "../lib/shopGuestSession.js"
   import { clearPaymentSession } from "../lib/tbankPayment.js"
+  import { clearPendingOrder } from "../lib/codeblackPendingOrder.js"
   import {
     pollSbpPaymentStatus,
     isSbpReturnSuccessStatus,
-    SBP_INCOMPLETE_MESSAGE
+    checkOrderStatus,
+    SBP_INCOMPLETE_MESSAGE,
+    SBP_WAITING_FOR_BANK_MESSAGE,
+    SBP_I_PAID_LABEL
   } from "../lib/shopSbpPay.js"
 
   let status = $state("fail")
@@ -15,6 +19,38 @@
   let message = $state("")
   let err = $state(null)
   let loading = $state(true)
+  let waitingForBank = $state(false)
+  let checkingPaid = $state(false)
+
+  async function settleSuccess() {
+    await pollSbpPaymentStatus(api, { orderId })
+    clearPendingOrder()
+    clearGuestOrderSession()
+    push(`/order/${orderId}`)
+  }
+
+  async function onIPaid() {
+    if (!orderId || checkingPaid) return
+    checkingPaid = true
+    err = null
+    try {
+      const st = await checkOrderStatus(api, { orderId })
+      if (st === "CONFIRMED") {
+        await settleSuccess()
+        return
+      }
+      if (st === "REJECTED" || st === "CANCELED") {
+        waitingForBank = false
+        message = SBP_INCOMPLETE_MESSAGE
+        return
+      }
+      // PENDING — остаёмся на WAITING_FOR_BANK
+    } catch (e) {
+      err = e.message || SBP_INCOMPLETE_MESSAGE
+    } finally {
+      checkingPaid = false
+    }
+  }
 
   onMount(async () => {
     const query = window.location.hash.split("?")[1] || ""
@@ -32,14 +68,19 @@
       await reconnectGuestOrder(api)
       clearPaymentSession()
 
+      if (status === "waiting") {
+        waitingForBank = true
+        loading = false
+        return
+      }
+
       if (isSbpReturnSuccessStatus(status)) {
-        await pollSbpPaymentStatus(api, { orderId })
-        clearGuestOrderSession()
-        push(`/order/${orderId}`)
+        await settleSuccess()
         return
       }
 
       if (status === "cancel") {
+        clearPendingOrder()
         message = SBP_INCOMPLETE_MESSAGE
       } else {
         try {
@@ -47,10 +88,10 @@
         } catch {
           /* abandon best-effort */
         }
+        clearPendingOrder()
         message = SBP_INCOMPLETE_MESSAGE
       }
     } catch (e) {
-      // timeout / terminal / network — без бесконечного Loading
       if (e?.kind === "sbp_timeout" || e?.kind === "sbp_terminal") {
         message = e.message || SBP_INCOMPLETE_MESSAGE
         err = null
@@ -66,6 +107,22 @@
 {#if loading}
   <div class="py-8 text-center" data-testid="payment-result-loading">
     <p class="text-[#a0a0a0]">Проверяем оплату…</p>
+  </div>
+{:else if waitingForBank}
+  <div class="py-8 text-center font-mono" data-testid="payment-waiting-for-bank">
+    <p class="mb-6 text-[#a0a0a0]">{SBP_WAITING_FOR_BANK_MESSAGE}</p>
+    {#if err}
+      <p class="mb-4 text-red-400" role="alert">{err}</p>
+    {/if}
+    <button
+      type="button"
+      class="border border-[#333] px-4 py-2 text-[#e0e0e0] hover:border-[#666]"
+      data-testid="payment-i-paid"
+      disabled={checkingPaid}
+      onclick={onIPaid}
+    >
+      [ {checkingPaid ? "…" : SBP_I_PAID_LABEL} ]
+    </button>
   </div>
 {:else if err}
   <p class="mb-4 text-red-400" role="alert">{err}</p>
