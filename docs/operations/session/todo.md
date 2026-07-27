@@ -6,8 +6,8 @@
 
 ## Текущая фаза
 
-**PHASE 2: GREEN** — `[x]` Шаги 7–8 characterization Recurrent/Charge · char **4/0** + suites  
-*(Шаги 9+11 UI/poll — GREEN; Шаг 10 polish — опционально)*
+**PHASE 2: GREEN** — `[x]` Шаг 10 маска `**** 1234` · Node 17/0 · Ruby mask+repeat 10/0  
+*(Эпик SBP Deep Link + card tokenization — чеклист 1–11 закрыт)*
 
 ---
 
@@ -149,7 +149,7 @@
 
 ### Сценарий 4 — UI CODE:BLACK
 - [x] Шаг 9: «Оплатить быстро» / SBP → init → redirect — **GREEN**
-- [ ] Шаг 10: маска карты + 1-tap (polish при необходимости)
+- [x] Шаг 10: маска карты + 1-tap (polish `**** 1234`) — **GREEN**
 - [x] Шаг 11: return + polling ≤60s / 2s; нет infinite Loading — **GREEN**
 
 ---

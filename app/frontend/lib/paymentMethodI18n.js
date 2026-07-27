@@ -1,9 +1,15 @@
-/** i18n подписей способов оплаты (канон макета repeat invalid token). */
+/** i18n подписей способов оплаты (канон макета + ТЗ SBP **** 1234). */
 
-import { panFromCard } from "./paymentMethodLabels.js"
+/** Маска карты для sheet: «**** 1234» (Шаг 10 ТЗ Т-Касса v2). */
+export function formatMaskedPan(card) {
+  const raw = card?.pan || card?.masked_pan || ""
+  const digits = String(raw).replace(/\D/g, "")
+  if (digits.length >= 4) return `**** ${digits.slice(-4)}`
+  return "**** ????"
+}
 
 export function formatCardRowLabel(card) {
-  return `Картой ${panFromCard(card)}`
+  return formatMaskedPan(card)
 }
 
 export function labelAddCard() {

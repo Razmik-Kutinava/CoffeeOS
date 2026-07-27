@@ -58,9 +58,9 @@ class Shop::RepeatInvalidTokenPaymentTest < ActionDispatch::IntegrationTest
     assert File.exist?(STORE), "expected repeatInvalidTokenStore.js"
   end
 
-  test "i18n card row label matches mockup «Картой *1594»" do
+  test "i18n card row label matches SBP mask «**** 1594»" do
     assert File.exist?(I18N)
-    assert_equal "Картой *1594", js_export("formatCardRowLabel", {
+    assert_equal "**** 1594", js_export("formatCardRowLabel", {
       "pan" => "*1594", "payment_system" => "VISA"
     })
   end

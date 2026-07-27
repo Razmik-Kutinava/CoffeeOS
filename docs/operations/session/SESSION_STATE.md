@@ -2,12 +2,18 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-27 (GREEN Шаги 7–8 card tokenization characterization)
+**Дата:** 2026-07-27 (GREEN Шаг 10 card mask **** 1234)
 
 | Сейчас | Дальше |
 |--------|--------|
-| GREEN 7–8: Recurrent→RebillId + Charge + invalid token (char) | Шаг 10 polish / push·Fly по просьбе |
-| Шаги 9+11 UI/poll — GREEN | |
+| GREEN Шаг 10: маска `**** 1234` в PaymentMethodsSheet | push / Fly / MCP по просьбе; апрув заказчика |
+| Эпик SBP 1–11 — закрыт по коду | |
+
+### Сессия 2026-07-27 (GREEN Шаг 10 card mask)
+
+- `formatMaskedPan` / `formatCardRowLabel` → `**** 1234`
+- 1-tap + invalid token — reuse (one_click / repeatInvalidTokenStore)
+- Тесты: Node mask+repeat **17/0**; Ruby step10+repeat **10/0**
 
 ### Сессия 2026-07-27 (GREEN Шаги 7–8 characterization)
 

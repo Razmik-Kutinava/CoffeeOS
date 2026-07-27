@@ -1,5 +1,10 @@
 ﻿# CHANGELOG
 
+## 2026-07-27 — feat(shop): card mask **** 1234 for 1-tap sheet [GREEN]
+
+- `formatMaskedPan` / `formatCardRowLabel` — маска по ТЗ Шаг 10
+- Тесты: Node 17/0 · Ruby step10+repeat 10/0
+
 ## 2026-07-27 — test(shop): characterize Recurrent/Charge card tokenization [GREEN]
 
 - `sbp_epic_card_tokenization_char_test.rb` — Шаги 7–8 эпика SBP (без новой прод-логики)
