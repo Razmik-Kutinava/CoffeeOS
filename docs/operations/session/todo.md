@@ -6,7 +6,7 @@
 
 ## Текущая фаза
 
-**PHASE 3: REVIEW** — Шаг 6 (cooldowns + rate limits) · **GREEN `[x]`**
+**PHASE 3: REVIEW** — Push / Fly / MCP · **PASS `[x]`** Fly v397
 
 ---
 
@@ -48,6 +48,7 @@
 - [x] **Шаг 4:** Messenger + SMS fallback (40–70 / 70+)
 - [x] **Шаг 5:** Backend `MessengerClient` + channel messenger + delivery error flag
 - [x] **Шаг 6:** Кулдауны / Rack::Attack 20 / 30 / 60
+- [x] **Push / Fly / MCP** — v397 · `fly_mcp_auth_funnel_2026-07-28.json`
 
 ---
 
