@@ -27,10 +27,15 @@ module Shop
 
     def sorted_city_rows
       peers = city_sales_points
-      peers = [@current_tenant] if peers.empty?
-      peers = peers.uniq(&:id)
+      # Неактивную / чужую текущую точку не впихиваем в дропдаун —
+      # иначе sticky Fly Overnight (inactive) держит витрину без «повторить».
+      if current_tenant_switchable?
+        peers = (peers + [@current_tenant]).uniq(&:id)
+      elsif peers.empty?
+        return []
+      end
 
-      current = peers.find { |t| t.id == @current_tenant.id } || @current_tenant
+      current = peers.find { |t| t.id == @current_tenant.id } || peers.first
       others = peers.reject { |t| t.id == current.id }
 
       with_coords, without_coords = others.partition { |t| TenantGeo.coordinates?(t) }
@@ -43,6 +48,10 @@ module Shop
       without_coords.sort_by!(&:name)
 
       ([current] + with_coords + without_coords).map { |t| tenant_row(t) }
+    end
+
+    def current_tenant_switchable?
+      @current_tenant.status.to_s == "active" && @current_tenant.type.to_s == "sales_point"
     end
 
     def city_sales_points

@@ -174,9 +174,20 @@ export async function bootstrapShopTenant(api) {
     switchableIds
   })
 
-  if (preferred && String(preferred) !== String(currentId)) {
-    // Запоминаем «свою» точку, чтобы F5 не возвращал на пустой Fly Overnight
-    navigateToTenant(preferred, { remember: true })
+  const currentAllowed =
+    Array.isArray(switchableIds) &&
+    switchableIds.map((id) => String(id)).includes(String(currentId))
+
+  // Текущий tenant_id не в активном списке (inactive Fly Overnight) → уводим на preferred
+  if ((!currentAllowed || (preferred && String(preferred) !== String(currentId))) && preferred) {
+    if (String(preferred) !== String(currentId)) {
+      navigateToTenant(preferred, { remember: true })
+      return cfg
+    }
+  }
+
+  if (!currentAllowed && !preferred && switchableIds?.length) {
+    navigateToTenant(switchableIds[0], { remember: true })
     return cfg
   }
 

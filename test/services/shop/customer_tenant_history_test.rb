@@ -73,6 +73,16 @@ class Shop::CustomerTenantHistoryTest < ActiveSupport::TestCase
     assert_equal 3, payload[:tenants].size
   end
 
+  test "inactive current tenant is not forced into switchable list" do
+    @tenant_a.update!(status: "inactive")
+    payload = Shop::CustomerTenantHistory.call(session: @session, current_tenant: @tenant_a)
+
+    ids = payload[:tenants].map { |t| t[:id] }
+    refute_includes ids, @tenant_a.id
+    assert_includes ids, @tenant_b.id
+    assert_includes ids, @tenant_c.id
+  end
+
   private
 
   def create_mobile_order!(tenant:, customer:, created_at: Time.current)
