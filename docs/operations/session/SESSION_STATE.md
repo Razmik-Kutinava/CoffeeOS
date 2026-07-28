@@ -2,13 +2,19 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-28 (Auth funnel cascade · Шаг 2 GREEN)
+**Дата:** 2026-07-28 (Auth funnel cascade · Шаг 3 GREEN)
 
 | Сейчас | Дальше |
 |--------|--------|
-| Шаги 1–2 wizard done (телефон + PIN auto-verify) | Шаг 3: каскад Flash Call #1/#2 таймеры |
-| Email/radio сняты | OrderCreator phone-only — после полного каскада |
+| Шаги 1–3: телефон + PIN + Flash #1/#2 таймеры | Шаг 4: Messenger + SMS fallback |
+| `PhoneAuthCodeStep` + `phoneAuthCascade.js` | Backend messenger / rate limit — 5–6 |
 | Fly v396 · банк 3001 (SBP) | не трогали |
+
+### Сессия 2026-07-28 (Auth funnel · Шаг 3)
+
+- Flash cascade: 20с «Ждем звонок...», авто Flash #2, кнопка «Запросить звонок еще раз»
+- Вынос Экрана 2 → `PhoneAuthCodeStep.svelte`; `phoneAuthCascade.js`
+- Тесты: Node **16/0**; Ruby wizard UI + phone_otp **8/0**
 
 ### Сессия 2026-07-28 (Auth funnel · Шаг 2)
 

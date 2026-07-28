@@ -6,7 +6,7 @@
 
 ## Текущая фаза
 
-**PHASE 2: BUILD** — Шаг 2 (PIN) · **GREEN `[x]`** · дальше Шаг 3 (каскад Flash #1/#2)
+**PHASE 2: BUILD** — Шаг 3 (Flash cascade) · **GREEN `[x]`** · дальше Шаг 4 (Messenger + SMS)
 
 ---
 
@@ -44,7 +44,7 @@
 
 - [x] **Шаг 1:** Очистка UI + Экран 1 (маска, автофокус, «Продолжить», `flash_call`, → Экран 2)
 - [x] **Шаг 2:** Экран 2 — 4 ячейки PIN, авто-сабмит verify, «Изменить номер»
-- [ ] **Шаг 3:** Каскад Flash Call #1 / #2 (таймеры 0–20 / 20–40)
+- [x] **Шаг 3:** Каскад Flash Call #1 / #2 (таймеры 0–20 / 20–40)
 - [ ] **Шаг 4:** Messenger + SMS fallback (40–70 / 70+)
 - [ ] **Шаг 5:** Backend `MessengerClient` + channel messenger + delivery error flag
 - [ ] **Шаг 6:** Кулдауны / Rack::Attack 20 / 30 / 60

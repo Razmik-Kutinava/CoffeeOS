@@ -1,6 +1,6 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-28 (**Auth funnel cascade · Шаг 2 GREEN**)  
+**Дата:** 2026-07-28 (**Auth funnel cascade · Шаг 3 GREEN**)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev · **Fly:** v396  
 
@@ -12,12 +12,13 @@
 | PHASE 1: SPEC | **`[x]`** · `todo.md` |
 | Шаг 1 Экран 1 (телефон → flash_call) | **`[x]`** GREEN |
 | Шаг 2 Экран 2 (PIN 4 + auto-verify) | **`[x]`** GREEN |
-| Шаги 3–6 (каскад / messenger / rate limit) | **`[ ]`** |
+| Шаг 3 Flash cascade #1/#2 (20с+20с) | **`[x]`** GREEN |
+| Шаги 4–6 (messenger / SMS / rate limit) | **`[ ]`** |
 | Push / Fly / MCP | **`[ ]`** |
 | Апрув заказчика | **`[ ]`** |
 
 **ТЗ:** [`Рефакторинг воронки авторизации…`](../milestones/veha_2/requirements/customer_tasks/Рефакторинг%20воронки%20авторизации%20PWA%20Каскад%20Flash%20Call%20Messenger%20SMS.md)  
-**Дальше:** Шаг 3 — таймеры Flash Call #1 / #2 (0–20 / 20–40).
+**Дальше:** Шаг 4 — Messenger + SMS fallback (40–70 / 70+).
 
 ### CODE:BLACK T-Kassa SBP · PWA lifecycle (2026-07-27)
 

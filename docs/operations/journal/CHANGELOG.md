@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-07-28 — feat(shop): auth funnel Flash cascade #1/#2 [GREEN]
+
+- Таймер «Ждем звонок... 00:20»; авто `flash_call` #2; кнопка «Запросить звонок еще раз»
+- `phoneAuthCascade.js` + `PhoneAuthCodeStep.svelte` (вынос Экрана 2)
+- Тесты: Node 16/0 · Ruby wizard UI 8/0
+
 ## 2026-07-28 — feat(shop): auth funnel Screen 2 PIN auto-verify [GREEN]
 
 - 4 PIN-ячейки + авто-сабмит `POST phone_otp/verify` на 4-й цифре
