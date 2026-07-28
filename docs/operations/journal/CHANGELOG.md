@@ -1,9 +1,16 @@
 ﻿# CHANGELOG
 
+## 2026-07-28 — ops: link Aram real phone +79639124847 (no deploy)
+
+- Владелец: настоящий `+7 963 912 4847` (тестовые 900… — не его)
+- `CustomerProfileMerger.link_phone!` на `2bc37279-…` + merge donor `e01d7bd4-…`
+- AFTER: phone=+79639124847 verified · orders/payments 75 · cards 2 · Point A succeeded 13
+- Артефакт `fly_aram_real_phone_link_2026-07-28.json`
+
 ## 2026-07-28 — ops: restore Aram phone +79001119877 on Fly
 
 - MCP auth funnel перезаписал профиль Арама тестовым `+79001119932`
-- Prod: `MobileCustomer` aramfifa100 → `phone=+79001119877`, `phone_verified=true`
+- Prod: `MobileCustomer` aramfifa100 → `phone=+79001119877`, `phone_verified=true` (позже заменён на настоящий)
 - Артефакт `artifacts/aram_phone_restore/` · ISSUES resolved
 
 ## 2026-07-28 — deploy: repeat recommendations restored Fly v399 + MCP PASS

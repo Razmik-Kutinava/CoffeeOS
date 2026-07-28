@@ -114,7 +114,7 @@
 | CODE:BLACK T-Kassa SBP PWA lifecycle | **Эквайринг / PWA** — ревизия: `codeblack_pending_order`, visibilitychange, cold start ≤15 мин, экран WAITING_FOR_BANK | [ТЗ](customer_tasks/Интеграция%20Т-Кассы%20СБП%20и%20токенизации%20в%20PWA%20CODE%20BLACK.md) · [`artifacts/codeblack_t_kassa_sbp_tokenization/`](../artifacts/codeblack_t_kassa_sbp_tokenization/) | **MCP PASS `[x]`** 2026-07-27 · Fly v395 · апрув `[ ]` |
 | Auth funnel cascade Flash→Messenger→SMS | **Витрина / PWA** — 2-экранный wizard + каскад Flash Call×2 → Messenger → SMS (без Email/радио) | [ТЗ](customer_tasks/Рефакторинг%20воронки%20авторизации%20PWA%20Каскад%20Flash%20Call%20Messenger%20SMS.md) · [`artifacts/auth_funnel_cascade_flash_messenger_sms/`](../artifacts/auth_funnel_cascade_flash_messenger_sms/) | **MCP PASS `[x]`** 2026-07-28 · Fly v397 · апрув `[ ]` |
 | Repeat recommendations missing | **Витрина** — пропал блок «повторить»/рекомендации (залипание на Fly Overnight) | [ТЗ](customer_tasks/Пропали%20рекомендации%20повторить%20на%20витрине.md) · [`artifacts/repeat_recommendations_missing/`](../artifacts/repeat_recommendations_missing/) | **MCP PASS `[x]`** 2026-07-28 · Fly v399 · апрув `[ ]` |
-| Aram phone restore | **Витрина / профиль** — откат тестового `+79001119932` → канон `+79001119877` | [ТЗ](customer_tasks/Вернуть%20номер%20телефона%20Арама%20в%20профиле.md) · [`artifacts/aram_phone_restore/`](../artifacts/aram_phone_restore/) | **prod restore PASS `[x]`** 2026-07-28 · апрув `[ ]` |
+| Aram phone restore | **Витрина / профиль** — настоящий `+79639124847` + merge оплат Point A | [ТЗ](customer_tasks/Вернуть%20номер%20телефона%20Арама%20в%20профиле.md) · [`artifacts/aram_phone_restore/`](../artifacts/aram_phone_restore/) | **prod link PASS `[x]`** 2026-07-28 · no deploy · апрув `[ ]` |
 
 > **B1.8 (не забыть):** сейчас письма с **подтверждённого личного sender** в Brevo. Когда будет **свой домен** — завести **кофейную почту** (напр. `noreply@бренд.ru`), аутентифицировать домен в Brevo, обновить `MAIL_FROM` + secrets. Код OTP/ActionMailer менять не нужно.
 
@@ -155,7 +155,7 @@
 | 28 | **CODE:BLACK T-Kassa SBP PWA lifecycle** | Ревизия ТЗ: pending order LS + visibilitychange + WAITING_FOR_BANK | **MCP PASS `[x]`** 2026-07-27 · Fly v395 · апрув `[ ]` | [Интеграция Т-Кассы СБП…](customer_tasks/Интеграция%20Т-Кассы%20СБП%20и%20токенизации%20в%20PWA%20CODE%20BLACK.md) |
 | 29 | **Auth funnel cascade** | 2-экранный wizard авторизации: Flash Call×2 → Messenger → SMS | **MCP PASS `[x]`** 2026-07-28 · Fly v397 | [Рефакторинг воронки авторизации…](customer_tasks/Рефакторинг%20воронки%20авторизации%20PWA%20Каскад%20Flash%20Call%20Messenger%20SMS.md) |
 | 30 | **Repeat recommendations missing** | Пропал блок «повторить» на витрине (Fly Overnight) | **MCP PASS `[x]`** 2026-07-28 · Fly v399 | [Пропали рекомендации…](customer_tasks/Пропали%20рекомендации%20повторить%20на%20витрине.md) |
-| 31 | **Aram phone restore** | Вернуть канон-телефон Арама после MCP auth funnel | **prod restore PASS `[x]`** 2026-07-28 | [Вернуть номер телефона Арама…](customer_tasks/Вернуть%20номер%20телефона%20Арама%20в%20профиле.md) |
+| 31 | **Aram phone restore** | Настоящий `+79639124847` + merge donor оплат | **prod link PASS `[x]`** 2026-07-28 · no deploy | [Вернуть номер телефона Арама…](customer_tasks/Вернуть%20номер%20телефона%20Арама%20в%20профиле.md) |
 
 
 ---

@@ -4,11 +4,11 @@
 
 ## 🔴 Блокеры
 
-[2026-07-28] — В профиле Арама тестовый телефон `+79001119932` вместо канона
-**Статус:** **resolved** 2026-07-28 · prod data restore
-**Источник:** скрин владельца · `artifacts/aram_phone_restore/screenshots/01_…`
-**Root cause:** MCP auth funnel 2026-07-28 прогнал OTP на живом `aramfifa100@gmail.com` тестовым `+79001119932` и перезаписал `MobileCustomer.phone`.
-**Чем закрыли:** Fly runner `update!(phone: "+79001119877", phone_verified: true)` для id `2bc37279-…-634c` · verify JSON [`fly_aram_phone_restore_2026-07-28.json`](milestones/veha_2/artifacts/aram_phone_restore/fly_aram_phone_restore_2026-07-28.json)
+[2026-07-28] — В профиле Арама тестовый телефон вместо настоящего
+**Статус:** **resolved** 2026-07-28 · prod `link_phone!` + merge
+**Источник:** скрин владельца · настоящий номер `+79639124847`
+**Root cause:** MCP OTP тестовыми `+79001119932` / `+79001119877` перезаписал phone; настоящий лежал на отдельном donor `e01d7bd4-…`.
+**Чем закрыли:** `Shop::CustomerProfileMerger.link_phone!(…, "+79639124847")` на survivor `2bc37279-…` · merge donor · [`fly_aram_real_phone_link_2026-07-28.json`](milestones/veha_2/artifacts/aram_phone_restore/fly_aram_real_phone_link_2026-07-28.json)
 **Правило:** не гонять phone OTP MCP на профиле заказчика тестовым номером.
 **ТЗ:** [`Вернуть номер телефона Арама в профиле.md`](milestones/veha_2/requirements/customer_tasks/Вернуть%20номер%20телефона%20Арама%20в%20профиле.md)
 

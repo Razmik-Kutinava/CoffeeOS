@@ -2,20 +2,20 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-28 (Aram phone restore PASS)
+**Дата:** 2026-07-28 (Aram real phone `+79639124847` · PASS · no deploy)
 
 | Сейчас | Дальше |
 |--------|--------|
-| Телефон Арама на Fly: **`+79001119877`** (был `+79001119932`) | апрув владельца / заказчика |
-| Repeat «повторить» · Fly **v399** | live NSPK — кабинет Т-Кассы |
-| Артефакт `aram_phone_restore/` | |
+| Телефон Арама: **`+79639124847`** verified · id `2bc37279-…` | апрув владельца |
+| Point A заказы/оплаты на том же customer_id (merge donor) | live NSPK — кабинет Т-Кассы |
+| Deploy **не** делали | |
 
-### Сессия 2026-07-28 (Aram phone restore · DONE)
+### Сессия 2026-07-28 (Aram real phone link · DONE)
 
-- Скрин профиля: тестовый `+79001119932` от MCP auth funnel
-- Канон из profile merge: `+79001119877`
-- Fly: `MobileCustomer` `2bc37279-…` → `phone=+79001119877`, `phone_verified=true`
-- Verify runner PASS · UI MCP SKIP (нет auth token в browser)
+- Владелец: настоящий номер `+7 963 912 4847`
+- `link_phone!` → `+79639124847`; merge donor `e01d7bd4-…` (уже с этим phone)
+- AFTER: orders 75 / payments 75 / cards 2 · Point A orders 59 / succeeded 13
+- Артефакт `fly_aram_real_phone_link_2026-07-28.json`
 
 ### Сессия 2026-07-28 (Repeat recommendations + SBP 3001 · DONE)
 

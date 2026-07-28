@@ -1,0 +1,46 @@
+{
+  "date": "2026-07-28",
+  "task": "aram_real_phone_link",
+  "deploy": false,
+  "customer": {
+    "id": "2bc37279-8d23-456b-a2a5-4c28f584634c",
+    "email": "aramfifa100@gmail.com",
+    "phone": "+79639124847",
+    "phone_verified": true
+  },
+  "point_a": {
+    "id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+    "name": "Demo Coffee Point A",
+    "address": "ул. Ленина, 10",
+    "shop_url": "https://coffeeos.fly.dev/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789"
+  },
+  "merge": {
+    "donor_id": "e01d7bd4-a793-4a16-8263-c0e252d3422a",
+    "donor_before": { "email": null, "phone": "+79639124847", "active": true },
+    "method": "Shop::CustomerProfileMerger.link_phone!"
+  },
+  "before": {
+    "phone": "+79001119877",
+    "orders": 60,
+    "payments": 60,
+    "cards": 2,
+    "point_a_orders": 53,
+    "point_a_succeeded": 12
+  },
+  "after": {
+    "phone": "+79639124847",
+    "phone_verified": true,
+    "orders": 75,
+    "payments": 75,
+    "cards": 2,
+    "point_a_orders": 59,
+    "point_a_succeeded": 13,
+    "other_with_same_phone": []
+  },
+  "sample_succeeded_point_a": [
+    { "payment_id": "f7a61e93-0d6f-4f05-9221-e3461b01dd30", "order_id": "72c26576-99c1-4ad0-adf3-39faf93f4320", "amount": 4.74, "at": "2026-07-16T09:56:36Z", "customer_id": "2bc37279-8d23-456b-a2a5-4c28f584634c" },
+    { "payment_id": "bff277bd-6e18-468c-8758-5d8e3bca4422", "order_id": "910b4e8b-3b5f-44db-b859-5cbdd9e7e5cf", "amount": 4.74, "at": "2026-07-16T08:42:07Z", "customer_id": "2bc37279-8d23-456b-a2a5-4c28f584634c" },
+    { "payment_id": "0a7e0f8e-f839-49d9-b5bd-c8a799fcaaca", "order_id": "fc18c88e-a5be-4a6e-a327-3314364053f3", "amount": 4.74, "at": "2026-07-15T14:36:10Z", "customer_id": "2bc37279-8d23-456b-a2a5-4c28f584634c" }
+  ],
+  "result": "PASS"
+}
