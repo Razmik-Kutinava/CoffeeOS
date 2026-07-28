@@ -61,6 +61,46 @@ class Shop::Api::PhoneOtpTest < ActionDispatch::IntegrationTest
     assert_response :unprocessable_entity
   end
 
+  test "send messenger returns code and verify creates refresh_token" do
+    post "/shop/api/phone_otp/send",
+      headers: shop_tenant_headers(@tenant.id),
+      params: { phone: @phone, channel: "messenger" },
+      as: :json
+
+    assert_response :success, response.body
+    assert_equal @phone, response.parsed_body["phone"]
+
+    record = MobileOtpCode.where(phone: @phone, is_used: false).order(created_at: :desc).first
+    assert record
+    assert_equal 4, record.code.length
+
+    post "/shop/api/phone_otp/verify",
+      headers: shop_tenant_headers(@tenant.id),
+      params: { phone: @phone, code: record.code },
+      as: :json
+
+    assert_response :success, response.body
+    body = response.parsed_body
+    assert_equal true, body["verified"]
+    assert body["refresh_token"].present?
+    assert MobileCustomer.exists?(phone: @phone)
+  end
+
+  test "send messenger delivery error returns messenger_delivery_error flag" do
+    Shop::MessengerClient.stub(:deliver_otp!, lambda { |_to:, _code:|
+      raise Shop::MessengerClient::Error.new("Messenger delivery failed", http_status: 503)
+    }) do
+      post "/shop/api/phone_otp/send",
+        headers: shop_tenant_headers(@tenant.id),
+        params: { phone: @phone, channel: "messenger" },
+        as: :json
+
+      assert_response :bad_gateway
+      assert_equal true, response.parsed_body["messenger_delivery_error"]
+      assert_equal "messenger_delivery_error", response.parsed_body["error_code"]
+    end
+  end
+
   test "links phone onto email-verified session customer" do
     email = "phone-api-link-#{SecureRandom.hex(3)}@example.com"
     verify_shop_email!(tenant_id: @tenant.id, email: email)

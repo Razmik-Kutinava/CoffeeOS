@@ -34,6 +34,13 @@ class Shop::PhoneOtpTest < ActiveSupport::TestCase
     assert_equal 4, record.code.length
   end
 
+  test "send_code messenger stores 4 digit code" do
+    Shop::PhoneOtp.send_code!(phone: @phone, channel: "messenger")
+    record = MobileOtpCode.where(phone: @phone, is_used: false).order(created_at: :desc).first
+    assert record
+    assert_equal 4, record.code.length
+  end
+
   test "cooldown blocks resend within 60 seconds" do
     Shop::PhoneOtp.send_code!(phone: @phone, channel: "sms")
     err = assert_raises(Shop::PhoneOtp::Error) do
