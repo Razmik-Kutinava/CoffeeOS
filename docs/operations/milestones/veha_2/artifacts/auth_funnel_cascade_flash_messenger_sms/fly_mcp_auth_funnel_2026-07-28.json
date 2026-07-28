@@ -1,0 +1,53 @@
+{
+  "date": "2026-07-28",
+  "kind": "mcp_auth_funnel_cascade_flash_messenger_sms",
+  "fly_release": "v397",
+  "commit": "22d136b",
+  "stand": "https://coffeeos.fly.dev",
+  "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "tenant_name": "Demo Coffee Point A",
+  "ui_tenant_id": "af4f78d6-c66b-428e-8ee4-5a609c5c9131",
+  "secrets": {
+    "SHOP_OTP_LOG_FALLBACK": "true (deployed)"
+  },
+  "checks": [
+    {
+      "id": "push_develop",
+      "status": "PASS",
+      "detail": "git push origin develop → 22d136b"
+    },
+    {
+      "id": "deploy_v397",
+      "status": "PASS",
+      "detail": "fly deploy -a coffeeos --remote-only --depot=false → VERSION 397; /up 200; health checks passing"
+    },
+    {
+      "id": "flash_call_send_and_throttle",
+      "status": "PASS",
+      "detail": "POST phone_otp/send channel=flash_call phone=+79001119921 → 200; Fly log code=7475; immediate resend → 429 retry_after=20"
+    },
+    {
+      "id": "messenger_send_and_throttle",
+      "status": "PASS",
+      "detail": "channel=messenger phone=+79001119931 → 200; log [MessengerClient] code=4119; resend → 429 retry_after=30"
+    },
+    {
+      "id": "sms_send_and_throttle",
+      "status": "PASS",
+      "detail": "channel=sms phone=+79001119932 → 200; log [SmsClient] code=7535; resend → 429 retry_after=60"
+    },
+    {
+      "id": "verify_all_channels",
+      "status": "PASS",
+      "detail": "verify flash/messenger/sms → 200 verified=true + refresh_token length 64 each"
+    },
+    {
+      "id": "checkout_wizard_ui",
+      "status": "PASS",
+      "detail": "Checkout: data-testid phone-auth-wizard / screen-1 / continue; no Email radio; Screen2: pin cells + «Ждем звонок... 00:20» + Изменить номер"
+    }
+  ],
+  "screenshots": [
+    "screenshots/01_screen2_flash_wait_fly_v397.png"
+  ]
+}

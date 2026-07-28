@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-07-28 — deploy: auth funnel cascade to Fly v397 + MCP PASS
+
+- Push `develop` → `22d136b`; Fly **v397**
+- MCP: flash/messenger/sms send+verify; Rack::Attack `retry_after` 20/30/60
+- Checkout wizard Screen1→Screen2 на Fly; артефакт `fly_mcp_auth_funnel_2026-07-28.json`
+
 ## 2026-07-28 — feat(shop): auth funnel channel cooldowns + Rack::Attack [GREEN]
 
 - `Shop::PhoneOtp`: cooldowns по каналам `flash_call=20s`, `messenger=30s`, `sms=60s`

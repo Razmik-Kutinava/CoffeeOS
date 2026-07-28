@@ -1,8 +1,8 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-28 (**Auth funnel cascade · Шаг 6 GREEN**)  
+**Дата:** 2026-07-28 (**Auth funnel cascade · Fly v397 MCP PASS**)  
 **Ветка:** `develop`  
-**Прод:** https://coffeeos.fly.dev · **Fly:** v396  
+**Прод:** https://coffeeos.fly.dev · **Fly:** v397  
 
 ### Auth funnel cascade Flash→Messenger→SMS (2026-07-28)
 
@@ -16,11 +16,11 @@
 | Шаг 4 Messenger + SMS fallback | **`[x]`** GREEN (FE; backend messenger — Шаг 5) |
 | Шаг 5 Backend messenger + flag + 4-digit OTP | **`[x]`** |
 | Шаг 6 rate limits 20/30/60 | **`[x]`** |
-| Push / Fly / MCP | **`[ ]`** |
+| Push / Fly / MCP | **`[x]`** v397 · [`fly_mcp_auth_funnel_2026-07-28.json`](../milestones/veha_2/artifacts/auth_funnel_cascade_flash_messenger_sms/fly_mcp_auth_funnel_2026-07-28.json) |
 | Апрув заказчика | **`[ ]`** |
 
 **ТЗ:** [`Рефакторинг воронки авторизации…`](../milestones/veha_2/requirements/customer_tasks/Рефакторинг%20воронки%20авторизации%20PWA%20Каскад%20Flash%20Call%20Messenger%20SMS.md)  
-**Дальше:** push / Fly / MCP при явной просьбе; код шагов 1–6 закрыт.
+**Дальше:** апрув заказчика; live NSPK/СБП — отдельно (банк 3001).
 
 ### CODE:BLACK T-Kassa SBP · PWA lifecycle (2026-07-27)
 

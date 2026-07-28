@@ -2,13 +2,20 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-28 (Auth funnel cascade · Шаг 6 GREEN)
+**Дата:** 2026-07-28 (Auth funnel cascade · Fly v397 MCP PASS)
 
 | Сейчас | Дальше |
 |--------|--------|
-| Шаги 1–6 закрыты: FE cascade + backend messenger + cooldowns | push / Fly / MCP |
-| Ошибка messenger → сразу SMS UI | апрув заказчика |
-| Fly v396 · банк 3001 | не трогали |
+| Шаги 1–6 + push/deploy/MCP на Fly **v397** | апрув заказчика |
+| Throttle 20/30/60 + wizard Screen1→2 подтверждены на стенде | live NSPK — банк 3001 |
+| Fly v397 | |
+
+### Сессия 2026-07-28 (Auth funnel · Push/Fly/MCP)
+
+- Push `develop` → `22d136b`; `fly deploy` → **v397**
+- MCP: flash/messenger/sms send+verify + 429 `retry_after` 20/30/60
+- UI checkout: `phone-auth-wizard` Screen1 → Screen2 «Ждем звонок... 00:20»
+- Артефакт: `artifacts/auth_funnel_cascade_flash_messenger_sms/fly_mcp_auth_funnel_2026-07-28.json`
 
 ### Сессия 2026-07-28 (Auth funnel · Шаг 6)
 
