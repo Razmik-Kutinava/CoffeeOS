@@ -113,7 +113,7 @@
 | SBP Deep Link + card tokenization | **Эквайринг / PWA** — СБП deep link (`qr.nspk.ru`) + Recurrent/Charge токенизация карт без iframe Т-Банка (CODE:BLACK) | [ТЗ](customer_tasks/Интеграция%20оплаты%20СБП%20Deep%20Link%20и%20токенизации%20карт%20Т-Касса%20v2.md) · [`artifacts/sbp_deep_link_card_tokenization/`](../artifacts/sbp_deep_link_card_tokenization/) | **Волны A–D GREEN `[x]`** 2026-07-27 · Fly v394 · апрув `[ ]` |
 | CODE:BLACK T-Kassa SBP PWA lifecycle | **Эквайринг / PWA** — ревизия: `codeblack_pending_order`, visibilitychange, cold start ≤15 мин, экран WAITING_FOR_BANK | [ТЗ](customer_tasks/Интеграция%20Т-Кассы%20СБП%20и%20токенизации%20в%20PWA%20CODE%20BLACK.md) · [`artifacts/codeblack_t_kassa_sbp_tokenization/`](../artifacts/codeblack_t_kassa_sbp_tokenization/) | **MCP PASS `[x]`** 2026-07-27 · Fly v395 · апрув `[ ]` |
 | Auth funnel cascade Flash→Messenger→SMS | **Витрина / PWA** — 2-экранный wizard + каскад Flash Call×2 → Messenger → SMS (без Email/радио) | [ТЗ](customer_tasks/Рефакторинг%20воронки%20авторизации%20PWA%20Каскад%20Flash%20Call%20Messenger%20SMS.md) · [`artifacts/auth_funnel_cascade_flash_messenger_sms/`](../artifacts/auth_funnel_cascade_flash_messenger_sms/) | **MCP PASS `[x]`** 2026-07-28 · Fly v397 · апрув `[ ]` |
-| Repeat recommendations missing | **Витрина** — пропал блок «повторить»/рекомендации (залипание на Fly Overnight) | [ТЗ](customer_tasks/Пропали%20рекомендации%20повторить%20на%20витрине.md) · [`artifacts/repeat_recommendations_missing/`](../artifacts/repeat_recommendations_missing/) | **in_progress** 2026-07-28 |
+| Repeat recommendations missing | **Витрина** — пропал блок «повторить»/рекомендации (залипание на Fly Overnight) | [ТЗ](customer_tasks/Пропали%20рекомендации%20повторить%20на%20витрине.md) · [`artifacts/repeat_recommendations_missing/`](../artifacts/repeat_recommendations_missing/) | **MCP PASS `[x]`** 2026-07-28 · Fly v399 · апрув `[ ]` |
 
 > **B1.8 (не забыть):** сейчас письма с **подтверждённого личного sender** в Brevo. Когда будет **свой домен** — завести **кофейную почту** (напр. `noreply@бренд.ru`), аутентифицировать домен в Brevo, обновить `MAIL_FROM` + secrets. Код OTP/ActionMailer менять не нужно.
 
@@ -153,7 +153,7 @@
 | 27 | **SBP Deep Link + card tokenization** | СБП deep link + Recurrent/Charge (Т-Касса v2), без iframe, CODE:BLACK | **GREEN `[x]`** 2026-07-27 · Fly v394 · апрув `[ ]` | [Интеграция оплаты СБП Deep Link…](customer_tasks/Интеграция%20оплаты%20СБП%20Deep%20Link%20и%20токенизации%20карт%20Т-Касса%20v2.md) |
 | 28 | **CODE:BLACK T-Kassa SBP PWA lifecycle** | Ревизия ТЗ: pending order LS + visibilitychange + WAITING_FOR_BANK | **MCP PASS `[x]`** 2026-07-27 · Fly v395 · апрув `[ ]` | [Интеграция Т-Кассы СБП…](customer_tasks/Интеграция%20Т-Кассы%20СБП%20и%20токенизации%20в%20PWA%20CODE%20BLACK.md) |
 | 29 | **Auth funnel cascade** | 2-экранный wizard авторизации: Flash Call×2 → Messenger → SMS | **MCP PASS `[x]`** 2026-07-28 · Fly v397 | [Рефакторинг воронки авторизации…](customer_tasks/Рефакторинг%20воронки%20авторизации%20PWA%20Каскад%20Flash%20Call%20Messenger%20SMS.md) |
-| 30 | **Repeat recommendations missing** | Пропал блок «повторить» на витрине (Fly Overnight) | **in_progress** 2026-07-28 | [Пропали рекомендации…](customer_tasks/Пропали%20рекомендации%20повторить%20на%20витрине.md) |
+| 30 | **Repeat recommendations missing** | Пропал блок «повторить» на витрине (Fly Overnight) | **MCP PASS `[x]`** 2026-07-28 · Fly v399 | [Пропали рекомендации…](customer_tasks/Пропали%20рекомендации%20повторить%20на%20витрине.md) |
 
 
 ---

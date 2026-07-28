@@ -5,18 +5,19 @@
 ## 🔴 Блокеры
 
 [2026-07-28] — Пропали рекомендации / «повторить» у Арама (Fly Test)
-**Статус:** 🟡 **in_progress** · root cause найден
+**Статус:** **resolved** 2026-07-28 · Fly **v399** · MCP PASS
 **Источник:** заказчик Арам · скрин `artifacts/repeat_recommendations_missing/screenshots/01_…`
-**Root cause:** витрина на `Fly Overnight` (`af4f78d6…`, ул. Fly Test) — 0 заказов; «повторить» на Point A (`2fdee1ac…`) жив (freq=3). Sticky selected + bootstrap до Silent Refresh.
-**Фикс:** restore→bootstrap · `resolvePreferredTenantId` · deactivate Fly Overnight · deploy+MCP
+**Root cause:** витрина на `Fly Overnight` (`af4f78d6…`, ул. Fly Test) — 0 заказов; «повторить» на Point A (`2fdee1ac…`) жив (freq=3). Sticky selected + inactive current в `/tenants` + bootstrap до Silent Refresh.
+**Чем закрыли:** restore→bootstrap · `resolvePreferredTenantId` · history без inactive current · deactivate Fly Overnight · deploy v399 · MCP [`fly_mcp_repeat_restored_2026-07-28.json`](milestones/veha_2/artifacts/repeat_recommendations_missing/fly_mcp_repeat_restored_2026-07-28.json) · скрин `02_fly_aram_point_a_repeat_restored.png`
 **ТЗ:** [`Пропали рекомендации повторить на витрине.md`](milestones/veha_2/requirements/customer_tasks/Пропали%20рекомендации%20повторить%20на%20витрине.md)
 
 [2026-07-27] — SBP live на Fly: банк отклоняет СБП
-**Статус:** 🟡 **открыт** · UI/OTP/WAITING PASS · код Receipt.Email **задеплоен v396**
+**Статус:** 🟡 **открыт** · UI/OTP/WAITING PASS · код Receipt.Email **задеплоен v396** · UX 3001 friendly **v398/v399**
 **Источник:** MCP Aram E2E · скрины `screenshots/01–07`
 **Улика v395:** `ErrorCode 329` Неверные параметры (Receipt без Email) — **закрыто кодом** `d1328b9`
 **Улика v396:** `ErrorCode 3001` **«Оплата через СБП недоступна»** — ответ Т-Кассы после успешного Formal Init path
 **Root cause 3001:** на терминале `TBANK_TERMINAL_KEY=1719235292309` в кабинете Т-Банка **не включён СБП** / нет тарифа NSPK (не баг приложения).
+**UX fix 2026-07-28:** сырой `Т-Банк API error 3001…` → «СБП сейчас недоступна… картой / позже» (BE+FE).
 **Осталось:** владелец включает СБП в кабинете Т-Кассы → повторный MCP → `qr.nspk.ru`
 
 [2026-07-16] — UserCards: карта не сохранилась после оплаты с save_card ON (bug_13-23)

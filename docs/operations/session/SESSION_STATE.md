@@ -2,21 +2,20 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-28 (Repeat recommendations missing · fix + deploy)
+**Дата:** 2026-07-28 (Repeat recommendations · Fly v399 MCP PASS)
 
 | Сейчас | Дальше |
 |--------|--------|
-| Фикс «повторить» + SBP 3001 UX закоммичен | Fly deploy + MCP скрин Арама Point A |
-| Fly Overnight `af4f78d6` → inactive (prod) | апрув заказчика |
-| Point A `2fdee1ac` freq=3 для Арама | |
+| «повторить» восстановлен у Арама на Point A · Fly **v399** | апрув заказчика |
+| Fly Overnight inactive · SBP 3001 friendly UX | live NSPK — кабинет Т-Кассы |
+| Коммиты `6f3a0b4` + `80e0f3a` | |
 
-### Сессия 2026-07-28 (Repeat recommendations + SBP 3001)
+### Сессия 2026-07-28 (Repeat recommendations + SBP 3001 · DONE)
 
-- Intake: заказчик «Пробежалась рекомендация» · скрин Fly Test без «повторить»
-- Диаг Fly: Point A orders/freq=3; Fly Overnight orders/freq=0
-- Код: restore→bootstrap · `resolvePreferredTenantId` · deactivate Fly Overnight
-- SBP: friendly map error_code 3001
-- Регрессия: preferred JS 4/0 · B114 2/0 · SBP Ruby+JS green
+- Intake + root cause: Fly Overnight 0 orders vs Point A freq=3
+- Код: restore→bootstrap · preferred · history skip inactive · deactivate Fly Overnight
+- SBP 3001 friendly message
+- Deploy **v398→v399** · MCP PASS · скрин `02_fly_aram_point_a_repeat_restored.png`
 
 ### Сессия 2026-07-28 (Auth funnel · Push/Fly/MCP)
 

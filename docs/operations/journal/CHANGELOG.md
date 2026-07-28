@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-07-28 — deploy: repeat recommendations restored Fly v399 + MCP PASS
+
+- Push `80e0f3a`; Fly **v399**
+- MCP Арам Point A: адрес Ленин, профиль 2bc3…4c, секция «повторить» PASS
+- Артефакт `fly_mcp_repeat_restored_2026-07-28.json` + скрин `02_…`
+
 ## 2026-07-28 — fix(shop): restore «повторить» + SBP 3001 friendly UX
 
 - Root cause «пропали рекомендации»: залипание на `Fly Overnight` (ул. Fly Test, 0 заказов); на Point A freq=3
