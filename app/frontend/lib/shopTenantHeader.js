@@ -65,8 +65,9 @@ export function clearSelectedTenantId() {
 
 /**
  * Предпочтительная точка витрины.
- * Sticky selected побеждает, но если точка пропала из списка (inactive) —
- * падаем на last_ordered, иначе «повторить» зависает на пустой тестовой точке.
+ * Sticky selected побеждает, но selected и last_ordered обязаны быть в
+ * активном списке — иначе Fly Overnight (inactive) с свежими заказами
+ * залипает в шапке («ул. Fly Test») и убивает «повторить» на Point A.
  *
  * @param {{ lastOrderedId?: string|null, selectedId?: string|null, switchableIds?: string[] }} opts
  */
@@ -77,15 +78,18 @@ export function resolvePreferredTenantId({
 } = {}) {
   const last = lastOrderedId ? String(lastOrderedId) : null
   const selected = selectedId ? String(selectedId) : null
-  const allowed =
-    Array.isArray(switchableIds) && switchableIds.length
-      ? new Set(switchableIds.map((id) => String(id)))
-      : null
+  const allowedList = Array.isArray(switchableIds)
+    ? switchableIds.map((id) => String(id)).filter(Boolean)
+    : []
+  const allowed = allowedList.length ? new Set(allowedList) : null
 
-  if (selected && allowed && !allowed.has(selected)) {
-    return last || null
-  }
-  return selected || last || null
+  const pickAllowed = (id) => (id && (!allowed || allowed.has(id)) ? id : null)
+
+  return (
+    pickAllowed(selected) ||
+    pickAllowed(last) ||
+    (allowedList.length ? allowedList[0] : null)
+  )
 }
 
 function cacheKey(tenantId) {
@@ -178,16 +182,14 @@ export async function bootstrapShopTenant(api) {
     Array.isArray(switchableIds) &&
     switchableIds.map((id) => String(id)).includes(String(currentId))
 
-  // Текущий tenant_id не в активном списке (inactive Fly Overnight) → уводим на preferred
-  if ((!currentAllowed || (preferred && String(preferred) !== String(currentId))) && preferred) {
-    if (String(preferred) !== String(currentId)) {
-      navigateToTenant(preferred, { remember: true })
-      return cfg
-    }
+  // Inactive / чужой current (Fly Overnight) → всегда на preferred из активного списка
+  if (!currentAllowed && preferred) {
+    navigateToTenant(preferred, { remember: true })
+    return cfg
   }
 
-  if (!currentAllowed && !preferred && switchableIds?.length) {
-    navigateToTenant(switchableIds[0], { remember: true })
+  if (preferred && String(preferred) !== String(currentId)) {
+    navigateToTenant(preferred, { remember: true })
     return cfg
   }
 

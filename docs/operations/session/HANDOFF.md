@@ -1,8 +1,20 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-28 (**Aram real phone `+79639124847` · PASS · no deploy**)  
+**Дата:** 2026-07-28 (**Fly Test sticky fix · local PASS · ждём deploy**)  
 **Ветка:** `develop`  
-**Прод:** https://coffeeos.fly.dev · **Fly:** v399  
+**Прод:** https://coffeeos.fly.dev · **Fly:** v400  
+
+### Fly Test sticky / inactive last_ordered (2026-07-28)
+
+| Что | Статус |
+|-----|--------|
+| Root cause: last_ordered = inactive Fly Overnight | **`[x]`** |
+| FE preferred + bootstrap bounce | **`[x]`** local |
+| BE last_ordered skip inactive | **`[x]`** local |
+| Push / Fly / MCP Ленин | **`[ ]`** ждать апрув deploy |
+
+**Телефон Арама:** `+79639124847` — готово (без регресса).  
+**Point A:** https://coffeeos.fly.dev/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789  
 
 ### Aram real phone link (2026-07-28)
 

@@ -29,6 +29,17 @@ describe("resolvePreferredTenantId", () => {
     )
   })
 
+  it("skips inactive last_ordered and picks first allowed", () => {
+    assert.equal(
+      resolvePreferredTenantId({
+        selectedId: "fly-overnight",
+        lastOrderedId: "fly-overnight",
+        switchableIds: ["point-a", "point-b"]
+      }),
+      "point-a"
+    )
+  })
+
   it("uses last_ordered when no selected", () => {
     assert.equal(
       resolvePreferredTenantId({

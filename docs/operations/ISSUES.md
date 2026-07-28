@@ -4,6 +4,13 @@
 
 ## 🔴 Блокеры
 
+[2026-07-28] — Шапка «ул. Fly Test» у Арама (inactive last_ordered)
+**Статус:** 🟡 **код local PASS** · deploy/MCP `[ ]`
+**Источник:** скрин заказчика «Хотя уже лучше» · адрес Fly Test при телефоне ок
+**Root cause:** `last_ordered_tenant_id` = inactive Fly Overnight (`af4f78d6`, 7 заказов 2026-07-28) свежее Point A → preferred=Fly Test → bootstrap не уводил.
+**Чем закрыли (код):** `resolvePreferredTenantId` только active · bootstrap bounce `!currentAllowed` · history skip inactive last_ordered
+**Осталось:** push + fly deploy + MCP шапка Ленин
+
 [2026-07-28] — В профиле Арама тестовый телефон вместо настоящего
 **Статус:** **resolved** 2026-07-28 · prod `link_phone!` + merge
 **Источник:** скрин владельца · настоящий номер `+79639124847`

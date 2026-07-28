@@ -2,12 +2,18 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-28 (Aram phone MCP v400 PASS)
+**Дата:** 2026-07-28 (fix inactive last_ordered Fly Test · local PASS · deploy pending)
 
 | Сейчас | Дальше |
 |--------|--------|
-| Телефон Арама UI+API: **`+79639124847`** · Fly **v400** | апрув владельца |
-| MCP скрины Point A + профиль | |
+| Код: не sticky inactive `last_ordered` (Fly Overnight) | **push + fly deploy** + MCP Ленин |
+| Телефон Арама `+79639124847` ок | |
+
+### Сессия 2026-07-28 (Fly Test sticky via last_ordered · GREEN local)
+
+- Diag: last_ordered=`af4f78d6` inactive · 7 orders 2026-07-28 > Point A
+- Fix preferred + bootstrap bounce + history skip inactive
+- Тесты local PASS; Fly MCP — после deploy
 
 ### Сессия 2026-07-28 (MCP после deploy v400 · DONE)
 

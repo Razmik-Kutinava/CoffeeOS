@@ -83,6 +83,16 @@ class Shop::CustomerTenantHistoryTest < ActiveSupport::TestCase
     assert_includes ids, @tenant_c.id
   end
 
+  test "last_ordered_tenant_id skips inactive tenants" do
+    create_mobile_order!(tenant: @tenant_a, customer: @customer, created_at: 2.days.ago)
+    create_mobile_order!(tenant: @tenant_b, customer: @customer, created_at: 1.hour.ago)
+    @tenant_b.update!(status: "inactive")
+    Shop::CustomerSession.set_customer_id!(@session, @tenant_a.id, @customer.id)
+
+    payload = Shop::CustomerTenantHistory.call(session: @session, current_tenant: @tenant_a)
+    assert_equal @tenant_a.id, payload[:last_ordered_tenant_id]
+  end
+
   private
 
   def create_mobile_order!(tenant:, customer:, created_at: Time.current)

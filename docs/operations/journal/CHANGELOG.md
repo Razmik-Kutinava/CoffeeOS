@@ -1,5 +1,12 @@
 ﻿# CHANGELOG
 
+## 2026-07-28 — fix(shop): bounce inactive last_ordered (Fly Test sticky)
+
+- Root cause: у Арама `last_ordered` = inactive Fly Overnight (7 заказов свежее Point A) → шапка «ул. Fly Test»
+- FE: `resolvePreferredTenantId` только active ids; bootstrap всегда уводит с !currentAllowed
+- BE: `last_ordered_tenant_id` пропускает inactive
+- Тесты: JS preferred 5/0 · history 5/0 · B114 2/0
+
 ## 2026-07-28 — ops: MCP Aram phone after Fly v400
 
 - MCP PASS: Point A Ленин + «повторить»; профиль `+79639124847` Подтвержден

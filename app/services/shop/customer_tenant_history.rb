@@ -74,7 +74,15 @@ module Shop
       end
       return nil if stats.blank?
 
-      stats.max_by { |_tid, at| at }&.first
+      # Только active sales_point — иначе inactive Fly Overnight «перебивает» Point A.
+      active_ids = with_rls_off do
+        Tenant.where(id: stats.keys, status: "active", type: "sales_point").pluck(:id).map(&:to_s)
+      end.to_set
+
+      stats
+        .select { |tid, _at| active_ids.include?(tid.to_s) }
+        .max_by { |_tid, at| at }
+        &.first
     end
 
     def tenant_row(tenant)
