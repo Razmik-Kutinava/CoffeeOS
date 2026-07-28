@@ -1,5 +1,12 @@
 ﻿# CHANGELOG
 
+## 2026-07-28 — feat(shop): auth funnel channel cooldowns + Rack::Attack [GREEN]
+
+- `Shop::PhoneOtp`: cooldowns по каналам `flash_call=20s`, `messenger=30s`, `sms=60s`
+- `Rack::Attack`: throttles `/shop/api/phone_otp/send` по `phone+channel`, ответ `429` с channel-specific `Retry-After`
+- Попутно исправлен responder/logging `rack.attack` для `Rack::Attack::Request`
+- Тесты: Ruby cooldown+throttle 19/0
+
 ## 2026-07-28 — feat(shop): auth funnel Messenger + SMS cascade [GREEN]
 
 - Фазы messenger (30с) / sms (60с); кнопки WA/TG и SMS; ошибка messenger → SMS

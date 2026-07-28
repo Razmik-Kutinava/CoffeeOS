@@ -2,13 +2,20 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-28 (Auth funnel cascade · Шаг 5 GREEN)
+**Дата:** 2026-07-28 (Auth funnel cascade · Шаг 6 GREEN)
 
 | Сейчас | Дальше |
 |--------|--------|
-| Шаги 1–4 FE cascade: Flash×2 → Messenger → SMS | Шаг 6: кулдауны / Rack::Attack 20/30/60 |
-| Ошибка messenger → сразу SMS UI | Шаг 6: rate limits 20/30/60 |
+| Шаги 1–6 закрыты: FE cascade + backend messenger + cooldowns | push / Fly / MCP |
+| Ошибка messenger → сразу SMS UI | апрув заказчика |
 | Fly v396 · банк 3001 | не трогали |
+
+### Сессия 2026-07-28 (Auth funnel · Шаг 6)
+
+- `Shop::PhoneOtp`: cooldowns по каналу `flash_call=20`, `messenger=30`, `sms=60`
+- `Rack::Attack`: throttles `/shop/api/phone_otp/send` по паре `phone+channel`, `429` + `Retry-After`
+- Попутно закрыт баг старого `rack.attack` responder/logging (`Rack::Attack::Request`)
+- Тесты: Ruby cooldown+throttle **19/0**
 
 ### Сессия 2026-07-28 (Auth funnel · Шаг 5)
 

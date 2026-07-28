@@ -15,7 +15,11 @@ module Shop
 
     CODE_TTL = 10.minutes
     MAX_ATTEMPTS = 5
-    COOLDOWN = 60.seconds
+    COOLDOWNS = {
+      "flash_call" => 20.seconds,
+      "messenger" => 30.seconds,
+      "sms" => 60.seconds
+    }.freeze
     CHANNELS = %w[sms flash_call messenger].freeze
 
     def self.send_code!(phone:, channel:)
@@ -31,7 +35,7 @@ module Shop
       ch = channel.to_s.strip
       raise Error, "Выберите SMS, мессенджер или звонок" unless CHANNELS.include?(ch)
 
-      enforce_cooldown!(normalized)
+      enforce_cooldown!(normalized, ch)
 
       otp_code = nil
       ActiveRecord::Base.transaction do
@@ -87,12 +91,14 @@ module Shop
 
     private
 
-    def enforce_cooldown!(normalized_phone)
+    def enforce_cooldown!(normalized_phone, channel)
+      cooldown = COOLDOWNS.fetch(channel, 60.seconds)
       last = MobileOtpCode.where(phone: normalized_phone).order(created_at: :desc).first
       return if last.nil?
-      return if last.created_at <= COOLDOWN.ago
+      return if last.created_at <= cooldown.ago
 
-      raise Error, "Подождите 60 секунд перед повторной отправкой кода"
+      seconds = cooldown.to_i
+      raise Error, "Подождите #{seconds} секунд перед повторной отправкой кода"
     end
 
     def generate_and_deliver!(phone:, channel:)

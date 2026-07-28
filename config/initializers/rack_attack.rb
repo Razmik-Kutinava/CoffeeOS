@@ -2,6 +2,12 @@
 # Защита от злоупотреблений и DDoS
 
 class Rack::Attack
+  SHOP_PHONE_OTP_RETRY_AFTER = {
+    'shop/phone_otp_flash_call' => 20,
+    'shop/phone_otp_messenger' => 30,
+    'shop/phone_otp_sms' => 60
+  }.freeze
+
   # Используем MemoryStore для rate limiting, так как SolidCache не поддерживает increment
   # Это предотвращает ошибки при upsert в solid_cache_entries
   Rack::Attack.cache.store = ActiveSupport::Cache::MemoryStore.new
@@ -44,13 +50,17 @@ class Rack::Attack
     end
   end
 
-  # Лимит phone OTP витрины: 5 send в минуту на телефон
-  throttle('shop/phone_otp', limit: 5, period: 1.minute) do |req|
-    if req.path == '/shop/api/phone_otp/send' && req.post?
-      body = req.body.read
-      req.body.rewind if req.body.respond_to?(:rewind)
-      JSON.parse(body)['phone'].to_s.presence rescue nil
-    end
+  # Лимиты phone OTP витрины: по каналу + телефону.
+  throttle('shop/phone_otp_flash_call', limit: 1, period: 20.seconds) do |req|
+    Rack::Attack.shop_phone_otp_discriminator(req, 'flash_call')
+  end
+
+  throttle('shop/phone_otp_messenger', limit: 1, period: 30.seconds) do |req|
+    Rack::Attack.shop_phone_otp_discriminator(req, 'messenger')
+  end
+
+  throttle('shop/phone_otp_sms', limit: 1, period: 60.seconds) do |req|
+    Rack::Attack.shop_phone_otp_discriminator(req, 'sms')
   end
   
   # Лимит на создание заказов баристой: 30 заказов в минуту с одного IP
@@ -74,22 +84,57 @@ class Rack::Attack
   end
 
   # Блокировка при превышении лимита
-  self.throttled_responder = lambda do |env|
+  self.throttled_responder = lambda do |req|
+    matched =
+      if req.respond_to?(:env)
+        req.env['rack.attack.matched'].to_s
+      elsif req.is_a?(Hash)
+        req['rack.attack.matched'].to_s
+      else
+        ""
+      end
+    retry_after = SHOP_PHONE_OTP_RETRY_AFTER.fetch(matched, 60)
     [
       429,
-      { 'Content-Type' => 'application/json', 'Retry-After' => '60' },
-      [{ error: { code: 'RATE_LIMIT_EXCEEDED', retry_after: 60 } }.to_json]
+      { 'Content-Type' => 'application/json', 'Retry-After' => retry_after.to_s },
+      [{ error: { code: 'RATE_LIMIT_EXCEEDED', retry_after: retry_after } }.to_json]
     ]
   end
   
   # Логирование заблокированных запросов
   ActiveSupport::Notifications.subscribe('rack.attack') do |name, start, finish, request_id, req|
-    next unless req.is_a?(Hash) && req['rack.attack.match_type']
-    if req['rack.attack.match_type'] == :throttle
+    match_type =
+      if req.respond_to?(:env)
+        req.env['rack.attack.match_type']
+      elsif req.is_a?(Hash)
+        req['rack.attack.match_type']
+      end
+    next unless match_type
+
+    if match_type == :throttle
+      matched =
+        if req.respond_to?(:env)
+          req.env['rack.attack.matched']
+        elsif req.is_a?(Hash)
+          req['rack.attack.matched']
+        end
       Rails.logger.warn(
-        "[RateLimit] #{req['rack.attack.matched']} - #{req['rack.attack.matched']} - #{req['rack.attack.matched']&.ip} - #{req['rack.attack.matched']&.path}"
+        "[RateLimit] #{matched} - #{matched} - #{req.respond_to?(:ip) ? req.ip : nil} - #{req.respond_to?(:path) ? req.path : nil}"
       )
     end
+  end
+
+  def self.shop_phone_otp_discriminator(req, channel)
+    return unless req.path == '/shop/api/phone_otp/send' && req.post?
+
+    body = req.body.read
+    req.body.rewind if req.body.respond_to?(:rewind)
+    json = JSON.parse(body) rescue {}
+    phone = json['phone'].to_s.presence
+    req_channel = json['channel'].to_s
+    return unless phone.present? && req_channel == channel
+
+    "#{phone}:#{channel}"
   end
 end
 

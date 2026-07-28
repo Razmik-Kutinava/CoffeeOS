@@ -6,7 +6,7 @@
 
 ## Текущая фаза
 
-**PHASE 2: BUILD** — Шаг 5 (MessengerClient backend) · **GREEN `[x]`** · дальше Шаг 6 (rate limits 20/30/60)
+**PHASE 3: REVIEW** — Шаг 6 (cooldowns + rate limits) · **GREEN `[x]`**
 
 ---
 
@@ -47,7 +47,7 @@
 - [x] **Шаг 3:** Каскад Flash Call #1 / #2 (таймеры 0–20 / 20–40)
 - [x] **Шаг 4:** Messenger + SMS fallback (40–70 / 70+)
 - [x] **Шаг 5:** Backend `MessengerClient` + channel messenger + delivery error flag
-- [ ] **Шаг 6:** Кулдауны / Rack::Attack 20 / 30 / 60
+- [x] **Шаг 6:** Кулдауны / Rack::Attack 20 / 30 / 60
 
 ---
 
