@@ -2,12 +2,21 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-27 (Aram E2E · Fly v396 · банк 3001)
+**Дата:** 2026-07-28 (Auth funnel cascade · Шаг 1 GREEN)
 
 | Сейчас | Дальше |
 |--------|--------|
-| Скрины 01–07 готовы заказчику | включить СБП в кабинете Т-Кассы → повтор nspk |
-| 329 закрыт; **3001** — терминал без СБП | апрув UI |
+| Шаг 1 wizard Экран 1 done | Шаг 2: PIN 4 ячейки + авто-verify |
+| Email/radio сняты с checkout auth | OrderCreator phone-only — после verify |
+| Fly v396 · банк 3001 (SBP) | не трогали |
+
+### Сессия 2026-07-28 (Auth funnel · Шаг 1)
+
+- Intake + SPEC + GREEN Экран 1
+- `PhoneAuthWizard.svelte` + `phoneAuthWizard.js`: маска, autofocus, «Продолжить» → `flash_call` → Экран 2 stub
+- Checkout: убраны Email OTP UI и radio channel
+- Тесты: Node wizard **5/0**; Ruby auth UI + cbr_01 + cleanup + cart UX + phone_otp **13/0**
+- ISSUES: checkout_ui_cleanup stale — **resolved**
 
 ### Сессия 2026-07-27 (Aram SBP E2E + deploy v396)
 

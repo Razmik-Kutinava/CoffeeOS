@@ -1,13 +1,12 @@
-# todo — CODE:BLACK T-Kassa SBP · PWA lifecycle (ревизия)
+# todo — Auth funnel cascade (Flash Call ×2 → Messenger → SMS)
 
-> **ТЗ:** [`customer_tasks/Интеграция Т-Кассы СБП и токенизации в PWA CODE BLACK.md`](../milestones/veha_2/requirements/customer_tasks/Интеграция%20Т-Кассы%20СБП%20и%20токенизации%20в%20PWA%20CODE%20BLACK.md)  
-> **Артефакты:** [`artifacts/codeblack_t_kassa_sbp_tokenization/`](../milestones/veha_2/artifacts/codeblack_t_kassa_sbp_tokenization/)  
-> **Предшественник v2:** [`todo` волны A–D закрыты](todo.md) · Fly v394 · [`sbp_deep_link_card_tokenization/`](../milestones/veha_2/artifacts/sbp_deep_link_card_tokenization/)
+> **ТЗ:** [`customer_tasks/Рефакторинг воронки авторизации PWA Каскад Flash Call Messenger SMS.md`](../milestones/veha_2/requirements/customer_tasks/Рефакторинг%20воронки%20авторизации%20PWA%20Каскад%20Flash%20Call%20Messenger%20SMS.md)  
+> **Артефакты:** [`artifacts/auth_funnel_cascade_flash_messenger_sms/`](../milestones/veha_2/artifacts/auth_funnel_cascade_flash_messenger_sms/)  
+> **Предшественник:** Phone OTP SMS/Flash Call · Fly v390
 
 ## Текущая фаза
 
-**PHASE 3: REVIEW** — Fly **v395** · MCP PASS · ждём апрув заказчика  
-*(код `[x]`; push+deploy `[x]`; MCP `[x]`)*
+**PHASE 2: BUILD** — Шаг 1 (Экран 1) · **GREEN `[x]`** · дальше Шаг 2 (PIN)
 
 ---
 
@@ -15,83 +14,50 @@
 
 | ТЗ | Канон CoffeeOS | Решение SPEC |
 |----|----------------|--------------|
-| `POST /api/v1/payments/sbp/init` | `POST /shop/api/payments/sbp/init` | **уже есть** (v2) |
-| `POST .../card/init` | `POST /shop/api/payments/new_card` | **reuse** |
-| `POST .../charge-recurrent` | `POST /shop/api/payments/one_click` | **reuse** (RebillId серверно, не с клиента plaintext) |
-| `POST .../webhook` | `POST /callbacks/tbank` | **reuse**; invalid Token → **401** (канон) |
-| `GET .../payments/status/:orderId` | новый тонкий `GET /shop/api/payments/status/:order_id` | **добавить** → `{ status: PENDING\|CONFIRMED\|REJECTED\|CANCELED }` |
-| `codeblack_pending_order` | `localStorage` ключ тот же | **новый** `lib/codeblackPendingOrder.js` |
-| Jest/React paths | `test/javascript/*.mjs` + Rails integration | стек **Rails 8 + Svelte** |
+| `POST /shop/api/phone_otp/send` | уже есть | extend channel: `flash_call` \| `messenger` \| `sms` (Шаг 5) |
+| `POST /shop/api/phone_otp/verify` | уже есть `{ phone, code }` | reuse |
+| RSpec / Vitest paths | `test/` + `test/javascript/*.mjs` | стек Rails Minitest + Node |
+| UX Guide | существующие Tailwind-токены checkout (`#ff8c42`, `#2a2a2a`) | без новой дизайн-системы |
+| `Shop::MessengerClient` | новый сервис | Шаг 5 |
+| Rack::Attack cooldowns 20/30/60 | частично (sms 60) | Шаг 6 |
 
----
+### Ограничения
 
-## As-is → Gap (только дельта)
-
-| # | Есть (v2) | Gap этой ревизии |
-|---|-----------|------------------|
-| B1–B3 | Init+Receipt, GetQr, sbp/init, webhook, Recurrent, Charge, SBP CTA, poll 60s/2s | Characterization; тонкий status GET |
-| G10 | SuccessURL → `#/payment-result` + poll finalize | Нет `codeblack_pending_order` до redirect |
-| G11 | `pageshow` + guest session recover | Нет `visibilitychange` по pending LS; нет TTL 15 мин |
-| G12 | PaymentResult loading / incomplete | Нет экрана WAITING_FOR_BANK + «Я оплатил» |
-
-### Ограничения (соблюдать)
-
-- Нет iframe/виджета Т-Банка.
-- В LS только `{ orderId, timestamp }` (+ маска карты уже в UI, не RebillId).
-- Race: повторный `visibilitychange` не запускает параллельные poll (mutex/in-flight flag).
-- Expired pending (>15 мин) — игнорировать и чистить.
+- Нет Email / radio channel / кнопки «подтвердить код» в wizard.
+- API-ключи мессенджеров — только ENV.
+- Checkout.svelte >200 строк — UI wizard вынести в `components/PhoneAuthWizard.svelte` + `lib/phoneAuthWizard.js`.
 
 ### File-size
 
 | Файл | План |
 |------|------|
-| `codeblackPendingOrder.js` | **create** ≤80 |
-| `shopSbpPay.js` | extend: `checkOrderStatus`, waiting copy; не раздувать |
-| `PaymentResult.svelte` | waiting UI + «Я оплатил» |
-| `App.svelte` | cold start + visibilitychange hook |
-| `Checkout.svelte` | save pending перед redirect |
-| `payments_controller#status` | тонкий show |
+| `lib/phoneAuthWizard.js` | **create** ≤80 — screen state, canContinue, send body |
+| `components/PhoneAuthWizard.svelte` | **create** ≤120 — Screen 1 (+ stub Screen 2) |
+| `lib/phoneOtp.js` | extend mask helpers при необходимости |
+| `Checkout.svelte` | заменить email+phone OTP блок на wizard; не раздувать |
 
-**DDL:** не требуется.
+**DDL:** не требуется (Шаг 1).
 
 ---
 
-## Волны
+## Чеклист
 
-| Волна | Шаги ТЗ | Суть |
-|-------|---------|------|
-| **E0** | 1–3, 5.1 | Characterization / reuse (без нового кода кроме status GET) |
-| **E1** | 4.1–4.3, 5.2 | Pending LS + visibility + cold start + WAITING_FOR_BANK |
-
-Первый RED: `codeblackPendingOrder` + status mapping + waiting UI tests.
-
----
-
-## Чеклист TDD
-
-### Backend (reuse / thin)
-- [x] 1.1 sbp/init — **reuse v2**
-- [x] 2.1 card/init — **reuse** `new_card`
-- [x] 2.2 charge-recurrent — **reuse** `one_click`
-- [x] 3.1 webhook — **reuse** `/callbacks/tbank`
-- [x] 3.2 `GET /shop/api/payments/status/:order_id` → PENDING/CONFIRMED/REJECTED/CANCELED
-
-### Frontend lifecycle (gap)
-- [x] 4.1 save `codeblack_pending_order` перед redirect + WAITING_FOR_BANK
-- [x] 4.2 `visibilitychange` → `checkOrderStatus`; clear на финале
-- [x] 4.3 cold start: TTL &lt; 15 мин → status + экран
-- [x] 5.1 checkout SBP/card CTA — **reuse v2**
-- [x] 5.2 экран ожидания + «Я оплатил»
+- [x] **Шаг 1:** Очистка UI + Экран 1 (маска, автофокус, «Продолжить», `flash_call`, → Экран 2)
+- [ ] **Шаг 2:** Экран 2 — 4 ячейки PIN, авто-сабмит verify, «Изменить номер»
+- [ ] **Шаг 3:** Каскад Flash Call #1 / #2 (таймеры 0–20 / 20–40)
+- [ ] **Шаг 4:** Messenger + SMS fallback (40–70 / 70+)
+- [ ] **Шаг 5:** Backend `MessengerClient` + channel messenger + delivery error flag
+- [ ] **Шаг 6:** Кулдауны / Rack::Attack 20 / 30 / 60
 
 ---
 
-## Тесты / регрессия
+## Тесты / регрессия (Шаг 1)
 
 | Зона | Команда |
 |------|---------|
-| JS pending + status | `node --test test/javascript/codeblack_pending_order_test.mjs test/javascript/shop_sbp_pay_test.mjs` |
-| Status API | `bin/rails test test/integration/shop/api/payment_status_test.rb` |
-| Оплата §2.3 | по `coffeeos-dev-gates.mdc` (payment cart + stage5 + order_creator) |
+| JS wizard Screen 1 | `node --test test/javascript/phone_auth_wizard_test.mjs` |
+| Checkout UI grep | `bin/rails test test/integration/shop/checkout_acceptance_cbr_test.rb` (обновить cbr_01) |
+| Phone OTP API | `bin/rails test test/integration/shop/api/phone_otp_test.rb` |
 
 ---
 
@@ -99,6 +65,6 @@
 
 | Риск | Митигация |
 |------|-----------|
-| Двойной poll (payment-result + visibility) | in-flight guard; clear pending после terminal |
-| Клиент шлёт RebillId в charge | one_click принимает `card_id`, не raw RebillId — **не** менять контракт под plaintext из ТЗ |
-| Status enum ≠ order.status | явный mapper payment/order → 4 статуса ТЗ |
+| OrderCreator требует email | Шаг 1 не ломает pay для saved email-профилей; phone-only pay — после Шага 2+ |
+| cbr_01 требует Email | обновить под phone-first (ТЗ supersede) |
+| Checkout монолит 890 строк | только вынос wizard, без полного сплита |

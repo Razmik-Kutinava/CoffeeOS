@@ -1,5 +1,13 @@
 ﻿# CHANGELOG
 
+## 2026-07-28 — feat(shop): auth funnel wizard Screen 1 flash_call [GREEN]
+
+- Intake ТЗ Auth funnel cascade + CBR #29 + artifacts
+- `PhoneAuthWizard` Экран 1: маска `+7`, autofocus, «Продолжить» → `POST phone_otp/send` `flash_call` → Экран 2 stub
+- Checkout: без Email OTP UI / radio channel; identityReady = phone \| email
+- Тесты: Node 5/0 · Ruby 13/0 (wizard UI, cbr_01, cleanup, cart UX, phone_otp)
+- ISSUES: checkout_ui_cleanup stale resolved
+
 ## 2026-07-27 — deploy: Receipt.Email fix v396; Aram E2E 3001
 
 - Fly **v396**; повтор Aram SBP → банк `3001 СБП недоступна` (терминал)

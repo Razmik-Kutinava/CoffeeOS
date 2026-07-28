@@ -23,18 +23,18 @@ class Shop::CheckoutAcceptanceCbrTest < ActionDispatch::IntegrationTest
     ENV["SHOP_SIMULATE_PAYMENT"] = "1"
   end
 
-  # п.1 — Email вместо телефона + валидация
-  test "cbr_01 checkout has email field with validation not phone" do
+  # п.1 — phone-first auth wizard (supersede email OTP UI; ТЗ Auth funnel cascade)
+  test "cbr_01 checkout has phone auth wizard without email field" do
     checkout = vitrina_source("routes/Checkout.svelte")
-    profile = File.read(Rails.root.join("app/frontend/lib/shopGuestProfile.js"))
+    wizard = File.read(Rails.root.join("app/frontend/components/PhoneAuthWizard.svelte"))
+    lib = File.read(Rails.root.join("app/frontend/lib/phoneAuthWizard.js"))
 
-    assert_includes checkout, "Email"
-    assert_includes checkout, 'type="email"'
-    assert_includes checkout, "isValidEmail"
-    refute_includes checkout, "Телефон"
-    assert_match(/isValidEmail\(email\)/, checkout)
-    assert_includes profile, "export function isValidEmail"
-    assert_includes profile, "@"
+    assert_includes checkout, "PhoneAuthWizard"
+    refute_includes checkout, 'type="email"'
+    refute_includes checkout, 'type="radio"'
+    assert_includes wizard, "Продолжить"
+    assert_includes wizard, "autofocus"
+    assert_includes lib, "flash_call"
   end
 
   # п.2 — отправка кода

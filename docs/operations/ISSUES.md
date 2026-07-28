@@ -44,11 +44,9 @@
 **Следующий шаг:** локализовать зависший файл бинарным делением списка (отдельный шаг по go).
 
 [2026-07-21] — `checkout_ui_cleanup_test.rb` противоречит канону «оплата через шторку» (pre-existing)
-**Статус:** 🟡 **открыт (stale-тест, не блокер)**
-**Симптом:** `test/integration/shop/checkout_ui_cleanup_test.rb:71` требует «Способ оплаты» в `Checkout.svelte`, а `shop_checkout_cart_sheet_ux_test.rb:45` требует его **отсутствия**. Оба вместе зелёными быть не могут; на чистом HEAD (без правок F5, проверено `git stash`) падает cleanup-тест.
-**Причина:** cleanup-тест писан до канона B1.12/Фазы 2 (оплата только через шторку + PaymentMethodsSheet); не обновлён при сносе инлайн-блока оплаты.
-**Обход:** в регрессии зоны опираться на `shop_checkout_cart_sheet_ux_test.rb` (актуальный канон).
-**Следующий шаг:** обновить/удалить устаревшие ассерты cleanup-теста отдельным шагом по go.
+**Статус:** **resolved** 2026-07-28 · Auth funnel Шаг 1 — ассерты Email/«Способ оплаты» в Checkout сняты; SBP/Оплатить → PaymentMethodsSheet
+**Симптом:** `test/integration/shop/checkout_ui_cleanup_test.rb:71` требовал «Способ оплаты» / Email в `Checkout.svelte`, а `shop_checkout_cart_sheet_ux_test.rb:45` — отсутствие «Способ оплаты».
+**Чем закрыли:** обновление cleanup-теста под phone wizard + PaymentMethodsSheet.
 
 ## Решено недавно
 
