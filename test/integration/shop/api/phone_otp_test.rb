@@ -61,6 +61,54 @@ class Shop::Api::PhoneOtpTest < ActionDispatch::IntegrationTest
     assert_response :unprocessable_entity
   end
 
+  test "rack attack throttles flash_call by 20 seconds" do
+    with_rack_attack do
+      post "/shop/api/phone_otp/send",
+        headers: shop_tenant_headers(@tenant.id),
+        params: { phone: @phone, channel: "flash_call" },
+        as: :json
+      assert_response :success
+
+      post "/shop/api/phone_otp/send",
+        headers: shop_tenant_headers(@tenant.id),
+        params: { phone: @phone, channel: "flash_call" },
+        as: :json
+      assert_response :too_many_requests
+    end
+  end
+
+  test "rack attack throttles messenger by 30 seconds" do
+    with_rack_attack do
+      post "/shop/api/phone_otp/send",
+        headers: shop_tenant_headers(@tenant.id),
+        params: { phone: @phone, channel: "messenger" },
+        as: :json
+      assert_response :success
+
+      post "/shop/api/phone_otp/send",
+        headers: shop_tenant_headers(@tenant.id),
+        params: { phone: @phone, channel: "messenger" },
+        as: :json
+      assert_response :too_many_requests
+    end
+  end
+
+  test "rack attack throttles sms by 60 seconds" do
+    with_rack_attack do
+      post "/shop/api/phone_otp/send",
+        headers: shop_tenant_headers(@tenant.id),
+        params: { phone: @phone, channel: "sms" },
+        as: :json
+      assert_response :success
+
+      post "/shop/api/phone_otp/send",
+        headers: shop_tenant_headers(@tenant.id),
+        params: { phone: @phone, channel: "sms" },
+        as: :json
+      assert_response :too_many_requests
+    end
+  end
+
   test "send messenger returns code and verify creates refresh_token" do
     post "/shop/api/phone_otp/send",
       headers: shop_tenant_headers(@tenant.id),
@@ -125,5 +173,17 @@ class Shop::Api::PhoneOtpTest < ActionDispatch::IntegrationTest
     assert_response :success, response.body
     assert_equal @phone, customer.reload.phone
     assert_equal email, customer.email
+  end
+
+  private
+
+  def with_rack_attack
+    was_enabled = Rack::Attack.enabled
+    Rack::Attack.enabled = true
+    Rack::Attack.cache.store.clear if Rack::Attack.cache.store.respond_to?(:clear)
+    yield
+  ensure
+    Rack::Attack.cache.store.clear if Rack::Attack.cache.store.respond_to?(:clear)
+    Rack::Attack.enabled = was_enabled
   end
 end

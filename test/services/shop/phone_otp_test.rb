@@ -49,6 +49,22 @@ class Shop::PhoneOtpTest < ActiveSupport::TestCase
     assert_match(/60|секунд|подождите/i, err.message)
   end
 
+  test "flash_call cooldown is 20 seconds" do
+    Shop::PhoneOtp.send_code!(phone: @phone, channel: "flash_call")
+    err = assert_raises(Shop::PhoneOtp::Error) do
+      Shop::PhoneOtp.send_code!(phone: @phone, channel: "flash_call")
+    end
+    assert_match(/20|секунд|подождите/i, err.message)
+  end
+
+  test "messenger cooldown is 30 seconds" do
+    Shop::PhoneOtp.send_code!(phone: @phone, channel: "messenger")
+    err = assert_raises(Shop::PhoneOtp::Error) do
+      Shop::PhoneOtp.send_code!(phone: @phone, channel: "messenger")
+    end
+    assert_match(/30|секунд|подождите/i, err.message)
+  end
+
   test "verify accepts code and marks used" do
     Shop::PhoneOtp.send_code!(phone: @phone, channel: "sms")
     record = MobileOtpCode.where(phone: @phone, is_used: false).order(created_at: :desc).first
