@@ -1,27 +1,27 @@
 <script>
   /**
-   * Экран 2 auth wizard: PIN + каскад Flash Call #1/#2.
+   * Экран 2: PIN + каскад Flash×2 → Messenger → SMS.
    */
-  import { onDestroy, onMount, tick } from "svelte"
+  import { onDestroy } from "svelte"
   import { api } from "../lib/api.js"
+  import { buildVerifyBody, buildOtpSendBody } from "../lib/phoneAuthWizard.js"
   import {
-    PIN_LENGTH,
-    emptyPinCells,
-    applyPinDigit,
-    pinBackspaceFocus,
-    shouldAutoSubmitPin,
-    buildVerifyBody,
-    buildFlashCallSendBody
-  } from "../lib/phoneAuthWizard.js"
-  import {
-    FLASH_HINT,
     RETRY_FLASH_LABEL,
+    MESSENGER_BTN_LABEL,
+    SMS_BTN_LABEL,
     initialFlashCascade,
     tickFlashCascade,
-    waitingCallLabel,
     showRetryFlashButton,
-    afterManualFlashResend
+    showMessengerButton,
+    showSmsButton,
+    afterManualFlashResend,
+    afterMessengerSend,
+    afterSmsSend,
+    afterMessengerDeliveryError,
+    cascadeHint,
+    cascadeTimerLabel
   } from "../lib/phoneAuthCascade.js"
+  import PhoneAuthPinInputs from "./PhoneAuthPinInputs.svelte"
 
   let {
     phoneDisplay = "+7",
@@ -34,14 +34,22 @@
   let verifying = $state(false)
   let resending = $state(false)
   let localError = $state("")
-  let pinCells = $state(emptyPinCells())
-  let pinEls = []
+  let pinNonce = $state(0)
   let cascade = $state(initialFlashCascade())
   let timerId = null
 
-  const pinIndexes = Array.from({ length: PIN_LENGTH }, (_, i) => i)
-  const waitLabel = $derived(waitingCallLabel(cascade.secondsLeft))
-  const showRetry = $derived(showRetryFlashButton(cascade.flashRound))
+  const hintText = $derived(cascadeHint({ lastChannel: cascade.lastChannel, phoneDisplay }))
+  const waitLabel = $derived(
+    cascadeTimerLabel({
+      phase: cascade.phase,
+      secondsLeft: cascade.secondsLeft,
+      lastChannel: cascade.lastChannel
+    })
+  )
+  const showRetry = $derived(showRetryFlashButton(cascade.phase))
+  const showMessenger = $derived(showMessengerButton(cascade.phase, cascade.secondsLeft))
+  const showSms = $derived(showSmsButton(cascade.phase))
+  const busy = $derived(resending || verifying)
 
   function stopTimer() {
     if (timerId) {
@@ -54,36 +62,38 @@
     stopTimer()
     timerId = setInterval(() => {
       const next = tickFlashCascade(cascade)
-      cascade = { flashRound: next.flashRound, secondsLeft: next.secondsLeft }
-      if (next.autoResend) requestFlashResend({ auto: true })
+      cascade = {
+        phase: next.phase,
+        secondsLeft: next.secondsLeft,
+        lastChannel: next.lastChannel
+      }
+      if (next.autoSend) sendChannel(next.autoSend)
     }, 1000)
   }
 
   startTimer()
   onDestroy(stopTimer)
 
-  onMount(() => {
-    focusPin(0)
-  })
-
-  async function focusPin(index) {
-    await tick()
-    pinEls[index]?.focus()
-  }
-
-  async function requestFlashResend({ auto = false } = {}) {
+  async function sendChannel(channel) {
     if (!phoneE164 || resending || verifying) return
     resending = true
     localError = ""
     try {
       await api("/phone_otp/send", {
         method: "POST",
-        body: JSON.stringify(buildFlashCallSendBody(phoneE164))
+        body: JSON.stringify(buildOtpSendBody(phoneE164, channel))
       })
-      cascade = afterManualFlashResend(auto ? 2 : cascade.flashRound)
+      if (channel === "flash_call") cascade = afterManualFlashResend()
+      else if (channel === "messenger") cascade = afterMessengerSend()
+      else if (channel === "sms") cascade = afterSmsSend()
       if (!timerId) startTimer()
     } catch (e) {
-      localError = e.message || "Не удалось запросить звонок"
+      if (channel === "messenger") {
+        cascade = afterMessengerDeliveryError()
+        localError = e.message || "Мессенджер недоступен — попробуйте СМС"
+      } else {
+        localError = e.message || "Не удалось отправить код"
+      }
       onError?.(localError)
     } finally {
       resending = false
@@ -91,7 +101,7 @@
   }
 
   async function submitPin(code) {
-    if (!phoneE164 || verifying || !shouldAutoSubmitPin(code)) return
+    if (!phoneE164 || verifying) return
     verifying = true
     localError = ""
     try {
@@ -100,39 +110,13 @@
         body: JSON.stringify(buildVerifyBody(phoneE164, code))
       })
       stopTimer()
-      onVerified?.({
-        phone: res?.phone || phoneE164,
-        refreshToken: res?.refresh_token
-      })
+      onVerified?.({ phone: res?.phone || phoneE164, refreshToken: res?.refresh_token })
     } catch (e) {
       localError = e.message || "Неверный код"
       onError?.(localError)
-      pinCells = emptyPinCells()
-      await focusPin(0)
+      pinNonce += 1
     } finally {
       verifying = false
-    }
-  }
-
-  function onPinInput(index, e) {
-    if (verifying) return
-    const r = applyPinDigit(pinCells, index, e.target.value)
-    pinCells = r.cells
-    localError = ""
-    focusPin(r.focusIndex)
-    if (shouldAutoSubmitPin(r.code)) submitPin(r.code)
-  }
-
-  function onPinKeydown(index, e) {
-    if (e.key !== "Backspace") return
-    if ((pinCells[index] || "").length > 0) return
-    e.preventDefault()
-    const prev = pinBackspaceFocus(pinCells, index)
-    if (prev !== index) {
-      const next = [...pinCells]
-      next[prev] = ""
-      pinCells = next
-      focusPin(prev)
     }
   }
 
@@ -152,30 +136,15 @@
   >
     Изменить номер
   </button>
-  <p class="mb-2 text-sm text-[#a0a0a0]" role="status" data-testid="phone-auth-flash-hint">
-    {FLASH_HINT}
-  </p>
-  <p class="mb-3 text-center text-sm text-white" role="status" data-testid="phone-auth-flash-timer">
-    {waitLabel}
-  </p>
-  <div class="mb-2 flex justify-center gap-2" data-testid="phone-auth-pin" role="group" aria-label="Код из 4 цифр">
-    {#each pinIndexes as i (i)}
-      <input
-        bind:this={pinEls[i]}
-        value={pinCells[i]}
-        oninput={(e) => onPinInput(i, e)}
-        onkeydown={(e) => onPinKeydown(i, e)}
-        type="text"
-        inputmode="numeric"
-        autocomplete={i === 0 ? "one-time-code" : "off"}
-        maxlength="1"
-        disabled={verifying}
-        class="h-12 w-11 rounded-lg border border-[#3a3a3a] bg-[#2a2a2a] text-center text-xl text-white tracking-widest disabled:opacity-50"
-        data-testid={"phone-auth-pin-" + i}
-        aria-label={"Цифра " + (i + 1)}
-      />
-    {/each}
-  </div>
+  <p class="mb-2 text-sm text-[#a0a0a0]" role="status" data-testid="phone-auth-flash-hint">{hintText}</p>
+  {#if waitLabel}
+    <p class="mb-3 text-center text-sm text-white" role="status" data-testid="phone-auth-flash-timer">
+      {waitLabel}
+    </p>
+  {/if}
+  {#key pinNonce}
+    <PhoneAuthPinInputs disabled={verifying} onComplete={submitPin} />
+  {/key}
   {#if verifying}
     <p class="text-center text-sm text-[#a0a0a0]" role="status">Проверяем…</p>
   {/if}
@@ -183,11 +152,33 @@
     <button
       type="button"
       class="mt-3 w-full rounded-lg border border-[#ff8c42] py-2 text-sm text-[#ff8c42] disabled:opacity-50"
-      disabled={resending || verifying}
-      onclick={() => requestFlashResend({ auto: false })}
+      disabled={busy}
+      onclick={() => sendChannel("flash_call")}
       data-testid="phone-auth-retry-flash"
     >
       {resending ? "Отправляем…" : RETRY_FLASH_LABEL}
+    </button>
+  {/if}
+  {#if showMessenger}
+    <button
+      type="button"
+      class="mt-3 w-full rounded-lg border border-[#ff8c42] py-2 text-sm text-[#ff8c42] disabled:opacity-50"
+      disabled={busy}
+      onclick={() => sendChannel("messenger")}
+      data-testid="phone-auth-messenger"
+    >
+      {resending ? "Отправляем…" : MESSENGER_BTN_LABEL}
+    </button>
+  {/if}
+  {#if showSms}
+    <button
+      type="button"
+      class="mt-3 w-full rounded-lg border border-[#ff8c42] py-2 text-sm text-[#ff8c42] disabled:opacity-50"
+      disabled={busy || cascade.secondsLeft > 0}
+      onclick={() => sendChannel("sms")}
+      data-testid="phone-auth-sms"
+    >
+      {resending ? "Отправляем…" : SMS_BTN_LABEL}
     </button>
   {/if}
   {#if localError}

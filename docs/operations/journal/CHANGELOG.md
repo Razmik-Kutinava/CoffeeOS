@@ -1,5 +1,12 @@
 ﻿# CHANGELOG
 
+## 2026-07-28 — feat(shop): auth funnel Messenger + SMS cascade [GREEN]
+
+- Фазы messenger (30с) / sms (60с); кнопки WA/TG и SMS; ошибка messenger → SMS
+- `buildOtpSendBody`; `PhoneAuthPinInputs.svelte`
+- Тесты: Node 22/0 · Ruby wizard 9/0
+- Backend `messenger` channel — Шаг 5
+
 ## 2026-07-28 — feat(shop): auth funnel Flash cascade #1/#2 [GREEN]
 
 - Таймер «Ждем звонок... 00:20»; авто `flash_call` #2; кнопка «Запросить звонок еще раз»

@@ -21,7 +21,12 @@ export function canContinuePhone(display) {
 
 /** Тело POST /shop/api/phone_otp/send для старта каскада. */
 export function buildFlashCallSendBody(phoneE164) {
-  return { phone: phoneE164, channel: "flash_call" }
+  return buildOtpSendBody(phoneE164, "flash_call")
+}
+
+/** Тело POST send с каналом flash_call | messenger | sms. */
+export function buildOtpSendBody(phoneE164, channel) {
+  return { phone: phoneE164, channel: String(channel || "flash_call") }
 }
 
 export function nextScreenAfterSend(current = WIZARD_SCREEN.PHONE) {

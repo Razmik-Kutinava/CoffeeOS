@@ -2,7 +2,7 @@
 
 require "test_helper"
 
-# Auth funnel cascade: checkout phone wizard Screens 1–3.
+# Auth funnel cascade: checkout phone wizard Screens 1–4.
 class Shop::AuthFunnelWizardUiTest < ActionDispatch::IntegrationTest
   test "checkout auth screen has phone wizard continue and no email radios" do
     checkout = File.read(Rails.root.join("app/frontend/routes/Checkout.svelte"))
@@ -30,19 +30,21 @@ class Shop::AuthFunnelWizardUiTest < ActionDispatch::IntegrationTest
 
   test "screen 2 has four pin cells auto-verify and change number without confirm button" do
     step = File.read(Rails.root.join("app/frontend/components/PhoneAuthCodeStep.svelte"))
+    pin = File.read(Rails.root.join("app/frontend/components/PhoneAuthPinInputs.svelte"))
     lib = File.read(Rails.root.join("app/frontend/lib/phoneAuthWizard.js"))
 
     assert_includes step, 'data-testid="phone-auth-screen-2"'
-    assert_includes step, 'data-testid="phone-auth-pin"'
     assert_includes step, 'data-testid="phone-auth-change-number"'
     assert_includes step, "Изменить номер"
     assert_includes step, "phone_otp/verify"
-    assert_includes step, "shouldAutoSubmitPin"
-    assert_includes step, "phone-auth-pin-"
-    assert_includes step, 'maxlength="1"'
-    assert_includes step, "{#each pinIndexes"
+    assert_includes step, "PhoneAuthPinInputs"
     refute_includes step, "Подтвердить код"
     refute_includes step, "Подтвердить телефон"
+
+    assert_includes pin, 'data-testid="phone-auth-pin"'
+    assert_includes pin, "phone-auth-pin-"
+    assert_includes pin, 'maxlength="1"'
+    assert_includes pin, "shouldAutoSubmitPin"
 
     assert_includes lib, "shouldAutoSubmitPin"
     assert_includes lib, "buildVerifyBody"
@@ -59,7 +61,7 @@ class Shop::AuthFunnelWizardUiTest < ActionDispatch::IntegrationTest
     assert_includes step, 'data-testid="phone-auth-retry-flash"'
     assert_includes step, "tickFlashCascade"
     assert_includes step, "RETRY_FLASH_LABEL"
-    assert_includes step, "waitingCallLabel"
+    assert_includes step, "cascadeTimerLabel"
 
     assert_includes cascade, "FLASH_WAIT_SEC"
     assert_match(/FLASH_WAIT_SEC\s*=\s*20/, cascade)
@@ -67,5 +69,28 @@ class Shop::AuthFunnelWizardUiTest < ActionDispatch::IntegrationTest
     assert_includes cascade, "Запросить звонок еще раз"
     assert_includes cascade, "tickFlashCascade"
     assert_includes cascade, "showRetryFlashButton"
+  end
+
+  test "messenger and sms fallback buttons and timings" do
+    step = File.read(Rails.root.join("app/frontend/components/PhoneAuthCodeStep.svelte"))
+    cascade = File.read(Rails.root.join("app/frontend/lib/phoneAuthCascade.js"))
+    lib = File.read(Rails.root.join("app/frontend/lib/phoneAuthWizard.js"))
+
+    assert_includes step, 'data-testid="phone-auth-messenger"'
+    assert_includes step, 'data-testid="phone-auth-sms"'
+    assert_includes step, "MESSENGER_BTN_LABEL"
+    assert_includes step, "SMS_BTN_LABEL"
+    assert_includes step, "afterMessengerDeliveryError"
+    assert_includes step, 'sendChannel("messenger")'
+    assert_includes step, 'sendChannel("sms")'
+
+    assert_match(/MESSENGER_WAIT_SEC\s*=\s*30/, cascade)
+    assert_match(/SMS_COOLDOWN_SEC\s*=\s*60/, cascade)
+    assert_includes cascade, "WhatsApp / Telegram"
+    assert_includes cascade, "Отправить код в СМС"
+    assert_includes cascade, "afterMessengerSend"
+    assert_includes cascade, "afterSmsSend"
+
+    assert_includes lib, "buildOtpSendBody"
   end
 end

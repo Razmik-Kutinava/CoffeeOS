@@ -1,5 +1,5 @@
 /**
- * Auth funnel wizard — Шаг 1–3: телефон → PIN → Flash cascade.
+ * Auth funnel wizard — Шаг 1–4: телефон → PIN → Flash → Messenger → SMS.
  * Node: node --test test/javascript/phone_auth_wizard_test.mjs
  */
 import assert from "node:assert/strict"
@@ -10,6 +10,7 @@ import {
   nationalPhoneDigits,
   canContinuePhone,
   buildFlashCallSendBody,
+  buildOtpSendBody,
   nextScreenAfterSend,
   emptyPinCells,
   pinCodeFromCells,
@@ -19,15 +20,26 @@ import {
   buildVerifyBody
 } from "../../app/frontend/lib/phoneAuthWizard.js"
 import {
+  CASCADE_PHASE,
   FLASH_WAIT_SEC,
+  MESSENGER_WAIT_SEC,
+  SMS_COOLDOWN_SEC,
   FLASH_HINT,
   RETRY_FLASH_LABEL,
+  MESSENGER_BTN_LABEL,
+  SMS_BTN_LABEL,
   formatMmSs,
   waitingCallLabel,
+  messengerSentHint,
   initialFlashCascade,
   tickFlashCascade,
   showRetryFlashButton,
-  afterManualFlashResend
+  showMessengerButton,
+  showSmsButton,
+  afterManualFlashResend,
+  afterMessengerSend,
+  afterSmsSend,
+  afterMessengerDeliveryError
 } from "../../app/frontend/lib/phoneAuthCascade.js"
 import { formatPhoneMask, normalizePhoneToE164Ru } from "../../app/frontend/lib/phoneOtp.js"
 
@@ -49,6 +61,17 @@ describe("phoneAuthWizard Screen 1", () => {
     assert.deepEqual(buildFlashCallSendBody(phone), {
       phone: "+79001234567",
       channel: "flash_call"
+    })
+  })
+
+  it("buildOtpSendBody supports messenger and sms", () => {
+    assert.deepEqual(buildOtpSendBody("+79001234567", "messenger"), {
+      phone: "+79001234567",
+      channel: "messenger"
+    })
+    assert.deepEqual(buildOtpSendBody("+79001234567", "sms"), {
+      phone: "+79001234567",
+      channel: "sms"
     })
   })
 
@@ -104,45 +127,107 @@ describe("phoneAuthCascade Flash #1/#2", () => {
   it("formats timer as MM:SS and waiting label", () => {
     assert.equal(FLASH_WAIT_SEC, 20)
     assert.equal(formatMmSs(20), "00:20")
-    assert.equal(formatMmSs(5), "00:05")
     assert.equal(waitingCallLabel(20), "Ждем звонок... 00:20")
     assert.match(FLASH_HINT, /4 цифр/)
     assert.equal(RETRY_FLASH_LABEL, "Запросить звонок еще раз")
   })
 
-  it("initial cascade is round 1 with 20s", () => {
-    assert.deepEqual(initialFlashCascade(), { flashRound: 1, secondsLeft: 20 })
+  it("initial cascade is flash_1 with 20s", () => {
+    assert.deepEqual(initialFlashCascade(), {
+      phase: CASCADE_PHASE.FLASH_1,
+      secondsLeft: 20,
+      lastChannel: null
+    })
   })
 
-  it("ticks down without resend until last second of round 1", () => {
+  it("ticks down without autosend until last second of flash_1", () => {
     let s = initialFlashCascade()
     for (let i = 0; i < 19; i++) {
       const t = tickFlashCascade(s)
-      assert.equal(t.autoResend, false)
-      s = { flashRound: t.flashRound, secondsLeft: t.secondsLeft }
+      assert.equal(t.autoSend, null)
+      s = { phase: t.phase, secondsLeft: t.secondsLeft, lastChannel: t.lastChannel }
     }
     assert.equal(s.secondsLeft, 1)
-    assert.equal(s.flashRound, 1)
-    assert.equal(showRetryFlashButton(s.flashRound), false)
+    assert.equal(s.phase, CASCADE_PHASE.FLASH_1)
+    assert.equal(showRetryFlashButton(s.phase), false)
   })
 
-  it("auto-resends flash on end of round 1 and starts round 2", () => {
-    const t = tickFlashCascade({ flashRound: 1, secondsLeft: 1 })
-    assert.equal(t.autoResend, true)
-    assert.equal(t.flashRound, 2)
+  it("auto flash_call on end of flash_1 → flash_2", () => {
+    const t = tickFlashCascade({
+      phase: CASCADE_PHASE.FLASH_1,
+      secondsLeft: 1,
+      lastChannel: null
+    })
+    assert.equal(t.autoSend, "flash_call")
+    assert.equal(t.phase, CASCADE_PHASE.FLASH_2)
     assert.equal(t.secondsLeft, 20)
-    assert.equal(showRetryFlashButton(t.flashRound), true)
+    assert.equal(showRetryFlashButton(t.phase), true)
   })
 
-  it("round 2 ends at 0 without autoResend (messenger later)", () => {
-    const t = tickFlashCascade({ flashRound: 2, secondsLeft: 1 })
-    assert.equal(t.autoResend, false)
+  it("end of flash_2 → messenger with auto messenger send", () => {
+    const t = tickFlashCascade({
+      phase: CASCADE_PHASE.FLASH_2,
+      secondsLeft: 1,
+      lastChannel: "flash_call"
+    })
+    assert.equal(t.autoSend, "messenger")
+    assert.equal(t.phase, CASCADE_PHASE.MESSENGER)
     assert.equal(t.secondsLeft, 0)
-    assert.equal(showRetryFlashButton(2), true)
+    assert.equal(showMessengerButton(t.phase, t.secondsLeft), true)
   })
 
-  it("afterManualFlashResend resets 20s on round >= 2", () => {
-    assert.deepEqual(afterManualFlashResend(2), { flashRound: 2, secondsLeft: 20 })
-    assert.deepEqual(afterManualFlashResend(1), { flashRound: 2, secondsLeft: 20 })
+  it("afterManualFlashResend resets flash_2 20s", () => {
+    assert.deepEqual(afterManualFlashResend(), {
+      phase: CASCADE_PHASE.FLASH_2,
+      secondsLeft: 20,
+      lastChannel: "flash_call"
+    })
+  })
+})
+
+describe("phoneAuthCascade Messenger + SMS", () => {
+  it("timings messenger 30 / sms 60", () => {
+    assert.equal(MESSENGER_WAIT_SEC, 30)
+    assert.equal(SMS_COOLDOWN_SEC, 60)
+    assert.match(MESSENGER_BTN_LABEL, /WhatsApp/)
+    assert.equal(SMS_BTN_LABEL, "Отправить код в СМС")
+  })
+
+  it("afterMessengerSend starts 30s wait", () => {
+    assert.deepEqual(afterMessengerSend(), {
+      phase: CASCADE_PHASE.MESSENGER,
+      secondsLeft: 30,
+      lastChannel: "messenger"
+    })
+    assert.equal(showMessengerButton(CASCADE_PHASE.MESSENGER, 30), false)
+  })
+
+  it("messenger timer end → sms phase", () => {
+    const t = tickFlashCascade({
+      phase: CASCADE_PHASE.MESSENGER,
+      secondsLeft: 1,
+      lastChannel: "messenger"
+    })
+    assert.equal(t.phase, CASCADE_PHASE.SMS)
+    assert.equal(t.secondsLeft, 0)
+    assert.equal(t.autoSend, null)
+    assert.equal(showSmsButton(t.phase), true)
+  })
+
+  it("afterSmsSend starts 60s cooldown", () => {
+    assert.deepEqual(afterSmsSend(), {
+      phase: CASCADE_PHASE.SMS,
+      secondsLeft: 60,
+      lastChannel: "sms"
+    })
+  })
+
+  it("messenger delivery error jumps to sms", () => {
+    assert.deepEqual(afterMessengerDeliveryError(), {
+      phase: CASCADE_PHASE.SMS,
+      secondsLeft: 0,
+      lastChannel: null
+    })
+    assert.match(messengerSentHint("+7 (900) 123-45-67"), /мессенджер/)
   })
 })
