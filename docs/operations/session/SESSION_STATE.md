@@ -2,13 +2,19 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-28 (Auth funnel cascade · Шаг 1 GREEN)
+**Дата:** 2026-07-28 (Auth funnel cascade · Шаг 2 GREEN)
 
 | Сейчас | Дальше |
 |--------|--------|
-| Шаг 1 wizard Экран 1 done | Шаг 2: PIN 4 ячейки + авто-verify |
-| Email/radio сняты с checkout auth | OrderCreator phone-only — после verify |
+| Шаги 1–2 wizard done (телефон + PIN auto-verify) | Шаг 3: каскад Flash Call #1/#2 таймеры |
+| Email/radio сняты | OrderCreator phone-only — после полного каскада |
 | Fly v396 · банк 3001 (SBP) | не трогали |
+
+### Сессия 2026-07-28 (Auth funnel · Шаг 2)
+
+- PIN 4 ячейки + авто-сабмит `phone_otp/verify` на 4-й цифре; «Изменить номер»
+- `phoneAuthWizard.js`: `shouldAutoSubmitPin`, `buildVerifyBody`, `applyPinDigit`
+- Тесты: Node **10/0**; Ruby wizard+phone_otp+cbr+cart **12/0**
 
 ### Сессия 2026-07-28 (Auth funnel · Шаг 1)
 

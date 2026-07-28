@@ -1,5 +1,12 @@
 ﻿# CHANGELOG
 
+## 2026-07-28 — feat(shop): auth funnel Screen 2 PIN auto-verify [GREEN]
+
+- 4 PIN-ячейки + авто-сабмит `POST phone_otp/verify` на 4-й цифре
+- «Изменить номер» → Экран 1; без кнопки подтверждения кода
+- `phoneAuthWizard.js`: `applyPinDigit`, `shouldAutoSubmitPin`, `buildVerifyBody`
+- Тесты: Node 10/0 · Ruby wizard+phone_otp 12/0
+
 ## 2026-07-28 — feat(shop): auth funnel wizard Screen 1 flash_call [GREEN]
 
 - Intake ТЗ Auth funnel cascade + CBR #29 + artifacts
