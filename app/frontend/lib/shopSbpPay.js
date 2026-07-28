@@ -66,7 +66,14 @@ export async function pollSbpPaymentStatus(api, { orderId, sleep } = {}) {
 }
 
 export function mapSbpInitError(status, body = {}) {
+  const code = String(body?.error_code || "").trim()
   const msg = body?.error || body?.message
+  if (code === "3001") {
+    return "СБП сейчас недоступна для этой точки. Выберите оплату картой или попробуйте позже."
+  }
+  if (String(msg || "").match(/3001/) && String(msg || "").match(/сбп/i)) {
+    return "СБП сейчас недоступна для этой точки. Выберите оплату картой или попробуйте позже."
+  }
   if (msg && String(msg).trim()) return String(msg)
   if (status === 404) return "Заказ не найден"
   if (status === 400 || status === 422) return "Не удалось начать оплату СБП. Проверьте заказ."

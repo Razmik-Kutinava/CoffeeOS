@@ -17,6 +17,7 @@
   import { installSlowRequestTracker } from "./lib/slowRequest.js"
   import { api } from "./lib/api.js"
   import { bootstrapShopTenant } from "./lib/shopTenantHeader.js"
+  import { restoreGuestSession } from "./lib/restoreGuestSession.js"
   import { loadOperatingHours } from "./lib/shopOperatingHours.js"
   import {
     lastGuestOrderId,
@@ -106,7 +107,11 @@
   }
 
   onMount(() => {
-    bootstrapShopTenant(api)
+    // Сначала Silent Refresh: иначе /config без customer_id → нет last_ordered →
+    // залипший Fly Overnight без «повторить»/рекомендаций.
+    restoreGuestSession()
+      .catch(() => ({ verified: false }))
+      .then(() => bootstrapShopTenant(api))
       .then((cfg) => {
         if (!cfg?.operating_hours) loadOperatingHours(api).catch(() => {})
       })

@@ -69,6 +69,13 @@ describe("shopSbpPay — init + redirect", () => {
     assert.match(mapSbpInitError(500, {}), /ошибка|не удалось/i)
   })
 
+  it("mapSbpInitError normalizes bank 3001 into friendly fallback text", () => {
+    const msgByCode = mapSbpInitError(422, { error_code: "3001", error: "T-Банк API error 3001: Оплата через СБП недоступна" })
+    const msgByText = mapSbpInitError(500, { error: "T-Банк API error 3001: Оплата через СБП недоступна" })
+    assert.match(msgByCode, /СБП сейчас недоступна.*картой.*попробуйте позже/i)
+    assert.match(msgByText, /СБП сейчас недоступна.*картой.*попробуйте позже/i)
+  })
+
   it("exports monochrome loading label", () => {
     assert.match(SBP_LOADING_LABEL, /оплат|сбп|загруз/i)
   })

@@ -1,5 +1,14 @@
 ﻿# CHANGELOG
 
+## 2026-07-28 — fix(shop): restore «повторить» + SBP 3001 friendly UX
+
+- Root cause «пропали рекомендации»: залипание на `Fly Overnight` (ул. Fly Test, 0 заказов); на Point A freq=3
+- `App.svelte`: Silent Refresh → затем `bootstrapShopTenant` (есть `last_ordered_tenant_id`)
+- `resolvePreferredTenantId`: sticky invalid → fallback на last_ordered
+- Prod: `Fly Overnight` (`af4f78d6…`) → `inactive` (убран из дропдауна)
+- SBP: bank `3001` → понятное сообщение «СБП сейчас недоступна… картой / позже» (BE+FE)
+- Тесты: preferred 4/0 · B114 2/0 · SBP initiator+API+JS green
+
 ## 2026-07-28 — deploy: auth funnel cascade to Fly v397 + MCP PASS
 
 - Push `develop` → `22d136b`; Fly **v397**

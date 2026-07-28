@@ -101,4 +101,38 @@ class Shop::Api::SbpPaymentInitTest < ActionDispatch::IntegrationTest
     src = File.read(Rails.root.join("app/controllers/shop/api/payments_controller.rb"))
     assert_match(/\bdef sbp_init\b/, src)
   end
+
+  test "POST sbp/init returns friendly message for bank code 3001" do
+    ENV["SHOP_SIMULATE_PAYMENT"] = "0"
+    order = build_pending_order!
+
+    klass = Shop::SbpPaymentInitiator.singleton_class
+    klass.alias_method :__orig_new_for_sbp_test, :new
+    klass.define_method(:new) do |*_args, **_kwargs|
+      stub = Object.new
+      stub.define_singleton_method(:call!) do |**_params|
+        raise Shop::SbpPaymentInitiator::Error.new(
+          "СБП сейчас недоступна для этой точки. Выберите оплату картой или попробуйте позже.",
+          http_status: :unprocessable_entity,
+          error_code: "3001"
+        )
+      end
+      stub
+    end
+
+    begin
+      post "/shop/api/payments/sbp/init",
+        headers: shop_headers,
+        params: { order_id: order.id },
+        as: :json
+    ensure
+      klass.alias_method :new, :__orig_new_for_sbp_test
+      klass.remove_method :__orig_new_for_sbp_test
+    end
+
+    assert_response :unprocessable_entity
+    body = JSON.parse(response.body)
+    assert_equal "3001", body["error_code"]
+    assert_match(/СБП сейчас недоступна.*оплату картой.*попробуйте позже/i, body["error"])
+  end
 end

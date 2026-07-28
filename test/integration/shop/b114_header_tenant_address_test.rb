@@ -24,8 +24,10 @@ class Shop::B114HeaderTenantAddressTest < ActionDispatch::IntegrationTest
     assert_includes header, "shop-hours-display"
     assert_includes lib, "formatTenantDisplayAddress"
     assert_includes lib, "bootstrapShopTenant"
+    assert_includes lib, "resolvePreferredTenantId"
     assert_includes lib, "Адрес не указан"
     assert_includes app, "bootstrapShopTenant"
+    assert_includes app, "restoreGuestSession"
   end
 
   test "shop page shell loads with tenant meta" do

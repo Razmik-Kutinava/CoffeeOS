@@ -4,6 +4,13 @@
 
 ## 🔴 Блокеры
 
+[2026-07-28] — Пропали рекомендации / «повторить» у Арама (Fly Test)
+**Статус:** 🟡 **in_progress** · root cause найден
+**Источник:** заказчик Арам · скрин `artifacts/repeat_recommendations_missing/screenshots/01_…`
+**Root cause:** витрина на `Fly Overnight` (`af4f78d6…`, ул. Fly Test) — 0 заказов; «повторить» на Point A (`2fdee1ac…`) жив (freq=3). Sticky selected + bootstrap до Silent Refresh.
+**Фикс:** restore→bootstrap · `resolvePreferredTenantId` · deactivate Fly Overnight · deploy+MCP
+**ТЗ:** [`Пропали рекомендации повторить на витрине.md`](milestones/veha_2/requirements/customer_tasks/Пропали%20рекомендации%20повторить%20на%20витрине.md)
+
 [2026-07-27] — SBP live на Fly: банк отклоняет СБП
 **Статус:** 🟡 **открыт** · UI/OTP/WAITING PASS · код Receipt.Email **задеплоен v396**
 **Источник:** MCP Aram E2E · скрины `screenshots/01–07`

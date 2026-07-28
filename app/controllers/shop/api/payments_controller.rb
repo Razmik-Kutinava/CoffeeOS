@@ -46,7 +46,10 @@ module Shop
       rescue ActionController::ParameterMissing => e
         render json: { error: e.message }, status: :bad_request
       rescue Shop::SbpPaymentInitiator::Error => e
-        render json: { error: e.message }, status: e.http_status
+        render json: {
+          error: e.message,
+          error_code: e.error_code
+        }, status: e.http_status
       end
 
       # GET /shop/api/payments/status/:order_id — PENDING|CONFIRMED|REJECTED|CANCELED.

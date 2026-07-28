@@ -1,8 +1,22 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-28 (**Auth funnel cascade · Fly v397 MCP PASS**)  
+**Дата:** 2026-07-28 (**Repeat recommendations · SBP 3001 UX**)  
 **Ветка:** `develop`  
-**Прод:** https://coffeeos.fly.dev · **Fly:** v397  
+**Прод:** https://coffeeos.fly.dev · **Fly:** deploy pending  
+
+### Repeat recommendations missing (2026-07-28)
+
+| Что | Статус |
+|-----|--------|
+| Intake ТЗ + CBR + ISSUES | **`[x]`** |
+| Root cause Fly Overnight vs Point A | **`[x]`** |
+| Код restore→bootstrap + preferred | **`[x]`** |
+| Deactivate Fly Overnight prod | **`[x]`** |
+| SBP 3001 friendly UX | **`[x]`** |
+| Push / Fly / MCP скрин «повторить» | **`[ ]`** |
+
+**ТЗ:** [`Пропали рекомендации…`](../milestones/veha_2/requirements/customer_tasks/Пропали%20рекомендации%20повторить%20на%20витрине.md)  
+**Витрина Арама:** `?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789` (Point A, ул. Ленина)
 
 ### Auth funnel cascade Flash→Messenger→SMS (2026-07-28)
 

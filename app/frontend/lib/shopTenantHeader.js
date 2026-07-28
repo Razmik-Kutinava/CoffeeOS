@@ -1,6 +1,6 @@
 /** B1.14: адрес точки в шапке, дропдаун, localStorage офлайн. */
 
-import { readShopLocalStorage, writeShopLocalStorage } from "./shopLocalStorage.js"
+import { readShopLocalStorage, writeShopLocalStorage, removeShopLocalStorage } from "./shopLocalStorage.js"
 import { applyOperatingHours } from "./shopOperatingHours.js"
 
 export const TENANT_ADDRESS_STUB = "Адрес не указан"
@@ -59,6 +59,35 @@ export function saveSelectedTenantId(tenantId) {
   writeShopLocalStorage(SELECTED_KEY, { tenantId: String(tenantId) })
 }
 
+export function clearSelectedTenantId() {
+  removeShopLocalStorage(SELECTED_KEY)
+}
+
+/**
+ * Предпочтительная точка витрины.
+ * Sticky selected побеждает, но если точка пропала из списка (inactive) —
+ * падаем на last_ordered, иначе «повторить» зависает на пустой тестовой точке.
+ *
+ * @param {{ lastOrderedId?: string|null, selectedId?: string|null, switchableIds?: string[] }} opts
+ */
+export function resolvePreferredTenantId({
+  lastOrderedId = null,
+  selectedId = null,
+  switchableIds = null
+} = {}) {
+  const last = lastOrderedId ? String(lastOrderedId) : null
+  const selected = selectedId ? String(selectedId) : null
+  const allowed =
+    Array.isArray(switchableIds) && switchableIds.length
+      ? new Set(switchableIds.map((id) => String(id)))
+      : null
+
+  if (selected && allowed && !allowed.has(selected)) {
+    return last || null
+  }
+  return selected || last || null
+}
+
 function cacheKey(tenantId) {
   return `${CACHE_PREFIX}${tenantId}`
 }
@@ -114,7 +143,7 @@ export function navigateToTenant(tenantId, { remember = true } = {}) {
   window.location.assign(`${url.pathname}${url.search}${hash}`)
 }
 
-/** Старт витрины: редирект на выбранную / последнюю точку, затем state шапки. */
+/** Старт витрины: редирект на точку с историей / выбранную, затем state шапки. */
 export async function bootstrapShopTenant(api) {
   const currentId = resolvedShopTenantId()
   let cfg = null
@@ -131,10 +160,28 @@ export async function bootstrapShopTenant(api) {
   const tenant = cfg.tenant || {}
   writeCachedTenant(tenant)
 
-  const preferred = readSelectedTenantId() || cfg.last_ordered_tenant_id
+  let switchableIds = null
+  try {
+    const tenantsPayload = await api("/tenants")
+    switchableIds = (tenantsPayload?.tenants || []).map((t) => t.id)
+  } catch {
+    switchableIds = tenant.id ? [tenant.id] : []
+  }
+
+  const preferred = resolvePreferredTenantId({
+    lastOrderedId: cfg.last_ordered_tenant_id,
+    selectedId: readSelectedTenantId(),
+    switchableIds
+  })
+
   if (preferred && String(preferred) !== String(currentId)) {
-    navigateToTenant(preferred, { remember: false })
+    // Запоминаем «свою» точку, чтобы F5 не возвращал на пустой Fly Overnight
+    navigateToTenant(preferred, { remember: true })
     return cfg
+  }
+
+  if (readSelectedTenantId() && preferred && String(readSelectedTenantId()) !== String(preferred)) {
+    saveSelectedTenantId(preferred)
   }
 
   await refreshTenantHeader(api, cfg)

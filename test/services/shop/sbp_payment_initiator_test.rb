@@ -176,4 +176,29 @@ class Shop::SbpPaymentInitiatorTest < ActiveSupport::TestCase
       )
     end
   end
+
+  test "call! maps bank 3001 into friendly sbp unavailable message" do
+    ENV["SHOP_SIMULATE_PAYMENT"] = "0"
+    order = build_pending_order!
+
+    adapter = Payments::TbankAdapter.new
+    adapter.define_singleton_method(:init_payment) do |**_kwargs|
+      raise Payments::TbankAdapter::ApiError.new(
+        error_code: "3001",
+        message: "Оплата через СБП недоступна"
+      )
+    end
+
+    error = assert_raises(Shop::SbpPaymentInitiator::Error) do
+      Shop::SbpPaymentInitiator.new(tenant: @tenant, adapter: adapter).call!(
+        order_id: order.id,
+        return_base_url: "https://example.com",
+        notification_url: "https://example.com/callbacks/tbank"
+      )
+    end
+
+    assert_equal "3001", error.error_code
+    assert_equal :unprocessable_entity, error.http_status
+    assert_match(/СБП сейчас недоступна.*оплату картой.*попробуйте позже/i, error.message)
+  end
 end

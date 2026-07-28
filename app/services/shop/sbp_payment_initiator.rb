@@ -5,10 +5,11 @@ module Shop
   # Работает по уже созданному заказу pending_payment (не создаёт Order).
   class SbpPaymentInitiator
     class Error < StandardError
-      attr_reader :http_status
+      attr_reader :http_status, :error_code
 
-      def initialize(message, http_status: :unprocessable_entity)
+      def initialize(message, http_status: :unprocessable_entity, error_code: nil)
         @http_status = http_status
+        @error_code = error_code.to_s.presence
         super(message)
       end
     end
@@ -88,9 +89,25 @@ module Shop
           order_id: order.id,
           provider_payment_id: init[:provider_payment_id]
         }
+      rescue Payments::TbankAdapter::ApiError => e
+        Rails.logger.error("[SbpPaymentInitiator] #{e.class}: #{e.message}")
+        raise Error.new(
+          friendly_api_message(e),
+          http_status: :unprocessable_entity,
+          error_code: e.error_code
+        )
       rescue Payments::TbankAdapter::Error, Payments::TbankQrFetcher::Error, Payments::TbankReceiptBuilder::Error => e
         Rails.logger.error("[SbpPaymentInitiator] #{e.class}: #{e.message}")
         raise Error.new(e.message, http_status: :internal_server_error)
+      end
+    end
+
+    def friendly_api_message(error)
+      case error.error_code.to_s
+      when "3001"
+        "СБП сейчас недоступна для этой точки. Выберите оплату картой или попробуйте позже."
+      else
+        error.message
       end
     end
   end
