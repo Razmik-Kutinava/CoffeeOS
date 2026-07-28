@@ -2,13 +2,20 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-28 (Repeat recommendations · Fly v399 MCP PASS)
+**Дата:** 2026-07-28 (Aram phone restore PASS)
 
 | Сейчас | Дальше |
 |--------|--------|
-| «повторить» восстановлен у Арама на Point A · Fly **v399** | апрув заказчика |
-| Fly Overnight inactive · SBP 3001 friendly UX | live NSPK — кабинет Т-Кассы |
-| Коммиты `6f3a0b4` + `80e0f3a` | |
+| Телефон Арама на Fly: **`+79001119877`** (был `+79001119932`) | апрув владельца / заказчика |
+| Repeat «повторить» · Fly **v399** | live NSPK — кабинет Т-Кассы |
+| Артефакт `aram_phone_restore/` | |
+
+### Сессия 2026-07-28 (Aram phone restore · DONE)
+
+- Скрин профиля: тестовый `+79001119932` от MCP auth funnel
+- Канон из profile merge: `+79001119877`
+- Fly: `MobileCustomer` `2bc37279-…` → `phone=+79001119877`, `phone_verified=true`
+- Verify runner PASS · UI MCP SKIP (нет auth token в browser)
 
 ### Сессия 2026-07-28 (Repeat recommendations + SBP 3001 · DONE)
 

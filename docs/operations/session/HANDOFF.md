@@ -1,8 +1,21 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-28 (**Repeat recommendations restored · Fly v399**)  
+**Дата:** 2026-07-28 (**Aram phone restore · prod PASS**)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev · **Fly:** v399  
+
+### Aram phone restore (2026-07-28)
+
+| Что | Статус |
+|-----|--------|
+| Intake ТЗ + CBR + ISSUES | **`[x]`** |
+| Канон `+79001119877` | **`[x]`** (profile merge) |
+| Prod restore на Fly | **`[x]`** |
+| Verify runner | **`[x]`** phone=+79001119877 |
+| UI MCP скрин | **SKIP** (нет session в browser) |
+
+**Артефакт:** [`fly_aram_phone_restore_2026-07-28.json`](../milestones/veha_2/artifacts/aram_phone_restore/fly_aram_phone_restore_2026-07-28.json)  
+**ТЗ:** [`Вернуть номер телефона Арама…`](../milestones/veha_2/requirements/customer_tasks/Вернуть%20номер%20телефона%20Арама%20в%20профиле.md)
 
 ### Repeat recommendations missing (2026-07-28)
 

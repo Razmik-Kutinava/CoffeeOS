@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-07-28 — ops: restore Aram phone +79001119877 on Fly
+
+- MCP auth funnel перезаписал профиль Арама тестовым `+79001119932`
+- Prod: `MobileCustomer` aramfifa100 → `phone=+79001119877`, `phone_verified=true`
+- Артефакт `artifacts/aram_phone_restore/` · ISSUES resolved
+
 ## 2026-07-28 — deploy: repeat recommendations restored Fly v399 + MCP PASS
 
 - Push `80e0f3a`; Fly **v399**

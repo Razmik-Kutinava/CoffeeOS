@@ -1,19 +1,16 @@
-# todo — Repeat recommendations missing + SBP 3001 UX
+# todo — Aram phone restore
 
-> **ТЗ:** [`Пропали рекомендации повторить на витрине.md`](../milestones/veha_2/requirements/customer_tasks/Пропали%20рекомендации%20повторить%20на%20витрине.md)
-> **Артефакты:** [`artifacts/repeat_recommendations_missing/`](../milestones/veha_2/artifacts/repeat_recommendations_missing/)
+> **ТЗ:** [`Вернуть номер телефона Арама в профиле.md`](../milestones/veha_2/requirements/customer_tasks/Вернуть%20номер%20телефона%20Арама%20в%20профиле.md)
+> **Артефакты:** [`artifacts/aram_phone_restore/`](../milestones/veha_2/artifacts/aram_phone_restore/)
 
 ## Текущая фаза
 
-**PHASE 3: REVIEW** — Fly **v399** · MCP **PASS `[x]`**
+**PHASE 3: REVIEW** — prod restore **PASS `[x]`**
 
 ## Чеклист
 
-- [x] Intake ТЗ + CBR + ISSUES + скрин заказчика
-- [x] Root cause: Fly Overnight 0 orders vs Point A freq=3
-- [x] `resolvePreferredTenantId` + restore→bootstrap
-- [x] History: не впихивать inactive current
-- [x] Deactivate `af4f78d6` Fly Overnight
-- [x] SBP 3001 friendly message
-- [x] Push / Fly deploy v398→v399
-- [x] MCP Арам Point A — скрин «повторить»
+- [x] Intake ТЗ + CBR + ISSUES + скрин
+- [x] Канон `+79001119877` (profile merge 2026-07-27)
+- [x] Fly restore `MobileCustomer` Арама
+- [x] Verify runner phone=+79001119877
+- [x] Ops + артефакт JSON

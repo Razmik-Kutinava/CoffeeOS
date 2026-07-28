@@ -1,0 +1,28 @@
+{
+  "date": "2026-07-28",
+  "task": "aram_phone_restore",
+  "customer": {
+    "email": "aramfifa100@gmail.com",
+    "id": "2bc37279-8d23-456b-a2a5-4c28f584634c"
+  },
+  "before": {
+    "phone": "+79001119932",
+    "phone_verified": true,
+    "source": "MCP auth funnel fly_mcp_auth_funnel_2026-07-28.json (agent test number)"
+  },
+  "canon": {
+    "phone": "+79001119877",
+    "source": "fly_mcp_profile_merge_2026-07-27.json"
+  },
+  "after": {
+    "phone": "+79001119877",
+    "phone_verified": true,
+    "verified_at": "2026-07-28T13:35:00Z approx",
+    "method": "fly ssh rails runner update! on machine 9080d40db67238"
+  },
+  "mcp_ui": {
+    "status": "SKIP",
+    "reason": "browser shop session had no auth token; DB verify PASS"
+  },
+  "result": "PASS"
+}
