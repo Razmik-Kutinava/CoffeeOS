@@ -2,19 +2,20 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-28 (Auth funnel cascade · Шаг 4 GREEN)
+**Дата:** 2026-07-28 (Auth funnel cascade · Шаг 5 GREEN)
 
 | Сейчас | Дальше |
 |--------|--------|
-| Шаги 1–4 FE cascade: Flash×2 → Messenger → SMS | Шаг 5: `Shop::MessengerClient` + channel messenger |
+| Шаги 1–4 FE cascade: Flash×2 → Messenger → SMS | Шаг 6: кулдауны / Rack::Attack 20/30/60 |
 | Ошибка messenger → сразу SMS UI | Шаг 6: rate limits 20/30/60 |
 | Fly v396 · банк 3001 | не трогали |
 
-### Сессия 2026-07-28 (Auth funnel · Шаг 4)
+### Сессия 2026-07-28 (Auth funnel · Шаг 5)
 
-- Фазы messenger (30с) / sms (60с); кнопки WA/TG + SMS; `buildOtpSendBody`
-- `PhoneAuthPinInputs.svelte`; ошибка messenger → `afterMessengerDeliveryError`
-- Тесты: Node **22/0**; Ruby wizard **9/0**
+- FE: Messenger (30с) / SMS (60с), кнопки WA/TG + SMS, `buildOtpSendBody`
+- Backend: `Shop::MessengerClient` + `Shop::PhoneOtp` принимает `channel=messenger`; при delivery error возвращается `messenger_delivery_error` флаг
+- OTP код для sms/messenger: 4 цифры (совместимость с PIN auto-verify)
+- Тесты: Ruby phone_otp messenger **14/0**
 
 ### Сессия 2026-07-28 (Auth funnel · Шаг 3)
 

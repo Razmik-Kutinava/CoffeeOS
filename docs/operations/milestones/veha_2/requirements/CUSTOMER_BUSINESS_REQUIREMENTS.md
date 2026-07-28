@@ -151,7 +151,7 @@
 | 26 | **Repeat order invalid token payment sheet** | Peek повтор: CTA «Добавить карту» + BottomSheet способов оплаты при invalid token | **MCP PASS `[x]`** 2026-07-27 · Fly v393 | [Главный экран — повторный заказ…](customer_tasks/Главный%20экран%20—%20повторный%20заказ%20(невалидный%20токен)%20BottomSheet%20выбора%20способа%20оплаты.md) |
 | 27 | **SBP Deep Link + card tokenization** | СБП deep link + Recurrent/Charge (Т-Касса v2), без iframe, CODE:BLACK | **GREEN `[x]`** 2026-07-27 · Fly v394 · апрув `[ ]` | [Интеграция оплаты СБП Deep Link…](customer_tasks/Интеграция%20оплаты%20СБП%20Deep%20Link%20и%20токенизации%20карт%20Т-Касса%20v2.md) |
 | 28 | **CODE:BLACK T-Kassa SBP PWA lifecycle** | Ревизия ТЗ: pending order LS + visibilitychange + WAITING_FOR_BANK | **MCP PASS `[x]`** 2026-07-27 · Fly v395 · апрув `[ ]` | [Интеграция Т-Кассы СБП…](customer_tasks/Интеграция%20Т-Кассы%20СБП%20и%20токенизации%20в%20PWA%20CODE%20BLACK.md) |
-| 29 | **Auth funnel cascade** | 2-экранный wizard авторизации: Flash Call×2 → Messenger → SMS | **Шаги 1–4 GREEN `[x]`** 2026-07-28 | [Рефакторинг воронки авторизации…](customer_tasks/Рефакторинг%20воронки%20авторизации%20PWA%20Каскад%20Flash%20Call%20Messenger%20SMS.md) |
+| 29 | **Auth funnel cascade** | 2-экранный wizard авторизации: Flash Call×2 → Messenger → SMS | **Шаги 1–5 GREEN `[x]`** 2026-07-28 | [Рефакторинг воронки авторизации…](customer_tasks/Рефакторинг%20воронки%20авторизации%20PWA%20Каскад%20Flash%20Call%20Messenger%20SMS.md) |
 
 
 ---

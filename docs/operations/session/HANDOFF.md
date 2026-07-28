@@ -1,6 +1,6 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-28 (**Auth funnel cascade · Шаг 4 GREEN**)  
+**Дата:** 2026-07-28 (**Auth funnel cascade · Шаг 5 GREEN**)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev · **Fly:** v396  
 
@@ -14,12 +14,13 @@
 | Шаг 2 Экран 2 (PIN 4 + auto-verify) | **`[x]`** GREEN |
 | Шаг 3 Flash cascade #1/#2 (20с+20с) | **`[x]`** GREEN |
 | Шаг 4 Messenger + SMS fallback | **`[x]`** GREEN (FE; backend messenger — Шаг 5) |
-| Шаги 5–6 (MessengerClient / rate limit) | **`[ ]`** |
+| Шаг 5 Backend messenger + flag + 4-digit OTP | **`[x]`** |
+| Шаг 6 rate limits 20/30/60 | **`[ ]`** |
 | Push / Fly / MCP | **`[ ]`** |
 | Апрув заказчика | **`[ ]`** |
 
 **ТЗ:** [`Рефакторинг воронки авторизации…`](../milestones/veha_2/requirements/customer_tasks/Рефакторинг%20воронки%20авторизации%20PWA%20Каскад%20Flash%20Call%20Messenger%20SMS.md)  
-**Дальше:** Шаг 5 — `Shop::MessengerClient` + channel `messenger` + delivery error flag.
+**Дальше:** Шаг 6 — кулдауны / rate limits 20 / 30 / 60 и их прогон.
 
 ### CODE:BLACK T-Kassa SBP · PWA lifecycle (2026-07-27)
 
