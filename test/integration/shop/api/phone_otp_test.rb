@@ -87,9 +87,12 @@ class Shop::Api::PhoneOtpTest < ActionDispatch::IntegrationTest
   end
 
   test "send messenger delivery error returns messenger_delivery_error flag" do
-    Shop::MessengerClient.stub(:deliver_otp!, lambda { |_to:, _code:|
+    original = Shop::MessengerClient.method(:deliver_otp!)
+    Shop::MessengerClient.define_singleton_method(:deliver_otp!) do |to:, code:|
       raise Shop::MessengerClient::Error.new("Messenger delivery failed", http_status: 503)
-    }) do
+    end
+
+    begin
       post "/shop/api/phone_otp/send",
         headers: shop_tenant_headers(@tenant.id),
         params: { phone: @phone, channel: "messenger" },
@@ -98,6 +101,8 @@ class Shop::Api::PhoneOtpTest < ActionDispatch::IntegrationTest
       assert_response :bad_gateway
       assert_equal true, response.parsed_body["messenger_delivery_error"]
       assert_equal "messenger_delivery_error", response.parsed_body["error_code"]
+    ensure
+      Shop::MessengerClient.define_singleton_method(:deliver_otp!, original)
     end
   end
 

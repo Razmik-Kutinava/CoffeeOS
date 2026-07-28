@@ -9,6 +9,13 @@ module Shop
           channel: params.require(:channel)
         )
         render json: { ok: true, phone: phone, channel: params[:channel].to_s }
+      rescue Shop::PhoneOtp::MessengerDeliveryError => e
+        status = provider_http_status(e)
+        render json: {
+          error: e.message,
+          messenger_delivery_error: true,
+          error_code: "messenger_delivery_error"
+        }, status: status
       rescue Shop::PhoneOtp::Error => e
         render json: { error: e.message }, status: :unprocessable_entity
       rescue Shop::SmsClient::Error, Shop::FlashCallClient::Error => e

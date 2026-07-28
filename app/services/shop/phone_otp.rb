@@ -4,10 +4,19 @@ module Shop
   class PhoneOtp
     class Error < StandardError; end
 
+    class MessengerDeliveryError < Error
+      attr_reader :http_status
+
+      def initialize(message, http_status: nil)
+        super(message)
+        @http_status = http_status
+      end
+    end
+
     CODE_TTL = 10.minutes
     MAX_ATTEMPTS = 5
     COOLDOWN = 60.seconds
-    CHANNELS = %w[sms flash_call].freeze
+    CHANNELS = %w[sms flash_call messenger].freeze
 
     def self.send_code!(phone:, channel:)
       new.send_code!(phone: phone, channel: channel)
@@ -20,7 +29,7 @@ module Shop
     def send_code!(phone:, channel:)
       normalized = PhoneNormalizer.normalize!(phone)
       ch = channel.to_s.strip
-      raise Error, "Выберите SMS или звонок" unless CHANNELS.include?(ch)
+      raise Error, "Выберите SMS, мессенджер или звонок" unless CHANNELS.include?(ch)
 
       enforce_cooldown!(normalized)
 
@@ -40,6 +49,8 @@ module Shop
       normalized
     rescue PhoneNormalizer::Error => e
       raise Error, e.message
+    rescue MessengerClient::Error => e
+      raise MessengerDeliveryError.new(e.message, http_status: e.http_status)
     rescue SmsClient::Error, FlashCallClient::Error => e
       raise Error, e.message
     end
@@ -94,14 +105,18 @@ module Shop
       end
 
       code = generate_sms_code
-      SmsClient.deliver_otp!(to: phone, code: code)
+      if channel == "messenger"
+        MessengerClient.deliver_otp!(to: phone, code: code)
+      else
+        SmsClient.deliver_otp!(to: phone, code: code)
+      end
       code
     end
 
     def generate_sms_code
-      return "123456" if Rails.env.test?
+      return "1234" if Rails.env.test?
 
-      format("%06d", SecureRandom.random_number(1_000_000))
+      format("%04d", SecureRandom.random_number(10_000))
     end
 
     def same_code?(stored, input)
