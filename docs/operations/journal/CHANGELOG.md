@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-07-28 — ops: MCP Aram phone after Fly v400
+
+- MCP PASS: Point A Ленин + «повторить»; профиль `+79639124847` Подтвержден
+- Скрины `03_fly_v400_point_a_…` / `04_fly_v400_profile_phone_…`
+- Артефакт `fly_mcp_aram_phone_v400_2026-07-28.json`
+
 ## 2026-07-28 — ops: link Aram real phone +79639124847 (no deploy)
 
 - Владелец: настоящий `+7 963 912 4847` (тестовые 900… — не его)

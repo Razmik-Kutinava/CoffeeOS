@@ -1,0 +1,35 @@
+{
+  "date": "2026-07-28",
+  "task": "aram_real_phone_mcp_after_deploy",
+  "fly_version": 400,
+  "url_point_a": "https://coffeeos.fly.dev/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "auth": "MobileSessionIssuer refresh_token injected + silent refresh CSRF",
+  "customer": {
+    "id": "2bc37279-8d23-456b-a2a5-4c28f584634c",
+    "email": "aramfifa100@gmail.com",
+    "phone": "+79639124847",
+    "phone_verified": true
+  },
+  "checks": [
+    {
+      "id": "point_a_header",
+      "result": "PASS",
+      "detail": "Москва, ул. Ленина, 10 · Профиль › 2bc3…4c · секция повторить"
+    },
+    {
+      "id": "profile_phone",
+      "result": "PASS",
+      "detail": "#/profile: email aramfifa100@gmail.com Подтвержден; phone +79639124847 Подтвержден"
+    },
+    {
+      "id": "session_refresh_api",
+      "result": "PASS",
+      "detail": "POST /shop/api/session/refresh → 200 phone=+79639124847 id=2bc37279-…"
+    }
+  ],
+  "screenshots": [
+    "screenshots/03_fly_v400_point_a_lenin_repeat.png",
+    "screenshots/04_fly_v400_profile_phone_79639124847.png"
+  ],
+  "result": "PASS"
+}

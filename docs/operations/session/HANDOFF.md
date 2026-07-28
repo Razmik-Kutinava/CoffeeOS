@@ -15,6 +15,7 @@
 
 **Point A:** https://coffeeos.fly.dev/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789  
 **Артефакт:** [`fly_aram_real_phone_link_2026-07-28.json`](../milestones/veha_2/artifacts/aram_phone_restore/fly_aram_real_phone_link_2026-07-28.json)  
+**MCP после deploy v400:** [`fly_mcp_aram_phone_v400_2026-07-28.json`](../milestones/veha_2/artifacts/aram_phone_restore/fly_mcp_aram_phone_v400_2026-07-28.json) · скрины `03_…` Point A · `04_…` профиль `+79639124847`  
 **ТЗ:** [`Вернуть номер телефона Арама…`](../milestones/veha_2/requirements/customer_tasks/Вернуть%20номер%20телефона%20Арама%20в%20профиле.md)
 
 ### Repeat recommendations missing (2026-07-28)
