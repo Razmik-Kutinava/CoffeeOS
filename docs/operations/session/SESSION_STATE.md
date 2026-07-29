@@ -2,11 +2,11 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-29 (PHASE 2 BUILD · Шаг 3 RED · T-Bank inline payment)
+**Дата:** 2026-07-29 (PHASE 2 BUILD · Шаг 3 GREEN · T-Bank inline payment)
 
 | Сейчас | Дальше |
 |--------|--------|
-| SPEC `[x]` · todo.md | **Шаг 3 RED** (webhook race: не даунгрейдить) |
+| SPEC `[x]` · todo.md | **Шаг 3 GREEN** (webhook race: не даунгрейдить) |
 | Fly Test sticky: код local PASS | push + fly deploy (отдельный апрув) |
 
 ### Сессия 2026-07-29 (PHASE 1 SPEC · T-Bank inline payment button)
@@ -14,7 +14,7 @@
 - ТЗ → `todo.md`: 8 атомарных шагов + маппинг путей на Rails/Svelte
 - Gaps: PayType O, Confirm, status GetState+Confirm, FE FSM тайминги ТЗ
 - `tbank_adapter.rb` >200 — GREEN: PayType O + Confirm + status sync
-- Дальше: RED Шаг 3 (Webhook vs polling race)
+- Дальше: Шаг 4 RED (Frontend: FSM IDLE→PROCESSING + polling/rotation)
 
 ### Сессия 2026-07-29 (PHASE 0 intake · T-Bank inline payment button)
 

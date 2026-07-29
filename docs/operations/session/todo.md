@@ -2,7 +2,7 @@
 
 **ТЗ:** [`customer_tasks/Интеграция inline-оплаты Т-Банка с динамическими статусами внутри кнопки.md`](../milestones/veha_2/requirements/customer_tasks/Интеграция%20inline-оплаты%20Т-Банка%20с%20динамическими%20статусами%20внутри%20кнопки.md)  
 **Артефакты:** `artifacts/tbank_inline_payment_button_statuses/`  
-**Фаза:** PHASE 2 BUILD · Шаг 3 RED (in progress)
+**Фаза:** PHASE 2 BUILD · Шаг 3 GREEN (готово)
 
 ---
 
@@ -76,9 +76,8 @@ bin/rails test test/integration/shop/api/qa_section_2_3_payment_cart_test.rb \
   Статус: GREEN (PASS)
 - [x] **Шаг 2** — GET status → GetState → auto Confirm на AUTHORIZED → CONFIRMED  
   Тесты: adapter Confirm + sync/status integration
-- [ ] **Шаг 3** — Webhook NotificationURL финализирует БД; race с polling  
+- [x] **Шаг 3** — Webhook NotificationURL финализирует БД; race с polling  
   Тесты: callback + sync idempotency
-  Статус: RED (race: устаревший AUTHORIZED не должен даунгрейдить succeeded)
 
 ### Frontend
 - [ ] **Шаг 4** — IDLE → PROCESSING («Ещё чуть-чуть…»), disabled+spinner, poll 1500 мс

@@ -4,6 +4,9 @@ module Callbacks
   # Обработка callback оплаты: Payment, PaymentStatusLog, перевод Order pending_payment → accepted.
   class PaymentStatusUpdater
     class InvalidStatusError < StandardError; end
+    TERMINAL_STATUSES = %w[
+      succeeded failed refunded partially_refunded
+    ].freeze
 
     def initialize(payment:, new_status:, provider_data: {}, provider_payment_id: nil, note: nil)
       @payment = payment
@@ -21,13 +24,19 @@ module Callbacks
       old_status = @payment.status
 
       @payment.with_lock do
-        @payment.status = @new_status
+        downgrade_from_terminal = TERMINAL_STATUSES.include?(old_status) &&
+          !TERMINAL_STATUSES.include?(@new_status)
+
+        # Если пришёл устаревший webhook-статус (например AUTHORIZED после CONFIRMED),
+        # не даём payment “даунгрейдиться” из terminal-состояния.
+        @payment.status = @new_status unless downgrade_from_terminal
         @payment.provider_data = (@payment.provider_data || {}).merge(@provider_data)
         @payment.provider_payment_id = @provider_payment_id if @provider_payment_id.present?
-        @payment.paid_at = Time.current if @new_status == "succeeded" && @payment.paid_at.blank?
+        status_for_paid_at = downgrade_from_terminal ? old_status : @new_status
+        @payment.paid_at = Time.current if status_for_paid_at == "succeeded" && @payment.paid_at.blank?
         @payment.save!
 
-        if old_status != @new_status
+        if !downgrade_from_terminal && old_status != @new_status
           PaymentStatusLog.create!(
             payment: @payment,
             status_from: old_status,
