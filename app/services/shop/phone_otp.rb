@@ -17,44 +17,36 @@ module Shop
     MAX_ATTEMPTS = 5
     COOLDOWNS = {
       "flash_call" => 20.seconds,
-      "messenger" => 30.seconds,
       "sms" => 60.seconds
     }.freeze
-    CHANNELS = %w[sms flash_call messenger].freeze
+    CHANNELS = %w[sms flash_call].freeze
 
-    def self.send_code!(phone:, channel:)
-      new.send_code!(phone: phone, channel: channel)
+    def self.send_code!(phone:, channel:, ip: nil)
+      new.send_code!(phone: phone, channel: channel, ip: ip)
     end
 
     def self.verify!(phone:, code:)
       new.verify!(phone: phone, code: code)
     end
 
-    def send_code!(phone:, channel:)
+    def send_code!(phone:, channel:, ip: nil)
       normalized = PhoneNormalizer.normalize!(phone)
       ch = channel.to_s.strip
-      raise Error, "Выберите SMS, мессенджер или звонок" unless CHANNELS.include?(ch)
+      raise Error, "Выберите SMS или звонок" unless CHANNELS.include?(ch)
 
-      enforce_cooldown!(normalized, ch)
+      enforce_cooldown!(normalized, ch) unless ch == "sms"
 
-      otp_code = nil
-      ActiveRecord::Base.transaction do
-        MobileOtpCode.where(phone: normalized, is_used: false).update_all(is_used: true)
-        otp_code = generate_and_deliver!(phone: normalized, channel: ch)
-        MobileOtpCode.create!(
-          phone: normalized,
-          code: otp_code,
-          expires_at: CODE_TTL.from_now,
-          attempts: 0,
-          is_used: false
-        )
+      if ch == "flash_call"
+        send_flash_call!(normalized, ip)
+      else
+        send_sms_with_existing_code!(normalized, ip)
       end
 
       normalized
     rescue PhoneNormalizer::Error => e
       raise Error, e.message
-    rescue MessengerClient::Error => e
-      raise MessengerDeliveryError.new(e.message, http_status: e.http_status)
+    rescue SmsRuClient::Error => e
+      raise Error, e.message
     rescue SmsClient::Error, FlashCallClient::Error => e
       raise Error, e.message
     end
@@ -101,22 +93,29 @@ module Shop
       raise Error, "Подождите #{seconds} секунд перед повторной отправкой кода"
     end
 
-    def generate_and_deliver!(phone:, channel:)
-      if channel == "flash_call"
-        code = FlashCallClient.request_call!(to: phone)
-        code = code.to_s.gsub(/\D/, "").last(4)
-        raise Error, "Не удалось получить код звонка" unless code.length == 4
+    def send_flash_call!(phone, ip)
+      otp_code = SmsRuClient.request_flash_call!(phone: phone, ip: ip)
+      otp_code = otp_code.to_s.gsub(/\D/, "").last(4)
+      raise Error, "Не удалось получить код звонка" unless otp_code.length == 4
 
-        return code
+      ActiveRecord::Base.transaction do
+        MobileOtpCode.where(phone: phone, is_used: false).update_all(is_used: true)
+        MobileOtpCode.create!(
+          phone: phone,
+          code: otp_code,
+          expires_at: CODE_TTL.from_now,
+          attempts: 0,
+          is_used: false
+        )
       end
+    end
 
-      code = generate_sms_code
-      if channel == "messenger"
-        MessengerClient.deliver_otp!(to: phone, code: code)
-      else
-        SmsClient.deliver_otp!(to: phone, code: code)
-      end
-      code
+    # SMS переиспользует последний активный код (не генерирует новый)
+    def send_sms_with_existing_code!(phone, ip)
+      record = MobileOtpCode.active.where(phone: phone).order(created_at: :desc).first
+      raise Error, "Нет активного кода. Запросите звонок сначала." unless record
+
+      SmsRuClient.send_sms!(phone: phone, code: record.code, ip: ip)
     end
 
     def generate_sms_code

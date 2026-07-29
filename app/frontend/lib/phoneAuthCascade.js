@@ -1,13 +1,11 @@
-/** Каскад OTP: Flash×2 → Messenger → SMS. */
+/** Каскад OTP: Flash×2 → SMS (без Messenger). */
 
 export const FLASH_WAIT_SEC = 20
-export const MESSENGER_WAIT_SEC = 30
 export const SMS_COOLDOWN_SEC = 60
 
 export const CASCADE_PHASE = Object.freeze({
   FLASH_1: "flash_1",
   FLASH_2: "flash_2",
-  MESSENGER: "messenger",
   SMS: "sms"
 })
 
@@ -15,7 +13,6 @@ export const FLASH_HINT =
   "Введите последние 4 цифры номера, с которого вам звонят. На звонок отвечать не нужно."
 
 export const RETRY_FLASH_LABEL = "Запросить звонок еще раз"
-export const MESSENGER_BTN_LABEL = "Получить код в WhatsApp / Telegram"
 export const SMS_BTN_LABEL = "Отправить код в СМС"
 export const SMS_SENT_HINT = "Отправили 4-значный код в СМС"
 
@@ -30,8 +27,8 @@ export function waitingCallLabel(secondsLeft) {
   return `Ждем звонок... ${formatMmSs(secondsLeft)}`
 }
 
-export function messengerSentHint(phoneDisplay) {
-  return `Отправили 4-значный код в мессенджер на номер ${phoneDisplay || ""}`.trim()
+export function smsSentHint(phoneDisplay) {
+  return `Отправили 4-значный код в СМС на номер ${phoneDisplay || ""}`.trim()
 }
 
 export function initialFlashCascade() {
@@ -44,7 +41,7 @@ export function initialFlashCascade() {
 
 /**
  * Тик каскада (1с).
- * @returns {{ phase: string, secondsLeft: number, lastChannel: string|null, autoSend: string|null }}
+ * Flash #1 (20с) → Flash #2 (20с) → SMS
  */
 export function tickFlashCascade(state) {
   const phase = state?.phase || CASCADE_PHASE.FLASH_1
@@ -66,14 +63,11 @@ export function tickFlashCascade(state) {
     }
     if (phase === CASCADE_PHASE.FLASH_2) {
       return {
-        phase: CASCADE_PHASE.MESSENGER,
+        phase: CASCADE_PHASE.SMS,
         secondsLeft: 0,
         lastChannel,
-        autoSend: "messenger"
+        autoSend: "sms"
       }
-    }
-    if (phase === CASCADE_PHASE.MESSENGER) {
-      return { phase: CASCADE_PHASE.SMS, secondsLeft: 0, lastChannel, autoSend: null }
     }
     return { phase: CASCADE_PHASE.SMS, secondsLeft: 0, lastChannel, autoSend: null }
   }
@@ -82,13 +76,8 @@ export function tickFlashCascade(state) {
 }
 
 export function showRetryFlashButton(phaseOrRound) {
-  // совместимость: число round ≥ 2 или phase FLASH_2
   if (typeof phaseOrRound === "number") return phaseOrRound >= 2
   return phaseOrRound === CASCADE_PHASE.FLASH_2
-}
-
-export function showMessengerButton(phase, secondsLeft) {
-  return phase === CASCADE_PHASE.MESSENGER && Number(secondsLeft) <= 0
 }
 
 export function showSmsButton(phase) {
@@ -103,14 +92,6 @@ export function afterManualFlashResend(_flashRound) {
   }
 }
 
-export function afterMessengerSend() {
-  return {
-    phase: CASCADE_PHASE.MESSENGER,
-    secondsLeft: MESSENGER_WAIT_SEC,
-    lastChannel: "messenger"
-  }
-}
-
 export function afterSmsSend() {
   return {
     phase: CASCADE_PHASE.SMS,
@@ -119,27 +100,14 @@ export function afterSmsSend() {
   }
 }
 
-/** Ошибка доставки мессенджера → сразу SMS. */
-export function afterMessengerDeliveryError() {
-  return {
-    phase: CASCADE_PHASE.SMS,
-    secondsLeft: 0,
-    lastChannel: null
-  }
-}
-
 export function cascadeHint({ lastChannel, phoneDisplay }) {
-  if (lastChannel === "messenger") return messengerSentHint(phoneDisplay)
-  if (lastChannel === "sms") return SMS_SENT_HINT
+  if (lastChannel === "sms") return smsSentHint(phoneDisplay)
   return FLASH_HINT
 }
 
 export function cascadeTimerLabel({ phase, secondsLeft, lastChannel }) {
   if (phase === CASCADE_PHASE.FLASH_1 || phase === CASCADE_PHASE.FLASH_2) {
     return waitingCallLabel(secondsLeft)
-  }
-  if (phase === CASCADE_PHASE.MESSENGER && lastChannel === "messenger" && secondsLeft > 0) {
-    return `Ждем код в мессенджере... ${formatMmSs(secondsLeft)}`
   }
   if (phase === CASCADE_PHASE.SMS && lastChannel === "sms" && secondsLeft > 0) {
     return `Повтор SMS через ${formatMmSs(secondsLeft)}`
