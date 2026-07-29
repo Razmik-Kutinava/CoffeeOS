@@ -30,6 +30,12 @@
 - CBR + `customer_tasks/README` — строка индекса
 - Код / `todo.md` не трогали — ждут go → SPEC
 
+### Сессия 2026-07-29 (PHASE 2 BUILD RED · Auth funnel Flash Call×2 → SMS.ru)
+
+- RED-тесты (3 файла): sms_ru_client_test.rb (6E), sms_ru_phone_otp_test.rb (2F+1E), cascade_smsru_test.mjs (1E)
+- Коммит: `f7313fdb` `[RED]`
+- Дальше: GREEN
+
 ### Сессия 2026-07-29 (PHASE 1 SPEC · Auth funnel Flash Call×2 → SMS.ru)
 
 - todo.md: добавлен блок “todo — Auth funnel cascade Flash Call×2 → SMS.ru”
