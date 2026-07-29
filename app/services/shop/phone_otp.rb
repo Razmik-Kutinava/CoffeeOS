@@ -4,15 +4,6 @@ module Shop
   class PhoneOtp
     class Error < StandardError; end
 
-    class MessengerDeliveryError < Error
-      attr_reader :http_status
-
-      def initialize(message, http_status: nil)
-        super(message)
-        @http_status = http_status
-      end
-    end
-
     CODE_TTL = 10.minutes
     MAX_ATTEMPTS = 5
     COOLDOWNS = {
@@ -46,8 +37,6 @@ module Shop
     rescue PhoneNormalizer::Error => e
       raise Error, e.message
     rescue SmsRuClient::Error => e
-      raise Error, e.message
-    rescue SmsClient::Error, FlashCallClient::Error => e
       raise Error, e.message
     end
 
@@ -116,12 +105,6 @@ module Shop
       raise Error, "Нет активного кода. Запросите звонок сначала." unless record
 
       SmsRuClient.send_sms!(phone: phone, code: record.code, ip: ip)
-    end
-
-    def generate_sms_code
-      return "1234" if Rails.env.test?
-
-      format("%04d", SecureRandom.random_number(10_000))
     end
 
     def same_code?(stored, input)
