@@ -23,6 +23,13 @@
 - CBR + `customer_tasks/README` — строка индекса
 - Код / `todo.md` не трогали — ждут go → SPEC
 
+### Сессия 2026-07-29 (PHASE 0 intake · Auth funnel Flash Call×2 → SMS.ru)
+
+- ТЗ: `customer_tasks/Рефакторинг воронки авторизации PWA Каскад Flash Call x2 SMS на базе SMS.ru.md`
+- Артефакты: `artifacts/auth_funnel_flash_call_x2_sms_ru/`
+- CBR + `customer_tasks/README` — строка индекса
+- Код / `todo.md` не трогали — ждут go → SPEC
+
 ### Сессия 2026-07-28 (Fly Test sticky via last_ordered · GREEN local)
 
 - Diag: last_ordered=`af4f78d6` inactive · 7 orders 2026-07-28 > Point A

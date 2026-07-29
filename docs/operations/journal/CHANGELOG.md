@@ -6,6 +6,11 @@
 - Артефакты: `artifacts/tbank_inline_payment_button_statuses/`
 - Индекс CBR + `customer_tasks/README` · статус **интейк `[x]`** · SPEC ждёт go
 
+## 2026-07-29 — docs: intake customer task Flash Call×2 → SMS.ru
+- PHASE 0: ТЗ заказчика дословно → `customer_tasks/Рефакторинг воронки авторизации PWA Каскад Flash Call x2 SMS на базе SMS.ru.md`
+- Артефакты: `artifacts/auth_funnel_flash_call_x2_sms_ru/`
+- Индекс CBR + `customer_tasks/README` · статус **интейк `[x]`** · SPEC ждёт go
+
 ## 2026-07-29 — feat(payments): PayType O Init + Charge by RebillId (T-Bank inline step 1)
 
 - `Payments::TbankAdapter#init_payment` получил опциональный `pay_type` и прокидывает `PayType` в payload
