@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-07-29 — feat: SmsRuClient + PhoneOtp cascade Flash×2→SMS [GREEN]
+- `app/services/shop/sms_ru_client.rb` — единый клиент SMS.ru (flash_call /code/call + sms /sms/send)
+- `app/services/shop/phone_otp.rb` — убран messenger, flash_call через SmsRuClient, sms переиспользует код
+- `app/frontend/lib/phoneAuthCascade.js` — убрана фаза MESSENGER, каскад Flash×2→SMS за 40с
+- Тесты: 38 runs total, 0F, 0E. Регрессия shop integration PASS.
+
 ## 2026-07-29 — docs: intake T-Bank inline payment button statuses
 
 - PHASE 0: ТЗ заказчика дословно → `customer_tasks/Интеграция inline-оплаты Т-Банка с динамическими статусами внутри кнопки.md`

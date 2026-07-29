@@ -30,11 +30,19 @@
 - CBR + `customer_tasks/README` — строка индекса
 - Код / `todo.md` не трогали — ждут go → SPEC
 
+### Сессия 2026-07-29 (PHASE 2 BUILD GREEN · Auth funnel Flash Call×2 → SMS.ru)
+
+- GREEN: реализация `Shop::SmsRuClient` (flash_call /code/call + sms /sms/send + dev fallback)
+- `Shop::PhoneOtp`: убран messenger, flash_call через SmsRuClient, sms переиспользует код из flash_call
+- `phoneAuthCascade.js`: убрана фаза MESSENGER, каскад Flash×2→SMS за 40с, добавлен `smsSentHint`
+- Тесты: sms_ru_client 6/6, sms_ru_phone_otp 7/7, phone_otp 10/10, FE cascade 15/15 — все GREEN
+- Регрессия shop integration: 4 runs, 0F, 0E — PASS
+- Коммит RED: `f7313fdb`, GREEN: `b2685910`
+
 ### Сессия 2026-07-29 (PHASE 2 BUILD RED · Auth funnel Flash Call×2 → SMS.ru)
 
 - RED-тесты (3 файла): sms_ru_client_test.rb (6E), sms_ru_phone_otp_test.rb (2F+1E), cascade_smsru_test.mjs (1E)
 - Коммит: `f7313fdb` `[RED]`
-- Дальше: GREEN
 
 ### Сессия 2026-07-29 (PHASE 1 SPEC · Auth funnel Flash Call×2 → SMS.ru)
 
