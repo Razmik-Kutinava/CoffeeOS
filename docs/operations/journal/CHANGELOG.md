@@ -6,6 +6,11 @@
 - FE: `RepeatSection.svelte` — inline widget pay flow (init→poll→confirm/reject→fallback→SBP/cards)
 - Тесты FE: 17/17 PASS · BE регрессия PASS
 
+## 2026-07-29 — PHASE 3 REVIEW: T-Kassa Widget #33 (Шаги 4–7)
+- Регрессия shop/payments + tbank: PASS
+- RLS/tenant isolation: PASS
+- `bin/rubocop`: PASS
+
 ## 2026-07-29 — T-Kassa Widget One-Click + Fallback (#33) — Шаги 1–3 GREEN
 - BE: `connection_type: "Widget"` в Init DATA (`TbankInlineInit` + `TbankAdapter`)
 - BE: `POST /shop/api/payments/widget_init` — сумма из БД, 404, стандартизированные ошибки

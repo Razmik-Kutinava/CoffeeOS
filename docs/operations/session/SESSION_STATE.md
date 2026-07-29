@@ -6,8 +6,15 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| #33 Шаги 1–7 GREEN (BE+FE полный flow) | PHASE 3 REVIEW |
-| FE тесты 17/17, BE регрессия PASS | Регрессия + REVIEW |
+| #33 Шаги 1–7 GREEN (BE+FE полный flow) | PHASE 3 REVIEW done |
+| FE тесты 17/17, BE регрессия PASS | Регрессия PASS (shop/payments + RLS + rubocop) |
+
+### Сессия 2026-07-29 (PHASE 3 REVIEW · #33)
+
+- Регрессия оплаты (PASS): `bin/rails test test/integration/shop/api/qa_section_2_3_payment_cart_test.rb test/integration/shop/api/qa_section_2_3_stage5_e2e_test.rb test/services/shop/order_creator_test.rb test/controllers/callbacks/tbank_controller_test.rb test/services/payments/tbank_adapter_test.rb`
+- RLS/tenant isolation (PASS): `bin/rails test test/integration/rls_tenant_isolation_test.rb test/integration/multi_tenant_isolation_test.rb test/integration/shop/api/tenant_isolation_test.rb`
+- `bin/rubocop` (PASS)
+- ReadLints: ошибок нет
 
 ### Сессия 2026-07-29 (PHASE 2 GREEN Шаги 4–7 · T-Kassa Widget #33)
 

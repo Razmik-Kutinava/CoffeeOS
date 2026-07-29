@@ -100,8 +100,8 @@ bin/rails test test/integration/shop/api/qa_section_2_3_payment_cart_test.rb \
   Тесты: FSM integration 17/17
 
 ### REVIEW
-- [ ] Регрессия оплаты + rubocop
-- [ ] CHANGELOG / HANDOFF / SESSION_STATE итог
+- [x] Регрессия оплаты + rubocop
+- [x] CHANGELOG / HANDOFF / SESSION_STATE итог
 
 ---
 

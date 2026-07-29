@@ -12,7 +12,7 @@
 | FE: shopWidgetPayFsm.js + widgetInlinePay.js | **`[x]`** |
 | FE: InlinePayFallback.svelte + RepeatSection inline flow | **`[x]`** |
 | FE: Fallback SBP + карта+ + expanded cards | **`[x]`** |
-| PHASE 3 REVIEW | **`[ ]`** |
+| PHASE 3 REVIEW | **`[x]`** |
 
 **ТЗ:** [`Интеграция виджета быстрой оплаты Т-Кассы…`](../milestones/veha_2/requirements/customer_tasks/Интеграция%20виджета%20быстрой%20оплаты%20Т-Кассы%20и%20One-Click%20сценария%20в%20PWA.md)  
 **Дальше:** PHASE 3 REVIEW (регрессия + rubocop + финальный отчёт).
