@@ -2,11 +2,11 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-29 (PHASE 0 intake · T-Kassa Widget One-Click + Fallback)
+**Дата:** 2026-07-29 (PHASE 1 SPEC · T-Kassa Widget One-Click + Fallback)
 
 | Сейчас | Дальше |
 |--------|--------|
-| Intake #33 Widget One-Click `[x]` | **PHASE 1 SPEC** (todo.md) ждёт go |
+| SPEC #33 `[x]` · todo.md 7 шагов | **PHASE 2 RED** ждёт go |
 | T-Bank inline (#32): Шаг 1 GREEN | Шаг 2+ GREEN |
 
 ### Сессия 2026-07-29 (PHASE 0 intake · T-Kassa Widget One-Click + Fallback)

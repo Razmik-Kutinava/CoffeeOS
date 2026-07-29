@@ -1,3 +1,112 @@
+# todo — T-Kassa Widget One-Click + Fallback (#33)
+
+**ТЗ:** [`customer_tasks/Интеграция виджета быстрой оплаты Т-Кассы и One-Click сценария в PWA.md`](../milestones/veha_2/requirements/customer_tasks/Интеграция%20виджета%20быстрой%20оплаты%20Т-Кассы%20и%20One-Click%20сценария%20в%20PWA.md)  
+**Артефакты:** `artifacts/tbank_widget_oneclick_fallback/`  
+**Фаза:** PHASE 1 SPEC · ждём RED
+
+---
+
+## SPEC (канон CoffeeOS)
+
+### Бизнес-цель
+Inline «оплатить в клик» на карточке повтора с fallback при отказе карты: инлайн-плашка «статусы от банка» → кнопки «СБП» / «карта +» → expanded сохранённые карты / форма новой — всё без ухода со страницы.
+
+### Глобальные ограничения (из ТЗ)
+- Сумма заказа **только** из БД по orderId, не из клиентского payload.
+- `orderId` и контекст корзины **не** инвалидировать при fallback.
+- `"connection_type": "Widget"` обязателен в `DATA` метода `Init` Т-Кассы.
+- `TerminalKey` / секреты — только ENV backend, не FE.
+
+### Что уже есть (не дублировать)
+- `Payments::TbankInlineInit` — Init с PayType "O" / Charge по RebillId
+- `Payments::TbankAdapter` — Init, Charge, GetState, Confirm, Token SHA-256
+- `Shop::OneClickPaymentService` — one-click оплата через RebillId
+- `Shop::NewCardPaymentService` — оплата новой картой
+- `RepeatSection.svelte` — карточки «повторить» + кнопка «оплатить в 1 клик»
+- `PaymentMethodsSheet.svelte` — bottom sheet выбора метода (saved cards, new card, SBP)
+- `frequentRepeatStore.js` → `repeatPayOneClickItem()` — текущий one-click flow (уходит в checkout)
+- `shopSbpPay.js` — SBP deep link flow
+- `shopPayFsm.js` — FSM оплаты (DEFAULT→PROCESSING→CONFIRMED/REJECTED)
+- `shopInlinePayFsm.js` (#32) — inline FSM для кнопки (ротация текстов, poll)
+- `CheckoutPayButton.svelte`, `NewCardForm.svelte`
+
+### Gaps (делать)
+1. **BE: `connection_type: "Widget"` в Init** — `TbankInlineInit` / `TbankAdapter#init_payment` не передаёт `DATA.connection_type`. Добавить опциональный param.
+2. **BE: widget-endpoint** — `POST /shop/api/payments/widget_init` (или расширить существующий) — сумма из БД, connection_type, JSON ответ `{ paymentUrl }`.
+3. **FE: inline pay flow в RepeatSection** — сейчас `onPayCardClick()` → checkout redirect. Нужно: инлайн Init/Charge, плашка «статусы от банка», poll status.
+4. **FE: fallback UI** — при REJECTED/ошибке карты: кнопки «СБП» / «карта +» прямо под карточкой.
+5. **FE: expanded cards** — при клике «карта +»: список сохранённых карт из `user_cards` API + форма новой карты с toggle «сохранить для будущих заказов».
+6. **FE: SBP fallback** — при клике «СБП»: SBP deep link flow для того же orderId.
+7. **FE: Widget SDK inject** — ленивая загрузка `integrationjs.tbank.ru` script, `PaymentIntegration.init()`.
+
+### Маппинг путей (CoffeeOS)
+
+| ТЗ (шаблон) | CoffeeOS |
+|---|---|
+| Backend init | `app/services/payments/tbank_inline_init.rb` (+ `tbank_adapter.rb`) |
+| BE endpoint | `app/controllers/shop/api/payments_controller.rb` или новый `widget_payments_controller.rb` |
+| FE repeat section | `app/frontend/components/RepeatSection.svelte` |
+| FE inline pay FSM | `app/frontend/lib/shopWidgetPayFsm.js` (новый) |
+| FE fallback UI | `app/frontend/components/InlinePayFallback.svelte` (новый) |
+| FE payment methods | `app/frontend/components/PaymentMethodsSheet.svelte` (reuse) |
+| Tests BE | `test/integration/shop/api/payment_widget_init_test.rb` + `test/services/payments/tbank_inline_init_test.rb` |
+| Tests FE | `test/javascript/shop_widget_pay_fsm_test.mjs` |
+
+### Архитектура GREEN (по шагам)
+
+| Шаг | Слой | Код (цель) | Тесты |
+|-----|------|------------|-------|
+| 1 | BE | `connection_type: "Widget"` в Init DATA + widget endpoint (сумма из БД, 404 missing order) | `tbank_inline_init_test.rb`, `payment_widget_init_test.rb` |
+| 2 | BE | Обработка ответа Init → JSON `{ paymentUrl }`, стандартизированные ошибки (400/500) | integration test |
+| 3 | FE | SDK inject + `shopWidgetPayFsm.js`: IDLE→PROCESSING→SUCCESS/ERROR | `shop_widget_pay_fsm_test.mjs` |
+| 4 | FE | RepeatSection: inline pay → плашка «статусы от банка» + poll status | unit/integration |
+| 5 | FE | Fallback: REJECTED → кнопки «СБП» / «карта +» inline | unit |
+| 6 | FE | «карта +» → expanded saved cards + new card form с toggle | unit |
+| 7 | FE | «СБП» → SBP deep link flow (reuse `shopSbpPay.js`) + iOS деградация | unit |
+
+### Лимиты файлов / RLS
+- `tbank_adapter.rb` ≈ 238 строк (>200): **не раздувать** — `connection_type` param через kwargs, без нового метода.
+- `RepeatSection.svelte` ≈ 150 строк: fallback UI — отдельный компонент `InlinePayFallback.svelte`.
+- Tenant: widget_init — только с shop tenant context (`Current.tenant_id`).
+
+### Регрессия зоны
+```
+bin/rails test test/integration/shop/api/qa_section_2_3_payment_cart_test.rb \
+  test/integration/shop/api/qa_section_2_3_stage5_e2e_test.rb \
+  test/services/shop/order_creator_test.rb \
+  test/controllers/callbacks/tbank_controller_test.rb \
+  test/services/payments/tbank_adapter_test.rb
+```
++ JS: `node --test test/javascript/shop_widget_pay_fsm_test.mjs`
+
+---
+
+## Чеклист TDD (атомарно)
+
+### Backend
+- [ ] **Шаг 1** — `connection_type: "Widget"` в Init DATA + widget endpoint `POST /shop/api/payments/widget_init` (сумма из БД, 404)  
+  Тесты: `tbank_inline_init_test.rb`, `payment_widget_init_test.rb`
+- [ ] **Шаг 2** — Ответ Init → JSON `{ paymentUrl }` + стандартизированные ошибки  
+  Тесты: integration test
+
+### Frontend
+- [ ] **Шаг 3** — SDK inject `integrationjs.tbank.ru` + `shopWidgetPayFsm.js` (IDLE→PROCESSING→SUCCESS/ERROR)  
+  Тесты: `shop_widget_pay_fsm_test.mjs`
+- [ ] **Шаг 4** — RepeatSection: inline pay click → плашка «статусы от банка» + disabled + poll  
+  Тесты: unit
+- [ ] **Шаг 5** — Fallback: REJECTED → кнопки «СБП» / «карта +» inline под карточкой  
+  Тесты: unit
+- [ ] **Шаг 6** — «карта +» → expanded saved cards list + NewCardForm с toggle  
+  Тесты: unit
+- [ ] **Шаг 7** — «СБП» → SBP deep link + iOS деградация  
+  Тесты: unit
+
+### REVIEW
+- [ ] Регрессия оплаты + rubocop
+- [ ] CHANGELOG / HANDOFF / SESSION_STATE итог
+
+---
+
 # todo — T-Bank inline payment + button statuses
 
 **ТЗ:** [`customer_tasks/Интеграция inline-оплаты Т-Банка с динамическими статусами внутри кнопки.md`](../milestones/veha_2/requirements/customer_tasks/Интеграция%20inline-оплаты%20Т-Банка%20с%20динамическими%20статусами%20внутри%20кнопки.md)  
