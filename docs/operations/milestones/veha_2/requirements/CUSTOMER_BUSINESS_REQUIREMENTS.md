@@ -115,6 +115,7 @@
 | Auth funnel cascade Flash→Messenger→SMS | **Витрина / PWA** — 2-экранный wizard + каскад Flash Call×2 → Messenger → SMS (без Email/радио) | [ТЗ](customer_tasks/Рефакторинг%20воронки%20авторизации%20PWA%20Каскад%20Flash%20Call%20Messenger%20SMS.md) · [`artifacts/auth_funnel_cascade_flash_messenger_sms/`](../artifacts/auth_funnel_cascade_flash_messenger_sms/) | **MCP PASS `[x]`** 2026-07-28 · Fly v397 · апрув `[ ]` |
 | Repeat recommendations missing | **Витрина** — пропал блок «повторить»/рекомендации (залипание на Fly Overnight) | [ТЗ](customer_tasks/Пропали%20рекомендации%20повторить%20на%20витрине.md) · [`artifacts/repeat_recommendations_missing/`](../artifacts/repeat_recommendations_missing/) | **MCP PASS `[x]`** 2026-07-28 · Fly v399 · апрув `[ ]` |
 | Aram phone restore | **Витрина / профиль** — настоящий `+79639124847` + merge оплат Point A | [ТЗ](customer_tasks/Вернуть%20номер%20телефона%20Арама%20в%20профиле.md) · [`artifacts/aram_phone_restore/`](../artifacts/aram_phone_restore/) | **prod link PASS `[x]`** 2026-07-28 · no deploy · апрув `[ ]` |
+| T-Bank inline payment button | **Эквайринг / PWA** — inline-оплата без redirect + динамические статусы кнопки (Init/Charge/GetState/Confirm + polling) | [ТЗ](customer_tasks/Интеграция%20inline-оплаты%20Т-Банка%20с%20динамическими%20статусами%20внутри%20кнопки.md) · [`artifacts/tbank_inline_payment_button_statuses/`](../artifacts/tbank_inline_payment_button_statuses/) | **интейк `[x]`** 2026-07-29 · SPEC `[ ]` ждёт go |
 
 > **B1.8 (не забыть):** сейчас письма с **подтверждённого личного sender** в Brevo. Когда будет **свой домен** — завести **кофейную почту** (напр. `noreply@бренд.ru`), аутентифицировать домен в Brevo, обновить `MAIL_FROM` + secrets. Код OTP/ActionMailer менять не нужно.
 
@@ -156,6 +157,7 @@
 | 29 | **Auth funnel cascade** | 2-экранный wizard авторизации: Flash Call×2 → Messenger → SMS | **MCP PASS `[x]`** 2026-07-28 · Fly v397 | [Рефакторинг воронки авторизации…](customer_tasks/Рефакторинг%20воронки%20авторизации%20PWA%20Каскад%20Flash%20Call%20Messenger%20SMS.md) |
 | 30 | **Repeat recommendations missing** | Пропал блок «повторить» на витрине (Fly Overnight) | **MCP PASS `[x]`** 2026-07-28 · Fly v399 | [Пропали рекомендации…](customer_tasks/Пропали%20рекомендации%20повторить%20на%20витрине.md) |
 | 31 | **Aram phone restore** | Настоящий `+79639124847` + merge donor оплат | **prod link PASS `[x]`** 2026-07-28 · no deploy | [Вернуть номер телефона Арама…](customer_tasks/Вернуть%20номер%20телефона%20Арама%20в%20профиле.md) |
+| 32 | **T-Bank inline payment button** | Inline-оплата без redirect + state machine кнопки (Init/Charge/Confirm + polling) | **интейк `[x]`** 2026-07-29 · SPEC `[ ]` ждёт go | [Интеграция inline-оплаты Т-Банка…](customer_tasks/Интеграция%20inline-оплаты%20Т-Банка%20с%20динамическими%20статусами%20внутри%20кнопки.md) |
 
 
 ---

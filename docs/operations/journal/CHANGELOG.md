@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-07-29 — docs: intake T-Bank inline payment button statuses
+
+- PHASE 0: ТЗ заказчика дословно → `customer_tasks/Интеграция inline-оплаты Т-Банка с динамическими статусами внутри кнопки.md`
+- Артефакты: `artifacts/tbank_inline_payment_button_statuses/`
+- Индекс CBR + `customer_tasks/README` · статус **интейк `[x]`** · SPEC ждёт go
+
 ## 2026-07-28 — fix(shop): bounce inactive last_ordered (Fly Test sticky)
 
 - Root cause: у Арама `last_ordered` = inactive Fly Overnight (7 заказов свежее Point A) → шапка «ул. Fly Test»

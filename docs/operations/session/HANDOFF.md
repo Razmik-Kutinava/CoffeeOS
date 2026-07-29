@@ -1,8 +1,20 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-28 (**Fly Test sticky fix · local PASS · ждём deploy**)  
+**Дата:** 2026-07-29 (**PHASE 0 intake · T-Bank inline payment button**)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev · **Fly:** v400  
+
+### T-Bank inline payment + button statuses (2026-07-29)
+
+| Что | Статус |
+|-----|--------|
+| Intake ТЗ + CBR + артефакты | **`[x]`** |
+| PHASE 1: SPEC (`todo.md`) | **`[ ]`** ждёт go |
+| Код / RED–GREEN | **`[ ]`** |
+
+**ТЗ:** [`Интеграция inline-оплаты Т-Банка…`](../milestones/veha_2/requirements/customer_tasks/Интеграция%20inline-оплаты%20Т-Банка%20с%20динамическими%20статусами%20внутри%20кнопки.md)  
+**Артефакты:** [`tbank_inline_payment_button_statuses/`](../milestones/veha_2/artifacts/tbank_inline_payment_button_statuses/)  
+**Дальше:** go → PHASE 1 SPEC (8 шагов TDD из ТЗ).
 
 ### Fly Test sticky / inactive last_ordered (2026-07-28)
 

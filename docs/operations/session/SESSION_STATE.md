@@ -2,12 +2,19 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-28 (fix inactive last_ordered Fly Test · local PASS · deploy pending)
+**Дата:** 2026-07-29 (PHASE 0 intake: T-Bank inline payment button)
 
 | Сейчас | Дальше |
 |--------|--------|
-| Код: не sticky inactive `last_ordered` (Fly Overnight) | **push + fly deploy** + MCP Ленин |
-| Телефон Арама `+79639124847` ок | |
+| **Интейк `[x]`** inline-оплата Т-Банка + статусы кнопки | **go** → PHASE 1: SPEC (`todo.md`) |
+| Fly Test sticky: код local PASS | push + fly deploy + MCP Ленин (отдельный апрув) |
+
+### Сессия 2026-07-29 (PHASE 0 intake · T-Bank inline payment button)
+
+- ТЗ: `customer_tasks/Интеграция inline-оплаты Т-Банка с динамическими статусами внутри кнопки.md`
+- Артефакты: `artifacts/tbank_inline_payment_button_statuses/`
+- CBR + `customer_tasks/README` — строка индекса
+- Код / `todo.md` не трогали — ждут go → SPEC
 
 ### Сессия 2026-07-28 (Fly Test sticky via last_ordered · GREEN local)
 
