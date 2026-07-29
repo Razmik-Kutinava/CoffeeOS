@@ -6,11 +6,48 @@ class Callbacks::TbankControllerTest < ActionDispatch::IntegrationTest
   include TestFactories
   include ActiveJob::TestHelper
 
+  module FakePollingConfirm
+    mattr_accessor :enabled, default: false
+
+    module Override
+      def get_payment_state(payment_id:)
+        return super unless FakePollingConfirm.enabled
+
+        {
+          "Success" => true,
+          "ErrorCode" => "0",
+          "Status" => "AUTHORIZED",
+          "PaymentId" => payment_id.to_s
+        }
+      end
+
+      def confirm_payment(payment_id:)
+        return super unless FakePollingConfirm.enabled
+
+        {
+          "Success" => true,
+          "ErrorCode" => "0",
+          "Status" => "CONFIRMED",
+          "PaymentId" => payment_id.to_s
+        }
+      end
+    end
+
+    def self.install!
+      return if @prepended
+
+      Payments::TbankAdapter.prepend(Override)
+      @prepended = true
+    end
+  end
+
   setup do
     ENV["TBANK_TERMINAL_KEY"] = "TestTerminal"
     ENV["TBANK_PASSWORD"]     = "TestPassword"
 
     @tenant = create_tenant!
+    FakePollingConfirm.install!
+    FakePollingConfirm.enabled = false
 
     @order = Order.create!(
       tenant:          @tenant,
@@ -147,6 +184,34 @@ class Callbacks::TbankControllerTest < ActionDispatch::IntegrationTest
     end
     assert_response :ok
     assert_equal "pending", @payment.reload.status
+  end
+
+  # ---------------------------------------------------------------------------
+  # Step 3 RED: race webhook vs polling
+  # ---------------------------------------------------------------------------
+
+  test "race: webhook AUTHORIZED after polling-confirm should not downgrade succeeded payment [TDD]" do
+    # 1) Polling (GET /payments/status) доводит payment до succeeded via GetState(AUTHORIZED) → Confirm
+    FakePollingConfirm.enabled = true
+    @payment.update!(status: :processing)
+
+    get(
+      "/shop/api/payments/status/#{@order.id}",
+      headers: { "X-Shop-Tenant" => @tenant.id.to_s },
+      as: :json
+    )
+
+    assert_response :success
+    assert_equal "CONFIRMED", JSON.parse(response.body)["status"]
+    assert_equal "succeeded", @payment.reload.status
+
+    FakePollingConfirm.enabled = false
+
+    # 2) Затем приходит устаревший webhook AUTHORIZED — не должны “даунгрейдить” final status
+    post_notify(tbank_payload(status: "AUTHORIZED"))
+    assert_response :ok
+
+    assert_equal "succeeded", @payment.reload.status
   end
 
   # ---------------------------------------------------------------------------
