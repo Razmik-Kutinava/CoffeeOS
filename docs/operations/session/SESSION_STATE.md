@@ -2,12 +2,20 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-29 (PHASE 1 SPEC · T-Kassa Widget One-Click + Fallback)
+**Дата:** 2026-07-29 (PHASE 2 BUILD · Шаги 1–3 GREEN · T-Kassa Widget One-Click + Fallback)
 
 | Сейчас | Дальше |
 |--------|--------|
-| SPEC #33 `[x]` · todo.md 7 шагов | **PHASE 2 RED** ждёт go |
-| T-Bank inline (#32): Шаг 1 GREEN | Шаг 2+ GREEN |
+| #33 Шаги 1–3 GREEN (BE+FE FSM) | Шаг 4–7 GREEN (FE UI: repeat inline pay, fallback, cards, SBP) |
+| Регрессия оплаты 64/0 | Продолжение FE шагов |
+
+### Сессия 2026-07-29 (PHASE 2 GREEN Шаги 1–3 · T-Kassa Widget #33)
+
+- BE: `connection_type: "Widget"` kwarg в `TbankInlineInit.call` + `TbankAdapter#init_payment(data:)` → `DATA` в payload
+- BE: `POST /shop/api/payments/widget_init` — сумма из БД, 404 missing, стандартизированные ошибки
+- FE: `shopWidgetPayFsm.js` — IDLE→PROCESSING→SUCCESS/ERROR/FALLBACK (карточные ошибки → FALLBACK)
+- Тесты: unit 5/5 + integration 4/4 + FE 8/8 = **17/17 PASS**
+- Регрессия оплаты: 64 runs, 0 failures
 
 ### Сессия 2026-07-29 (PHASE 0 intake · T-Kassa Widget One-Click + Fallback)
 

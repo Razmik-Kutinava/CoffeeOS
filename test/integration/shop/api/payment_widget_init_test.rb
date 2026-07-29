@@ -37,17 +37,31 @@ class Shop::Api::PaymentWidgetInitTest < ActionDispatch::IntegrationTest
     )
   end
 
+  def with_inline_init_stub(result: nil, error: nil)
+    original = Payments::TbankInlineInit.method(:call)
+    Payments::TbankInlineInit.define_singleton_method(:call) do |**_kw|
+      raise error if error
+      result || { provider_payment_id: "pid-widget-stub" }
+    end
+    yield
+  ensure
+    Payments::TbankInlineInit.define_singleton_method(:call, original)
+  end
+
   test "[TDD] POST widget_init returns paymentUrl from T-Kassa Init with connection_type Widget" do
     order = create_order!
 
-    post "/shop/api/payments/widget_init",
-      params: { order_id: order.id },
-      headers: shop_headers,
-      as: :json
+    with_inline_init_stub do
+      post "/shop/api/payments/widget_init",
+        params: { order_id: order.id },
+        headers: shop_headers,
+        as: :json
+    end
 
     assert_response :success
     json = JSON.parse(response.body)
     assert json["paymentUrl"].present?, "ожидали paymentUrl в ответе"
+    assert_includes json["paymentUrl"], "pid-widget-stub"
   end
 
   test "[TDD] POST widget_init returns 404 for missing order" do
@@ -64,25 +78,31 @@ class Shop::Api::PaymentWidgetInitTest < ActionDispatch::IntegrationTest
   test "[TDD] POST widget_init ignores client-side amount and uses DB amount" do
     order = create_order!(amount: 500)
 
-    post "/shop/api/payments/widget_init",
-      params: { order_id: order.id, amount: 1 },
-      headers: shop_headers,
-      as: :json
+    with_inline_init_stub do
+      post "/shop/api/payments/widget_init",
+        params: { order_id: order.id, amount: 1 },
+        headers: shop_headers,
+        as: :json
+    end
 
     assert_response :success
   end
 
-  test "[TDD] POST widget_init returns standardized error on T-Kassa API failure" do
+  test "[TDD] POST widget_init returns standardized error without leaking secrets" do
     order = create_order!
 
-    post "/shop/api/payments/widget_init",
-      params: { order_id: order.id },
-      headers: shop_headers,
-      as: :json
+    api_err = Payments::TbankAdapter::ApiError.new(error_code: "501", message: "test error")
+    with_inline_init_stub(error: api_err) do
+      post "/shop/api/payments/widget_init",
+        params: { order_id: order.id },
+        headers: shop_headers,
+        as: :json
+    end
 
-    # При реальной ошибке API — ожидаем стандартизированный error без утечки деталей
-    # (этот тест GREEN пройдёт после реализации error handling)
+    assert_response :unprocessable_entity
     json = JSON.parse(response.body)
+    assert json["error"].present?
+    assert_equal "501", json["error_code"]
     refute json.key?("terminal_key"), "секреты не должны попадать в ответ"
     refute json.key?("password"), "секреты не должны попадать в ответ"
   end

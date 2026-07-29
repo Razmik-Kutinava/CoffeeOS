@@ -5,7 +5,7 @@ module Shop
     class PaymentsController < Shop::Api::BaseController
       include Shop::Api::OperatingHoursGuard
 
-      before_action :reject_orders_when_closed!, only: %i[new_card one_click sbp_init]
+      before_action :reject_orders_when_closed!, only: %i[new_card one_click sbp_init widget_init]
 
       # GET /shop/api/payments/card_config — RSA public key для CardData.
       def card_config
@@ -52,6 +52,25 @@ module Shop
         }, status: e.http_status
       end
 
+      # POST /shop/api/payments/widget_init — Widget SDK: сумма из БД, connection_type: Widget.
+      def widget_init
+        order = Order.find_by(id: params[:order_id], tenant_id: @shop_tenant.id)
+        return render json: { error: "Order not found" }, status: :not_found unless order
+
+        result = Payments::TbankInlineInit.call(
+          order: order,
+          return_base_url: ENV.fetch("TBANK_RETURN_URL", request.base_url),
+          notification_url: "#{request.base_url}/callbacks/tbank",
+          connection_type: "Widget"
+        )
+
+        render json: { paymentUrl: adapter_payment_url(result), order_id: order.id.to_s }
+      rescue Payments::TbankAdapter::ApiError => e
+        render json: { error: "Payment provider error", error_code: e.error_code }, status: :unprocessable_entity
+      rescue Payments::TbankAdapter::Error
+        render json: { error: "Payment provider unavailable" }, status: :service_unavailable
+      end
+
       # GET /shop/api/payments/status/:order_id — PENDING|CONFIRMED|REJECTED|CANCELED.
       def status
         order = Order.includes(:payments).find_by(id: params[:order_id], tenant_id: @shop_tenant.id)
@@ -75,6 +94,11 @@ module Shop
           :client_order_uuid, :card_data, :CardData, :save_card, :amount,
           :card_id, :saved_card_id, :order_id
         )
+      end
+
+      def adapter_payment_url(result)
+        pid = result[:provider_payment_id]
+        "https://securepayments.tinkoff.ru/#{pid}"
       end
 
       def render_payment_error(error)

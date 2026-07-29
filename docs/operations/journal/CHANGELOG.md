@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-07-29 — T-Kassa Widget One-Click + Fallback (#33) — Шаги 1–3 GREEN
+- BE: `connection_type: "Widget"` в Init DATA (`TbankInlineInit` + `TbankAdapter`)
+- BE: `POST /shop/api/payments/widget_init` — сумма из БД, 404, стандартизированные ошибки
+- FE: `shopWidgetPayFsm.js` — FSM IDLE→PROCESSING→SUCCESS/ERROR/FALLBACK (карточные ошибки)
+- Тесты: 17/17 PASS · регрессия оплаты 64/0
+
 ## 2026-07-29 — Deploy: Auth funnel Flash×2→SMS → Fly
 - `git push origin develop` + `fly deploy` — `cd26cb1b`
 - Fly machines healthy, витрина + API 200, Rack::Attack 429 OK, логи без 500

@@ -2,7 +2,7 @@
 
 **ТЗ:** [`customer_tasks/Интеграция виджета быстрой оплаты Т-Кассы и One-Click сценария в PWA.md`](../milestones/veha_2/requirements/customer_tasks/Интеграция%20виджета%20быстрой%20оплаты%20Т-Кассы%20и%20One-Click%20сценария%20в%20PWA.md)  
 **Артефакты:** `artifacts/tbank_widget_oneclick_fallback/`  
-**Фаза:** PHASE 1 SPEC · ждём RED
+**Фаза:** PHASE 2 BUILD · Шаги 1–3 GREEN
 
 ---
 
@@ -84,14 +84,12 @@ bin/rails test test/integration/shop/api/qa_section_2_3_payment_cart_test.rb \
 ## Чеклист TDD (атомарно)
 
 ### Backend
-- [ ] **Шаг 1** — `connection_type: "Widget"` в Init DATA + widget endpoint `POST /shop/api/payments/widget_init` (сумма из БД, 404)  
-  Тесты: `tbank_inline_init_test.rb`, `payment_widget_init_test.rb`
-- [ ] **Шаг 2** — Ответ Init → JSON `{ paymentUrl }` + стандартизированные ошибки  
-  Тесты: integration test
-
-### Frontend
-- [ ] **Шаг 3** — SDK inject `integrationjs.tbank.ru` + `shopWidgetPayFsm.js` (IDLE→PROCESSING→SUCCESS/ERROR)  
-  Тесты: `shop_widget_pay_fsm_test.mjs`
+- [x] **Шаг 1** — `connection_type: "Widget"` в Init DATA + widget endpoint `POST /shop/api/payments/widget_init` (сумма из БД, 404)  
+  Тесты: `tbank_inline_init_test.rb` 5/5, `payment_widget_init_test.rb` 4/4
+- [x] **Шаг 2** — Ответ Init → JSON `{ paymentUrl }` + стандартизированные ошибки  
+  Тесты: integration 4/4
+- [x] **Шаг 3** — `shopWidgetPayFsm.js` (IDLE→PROCESSING→SUCCESS/ERROR/FALLBACK)  
+  Тесты: `shop_widget_pay_fsm_test.mjs` 8/8
 - [ ] **Шаг 4** — RepeatSection: inline pay click → плашка «статусы от банка» + disabled + poll  
   Тесты: unit
 - [ ] **Шаг 5** — Fallback: REJECTED → кнопки «СБП» / «карта +» inline под карточкой  
