@@ -1,8 +1,21 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-29 (**PHASE 0 intake · T-Bank inline payment button**)  
+**Дата:** 2026-07-29 (**PHASE 2 BUILD · T-Kassa Widget #33 Шаги 1–7 GREEN**)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev · **Fly:** v400  
+
+### T-Kassa Widget One-Click + Fallback #33 (2026-07-29)
+
+| Что | Статус |
+|-----|--------|
+| BE: connection_type Widget + widget_init endpoint | **`[x]`** |
+| FE: shopWidgetPayFsm.js + widgetInlinePay.js | **`[x]`** |
+| FE: InlinePayFallback.svelte + RepeatSection inline flow | **`[x]`** |
+| FE: Fallback SBP + карта+ + expanded cards | **`[x]`** |
+| PHASE 3 REVIEW | **`[ ]`** |
+
+**ТЗ:** [`Интеграция виджета быстрой оплаты Т-Кассы…`](../milestones/veha_2/requirements/customer_tasks/Интеграция%20виджета%20быстрой%20оплаты%20Т-Кассы%20и%20One-Click%20сценария%20в%20PWA.md)  
+**Дальше:** PHASE 3 REVIEW (регрессия + rubocop + финальный отчёт).
 
 ### T-Bank inline payment + button statuses (2026-07-29)
 

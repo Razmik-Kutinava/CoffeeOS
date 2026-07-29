@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-07-29 — T-Kassa Widget One-Click + Fallback (#33) — Шаги 4–7 GREEN
+- FE: `widgetInlinePay.js` — init/poll/isCardRelatedError для inline widget pay
+- FE: `InlinePayFallback.svelte` — inline fallback UI (статус-плашка, СБП, карта+, expanded cards)
+- FE: `RepeatSection.svelte` — inline widget pay flow (init→poll→confirm/reject→fallback→SBP/cards)
+- Тесты FE: 17/17 PASS · BE регрессия PASS
+
 ## 2026-07-29 — T-Kassa Widget One-Click + Fallback (#33) — Шаги 1–3 GREEN
 - BE: `connection_type: "Widget"` в Init DATA (`TbankInlineInit` + `TbankAdapter`)
 - BE: `POST /shop/api/payments/widget_init` — сумма из БД, 404, стандартизированные ошибки

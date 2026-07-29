@@ -9,6 +9,11 @@
     repeatFeedback
   } from "../lib/frequentRepeatStore.js"
   import { repeatBumpEmbeddedToCart } from "../lib/repeatEmbeddedCart.js"
+  import { createWidgetPayFsm, WIDGET_FSM_STATES } from "../lib/shopWidgetPayFsm.js"
+  import { widgetInitPayment, widgetPollStatus, isCardRelatedError, WIDGET_STATUS_LABELS } from "../lib/widgetInlinePay.js"
+  import { initSbpPayment, redirectToSbp } from "../lib/shopSbpPay.js"
+  import { api } from "../lib/api.js"
+  import InlinePayFallback from "./InlinePayFallback.svelte"
 
   /** full — empty/expanded (скрин 06); embedded — peek с заказом (скрины 01–02: thumb+qty) */
   let { layout = "full" } = $props()
@@ -19,6 +24,14 @@
   let feedback = $state(null)
   let repeatBusy = $state(false)
   let toastTimer = null
+
+  let widgetFsm = $state(createWidgetPayFsm())
+  let activePayItemKey = $state(null)
+  let widgetStatusText = $state("")
+  let widgetErrorText = $state("")
+  let showFallbackMethods = $state(false)
+  let showExpandedCards = $state(false)
+  let savedCards = $state([])
 
   let topItems = $derived(items.slice(0, 3))
   let embedded = $derived(layout === "embedded")
@@ -58,12 +71,70 @@
 
   async function onPayCardClick(item) {
     if (repeatBusy) return
+    const key = frequentCardKey(item)
     repeatBusy = true
-    try {
+    activePayItemKey = key
+    showFallbackMethods = false
+    showExpandedCards = false
+    widgetFsm = createWidgetPayFsm({ orderId: item.last_order_id })
+
+    if (!item.last_order_id) {
       await repeatPayOneClickItem(item)
+      repeatBusy = false
+      activePayItemKey = null
+      return
+    }
+
+    widgetFsm.start()
+    widgetStatusText = WIDGET_STATUS_LABELS.PROCESSING
+    try {
+      await widgetInitPayment(item.last_order_id)
+      const result = await widgetPollStatus(item.last_order_id)
+      if (result.status === "CONFIRMED") {
+        widgetFsm.confirm()
+        widgetStatusText = WIDGET_STATUS_LABELS.SUCCESS
+        setTimeout(() => { widgetFsm.reset(); activePayItemKey = null }, 3000)
+      } else {
+        const errInfo = { error_code: result.error_code || "" }
+        widgetFsm.reject(errInfo)
+        widgetErrorText = result.error_message || WIDGET_STATUS_LABELS.ERROR
+        if (widgetFsm.state === WIDGET_FSM_STATES.FALLBACK) {
+          showFallbackMethods = true
+        }
+      }
+    } catch (_e) {
+      widgetFsm.reject({ error_code: "" })
+      widgetErrorText = WIDGET_STATUS_LABELS.ERROR
     } finally {
       repeatBusy = false
     }
+  }
+
+  async function onFallbackSbp() {
+    if (!widgetFsm.orderId) return
+    try {
+      const result = await initSbpPayment(api, { orderId: widgetFsm.orderId })
+      if (result?.payment_url) redirectToSbp(result.payment_url)
+    } catch (_e) {
+      widgetErrorText = "Ошибка инициализации СБП"
+    }
+  }
+
+  async function onFallbackCardPlus() {
+    showExpandedCards = true
+    showFallbackMethods = false
+    try {
+      const data = await api("/user/cards")
+      savedCards = Array.isArray(data?.cards) ? data.cards : []
+    } catch (_e) {
+      savedCards = []
+    }
+  }
+
+  function onSelectSavedCard(card) {
+    showExpandedCards = false
+    activePayItemKey = null
+    widgetFsm.reset()
   }
 
   function roundPrice(n) {
@@ -140,7 +211,20 @@
               class="mt-0.5 min-h-7 w-full rounded-lg bg-[#ff8c42] px-2 py-1 text-[10px] font-semibold text-black disabled:opacity-40"
               disabled={repeatBusy}
               onclick={() => onPayCardClick(item)}
-            >оплатить в 1 клик</button>
+            >оплатить в клик</button>
+          {/if}
+          {#if activePayItemKey === key}
+            <InlinePayFallback
+              fsmState={widgetFsm.state}
+              statusText={widgetStatusText}
+              errorText={widgetErrorText}
+              {savedCards}
+              {showFallbackMethods}
+              {showExpandedCards}
+              onSelectSbp={onFallbackSbp}
+              onSelectCardPlus={onFallbackCardPlus}
+              onSelectSavedCard={onSelectSavedCard}
+            />
           {/if}
         </div>
       {/each}

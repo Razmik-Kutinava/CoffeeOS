@@ -2,12 +2,21 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-29 (PHASE 2 BUILD · Шаги 1–3 GREEN · T-Kassa Widget One-Click + Fallback)
+**Дата:** 2026-07-29 (PHASE 2 BUILD · Шаги 1–7 GREEN · T-Kassa Widget One-Click + Fallback)
 
 | Сейчас | Дальше |
 |--------|--------|
-| #33 Шаги 1–3 GREEN (BE+FE FSM) | Шаг 4–7 GREEN (FE UI: repeat inline pay, fallback, cards, SBP) |
-| Регрессия оплаты 64/0 | Продолжение FE шагов |
+| #33 Шаги 1–7 GREEN (BE+FE полный flow) | PHASE 3 REVIEW |
+| FE тесты 17/17, BE регрессия PASS | Регрессия + REVIEW |
+
+### Сессия 2026-07-29 (PHASE 2 GREEN Шаги 4–7 · T-Kassa Widget #33)
+
+- FE: `widgetInlinePay.js` — widget init + poll + isCardRelatedError
+- FE: `InlinePayFallback.svelte` — inline fallback UI (статус-плашка, кнопки СБП/карта+, expanded cards)
+- FE: `RepeatSection.svelte` обновлён — inline widget pay flow (init→poll→confirm/reject→fallback)
+- FE: fallback SBP → reuse `shopSbpPay.js`, fallback карта+ → expanded saved cards
+- Тесты FE: 17/17 PASS (FSM + widgetInlinePay labels + isCardRelatedError + integration flow)
+- BE регрессия: PASS
 
 ### Сессия 2026-07-29 (PHASE 2 GREEN Шаги 1–3 · T-Kassa Widget #33)
 
