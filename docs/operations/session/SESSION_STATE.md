@@ -2,19 +2,19 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-29 (PHASE 2 BUILD · Шаг 1 RED · T-Bank inline payment)
+**Дата:** 2026-07-29 (PHASE 2 BUILD · Шаг 1 GREEN · T-Bank inline payment)
 
 | Сейчас | Дальше |
 |--------|--------|
-| SPEC `[x]` · todo.md | **Шаг 1 RED** → GREEN по намерению |
+| SPEC `[x]` · todo.md | **Шаг 1 GREEN** (PASS) → Шаг 2 RED |
 | Fly Test sticky: код local PASS | push + fly deploy (отдельный апрув) |
 
 ### Сессия 2026-07-29 (PHASE 1 SPEC · T-Bank inline payment button)
 
 - ТЗ → `todo.md`: 8 атомарных шагов + маппинг путей на Rails/Svelte
 - Gaps: PayType O, Confirm, status GetState+Confirm, FE FSM тайминги ТЗ
-- `tbank_adapter.rb` >200 — GREEN: минимальный diff или новый файл Confirm/two_stage
-- Дальше: RED Шаг 1 (Init PayType O / Charge)
+- `tbank_adapter.rb` >200 — GREEN: минимальный diff (PayType) + новый сервис inline Init
+- Дальше: RED Шаг 2 (GetState → auto Confirm на AUTHORIZED)
 
 ### Сессия 2026-07-29 (PHASE 0 intake · T-Bank inline payment button)
 

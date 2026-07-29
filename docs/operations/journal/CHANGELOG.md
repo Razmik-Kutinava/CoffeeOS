@@ -6,6 +6,13 @@
 - Артефакты: `artifacts/tbank_inline_payment_button_statuses/`
 - Индекс CBR + `customer_tasks/README` · статус **интейк `[x]`** · SPEC ждёт go
 
+## 2026-07-29 — feat(payments): PayType O Init + Charge by RebillId (T-Bank inline step 1)
+
+- `Payments::TbankAdapter#init_payment` получил опциональный `pay_type` и прокидывает `PayType` в payload
+- Добавлен `Payments::TbankInlineInit` для шага 1 ТЗ (Init PayType O или Init→Charge при наличии `rebill_id`)
+- Тесты: `test/services/payments/tbank_adapter_test.rb`, `test/services/payments/tbank_inline_init_test.rb` (PASS)
+- Регрессия зоны оплаты: `test/integration/shop/api/qa_section_2_3_payment_cart_test.rb` + `qa_section_2_3_stage5_e2e_test.rb` + `test/services/shop/order_creator_test.rb`
+
 ## 2026-07-28 — fix(shop): bounce inactive last_ordered (Fly Test sticky)
 
 - Root cause: у Арама `last_ordered` = inactive Fly Overnight (7 заказов свежее Point A) → шапка «ул. Fly Test»

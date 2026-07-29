@@ -2,7 +2,7 @@
 
 **ТЗ:** [`customer_tasks/Интеграция inline-оплаты Т-Банка с динамическими статусами внутри кнопки.md`](../milestones/veha_2/requirements/customer_tasks/Интеграция%20inline-оплаты%20Т-Банка%20с%20динамическими%20статусами%20внутри%20кнопки.md)  
 **Артефакты:** `artifacts/tbank_inline_payment_button_statuses/`  
-**Фаза:** PHASE 2 BUILD · Шаг 1 RED
+**Фаза:** PHASE 2 BUILD · Шаг 1 GREEN (готово)
 
 ---
 
@@ -71,9 +71,9 @@ bin/rails test test/integration/shop/api/qa_section_2_3_payment_cart_test.rb \
 ## Чеклист TDD (атомарно)
 
 ### Backend
-- [ ] **Шаг 1** — Init `PayType:"O"` / Charge при RebillId + Token SHA-256 → PaymentId  
+- [x] **Шаг 1** — Init `PayType:"O"` / Charge при RebillId + Token SHA-256 → PaymentId  
   Тесты: `test/services/payments/tbank_adapter_test.rb` `[TDD]`  
-  Статус: RED in progress
+  Статус: GREEN (PASS)
 - [ ] **Шаг 2** — GET status → GetState → auto Confirm на AUTHORIZED → CONFIRMED  
   Тесты: adapter Confirm + sync/status integration
 - [ ] **Шаг 3** — Webhook NotificationURL финализирует БД; race с polling  

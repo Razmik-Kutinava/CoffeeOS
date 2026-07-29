@@ -10,13 +10,13 @@
 |-----|--------|
 | Intake ТЗ + CBR + артефакты | **`[x]`** |
 | PHASE 1: SPEC (`todo.md`) | **`[x]`** |
-| Шаг 1 RED (PayType O / Charge) | **in progress** |
+| Шаг 1 GREEN (PayType O / Charge) | **`[x]`** |
 | GREEN / остальные шаги | **`[ ]`** |
 
 **ТЗ:** [`Интеграция inline-оплаты Т-Банка…`](../milestones/veha_2/requirements/customer_tasks/Интеграция%20inline-оплаты%20Т-Банка%20с%20динамическими%20статусами%20внутри%20кнопки.md)  
 **Артефакты:** [`tbank_inline_payment_button_statuses/`](../milestones/veha_2/artifacts/tbank_inline_payment_button_statuses/)  
 **todo:** [`SESSION todo.md`](todo.md)  
-**Дальше:** RED Шаг 1 → GREEN по намерению.
+**Дальше:** RED Шаг 2 (GetState → auto Confirm на AUTHORIZED).
 
 ### Fly Test sticky / inactive last_ordered (2026-07-28)
 

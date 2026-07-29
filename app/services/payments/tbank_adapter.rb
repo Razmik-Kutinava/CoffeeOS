@@ -42,7 +42,7 @@ module Payments
     # recurrent + customer_key — привязка карты (RebillId в webhook).
     # receipt — опциональный объект 54-ФЗ (вложенный; в Token не входит).
     # Возвращает { payment_url:, provider_payment_id: }
-    def init_payment(order:, return_base_url:, notification_url:, customer_key: nil, recurrent: false, receipt: nil)
+    def init_payment(order:, return_base_url:, notification_url:, customer_key: nil, recurrent: false, receipt: nil, pay_type: nil)
       amount_kopecks = (order.final_amount * 100).to_i
 
       payload = {
@@ -56,6 +56,7 @@ module Payments
       }
       payload["CustomerKey"] = customer_key.to_s if customer_key.present?
       payload["Recurrent"] = "Y" if recurrent
+      payload["PayType"] = pay_type.to_s if pay_type.present?
       payload["Receipt"] = receipt if receipt.present?
       payload["Token"] = build_token(payload)
 
