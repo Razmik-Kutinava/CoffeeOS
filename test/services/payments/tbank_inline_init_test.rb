@@ -69,6 +69,47 @@ class Payments::TbankInlineInitTest < ActiveSupport::TestCase
     assert_equal "pid-inline-1", result[:provider_payment_id]
   end
 
+  test "[TDD] widget mode passes connection_type Widget in DATA hash" do
+    order = order_stub
+    captured = []
+    adapter = adapter_capturing(captured)
+
+    Payments::TbankInlineInit.call(
+      order: order,
+      adapter: adapter,
+      return_base_url: "https://example.com",
+      notification_url: "https://example.com/callbacks/tbank",
+      connection_type: "Widget"
+    )
+
+    init_call = captured.find { |c| c[:url].end_with?("/Init") }
+    assert init_call, "ожидали POST /v2/Init"
+    data = init_call[:payload]["DATA"]
+    assert data.is_a?(Hash), "ожидали DATA как Hash в payload Init"
+    assert_equal "Widget", data["connection_type"]
+  end
+
+  test "[TDD] widget mode with rebill_id passes connection_type Widget in Init DATA" do
+    order = order_stub
+    captured = []
+    adapter = adapter_capturing(captured)
+
+    Payments::TbankInlineInit.call(
+      order: order,
+      adapter: adapter,
+      rebill_id: "rebill-w",
+      return_base_url: "https://example.com",
+      notification_url: "https://example.com/callbacks/tbank",
+      connection_type: "Widget"
+    )
+
+    init_call = captured.find { |c| c[:url].end_with?("/Init") }
+    assert init_call, "ожидали POST /v2/Init"
+    data = init_call[:payload]["DATA"]
+    assert data.is_a?(Hash), "ожидали DATA как Hash"
+    assert_equal "Widget", data["connection_type"]
+  end
+
   test "[TDD] Token is present and secrets stay off result contract" do
     order = order_stub
     captured = []
