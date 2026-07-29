@@ -92,3 +92,58 @@ bin/rails test test/integration/shop/api/qa_section_2_3_payment_cart_test.rb \
 - [ ] Регрессия оплаты + rubocop зоны
 - [ ] CHANGELOG / HANDOFF / SESSION_STATE итог
 - [ ] MCP / ручная проверка Dev — после deploy (отдельный апрув)
+
+---
+# todo — Auth funnel cascade Flash Call×2 → SMS.ru
+
+**ТЗ:** [`customer_tasks/Рефакторинг воронки авторизации PWA Каскад Flash Call x2 SMS на базе SMS.ru.md`](../milestones/veha_2/requirements/customer_tasks/Рефакторинг%20воронки%20авторизации%20PWA%20Каскад%20Flash%20Call%20x2%20SMS%20на%20базе%20SMS.ru.md)  
+**Артефакты:** `artifacts/auth_funnel_flash_call_x2_sms_ru/`  
+**Фаза:** PHASE 1 SPEC · ждём RED
+
+---
+
+## SPEC (канон CoffeeOS)
+### Бизнес-цель
+Снижение CAC через 2-экранный Wizard и 3-уровневый каскад верификации: `Flash Call #1 → Flash Call #2 → SMS`.
+
+### Глобальные ограничения (из ТЗ)
+- нет `Email` поля, нет ручного выбора канала и нет отдельных кнопок подтверждения кода
+- никаких хардкодов ключей/`api_id`/`from` — только `ENV['SMS_RU_API_ID']`, `ENV['SMS_RU_FROM']`
+- dev fallback: `ENV['SHOP_OTP_LOG_FALLBACK'] = true` блокирует отправку (или передаёт `test=1`)
+
+### План RED (что добавим тестами в PHASE 2 BUILD)
+#### Backend (по `channel`)
+1. `Shop::SmsRuClient`:
+   - `flash_call`: `POST https://sms.ru/code/call` (проверка `json["status"] == "OK"`, upsert кода в `mobile_otp_codes`, TTL=10 мин)
+   - `sms`: `POST https://sms.ru/sms/send` с последним кодом из `mobile_otp_codes` (`msg="Ваш код: XXXX"`, `from=ENV['SMS_RU_FROM']`, `ip=request.remote_ip`)
+   - обработка network ошибок / JSON `status != "OK"` (API возвращает вменяемый JSON без 500)
+2. `POST /shop/api/phone_otp/send`:
+   - поддержка `channel: "flash_call"` и `channel: "sms"` (и одинаковая передача `request.remote_ip`)
+3. `POST /shop/api/phone_otp/verify`:
+   - верификация 4-значного кода (HTTP 422 для неверного кода)
+4. `Rack::Attack` throttling:
+   - `flash_call` кулдаун 20 сек, `sms` кулдаун 60 сек
+   - при превышении частоты: HTTP 429
+
+#### Frontend (Wizard + каскад)
+1. Screen 1 (телефон):
+   - mask `+7 (9XX) XXX-XX-XX`, автофокус, `Продолжить` активна строго при вводе 10 цифр
+   - по клику `POST /shop/api/phone_otp/send` `channel: "flash_call"` и переход на Screen 2
+2. Screen 2 (PIN):
+   - 4 ячейки, авто-submit на 4-й цифре в `POST /shop/api/phone_otp/verify`
+   - при HTTP 422: подсветка ячеек, shake, очистка, фокус на 1-ю
+3. Каскад-таймер:
+   - 0–20 сек: подсказка “последние 4 цифры…”, таймер “Ждем звонок... 00:20”
+   - 20–40 сек: CTA “Запросить звонок еще раз” → повтор `flash_call` и перезапуск таймера
+   - 40+ сек: CTA “Отправить код в СМС” → `sms` + кулдаун 60 сек
+4. “Изменить номер”:
+   - сброс таймеров каскада и состояния авторизации
+
+### Лимиты / RLS (для реализации)
+- Все BE-операции, затрагивающие shop-данные, только в контексте `Current.tenant_id` (RLS контекст на базе controllers).
+- Не раздувать файлы >200 строк: `SmsRuClient` и FE FSM разбиваем по ответственности.
+
+---
+
+### Gate 1 (стоп)
+Жду намерения на PHASE 2 BUILD (RED) для начала добавления тестов.

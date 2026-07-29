@@ -11,6 +11,10 @@
 - Артефакты: `artifacts/auth_funnel_flash_call_x2_sms_ru/`
 - Индекс CBR + `customer_tasks/README` · статус **интейк `[x]`** · SPEC ждёт go
 
+## 2026-07-29 — docs: PHASE 1 SPEC Flash Call×2 → SMS.ru
+- Обновлён `docs/operations/session/todo.md` (блок под задачу)
+- Синхронизированы `SESSION_STATE.md` и `HANDOFF.md` (SPEC стартовал)
+
 ## 2026-07-29 — feat(payments): PayType O Init + Charge by RebillId (T-Bank inline step 1)
 
 - `Payments::TbankAdapter#init_payment` получил опциональный `pay_type` и прокидывает `PayType` в payload

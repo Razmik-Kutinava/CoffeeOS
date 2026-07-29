@@ -23,13 +23,13 @@
 | Что | Статус |
 |-----|--------|
 | Intake ТЗ + CBR + артефакты | **`[x]`** |
-| PHASE 1: SPEC (`todo.md`) | **`[ ]`** |
+| PHASE 1: SPEC (`todo.md`) | **`[x]`** |
 | Код / `todo.md` | **не трогали** |
 
 **ТЗ:** [`Рефакторинг воронки авторизации…`](../milestones/veha_2/requirements/customer_tasks/Рефакторинг%20воронки%20авторизации%20PWA%20Каскад%20Flash%20Call%20x2%20SMS%20на%20базе%20SMS.ru.md)  
 **Артефакты:** [`auth_funnel_flash_call_x2_sms_ru/`](../milestones/veha_2/artifacts/auth_funnel_flash_call_x2_sms_ru/)  
 **todo:** [`SESSION todo.md`](todo.md)  
-**Дальше:** ждём go → PHASE 1: SPEC.
+**Дальше:** ждём намерения на PHASE 2 BUILD (RED).
 
 ### Fly Test sticky / inactive last_ordered (2026-07-28)
 

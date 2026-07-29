@@ -30,6 +30,12 @@
 - CBR + `customer_tasks/README` — строка индекса
 - Код / `todo.md` не трогали — ждут go → SPEC
 
+### Сессия 2026-07-29 (PHASE 1 SPEC · Auth funnel Flash Call×2 → SMS.ru)
+
+- todo.md: добавлен блок “todo — Auth funnel cascade Flash Call×2 → SMS.ru”
+- План RED: `Shop::SmsRuClient` + `phone_otp` endpoints + `Rack::Attack`, FE wizard+каскад-таймер и 422/тайминги
+- Лимиты учтены: `Current.tenant_id`/RLS и запрет файлов >200 строк
+
 ### Сессия 2026-07-28 (Fly Test sticky via last_ordered · GREEN local)
 
 - Diag: last_ordered=`af4f78d6` inactive · 7 orders 2026-07-28 > Point A
