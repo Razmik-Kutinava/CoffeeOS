@@ -57,6 +57,13 @@ module Shop
         order = Order.includes(:payments).find_by(id: params[:order_id], tenant_id: @shop_tenant.id)
         return render json: { error: "Order not found" }, status: :not_found unless order
 
+      # Шаг 2 ТЗ: sync статуса через GetState; при AUTHORIZED инициируем Confirm.
+      Payments::TbankPaymentSync.sync_order!(order: order)
+
+      # sync_order! обновляет Payment в БД, а payments может быть заранее загружен через includes.
+      # Чтобы presenter вернул актуальный статус — перезагружаем association.
+      order.payments.reload
+
         render json: Shop::PaymentStatusPresenter.call(order)
       end
 

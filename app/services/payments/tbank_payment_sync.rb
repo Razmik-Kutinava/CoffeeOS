@@ -83,7 +83,15 @@ module Payments
 
     def fetch_state!(provider_id)
       response = adapter.get_payment_state(payment_id: provider_id)
-      response if response.is_a?(Hash) && response["Success"]
+      return unless response.is_a?(Hash) && response["Success"]
+
+      # ТЗ Шаг 2: при AUTHORIZED делаем auto Confirm, чтобы перейти к CONFIRMED.
+      if response["Status"].to_s.upcase == "AUTHORIZED"
+        confirm = adapter.confirm_payment(payment_id: provider_id)
+        return confirm if confirm.is_a?(Hash) && confirm["Success"]
+      end
+
+      response
     end
 
     def apply_state!(state)
