@@ -4,6 +4,9 @@
 - `app/services/shop/sms_ru_client.rb` — единый клиент SMS.ru (flash_call /code/call + sms /sms/send)
 - `app/services/shop/phone_otp.rb` — убран messenger, flash_call через SmsRuClient, sms переиспользует код
 - `app/frontend/lib/phoneAuthCascade.js` — убрана фаза MESSENGER, каскад Flash×2→SMS за 40с
+- `app/controllers/shop/api/phone_otp_controller.rb` — ip passthrough, убран messenger rescue
+- `config/initializers/rack_attack.rb` — убран messenger throttle
+- `app/frontend/components/PhoneAuthCodeStep.svelte` — убрана messenger кнопка/fallback
 - Тесты: 38 runs total, 0F, 0E. Регрессия shop integration PASS.
 
 ## 2026-07-29 — docs: intake T-Bank inline payment button statuses

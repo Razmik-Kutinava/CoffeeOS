@@ -37,7 +37,10 @@
 - `phoneAuthCascade.js`: убрана фаза MESSENGER, каскад Flash×2→SMS за 40с, добавлен `smsSentHint`
 - Тесты: sms_ru_client 6/6, sms_ru_phone_otp 7/7, phone_otp 10/10, FE cascade 15/15 — все GREEN
 - Регрессия shop integration: 4 runs, 0F, 0E — PASS
-- Коммит RED: `f7313fdb`, GREEN: `b2685910`
+- Контроллер: `ip: request.remote_ip` в `send_code!`, убран messenger rescue
+- Rack::Attack: убран `shop/phone_otp_messenger` throttle
+- PhoneAuthCodeStep.svelte: убраны messenger imports/кнопка/fallback
+- Коммит RED: `f7313fdb`, GREEN: `b2685910`, доп GREEN: `8b76da10`
 
 ### Сессия 2026-07-29 (PHASE 2 BUILD RED · Auth funnel Flash Call×2 → SMS.ru)
 

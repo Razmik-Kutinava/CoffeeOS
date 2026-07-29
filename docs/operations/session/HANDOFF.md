@@ -25,7 +25,7 @@
 | Intake ТЗ + CBR + артефакты | **`[x]`** |
 | PHASE 1: SPEC (`todo.md`) | **`[x]`** |
 | PHASE 2: RED (тесты) | **`[x]`** `f7313fdb` |
-| PHASE 2: GREEN (BE+FE) | **`[x]`** `b2685910` |
+| PHASE 2: GREEN (BE+FE) | **`[x]`** `b2685910` + `8b76da10` |
 | PHASE 3: REVIEW | **`[ ]`** |
 
 **ТЗ:** [`Рефакторинг воронки авторизации…`](../milestones/veha_2/requirements/customer_tasks/Рефакторинг%20воронки%20авторизации%20PWA%20Каскад%20Flash%20Call%20x2%20SMS%20на%20базе%20SMS.ru.md)  
