@@ -1,23 +1,19 @@
 <script>
   /**
-   * Экран 2: PIN + каскад Flash×2 → Messenger → SMS.
+   * Экран 2: PIN + каскад Flash×2 → SMS.
    */
   import { onDestroy } from "svelte"
   import { api } from "../lib/api.js"
   import { buildVerifyBody, buildOtpSendBody } from "../lib/phoneAuthWizard.js"
   import {
     RETRY_FLASH_LABEL,
-    MESSENGER_BTN_LABEL,
     SMS_BTN_LABEL,
     initialFlashCascade,
     tickFlashCascade,
     showRetryFlashButton,
-    showMessengerButton,
     showSmsButton,
     afterManualFlashResend,
-    afterMessengerSend,
     afterSmsSend,
-    afterMessengerDeliveryError,
     cascadeHint,
     cascadeTimerLabel
   } from "../lib/phoneAuthCascade.js"
@@ -47,7 +43,6 @@
     })
   )
   const showRetry = $derived(showRetryFlashButton(cascade.phase))
-  const showMessenger = $derived(showMessengerButton(cascade.phase, cascade.secondsLeft))
   const showSms = $derived(showSmsButton(cascade.phase))
   const busy = $derived(resending || verifying)
 
@@ -84,16 +79,10 @@
         body: JSON.stringify(buildOtpSendBody(phoneE164, channel))
       })
       if (channel === "flash_call") cascade = afterManualFlashResend()
-      else if (channel === "messenger") cascade = afterMessengerSend()
       else if (channel === "sms") cascade = afterSmsSend()
       if (!timerId) startTimer()
     } catch (e) {
-      if (channel === "messenger") {
-        cascade = afterMessengerDeliveryError()
-        localError = e.message || "Мессенджер недоступен — попробуйте СМС"
-      } else {
-        localError = e.message || "Не удалось отправить код"
-      }
+      localError = e.message || "Не удалось отправить код"
       onError?.(localError)
     } finally {
       resending = false
@@ -157,17 +146,6 @@
       data-testid="phone-auth-retry-flash"
     >
       {resending ? "Отправляем…" : RETRY_FLASH_LABEL}
-    </button>
-  {/if}
-  {#if showMessenger}
-    <button
-      type="button"
-      class="mt-3 w-full rounded-lg border border-[#ff8c42] py-2 text-sm text-[#ff8c42] disabled:opacity-50"
-      disabled={busy}
-      onclick={() => sendChannel("messenger")}
-      data-testid="phone-auth-messenger"
-    >
-      {resending ? "Отправляем…" : MESSENGER_BTN_LABEL}
     </button>
   {/if}
   {#if showSms}

@@ -4,7 +4,6 @@
 class Rack::Attack
   SHOP_PHONE_OTP_RETRY_AFTER = {
     'shop/phone_otp_flash_call' => 20,
-    'shop/phone_otp_messenger' => 30,
     'shop/phone_otp_sms' => 60
   }.freeze
 
@@ -53,10 +52,6 @@ class Rack::Attack
   # Лимиты phone OTP витрины: по каналу + телефону.
   throttle('shop/phone_otp_flash_call', limit: 1, period: 20.seconds) do |req|
     Rack::Attack.shop_phone_otp_discriminator(req, 'flash_call')
-  end
-
-  throttle('shop/phone_otp_messenger', limit: 1, period: 30.seconds) do |req|
-    Rack::Attack.shop_phone_otp_discriminator(req, 'messenger')
   end
 
   throttle('shop/phone_otp_sms', limit: 1, period: 60.seconds) do |req|

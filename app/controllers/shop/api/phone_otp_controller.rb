@@ -6,21 +6,14 @@ module Shop
       def send_code
         phone = Shop::PhoneOtp.send_code!(
           phone: params.require(:phone),
-          channel: params.require(:channel)
+          channel: params.require(:channel),
+          ip: request.remote_ip
         )
         render json: { ok: true, phone: phone, channel: params[:channel].to_s }
-      rescue Shop::PhoneOtp::MessengerDeliveryError => e
-        status = provider_http_status(e)
-        render json: {
-          error: e.message,
-          messenger_delivery_error: true,
-          error_code: "messenger_delivery_error"
-        }, status: status
       rescue Shop::PhoneOtp::Error => e
         render json: { error: e.message }, status: :unprocessable_entity
-      rescue Shop::SmsClient::Error, Shop::FlashCallClient::Error => e
-        status = provider_http_status(e)
-        render json: { error: e.message }, status: status
+      rescue Shop::SmsRuClient::Error => e
+        render json: { error: e.message }, status: :bad_gateway
       end
 
       def verify
@@ -71,17 +64,6 @@ module Shop
         end
 
         render json: { verified: verified, phone: verified ? normalized : nil }
-      end
-
-      private
-
-      def provider_http_status(error)
-        code = error.respond_to?(:http_status) ? error.http_status.to_i : 0
-        return :bad_gateway if code >= 500 || code.zero?
-        return :bad_request if code == 400
-        return :bad_gateway if code >= 400
-
-        :bad_gateway
       end
     end
   end
