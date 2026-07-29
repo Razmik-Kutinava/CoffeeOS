@@ -94,9 +94,9 @@ bin/rails test test/integration/shop/api/qa_section_2_3_payment_cart_test.rb \
 - [ ] MCP / ручная проверка Dev — после deploy (отдельный апрув)
 
 ---
-# todo — Auth funnel cascade Flash Call×2 → SMS.ru
+# todo — Auth funnel cascade Flash Call×2 → SMS
 
-**ТЗ:** [`customer_tasks/Рефакторинг воронки авторизации PWA Каскад Flash Call x2 SMS на базе SMS.ru.md`](../milestones/veha_2/requirements/customer_tasks/Рефакторинг%20воронки%20авторизации%20PWA%20Каскад%20Flash%20Call%20x2%20SMS%20на%20базе%20SMS.ru.md)  
+**ТЗ:** [`customer_tasks/Рефакторинг воронки авторизации PWA Каскад Flash Call x2 SMS.md`](../milestones/veha_2/requirements/customer_tasks/Рефакторинг%20воронки%20авторизации%20PWA%20Каскад%20Flash%20Call%20x2%20SMS.md)  
 **Артефакты:** `artifacts/auth_funnel_flash_call_x2_sms_ru/`  
 **Фаза:** PHASE 1 SPEC · ждём RED
 

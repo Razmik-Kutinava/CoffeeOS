@@ -1,4 +1,4 @@
-# Рефакторинг воронки авторизации PWA (Каскад Flash Call x2 → SMS) на базе SMS.ru
+# Рефакторинг воронки авторизации PWA (Каскад Flash Call x2 > SMS)
 
 **Артефакты:** docs/operations/milestones/veha_2/artifacts/auth_funnel_flash_call_x2_sms_ru/
 

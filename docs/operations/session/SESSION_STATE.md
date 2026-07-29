@@ -23,14 +23,14 @@
 - CBR + `customer_tasks/README` — строка индекса
 - Код / `todo.md` не трогали — ждут go → SPEC
 
-### Сессия 2026-07-29 (PHASE 0 intake · Auth funnel Flash Call×2 → SMS.ru)
+### Сессия 2026-07-29 (PHASE 0 intake · Auth funnel Flash Call×2 → SMS)
 
-- ТЗ: `customer_tasks/Рефакторинг воронки авторизации PWA Каскад Flash Call x2 SMS на базе SMS.ru.md`
+- ТЗ: `customer_tasks/Рефакторинг воронки авторизации PWA Каскад Flash Call x2 SMS.md`
 - Артефакты: `artifacts/auth_funnel_flash_call_x2_sms_ru/`
 - CBR + `customer_tasks/README` — строка индекса
 - Код / `todo.md` не трогали — ждут go → SPEC
 
-### Сессия 2026-07-29 (PHASE 2 BUILD GREEN · Auth funnel Flash Call×2 → SMS.ru)
+### Сессия 2026-07-29 (PHASE 2 BUILD GREEN · Auth funnel Flash Call×2 → SMS)
 
 - GREEN: реализация `Shop::SmsRuClient` (flash_call /code/call + sms /sms/send + dev fallback)
 - `Shop::PhoneOtp`: убран messenger, flash_call через SmsRuClient, sms переиспользует код из flash_call
@@ -45,14 +45,14 @@
 - N+1: нет циклов, все запросы одиночные. RLS: MobileOtpCode без tenant_id — ок.
 - Коммиты: RED `f7313fdb`, GREEN `b2685910` + `8b76da10`, REVIEW `8d94b95b`
 
-### Сессия 2026-07-29 (PHASE 2 BUILD RED · Auth funnel Flash Call×2 → SMS.ru)
+### Сессия 2026-07-29 (PHASE 2 BUILD RED · Auth funnel Flash Call×2 → SMS)
 
 - RED-тесты (3 файла): sms_ru_client_test.rb (6E), sms_ru_phone_otp_test.rb (2F+1E), cascade_smsru_test.mjs (1E)
 - Коммит: `f7313fdb` `[RED]`
 
-### Сессия 2026-07-29 (PHASE 1 SPEC · Auth funnel Flash Call×2 → SMS.ru)
+### Сессия 2026-07-29 (PHASE 1 SPEC · Auth funnel Flash Call×2 → SMS)
 
-- todo.md: добавлен блок “todo — Auth funnel cascade Flash Call×2 → SMS.ru”
+- todo.md: добавлен блок “todo — Auth funnel cascade Flash Call×2 → SMS”
 - План RED: `Shop::SmsRuClient` + `phone_otp` endpoints + `Rack::Attack`, FE wizard+каскад-таймер и 422/тайминги
 - Лимиты учтены: `Current.tenant_id`/RLS и запрет файлов >200 строк
 

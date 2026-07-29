@@ -18,7 +18,7 @@
 **todo:** [`SESSION todo.md`](todo.md)  
 **Дальше:** RED Шаг 2 (GetState → auto Confirm на AUTHORIZED).
 
-### Auth funnel cascade Flash Call×2 → SMS.ru (2026-07-29)
+### Auth funnel cascade Flash Call×2 → SMS (2026-07-29)
 
 | Что | Статус |
 |-----|--------|
@@ -28,7 +28,7 @@
 | PHASE 2: GREEN (BE+FE) | **`[x]`** `b2685910` + `8b76da10` |
 | PHASE 3: REVIEW | **`[x]`** `8d94b95b` |
 
-**ТЗ:** [`Рефакторинг воронки авторизации…`](../milestones/veha_2/requirements/customer_tasks/Рефакторинг%20воронки%20авторизации%20PWA%20Каскад%20Flash%20Call%20x2%20SMS%20на%20базе%20SMS.ru.md)  
+**ТЗ:** [`Рефакторинг воронки авторизации…`](../milestones/veha_2/requirements/customer_tasks/Рефакторинг%20воронки%20авторизации%20PWA%20Каскад%20Flash%20Call%20x2%20SMS.md)  
 **Артефакты:** [`auth_funnel_flash_call_x2_sms_ru/`](../milestones/veha_2/artifacts/auth_funnel_flash_call_x2_sms_ru/)  
 **todo:** [`SESSION todo.md`](todo.md)  
 **Дальше:** done — деплой/push по явной просьбе.

@@ -1,6 +1,6 @@
 ﻿# CHANGELOG
 
-## 2026-07-29 — PHASE 3 REVIEW: Auth funnel Flash×2→SMS.ru
+## 2026-07-29 — PHASE 3 REVIEW: Auth funnel Flash×2→SMS
 - REVIEW cleanup: убран мёртвый код MessengerDeliveryError, generate_sms_code, rescue SmsClient/FlashCallClient
 - rubocop 0 offenses на новых файлах
 - N+1 check: все запросы одиночные, без циклов
@@ -22,12 +22,12 @@
 - Артефакты: `artifacts/tbank_inline_payment_button_statuses/`
 - Индекс CBR + `customer_tasks/README` · статус **интейк `[x]`** · SPEC ждёт go
 
-## 2026-07-29 — docs: intake customer task Flash Call×2 → SMS.ru
-- PHASE 0: ТЗ заказчика дословно → `customer_tasks/Рефакторинг воронки авторизации PWA Каскад Flash Call x2 SMS на базе SMS.ru.md`
+## 2026-07-29 — docs: intake customer task Flash Call×2 → SMS
+- PHASE 0: ТЗ заказчика дословно → `customer_tasks/Рефакторинг воронки авторизации PWA Каскад Flash Call x2 SMS.md`
 - Артефакты: `artifacts/auth_funnel_flash_call_x2_sms_ru/`
 - Индекс CBR + `customer_tasks/README` · статус **интейк `[x]`** · SPEC ждёт go
 
-## 2026-07-29 — docs: PHASE 1 SPEC Flash Call×2 → SMS.ru
+## 2026-07-29 — docs: PHASE 1 SPEC Flash Call×2 → SMS
 - Обновлён `docs/operations/session/todo.md` (блок под задачу)
 - Синхронизированы `SESSION_STATE.md` и `HANDOFF.md` (SPEC стартовал)
 
