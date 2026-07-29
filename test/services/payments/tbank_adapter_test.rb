@@ -225,6 +225,32 @@ class Payments::TbankAdapterTest < ActiveSupport::TestCase
   end
 
   # ---------------------------------------------------------------------------
+  # Confirm (Шаг 2 RED) — POST /v2/Confirm при AUTHORIZED
+  # ---------------------------------------------------------------------------
+
+  test "[TDD] confirm_payment posts PaymentId to /Confirm endpoint" do
+    adapter = Payments::TbankAdapter.new
+    captured = nil
+
+    adapter.define_singleton_method(:post_json) do |url, payload|
+      captured = { url: url, payload: payload }
+      {
+        "Success" => true,
+        "ErrorCode" => "0",
+        "Status" => "CONFIRMED",
+        "PaymentId" => payload["PaymentId"].to_s
+      }
+    end
+
+    response = adapter.confirm_payment(payment_id: "pay-confirm-1")
+
+    assert captured[:url].end_with?("/Confirm")
+    assert_equal "pay-confirm-1", captured[:payload]["PaymentId"]
+    assert captured[:payload]["Token"].present?
+    assert_equal "CONFIRMED", response["Status"]
+  end
+
+  # ---------------------------------------------------------------------------
   # Init + Receipt 54-ФЗ (Шаг 1 RED)
   # ---------------------------------------------------------------------------
 
