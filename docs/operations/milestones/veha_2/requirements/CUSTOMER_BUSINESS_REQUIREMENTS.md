@@ -159,7 +159,7 @@
 | 30 | **Repeat recommendations missing** | Пропал блок «повторить» на витрине (Fly Overnight) | **MCP PASS `[x]`** 2026-07-28 · Fly v399 | [Пропали рекомендации…](customer_tasks/Пропали%20рекомендации%20повторить%20на%20витрине.md) |
 | 31 | **Aram phone restore** | Настоящий `+79639124847` + merge donor оплат | **prod link PASS `[x]`** 2026-07-28 · no deploy | [Вернуть номер телефона Арама…](customer_tasks/Вернуть%20номер%20телефона%20Арама%20в%20профиле.md) |
 | 32 | **T-Bank inline payment button** | Inline-оплата без redirect + state machine кнопки (Init/Charge/Confirm + polling) | **SPEC `[x]`** 2026-07-29 · Шаг 1 RED | [Интеграция inline-оплаты Т-Банка…](customer_tasks/Интеграция%20inline-оплаты%20Т-Банка%20с%20динамическими%20статусами%20внутри%20кнопки.md) |
-
+| 33 | **T-Kassa Widget One-Click + Fallback** | Виджет Т-Кассы SDK (connection_type: Widget) + One-Click + fallback СБП/карта при отказе | **интейк `[x]`** 2026-07-29 · SPEC `[ ]` | [Интеграция виджета быстрой оплаты…](customer_tasks/Интеграция%20виджета%20быстрой%20оплаты%20Т-Кассы%20и%20One-Click%20сценария%20в%20PWA.md) |
 
 ---
 

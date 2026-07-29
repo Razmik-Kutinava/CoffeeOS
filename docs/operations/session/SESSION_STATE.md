@@ -2,12 +2,20 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-29 (PHASE 2 BUILD · Шаг 3 GREEN · T-Bank inline payment)
+**Дата:** 2026-07-29 (PHASE 0 intake · T-Kassa Widget One-Click + Fallback)
 
 | Сейчас | Дальше |
 |--------|--------|
-| SPEC `[x]` · todo.md | **Шаг 3 GREEN** (webhook race: не даунгрейдить) |
-| Fly Test sticky: код local PASS | push + fly deploy (отдельный апрув) |
+| Intake #33 Widget One-Click `[x]` | **PHASE 1 SPEC** (todo.md) ждёт go |
+| T-Bank inline (#32): Шаг 1 GREEN | Шаг 2+ GREEN |
+
+### Сессия 2026-07-29 (PHASE 0 intake · T-Kassa Widget One-Click + Fallback)
+
+- Новая задача #33: Интеграция виджета быстрой оплаты Т-Кассы и One-Click сценария в PWA
+- ТЗ дословно: `customer_tasks/Интеграция виджета быстрой оплаты Т-Кассы и One-Click сценария в PWA.md`
+- 4 скрина заказчика → `artifacts/tbank_widget_oneclick_fallback/screenshots/` (01–04)
+- CBR строка #33 добавлена
+- Отличие от #32: здесь SDK Т-Кассы (`connection_type: Widget`) + fallback СБП/карта при отказе эквайринга
 
 ### Сессия 2026-07-29 (PHASE 1 SPEC · T-Bank inline payment button)
 
