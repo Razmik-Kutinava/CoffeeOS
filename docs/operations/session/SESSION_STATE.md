@@ -23,6 +23,13 @@
 - CBR + `customer_tasks/README` — строка индекса
 - Код / `todo.md` не трогали — ждут go → SPEC
 
+### Сессия 2026-07-29 (Deploy · Auth funnel Flash Call×2 → SMS)
+
+- `git push origin develop` → `cd26cb1b`
+- `fly deploy` — image built + deployed, machines healthy
+- MCP: витрина `655aaccb` загрузилась, API categories 200, phone_otp/send → 429 (Rack::Attack OK), логи чистые (нет 500)
+- RoutingError `/uploads/products/...` — известная особенность (эфемерные файлы Fly)
+
 ### Сессия 2026-07-29 (PHASE 0 intake · Auth funnel Flash Call×2 → SMS)
 
 - ТЗ: `customer_tasks/Рефакторинг воронки авторизации PWA Каскад Flash Call x2 SMS.md`

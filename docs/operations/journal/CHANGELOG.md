@@ -1,5 +1,9 @@
 ﻿# CHANGELOG
 
+## 2026-07-29 — Deploy: Auth funnel Flash×2→SMS → Fly
+- `git push origin develop` + `fly deploy` — `cd26cb1b`
+- Fly machines healthy, витрина + API 200, Rack::Attack 429 OK, логи без 500
+
 ## 2026-07-29 — PHASE 3 REVIEW: Auth funnel Flash×2→SMS
 - REVIEW cleanup: убран мёртвый код MessengerDeliveryError, generate_sms_code, rescue SmsClient/FlashCallClient
 - rubocop 0 offenses на новых файлах
