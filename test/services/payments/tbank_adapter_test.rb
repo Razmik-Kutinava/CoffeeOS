@@ -307,4 +307,72 @@ class Payments::TbankAdapterTest < ActiveSupport::TestCase
     end
     assert_equal "3001", error.error_code
   end
+
+  # ---------------------------------------------------------------------------
+  # Inline two-stage Init PayType O [TDD] — ТЗ inline-оплата Шаг 1
+  # ---------------------------------------------------------------------------
+
+  test "[TDD] init_payment with pay_type O posts PayType O and returns PaymentId" do
+    adapter = Payments::TbankAdapter.new
+    order = Struct.new(:id, :final_amount).new(SecureRandom.uuid, BigDecimal("150.00"))
+
+    captured = nil
+    adapter.define_singleton_method(:post_json) do |url, payload|
+      captured = { url: url, payload: payload }
+      { "Success" => true, "PaymentURL" => "https://pay.tbank.ru/x", "PaymentId" => "pid-o-1" }
+    end
+
+    result = adapter.init_payment(
+      order: order,
+      return_base_url: "https://example.com",
+      notification_url: "https://example.com/callbacks/tbank",
+      pay_type: "O"
+    )
+
+    assert captured[:url].end_with?("/Init")
+    assert_equal "O", captured[:payload]["PayType"]
+    assert_equal "pid-o-1", result[:provider_payment_id]
+    assert captured[:payload]["Token"].present?
+  end
+
+  test "[TDD] init_payment PayType O is included in Token SHA-256" do
+    adapter = Payments::TbankAdapter.new
+    order = Struct.new(:id, :final_amount).new("order-paytype-o", BigDecimal("100.00"))
+
+    captured = nil
+    adapter.define_singleton_method(:post_json) do |_url, payload|
+      captured = payload
+      { "Success" => true, "PaymentURL" => "https://pay.tbank.ru/x", "PaymentId" => "pid-o-2" }
+    end
+
+    adapter.init_payment(
+      order: order,
+      return_base_url: "https://example.com",
+      notification_url: "https://example.com/callbacks/tbank",
+      pay_type: "O"
+    )
+
+    expected_token = adapter.build_token(captured.except("Token"))
+    assert_equal expected_token, captured["Token"]
+    assert_includes captured.keys, "PayType"
+  end
+
+  test "[TDD] init_payment without pay_type does not send PayType (legacy)" do
+    adapter = Payments::TbankAdapter.new
+    order = Struct.new(:id, :final_amount).new(SecureRandom.uuid, BigDecimal("100.00"))
+
+    captured = nil
+    adapter.define_singleton_method(:post_json) do |_url, payload|
+      captured = payload
+      { "Success" => true, "PaymentURL" => "https://pay.tbank.ru/x", "PaymentId" => "pid-legacy" }
+    end
+
+    adapter.init_payment(
+      order: order,
+      return_base_url: "https://example.com",
+      notification_url: "https://example.com/callbacks/tbank"
+    )
+
+    assert_nil captured["PayType"]
+  end
 end
