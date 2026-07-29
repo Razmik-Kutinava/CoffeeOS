@@ -1,5 +1,12 @@
 ﻿# CHANGELOG
 
+## 2026-07-29 — PHASE 3 REVIEW: Auth funnel Flash×2→SMS.ru
+- REVIEW cleanup: убран мёртвый код MessengerDeliveryError, generate_sms_code, rescue SmsClient/FlashCallClient
+- rubocop 0 offenses на новых файлах
+- N+1 check: все запросы одиночные, без циклов
+- RLS check: MobileOtpCode по phone, без tenant_id — корректно
+- 38 runs (BE 23 + FE 15), 0F, 0E — PASS
+
 ## 2026-07-29 — feat: SmsRuClient + PhoneOtp cascade Flash×2→SMS [GREEN]
 - `app/services/shop/sms_ru_client.rb` — единый клиент SMS.ru (flash_call /code/call + sms /sms/send)
 - `app/services/shop/phone_otp.rb` — убран messenger, flash_call через SmsRuClient, sms переиспользует код

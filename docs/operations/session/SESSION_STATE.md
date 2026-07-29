@@ -40,7 +40,10 @@
 - Контроллер: `ip: request.remote_ip` в `send_code!`, убран messenger rescue
 - Rack::Attack: убран `shop/phone_otp_messenger` throttle
 - PhoneAuthCodeStep.svelte: убраны messenger imports/кнопка/fallback
-- Коммит RED: `f7313fdb`, GREEN: `b2685910`, доп GREEN: `8b76da10`
+- REVIEW: убран мёртвый код (MessengerDeliveryError, generate_sms_code, rescue SmsClient/FlashCallClient)
+- rubocop: 0 offenses на новых файлах (rack_attack pre-existing — не трогаем)
+- N+1: нет циклов, все запросы одиночные. RLS: MobileOtpCode без tenant_id — ок.
+- Коммиты: RED `f7313fdb`, GREEN `b2685910` + `8b76da10`, REVIEW `8d94b95b`
 
 ### Сессия 2026-07-29 (PHASE 2 BUILD RED · Auth funnel Flash Call×2 → SMS.ru)
 
