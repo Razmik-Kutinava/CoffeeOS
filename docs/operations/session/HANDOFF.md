@@ -1,6 +1,6 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-30 (**PHASE 0 intake · #34 SBP Autopay AccountToken**)  
+**Дата:** 2026-07-30 (**PHASE 1 SPEC · #34 SBP Autopay AccountToken**)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev  
 
@@ -9,12 +9,15 @@
 | Что | Статус |
 |-----|--------|
 | Intake ТЗ + CBR + артефакты | **`[x]`** |
-| PHASE 1: SPEC (`todo.md`) | **`[ ]`** ждёт go |
-| PHASE 2–3 | **`[ ]`** |
+| PHASE 1: SPEC (`todo.md`) | **`[x]`** |
+| PHASE 2: RED | **`[ ]`** ждёт go |
+| PHASE 2–3 GREEN/REVIEW | **`[ ]`** |
 
 **ТЗ:** [`Интеграция Автоплатежей СБП Т-Касса в PWA.md`](../milestones/veha_2/requirements/customer_tasks/Интеграция%20Автоплатежей%20СБП%20Т-Касса%20в%20PWA.md)  
 **Артефакты:** [`tbank_sbp_autopayments_account_token/`](../milestones/veha_2/artifacts/tbank_sbp_autopayments_account_token/)  
-**Дальше:** go → PHASE 1: SPEC.
+**todo:** [`SESSION todo.md`](todo.md)  
+**Дальше:** go → PHASE 2 RED.  
+**Блокер live:** терминал без Charge/Recurrent (#32) — MCP SUCCESS отложен.
 
 ### T-Bank inline payment + button statuses #32 (2026-07-30)
 

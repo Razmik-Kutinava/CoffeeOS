@@ -2,12 +2,20 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-30 (PHASE 0 intake · #34 SBP Autopay AccountToken)
+**Дата:** 2026-07-30 (PHASE 1 SPEC · #34 SBP Autopay AccountToken)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#34** интейк ТЗ «Автоплатежи СБП (Т-Касса)» — док + CBR + артефакты | **go** → PHASE 1: SPEC (`todo.md`) |
+| **#34** SPEC в `todo.md` — gaps, маппинг, 4 шага, Migration Gate | **go** → PHASE 2 RED (тесты) |
 | #32 SUCCESS blocked: Charge disabled на терминале T-Bank | Включить Charge в ЛК → MCP SUCCESS |
+
+### Сессия 2026-07-30 (PHASE 1 SPEC · #34)
+
+- SPEC: reuse MPM `payment_type=sbp` + `card_token` как AccountToken; API `sbp/init` + новый `sbp/charge`
+- Gaps: `GetAddAccountQRState`, `ChargeQr`, RequestKey idempotency, checkbox, Zero-Click UI, CHARGE_DECLINED fallback
+- `tbank_adapter.rb` ~260 — новые методы в отдельный сервис (не раздувать)
+- Live MCP blocked тем же терминалом, что #32 (пока нет Charge/Recurrent в ЛК)
+- Код не писали
 
 ### Сессия 2026-07-30 (PHASE 0 · #34 T-Kassa SBP Autopay)
 

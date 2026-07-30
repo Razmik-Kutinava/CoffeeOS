@@ -1,5 +1,10 @@
 ﻿# CHANGELOG
 
+## 2026-07-30 — docs: SPEC #34 T-Kassa SBP Autopay AccountToken
+- `todo.md` — PHASE 1: gaps, маппинг CoffeeOS, 4 шага, Migration Gate (reuse MPM sbp)
+- CBR/README: статус SPEC `[x]` · RED ждёт go
+- Код не менялся; live MCP blocked терминалом (#32 Charge)
+
 ## 2026-07-30 — docs: intake #34 T-Kassa SBP Autopay AccountToken
 - ТЗ: `customer_tasks/Интеграция Автоплатежей СБП Т-Касса в PWA.md` (текст заказчика 1:1)
 - Артефакты: `artifacts/tbank_sbp_autopayments_account_token/`
