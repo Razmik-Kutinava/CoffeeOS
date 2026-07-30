@@ -96,4 +96,38 @@ class Shop::WidgetPaymentInitiatorTest < ActiveSupport::TestCase
     assert_equal "pid-new", @payment.reload.provider_payment_id
     assert sync_called
   end
+
+  test "resolves rebill from extra_customer_ids when order customer has no cards" do
+    other = create_mobile_customer!(email: "other-#{SecureRandom.hex(3)}@ex.com")
+    MobilePaymentMethod.create!(
+      customer_id: other.id,
+      payment_type: "card",
+      card_token: "rebill-session",
+      card_masked: "*9999",
+      is_active: true,
+      is_default: true
+    )
+
+    captured = nil
+    original_sync = Payments::TbankPaymentSync.method(:sync_order!)
+    Payments::TbankPaymentSync.define_singleton_method(:sync_order!) { |**_| true }
+
+    begin
+      with_inline_stub(
+        result: { provider_payment_id: "pid-x" },
+        capture: ->(kw) { captured = kw }
+      ) do
+        Shop::WidgetPaymentInitiator.call(
+          order: @order,
+          return_base_url: "https://example.com",
+          notification_url: "https://example.com/cb",
+          extra_customer_ids: [ other.id ]
+        )
+      end
+    ensure
+      Payments::TbankPaymentSync.define_singleton_method(:sync_order!, original_sync)
+    end
+
+    assert_equal "rebill-session", captured[:rebill_id]
+  end
 end

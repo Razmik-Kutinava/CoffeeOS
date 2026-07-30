@@ -30,7 +30,14 @@ export async function runRepeatWidgetPayFlow({ orderId, api, fsm: existingFsm, o
   onStatusText?.(statusText)
 
   try {
-    await widgetInitPayment(orderId)
+    let cardId
+    try {
+      const cardsData = await api("/user/cards")
+      cardId = cardsData?.primary?.id || cardsData?.cards?.[0]?.id
+    } catch (_e) {
+      cardId = undefined
+    }
+    await widgetInitPayment(orderId, { cardId })
     const result = await runTbankInlineButtonCycle(
       async () => {
         try {

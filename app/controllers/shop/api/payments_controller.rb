@@ -57,10 +57,15 @@ module Shop
         order = Order.find_by(id: params[:order_id], tenant_id: @shop_tenant.id)
         return render json: { error: "Order not found" }, status: :not_found unless order
 
+        session_cid = Shop::CustomerSession.customer_id(session, @shop_tenant.id)
+        rebill_id = rebill_id_from_card_param(order)
+
         result = Shop::WidgetPaymentInitiator.call(
           order: order,
           return_base_url: ENV.fetch("TBANK_RETURN_URL", request.base_url),
-          notification_url: "#{request.base_url}/callbacks/tbank"
+          notification_url: "#{request.base_url}/callbacks/tbank",
+          rebill_id: rebill_id,
+          extra_customer_ids: [ session_cid ]
         )
 
         render json: { paymentUrl: adapter_payment_url(result), order_id: order.id.to_s }
@@ -101,6 +106,21 @@ module Shop
       def adapter_payment_url(result)
         pid = result[:provider_payment_id]
         "https://securepayments.tinkoff.ru/#{pid}"
+      end
+
+      # card_id / saved_card_id → RebillId; карта должна принадлежать клиенту заказа или сессии.
+      def rebill_id_from_card_param(order)
+        card_id = params[:card_id].presence || params[:saved_card_id].presence
+        return nil if card_id.blank?
+
+        card = MobilePaymentMethod.find_by(id: card_id, is_active: true)
+        return nil unless card
+
+        session_cid = Shop::CustomerSession.customer_id(session, @shop_tenant.id)
+        allowed = [ order.customer_id.to_s, session_cid.to_s ].compact_blank
+        return nil unless allowed.include?(card.customer_id.to_s)
+
+        card.rebill_id
       end
 
       def render_payment_error(error)

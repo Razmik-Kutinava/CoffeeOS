@@ -12,10 +12,16 @@ export const WIDGET_STATUS_LABELS = {
 export const WIDGET_POLL_MS = 2000
 export const WIDGET_POLL_MAX = 15
 
-export async function widgetInitPayment(orderId) {
+/**
+ * @param {string} orderId
+ * @param {{ cardId?: string }} [opts] — id сохранённой карты → RebillId на бэке
+ */
+export async function widgetInitPayment(orderId, { cardId } = {}) {
+  const body = { order_id: orderId }
+  if (cardId) body.card_id = cardId
   const data = await api("/payments/widget_init", {
     method: "POST",
-    body: JSON.stringify({ order_id: orderId })
+    body: JSON.stringify(body)
   })
   return data
 }
