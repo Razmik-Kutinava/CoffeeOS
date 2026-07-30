@@ -229,22 +229,25 @@
               onclick={() => onPayCardClick(item)}
             >оплатить в клик</button>
           {/if}
-          {#if payUi.activeKey === key}
-            <InlinePayFallback
-              fsmState={payUi.fsm?.state}
-              statusText={payUi.statusText || ""}
-              errorText={payUi.errorText || ""}
-              savedCards={payUi.savedCards || []}
-              showFallbackMethods={!!payUi.showFallbackMethods}
-              showExpandedCards={!!payUi.showExpandedCards}
-              showNewCardForm={!!payUi.showNewCardForm}
-              onSelectSbp={onFallbackSbp}
-              onSelectCardPlus={onFallbackCardPlus}
-              onSelectSavedCard={onSelectSavedCard}
-            />
-          {/if}
         </div>
       {/each}
     </div>
+    {#if payUi.activeKey}
+      <!-- Полная ширина: внутри карточки (embedded 4.5rem) плашка обрезалась -->
+      <div class="mt-1.5 w-full min-w-0 px-0.5" data-testid="shop-repeat-inline-pay-slot">
+        <InlinePayFallback
+          fsmState={payUi.fsm?.state}
+          statusText={payUi.statusText || ""}
+          errorText={payUi.errorText || ""}
+          savedCards={payUi.savedCards || []}
+          showFallbackMethods={!!payUi.showFallbackMethods}
+          showExpandedCards={!!payUi.showExpandedCards}
+          showNewCardForm={!!payUi.showNewCardForm}
+          onSelectSbp={onFallbackSbp}
+          onSelectCardPlus={onFallbackCardPlus}
+          onSelectSavedCard={onSelectSavedCard}
+        />
+      </div>
+    {/if}
   </div>
 {/if}
