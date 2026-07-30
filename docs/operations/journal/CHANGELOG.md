@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-07-30 — MCP #34 Fly: UI OK, T-Bank Recurrent/Charge blocked
+- Чекбокс bind + `save_sbp_account` → 422 **3013** Recurrent недоступны
+- Ручной СБП → NSPK QR PASS; карта Charge → 422 **10**
+- Zero-Click SUCCESS NO-GO до ЛК T-Bank
+- Артефакт: `mcp_fly_sbp_autopay_2026-07-30.json`
+
 ## 2026-07-30 — feat(#34): Checkout UI SBP account + bind checkbox
 - GET `/user/cards` → `sbp_accounts` / `has_sbp_account`
 - PaymentMethodsSheet: «Ваш счет СБП» (default) + чекбокс привязки

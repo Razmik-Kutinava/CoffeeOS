@@ -1,6 +1,6 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-30 (**#34 Checkout UI SBP Autopay done · MCP blocked**)  
+**Дата:** 2026-07-30 (**#34 MCP Fly — UI OK · T-Bank 3013/10 block**)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev  
 
@@ -11,12 +11,15 @@
 | Intake + SPEC + RED + GREEN | **`[x]`** |
 | REVIEW: ownership fix + settle ChargeQr + ops | **`[x]`** |
 | Checkout UI checkbox / default «Ваш счет СБП» | **`[x]`** |
-| MCP Fly live SUCCESS | **blocked** — терминал без Charge/Recurrent (#32) |
+| MCP Fly UI/API smoke | **`[x]`** — чекбокс, `save_sbp_account`, `sbp_accounts`, `sbp/charge` route |
+| MCP Setup bind (Recurrent) | **FAIL_TBANK** — **3013** «Рекуррентные платежи недоступны» |
+| MCP manual SBP | **PASS** — NSPK QR |
+| MCP Zero-Click ChargeQr SUCCESS | **blocked** — нет AccountToken + Charge **10** |
 
+**MCP:** [`mcp_fly_sbp_autopay_2026-07-30.json`](../milestones/veha_2/artifacts/tbank_sbp_autopayments_account_token/mcp_fly_sbp_autopay_2026-07-30.json)  
 **ТЗ:** [`Интеграция Автоплатежей СБП Т-Касса в PWA.md`](../milestones/veha_2/requirements/customer_tasks/Интеграция%20Автоплатежей%20СБП%20Т-Касса%20в%20PWA.md)  
 **Артефакты:** [`tbank_sbp_autopayments_account_token/`](../milestones/veha_2/artifacts/tbank_sbp_autopayments_account_token/)  
-**Коммиты:** RED `e1d73dc5` · GREEN `1268bb45` · REVIEW (этот)  
-**Дальше:** Checkout UI wiring **или** включить Charge в ЛК T-Bank → MCP.
+**Дальше:** ОК Recurrent+Charge в ЛК T-Bank → повтор MCP Setup→webhook→Zero-Click SUCCESS.
 
 **Review findings (закрыты в REVIEW):**
 - P1 session мог списать свой AccountToken за чужой заказ → 404 mismatch

@@ -2,12 +2,20 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-30 (#34 Checkout UI SBP Autopay)
+**Дата:** 2026-07-30 (#34 MCP Fly SBP Autopay)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#34** Checkout UI: «Ваш счет СБП» + чекбокс + charge/fallback | MCP Fly после Charge в ЛК (#32) |
-| #32 SUCCESS blocked: Charge disabled | Включить Charge в ЛК |
+| **#34** MCP Fly: UI/API OK; Setup **3013** + Charge **10** | ОК Recurrent+Charge в ЛК T-Bank → повтор MCP SUCCESS |
+| #32/#34 live Zero-Click blocked терминалом | Ждать ответ T-Bank |
+
+### Сессия 2026-07-30 (MCP Fly · #34 SBP Autopay)
+
+- Чекбокс «Привязать счет…» + `save_sbp_account:true` → **422 error 3013** Recurrent недоступны
+- Ручной СБП без bind → NSPK QR PASS (`4094633d…`)
+- Карта one_click → **422 error 10** Charge заблокирован
+- `has_sbp_account=false`; Zero-Click / CHARGE_DECLINED live — BLOCKED
+- Артефакт: `artifacts/tbank_sbp_autopayments_account_token/mcp_fly_sbp_autopay_2026-07-30.json`
 
 ### Сессия 2026-07-30 (#34 Checkout UI)
 

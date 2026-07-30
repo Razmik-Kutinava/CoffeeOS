@@ -6,8 +6,12 @@
 
 | Папка / файл | Назначение |
 |---|---|
-| `screenshots/` | Скрины приёмки / заказчика (пока пусто — в ТЗ скринов не было) |
-| MCP JSON | Прогоны Fly после реализации |
+| `screenshots/` | Скрины приёмки / MCP (viewport в сессии; filePath MCP → вне workspace root) |
+| `mcp_fly_sbp_autopay_2026-07-30.json` | MCP Fly 2026-07-30: UI OK · Setup 3013 · manual SBP PASS · Charge 10 |
+
+## MCP Fly 2026-07-30
+
+Вердикт: наш UI/API #34 на стенде живые; live Setup/Zero-Click/Charge SUCCESS — **NO-GO** до включения Recurrent+Charge в ЛК T-Bank.
 
 ## Интейк 2026-07-30
 

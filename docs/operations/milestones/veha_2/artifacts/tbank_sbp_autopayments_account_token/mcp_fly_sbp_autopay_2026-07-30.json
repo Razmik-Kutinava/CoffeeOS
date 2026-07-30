@@ -1,0 +1,110 @@
+{
+  "date": "2026-07-30",
+  "task": "#34 T-Kassa SBP Autopay AccountToken — MCP Fly simulation",
+  "stand": "https://coffeeos.fly.dev",
+  "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "tenant_name": "Point A Ленин",
+  "profile": "Aram R / aramfifa100@gmail.com / +79639124847 / 2bc3…4c",
+  "bundle": "application-DkAMfd9a.js",
+  "local_head": "8433673c",
+  "note": "MCP only. T-Bank ЛК ещё не включил Recurrent/Charge — live Zero-Click SUCCESS невозможен.",
+  "api_probe": {
+    "GET /user/cards": {
+      "status": 200,
+      "has_sbp_account": false,
+      "sbp_accounts": [],
+      "cards_count": 2,
+      "keys": ["primary", "cards", "sbp_accounts", "has_sbp_account"]
+    },
+    "POST /payments/sbp/charge (fake order)": {
+      "status": 404,
+      "body": "{\"error\":\"Заказ не найден\",\"fatal\":false}",
+      "note": "Роут живой; без валидного order_id + AccountToken SUCCESS недостижим"
+    }
+  },
+  "checks": [
+    {
+      "id": "ui_bind_checkbox",
+      "scenario": "Шаг 1 UI: СБП выбран → чекбокс «Привязать счет для покупок в один клик»",
+      "result": "PASS",
+      "evidence": "data-testid save-sbp-account-checkbox; кнопка «Оплатить быстро»"
+    },
+    {
+      "id": "ui_your_sbp_account",
+      "scenario": "Шаг 3 UI: «Ваш счет СБП» выбран по умолчанию",
+      "result": "SKIP_EXPECTED",
+      "evidence": "has_sbp_account=false — AccountToken ещё не сохранён (Setup не прошёл из-за 3013)"
+    },
+    {
+      "id": "setup_save_sbp_account",
+      "scenario": "Шаг 1: POST sbp/init с save_sbp_account:true",
+      "result": "FAIL_TBANK",
+      "order_id": "c963ffc8-eed8-452e-8411-897d97436647",
+      "request": { "order_id": "c963ffc8-eed8-452e-8411-897d97436647", "save_sbp_account": true },
+      "response": {
+        "status": 422,
+        "error": "Т-Банк API error 3013: Рекуррентные платежи недоступны",
+        "error_code": "3013"
+      },
+      "ui": "красная полоса ошибки + кнопка «Сбой банка: позже»"
+    },
+    {
+      "id": "manual_sbp_without_bind",
+      "scenario": "Ручной СБП без флага привязки (свежий заказ)",
+      "result": "PASS",
+      "order_id": "4094633d-3389-4873-8464-30d1542b0b3d",
+      "evidence": "редирект на https://qr.nspk.ru/AD101067GD5T95VI9ATQPOBBP4UC7KSJ («Оплата по QR коду»); затем #/payment-result?status=waiting"
+    },
+    {
+      "id": "card_charge_blocked",
+      "scenario": "Карта MIR *5953 one_click / Charge (регресс #32)",
+      "result": "FAIL_TBANK",
+      "request": {
+        "endpoint": "POST /shop/api/payments/one_click",
+        "card_id": "4c5569dd-994c-4146-86d2-ed4d78bebcd6"
+      },
+      "response": {
+        "status": 422,
+        "error": "Метод Charge заблокирован для данного терминала.",
+        "error_code": "10"
+      },
+      "ui": "«Отказ: смените карту»"
+    },
+    {
+      "id": "zero_click_charge_qr",
+      "scenario": "Шаг 3: Zero-Click ChargeQr SUCCESS",
+      "result": "BLOCKED",
+      "reason": "Нет AccountToken (Setup 3013) + терминал без Charge/Recurrent (error 10 / 3013)"
+    },
+    {
+      "id": "fallback_charge_declined",
+      "scenario": "Шаг 4: CHARGE_DECLINED → manual SBP",
+      "result": "BLOCKED",
+      "reason": "ChargeQr до банка не доходит; soft decline не симулируется live без включённого Charge"
+    }
+  ],
+  "tbank_blockers": [
+    {
+      "code": "3013",
+      "message": "Рекуррентные платежи недоступны",
+      "blocks": "Setup bind (Init Recurrent=Y + DATA QR)"
+    },
+    {
+      "code": "10",
+      "message": "Метод Charge заблокирован для данного терминала",
+      "blocks": "Card one-click Charge + будущий ChargeQr Zero-Click"
+    }
+  ],
+  "verdict": "UI+API #34 на Fly работают (чекбокс, save_sbp_account, sbp_accounts, sbp/charge route). Live Setup/Zero-Click/Charge SUCCESS — NO-GO до ответа/включения Recurrent+Charge в ЛК T-Bank на терминале TBANK_TERMINAL_KEY.",
+  "screenshots": [
+    "screenshots/mcp_fly_2026-07-30_sbp_bind_checkbox.png (viewport capture in MCP session)",
+    "screenshots/mcp_fly_2026-07-30_sbp_bind_error_3013.png (viewport capture in MCP session)",
+    "screenshots/mcp_fly_2026-07-30_manual_sbp_nspk_qr.png (viewport capture in MCP session)",
+    "screenshots/mcp_fly_2026-07-30_charge_error10.png (viewport capture in MCP session)"
+  ],
+  "next": [
+    "Дождаться ОК в ЛК T-Bank: Recurrent + Charge на том же TerminalKey",
+    "Повторный MCP: Setup bind → webhook AccountToken → Zero-Click ChargeQr SUCCESS",
+    "После Charge OK — проверить soft CHARGE_DECLINED fallback (Toast + manual SBP)"
+  ]
+}
