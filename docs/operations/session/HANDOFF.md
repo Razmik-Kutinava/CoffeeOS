@@ -10,13 +10,15 @@
 |-----|--------|
 | Intake + SPEC + BE шаги 1–3 | **`[x]`** |
 | FE FSM poll/rotation/timeout (шаги 4–8) | **`[x]`** |
-| UI по скрину (плашка / СБП / карта+ / cards / form) | **`[x]`** layout |
-| SMS-пинпад 00:59 в NewCardForm | **`[ ]`** backlog |
-| PHASE 3 REVIEW / MCP Fly | **`[ ]`** |
+| UI по скрину (плашка / СБП / карта+ / cards / form) | **`[x]`** |
+| SMS-пинпад 00:59 в NewCardForm (inline) | **`[x]`** |
+| SUCCESS ✔ / ERROR красная / reset IDLE 3 с | **`[x]`** |
+| Poll HTTP 400/500 → ERROR | **`[x]`** |
+| PHASE 3 REVIEW / MCP Fly | **`[ ]`** (нужен deploy) |
 
 **ТЗ:** [`Интеграция inline-оплаты Т-Банка…`](../milestones/veha_2/requirements/customer_tasks/Интеграция%20inline-оплаты%20Т-Банка%20с%20динамическими%20статусами%20внутри%20кнопки.md)  
 **Скрин:** [`01_full_flow_schema…`](../milestones/veha_2/artifacts/tbank_inline_payment_button_statuses/screenshots/01_full_flow_schema_status_sbp_cards_form.png)  
-**Дальше:** PHASE 3 REVIEW или SMS-пинпад по скрину.
+**Дальше:** регрессия zone → MCP после `fly deploy` / push.
 
 ### T-Kassa Widget One-Click + Fallback #33 (2026-07-29)
 

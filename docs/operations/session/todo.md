@@ -193,8 +193,8 @@ bin/rails test test/integration/shop/api/qa_section_2_3_payment_cart_test.rb \
 - [x] **Шаг 6** — CONFIRMED → SUCCESS («Оплачено!»), стоп таймеров
 - [x] **Шаг 7** — REJECTED/CANCELED → ERROR; 1051→«Недостаточно средств»; fallback СБП/карта+
 - [x] **Шаг 8** — Timeout 15 с → «Время ожидания истекло»  
-  Тесты: `node --test test/javascript/shop_inline_pay_button_fsm_test.mjs` 6/6  
-  Backlog: SMS-пинпад 00:59 в NewCardForm (на скрине есть, в форме ещё нет) · HTTP 400/500→reset 3 с edge
+  Тесты: `node --test test/javascript/shop_inline_pay_button_fsm_test.mjs` (+ HTTP 400/500)  
+  UI: SUCCESS ✔ зелёная · ERROR красная · reset IDLE 3 с · SMS-пинпад 00:59 (`SmsPinPad` + `shopSmsPinPad.js`)
 
 ### REVIEW
 - [ ] Регрессия оплаты + rubocop зоны

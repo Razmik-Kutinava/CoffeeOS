@@ -1,5 +1,12 @@
 ﻿# CHANGELOG
 
+## 2026-07-30 — feat(#32): SMS pinpad + ERROR/SUCCESS UI + poll HTTP edge [GREEN]
+- FE: `shopSmsPinPad.js` + `SmsPinPad.svelte` — смс код, таймер 00:59, numpad
+- FE: `NewCardForm` — `showSmsPinPad` (inline); checkout без пинпада
+- FE: SUCCESS ✔ зелёная / ERROR красная / reset IDLE 3 с (`TBANK_INLINE_ERROR_RESET_MS`)
+- FE: poll HTTP 400/500 → `http_error` + generic label
+- Тесты: JS inline+sms+widget PASS · NewCardForm step1 UI PASS
+
 ## 2026-07-30 — feat(#32): inline pay FSM + UI по скрину заказчика [GREEN]
 - Артефакт скрина: `tbank_inline_payment_button_statuses/screenshots/01_full_flow_schema_status_sbp_cards_form.png`
 - FE: `shopInlinePayFsm.js` — poll 1500ms / ротация 1800ms / timeout 15s / 1051

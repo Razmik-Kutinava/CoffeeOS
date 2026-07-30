@@ -130,8 +130,42 @@ export async function runTbankInlineButtonCycle(pollStatusFn, opts = {}) {
     if (elapsed === nextPollAt) {
       attempt += 1
       pollTimes.push(elapsed)
-      const data = (await pollStatusFn({ attempt, elapsedMs: elapsed })) || {}
+
+      let data = {}
+      try {
+        data = (await pollStatusFn({ attempt, elapsedMs: elapsed })) || {}
+      } catch (err) {
+        const http = Number(err?.httpStatus || err?.status || 0)
+        if (http >= 400) {
+          return {
+            kind: "http_error",
+            terminalStatus: "HTTP_ERROR",
+            errorCode: String(http),
+            errorLabel: INLINE_GENERIC_ERROR_LABEL,
+            pollTimes,
+            rotationTimes,
+            rotationLabels,
+            labelAtTerminal: rotationLabels[labelIndex]
+          }
+        }
+        throw err
+      }
+
       const status = String(data.status || "").toUpperCase()
+
+      if (status === "HTTP_ERROR" || status === "ERROR") {
+        const http = data.error_code || data.httpStatus
+        return {
+          kind: "http_error",
+          terminalStatus: "HTTP_ERROR",
+          errorCode: http != null ? String(http) : null,
+          errorLabel: INLINE_GENERIC_ERROR_LABEL,
+          pollTimes,
+          rotationTimes,
+          rotationLabels,
+          labelAtTerminal: rotationLabels[labelIndex]
+        }
+      }
 
       if (status === "CONFIRMED") {
         return {

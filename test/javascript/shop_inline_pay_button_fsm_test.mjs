@@ -125,5 +125,34 @@ describe("runTbankInlineButtonCycle — scheduling + terminal outcomes", () => {
     assert.deepEqual(res.pollTimes, [1500])
     assert.deepEqual(res.rotationTimes, [])
   })
+
+  it("maps HTTP 500 throw during poll to http_error + generic label", async () => {
+    const pollStatusFn = async () => {
+      const err = new Error("server")
+      err.httpStatus = 500
+      throw err
+    }
+
+    const res = await runTbankInlineButtonCycle(pollStatusFn, {
+      sleep: async (_ms) => {}
+    })
+
+    assert.equal(res.kind, "http_error")
+    assert.equal(res.terminalStatus, "HTTP_ERROR")
+    assert.equal(res.errorCode, "500")
+    assert.equal(res.errorLabel, "Ошибка оплаты, попробуйте снова")
+  })
+
+  it("maps HTTP 400 status payload to http_error", async () => {
+    const pollStatusFn = async () => ({ status: "HTTP_ERROR", error_code: "400" })
+
+    const res = await runTbankInlineButtonCycle(pollStatusFn, {
+      sleep: async (_ms) => {}
+    })
+
+    assert.equal(res.kind, "http_error")
+    assert.equal(res.errorCode, "400")
+    assert.equal(res.errorLabel, "Ошибка оплаты, попробуйте снова")
+  })
 })
 

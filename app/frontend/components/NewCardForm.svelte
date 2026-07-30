@@ -1,7 +1,6 @@
 <script>
   /**
-   * Форма новой карты — макет 1000008924.png
-   * Логика валидации / save_card — в shopNewCardForm.js
+   * Форма новой карты (+ опционально SMS-пинпад для inline #32).
    */
   import {
     createNewCardFormState,
@@ -11,13 +10,21 @@
     setSaveCard,
     isPayEnabled
   } from "../lib/shopNewCardForm.js"
+  import { createSmsPinPadState, isSmsCodeComplete } from "../lib/shopSmsPinPad.js"
+  import SmsPinPad from "./SmsPinPad.svelte"
 
   let {
     state = $bindable(createNewCardFormState()),
-    onchange = undefined
+    smsState = $bindable(createSmsPinPadState()),
+    showSmsPinPad = false,
+    onchange = undefined,
+    onPay = undefined
   } = $props()
 
-  const payEnabled = $derived(isPayEnabled(state))
+  const cardReady = $derived(isPayEnabled(state))
+  const payEnabled = $derived(
+    showSmsPinPad ? cardReady && isSmsCodeComplete(smsState) : cardReady
+  )
 
   function emit(next) {
     state = next
@@ -38,6 +45,11 @@
 
   function onSaveToggle(e) {
     emit(setSaveCard(state, e.currentTarget.checked))
+  }
+
+  function handlePay() {
+    if (!payEnabled) return
+    onPay?.({ card: state, smsCode: showSmsPinPad ? smsState.code : null })
   }
 </script>
 
@@ -87,30 +99,41 @@
   </div>
 
   <label class="toggle" data-testid="shop-new-card-save-toggle">
-    <input
-      type="checkbox"
-      checked={state.save_card}
-      onchange={onSaveToggle}
-    />
-    <span>Использовать карту для будущих заказов</span>
+    <input type="checkbox" checked={state.save_card} onchange={onSaveToggle} />
+    <span>
+      Использовать карту для будущих заказов
+      {#if showSmsPinPad}
+        <small>Это безопасно, данные зашифрованы</small>
+      {/if}
+    </span>
   </label>
 
-  <!-- Кнопка «Оплатить» активируется снаружи по isPayEnabled / data-pay-enabled -->
-  <p class="pay-hint" hidden={!payEnabled} data-testid="shop-new-card-pay-ready">
-    Готово к оплате
-  </p>
+  {#if showSmsPinPad}
+    <SmsPinPad bind:state={smsState} />
+    <button
+      type="button"
+      class="pay-btn"
+      data-testid="shop-new-card-pay"
+      disabled={!payEnabled}
+      onclick={handlePay}
+    >Оплатить</button>
+  {:else}
+    <p class="pay-hint" hidden={!payEnabled} data-testid="shop-new-card-pay-ready">
+      Готово к оплате
+    </p>
+  {/if}
 </div>
 
 <style>
   .new-card-form {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: 0.65rem;
   }
   .row {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 0.75rem;
+    gap: 0.5rem;
   }
   .field {
     display: flex;
@@ -130,13 +153,34 @@
   }
   .toggle {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 0.5rem;
     font-size: 0.875rem;
+  }
+  .toggle small {
+    display: block;
+    margin-top: 0.15rem;
+    color: #888;
+    font-size: 0.7rem;
   }
   .pay-hint {
     font-size: 0.75rem;
     color: #059669;
     margin: 0;
+  }
+  .pay-btn {
+    align-self: flex-end;
+    min-width: 7rem;
+    border: 0;
+    border-radius: 0.75rem;
+    padding: 0.7rem 1rem;
+    background: #ff8c42;
+    color: #111;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .pay-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
   }
 </style>

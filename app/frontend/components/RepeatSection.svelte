@@ -97,8 +97,16 @@
       widgetStatusText = out.statusText
       widgetErrorText = out.errorText
       showFallbackMethods = out.showFallbackMethods
-      if (out.fsm.state === "SUCCESS") {
-        setTimeout(() => { widgetFsm.reset(); activePayItemKey = null }, 3000)
+      if (out.resetAfterMs) {
+        setTimeout(() => {
+          widgetFsm.reset()
+          activePayItemKey = null
+          showFallbackMethods = false
+          showExpandedCards = false
+          showNewCardForm = false
+          widgetErrorText = ""
+          widgetStatusText = ""
+        }, out.resetAfterMs)
       }
     } finally {
       repeatBusy = false

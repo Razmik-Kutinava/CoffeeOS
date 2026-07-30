@@ -2,12 +2,21 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-30 (PHASE 2 GREEN · #32 Шаги 4–8 FE FSM + UI по скрину)
+**Дата:** 2026-07-30 (PHASE 2 GREEN · #32 SMS pinpad + ERROR/SUCCESS + HTTP edge)
 
 | Сейчас | Дальше |
 |--------|--------|
-| #32 FE FSM + wiring по скрину (оранжевая плашка / белые СБП·карта+ / expanded / NewCardForm) | PHASE 3 REVIEW #32 · SMS-пинпад в NewCardForm (backlog) |
-| JS: `shop_inline_pay_button_fsm_test` + widget 23/23 PASS | MCP/Fly визуальная сверка со скрином |
+| #32: SMS 00:59 · ✔ SUCCESS · красный ERROR · reset 3с · poll 400/500 | PHASE 3 REVIEW + MCP (нужен deploy для Fly) |
+| JS 30/30 PASS · NewCardForm UI PASS | Регрессия оплаты zone (в прогоне) |
+
+### Сессия 2026-07-30 (#32 SMS pinpad + UI states + HTTP edge)
+
+- `shopSmsPinPad.js` / `SmsPinPad.svelte` — таймер 00:59 + 4-digit + numpad
+- `NewCardForm showSmsPinPad` только в InlinePayFallback (checkout не ломаем)
+- `InlinePayFallback`: SUCCESS зелёный+✔ · ERROR красный · fallback оранжевый
+- `runTbankInlineButtonCycle`: catch httpStatus≥400 → http_error
+- `widgetRepeatPayFlow`: `resetAfterMs=3000` на SUCCESS/ERROR/timeout/http
+- Тесты: JS 30/30 · `shop_new_card_form_step1` UI 1/1 PASS
 
 ### Сессия 2026-07-30 (#32 Шаг 4–8 GREEN · скрин в артефактах)
 
