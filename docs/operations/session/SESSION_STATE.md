@@ -6,8 +6,8 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| #32: SMS 00:59 · ✔ SUCCESS · красный ERROR · reset 3с · poll 400/500 | PHASE 3 REVIEW + MCP (нужен deploy для Fly) |
-| JS 30/30 PASS · NewCardForm UI PASS | Регрессия оплаты zone (в прогоне) |
+| #32: SMS 00:59 · ✔ SUCCESS · красный ERROR · reset 3с · poll 400/500 | MCP после deploy (апрув) |
+| JS 30/30 PASS · NewCardForm UI PASS · оплата zone **64/0** | `fly deploy` для визуальной сверки скрина |
 
 ### Сессия 2026-07-30 (#32 SMS pinpad + UI states + HTTP edge)
 

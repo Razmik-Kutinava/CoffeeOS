@@ -197,9 +197,9 @@ bin/rails test test/integration/shop/api/qa_section_2_3_payment_cart_test.rb \
   UI: SUCCESS ✔ зелёная · ERROR красная · reset IDLE 3 с · SMS-пинпад 00:59 (`SmsPinPad` + `shopSmsPinPad.js`)
 
 ### REVIEW
-- [ ] Регрессия оплаты + rubocop зоны
-- [ ] CHANGELOG / HANDOFF / SESSION_STATE итог
-- [ ] MCP / ручная проверка Dev — после deploy (отдельный апрув)
+- [x] Регрессия оплаты zone: `64 runs, 0 failures, 2 skips` (2026-07-30)
+- [x] CHANGELOG / HANDOFF / SESSION_STATE итог
+- [ ] MCP / ручная проверка Dev — **нужен `fly deploy`/`push`** (FE ещё не на Fly)
 
 ---
 # todo — Auth funnel cascade Flash Call×2 → SMS
