@@ -1,5 +1,10 @@
 ﻿# CHANGELOG
 
+## 2026-07-30 — MCP Fly #32 inline pay: FAIL (last_order_id null)
+- Прогон Point A / Aram: бандл #32 на Fly есть, но «оплатить в клик» → checkout
+- Причина: `frequent_items[].last_order_id = null` → не вызывается widget/inline FSM
+- Артефакт: `mcp_fly_inline_pay_2026-07-30.json` · вердикт **NOT READY** для заказчика
+
 ## 2026-07-30 — feat(#32): SMS pinpad + ERROR/SUCCESS UI + poll HTTP edge [GREEN]
 - FE: `shopSmsPinPad.js` + `SmsPinPad.svelte` — смс код, таймер 00:59, numpad
 - FE: `NewCardForm` — `showSmsPinPad` (inline); checkout без пинпада

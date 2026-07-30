@@ -1,0 +1,62 @@
+{
+  "date": "2026-07-30",
+  "task": "T-Bank inline payment button #32",
+  "stand": "https://coffeeos.fly.dev",
+  "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "tenant_name": "Point A Ленин",
+  "profile": "Aram 2bc3…4c",
+  "bundle": "/vite/assets/application-D10vNL7z.js",
+  "health": { "up": "green PASS" },
+  "bundle_contains": {
+    "rotation_labels": true,
+    "sms_pinpad_testid": true,
+    "success_check_testid": true,
+    "bg_red_600": true,
+    "http_error": true
+  },
+  "checks": [
+    {
+      "id": 1,
+      "check": "Витрина Point A загружается, секция «повторить» + «оплатить в клик»",
+      "result": "PASS"
+    },
+    {
+      "id": 2,
+      "check": "Клик «оплатить в клик» → inline плашка статусов (Ещё чуть-чуть… / ротация)",
+      "result": "FAIL",
+      "evidence": "Уход на #/checkout + PaymentMethodsSheet (MIR *5953/*8782, СБП, Картой +)"
+    },
+    {
+      "id": 3,
+      "check": "Причина: frequent_items[].last_order_id",
+      "result": "FAIL",
+      "evidence": "GET /shop/api/frequent_products → 3 items, last_order_id=null → RepeatSection вызывает repeatPayOneClickItem (старый checkout), не widget_init/inline FSM"
+    },
+    {
+      "id": 4,
+      "check": "SMS-пинпад 00:59 на inline NewCardForm (скрин)",
+      "result": "BLOCKED",
+      "evidence": "Inline path не открылся; на checkout NewCardForm showSmsPinPad=false → pinpad отсутствует (ожидаемо для checkout)"
+    },
+    {
+      "id": 5,
+      "check": "SUCCESS ✔ / ERROR красная / reset 3с на Fly UI",
+      "result": "BLOCKED",
+      "evidence": "Не достигнуто: нет inline PROCESSING UI на живом клике"
+    },
+    {
+      "id": 6,
+      "check": "Деплой содержит код #32",
+      "result": "PASS",
+      "evidence": "Строки ротации / shop-sms-pinpad / Оплачено! / bg-red-600 в application-D10vNL7z.js"
+    }
+  ],
+  "verdict": "NOT READY for customer acceptance",
+  "blockers": [
+    "frequent API не отдаёт last_order_id → one-click не заходит в inline widget flow",
+    "нужен фикс данных/API и повторный MCP на inline статусы + SMS + ERROR/SUCCESS"
+  ],
+  "screenshots": [
+    "screenshots/mcp_fly_2026-07-30_checkout_after_oneclick.png"
+  ]
+}

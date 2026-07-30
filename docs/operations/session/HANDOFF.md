@@ -14,12 +14,14 @@
 | SMS-пинпад 00:59 в NewCardForm (inline) | **`[x]`** |
 | SUCCESS ✔ / ERROR красная / reset IDLE 3 с | **`[x]`** |
 | Poll HTTP 400/500 → ERROR | **`[x]`** |
-| PHASE 3 REVIEW / MCP Fly | **регрессия `[x]`** · MCP **`[ ]`** ждёт deploy |
+| PHASE 3 REVIEW / MCP Fly | **регрессия `[x]`** · MCP **FAIL** 2026-07-30 — не к заказчику |
 
 **ТЗ:** [`Интеграция inline-оплаты Т-Банка…`](../milestones/veha_2/requirements/customer_tasks/Интеграция%20inline-оплаты%20Т-Банка%20с%20динамическими%20статусами%20внутри%20кнопки.md)  
 **Скрин:** [`01_full_flow_schema…`](../milestones/veha_2/artifacts/tbank_inline_payment_button_statuses/screenshots/01_full_flow_schema_status_sbp_cards_form.png)  
+**MCP:** [`mcp_fly_inline_pay_2026-07-30.json`](../milestones/veha_2/artifacts/tbank_inline_payment_button_statuses/mcp_fly_inline_pay_2026-07-30.json)  
 **Регрессия:** shop/payments zone **64/0** · JS **30/30**  
-**Дальше:** явный апрув → `git push` + `fly deploy` → MCP сверка SMS/✔/красная кнопка.
+**Блокер MCP:** `frequent_items[].last_order_id = null` → «оплатить в клик» уходит в `#/checkout`, не inline статусы/SMS.  
+**Дальше:** фикс last_order_id (API/данные) → повторный MCP → только потом заказчику.
 
 ### T-Kassa Widget One-Click + Fallback #33 (2026-07-29)
 
