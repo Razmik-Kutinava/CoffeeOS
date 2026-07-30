@@ -2,12 +2,19 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-30 (PHASE 2 GREEN · #32 SMS pinpad + ERROR/SUCCESS + HTTP edge)
+**Дата:** 2026-07-30 (fix #32 MCP blocker · inline create order)
 
 | Сейчас | Дальше |
 |--------|--------|
-| #32: код на Fly в бандле PASS · MCP UI **FAIL** | фикс `last_order_id` в frequent API → повторный MCP |
-| «оплатить в клик» → checkout (не inline) | не отдавать заказчику до PASS |
+| Фикс: `last_order_id` в frequent v2 + `createRepeatInlineOrder` + FSM UI сразу | Deploy Fly → MCP до PASS |
+| «оплатить в клик» больше не уходит в checkout | SMS / SUCCESS / ERROR на живом стенде |
+
+### Сессия 2026-07-30 (fix: one-click → new pending order + PROCESSING UI)
+
+- BE: `CustomerFrequentProductsService` — `last_order_id` в payload, cache `shop/freq/v2/…`
+- FE: `createRepeatInlineOrder.js` — addToCart → POST `/orders` (card) → новый `order_id`
+- FE: `RepeatSection` — сразу PROCESSING, затем `runRepeatWidgetPayFlow({ fsm })`
+- Тесты: frequent service/cache/API PASS · JS create+inline+sms 15/15 · payment cart 24/0 (2 skip)
 
 ### Сессия 2026-07-30 (MCP Fly #32 · FAIL — не к заказчику)
 

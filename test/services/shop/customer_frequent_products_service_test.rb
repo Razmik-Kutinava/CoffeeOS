@@ -52,6 +52,17 @@ class Shop::CustomerFrequentProductsServiceTest < ActiveSupport::TestCase
     assert_equal 250.0, top[:price]
     assert_equal "https://cdn.example.com/filter.png", top[:image_url]
     assert_equal SYRUP_CARAMEL, top[:modifier_options]
+    assert top[:last_order_id].present?, "карточка повтора должна нести last_order_id свежего заказа"
+  end
+
+  test "last_order_id points to the most recent order in the group" do
+    older = create_paid_order!(product: @filter, modifiers: SYRUP_CARAMEL, created_at: 10.days.ago)
+    newer = create_paid_order!(product: @filter, modifiers: SYRUP_CARAMEL, created_at: 1.day.ago)
+
+    items = call_service
+    assert_equal 1, items.length
+    assert_equal newer.id, items.first[:last_order_id]
+    refute_equal older.id, items.first[:last_order_id]
   end
 
   test "returns empty array without matching orders" do

@@ -5,10 +5,12 @@ import {
 } from "./shopLocalStorage.js"
 
 function profileStorageKey() {
+  if (typeof window === "undefined") return "shop_guest_profile:default"
   const q = new URLSearchParams(window.location.search).get("tenant_id")
   const tid =
     (q && String(q).trim()) ||
-    document.querySelector('meta[name="shop-tenant-id"]')?.getAttribute("content") ||
+    (typeof document !== "undefined" &&
+      document.querySelector('meta[name="shop-tenant-id"]')?.getAttribute("content")) ||
     "default"
   return `shop_guest_profile:${tid}`
 }

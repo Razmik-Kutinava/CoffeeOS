@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-07-30 — fix(#32): one-click создаёт pending order + last_order_id v2
+- BE: `frequent_items[].last_order_id` + cache key `shop/freq/v2/…`
+- FE: `createRepeatInlineOrder` → корзина + POST `/orders` (не checkout fallback)
+- FE: PROCESSING UI сразу при клике; `runRepeatWidgetPayFlow` принимает готовый `fsm`
+- Тесты: frequent + JS create/inline/sms PASS
+
 ## 2026-07-30 — MCP Fly #32 inline pay: FAIL (last_order_id null)
 - Прогон Point A / Aram: бандл #32 на Fly есть, но «оплатить в клик» → checkout
 - Причина: `frequent_items[].last_order_id = null` → не вызывается widget/inline FSM

@@ -23,7 +23,7 @@ class Shop::CustomerFrequentProductsCacheTest < ActiveSupport::TestCase
 
   test "cache key format and TTL constant" do
     key = Shop::CustomerFrequentProductsService.cache_key(tenant_id: @tenant.id, customer_id: @customer.id)
-    assert_equal "shop/freq/#{@tenant.id}/#{@customer.id}", key
+    assert_equal "shop/freq/v2/#{@tenant.id}/#{@customer.id}", key
     assert_equal 30.minutes, Shop::CustomerFrequentProductsService::CACHE_TTL
   end
 

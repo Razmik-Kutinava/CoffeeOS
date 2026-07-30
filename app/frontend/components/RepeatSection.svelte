@@ -5,12 +5,13 @@
     frequentQuantities,
     frequentCardKey,
     setFrequentQty,
-    repeatPayOneClickItem,
     repeatFeedback
   } from "../lib/frequentRepeatStore.js"
   import { repeatBumpEmbeddedToCart } from "../lib/repeatEmbeddedCart.js"
   import { createWidgetPayFsm } from "../lib/shopWidgetPayFsm.js"
   import { runRepeatWidgetPayFlow } from "../lib/widgetRepeatPayFlow.js"
+  import { createRepeatInlineOrder } from "../lib/createRepeatInlineOrder.js"
+  import { INLINE_ROTATION_LABELS } from "../lib/shopInlinePayFsm.js"
   import { initSbpPayment, redirectToSbp } from "../lib/shopSbpPay.js"
   import { api } from "../lib/api.js"
   import InlinePayFallback from "./InlinePayFallback.svelte"
@@ -78,19 +79,23 @@
     showFallbackMethods = false
     showExpandedCards = false
     showNewCardForm = false
-    widgetFsm = createWidgetPayFsm({ orderId: item.last_order_id })
-
-    if (!item.last_order_id) {
-      await repeatPayOneClickItem(item)
-      repeatBusy = false
-      activePayItemKey = null
-      return
-    }
+    widgetErrorText = ""
+    // Сразу PROCESSING — плашка статусов видна во время create+poll (не ждём конца await)
+    widgetFsm = createWidgetPayFsm()
+    widgetFsm.start()
+    widgetStatusText = INLINE_ROTATION_LABELS[0]
 
     try {
-      const out = await runRepeatWidgetPayFlow({
-        orderId: item.last_order_id,
+      const { orderId } = await createRepeatInlineOrder(item, {
         api,
+        quantities: storeQty
+      })
+      widgetFsm.orderId = orderId
+
+      const out = await runRepeatWidgetPayFlow({
+        orderId,
+        api,
+        fsm: widgetFsm,
         onStatusText: (label) => { widgetStatusText = label }
       })
       widgetFsm = out.fsm
@@ -108,6 +113,20 @@
           widgetStatusText = ""
         }, out.resetAfterMs)
       }
+    } catch (e) {
+      widgetFsm.reject({ error_code: "" })
+      widgetFsm.state = "ERROR"
+      widgetErrorText = e?.message || "Ошибка оплаты, попробуйте снова"
+      widgetStatusText = widgetErrorText
+      showFallbackMethods = true
+      setTimeout(() => {
+        widgetFsm.reset()
+        activePayItemKey = null
+        showFallbackMethods = false
+        showNewCardForm = false
+        widgetErrorText = ""
+        widgetStatusText = ""
+      }, 3000)
     } finally {
       repeatBusy = false
     }

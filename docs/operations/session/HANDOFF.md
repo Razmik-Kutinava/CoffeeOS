@@ -1,27 +1,21 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-30 (**PHASE 2 GREEN · #32 inline button FSM + UI по скрину**)  
+**Дата:** 2026-07-30 (**fix #32 · one-click inline order · ждём deploy+MCP**)  
 **Ветка:** `develop`  
-**Прод:** https://coffeeos.fly.dev · **Fly:** v400  
+**Прод:** https://coffeeos.fly.dev  
 
 ### T-Bank inline payment + button statuses #32 (2026-07-30)
 
 | Что | Статус |
 |-----|--------|
 | Intake + SPEC + BE шаги 1–3 | **`[x]`** |
-| FE FSM poll/rotation/timeout (шаги 4–8) | **`[x]`** |
-| UI по скрину (плашка / СБП / карта+ / cards / form) | **`[x]`** |
-| SMS-пинпад 00:59 в NewCardForm (inline) | **`[x]`** |
-| SUCCESS ✔ / ERROR красная / reset IDLE 3 с | **`[x]`** |
-| Poll HTTP 400/500 → ERROR | **`[x]`** |
-| PHASE 3 REVIEW / MCP Fly | **регрессия `[x]`** · MCP **FAIL** 2026-07-30 — не к заказчику |
+| FE FSM / UI / SMS / SUCCESS-ERROR | **`[x]`** |
+| Фикс MCP-блокера (create order + last_order_id v2) | **`[x]` код** · deploy/MCP **in progress** |
+| PHASE 3 / MCP Fly PASS | **ожидает** повторный прогон после deploy |
 
 **ТЗ:** [`Интеграция inline-оплаты Т-Банка…`](../milestones/veha_2/requirements/customer_tasks/Интеграция%20inline-оплаты%20Т-Банка%20с%20динамическими%20статусами%20внутри%20кнопки.md)  
-**Скрин:** [`01_full_flow_schema…`](../milestones/veha_2/artifacts/tbank_inline_payment_button_statuses/screenshots/01_full_flow_schema_status_sbp_cards_form.png)  
-**MCP:** [`mcp_fly_inline_pay_2026-07-30.json`](../milestones/veha_2/artifacts/tbank_inline_payment_button_statuses/mcp_fly_inline_pay_2026-07-30.json)  
-**Регрессия:** shop/payments zone **64/0** · JS **30/30**  
-**Блокер MCP:** `frequent_items[].last_order_id = null` → «оплатить в клик» уходит в `#/checkout`, не inline статусы/SMS.  
-**Дальше:** фикс last_order_id (API/данные) → повторный MCP → только потом заказчику.
+**Фикс:** `createRepeatInlineOrder` + `last_order_id` в frequent v2; PROCESSING сразу при клике.  
+**Дальше:** `bin/fly_deploy.sh` → MCP Point A → PASS или скрины FAIL.
 
 ### T-Kassa Widget One-Click + Fallback #33 (2026-07-29)
 

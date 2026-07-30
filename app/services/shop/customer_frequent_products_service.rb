@@ -17,7 +17,8 @@ module Shop
     end
 
     def self.cache_key(tenant_id:, customer_id:)
-      "shop/freq/#{tenant_id}/#{customer_id}"
+      # v2: в payload есть last_order_id (MCP 2026-07-30)
+      "shop/freq/v2/#{tenant_id}/#{customer_id}"
     end
 
     def self.cached_call(customer_id:, tenant_id:)
@@ -76,8 +77,16 @@ module Shop
       item_rows
         .group_by { |(_oid, product_id, modifiers)| [ product_id, normalize_modifier_options(modifiers) ] }
         .map do |(product_id, modifiers), rows|
-          last_at = rows.map { |(oid, *)| order_dates[oid] }.compact.max
-          { product_id: product_id, modifier_options: modifiers, count: rows.size, last_at: last_at }
+          best = rows.max_by { |(oid, *)| order_dates[oid].to_f }
+          last_oid, = best
+          last_at = order_dates[last_oid]
+          {
+            product_id: product_id,
+            modifier_options: modifiers,
+            count: rows.size,
+            last_at: last_at,
+            last_order_id: last_oid
+          }
         end
         .sort_by { |g| [ -g[:count], -g[:last_at].to_f ] }
     end
@@ -123,7 +132,8 @@ module Shop
           name: product.name,
           price: setting.price.to_f,
           image_url: product.image_url,
-          modifier_options: group[:modifier_options]
+          modifier_options: group[:modifier_options],
+          last_order_id: group[:last_order_id]
         }
       end.first(MAX_REPEAT_ITEMS)
     end

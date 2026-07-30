@@ -63,6 +63,7 @@ class Shop::Api::FrequentProductsTest < ActionDispatch::IntegrationTest
     assert_equal 250.0, item["price"]
     assert_equal "https://cdn.example.com/brazil.png", item["image_url"]
     assert item.key?("modifier_options"), "карточка повтора несёт полный сет кастомизаций"
+    assert item["last_order_id"].present?, "frequent_items must include last_order_id for inline pay"
   end
 
   test "frequent_items are isolated per tenant session" do

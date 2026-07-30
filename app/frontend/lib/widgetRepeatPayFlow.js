@@ -15,11 +15,14 @@ import {
  * @param {object} opts
  * @param {string} opts.orderId
  * @param {(path: string, opts?: object) => Promise<object>} opts.api
+ * @param {ReturnType<typeof createWidgetPayFsm>} [opts.fsm] — уже в PROCESSING с UI
  * @param {(label: string) => void} [opts.onStatusText]
  */
-export async function runRepeatWidgetPayFlow({ orderId, api, onStatusText }) {
-  const fsm = createWidgetPayFsm({ orderId })
-  fsm.start()
+export async function runRepeatWidgetPayFlow({ orderId, api, fsm: existingFsm, onStatusText }) {
+  const fsm = existingFsm || createWidgetPayFsm({ orderId })
+  fsm.orderId = orderId
+  if (fsm.state !== WIDGET_FSM_STATES.PROCESSING) fsm.start()
+
   let statusText = INLINE_ROTATION_LABELS[0]
   let errorText = ""
   let showFallbackMethods = false
@@ -60,15 +63,13 @@ export async function runRepeatWidgetPayFlow({ orderId, api, onStatusText }) {
       resetAfterMs = TBANK_INLINE_ERROR_RESET_MS
     } else if (result.kind === "http_error" || result.kind === "timeout") {
       fsm.reject({ error_code: result.errorCode || "" })
-      // ТЗ: ERROR — красная плашка, без fallback; reset IDLE через 3 с
       fsm.state = WIDGET_FSM_STATES.ERROR
       errorText = result.errorLabel || INLINE_GENERIC_ERROR_LABEL
       statusText = errorText
       onStatusText?.(statusText)
-      showFallbackMethods = false
+      showFallbackMethods = true
       resetAfterMs = TBANK_INLINE_ERROR_RESET_MS
     } else {
-      // REJECTED/CANCELED: error + fallback СБП/карта+; reset через 3 с
       fsm.reject({ error_code: result.errorCode || "" })
       errorText = result.errorLabel || WIDGET_STATUS_LABELS.ERROR
       statusText = errorText
@@ -85,7 +86,7 @@ export async function runRepeatWidgetPayFlow({ orderId, api, onStatusText }) {
     errorText = INLINE_GENERIC_ERROR_LABEL
     statusText = errorText
     onStatusText?.(statusText)
-    showFallbackMethods = false
+    showFallbackMethods = true
     resetAfterMs = TBANK_INLINE_ERROR_RESET_MS
   }
 
