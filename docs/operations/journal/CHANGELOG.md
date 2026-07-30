@@ -1,5 +1,12 @@
 ﻿# CHANGELOG
 
+## 2026-07-30 — feat(#32): inline pay FSM + UI по скрину заказчика [GREEN]
+- Артефакт скрина: `tbank_inline_payment_button_statuses/screenshots/01_full_flow_schema_status_sbp_cards_form.png`
+- FE: `shopInlinePayFsm.js` — poll 1500ms / ротация 1800ms / timeout 15s / 1051
+- FE: `widgetRepeatPayFlow.js` + wiring `RepeatSection` / `InlinePayFallback` (белые СБП·карта+, expanded, NewCardForm)
+- Тесты: `shop_inline_pay_button_fsm_test` + widget — 23/23 PASS
+- Backlog: SMS-пинпад 00:59 в NewCardForm
+
 ## 2026-07-29 — T-Kassa Widget One-Click + Fallback (#33) — Шаги 4–7 GREEN
 - FE: `widgetInlinePay.js` — init/poll/isCardRelatedError для inline widget pay
 - FE: `InlinePayFallback.svelte` — inline fallback UI (статус-плашка, СБП, карта+, expanded cards)

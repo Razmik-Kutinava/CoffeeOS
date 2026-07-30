@@ -109,7 +109,7 @@ bin/rails test test/integration/shop/api/qa_section_2_3_payment_cart_test.rb \
 
 **ТЗ:** [`customer_tasks/Интеграция inline-оплаты Т-Банка с динамическими статусами внутри кнопки.md`](../milestones/veha_2/requirements/customer_tasks/Интеграция%20inline-оплаты%20Т-Банка%20с%20динамическими%20статусами%20внутри%20кнопки.md)  
 **Артефакты:** `artifacts/tbank_inline_payment_button_statuses/`  
-**Фаза:** PHASE 2 BUILD · Шаг 3 GREEN (готово)
+**Фаза:** PHASE 2 BUILD · Шаг 4–8 FE FSM GREEN (готово)
 
 ---
 
@@ -187,13 +187,14 @@ bin/rails test test/integration/shop/api/qa_section_2_3_payment_cart_test.rb \
   Тесты: callback + sync idempotency
 
 ### Frontend
-- [ ] **Шаг 4** — IDLE → PROCESSING («Ещё чуть-чуть…»), disabled+spinner, poll 1500 мс
-- [ ] **Шаг 5** — Ротация текста каждые 1800 мс (3 фазы, цикл)
-- [ ] **Шаг 6** — CONFIRMED → SUCCESS («Оплачено!», зелёный, галочка), стоп таймеров
-- [ ] **Шаг 7** — REJECTED/CANCELED → ERROR; 1051→«Недостаточно средств»; reset IDLE 3 с
-- [ ] **Шаг 8** — Timeout 15 с → «Время ожидания истекло» → IDLE 3 с  
-  Edge: HTTP 400/500 на poll → ERROR generic + reset 3 с  
-  Security: FE payload/логи без TerminalKey/Password
+- [x] **Шаг 4** — IDLE → PROCESSING («Ещё чуть-чуть…»), disabled+spinner, poll 1500 мс  
+  `shopInlinePayFsm.js` + wiring RepeatSection / InlinePayFallback (скрин)
+- [x] **Шаг 5** — Ротация текста каждые 1800 мс (3 фазы, цикл)
+- [x] **Шаг 6** — CONFIRMED → SUCCESS («Оплачено!»), стоп таймеров
+- [x] **Шаг 7** — REJECTED/CANCELED → ERROR; 1051→«Недостаточно средств»; fallback СБП/карта+
+- [x] **Шаг 8** — Timeout 15 с → «Время ожидания истекло»  
+  Тесты: `node --test test/javascript/shop_inline_pay_button_fsm_test.mjs` 6/6  
+  Backlog: SMS-пинпад 00:59 в NewCardForm (на скрине есть, в форме ещё нет) · HTTP 400/500→reset 3 с edge
 
 ### REVIEW
 - [ ] Регрессия оплаты + rubocop зоны

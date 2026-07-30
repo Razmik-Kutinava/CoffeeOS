@@ -1,8 +1,22 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-29 (**PHASE 2 BUILD · T-Kassa Widget #33 Шаги 1–7 GREEN**)  
+**Дата:** 2026-07-30 (**PHASE 2 GREEN · #32 inline button FSM + UI по скрину**)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev · **Fly:** v400  
+
+### T-Bank inline payment + button statuses #32 (2026-07-30)
+
+| Что | Статус |
+|-----|--------|
+| Intake + SPEC + BE шаги 1–3 | **`[x]`** |
+| FE FSM poll/rotation/timeout (шаги 4–8) | **`[x]`** |
+| UI по скрину (плашка / СБП / карта+ / cards / form) | **`[x]`** layout |
+| SMS-пинпад 00:59 в NewCardForm | **`[ ]`** backlog |
+| PHASE 3 REVIEW / MCP Fly | **`[ ]`** |
+
+**ТЗ:** [`Интеграция inline-оплаты Т-Банка…`](../milestones/veha_2/requirements/customer_tasks/Интеграция%20inline-оплаты%20Т-Банка%20с%20динамическими%20статусами%20внутри%20кнопки.md)  
+**Скрин:** [`01_full_flow_schema…`](../milestones/veha_2/artifacts/tbank_inline_payment_button_statuses/screenshots/01_full_flow_schema_status_sbp_cards_form.png)  
+**Дальше:** PHASE 3 REVIEW или SMS-пинпад по скрину.
 
 ### T-Kassa Widget One-Click + Fallback #33 (2026-07-29)
 

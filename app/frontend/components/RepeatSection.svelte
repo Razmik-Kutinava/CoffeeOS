@@ -9,8 +9,8 @@
     repeatFeedback
   } from "../lib/frequentRepeatStore.js"
   import { repeatBumpEmbeddedToCart } from "../lib/repeatEmbeddedCart.js"
-  import { createWidgetPayFsm, WIDGET_FSM_STATES } from "../lib/shopWidgetPayFsm.js"
-  import { widgetInitPayment, widgetPollStatus, isCardRelatedError, WIDGET_STATUS_LABELS } from "../lib/widgetInlinePay.js"
+  import { createWidgetPayFsm } from "../lib/shopWidgetPayFsm.js"
+  import { runRepeatWidgetPayFlow } from "../lib/widgetRepeatPayFlow.js"
   import { initSbpPayment, redirectToSbp } from "../lib/shopSbpPay.js"
   import { api } from "../lib/api.js"
   import InlinePayFallback from "./InlinePayFallback.svelte"
@@ -31,6 +31,7 @@
   let widgetErrorText = $state("")
   let showFallbackMethods = $state(false)
   let showExpandedCards = $state(false)
+  let showNewCardForm = $state(false)
   let savedCards = $state([])
 
   let topItems = $derived(items.slice(0, 3))
@@ -76,6 +77,7 @@
     activePayItemKey = key
     showFallbackMethods = false
     showExpandedCards = false
+    showNewCardForm = false
     widgetFsm = createWidgetPayFsm({ orderId: item.last_order_id })
 
     if (!item.last_order_id) {
@@ -85,26 +87,19 @@
       return
     }
 
-    widgetFsm.start()
-    widgetStatusText = WIDGET_STATUS_LABELS.PROCESSING
     try {
-      await widgetInitPayment(item.last_order_id)
-      const result = await widgetPollStatus(item.last_order_id)
-      if (result.status === "CONFIRMED") {
-        widgetFsm.confirm()
-        widgetStatusText = WIDGET_STATUS_LABELS.SUCCESS
+      const out = await runRepeatWidgetPayFlow({
+        orderId: item.last_order_id,
+        api,
+        onStatusText: (label) => { widgetStatusText = label }
+      })
+      widgetFsm = out.fsm
+      widgetStatusText = out.statusText
+      widgetErrorText = out.errorText
+      showFallbackMethods = out.showFallbackMethods
+      if (out.fsm.state === "SUCCESS") {
         setTimeout(() => { widgetFsm.reset(); activePayItemKey = null }, 3000)
-      } else {
-        const errInfo = { error_code: result.error_code || "" }
-        widgetFsm.reject(errInfo)
-        widgetErrorText = result.error_message || WIDGET_STATUS_LABELS.ERROR
-        if (widgetFsm.state === WIDGET_FSM_STATES.FALLBACK) {
-          showFallbackMethods = true
-        }
       }
-    } catch (_e) {
-      widgetFsm.reject({ error_code: "" })
-      widgetErrorText = WIDGET_STATUS_LABELS.ERROR
     } finally {
       repeatBusy = false
     }
@@ -121,8 +116,10 @@
   }
 
   async function onFallbackCardPlus() {
+    // Скрин expanded: методы остаются + список карт + форма новой карты
     showExpandedCards = true
-    showFallbackMethods = false
+    showNewCardForm = true
+    showFallbackMethods = true
     try {
       const data = await api("/user/cards")
       savedCards = Array.isArray(data?.cards) ? data.cards : []
@@ -221,6 +218,7 @@
               {savedCards}
               {showFallbackMethods}
               {showExpandedCards}
+              {showNewCardForm}
               onSelectSbp={onFallbackSbp}
               onSelectCardPlus={onFallbackCardPlus}
               onSelectSavedCard={onSelectSavedCard}

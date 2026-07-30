@@ -2,12 +2,21 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-29 (PHASE 2 BUILD · Шаги 1–7 GREEN · T-Kassa Widget One-Click + Fallback)
+**Дата:** 2026-07-30 (PHASE 2 GREEN · #32 Шаги 4–8 FE FSM + UI по скрину)
 
 | Сейчас | Дальше |
 |--------|--------|
-| #33 Шаги 1–7 GREEN (BE+FE полный flow) | PHASE 3 REVIEW done |
-| FE тесты 17/17, BE регрессия PASS | Регрессия PASS (shop/payments + RLS + rubocop) |
+| #32 FE FSM + wiring по скрину (оранжевая плашка / белые СБП·карта+ / expanded / NewCardForm) | PHASE 3 REVIEW #32 · SMS-пинпад в NewCardForm (backlog) |
+| JS: `shop_inline_pay_button_fsm_test` + widget 23/23 PASS | MCP/Fly визуальная сверка со скрином |
+
+### Сессия 2026-07-30 (#32 Шаг 4–8 GREEN · скрин в артефактах)
+
+- Артефакт: `tbank_inline_payment_button_statuses/screenshots/01_full_flow_schema_status_sbp_cards_form.png` (+ копия `tbank_widget_oneclick_fallback/…/05_…`)
+- FE: `shopInlinePayFsm.js` — poll 1500 / rotate 1800 / timeout 15s + map 1051
+- FE: `widgetRepeatPayFlow.js` — RepeatSection pay orchestration
+- UI: `InlinePayFallback` — белые СБП/карта+, expanded *XXXX, NewCardForm; ротация текстов #32
+- Тесты: `node --test …shop_inline… + shop_widget…` **23/23 PASS**
+- Backlog: SMS keypad 00:59 на скрине ещё нет в NewCardForm; RepeatSection ~231 строк (чуть >200)
 
 ### Сессия 2026-07-29 (PHASE 3 REVIEW · #33)
 
