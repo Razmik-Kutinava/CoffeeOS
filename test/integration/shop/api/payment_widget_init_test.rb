@@ -25,7 +25,7 @@ class Shop::Api::PaymentWidgetInitTest < ActionDispatch::IntegrationTest
   end
 
   def create_order!(amount: 350)
-    Order.create!(
+    order = Order.create!(
       tenant_id: @tenant.id,
       customer_name: "Widget Guest",
       order_number: "",
@@ -35,6 +35,15 @@ class Shop::Api::PaymentWidgetInitTest < ActionDispatch::IntegrationTest
       discount_amount: 0,
       final_amount: amount
     )
+    Payment.create!(
+      tenant_id: @tenant.id,
+      order_id: order.id,
+      amount: amount,
+      method: :card,
+      status: :pending,
+      provider: "pending"
+    )
+    order
   end
 
   def with_inline_init_stub(result: nil, error: nil)

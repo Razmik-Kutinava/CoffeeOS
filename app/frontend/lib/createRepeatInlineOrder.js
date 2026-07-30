@@ -41,6 +41,8 @@ export async function createRepeatInlineOrder(item, { api, quantities = {} } = {
       name: profile.name,
       email: profile.email,
       payment_method: "card",
+      // без Init здесь — иначе widget_init получит duplicate OrderId в Т-Банке
+      defer_payment_init: true,
       client_order_uuid: crypto.randomUUID()
     })
   })

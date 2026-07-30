@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-07-30 — fix(#32): defer Init + widget Charge by RebillId
+- BE: `defer_payment_init` в OrderCreator — без двойного Init (причина 422)
+- BE: `Shop::WidgetPaymentInitiator` — RebillId primary card → Init+Charge, sync GetState
+- FE: `createRepeatInlineOrder` шлёт `defer_payment_init: true`
+- Тесты: widget_initiator + widget_init API PASS
+
 ## 2026-07-30 — MCP Fly #32 PASS (PROCESSING/ERROR/SBP/SMS)
 - Point A / Aram: one-click → inline PROCESSING → ERROR + СБП/карта+ → SMS pinpad
 - Не уходит в checkout; fallback не сбрасывается через 3 с

@@ -57,15 +57,17 @@ module Shop
         order = Order.find_by(id: params[:order_id], tenant_id: @shop_tenant.id)
         return render json: { error: "Order not found" }, status: :not_found unless order
 
-        result = Payments::TbankInlineInit.call(
+        result = Shop::WidgetPaymentInitiator.call(
           order: order,
           return_base_url: ENV.fetch("TBANK_RETURN_URL", request.base_url),
-          notification_url: "#{request.base_url}/callbacks/tbank",
-          connection_type: "Widget"
+          notification_url: "#{request.base_url}/callbacks/tbank"
         )
 
         render json: { paymentUrl: adapter_payment_url(result), order_id: order.id.to_s }
+      rescue Shop::WidgetPaymentInitiator::Error => e
+        render json: { error: e.message }, status: :unprocessable_entity
       rescue Payments::TbankAdapter::ApiError => e
+        Rails.logger.warn("[Shop::Payments#widget_init] ApiError order=#{params[:order_id]} code=#{e.error_code} msg=#{e.message}")
         render json: { error: "Payment provider error", error_code: e.error_code }, status: :unprocessable_entity
       rescue Payments::TbankAdapter::Error
         render json: { error: "Payment provider unavailable" }, status: :service_unavailable

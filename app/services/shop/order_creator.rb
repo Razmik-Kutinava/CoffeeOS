@@ -108,7 +108,9 @@ module Shop
       begin
         save_card = ActiveModel::Type::Boolean.new.cast(params.fetch(:save_card, false))
         # SBP deep link: Init+GetQr делает Shop::SbpPaymentInitiator (не PaymentURL iframe).
-        if gateway && flow[:order_status] == :pending_payment && payment_method != :sbp
+        # defer_payment_init: заказ без Init — Init/Charge делает widget_init / one_click
+        defer_init = ActiveModel::Type::Boolean.new.cast(params.fetch(:defer_payment_init, false))
+        if gateway && flow[:order_status] == :pending_payment && payment_method != :sbp && !defer_init
           init_gateway_payment!(order, payment, save_card: save_card)
         end
       rescue Payments::TbankAdapter::Error, Error => e
