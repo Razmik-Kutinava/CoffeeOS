@@ -29,21 +29,6 @@
 | PHASE 3 REVIEW | **`[x]`** |
 
 **ТЗ:** [`Интеграция виджета быстрой оплаты Т-Кассы…`](../milestones/veha_2/requirements/customer_tasks/Интеграция%20виджета%20быстрой%20оплаты%20Т-Кассы%20и%20One-Click%20сценария%20в%20PWA.md)  
-**Дальше:** PHASE 3 REVIEW (регрессия + rubocop + финальный отчёт).
-
-### T-Bank inline payment + button statuses (2026-07-29)
-
-| Что | Статус |
-|-----|--------|
-| Intake ТЗ + CBR + артефакты | **`[x]`** |
-| PHASE 1: SPEC (`todo.md`) | **`[x]`** |
-| Шаг 1 GREEN (PayType O / Charge) | **`[x]`** |
-| GREEN / остальные шаги | **`[ ]`** |
-
-**ТЗ:** [`Интеграция inline-оплаты Т-Банка…`](../milestones/veha_2/requirements/customer_tasks/Интеграция%20inline-оплаты%20Т-Банка%20с%20динамическими%20статусами%20внутри%20кнопки.md)  
-**Артефакты:** [`tbank_inline_payment_button_statuses/`](../milestones/veha_2/artifacts/tbank_inline_payment_button_statuses/)  
-**todo:** [`SESSION todo.md`](todo.md)  
-**Дальше:** RED Шаг 2 (GetState → auto Confirm на AUTHORIZED).
 
 ### Auth funnel cascade Flash Call×2 → SMS (2026-07-29)
 
