@@ -68,7 +68,7 @@ export async function runRepeatWidgetPayFlow({ orderId, api, fsm: existingFsm, o
       statusText = errorText
       onStatusText?.(statusText)
       showFallbackMethods = true
-      resetAfterMs = TBANK_INLINE_ERROR_RESET_MS
+      // fallback СБП/карта+ не сбрасываем — пользователь должен успеть нажать
     } else {
       fsm.reject({ error_code: result.errorCode || "" })
       errorText = result.errorLabel || WIDGET_STATUS_LABELS.ERROR
@@ -78,7 +78,6 @@ export async function runRepeatWidgetPayFlow({ orderId, api, fsm: existingFsm, o
         fsm.state = WIDGET_FSM_STATES.ERROR
       }
       showFallbackMethods = true
-      resetAfterMs = TBANK_INLINE_ERROR_RESET_MS
     }
   } catch (_e) {
     fsm.reject({ error_code: "" })
@@ -87,7 +86,6 @@ export async function runRepeatWidgetPayFlow({ orderId, api, fsm: existingFsm, o
     statusText = errorText
     onStatusText?.(statusText)
     showFallbackMethods = true
-    resetAfterMs = TBANK_INLINE_ERROR_RESET_MS
   }
 
   return {

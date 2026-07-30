@@ -117,7 +117,7 @@
         statusText: msg,
         showFallbackMethods: true
       })
-      setTimeout(() => resetRepeatInlinePayUi(), 3000)
+      // не auto-reset — нужны СБП / карта+
     } finally {
       patchRepeatInlinePayUi({ busy: false })
     }
