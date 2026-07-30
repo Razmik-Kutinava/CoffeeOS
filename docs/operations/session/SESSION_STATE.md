@@ -2,12 +2,19 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-30 (PHASE 2 GREEN · #34 SBP Autopay AccountToken)
+**Дата:** 2026-07-30 (PHASE 3 REVIEW · #34 SBP Autopay AccountToken)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#34** GREEN: ChargeQr/AccountToken/sbp/charge + FSM; регрессия оплаты PASS | **go** → PHASE 3 REVIEW |
+| **#34** REVIEW закрыт: ownership+settle; код готов (без Checkout UI) | Checkout UI **или** Charge в ЛК → MCP |
 | #32 SUCCESS blocked: Charge disabled на терминале T-Bank | Включить Charge в ЛК → MCP SUCCESS |
+
+### Сессия 2026-07-30 (PHASE 3 REVIEW · #34)
+
+- Security: mismatch session/order → 404; token только от order.customer_id
+- Settle: PaymentStatusUpdater после ChargeQr; with_lock
+- Тест mismatch + #34 suite PASS
+- Backlog: Checkout checkbox/default UI; full charge idempotency key; live MCP
 
 ### Сессия 2026-07-30 (PHASE 2 GREEN · #34)
 

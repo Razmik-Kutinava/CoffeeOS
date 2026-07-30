@@ -48,8 +48,14 @@ module Shop
       order
     end
 
+    # Токен всегда от владельца заказа. Сессия чужого клиента → 404 (не светим заказ).
     def find_account_token!(order, customer_id:)
-      cid = customer_id.presence || order.customer_id
+      if customer_id.present? && order.customer_id.present? &&
+          customer_id.to_s != order.customer_id.to_s
+        raise Error.new("Заказ не найден", http_status: :not_found)
+      end
+
+      cid = order.customer_id.presence || customer_id
       raise Error.new("Нет клиента для AccountToken", http_status: :unprocessable_entity) if cid.blank?
 
       row = MobilePaymentMethod
@@ -63,8 +69,14 @@ module Shop
 
     def simulate_success(order)
       payment = order.payments.order(created_at: :desc).first
-      payment&.update_columns(status: "succeeded", provider: "tbank")
-      order.update_columns(status: "accepted") if order.respond_to?(:pending_payment?) && order.pending_payment?
+      if payment
+        Callbacks::PaymentStatusUpdater.new(
+          payment: payment,
+          new_status: "succeeded",
+          provider_data: { "simulate" => true, "source" => "sbp_autopay" },
+          note: "SBP Autopay simulate"
+        ).call!
+      end
 
       {
         order_id: order.id,
@@ -78,9 +90,20 @@ module Shop
       notify = "#{base}/callbacks/tbank"
       raise Error.new("Не задан return URL", http_status: :internal_server_error) if base.blank?
 
+      payment = nil
+      order.with_lock do
+        order.reload
+        unless order.pending_payment?
+          raise Error.new("Заказ недоступен для автоплатежа СБП", http_status: :unprocessable_entity)
+        end
+        payment = order.payments.order(created_at: :desc).first
+        raise Error.new("У заказа нет платежа", http_status: :unprocessable_entity) unless payment
+        if payment.provider_payment_id.present? && payment.status.to_s != "pending"
+          raise Error.new("Оплата уже в обработке", http_status: :unprocessable_entity)
+        end
+      end
+
       receipt = Payments::TbankReceiptBuilder.call!(order: order, email: order.customer&.email)
-      payment = order.payments.order(created_at: :desc).first
-      raise Error.new("У заказа нет платежа", http_status: :unprocessable_entity) unless payment
 
       init = @adapter.init_payment(
         order: order,
@@ -106,6 +129,15 @@ module Shop
         )
         raise Error.new(e.message, error_code: e.error_code, fatal: e.fatal?)
       end
+
+      our_status = Payments::TbankAdapter.map_status(charged[:status]) || "succeeded"
+      Callbacks::PaymentStatusUpdater.new(
+        payment: payment.reload,
+        new_status: our_status,
+        provider_data: (charged[:raw].is_a?(Hash) ? charged[:raw] : {}).except("Token", "Password"),
+        provider_payment_id: charged[:payment_id],
+        note: "SBP ChargeQr"
+      ).call!
 
       token_row.update_columns(last_used_at: Time.current)
       {

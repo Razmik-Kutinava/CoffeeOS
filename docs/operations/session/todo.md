@@ -2,7 +2,7 @@
 
 **ТЗ:** [`customer_tasks/Интеграция Автоплатежей СБП Т-Касса в PWA.md`](../milestones/veha_2/requirements/customer_tasks/Интеграция%20Автоплатежей%20СБП%20Т-Касса%20в%20PWA.md)  
 **Артефакты:** `artifacts/tbank_sbp_autopayments_account_token/`  
-**Фаза:** PHASE 2 BUILD · GREEN (тесты + регрессия PASS) · REVIEW ждёт go
+**Фаза:** PHASE 3 REVIEW · закрыт (Checkout UI backlog)
 
 ---
 
@@ -115,5 +115,5 @@ bin/rails test test/integration/shop/api/qa_section_2_3_payment_cart_test.rb \
 | PHASE 0 intake | `[x]` `48aba0c6` |
 | PHASE 1 SPEC | `[x]` |
 | PHASE 2 RED | `[x]` `e1d73dc5` |
-| PHASE 2 GREEN | `[x]` |
-| PHASE 3 REVIEW | `[ ]` ждёт go |
+| PHASE 2 GREEN | `[x]` `1268bb45` |
+| PHASE 3 REVIEW | `[x]` ownership+settle |

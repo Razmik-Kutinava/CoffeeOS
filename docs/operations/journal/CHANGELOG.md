@@ -1,5 +1,17 @@
 ﻿# CHANGELOG
 
+## 2026-07-30 — review(#34): SBP Autopay ownership + settle after ChargeQr
+- `SbpAutopayChargeService`: сессия ≠ владелец заказа → 404; токен только от order.customer
+- После успешного ChargeQr — `PaymentStatusUpdater` (не оставлять pending при ответе CONFIRMED)
+- `order.with_lock` перед Init/Charge; тест mismatch customer
+- PHASE 3 REVIEW ops
+
+## 2026-07-30 — feat(#34): SBP Autopay AccountToken ChargeQr [GREEN]
+- BE: TbankSbpAutopay, SbpAccountTokenStore, FromWebhook, SbpAutopayChargeService
+- API: save_sbp_account на sbp/init; POST sbp/charge
+- FE: shopSbpAutopay.js FSM/toasts
+- Тесты 21+10 PASS; регрессия оплаты PASS
+
 ## 2026-07-30 — docs: SPEC #34 T-Kassa SBP Autopay AccountToken
 - `todo.md` — PHASE 1: gaps, маппинг CoffeeOS, 4 шага, Migration Gate (reuse MPM sbp)
 - CBR/README: статус SPEC `[x]` · RED ждёт go

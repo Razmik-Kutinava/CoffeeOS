@@ -100,4 +100,20 @@ class Shop::Api::SbpAutopayChargeTest < ActionDispatch::IntegrationTest
     assert defined?(Shop::SbpAutopayChargeService),
       "[TDD] Init→ChargeQr оркестрация в Shop::SbpAutopayChargeService"
   end
+
+  test "SbpAutopayChargeService rejects customer_id mismatch with order owner" do
+    create_sbp_token!
+    order = build_pending_order!
+    other = create_mobile_customer!(email: "other-#{SecureRandom.hex(3)}@example.com")
+
+    error = assert_raises(Shop::SbpAutopayChargeService::Error) do
+      Shop::SbpAutopayChargeService.new(tenant: @tenant).call!(
+        order_id: order.id,
+        customer_id: other.id
+      )
+    end
+
+    assert_equal :not_found, error.http_status
+    assert order.reload.pending_payment?
+  end
 end
