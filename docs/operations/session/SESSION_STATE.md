@@ -9,6 +9,12 @@
 | Inline one-click на Fly: PROCESSING → ERROR → СБП/карта+/SMS | SUCCESS ✔ — когда widget_init на стенде не 422 |
 | MCP артефакт PASS | заказчику можно показывать UI-флоу (кроме SUCCESS банка) |
 
+### Сессия 2026-07-30 (fix widget_init 422 → defer + Rebill Charge)
+
+- Root cause: OrderCreator Init, затем widget_init Init снова → duplicate OrderId
+- `defer_payment_init` + `WidgetPaymentInitiator` (rebill primary → Charge)
+- Дальше: deploy + MCP SUCCESS
+
 ### Сессия 2026-07-30 (MCP PASS после фиксов remount/fallback)
 
 - Deploy бандл `application-DMPdGrlR.js`
