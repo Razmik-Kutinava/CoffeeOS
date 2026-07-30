@@ -2,12 +2,18 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-30 (PHASE 1 SPEC · #34 SBP Autopay AccountToken)
+**Дата:** 2026-07-30 (PHASE 2 RED · #34 SBP Autopay AccountToken)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#34** SPEC в `todo.md` — gaps, маппинг, 4 шага, Migration Gate | **go** → PHASE 2 RED (тесты) |
+| **#34** RED тесты закоммичены, падают (ожидаемо) | **go** → PHASE 2 GREEN |
 | #32 SUCCESS blocked: Charge disabled на терминале T-Bank | Включить Charge в ЛК → MCP SUCCESS |
+
+### Сессия 2026-07-30 (PHASE 2 RED · #34)
+
+- RED тесты: TbankSbpAutopay, SbpAccountTokenStore, FromWebhook, initiator save_sbp_account, sbp/charge API, shopSbpAutopay.js FSM
+- Падения ожидаемы (NameError / no route / ArgumentError / MODULE_NOT_FOUND)
+- GREEN ждёт намерения
 
 ### Сессия 2026-07-30 (PHASE 1 SPEC · #34)
 
