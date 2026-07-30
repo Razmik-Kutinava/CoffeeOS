@@ -2,12 +2,19 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-30 (fix #32 MCP blocker · inline create order)
+**Дата:** 2026-07-30 (MCP #32 PASS · PROCESSING/ERROR/SBP/SMS)
 
 | Сейчас | Дальше |
 |--------|--------|
-| Фикс: `last_order_id` в frequent v2 + `createRepeatInlineOrder` + FSM UI сразу | Deploy Fly → MCP до PASS |
-| «оплатить в клик» больше не уходит в checkout | SMS / SUCCESS / ERROR на живом стенде |
+| Inline one-click на Fly: PROCESSING → ERROR → СБП/карта+/SMS | SUCCESS ✔ — когда widget_init на стенде не 422 |
+| MCP артефакт PASS | заказчику можно показывать UI-флоу (кроме SUCCESS банка) |
+
+### Сессия 2026-07-30 (MCP PASS после фиксов remount/fallback)
+
+- Deploy бандл `application-DMPdGrlR.js`
+- CDP: PROCESSING «Ещё чуть-чуть…» · не checkout · ERROR + СБП/карта+ persist >5s · SMS timer
+- widget_init 422 на стенде → SUCCESS не проверен
+- Артефакт: `mcp_fly_inline_pay_2026-07-30_pass.json`
 
 ### Сессия 2026-07-30 (fix2: remount UI + cart clear · deploy#2)
 

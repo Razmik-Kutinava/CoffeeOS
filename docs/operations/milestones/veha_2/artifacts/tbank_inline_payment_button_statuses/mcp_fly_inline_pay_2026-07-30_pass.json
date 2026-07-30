@@ -1,0 +1,63 @@
+{
+  "date": "2026-07-30",
+  "task": "T-Bank inline payment button #32",
+  "stand": "https://coffeeos.fly.dev",
+  "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "tenant_name": "Point A Ленин",
+  "profile": "Aram 2bc3…4c / aramfifa100@gmail.com",
+  "bundle": "/vite/assets/application-DMPdGrlR.js",
+  "commits": [
+    "ace8d853 fix(#32): one-click creates pending order + frequent last_order_id v2",
+    "37d75f8b fix(#32): persist inline pay UI across RepeatSection remount",
+    "667465d5 fix(#32): show inline pay status full-width outside narrow cards",
+    "7f81fca4 fix(#32): keep SBP/card+ fallback visible (no 3s auto-reset on ERROR)"
+  ],
+  "health": { "up": "200 PASS" },
+  "checks": [
+    {
+      "id": 1,
+      "check": "Витрина Point A + секция «повторить» + «оплатить в клик»",
+      "result": "PASS"
+    },
+    {
+      "id": 2,
+      "check": "Клик «оплатить в клик» → inline PROCESSING («Ещё чуть-чуть…»), без #/checkout",
+      "result": "PASS",
+      "evidence": "CDP: fsm=PROCESSING, text=Ещё чуть-чуть…; hash without checkout"
+    },
+    {
+      "id": 3,
+      "check": "frequent_items[].last_order_id + createRepeatInlineOrder (POST /orders pending_payment)",
+      "result": "PASS",
+      "evidence": "API last_order_id present; POST /orders 200 pending_payment"
+    },
+    {
+      "id": 4,
+      "check": "widget_init fail → ERROR + СБП + карта+ (persist >5s)",
+      "result": "PASS",
+      "evidence": "POST /payments/widget_init 422 Payment provider error → ERROR bar + fallback; after 5s still visible"
+    },
+    {
+      "id": 5,
+      "check": "карта+ → NewCardForm + SMS pinpad timer ~00:5x",
+      "result": "PASS",
+      "evidence": "shop-new-card-form + shop-sms-pinpad + timer 00:54; screenshot mcp_fly_2026-07-30_pass_error_sbp_sms.png"
+    },
+    {
+      "id": 6,
+      "check": "SUCCESS ✔ live bank confirm",
+      "result": "BLOCKED",
+      "evidence": "T-Bank widget_init returns 422 on stand — SUCCESS path not reachable without provider OK"
+    }
+  ],
+  "verdict": "READY for customer UI review of PROCESSING/ERROR/SBP/карта+/SMS; SUCCESS needs working T-Bank widget_init on stand",
+  "notes": [
+    "Earlier FAIL was last_order_id null → checkout; fixed via createRepeatInlineOrder + frequent v2",
+    "UI remount empty→embedded fixed via repeatInlinePayUiStore + full-width status slot",
+    "3s auto-reset on ERROR removed so fallback stays clickable"
+  ],
+  "screenshots": [
+    "screenshots/mcp_fly_2026-07-30_pass_error_sbp_sms.png",
+    "screenshots/mcp_fly_2026-07-30_checkout_after_oneclick.png"
+  ]
+}

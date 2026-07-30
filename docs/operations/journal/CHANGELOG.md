@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-07-30 — MCP Fly #32 PASS (PROCESSING/ERROR/SBP/SMS)
+- Point A / Aram: one-click → inline PROCESSING → ERROR + СБП/карта+ → SMS pinpad
+- Не уходит в checkout; fallback не сбрасывается через 3 с
+- SUCCESS blocked: `widget_init` 422 на стенде
+- Артефакт: `mcp_fly_inline_pay_2026-07-30_pass.json`
+
 ## 2026-07-30 — fix(#32): inline pay UI store + clear cart before order
 - FE: `repeatInlinePayUiStore` — статусы переживают remount RepeatSection (empty→peek)
 - FE: `createRepeatInlineOrder` — DELETE `/cart` перед add (только позиция повтора)

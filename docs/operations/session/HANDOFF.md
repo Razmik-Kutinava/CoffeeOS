@@ -1,6 +1,6 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-30 (**fix #32 · one-click inline order · ждём deploy+MCP**)  
+**Дата:** 2026-07-30 (**MCP #32 PASS · ERROR/SBP/SMS; SUCCESS blocked by T-Bank 422**)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev  
 
@@ -8,14 +8,14 @@
 
 | Что | Статус |
 |-----|--------|
-| Intake + SPEC + BE шаги 1–3 | **`[x]`** |
-| FE FSM / UI / SMS / SUCCESS-ERROR | **`[x]`** |
-| Фикс MCP-блокера (create order + last_order_id v2) | **`[x]` код** · deploy/MCP **in progress** |
-| PHASE 3 / MCP Fly PASS | **ожидает** повторный прогон после deploy |
+| Intake + SPEC + BE + FE FSM/UI/SMS | **`[x]`** |
+| Фикс MCP (order + remount store + full-width + no ERROR reset) | **`[x]`** |
+| MCP Fly PASS (PROCESSING / ERROR / СБП / карта+ / SMS) | **`[x]`** |
+| SUCCESS ✔ live | **blocked** — `widget_init` 422 Payment provider error |
 
-**ТЗ:** [`Интеграция inline-оплаты Т-Банка…`](../milestones/veha_2/requirements/customer_tasks/Интеграция%20inline-оплаты%20Т-Банка%20с%20динамическими%20статусами%20внутри%20кнопки.md)  
-**Фикс:** `createRepeatInlineOrder` + `last_order_id` в frequent v2; PROCESSING сразу при клике.  
-**Дальше:** `bin/fly_deploy.sh` → MCP Point A → PASS или скрины FAIL.
+**MCP:** [`mcp_fly_inline_pay_2026-07-30_pass.json`](../milestones/veha_2/artifacts/tbank_inline_payment_button_statuses/mcp_fly_inline_pay_2026-07-30_pass.json)  
+**Скрин:** [`mcp_fly_2026-07-30_pass_error_sbp_sms.png`](../milestones/veha_2/artifacts/tbank_inline_payment_button_statuses/screenshots/mcp_fly_2026-07-30_pass_error_sbp_sms.png)  
+**Дальше:** починить T-Bank widget_init на стенде → SUCCESS; или отдать заказчику UI-флоу как есть.
 
 ### T-Kassa Widget One-Click + Fallback #33 (2026-07-29)
 
