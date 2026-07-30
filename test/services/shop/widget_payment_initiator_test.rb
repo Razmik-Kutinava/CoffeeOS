@@ -32,32 +32,35 @@ class Shop::WidgetPaymentInitiatorTest < ActiveSupport::TestCase
 
   teardown { Current.reset }
 
-  def with_inline_stub(result: nil, capture: nil)
-    original = Payments::TbankInlineInit.method(:call)
-    Payments::TbankInlineInit.define_singleton_method(:call) do |**kw|
-      capture&.call(kw)
-      result || { provider_payment_id: "pid-stub" }
+  def confirmed_adapter(rebill_expect: nil)
+    fake = Object.new
+    fake.define_singleton_method(:charge_recurrent) do |**kw|
+      raise "unexpected rebill #{kw[:rebill_id]}" if rebill_expect && kw[:rebill_id] != rebill_expect
+
+      {
+        provider_payment_id: "pid-charged",
+        charge_response: {
+          "Success" => true,
+          "Status" => "CONFIRMED",
+          "PaymentId" => "pid-charged",
+          "ErrorCode" => "0"
+        }
+      }
     end
-    yield
-  ensure
-    Payments::TbankInlineInit.define_singleton_method(:call, original)
+    fake
   end
 
-  test "skips Init when provider_payment_id already set" do
+  test "skips gateway when provider_payment_id already set and no rebill" do
     @payment.update_columns(provider_payment_id: "existing-pid")
-    called = false
-    with_inline_stub(capture: ->(_) { called = true }) do
-      result = Shop::WidgetPaymentInitiator.call(
-        order: @order,
-        return_base_url: "https://example.com",
-        notification_url: "https://example.com/cb"
-      )
-      assert_equal "existing-pid", result[:provider_payment_id]
-      refute called
-    end
+    result = Shop::WidgetPaymentInitiator.call(
+      order: @order,
+      return_base_url: "https://example.com",
+      notification_url: "https://example.com/cb"
+    )
+    assert_equal "existing-pid", result[:provider_payment_id]
   end
 
-  test "passes rebill_id from primary saved card and updates payment" do
+  test "with rebill uses charge_recurrent and settles CONFIRMED" do
     MobilePaymentMethod.create!(
       customer_id: @customer.id,
       payment_type: "card",
@@ -67,37 +70,44 @@ class Shop::WidgetPaymentInitiatorTest < ActiveSupport::TestCase
       is_default: true
     )
 
-    captured = nil
-    sync_called = false
-    original_sync = Payments::TbankPaymentSync.method(:sync_order!)
-    Payments::TbankPaymentSync.define_singleton_method(:sync_order!) do |**_|
-      sync_called = true
-      true
+    result = Shop::WidgetPaymentInitiator.call(
+      order: @order,
+      return_base_url: "https://example.com",
+      notification_url: "https://example.com/cb",
+      adapter: confirmed_adapter(rebill_expect: "rebill-99")
+    )
+
+    assert_equal "pid-charged", result[:provider_payment_id]
+    assert_equal "pid-charged", @payment.reload.provider_payment_id
+    assert_predicate @payment, :succeeded?
+    assert_predicate @order.reload, :accepted?
+  end
+
+  test "without rebill uses TbankInlineInit Widget path" do
+    called = false
+    captured_type = nil
+    original = Payments::TbankInlineInit.method(:call)
+    Payments::TbankInlineInit.define_singleton_method(:call) do |**kw|
+      called = true
+      captured_type = kw[:connection_type]
+      { provider_payment_id: "pid-widget" }
     end
 
     begin
-      with_inline_stub(
-        result: { provider_payment_id: "pid-new" },
-        capture: ->(kw) { captured = kw }
-      ) do
-        result = Shop::WidgetPaymentInitiator.call(
-          order: @order,
-          return_base_url: "https://example.com",
-          notification_url: "https://example.com/cb"
-        )
-        assert_equal "pid-new", result[:provider_payment_id]
-      end
+      result = Shop::WidgetPaymentInitiator.call(
+        order: @order,
+        return_base_url: "https://example.com",
+        notification_url: "https://example.com/cb"
+      )
+      assert_equal "pid-widget", result[:provider_payment_id]
+      assert called
+      assert_equal "Widget", captured_type
     ensure
-      Payments::TbankPaymentSync.define_singleton_method(:sync_order!, original_sync)
+      Payments::TbankInlineInit.define_singleton_method(:call, original)
     end
-
-    assert_equal "rebill-99", captured[:rebill_id]
-    assert_equal "Widget", captured[:connection_type]
-    assert_equal "pid-new", @payment.reload.provider_payment_id
-    assert sync_called
   end
 
-  test "resolves rebill from extra_customer_ids when order customer has no cards" do
+  test "resolves rebill from extra_customer_ids" do
     other = create_mobile_customer!(email: "other-#{SecureRandom.hex(3)}@ex.com")
     MobilePaymentMethod.create!(
       customer_id: other.id,
@@ -108,26 +118,14 @@ class Shop::WidgetPaymentInitiatorTest < ActiveSupport::TestCase
       is_default: true
     )
 
-    captured = nil
-    original_sync = Payments::TbankPaymentSync.method(:sync_order!)
-    Payments::TbankPaymentSync.define_singleton_method(:sync_order!) { |**_| true }
+    Shop::WidgetPaymentInitiator.call(
+      order: @order,
+      return_base_url: "https://example.com",
+      notification_url: "https://example.com/cb",
+      extra_customer_ids: [ other.id ],
+      adapter: confirmed_adapter(rebill_expect: "rebill-session")
+    )
 
-    begin
-      with_inline_stub(
-        result: { provider_payment_id: "pid-x" },
-        capture: ->(kw) { captured = kw }
-      ) do
-        Shop::WidgetPaymentInitiator.call(
-          order: @order,
-          return_base_url: "https://example.com",
-          notification_url: "https://example.com/cb",
-          extra_customer_ids: [ other.id ]
-        )
-      end
-    ensure
-      Payments::TbankPaymentSync.define_singleton_method(:sync_order!, original_sync)
-    end
-
-    assert_equal "rebill-session", captured[:rebill_id]
+    assert_equal "pid-charged", @payment.reload.provider_payment_id
   end
 end

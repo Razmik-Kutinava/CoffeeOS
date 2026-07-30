@@ -1,27 +1,28 @@
 # frozen_string_literal: true
 
 module Shop
-  # POST widget_init: Init(+Charge по RebillId) с connection_type Widget, сумма из БД.
-  # RebillId: явный → primary card order.customer → extra customer_ids (session).
+  # POST widget_init: one-click Charge по RebillId или Init(Widget) без карты.
   class WidgetPaymentInitiator
     class Error < StandardError; end
 
-    def self.call(order:, return_base_url:, notification_url:, rebill_id: nil, extra_customer_ids: [])
+    def self.call(order:, return_base_url:, notification_url:, rebill_id: nil, extra_customer_ids: [], adapter: nil)
       new(
         order: order,
         return_base_url: return_base_url,
         notification_url: notification_url,
         rebill_id: rebill_id,
-        extra_customer_ids: extra_customer_ids
+        extra_customer_ids: extra_customer_ids,
+        adapter: adapter
       ).call
     end
 
-    def initialize(order:, return_base_url:, notification_url:, rebill_id: nil, extra_customer_ids: [])
+    def initialize(order:, return_base_url:, notification_url:, rebill_id: nil, extra_customer_ids: [], adapter: nil)
       @order = order
       @return_base_url = return_base_url
       @notification_url = notification_url
       @rebill_id = rebill_id.to_s.presence
       @extra_customer_ids = Array(extra_customer_ids).compact
+      @adapter = adapter || Payments::TbankAdapter.new
     end
 
     def call
@@ -36,22 +37,11 @@ module Shop
         return { provider_payment_id: payment.provider_payment_id.to_s }
       end
 
-      result = Payments::TbankInlineInit.call(
-        order: @order,
-        return_base_url: @return_base_url,
-        notification_url: @notification_url,
-        rebill_id: rebill_id,
-        customer_key: @order.customer_id&.to_s,
-        connection_type: "Widget"
-      )
-
-      payment.update_columns(
-        provider: "tbank",
-        provider_payment_id: result[:provider_payment_id]
-      )
-
-      Payments::TbankPaymentSync.sync_order!(order: @order) if rebill_id.present?
-      result
+      if rebill_id.present?
+        charge_with_rebill!(payment, rebill_id)
+      else
+        init_widget_only!(payment)
+      end
     end
 
     private
@@ -65,17 +55,80 @@ module Shop
       nil
     end
 
-    # Init уже был (без Charge) — дожимаем Charge по RebillId.
+    # Как Shop::RecurrentOrderCreator: Init → Charge, проверка Success, settle CONFIRMED.
+    def charge_with_rebill!(payment, rebill_id)
+      charge_data = @adapter.charge_recurrent(
+        order: @order,
+        rebill_id: rebill_id,
+        return_base_url: @return_base_url,
+        notification_url: @notification_url,
+        customer_key: @order.customer_id&.to_s
+      )
+
+      pid = charge_data[:provider_payment_id].to_s
+      payment.update_columns(provider: "tbank", provider_payment_id: pid)
+
+      raw = charge_data[:charge_response] || {}
+      result = Payments::TbankPaymentResult.new(raw)
+
+      if result.confirmed?
+        settle_confirmed!(payment, raw, pid)
+      elsif result.three_ds?
+        Rails.logger.info("[WidgetPaymentInitiator] 3DS required order=#{@order.id}")
+      else
+        Payments::TbankPaymentSync.sync_order!(order: @order.reload)
+      end
+
+      { provider_payment_id: pid }
+    end
+
+    def init_widget_only!(payment)
+      result = Payments::TbankInlineInit.call(
+        order: @order,
+        return_base_url: @return_base_url,
+        notification_url: @notification_url,
+        customer_key: @order.customer_id&.to_s,
+        connection_type: "Widget",
+        adapter: @adapter
+      )
+      payment.update_columns(provider: "tbank", provider_payment_id: result[:provider_payment_id])
+      result
+    end
+
     def charge_existing!(payment, rebill_id)
-      adapter = Payments::TbankAdapter.new
-      charge_response = adapter.charge(
+      charge_response = @adapter.charge(
         payment_id: payment.provider_payment_id,
         rebill_id: rebill_id
       )
+      result = Payments::TbankPaymentResult.new(charge_response)
+      unless result.success?
+        raise Payments::TbankAdapter::ApiError.new(
+          error_code: result.error_code,
+          message: result.message
+        )
+      end
+
       pid = charge_response["PaymentId"].to_s.presence || payment.provider_payment_id.to_s
       payment.update_columns(provider: "tbank", provider_payment_id: pid)
-      Payments::TbankPaymentSync.sync_order!(order: @order)
+
+      if result.confirmed?
+        settle_confirmed!(payment, charge_response, pid)
+      else
+        Payments::TbankPaymentSync.sync_order!(order: @order.reload)
+      end
+
       { provider_payment_id: pid }
+    end
+
+    def settle_confirmed!(payment, raw, pid)
+      Callbacks::PaymentStatusUpdater.new(
+        payment: payment,
+        new_status: "succeeded",
+        provider_data: raw.except("Token", "Password"),
+        provider_payment_id: pid,
+        note: "Widget Charge CONFIRMED"
+      ).call!
+      @order.reload
     end
   end
 end
