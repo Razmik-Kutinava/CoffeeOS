@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-07-30 — docs: intake #34 T-Kassa SBP Autopay AccountToken
+- ТЗ: `customer_tasks/Интеграция Автоплатежей СБП Т-Касса в PWA.md` (текст заказчика 1:1)
+- Артефакты: `artifacts/tbank_sbp_autopayments_account_token/`
+- CBR индекс #34 + backlog · README customer_tasks
+- Код не менялся; SPEC ждёт go
+
 ## 2026-07-30 — MCP #32 SUCCESS blocked: T-Bank Charge disabled
 - Deploy `c9e68271` на Fly OK; one-click создаёт pending order + primary card
 - `widget_init` 422 `error_code=10`: «Метод Charge заблокирован для данного терминала»

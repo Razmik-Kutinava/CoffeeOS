@@ -2,12 +2,20 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-30 (MCP #32 · Charge blocked on T-Bank terminal)
+**Дата:** 2026-07-30 (PHASE 0 intake · #34 SBP Autopay AccountToken)
 
 | Сейчас | Дальше |
 |--------|--------|
-| Deploy `c9e68271` OK; one-click → orders+cards OK; widget_init 422 code=10 | Включить Charge в ЛК T-Bank → MCP SUCCESS |
-| Root cause Fly logs: «Метод Charge заблокирован для данного терминала» | Опционально: Widget SDK fallback без server Charge |
+| **#34** интейк ТЗ «Автоплатежи СБП (Т-Касса)» — док + CBR + артефакты | **go** → PHASE 1: SPEC (`todo.md`) |
+| #32 SUCCESS blocked: Charge disabled на терминале T-Bank | Включить Charge в ЛК → MCP SUCCESS |
+
+### Сессия 2026-07-30 (PHASE 0 · #34 T-Kassa SBP Autopay)
+
+- Интейк заказчика: Zero-Click checkout через `AccountToken` + `GetAddAccountQRState` / `ChargeQr`
+- ТЗ: `customer_tasks/Интеграция Автоплатежей СБП Т-Касса в PWA.md`
+- Артефакты: `artifacts/tbank_sbp_autopayments_account_token/`
+- CBR: строка backlog + индекс #34 · статус **интейк `[x]`** · SPEC ждёт go
+- Код / todo.md — не трогали (PHASE 0 only)
 
 ### Сессия 2026-07-30 (MCP SUCCESS attempt · Charge blocked)
 
