@@ -5,7 +5,7 @@ module Shop
     class PaymentsController < Shop::Api::BaseController
       include Shop::Api::OperatingHoursGuard
 
-      before_action :reject_orders_when_closed!, only: %i[new_card one_click sbp_init widget_init]
+      before_action :reject_orders_when_closed!, only: %i[new_card one_click sbp_init sbp_charge widget_init]
 
       # GET /shop/api/payments/card_config — RSA public key для CardData.
       def card_config
@@ -37,7 +37,10 @@ module Shop
       # POST /shop/api/payments/sbp/init — Init+Receipt → GetQr → { payment_url }.
       def sbp_init
         result = Shop::SbpPaymentInitiator.new(tenant: @shop_tenant, request: request)
-          .call!(order_id: params.require(:order_id))
+          .call!(
+            order_id: params.require(:order_id),
+            save_sbp_account: params[:save_sbp_account]
+          )
         render json: {
           payment_url: result[:payment_url],
           order_id: result[:order_id],
@@ -50,6 +53,27 @@ module Shop
           error: e.message,
           error_code: e.error_code
         }, status: e.http_status
+      end
+
+      # POST /shop/api/payments/sbp/charge — Zero-Click ChargeQr по AccountToken.
+      def sbp_charge
+        session_cid = Shop::CustomerSession.customer_id(session, @shop_tenant.id)
+        result = Shop::SbpAutopayChargeService.new(tenant: @shop_tenant, request: request)
+          .call!(order_id: params.require(:order_id), customer_id: session_cid)
+        render json: {
+          order_id: result[:order_id],
+          status: result[:status],
+          amount: result[:amount],
+          provider_payment_id: result[:provider_payment_id]
+        }.compact
+      rescue ActionController::ParameterMissing => e
+        render json: { error: e.message }, status: :bad_request
+      rescue Shop::SbpAutopayChargeService::Error => e
+        render json: {
+          error: e.message,
+          error_code: e.error_code,
+          fatal: e.fatal?
+        }.compact, status: e.http_status
       end
 
       # POST /shop/api/payments/widget_init — Widget SDK: сумма из БД, connection_type: Widget.

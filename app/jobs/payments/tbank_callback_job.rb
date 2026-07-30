@@ -61,6 +61,15 @@ module Payments
         elsif Payments::SavedCardStore.allowed_for?(payment)
           Payments::TbankPaymentSync.new(payment: payment).sync_for_rebill!
         end
+
+        if payload["RequestKey"].to_s.present?
+          begin
+            Payments::SbpAccountTokenFromWebhook.new.call!(payment: payment, payload: payload)
+          rescue StandardError => e
+            Rails.logger.error("[TbankCallbackJob] SBP AccountToken persist failed: #{e.class}: #{e.message}")
+            raise
+          end
+        end
       end
 
       Rails.logger.info("[TbankCallbackJob] Processed OrderId=#{order_id}, status=#{tbank_status}→#{our_status}")

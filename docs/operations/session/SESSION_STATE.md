@@ -2,12 +2,22 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-30 (PHASE 2 RED · #34 SBP Autopay AccountToken)
+**Дата:** 2026-07-30 (PHASE 2 GREEN · #34 SBP Autopay AccountToken)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#34** RED тесты закоммичены, падают (ожидаемо) | **go** → PHASE 2 GREEN |
+| **#34** GREEN: ChargeQr/AccountToken/sbp/charge + FSM; регрессия оплаты PASS | **go** → PHASE 3 REVIEW |
 | #32 SUCCESS blocked: Charge disabled на терминале T-Bank | Включить Charge в ЛК → MCP SUCCESS |
+
+### Сессия 2026-07-30 (PHASE 2 GREEN · #34)
+
+- BE: `TbankSbpAutopay`, `SbpAccountTokenStore`, `SbpAccountTokenFromWebhook`, `SbpAutopayChargeService`
+- BE: `SbpPaymentInitiator` + `save_sbp_account`; route `POST sbp/charge`; callback RequestKey
+- FE: `shopSbpAutopay.js` FSM + toasts
+- Тесты #34: 21/21 Ruby + 10/10 JS PASS
+- Регрессия оплаты: 70 runs / 0 fail / 2 skip PASS
+- Checkout checkbox UI — не вшивали в route (helpers готовы); backlog REVIEW
+- Live MCP blocked терминалом (#32)
 
 ### Сессия 2026-07-30 (PHASE 2 RED · #34)
 

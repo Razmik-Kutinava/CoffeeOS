@@ -2,7 +2,7 @@
 
 **ТЗ:** [`customer_tasks/Интеграция Автоплатежей СБП Т-Касса в PWA.md`](../milestones/veha_2/requirements/customer_tasks/Интеграция%20Автоплатежей%20СБП%20Т-Касса%20в%20PWA.md)  
 **Артефакты:** `artifacts/tbank_sbp_autopayments_account_token/`  
-**Фаза:** PHASE 2 BUILD · RED (тесты падают — ожидаемо)
+**Фаза:** PHASE 2 BUILD · GREEN (тесты + регрессия PASS) · REVIEW ждёт go
 
 ---
 
@@ -101,10 +101,10 @@ bin/rails test test/integration/shop/api/qa_section_2_3_payment_cart_test.rb \
 
 ## Чеклист шагов
 
-- [ ] **Шаг 1:** Setup — Init+Recurrent+QR + checkbox `save_sbp_account` + toast
-- [ ] **Шаг 2:** Webhook — GetAddAccountQRState + AccountToken + RequestKey idempotency
-- [ ] **Шаг 3:** Zero-Click — `sbp/charge` ChargeQr + UI loader/success
-- [ ] **Шаг 4:** Fallback — `CHARGE_DECLINED` → manual SBP; soft keep token
+- [x] **Шаг 1:** Setup — Init+Recurrent+QR + checkbox `save_sbp_account` + toast (BE+FSM; Checkout UI checkbox — backlog до REVIEW)
+- [x] **Шаг 2:** Webhook — GetAddAccountQRState + AccountToken + RequestKey idempotency
+- [x] **Шаг 3:** Zero-Click — `sbp/charge` ChargeQr + UI loader/success FSM
+- [x] **Шаг 4:** Fallback — `CHARGE_DECLINED` soft/fatal + FSM declined→manual
 
 ---
 
@@ -113,19 +113,7 @@ bin/rails test test/integration/shop/api/qa_section_2_3_payment_cart_test.rb \
 | Фаза | Статус |
 |---|---|
 | PHASE 0 intake | `[x]` `48aba0c6` |
-| PHASE 1 SPEC | `[x]` (этот файл) |
-| PHASE 2 RED | `[x]` тесты написаны, падают (ожидаемо) |
-| PHASE 2 GREEN | `[ ]` ждёт go |
-| PHASE 3 REVIEW | `[ ]` |
-
-### RED tests (#34)
-
-| Файл | Что покрывает |
-|---|---|
-| `test/services/payments/tbank_sbp_autopay_test.rb` | GetAddAccountQRState, ChargeQr, CHARGE_DECLINED soft/fatal |
-| `test/services/payments/sbp_account_token_store_test.rb` | persist AccountToken, append, RequestKey idempotency |
-| `test/services/payments/sbp_account_token_from_webhook_test.rb` | webhook → GetAddAccountQRState → store |
-| `test/services/shop/sbp_payment_initiator_autopay_test.rb` | save_sbp_account → Recurrent+QR |
-| `test/integration/shop/api/sbp_init_save_account_test.rb` | API sbp/init + provider_data flag |
-| `test/integration/shop/api/sbp_autopay_charge_test.rb` | route/action sbp/charge + service |
-| `test/javascript/shop_sbp_autopay_test.mjs` | FSM loading→declined→manual + toasts |
+| PHASE 1 SPEC | `[x]` |
+| PHASE 2 RED | `[x]` `e1d73dc5` |
+| PHASE 2 GREEN | `[x]` |
+| PHASE 3 REVIEW | `[ ]` ждёт go |

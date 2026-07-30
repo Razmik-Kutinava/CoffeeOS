@@ -21,8 +21,9 @@ module Shop
       @qr_fetcher = qr_fetcher || Payments::TbankQrFetcher
     end
 
-    def call!(order_id:, return_base_url: nil, notification_url: nil)
+    def call!(order_id:, return_base_url: nil, notification_url: nil, save_sbp_account: false)
       order = find_pending_order!(order_id)
+      @save_sbp_account = ActiveModel::Type::Boolean.new.cast(save_sbp_account)
 
       if Shop::PaymentConfig.simulate?
         return simulate_result(order)
@@ -48,6 +49,7 @@ module Shop
     end
 
     def simulate_result(order)
+      mark_save_sbp_account!(order)
       {
         payment_url: "https://qr.nspk.ru/SIMULATE-#{order.id.to_s.delete("-")[0, 12]}",
         order_id: order.id,
@@ -69,19 +71,23 @@ module Shop
       raise Error.new("У заказа нет платежа", http_status: :unprocessable_entity) unless payment
 
       begin
-        init = @adapter.init_payment(
+        init_kwargs = {
           order: order,
           return_base_url: base,
           notification_url: notify,
           customer_key: order.customer_id&.to_s,
-          recurrent: false,
+          recurrent: @save_sbp_account,
           receipt: receipt
-        )
+        }
+        init_kwargs[:data] = { "QR" => "true" } if @save_sbp_account
+
+        init = @adapter.init_payment(**init_kwargs)
 
         payment.update_columns(
           provider: "tbank",
           provider_payment_id: init[:provider_payment_id]
         )
+        mark_save_sbp_account!(order)
 
         qr = @qr_fetcher.call!(payment_id: init[:provider_payment_id], adapter: @adapter)
         {
@@ -100,6 +106,17 @@ module Shop
         Rails.logger.error("[SbpPaymentInitiator] #{e.class}: #{e.message}")
         raise Error.new(e.message, http_status: :internal_server_error)
       end
+    end
+
+    def mark_save_sbp_account!(order)
+      return unless @save_sbp_account
+
+      payment = order.payments.order(created_at: :desc).first
+      return unless payment
+
+      data = payment.provider_data.is_a?(Hash) ? payment.provider_data.deep_dup : {}
+      data["save_sbp_account"] = true
+      payment.update_columns(provider_data: data)
     end
 
     def friendly_api_message(error)

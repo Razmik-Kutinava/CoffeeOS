@@ -45,9 +45,10 @@ class Payments::SbpAccountTokenFromWebhookTest < ActiveSupport::TestCase
   end
 
   test "call! with RequestKey fetches AccountToken and persists once" do
+    seen_key = nil
     autopay = Object.new
     autopay.define_singleton_method(:get_add_account_qr_state) do |request_key:|
-      assert_equal "rk-wh-1", request_key
+      seen_key = request_key
       { account_token: "acct-from-wh" }
     end
 
@@ -60,6 +61,7 @@ class Payments::SbpAccountTokenFromWebhookTest < ActiveSupport::TestCase
       }
     )
 
+    assert_equal "rk-wh-1", seen_key
     row = MobilePaymentMethod.find_by(customer_id: @customer.id, payment_type: "sbp", card_token: "acct-from-wh")
     assert row, "AccountToken должен быть сохранён"
     assert row.is_active
