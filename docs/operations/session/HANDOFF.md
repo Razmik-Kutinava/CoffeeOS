@@ -1,6 +1,6 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-30 (**MCP #32 PASS · ERROR/SBP/SMS; SUCCESS blocked by T-Bank 422**)  
+**Дата:** 2026-07-30 (**MCP #32 · SUCCESS blocked: T-Bank Charge disabled on terminal**)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev  
 
@@ -9,13 +9,14 @@
 | Что | Статус |
 |-----|--------|
 | Intake + SPEC + BE + FE FSM/UI/SMS | **`[x]`** |
-| Фикс MCP (order + remount store + full-width + no ERROR reset) | **`[x]`** |
+| Фикс MCP (order + remount + full-width + no ERROR reset) | **`[x]`** |
+| defer_payment_init + WidgetPaymentInitiator Charge+settle | **`[x]`** `c9e68271` deployed |
 | MCP Fly PASS (PROCESSING / ERROR / СБП / карта+ / SMS) | **`[x]`** |
-| SUCCESS ✔ live | **blocked** — `widget_init` 422 Payment provider error |
+| SUCCESS ✔ live | **blocked** — T-Bank **error 10: Метод Charge заблокирован для данного терминала** |
 
-**MCP:** [`mcp_fly_inline_pay_2026-07-30_pass.json`](../milestones/veha_2/artifacts/tbank_inline_payment_button_statuses/mcp_fly_inline_pay_2026-07-30_pass.json)  
-**Скрин:** [`mcp_fly_2026-07-30_pass_error_sbp_sms.png`](../milestones/veha_2/artifacts/tbank_inline_payment_button_statuses/screenshots/mcp_fly_2026-07-30_pass_error_sbp_sms.png)  
-**Дальше:** починить T-Bank widget_init на стенде → SUCCESS; или отдать заказчику UI-флоу как есть.
+**MCP SUCCESS attempt:** [`mcp_fly_inline_pay_2026-07-30_charge_blocked.json`](../milestones/veha_2/artifacts/tbank_inline_payment_button_statuses/mcp_fly_inline_pay_2026-07-30_charge_blocked.json)  
+**MCP UI PASS:** [`mcp_fly_inline_pay_2026-07-30_pass.json`](../milestones/veha_2/artifacts/tbank_inline_payment_button_statuses/mcp_fly_inline_pay_2026-07-30_pass.json)  
+**Дальше:** в ЛК T-Bank включить Charge/Recurrent на терминале `TBANK_TERMINAL_KEY` → повторный MCP SUCCESS.
 
 ### T-Kassa Widget One-Click + Fallback #33 (2026-07-29)
 

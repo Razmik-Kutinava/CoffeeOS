@@ -2,18 +2,27 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-30 (MCP #32 PASS · PROCESSING/ERROR/SBP/SMS)
+**Дата:** 2026-07-30 (MCP #32 · Charge blocked on T-Bank terminal)
 
 | Сейчас | Дальше |
 |--------|--------|
-| Inline one-click на Fly: PROCESSING → ERROR → СБП/карта+/SMS | SUCCESS ✔ — когда widget_init на стенде не 422 |
-| MCP артефакт PASS | заказчику можно показывать UI-флоу (кроме SUCCESS банка) |
+| Deploy `c9e68271` OK; one-click → orders+cards OK; widget_init 422 code=10 | Включить Charge в ЛК T-Bank → MCP SUCCESS |
+| Root cause Fly logs: «Метод Charge заблокирован для данного терминала» | Опционально: Widget SDK fallback без server Charge |
+
+### Сессия 2026-07-30 (MCP SUCCESS attempt · Charge blocked)
+
+- Deploy `c9e68271` (charge_recurrent + settle CONFIRMED) — Fly PASS
+- BE на машине: `settle_confirmed!` в WidgetPaymentInitiator
+- MCP Point A / Aram: order `5514597d…` + primary MIR *5953 → widget_init **422 error_code 10**
+- Fly log: `Т-Банк API error 10: Метод Charge заблокирован для данного терминала`
+- UI: ERROR + СБП/карта+ (без checkout) — код CoffeeOS OK
+- Артефакт: `mcp_fly_inline_pay_2026-07-30_charge_blocked.json`
 
 ### Сессия 2026-07-30 (fix widget_init 422 → defer + Rebill Charge)
 
 - Root cause: OrderCreator Init, затем widget_init Init снова → duplicate OrderId
 - `defer_payment_init` + `WidgetPaymentInitiator` (rebill primary → Charge)
-- Дальше: deploy + MCP SUCCESS
+- Deploy + MCP: Charge blocked терминалом (не duplicate Init)
 
 ### Сессия 2026-07-30 (MCP PASS после фиксов remount/fallback)
 

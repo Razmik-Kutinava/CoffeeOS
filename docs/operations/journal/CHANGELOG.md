@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-07-30 — MCP #32 SUCCESS blocked: T-Bank Charge disabled
+- Deploy `c9e68271` на Fly OK; one-click создаёт pending order + primary card
+- `widget_init` 422 `error_code=10`: «Метод Charge заблокирован для данного терминала»
+- Артефакт: `mcp_fly_inline_pay_2026-07-30_charge_blocked.json`
+- Нужно: включить Charge/Recurrent в ЛК T-Bank на TerminalKey стенда
+
 ## 2026-07-30 — fix(#32): defer Init + widget Charge by RebillId
 - BE: `defer_payment_init` в OrderCreator — без двойного Init (причина 422)
 - BE: `Shop::WidgetPaymentInitiator` — RebillId primary card → Init+Charge, sync GetState

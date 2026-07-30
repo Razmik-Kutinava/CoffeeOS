@@ -1,0 +1,61 @@
+{
+  "date": "2026-07-30",
+  "task": "T-Bank inline payment button #32 — SUCCESS after Charge settle deploy",
+  "stand": "https://coffeeos.fly.dev",
+  "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "tenant_name": "Point A Ленин",
+  "profile": "Aram 2bc3…4c / aramfifa100@gmail.com",
+  "bundle": "application-DVLSp1Pc.js",
+  "deploy": {
+    "commit": "c9e68271",
+    "fly_deploy": "PASS exit 0",
+    "be_verified": "settle_confirmed! present in /rails WidgetPaymentInitiator"
+  },
+  "health": { "up": "200 PASS" },
+  "order_id": "5514597d-1848-4941-b468-4a62619205f6",
+  "primary_card": {
+    "id": "4c5569dd-994c-4146-86d2-ed4d78bebcd6",
+    "masked_pan": "*5953",
+    "payment_system": "MIR"
+  },
+  "checks": [
+    {
+      "id": 1,
+      "check": "Empty cart → «оплатить в клик» (не #/checkout)",
+      "result": "PASS"
+    },
+    {
+      "id": 2,
+      "check": "DELETE cart → add → POST /orders pending_payment defer_payment_init",
+      "result": "PASS",
+      "evidence": "order 5514597d… status pending_payment payment_url null"
+    },
+    {
+      "id": 3,
+      "check": "GET /user/cards → primary MIR *5953",
+      "result": "PASS"
+    },
+    {
+      "id": 4,
+      "check": "POST widget_init → Charge + settle CONFIRMED → SUCCESS ✔",
+      "result": "FAIL",
+      "evidence": "HTTP 422 {error: Payment provider error, error_code: 10}"
+    },
+    {
+      "id": 5,
+      "check": "Inline ERROR + СБП / карта + (no checkout)",
+      "result": "PASS",
+      "evidence": "UI: Ошибка оплаты, попробуйте снова + СБП + карта +"
+    }
+  ],
+  "fly_log_root_cause": "[Shop::Payments#widget_init] ApiError order=5514597d-1848-4941-b468-4a62619205f6 code=10 msg=Т-Банк API error 10: Метод Charge заблокирован для данного терминала.",
+  "verdict": "NOT READY for live SUCCESS — terminal TBANK_TERMINAL_KEY blocks Charge. Code path OK (defer + RebillId + charge_recurrent). Need T-Bank ЛК: enable Charge/Recurrent on this terminal, or use Widget SDK path without server Charge.",
+  "screenshots": [
+    "screenshots/mcp_fly_2026-07-30_charge_blocked.png"
+  ],
+  "next": [
+    "Включить Charge на терминале T-Bank (тот же TerminalKey что TBANK_TERMINAL_KEY на Fly)",
+    "Повторный MCP one-click → SUCCESS",
+    "Опционально: при error 10 fallback на Widget Init + PaymentIntegration.init (без server Charge)"
+  ]
+}
