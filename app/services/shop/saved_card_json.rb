@@ -19,5 +19,18 @@ module Shop
         last_used_at: card.last_used_at&.iso8601
       }.compact
     end
+
+    # #34 AccountToken СБП — без PAN, только id + label.
+    def serialize_sbp(account)
+      return nil unless account
+
+      {
+        id: account.id,
+        payment_type: "sbp",
+        label: "Ваш счет СБП",
+        is_primary: account.is_default?,
+        last_used_at: account.last_used_at&.iso8601
+      }.compact
+    end
   end
 end

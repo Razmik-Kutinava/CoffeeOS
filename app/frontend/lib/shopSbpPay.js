@@ -82,14 +82,16 @@ export function mapSbpInitError(status, body = {}) {
 
 /**
  * @param {(path: string, opts?: object) => Promise<object>} api
- * @param {{ orderId: string }} params
+ * @param {{ orderId: string, saveSbpAccount?: boolean }} params
  * @returns {Promise<string>} payment_url
  */
-export async function initSbpPayment(api, { orderId }) {
+export async function initSbpPayment(api, { orderId, saveSbpAccount = false }) {
   try {
+    const body = { order_id: orderId }
+    if (saveSbpAccount) body.save_sbp_account = true
     const data = await api("/payments/sbp/init", {
       method: "POST",
-      body: { order_id: orderId }
+      body
     })
     const url = data?.payment_url
     if (!url) throw Object.assign(new Error("Не получен payment_url"), { status: 500, body: {} })

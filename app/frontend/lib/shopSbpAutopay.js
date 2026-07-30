@@ -66,3 +66,51 @@ export function buildSbpInitBody({ orderId, saveSbpAccount = false }) {
 export function buildSbpChargeBody({ orderId }) {
   return { order_id: orderId }
 }
+
+/**
+ * Zero-Click charge. Throws Error with status/body/error_code.
+ * @param {(path: string, opts?: object) => Promise<object>} api
+ */
+export async function chargeSbpAutopay(api, { orderId }) {
+  try {
+    return await api("/payments/sbp/charge", {
+      method: "POST",
+      body: buildSbpChargeBody({ orderId })
+    })
+  } catch (e) {
+    const status = e.status ?? e.httpStatus ?? 500
+    const body = e.body && typeof e.body === "object"
+      ? e.body
+      : { error: e.message, error_code: e.error_code }
+    if (!body.error_code && e.error_code) body.error_code = e.error_code
+    const err = new Error(mapSbpAutopayError(status, body))
+    err.status = status
+    err.body = body
+    err.error_code = body?.error_code || e.error_code
+    throw err
+  }
+}
+
+/**
+ * Дефолт выбора метода: при наличии AccountToken — «Ваш счет СБП».
+ */
+export function pickDefaultPaymentSelection({
+  sbpAccounts = [],
+  cards = [],
+  primary = null,
+  persisted = null
+} = {}) {
+  const hasSbp = Array.isArray(sbpAccounts) && sbpAccounts.length > 0
+  if (hasSbp) {
+    return { selectionMode: "sbp_account", selectedCardId: null }
+  }
+  if (persisted?.selectedCardId && cards.some((c) => c.id === persisted.selectedCardId)) {
+    return {
+      selectionMode: persisted.selectionMode === "new_card" ? "saved_card" : (persisted.selectionMode || "saved_card"),
+      selectedCardId: persisted.selectedCardId
+    }
+  }
+  if (primary?.id) return { selectionMode: "saved_card", selectedCardId: primary.id }
+  if (cards[0]?.id) return { selectionMode: "saved_card", selectedCardId: cards[0].id }
+  return { selectionMode: "sbp", selectedCardId: null }
+}

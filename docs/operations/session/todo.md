@@ -101,7 +101,7 @@ bin/rails test test/integration/shop/api/qa_section_2_3_payment_cart_test.rb \
 
 ## Чеклист шагов
 
-- [x] **Шаг 1:** Setup — Init+Recurrent+QR + checkbox `save_sbp_account` + toast (BE+FSM; Checkout UI checkbox — backlog до REVIEW)
+- [x] **Шаг 1:** Setup — Init+Recurrent+QR + checkbox `save_sbp_account` + toast (Checkout UI `[x]`)
 - [x] **Шаг 2:** Webhook — GetAddAccountQRState + AccountToken + RequestKey idempotency
 - [x] **Шаг 3:** Zero-Click — `sbp/charge` ChargeQr + UI loader/success FSM
 - [x] **Шаг 4:** Fallback — `CHARGE_DECLINED` soft/fatal + FSM declined→manual

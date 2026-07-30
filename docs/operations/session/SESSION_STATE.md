@@ -2,12 +2,18 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-30 (PHASE 3 REVIEW · #34 SBP Autopay AccountToken)
+**Дата:** 2026-07-30 (#34 Checkout UI SBP Autopay)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#34** REVIEW закрыт: ownership+settle; код готов (без Checkout UI) | Checkout UI **или** Charge в ЛК → MCP |
-| #32 SUCCESS blocked: Charge disabled на терминале T-Bank | Включить Charge в ЛК → MCP SUCCESS |
+| **#34** Checkout UI: «Ваш счет СБП» + чекбокс + charge/fallback | MCP Fly после Charge в ЛК (#32) |
+| #32 SUCCESS blocked: Charge disabled | Включить Charge в ЛК |
+
+### Сессия 2026-07-30 (#34 Checkout UI)
+
+- API `sbp_accounts` в user/cards; sheet + Checkout wiring
+- Zero-Click charge + CHARGE_DECLINED → manual init; toast SERVICE_UNAVAILABLE
+- Тесты: user_cards_sbp 2/2 · JS checkout UI 8/8 · shop_sbp_* 32/32
 
 ### Сессия 2026-07-30 (PHASE 3 REVIEW · #34)
 

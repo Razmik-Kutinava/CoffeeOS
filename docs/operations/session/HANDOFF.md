@@ -1,6 +1,6 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-30 (**PHASE 3 REVIEW · #34 SBP Autopay AccountToken**)  
+**Дата:** 2026-07-30 (**#34 Checkout UI SBP Autopay done · MCP blocked**)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev  
 
@@ -10,7 +10,7 @@
 |-----|--------|
 | Intake + SPEC + RED + GREEN | **`[x]`** |
 | REVIEW: ownership fix + settle ChargeQr + ops | **`[x]`** |
-| Checkout UI checkbox / default «Ваш счет СБП» | **`[ ]`** backlog |
+| Checkout UI checkbox / default «Ваш счет СБП» | **`[x]`** |
 | MCP Fly live SUCCESS | **blocked** — терминал без Charge/Recurrent (#32) |
 
 **ТЗ:** [`Интеграция Автоплатежей СБП Т-Касса в PWA.md`](../milestones/veha_2/requirements/customer_tasks/Интеграция%20Автоплатежей%20СБП%20Т-Касса%20в%20PWA.md)  

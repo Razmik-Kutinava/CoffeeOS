@@ -7,7 +7,10 @@
     formatCardRowLabel,
     labelAddCard,
     labelSbp,
+    labelSbpAccount,
+    labelBindSbpAccount,
     ctaSbpFastPay,
+    ctaSbpAccountPay,
     paymentMethodLoadErrorMessage,
     paymentMethodRetryLabel
   } from "../lib/paymentMethodI18n.js"
@@ -20,11 +23,13 @@
     open = false,
     stacked = false,
     cards = [],
+    sbpAccounts = [],
     loading = false,
     loadError = null,
     inlineError = null,
     selectedCardId = null,
-    selectionMode = "saved_card", // saved_card | new_card | sbp
+    selectionMode = "saved_card", // saved_card | new_card | sbp | sbp_account
+    saveSbpAccount = $bindable(false),
     canPay = false,
     fsmState = PAY_FSM.DEFAULT,
     newCardState = $bindable(undefined),
@@ -32,6 +37,7 @@
     onSelectCard = undefined,
     onSelectNewCard = undefined,
     onSelectSbp = undefined,
+    onSelectSbpAccount = undefined,
     onPay = undefined,
     onRetry = undefined,
     onRetryLoad = undefined
@@ -39,8 +45,17 @@
 
   const locked = $derived(shouldLockPaymentMethods(fsmState))
   const payDisabled = $derived(!canPay || loading || locked)
-  const idlePayLabel = $derived(selectionMode === "sbp" ? ctaSbpFastPay() : null)
-  const loadingPayLabel = $derived(selectionMode === "sbp" ? SBP_LOADING_LABEL : null)
+  const hasSbpAccount = $derived(Array.isArray(sbpAccounts) && sbpAccounts.length > 0)
+  const idlePayLabel = $derived(
+    selectionMode === "sbp"
+      ? ctaSbpFastPay()
+      : selectionMode === "sbp_account"
+        ? ctaSbpAccountPay()
+        : null
+  )
+  const loadingPayLabel = $derived(
+    selectionMode === "sbp" || selectionMode === "sbp_account" ? SBP_LOADING_LABEL : null
+  )
 
   function isCardSelected(card) {
     return selectionMode === "saved_card" && selectedCardId === card.id
@@ -49,6 +64,11 @@
   function handleSbpClick() {
     if (locked) return
     onSelectSbp?.()
+  }
+
+  function handleSbpAccountClick() {
+    if (locked) return
+    onSelectSbpAccount?.()
   }
 </script>
 
@@ -99,6 +119,25 @@
       </div>
     {:else}
       <ul class="pm-sheet__list" role="radiogroup" aria-label="Сохранённые карты">
+        {#if hasSbpAccount}
+          <li>
+            <button
+              type="button"
+              class="pm-row pm-row--sbp"
+              class:pm-row--selected={selectionMode === "sbp_account"}
+              role="radio"
+              aria-checked={selectionMode === "sbp_account"}
+              data-testid="payment-method-sbp-account"
+              disabled={locked}
+              onclick={handleSbpAccountClick}
+            >
+              <span class="pm-row__brand pm-row__brand--sbp" aria-hidden="true">{labelSbp()}</span>
+              <span class="pm-row__label">{labelSbpAccount()}</span>
+              <span class="pm-row__radio" aria-hidden="true"></span>
+            </button>
+          </li>
+        {/if}
+
         {#each cards as card (card.id)}
           <li>
             <button
@@ -151,6 +190,21 @@
           </button>
         </li>
       </ul>
+
+      {#if selectionMode === "sbp" && !hasSbpAccount}
+        <label class="pm-bind-sbp" data-testid="save-sbp-account-checkbox">
+          <input
+            type="checkbox"
+            class="pm-bind-sbp__input"
+            checked={saveSbpAccount}
+            disabled={locked}
+            onchange={(e) => {
+              saveSbpAccount = !!e.currentTarget.checked
+            }}
+          />
+          <span class="pm-bind-sbp__text">{labelBindSbpAccount()}</span>
+        </label>
+      {/if}
 
       {#if selectionMode === "new_card" && newCardState}
         <div class="pm-new-card" data-testid="checkout-new-card-wrap">
@@ -305,9 +359,32 @@
     box-shadow: inset 0 0 0 1px #ff8c42;
   }
 
-  .pm-row--sbp {
-    opacity: 0.55;
-    cursor: not-allowed;
+  .pm-row--sbp .pm-row__brand--sbp {
+    color: #6fcf97;
+  }
+
+  .pm-bind-sbp {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.625rem;
+    margin-top: 0.75rem;
+    padding: 0.75rem 0.25rem;
+    cursor: pointer;
+    color: #e0e0e0;
+    font-size: 0.875rem;
+    line-height: 1.35;
+  }
+
+  .pm-bind-sbp__input {
+    margin-top: 0.15rem;
+    width: 1.05rem;
+    height: 1.05rem;
+    accent-color: #ff8c42;
+    flex-shrink: 0;
+  }
+
+  .pm-bind-sbp__text {
+    flex: 1;
   }
 
   .pm-row__brand {

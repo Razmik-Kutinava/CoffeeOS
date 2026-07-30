@@ -11,9 +11,14 @@ class MobilePaymentMethod < ApplicationRecord
   validates :customer_id, presence: true
 
   scope :active_cards, -> { where(is_active: true, payment_type: "card") }
+  scope :active_sbp, -> { where(is_active: true, payment_type: "sbp") }
 
   def self.for_customer(customer_id)
     active_cards.where(customer_id: customer_id).order(last_used_at: :desc, created_at: :desc)
+  end
+
+  def self.sbp_for_customer(customer_id)
+    active_sbp.where(customer_id: customer_id).order(is_default: :desc, last_used_at: :desc, created_at: :desc)
   end
 
   def self.primary_for(customer_id)

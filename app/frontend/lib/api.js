@@ -55,6 +55,7 @@ export async function api(path, opts = {}) {
     err.httpStatus = res.status
     if (data.error_code) err.error_code = data.error_code
     if (data.tbank_status) err.tbank_status = data.tbank_status
+    err.body = data
     throw err
   }
   return data

@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-07-30 — feat(#34): Checkout UI SBP account + bind checkbox
+- GET `/user/cards` → `sbp_accounts` / `has_sbp_account`
+- PaymentMethodsSheet: «Ваш счет СБП» (default) + чекбокс привязки
+- Checkout: Zero-Click `sbp/charge` + fallback CHARGE_DECLINED → manual SBP
+- `api.js`: `err.body` для error_code; тесты UI PASS
+
 ## 2026-07-30 — review(#34): SBP Autopay ownership + settle after ChargeQr
 - `SbpAutopayChargeService`: сессия ≠ владелец заказа → 404; токен только от order.customer
 - После успешного ChargeQr — `PaymentStatusUpdater` (не оставлять pending при ответе CONFIRMED)

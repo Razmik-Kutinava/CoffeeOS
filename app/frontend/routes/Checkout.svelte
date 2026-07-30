@@ -52,6 +52,11 @@
   import { restoreGuestSession } from "../lib/restoreGuestSession.js"
   import { paymentMethodLoadErrorMessage } from "../lib/paymentMethodI18n.js"
   import { initSbpPayment, redirectToSbp } from "../lib/shopSbpPay.js"
+  import {
+    chargeSbpAutopay,
+    pickDefaultPaymentSelection,
+    SBP_AUTOPAY_TOASTS
+  } from "../lib/shopSbpAutopay.js"
   import { savePendingOrder } from "../lib/codeblackPendingOrder.js"
   import {
     setTokenInvalid,
@@ -87,7 +92,9 @@
   let savedCards = $state([])
   let cardsLoading = $state(false)
   let selectedCardId = $state(null)
-  let selectionMode = $state("saved_card") // saved_card | new_card | sbp
+  let selectionMode = $state("saved_card") // saved_card | new_card | sbp | sbp_account
+  let saveSbpAccount = $state(false)
+  let sbpAccounts = $state([])
   let newCardState = $state(createNewCardFormState())
   let payFsmState = $state(PAY_FSM.DEFAULT)
   let showThreeDsOverlay = $state(false)
@@ -102,7 +109,7 @@
   const canPay = $derived(identityReady && !submitting && shopIsOpenForPay())
   const sheetCanPay = $derived(
     canPay &&
-      (selectionMode === "sbp"
+      (selectionMode === "sbp" || selectionMode === "sbp_account"
         ? true
         : selectionMode === "saved_card"
           ? !!selectedCardId
@@ -217,34 +224,37 @@
   })
 
   async function loadSavedCards() {
-    if (!isValidEmail(email) || !emailVerified) {
+    if (!identityReady) {
       savedCards = []
+      sbpAccounts = []
       cardsLoadError = null
       return true
     }
     cardsLoading = true
     cardsLoadError = null
     try {
-      const q = encodeURIComponent(email.trim().toLowerCase())
-      const res = await api(`/user/cards?email=${q}`)
+      const q =
+        isValidEmail(email) && emailVerified
+          ? `?email=${encodeURIComponent(email.trim().toLowerCase())}`
+          : ""
+      const res = await api(`/user/cards${q}`)
       savedCards = Array.isArray(res?.cards) ? res.cards : []
+      sbpAccounts = Array.isArray(res?.sbp_accounts) ? res.sbp_accounts : []
       const primary = res?.primary
       const persisted = loadPaymentSelection()
-      if (persisted.selectedCardId && savedCards.some((c) => c.id === persisted.selectedCardId)) {
-        selectedCardId = persisted.selectedCardId
-        selectionMode = persisted.selectionMode || "saved_card"
-      } else if (primary?.id) {
-        selectedCardId = primary.id
-        selectionMode = "saved_card"
-      } else if (savedCards[0]?.id) {
-        selectedCardId = savedCards[0].id
-        selectionMode = "saved_card"
-      } else {
-        selectedCardId = null
-      }
+      const picked = pickDefaultPaymentSelection({
+        sbpAccounts,
+        cards: savedCards,
+        primary,
+        persisted
+      })
+      selectedCardId = picked.selectedCardId
+      selectionMode = picked.selectionMode
+      if (selectionMode !== "sbp") saveSbpAccount = false
       return true
     } catch (e) {
       savedCards = []
+      sbpAccounts = []
       cardsLoadError = e?.message || paymentMethodLoadErrorMessage()
       return false
     } finally {
@@ -352,6 +362,15 @@
     persistPaymentSelection({ selectedCardId: null, selectionMode: "sbp" })
   }
 
+  function onSelectSbpAccount() {
+    selectionMode = "sbp_account"
+    selectedCardId = null
+    saveSbpAccount = false
+    payFsmState = PAY_FSM.DEFAULT
+    sheetInlineError = null
+    persistPaymentSelection({ selectedCardId: null, selectionMode: "sbp_account" })
+  }
+
   /** api-адаптер для shopSbpPay: body объектом (unit-контракт), наружу — JSON.stringify. */
   async function sbpApi(path, opts = {}) {
     const next = { ...opts }
@@ -362,7 +381,11 @@
       return await apiWithPayTimeout(api, path, next)
     } catch (e) {
       e.status = e.httpStatus
-      e.body = { error: e.message }
+      const prev = e.body && typeof e.body === "object" ? e.body : {}
+      e.body = {
+        error: prev.error || e.message,
+        error_code: prev.error_code || e.error_code
+      }
       throw e
     }
   }
@@ -460,7 +483,7 @@
     try {
       saveGuestProfile({ name, email, emailVerified: true })
 
-      if (selectionMode === "sbp") {
+      if (selectionMode === "sbp" || selectionMode === "sbp_account") {
         const orderRes = await withMinLoaderMs(MIN_LOADER_MS, async () => {
           payFsmState = PAY_FSM.CONNECTING
           const payload = await apiWithPayTimeout(api, "/orders", {
@@ -475,9 +498,43 @@
           return payload
         })
         saveGuestOrderSession(orderRes.order_id, orderRes.reconnect_token)
-        const paymentUrl = await initSbpPayment(sbpApi, { orderId: orderRes.order_id })
-        savePendingOrder(orderRes.order_id)
-        redirectToSbp(paymentUrl)
+
+        if (selectionMode === "sbp_account") {
+          try {
+            const charged = await chargeSbpAutopay(sbpApi, { orderId: orderRes.order_id })
+            await completePaySuccess(charged.order_id || orderRes.order_id, { wantedSave: false })
+            return
+          } catch (chargeErr) {
+            if (chargeErr?.error_code === "CHARGE_DECLINED" || /CHARGE_DECLINED/i.test(chargeErr?.body?.error_code || "")) {
+              sheetInlineError = SBP_AUTOPAY_TOASTS.CHARGE_DECLINED
+              selectionMode = "sbp"
+              saveSbpAccount = false
+              const paymentUrl = await initSbpPayment(sbpApi, {
+                orderId: orderRes.order_id,
+                saveSbpAccount: false
+              })
+              savePendingOrder(orderRes.order_id)
+              redirectToSbp(paymentUrl)
+              return
+            }
+            sheetInlineError = chargeErr.message || SBP_AUTOPAY_TOASTS.CONNECTION_ERROR
+            payFsmState = PAY_FSM.CLIENT_ERROR
+            return
+          }
+        }
+
+        try {
+          const paymentUrl = await initSbpPayment(sbpApi, {
+            orderId: orderRes.order_id,
+            saveSbpAccount: !!saveSbpAccount
+          })
+          savePendingOrder(orderRes.order_id)
+          redirectToSbp(paymentUrl)
+        } catch (initErr) {
+          sheetInlineError = SBP_AUTOPAY_TOASTS.SERVICE_UNAVAILABLE
+          payFsmState = PAY_FSM.CLIENT_ERROR
+          throw initErr
+        }
         return
       }
 
@@ -647,11 +704,13 @@
     open={paymentSheetOpen}
     stacked={paymentSheetOpen}
     cards={savedCards}
+    {sbpAccounts}
     loading={cardsLoading}
     loadError={cardsLoadError}
     inlineError={sheetInlineError}
     {selectedCardId}
     {selectionMode}
+    bind:saveSbpAccount
     canPay={sheetCanPay}
     fsmState={payFsmState}
     bind:newCardState
@@ -661,6 +720,7 @@
     {onSelectCard}
     {onSelectNewCard}
     {onSelectSbp}
+    {onSelectSbpAccount}
     onPay={onSheetPay}
     onRetry={onSheetPayRetry}
     onRetryLoad={retryLoadSavedCards}

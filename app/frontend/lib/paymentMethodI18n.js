@@ -28,9 +28,23 @@ export function labelSbp() {
   return "СБП"
 }
 
+/** #34 Zero-Click: сохранённый счёт СБП. */
+export function labelSbpAccount() {
+  return "Ваш счет СБП"
+}
+
+/** Чекбокс привязки счёта при первой оплате СБП. */
+export function labelBindSbpAccount() {
+  return "Привязать счет для покупок в один клик"
+}
+
 /** CTA кнопки оплаты при выбранном СБП (CODE:BLACK / deep link). */
 export function ctaSbpFastPay() {
   return "Оплатить быстро"
+}
+
+export function ctaSbpAccountPay() {
+  return "Оплатить"
 }
 
 export function sbpUnavailable() {
