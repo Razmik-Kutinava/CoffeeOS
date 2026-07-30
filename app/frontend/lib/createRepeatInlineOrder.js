@@ -27,6 +27,8 @@ export async function createRepeatInlineOrder(item, { api, quantities = {} } = {
   }
 
   const qty = quantities[qtyKey(item)] || 1
+  // Только позиция «повторить» — иначе leftover в корзине уйдёт в заказ
+  await api("/cart", { method: "DELETE" })
   await addToCart({
     product_id: item.product_id,
     quantity: qty,

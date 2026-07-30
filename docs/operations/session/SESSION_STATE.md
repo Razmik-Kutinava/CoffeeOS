@@ -9,6 +9,12 @@
 | Фикс: `last_order_id` в frequent v2 + `createRepeatInlineOrder` + FSM UI сразу | Deploy Fly → MCP до PASS |
 | «оплатить в клик» больше не уходит в checkout | SMS / SUCCESS / ERROR на живом стенде |
 
+### Сессия 2026-07-30 (fix2: remount UI + cart clear · deploy#2)
+
+- MCP после первого deploy: `last_order_id` OK, заказ 200, но UI пропадал — full→embedded remount
+- FE: `repeatInlinePayUiStore` + clear cart перед one-click order
+- Дальше: redeploy → MCP статусы/СБП/карта+
+
 ### Сессия 2026-07-30 (fix: one-click → new pending order + PROCESSING UI)
 
 - BE: `CustomerFrequentProductsService` — `last_order_id` в payload, cache `shop/freq/v2/…`

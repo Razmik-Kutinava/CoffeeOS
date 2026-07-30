@@ -12,42 +12,40 @@
   import { runRepeatWidgetPayFlow } from "../lib/widgetRepeatPayFlow.js"
   import { createRepeatInlineOrder } from "../lib/createRepeatInlineOrder.js"
   import { INLINE_ROTATION_LABELS } from "../lib/shopInlinePayFsm.js"
+  import {
+    repeatInlinePayUi,
+    patchRepeatInlinePayUi,
+    resetRepeatInlinePayUi
+  } from "../lib/repeatInlinePayUiStore.js"
   import { initSbpPayment, redirectToSbp } from "../lib/shopSbpPay.js"
   import { api } from "../lib/api.js"
   import InlinePayFallback from "./InlinePayFallback.svelte"
 
-  /** full — empty/expanded (скрин 06); embedded — peek с заказом (скрины 01–02: thumb+qty) */
+  /** full — empty; embedded — peek с заказом */
   let { layout = "full" } = $props()
 
   let items = $state([])
   let storeQty = $state({})
   let brokenUrls = $state(/** @type {Set<string>} */ (new Set()))
   let feedback = $state(null)
-  let repeatBusy = $state(false)
   let toastTimer = null
-
-  let widgetFsm = $state(createWidgetPayFsm())
-  let activePayItemKey = $state(null)
-  let widgetStatusText = $state("")
-  let widgetErrorText = $state("")
-  let showFallbackMethods = $state(false)
-  let showExpandedCards = $state(false)
-  let showNewCardForm = $state(false)
-  let savedCards = $state([])
+  let payUi = $state(/** @type {any} */ ({}))
 
   let topItems = $derived(items.slice(0, 3))
   let embedded = $derived(layout === "embedded")
+  let repeatBusy = $derived(!!payUi.busy)
 
   onMount(() => {
     const unsubItems = frequentItems.subscribe((v) => { items = Array.isArray(v) ? v : [] })
     const unsubQty = frequentQuantities.subscribe((v) => { storeQty = v || {} })
+    const unsubPay = repeatInlinePayUi.subscribe((v) => { payUi = v || {} })
     const unsubFeedback = repeatFeedback.subscribe((v) => {
       feedback = v
       if (toastTimer) clearTimeout(toastTimer)
       if (v) toastTimer = setTimeout(() => repeatFeedback.set(null), 2500)
     })
     return () => {
-      unsubItems(); unsubQty(); unsubFeedback()
+      unsubItems(); unsubQty(); unsubPay(); unsubFeedback()
       if (toastTimer) clearTimeout(toastTimer)
     }
   })
@@ -60,11 +58,11 @@
     const key = frequentCardKey(item)
     if (embedded) {
       if (repeatBusy) return
-      repeatBusy = true
+      patchRepeatInlinePayUi({ busy: true })
       try {
         await repeatBumpEmbeddedToCart(item, delta)
       } finally {
-        repeatBusy = false
+        patchRepeatInlinePayUi({ busy: false })
       }
       return
     }
@@ -72,93 +70,87 @@
   }
 
   async function onPayCardClick(item) {
-    if (repeatBusy) return
+    if (payUi.busy) return
     const key = frequentCardKey(item)
-    repeatBusy = true
-    activePayItemKey = key
-    showFallbackMethods = false
-    showExpandedCards = false
-    showNewCardForm = false
-    widgetErrorText = ""
-    // Сразу PROCESSING — плашка статусов видна во время create+poll (не ждём конца await)
-    widgetFsm = createWidgetPayFsm()
-    widgetFsm.start()
-    widgetStatusText = INLINE_ROTATION_LABELS[0]
+    const fsm = createWidgetPayFsm()
+    fsm.start()
+    patchRepeatInlinePayUi({
+      busy: true,
+      activeKey: key,
+      fsm,
+      statusText: INLINE_ROTATION_LABELS[0],
+      errorText: "",
+      showFallbackMethods: false,
+      showExpandedCards: false,
+      showNewCardForm: false,
+      savedCards: []
+    })
 
     try {
       const { orderId } = await createRepeatInlineOrder(item, {
         api,
         quantities: storeQty
       })
-      widgetFsm.orderId = orderId
-
+      fsm.orderId = orderId
       const out = await runRepeatWidgetPayFlow({
         orderId,
         api,
-        fsm: widgetFsm,
-        onStatusText: (label) => { widgetStatusText = label }
+        fsm,
+        onStatusText: (label) => patchRepeatInlinePayUi({ statusText: label })
       })
-      widgetFsm = out.fsm
-      widgetStatusText = out.statusText
-      widgetErrorText = out.errorText
-      showFallbackMethods = out.showFallbackMethods
+      patchRepeatInlinePayUi({
+        fsm: out.fsm,
+        statusText: out.statusText,
+        errorText: out.errorText,
+        showFallbackMethods: out.showFallbackMethods
+      })
       if (out.resetAfterMs) {
-        setTimeout(() => {
-          widgetFsm.reset()
-          activePayItemKey = null
-          showFallbackMethods = false
-          showExpandedCards = false
-          showNewCardForm = false
-          widgetErrorText = ""
-          widgetStatusText = ""
-        }, out.resetAfterMs)
+        setTimeout(() => resetRepeatInlinePayUi(), out.resetAfterMs)
       }
     } catch (e) {
-      widgetFsm.reject({ error_code: "" })
-      widgetFsm.state = "ERROR"
-      widgetErrorText = e?.message || "Ошибка оплаты, попробуйте снова"
-      widgetStatusText = widgetErrorText
-      showFallbackMethods = true
-      setTimeout(() => {
-        widgetFsm.reset()
-        activePayItemKey = null
-        showFallbackMethods = false
-        showNewCardForm = false
-        widgetErrorText = ""
-        widgetStatusText = ""
-      }, 3000)
+      fsm.reject({ error_code: "" })
+      fsm.state = "ERROR"
+      const msg = e?.message || "Ошибка оплаты, попробуйте снова"
+      patchRepeatInlinePayUi({
+        fsm,
+        errorText: msg,
+        statusText: msg,
+        showFallbackMethods: true
+      })
+      setTimeout(() => resetRepeatInlinePayUi(), 3000)
     } finally {
-      repeatBusy = false
+      patchRepeatInlinePayUi({ busy: false })
     }
   }
 
   async function onFallbackSbp() {
-    if (!widgetFsm.orderId) return
+    if (!payUi.fsm?.orderId) return
     try {
-      const result = await initSbpPayment(api, { orderId: widgetFsm.orderId })
+      const result = await initSbpPayment(api, { orderId: payUi.fsm.orderId })
       if (result?.payment_url) redirectToSbp(result.payment_url)
     } catch (_e) {
-      widgetErrorText = "Ошибка инициализации СБП"
+      patchRepeatInlinePayUi({ errorText: "Ошибка инициализации СБП" })
     }
   }
 
   async function onFallbackCardPlus() {
-    // Скрин expanded: методы остаются + список карт + форма новой карты
-    showExpandedCards = true
-    showNewCardForm = true
-    showFallbackMethods = true
+    patchRepeatInlinePayUi({
+      showExpandedCards: true,
+      showNewCardForm: true,
+      showFallbackMethods: true
+    })
     try {
       const data = await api("/user/cards")
-      savedCards = Array.isArray(data?.cards) ? data.cards : []
+      patchRepeatInlinePayUi({
+        savedCards: Array.isArray(data?.cards) ? data.cards : []
+      })
     } catch (_e) {
-      savedCards = []
+      patchRepeatInlinePayUi({ savedCards: [] })
     }
   }
 
-  function onSelectSavedCard(card) {
-    showExpandedCards = false
-    activePayItemKey = null
-    widgetFsm.reset()
+  function onSelectSavedCard(_card) {
+    resetRepeatInlinePayUi()
   }
 
   function roundPrice(n) {
@@ -237,15 +229,15 @@
               onclick={() => onPayCardClick(item)}
             >оплатить в клик</button>
           {/if}
-          {#if activePayItemKey === key}
+          {#if payUi.activeKey === key}
             <InlinePayFallback
-              fsmState={widgetFsm.state}
-              statusText={widgetStatusText}
-              errorText={widgetErrorText}
-              {savedCards}
-              {showFallbackMethods}
-              {showExpandedCards}
-              {showNewCardForm}
+              fsmState={payUi.fsm?.state}
+              statusText={payUi.statusText || ""}
+              errorText={payUi.errorText || ""}
+              savedCards={payUi.savedCards || []}
+              showFallbackMethods={!!payUi.showFallbackMethods}
+              showExpandedCards={!!payUi.showExpandedCards}
+              showNewCardForm={!!payUi.showNewCardForm}
               onSelectSbp={onFallbackSbp}
               onSelectCardPlus={onFallbackCardPlus}
               onSelectSavedCard={onSelectSavedCard}

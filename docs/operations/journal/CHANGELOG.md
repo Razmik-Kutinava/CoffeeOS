@@ -1,5 +1,10 @@
 ﻿# CHANGELOG
 
+## 2026-07-30 — fix(#32): inline pay UI store + clear cart before order
+- FE: `repeatInlinePayUiStore` — статусы переживают remount RepeatSection (empty→peek)
+- FE: `createRepeatInlineOrder` — DELETE `/cart` перед add (только позиция повтора)
+- Deploy + MCP повтор
+
 ## 2026-07-30 — fix(#32): one-click создаёт pending order + last_order_id v2
 - BE: `frequent_items[].last_order_id` + cache key `shop/freq/v2/…`
 - FE: `createRepeatInlineOrder` → корзина + POST `/orders` (не checkout fallback)
