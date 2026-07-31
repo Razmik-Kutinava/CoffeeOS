@@ -1,6 +1,6 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-31 (**#35 GREEN B3 — ReadyPushJob + Apple Wallet stub**)  
+**Дата:** 2026-07-31 (**#35 PHASE 3 REVIEW — Order status sheet + Push**)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev  
 
@@ -8,16 +8,15 @@
 
 | Что | Статус |
 |-----|--------|
-| Intake + SPEC + RED | **`[x]`** |
-| GREEN C1/C2 `ready_notified_at` | **`[x]`** |
-| GREEN A1–A3 sticky sheet + active | **`[x]`** |
-| GREEN B3 Wallet (`ReadyPushJob` + simulate) | **`[x]`** |
-| PKCS7 + device register + pass download UI | **backlog** |
-| REVIEW + MCP Fly vs скрины | **`[ ]`** |
+| Intake + SPEC + RED + GREEN A/B/C | **`[x]`** |
+| PHASE 3 REVIEW (tests + sanity + ops) | **`[x]`** |
+| MCP Fly vs скрины артефактов | **`[ ]`** ждёт deploy-апрув |
+| PKCS7 / device register / pass UI | **backlog** PRACTICES |
 
 **ТЗ:** [`Интеграция статусной модели…`](../milestones/veha_2/requirements/customer_tasks/Интеграция%20статусной%20модели%20в%20компактную%20шторку%20PWA%20и%20Push.md)  
+**Артефакты:** [`order_status_compact_sheet_push/`](../milestones/veha_2/artifacts/order_status_compact_sheet_push/)  
 **Runbook Wallet:** [`APPLE_WALLET_ORDER_PASS.md`](../milestones/veha_2/runbooks/APPLE_WALLET_ORDER_PASS.md)  
-**Дальше:** REVIEW / MCP (после deploy-апрува).
+**Дальше:** явный апрув `fly deploy` / push → MCP на Fly vs 5 скринов.
 
 ### T-Kassa SBP Autopay AccountToken #34 (2026-07-30)
 

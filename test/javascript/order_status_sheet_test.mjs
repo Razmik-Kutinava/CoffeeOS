@@ -93,6 +93,22 @@ describe("applyCableEvent (#35 A1/A2)", () => {
     assert.equal(state.orders[0].status, "accepted")
     assert.equal(state.orders.length, 1)
   })
+
+  it("removes order on issued/cancelled terminal status", () => {
+    const state = createOrderStatusSheetState()
+    state.setOrders([
+      { id: "42", status: "ready", order_number: "N" },
+      { id: "7", status: "preparing", order_number: "M" }
+    ])
+    applyCableEvent(state, {
+      type: "status_changed",
+      order_id: "42",
+      status: "issued"
+    })
+    assert.equal(state.orders.length, 1)
+    assert.equal(state.orders[0].id, "7")
+    assert.equal(state.mode, ORDER_STATUS_SHEET_MODES.PEEK)
+  })
 })
 
 describe("reconnect refresh (#35 A3)", () => {

@@ -2,13 +2,20 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-31 (#35 PHASE 2 GREEN B3 Wallet + A1–A3 + C1)
+**Дата:** 2026-07-31 (#35 PHASE 3 REVIEW)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#35** B3 Wallet GREEN `[x]` (simulate + FCM fallback) | REVIEW / MCP Fly; PKCS7/device register — backlog |
-| Sticky sheet + ready claim | deploy по апруву |
+| **#35** REVIEW `[x]` — local PASS | deploy-апрув → MCP Fly vs скрины |
+| PKCS7 / push reliability | PRACTICES backlog |
 
+### Сессия 2026-07-31 (PHASE 3 REVIEW · #35)
+
+- Suite #35: Rails **34/34** + JS **14/14** PASS; rubocop new Wallet/job files clean
+- Sanity: N+1 clean; `orders/active` tenant+customer OK; claim atomic OK
+- Fix REVIEW: `applyCableEvent` снимает issued/cancelled/closed со шторки
+- Backlog PRACTICES: V2-#35-WALLET-PROD, PUSH-RELIABILITY, ORDERS-CTRL-SPLIT
+- MCP Fly / `[x]` заказчика — ждут deploy
 ### Сессия 2026-07-31 (PHASE 2 GREEN B3 · #35)
 
 - `Shop::ReadyPushJob`: PassUpdater → FCM; Unavailable → FCM-only; GenerationError → retry

@@ -30,19 +30,13 @@ module Shop
       Rails.logger.info("[Shop::ReadyPushJob] wallet fallback FCM-only: #{e.message}")
     end
 
-    def deliver_fcm!(order, customer, old_status)
-      body = if old_status.to_s == "preparing"
-        READY_BODY
-      else
-        Shop::OrderStatusPushNotifier::BARISTA_TRANSITION_BODIES[[old_status.to_s, "ready"]] || READY_BODY
-      end
-
+    def deliver_fcm!(order, customer, _old_status)
       notification = PushNotification.create!(
         customer_id: customer.id,
         tenant_id: order.tenant_id,
         notification_type: "order_status",
         title: TITLE,
-        body: body,
+        body: READY_BODY,
         payload: {
           order_id: order.id,
           status: order.status,

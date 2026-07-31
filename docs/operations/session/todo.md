@@ -2,7 +2,7 @@
 
 **ТЗ:** [`customer_tasks/Интеграция статусной модели в компактную шторку PWA и Push.md`](../milestones/veha_2/requirements/customer_tasks/Интеграция%20статусной%20модели%20в%20компактную%20шторку%20PWA%20и%20Push.md)  
 **Артефакты (канон UI):** [`artifacts/order_status_compact_sheet_push/`](../milestones/veha_2/artifacts/order_status_compact_sheet_push/)  
-**Фаза:** PHASE 2: BUILD · A1–A3 + B3 + C1/C2 GREEN `[x]` · REVIEW / MCP ждёт
+**Фаза:** PHASE 3: REVIEW `[x]` · MCP Fly / deploy `[ ]` · PKCS7 backlog
 
 ---
 
@@ -160,9 +160,11 @@
 - [x] C2 GREEN — atomic claim; skip duplicate push (покрыто `ready_push_claim_test`)
 
 ### PHASE 3: REVIEW
-- [ ] N+1/RLS/rubocop; регрессия `test/integration/shop/`
-- [ ] MCP Fly vs скрины артефактов
-- [ ] CHANGELOG / HANDOFF / CBR статус
+- [x] N+1/RLS sanity + #35 suite + JS + rubocop (new files clean)
+- [x] Fix: terminal Cable status removes row from sticky sheet
+- [x] PRACTICES backlog: Wallet prod, push reliability, orders_controller split
+- [ ] MCP Fly vs скрины (нужен deploy-апрув)
+- [x] CHANGELOG / HANDOFF / CBR статус
 
 ---
 

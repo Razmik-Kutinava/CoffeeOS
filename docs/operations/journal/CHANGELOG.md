@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-07-31 — review(#35): Order status sheet + Push REVIEW
+- Suite 34 Rails + 14 JS PASS; rubocop Wallet/job clean
+- Fix: sticky sheet drops terminal Cable statuses (issued/cancelled/closed)
+- PRACTICES: Wallet PKCS7, push reliability, orders_controller split
+- MCP Fly — после deploy-апрува
+
 ## 2026-07-31 — feat(#35): ReadyPushJob + Apple Wallet stub [GREEN B3]
 - `ReadyPushJob`: Wallet update → FCM; unavailable → FCM-only; gen error → retry
 - DDL `order_wallet_passes`; `Shop::AppleWallet::*` (WALLET_SIMULATE)
