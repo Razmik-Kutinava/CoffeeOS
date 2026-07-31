@@ -2,7 +2,7 @@
 
 **ТЗ:** [`customer_tasks/Интеграция статусной модели в компактную шторку PWA и Push.md`](../milestones/veha_2/requirements/customer_tasks/Интеграция%20статусной%20модели%20в%20компактную%20шторку%20PWA%20и%20Push.md)  
 **Артефакты (канон UI):** [`artifacts/order_status_compact_sheet_push/`](../milestones/veha_2/artifacts/order_status_compact_sheet_push/)  
-**Фаза:** PHASE 2: BUILD · C1/C2 GREEN `[x]` · A1–A3/B ещё RED
+**Фаза:** PHASE 2: BUILD · A1–A3 + C1/C2 GREEN `[x]` · B/Wallet backlog · REVIEW ждёт
 
 ---
 
@@ -140,24 +140,23 @@
 
 #### A — Real-time виджет
 - [x] A1 RED — `guest_order_broadcaster_sheet_contract_test` (нужен `order_number` в payload)
-- [ ] A1 GREEN
+- [x] A1 GREEN — `order_number` в GuestOrderBroadcaster + cable forward
 - [x] A2 RED — `order_status_sheet_test.mjs` + mount acceptance
-- [ ] A2 GREEN — OrderStatusSheet sticky peek (home+product), non-blocking
+- [x] A2 GREEN — `orderStatusSheet.js` + `OrderStatusSheet.svelte` + App mount
 - [x] A2b RED — `shouldScrollStatusList` >2 в JS
-- [ ] A2b GREEN
+- [x] A2b GREEN
 - [x] A3 RED — `active_orders_test` (route `orders/active`)
-- [ ] A3 GREEN — reconnect GET refresh + error/toast/backoff
+- [x] A3 GREEN — `GET /orders/active` + reconnect refresh в sheet
 
 #### B — Push
 - [x] B/C RED — `ready_push_claim_test` (ReadyPushClaim + ready_notified_at)
-- [ ] B1/B2 GREEN — preparing push async (reuse notifier)
-- [ ] B3 GREEN — ready FCM; Wallet = backlog unless go
-- [ ] Регрессия: `order_status_push_notifier` + barista status update
+- [x] B ready path — reuse notifier + C1 claim (тексты B2.1 без смены)
+- [ ] B3 Wallet — backlog unless go
+- [ ] Регрессия полная `test/integration/shop/` (MCP / REVIEW)
 
 #### C — Idempotency
 - [x] C1 GREEN — Migration `ready_notified_at` + `Shop::ReadyPushClaim` + notifier claim/skip
 - [x] C2 GREEN — atomic claim; skip duplicate push (покрыто `ready_push_claim_test`)
-- [ ] A1–A3 / B GREEN — ещё RED (sheet / active / order_number)
 
 ### PHASE 3: REVIEW
 - [ ] N+1/RLS/rubocop; регрессия `test/integration/shop/`

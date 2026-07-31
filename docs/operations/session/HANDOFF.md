@@ -1,6 +1,6 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-31 (**#35 GREEN C1 — ready_notified_at + ReadyPushClaim**)  
+**Дата:** 2026-07-31 (**#35 GREEN A1–A3 — sticky OrderStatusSheet + orders/active**)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev  
 
@@ -10,17 +10,16 @@
 |-----|--------|
 | Intake ТЗ + CBR + 5 скринов | **`[x]`** |
 | PHASE 1: SPEC (`todo.md`) | **`[x]`** |
-| PHASE 2 RED | **`[x]`** `5ef36e9d` |
+| PHASE 2 RED | **`[x]`** |
 | PHASE 2 GREEN C1/C2 (`ready_notified_at`) | **`[x]`** |
-| GREEN A1–A3 / B (sheet, active, cable) | **`[ ]`** |
-| REVIEW | **`[ ]`** |
+| PHASE 2 GREEN A1–A3 (sheet + active + cable) | **`[x]`** |
+| B3 Wallet / pkpass | **backlog** |
+| REVIEW + MCP Fly vs скрины | **`[ ]`** |
 
 **ТЗ:** [`Интеграция статусной модели в компактную шторку PWA и Push.md`](../milestones/veha_2/requirements/customer_tasks/Интеграция%20статусной%20модели%20в%20компактную%20шторку%20PWA%20и%20Push.md)  
 **Артефакты:** [`order_status_compact_sheet_push/`](../milestones/veha_2/artifacts/order_status_compact_sheet_push/) — скрины = канон приёмки UI  
 **todo:** [`SESSION todo.md`](todo.md)  
-**Дальше:** go → GREEN A1 (`order_number` в cable) + A2/A3 sticky sheet + `orders/active`.  
-
-**SPEC кратко:** reuse GuestOrderChannel + FCM notifier; новый sticky `OrderStatusSheet`; `ready_notified_at` + Migration Gate; Apple Wallet → backlog unless go.
+**Дальше:** REVIEW / MCP на Fly (после deploy-апрува); Wallet — отдельный go.
 
 ### T-Kassa SBP Autopay AccountToken #34 (2026-07-30)
 

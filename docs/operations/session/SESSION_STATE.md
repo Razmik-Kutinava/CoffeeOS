@@ -2,13 +2,21 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-31 (#35 PHASE 2 GREEN C1/C2 · ready_notified_at)
+**Дата:** 2026-07-31 (#35 PHASE 2 GREEN A1–A3 + C1)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#35** C1/C2 GREEN `[x]` — claim + notifier | go → GREEN A1–A3 (sheet / active / order_number) |
-| A1/A2/A3/B | ещё RED |
+| **#35** A1–A3 + C1/C2 GREEN `[x]` | REVIEW / MCP vs скрины; B3 Wallet backlog |
+| Sticky sheet на Fly | deploy + MCP (по апруву) |
 
+### Сессия 2026-07-31 (PHASE 2 GREEN A1–A3 · #35)
+
+- A1: `order_number` в GuestOrderBroadcaster; cable forwards order_id/order_number
+- A2: `orderStatusSheet.js` + `OrderStatusSheet.svelte` (peek, pointer-events) + App mount
+- A2b: scroll if >2 orders
+- A3: `GET /shop/api/orders/active` + refresh on reconnect/online
+- Тесты: JS 13/13 · Rails A1/A3/mount+channel 12/12 PASS
+- Note: b11_02 CBR (Checkout `push(/order/)`) — pre-existing fail, не из #35
 ### Сессия 2026-07-31 (PHASE 2 GREEN C1 · #35)
 
 - DDL: `orders.ready_notified_at` (timestamptz, nullable)

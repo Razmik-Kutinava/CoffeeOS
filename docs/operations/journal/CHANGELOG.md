@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-07-31 — feat(#35): OrderStatusSheet sticky + orders/active [GREEN A1–A3]
+- Cable payload: `order_number`; FE cable forwards order_id/number
+- `GET /shop/api/orders/active` (accepted/preparing/ready)
+- `orderStatusSheet.js` + sticky `OrderStatusSheet` (peek, scroll >2, reconnect)
+- App mount; tests JS 13 + Rails A1/A3/mount PASS
+
 ## 2026-07-31 — feat(#35): ready_notified_at + ReadyPushClaim [GREEN C1]
 - DDL: `orders.ready_notified_at` (nullable timestamptz)
 - `Shop::ReadyPushClaim` — atomic first-ready claim

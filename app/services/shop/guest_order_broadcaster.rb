@@ -11,7 +11,8 @@ module Shop
         order_id: order.id,
         status: order.status,
         payment_settled: !order.pending_payment?,
-        old_status: old_status
+        old_status: old_status,
+        order_number: order.order_number
       }
       payload.merge!(Shop::OrderCancellationPresenter.meta_for(order)) if order.cancelled?
 

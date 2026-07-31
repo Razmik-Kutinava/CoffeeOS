@@ -196,6 +196,7 @@ Rails.application.routes.draw do
       get "payments/card_config", to: "payments#card_config"
       get "user/cards", to: "user_cards#index"
       get "orders/history", to: "orders#history"
+      get "orders/active", to: "orders#active"
       post "session/reconnect", to: "session#reconnect"
       post "session/refresh", to: "session#refresh"
       post "orders/:id/abandon", to: "orders#abandon"

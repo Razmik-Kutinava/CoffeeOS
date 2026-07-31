@@ -83,7 +83,10 @@ export function subscribeGuestOrderStatus({ orderId, reconnectToken, onStatus, o
       received(data) {
         if (data?.type === "status_changed" && data.status) {
           onStatus?.({
+            type: data.type,
+            order_id: data.order_id,
             status: data.status,
+            order_number: data.order_number,
             payment_settled: data.payment_settled,
             can_cancel: data.can_cancel,
             cancelled_by: data.cancelled_by,

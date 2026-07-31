@@ -136,6 +136,33 @@ module Shop
         end
       end
 
+      # #35 A3 — активные заказы для sticky-шторки / реконнекта WS
+      def active
+        cid = Shop::CustomerSession.customer_id(session, @shop_tenant.id)
+        if cid.blank?
+          return render json: { orders: [] }
+        end
+
+        orders = Order.where(
+          tenant_id: @shop_tenant.id,
+          customer_id: cid,
+          source: :mobile,
+          status: %w[accepted preparing ready]
+        ).order(created_at: :desc)
+
+        render json: {
+          orders: orders.map { |o|
+            {
+              id: o.id,
+              order_id: o.id,
+              status: o.status,
+              order_number: o.order_number,
+              payment_settled: !o.pending_payment?
+            }
+          }
+        }
+      end
+
       private
 
       def order_visible_to_session_customer?(order)
