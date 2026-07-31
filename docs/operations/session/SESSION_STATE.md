@@ -2,12 +2,20 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-31 (#36 PHASE 2 GREEN)
+**Дата:** 2026-07-31 (#36 PHASE 3 REVIEW)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#36** accordion + text receipt — **GREEN `[x]`** | PHASE 3 REVIEW |
+| **#36** accordion + text receipt — **REVIEW `[x]`** | MCP Fly / deploy по апруву; stub CTA backlog |
 | **#35** sticky status — Fly **v414** MCP PASS | апрув заказчика; PKCS7 backlog |
+
+### Сессия 2026-07-31 (PHASE 3 REVIEW · #36)
+
+- Suite: Rails receipt 4 + active 2 + mount 5 = **11/11**; JS **27/27**; rubocop presenter clean
+- Sanity: N+1 PASS (`includes(:order_items)`); RLS/tenant PASS; cart untouched; receipt text-only; one-expanded; #35 peek preserved
+- P2 backlog PRACTICES: ACCORDION-SPLIT (~240 lines), STATUS-CTA-COPY
+- Rubocop offenses в `orders_controller` history — pre-existing, не #36
+- MCP Fly / `[x]` заказчика — после deploy-апрува
 
 ### Сессия 2026-07-31 (PHASE 2 GREEN · #36)
 

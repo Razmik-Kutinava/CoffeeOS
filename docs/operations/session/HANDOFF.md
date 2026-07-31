@@ -1,6 +1,6 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-31 (**#36 SPEC ревизия — receipt, без repeat**)  
+**Дата:** 2026-07-31 (**#36 PHASE 3 REVIEW**)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev  
 
@@ -9,14 +9,17 @@
 | Что | Статус |
 |-----|--------|
 | Intake + ревизия ТЗ (чек read-only) | **`[x]`** |
-| Скрины заменены (1 / 2 заказа) | **`[x]`** |
-| PHASE 1: SPEC (`todo.md`) | **`[x]`** ревизия |
-| RED / GREEN / REVIEW | **`[ ]`** ждёт намерения на RED |
+| PHASE 1: SPEC | **`[x]`** |
+| PHASE 2: RED + GREEN | **`[x]`** `f7cf16cd` / `620ac066` |
+| PHASE 3: REVIEW | **`[x]`** |
+| Push + Fly deploy | **`[ ]`** ждёт апрув |
+| MCP Fly vs 2 скрина | **`[ ]`** после deploy |
 
 **ТЗ:** [`Мульти-статусная шторка активных заказов с просмотром состава чека.md`](../milestones/veha_2/requirements/customer_tasks/Мульти-статусная%20шторка%20активных%20заказов%20с%20просмотром%20состава%20чека.md)  
 **Артефакты (канон UI):** [`active_orders_accordion_receipt/`](../milestones/veha_2/artifacts/active_orders_accordion_receipt/)  
-**Снято:** POST repeat / «Повторить» / стоп-лист soft-skip  
-**Дальше:** намерение → PHASE 2 RED (A1–A2 + B1–B5).
+**Снято:** POST repeat / «Повторить»  
+**Backlog:** V2-#36-ACCORDION-SPLIT · V2-#36-STATUS-CTA-COPY  
+**Дальше:** push/deploy по апруву → MCP vs скрины 01/02.
 
 ### Order status compact sheet + Push #35 (2026-07-31)
 

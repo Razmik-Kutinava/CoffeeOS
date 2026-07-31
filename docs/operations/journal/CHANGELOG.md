@@ -1,5 +1,16 @@
 ﻿# CHANGELOG
 
+## 2026-07-31 — review(#36): Active orders accordion + text receipt
+- Suite 11 Rails + 27 JS PASS; rubocop presenter clean
+- Sanity: N+1/RLS/text-only receipt/one-expanded/#35 peek PASS
+- PRACTICES: accordion split, stub CTA copy
+- MCP Fly — после deploy-апрува
+
+## 2026-07-31 — feat(#36): active orders accordion with text receipt [GREEN]
+- `Shop::ActiveOrdersPresenter` expands `/orders/active` (items/mods/totals/sales_point)
+- FE accordion: one-open + scrollable text receipt in OrderStatusSheet
+- Focused shop tests + vite build PASS
+
 ## 2026-07-31 — docs(#36): revise TZ to receipt-only accordion
 - Scope: убран repeat/«Повторить»; чек только текст (items/mods/totals)
 - ТЗ: `…с просмотром состава чека.md`; артефакты `active_orders_accordion_receipt/`

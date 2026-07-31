@@ -2,7 +2,7 @@
 
 **ТЗ:** [`customer_tasks/Мульти-статусная шторка активных заказов с просмотром состава чека.md`](../milestones/veha_2/requirements/customer_tasks/Мульти-статусная%20шторка%20активных%20заказов%20с%20просмотром%20состава%20чека.md)  
 **Артефакты (канон UI):** [`artifacts/active_orders_accordion_receipt/`](../milestones/veha_2/artifacts/active_orders_accordion_receipt/)  
-**Фаза:** PHASE 1: SPEC `[x]` · RED `[x]` · GREEN `[x]` · REVIEW `[ ]`
+**Фаза:** PHASE 1: SPEC `[x]` · RED `[x]` · GREEN `[x]` · REVIEW `[x]` · MCP/deploy `[ ]`
 
 ---
 
@@ -119,8 +119,8 @@
 - [x] commit `feat: … [GREEN]` · `620ac066`
 
 ### PHASE 3: REVIEW
-- [ ] N+1 / RLS / rubocop
-- [ ] CHANGELOG + HANDOFF
+- [x] N+1 / RLS / rubocop presenter
+- [x] CHANGELOG + HANDOFF
 - [ ] MCP Fly vs 2 скрина (после deploy-апрува)
 
 ---

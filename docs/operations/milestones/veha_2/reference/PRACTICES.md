@@ -103,6 +103,8 @@
 | V2-#35-WALLET-PROD | #35 Apple Wallet PKCS7 + device register + download UI *(2026-07-31)* | **backlog** | MVP: `ReadyPushJob` + `WALLET_SIMULATE` + `order_wallet_passes`; runbook `APPLE_WALLET_ORDER_PASS.md` |
 | V2-#35-PUSH-RELIABILITY | #35 claim-before-send / Cable soft-fail / ReadyPushJob FCM retry *(2026-07-31 REVIEW)* | **backlog** | Soft Cable+notifier в одном rescue (push skip if Cable raises); claim до job → 0 push if job dead; job retry после create notification → risk duplicate FCM |
 | V2-#35-ORDERS-CTRL-SPLIT | `shop/api/orders_controller` >200 после `active` *(2026-07-31)* | **backlog** | Сплит только с `go`; не раздувать дальше |
+| V2-#36-ACCORDION-SPLIT | `ActiveOrdersAccordion.svelte` ~240 строк *(2026-07-31 REVIEW)* | **backlog** | Сплит CSS / row vs receipt при следующем UI-касании + `go` |
+| V2-#36-STATUS-CTA-COPY | Оранж. stub «кнопка с текстом» справа от статус-лайна *(2026-07-31)* | **backlog** | Тексты/действия не заданы заказчиком; вне блока чека |
 | V2-P10-11 | Блок 11 CON-02…06 | **done** *(2026-06-02)* | `prog10/_index/prog10_connectivity.json`, тесты + Fly CON-02 |
 | V2-P10-12 | Блок 12 Barista↔цех e2e | **done** *(2026-06-02)* | `prog10/warehouse/prog10_warehouse_block12.json`; auto-link sales→prep в backlog V2-BACKLOG-PREP-MULTI |
 | V2-P10-13 | Блок 13 финал прогона 10 | **done** *(2026-06-02)* | `prog10/_index/prog10_final_block13.json`, `prog10/_index/prog10_final_index.json` |
