@@ -2,12 +2,18 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-31 (#36 SPEC ревизия — receipt)
+**Дата:** 2026-07-31 (#36 PHASE 2 RED)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#36** accordion + **текстовый чек** — **SPEC `[x]`** (ревизия) | RED по намерению |
+| **#36** accordion + text receipt — **RED `[x]`** (падающие тесты) | GREEN по намерению |
 | **#35** sticky status — Fly **v414** MCP PASS | апрув заказчика; PKCS7 backlog |
+
+### Сессия 2026-07-31 (PHASE 2 RED · #36)
+
+- Rails: `active_orders_receipt_test.rb` — 4 runs, 4 failures (нет created_at/items/discount) — ожидаемо
+- JS: `active_orders_accordion_test.mjs` — MODULE_NOT_FOUND `activeOrdersAccordion.js` — ожидаемо
+- Код реализации не писали; CHANGELOG/HANDOFF не трогали (RED-substep)
 
 ### Сессия 2026-07-31 (SPEC ревизия · #36)
 

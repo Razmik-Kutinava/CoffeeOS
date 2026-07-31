@@ -105,11 +105,11 @@
 ### PHASE 1: SPEC
 - [x] Анализ + ревизия ТЗ (receipt, без repeat)
 - [x] todo.md + SESSION_STATE
-- [ ] СТОП → намерение на RED
+- [x] СТОП → намерение на RED
 
 ### PHASE 2: RED
-- [ ] A1–A2 failing tests (Rails)
-- [ ] B1–B5 failing tests (JS)
+- [x] A1–A2 failing tests (Rails) — `active_orders_receipt_test.rb`
+- [x] B1–B5 failing tests (JS) — `active_orders_accordion_test.mjs`
 - [ ] commit `test: … [RED]`
 
 ### PHASE 2: GREEN
