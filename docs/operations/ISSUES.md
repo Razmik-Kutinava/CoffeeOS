@@ -12,11 +12,10 @@
 **Осталось:** отдельный triage/fix legacy shop suite; не пакетить в #35.
 
 [2026-07-31] — #35 status sheet скрыта под CartSheet + WS reconnect loop
-**Статус:** 🟡 **код local PASS** · redeploy/MCP `[ ]`
+**Статус:** **resolved** 2026-07-31 · Fly **v414** · MCP PASS (labels/track/z60)
 **Источник:** MCP DevTools Fly, сравнение с `artifacts/order_status_compact_sheet_push/screenshots/`
 **Root cause:** `OrderStatusSheet` имела `z-index:40`, а CartSheet — `50`; initial `connected` вызывал `refreshActive→resubscribe→connected` по кругу.
-**Чем закрыли (код):** status layer `z-index:60`, правая зона `7.5rem` оставлена действиям корзины, оранжевый divider; GET refresh только после фактического disconnect.
-**Осталось:** redeploy + повторные MCP-скрины home/product/multi-order.
+**Чем закрыли:** `e2f69ec2` layering/reconnect · `3bbd62a8` labels+track · deploy v414 · evidence `artifacts/…/mcp/`
 
 [2026-07-28] — Шапка «ул. Fly Test» у Арама (inactive last_ordered)
 **Статус:** 🟡 **код local PASS** · deploy/MCP `[ ]`

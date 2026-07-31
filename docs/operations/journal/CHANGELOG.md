@@ -1,10 +1,16 @@
 ﻿# CHANGELOG
 
+## 2026-07-31 — deploy(#35): Fly v414 + MCP PASS sticky status
+- Push develop + `fly deploy` → **v414**
+- UI: labeled progress (Принят→Готов) + track/fill на sticky sheet
+- MCP: z60/cart coexistence PASS; evidence `artifacts/…/mcp/`
+- ISSUES #35 layering — resolved
+
 ## 2026-07-31 — fix(#35): MCP status/cart layering and cable reconnect
 - Fly MCP выявил: status sheet скрыта под CartSheet (`z40<z50`)
 - Fix: status `z60`, справа 7.5rem под cart actions, orange divider
 - Fix: active GET только после реального Cable disconnect, без initial resubscribe loop
-- Tests: mount 5/5, JS 14/14, Vite build PASS; redeploy/MCP pending
+- Tests: mount 5/5, JS 14/14, Vite build PASS
 - Full shop regression: 460 runs, 24 unrelated legacy failures → ISSUES
 
 ## 2026-07-31 — review(#35): Order status sheet + Push REVIEW
