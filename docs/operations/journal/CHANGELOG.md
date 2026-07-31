@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-07-31 — fix(#35): MCP status/cart layering and cable reconnect
+- Fly MCP выявил: status sheet скрыта под CartSheet (`z40<z50`)
+- Fix: status `z60`, справа 7.5rem под cart actions, orange divider
+- Fix: active GET только после реального Cable disconnect, без initial resubscribe loop
+- Tests: mount 5/5, JS 14/14, Vite build PASS; redeploy/MCP pending
+
 ## 2026-07-31 — review(#35): Order status sheet + Push REVIEW
 - Suite 34 Rails + 14 JS PASS; rubocop Wallet/job clean
 - Fix: sticky sheet drops terminal Cable statuses (issued/cancelled/closed)

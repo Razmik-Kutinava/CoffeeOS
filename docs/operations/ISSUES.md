@@ -4,6 +4,13 @@
 
 ## 🔴 Блокеры
 
+[2026-07-31] — #35 status sheet скрыта под CartSheet + WS reconnect loop
+**Статус:** 🟡 **код local PASS** · redeploy/MCP `[ ]`
+**Источник:** MCP DevTools Fly, сравнение с `artifacts/order_status_compact_sheet_push/screenshots/`
+**Root cause:** `OrderStatusSheet` имела `z-index:40`, а CartSheet — `50`; initial `connected` вызывал `refreshActive→resubscribe→connected` по кругу.
+**Чем закрыли (код):** status layer `z-index:60`, правая зона `7.5rem` оставлена действиям корзины, оранжевый divider; GET refresh только после фактического disconnect.
+**Осталось:** redeploy + повторные MCP-скрины home/product/multi-order.
+
 [2026-07-28] — Шапка «ул. Fly Test» у Арама (inactive last_ordered)
 **Статус:** 🟡 **код local PASS** · deploy/MCP `[ ]`
 **Источник:** скрин заказчика «Хотя уже лучше» · адрес Fly Test при телефоне ок

@@ -2,7 +2,9 @@
 
 **ТЗ:** [`customer_tasks/Интеграция статусной модели в компактную шторку PWA и Push.md`](../milestones/veha_2/requirements/customer_tasks/Интеграция%20статусной%20модели%20в%20компактную%20шторку%20PWA%20и%20Push.md)  
 **Артефакты (канон UI):** [`artifacts/order_status_compact_sheet_push/`](../milestones/veha_2/artifacts/order_status_compact_sheet_push/)  
-**Фаза:** PHASE 3: REVIEW `[x]` · MCP Fly / deploy `[ ]` · PKCS7 backlog
+**Фаза:** PHASE 3: REVIEW `[x]` · MCP Fly FAIL → local fix PASS · redeploy/recheck `[ ]` · PKCS7 backlog
+
+**MCP 2026-07-31:** `[x]` обнаружены layering/reconnect defects · `[x]` local fix + tests/build · `[ ]` redeploy · `[ ]` финальные home/product/multi-order screenshots.
 
 ---
 

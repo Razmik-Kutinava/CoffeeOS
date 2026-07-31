@@ -1,6 +1,6 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-31 (**#35 PHASE 3 REVIEW — Order status sheet + Push**)  
+**Дата:** 2026-07-31 (**#35 MCP Fly — layout/reconnect fix local PASS**)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev  
 
@@ -10,13 +10,14 @@
 |-----|--------|
 | Intake + SPEC + RED + GREEN A/B/C | **`[x]`** |
 | PHASE 3 REVIEW (tests + sanity + ops) | **`[x]`** |
-| MCP Fly vs скрины артефактов | **`[ ]`** ждёт deploy-апрув |
+| MCP Fly vs скрины артефактов | **FAIL → local fix PASS**; повтор после redeploy `[ ]` |
 | PKCS7 / device register / pass UI | **backlog** PRACTICES |
 
 **ТЗ:** [`Интеграция статусной модели…`](../milestones/veha_2/requirements/customer_tasks/Интеграция%20статусной%20модели%20в%20компактную%20шторку%20PWA%20и%20Push.md)  
 **Артефакты:** [`order_status_compact_sheet_push/`](../milestones/veha_2/artifacts/order_status_compact_sheet_push/)  
 **Runbook Wallet:** [`APPLE_WALLET_ORDER_PASS.md`](../milestones/veha_2/runbooks/APPLE_WALLET_ORDER_PASS.md)  
-**Дальше:** явный апрув `fly deploy` / push → MCP на Fly vs 5 скринов.
+**MCP 2026-07-31:** на Fly status sheet скрывалась под CartSheet (`z40<z50`), cable initial connect зацикливал refresh/resubscribe. Исправлено локально; mount 5/5, JS 14/14, Vite build PASS.  
+**Дальше:** явный апрув `fly deploy` / push → повторный MCP на Fly vs 5 скринов.
 
 ### T-Kassa SBP Autopay AccountToken #34 (2026-07-30)
 

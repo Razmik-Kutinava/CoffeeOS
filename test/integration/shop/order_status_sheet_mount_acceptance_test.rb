@@ -18,6 +18,21 @@ class Shop::OrderStatusSheetMountAcceptanceTest < ActionDispatch::IntegrationTes
     assert path.exist?, "#35 missing app/frontend/components/OrderStatusSheet.svelte"
   end
 
+  test "#35 status sheet stays above cart and leaves actions visible" do
+    sheet = File.read(Rails.root.join("app/frontend/components/OrderStatusSheet.svelte"))
+
+    assert_includes sheet, "z-index: 60"
+    assert_includes sheet, "right: 7.5rem"
+    assert_includes sheet, "border-right: 3px solid #ff8c42"
+  end
+
+  test "#35 initial cable connect does not recurse through active refresh" do
+    sheet = File.read(Rails.root.join("app/frontend/components/OrderStatusSheet.svelte"))
+
+    assert_includes sheet, "connectionLost"
+    assert_match(/else if \(connectionLost\)/, sheet)
+  end
+
   test "#35 CartSheet does not embed order progress steps (separate sheet)" do
     cart = File.read(Rails.root.join("app/frontend/components/CartSheet.svelte"))
     assert_no_match(/orderProgressView|PROGRESS_STEPS/, cart)

@@ -2,12 +2,20 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-31 (#35 PHASE 3 REVIEW)
+**Дата:** 2026-07-31 (#35 MCP Fly — найден и исправлен layout/reconnect bug)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#35** REVIEW `[x]` — local PASS | deploy-апрув → MCP Fly vs скрины |
+| **#35** MCP Fly: status под CartSheet + reconnect loop найдены; local fix PASS | redeploy → повторные MCP-скрины |
 | PKCS7 / push reliability | PRACTICES backlog |
+
+### Сессия 2026-07-31 (MCP Fly · #35)
+
+- Fly DevTools: `/shop?tenant_id=2fdee1ac…`; active API/session живы, multi-order отрисован
+- FAIL vs канон: CartSheet `z=50` скрывала OrderStatusSheet `z=40`; initial cable `connected` запускал цикл refresh/resubscribe
+- Local fix: status `z=60`, правая зона 7.5rem под cart actions, orange divider; refresh только после disconnect
+- Tests: mount acceptance **5/5**, JS **14/14**, `vite:build` PASS
+- ISSUES: #35 bug — local PASS, redeploy/MCP pending
 
 ### Сессия 2026-07-31 (PHASE 3 REVIEW · #35)
 

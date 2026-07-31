@@ -20,6 +20,7 @@
   let mode = $state(ORDER_STATUS_SHEET_MODES.HIDDEN)
   let connection = $state("idle")
   let unsubs = []
+  let connectionLost = false
 
   function sync() {
     orders = sheet.orders
@@ -45,8 +46,15 @@
         onConnection: (status) => {
           const online = status === "connected"
           sheet.setConnection(online ? "online" : "lost")
-          if (online) refreshActive()
-          else sync()
+          if (!online) {
+            connectionLost = true
+            sync()
+          } else if (connectionLost) {
+            connectionLost = false
+            refreshActive()
+          } else {
+            sync()
+          }
         }
       }))
     }
@@ -106,8 +114,8 @@
 {/if}
 
 <style>
-  .oss { position: fixed; left: 0; right: 0; bottom: 0; z-index: 40; display: flex; justify-content: center; padding-bottom: env(safe-area-inset-bottom, 0); }
-  .oss__panel { width: 100%; max-width: 32rem; background: #2a2a2a; border-top: 1px solid #3a3a3a; padding: 0.5rem 0.75rem 0.65rem; max-height: 28vh; }
+  .oss { position: fixed; left: 0; right: 7.5rem; bottom: 0; z-index: 60; display: flex; justify-content: flex-end; padding-bottom: env(safe-area-inset-bottom, 0); }
+  .oss__panel { width: 100%; max-width: 24.5rem; background: #2a2a2a; border-top: 1px solid #3a3a3a; border-right: 3px solid #ff8c42; padding: 0.4rem 0.65rem 0.5rem; max-height: 7.5rem; }
   .oss__panel.scrollable { overflow-y: auto; }
   .oss__conn { margin: 0 0 0.35rem; font-size: 0.7rem; color: #f0c070; }
   .oss__row { display: block; width: 100%; text-align: left; background: transparent; border: 0; color: inherit; padding: 0.35rem 0; cursor: pointer; }
