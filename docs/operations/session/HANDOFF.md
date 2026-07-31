@@ -1,6 +1,6 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-31 (**#35 PHASE 1 SPEC — Order status compact sheet + Push**)  
+**Дата:** 2026-07-31 (**#35 GREEN C1 — ready_notified_at + ReadyPushClaim**)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev  
 
