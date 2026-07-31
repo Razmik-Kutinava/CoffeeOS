@@ -20,12 +20,14 @@ class Shop::OrderStatusSheetMountAcceptanceTest < ActionDispatch::IntegrationTes
 
   test "#35 status sheet stays above cart and leaves actions visible" do
     sheet = File.read(Rails.root.join("app/frontend/components/OrderStatusSheet.svelte"))
+    accordion = File.read(Rails.root.join("app/frontend/components/ActiveOrdersAccordion.svelte"))
 
     assert_includes sheet, "z-index: 60"
     assert_includes sheet, "right: 7.5rem"
     assert_includes sheet, "border-right: 3px solid #ff8c42"
-    assert_includes sheet, "oss__label"
-    assert_includes sheet, "oss__track"
+    # #36: progress labels/track вынесены в ActiveOrdersAccordion
+    assert_match(/aoa__label|oss__label/, accordion)
+    assert_match(/aoa__track|oss__track/, accordion)
   end
 
   test "#35 initial cable connect does not recurse through active refresh" do

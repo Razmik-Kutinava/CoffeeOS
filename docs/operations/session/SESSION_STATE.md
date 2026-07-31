@@ -2,12 +2,20 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-31 (#36 PHASE 2 RED)
+**Дата:** 2026-07-31 (#36 PHASE 2 GREEN)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#36** accordion + text receipt — **RED `[x]`** (падающие тесты) | GREEN по намерению |
+| **#36** accordion + text receipt — **GREEN `[x]`** | PHASE 3 REVIEW |
 | **#35** sticky status — Fly **v414** MCP PASS | апрув заказчика; PKCS7 backlog |
+
+### Сессия 2026-07-31 (PHASE 2 GREEN · #36)
+
+- BE: `Shop::ActiveOrdersPresenter` + `#active` includes items/mods/totals/sales_point
+- FE: `activeOrdersAccordion.js` + `ActiveOrdersAccordion.svelte` в `OrderStatusSheet`
+- Тесты: Rails receipt+active+mount **11/11**; JS accordion+sheet **27/27**; cart_service зона **30/30**; vite build PASS
+- Регрессия focused shop api/mount/cart — PASS
+- CHANGELOG/HANDOFF полный — в REVIEW
 
 ### Сессия 2026-07-31 (PHASE 2 RED · #36)
 

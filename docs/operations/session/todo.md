@@ -2,7 +2,7 @@
 
 **ТЗ:** [`customer_tasks/Мульти-статусная шторка активных заказов с просмотром состава чека.md`](../milestones/veha_2/requirements/customer_tasks/Мульти-статусная%20шторка%20активных%20заказов%20с%20просмотром%20состава%20чека.md)  
 **Артефакты (канон UI):** [`artifacts/active_orders_accordion_receipt/`](../milestones/veha_2/artifacts/active_orders_accordion_receipt/)  
-**Фаза:** PHASE 1: SPEC `[x]` (ревизия) · RED `[ ]` · GREEN `[ ]` · REVIEW `[ ]`
+**Фаза:** PHASE 1: SPEC `[x]` · RED `[x]` · GREEN `[x]` · REVIEW `[ ]`
 
 ---
 
@@ -113,9 +113,9 @@
 - [x] commit `test: … [RED]` · `f7cf16cd`
 
 ### PHASE 2: GREEN
-- [ ] A1–A2 presenter + active payload
-- [ ] B1–B5 accordion + text receipt
-- [ ] регрессия shop
+- [x] A1–A2 presenter + active payload
+- [x] B1–B5 accordion + text receipt
+- [x] регрессия shop (focused) PASS
 - [ ] commit `feat: … [GREEN]`
 
 ### PHASE 3: REVIEW

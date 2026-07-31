@@ -136,7 +136,7 @@ module Shop
         end
       end
 
-      # #35 A3 — активные заказы для sticky-шторки / реконнекта WS
+      # #35 A3 + #36 A1/A2 — активные заказы: status sheet + чек (items/mods/totals)
       def active
         cid = Shop::CustomerSession.customer_id(session, @shop_tenant.id)
         if cid.blank?
@@ -148,18 +148,10 @@ module Shop
           customer_id: cid,
           source: :mobile,
           status: %w[accepted preparing ready]
-        ).order(created_at: :desc)
+        ).includes(:order_items).order(created_at: :desc)
 
         render json: {
-          orders: orders.map { |o|
-            {
-              id: o.id,
-              order_id: o.id,
-              status: o.status,
-              order_number: o.order_number,
-              payment_settled: !o.pending_payment?
-            }
-          }
+          orders: Shop::ActiveOrdersPresenter.list(orders, tenant: @shop_tenant)
         }
       end
 
