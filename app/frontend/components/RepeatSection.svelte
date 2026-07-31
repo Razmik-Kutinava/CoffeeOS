@@ -227,7 +227,7 @@
               class="mt-0.5 min-h-7 w-full rounded-lg bg-[#ff8c42] px-2 py-1 text-[10px] font-semibold text-black disabled:opacity-40"
               disabled={repeatBusy}
               onclick={() => onPayCardClick(item)}
-            >оплатить в клик</button>
+            >оплатить в 1 клик</button>
           {/if}
         </div>
       {/each}
