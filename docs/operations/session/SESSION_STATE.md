@@ -2,12 +2,21 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-31 (#35 push+deploy+MCP v414)
+**Дата:** 2026-07-31 (#36 PHASE 0 intake)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#35** push + Fly **v414** + MCP PASS (labels/track/z60) | апрув заказчика; PKCS7 backlog |
-| PKCS7 / push reliability | PRACTICES backlog |
+| **#36** Active orders accordion + repeat — **интейк `[x]`** | PHASE 1 SPEC по go |
+| **#35** sticky status sheet — Fly **v414** MCP PASS | апрув заказчика; PKCS7 backlog |
+
+### Сессия 2026-07-31 (PHASE 0 · #36 Active orders accordion + repeat)
+
+- Интейк заказчика: expanded-аккордеон активных заказов (чек + «Повторить»), multi-order
+- ТЗ: `customer_tasks/Мульти-статусная шторка активных заказов с повторной покупкой.md`
+- Артефакты: `artifacts/active_orders_accordion_repeat/` — 2 скрина (канон приёмки UI)
+- CBR: backlog + индекс #36 · статус **интейк `[x]`** · SPEC ждёт go
+- Код / todo.md — не трогали (PHASE 0 only)
+- Связь: #35 compact sticky peek `[x]`; эта задача — expanded accordion + repeat из чека
 
 ### Сессия 2026-07-31 (push/deploy/MCP · #35)
 

@@ -1,5 +1,10 @@
 ﻿# CHANGELOG
 
+## 2026-07-31 — docs(#36): intake Active orders accordion + repeat
+- ТЗ: `customer_tasks/Мульти-статусная шторка активных заказов с повторной покупкой.md`
+- Артефакты: `artifacts/active_orders_accordion_repeat/` — 2 скрина (1 / 2+ заказов expanded)
+- CBR backlog + индекс #36 · статус интейк; SPEC ждёт go
+
 ## 2026-07-31 — deploy(#35): Fly v414 + MCP PASS sticky status
 - Push develop + `fly deploy` → **v414**
 - UI: labeled progress (Принят→Готов) + track/fill на sticky sheet
