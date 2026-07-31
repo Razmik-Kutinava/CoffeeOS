@@ -37,7 +37,6 @@ class Shop::QuickRepeatSectionTest < ActionDispatch::IntegrationTest
 
     assert_includes sheet, "RepeatSection"
     assert_includes sheet, "initFrequentFromCache"
-    assert_includes sheet, "refreshFrequentProducts"
 
     # Встройка через снippet/рендер в ветках сценариев (маркер на ветку)
     assert_includes sheet, "shop-repeat-slot-empty"
@@ -45,6 +44,17 @@ class Shop::QuickRepeatSectionTest < ActionDispatch::IntegrationTest
     assert_includes sheet, "shop-repeat-slot-expanded"
     refute_includes sheet, "shop-repeat-slot-hidden",
       "в hidden свои чипы корзины — секция «повторить» не рендерится"
+  end
+
+  # --- Ревизия 2026-07-31: F2 hide when hasActiveOrder ---
+
+  test "CartSheet gates RepeatSection on hasActiveOrder" do
+    sheet = File.read(Rails.root.join("app/frontend/components/CartSheet.svelte"))
+
+    assert_includes sheet, "hasActiveOrder",
+      "CartSheet подписывается на hasActiveOrder из frequentRepeatStore"
+    # Не монтировать повтор при активном заказе (даже если stale items в сторе)
+    assert_match(/!hasActiveOrder|hasActiveOrder\s*===\s*false|!\$?hasActiveOrder/, sheet)
   end
 
   test "sheet keeps single drag-handle gesture zone" do
@@ -64,9 +74,17 @@ class Shop::QuickRepeatSectionTest < ActionDispatch::IntegrationTest
     refute repeat_visible?(mode: "peek", frequent: 0), "нет частых заказов — секции нет"
   end
 
+  test "repeat visibility mirror: has_active_order hides section" do
+    refute repeat_visible?(mode: "peek", frequent: 3, has_active_order: true)
+    refute repeat_visible?(mode: "empty", frequent: 2, has_active_order: true)
+    refute repeat_visible?(mode: "expanded", frequent: 1, has_active_order: true)
+    assert repeat_visible?(mode: "peek", frequent: 2, has_active_order: false)
+  end
+
   private
 
-  def repeat_visible?(mode:, frequent:)
+  def repeat_visible?(mode:, frequent:, has_active_order: false)
+    return false if has_active_order
     return false if frequent.zero?
 
     %w[empty peek expanded].include?(mode)

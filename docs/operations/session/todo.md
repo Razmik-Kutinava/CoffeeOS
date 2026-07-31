@@ -143,7 +143,7 @@
 ### PHASE 2 BUILD
 - [x] RED B1–B4 (тесты написаны, падают — ожидаемо)
 - [x] GREEN B1–B4
-- [ ] RED F1–F3
+- [x] RED F1–F3
 - [ ] GREEN F1–F3
 - [ ] Регрессия зоны shop
 
