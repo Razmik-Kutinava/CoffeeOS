@@ -10,12 +10,13 @@
 |-----|--------|
 | Intake + SPEC + RED/GREEN B1–B4 + F1–F3 | **`[x]`** |
 | PHASE 3 REVIEW (tests + sanity + ops) | **`[x]`** |
+| MCP local feedback 07 | **PASS** · full-width 390/390 · repeat hidden · one-open · modes |
 | Push + Fly deploy | **`[ ]`** |
 | MCP Fly vs скрины 01–07 | **`[ ]`** |
 | Full-width OrderStatusSheet | **код `[x]`** (`left/right:0`) |
 
 **ТЗ:** [`Быстрый повтор частых покупок Quick Repeat Bottom Sheet.md`](../milestones/veha_2/requirements/customer_tasks/Быстрый%20повтор%20частых%20покупок%20Quick%20Repeat%20Bottom%20Sheet.md)  
-**Артефакты:** [`quick_repeat_bottom_sheet/`](../milestones/veha_2/artifacts/quick_repeat_bottom_sheet/)  
+**Артефакты:** [`quick_repeat_bottom_sheet/`](../milestones/veha_2/artifacts/quick_repeat_bottom_sheet/) · local MCP [`mcp/local_feedback_07/`](../milestones/veha_2/artifacts/quick_repeat_bottom_sheet/mcp/local_feedback_07/)
 **Канон:** hide «повторить» при `accepted|preparing|ready`; API `has_active_order`; cache v3; barista bust; FE clear+gate; status sheet full-width.  
 **Коммиты:** `01c61262` (BE) · `ba0abf7f` (FE) · REVIEW ops этот.  
 **Дальше:** явный апрув → `git push` + `fly deploy` → MCP.

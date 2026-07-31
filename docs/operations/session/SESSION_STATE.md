@@ -6,9 +6,17 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **Quick Repeat** REVIEW `[x]` — hide при Order.active + full-width status | **push/deploy** + MCP vs скрины 01–07 |
-| ISSUES Fly v415 QR/width | 🟡 code done · MCP pending |
+| **Quick Repeat** REVIEW + local MCP `[x]` — hide при Order.active + full-width status | **push/deploy** + Fly MCP vs скрины 01–07 |
+| ISSUES Fly v415 QR/width | 🟡 code/local MCP done · Fly pending |
 | **#36** / **#35** | апрув заказчика |
+
+### Сессия 2026-07-31 (MCP local · feedback 07)
+
+- Deterministic CDP stub: 2 active orders + stale frequent item при `has_active_order=true`.
+- Peek: sheet `390/390`, `left=0`, repeat отсутствует; expanded: один receipt.
+- После открытия №2: №1 closed, №2 open, receipts=1; после `orders=[]` status sheet hidden.
+- Скрины/evidence: `artifacts/quick_repeat_bottom_sheet/mcp/local_feedback_07/`.
+- Fly не менялся: push/deploy — только после явной команды владельца.
 
 ### Сессия 2026-07-31 (PHASE 3 REVIEW · Quick Repeat)
 

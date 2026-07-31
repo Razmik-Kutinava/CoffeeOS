@@ -26,3 +26,4 @@
 | Real-run без стабов 2026-07-21 | [`fly_real_run_mcp_2026-07-21.json`](fly_real_run_mcp_2026-07-21.json) | 8/8 PASS · `screenshots/fly_real_run/` |
 | FIX-A…F 2026-07-22 | [`fly_fix_af_mcp_2026-07-22.json`](fly_fix_af_mcp_2026-07-22.json) | 9/9 PASS · `screenshots/fly_fix_af_2026-07-22/` |
 | Layout prog28 2026-07-23 | [`fly_layout_prog28_mcp_2026-07-23.json`](fly_layout_prog28_mcp_2026-07-23.json) | PASS · `screenshots/fly_layout_prog28_2026-07-23/` |
+| Feedback 07 local MCP 2026-07-31 | [`mcp/local_feedback_07/`](mcp/local_feedback_07/) | PASS: full-width 390/390 · repeat hidden · one-open · hidden/peek/expanded |

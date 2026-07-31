@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-07-31 — MCP local: Quick Repeat feedback 07
+- Mobile viewport 390px: status sheet width 390px, Quick Repeat hidden при active
+- `peek` / `expanded` / `hidden` подтверждены; при переключении заказов открыт ровно один receipt
+- Evidence: `artifacts/quick_repeat_bottom_sheet/mcp/local_feedback_07/`
+- Fly не менялся: push/deploy ждут явной команды владельца
+
 ## 2026-07-31 — review: Quick Repeat hide on active order + full-width status
 - BE: `HIDE_REPEAT_STATUSES`, `has_active_order`, cache `shop/freq/v3`, barista bust
 - FE: `hasActiveOrder` / CartSheet `showRepeat`; Cable terminal → refresh frequent

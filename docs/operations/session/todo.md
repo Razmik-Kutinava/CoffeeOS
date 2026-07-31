@@ -150,4 +150,5 @@
 ### PHASE 3 REVIEW
 - [x] Sanity N+1 / RLS / file-size
 - [x] CHANGELOG / HANDOFF
+- [x] MCP local feedback 07: full-width / repeat hidden / one-open / modes
 - [ ] MCP Fly vs скрины (после deploy-апрува)
