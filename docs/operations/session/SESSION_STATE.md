@@ -2,13 +2,19 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-31 (PHASE 1 SPEC · Quick Repeat ревизия)
+**Дата:** 2026-07-31 (PHASE 2 RED · Quick Repeat B1–B4)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **Quick Repeat** ревизия — SPEC `[x]` в `todo.md` | **go/ебашь** → RED B1–B4 (active hide + `has_active_order`) |
+| **Quick Repeat** RED B1–B4 `[x]` — 9 fail + 1 error (ожидаемо) | **go** → GREEN B1–B4 |
 | **#36** accordion receipt — Fly **v415** MCP PASS | апрув заказчика |
 | **#35** sticky status — Fly **v414** | апрув заказчика |
+
+### Сессия 2026-07-31 (PHASE 2 RED · Quick Repeat B1–B4)
+
+- Тесты: service (HIDE + active→[]) · API `has_active_order` · cache v3 Hash · barista bust issued/cancelled
+- `bundle exec rails test` …frequent* — **37 runs, 9 failures, 1 error** (намеренный RED)
+- Код реализации не писали; CHANGELOG/HANDOFF не трогали (RED-substep)
 
 ### Сессия 2026-07-31 (PHASE 1 SPEC · Quick Repeat ревизия)
 

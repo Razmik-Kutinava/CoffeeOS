@@ -141,7 +141,7 @@
 - [x] `todo.md` / SESSION_STATE
 
 ### PHASE 2 BUILD
-- [ ] RED B1–B4
+- [x] RED B1–B4 (тесты написаны, падают — ожидаемо)
 - [ ] GREEN B1–B4
 - [ ] RED F1–F3
 - [ ] GREEN F1–F3

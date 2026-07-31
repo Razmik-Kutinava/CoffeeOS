@@ -123,6 +123,70 @@ class Shop::CustomerFrequentProductsCacheTest < ActiveSupport::TestCase
     assert_nil Rails.cache.read(key), "подтверждение оплаты должно сбрасывать кэш shop/freq"
   end
 
+  # --- Ревизия 2026-07-31: B3 cache v3 + B4 barista bust ---
+
+  test "cache key is v3 and cached payload includes has_active_order" do
+    key = Shop::CustomerFrequentProductsService.cache_key(tenant_id: @tenant.id, customer_id: @customer.id)
+    assert_equal "shop/freq/v3/#{@tenant.id}/#{@customer.id}", key,
+      "ревизия: ключ v3 (payload с has_active_order)"
+
+    create_paid_order!(created_at: 1.day.ago, status: :issued)
+    cached_call
+
+    payload = Rails.cache.read(key)
+    assert payload.is_a?(Hash), "кэш хранит Hash { has_active_order, frequent_items }, не голый Array"
+    flag = payload[:has_active_order]
+    flag = payload["has_active_order"] if flag.nil?
+    items = payload[:frequent_items] || payload["frequent_items"]
+    assert_equal false, flag
+    assert_equal 1, items.length
+  end
+
+  test "Barista OrderStatusUpdateService busts frequent cache on issued" do
+    user = create_user!(tenant: @tenant, role_codes: %w[barista])
+    shift = open_cash_shift!(tenant: @tenant, opened_by: user)
+    create_paid_order!(created_at: 2.days.ago, status: :issued)
+    order = create_paid_order!(created_at: 1.hour.ago, status: :accepted)
+    order.update!(cash_shift: shift)
+
+    cached_call
+    key = Shop::CustomerFrequentProductsService.cache_key(tenant_id: @tenant.id, customer_id: @customer.id)
+    assert_not_nil Rails.cache.read(key)
+
+    # accepted → preparing → ready → issued
+    %w[preparing ready issued].each do |status|
+      Barista::OrderStatusUpdateService.new(
+        order: order.reload,
+        new_status: status,
+        user_id: user.id
+      ).call!
+    end
+
+    assert_nil Rails.cache.read(key),
+      "переход в issued (терминал) должен сбрасывать кэш, чтобы UI снова увидел повтор"
+  end
+
+  test "Barista OrderStatusUpdateService busts frequent cache on cancelled" do
+    user = create_user!(tenant: @tenant, role_codes: %w[barista])
+    shift = open_cash_shift!(tenant: @tenant, opened_by: user)
+    create_paid_order!(created_at: 2.days.ago, status: :issued)
+    order = create_paid_order!(created_at: 1.hour.ago, status: :accepted)
+    order.update!(cash_shift: shift)
+
+    cached_call
+    key = Shop::CustomerFrequentProductsService.cache_key(tenant_id: @tenant.id, customer_id: @customer.id)
+    assert_not_nil Rails.cache.read(key)
+
+    Barista::OrderStatusUpdateService.new(
+      order: order.reload,
+      new_status: "cancelled",
+      user_id: user.id
+    ).call!
+
+    assert_nil Rails.cache.read(key),
+      "отмена активного заказа должна сбрасывать кэш"
+  end
+
   private
 
   def cached_call

@@ -32,6 +32,49 @@ class Shop::CustomerFrequentProductsServiceTest < ActiveSupport::TestCase
   test "business limits live in service constants, not hardcode" do
     assert_includes 30..60, Shop::CustomerFrequentProductsService::WINDOW_DAYS
     assert_equal 3, Shop::CustomerFrequentProductsService::MAX_REPEAT_ITEMS
+    assert_equal %w[accepted preparing ready],
+                 Shop::CustomerFrequentProductsService::HIDE_REPEAT_STATUSES,
+                 "статусы hide = Order.active (SPEC ревизия 2026-07-31)"
+  end
+
+  # --- Ревизия 2026-07-31: B1 active-order gate ---
+
+  test "returns empty when customer has active order even with repeat history" do
+    create_paid_order!(product: @filter, created_at: 5.days.ago, status: :issued)
+    create_paid_order!(product: @bumble, created_at: 1.hour.ago, status: :accepted)
+
+    assert_equal [], call_service,
+      "при активном заказе (accepted/preparing/ready) frequent_items = []"
+  end
+
+  test "returns frequent items when only terminal history (issued) and no active" do
+    create_paid_order!(product: @filter, created_at: 5.days.ago, status: :issued)
+    create_paid_order!(product: @bumble, created_at: 2.days.ago, status: :issued)
+
+    items = call_service
+    assert items.length.between?(1, 3)
+    assert_includes items.map { |i| i[:product_id] }, @filter.id
+  end
+
+  test "pending_payment does not hide frequent items" do
+    create_paid_order!(product: @filter, created_at: 5.days.ago, status: :issued)
+    create_paid_order!(product: @bumble, created_at: 1.hour.ago, status: :pending_payment)
+
+    items = call_service
+    assert_equal [ @filter.id ], items.map { |i| i[:product_id] },
+      "pending_payment ≠ hide (SPEC: иначе peek без #35 и без повтора)"
+  end
+
+  test "preparing and ready also hide frequent items" do
+    create_paid_order!(product: @filter, created_at: 5.days.ago, status: :issued)
+
+    create_paid_order!(product: @bumble, created_at: 1.hour.ago, status: :preparing)
+    assert_equal [], call_service
+
+    Order.where(customer_id: @customer.id, tenant_id: @tenant.id, status: :preparing)
+         .update_all(status: "issued")
+    create_paid_order!(product: @tonic, created_at: 30.minutes.ago, status: :ready)
+    assert_equal [], call_service
   end
 
   test "aggregates same drink with same modifiers across orders in window" do

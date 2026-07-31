@@ -87,6 +87,57 @@ class Shop::Api::FrequentProductsTest < ActionDispatch::IntegrationTest
     assert response.parsed_body["error"].present?
   end
 
+  # --- Ревизия 2026-07-31: B2 has_active_order ---
+
+  test "response includes has_active_order boolean" do
+    get "/shop/api/frequent_products", headers: shop_headers, as: :json
+
+    assert_response :success
+    body = response.parsed_body
+    assert body.key?("has_active_order"), "JSON должен содержать has_active_order"
+    assert_includes [ true, false ], body["has_active_order"]
+  end
+
+  test "guest has_active_order false and empty frequent_items" do
+    get "/shop/api/frequent_products", headers: shop_headers, as: :json
+
+    assert_response :success
+    body = response.parsed_body
+    assert_equal false, body["has_active_order"]
+    assert_equal [], body["frequent_items"]
+  end
+
+  test "active accepted order forces has_active_order true and empty frequent_items" do
+    email = "freqapi-active-#{SecureRandom.hex(4)}@example.com"
+    place_order!(email: email) # cash → accepted (активный)
+
+    get "/shop/api/frequent_products", headers: shop_headers, as: :json
+
+    assert_response :success
+    body = response.parsed_body
+    assert_equal true, body["has_active_order"]
+    assert_equal [], body["frequent_items"],
+      "при активном заказе frequent_items всегда []"
+  end
+
+  test "after order issued has_active_order false and frequent_items return" do
+    email = "freqapi-issued-#{SecureRandom.hex(4)}@example.com"
+    place_order!(email: email)
+
+    order = Order.where(tenant_id: @tenant.id).order(created_at: :desc).first
+    order.update!(status: :preparing)
+    order.update!(status: :ready)
+    order.update!(status: :issued)
+
+    get "/shop/api/frequent_products", headers: shop_headers, as: :json
+
+    assert_response :success
+    body = response.parsed_body
+    assert_equal false, body["has_active_order"]
+    assert_equal 1, body["frequent_items"].length
+    assert_equal @product.id, body["frequent_items"].first["product_id"]
+  end
+
   private
 
   def shop_headers
