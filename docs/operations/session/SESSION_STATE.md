@@ -2,13 +2,20 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-31 (PHASE 0/SPEC addendum · Quick Repeat + full-width status)
+**Дата:** 2026-07-31 (PHASE 2 RED · Quick Repeat F1–F3)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **Quick Repeat** GREEN B1–B4 `[x]` — service/API/cache v3/barista bust | RED F1–F3/layout → GREEN |
-| **#36** accordion receipt — Fly **v415**, visual feedback | full-width + modes + one-open MCP |
-| **#35** sticky status — Fly **v414** | апрув заказчика |
+| **Quick Repeat** RED F1–F3 `[x]` — hasActiveOrder / CartSheet / Cable onTerminal | **go** → GREEN F1–F3 (+ layout full-width из feedback 07) |
+| GREEN B1–B4 `[x]` | — |
+| **#36** visual feedback 07 | full-width status sheet |
+
+### Сессия 2026-07-31 (PHASE 2 RED · Quick Repeat F1–F3)
+
+- F1: store `hasActiveOrder` + clear items; F2: CartSheet gate; F3: OrderStatusSheet refresh + `applyCableEvent` onTerminal
+- Rails: 13 runs, 2 failures (ожидаемо); node: 4 tests, 2 fail (ожидаемо)
+- Код реализации не писали; CHANGELOG/HANDOFF не трогали
+- Коммит: `5493de99`
 
 ### Сессия 2026-07-31 (PHASE 0/SPEC addendum · feedback 07)
 
