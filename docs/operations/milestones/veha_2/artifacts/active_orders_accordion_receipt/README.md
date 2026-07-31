@@ -15,4 +15,4 @@
 
 ## MCP / приёмка Fly
 
-Папка под будущие прогоны после реализации.
+**2026-07-31:** Fly **v415** · evidence [`mcp/`](./mcp/) · `MCP_RESULT_2026-07-31.md` — **PASS** (01 expanded receipt · 02 one-open accordion).

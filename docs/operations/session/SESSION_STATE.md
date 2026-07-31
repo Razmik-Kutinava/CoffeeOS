@@ -2,12 +2,19 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-31 (#36 PHASE 3 REVIEW)
+**Дата:** 2026-07-31 (#36 push+deploy+MCP v415)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#36** accordion + text receipt — **REVIEW `[x]`** | MCP Fly / deploy по апруву; stub CTA backlog |
+| **#36** accordion receipt — Fly **v415** + MCP **PASS** | апрув заказчика; stub CTA backlog |
 | **#35** sticky status — Fly **v414** MCP PASS | апрув заказчика; PKCS7 backlog |
+
+### Сессия 2026-07-31 (push/deploy/MCP · #36)
+
+- `git push` develop → `cdab89ee`; `fly deploy` → **v415**
+- MCP: 01 expanded text receipt · 02 one-open (first closes) · labels/z60/350px
+- Evidence: `artifacts/active_orders_accordion_receipt/mcp/`
+- Cable «Потеряно соединение…» при 14 orders — note, не блокер чека
 
 ### Сессия 2026-07-31 (PHASE 3 REVIEW · #36)
 

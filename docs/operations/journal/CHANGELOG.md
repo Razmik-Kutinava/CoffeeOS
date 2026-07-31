@@ -1,5 +1,10 @@
 ﻿# CHANGELOG
 
+## 2026-07-31 — deploy(#36): Fly v415 + MCP PASS accordion receipt
+- Push develop + `fly deploy` → **v415**
+- MCP: one-open accordion + text receipt vs screens 01/02 PASS
+- Evidence: `artifacts/active_orders_accordion_receipt/mcp/`
+
 ## 2026-07-31 — review(#36): Active orders accordion + text receipt
 - Suite 11 Rails + 27 JS PASS; rubocop presenter clean
 - Sanity: N+1/RLS/text-only receipt/one-expanded/#35 peek PASS
