@@ -2,7 +2,7 @@
 
 **ТЗ:** [`customer_tasks/Быстрый повтор частых покупок Quick Repeat Bottom Sheet.md`](../milestones/veha_2/requirements/customer_tasks/Быстрый%20повтор%20частых%20покупок%20Quick%20Repeat%20Bottom%20Sheet.md)  
 **Артефакты (канон UI):** [`artifacts/quick_repeat_bottom_sheet/`](../milestones/veha_2/artifacts/quick_repeat_bottom_sheet/) — скрины `*_2026-07-31.png`  
-**Фаза:** PHASE 1–3 SPEC/RED/GREEN/REVIEW `[x]` · push/deploy/MCP `[ ]`
+**Фаза:** PHASE 1–3 SPEC/RED/GREEN/REVIEW `[x]` · push/deploy/MCP Fly v416 **PASS** `[x]`
 
 ---
 
@@ -151,4 +151,5 @@
 - [x] Sanity N+1 / RLS / file-size
 - [x] CHANGELOG / HANDOFF
 - [x] MCP local feedback 07: full-width / repeat hidden / one-open / modes
-- [ ] MCP Fly vs скрины (после deploy-апрува)
+- [x] Push + Fly deploy v416
+- [x] MCP Fly hide + full-width (`mcp/fly_v416_2026-07-31/`) — SKIP visible-repeat 01–06 (demo active)

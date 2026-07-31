@@ -1,0 +1,40 @@
+{
+  "task": "Quick Repeat — hide on active order + OrderStatusSheet full-width (ревизия 2026-07-31)",
+  "date": "2026-07-31",
+  "stand": "https://coffeeos.fly.dev/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "deploy": "Fly v416 · image deployment-01KYWA7WEKGMXXYRJSNYQ59PDN · push develop 0b71d5f9",
+  "profile": "Aram R (guest profile emailVerified aramfifa100@gmail.com) — много active orders (демо #36)",
+  "checks": [
+    {
+      "id": "api",
+      "check": "GET /shop/api/frequent_products → has_active_order:true, frequent_items:[]",
+      "result": "PASS",
+      "evidence": "CDP fetch + X-Shop-Api-Key → 200"
+    },
+    {
+      "id": "ui_hide",
+      "check": "Секция «повторить» скрыта при active (body/cart без слова «повторить», нет pay 1-клик)",
+      "result": "PASS",
+      "evidence": "CDP bodyHasRepeat=false, cartHasRepeat=false; скрин 02"
+    },
+    {
+      "id": "full_width",
+      "check": "OrderStatusSheet full-width (left:0 right:0 width=vw z60) vs feedback 07",
+      "result": "PASS",
+      "evidence": "CDP cssLeft=0px cssRight=0px width=390 vw=390 z=60 mode=peek"
+    },
+    {
+      "id": "layout_01_06_repeat_visible",
+      "check": "Канон UI 01–06 со видимым «повторить» (нет active)",
+      "result": "SKIP",
+      "evidence": "У Aram залипли accepted/preparing/ready (#36 accordion demo) — hide-сценарий приоритет ревизии; layout 01–06 ранее PASS (prog28)"
+    }
+  ],
+  "screenshots": [
+    "mcp/fly_v416_2026-07-31/01_peek_status_full_width_no_repeat_v416.png",
+    "mcp/fly_v416_2026-07-31/02_catalog_cart_peek_active_no_repeat_v416.png",
+    "mcp/fly_v416_2026-07-31/03_catalog_active_no_repeat_v416.png",
+    "mcp/fly_v416_2026-07-31/03b_status_full_width_bottom_v416.png"
+  ],
+  "verdict": "PASS — API hide + UI hide + status full-width на Fly v416 (SKIP 01–06 visible-repeat из-за demo active)"
+}

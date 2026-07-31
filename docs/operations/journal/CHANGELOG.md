@@ -1,10 +1,16 @@
 ﻿# CHANGELOG
 
+## 2026-07-31 — deploy: Quick Repeat v416 + Fly MCP PASS
+- Push `develop` `0b71d5f9` · `fly deploy --remote-only --depot=false` → **v416**
+- MCP Point A: API `has_active_order:true` + `frequent_items:[]`; UI без «повторить»
+- OrderStatusSheet full-width: `left/right=0`, `width=390=vw`, `z=60`
+- Evidence: `artifacts/quick_repeat_bottom_sheet/mcp/fly_v416_2026-07-31/`
+- ISSUES QR/width → **resolved**
+
 ## 2026-07-31 — MCP local: Quick Repeat feedback 07
 - Mobile viewport 390px: status sheet width 390px, Quick Repeat hidden при active
 - `peek` / `expanded` / `hidden` подтверждены; при переключении заказов открыт ровно один receipt
 - Evidence: `artifacts/quick_repeat_bottom_sheet/mcp/local_feedback_07/`
-- Fly не менялся: push/deploy ждут явной команды владельца
 
 ## 2026-07-31 — review: Quick Repeat hide on active order + full-width status
 - BE: `HIDE_REPEAT_STATUSES`, `has_active_order`, cache `shop/freq/v3`, barista bust

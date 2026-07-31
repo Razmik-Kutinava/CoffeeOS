@@ -2,13 +2,21 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-31 (PHASE 3 REVIEW · Quick Repeat active-order hide)
+**Дата:** 2026-07-31 (push/deploy/MCP · Quick Repeat v416)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **Quick Repeat** REVIEW + local MCP `[x]` — hide при Order.active + full-width status | **push/deploy** + Fly MCP vs скрины 01–07 |
-| ISSUES Fly v415 QR/width | 🟡 code/local MCP done · Fly pending |
+| **Quick Repeat** Fly **v416** MCP **PASS** (hide + full-width) | апрув заказчика; optional visible-repeat MCP |
+| ISSUES QR/width | **resolved** v416 |
 | **#36** / **#35** | апрув заказчика |
+
+### Сессия 2026-07-31 (push + fly deploy + MCP · Quick Repeat)
+
+- Push `develop` → `0b71d5f9`; `fly deploy --remote-only --depot=false` → **v416**
+- MCP Point A (Aram, active orders): API `has_active_order:true` + `frequent_items:[]`; UI без «повторить»
+- Status sheet: `css left/right 0`, `width=390=vw`, `z=60` (vs feedback 07)
+- Evidence: `artifacts/quick_repeat_bottom_sheet/mcp/fly_v416_2026-07-31/`
+- SKIP: канон 01–06 со видимым повтором — залипшие active (#36 demo)
 
 ### Сессия 2026-07-31 (MCP local · feedback 07)
 
