@@ -2,12 +2,19 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-31 (#36 PHASE 1 SPEC)
+**Дата:** 2026-07-31 (#36 SPEC ревизия — receipt)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#36** Active orders accordion + repeat — **SPEC `[x]`** | RED по намерению («ебашь / дальше») |
-| **#35** sticky status sheet — Fly **v414** MCP PASS | апрув заказчика; PKCS7 backlog |
+| **#36** accordion + **текстовый чек** — **SPEC `[x]`** (ревизия) | RED по намерению |
+| **#35** sticky status — Fly **v414** MCP PASS | апрув заказчика; PKCS7 backlog |
+
+### Сессия 2026-07-31 (SPEC ревизия · #36)
+
+- Заказчик убрал «Повторить» / POST repeat: scope = **просмотр состава чека** (read-only)
+- ТЗ переименован; артефакты → `active_orders_accordion_receipt/`; скрины заменены (1 / 2 заказа)
+- A1: + subtotal/discount/total_amount; A2: modifiers name+price; B1–B5 accordion + text receipt
+- `todo.md` переписан; код не писали; RED ждёт намерения
 
 ### Сессия 2026-07-31 (PHASE 1 SPEC · #36)
 

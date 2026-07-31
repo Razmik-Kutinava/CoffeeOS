@@ -1,20 +1,22 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-31 (**#36 PHASE 1 SPEC**)  
+**Дата:** 2026-07-31 (**#36 SPEC ревизия — receipt, без repeat**)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev  
 
-### Active orders accordion + repeat #36 (2026-07-31)
+### Active orders accordion + receipt #36 (2026-07-31)
 
 | Что | Статус |
 |-----|--------|
-| Intake ТЗ + CBR + 2 скрина | **`[x]`** |
-| PHASE 1: SPEC (`todo.md`) | **`[x]`** |
+| Intake + ревизия ТЗ (чек read-only) | **`[x]`** |
+| Скрины заменены (1 / 2 заказа) | **`[x]`** |
+| PHASE 1: SPEC (`todo.md`) | **`[x]`** ревизия |
 | RED / GREEN / REVIEW | **`[ ]`** ждёт намерения на RED |
 
-**ТЗ:** [`Мульти-статусная шторка активных заказов с повторной покупкой.md`](../milestones/veha_2/requirements/customer_tasks/Мульти-статусная%20шторка%20активных%20заказов%20с%20повторной%20покупкой.md)  
-**Артефакты (канон UI):** [`active_orders_accordion_repeat/`](../milestones/veha_2/artifacts/active_orders_accordion_repeat/)  
-**Дальше:** намерение → PHASE 2 RED (тесты A1–A3 + B1–B6).
+**ТЗ:** [`Мульти-статусная шторка активных заказов с просмотром состава чека.md`](../milestones/veha_2/requirements/customer_tasks/Мульти-статусная%20шторка%20активных%20заказов%20с%20просмотром%20состава%20чека.md)  
+**Артефакты (канон UI):** [`active_orders_accordion_receipt/`](../milestones/veha_2/artifacts/active_orders_accordion_receipt/)  
+**Снято:** POST repeat / «Повторить» / стоп-лист soft-skip  
+**Дальше:** намерение → PHASE 2 RED (A1–A2 + B1–B5).
 
 ### Order status compact sheet + Push #35 (2026-07-31)
 
