@@ -2,13 +2,21 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-31 (PHASE 0 · Quick Repeat ревизия)
+**Дата:** 2026-07-31 (PHASE 1 SPEC · Quick Repeat ревизия)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **Quick Repeat** ревизия интейк `[x]` — hide при активном заказе + новые скрины | **go** → PHASE 1 SPEC |
-| **#36** accordion receipt — Fly **v415** + MCP **PASS** | апрув заказчика; stub CTA backlog |
-| **#35** sticky status — Fly **v414** MCP PASS | апрув заказчика; PKCS7 backlog |
+| **Quick Repeat** ревизия — SPEC `[x]` в `todo.md` | **go/ебашь** → RED B1–B4 (active hide + `has_active_order`) |
+| **#36** accordion receipt — Fly **v415** MCP PASS | апрув заказчика |
+| **#35** sticky status — Fly **v414** | апрув заказчика |
+
+### Сессия 2026-07-31 (PHASE 1 SPEC · Quick Repeat ревизия)
+
+- Reuse: `CustomerFrequentProductsService`, `GET frequent_products`, CartSheet/RepeatSection, cache bust OrderCreator+PaymentUpdater
+- NEW gaps: `HIDE_REPEAT_STATUSES` = `accepted/preparing/ready` (= `Order.active`); API `has_active_order`; cache **v3**; bust barista status; FE clear+hide
+- Решение: `pending_payment` **не** скрывает повтор (иначе peek без #35 и без секции)
+- Не rewrite шагов 2/9/12 ТЗ — уже в коде; фокус ревизии = active-order gate + UI канон скринов
+- Код не писали; RED ждёт намерения
 
 ### Сессия 2026-07-31 (PHASE 0 · Quick Repeat ревизия)
 

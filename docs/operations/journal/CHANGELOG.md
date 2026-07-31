@@ -1,5 +1,10 @@
 ﻿# CHANGELOG
 
+## 2026-07-31 — docs: Quick Repeat — PHASE 1 SPEC (active order hide)
+- `todo.md`: reuse service/API/CartSheet; gaps B1–B4 + F1–F3
+- Hide-статусы = `Order.active` (`accepted/preparing/ready`); cache v3; bust barista
+- `pending_payment` не скрывает повтор; CBR → SPEC `[x]` · RED ждёт go
+
 ## 2026-07-31 — docs: Quick Repeat Bottom Sheet — ревизия интейка (active order hide)
 - ТЗ обновлён 1:1: **NEW** hide «повторить» при `created`/`accepted`/`cooking`/`ready` + `has_active_order`
 - Скрины канона UI заменены (6 PNG `*_2026-07-31.png`); старые → `_archive_2026-07-21/`

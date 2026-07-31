@@ -10,12 +10,14 @@
 |-----|--------|
 | Ревизия ТЗ (active order hide + `has_active_order`) | **интейк `[x]`** |
 | Скрины канона UI заменены (6 PNG) | **`[x]`** |
-| PHASE 1 SPEC | **`[ ]`** ждёт go |
+| PHASE 1 SPEC | **`[x]`** — `todo.md` |
+| RED B1–B4 / GREEN | **`[ ]`** ждёт go |
 | Код переделки | **`[ ]`** |
 
 **ТЗ:** [`Быстрый повтор частых покупок Quick Repeat Bottom Sheet.md`](../milestones/veha_2/requirements/customer_tasks/Быстрый%20повтор%20частых%20покупок%20Quick%20Repeat%20Bottom%20Sheet.md)  
 **Артефакты:** [`quick_repeat_bottom_sheet/`](../milestones/veha_2/artifacts/quick_repeat_bottom_sheet/)  
-**Дальше:** go → SPEC (переиспользовать существующий сервис/API; не плодить доки).
+**SPEC:** hide = `accepted|preparing|ready` (= `Order.active`); cache v3; bust barista; FE clear+hide; `pending_payment` не скрывает.  
+**Дальше:** go → RED B1–B4.
 
 ### Active orders accordion + receipt #36 (2026-07-31)
 
