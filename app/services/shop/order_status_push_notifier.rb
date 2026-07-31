@@ -35,6 +35,11 @@ module Shop
       return unless customer&.push_enabled?
       return if customer.push_token.blank?
 
+      # #35 C1/C2: ready-push ровно один раз (flip-flop / retry / double-click)
+      if @order.ready?
+        return unless Shop::ReadyPushClaim.claim!(@order)
+      end
+
       title = TITLES[@order.status] || "Статус заказа"
       body = body_for_status
 

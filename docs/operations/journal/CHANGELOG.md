@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-07-31 — feat(#35): ready_notified_at + ReadyPushClaim [GREEN C1]
+- DDL: `orders.ready_notified_at` (nullable timestamptz)
+- `Shop::ReadyPushClaim` — atomic first-ready claim
+- `OrderStatusPushNotifier` — skip duplicate ready-push
+- Тесты: ready_push_claim + notifier PASS
+
 ## 2026-07-31 — docs: SPEC #35 Order status compact sheet + Push
 - `todo.md` — EXISTING/Gaps, маппинг GuestOrderChannel/FCM/Solid Queue, блоки A/B/C
 - Sticky sheet + multi>2 + ready_notified_at (Migration Gate); Wallet backlog

@@ -2,13 +2,20 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-31 (#35 PHASE 2 RED · Order status compact sheet + Push)
+**Дата:** 2026-07-31 (#35 PHASE 2 GREEN C1/C2 · ready_notified_at)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#35** RED [x] — тесты красные (ожидаемо) | **go** → PHASE 2 GREEN |
-| C1 DDL `ready_notified_at` | Migration Gate — нужен go перед GREEN C |
+| **#35** C1/C2 GREEN `[x]` — claim + notifier | go → GREEN A1–A3 (sheet / active / order_number) |
+| A1/A2/A3/B | ещё RED |
 
+### Сессия 2026-07-31 (PHASE 2 GREEN C1 · #35)
+
+- DDL: `orders.ready_notified_at` (timestamptz, nullable)
+- `Shop::ReadyPushClaim.claim!` — atomic UPDATE WHERE NULL
+- `OrderStatusPushNotifier`: на `ready` claim перед enqueue; повторный skip
+- Тесты: ready_push_claim + order_status_push_notifier **9 runs / 0 fail**
+- Откат: `remove_column :orders, :ready_notified_at`
 ### Сессия 2026-07-31 (PHASE 2 RED · #35)
 
 - RED тесты: sheet contract (order_number), ReadyPushClaim, orders/active, OrderStatusSheet mount, orderStatusSheet.js

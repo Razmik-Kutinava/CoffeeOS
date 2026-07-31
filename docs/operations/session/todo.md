@@ -2,7 +2,7 @@
 
 **ТЗ:** [`customer_tasks/Интеграция статусной модели в компактную шторку PWA и Push.md`](../milestones/veha_2/requirements/customer_tasks/Интеграция%20статусной%20модели%20в%20компактную%20шторку%20PWA%20и%20Push.md)  
 **Артефакты (канон UI):** [`artifacts/order_status_compact_sheet_push/`](../milestones/veha_2/artifacts/order_status_compact_sheet_push/)  
-**Фаза:** PHASE 2: BUILD · RED `[x]` · GREEN ждёт намерения
+**Фаза:** PHASE 2: BUILD · C1/C2 GREEN `[x]` · A1–A3/B ещё RED
 
 ---
 
@@ -155,8 +155,9 @@
 - [ ] Регрессия: `order_status_push_notifier` + barista status update
 
 #### C — Idempotency
-- [ ] C1 — Migration Gate `ready_notified_at` + `go` → DDL (RED ждёт колонку)
-- [ ] C2 GREEN — atomic claim; skip duplicate push; Cable OK
+- [x] C1 GREEN — Migration `ready_notified_at` + `Shop::ReadyPushClaim` + notifier claim/skip
+- [x] C2 GREEN — atomic claim; skip duplicate push (покрыто `ready_push_claim_test`)
+- [ ] A1–A3 / B GREEN — ещё RED (sheet / active / order_number)
 
 ### PHASE 3: REVIEW
 - [ ] N+1/RLS/rubocop; регрессия `test/integration/shop/`
