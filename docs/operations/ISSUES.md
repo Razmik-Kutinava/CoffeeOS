@@ -5,7 +5,7 @@
 ## 🔴 Блокеры
 
 [2026-07-31] — Fly v415: Quick Repeat не скрыт и status sheet не на всю ширину
-**Статус:** **resolved** 2026-07-31 · Fly **v416** · MCP PASS (hide + full-width)
+**Статус:** **resolved** 2026-07-31 · Fly **v416** · re-verify **v417** MCP PASS (hide + full-width + one-open)
 **Источник:** фидбек заказчика + `artifacts/quick_repeat_bottom_sheet/screenshots/07_…png`
 **Root cause:** FE не читал `has_active_order`; legacy `right/max-width` у OrderStatusSheet.
 **Чем закрыли:**
@@ -13,6 +13,7 @@
 - FE: `hasActiveOrder` / `showRepeat` + Cable `onTerminal` refresh (`ba0abf7f`)
 - Layout: `OrderStatusSheet` `left:0; right:0; width:100%` (z60)
 - Push develop `0b71d5f9` · deploy **v416** · Fly MCP [`mcp/fly_v416_2026-07-31/`](milestones/veha_2/artifacts/quick_repeat_bottom_sheet/mcp/fly_v416_2026-07-31/) — API `has_active_order:true`+`[]`, UI без «повторить», sheet `390/390` z60.
+- Re-verify: push `6fa90731` · deploy **v417** · MCP [`mcp/fly_v417/`](milestones/veha_2/artifacts/quick_repeat_bottom_sheet/mcp/fly_v417/) — peek/expanded/one-open PASS.
 
 [2026-07-31] — Полная shop regression: 24 legacy OTP/structural failures
 **Статус:** 🔴 **open**, не из diff #35

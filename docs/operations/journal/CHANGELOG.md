@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-07-31 — deploy: Quick Repeat v417 + Fly MCP re-verify PASS
+- Push `develop` `6fa90731` · `fly deploy --remote-only` → **v417**
+- MCP Point A: full-width `390/390`; Quick Repeat hidden; peek/expanded; one-open
+- Evidence: `artifacts/quick_repeat_bottom_sheet/mcp/fly_v417/`
+- ISSUES QR/width остаётся **resolved** (закрыт на v416; v417 re-verify)
+
 ## 2026-07-31 — deploy: Quick Repeat v416 + Fly MCP PASS
 - Push `develop` `0b71d5f9` · `fly deploy --remote-only --depot=false` → **v416**
 - MCP Point A: API `has_active_order:true` + `frequent_items:[]`; UI без «повторить»

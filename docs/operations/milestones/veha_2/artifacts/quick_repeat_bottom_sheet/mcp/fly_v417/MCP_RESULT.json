@@ -1,0 +1,23 @@
+{
+  "task": "quick_repeat_bottom_sheet",
+  "date": "2026-07-31",
+  "fly_version": 417,
+  "image": "deployment-01KYWARC7B9XZDPDHSAHMEFQWC",
+  "commit_pushed": "6fa90731",
+  "url": "https://coffeeos.fly.dev/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "customer": "2bc37279-…4c",
+  "viewport": { "width": 390 },
+  "checks": [
+    { "id": "full_width", "result": "PASS", "detail": "sheet left=0 right=0 width=390=vw maxWidth=none z=60" },
+    { "id": "repeat_hidden", "result": "PASS", "detail": "no shop-repeat-section; no repeat CTA text" },
+    { "id": "mode_peek", "result": "PASS", "detail": "data-status-sheet-mode=peek openReceipts=0" },
+    { "id": "mode_expanded", "result": "PASS", "detail": "expanded + receipt lines/totals" },
+    { "id": "one_open", "result": "PASS", "detail": "after 2nd chevron: a0=false a1=true receipts=1" }
+  ],
+  "screenshots": [
+    "01_peek_full_width_repeat_hidden_fly_v417.png",
+    "02_expanded_first_receipt_fly_v417.png",
+    "03_expanded_second_receipt_only_fly_v417.png"
+  ],
+  "overall": "PASS"
+}

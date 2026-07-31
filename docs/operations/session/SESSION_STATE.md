@@ -2,15 +2,23 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-31 (push/deploy/MCP · Quick Repeat v416)
+**Дата:** 2026-07-31 (push/deploy/MCP · Quick Repeat v417)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **Quick Repeat** Fly **v416** MCP **PASS** (hide + full-width) | апрув заказчика; optional visible-repeat MCP |
-| ISSUES QR/width | **resolved** v416 |
+| **Quick Repeat** Fly **v417** MCP **PASS** (hide + full-width + one-open) | апрув заказчика; optional visible-repeat MCP |
+| ISSUES QR/width | **resolved** v416; re-verify **v417** |
 | **#36** / **#35** | апрув заказчика |
 
-### Сессия 2026-07-31 (push + fly deploy + MCP · Quick Repeat)
+### Сессия 2026-07-31 (push + fly deploy + MCP · Quick Repeat v417)
+
+- Push `develop` → `6fa90731`; `fly deploy --remote-only` → **v417**
+- MCP Point A (Aram, 14 active): sheet `390/390` left/right 0 z60; `shop-repeat-section` absent
+- Modes: peek → expanded; one-open PASS (2nd open closes 1st)
+- Evidence: `artifacts/quick_repeat_bottom_sheet/mcp/fly_v417/`
+- Prior v416 evidence retained under `mcp/fly_v416_2026-07-31/`
+
+### Сессия 2026-07-31 (push + fly deploy + MCP · Quick Repeat v416)
 
 - Push `develop` → `0b71d5f9`; `fly deploy --remote-only --depot=false` → **v416**
 - MCP Point A (Aram, active orders): API `has_active_order:true` + `frequent_items:[]`; UI без «повторить»
