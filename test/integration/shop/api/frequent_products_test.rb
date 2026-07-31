@@ -51,10 +51,18 @@ class Shop::Api::FrequentProductsTest < ActionDispatch::IntegrationTest
     email = "freqapi-#{SecureRandom.hex(4)}@example.com"
     place_order!(email: email)
 
+    # После checkout заказ accepted (= активный) → hide; для «истории» доводим до issued
+    order = Order.where(tenant_id: @tenant.id).order(created_at: :desc).first
+    order.update!(status: :preparing)
+    order.update!(status: :ready)
+    order.update!(status: :issued)
+
     get "/shop/api/frequent_products", headers: shop_headers, as: :json
 
     assert_response :success
-    items = response.parsed_body["frequent_items"]
+    body = response.parsed_body
+    assert_equal false, body["has_active_order"]
+    items = body["frequent_items"]
     assert_equal 1, items.length
 
     item = items.first

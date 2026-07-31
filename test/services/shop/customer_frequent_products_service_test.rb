@@ -207,7 +207,7 @@ class Shop::CustomerFrequentProductsServiceTest < ActiveSupport::TestCase
   end
 
   def create_paid_order!(product:, tenant: @tenant, modifiers: {}, created_at: Time.current,
-                         status: :accepted, source: :mobile, quantity: 1, unit_price: 250)
+                         status: :issued, source: :mobile, quantity: 1, unit_price: 250)
     order = Order.create!(
       tenant: tenant,
       customer_id: @customer.id,

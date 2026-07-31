@@ -61,12 +61,13 @@ class Shop::Api::EmailVerifyCustomerLinkTest < ActionDispatch::IntegrationTest
   end
 
   def seed_accepted_order!(customer:)
+    # История для «повторить»: issued (не accepted — иначе hide active-order)
     order = Order.create!(
       tenant: @tenant,
       customer_id: customer.id,
       order_number: "EVL-#{SecureRandom.hex(4)}",
       source: :mobile,
-      status: :accepted,
+      status: :issued,
       total_amount: 250,
       discount_amount: 0,
       final_amount: 250,

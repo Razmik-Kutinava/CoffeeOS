@@ -111,12 +111,14 @@ class Shop::Api::GuestSessionRestoreTest < ActionDispatch::IntegrationTest
   end
 
   def seed_accepted_order!(customer:)
+    # История для «повторить»: терминальный статус (issued).
+    # accepted скрывает секцию (HIDE_REPEAT_STATUSES / ревизия 2026-07-31).
     order = Order.create!(
       tenant: @tenant,
       customer_id: customer.id,
       order_number: "GSR-#{SecureRandom.hex(4)}",
       source: :mobile,
-      status: :accepted,
+      status: :issued,
       total_amount: 290,
       discount_amount: 0,
       final_amount: 290,

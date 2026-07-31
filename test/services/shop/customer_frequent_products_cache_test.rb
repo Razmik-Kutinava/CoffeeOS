@@ -23,12 +23,12 @@ class Shop::CustomerFrequentProductsCacheTest < ActiveSupport::TestCase
 
   test "cache key format and TTL constant" do
     key = Shop::CustomerFrequentProductsService.cache_key(tenant_id: @tenant.id, customer_id: @customer.id)
-    assert_equal "shop/freq/v2/#{@tenant.id}/#{@customer.id}", key
+    assert_equal "shop/freq/v3/#{@tenant.id}/#{@customer.id}", key
     assert_equal 30.minutes, Shop::CustomerFrequentProductsService::CACHE_TTL
   end
 
   test "cached_call stores result in Rails.cache and serves stale data within TTL" do
-    create_paid_order!(created_at: 1.day.ago)
+    create_paid_order!(created_at: 1.day.ago, status: :issued)
 
     first = cached_call
     assert_equal [ @product.id ], first.map { |i| i[:product_id] }
@@ -39,19 +39,19 @@ class Shop::CustomerFrequentProductsCacheTest < ActiveSupport::TestCase
     # Новые данные в БД не видны, пока живёт кэш
     another = create_product!(category: @category, name: "Кофе-тоник")
     enable_product_for_tenant!(tenant: @tenant, product: another, price: 300)
-    2.times { create_paid_order!(product: another, created_at: 1.hour.ago) }
+    2.times { create_paid_order!(product: another, created_at: 1.hour.ago, status: :issued) }
 
     assert_equal first, cached_call, "внутри TTL отдаётся кэш без пересчёта"
   end
 
   test "cache expires after 30 minutes TTL" do
-    create_paid_order!(created_at: 1.day.ago)
+    create_paid_order!(created_at: 1.day.ago, status: :issued)
     first = cached_call
     assert_equal 1, first.length
 
     another = create_product!(category: @category, name: "Матча")
     enable_product_for_tenant!(tenant: @tenant, product: another, price: 300)
-    2.times { create_paid_order!(product: another, created_at: 1.hour.ago) }
+    2.times { create_paid_order!(product: another, created_at: 1.hour.ago, status: :issued) }
 
     travel 31.minutes do
       refreshed = cached_call
@@ -74,19 +74,19 @@ class Shop::CustomerFrequentProductsCacheTest < ActiveSupport::TestCase
   end
 
   test "bust_cache! forces recompute" do
-    create_paid_order!(created_at: 1.day.ago)
+    create_paid_order!(created_at: 1.day.ago, status: :issued)
     cached_call
 
     another = create_product!(category: @category, name: "Матча")
     enable_product_for_tenant!(tenant: @tenant, product: another, price: 300)
-    2.times { create_paid_order!(product: another, created_at: 1.hour.ago) }
+    2.times { create_paid_order!(product: another, created_at: 1.hour.ago, status: :issued) }
 
     Shop::CustomerFrequentProductsService.bust_cache!(tenant_id: @tenant.id, customer_id: @customer.id)
     assert_equal 2, cached_call.length
   end
 
   test "OrderCreator invalidates frequent products cache on order creation" do
-    create_paid_order!(created_at: 1.day.ago)
+    create_paid_order!(created_at: 1.day.ago, status: :issued)
     cached_call
     key = Shop::CustomerFrequentProductsService.cache_key(tenant_id: @tenant.id, customer_id: @customer.id)
     assert_not_nil Rails.cache.read(key)
@@ -193,7 +193,7 @@ class Shop::CustomerFrequentProductsCacheTest < ActiveSupport::TestCase
     Shop::CustomerFrequentProductsService.cached_call(customer_id: @customer.id, tenant_id: @tenant.id)
   end
 
-  def create_paid_order!(product: @product, created_at: Time.current, status: :accepted)
+  def create_paid_order!(product: @product, created_at: Time.current, status: :issued)
     order = Order.create!(
       tenant: @tenant,
       customer_id: @customer.id,

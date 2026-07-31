@@ -2,13 +2,22 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-31 (PHASE 2 RED · Quick Repeat B1–B4)
+**Дата:** 2026-07-31 (PHASE 2 GREEN · Quick Repeat B1–B4)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **Quick Repeat** RED B1–B4 `[x]` — 9 fail + 1 error (ожидаемо) | **go** → GREEN B1–B4 |
+| **Quick Repeat** GREEN B1–B4 `[x]` — service/API/cache v3/barista bust | **go** → RED F1–F3 (FE flag + hide) |
 | **#36** accordion receipt — Fly **v415** MCP PASS | апрув заказчика |
 | **#35** sticky status — Fly **v414** | апрув заказчика |
+
+### Сессия 2026-07-31 (PHASE 2 GREEN · Quick Repeat B1–B4)
+
+- BE: `HIDE_REPEAT_STATUSES`, `payload`/`cached_payload`, cache `shop/freq/v3/…`
+- API: `has_active_order` + empty `frequent_items` when active
+- Bust: `Barista::OrderStatusUpdateService` → `bust_cache!`
+- Тесты: 45 runs / 0 failures (frequent* + guest restore + email link + barista status)
+- Legacy seeds: history = `issued` (не `accepted`)
+- CHANGELOG/HANDOFF — в REVIEW / после F*
 
 ### Сессия 2026-07-31 (PHASE 2 RED · Quick Repeat B1–B4)
 

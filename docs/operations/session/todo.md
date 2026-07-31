@@ -2,7 +2,7 @@
 
 **ТЗ:** [`customer_tasks/Быстрый повтор частых покупок Quick Repeat Bottom Sheet.md`](../milestones/veha_2/requirements/customer_tasks/Быстрый%20повтор%20частых%20покупок%20Quick%20Repeat%20Bottom%20Sheet.md)  
 **Артефакты (канон UI):** [`artifacts/quick_repeat_bottom_sheet/`](../milestones/veha_2/artifacts/quick_repeat_bottom_sheet/) — скрины `*_2026-07-31.png`  
-**Фаза:** PHASE 1 SPEC `[x]` · RED `[ ]` · GREEN `[ ]` · REVIEW `[ ]`
+**Фаза:** PHASE 1 SPEC `[x]` · RED BE `[x]` · RED FE/layout `[ ]` · GREEN `[ ]` · REVIEW `[ ]`
 
 ---
 
@@ -99,7 +99,7 @@
 | `04_…` | hidden, один напиток — без обязательной секции повтора в полосе |
 | `05_…` | peek: 3 превью + «+цена» (нет активного) |
 | `06_…` | «полатить в 1 клик» на карточках повтора |
-| *(нет скрина)* | при активном заказе — секции «повторить» **нет**; виден #35 status sheet |
+| `07_customer_feedback_status_sheet_not_full_width_2026-07-31.png` | при активном заказе Quick Repeat скрыт во всех режимах; #35/#36 status sheet на всю ширину, без боковой CartSheet |
 
 ### RLS
 - Как сейчас: tenant + mobile history + customer session / GuestCustomerResolver
@@ -112,7 +112,7 @@
 | `pending_payment` как «created» → пустой peek | **не** в HIDE_REPEAT (решение SPEC) |
 | Stale Rails cache после issued | bust в barista status |
 | Stale localStorage | FE clear при `has_active_order: true` |
-| Сломать #35 peek / z-index | не трогать OrderStatusSheet layout; только hide repeat |
+| Сломать #35 peek / z-index | full-width `OrderStatusSheet`; явный `hidden/peek/expanded`; z60 сохранить |
 | `RepeatSection` / CartSheet размер | минимальный gate, без нового монолита |
 | Guest 401 из ТЗ | не менять (200 + []) |
 
@@ -129,8 +129,8 @@
 ### Порядок RED → GREEN
 1. RED B1–B4 (падающие тесты active/flag/bust) → commit `[RED]`
 2. GREEN B1–B4 → регрессия frequent*
-3. RED F1–F3 → commit `[RED]` (или один RED-пакет BE+FE если один проход)
-4. GREEN F1–F3 → layout canon + REVIEW
+3. RED F1–F3 + full-width/status modes → commit `[RED]`
+4. GREEN F1–F3 + full-width/status modes → layout canon + REVIEW
 
 ---
 
@@ -142,7 +142,7 @@
 
 ### PHASE 2 BUILD
 - [x] RED B1–B4 (тесты написаны, падают — ожидаемо)
-- [ ] GREEN B1–B4
+- [x] GREEN B1–B4
 - [ ] RED F1–F3
 - [ ] GREEN F1–F3
 - [ ] Регрессия зоны shop

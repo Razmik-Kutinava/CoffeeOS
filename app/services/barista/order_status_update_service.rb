@@ -39,6 +39,11 @@ module Barista
 
       order = @order.reload
       Shop::GuestOrderBroadcaster.call(order: order, old_status: old_status)
+      # Quick Repeat: смена статуса (в т.ч. issued/cancelled) → UI узнаёт has_active_order
+      Shop::CustomerFrequentProductsService.bust_cache!(
+        tenant_id: order.tenant_id,
+        customer_id: order.customer_id
+      )
 
       { order: order, old_status: old_status }
     end

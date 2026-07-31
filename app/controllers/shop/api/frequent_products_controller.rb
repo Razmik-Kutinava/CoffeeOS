@@ -12,18 +12,22 @@ module Shop
           email: params[:email]
         )
 
-        frequent_items =
+        payload =
           if customer_id.present?
-            Shop::CustomerFrequentProductsService.cached_call(
+            Shop::CustomerFrequentProductsService.cached_payload(
               customer_id: customer_id,
               tenant_id: @shop_tenant.id
             )
           else
             # Витрина гостевая: без customer / без verified email — «повторить» пуста (не 401)
-            []
+            { has_active_order: false, frequent_items: [] }
           end
 
-        render json: { frequent_items: frequent_items, categories: categories_by_name }
+        render json: {
+          has_active_order: payload[:has_active_order],
+          frequent_items: payload[:frequent_items],
+          categories: categories_by_name
+        }
       end
 
       private

@@ -4,32 +4,45 @@ module Shop
   # Секция «повторить» (Quick Repeat Bottom Sheet): частые товары клиента
   # за окно WINDOW_DAYS, сгруппированные по [product_id, modifier_options],
   # топ MAX_REPEAT_ITEMS по частоте, при равенстве — по свежести заказа.
-  # Без JOIN в горячем потоке: 4 плоских запроса + агрегация в Ruby.
+  # Без JOIN в горячем потоке: плоские запросы + агрегация в Ruby.
+  #
+  # Ревизия 2026-07-31: при активном заказе (HIDE_REPEAT_STATUSES = Order.active)
+  # frequent_items пуст; кэш v3 хранит { has_active_order, frequent_items }.
   class CustomerFrequentProductsService
     WINDOW_DAYS = 45
     MAX_REPEAT_ITEMS = 3
     CACHE_TTL = 30.minutes
     # Учитываем только оформленные заказы (оплаченные/выданные), не черновики и не отмены
     COUNTED_STATUSES = %w[accepted preparing ready issued closed].freeze
+    # Скрыть «повторить» пока заказ в работе (= Order.active / #35)
+    HIDE_REPEAT_STATUSES = %w[accepted preparing ready].freeze
 
     def self.call(customer_id:, tenant_id:)
       new(customer_id: customer_id, tenant_id: tenant_id).call
     end
 
-    def self.cache_key(tenant_id:, customer_id:)
-      # v2: в payload есть last_order_id (MCP 2026-07-30)
-      "shop/freq/v2/#{tenant_id}/#{customer_id}"
+    def self.payload(customer_id:, tenant_id:)
+      new(customer_id: customer_id, tenant_id: tenant_id).payload
     end
 
+    def self.cache_key(tenant_id:, customer_id:)
+      # v3: payload { has_active_order, frequent_items } (ревизия active-order hide)
+      "shop/freq/v3/#{tenant_id}/#{customer_id}"
+    end
+
+    # Совместимость: массив frequent_items (как до v3)
     def self.cached_call(customer_id:, tenant_id:)
+      cached_payload(customer_id: customer_id, tenant_id: tenant_id)[:frequent_items]
+    end
+
+    def self.cached_payload(customer_id:, tenant_id:)
       Rails.cache.fetch(cache_key(tenant_id: tenant_id, customer_id: customer_id), expires_in: CACHE_TTL) do
-        call(customer_id: customer_id, tenant_id: tenant_id)
+        payload(customer_id: customer_id, tenant_id: tenant_id)
       end
     end
 
-    # Сброс при создании заказа (OrderCreator) и подтверждении оплаты (PaymentStatusUpdater).
-    # Вызывается в hot-path заказа/callback: деградация кэш-хранилища не должна ронять оплату,
-    # худший случай — клиент видит устаревший топ-3 до TTL (30 мин).
+    # Сброс: OrderCreator, PaymentStatusUpdater, Barista::OrderStatusUpdateService.
+    # Hot-path: деградация кэша не роняет заказ/оплату/смену статуса.
     def self.bust_cache!(tenant_id:, customer_id:)
       return if customer_id.blank?
 
@@ -45,16 +58,35 @@ module Shop
     end
 
     def call
-      return [] if @customer_id.blank?
+      payload[:frequent_items]
+    end
 
+    def payload
+      return { has_active_order: false, frequent_items: [] } if @customer_id.blank?
+
+      active = has_active_order?
+      {
+        has_active_order: active,
+        frequent_items: active ? [] : compute_items
+      }
+    end
+
+    private
+
+    def has_active_order?
+      Order
+        .where(tenant_id: @tenant_id, customer_id: @customer_id)
+        .where(status: HIDE_REPEAT_STATUSES)
+        .exists?
+    end
+
+    def compute_items
       order_dates = recent_order_dates
       return [] if order_dates.empty?
 
       groups = top_groups(order_items_for(order_dates.keys), order_dates)
       build_items(groups)
     end
-
-    private
 
     # { order_id => created_at } за окно — один запрос без JOIN
     def recent_order_dates
