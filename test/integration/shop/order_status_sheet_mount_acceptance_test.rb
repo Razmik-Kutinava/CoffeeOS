@@ -24,6 +24,8 @@ class Shop::OrderStatusSheetMountAcceptanceTest < ActionDispatch::IntegrationTes
     assert_includes sheet, "z-index: 60"
     assert_includes sheet, "right: 7.5rem"
     assert_includes sheet, "border-right: 3px solid #ff8c42"
+    assert_includes sheet, "oss__label"
+    assert_includes sheet, "oss__track"
   end
 
   test "#35 initial cable connect does not recurse through active refresh" do
