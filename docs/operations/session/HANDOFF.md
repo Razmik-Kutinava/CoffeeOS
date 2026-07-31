@@ -1,8 +1,21 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-31 (**#36 push + Fly v415 + MCP PASS**)  
+**Дата:** 2026-07-31 (**Quick Repeat ревизия PHASE 0**)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev  
+
+### Quick Repeat Bottom Sheet — ревизия (2026-07-31)
+
+| Что | Статус |
+|-----|--------|
+| Ревизия ТЗ (active order hide + `has_active_order`) | **интейк `[x]`** |
+| Скрины канона UI заменены (6 PNG) | **`[x]`** |
+| PHASE 1 SPEC | **`[ ]`** ждёт go |
+| Код переделки | **`[ ]`** |
+
+**ТЗ:** [`Быстрый повтор частых покупок Quick Repeat Bottom Sheet.md`](../milestones/veha_2/requirements/customer_tasks/Быстрый%20повтор%20частых%20покупок%20Quick%20Repeat%20Bottom%20Sheet.md)  
+**Артефакты:** [`quick_repeat_bottom_sheet/`](../milestones/veha_2/artifacts/quick_repeat_bottom_sheet/)  
+**Дальше:** go → SPEC (переиспользовать существующий сервис/API; не плодить доки).
 
 ### Active orders accordion + receipt #36 (2026-07-31)
 

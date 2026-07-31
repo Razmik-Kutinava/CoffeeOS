@@ -1,5 +1,10 @@
 ﻿# CHANGELOG
 
+## 2026-07-31 — docs: Quick Repeat Bottom Sheet — ревизия интейка (active order hide)
+- ТЗ обновлён 1:1: **NEW** hide «повторить» при `created`/`accepted`/`cooking`/`ready` + `has_active_order`
+- Скрины канона UI заменены (6 PNG `*_2026-07-31.png`); старые → `_archive_2026-07-21/`
+- CBR / customer_tasks README: **ревизия интейк `[x]`** · SPEC ждёт go · код не трогали
+
 ## 2026-07-31 — deploy(#36): Fly v415 + MCP PASS accordion receipt
 - Push develop + `fly deploy` → **v415**
 - MCP: one-open accordion + text receipt vs screens 01/02 PASS

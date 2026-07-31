@@ -2,12 +2,20 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-31 (#36 push+deploy+MCP v415)
+**Дата:** 2026-07-31 (PHASE 0 · Quick Repeat ревизия)
 
 | Сейчас | Дальше |
 |--------|--------|
+| **Quick Repeat** ревизия интейк `[x]` — hide при активном заказе + новые скрины | **go** → PHASE 1 SPEC |
 | **#36** accordion receipt — Fly **v415** + MCP **PASS** | апрув заказчика; stub CTA backlog |
 | **#35** sticky status — Fly **v414** MCP PASS | апрув заказчика; PKCS7 backlog |
+
+### Сессия 2026-07-31 (PHASE 0 · Quick Repeat ревизия)
+
+- Переделка существующей задачи (не новый док): ТЗ обновлён 1:1 + **NEW** `has_active_order` / hide «повторить»
+- Скрины канона заменены (6 PNG `*_2026-07-31.png`); старые → `_archive_2026-07-21/`
+- CBR / customer_tasks README: статус **ревизия интейк `[x]`** · SPEC ждёт go
+- Код / `todo.md` — не трогали (PHASE 0 only)
 
 ### Сессия 2026-07-31 (push/deploy/MCP · #36)
 
