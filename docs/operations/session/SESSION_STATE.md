@@ -2,12 +2,20 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-31 (#36 PHASE 0 intake)
+**Дата:** 2026-07-31 (#36 PHASE 1 SPEC)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#36** Active orders accordion + repeat — **интейк `[x]`** | PHASE 1 SPEC по go |
+| **#36** Active orders accordion + repeat — **SPEC `[x]`** | RED по намерению («ебашь / дальше») |
 | **#35** sticky status sheet — Fly **v414** MCP PASS | апрув заказчика; PKCS7 backlog |
+
+### Сессия 2026-07-31 (PHASE 1 SPEC · #36)
+
+- Reuse: `#active` (#35), `OrderStatusSheet` peek, `CartService#add!`, `ProductTenantSetting.available`, `orderStatusProgress`
+- Gaps: enrich active (items/sales_point/created_at); `POST …/repeat` + OrderRepeatService; FE accordion expanded + «Повторить»
+- Решения: 404 вместо 403 (как show); optional `product_id` для per-line; не второй sticky — extend #35; без DDL
+- `todo.md` переписан под #36; код не писали
+- RED ждёт намерения
 
 ### Сессия 2026-07-31 (PHASE 0 · #36 Active orders accordion + repeat)
 

@@ -1,5 +1,9 @@
 ﻿# CHANGELOG
 
+## 2026-07-31 — docs(#36): SPEC Active orders accordion + repeat
+- `todo.md` — reuse #35 active/sheet/CartService; gaps A1–B6; 404≠403; per-line product_id
+- Код не менялся; RED ждёт намерения
+
 ## 2026-07-31 — docs(#36): intake Active orders accordion + repeat
 - ТЗ: `customer_tasks/Мульти-статусная шторка активных заказов с повторной покупкой.md`
 - Артефакты: `artifacts/active_orders_accordion_repeat/` — 2 скрина (1 / 2+ заказов expanded)

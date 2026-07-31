@@ -1,181 +1,157 @@
-# todo — Order status compact sheet + Push (#35)
+# todo — Active orders accordion + repeat (#36)
 
-**ТЗ:** [`customer_tasks/Интеграция статусной модели в компактную шторку PWA и Push.md`](../milestones/veha_2/requirements/customer_tasks/Интеграция%20статусной%20модели%20в%20компактную%20шторку%20PWA%20и%20Push.md)  
-**Артефакты (канон UI):** [`artifacts/order_status_compact_sheet_push/`](../milestones/veha_2/artifacts/order_status_compact_sheet_push/)  
-**Фаза:** PHASE 3: REVIEW `[x]` · push/deploy Fly **v414** `[x]` · MCP PASS `[x]` · PKCS7 backlog
-
-**MCP 2026-07-31:** layering FAIL→fix→deploy→PASS (labels/track/z60). Evidence: `artifacts/order_status_compact_sheet_push/mcp/`.
+**ТЗ:** [`customer_tasks/Мульти-статусная шторка активных заказов с повторной покупкой.md`](../milestones/veha_2/requirements/customer_tasks/Мульти-статусная%20шторка%20активных%20заказов%20с%20повторной%20покупкой.md)  
+**Артефакты (канон UI):** [`artifacts/active_orders_accordion_repeat/`](../milestones/veha_2/artifacts/active_orders_accordion_repeat/)  
+**Фаза:** PHASE 1: SPEC `[x]` · RED `[ ]` · GREEN `[ ]` · REVIEW `[ ]`
 
 ---
 
 ## SPEC (канон CoffeeOS)
 
 ### Бизнес-цель
-Не блокировать гостя на full-screen `/order/:id`. Статус активного заказа — в **сквозной sticky-шторке** (peek/hidden) поверх каталога и карточки товара; бариста меняет статус на табло → ActionCable + Push; при «Готов» — ровно 1 пуш (идемпотентность).
+На витрине PWA — **разворачиваемый аккордеон** активных заказов: статус-лайн (4 шага), чек состава, кнопка **«Повторить»** по позиции → в корзину с учётом стоп-листа. Не блокировать каталог; не ломать sticky peek из #35.
 
-### Глобальные ограничения (из ТЗ)
-- Шторка **не** блокирует клики по каталогу / карточкам (`pointer-events` / z-index).
-- **Не трогать** базовую схему `orders.status` и основные связи; для C1 — только `ready_notified_at` **или** `order_push_logs` (Migration Gate + `go`).
-- Real-time — **только** ActionCable (штатный).
-- Push / `.pkpass` / тяжёлое — **ActiveJob** (в CoffeeOS = **Solid Queue**, не Sidekiq/GoodJob). POS не блокируется.
+### Глобальные ограничения (из ТЗ + CoffeeOS)
+
+| Ограничение | Канон |
+|---|---|
+| `GET /orders/active`, `/history` | **не ломать** маршрут/форму ответа — только **расширить** поля |
+| Глобальные стили PWA | не трогать; стили только в компоненте шторки |
+| Логика корзины | не менять `CartService` API; repeat **вызывает** `CartService#add!` |
+| Тема | `#1a1a1a`, акцент `#ff6b35` |
+| DDL | **нет** — Migration Gate не нужен |
+| Hot-path | не трогать `OrderCreator` / T-Bank callback |
 
 ### Что уже есть (не дублировать)
 
 | Компонент | Путь | Роль |
 |---|---|---|
-| Guest WS channel | `app/channels/shop/guest_order_channel.rb` | `stream_for order`; auth reconnect_token / session |
-| Broadcast из POS | `Shop::GuestOrderBroadcaster` ← `Barista::OrderStatusUpdateService` | payload `status_changed` + order_id/status (+ meta) |
-| FE cable | `app/frontend/lib/shopOrderCable.js` | subscribe + retry 5s; used by OrderStatus / settle |
-| 4-step progress | `app/frontend/lib/orderStatusProgress.js` | Принят→Оплачен→Готовится→Готов |
-| Full-screen B1.1 | `app/frontend/routes/OrderStatus.svelte` (~577) | `/order/:id` — **оставить** как detail; не раздувать |
-| Cart peek | `CartSheet.svelte` (~586) + `ProductCartPeek.svelte` | паттерн peek/hidden; **корзина**, не статус |
-| Push pipeline | `OrderStatusPushNotifier` → `SendPushNotificationJob` → `FcmClient` | FCM; тексты B2.1 близки к ТЗ |
-| Order FSM | `Order::VALID_TRANSITIONS` | `ready → preparing` **запрещён** |
-| ActiveJob | Solid Queue (prod) | маппинг ТЗ Sidekiq/GoodJob |
-| Order show API | `GET /shop/api/orders/:id` | refresh одного заказа |
-| Session LS | `shopGuestSession.js` | `lastGuestOrderId` + reconnect_token |
+| Active API | `OrdersController#active` | `{ orders: [{ id, order_id, status, order_number, payment_settled }] }` — **без** items/sales_point |
+| Order show JSON | `#order_json` | `created_at`, `tenant`, items без `product_id` |
+| Sticky peek #35 | `OrderStatusSheet.svelte` (~251) + `orderStatusSheet.js` (~73) | peek/hidden, multi-order, Cable, GET active |
+| Progress 4 шага | `orderStatusProgress.js` | Принят→Оплачен→Готовится→Готов |
+| Cart add | `POST /shop/api/cart/add` → `Shop::CartService#add!` | стоп-лист → 404 hard-fail |
+| Stop-list | `ProductTenantSetting.available` | `is_enabled && !is_sold_out` |
+| Ownership | `order_visible_to_session_customer?` | mismatch → **404** (не 403) |
+| Quick Repeat | `RepeatSection` / `frequent_products` | **другая** поверхность (корзина) — не смешивать |
 
 ### Gaps (делать)
 
-1. **FE sticky widget** — новый компонент(ы) статуса в peek/hidden на Home + Product (+ App mount); канон = 5 скринов.
-2. **Multi-order** — ≥2 активных полос; scroll если **>2** (подпись заказчика).
-3. **Coexistence с CartSheet** — оба внизу; статус не должен ломать peek корзины / клики; layout/padding контента.
-4. **A3 reconnect GET** — при `connected`/online: фоновый refresh активных заказов; 404/500 → hide/toast + backoff.
-5. **API active orders** — сейчас один `lastGuestOrderId`; для multi нужна `GET …/orders/active` (или history filter) + хранение списка id.
-6. **Push copy** — выровнять тексты под ТЗ («Бариста уже готовит…» / «Ваш кофе готов! Заберите на кассе») без ломки B2.1 acceptance без апрува — в GREEN уточнить в notifier.
-7. **C1/C2 idempotency** — `ready_notified_at` (предпочтительно колонка на `orders`) + atomic skip duplicate ready-push; Cable всё равно шлёт.
-8. **B3 Apple Wallet / pkpass / APNs** — **нет кода**; отдельный подшаг, можно отложить в backlog если scope велик (зафиксировать в REVIEW/CBR).
-9. **Не создавать** параллельный `OrderStatusChannel` — маппинг на `Shop::GuestOrderChannel` (см. ниже).
-10. **Не** `after_update_commit` на всей модели Order вслепую — оставить триггер в broadcaster/service (уже есть); при желании тонкие job-обёртки вокруг notifier.
+1. **A1** — расширить `#active`: `created_at`, `sales_point` (из `tenant_pickup_json`), `items[]` с `product_id`, `name`, `quantity`, `price`, `modifiers[]`; **сохранить** текущие ключи (#35).
+2. **A2** — `POST /shop/api/orders/:id/repeat` + `Shop::OrderRepeatService` → `CartService#add!` → `{ added_items, skipped_items }`.
+3. **A3** — soft-skip стоп-листа в repeat (не hard 404 на всю операцию).
+4. **B1–B3** — expanded-аккордеон: один `expandedOrderId`; чек `max-height: 350px; overflow-y: auto`; тогл `>` / `v`.
+5. **B4–B6** — «Повторить» (позиция), snackbar skipped, ошибка сети.
+6. **Не** плодить второй sticky widget — **расширить** `#35` sheet режимом `expanded` (или дочерний accordion внутри).
+7. **File-size:** `orders_controller.rb` 266 / `OrderStatusSheet.svelte` 251 — **не раздувать**; вынести presenter/service + дочерние `.svelte` / lib.
 
 ### Маппинг путей (ТЗ → CoffeeOS)
 
 | ТЗ (шаблон) | CoffeeOS |
 |---|---|
-| `OrderStatusChannel` | **`Shop::GuestOrderChannel`** (+ при необходимости alias/doc); payload уже шире `{order_id,status}` |
-| `PreparingPushJob` / `ReadyPushJob` | Расширить `OrderStatusPushNotifier` + опц. тонкие `Shop::PreparingPushJob` / `ReadyPushJob` → тот же FCM path; **Solid Queue** |
-| Web Push | **FCM** (`FcmClient` + `firebasePush.js`); VAPID stub в SW не трогать как основной путь |
-| Apple Wallet `.pkpass` | **нет** — новый scope (B3-Wallet) или backlog |
-| `ready_notified_at` / `order_push_logs` | DDL: предпочтительно **`orders.ready_notified_at`** (nullable timestamptz) |
-| `spec/…` / Vitest/React | **не использовать** |
-| Backend tests | `test/channels/shop/…`, `test/services/shop/…`, `test/services/barista/…`, `test/integration/shop/…` |
-| Frontend tests | `test/javascript/order_status_sheet_*.mjs` (`node --test`) |
-| Sticky widget | `app/frontend/components/OrderStatusSheet.svelte` (+ lib `orderStatusSheetStore.js` / `orderStatusActive.js`) |
-| POS soft Cable fail | Сегодня broadcaster **rescue** — POS не 500 при Cable down. ТЗ хочет hard-fail — **не менять** без явного апрува (риск регресса табло); в A1 зафиксировать soft-fail как канон CoffeeOS |
+| `ActiveOrdersAccordion` | `app/frontend/components/ActiveOrdersAccordion.svelte` (+ partials) внутри `OrderStatusSheet` |
+| Jest / React / `src/components/…` | **не использовать** → `test/javascript/active_orders_accordion_*.mjs` (`node --test`) |
+| RSpec `spec/requests/…` | `test/integration/shop/api/active_orders_test.rb` + `order_repeat_test.rb` |
+| `yarn test` / `yarn tsc` | `node --test test/javascript/…` + `bin/rails test …` (tsc не канон shop FE) |
+| 403 Forbidden (чужой заказ) | **отклонение:** как `#show` — **404** `"Order not found"` (не светить существование); зафиксировать в тесте |
+| auth token | session + `Shop::CustomerSession` / `order_visible_to_session_customer?` (как show) |
+| `sales_point` | объект как `tenant_pickup_json` (`name`, `address`, `city`) под ключом `sales_point` |
+| `modifiers[]` | из `order_item.modifier_options["selected_modifiers"]` |
+| «кнопка с текстом» (оранж. справа на макете) | **не в чеклисте A/B** — stub/placeholder или backlog до уточнения заказчика; не блокирует exit criteria |
 
-### Архитектура GREEN (по блокам ТЗ)
+### Решение по «Повторить» (позиция vs весь заказ)
+
+Макет: кнопка **на каждой строке** чека.  
+ТЗ A2: `POST …/repeat` копирует items заказа.
+
+**Канон SPEC:**
+
+- `POST /shop/api/orders/:id/repeat`
+- Body опционально: `{ "product_id": "<uuid>" }` **или** `{ "order_item_id": "<uuid>" }`
+- Без body / без фильтра → все позиции заказа
+- С фильтром → только эта позиция (и её модификаторы из order_item)
+- Цены — **актуальные** из `ProductTenantSetting` / `CartService#add!` (не историческая цена чека)
+- Ответ всегда `{ added_items: [...], skipped_items: [...] }` (+ опц. `cart`/`total` для FE refresh — если удобно, без ломки контракта ТЗ)
+
+### Архитектура GREEN (по блокам)
 
 | Шаг | Слой | Код (цель) | Тесты (RED→GREEN) |
 |-----|------|------------|-------------------|
-| **A1** | BE | Reuse GuestOrderChannel + GuestOrderBroadcaster; документировать контракт payload; не ломать POS soft-fail | channel + broadcaster (+ assert payload keys) |
-| **A2** | FE | `OrderStatusSheet` sticky peek/hidden; mount в `App.svelte` рядом с CartSheet; reuse `orderProgressView`; z-index/`pointer-events` так, чтобы каталог кликабелен; 1–2 полосы без scroll, >2 — scroll | JS: render steps, multi>2 scroll flag, pointer-events policy |
-| **A3** | FE(+BE) | On cable reconnect / `online`: GET active order(s); 404→hide+toast; 500→error+backoff | JS reconnect refresh; integration API active |
-| **B1** | BE | При `preparing`/`ready` — async job (существующий или split); **не** блокировать POS | notifier enqueue tests |
-| **B2** | BE | Preparing push body по ТЗ (или B2.1 + note); Solid Queue | `order_status_push_notifier_test` |
-| **B3** | BE | Ready FCM; Wallet — **отдельный go/backlog** если нет сертификатов | ready job + skip Wallet stub |
-| **C1** | BE+DDL | `ready_notified_at` после успешного claim перед send | migration + model/service |
-| **C2** | BE | `UPDATE … WHERE ready_notified_at IS NULL` → skip push/Wallet; Cable всегда; FSM `ready→preparing` не открывать | idempotency race test |
+| **A1** | BE | `#active` + `includes(:order_items)`; presenter `Shop::ActiveOrdersPresenter` (не раздувать controller) | `active_orders_test` — поля items/sales_point/created_at; N+1 нет |
+| **A2** | BE | route `post :repeat`; тонкий action → `Shop::OrderRepeatService` | `order_repeat_test` — 200 / 404 / empty items |
+| **A3** | BE | в сервисе: PTS.available → skip; иначе `CartService#add!` | sold_out → skipped; все skipped → 200 + empty added |
+| **B1** | FE | accordion rows: progress + ETA + № + точка + chevron | JS render 1 order expanded |
+| **B2** | FE | `expandedOrderId` — только один открыт | JS: open B closes A |
+| **B3** | FE | receipt container `max-height: 350px; overflow-y: auto` | JS/class assert + mount acceptance |
+| **B4** | FE | кнопка «повторить» → POST repeat(+product_id) → refresh cart store | JS mock 200 |
+| **B5** | FE | snackbar текст из ТЗ при `skipped_items.length > 0` | JS |
+| **B6** | FE | сеть/500 → toast ошибки; корзина без изменений | JS |
 
 ### UI / скрины (критерий приёмки)
 
-| Скрин | Требование |
+| Скрин | Ожидание |
 |---|---|
-| `01_home_peek_status_bar` | Главный / витрина: peek прогресс + каталог доступен |
-| `02` / `03_product_*` | Карточка товара: статус внизу; add/pay не блокируются бессмысленно |
-| `04` / `05_multi_*` | ≥2 статусов; scroll если **>2** |
-| Подпись «если заказ еще» | **Обрыв** — трактовать как «можно заказать ещё при активном заказе» (уже в A2); уточнить у заказчика при MCP |
+| `01_single_order_expanded.png` | 1 заказ, expanded, статус-лайн 4 шага, чек + «повторить» |
+| `02_multi_order_accordion_one_expanded.png` | ≥2 заказа; один `v` expanded, другой `>` collapsed |
 
-### Coexistence CartSheet ↔ StatusSheet (решение SPEC)
+Coexistence: не ломать CartSheet z-index/#35 peek; expanded — **дополнение** к sticky status (режим sheet / высота), каталог кликабелен где не перекрыт шторкой.
 
-- **Вариант (канон):** StatusSheet — отдельный sticky слой над safe-area; при активных заказах занимает нижнюю полосу peek; CartSheet peek/expanded **остаётся** для корзины (как сейчас), с `padding-bottom` / stack, чтобы оба не перекрывали клики каталога вне своих hit-area.
-- **Не** вшивать прогресс внутрь `CartSheet.svelte` (уже >200) — новый компонент.
-- Full-screen `/order/:id` — оставить; deep-link / «детали» со шторки могут вести туда (кнопки на скринах — placeholder «кнопка с текстом» → в SPEC: primary = открыть OrderStatus / secondary = TBD, не выдумывать CTA без заказчика).
+### RLS / тенант
 
-### Storage / Migration Gate
+- Все запросы — `tenant_id: @shop_tenant.id`, `source: :mobile`
+- Repeat: заказ виден через `order_visible_to_session_customer?` (или тот же customer_id что `#active`)
+- Cart add — существующий `CartService` с `Current.tenant_id` / session tenant
+- Без `unscoped` / `row_security off`
 
-| Что | Решение |
+### Риски
+
+| Риск | Митигация |
 |---|---|
-| `orders.ready_notified_at` | **Да** (nullable) — проще atomic claim; **DDL только после `go`** |
-| `order_push_logs` | Альтернатива; не нужна если есть колонка |
-| Enum / связи `orders` | **Не трогать** |
-| C2 flip-flop preparing↔ready | FSM **не** менять; идемпотентность на повторный enqueue / double ready / job retry |
+| Раздуть `OrdersController` / `OrderStatusSheet` >200 | Presenter + OrderRepeatService; FE split accordion |
+| Сломать #35 peek / Cable | Регрессия `order_status_sheet_*` + `active_orders_test` |
+| Путаница с Quick Repeat | Отдельный endpoint/UI; не трогать `RepeatSection` |
+| Per-item vs whole-order | optional `product_id` / `order_item_id` в body |
+| Оранж. кнопки на макете без текста | backlog / stub; не блокер A/B чеклиста |
 
-### Лимиты файлов / RLS
+### Вне scope (backlog при необходимости)
 
-| Файл | Сейчас | Правило |
-|---|---|---|
-| `CartSheet.svelte` | ~586 | **не раздувать** — статус отдельно |
-| `OrderStatus.svelte` | ~577 | **не раздувать** — detail only; shared lib |
-| `orderStatusProgress.js` | ~61 | reuse; иконки под скрины можно в sheet CSS |
-| `App.svelte` | — | тонкий mount `<OrderStatusSheet />` |
-| Tenant / RLS | — | shop API + channel как сейчас (`Current.tenant_id`, guest reconnect) |
-
-### Риски / блокеры
-
-| Риск | Влияние |
-|---|---|
-| CartSheet + StatusSheet оба sticky | Сложный layout; регрессия peek/свайпа корзины → регрессия зоны shop |
-| Multi-order без API | Нужен `orders/active` или клиентский список id |
-| Apple Wallet | Нет инфры/сертификатов → backlog B3-Wallet |
-| Тексты push ≠ B2.1 | Менять только с пометкой в DEMO_FEEDBACK / апрувом |
-| Cable hard-fail POS (ТЗ) | Конфликт с soft-rescue — **оставить soft** |
-| Migration без go | Стоп на C1 |
-
-### Открытые вопросы (не блокируют SPEC→RED A1/A2)
-
-1. Точный текст CTA на оранжевых кнопках скринов («КУПИТЬ В 1 КЛИК» vs «кнопка с текстом»).
-2. «если заказ еще» — полный смысл фразы заказчика.
-3. Делать ли B3 Wallet в этом эпике или backlog.
-4. Нужен ли hard-fail POS при Cable down (сейчас soft) — **по умолчанию нет**.
+- Реальные тексты двух оранжевых кнопок справа от статус-лайна
+- Изменение `/history` payload (ТЗ разрешает расширять, но чеклист не требует)
+- PKCS7 / Wallet (#35 backlog)
+- Push copy / новый Cable channel
 
 ---
 
 ## Чеклист выполнения (SBR)
 
 ### PHASE 1: SPEC
-- [x] Анализ EXISTING vs MISSING
-- [x] Маппинг ТЗ → CoffeeOS
+- [x] Анализ reuse/#35 + gaps
 - [x] todo.md + SESSION_STATE
-- [x] RED — тесты написаны (ожидаемо красные)
+- [ ] СТОП → намерение на RED
 
-### PHASE 2: BUILD
+### PHASE 2: RED
+- [ ] A1–A3 failing tests (Rails)
+- [ ] B1–B6 failing tests (JS)
+- [ ] commit `test: … [RED]`
 
-#### A — Real-time виджет
-- [x] A1 RED — `guest_order_broadcaster_sheet_contract_test` (нужен `order_number` в payload)
-- [x] A1 GREEN — `order_number` в GuestOrderBroadcaster + cable forward
-- [x] A2 RED — `order_status_sheet_test.mjs` + mount acceptance
-- [x] A2 GREEN — `orderStatusSheet.js` + `OrderStatusSheet.svelte` + App mount
-- [x] A2b RED — `shouldScrollStatusList` >2 в JS
-- [x] A2b GREEN
-- [x] A3 RED — `active_orders_test` (route `orders/active`)
-- [x] A3 GREEN — `GET /orders/active` + reconnect refresh в sheet
-
-#### B — Push
-- [x] B/C RED — `ready_push_claim_test` (ReadyPushClaim + ready_notified_at)
-- [x] B ready path — `ReadyPushJob` + FCM (текст ТЗ ready)
-- [x] B3 Wallet GREEN — `order_wallet_passes` + PassUpdater simulate/fallback + runbook
-- [ ] PassKit PKCS7 + device register + download UI — backlog (см. runbook)
-- [ ] Регрессия полная `test/integration/shop/` (MCP / REVIEW)
-
-#### C — Idempotency
-- [x] C1 GREEN — Migration `ready_notified_at` + `Shop::ReadyPushClaim` + notifier claim/skip
-- [x] C2 GREEN — atomic claim; skip duplicate push (покрыто `ready_push_claim_test`)
+### PHASE 2: GREEN
+- [ ] A1 expand active payload
+- [ ] A2+A3 OrderRepeatService + route
+- [ ] B1–B6 accordion + repeat UI
+- [ ] регрессия зоны shop
+- [ ] commit `feat: … [GREEN]`
 
 ### PHASE 3: REVIEW
-- [x] N+1/RLS sanity + #35 suite + JS + rubocop (new files clean)
-- [x] Fix: terminal Cable status removes row from sticky sheet
-- [x] PRACTICES backlog: Wallet prod, push reliability, orders_controller split
-- [ ] MCP Fly vs скрины (нужен deploy-апрув)
-- [x] CHANGELOG / HANDOFF / CBR статус
+- [ ] N+1 / RLS / rubocop
+- [ ] CHANGELOG + HANDOFF
+- [ ] MCP Fly vs 2 скрина (после deploy-апрува)
 
 ---
 
-## Команды проверки (после GREEN)
+## Команды проверки (целевые)
 
-```text
-bin/rails test test/channels/shop/guest_order_channel_test.rb test/services/shop/guest_order_broadcaster_test.rb test/services/shop/order_status_push_notifier_test.rb test/services/barista/order_status_update_service_test.rb
+```bash
+bin/rails test test/integration/shop/api/active_orders_test.rb test/integration/shop/api/order_repeat_test.rb test/services/shop/order_repeat_service_test.rb
+node --test test/javascript/order_status_sheet_test.mjs test/javascript/active_orders_accordion_test.mjs
 bin/rails test test/integration/shop/
-node --test test/javascript/order_status_sheet_*.mjs
 ```
-
-Регрессия зоны shop: `bin/rails test test/integration/shop/`

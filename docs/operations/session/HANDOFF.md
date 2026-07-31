@@ -1,6 +1,6 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-31 (**#36 PHASE 0 intake**)  
+**Дата:** 2026-07-31 (**#36 PHASE 1 SPEC**)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev  
 
@@ -9,12 +9,12 @@
 | Что | Статус |
 |-----|--------|
 | Intake ТЗ + CBR + 2 скрина | **`[x]`** |
-| PHASE 1: SPEC | **`[ ]`** ждёт go |
-| RED / GREEN / REVIEW | **`[ ]`** |
+| PHASE 1: SPEC (`todo.md`) | **`[x]`** |
+| RED / GREEN / REVIEW | **`[ ]`** ждёт намерения на RED |
 
 **ТЗ:** [`Мульти-статусная шторка активных заказов с повторной покупкой.md`](../milestones/veha_2/requirements/customer_tasks/Мульти-статусная%20шторка%20активных%20заказов%20с%20повторной%20покупкой.md)  
 **Артефакты (канон UI):** [`active_orders_accordion_repeat/`](../milestones/veha_2/artifacts/active_orders_accordion_repeat/)  
-**Дальше:** go → PHASE 1 SPEC (маппинг на CoffeeOS: Svelte + `test/`, reuse #35 `orders/active`).
+**Дальше:** намерение → PHASE 2 RED (тесты A1–A3 + B1–B6).
 
 ### Order status compact sheet + Push #35 (2026-07-31)
 
