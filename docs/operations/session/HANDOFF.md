@@ -1,8 +1,20 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-30 (**#34 MCP Fly — UI OK · T-Bank 3013/10 block**)  
+**Дата:** 2026-07-31 (**#35 PHASE 0 intake — Order status compact sheet + Push**)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev  
+
+### Order status compact sheet + Push #35 (2026-07-31)
+
+| Что | Статус |
+|-----|--------|
+| Intake ТЗ + CBR + 5 скринов | **`[x]`** |
+| PHASE 1: SPEC (`todo.md`) | **`[ ]`** ждёт go |
+| RED / GREEN / REVIEW | **`[ ]`** |
+
+**ТЗ:** [`Интеграция статусной модели в компактную шторку PWA и Push.md`](../milestones/veha_2/requirements/customer_tasks/Интеграция%20статусной%20модели%20в%20компактную%20шторку%20PWA%20и%20Push.md)  
+**Артефакты:** [`order_status_compact_sheet_push/`](../milestones/veha_2/artifacts/order_status_compact_sheet_push/) — скрины = канон приёмки UI  
+**Дальше:** go → PHASE 1: SPEC (блоки A/B/C из ТЗ → todo.md).
 
 ### T-Kassa SBP Autopay AccountToken #34 (2026-07-30)
 

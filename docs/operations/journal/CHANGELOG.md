@@ -1,5 +1,10 @@
 ﻿# CHANGELOG
 
+## 2026-07-31 — docs: intake #35 Order status compact sheet + Push
+- ТЗ: `customer_tasks/Интеграция статусной модели в компактную шторку PWA и Push.md`
+- Артефакты: `artifacts/order_status_compact_sheet_push/` — 5 скринов заказчика (канон UI)
+- CBR: backlog + индекс #35 · интейк `[x]` · SPEC ждёт go
+
 ## 2026-07-30 — MCP #34 Fly: UI OK, T-Bank Recurrent/Charge blocked
 - Чекбокс bind + `save_sbp_account` → 422 **3013** Recurrent недоступны
 - Ручной СБП → NSPK QR PASS; карта Charge → 422 **10**

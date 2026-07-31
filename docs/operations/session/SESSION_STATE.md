@@ -2,12 +2,22 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-30 (#34 MCP Fly SBP Autopay)
+**Дата:** 2026-07-31 (#35 PHASE 0 intake · Order status compact sheet + Push)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#34** MCP Fly: UI/API OK; Setup **3013** + Charge **10** | ОК Recurrent+Charge в ЛК T-Bank → повтор MCP SUCCESS |
+| **#35** интейк `[x]` — ТЗ + 5 скринов заказчика | **go** → PHASE 1: SPEC (`todo.md`) |
+| **#34** MCP Fly: UI OK; Setup **3013** + Charge **10** | FIX Recurrent+Charge в ЛК T-Bank |
 | #32/#34 live Zero-Click blocked терминалом | Ждать ответ T-Bank |
+
+### Сессия 2026-07-31 (PHASE 0 · #35 Order status compact sheet + Push)
+
+- Интейк заказчика: сквозная sticky-шторка статуса (peek/hidden) + ActionCable + Push/Wallet из POS
+- ТЗ: `customer_tasks/Интеграция статусной модели в компактную шторку PWA и Push.md`
+- Артефакты: `artifacts/order_status_compact_sheet_push/` — 5 скринов (канон приёмки UI)
+- CBR: backlog + индекс #35 · статус **интейк `[x]`** · SPEC ждёт go
+- Код / todo.md — не трогали (PHASE 0 only)
+- Связь: B1.1 full-screen статус `[x]`; эта задача — компактная шторка поверх каталога
 
 ### Сессия 2026-07-30 (MCP Fly · #34 SBP Autopay)
 

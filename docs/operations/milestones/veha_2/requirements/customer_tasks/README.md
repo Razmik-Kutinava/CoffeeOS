@@ -32,6 +32,7 @@
 | **Auth funnel cascade Flash Call×2 → SMS.ru** | 2-экрановый wizard + каскад Flash Call×2 → СМС (без Email/радиоканалов) | **интейк `[x]`** 2026-07-29 · SPEC `[ ]` ждёт go | [Рефакторинг воронки авторизации PWA Каскад Flash Call x2 SMS.md](Рефакторинг%20воронки%20авторизации%20PWA%20Каскад%20Flash%20Call%20x2%20SMS%20на%20базе%20SMS.ru.md) |
 | **T-Bank inline payment button** | Inline-оплата без redirect + динамические статусы кнопки (Init/Charge/GetState/Confirm) | **интейк `[x]`** 2026-07-29 · SPEC `[ ]` ждёт go | [Интеграция inline-оплаты Т-Банка с динамическими статусами внутри кнопки.md](Интеграция%20inline-оплаты%20Т-Банка%20с%20динамическими%20статусами%20внутри%20кнопки.md) |
 | **T-Kassa SBP Autopay AccountToken** | Автоплатежи СБП: привязка счёта (`AccountToken`), Zero-Click `ChargeQr`, fallback | **Checkout UI `[x]`** 2026-07-30 · MCP blocked | [Интеграция Автоплатежей СБП Т-Касса в PWA.md](Интеграция%20Автоплатежей%20СБП%20Т-Касса%20в%20PWA.md) |
+| **Order status compact sheet + Push** | Сквозная sticky-шторка статуса (peek/hidden) + ActionCable + Push/Wallet из POS | **интейк `[x]`** 2026-07-31 · SPEC `[ ]` ждёт go | [Интеграция статусной модели в компактную шторку PWA и Push.md](Интеграция%20статусной%20модели%20в%20компактную%20шторку%20PWA%20и%20Push.md) |
 
 **Порядок работ:** апрув ТЗ Hidden → **go** код · новое ТЗ UserCards (после `go`) · **B1.13 S4** · **B1.14-4** · **B2.2** · **B1.4**.
 
