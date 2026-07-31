@@ -2,13 +2,20 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-31 (PHASE 2 GREEN · Quick Repeat B1–B4)
+**Дата:** 2026-07-31 (PHASE 0/SPEC addendum · Quick Repeat + full-width status)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **Quick Repeat** GREEN B1–B4 `[x]` — service/API/cache v3/barista bust | **go** → RED F1–F3 (FE flag + hide) |
-| **#36** accordion receipt — Fly **v415** MCP PASS | апрув заказчика |
+| **Quick Repeat** GREEN B1–B4 `[x]` — service/API/cache v3/barista bust | RED F1–F3/layout → GREEN |
+| **#36** accordion receipt — Fly **v415**, visual feedback | full-width + modes + one-open MCP |
 | **#35** sticky status — Fly **v414** | апрув заказчика |
+
+### Сессия 2026-07-31 (PHASE 0/SPEC addendum · feedback 07)
+
+- Сохранён скрин заказчика `07_customer_feedback_status_sheet_not_full_width_2026-07-31.png`.
+- Root cause: `OrderStatusSheet` с `right: 7.5rem` / `max-width: 24.5rem` создаёт узкую колонку поверх CartSheet.
+- Канон: Quick Repeat скрыт при active во всех `hidden/peek/expanded`; status sheet = full viewport width; modes status = hidden/no orders, peek/collapsed, expanded/one receipt.
+- Баг записан в `ISSUES.md`; следующий substep — FE/layout RED, затем GREEN до MCP.
 
 ### Сессия 2026-07-31 (PHASE 2 GREEN · Quick Repeat B1–B4)
 
