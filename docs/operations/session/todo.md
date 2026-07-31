@@ -116,7 +116,7 @@
 - [x] A1–A2 presenter + active payload
 - [x] B1–B5 accordion + text receipt
 - [x] регрессия shop (focused) PASS
-- [ ] commit `feat: … [GREEN]`
+- [x] commit `feat: … [GREEN]` · `620ac066`
 
 ### PHASE 3: REVIEW
 - [ ] N+1 / RLS / rubocop
