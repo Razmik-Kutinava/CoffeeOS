@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-07-31 — feat: OrderStatusSheet inside CartSheet (not overlay)
+- Статус активных заказов — секция внутри `CartSheet` (`embedded`), не sibling fixed z-60 в `App`
+- CSS: relative flow, без отдельной «второй шторки»; modes/accordion/cable сохранены
+- Mount tests 5/5; JS order_status + terminal refresh PASS; `CART_SHEET_BUILD=prog36`
+- ТЗ: `customer_tasks/Статус заказа внутри шторки корзины не слой поверх.md`
+
 ## 2026-07-31 — deploy: Quick Repeat v417 + Fly MCP re-verify PASS
 - Push `develop` `6fa90731` · `fly deploy --remote-only` → **v417**
 - MCP Point A: full-width `390/390`; Quick Repeat hidden; peek/expanded; one-open

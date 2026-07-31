@@ -19,6 +19,9 @@
   import ActiveOrdersAccordion from "./ActiveOrdersAccordion.svelte"
   import { refreshFrequentProducts } from "../lib/frequentRepeatStore.js"
 
+  /** true — секция внутри CartSheet (не fixed overlay поверх шторки) */
+  let { embedded = true } = $props()
+
   const sheet = createOrderStatusSheetState()
   let orders = $state([])
   let mode = $state(ORDER_STATUS_SHEET_MODES.HIDDEN)
@@ -113,15 +116,18 @@
 {#if statusSheetMode !== ORDER_STATUS_SHEET_MODES.HIDDEN}
   <div
     class="oss"
+    class:embedded
     data-testid="shop-order-status-sheet"
     data-status-sheet-mode={statusSheetMode}
-    style="pointer-events:none"
+    data-status-embedded={embedded ? "true" : "false"}
+    style={embedded ? undefined : "pointer-events:none"}
   >
     <div
       class="oss__panel"
       class:scrollable
       class:expanded={panelExpanded}
-      style="pointer-events:auto"
+      class:embedded
+      style={embedded ? undefined : "pointer-events:auto"}
       role="status"
       aria-live="polite"
     >
@@ -143,6 +149,7 @@
 {/if}
 
 <style>
+  /* Legacy overlay (embedded=false) — не использовать на витрине */
   .oss {
     position: fixed;
     left: 0;
@@ -152,6 +159,18 @@
     display: flex;
     justify-content: center;
     padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+  /* Внутри CartSheet: flow-секция, не второй слой */
+  .oss.embedded {
+    position: relative;
+    left: auto;
+    right: auto;
+    bottom: auto;
+    z-index: auto;
+    display: block;
+    width: 100%;
+    flex-shrink: 0;
+    padding-bottom: 0;
   }
   .oss__panel {
     position: relative;
@@ -164,10 +183,21 @@
     max-height: 8.75rem;
     transition: max-height 0.3s ease;
   }
+  .oss__panel.embedded {
+    border-radius: 0;
+    box-shadow: none;
+    border-top: none;
+    border-bottom: 1px solid #3a3a3a;
+    background: transparent;
+    max-height: min(40vh, 16rem);
+  }
   .oss__panel.scrollable { overflow-y: auto; }
   .oss__panel.expanded {
     max-height: min(70vh, 32rem);
     overflow-y: auto;
+  }
+  .oss__panel.embedded.expanded {
+    max-height: min(50vh, 22rem);
   }
   .oss__conn { margin: 0 0 0.25rem; font-size: 0.65rem; color: #f0c070; }
   .oss__scroll-hint {
@@ -179,5 +209,8 @@
     font-size: 0.75rem;
     background: #2a2a2a;
     padding: 0 0.15rem;
+  }
+  .oss__panel.embedded .oss__scroll-hint {
+    background: transparent;
   }
 </style>

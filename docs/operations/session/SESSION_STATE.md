@@ -2,13 +2,20 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-31 (push/deploy/MCP · Quick Repeat v417)
+**Дата:** 2026-07-31 (Status inside cart sheet GREEN)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **Quick Repeat** Fly **v417** MCP **PASS** (hide + full-width + one-open) | апрув заказчика; optional visible-repeat MCP |
-| ISSUES QR/width | **resolved** v416; re-verify **v417** |
-| **#36** / **#35** | апрув заказчика |
+| **Status inside cart sheet** GREEN `[x]` — статус внутри CartSheet | push/deploy + MCP по апруву |
+| **Quick Repeat** Fly v417 MCP PASS | апрув заказчика |
+
+### Сессия 2026-07-31 (Status inside cart sheet)
+
+- Фидбек: «вписать в шторку, не слой сверху»
+- Mount: `OrderStatusSheet` → внутри `CartSheet` после gesture; убран из `App.svelte`
+- CSS `embedded`: `position:relative`, без z-60 overlay / отдельной «второй шторки»
+- Тесты: mount 5/5; JS 18+4 PASS; build marker `CART_SHEET_BUILD=prog36`
+- MCP/deploy — ждут явный апрув
 
 ### Сессия 2026-07-31 (push + fly deploy + MCP · Quick Repeat v417)
 

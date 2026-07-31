@@ -1,8 +1,20 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-31 (**Quick Repeat Fly v417 MCP PASS**)  
+**Дата:** 2026-07-31 (**Status inside cart sheet GREEN**)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev  
+
+### Status inside cart sheet (2026-07-31)
+
+| Что | Статус |
+|-----|--------|
+| Intake + SPEC + RED/GREEN | **`[x]`** |
+| `OrderStatusSheet` внутри `CartSheet` (embedded) | **`[x]`** |
+| Убран overlay mount из `App.svelte` | **`[x]`** |
+| Push + Fly deploy + MCP | **`[ ]`** |
+
+**ТЗ:** [`Статус заказа внутри шторки корзины не слой поверх.md`](../milestones/veha_2/requirements/customer_tasks/Статус%20заказа%20внутри%20шторки%20корзины%20не%20слой%20поверх.md)  
+**Дальше:** явный апрув → push/deploy → MCP.
 
 ### Quick Repeat Bottom Sheet — ревизия (2026-07-31)
 

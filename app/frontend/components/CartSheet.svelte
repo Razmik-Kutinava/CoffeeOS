@@ -22,6 +22,7 @@
     openEditCard
   } from "../lib/cartSheetStore.js"
   import RepeatSection from "./RepeatSection.svelte"
+  import OrderStatusSheet from "./OrderStatusSheet.svelte"
   import { initFrequentFromCache, frequentItems, hasActiveOrder } from "../lib/frequentRepeatStore.js"
   import { restoreGuestSession } from "../lib/restoreGuestSession.js"
   import { ctaAddCard } from "../lib/paymentMethodI18n.js"
@@ -385,6 +386,9 @@
       <div class="drag-handle h-1.5 w-12 rounded-full bg-[#777]" aria-hidden="true"></div>
     </div>
     {/if}
+
+    <!-- Статус активных заказов — внутри шторки, не overlay поверх -->
+    <OrderStatusSheet embedded={true} />
 
     <!-- EMPTY — надпись только без истории заказов; иначе «повторить» -->
     {#if mode === MODE_EMPTY || !count}

@@ -5,7 +5,6 @@
   import { onMount } from "svelte"
   import Header from "./components/Header.svelte"
   import CartSheet from "./components/CartSheet.svelte"
-  import OrderStatusSheet from "./components/OrderStatusSheet.svelte"
   import RouteLoading from "./components/RouteLoading.svelte"
   import SlowRequestOverlay from "./components/SlowRequestOverlay.svelte"
   import ShopPwaBanner from "./components/ShopPwaBanner.svelte"
@@ -155,5 +154,4 @@
     <Router {routes} options={{ hash: true }} />
   </main>
   <CartSheet />
-  <OrderStatusSheet />
 </div>
