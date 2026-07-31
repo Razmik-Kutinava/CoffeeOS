@@ -1,6 +1,6 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-31 (**#35 PHASE 0 intake — Order status compact sheet + Push**)  
+**Дата:** 2026-07-31 (**#35 PHASE 1 SPEC — Order status compact sheet + Push**)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev  
 
@@ -9,12 +9,15 @@
 | Что | Статус |
 |-----|--------|
 | Intake ТЗ + CBR + 5 скринов | **`[x]`** |
-| PHASE 1: SPEC (`todo.md`) | **`[ ]`** ждёт go |
-| RED / GREEN / REVIEW | **`[ ]`** |
+| PHASE 1: SPEC (`todo.md`) | **`[x]`** |
+| RED / GREEN / REVIEW | **`[ ]`** ждёт go на RED |
 
 **ТЗ:** [`Интеграция статусной модели в компактную шторку PWA и Push.md`](../milestones/veha_2/requirements/customer_tasks/Интеграция%20статусной%20модели%20в%20компактную%20шторку%20PWA%20и%20Push.md)  
 **Артефакты:** [`order_status_compact_sheet_push/`](../milestones/veha_2/artifacts/order_status_compact_sheet_push/) — скрины = канон приёмки UI  
-**Дальше:** go → PHASE 1: SPEC (блоки A/B/C из ТЗ → todo.md).
+**todo:** [`SESSION todo.md`](todo.md)  
+**Дальше:** go → PHASE 2 RED (A1 channel contract / A2 sticky sheet).  
+
+**SPEC кратко:** reuse GuestOrderChannel + FCM notifier; новый sticky `OrderStatusSheet`; `ready_notified_at` + Migration Gate; Apple Wallet → backlog unless go.
 
 ### T-Kassa SBP Autopay AccountToken #34 (2026-07-30)
 

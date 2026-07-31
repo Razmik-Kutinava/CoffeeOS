@@ -2,14 +2,21 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-31 (#35 PHASE 0 intake · Order status compact sheet + Push)
+**Дата:** 2026-07-31 (#35 PHASE 1 SPEC · Order status compact sheet + Push)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#35** интейк `[x]` — ТЗ + 5 скринов заказчика | **go** → PHASE 1: SPEC (`todo.md`) |
+| **#35** SPEC [x] — todo.md блоки A/B/C | **go** → PHASE 2 RED (A1/A2) |
 | **#34** MCP Fly: UI OK; Setup **3013** + Charge **10** | FIX Recurrent+Charge в ЛК T-Bank |
 | #32/#34 live Zero-Click blocked терминалом | Ждать ответ T-Bank |
 
+### Сессия 2026-07-31 (PHASE 1 SPEC · #35)
+
+- Reuse: `Shop::GuestOrderChannel` + `GuestOrderBroadcaster` + `orderStatusProgress.js` + FCM push (Solid Queue)
+- Gaps: sticky `OrderStatusSheet` (home+product), multi>2 scroll, reconnect GET, `ready_notified_at` (Migration Gate), Wallet backlog
+- Не создавать параллельный OrderStatusChannel; CartSheet не раздувать; FSM ready→preparing не открывать
+- `todo.md` переписан под #35; код не писали
+- RED ждёт намерения
 ### Сессия 2026-07-31 (PHASE 0 · #35 Order status compact sheet + Push)
 
 - Интейк заказчика: сквозная sticky-шторка статуса (peek/hidden) + ActionCable + Push/Wallet из POS

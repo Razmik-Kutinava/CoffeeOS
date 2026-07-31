@@ -1,5 +1,10 @@
 ﻿# CHANGELOG
 
+## 2026-07-31 — docs: SPEC #35 Order status compact sheet + Push
+- `todo.md` — EXISTING/Gaps, маппинг GuestOrderChannel/FCM/Solid Queue, блоки A/B/C
+- Sticky sheet + multi>2 + ready_notified_at (Migration Gate); Wallet backlog
+- Код не менялся; RED ждёт go
+
 ## 2026-07-31 — docs: intake #35 Order status compact sheet + Push
 - ТЗ: `customer_tasks/Интеграция статусной модели в компактную шторку PWA и Push.md`
 - Артефакты: `artifacts/order_status_compact_sheet_push/` — 5 скринов заказчика (канон UI)

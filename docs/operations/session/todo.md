@@ -1,119 +1,171 @@
-# todo — T-Kassa SBP Autopay AccountToken (#34)
+# todo — Order status compact sheet + Push (#35)
 
-**ТЗ:** [`customer_tasks/Интеграция Автоплатежей СБП Т-Касса в PWA.md`](../milestones/veha_2/requirements/customer_tasks/Интеграция%20Автоплатежей%20СБП%20Т-Касса%20в%20PWA.md)  
-**Артефакты:** `artifacts/tbank_sbp_autopayments_account_token/`  
-**Фаза:** PHASE 3 REVIEW · закрыт (Checkout UI backlog)
+**ТЗ:** [`customer_tasks/Интеграция статусной модели в компактную шторку PWA и Push.md`](../milestones/veha_2/requirements/customer_tasks/Интеграция%20статусной%20модели%20в%20компактную%20шторку%20PWA%20и%20Push.md)  
+**Артефакты (канон UI):** [`artifacts/order_status_compact_sheet_push/`](../milestones/veha_2/artifacts/order_status_compact_sheet_push/)  
+**Фаза:** PHASE 1: SPEC · RED ждёт намерения
 
 ---
 
 ## SPEC (канон CoffeeOS)
 
 ### Бизнес-цель
-Zero-Click checkout для постоянных гостей: первая оплата СБП с привязкой счёта (`AccountToken`) → повторные оплаты через `ChargeQr` без ухода в банк; при soft-decline — fallback на обычный СБП deep link **без** удаления токена.
+Не блокировать гостя на full-screen `/order/:id`. Статус активного заказа — в **сквозной sticky-шторке** (peek/hidden) поверх каталога и карточки товара; бариста меняет статус на табло → ActionCable + Push; при «Готов» — ровно 1 пуш (идемпотентность).
 
 ### Глобальные ограничения (из ТЗ)
-- Сумма заказа **только** на бэкенде (из БД по order), не с FE.
-- Пароль терминала / Token SHA-256 — **только** backend ENV (`TBANK_*`).
-- `AccountToken` **не** удалять при soft decline (нет средств, лимиты); удаление — явная отвязка или fatal («счёт закрыт»).
-- Без сторонних SDK для `GetAddAccountQRState` / `ChargeQr` — прямые HTTP в `TbankAdapter` (или соседний сервис).
-- Hot-path: `order_creator`, `tbank_adapter`, `tbank_controller` — минимальный diff.
+- Шторка **не** блокирует клики по каталогу / карточкам (`pointer-events` / z-index).
+- **Не трогать** базовую схему `orders.status` и основные связи; для C1 — только `ready_notified_at` **или** `order_push_logs` (Migration Gate + `go`).
+- Real-time — **только** ActionCable (штатный).
+- Push / `.pkpass` / тяжёлое — **ActiveJob** (в CoffeeOS = **Solid Queue**, не Sidekiq/GoodJob). POS не блокируется.
 
 ### Что уже есть (не дублировать)
+
 | Компонент | Путь | Роль |
 |---|---|---|
-| Init + Token SHA-256 | `Payments::TbankAdapter` | `init_payment`, `build_token`, `verify_notification` |
-| Charge (карта RebillId) | `TbankAdapter#charge` / `#charge_recurrent` | **не** ChargeQr |
-| GetQr → deep link | `Payments::TbankQrFetcher` + `Shop::SbpPaymentInitiator` | manual SBP, `recurrent: false` |
-| SBP FE | `shopSbpPay.js`, Checkout SBP path | `POST /shop/api/payments/sbp/init` |
-| Webhook + idempotency | `Callbacks::TbankController` + `TbankCallbackJob` | по `PaymentId:Status`; RebillId → `SavedCardStore` |
-| UserCards schema | `mobile_payment_methods` | `payment_type` ∈ `card\|sbp\|ya_pay`; `card_token` = RebillId для card |
-| One-click карта | `Shop::OneClickPaymentService` | Init→Charge(RebillId) — паттерн для ChargeQr |
+| Guest WS channel | `app/channels/shop/guest_order_channel.rb` | `stream_for order`; auth reconnect_token / session |
+| Broadcast из POS | `Shop::GuestOrderBroadcaster` ← `Barista::OrderStatusUpdateService` | payload `status_changed` + order_id/status (+ meta) |
+| FE cable | `app/frontend/lib/shopOrderCable.js` | subscribe + retry 5s; used by OrderStatus / settle |
+| 4-step progress | `app/frontend/lib/orderStatusProgress.js` | Принят→Оплачен→Готовится→Готов |
+| Full-screen B1.1 | `app/frontend/routes/OrderStatus.svelte` (~577) | `/order/:id` — **оставить** как detail; не раздувать |
+| Cart peek | `CartSheet.svelte` (~586) + `ProductCartPeek.svelte` | паттерн peek/hidden; **корзина**, не статус |
+| Push pipeline | `OrderStatusPushNotifier` → `SendPushNotificationJob` → `FcmClient` | FCM; тексты B2.1 близки к ТЗ |
+| Order FSM | `Order::VALID_TRANSITIONS` | `ready → preparing` **запрещён** |
+| ActiveJob | Solid Queue (prod) | маппинг ТЗ Sidekiq/GoodJob |
+| Order show API | `GET /shop/api/orders/:id` | refresh одного заказа |
+| Session LS | `shopGuestSession.js` | `lastGuestOrderId` + reconnect_token |
 
 ### Gaps (делать)
-1. **BE API methods:** `GetAddAccountQRState`, `ChargeQr` (новые методы; `tbank_adapter.rb` уже **260** строк → **не раздувать** — вынести в `Payments::TbankSbpAutopay` или тонкие wrappers рядом).
-2. **BE Setup:** Init SBP с `Recurrent=Y` + `DATA={"QR":"true"}` при `save_sbp_account: true` (расширить `SbpPaymentInitiator` / отдельный сервис).
-3. **BE storage:** `AccountToken` в `mobile_payment_methods` (`payment_type: "sbp"`, `card_token` = AccountToken); идемпотентность по `RequestKey` (Redis key или колонка + unique).
-4. **BE webhook:** после успеха + `RequestKey` → `GetAddAccountQRState` → persist AccountToken (массив = несколько строк MPM на customer).
-5. **BE charge:** `POST /shop/api/payments/sbp/charge` (маппинг ТЗ `/api/payments/charge`) — сумма из order, Init→ChargeQr; ошибки: network vs `CHARGE_DECLINED` (+ fatal flag).
-6. **FE Setup:** чекбокс «Привязать счет…» + `save_sbp_account`; toast «Сервис временно недоступен» на 4xx/5xx.
-7. **FE Zero-Click:** дефолт «Ваш счет СБП» если есть token; fullscreen loader → success / toast reconnect.
-8. **FE Fallback:** `CHARGE_DECLINED` → toast + manual `sbp/init` без bind; token не трогать (soft).
+
+1. **FE sticky widget** — новый компонент(ы) статуса в peek/hidden на Home + Product (+ App mount); канон = 5 скринов.
+2. **Multi-order** — ≥2 активных полос; scroll если **>2** (подпись заказчика).
+3. **Coexistence с CartSheet** — оба внизу; статус не должен ломать peek корзины / клики; layout/padding контента.
+4. **A3 reconnect GET** — при `connected`/online: фоновый refresh активных заказов; 404/500 → hide/toast + backoff.
+5. **API active orders** — сейчас один `lastGuestOrderId`; для multi нужна `GET …/orders/active` (или history filter) + хранение списка id.
+6. **Push copy** — выровнять тексты под ТЗ («Бариста уже готовит…» / «Ваш кофе готов! Заберите на кассе») без ломки B2.1 acceptance без апрува — в GREEN уточнить в notifier.
+7. **C1/C2 idempotency** — `ready_notified_at` (предпочтительно колонка на `orders`) + atomic skip duplicate ready-push; Cable всё равно шлёт.
+8. **B3 Apple Wallet / pkpass / APNs** — **нет кода**; отдельный подшаг, можно отложить в backlog если scope велик (зафиксировать в REVIEW/CBR).
+9. **Не создавать** параллельный `OrderStatusChannel` — маппинг на `Shop::GuestOrderChannel` (см. ниже).
+10. **Не** `after_update_commit` на всей модели Order вслепую — оставить триггер в broadcaster/service (уже есть); при желании тонкие job-обёртки вокруг notifier.
 
 ### Маппинг путей (ТЗ → CoffeeOS)
 
 | ТЗ (шаблон) | CoffeeOS |
 |---|---|
-| `POST /api/payments/init` | `POST /shop/api/payments/sbp/init` (+ `save_sbp_account`) **или** отдельный `sbp/bind_init` |
-| `POST /api/payments/charge` | `POST /shop/api/payments/sbp/charge` (новый) |
-| Webhook NotificationURL | `Callbacks::TbankController` (+ ветка RequestKey / AccountToken) |
-| AccountToken storage | `mobile_payment_methods` `payment_type=sbp` + `card_token` |
-| Backend tests | `test/services/payments/tbank_sbp_autopay_test.rb`, `test/services/shop/sbp_*_test.rb`, `test/integration/shop/api/sbp_autopay_*_test.rb`, `test/controllers/callbacks/tbank_controller_test.rb` |
-| Frontend tests | `test/javascript/shop_sbp_autopay_*.mjs` (`node --test`) |
-| Vitest/React/`src/…` | **не использовать** — канон Rails + Svelte + `node --test` |
+| `OrderStatusChannel` | **`Shop::GuestOrderChannel`** (+ при необходимости alias/doc); payload уже шире `{order_id,status}` |
+| `PreparingPushJob` / `ReadyPushJob` | Расширить `OrderStatusPushNotifier` + опц. тонкие `Shop::PreparingPushJob` / `ReadyPushJob` → тот же FCM path; **Solid Queue** |
+| Web Push | **FCM** (`FcmClient` + `firebasePush.js`); VAPID stub в SW не трогать как основной путь |
+| Apple Wallet `.pkpass` | **нет** — новый scope (B3-Wallet) или backlog |
+| `ready_notified_at` / `order_push_logs` | DDL: предпочтительно **`orders.ready_notified_at`** (nullable timestamptz) |
+| `spec/…` / Vitest/React | **не использовать** |
+| Backend tests | `test/channels/shop/…`, `test/services/shop/…`, `test/services/barista/…`, `test/integration/shop/…` |
+| Frontend tests | `test/javascript/order_status_sheet_*.mjs` (`node --test`) |
+| Sticky widget | `app/frontend/components/OrderStatusSheet.svelte` (+ lib `orderStatusSheetStore.js` / `orderStatusActive.js`) |
+| POS soft Cable fail | Сегодня broadcaster **rescue** — POS не 500 при Cable down. ТЗ хочет hard-fail — **не менять** без явного апрува (риск регресса табло); в A1 зафиксировать soft-fail как канон CoffeeOS |
 
-### Архитектура GREEN (по шагам ТЗ)
+### Архитектура GREEN (по блокам ТЗ)
 
 | Шаг | Слой | Код (цель) | Тесты (RED→GREEN) |
 |-----|------|------------|-------------------|
-| 1 Setup | BE+FE | `save_sbp_account` → Init Recurrent+QR → GetQr deep link; checkbox + toast 4xx/5xx | adapter/initiator unit + sbp_init integration + JS checkbox/toast |
-| 2 Webhook | BE | verify → `GetAddAccountQRState` → append AccountToken; idempotent `RequestKey`; HTTP 200 | callback + store idempotency tests |
-| 3 Zero-Click | BE+FE | `sbp/charge` Init→ChargeQr; UI default SBP account + loader → paid | charge service + API + JS FSM |
-| 4 Fallback | BE+FE | `CHARGE_DECLINED` (+ soft/fatal); toast + manual init; token keep on soft | decline mapping + FE state machine |
+| **A1** | BE | Reuse GuestOrderChannel + GuestOrderBroadcaster; документировать контракт payload; не ломать POS soft-fail | channel + broadcaster (+ assert payload keys) |
+| **A2** | FE | `OrderStatusSheet` sticky peek/hidden; mount в `App.svelte` рядом с CartSheet; reuse `orderProgressView`; z-index/`pointer-events` так, чтобы каталог кликабелен; 1–2 полосы без scroll, >2 — scroll | JS: render steps, multi>2 scroll flag, pointer-events policy |
+| **A3** | FE(+BE) | On cable reconnect / `online`: GET active order(s); 404→hide+toast; 500→error+backoff | JS reconnect refresh; integration API active |
+| **B1** | BE | При `preparing`/`ready` — async job (существующий или split); **не** блокировать POS | notifier enqueue tests |
+| **B2** | BE | Preparing push body по ТЗ (или B2.1 + note); Solid Queue | `order_status_push_notifier_test` |
+| **B3** | BE | Ready FCM; Wallet — **отдельный go/backlog** если нет сертификатов | ready job + skip Wallet stub |
+| **C1** | BE+DDL | `ready_notified_at` после успешного claim перед send | migration + model/service |
+| **C2** | BE | `UPDATE … WHERE ready_notified_at IS NULL` → skip push/Wallet; Cable всегда; FSM `ready→preparing` не открывать | idempotency race test |
+
+### UI / скрины (критерий приёмки)
+
+| Скрин | Требование |
+|---|---|
+| `01_home_peek_status_bar` | Главный / витрина: peek прогресс + каталог доступен |
+| `02` / `03_product_*` | Карточка товара: статус внизу; add/pay не блокируются бессмысленно |
+| `04` / `05_multi_*` | ≥2 статусов; scroll если **>2** |
+| Подпись «если заказ еще» | **Обрыв** — трактовать как «можно заказать ещё при активном заказе» (уже в A2); уточнить у заказчика при MCP |
+
+### Coexistence CartSheet ↔ StatusSheet (решение SPEC)
+
+- **Вариант (канон):** StatusSheet — отдельный sticky слой над safe-area; при активных заказах занимает нижнюю полосу peek; CartSheet peek/expanded **остаётся** для корзины (как сейчас), с `padding-bottom` / stack, чтобы оба не перекрывали клики каталога вне своих hit-area.
+- **Не** вшивать прогресс внутрь `CartSheet.svelte` (уже >200) — новый компонент.
+- Full-screen `/order/:id` — оставить; deep-link / «детали» со шторки могут вести туда (кнопки на скринах — placeholder «кнопка с текстом» → в SPEC: primary = открыть OrderStatus / secondary = TBD, не выдумывать CTA без заказчика).
 
 ### Storage / Migration Gate
-- **Предпочтительно без DDL:** reuse `mobile_payment_methods` (`payment_type: sbp`, `card_token` = AccountToken). Несколько счетов = несколько строк.
-- **Идемпотентность RequestKey:** Redis `tbank:sbp_account:#{RequestKey}` (как callback PaymentId) **или** колонка `external_request_key` + unique — **DDL только после явного go**.
-- Fatal «счёт закрыт» → `is_active=false` (не hard delete), если Т-Касса отдаёт fatal code.
+
+| Что | Решение |
+|---|---|
+| `orders.ready_notified_at` | **Да** (nullable) — проще atomic claim; **DDL только после `go`** |
+| `order_push_logs` | Альтернатива; не нужна если есть колонка |
+| Enum / связи `orders` | **Не трогать** |
+| C2 flip-flop preparing↔ready | FSM **не** менять; идемпотентность на повторный enqueue / double ready / job retry |
 
 ### Лимиты файлов / RLS
+
 | Файл | Сейчас | Правило |
 |---|---|---|
-| `tbank_adapter.rb` | ~260 (>200) | **не добавлять** ChargeQr/GetAddAccountQRState внутрь монолита — новый `payments/tbank_sbp_autopay.rb` (или 2 тонких метода max + go на сплит) |
-| `Checkout.svelte` | ~670 | UI чекбокс/метод — partial / lib, не раздувать route |
-| `shopSbpPay.js` | ~162 | autopay FSM → `shopSbpAutopay.js` (новый) |
-| Tenant | — | все shop endpoints с `Current.tenant_id` / RLS как существующие payments |
+| `CartSheet.svelte` | ~586 | **не раздувать** — статус отдельно |
+| `OrderStatus.svelte` | ~577 | **не раздувать** — detail only; shared lib |
+| `orderStatusProgress.js` | ~61 | reuse; иконки под скрины можно в sheet CSS |
+| `App.svelte` | — | тонкий mount `<OrderStatusSheet />` |
+| Tenant / RLS | — | shop API + channel как сейчас (`Current.tenant_id`, guest reconnect) |
 
 ### Риски / блокеры
+
 | Риск | Влияние |
 |---|---|
-| Терминал T-Bank: Charge/Recurrent **сейчас заблокирован** (#32 error 10) | Live MCP SUCCESS #34 тоже blocked до включения методов в ЛК; код+моки — да |
-| `GetAddAccountQRState` / `ChargeQr` — нет в текущем adapter | Нужны официальные контракты T-Bank (поля ответа) |
-| Путаница с #27/#33 card RebillId | Жёстко: SBP AccountToken ≠ card RebillId; разные `payment_type` |
+| CartSheet + StatusSheet оба sticky | Сложный layout; регрессия peek/свайпа корзины → регрессия зоны shop |
+| Multi-order без API | Нужен `orders/active` или клиентский список id |
+| Apple Wallet | Нет инфры/сертификатов → backlog B3-Wallet |
+| Тексты push ≠ B2.1 | Менять только с пометкой в DEMO_FEEDBACK / апрувом |
+| Cable hard-fail POS (ТЗ) | Конфликт с soft-rescue — **оставить soft** |
+| Migration без go | Стоп на C1 |
 
-### Регрессия зоны (после GREEN)
-```
-bin/rails test test/integration/shop/api/qa_section_2_3_payment_cart_test.rb \
-  test/integration/shop/api/qa_section_2_3_stage5_e2e_test.rb \
-  test/services/shop/order_creator_test.rb \
-  test/controllers/callbacks/tbank_controller_test.rb \
-  test/services/payments/tbank_adapter_test.rb \
-  test/integration/shop/api/sbp_payment_init_test.rb
-```
-+ JS: `node --test test/javascript/shop_sbp_*.mjs`
+### Открытые вопросы (не блокируют SPEC→RED A1/A2)
 
-### Exit Criteria (CoffeeOS)
-1. Тесты шагов 1–4 зелёные + регрессия зоны PASS.
-2. Rubocop на изменённом Ruby; JS без падений `node --test`.
-3. AccountToken persist (MPM `sbp`) + idempotent RequestKey.
-4. ENV уже `TBANK_TERMINAL_KEY` / `TBANK_PASSWORD` — сверить `.env.example` (не дублировать `TERMINAL_*` из шаблона ТЗ).
+1. Точный текст CTA на оранжевых кнопках скринов («КУПИТЬ В 1 КЛИК» vs «кнопка с текстом»).
+2. «если заказ еще» — полный смысл фразы заказчика.
+3. Делать ли B3 Wallet в этом эпике или backlog.
+4. Нужен ли hard-fail POS при Cable down (сейчас soft) — **по умолчанию нет**.
 
 ---
 
-## Чеклист шагов
+## Чеклист выполнения (SBR)
 
-- [x] **Шаг 1:** Setup — Init+Recurrent+QR + checkbox `save_sbp_account` + toast (Checkout UI `[x]`)
-- [x] **Шаг 2:** Webhook — GetAddAccountQRState + AccountToken + RequestKey idempotency
-- [x] **Шаг 3:** Zero-Click — `sbp/charge` ChargeQr + UI loader/success FSM
-- [x] **Шаг 4:** Fallback — `CHARGE_DECLINED` soft/fatal + FSM declined→manual
+### PHASE 1: SPEC
+- [x] Анализ EXISTING vs MISSING
+- [x] Маппинг ТЗ → CoffeeOS
+- [x] todo.md + SESSION_STATE
+- [ ] RED — ждёт намерения
+
+### PHASE 2: BUILD
+
+#### A — Real-time виджет
+- [ ] A1 RED/GREEN — GuestOrderChannel contract (+ tests)
+- [ ] A2 RED/GREEN — OrderStatusSheet sticky peek (home+product), non-blocking
+- [ ] A2b — multi-order + scroll >2
+- [ ] A3 RED/GREEN — reconnect GET refresh + error/toast/backoff
+
+#### B — Push
+- [ ] B1/B2 — preparing push async (reuse notifier/job; copy)
+- [ ] B3 — ready FCM; Wallet = backlog unless go
+- [ ] Регрессия: `order_status_push_notifier` + barista status update
+
+#### C — Idempotency
+- [ ] C1 — Migration Gate `ready_notified_at` + `go` → DDL
+- [ ] C2 — atomic claim; skip duplicate push; Cable OK
+
+### PHASE 3: REVIEW
+- [ ] N+1/RLS/rubocop; регрессия `test/integration/shop/`
+- [ ] MCP Fly vs скрины артефактов
+- [ ] CHANGELOG / HANDOFF / CBR статус
 
 ---
 
-## Статус
+## Команды проверки (после GREEN)
 
-| Фаза | Статус |
-|---|---|
-| PHASE 0 intake | `[x]` `48aba0c6` |
-| PHASE 1 SPEC | `[x]` |
-| PHASE 2 RED | `[x]` `e1d73dc5` |
-| PHASE 2 GREEN | `[x]` `1268bb45` |
-| PHASE 3 REVIEW | `[x]` ownership+settle |
+```text
+bin/rails test test/channels/shop/guest_order_channel_test.rb test/services/shop/guest_order_broadcaster_test.rb test/services/shop/order_status_push_notifier_test.rb test/services/barista/order_status_update_service_test.rb
+bin/rails test test/integration/shop/
+node --test test/javascript/order_status_sheet_*.mjs
+```
+
+Регрессия зоны shop: `bin/rails test test/integration/shop/`

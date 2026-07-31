@@ -97,5 +97,6 @@
 - Интейк 2026-07-31. Скрины заказчика: `artifacts/order_status_compact_sheet_push/screenshots/` (5 шт.) — **канон приёмки UI**: результат должен совпасть со скринами.
 - Связь с B1.1 (экран статуса + прогресс-бар `[x]` 2026-06): эта задача — **сквозная компактная шторка** (hidden/peek) поверх каталога/карточки + push из POS, а не отдельный full-screen экран ожидания.
 - Пути тестов в ТЗ (`spec/`, Vitest/React/`src/components`) — шаблон заказчика; в CoffeeOS канон: Rails `test/` + Svelte `app/frontend/` + `node --test` (маппинг в PHASE 1: SPEC).
-- Фраза заказчика «если заказ еще» — обрыв в чате; уточнить в SPEC при go.
+- Фраза заказчика «если заказ еще» — обрыв в чате; в SPEC трактуем как «можно заказать ещё»; уточнить при MCP.
 - Допускается `ready_notified_at` / `order_push_logs` — Migration Gate + `go` перед DDL.
+- **SPEC 2026-07-31:** `docs/operations/session/todo.md` (#35) — reuse GuestOrderChannel/FCM; sticky sheet новый; Wallet backlog.
