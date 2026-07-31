@@ -2,7 +2,7 @@
 
 **ТЗ:** [`customer_tasks/Интеграция статусной модели в компактную шторку PWA и Push.md`](../milestones/veha_2/requirements/customer_tasks/Интеграция%20статусной%20модели%20в%20компактную%20шторку%20PWA%20и%20Push.md)  
 **Артефакты (канон UI):** [`artifacts/order_status_compact_sheet_push/`](../milestones/veha_2/artifacts/order_status_compact_sheet_push/)  
-**Фаза:** PHASE 1: SPEC · RED ждёт намерения
+**Фаза:** PHASE 2: BUILD · RED `[x]` · GREEN ждёт намерения
 
 ---
 
@@ -134,24 +134,29 @@
 - [x] Анализ EXISTING vs MISSING
 - [x] Маппинг ТЗ → CoffeeOS
 - [x] todo.md + SESSION_STATE
-- [ ] RED — ждёт намерения
+- [x] RED — тесты написаны (ожидаемо красные)
 
 ### PHASE 2: BUILD
 
 #### A — Real-time виджет
-- [ ] A1 RED/GREEN — GuestOrderChannel contract (+ tests)
-- [ ] A2 RED/GREEN — OrderStatusSheet sticky peek (home+product), non-blocking
-- [ ] A2b — multi-order + scroll >2
-- [ ] A3 RED/GREEN — reconnect GET refresh + error/toast/backoff
+- [x] A1 RED — `guest_order_broadcaster_sheet_contract_test` (нужен `order_number` в payload)
+- [ ] A1 GREEN
+- [x] A2 RED — `order_status_sheet_test.mjs` + mount acceptance
+- [ ] A2 GREEN — OrderStatusSheet sticky peek (home+product), non-blocking
+- [x] A2b RED — `shouldScrollStatusList` >2 в JS
+- [ ] A2b GREEN
+- [x] A3 RED — `active_orders_test` (route `orders/active`)
+- [ ] A3 GREEN — reconnect GET refresh + error/toast/backoff
 
 #### B — Push
-- [ ] B1/B2 — preparing push async (reuse notifier/job; copy)
-- [ ] B3 — ready FCM; Wallet = backlog unless go
+- [x] B/C RED — `ready_push_claim_test` (ReadyPushClaim + ready_notified_at)
+- [ ] B1/B2 GREEN — preparing push async (reuse notifier)
+- [ ] B3 GREEN — ready FCM; Wallet = backlog unless go
 - [ ] Регрессия: `order_status_push_notifier` + barista status update
 
 #### C — Idempotency
-- [ ] C1 — Migration Gate `ready_notified_at` + `go` → DDL
-- [ ] C2 — atomic claim; skip duplicate push; Cable OK
+- [ ] C1 — Migration Gate `ready_notified_at` + `go` → DDL (RED ждёт колонку)
+- [ ] C2 GREEN — atomic claim; skip duplicate push; Cable OK
 
 ### PHASE 3: REVIEW
 - [ ] N+1/RLS/rubocop; регрессия `test/integration/shop/`

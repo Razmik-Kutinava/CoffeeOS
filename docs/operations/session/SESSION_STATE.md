@@ -2,14 +2,18 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-31 (#35 PHASE 1 SPEC · Order status compact sheet + Push)
+**Дата:** 2026-07-31 (#35 PHASE 2 RED · Order status compact sheet + Push)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#35** SPEC [x] — todo.md блоки A/B/C | **go** → PHASE 2 RED (A1/A2) |
-| **#34** MCP Fly: UI OK; Setup **3013** + Charge **10** | FIX Recurrent+Charge в ЛК T-Bank |
-| #32/#34 live Zero-Click blocked терминалом | Ждать ответ T-Bank |
+| **#35** RED [x] — тесты красные (ожидаемо) | **go** → PHASE 2 GREEN |
+| C1 DDL `ready_notified_at` | Migration Gate — нужен go перед GREEN C |
 
+### Сессия 2026-07-31 (PHASE 2 RED · #35)
+
+- RED тесты: sheet contract (order_number), ReadyPushClaim, orders/active, OrderStatusSheet mount, orderStatusSheet.js
+- Rails: 10 runs, 6 fail + 3 error (ожидаемо); JS: MODULE_NOT_FOUND orderStatusSheet.js
+- Код реализации не писали; CHANGELOG/HANDOFF не трогали (RED-substep)
 ### Сессия 2026-07-31 (PHASE 1 SPEC · #35)
 
 - Reuse: `Shop::GuestOrderChannel` + `GuestOrderBroadcaster` + `orderStatusProgress.js` + FCM push (Solid Queue)

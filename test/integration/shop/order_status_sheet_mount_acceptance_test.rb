@@ -1,0 +1,25 @@
+# frozen_string_literal: true
+
+require "test_helper"
+
+# #35 A2 — sticky OrderStatusSheet смонтирован в App, не в CartSheet [TDD RED]
+class Shop::OrderStatusSheetMountAcceptanceTest < ActionDispatch::IntegrationTest
+  test "#35 App.svelte mounts OrderStatusSheet component" do
+    app = File.read(Rails.root.join("app/frontend/App.svelte"))
+    assert_match(/OrderStatusSheet/, app, "#35 sticky sheet must mount in App.svelte")
+    assert_match(
+      %r{components/OrderStatusSheet\.svelte|from ["'].*OrderStatusSheet},
+      app
+    )
+  end
+
+  test "#35 OrderStatusSheet.svelte exists" do
+    path = Rails.root.join("app/frontend/components/OrderStatusSheet.svelte")
+    assert path.exist?, "#35 missing app/frontend/components/OrderStatusSheet.svelte"
+  end
+
+  test "#35 CartSheet does not embed order progress steps (separate sheet)" do
+    cart = File.read(Rails.root.join("app/frontend/components/CartSheet.svelte"))
+    assert_no_match(/orderProgressView|PROGRESS_STEPS/, cart)
+  end
+end

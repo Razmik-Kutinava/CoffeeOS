@@ -1,0 +1,79 @@
+# frozen_string_literal: true
+
+require "test_helper"
+
+# #35 A3 — GET /shop/api/orders/active для реконнекта sticky-шторки [TDD RED]
+class Shop::Api::ActiveOrdersTest < ActionDispatch::IntegrationTest
+  include TestFactories
+  include ShopEmailTestHelper
+
+  setup do
+    @tenant = create_tenant!
+    @customer = create_mobile_customer!(email: "active-orders-#{SecureRandom.hex(3)}@example.com")
+    @email = @customer.email
+
+    @active = Order.create!(
+      tenant_id: @tenant.id,
+      customer_id: @customer.id,
+      customer_name: "Active",
+      order_number: "202607-3503a",
+      source: :mobile,
+      status: :preparing,
+      total_amount: 100,
+      discount_amount: 0,
+      final_amount: 100
+    )
+    @ready = Order.create!(
+      tenant_id: @tenant.id,
+      customer_id: @customer.id,
+      customer_name: "Ready",
+      order_number: "202607-3503b",
+      source: :mobile,
+      status: :ready,
+      total_amount: 120,
+      discount_amount: 0,
+      final_amount: 120
+    )
+    @issued = Order.create!(
+      tenant_id: @tenant.id,
+      customer_id: @customer.id,
+      customer_name: "Issued",
+      order_number: "202607-3503c",
+      source: :mobile,
+      status: :issued,
+      total_amount: 90,
+      discount_amount: 0,
+      final_amount: 90
+    )
+  end
+
+  test "#35 GET orders/active returns accepted preparing ready for session customer" do
+    verify_shop_email!(tenant_id: @tenant.id, email: @email)
+
+    get "/shop/api/orders/active", headers: shop_tenant_headers(@tenant.id), as: :json
+
+    assert_response :success
+    body = response.parsed_body
+    orders = body.is_a?(Array) ? body : body["orders"]
+    assert_kind_of Array, orders
+    ids = orders.map { |o| o["id"] || o["order_id"] }
+    assert_includes ids, @active.id
+    assert_includes ids, @ready.id
+    assert_not_includes ids, @issued.id
+
+    preparing = orders.find { |o| (o["id"] || o["order_id"]) == @active.id }
+    assert_equal "preparing", preparing["status"]
+    assert preparing.key?("order_number")
+  end
+
+  test "#35 GET orders/active without session returns empty or unauthorized" do
+    get "/shop/api/orders/active", headers: shop_tenant_headers(@tenant.id), as: :json
+
+    assert_includes [200, 401], response.status
+    if response.status == 200
+      body = response.parsed_body
+      orders = body.is_a?(Array) ? body : body["orders"]
+      assert_equal [], orders
+    end
+  end
+end
