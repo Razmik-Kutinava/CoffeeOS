@@ -2,13 +2,21 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-31 (PHASE 2 GREEN · Quick Repeat F1–F3)
+**Дата:** 2026-07-31 (PHASE 3 REVIEW · Quick Repeat active-order hide)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **Quick Repeat** GREEN F1–F3 `[x]` — hasActiveOrder + CartSheet gate + Cable refresh | **go** → PHASE 3 REVIEW (+ layout full-width feedback 07?) |
-| GREEN B1–B4 `[x]` | — |
-| **#36** visual feedback 07 | full-width status sheet |
+| **Quick Repeat** REVIEW `[x]` — hide при Order.active + full-width status | **push/deploy** + MCP vs скрины 01–07 |
+| ISSUES Fly v415 QR/width | 🟡 code done · MCP pending |
+| **#36** / **#35** | апрув заказчика |
+
+### Сессия 2026-07-31 (PHASE 3 REVIEW · Quick Repeat)
+
+- Suite: Rails **89/89** + JS **18/18**; rubocop 3 Ruby files clean
+- Sanity: N+1 PASS (exists? + flat plucks + index_by); RLS PASS (tenant scoped); no DDL
+- File-size: service 173 (warn); store 118 OK; OrderStatusSheet 183 (warn); CartSheet 626 / RepeatSection 253 — legacy, не раздували
+- Full-width: `OrderStatusSheet` left/right 0, width 100%, z60
+- MCP Fly / `[x]` заказчика — после deploy-апрува
 
 ### Сессия 2026-07-31 (PHASE 2 GREEN · Quick Repeat F1–F3)
 

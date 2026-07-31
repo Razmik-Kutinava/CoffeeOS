@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-07-31 — review: Quick Repeat hide on active order + full-width status
+- BE: `HIDE_REPEAT_STATUSES`, `has_active_order`, cache `shop/freq/v3`, barista bust
+- FE: `hasActiveOrder` / CartSheet `showRepeat`; Cable terminal → refresh frequent
+- OrderStatusSheet full viewport width (`left/right:0`, z60)
+- Suite 89 Rails + 18 JS PASS; rubocop clean; ISSUES Fly QR/width → code done (MCP after deploy)
+
 ## 2026-07-31 — docs: Quick Repeat — PHASE 1 SPEC (active order hide)
 - `todo.md`: reuse service/API/CartSheet; gaps B1–B4 + F1–F3
 - Hide-статусы = `Order.active` (`accepted/preparing/ready`); cache v3; bust barista

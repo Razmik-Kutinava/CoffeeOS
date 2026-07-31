@@ -2,7 +2,7 @@
 
 **ТЗ:** [`customer_tasks/Быстрый повтор частых покупок Quick Repeat Bottom Sheet.md`](../milestones/veha_2/requirements/customer_tasks/Быстрый%20повтор%20частых%20покупок%20Quick%20Repeat%20Bottom%20Sheet.md)  
 **Артефакты (канон UI):** [`artifacts/quick_repeat_bottom_sheet/`](../milestones/veha_2/artifacts/quick_repeat_bottom_sheet/) — скрины `*_2026-07-31.png`  
-**Фаза:** PHASE 1 SPEC `[x]` · RED BE `[x]` · RED FE/layout `[ ]` · GREEN `[ ]` · REVIEW `[ ]`
+**Фаза:** PHASE 1–3 SPEC/RED/GREEN/REVIEW `[x]` · push/deploy/MCP `[ ]`
 
 ---
 
@@ -148,6 +148,6 @@
 - [x] Регрессия зоны shop (quick_repeat* + frequent*)
 
 ### PHASE 3 REVIEW
-- [ ] Sanity N+1 / RLS / file-size
-- [ ] CHANGELOG / HANDOFF
+- [x] Sanity N+1 / RLS / file-size
+- [x] CHANGELOG / HANDOFF
 - [ ] MCP Fly vs скрины (после deploy-апрува)

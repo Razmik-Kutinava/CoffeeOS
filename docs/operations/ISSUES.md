@@ -5,10 +5,14 @@
 ## 🔴 Блокеры
 
 [2026-07-31] — Fly v415: Quick Repeat не скрыт и status sheet не на всю ширину
-**Статус:** 🔴 **open**
-**Источник:** фидбек заказчика + `artifacts/quick_repeat_bottom_sheet/screenshots/07_customer_feedback_status_sheet_not_full_width_2026-07-31.png`
-**Root cause:** ревизия Quick Repeat была только в RED; FE не читает `has_active_order`. `OrderStatusSheet.svelte` сохраняет legacy `right: 7.5rem` / `max-width: 24.5rem`, поэтому CartSheet видна отдельной правой колонкой.
-**План закрытия:** GREEN active-order gate BE/FE + cache bust; full-width `OrderStatusSheet`; режимы `hidden/peek/expanded`; тесты + Fly MCP со скринами.
+**Статус:** 🟡 **code done** 2026-07-31 · ждёт push/deploy + MCP
+**Источник:** фидбек заказчика + `artifacts/quick_repeat_bottom_sheet/screenshots/07_…png`
+**Root cause:** FE не читал `has_active_order`; legacy `right/max-width` у OrderStatusSheet.
+**Чем закрыли (код):**
+- BE: `HIDE_REPEAT_STATUSES` + `has_active_order` + cache v3 + barista `bust_cache!` (`01c61262`)
+- FE: `hasActiveOrder` / `showRepeat` + Cable `onTerminal` refresh (`ba0abf7f`)
+- Layout: `OrderStatusSheet` `left:0; right:0; width:100%` (z60)
+**Осталось:** `git push` + `fly deploy` + MCP vs скрины 01–07 → тогда **resolved**.
 
 [2026-07-31] — Полная shop regression: 24 legacy OTP/structural failures
 **Статус:** 🔴 **open**, не из diff #35
