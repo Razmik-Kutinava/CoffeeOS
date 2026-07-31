@@ -110,7 +110,7 @@
 ### PHASE 2: RED
 - [x] A1–A2 failing tests (Rails) — `active_orders_receipt_test.rb`
 - [x] B1–B5 failing tests (JS) — `active_orders_accordion_test.mjs`
-- [ ] commit `test: … [RED]`
+- [x] commit `test: … [RED]` · `f7cf16cd`
 
 ### PHASE 2: GREEN
 - [ ] A1–A2 presenter + active payload
