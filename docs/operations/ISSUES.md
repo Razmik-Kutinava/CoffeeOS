@@ -4,6 +4,13 @@
 
 ## 🔴 Блокеры
 
+[2026-07-31] — Полная shop regression: 24 legacy OTP/structural failures
+**Статус:** 🔴 **open**, не из diff #35
+**Источник:** после MCP fix #35: `bundle exec rails test test/integration/shop/`
+**Факт:** 460 runs, 2893 assertions, **24 failures**, 0 errors, 3 skips; примеры — phone/profile OTP ожидают старый messenger flow, structural tests ищут удалённые frontend symbols.
+**#35:** targeted mount 5/5 + JS 14/14 + Vite build PASS.
+**Осталось:** отдельный triage/fix legacy shop suite; не пакетить в #35.
+
 [2026-07-31] — #35 status sheet скрыта под CartSheet + WS reconnect loop
 **Статус:** 🟡 **код local PASS** · redeploy/MCP `[ ]`
 **Источник:** MCP DevTools Fly, сравнение с `artifacts/order_status_compact_sheet_push/screenshots/`

@@ -5,6 +5,7 @@
 - Fix: status `z60`, справа 7.5rem под cart actions, orange divider
 - Fix: active GET только после реального Cable disconnect, без initial resubscribe loop
 - Tests: mount 5/5, JS 14/14, Vite build PASS; redeploy/MCP pending
+- Full shop regression: 460 runs, 24 unrelated legacy failures → ISSUES
 
 ## 2026-07-31 — review(#35): Order status sheet + Push REVIEW
 - Suite 34 Rails + 14 JS PASS; rubocop Wallet/job clean

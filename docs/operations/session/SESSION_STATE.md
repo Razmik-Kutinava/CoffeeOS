@@ -15,6 +15,7 @@
 - FAIL vs канон: CartSheet `z=50` скрывала OrderStatusSheet `z=40`; initial cable `connected` запускал цикл refresh/resubscribe
 - Local fix: status `z=60`, правая зона 7.5rem под cart actions, orange divider; refresh только после disconnect
 - Tests: mount acceptance **5/5**, JS **14/14**, `vite:build` PASS
+- Full shop regression: **460 runs / 24 legacy failures / 0 errors / 3 skips**; отдельный ISSUES blocker
 - ISSUES: #35 bug — local PASS, redeploy/MCP pending
 
 ### Сессия 2026-07-31 (PHASE 3 REVIEW · #35)

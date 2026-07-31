@@ -16,7 +16,7 @@
 **ТЗ:** [`Интеграция статусной модели…`](../milestones/veha_2/requirements/customer_tasks/Интеграция%20статусной%20модели%20в%20компактную%20шторку%20PWA%20и%20Push.md)  
 **Артефакты:** [`order_status_compact_sheet_push/`](../milestones/veha_2/artifacts/order_status_compact_sheet_push/)  
 **Runbook Wallet:** [`APPLE_WALLET_ORDER_PASS.md`](../milestones/veha_2/runbooks/APPLE_WALLET_ORDER_PASS.md)  
-**MCP 2026-07-31:** на Fly status sheet скрывалась под CartSheet (`z40<z50`), cable initial connect зацикливал refresh/resubscribe. Исправлено локально; mount 5/5, JS 14/14, Vite build PASS.  
+**MCP 2026-07-31:** на Fly status sheet скрывалась под CartSheet (`z40<z50`), cable initial connect зацикливал refresh/resubscribe. Исправлено локально; mount 5/5, JS 14/14, Vite build PASS. Full shop: 460 runs, 24 unrelated legacy failures (ISSUES).  
 **Дальше:** явный апрув `fly deploy` / push → повторный MCP на Fly vs 5 скринов.
 
 ### T-Kassa SBP Autopay AccountToken #34 (2026-07-30)
