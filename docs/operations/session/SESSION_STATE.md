@@ -2,14 +2,20 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-31 (Status inside cart sheet GREEN)
+**Дата:** 2026-07-31 (Status inside cart sheet · Fly v418 MCP PASS)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **Status inside cart sheet** GREEN `[x]` — статус внутри CartSheet | push/deploy + MCP по апруву |
+| **Status inside cart sheet** Fly **v418** MCP **PASS** | апрув заказчика |
 | **Quick Repeat** Fly v417 MCP PASS | апрув заказчика |
 
-### Сессия 2026-07-31 (Status inside cart sheet)
+### Сессия 2026-07-31 (push/deploy/MCP · Status inside cart sheet)
+
+- Push `876b5432` · `fly deploy` → **v418** · build `prog36`
+- MCP: status parent=`shop-cart-sheet`, `embedded=true`, `position=relative` z=auto (не fixed overlay)
+- Evidence: `artifacts/status_inside_cart_sheet/mcp/fly_v418/`
+
+### Сессия 2026-07-31 (Status inside cart sheet GREEN)
 
 - Фидбек: «вписать в шторку, не слой сверху»
 - Mount: `OrderStatusSheet` → внутри `CartSheet` после gesture; убран из `App.svelte`

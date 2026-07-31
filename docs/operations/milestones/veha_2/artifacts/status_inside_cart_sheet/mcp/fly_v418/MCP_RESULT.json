@@ -1,0 +1,17 @@
+{
+  "task": "status_inside_cart_sheet",
+  "date": "2026-07-31",
+  "fly_version": 418,
+  "image": "deployment-01KYWD6MY6TFC80D9Y1181EDJN",
+  "commit": "876b5432",
+  "url": "https://coffeeos.fly.dev/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "cart_sheet_build": "prog36",
+  "checks": [
+    { "id": "dom_inside_cart", "result": "PASS", "detail": "cart.contains(status)=true parentTid=shop-cart-sheet" },
+    { "id": "embedded_attr", "result": "PASS", "detail": "data-status-embedded=true" },
+    { "id": "css_relative", "result": "PASS", "detail": "position=relative zIndex=auto" },
+    { "id": "not_fixed_overlay", "result": "PASS", "detail": "status not fixed z60 sibling of cart" },
+    { "id": "expanded_still_inside", "result": "PASS", "detail": "mode=expanded receipts=1 stillInside=true" }
+  ],
+  "overall": "PASS"
+}

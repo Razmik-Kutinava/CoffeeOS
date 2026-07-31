@@ -1,5 +1,10 @@
 ﻿# CHANGELOG
 
+## 2026-07-31 — deploy: Status inside cart sheet v418 + MCP PASS
+- Push `876b5432` · `fly deploy` → **v418**
+- MCP: status DOM внутри `shop-cart-sheet`, `embedded=true`, CSS `relative` (не overlay)
+- Evidence: `artifacts/status_inside_cart_sheet/mcp/fly_v418/`
+
 ## 2026-07-31 — feat: OrderStatusSheet inside CartSheet (not overlay)
 - Статус активных заказов — секция внутри `CartSheet` (`embedded`), не sibling fixed z-60 в `App`
 - CSS: relative flow, без отдельной «второй шторки»; modes/accordion/cable сохранены
