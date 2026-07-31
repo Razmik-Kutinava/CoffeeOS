@@ -61,13 +61,22 @@ class Shop::OrderStatusPushNotifierTest < ActiveSupport::TestCase
     assert_equal "Заказ готовится", notification.title
   end
 
-  test "b21 preparing to ready push body" do
+  test "b21 preparing to ready enqueues ReadyPushJob (#35 B3)" do
     @order.update!(status: :ready)
+    ENV["WALLET_SIMULATE"] = "1"
+    ENV["FCM_SIMULATE"] = "1"
 
-    Shop::OrderStatusPushNotifier.call(order: @order.reload, old_status: "preparing")
+    assert_enqueued_with(job: Shop::ReadyPushJob, args: [@order.id, "preparing"]) do
+      Shop::OrderStatusPushNotifier.call(order: @order.reload, old_status: "preparing")
+    end
+
+    perform_enqueued_jobs
 
     notification = PushNotification.order(created_at: :desc).first
-    assert_equal "Заказ готов, забирайте!", notification.body
+    assert_equal Shop::ReadyPushJob::READY_BODY, notification.body
     assert_equal "Заказ готов", notification.title
+  ensure
+    ENV.delete("WALLET_SIMULATE")
+    ENV.delete("FCM_SIMULATE")
   end
 end

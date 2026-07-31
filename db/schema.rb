@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_31_120000) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_31_130000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_stat_statements"
@@ -548,6 +548,21 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_31_120000) do
     t.index ["created_at"], name: "index_order_status_logs_on_created_at"
     t.index ["device_id"], name: "index_order_status_logs_on_device_id"
     t.index ["order_id"], name: "index_order_status_logs_on_order_id"
+  end
+
+  create_table "order_wallet_passes", id: :uuid, default: -> { "gen_random_uuid()" }, comment: "Apple Wallet pass metadata (#35 B3)", force: :cascade do |t|
+    t.string "authentication_token", limit: 64, null: false
+    t.datetime "created_at", null: false
+    t.uuid "customer_id"
+    t.uuid "order_id", null: false
+    t.string "pass_type_identifier", limit: 128
+    t.integer "revision", default: 1, null: false
+    t.string "serial_number", limit: 64, null: false
+    t.string "status_label", limit: 64, default: "accepted", null: false
+    t.uuid "tenant_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["order_id"], name: "idx_order_wallet_passes_order", unique: true
+    t.index ["serial_number"], name: "idx_order_wallet_passes_serial", unique: true
   end
 
   create_table "orders", id: :uuid, default: -> { "gen_random_uuid()" }, comment: "Заказы клиентов", force: :cascade do |t|
@@ -1265,6 +1280,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_31_120000) do
   add_foreign_key "order_status_logs", "devices", name: "fk_order_status_logs_device", on_delete: :nullify
   add_foreign_key "order_status_logs", "orders", on_delete: :cascade
   add_foreign_key "order_status_logs", "users", column: "changed_by_id", on_delete: :nullify
+  add_foreign_key "order_wallet_passes", "orders"
+  add_foreign_key "order_wallet_passes", "tenants"
   add_foreign_key "orders", "mobile_customers", column: "customer_id", name: "fk_orders_customer", on_delete: :nullify
   add_foreign_key "orders", "order_cancel_reasons", column: "cancel_reason_code", primary_key: "code", on_delete: :nullify
   add_foreign_key "orders", "tenants", on_delete: :cascade

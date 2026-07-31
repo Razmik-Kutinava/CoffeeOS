@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-07-31 — feat(#35): ReadyPushJob + Apple Wallet stub [GREEN B3]
+- `ReadyPushJob`: Wallet update → FCM; unavailable → FCM-only; gen error → retry
+- DDL `order_wallet_passes`; `Shop::AppleWallet::*` (WALLET_SIMULATE)
+- Notifier ready → ReadyPushJob after claim; runbook APPLE_WALLET_ORDER_PASS
+- Тесты 17/17 PASS; PKCS7/device register — backlog
+
 ## 2026-07-31 — feat(#35): OrderStatusSheet sticky + orders/active [GREEN A1–A3]
 - Cable payload: `order_number`; FE cable forwards order_id/number
 - `GET /shop/api/orders/active` (accepted/preparing/ready)

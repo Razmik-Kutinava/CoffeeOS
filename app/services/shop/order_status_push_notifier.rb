@@ -35,9 +35,12 @@ module Shop
       return unless customer&.push_enabled?
       return if customer.push_token.blank?
 
-      # #35 C1/C2: ready-push ровно один раз (flip-flop / retry / double-click)
+      # #35 C1/C2 + B3: ready — claim once, затем ReadyPushJob (Wallet + FCM)
       if @order.ready?
         return unless Shop::ReadyPushClaim.claim!(@order)
+
+        Shop::ReadyPushJob.perform_later(@order.id, @old_status.to_s.presence || "preparing")
+        return
       end
 
       title = TITLES[@order.status] || "Статус заказа"

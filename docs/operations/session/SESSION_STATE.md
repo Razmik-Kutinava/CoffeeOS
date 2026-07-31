@@ -2,13 +2,21 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-31 (#35 PHASE 2 GREEN A1–A3 + C1)
+**Дата:** 2026-07-31 (#35 PHASE 2 GREEN B3 Wallet + A1–A3 + C1)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#35** A1–A3 + C1/C2 GREEN `[x]` | REVIEW / MCP vs скрины; B3 Wallet backlog |
-| Sticky sheet на Fly | deploy + MCP (по апруву) |
+| **#35** B3 Wallet GREEN `[x]` (simulate + FCM fallback) | REVIEW / MCP Fly; PKCS7/device register — backlog |
+| Sticky sheet + ready claim | deploy по апруву |
 
+### Сессия 2026-07-31 (PHASE 2 GREEN B3 · #35)
+
+- `Shop::ReadyPushJob`: PassUpdater → FCM; Unavailable → FCM-only; GenerationError → retry
+- DDL `order_wallet_passes`; AppleWallet Config/PassBuilder/ApnsClient (`WALLET_SIMULATE`)
+- Notifier ready → ReadyPushJob (после claim)
+- Тесты: ready_push_job + claim + notifier + barista **17/17 PASS**
+- Runbook: `runbooks/APPLE_WALLET_ORDER_PASS.md`
+- Backlog: реальный PKCS7 + APNs devices + download UI
 ### Сессия 2026-07-31 (PHASE 2 GREEN A1–A3 · #35)
 
 - A1: `order_number` в GuestOrderBroadcaster; cable forwards order_id/order_number

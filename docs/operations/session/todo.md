@@ -2,7 +2,7 @@
 
 **ТЗ:** [`customer_tasks/Интеграция статусной модели в компактную шторку PWA и Push.md`](../milestones/veha_2/requirements/customer_tasks/Интеграция%20статусной%20модели%20в%20компактную%20шторку%20PWA%20и%20Push.md)  
 **Артефакты (канон UI):** [`artifacts/order_status_compact_sheet_push/`](../milestones/veha_2/artifacts/order_status_compact_sheet_push/)  
-**Фаза:** PHASE 2: BUILD · A1–A3 + C1/C2 GREEN `[x]` · B/Wallet backlog · REVIEW ждёт
+**Фаза:** PHASE 2: BUILD · A1–A3 + B3 + C1/C2 GREEN `[x]` · REVIEW / MCP ждёт
 
 ---
 
@@ -150,8 +150,9 @@
 
 #### B — Push
 - [x] B/C RED — `ready_push_claim_test` (ReadyPushClaim + ready_notified_at)
-- [x] B ready path — reuse notifier + C1 claim (тексты B2.1 без смены)
-- [ ] B3 Wallet — backlog unless go
+- [x] B ready path — `ReadyPushJob` + FCM (текст ТЗ ready)
+- [x] B3 Wallet GREEN — `order_wallet_passes` + PassUpdater simulate/fallback + runbook
+- [ ] PassKit PKCS7 + device register + download UI — backlog (см. runbook)
 - [ ] Регрессия полная `test/integration/shop/` (MCP / REVIEW)
 
 #### C — Idempotency

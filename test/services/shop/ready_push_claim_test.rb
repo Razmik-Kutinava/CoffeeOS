@@ -41,7 +41,7 @@ class Shop::ReadyPushClaimTest < ActiveSupport::TestCase
   test "#35 notifier skips ready push when already claimed" do
     assert Shop::ReadyPushClaim.claim!(@order)
 
-    assert_no_enqueued_jobs(only: Shop::SendPushNotificationJob) do
+    assert_no_enqueued_jobs(only: [Shop::ReadyPushJob, Shop::SendPushNotificationJob]) do
       Shop::OrderStatusPushNotifier.call(order: @order.reload, old_status: "preparing")
     end
   end
@@ -49,7 +49,7 @@ class Shop::ReadyPushClaimTest < ActiveSupport::TestCase
   test "#35 notifier claims and enqueues on first ready" do
     assert_nil @order.ready_notified_at
 
-    assert_enqueued_with(job: Shop::SendPushNotificationJob) do
+    assert_enqueued_with(job: Shop::ReadyPushJob, args: [@order.id, "preparing"]) do
       Shop::OrderStatusPushNotifier.call(order: @order, old_status: "preparing")
     end
 
