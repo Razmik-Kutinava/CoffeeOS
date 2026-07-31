@@ -2,13 +2,19 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-31 (PHASE 2 RED · Quick Repeat F1–F3)
+**Дата:** 2026-07-31 (PHASE 2 GREEN · Quick Repeat F1–F3)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **Quick Repeat** RED F1–F3 `[x]` — hasActiveOrder / CartSheet / Cable onTerminal | **go** → GREEN F1–F3 (+ layout full-width из feedback 07) |
+| **Quick Repeat** GREEN F1–F3 `[x]` — hasActiveOrder + CartSheet gate + Cable refresh | **go** → PHASE 3 REVIEW (+ layout full-width feedback 07?) |
 | GREEN B1–B4 `[x]` | — |
 | **#36** visual feedback 07 | full-width status sheet |
+
+### Сессия 2026-07-31 (PHASE 2 GREEN · Quick Repeat F1–F3)
+
+- FE: `hasActiveOrder` store; `applyFrequentPayload` clear items; CartSheet `showRepeat`; `applyCableEvent` onTerminal → `refreshFrequentProducts`
+- Регрессия: 89 Rails + 18 JS — 0 failures
+- CHANGELOG/HANDOFF — в REVIEW
 
 ### Сессия 2026-07-31 (PHASE 2 RED · Quick Repeat F1–F3)
 

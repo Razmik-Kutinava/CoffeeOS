@@ -144,8 +144,8 @@
 - [x] RED B1–B4 (тесты написаны, падают — ожидаемо)
 - [x] GREEN B1–B4
 - [x] RED F1–F3
-- [ ] GREEN F1–F3
-- [ ] Регрессия зоны shop
+- [x] GREEN F1–F3
+- [x] Регрессия зоны shop (quick_repeat* + frequent*)
 
 ### PHASE 3 REVIEW
 - [ ] Sanity N+1 / RLS / file-size

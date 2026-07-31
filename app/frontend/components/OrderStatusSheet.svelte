@@ -17,6 +17,7 @@
   import { subscribeGuestOrderStatus } from "../lib/shopOrderCable.js"
   import { guestReconnectToken } from "../lib/shopGuestSession.js"
   import ActiveOrdersAccordion from "./ActiveOrdersAccordion.svelte"
+  import { refreshFrequentProducts } from "../lib/frequentRepeatStore.js"
 
   const sheet = createOrderStatusSheetState()
   let orders = $state([])
@@ -52,7 +53,12 @@
       unsubs.push(subscribeGuestOrderStatus({
         orderId,
         reconnectToken: token,
-        onStatus: (payload) => { applyCableEvent(sheet, payload); sync() },
+        onStatus: (payload) => {
+          applyCableEvent(sheet, payload, {
+            onTerminal: () => { refreshFrequentProducts() }
+          })
+          sync()
+        },
         onConnection: (status) => {
           const online = status === "connected"
           sheet.setConnection(online ? "online" : "lost")
@@ -95,10 +101,22 @@
 
   let scrollable = $derived(shouldScrollStatusList(orders))
   let panelExpanded = $derived(!!accordionState.activeExpandedOrderId)
+  let statusSheetMode = $derived(
+    orders.length === 0
+      ? ORDER_STATUS_SHEET_MODES.HIDDEN
+      : panelExpanded
+        ? ORDER_STATUS_SHEET_MODES.EXPANDED
+        : ORDER_STATUS_SHEET_MODES.PEEK
+  )
 </script>
 
-{#if mode === ORDER_STATUS_SHEET_MODES.PEEK && orders.length}
-  <div class="oss" data-testid="shop-order-status-sheet" style="pointer-events:none">
+{#if statusSheetMode !== ORDER_STATUS_SHEET_MODES.HIDDEN}
+  <div
+    class="oss"
+    data-testid="shop-order-status-sheet"
+    data-status-sheet-mode={statusSheetMode}
+    style="pointer-events:none"
+  >
     <div
       class="oss__panel"
       class:scrollable
@@ -128,22 +146,23 @@
   .oss {
     position: fixed;
     left: 0;
-    right: 7.5rem;
+    right: 0;
     bottom: 0;
     z-index: 60;
     display: flex;
-    justify-content: flex-end;
+    justify-content: center;
     padding-bottom: env(safe-area-inset-bottom, 0);
   }
   .oss__panel {
     position: relative;
     width: 100%;
-    max-width: 24.5rem;
     background: #2a2a2a;
     border-top: 1px solid #3a3a3a;
-    border-right: 3px solid #ff8c42;
+    border-radius: 1rem 1rem 0 0;
+    box-shadow: 0 -0.5rem 1.5rem rgb(0 0 0 / 35%);
     padding: 0.35rem 0.55rem 0.45rem;
     max-height: 8.75rem;
+    transition: max-height 0.3s ease;
   }
   .oss__panel.scrollable { overflow-y: auto; }
   .oss__panel.expanded {

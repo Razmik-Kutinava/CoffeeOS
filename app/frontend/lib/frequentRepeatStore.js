@@ -12,6 +12,8 @@ export const frequentCategories = writable({})
 export const frequentLoaded = writable(false)
 export const frequentQuantities = writable({})
 export const repeatFeedback = writable(null)
+/** Ревизия 2026-07-31: true → CartSheet скрывает «повторить» */
+export const hasActiveOrder = writable(false)
 
 let currentQuantities = {}
 frequentQuantities.subscribe((v) => { currentQuantities = v })
@@ -29,18 +31,19 @@ export function setFrequentQty(key, qty) {
   return next
 }
 
+function applyFrequentPayload(data) {
+  const active = !!(data && data.has_active_order)
+  hasActiveOrder.set(active)
+  if (active) frequentItems.set([])
+  else frequentItems.set(Array.isArray(data?.frequent_items) ? data.frequent_items : [])
+  if (data?.categories && typeof data.categories === "object") frequentCategories.set(data.categories)
+}
+
 export function initFrequentFromCache() {
   const cached = readFrequentCache()
-  if (cached && Array.isArray(cached.frequent_items)) {
-    frequentItems.set(cached.frequent_items)
-  }
-  if (cached && cached.categories && typeof cached.categories === "object") {
-    frequentCategories.set(cached.categories)
-  }
+  if (cached) applyFrequentPayload(cached)
   const qty = readFrequentQty()
-  if (qty && typeof qty === "object") {
-    frequentQuantities.set(qty)
-  }
+  if (qty && typeof qty === "object") frequentQuantities.set(qty)
   frequentLoaded.set(true)
   return cached
 }
@@ -62,7 +65,10 @@ export async function repeatAllToCart() {
     repeatFeedback.set({ type: "success", message: "Заказ добавлен в корзину" })
     return true
   } catch (_e) {
-    repeatFeedback.set({ type: "error", message: added ? `Добавлено ${added} из ${items.length} — проверьте корзину` : "Не удалось повторить заказ" })
+    repeatFeedback.set({
+      type: "error",
+      message: added ? `Добавлено ${added} из ${items.length} — проверьте корзину` : "Не удалось повторить заказ"
+    })
     return false
   }
 }
@@ -95,15 +101,14 @@ export async function repeatPayOneClickItem(item) {
   }
 }
 
-/** @param {string} [email] — после F5: восстановить frequent по verified email, если сессия пуста */
+/** @param {string} [email] — после F5: frequent по verified email */
 export async function refreshFrequentProducts(email) {
   try {
     let path = "/frequent_products"
     const e = email && String(email).trim().toLowerCase()
     if (e) path += `?email=${encodeURIComponent(e)}`
     const data = await api(path)
-    frequentItems.set(data?.frequent_items || [])
-    frequentCategories.set(data?.categories || {})
+    applyFrequentPayload(data || {})
     writeFrequentCache(data)
     frequentLoaded.set(true)
     return data

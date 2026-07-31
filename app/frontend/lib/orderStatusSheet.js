@@ -2,6 +2,7 @@
 
 export const ORDER_STATUS_SHEET_MODES = Object.freeze({
   PEEK: "peek",
+  EXPANDED: "expanded",
   HIDDEN: "hidden"
 })
 
@@ -43,7 +44,7 @@ export function createOrderStatusSheetState() {
   return state
 }
 
-export function applyCableEvent(state, payload) {
+export function applyCableEvent(state, payload, hooks = {}) {
   if (!payload || payload.type !== "status_changed") return
   const orderId = normalizeId(payload.order_id ?? payload.orderId)
   if (!orderId) return
@@ -53,6 +54,8 @@ export function applyCableEvent(state, payload) {
     state.setOrders(
       state.orders.filter((o) => normalizeId(o.id ?? o.order_id) !== orderId)
     )
+    // Quick Repeat: после terminal — UI узнаёт has_active_order без reload
+    if (typeof hooks.onTerminal === "function") hooks.onTerminal()
     return
   }
 

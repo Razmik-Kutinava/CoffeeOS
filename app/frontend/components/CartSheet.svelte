@@ -22,7 +22,7 @@
     openEditCard
   } from "../lib/cartSheetStore.js"
   import RepeatSection from "./RepeatSection.svelte"
-  import { initFrequentFromCache, frequentItems } from "../lib/frequentRepeatStore.js"
+  import { initFrequentFromCache, frequentItems, hasActiveOrder } from "../lib/frequentRepeatStore.js"
   import { restoreGuestSession } from "../lib/restoreGuestSession.js"
   import { ctaAddCard } from "../lib/paymentMethodI18n.js"
   import {
@@ -59,15 +59,18 @@
   /** URL с 404 — не показывать broken-icon в шторке */
   let brokenThumbUrls = $state(/** @type {Set<string>} */ (new Set()))
   let frequentCount = $state(0)
+  let hasActiveOrderFlag = $state(false)
   let tokenInvalid = $state(false)
 
   let showSheet = $derived(isCartSheetRoute(hash))
   let onCheckout = $derived(isCheckoutRoute(hash))
   let count = $derived(items.length)
+  /** Повтор только без активного заказа (ревизия 2026-07-31) */
+  let showRepeat = $derived(frequentCount > 0 && !hasActiveOrderFlag && !onCheckout)
   let showAddCardCta = $derived(
     shouldShowAddCardCta({
       isTokenInvalid: tokenInvalid,
-      hasRepeatContext: frequentCount > 0,
+      hasRepeatContext: showRepeat,
       cartItemCount: count
     })
   )
@@ -76,11 +79,11 @@
     if (payStackActive) return CHECKOUT_PEEK_VH
     // Пустая корзина: peek-высота (placeholder или «повторить»)
     if (!count) {
-      if (frequentCount > 0 && !onCheckout) return SHEET_VH.peekSingleWithRepeat
+      if (showRepeat) return SHEET_VH.peekSingleWithRepeat
       return SHEET_VH.peekSingle
     }
     // Одна сущность заказ+«повторить»: выше peek, чтобы не выглядело как две шторки
-    if (frequentCount > 0 && (mode === MODE_PEEK || mode === MODE_EMPTY)) {
+    if (showRepeat && (mode === MODE_PEEK || mode === MODE_EMPTY)) {
       if (count <= 1) return SHEET_VH.peekSingleWithRepeat
       return SHEET_VH.peekMultiWithRepeat
     }
@@ -226,6 +229,9 @@
     const unsubFrequent = frequentItems.subscribe((v) => {
       frequentCount = Array.isArray(v) ? v.length : 0
     })
+    const unsubHasActive = hasActiveOrder.subscribe((v) => {
+      hasActiveOrderFlag = !!v
+    })
     refreshInvalidRebillFlag()
     const unsubInvalid = invalidRebillActive.subscribe((v) => {
       tokenInvalid = v
@@ -249,7 +255,7 @@
 
     return () => {
       unsubItems(); unsubTotal(); unsubMode(); unsubBusy()
-      unsubErr(); unsubPay(); unsubFrequent(); unsubInvalid()
+      unsubErr(); unsubPay(); unsubFrequent(); unsubHasActive(); unsubInvalid()
       window.removeEventListener("hashchange", onHash)
     }
   })
@@ -382,13 +388,13 @@
 
     <!-- EMPTY — надпись только без истории заказов; иначе «повторить» -->
     {#if mode === MODE_EMPTY || !count}
-      {#if frequentCount === 0}
+      {#if !showRepeat}
         <p data-testid="shop-cart-sheet-empty" class="px-4 py-2 text-center text-sm italic text-[#888]">
           тут будут твои заказы
         </p>
       {/if}
       {@render checkoutBar("shop-cart-empty-total")}
-      {#if frequentCount > 0 && !onCheckout}
+      {#if showRepeat}
         <div data-testid="shop-repeat-slot-empty" class="shrink-0 px-2">
           <RepeatSection layout="full" />
         </div>
@@ -510,7 +516,7 @@
         {/if}
         {@render checkoutBar("shop-cart-peek-total", payStackActive)}
         <div data-testid="shop-repeat-slot-peek" class="shrink-0 border-t border-[#3a3a3a]/40">
-          {#if !onCheckout}<RepeatSection layout="embedded" />{/if}
+          {#if showRepeat}<RepeatSection layout="embedded" />{/if}
         </div>
       </div>
 
@@ -577,7 +583,7 @@
         </div>
         {@render checkoutBar(null, payStackActive)}
         <div data-testid="shop-repeat-slot-expanded" class="shrink-0 border-t border-[#3a3a3a]/40">
-          {#if !onCheckout}<RepeatSection layout="embedded" />{/if}
+          {#if showRepeat}<RepeatSection layout="embedded" />{/if}
         </div>
       </div>
 
@@ -612,7 +618,7 @@
         </div>
         {@render checkoutBar(null, payStackActive)}
         <div data-testid="shop-repeat-slot-single" class="shrink-0 border-t border-[#3a3a3a]/40">
-          {#if !onCheckout}<RepeatSection layout="embedded" />{/if}
+          {#if showRepeat}<RepeatSection layout="embedded" />{/if}
         </div>
       </div>
     {/if}

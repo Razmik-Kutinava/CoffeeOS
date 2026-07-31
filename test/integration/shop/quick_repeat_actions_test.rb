@@ -22,7 +22,8 @@ class Shop::QuickRepeatActionsTest < ActionDispatch::IntegrationTest
     assert_includes section, 'data-testid="shop-repeat-card-pay"'
     assert_includes section, "оплатить в 1 клик"
     assert_includes section, "bg-[#ff8c42]"
-    assert_includes section, "repeatPayOneClickItem"
+    # Per-card pay: inline widget flow (createRepeatInlineOrder), не global repeatPayOneClickItem
+    assert_includes section, "createRepeatInlineOrder"
 
     refute_includes section, 'data-testid="shop-repeat-one-click"'
     refute_includes section, "повторить в 1 клик"

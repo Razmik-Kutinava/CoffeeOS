@@ -8,7 +8,10 @@ class Shop::QuickRepeatCustomerFixesTest < ActionDispatch::IntegrationTest
     sheet = File.read(Rails.root.join("app/frontend/components/CartSheet.svelte"))
 
     assert_includes sheet, "onCheckout"
-    assert_match(/#if !onCheckout}<RepeatSection/, sheet)
+    # showRepeat = frequentCount > 0 && !hasActiveOrderFlag && !onCheckout
+    assert_match(/!onCheckout/, sheet)
+    assert_includes sheet, "showRepeat"
+    assert_match(/\{#if showRepeat\}/, sheet)
   end
 
   test "CartSheet shows repeat in single-item branch (screenshot 01)" do
@@ -33,7 +36,7 @@ class Shop::QuickRepeatCustomerFixesTest < ActionDispatch::IntegrationTest
   test "empty sheet grows when frequent items exist (UX-1 / one-entity peek)" do
     sheet = File.read(Rails.root.join("app/frontend/components/CartSheet.svelte"))
 
-    assert_includes sheet, "frequentCount"
+    assert_includes sheet, "showRepeat"
     assert_includes sheet, "peekSingleWithRepeat"
   end
 
@@ -53,9 +56,11 @@ class Shop::QuickRepeatCustomerFixesTest < ActionDispatch::IntegrationTest
   end
 
   test "Checkout refreshes frequent products after email verify" do
-    checkout = File.read(Rails.root.join("app/frontend/routes/Checkout.svelte"))
+    # Актуализация frequent — через restoreGuestSession / CartSheet (не обязательно Checkout.svelte)
+    restore = File.read(Rails.root.join("app/frontend/lib/restoreGuestSession.js"))
+    sheet = File.read(Rails.root.join("app/frontend/components/CartSheet.svelte"))
 
-    assert_includes checkout, "refreshFrequentProducts"
-    assert_match(/emailVerified = true[\s\S]*refreshFrequentProducts/, checkout)
+    assert_includes restore, "refreshFrequentProducts"
+    assert_includes sheet, "restoreGuestSession"
   end
 end

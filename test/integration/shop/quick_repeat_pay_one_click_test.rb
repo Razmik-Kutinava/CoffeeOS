@@ -23,7 +23,9 @@ class Shop::QuickRepeatPayOneClickTest < ActionDispatch::IntegrationTest
 
     assert_includes section, 'data-testid="shop-repeat-card-pay"'
     assert_includes section, "оплатить в 1 клик"
-    assert_includes section, "repeatPayOneClickItem"
+    assert_includes section, "onPayCardClick"
+    assert_includes section, "createRepeatInlineOrder"
+    assert_includes section, "runRepeatWidgetPayFlow"
   end
 
   test "Checkout consumes autopay flag and opens payment sheet" do

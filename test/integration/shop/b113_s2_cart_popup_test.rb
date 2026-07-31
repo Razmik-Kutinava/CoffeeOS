@@ -39,8 +39,8 @@ class Shop::B113S2CartPopupTest < ActionDispatch::IntegrationTest
     assert_includes sheet, 'data-testid="shop-cart-sheet"'
     assert_includes sheet, 'data-testid="shop-cart-sheet-empty"'
     assert_includes sheet, "тут будут твои заказы"
-    assert_includes sheet, "frequentCount === 0"
-    assert_includes sheet, "frequentCount > 0 && !onCheckout"
+    assert_includes sheet, "showRepeat"
+    assert_includes sheet, "!showRepeat"
     assert_includes sheet, "MODE_EXPANDED"
     assert_includes sheet, "MODE_PEEK"
     assert_includes sheet, "MODE_HIDDEN"
