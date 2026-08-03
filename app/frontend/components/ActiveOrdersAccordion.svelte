@@ -12,7 +12,8 @@
     notifyActionsView,
     openOrderReceipt,
     downloadWalletPass,
-    subscribeOrderPush
+    subscribeOrderPush,
+    resolveNotifyPrimaryInit
   } from "../lib/orderStatusNotifyActions.js"
 
   let {
@@ -24,11 +25,23 @@
   let row = $derived(accordionRowView(order, accordionState?.activeExpandedOrderId))
   let receipt = $derived(row.expanded ? receiptView(order) : null)
   let scrollStyle = receiptScrollStyle()
-  let actions = $derived(notifyActionsView({ os: getDeviceOS() }))
+  let deviceOs = $derived(getDeviceOS())
+  let actions = $derived(notifyActionsView({ os: deviceOs }))
   let primaryLabelOverride = $state(null)
   let primaryLoading = $state(false)
   let toastMsg = $state("")
   let displayPrimary = $derived(primaryLabelOverride ?? actions.primaryLabel)
+
+  $effect(() => {
+    const id = order?.id || order?.order_id
+    const init = resolveNotifyPrimaryInit({
+      os: deviceOs,
+      orderId: id
+    })
+    if (init.restored && init.primaryLabel) {
+      primaryLabelOverride = init.primaryLabel
+    }
+  })
 
   function onToggle(e) {
     e.stopPropagation()

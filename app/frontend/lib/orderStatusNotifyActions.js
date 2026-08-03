@@ -166,7 +166,6 @@ export async function subscribeOrderPush(opts = {}) {
 
 /**
  * Начальное состояние primary CTA (mount).
- * #37 шаг 6 — RED stub.
  *
  * @param {{
  *   os?: "ios"|"android"|"desktop",
@@ -176,6 +175,36 @@ export async function subscribeOrderPush(opts = {}) {
  * }} [opts]
  * @returns {{ primaryLabel: string|null, disabled: boolean, restored: boolean }}
  */
-export function resolveNotifyPrimaryInit(_opts = {}) {
+export function resolveNotifyPrimaryInit(opts = {}) {
+  const os = opts.os
+  const orderId = opts.orderId
+  const storage = opts.storage ?? (typeof localStorage !== "undefined" ? localStorage : null)
+  const permission =
+    opts.notificationPermission ??
+    (typeof Notification !== "undefined" ? Notification.permission : "default")
+
+  if (os === "ios") {
+    const key = walletAddedStorageKey(orderId)
+    const added = storage?.getItem(key) === "true"
+    if (added) {
+      return {
+        primaryLabel: WALLET_SUCCESS_LABEL,
+        disabled: true,
+        restored: true
+      }
+    }
+    return { primaryLabel: null, disabled: false, restored: false }
+  }
+
+  if (os === "android" || os === "desktop") {
+    if (permission === "granted") {
+      return {
+        primaryLabel: PUSH_SUCCESS_LABEL,
+        disabled: true,
+        restored: true
+      }
+    }
+  }
+
   return { primaryLabel: null, disabled: false, restored: false }
 }
