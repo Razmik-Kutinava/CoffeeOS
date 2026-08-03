@@ -11,8 +11,12 @@ import { dirname, join } from "node:path"
 
 import {
   CTA_STYLE,
-  notifyActionsView
+  notifyActionsView,
+  openOrderReceipt
 } from "../../app/frontend/lib/orderStatusNotifyActions.js"
+import {
+  createActiveOrdersAccordionState
+} from "../../app/frontend/lib/activeOrdersAccordion.js"
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "../..")
 const accordionPath = join(
@@ -72,5 +76,37 @@ describe("ActiveOrdersAccordion wires notify CTAs (#37 step 2)", () => {
     assert.match(src, /aoa__cta/)
     assert.doesNotMatch(src, /кнопка с текстом/)
     assert.match(src, /#ff8c42/)
+  })
+})
+
+describe("openOrderReceipt (#37 step 3)", () => {
+  it("toggles accordion expand and keeps isLoading false", () => {
+    const state = createActiveOrdersAccordionState([
+      { id: "o1", order_number: "1", status: "preparing" }
+    ])
+    const ui = { isLoading: false }
+    const result = openOrderReceipt(state, "o1", ui)
+
+    assert.equal(state.activeExpandedOrderId, "o1")
+    assert.equal(result.isLoading, false)
+    assert.equal(ui.isLoading, false)
+  })
+
+  it("second click collapses without loading", () => {
+    const state = createActiveOrdersAccordionState([{ id: "o1" }])
+    openOrderReceipt(state, "o1", { isLoading: false })
+    const result = openOrderReceipt(state, "o1", { isLoading: false })
+
+    assert.equal(state.activeExpandedOrderId, null)
+    assert.equal(result.isLoading, false)
+  })
+
+  it("ActiveOrdersAccordion wires receipt button to openOrderReceipt", () => {
+    const src = readFileSync(accordionPath, "utf8")
+    assert.match(src, /openOrderReceipt/)
+    assert.match(
+      src,
+      /active-order-notify-receipt[\s\S]{0,200}onclick|onclick[\s\S]{0,120}openOrderReceipt|onReceipt/
+    )
   })
 })

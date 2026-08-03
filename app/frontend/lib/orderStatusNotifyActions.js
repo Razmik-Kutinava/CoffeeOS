@@ -34,3 +34,16 @@ export function notifyActionsView({ os } = {}) {
     style: CTA_STYLE
   }
 }
+
+/**
+ * Клик «Состав заказа»: раскрыть/свернуть чек. Без isLoading.
+ * #37 шаг 3 — RED stub.
+ *
+ * @param {object} _state accordion state
+ * @param {string|number} _orderId
+ * @param {{ isLoading?: boolean }} [ui]
+ * @returns {{ isLoading: boolean }}
+ */
+export function openOrderReceipt(_state, _orderId, ui = {}) {
+  return { isLoading: true }
+}

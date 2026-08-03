@@ -2,7 +2,7 @@
 
 **ТЗ:** [`customer_tasks/Адаптивный виджет статуса заказа Детекция ОС и подписка на уведомления.md`](../milestones/veha_2/requirements/customer_tasks/Адаптивный%20виджет%20статуса%20заказа%20Детекция%20ОС%20и%20подписка%20на%20уведомления.md)  
 **Артефакты:** [`artifacts/order_status_os_detect_wallet_webpush/`](../milestones/veha_2/artifacts/order_status_os_detect_wallet_webpush/)  
-**Фаза:** SPEC `[x]` · RED/GREEN шаги 1–2 `[x]` · REVIEW `[ ]` · MCP/deploy `[ ]`
+**Фаза:** SPEC `[x]` · RED шаг 3 `[x]` · GREEN шаги 1–2 `[x]` · REVIEW `[ ]` · MCP/deploy `[ ]`
 
 ---
 
@@ -44,10 +44,11 @@
 - **GREEN:** CTA по ОС + «Состав заказа»; stubs убраны; `#ff8c42` / h-36 / w-11rem
 - **Не:** handlers Wallet/Push/receipt (шаги 3–5)
 
-### Шаг 3 — «Состав заказа» → чек `[ ]`
+### Шаг 3 — «Состав заказа» → чек `[x]` RED · GREEN `[ ]`
 
-- **Then:** клик нижней кнопки вызывает `toggleExpandedOrder` / раскрывает `aoa__receipt`; `isLoading` не ставится
-- **TDD:** unit на handler + (при необходимости) mount acceptance
+- **RED:** `openOrderReceipt` stub + 3 fail (toggle / isLoading / wire onclick)
+- **Then:** клик нижней кнопки → `toggleExpandedOrder`; `isLoading` остаётся false
+- **TDD:** unit + structural wire в `ActiveOrdersAccordion`
 
 ### Шаг 4 — iOS → Apple Wallet `[ ]`
 
