@@ -107,4 +107,56 @@ class Shop::GuestOrderBroadcasterTest < ActiveSupport::TestCase
       end
     end
   end
+
+  # --- #39 шаг 1 [TDD-RED]: enqueue OrderReadyCascadeJob на ready ---
+
+  test "#39 enqueues OrderReadyCascadeJob when status becomes ready" do
+    @order.update!(status: :ready)
+
+    assert_enqueued_with(job: Shop::OrderReadyCascadeJob, args: [@order.id]) do
+      Shop::GuestOrderBroadcaster.call(order: @order.reload, old_status: "preparing")
+    end
+  end
+
+  test "#39 does not enqueue OrderReadyCascadeJob when status is preparing" do
+    @order.update!(status: :preparing)
+
+    assert_no_enqueued_jobs(only: Shop::OrderReadyCascadeJob) do
+      Shop::GuestOrderBroadcaster.call(order: @order.reload, old_status: "accepted")
+    end
+  end
+
+  test "#39 cable soft-fail still enqueues OrderReadyCascadeJob on ready" do
+    @order.update!(status: :ready)
+    original = Shop::GuestOrderChannel.method(:broadcast_to)
+    Shop::GuestOrderChannel.define_singleton_method(:broadcast_to) do |*_args|
+      raise StandardError, "cable 502"
+    end
+
+    assert_nothing_raised do
+      assert_enqueued_with(job: Shop::OrderReadyCascadeJob, args: [@order.id]) do
+        Shop::GuestOrderBroadcaster.call(order: @order.reload, old_status: "preparing")
+      end
+    end
+  ensure
+    Shop::GuestOrderChannel.define_singleton_method(:broadcast_to, original) if original
+  end
+
+  test "#39 skips OrderReadyCascadeJob for non-mobile ready order" do
+    kiosk = Order.create!(
+      tenant_id: @tenant.id,
+      customer_id: @customer.id,
+      customer_name: "Kiosk Ready",
+      order_number: "202608-3901",
+      source: :kiosk,
+      status: :ready,
+      total_amount: 100,
+      discount_amount: 0,
+      final_amount: 100
+    )
+
+    assert_no_enqueued_jobs(only: Shop::OrderReadyCascadeJob) do
+      Shop::GuestOrderBroadcaster.call(order: kiosk, old_status: "preparing")
+    end
+  end
 end
