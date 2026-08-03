@@ -1,5 +1,10 @@
 ﻿# CHANGELOG
 
+## 2026-08-03 — deploy: #37 OS detect Wallet/WebPush v419 + MCP PASS
+- Push `develop` `35b7f00c` · `fly deploy --remote-only` → **v419** (`deployment-01KZ3CAC9RNSCPZRZ5VZWEWW8K`)
+- MCP Point A: Android Push CTA · iOS (CriOS) Wallet CTA · receipt toggle
+- Evidence: `artifacts/order_status_os_detect_wallet_webpush/mcp/fly_v419_2026-08-03/`
+
 ## 2026-08-03 — feat: Order status OS detect + Wallet/WebPush (#37) REVIEW
 - Accordion CTAs: iOS Apple Wallet download · Android/Desktop FCM `registerShopPush` · «Состав заказа» → receipt
 - `GET /shop/api/orders/:id/wallet_pass` (PassUpdater + pkpass blob); `getDeviceOS` + init restore LS/permission

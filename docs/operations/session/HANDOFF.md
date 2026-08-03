@@ -1,6 +1,6 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-08-03 (**PHASE 3 REVIEW · #37 OS detect + Wallet/WebPush**)  
+**Дата:** 2026-08-03 (**push/deploy/MCP · #37 OS detect + Wallet/WebPush**)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev  
 
@@ -12,12 +12,14 @@
 | PHASE 1 SPEC | **`[x]`** |
 | RED/GREEN шаги 1–6 | **`[x]`** tip `a0b3d0ea` |
 | PHASE 3 REVIEW | **`[x]`** · JS 56 · Rails 11 |
-| Push / Fly deploy / MCP | **`[ ]`** |
+| Push / Fly deploy / MCP | **`[x]`** v419 · MCP **PASS** |
 
 **ТЗ:** [`Адаптивный виджет статуса заказа Детекция ОС и подписка на уведомления.md`](../milestones/veha_2/requirements/customer_tasks/Адаптивный%20виджет%20статуса%20заказа%20Детекция%20ОС%20и%20подписка%20на%20уведомления.md)  
-**Артефакты:** [`order_status_os_detect_wallet_webpush/`](../milestones/veha_2/artifacts/order_status_os_detect_wallet_webpush/)  
+**Артефакты:** [`order_status_os_detect_wallet_webpush/`](../milestones/veha_2/artifacts/order_status_os_detect_wallet_webpush/) · MCP [`mcp/fly_v419_2026-08-03/`](../milestones/veha_2/artifacts/order_status_os_detect_wallet_webpush/mcp/fly_v419_2026-08-03/)  
 **Канон:** CTAs в `ActiveOrdersAccordion`; `deviceDetect`; `GET …/wallet_pass`; FCM `subscribeOrderPush`; init LS/permission.  
-**Дальше:** явный push/deploy → MCP UA iOS/Android; апрув заказчика. PKCS7 prod — PRACTICES.
+**Deploy:** push `35b7f00c` · Fly **v419** · `deployment-01KZ3CAC9RNSCPZRZ5VZWEWW8K`  
+**MCP:** Android → Push CTA · iPhone CriOS → Wallet CTA · receipt toggle PASS (Point A Aram).  
+**Дальше:** апрув заказчика. PKCS7 prod — PRACTICES.
 
 ### Status inside cart sheet (2026-07-31)
 

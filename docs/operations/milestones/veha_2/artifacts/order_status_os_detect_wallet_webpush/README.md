@@ -8,3 +8,4 @@
 |-------|------------|
 | `screenshots/` | скрины заказчика / приёмки (когда появятся) |
 | `mcp/` | evidence MCP DevTools после deploy |
+| `mcp/fly_v419_2026-08-03/` | Fly **v419** · Android Push + iOS Wallet + receipt · **PASS** |

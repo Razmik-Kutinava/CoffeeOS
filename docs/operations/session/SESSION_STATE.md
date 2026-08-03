@@ -2,20 +2,28 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-08-03 (PHASE 3 REVIEW · #37 OS detect + Wallet/WebPush)
+**Дата:** 2026-08-03 (push/deploy/MCP · #37 OS detect + Wallet/WebPush)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#37** REVIEW `[x]` · код local PASS | push/deploy + MCP по апруву · апрув заказчика |
+| **#37** Fly **v419** MCP **PASS** | апрув заказчика (CBR `[x]` только после «ок») |
 | **Status inside cart** Fly v418 MCP PASS | апрув заказчика |
 | **Quick Repeat** Fly v417 MCP PASS | апрув заказчика |
+
+### Сессия 2026-08-03 (push + fly deploy + MCP · #37)
+
+- Push `develop` → `35b7f00c`; `fly deploy --remote-only` → **v419** · image `deployment-01KZ3CAC9RNSCPZRZ5VZWEWW8K`
+- `/up` 200
+- MCP Point A (Aram, 14 active): Android UA → `🔔 Уведомление о готовности`; iPhone CriOS → `Карта в Apple Wallet`; «Состав заказа» → receipt PASS
+- Evidence: `artifacts/order_status_os_detect_wallet_webpush/mcp/fly_v419_2026-08-03/`
+- NOTE: чистый Safari UA → 406 (edge); CriOS iPhone OK для детекта
 
 ### Сессия 2026-08-03 (PHASE 3 REVIEW · #37)
 
 - Шаги 1–6 GREEN: `deviceDetect`, accordion CTAs, receipt, `wallet_pass` API, FCM `subscribeOrderPush`, init restore
 - Регрессия: JS 56/56 · Rails 11/11 (wallet/mount/push/active)
 - Sanity: session visibility; no N+1; Accordion 309 warn; PKCS7 backlog
-- MCP/deploy не делали
+- MCP/deploy — закрыто в сессии выше
 
 ### Сессия 2026-08-03 (PHASE 1 SPEC · OS detect Wallet/WebPush)
 

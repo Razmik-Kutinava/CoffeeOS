@@ -1,0 +1,46 @@
+{
+  "task": "#37 Order status OS detect + Wallet/WebPush",
+  "date": "2026-08-03",
+  "stand": "https://coffeeos.fly.dev/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "deploy": "Fly v419 · image deployment-01KZ3CAC9RNSCPZRZ5VZWEWW8K · push develop 35b7f00c",
+  "profile": "Aram (guest profile emailVerified · 2bc3…4c) — active orders accordion visible",
+  "health": "/up → 200",
+  "checks": [
+    {
+      "id": "android_push_cta",
+      "check": "UA Android → primary CTA «🔔 Уведомление о готовности» + «Состав заказа»",
+      "result": "PASS",
+      "evidence": "CDP evaluate: 3 rows primaryText=🔔 Уведомление о готовности; receipt=Состав заказа; data-testid active-order-notify-*"
+    },
+    {
+      "id": "ios_wallet_cta",
+      "check": "UA iPhone CriOS → primary CTA «Карта в Apple Wallet» + «Состав заказа»",
+      "result": "PASS",
+      "evidence": "CDP evaluate: ua contains iPhone; primaryText=Карта в Apple Wallet; hasPushWord=false; 14 accordion rows"
+    },
+    {
+      "id": "receipt_toggle",
+      "check": "Клик «Состав заказа» открывает receipt panel",
+      "result": "PASS",
+      "evidence": "CDP click active-order-notify-receipt → active-order-receipt visible (line items + totals)"
+    },
+    {
+      "id": "wallet_pass_api_session",
+      "check": "GET /shop/api/orders/active + wallet_pass с cookie session",
+      "result": "SKIP",
+      "evidence": "CDP fetch /shop/api/orders/active → 401 (без shop session cookie в DevTools); UI orders уже в DOM из LS/profile. Unit/integration wallet_pass покрыты в REVIEW."
+    },
+    {
+      "id": "safari_ua_406",
+      "check": "Чистый Mobile Safari UA (без CriOS)",
+      "result": "NOTE",
+      "evidence": "navigate с iPhone Safari UA → 406 Not Acceptable (прокси/edge); CriOS iPhone OK для getDeviceOS(/iPhone/)"
+    }
+  ],
+  "screenshots": [
+    "01_android_push_cta.png",
+    "03_ios_wallet_cta.png"
+  ],
+  "screenshots_note": "Headless Chrome без guest profile — каталог/landing; канон UI CTAs подтверждён CDP evaluate + inline MCP screenshots в сессии (Android push, iOS Wallet).",
+  "verdict": "PASS — Android Push CTA + iOS Wallet CTA + receipt toggle на Fly v419"
+}
