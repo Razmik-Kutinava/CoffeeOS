@@ -2,20 +2,25 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-08-03 (PHASE 0 intake · Order status OS detect + Wallet/WebPush)
+**Дата:** 2026-08-03 (PHASE 1 SPEC · Order status OS detect + Wallet/WebPush)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **Order status OS detect + Wallet/WebPush** интейк `[x]` | PHASE 1: SPEC по **go** |
+| **#37 OS detect + Wallet/WebPush** SPEC `[x]` в `todo.md` | RED шаг 1 (`getDeviceOS`) по намерению |
 | **Status inside cart sheet** Fly **v418** MCP **PASS** | апрув заказчика |
 | **Quick Repeat** Fly v417 MCP PASS | апрув заказчика |
+
+### Сессия 2026-08-03 (PHASE 1 SPEC · OS detect Wallet/WebPush)
+
+- Канон: кнопки в `ActiveOrdersAccordion` stubs; `deviceDetect.js`; Wallet `GET /shop/api/orders/:id/wallet_pass` (новый); Push = FCM `registerShopPush` (не raw WebPush); чек = accordion expand
+- `todo.md` переписан под #37; шаги 1–6 TDD; код не писали
+- Дальше: RED шаг 1 при намерении («го / ебашь / сделай»)
 
 ### Сессия 2026-08-03 (PHASE 0 intake · OS detect Wallet/WebPush)
 
 - Док ТЗ 1:1: `customer_tasks/Адаптивный виджет статуса заказа Детекция ОС и подписка на уведомления.md`
 - Артефакты: `artifacts/order_status_os_detect_wallet_webpush/`
 - CBR + `customer_tasks/README.md` — строка #37 / backlog
-- Код / todo.md / SPEC — не трогали; ждём go → PHASE 1
 
 ### Сессия 2026-07-31 (push/deploy/MCP · Status inside cart sheet)
 

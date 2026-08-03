@@ -1,5 +1,9 @@
 ﻿# CHANGELOG
 
+## 2026-08-03 — docs: SPEC Order status OS detect + Wallet/WebPush
+- PHASE 1: `todo.md` — маппинг ТЗ → Svelte/shop API; шаги 1–6 TDD
+- Канон: accordion CTAs + `deviceDetect` + wallet_pass download + FCM register (не React/Tailwind overlay)
+
 ## 2026-08-03 — docs: intake Order status OS detect + Wallet/WebPush
 - PHASE 0: ТЗ 1:1 `customer_tasks/Адаптивный виджет статуса заказа Детекция ОС и подписка на уведомления.md`
 - Артефакты: `artifacts/order_status_os_detect_wallet_webpush/`
