@@ -2,13 +2,20 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-08-03 (#38 push OK · Fly billing BLOCKED)
+**Дата:** 2026-08-03 (#39 intake · #38 Fly billing BLOCKED)
 
 | Сейчас | Дальше |
 |--------|--------|
+| **#39** Order ready cascade WS→TG→SMS | **PHASE 0 intake `[x]`** · ждёт **go** → PHASE 1 SPEC |
 | **#38** push `a145ee0c` · image built · **release 403 billing** | пополнить Fly billing → redeploy image → MCP |
 | Live Fly | **v419** (без #38) |
-| **#37** / Charge | как были |
+
+### Сессия 2026-08-03 (PHASE 0 intake · #39 Order ready cascade)
+
+- ТЗ 1:1: `customer_tasks/Оптимизированный каскад уведомлений Заказ готов PWA WS Push Telegram SMS.md`
+- Артефакты: `artifacts/order_ready_cascade_ws_telegram_sms/`
+- Индекс CBR #39 + `customer_tasks/README.md`
+- Код не менялся; SPEC/todo — после go
 
 ### Сессия 2026-08-03 (push/deploy attempt · #38)
 

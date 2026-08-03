@@ -1,5 +1,10 @@
 ﻿# CHANGELOG
 
+## 2026-08-03 — docs: intake Order ready cascade WS→TG→SMS (#39)
+- PHASE 0: ТЗ 1:1 `customer_tasks/Оптимизированный каскад уведомлений Заказ готов PWA WS Push Telegram SMS.md`
+- Артефакты: `artifacts/order_ready_cascade_ws_telegram_sms/`
+- Индекс CBR #39 + `customer_tasks/README.md`; код не менялся
+
 ## 2026-08-03 — deploy: #38 push OK · Fly release BLOCKED billing
 - Push `develop` `a145ee0c`
 - Image built+pushed: `deployment-01KZ3QRBRX8E2VES9XFJSBGDJ4` (`--depot=false`)

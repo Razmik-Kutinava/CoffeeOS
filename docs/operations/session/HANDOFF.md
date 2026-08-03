@@ -1,8 +1,20 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-08-03 (**#38 push OK · Fly deploy BLOCKED billing**)  
+**Дата:** 2026-08-03 (**#39 intake · #38 Fly billing BLOCKED**)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev (**ещё v419**)  
+
+### Order ready cascade WS→TG→SMS (#39) — 2026-08-03
+
+| Что | Статус |
+|-----|--------|
+| Intake (PHASE 0) | **`[x]`** |
+| PHASE 1 SPEC | **`[ ]`** ждёт go |
+| RED/GREEN / REVIEW | **`[ ]`** |
+
+**ТЗ:** [`Оптимизированный каскад уведомлений Заказ готов PWA WS Push Telegram SMS.md`](../milestones/veha_2/requirements/customer_tasks/Оптимизированный%20каскад%20уведомлений%20Заказ%20готов%20PWA%20WS%20Push%20Telegram%20SMS.md)  
+**Артефакты:** [`order_ready_cascade_ws_telegram_sms/`](../milestones/veha_2/artifacts/order_ready_cascade_ws_telegram_sms/)  
+**Дальше:** go → PHASE 1 SPEC (маппинг ТЗ → CoffeeOS: Minitest, barista routes/статусы, Sidekiq).
 
 ### Background FCM progress + Apple Wallet (#38) — 2026-08-03
 
