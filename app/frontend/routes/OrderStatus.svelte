@@ -7,6 +7,14 @@
   import { orderProgressView } from "../lib/orderStatusProgress.js"
   import { firebaseClientConfigured, registerShopPush } from "../lib/firebasePush.js"
   import { useTelegramBack } from "../lib/telegram.js"
+  import { getDeviceOS } from "../lib/deviceDetect.js"
+  import {
+    orderStatusCtas,
+    showReconnectBanner,
+    CTA_STYLE
+  } from "../lib/orderStatusCtaMachine.js"
+  import { downloadWalletPass } from "../lib/orderStatusNotifyActions.js"
+  import { orderDeepLink } from "../lib/swNotificationActions.js"
   import PageSkeleton from "../components/PageSkeleton.svelte"
 
   let { params } = $props()
@@ -20,10 +28,22 @@
   let pushAvailable = $state(false)
   let pushState = $state("idle")
   let pushErr = $state(null)
+  let ctaToast = $state("")
+  let ctaLoading = $state(false)
   let unsubscribeCable = null
 
   const progress = $derived(order ? orderProgressView(order) : null)
-  const showCancelButton = $derived(Boolean(order?.can_cancel))
+  const deviceOs = $derived(getDeviceOS())
+  const ctaView = $derived(
+    order
+      ? orderStatusCtas({
+          status: order.status,
+          os: deviceOs,
+          canCancel: Boolean(order.can_cancel)
+        })
+      : { buttons: [], style: CTA_STYLE }
+  )
+  const reconnectBanner = $derived(showReconnectBanner(cableState))
 
   const pickupLine = $derived(
     order?.tenant
@@ -78,6 +98,37 @@
       cancelErr = e.message
     } finally {
       cancelling = false
+    }
+  }
+
+  async function onCtaClick(kind) {
+    if (!order || ctaLoading) return
+    ctaToast = ""
+    cancelErr = null
+
+    if (kind === "cancel") {
+      await cancelOrder()
+      return
+    }
+    if (kind === "push") {
+      await enablePushNotifications()
+      return
+    }
+    if (kind === "wallet") {
+      ctaLoading = true
+      const result = await downloadWalletPass({
+        orderId: order.id,
+        onToast: (msg) => {
+          ctaToast = msg
+        }
+      })
+      ctaLoading = false
+      if (result.ok) ctaToast = result.primaryLabel || "✓ Карта добавлена"
+      return
+    }
+    if (kind === "chat" || kind === "tips") {
+      const url = orderDeepLink(order.id, kind)
+      window.location.assign(url)
     }
   }
 
@@ -149,7 +200,7 @@
       <button type="button" class="primary-btn" onclick={() => push("/")}>В каталог</button>
     </div>
   {:else if order && progress}
-    {#if cableState === "disconnected"}
+    {#if reconnectBanner}
       <p class="cable-banner" role="status">Обновление статуса...</p>
     {/if}
 
@@ -256,18 +307,32 @@
       {/if}
     </section>
 
-    {#if showCancelButton}
-      {#if cancelErr}
-        <p class="cancel-error" role="alert">{cancelErr}</p>
-      {/if}
-      <button
-        type="button"
-        class="cancel-btn"
-        disabled={cancelling}
-        onclick={cancelOrder}
-      >
-        {cancelling ? "Отменяем…" : "Отменить заказ"}
-      </button>
+    {#if cancelErr || ctaToast}
+      <p class="cancel-error" role="alert">{cancelErr || ctaToast}</p>
+    {/if}
+    {#if ctaView.buttons.length}
+      <div class="status-cta-row" role="group" aria-label="Действия по заказу">
+        {#each ctaView.buttons as btn (btn.kind)}
+          <button
+            type="button"
+            class="status-cta-btn"
+            class:status-cta-btn--ghost={btn.kind === "cancel"}
+            style={btn.kind === "cancel"
+              ? undefined
+              : `background:${ctaView.style.background};color:${ctaView.style.color};height:${ctaView.style.heightPx}px;border-radius:${ctaView.style.borderRadius};font-weight:${ctaView.style.fontWeight}`}
+            disabled={cancelling || ctaLoading || (btn.kind === "push" && pushState === "requesting")}
+            onclick={() => onCtaClick(btn.kind)}
+          >
+            {#if btn.kind === "cancel" && cancelling}
+              Отменяем…
+            {:else if btn.kind === "push" && pushState === "requesting"}
+              Подключаем…
+            {:else}
+              {btn.label}
+            {/if}
+          </button>
+        {/each}
+      </div>
     {/if}
   {/if}
 </div>
@@ -634,6 +699,35 @@
   .cancel-btn:disabled {
     opacity: 0.6;
     cursor: not-allowed;
+  }
+
+  .status-cta-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 16px;
+  }
+
+  .status-cta-btn {
+    width: 100%;
+    border: none;
+    cursor: pointer;
+    font-size: 0.75rem;
+  }
+
+  .status-cta-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  .status-cta-btn--ghost {
+    background: transparent;
+    color: #a0a0a0;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    font-size: 15px;
+    font-weight: 500;
+    padding: 12px;
   }
 
   .cancel-error {

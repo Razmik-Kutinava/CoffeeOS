@@ -2,7 +2,7 @@
 
 **ТЗ:** [`customer_tasks/Фоновые уведомления прогресс-бар Android FCM и Apple Wallet iOS.md`](../milestones/veha_2/requirements/customer_tasks/Фоновые%20уведомления%20прогресс-бар%20Android%20FCM%20и%20Apple%20Wallet%20iOS.md)  
 **Артефакты:** [`artifacts/background_notifications_fcm_apple_wallet/`](../milestones/veha_2/artifacts/background_notifications_fcm_apple_wallet/)  
-**Фаза:** SPEC `[x]` · RED/GREEN шаги 1–4 `[x]` · RED шаг 5 `[x]` · GREEN 5 `[ ]` · REVIEW `[ ]` · MCP/deploy `[ ]`
+**Фаза:** SPEC `[x]` · RED/GREEN шаги 1–5 `[x]` · REVIEW `[ ]` · MCP/deploy `[ ]`
 
 ---
 
@@ -42,7 +42,7 @@
 | 2 | SW: `notificationclick` — cancel → `fetch` cancel API; chat/tips → focus + deep link; ошибка сети → local notification | `swNotificationActions.js` · `firebase_sw/show.js.erb` · `fcm_client` JSON data | `sw_notification_actions_test.mjs` 11/11 | **GREEN `[x]`** |
 | 3 | `.pkpass` enrich: face / QR / back chat+tips / strip progress | `pass_builder.rb` · runbook | pass_builder + wallet_pass + ready | **GREEN `[x]`** |
 | 4 | APNs update на смене статуса если pass есть; soft-fail; ReadyPushJob без double update | `guest_order_broadcaster.rb` · `ready_push_job.rb` | broadcaster + ready + notifier + pass_builder | **GREEN `[x]`** |
-| 5 | PWA UI state machine: CTAs по матрице; reconnect banner; max 2; UI-kit | `orderStatusCtaMachine.js` · `OrderStatus.svelte` | `order_status_cta_machine_test.mjs` | **RED `[x]`** |
+| 5 | PWA UI state machine: CTAs по матрице; reconnect banner; max 2; UI-kit | `orderStatusCtaMachine.js` · `OrderStatus.svelte` | `order_status_cta_machine_test.mjs` + notify/sw | **GREEN `[x]`** |
 
 ### Порядок
 

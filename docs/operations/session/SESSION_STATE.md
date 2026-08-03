@@ -2,13 +2,19 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-08-03 (RED шаг 5 · #38 PWA CTA machine)
+**Дата:** 2026-08-03 (GREEN шаг 5 · #38 PWA CTA machine)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#38** RED шаг 5 `[x]` | GREEN шаг 5 при намерении |
+| **#38** GREEN шаги 1–5 `[x]` | PHASE 3 REVIEW |
 | **#37** Fly v419 MCP PASS | апрув заказчика |
 | **Charge live PASS** #32/#33/#27 · #34 Setup PASS | Zero-Click после 1× bind в банке |
+
+### Сессия 2026-08-03 (GREEN шаг 5 · #38 PWA CTA machine)
+
+- `orderStatusCtaMachine.js` + wire `OrderStatus.svelte` (max 2 CTAs, reconnect banner)
+- JS: cta + notify + sw → 29/29 PASS
+- Дальше: PHASE 3 REVIEW (CHANGELOG/HANDOFF/CBR)
 
 ### Сессия 2026-08-03 (RED шаг 5 · #38 PWA CTA machine)
 
