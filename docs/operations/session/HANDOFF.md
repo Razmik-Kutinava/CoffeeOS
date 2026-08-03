@@ -1,6 +1,6 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-08-03 (**PHASE 1 SPEC · Order status OS detect + Wallet/WebPush**)  
+**Дата:** 2026-08-03 (**PHASE 3 REVIEW · #37 OS detect + Wallet/WebPush**)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev  
 
@@ -9,13 +9,15 @@
 | Что | Статус |
 |-----|--------|
 | Intake (PHASE 0) | **`[x]`** |
-| PHASE 1 SPEC | **`[x]`** · `todo.md` |
-| RED / GREEN / REVIEW / MCP | **`[ ]`** |
+| PHASE 1 SPEC | **`[x]`** |
+| RED/GREEN шаги 1–6 | **`[x]`** tip `a0b3d0ea` |
+| PHASE 3 REVIEW | **`[x]`** · JS 56 · Rails 11 |
+| Push / Fly deploy / MCP | **`[ ]`** |
 
 **ТЗ:** [`Адаптивный виджет статуса заказа Детекция ОС и подписка на уведомления.md`](../milestones/veha_2/requirements/customer_tasks/Адаптивный%20виджет%20статуса%20заказа%20Детекция%20ОС%20и%20подписка%20на%20уведомления.md)  
 **Артефакты:** [`order_status_os_detect_wallet_webpush/`](../milestones/veha_2/artifacts/order_status_os_detect_wallet_webpush/)  
-**Канон SPEC:** CTAs в stubs `ActiveOrdersAccordion` (не fixed overlay); `deviceDetect.js`; `GET /shop/api/orders/:id/wallet_pass` (новый); Push = FCM `registerShopPush`; «Состав заказа» = accordion receipt.  
-**Дальше:** намерение → RED шаг 1 (`getDeviceOS`).
+**Канон:** CTAs в `ActiveOrdersAccordion`; `deviceDetect`; `GET …/wallet_pass`; FCM `subscribeOrderPush`; init LS/permission.  
+**Дальше:** явный push/deploy → MCP UA iOS/Android; апрув заказчика. PKCS7 prod — PRACTICES.
 
 ### Status inside cart sheet (2026-07-31)
 

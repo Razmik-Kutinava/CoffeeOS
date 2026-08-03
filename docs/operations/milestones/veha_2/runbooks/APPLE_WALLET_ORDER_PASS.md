@@ -22,6 +22,9 @@
 
 ## Ещё не в scope
 
-- Раздача `.pkpass` гостю (download URL / Wallet web service register device)
-- Реальный PKCS7 + APNs device tokens
-- UI «Добавить в Apple Wallet» на витрине
+- Реальный PKCS7 + APNs device tokens (prod signing)
+- Wallet web service register device
+
+## В scope с #37 (2026-08-03)
+
+- Guest download: `GET /shop/api/orders/:id/wallet_pass` + CTA «Карта в Apple Wallet» в `ActiveOrdersAccordion`

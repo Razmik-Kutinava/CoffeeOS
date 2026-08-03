@@ -1,5 +1,10 @@
 ﻿# CHANGELOG
 
+## 2026-08-03 — feat: Order status OS detect + Wallet/WebPush (#37) REVIEW
+- Accordion CTAs: iOS Apple Wallet download · Android/Desktop FCM `registerShopPush` · «Состав заказа» → receipt
+- `GET /shop/api/orders/:id/wallet_pass` (PassUpdater + pkpass blob); `getDeviceOS` + init restore LS/permission
+- Тесты: JS 56/56 · Rails wallet/mount/push/active 11/11 · tip GREEN `a0b3d0ea`
+
 ## 2026-08-03 — docs: SPEC Order status OS detect + Wallet/WebPush
 - PHASE 1: `todo.md` — маппинг ТЗ → Svelte/shop API; шаги 1–6 TDD
 - Канон: accordion CTAs + `deviceDetect` + wallet_pass download + FCM register (не React/Tailwind overlay)

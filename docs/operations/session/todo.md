@@ -2,81 +2,23 @@
 
 **ТЗ:** [`customer_tasks/Адаптивный виджет статуса заказа Детекция ОС и подписка на уведомления.md`](../milestones/veha_2/requirements/customer_tasks/Адаптивный%20виджет%20статуса%20заказа%20Детекция%20ОС%20и%20подписка%20на%20уведомления.md)  
 **Артефакты:** [`artifacts/order_status_os_detect_wallet_webpush/`](../milestones/veha_2/artifacts/order_status_os_detect_wallet_webpush/)  
-**Фаза:** SPEC `[x]` · RED/GREEN шаги 1–6 `[x]` · REVIEW `[ ]` · MCP/deploy `[ ]`
+**Фаза:** SPEC `[x]` · RED/GREEN 1–6 `[x]` · REVIEW `[x]` · MCP/deploy `[ ]`
 
----
+## Шаги
 
-## Канон SPEC (маппинг ТЗ → CoffeeOS)
+| # | Что | Статус |
+|---|-----|--------|
+| 1 | `getDeviceOS` | `[x]` |
+| 2 | CTA верстка в accordion | `[x]` |
+| 3 | «Состав заказа» → receipt | `[x]` |
+| 4 | iOS Wallet download | `[x]` |
+| 5 | Android/Desktop FCM | `[x]` |
+| 6 | Init restored state | `[x]` |
 
-| ТЗ (React / `/api/v1`) | Канон CoffeeOS |
-|------------------------|----------------|
-| `src/utils/deviceDetect.ts` | `app/frontend/lib/deviceDetect.js` |
-| `deviceDetect.test.ts` | `test/javascript/device_detect_test.mjs` (`node --test`) |
-| `OrderStatusBottomBar.tsx` | Правая колонка stubs в `ActiveOrdersAccordion.svelte` (`aoa__actions`) + логика в `app/frontend/lib/orderStatusNotifyActions.js` |
-| Fixed bar `z-50` overlay | **Не новый overlay.** Бар = уже существующий `OrderStatusSheet` **embedded** в `CartSheet` (v418). Кнопки — в строке аккордеона. |
-| Tailwind / `#FF8A3D` | Scoped CSS как в `ActiveOrdersAccordion` / kit: accent **`#ff8c42`** (`--accent`). Tailwind в shop FE нет — не вводим. |
-| Модалка «Состав заказа» | **Не новая модалка.** Нижняя кнопка → `toggleExpandedOrder` (чек `aoa__receipt` как в #36). Архитектуру модалок не трогаем. |
-| `GET /api/v1/orders/:id/wallet_pass` | **Новый** `GET /shop/api/orders/:id/wallet_pass` (blob `.pkpass`) поверх `Shop::AppleWallet::PassBuilder` / `OrderWalletPass` |
-| `POST …/push_subscription` + raw WebPush | **Reuse** `registerShopPush()` → `POST /shop/api/push/register` (FCM + VAPID). Не новый WebPush endpoint. |
-| Vitest + RTL | `node --test` в `test/javascript/` + Rails integration на wallet_pass |
+## REVIEW (2026-08-03)
 
-### Ограничения / риски
-
-- **Не ломать** status-inside-cart (embedded), accordion receipt, Cable.
-- Wallet download UI + route — раньше backlog runbook; в этой фиче **в scope** (шаг 4).
-- Push register сегодня требует **сессию** `MobileCustomer` — при госте: toast / soft fail (не краш).
-- `ActiveOrdersAccordion.svelte` уже ~240 строк → логику кнопок вынести в lib (file-size).
-- PKCS7 prod signing / APNs device register — **вне scope** (остаётся PRACTICES / runbook).
-
----
-
-## Атомарные шаги (TDD)
-
-### Шаг 1 — `getDeviceOS` `[x]`
-
-- **Файлы:** `app/frontend/lib/deviceDetect.js` · `test/javascript/device_detect_test.mjs`
-- **RED:** 7/7 fail · **GREEN:** 7/7 pass (`00f2ff36` → GREEN commit)
-- **Given/When/Then:** `'ios'` (iPhone/iPod + iPadOS MacIntel+touch), `'android'`, `'desktop'` (+ SSR `hasWindow:false`)
-
-### Шаг 2 — Верстка кнопок в аккордеоне `[x]`
-
-- **Файлы:** `orderStatusNotifyActions.js` · `ActiveOrdersAccordion.svelte` · `order_status_notify_actions_test.mjs`
-- **GREEN:** CTA по ОС + «Состав заказа»; stubs убраны; `#ff8c42` / h-36 / w-11rem
-- **Не:** handlers Wallet/Push/receipt (шаги 3–5)
-
-### Шаг 3 — «Состав заказа» → чек `[x]`
-
-- **GREEN:** `openOrderReceipt` → `toggleExpandedOrder`; `isLoading` всегда false; `onclick={onReceipt}`
-
-### Шаг 4 — iOS → Apple Wallet `[x]`
-
-- **GREEN:** `GET /shop/api/orders/:id/wallet_pass` (PassUpdater + send_data) · `downloadWalletPass` · primary CTA wire
-- Тесты: JS wallet PASS · Rails wallet_pass 2/2 PASS
-
-### Шаг 5 — Android/Desktop → Push (FCM) `[x]`
-
-- **GREEN:** `subscribeOrderPush` → `registerShopPush`; denied/network toasts; `onPrimary` ветка push
-
-### Шаг 6 — Init restored state `[x]`
-
-- **GREEN:** `resolveNotifyPrimaryInit` (LS wallet / Notification.granted) · `$effect` в accordion
-
----
-
-## Регрессия (после GREEN / REVIEW)
-
-| Зона | Команда |
-|------|---------|
-| JS | `node --test test/javascript/device_detect_test.mjs test/javascript/order_status_*.mjs` (и связанные) |
-| Shop status | `bin/rails test test/integration/shop/order_status_sheet_mount_acceptance_test.rb` + active_orders* |
-| Push | `bin/rails test test/integration/shop/api/push_register_test.rb` |
-| Wallet API | новый integration test на `wallet_pass` |
-
----
-
-## Exit (из ТЗ, адаптировано)
-
-1. Unit/integration зелёные по шагам 1–6  
-2. Регрессия зоны PASS  
-3. Визуал кнопок = kit аккордеона / `#ff8c42`  
-4. MCP DevTools (iOS/Android UA) после deploy-апрува — не в этом SPEC-шаге
+- JS зона: **56/56 PASS**
+- Rails: wallet_pass + mount + push_register + active_orders → **11/11 PASS**
+- Sanity: RLS/session visibility на `wallet_pass`; N+1 нет (PassUpdater один заказ); Accordion **309** строк (warn — логика в lib)
+- PKCS7 prod / device register — backlog PRACTICES `V2-#35-WALLET-PROD`
+- MCP/deploy — ждут явный апрув

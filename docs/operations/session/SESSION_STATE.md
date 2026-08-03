@@ -2,13 +2,20 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-08-03 (PHASE 1 SPEC · Order status OS detect + Wallet/WebPush)
+**Дата:** 2026-08-03 (PHASE 3 REVIEW · #37 OS detect + Wallet/WebPush)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#37 OS detect + Wallet/WebPush** SPEC `[x]` в `todo.md` | RED шаг 1 (`getDeviceOS`) по намерению |
-| **Status inside cart sheet** Fly **v418** MCP **PASS** | апрув заказчика |
+| **#37** REVIEW `[x]` · код local PASS | push/deploy + MCP по апруву · апрув заказчика |
+| **Status inside cart** Fly v418 MCP PASS | апрув заказчика |
 | **Quick Repeat** Fly v417 MCP PASS | апрув заказчика |
+
+### Сессия 2026-08-03 (PHASE 3 REVIEW · #37)
+
+- Шаги 1–6 GREEN: `deviceDetect`, accordion CTAs, receipt, `wallet_pass` API, FCM `subscribeOrderPush`, init restore
+- Регрессия: JS 56/56 · Rails 11/11 (wallet/mount/push/active)
+- Sanity: session visibility; no N+1; Accordion 309 warn; PKCS7 backlog
+- MCP/deploy не делали
 
 ### Сессия 2026-08-03 (PHASE 1 SPEC · OS detect Wallet/WebPush)
 
