@@ -1,5 +1,5 @@
 <script>
-  /** #36 accordion row: статус-лайн + тогл + текстовый чек (без кнопок в чеке). */
+  /** #36/#37 accordion: статус + CTA Wallet/Push + текстовый чек. */
   import {
     toggleExpandedOrder,
     accordionRowView,
@@ -7,6 +7,8 @@
     receiptScrollStyle,
     CHEVRON
   } from "../lib/activeOrdersAccordion.js"
+  import { getDeviceOS } from "../lib/deviceDetect.js"
+  import { notifyActionsView } from "../lib/orderStatusNotifyActions.js"
 
   let {
     order,
@@ -17,6 +19,7 @@
   let row = $derived(accordionRowView(order, accordionState?.activeExpandedOrderId))
   let receipt = $derived(row.expanded ? receiptView(order) : null)
   let scrollStyle = receiptScrollStyle()
+  let actions = $derived(notifyActionsView({ os: getDeviceOS() }))
 
   function onToggle(e) {
     e.stopPropagation()
@@ -57,9 +60,18 @@
         </div>
       {/if}
     </button>
-    <div class="aoa__actions" aria-hidden="true">
-      <span class="aoa__stub">кнопка с текстом</span>
-      <span class="aoa__stub">кнопка с текстом</span>
+    <div class={actions.actionsClass} data-testid="active-order-notify-actions">
+      <button
+        type="button"
+        class={actions.buttonClass}
+        data-kind={actions.primaryKind}
+        data-testid="active-order-notify-primary"
+      >{actions.primaryLabel}</button>
+      <button
+        type="button"
+        class={actions.buttonClass}
+        data-testid="active-order-notify-receipt"
+      >{actions.secondaryLabel}</button>
     </div>
   </div>
   <button
@@ -190,21 +202,27 @@
   .aoa__actions {
     display: flex;
     flex-direction: column;
-    gap: 0.2rem;
+    gap: 0.5rem;
     flex-shrink: 0;
+    width: 11rem;
   }
-  .aoa__stub {
-    display: block;
-    background: #ff6b35;
-    color: #1a1a1a;
-    font-size: 0.48rem;
+  .aoa__cta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    height: 36px;
+    padding: 0 0.45rem;
+    background: #ff8c42;
+    color: #000000;
+    font-size: 0.75rem;
     font-weight: 600;
-    padding: 0.28rem 0.35rem;
-    border-radius: 0.35rem;
-    white-space: nowrap;
-    max-width: 4.5rem;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    border: 0;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    text-align: center;
+    line-height: 1.15;
+    white-space: normal;
   }
   .aoa__chevron {
     display: block;
@@ -236,5 +254,5 @@
     padding-top: 0.35rem;
     color: #ccc;
   }
-  .aoa__total { color: #ff6b35; font-weight: 600; margin-top: 0.15rem; }
+  .aoa__total { color: #ff8c42; font-weight: 600; margin-top: 0.15rem; }
 </style>

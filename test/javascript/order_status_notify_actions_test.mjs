@@ -68,7 +68,7 @@ describe("ActiveOrdersAccordion wires notify CTAs (#37 step 2)", () => {
     const src = readFileSync(accordionPath, "utf8")
     assert.match(src, /orderStatusNotifyActions/)
     assert.match(src, /notifyActionsView/)
-    assert.match(src, /Состав заказа/)
+    assert.match(src, /actions\.secondaryLabel|active-order-notify-receipt/)
     assert.match(src, /aoa__cta/)
     assert.doesNotMatch(src, /кнопка с текстом/)
     assert.match(src, /#ff8c42/)

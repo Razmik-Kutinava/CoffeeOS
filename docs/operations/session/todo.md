@@ -2,7 +2,7 @@
 
 **ТЗ:** [`customer_tasks/Адаптивный виджет статуса заказа Детекция ОС и подписка на уведомления.md`](../milestones/veha_2/requirements/customer_tasks/Адаптивный%20виджет%20статуса%20заказа%20Детекция%20ОС%20и%20подписка%20на%20уведомления.md)  
 **Артефакты:** [`artifacts/order_status_os_detect_wallet_webpush/`](../milestones/veha_2/artifacts/order_status_os_detect_wallet_webpush/)  
-**Фаза:** SPEC `[x]` · RED `[x]` шаг 2 · GREEN шаг 1 `[x]` · REVIEW `[ ]` · MCP/deploy `[ ]`
+**Фаза:** SPEC `[x]` · RED/GREEN шаги 1–2 `[x]` · REVIEW `[ ]` · MCP/deploy `[ ]`
 
 ---
 
@@ -38,12 +38,11 @@
 - **RED:** 7/7 fail · **GREEN:** 7/7 pass (`00f2ff36` → GREEN commit)
 - **Given/When/Then:** `'ios'` (iPhone/iPod + iPadOS MacIntel+touch), `'android'`, `'desktop'` (+ SSR `hasWindow:false`)
 
-### Шаг 2 — Верстка кнопок в аккордеоне `[x]` RED · GREEN `[ ]`
+### Шаг 2 — Верстка кнопок в аккордеоне `[x]`
 
-- **Файлы:** stub `orderStatusNotifyActions.js` · `test/javascript/order_status_notify_actions_test.mjs` · (GREEN: `ActiveOrdersAccordion.svelte`)
-- **RED:** 6/6 fail — CTA_STYLE / labels по OS / wire accordion
-- **Then:** правая секция CTAs; верх — Wallet/Push по ОС; низ — «Состав заказа»; `#ff8c42`
-- **Не:** отдельный fixed overlay
+- **Файлы:** `orderStatusNotifyActions.js` · `ActiveOrdersAccordion.svelte` · `order_status_notify_actions_test.mjs`
+- **GREEN:** CTA по ОС + «Состав заказа»; stubs убраны; `#ff8c42` / h-36 / w-11rem
+- **Не:** handlers Wallet/Push/receipt (шаги 3–5)
 
 ### Шаг 3 — «Состав заказа» → чек `[ ]`
 
