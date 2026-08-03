@@ -25,6 +25,10 @@ module Shop
     private
 
     def update_wallet!(order)
+      pass = OrderWalletPass.find_by(order_id: order.id)
+      # #38: Broadcaster уже обновил pass до ready — не bump revision повторно.
+      return if pass&.status_label.to_s == "ready"
+
       Shop::AppleWallet::PassUpdater.call!(order: order)
     rescue Shop::AppleWallet::UnavailableError => e
       Rails.logger.info("[Shop::ReadyPushJob] wallet fallback FCM-only: #{e.message}")

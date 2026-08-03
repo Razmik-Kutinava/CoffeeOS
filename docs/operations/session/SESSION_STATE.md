@@ -2,13 +2,20 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-08-03 (RED шаг 4 · #38 Broadcaster PassUpdater)
+**Дата:** 2026-08-03 (GREEN шаг 4 · #38 Broadcaster PassUpdater)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#38** RED шаг 4 `[x]` | GREEN шаг 4 при намерении |
+| **#38** GREEN шаг 4 `[x]` | RED шаг 5 (PWA CTA state machine) |
 | **#37** Fly v419 MCP PASS | апрув заказчика |
 | **Charge live PASS** #32/#33/#27 · #34 Setup PASS | Zero-Click после 1× bind в банке |
+
+### Сессия 2026-08-03 (GREEN шаг 4 · #38 Broadcaster wallet update)
+
+- Broadcaster: PassUpdater if `OrderWalletPass` exists; soft-fail Generation/Unavailable
+- ReadyPushJob: skip PassUpdater when `status_label` already `ready`
+- Тесты: 24 runs / 89 assertions PASS
+- Дальше: RED шаг 5 PWA CTA machine
 
 ### Сессия 2026-08-03 (RED шаг 4 · #38 Broadcaster wallet update)
 
