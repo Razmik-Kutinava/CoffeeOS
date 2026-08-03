@@ -108,4 +108,26 @@ class Shop::ReadyPushJobTest < ActiveSupport::TestCase
     assert_equal "🟩🟩🟩", note.payload["progress"]
     assert_match(/\A🟩🟩🟩/, note.body)
   end
+
+  # --- #38 шаг 4 [TDD-RED]: не дублировать Wallet hard на ready ---
+
+  test "#38 ReadyPushJob skips PassUpdater when pass already at ready" do
+    OrderWalletPass.create!(
+      order_id: @order.id,
+      tenant_id: @tenant.id,
+      customer_id: @customer.id,
+      serial_number: "ser-#{SecureRandom.hex(8)}",
+      authentication_token: SecureRandom.hex(16),
+      pass_type_identifier: "pass.ru.coffeeos.order",
+      status_label: "ready",
+      revision: 3
+    )
+
+    Shop::ReadyPushJob.perform_now(@order.id, "preparing")
+
+    pass = OrderWalletPass.find_by!(order_id: @order.id)
+    assert_equal 3, pass.revision
+    assert_equal "ready", pass.status_label
+    assert PushNotification.order(created_at: :desc).first.present?
+  end
 end

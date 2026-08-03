@@ -2,13 +2,18 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-08-03 (GREEN шаг 3 · #38 pkpass enrich)
+**Дата:** 2026-08-03 (RED шаг 4 · #38 Broadcaster PassUpdater)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#38** GREEN шаг 3 `[x]` | RED шаг 4 (APNs из Broadcaster) |
+| **#38** RED шаг 4 `[x]` | GREEN шаг 4 при намерении |
 | **#37** Fly v419 MCP PASS | апрув заказчика |
 | **Charge live PASS** #32/#33/#27 · #34 Setup PASS | Zero-Click после 1× bind в банке |
+
+### Сессия 2026-08-03 (RED шаг 4 · #38 Broadcaster wallet update)
+
+- Тесты: pass revision не обновляется; ReadyPushJob всё ещё bump revision если pass already ready
+- Дальше: GREEN — Broadcaster `PassUpdater` if exists + soft-fail; ReadyPushJob skip if status_label already ready
 
 ### Сессия 2026-08-03 (GREEN шаг 3 · #38 pkpass enrich)
 
