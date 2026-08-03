@@ -50,4 +50,19 @@ class Shop::Api::WalletPassTest < ActionDispatch::IntegrationTest
 
     assert_response :not_found
   end
+
+  # --- #38 шаг 3 [TDD-RED] ---
+
+  test "#38 GET wallet_pass 500 JSON when certificate/generation fails" do
+    verify_shop_email!(tenant_id: @tenant.id, email: @customer.email)
+    ENV["WALLET_FORCE_GEN_ERROR"] = "1"
+
+    get "/shop/api/orders/#{@order.id}/wallet_pass",
+        headers: shop_tenant_headers(@tenant.id)
+
+    assert_response :internal_server_error
+    body = JSON.parse(response.body)
+    assert body["error"].present?
+    assert_match(/wallet|cert|generation|forced/i, body["error"])
+  end
 end
