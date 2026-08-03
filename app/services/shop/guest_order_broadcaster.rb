@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Shop
-  # WebSocket + FCM + Apple Wallet update (#38) для mobile-заказа.
+  # WebSocket + FCM + Apple Wallet (#38) + enqueue OrderReadyCascadeJob (#39) для mobile.
   class GuestOrderBroadcaster
     def self.call(order:, old_status: nil)
       return unless order.source == "mobile"
@@ -24,6 +24,7 @@ module Shop
 
       Shop::OrderStatusPushNotifier.call(order: order, old_status: old_status)
       update_wallet_pass_if_present!(order)
+      enqueue_ready_cascade!(order)
     end
 
     def self.update_wallet_pass_if_present!(order)
@@ -36,5 +37,13 @@ module Shop
       Rails.logger.warn("[Shop::GuestOrderBroadcaster] wallet update soft-fail: #{e.class} #{e.message}")
     end
     private_class_method :update_wallet_pass_if_present!
+
+    # #39: платные каналы (TG→SMS) после бесплатных WS/Push/Wallet
+    def self.enqueue_ready_cascade!(order)
+      return unless order.ready?
+
+      Shop::OrderReadyCascadeJob.perform_later(order.id)
+    end
+    private_class_method :enqueue_ready_cascade!
   end
 end

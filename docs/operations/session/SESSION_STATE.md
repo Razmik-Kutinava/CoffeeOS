@@ -2,13 +2,19 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-08-03 (#38 MCP PASS v421 · #39 SPEC)
+**Дата:** 2026-08-03 (#39 GREEN шаг 1 · #38 MCP v421)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#38** Fly **v421** · MCP **PASS** (Aram) | апрув заказчика «ок» или #39 RED |
-| **#39** Order ready cascade WS→TG→SMS | **PHASE 1 SPEC `[x]`** · ждёт намерение → RED шаг 1 |
-| Live Fly | **v421** · image `deployment-01KZ3T8HZMBBGBMH2GD7Z20J37` |
+| **#39** Order ready cascade | шаг 1 **GREEN** · дальше RED шаг 2 (presence) |
+| **#38** Fly **v421** · MCP **PASS** (Aram) | апрув заказчика «ок» |
+| Live Fly | **v421** |
+
+### Сессия 2026-08-03 (GREEN шаг 1 · #39 cascade enqueue)
+
+- `Shop::OrderReadyCascadeJob` skeleton; Broadcaster enqueue на `ready`
+- Тесты: 18/52 PASS · регрессия notifier+ready+broadcaster+cascade **26/87 PASS**
+- Barista controller/service — без diff
 
 ### Сессия 2026-08-03 (MCP · #38 Fly v421)
 
