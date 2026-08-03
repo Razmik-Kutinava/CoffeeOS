@@ -1,8 +1,20 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-07-31 (**Status inside cart sheet Fly v418 MCP PASS**)  
+**Дата:** 2026-08-03 (**PHASE 0 intake · Order status OS detect + Wallet/WebPush**)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev  
+
+### Order status OS detect + Wallet/WebPush (2026-08-03)
+
+| Что | Статус |
+|-----|--------|
+| Intake (PHASE 0) | **`[x]`** |
+| PHASE 1 SPEC | **`[ ]`** ждёт go |
+| RED / GREEN / REVIEW / MCP | **`[ ]`** |
+
+**ТЗ:** [`Адаптивный виджет статуса заказа Детекция ОС и подписка на уведомления.md`](../milestones/veha_2/requirements/customer_tasks/Адаптивный%20виджет%20статуса%20заказа%20Детекция%20ОС%20и%20подписка%20на%20уведомления.md)  
+**Артефакты:** [`order_status_os_detect_wallet_webpush/`](../milestones/veha_2/artifacts/order_status_os_detect_wallet_webpush/)  
+**Дальше:** go → PHASE 1 SPEC (маппинг React/TSX путей ТЗ на Svelte `app/frontend/` + существующие Wallet/Push API).
 
 ### Status inside cart sheet (2026-07-31)
 

@@ -2,12 +2,20 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-07-31 (Status inside cart sheet · Fly v418 MCP PASS)
+**Дата:** 2026-08-03 (PHASE 0 intake · Order status OS detect + Wallet/WebPush)
 
 | Сейчас | Дальше |
 |--------|--------|
+| **Order status OS detect + Wallet/WebPush** интейк `[x]` | PHASE 1: SPEC по **go** |
 | **Status inside cart sheet** Fly **v418** MCP **PASS** | апрув заказчика |
 | **Quick Repeat** Fly v417 MCP PASS | апрув заказчика |
+
+### Сессия 2026-08-03 (PHASE 0 intake · OS detect Wallet/WebPush)
+
+- Док ТЗ 1:1: `customer_tasks/Адаптивный виджет статуса заказа Детекция ОС и подписка на уведомления.md`
+- Артефакты: `artifacts/order_status_os_detect_wallet_webpush/`
+- CBR + `customer_tasks/README.md` — строка #37 / backlog
+- Код / todo.md / SPEC — не трогали; ждём go → PHASE 1
 
 ### Сессия 2026-07-31 (push/deploy/MCP · Status inside cart sheet)
 

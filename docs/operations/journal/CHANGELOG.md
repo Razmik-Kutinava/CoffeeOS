@@ -1,5 +1,10 @@
 ﻿# CHANGELOG
 
+## 2026-08-03 — docs: intake Order status OS detect + Wallet/WebPush
+- PHASE 0: ТЗ 1:1 `customer_tasks/Адаптивный виджет статуса заказа Детекция ОС и подписка на уведомления.md`
+- Артефакты: `artifacts/order_status_os_detect_wallet_webpush/`
+- Индекс CBR #37 + `customer_tasks/README.md`; код не менялся
+
 ## 2026-07-31 — deploy: Status inside cart sheet v418 + MCP PASS
 - Push `876b5432` · `fly deploy` → **v418**
 - MCP: status DOM внутри `shop-cart-sheet`, `embedded=true`, CSS `relative` (не overlay)
