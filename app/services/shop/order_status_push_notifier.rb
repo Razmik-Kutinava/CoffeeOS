@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Shop
-  # Push при смене статуса mobile-заказа (B1.1).
+  # Push при смене статуса mobile-заказа (B1.1 + #38 FCM enrich).
   class OrderStatusPushNotifier
     # B2.1 — тексты при смене статуса баристой (accepted→preparing, preparing→ready).
     BARISTA_TRANSITION_BODIES = {
@@ -43,8 +43,21 @@ module Shop
         return
       end
 
+      meta = enriched_meta!
+      return if meta == :aborted
+
       title = TITLES[@order.status] || "Статус заказа"
-      body = body_for_status
+      body = compose_body(meta)
+      payload = {
+        "order_id" => @order.id,
+        "status" => @order.status,
+        "order_number" => @order.order_number
+      }
+      if meta
+        payload["tag"] = meta[:tag]
+        payload["actions"] = meta[:actions]
+        payload["progress"] = meta[:progress]
+      end
 
       notification = PushNotification.create!(
         customer_id: customer.id,
@@ -52,11 +65,7 @@ module Shop
         notification_type: "order_status",
         title: title,
         body: body,
-        payload: {
-          order_id: @order.id,
-          status: @order.status,
-          order_number: @order.order_number
-        },
+        payload: payload,
         status: :pending
       )
 
@@ -66,6 +75,23 @@ module Shop
     end
 
     private
+
+    # :aborted — ошибка enrich; nil — статус вне матрицы (legacy); Hash — enrich ok
+    def enriched_meta!
+      return nil unless Shop::OrderStatusPushPayload.enrichable?(@order)
+
+      Shop::OrderStatusPushPayload.build!(order: @order)
+    rescue Shop::OrderStatusPushPayload::Error => e
+      Rails.logger.warn("[Shop::OrderStatusPushNotifier] payload #{e.class}: #{e.message}")
+      :aborted
+    end
+
+    def compose_body(meta)
+      text = body_for_status
+      return text unless meta.is_a?(Hash)
+
+      "#{meta[:progress]} #{text}"
+    end
 
     def body_for_status
       transition_body = BARISTA_TRANSITION_BODIES[[@old_status.to_s, @order.status.to_s]]

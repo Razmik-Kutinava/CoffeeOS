@@ -55,7 +55,7 @@ class Shop::PushPipelineSimulationTest < ActionDispatch::IntegrationTest
 
     notification = PushNotification.order(created_at: :desc).first
     assert_not_nil notification
-    assert_equal "Ваш заказ начали готовить", notification.body
+    assert_match(/\A🟩🟩⬜ Ваш заказ начали готовить\z/, notification.body)
     assert_equal "sent", notification.status
     assert_not_nil notification.sent_at
   end
@@ -69,7 +69,7 @@ class Shop::PushPipelineSimulationTest < ActionDispatch::IntegrationTest
     Shop::SendPushNotificationJob.perform_now(notification.id)
 
     notification.reload
-    assert_equal "Ваш заказ начали готовить", notification.body
+    assert_match(/\A🟩🟩⬜ Ваш заказ начали готовить\z/, notification.body)
     assert_equal "sent", notification.status
   end
 end

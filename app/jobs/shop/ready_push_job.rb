@@ -3,11 +3,11 @@
 module Shop
   # #35 B3 — ready: Apple Wallet update + FCM. Wallet unavailable → FCM only.
   # GenerationError → raise (ActiveJob retry). Не блокирует POS (async).
+  # #38 — FCM body/payload с tag/actions/unicode progress.
   class ReadyPushJob < ApplicationJob
     queue_as :default
 
     READY_BODY = "Ваш кофе готов! Заберите на кассе"
-    # B2.1 совместимый текст тоже принимаем в тестах notifier path; job шлёт ТЗ-копию.
     TITLE = "Заказ готов"
 
     def perform(order_id, old_status = "preparing")
@@ -31,22 +31,30 @@ module Shop
     end
 
     def deliver_fcm!(order, customer, _old_status)
+      meta = Shop::OrderStatusPushPayload.build!(order: order)
+      body = "#{meta[:progress]} #{READY_BODY}"
+
       notification = PushNotification.create!(
         customer_id: customer.id,
         tenant_id: order.tenant_id,
         notification_type: "order_status",
         title: TITLE,
-        body: READY_BODY,
+        body: body,
         payload: {
-          order_id: order.id,
-          status: order.status,
-          order_number: order.order_number,
-          channel: "ready_push"
+          "order_id" => order.id,
+          "status" => order.status,
+          "order_number" => order.order_number,
+          "channel" => "ready_push",
+          "tag" => meta[:tag],
+          "actions" => meta[:actions],
+          "progress" => meta[:progress]
         },
         status: :pending
       )
 
       Shop::SendPushNotificationJob.perform_now(notification.id)
+    rescue Shop::OrderStatusPushPayload::Error => e
+      Rails.logger.warn("[Shop::ReadyPushJob] FCM payload #{e.class}: #{e.message}")
     end
   end
 end

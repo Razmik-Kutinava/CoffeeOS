@@ -57,7 +57,7 @@ class Shop::OrderStatusPushNotifierTest < ActiveSupport::TestCase
     Shop::OrderStatusPushNotifier.call(order: @order.reload, old_status: "accepted")
 
     notification = PushNotification.order(created_at: :desc).first
-    assert_equal "Ваш заказ начали готовить", notification.body
+    assert_match(/\A🟩🟩⬜ Ваш заказ начали готовить\z/, notification.body)
     assert_equal "Заказ готовится", notification.title
   end
 
@@ -73,7 +73,7 @@ class Shop::OrderStatusPushNotifierTest < ActiveSupport::TestCase
     perform_enqueued_jobs
 
     notification = PushNotification.order(created_at: :desc).first
-    assert_equal Shop::ReadyPushJob::READY_BODY, notification.body
+    assert_match(/\A🟩🟩🟩 #{Regexp.escape(Shop::ReadyPushJob::READY_BODY)}\z/, notification.body)
     assert_equal "Заказ готов", notification.title
   ensure
     ENV.delete("WALLET_SIMULATE")
@@ -106,15 +106,16 @@ class Shop::OrderStatusPushNotifierTest < ActiveSupport::TestCase
 
   test "#38 payload builder error soft-fails without enqueue or raise" do
     assert defined?(Shop::OrderStatusPushPayload)
+    ENV["PUSH_PAYLOAD_FORCE_ERROR"] = "1"
 
-    Shop::OrderStatusPushPayload.stub(:build!, ->(*) { raise Shop::OrderStatusPushPayload::Error, "forced 500" }) do
-      assert_nothing_raised do
-        assert_no_enqueued_jobs(only: Shop::SendPushNotificationJob) do
-          assert_no_difference -> { PushNotification.count } do
-            Shop::OrderStatusPushNotifier.call(order: @order, old_status: "pending_payment")
-          end
+    assert_nothing_raised do
+      assert_no_enqueued_jobs(only: Shop::SendPushNotificationJob) do
+        assert_no_difference -> { PushNotification.count } do
+          Shop::OrderStatusPushNotifier.call(order: @order, old_status: "pending_payment")
         end
       end
     end
+  ensure
+    ENV.delete("PUSH_PAYLOAD_FORCE_ERROR")
   end
 end

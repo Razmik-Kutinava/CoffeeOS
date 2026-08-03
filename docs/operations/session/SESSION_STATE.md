@@ -2,13 +2,21 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-08-03 (PHASE 1 SPEC · #38 Background FCM + Apple Wallet)
+**Дата:** 2026-08-03 (GREEN шаг 1 · #38 FCM payload)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#38** RED шаг 1 `[x]` (FCM payload tests) | GREEN шаг 1 при намерении |
+| **#38** GREEN шаг 1 `[x]` | RED шаг 2 (SW notificationclick) |
 | **#37** Fly v419 MCP PASS | апрув заказчика |
 | **Charge live PASS** #32/#33/#27 · #34 Setup PASS | Zero-Click после 1× bind в банке |
+
+### Сессия 2026-08-03 (GREEN шаг 1 · #38 FCM payload)
+
+- `Shop::OrderStatusPushPayload` — tag/actions/progress; soft-fail `PUSH_PAYLOAD_FORCE_ERROR`
+- Wire: notifier + ReadyPushJob; body `🟩… текст`
+- Тесты: 22 runs / 84 assertions PASS (payload+notifier+ready+broadcaster+pipeline)
+- Barista status files — не трогали
+- Дальше: RED шаг 2 SW actions
 
 ### Сессия 2026-08-03 (RED шаг 1 · #38 FCM payload)
 

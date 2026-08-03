@@ -2,7 +2,7 @@
 
 **ТЗ:** [`customer_tasks/Фоновые уведомления прогресс-бар Android FCM и Apple Wallet iOS.md`](../milestones/veha_2/requirements/customer_tasks/Фоновые%20уведомления%20прогресс-бар%20Android%20FCM%20и%20Apple%20Wallet%20iOS.md)  
 **Артефакты:** [`artifacts/background_notifications_fcm_apple_wallet/`](../milestones/veha_2/artifacts/background_notifications_fcm_apple_wallet/)  
-**Фаза:** SPEC `[x]` · RED шаг 1 `[x]` · GREEN шаг 1 `[ ]` · RED/GREEN 2–5 `[ ]` · REVIEW `[ ]` · MCP/deploy `[ ]`
+**Фаза:** SPEC `[x]` · RED/GREEN шаг 1 `[x]` · RED/GREEN 2–5 `[ ]` · REVIEW `[ ]` · MCP/deploy `[ ]`
 
 ---
 
@@ -38,7 +38,7 @@
 
 | # | Что | Файлы (ориентир) | Тесты | Статус |
 |---|-----|------------------|-------|--------|
-| 1 | Обогащение FCM payload: `tag`, unicode progress, `actions` по матрице; soft-fail | `order_status_push_notifier.rb` · payload builder (новый тонкий helper при >~50 строк) · `fcm_client.rb` (android/web fields если нужны) · `ready_push_job.rb` (тот же контракт) | `test/services/shop/order_status_push_payload_test.rb` · notifier · ready_push_job | **RED `[x]`** |
+| 1 | Обогащение FCM payload: `tag`, unicode progress, `actions` по матрице; soft-fail | `order_status_push_payload.rb` · notifier · `ready_push_job.rb` | payload + notifier + ready + pipeline | **GREEN `[x]`** |
 | 2 | SW: `notificationclick` — cancel → `fetch` cancel API; chat/tips → focus + deep link; ошибка сети → local notification | `app/views/shop/firebase_sw/show.js.erb` · при необходимости `app/frontend/lib/swNotificationActions.js` (логика вынести + тест) | `test/javascript/sw_notification_actions_test.mjs` | `[ ]` |
 | 3 | `.pkpass` / download path: enrich PassBuilder (status / QR ready / back links chat+tips); strip из токенов прогресса B1.1; 500 → toast (#37 уже) | `apple_wallet/pass_builder.rb` · `orders#wallet_pass` · runbook | `test/services/shop/…` · `test/integration/shop/api/wallet_pass_test.rb` | `[ ]` |
 | 4 | APNs update на **каждой** смене статуса, если `OrderWalletPass` уже есть; вызов из `GuestOrderBroadcaster` (rescue, не ломать cable/FCM); не дублировать hard с ReadyPushJob | `guest_order_broadcaster.rb` · `AppleWallet::PassUpdater` · `ApnsClient` | `test/services/shop/guest_order_broadcaster_test.rb` · pass_updater tests | `[ ]` |
