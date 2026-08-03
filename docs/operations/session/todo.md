@@ -2,7 +2,7 @@
 
 **ТЗ:** [`customer_tasks/Адаптивный виджет статуса заказа Детекция ОС и подписка на уведомления.md`](../milestones/veha_2/requirements/customer_tasks/Адаптивный%20виджет%20статуса%20заказа%20Детекция%20ОС%20и%20подписка%20на%20уведомления.md)  
 **Артефакты:** [`artifacts/order_status_os_detect_wallet_webpush/`](../milestones/veha_2/artifacts/order_status_os_detect_wallet_webpush/)  
-**Фаза:** SPEC `[x]` · RED `[ ]` · GREEN `[ ]` · REVIEW `[ ]` · MCP/deploy `[ ]`
+**Фаза:** SPEC `[x]` · RED `[x]` шаг 1 · GREEN `[ ]` · REVIEW `[ ]` · MCP/deploy `[ ]`
 
 ---
 
@@ -32,11 +32,12 @@
 
 ## Атомарные шаги (TDD)
 
-### Шаг 1 — `getDeviceOS` `[ ]`
+### Шаг 1 — `getDeviceOS` `[x]` RED · GREEN `[ ]`
 
-- **Файлы:** `app/frontend/lib/deviceDetect.js` · `test/javascript/device_detect_test.mjs`
-- **Given/When/Then:** как в ТЗ — `'ios'` (iPhone/iPod + iPadOS MacIntel+touch), `'android'`, `'desktop'` (+ SSR `window` undefined → `'desktop'`)
-- **TDD:** RED тест с моками UA/platform → GREEN реализация
+- **Файлы:** `app/frontend/lib/deviceDetect.js` (stub) · `test/javascript/device_detect_test.mjs`
+- **RED:** 7/7 fail (`undefined` ≠ ios/android/desktop) — коммит `[RED]`
+- **Given/When/Then:** как в ТЗ — `'ios'` (iPhone/iPod + iPadOS MacIntel+touch), `'android'`, `'desktop'` (+ SSR `hasWindow:false` → `'desktop'`)
+- **TDD:** RED тест с injectable env → GREEN реализация
 
 ### Шаг 2 — Верстка кнопок в аккордеоне `[ ]`
 
