@@ -2,13 +2,19 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-08-03 (GREEN шаг 1 · #38 FCM payload)
+**Дата:** 2026-08-03 (RED шаг 2 · #38 SW notificationclick)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#38** GREEN шаг 1 `[x]` | RED шаг 2 (SW notificationclick) |
+| **#38** RED шаг 2 `[x]` (SW actions tests) | GREEN шаг 2 при намерении |
 | **#37** Fly v419 MCP PASS | апрув заказчика |
 | **Charge live PASS** #32/#33/#27 · #34 Setup PASS | Zero-Click после 1× bind в банке |
+
+### Сессия 2026-08-03 (RED шаг 2 · #38 SW notificationclick)
+
+- Тест: `test/javascript/sw_notification_actions_test.mjs` — ERR_MODULE_NOT_FOUND (`swNotificationActions.js`)
+- Контракт: cancel POST + error toast; chat/tips deep link; tag/actions в showNotification
+- Дальше: GREEN — lib + wire `firebase_sw/show.js.erb`
 
 ### Сессия 2026-08-03 (GREEN шаг 1 · #38 FCM payload)
 

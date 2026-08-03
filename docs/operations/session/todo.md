@@ -2,7 +2,7 @@
 
 **ТЗ:** [`customer_tasks/Фоновые уведомления прогресс-бар Android FCM и Apple Wallet iOS.md`](../milestones/veha_2/requirements/customer_tasks/Фоновые%20уведомления%20прогресс-бар%20Android%20FCM%20и%20Apple%20Wallet%20iOS.md)  
 **Артефакты:** [`artifacts/background_notifications_fcm_apple_wallet/`](../milestones/veha_2/artifacts/background_notifications_fcm_apple_wallet/)  
-**Фаза:** SPEC `[x]` · RED/GREEN шаг 1 `[x]` · RED/GREEN 2–5 `[ ]` · REVIEW `[ ]` · MCP/deploy `[ ]`
+**Фаза:** SPEC `[x]` · RED/GREEN шаг 1 `[x]` · RED шаг 2 `[x]` · GREEN 2–5 `[ ]` · REVIEW `[ ]` · MCP/deploy `[ ]`
 
 ---
 
@@ -39,7 +39,7 @@
 | # | Что | Файлы (ориентир) | Тесты | Статус |
 |---|-----|------------------|-------|--------|
 | 1 | Обогащение FCM payload: `tag`, unicode progress, `actions` по матрице; soft-fail | `order_status_push_payload.rb` · notifier · `ready_push_job.rb` | payload + notifier + ready + pipeline | **GREEN `[x]`** |
-| 2 | SW: `notificationclick` — cancel → `fetch` cancel API; chat/tips → focus + deep link; ошибка сети → local notification | `app/views/shop/firebase_sw/show.js.erb` · при необходимости `app/frontend/lib/swNotificationActions.js` (логика вынести + тест) | `test/javascript/sw_notification_actions_test.mjs` | `[ ]` |
+| 2 | SW: `notificationclick` — cancel → `fetch` cancel API; chat/tips → focus + deep link; ошибка сети → local notification | `firebase_sw/show.js.erb` · `swNotificationActions.js` | `test/javascript/sw_notification_actions_test.mjs` | **RED `[x]`** |
 | 3 | `.pkpass` / download path: enrich PassBuilder (status / QR ready / back links chat+tips); strip из токенов прогресса B1.1; 500 → toast (#37 уже) | `apple_wallet/pass_builder.rb` · `orders#wallet_pass` · runbook | `test/services/shop/…` · `test/integration/shop/api/wallet_pass_test.rb` | `[ ]` |
 | 4 | APNs update на **каждой** смене статуса, если `OrderWalletPass` уже есть; вызов из `GuestOrderBroadcaster` (rescue, не ломать cable/FCM); не дублировать hard с ReadyPushJob | `guest_order_broadcaster.rb` · `AppleWallet::PassUpdater` · `ApnsClient` | `test/services/shop/guest_order_broadcaster_test.rb` · pass_updater tests | `[ ]` |
 | 5 | PWA UI state machine на карточке: CTAs по матрице; WS reconnect banner (B1.1 уже есть — проверить/дотянуть); max 2 кнопки; только существующие стили | `OrderStatus.svelte` · `orderStatusNotifyActions.js` / новый `orderStatusCtaMachine.js` · accordion при необходимости | `test/javascript/order_status_cta_machine_test.mjs` (+ существующие progress/cable) | `[ ]` |
