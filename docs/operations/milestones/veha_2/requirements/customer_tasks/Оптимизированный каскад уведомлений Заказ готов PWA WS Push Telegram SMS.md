@@ -106,4 +106,4 @@
 
 - Интейк PHASE 0 (2026-08-03): текст выше — 1:1 из чата.
 - Связь: #35 compact status + Push, #37 OS detect Wallet/WebPush, #38 FCM progress + Apple Wallet.
-- В SPEC (PHASE 1): маппинг путей ТЗ (`spec/`, `POST /api/v1/barista/…`, `in_progress`) → канон CoffeeOS (Minitest, существующие barista routes/статусы, Sidekiq/FCM/Wallet).
+- **PHASE 1 SPEC (2026-08-03):** канон в `docs/operations/session/todo.md` — Minitest/Solid Queue (не RSpec/Sidekiq); `preparing`+`PATCH update_status` (не `in_progress` / `/api/v1/…/ready`); reuse GuestOrderBroadcaster+FCM+Wallet; presence = `Rails.cache` (не Redis); `Shop::TelegramBotClient` + `mobile_customers.telegram_chat_id`; SMS через расширенный `Shop::SmsRuClient` (`SMS_RU_FROM`); лог = `order_notification_logs`; Migration Gate на DDL.

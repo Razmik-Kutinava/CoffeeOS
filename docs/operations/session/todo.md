@@ -1,26 +1,8 @@
-# todo — Background FCM progress + Apple Wallet (#38)
+# todo — Order ready cascade WS→TG→SMS (#39)
 
-**ТЗ:** [`customer_tasks/Фоновые уведомления прогресс-бар Android FCM и Apple Wallet iOS.md`](../milestones/veha_2/requirements/customer_tasks/Фоновые%20уведомления%20прогресс-бар%20Android%20FCM%20и%20Apple%20Wallet%20iOS.md)  
-**Артефакты:** [`artifacts/background_notifications_fcm_apple_wallet/`](../milestones/veha_2/artifacts/background_notifications_fcm_apple_wallet/)  
-**Фаза:** SPEC `[x]` · RED/GREEN 1–5 `[x]` · REVIEW `[x]` · MCP/deploy `[ ]`
-
----
-
-## PHASE 3: REVIEW (2026-08-03)
-
-| Проверка | Результат |
-|----------|-----------|
-| Rails зона push/wallet | **33 runs / 127 assertions PASS** |
-| JS (sw/cta/notify/wallet/device) | **40/40 PASS** |
-| Barista `OrdersController` / `OrderStatusUpdateService` | **без diff** |
-| N+1 | нет циклов AR в новых сервисах |
-| RLS | wallet_pass session visibility без изменений контракта |
-| File size | new libs ≤101; `OrderStatus.svelte` **754** (legacy warn); Accordion **322** (warn, не трогали логику) |
-| PKCS7 / APNs prod device tokens | backlog PRACTICES `V2-#35-WALLET-PROD` |
-| Chat/Tips продукт | deep link only — backlog NETMONET / chat UI |
-| MCP / Fly deploy | **ждут явный апрув** |
-
-**Tip GREEN:** `f3f0f2db` · intake `4a8d2e44` · SPEC `67eb0080`
+**ТЗ:** [`customer_tasks/Оптимизированный каскад уведомлений Заказ готов PWA WS Push Telegram SMS.md`](../milestones/veha_2/requirements/customer_tasks/Оптимизированный%20каскад%20уведомлений%20Заказ%20готов%20PWA%20WS%20Push%20Telegram%20SMS.md)  
+**Артефакты:** [`artifacts/order_ready_cascade_ws_telegram_sms/`](../milestones/veha_2/artifacts/order_ready_cascade_ws_telegram_sms/)  
+**Фаза:** SPEC `[x]` · RED/GREEN `[ ]` · REVIEW `[ ]` · MCP/deploy `[ ]`
 
 ---
 
@@ -28,27 +10,66 @@
 
 | В ТЗ | В репо (делать так) | Не делать |
 |------|---------------------|-----------|
-| RSpec `spec/services/shop/…` | **Minitest** `test/services/shop/…` (+ integration при API/SW) | Не заводить `spec/` |
-| Vitest / Playwright paths | **Node** `test/javascript/*.mjs` (+ при необходимости MCP Fly) | Не React/Vitest/Playwright |
-| `Shop::AppleWalletPassUpdater` | Существующий **`Shop::AppleWallet::PassUpdater`** (+ `ApnsClient`, `PassBuilder`) | Не дублировать top-level класс |
-| Триггер статуса | Уже: `Barista::OrderStatusUpdateService` → `GuestOrderBroadcaster` | **Не менять** `Barista::OrdersController` / `OrderStatusUpdateService` |
-| FCM send | `OrderStatusPushNotifier` → `PushNotification` → `SendPushNotificationJob` → `FcmClient` · ready → `ReadyPushJob` | Не слать FCM из barista |
-| SW Android | `GET /firebase-messaging-sw.js` → `app/views/shop/firebase_sw/show.js.erb` | Не сырой WebPush в `app/views/pwa/service-worker.js` |
-| Cancel API | `POST /shop/api/orders/:id/cancel` (`GuestOrderCancellationService`) | Не PATCH barista |
-| Wallet download | Уже #37: `GET /shop/api/orders/:id/wallet_pass` | Не `/api/v1/…` |
-| UI карточки | `OrderStatus.svelte` + `ActiveOrdersAccordion` / `orderStatusNotifyActions.js` · стили `#ff8c42` / существующие классы | Нет новых CSS-переменных / Tailwind-изобретений |
-| Прогресс в push | Юникод 3 клетки по статусу (ниже) · визуальный бар PWA = `orderStatusProgress.js` (B1.1) | Не новый progress UI-kit |
-| Chat / Tips | Deep link `#/order/:id?action=chat\|tips` на карточку; **экранов чата/чаевых в коде нет** (`tips_initiated_at` нет в `schema.rb`) | Нет миграций без Migration Gate + go; Tips = CTA + toast/placeholder до NETMONET |
+| RSpec / WebMock / FactoryBot / `spec/…` | **Minitest** `test/services/…`, `test/jobs/…`, `test/channels/…` + stubs/simulate | Не заводить `spec/`, WebMock, Sidekiq |
+| Sidekiq | **Solid Queue** (`ApplicationJob` / `perform_later`) | Не добавлять Sidekiq/Redis gem |
+| `in_progress` | **`preparing`** | Не вводить статус `in_progress` |
+| `POST /api/v1/barista/orders/:id/ready` | Уже: **`PATCH /barista/orders/:id/update_status?status=ready`** → `OrderStatusUpdateService` → `GuestOrderBroadcaster` | Не плодить `/api/v1/…/ready` |
+| `OrderChannel` + payload `{order_id,status}` | **`Shop::GuestOrderChannel`** + payload `type/status_changed` (как сейчас) | Не ломать контракт Cable FE |
+| `WebPushService` / `AppleWalletNotificationService` | Уже: **FCM** (`OrderStatusPushNotifier` → `ReadyPushJob`) + **`Shop::AppleWallet::PassUpdater`** | Не дублировать второй push/wallet путь |
+| Redis `order:{id}:online` | **`Rails.cache`** ключ `order:{id}:online` (prod = Solid Cache; test = memory_store) | Не тащить Redis только ради presence |
+| `TelegramBotClient` | Новый **`Shop::TelegramBotClient`** (отдельно от ops `TelegramAlertJob`) | Не слать гостю через `TELEGRAM_CHAT_ID` алертов |
+| `telegram_chat_id` | Колонка на **`mobile_customers`** (Migration Gate) | Не на `users` (сотрудники) |
+| `SmsRuClient.send_sms` произвольный текст | Расширить **`Shop::SmsRuClient`**: `send_message!(phone:, msg:)` + валидация `msg.length <= 70` | Не ломать OTP `send_sms!(code:)` |
+| `SMS_RU_SENDER` | Канон ENV: **`SMS_RU_FROM`** (как OTP); алиас `SMS_RU_SENDER` опционально | Не хардкодить sender |
+| `TELEGRAM_BOT_TOKEN` | Только `ENV` (уже есть у алертов) | Не логировать token |
+| `NotificationHistory` | Новая таблица **`order_notification_logs`** (channel/status/error/payload) — Migration Gate | Не путать с `push_notifications` (FCM) |
+| `order_hash` в ссылке | Deep link: **`/shop/#/order/{order.id}`** (короткий текст SMS); внешний `codeblack.xyz/o/…` — backlog домена | Не выдумывать `order_hash` без DDL |
+| Синхронный HTTP в request | Только Job | Уже так для FCM; cascade — только Job |
 
-### Матрица состояний (канон — из шага 5 ТЗ; отдельной таблицы в paste не было)
+### Каскад (канон поведения)
 
-| `Order.status` | FCM `tag` | Unicode body prefix | FCM `actions` | PWA CTAs (макс. 2) |
-|----------------|-----------|---------------------|---------------|---------------------|
-| `accepted` | `order-#{id}` | `🟩⬜⬜` | `cancel` | [Отменить] · [Push / Wallet] (как #37 OS) |
-| `preparing` | `order-#{id}` | `🟩🟩⬜` | `chat`, `tips` | [Чат] · [Чаевые / Wallet] |
-| `ready` | `order-#{id}` | `🟩🟩🟩` | `chat`, `tips` | [Чат] · [Чаевые / Wallet]; face pass → QR (когда PKCS7) |
+```text
+barista PATCH update_status(ready)
+  → GuestOrderBroadcaster
+       → GuestOrderChannel (WS, soft-fail)
+       → FCM / ReadyPushJob + Wallet PassUpdater   # бесплатные мгновенные — УЖЕ ЕСТЬ
+       → OrderReadyCascadeJob.perform_later(order_id)  # НОВОЕ
+            1) presence Rails.cache order:{id}:online?
+               true  → log skip paid; return
+               false → Telegram (если chat_id)
+            2) TG 200 → done
+               TG 400/403/5xx/timeout → SMS fallback (soft-catch, job не failed без SMS-попытки)
+            3) SMS ≤70 → sms.ru; лог в order_notification_logs
+```
 
-Ошибка payload / APNs / cancel fetch — **log + soft-fail**, broadcaster / UI не падают.
+### Presence (канон)
+
+| Событие | Действие |
+|---------|----------|
+| `GuestOrderChannel#subscribed` | `Rails.cache.write("order:#{id}:online", true, expires_in: 15.minutes)` |
+| `GuestOrderChannel#unsubscribed` | `Rails.cache.delete("order:#{id}:online")` |
+| Cascade | `Rails.cache.read(...) == true` → skip TG/SMS |
+| Cache down / raise | Job **re-raises** → ActiveJob retry; TG/SMS не вызывать |
+
+### Секреты / ENV
+
+| ENV | Назначение |
+|-----|------------|
+| `TELEGRAM_BOT_TOKEN` | Bot API для гостя |
+| `SMS_RU_API_ID` | SMS.ru |
+| `SMS_RU_FROM` (≈ `SMS_RU_SENDER`) | sender name |
+| Simulate/test | как у OTP: без ключей → fallback/log, без реального HTTP |
+
+---
+
+## Migration Gate (нужен отдельный `go` перед RED шагов 3–5)
+
+| Изменение | Rollback |
+|-----------|----------|
+| `mobile_customers.telegram_chat_id` string nullable + index partial where not null | `remove_column` |
+| `order_notification_logs` (id, order_id, tenant_id?, channel enum/string, status, error_message, payload jsonb, timestamps) + RLS как у соседних order-таблиц | `drop_table` |
+
+Без апрува DDL — шаги 1–2 (verify + presence + job skeleton без TG/SMS persistence) можно начинать; запись history — после миграции.
 
 ---
 
@@ -56,44 +77,51 @@
 
 | # | Что | Файлы (ориентир) | Тесты | Статус |
 |---|-----|------------------|-------|--------|
-| 1 | Обогащение FCM payload: `tag`, unicode progress, `actions` по матрице; soft-fail | `order_status_push_payload.rb` · notifier · `ready_push_job.rb` | payload + notifier + ready + pipeline | **GREEN `[x]`** |
-| 2 | SW: `notificationclick` — cancel → `fetch` cancel API; chat/tips → focus + deep link; ошибка сети → local notification | `swNotificationActions.js` · `firebase_sw/show.js.erb` · `fcm_client` JSON data | `sw_notification_actions_test.mjs` 11/11 | **GREEN `[x]`** |
-| 3 | `.pkpass` enrich: face / QR / back chat+tips / strip progress | `pass_builder.rb` · runbook | pass_builder + wallet_pass + ready | **GREEN `[x]`** |
-| 4 | APNs update на смене статуса если pass есть; soft-fail; ReadyPushJob без double update | `guest_order_broadcaster.rb` · `ready_push_job.rb` | broadcaster + ready + notifier + pass_builder | **GREEN `[x]`** |
-| 5 | PWA UI state machine: CTAs по матрице; reconnect banner; max 2; UI-kit | `orderStatusCtaMachine.js` · `OrderStatus.svelte` | `order_status_cta_machine_test.mjs` + notify/sw | **GREEN `[x]`** |
+| 1 | **Бесплатные каналы (verify + enqueue cascade)** — при `ready` WS/FCM/Wallet без регрессии; soft-fail Cable; enqueue `OrderReadyCascadeJob` из Broadcaster (не трогать barista controller/service) | `guest_order_broadcaster.rb` · `order_ready_cascade_job.rb` (stub) | broadcaster + ready_push + cascade enqueue | `[ ]` |
+| 2 | **Presence filter** — cache online flag в Channel; cascade skip TG/SMS если online; cache error → retry без внешних API | `guest_order_channel.rb` · cascade job | channel + `order_ready_cascade_job_test` | `[ ]` |
+| 3 | **Telegram success** — `Shop::TelegramBotClient`; текст «готов к выдаче»; 200 → log done, SMS не вызвать; 400 → clear/log chat_id → SMS | `telegram_bot_client.rb` · cascade | client + cascade | `[ ]` |
+| 4 | **Telegram fallback** — 403 / 5xx / timeout перехватить; log; один вызов SMS; job не `failed` без fallback | cascade job | cascade (timeout/403) | `[ ]` |
+| 5 | **SMS.ru ≤70 + log** — `send_message!` + ValidationError до HTTP; `order_notification_logs`; сеть → `failed` в логе, без бесконечного retry | `sms_ru_client.rb` · log model | sms_ru + cascade | `[ ]` |
 
 ### Порядок
 
-1 → 2 (FCM+SW Android) · 3 → 4 (Wallet) · 5 (PWA).  
-Каждый шаг: **RED** → commit `[RED]` → **GREEN** → commit `[GREEN]` · регрессия зоны push/wallet/shop.
+1 → 2 (бесплатные + presence) · **Migration Gate `go`** · 3 → 4 → 5 (TG→SMS).  
+Каждый шаг: **RED** → commit `[RED]` → **GREEN** → commit `[GREEN]` · регрессия зоны.
 
 ### Регрессия зоны (после GREEN)
 
 ```text
-bin/rails test test/services/shop/order_status_push_notifier_test.rb test/services/shop/guest_order_broadcaster_test.rb test/jobs/shop/ready_push_job_test.rb test/integration/shop/api/wallet_pass_test.rb
-# + JS: node --test test/javascript/sw_notification_actions_test.mjs test/javascript/order_status_*_test.mjs
+bin/rails test test/services/shop/guest_order_broadcaster_test.rb test/jobs/shop/ready_push_job_test.rb test/jobs/shop/order_ready_cascade_job_test.rb test/services/shop/sms_ru_client_test.rb test/channels/shop/guest_order_channel_test.rb
+# + при DDL: test/integration/rls_tenant_isolation_test.rb
 ```
 
 ### Риски / backlog
 
 | Риск | Решение в SPEC |
 |------|----------------|
-| PKCS7 / prod APNs device tokens | Уже PRACTICES `V2-#35-WALLET-PROD`; simulate + stub остаются; шаг 3/4 зелёные на `WALLET_SIMULATE` |
-| Chat / Tips нет продукта | Deep link + CTA; Tips без DDL; NETMONET — backlog PRACTICES если не успеем |
-| Двойной Wallet update на `ready` | Broadcaster: PassUpdater только если pass exists; ReadyPushJob: оставить claim+FCM, Wallet — один путь (уточнить на GREEN: либо job, либо broadcaster, не оба hard) |
-| Accordion >200 строк | Логика CTAs в `lib/`, не раздувать `.svelte` |
-| Race accepted→preparing→ready | Тест порядка payload / revision bump; tag дедуп на клиенте |
+| Нет Redis в стеке | Presence через `Rails.cache` / Solid Cache; семантика ключа как в ТЗ |
+| Нет UI привязки Telegram | Cascade читает `telegram_chat_id`; bind-бот / deep-link — **backlog** PRACTICES/CBR |
+| `codeblack.xyz/o/{hash}` | В SMS/TG пока `/shop/#/order/{id}` или короткий host из ENV; кастомный hash — backlog |
+| Дубль FCM + TG | Presence: если WS online — skip paid; если offline — TG затем SMS; FCM уже ушёл бесплатно (как ТЗ) |
+| Barista hot-path | **Не менять** `OrdersController` / `OrderStatusUpdateService` — только Broadcaster side-effect |
+| SMS OTP контракт | Новый метод `send_message!`; `send_sms!(code:)` не ломать |
+| `NotificationHistory` vs push | Отдельная таблица логов каскада, не смешивать с FCM `push_notifications` |
+| File size | Client/job ≤120 строк; не раздувать Broadcaster |
 
-### Запреты (из ТЗ)
+### Запреты (из ТЗ + канон)
 
-- Diff `app/controllers/barista/orders_controller.rb` · `app/services/barista/order_status_update_service.rb` = **пустой**
-- Новые CSS variables / кастомные анимации / «изобретённый» Tailwind
-- Смена источника правды статуса (только существующий barista PATCH → broadcaster side-effects)
+- Хардкод `TELEGRAM_BOT_TOKEN` / `SMS_RU_*`
+- Синхронный HTTP Telegram/SMS в request thread
+- Breaking Cable payload без FE compat
+- Новый barista ready endpoint
+- Sidekiq / Redis gem «заодно»
+- Миграции без Migration Gate + `go`
 
 ---
 
 ## PHASE 1: SPEC — итог
 
-- Интейк #38 уже в CBR / customer_tasks.
+- Интейк #39 уже в CBR / customer_tasks (`9edc2bbd`).
 - Канон и шаги 1–5 зафиксированы здесь; **код не писали**.
-- Дальше: RED шаг 1 при намерении («го / ебашь / сделай»).
+- Шаг 1 ТЗ ≈ уже закрыт инфраструктурой (#35–#38); в коде — только enqueue cascade + verify.
+- Дальше: RED шаг 1 при намерении («го / ебашь / сделай»). DDL TG/SMS log — отдельный `go`.

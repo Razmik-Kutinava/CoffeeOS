@@ -1,5 +1,9 @@
 ﻿# CHANGELOG
 
+## 2026-08-03 — docs: SPEC Order ready cascade WS→TG→SMS (#39)
+- PHASE 1: `todo.md` — маппинг ТЗ → Minitest/Solid Queue + GuestOrderBroadcaster; шаги 1–5 TDD
+- Канон: presence Rails.cache; TelegramBotClient + SMS.ru ≤70; без нового barista ready API; DDL — Migration Gate
+
 ## 2026-08-03 — docs: intake Order ready cascade WS→TG→SMS (#39)
 - PHASE 0: ТЗ 1:1 `customer_tasks/Оптимизированный каскад уведомлений Заказ готов PWA WS Push Telegram SMS.md`
 - Артефакты: `artifacts/order_ready_cascade_ws_telegram_sms/`

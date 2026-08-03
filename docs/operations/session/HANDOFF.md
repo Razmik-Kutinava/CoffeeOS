@@ -8,13 +8,14 @@
 
 | Что | Статус |
 |-----|--------|
-| Intake (PHASE 0) | **`[x]`** |
-| PHASE 1 SPEC | **`[ ]`** ждёт go |
-| RED/GREEN / REVIEW | **`[ ]`** |
+| Intake (PHASE 0) | **`[x]`** `9edc2bbd` |
+| PHASE 1 SPEC | **`[x]`** |
+| RED/GREEN 1–5 / REVIEW | **`[ ]`** |
 
 **ТЗ:** [`Оптимизированный каскад уведомлений Заказ готов PWA WS Push Telegram SMS.md`](../milestones/veha_2/requirements/customer_tasks/Оптимизированный%20каскад%20уведомлений%20Заказ%20готов%20PWA%20WS%20Push%20Telegram%20SMS.md)  
 **Артефакты:** [`order_ready_cascade_ws_telegram_sms/`](../milestones/veha_2/artifacts/order_ready_cascade_ws_telegram_sms/)  
-**Дальше:** go → PHASE 1 SPEC (маппинг ТЗ → CoffeeOS: Minitest, barista routes/статусы, Sidekiq).
+**Канон:** `todo.md` — reuse Broadcaster/FCM/Wallet; cascade Job; presence Rails.cache; TG→SMS; Migration Gate на `telegram_chat_id` + `order_notification_logs`.  
+**Дальше:** намерение → RED шаг 1 (enqueue cascade + verify free channels).
 
 ### Background FCM progress + Apple Wallet (#38) — 2026-08-03
 
