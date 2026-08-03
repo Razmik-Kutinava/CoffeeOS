@@ -2,13 +2,19 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-08-03 (#39 GREEN шаг 1 · #38 MCP v421)
+**Дата:** 2026-08-03 (#39 GREEN шаг 2 · #38 MCP v421)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#39** Order ready cascade | шаг 1 **GREEN** · дальше RED шаг 2 (presence) |
+| **#39** Order ready cascade | шаги 1–2 **GREEN** · дальше Migration Gate / RED шаг 3 (Telegram) |
 | **#38** Fly **v421** · MCP **PASS** (Aram) | апрув заказчика «ок» |
 | Live Fly | **v421** |
+
+### Сессия 2026-08-03 (GREEN шаг 2 · #39 presence)
+
+- `Shop::OrderReadyPresence` (Rails.cache `order:{id}:online`)
+- Channel subscribe/unsubscribe mark/clear; Cascade skip paid если online; cache error re-raise
+- Тесты: 27/52 PASS (presence + channel + cascade + broadcaster)
 
 ### Сессия 2026-08-03 (GREEN шаг 1 · #39 cascade enqueue)
 

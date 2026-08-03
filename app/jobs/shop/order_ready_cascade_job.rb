@@ -2,7 +2,6 @@
 
 module Shop
   # #39 — каскад «Заказ готов»: presence → Telegram → SMS.ru.
-  # Шаг 1: skeleton + enqueue из GuestOrderBroadcaster при ready.
   class OrderReadyCascadeJob < ApplicationJob
     queue_as :default
 
@@ -10,8 +9,21 @@ module Shop
       order = Order.find_by(id: order_id)
       return unless order&.ready? && order.source == "mobile"
 
-      # Шаги 2–5: presence / Telegram / SMS
-      Rails.logger.info("[Cascade][Order ##{order.id}] cascade job started (skeleton)")
+      if Shop::OrderReadyPresence.online?(order.id)
+        Rails.logger.info(
+          "[Cascade][Order ##{order.id}] User is online via WebSocket. Paid channels skipped."
+        )
+        return
+      end
+
+      deliver_paid_channels!(order)
+    end
+
+    private
+
+    # Шаги 3–5: Telegram → SMS
+    def deliver_paid_channels!(order)
+      Rails.logger.info("[Cascade][Order ##{order.id}] Paid channels continue (offline).")
     end
   end
 end

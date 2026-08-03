@@ -6,7 +6,14 @@ module Shop
       order = authorized_order
       return reject unless order
 
+      @presence_order_id = order.id
+      Shop::OrderReadyPresence.mark_online!(@presence_order_id)
       stream_for order
+    end
+
+    def unsubscribed
+      Shop::OrderReadyPresence.mark_offline!(@presence_order_id) if @presence_order_id
+      stop_all_streams
     end
 
     private
@@ -24,10 +31,6 @@ module Shop
         token: token,
         customer_id: customer_id
       )
-    end
-
-    def unsubscribed
-      stop_all_streams
     end
   end
 end
