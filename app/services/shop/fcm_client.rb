@@ -48,6 +48,16 @@ module Shop
       ActiveModel::Type::Boolean.new.cast(ENV["FCM_SIMULATE"])
     end
 
+    # FCM data values must be strings; arrays/hashes → JSON (SW parseNotificationActions).
+    def stringify_fcm_data(data)
+      data.to_h.transform_keys(&:to_s).transform_values do |value|
+        case value
+        when Array, Hash then JSON.generate(value)
+        else value.to_s
+        end
+      end
+    end
+
     def fetch_access_token!(account)
       client_email = account["client_email"]
       private_key_pem = account["private_key"]
@@ -86,7 +96,7 @@ module Shop
         message: {
           token: token,
           notification: { title: title, body: body },
-          data: data.transform_keys(&:to_s).transform_values(&:to_s)
+          data: stringify_fcm_data(data)
         }
       }
 

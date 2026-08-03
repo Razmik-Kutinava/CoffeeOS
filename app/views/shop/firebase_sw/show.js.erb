@@ -1,4 +1,4 @@
-/* Firebase Messaging SW — CoffeeOS vitrina */
+/* Firebase Messaging SW — CoffeeOS vitrina (#38 actions) */
 importScripts("https://www.gstatic.com/firebasejs/11.0.0/firebase-app-compat.js");
 importScripts("https://www.gstatic.com/firebasejs/11.0.0/firebase-messaging-compat.js");
 
@@ -13,11 +13,104 @@ firebase.initializeApp({
 
 const messaging = firebase.messaging();
 
-messaging.onBackgroundMessage((payload) => {
-  const title = payload.notification?.title || "CoffeeOS";
-  const options = {
-    body: payload.notification?.body || "",
-    data: payload.data || {}
-  };
-  self.registration.showNotification(title, options);
+/* Зеркало app/frontend/lib/swNotificationActions.js (classic SW без ESM). */
+const CANCEL_ERROR_MESSAGE = "Не удалось отменить, проверьте сеть";
+const ACTION_TITLES = { cancel: "Отменить", chat: "Чат", tips: "Чаевые" };
+
+function parseNotificationActions(raw) {
+  if (Array.isArray(raw)) return raw.map(String).filter(Boolean);
+  if (typeof raw !== "string" || !raw.trim()) return [];
+  try {
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed.map(String).filter(Boolean) : [];
+  } catch (e) {
+    return [];
+  }
+}
+
+function orderDeepLink(orderId, action) {
+  return "/shop/#/order/" + orderId + "?action=" + encodeURIComponent(action);
+}
+
+function buildShowNotificationOptions(input) {
+  const data = Object.assign({}, (input && input.data) || {});
+  const actions = parseNotificationActions(data.actions).map(function (action) {
+    return { action: action, title: ACTION_TITLES[action] || action };
+  });
+  const opts = { body: (input && input.body) || "", data: data, actions: actions };
+  if (data.tag) opts.tag = String(data.tag);
+  return opts;
+}
+
+async function openClient(url) {
+  const all = await clients.matchAll({ type: "window", includeUncontrolled: true });
+  for (var i = 0; i < all.length; i++) {
+    var client = all[i];
+    if ("focus" in client) {
+      await client.focus();
+      if ("navigate" in client) {
+        try { await client.navigate(url); } catch (e) { /* hash fallback */ }
+      }
+      client.postMessage({ type: "coffeeos_navigate", url: url });
+      return { opened: true };
+    }
+  }
+  if (clients.openWindow) {
+    await clients.openWindow(url);
+    return { opened: true };
+  }
+  return { opened: false };
+}
+
+async function handleNotificationAction(opts) {
+  var action = opts.action;
+  var orderId = opts.orderId;
+  if (action === "cancel") {
+    try {
+      var res = await fetch("/shop/api/orders/" + orderId + "/cancel", {
+        method: "POST",
+        credentials: "include",
+        headers: { Accept: "application/json" }
+      });
+      if (!res.ok) {
+        await self.registration.showNotification("CoffeeOS", { body: CANCEL_ERROR_MESSAGE });
+        return { kind: "cancel_error" };
+      }
+      return { kind: "cancel_ok" };
+    } catch (e) {
+      await self.registration.showNotification("CoffeeOS", { body: CANCEL_ERROR_MESSAGE });
+      return { kind: "cancel_error" };
+    }
+  }
+  if (action === "chat" || action === "tips") {
+    await openClient(orderDeepLink(orderId, action));
+    return { kind: "navigate" };
+  }
+  return { kind: "ignored" };
+}
+
+messaging.onBackgroundMessage(function (payload) {
+  var title = (payload.notification && payload.notification.title) || "CoffeeOS";
+  var body = (payload.notification && payload.notification.body) || "";
+  var data = payload.data || {};
+  var options = buildShowNotificationOptions({ body: body, data: data });
+  return self.registration.showNotification(title, options);
+});
+
+self.addEventListener("notificationclick", function (event) {
+  event.notification.close();
+  var data = event.notification.data || {};
+  var orderId = data.order_id;
+  var action = event.action || "";
+
+  if (!orderId) return;
+
+  if (action === "cancel" || action === "chat" || action === "tips") {
+    event.waitUntil(
+      handleNotificationAction({ action: action, orderId: orderId })
+    );
+    return;
+  }
+
+  event.waitUntil(openClient("/shop/#/order/" + orderId));
 });
