@@ -2,13 +2,19 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-08-03 (RED шаг 3 · #38 pkpass enrich)
+**Дата:** 2026-08-03 (GREEN шаг 3 · #38 pkpass enrich)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#38** RED шаг 3 `[x]` (PassBuilder face/back/strip) | GREEN шаг 3 при намерении |
+| **#38** GREEN шаг 3 `[x]` | RED шаг 4 (APNs из Broadcaster) |
 | **#37** Fly v419 MCP PASS | апрув заказчика |
 | **Charge live PASS** #32/#33/#27 · #34 Setup PASS | Zero-Click после 1× bind в банке |
+
+### Сессия 2026-08-03 (GREEN шаг 3 · #38 pkpass enrich)
+
+- `PassBuilder` simulate: face status/QR, back chat/tips, strip progress+fill_percent
+- Тесты: pass_builder + wallet_pass + ready → 13/58 PASS
+- Дальше: RED шаг 4 Broadcaster → PassUpdater если pass есть
 
 ### Сессия 2026-08-03 (RED шаг 3 · #38 pkpass enrich)
 

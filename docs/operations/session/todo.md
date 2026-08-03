@@ -2,7 +2,7 @@
 
 **ТЗ:** [`customer_tasks/Фоновые уведомления прогресс-бар Android FCM и Apple Wallet iOS.md`](../milestones/veha_2/requirements/customer_tasks/Фоновые%20уведомления%20прогресс-бар%20Android%20FCM%20и%20Apple%20Wallet%20iOS.md)  
 **Артефакты:** [`artifacts/background_notifications_fcm_apple_wallet/`](../milestones/veha_2/artifacts/background_notifications_fcm_apple_wallet/)  
-**Фаза:** SPEC `[x]` · RED/GREEN шаги 1–2 `[x]` · RED шаг 3 `[x]` · GREEN 3–5 `[ ]` · REVIEW `[ ]` · MCP/deploy `[ ]`
+**Фаза:** SPEC `[x]` · RED/GREEN шаги 1–3 `[x]` · RED/GREEN 4–5 `[ ]` · REVIEW `[ ]` · MCP/deploy `[ ]`
 
 ---
 
@@ -40,7 +40,7 @@
 |---|-----|------------------|-------|--------|
 | 1 | Обогащение FCM payload: `tag`, unicode progress, `actions` по матрице; soft-fail | `order_status_push_payload.rb` · notifier · `ready_push_job.rb` | payload + notifier + ready + pipeline | **GREEN `[x]`** |
 | 2 | SW: `notificationclick` — cancel → `fetch` cancel API; chat/tips → focus + deep link; ошибка сети → local notification | `swNotificationActions.js` · `firebase_sw/show.js.erb` · `fcm_client` JSON data | `sw_notification_actions_test.mjs` 11/11 | **GREEN `[x]`** |
-| 3 | `.pkpass` / download path: enrich PassBuilder (status / QR ready / back links chat+tips); strip из токенов прогресса B1.1; 500 → toast (#37 уже) | `apple_wallet/pass_builder.rb` · `orders#wallet_pass` | `pass_builder_test` · `wallet_pass_test` | **RED `[x]`** |
+| 3 | `.pkpass` enrich: face / QR / back chat+tips / strip progress | `pass_builder.rb` · runbook | pass_builder + wallet_pass + ready | **GREEN `[x]`** |
 | 4 | APNs update на **каждой** смене статуса, если `OrderWalletPass` уже есть; вызов из `GuestOrderBroadcaster` (rescue, не ломать cable/FCM); не дублировать hard с ReadyPushJob | `guest_order_broadcaster.rb` · `AppleWallet::PassUpdater` · `ApnsClient` | `test/services/shop/guest_order_broadcaster_test.rb` · pass_updater tests | `[ ]` |
 | 5 | PWA UI state machine на карточке: CTAs по матрице; WS reconnect banner (B1.1 уже есть — проверить/дотянуть); max 2 кнопки; только существующие стили | `OrderStatus.svelte` · `orderStatusNotifyActions.js` / новый `orderStatusCtaMachine.js` · accordion при необходимости | `test/javascript/order_status_cta_machine_test.mjs` (+ существующие progress/cable) | `[ ]` |
 

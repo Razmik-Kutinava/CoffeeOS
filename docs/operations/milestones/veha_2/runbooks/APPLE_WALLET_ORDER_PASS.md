@@ -28,3 +28,8 @@
 ## В scope с #37 (2026-08-03)
 
 - Guest download: `GET /shop/api/orders/:id/wallet_pass` + CTA «Карта в Apple Wallet» в `ActiveOrdersAccordion`
+
+## В scope с #38 шаг 3 (2026-08-03)
+
+- Simulate `PassBuilder` enrich: `face` (status / QR на `ready`), `back` (chat/tips deep links), `strip` (unicode progress + `fill_percent` из B1.1 / push matrix, `source: order_status_progress`)
+- API 500 JSON при `GenerationError` / unavailable (toast на фронте #37)
