@@ -1,8 +1,8 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-08-03 (**#39 intake · #38 Fly billing BLOCKED**)  
+**Дата:** 2026-08-03 (**#38 MCP PASS v421 · #39 SPEC**)  
 **Ветка:** `develop`  
-**Прод:** https://coffeeos.fly.dev (**ещё v419**)  
+**Прод:** https://coffeeos.fly.dev (**v421**)  
 
 ### Order ready cascade WS→TG→SMS (#39) — 2026-08-03
 
@@ -22,15 +22,12 @@
 | Что | Статус |
 |-----|--------|
 | Intake / SPEC / RED-GREEN 1–5 / REVIEW | **`[x]`** tip `f3f0f2db` · REVIEW `a145ee0c` |
-| `git push` develop | **`[x]`** `a145ee0c` |
-| Image build | **`[x]`** `deployment-01KZ3QRBRX8E2VES9XFJSBGDJ4` |
-| Fly release / machines | **BLOCKED** org billing 403 |
-| MCP #38 на новом коде | **SKIP** до релиза |
+| Fly deploy | **`[x]`** **v421** · `deployment-01KZ3T8HZMBBGBMH2GD7Z20J37` |
+| MCP #38 Aram Point A | **PASS** |
 
-**Evidence:** [`mcp/fly_blocked_billing_2026-08-03/`](../milestones/veha_2/artifacts/background_notifications_fcm_apple_wallet/mcp/fly_blocked_billing_2026-08-03/)  
-**Image (WSL, latest):** `deployment-01KZ3S4V3XCEY7W87WBP76XC7C`  
-**Дальше:** billing https://fly.io/dashboard/razmik-kutinava/billing →  
-`fly deploy -a coffeeos --image registry.fly.io/coffeeos:deployment-01KZ3S4V3XCEY7W87WBP76XC7C` → MCP.
+**Evidence:** [`mcp/fly_v421_2026-08-03/`](../milestones/veha_2/artifacts/background_notifications_fcm_apple_wallet/mcp/fly_v421_2026-08-03/)  
+**Скрины:** `02_*` max-2 CTA subscribed · `03_*` iOS Wallet CTA  
+**Дальше:** апрув заказчика «ок» → `[x]` в CBR; или #39 RED шаг 1.
 
 ### T-Bank Charge unlocked — пакет MCP (2026-08-03)
 

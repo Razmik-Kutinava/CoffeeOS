@@ -2,13 +2,21 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-08-03 (#39 SPEC · #38 Fly billing BLOCKED)
+**Дата:** 2026-08-03 (#38 MCP PASS v421 · #39 SPEC)
 
 | Сейчас | Дальше |
 |--------|--------|
+| **#38** Fly **v421** · MCP **PASS** (Aram) | апрув заказчика «ок» или #39 RED |
 | **#39** Order ready cascade WS→TG→SMS | **PHASE 1 SPEC `[x]`** · ждёт намерение → RED шаг 1 |
-| **#38** push `a145ee0c` · image built · **release 403 billing** | пополнить Fly billing → redeploy image → MCP |
-| Live Fly | **v419** (без #38) |
+| Live Fly | **v421** · image `deployment-01KZ3T8HZMBBGBMH2GD7Z20J37` |
+
+### Сессия 2026-08-03 (MCP · #38 Fly v421)
+
+- Aram OTP login Point A · 17 active orders
+- Desktop: max-2 CTA `✓ Уведомления включены` + `Состав заказа`
+- iPhone CriOS: `Карта в Apple Wallet` + `Состав заказа`
+- Reconnect banner + progress stepper + SW `/firebase-messaging-sw.js` 200
+- PNG: `artifacts/…/mcp/fly_v421_2026-08-03/`
 
 ### Сессия 2026-08-03 (PHASE 1 SPEC · #39 Order ready cascade)
 

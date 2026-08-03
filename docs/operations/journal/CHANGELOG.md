@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-08-03 — MCP: #38 Background FCM/Wallet · Fly v421 PASS
+- Live **v421** · Aram Point A · 17 active orders
+- Desktop max-2 CTA (subscribed) + iOS CriOS Apple Wallet CTA + reconnect banner
+- Evidence: `artifacts/background_notifications_fcm_apple_wallet/mcp/fly_v421_2026-08-03/`
+- CBR #38 → MCP PASS
+
 ## 2026-08-03 — docs: SPEC Order ready cascade WS→TG→SMS (#39)
 - PHASE 1: `todo.md` — маппинг ТЗ → Minitest/Solid Queue + GuestOrderBroadcaster; шаги 1–5 TDD
 - Канон: presence Rails.cache; TelegramBotClient + SMS.ru ≤70; без нового barista ready API; DDL — Migration Gate

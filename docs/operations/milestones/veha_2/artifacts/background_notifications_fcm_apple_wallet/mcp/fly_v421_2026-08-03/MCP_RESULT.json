@@ -1,0 +1,56 @@
+{
+  "task": "#38 Background FCM progress + Apple Wallet",
+  "date": "2026-08-03",
+  "stand": "https://coffeeos.fly.dev/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "deploy": "Fly v421 · image deployment-01KZ3T8HZMBBGBMH2GD7Z20J37",
+  "profile": "Aram R / aramfifa100@gmail.com / 2bc37279-…4c — 17 active orders",
+  "health": "/up → 200",
+  "auth": "email_otp send+verify via CDP; refresh_token silent restore for iOS UA",
+  "checks": [
+    {
+      "id": "desktop_max2_ctas_subscribed",
+      "check": "Desktop UA: max 2 CTAs — «✓ Уведомления включены» + «Состав заказа»",
+      "result": "PASS",
+      "evidence": "CDP: 17 rows, each notify-actions btnCount=2; screenshot 02_*.png"
+    },
+    {
+      "id": "ios_wallet_cta",
+      "check": "iPhone CriOS UA → primary «Карта в Apple Wallet» + «Состав заказа»",
+      "result": "PASS",
+      "evidence": "CDP: hasWallet=true; 17× primary=Карта в Apple Wallet; screenshot 03_*.png"
+    },
+    {
+      "id": "reconnect_banner",
+      "check": "Баннер «Потеряно соединение…» при lost cable (#38 showReconnectBanner)",
+      "result": "PASS",
+      "evidence": "DOM + screenshots 02/03 — текст виден над прогрессом"
+    },
+    {
+      "id": "progress_stepper",
+      "check": "Прогресс Принят→Оплачен→Готовится→Готов на карточке #202608-0005",
+      "result": "PASS",
+      "evidence": "screenshot 03_*.png; order status accepted/paid"
+    },
+    {
+      "id": "receipt_expand",
+      "check": "Клик «Состав заказа» → чек expanded",
+      "result": "PASS",
+      "evidence": "CDP receipt: Фильтр-кофе Бразилия ×1 · 179₽; a11y «Свернуть чек» expanded"
+    },
+    {
+      "id": "firebase_sw",
+      "check": "GET /firebase-messaging-sw.js",
+      "result": "PASS",
+      "evidence": "200 text/javascript · len=3978 · has notificationclick actions (cancel/chat/tips)"
+    }
+  ],
+  "screenshots": [
+    "00_aram_profile_header_fly_v421.png",
+    "01_aram_order_cta_notify_enabled_fly_v421.png",
+    "01b_aram_cta_notify_button_fly_v421.png",
+    "01c_peek_progress_reconnect_fly_v421.png",
+    "02_aram_expanded_ctas_max2_and_receipt_fly_v421.png",
+    "03_aram_ios_wallet_cta_fly_v421.png"
+  ],
+  "verdict": "PASS — Aram Point A Fly v421: max-2 CTA (push subscribed / iOS Wallet) + reconnect banner + progress"
+}
