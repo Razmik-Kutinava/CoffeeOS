@@ -2,7 +2,7 @@
 
 **ТЗ:** [`customer_tasks/Адаптивный виджет статуса заказа Детекция ОС и подписка на уведомления.md`](../milestones/veha_2/requirements/customer_tasks/Адаптивный%20виджет%20статуса%20заказа%20Детекция%20ОС%20и%20подписка%20на%20уведомления.md)  
 **Артефакты:** [`artifacts/order_status_os_detect_wallet_webpush/`](../milestones/veha_2/artifacts/order_status_os_detect_wallet_webpush/)  
-**Фаза:** SPEC `[x]` · RED/GREEN шаги 1–5 `[x]` · REVIEW `[ ]` · MCP/deploy `[ ]`
+**Фаза:** SPEC `[x]` · RED шаг 6 `[x]` · GREEN шаги 1–5 `[x]` · REVIEW `[ ]` · MCP/deploy `[ ]`
 
 ---
 
@@ -57,10 +57,10 @@
 
 - **GREEN:** `subscribeOrderPush` → `registerShopPush`; denied/network toasts; `onPrimary` ветка push
 
-### Шаг 6 — Init restored state `[ ]`
+### Шаг 6 — Init restored state `[x]` RED · GREEN `[ ]`
 
-- **Then:** при mount: `localStorage wallet_added` → disabled «✓ Карта добавлена»; `Notification.permission === 'granted'` (и/или уже зарегистрированный push) → «✓ Уведомления включены» без повторного клика
-- **TDD:** init render cases
+- **RED:** stub `resolveNotifyPrimaryInit` · `order_status_notify_init_test.mjs` (3 fail / 2 pass idle)
+- **GREEN:** LS wallet / Notification.granted → final label + disabled; wire в accordion mount
 
 ---
 

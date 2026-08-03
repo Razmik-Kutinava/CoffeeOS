@@ -163,3 +163,19 @@ export async function subscribeOrderPush(opts = {}) {
     return { ok: false, isLoading: false, primaryLabel: idleLabel, error: "network" }
   }
 }
+
+/**
+ * Начальное состояние primary CTA (mount).
+ * #37 шаг 6 — RED stub.
+ *
+ * @param {{
+ *   os?: "ios"|"android"|"desktop",
+ *   orderId?: string|number,
+ *   storage?: { getItem: (k: string) => string|null },
+ *   notificationPermission?: string
+ * }} [opts]
+ * @returns {{ primaryLabel: string|null, disabled: boolean, restored: boolean }}
+ */
+export function resolveNotifyPrimaryInit(_opts = {}) {
+  return { primaryLabel: null, disabled: false, restored: false }
+}
