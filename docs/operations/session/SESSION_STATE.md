@@ -2,15 +2,23 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-08-03 (push/deploy/MCP · #37 OS detect + Wallet/WebPush)
+**Дата:** 2026-08-03 (MCP Charge unlocked · 4 payment tasks)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#37** Fly **v419** MCP **PASS** | апрув заказчика (CBR `[x]` только после «ок») |
-| **Status inside cart** Fly v418 MCP PASS | апрув заказчика |
-| **Quick Repeat** Fly v417 MCP PASS | апрув заказчика |
+| **Charge live PASS** #32/#33/#27 · #34 Setup PASS | Заказчик проверка; #34 Zero-Click после 1× bind в банке |
+| **#37** Fly v419 MCP PASS | апрув заказчика |
 
-### Сессия 2026-08-03 (push + fly deploy + MCP · #37)
+### Сессия 2026-08-03 (MCP · Charge unlocked package)
+
+- ТП: Recurrent+Charge+ChargeQr на `1719235292309`
+- one_click MIR *5953 → `#202608-0001` accepted `recurrent_charge=true`
+- widget_init → `#202608-0005` CONFIRMED settled
+- sbp/init `save_sbp_account:true` 179₽ → QR NSPK (не 3013); &lt;10₽ → 3016
+- `has_sbp_account=false` — Zero-Click ChargeQr после оплаты в банке
+- Артефакт: `artifacts/tbank_charge_unlocked_mcp_2026-08-03/`
+
+### Сессия 2026-08-03 (push/deploy/MCP · #37 OS detect + Wallet/WebPush)
 
 - Push `develop` → `35b7f00c`; `fly deploy --remote-only` → **v419** · image `deployment-01KZ3CAC9RNSCPZRZ5VZWEWW8K`
 - `/up` 200

@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-08-03 — MCP: Charge unlocked · #32/#33/#27/#34
+- Т-Банк включил Recurrent/Charge на `1719235292309`
+- one_click + widget_init → accepted/CONFIRMED live
+- SBP bind Init → NSPK QR (не 3013); Zero-Click ждёт AccountToken после банка
+- Артефакт: `tbank_charge_unlocked_mcp_2026-08-03/`
+
 ## 2026-08-03 — deploy: #37 OS detect Wallet/WebPush v419 + MCP PASS
 - Push `develop` `35b7f00c` · `fly deploy --remote-only` → **v419** (`deployment-01KZ3CAC9RNSCPZRZ5VZWEWW8K`)
 - MCP Point A: Android Push CTA · iOS (CriOS) Wallet CTA · receipt toggle

@@ -1,0 +1,78 @@
+{
+  "date": "2026-08-03",
+  "kind": "mcp_fly_charge_unlocked_package",
+  "stand": "https://coffeeos.fly.dev",
+  "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "tenant_name": "Point A Ленин",
+  "profile": "Aram R / aramfifa100@gmail.com / 2bc3…4c",
+  "terminal_key": "1719235292309",
+  "tbank_note": "ТП: рекуррент + Charge + ChargeQr подключены на терминале",
+  "verdict": "Card Charge + widget_init SUCCESS; SBP bind Init SUCCESS (QR). Zero-Click ChargeQr ждёт одну оплату с привязкой в банке (AccountToken ещё нет).",
+  "tasks": [
+    {
+      "id": "#32",
+      "name": "T-Bank inline payment button statuses",
+      "result": "PASS",
+      "evidence": {
+        "widget_init": "POST 200 → order accepted + payment_settled + GetState CONFIRMED",
+        "order_id": "b531caa3-eba2-42e2-a641-e6c00ae8729b",
+        "order_number": "#202608-0005",
+        "provider_payment_id": "8975729083",
+        "was_blocked": "error 10 Charge disabled"
+      }
+    },
+    {
+      "id": "#33",
+      "name": "T-Kassa Widget One-Click + Fallback",
+      "result": "PASS",
+      "evidence": {
+        "one_click": "POST /payments/one_click 200 recurrent_charge=true status=accepted",
+        "order_id": "4ad083ca-894f-4c07-8fda-56ecbe804a24",
+        "order_number": "#202608-0001",
+        "amount_rub": 3.35,
+        "card": "MIR *5953",
+        "ui": "Экран Заказ / Оплачен"
+      }
+    },
+    {
+      "id": "#27 / SBP Deep Link + card tokenization",
+      "name": "SBP Deep Link + card tokenization",
+      "result": "PASS",
+      "evidence": {
+        "card_charge": "same one_click SUCCESS (RebillId Charge)",
+        "sbp_qr": "POST sbp/init save_sbp_account → https://qr.nspk.ru/AD1P105HJ1PFGL7G8FAOHO0Q9JBMA4LS",
+        "order_id_sbp_bind": "e3ea10f5-092d-485c-90b6-6efcfeca6ec4",
+        "provider_payment_id": "8975723077"
+      }
+    },
+    {
+      "id": "#34",
+      "name": "T-Kassa SBP Autopay AccountToken",
+      "result": "PASS_SETUP_PENDING_ZERO_CLICK",
+      "evidence": {
+        "setup_init": "POST sbp/init save_sbp_account:true → 200 + qr.nspk.ru (больше не 3013)",
+        "has_sbp_account": false,
+        "sbp_accounts": [],
+        "zero_click": "BLOCKED_UNTIL_BANK — нужен один успешный платёж СБП с согласием привязки в приложении банка → webhook AccountToken → повтор MCP ChargeQr",
+        "min_amount_note": "Сумма < 10₽ на bind → T-Bank 3016 (минимум 1000 коп.). Для bind/ChargeQr тестировать ≥10₽."
+      }
+    }
+  ],
+  "also_verified": [
+    {
+      "check": "widget_init on 3₽ Guatemala earlier order",
+      "order_id": "497b866e-390b-4c4a-859a-30c3086ddcab",
+      "result": "accepted + settled (#202608-0004)"
+    }
+  ],
+  "customer_can_verify": [
+    "Оплата сохранённой картой в 1 клик (чекаут / повторить)",
+    "Inline / widget Charge SUCCESS без ошибки 10",
+    "СБП с галочкой «Привязать счет…» → банк → после оплаты счёт появится как «Ваш счет СБП»",
+    "Второй заказ: Zero-Click по счёту СБП"
+  ],
+  "next_internal": [
+    "После первой привязки СБП в банке — короткий MCP Zero-Click ChargeQr SUCCESS",
+    "Не тестировать SBP Recurrent на сумме < 10₽ (error 3016)"
+  ]
+}

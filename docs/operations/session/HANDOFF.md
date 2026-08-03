@@ -1,8 +1,24 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-08-03 (**push/deploy/MCP · #37 OS detect + Wallet/WebPush**)  
+**Дата:** 2026-08-03 (**MCP Charge unlocked · #32/#33/#27/#34**)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev  
+
+### T-Bank Charge unlocked — пакет MCP (2026-08-03)
+
+ТП: рекуррент + Charge + ChargeQr на терминале `1719235292309`.
+
+| Задача | MCP |
+|--------|-----|
+| **#32** inline / widget Charge SUCCESS | **PASS** · order `#202608-0005` CONFIRMED |
+| **#33** One-Click card Charge | **PASS** · `#202608-0001` `recurrent_charge=true` |
+| **#27** SBP Deep Link + card tokenization | **PASS** · QR NSPK + card Charge |
+| **#34** SBP Autopay bind Init | **PASS** · `save_sbp_account` → QR (не 3013) |
+| **#34** Zero-Click ChargeQr | **ждёт** одну оплату с привязкой в банке (нет AccountToken) |
+
+**Артефакт:** [`tbank_charge_unlocked_mcp_2026-08-03/`](../milestones/veha_2/artifacts/tbank_charge_unlocked_mcp_2026-08-03/)  
+**Заказчику:** можно проверять оплату картой в 1 клик + СБП с галочкой привязки (≥10₽).  
+**Note:** SBP Recurrent сумма &lt; 10₽ → T-Bank **3016**.
 
 ### Order status OS detect + Wallet/WebPush (2026-08-03)
 
@@ -88,14 +104,14 @@
 | REVIEW: ownership fix + settle ChargeQr + ops | **`[x]`** |
 | Checkout UI checkbox / default «Ваш счет СБП» | **`[x]`** |
 | MCP Fly UI/API smoke | **`[x]`** — чекбокс, `save_sbp_account`, `sbp_accounts`, `sbp/charge` route |
-| MCP Setup bind (Recurrent) | **FAIL_TBANK** — **3013** «Рекуррентные платежи недоступны» |
+| MCP Setup bind (Recurrent) | **PASS** 2026-08-03 — QR NSPK (не 3013) |
 | MCP manual SBP | **PASS** — NSPK QR |
-| MCP Zero-Click ChargeQr SUCCESS | **blocked** — нет AccountToken + Charge **10** |
+| MCP Zero-Click ChargeQr SUCCESS | **ждёт банк** — AccountToken после первой привязки |
 
-**MCP:** [`mcp_fly_sbp_autopay_2026-07-30.json`](../milestones/veha_2/artifacts/tbank_sbp_autopayments_account_token/mcp_fly_sbp_autopay_2026-07-30.json)  
+**MCP:** [`mcp_fly_sbp_autopay_2026-07-30.json`](../milestones/veha_2/artifacts/tbank_sbp_autopayments_account_token/mcp_fly_sbp_autopay_2026-07-30.json) · пакет [`charge_unlocked`](../milestones/veha_2/artifacts/tbank_charge_unlocked_mcp_2026-08-03/)  
 **ТЗ:** [`Интеграция Автоплатежей СБП Т-Касса в PWA.md`](../milestones/veha_2/requirements/customer_tasks/Интеграция%20Автоплатежей%20СБП%20Т-Касса%20в%20PWA.md)  
 **Артефакты:** [`tbank_sbp_autopayments_account_token/`](../milestones/veha_2/artifacts/tbank_sbp_autopayments_account_token/)  
-**Дальше:** ОК Recurrent+Charge в ЛК T-Bank → повтор MCP Setup→webhook→Zero-Click SUCCESS.
+**Дальше:** заказчик: 1× СБП с привязкой в банке → «Ваш счет СБП» → Zero-Click; затем короткий MCP ChargeQr.
 
 **Review findings (закрыты в REVIEW):**
 - P1 session мог списать свой AccountToken за чужой заказ → 404 mismatch
@@ -110,11 +126,12 @@
 | Фикс MCP (order + remount + full-width + no ERROR reset) | **`[x]`** |
 | defer_payment_init + WidgetPaymentInitiator Charge+settle | **`[x]`** `c9e68271` deployed |
 | MCP Fly PASS (PROCESSING / ERROR / СБП / карта+ / SMS) | **`[x]`** |
-| SUCCESS ✔ live | **blocked** — T-Bank **error 10: Метод Charge заблокирован для данного терминала** |
+| SUCCESS ✔ live | **PASS** 2026-08-03 — widget_init CONFIRMED `#202608-0005` |
 
-**MCP SUCCESS attempt:** [`mcp_fly_inline_pay_2026-07-30_charge_blocked.json`](../milestones/veha_2/artifacts/tbank_inline_payment_button_statuses/mcp_fly_inline_pay_2026-07-30_charge_blocked.json)  
+**MCP SUCCESS:** пакет [`charge_unlocked`](../milestones/veha_2/artifacts/tbank_charge_unlocked_mcp_2026-08-03/)  
+**MCP SUCCESS attempt (blocked):** [`mcp_fly_inline_pay_2026-07-30_charge_blocked.json`](../milestones/veha_2/artifacts/tbank_inline_payment_button_statuses/mcp_fly_inline_pay_2026-07-30_charge_blocked.json)  
 **MCP UI PASS:** [`mcp_fly_inline_pay_2026-07-30_pass.json`](../milestones/veha_2/artifacts/tbank_inline_payment_button_statuses/mcp_fly_inline_pay_2026-07-30_pass.json)  
-**Дальше:** в ЛК T-Bank включить Charge/Recurrent на терминале `TBANK_TERMINAL_KEY` → повторный MCP SUCCESS.
+**Дальше:** апрув заказчика.
 
 ### T-Kassa Widget One-Click + Fallback #33 (2026-07-29)
 
@@ -125,8 +142,10 @@
 | FE: InlinePayFallback.svelte + RepeatSection inline flow | **`[x]`** |
 | FE: Fallback SBP + карта+ + expanded cards | **`[x]`** |
 | PHASE 3 REVIEW | **`[x]`** |
+| MCP live Charge one_click | **PASS** 2026-08-03 · `#202608-0001` |
 
 **ТЗ:** [`Интеграция виджета быстрой оплаты Т-Кассы…`](../milestones/veha_2/requirements/customer_tasks/Интеграция%20виджета%20быстрой%20оплаты%20Т-Кассы%20и%20One-Click%20сценария%20в%20PWA.md)  
+**Дальше:** апрув заказчика.  
 
 ### Auth funnel cascade Flash Call×2 → SMS (2026-07-29)
 
