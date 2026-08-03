@@ -24,6 +24,11 @@ class Shop::OrderReadyCascadeJobTest < ActiveSupport::TestCase
       discount_amount: 0,
       final_amount: 200
     )
+    Rails.cache.clear
+  end
+
+  teardown do
+    Rails.cache.clear
   end
 
   test "#39 OrderReadyCascadeJob is an ApplicationJob and accepts order_id" do
@@ -57,5 +62,56 @@ class Shop::OrderReadyCascadeJobTest < ActiveSupport::TestCase
   ensure
     ENV.delete("FCM_SIMULATE")
     ENV.delete("WALLET_SIMULATE")
+  end
+
+  # --- #39 шаг 2 [TDD-RED]: presence filter ---
+
+  test "#39 when user online via WS skips paid channels" do
+    Shop::OrderReadyPresence.mark_online!(@order.id)
+
+    logs = capture_cascade_logs do
+      Shop::OrderReadyCascadeJob.perform_now(@order.id)
+    end
+
+    assert_match(
+      /\[Cascade\]\[Order ##{@order.id}\] User is online via WebSocket\. Paid channels skipped\./,
+      logs
+    )
+  end
+
+  test "#39 when user offline does not log paid channels skipped" do
+    Shop::OrderReadyPresence.mark_offline!(@order.id)
+
+    logs = capture_cascade_logs do
+      Shop::OrderReadyCascadeJob.perform_now(@order.id)
+    end
+
+    assert_no_match(/Paid channels skipped/, logs)
+  end
+
+  test "#39 cache read failure re-raises and does not swallow" do
+    original = Rails.cache.method(:read)
+    Rails.cache.define_singleton_method(:read) do |*_args|
+      raise StandardError, "cache 500"
+    end
+
+    err = assert_raises(StandardError) do
+      Shop::OrderReadyCascadeJob.perform_now(@order.id)
+    end
+    assert_match(/cache 500/, err.message)
+  ensure
+    Rails.cache.define_singleton_method(:read, original) if original
+  end
+
+  private
+
+  def capture_cascade_logs
+    io = StringIO.new
+    old = Rails.logger
+    Rails.logger = Logger.new(io)
+    yield
+    io.string
+  ensure
+    Rails.logger = old
   end
 end

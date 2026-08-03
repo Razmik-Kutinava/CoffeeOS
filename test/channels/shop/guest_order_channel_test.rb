@@ -82,6 +82,34 @@ class Shop::GuestOrderChannelTest < ActionCable::Channel::TestCase
     end
   end
 
+  # --- #39 шаг 2 [TDD-RED]: presence flag в Rails.cache ---
+
+  test "#39 subscribed marks order online in cache" do
+    Rails.cache.clear
+    subscribe order_id: @order.id, tenant_id: @tenant.id, reconnect_token: @token
+
+    assert subscription.confirmed?
+    assert Shop::OrderReadyPresence.online?(@order.id)
+  end
+
+  test "#39 unsubscribe clears order online flag" do
+    Rails.cache.clear
+    subscribe order_id: @order.id, tenant_id: @tenant.id, reconnect_token: @token
+    assert Shop::OrderReadyPresence.online?(@order.id)
+
+    unsubscribe
+    assert_not Shop::OrderReadyPresence.online?(@order.id)
+  end
+
+  test "#39 rejected subscribe does not mark online" do
+    Rails.cache.clear
+    stub_connection(session: {})
+    subscribe order_id: @order.id, tenant_id: @tenant.id
+
+    assert subscription.rejected?
+    assert_not Shop::OrderReadyPresence.online?(@order.id)
+  end
+
   # B2.1 этап 3 — бариста меняет статус → WS гостю
   test "b21 barista status update broadcasts to guest" do
     subscribe order_id: @order.id, tenant_id: @tenant.id, reconnect_token: @token
