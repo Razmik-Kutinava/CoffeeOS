@@ -52,3 +52,27 @@ export function openOrderReceipt(state, orderId, ui = {}) {
   toggleExpandedOrder(state, orderId)
   return { isLoading: false }
 }
+
+/** localStorage key после успешного добавления pass. */
+export function walletAddedStorageKey(orderId) {
+  return `order_${orderId}_wallet_added`
+}
+
+/**
+ * iOS: скачать .pkpass (GET /shop/api/orders/:id/wallet_pass).
+ * #37 шаг 4 — RED stub.
+ *
+ * @returns {Promise<{
+ *   ok: boolean,
+ *   isLoading: boolean,
+ *   primaryLabel: string,
+ *   error?: string
+ * }>}
+ */
+export async function downloadWalletPass(_opts = {}) {
+  return {
+    ok: false,
+    isLoading: true,
+    primaryLabel: "Карта в Apple Wallet"
+  }
+}
