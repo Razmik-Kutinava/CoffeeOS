@@ -2,13 +2,19 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-08-03 (GREEN шаг 4 · #38 Broadcaster PassUpdater)
+**Дата:** 2026-08-03 (RED шаг 5 · #38 PWA CTA machine)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#38** GREEN шаг 4 `[x]` | RED шаг 5 (PWA CTA state machine) |
+| **#38** RED шаг 5 `[x]` | GREEN шаг 5 при намерении |
 | **#37** Fly v419 MCP PASS | апрув заказчика |
 | **Charge live PASS** #32/#33/#27 · #34 Setup PASS | Zero-Click после 1× bind в банке |
+
+### Сессия 2026-08-03 (RED шаг 5 · #38 PWA CTA machine)
+
+- Тест: `order_status_cta_machine_test.mjs` — ERR_MODULE_NOT_FOUND (`orderStatusCtaMachine.js`)
+- Контракт: accepted cancel+push/wallet; preparing/ready chat+tips/wallet; max 2; reconnect banner
+- Дальше: GREEN — lib + wire OrderStatus.svelte
 
 ### Сессия 2026-08-03 (GREEN шаг 4 · #38 Broadcaster wallet update)
 
