@@ -117,3 +117,24 @@ export async function downloadWalletPass(opts = {}) {
     }
   }
 }
+
+const PUSH_SUCCESS_LABEL = "✓ Уведомления включены"
+const PUSH_DENIED_TOAST = "Уведомления запрещены в настройках браузера"
+const PUSH_NETWORK_TOAST = "Не удалось включить уведомления. Проверьте сеть."
+
+/**
+ * Android/Desktop: FCM через registerShopPush.
+ * #37 шаг 5 — RED stub.
+ *
+ * @param {{
+ *   registerShopPushImpl?: () => Promise<{ok:boolean, reason?:string}>,
+ *   onToast?: (msg: string) => void
+ * }} [opts]
+ */
+export async function subscribeOrderPush(_opts = {}) {
+  return {
+    ok: false,
+    isLoading: true,
+    primaryLabel: LABELS.push
+  }
+}
