@@ -1,5 +1,10 @@
 ﻿# CHANGELOG
 
+## 2026-08-03 — docs: intake Background FCM progress + Apple Wallet (#38)
+- PHASE 0: ТЗ 1:1 `customer_tasks/Фоновые уведомления прогресс-бар Android FCM и Apple Wallet iOS.md`
+- Артефакты: `artifacts/background_notifications_fcm_apple_wallet/`
+- Индекс CBR #38 + `customer_tasks/README.md`; код не менялся
+
 ## 2026-08-03 — MCP: Charge unlocked · #32/#33/#27/#34
 - Т-Банк включил Recurrent/Charge на `1719235292309`
 - one_click + widget_init → accepted/CONFIRMED live
