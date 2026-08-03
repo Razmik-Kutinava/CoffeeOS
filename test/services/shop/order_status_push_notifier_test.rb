@@ -79,4 +79,42 @@ class Shop::OrderStatusPushNotifierTest < ActiveSupport::TestCase
     ENV.delete("WALLET_SIMULATE")
     ENV.delete("FCM_SIMULATE")
   end
+
+  # --- #38 шаг 1 [TDD-RED]: обогащённый FCM payload ---
+
+  test "#38 accepted push has tag cancel action and unicode progress in body" do
+    Shop::OrderStatusPushNotifier.call(order: @order, old_status: "pending_payment")
+
+    notification = PushNotification.order(created_at: :desc).first
+    assert notification.present?
+    assert_equal "order-#{@order.id}", notification.payload["tag"]
+    assert_equal %w[cancel], notification.payload["actions"]
+    assert_equal "🟩⬜⬜", notification.payload["progress"]
+    assert_match(/\A🟩⬜⬜/, notification.body)
+  end
+
+  test "#38 preparing push has chat tips actions and unicode progress" do
+    @order.update!(status: :preparing)
+    Shop::OrderStatusPushNotifier.call(order: @order.reload, old_status: "accepted")
+
+    notification = PushNotification.order(created_at: :desc).first
+    assert_equal "order-#{@order.id}", notification.payload["tag"]
+    assert_equal %w[chat tips], notification.payload["actions"]
+    assert_equal "🟩🟩⬜", notification.payload["progress"]
+    assert_match(/\A🟩🟩⬜/, notification.body)
+  end
+
+  test "#38 payload builder error soft-fails without enqueue or raise" do
+    assert defined?(Shop::OrderStatusPushPayload)
+
+    Shop::OrderStatusPushPayload.stub(:build!, ->(*) { raise Shop::OrderStatusPushPayload::Error, "forced 500" }) do
+      assert_nothing_raised do
+        assert_no_enqueued_jobs(only: Shop::SendPushNotificationJob) do
+          assert_no_difference -> { PushNotification.count } do
+            Shop::OrderStatusPushNotifier.call(order: @order, old_status: "pending_payment")
+          end
+        end
+      end
+    end
+  end
 end

@@ -96,4 +96,16 @@ class Shop::ReadyPushJobTest < ActiveSupport::TestCase
       Shop::OrderStatusPushNotifier.call(order: @order.reload, old_status: "preparing")
     end
   end
+
+  # --- #38 шаг 1 [TDD-RED]: ready FCM тоже с tag/actions/unicode ---
+
+  test "#38 ready push payload has tag chat tips and unicode progress" do
+    Shop::ReadyPushJob.perform_now(@order.id, "preparing")
+
+    note = PushNotification.order(created_at: :desc).first
+    assert_equal "order-#{@order.id}", note.payload["tag"]
+    assert_equal %w[chat tips], note.payload["actions"]
+    assert_equal "🟩🟩🟩", note.payload["progress"]
+    assert_match(/\A🟩🟩🟩/, note.body)
+  end
 end

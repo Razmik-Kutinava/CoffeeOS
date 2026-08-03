@@ -6,9 +6,15 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#38** SPEC `[x]` · `todo.md` шаги 1–5 | RED шаг 1 при намерении |
+| **#38** RED шаг 1 `[x]` (FCM payload tests) | GREEN шаг 1 при намерении |
 | **#37** Fly v419 MCP PASS | апрув заказчика |
 | **Charge live PASS** #32/#33/#27 · #34 Setup PASS | Zero-Click после 1× bind в банке |
+
+### Сессия 2026-08-03 (RED шаг 1 · #38 FCM payload)
+
+- Тесты: `order_status_push_payload_test` (NameError) · notifier tag/actions/unicode · ready job · soft-fail `defined?`
+- Намеренный RED `[TDD]` — не ISSUES
+- Дальше: GREEN — `Shop::OrderStatusPushPayload` + wire notifier/ReadyPushJob
 
 ### Сессия 2026-08-03 (PHASE 1 SPEC · #38 Background FCM progress + Apple Wallet)
 
