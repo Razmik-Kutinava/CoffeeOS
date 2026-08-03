@@ -70,3 +70,4 @@
 - Интейк PHASE 0 (2026-08-03): текст выше — 1:1 из чата.
 - Связь: #35 compact status + Push/Wallet (server), #37 OS detect + Wallet/WebPush CTA (Fly v419), B1.1 progress bar.
 - **PHASE 1 SPEC (2026-08-03):** канон в `docs/operations/session/todo.md` — Minitest/JS `.mjs` (не RSpec/Vitest); `Shop::AppleWallet::PassUpdater` (не новый top-level); FCM через notifier+SW `firebase-messaging-sw.js`; матрица из шага 5 ТЗ; Chat/Tips = deep link (продукта нет); barista status files — не трогать.
+- **PHASE 3 REVIEW (2026-08-03):** шаги 1–5 GREEN; Rails 33/127 · JS 40/40; barista без diff; MCP/deploy ждут апрув; PKCS7/chat UI — backlog.

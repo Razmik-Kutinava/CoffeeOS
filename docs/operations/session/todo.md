@@ -2,7 +2,25 @@
 
 **ТЗ:** [`customer_tasks/Фоновые уведомления прогресс-бар Android FCM и Apple Wallet iOS.md`](../milestones/veha_2/requirements/customer_tasks/Фоновые%20уведомления%20прогресс-бар%20Android%20FCM%20и%20Apple%20Wallet%20iOS.md)  
 **Артефакты:** [`artifacts/background_notifications_fcm_apple_wallet/`](../milestones/veha_2/artifacts/background_notifications_fcm_apple_wallet/)  
-**Фаза:** SPEC `[x]` · RED/GREEN шаги 1–5 `[x]` · REVIEW `[ ]` · MCP/deploy `[ ]`
+**Фаза:** SPEC `[x]` · RED/GREEN 1–5 `[x]` · REVIEW `[x]` · MCP/deploy `[ ]`
+
+---
+
+## PHASE 3: REVIEW (2026-08-03)
+
+| Проверка | Результат |
+|----------|-----------|
+| Rails зона push/wallet | **33 runs / 127 assertions PASS** |
+| JS (sw/cta/notify/wallet/device) | **40/40 PASS** |
+| Barista `OrdersController` / `OrderStatusUpdateService` | **без diff** |
+| N+1 | нет циклов AR в новых сервисах |
+| RLS | wallet_pass session visibility без изменений контракта |
+| File size | new libs ≤101; `OrderStatus.svelte` **754** (legacy warn); Accordion **322** (warn, не трогали логику) |
+| PKCS7 / APNs prod device tokens | backlog PRACTICES `V2-#35-WALLET-PROD` |
+| Chat/Tips продукт | deep link only — backlog NETMONET / chat UI |
+| MCP / Fly deploy | **ждут явный апрув** |
+
+**Tip GREEN:** `f3f0f2db` · intake `4a8d2e44` · SPEC `67eb0080`
 
 ---
 

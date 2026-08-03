@@ -1,5 +1,12 @@
 ﻿# CHANGELOG
 
+## 2026-08-03 — feat: Background FCM progress + Apple Wallet (#38) REVIEW
+- FCM: `tag` / `actions` / unicode progress; soft-fail payload; SW notificationclick (cancel/chat/tips)
+- Wallet: PassBuilder face/back/strip; Broadcaster PassUpdater если pass есть; ReadyPushJob без double ready
+- PWA: `orderStatusCtaMachine` (макс. 2 CTA) на карточке заказа
+- Тесты: Rails 33/127 · JS 40/40 · barista status files без diff · tip `f3f0f2db`
+- MCP/deploy — ждут апрув
+
 ## 2026-08-03 — docs: SPEC Background FCM progress + Apple Wallet (#38)
 - PHASE 1: `todo.md` — маппинг ТЗ → Minitest/JS + существующие Shop push/Wallet сервисы; шаги 1–5 TDD
 - Канон: FCM tag/actions/unicode; SW cancel/chat/tips; PassUpdater из Broadcaster; PWA CTA machine; без правок barista status

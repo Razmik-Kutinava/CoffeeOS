@@ -2,13 +2,19 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-08-03 (GREEN шаг 5 · #38 PWA CTA machine)
+**Дата:** 2026-08-03 (PHASE 3 REVIEW · #38 Background FCM + Apple Wallet)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#38** GREEN шаги 1–5 `[x]` | PHASE 3 REVIEW |
+| **#38** REVIEW `[x]` · tip `f3f0f2db` | push + fly deploy + MCP по апруву |
 | **#37** Fly v419 MCP PASS | апрув заказчика |
 | **Charge live PASS** #32/#33/#27 · #34 Setup PASS | Zero-Click после 1× bind в банке |
+
+### Сессия 2026-08-03 (PHASE 3 REVIEW · #38)
+
+- Sanity: Rails 33/127 PASS · JS 40/40 PASS · barista status без diff
+- Warn: OrderStatus.svelte 754 / Accordion 322 (legacy); PKCS7 + chat/tips UI backlog
+- MCP/deploy не запускали
 
 ### Сессия 2026-08-03 (GREEN шаг 5 · #38 PWA CTA machine)
 
