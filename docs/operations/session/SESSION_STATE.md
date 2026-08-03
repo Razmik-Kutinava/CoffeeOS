@@ -2,13 +2,20 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-08-03 (RED шаг 2 · #38 SW notificationclick)
+**Дата:** 2026-08-03 (GREEN шаг 2 · #38 SW notificationclick)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#38** RED шаг 2 `[x]` (SW actions tests) | GREEN шаг 2 при намерении |
+| **#38** GREEN шаг 2 `[x]` | RED шаг 3 (pkpass enrich) |
 | **#37** Fly v419 MCP PASS | апрув заказчика |
 | **Charge live PASS** #32/#33/#27 · #34 Setup PASS | Zero-Click после 1× bind в банке |
+
+### Сессия 2026-08-03 (GREEN шаг 2 · #38 SW notificationclick)
+
+- `swNotificationActions.js` + зеркало в `firebase_sw/show.js.erb` (notificationclick)
+- `FcmClient` stringify Array/Hash → JSON для data
+- JS 11/11 · Rails push 18/70 PASS
+- Дальше: RED шаг 3 `.pkpass`
 
 ### Сессия 2026-08-03 (RED шаг 2 · #38 SW notificationclick)
 
