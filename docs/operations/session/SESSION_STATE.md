@@ -2,20 +2,25 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-08-03 (PHASE 0 intake · #38 Background FCM + Apple Wallet)
+**Дата:** 2026-08-03 (PHASE 1 SPEC · #38 Background FCM + Apple Wallet)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#38** интейк PHASE 0 `[x]` | go → PHASE 1: SPEC |
+| **#38** SPEC `[x]` · `todo.md` шаги 1–5 | RED шаг 1 при намерении |
 | **#37** Fly v419 MCP PASS | апрув заказчика |
 | **Charge live PASS** #32/#33/#27 · #34 Setup PASS | Zero-Click после 1× bind в банке |
+
+### Сессия 2026-08-03 (PHASE 1 SPEC · #38 Background FCM progress + Apple Wallet)
+
+- `todo.md` переписан под #38: маппинг RSpec/Vitest → Minitest/JS; PassUpdater namespace; матрица CTAs; Chat/Tips deep-link gap
+- Канон: enrich FCM в notifier + SW actions; Wallet APNs из Broadcaster если pass есть; UI machine на OrderStatus
+- Код не писали; дальше RED шаг 1
 
 ### Сессия 2026-08-03 (PHASE 0 intake · #38 Background FCM progress + Apple Wallet)
 
 - Док ТЗ 1:1: `customer_tasks/Фоновые уведомления прогресс-бар Android FCM и Apple Wallet iOS.md`
 - Артефакты: `artifacts/background_notifications_fcm_apple_wallet/`
 - CBR + `customer_tasks/README.md` — строка #38 / backlog
-- Код не трогали; ждём go → PHASE 1: SPEC
 
 ### Сессия 2026-08-03 (MCP · Charge unlocked package)
 

@@ -1,6 +1,6 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-08-03 (**PHASE 0 intake · #38 Background FCM + Apple Wallet**)  
+**Дата:** 2026-08-03 (**PHASE 1 SPEC · #38 Background FCM + Apple Wallet**)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev  
 
@@ -9,13 +9,14 @@
 | Что | Статус |
 |-----|--------|
 | Intake (PHASE 0) | **`[x]`** |
-| PHASE 1 SPEC | **`[ ]`** ждёт go |
-| RED/GREEN / REVIEW / deploy / MCP | **`[ ]`** |
+| PHASE 1 SPEC | **`[x]`** |
+| RED/GREEN шаги 1–5 | **`[ ]`** |
+| REVIEW / deploy / MCP | **`[ ]`** |
 
 **ТЗ:** [`Фоновые уведомления прогресс-бар Android FCM и Apple Wallet iOS.md`](../milestones/veha_2/requirements/customer_tasks/Фоновые%20уведомления%20прогресс-бар%20Android%20FCM%20и%20Apple%20Wallet%20iOS.md)  
 **Артефакты:** [`background_notifications_fcm_apple_wallet/`](../milestones/veha_2/artifacts/background_notifications_fcm_apple_wallet/)  
-**Канон (из ТЗ):** FCM tag/actions/прогресс → SW actions; `.pkpass` + APNs update через `GuestOrderBroadcaster` / `AppleWalletPassUpdater`; PWA UI state machine (макс. 2 CTA); **не трогать** `Barista::OrdersController` / `OrderStatusUpdateService`.  
-**Дальше:** go → PHASE 1: SPEC (`todo.md`).
+**Канон:** см. `todo.md` — FCM enrich + SW; `Shop::AppleWallet::PassUpdater` из Broadcaster (если pass есть); PWA CTA machine; Chat/Tips = deep link; barista status files не трогать.  
+**Дальше:** RED шаг 1 (FCM payload + tag/actions/unicode).
 
 ### T-Bank Charge unlocked — пакет MCP (2026-08-03)
 

@@ -1,5 +1,9 @@
 ﻿# CHANGELOG
 
+## 2026-08-03 — docs: SPEC Background FCM progress + Apple Wallet (#38)
+- PHASE 1: `todo.md` — маппинг ТЗ → Minitest/JS + существующие Shop push/Wallet сервисы; шаги 1–5 TDD
+- Канон: FCM tag/actions/unicode; SW cancel/chat/tips; PassUpdater из Broadcaster; PWA CTA machine; без правок barista status
+
 ## 2026-08-03 — docs: intake Background FCM progress + Apple Wallet (#38)
 - PHASE 0: ТЗ 1:1 `customer_tasks/Фоновые уведомления прогресс-бар Android FCM и Apple Wallet iOS.md`
 - Артефакты: `artifacts/background_notifications_fcm_apple_wallet/`
