@@ -1,23 +1,21 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-08-03 (**PHASE 3 REVIEW · #38 Background FCM + Apple Wallet**)  
+**Дата:** 2026-08-03 (**#38 push OK · Fly deploy BLOCKED billing**)  
 **Ветка:** `develop`  
-**Прод:** https://coffeeos.fly.dev  
+**Прод:** https://coffeeos.fly.dev (**ещё v419**)  
 
 ### Background FCM progress + Apple Wallet (#38) — 2026-08-03
 
 | Что | Статус |
 |-----|--------|
-| Intake (PHASE 0) | **`[x]`** |
-| PHASE 1 SPEC | **`[x]`** |
-| RED/GREEN шаги 1–5 | **`[x]`** tip `f3f0f2db` |
-| PHASE 3 REVIEW | **`[x]`** · Rails 33 · JS 40 |
-| Push / Fly deploy / MCP | **`[ ]`** ждут апрув |
+| Intake / SPEC / RED-GREEN 1–5 / REVIEW | **`[x]`** tip `f3f0f2db` · REVIEW `a145ee0c` |
+| `git push` develop | **`[x]`** `a145ee0c` |
+| Image build | **`[x]`** `deployment-01KZ3QRBRX8E2VES9XFJSBGDJ4` |
+| Fly release / machines | **BLOCKED** org billing 403 |
+| MCP #38 на новом коде | **SKIP** до релиза |
 
-**ТЗ:** [`Фоновые уведомления прогресс-бар Android FCM и Apple Wallet iOS.md`](../milestones/veha_2/requirements/customer_tasks/Фоновые%20уведомления%20прогресс-бар%20Android%20FCM%20и%20Apple%20Wallet%20iOS.md)  
-**Артефакты:** [`background_notifications_fcm_apple_wallet/`](../milestones/veha_2/artifacts/background_notifications_fcm_apple_wallet/)  
-**Канон:** FCM tag/actions/unicode → SW; PassBuilder enrich; Broadcaster→PassUpdater (если pass); CTA machine max 2; barista status **не трогали**.  
-**Дальше:** push + `fly deploy` + MCP по явному апруву; PKCS7/chat UI — PRACTICES.
+**Evidence:** [`mcp/fly_blocked_billing_2026-08-03/`](../milestones/veha_2/artifacts/background_notifications_fcm_apple_wallet/mcp/fly_blocked_billing_2026-08-03/)  
+**Дальше:** пополнить https://fly.io/dashboard/razmik-kutinava/billing → `fly deploy -a coffeeos --image registry.fly.io/coffeeos:deployment-01KZ3QRBRX8E2VES9XFJSBGDJ4` → MCP.
 
 ### T-Bank Charge unlocked — пакет MCP (2026-08-03)
 

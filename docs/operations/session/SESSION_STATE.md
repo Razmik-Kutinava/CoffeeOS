@@ -2,13 +2,20 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-08-03 (PHASE 3 REVIEW · #38 Background FCM + Apple Wallet)
+**Дата:** 2026-08-03 (#38 push OK · Fly billing BLOCKED)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#38** REVIEW `[x]` · tip `f3f0f2db` | push + fly deploy + MCP по апруву |
-| **#37** Fly v419 MCP PASS | апрув заказчика |
-| **Charge live PASS** #32/#33/#27 · #34 Setup PASS | Zero-Click после 1× bind в банке |
+| **#38** push `a145ee0c` · image built · **release 403 billing** | пополнить Fly billing → redeploy image → MCP |
+| Live Fly | **v419** (без #38) |
+| **#37** / Charge | как были |
+
+### Сессия 2026-08-03 (push/deploy attempt · #38)
+
+- Push `develop` → `a145ee0c` OK
+- `fly deploy --depot=false`: image `deployment-01KZ3QRBRX8E2VES9XFJSBGDJ4` pushed
+- Release + `machine update` → **403 billing** (https://fly.io/dashboard/razmik-kutinava/billing)
+- MCP #38 SKIP; evidence `artifacts/…/mcp/fly_blocked_billing_2026-08-03/`
 
 ### Сессия 2026-08-03 (PHASE 3 REVIEW · #38)
 

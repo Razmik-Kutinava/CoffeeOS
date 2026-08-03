@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-08-03 — deploy: #38 push OK · Fly release BLOCKED billing
+- Push `develop` `a145ee0c`
+- Image built+pushed: `deployment-01KZ3QRBRX8E2VES9XFJSBGDJ4` (`--depot=false`)
+- Release/machine update → Fly org **403 billing**; live остаётся **v419**
+- MCP #38 SKIP · evidence `mcp/fly_blocked_billing_2026-08-03/`
+
 ## 2026-08-03 — feat: Background FCM progress + Apple Wallet (#38) REVIEW
 - FCM: `tag` / `actions` / unicode progress; soft-fail payload; SW notificationclick (cancel/chat/tips)
 - Wallet: PassBuilder face/back/strip; Broadcaster PassUpdater если pass есть; ReadyPushJob без double ready
