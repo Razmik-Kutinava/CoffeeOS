@@ -11,7 +11,8 @@
   import {
     notifyActionsView,
     openOrderReceipt,
-    downloadWalletPass
+    downloadWalletPass,
+    subscribeOrderPush
   } from "../lib/orderStatusNotifyActions.js"
 
   let {
@@ -43,16 +44,21 @@
 
   async function onPrimary(e) {
     e.stopPropagation()
-    if (actions.primaryKind !== "wallet" || primaryLoading || primaryLabelOverride) return
+    if (primaryLoading || primaryLabelOverride) return
+    if (actions.primaryKind !== "wallet" && actions.primaryKind !== "push") return
+
     primaryLoading = true
     toastMsg = ""
     const id = order.id || order.order_id
-    const result = await downloadWalletPass({
-      orderId: id,
-      onToast: (msg) => {
-        toastMsg = msg
-      }
-    })
+    const onToast = (msg) => {
+      toastMsg = msg
+    }
+
+    const result =
+      actions.primaryKind === "wallet"
+        ? await downloadWalletPass({ orderId: id, onToast })
+        : await subscribeOrderPush({ onToast })
+
     primaryLoading = false
     if (result.ok) primaryLabelOverride = result.primaryLabel
   }

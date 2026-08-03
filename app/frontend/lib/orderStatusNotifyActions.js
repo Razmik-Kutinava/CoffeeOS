@@ -124,17 +124,42 @@ const PUSH_NETWORK_TOAST = "Не удалось включить уведомл�
 
 /**
  * Android/Desktop: FCM через registerShopPush.
- * #37 шаг 5 — RED stub.
  *
  * @param {{
  *   registerShopPushImpl?: () => Promise<{ok:boolean, reason?:string}>,
  *   onToast?: (msg: string) => void
  * }} [opts]
  */
-export async function subscribeOrderPush(_opts = {}) {
-  return {
-    ok: false,
-    isLoading: true,
-    primaryLabel: LABELS.push
+export async function subscribeOrderPush(opts = {}) {
+  const { registerShopPushImpl, onToast } = opts
+  const idleLabel = LABELS.push
+
+  try {
+    let register = registerShopPushImpl
+    if (typeof register !== "function") {
+      const mod = await import("./firebasePush.js")
+      register = mod.registerShopPush
+    }
+    const result = await register()
+
+    if (result?.ok) {
+      return { ok: true, isLoading: false, primaryLabel: PUSH_SUCCESS_LABEL }
+    }
+
+    if (result?.reason === "denied") {
+      if (typeof onToast === "function") onToast(PUSH_DENIED_TOAST)
+      return { ok: false, isLoading: false, primaryLabel: idleLabel, error: "denied" }
+    }
+
+    if (typeof onToast === "function") onToast(PUSH_NETWORK_TOAST)
+    return {
+      ok: false,
+      isLoading: false,
+      primaryLabel: idleLabel,
+      error: result?.reason || "failed"
+    }
+  } catch (_err) {
+    if (typeof onToast === "function") onToast(PUSH_NETWORK_TOAST)
+    return { ok: false, isLoading: false, primaryLabel: idleLabel, error: "network" }
   }
 }

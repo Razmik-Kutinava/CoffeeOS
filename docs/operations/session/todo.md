@@ -2,7 +2,7 @@
 
 **ТЗ:** [`customer_tasks/Адаптивный виджет статуса заказа Детекция ОС и подписка на уведомления.md`](../milestones/veha_2/requirements/customer_tasks/Адаптивный%20виджет%20статуса%20заказа%20Детекция%20ОС%20и%20подписка%20на%20уведомления.md)  
 **Артефакты:** [`artifacts/order_status_os_detect_wallet_webpush/`](../milestones/veha_2/artifacts/order_status_os_detect_wallet_webpush/)  
-**Фаза:** SPEC `[x]` · RED шаг 5 `[x]` · GREEN шаги 1–4 `[x]` · REVIEW `[ ]` · MCP/deploy `[ ]`
+**Фаза:** SPEC `[x]` · RED/GREEN шаги 1–5 `[x]` · REVIEW `[ ]` · MCP/deploy `[ ]`
 
 ---
 
@@ -53,10 +53,9 @@
 - **GREEN:** `GET /shop/api/orders/:id/wallet_pass` (PassUpdater + send_data) · `downloadWalletPass` · primary CTA wire
 - Тесты: JS wallet PASS · Rails wallet_pass 2/2 PASS
 
-### Шаг 5 — Android/Desktop → Push (FCM) `[x]` RED · GREEN `[ ]`
+### Шаг 5 — Android/Desktop → Push (FCM) `[x]`
 
-- **RED:** stub `subscribeOrderPush` · `order_status_push_subscribe_test.mjs` (4 fail)
-- **GREEN:** wrap `registerShopPush` + wire `primaryKind === "push"`; denied/network toasts
+- **GREEN:** `subscribeOrderPush` → `registerShopPush`; denied/network toasts; `onPrimary` ветка push
 
 ### Шаг 6 — Init restored state `[ ]`
 
