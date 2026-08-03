@@ -58,21 +58,62 @@ export function walletAddedStorageKey(orderId) {
   return `order_${orderId}_wallet_added`
 }
 
+const WALLET_SUCCESS_LABEL = "✓ Карта добавлена"
+const WALLET_ERROR_TOAST = "Не удалось добавить карту. Попробуйте позже."
+
 /**
  * iOS: скачать .pkpass (GET /shop/api/orders/:id/wallet_pass).
- * #37 шаг 4 — RED stub.
  *
- * @returns {Promise<{
- *   ok: boolean,
- *   isLoading: boolean,
- *   primaryLabel: string,
- *   error?: string
- * }>}
+ * @param {{
+ *   orderId: string|number,
+ *   fetchImpl?: typeof fetch,
+ *   createObjectURL?: (blob: Blob) => string,
+ *   locationAssign?: (url: string) => void,
+ *   storage?: Storage,
+ *   onToast?: (msg: string) => void
+ * }} opts
  */
-export async function downloadWalletPass(_opts = {}) {
-  return {
-    ok: false,
-    isLoading: true,
-    primaryLabel: "Карта в Apple Wallet"
+export async function downloadWalletPass(opts = {}) {
+  const {
+    orderId,
+    fetchImpl = globalThis.fetch.bind(globalThis),
+    createObjectURL = (blob) => URL.createObjectURL(blob),
+    locationAssign = (url) => {
+      globalThis.location.href = url
+    },
+    storage = globalThis.localStorage,
+    onToast
+  } = opts
+
+  const idleLabel = LABELS.wallet
+  const url = `/shop/api/orders/${orderId}/wallet_pass`
+
+  try {
+    const res = await fetchImpl(url, {
+      method: "GET",
+      credentials: "same-origin",
+      headers: { Accept: "application/vnd.apple.pkpass" },
+      cache: "no-store"
+    })
+
+    if (!res.ok) {
+      if (typeof onToast === "function") onToast(WALLET_ERROR_TOAST)
+      return { ok: false, isLoading: false, primaryLabel: idleLabel, error: String(res.status) }
+    }
+
+    const blob = await res.blob()
+    const blobUrl = createObjectURL(blob)
+    locationAssign(blobUrl)
+    storage?.setItem(walletAddedStorageKey(orderId), "true")
+
+    return { ok: true, isLoading: false, primaryLabel: WALLET_SUCCESS_LABEL }
+  } catch (err) {
+    if (typeof onToast === "function") onToast(WALLET_ERROR_TOAST)
+    return {
+      ok: false,
+      isLoading: false,
+      primaryLabel: idleLabel,
+      error: err?.message || "network"
+    }
   }
 }

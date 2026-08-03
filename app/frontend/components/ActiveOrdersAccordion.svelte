@@ -8,7 +8,11 @@
     CHEVRON
   } from "../lib/activeOrdersAccordion.js"
   import { getDeviceOS } from "../lib/deviceDetect.js"
-  import { notifyActionsView, openOrderReceipt } from "../lib/orderStatusNotifyActions.js"
+  import {
+    notifyActionsView,
+    openOrderReceipt,
+    downloadWalletPass
+  } from "../lib/orderStatusNotifyActions.js"
 
   let {
     order,
@@ -20,6 +24,10 @@
   let receipt = $derived(row.expanded ? receiptView(order) : null)
   let scrollStyle = receiptScrollStyle()
   let actions = $derived(notifyActionsView({ os: getDeviceOS() }))
+  let primaryLabelOverride = $state(null)
+  let primaryLoading = $state(false)
+  let toastMsg = $state("")
+  let displayPrimary = $derived(primaryLabelOverride ?? actions.primaryLabel)
 
   function onToggle(e) {
     e.stopPropagation()
@@ -31,6 +39,22 @@
     e.stopPropagation()
     const id = order.id || order.order_id
     openOrderReceipt(accordionState, id, { isLoading: false })
+  }
+
+  async function onPrimary(e) {
+    e.stopPropagation()
+    if (actions.primaryKind !== "wallet" || primaryLoading || primaryLabelOverride) return
+    primaryLoading = true
+    toastMsg = ""
+    const id = order.id || order.order_id
+    const result = await downloadWalletPass({
+      orderId: id,
+      onToast: (msg) => {
+        toastMsg = msg
+      }
+    })
+    primaryLoading = false
+    if (result.ok) primaryLabelOverride = result.primaryLabel
   }
 
   function onDetail() {
@@ -72,7 +96,9 @@
         class={actions.buttonClass}
         data-kind={actions.primaryKind}
         data-testid="active-order-notify-primary"
-      >{actions.primaryLabel}</button>
+        disabled={primaryLoading || Boolean(primaryLabelOverride)}
+        onclick={onPrimary}
+      >{#if primaryLoading}…{:else}{displayPrimary}{/if}</button>
       <button
         type="button"
         class={actions.buttonClass}
@@ -81,6 +107,9 @@
       >{actions.secondaryLabel}</button>
     </div>
   </div>
+  {#if toastMsg}
+    <div class="aoa__toast" data-testid="active-order-notify-toast" role="status">{toastMsg}</div>
+  {/if}
   <button
     type="button"
     class="aoa__chevron"
@@ -230,6 +259,15 @@
     text-align: center;
     line-height: 1.15;
     white-space: normal;
+  }
+  .aoa__cta:disabled {
+    opacity: 0.85;
+    cursor: default;
+  }
+  .aoa__toast {
+    margin-top: 0.25rem;
+    font-size: 0.62rem;
+    color: #ffb74d;
   }
   .aoa__chevron {
     display: block;

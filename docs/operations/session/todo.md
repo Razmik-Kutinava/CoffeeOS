@@ -2,7 +2,7 @@
 
 **ТЗ:** [`customer_tasks/Адаптивный виджет статуса заказа Детекция ОС и подписка на уведомления.md`](../milestones/veha_2/requirements/customer_tasks/Адаптивный%20виджет%20статуса%20заказа%20Детекция%20ОС%20и%20подписка%20на%20уведомления.md)  
 **Артефакты:** [`artifacts/order_status_os_detect_wallet_webpush/`](../milestones/veha_2/artifacts/order_status_os_detect_wallet_webpush/)  
-**Фаза:** SPEC `[x]` · RED шаг 4 `[x]` · GREEN шаги 1–3 `[x]` · REVIEW `[ ]` · MCP/deploy `[ ]`
+**Фаза:** SPEC `[x]` · RED/GREEN шаги 1–4 `[x]` · REVIEW `[ ]` · MCP/deploy `[ ]`
 
 ---
 
@@ -48,11 +48,10 @@
 
 - **GREEN:** `openOrderReceipt` → `toggleExpandedOrder`; `isLoading` всегда false; `onclick={onReceipt}`
 
-### Шаг 4 — iOS → Apple Wallet `[x]` RED · GREEN `[ ]`
+### Шаг 4 — iOS → Apple Wallet `[x]`
 
-- **RED FE:** `downloadWalletPass` stub · `order_status_wallet_pass_test.mjs` (3 fail)
-- **RED BE:** `test/integration/shop/api/wallet_pass_test.rb` (route отсутствует)
-- **GREEN:** `GET /shop/api/orders/:id/wallet_pass` + FE blob/localStorage/toast + wire primary
+- **GREEN:** `GET /shop/api/orders/:id/wallet_pass` (PassUpdater + send_data) · `downloadWalletPass` · primary CTA wire
+- Тесты: JS wallet PASS · Rails wallet_pass 2/2 PASS
 
 ### Шаг 5 — Android/Desktop → Push (FCM) `[ ]`
 

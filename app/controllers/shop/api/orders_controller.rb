@@ -155,6 +155,25 @@ module Shop
         }
       end
 
+      # #37 — скачать .pkpass для Apple Wallet (simulate stub или signed bytes).
+      def wallet_pass
+        order = Order.where(tenant_id: @shop_tenant.id, source: :mobile).find(params[:id])
+        unless order_visible_to_session_customer?(order)
+          return render json: { error: "Order not found", status: 404 }, status: :not_found
+        end
+
+        result = Shop::AppleWallet::PassUpdater.call!(order: order)
+        bytes = result.dig(:built, :bytes).to_s
+        send_data bytes,
+                  type: "application/vnd.apple.pkpass",
+                  disposition: "attachment",
+                  filename: "order-#{order.id}.pkpass"
+      rescue Shop::AppleWallet::UnavailableError, Shop::AppleWallet::GenerationError => e
+        render json: { error: e.message, status: 500 }, status: :internal_server_error
+      rescue ActiveRecord::RecordNotFound
+        render json: { error: "Order not found", status: 404 }, status: :not_found
+      end
+
       private
 
       def order_visible_to_session_customer?(order)

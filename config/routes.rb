@@ -202,6 +202,7 @@ Rails.application.routes.draw do
       post "orders/:id/abandon", to: "orders#abandon"
       post "orders/:id/cancel", to: "orders#cancel"
       post "orders/:id/finalize", to: "orders#finalize"
+      get "orders/:id/wallet_pass", to: "orders#wallet_pass"
       get "orders/:id", to: "orders#show"
       post "promo_codes/apply", to: "promo_codes#apply"
       get "profile", to: "profile#show"
