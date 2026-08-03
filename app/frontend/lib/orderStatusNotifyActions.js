@@ -2,6 +2,8 @@
  * #37 — CTA Wallet / Push / «Состав заказа» в строке аккордеона.
  */
 
+import { toggleExpandedOrder } from "./activeOrdersAccordion.js"
+
 /** Токены UI-kit (accent проекта, h-9 ≈ 36px, rounded-lg, w-44). */
 export const CTA_STYLE = Object.freeze({
   background: "#ff8c42",
@@ -37,13 +39,16 @@ export function notifyActionsView({ os } = {}) {
 
 /**
  * Клик «Состав заказа»: раскрыть/свернуть чек. Без isLoading.
- * #37 шаг 3 — RED stub.
  *
- * @param {object} _state accordion state
- * @param {string|number} _orderId
+ * @param {object} state accordion state (`activeExpandedOrderId`)
+ * @param {string|number} orderId
  * @param {{ isLoading?: boolean }} [ui]
  * @returns {{ isLoading: boolean }}
  */
-export function openOrderReceipt(_state, _orderId, ui = {}) {
-  return { isLoading: true }
+export function openOrderReceipt(state, orderId, ui = {}) {
+  if (ui && Object.prototype.hasOwnProperty.call(ui, "isLoading")) {
+    ui.isLoading = false
+  }
+  toggleExpandedOrder(state, orderId)
+  return { isLoading: false }
 }

@@ -8,7 +8,7 @@
     CHEVRON
   } from "../lib/activeOrdersAccordion.js"
   import { getDeviceOS } from "../lib/deviceDetect.js"
-  import { notifyActionsView } from "../lib/orderStatusNotifyActions.js"
+  import { notifyActionsView, openOrderReceipt } from "../lib/orderStatusNotifyActions.js"
 
   let {
     order,
@@ -25,6 +25,12 @@
     e.stopPropagation()
     const id = order.id || order.order_id
     toggleExpandedOrder(accordionState, id)
+  }
+
+  function onReceipt(e) {
+    e.stopPropagation()
+    const id = order.id || order.order_id
+    openOrderReceipt(accordionState, id, { isLoading: false })
   }
 
   function onDetail() {
@@ -71,6 +77,7 @@
         type="button"
         class={actions.buttonClass}
         data-testid="active-order-notify-receipt"
+        onclick={onReceipt}
       >{actions.secondaryLabel}</button>
     </div>
   </div>
