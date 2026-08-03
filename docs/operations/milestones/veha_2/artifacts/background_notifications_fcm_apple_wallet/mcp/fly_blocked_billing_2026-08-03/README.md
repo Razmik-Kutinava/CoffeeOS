@@ -1,25 +1,47 @@
-# MCP #38 — blocked pending Fly billing
+# Fly #38 — release BLOCKED billing (WSL `bin/fly_deploy.sh`)
 
 **Дата:** 2026-08-03  
-**Push:** `develop` `a145ee0c` → origin **OK**  
-**Image build:** `registry.fly.io/coffeeos:deployment-01KZ3QRBRX8E2VES9XFJSBGDJ4` **OK** (remote builder `--depot=false`)  
-**Release / machine update:** **BLOCKED** Fly org billing 403  
-  - URL: https://fly.io/dashboard/razmik-kutinava/billing  
-  - Live remain: **v419** `deployment-01KZ3CAC9RNSCPZRZ5VZWEWW8K`  
-**MCP on new #38 code:** **SKIP** — стенд ещё без релиза  
+**Причина:** не код CoffeeOS. Build + push image **OK**; `create release` → **403 billing**.
 
-## После пополнения billing
+## Что уже готово
 
+| Шаг | Статус |
+|-----|--------|
+| `git push` develop | OK (`5786f901` / tip #38) |
+| Docker build (WSL `bin/fly_deploy.sh`) | OK |
+| Push image | OK → `registry.fly.io/coffeeos:deployment-01KZ3S4V3XCEY7W87WBP76XC7C` |
+| Create release / machines | **FAIL 403** |
+| Live | всё ещё **v419** |
+
+Ошибка:
 ```text
-fly deploy -a coffeeos --remote-only --depot=false
-# или
-fly deploy -a coffeeos --image registry.fly.io/coffeeos:deployment-01KZ3QRBRX8E2VES9XFJSBGDJ4
+failed to create release (status 403): We need your payment information to continue!
+https://fly.io/dashboard/razmik-kutinava/billing
 ```
 
-Затем MCP Point A (Aram / active orders):
-1. OrderStatus CTAs max 2 (accepted: Отменить + Push/Wallet; preparing: Чат + Чаевые/Wallet)
-2. `/firebase-messaging-sw.js` содержит `notificationclick`
-3. Android UA / iOS CriOS accordion CTAs (регресс #37)
-4. `GET /shop/api/orders/:id/wallet_pass` session → pkpass/simulate
+Ранее (Windows): `deployment-01KZ3QRBRX8E2VES9XFJSBGDJ4` — тот же billing gate.
 
-**Verdict:** deploy+MCP **blocked_billing** · code on git ready
+## Что сделать тебе (1–2 мин)
+
+1. Открыть https://fly.io/dashboard/razmik-kutinava/billing  
+2. Добавить карту **или** купить credit (org `razmik-kutinava`)  
+3. Снова релиз **без пересборки** (image уже в registry):
+
+```bash
+# из WSL, в репо:
+fly deploy -a coffeeos --image registry.fly.io/coffeeos:deployment-01KZ3S4V3XCEY7W87WBP76XC7C
+```
+
+или полный скрипт снова:
+```bash
+bin/fly_deploy.sh
+```
+
+4. Проверка: `curl -s -o /dev/null -w "%{http_code}\n" https://coffeeos.fly.dev/up` → `200`  
+5. Написать агенту «деплой ок» → MCP #38.
+
+## Не чинить в коде
+
+- Dockerfile / assets / unused CSS `.cancel-btn` — **не** причина 403  
+- Depot vs `--depot=false` — у тебя build уже прошёл  
+- Пока billing не ок, любой `fly deploy` / `machine update` будет 403

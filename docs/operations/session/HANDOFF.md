@@ -15,7 +15,9 @@
 | MCP #38 на новом коде | **SKIP** до релиза |
 
 **Evidence:** [`mcp/fly_blocked_billing_2026-08-03/`](../milestones/veha_2/artifacts/background_notifications_fcm_apple_wallet/mcp/fly_blocked_billing_2026-08-03/)  
-**Дальше:** пополнить https://fly.io/dashboard/razmik-kutinava/billing → `fly deploy -a coffeeos --image registry.fly.io/coffeeos:deployment-01KZ3QRBRX8E2VES9XFJSBGDJ4` → MCP.
+**Image (WSL, latest):** `deployment-01KZ3S4V3XCEY7W87WBP76XC7C`  
+**Дальше:** billing https://fly.io/dashboard/razmik-kutinava/billing →  
+`fly deploy -a coffeeos --image registry.fly.io/coffeeos:deployment-01KZ3S4V3XCEY7W87WBP76XC7C` → MCP.
 
 ### T-Bank Charge unlocked — пакет MCP (2026-08-03)
 
