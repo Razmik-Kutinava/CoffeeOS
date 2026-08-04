@@ -1,20 +1,21 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-08-04 (**#39 REVIEW · #38 v421**)  
+**Дата:** 2026-08-04 (**#39 Fly v426 · TG cascade PASS**)  
 **Ветка:** `develop`  
-**Прод:** https://coffeeos.fly.dev (**v421**)  
+**Прод:** https://coffeeos.fly.dev (**v426**)  
 
 ### Order ready cascade WS→TG→SMS (#39) — 2026-08-04
 
 | Что | Статус |
 |-----|--------|
-| Intake / SPEC / DDL | **`[x]`** |
-| RED/GREEN шаги 1–5 | **`[x]`** |
-| PHASE 3 REVIEW | **`[x]`** · зона 54/126 PASS |
-| Push / Fly migrate+deploy / MCP | **`[ ]`** |
+| Intake / SPEC / DDL / RED-GREEN 1–5 / REVIEW | **`[x]`** |
+| Push develop | **`[x]`** `2af25874` |
+| Fly deploy | **`[x]`** **v426** |
+| MCP cascade TG | **PASS** · `telegram:sent` order `#202608-0005` |
+| SMS_RU secrets on Fly | **`[ ]`** (нет в local `.env`) |
 
-**Канон:** Broadcaster enqueue → presence (Rails.cache) → `OrderReadyPaidNotifier` (TG→SMS≤70) → `order_notification_logs`.  
-**Дальше:** явный push + fly migrate/deploy → MCP.  
+**Evidence:** [`mcp/fly_v426_2026-08-04/`](../milestones/veha_2/artifacts/order_ready_cascade_ws_telegram_sms/mcp/fly_v426_2026-08-04/)  
+**Дальше:** апрув заказчика; при необходимости `SMS_RU_API_ID` / `SMS_RU_FROM` на Fly.
 
 ### Background FCM progress + Apple Wallet (#38) — 2026-08-03
 

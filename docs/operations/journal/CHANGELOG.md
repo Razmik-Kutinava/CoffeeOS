@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-08-04 — deploy: #39 cascade on Fly v426 · TG MCP PASS
+- Push `2af25874` · image `deployment-01KZ5X2WSEYB4GKVBVPBMJ3SG0` · **v426**
+- `TELEGRAM_BOT_TOKEN` secret; DDL telegram_chat_id + order_notification_logs на Neon
+- MCP: Aram `#202608-0005` → cascade → `telegram:sent`
+- Evidence: `mcp/fly_v426_2026-08-04/`
+
 ## 2026-08-04 — feat: Order ready cascade Telegram→SMS (#39) REVIEW
 - `Shop::TelegramBotClient` + `OrderReadyPaidNotifier` (403/400/timeout → SMS)
 - `SmsRuClient#send_message!` с валидацией ≤70; лог в `order_notification_logs`

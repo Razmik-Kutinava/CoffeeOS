@@ -2,13 +2,21 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-08-04 (#39 REVIEW · шаги 1–5 GREEN)
+**Дата:** 2026-08-04 (#39 Fly v426 MCP · TG delivered)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#39** cascade WS→TG→SMS **REVIEW** | push + migrate Fly + MCP (по апруву) |
-| **#38** Fly **v421** · MCP **PASS** | апрув заказчика |
-| Live Fly | **v421** (без #39) |
+| **#39** push+deploy **v426** · TG cascade **PASS** | апрув заказчика; SMS_RU secrets опционально |
+| **#38** | как было |
+| Live Fly | **v426** |
+
+### Сессия 2026-08-04 (deploy/MCP · #39)
+
+- Push `2af25874` · image `deployment-01KZ5X2WSEYB4GKVBVPBMJ3SG0` · **v426**
+- Secrets: `TELEGRAM_BOT_TOKEN`; SMS_RU не в .env — не ставили
+- Release: ConcurrentMigrationError после DDL → `--skip-release-command` (DDL уже в Neon)
+- Aram chat id на Fly; cascade smoke `#202608-0005` → `telegram:sent`
+- Evidence: `artifacts/order_ready_cascade_ws_telegram_sms/mcp/fly_v426_2026-08-04/`
 
 ### Сессия 2026-08-04 (PHASE 3 REVIEW · #39)
 
