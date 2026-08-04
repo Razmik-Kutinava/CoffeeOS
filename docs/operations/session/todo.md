@@ -2,7 +2,7 @@
 
 **ТЗ:** [`customer_tasks/Автоматический возврат платежа Т-Банк при отмене заказа в PWA.md`](../milestones/veha_2/requirements/customer_tasks/Автоматический%20возврат%20платежа%20Т-Банк%20при%20отмене%20заказа%20в%20PWA.md)  
 **Артефакты:** [`artifacts/tbank_auto_refund_order_cancellation_pwa/`](../milestones/veha_2/artifacts/tbank_auto_refund_order_cancellation_pwa/)  
-**Фаза:** PHASE 0 `[x]` · SPEC `[x]` · RED/GREEN `[ ]` · REVIEW `[ ]` · MCP/deploy `[ ]`  
+**Фаза:** PHASE 0 `[x]` · SPEC `[x]` · RED шаг 1 `in_progress` · GREEN `[ ]` · REVIEW `[ ]` · MCP/deploy `[ ]`  
 **CBR:** #40
 
 ---
@@ -67,7 +67,7 @@ preparing|ready|issued → 422, без изменений
 
 | # | Что | Тесты (канон) | Код | Статус |
 |---|-----|---------------|-----|--------|
-| 1 | `TbankAdapter#cancel_payment` → `POST /v2/Cancel` без Receipt | `test/services/payments/tbank_adapter_test.rb` | `app/services/payments/tbank_adapter.rb` | `[ ]` |
+| 1 | `TbankAdapter#cancel_payment` → `POST /v2/Cancel` без Receipt | `test/services/payments/tbank_adapter_test.rb` | `app/services/payments/tbank_adapter.rb` | **RED** `[ ]` GREEN |
 | 2 | `pending_payment` local cancel без T-Bank | `test/services/shop/guest_order_cancellation_service_test.rb` (уточнить assert: no Cancel stub) | сервис уже есть — assert/stub | `[ ]` |
 | 3 | `accepted` + succeeded → Cancel → `refunded` + `cancelled` | guest cancel unit + stub adapter; integration `orders_guest_cancel_test` | `GuestOrderCancellationService` (+ optional thin refund helper) | `[ ]` |
 | 4 | Block `preparing`/`ready`/`issued` → 422, payment unchanged | integration + unit (усилить ready/issued + payment freeze) | deny path уже есть | `[ ]` |

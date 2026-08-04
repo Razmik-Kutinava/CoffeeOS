@@ -6,9 +6,14 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#40** T-Bank auto refund — PHASE 0+SPEC **`[x]`** · todo шаги 1–7 | **go** → RED шаг 1 (`cancel_payment`) |
+| **#40** SPEC `[x]` · **RED шаг 1** `cancel_payment` тесты (намеренный RED) | **go** → GREEN шаг 1 |
 | **#39 v2** Fly **v427** · cascade SMS MCP **PASS** | апрув заказчика |
 | Live Fly | **v427** |
+
+### Сессия 2026-08-04 (RED шаг 1 · #40 cancel_payment)
+
+- Тесты `[TDD] cancel_payment*` в `tbank_adapter_test.rb` — 3 runs, NoMethodError (ожидаемо)
+- CHANGELOG/HANDOFF не трогали (RED-substep)
 
 ### Сессия 2026-08-04 (PHASE 1 SPEC · #40)
 

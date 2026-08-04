@@ -251,6 +251,66 @@ class Payments::TbankAdapterTest < ActiveSupport::TestCase
   end
 
   # ---------------------------------------------------------------------------
+  # Cancel / refund (#40 Шаг 1 RED) — POST /v2/Cancel без Receipt
+  # ---------------------------------------------------------------------------
+
+  test "[TDD] cancel_payment posts PaymentId to /Cancel without Receipt" do
+    adapter = Payments::TbankAdapter.new
+    captured = nil
+
+    adapter.define_singleton_method(:post_json) do |url, payload|
+      captured = { url: url, payload: payload }
+      {
+        "Success" => true,
+        "ErrorCode" => "0",
+        "Status" => "REFUNDED",
+        "PaymentId" => payload["PaymentId"].to_s
+      }
+    end
+
+    response = adapter.cancel_payment(payment_id: "pay-cancel-1")
+
+    assert captured[:url].end_with?("/Cancel")
+    assert_equal "https://securepay.tinkoff.ru/v2/Cancel", captured[:url]
+    assert_equal "TestTerminal", captured[:payload]["TerminalKey"]
+    assert_equal "pay-cancel-1", captured[:payload]["PaymentId"]
+    assert captured[:payload]["Token"].present?
+    assert_nil captured[:payload]["Receipt"]
+    refute captured[:payload].key?("Receipt")
+    assert_equal true, response["Success"]
+    assert_equal "0", response["ErrorCode"]
+    assert_equal "REFUNDED", response["Status"]
+  end
+
+  test "[TDD] cancel_payment Token matches build_token without Receipt" do
+    adapter = Payments::TbankAdapter.new
+    captured = nil
+
+    adapter.define_singleton_method(:post_json) do |_url, payload|
+      captured = payload
+      { "Success" => true, "ErrorCode" => "0", "Status" => "REFUNDED", "PaymentId" => "pay-cancel-2" }
+    end
+
+    adapter.cancel_payment(payment_id: "pay-cancel-2")
+
+    expected_token = adapter.build_token(captured.except("Token"))
+    assert_equal expected_token, captured["Token"]
+    refute captured.key?("Receipt")
+  end
+
+  test "[TDD] cancel_payment raises ApiError when bank returns Success false" do
+    adapter = Payments::TbankAdapter.new
+    adapter.define_singleton_method(:post_json) do |*_args|
+      { "Success" => false, "ErrorCode" => "504", "Message" => "Timeout" }
+    end
+
+    error = assert_raises(Payments::TbankAdapter::ApiError) do
+      adapter.cancel_payment(payment_id: "pay-cancel-fail")
+    end
+    assert_equal "504", error.error_code
+  end
+
+  # ---------------------------------------------------------------------------
   # Init + Receipt 54-ФЗ (Шаг 1 RED)
   # ---------------------------------------------------------------------------
 
