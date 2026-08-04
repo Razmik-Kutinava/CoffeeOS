@@ -1,6 +1,6 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-08-04 (**#39 Migration Gate · #38 v421**)  
+**Дата:** 2026-08-04 (**#39 REVIEW · #38 v421**)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev (**v421**)  
 
@@ -8,13 +8,13 @@
 
 | Что | Статус |
 |-----|--------|
-| Intake / SPEC | **`[x]`** |
-| RED/GREEN шаги 1–2 | **`[x]`** |
-| Migration Gate (`telegram_chat_id` + `order_notification_logs`) | **`[x]`** |
-| RED/GREEN 3–5 / REVIEW | **`[ ]`** |
+| Intake / SPEC / DDL | **`[x]`** |
+| RED/GREEN шаги 1–5 | **`[x]`** |
+| PHASE 3 REVIEW | **`[x]`** · зона 54/126 PASS |
+| Push / Fly migrate+deploy / MCP | **`[ ]`** |
 
-**ТЗ:** [`Оптимизированный каскад уведомлений Заказ готов PWA WS Push Telegram SMS.md`](../milestones/veha_2/requirements/customer_tasks/Оптимизированный%20каскад%20уведомлений%20Заказ%20готов%20PWA%20WS%20Push%20Telegram%20SMS.md)  
-**Дальше:** вставить chat id в `mobile_customers.telegram_chat_id` · RED/GREEN 3–5 · REVIEW.  
+**Канон:** Broadcaster enqueue → presence (Rails.cache) → `OrderReadyPaidNotifier` (TG→SMS≤70) → `order_notification_logs`.  
+**Дальше:** явный push + fly migrate/deploy → MCP.  
 
 ### Background FCM progress + Apple Wallet (#38) — 2026-08-03
 

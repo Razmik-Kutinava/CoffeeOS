@@ -17,8 +17,11 @@ module Shop
       end
     end
 
+    class ValidationError < Error; end
+
     FLASH_CALL_URL = URI("https://sms.ru/code/call")
     SMS_SEND_URL   = URI("https://sms.ru/sms/send")
+    MAX_MSG_LENGTH = 70
 
     def self.request_flash_call!(phone:, ip: nil)
       new.request_flash_call!(phone: phone, ip: ip)
@@ -26,6 +29,10 @@ module Shop
 
     def self.send_sms!(phone:, code:, ip: nil)
       new.send_sms!(phone: phone, code: code, ip: ip)
+    end
+
+    def self.send_message!(phone:, msg:, ip: nil)
+      new.send_message!(phone: phone, msg: msg, ip: ip)
     end
 
     # @return [String] 4-значный код из ответа SMS.ru
@@ -50,15 +57,28 @@ module Shop
     end
 
     def send_sms!(phone:, code:, ip: nil)
+      send_message!(phone: phone, msg: "Ваш код: #{code}", ip: ip)
+    end
+
+    # #39 — произвольный текст (каскад «Заказ готов»); ≤70 символов до HTTP.
+    def send_message!(phone:, msg:, ip: nil)
+      text = msg.to_s
+      if text.length > MAX_MSG_LENGTH
+        raise ValidationError.new(
+          "SMS msg length #{text.length} > #{MAX_MSG_LENGTH}",
+          http_status: 422
+        )
+      end
+
       if fallback?
-        Rails.logger.info("[Shop::SmsRuClient] sms to #{phone}: code=#{code} (fallback)")
+        Rails.logger.info("[Shop::SmsRuClient] sms to #{phone}: msg=#{text.truncate(40)} (fallback)")
         return true
       end
 
       payload = {
         "api_id" => api_id,
         "to" => strip_plus(phone),
-        "msg" => "Ваш код: #{code}",
+        "msg" => text,
         "from" => sms_from,
         "json" => "1"
       }
@@ -110,7 +130,7 @@ module Shop
     end
 
     def sms_from
-      ENV["SMS_RU_FROM"].to_s.strip.presence
+      ENV["SMS_RU_FROM"].to_s.strip.presence || ENV["SMS_RU_SENDER"].to_s.strip.presence
     end
 
     def otp_log_fallback?

@@ -2,7 +2,20 @@
 
 **ТЗ:** [`customer_tasks/Оптимизированный каскад уведомлений Заказ готов PWA WS Push Telegram SMS.md`](../milestones/veha_2/requirements/customer_tasks/Оптимизированный%20каскад%20уведомлений%20Заказ%20готов%20PWA%20WS%20Push%20Telegram%20SMS.md)  
 **Артефакты:** [`artifacts/order_ready_cascade_ws_telegram_sms/`](../milestones/veha_2/artifacts/order_ready_cascade_ws_telegram_sms/)  
-**Фаза:** SPEC `[x]` · RED/GREEN `[ ]` · REVIEW `[ ]` · MCP/deploy `[ ]`
+**Фаза:** SPEC `[x]` · RED/GREEN 1–5 `[x]` · REVIEW `[x]` · MCP/deploy `[ ]`
+
+---
+
+## PHASE 3: REVIEW (2026-08-04)
+
+| Проверка | Результат |
+|----------|-----------|
+| Cascade / TG / SMS / presence / channel / broadcaster | **54 runs / 126 assertions PASS** |
+| Barista OrdersController / OrderStatusUpdateService | **без diff** |
+| N+1 | нет циклов AR в PaidNotifier |
+| RLS | `order_notification_logs` tenant policy; smoke ранее PASS |
+| File size | clients/notifier/job ≤120 |
+| MCP / Fly deploy | **ждут явный апрув** (+ migrate на Fly) |
 
 ---
 
@@ -79,9 +92,9 @@ barista PATCH update_status(ready)
 |---|-----|------------------|-------|--------|
 | 1 | **Бесплатные каналы (verify + enqueue cascade)** — при `ready` WS/FCM/Wallet без регрессии; soft-fail Cable; enqueue `OrderReadyCascadeJob` из Broadcaster (не трогать barista controller/service) | `guest_order_broadcaster.rb` · `order_ready_cascade_job.rb` (stub) | broadcaster + ready_push + cascade enqueue | **GREEN `[x]`** |
 | 2 | **Presence filter** — cache online flag в Channel; cascade skip TG/SMS если online; cache error → retry без внешних API | `guest_order_channel.rb` · cascade job | channel + `order_ready_cascade_job_test` | **GREEN `[x]`** |
-| 3 | **Telegram success** — `Shop::TelegramBotClient`; текст «готов к выдаче»; 200 → log done, SMS не вызвать; 400 → clear/log chat_id → SMS | `telegram_bot_client.rb` · cascade | client + cascade | `[ ]` |
-| 4 | **Telegram fallback** — 403 / 5xx / timeout перехватить; log; один вызов SMS; job не `failed` без fallback | cascade job | cascade (timeout/403) | `[ ]` |
-| 5 | **SMS.ru ≤70 + log** — `send_message!` + ValidationError до HTTP; `order_notification_logs`; сеть → `failed` в логе, без бесконечного retry | `sms_ru_client.rb` · log model | sms_ru + cascade | `[ ]` |
+| 3 | **Telegram success** — `Shop::TelegramBotClient`; текст «готов к выдаче»; 200 → log done, SMS не вызвать; 400 → clear/log chat_id → SMS | `telegram_bot_client.rb` · cascade | client + cascade | **GREEN `[x]`** |
+| 4 | **Telegram fallback** — 403 / 5xx / timeout перехватить; log; один вызов SMS; job не `failed` без fallback | cascade job | cascade (timeout/403) | **GREEN `[x]`** |
+| 5 | **SMS.ru ≤70 + log** — `send_message!` + ValidationError до HTTP; `order_notification_logs`; сеть → `failed` в логе, без бесконечного retry | `sms_ru_client.rb` · log model | sms_ru + cascade | **GREEN `[x]`** |
 
 ### Порядок
 

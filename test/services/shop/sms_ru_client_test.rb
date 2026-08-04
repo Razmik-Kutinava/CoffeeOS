@@ -56,4 +56,27 @@ class Shop::SmsRuClientTest < ActiveSupport::TestCase
     err = Shop::SmsRuClient::Error.new("test", http_status: 502)
     assert_equal 502, err.http_status
   end
+
+  # --- #39 шаг 5: send_message! произвольный текст ≤70 ---
+
+  test "#39 send_message! succeeds for msg length 70 in fallback" do
+    msg = "x" * 70
+    assert_nothing_raised do
+      Shop::SmsRuClient.send_message!(phone: "+79001112233", msg: msg)
+    end
+  end
+
+  test "#39 send_message! raises ValidationError before HTTP when msg > 70" do
+    msg = "x" * 71
+    err = assert_raises(Shop::SmsRuClient::ValidationError) do
+      Shop::SmsRuClient.send_message!(phone: "+79001112233", msg: msg)
+    end
+    assert_match(/70/, err.message)
+  end
+
+  test "#39 send_sms! code path still works (OTP contract)" do
+    assert_nothing_raised do
+      Shop::SmsRuClient.send_sms!(phone: "+79001112233", code: "9999")
+    end
+  end
 end

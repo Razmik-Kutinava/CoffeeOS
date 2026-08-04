@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-08-04 — feat: Order ready cascade Telegram→SMS (#39) REVIEW
+- `Shop::TelegramBotClient` + `OrderReadyPaidNotifier` (403/400/timeout → SMS)
+- `SmsRuClient#send_message!` с валидацией ≤70; лог в `order_notification_logs`
+- Зона: 54 runs / 126 assertions PASS · barista status без diff
+- MCP/deploy — ждут апрув
+
 ## 2026-08-04 — db: #39 Migration Gate telegram_chat_id + order_notification_logs
 - `mobile_customers.telegram_chat_id` (partial unique index)
 - `order_notification_logs` + RLS tenant isolation

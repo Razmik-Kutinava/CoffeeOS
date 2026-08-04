@@ -2,7 +2,7 @@
 
 require "test_helper"
 
-# #39 шаг 1 [TDD-RED]: skeleton OrderReadyCascadeJob (enqueue from Broadcaster)
+# #39 — OrderReadyCascadeJob: presence + Telegram → SMS
 class Shop::OrderReadyCascadeJobTest < ActiveSupport::TestCase
   include TestFactories
   include ActiveJob::TestHelper
@@ -25,10 +25,19 @@ class Shop::OrderReadyCascadeJobTest < ActiveSupport::TestCase
       final_amount: 200
     )
     Rails.cache.clear
+    ENV["TELEGRAM_BOT_TOKEN"] = "test-bot-token"
+    ENV["TELEGRAM_SIMULATE"] = "1"
+    ENV["SMS_RU_API_ID"] = "test-api-id"
+    ENV["SMS_RU_FROM"] = "CoffeeOS"
+    ENV["SHOP_OTP_LOG_FALLBACK"] = "true"
   end
 
   teardown do
     Rails.cache.clear
+    %w[
+      TELEGRAM_BOT_TOKEN TELEGRAM_SIMULATE TELEGRAM_FORCE_400 TELEGRAM_FORCE_403
+      TELEGRAM_FORCE_5XX TELEGRAM_FORCE_TIMEOUT SMS_RU_API_ID SMS_RU_FROM SHOP_OTP_LOG_FALLBACK
+    ].each { |k| ENV.delete(k) }
   end
 
   test "#39 OrderReadyCascadeJob is an ApplicationJob and accepts order_id" do
@@ -64,10 +73,9 @@ class Shop::OrderReadyCascadeJobTest < ActiveSupport::TestCase
     ENV.delete("WALLET_SIMULATE")
   end
 
-  # --- #39 шаг 2 [TDD-RED]: presence filter ---
-
   test "#39 when user online via WS skips paid channels" do
     Shop::OrderReadyPresence.mark_online!(@order.id)
+    @customer.update!(telegram_chat_id: "183760838")
 
     logs = capture_cascade_logs do
       Shop::OrderReadyCascadeJob.perform_now(@order.id)
@@ -77,6 +85,7 @@ class Shop::OrderReadyCascadeJobTest < ActiveSupport::TestCase
       /\[Cascade\]\[Order ##{@order.id}\] User is online via WebSocket\. Paid channels skipped\./,
       logs
     )
+    assert_equal 0, OrderNotificationLog.where(order_id: @order.id).count
   end
 
   test "#39 when user offline does not log paid channels skipped" do
@@ -101,6 +110,68 @@ class Shop::OrderReadyCascadeJobTest < ActiveSupport::TestCase
     assert_match(/cache 500/, err.message)
   ensure
     Rails.cache.define_singleton_method(:read, original) if original
+  end
+
+  test "#39 telegram success logs delivered and does not create SMS log" do
+    @customer.update!(telegram_chat_id: "183760838")
+
+    logs = capture_cascade_logs do
+      Shop::OrderReadyCascadeJob.perform_now(@order.id)
+    end
+
+    assert_match(/Telegram message delivered/, logs)
+    assert OrderNotificationLog.exists?(order_id: @order.id, channel: "telegram", status: "sent")
+    assert_equal 0, OrderNotificationLog.where(order_id: @order.id, channel: "sms").count
+  end
+
+  test "#39 telegram 403 falls back to SMS and logs both" do
+    @customer.update!(telegram_chat_id: "183760838")
+    ENV["TELEGRAM_FORCE_403"] = "1"
+
+    logs = capture_cascade_logs do
+      assert_nothing_raised { Shop::OrderReadyCascadeJob.perform_now(@order.id) }
+    end
+
+    assert_match(/Telegram failed.*Fallback to SMS/, logs)
+    assert OrderNotificationLog.exists?(order_id: @order.id, channel: "telegram", status: "failed")
+    assert OrderNotificationLog.exists?(order_id: @order.id, channel: "sms", status: "sent")
+  end
+
+  test "#39 telegram timeout falls back to SMS without failing job" do
+    @customer.update!(telegram_chat_id: "183760838")
+    ENV["TELEGRAM_FORCE_TIMEOUT"] = "1"
+
+    assert_nothing_raised { Shop::OrderReadyCascadeJob.perform_now(@order.id) }
+    assert OrderNotificationLog.exists?(order_id: @order.id, channel: "sms", status: "sent")
+  end
+
+  test "#39 telegram 400 clears chat_id and falls back to SMS" do
+    @customer.update!(telegram_chat_id: "bad-chat")
+    ENV["TELEGRAM_FORCE_400"] = "1"
+
+    assert_nothing_raised { Shop::OrderReadyCascadeJob.perform_now(@order.id) }
+    assert_nil @customer.reload.telegram_chat_id
+    assert OrderNotificationLog.exists?(order_id: @order.id, channel: "sms", status: "sent")
+  end
+
+  test "#39 no telegram_chat_id goes straight to SMS with msg <= 70" do
+    @customer.update!(telegram_chat_id: nil)
+
+    assert_difference -> { OrderNotificationLog.where(channel: "sms").count } => 1 do
+      Shop::OrderReadyCascadeJob.perform_now(@order.id)
+    end
+    log = OrderNotificationLog.where(order_id: @order.id, channel: "sms").order(:created_at).last
+    assert_equal "sent", log.status
+    assert_operator log.payload["msg"].to_s.length, :<=, 70
+  end
+
+  test "#39 online presence creates no notification logs" do
+    Shop::OrderReadyPresence.mark_online!(@order.id)
+    @customer.update!(telegram_chat_id: "183760838")
+
+    assert_no_difference -> { OrderNotificationLog.count } do
+      Shop::OrderReadyCascadeJob.perform_now(@order.id)
+    end
   end
 
   private

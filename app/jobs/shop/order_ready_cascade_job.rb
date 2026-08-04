@@ -16,14 +16,7 @@ module Shop
         return
       end
 
-      deliver_paid_channels!(order)
-    end
-
-    private
-
-    # Шаги 3–5: Telegram → SMS
-    def deliver_paid_channels!(order)
-      Rails.logger.info("[Cascade][Order ##{order.id}] Paid channels continue (offline).")
+      Shop::OrderReadyPaidNotifier.call(order: order)
     end
   end
 end

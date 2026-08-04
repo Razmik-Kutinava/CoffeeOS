@@ -2,13 +2,19 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-08-04 (#39 Migration Gate · шаги 1–2 GREEN)
+**Дата:** 2026-08-04 (#39 REVIEW · шаги 1–5 GREEN)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#39** DDL `[x]` · presence/enqueue GREEN | RED/GREEN шаги 3–5 (TG→SMS); вставить chat id в БД |
-| **#38** Fly **v421** · MCP **PASS** | апрув заказчика «ок» |
-| Live Fly | **v421** (без #39 DDL) |
+| **#39** cascade WS→TG→SMS **REVIEW** | push + migrate Fly + MCP (по апруву) |
+| **#38** Fly **v421** · MCP **PASS** | апрув заказчика |
+| Live Fly | **v421** (без #39) |
+
+### Сессия 2026-08-04 (PHASE 3 REVIEW · #39)
+
+- TG client + PaidNotifier + SMS send_message! ≤70 + logs
+- Зона: **54/126 PASS**; barista без diff
+- MCP/deploy ждут апрув
 
 ### Сессия 2026-08-04 (Migration Gate · #39)
 
