@@ -1,5 +1,5 @@
 /**
- * #38 — PWA CTA state machine карточки заказа (макс. 2 кнопки, UI-kit #37).
+ * #38 / #40 — PWA CTA state machine карточки заказа (макс. 2 кнопки).
  */
 
 import { CTA_STYLE } from "./orderStatusNotifyActions.js"
@@ -7,10 +7,11 @@ import { CTA_STYLE } from "./orderStatusNotifyActions.js"
 export { CTA_STYLE }
 
 const LABELS = Object.freeze({
-  cancel: "Отменить",
+  cancel: "Отменить заказ",
+  cancelHintAccepted: "Вернем 100% суммы",
   push: "🔔 Уведомление о готовности",
   wallet: "Карта в Apple Wallet",
-  chat: "Чат",
+  chat: "Написать в поддержку",
   tips: "Чаевые"
 })
 
@@ -20,7 +21,10 @@ const LABELS = Object.freeze({
  *   os?: "ios"|"android"|"desktop",
  *   canCancel?: boolean
  * }} opts
- * @returns {{ buttons: Array<{ kind: string, label: string }>, style: typeof CTA_STYLE }}
+ * @returns {{
+ *   buttons: Array<{ kind: string, label: string, hint?: string }>,
+ *   style: typeof CTA_STYLE
+ * }}
  */
 export function orderStatusCtas(opts = {}) {
   const status = String(opts.status || "")
@@ -29,11 +33,21 @@ export function orderStatusCtas(opts = {}) {
   const notifyKind = os === "ios" ? "wallet" : "push"
   const secondaryKind = os === "ios" ? "wallet" : "tips"
 
-  /** @type {Array<{ kind: string, label: string }>} */
+  /** @type {Array<{ kind: string, label: string, hint?: string }>} */
   let buttons = []
 
-  if (status === "accepted") {
-    if (canCancel) buttons.push({ kind: "cancel", label: LABELS.cancel })
+  if (status === "pending_payment") {
+    if (canCancel) {
+      buttons.push({ kind: "cancel", label: LABELS.cancel })
+    }
+  } else if (status === "accepted") {
+    if (canCancel) {
+      buttons.push({
+        kind: "cancel",
+        label: LABELS.cancel,
+        hint: LABELS.cancelHintAccepted
+      })
+    }
     buttons.push({ kind: notifyKind, label: LABELS[notifyKind] })
   } else if (status === "preparing" || status === "ready") {
     buttons.push({ kind: "chat", label: LABELS.chat })

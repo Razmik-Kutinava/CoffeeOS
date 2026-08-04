@@ -329,6 +329,9 @@
               Подключаем…
             {:else}
               {btn.label}
+              {#if btn.hint}
+                <span class="status-cta-hint">{btn.hint}</span>
+              {/if}
             {/if}
           </button>
         {/each}
@@ -713,6 +716,14 @@
     border: none;
     cursor: pointer;
     font-size: 0.75rem;
+  }
+
+  .status-cta-hint {
+    display: block;
+    margin-top: 0.25rem;
+    font-size: 0.7rem;
+    font-weight: 400;
+    opacity: 0.85;
   }
 
   .status-cta-btn:disabled {

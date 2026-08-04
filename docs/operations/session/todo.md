@@ -2,7 +2,7 @@
 
 **ТЗ:** [`customer_tasks/Автоматический возврат платежа Т-Банк при отмене заказа в PWA.md`](../milestones/veha_2/requirements/customer_tasks/Автоматический%20возврат%20платежа%20Т-Банк%20при%20отмене%20заказа%20в%20PWA.md)  
 **Артефакты:** [`artifacts/tbank_auto_refund_order_cancellation_pwa/`](../milestones/veha_2/artifacts/tbank_auto_refund_order_cancellation_pwa/)  
-**Фаза:** PHASE 0 `[x]` · SPEC `[x]` · шаги 1–4 GREEN `[x]` · RED шаг 5 `in_progress` · REVIEW `[ ]`  
+**Фаза:** PHASE 0 `[x]` · SPEC `[x]` · шаги 1–5 **GREEN `[x]`** · шаги 6–7 `[ ]` · REVIEW `[ ]` · MCP/deploy `[ ]`  
 **CBR:** #40
 
 ---
@@ -71,7 +71,7 @@ preparing|ready|issued → 422, без изменений
 | 2 | `pending_payment` local cancel без T-Bank | `test/services/shop/guest_order_cancellation_service_test.rb` (уточнить assert: no Cancel stub) | сервис уже есть — assert/stub | **GREEN `[x]`** (контракт; код был) |
 | 3 | `accepted` + succeeded → Cancel → `refunded` + `cancelled` | guest cancel unit + stub adapter; integration `orders_guest_cancel_test` | `GuestOrderCancellationService` (+ optional thin refund helper) | **GREEN `[x]`** |
 | 4 | Block `preparing`/`ready`/`issued` → 422, payment unchanged | integration + unit (усилить ready/issued + payment freeze) | deny path уже есть | **GREEN `[x]`** (контракт; код был) |
-| 5 | UI CTA: cancel labels + support | `test/javascript/order_status_cta_machine_test.mjs` | `orderStatusCtaMachine.js` (+ OrderStatus wiring) | **RED** `[ ]` GREEN |
+| 5 | UI CTA: cancel labels + support | `test/javascript/order_status_cta_machine_test.mjs` | `orderStatusCtaMachine.js` (+ OrderStatus wiring) | **GREEN `[x]`** |
 | 6 | Modal confirm для `accepted` (сумма) | `test/javascript/order_cancel_flow_test.mjs` (copy/format) | `OrderCancelModal.svelte` + flow lib | `[ ]` |
 | 7 | Loading / toast success / toast 422→«Готовится» | тот же JS + manual/MCP later | `orderCancelFlow.js` + `OrderStatus.svelte` | `[ ]` |
 
