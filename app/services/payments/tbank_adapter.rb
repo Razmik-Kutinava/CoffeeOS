@@ -117,6 +117,27 @@ module Payments
       response
     end
 
+    # Полный возврат по PaymentId (Cancel). Receipt не передаём — Т-Банк формирует чек сам (#40).
+    def cancel_payment(payment_id:)
+      payload = {
+        "TerminalKey" => terminal_key,
+        "PaymentId"   => payment_id.to_s
+      }
+      payload["Token"] = build_token(payload)
+
+      response = with_circuit_breaker { post_json("#{BASE_URL}/Cancel", payload) }
+      unless response.is_a?(Hash)
+        raise Error, "Некорректный ответ Т-Банка (Cancel)"
+      end
+
+      raise ApiError.new(
+        error_code: response["ErrorCode"],
+        message: [response["Message"], response["Details"]].compact_blank.join(" — ")
+      ) unless response["Success"]
+
+      response
+    end
+
     # Рекуррент: Init → Charge по RebillId (Шаг 4 ТЗ).
     def charge_recurrent(order:, rebill_id:, return_base_url:, notification_url:, customer_key: nil)
       init_result = init_payment(

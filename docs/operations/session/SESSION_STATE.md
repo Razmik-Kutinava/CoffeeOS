@@ -6,9 +6,15 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#40** SPEC `[x]` · **RED шаг 1** `cancel_payment` тесты (намеренный RED) | **go** → GREEN шаг 1 |
+| **#40** шаг 1 GREEN `[x]` · `cancel_payment` | **go** → RED шаг 2 (`pending_payment` local) |
 | **#39 v2** Fly **v427** · cascade SMS MCP **PASS** | апрув заказчика |
 | Live Fly | **v427** |
+
+### Сессия 2026-08-04 (GREEN шаг 1 · #40 cancel_payment)
+
+- `Payments::TbankAdapter#cancel_payment` → `POST /v2/Cancel` без Receipt
+- Тесты cancel: **3/14 PASS**; адаптер+callback: PASS
+- CHANGELOG/HANDOFF — в REVIEW
 
 ### Сессия 2026-08-04 (RED шаг 1 · #40 cancel_payment)
 
