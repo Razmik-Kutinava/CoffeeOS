@@ -1,6 +1,6 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-08-04 (**#40 SPEC** · #39 v2 Fly **v427**)  
+**Дата:** 2026-08-04 (**#40 REVIEW** · #39 v2 Fly **v427**)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev (**v427**)
 
@@ -8,14 +8,15 @@
 
 | Что | Статус |
 |-----|--------|
-| Intake (PHASE 0) | **`[x]`** |
-| PHASE 1 SPEC | **`[x]`** · `todo.md` шаги 1–7 |
-| RED/GREEN / REVIEW / deploy | **`[ ]`** |
+| Intake / SPEC / RED-GREEN 1–7 / REVIEW | **`[x]`** tip `070ac123` · REVIEW docs |
+| Push develop | **`[ ]`** |
+| Fly deploy / MCP staging | **`[ ]`** |
 
 **ТЗ:** [`Автоматический возврат платежа Т-Банк при отмене заказа в PWA.md`](../milestones/veha_2/requirements/customer_tasks/Автоматический%20возврат%20платежа%20Т-Банк%20при%20отмене%20заказа%20в%20PWA.md)  
 **Артефакты:** [`tbank_auto_refund_order_cancellation_pwa/`](../milestones/veha_2/artifacts/tbank_auto_refund_order_cancellation_pwa/)  
-**Канон:** Minitest + Svelte; Guest cancel API уже есть; нужен `/v2/Cancel` + refund на `accepted` + modal/toasts.  
-**Дальше:** **go** → RED шаг 1 (`TbankAdapter#cancel_payment`).
+**Канон:** `/v2/Cancel` без Receipt; accepted+succeeded → refunded; preparing+ → 422; FE modal/toasts.  
+**Регрессия:** cancel+Tbank+creator **81/223 PASS** · JS **19/19** · §2.3 **2/5** (2 skips).  
+**Дальше:** push + fly deploy + MCP на тестовом TerminalKey (явный апрув).
 
 ### Order ready cascade WS/Push/Wallet→SMS (#39 v2) — 2026-08-04
 

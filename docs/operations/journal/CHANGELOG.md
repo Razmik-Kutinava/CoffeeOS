@@ -1,5 +1,12 @@
 ﻿# CHANGELOG
 
+## 2026-08-04 — feat: #40 T-Bank auto refund on PWA cancel [REVIEW]
+
+- BE: `TbankAdapter#cancel_payment` (`/v2/Cancel` без Receipt); GuestCancel → refunded + Refund
+- FE: CTA labels, `OrderCancelModal`, success/blocked toasts + force preparing
+- Регрессия: cancel/Tbank/creator **81/223 PASS**; JS **19/19**; §2.3 2 skips OK
+- Deploy/MCP — не делали
+
 ## 2026-08-04 — docs: SPEC #40 T-Bank auto refund on PWA cancel
 
 - PHASE 1: `todo.md` шаги 1–7 · маппинг Minitest/Svelte

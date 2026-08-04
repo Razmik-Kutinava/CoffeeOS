@@ -2,8 +2,20 @@
 
 **ТЗ:** [`customer_tasks/Автоматический возврат платежа Т-Банк при отмене заказа в PWA.md`](../milestones/veha_2/requirements/customer_tasks/Автоматический%20возврат%20платежа%20Т-Банк%20при%20отмене%20заказа%20в%20PWA.md)  
 **Артефакты:** [`artifacts/tbank_auto_refund_order_cancellation_pwa/`](../milestones/veha_2/artifacts/tbank_auto_refund_order_cancellation_pwa/)  
-**Фаза:** PHASE 0 `[x]` · SPEC `[x]` · шаги 1–7 **GREEN `[x]`** · REVIEW `[ ]` · MCP/deploy `[ ]`  
+**Фаза:** PHASE 0 `[x]` · SPEC `[x]` · RED/GREEN 1–7 **`[x]`** · REVIEW **`[x]`** · MCP/deploy `[ ]`  
 **CBR:** #40
+
+---
+
+## PHASE 3: REVIEW (2026-08-04)
+
+| Проверка | Результат |
+|----------|-----------|
+| TbankAdapter + guest cancel + API cancel + callback + order_creator | **81 runs / 223 assertions PASS** |
+| qa_section_2_3_payment_cart | **2/5 PASS** (2 skips) |
+| JS cancel flow + CTA | **19/19 PASS** |
+| N+1 / Receipt в Cancel / Token | Cancel без Receipt; `build_token` без diff |
+| MCP / Fly deploy | **`[ ]`** ждёт апрув |
 
 ---
 
@@ -20,13 +32,11 @@
 
 | Артефакт | Путь | Статус vs ТЗ |
 |----------|------|--------------|
-| `Payments::TbankAdapter` | `app/services/payments/tbank_adapter.rb` (260 строк) | Init/GetState/Confirm/Charge есть; **Cancel нет** |
-| Token sha256 | `build_token` | **не трогать** |
-| `CONFIRMED` → `succeeded` | `TBANK_STATUS_MAP` | уже есть |
-| Guest cancel API | `POST /shop/api/orders/:id/cancel` | есть |
-| `GuestOrderCancellationService` | `app/services/shop/…` | pending/accepted local; **без `/v2/Cancel`** |
-| Блок `preparing+` | `Order#guest_can_cancel?` + 422 | почти готов |
-| CTA machine | `lib/orderStatusCtaMachine.js` | cancel только `accepted`; label «Отменить» / «Чат» |
+| `Payments::TbankAdapter` | `app/services/payments/tbank_adapter.rb` | **`#cancel_payment` → `/v2/Cancel`** |
+| Token sha256 | `build_token` | **не трогали** |
+| Guest cancel | `GuestOrderCancellationService` | pending journal; accepted+PaymentId → Cancel→refunded |
+| Блок `preparing+` | `guest_can_cancel?` + 422 | контракт locked |
+| FE | `orderStatusCtaMachine` + `orderCancelFlow` + `OrderCancelModal` | labels/modal/toasts |
 
 ### Глобальные ограничения (канон)
 

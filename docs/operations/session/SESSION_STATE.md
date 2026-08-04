@@ -6,9 +6,15 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#40** шаги 1–7 GREEN `[x]` · код готов | **go** → PHASE 3: REVIEW (+ ops/регрессия зоны оплаты) |
+| **#40** REVIEW **`[x]`** · код local · deploy `[ ]` | push + fly deploy + MCP (явный апрув) |
 | **#39 v2** Fly **v427** | апрув заказчика |
 | Live Fly | **v427** |
+
+### Сессия 2026-08-04 (PHASE 3 REVIEW · #40)
+
+- Регрессия: adapter+guest cancel+API+callback+creator **81/223 PASS**
+- §2.3: **2 runs / 5 assert / 2 skips** · JS **19/19 PASS**
+- CHANGELOG/HANDOFF/todo sync; MCP/deploy ждут апрув
 
 ### Сессия 2026-08-04 (GREEN шаг 7 · #40 cancel toasts)
 
