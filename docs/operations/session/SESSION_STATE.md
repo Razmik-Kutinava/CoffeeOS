@@ -6,9 +6,14 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#40** шаги 1–6 GREEN · **RED шаг 7** cancel toasts (exports missing) | **go** → GREEN шаг 7 |
+| **#40** шаги 1–7 GREEN `[x]` · код готов | **go** → PHASE 3: REVIEW (+ ops/регрессия зоны оплаты) |
 | **#39 v2** Fly **v427** | апрув заказчика |
 | Live Fly | **v427** |
+
+### Сессия 2026-08-04 (GREEN шаг 7 · #40 cancel toasts)
+
+- `resolveCancelSuccess/ErrorResult`; OrderStatus toast + force preparing на 422/500
+- JS cancel+cta **19/19 PASS**
 
 ### Сессия 2026-08-04 (RED шаг 7 · #40 cancel toasts)
 

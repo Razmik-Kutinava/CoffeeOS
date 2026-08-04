@@ -17,7 +17,9 @@
   import { orderDeepLink } from "../lib/swNotificationActions.js"
   import {
     buildAcceptedCancelModalCopy,
-    shouldShowAcceptedCancelModal
+    shouldShowAcceptedCancelModal,
+    resolveCancelSuccessResult,
+    resolveCancelErrorResult
   } from "../lib/orderCancelFlow.js"
   import PageSkeleton from "../components/PageSkeleton.svelte"
   import OrderCancelModal from "../components/OrderCancelModal.svelte"
@@ -31,6 +33,8 @@
   let cancelErr = $state(null)
   let cancelling = $state(false)
   let cancelModalOpen = $state(false)
+  let cancelToast = $state("")
+  let cancelToastTone = $state("error")
   let pushAvailable = $state(false)
   let pushState = $state("idle")
   let pushErr = $state(null)
@@ -103,13 +107,27 @@
     if (!order?.can_cancel || cancelling) return
 
     cancelErr = null
+    cancelToast = ""
     cancelling = true
     try {
       const updated = await api(`/orders/${order.id}/cancel`, { method: "POST" })
-      order = updated
+      const outcome = resolveCancelSuccessResult(updated)
+      order = outcome.order
+      cancelToast = outcome.toast
+      cancelToastTone = outcome.toastTone
       cancelModalOpen = false
     } catch (e) {
-      cancelErr = e.message
+      const outcome = resolveCancelErrorResult(e)
+      cancelToast = outcome.toast
+      cancelToastTone = outcome.toastTone
+      cancelErr = null
+      if (outcome.forceStatus && order) {
+        order = {
+          ...order,
+          status: outcome.forceStatus,
+          can_cancel: outcome.canCancel
+        }
+      }
       cancelModalOpen = false
     } finally {
       cancelling = false
@@ -129,6 +147,7 @@
     if (!order || ctaLoading) return
     ctaToast = ""
     cancelErr = null
+    cancelToast = ""
 
     if (kind === "cancel") {
       await cancelOrder()
@@ -331,8 +350,15 @@
       {/if}
     </section>
 
-    {#if cancelErr || ctaToast}
-      <p class="cancel-error" role="alert">{cancelErr || ctaToast}</p>
+    {#if cancelToast || cancelErr || ctaToast}
+      <p
+        class="cancel-toast"
+        class:cancel-toast--success={cancelToastTone === "success" && cancelToast}
+        class:cancel-toast--error={(cancelToast && cancelToastTone === "error") || cancelErr || ctaToast}
+        role="alert"
+      >
+        {cancelToast || cancelErr || ctaToast}
+      </p>
     {/if}
     {#if ctaView.buttons.length}
       <div class="status-cta-row" role="group" aria-label="Действия по заказу">
@@ -785,6 +811,21 @@
     font-size: 13px;
     color: #f44336;
     text-align: center;
+  }
+
+  .cancel-toast {
+    margin: 12px 0 0;
+    font-size: 13px;
+    text-align: center;
+    line-height: 1.35;
+  }
+
+  .cancel-toast--success {
+    color: #2e7d32;
+  }
+
+  .cancel-toast--error {
+    color: #f44336;
   }
 
   .error-text {
