@@ -6,9 +6,14 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#40** шаги 1–4 GREEN · **RED шаг 5** UI CTA labels (6 failing) | **go** → GREEN шаг 5 |
+| **#40** шаги 1–5 GREEN `[x]` · CTA labels | **go** → RED шаг 6 (confirm modal) |
 | **#39 v2** Fly **v427** | апрув заказчика |
 | Live Fly | **v427** |
+
+### Сессия 2026-08-04 (GREEN шаг 5 · #40 UI CTA)
+
+- `orderStatusCtaMachine`: «Отменить заказ» + hint 100%; pending cancel; «Написать в поддержку»
+- OrderStatus: render `btn.hint`; JS **10/10 PASS**
 
 ### Сессия 2026-08-04 (RED шаг 5 · #40 UI CTA)
 
