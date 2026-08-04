@@ -2,13 +2,20 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-08-04 (#39 Fly v426 MCP · TG delivered)
+**Дата:** 2026-08-04 (#39 v2 rewrite · WS/Push→SMS без TG)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#39** push+deploy **v426** · TG cascade **PASS** | апрув заказчика; SMS_RU secrets опционально |
-| **#38** | как было |
-| Live Fly | **v426** |
+| **#39 v2** intake+SPEC · каскад без Telegram | RED/GREEN rewrite PaidNotifier → SMS-only |
+| **#39 v1** Fly v426 TG | **SUPERSEDED** |
+| Live Fly | **v426** (ещё v1 код до deploy v2) |
+
+### Сессия 2026-08-04 (PHASE 0+SPEC · #39 v2 без Telegram)
+
+- ТЗ 1:1: `customer_tasks/Каскад уведомлений Заказ готов PWA WS Push WebPush Apple Wallet SMS.md`
+- Артефакты: `artifacts/order_ready_cascade_ws_push_sms/`
+- CBR #39 → v2; v1 marked SUPERSEDED
+- `todo.md` — маппинг: presence → SMS only; FCM/Wallet reuse; без TG
 
 ### Сессия 2026-08-04 (deploy/MCP · #39)
 

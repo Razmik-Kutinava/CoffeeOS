@@ -1,5 +1,7 @@
 # Оптимизированный каскад уведомлений «Заказ готов» (PWA WS + Push + Telegram -> SMS.ru)
 
+> **SUPERSEDED 2026-08-04:** ревизия без Telegram — см. [`Каскад уведомлений Заказ готов PWA WS Push WebPush Apple Wallet SMS.md`](Каскад%20уведомлений%20Заказ%20готов%20PWA%20WS%20Push%20WebPush%20Apple%20Wallet%20SMS.md) · artifacts `order_ready_cascade_ws_push_sms/`.
+
 **Дата интейка:** 2026-08-03  
 **Источник:** ТЗ заказчика в чате  
 **Артефакты:** `docs/operations/milestones/veha_2/artifacts/order_ready_cascade_ws_telegram_sms/`
