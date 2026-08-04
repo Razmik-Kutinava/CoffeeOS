@@ -6,9 +6,14 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#40** шаги 1–3 GREEN `[x]` · auto-refund accepted | **go** → RED шаг 4 (block preparing+) |
+| **#40** шаги 1–4 GREEN `[x]` · backend cancel/refund done | **go** → RED шаг 5 (UI CTA labels) |
 | **#39 v2** Fly **v427** | апрув заказчика |
 | Live Fly | **v427** |
+
+### Сессия 2026-08-04 (шаг 4 · #40 block preparing/ready/issued)
+
+- Контракт unit+API: 422, payment freeze, no Cancel — **PASS сразу** (guest_can_cancel? был)
+- RED vacuous → закрыт как GREEN
 
 ### Сессия 2026-08-04 (GREEN шаг 3 · #40 accepted auto-refund)
 

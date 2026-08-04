@@ -39,6 +39,98 @@ class Shop::GuestOrderCancellationServiceTest < ActiveSupport::TestCase
     assert_includes error.message, "уже готовится"
   end
 
+  # ---------------------------------------------------------------------------
+  # #40 Шаг 4 — блок preparing / ready / issued (обход фронта)
+  # ---------------------------------------------------------------------------
+
+  test "[TDD] guest cannot cancel ready order; payment and Cancel untouched" do
+    order = mobile_order!(status: :ready)
+    payment = Payment.create!(
+      order_id: order.id,
+      tenant_id: @tenant.id,
+      amount: order.final_amount,
+      method: :card,
+      provider: "tbank",
+      provider_payment_id: "pay-ready-block",
+      status: :succeeded,
+      paid_at: Time.current
+    )
+
+    calls = []
+    with_stubbed_cancel_payment(calls: calls) do
+      error = assert_raises(Shop::GuestOrderCancellationService::Error) do
+        Shop::GuestOrderCancellationService.new(
+          order: order,
+          session: @session,
+          tenant_id: @tenant.id
+        ).call!
+      end
+
+      assert_includes error.message, "уже готовится"
+      assert_equal "ready", order.reload.status
+      assert_equal "succeeded", payment.reload.status
+      assert_empty calls
+    end
+  end
+
+  test "[TDD] guest cannot cancel issued order; payment and Cancel untouched" do
+    order = mobile_order!(status: :issued)
+    payment = Payment.create!(
+      order_id: order.id,
+      tenant_id: @tenant.id,
+      amount: order.final_amount,
+      method: :card,
+      provider: "tbank",
+      provider_payment_id: "pay-issued-block",
+      status: :succeeded,
+      paid_at: Time.current
+    )
+
+    calls = []
+    with_stubbed_cancel_payment(calls: calls) do
+      assert_raises(Shop::GuestOrderCancellationService::Error) do
+        Shop::GuestOrderCancellationService.new(
+          order: order,
+          session: @session,
+          tenant_id: @tenant.id
+        ).call!
+      end
+
+      assert_equal "issued", order.reload.status
+      assert_equal "succeeded", payment.reload.status
+      assert_empty calls
+    end
+  end
+
+  test "[TDD] preparing with succeeded payment rejects without Cancel" do
+    order = mobile_order!(status: :preparing)
+    payment = Payment.create!(
+      order_id: order.id,
+      tenant_id: @tenant.id,
+      amount: order.final_amount,
+      method: :card,
+      provider: "tbank",
+      provider_payment_id: "pay-preparing-block",
+      status: :succeeded,
+      paid_at: Time.current
+    )
+
+    calls = []
+    with_stubbed_cancel_payment(calls: calls) do
+      assert_raises(Shop::GuestOrderCancellationService::Error) do
+        Shop::GuestOrderCancellationService.new(
+          order: order,
+          session: @session,
+          tenant_id: @tenant.id
+        ).call!
+      end
+
+      assert_equal "preparing", order.reload.status
+      assert_equal "succeeded", payment.reload.status
+      assert_empty calls
+    end
+  end
+
   test "guest can cancel pending_payment via payment journal" do
     order = mobile_order!(status: :pending_payment)
     Payment.create!(
