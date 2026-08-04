@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Shop
-  # #39 — каскад «Заказ готов»: presence → Telegram → SMS.ru.
+  # #39 v2 — каскад «Заказ готов»: presence → SMS.ru (без Telegram).
   class OrderReadyCascadeJob < ApplicationJob
     queue_as :default
 
@@ -11,7 +11,7 @@ module Shop
 
       if Shop::OrderReadyPresence.online?(order.id)
         Rails.logger.info(
-          "[Cascade][Order ##{order.id}] User is online via WebSocket. Paid channels skipped."
+          "[Cascade][Order ##{order.id}] User is online via WebSocket. SMS skipped."
         )
         return
       end

@@ -2,13 +2,20 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-08-04 (#39 v2 rewrite · WS/Push→SMS без TG)
+**Дата:** 2026-08-04 (#39 v2 GREEN · presence→SMS без TG)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#39 v2** intake+SPEC · каскад без Telegram | RED/GREEN rewrite PaidNotifier → SMS-only |
-| **#39 v1** Fly v426 TG | **SUPERSEDED** |
-| Live Fly | **v426** (ещё v1 код до deploy v2) |
+| **#39 v2** rewrite GREEN · REVIEW · тесты 45/91 PASS | push/deploy + MCP по апруву; SMS_RU secrets |
+| **#39 v1** Fly v426 TG | **SUPERSEDED** (код на Fly ещё v1 до deploy) |
+| Live Fly | **v426** |
+
+### Сессия 2026-08-04 (GREEN+REVIEW · #39 v2)
+
+- `OrderReadyPaidNotifier` — только SMS; лог `SMS.ru delivery failed`
+- `OrderReadyCascadeJob` — presence → `SMS skipped`
+- Тесты cascade/presence/sms/broadcaster/channel: **45/91 PASS**
+- TelegramBotClient оставлен dormant (не в cascade)
 
 ### Сессия 2026-08-04 (PHASE 0+SPEC · #39 v2 без Telegram)
 

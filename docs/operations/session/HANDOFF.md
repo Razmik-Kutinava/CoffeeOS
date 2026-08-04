@@ -1,21 +1,27 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-08-04 (**#39 Fly v426 · TG cascade PASS**)  
+**Дата:** 2026-08-04 (**#39 v2** · WS/Push→SMS · без TG · LOCAL GREEN)  
 **Ветка:** `develop`  
-**Прод:** https://coffeeos.fly.dev (**v426**)  
+**Прод:** https://coffeeos.fly.dev (**v426** — ещё код v1 TG до следующего deploy)
 
-### Order ready cascade WS→TG→SMS (#39) — 2026-08-04
+### Order ready cascade WS/Push/Wallet→SMS (#39 v2) — 2026-08-04
 
 | Что | Статус |
 |-----|--------|
-| Intake / SPEC / DDL / RED-GREEN 1–5 / REVIEW | **`[x]`** |
-| Push develop | **`[x]`** `2af25874` |
-| Fly deploy | **`[x]`** **v426** |
-| MCP cascade TG | **PASS** · `telegram:sent` order `#202608-0005` |
-| SMS_RU secrets on Fly | **`[ ]`** (нет в local `.env`) |
+| Intake / SPEC / GREEN rewrite / REVIEW | **`[x]`** |
+| Push develop | **`[ ]`** |
+| Fly deploy | **`[ ]`** |
+| MCP cascade SMS | **`[ ]`** |
+| SMS_RU secrets on Fly | **`[ ]`** |
 
-**Evidence:** [`mcp/fly_v426_2026-08-04/`](../milestones/veha_2/artifacts/order_ready_cascade_ws_telegram_sms/mcp/fly_v426_2026-08-04/)  
-**Дальше:** апрув заказчика; при необходимости `SMS_RU_API_ID` / `SMS_RU_FROM` на Fly.
+**ТЗ:** [`Каскад уведомлений… SMS.md`](../milestones/veha_2/requirements/customer_tasks/Каскад%20уведомлений%20Заказ%20готов%20PWA%20WS%20Push%20WebPush%20Apple%20Wallet%20SMS.md)  
+**Артефакты:** [`order_ready_cascade_ws_push_sms/`](../milestones/veha_2/artifacts/order_ready_cascade_ws_push_sms/)  
+**Канон:** presence online → SMS skipped; offline → SMS.ru ≤70 → `order_notification_logs`; Telegram **не** в cascade.  
+**Дальше:** явный push/deploy → MCP (нужен телефон + SMS_RU_*); апрув заказчика.
+
+### Order ready cascade WS→TG→SMS (#39 v1) — SUPERSEDED
+
+Fly v426 · TG MCP PASS · superseded by v2 2026-08-04. Evidence: [`…telegram_sms/mcp/fly_v426_2026-08-04/`](../milestones/veha_2/artifacts/order_ready_cascade_ws_telegram_sms/mcp/fly_v426_2026-08-04/)
 
 ### Background FCM progress + Apple Wallet (#38) — 2026-08-03
 

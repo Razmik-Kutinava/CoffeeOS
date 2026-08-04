@@ -1,5 +1,16 @@
 ﻿# CHANGELOG
 
+## 2026-08-04 — feat: #39 v2 cascade presence→SMS (no Telegram) [GREEN]
+
+- Rewrite: `OrderReadyPaidNotifier` SMS-only; cascade log `SMS skipped`
+- Network SMS errors → `order_notification_logs` failed, job soft-exit
+- Tests: cascade zone **45/91 PASS**; TelegramBotClient dormant
+- Docs: CBR #39 v2; v1 SUPERSEDED
+
+## 2026-08-04 — docs: intake #39 v2 cascade WS/Push/Wallet to SMS (no Telegram)
+
+- PHASE 0+SPEC: ТЗ 1:1, artifacts `order_ready_cascade_ws_push_sms`, todo mapping
+
 ## 2026-08-04 — deploy: #39 cascade on Fly v426 · TG MCP PASS
 - Push `2af25874` · image `deployment-01KZ5X2WSEYB4GKVBVPBMJ3SG0` · **v426**
 - `TELEGRAM_BOT_TOKEN` secret; DDL telegram_chat_id + order_notification_logs на Neon
