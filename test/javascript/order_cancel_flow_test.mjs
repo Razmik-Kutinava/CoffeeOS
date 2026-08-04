@@ -1,5 +1,5 @@
 /**
- * #40 Шаг 6 [TDD-RED] — модалка подтверждения отмены (accepted) + формат суммы.
+ * #40 Шаг 6–7 — модалка accepted + toast/network states отмены.
  *
  * node --test test/javascript/order_cancel_flow_test.mjs
  */
@@ -12,7 +12,11 @@ import { dirname, join } from "node:path"
 import {
   formatCancelAmountRub,
   buildAcceptedCancelModalCopy,
-  shouldShowAcceptedCancelModal
+  shouldShowAcceptedCancelModal,
+  CANCEL_SUCCESS_TOAST,
+  CANCEL_BLOCKED_TOAST,
+  resolveCancelSuccessResult,
+  resolveCancelErrorResult
 } from "../../app/frontend/lib/orderCancelFlow.js"
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "../..")
@@ -60,5 +64,43 @@ describe("OrderCancelModal artifact (#40 step 6)", () => {
     const src = readFileSync(orderStatusPath, "utf8")
     assert.match(src, /orderCancelFlow|OrderCancelModal/)
     assert.doesNotMatch(src, /window\.confirm\("Отменить заказ\?"\)/)
+  })
+})
+
+describe("orderCancelFlow network/toasts (#40 step 7)", () => {
+  it("[TDD] success toast matches TZ refund copy", () => {
+    assert.match(
+      CANCEL_SUCCESS_TOAST,
+      /Заказ отменён.*возврат.*1–3 дней/
+    )
+    const result = resolveCancelSuccessResult({ id: "o1", status: "cancelled" })
+    assert.equal(result.toast, CANCEL_SUCCESS_TOAST)
+    assert.equal(result.toastTone, "success")
+    assert.equal(result.order.status, "cancelled")
+  })
+
+  it("[TDD] 422 maps to blocked toast and force preparing", () => {
+    const result = resolveCancelErrorResult({ httpStatus: 422, message: "уже готовится" })
+    assert.equal(result.toast, CANCEL_BLOCKED_TOAST)
+    assert.equal(result.toastTone, "error")
+    assert.equal(result.forceStatus, "preparing")
+    assert.equal(result.canCancel, false)
+    assert.match(CANCEL_BLOCKED_TOAST, /уже взяли в работу.*поддержк/i)
+  })
+
+  it("[TDD] 500/504 map to blocked toast and force preparing", () => {
+    for (const httpStatus of [500, 504]) {
+      const result = resolveCancelErrorResult({ httpStatus, message: "Timeout" })
+      assert.equal(result.toast, CANCEL_BLOCKED_TOAST)
+      assert.equal(result.forceStatus, "preparing")
+      assert.equal(result.canCancel, false)
+    }
+  })
+
+  it("[TDD] OrderStatus wires resolveCancel* / toast tones", () => {
+    const src = readFileSync(orderStatusPath, "utf8")
+    assert.match(src, /resolveCancelSuccessResult|CANCEL_SUCCESS_TOAST/)
+    assert.match(src, /resolveCancelErrorResult|CANCEL_BLOCKED_TOAST/)
+    assert.match(src, /forceStatus|preparing/)
   })
 })

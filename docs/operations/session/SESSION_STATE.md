@@ -6,9 +6,13 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#40** шаги 1–6 GREEN `[x]` · cancel modal | **go** → RED шаг 7 (toast/network states) |
+| **#40** шаги 1–6 GREEN · **RED шаг 7** cancel toasts (exports missing) | **go** → GREEN шаг 7 |
 | **#39 v2** Fly **v427** | апрув заказчика |
 | Live Fly | **v427** |
+
+### Сессия 2026-08-04 (RED шаг 7 · #40 cancel toasts)
+
+- `order_cancel_flow_test.mjs` step 7 — нет CANCEL_* / resolveCancel* (намеренно)
 
 ### Сессия 2026-08-04 (GREEN шаг 6 · #40 cancel modal)
 
