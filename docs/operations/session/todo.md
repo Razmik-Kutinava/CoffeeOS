@@ -2,7 +2,7 @@
 
 **ТЗ:** [`customer_tasks/Каскад уведомлений Заказ готов PWA WS Push WebPush Apple Wallet SMS.md`](../milestones/veha_2/requirements/customer_tasks/Каскад%20уведомлений%20Заказ%20готов%20PWA%20WS%20Push%20WebPush%20Apple%20Wallet%20SMS.md)  
 **Артефакты:** [`artifacts/order_ready_cascade_ws_push_sms/`](../milestones/veha_2/artifacts/order_ready_cascade_ws_push_sms/)  
-**Фаза:** PHASE 0 `[x]` · SPEC `[x]` · RED/GREEN `[x]` · REVIEW `[x]` · MCP/deploy `[ ]`  
+**Фаза:** PHASE 0 `[x]` · SPEC `[x]` · RED/GREEN `[x]` · REVIEW `[x]` · MCP/deploy **`[x]` v427**  
 **Supersedes:** v1 WS→TG→SMS (`order_ready_cascade_ws_telegram_sms`)
 
 ---
@@ -15,7 +15,7 @@
 | Barista OrdersController / OrderStatusUpdateService | **без diff** |
 | Telegram в PaidNotifier | **удалён** |
 | Presence log | `SMS skipped` (не Paid channels) |
-| MCP / Fly deploy | **ждут явный апрув** (+ `SMS_RU_*` secrets) |
+| MCP / Fly deploy | **v427 PASS** · evidence `mcp/fly_v427_2026-08-04/` |
 
 ---
 

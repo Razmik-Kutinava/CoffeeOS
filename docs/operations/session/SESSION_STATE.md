@@ -2,13 +2,19 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-08-04 (#39 v2 GREEN · presence→SMS без TG)
+**Дата:** 2026-08-04 (#39 v2 Fly v427 · MCP SMS PASS)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#39 v2** rewrite GREEN · REVIEW · тесты 45/91 PASS | push/deploy + MCP по апруву; SMS_RU secrets |
-| **#39 v1** Fly v426 TG | **SUPERSEDED** (код на Fly ещё v1 до deploy) |
-| Live Fly | **v426** |
+| **#39 v2** push+deploy **v427** · cascade SMS MCP **PASS** | апрув заказчика; SMS_RU secrets опционально |
+| Live Fly | **v427** |
+
+### Сессия 2026-08-04 (deploy/MCP · #39 v2)
+
+- Push `7b4ff49f` · image `deployment-01KZ695P61B8GEC9CVZ0AA8GDD` · **v427**
+- Smoke: `#202608-0005` offline → `sms:sent` (TG path нет); online → `SMS skipped`
+- `/shop` 200 · меню OK · SMS_RU не на Fly → fallback log
+- Evidence: `artifacts/order_ready_cascade_ws_push_sms/mcp/fly_v427_2026-08-04/`
 
 ### Сессия 2026-08-04 (GREEN+REVIEW · #39 v2)
 

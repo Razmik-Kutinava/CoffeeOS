@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-08-04 — deploy: #39 v2 cascade on Fly v427 · SMS MCP PASS
+
+- Push `7b4ff49f` · Fly **v427** · presence→SMS (no TG)
+- MCP: `#202608-0005` → `sms:sent` · online `SMS skipped` · `/shop` 200
+- SMS_RU secrets still unset (fallback log-only)
+
 ## 2026-08-04 — feat: #39 v2 cascade presence→SMS (no Telegram) [GREEN]
 
 - Rewrite: `OrderReadyPaidNotifier` SMS-only; cascade log `SMS skipped`
