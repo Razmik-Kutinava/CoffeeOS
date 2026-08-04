@@ -6,9 +6,14 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#40** шаги 1–2 GREEN `[x]` | **go** → RED шаг 3 (`accepted` + Cancel → refunded) |
-| **#39 v2** Fly **v427** · cascade SMS MCP **PASS** | апрув заказчика |
+| **#40** шаги 1–2 GREEN · **RED шаг 3** accepted+refund (4 failing) | **go** → GREEN шаг 3 |
+| **#39 v2** Fly **v427** | апрув заказчика |
 | Live Fly | **v427** |
+
+### Сессия 2026-08-04 (RED шаг 3 · #40 accepted auto-refund)
+
+- 4 теста `[TDD] accepted cancel*` — намеренный RED (нет Cancel/refund в GuestCancel)
+- CHANGELOG/HANDOFF не трогали
 
 ### Сессия 2026-08-04 (шаг 2 · #40 pending_payment local)
 

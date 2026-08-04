@@ -146,7 +146,153 @@ class Shop::GuestOrderCancellationServiceTest < ActiveSupport::TestCase
     end
   end
 
+  # ---------------------------------------------------------------------------
+  # #40 Шаг 3 RED — accepted + succeeded → /v2/Cancel → payment refunded
+  # ---------------------------------------------------------------------------
+
+  test "[TDD] accepted cancel with succeeded payment calls Cancel and marks refunded" do
+    order = mobile_order!(status: :accepted)
+    payment = Payment.create!(
+      order_id: order.id,
+      tenant_id: @tenant.id,
+      amount: order.final_amount,
+      method: :card,
+      provider: "tbank",
+      provider_payment_id: "pay-accepted-ok",
+      status: :succeeded,
+      paid_at: Time.current
+    )
+
+    calls = []
+    with_stubbed_cancel_payment(calls: calls, response: {
+      "Success" => true,
+      "ErrorCode" => "0",
+      "Status" => "REFUNDED",
+      "PaymentId" => "pay-accepted-ok"
+    }) do
+      result = Shop::GuestOrderCancellationService.new(
+        order: order,
+        session: @session,
+        tenant_id: @tenant.id
+      ).call!
+
+      assert_equal "cancelled", result.status
+      assert_equal "refunded", payment.reload.status
+      assert_equal 1, calls.size
+      assert_equal "pay-accepted-ok", calls.first[:payment_id].to_s
+      assert_equal 1, Refund.where(payment_id: payment.id, status: :succeeded).count
+    end
+  end
+
+  test "[TDD] accepted cancel rejects when payment is failed (no Cancel)" do
+    order = mobile_order!(status: :accepted)
+    payment = Payment.create!(
+      order_id: order.id,
+      tenant_id: @tenant.id,
+      amount: order.final_amount,
+      method: :card,
+      provider: "tbank",
+      provider_payment_id: "pay-failed",
+      status: :failed
+    )
+
+    calls = []
+    with_stubbed_cancel_payment(calls: calls) do
+      error = assert_raises(Shop::GuestOrderCancellationService::Error) do
+        Shop::GuestOrderCancellationService.new(
+          order: order,
+          session: @session,
+          tenant_id: @tenant.id
+        ).call!
+      end
+
+      assert_match(/возврат|оплат|недоступ/i, error.message)
+      assert_equal "accepted", order.reload.status
+      assert_equal "failed", payment.reload.status
+      assert_empty calls
+    end
+  end
+
+  test "[TDD] accepted cancel rejects when payment is already refunded (no Cancel)" do
+    order = mobile_order!(status: :accepted)
+    payment = Payment.create!(
+      order_id: order.id,
+      tenant_id: @tenant.id,
+      amount: order.final_amount,
+      method: :card,
+      provider: "tbank",
+      provider_payment_id: "pay-already-refunded",
+      status: :refunded
+    )
+
+    calls = []
+    with_stubbed_cancel_payment(calls: calls) do
+      assert_raises(Shop::GuestOrderCancellationService::Error) do
+        Shop::GuestOrderCancellationService.new(
+          order: order,
+          session: @session,
+          tenant_id: @tenant.id
+        ).call!
+      end
+
+      assert_equal "accepted", order.reload.status
+      assert_equal "refunded", payment.reload.status
+      assert_empty calls
+    end
+  end
+
+  test "[TDD] accepted cancel leaves order and payment unchanged when Cancel ApiError" do
+    order = mobile_order!(status: :accepted)
+    payment = Payment.create!(
+      order_id: order.id,
+      tenant_id: @tenant.id,
+      amount: order.final_amount,
+      method: :card,
+      provider: "tbank",
+      provider_payment_id: "pay-bank-fail",
+      status: :succeeded,
+      paid_at: Time.current
+    )
+
+    calls = []
+    with_stubbed_cancel_payment(
+      calls: calls,
+      raise_error: Payments::TbankAdapter::ApiError.new(error_code: "504", message: "Timeout")
+    ) do
+      assert_raises(Shop::GuestOrderCancellationService::Error, Payments::TbankAdapter::ApiError) do
+        Shop::GuestOrderCancellationService.new(
+          order: order,
+          session: @session,
+          tenant_id: @tenant.id
+        ).call!
+      end
+
+      assert_equal "accepted", order.reload.status
+      assert_equal "succeeded", payment.reload.status
+      assert_equal 1, calls.size
+      assert_equal 0, Refund.where(payment_id: payment.id).count
+    end
+  end
+
   private
+
+  def with_stubbed_cancel_payment(calls:, response: nil, raise_error: nil)
+    adapter = Payments::TbankAdapter
+    original = adapter.instance_method(:cancel_payment)
+    adapter.define_method(:cancel_payment) do |**kwargs|
+      calls << kwargs
+      raise raise_error if raise_error
+      response || {
+        "Success" => true,
+        "ErrorCode" => "0",
+        "Status" => "REFUNDED",
+        "PaymentId" => kwargs[:payment_id].to_s
+      }
+    end
+    yield
+  ensure
+    adapter.define_method(:cancel_payment, original)
+  end
 
   def mobile_order!(status:)
     Order.create!(
