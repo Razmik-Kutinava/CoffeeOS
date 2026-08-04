@@ -2,12 +2,20 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-08-04 (#39 v2 Fly v427 · MCP SMS PASS)
+**Дата:** 2026-08-04 (#40 intake · #39 v2 Fly v427)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#39 v2** push+deploy **v427** · cascade SMS MCP **PASS** | апрув заказчика; SMS_RU secrets опционально |
+| **#40** T-Bank auto refund on PWA cancel — **PHASE 0 intake `[x]`** | **go** → PHASE 1: SPEC |
+| **#39 v2** Fly **v427** · cascade SMS MCP **PASS** | апрув заказчика; SMS_RU secrets опционально |
 | Live Fly | **v427** |
+
+### Сессия 2026-08-04 (PHASE 0 intake · #40 T-Bank auto refund)
+
+- ТЗ 1:1: `customer_tasks/Автоматический возврат платежа Т-Банк при отмене заказа в PWA.md`
+- Артефакты: `artifacts/tbank_auto_refund_order_cancellation_pwa/`
+- CBR #40 · customer_tasks README
+- Код/todo не трогали; ждём go → SPEC
 
 ### Сессия 2026-08-04 (deploy/MCP · #39 v2)
 

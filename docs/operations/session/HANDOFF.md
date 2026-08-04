@@ -1,8 +1,20 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-08-04 (**#39 v2** · Fly **v427** · MCP SMS cascade PASS)  
+**Дата:** 2026-08-04 (**#40 intake** · #39 v2 Fly **v427**)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev (**v427**)
+
+### T-Bank auto refund on PWA cancel (#40) — 2026-08-04
+
+| Что | Статус |
+|-----|--------|
+| Intake (PHASE 0) | **`[x]`** |
+| PHASE 1 SPEC | **`[ ]`** ждёт go |
+| RED/GREEN / REVIEW / deploy | **`[ ]`** |
+
+**ТЗ:** [`Автоматический возврат платежа Т-Банк при отмене заказа в PWA.md`](../milestones/veha_2/requirements/customer_tasks/Автоматический%20возврат%20платежа%20Т-Банк%20при%20отмене%20заказа%20в%20PWA.md)  
+**Артефакты:** [`tbank_auto_refund_order_cancellation_pwa/`](../milestones/veha_2/artifacts/tbank_auto_refund_order_cancellation_pwa/)  
+**Дальше:** **go** → PHASE 1: SPEC (маппинг Minitest/Svelte; шаги 1–7 TDD).
 
 ### Order ready cascade WS/Push/Wallet→SMS (#39 v2) — 2026-08-04
 

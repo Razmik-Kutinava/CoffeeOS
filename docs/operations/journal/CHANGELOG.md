@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-08-04 — docs: intake #40 T-Bank auto refund on PWA cancel
+
+- PHASE 0: ТЗ 1:1 `Автоматический возврат платежа Т-Банк при отмене заказа в PWA.md`
+- Артефакты: `tbank_auto_refund_order_cancellation_pwa/` · CBR #40
+- Код не трогали; ждём go → SPEC
+
 ## 2026-08-04 — deploy: #39 v2 cascade on Fly v427 · SMS MCP PASS
 
 - Push `7b4ff49f` · Fly **v427** · presence→SMS (no TG)
