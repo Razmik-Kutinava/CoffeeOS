@@ -8,6 +8,8 @@ class MobileCustomer < ApplicationRecord
                     format: { with: /\A[+]?[0-9]{10,15}\z/ }, if: -> { phone.present? }
   validates :email, presence: true, uniqueness: true,
                     format: { with: /\A[^@\s]+@[^@\s]+\.[^@\s]+\z/ }, if: -> { email.present? }
+  validates :telegram_chat_id, uniqueness: true, allow_nil: true,
+                               length: { maximum: 64 }
   validate :phone_or_email_present
   validates :is_active, inclusion: { in: [true, false] }
   validates :push_enabled, inclusion: { in: [true, false] }

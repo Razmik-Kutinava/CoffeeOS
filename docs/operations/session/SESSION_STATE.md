@@ -2,13 +2,20 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-08-03 (#39 GREEN шаг 2 · #38 MCP v421)
+**Дата:** 2026-08-04 (#39 Migration Gate · шаги 1–2 GREEN)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#39** Order ready cascade | шаги 1–2 **GREEN** · дальше Migration Gate / RED шаг 3 (Telegram) |
-| **#38** Fly **v421** · MCP **PASS** (Aram) | апрув заказчика «ок» |
-| Live Fly | **v421** |
+| **#39** DDL `[x]` · presence/enqueue GREEN | RED/GREEN шаги 3–5 (TG→SMS); вставить chat id в БД |
+| **#38** Fly **v421** · MCP **PASS** | апрув заказчика «ок» |
+| Live Fly | **v421** (без #39 DDL) |
+
+### Сессия 2026-08-04 (Migration Gate · #39)
+
+- `mobile_customers.telegram_chat_id` + `order_notification_logs` (+ RLS)
+- Models: `OrderNotificationLog`; validation на `MobileCustomer`
+- `db:migrate` dev+test OK · RLS smoke **7/27 PASS**
+- `.env.example`: TELEGRAM_BOT_TOKEN / SMS_RU_*
 
 ### Сессия 2026-08-03 (GREEN шаг 2 · #39 presence)
 

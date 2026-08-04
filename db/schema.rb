@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_31_130000) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_04_120100) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_stat_statements"
@@ -401,10 +401,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_31_130000) do
     t.boolean "phone_verified", default: false, null: false
     t.boolean "push_enabled", default: false, null: false
     t.string "push_token", limit: 255
+    t.string "telegram_chat_id", limit: 64, comment: "Telegram chat_id гостя для OrderReadyCascade (#39)"
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_mobile_customers_on_email", unique: true, where: "(email IS NOT NULL)"
     t.index ["is_active"], name: "index_mobile_customers_on_is_active"
     t.index ["phone"], name: "index_mobile_customers_on_phone", unique: true
+    t.index ["telegram_chat_id"], name: "idx_mobile_customers_telegram_chat_id", unique: true, where: "(telegram_chat_id IS NOT NULL)"
   end
 
   create_table "mobile_otp_codes", id: :uuid, default: -> { "gen_random_uuid()" }, comment: "OTP коды для авторизации в мобильном приложении", force: :cascade do |t|
@@ -532,6 +534,22 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_31_130000) do
     t.index ["product_id"], name: "index_order_items_on_product_id"
     t.check_constraint "quantity > 0", name: "chk_order_item_quantity"
     t.check_constraint "unit_price > 0::numeric AND total_price = (unit_price * quantity::numeric)", name: "chk_order_item_prices"
+  end
+
+  create_table "order_notification_logs", id: :uuid, default: -> { "gen_random_uuid()" }, comment: "Лог каскада уведомлений «Заказ готов» (#39)", force: :cascade do |t|
+    t.string "channel", limit: 32, null: false
+    t.datetime "created_at", null: false
+    t.text "error_message"
+    t.uuid "order_id", null: false
+    t.jsonb "payload", default: {}, null: false
+    t.string "status", limit: 32, default: "pending", null: false
+    t.uuid "tenant_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["order_id", "channel", "created_at"], name: "idx_order_notification_logs_order_channel"
+    t.index ["order_id"], name: "idx_order_notification_logs_order"
+    t.index ["tenant_id", "created_at"], name: "idx_order_notification_logs_tenant_created", order: { created_at: :desc }
+    t.check_constraint "channel::text = ANY (ARRAY['telegram'::character varying, 'sms'::character varying]::text[])", name: "chk_order_notification_logs_channel"
+    t.check_constraint "status::text = ANY (ARRAY['pending'::character varying, 'sent'::character varying, 'failed'::character varying, 'skipped'::character varying]::text[])", name: "chk_order_notification_logs_status"
   end
 
   create_table "order_status_logs", id: :uuid, default: -> { "gen_random_uuid()" }, comment: "История изменений статуса заказа", force: :cascade do |t|
@@ -1277,6 +1295,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_31_130000) do
   add_foreign_key "order_feedback", "users", column: "resolved_by_id", on_delete: :nullify
   add_foreign_key "order_items", "orders", on_delete: :cascade
   add_foreign_key "order_items", "products", name: "fk_order_items_product", on_delete: :restrict
+  add_foreign_key "order_notification_logs", "orders"
+  add_foreign_key "order_notification_logs", "tenants"
   add_foreign_key "order_status_logs", "devices", name: "fk_order_status_logs_device", on_delete: :nullify
   add_foreign_key "order_status_logs", "orders", on_delete: :cascade
   add_foreign_key "order_status_logs", "users", column: "changed_by_id", on_delete: :nullify

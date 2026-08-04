@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-08-04 — db: #39 Migration Gate telegram_chat_id + order_notification_logs
+- `mobile_customers.telegram_chat_id` (partial unique index)
+- `order_notification_logs` + RLS tenant isolation
+- Model `OrderNotificationLog`; `.env.example` cascade secrets
+- Smoke: `rls_tenant_isolation_test` 7/27 PASS
+
 ## 2026-08-03 — MCP: #38 Background FCM/Wallet · Fly v421 PASS
 - Live **v421** · Aram Point A · 17 active orders
 - Desktop max-2 CTA (subscribed) + iOS CriOS Apple Wallet CTA + reconnect banner

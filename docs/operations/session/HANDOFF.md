@@ -1,21 +1,20 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-08-03 (**#38 MCP PASS v421 · #39 SPEC**)  
+**Дата:** 2026-08-04 (**#39 Migration Gate · #38 v421**)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev (**v421**)  
 
-### Order ready cascade WS→TG→SMS (#39) — 2026-08-03
+### Order ready cascade WS→TG→SMS (#39) — 2026-08-04
 
 | Что | Статус |
 |-----|--------|
-| Intake (PHASE 0) | **`[x]`** `9edc2bbd` |
-| PHASE 1 SPEC | **`[x]`** |
-| RED/GREEN 1–5 / REVIEW | **`[ ]`** |
+| Intake / SPEC | **`[x]`** |
+| RED/GREEN шаги 1–2 | **`[x]`** |
+| Migration Gate (`telegram_chat_id` + `order_notification_logs`) | **`[x]`** |
+| RED/GREEN 3–5 / REVIEW | **`[ ]`** |
 
 **ТЗ:** [`Оптимизированный каскад уведомлений Заказ готов PWA WS Push Telegram SMS.md`](../milestones/veha_2/requirements/customer_tasks/Оптимизированный%20каскад%20уведомлений%20Заказ%20готов%20PWA%20WS%20Push%20Telegram%20SMS.md)  
-**Артефакты:** [`order_ready_cascade_ws_telegram_sms/`](../milestones/veha_2/artifacts/order_ready_cascade_ws_telegram_sms/)  
-**Канон:** `todo.md` — reuse Broadcaster/FCM/Wallet; cascade Job; presence Rails.cache; TG→SMS; Migration Gate на `telegram_chat_id` + `order_notification_logs`.  
-**Дальше:** намерение → RED шаг 1 (enqueue cascade + verify free channels).
+**Дальше:** вставить chat id в `mobile_customers.telegram_chat_id` · RED/GREEN 3–5 · REVIEW.  
 
 ### Background FCM progress + Apple Wallet (#38) — 2026-08-03
 

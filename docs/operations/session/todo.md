@@ -64,12 +64,12 @@ barista PATCH update_status(ready)
 
 ## Migration Gate (нужен отдельный `go` перед RED шагов 3–5)
 
-| Изменение | Rollback |
-|-----------|----------|
-| `mobile_customers.telegram_chat_id` string nullable + index partial where not null | `remove_column` |
-| `order_notification_logs` (id, order_id, tenant_id?, channel enum/string, status, error_message, payload jsonb, timestamps) + RLS как у соседних order-таблиц | `drop_table` |
+| Изменение | Rollback | Статус |
+|-----------|----------|--------|
+| `mobile_customers.telegram_chat_id` string nullable + index partial where not null | `remove_column` | **`[x]`** 2026-08-04 |
+| `order_notification_logs` (+ RLS tenant) | `drop_table` | **`[x]`** 2026-08-04 |
 
-Без апрува DDL — шаги 1–2 (verify + presence + job skeleton без TG/SMS persistence) можно начинать; запись history — после миграции.
+Дальше: RED шаг 3 (Telegram). Chat id вставить в `mobile_customers.telegram_chat_id` вручную / console.
 
 ---
 
