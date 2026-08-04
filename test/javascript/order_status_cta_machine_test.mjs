@@ -1,5 +1,5 @@
 /**
- * #38 Шаг 5 [TDD-RED] — PWA UI CTA state machine на карточке заказа.
+ * #38 / #40 — PWA UI CTA state machine на карточке заказа.
  *
  * node --test test/javascript/order_status_cta_machine_test.mjs
  */
@@ -18,8 +18,8 @@ import {
 const root = join(dirname(fileURLToPath(import.meta.url)), "../..")
 const orderStatusPath = join(root, "app/frontend/routes/OrderStatus.svelte")
 
-describe("orderStatusCtas (#38 step 5)", () => {
-  it("accepted: max 2 — Отменить + Push (android)", () => {
+describe("orderStatusCtas (#38 / #40 step 5)", () => {
+  it("accepted: max 2 — Отменить заказ + Push (android)", () => {
     const view = orderStatusCtas({
       status: "accepted",
       os: "android",
@@ -31,12 +31,13 @@ describe("orderStatusCtas (#38 step 5)", () => {
       view.buttons.map((b) => b.kind),
       ["cancel", "push"]
     )
-    assert.equal(view.buttons[0].label, "Отменить")
+    assert.equal(view.buttons[0].label, "Отменить заказ")
+    assert.equal(view.buttons[0].hint, "Вернем 100% суммы")
     assert.match(view.buttons[1].label, /Уведомление|Push|push/i)
     assert.equal(view.style.background, CTA_STYLE.background)
   })
 
-  it("accepted ios: Отменить + Wallet", () => {
+  it("accepted ios: Отменить заказ + Wallet", () => {
     const view = orderStatusCtas({
       status: "accepted",
       os: "ios",
@@ -46,6 +47,8 @@ describe("orderStatusCtas (#38 step 5)", () => {
       view.buttons.map((b) => b.kind),
       ["cancel", "wallet"]
     )
+    assert.equal(view.buttons[0].label, "Отменить заказ")
+    assert.equal(view.buttons[0].hint, "Вернем 100% суммы")
     assert.match(view.buttons[1].label, /Apple Wallet|Wallet/)
   })
 
@@ -59,7 +62,20 @@ describe("orderStatusCtas (#38 step 5)", () => {
     assert.equal(view.buttons[0].kind, "push")
   })
 
-  it("preparing: cancel gone — Чат + Чаевые (android)", () => {
+  it("[TDD] pending_payment + canCancel: Отменить заказ (без 100% hint)", () => {
+    const view = orderStatusCtas({
+      status: "pending_payment",
+      os: "android",
+      canCancel: true
+    })
+    const cancel = view.buttons.find((b) => b.kind === "cancel")
+    assert.ok(cancel, "ожидается кнопка cancel")
+    assert.equal(cancel.label, "Отменить заказ")
+    assert.equal(cancel.hint, undefined)
+    assert.ok(view.buttons.length <= 2)
+  })
+
+  it("preparing: cancel gone — Написать в поддержку + Чаевые (android)", () => {
     const view = orderStatusCtas({
       status: "preparing",
       os: "android",
@@ -70,12 +86,12 @@ describe("orderStatusCtas (#38 step 5)", () => {
       view.buttons.map((b) => b.kind),
       ["chat", "tips"]
     )
-    assert.equal(view.buttons[0].label, "Чат")
+    assert.equal(view.buttons[0].label, "Написать в поддержку")
     assert.equal(view.buttons[1].label, "Чаевые")
     assert.ok(!view.buttons.some((b) => b.kind === "cancel"))
   })
 
-  it("preparing ios: Чат + Wallet", () => {
+  it("preparing ios: Написать в поддержку + Wallet", () => {
     const view = orderStatusCtas({
       status: "preparing",
       os: "ios",
@@ -85,24 +101,27 @@ describe("orderStatusCtas (#38 step 5)", () => {
       view.buttons.map((b) => b.kind),
       ["chat", "wallet"]
     )
+    assert.equal(view.buttons[0].label, "Написать в поддержку")
   })
 
-  it("ready: same matrix as preparing (chat + tips/wallet)", () => {
+  it("ready: same matrix as preparing (support + tips/wallet)", () => {
     const android = orderStatusCtas({ status: "ready", os: "android" })
     const ios = orderStatusCtas({ status: "ready", os: "ios" })
     assert.deepEqual(
       android.buttons.map((b) => b.kind),
       ["chat", "tips"]
     )
+    assert.equal(android.buttons[0].label, "Написать в поддержку")
     assert.deepEqual(
       ios.buttons.map((b) => b.kind),
       ["chat", "wallet"]
     )
+    assert.equal(ios.buttons[0].label, "Написать в поддержку")
   })
 
   it("cancelled / unknown: no CTAs", () => {
     assert.equal(orderStatusCtas({ status: "cancelled", os: "android" }).buttons.length, 0)
-    assert.equal(orderStatusCtas({ status: "pending_payment", os: "ios" }).buttons.length, 0)
+    assert.equal(orderStatusCtas({ status: "issued", os: "ios" }).buttons.length, 0)
   })
 })
 

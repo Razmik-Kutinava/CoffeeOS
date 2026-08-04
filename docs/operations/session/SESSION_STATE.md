@@ -6,9 +6,13 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#40** шаги 1–4 GREEN `[x]` · backend cancel/refund done | **go** → RED шаг 5 (UI CTA labels) |
+| **#40** шаги 1–4 GREEN · **RED шаг 5** UI CTA labels (6 failing) | **go** → GREEN шаг 5 |
 | **#39 v2** Fly **v427** | апрув заказчика |
 | Live Fly | **v427** |
+
+### Сессия 2026-08-04 (RED шаг 5 · #40 UI CTA)
+
+- `order_status_cta_machine_test.mjs`: «Отменить заказ» + hint 100%; pending cancel; «Написать в поддержку» — 6 fail (намеренно)
 
 ### Сессия 2026-08-04 (шаг 4 · #40 block preparing/ready/issued)
 
