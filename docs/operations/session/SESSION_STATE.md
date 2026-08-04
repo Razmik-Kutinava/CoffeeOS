@@ -6,9 +6,14 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#40** шаг 1 GREEN `[x]` · `cancel_payment` | **go** → RED шаг 2 (`pending_payment` local) |
+| **#40** шаги 1–2 GREEN `[x]` | **go** → RED шаг 3 (`accepted` + Cancel → refunded) |
 | **#39 v2** Fly **v427** · cascade SMS MCP **PASS** | апрув заказчика |
 | Live Fly | **v427** |
+
+### Сессия 2026-08-04 (шаг 2 · #40 pending_payment local)
+
+- Контрактные тесты: no `cancel_payment`, payment→failed, order cancelled — **PASS сразу** (код был)
+- RED vacuous → закрыт как GREEN без правки сервиса
 
 ### Сессия 2026-08-04 (GREEN шаг 1 · #40 cancel_payment)
 
