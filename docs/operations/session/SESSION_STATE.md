@@ -6,9 +6,14 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#40** шаги 1–2 GREEN · **RED шаг 3** accepted+refund (4 failing) | **go** → GREEN шаг 3 |
+| **#40** шаги 1–3 GREEN `[x]` · auto-refund accepted | **go** → RED шаг 4 (block preparing+) |
 | **#39 v2** Fly **v427** | апрув заказчика |
 | Live Fly | **v427** |
+
+### Сессия 2026-08-04 (GREEN шаг 3 · #40 accepted auto-refund)
+
+- `GuestOrderCancellationService`: Cancel → refunded + Refund; reject failed/refunded; cash без PaymentId — local
+- Тесты: guest cancel **9/39** · регрессия cancel+adapter **42/126 PASS**
 
 ### Сессия 2026-08-04 (RED шаг 3 · #40 accepted auto-refund)
 

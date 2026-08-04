@@ -1,11 +1,15 @@
 # frozen_string_literal: true
 
 module Shop
-  # Отмена заказа гостем с экрана статуса (B1.1): pending_payment или accepted.
+  # Отмена заказа гостем с экрана статуса (B1.1 / #40):
+  # pending_payment — локально через journal;
+  # accepted + succeeded — /v2/Cancel → payment refunded;
+  # failed/refunded без succeeded — отказ.
   class GuestOrderCancellationService
     class Error < StandardError; end
 
     GUEST_REASON = "Гость отменил заказ"
+    REFUND_UNAVAILABLE = "Автовозврат недоступен. Пожалуйста, обратитесь в поддержку."
 
     def initialize(order:, session:, tenant_id:, request_id: nil)
       @order = order
@@ -61,7 +65,47 @@ module Shop
     end
 
     def cancel_accepted!(old_status:)
+      succeeded = @order.payments.find_by(status: :succeeded)
+
+      if refundable_via_tbank?(succeeded)
+        refund_succeeded_via_tbank!(succeeded, old_status: old_status)
+      elsif succeeded
+        # cash / без PaymentId — локальная отмена, банк не трогаем
+        persist_cancelled!(old_status: old_status)
+      elsif @order.payments.where(status: %w[failed refunded partially_refunded]).exists?
+        raise Error, REFUND_UNAVAILABLE
+      else
+        persist_cancelled!(old_status: old_status)
+      end
+    end
+
+    def refundable_via_tbank?(payment)
+      payment.present? && payment.provider_payment_id.present?
+    end
+
+    # Сначала банк (без тихого cancel при ошибке), затем БД.
+    def refund_succeeded_via_tbank!(payment, old_status:)
+      response = Payments::TbankAdapter.new.cancel_payment(
+        payment_id: payment.provider_payment_id
+      )
+
       ActiveRecord::Base.transaction do
+        payment.update!(status: :refunded)
+        Refund.create!(
+          tenant_id: @tenant_id,
+          payment_id: payment.id,
+          order_id: @order.id,
+          amount: payment.amount,
+          reason: GUEST_REASON,
+          status: :succeeded,
+          provider_refund_id: response["PaymentId"].presence || payment.provider_payment_id
+        )
+        persist_cancelled!(old_status: old_status)
+      end
+    end
+
+    def persist_cancelled!(old_status:)
+      ActiveRecord::Base.transaction(requires_new: true) do
         @order.update!(
           status: :cancelled,
           cancel_reason: GUEST_REASON,
