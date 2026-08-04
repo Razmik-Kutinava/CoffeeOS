@@ -15,7 +15,12 @@
   } from "../lib/orderStatusCtaMachine.js"
   import { downloadWalletPass } from "../lib/orderStatusNotifyActions.js"
   import { orderDeepLink } from "../lib/swNotificationActions.js"
+  import {
+    buildAcceptedCancelModalCopy,
+    shouldShowAcceptedCancelModal
+  } from "../lib/orderCancelFlow.js"
   import PageSkeleton from "../components/PageSkeleton.svelte"
+  import OrderCancelModal from "../components/OrderCancelModal.svelte"
 
   let { params } = $props()
 
@@ -25,6 +30,7 @@
   let cableState = $state("idle")
   let cancelErr = $state(null)
   let cancelling = $state(false)
+  let cancelModalOpen = $state(false)
   let pushAvailable = $state(false)
   let pushState = $state("idle")
   let pushErr = $state(null)
@@ -44,6 +50,14 @@
       : { buttons: [], style: CTA_STYLE }
   )
   const reconnectBanner = $derived(showReconnectBanner(cableState))
+  const cancelModalCopy = $derived(
+    order
+      ? buildAcceptedCancelModalCopy({
+          orderNumber: order.order_number,
+          amount: order.total
+        })
+      : null
+  )
 
   const pickupLine = $derived(
     order?.tenant
@@ -85,20 +99,30 @@
     }
   }
 
-  async function cancelOrder() {
+  async function performCancel() {
     if (!order?.can_cancel || cancelling) return
-    if (!window.confirm("Отменить заказ?")) return
 
     cancelErr = null
     cancelling = true
     try {
       const updated = await api(`/orders/${order.id}/cancel`, { method: "POST" })
       order = updated
+      cancelModalOpen = false
     } catch (e) {
       cancelErr = e.message
+      cancelModalOpen = false
     } finally {
       cancelling = false
     }
+  }
+
+  async function cancelOrder() {
+    if (!order?.can_cancel || cancelling) return
+    if (shouldShowAcceptedCancelModal(order.status)) {
+      cancelModalOpen = true
+      return
+    }
+    await performCancel()
   }
 
   async function onCtaClick(kind) {
@@ -339,6 +363,21 @@
     {/if}
   {/if}
 </div>
+
+{#if cancelModalCopy}
+  <OrderCancelModal
+    open={cancelModalOpen}
+    title={cancelModalCopy.title}
+    body={cancelModalCopy.body}
+    confirmLabel={cancelModalCopy.confirmLabel}
+    dismissLabel={cancelModalCopy.dismissLabel}
+    confirming={cancelling}
+    onConfirm={performCancel}
+    onDismiss={() => {
+      if (!cancelling) cancelModalOpen = false
+    }}
+  />
+{/if}
 
 <style>
   .order-status-page {

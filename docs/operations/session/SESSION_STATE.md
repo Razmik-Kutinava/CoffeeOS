@@ -6,9 +6,14 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#40** шаги 1–5 GREEN · **RED шаг 6** cancel modal (module missing) | **go** → GREEN шаг 6 |
+| **#40** шаги 1–6 GREEN `[x]` · cancel modal | **go** → RED шаг 7 (toast/network states) |
 | **#39 v2** Fly **v427** | апрув заказчика |
 | Live Fly | **v427** |
+
+### Сессия 2026-08-04 (GREEN шаг 6 · #40 cancel modal)
+
+- `orderCancelFlow.js` + `OrderCancelModal.svelte`; OrderStatus без window.confirm
+- JS cancel+cta **15/15 PASS**
 
 ### Сессия 2026-08-04 (RED шаг 6 · #40 cancel modal)
 
