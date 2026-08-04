@@ -2,13 +2,22 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-08-04 (#40 SPEC · #39 v2 Fly v427)
+**Дата:** 2026-08-04 (#40 Fly v428 · MCP PASS)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#40** REVIEW **`[x]`** · код local · deploy `[ ]` | push + fly deploy + MCP (явный апрув) |
-| **#39 v2** Fly **v427** | апрув заказчика |
-| Live Fly | **v427** |
+| **#40** push+deploy+MCP **`[x]`** · Fly **v428** | апрув заказчика «ок»; опц. live Cancel E2E |
+| **#39 v2** cascade SMS | апрув заказчика |
+| Live Fly | **v428** |
+
+### Сессия 2026-08-04 (deploy + MCP · #40)
+
+- Push `e2c10736` · Fly **v428** · image `deployment-01KZ6M11H6F1RJ4GPMND07P57R`
+- HTTP `/up`+`/shop` 200 · SSH `cancel_payment`+`REFUND_UNAVAILABLE` true
+- MCP: `#202608-0003` pending cancel → cancelled/failed + success toast
+- MCP: `#202608-0005` ready → «Написать в поддержку», без cancel
+- Live `/v2/Cancel` E2E deferred (нет accepted+PaymentId в сессии)
+- Evidence: `artifacts/…/mcp/fly_v428_2026-08-04/`
 
 ### Сессия 2026-08-04 (PHASE 3 REVIEW · #40)
 

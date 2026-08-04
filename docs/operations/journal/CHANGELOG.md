@@ -1,5 +1,12 @@
 ﻿# CHANGELOG
 
+## 2026-08-04 — deploy: #40 T-Bank auto refund on Fly v428 · MCP PASS
+
+- Push `e2c10736` · Fly **v428** · `deployment-01KZ6M11H6F1RJ4GPMND07P57R`
+- MCP: pending cancel `#202608-0003` → cancelled + toast; ready `#202608-0005` → support CTA
+- SSH: `cancel_payment` / `REFUND_UNAVAILABLE` на Fly; live `/v2/Cancel` E2E deferred
+- Evidence: `artifacts/tbank_auto_refund_order_cancellation_pwa/mcp/fly_v428_2026-08-04/`
+
 ## 2026-08-04 — feat: #40 T-Bank auto refund on PWA cancel [REVIEW]
 
 - BE: `TbankAdapter#cancel_payment` (`/v2/Cancel` без Receipt); GuestCancel → refunded + Refund

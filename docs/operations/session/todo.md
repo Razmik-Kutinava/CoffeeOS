@@ -2,7 +2,7 @@
 
 **ТЗ:** [`customer_tasks/Автоматический возврат платежа Т-Банк при отмене заказа в PWA.md`](../milestones/veha_2/requirements/customer_tasks/Автоматический%20возврат%20платежа%20Т-Банк%20при%20отмене%20заказа%20в%20PWA.md)  
 **Артефакты:** [`artifacts/tbank_auto_refund_order_cancellation_pwa/`](../milestones/veha_2/artifacts/tbank_auto_refund_order_cancellation_pwa/)  
-**Фаза:** PHASE 0 `[x]` · SPEC `[x]` · RED/GREEN 1–7 **`[x]`** · REVIEW **`[x]`** · MCP/deploy `[ ]`  
+**Фаза:** PHASE 0 `[x]` · SPEC `[x]` · RED/GREEN 1–7 **`[x]`** · REVIEW **`[x]`** · MCP/deploy **`[x]`** (Fly **v428**)  
 **CBR:** #40
 
 ---
@@ -15,7 +15,7 @@
 | qa_section_2_3_payment_cart | **2/5 PASS** (2 skips) |
 | JS cancel flow + CTA | **19/19 PASS** |
 | N+1 / Receipt в Cancel / Token | Cancel без Receipt; `build_token` без diff |
-| MCP / Fly deploy | **`[ ]`** ждёт апрув |
+| MCP / Fly deploy | **`[x]`** push `e2c10736` · Fly **v428** · MCP PASS (pending cancel + ready support; live Cancel E2E deferred) |
 
 ---
 

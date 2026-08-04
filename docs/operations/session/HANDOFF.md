@@ -1,22 +1,22 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-08-04 (**#40 REVIEW** · #39 v2 Fly **v427**)  
+**Дата:** 2026-08-04 (**#40** Fly **v428** · MCP PASS)  
 **Ветка:** `develop`  
-**Прод:** https://coffeeos.fly.dev (**v427**)
+**Прод:** https://coffeeos.fly.dev (**v428**)
 
 ### T-Bank auto refund on PWA cancel (#40) — 2026-08-04
 
 | Что | Статус |
 |-----|--------|
-| Intake / SPEC / RED-GREEN 1–7 / REVIEW | **`[x]`** tip `070ac123` · REVIEW docs |
-| Push develop | **`[ ]`** |
-| Fly deploy / MCP staging | **`[ ]`** |
+| Intake / SPEC / RED-GREEN 1–7 / REVIEW | **`[x]`** tip REVIEW `e2c10736` |
+| Push develop | **`[x]`** `e2c10736` |
+| Fly deploy | **`[x]`** **v428** · `deployment-01KZ6M11H6F1RJ4GPMND07P57R` |
+| MCP | **PASS** · pending cancel `#202608-0003` · ready support `#202608-0005` · live `/v2/Cancel` E2E deferred |
 
 **ТЗ:** [`Автоматический возврат платежа Т-Банк при отмене заказа в PWA.md`](../milestones/veha_2/requirements/customer_tasks/Автоматический%20возврат%20платежа%20Т-Банк%20при%20отмене%20заказа%20в%20PWA.md)  
-**Артефакты:** [`tbank_auto_refund_order_cancellation_pwa/`](../milestones/veha_2/artifacts/tbank_auto_refund_order_cancellation_pwa/)  
+**Evidence:** [`mcp/fly_v428_2026-08-04/`](../milestones/veha_2/artifacts/tbank_auto_refund_order_cancellation_pwa/mcp/fly_v428_2026-08-04/)  
 **Канон:** `/v2/Cancel` без Receipt; accepted+succeeded → refunded; preparing+ → 422; FE modal/toasts.  
-**Регрессия:** cancel+Tbank+creator **81/223 PASS** · JS **19/19** · §2.3 **2/5** (2 skips).  
-**Дальше:** push + fly deploy + MCP на тестовом TerminalKey (явный апрув).
+**Дальше:** апрув заказчика «ок»; опционально live Cancel на тестовом paid `accepted`.
 
 ### Order ready cascade WS/Push/Wallet→SMS (#39 v2) — 2026-08-04
 
@@ -24,7 +24,7 @@
 |-----|--------|
 | Intake / SPEC / GREEN rewrite / REVIEW | **`[x]`** |
 | Push develop | **`[x]`** `7b4ff49f` |
-| Fly deploy | **`[x]`** **v427** |
+| Fly deploy | **`[x]`** **v427** (superseded by v428 for #40) |
 | MCP cascade SMS | **PASS** · `#202608-0005` → `sms:sent` · TG=0 · presence skip OK |
 | SMS_RU secrets on Fly | **`[ ]`** (fallback log-only) |
 
