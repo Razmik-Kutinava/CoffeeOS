@@ -2,13 +2,19 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-08-04 (#40 intake · #39 v2 Fly v427)
+**Дата:** 2026-08-04 (#40 SPEC · #39 v2 Fly v427)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#40** T-Bank auto refund on PWA cancel — **PHASE 0 intake `[x]`** | **go** → PHASE 1: SPEC |
-| **#39 v2** Fly **v427** · cascade SMS MCP **PASS** | апрув заказчика; SMS_RU secrets опционально |
+| **#40** T-Bank auto refund — PHASE 0+SPEC **`[x]`** · todo шаги 1–7 | **go** → RED шаг 1 (`cancel_payment`) |
+| **#39 v2** Fly **v427** · cascade SMS MCP **PASS** | апрув заказчика |
 | Live Fly | **v427** |
+
+### Сессия 2026-08-04 (PHASE 1 SPEC · #40)
+
+- `todo.md` — маппинг RSpec/React → Minitest/Svelte; есть GuestCancel API без `/v2/Cancel`
+- Отклонения: pending journal→failed; CTA «Чат»→«Написать в поддержку»; adapter 260 строк
+- Код не писали; дальше RED шаг 1
 
 ### Сессия 2026-08-04 (PHASE 0 intake · #40 T-Bank auto refund)
 

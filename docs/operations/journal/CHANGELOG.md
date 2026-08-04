@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-08-04 — docs: SPEC #40 T-Bank auto refund on PWA cancel
+
+- PHASE 1: `todo.md` шаги 1–7 · маппинг Minitest/Svelte
+- Канон: GuestCancel API есть; `/v2/Cancel` + modal/toasts — нет
+- Код не писали; дальше RED шаг 1
+
 ## 2026-08-04 — docs: intake #40 T-Bank auto refund on PWA cancel
 
 - PHASE 0: ТЗ 1:1 `Автоматический возврат платежа Т-Банк при отмене заказа в PWA.md`
