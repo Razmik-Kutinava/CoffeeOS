@@ -6,9 +6,13 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#40** шаги 1–5 GREEN `[x]` · CTA labels | **go** → RED шаг 6 (confirm modal) |
+| **#40** шаги 1–5 GREEN · **RED шаг 6** cancel modal (module missing) | **go** → GREEN шаг 6 |
 | **#39 v2** Fly **v427** | апрув заказчика |
 | Live Fly | **v427** |
+
+### Сессия 2026-08-04 (RED шаг 6 · #40 cancel modal)
+
+- `order_cancel_flow_test.mjs` — ERR_MODULE_NOT_FOUND `orderCancelFlow.js` (намеренно)
 
 ### Сессия 2026-08-04 (GREEN шаг 5 · #40 UI CTA)
 
