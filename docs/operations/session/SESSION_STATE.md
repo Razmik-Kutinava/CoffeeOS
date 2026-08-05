@@ -6,9 +6,14 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#41** GREEN 1–5 `[x]` · **RED шаг 6** sticky cancel (падающий тест) | **go → GREEN шаг 6** |
+| **#41** GREEN шаги 1–6 **`[x]`** | **go → RED шаг 7** (mobile touch 44px) |
 | **#40** MCP modal accepted **`[x]`** · Fly **v428** | апрув «ок» |
 | Live Fly | **v428** |
+
+### Сессия 2026-08-05 (GREEN шаг 6 · #41 sticky cancel)
+
+- `stickyOrderCancel.js` + OrderCancelModal в OrderStatusSheet + paid modal gate
+- cancel/cable/action → **27/27 PASS**
 
 ### Сессия 2026-08-05 (RED шаг 6 · #41 sticky cancel)
 

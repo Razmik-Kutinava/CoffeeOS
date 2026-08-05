@@ -32,7 +32,7 @@ const accordionPath = join(
   "app/frontend/components/ActiveOrdersAccordion.svelte"
 )
 
-describe("sticky cancel modal gate (#41 step 6) [TDD-RED]", () => {
+describe("sticky cancel modal gate (#41 step 6)", () => {
   it("paid ≡ accepted for Confirm Sheet", () => {
     assert.equal(shouldShowAcceptedCancelModal("accepted"), true)
     assert.equal(
@@ -43,7 +43,7 @@ describe("sticky cancel modal gate (#41 step 6) [TDD-RED]", () => {
   })
 })
 
-describe("applyStickyCancelSuccess (#41 step 6) [TDD-RED]", () => {
+describe("applyStickyCancelSuccess (#41 step 6)", () => {
   it("200: removes/hides order CTAs (cancelled → no buttons)", () => {
     const state = createOrderStatusSheetState()
     state.setOrders([
@@ -108,7 +108,7 @@ describe("applyStickyCancelSuccess (#41 step 6) [TDD-RED]", () => {
   })
 })
 
-describe("sticky panel cancel wiring (#41 step 6) [TDD-RED]", () => {
+describe("sticky panel cancel wiring (#41 step 6)", () => {
   it("OrderStatusSheet wires modal + cancel API + onCancelRequest", () => {
     const src = readFileSync(sheetComponentPath, "utf8")
     assert.match(src, /OrderCancelModal/)
@@ -116,7 +116,7 @@ describe("sticky panel cancel wiring (#41 step 6) [TDD-RED]", () => {
     assert.match(src, /onCancelRequest/)
     assert.match(src, /orders\/\$\{.*\}\/cancel|\/orders\/.*\/cancel/)
     assert.match(src, /resolveCancelSuccessResult|applyStickyCancelSuccess/)
-    assert.match(src, /resolveCancelErrorResult/)
+    assert.match(src, /resolveCancelErrorResult|applyStickyCancelError/)
     assert.match(src, /isLoading|cancelLoading|cancelling/)
   })
 

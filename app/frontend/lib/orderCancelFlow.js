@@ -42,7 +42,8 @@ export function buildAcceptedCancelModalCopy(opts = {}) {
  * @returns {boolean}
  */
 export function shouldShowAcceptedCancelModal(status) {
-  return String(status || "") === "accepted"
+  const s = String(status || "")
+  return s === "accepted" || s === "paid"
 }
 
 /**

@@ -129,11 +129,12 @@ Chat/Tips → openSupportChat / openTipsService (URL или console pending)
 - **GREEN:** `orderStatusSheet.applyCableEvent` мержит `can_cancel`; accordion `$derived` status → OrderActionButtons
 - Тест: cable + sheet + order_action → **25/25 PASS**
 
-### Шаг 6 — Cancel flow в sticky-панели `[ ]` · RED `in_progress`
+### Шаг 6 — Cancel flow в sticky-панели `[x]` · GREEN
 
-- **RED:** `order_action_buttons_cancel_test.mjs` — Confirm Sheet + `applyStickyCancelSuccess` + sheet wiring; **FAIL** `ERR_MODULE_NOT_FOUND` `stickyOrderCancel.js` (+ later: `paid` modal gate, OrderStatusSheet wire)
-- **GREEN:** `stickyOrderCancel.js` + `OrderCancelModal` в `OrderStatusSheet`; `shouldShowAcceptedCancelModal('paid')`; переиспользовать `orderCancelFlow` / API cancel
-- BE не менять (уже #40)
+- **RED:** `order_action_buttons_cancel_test.mjs` — Confirm Sheet + `applyStickyCancelSuccess` + sheet wiring
+- **GREEN:** `stickyOrderCancel.js` + `OrderCancelModal` в `OrderStatusSheet`; `shouldShowAcceptedCancelModal('paid')`; API cancel + toast
+- Тест: cancel sticky + #40 cancel flow + cable/action → **27/27 PASS**
+- BE не меняли
 
 ### Шаг 7 — Mobile touch targets `[ ]`
 

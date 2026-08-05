@@ -1,5 +1,5 @@
 <script>
-  /** #35 sticky peek + #36 accordion/чек; pointer-events: каталог не блокируется. */
+  /** #35 sticky peek + #36 accordion + #41 cancel Confirm Sheet. */
   import { onMount } from "svelte"
   import { push } from "svelte-spa-router"
   import { api } from "../lib/api.js"
@@ -17,7 +17,16 @@
   import { subscribeGuestOrderStatus } from "../lib/shopOrderCable.js"
   import { guestReconnectToken } from "../lib/shopGuestSession.js"
   import ActiveOrdersAccordion from "./ActiveOrdersAccordion.svelte"
+  import OrderCancelModal from "./OrderCancelModal.svelte"
   import { refreshFrequentProducts } from "../lib/frequentRepeatStore.js"
+  import {
+    buildAcceptedCancelModalCopy,
+    shouldShowAcceptedCancelModal
+  } from "../lib/orderCancelFlow.js"
+  import {
+    applyStickyCancelSuccess,
+    applyStickyCancelError
+  } from "../lib/stickyOrderCancel.js"
 
   /** true — секция внутри CartSheet (не fixed overlay поверх шторки) */
   let { embedded = true } = $props()
@@ -29,6 +38,17 @@
   let accordionState = $state(createActiveOrdersAccordionState([]))
   let unsubs = []
   let connectionLost = false
+
+  let cancelModalOpen = $state(false)
+  let cancelLoading = $state(false)
+  let cancelTarget = $state(null)
+  let cancelToast = $state("")
+  let cancelModalCopy = $state({
+    title: "",
+    body: "",
+    confirmLabel: "",
+    dismissLabel: "Оставить заказ"
+  })
 
   function sync() {
     orders = sheet.orders
@@ -95,6 +115,48 @@
     }
   }
 
+  function onCancelRequest(order) {
+    if (cancelLoading || !order?.can_cancel) return
+    cancelTarget = order
+    cancelToast = ""
+    if (shouldShowAcceptedCancelModal(order.status)) {
+      cancelModalCopy = buildAcceptedCancelModalCopy({
+        orderNumber: order.order_number || order.orderNumber,
+        amount: order.total_amount ?? order.totalAmount
+      })
+      cancelModalOpen = true
+      return
+    }
+    performStickyCancel(order)
+  }
+
+  async function performStickyCancel(order) {
+    const target = order || cancelTarget
+    const orderId = target?.id || target?.order_id
+    if (!orderId || cancelLoading) return
+    if (!target?.can_cancel) return
+
+    cancelLoading = true
+    cancelToast = ""
+    try {
+      const updated = await api(`/orders/${orderId}/cancel`, { method: "POST" })
+      const outcome = applyStickyCancelSuccess(sheet, updated)
+      cancelToast = outcome.toast
+      cancelModalOpen = false
+      cancelTarget = null
+      refreshFrequentProducts()
+      sync()
+    } catch (e) {
+      const outcome = applyStickyCancelError(sheet, orderId, e)
+      cancelToast = outcome.toast
+      cancelModalOpen = false
+      cancelTarget = null
+      sync()
+    } finally {
+      cancelLoading = false
+    }
+  }
+
   onMount(() => {
     refreshActive()
     const onOnline = () => refreshActive()
@@ -134,11 +196,15 @@
       {#if connection === "lost"}
         <p class="oss__conn">Потеряно соединение…</p>
       {/if}
+      {#if cancelToast}
+        <p class="oss__toast" data-testid="sticky-cancel-toast" role="status">{cancelToast}</p>
+      {/if}
       {#each orders as order (order.id || order.order_id)}
         <ActiveOrdersAccordion
           {order}
           bind:accordionState
           onOpenDetail={(o) => push(`/order/${o.id || o.order_id}`)}
+          onCancelRequest={onCancelRequest}
         />
       {/each}
       {#if scrollable}
@@ -147,6 +213,21 @@
     </div>
   </div>
 {/if}
+
+<OrderCancelModal
+  open={cancelModalOpen}
+  title={cancelModalCopy.title}
+  body={cancelModalCopy.body}
+  confirmLabel={cancelModalCopy.confirmLabel}
+  dismissLabel={cancelModalCopy.dismissLabel}
+  confirming={cancelLoading}
+  onConfirm={() => performStickyCancel(cancelTarget)}
+  onDismiss={() => {
+    if (cancelLoading) return
+    cancelModalOpen = false
+    cancelTarget = null
+  }}
+/>
 
 <style>
   /* Legacy overlay (embedded=false) — не использовать на витрине */
@@ -200,6 +281,12 @@
     max-height: min(50vh, 22rem);
   }
   .oss__conn { margin: 0 0 0.25rem; font-size: 0.65rem; color: #f0c070; }
+  .oss__toast {
+    margin: 0 0 0.35rem;
+    font-size: 0.68rem;
+    color: #a5d6a7;
+    line-height: 1.3;
+  }
   .oss__scroll-hint {
     position: sticky;
     bottom: 0;
