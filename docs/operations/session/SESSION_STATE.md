@@ -2,13 +2,20 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-08-05 (#35 rev · Fly v432 MCP)
+**Дата:** 2026-08-05 (#42 stuck sheet unblock · local GREEN)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#35 rev** push+deploy **v432** · MCP home/product/scroll **PASS** | апрув заказчика; optional barista→ready smoke |
-| **#41** CBR **`[x]`** · MCP v429+v431 cancel PASS | — |
-| Live Fly | **v432** |
+| **#42** TTL 24h + peek height — тесты PASS | push/deploy/MCP чтобы Арам мог тестить |
+| **#35 rev** Fly **v432** MCP home/product PASS | апрув; optional ready-smoke |
+| Live Fly | **v432** (ещё без #42) |
+
+### Сессия 2026-08-05 (GREEN · #42 stuck orders sheet)
+
+- Intake: `Зависшие заказы в статусной шторке…` + CBR #42
+- BE: `ACTIVE_ORDERS_WINDOW = 24.hours` на `#active`
+- FE: peek `min(22vh, 8.5rem)`
+- Тесты 11/11 PASS · deploy ждёт апрув
 
 ### Сессия 2026-08-05 (push/deploy/MCP · #35 rev)
 

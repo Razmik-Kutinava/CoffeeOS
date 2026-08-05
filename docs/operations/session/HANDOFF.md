@@ -1,8 +1,21 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-08-05 (**#35 rev** push/deploy/MCP · **#41** закрыта)  
+**Дата:** 2026-08-05 (**#42** local GREEN · **#35** v432)  
 **Ветка:** `develop`  
-**Прод:** https://coffeeos.fly.dev (**v432**)
+**Прод:** https://coffeeos.fly.dev (**v432** — без #42 до deploy)
+
+### Stuck orders sheet blocks payment (#42) — 2026-08-05
+
+| Что | Статус |
+|-----|--------|
+| Intake | **`[x]`** |
+| TTL 24h + peek height | **`[x]`** local tests PASS |
+| Push / Fly / MCP | **`[ ]`** |
+
+**ТЗ:** [`Зависшие заказы…`](../milestones/veha_2/requirements/customer_tasks/Зависшие%20заказы%20в%20статусной%20шторке%20PWA%20блокируют%20оплату.md)  
+**Суть:** June `#202606-*` вечно в шторке → пол экрана; на табло нет (фильтр смены).  
+**Фикс:** `orders/active` ≥ 24h + peek `min(22vh,8.5rem)`. FAQ payment statuses в ТЗ.  
+**Дальше:** push + deploy + MCP.
 
 ### Order status compact sheet + Push #35 — ревизия ТЗ (2026-08-05)
 

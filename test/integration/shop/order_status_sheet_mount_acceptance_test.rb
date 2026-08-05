@@ -60,4 +60,11 @@ class Shop::OrderStatusSheetMountAcceptanceTest < ActionDispatch::IntegrationTes
     assert_includes sheet, "shouldScrollStatusList(orders)"
     assert_match(/\{#if\s+scrollable\}[\s\S]*oss__scroll-hint/, sheet)
   end
+
+  test "#42 embedded peek max-height capped so sheet does not cover payment" do
+    sheet = File.read(Rails.root.join("app/frontend/components/OrderStatusSheet.svelte"))
+
+    assert_includes sheet, "max-height: min(22vh, 8.5rem)"
+    refute_includes sheet, "max-height: min(40vh, 16rem)"
+  end
 end

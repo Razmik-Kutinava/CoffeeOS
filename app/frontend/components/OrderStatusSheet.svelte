@@ -270,7 +270,8 @@
     border-top: none;
     border-bottom: 1px solid #3a3a3a;
     background: transparent;
-    max-height: min(40vh, 16rem);
+    /* #42: не перекрывать оплату / каталог при multi-order */
+    max-height: min(22vh, 8.5rem);
   }
   .oss__panel.scrollable { overflow-y: auto; }
   .oss__panel.expanded {
@@ -278,7 +279,7 @@
     overflow-y: auto;
   }
   .oss__panel.embedded.expanded {
-    max-height: min(50vh, 22rem);
+    max-height: min(36vh, 14rem);
   }
   .oss__conn { margin: 0 0 0.25rem; font-size: 0.65rem; color: #f0c070; }
   .oss__toast {

@@ -137,6 +137,9 @@ module Shop
       end
 
       # #35 A3 + #36 A1/A2 — активные заказы: status sheet + чек (items/mods/totals)
+      # #42: только «свежие» — иначе June accepted залипают и перекрывают оплату.
+      ACTIVE_ORDERS_WINDOW = 24.hours
+
       def active
         cid = Shop::CustomerSession.customer_id(session, @shop_tenant.id)
         if cid.blank?
@@ -150,7 +153,8 @@ module Shop
           # #35: статусная карточка в PWA видна только в процессе готовки.
           # После перехода в `ready` виджет должен исчезать, поэтому `ready` исключаем.
           status: %w[accepted preparing]
-        ).includes(:order_items).order(created_at: :desc)
+        ).where("orders.created_at >= ?", ACTIVE_ORDERS_WINDOW.ago)
+          .includes(:order_items).order(created_at: :desc)
 
         render json: {
           orders: Shop::ActiveOrdersPresenter.list(orders, tenant: @shop_tenant)

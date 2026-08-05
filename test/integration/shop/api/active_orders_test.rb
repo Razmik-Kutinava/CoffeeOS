@@ -100,4 +100,39 @@ class Shop::Api::ActiveOrdersTest < ActionDispatch::IntegrationTest
       assert_equal [], orders
     end
   end
+
+  test "#42 GET orders/active excludes stale accepted older than 24h" do
+    stale = Order.create!(
+      tenant_id: @tenant.id,
+      customer_id: @customer.id,
+      customer_name: "Stale June",
+      order_number: "202606-0259",
+      source: :mobile,
+      status: :accepted,
+      total_amount: 3,
+      discount_amount: 0,
+      final_amount: 3,
+      created_at: 40.days.ago,
+      updated_at: 40.days.ago
+    )
+    fresh = Order.create!(
+      tenant_id: @tenant.id,
+      customer_id: @customer.id,
+      customer_name: "Fresh Today",
+      order_number: "202608-4201",
+      source: :mobile,
+      status: :accepted,
+      total_amount: 179,
+      discount_amount: 0,
+      final_amount: 179
+    )
+    verify_shop_email!(tenant_id: @tenant.id, email: @email)
+
+    get "/shop/api/orders/active", headers: shop_tenant_headers(@tenant.id), as: :json
+
+    assert_response :success
+    ids = response.parsed_body["orders"].map { |o| o["id"] }
+    assert_includes ids, fresh.id
+    assert_not_includes ids, stale.id
+  end
 end

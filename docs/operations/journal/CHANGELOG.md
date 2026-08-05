@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-08-05 — feat: #42 TTL active orders + peek height (unblock payment)
+- `orders/active`: только заказы за последние **24h** (June accepted больше не залипают в шторке)
+- OrderStatusSheet embedded peek: `min(22vh, 8.5rem)` — не перекрывает оплату
+- Intake + FAQ payment `processing`/`succeeded` в customer_tasks
+- Тесты: active_orders + mount acceptance PASS
+
 ## 2026-08-05 — deploy: #35 rev status sheet hide-ready + product · Fly v432 MCP PASS
 - Push `38df5088` · Fly **v432** · `deployment-01KZ8W88G4HC0YK291M3FM011G`
 - Live: `orders/active` без ready · sheet на home + `#/product` · scroll >2
