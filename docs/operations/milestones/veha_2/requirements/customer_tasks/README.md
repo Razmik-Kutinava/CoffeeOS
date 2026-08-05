@@ -40,6 +40,7 @@
 | **Order ready cascade WS→TG→SMS (v1)** | v1 с Telegram — **SUPERSEDED** | superseded 2026-08-04 | [Оптимизированный каскад… Telegram SMS.md](Оптимизированный%20каскад%20уведомлений%20Заказ%20готов%20PWA%20WS%20Push%20Telegram%20SMS.md) |
 | **Order ready cascade WS/Push/Wallet→SMS** | Каскад «Заказ готов»: WS + Push/Wallet → presence → SMS.ru (≤70), без TG | **Fly v427 MCP SMS PASS `[x]`** 2026-08-04 · апрув `[ ]` | [Каскад уведомлений Заказ готов PWA WS Push WebPush Apple Wallet SMS.md](Каскад%20уведомлений%20Заказ%20готов%20PWA%20WS%20Push%20WebPush%20Apple%20Wallet%20SMS.md) |
 | **T-Bank auto refund on PWA cancel** | Автовозврат 100% через `/v2/Cancel` при отмене заказа гостем в PWA | **REVIEW `[x]`** 2026-08-04 · MCP/deploy `[ ]` | [Автоматический возврат платежа Т-Банк при отмене заказа в PWA.md](Автоматический%20возврат%20платежа%20Т-Банк%20при%20отмене%20заказа%20в%20PWA.md) |
+| **Order action buttons status panel** | Динамический блок CTA справа от progress bar (Отмена / Чат / Чаевые / Push\|Wallet) | **интейк `[x]`** 2026-08-05 · SPEC `[ ]` ждёт go | [Динамический блок действий Action Buttons в статусной панели заказа.md](Динамический%20блок%20действий%20Action%20Buttons%20в%20статусной%20панели%20заказа.md) |
 
 **Порядок работ:** апрув ТЗ Hidden → **go** код · новое ТЗ UserCards (после `go`) · **B1.13 S4** · **B1.14-4** · **B2.2** · **B1.4**.
 

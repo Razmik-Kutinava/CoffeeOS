@@ -2,13 +2,21 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-08-04 (#40 Fly v428 · MCP PASS)
+**Дата:** 2026-08-05 (#41 intake · #40 Fly v428)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#40** MCP modal accepted **`[x]`** · Fly **v428** | апрув «ок»; опц. live Cancel; **след. задача** — выбрать (см. HANDOFF) |
+| **#41** Order action buttons — **PHASE 0 intake `[x]`** | **go → PHASE 1: SPEC** (todo + маппинг Svelte) |
+| **#40** MCP modal accepted **`[x]`** · Fly **v428** | апрув «ок»; опц. live Cancel |
 | **#39 v2** cascade SMS | апрув заказчика |
 | Live Fly | **v428** |
+
+### Сессия 2026-08-05 (PHASE 0 intake · #41 Action Buttons)
+
+- ТЗ 1:1: `customer_tasks/Динамический блок действий Action Buttons в статусной панели заказа.md`
+- Артефакты: `order_action_buttons_status_panel/` + макет `screenshots/01_mockup_…png`
+- CBR #41 · customer_tasks README · код не трогали
+- Дальше: PHASE 1 SPEC (маппинг React/TS/Jest → Svelte + node:test; шаги 1–7)
 
 ### Сессия 2026-08-05 (MCP accepted modal · #40)
 

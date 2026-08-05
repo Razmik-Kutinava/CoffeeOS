@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-08-05 — docs: intake #41 Order action buttons status panel
+
+- PHASE 0: ТЗ 1:1 `Динамический блок действий Action Buttons в статусной панели заказа.md`
+- Артефакты: `order_action_buttons_status_panel/` + макет плейсхолдеров CTA
+- CBR #41 · код не трогали; ждём go → SPEC
+
 ## 2026-08-05 — docs: #40 MCP accepted cancel modal on Fly v428
 
 - MCP: `#202608-0006` accepted → modal (179 ₽) → confirm → cancelled + toast
