@@ -27,6 +27,7 @@ class Shop::GuestOrderBroadcasterSheetContractTest < ActionCable::Channel::TestC
       "type" => "status_changed",
       "order_id" => @order.id,
       "status" => "preparing",
+      "can_cancel" => false,
       "payment_settled" => true,
       "old_status" => "accepted",
       "order_number" => "202607-3501"
