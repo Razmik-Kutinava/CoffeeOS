@@ -1,5 +1,5 @@
 /**
- * #38 / #40 — PWA CTA state machine карточки заказа (макс. 2 кнопки).
+ * #38 / #40 / #41 — PWA CTA state machine карточки заказа (макс. 2 кнопки).
  */
 
 import { CTA_STYLE } from "./orderStatusNotifyActions.js"
@@ -9,17 +9,18 @@ export { CTA_STYLE }
 const LABELS = Object.freeze({
   cancel: "Отменить заказ",
   cancelHintAccepted: "Вернем 100% суммы",
-  push: "🔔 Уведомление о готовности",
-  wallet: "Карта в Apple Wallet",
-  chat: "Написать в поддержку",
-  tips: "Чаевые"
+  push: "Включить Push",
+  wallet: "Добавить в Wallet",
+  chat: "Чат с поддержкой",
+  tips: "Оставить чаевые"
 })
 
 /**
  * @param {{
  *   status?: string,
  *   os?: "ios"|"android"|"desktop",
- *   canCancel?: boolean
+ *   canCancel?: boolean,
+ *   hasPushSubscription?: boolean
  * }} opts
  * @returns {{
  *   buttons: Array<{ kind: string, label: string, hint?: string }>,
@@ -27,11 +28,13 @@ const LABELS = Object.freeze({
  * }}
  */
 export function orderStatusCtas(opts = {}) {
-  const status = String(opts.status || "")
+  let status = String(opts.status || "")
+  if (status === "paid") status = "accepted"
+
   const os = opts.os || "desktop"
   const canCancel = Boolean(opts.canCancel)
+  const hasPushSubscription = Boolean(opts.hasPushSubscription)
   const notifyKind = os === "ios" ? "wallet" : "push"
-  const secondaryKind = os === "ios" ? "wallet" : "tips"
 
   /** @type {Array<{ kind: string, label: string, hint?: string }>} */
   let buttons = []
@@ -51,7 +54,11 @@ export function orderStatusCtas(opts = {}) {
     buttons.push({ kind: notifyKind, label: LABELS[notifyKind] })
   } else if (status === "preparing" || status === "ready") {
     buttons.push({ kind: "chat", label: LABELS.chat })
-    buttons.push({ kind: secondaryKind, label: LABELS[secondaryKind] })
+    if (hasPushSubscription) {
+      buttons.push({ kind: "tips", label: LABELS.tips })
+    } else {
+      buttons.push({ kind: notifyKind, label: LABELS[notifyKind] })
+    }
   }
 
   if (buttons.length > 2) buttons = buttons.slice(0, 2)

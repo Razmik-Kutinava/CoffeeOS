@@ -136,7 +136,7 @@ describe("orderStatusCtas (#38 / #40 step 5)", () => {
   })
 })
 
-describe("orderStatusCtas (#41 step 3 ButtonMapper) [TDD-RED]", () => {
+describe("orderStatusCtas (#41 step 3 ButtonMapper)", () => {
   it("paid ≡ accepted: cancel + Wallet (ios)", () => {
     const view = orderStatusCtas({
       status: "paid",

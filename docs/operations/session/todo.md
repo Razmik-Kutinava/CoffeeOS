@@ -107,14 +107,14 @@ Chat/Tips → openSupportChat / openTipsService (URL или console pending)
   - URL → `window.open`; иначе log `[Tips Integration Pending] Order: …`
 - Тест: `node --test test/javascript/tips_adapter_test.mjs` → **3/3 PASS** (+ chat 3/3 регрессия)
 
-### Шаг 3 — ButtonMapper (`orderStatusCtas`) `[ ]` · RED `in_progress`
+### Шаг 3 — ButtonMapper (`orderStatusCtas`) `[x]` · GREEN
 
 - **RED:** `order_status_cta_machine_test.mjs` — матрица #41 + `hasPushSubscription` + `paid` ≡ `accepted` + labels; **10 fail / 6 pass** (намеренно)
 - **GREEN:** `orderStatusCtaMachine.js`
   - max 2; labels #41
   - edge `!hasPushSubscription` → btn2 notify (push/wallet) до ready включительно
   - `paid` ≡ `accepted` для матрицы
-- Регрессия: существующие #40 кейсы (hint 100%, preparing chat) — обновить labels, не ломать kinds
+- Тест: CTA machine + adapters + cancel flow → **PASS** (cta 16 + adapters 6 + cancel 9)
 
 ### Шаг 4 — Статический рендер `OrderActionButtons` `[ ]`
 

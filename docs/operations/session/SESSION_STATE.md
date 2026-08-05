@@ -6,9 +6,14 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#41** GREEN 1–2 `[x]` · **RED шаг 3** ButtonMapper (10 fail / 6 pass) | **go → GREEN шаг 3** |
+| **#41** GREEN шаги 1–3 **`[x]`** (Chat + Tips + ButtonMapper) | **go → RED шаг 4** (OrderActionButtons render) |
 | **#40** MCP modal accepted **`[x]`** · Fly **v428** | апрув «ок» |
 | Live Fly | **v428** |
+
+### Сессия 2026-08-05 (GREEN шаг 3 · #41 ButtonMapper)
+
+- `orderStatusCtaMachine.js`: labels #41, `paid`→accepted, `hasPushSubscription` edge
+- cta+adapters+cancel → **PASS**
 
 ### Сессия 2026-08-05 (RED шаг 3 · #41 ButtonMapper)
 
