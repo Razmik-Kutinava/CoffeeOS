@@ -6,9 +6,14 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#41** SPEC `[x]` · **RED шаг 1** SupportChatAdapter (падающий тест) | **go → GREEN шаг 1** |
+| **#41** GREEN шаг 1 SupportChatAdapter **`[x]`** | **go → RED шаг 2** (TipsAdapter) |
 | **#40** MCP modal accepted **`[x]`** · Fly **v428** | апрув «ок» |
 | Live Fly | **v428** |
+
+### Сессия 2026-08-05 (GREEN шаг 1 · #41 SupportChatAdapter)
+
+- `app/frontend/lib/supportChatAdapter.js` — `openSupportChat`
+- `node --test test/javascript/support_chat_adapter_test.mjs` → **3/3 PASS**
 
 ### Сессия 2026-08-05 (RED шаг 1 · #41 SupportChatAdapter)
 
