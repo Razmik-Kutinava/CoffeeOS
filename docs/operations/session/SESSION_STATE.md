@@ -6,9 +6,14 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#41** GREEN шаги 1–4 **`[x]`** (adapters + mapper + OrderActionButtons) | **go → RED шаг 5** (Cable CTA swap) |
+| **#41** GREEN 1–4 `[x]` · **RED шаг 5** Cable CTA (2 fail / 4 pass) | **go → GREEN шаг 5** |
 | **#40** MCP modal accepted **`[x]`** · Fly **v428** | апрув «ок» |
 | Live Fly | **v428** |
+
+### Сессия 2026-08-05 (RED шаг 5 · #41 Cable CTA)
+
+- `order_action_buttons_cable_test.mjs`: swap kinds OK; **fail** `can_cancel` merge в `applyCableEvent`
+- CHANGELOG/HANDOFF не трогали
 
 ### Сессия 2026-08-05 (GREEN шаг 4 · #41 OrderActionButtons)
 
