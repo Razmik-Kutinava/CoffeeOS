@@ -1,5 +1,12 @@
 ﻿# CHANGELOG
 
+## 2026-08-05 — feat: #41 Order action buttons status panel [REVIEW]
+
+- FE: `OrderActionButtons` + `orderStatusCtas(+hasPushSubscription)` + SupportChat/Tips adapters
+- Sticky: cable `can_cancel` merge; cancel Confirm Sheet + `stickyOrderCancel`; touch 44px `#ff6b35`
+- Регрессия JS зона #41: **95/95 PASS**
+- Deploy/MCP — не делали
+
 ## 2026-08-05 — docs: SPEC #41 Order action buttons status panel
 
 - PHASE 1: `todo.md` шаги 1–7 · маппинг Svelte/node:test · цель sticky accordion RIGHT

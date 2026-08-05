@@ -2,8 +2,19 @@
 
 **ТЗ:** [`customer_tasks/Динамический блок действий Action Buttons в статусной панели заказа.md`](../milestones/veha_2/requirements/customer_tasks/Динамический%20блок%20действий%20Action%20Buttons%20в%20статусной%20панели%20заказа.md)  
 **Артефакты:** [`artifacts/order_action_buttons_status_panel/`](../milestones/veha_2/artifacts/order_action_buttons_status_panel/)  
-**Фаза:** PHASE 0 `[x]` · SPEC **`[x]`** · RED/GREEN 1–7 **`[x]`** · REVIEW `[ ]` · MCP/deploy `[ ]`  
+**Фаза:** PHASE 0 `[x]` · SPEC **`[x]`** · RED/GREEN 1–7 **`[x]`** · REVIEW **`[x]`** · MCP/deploy `[ ]`  
 **CBR:** #41
+
+---
+
+## PHASE 3: REVIEW (2026-08-05)
+
+| Проверка | Результат |
+|----------|-----------|
+| FE #41 зона (cta/cancel/notify/accordion/adapters/action/cable/mobile/sheet/wallet/push) | **95 runs / 0 fail PASS** |
+| N+1 / RLS | не затронуты (только FE sticky CTA) |
+| Progress bar структура | не менялась |
+| MCP / Fly deploy | **`[ ]`** ждёт апрув |
 
 ---
 

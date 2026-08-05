@@ -2,13 +2,18 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-08-05 (#41 SPEC · #40 Fly v428)
+**Дата:** 2026-08-05 (#41 REVIEW · #40 Fly v428)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#41** GREEN шаги 1–7 **`[x]`** | **go → PHASE 3: REVIEW** |
+| **#41** REVIEW **`[x]`** · JS **95/95 PASS** | push + fly deploy + MCP (по апруву) |
 | **#40** MCP modal accepted **`[x]`** · Fly **v428** | апрув «ок» |
-| Live Fly | **v428** |
+| Live Fly | **v428** (без #41) |
+
+### Сессия 2026-08-05 (PHASE 3 REVIEW · #41)
+
+- Регрессия FE зона #41: **95 runs / 0 fail PASS**
+- CHANGELOG/HANDOFF/todo sync; MCP/deploy ждут апрув
 
 ### Сессия 2026-08-05 (GREEN шаг 7 · #41 mobile 44px)
 
