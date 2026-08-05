@@ -7,7 +7,7 @@
 | Сейчас | Дальше |
 |--------|--------|
 | **#35 rev** ТЗ + 5 скринов обновлены · SPEC в `todo.md` | RED/GREEN: hide on `ready`, product route |
-| **#41** CBR **`[x]`** · MCP v429 | — |
+| **#41** CBR **`[x]`** · MCP v429+v431 cancel PASS | — |
 
 ### Сессия 2026-08-05 (PHASE 0 + SPEC · #35 rev)
 
@@ -15,6 +15,13 @@
 - Скрины `01–05` заменены в `artifacts/order_status_compact_sheet_push/screenshots/`
 - SPEC: 8 дельт vs код v414 (главное: `orders/active` без ready; mount на `#/product`)
 - Код не трогали
+
+### Сессия 2026-08-05 (cancel MCP + fix can_cancel · #41)
+
+- **Фикс:** `ActiveOrdersPresenter` + `GuestOrderBroadcaster` → `can_cancel`
+- Fly **v431** deploy · MCP PASS: cancel CTA `#ff6b35`/44px + Confirm Sheet «Вернём 179 ₽…»
+- Тест: `test/integration/shop/api/active_orders_test.rb` — **3/3 PASS**
+- ISSUES Fly LB 503 → **resolved**
 
 ### Сессия 2026-08-05 (CBR ок + cancel MCP attempt · #41)
 

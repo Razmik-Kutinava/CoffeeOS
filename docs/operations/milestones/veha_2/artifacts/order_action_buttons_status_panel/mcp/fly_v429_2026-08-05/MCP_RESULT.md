@@ -39,5 +39,6 @@ Live viewport (Chrome DevTools `take_screenshot`) в чате сессии: stic
 
 ## Gaps / notes
 
-- Cancel CTA + accepted cancel modal — не в этой выборке active (ready-only); покрыто unit/integration + #40 MCP на v428.  
-- Cable reconnect banner виден; CTAs всё равно рендерятся.
+- **Cancel CTA live (2026-08-05 follow-up):** закрыто на **v431** — см. [`../fly_v431_2026-08-05/`](../fly_v431_2026-08-05/).
+- Cable reconnect banner виден; CTAs chat/push рендерятся при живой сессии.
+- **CBR:** апрув «ок» владельца 2026-08-05 → задача **закрыта `[x]`**.

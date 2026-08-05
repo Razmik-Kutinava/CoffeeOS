@@ -64,6 +64,30 @@ class Shop::Api::ActiveOrdersTest < ActionDispatch::IntegrationTest
     preparing = orders.find { |o| (o["id"] || o["order_id"]) == @active.id }
     assert_equal "preparing", preparing["status"]
     assert preparing.key?("order_number")
+    assert_equal false, preparing["can_cancel"]
+  end
+
+  test "#41 GET orders/active includes can_cancel for accepted guest orders" do
+    accepted = Order.create!(
+      tenant_id: @tenant.id,
+      customer_id: @customer.id,
+      customer_name: "Accepted",
+      order_number: "202608-4101",
+      source: :mobile,
+      status: :accepted,
+      total_amount: 179,
+      discount_amount: 0,
+      final_amount: 179
+    )
+    verify_shop_email!(tenant_id: @tenant.id, email: @email)
+
+    get "/shop/api/orders/active", headers: shop_tenant_headers(@tenant.id), as: :json
+
+    assert_response :success
+    orders = response.parsed_body["orders"]
+    row = orders.find { |o| o["id"] == accepted.id }
+    assert_equal true, row["can_cancel"]
+    assert_equal "accepted", row["status"]
   end
 
   test "#35 GET orders/active without session returns empty or unauthorized" do

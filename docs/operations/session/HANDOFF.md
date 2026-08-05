@@ -2,7 +2,7 @@
 
 **Дата:** 2026-08-05 (**#35 rev** intake+SPEC · **#41** закрыта)  
 **Ветка:** `develop`  
-**Прод:** https://coffeeos.fly.dev (**v429**)
+**Прод:** https://coffeeos.fly.dev (**v431**)
 
 ### Order status compact sheet + Push #35 — ревизия ТЗ (2026-08-05)
 
@@ -24,13 +24,13 @@
 |-----|--------|
 | Intake / SPEC / RED-GREEN 1–7 / REVIEW | **`[x]`** |
 | Push develop | **`[x]`** |
-| Fly deploy | **`[x]`** **v429** · `deployment-01KZ88WP8VNXVGCBZVV4QZ0NAM` |
-| MCP chat+push | **PASS** · sticky RIGHT · `#ff6b35` / 44px |
-| MCP cancel CTA live | **blocked** · Fly proxy FRA LB 503 after restart; DB `#202608-0005` → accepted+can_cancel; reconnect token ready |
+| Fly deploy | **`[x]`** **v431** · `deployment-01KZ8J3QC9JAKDRAZZMG16K6KP` |
+| MCP chat+push | **PASS** v429 |
+| MCP cancel CTA + modal | **PASS** v431 · `#202608-0005` |
 | CBR апрув «ок» | **`[x]`** 2026-08-05 |
 
-**Evidence:** [`mcp/fly_v429_2026-08-05/`](../milestones/veha_2/artifacts/order_action_buttons_status_panel/mcp/fly_v429_2026-08-05/)  
-**Дальше:** при стабильном Fly — добить cancel CTA скрин; иначе cancel покрыт #40 v428 + unit #41.
+**Evidence:** [`mcp/fly_v429_2026-08-05/`](../milestones/veha_2/artifacts/order_action_buttons_status_panel/mcp/fly_v429_2026-08-05/) · [`mcp/fly_v431_2026-08-05/`](../milestones/veha_2/artifacts/order_action_buttons_status_panel/mcp/fly_v431_2026-08-05/)  
+**Дальше:** — (#41 закрыта)
 
 ### T-Bank auto refund on PWA cancel (#40) — 2026-08-04
 

@@ -10,6 +10,7 @@ module Shop
         type: "status_changed",
         order_id: order.id,
         status: order.status,
+        can_cancel: order.guest_can_cancel?,
         payment_settled: !order.pending_payment?,
         old_status: old_status,
         order_number: order.order_number

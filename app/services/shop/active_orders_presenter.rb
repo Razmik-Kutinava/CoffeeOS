@@ -21,6 +21,7 @@ module Shop
         order_id: order.id,
         status: order.status,
         order_number: order.order_number,
+        can_cancel: order.guest_can_cancel?,
         payment_settled: !order.pending_payment?,
         created_at: order.created_at&.iso8601,
         sales_point: sales_point_json,

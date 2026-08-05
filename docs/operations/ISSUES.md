@@ -4,6 +4,12 @@
 
 ## 🔴 Блокеры
 
+[2026-08-05] — Fly coffeeos edge FRA: 503 «could not find a good candidate within 40 attempts at load balancing»
+**Статус:** **resolved** 2026-08-05 · redeploy **v430/v431** · `/up` 200 стабильно
+**Источник:** MCP #41 cancel follow-up после `fly machine restart`
+**Чем закрыли:** `fly apps restart` + повторный `fly deploy` (v431); cancel MCP PASS на v431.
+**Артефакт:** [`mcp/fly_v431_2026-08-05/`](milestones/veha_2/artifacts/order_action_buttons_status_panel/mcp/fly_v431_2026-08-05/)
+
 [2026-07-31] — Fly v415: Quick Repeat не скрыт и status sheet не на всю ширину
 **Статус:** **resolved** 2026-07-31 · Fly **v416** · re-verify **v417** MCP PASS (hide + full-width + one-open)
 **Источник:** фидбек заказчика + `artifacts/quick_repeat_bottom_sheet/screenshots/07_…png`

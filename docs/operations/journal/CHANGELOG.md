@@ -1,5 +1,12 @@
 ﻿# CHANGELOG
 
+## 2026-08-05 — fix: #41 can_cancel in orders/active + cancel MCP v431
+
+- BE: `ActiveOrdersPresenter` + `GuestOrderBroadcaster` отдают `can_cancel` для sticky CTA
+- Fly **v431** · MCP PASS cancel + accepted modal `#202608-0005`
+- Тест: `active_orders_test.rb` +1
+- CBR #41 апрув «ок» · ISSUES Fly LB resolved
+
 ## 2026-08-05 — docs: #35 rev intake+SPEC (status widget hide on ready)
 - ТЗ заказчика обновлено 1:1; 5 скринов заменены в `order_status_compact_sheet_push/screenshots/`
 - SPEC: дельта vs v414 — hide on `ready`, product route, active API без ready
