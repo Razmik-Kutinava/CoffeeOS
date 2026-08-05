@@ -52,4 +52,12 @@ class Shop::OrderStatusSheetMountAcceptanceTest < ActionDispatch::IntegrationTes
     assert_includes sheet, "connectionLost"
     assert_match(/else if \(connectionLost\)/, sheet)
   end
+
+  test "scroll hint is gated by shouldScrollStatusList (multi-order >2)" do
+    sheet = File.read(Rails.root.join("app/frontend/components/OrderStatusSheet.svelte"))
+
+    assert_includes sheet, "oss__scroll-hint"
+    assert_includes sheet, "shouldScrollStatusList(orders)"
+    assert_match(/\{#if\s+scrollable\}[\s\S]*oss__scroll-hint/, sheet)
+  end
 end
