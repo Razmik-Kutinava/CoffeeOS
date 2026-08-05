@@ -67,15 +67,12 @@ describe("notifyActionsView by OS (#37 step 2)", () => {
   })
 })
 
-describe("ActiveOrdersAccordion wires notify CTAs (#37 step 2)", () => {
-  it("imports notifyActionsView and drops stub placeholders", () => {
+describe("ActiveOrdersAccordion wires notify CTAs (#37 step 2 / #41)", () => {
+  it("imports OrderActionButtons; receipt via chevron (no stub placeholders)", () => {
     const src = readFileSync(accordionPath, "utf8")
-    assert.match(src, /orderStatusNotifyActions/)
-    assert.match(src, /notifyActionsView/)
-    assert.match(src, /actions\.secondaryLabel|active-order-notify-receipt/)
-    assert.match(src, /aoa__cta/)
+    assert.match(src, /OrderActionButtons/)
+    assert.match(src, /aoa__chevron|onToggle/)
     assert.doesNotMatch(src, /кнопка с текстом/)
-    assert.match(src, /#ff8c42/)
   })
 })
 
@@ -101,12 +98,9 @@ describe("openOrderReceipt (#37 step 3)", () => {
     assert.equal(result.isLoading, false)
   })
 
-  it("ActiveOrdersAccordion wires receipt button to openOrderReceipt", () => {
+  it("ActiveOrdersAccordion wires receipt toggle via chevron", () => {
     const src = readFileSync(accordionPath, "utf8")
-    assert.match(src, /openOrderReceipt/)
-    assert.match(
-      src,
-      /active-order-notify-receipt[\s\S]{0,200}onclick|onclick[\s\S]{0,120}openOrderReceipt|onReceipt/
-    )
+    assert.match(src, /toggleExpandedOrder|onToggle/)
+    assert.match(src, /aoa__chevron|active-order-receipt/)
   })
 })

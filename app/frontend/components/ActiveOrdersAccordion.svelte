@@ -1,5 +1,5 @@
 <script>
-  /** #36/#37 accordion: статус + CTA Wallet/Push + текстовый чек. */
+  /** #36/#37/#41 accordion: статус + OrderActionButtons + текстовый чек. */
   import {
     toggleExpandedOrder,
     accordionRowView,
@@ -9,75 +9,92 @@
   } from "../lib/activeOrdersAccordion.js"
   import { getDeviceOS } from "../lib/deviceDetect.js"
   import {
-    notifyActionsView,
-    openOrderReceipt,
     downloadWalletPass,
     subscribeOrderPush,
     resolveNotifyPrimaryInit
   } from "../lib/orderStatusNotifyActions.js"
+  import { openSupportChat } from "../lib/supportChatAdapter.js"
+  import { openTipsService } from "../lib/tipsAdapter.js"
+  import OrderActionButtons from "./OrderActionButtons.svelte"
 
   let {
     order,
     accordionState = $bindable(),
-    onOpenDetail = undefined
+    onOpenDetail = undefined,
+    onCancelRequest = undefined
   } = $props()
 
   let row = $derived(accordionRowView(order, accordionState?.activeExpandedOrderId))
   let receipt = $derived(row.expanded ? receiptView(order) : null)
   let scrollStyle = receiptScrollStyle()
   let deviceOs = $derived(getDeviceOS())
-  let actions = $derived(notifyActionsView({ os: deviceOs }))
-  let primaryLabelOverride = $state(null)
-  let primaryLoading = $state(false)
+  let actionLoading = $state(false)
   let toastMsg = $state("")
-  let displayPrimary = $derived(primaryLabelOverride ?? actions.primaryLabel)
+  let pushSubscribed = $state(false)
+
+  let orderId = $derived(order?.id || order?.order_id)
+  let hasPushSubscription = $derived(
+    pushSubscribed ||
+      resolveNotifyPrimaryInit({ os: deviceOs, orderId }).restored
+  )
+  let canCancel = $derived(Boolean(order?.can_cancel))
+  let status = $derived(String(order?.status || ""))
 
   $effect(() => {
-    const id = order?.id || order?.order_id
     const init = resolveNotifyPrimaryInit({
       os: deviceOs,
-      orderId: id
+      orderId
     })
-    if (init.restored && init.primaryLabel) {
-      primaryLabelOverride = init.primaryLabel
-    }
+    if (init.restored) pushSubscribed = true
   })
 
   function onToggle(e) {
     e.stopPropagation()
-    const id = order.id || order.order_id
-    toggleExpandedOrder(accordionState, id)
-  }
-
-  function onReceipt(e) {
-    e.stopPropagation()
-    const id = order.id || order.order_id
-    openOrderReceipt(accordionState, id, { isLoading: false })
-  }
-
-  async function onPrimary(e) {
-    e.stopPropagation()
-    if (primaryLoading || primaryLabelOverride) return
-    if (actions.primaryKind !== "wallet" && actions.primaryKind !== "push") return
-
-    primaryLoading = true
-    toastMsg = ""
-    const id = order.id || order.order_id
-    const onToast = (msg) => {
-      toastMsg = msg
-    }
-
-    const result =
-      actions.primaryKind === "wallet"
-        ? await downloadWalletPass({ orderId: id, onToast })
-        : await subscribeOrderPush({ onToast })
-
-    primaryLoading = false
-    if (result.ok) primaryLabelOverride = result.primaryLabel
+    toggleExpandedOrder(accordionState, orderId)
   }
 
   function onDetail() {
     if (typeof onOpenDetail === "function") onOpenDetail(order)
+  }
+
+  /**
+   * @param {string} kind
+   */
+  async function onAction(kind) {
+    if (actionLoading) return
+    toastMsg = ""
+
+    if (kind === "cancel") {
+      if (typeof onCancelRequest === "function") {
+        onCancelRequest(order)
+        return
+      }
+      return
+    }
+
+    if (kind === "chat") {
+      openSupportChat(orderId)
+      return
+    }
+
+    if (kind === "tips") {
+      const tenantId = order?.tenant_id || order?.sales_point?.tenant_id || ""
+      openTipsService(orderId, tenantId)
+      return
+    }
+
+    if (kind === "wallet" || kind === "push") {
+      actionLoading = true
+      const onToast = (msg) => {
+        toastMsg = msg
+      }
+      const result =
+        kind === "wallet"
+          ? await downloadWalletPass({ orderId, onToast })
+          : await subscribeOrderPush({ onToast })
+      actionLoading = false
+      if (result.ok) pushSubscribed = true
+    }
   }
 </script>
 
@@ -109,22 +126,14 @@
         </div>
       {/if}
     </button>
-    <div class={actions.actionsClass} data-testid="active-order-notify-actions">
-      <button
-        type="button"
-        class={actions.buttonClass}
-        data-kind={actions.primaryKind}
-        data-testid="active-order-notify-primary"
-        disabled={primaryLoading || Boolean(primaryLabelOverride)}
-        onclick={onPrimary}
-      >{#if primaryLoading}…{:else}{displayPrimary}{/if}</button>
-      <button
-        type="button"
-        class={actions.buttonClass}
-        data-testid="active-order-notify-receipt"
-        onclick={onReceipt}
-      >{actions.secondaryLabel}</button>
-    </div>
+    <OrderActionButtons
+      status={status}
+      os={deviceOs}
+      canCancel={canCancel}
+      hasPushSubscription={hasPushSubscription}
+      isLoading={actionLoading}
+      onAction={onAction}
+    />
   </div>
   {#if toastMsg}
     <div class="aoa__toast" data-testid="active-order-notify-toast" role="status">{toastMsg}</div>
@@ -254,35 +263,6 @@
   .aoa__step.done .aoa__label,
   .aoa__step.current .aoa__label { color: #4caf50; }
   .aoa__step.current .aoa__label { font-weight: 600; }
-  .aoa__actions {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    flex-shrink: 0;
-    width: 11rem;
-  }
-  .aoa__cta {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-sizing: border-box;
-    height: 36px;
-    padding: 0 0.45rem;
-    background: #ff8c42;
-    color: #000000;
-    font-size: 0.75rem;
-    font-weight: 600;
-    border: 0;
-    border-radius: 0.5rem;
-    cursor: pointer;
-    text-align: center;
-    line-height: 1.15;
-    white-space: normal;
-  }
-  .aoa__cta:disabled {
-    opacity: 0.85;
-    cursor: default;
-  }
   .aoa__toast {
     margin-top: 0.25rem;
     font-size: 0.62rem;

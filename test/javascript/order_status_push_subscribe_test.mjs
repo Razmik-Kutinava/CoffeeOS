@@ -64,10 +64,11 @@ describe("subscribeOrderPush (#37 step 5)", () => {
   })
 })
 
-describe("ActiveOrdersAccordion wires push subscribe (#37 step 5)", () => {
-  it("imports subscribeOrderPush and handles primaryKind push", () => {
+describe("ActiveOrdersAccordion wires push subscribe (#37 step 5 / #41)", () => {
+  it("imports subscribeOrderPush and handles push kind in onAction", () => {
     const src = readFileSync(accordionPath, "utf8")
     assert.match(src, /subscribeOrderPush/)
-    assert.match(src, /primaryKind\s*===\s*["']push["']|primaryKind\s*!==\s*["']wallet["']/)
+    assert.match(src, /kind === ["']push["']|kind === 'push'/)
+    assert.match(src, /onAction/)
   })
 })

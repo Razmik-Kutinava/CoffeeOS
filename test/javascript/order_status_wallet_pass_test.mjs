@@ -98,10 +98,11 @@ describe("downloadWalletPass (#37 step 4)", () => {
   })
 })
 
-describe("ActiveOrdersAccordion wires wallet download (#37 step 4)", () => {
-  it("imports downloadWalletPass and wires primary wallet click", () => {
+describe("ActiveOrdersAccordion wires wallet download (#37 step 4 / #41)", () => {
+  it("imports downloadWalletPass and handles wallet kind in onAction", () => {
     const src = readFileSync(accordionPath, "utf8")
     assert.match(src, /downloadWalletPass/)
-    assert.match(src, /active-order-notify-primary[\s\S]{0,220}onclick|onPrimary|onNotifyPrimary/)
+    assert.match(src, /kind === ["']wallet["']|kind === 'wallet'/)
+    assert.match(src, /onAction/)
   })
 })

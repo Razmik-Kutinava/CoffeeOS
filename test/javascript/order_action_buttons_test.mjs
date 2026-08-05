@@ -64,9 +64,14 @@ describe("OrderActionButtons.svelte markup (#41 step 4)", () => {
     const src = readFileSync(componentPath, "utf8")
     assert.match(src, /orderStatusCtas/)
     assert.match(src, /ACTION_CTA_STYLE|orderActionButtons/)
-    assert.match(src, /data-testid=["']order-action-buttons["']/)
-    assert.match(src, /data-testid=["']order-action-btn["']/)
-    assert.match(src, /#ff6b35/)
+    assert.match(src, /data-testid=\{ORDER_ACTION_TEST_IDS\.root\}|data-testid=["']order-action-buttons["']/)
+    assert.match(src, /data-testid=\{ORDER_ACTION_TEST_IDS\.button\}|data-testid=["']order-action-btn["']/)
+    assert.match(src, /ACTION_CTA_STYLE\.background|style:background/)
+    const styleSrc = readFileSync(
+      join(root, "app/frontend/lib/orderActionButtons.js"),
+      "utf8"
+    )
+    assert.match(styleSrc, /#ff6b35/)
   })
 })
 

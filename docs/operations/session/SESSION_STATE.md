@@ -6,9 +6,14 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#41** GREEN 1–3 `[x]` · **RED шаг 4** OrderActionButtons (падающий тест) | **go → GREEN шаг 4** |
+| **#41** GREEN шаги 1–4 **`[x]`** (adapters + mapper + OrderActionButtons) | **go → RED шаг 5** (Cable CTA swap) |
 | **#40** MCP modal accepted **`[x]`** · Fly **v428** | апрув «ок» |
 | Live Fly | **v428** |
+
+### Сессия 2026-08-05 (GREEN шаг 4 · #41 OrderActionButtons)
+
+- `orderActionButtons.js` (`#ff6b35`) + `OrderActionButtons.svelte` + accordion RIGHT wire
+- Регрессия FE зона → **57/57 PASS**
 
 ### Сессия 2026-08-05 (RED шаг 4 · #41 OrderActionButtons)
 
