@@ -6,9 +6,14 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#41** GREEN шаги 1–5 **`[x]`** | **go → RED шаг 6** (Cancel flow в sticky) |
+| **#41** GREEN 1–5 `[x]` · **RED шаг 6** sticky cancel (падающий тест) | **go → GREEN шаг 6** |
 | **#40** MCP modal accepted **`[x]`** · Fly **v428** | апрув «ок» |
 | Live Fly | **v428** |
+
+### Сессия 2026-08-05 (RED шаг 6 · #41 sticky cancel)
+
+- `order_action_buttons_cancel_test.mjs` — modal paid, applyStickyCancelSuccess, OrderStatusSheet wire
+- `node --test …` → **FAIL** `ERR_MODULE_NOT_FOUND` `stickyOrderCancel.js` (намеренно)
 
 ### Сессия 2026-08-05 (GREEN шаг 5 · #41 Cable CTA)
 
