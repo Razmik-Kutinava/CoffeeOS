@@ -2,13 +2,25 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-08-05 (#41 Fly v429 MCP PASS · #40 v428)
+**Дата:** 2026-08-05 (#35 rev intake+SPEC)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#41** MCP **PASS** · Fly **v429** · chat+push · `#ff6b35`/44px | апрув «ок» |
-| **#40** MCP modal accepted **`[x]`** · Fly **v428** | апрув «ок» |
-| Live Fly | **v429** |
+| **#35 rev** ТЗ + 5 скринов обновлены · SPEC в `todo.md` | RED/GREEN: hide on `ready`, product route |
+| **#41** CBR **`[x]`** · MCP v429 | — |
+
+### Сессия 2026-08-05 (PHASE 0 + SPEC · #35 rev)
+
+- ТЗ 1:1: виджет только accepted/paid/preparing; исчезает на `ready`; home + product; scroll >2
+- Скрины `01–05` заменены в `artifacts/order_status_compact_sheet_push/screenshots/`
+- SPEC: 8 дельт vs код v414 (главное: `orders/active` без ready; mount на `#/product`)
+- Код не трогали
+
+### Сессия 2026-08-05 (CBR ок + cancel MCP attempt · #41)
+
+- CBR #41 → **закрыта `[x]`** по апруву владельца
+- Cancel: `#202608-0005` → `accepted`+`can_cancel`; reconnect token; Fly edge **503** (`load balancing`) — UI cancel не снят
+- Evidence note in `mcp/fly_v429_2026-08-05/MCP_RESULT.md`
 
 ### Сессия 2026-08-05 (push / deploy / MCP · #41)
 

@@ -1,176 +1,88 @@
-# todo — Order action buttons status panel (#41)
+# todo — #35 rev: статусная шторка + Push (ревизия ТЗ 2026-08-05)
 
-**ТЗ:** [`customer_tasks/Динамический блок действий Action Buttons в статусной панели заказа.md`](../milestones/veha_2/requirements/customer_tasks/Динамический%20блок%20действий%20Action%20Buttons%20в%20статусной%20панели%20заказа.md)  
-**Артефакты:** [`artifacts/order_action_buttons_status_panel/`](../milestones/veha_2/artifacts/order_action_buttons_status_panel/)  
-**Фаза:** PHASE 0 `[x]` · SPEC **`[x]`** · RED/GREEN 1–7 **`[x]`** · REVIEW **`[x]`** · MCP/deploy **`[x]`** Fly v429  
-**CBR:** #41
+**ТЗ:** [`customer_tasks/Интеграция статусной модели в компактную шторку PWA и Push.md`](../milestones/veha_2/requirements/customer_tasks/Интеграция%20статусной%20модели%20в%20компактную%20шторку%20PWA%20и%20Push.md)  
+**Артефакты / скрины:** [`artifacts/order_status_compact_sheet_push/`](../milestones/veha_2/artifacts/order_status_compact_sheet_push/)  
+**Фаза:** PHASE 0 `[x]` · SPEC **`[x]`** · RED/GREEN **`[ ]`** · REVIEW **`[ ]`** · MCP **`[ ]`**
+
+**Контекст:** первая реализация #35 (2026-07-31, Fly v414) есть. Заказчик обновил ТЗ + 5 скринов. Этот проход — **дельта** до соответствия новому канону.
 
 ---
 
-## PHASE 3: REVIEW (2026-08-05)
+## Что нового у заказчика (дельта vs реализация 2026-07-31)
 
-| Проверка | Результат |
-|----------|-----------|
-| FE #41 зона (cta/cancel/notify/accordion/adapters/action/cable/mobile/sheet/wallet/push) | **95 runs / 0 fail PASS** |
-| N+1 / RLS | не затронуты (только FE sticky CTA) |
-| Progress bar структура | не менялась |
-| MCP / Fly deploy | **`[x]`** Fly **v429** · MCP PASS · [`mcp/fly_v429_2026-08-05/`](../milestones/veha_2/artifacts/order_action_buttons_status_panel/mcp/fly_v429_2026-08-05/) |
+| # | Изменение в ТЗ | Было в коде #35 | Действие в RED/GREEN |
+|---|----------------|-----------------|----------------------|
+| 1 | Виджет **только** `accepted` / `paid` / `preparing`; при `ready` **исчезает** | `GET orders/active` включает **`ready`**; cable `applyCableEvent` не снимает `ready` | BE: убрать `ready` из active scope · FE: drop order on `status===ready` |
+| 2 | Явный фокус: **главный экран + карточка товара** (скрины 01–05) | `OrderStatusSheet` только в `CartSheet`; `isCartSheetRoute` = `/` и `/checkout` **без** `#/product/…` | Показать виджет на `#/product/:id` (reuse `OrderStatusSheet` embedded или общий mount) |
+| 3 | «Заказать ещё» на карточке при активном заказе | `ProductCartPeek` — только строки корзины, **без** progress bar | На product: peek корзины + статусная полоса как на скрине 02–03 |
+| 4 | Скролл при **>2** активных заказах на карточке | `shouldScrollStatusList` уже `> 2` — ок | Проверить на product route + MCP скрин 04–05 |
+| 5 | Push **только на `ready`** (нет `PreparingPushJob`) | В старом ТЗ был B2 preparing — **в новом ТЗ убран** | Не добавлять preparing-push; сверить `OrderStatusPushNotifier` |
+| 6 | Текст пуша: «Ваш заказ готов, заберите на кассе!» | Проверить copy в `ReadyPushJob` / FCM | Выровнять строку при расхождении |
+| 7 | Оранжевые CTA справа от прогресса | Реализовано в **#41** (`OrderActionButtons`) | Не дублировать в #35; MCP сверка со скринами после hide-on-ready |
+| 8 | `OrderStatusChannel` в ТЗ | В репо: **`GuestOrderChannel`** + `shopOrderCable.js` | Не плодить канал; документировать маппинг A1 |
+
+**Не менялось / уже есть:** `ready_notified_at`, `ReadyPushJob`, `ReadyPushClaim`, reconnect `GET /orders/active`, `shouldScrollStatusList`, non-blocking `pointer-events`, Wallet stub backlog.
 
 ---
 
 ## Канон стека (маппинг ТЗ → CoffeeOS)
 
-| В ТЗ | В репо (делать так) | Не делать |
-|------|---------------------|-----------|
-| Jest + RTL + React / `OrderActionButtons.tsx` | **Svelte** + `test/javascript/*.mjs` (node:test) | Не React / не `pwa/src/` / не внедрять TS |
-| `SupportChatAdapter.test.ts` | `test/javascript/support_chat_adapter_test.mjs` | — |
-| `TipsAdapter.test.ts` | `test/javascript/tips_adapter_test.mjs` | — |
-| `orderButtonMapper.test.ts` | расширить `test/javascript/order_status_cta_machine_test.mjs` | Не дублировать второй mapper |
-| `OrderActionButtons.test.tsx` | `test/javascript/order_action_buttons_test.mjs` (+ wiring accordion) | — |
-| `tsc --noEmit` / запрет `any` | **JSDoc** typedefs; без нетипизированных «any» | Не добавлять TS ради ТЗ |
-| `appConfig.chatUrl` / `tipsUrl` | `app/frontend/lib/shopAppConfig.js` (meta / `window.__COFFEEOS_SHOP__`) | Не хардкодить URL в компоненте |
-| Мутация стейта из кнопок | handlers → `dispatch`/callbacks родителя (`onCancel`, `onStatusPatch`) | Не писать в order напрямую из CTA |
-
-### Целевая поверхность UI (канон #41)
-
-| Зона | Путь | Роль |
-|------|------|------|
-| **Правая колонка sticky-панели** | `ActiveOrdersAccordion.svelte` → `.aoa__actions` | **главная** — заменить `notifyActionsView` на матрицу #41 |
-| Изолированный блок кнопок | `app/frontend/components/OrderActionButtons.svelte` (**новый**) | Рендер ≤2 оранжевых кнопок; без маппинга |
-| Маппинг | `app/frontend/lib/orderStatusCtaMachine.js` | Расширить `hasPushSubscription`; labels по матрице |
-| Full-page `/order/:id` | `OrderStatus.svelte` | Переиспользовать ту же `orderStatusCtas` (не ломать #40); не раздувать файл (754) |
-
-### Есть в репо (не изобретать)
-
-| Артефакт | Путь | Статус vs #41 |
-|----------|------|---------------|
-| Progress 4 этапа | `orderStatusProgress.js` + UI accordion/OrderStatus | **не трогать структуру** |
-| CTA machine | `orderStatusCtaMachine.js` | есть accepted/cancel/chat/tips/wallet/push — **нет** `hasPushSubscription`, нет ветки `paid`, labels ≠ ТЗ |
-| OS detect | `deviceDetect.js` → `getDeviceOS()` | `isIOS` = `os === "ios"` |
-| Push/Wallet actions | `orderStatusNotifyActions.js` | `subscribeOrderPush` / `downloadWalletPass` |
-| Cancel modal/flow | `OrderCancelModal.svelte` + `orderCancelFlow.js` | готово на OrderStatus; **нет** в accordion |
-| Cable | `shopOrderCable.js` + `OrderStatusSheet` | обновляет status/progress; CTA accordion **не** status-aware |
-| Cancel API | `POST /shop/api/orders/:id/cancel` | BE #40 готов |
-
-### Глобальные ограничения (канон)
-
-- Не менять структуру progress bar (4 этапа Принят→Оплачен→Готовится→Готов).
-- Цвета панели: фон `#1a1a1a` (уже `--bg`/receipt); completed `#4caf50` (не трогать); **CTA accent для блока действий = `#ff6b35`** по макету #41 (сейчас `#ff8c42` в `CTA_STYLE` — для `OrderActionButtons` ввести отдельный `ACTION_CTA_STYLE` / override, **не ломать** тесты #37 на `#ff8c42` без апдейта).
-- Не мутировать order state из кнопок — только callbacks.
-- URL чата/чаевых — только из config; fallback console log по ТЗ.
-- Progress bar / sheet layout — без структурных перестроек.
-
-### Отклонения / конфликты (зафиксировано)
-
-| ТЗ буквально | Канон репо / решение SPEC |
-|--------------|---------------------------|
-| React + TS + Jest | Svelte + JSDoc + node:test |
-| `paid` status | В домене CoffeeOS после оплаты обычно **`accepted`**; `paid` в mapper = алиас `accepted` |
-| Labels: «Включить Push» / «Добавить в Wallet» / «Чат с поддержкой» / «Оставить чаевые» | Сейчас: «🔔 Уведомление…» / «Карта в Apple Wallet» / «Написать в поддержку» / «Чаевые». **Шаг 3:** выровнять labels под #41 (kind без смены). |
-| Edge: `!hasPushSubscription` → btn2 Push/Wallet **до ready включительно** | Сейчас preparing/ready android = chat+tips всегда. **Шаг 3:** edge перекрывает tips, пока нет подписки; на `ready` при `hasPushSubscription===true` — tips; при `false` — Push/Wallet (по ТЗ edge). |
-| #40 preparing → «Написать в поддержку» | Label → «Чат с поддержкой» (#41); kind `chat` |
-| Accordion secondary «Состав заказа» | Матрица #41 = max 2 CTA; **receipt** остаётся через expand строки аккордеона (не третья кнопка) |
-| Touch target 44px | Сейчас `CTA_STYLE.heightPx: 36` — для `OrderActionButtons` **min-height 44px** (шаг 7) |
-
-### Размер файлов
-
-| Файл | Строк | План |
-|------|-------|------|
-| `ActiveOrdersAccordion.svelte` | ~309 | Тонкая замена `.aoa__actions` → `<OrderActionButtons />`; cancel modal mount рядом |
-| `OrderStatus.svelte` | **754** | Не раздувать: только sync labels/machine API; handlers уже есть |
-| `orderStatusCtaMachine.js` | ~67 | Расширить opts + labels; держать ≤120 |
-| `OrderActionButtons.svelte` | **новый** | ≤120; только render + click → callbacks |
+| В ТЗ | В репо |
+|------|--------|
+| `OrderStatusChannel` | `GuestOrderChannel` · `subscribeGuestOrderStatus` |
+| `OrderStatusWidget` | `OrderStatusSheet.svelte` + `ActiveOrdersAccordion.svelte` |
+| `paid` | `accepted` + `payment_settled: true` |
+| RSpec / Vitest / React | `test/` · `test/javascript/*.mjs` · Svelte |
+| Sidekiq | **Solid Queue** (`ReadyPushJob`) |
+| Скрины канон | `artifacts/.../screenshots/01–05` (2026-08-05) |
 
 ---
 
-## Happy path (целевой)
+## PHASE 1: SPEC — шаги RED/GREEN (ждут намерения «ебашь»)
 
-```text
-Sticky panel (CartSheet → OrderStatusSheet → ActiveOrdersAccordion)
-  RIGHT: OrderActionButtons ← orderStatusCtas({ status, os, canCancel, hasPushSubscription })
-  Cable status_changed → parent patches order.status → $derived ctas без reload
-accepted/paid + !push: [Отменить заказ] [Push|Wallet]
-preparing + push: [Чат с поддержкой] [Оставить чаевые]
-preparing + !push: [Чат с поддержкой] [Push|Wallet]
-ready + push: [Чат с поддержкой] [Оставить чаевые]
-ready + !push: [Чат с поддержкой] [Push|Wallet]   # edge #41
-Cancel confirm → POST /orders/:id/cancel → 200 cancelled / 4xx-5xx toast, buttons stay
-Chat/Tips → openSupportChat / openTipsService (URL или console pending)
-```
+### Блок A — виджет только во время готовки
 
----
+- [ ] **A1** Cable: событие смены статуса → FE обновляет список (reuse `shopOrderCable.js`)
+- [ ] **A2a** BE: `orders#active` — только `accepted`, `preparing` (и оплаченный accepted); **без `ready`**
+- [ ] **A2b** FE: при cable `status=ready` — **удалить** заказ из sheet (не показывать «Готов» в sticky)
+- [ ] **A2c** Главный экран: виджет как на скрине `01` (внутри `CartSheet` / peek)
+- [ ] **A2d** Карточка товара `#/product/:id`: виджет + «добавить/оплатить» как скрины `02–03`
+- [ ] **A2e** Multi-order scroll `>2` на home и product (`04–05`)
+- [ ] **A3** Reconnect: после WS — `GET /orders/active` без ready; toast/hide по `mapReconnectError`
 
-## Шаги TDD (1–7)
+### Блок B — Push только ready
 
-### Шаг 1 — SupportChatAdapter `[x]` · GREEN
+- [ ] **B1** Hook → `ReadyPushJob` на переход в `ready` (уже есть — регрессия)
+- [ ] **B2** Copy пуша «Ваш заказ готов, заберите на кассе!» + Wallet fallback
 
-- **RED:** `test/javascript/support_chat_adapter_test.mjs` — намеренный fail `ERR_MODULE_NOT_FOUND` (`supportChatAdapter.js`)
-- **GREEN:** `app/frontend/lib/supportChatAdapter.js` — `openSupportChat(orderId, chatUrl?)`
-  - URL → `window.open(url, "_blank")`
-  - нет URL → `console.info("[Chat Integration Pending] Order: …")` (injectable `log`)
-- Config read: `shopAppConfig().chatUrl` (опц. в шаге 1 — param `chatUrl` достаточно)
-- Тест: `node --test test/javascript/support_chat_adapter_test.mjs` → **3/3 PASS**
+### Блок C — idempotency
 
-### Шаг 2 — TipsAdapter (нетмонет) `[x]` · GREEN
+- [ ] **C1** `ready_notified_at` claim (уже есть — регрессия + тест на race)
 
-- **RED:** `test/javascript/tips_adapter_test.mjs` — намеренный fail `ERR_MODULE_NOT_FOUND` (`tipsAdapter.js`)
-- **GREEN:** `app/frontend/lib/tipsAdapter.js` — `openTipsService(orderId, tenantId, tipsUrl?)`
-  - URL → `window.open`; иначе log `[Tips Integration Pending] Order: …`
-- Тест: `node --test test/javascript/tips_adapter_test.mjs` → **3/3 PASS** (+ chat 3/3 регрессия)
+### Тесты (RED → GREEN)
 
-### Шаг 3 — ButtonMapper (`orderStatusCtas`) `[x]` · GREEN
+| Зона | Файлы |
+|------|--------|
+| BE active scope | `test/integration/shop/api/active_orders_test.rb` |
+| FE hide on ready | `test/javascript/order_status_sheet_test.mjs` |
+| FE product mount | `test/javascript/order_status_product_route_test.mjs` (новый) |
+| Ready push copy | `test/jobs/shop/ready_push_job_test.rb` |
 
-- **RED:** `order_status_cta_machine_test.mjs` — матрица #41 + `hasPushSubscription` + `paid` ≡ `accepted` + labels; **10 fail / 6 pass** (намеренно)
-- **GREEN:** `orderStatusCtaMachine.js`
-  - max 2; labels #41
-  - edge `!hasPushSubscription` → btn2 notify (push/wallet) до ready включительно
-  - `paid` ≡ `accepted` для матрицы
-- Тест: CTA machine + adapters + cancel flow → **PASS** (cta 16 + adapters 6 + cancel 9)
+### MCP приёмка (после GREEN)
 
-### Шаг 4 — Статический рендер `OrderActionButtons` `[x]` · GREEN
+- [ ] Home — скрин `01`
+- [ ] Product — `02`, `03`
+- [ ] Product multi — `04` или `05`
+- [ ] Бариста → `ready` → виджет исчез + push (smoke)
 
-- **RED:** `order_action_buttons_test.mjs` — ACTION_CTA_STYLE `#ff6b35` + markup/wire; **FAIL** `ERR_MODULE_NOT_FOUND` `orderActionButtons.js` (намеренно)
-- **GREEN:** `orderActionButtons.js` + `OrderActionButtons.svelte` + `ActiveOrdersAccordion` (RIGHT → OrderActionButtons; чек через chevron)
-- Тест зона: order_action + cta + notify + wallet + push + accordion + adapters → **57/57 PASS**
-- Не трогали progress bar DOM
+### Риски
 
-### Шаг 5 — Реактивность ActionCable `[x]` · GREEN
-
-- **RED:** `order_action_buttons_cable_test.mjs` — paid→preparing CTA swap + `can_cancel` patch; **2 fail / 4 pass** (намеренно)
-- **GREEN:** `orderStatusSheet.applyCableEvent` мержит `can_cancel`; accordion `$derived` status → OrderActionButtons
-- Тест: cable + sheet + order_action → **25/25 PASS**
-
-### Шаг 6 — Cancel flow в sticky-панели `[x]` · GREEN
-
-- **RED:** `order_action_buttons_cancel_test.mjs` — Confirm Sheet + `applyStickyCancelSuccess` + sheet wiring
-- **GREEN:** `stickyOrderCancel.js` + `OrderCancelModal` в `OrderStatusSheet`; `shouldShowAcceptedCancelModal('paid')`; API cancel + toast
-- Тест: cancel sticky + #40 cancel flow + cable/action → **27/27 PASS**
-- BE не меняли
-
-### Шаг 7 — Mobile touch targets `[x]` · GREEN
-
-- **RED:** `order_action_buttons_mobile_test.mjs` — `heightPx >= 44`; **1 fail / 1 pass** (было 36)
-- **GREEN:** `ACTION_CTA_STYLE.heightPx = 44` + CSS `min-height: 44px` / wrap / `@media max-width 767px`
-- Регрессия #41 FE зона → **51/51 PASS**
+- Много «зависших» active на Point A — для MCP взять свежий заказ или почистить демо-данные
+- `#41` CTA — не ломать при правках layout
+- `OrderStatusSheet` embedded в `CartSheet` — product route может потребовать `isCartSheetRoute` расширить или второй mount
 
 ---
 
-## Регрессия зоны (после GREEN / REVIEW)
+## Архив: #41 Order action buttons (закрыта 2026-08-05)
 
-| Зона | Команда |
-|------|---------|
-| JS CTA / cancel / notify / accordion | `node --test test/javascript/order_status_cta_machine_test.mjs test/javascript/order_cancel_flow_test.mjs test/javascript/order_status_notify_actions_test.mjs test/javascript/active_orders_accordion_test.mjs test/javascript/support_chat_adapter_test.mjs test/javascript/tips_adapter_test.mjs test/javascript/order_action_buttons_test.mjs` |
-| Shop (если трогали API) | только если менялся BE — иначе skip |
-| MCP Fly | **PASS** v429 · chat+push · `#ff6b35`/44px · evidence `mcp/fly_v429_2026-08-05/` |
-
----
-
-## Exit Criteria (маппинг)
-
-1. Новые + обновлённые JS-тесты зелёные; ветки mapper покрыты.
-2. Без новых lint/TS ошибок в затронутых FE-файлах.
-3. Макет: справа от progress — реальные CTA по матрице (не «кнопка с текстом»).
-4. WS: смена статуса → смена кнопок без reload.
-5. Cancel до `preparing` + ошибки сети.
-6. Chat/Tips — адаптеры; URL из config одной строкой.
-7. Mobile: touch ≥44px, без overflow.
+См. историю в git / `HANDOFF.md` · Fly v429 MCP PASS.

@@ -1,5 +1,16 @@
 ﻿# CHANGELOG
 
+## 2026-08-05 — docs: #35 rev intake+SPEC (status widget hide on ready)
+- ТЗ заказчика обновлено 1:1; 5 скринов заменены в `order_status_compact_sheet_push/screenshots/`
+- SPEC: дельта vs v414 — hide on `ready`, product route, active API без ready
+- RED/GREEN не начинали
+
+## 2026-08-05 — docs: #41 CBR апрув «ок»; cancel MCP blocked by Fly LB
+
+- CBR #41 → **закрыта `[x]`** (апрув владельца)
+- Cancel live: заказ `#202608-0005` → accepted+can_cancel; reconnect token; Fly FRA proxy **503** — скрин cancel не снят
+- MCP_RESULT / HANDOFF / SESSION_STATE updated
+
 ## 2026-08-05 — deploy: #41 Order action buttons on Fly v429 · MCP PASS
 
 - Push develop · Fly **v429** · `deployment-01KZ88WP8VNXVGCBZVV4QZ0NAM`

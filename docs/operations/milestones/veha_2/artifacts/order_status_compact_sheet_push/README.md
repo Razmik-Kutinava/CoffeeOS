@@ -1,21 +1,24 @@
-# Статусная модель в компактной шторке PWA + Push из POS
+# Статусная модель в компактной шторке PWA + Push из POS (#35)
 
 **ТЗ:** [`../../requirements/customer_tasks/Интеграция статусной модели в компактную шторку PWA и Push.md`](../../requirements/customer_tasks/Интеграция%20статусной%20модели%20в%20компактную%20шторку%20PWA%20и%20Push.md)
 
 **Канон приёмки UI:** результат на Fly должен совпасть со скринами заказчика ниже.
 
-## Скрины заказчика (интейк 2026-07-31)
+## Скрины заказчика (ревизия 2026-08-05)
 
-| Файл | Подпись заказчика / контекст |
+| Файл | Подпись заказчика / что на макете |
 |---|---|
-| `screenshots/01_home_peek_status_bar.png` | «на главном экране» · hidden/peek · 4-шаговый прогресс + каталог доступен |
-| `screenshots/02_product_card_status_bar.png` | «в карточке товара» · шторка статуса поверх карточки, корзина/добавить не блокируются |
-| `screenshots/03_product_peek_status_bar.png` | peek на карточке · «если нужно заказать еще после заказа» · handle шторки |
-| `screenshots/04_product_multi_status_scroll.png` | «если несколько статусов… скролл если более 2ух» · 2 полосы статуса + вертикальный скролл |
-| `screenshots/05_product_multi_status_scroll_alt.png` | тот же кейс multi-status на карточке (alt-мок) |
+| `screenshots/01_home_peek_status_bar.png` | «на главном экране» · каталог + 4 шага (Принят→Оплачен→Готовится→Готов) + оранжевые CTA справа |
+| `screenshots/02_product_card_status_bar.png` | «в карточке товара» · можно добавить в заказ при активном статусе |
+| `screenshots/03_product_peek_status_bar.png` | «если нужно заказать еще…» · оплата/добавить + полоса «Готовится» |
+| `screenshots/04_product_multi_status_scroll.png` | «>2 статусов → скролл» · 2 полосы + индикатор прокрутки |
+| `screenshots/05_product_multi_status_scroll_alt.png` | тот же multi-order на карточке (alt) |
+
+Предыдущие скрины (2026-07-31) **заменены** этими файлами.
 
 ## MCP / приёмка Fly
 
-Папка под будущие прогоны после реализации.
-
-**2026-07-31:** Fly **v414** · evidence [`mcp/`](./mcp/) · `MCP_RESULT_2026-07-31.md` — PASS labels/track/z60.
+| Прогон | Результат |
+|---|---|
+| 2026-07-31 v414 | PASS labels/track/z60 · [`mcp/MCP_RESULT_2026-07-31.md`](./mcp/MCP_RESULT_2026-07-31.md) |
+| 2026-08-05 rev | ждёт RED/GREEN по обновлённому ТЗ (hide on `ready`, карточка товара) |
