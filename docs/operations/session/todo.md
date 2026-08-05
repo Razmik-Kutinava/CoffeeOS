@@ -48,7 +48,7 @@
 - [ ] **A2c** Главный экран: виджет как на скрине `01` (внутри `CartSheet` / peek)
 - [x] **A2d** Карточка товара `#/product/:id`: виджет + «добавить/оплатить» как скрины `02–03`
 - [ ] **A2e** Multi-order scroll `>2` на home и product (`04–05`)
-- [ ] **A3** Reconnect: после WS — `GET /orders/active` без ready; toast/hide по `mapReconnectError`
+- [x] **A3** Reconnect: после WS — `GET /orders/active` без ready; toast/hide по `mapReconnectError`
 
 ### Блок B — Push только ready
 

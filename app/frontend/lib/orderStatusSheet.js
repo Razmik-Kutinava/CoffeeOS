@@ -77,5 +77,9 @@ export function applyCableEvent(state, payload, hooks = {}) {
 }
 
 export function applyReconnectOrders(state, orders) {
-  state.setOrders(Array.isArray(orders) ? orders : [])
+  const list = Array.isArray(orders) ? orders : []
+  // #35: виджет отображаем только в процессе готовки.
+  // Даже если API по какой-то причине вернул `ready`, фильтруем на клиенте.
+  const filtered = list.filter((o) => String(o?.status || "") !== "ready")
+  state.setOrders(filtered)
 }
