@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-08-05 — docs: SPEC #41 Order action buttons status panel
+
+- PHASE 1: `todo.md` шаги 1–7 · маппинг Svelte/node:test · цель sticky accordion RIGHT
+- Канон: `OrderActionButtons.svelte` + `orderStatusCtas(+hasPushSubscription)` + chat/tips adapters
+- Код не писали; дальше RED шаг 1
+
 ## 2026-08-05 — docs: intake #41 Order action buttons status panel
 
 - PHASE 0: ТЗ 1:1 `Динамический блок действий Action Buttons в статусной панели заказа.md`

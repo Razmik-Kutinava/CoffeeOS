@@ -90,5 +90,6 @@
 ## Заметки агента
 
 - Интейк PHASE 0 (2026-08-05): текст заказчика сохранён 1:1 выше; макет — `artifacts/order_action_buttons_status_panel/screenshots/01_mockup_status_panel_action_placeholders_2026-08-05.png`.
-- В репо канон тестов FE — **node:test** (`test/javascript/*.mjs`), не Jest/RTL; фронт витрины — **Svelte**, не React/`OrderActionButtons.tsx`. Маппинг путей и матрицы кнопок — в PHASE 1: SPEC.
+- PHASE 1 SPEC (2026-08-05): канон в `docs/operations/session/todo.md` — Svelte + node:test; цель sticky `ActiveOrdersAccordion` RIGHT → `OrderActionButtons.svelte`; mapper = `orderStatusCtas(+hasPushSubscription)`.
+- В репо канон тестов FE — **node:test** (`test/javascript/*.mjs`), не Jest/RTL; фронт витрины — **Svelte**, не React/`OrderActionButtons.tsx`.
 - Связанные эпики: #37 OS detect Wallet/WebPush · #38 FCM/Wallet CTA · #40 cancel/refund CTA machine — не ломать существующие CTA без явного плана в SPEC.

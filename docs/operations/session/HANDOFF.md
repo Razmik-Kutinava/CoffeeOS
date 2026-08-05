@@ -1,6 +1,6 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-08-05 (**#41** intake · **#40** Fly **v428**)  
+**Дата:** 2026-08-05 (**#41** SPEC · **#40** Fly **v428**)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev (**v428**)
 
@@ -8,14 +8,14 @@
 
 | Что | Статус |
 |-----|--------|
-| Intake (PHASE 0) | **`[x]`** |
-| PHASE 1 SPEC | **`[ ]`** ждёт go |
+| Intake (PHASE 0) | **`[x]`** `c93e9a78` |
+| PHASE 1 SPEC | **`[x]`** |
 | RED/GREEN / REVIEW / deploy / MCP | **`[ ]`** |
 
 **ТЗ:** [`Динамический блок действий Action Buttons в статусной панели заказа.md`](../milestones/veha_2/requirements/customer_tasks/Динамический%20блок%20действий%20Action%20Buttons%20в%20статусной%20панели%20заказа.md)  
 **Артефакты:** [`order_action_buttons_status_panel/`](../milestones/veha_2/artifacts/order_action_buttons_status_panel/) · макет `screenshots/01_mockup_status_panel_action_placeholders_2026-08-05.png`  
-**Суть:** заменить оранжевые плейсхолдеры справа от progress bar на динамические CTA (Отмена / Чат / Чаевые / Push|Wallet) по матрице статусов + WS.  
-**Дальше:** go → PHASE 1: SPEC (`todo.md`, маппинг Svelte / node:test; не React/Jest из ТЗ).
+**SPEC:** [`todo.md`](todo.md) — sticky RIGHT (`ActiveOrdersAccordion`) → `OrderActionButtons.svelte` + `orderStatusCtas(+hasPushSubscription)` + SupportChat/Tips adapters; Svelte/node:test.  
+**Дальше:** go → RED шаг 1 (SupportChatAdapter).
 
 ### T-Bank auto refund on PWA cancel (#40) — 2026-08-04
 

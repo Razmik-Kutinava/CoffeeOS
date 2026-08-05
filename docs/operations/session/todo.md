@@ -1,21 +1,9 @@
-# todo — T-Bank auto refund on PWA cancel (#40)
+# todo — Order action buttons status panel (#41)
 
-**ТЗ:** [`customer_tasks/Автоматический возврат платежа Т-Банк при отмене заказа в PWA.md`](../milestones/veha_2/requirements/customer_tasks/Автоматический%20возврат%20платежа%20Т-Банк%20при%20отмене%20заказа%20в%20PWA.md)  
-**Артефакты:** [`artifacts/tbank_auto_refund_order_cancellation_pwa/`](../milestones/veha_2/artifacts/tbank_auto_refund_order_cancellation_pwa/)  
-**Фаза:** PHASE 0 `[x]` · SPEC `[x]` · RED/GREEN 1–7 **`[x]`** · REVIEW **`[x]`** · MCP/deploy **`[x]`** (Fly **v428**)  
-**CBR:** #40
-
----
-
-## PHASE 3: REVIEW (2026-08-04)
-
-| Проверка | Результат |
-|----------|-----------|
-| TbankAdapter + guest cancel + API cancel + callback + order_creator | **81 runs / 223 assertions PASS** |
-| qa_section_2_3_payment_cart | **2/5 PASS** (2 skips) |
-| JS cancel flow + CTA | **19/19 PASS** |
-| N+1 / Receipt в Cancel / Token | Cancel без Receipt; `build_token` без diff |
-| MCP / Fly deploy | **`[x]`** v428 · pending+ready+**accepted modal** PASS · live Cancel deferred |
+**ТЗ:** [`customer_tasks/Динамический блок действий Action Buttons в статусной панели заказа.md`](../milestones/veha_2/requirements/customer_tasks/Динамический%20блок%20действий%20Action%20Buttons%20в%20статусной%20панели%20заказа.md)  
+**Артефакты:** [`artifacts/order_action_buttons_status_panel/`](../milestones/veha_2/artifacts/order_action_buttons_status_panel/)  
+**Фаза:** PHASE 0 `[x]` · SPEC **`[x]`** · RED/GREEN 1–7 `[ ]` · REVIEW `[ ]` · MCP/deploy `[ ]`  
+**CBR:** #41
 
 ---
 
@@ -23,101 +11,149 @@
 
 | В ТЗ | В репо (делать так) | Не делать |
 |------|---------------------|-----------|
-| RSpec / WebMock / `spec/…` | **Minitest** + stub `Net::HTTP` (как в `tbank_adapter_test`) | Не `spec/` |
-| Jest + RTL + React / `src/…tsx` | **Svelte** + `test/javascript/*.mjs` (node:test) | Не React / не `any` в JSDoc |
-| `OrderCancellationModal.tsx` | `app/frontend/components/OrderCancelModal.svelte` + `lib/orderCancelFlow.js` | Не раздувать `OrderStatus.svelte` (уже 754) |
-| `tsc --noEmit` | JSDoc + существующий FE lint/test | Не внедрять TS ради ТЗ |
+| Jest + RTL + React / `OrderActionButtons.tsx` | **Svelte** + `test/javascript/*.mjs` (node:test) | Не React / не `pwa/src/` / не внедрять TS |
+| `SupportChatAdapter.test.ts` | `test/javascript/support_chat_adapter_test.mjs` | — |
+| `TipsAdapter.test.ts` | `test/javascript/tips_adapter_test.mjs` | — |
+| `orderButtonMapper.test.ts` | расширить `test/javascript/order_status_cta_machine_test.mjs` | Не дублировать второй mapper |
+| `OrderActionButtons.test.tsx` | `test/javascript/order_action_buttons_test.mjs` (+ wiring accordion) | — |
+| `tsc --noEmit` / запрет `any` | **JSDoc** typedefs; без нетипизированных «any» | Не добавлять TS ради ТЗ |
+| `appConfig.chatUrl` / `tipsUrl` | `app/frontend/lib/shopAppConfig.js` (meta / `window.__COFFEEOS_SHOP__`) | Не хардкодить URL в компоненте |
+| Мутация стейта из кнопок | handlers → `dispatch`/callbacks родителя (`onCancel`, `onStatusPatch`) | Не писать в order напрямую из CTA |
+
+### Целевая поверхность UI (канон #41)
+
+| Зона | Путь | Роль |
+|------|------|------|
+| **Правая колонка sticky-панели** | `ActiveOrdersAccordion.svelte` → `.aoa__actions` | **главная** — заменить `notifyActionsView` на матрицу #41 |
+| Изолированный блок кнопок | `app/frontend/components/OrderActionButtons.svelte` (**новый**) | Рендер ≤2 оранжевых кнопок; без маппинга |
+| Маппинг | `app/frontend/lib/orderStatusCtaMachine.js` | Расширить `hasPushSubscription`; labels по матрице |
+| Full-page `/order/:id` | `OrderStatus.svelte` | Переиспользовать ту же `orderStatusCtas` (не ломать #40); не раздувать файл (754) |
 
 ### Есть в репо (не изобретать)
 
-| Артефакт | Путь | Статус vs ТЗ |
-|----------|------|--------------|
-| `Payments::TbankAdapter` | `app/services/payments/tbank_adapter.rb` | **`#cancel_payment` → `/v2/Cancel`** |
-| Token sha256 | `build_token` | **не трогали** |
-| Guest cancel | `GuestOrderCancellationService` | pending journal; accepted+PaymentId → Cancel→refunded |
-| Блок `preparing+` | `guest_can_cancel?` + 422 | контракт locked |
-| FE | `orderStatusCtaMachine` + `orderCancelFlow` + `OrderCancelModal` | labels/modal/toasts |
+| Артефакт | Путь | Статус vs #41 |
+|----------|------|---------------|
+| Progress 4 этапа | `orderStatusProgress.js` + UI accordion/OrderStatus | **не трогать структуру** |
+| CTA machine | `orderStatusCtaMachine.js` | есть accepted/cancel/chat/tips/wallet/push — **нет** `hasPushSubscription`, нет ветки `paid`, labels ≠ ТЗ |
+| OS detect | `deviceDetect.js` → `getDeviceOS()` | `isIOS` = `os === "ios"` |
+| Push/Wallet actions | `orderStatusNotifyActions.js` | `subscribeOrderPush` / `downloadWalletPass` |
+| Cancel modal/flow | `OrderCancelModal.svelte` + `orderCancelFlow.js` | готово на OrderStatus; **нет** в accordion |
+| Cable | `shopOrderCable.js` + `OrderStatusSheet` | обновляет status/progress; CTA accordion **не** status-aware |
+| Cancel API | `POST /shop/api/orders/:id/cancel` | BE #40 готов |
 
 ### Глобальные ограничения (канон)
 
-- Payload `/v2/Cancel` — **без** `Receipt`.
-- Не менять переходы `preparing`/`ready`/`issued` (только deny cancel).
-- Не менять `build_token`.
-- Refund только если `payment.status == succeeded` (+ есть `provider_payment_id`).
-- Barista cancel — **out of scope** (без автовозврата в этом эпике).
+- Не менять структуру progress bar (4 этапа Принят→Оплачен→Готовится→Готов).
+- Цвета панели: фон `#1a1a1a` (уже `--bg`/receipt); completed `#4caf50` (не трогать); **CTA accent для блока действий = `#ff6b35`** по макету #41 (сейчас `#ff8c42` в `CTA_STYLE` — для `OrderActionButtons` ввести отдельный `ACTION_CTA_STYLE` / override, **не ломать** тесты #37 на `#ff8c42` без апдейта).
+- Не мутировать order state из кнопок — только callbacks.
+- URL чата/чаевых — только из config; fallback console log по ТЗ.
+- Progress bar / sheet layout — без структурных перестроек.
 
-### Отклонение ТЗ (зафиксировано)
+### Отклонения / конфликты (зафиксировано)
 
-| ТЗ буквально | Канон репо |
-|--------------|------------|
-| `pending_payment`: «платёж не затрагивается» | `PaymentFailureJournal` → ордер `cancelled`, pending payment → **`failed`** (без T-Bank). Сохраняем journal. |
-| «Написать в поддержку» | Сейчас label **«Чат»** — в шаге 5 меняем label по ТЗ (kind остаётся `chat`, URL/handler без смены флоу). |
-| TypeScript / `any` | Svelte+JSDoc; запрет нетипизированных «any» в новых typedef. |
+| ТЗ буквально | Канон репо / решение SPEC |
+|--------------|---------------------------|
+| React + TS + Jest | Svelte + JSDoc + node:test |
+| `paid` status | В домене CoffeeOS после оплаты обычно **`accepted`**; `paid` в mapper = алиас `accepted` |
+| Labels: «Включить Push» / «Добавить в Wallet» / «Чат с поддержкой» / «Оставить чаевые» | Сейчас: «🔔 Уведомление…» / «Карта в Apple Wallet» / «Написать в поддержку» / «Чаевые». **Шаг 3:** выровнять labels под #41 (kind без смены). |
+| Edge: `!hasPushSubscription` → btn2 Push/Wallet **до ready включительно** | Сейчас preparing/ready android = chat+tips всегда. **Шаг 3:** edge перекрывает tips, пока нет подписки; на `ready` при `hasPushSubscription===true` — tips; при `false` — Push/Wallet (по ТЗ edge). |
+| #40 preparing → «Написать в поддержку» | Label → «Чат с поддержкой» (#41); kind `chat` |
+| Accordion secondary «Состав заказа» | Матрица #41 = max 2 CTA; **receipt** остаётся через expand строки аккордеона (не третья кнопка) |
+| Touch target 44px | Сейчас `CTA_STYLE.heightPx: 36` — для `OrderActionButtons` **min-height 44px** (шаг 7) |
 
 ### Размер файлов
 
 | Файл | Строк | План |
 |------|-------|------|
-| `tbank_adapter.rb` | **260** (>200) | Шаг 1: минимальный `#cancel_payment` по паттерну `confirm_payment` (~25 строк). Сплит адаптера — **backlog PRACTICES**, не блокер #40. |
-| `guest_order_cancellation_service.rb` | 95 | Ветка refund; если >120 — вынести `Shop::GuestOrderTbankRefund` |
-| `OrderStatus.svelte` | **754** | Не раздувать: модалка + flow в отдельных файлах |
+| `ActiveOrdersAccordion.svelte` | ~309 | Тонкая замена `.aoa__actions` → `<OrderActionButtons />`; cancel modal mount рядом |
+| `OrderStatus.svelte` | **754** | Не раздувать: только sync labels/machine API; handlers уже есть |
+| `orderStatusCtaMachine.js` | ~67 | Расширить opts + labels; держать ≤120 |
+| `OrderActionButtons.svelte` | **новый** | ≤120; только render + click → callbacks |
 
-### Happy path (целевой)
+---
+
+## Happy path (целевой)
 
 ```text
-pending_payment → GuestCancel → journal (cancelled + payment failed) → NO T-Bank
-accepted + payment.succeeded → GuestCancel → TbankAdapter.cancel_payment(PaymentId)
-  → Success → payment.refunded (+ Refund row) + order.cancelled → broadcast
-preparing|ready|issued → 422, без изменений
+Sticky panel (CartSheet → OrderStatusSheet → ActiveOrdersAccordion)
+  RIGHT: OrderActionButtons ← orderStatusCtas({ status, os, canCancel, hasPushSubscription })
+  Cable status_changed → parent patches order.status → $derived ctas без reload
+accepted/paid + !push: [Отменить заказ] [Push|Wallet]
+preparing + push: [Чат с поддержкой] [Оставить чаевые]
+preparing + !push: [Чат с поддержкой] [Push|Wallet]
+ready + push: [Чат с поддержкой] [Оставить чаевые]
+ready + !push: [Чат с поддержкой] [Push|Wallet]   # edge #41
+Cancel confirm → POST /orders/:id/cancel → 200 cancelled / 4xx-5xx toast, buttons stay
+Chat/Tips → openSupportChat / openTipsService (URL или console pending)
 ```
 
 ---
 
-## Шаги (TDD: RED → GREEN)
+## Шаги TDD (1–7)
 
-| # | Что | Тесты (канон) | Код | Статус |
-|---|-----|---------------|-----|--------|
-| 1 | `TbankAdapter#cancel_payment` → `POST /v2/Cancel` без Receipt | `test/services/payments/tbank_adapter_test.rb` | `app/services/payments/tbank_adapter.rb` | **GREEN `[x]`** |
-| 2 | `pending_payment` local cancel без T-Bank | `test/services/shop/guest_order_cancellation_service_test.rb` (уточнить assert: no Cancel stub) | сервис уже есть — assert/stub | **GREEN `[x]`** (контракт; код был) |
-| 3 | `accepted` + succeeded → Cancel → `refunded` + `cancelled` | guest cancel unit + stub adapter; integration `orders_guest_cancel_test` | `GuestOrderCancellationService` (+ optional thin refund helper) | **GREEN `[x]`** |
-| 4 | Block `preparing`/`ready`/`issued` → 422, payment unchanged | integration + unit (усилить ready/issued + payment freeze) | deny path уже есть | **GREEN `[x]`** (контракт; код был) |
-| 5 | UI CTA: cancel labels + support | `test/javascript/order_status_cta_machine_test.mjs` | `orderStatusCtaMachine.js` (+ OrderStatus wiring) | **GREEN `[x]`** |
-| 6 | Modal confirm для `accepted` (сумма) | `test/javascript/order_cancel_flow_test.mjs` (copy/format) | `OrderCancelModal.svelte` + flow lib | **GREEN `[x]`** |
-| 7 | Loading / toast success / toast 422→«Готовится» | тот же JS + manual/MCP later | `orderCancelFlow.js` + `OrderStatus.svelte` | **GREEN `[x]`** |
+### Шаг 1 — SupportChatAdapter `[ ]`
 
-### Критические кейсы (в шагах 1/3/7)
+- **RED:** `test/javascript/support_chat_adapter_test.mjs`
+- **GREEN:** `app/frontend/lib/supportChatAdapter.js` — `openSupportChat(orderId, chatUrl?)`
+  - URL → `window.open(url, "_blank")`
+  - нет URL → `console.info("[Chat Integration Pending] Order: …")` (injectable `log`)
+- Config read: `shopAppConfig().chatUrl` (опц. в шаге 1 — param `chatUrl` достаточно)
 
-- Timeout / 500/504 T-Bank → API 500, ордер/платёж не «тихо» cancelled.
-- Двойной cancel: UI disable + бэкенд `guest_can_cancel?` / already cancelled / already refunded.
-- Payment `failed`/`refunded` при `accepted` → reject, без Cancel.
-- Сумма в модалке = `order.final_amount` (формат `N ₽`).
+### Шаг 2 — TipsAdapter (нетмонет) `[ ]`
 
-### Регрессия зоны (после GREEN шагов / REVIEW)
+- **RED:** `test/javascript/tips_adapter_test.mjs`
+- **GREEN:** `app/frontend/lib/tipsAdapter.js` — `openTipsService(orderId, tenantId, tipsUrl?)`
+  - URL → `window.open`; иначе log `[Tips Integration Pending] Order: …`
 
-```text
-bin/rails test test/services/payments/tbank_adapter_test.rb \
-  test/services/shop/guest_order_cancellation_service_test.rb \
-  test/integration/shop/api/orders_guest_cancel_test.rb
+### Шаг 3 — ButtonMapper (`orderStatusCtas`) `[ ]`
 
-# зона оплаты (dev-gates)
-bin/rails test test/integration/shop/api/qa_section_2_3_payment_cart_test.rb \
-  test/services/shop/order_creator_test.rb \
-  test/controllers/callbacks/tbank_controller_test.rb
-```
+- **RED:** расширить `order_status_cta_machine_test.mjs` матрицей #41 + `hasPushSubscription` + alias `paid`
+- **GREEN:** `orderStatusCtaMachine.js`
+  - max 2; labels #41
+  - edge `!hasPushSubscription` → btn2 notify (push/wallet) до ready включительно
+  - `paid` ≡ `accepted` для матрицы
+- Регрессия: существующие #40 кейсы (hint 100%, preparing chat) — обновить labels, не ломать kinds
 
-FE: `node --test test/javascript/order_status_cta_machine_test.mjs test/javascript/order_cancel_flow_test.mjs` (или принятый runner репо).
+### Шаг 4 — Статический рендер `OrderActionButtons` `[ ]`
+
+- **RED:** `order_action_buttons_test.mjs` — props `status=paid|accepted`, `hasPushSubscription=false`, `isIOS=true` → 2 кнопки «Отменить заказ» + «Добавить в Wallet»; `data-testid`; фон `#ff6b35`
+- **GREEN:** `OrderActionButtons.svelte` + подключение в `ActiveOrdersAccordion` (замена `notifyActionsView` primary/secondary)
+- Не трогать progress bar DOM
+
+### Шаг 5 — Реактивность ActionCable `[ ]`
+
+- **RED:** тест: после `applyCableEvent` / patch `paid→preparing` набор kinds меняется (cancel→chat); progress view уже зелёный на preparing — assert CTA swap
+- **GREEN:** accordion/`OrderStatusSheet` передаёт актуальный `status` в `OrderActionButtons` ($derived); без remount всей панели
+
+### Шаг 6 — Cancel flow в sticky-панели `[ ]`
+
+- **RED:** wiring: click cancel → Confirm Sheet → POST cancel; 200 → hide buttons / cancelled; 400/500 → toast, buttons active; `isLoading` блокирует double-tap
+- **GREEN:** переиспользовать `OrderCancelModal` + `orderCancelFlow` + `api(/orders/:id/cancel)` из accordion (не копипаст логики OrderStatus)
+- BE не менять (уже #40)
+
+### Шаг 7 — Mobile touch targets `[ ]`
+
+- **RED:** assert `min-height` ≥ 44px / style tokens `ACTION_CTA_STYLE.heightPx >= 44`
+- **GREEN:** CSS `OrderActionButtons` — wrap text, не вылезать за `.aoa__actions`, `<768px` кликабельны
 
 ---
 
-## Out of scope / backlog
+## Регрессия зоны (после GREEN / REVIEW)
 
-- Barista/manager auto-refund при staff cancel
-- Partial refund
-- Сплит `tbank_adapter.rb` / `OrderStatus.svelte`
-- Drop `window.confirm` только после шага 6 (замена модалкой)
+| Зона | Команда |
+|------|---------|
+| JS CTA / cancel / notify / accordion | `node --test test/javascript/order_status_cta_machine_test.mjs test/javascript/order_cancel_flow_test.mjs test/javascript/order_status_notify_actions_test.mjs test/javascript/active_orders_accordion_test.mjs test/javascript/support_chat_adapter_test.mjs test/javascript/tips_adapter_test.mjs test/javascript/order_action_buttons_test.mjs` |
+| Shop (если трогали API) | только если менялся BE — иначе skip |
+| MCP Fly | после deploy — скрины sticky CTA по матрице статусов |
 
 ---
 
-## Дальше
+## Exit Criteria (маппинг)
 
-**go / ебашь** → PHASE 2 RED шаг 1 (`cancel_payment` failing test).
+1. Новые + обновлённые JS-тесты зелёные; ветки mapper покрыты.
+2. Без новых lint/TS ошибок в затронутых FE-файлах.
+3. Макет: справа от progress — реальные CTA по матрице (не «кнопка с текстом»).
+4. WS: смена статуса → смена кнопок без reload.
+5. Cancel до `preparing` + ошибки сети.
+6. Chat/Tips — адаптеры; URL из config одной строкой.
+7. Mobile: touch ≥44px, без overflow.

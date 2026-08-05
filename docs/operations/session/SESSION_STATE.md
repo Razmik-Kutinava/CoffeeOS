@@ -2,14 +2,20 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-08-05 (#41 intake · #40 Fly v428)
+**Дата:** 2026-08-05 (#41 SPEC · #40 Fly v428)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#41** Order action buttons — **PHASE 0 intake `[x]`** | **go → PHASE 1: SPEC** (todo + маппинг Svelte) |
-| **#40** MCP modal accepted **`[x]`** · Fly **v428** | апрув «ок»; опц. live Cancel |
-| **#39 v2** cascade SMS | апрув заказчика |
+| **#41** Order action buttons — PHASE 0 `[x]` · **SPEC `[x]`** | **go → RED шаг 1** (SupportChatAdapter) |
+| **#40** MCP modal accepted **`[x]`** · Fly **v428** | апрув «ок» |
 | Live Fly | **v428** |
+
+### Сессия 2026-08-05 (PHASE 1 SPEC · #41)
+
+- `todo.md`: маппинг React/TS/Jest → Svelte + node:test; целевая поверхность = sticky `ActiveOrdersAccordion` RIGHT
+- Канон: новый `OrderActionButtons.svelte`; mapper = расширить `orderStatusCtaMachine` (+ `hasPushSubscription`); адаптеры chat/tips
+- Конфликт #40/#41 labels + edge push — зафиксирован в todo
+- Код не писали; дальше RED шаг 1
 
 ### Сессия 2026-08-05 (PHASE 0 intake · #41 Action Buttons)
 
