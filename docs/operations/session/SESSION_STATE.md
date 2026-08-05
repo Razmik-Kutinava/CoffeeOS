@@ -6,9 +6,14 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#41** GREEN шаги 1–6 **`[x]`** | **go → RED шаг 7** (mobile touch 44px) |
+| **#41** GREEN 1–6 `[x]` · **RED шаг 7** touch 44px (1 fail) | **go → GREEN шаг 7** → затем REVIEW |
 | **#40** MCP modal accepted **`[x]`** · Fly **v428** | апрув «ок» |
 | Live Fly | **v428** |
+
+### Сессия 2026-08-05 (RED шаг 7 · #41 mobile touch)
+
+- `order_action_buttons_mobile_test.mjs` — `heightPx >= 44` fail (got 36)
+- CHANGELOG/HANDOFF не трогали
 
 ### Сессия 2026-08-05 (GREEN шаг 6 · #41 sticky cancel)
 
