@@ -136,10 +136,10 @@ Chat/Tips → openSupportChat / openTipsService (URL или console pending)
 - Тест: cancel sticky + #40 cancel flow + cable/action → **27/27 PASS**
 - BE не меняли
 
-### Шаг 7 — Mobile touch targets `[ ]`
+### Шаг 7 — Mobile touch targets `[ ]` · RED `in_progress`
 
-- **RED:** assert `min-height` ≥ 44px / style tokens `ACTION_CTA_STYLE.heightPx >= 44`
-- **GREEN:** CSS `OrderActionButtons` — wrap text, не вылезать за `.aoa__actions`, `<768px` кликабельны
+- **RED:** `order_action_buttons_mobile_test.mjs` — `heightPx >= 44`; **1 fail / 1 pass** (сейчас 36)
+- **GREEN:** `ACTION_CTA_STYLE.heightPx = 44` + CSS wrap / не overflow
 
 ---
 
