@@ -126,15 +126,14 @@ describe("applyCableEvent (#35 A1/A2)", () => {
 })
 
 describe("reconnect refresh (#35 A3)", () => {
-  it("applyReconnectOrders replaces list and peeks when non-empty", () => {
+  it("applyReconnectOrders filters out ready and hides sheet", () => {
     const state = createOrderStatusSheetState()
     state.setOrders([{ id: "old", status: "preparing", order_number: "OLD" }])
     applyReconnectOrders(state, [
       { id: "new", status: "ready", order_number: "NEW" }
     ])
-    assert.equal(state.orders.length, 1)
-    assert.equal(state.orders[0].id, "new")
-    assert.equal(state.mode, ORDER_STATUS_SHEET_MODES.PEEK)
+    assert.equal(state.orders.length, 0)
+    assert.equal(state.mode, ORDER_STATUS_SHEET_MODES.HIDDEN)
   })
 
   it("mapReconnectError 404 → hide", () => {
