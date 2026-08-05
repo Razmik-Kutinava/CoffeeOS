@@ -2,7 +2,7 @@
 
 **ТЗ:** [`customer_tasks/Динамический блок действий Action Buttons в статусной панели заказа.md`](../milestones/veha_2/requirements/customer_tasks/Динамический%20блок%20действий%20Action%20Buttons%20в%20статусной%20панели%20заказа.md)  
 **Артефакты:** [`artifacts/order_action_buttons_status_panel/`](../milestones/veha_2/artifacts/order_action_buttons_status_panel/)  
-**Фаза:** PHASE 0 `[x]` · SPEC **`[x]`** · RED/GREEN 1–7 **`[x]`** · REVIEW **`[x]`** · MCP/deploy `[ ]`  
+**Фаза:** PHASE 0 `[x]` · SPEC **`[x]`** · RED/GREEN 1–7 **`[x]`** · REVIEW **`[x]`** · MCP/deploy **`[x]`** Fly v429  
 **CBR:** #41
 
 ---
@@ -14,7 +14,7 @@
 | FE #41 зона (cta/cancel/notify/accordion/adapters/action/cable/mobile/sheet/wallet/push) | **95 runs / 0 fail PASS** |
 | N+1 / RLS | не затронуты (только FE sticky CTA) |
 | Progress bar структура | не менялась |
-| MCP / Fly deploy | **`[ ]`** ждёт апрув |
+| MCP / Fly deploy | **`[x]`** Fly **v429** · MCP PASS · [`mcp/fly_v429_2026-08-05/`](../milestones/veha_2/artifacts/order_action_buttons_status_panel/mcp/fly_v429_2026-08-05/) |
 
 ---
 
@@ -161,7 +161,7 @@ Chat/Tips → openSupportChat / openTipsService (URL или console pending)
 |------|---------|
 | JS CTA / cancel / notify / accordion | `node --test test/javascript/order_status_cta_machine_test.mjs test/javascript/order_cancel_flow_test.mjs test/javascript/order_status_notify_actions_test.mjs test/javascript/active_orders_accordion_test.mjs test/javascript/support_chat_adapter_test.mjs test/javascript/tips_adapter_test.mjs test/javascript/order_action_buttons_test.mjs` |
 | Shop (если трогали API) | только если менялся BE — иначе skip |
-| MCP Fly | после deploy — скрины sticky CTA по матрице статусов |
+| MCP Fly | **PASS** v429 · chat+push · `#ff6b35`/44px · evidence `mcp/fly_v429_2026-08-05/` |
 
 ---
 

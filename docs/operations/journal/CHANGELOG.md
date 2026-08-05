@@ -1,11 +1,17 @@
 ﻿# CHANGELOG
 
+## 2026-08-05 — deploy: #41 Order action buttons on Fly v429 · MCP PASS
+
+- Push develop · Fly **v429** · `deployment-01KZ88WP8VNXVGCBZVV4QZ0NAM`
+- MCP: sticky RIGHT «Чат с поддержкой» + «Включить Push» · `#ff6b35` · 44px · 17 roots / 29 btns
+- Evidence: `artifacts/order_action_buttons_status_panel/mcp/fly_v429_2026-08-05/`
+
 ## 2026-08-05 — feat: #41 Order action buttons status panel [REVIEW]
 
 - FE: `OrderActionButtons` + `orderStatusCtas(+hasPushSubscription)` + SupportChat/Tips adapters
 - Sticky: cable `can_cancel` merge; cancel Confirm Sheet + `stickyOrderCancel`; touch 44px `#ff6b35`
 - Регрессия JS зона #41: **95/95 PASS**
-- Deploy/MCP — не делали
+- Deploy/MCP — сделаны отдельным шагом (v429)
 
 ## 2026-08-05 — docs: SPEC #41 Order action buttons status panel
 

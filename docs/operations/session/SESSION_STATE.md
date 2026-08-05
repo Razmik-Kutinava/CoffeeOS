@@ -2,18 +2,24 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-08-05 (#41 REVIEW · #40 Fly v428)
+**Дата:** 2026-08-05 (#41 Fly v429 MCP PASS · #40 v428)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#41** REVIEW **`[x]`** · JS **95/95 PASS** | push + fly deploy + MCP (по апруву) |
+| **#41** MCP **PASS** · Fly **v429** · chat+push · `#ff6b35`/44px | апрув «ок» |
 | **#40** MCP modal accepted **`[x]`** · Fly **v428** | апрув «ок» |
-| Live Fly | **v428** (без #41) |
+| Live Fly | **v429** |
+
+### Сессия 2026-08-05 (push / deploy / MCP · #41)
+
+- Push develop · Fly **v429** · image `deployment-01KZ88WP8VNXVGCBZVV4QZ0NAM`
+- MCP Aram Point A: 17× `order-action-buttons` · 29× btn · kinds chat/push · 44px · `#ff6b35`
+- Evidence: `artifacts/order_action_buttons_status_panel/mcp/fly_v429_2026-08-05/`
 
 ### Сессия 2026-08-05 (PHASE 3 REVIEW · #41)
 
 - Регрессия FE зона #41: **95 runs / 0 fail PASS**
-- CHANGELOG/HANDOFF/todo sync; MCP/deploy ждут апрув
+- CHANGELOG/HANDOFF/todo sync; затем push/deploy/MCP
 
 ### Сессия 2026-08-05 (GREEN шаг 7 · #41 mobile 44px)
 

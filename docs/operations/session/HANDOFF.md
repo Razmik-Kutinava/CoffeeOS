@@ -1,22 +1,24 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-08-05 (**#41** REVIEW · **#40** Fly **v428**)  
+**Дата:** 2026-08-05 (**#41** Fly **v429** MCP PASS · **#40** v428)  
 **Ветка:** `develop`  
-**Прод:** https://coffeeos.fly.dev (**v428** — без #41 до deploy)
+**Прод:** https://coffeeos.fly.dev (**v429**)
 
 ### Order action buttons status panel (#41) — 2026-08-05
 
 | Что | Статус |
 |-----|--------|
 | Intake / SPEC / RED-GREEN 1–7 / REVIEW | **`[x]`** |
-| Push develop | **`[ ]`** |
-| Fly deploy / MCP | **`[ ]`** |
+| Push develop | **`[x]`** |
+| Fly deploy | **`[x]`** **v429** · `deployment-01KZ88WP8VNXVGCBZVV4QZ0NAM` |
+| MCP | **PASS** · sticky RIGHT chat+push · `#ff6b35` / 44px · 17 roots / 29 btns |
 
 **ТЗ:** [`Динамический блок действий Action Buttons в статусной панели заказа.md`](../milestones/veha_2/requirements/customer_tasks/Динамический%20блок%20действий%20Action%20Buttons%20в%20статусной%20панели%20заказа.md)  
 **Артефакты:** [`order_action_buttons_status_panel/`](../milestones/veha_2/artifacts/order_action_buttons_status_panel/)  
+**Evidence:** [`mcp/fly_v429_2026-08-05/`](../milestones/veha_2/artifacts/order_action_buttons_status_panel/mcp/fly_v429_2026-08-05/)  
 **Канон:** sticky RIGHT → `OrderActionButtons`; матрица Отмена/Чат/Чаевые/Push|Wallet; adapters chat/tips; cable `can_cancel`; cancel modal; touch 44px `#ff6b35`.  
 **Регрессия:** JS **95/95 PASS**.  
-**Дальше:** push + fly deploy + MCP (матрица CTA по статусам) — только по явной просьбе.
+**Дальше:** апрув заказчика «ок» → `[x]` в CBR; cancel CTA live — на accepted с `can_cancel`.
 
 ### T-Bank auto refund on PWA cancel (#40) — 2026-08-04
 
