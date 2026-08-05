@@ -6,9 +6,14 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#41** GREEN шаги 1–2 **`[x]`** (Chat + Tips adapters) | **go → RED шаг 3** (ButtonMapper / orderStatusCtas) |
+| **#41** GREEN 1–2 `[x]` · **RED шаг 3** ButtonMapper (10 fail / 6 pass) | **go → GREEN шаг 3** |
 | **#40** MCP modal accepted **`[x]`** · Fly **v428** | апрув «ок» |
 | Live Fly | **v428** |
+
+### Сессия 2026-08-05 (RED шаг 3 · #41 ButtonMapper)
+
+- `order_status_cta_machine_test.mjs`: labels #41, `paid` alias, `hasPushSubscription` edge
+- `node --test …` → **10 fail / 6 pass** (намеренно); CHANGELOG/HANDOFF не трогали
 
 ### Сессия 2026-08-05 (GREEN шаг 2 · #41 TipsAdapter)
 

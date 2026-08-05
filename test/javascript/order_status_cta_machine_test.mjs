@@ -1,5 +1,5 @@
 /**
- * #38 / #40 — PWA UI CTA state machine на карточке заказа.
+ * #38 / #40 / #41 — PWA UI CTA state machine на карточке заказа.
  *
  * node --test test/javascript/order_status_cta_machine_test.mjs
  */
@@ -33,7 +33,7 @@ describe("orderStatusCtas (#38 / #40 step 5)", () => {
     )
     assert.equal(view.buttons[0].label, "Отменить заказ")
     assert.equal(view.buttons[0].hint, "Вернем 100% суммы")
-    assert.match(view.buttons[1].label, /Уведомление|Push|push/i)
+    assert.equal(view.buttons[1].label, "Включить Push")
     assert.equal(view.style.background, CTA_STYLE.background)
   })
 
@@ -49,7 +49,7 @@ describe("orderStatusCtas (#38 / #40 step 5)", () => {
     )
     assert.equal(view.buttons[0].label, "Отменить заказ")
     assert.equal(view.buttons[0].hint, "Вернем 100% суммы")
-    assert.match(view.buttons[1].label, /Apple Wallet|Wallet/)
+    assert.equal(view.buttons[1].label, "Добавить в Wallet")
   })
 
   it("accepted without canCancel: only Push/Wallet (≤2)", () => {
@@ -75,53 +75,145 @@ describe("orderStatusCtas (#38 / #40 step 5)", () => {
     assert.ok(view.buttons.length <= 2)
   })
 
-  it("preparing: cancel gone — Написать в поддержку + Чаевые (android)", () => {
+  it("preparing: cancel gone — Чат + Чаевые (android, subscribed)", () => {
     const view = orderStatusCtas({
       status: "preparing",
       os: "android",
-      canCancel: false
+      canCancel: false,
+      hasPushSubscription: true
     })
     assert.equal(view.buttons.length, 2)
     assert.deepEqual(
       view.buttons.map((b) => b.kind),
       ["chat", "tips"]
     )
-    assert.equal(view.buttons[0].label, "Написать в поддержку")
-    assert.equal(view.buttons[1].label, "Чаевые")
+    assert.equal(view.buttons[0].label, "Чат с поддержкой")
+    assert.equal(view.buttons[1].label, "Оставить чаевые")
     assert.ok(!view.buttons.some((b) => b.kind === "cancel"))
   })
 
-  it("preparing ios: Написать в поддержку + Wallet", () => {
+  it("preparing ios + subscribed: Чат + Чаевые", () => {
     const view = orderStatusCtas({
       status: "preparing",
       os: "ios",
-      canCancel: true
+      canCancel: true,
+      hasPushSubscription: true
     })
     assert.deepEqual(
       view.buttons.map((b) => b.kind),
-      ["chat", "wallet"]
+      ["chat", "tips"]
     )
-    assert.equal(view.buttons[0].label, "Написать в поддержку")
+    assert.equal(view.buttons[0].label, "Чат с поддержкой")
+    assert.equal(view.buttons[1].label, "Оставить чаевые")
   })
 
-  it("ready: same matrix as preparing (support + tips/wallet)", () => {
-    const android = orderStatusCtas({ status: "ready", os: "android" })
-    const ios = orderStatusCtas({ status: "ready", os: "ios" })
+  it("ready + subscribed: same matrix as preparing (chat + tips)", () => {
+    const android = orderStatusCtas({
+      status: "ready",
+      os: "android",
+      hasPushSubscription: true
+    })
+    const ios = orderStatusCtas({
+      status: "ready",
+      os: "ios",
+      hasPushSubscription: true
+    })
     assert.deepEqual(
       android.buttons.map((b) => b.kind),
       ["chat", "tips"]
     )
-    assert.equal(android.buttons[0].label, "Написать в поддержку")
+    assert.equal(android.buttons[0].label, "Чат с поддержкой")
     assert.deepEqual(
       ios.buttons.map((b) => b.kind),
-      ["chat", "wallet"]
+      ["chat", "tips"]
     )
-    assert.equal(ios.buttons[0].label, "Написать в поддержку")
+    assert.equal(ios.buttons[0].label, "Чат с поддержкой")
   })
 
   it("cancelled / unknown: no CTAs", () => {
     assert.equal(orderStatusCtas({ status: "cancelled", os: "android" }).buttons.length, 0)
     assert.equal(orderStatusCtas({ status: "issued", os: "ios" }).buttons.length, 0)
+  })
+})
+
+describe("orderStatusCtas (#41 step 3 ButtonMapper) [TDD-RED]", () => {
+  it("paid ≡ accepted: cancel + Wallet (ios)", () => {
+    const view = orderStatusCtas({
+      status: "paid",
+      os: "ios",
+      canCancel: true,
+      hasPushSubscription: false
+    })
+    assert.deepEqual(
+      view.buttons.map((b) => b.kind),
+      ["cancel", "wallet"]
+    )
+    assert.equal(view.buttons[0].label, "Отменить заказ")
+    assert.equal(view.buttons[1].label, "Добавить в Wallet")
+  })
+
+  it("paid android: cancel + Включить Push", () => {
+    const view = orderStatusCtas({
+      status: "paid",
+      os: "android",
+      canCancel: true,
+      hasPushSubscription: false
+    })
+    assert.deepEqual(
+      view.buttons.map((b) => b.kind),
+      ["cancel", "push"]
+    )
+    assert.equal(view.buttons[1].label, "Включить Push")
+  })
+
+  it("edge: preparing + !hasPushSubscription → chat + Push (android)", () => {
+    const view = orderStatusCtas({
+      status: "preparing",
+      os: "android",
+      hasPushSubscription: false
+    })
+    assert.deepEqual(
+      view.buttons.map((b) => b.kind),
+      ["chat", "push"]
+    )
+    assert.equal(view.buttons[0].label, "Чат с поддержкой")
+    assert.equal(view.buttons[1].label, "Включить Push")
+  })
+
+  it("edge: preparing + !hasPushSubscription → chat + Wallet (ios)", () => {
+    const view = orderStatusCtas({
+      status: "preparing",
+      os: "ios",
+      hasPushSubscription: false
+    })
+    assert.deepEqual(
+      view.buttons.map((b) => b.kind),
+      ["chat", "wallet"]
+    )
+    assert.equal(view.buttons[1].label, "Добавить в Wallet")
+  })
+
+  it("edge: ready + !hasPushSubscription → chat + Push (android)", () => {
+    const view = orderStatusCtas({
+      status: "ready",
+      os: "android",
+      hasPushSubscription: false
+    })
+    assert.deepEqual(
+      view.buttons.map((b) => b.kind),
+      ["chat", "push"]
+    )
+    assert.equal(view.buttons[1].label, "Включить Push")
+  })
+
+  it("max 2 buttons always", () => {
+    const view = orderStatusCtas({
+      status: "accepted",
+      os: "android",
+      canCancel: true,
+      hasPushSubscription: false
+    })
+    assert.ok(view.buttons.length <= 2)
   })
 })
 
