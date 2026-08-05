@@ -86,7 +86,7 @@ class Shop::B113S2CartPopupTest < ActionDispatch::IntegrationTest
     assert_includes thresholds, "SCROLL_TO_PEEK_PX = 100"
     assert_includes thresholds, "SCROLL_TO_HIDDEN_PX = 200"
     assert_includes thresholds, "SWIPE_UP_PX = 20"
-    assert_includes thresholds, 'CART_SHEET_BUILD = "prog35"'
+    assert_includes thresholds, 'CART_SHEET_BUILD = "prog36"'
 
     assert_equal 56, sheet_height_vh("expanded", 3)
     assert_equal 38, sheet_height_vh("peek", 2)
@@ -95,14 +95,15 @@ class Shop::B113S2CartPopupTest < ActionDispatch::IntegrationTest
     assert_equal 12, sheet_height_vh("empty", 0)
   end
 
-  test "isCartSheetRoute mirror: catalog + checkout, not product/profile" do
+  test "isCartSheetRoute mirror: catalog + checkout + product, not favorites/profile" do
     assert cart_sheet_route?("#/")
     assert cart_sheet_route?("#")
     assert cart_sheet_route?("")
     assert cart_sheet_route?("#/checkout")
     refute cart_sheet_route?("#/favorites")
     refute cart_sheet_route?("#/profile")
-    refute cart_sheet_route?("#/product/1")
+    assert cart_sheet_route?("#/product/1")
+    assert cart_sheet_route?("#/product/1?cart_line=0")
   end
 
   test "cart api supports CartSheet after add" do

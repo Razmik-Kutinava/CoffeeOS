@@ -109,6 +109,20 @@ describe("applyCableEvent (#35 A1/A2)", () => {
     assert.equal(state.orders[0].id, "7")
     assert.equal(state.mode, ORDER_STATUS_SHEET_MODES.PEEK)
   })
+
+  it("removes order on status=ready status_changed event", () => {
+    const state = createOrderStatusSheetState()
+    state.setOrders([{ id: "42", status: "preparing", order_number: "N" }])
+
+    applyCableEvent(state, {
+      type: "status_changed",
+      order_id: "42",
+      status: "ready"
+    })
+
+    assert.equal(state.orders.length, 0)
+    assert.equal(state.mode, ORDER_STATUS_SHEET_MODES.HIDDEN)
+  })
 })
 
 describe("reconnect refresh (#35 A3)", () => {
