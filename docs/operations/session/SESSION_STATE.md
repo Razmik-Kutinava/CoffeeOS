@@ -6,9 +6,14 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#41** GREEN 1 `[x]` · **RED шаг 2** TipsAdapter (падающий тест) | **go → GREEN шаг 2** |
+| **#41** GREEN шаги 1–2 **`[x]`** (Chat + Tips adapters) | **go → RED шаг 3** (ButtonMapper / orderStatusCtas) |
 | **#40** MCP modal accepted **`[x]`** · Fly **v428** | апрув «ок» |
 | Live Fly | **v428** |
+
+### Сессия 2026-08-05 (GREEN шаг 2 · #41 TipsAdapter)
+
+- `app/frontend/lib/tipsAdapter.js` — `openTipsService`
+- tips+chat adapters → **6/6 PASS**
 
 ### Сессия 2026-08-05 (RED шаг 2 · #41 TipsAdapter)
 
