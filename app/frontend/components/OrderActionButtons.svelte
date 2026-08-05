@@ -68,6 +68,8 @@
     display: flex;
     flex-direction: column;
     flex-shrink: 0;
+    max-width: 100%;
+    box-sizing: border-box;
   }
   .oab__btn {
     display: flex;
@@ -76,6 +78,7 @@
     justify-content: center;
     box-sizing: border-box;
     width: 100%;
+    min-height: 44px;
     padding: 0.35rem 0.45rem;
     border: 0;
     cursor: pointer;
@@ -83,6 +86,7 @@
     line-height: 1.15;
     white-space: normal;
     word-break: break-word;
+    overflow-wrap: anywhere;
   }
   .oab__btn:disabled {
     opacity: 0.85;
@@ -94,5 +98,10 @@
     font-weight: 500;
     opacity: 0.9;
     margin-top: 0.1rem;
+  }
+  @media (max-width: 767px) {
+    .oab__btn {
+      min-height: 44px;
+    }
   }
 </style>

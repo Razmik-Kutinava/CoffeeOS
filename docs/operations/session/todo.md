@@ -2,7 +2,7 @@
 
 **ТЗ:** [`customer_tasks/Динамический блок действий Action Buttons в статусной панели заказа.md`](../milestones/veha_2/requirements/customer_tasks/Динамический%20блок%20действий%20Action%20Buttons%20в%20статусной%20панели%20заказа.md)  
 **Артефакты:** [`artifacts/order_action_buttons_status_panel/`](../milestones/veha_2/artifacts/order_action_buttons_status_panel/)  
-**Фаза:** PHASE 0 `[x]` · SPEC **`[x]`** · RED/GREEN 1–7 `[ ]` · REVIEW `[ ]` · MCP/deploy `[ ]`  
+**Фаза:** PHASE 0 `[x]` · SPEC **`[x]`** · RED/GREEN 1–7 **`[x]`** · REVIEW `[ ]` · MCP/deploy `[ ]`  
 **CBR:** #41
 
 ---
@@ -136,10 +136,11 @@ Chat/Tips → openSupportChat / openTipsService (URL или console pending)
 - Тест: cancel sticky + #40 cancel flow + cable/action → **27/27 PASS**
 - BE не меняли
 
-### Шаг 7 — Mobile touch targets `[ ]` · RED `in_progress`
+### Шаг 7 — Mobile touch targets `[x]` · GREEN
 
-- **RED:** `order_action_buttons_mobile_test.mjs` — `heightPx >= 44`; **1 fail / 1 pass** (сейчас 36)
-- **GREEN:** `ACTION_CTA_STYLE.heightPx = 44` + CSS wrap / не overflow
+- **RED:** `order_action_buttons_mobile_test.mjs` — `heightPx >= 44`; **1 fail / 1 pass** (было 36)
+- **GREEN:** `ACTION_CTA_STYLE.heightPx = 44` + CSS `min-height: 44px` / wrap / `@media max-width 767px`
+- Регрессия #41 FE зона → **51/51 PASS**
 
 ---
 

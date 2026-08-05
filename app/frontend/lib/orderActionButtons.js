@@ -6,7 +6,7 @@ export const ACTION_CTA_STYLE = Object.freeze({
   background: "#ff6b35",
   color: "#ffffff",
   fontWeight: 600,
-  heightPx: 36,
+  heightPx: 44,
   borderRadius: "0.375rem",
   fontSizeRem: 0.75,
   actionsClass: "oab__actions",

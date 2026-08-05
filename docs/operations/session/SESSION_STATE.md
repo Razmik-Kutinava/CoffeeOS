@@ -6,9 +6,14 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#41** GREEN 1–6 `[x]` · **RED шаг 7** touch 44px (1 fail) | **go → GREEN шаг 7** → затем REVIEW |
+| **#41** GREEN шаги 1–7 **`[x]`** | **go → PHASE 3: REVIEW** |
 | **#40** MCP modal accepted **`[x]`** · Fly **v428** | апрув «ок» |
 | Live Fly | **v428** |
+
+### Сессия 2026-08-05 (GREEN шаг 7 · #41 mobile 44px)
+
+- `ACTION_CTA_STYLE.heightPx = 44` + CSS min-height / media
+- #41 FE зона → **51/51 PASS**
 
 ### Сессия 2026-08-05 (RED шаг 7 · #41 mobile touch)
 

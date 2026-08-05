@@ -17,7 +17,7 @@ const componentPath = join(
   "app/frontend/components/OrderActionButtons.svelte"
 )
 
-describe("ACTION_CTA_STYLE touch target (#41 step 7) [TDD-RED]", () => {
+describe("ACTION_CTA_STYLE touch target (#41 step 7)", () => {
   it("min touch height is at least 44px", () => {
     assert.ok(
       ACTION_CTA_STYLE.heightPx >= 44,
@@ -26,7 +26,7 @@ describe("ACTION_CTA_STYLE touch target (#41 step 7) [TDD-RED]", () => {
   })
 })
 
-describe("OrderActionButtons mobile CSS (#41 step 7) [TDD-RED]", () => {
+describe("OrderActionButtons mobile CSS (#41 step 7)", () => {
   it("buttons wrap text and stay within action column", () => {
     const src = readFileSync(componentPath, "utf8")
     assert.match(src, /min-height|heightPx/)
@@ -34,7 +34,7 @@ describe("OrderActionButtons mobile CSS (#41 step 7) [TDD-RED]", () => {
     assert.match(src, /width:\s*100%/)
     assert.match(
       src,
-      /@media[^{]*max-width:\s*767px|min-height:\s*44px|heightPx\s*>=\s*44|ACTION_CTA_STYLE\.heightPx/
+      /@media[^{]*max-width:\s*767px|min-height:\s*44px|ACTION_CTA_STYLE\.heightPx/
     )
   })
 })
