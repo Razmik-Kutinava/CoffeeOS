@@ -1,8 +1,8 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-08-05 (**#35 rev** intake+SPEC · **#41** закрыта)  
+**Дата:** 2026-08-05 (**#35 rev** push/deploy/MCP · **#41** закрыта)  
 **Ветка:** `develop`  
-**Прод:** https://coffeeos.fly.dev (**v431**)
+**Прод:** https://coffeeos.fly.dev (**v432**)
 
 ### Order status compact sheet + Push #35 — ревизия ТЗ (2026-08-05)
 
@@ -10,13 +10,17 @@
 |-----|--------|
 | PHASE 0 intake (ТЗ 1:1 + скрины) | **`[x]`** |
 | PHASE 1 SPEC (`todo.md`) | **`[x]`** |
-| RED/GREEN | **`[ ]`** |
-| MCP vs новые скрины | **`[ ]`** |
+| RED/GREEN A/B/C | **`[x]`** tip `38df5088` |
+| Push develop | **`[x]`** `8ffabc86..38df5088` |
+| Fly deploy | **`[x]`** **v432** · `deployment-01KZ8W88G4HC0YK291M3FM011G` |
+| MCP home/product/scroll | **PASS** |
+| MCP barista → ready → hide + push | **PARTIAL** (не гоняли) |
 
 **ТЗ:** [`Интеграция статусной модели…`](../milestones/veha_2/requirements/customer_tasks/Интеграция%20статусной%20модели%20в%20компактную%20шторку%20PWA%20и%20Push.md)  
 **Скрины:** [`order_status_compact_sheet_push/screenshots/`](../milestones/veha_2/artifacts/order_status_compact_sheet_push/screenshots/) (обновлены 2026-08-05)  
-**Дельта:** hide widget on `ready`; mount на `#/product`; `GET orders/active` без `ready`. Baseline v414.  
-**Дальше:** RED → GREEN по `todo.md`.
+**Evidence:** [`mcp/fly_v432_2026-08-05/`](../milestones/veha_2/artifacts/order_status_compact_sheet_push/mcp/fly_v432_2026-08-05/)  
+**Дельта live:** hide `ready` · sheet на `#/product` · scroll >2 · ReadyPushJob copy/claim.  
+**Дальше:** апрув заказчика; optional MCP smoke barista→ready.
 
 ### Order action buttons status panel (#41) — 2026-08-05
 

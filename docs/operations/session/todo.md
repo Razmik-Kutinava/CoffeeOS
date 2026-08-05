@@ -2,7 +2,7 @@
 
 **ТЗ:** [`customer_tasks/Интеграция статусной модели в компактную шторку PWA и Push.md`](../milestones/veha_2/requirements/customer_tasks/Интеграция%20статусной%20модели%20в%20компактную%20шторку%20PWA%20и%20Push.md)  
 **Артефакты / скрины:** [`artifacts/order_status_compact_sheet_push/`](../milestones/veha_2/artifacts/order_status_compact_sheet_push/)  
-**Фаза:** PHASE 0 `[x]` · SPEC **`[x]`** · RED/GREEN **`[ ]`** · REVIEW **`[ ]`** · MCP **`[ ]`**
+**Фаза:** PHASE 0 `[x]` · SPEC **`[x]`** · RED/GREEN **`[x]`** · REVIEW **`[x]`** · MCP home/product **`[x]`** · MCP ready-smoke **`[ ]`**
 
 **Контекст:** первая реализация #35 (2026-07-31, Fly v414) есть. Заказчик обновил ТЗ + 5 скринов. Этот проход — **дельта** до соответствия новому канону.
 
@@ -70,10 +70,10 @@
 
 ### MCP приёмка (после GREEN)
 
-- [ ] Home — скрин `01`
-- [ ] Product — `02`, `03`
-- [ ] Product multi — `04` или `05`
-- [ ] Бариста → `ready` → виджет исчез + push (smoke)
+- [x] Home — скрин `01` (Fly **v432** DOM PASS)
+- [x] Product — `02`, `03` (sheet на `#/product` + add)
+- [x] Product multi — `04` или `05` (6 rows scrollable)
+- [ ] Бариста → `ready` → виджет исчез + push (smoke) — PARTIAL, не гоняли live
 
 ### Риски
 

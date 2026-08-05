@@ -2,12 +2,20 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-08-05 (#35 rev intake+SPEC)
+**Дата:** 2026-08-05 (#35 rev · Fly v432 MCP)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#35 rev** ТЗ + 5 скринов обновлены · SPEC в `todo.md` | RED/GREEN: hide on `ready`, product route |
+| **#35 rev** push+deploy **v432** · MCP home/product/scroll **PASS** | апрув заказчика; optional barista→ready smoke |
 | **#41** CBR **`[x]`** · MCP v429+v431 cancel PASS | — |
+| Live Fly | **v432** |
+
+### Сессия 2026-08-05 (push/deploy/MCP · #35 rev)
+
+- Push develop `38df5088` · Fly **v432** · image `deployment-01KZ8W88G4HC0YK291M3FM011G`
+- MCP Point A: sheet home + product `#/product/…` · 6 rows scrollable · cancel CTA на accepted (не ready)
+- Evidence: `artifacts/order_status_compact_sheet_push/mcp/fly_v432_2026-08-05/`
+- Smoke ready→hide+push — не гоняли
 
 ### Сессия 2026-08-05 (PHASE 0 + SPEC · #35 rev)
 

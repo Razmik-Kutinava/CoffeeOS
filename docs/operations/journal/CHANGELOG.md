@@ -1,5 +1,12 @@
 ﻿# CHANGELOG
 
+## 2026-08-05 — deploy: #35 rev status sheet hide-ready + product · Fly v432 MCP PASS
+- Push `38df5088` · Fly **v432** · `deployment-01KZ8W88G4HC0YK291M3FM011G`
+- Live: `orders/active` без ready · sheet на home + `#/product` · scroll >2
+- ReadyPushJob: copy «Ваш заказ готов, заберите на кассе!» + claim в job
+- MCP: [`order_status_compact_sheet_push/mcp/fly_v432_2026-08-05/`](../milestones/veha_2/artifacts/order_status_compact_sheet_push/mcp/fly_v432_2026-08-05/)
+- Smoke barista→ready→hide — PARTIAL
+
 ## 2026-08-05 — fix: #41 can_cancel in orders/active + cancel MCP v431
 
 - BE: `ActiveOrdersPresenter` + `GuestOrderBroadcaster` отдают `can_cancel` для sticky CTA
