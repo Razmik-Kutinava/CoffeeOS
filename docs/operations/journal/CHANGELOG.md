@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-08-05 — deploy: #42 stuck sheet TTL · Fly v433 MCP PASS
+- Push `ec1e6a65` · Fly **v433** · `deployment-01KZ9913PP55V099F8Y6JQCK5V`
+- Live: Aram `orders/active` → `[]` (5 June accepted отрезаны TTL); sheet absent; pay CTA `+3₽` visible
+- Evidence: [`stuck_orders_status_sheet_blocks_payment/mcp/fly_v433_2026-08-05/`](../milestones/veha_2/artifacts/stuck_orders_status_sheet_blocks_payment/mcp/fly_v433_2026-08-05/)
+- ISSUES #42 → resolved
+
 ## 2026-08-05 — feat: #42 TTL active orders + peek height (unblock payment)
 - `orders/active`: только заказы за последние **24h** (June accepted больше не залипают в шторке)
 - OrderStatusSheet embedded peek: `min(22vh, 8.5rem)` — не перекрывает оплату

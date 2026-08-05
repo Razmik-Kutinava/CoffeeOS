@@ -1,21 +1,22 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-08-05 (**#42** local GREEN · **#35** v432)  
+**Дата:** 2026-08-05 (**#42** Fly v433 MCP PASS · **#35** v432)  
 **Ветка:** `develop`  
-**Прод:** https://coffeeos.fly.dev (**v432** — без #42 до deploy)
+**Прод:** https://coffeeos.fly.dev (**v433**)
 
 ### Stuck orders sheet blocks payment (#42) — 2026-08-05
 
 | Что | Статус |
 |-----|--------|
 | Intake | **`[x]`** |
-| TTL 24h + peek height | **`[x]`** local tests PASS |
-| Push / Fly / MCP | **`[ ]`** |
+| TTL 24h + peek height | **`[x]`** |
+| Push / Fly / MCP | **`[x]`** **v433** PASS |
 
 **ТЗ:** [`Зависшие заказы…`](../milestones/veha_2/requirements/customer_tasks/Зависшие%20заказы%20в%20статусной%20шторке%20PWA%20блокируют%20оплату.md)  
+**Evidence:** [`mcp/fly_v433_2026-08-05/`](../milestones/veha_2/artifacts/stuck_orders_status_sheet_blocks_payment/mcp/fly_v433_2026-08-05/)  
 **Суть:** June `#202606-*` вечно в шторке → пол экрана; на табло нет (фильтр смены).  
-**Фикс:** `orders/active` ≥ 24h + peek `min(22vh,8.5rem)`. FAQ payment statuses в ТЗ.  
-**Дальше:** push + deploy + MCP.
+**Фикс live:** `orders/active` TTL 24h → Aram `[]`; peek `min(22vh,8.5rem)`; pay CTA видна.  
+**Дальше:** апрув заказчика «ок»; backlog SM NULL-shift / payment sync.
 
 ### Order status compact sheet + Push #35 — ревизия ТЗ (2026-08-05)
 

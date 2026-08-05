@@ -2,20 +2,27 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-08-05 (#42 stuck sheet unblock · local GREEN)
+**Дата:** 2026-08-05 (#42 Fly v433 MCP PASS)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#42** TTL 24h + peek height — тесты PASS | push/deploy/MCP чтобы Арам мог тестить |
-| **#35 rev** Fly **v432** MCP home/product PASS | апрув; optional ready-smoke |
-| Live Fly | **v432** (ещё без #42) |
+| **#42** Fly **v433** MCP PASS · ISSUES resolved | апрув заказчика «ок» |
+| **#35 rev** Fly **v432** (superseded tip by v433) | апрув; optional ready-smoke |
+| Live Fly | **v433** |
+
+### Сессия 2026-08-05 (push/deploy/MCP · #42)
+
+- Push `ec1e6a65` · Fly **v433** · `deployment-01KZ9913PP55V099F8Y6JQCK5V`
+- Server: Aram 5 June accepted → 0 в 24h window
+- MCP: reconnect → `orders/active=[]` · no sheet · `+3₽` visible
+- Evidence: `artifacts/stuck_orders_status_sheet_blocks_payment/mcp/fly_v433_2026-08-05/`
 
 ### Сессия 2026-08-05 (GREEN · #42 stuck orders sheet)
 
 - Intake: `Зависшие заказы в статусной шторке…` + CBR #42
 - BE: `ACTIVE_ORDERS_WINDOW = 24.hours` на `#active`
 - FE: peek `min(22vh, 8.5rem)`
-- Тесты 11/11 PASS · deploy ждёт апрув
+- Тесты 11/11 PASS
 
 ### Сессия 2026-08-05 (push/deploy/MCP · #35 rev)
 

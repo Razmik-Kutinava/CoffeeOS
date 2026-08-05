@@ -5,10 +5,10 @@
 ## 🔴 Блокеры
 
 [2026-08-05] — #42 Зависшие June accepted в шторке #35 блокируют оплату Point A
-**Статус:** 🟡 **код local PASS** · ждёт push/deploy/MCP
+**Статус:** **resolved** 2026-08-05 · Fly **v433** · MCP PASS
 **Источник:** Арам · чат · [`customer_tasks/Зависшие заказы…`](milestones/veha_2/requirements/customer_tasks/Зависшие%20заказы%20в%20статусной%20шторке%20PWA%20блокируют%20оплату.md)
 **Root cause:** `orders/active` без TTL → старые `accepted` вечно в sheet; peek `min(40vh,16rem)` съедает экран. На табло нет: фильтр открытой смены (`created_at >= shift.opened_at` / cash_shift).
-**Чем закрыли (local):** TTL 24h на `#active` + CSS peek `min(22vh,8.5rem)`; тесты active+mount PASS. Deploy/MCP — следующий шаг.
+**Чем закрыли:** TTL 24h на `#active` + peek `min(22vh,8.5rem)`; deploy v433; MCP Aram `orders/active=[]`, June не в DOM, CTA `+3₽` видна. Evidence: [`mcp/fly_v433_2026-08-05/`](milestones/veha_2/artifacts/stuck_orders_status_sheet_blocks_payment/mcp/fly_v433_2026-08-05/).
 **Backlog:** SM filter NULL-shift; sync payment `processing` после callback.
 
 [2026-08-05] — Fly coffeeos edge FRA: 503 «could not find a good candidate within 40 attempts at load balancing»

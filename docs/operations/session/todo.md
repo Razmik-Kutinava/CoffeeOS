@@ -11,7 +11,7 @@
 | 2 | Peek max-height `min(22vh, 8.5rem)` | `[x]` |
 | 3 | Тесты active + mount | `[x]` |
 | 4 | FAQ payment processing/succeeded в ТЗ | `[x]` |
-| 5 | Push/deploy/MCP | `[ ]` |
+| 5 | Push/deploy/MCP | `[x]` Fly **v433** PASS |
 | 6 | Backlog: SM filter NULL-shift; payment row sync | backlog |
 
 ## Почему табло пусто
