@@ -54,6 +54,29 @@ class Shop::ReadyPushJobTest < ActiveSupport::TestCase
     assert pass.authentication_token.present?
   end
 
+  test "#35 B2 ready push body matches customer spec (order, not coffee)" do
+    Shop::ReadyPushJob.perform_now(@order.id, "preparing")
+
+    note = PushNotification.order(created_at: :desc).first
+    progress = note.payload["progress"]
+
+    assert_equal "#{progress} Ваш заказ готов, заберите на кассе!", note.body
+  end
+
+  test "#35 C1 ReadyPushJob claims ready_notified_at and sends push once" do
+    @order.update!(ready_notified_at: nil)
+
+    assert_difference -> { PushNotification.count } => 1 do
+      Shop::ReadyPushJob.perform_now(@order.id, "preparing")
+    end
+
+    assert @order.reload.ready_notified_at.present?, "job must claim ready_notified_at"
+
+    assert_no_difference -> { PushNotification.count } do
+      Shop::ReadyPushJob.perform_now(@order.id, "preparing")
+    end
+  end
+
   test "#35 B3 wallet unavailable falls back to FCM only" do
     ENV["WALLET_FORCE_UNAVAILABLE"] = "1"
 
