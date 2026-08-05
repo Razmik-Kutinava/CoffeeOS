@@ -91,9 +91,9 @@ Chat/Tips → openSupportChat / openTipsService (URL или console pending)
 
 ## Шаги TDD (1–7)
 
-### Шаг 1 — SupportChatAdapter `[ ]`
+### Шаг 1 — SupportChatAdapter `[ ]` · RED `in_progress`
 
-- **RED:** `test/javascript/support_chat_adapter_test.mjs`
+- **RED:** `test/javascript/support_chat_adapter_test.mjs` — намеренный fail `ERR_MODULE_NOT_FOUND` (`supportChatAdapter.js`)
 - **GREEN:** `app/frontend/lib/supportChatAdapter.js` — `openSupportChat(orderId, chatUrl?)`
   - URL → `window.open(url, "_blank")`
   - нет URL → `console.info("[Chat Integration Pending] Order: …")` (injectable `log`)

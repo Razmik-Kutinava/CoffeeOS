@@ -6,9 +6,15 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#41** Order action buttons — PHASE 0 `[x]` · **SPEC `[x]`** | **go → RED шаг 1** (SupportChatAdapter) |
+| **#41** SPEC `[x]` · **RED шаг 1** SupportChatAdapter (падающий тест) | **go → GREEN шаг 1** |
 | **#40** MCP modal accepted **`[x]`** · Fly **v428** | апрув «ок» |
 | Live Fly | **v428** |
+
+### Сессия 2026-08-05 (RED шаг 1 · #41 SupportChatAdapter)
+
+- `test/javascript/support_chat_adapter_test.mjs` — open URL / pending log / empty URL
+- `node --test …` → **FAIL** `ERR_MODULE_NOT_FOUND` `supportChatAdapter.js` (намеренно)
+- CHANGELOG/HANDOFF не трогали
 
 ### Сессия 2026-08-05 (PHASE 1 SPEC · #41)
 
