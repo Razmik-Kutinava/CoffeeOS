@@ -147,7 +147,9 @@ module Shop
           tenant_id: @shop_tenant.id,
           customer_id: cid,
           source: :mobile,
-          status: %w[accepted preparing ready]
+          # #35: статусная карточка в PWA видна только в процессе готовки.
+          # После перехода в `ready` виджет должен исчезать, поэтому `ready` исключаем.
+          status: %w[accepted preparing]
         ).includes(:order_items).order(created_at: :desc)
 
         render json: {

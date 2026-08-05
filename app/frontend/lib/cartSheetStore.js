@@ -97,7 +97,10 @@ export function isCatalogRoute(hash = null) {
 export function isCartSheetRoute(hash = null) {
   const h = (hash ?? (typeof window !== "undefined" ? window.location.hash : "")).replace("#", "") || "/"
   if (h === "/" || h === "") return true
-  return h === "/checkout" || h.startsWith("/checkout?")
+  if (h === "/checkout" || h.startsWith("/checkout?")) return true
+  // #35: виджет статусов должен быть виден также на карточке товара.
+  if (h.startsWith("/product/")) return true
+  return false
 }
 
 export function isCheckoutRoute(hash = null) {

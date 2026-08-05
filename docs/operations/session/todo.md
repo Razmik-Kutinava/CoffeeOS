@@ -43,10 +43,10 @@
 ### Блок A — виджет только во время готовки
 
 - [ ] **A1** Cable: событие смены статуса → FE обновляет список (reuse `shopOrderCable.js`)
-- [ ] **A2a** BE: `orders#active` — только `accepted`, `preparing` (и оплаченный accepted); **без `ready`**
-- [ ] **A2b** FE: при cable `status=ready` — **удалить** заказ из sheet (не показывать «Готов» в sticky)
+- [x] **A2a** BE: `orders#active` — только `accepted`, `preparing` (и оплаченный accepted); **без `ready`**
+- [x] **A2b** FE: при cable `status=ready` — **удалить** заказ из sheet (не показывать «Готов» в sticky)
 - [ ] **A2c** Главный экран: виджет как на скрине `01` (внутри `CartSheet` / peek)
-- [ ] **A2d** Карточка товара `#/product/:id`: виджет + «добавить/оплатить» как скрины `02–03`
+- [x] **A2d** Карточка товара `#/product/:id`: виджет + «добавить/оплатить» как скрины `02–03`
 - [ ] **A2e** Multi-order scroll `>2` на home и product (`04–05`)
 - [ ] **A3** Reconnect: после WS — `GET /orders/active` без ready; toast/hide по `mapReconnectError`
 

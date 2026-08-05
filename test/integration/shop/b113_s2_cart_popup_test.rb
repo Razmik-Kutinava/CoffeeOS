@@ -142,6 +142,6 @@ class Shop::B113S2CartPopupTest < ActionDispatch::IntegrationTest
   def cart_sheet_route?(hash)
     h = hash.to_s.delete_prefix("#")
     h = "/" if h.blank?
-    h == "/" || h == "/checkout" || h.start_with?("/checkout?")
+    h == "/" || h == "/checkout" || h.start_with?("/checkout?") || h.start_with?("/product/")
   end
 end

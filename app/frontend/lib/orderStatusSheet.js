@@ -49,7 +49,7 @@ export function applyCableEvent(state, payload, hooks = {}) {
   const orderId = normalizeId(payload.order_id ?? payload.orderId)
   if (!orderId) return
 
-  const terminal = ["issued", "closed", "cancelled"].includes(String(payload.status || ""))
+  const terminal = ["issued", "closed", "cancelled", "ready"].includes(String(payload.status || ""))
   if (terminal) {
     state.setOrders(
       state.orders.filter((o) => normalizeId(o.id ?? o.order_id) !== orderId)
