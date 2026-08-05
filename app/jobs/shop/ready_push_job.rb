@@ -7,7 +7,7 @@ module Shop
   class ReadyPushJob < ApplicationJob
     queue_as :default
 
-    READY_BODY = "Ваш кофе готов! Заберите на кассе"
+    READY_BODY = "Ваш заказ готов, заберите на кассе!"
     TITLE = "Заказ готов"
 
     def perform(order_id, old_status = "preparing")
@@ -17,6 +17,9 @@ module Shop
 
       customer = MobileCustomer.find_by(id: order.customer_id)
       return unless customer&.push_enabled? && customer.push_token.present?
+
+      # #35 C1: атомарно фиксируем первую отправку и пропускаем любые дубли.
+      return unless Shop::ReadyPushClaim.claim!(order)
 
       update_wallet!(order)
       deliver_fcm!(order, customer, old_status)

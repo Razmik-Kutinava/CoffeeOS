@@ -52,7 +52,6 @@ class Shop::ReadyPushClaimTest < ActiveSupport::TestCase
     assert_enqueued_with(job: Shop::ReadyPushJob, args: [@order.id, "preparing"]) do
       Shop::OrderStatusPushNotifier.call(order: @order, old_status: "preparing")
     end
-
-    assert @order.reload.ready_notified_at.present?
+    assert_nil @order.reload.ready_notified_at
   end
 end

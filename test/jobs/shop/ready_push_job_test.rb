@@ -24,7 +24,7 @@ class Shop::ReadyPushJobTest < ActiveSupport::TestCase
       total_amount: 200,
       discount_amount: 0,
       final_amount: 200,
-      ready_notified_at: Time.current
+      ready_notified_at: nil
     )
     ENV["WALLET_SIMULATE"] = "1"
     ENV["FCM_SIMULATE"] = "1"
@@ -111,10 +111,12 @@ class Shop::ReadyPushJobTest < ActiveSupport::TestCase
     assert_enqueued_with(job: Shop::ReadyPushJob, args: [fresh.id, "preparing"]) do
       Shop::OrderStatusPushNotifier.call(order: fresh, old_status: "preparing")
     end
-    assert fresh.reload.ready_notified_at.present?
+    assert_nil fresh.reload.ready_notified_at
   end
 
   test "#35 notifier skips ReadyPushJob when already claimed" do
+    assert Shop::ReadyPushClaim.claim!(@order.reload), "test precondition: must be claimed already"
+
     assert_no_enqueued_jobs(only: Shop::ReadyPushJob) do
       Shop::OrderStatusPushNotifier.call(order: @order.reload, old_status: "preparing")
     end

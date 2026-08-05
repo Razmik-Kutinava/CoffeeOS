@@ -52,12 +52,12 @@
 
 ### Блок B — Push только ready
 
-- [ ] **B1** Hook → `ReadyPushJob` на переход в `ready` (уже есть — регрессия)
-- [ ] **B2** Copy пуша «Ваш заказ готов, заберите на кассе!» + Wallet fallback
+- [x] **B1** Hook → `ReadyPushJob` на переход в `ready` (уже есть — регрессия)
+- [x] **B2** Copy пуша «Ваш заказ готов, заберите на кассе!» + Wallet fallback
 
 ### Блок C — idempotency
 
-- [ ] **C1** `ready_notified_at` claim (уже есть — регрессия + тест на race)
+- [x] **C1** `ready_notified_at` claim (уже есть — регрессия + тест на race)
 
 ### Тесты (RED → GREEN)
 

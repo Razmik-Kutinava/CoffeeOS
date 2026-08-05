@@ -37,7 +37,9 @@ module Shop
 
       # #35 C1/C2 + B3: ready — claim once, затем ReadyPushJob (Wallet + FCM)
       if @order.ready?
-        return unless Shop::ReadyPushClaim.claim!(@order)
+        # #35 C1: claim делает сам ReadyPushJob (атомарно). Нотификатор лишь избегает enqueue,
+        #        если уже готово (`ready_notified_at` проставлен).
+        return if @order.ready_notified_at.present?
 
         Shop::ReadyPushJob.perform_later(@order.id, @old_status.to_s.presence || "preparing")
         return
