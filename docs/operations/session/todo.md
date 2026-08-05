@@ -116,10 +116,10 @@ Chat/Tips → openSupportChat / openTipsService (URL или console pending)
   - `paid` ≡ `accepted` для матрицы
 - Тест: CTA machine + adapters + cancel flow → **PASS** (cta 16 + adapters 6 + cancel 9)
 
-### Шаг 4 — Статический рендер `OrderActionButtons` `[ ]`
+### Шаг 4 — Статический рендер `OrderActionButtons` `[ ]` · RED `in_progress`
 
-- **RED:** `order_action_buttons_test.mjs` — props `status=paid|accepted`, `hasPushSubscription=false`, `isIOS=true` → 2 кнопки «Отменить заказ» + «Добавить в Wallet»; `data-testid`; фон `#ff6b35`
-- **GREEN:** `OrderActionButtons.svelte` + подключение в `ActiveOrdersAccordion` (замена `notifyActionsView` primary/secondary)
+- **RED:** `order_action_buttons_test.mjs` — ACTION_CTA_STYLE `#ff6b35` + markup/wire; **FAIL** `ERR_MODULE_NOT_FOUND` `orderActionButtons.js` (намеренно)
+- **GREEN:** `orderActionButtons.js` + `OrderActionButtons.svelte` + подключение в `ActiveOrdersAccordion`
 - Не трогать progress bar DOM
 
 ### Шаг 5 — Реактивность ActionCable `[ ]`

@@ -6,9 +6,14 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#41** GREEN шаги 1–3 **`[x]`** (Chat + Tips + ButtonMapper) | **go → RED шаг 4** (OrderActionButtons render) |
+| **#41** GREEN 1–3 `[x]` · **RED шаг 4** OrderActionButtons (падающий тест) | **go → GREEN шаг 4** |
 | **#40** MCP modal accepted **`[x]`** · Fly **v428** | апрув «ок» |
 | Live Fly | **v428** |
+
+### Сессия 2026-08-05 (RED шаг 4 · #41 OrderActionButtons)
+
+- `test/javascript/order_action_buttons_test.mjs` — style `#ff6b35`, matrix paid+ios, svelte markup, accordion wire
+- `node --test …` → **FAIL** `ERR_MODULE_NOT_FOUND` `orderActionButtons.js` (намеренно)
 
 ### Сессия 2026-08-05 (GREEN шаг 3 · #41 ButtonMapper)
 
