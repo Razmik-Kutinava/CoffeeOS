@@ -100,9 +100,9 @@ Chat/Tips → openSupportChat / openTipsService (URL или console pending)
 - Config read: `shopAppConfig().chatUrl` (опц. в шаге 1 — param `chatUrl` достаточно)
 - Тест: `node --test test/javascript/support_chat_adapter_test.mjs` → **3/3 PASS**
 
-### Шаг 2 — TipsAdapter (нетмонет) `[ ]`
+### Шаг 2 — TipsAdapter (нетмонет) `[ ]` · RED `in_progress`
 
-- **RED:** `test/javascript/tips_adapter_test.mjs`
+- **RED:** `test/javascript/tips_adapter_test.mjs` — намеренный fail `ERR_MODULE_NOT_FOUND` (`tipsAdapter.js`)
 - **GREEN:** `app/frontend/lib/tipsAdapter.js` — `openTipsService(orderId, tenantId, tipsUrl?)`
   - URL → `window.open`; иначе log `[Tips Integration Pending] Order: …`
 

@@ -6,9 +6,15 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#41** GREEN шаг 1 SupportChatAdapter **`[x]`** | **go → RED шаг 2** (TipsAdapter) |
+| **#41** GREEN 1 `[x]` · **RED шаг 2** TipsAdapter (падающий тест) | **go → GREEN шаг 2** |
 | **#40** MCP modal accepted **`[x]`** · Fly **v428** | апрув «ок» |
 | Live Fly | **v428** |
+
+### Сессия 2026-08-05 (RED шаг 2 · #41 TipsAdapter)
+
+- `test/javascript/tips_adapter_test.mjs` — URL / pending log / empty URL
+- `node --test …` → **FAIL** `ERR_MODULE_NOT_FOUND` `tipsAdapter.js` (намеренно)
+- CHANGELOG/HANDOFF не трогали
 
 ### Сессия 2026-08-05 (GREEN шаг 1 · #41 SupportChatAdapter)
 
