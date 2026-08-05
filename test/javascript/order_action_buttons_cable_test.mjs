@@ -36,7 +36,7 @@ function ctasForOrder(order, opts = {}) {
   })
 }
 
-describe("cable → CTA swap (#41 step 5) [TDD-RED]", () => {
+describe("cable → CTA swap (#41 step 5)", () => {
   it("paid→preparing: cancel disappears, chat+push appear", () => {
     const state = createOrderStatusSheetState()
     state.setOrders([
@@ -110,7 +110,7 @@ describe("cable → CTA swap (#41 step 5) [TDD-RED]", () => {
   })
 })
 
-describe("wiring sticky panel (#41 step 5) [TDD-RED]", () => {
+describe("wiring sticky panel (#41 step 5)", () => {
   it("orderStatusSheet.applyCableEvent merges can_cancel", () => {
     const src = readFileSync(sheetPath, "utf8")
     assert.match(src, /can_cancel/)

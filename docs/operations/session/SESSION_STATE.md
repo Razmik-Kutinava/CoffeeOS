@@ -6,9 +6,14 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#41** GREEN 1–4 `[x]` · **RED шаг 5** Cable CTA (2 fail / 4 pass) | **go → GREEN шаг 5** |
+| **#41** GREEN шаги 1–5 **`[x]`** | **go → RED шаг 6** (Cancel flow в sticky) |
 | **#40** MCP modal accepted **`[x]`** · Fly **v428** | апрув «ок» |
 | Live Fly | **v428** |
+
+### Сессия 2026-08-05 (GREEN шаг 5 · #41 Cable CTA)
+
+- `applyCableEvent` мержит `can_cancel` из payload
+- cable + sheet + order_action → **25/25 PASS**
 
 ### Сессия 2026-08-05 (RED шаг 5 · #41 Cable CTA)
 

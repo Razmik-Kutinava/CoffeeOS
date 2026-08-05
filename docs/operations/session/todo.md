@@ -123,11 +123,11 @@ Chat/Tips → openSupportChat / openTipsService (URL или console pending)
 - Тест зона: order_action + cta + notify + wallet + push + accordion + adapters → **57/57 PASS**
 - Не трогали progress bar DOM
 
-### Шаг 5 — Реактивность ActionCable `[ ]` · RED `in_progress`
+### Шаг 5 — Реактивность ActionCable `[x]` · GREEN
 
-- **RED:** `order_action_buttons_cable_test.mjs` — paid→preparing CTA swap + `can_cancel` patch; **2 fail / 4 pass** (намеренно: `applyCableEvent` не мержит `can_cancel`)
-- **GREEN:** `orderStatusSheet.applyCableEvent` мержит `can_cancel`; accordion уже `$derived` status → OrderActionButtons
-- Не remount всей панели / без `location.reload`
+- **RED:** `order_action_buttons_cable_test.mjs` — paid→preparing CTA swap + `can_cancel` patch; **2 fail / 4 pass** (намеренно)
+- **GREEN:** `orderStatusSheet.applyCableEvent` мержит `can_cancel`; accordion `$derived` status → OrderActionButtons
+- Тест: cable + sheet + order_action → **25/25 PASS**
 
 ### Шаг 6 — Cancel flow в sticky-панели `[ ]`
 

@@ -63,12 +63,17 @@ export function applyCableEvent(state, payload, hooks = {}) {
   if (idx < 0) return
 
   const prev = state.orders[idx]
-  state.orders[idx] = {
+  const next = {
     ...prev,
     status: payload.status,
     order_number: payload.order_number ?? prev.order_number,
     payment_settled: payload.payment_settled ?? prev.payment_settled
   }
+  // #41: sticky CTA зависит от can_cancel вместе со status
+  if (Object.prototype.hasOwnProperty.call(payload, "can_cancel")) {
+    next.can_cancel = payload.can_cancel
+  }
+  state.orders[idx] = next
 }
 
 export function applyReconnectOrders(state, orders) {
