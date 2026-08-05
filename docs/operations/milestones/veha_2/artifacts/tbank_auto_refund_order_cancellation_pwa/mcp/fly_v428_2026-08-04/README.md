@@ -1,34 +1,39 @@
-# MCP — #40 T-Bank auto refund on PWA cancel · Fly v428 · 2026-08-04
+# MCP — #40 T-Bank auto refund on PWA cancel · Fly v428 · 2026-08-04 (+ modal 2026-08-05)
 
 | Проверка | Результат |
 |----------|-----------|
-| Push `develop` | `e2c10736` |
+| Push `develop` | `e2c10736` (+ ops tips) |
 | Fly image | `deployment-01KZ6M11H6F1RJ4GPMND07P57R` |
-| Version | **v428** (web+worker started, checks passing) |
-| HTTP | `/up` **200** · `/shop?tenant_id=PointA` **200** |
+| Version | **v428** |
+| HTTP | `/up` **200** · `/shop` Point A **200** |
 | SSH code | `cancel_payment` **true** · `REFUND_UNAVAILABLE` **true** |
-| MCP UI pending_payment cancel | **PASS** · `#202608-0003` → `cancelled` · payment `failed` · toast success |
-| MCP UI ready block | **PASS** · `#202608-0005` status **Готов** · CTA **«Написать в поддержку»** · нет «Отменить заказ» |
-| Live T-Bank `/v2/Cancel` E2E | **отложено** — не было `accepted`+`succeeded`+PaymentId в сессии гостя (не дёргали боевой Cancel на чужой платёж) |
-| SMOKE_OK | **true** (deploy + FE cancel/block; Cancel API — unit + SSH method) |
+| MCP UI pending_payment cancel | **PASS** · `#202608-0003` → `cancelled` · payment `failed` |
+| MCP UI ready block | **PASS** · `#202608-0005` · «Написать в поддержку» |
+| MCP UI accepted modal | **PASS** · `#202608-0006` · modal + confirm → `cancelled` · toast |
+| Live T-Bank `/v2/Cancel` E2E | **отложено** — modal/cash path без PaymentId; боевой Cancel не дёргали |
+| SMOKE_OK | **true** |
 
 ## Сценарии
 
-1. **pending_payment cancel (локальный, без банка)**  
-   Guest `2bc3…4c` · order `#202608-0003` · UI «Отменить заказ» → «Отменяем…» → toast  
-   `Заказ отменён. Деньги ушли на возврат…` · DB: `status=cancelled`, payment `failed`, reason гостевой.
+1. **pending_payment cancel** — `#202608-0003` · без модалки · toast success · payment `failed`.
 
-2. **ready — блок отмены**  
-   `#202608-0005` · heading **Готов** · кнопки **Написать в поддержку** / **Чаевые** · cancel CTA отсутствует.
+2. **ready — блок** — `#202608-0005` · «Написать в поддержку» · нет cancel.
+
+3. **accepted — модалка (2026-08-05)**  
+   Cash `accepted` `#202608-0006` · CTA «Отменить заказ» + hint «Вернем 100% суммы» → modal  
+   «Отменить заказ №#202608-0006?» · «Вернём 179 ₽…» · «Да, отменить и вернуть 179 ₽» / «Оставить заказ»  
+   Confirm → toast success · DB `cancelled` (cash local, payment остался `succeeded` — без T-Bank Cancel).
 
 ## Скрины
 
 | Файл | Что |
 |------|-----|
-| `01_shop_point_a.png` | Витрина Point A на v428 |
-| `02_pending_cancel_success_toast.png` | Успех отмены + toast |
-| `03_ready_support_cta_no_cancel.png` / `03b_ready_support_cta.png` | ready · support CTA |
+| `01_shop_point_a.png` | Витрина Point A |
+| `02_pending_cancel_success_toast.png` | pending cancel toast |
+| `03_*` / `03b_*` | ready · support CTA |
+| `04_accepted_cancel_modal.png` | модалка accepted |
+| `05_accepted_modal_cancel_success.png` | успех после confirm |
 
 ## Note
 
-Модалка accepted (`OrderCancelModal`) на MCP не ловилась: у `pending_payment` modal не показывается (`shouldShowAcceptedCancelModal` только для `accepted`). Live Cancel — при апруве на тестовый paid `accepted` заказ.
+Двойной `#` в заголовке (`№#202608-…`) — косметика copy (`order_number` уже с `#`). Live `/v2/Cancel` — отдельный прогон на card `succeeded`+PaymentId.

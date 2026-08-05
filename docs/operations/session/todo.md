@@ -15,7 +15,7 @@
 | qa_section_2_3_payment_cart | **2/5 PASS** (2 skips) |
 | JS cancel flow + CTA | **19/19 PASS** |
 | N+1 / Receipt в Cancel / Token | Cancel без Receipt; `build_token` без diff |
-| MCP / Fly deploy | **`[x]`** push `e2c10736` · Fly **v428** · MCP PASS (pending cancel + ready support; live Cancel E2E deferred) |
+| MCP / Fly deploy | **`[x]`** v428 · pending+ready+**accepted modal** PASS · live Cancel deferred |
 
 ---
 

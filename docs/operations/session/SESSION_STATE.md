@@ -6,9 +6,16 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#40** push+deploy+MCP **`[x]`** · Fly **v428** | апрув заказчика «ок»; опц. live Cancel E2E |
+| **#40** MCP modal accepted **`[x]`** · Fly **v428** | апрув «ок»; опц. live Cancel; **след. задача** — выбрать (см. HANDOFF) |
 | **#39 v2** cascade SMS | апрув заказчика |
 | Live Fly | **v428** |
+
+### Сессия 2026-08-05 (MCP accepted modal · #40)
+
+- Order `#202608-0006` cash accepted · reconnect session
+- CTA + hint 100% → modal (сумма 179 ₽) → confirm → cancelled + toast
+- Evidence: `04_accepted_cancel_modal.png` · `05_accepted_modal_cancel_success.png`
+- Live `/v2/Cancel` по-прежнему deferred (cash без PaymentId)
 
 ### Сессия 2026-08-04 (deploy + MCP · #40)
 

@@ -11,12 +11,12 @@
 | Intake / SPEC / RED-GREEN 1–7 / REVIEW | **`[x]`** tip REVIEW `e2c10736` |
 | Push develop | **`[x]`** `e2c10736` |
 | Fly deploy | **`[x]`** **v428** · `deployment-01KZ6M11H6F1RJ4GPMND07P57R` |
-| MCP | **PASS** · pending cancel `#202608-0003` · ready support `#202608-0005` · live `/v2/Cancel` E2E deferred |
+| MCP | **PASS** · pending `#202608-0003` · ready `#202608-0005` · **accepted modal `#202608-0006`** · live `/v2/Cancel` E2E deferred |
 
 **ТЗ:** [`Автоматический возврат платежа Т-Банк при отмене заказа в PWA.md`](../milestones/veha_2/requirements/customer_tasks/Автоматический%20возврат%20платежа%20Т-Банк%20при%20отмене%20заказа%20в%20PWA.md)  
 **Evidence:** [`mcp/fly_v428_2026-08-04/`](../milestones/veha_2/artifacts/tbank_auto_refund_order_cancellation_pwa/mcp/fly_v428_2026-08-04/)  
 **Канон:** `/v2/Cancel` без Receipt; accepted+succeeded → refunded; preparing+ → 422; FE modal/toasts.  
-**Дальше:** апрув заказчика «ок»; опционально live Cancel на тестовом paid `accepted`.
+**Дальше:** апрув заказчика «ок»; опционально live Cancel на card `accepted`+PaymentId.
 
 ### Order ready cascade WS/Push/Wallet→SMS (#39 v2) — 2026-08-04
 

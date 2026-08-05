@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-08-05 — docs: #40 MCP accepted cancel modal on Fly v428
+
+- MCP: `#202608-0006` accepted → modal (179 ₽) → confirm → cancelled + toast
+- Evidence: `04_accepted_cancel_modal.png` · `05_accepted_modal_cancel_success.png`
+- Live T-Bank `/v2/Cancel` E2E still deferred (cash path)
+
 ## 2026-08-04 — deploy: #40 T-Bank auto refund on Fly v428 · MCP PASS
 
 - Push `e2c10736` · Fly **v428** · `deployment-01KZ6M11H6F1RJ4GPMND07P57R`
