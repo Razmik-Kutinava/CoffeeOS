@@ -2,12 +2,18 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-08-06 (PHASE 2 GREEN · #35 D1+D2)
+**Дата:** 2026-08-06 (PHASE 3 REVIEW · #35 D1+D2 → push/deploy)
 
 | Сейчас | Дальше |
 |--------|--------|
-| GREEN D1+D2: stack contract + meta product name | D4 MCP vs скрин 06 по апруву push |
-| Тесты 18/0 + JS 32/0 | D5 optional barista→ready |
+| REVIEW: нет P0; fix empty meta fallback `99a4941d` | push → fly deploy → MCP D4 |
+| GREEN D1+D2 + review fix | |
+
+### Сессия 2026-08-06 (PHASE 3 REVIEW · #35 D1+D2)
+
+- Correctness/Kieran: нет critical; important — silent sales-point fallback → **fixed**
+- Residual: stringly sheetContext / MCP visual (D4)
+- Дальше: push + deploy + MCP по апруву владельца
 
 ### Сессия 2026-08-06 (PHASE 2 GREEN · #35 D1+D2)
 
