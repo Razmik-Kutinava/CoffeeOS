@@ -87,6 +87,8 @@
     })
   )
   let payStackActive = $derived(onCheckout && payStackOpen && count > 0)
+  /** При активном заказе (OrderStatusSheet) не показываем “хвост” корзины. */
+  let hideCartTail = $derived(hasActiveOrderFlag && !onCheckout)
   let heightVh = $derived.by(() => {
     let base
     if (payStackActive) {
@@ -94,6 +96,8 @@
     } else if (!count) {
       // Пустая корзина: peek-высота (placeholder или «повторить»)
       base = showRepeat ? SHEET_VH.peekSingleWithRepeat : SHEET_VH.peekSingle
+    } else if (hideCartTail) {
+      base = SHEET_VH.peekSingle
     } else if (showRepeat && (mode === MODE_PEEK || mode === MODE_EMPTY)) {
       // Одна сущность заказ+«повторить»: выше peek, чтобы не выглядело как две шторки
       base = count <= 1 ? SHEET_VH.peekSingleWithRepeat : SHEET_VH.peekMultiWithRepeat
@@ -450,7 +454,7 @@
       {/if}
 
     <!-- HIDDEN — ряд чипов с фото + сумма (канон заказчика 2026-07-20) -->
-    {:else if mode === MODE_HIDDEN}
+    {:else if !hideCartTail && mode === MODE_HIDDEN}
       <div
         class="flex flex-1 min-h-0 items-center gap-2 px-3 py-1.5"
         data-testid="shop-cart-hidden-chip"
@@ -508,7 +512,7 @@
       </div>
 
     <!-- PEEK 2+ — одна сущность: заказ → +цена → «повторить» (скрины 01–02) -->
-    {:else if (mode === MODE_PEEK || payStackActive) && count >= 2}
+    {:else if !hideCartTail && (mode === MODE_PEEK || payStackActive) && count >= 2}
       <div
         class="flex flex-1 min-h-0 flex-col overflow-hidden px-3 pb-2 pt-1"
         data-testid="shop-cart-peek-list"
@@ -590,7 +594,7 @@
       </div>
 
     <!-- EXPANDED 2+ — только список заказов (сетка каталога убрана 2026-07-23) -->
-    {:else if mode === MODE_EXPANDED && count >= 2}
+    {:else if !hideCartTail && mode === MODE_EXPANDED && count >= 2}
       <div
         class="flex flex-1 min-h-0 flex-col overflow-hidden px-3 pb-2 pt-1"
         data-testid="shop-cart-expanded-horizontal"
@@ -657,7 +661,7 @@
       </div>
 
     <!-- 1 товар — одна шторка: заказ → +цена → «повторить» (скрин 02) -->
-    {:else if singleItem}
+    {:else if !hideCartTail && singleItem}
       {@const unavailable = lineUnavailable(singleItem)}
       <div
         class="flex flex-1 min-h-0 flex-col overflow-hidden px-3 pb-2 pt-1"

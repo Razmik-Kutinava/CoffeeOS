@@ -57,6 +57,18 @@ class Shop::QuickRepeatSectionTest < ActionDispatch::IntegrationTest
     assert_match(/!hasActiveOrder|hasActiveOrder\s*===\s*false|!\$?hasActiveOrder/, sheet)
   end
 
+  test "CartSheet hides cart tail (peek/expanded/single) when hasActiveOrder" do
+    sheet = File.read(Rails.root.join("app/frontend/components/CartSheet.svelte"))
+
+    assert_includes sheet, "hideCartTail",
+      "должен быть гейт для хвоста корзины"
+
+    # peek/expanded/single ветки не должны рендериться при active order
+    assert_match(/!\s*hideCartTail\s*&&\s*\(mode === MODE_PEEK \|\|\s*payStackActive\)\s*&&\s*count >= 2/, sheet)
+    assert_match(/!\s*hideCartTail\s*&&\s*mode === MODE_EXPANDED\s*&&\s*count >= 2/, sheet)
+    assert_match(/!\s*hideCartTail\s*&&\s*singleItem/, sheet)
+  end
+
   test "sheet keeps single drag-handle gesture zone" do
     sheet = File.read(Rails.root.join("app/frontend/components/CartSheet.svelte"))
     section = File.read(Rails.root.join("app/frontend/components/RepeatSection.svelte"))
