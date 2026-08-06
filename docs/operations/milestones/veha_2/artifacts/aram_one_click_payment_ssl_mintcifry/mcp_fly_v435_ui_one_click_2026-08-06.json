@@ -1,0 +1,22 @@
+{
+  "task": "#45 MCP UI one-click end-to-end",
+  "fly": "v435",
+  "date": "2026-08-06",
+  "precondition": "Cleared #202608-0013 accepted→issued (HIDE_REPEAT); cancelled stale pending; busted freq cache; emptied cart for full RepeatSection",
+  "steps": [
+    "Open shop as Aram (profile 2bc3…4c, email verified)",
+    "Confirm «повторить» + 3× «оплатить в 1 клик»",
+    "Click first pay button (декаф Гватемала 3₽)",
+    "Inline status → SUCCESS «✔ Оплачено!»"
+  ],
+  "result": {
+    "ui": "✔ Оплачено! (data-fsm=SUCCESS)",
+    "order_number": "#202608-0014",
+    "order_status": "accepted",
+    "payment": "succeeded/tbank/8995082965",
+    "amount": 2.95,
+    "orders_active": ["#202608-0014 accepted"]
+  },
+  "screenshot": "mcp/ui_one_click_success_v435.png",
+  "verdict": "PASS"
+}

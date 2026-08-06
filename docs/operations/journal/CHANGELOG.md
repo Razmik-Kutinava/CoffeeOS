@@ -1,5 +1,9 @@
 ﻿# CHANGELOG
 
+## 2026-08-06 — mcp: #45 UI one-click PASS на Fly v435
+- Click «оплатить в 1 клик» → «✔ Оплачено!» → `#202608-0014` accepted / tbank `8995082965`
+- Evidence: [`mcp_fly_v435_ui_one_click_2026-08-06.json`](../milestones/veha_2/artifacts/aram_one_click_payment_ssl_mintcifry/mcp_fly_v435_ui_one_click_2026-08-06.json)
+
 ## 2026-08-06 — deploy: #45 Aram one-click SSL · Fly v435 PASS
 - Push `8db2bed2` · Fly **v435** · `deployment-01KZB0QYSKZM6BWWCVR840SNS4`
 - Live Charge *5953 CONFIRMED → `#202608-0013` accepted (PaymentId 8995036222)

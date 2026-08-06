@@ -10,6 +10,13 @@
 | **#44** Product card peek · intake `[x]` | go → SPEC |
 | Live Fly | **v435** |
 
+### Сессия 2026-08-06 (#45 · MCP UI one-click)
+
+- Сняли `#202608-0013` accepted→issued (иначе HIDE_REPEAT), очистили cart
+- MCP click «оплатить в 1 клик» → `data-fsm=SUCCESS` «✔ Оплачено!»
+- Order `#202608-0014` accepted · payment succeeded/tbank/`8995082965`
+- Evidence: `mcp_fly_v435_ui_one_click_2026-08-06.json` + screenshot
+
 ### Сессия 2026-08-06 (#45 · deploy/MCP)
 
 - Push `8db2bed2` · Fly **v435** · `deployment-01KZB0QYSKZM6BWWCVR840SNS4`

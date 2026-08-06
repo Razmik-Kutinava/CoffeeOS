@@ -16,7 +16,7 @@
 **ТЗ:** [`Оплата в 1 клик у Арама…`](../milestones/veha_2/requirements/customer_tasks/Оплата%20в%201%20клик%20у%20Арама%20падает%20после%20processing.md)  
 **Evidence:** [`mcp_fly_v435_2026-08-06.json`](../milestones/veha_2/artifacts/aram_one_click_payment_ssl_mintcifry/mcp_fly_v435_2026-08-06.json)  
 **Root cause:** Т-Банк на Russian Trusted CA → SSL fail на Fly без НУЦ в образе.  
-**Live:** Charge *5953 → `#202608-0013` accepted.  
+**Live:** Charge *5953 → `#202608-0013` (server) · MCP UI one-click → `#202608-0014` «✔ Оплачено!»  
 **Дальше:** апрув «ок»; Араму hard refresh.
 
 ### Product card peek cart (#44) — reopen intake 2026-08-06
