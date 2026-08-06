@@ -33,6 +33,11 @@
 **Live:** Charge *5953 → `#202608-0013` (server) · MCP UI one-click → `#202608-0014` «✔ Оплачено!»  
 **Дальше:** апрув «ок»; Араму hard refresh.
 
+### Follow-up: убрать “хвост” корзины под статусом
+- Наблюдение заказчика: при активном статусе виден “хвост” строк корзины под `OrderStatusSheet`
+- Фикс: `CartSheet.svelte` при `hasActiveOrderFlag` не рендерит peek/expanded/single блоки корзины (оставляем только `OrderStatusSheet`)
+- Коммит: `19231620`
+
 ### Repeat hidden by stale active orders (#43) — 2026-08-06
 
 | Что | Статус |

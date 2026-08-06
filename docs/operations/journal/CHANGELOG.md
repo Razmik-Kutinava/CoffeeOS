@@ -5,6 +5,10 @@
 - MCP: CTA внутри CartSheet · `уже в заказе: N` · ± bump 2→3 · build `prog37` · без fixed overlay
 - Evidence: [`product_card_peek_cart/mcp/fly_v436_2026-08-06/`](../milestones/veha_2/artifacts/product_card_peek_cart/mcp/fly_v436_2026-08-06/)
 
+## 2026-08-06 — fix: убрать “хвост” корзины под активным статусом
+- `CartSheet.svelte`: при `hasActiveOrderFlag` не рендерим peek/expanded/single блоки корзины (оставляем только `OrderStatusSheet`)
+- Коммит: `19231620`
+
 ## 2026-08-06 — feat: #44 product card — одна шторка без наложений [GREEN]
 - Root cause: fixed ProductCartPeek (z-45) + bottom-bar (bottom:140px) + CartSheet на `#/product`
 - CTA «добавить к заказу» → `ProductSheetCta` внутри CartSheet; peek/hidden/expanded — секции той же шторки

@@ -31,6 +31,12 @@
 - Order `#202608-0014` accepted · payment succeeded/tbank/`8995082965`
 - Evidence: `mcp_fly_v435_ui_one_click_2026-08-06.json` + screenshot
 
+### Сессия 2026-08-06 (#46 · UI follow-up: убираем хвост корзины)
+
+- Наблюдение заказчика: при статусе активного заказа виден “хвост” строк корзины под статусом
+- Фикс: в `app/frontend/components/CartSheet.svelte` при `hasActiveOrderFlag` не рендерятся peek/expanded/single блоки корзины (оставляем только `OrderStatusSheet`)
+- Тесты: `quick_repeat_section_test` + `b113_s2a_cart_sheet_acceptance_test` + `cart_sheet_empty_orders_placeholder_test` (PASS)
+
 ### Сессия 2026-08-06 (#45 · deploy/MCP)
 
 - Push `8db2bed2` · Fly **v435** · `deployment-01KZB0QYSKZM6BWWCVR840SNS4`
