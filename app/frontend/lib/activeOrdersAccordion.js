@@ -46,7 +46,8 @@ export function statusMetaThird(order, sheetContext = "peek") {
   const salesPoint =
     order?.sales_point?.name || order?.tenant?.name || ""
   if (sheetContext === "cart_expanded") {
-    return firstProductName(order) || salesPoint
+    // Без silent fallback на точку: иначе expanded выглядит как peek (скрин 01).
+    return firstProductName(order)
   }
   return salesPoint
 }

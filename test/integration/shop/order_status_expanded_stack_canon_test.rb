@@ -31,7 +31,10 @@ class Shop::OrderStatusExpandedStackCanonTest < ActionDispatch::IntegrationTest
     assert expanded_idx, "expanded cart lines must exist"
     assert peek_idx, "peek/payStack cart lines must exist"
     assert_includes sheet, "embedded={true}"
-    assert_includes sheet, "sheetContext="
+    assert_match(
+      /sheetContext=\{mode === MODE_EXPANDED \|\| payStackActive \? "cart_expanded" : "peek"\}/,
+      sheet
+    )
 
     assert status_idx < expanded_idx,
       "status section must precede MODE_EXPANDED cart lines (screen 06)"

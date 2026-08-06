@@ -131,6 +131,13 @@ describe("statusMetaThird (#35 D2 screen 06)", () => {
     assert.equal(statusMetaThird(sampleOrders[0], "peek"), "Point A")
   })
 
+  it("cart_expanded with empty items omits product (no silent sales-point fallback)", () => {
+    assert.equal(
+      statusMetaThird({ sales_point: { name: "Point A" }, items: [] }, "cart_expanded"),
+      ""
+    )
+  })
+
   it("accordionRowView exposes metaThird for cart_expanded context", () => {
     const row = accordionRowView(sampleOrders[0], null, {
       sheetContext: "cart_expanded"
