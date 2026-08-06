@@ -2,12 +2,18 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-08-06 (PHASE 3 REVIEW · #35 D1+D2 → push/deploy)
+**Дата:** 2026-08-06 (REVIEW+push+deploy+MCP · #35 D1+D2 · Fly v438)
 
 | Сейчас | Дальше |
 |--------|--------|
-| REVIEW: нет P0; fix empty meta fallback `99a4941d` | push → fly deploy → MCP D4 |
-| GREEN D1+D2 + review fix | |
+| Fly **v438** · MCP D4 **PASS** (meta=позиция на pay-stack) | апрув заказчика «ок»; D5 optional |
+| Push `4ca777a4` | |
+
+### Сессия 2026-08-06 (push/deploy/MCP · #35 D1+D2)
+
+- Push `4ca777a4` · Fly **v438** · `deployment-01KZBM95ZEVSW9G5GN87EW4RW6`
+- MCP: `status-above-lines` · prog38 · status before lines · checkout pay-stack meta = «Фильтр-кофе… Гватемала»
+- Evidence: `artifacts/order_status_compact_sheet_push/mcp/fly_v438_2026-08-06/`
 
 ### Сессия 2026-08-06 (PHASE 3 REVIEW · #35 D1+D2)
 

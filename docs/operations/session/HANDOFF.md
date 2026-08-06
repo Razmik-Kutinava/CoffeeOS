@@ -1,8 +1,20 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-08-06 (PHASE 2 GREEN · #35 D1+D2)  
+**Дата:** 2026-08-06 (REVIEW+deploy · #35 D1+D2 · Fly **v438**)  
 **Ветка:** `develop`  
-**Прод:** https://coffeeos.fly.dev (**v436** — без GREEN D1+D2 до push)
+**Прод:** https://coffeeos.fly.dev (**v438**)
+
+### #35 D1+D2 REVIEW + deploy/MCP (2026-08-06)
+
+| Что | Статус |
+|-----|--------|
+| REVIEW (нет P0; fix empty meta) | **`[x]`** |
+| Push `4ca777a4` | **`[x]`** |
+| Fly **v438** | **`[x]`** `deployment-01KZBM95ZEVSW9G5GN87EW4RW6` |
+| MCP D4 vs скрин 06 (pay-stack meta=позиция) | **PASS** |
+
+**Evidence:** [`mcp/fly_v438_2026-08-06/`](../milestones/veha_2/artifacts/order_status_compact_sheet_push/mcp/fly_v438_2026-08-06/)  
+**Дальше:** апрув заказчика «ок»; D5 barista→ready optional.
 
 ### PHASE 2 GREEN: #35 D1+D2 expanded stack + meta (2026-08-06)
 

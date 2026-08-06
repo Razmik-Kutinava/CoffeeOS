@@ -47,7 +47,7 @@
 | D1 | **DOM-порядок в expanded/checkout:** gesture → **OrderStatusSheet** → (CTA) → **позиции корзины** → **pay/checkout** — без второго fixed/z-index | `[x]` GREEN | `data-cart-status-stack="status-above-lines"` · sheetContext на mount |
 | D2 | **Мета-строка:** на expanded (скрин 06) третий сегмент = **название позиции (только продукта)**; на home peek (скрин 01) допускается точка/локация — не ломать 01 без апрува | `[x]` GREEN | `statusMetaThird` · `metaThird` в AOA · expanded/payStack → `cart_expanded` |
 | D3 | Регрессия зоны shop + JS sheet | `[x]` | D1/D2 + peek stack + mount **18/0** · JS accordion+sheet **32/0** |
-| D4 | MCP приёмка vs **скрин 06** (после push `prog38` + D1/D2) | `[ ]` | Fly · evidence в `artifacts/…/mcp/` · expanded: статус над линиями + оплата |
+| D4 | MCP приёмка vs **скрин 06** (после push `prog38` + D1/D2) | `[x]` | Fly **v438** PASS · evidence `mcp/fly_v438_2026-08-06/` |
 | D5 | Optional: barista → `ready` → hide + один push (PARTIAL с v432) | `[ ]` | только по апруву / вместе с D4 |
 
 ### Soft / не блокер (backlog, не в RED без go)

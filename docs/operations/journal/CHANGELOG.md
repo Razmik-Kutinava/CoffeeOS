@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-08-06 — deploy/MCP: #35 D1+D2 · Fly v438 PASS
+- Push `4ca777a4` · Fly **v438** · `deployment-01KZBM95ZEVSW9G5GN87EW4RW6`
+- REVIEW: нет P0; empty meta fallback fixed
+- MCP: `status-above-lines` + pay-stack meta = название позиции (скрин 06)
+- Evidence: `order_status_compact_sheet_push/mcp/fly_v438_2026-08-06/`
+
 ## 2026-08-06 — feat: #35 D1+D2 expanded stack contract + meta product [GREEN]
 - CartSheet: `data-cart-status-stack="status-above-lines"`; sheetContext peek vs cart_expanded
 - `statusMetaThird`: expanded → название позиции; peek → точка продаж
