@@ -32,6 +32,7 @@ class Shop::CustomerFrequentProductsServiceTest < ActiveSupport::TestCase
   test "business limits live in service constants, not hardcode" do
     assert_includes 30..60, Shop::CustomerFrequentProductsService::WINDOW_DAYS
     assert_equal 3, Shop::CustomerFrequentProductsService::MAX_REPEAT_ITEMS
+    assert_equal 24.hours, Shop::CustomerFrequentProductsService::ACTIVE_ORDERS_WINDOW
     assert_equal %w[accepted preparing ready],
                  Shop::CustomerFrequentProductsService::HIDE_REPEAT_STATUSES,
                  "статусы hide = Order.active (SPEC ревизия 2026-07-31)"
@@ -45,6 +46,18 @@ class Shop::CustomerFrequentProductsServiceTest < ActiveSupport::TestCase
 
     assert_equal [], call_service,
       "при активном заказе (accepted/preparing/ready) frequent_items = []"
+  end
+
+  test "#43 stale accepted outside ACTIVE_ORDERS_WINDOW does not hide frequent items" do
+    create_paid_order!(product: @filter, created_at: 5.days.ago, status: :issued)
+    create_paid_order!(product: @bumble, created_at: 30.days.ago, status: :accepted)
+
+    payload = Shop::CustomerFrequentProductsService.payload(
+      customer_id: @customer.id, tenant_id: @tenant.id
+    )
+    assert_equal false, payload[:has_active_order],
+      "June/stale accepted не должны держать has_active_order"
+    assert_includes payload[:frequent_items].map { |i| i[:product_id] }, @filter.id
   end
 
   test "returns frequent items when only terminal history (issued) and no active" do

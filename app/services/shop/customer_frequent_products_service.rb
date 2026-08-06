@@ -8,10 +8,13 @@ module Shop
   #
   # Ревизия 2026-07-31: при активном заказе (HIDE_REPEAT_STATUSES = Order.active)
   # frequent_items пуст; кэш v3 хранит { has_active_order, frequent_items }.
+  # #43 / #42: hide только для «свежих» active (иначе June accepted навечно гасит «повторить»).
   class CustomerFrequentProductsService
     WINDOW_DAYS = 45
     MAX_REPEAT_ITEMS = 3
     CACHE_TTL = 30.minutes
+    # Общее окно с Shop::Api::OrdersController#active (#42)
+    ACTIVE_ORDERS_WINDOW = 24.hours
     # Учитываем только оформленные заказы (оплаченные/выданные), не черновики и не отмены
     COUNTED_STATUSES = %w[accepted preparing ready issued closed].freeze
     # Скрыть «повторить» пока заказ в работе (= Order.active / #35)
@@ -77,6 +80,7 @@ module Shop
       Order
         .where(tenant_id: @tenant_id, customer_id: @customer_id)
         .where(status: HIDE_REPEAT_STATUSES)
+        .where("created_at >= ?", ACTIVE_ORDERS_WINDOW.ago)
         .exists?
     end
 

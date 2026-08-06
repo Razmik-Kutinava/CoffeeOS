@@ -1,19 +1,11 @@
-# todo — #42 Stuck orders sheet blocks payment (2026-08-05)
+# todo — #43 Repeat hidden by stale active orders (2026-08-06)
 
-**ТЗ:** [`customer_tasks/Зависшие заказы…`](../milestones/veha_2/requirements/customer_tasks/Зависшие%20заказы%20в%20статусной%20шторке%20PWA%20блокируют%20оплату.md)  
-**Артефакты:** [`artifacts/stuck_orders_status_sheet_blocks_payment/`](../milestones/veha_2/artifacts/stuck_orders_status_sheet_blocks_payment/)
-
-## SPEC
+**ТЗ:** [`После 42 пропали повторы…`](../milestones/veha_2/requirements/customer_tasks/После%2042%20пропали%20повторы%20в%20шторке%20и%20история%20покупок.md)  
+**Артефакты:** [`artifacts/repeat_hidden_by_stale_active_orders/`](../milestones/veha_2/artifacts/repeat_hidden_by_stale_active_orders/)
 
 | # | Шаг | Статус |
 |---|-----|--------|
-| 1 | TTL 24h на `GET orders/active` (June stuck out) | `[x]` |
-| 2 | Peek max-height `min(22vh, 8.5rem)` | `[x]` |
-| 3 | Тесты active + mount | `[x]` |
-| 4 | FAQ payment processing/succeeded в ТЗ | `[x]` |
-| 5 | Push/deploy/MCP | `[x]` Fly **v433** PASS |
-| 6 | Backlog: SM filter NULL-shift; payment row sync | backlog |
-
-## Почему табло пусто
-
-Board = только текущая смена. `#202606-*` старше `shift.opened_at` → не на табло (ожидаемо).
+| 1 | Intake + CBR #43 | `[x]` |
+| 2 | TTL 24h на `has_active_order?` | `[x]` |
+| 3 | Тесты service + API | `[x]` 33/33 |
+| 4 | Push / Fly / MCP | `[ ]` |

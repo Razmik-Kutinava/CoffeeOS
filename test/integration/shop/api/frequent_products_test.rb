@@ -128,6 +128,23 @@ class Shop::Api::FrequentProductsTest < ActionDispatch::IntegrationTest
       "при активном заказе frequent_items всегда []"
   end
 
+  test "#43 stale accepted does not set has_active_order and returns frequent_items" do
+    email = "freqapi-stale-#{SecureRandom.hex(4)}@example.com"
+    place_order!(email: email)
+
+    order = Order.where(tenant_id: @tenant.id).order(created_at: :desc).first
+    order.update_columns(created_at: 30.days.ago, status: "accepted")
+    Rails.cache.clear
+
+    get "/shop/api/frequent_products", headers: shop_headers, as: :json
+
+    assert_response :success
+    body = response.parsed_body
+    assert_equal false, body["has_active_order"]
+    assert_equal 1, body["frequent_items"].length,
+      "stale accepted не должен гасить «повторить» (#43)"
+  end
+
   test "after order issued has_active_order false and frequent_items return" do
     email = "freqapi-issued-#{SecureRandom.hex(4)}@example.com"
     place_order!(email: email)

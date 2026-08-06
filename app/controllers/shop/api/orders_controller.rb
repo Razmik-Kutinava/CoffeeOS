@@ -137,8 +137,8 @@ module Shop
       end
 
       # #35 A3 + #36 A1/A2 — активные заказы: status sheet + чек (items/mods/totals)
-      # #42: только «свежие» — иначе June accepted залипают и перекрывают оплату.
-      ACTIVE_ORDERS_WINDOW = 24.hours
+      # #42/#43: только «свежие» — иначе June accepted залипают в sheet и гасят «повторить».
+      ACTIVE_ORDERS_WINDOW = Shop::CustomerFrequentProductsService::ACTIVE_ORDERS_WINDOW
 
       def active
         cid = Shop::CustomerSession.customer_id(session, @shop_tenant.id)
