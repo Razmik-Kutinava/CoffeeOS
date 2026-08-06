@@ -1,11 +1,25 @@
-# todo — #43 Repeat hidden by stale active orders (2026-08-06)
+# todo — #44 Product card peek cart (одна шторка, без наложений)
 
-**ТЗ:** [`После 42 пропали повторы…`](../milestones/veha_2/requirements/customer_tasks/После%2042%20пропали%20повторы%20в%20шторке%20и%20история%20покупок.md)  
-**Артефакты:** [`artifacts/repeat_hidden_by_stale_active_orders/`](../milestones/veha_2/artifacts/repeat_hidden_by_stale_active_orders/)
+**ТЗ:** [`Карточка товара отображение…`](../milestones/veha_2/requirements/customer_tasks/Карточка%20товара%20отображение%20набранных%20позиций%20и%20функциональность%20в%20режиме%20peek.md)  
+**Артефакты:** [`artifacts/product_card_peek_cart/`](../milestones/veha_2/artifacts/product_card_peek_cart/)
+
+## Канон layout (SPEC 2026-08-06)
+
+| Режим | Что внутри **одной** `CartSheet` (стыки, не слои) |
+|-------|---------------------------------------------------|
+| **peek** | gesture → status → CTA «добавить к заказу» → «уже в заказе» (гориз. ±1 + scroll) → checkout |
+| **expanded** | gesture → status → CTA → вертикальный список ± → checkout |
+| **hidden** | gesture → status → CTA (компакт) → чипы → checkout |
+| **empty** | gesture → status → CTA → placeholder / repeat |
+
+**Запрещено:** второй fixed `ProductCartPeek` + fixed `.bottom-bar` с `bottom: 140px` поверх шторки.
 
 | # | Шаг | Статус |
 |---|-----|--------|
-| 1 | Intake + CBR #43 | `[x]` |
-| 2 | TTL 24h на `has_active_order?` | `[x]` |
-| 3 | Тесты service + API | `[x]` 33/33 |
-| 4 | Push / Fly / MCP | `[x]` Fly **v434** PASS |
+| 1 | PHASE 0 intake reopen | `[x]` |
+| 2 | PHASE 1 SPEC (этот todo + канон стыков) | `[x]` |
+| 3 | RED: тест «один fixed sheet / нет bottom-bar--peek» | `[ ]` |
+| 4 | GREEN: CTA в шторке + alias peek testids + убрать дубль | `[ ]` |
+| 5 | Обновить product_card_s* под CartSheet | `[ ]` |
+| 6 | Регрессия `test/integration/shop/` | `[ ]` |
+| 7 | REVIEW: CHANGELOG / HANDOFF / CBR | `[ ]` |

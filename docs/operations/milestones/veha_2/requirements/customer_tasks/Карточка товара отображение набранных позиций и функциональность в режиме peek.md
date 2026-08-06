@@ -2,7 +2,7 @@
 
 Артефакты: docs/operations/milestones/veha_2/artifacts/product_card_peek_cart/
 
-**Статус:** reopen 2026-08-06 · PHASE 0 intake (ревизия ТЗ заказчика) · код волны 2026-07-10 есть, MCP/апрув не было · CBR #44
+**Статус:** reopen 2026-08-06 · SPEC/BUILD · канон: одна CartSheet, стыки peek/hidden/expanded · CBR #44
 
 ---
 
