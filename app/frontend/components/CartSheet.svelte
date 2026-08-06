@@ -386,6 +386,7 @@
     data-testid="shop-cart-sheet"
     data-cart-sheet-mode={mode}
     data-cart-sheet-build={CART_SHEET_BUILD}
+    data-cart-status-stack="status-above-lines"
     data-checkout-pay-stack={payStackActive ? "true" : "false"}
     class="cart-sheet fixed left-0 right-0 z-50 mx-auto flex flex-col overflow-hidden border-t border-[#3a3a3a] bg-[#2a2a2a]/98 backdrop-blur transition-[height,bottom] ease-out"
     class:cart-sheet--pay-stack-peek={payStackActive}
@@ -421,8 +422,11 @@
     </div>
     {/if}
 
-    <!-- Статус активных заказов — внутри шторки, не overlay поверх -->
-    <OrderStatusSheet embedded={true} />
+    <!-- Статус активных заказов — внутри шторки, не overlay поверх (#35 D1/D2) -->
+    <OrderStatusSheet
+      embedded={true}
+      sheetContext={mode === MODE_EXPANDED || payStackActive ? "cart_expanded" : "peek"}
+    />
 
     <!-- #44: CTA карточки товара — стык внутри шторки (peek/hidden/expanded) -->
     {#if onProduct}

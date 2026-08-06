@@ -44,9 +44,9 @@
 | # | Шаг | Статус | Файлы / тесты |
 |---|-----|--------|---------------|
 | D0 | SPEC зафиксирован (этот todo) | `[x]` | `todo.md` · SESSION_STATE |
-| D1 | **DOM-порядок в expanded/checkout:** gesture → **OrderStatusSheet** → (CTA) → **позиции корзины** → **pay/checkout** — без второго fixed/z-index | `[ ]` RED | `order_status_expanded_stack_canon_test` — fail: нет `data-cart-status-stack="status-above-lines"` |
-| D2 | **Мета-строка:** на expanded (скрин 06) третий сегмент = **название позиции (только продукта)**; на home peek (скрин 01) допускается точка/локация — не ломать 01 без апрува | `[ ]` RED | `statusMetaThird` + `metaThird` в accordion · `active_orders_accordion_test` + `order_status_meta_product_name_canon_test` |
-| D3 | Регрессия зоны shop + JS sheet | `[ ]` | `bin/rails test test/integration/shop/…` (точечно status/cart) · `node --test test/javascript/order_status_sheet_test.mjs` |
+| D1 | **DOM-порядок в expanded/checkout:** gesture → **OrderStatusSheet** → (CTA) → **позиции корзины** → **pay/checkout** — без второго fixed/z-index | `[x]` GREEN | `data-cart-status-stack="status-above-lines"` · sheetContext на mount |
+| D2 | **Мета-строка:** на expanded (скрин 06) третий сегмент = **название позиции (только продукта)**; на home peek (скрин 01) допускается точка/локация — не ломать 01 без апрува | `[x]` GREEN | `statusMetaThird` · `metaThird` в AOA · expanded/payStack → `cart_expanded` |
+| D3 | Регрессия зоны shop + JS sheet | `[x]` | D1/D2 + peek stack + mount **18/0** · JS accordion+sheet **32/0** |
 | D4 | MCP приёмка vs **скрин 06** (после push `prog38` + D1/D2) | `[ ]` | Fly · evidence в `artifacts/…/mcp/` · expanded: статус над линиями + оплата |
 | D5 | Optional: barista → `ready` → hide + один push (PARTIAL с v432) | `[ ]` | только по апруву / вместе с D4 |
 
@@ -65,8 +65,8 @@
 1. `[x]` Виджет только во время готовки (accepted/preparing); hide на `ready` — baseline.
 2. `[x]` Push ready ровно один раз (`ready_notified_at`) — baseline; live smoke D5 optional.
 3. `[x]` >2 заказов → scroll — baseline (v432).
-4. `[ ]` **Скрин 06:** в **expanded** шторки видны статус **над** корзиной **и** оплата; каталог/карточка кликабельны выше шторки; одна CartSheet.
-5. `[ ]` Новые тесты D1/D2 зелёные + регрессия зоны.
+4. `[x]` **Скрин 06 (код):** в expanded — статус над корзиной + `metaThird`=позиция; контракт `status-above-lines`. MCP D4 — отдельно.
+5. `[x]` Тесты D1/D2 зелёные + точечная регрессия.
 
 ---
 

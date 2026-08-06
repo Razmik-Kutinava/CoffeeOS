@@ -19,12 +19,15 @@
 
   let {
     order,
+    sheetContext = "peek",
     accordionState = $bindable(),
     onOpenDetail = undefined,
     onCancelRequest = undefined
   } = $props()
 
-  let row = $derived(accordionRowView(order, accordionState?.activeExpandedOrderId))
+  let row = $derived(
+    accordionRowView(order, accordionState?.activeExpandedOrderId, { sheetContext })
+  )
   let receipt = $derived(row.expanded ? receiptView(order) : null)
   let scrollStyle = receiptScrollStyle()
   let deviceOs = $derived(getDeviceOS())
@@ -102,7 +105,7 @@
   <div class="aoa__head">
     <button type="button" class="aoa__meta-btn" onclick={onDetail}>
       <span class="aoa__meta">
-        {#if row.eta}{row.eta} — {/if}{row.orderNumber}{#if row.salesPointName} — {row.salesPointName}{/if}
+        {#if row.eta}{row.eta} — {/if}{row.orderNumber}{#if row.metaThird} — {row.metaThird}{/if}
       </span>
       {#if row.showProgress}
         <div class="aoa__progress" aria-label="Прогресс заказа">

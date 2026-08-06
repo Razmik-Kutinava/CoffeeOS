@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-08-06 — feat: #35 D1+D2 expanded stack contract + meta product [GREEN]
+- CartSheet: `data-cart-status-stack="status-above-lines"`; sheetContext peek vs cart_expanded
+- `statusMetaThird`: expanded → название позиции; peek → точка продаж
+- ActiveOrdersAccordion показывает `metaThird`
+- Тесты: expanded/meta/peek/mount 18/0 · JS accordion+sheet 32/0
+
 ## 2026-08-06 — docs: #35 PHASE 1 SPEC (скрин 06 expanded)
 - `todo.md`: baseline A/B/C `[x]`; gaps D1–D5 (DOM-порядок expanded, meta product name, MCP)
 - Маппинг GuestOrderChannel / ReadyPushJob; код не меняли

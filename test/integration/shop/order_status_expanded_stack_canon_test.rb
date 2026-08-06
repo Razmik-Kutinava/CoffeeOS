@@ -23,13 +23,15 @@ class Shop::OrderStatusExpandedStackCanonTest < ActionDispatch::IntegrationTest
   end
 
   test "source order: OrderStatusSheet before expanded cart lines and checkout" do
-    status_idx = sheet.index("<OrderStatusSheet embedded={true}")
+    status_idx = sheet.index("<OrderStatusSheet")
     expanded_idx = sheet.index('data-testid="shop-cart-expanded-horizontal"')
     peek_idx = sheet.index('data-testid="shop-cart-peek-list"')
 
     assert status_idx, "OrderStatusSheet must be mounted in CartSheet"
     assert expanded_idx, "expanded cart lines must exist"
     assert peek_idx, "peek/payStack cart lines must exist"
+    assert_includes sheet, "embedded={true}"
+    assert_includes sheet, "sheetContext="
 
     assert status_idx < expanded_idx,
       "status section must precede MODE_EXPANDED cart lines (screen 06)"

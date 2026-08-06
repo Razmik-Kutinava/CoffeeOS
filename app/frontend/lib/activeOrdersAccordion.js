@@ -31,17 +31,39 @@ export function toggleExpandedOrder(state, orderId) {
     normalizeId(state.activeExpandedOrderId) === id ? null : id
 }
 
-export function accordionRowView(order, activeExpandedOrderId) {
+function firstProductName(order) {
+  const items = Array.isArray(order?.items) ? order.items : []
+  const first = items[0]
+  if (!first) return ""
+  return String(first.name || first.product_name || "").trim()
+}
+
+/**
+ * #35 D2 / скрин 06: третий сегмент мета-строки.
+ * cart_expanded → название позиции; peek (скрин 01) → точка продаж.
+ */
+export function statusMetaThird(order, sheetContext = "peek") {
+  const salesPoint =
+    order?.sales_point?.name || order?.tenant?.name || ""
+  if (sheetContext === "cart_expanded") {
+    return firstProductName(order) || salesPoint
+  }
+  return salesPoint
+}
+
+export function accordionRowView(order, activeExpandedOrderId, opts = {}) {
   const id = normalizeId(order?.id ?? order?.order_id)
   const expanded = id !== "" && normalizeId(activeExpandedOrderId) === id
   const progress = orderProgressView(order)
   const salesPointName =
     order?.sales_point?.name || order?.tenant?.name || ""
+  const sheetContext = opts?.sheetContext || "peek"
 
   return {
     orderId: id,
     orderNumber: order?.order_number || "",
     salesPointName,
+    metaThird: statusMetaThird(order, sheetContext),
     eta: progress.subtitle || null,
     expanded,
     chevron: expanded ? CHEVRON.expanded : CHEVRON.collapsed,

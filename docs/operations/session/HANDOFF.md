@@ -1,8 +1,19 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-08-06 (PHASE 1 SPEC · #35 + скрин 06)  
+**Дата:** 2026-08-06 (PHASE 2 GREEN · #35 D1+D2)  
 **Ветка:** `develop`  
-**Прод:** https://coffeeos.fly.dev (**v436**)
+**Прод:** https://coffeeos.fly.dev (**v436** — без GREEN D1+D2 до push)
+
+### PHASE 2 GREEN: #35 D1+D2 expanded stack + meta (2026-08-06)
+
+| Что | Статус |
+|-----|--------|
+| `data-cart-status-stack="status-above-lines"` | **`[x]`** |
+| `statusMetaThird` / UI `metaThird` | **`[x]`** |
+| Тесты D1+D2 + zone | **`[x]`** 18/0 · JS 32/0 |
+| Push / MCP vs скрин 06 | **`[ ]`** ждёт апрув |
+
+**Дальше:** push → Fly → MCP D4 (expanded: статус над корзиной, meta=позиция).
 
 ### PHASE 1 SPEC: #35 + скрин 06 (2026-08-06)
 

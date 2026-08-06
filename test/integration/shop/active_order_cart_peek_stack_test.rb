@@ -15,7 +15,8 @@ class Shop::ActiveOrderCartPeekStackTest < ActionDispatch::IntegrationTest
   end
 
   test "CartSheet mounts OrderStatusSheet embedded inside one sheet" do
-    assert_includes sheet, "<OrderStatusSheet embedded={true}"
+    assert_includes sheet, "<OrderStatusSheet"
+    assert_includes sheet, "embedded={true}"
     assert_includes sheet, 'data-testid="shop-cart-sheet"'
   end
 

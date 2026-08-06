@@ -2,13 +2,19 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-08-06 (PHASE 2 RED · #35 D1+D2)
+**Дата:** 2026-08-06 (PHASE 2 GREEN · #35 D1+D2)
 
 | Сейчас | Дальше |
 |--------|--------|
-| RED D1+D2 закоммичен (падающие тесты) | GREEN по намерению |
-| Fail: нет `data-cart-status-stack` · нет `statusMetaThird`/`metaThird` | |
-| prog38 status+cart stack (лок.) | push/MCP по апруву |
+| GREEN D1+D2: stack contract + meta product name | D4 MCP vs скрин 06 по апруву push |
+| Тесты 18/0 + JS 32/0 | D5 optional barista→ready |
+
+### Сессия 2026-08-06 (PHASE 2 GREEN · #35 D1+D2)
+
+- `data-cart-status-stack="status-above-lines"` на CartSheet
+- `statusMetaThird` / `metaThird`: peek→точка, `cart_expanded`→первая позиция
+- Wire: CartSheet sheetContext → OrderStatusSheet → ActiveOrdersAccordion
+- Тесты: expanded/meta/peek/mount 18/0 · JS 32/0
 
 ### Сессия 2026-08-06 (PHASE 2 RED · #35 D1+D2)
 

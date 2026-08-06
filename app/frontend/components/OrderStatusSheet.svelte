@@ -29,7 +29,8 @@
   } from "../lib/stickyOrderCancel.js"
 
   /** true — секция внутри CartSheet (не fixed overlay поверх шторки) */
-  let { embedded = true } = $props()
+  /** sheetContext: peek (скрин 01) | cart_expanded (скрин 06 — meta = позиция) */
+  let { embedded = true, sheetContext = "peek" } = $props()
 
   const sheet = createOrderStatusSheetState()
   let orders = $state([])
@@ -202,6 +203,7 @@
       {#each orders as order (order.id || order.order_id)}
         <ActiveOrdersAccordion
           {order}
+          {sheetContext}
           bind:accordionState
           onOpenDetail={(o) => push(`/order/${o.id || o.order_id}`)}
           onCancelRequest={onCancelRequest}
