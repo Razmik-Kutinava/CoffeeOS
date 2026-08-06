@@ -1,8 +1,21 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-08-06 (fix: peek при активном статусе · prog38)  
+**Дата:** 2026-08-06 (PHASE 0: #35 скрин expanded)  
 **Ветка:** `develop`  
-**Прод:** https://coffeeos.fly.dev (**v436** — без этого фикса до push)
+**Прод:** https://coffeeos.fly.dev (**v436**)
+
+### PHASE 0: #35 доп. скрин expanded (2026-08-06)
+
+| Что | Статус |
+|-----|--------|
+| Сверка текста ТЗ с существующим доком | **совпал** — тело не трогали |
+| Скрин `06_expanded_sheet_status_plus_cart.png` | **`[x]`** в artifacts |
+| Карта подписей + README + CBR | **`[x]`** |
+| SPEC / код | **`[ ]`** ждать `go` |
+
+**ТЗ:** [`Интеграция статусной модели…`](../milestones/veha_2/requirements/customer_tasks/Интеграция%20статусной%20модели%20в%20компактную%20шторку%20PWA%20и%20Push.md)  
+**Скрин:** [`screenshots/06_…`](../milestones/veha_2/artifacts/order_status_compact_sheet_push/screenshots/06_expanded_sheet_status_plus_cart.png) — **канон** expanded: статус над корзиной + оплата.  
+**Дальше:** `go` → SPEC (сверка live/prog38 со скрином 06) или апрув «ок» по #35.
 
 ### Fix: status + cart peek stack (2026-08-06)
 

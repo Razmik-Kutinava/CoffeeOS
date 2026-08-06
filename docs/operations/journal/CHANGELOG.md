@@ -1,5 +1,10 @@
 ﻿# CHANGELOG
 
+## 2026-08-06 — docs: #35 PHASE 0 — забытый скрин expanded
+- Текст ТЗ без изменений (совпал с принятым)
+- Артефакт: `order_status_compact_sheet_push/screenshots/06_expanded_sheet_status_plus_cart.png`
+- Карта подпись «если заказ еще» → 06; README + CBR #35
+
 ## 2026-08-06 — fix: peek корзины при активном статусе (status+cart stack)
 - Root cause: `hideCartTail` при `hasActiveOrder` прятал peek/expanded/single — add «пропадал»
 - `CartSheet`: статус + позиции стык в стык; `STATUS_IN_SHEET_EXTRA_VH`; empty placeholder только без активного заказа
