@@ -1,8 +1,21 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-08-06 (**#44** product card peek reopen intake · **#43** Fly v434)  
+**Дата:** 2026-08-06 (**#45** Aram one-click SSL + cards · **#44** peek intake)  
 **Ветка:** `develop`  
-**Прод:** https://coffeeos.fly.dev (**v434**)
+**Прод:** https://coffeeos.fly.dev (**v434** → ждёт деплой #45)
+
+### Aram one-click pay SSL + cards (#45) — 2026-08-06
+
+| Что | Статус |
+|-----|--------|
+| Intake | **`[x]`** |
+| CA Минцифры в Docker | **`[x]`** |
+| FE email/cards + Charge saved card | **`[x]`** |
+| Push / Fly / MCP | **`[ ]`** |
+
+**ТЗ:** [`Оплата в 1 клик у Арама…`](../milestones/veha_2/requirements/customer_tasks/Оплата%20в%201%20клик%20у%20Арама%20падает%20после%20processing.md)  
+**Root cause:** Т-Банк на Russian Trusted CA → SSL fail на Fly без НУЦ в образе.  
+**Дальше:** push + `fly deploy` + MCP Charge *5953 у Арама.
 
 ### Product card peek cart (#44) — reopen intake 2026-08-06
 

@@ -85,7 +85,7 @@
             data-testid="inline-saved-card"
             class="w-full rounded-lg border border-[#ff8c42] bg-[#1a1a1a] px-3 py-2.5 text-left text-[13px] font-medium text-[#ff8c42]"
             onclick={() => onSelectSavedCard?.(card)}
-          >Картой *{card.last4 || card.last_4 || "????"}</button>
+          >Картой {card.pan || (card.last4 || card.last_4 ? `*${card.last4 || card.last_4}` : "*????")}</button>
         {/each}
       </div>
     {/if}

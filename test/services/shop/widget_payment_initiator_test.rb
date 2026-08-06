@@ -34,17 +34,18 @@ class Shop::WidgetPaymentInitiatorTest < ActiveSupport::TestCase
 
   def confirmed_adapter(rebill_expect: nil)
     fake = Object.new
-    fake.define_singleton_method(:charge_recurrent) do |**kw|
-      raise "unexpected rebill #{kw[:rebill_id]}" if rebill_expect && kw[:rebill_id] != rebill_expect
+    fake.define_singleton_method(:init_payment) do |**_kw|
+      { provider_payment_id: "pid-charged", payment_url: "https://pay.example/pid-charged" }
+    end
+    fake.define_singleton_method(:charge) do |payment_id:, rebill_id:|
+      raise "unexpected rebill #{rebill_id}" if rebill_expect && rebill_id != rebill_expect
+      raise "unexpected pid #{payment_id}" if payment_id != "pid-charged"
 
       {
-        provider_payment_id: "pid-charged",
-        charge_response: {
-          "Success" => true,
-          "Status" => "CONFIRMED",
-          "PaymentId" => "pid-charged",
-          "ErrorCode" => "0"
-        }
+        "Success" => true,
+        "Status" => "CONFIRMED",
+        "PaymentId" => "pid-charged",
+        "ErrorCode" => "0"
       }
     end
     fake
@@ -60,7 +61,7 @@ class Shop::WidgetPaymentInitiatorTest < ActiveSupport::TestCase
     assert_equal "existing-pid", result[:provider_payment_id]
   end
 
-  test "with rebill uses charge_recurrent and settles CONFIRMED" do
+  test "with rebill uses Init+Charge and settles CONFIRMED" do
     MobilePaymentMethod.create!(
       customer_id: @customer.id,
       payment_type: "card",
@@ -83,6 +84,43 @@ class Shop::WidgetPaymentInitiatorTest < ActiveSupport::TestCase
     assert_predicate @order.reload, :accepted?
   end
 
+  test "persists Init provider_payment_id when Charge fails" do
+    MobilePaymentMethod.create!(
+      customer_id: @customer.id,
+      payment_type: "card",
+      card_token: "rebill-fail",
+      card_masked: "*0000",
+      is_active: true,
+      is_default: true
+    )
+
+    fake = Object.new
+    fake.define_singleton_method(:init_payment) do |**_kw|
+      { provider_payment_id: "pid-init-only" }
+    end
+    fake.define_singleton_method(:charge) do |**_kw|
+      {
+        "Success" => false,
+        "Status" => "REJECTED",
+        "ErrorCode" => "1051",
+        "Message" => "Insufficient funds",
+        "PaymentId" => "pid-init-only"
+      }
+    end
+
+    assert_raises(Payments::TbankAdapter::ApiError) do
+      Shop::WidgetPaymentInitiator.call(
+        order: @order,
+        return_base_url: "https://example.com",
+        notification_url: "https://example.com/cb",
+        adapter: fake
+      )
+    end
+
+    @payment.reload
+    assert_equal "pid-init-only", @payment.provider_payment_id
+    assert_equal "tbank", @payment.provider
+  end
   test "without rebill uses TbankInlineInit Widget path" do
     called = false
     captured_type = nil

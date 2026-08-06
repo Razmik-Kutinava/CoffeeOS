@@ -82,6 +82,11 @@ module Shop
         return render json: { error: "Order not found" }, status: :not_found unless order
 
         session_cid = Shop::CustomerSession.customer_id(session, @shop_tenant.id)
+        email_cid = Shop::GuestCustomerResolver.call(
+          session: session,
+          tenant_id: @shop_tenant.id,
+          email: params[:email]
+        )
         rebill_id = rebill_id_from_card_param(order)
 
         result = Shop::WidgetPaymentInitiator.call(
@@ -89,7 +94,7 @@ module Shop
           return_base_url: ENV.fetch("TBANK_RETURN_URL", request.base_url),
           notification_url: "#{request.base_url}/callbacks/tbank",
           rebill_id: rebill_id,
-          extra_customer_ids: [ session_cid ]
+          extra_customer_ids: [ session_cid, email_cid ]
         )
 
         render json: { paymentUrl: adapter_payment_url(result), order_id: order.id.to_s }
@@ -132,7 +137,7 @@ module Shop
         "https://securepayments.tinkoff.ru/#{pid}"
       end
 
-      # card_id / saved_card_id → RebillId; карта должна принадлежать клиенту заказа или сессии.
+      # card_id / saved_card_id → RebillId; карта должна принадлежать клиенту заказа / сессии / email.
       def rebill_id_from_card_param(order)
         card_id = params[:card_id].presence || params[:saved_card_id].presence
         return nil if card_id.blank?
@@ -141,7 +146,12 @@ module Shop
         return nil unless card
 
         session_cid = Shop::CustomerSession.customer_id(session, @shop_tenant.id)
-        allowed = [ order.customer_id.to_s, session_cid.to_s ].compact_blank
+        email_cid = Shop::GuestCustomerResolver.call(
+          session: session,
+          tenant_id: @shop_tenant.id,
+          email: params[:email]
+        )
+        allowed = [ order.customer_id.to_s, session_cid.to_s, email_cid.to_s ].compact_blank
         return nil unless allowed.include?(card.customer_id.to_s)
 
         card.rebill_id

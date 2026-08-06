@@ -1,5 +1,12 @@
 ﻿# CHANGELOG
 
+## 2026-08-06 — fix: #45 Aram one-click — SSL Минцифры + cards/Charge
+- Root cause: Т-Банк TLS на Russian Trusted CA → SSL fail на Fly (`certificate verify failed`)
+- `config/certs/` + Dockerfile `update-ca-certificates` + `SSL_CERT_FILE`
+- FE: `userCardsApiPath(?email)`, Charge по saved card, no-token → bind form
+- BE: widget_init email resolve; Init `provider_payment_id` до Charge
+- Intake CBR #45 · тесты widget_initiator + JS path PASS
+
 ## 2026-08-06 — docs: intake #44 product card peek cart (reopen)
 - Продолжение задачи `product_card_peek_cart` (не новая): ТЗ 1:1, скрины заменены, архив `_archive_2026-07-10/`
 - Файл ТЗ переименован с усечённого `…pee.md`

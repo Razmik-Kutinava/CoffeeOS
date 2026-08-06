@@ -10,6 +10,7 @@ import {
   TBANK_INLINE_ERROR_RESET_MS,
   runTbankInlineButtonCycle
 } from "./shopInlinePayFsm.js"
+import { userCardsApiPath } from "./userCardsApiPath.js"
 
 /**
  * @param {object} opts
@@ -17,8 +18,15 @@ import {
  * @param {(path: string, opts?: object) => Promise<object>} opts.api
  * @param {ReturnType<typeof createWidgetPayFsm>} [opts.fsm] — уже в PROCESSING с UI
  * @param {(label: string) => void} [opts.onStatusText]
+ * @param {string} [opts.cardId] — явный выбор сохранённой карты
  */
-export async function runRepeatWidgetPayFlow({ orderId, api, fsm: existingFsm, onStatusText }) {
+export async function runRepeatWidgetPayFlow({
+  orderId,
+  api,
+  fsm: existingFsm,
+  onStatusText,
+  cardId: forcedCardId
+}) {
   const fsm = existingFsm || createWidgetPayFsm({ orderId })
   fsm.orderId = orderId
   if (fsm.state !== WIDGET_FSM_STATES.PROCESSING) fsm.start()
@@ -26,17 +34,44 @@ export async function runRepeatWidgetPayFlow({ orderId, api, fsm: existingFsm, o
   let statusText = INLINE_ROTATION_LABELS[0]
   let errorText = ""
   let showFallbackMethods = false
+  let showExpandedCards = false
+  let showNewCardForm = false
+  let savedCards = []
   let resetAfterMs = null
   onStatusText?.(statusText)
 
   try {
-    let cardId
+    let cardId = forcedCardId
+    let cardsData = null
     try {
-      const cardsData = await api("/user/cards")
-      cardId = cardsData?.primary?.id || cardsData?.cards?.[0]?.id
+      cardsData = await api(userCardsApiPath())
+      if (!cardId) cardId = cardsData?.primary?.id || cardsData?.cards?.[0]?.id
+      savedCards = Array.isArray(cardsData?.cards) ? cardsData.cards : []
     } catch (_e) {
-      cardId = undefined
+      if (!cardId) cardId = undefined
     }
+
+    // API ответил пустым списком и нет cardId → форма привязки (не Widget-poll вхолостую).
+    // Если /user/cards упал — всё равно идём в widget_init: бэкенд возьмёт RebillId по order.customer_id.
+    if (!cardId && cardsData && savedCards.length === 0) {
+      fsm.reject({ error_code: "NO_CARD" })
+      fsm.state = WIDGET_FSM_STATES.FALLBACK
+      errorText = "Добавьте карту для оплаты"
+      statusText = errorText
+      onStatusText?.(statusText)
+      return {
+        fsm,
+        statusText,
+        errorText,
+        showFallbackMethods: true,
+        showExpandedCards: true,
+        showNewCardForm: true,
+        savedCards: [],
+        resetAfterMs: null,
+        state: fsm.state
+      }
+    }
+
     await widgetInitPayment(orderId, { cardId })
     const result = await runTbankInlineButtonCycle(
       async () => {
@@ -86,13 +121,19 @@ export async function runRepeatWidgetPayFlow({ orderId, api, fsm: existingFsm, o
       }
       showFallbackMethods = true
     }
-  } catch (_e) {
-    fsm.reject({ error_code: "" })
+  } catch (e) {
+    fsm.reject({ error_code: e?.error_code || "" })
     fsm.state = WIDGET_FSM_STATES.ERROR
-    errorText = INLINE_GENERIC_ERROR_LABEL
+    errorText =
+      (typeof e?.message === "string" && e.message && e.message !== "Payment provider error"
+        ? e.message
+        : null) || INLINE_GENERIC_ERROR_LABEL
     statusText = errorText
     onStatusText?.(statusText)
     showFallbackMethods = true
+    // при ошибке Charge / недоступности — дать выбрать карту или привязать новую
+    showExpandedCards = true
+    showNewCardForm = savedCards.length === 0
   }
 
   return {
@@ -100,6 +141,9 @@ export async function runRepeatWidgetPayFlow({ orderId, api, fsm: existingFsm, o
     statusText,
     errorText,
     showFallbackMethods,
+    showExpandedCards,
+    showNewCardForm,
+    savedCards,
     resetAfterMs,
     state: fsm.state
   }

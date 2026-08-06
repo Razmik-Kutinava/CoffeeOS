@@ -16,9 +16,15 @@ export const WIDGET_POLL_MAX = 15
  * @param {string} orderId
  * @param {{ cardId?: string }} [opts] — id сохранённой карты → RebillId на бэке
  */
-export async function widgetInitPayment(orderId, { cardId } = {}) {
+export async function widgetInitPayment(orderId, { cardId, email } = {}) {
   const body = { order_id: orderId }
   if (cardId) body.card_id = cardId
+  let mail = email
+  if (!mail) {
+    const { loadGuestProfile } = await import("./shopGuestProfile.js")
+    mail = loadGuestProfile()?.email
+  }
+  if (mail) body.email = String(mail).trim().toLowerCase()
   const data = await api("/payments/widget_init", {
     method: "POST",
     body: JSON.stringify(body)

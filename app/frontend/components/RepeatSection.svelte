@@ -19,6 +19,7 @@
   } from "../lib/repeatInlinePayUiStore.js"
   import { initSbpPayment, redirectToSbp } from "../lib/shopSbpPay.js"
   import { api } from "../lib/api.js"
+  import { userCardsApiPath } from "../lib/userCardsApiPath.js"
   import InlinePayFallback from "./InlinePayFallback.svelte"
 
   /** full — empty; embedded — peek с заказом */
@@ -102,7 +103,10 @@
         fsm: out.fsm,
         statusText: out.statusText,
         errorText: out.errorText,
-        showFallbackMethods: out.showFallbackMethods
+        showFallbackMethods: out.showFallbackMethods,
+        showExpandedCards: !!out.showExpandedCards,
+        showNewCardForm: !!out.showNewCardForm,
+        savedCards: out.savedCards || []
       })
       if (out.resetAfterMs) {
         setTimeout(() => resetRepeatInlinePayUi(), out.resetAfterMs)
@@ -115,7 +119,9 @@
         fsm,
         errorText: msg,
         statusText: msg,
-        showFallbackMethods: true
+        showFallbackMethods: true,
+        showExpandedCards: true,
+        showNewCardForm: true
       })
       // не auto-reset — нужны СБП / карта+
     } finally {
@@ -140,7 +146,7 @@
       showFallbackMethods: true
     })
     try {
-      const data = await api("/user/cards")
+      const data = await api(userCardsApiPath())
       patchRepeatInlinePayUi({
         savedCards: Array.isArray(data?.cards) ? data.cards : []
       })
@@ -149,8 +155,57 @@
     }
   }
 
-  function onSelectSavedCard(_card) {
-    resetRepeatInlinePayUi()
+  /** Тап по сохранённой карте → Charge по card_id (не сброс UI). */
+  async function onSelectSavedCard(card) {
+    const orderId = payUi.fsm?.orderId
+    const cardId = card?.id
+    if (!orderId || !cardId || payUi.busy) return
+
+    const fsm = payUi.fsm || createWidgetPayFsm({ orderId })
+    fsm.start()
+    patchRepeatInlinePayUi({
+      busy: true,
+      fsm,
+      statusText: INLINE_ROTATION_LABELS[0],
+      errorText: "",
+      showFallbackMethods: false,
+      showExpandedCards: false,
+      showNewCardForm: false
+    })
+    try {
+      const out = await runRepeatWidgetPayFlow({
+        orderId,
+        api,
+        fsm,
+        cardId,
+        onStatusText: (label) => patchRepeatInlinePayUi({ statusText: label })
+      })
+      patchRepeatInlinePayUi({
+        fsm: out.fsm,
+        statusText: out.statusText,
+        errorText: out.errorText,
+        showFallbackMethods: out.showFallbackMethods,
+        showExpandedCards: !!out.showExpandedCards,
+        showNewCardForm: !!out.showNewCardForm,
+        savedCards: out.savedCards || payUi.savedCards || []
+      })
+      if (out.resetAfterMs) {
+        setTimeout(() => resetRepeatInlinePayUi(), out.resetAfterMs)
+      }
+    } catch (e) {
+      fsm.reject({ error_code: "" })
+      fsm.state = "ERROR"
+      const msg = e?.message || "Ошибка оплаты, попробуйте снова"
+      patchRepeatInlinePayUi({
+        fsm,
+        errorText: msg,
+        statusText: msg,
+        showFallbackMethods: true,
+        showExpandedCards: true
+      })
+    } finally {
+      patchRepeatInlinePayUi({ busy: false })
+    }
   }
 
   function roundPrice(n) {

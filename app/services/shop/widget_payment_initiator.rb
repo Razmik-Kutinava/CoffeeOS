@@ -56,30 +56,36 @@ module Shop
     end
 
     # Как Shop::RecurrentOrderCreator: Init → Charge, проверка Success, settle CONFIRMED.
+    # Init PaymentId сохраняем сразу — иначе при падении Charge в БД остаётся pid=nil.
     def charge_with_rebill!(payment, rebill_id)
-      charge_data = @adapter.charge_recurrent(
+      init_result = @adapter.init_payment(
         order: @order,
-        rebill_id: rebill_id,
         return_base_url: @return_base_url,
         notification_url: @notification_url,
-        customer_key: @order.customer_id&.to_s
+        customer_key: @order.customer_id&.to_s,
+        recurrent: false
       )
-
-      pid = charge_data[:provider_payment_id].to_s
+      pid = init_result[:provider_payment_id].to_s
       payment.update_columns(provider: "tbank", provider_payment_id: pid)
 
-      raw = charge_data[:charge_response] || {}
-      result = Payments::TbankPaymentResult.new(raw)
+      charge_response = @adapter.charge(payment_id: pid, rebill_id: rebill_id)
+      result = Payments::TbankPaymentResult.new(charge_response)
+      unless result.success?
+        raise Payments::TbankAdapter::ApiError.new(
+          error_code: result.error_code,
+          message: result.message
+        )
+      end
 
       if result.confirmed?
-        settle_confirmed!(payment, raw, pid)
+        settle_confirmed!(payment, charge_response, pid)
       elsif result.three_ds?
         Rails.logger.info("[WidgetPaymentInitiator] 3DS required order=#{@order.id}")
       else
         Payments::TbankPaymentSync.sync_order!(order: @order.reload)
       end
 
-      { provider_payment_id: pid }
+      { provider_payment_id: pid, charge_response: charge_response }
     end
 
     def init_widget_only!(payment)

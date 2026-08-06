@@ -2,13 +2,22 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-08-06 (#44 Product card peek cart — PHASE 0 reopen intake)
+**Дата:** 2026-08-06 (#45 Aram one-click SSL Минцифры + cards/Charge)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#44** Product card peek cart · PHASE 0 intake `[x]` | go → PHASE 1 SPEC |
-| **#43** Fly **v434** MCP PASS | апрув заказчика «ок» |
-| Live Fly | **v434** |
+| **#45** One-click Aram · код `[x]` · тесты PASS | push → fly deploy → MCP Charge |
+| **#44** Product card peek · intake `[x]` | go → SPEC |
+| Live Fly | **v434** (до деплоя #45) |
+
+### Сессия 2026-08-06 (#45 · Aram 1-click pay broken)
+
+- Root cause live: SSL к Т-Банку — Russian Trusted Root CA (НУЦ Минцифры); без CA → `certificate verify failed` → pid=nil
+- У Арама RebillId *5953/*8782 есть; заказы #202608-0007…0011 failed/pending без provider_payment_id
+- Фикс: `config/certs/` + Dockerfile `update-ca-certificates` + `SSL_CERT_FILE`
+- FE: `userCardsApiPath` (?email), Charge по saved card, no-token → bind form
+- BE: widget_init email → GuestCustomerResolver; Init pid до Charge
+- Тесты: widget_payment_initiator  + payment_widget_init + JS user_cards_api_path — PASS
 
 ### Сессия 2026-08-06 (PHASE 0 · #44 product card peek cart reopen)
 
