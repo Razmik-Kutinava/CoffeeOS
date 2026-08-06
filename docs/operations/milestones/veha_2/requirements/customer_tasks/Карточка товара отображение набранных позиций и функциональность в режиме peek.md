@@ -2,7 +2,7 @@
 
 Артефакты: docs/operations/milestones/veha_2/artifacts/product_card_peek_cart/
 
-**Статус:** GREEN 2026-08-06 · одна CartSheet без наложений · MCP/апрув `[ ]` · CBR #44
+**Статус:** Fly v436 MCP PASS 2026-08-06 · апрув заказчика `[ ]` · CBR #44
 
 ---
 

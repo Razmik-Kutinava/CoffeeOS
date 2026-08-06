@@ -1,21 +1,22 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-08-06 (**#44** product card single sheet · **#45** Aram one-click)  
+**Дата:** 2026-08-06 (**#44** product card single sheet · Fly **v436**)  
 **Ветка:** `develop`  
-**Прод:** https://coffeeos.fly.dev (**v435**)
+**Прод:** https://coffeeos.fly.dev (**v436**)
 
-### Product card peek cart (#44) — GREEN 2026-08-06
+### Product card peek cart (#44) — GREEN + MCP 2026-08-06
 
 | Что | Статус |
 |-----|--------|
 | PHASE 0 intake | **`[x]`** |
-| SPEC / RED / GREEN | **`[x]`** |
-| Push / Fly / MCP | **`[ ]`** |
+| SPEC / RED / GREEN | **`[x]`** `7f7973e1` |
+| Push / Fly / MCP | **`[x]`** **v436** PASS |
 
 **ТЗ:** [`Карточка товара отображение набранных позиций…`](../milestones/veha_2/requirements/customer_tasks/Карточка%20товара%20отображение%20набранных%20позиций%20и%20функциональность%20в%20режиме%20peek.md)  
-**Скрины:** [`product_card_peek_cart/screenshots/`](../milestones/veha_2/artifacts/product_card_peek_cart/screenshots/)  
+**Evidence:** [`mcp/fly_v436_2026-08-06/`](../milestones/veha_2/artifacts/product_card_peek_cart/mcp/fly_v436_2026-08-06/)  
 **Суть:** одна CartSheet на `#/product` — CTA + peek/hidden/expanded стыками; без fixed overlay.  
-**Дальше:** push/deploy + MCP на Fly; апрув «ок».
+**Live:** `prog37` · `уже в заказе: 2` · ± → 3 · CTA внутри шторки.  
+**Дальше:** апрув заказчика «ок».
 
 ### Aram one-click pay SSL + cards (#45) — 2026-08-06
 

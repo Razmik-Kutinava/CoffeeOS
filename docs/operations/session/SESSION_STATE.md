@@ -2,13 +2,19 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-08-06 (#44 product card single sheet GREEN)
+**Дата:** 2026-08-06 (#44 product card · Fly v436 MCP PASS)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#44** GREEN — одна CartSheet, без наложений | push / Fly / MCP |
+| **#44** Fly **v436** MCP PASS | апрув «ок» |
 | **#45** Fly **v435** Charge PASS | апрув «ок» |
-| Live Fly | **v435** (код #44 ещё не на Fly) |
+| Live Fly | **v436** |
+
+### Сессия 2026-08-06 (#44 · push/deploy/MCP)
+
+- Push `7f7973e1` · Fly **v436** · `deployment-01KZB42C5176Y6MH07YGFSD0YF`
+- MCP Point A: product in cart · `уже в заказе: 2` · CTA inside sheet · ± → 3 · build prog37
+- Evidence: `artifacts/product_card_peek_cart/mcp/fly_v436_2026-08-06/`
 
 ### Сессия 2026-08-06 (#44 · GREEN single sheet)
 

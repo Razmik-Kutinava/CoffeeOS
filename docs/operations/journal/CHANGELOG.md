@@ -1,5 +1,10 @@
 ﻿# CHANGELOG
 
+## 2026-08-06 — deploy/MCP: #44 product single sheet · Fly v436 PASS
+- Push `7f7973e1` · Fly **v436** · `deployment-01KZB42C5176Y6MH07YGFSD0YF`
+- MCP: CTA внутри CartSheet · `уже в заказе: N` · ± bump 2→3 · build `prog37` · без fixed overlay
+- Evidence: [`product_card_peek_cart/mcp/fly_v436_2026-08-06/`](../milestones/veha_2/artifacts/product_card_peek_cart/mcp/fly_v436_2026-08-06/)
+
 ## 2026-08-06 — feat: #44 product card — одна шторка без наложений [GREEN]
 - Root cause: fixed ProductCartPeek (z-45) + bottom-bar (bottom:140px) + CartSheet на `#/product`
 - CTA «добавить к заказу» → `ProductSheetCta` внутри CartSheet; peek/hidden/expanded — секции той же шторки

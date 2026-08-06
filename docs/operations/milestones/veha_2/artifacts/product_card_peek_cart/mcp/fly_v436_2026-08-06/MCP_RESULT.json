@@ -1,0 +1,35 @@
+{
+  "task": "#44 product_card_peek_cart",
+  "date": "2026-08-06",
+  "fly_version": "v436",
+  "deployment": "deployment-01KZB42C5176Y6MH07YGFSD0YF",
+  "commit": "7f7973e1",
+  "stand": "https://coffeeos.fly.dev/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "product_url": "https://coffeeos.fly.dev/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789#/product/d4ff4994-a212-4bfb-8cfb-b6c120f86ced",
+  "build": "prog37",
+  "result": "PASS",
+  "checks": {
+    "single_fixed_footer": "shop-cart-sheet only (no .product-cart-peek, no .bottom-bar--peek)",
+    "cta_inside_sheet": true,
+    "add_btn_text": "добавить к заказу",
+    "in_order_indicator": "уже в заказе: 2 → 3 after +",
+    "peek_aliases": ["shop-product-peek-list", "shop-product-peek-minus", "shop-product-peek-plus", "shop-product-peek-scroll"],
+    "sheet_children_seam": [
+      "shop-cart-sheet-gesture-zone",
+      "shop-order-status-sheet",
+      "shop-product-sheet-cta",
+      "shop-product-add-btn",
+      "shop-product-peek-list",
+      "shop-cart-expanded-single",
+      "shop-cart-sheet-checkout"
+    ],
+    "qty_bump": {"from": 2, "to": 3, "total_from": "+358₽", "total_to": "+537₽"},
+    "mode": "peek",
+    "cart_sheet_h": "48vh"
+  },
+  "notes": [
+    "Geometric overlap of tall product image under fixed sheet is expected (scroll under sheet).",
+    "Active order status + reconnect banner make sheet crowded; content still inside one CartSheet.",
+    "Opened product id must match cart line product_id for in-order indicator."
+  ]
+}

@@ -23,4 +23,4 @@
 | 5 | Обновить product_card_s* под CartSheet | `[x]` 28/28 |
 | 6 | Регрессия cart/product shop zone | `[x]` 135/0 |
 | 7 | REVIEW: CHANGELOG / HANDOFF / CBR | `[x]` |
-| 8 | Push / Fly / MCP | `[ ]` ждать апрува |
+| 8 | Push / Fly / MCP | `[x]` Fly **v436** PASS |
