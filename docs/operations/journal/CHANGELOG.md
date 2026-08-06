@@ -1,5 +1,12 @@
 ﻿# CHANGELOG
 
+## 2026-08-06 — feat: #44 product card — одна шторка без наложений [GREEN]
+- Root cause: fixed ProductCartPeek (z-45) + bottom-bar (bottom:140px) + CartSheet на `#/product`
+- CTA «добавить к заказу» → `ProductSheetCta` внутри CartSheet; peek/hidden/expanded — секции той же шторки
+- Удалён `ProductCartPeek.svelte`; `productPageCtaStore` + `PRODUCT_CTA_EXTRA_VH`; spacer `--cart-sheet-h`
+- Тесты: product_card_s0–s7 28/28 · cart/product zone 135/0 · build `prog37`
+- MCP/Fly — ждать push
+
 ## 2026-08-06 — mcp: #45 UI one-click PASS на Fly v435
 - Click «оплатить в 1 клик» → «✔ Оплачено!» → `#202608-0014` accepted / tbank `8995082965`
 - Evidence: [`mcp_fly_v435_ui_one_click_2026-08-06.json`](../milestones/veha_2/artifacts/aram_one_click_payment_ssl_mintcifry/mcp_fly_v435_ui_one_click_2026-08-06.json)

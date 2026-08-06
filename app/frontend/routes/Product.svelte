@@ -7,7 +7,10 @@
   import { cartItems, cartTotal } from "../lib/cartSheetStore.js"
   import { useTelegramBack } from "../lib/telegram.js"
   import { favorites } from "../lib/stores/favorites.js"
-  import ProductCartPeek from "../components/ProductCartPeek.svelte"
+  import {
+    publishProductPageCta,
+    clearProductPageCta
+  } from "../lib/productPageCtaStore.js"
   import {
     defaultSelectionForGroup,
     buildModifierPayload,
@@ -40,7 +43,6 @@
       .filter((l) => String(l.product_id) === String(params.id))
       .reduce((sum, l) => sum + Number(l.quantity || 0), 0)
   )
-  let hasPeekItems = $derived(cartLines.length > 0)
 
   // Разбираем ?cart_line=N из хэша URL (#/product/123?cart_line=2)
   function parseCartLine() {
@@ -154,6 +156,7 @@
     document.addEventListener("visibilitychange", onVisible)
     return () => {
       unsubCart()
+      clearProductPageCta()
       clearInterval(pollTimer)
       document.removeEventListener("visibilitychange", onVisible)
     }
@@ -217,6 +220,28 @@
       adding = false
     }
   }
+
+  // #44: CTA внутри CartSheet — публикуем состояние, не второй fixed-слой
+  $effect(() => {
+    if (!product || loading) {
+      clearProductPageCta()
+      return
+    }
+    publishProductPageCta({
+      price: totalPrice,
+      qty,
+      adding,
+      editMode,
+      stockOk: product.stock > 0,
+      outOfStockProductId: product.stock <= 0 ? product.id : null,
+      onAdd: () => { addToCart() },
+      onQtyDelta: (delta) => {
+        if (delta < 0) qty = Math.max(1, qty - 1)
+        else qty = qty + 1
+      },
+      onMore: () => { showMoreMenu = !showMoreMenu }
+    })
+  })
 
   function writeToTelegram() {
     if (!shopTelegramUrl) return
@@ -299,39 +324,12 @@
     </div>
   {/each}
 
-  <!-- Пустое место чтоб контент не залазил под закреп + peek -->
-  <div class="bottom-spacer" class:bottom-spacer--peek={hasPeekItems}></div>
+  <!-- Пустое место: высота = фактическая шторка (--cart-sheet-h), стык без наложений -->
+  <div class="bottom-spacer"></div>
 
-  <!-- ЗАКРЕПЛЁННЫЙ НИЖНИЙ БАР -->
-  <div class="bottom-bar" class:bottom-bar--peek={hasPeekItems}>
-    <div class="bar-left">
-      <div class="price-display">{Math.round(totalPrice)}₽</div>
-      <div class="qty-controls">
-        <button class="qty-btn" disabled={product.stock <= 0} onclick={() => (qty = Math.max(1, qty - 1))}>−</button>
-        <span class="qty-value">{qty}</span>
-        <button class="qty-btn" disabled={product.stock <= 0} onclick={() => (qty = qty + 1)}>+</button>
-      </div>
-    </div>
-    <button
-      class="add-to-cart-btn"
-      data-testid="shop-product-add-btn"
-      disabled={product.stock <= 0 || adding}
-      onclick={addToCart}
-    >
-      {#if adding}
-        {editMode ? "Сохраняем…" : "Добавляем…"}
-      {:else}
-        {editMode ? "Сохранить" : "добавить к заказу"}
-      {/if}
-    </button>
-    <button class="more-btn" onclick={() => showMoreMenu = !showMoreMenu}>⋮</button>
-  </div>
-
-  <ProductCartPeek outOfStockProductId={product.stock <= 0 ? product.id : null} />
-
-  <!-- Выпадающее меню от "⋮" -->
+  <!-- Выпадающее меню от "⋮" (кнопка ⋮ внутри CartSheet CTA) -->
   {#if showMoreMenu}
-    <div class="more-menu" class:more-menu--peek={hasPeekItems}>
+    <div class="more-menu">
       {#if shopTelegramUrl}
         <button onclick={writeToTelegram}>
           <span>✈️</span> Написать в Telegram
@@ -384,108 +382,13 @@
   }
 
   .bottom-spacer {
-    height: 90px;
-  }
-
-  .bottom-spacer--peek {
-    height: 230px;
-  }
-
-  /* === ЗАКРЕПЛЁННЫЙ НИЖНИЙ БАР === */
-  .bottom-bar {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 50;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 12px 16px;
-    background: #2a2a2a;
-    border-top: 1px solid #3a3a3a;
-    max-width: 480px;
-    margin: 0 auto;
-  }
-
-  .bottom-bar--peek {
-    bottom: 140px;
-  }
-
-  .bar-left {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    min-width: 0;
-  }
-
-  .price-display {
-    font-size: 18px;
-    font-weight: 700;
-    color: #ff8c42;
-    white-space: nowrap;
-  }
-
-  .qty-controls {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .qty-btn {
-    width: 28px;
-    height: 28px;
-    border-radius: 6px;
-    background: #3a3a3a;
-    border: none;
-    color: #fff;
-    font-size: 16px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .qty-value {
-    font-size: 14px;
-    color: #fff;
-    min-width: 20px;
-    text-align: center;
-  }
-
-  .add-to-cart-btn {
-    flex: 1;
-    background: #ff8c42;
-    color: #000;
-    border: none;
-    border-radius: 12px;
-    padding: 14px 16px;
-    font-size: 15px;
-    font-weight: 700;
-    cursor: pointer;
-    white-space: nowrap;
-  }
-
-  .add-to-cart-btn:disabled {
-    opacity: 0.4;
-    cursor: default;
-  }
-
-  .more-btn {
-    background: #3a3a3a;
-    border: none;
-    color: #a0a0a0;
-    font-size: 22px;
-    cursor: pointer;
-    padding: 10px 12px;
-    border-radius: 10px;
-    line-height: 1;
-    flex-shrink: 0;
+    /* Синхрон с CartSheet heightVh (+ CTA) — стык, не магические 230px */
+    height: calc(var(--cart-sheet-h, 34vh) + 1rem);
   }
 
   .more-menu {
     position: fixed;
-    bottom: 80px;
+    bottom: calc(var(--cart-sheet-h, 34vh) + 0.5rem);
     right: 16px;
     background: #2a2a2a;
     border: 1px solid #3a3a3a;
@@ -494,10 +397,6 @@
     z-index: 100;
     min-width: 220px;
     box-shadow: 0 8px 24px rgba(0,0,0,0.5);
-  }
-
-  .more-menu--peek {
-    bottom: 220px;
   }
 
   .more-menu button {

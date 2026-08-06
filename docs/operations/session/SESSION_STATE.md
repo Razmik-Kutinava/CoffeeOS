@@ -2,13 +2,21 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-08-06 (#45 Aram one-click SSL Минцифры + cards/Charge)
+**Дата:** 2026-08-06 (#44 product card single sheet GREEN)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#45** Fly **v435** Charge PASS (*5953 → #202608-0013) | апрув «ок» |
-| **#44** Product card peek · intake `[x]` | go → SPEC |
-| Live Fly | **v435** |
+| **#44** GREEN — одна CartSheet, без наложений | push / Fly / MCP |
+| **#45** Fly **v435** Charge PASS | апрув «ок» |
+| Live Fly | **v435** (код #44 ещё не на Fly) |
+
+### Сессия 2026-08-06 (#44 · GREEN single sheet)
+
+- Root cause: ProductCartPeek + fixed bottom-bar + CartSheet на product
+- `ProductSheetCta` + `productPageCtaStore` внутри CartSheet; удалён ProductCartPeek
+- peek/hidden/expanded — секции одной шторки; `--cart-sheet-h` spacer; `PRODUCT_CTA_EXTRA_VH`
+- Тесты product_card 28/28 · cart/product zone 135/0 · build prog37
+- Push/MCP — не делали
 
 ### Сессия 2026-08-06 (#45 · MCP UI one-click)
 

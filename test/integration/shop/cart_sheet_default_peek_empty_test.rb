@@ -28,7 +28,7 @@ class Shop::CartSheetDefaultPeekEmptyTest < ActionDispatch::IntegrationTest
   test "empty peek height matches peekSingle; build prog35" do
     assert_includes thresholds, "empty:         34"
     assert_includes thresholds, "peekSingle:    34"
-    assert_includes thresholds, 'CART_SHEET_BUILD = "prog35"'
+    assert_includes thresholds, 'CART_SHEET_BUILD = "prog37"'
   end
 
   test "CartSheet empty height uses peekSingle or peekSingleWithRepeat" do
@@ -36,6 +36,8 @@ class Shop::CartSheetDefaultPeekEmptyTest < ActionDispatch::IntegrationTest
     assert_includes sheet, "SHEET_VH.peekSingle"
     assert_includes sheet, "SHEET_VH.peekSingleWithRepeat"
     assert_includes sheet, "тут будут твои заказы"
-    assert_includes sheet, "frequentCount === 0"
+    # Высота empty: с repeat → peekSingleWithRepeat, иначе peekSingle (через showRepeat / frequentCount)
+    gated = sheet.include?("showRepeat") || sheet.include?("frequentCount === 0")
+    assert gated, "empty height должна ветвиться по showRepeat / frequentCount"
   end
 end

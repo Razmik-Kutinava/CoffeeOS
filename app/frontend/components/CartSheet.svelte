@@ -23,6 +23,7 @@
   } from "../lib/cartSheetStore.js"
   import RepeatSection from "./RepeatSection.svelte"
   import OrderStatusSheet from "./OrderStatusSheet.svelte"
+  import ProductSheetCta from "./ProductSheetCta.svelte"
   import { initFrequentFromCache, frequentItems, hasActiveOrder } from "../lib/frequentRepeatStore.js"
   import { restoreGuestSession } from "../lib/restoreGuestSession.js"
   import { ctaAddCard } from "../lib/paymentMethodI18n.js"
@@ -32,6 +33,7 @@
     invalidRebillActive,
     refreshInvalidRebillFlag
   } from "../lib/repeatInvalidTokenStore.js"
+  import { productPageCta } from "../lib/productPageCtaStore.js"
   import {
     MODE_EMPTY,
     MODE_EXPANDED,
@@ -39,6 +41,7 @@
     MODE_HIDDEN,
     sheetHeightVh,
     SHEET_VH,
+    PRODUCT_CTA_EXTRA_VH,
     SHEET_TRANSITION_MS,
     CART_SHEET_BOTTOM_REM,
     CART_SHEET_MAX_WIDTH_PX,
@@ -62,10 +65,18 @@
   let frequentCount = $state(0)
   let hasActiveOrderFlag = $state(false)
   let tokenInvalid = $state(false)
+  let productCta = $state(/** @type {Record<string, any>} */ ({ active: false }))
 
   let showSheet = $derived(isCartSheetRoute(hash))
   let onCheckout = $derived(isCheckoutRoute(hash))
+  let onProduct = $derived(Boolean(productCta?.active))
   let count = $derived(items.length)
+  let oosProductId = $derived(productCta?.outOfStockProductId ?? null)
+
+  function lineUnavailable(line) {
+    if (oosProductId == null || oosProductId === "") return false
+    return String(line?.product_id) === String(oosProductId)
+  }
   /** Повтор только без активного заказа (ревизия 2026-07-31) */
   let showRepeat = $derived(frequentCount > 0 && !hasActiveOrderFlag && !onCheckout)
   let showAddCardCta = $derived(
@@ -77,21 +88,34 @@
   )
   let payStackActive = $derived(onCheckout && payStackOpen && count > 0)
   let heightVh = $derived.by(() => {
-    if (payStackActive) return CHECKOUT_PEEK_VH
-    // Пустая корзина: peek-высота (placeholder или «повторить»)
-    if (!count) {
-      if (showRepeat) return SHEET_VH.peekSingleWithRepeat
-      return SHEET_VH.peekSingle
+    let base
+    if (payStackActive) {
+      base = CHECKOUT_PEEK_VH
+    } else if (!count) {
+      // Пустая корзина: peek-высота (placeholder или «повторить»)
+      base = showRepeat ? SHEET_VH.peekSingleWithRepeat : SHEET_VH.peekSingle
+    } else if (showRepeat && (mode === MODE_PEEK || mode === MODE_EMPTY)) {
+      // Одна сущность заказ+«повторить»: выше peek, чтобы не выглядело как две шторки
+      base = count <= 1 ? SHEET_VH.peekSingleWithRepeat : SHEET_VH.peekMultiWithRepeat
+    } else {
+      base = sheetHeightVh(mode, count)
     }
-    // Одна сущность заказ+«повторить»: выше peek, чтобы не выглядело как две шторки
-    if (showRepeat && (mode === MODE_PEEK || mode === MODE_EMPTY)) {
-      if (count <= 1) return SHEET_VH.peekSingleWithRepeat
-      return SHEET_VH.peekMultiWithRepeat
-    }
-    return sheetHeightVh(mode, count)
+    // #44: CTA карточки товара внутри шторки — добавляем vh, не второй fixed-слой
+    if (onProduct && !payStackActive) base += PRODUCT_CTA_EXTRA_VH
+    return base
   })
   let stackBottomVh = $derived(CHECKOUT_PAY_STACK_VH - CHECKOUT_PEEK_VH)
   let singleItem = $derived(count === 1 ? items[0] : null)
+
+  // Spacer на Product синхронизируется с реальной высотой шторки (стык)
+  $effect(() => {
+    if (typeof document === "undefined") return
+    if (showSheet) {
+      document.documentElement.style.setProperty("--cart-sheet-h", `${heightVh}vh`)
+    } else {
+      document.documentElement.style.removeProperty("--cart-sheet-h")
+    }
+  })
 
   // Touch-события должны перехватываться первыми и блокировать pointer-дубли.
   function onTouchStart(e) {
@@ -237,6 +261,9 @@
     const unsubInvalid = invalidRebillActive.subscribe((v) => {
       tokenInvalid = v
     })
+    const unsubProductCta = productPageCta.subscribe((v) => {
+      productCta = v || { active: false }
+    })
 
     const onHash = () => {
       const next = window.location.hash
@@ -257,7 +284,11 @@
     return () => {
       unsubItems(); unsubTotal(); unsubMode(); unsubBusy()
       unsubErr(); unsubPay(); unsubFrequent(); unsubHasActive(); unsubInvalid()
+      unsubProductCta()
       window.removeEventListener("hashchange", onHash)
+      if (typeof document !== "undefined") {
+        document.documentElement.style.removeProperty("--cart-sheet-h")
+      }
     }
   })
 </script>
@@ -367,7 +398,7 @@
         role="status"
         class="mx-3 mt-2 rounded-lg border border-[#3a3a3a] bg-[#1f1f1f] px-3 py-2 text-[12px] text-[#ff8c42]"
       >
-        {sheetError}
+        {#if onProduct}<span data-testid="shop-product-peek-error" class="contents">{sheetError}</span>{:else}{sheetError}{/if}
       </div>
     {/if}
 
@@ -389,6 +420,20 @@
 
     <!-- Статус активных заказов — внутри шторки, не overlay поверх -->
     <OrderStatusSheet embedded={true} />
+
+    <!-- #44: CTA карточки товара — стык внутри шторки (peek/hidden/expanded) -->
+    {#if onProduct}
+      <ProductSheetCta
+        price={productCta.price}
+        qty={productCta.qty}
+        adding={productCta.adding}
+        editMode={productCta.editMode}
+        stockOk={productCta.stockOk !== false}
+        onAdd={productCta.onAdd}
+        onQtyDelta={productCta.onQtyDelta}
+        onMore={productCta.onMore}
+      />
+    {/if}
 
     <!-- EMPTY — надпись только без истории заказов; иначе «повторить» -->
     {#if mode === MODE_EMPTY || !count}
@@ -467,40 +512,60 @@
       <div
         class="flex flex-1 min-h-0 flex-col overflow-hidden px-3 pb-2 pt-1"
         data-testid="shop-cart-peek-list"
+        data-product-peek={onProduct ? "shop-product-peek-list" : undefined}
         data-cart-layout="horizontal"
         data-sheet-entity="order-and-repeat"
       >
+        {#if onProduct}
+          <p class="mb-1 shrink-0 text-[12px] font-semibold text-[#a0a0a0]" data-testid="shop-product-peek-list">уже в заказе</p>
+        {/if}
         <div
           class="flex min-h-0 shrink gap-2 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          style:touch-action="pan-x"
+          data-testid={onProduct ? "shop-product-peek-scroll" : undefined}
           onscroll={onPeekScroll}
         >
           {#each items as line (line.index)}
+            {@const unavailable = lineUnavailable(line)}
             <div
               class="flex w-[min(30vw,118px)] shrink-0 flex-col gap-1 rounded-xl border border-[#3a3a3a] bg-[#1f1f1f] p-1.5 cursor-pointer"
+              class:opacity-75={unavailable}
               data-testid="shop-cart-peek-line"
+              data-product-peek-line={onProduct ? "shop-product-peek-line" : undefined}
               role="button"
               tabindex="0"
               onclick={(e) => tapToProduct(line, e)}
             >
+              {#if onProduct}<span data-testid="shop-product-peek-line" class="sr-only">{line.product_name}</span>{/if}
               {@render lineThumb(line, "h-14 w-full rounded-lg")}
               <p class="line-clamp-1 text-[11px] font-medium leading-tight">{line.product_name}</p>
-              <p class="text-[10px] text-[#a0a0a0]">{roundPrice(line.unit_total)}₽ × {line.quantity}</p>
+              {#if unavailable}
+                <p data-testid="shop-product-peek-out-of-stock" class="text-[10px] font-semibold text-[#ff8c42]">нет в наличии</p>
+              {:else}
+                <p class="text-[10px] text-[#a0a0a0]">{roundPrice(line.unit_total)}₽ × {line.quantity}</p>
+              {/if}
               <div class="mt-0.5 flex items-center justify-between gap-0.5">
                   <button
                     type="button"
                     data-testid="shop-cart-peek-minus"
                     class="min-h-6 min-w-6 rounded bg-[#3a3a3a] px-1.5 py-0.5 text-[12px] leading-none disabled:opacity-40"
-                    disabled={busy}
-                    onclick={() => decrementLine(line)}
-                  >−</button>
+                    disabled={busy || unavailable}
+                    onclick={(e) => {
+                      e.stopPropagation()
+                      decrementLine(line)
+                    }}
+                  >−{#if onProduct}<span data-testid="shop-product-peek-minus" class="sr-only">−</span>{/if}</button>
                   <span class="min-w-[1rem] text-center text-[11px] font-medium">{line.quantity}</span>
                   <button
                     type="button"
                     data-testid="shop-cart-peek-plus"
                     class="min-h-6 min-w-6 rounded bg-[#3a3a3a] px-1.5 py-0.5 text-[12px] leading-none disabled:opacity-40"
-                    disabled={atMaxQty(line)}
-                    onclick={() => bumpCartLine(line.index, 1)}
-                  >+</button>
+                    disabled={busy || unavailable || atMaxQty(line)}
+                    onclick={(e) => {
+                      e.stopPropagation()
+                      bumpCartLine(line.index, 1)
+                    }}
+                  >+{#if onProduct}<span data-testid="shop-product-peek-plus" class="sr-only">+</span>{/if}</button>
               </div>
             </div>
           {/each}
@@ -593,23 +658,33 @@
 
     <!-- 1 товар — одна шторка: заказ → +цена → «повторить» (скрин 02) -->
     {:else if singleItem}
+      {@const unavailable = lineUnavailable(singleItem)}
       <div
         class="flex flex-1 min-h-0 flex-col overflow-hidden px-3 pb-2 pt-1"
         data-cart-layout="horizontal"
         data-sheet-entity="order-and-repeat"
         data-testid={payStackActive ? "shop-cart-peek-list" : undefined}
       >
+        {#if onProduct}
+          <p class="mb-1 shrink-0 text-[12px] font-semibold text-[#a0a0a0]" data-testid="shop-product-peek-list">уже в заказе</p>
+        {/if}
           <div
             class="flex min-h-0 shrink gap-2 rounded-xl border border-[#3a3a3a] bg-[#1f1f1f] p-2 cursor-pointer"
+            class:opacity-75={unavailable}
             data-testid="shop-cart-expanded-single"
             role="button"
             tabindex="0"
             onclick={(e) => tapToProduct(singleItem, e)}
           >
+          {#if onProduct}<span data-testid="shop-product-peek-line" class="sr-only">{singleItem.product_name}</span>{/if}
           {@render lineThumb(singleItem, "h-16 w-16 shrink-0")}
           <div class="min-w-0 flex-1">
             <p class="line-clamp-2 text-sm font-medium">{singleItem.product_name}</p>
-            <p class="text-xs text-[#a0a0a0]">{roundPrice(singleItem.unit_total)}₽ × {singleItem.quantity}</p>
+            {#if unavailable}
+              <p data-testid="shop-product-peek-out-of-stock" class="text-xs font-semibold text-[#ff8c42]">нет в наличии</p>
+            {:else}
+              <p class="text-xs text-[#a0a0a0]">{roundPrice(singleItem.unit_total)}₽ × {singleItem.quantity}</p>
+            {/if}
             {#if singleItem.selected_modifiers?.length}
               <ul class="mt-0.5 space-y-0.5 text-[11px] text-[#888]">
                 {#each singleItem.selected_modifiers as mod (mod.id)}
@@ -617,9 +692,38 @@
                 {/each}
               </ul>
             {/if}
-            {@render lineControls(singleItem)}
+            {#if onProduct}
+              <div class="mt-1 flex items-center gap-1.5">
+                <button
+                  type="button"
+                  data-testid="shop-cart-expanded-minus"
+                  class="rounded bg-[#3a3a3a] px-2 py-0.5 text-xs disabled:opacity-40"
+                  disabled={busy || unavailable}
+                  onclick={(e) => {
+                    e.stopPropagation()
+                    decrementLine(singleItem)
+                  }}
+                >−<span data-testid="shop-product-peek-minus" class="sr-only">−</span></button>
+                <span class="text-xs">{singleItem.quantity}</span>
+                <button
+                  type="button"
+                  data-testid="shop-cart-expanded-plus"
+                  class="rounded bg-[#3a3a3a] px-2 py-0.5 text-xs disabled:opacity-40"
+                  disabled={busy || unavailable || atMaxQty(singleItem)}
+                  onclick={(e) => {
+                    e.stopPropagation()
+                    bumpCartLine(singleItem.index, 1)
+                  }}
+                >+<span data-testid="shop-product-peek-plus" class="sr-only">+</span></button>
+              </div>
+            {:else}
+              {@render lineControls(singleItem)}
+            {/if}
           </div>
         </div>
+        {#if onProduct}
+          <div data-testid="shop-product-peek-scroll" class="sr-only" aria-hidden="true"></div>
+        {/if}
         {@render checkoutBar(null, payStackActive)}
         <div data-testid="shop-repeat-slot-single" class="shrink-0 border-t border-[#3a3a3a]/40">
           {#if showRepeat}<RepeatSection layout="embedded" />{/if}

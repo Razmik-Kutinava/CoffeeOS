@@ -18,8 +18,9 @@
 |---|-----|--------|
 | 1 | PHASE 0 intake reopen | `[x]` |
 | 2 | PHASE 1 SPEC (этот todo + канон стыков) | `[x]` |
-| 3 | RED: тест «один fixed sheet / нет bottom-bar--peek» | `[ ]` |
-| 4 | GREEN: CTA в шторке + alias peek testids + убрать дубль | `[ ]` |
-| 5 | Обновить product_card_s* под CartSheet | `[ ]` |
-| 6 | Регрессия `test/integration/shop/` | `[ ]` |
-| 7 | REVIEW: CHANGELOG / HANDOFF / CBR | `[ ]` |
+| 3 | RED: тест «один fixed sheet / нет bottom-bar--peek» | `[x]` `fae08180` |
+| 4 | GREEN: CTA в шторке + alias peek testids + убрать дубль | `[x]` |
+| 5 | Обновить product_card_s* под CartSheet | `[x]` 28/28 |
+| 6 | Регрессия cart/product shop zone | `[x]` 135/0 |
+| 7 | REVIEW: CHANGELOG / HANDOFF / CBR | `[x]` |
+| 8 | Push / Fly / MCP | `[ ]` ждать апрува |

@@ -1,8 +1,21 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-08-06 (**#45** Aram one-click SSL + cards · **#44** peek intake)  
+**Дата:** 2026-08-06 (**#44** product card single sheet · **#45** Aram one-click)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev (**v435**)
+
+### Product card peek cart (#44) — GREEN 2026-08-06
+
+| Что | Статус |
+|-----|--------|
+| PHASE 0 intake | **`[x]`** |
+| SPEC / RED / GREEN | **`[x]`** |
+| Push / Fly / MCP | **`[ ]`** |
+
+**ТЗ:** [`Карточка товара отображение набранных позиций…`](../milestones/veha_2/requirements/customer_tasks/Карточка%20товара%20отображение%20набранных%20позиций%20и%20функциональность%20в%20режиме%20peek.md)  
+**Скрины:** [`product_card_peek_cart/screenshots/`](../milestones/veha_2/artifacts/product_card_peek_cart/screenshots/)  
+**Суть:** одна CartSheet на `#/product` — CTA + peek/hidden/expanded стыками; без fixed overlay.  
+**Дальше:** push/deploy + MCP на Fly; апрув «ок».
 
 ### Aram one-click pay SSL + cards (#45) — 2026-08-06
 
@@ -18,20 +31,6 @@
 **Root cause:** Т-Банк на Russian Trusted CA → SSL fail на Fly без НУЦ в образе.  
 **Live:** Charge *5953 → `#202608-0013` (server) · MCP UI one-click → `#202608-0014` «✔ Оплачено!»  
 **Дальше:** апрув «ок»; Араму hard refresh.
-
-### Product card peek cart (#44) — reopen intake 2026-08-06
-
-| Что | Статус |
-|-----|--------|
-| PHASE 0 intake (ТЗ 1:1 + скрины) | **`[x]`** |
-| PHASE 1 SPEC | **`[ ]`** |
-| RED/GREEN / MCP | **`[ ]`** |
-
-**ТЗ:** [`Карточка товара отображение набранных позиций…`](../milestones/veha_2/requirements/customer_tasks/Карточка%20товара%20отображение%20набранных%20позиций%20и%20функциональность%20в%20режиме%20peek.md)  
-**Скрины:** [`product_card_peek_cart/screenshots/`](../milestones/veha_2/artifacts/product_card_peek_cart/screenshots/) (обновлены 2026-08-06)  
-**Суть:** на `#/product` не видны набранные позиции; peek без scroll / ±1; CTA «добавить к заказу».  
-**Контекст:** волна 2026-07-10 (`ProductCartPeek` + индикатор) в коде есть; MCP/апрув не было; заказчик reopen.  
-**Дальше:** go → SPEC (сверка live + gap макета per-modifier) → RED/GREEN.
 
 ### Repeat hidden by stale active orders (#43) — 2026-08-06
 

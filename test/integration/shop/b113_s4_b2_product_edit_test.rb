@@ -16,6 +16,10 @@ class Shop::B113S4B2ProductEditTest < ActionDispatch::IntegrationTest
     @svelte ||= File.read(Rails.root.join("app/frontend/routes/Product.svelte"))
   end
 
+  def product_cta
+    @product_cta ||= File.read(Rails.root.join("app/frontend/components/ProductSheetCta.svelte"))
+  end
+
   test "Product: parseCartLine функция присутствует" do
     assert_includes svelte, "function parseCartLine()"
     assert_includes svelte, "cart_line"
@@ -54,20 +58,24 @@ class Shop::B113S4B2ProductEditTest < ActionDispatch::IntegrationTest
   end
 
   test "Product: кнопка Сохранить в editMode" do
-    assert_includes svelte, "Сохранить"
-    assert_includes svelte, "editMode"
+    assert_includes product_cta, "Сохранить"
+    assert_includes product_cta, "editMode"
   end
 
   test "Product: кнопка добавить к заказу в обычном режиме" do
-    assert_includes svelte, "добавить к заказу"
+    assert_includes product_cta, "добавить к заказу"
   end
 
   test "Product: data-testid на кнопке добавления" do
-    assert_includes svelte, 'data-testid="shop-product-add-btn"'
+    assert_includes product_cta, 'data-testid="shop-product-add-btn"'
   end
 
   test "Product: writeCartCache вызывается после PATCH" do
     assert_includes svelte, "writeCartCache(data)"
+  end
+
+  test "Product: publishes CTA into CartSheet store" do
+    assert_includes svelte, "publishProductPageCta"
   end
 
   # ---------------------------------------------------------------------------

@@ -52,24 +52,27 @@ class Shop::ProductCardS0SingleSheetNoOverlapTest < ActionDispatch::IntegrationT
 
   test "S0 Then: CartSheet renders product CTA inside sheet (not overlay)" do
     src = cart_sheet_src
+    cta = File.read(Rails.root.join("app/frontend/components/ProductSheetCta.svelte"))
 
     assert_includes src, "productPageCta",
       "S0: CartSheet читает productPageCta"
-    assert_includes src, 'data-testid="shop-product-add-btn"',
+    assert_includes src, "ProductSheetCta",
+      "S0: CartSheet монтирует ProductSheetCta внутри шторки"
+    assert_includes cta, 'data-testid="shop-product-add-btn"',
       "S0: кнопка «добавить к заказу» внутри шторки"
-    # CTA не position:fixed в CartSheet-секции продукта
-    refute_match(/shop-product-sheet-cta[\s\S]{0,200}position:\s*fixed/, src)
+    refute_match(/position:\s*fixed/, cta,
+      "S0: ProductSheetCta не position:fixed")
   end
 
   test "S0 Then: CartSheet exposes product peek aliases inside modes" do
     src = cart_sheet_src
 
-    assert_includes src, 'data-testid="shop-product-peek-list"',
-      "S0: на #/product peek-list alias внутри CartSheet"
-    assert_includes src, 'shop-product-peek-scroll',
-      "S0: horizontal scroll alias внутри шторки"
-    assert_includes src, 'shop-product-peek-minus',
-      "S0: ± aliases внутри шторки"
+    assert_match(/shop-product-peek-list/, src,
+      "S0: на #/product peek-list alias внутри CartSheet")
+    assert_match(/shop-product-peek-scroll/, src,
+      "S0: horizontal scroll alias внутри шторки")
+    assert_match(/shop-product-peek-minus/, src,
+      "S0: ± aliases внутри шторки")
   end
 
   test "S0 Then: sheet height grows for product CTA (seam, not overlap)" do

@@ -2,7 +2,7 @@
 
 Артефакты: docs/operations/milestones/veha_2/artifacts/product_card_peek_cart/
 
-**Статус:** reopen 2026-08-06 · SPEC/BUILD · канон: одна CartSheet, стыки peek/hidden/expanded · CBR #44
+**Статус:** GREEN 2026-08-06 · одна CartSheet без наложений · MCP/апрув `[ ]` · CBR #44
 
 ---
 
@@ -119,41 +119,28 @@
 
 ## Заметки агента
 
-### Волна 2026-07-10 (закрыта в коде, не принята заказчиком)
+### Канон layout (GREEN 2026-08-06)
 
-| Сценарий | Было в коде | Тесты |
-|----------|-------------|-------|
-| S1 — индикатор «уже в заказе» | `Product.svelte` · `shop-product-in-order` · `уже в заказе: N` | `product_card_s1_in_order_indicator_test.rb` |
-| S2 — peek-список | `ProductCartPeek.svelte` | `product_card_s2_peek_list_test.rb` |
-| S3 — ±1 | `bumpCartLine` / `removeCartLine` | `product_card_s3_peek_qty_edit_test.rb` |
-| S4 — horizontal scroll | `shop-product-peek-scroll` · `touch-action: pan-x` | extremes |
-| S5–S7 | empty / API error / OOS | `product_card_s4_s7_peek_extremes_test.rb` |
+**Одна** `CartSheet` на `#/product`: gesture → OrderStatus → ProductSheetCta («добавить к заказу») → корзина (peek/hidden/expanded) → checkout.  
+Запрещены: fixed `.bottom-bar` + отдельный `ProductCartPeek` (удалён).  
+Spacer Product = `var(--cart-sheet-h)`; высота += `PRODUCT_CTA_EXTRA_VH`.
 
-**Не сделано тогда:** MCP / Fly визуальная приёмка · запись в CBR · апрув заказчика «ок».
+| Сценарий | Где |
+|----------|-----|
+| S0 — без наложений | `product_card_s0_*` · CartSheet + ProductSheetCta |
+| S1 — «уже в заказе: N» | `Product.svelte` |
+| S2–S7 peek ± / scroll / OOS | aliases `shop-product-peek-*` внутри CartSheet |
 
-**Файл ТЗ:** переименован с усечённого `…режиме pee.md` → полное имя.
+### Волна 2026-07-10 (superseded)
 
-### Reopen 2026-08-06 (этот intake)
+| Сценарий | Было | Сейчас |
+|----------|------|--------|
+| S2 peek | `ProductCartPeek.svelte` (fixed) | CartSheet aliases |
+| S3–S7 | ProductCartPeek | CartSheet |
 
-Заказчик снова прислал **тот же** текст проблемы + скрины. Критерии приёмки снова `[ ]` (как в исходном ТЗ).
+**Не сделано:** MCP / Fly визуальная приёмка · апрув заказчика «ок».
 
-**Скрины:** пересохранены в `artifacts/product_card_peek_cart/screenshots/` (хеши отличаются от 2026-07-10). Старые → `screenshots/_archive_2026-07-10/`.
+### Reopen 2026-08-06
 
-**Расхождения текст ↔ макет ↔ код (для SPEC):**
-
-| Что | Текст ТЗ | Макет (mockup) | Код сейчас |
-|-----|----------|----------------|------------|
-| Индикатор «уже в заказе» | на карточке: `уже в заказе: 1` | + подпись «уже в заказе» **под опцией модификатора** («Яблочный с корицей») | только уровень товара (`inOrderQty`), **не** per-modifier |
-| Peek | список позиций, ±1, horizontal scroll | горизонтальные карточки: thumb + ± | `ProductCartPeek` ≈ макет |
-| CTA | «добавить к заказу» | есть | есть |
-| Шапка / install banner | не в тексте | CoffeeOS + «Витрина» + install | другой header (back + title) — вне scope, если не уточнят |
-| Live | заказчик «не видит позиции / нет scroll / нет ±» | — | возможная регрессия после #35/#42 (status sheet / peek height) поверх `ProductCartPeek` |
-
-### Что переделать (после go → SPEC → RED → GREEN)
-
-1. **SPEC:** сверить live Fly `#/product/…` с корзиной — виден ли `ProductCartPeek`, не перекрывает ли OrderStatusSheet / bottom bar, работает ли pan-x.
-2. **Уточнить scope индикатора:** только `уже в заказе: N` (текст) **или** ещё метка на модификаторах как на макете.
-3. **RED:** тесты, которые реально красные на текущем баге (не зелёные «по памяти» волны июля); при регрессии — починить, при gap макета — новые тест-критерии.
-4. **GREEN:** минимальный fix без ломки `cartSheetStore` / основной `CartSheet`.
-5. **Регрессия:** `bin/rails test test/integration/shop/` (зона shop) + MCP на Fly.
-6. **Не трогать:** API корзины, сценарии add/remove каталога (жёсткие ограничения ТЗ).
+Заказчик: наложения оранжевого бара на фото; не видит позиции / ± / scroll.  
+Root cause: три fixed-слоя после #35/#42. Фикс — одна шторка со стыками.

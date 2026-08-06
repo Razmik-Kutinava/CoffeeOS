@@ -68,9 +68,10 @@ class Shop::B113S4CartModifiersTest < ActionDispatch::IntegrationTest
   end
 
   test "S4-b2: кнопка показывает Сохранить в editMode" do
-    assert_includes product_svelte, "Сохранить"
-    assert_includes product_svelte, "editMode"
-    assert_includes product_svelte, "добавить к заказу"
+    cta = File.read(Rails.root.join("app/frontend/components/ProductSheetCta.svelte"))
+    assert_includes cta, "Сохранить"
+    assert_includes cta, "editMode"
+    assert_includes cta, "добавить к заказу"
   end
 
   test "S4-b2: stores обновляются после PATCH" do
