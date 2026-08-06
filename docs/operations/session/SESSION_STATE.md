@@ -2,13 +2,18 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-08-06 (PHASE 1 SPEC · #35 + скрин 06)
+**Дата:** 2026-08-06 (PHASE 2 RED · #35 D1+D2)
 
 | Сейчас | Дальше |
 |--------|--------|
-| SPEC #35: baseline A/B/C `[x]`; gaps **D1–D5** (expanded vs скрин 06) в `todo.md` | RED D1+D2 по намерению («ебашь/сделай») |
-| Скрин 06 в artifacts | канон expanded: статус над корзиной + оплата |
+| RED D1+D2 закоммичен (падающие тесты) | GREEN по намерению |
+| Fail: нет `data-cart-status-stack` · нет `statusMetaThird`/`metaThird` | |
 | prog38 status+cart stack (лок.) | push/MCP по апруву |
+
+### Сессия 2026-08-06 (PHASE 2 RED · #35 D1+D2)
+
+- Тесты: `order_status_expanded_stack_canon_test` (1F/3P) · `order_status_meta_product_name_canon_test` (2F) · JS accordion import `statusMetaThird` FAIL
+- Код реализации не писали
 
 ### Сессия 2026-08-06 (PHASE 1 SPEC · #35 + скрин 06)
 

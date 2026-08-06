@@ -44,8 +44,8 @@
 | # | Шаг | Статус | Файлы / тесты |
 |---|-----|--------|---------------|
 | D0 | SPEC зафиксирован (этот todo) | `[x]` | `todo.md` · SESSION_STATE |
-| D1 | **DOM-порядок в expanded/checkout:** gesture → **OrderStatusSheet** → (CTA) → **позиции корзины** → **pay/checkout** — без второго fixed/z-index | `[ ]` | `CartSheet.svelte` · тест integration: порядок `data-testid` при `MODE_EXPANDED`/`payStack` + `hasActiveOrder` |
-| D2 | **Мета-строка:** на expanded (скрин 06) третий сегмент = **название позиции (только продукта)**; на home peek (скрин 01) допускается точка/локация — не ломать 01 без апрува | `[ ]` | `ActiveOrdersAccordion` / `accordionRowView` · API `#active` уже отдаёт items · тест JS/integration |
+| D1 | **DOM-порядок в expanded/checkout:** gesture → **OrderStatusSheet** → (CTA) → **позиции корзины** → **pay/checkout** — без второго fixed/z-index | `[ ]` RED | `order_status_expanded_stack_canon_test` — fail: нет `data-cart-status-stack="status-above-lines"` |
+| D2 | **Мета-строка:** на expanded (скрин 06) третий сегмент = **название позиции (только продукта)**; на home peek (скрин 01) допускается точка/локация — не ломать 01 без апрува | `[ ]` RED | `statusMetaThird` + `metaThird` в accordion · `active_orders_accordion_test` + `order_status_meta_product_name_canon_test` |
 | D3 | Регрессия зоны shop + JS sheet | `[ ]` | `bin/rails test test/integration/shop/…` (точечно status/cart) · `node --test test/javascript/order_status_sheet_test.mjs` |
 | D4 | MCP приёмка vs **скрин 06** (после push `prog38` + D1/D2) | `[ ]` | Fly · evidence в `artifacts/…/mcp/` · expanded: статус над линиями + оплата |
 | D5 | Optional: barista → `ready` → hide + один push (PARTIAL с v432) | `[ ]` | только по апруву / вместе с D4 |

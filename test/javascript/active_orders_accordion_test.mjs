@@ -12,7 +12,8 @@ import {
   createActiveOrdersAccordionState,
   toggleExpandedOrder,
   accordionRowView,
-  receiptView
+  receiptView,
+  statusMetaThird
 } from "../../app/frontend/lib/activeOrdersAccordion.js"
 
 const sampleOrders = [
@@ -118,6 +119,29 @@ describe("accordionRowView (#36 B1)", () => {
     const row = accordionRowView(sampleOrders[1], "o1")
     assert.equal(row.expanded, false)
     assert.equal(row.chevron, ">")
+  })
+})
+
+describe("statusMetaThird (#35 D2 screen 06)", () => {
+  it("cart_expanded third segment is first product name only", () => {
+    assert.equal(statusMetaThird(sampleOrders[0], "cart_expanded"), "Капучино")
+  })
+
+  it("peek third segment stays sales point (screen 01)", () => {
+    assert.equal(statusMetaThird(sampleOrders[0], "peek"), "Point A")
+  })
+
+  it("accordionRowView exposes metaThird for cart_expanded context", () => {
+    const row = accordionRowView(sampleOrders[0], null, {
+      sheetContext: "cart_expanded"
+    })
+    assert.equal(row.metaThird, "Капучино")
+    assert.equal(row.salesPointName, "Point A")
+  })
+
+  it("accordionRowView peek metaThird is sales point", () => {
+    const row = accordionRowView(sampleOrders[0], null, { sheetContext: "peek" })
+    assert.equal(row.metaThird, "Point A")
   })
 })
 
