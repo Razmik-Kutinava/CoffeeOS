@@ -2,13 +2,19 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-08-05 (#42 Fly v433 MCP PASS)
+**Дата:** 2026-08-06 (#43 repeat hidden · intake + fix)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#42** Fly **v433** MCP PASS · ISSUES resolved | апрув заказчика «ок» |
-| **#35 rev** Fly **v432** (superseded tip by v433) | апрув; optional ready-smoke |
-| Live Fly | **v433** |
+| **#43** intake + TTL на `has_active_order` | deploy/MCP |
+| **#42** Fly **v433** MCP PASS | апрув |
+| Live Fly | **v433** (ещё без #43) |
+
+### Сессия 2026-08-06 (intake · #43)
+
+- Арам: нет повторов / кнопок / истории после #42
+- Root cause: `has_active_order?` без TTL (June accepted)
+- ТЗ + artifacts `repeat_hidden_by_stale_active_orders/`
 
 ### Сессия 2026-08-05 (push/deploy/MCP · #42)
 
