@@ -2,13 +2,21 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-08-06 (#43 Fly v434 MCP PASS)
+**Дата:** 2026-08-06 (#44 Product card peek cart — PHASE 0 reopen intake)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#43** Fly **v434** MCP PASS · ISSUES resolved | апрув заказчика «ок» |
-| **#42** Fly **v433** | апрув |
+| **#44** Product card peek cart · PHASE 0 intake `[x]` | go → PHASE 1 SPEC |
+| **#43** Fly **v434** MCP PASS | апрув заказчика «ок» |
 | Live Fly | **v434** |
+
+### Сессия 2026-08-06 (PHASE 0 · #44 product card peek cart reopen)
+
+- Заказчик снова: не видит набранные позиции на карточке; peek без scroll / ±1
+- **Не новая задача** — продолжение `product_card_peek_cart` (волна 2026-07-10 код есть, MCP/апрув не было, в CBR не было)
+- ТЗ 1:1 перезаписан; файл переименован с `…pee.md`; скрины заменены (старые → `_archive_2026-07-10/`)
+- CBR #44 · статус reopen intake
+- Код/todo не трогали
 
 ### Сессия 2026-08-06 (push/deploy/MCP · #43)
 

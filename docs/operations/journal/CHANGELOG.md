@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-08-06 — docs: intake #44 product card peek cart (reopen)
+- Продолжение задачи `product_card_peek_cart` (не новая): ТЗ 1:1, скрины заменены, архив `_archive_2026-07-10/`
+- Файл ТЗ переименован с усечённого `…pee.md`
+- CBR #44 · SESSION_STATE / HANDOFF
+- Код не трогали — ждём go → SPEC
+
 ## 2026-08-06 — deploy: #43 has_active_order TTL · Fly v434 MCP PASS
 - `has_active_order?` окно 24h (как #42) — June accepted больше не гасят «повторить»
 - Push `c9c5aacd` · Fly **v434** · `deployment-01KZAVCVTD37NBM7CK9M7MFMFK`
