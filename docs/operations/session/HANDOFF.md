@@ -1,8 +1,19 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-08-06 (PHASE 0: #35 скрин expanded)  
+**Дата:** 2026-08-06 (PHASE 1 SPEC · #35 + скрин 06)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev (**v436**)
+
+### PHASE 1 SPEC: #35 + скрин 06 (2026-08-06)
+
+| Что | Статус |
+|-----|--------|
+| SPEC / `todo.md` (baseline A–C + gaps D1–D5) | **`[x]`** |
+| RED D1+D2 (порядок expanded + meta product) | **`[ ]`** |
+| GREEN / MCP vs скрин 06 | **`[ ]`** |
+
+**Канон:** [`todo.md`](todo.md) · скрин [`06_expanded…`](../milestones/veha_2/artifacts/order_status_compact_sheet_push/screenshots/06_expanded_sheet_status_plus_cart.png)  
+**Дальше:** намерение → RED D1+D2.
 
 ### PHASE 0: #35 доп. скрин expanded (2026-08-06)
 

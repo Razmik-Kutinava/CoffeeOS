@@ -2,13 +2,21 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-08-06 (PHASE 0: #35 доп. скрин expanded)
+**Дата:** 2026-08-06 (PHASE 1 SPEC · #35 + скрин 06)
 
 | Сейчас | Дальше |
 |--------|--------|
-| #35: текст ТЗ без изменений; добавлен забытый скрин `06_expanded…` | ждать `go` на SPEC/сверку с live (status внутри expanded + корзина) |
-| Убран mutex `hideCartTail` · build `prog38` (локально) | push / Fly / MCP по апруву |
-| Live Fly | **v436** |
+| SPEC #35: baseline A/B/C `[x]`; gaps **D1–D5** (expanded vs скрин 06) в `todo.md` | RED D1+D2 по намерению («ебашь/сделай») |
+| Скрин 06 в artifacts | канон expanded: статус над корзиной + оплата |
+| prog38 status+cart stack (лок.) | push/MCP по апруву |
+
+### Сессия 2026-08-06 (PHASE 1 SPEC · #35 + скрин 06)
+
+- Маппинг: GuestOrderChannel / ReadyPushJob / ReadyPushClaim / embedded CartSheet (не React/RSpec)
+- Baseline A1–A3, B1–B2, C1 = уже в коде + Fly v432 (01–05)
+- Остаток: **D1** DOM-порядок expanded · **D2** мета = название позиции · **D3** регрессия · **D4** MCP 06 · **D5** optional ready→push
+- Soft: toast A3 / model after_update — не блокер
+- `todo.md` переписан; код не писали
 
 ### Сессия 2026-08-06 (PHASE 0 · #35 доп. скрин expanded)
 

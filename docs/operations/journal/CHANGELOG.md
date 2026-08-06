@@ -1,5 +1,9 @@
 ﻿# CHANGELOG
 
+## 2026-08-06 — docs: #35 PHASE 1 SPEC (скрин 06 expanded)
+- `todo.md`: baseline A/B/C `[x]`; gaps D1–D5 (DOM-порядок expanded, meta product name, MCP)
+- Маппинг GuestOrderChannel / ReadyPushJob; код не меняли
+
 ## 2026-08-06 — docs: #35 PHASE 0 — забытый скрин expanded
 - Текст ТЗ без изменений (совпал с принятым)
 - Артефакт: `order_status_compact_sheet_push/screenshots/06_expanded_sheet_status_plus_cart.png`
