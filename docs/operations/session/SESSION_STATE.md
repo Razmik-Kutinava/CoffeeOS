@@ -2,13 +2,19 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-08-06 (правило CartSheet без многослойности)
+**Дата:** 2026-08-06 (fix: peek корзины при активном статусе)
 
 | Сейчас | Дальше |
 |--------|--------|
-| Правило `coffeeos-cart-sheet.mdc` | после апрува — аудит кода на слои внутри шторки |
-| **#44** Fly **v436** MCP PASS | апрув «ок» |
-| Live Fly | **v436** |
+| Убран mutex `hideCartTail` — статус + peek стык в стык · build `prog38` | push / Fly / MCP по апруву |
+| Live Fly | **v436** (ещё без этого фикса) |
+
+### Сессия 2026-08-06 (fix: status+cart peek stack)
+
+- Баг: при активном заказе add на карточке — peek корзины не виден (только статус)
+- Root cause: follow-up `hideCartTail` (`19231620`)
+- Фикс: убрать гейт; `STATUS_IN_SHEET_EXTRA_VH`; empty placeholder скрыт при active+empty; `prog38`
+- Тесты: `active_order_cart_peek_stack_test` + cart sheet zone **57/0**
 
 ### Сессия 2026-08-06 (правило: CartSheet без многослойности)
 

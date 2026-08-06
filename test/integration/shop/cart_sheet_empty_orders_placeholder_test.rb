@@ -14,9 +14,9 @@ class Shop::CartSheetEmptyOrdersPlaceholderTest < ActionDispatch::IntegrationTes
 
   test "empty placeholder only when frequentCount is zero" do
     assert_includes sheet, "тут будут твои заказы"
-    assert_includes sheet, "!showRepeat"
+    assert_includes sheet, "!showRepeat && !hasActiveOrderFlag"
     assert_match(
-      /#if !showRepeat[\s\S]*?shop-cart-sheet-empty[\s\S]*?тут будут твои заказы/,
+      /#if !showRepeat && !hasActiveOrderFlag[\s\S]*?shop-cart-sheet-empty[\s\S]*?тут будут твои заказы/,
       sheet
     )
   end
@@ -30,6 +30,6 @@ class Shop::CartSheetEmptyOrdersPlaceholderTest < ActionDispatch::IntegrationTes
   end
 
   test "build marker prog35" do
-    assert_includes thresholds, 'CART_SHEET_BUILD = "prog37"'
+    assert_includes thresholds, 'CART_SHEET_BUILD = "prog38"'
   end
 end

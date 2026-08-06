@@ -1,26 +1,12 @@
-# todo — #44 Product card peek cart (одна шторка, без наложений)
+# todo — Active order + cart peek stack (фикс mutex)
 
-**ТЗ:** [`Карточка товара отображение…`](../milestones/veha_2/requirements/customer_tasks/Карточка%20товара%20отображение%20набранных%20позиций%20и%20функциональность%20в%20режиме%20peek.md)  
-**Артефакты:** [`artifacts/product_card_peek_cart/`](../milestones/veha_2/artifacts/product_card_peek_cart/)
-
-## Канон layout (SPEC 2026-08-06)
-
-| Режим | Что внутри **одной** `CartSheet` (стыки, не слои) |
-|-------|---------------------------------------------------|
-| **peek** | gesture → status → CTA «добавить к заказу» → «уже в заказе» (гориз. ±1 + scroll) → checkout |
-| **expanded** | gesture → status → CTA → вертикальный список ± → checkout |
-| **hidden** | gesture → status → CTA (компакт) → чипы → checkout |
-| **empty** | gesture → status → CTA → placeholder / repeat |
-
-**Запрещено:** второй fixed `ProductCartPeek` + fixed `.bottom-bar` с `bottom: 140px` поверх шторки.
+**Баг:** при `has_active_order` `hideCartTail` прятал peek — add на карточке «пропадал».  
+**Канон:** gesture → status → CTA → «уже в заказе» → checkout (стык, не mutex).
 
 | # | Шаг | Статус |
 |---|-----|--------|
-| 1 | PHASE 0 intake reopen | `[x]` |
-| 2 | PHASE 1 SPEC (этот todo + канон стыков) | `[x]` |
-| 3 | RED: тест «один fixed sheet / нет bottom-bar--peek» | `[x]` `fae08180` |
-| 4 | GREEN: CTA в шторке + alias peek testids + убрать дубль | `[x]` |
-| 5 | Обновить product_card_s* под CartSheet | `[x]` 28/28 |
-| 6 | Регрессия cart/product shop zone | `[x]` 135/0 |
-| 7 | REVIEW: CHANGELOG / HANDOFF / CBR | `[x]` |
-| 8 | Push / Fly / MCP | `[x]` Fly **v436** PASS |
+| 1 | RED: тесты статус+peek вместе | `[x]` |
+| 2 | GREEN: убрать hideCartTail; STATUS_IN_SHEET_EXTRA_VH; prog38 | `[x]` |
+| 3 | Регрессия cart sheet zone | `[x]` 57/0 |
+| 4 | Ops + commit | `[x]` |
+| 5 | Push / Fly / MCP | `[ ]` ждёт апрув |

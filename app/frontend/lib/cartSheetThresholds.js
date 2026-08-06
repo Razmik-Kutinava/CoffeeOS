@@ -25,8 +25,11 @@ export const SHEET_VH = {
 /** #44: доп. высота шторки на #/product под CTA «добавить к заказу» (стык, не overlay) */
 export const PRODUCT_CTA_EXTRA_VH = 14
 
+/** Активный заказ (OrderStatusSheet embedded peek ~22vh) + позиции корзины — стык, не mutex */
+export const STATUS_IN_SHEET_EXTRA_VH = 18
+
 /** Маркер сборки cart sheet — менять при каждом UX-фиксе для верификации на Fly */
-export const CART_SHEET_BUILD = "prog37"
+export const CART_SHEET_BUILD = "prog38"
 
 /** Высота единой шторки checkout: peek корзины + PaymentMethodsSheet (Фаза 2 UX) */
 export const CHECKOUT_PAY_STACK_VH = 92

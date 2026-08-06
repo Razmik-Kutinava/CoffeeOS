@@ -57,16 +57,17 @@ class Shop::QuickRepeatSectionTest < ActionDispatch::IntegrationTest
     assert_match(/!hasActiveOrder|hasActiveOrder\s*===\s*false|!\$?hasActiveOrder/, sheet)
   end
 
-  test "CartSheet hides cart tail (peek/expanded/single) when hasActiveOrder" do
+  # Канон: статус + корзина стык в стык (не mutex hideCartTail). Полный стек —
+  # test/integration/shop/active_order_cart_peek_stack_test.rb
+  test "CartSheet does not mutex-hide cart peek when hasActiveOrder" do
     sheet = File.read(Rails.root.join("app/frontend/components/CartSheet.svelte"))
 
-    assert_includes sheet, "hideCartTail",
-      "должен быть гейт для хвоста корзины"
-
-    # peek/expanded/single ветки не должны рендериться при active order
-    assert_match(/!\s*hideCartTail\s*&&\s*\(mode === MODE_PEEK \|\|\s*payStackActive\)\s*&&\s*count >= 2/, sheet)
-    assert_match(/!\s*hideCartTail\s*&&\s*mode === MODE_EXPANDED\s*&&\s*count >= 2/, sheet)
-    assert_match(/!\s*hideCartTail\s*&&\s*singleItem/, sheet)
+    refute_match(/!\s*hideCartTail\s*&&\s*\(mode === MODE_PEEK/, sheet,
+      "peek не прячется из‑за hasActiveOrder")
+    refute_match(/!\s*hideCartTail\s*&&\s*mode === MODE_EXPANDED/, sheet,
+      "expanded не прячется из‑за hasActiveOrder")
+    refute_match(/!\s*hideCartTail\s*&&\s*singleItem/, sheet,
+      "single не прячется из‑за hasActiveOrder")
   end
 
   test "sheet keeps single drag-handle gesture zone" do

@@ -28,7 +28,7 @@ class Shop::CartSheetDefaultPeekEmptyTest < ActionDispatch::IntegrationTest
   test "empty peek height matches peekSingle; build prog35" do
     assert_includes thresholds, "empty:         34"
     assert_includes thresholds, "peekSingle:    34"
-    assert_includes thresholds, 'CART_SHEET_BUILD = "prog37"'
+    assert_includes thresholds, 'CART_SHEET_BUILD = "prog38"'
   end
 
   test "CartSheet empty height uses peekSingle or peekSingleWithRepeat" do

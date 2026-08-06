@@ -28,6 +28,6 @@ class Shop::PeekRepeatPlusAddsToCartTest < ActionDispatch::IntegrationTest
 
   test "cart sheet build bumped for peek repeat plus fix" do
     thresholds = File.read(Rails.root.join("app/frontend/lib/cartSheetThresholds.js"))
-    assert_includes thresholds, 'CART_SHEET_BUILD = "prog37"'
+    assert_includes thresholds, 'CART_SHEET_BUILD = "prog38"'
   end
 end

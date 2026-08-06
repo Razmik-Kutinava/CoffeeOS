@@ -1,8 +1,20 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-08-06 (правило CartSheet · #44 v436)  
+**Дата:** 2026-08-06 (fix: peek при активном статусе · prog38)  
 **Ветка:** `develop`  
-**Прод:** https://coffeeos.fly.dev (**v436**)
+**Прод:** https://coffeeos.fly.dev (**v436** — без этого фикса до push)
+
+### Fix: status + cart peek stack (2026-08-06)
+
+| Что | Статус |
+|-----|--------|
+| Убран `hideCartTail` mutex | **`[x]`** |
+| `STATUS_IN_SHEET_EXTRA_VH` + `prog38` | **`[x]`** |
+| Тесты cart sheet zone | **`[x]`** 57/0 |
+| Push / Fly / MCP | **`[ ]`** ждёт апрув |
+
+**Суть:** при активном заказе снова видны позиции корзины (стык под статусом); empty placeholder не рисуется под статусом без позиций.  
+**Дальше:** push → deploy → MCP (каталог с active order → add → peek «уже в заказе»).
 
 ### Правило: CartSheet без многослойности (2026-08-06)
 
@@ -29,25 +41,9 @@
 **Live:** `prog37` · `уже в заказе: 2` · ± → 3 · CTA внутри шторки.  
 **Дальше:** апрув заказчика «ок».
 
-### Aram one-click pay SSL + cards (#45) — 2026-08-06
-
-| Что | Статус |
-|-----|--------|
-| Intake | **`[x]`** |
-| CA Минцифры в Docker | **`[x]`** |
-| FE email/cards + Charge saved card | **`[x]`** |
-| Push / Fly / MCP | **`[x]`** **v435** PASS |
-
-**ТЗ:** [`Оплата в 1 клик у Арама…`](../milestones/veha_2/requirements/customer_tasks/Оплата%20в%201%20клик%20у%20Арама%20падает%20после%20processing.md)  
-**Evidence:** [`mcp_fly_v435_2026-08-06.json`](../milestones/veha_2/artifacts/aram_one_click_payment_ssl_mintcifry/mcp_fly_v435_2026-08-06.json)  
-**Root cause:** Т-Банк на Russian Trusted CA → SSL fail на Fly без НУЦ в образе.  
-**Live:** Charge *5953 → `#202608-0013` (server) · MCP UI one-click → `#202608-0014` «✔ Оплачено!»  
-**Дальше:** апрув «ок»; Араму hard refresh.
-
-### Follow-up: убрать “хвост” корзины под статусом
-- Наблюдение заказчика: при активном статусе виден “хвост” строк корзины под `OrderStatusSheet`
-- Фикс: `CartSheet.svelte` при `hasActiveOrderFlag` не рендерит peek/expanded/single блоки корзины (оставляем только `OrderStatusSheet`)
-- Коммит: `19231620`
+### Follow-up: убрать “хвост” корзины под статусом — **откатан mutex**
+- Было: `hideCartTail` прятал весь peek при active order (`19231620`) → add «пропадал»
+- Теперь: статус + корзина стык; пустой placeholder скрыт только без позиций
 
 ### Repeat hidden by stale active orders (#43) — 2026-08-06
 

@@ -97,7 +97,7 @@ class Shop::B113S2aCartSheetAcceptanceTest < ActionDispatch::IntegrationTest
     assert_includes sheet, 'data-testid="shop-cart-hidden-thumb"'
     assert_includes sheet, 'data-cart-layout="hidden-chips"'
     refute_includes sheet, ">Корзина</span>"
-    assert_includes thresholds, 'CART_SHEET_BUILD = "prog37"'
+    assert_includes thresholds, 'CART_SHEET_BUILD = "prog38"'
     assert_match(/hidden:\s*24/, thresholds)
     assert_match(/expandedMulti:\s*56/, thresholds)
     assert_match(/peekMulti:\s*38/, thresholds)

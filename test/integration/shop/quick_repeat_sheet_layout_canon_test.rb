@@ -66,7 +66,7 @@ class Shop::QuickRepeatSheetLayoutCanonTest < ActionDispatch::IntegrationTest
     assert_includes thresholds, "peekSingleWithRepeat"
     assert_includes thresholds, "peekMultiWithRepeat"
     assert_includes sheet, "peekSingleWithRepeat"
-    assert_includes thresholds, 'CART_SHEET_BUILD = "prog37"'
+    assert_includes thresholds, 'CART_SHEET_BUILD = "prog38"'
   end
 
   test "visibility mirror: hidden never shows repeat" do

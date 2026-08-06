@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-08-06 — fix: peek корзины при активном статусе (status+cart stack)
+- Root cause: `hideCartTail` при `hasActiveOrder` прятал peek/expanded/single — add «пропадал»
+- `CartSheet`: статус + позиции стык в стык; `STATUS_IN_SHEET_EXTRA_VH`; empty placeholder только без активного заказа
+- Build `prog38`; тесты `active_order_cart_peek_stack_test` + cart sheet zone 57/0
+- Push/MCP — ждёт апрув
+
 ## 2026-08-06 — docs: правило CartSheet без многослойности
 - `.cursor/rules/project/coffeeos-cart-sheet.mdc` — одна шторка, секции стык в стык, запрет fixed/z-index слоёв внутри
 - Индекс: `RULES_INDEX.md` · symlink · ссылка из `coffeeos-ui.mdc`
