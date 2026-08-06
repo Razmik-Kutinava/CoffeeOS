@@ -1,0 +1,34 @@
+{
+  "task": "#45 Aram one-click SSL + Charge",
+  "fly": "v435",
+  "image": "deployment-01KZB0QYSKZM6BWWCVR840SNS4",
+  "commit": "8db2bed2",
+  "date": "2026-08-06",
+  "root_cause": "T-Bank TLS switched to Russian Trusted Root CA (НУЦ Минцифры); Fly Docker lacked CA → SSL verify failed → widget_init left payment provider=shop pid=nil",
+  "server_diag": {
+    "ssl": "PASS after CA in Docker",
+    "charge": "SUCCESS CONFIRMED",
+    "payment_id": "8995036222",
+    "amount_kopecks": 1000,
+    "card": "*5953",
+    "order_number": "#202608-0013",
+    "order_status": "accepted",
+    "payment_status": "succeeded"
+  },
+  "mcp_ui": {
+    "shop_url": "https://coffeeos.fly.dev/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789",
+    "profile_chip": "Профиль › 2bc3…4c (Aram session present)",
+    "status_sheet": "visible #202608-0013 Принят / Оплачен / Готовится (after Charge)",
+    "repeat_section": "hidden while active accepted within 24h (expected #42/#43 TTL)"
+  },
+  "fixes": [
+    "config/certs russian_trusted_* + Dockerfile update-ca-certificates + SSL_CERT_FILE",
+    "FE userCardsApiPath(?email) + Charge on saved card tap + no-token bind form",
+    "BE widget_init email GuestCustomerResolver + Init pid before Charge"
+  ],
+  "tests": {
+    "ruby bin/rails test widget_payment_initiator + payment_widget_init + quick_repeat_pay": "13 runs 52 assertions PASS",
+    "node user_cards_api_path_test": "2/2 PASS"
+  },
+  "verdict": "PASS"
+}

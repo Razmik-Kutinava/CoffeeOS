@@ -2,7 +2,7 @@
 
 **Дата:** 2026-08-06 (**#45** Aram one-click SSL + cards · **#44** peek intake)  
 **Ветка:** `develop`  
-**Прод:** https://coffeeos.fly.dev (**v434** → ждёт деплой #45)
+**Прод:** https://coffeeos.fly.dev (**v435**)
 
 ### Aram one-click pay SSL + cards (#45) — 2026-08-06
 
@@ -11,11 +11,13 @@
 | Intake | **`[x]`** |
 | CA Минцифры в Docker | **`[x]`** |
 | FE email/cards + Charge saved card | **`[x]`** |
-| Push / Fly / MCP | **`[ ]`** |
+| Push / Fly / MCP | **`[x]`** **v435** PASS |
 
 **ТЗ:** [`Оплата в 1 клик у Арама…`](../milestones/veha_2/requirements/customer_tasks/Оплата%20в%201%20клик%20у%20Арама%20падает%20после%20processing.md)  
+**Evidence:** [`mcp_fly_v435_2026-08-06.json`](../milestones/veha_2/artifacts/aram_one_click_payment_ssl_mintcifry/mcp_fly_v435_2026-08-06.json)  
 **Root cause:** Т-Банк на Russian Trusted CA → SSL fail на Fly без НУЦ в образе.  
-**Дальше:** push + `fly deploy` + MCP Charge *5953 у Арама.
+**Live:** Charge *5953 → `#202608-0013` accepted.  
+**Дальше:** апрув «ок»; Араму hard refresh.
 
 ### Product card peek cart (#44) — reopen intake 2026-08-06
 

@@ -6,9 +6,15 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#45** One-click Aram · код `[x]` · тесты PASS | push → fly deploy → MCP Charge |
+| **#45** Fly **v435** Charge PASS (*5953 → #202608-0013) | апрув «ок» |
 | **#44** Product card peek · intake `[x]` | go → SPEC |
-| Live Fly | **v434** (до деплоя #45) |
+| Live Fly | **v435** |
+
+### Сессия 2026-08-06 (#45 · deploy/MCP)
+
+- Push `8db2bed2` · Fly **v435** · `deployment-01KZB0QYSKZM6BWWCVR840SNS4`
+- Live Charge CONFIRMED PaymentId=8995036222 · order `#202608-0013` accepted
+- Evidence: `artifacts/aram_one_click_payment_ssl_mintcifry/mcp_fly_v435_2026-08-06.json`
 
 ### Сессия 2026-08-06 (#45 · Aram 1-click pay broken)
 

@@ -1,5 +1,10 @@
 ﻿# CHANGELOG
 
+## 2026-08-06 — deploy: #45 Aram one-click SSL · Fly v435 PASS
+- Push `8db2bed2` · Fly **v435** · `deployment-01KZB0QYSKZM6BWWCVR840SNS4`
+- Live Charge *5953 CONFIRMED → `#202608-0013` accepted (PaymentId 8995036222)
+- Evidence: [`aram_one_click_payment_ssl_mintcifry/mcp_fly_v435_2026-08-06.json`](../milestones/veha_2/artifacts/aram_one_click_payment_ssl_mintcifry/mcp_fly_v435_2026-08-06.json)
+
 ## 2026-08-06 — fix: #45 Aram one-click — SSL Минцифры + cards/Charge
 - Root cause: Т-Банк TLS на Russian Trusted CA → SSL fail на Fly (`certificate verify failed`)
 - `config/certs/` + Dockerfile `update-ca-certificates` + `SSL_CERT_FILE`
