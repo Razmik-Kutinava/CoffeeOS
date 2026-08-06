@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-08-06 — deploy: #43 has_active_order TTL · Fly v434 MCP PASS
+- `has_active_order?` окно 24h (как #42) — June accepted больше не гасят «повторить»
+- Push `c9c5aacd` · Fly **v434** · `deployment-01KZAVCVTD37NBM7CK9M7MFMFK`
+- MCP: Aram `frequent_products` 3 items · 3× «оплатить в 1 клик»
+- Evidence: [`repeat_hidden_by_stale_active_orders/mcp/fly_v434_2026-08-06/`](../milestones/veha_2/artifacts/repeat_hidden_by_stale_active_orders/mcp/fly_v434_2026-08-06/)
+
 ## 2026-08-05 — deploy: #42 stuck sheet TTL · Fly v433 MCP PASS
 - Push `ec1e6a65` · Fly **v433** · `deployment-01KZ9913PP55V099F8Y6JQCK5V`
 - Live: Aram `orders/active` → `[]` (5 June accepted отрезаны TTL); sheet absent; pay CTA `+3₽` visible

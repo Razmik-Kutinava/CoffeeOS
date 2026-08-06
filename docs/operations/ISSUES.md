@@ -5,10 +5,10 @@
 ## 🔴 Блокеры
 
 [2026-08-06] — #43 После #42 пропали повторы / кнопки / история частот
-**Статус:** 🟡 **код local PASS** · ждёт push/deploy/MCP
+**Статус:** **resolved** 2026-08-06 · Fly **v434** · MCP PASS
 **Источник:** Арам · [`После 42 пропали повторы…`](milestones/veha_2/requirements/customer_tasks/После%2042%20пропали%20повторы%20в%20шторке%20и%20история%20покупок.md)
 **Root cause:** `has_active_order?` без TTL → June accepted → hide «повторить».
-**Чем закрыли (local):** TTL 24h (= #42 ACTIVE_ORDERS_WINDOW) + тесты 33/33.
+**Чем закрыли:** TTL 24h (= #42) на `has_active_order?`; bust cache; MCP 3× «оплатить в 1 клик». Evidence: [`mcp/fly_v434_2026-08-06/`](milestones/veha_2/artifacts/repeat_hidden_by_stale_active_orders/mcp/fly_v434_2026-08-06/).
 
 [2026-08-05] — #42 Зависшие June accepted в шторке #35 блокируют оплату Point A
 **Статус:** **resolved** 2026-08-05 · Fly **v433** · MCP PASS

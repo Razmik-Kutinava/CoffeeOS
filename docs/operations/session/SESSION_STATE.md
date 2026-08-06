@@ -2,13 +2,20 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-08-06 (#43 repeat hidden · intake + fix)
+**Дата:** 2026-08-06 (#43 Fly v434 MCP PASS)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#43** intake + TTL на `has_active_order` | deploy/MCP |
-| **#42** Fly **v433** MCP PASS | апрув |
-| Live Fly | **v433** (ещё без #43) |
+| **#43** Fly **v434** MCP PASS · ISSUES resolved | апрув заказчика «ок» |
+| **#42** Fly **v433** | апрув |
+| Live Fly | **v434** |
+
+### Сессия 2026-08-06 (push/deploy/MCP · #43)
+
+- Push `c9c5aacd` · Fly **v434** · `deployment-01KZAVCVTD37NBM7CK9M7MFMFK`
+- Server: Aram `has_active_order=false` · 3 frequent items
+- MCP: 3× «оплатить в 1 клик» в шторке
+- Evidence: `artifacts/repeat_hidden_by_stale_active_orders/mcp/fly_v434_2026-08-06/`
 
 ### Сессия 2026-08-06 (intake · #43)
 

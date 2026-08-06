@@ -1,8 +1,22 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-08-05 (**#42** Fly v433 MCP PASS · **#35** v432)  
+**Дата:** 2026-08-06 (**#43** Fly v434 MCP PASS · **#42** v433)  
 **Ветка:** `develop`  
-**Прод:** https://coffeeos.fly.dev (**v433**)
+**Прод:** https://coffeeos.fly.dev (**v434**)
+
+### Repeat hidden by stale active orders (#43) — 2026-08-06
+
+| Что | Статус |
+|-----|--------|
+| Intake | **`[x]`** |
+| TTL на `has_active_order?` | **`[x]`** |
+| Push / Fly / MCP | **`[x]`** **v434** PASS |
+
+**ТЗ:** [`После 42 пропали повторы…`](../milestones/veha_2/requirements/customer_tasks/После%2042%20пропали%20повторы%20в%20шторке%20и%20история%20покупок.md)  
+**Evidence:** [`mcp/fly_v434_2026-08-06/`](../milestones/veha_2/artifacts/repeat_hidden_by_stale_active_orders/mcp/fly_v434_2026-08-06/)  
+**Суть:** June accepted → `has_active_order` навечно → нет «повторить».  
+**Фикс live:** TTL 24h; Aram 3 frequent + 3× «оплатить в 1 клик».  
+**Дальше:** апрув «ок»; Араму hard refresh.
 
 ### Stuck orders sheet blocks payment (#42) — 2026-08-05
 

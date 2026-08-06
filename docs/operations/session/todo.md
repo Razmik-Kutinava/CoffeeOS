@@ -8,4 +8,4 @@
 | 1 | Intake + CBR #43 | `[x]` |
 | 2 | TTL 24h на `has_active_order?` | `[x]` |
 | 3 | Тесты service + API | `[x]` 33/33 |
-| 4 | Push / Fly / MCP | `[ ]` |
+| 4 | Push / Fly / MCP | `[x]` Fly **v434** PASS |
