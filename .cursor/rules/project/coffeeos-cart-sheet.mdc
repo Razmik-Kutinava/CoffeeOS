@@ -1,0 +1,32 @@
+---
+description: CoffeeOS shop — одна CartSheet без многослойности внутри (стыки, не оверлеи)
+globs: app/frontend/**/*.svelte,app/frontend/**/*.js,app/frontend/**/*.css,test/integration/shop/**
+alwaysApply: false
+---
+
+# CartSheet — без многослойности
+
+**Слепая зона:** экраны/блоки **внутри** шторки наслаиваются друг на друга (`fixed`/`absolute` + `z-index`), вместо того чтобы идти **стык в стык** в одном контейнере.
+
+## Канон
+
+1. На витрине / `#/product` / checkout — **одна** `CartSheet` как единственный fixed bottom layer (`z-50`/`52` только у самой шторки).
+2. Peek / hidden / expanded / empty / CTA / статус / repeat / checkout-бар — **секции одной колонки** (flex/stack), соседние по вертикали, без перекрытия.
+3. Новый UI «внизу экрана» → **внутрь** `CartSheet`, не отдельным fixed-слоем рядом или поверх.
+
+## Запрещено
+
+- Второй (третий…) `position: fixed` / sticky-bottom overlay на той же зоне: `ProductCartPeek`, `.bottom-bar` с `bottom: Npx`, отдельная «статусная шторка» поверх корзины.
+- Вложенный `fixed`/`absolute` + высокий `z-index` **внутри** содержимого шторки, чтобы «прибить» блок поверх соседней секции.
+- Два независимых bottom-sheet на одном экране (кроме явного pay-stack, уже внутри той же `CartSheet`).
+
+## Чеклист перед кодом
+
+1. Сколько `fixed` bottom-элементов на экране? Должен быть **один** (сама `CartSheet`).
+2. Новая полоса — секция в разметке шторки или отдельный слой? Только секция.
+3. Высота растёт стыками (`--cart-sheet-h` / vh-секции), а не наложением.
+
+## Референс
+
+- Канон #44: `docs/operations/session/todo.md` (product card — одна шторка).
+- Компонент: `app/frontend/components/CartSheet.svelte`.

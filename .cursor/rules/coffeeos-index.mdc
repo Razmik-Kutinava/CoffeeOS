@@ -7,7 +7,7 @@ alwaysApply: true
 
 **Процесс агента:** `.cursor/rules/workflow/` — канон (`coffeeos-commit-ops` > `coffeeos-task-workflow` > `coffeeos-dev-gates`).
 
-**Код и домен:** `.cursor/rules/project/` — `coffeeos-core`, `coffeeos-performance`, `coffeeos-services`, …
+**Код и домен:** `.cursor/rules/project/` — `coffeeos-core`, `coffeeos-performance`, `coffeeos-services`, `coffeeos-cart-sheet`, …
 
 **Человекочитаемая карта:** `docs/operations/RULES_INDEX.md`
 

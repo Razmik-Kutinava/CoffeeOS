@@ -9,3 +9,4 @@ alwaysApply: false
 - Стек: Hotwire (Turbo + Stimulus), ERB; без React/Vue без явного решения. См. `docs/stack/Frontend.md`, `docs/stack/Turbo.md`.
 - Темы и компоненты: `docs/guides/UI_GUIDELINES.md`; layout по ролям в `app/views/layouts/`.
 - Real-time: Turbo Streams / Action Cable — как на существующих экранах баристы и ТВ.
+- Shop bottom sheet (Svelte `CartSheet`): **без многослойности** — `coffeeos-cart-sheet.mdc`.

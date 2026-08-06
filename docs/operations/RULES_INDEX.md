@@ -1,6 +1,6 @@
 # Индекс правил агента CoffeeOS
 
-**Обновлено:** 2026-06-09. При конфликте приоритет у **workflow** (см. `coffeeos-dev-gates.mdc`).
+**Обновлено:** 2026-08-06. При конфликте приоритет у **workflow** (см. `coffeeos-dev-gates.mdc`).
 
 ## Workflow — `.cursor/rules/workflow/`
 
@@ -25,6 +25,7 @@
 | `coffeeos-http.mdc` | Контроллеры, routes |
 | `coffeeos-data.mdc` | models, migrate, schema |
 | `coffeeos-ui.mdc` | views, frontend |
+| `coffeeos-cart-sheet.mdc` | Shop CartSheet: одна шторка, секции стык в стык, без многослойности |
 | `coffeeos-tests.mdc` | test/ |
 | `coffeeos-code-review.mdc` | Ревью по запросу |
 

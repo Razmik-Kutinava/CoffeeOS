@@ -1,5 +1,10 @@
 ﻿# CHANGELOG
 
+## 2026-08-06 — docs: правило CartSheet без многослойности
+- `.cursor/rules/project/coffeeos-cart-sheet.mdc` — одна шторка, секции стык в стык, запрет fixed/z-index слоёв внутри
+- Индекс: `RULES_INDEX.md` · symlink · ссылка из `coffeeos-ui.mdc`
+- Аудит кода на нарушения — после апрува
+
 ## 2026-08-06 — deploy/MCP: #44 product single sheet · Fly v436 PASS
 - Push `7f7973e1` · Fly **v436** · `deployment-01KZB42C5176Y6MH07YGFSD0YF`
 - MCP: CTA внутри CartSheet · `уже в заказе: N` · ± bump 2→3 · build `prog37` · без fixed overlay
