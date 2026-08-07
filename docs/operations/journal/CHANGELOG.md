@@ -1,5 +1,12 @@
 ﻿# CHANGELOG
 
+## 2026-08-07 — chore: thin always Cursor rules (−77% tok/ход)
+- Always bundle: **50758 B / ~12690 tok → 11775 B / ~2944 tok** (строки 626→135)
+- `alwaysApply: false`: task-workflow, SBR, gates, layout, intake, file-size-split
+- `coffeeos-performance`: globs Ruby вместо always
+- Удалены symlink-дубли `rules/coffeeos-core.mdc`, `rules/coffeeos-performance.mdc`
+- Обновлены index / agent-workflow / `.cursorrules` / `RULES_INDEX` / `AGENTS.md`
+
 ## 2026-08-07 — MCP: Fly v441 #46 auth-limit + *8782 pay PASS
 - Deploy health: v441 machines started · `/up` 200
 - #46: one_click *5953 → 119 friendly + NewCardForm; *8782 → «Оплачен» (`db45ab5f-…`)

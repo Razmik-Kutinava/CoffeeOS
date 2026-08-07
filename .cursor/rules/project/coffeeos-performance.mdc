@@ -1,6 +1,7 @@
 ---
-description: Правила производительности и безопасности CoffeeOS — N+1, SQL Injection, preload. Применяется всегда при написании Rails кода.
-alwaysApply: true
+description: CoffeeOS — N+1, SQL Injection, preload, SET LOCAL quote. Подключай при Rails/SQL/сериализаторах.
+alwaysApply: false
+globs: app/**/*.rb,db/**/*.rb,test/**/*.rb,lib/**/*.rb
 ---
 
 # Производительность и безопасность (CoffeeOS)

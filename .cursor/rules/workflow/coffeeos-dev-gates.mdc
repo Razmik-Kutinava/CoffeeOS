@@ -1,6 +1,6 @@
 ---
-description: CoffeeOS — технические гейты (DoD, регрессия, миграции, API, hot-path)
-alwaysApply: true
+description: CoffeeOS — DoD, регрессия по зонам, Migration Gate, API/hot-path. Подключай при тестах, регрессии, миграциях, изменениях shop/payments/platform.
+alwaysApply: false
 ---
 
 # CoffeeOS — dev gates

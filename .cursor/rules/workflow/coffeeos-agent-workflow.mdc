@@ -1,33 +1,36 @@
 ---
-description: CoffeeOS — порядок шага агента (детали задач → coffeeos-task-workflow.mdc)
+description: CoffeeOS — короткий порядок шага агента + когда читать остальные правила
 alwaysApply: true
 ---
 
-# CoffeeOS — рабочий процесс агента (краткий)
+# CoffeeOS — порядок шага (кратко)
 
-**Задачи, намерение шага, честный отчёт:** [`coffeeos-task-workflow.mdc`](coffeeos-task-workflow.mdc) — канон для CHECKLIST/CBR/фич. Апрув = смысл текста («ебашь/сделай»), не культ слова `go`.
-
-**Коммит и ops:** только [`coffeeos-commit-ops.mdc`](coffeeos-commit-ops.mdc).
-
-**Гейты:** [`coffeeos-dev-gates.mdc`](coffeeos-dev-gates.mdc). **Структура:** [`coffeeos-repo-layout.mdc`](coffeeos-repo-layout.mdc).
-
-**Правила проекта:** [`../project/`](../project/).
-
----
+**Коммит/ops:** только [`coffeeos-commit-ops.mdc`](coffeeos-commit-ops.mdc) (always).  
+**Детали задач/SBR/гейты:** читай on-demand по таблице ниже — не всё сразу.
 
 ## Порядок шага
 
 | # | Действие |
 |---|----------|
 | 1 | Один логический шаг |
-| 2 | Тесты (`coffeeos-dev-gates.mdc`) |
+| 2 | Тесты (зона — `coffeeos-dev-gates.mdc`) |
 | 3 | **`git commit`** + **ops** (`coffeeos-commit-ops.mdc`) |
-| 4 | **Отчёт** — таблица Сделано \| Не сделано + коммит (`coffeeos-task-workflow.mdc`) |
-| 5 | **Стоп** — ждать **намерения** на следующий шаг (не литерал `go`) |
+| 4 | Отчёт: таблица **Сделано \| Не сделано** + `Коммит: <хеш>` |
+| 5 | Стоп — ждать **намерения** на следующий шаг («ебашь/сделай/дальше», не культ `go`) |
 
 Срочность не отменяет коммит, тесты и ops.
 
----
+## Когда читать остальные правила
+
+| Ситуация | Открыть |
+|----------|---------|
+| Фича / CBR / CHECKLIST / честный отчёт / старт сессии | `coffeeos-task-workflow.mdc` |
+| SBR цикл | `spec-build-review.mdc` |
+| Регрессия / миграции / hot-path | `coffeeos-dev-gates.mdc` |
+| Куда класть файл | `coffeeos-repo-layout.mdc` |
+| Текст от заказчика | `coffeeos-customer-intake.mdc` |
+| Файл >120–200 строк | `coffeeos-file-size-split.mdc` |
+| Код Rails (N+1) | `../project/coffeeos-performance.mdc` |
 
 ## Ops-файлы
 
@@ -40,3 +43,5 @@ alwaysApply: true
 | CBR / `DEMO_FEEDBACK.md` | Заказчик / backlog |
 
 После **`git push`** — SESSION_STATE + HANDOFF.
+
+**Старт нового чата:** прочитай только верх `HANDOFF` + блок «Текущее состояние» в `SESSION_STATE` + 🔴 в `ISSUES` (+ `todo.md` если есть живая задача). Не глотай всю историю файлов.

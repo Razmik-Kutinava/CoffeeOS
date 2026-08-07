@@ -1,7 +1,6 @@
 ---
-description: "SBR Engine: Интеграция гибридного цикла разработки Spec-Build-Review в инфраструктуру CoffeeOS"
-globs: ["*"]
-alwaysApply: true
+description: "SBR: SPEC→RED→GREEN→REVIEW (TDD). Подключай при фиче/задаче заказчика по SBR; не для мелких правок."
+alwaysApply: false
 ---
 
 # COFFEEOS SBR ENGINE (SPEC-BUILD-REVIEW)

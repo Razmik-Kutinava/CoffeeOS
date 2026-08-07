@@ -1,14 +1,32 @@
 ---
-description: CoffeeOS — индекс правил Cursor (workflow + project)
+description: CoffeeOS — индекс правил: что always, что читать по типу задачи
 alwaysApply: true
 ---
 
 # CoffeeOS — индекс правил
 
-**Процесс агента:** `.cursor/rules/workflow/` — канон (`coffeeos-commit-ops` > `coffeeos-task-workflow` > `coffeeos-dev-gates`).
+**Канон карты:** `docs/operations/RULES_INDEX.md`
 
-**Код и домен:** `.cursor/rules/project/` — `coffeeos-core`, `coffeeos-performance`, `coffeeos-services`, `coffeeos-cart-sheet`, …
+## Always (каждый ход) — короткий закон
 
-**Человекочитаемая карта:** `docs/operations/RULES_INDEX.md`
+| Файл | Зачем |
+|------|--------|
+| `workflow/coffeeos-commit-ops.mdc` | commit + ops всегда; push только по просьбе |
+| `workflow/coffeeos-agent-workflow.mdc` | порядок шага + когда читать остальные |
+| `project/coffeeos-core.mdc` | tenant / RLS / панели / честность |
+| этот индекс + `.cursorrules` | навигация |
 
-**Краткий индекс (legacy):** `.cursorrules` + `docs/agents/AGENTS.md` — должны совпадать с `workflow/`, не противоречить.
+## On-demand — читай сам по типу работы
+
+| Когда | Файл |
+|-------|------|
+| Фича / CHECKLIST / CBR / отчёт | `workflow/coffeeos-task-workflow.mdc` |
+| SBR (SPEC→RED→GREEN→REVIEW) | `workflow/spec-build-review.mdc` |
+| Тесты / регрессия / миграции | `workflow/coffeeos-dev-gates.mdc` |
+| Новые файлы / куда класть | `workflow/coffeeos-repo-layout.mdc` |
+| ТЗ заказчика (intake) | `workflow/coffeeos-customer-intake.mdc` |
+| Файл растёт / сплит | `workflow/coffeeos-file-size-split.mdc` |
+| Rails N+1 / SQL | `project/coffeeos-performance.mdc` (также globs `app|db|test/**/*.rb`) |
+| Сервисы / HTTP / UI / cart / data / tests | `project/coffeeos-*.mdc` по зоне |
+
+**Запрещено:** тащить все workflow-файлы в мелочь. Сначала always-закон → нужный on-demand.

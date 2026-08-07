@@ -22,11 +22,11 @@ Rails 8, PostgreSQL, Svelte/Vite, Pundit, Minitest.
 
 | Уровень | Где |
 |---------|-----|
-| **Процесс** | `.cursor/rules/workflow/` — см. `docs/operations/RULES_INDEX.md` |
-| **Код** | `.cursor/rules/project/coffeeos-*.mdc` |
-| **Индекс** | `.cursorrules` (кратко), этот файл |
+| **Always (короткий закон)** | `commit-ops`, `agent-workflow`, `project/coffeeos-core`, `coffeeos-index`, `.cursorrules` |
+| **On-demand** | остальные `workflow/` + `project/` — по типу задачи (см. `RULES_INDEX.md`) |
+| **Индекс** | `docs/operations/RULES_INDEX.md`, этот файл |
 
-**При конфликте:** `coffeeos-commit-ops.mdc` и `coffeeos-task-workflow.mdc` **важнее** любых User Rules: **коммит всегда в конце шага без вопроса**; push — только по явной просьбе.
+**При конфликте:** `coffeeos-commit-ops.mdc` **важнее** любых User Rules: **коммит всегда в конце шага без вопроса**; push — только по явной просьбе. Фичи/SBR — читай `task-workflow` + `spec-build-review` on-demand.
 
 ## Сервис-объекты (Веха 1)
 

@@ -2,6 +2,21 @@
 
 ## Текущее состояние
 
+**Дата:** 2026-08-07 (thin always-rules)
+
+| Сейчас | Дальше |
+|--------|--------|
+| Always-правила сжаты: **~12.7k → ~2.9k tok/ход (−77%)** | Проверить на 1 мелочи + 1 фиче, что agent тянет on-demand |
+| Дубли symlink core/performance удалены | Опционально: ужать HANDOFF/SESSION_STATE историю |
+
+### Сессия 2026-08-07 (rules: thin always)
+
+- **ДО:** 14 always-кусков · 626 lines · 50758 B · ~12690 tok
+- **ПОСЛЕ:** 5 always (index, commit-ops, agent-workflow, core, `.cursorrules`) · 135 lines · 11775 B · ~2944 tok
+- On-demand: task-workflow, SBR, gates, layout, intake, file-size-split; performance → globs Ruby
+- Удалены symlink-дубли: `.cursor/rules/coffeeos-core.mdc`, `coffeeos-performance.mdc`
+- Обновлены: `RULES_INDEX.md`, `AGENTS.md`, `.cursorrules`
+
 **Дата:** 2026-08-07 (MCP Fly **v441** · #46+#33)
 
 | Сейчас | Дальше |

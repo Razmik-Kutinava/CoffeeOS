@@ -1,6 +1,7 @@
 ---
-description: CoffeeOS — лимиты размера файлов, сплит кода, запрет монолитов
-alwaysApply: true
+description: CoffeeOS — лимиты 50/120/200 строк, сплит монолитов. Подключай при новых/растущих файлах app/ или рефакторинге >200 строк.
+alwaysApply: false
+globs: app/**/*.{rb,svelte,js},app/javascript/**/*.js
 ---
 
 # CoffeeOS — размер файлов и сплит кода

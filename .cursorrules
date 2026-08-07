@@ -1,48 +1,24 @@
 # CoffeeOS — Cursor Rules (краткий индекс)
 
-**Канон:** `.cursor/rules/workflow/` + `.cursor/rules/project/` — полная карта: `docs/operations/RULES_INDEX.md`.
+**Канон:** `.cursor/rules/workflow/` + `.cursor/rules/project/` — карта: `docs/operations/RULES_INDEX.md`.
 
-## Главное для агента
+## Always vs on-demand
 
-### Баги → `docs/operations/ISSUES.md`
+В контексте **всегда** только: `commit-ops`, `agent-workflow`, `project/coffeeos-core`, `coffeeos-index`, этот файл.  
+Остальное агент **подключает по типу задачи** (см. `coffeeos-index.mdc` / `agent-workflow`).
 
-Сразу при обнаружении; до статуса «решено» с записью **чем закрыли**.
+## Главное
 
-### Память → `docs/operations/session/SESSION_STATE.md`
+- Баги → `docs/operations/ISSUES.md` сразу
+- Шаг с правками → **`git commit` + ops** без вопроса; **push** — только по явной просьбе
+- Отчёт: **Сделано | Не сделано** + `Коммит: <хеш>`
+- Tenant/RLS обязателен; Fly/Neon — `INFRA_STACK.md`; Supabase/MPG запрещены
+- Deploy / деструктив / миграции — только явный апрув владельца
+- Scratch: `scripts/scratch/`, не корень
 
-После **каждого шага с правками** (`coffeeos-commit-ops.mdc`). Конец шага: `CHANGELOG.md` + `HANDOFF.md`.
+## Стек / ветки
 
-### Коммиты
-
-- Шаг изменил файлы → **`git commit`** + ops — **всегда**, **без вопроса**, **до** отчёта пользователю.
-- **Запрещено:** «коммитить?», «нужен ли коммит», «коммит не делал».
-- **`git push`** — **только** по явной просьбе (push / deploy).
-- Отчёт: таблица **Сделано | Не сделано** + `Коммит: <хеш>` (`coffeeos-task-workflow.mdc`).
-- Scratch: `scripts/scratch/`, не корень.
-
-### Продукт
-
-`docs/product/01_Vision.md`, `02_functional.md`, `03_Business_Logic.md`. `ARCHITECTURE.md` — когда канон.
-
-**Инфра:** Fly app `coffeeos` + **Neon** (`coffeeos`, Launch) — `docs/operations/dev/INFRA_STACK.md`. Supabase / Fly MPG — **запрещено**. **`fly deploy` / push deploy — только по явному апруву владельца.**
-
-### Риски
-
-Деструктив (DB drop, force push, prod) — только явное «да». Миграции — план + **`go`**.
-
-### Детали
-
-`docs/agents/AGENTS.md` · `coffeeos-task-workflow.mdc` · `coffeeos-dev-gates.mdc`
-
----
-
-## Проект / стек / ветки
-
-Мульти-тенант кофейни, Rails 8, PostgreSQL, Svelte. develop → staging → main.
-
-## Стиль кода
-
-Комментарии — русский; код — английский. 50–120 строк цель; >200 — сплит с go. Без utils-свалок.
+Rails 8, PostgreSQL, Svelte. develop → staging → main.
 
 ## Эскалация
 

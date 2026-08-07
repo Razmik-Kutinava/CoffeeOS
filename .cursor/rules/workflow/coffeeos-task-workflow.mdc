@@ -1,6 +1,6 @@
 ---
-description: CoffeeOS — CHECKLIST/CBR, go, тесты, отчёт Сделано/Не сделано (коммит/ops → coffeeos-commit-ops.mdc)
-alwaysApply: true
+description: CoffeeOS — CHECKLIST/CBR/фичи/фиксы: намерение шага, старт сессии, тесты, отчёт Сделано/Не сделано. Подключай при задачах заказчика, вехи, SBR (не на мелочь).
+alwaysApply: false
 ---
 
 # CoffeeOS — workflow задач

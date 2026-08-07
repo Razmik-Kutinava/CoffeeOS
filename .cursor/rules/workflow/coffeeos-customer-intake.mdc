@@ -1,6 +1,6 @@
 ---
-description: CoffeeOS — интейк задач заказчика (PHASE 0 DOCS) — сначала доки и артефакты, потом SPEC
-alwaysApply: true
+description: CoffeeOS — PHASE 0 intake: текст заказчика 1:1 в customer_tasks/, артефакты, CBR, коммит docs. Подключай когда пришло ТЗ/фидбек/скрины от заказчика.
+alwaysApply: false
 ---
 
 # CoffeeOS — интейк задач заказчика (PHASE 0: DOCS)
