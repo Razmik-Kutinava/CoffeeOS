@@ -11,6 +11,47 @@ class Shop::RepeatInvalidTokenPaymentTest < ActionDispatch::IntegrationTest
   SHEET  = Rails.root.join("app/frontend/components/PaymentMethodsSheet.svelte")
   CART   = Rails.root.join("app/frontend/components/CartSheet.svelte")
   CHECKOUT = Rails.root.join("app/frontend/routes/Checkout.svelte")
+  PAY_BTN  = Rails.root.join("app/frontend/components/CheckoutPayButton.svelte")
+  PAY_FSM  = Rails.root.join("app/frontend/lib/shopPayFsm.js")
+
+  # G7 live: insufficient funds → «Отказ: смените карту» открывает NewCardForm (не retry pay).
+  test "G7 shopPayFsm exports CLIENT_ERROR → open_new_card helpers [TDD]" do
+    src = File.read(PAY_FSM)
+    assert_includes src, "resolvePayFsmCtaAction",
+                    "ожидаем resolvePayFsmCtaAction(CLIENT_ERROR)=open_new_card"
+    assert_includes src, "shouldAutoOpenNewCardOnClientError",
+                    "ожидаем auto-open NewCardForm при входе в CLIENT_ERROR (D4=C)"
+    assert_equal "open_new_card", js_pay_fsm_export("resolvePayFsmCtaAction", 5)
+    assert_equal true, js_pay_fsm_export("shouldAutoOpenNewCardOnClientError", 5)
+  end
+
+  test "G7 CheckoutPayButton CLIENT_ERROR calls onChangeCard not onPay [TDD]" do
+    src = File.read(PAY_BTN)
+    assert_includes src, "onChangeCard",
+                    "CheckoutPayButton должен принимать onChangeCard для CLIENT_ERROR"
+    # В ветке CLIENT_ERROR — onChangeCard(), не onPay()
+    assert_match(
+      /fsmState === PAY_FSM\.CLIENT_ERROR[\s\S]{0,120}?onChangeCard\s*\(/m,
+      src,
+      "CLIENT_ERROR click → onChangeCard(), не повторный onPay()"
+    )
+    refute_match(
+      /fsmState === PAY_FSM\.CLIENT_ERROR[\s\S]{0,80}?onPay\s*\(/m,
+      src,
+      "CLIENT_ERROR не должен вызывать onPay()"
+    )
+  end
+
+  test "G7 Checkout wires onChangeCard to onSelectNewCard and auto-open [TDD]" do
+    src = File.read(CHECKOUT)
+    assert_match(
+      /onChangeCard=\{onSelectNewCard\}/,
+      src,
+      "PaymentMethodsSheet/CheckoutPayButton: onChangeCard={onSelectNewCard}"
+    )
+    assert_includes src, "shouldAutoOpenNewCardOnClientError",
+                    "Checkout должен auto-open NewCardForm при CLIENT_ERROR"
+  end
 
   test "step1 CartSheet exposes Add card CTA when invalid rebill in repeat context" do
     src = File.read(CART)
@@ -89,6 +130,25 @@ class Shop::RepeatInvalidTokenPaymentTest < ActionDispatch::IntegrationTest
       import * as i18n from #{i18n_path.inspect};
       const mod = store.#{fn} ? store : i18n;
       const result = mod.#{fn}(#{JSON.generate(arg)});
+      process.stdout.write(JSON.stringify(result));
+    JS
+    stdout, stderr, status = Open3.capture3(
+      "node", "--input-type=module", "-e", script,
+      chdir: Rails.root.to_s
+    )
+    flunk "Node: #{stderr}" unless status.success?
+    JSON.parse(stdout)
+  end
+
+  def js_pay_fsm_export(fn, arg)
+    path = "./#{PAY_FSM.relative_path_from(Rails.root).to_s.tr('\\', '/')}"
+    script = <<~JS
+      import * as fsm from #{path.inspect};
+      if (typeof fsm.#{fn} !== "function") {
+        process.stderr.write("missing export #{fn}");
+        process.exit(1);
+      }
+      const result = fsm.#{fn}(#{JSON.generate(arg)});
       process.stdout.write(JSON.stringify(result));
     JS
     stdout, stderr, status = Open3.capture3(
