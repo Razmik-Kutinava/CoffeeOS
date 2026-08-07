@@ -84,7 +84,8 @@ class Shop::WidgetPaymentInitiatorTest < ActiveSupport::TestCase
     assert_predicate @order.reload, :accepted?
   end
 
-  test "persists Init provider_payment_id when Charge fails" do
+  # #46: после REJECTED Charge нельзя оставлять pid — иначе retry бьёт charge_existing! → Error 119.
+  test "clears provider_payment_id when Charge fails [TDD #46]" do
     MobilePaymentMethod.create!(
       customer_id: @customer.id,
       payment_type: "card",
@@ -118,8 +119,67 @@ class Shop::WidgetPaymentInitiatorTest < ActiveSupport::TestCase
     end
 
     @payment.reload
-    assert_equal "pid-init-only", @payment.provider_payment_id
-    assert_equal "tbank", @payment.provider
+    assert_nil @payment.provider_payment_id,
+               "после fail Charge pid должен быть сброшен — иначе retry Charge same PaymentId (119)"
+  end
+
+  test "retry after Charge fail does fresh Init not charge_existing [TDD #46]" do
+    MobilePaymentMethod.create!(
+      customer_id: @customer.id,
+      payment_type: "card",
+      card_token: "rebill-retry",
+      card_masked: "*1111",
+      is_active: true,
+      is_default: true
+    )
+
+    init_pids = []
+    charge_pids = []
+    fake = Object.new
+    fake.define_singleton_method(:init_payment) do |**_kw|
+      pid = "pid-#{init_pids.size + 1}"
+      init_pids << pid
+      { provider_payment_id: pid }
+    end
+    fake.define_singleton_method(:charge) do |payment_id:, rebill_id:|
+      charge_pids << payment_id
+      if payment_id == "pid-1"
+        {
+          "Success" => false,
+          "Status" => "REJECTED",
+          "ErrorCode" => "119",
+          "Message" => "Превышено допустимое количество запросов авторизации операции",
+          "PaymentId" => payment_id
+        }
+      else
+        {
+          "Success" => true,
+          "Status" => "CONFIRMED",
+          "PaymentId" => payment_id,
+          "ErrorCode" => "0"
+        }
+      end
+    end
+
+    assert_raises(Payments::TbankAdapter::ApiError) do
+      Shop::WidgetPaymentInitiator.call(
+        order: @order,
+        return_base_url: "https://example.com",
+        notification_url: "https://example.com/cb",
+        adapter: fake
+      )
+    end
+
+    result = Shop::WidgetPaymentInitiator.call(
+      order: @order,
+      return_base_url: "https://example.com",
+      notification_url: "https://example.com/cb",
+      adapter: fake
+    )
+
+    assert_equal [ "pid-1", "pid-2" ], init_pids, "retry должен Init заново"
+    assert_equal [ "pid-1", "pid-2" ], charge_pids, "не Charge на тот же pid-1"
+    assert_equal "pid-2", result[:provider_payment_id]
   end
   test "without rebill uses TbankInlineInit Widget path" do
     called = false

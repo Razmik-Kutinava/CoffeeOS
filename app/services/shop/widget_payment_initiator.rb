@@ -71,6 +71,8 @@ module Shop
       charge_response = @adapter.charge(payment_id: pid, rebill_id: rebill_id)
       result = Payments::TbankPaymentResult.new(charge_response)
       unless result.success?
+        # #46: не оставляем pid — иначе retry → charge_existing! → Error 119 (лимит авторизаций).
+        clear_provider_payment_id!(payment)
         raise Payments::TbankAdapter::ApiError.new(
           error_code: result.error_code,
           message: result.message
@@ -108,6 +110,8 @@ module Shop
       )
       result = Payments::TbankPaymentResult.new(charge_response)
       unless result.success?
+        # #46: REJECTED Charge на том же PaymentId нельзя ретраить.
+        clear_provider_payment_id!(payment)
         raise Payments::TbankAdapter::ApiError.new(
           error_code: result.error_code,
           message: result.message
@@ -124,6 +128,10 @@ module Shop
       end
 
       { provider_payment_id: pid }
+    end
+
+    def clear_provider_payment_id!(payment)
+      payment.update_columns(provider_payment_id: nil)
     end
 
     def settle_confirmed!(payment, raw, pid)

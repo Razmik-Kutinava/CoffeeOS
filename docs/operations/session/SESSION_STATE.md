@@ -2,12 +2,19 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-08-07 (PHASE 0 · #46 bank auth limit)
+**Дата:** 2026-08-07 (feat #46 bank auth-limit GREEN)
 
 | Сейчас | Дальше |
 |--------|--------|
-| #46 интейк: «не могу оплатить… заместить статусы» + скрин auth-limit | SPEC → fix (ебашь) |
-| Root: ErrorCode 119/2200 + blind retry *5953; widget Charge same PaymentId | не ждать go — намерение в том же сообщении |
+| #46 local GREEN: clear pid + CLIENT_ERROR 119/2200 | push + deploy + MCP |
+| СБП 3001 / disabled #26 | вне scope |
+
+### Сессия 2026-08-07 (feat #46 GREEN)
+
+- Widget: `clear_provider_payment_id!` после Charge reject
+- `shopPayFsm`: 119/2200 → CLIENT_ERROR; regex «запросов авторизац»
+- `TbankPaymentError`: friendly 119/2200
+- Тесты PASS; ISSUES #46 resolved (код)
 
 ### Сессия 2026-08-07 (PHASE 0 · #46 bank auth limit)
 

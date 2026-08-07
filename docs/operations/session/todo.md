@@ -1,135 +1,69 @@
-# todo — #26 Repeat order invalid token · PaymentMethodsSheet (SPEC 2026-08-07 + live)
+# todo — #33 clarification: fallback vs expanded (SPEC 2026-08-07)
 
-**ТЗ:** [`customer_tasks/Главный экран — повторный заказ (невалидный токен) BottomSheet выбора способа оплаты.md`](../milestones/veha_2/requirements/customer_tasks/Главный%20экран%20—%20повторный%20заказ%20(невалидный%20токен)%20BottomSheet%20выбора%20способа%20оплаты.md)  
-**Артефакты:** [`repeat_order_invalid_token_payment_sheet/`](../milestones/veha_2/artifacts/repeat_order_invalid_token_payment_sheet/) · скрины `01`–`08`  
-**Стек:** Svelte · `PaymentMethodsSheet` + `CheckoutPayButton` + `Checkout.svelte`  
-**Ограничения ТЗ:** не трогать auth store / refresh; не `legacy/ui`; не новый BottomSheet-менеджер
+**ТЗ:** [`customer_tasks/Интеграция виджета быстрой оплаты Т-Кассы и One-Click сценария в PWA.md`](../milestones/veha_2/requirements/customer_tasks/Интеграция%20виджета%20быстрой%20оплаты%20Т-Кассы%20и%20One-Click%20сценария%20в%20PWA.md)  
+**Артефакты:** [`tbank_widget_oneclick_fallback/`](../milestones/veha_2/artifacts/tbank_widget_oneclick_fallback/) · скрины `07` (as-is mixed), `08` (expanded = fullscreen)  
+**Стек:** `RepeatSection` · `InlinePayFallback` · `widgetRepeatPayFlow.js` · `shopWidgetPayFsm.js`  
+**Связанный WIP:** #46 bank auth limit (`ErrorCode` 119) — отдельно в working tree; не смешивать в этот GREEN без отдельного RED
 
 ---
 
-## P0 — Live фидбек заказчика (2026-08-07)
+## Логи / as-is (2026-08-07)
 
-**Дословно:** на карте нет суммы → оплата *5953 → должен открыться вариант сменить карту / форма новой карты → **не открывается**, только текст «не хватает денег»; в исходном макете сценария не было.
+| Источник | Факт |
+|---|---|
+| Fly `coffeeos` | `POST /callbacks/tbank` · `Status=REJECTED` · `ErrorCode=119` · `Pan=…5953` · `Amount=295` |
+| MCP v439 | G7 live: rate-limit → не insufficient; unit G7 PASS |
+| Код | `widgetRepeatPayFlow` на любой ERROR: `showFallbackMethods=true`; в `catch` ещё `showExpandedCards=true` |
+| `RepeatSection` catch | сразу `showFallbackMethods` + `showExpandedCards` + `showNewCardForm` = true |
 
-| Given | When | Then (ожидание = скрин **05**) | As-is (скрины **04/07/08**) |
+**Вывод:** после отказа банка UI сразу показывает **fallback (СБП / карта +)** и **expanded (Картой *5953)** вместе — это скрин **05** (не канон).
+
+---
+
+## Канон состояний (заказчик 2026-08-07)
+
+| # | Состояние | UI | Скрин |
 |---|---|---|---|
-| Карта *5953 без средств (банк: 159,33 ₽) | Пользователь жмёт оплатить | После отказа: inline «Недостаточно средств…» **и** открыта форма «Картой +» (NewCardForm) **или** тап по «Отказ: смените карту» открывает её | Inline + красная CTA «Отказ: смените карту»; *5953 остаётся selected; форма **закрыта** |
+| S0 | Idle, карта есть | Одна кнопка оплаты; статусы банка **внутри** кнопки/плашки; **нет** СБП / «карта +» | 01–02 |
+| S1 | Отказ карты (нет денег / 1051 / отказ эмитента / 119 card-related) | Плашка ошибки + **только** «СБП» и «карта +»; **без** списка карт / формы | 03 · as-is broken = **07** |
+| S2 | Тап «карта +» | Expanded / fullscreen: сохранённые карты + «Картой +» + форма новой карты + «Оплатить» | **08** (= макет expanded, не дефолт) |
 
-### Root cause
-
-`CheckoutPayButton` при `PAY_FSM.CLIENT_ERROR` вызывает **`onPay()`** (повтор charge той же карты), а не `onSelectNewCard()`.  
-Текст кнопки обещает «смените карту», поведение — «попробуйте снова той же».
-
-Файлы: `CheckoutPayButton.svelte` · `Checkout.svelte` (`onSelectNewCard` уже есть) · `shopPayFsm.js` (`CLIENT_ERROR` / код `1051` insufficient funds).
-
----
-
-## Маппинг ТЗ → CoffeeOS
-
-| ТЗ / фидбек | Канон CoffeeOS |
-|---|---|
-| `PaymentMethodBottomSheet` | `PaymentMethodsSheet.svelte` |
-| `isTokenInvalid` | RebillId · `repeatInvalidTokenStore.js` (не auth JWT) |
-| «смените карту» / insufficient funds | FSM `CLIENT_ERROR` + `sheetInlineError` → **должен** вести в `selectionMode=new_card` |
-| Макет UI | скрин **03** |
-| Ожидание после отказа | скрин **05** |
-
----
-
-## Канон UI
-
-### Макет (скрин 03) — визуал списка
-
-| Элемент | Канон |
-|---|---|
-| Карта | `Картой *XXXX`, «Картой» orange, рамка selected |
-| СБП | disabled / серый + toast `sbpUnavailable()` |
-| «Картой +» | `+` справа (не ⌄), оранжевая рамка |
-| Idle CTA | оранжевая «Оплатить» |
-
-### После отказа банка (скрины 04→05) — поведение
-
-| Элемент | Канон |
-|---|---|
-| Inline | «Недостаточно средств на карте» (оставить) |
-| CTA / действие | **Открыть NewCardForm** (как 05): `selectionMode=new_card`, сброс FSM → DEFAULT, CTA снова «Оплатить» |
-| Не делать | Повторный charge той же карты по тапу «Отказ: смените карту» |
+**Явно:** скрин **08** = режим expanded шторки, **не** базовый чекаут.
 
 ---
 
 ## Gaps
 
-| # | Тема | Приоритет | Статус |
-|---|---|---|---|
-| **G7** | `CLIENT_ERROR` / «Отказ: смените карту» → `onSelectNewCard()` (+ auto при CLIENT_ERROR) | **P0 блокер заказчика** | `[x]` GREEN |
-| G1 | Лейбл `Картой *XXXX` vs MIR **** | MUST (макет 03) | `[x]` GREEN |
-| G2 | Оранжевый idle Pay | MUST (макет 03) | `[x]` GREEN |
-| G3 | «Картой +» без шеврона | MUST (макет 03) | `[x]` GREEN |
-| G4 | СБП disabled (конфликт #27) | MUST · Decision D1 | `[x]` GREEN |
-| G5/G6 | i18n + тесты под канон | с GREEN | `[x]` |
-| B1–B6 | Peek CTA / sheet / NewCard tap / errors / persist | baseline `[x]` | — |
+| ID | Gap | Prio | Статус |
+|----|-----|------|--------|
+| **F1** | На ERROR/FALLBACK: `showFallbackMethods=true`, **`showExpandedCards=false`**, **`showNewCardForm=false`** (пока не тап «карта +») | P0 | `[ ]` |
+| **F2** | `onFallbackCardPlus` → expanded (карты + форма) — уже есть; закрепить тестом | P0 | `[ ]` |
+| **F3** | `RepeatSection` catch не открывает expanded/form сразу | P0 | `[ ]` |
+| R1 | Happy-path: с картой нет fallback до ошибки (регрессия) | MUST | `[ ]` |
+| #46 | 119 → CLIENT_ERROR / clear PaymentId | related | **GREEN `[x]`** этот шаг (отдельный коммит) |
 
 ---
 
-## Decisions
+## План SBR
 
-### D4 — G7: когда открывать форму (апрув по умолчанию)
-
-**A (рекомендуем):** тап по CTA в `CLIENT_ERROR` → `onSelectNewCard()` (не `onPay`).  
-**B (строже):** при переходе в `CLIENT_ERROR` сразу auto-open NewCardForm (скрин 05 без второго тапа).  
-**C:** оба — auto-open + тап по CTA тоже ведёт в new_card.
-
-→ **По умолчанию: D4 = C** (auto при CLIENT_ERROR insufficient/card decline + тап CTA не ретраит ту же карту).
-
-### D1–D3 — визуал макета 03
-
-- D1 СБП disabled · D2 `Картой *XXXX` · D3 оранжевый Pay в sheet — как в SPEC ранее; **после G7** или тем же GREEN-пакетом по апруву.
-
----
-
-## План BUILD
-
-### RED (сначала G7)
-
-1. Тест: при `CLIENT_ERROR` (insufficient / code 1051) вызов CTA **не** ретраит pay; переключает `selectionMode` → `new_card` / виден NewCardForm.  
-2. Тест: auto-open при входе в CLIENT_ERROR (если D4=C).  
+### RED
+1. Тест `widgetRepeatPayFlow` / helper: reject → fallback methods **без** expanded/form  
+2. Тест: после `card+` → expanded+form  
 3. Коммит `test: … [RED]`
 
 ### GREEN
+1. `widgetRepeatPayFlow.js` + `RepeatSection.svelte` catch — не ставить expanded/form на ошибке  
+2. Регрессия JS widget/repeat + shop zone при касании  
+3. Коммит `feat: … [GREEN]`
 
-1. `CheckoutPayButton`: `CLIENT_ERROR` → `onChangeCard` / `onRetry`≠pay (новый колбэк)  
-2. `Checkout.svelte`: колбэк = `onSelectNewCard` (+ auto при set CLIENT_ERROR)  
-3. G1–G4 по апруву (можно вторым коммитом)  
-4. Регрессия: `repeat_invalid_token_payment_test` + JS + shop pay FSM  
-5. Коммит `feat: … [GREEN]`
-
-### REVIEW / MCP
-
-- `[x]` REVIEW 2026-08-07: sanity FE-only; JS 21/0 · Rails pay 21/0  
-- `[x]` MCP Fly **v439** G1–G4 PASS · G7 live PARTIAL (rate-limit)  
-- Residual: СБП disabled vs #27 (D1 осознанно)
-
----
-
-## Чеклист
-
-| # | Суть | Статус |
-|---|---|---|
-| 1–6 | Шаги исходного ТЗ (peek/sheet/select/add/errors/close) | baseline + **G1–G4 `[x]`** |
-| **7** | **Live:** insufficient funds → смена карты / NewCardForm | **G7 `[x]`** |
+### REVIEW
+Ops + отчёт: «макет expanded ≠ дефолт; чиним момент появления СБП/карта+ vs список карт»
 
 ---
 
 ## Exit Criteria
 
-1. `[x]` G7: CLIENT_ERROR → NewCardForm (тесты зелёные)  
-2. `[x]` CTA не ретраит ту же карту  
-3. `[x]` Визуал G1–G4 = скрин 03  
-4. `[x]` MCP на Fly v439 (G1–G4 PASS; G7 live PARTIAL)
-
----
-
-## Порядок
-
-1. `[x]` SPEC / RED / GREEN G7 / GREEN G1–G4 / REVIEW  
-2. Push/MCP — только по просьбе
+1. `[ ]` S1: ошибка → только статус + СБП/карта+  
+2. `[ ]` S2: тап карта+ → expanded как скрин 08  
+3. `[ ]` S0 регрессия: idle с картой без fallback  
+4. `[ ]` Тесты зелёные · коммит GREEN · ops

@@ -25,6 +25,14 @@ class Shop::RepeatInvalidTokenPaymentTest < ActionDispatch::IntegrationTest
     assert_equal true, js_pay_fsm_export("shouldAutoOpenNewCardOnClientError", 5)
   end
 
+  # #46: ErrorCode 119/2200 (лимит авторизаций) → CLIENT_ERROR, не BANK_ERROR retry.
+  test "#46 shopPayFsm maps auth-limit codes 119/2200 to CLIENT_ERROR [TDD]" do
+    src = File.read(PAY_FSM)
+    assert_match(/["']119["']/, src, "CLIENT_ERROR_CODES должен включать 119")
+    assert_match(/["']2200["']/, src, "CLIENT_ERROR_CODES должен включать 2200")
+    assert_match(/запросов авторизац/i, src, "regex сообщения auth-limit → CLIENT_ERROR")
+  end
+
   test "G7 CheckoutPayButton CLIENT_ERROR calls onChangeCard not onPay [TDD]" do
     src = File.read(PAY_BTN)
     assert_includes src, "onChangeCard",

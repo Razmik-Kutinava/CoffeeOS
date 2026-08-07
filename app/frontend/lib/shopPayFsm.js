@@ -40,7 +40,10 @@ const CLIENT_ERROR_CODES = new Set([
   "1057",
   "1061",
   "1062",
-  "1078"
+  "1078",
+  // #46: лимит запросов авторизации — сменить карту, не blind retry.
+  "119",
+  "2200"
 ])
 
 export function payFsmLabel(state) {
@@ -102,7 +105,7 @@ export function fsmFromPaymentError(error, { httpStatus } = {}) {
   const code = String(error?.error_code || "").trim()
   if (code && CLIENT_ERROR_CODES.has(code)) return PAY_FSM.CLIENT_ERROR
 
-  if (/истёк|истек|expir|недостаточно|средств|заблокирован|блокир|отклон|лимит|cvv|cvc|карт/i.test(msg)) {
+  if (/истёк|истек|expir|недостаточно|средств|заблокирован|блокир|отклон|лимит|запросов авторизац|cvv|cvc|карт/i.test(msg)) {
     return PAY_FSM.CLIENT_ERROR
   }
   if (/сеть|network|offline|повторить/i.test(msg)) return PAY_FSM.NET_ERROR

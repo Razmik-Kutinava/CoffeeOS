@@ -1,8 +1,20 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-08-07 (push/deploy/MCP · #26 G7+G1–G4 · Fly **v439**)  
+**Дата:** 2026-08-07 (feat #46 bank auth-limit local GREEN)  
 **Ветка:** `develop`  
-**Прод:** https://coffeeos.fly.dev (**v439**)
+**Прод:** https://coffeeos.fly.dev (**v439** — без #46 до deploy)
+
+### #46 bank auth limit blocks payment (2026-08-07)
+
+| Что | Статус |
+|-----|--------|
+| Интейк + скрин 01 | **`[x]`** |
+| GREEN: clear pid + CLIENT_ERROR 119/2200 + friendly | **`[x]`** |
+| Push / Fly / MCP | **`[ ]`** ждёт апрув |
+| СБП enable | **out** (3001 кабинет + #26) |
+
+**ТЗ:** [`Сбой банка…`](../milestones/veha_2/requirements/customer_tasks/Сбой%20банка%20не%20могу%20оплатить%20заказ%20для%20статусов.md)  
+**Дальше:** `push` + `fly deploy` → MCP: после 119 CTA «смените карту» / NewCardForm; оплата *8782 или новой картой → статус accepted.
 
 ### #26 push/deploy/MCP (2026-08-07)
 

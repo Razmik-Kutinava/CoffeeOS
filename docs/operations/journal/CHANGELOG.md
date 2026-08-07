@@ -1,5 +1,12 @@
 ﻿# CHANGELOG
 
+## 2026-08-07 — feat: #46 bank auth-limit — stop blind retry / same-PaymentId Charge
+- Widget: после REJECTED Charge сбрасываем `provider_payment_id` (нет `charge_existing!` → 119)
+- FE: ErrorCode `119`/`2200` + текст «запросов авторизации» → `CLIENT_ERROR` (сменить карту), не «Сбой банка: позже» retry
+- BE: friendly message для 119/2200
+- Тесты: widget+error 8/0 · JS 19/0 · repeat 11/0 · order/adapter 22/0
+- Push/MCP — ждёт апрув; cooldown *5953 на банке может ещё держаться
+
 ## 2026-08-07 — deploy/MCP: #26 G7+G1–G4 · Fly v439
 - Push `bd0e9fb0` · Fly **v439** · `deployment-01KZDEN9MV9QW2DKFWQXRNFYVT` · `/up` 200
 - MCP: G1–G4 PASS (Картой *XXXX, orange Pay, +, СБП disabled)

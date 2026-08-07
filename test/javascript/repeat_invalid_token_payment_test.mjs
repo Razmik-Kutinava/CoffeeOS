@@ -199,3 +199,35 @@ describe("shopPayFsm — G7 CLIENT_ERROR CTA → open_new_card [TDD]", () => {
     assert.equal(shouldAutoOpenNewCardOnClientError(PAY_FSM.NET_ERROR), false)
   })
 })
+
+/** #46: auth-limit 119/2200 → CLIENT_ERROR (сменить карту), не blind retry BANK_ERROR. */
+describe("shopPayFsm — #46 auth limit → CLIENT_ERROR [TDD]", () => {
+  it("fsmFromPaymentError maps ErrorCode 119 and 2200 to CLIENT_ERROR", async () => {
+    const { PAY_FSM, fsmFromPaymentError } = await import(
+      "../../app/frontend/lib/shopPayFsm.js"
+    )
+    assert.equal(
+      fsmFromPaymentError({
+        error_code: "119",
+        message: "Превышено допустимое количество запросов авторизации операции"
+      }),
+      PAY_FSM.CLIENT_ERROR
+    )
+    assert.equal(
+      fsmFromPaymentError({ error_code: "2200", message: "auth limit" }),
+      PAY_FSM.CLIENT_ERROR
+    )
+  })
+
+  it("fsmFromPaymentError maps auth-limit message without code to CLIENT_ERROR", async () => {
+    const { PAY_FSM, fsmFromPaymentError } = await import(
+      "../../app/frontend/lib/shopPayFsm.js"
+    )
+    assert.equal(
+      fsmFromPaymentError({
+        message: "Превышено допустимое количество запросов авторизации операции"
+      }),
+      PAY_FSM.CLIENT_ERROR
+    )
+  })
+})
