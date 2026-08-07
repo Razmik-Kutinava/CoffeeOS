@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-08-07 — review: #26 G7 + G1–G4 PaymentMethodsSheet (local done)
+- G7: CLIENT_ERROR / insufficient funds → auto + CTA открывают NewCardForm (не retry той же карты)
+- G1–G4: UI скрин 03 — `Картой *XXXX`, orange Pay, `Картой +`, СБП disabled (D1; #27 deep link follow-up)
+- Тесты: JS 21/0 · Rails pay zone 21/0 · коммиты `2fd3bb87` + `7c435b0b`
+- Push/MCP — ждёт апрув
+
 ## 2026-08-07 — docs: #26 PHASE 0+SPEC live insufficient funds (G7)
 - Фидбек заказчика (дословно) + скрины `04`–`08` в artifacts
 - P0: после отказа *5953 форма NewCardForm не открывается; root cause CLIENT_ERROR→onPay

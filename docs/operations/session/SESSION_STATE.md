@@ -2,12 +2,18 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-08-07 (PHASE 2 GREEN · #26 G1–G4 UI = скрин 03)
+**Дата:** 2026-08-07 (PHASE 3 REVIEW · #26 G7 + G1–G4 · local done)
 
 | Сейчас | Дальше |
 |--------|--------|
-| G7 + **G1–G4 GREEN**: `Картой *XXXX`, orange Pay, `+`, СБП disabled | REVIEW / MCP vs 03+05 по апруву |
-| JS 21/0 · Rails repeat 10/0 · zone CBR/SBP | |
+| REVIEW PASS: G7 + UI 03 локально; FE-only, auth не тронут | push → Fly → MCP vs 03/05 |
+| Регрессия JS **21/0** · Rails pay **21/0** | апрув заказчика |
+
+### Сессия 2026-08-07 (PHASE 3 REVIEW · #26)
+
+- Sanity: нет DDL/RLS; auth store не меняли; N+1 n/a (FE)
+- Exit: G7 + G1–G4 `[x]`; MCP/push `[ ]`
+- Residual: СБП disabled расходится с эпиком #27 (зафиксировано D1); live MCP insufficient на Fly
 
 ### Сессия 2026-08-07 (PHASE 2 GREEN · #26 G1–G4)
 

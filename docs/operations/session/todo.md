@@ -105,8 +105,9 @@
 
 ### REVIEW / MCP
 
-- Сценарий *5953 insufficient → форма как 05  
-- Push/deploy — только по просьбе
+- `[x]` REVIEW 2026-08-07: sanity FE-only; JS 21/0 · Rails pay 21/0  
+- `[ ]` MCP Fly vs скрины 03 + 05 — после push/deploy  
+- Residual: СБП disabled vs #27 (D1 осознанно)
 
 ---
 
@@ -114,22 +115,21 @@
 
 | # | Суть | Статус |
 |---|---|---|
-| 1–6 | Шаги исходного ТЗ (peek/sheet/select/add/errors/close) | baseline + G1–G4 |
-| **7** | **Live:** insufficient funds → смена карты / NewCardForm | **G7 `[x]` GREEN** |
+| 1–6 | Шаги исходного ТЗ (peek/sheet/select/add/errors/close) | baseline + **G1–G4 `[x]`** |
+| **7** | **Live:** insufficient funds → смена карты / NewCardForm | **G7 `[x]`** |
 
 ---
 
 ## Exit Criteria
 
-1. G7: после отказа *5953* форма новой карты открывается (скрин 05) — тест зелёный  
-2. Тап «Отказ: смените карту» не крутит повторный charge той же карты  
-3. (Опционально в том же / следующем шаге) визуал G1–G4 = скрин 03  
-4. MCP на Fly — по явной просьбе
+1. `[x]` G7: CLIENT_ERROR → NewCardForm (тесты зелёные)  
+2. `[x]` CTA не ретраит ту же карту  
+3. `[x]` Визуал G1–G4 = скрин 03  
+4. `[ ]` MCP на Fly — по явной просьбе
 
 ---
 
 ## Порядок
 
-1. SPEC дополнен (этот файл) — **стоп до апрува на RED**, если владелец хочет править D4  
-2. RED G7 → GREEN G7 → (G1–G4) → REVIEW  
-3. Push/MCP — только по просьбе
+1. `[x]` SPEC / RED / GREEN G7 / GREEN G1–G4 / REVIEW  
+2. Push/MCP — только по просьбе
