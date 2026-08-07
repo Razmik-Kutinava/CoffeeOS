@@ -2,6 +2,19 @@
 
 ## Текущее состояние
 
+**Дата:** 2026-08-07 (PHASE 0 · #46 bank auth limit)
+
+| Сейчас | Дальше |
+|--------|--------|
+| #46 интейк: «не могу оплатить… заместить статусы» + скрин auth-limit | SPEC → fix (ебашь) |
+| Root: ErrorCode 119/2200 + blind retry *5953; widget Charge same PaymentId | не ждать go — намерение в том же сообщении |
+
+### Сессия 2026-08-07 (PHASE 0 · #46 bank auth limit)
+
+- Текст заказчика дословно + скрин `01_checkout_auth_limit_bank_error.png`
+- CBR #46 · artifacts `bank_auth_limit_blocks_payment/`
+- Совпадает с MCP v439 G7 live rate-limit
+
 **Дата:** 2026-08-07 (push/deploy/MCP · #26 · Fly **v439**)
 
 | Сейчас | Дальше |
