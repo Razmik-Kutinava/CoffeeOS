@@ -1,0 +1,24 @@
+{
+  "stand": "https://coffeeos.fly.dev/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "release": "v440",
+  "commit": "11e5eaf7",
+  "deployment": "01KZDYQPQCHWPFBPEX3XJF8JKA",
+  "date": "2026-08-07",
+  "checks": {
+    "up": "PASS",
+    "bundle_helpers_minified": "PASS",
+    "S1_fallback_only_no_expanded": "PASS",
+    "S2_card_plus_opens_expanded": "PASS"
+  },
+  "observed": {
+    "S1": {
+      "statusText": "Ошибка оплаты, попробуйте снова",
+      "buttons": ["СБП", "карта +"],
+      "savedCardsVisible": false
+    },
+    "S2_after_card_plus": {
+      "savedCards": ["Картой *5953", "Картой *8782"],
+      "newCardForm": true
+    }
+  }
+}

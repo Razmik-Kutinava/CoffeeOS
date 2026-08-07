@@ -1,5 +1,10 @@
 ﻿# CHANGELOG
 
+## 2026-08-07 — deploy/MCP: #33 fallback≠expanded + #46 · Fly v440
+- Push `11e5eaf7` · Fly **v440** · `deployment-01KZDYQPQCHWPFBPEX3XJF8JKA` · `/up` 200
+- MCP: S1 PASS (ошибка → только СБП/карта+); S2 PASS (карта + → *5953/*8782 + форма)
+- Evidence: `tbank_widget_oneclick_fallback/mcp/fly_2026-08-07/`
+
 ## 2026-08-07 — feat: #33 fallback UI — expanded only after «карта +»
 - После отказа карты: только плашка + «СБП» / «карта +» (без списка карт / формы)
 - Expanded (скрин 08) — только после тапа «карта +»

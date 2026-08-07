@@ -2,35 +2,23 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-08-07 (PHASE 3 REVIEW · #33 fallback vs expanded)
+**Дата:** 2026-08-07 (push/deploy/MCP · #33+#46 · Fly **v440**)
 
 | Сейчас | Дальше |
 |--------|--------|
-| #33 F1–F3 GREEN: decline → только СБП/карта+; expanded после «карта +» | push/MCP по апруву |
-| #46 GREEN local `327e8767` | push/MCP по апруву |
+| Fly **v440** · MCP S1/S2 **PASS** · push `11e5eaf7` | апрув заказчика «ок» |
+| #46 в том же релизе | optional live checkout CTA после 119 |
+
+### Сессия 2026-08-07 (push/deploy/MCP · #33+#46)
+
+- Push develop `11e5eaf7` · Fly **v440** · `deployment-01KZDYQPQCHWPFBPEX3XJF8JKA` · `/up` 200
+- MCP: S1 отказ → только СБП/карта+; S2 «карта +» → *5953/*8782 + форма
+- Evidence: `artifacts/tbank_widget_oneclick_fallback/mcp/fly_2026-08-07/`
 
 ### Сессия 2026-08-07 (PHASE 3 REVIEW · #33 fallback vs expanded)
 
 - Helpers `resolveCardDeclineFallbackUi` / `resolveCardPlusExpandedUi`
-- `widgetRepeatPayFlow` + `RepeatSection` catch: не открывают expanded на ошибке
-- Тесты: JS 38/0 (widget + fallback UI + #46 FSM) · widget_payment_initiator 6/0
-- Скрин 08 = expanded ≠ дефолт
-
-### Сессия 2026-08-07 (PHASE 2 RED · #33)
-
-- `test/javascript/widget_repeat_pay_flow_fallback_ui_test.mjs` [RED] `b3e9f0ec`
-
-### Сессия 2026-08-07 (PHASE 1 SPEC · #33 fallback vs expanded)
-
-- Логи Fly: REJECTED · ErrorCode **119** · Pan *5953
-- Root UI: catch открывал expanded вместе с fallback
-- Канон S0→S1→S2; скрины 07/08
-
-### Сессия 2026-08-07 (feat #46 bank auth-limit GREEN)
-
-- Widget: `clear_provider_payment_id!` после Charge reject
-- `shopPayFsm`: 119/2200 → CLIENT_ERROR
-- Коммит `327e8767`
+- Тесты: JS 38/0 · widget_payment_initiator 6/0
 
 **Дата:** 2026-08-07 (push/deploy/MCP · #26 · Fly **v439**)
 

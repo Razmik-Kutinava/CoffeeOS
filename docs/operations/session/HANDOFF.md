@@ -1,8 +1,19 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-08-07 (REVIEW #33 fallback vs expanded + #46 GREEN)  
+**Дата:** 2026-08-07 (push/deploy/MCP · #33+#46 · Fly **v440**)  
 **Ветка:** `develop`  
-**Прод:** https://coffeeos.fly.dev (**v439** — без #33/#46 до deploy)
+**Прод:** https://coffeeos.fly.dev (**v440**)
+
+### #33+#46 push/deploy/MCP (2026-08-07)
+
+| Что | Статус |
+|-----|--------|
+| Push `11e5eaf7` | **`[x]`** |
+| Fly **v440** | **`[x]`** `deployment-01KZDYQPQCHWPFBPEX3XJF8JKA` |
+| MCP S1 (fallback only) / S2 (expanded after карта +) | **PASS** |
+
+**Evidence:** [`mcp/fly_2026-08-07/`](../milestones/veha_2/artifacts/tbank_widget_oneclick_fallback/mcp/fly_2026-08-07/)  
+**Дальше:** апрув заказчика «ок».
 
 ### #33 fallback vs expanded (2026-08-07)
 
@@ -10,22 +21,16 @@
 |-----|--------|
 | SPEC канон S0→S1→S2 · скрины 07/08 | **`[x]`** |
 | GREEN: decline → только СБП/карта+; expanded после «карта +» | **`[x]`** |
-| Push / Fly / MCP | **`[ ]`** ждёт апрув |
-
-**Канон:** скрин **08** = expanded ≠ дефолт чекаута.  
-**Дальше:** push → deploy → MCP vs скрины 07→08.
+| Push / Fly / MCP | **`[x]`** v440 |
 
 ### #46 bank auth limit blocks payment (2026-08-07)
 
 | Что | Статус |
 |-----|--------|
-| Интейк + скрин 01 | **`[x]`** |
-| GREEN: clear pid + CLIENT_ERROR 119/2200 + friendly | **`[x]`** `327e8767` |
-| Push / Fly / MCP | **`[ ]`** ждёт апрув |
-| СБП enable | **out** (3001 кабинет + #26) |
-
-**ТЗ:** [`Сбой банка…`](../milestones/veha_2/requirements/customer_tasks/Сбой%20банка%20не%20могу%20оплатить%20заказ%20для%20статусов.md)  
-**Дальше:** `push` + `fly deploy` → MCP: после 119 CTA «смените карту» / NewCardForm.
+| GREEN: clear pid + CLIENT_ERROR 119/2200 | **`[x]`** `327e8767` |
+| Push / Fly | **`[x]`** в v440 |
+| MCP checkout CTA после 119 | optional |
+| СБП enable | **out** (3001 + #26) |
 
 ### #26 push/deploy/MCP (2026-08-07)
 
