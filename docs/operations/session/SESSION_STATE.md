@@ -2,32 +2,35 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-08-07 (PHASE 1 SPEC · #33 fallback vs expanded)
+**Дата:** 2026-08-07 (PHASE 3 REVIEW · #33 fallback vs expanded)
 
 | Сейчас | Дальше |
 |--------|--------|
-| #33 SPEC: канон S0→S1→S2; Fly `ErrorCode=119` *5953; mixed UI скрин 07 | RED F1–F3 |
-| #46 GREEN local (clear pid + CLIENT_ERROR 119) | push/MCP по апруву |
+| #33 F1–F3 GREEN: decline → только СБП/карта+; expanded после «карта +» | push/MCP по апруву |
+| #46 GREEN local `327e8767` | push/MCP по апруву |
+
+### Сессия 2026-08-07 (PHASE 3 REVIEW · #33 fallback vs expanded)
+
+- Helpers `resolveCardDeclineFallbackUi` / `resolveCardPlusExpandedUi`
+- `widgetRepeatPayFlow` + `RepeatSection` catch: не открывают expanded на ошибке
+- Тесты: JS 38/0 (widget + fallback UI + #46 FSM) · widget_payment_initiator 6/0
+- Скрин 08 = expanded ≠ дефолт
+
+### Сессия 2026-08-07 (PHASE 2 RED · #33)
+
+- `test/javascript/widget_repeat_pay_flow_fallback_ui_test.mjs` [RED] `b3e9f0ec`
 
 ### Сессия 2026-08-07 (PHASE 1 SPEC · #33 fallback vs expanded)
 
 - Логи Fly: REJECTED · ErrorCode **119** · Pan *5953
-- Root UI: `widgetRepeatPayFlow` / `RepeatSection` catch открывают expanded вместе с fallback
-- Канон: S0 pay+статусы → S1 только СБП/карта+ → S2 expanded (скрин 08) после тапа
-- todo.md → #33 F1–F3; скрины 07/08 в artifacts
+- Root UI: catch открывал expanded вместе с fallback
+- Канон S0→S1→S2; скрины 07/08
 
 ### Сессия 2026-08-07 (feat #46 bank auth-limit GREEN)
 
 - Widget: `clear_provider_payment_id!` после Charge reject
-- `shopPayFsm`: 119/2200 → CLIENT_ERROR; regex «запросов авторизац»
-- `TbankPaymentError`: friendly 119/2200
-- Тесты PASS; ISSUES #46 resolved (код)
-
-### Сессия 2026-08-07 (PHASE 0 · #46 bank auth limit)
-
-- Текст заказчика дословно + скрин `01_checkout_auth_limit_bank_error.png`
-- CBR #46 · artifacts `bank_auth_limit_blocks_payment/`
-- Совпадает с MCP v439 G7 live rate-limit
+- `shopPayFsm`: 119/2200 → CLIENT_ERROR
+- Коммит `327e8767`
 
 **Дата:** 2026-08-07 (push/deploy/MCP · #26 · Fly **v439**)
 

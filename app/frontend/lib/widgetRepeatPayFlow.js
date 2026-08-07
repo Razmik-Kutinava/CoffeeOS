@@ -13,6 +13,30 @@ import {
 import { userCardsApiPath } from "./userCardsApiPath.js"
 
 /**
+ * S1: отказ карты → только СБП / «карта +» (без expanded / формы).
+ * @returns {{ showFallbackMethods: boolean, showExpandedCards: boolean, showNewCardForm: boolean }}
+ */
+export function resolveCardDeclineFallbackUi() {
+  return {
+    showFallbackMethods: true,
+    showExpandedCards: false,
+    showNewCardForm: false
+  }
+}
+
+/**
+ * S2: тап «карта +» → expanded список карт + форма новой карты.
+ * @returns {{ showFallbackMethods: boolean, showExpandedCards: boolean, showNewCardForm: boolean }}
+ */
+export function resolveCardPlusExpandedUi() {
+  return {
+    showFallbackMethods: true,
+    showExpandedCards: true,
+    showNewCardForm: true
+  }
+}
+
+/**
  * @param {object} opts
  * @param {string} opts.orderId
  * @param {(path: string, opts?: object) => Promise<object>} opts.api
@@ -59,13 +83,12 @@ export async function runRepeatWidgetPayFlow({
       errorText = "Добавьте карту для оплаты"
       statusText = errorText
       onStatusText?.(statusText)
+      // Нет привязанной карты — сразу форма (не «сначала fallback»).
       return {
         fsm,
         statusText,
         errorText,
-        showFallbackMethods: true,
-        showExpandedCards: true,
-        showNewCardForm: true,
+        ...resolveCardPlusExpandedUi(),
         savedCards: [],
         resetAfterMs: null,
         state: fsm.state
@@ -109,8 +132,8 @@ export async function runRepeatWidgetPayFlow({
       errorText = result.errorLabel || INLINE_GENERIC_ERROR_LABEL
       statusText = errorText
       onStatusText?.(statusText)
-      showFallbackMethods = true
-      // fallback СБП/карта+ не сбрасываем — пользователь должен успеть нажать
+      ;({ showFallbackMethods, showExpandedCards, showNewCardForm } =
+        resolveCardDeclineFallbackUi())
     } else {
       fsm.reject({ error_code: result.errorCode || "" })
       errorText = result.errorLabel || WIDGET_STATUS_LABELS.ERROR
@@ -119,7 +142,8 @@ export async function runRepeatWidgetPayFlow({
       if (fsm.state !== WIDGET_FSM_STATES.FALLBACK) {
         fsm.state = WIDGET_FSM_STATES.ERROR
       }
-      showFallbackMethods = true
+      ;({ showFallbackMethods, showExpandedCards, showNewCardForm } =
+        resolveCardDeclineFallbackUi())
     }
   } catch (e) {
     fsm.reject({ error_code: e?.error_code || "" })
@@ -130,10 +154,9 @@ export async function runRepeatWidgetPayFlow({
         : null) || INLINE_GENERIC_ERROR_LABEL
     statusText = errorText
     onStatusText?.(statusText)
-    showFallbackMethods = true
-    // при ошибке Charge / недоступности — дать выбрать карту или привязать новую
-    showExpandedCards = true
-    showNewCardForm = savedCards.length === 0
+    // S1: только СБП / «карта +»; expanded — после тапа «карта +» (S2).
+    ;({ showFallbackMethods, showExpandedCards, showNewCardForm } =
+      resolveCardDeclineFallbackUi())
   }
 
   return {

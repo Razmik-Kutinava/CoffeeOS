@@ -36,11 +36,11 @@
 
 | ID | Gap | Prio | Статус |
 |----|-----|------|--------|
-| **F1** | На ERROR/FALLBACK: `showFallbackMethods=true`, **`showExpandedCards=false`**, **`showNewCardForm=false`** (пока не тап «карта +») | P0 | `[ ]` |
-| **F2** | `onFallbackCardPlus` → expanded (карты + форма) — уже есть; закрепить тестом | P0 | `[ ]` |
-| **F3** | `RepeatSection` catch не открывает expanded/form сразу | P0 | `[ ]` |
-| R1 | Happy-path: с картой нет fallback до ошибки (регрессия) | MUST | `[ ]` |
-| #46 | 119 → CLIENT_ERROR / clear PaymentId | related | **GREEN `[x]`** этот шаг (отдельный коммит) |
+| **F1** | На ERROR/FALLBACK: `showFallbackMethods=true`, **`showExpandedCards=false`**, **`showNewCardForm=false`** (пока не тап «карта +») | P0 | `[x]` |
+| **F2** | `onFallbackCardPlus` → expanded (карты + форма) — уже есть; закрепить тестом | P0 | `[x]` |
+| **F3** | `RepeatSection` catch не открывает expanded/form сразу | P0 | `[x]` |
+| R1 | Happy-path: с картой нет fallback до ошибки (регрессия) | MUST | `[x]` |
+| #46 | 119 → CLIENT_ERROR / clear PaymentId | related | GREEN `327e8767` |
 
 ---
 
@@ -63,7 +63,7 @@ Ops + отчёт: «макет expanded ≠ дефолт; чиним момен�
 
 ## Exit Criteria
 
-1. `[ ]` S1: ошибка → только статус + СБП/карта+  
-2. `[ ]` S2: тап карта+ → expanded как скрин 08  
-3. `[ ]` S0 регрессия: idle с картой без fallback  
-4. `[ ]` Тесты зелёные · коммит GREEN · ops
+1. `[x]` S1: ошибка → только статус + СБП/карта+  
+2. `[x]` S2: тап карта+ → expanded как скрин 08  
+3. `[x]` S0 регрессия: idle с картой без fallback  
+4. `[x]` Тесты зелёные · коммит GREEN · ops

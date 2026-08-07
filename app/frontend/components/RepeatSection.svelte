@@ -9,7 +9,11 @@
   } from "../lib/frequentRepeatStore.js"
   import { repeatBumpEmbeddedToCart } from "../lib/repeatEmbeddedCart.js"
   import { createWidgetPayFsm } from "../lib/shopWidgetPayFsm.js"
-  import { runRepeatWidgetPayFlow } from "../lib/widgetRepeatPayFlow.js"
+  import {
+    runRepeatWidgetPayFlow,
+    resolveCardDeclineFallbackUi,
+    resolveCardPlusExpandedUi
+  } from "../lib/widgetRepeatPayFlow.js"
   import { createRepeatInlineOrder } from "../lib/createRepeatInlineOrder.js"
   import { INLINE_ROTATION_LABELS } from "../lib/shopInlinePayFsm.js"
   import {
@@ -115,13 +119,12 @@
       fsm.reject({ error_code: "" })
       fsm.state = "ERROR"
       const msg = e?.message || "Ошибка оплаты, попробуйте снова"
+      // S1: только СБП / «карта +»; expanded — после тапа «карта +».
       patchRepeatInlinePayUi({
         fsm,
         errorText: msg,
         statusText: msg,
-        showFallbackMethods: true,
-        showExpandedCards: true,
-        showNewCardForm: true
+        ...resolveCardDeclineFallbackUi()
       })
       // не auto-reset — нужны СБП / карта+
     } finally {
@@ -141,9 +144,7 @@
 
   async function onFallbackCardPlus() {
     patchRepeatInlinePayUi({
-      showExpandedCards: true,
-      showNewCardForm: true,
-      showFallbackMethods: true
+      ...resolveCardPlusExpandedUi()
     })
     try {
       const data = await api(userCardsApiPath())
@@ -200,8 +201,7 @@
         fsm,
         errorText: msg,
         statusText: msg,
-        showFallbackMethods: true,
-        showExpandedCards: true
+        ...resolveCardDeclineFallbackUi()
       })
     } finally {
       patchRepeatInlinePayUi({ busy: false })

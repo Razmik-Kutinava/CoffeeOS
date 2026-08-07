@@ -1,20 +1,31 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-08-07 (feat #46 bank auth-limit local GREEN)  
+**Дата:** 2026-08-07 (REVIEW #33 fallback vs expanded + #46 GREEN)  
 **Ветка:** `develop`  
-**Прод:** https://coffeeos.fly.dev (**v439** — без #46 до deploy)
+**Прод:** https://coffeeos.fly.dev (**v439** — без #33/#46 до deploy)
+
+### #33 fallback vs expanded (2026-08-07)
+
+| Что | Статус |
+|-----|--------|
+| SPEC канон S0→S1→S2 · скрины 07/08 | **`[x]`** |
+| GREEN: decline → только СБП/карта+; expanded после «карта +» | **`[x]`** |
+| Push / Fly / MCP | **`[ ]`** ждёт апрув |
+
+**Канон:** скрин **08** = expanded ≠ дефолт чекаута.  
+**Дальше:** push → deploy → MCP vs скрины 07→08.
 
 ### #46 bank auth limit blocks payment (2026-08-07)
 
 | Что | Статус |
 |-----|--------|
 | Интейк + скрин 01 | **`[x]`** |
-| GREEN: clear pid + CLIENT_ERROR 119/2200 + friendly | **`[x]`** |
+| GREEN: clear pid + CLIENT_ERROR 119/2200 + friendly | **`[x]`** `327e8767` |
 | Push / Fly / MCP | **`[ ]`** ждёт апрув |
 | СБП enable | **out** (3001 кабинет + #26) |
 
 **ТЗ:** [`Сбой банка…`](../milestones/veha_2/requirements/customer_tasks/Сбой%20банка%20не%20могу%20оплатить%20заказ%20для%20статусов.md)  
-**Дальше:** `push` + `fly deploy` → MCP: после 119 CTA «смените карту» / NewCardForm; оплата *8782 или новой картой → статус accepted.
+**Дальше:** `push` + `fly deploy` → MCP: после 119 CTA «смените карту» / NewCardForm.
 
 ### #26 push/deploy/MCP (2026-08-07)
 

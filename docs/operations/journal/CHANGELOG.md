@@ -1,5 +1,12 @@
 ﻿# CHANGELOG
 
+## 2026-08-07 — feat: #33 fallback UI — expanded only after «карта +»
+- После отказа карты: только плашка + «СБП» / «карта +» (без списка карт / формы)
+- Expanded (скрин 08) — только после тапа «карта +»
+- `resolveCardDeclineFallbackUi` / `resolveCardPlusExpandedUi` в `widgetRepeatPayFlow` + `RepeatSection`
+- Тесты: JS fallback UI + widget FSM + #46 pay FSM 38/0 · widget initiator 6/0
+- Push/MCP — ждёт апрув
+
 ## 2026-08-07 — feat: #46 bank auth-limit — stop blind retry / same-PaymentId Charge
 - Widget: после REJECTED Charge сбрасываем `provider_payment_id` (нет `charge_existing!` → 119)
 - FE: ErrorCode `119`/`2200` + текст «запросов авторизации» → `CLIENT_ERROR` (сменить карту), не «Сбой банка: позже» retry
