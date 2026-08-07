@@ -61,7 +61,7 @@
 
 | # | Тема | Приоритет | Статус |
 |---|---|---|---|
-| **G7** | `CLIENT_ERROR` / «Отказ: смените карту» → `onSelectNewCard()` (+ опционально auto при входе в CLIENT_ERROR) | **P0 блокер заказчика** | `[ ]` RED написан · ждут GREEN |
+| **G7** | `CLIENT_ERROR` / «Отказ: смените карту» → `onSelectNewCard()` (+ auto при CLIENT_ERROR) | **P0 блокер заказчика** | `[x]` GREEN |
 | G1 | Лейбл `Картой *XXXX` vs MIR **** | MUST (макет 03) | `[ ]` |
 | G2 | Оранжевый idle Pay | MUST (макет 03) | `[ ]` |
 | G3 | «Картой +» без шеврона | MUST (макет 03) | `[ ]` |
@@ -115,7 +115,7 @@
 | # | Суть | Статус |
 |---|---|---|
 | 1–6 | Шаги исходного ТЗ (peek/sheet/select/add/errors/close) | baseline + G1–G4 |
-| **7** | **Live:** insufficient funds → смена карты / NewCardForm | **G7 `[ ]` P0** |
+| **7** | **Live:** insufficient funds → смена карты / NewCardForm | **G7 `[x]` GREEN** |
 
 ---
 

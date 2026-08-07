@@ -40,7 +40,8 @@
     onSelectSbpAccount = undefined,
     onPay = undefined,
     onRetry = undefined,
-    onRetryLoad = undefined
+    onRetryLoad = undefined,
+    onChangeCard = undefined
   } = $props()
 
   const locked = $derived(shouldLockPaymentMethods(fsmState))
@@ -227,6 +228,7 @@
         loadingLabel={loadingPayLabel}
         onPay={() => onPay?.()}
         onRetry={() => onRetry?.()}
+        onChangeCard={() => onChangeCard?.()}
       />
     </div>
   </section>

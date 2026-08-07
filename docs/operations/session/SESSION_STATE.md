@@ -2,12 +2,24 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-08-07 (PHASE 0+SPEC · #26 live insufficient funds → NewCardForm · G7)
+**Дата:** 2026-08-07 (PHASE 2 GREEN · #26 G7 CLIENT_ERROR → NewCardForm)
 
 | Сейчас | Дальше |
 |--------|--------|
-| Скрины `04`–`08` сохранены; фидбек в ТЗ; SPEC: **G7 = P0** | апрув D4 (C=auto+tap) → RED G7 |
-| Root cause: `CLIENT_ERROR` CTA → `onPay()` вместо `onSelectNewCard()` | код не писали в этом шаге |
+| G7 GREEN: auto-open + CTA `onChangeCard` → `onSelectNewCard` | REVIEW / MCP vs скрин 05 по апруву; G1–G4 макет 03 — отдельно |
+| Тесты: JS 17/0 · Rails repeat 10/0 · zone pay/sbp 4/0 | |
+
+### Сессия 2026-08-07 (PHASE 2 GREEN · #26 G7)
+
+- `resolvePayFsmCtaAction` / `shouldAutoOpenNewCardOnClientError` в `shopPayFsm.js`
+- `CheckoutPayButton`: CLIENT_ERROR → `onChangeCard()` (не `onPay`)
+- `PaymentMethodsSheet` + `Checkout`: `onChangeCard={onSelectNewCard}`; `$effect` auto-open
+- Тесты G7 зелёные; регрессия shop_pay_fsm_3ds + sbp_payment_ui PASS
+
+### Сессия 2026-08-07 (PHASE 2 RED · #26 G7)
+
+- Падающие тесты G7 (helpers / onChangeCard / Checkout wiring)
+- Коммит `[RED]` `50419a0a`
 
 ### Сессия 2026-08-07 (PHASE 0+SPEC · live *5953 insufficient)
 

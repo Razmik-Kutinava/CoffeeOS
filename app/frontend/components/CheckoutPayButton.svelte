@@ -2,7 +2,8 @@
   import {
     PAY_FSM,
     payFsmLabel,
-    isPayFsmBusy
+    isPayFsmBusy,
+    resolvePayFsmCtaAction
   } from "../lib/shopPayFsm.js"
 
   let {
@@ -11,7 +12,8 @@
     idleLabel = null,
     loadingLabel = null,
     onPay = () => {},
-    onRetry = () => {}
+    onRetry = () => {},
+    onChangeCard = () => {}
   } = $props()
 
   let shake = $state(false)
@@ -42,15 +44,16 @@
 
   function handleClick() {
     if (disabled) return
-    if (fsmState === PAY_FSM.BANK_ERROR || fsmState === PAY_FSM.NET_ERROR) {
+    const action = resolvePayFsmCtaAction(fsmState)
+    if (action === "retry") {
       onRetry()
       return
     }
     if (fsmState === PAY_FSM.CLIENT_ERROR) {
-      onPay()
+      onChangeCard()
       return
     }
-    if (fsmState === PAY_FSM.DEFAULT) {
+    if (action === "pay" || fsmState === PAY_FSM.DEFAULT) {
       onPay()
     }
   }

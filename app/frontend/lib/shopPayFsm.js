@@ -69,6 +69,21 @@ export function shouldLockPaymentMethods(state) {
   return isPayFsmBusy(state)
 }
 
+/**
+ * G7: действие CTA по FSM.
+ * CLIENT_ERROR («Отказ: смените карту») → открыть NewCardForm, не retry той же карты.
+ */
+export function resolvePayFsmCtaAction(state) {
+  if (state === PAY_FSM.CLIENT_ERROR) return "open_new_card"
+  if (state === PAY_FSM.NET_ERROR || state === PAY_FSM.BANK_ERROR) return "retry"
+  return "pay"
+}
+
+/** D4=C: при входе в CLIENT_ERROR сразу открываем форму новой карты. */
+export function shouldAutoOpenNewCardOnClientError(state) {
+  return state === PAY_FSM.CLIENT_ERROR
+}
+
 /** ErrorCode / HTTP / сеть → FSM 5–7. */
 export function fsmFromPaymentError(error, { httpStatus } = {}) {
   if (typeof navigator !== "undefined" && (!navigator.onLine || isOfflineError(error))) {

@@ -37,6 +37,7 @@
     apiWithPayTimeout,
     fsmFromPaymentError,
     isPayFsmClickable,
+    shouldAutoOpenNewCardOnClientError,
     withMinLoaderMs
   } from "../lib/shopPayFsm.js"
   import { waitForOrderSettled } from "../lib/shopPaySettle.js"
@@ -353,6 +354,16 @@
     sheetInlineError = null
     persistPaymentSelection({ selectedCardId: null, selectionMode: "new_card" })
   }
+
+  /** G7 D4=C: отказ банка (CLIENT_ERROR) → сразу форма новой карты; уже на new_card — только сброс FSM. */
+  $effect(() => {
+    if (!shouldAutoOpenNewCardOnClientError(payFsmState)) return
+    if (selectionMode === "new_card") {
+      payFsmState = PAY_FSM.DEFAULT
+      return
+    }
+    onSelectNewCard()
+  })
 
   function onSelectSbp() {
     selectionMode = "sbp"
@@ -719,6 +730,7 @@
     }}
     {onSelectCard}
     {onSelectNewCard}
+    onChangeCard={onSelectNewCard}
     {onSelectSbp}
     {onSelectSbpAccount}
     onPay={onSheetPay}
