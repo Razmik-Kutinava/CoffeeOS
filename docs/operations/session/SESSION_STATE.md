@@ -2,19 +2,25 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-08-07 (PHASE 0 re-intake · #26 Repeat order invalid token payment sheet)
+**Дата:** 2026-08-07 (PHASE 1 SPEC · #26 invalid token payment sheet · канон скрин 03)
 
 | Сейчас | Дальше |
 |--------|--------|
-| #26 найдена; текст ТЗ = канон; скрин `03` сохранён | `go` → PHASE 1 SPEC (gap vs Fly v438 / код) |
-| MCP PASS был на Fly **v393**; апрув заказчика `[ ]` | re-verify MCP или доделки только после SPEC |
+| SPEC в `todo.md`: baseline B1–B6 + gaps **G1–G4** (лейбл / оранжевый Pay / «Картой +» / СБП disabled) | апрув SPEC (D1 СБП, D2 маска) → RED |
+| Канон UI: скрин `03` (текст ТЗ совпал → делаем как на скрине) | код не писали |
+
+### Сессия 2026-08-07 (PHASE 1 SPEC · #26)
+
+- As-is: peek CTA + sheet + NewCard + errors уже есть (MCP v393)
+- Gaps vs скрин 03: `Картой *XXXX` (не MIR/****), оранжевый «Оплатить», «+» вместо ⌄, СБП disabled
+- Decisions: D1 СБП vs #27 · D2 маска vs Step10 · D3 accent Pay
+- `todo.md` переписан; код не трогали
 
 ### Сессия 2026-08-07 (PHASE 0 · #26 re-intake)
 
-- Текст заказчика совпал с [`Главный экран — повторный заказ…`](../milestones/veha_2/requirements/customer_tasks/Главный%20экран%20—%20повторный%20заказ%20(невалидный%20токен)%20BottomSheet%20выбора%20способа%20оплаты.md) — тело не трогали
-- Скрин → `artifacts/repeat_order_invalid_token_payment_sheet/screenshots/03_payment_method_bottom_sheet_invalid_token_2026-08-07.png`
-- README + CBR #26 + customer_tasks README обновлены
-- Код / SPEC / todo — не писали
+- Текст заказчика совпал с ТЗ — тело не трогали
+- Скрин → `screenshots/03_payment_method_bottom_sheet_invalid_token_2026-08-07.png`
+- README + CBR #26 обновлены
 
 ### Сессия 2026-08-06 (push/deploy/MCP · #35 D1+D2)
 

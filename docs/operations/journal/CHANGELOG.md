@@ -1,5 +1,10 @@
 ﻿# CHANGELOG
 
+## 2026-08-07 — docs: #26 PHASE 1 SPEC (канон скрин 03)
+- `todo.md`: baseline B1–B6; gaps G1–G4 (лейбл «Картой *XXXX», оранжевый Pay, «Картой +», СБП disabled)
+- Decisions D1 СБП vs #27 · D2 маска vs Step10 · D3 accent Pay
+- Код не меняли — ждём апрув SPEC → RED
+
 ## 2026-08-07 — docs: #26 PHASE 0 re-intake (invalid token payment sheet)
 - Текст ТЗ совпал с принятым — тело не перезаписывали
 - Скрин: `repeat_order_invalid_token_payment_sheet/screenshots/03_payment_method_bottom_sheet_invalid_token_2026-08-07.png`

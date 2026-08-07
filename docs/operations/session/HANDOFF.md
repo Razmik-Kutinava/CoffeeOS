@@ -1,8 +1,21 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-08-07 (PHASE 0 re-intake · #26 invalid token payment sheet)  
+**Дата:** 2026-08-07 (PHASE 1 SPEC · #26 invalid token · канон скрин 03)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev (**v438**)
+
+### PHASE 1 SPEC: #26 vs скрин 03 (2026-08-07)
+
+| Что | Статус |
+|-----|--------|
+| As-is / gap в `todo.md` | **`[x]`** |
+| Канон UI = скрин `03` (текст совпал → UI как на скрине) | **`[x]`** |
+| Gaps MUST: G1 лейбл · G2 оранжевый Pay · G3 «Картой +» · G4 СБП disabled | зафиксированы |
+| Decisions D1/D2/D3 | ждать апрув |
+| RED / GREEN | **`[ ]`** |
+
+**Канон:** [`todo.md`](todo.md) · скрин [`03_…`](../milestones/veha_2/artifacts/repeat_order_invalid_token_payment_sheet/screenshots/03_payment_method_bottom_sheet_invalid_token_2026-08-07.png)  
+**Дальше:** апрув SPEC → RED G1–G4.
 
 ### PHASE 0: #26 re-intake (2026-08-07)
 
@@ -12,12 +25,6 @@
 | Сверка текста ТЗ | **совпал** — тело не трогали |
 | Скрин `03_…_2026-08-07.png` | **`[x]`** в artifacts |
 | README + CBR #26 | **`[x]`** |
-| SPEC / код | **`[ ]`** ждать `go` |
-
-**ТЗ:** [`Главный экран — повторный заказ…`](../milestones/veha_2/requirements/customer_tasks/Главный%20экран%20—%20повторный%20заказ%20(невалидный%20токен)%20BottomSheet%20выбора%20способа%20оплаты.md)  
-**Скрин:** [`screenshots/03_…`](../milestones/veha_2/artifacts/repeat_order_invalid_token_payment_sheet/screenshots/03_payment_method_bottom_sheet_invalid_token_2026-08-07.png)  
-**Было:** MCP PASS Fly **v393** (2026-07-27); step5 live — unit only; апрув заказчика `[ ]`  
-**Дальше:** `go` → SPEC (gap vs текущий код/Fly v438) или апрув «ок» по #26.
 
 ### #35 D1+D2 REVIEW + deploy/MCP (2026-08-06)
 
