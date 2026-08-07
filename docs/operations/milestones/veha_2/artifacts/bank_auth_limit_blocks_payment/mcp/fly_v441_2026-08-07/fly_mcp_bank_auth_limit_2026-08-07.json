@@ -1,0 +1,42 @@
+{
+  "date": "2026-08-07",
+  "kind": "mcp_bank_auth_limit_blocks_payment",
+  "fly_release": "v441",
+  "commit": "4ff0cede",
+  "deployment": "01KZDZ59Z9113BYEWRVEHF3QBT",
+  "stand": "https://coffeeos.fly.dev/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "customer": { "email": "aramfifa100@gmail.com", "profile": "Aram 2bc3…4c" },
+  "deploy": {
+    "machines": "web+worker VERSION 441 started, checks passing",
+    "up": "200 green"
+  },
+  "checks": [
+    {
+      "id": "deploy_v441",
+      "status": "PASS",
+      "detail": "Fly v441 complete; /up 200; machines started"
+    },
+    {
+      "id": "bundle_checkout_46",
+      "status": "PASS",
+      "detail": "Checkout-C5wBiOBy.js: open_new_card + Set includes 119/2200 + regex запросов авторизац"
+    },
+    {
+      "id": "live_119_client_error_new_card",
+      "status": "PASS",
+      "detail": "POST one_click *5953 → 422 error_code=119 friendly «Слишком много попыток…»; UI NewCardForm (Картой +), NOT «Сбой банка: позже»"
+    },
+    {
+      "id": "live_8782_pay_statuses",
+      "status": "PASS",
+      "detail": "POST one_click *8782 → payment-result status=ok order db45ab5f-…; UI «Оплачен» + progress Принят/Оплачен/Готовится/Готов"
+    }
+  ],
+  "one_click_119_response": {
+    "error": "Слишком много попыток оплаты. Выберите другую карту или подождите",
+    "error_code": "119",
+    "status": 422
+  },
+  "success_order_id": "db45ab5f-e33a-4ac4-87da-b882a4f07e60"
+}

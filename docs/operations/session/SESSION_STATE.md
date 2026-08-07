@@ -2,18 +2,31 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-08-07 (push/deploy/MCP · #33+#46 · Fly **v440**)
+**Дата:** 2026-08-07 (MCP Fly **v441** · #46+#33)
 
 | Сейчас | Дальше |
 |--------|--------|
-| Fly **v440** · MCP S1/S2 **PASS** · push `11e5eaf7` | апрув заказчика «ок» |
-| #46 в том же релизе | optional live checkout CTA после 119 |
+| Fly **v441** · MCP #46 PASS (119→NewCard + *8782→Оплачен) | апрув заказчика «ок» |
+| #33 helpers v441 · S1/S2 live v440 | — |
+
+### Сессия 2026-08-07 (MCP · Fly v441)
+
+- Deploy владельца: **v441** `01KZDZ59Z9113BYEWRVEHF3QBT` — machines started, `/up` 200
+- #46 live: *5953 → 422 `119` friendly + NewCardForm; *8782 → order `db45ab5f-…` «Оплачен»
+- Evidence: `bank_auth_limit_blocks_payment/mcp/fly_v441_2026-08-07/`
 
 ### Сессия 2026-08-07 (push/deploy/MCP · #33+#46)
 
 - Push develop `11e5eaf7` · Fly **v440** · `deployment-01KZDYQPQCHWPFBPEX3XJF8JKA` · `/up` 200
 - MCP: S1 отказ → только СБП/карта+; S2 «карта +» → *5953/*8782 + форма
 - Evidence: `artifacts/tbank_widget_oneclick_fallback/mcp/fly_2026-08-07/`
+
+**Дата:** 2026-08-07 (push/deploy/MCP · #33+#46 · Fly **v440**)
+
+| Сейчас | Дальше |
+|--------|--------|
+| Fly **v440** · MCP S1/S2 **PASS** · push `11e5eaf7` | апрув заказчика «ок» |
+| #46 в том же релизе | optional live checkout CTA после 119 |
 
 ### Сессия 2026-08-07 (PHASE 3 REVIEW · #33 fallback vs expanded)
 

@@ -5,12 +5,13 @@
 ## 🔴 Блокеры
 
 [2026-08-07] — #46 Сбой банка: лимит авторизаций блокирует оплату / статусы
-**Статус:** **resolved** (код local) 2026-08-07 · push/MCP `[ ]`
+**Статус:** **resolved** 2026-08-07 · Fly **v441** · MCP PASS
 **Источник:** заказчик · [`Сбой банка…`](milestones/veha_2/requirements/customer_tasks/Сбой%20банка%20не%20могу%20оплатить%20заказ%20для%20статусов.md) · скрин `01`
 **Симптом:** «Превышено допустимое количество запросов авторизации операции» + CTA «Сбой банка: позже»; нельзя оплатить → статусы не сменяются.
 **Root cause:** ErrorCode `119`/`2200` (банк) + UX blind-retry той же карты + widget `charge_existing!` на том же PaymentId после REJECTED Charge.
-**Чем закрыли:** clear `provider_payment_id` после fail Charge; FE `119`/`2200` → `CLIENT_ERROR` (сменить карту); BE friendly message. СБП UI (#26) + терминал 3001 — вне этого фикса.
-**Осталось:** push + fly deploy + MCP; cooldown банка на *5953 может ещё держаться — платить *8782 / новой картой.
+**Чем закрыли:** clear `provider_payment_id` после fail Charge; FE `119`/`2200` → `CLIENT_ERROR` (сменить карту); BE friendly message. MCP v441: *5953→119+NewCardForm; *8782→«Оплачен».
+**Evidence:** [`mcp/fly_v441_2026-08-07/`](milestones/veha_2/artifacts/bank_auth_limit_blocks_payment/mcp/fly_v441_2026-08-07/)
+**Осталось:** апрув заказчика «ок»; СБП 3001 кабинет — отдельно.
 
 [2026-08-06] — Peek корзины пропадал при активном статусе заказа
 **Статус:** **resolved** 2026-08-06 (локально; push/MCP — ждёт апрув)

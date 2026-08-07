@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-08-07 — MCP: Fly v441 #46 auth-limit + *8782 pay PASS
+- Deploy health: v441 machines started · `/up` 200
+- #46: one_click *5953 → 119 friendly + NewCardForm; *8782 → «Оплачен» (`db45ab5f-…`)
+- #33: El/Dl helpers в bundle v441; live S1/S2 = v440
+- Evidence: `bank_auth_limit_blocks_payment/mcp/fly_v441_2026-08-07/`
+
 ## 2026-08-07 — deploy/MCP: #33 fallback≠expanded + #46 · Fly v440
 - Push `11e5eaf7` · Fly **v440** · `deployment-01KZDYQPQCHWPFBPEX3XJF8JKA` · `/up` 200
 - MCP: S1 PASS (ошибка → только СБП/карта+); S2 PASS (карта + → *5953/*8782 + форма)

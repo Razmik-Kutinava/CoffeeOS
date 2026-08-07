@@ -1,8 +1,20 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-08-07 (push/deploy/MCP · #33+#46 · Fly **v440**)  
+**Дата:** 2026-08-07 (MCP Fly **v441** · #46+#33)  
 **Ветка:** `develop`  
-**Прод:** https://coffeeos.fly.dev (**v440**)
+**Прод:** https://coffeeos.fly.dev (**v441**)
+
+### MCP Fly v441 (2026-08-07)
+
+| Что | Статус |
+|-----|--------|
+| Deploy health (machines 441, `/up` 200) | **PASS** |
+| #46 Checkout chunk 119/2200 + live *5953 → NewCardForm | **PASS** |
+| #46 live *8782 → order accepted / «Оплачен» | **PASS** `db45ab5f-…` |
+| #33 El/Dl helpers в bundle | **PASS** (live S1/S2 = v440) |
+
+**Evidence:** [`bank_auth_limit…/mcp/fly_v441_2026-08-07/`](../milestones/veha_2/artifacts/bank_auth_limit_blocks_payment/mcp/fly_v441_2026-08-07/) · [`tbank_widget…/mcp/fly_v441_2026-08-07/`](../milestones/veha_2/artifacts/tbank_widget_oneclick_fallback/mcp/fly_v441_2026-08-07/)  
+**Дальше:** апрув заказчика «ок».
 
 ### #33+#46 push/deploy/MCP (2026-08-07)
 
@@ -10,9 +22,11 @@
 |-----|--------|
 | Push `11e5eaf7` | **`[x]`** |
 | Fly **v440** | **`[x]`** `deployment-01KZDYQPQCHWPFBPEX3XJF8JKA` |
-| MCP S1 (fallback only) / S2 (expanded after карта +) | **PASS** |
+| Fly **v441** (re-deploy владельца) | **`[x]`** `deployment-01KZDZ59Z9113BYEWRVEHF3QBT` |
+| MCP S1/S2 (#33) | **PASS** v440 · helpers v441 |
+| MCP #46 119 + *8782 pay | **PASS** v441 |
 
-**Evidence:** [`mcp/fly_2026-08-07/`](../milestones/veha_2/artifacts/tbank_widget_oneclick_fallback/mcp/fly_2026-08-07/)  
+**Evidence:** [`mcp/fly_2026-08-07/`](../milestones/veha_2/artifacts/tbank_widget_oneclick_fallback/mcp/fly_2026-08-07/) · [`mcp/fly_v441…`](../milestones/veha_2/artifacts/bank_auth_limit_blocks_payment/mcp/fly_v441_2026-08-07/)  
 **Дальше:** апрув заказчика «ок».
 
 ### #33 fallback vs expanded (2026-08-07)
@@ -21,15 +35,15 @@
 |-----|--------|
 | SPEC канон S0→S1→S2 · скрины 07/08 | **`[x]`** |
 | GREEN: decline → только СБП/карта+; expanded после «карта +» | **`[x]`** |
-| Push / Fly / MCP | **`[x]`** v440 |
+| Push / Fly / MCP | **`[x]`** v440/v441 |
 
 ### #46 bank auth limit blocks payment (2026-08-07)
 
 | Что | Статус |
 |-----|--------|
 | GREEN: clear pid + CLIENT_ERROR 119/2200 | **`[x]`** `327e8767` |
-| Push / Fly | **`[x]`** в v440 |
-| MCP checkout CTA после 119 | optional |
+| Push / Fly | **`[x]`** v440/v441 |
+| MCP checkout 119 → NewCardForm; *8782 → статусы | **`[x]`** v441 |
 | СБП enable | **out** (3001 + #26) |
 
 ### #26 push/deploy/MCP (2026-08-07)
