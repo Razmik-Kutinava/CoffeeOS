@@ -2,14 +2,21 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-08-07 (feat #46 bank auth-limit GREEN)
+**Дата:** 2026-08-07 (PHASE 1 SPEC · #33 fallback vs expanded)
 
 | Сейчас | Дальше |
 |--------|--------|
-| #46 local GREEN: clear pid + CLIENT_ERROR 119/2200 | push + deploy + MCP |
-| СБП 3001 / disabled #26 | вне scope |
+| #33 SPEC: канон S0→S1→S2; Fly `ErrorCode=119` *5953; mixed UI скрин 07 | RED F1–F3 |
+| #46 GREEN local (clear pid + CLIENT_ERROR 119) | push/MCP по апруву |
 
-### Сессия 2026-08-07 (feat #46 GREEN)
+### Сессия 2026-08-07 (PHASE 1 SPEC · #33 fallback vs expanded)
+
+- Логи Fly: REJECTED · ErrorCode **119** · Pan *5953
+- Root UI: `widgetRepeatPayFlow` / `RepeatSection` catch открывают expanded вместе с fallback
+- Канон: S0 pay+статусы → S1 только СБП/карта+ → S2 expanded (скрин 08) после тапа
+- todo.md → #33 F1–F3; скрины 07/08 в artifacts
+
+### Сессия 2026-08-07 (feat #46 bank auth-limit GREEN)
 
 - Widget: `clear_provider_payment_id!` после Charge reject
 - `shopPayFsm`: 119/2200 → CLIENT_ERROR; regex «запросов авторизац»

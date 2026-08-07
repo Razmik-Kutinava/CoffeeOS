@@ -3,7 +3,7 @@
 **ТЗ:** [`customer_tasks/Интеграция виджета быстрой оплаты Т-Кассы и One-Click сценария в PWA.md`](../milestones/veha_2/requirements/customer_tasks/Интеграция%20виджета%20быстрой%20оплаты%20Т-Кассы%20и%20One-Click%20сценария%20в%20PWA.md)  
 **Артефакты:** [`tbank_widget_oneclick_fallback/`](../milestones/veha_2/artifacts/tbank_widget_oneclick_fallback/) · скрины `07` (as-is mixed), `08` (expanded = fullscreen)  
 **Стек:** `RepeatSection` · `InlinePayFallback` · `widgetRepeatPayFlow.js` · `shopWidgetPayFsm.js`  
-**Связанный WIP:** #46 bank auth limit (`ErrorCode` 119) — отдельно в working tree; не смешивать в этот GREEN без отдельного RED
+**Связанный:** #46 bank auth limit (`ErrorCode` 119) — GREEN `327e8767`; push/MCP отдельно
 
 ---
 
@@ -16,7 +16,7 @@
 | Код | `widgetRepeatPayFlow` на любой ERROR: `showFallbackMethods=true`; в `catch` ещё `showExpandedCards=true` |
 | `RepeatSection` catch | сразу `showFallbackMethods` + `showExpandedCards` + `showNewCardForm` = true |
 
-**Вывод:** после отказа банка UI сразу показывает **fallback (СБП / карта +)** и **expanded (Картой *5953)** вместе — это скрин **05** (не канон).
+**Вывод:** после отказа банка UI сразу показывает **fallback (СБП / карта +)** и **expanded (Картой *5953)** вместе — это скрин **07** (не канон).
 
 ---
 
