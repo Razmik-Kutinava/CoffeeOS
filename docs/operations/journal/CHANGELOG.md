@@ -1,5 +1,10 @@
 ﻿# CHANGELOG
 
+## 2026-08-07 — docs: #26 PHASE 0+SPEC live insufficient funds (G7)
+- Фидбек заказчика (дословно) + скрины `04`–`08` в artifacts
+- P0: после отказа *5953 форма NewCardForm не открывается; root cause CLIENT_ERROR→onPay
+- SPEC: gap G7 + D4; визуал G1–G4 вторичны; код не писали
+
 ## 2026-08-07 — docs: #26 PHASE 1 SPEC (канон скрин 03)
 - `todo.md`: baseline B1–B6; gaps G1–G4 (лейбл «Картой *XXXX», оранжевый Pay, «Картой +», СБП disabled)
 - Decisions D1 СБП vs #27 · D2 маска vs Step10 · D3 accent Pay

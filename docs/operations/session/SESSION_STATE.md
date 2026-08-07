@@ -2,19 +2,26 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-08-07 (PHASE 1 SPEC · #26 invalid token payment sheet · канон скрин 03)
+**Дата:** 2026-08-07 (PHASE 0+SPEC · #26 live insufficient funds → NewCardForm · G7)
 
 | Сейчас | Дальше |
 |--------|--------|
-| SPEC в `todo.md`: baseline B1–B6 + gaps **G1–G4** (лейбл / оранжевый Pay / «Картой +» / СБП disabled) | апрув SPEC (D1 СБП, D2 маска) → RED |
-| Канон UI: скрин `03` (текст ТЗ совпал → делаем как на скрине) | код не писали |
+| Скрины `04`–`08` сохранены; фидбек в ТЗ; SPEC: **G7 = P0** | апрув D4 (C=auto+tap) → RED G7 |
+| Root cause: `CLIENT_ERROR` CTA → `onPay()` вместо `onSelectNewCard()` | код не писали в этом шаге |
+
+### Сессия 2026-08-07 (PHASE 0+SPEC · live *5953 insufficient)
+
+- Текст заказчика (дословно) + 5 скринов в artifacts
+- Проблема: нет денег на *5953 → оплата → текст ошибки есть, форма новой карты **не** открывается
+- Канон Then: скрин `05`; As-is: `04`/`08`
+- SPEC: gap **G7** P0; D4 default = C; G1–G4 макет 03 вторичны к блокеру
 
 ### Сессия 2026-08-07 (PHASE 1 SPEC · #26)
 
 - As-is: peek CTA + sheet + NewCard + errors уже есть (MCP v393)
 - Gaps vs скрин 03: `Картой *XXXX` (не MIR/****), оранжевый «Оплатить», «+» вместо ⌄, СБП disabled
 - Decisions: D1 СБП vs #27 · D2 маска vs Step10 · D3 accent Pay
-- `todo.md` переписан; код не трогали
+- `todo.md` переписан; затем дополнен live G7
 
 ### Сессия 2026-08-07 (PHASE 0 · #26 re-intake)
 

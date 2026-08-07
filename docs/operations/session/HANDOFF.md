@@ -1,30 +1,36 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-08-07 (PHASE 1 SPEC · #26 invalid token · канон скрин 03)  
+**Дата:** 2026-08-07 (PHASE 0+SPEC · #26 live G7 insufficient → NewCardForm)  
 **Ветка:** `develop`  
 **Прод:** https://coffeeos.fly.dev (**v438**)
+
+### PHASE 0+SPEC: #26 live insufficient funds (2026-08-07)
+
+| Что | Статус |
+|-----|--------|
+| Текст фидбека заказчика (дословно) в customer_tasks | **`[x]`** |
+| Скрины `04`–`08` в artifacts | **`[x]`** |
+| SPEC: **G7 P0** (CLIENT_ERROR → NewCardForm) | **`[x]`** в todo |
+| Root cause: CTA «Отказ: смените карту» → `onPay()` | зафиксирован |
+| RED / GREEN | **`[ ]`** ждать апрув D4 → RED |
+
+**Канон Then:** [`05_…expected`](../milestones/veha_2/artifacts/repeat_order_invalid_token_payment_sheet/screenshots/05_fly_new_card_form_expanded_expected_2026-08-07.png)  
+**As-is баг:** [`04`](../milestones/veha_2/artifacts/repeat_order_invalid_token_payment_sheet/screenshots/04_fly_insufficient_funds_decline_change_card_2026-08-07.png) / [`08`](../milestones/veha_2/artifacts/repeat_order_invalid_token_payment_sheet/screenshots/08_fly_insufficient_funds_inline_error_again_2026-08-07.png)  
+**Дальше:** апрув → RED G7 (потом G1–G4 макет 03).
 
 ### PHASE 1 SPEC: #26 vs скрин 03 (2026-08-07)
 
 | Что | Статус |
 |-----|--------|
-| As-is / gap в `todo.md` | **`[x]`** |
-| Канон UI = скрин `03` (текст совпал → UI как на скрине) | **`[x]`** |
-| Gaps MUST: G1 лейбл · G2 оранжевый Pay · G3 «Картой +» · G4 СБП disabled | зафиксированы |
-| Decisions D1/D2/D3 | ждать апрув |
-| RED / GREEN | **`[ ]`** |
-
-**Канон:** [`todo.md`](todo.md) · скрин [`03_…`](../milestones/veha_2/artifacts/repeat_order_invalid_token_payment_sheet/screenshots/03_payment_method_bottom_sheet_invalid_token_2026-08-07.png)  
-**Дальше:** апрув SPEC → RED G1–G4.
+| Gaps G1–G4 (визуал макета) | зафиксированы · после G7 |
+| Decisions D1–D3 | в todo |
 
 ### PHASE 0: #26 re-intake (2026-08-07)
 
 | Что | Статус |
 |-----|--------|
-| Поиск задачи в customer_tasks / CBR | **найдена #26** |
-| Сверка текста ТЗ | **совпал** — тело не трогали |
-| Скрин `03_…_2026-08-07.png` | **`[x]`** в artifacts |
-| README + CBR #26 | **`[x]`** |
+| Задача #26 найдена; текст ТЗ совпал | **`[x]`** |
+| Скрин `03` | **`[x]`** |
 
 ### #35 D1+D2 REVIEW + deploy/MCP (2026-08-06)
 
