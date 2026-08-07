@@ -76,3 +76,12 @@
 → Полный as-is/gap, файлы, чеклист: [`docs/operations/session/todo.md`](../../../session/todo.md)
 
 Ключевое: стек **Svelte** (`app/frontend/`), не React; `isTokenInvalid` = **RebillId карты**, не auth refresh; MVP — флаг после fail `one_click`, без DDL.
+
+## Заметки агента (re-intake PHASE 0 · 2026-08-07)
+
+- Текст заказчика в чате **=** тело выше — **не перезаписывали**.
+- Задача уже в индексе: **#26** · CBR `Repeat order invalid token payment sheet`.
+- Статус на момент re-intake: **MCP PASS** Fly **v393** (2026-07-27) · апрув заказчика `[ ]`.
+- Новый скрин: [`screenshots/03_…_2026-08-07.png`](../../artifacts/repeat_order_invalid_token_payment_sheet/screenshots/03_payment_method_bottom_sheet_invalid_token_2026-08-07.png) — канон шагов 2–3 (лист способов + selected card + «Оплатить»).
+- Остаток без апрува: live step5 (inline pay 400/500 на Fly); возможный re-verify на текущем Fly после #35/#44.
+- SPEC/код — только после `go`.

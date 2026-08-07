@@ -2,12 +2,19 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-08-06 (REVIEW+push+deploy+MCP · #35 D1+D2 · Fly v438)
+**Дата:** 2026-08-07 (PHASE 0 re-intake · #26 Repeat order invalid token payment sheet)
 
 | Сейчас | Дальше |
 |--------|--------|
-| Fly **v438** · MCP D4 **PASS** (meta=позиция на pay-stack) | апрув заказчика «ок»; D5 optional |
-| Push `4ca777a4` | |
+| #26 найдена; текст ТЗ = канон; скрин `03` сохранён | `go` → PHASE 1 SPEC (gap vs Fly v438 / код) |
+| MCP PASS был на Fly **v393**; апрув заказчика `[ ]` | re-verify MCP или доделки только после SPEC |
+
+### Сессия 2026-08-07 (PHASE 0 · #26 re-intake)
+
+- Текст заказчика совпал с [`Главный экран — повторный заказ…`](../milestones/veha_2/requirements/customer_tasks/Главный%20экран%20—%20повторный%20заказ%20(невалидный%20токен)%20BottomSheet%20выбора%20способа%20оплаты.md) — тело не трогали
+- Скрин → `artifacts/repeat_order_invalid_token_payment_sheet/screenshots/03_payment_method_bottom_sheet_invalid_token_2026-08-07.png`
+- README + CBR #26 + customer_tasks README обновлены
+- Код / SPEC / todo — не писали
 
 ### Сессия 2026-08-06 (push/deploy/MCP · #35 D1+D2)
 

@@ -1,5 +1,10 @@
 ﻿# CHANGELOG
 
+## 2026-08-07 — docs: #26 PHASE 0 re-intake (invalid token payment sheet)
+- Текст ТЗ совпал с принятым — тело не перезаписывали
+- Скрин: `repeat_order_invalid_token_payment_sheet/screenshots/03_payment_method_bottom_sheet_invalid_token_2026-08-07.png`
+- README artifacts + CBR #26 + customer_tasks README; SPEC/код не трогали
+
 ## 2026-08-06 — deploy/MCP: #35 D1+D2 · Fly v438 PASS
 - Push `4ca777a4` · Fly **v438** · `deployment-01KZBM95ZEVSW9G5GN87EW4RW6`
 - REVIEW: нет P0; empty meta fallback fixed
