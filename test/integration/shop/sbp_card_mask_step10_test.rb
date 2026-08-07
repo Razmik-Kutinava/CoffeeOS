@@ -14,9 +14,10 @@ class Shop::SbpCardMaskStep10Test < ActionDispatch::IntegrationTest
     assert_includes src, "**** "
   end
 
-  test "PaymentMethodsSheet uses formatCardRowLabel for saved cards" do
+  test "PaymentMethodsSheet uses Картой *mask for saved cards (#26)" do
     src = File.read(SHEET)
-    assert_includes src, "formatCardRowLabel"
+    assert_includes src, "formatCardMaskStar"
+    assert_includes src, "labelCardBy"
     assert_includes src, 'data-testid="payment-method-card-'
   end
 

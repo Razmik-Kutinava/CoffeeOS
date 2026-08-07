@@ -25,10 +25,10 @@ import {
 } from "../../app/frontend/lib/repeatInvalidTokenStore.js"
 
 describe("paymentMethodI18n", () => {
-  it("formats card row as «**** XXXX» per SBP ТЗ Шаг 10", () => {
+  it("formats card row as «Картой *XXXX» per #26 скрин 03", () => {
     assert.equal(
       formatCardRowLabel({ pan: "*1594", payment_system: "VISA" }),
-      "**** 1594"
+      "Картой *1594"
     )
   })
 

@@ -67,16 +67,16 @@ class Shop::CheckoutAcceptanceCbrTest < ActionDispatch::IntegrationTest
   end
 
   # п.5 — СБП: deep link enabled (эпик Т-Касса v2 / Шаг 9)
-  test "cbr_05 sbp enabled via shopSbpPay on checkout sheet" do
+  test "cbr_05 sbp row present but disabled per #26 mock" do
     checkout = vitrina_source("routes/Checkout.svelte")
     sheet = vitrina_source("components/PaymentMethodsSheet.svelte")
     assert_includes checkout, "shopSbpPay"
     assert_includes checkout, "initSbpPayment"
     assert_includes sheet, 'data-testid="payment-method-sbp"'
-    refute_match(
+    assert_match(
       /data-testid="payment-method-sbp"[\s\S]{0,120}?^\s*disabled\s*$/m,
       sheet,
-      "SBP не permanently disabled"
+      "СБП disabled по #26 скрин 03"
     )
   end
 
@@ -95,11 +95,13 @@ class Shop::CheckoutAcceptanceCbrTest < ActionDispatch::IntegrationTest
     end
   end
 
-  # п.8 — валидация до оплаты (canPay требует verify)
+  # п.8 — валидация до оплаты (canPay / sheetCanPay требует verify)
   test "cbr_08 pay blocked until email verification" do
     checkout = vitrina_source("routes/Checkout.svelte")
-    assert_match(/canPay.*emailVerified/m, checkout.gsub(/\s+/, " "))
-    assert_includes checkout, "disabled={!canPay}"
+    sheet = vitrina_source("components/PaymentMethodsSheet.svelte")
+    assert_match(/canPay.*emailVerified|identityReady/m, checkout.gsub(/\s+/, " "))
+    assert_includes checkout, "sheetCanPay"
+    assert_includes sheet, "payDisabled"
   end
 
   # п.9 — код уходит на указанный email (запись OTP + API ok)

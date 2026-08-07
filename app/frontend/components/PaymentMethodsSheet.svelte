@@ -1,21 +1,23 @@
 <script>
   /**
-   * Список способов оплаты — макет 1000008925.png + repeat invalid token UX + SBP deep link.
+   * Список способов оплаты — канон #26 скрин 03 (Картой *XXXX / СБП disabled / Картой +).
    */
-  import { cardBrandShort } from "../lib/paymentMethodLabels.js"
   import {
-    formatCardRowLabel,
+    formatCardMaskStar,
+    labelCardBy,
     labelAddCard,
     labelSbp,
     labelSbpAccount,
     labelBindSbpAccount,
     ctaSbpFastPay,
     ctaSbpAccountPay,
+    sbpUnavailable,
     paymentMethodLoadErrorMessage,
     paymentMethodRetryLabel
   } from "../lib/paymentMethodI18n.js"
   import { SBP_LOADING_LABEL } from "../lib/shopSbpPay.js"
   import { PAY_FSM, shouldLockPaymentMethods } from "../lib/shopPayFsm.js"
+  import { cartSheetError } from "../lib/cartSheetStore.js"
   import NewCardForm from "./NewCardForm.svelte"
   import CheckoutPayButton from "./CheckoutPayButton.svelte"
 
@@ -62,14 +64,17 @@
     return selectionMode === "saved_card" && selectedCardId === card.id
   }
 
+  /** G4: СБП disabled на макете 03 — toast при попытке. */
+  function handleSbpUnavailable() {
+    cartSheetError.set(sbpUnavailable())
+  }
+
   function handleSbpClick() {
-    if (locked) return
-    onSelectSbp?.()
+    handleSbpUnavailable()
   }
 
   function handleSbpAccountClick() {
-    if (locked) return
-    onSelectSbpAccount?.()
+    handleSbpUnavailable()
   }
 </script>
 
@@ -124,17 +129,16 @@
           <li>
             <button
               type="button"
-              class="pm-row pm-row--sbp"
+              class="pm-row pm-row--sbp pm-row--sbp-disabled"
               class:pm-row--selected={selectionMode === "sbp_account"}
               role="radio"
               aria-checked={selectionMode === "sbp_account"}
+              aria-disabled="true"
               data-testid="payment-method-sbp-account"
-              disabled={locked}
+              disabled
               onclick={handleSbpAccountClick}
             >
-              <span class="pm-row__brand pm-row__brand--sbp" aria-hidden="true">{labelSbp()}</span>
-              <span class="pm-row__label">{labelSbpAccount()}</span>
-              <span class="pm-row__radio" aria-hidden="true"></span>
+              <span class="pm-row__label pm-row__label--solo">{labelSbpAccount()}</span>
             </button>
           </li>
         {/if}
@@ -151,9 +155,10 @@
               disabled={locked}
               onclick={() => onSelectCard?.(card)}
             >
-              <span class="pm-row__brand" aria-hidden="true">{cardBrandShort(card.payment_system || card.card_type)}</span>
-              <span class="pm-row__label">{formatCardRowLabel(card)}</span>
-              <span class="pm-row__radio" aria-hidden="true"></span>
+              <span class="pm-row__label">
+                <span class="pm-row__card-prefix">{labelCardBy()}</span>
+                <span class="pm-row__card-mask">{formatCardMaskStar(card)}</span>
+              </span>
             </button>
           </li>
         {/each}
@@ -161,33 +166,33 @@
         <li>
           <button
             type="button"
-            class="pm-row pm-row--sbp"
+            class="pm-row pm-row--sbp pm-row--sbp-disabled"
             class:pm-row--selected={selectionMode === "sbp"}
             role="radio"
             aria-checked={selectionMode === "sbp"}
+            aria-disabled="true"
             data-testid="payment-method-sbp"
-            disabled={locked}
+            disabled
             onclick={handleSbpClick}
           >
-            <span class="pm-row__brand pm-row__brand--sbp" aria-hidden="true">{labelSbp()}</span>
-            <span class="pm-row__label">{labelSbp()}</span>
-            <span class="pm-row__radio" aria-hidden="true"></span>
+            <span class="pm-row__label pm-row__label--solo">{labelSbp()}</span>
           </button>
         </li>
 
         <li>
           <button
             type="button"
-            class="pm-row"
+            class="pm-row pm-row--accent"
             class:pm-row--selected={selectionMode === "new_card"}
             role="radio"
             aria-checked={selectionMode === "new_card"}
             data-testid="payment-method-new-card"
             disabled={locked}
             onclick={() => onSelectNewCard?.()}
+            aria-label={labelAddCard()}
           >
-            <span class="pm-row__label pm-row__label--solo">{labelAddCard()}</span>
-            <span class="pm-row__chevron" aria-hidden="true">⌄</span>
+            <span class="pm-row__card-prefix">{labelCardBy()}</span>
+            <span class="pm-row__plus" aria-hidden="true">+</span>
           </button>
         </li>
       </ul>
@@ -223,6 +228,7 @@
     <div class="pm-sheet__pay">
       <CheckoutPayButton
         {fsmState}
+        accent="orange"
         disabled={payDisabled && fsmState === PAY_FSM.DEFAULT}
         idleLabel={idlePayLabel}
         loadingLabel={loadingPayLabel}
@@ -361,6 +367,16 @@
     box-shadow: inset 0 0 0 1px #ff8c42;
   }
 
+  .pm-row--accent {
+    border-color: #ff8c42;
+  }
+
+  .pm-row--sbp-disabled {
+    opacity: 0.55;
+    background: #333;
+    border-color: #3a3a3a;
+  }
+
   .pm-row--sbp .pm-row__brand--sbp {
     color: #6fcf97;
   }
@@ -407,10 +423,31 @@
     flex: 1;
     font-size: 1rem;
     font-weight: 500;
+    display: flex;
+    align-items: baseline;
+    gap: 0.35rem;
   }
 
   .pm-row__label--solo {
     flex: 1;
+  }
+
+  .pm-row__card-prefix {
+    color: #ff8c42;
+    font-weight: 600;
+  }
+
+  .pm-row__card-mask {
+    color: #fff;
+    font-weight: 500;
+  }
+
+  .pm-row__plus {
+    margin-left: auto;
+    color: #fff;
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 1;
   }
 
   .pm-row__radio {

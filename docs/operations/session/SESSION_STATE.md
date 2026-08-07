@@ -2,19 +2,22 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-08-07 (PHASE 2 GREEN · #26 G7 CLIENT_ERROR → NewCardForm)
+**Дата:** 2026-08-07 (PHASE 2 GREEN · #26 G1–G4 UI = скрин 03)
 
 | Сейчас | Дальше |
 |--------|--------|
-| G7 GREEN: auto-open + CTA `onChangeCard` → `onSelectNewCard` | REVIEW / MCP vs скрин 05 по апруву; G1–G4 макет 03 — отдельно |
-| Тесты: JS 17/0 · Rails repeat 10/0 · zone pay/sbp 4/0 | |
+| G7 + **G1–G4 GREEN**: `Картой *XXXX`, orange Pay, `+`, СБП disabled | REVIEW / MCP vs 03+05 по апруву |
+| JS 21/0 · Rails repeat 10/0 · zone CBR/SBP | |
+
+### Сессия 2026-08-07 (PHASE 2 GREEN · #26 G1–G4)
+
+- i18n: `formatCardRowLabel` → `Картой *1594`; `formatMaskedPan` остаётся `****` (Step10)
+- Sheet: prefix orange + mask; accent «Картой +»; SBP `disabled`; Pay `accent=orange`
+- Тесты #26/#CBR/#27 flip under D1; cbr_08 → sheetCanPay
 
 ### Сессия 2026-08-07 (PHASE 2 GREEN · #26 G7)
 
-- `resolvePayFsmCtaAction` / `shouldAutoOpenNewCardOnClientError` в `shopPayFsm.js`
-- `CheckoutPayButton`: CLIENT_ERROR → `onChangeCard()` (не `onPay`)
-- `PaymentMethodsSheet` + `Checkout`: `onChangeCard={onSelectNewCard}`; `$effect` auto-open
-- Тесты G7 зелёные; регрессия shop_pay_fsm_3ds + sbp_payment_ui PASS
+- `resolvePayFsmCtaAction` / auto-open NewCardForm; CLIENT_ERROR → onChangeCard
 
 ### Сессия 2026-08-07 (PHASE 2 RED · #26 G7)
 

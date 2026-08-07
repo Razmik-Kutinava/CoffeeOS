@@ -1,6 +1,6 @@
-/** i18n подписей способов оплаты (канон макета + ТЗ SBP **** 1234). */
+/** i18n подписей способов оплаты (#26 скрин 03 + formatMaskedPan для Step10). */
 
-/** Маска карты для sheet: «**** 1234» (Шаг 10 ТЗ Т-Касса v2). */
+/** Маска **** last4 — канон Step10 / API (не строка sheet). */
 export function formatMaskedPan(card) {
   const raw = card?.pan || card?.masked_pan || ""
   const digits = String(raw).replace(/\D/g, "")
@@ -8,8 +8,22 @@ export function formatMaskedPan(card) {
   return "**** ????"
 }
 
+/** Маска sheet: «*1594» (#26 скрин 03). */
+export function formatCardMaskStar(card) {
+  const raw = card?.pan || card?.masked_pan || ""
+  const digits = String(raw).replace(/\D/g, "")
+  if (digits.length >= 4) return `*${digits.slice(-4)}`
+  return "*????"
+}
+
+/** Префикс «Картой» (оранжевый в UI). */
+export function labelCardBy() {
+  return "Картой"
+}
+
+/** Полная строка sheet: «Картой *1594». */
 export function formatCardRowLabel(card) {
-  return formatMaskedPan(card)
+  return `${labelCardBy()} ${formatCardMaskStar(card)}`
 }
 
 export function labelAddCard() {

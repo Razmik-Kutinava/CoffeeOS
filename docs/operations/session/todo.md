@@ -62,11 +62,11 @@
 | # | Тема | Приоритет | Статус |
 |---|---|---|---|
 | **G7** | `CLIENT_ERROR` / «Отказ: смените карту» → `onSelectNewCard()` (+ auto при CLIENT_ERROR) | **P0 блокер заказчика** | `[x]` GREEN |
-| G1 | Лейбл `Картой *XXXX` vs MIR **** | MUST (макет 03) | `[ ]` |
-| G2 | Оранжевый idle Pay | MUST (макет 03) | `[ ]` |
-| G3 | «Картой +» без шеврона | MUST (макет 03) | `[ ]` |
-| G4 | СБП disabled (конфликт #27) | MUST · Decision D1 | `[ ]` |
-| G5/G6 | i18n + тесты под канон | с GREEN | `[ ]` |
+| G1 | Лейбл `Картой *XXXX` vs MIR **** | MUST (макет 03) | `[x]` GREEN |
+| G2 | Оранжевый idle Pay | MUST (макет 03) | `[x]` GREEN |
+| G3 | «Картой +» без шеврона | MUST (макет 03) | `[x]` GREEN |
+| G4 | СБП disabled (конфликт #27) | MUST · Decision D1 | `[x]` GREEN |
+| G5/G6 | i18n + тесты под канон | с GREEN | `[x]` |
 | B1–B6 | Peek CTA / sheet / NewCard tap / errors / persist | baseline `[x]` | — |
 
 ---

@@ -14,11 +14,15 @@ describe("card mask Step 10 — **** 1234", () => {
     assert.equal(formatMaskedPan({ pan: "**** 8339" }), "**** 8339")
   })
 
-  it("formatCardRowLabel shows **** 1234 for sheet (ТЗ Шаг 10)", () => {
+  it("formatCardRowLabel shows «Картой *1594» for sheet (#26 скрин 03)", () => {
     assert.equal(
       formatCardRowLabel({ pan: "*1594", payment_system: "VISA" }),
-      "**** 1594"
+      "Картой *1594"
     )
+  })
+
+  it("formatMaskedPan still **** last4 for Step10 / API", () => {
+    assert.equal(formatMaskedPan({ pan: "*1594" }), "**** 1594")
   })
 
   it("panFromCard keeps compact *XXXX for legacy labels", () => {

@@ -25,14 +25,14 @@ class Shop::SbpPaymentUiTest < ActionDispatch::IntegrationTest
     assert_includes src, "Оплатить быстро"
   end
 
-  test "PaymentMethodsSheet enables SBP row (not permanently disabled)" do
+  test "PaymentMethodsSheet SBP row disabled per #26 mock (скрин 03)" do
     src = File.read(SHEET)
     assert_includes src, 'data-testid="payment-method-sbp"'
     assert_includes src, "shopSbpPay"
-    refute_match(
+    assert_match(
       /data-testid="payment-method-sbp"[\s\S]{0,120}?^\s*disabled\s*$/m,
       src,
-      "SBP не должен быть permanently disabled"
+      "СБП disabled по канону #26; deep link #27 — follow-up"
     )
   end
 

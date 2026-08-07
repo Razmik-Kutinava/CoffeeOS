@@ -11,6 +11,7 @@
     disabled = false,
     idleLabel = null,
     loadingLabel = null,
+    accent = "blue",
     onPay = () => {},
     onRetry = () => {},
     onChangeCard = () => {}
@@ -62,12 +63,14 @@
 <button
   type="button"
   class="pay-fsm-btn pay-fsm-btn--{fsmState}"
+  class:pay-fsm-btn--accent-orange={accent === "orange"}
   class:pay-fsm-btn--shake={shake}
   disabled={disabled || (busy && fsmState !== PAY_FSM.CLIENT_ERROR)}
   onclick={handleClick}
   aria-live="polite"
   aria-busy={busy}
   data-fsm-state={fsmState}
+  data-pay-accent={accent}
   data-testid="checkout-pay-fsm"
 >
   {#if showLoader}
@@ -102,11 +105,22 @@
     color: #fff;
   }
 
+  .pay-fsm-btn--0.pay-fsm-btn--accent-orange {
+    background: #ff8c42;
+    color: #0f172a;
+  }
+
   .pay-fsm-btn--1,
   .pay-fsm-btn--2 {
     background: #2563eb;
     color: #fff;
     opacity: 0.92;
+  }
+
+  .pay-fsm-btn--1.pay-fsm-btn--accent-orange,
+  .pay-fsm-btn--2.pay-fsm-btn--accent-orange {
+    background: #e67a35;
+    color: #0f172a;
   }
 
   .pay-fsm-btn--3 {
