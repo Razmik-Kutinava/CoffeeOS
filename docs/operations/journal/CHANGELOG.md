@@ -1,5 +1,11 @@
 ﻿# CHANGELOG
 
+## 2026-08-07 — deploy/MCP: #26 G7+G1–G4 · Fly v439
+- Push `bd0e9fb0` · Fly **v439** · `deployment-01KZDEN9MV9QW2DKFWQXRNFYVT` · `/up` 200
+- MCP: G1–G4 PASS (Картой *XXXX, orange Pay, +, СБП disabled)
+- G7 live PARTIAL (банк rate-limit BANK_ERROR); unit+bundle PASS
+- Evidence: `repeat_order_invalid_token_payment_sheet/mcp/fly_v439_2026-08-07/`
+
 ## 2026-08-07 — review: #26 G7 + G1–G4 PaymentMethodsSheet (local done)
 - G7: CLIENT_ERROR / insufficient funds → auto + CTA открывают NewCardForm (не retry той же карты)
 - G1–G4: UI скрин 03 — `Картой *XXXX`, orange Pay, `Картой +`, СБП disabled (D1; #27 deep link follow-up)

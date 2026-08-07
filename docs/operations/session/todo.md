@@ -106,7 +106,7 @@
 ### REVIEW / MCP
 
 - `[x]` REVIEW 2026-08-07: sanity FE-only; JS 21/0 · Rails pay 21/0  
-- `[ ]` MCP Fly vs скрины 03 + 05 — после push/deploy  
+- `[x]` MCP Fly **v439** G1–G4 PASS · G7 live PARTIAL (rate-limit)  
 - Residual: СБП disabled vs #27 (D1 осознанно)
 
 ---
@@ -125,7 +125,7 @@
 1. `[x]` G7: CLIENT_ERROR → NewCardForm (тесты зелёные)  
 2. `[x]` CTA не ретраит ту же карту  
 3. `[x]` Визуал G1–G4 = скрин 03  
-4. `[ ]` MCP на Fly — по явной просьбе
+4. `[x]` MCP на Fly v439 (G1–G4 PASS; G7 live PARTIAL)
 
 ---
 

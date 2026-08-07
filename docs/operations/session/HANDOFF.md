@@ -1,32 +1,28 @@
 ﻿# HANDOFF — Веха 2 (Веха 1 **закрыта** 2026-06-19)
 
-**Дата:** 2026-08-07 (PHASE 3 REVIEW · #26 G7 + G1–G4)  
+**Дата:** 2026-08-07 (push/deploy/MCP · #26 G7+G1–G4 · Fly **v439**)  
 **Ветка:** `develop`  
-**Прод:** https://coffeeos.fly.dev (**v438** · код #26 ещё **не** на Fly)
+**Прод:** https://coffeeos.fly.dev (**v439**)
+
+### #26 push/deploy/MCP (2026-08-07)
+
+| Что | Статус |
+|-----|--------|
+| Push `bd0e9fb0` | **`[x]`** |
+| Fly **v439** | **`[x]`** `deployment-01KZDEN9MV9QW2DKFWQXRNFYVT` |
+| MCP G1–G4 (labels / orange Pay / + / SBP disabled) | **PASS** |
+| MCP G7 live insufficient | **PARTIAL** (банк rate-limit BANK_ERROR; unit+bundle PASS) |
+
+**Evidence:** [`mcp/fly_v439_2026-08-07/`](../milestones/veha_2/artifacts/repeat_order_invalid_token_payment_sheet/mcp/fly_v439_2026-08-07/)  
+**Дальше:** апрув заказчика «ок»; optional live re-check insufficient когда банк не rate-limit.
 
 ### PHASE 3 REVIEW: #26 G7 + G1–G4 (2026-08-07)
 
 | Что | Статус |
 |-----|--------|
-| G7 CLIENT_ERROR → NewCardForm (auto + CTA) | **`[x]`** GREEN `2fd3bb87` |
-| G1–G4 UI = скрин 03 | **`[x]`** GREEN `7c435b0b` |
-| Sanity: auth store не тронут; RLS/N+1 не затронуты (FE-only) | **`[x]`** |
-| Регрессия JS 21/0 · Rails pay zone 21/0 | **PASS** |
-| Push / Fly / MCP vs скрины 03+05 | **`[ ]`** ждёт апрув |
-| Апрув заказчика | **`[ ]`** |
-
-**Канон:** [`todo.md`](todo.md) · скрины [`03`](../milestones/veha_2/artifacts/repeat_order_invalid_token_payment_sheet/screenshots/03_payment_method_bottom_sheet_invalid_token_2026-08-07.png) / [`05`](../milestones/veha_2/artifacts/repeat_order_invalid_token_payment_sheet/screenshots/05_fly_new_card_form_expanded_expected_2026-08-07.png)  
-**Дальше:** push → deploy → MCP (insufficient *5953 → NewCardForm; UI как 03).
-
-### PHASE 0+SPEC: #26 live insufficient funds (2026-08-07)
-
-| Что | Статус |
-|-----|--------|
-| Фидбек + скрины `04`–`08` | **`[x]`** |
-| SPEC G7 P0 | **`[x]`** |
-| RED / GREEN G7 | **`[x]`** |
-
-### #35 D1+D2 REVIEW + deploy/MCP (2026-08-06)
+| G7 + G1–G4 local GREEN | **`[x]`** |
+| REVIEW sanity | **`[x]`** |
+| Push / MCP | **`[x]`** v439 |
 
 | Что | Статус |
 |-----|--------|

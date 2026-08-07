@@ -2,12 +2,19 @@
 
 ## Текущее состояние
 
-**Дата:** 2026-08-07 (PHASE 3 REVIEW · #26 G7 + G1–G4 · local done)
+**Дата:** 2026-08-07 (push/deploy/MCP · #26 · Fly **v439**)
 
 | Сейчас | Дальше |
 |--------|--------|
-| REVIEW PASS: G7 + UI 03 локально; FE-only, auth не тронут | push → Fly → MCP vs 03/05 |
-| Регрессия JS **21/0** · Rails pay **21/0** | апрув заказчика |
+| Fly **v439** · MCP G1–G4 **PASS** · G7 live PARTIAL | апрув заказчика «ок» |
+| Push `bd0e9fb0` | optional re-MCP insufficient когда нет rate-limit |
+
+### Сессия 2026-08-07 (push/deploy/MCP · #26)
+
+- Push develop `bd0e9fb0` · Fly **v439** · `/up` 200
+- MCP Point A: sheet «Картой *5953/*8782», orange Pay, «Картой +», СБП disabled
+- Live pay *5953 → BANK_ERROR rate-limit (не CLIENT_ERROR) — G7 unit+bundle
+- Evidence: `artifacts/…/mcp/fly_v439_2026-08-07/`
 
 ### Сессия 2026-08-07 (PHASE 3 REVIEW · #26)
 

@@ -1,0 +1,61 @@
+{
+  "date": "2026-08-07",
+  "kind": "mcp_repeat_invalid_token_payment_sheet",
+  "fly_release": "v439",
+  "commit": "bd0e9fb0",
+  "deployment": "01KZDEN9MV9QW2DKFWQXRNFYVT",
+  "stand": "https://coffeeos.fly.dev/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "tenant_name": "Demo Coffee Point A",
+  "customer": {
+    "email": "aramfifa100@gmail.com",
+    "profile": "Aram"
+  },
+  "deploy_notes": {
+    "push": "develop bd0e9fb0 (7 commits: #26 PHASE0–REVIEW + G7 + G1–G4)",
+    "deploy": "fly deploy -a coffeeos --remote-only --depot=false → v439 PASS; release_command ok; /up 200"
+  },
+  "checks": [
+    {
+      "id": "deploy_v439",
+      "status": "PASS",
+      "detail": "push develop bd0e9fb0; Fly v439 complete; /up 200"
+    },
+    {
+      "id": "bundle_g7_g14",
+      "status": "PASS",
+      "detail": "Checkout-*.js contains open_new_card, onChangeCard, accent-orange, pm-row__plus, pm-row__card-prefix, sbp-disabled"
+    },
+    {
+      "id": "g1_card_labels",
+      "status": "PASS",
+      "detail": "PaymentMethodsSheet: «Картой *5953» selected, «Картой *8782» — канон скрин 03"
+    },
+    {
+      "id": "g2_orange_pay",
+      "status": "PASS",
+      "detail": "checkout-pay-fsm data-pay-accent=orange; background rgb(255, 140, 66); label «Оплатить»"
+    },
+    {
+      "id": "g3_add_card_plus",
+      "status": "PASS",
+      "detail": "payment-method-new-card: «Картой +», .pm-row__plus present, no chevron; tap → NewCardForm (номер/ММ/ГГ/CVV)"
+    },
+    {
+      "id": "g4_sbp_disabled",
+      "status": "PASS",
+      "detail": "payment-method-sbp disabled=true aria-disabled=true; class pm-row--sbp-disabled"
+    },
+    {
+      "id": "g7_live_insufficient",
+      "status": "PARTIAL",
+      "detail": "Live charge *5953 returned BANK_ERROR fsm=6 («Превышено допустимое количество запросов авторизации») — not CLIENT_ERROR/1051; auto-open N/A this run. G7 covered by unit + Checkout chunk open_new_card/onChangeCard"
+    }
+  ],
+  "screenshots": [
+    "docs/operations/milestones/veha_2/artifacts/repeat_order_invalid_token_payment_sheet/mcp/fly_v439_2026-08-07/README.md"
+  ],
+  "not_run": [
+    "live insufficient funds (*5953 1051) → NewCardForm auto-open — банк вернул rate-limit BANK_ERROR, не CLIENT_ERROR"
+  ]
+}

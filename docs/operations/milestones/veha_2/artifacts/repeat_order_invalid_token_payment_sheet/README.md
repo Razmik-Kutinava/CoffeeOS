@@ -20,3 +20,4 @@
 | Артефакт | Статус |
 |---|---|
 | `fly_mcp_repeat_invalid_token_2026-07-27.json` | Fly **v393** · steps 1–4, 6 PASS · step5 live charge fail — unit only |
+| `mcp/fly_v439_2026-08-07/` | Fly **v439** · G1–G4 **PASS** · G7 live PARTIAL (BANK_ERROR rate-limit) · unit+bundle PASS |
