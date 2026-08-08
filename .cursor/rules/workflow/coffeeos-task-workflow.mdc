@@ -32,23 +32,21 @@ SBR — это **порядок фаз** (SPEC → RED → GREEN → REVIEW), а
 
 ## Старт сессии (обязательно в новом чате)
 
-Прочитать:
+Прочитать **только тонкий набор** (см. `coffeeos-agent-workflow.mdc`):
 
-- `docs/operations/session/HANDOFF.md`
-- `docs/operations/session/SESSION_STATE.md`
-- `docs/operations/session/todo.md` (живой чеклист текущей работы; не путать с CHECKLIST вехи)
-- `docs/operations/ISSUES.md` (🔴)
-- `docs/operations/milestones/veha_2/checklists/CHECKLIST.md`
-- `docs/operations/milestones/veha_2/requirements/CUSTOMER_BUSINESS_REQUIREMENTS.md` (индекс)
-- `docs/operations/milestones/veha_2/requirements/customer_tasks/` (активное ТЗ — файл задачи)
+- **Шапка** `HANDOFF.md` + **шапка** `SESSION_STATE.md` (не весь файл, не `session/archive/`)
+- `ISSUES.md` — секция 🔴
+- `todo.md` — если есть живая задача
+- Активное ТЗ в `customer_tasks/` — **если** уже ведётся задача заказчика
+- `CHECKLIST.md` / `CBR` — **только если** работа явно про пункт вехи / индекс требований
 
 Первый ответ пользователю — **таблица** (все три поля заполнены):
 
 | Поле | Источник | Содержание |
 |------|----------|------------|
-| `last_done:` | `HANDOFF.md` | чем закончилась прошлая сессия |
-| `current_state:` | `SESSION_STATE` + `ISSUES` 🔴 | где стоим, блокеры |
-| `next_step:` | `HANDOFF` + CHECKLIST/CBR | **один** логический шаг |
+| `last_done:` | шапка `HANDOFF.md` | чем закончилась прошлая сессия |
+| `current_state:` | шапка `SESSION_STATE` + `ISSUES` 🔴 | где стоим, блокеры |
+| `next_step:` | шапка `HANDOFF` (+ CHECKLIST/CBR **если веха**) | **один** логический шаг |
 
 Без этой таблицы работу не начинать.
 

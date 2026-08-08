@@ -11,7 +11,7 @@
 
 | Папка | Содержимое |
 |-------|------------|
-| [session/](session/) | SESSION_STATE, HANDOFF — память агента |
+| [session/](session/) | SESSION_STATE, HANDOFF (шапка + текущий месяц); [archive/](session/archive/) — старые месяцы |
 | [journal/](journal/) | CHANGELOG — история изменений |
 | [demo/](demo/) | CUSTOMER_HANDOFF, FLY_DEMO_STAND |
 | [dev/](dev/) | LOCAL_DEV, SHOP_URL_MODES, **INFRA_STACK** |
@@ -20,7 +20,7 @@
 
 ## Быстрый вход
 
-1. **Где остановились** → [session/SESSION_STATE.md](session/SESSION_STATE.md)
+1. **Где остановились** → шапка [session/HANDOFF.md](session/HANDOFF.md) / [SESSION_STATE.md](session/SESSION_STATE.md) (не весь файл, не archive)
 2. **Чеклист В2** → [milestones/veha_2/checklists/CHECKLIST.md](milestones/veha_2/checklists/CHECKLIST.md)
 3. **Локальный запуск** → [dev/LOCAL_DEV.md](dev/LOCAL_DEV.md)
 4. **Старые пути** → [milestones/PATH_MAP.md](milestones/PATH_MAP.md)

@@ -20,11 +20,23 @@ alwaysApply: true
 
 Срочность не отменяет коммит, тесты и ops.
 
+## Старт чата / память (обязательно тонко)
+
+Читать **только**:
+1. **Шапка** `HANDOFF.md` (до `---` / «Текущий месяц»)
+2. **Шапка** `SESSION_STATE.md` (то же)
+3. 🔴 блокеры в `ISSUES.md` (не весь архив resolved)
+4. `todo.md` — если есть живая задача
+
+**Запрещено** на старте: глотать весь HANDOFF/SESSION_STATE/CHANGELOG; читать `session/archive/` без явной просьбы; тащить CHECKLIST/CBR **если задача не про веху/пункт чеклиста**.
+
+Новый месяц → старое в `docs/operations/session/archive/`; в живых файлах — шапка + текущий месяц.
+
 ## Когда читать остальные правила
 
 | Ситуация | Открыть |
 |----------|---------|
-| Фича / CBR / CHECKLIST / честный отчёт / старт сессии | `coffeeos-task-workflow.mdc` |
+| Фича / CBR / CHECKLIST / честный отчёт | `coffeeos-task-workflow.mdc` |
 | SBR цикл | `spec-build-review.mdc` |
 | Регрессия / миграции / hot-path | `coffeeos-dev-gates.mdc` |
 | Куда класть файл | `coffeeos-repo-layout.mdc` |
@@ -32,16 +44,14 @@ alwaysApply: true
 | Файл >120–200 строк | `coffeeos-file-size-split.mdc` |
 | Код Rails (N+1) | `../project/coffeeos-performance.mdc` |
 
-## Ops-файлы
+## Ops-файлы (писать)
 
 | Файл | Когда |
 |------|--------|
-| `docs/operations/session/SESSION_STATE.md` | После шага с правками |
-| `docs/operations/session/HANDOFF.md` | Конец шага |
-| `docs/operations/journal/CHANGELOG.md` | Конец шага |
-| `docs/operations/ISSUES.md` | Баг |
+| `SESSION_STATE.md` | После шага — **обновить шапку** + короткая запись в текущий месяц |
+| `HANDOFF.md` | Конец шага — **шапка** + кратко |
+| `CHANGELOG.md` | Конец шага |
+| `ISSUES.md` | Баг |
 | CBR / `DEMO_FEEDBACK.md` | Заказчик / backlog |
 
-После **`git push`** — SESSION_STATE + HANDOFF.
-
-**Старт нового чата:** прочитай только верх `HANDOFF` + блок «Текущее состояние» в `SESSION_STATE` + 🔴 в `ISSUES` (+ `todo.md` если есть живая задача). Не глотай всю историю файлов.
+После **`git push`** — SESSION_STATE + HANDOFF (шапки).

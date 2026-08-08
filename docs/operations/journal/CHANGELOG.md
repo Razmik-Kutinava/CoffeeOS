@@ -1,5 +1,10 @@
 ﻿# CHANGELOG
 
+## 2026-08-08 — chore: archive session ops by month + thin read
+- `HANDOFF`/`SESSION_STATE`: шапка + только `2026-08`; архив в `session/archive/`
+- Always/agent-workflow + task-workflow: старт = шапка + 🔴 + todo; CHECKLIST/CBR только для вехи
+- Замер live: HANDOFF ~76k→~19k B · SESSION_STATE ~284k→~35k B (~90k→~13.5k tok вместе)
+
 ## 2026-08-07 — chore: thin always Cursor rules (−77% tok/ход)
 - Always bundle: **50758 B / ~12690 tok → 11775 B / ~2944 tok** (строки 626→135)
 - `alwaysApply: false`: task-workflow, SBR, gates, layout, intake, file-size-split

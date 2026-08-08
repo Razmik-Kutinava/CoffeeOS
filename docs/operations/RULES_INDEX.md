@@ -37,11 +37,11 @@
 
 | Файл | Когда |
 |------|--------|
-| `session/SESSION_STATE.md` | После шага с правками (читай **верх**, не всю историю) |
-| `session/HANDOFF.md` | Конец шага (читай **верх**) |
-| `journal/CHANGELOG.md` | Заметные изменения |
-| `ISSUES.md` | Баги |
-| CBR / `DEMO_FEEDBACK.md` | Заказчик, backlog |
+| `session/SESSION_STATE.md` / `HANDOFF.md` | Живые: **шапка** + текущий месяц. Агент на старте читает **только шапку** |
+| `session/archive/` | Старые месяцы (`handoff-YYYY-MM.md`, `session_state-YYYY-MM.md`) — **не читать** без запроса |
+| `journal/CHANGELOG.md` | Заметные изменения (архив по месяцам — позже) |
+| `ISSUES.md` | Баги; на старте — 🔴 |
+| CBR / `DEMO_FEEDBACK.md` | Заказчик, backlog — не на каждый старт |
 
 ## Symlinks в `.cursor/rules/`
 
