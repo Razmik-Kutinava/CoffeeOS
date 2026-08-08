@@ -2,19 +2,25 @@
 
 ## Шапка (агент читает только это + todo + 🔴 ISSUES)
 
-**Дата:** 2026-08-08 (архив ops по месяцам)  
+**Дата:** 2026-08-08 (архив CHANGELOG + дисциплина ISSUES)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Живые ops: шапка + месяц `2026-08` | `session/archive/` для 2026-05…07 |
-| Правило: на старте только шапка | Опционально CHANGELOG/ISSUES archive |
+| CHANGELOG архив `journal/archive/` · live только август | Смоук нового чата |
+| ISSUES ~170 строк — без архива; старт только 🔴 | Архив ISSUES позже при раздутии |
 
-**Архив:** [`archive/README.md`](archive/README.md) — `session_state-2026-05.md` … `2026-07.md`
+**Архив session:** [`archive/README.md`](archive/README.md)  
+**Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
 
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-08 (архив CHANGELOG)
+
+- CHANGELOG: ~257k→~23k B; июнь–июль → `journal/archive/`
+- ISSUES: не архивировали; always — на старте только секция 🔴
 
 ### Сессия 2026-08-08 (архив ops)
 

@@ -38,9 +38,10 @@
 | Файл | Когда |
 |------|--------|
 | `session/SESSION_STATE.md` / `HANDOFF.md` | Живые: **шапка** + текущий месяц. Агент на старте читает **только шапку** |
-| `session/archive/` | Старые месяцы (`handoff-YYYY-MM.md`, `session_state-YYYY-MM.md`) — **не читать** без запроса |
-| `journal/CHANGELOG.md` | Заметные изменения (архив по месяцам — позже) |
-| `ISSUES.md` | Баги; на старте — 🔴 |
+| `session/archive/` | Старые месяцы — **не читать** без запроса |
+| `journal/CHANGELOG.md` | Живой: шапка + текущий месяц |
+| `journal/archive/` | Старые CHANGELOG-YYYY-MM — **не читать** без запроса |
+| `ISSUES.md` | Баги; на старте — только 🔴 (архив позже, если файл раздуется) |
 | CBR / `DEMO_FEEDBACK.md` | Заказчик, backlog — не на каждый старт |
 
 ## Symlinks в `.cursor/rules/`

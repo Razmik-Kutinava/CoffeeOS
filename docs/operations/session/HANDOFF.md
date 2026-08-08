@@ -2,23 +2,31 @@
 
 ## Шапка (агент читает только это + todo + 🔴 ISSUES)
 
-**Дата:** 2026-08-08 (архив ops по месяцам)  
+**Дата:** 2026-08-08 (архив CHANGELOG + дисциплина ISSUES)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Ops: шапка + месяц `2026-08`; архив май–июль в `session/archive/` | Новый чат: проверить тонкий старт |
-| Always thin (−77%) + правило «только шапка» | Опционально: архив CHANGELOG / ISSUES resolved |
-| Fly v441 · #46/#33 MCP PASS | Апрув заказчика «ок» |
+| CHANGELOG: шапка + `2026-08`; архив июнь–июль в `journal/archive/` | Новый чат: тонкий старт |
+| ISSUES без архива; на старте только 🔴 | Архив ISSUES — если файл → тысячи строк |
+| Session ops уже в `session/archive/` | Апрув заказчика «ок» (#46/#33) |
 
-**last_done:** архив HANDOFF/SESSION_STATE по месяцам + always «читай шапку»  
-**next_step:** смоук нового чата; при желании — архив CHANGELOG  
+**last_done:** архив CHANGELOG по месяцам; ISSUES — правило «только 🔴»  
+**next_step:** смоук нового чата  
 
-**Архив:** [`archive/README.md`](archive/README.md) — `handoff-2026-06.md`, `handoff-2026-07.md`
+**Архив session:** [`archive/README.md`](archive/README.md)  
+**Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
 
 ---
 
 ## Текущий месяц (2026-08)
+
+### Архив CHANGELOG (2026-08-08)
+
+| Что | Статус |
+|-----|--------|
+| CHANGELOG live ~257k→~23k B; `journal/archive/` 06–07 | **`[x]`** |
+| ISSUES без архива; старт = только 🔴 | **`[x]`** |
 
 ### Архив ops по месяцам (2026-08-08)
 

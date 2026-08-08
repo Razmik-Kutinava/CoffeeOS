@@ -31,4 +31,4 @@ alwaysApply: true
 
 **Запрещено:** тащить все workflow-файлы в мелочь. Сначала always-закон → нужный on-demand.
 
-**Память:** на старте только шапка `HANDOFF`/`SESSION_STATE` + 🔴 ISSUES + `todo`. Архив `session/archive/` — по запросу. CHECKLIST/CBR — только если задача про веху.
+**Память:** на старте только шапка `HANDOFF`/`SESSION_STATE` + 🔴 ISSUES (не весь файл) + `todo`. Архив `session/archive/` и `journal/archive/` — по запросу. CHECKLIST/CBR — только если задача про веху.

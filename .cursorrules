@@ -10,7 +10,8 @@
 ## Главное
 
 - Баги → `docs/operations/ISSUES.md` сразу
-- Старт чата → **только шапка** HANDOFF/SESSION_STATE + 🔴 + todo (не архив, не весь CHANGELOG)
+- Старт чата → **только шапка** HANDOFF/SESSION_STATE + 🔴 ISSUES (не весь) + todo; не archive, не весь CHANGELOG
+- ISSUES архив — только когда файл раздуется до тысяч строк; пока дисциплина «только 🔴»
 - Шаг с правками → **`git commit` + ops** без вопроса; **push** — только по явной просьбе
 - Отчёт: **Сделано | Не сделано** + `Коммит: <хеш>`
 - Tenant/RLS обязателен; Fly/Neon — `INFRA_STACK.md`; Supabase/MPG запрещены

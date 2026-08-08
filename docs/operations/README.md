@@ -12,7 +12,7 @@
 | Папка | Содержимое |
 |-------|------------|
 | [session/](session/) | SESSION_STATE, HANDOFF (шапка + текущий месяц); [archive/](session/archive/) — старые месяцы |
-| [journal/](journal/) | CHANGELOG — история изменений |
+| [journal/](journal/) | CHANGELOG (шапка + текущий месяц); [archive/](journal/archive/) — старые месяцы |
 | [demo/](demo/) | CUSTOMER_HANDOFF, FLY_DEMO_STAND |
 | [dev/](dev/) | LOCAL_DEV, SHOP_URL_MODES, **INFRA_STACK** |
 | [reference/](reference/) | GAP_LIST, MILESTONE_PRACTICES |
