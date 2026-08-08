@@ -19,7 +19,7 @@
 | Файл | Когда |
 |------|--------|
 | `workflow/coffeeos-task-workflow.mdc` | Фича / CBR / CHECKLIST / отчёт / старт сессии |
-| `workflow/spec-build-review.mdc` | SBR SPEC→RED→GREEN→REVIEW |
+| `workflow/spec-build-review.mdc` | SBR SPEC→RED→GREEN→REVIEW; в SPEC — 2–7 файлов в todo; BUILD без `@codebase` зря |
 | `workflow/coffeeos-dev-gates.mdc` | DoD, регрессия зон, миграции, hot-path |
 | `workflow/coffeeos-repo-layout.mdc` | Куда класть файлы; `scripts/scratch/` |
 | `workflow/coffeeos-file-size-split.mdc` | Лимиты 50/120/200 (globs app) |

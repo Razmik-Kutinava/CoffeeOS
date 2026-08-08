@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-08 — chore: pinpoint code context (SPEC files list, no @codebase waste)
+- Always/SBR/task-workflow: SPEC → «Файлы (ожидаемо)» 2–7 путей в todo; BUILD читает список + точечный добор
+- Без Graphify/`codebase-map.md`; запрет зряшного `@codebase`
+- Оценка: на разведке/BUILD фичи часто **−40–70%** токенов vs полный `@codebase` (зависит от задачи)
+
 ## 2026-08-08 — chore: archive CHANGELOG by month; ISSUES keep + 🔴-only start
 - `CHANGELOG`: live шапка + `2026-08` (~257k→~23k B); архив `journal/archive/CHANGELOG-2026-06|07.md`
 - `ISSUES`: без архива (~170 строк); always/agent-workflow — на старте только секция 🔴

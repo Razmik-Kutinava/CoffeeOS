@@ -2,13 +2,13 @@
 
 ## Шапка (агент читает только это + todo + 🔴 ISSUES)
 
-**Дата:** 2026-08-08 (архив CHANGELOG + дисциплина ISSUES)  
+**Дата:** 2026-08-08 (pinpoint code context)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| CHANGELOG архив `journal/archive/` · live только август | Смоук нового чата |
-| ISSUES ~170 строк — без архива; старт только 🔴 | Архив ISSUES позже при раздутии |
+| Pinpoint: SPEC файлы → BUILD точечно | Проверить на следующей фиче |
+| Архивы session/journal + thin always | — |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -16,6 +16,11 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-08 (pinpoint code context)
+
+- Правила: agent-workflow / SBR / task-workflow — список 2–7 файлов, без зряшного `@codebase`
+- Graphify/`codebase-map.md` не заводили
 
 ### Сессия 2026-08-08 (архив CHANGELOG)
 

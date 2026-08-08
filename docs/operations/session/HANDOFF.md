@@ -2,17 +2,17 @@
 
 ## Шапка (агент читает только это + todo + 🔴 ISSUES)
 
-**Дата:** 2026-08-08 (архив CHANGELOG + дисциплина ISSUES)  
+**Дата:** 2026-08-08 (pinpoint code context)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| CHANGELOG: шапка + `2026-08`; архив июнь–июль в `journal/archive/` | Новый чат: тонкий старт |
-| ISSUES без архива; на старте только 🔴 | Архив ISSUES — если файл → тысячи строк |
-| Session ops уже в `session/archive/` | Апрув заказчика «ок» (#46/#33) |
+| Контекст кода: SPEC 2–7 файлов → BUILD только они | Смоук на следующей SBR-задаче |
+| CHANGELOG/session архивы + thin always | — |
+| ISSUES: только 🔴 на старте | Апрув заказчика «ок» (#46/#33) |
 
-**last_done:** архив CHANGELOG по месяцам; ISSUES — правило «только 🔴»  
-**next_step:** смоук нового чата  
+**last_done:** правило pinpoint context (без Graphify)  
+**next_step:** применить на реальной фиче заказчика  
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -20,6 +20,14 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Pinpoint code context (2026-08-08)
+
+| Что | Статус |
+|-----|--------|
+| SPEC: «Файлы (ожидаемо)» 2–7 в todo | **`[x]`** |
+| BUILD: только список + точечный добор; без `@codebase` зря | **`[x]`** |
+| Без Graphify / codebase-map | **`[x]`** |
 
 ### Архив CHANGELOG (2026-08-08)
 
