@@ -54,7 +54,7 @@
 
 ### REVIEW
 1. `[x]` Ops SESSION/HANDOFF/CHANGELOG/CBR
-2. `[x]` MCP Fly (нужен push/deploy) — **deploy v443**; MCP прогон `[ ]`
+2. `[x]` MCP Fly — **PASS** v443 (`mcp/fly_v443_2026-08-08/`)
 
 ---
 
@@ -62,5 +62,5 @@
 
 1. `[x]` код: poll ≤8s + visibility
 2. `[x]` код: refresh frequent после sync
-3. `[x]` JS 32/0 · GREEN · REVIEW ops
-4. `[ ]` MCP Fly · апрув заказчика «ок»
+3. `[x]` JS 32/0 · GREEN · REVIEW ops · Fly v443
+4. `[x]` MCP Fly · `[ ]` апрув заказчика «ок»

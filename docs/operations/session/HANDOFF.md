@@ -2,16 +2,16 @@
 
 ## Шапка (агент читает только это + todo + 🔴 ISSUES)
 
-**Дата:** 2026-08-08 (#47 push + Fly **v443**)  
+**Дата:** 2026-08-08 (#47 MCP PASS · Fly **v443**)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Push `56648134` · Fly **v443** · `/up` 200 | MCP: статус без F5 + повторы после issued |
-| #47 🟡 до MCP/апрува | — |
+| #47 MCP PASS v443 (повторы без F5) | апрув заказчика «ок» |
+| — | — |
 
-**last_done:** #47 push develop + deploy v443 (`deployment-01KZGG9538YYB9ZE5YBTEN9PQS`)  
-**next_step:** MCP Fly приёмка #47  
+**last_done:** #47 MCP Fly v443 — ready→issued без reload → «повторить»  
+**next_step:** апрув «ок» / следующая задача  
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -25,11 +25,11 @@
 | Что | Статус |
 |-----|--------|
 | Intake + SPEC + RED + GREEN + REVIEW | **`[x]`** |
-| Push develop `56648134` | **`[x]`** |
-| Fly **v443** · `/up` 200 | **`[x]`** |
-| MCP / апрув | `[ ]` |
+| Push + Fly **v443** | **`[x]`** |
+| MCP Fly | **`[x]` PASS** |
+| Апрув заказчика | `[ ]` |
 
-**Image:** `deployment-01KZGG9538YYB9ZE5YBTEN9PQS` (v442 release API fail → retry `--image` → v443)  
+**Evidence:** [`mcp/fly_v443_2026-08-08/`](../milestones/veha_2/artifacts/pwa_status_sync_and_repeats_stale/mcp/fly_v443_2026-08-08/)  
 **ТЗ:** `customer_tasks/Статусы с табло не подтягиваются в PWA и повторы после заказа.md`
 
 ### Pinpoint code context (2026-08-08)

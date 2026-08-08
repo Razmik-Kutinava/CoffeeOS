@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-08 — MCP: #47 Fly v443 status poll + repeats PASS
+- Aram Point A: ready `#202608-0027` → issued (barista service); без reload PWA → «повторить» ×3
+- Evidence: `pwa_status_sync_and_repeats_stale/mcp/fly_v443_2026-08-08/`
+- Апрув заказчика «ок» — отдельно
+
 ## 2026-08-08 — deploy: #47 Fly v443 (status poll + frequent refresh)
 - Push develop `56648134` · image `deployment-01KZGG9538YYB9ZE5YBTEN9PQS`
 - v442: release_command machine API «not found» → retry `--image` → **v443** · `/up` 200

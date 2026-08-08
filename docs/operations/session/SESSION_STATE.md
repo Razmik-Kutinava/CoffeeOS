@@ -2,13 +2,13 @@
 
 ## Шапка (агент читает только это + todo + 🔴 ISSUES)
 
-**Дата:** 2026-08-08 (#47 push + Fly **v443**)  
+**Дата:** 2026-08-08 (#47 MCP PASS · Fly **v443**)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Fly **v443** · push `56648134` · `/up` 200 | MCP #47 |
-| #47 🟡 до MCP | — |
+| #47 MCP PASS · v443 | апрув «ок» |
+| — | — |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -16,6 +16,11 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-08 (#47 MCP)
+
+- Browser: Aram Point A · до: frequent `has_active_order:true` пусто; POS ready→issued; без F5 → «повторить» ×3
+- Evidence: `pwa_status_sync_and_repeats_stale/mcp/fly_v443_2026-08-08/`
 
 ### Сессия 2026-08-08 (#47 push/deploy)
 

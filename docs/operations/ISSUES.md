@@ -7,12 +7,13 @@
 ## 🔴 Блокеры
 
 [2026-08-08] — #47 Статусы с табло не sync в PWA; повторы после заказа пустые
-**Статус:** 🟡 **код GREEN** 2026-08-08 · MCP/апрув `[ ]`
+**Статус:** 🟡 **MCP PASS** Fly **v443** · апрув заказчика `[ ]`
 **Источник:** Арам · [`Статусы с табло не подтягиваются…`](milestones/veha_2/requirements/customer_tasks/Статусы%20с%20табло%20не%20подтягиваются%20в%20PWA%20и%20повторы%20после%20заказа.md) · скрин `01_aram_empty_sheet_plus0.png`
 **Симптом:** смена статуса на табло → PWA только после reload; после покупки «повторы»/история не подгружаются (пустая шторка +0₽).
 **Root cause:** live-path только ActionCable; нет polling `/orders/active`; frequent refresh после terminal в основном по Cable.
-**Чем закрыли (код):** `ACTIVE_ORDERS_POLL_MS` + `start/stopActiveOrdersPolling`; Sheet: visibilitychange + poll; `refreshActive` → `refreshFrequentProducts`. JS 32/0.
-**Осталось:** MCP Fly · апрув «ок».  
+**Чем закрыли (код):** `ACTIVE_ORDERS_POLL_MS` + visibility; `refreshActive` → `refreshFrequentProducts`. JS 32/0 · Fly **v443**.
+**Evidence:** [`mcp/fly_v443_2026-08-08/`](milestones/veha_2/artifacts/pwa_status_sync_and_repeats_stale/mcp/fly_v443_2026-08-08/) — ready→issued без F5 → «повторить» ×3.
+**Осталось:** апрув заказчика «ок».
 **Deploy:** Fly **v443** · `deployment-01KZGG9538YYB9ZE5YBTEN9PQS` · `/up` 200 (2026-08-08).
 
 [2026-08-07] — #46 Сбой банка: лимит авторизаций блокирует оплату / статусы
