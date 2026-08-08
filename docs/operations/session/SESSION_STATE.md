@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + 🔴 ISSUES)
 
-**Дата:** 2026-08-08 (#47 PWA status sync · REVIEW)  
+**Дата:** 2026-08-08 (#47 push + Fly **v443**)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #47 REVIEW ops done · код на develop | push/deploy + MCP |
+| Fly **v443** · push `56648134` · `/up` 200 | MCP #47 |
 | #47 🟡 до MCP | — |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
@@ -16,6 +16,11 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-08 (#47 push/deploy)
+
+- Push develop `56648134`
+- Build image `deployment-01KZGG9538YYB9ZE5YBTEN9PQS`; v442 release machine API fail; retry `--image` → **v443** machines started · `/up` 200
 
 ### Сессия 2026-08-08 (#47 REVIEW)
 

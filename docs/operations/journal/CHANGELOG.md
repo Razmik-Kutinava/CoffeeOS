@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-08 — deploy: #47 Fly v443 (status poll + frequent refresh)
+- Push develop `56648134` · image `deployment-01KZGG9538YYB9ZE5YBTEN9PQS`
+- v442: release_command machine API «not found» → retry `--image` → **v443** · `/up` 200
+- MCP приёмка статусов/повторов — отдельно
+
 ## 2026-08-08 — feat: #47 PWA status poll + frequent refresh [GREEN+REVIEW]
 - FE: `ACTIVE_ORDERS_POLL_MS` (8s) + `visibilitychange` → `GET /orders/active`; после sync — `refreshFrequentProducts`
 - Cable остаётся fast-path; страховка когда WS молчит на мобильном PWA

@@ -2,16 +2,16 @@
 
 ## Шапка (агент читает только это + todo + 🔴 ISSUES)
 
-**Дата:** 2026-08-08 (#47 PWA status sync · REVIEW)  
+**Дата:** 2026-08-08 (#47 push + Fly **v443**)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #47 код GREEN + REVIEW ops | push/deploy + MCP Fly |
-| ISSUES #47 🟡 до MCP/апрува | Апрув «ок» (#46/#33) отдельно |
+| Push `56648134` · Fly **v443** · `/up` 200 | MCP: статус без F5 + повторы после issued |
+| #47 🟡 до MCP/апрува | — |
 
-**last_done:** #47 SBR REVIEW — poll 8s + visibility + frequent refresh  
-**next_step:** push/deploy + MCP: статус с табло без F5; после issued — повторы  
+**last_done:** #47 push develop + deploy v443 (`deployment-01KZGG9538YYB9ZE5YBTEN9PQS`)  
+**next_step:** MCP Fly приёмка #47  
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -24,12 +24,12 @@
 
 | Что | Статус |
 |-----|--------|
-| Intake 1:1 + artifacts + CBR #47 + ISSUES | **`[x]`** |
-| SPEC / RED / GREEN | **`[x]`** `6c7176fe` / `aeff9fa7` |
-| REVIEW ops | **`[x]`** |
-| MCP Fly / апрув | `[ ]` |
+| Intake + SPEC + RED + GREEN + REVIEW | **`[x]`** |
+| Push develop `56648134` | **`[x]`** |
+| Fly **v443** · `/up` 200 | **`[x]`** |
+| MCP / апрув | `[ ]` |
 
-**Код:** `ACTIVE_ORDERS_POLL_MS` + visibility → `refreshActive` + `refreshFrequentProducts`; Cable fast-path. JS 32/0.  
+**Image:** `deployment-01KZGG9538YYB9ZE5YBTEN9PQS` (v442 release API fail → retry `--image` → v443)  
 **ТЗ:** `customer_tasks/Статусы с табло не подтягиваются в PWA и повторы после заказа.md`
 
 ### Pinpoint code context (2026-08-08)

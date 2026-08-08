@@ -54,7 +54,7 @@
 
 ### REVIEW
 1. `[x]` Ops SESSION/HANDOFF/CHANGELOG/CBR
-2. `[ ]` MCP Fly (нужен push/deploy)
+2. `[x]` MCP Fly (нужен push/deploy) — **deploy v443**; MCP прогон `[ ]`
 
 ---
 
