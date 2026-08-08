@@ -2,13 +2,13 @@
 
 ## Шапка (агент читает только это + todo + 🔴 ISSUES)
 
-**Дата:** 2026-08-08 (pinpoint code context)  
+**Дата:** 2026-08-08 (#47 PWA status sync · SPEC)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Pinpoint: SPEC файлы → BUILD точечно | Проверить на следующей фиче |
-| Архивы session/journal + thin always | — |
+| #47 intake + SPEC в `todo.md` | RED: poll/visibility + refresh frequent |
+| 🔴 #47 open | — |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -16,6 +16,12 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-08 (#47 intake + SPEC)
+
+- PHASE 0: customer_tasks + artifacts `pwa_status_sync_and_repeats_stale` + CBR #47 + ISSUES 🔴
+- SPEC: poll `/orders/active` + visibility + `refreshFrequentProducts`; файлы 2–5 в todo
+- Token check: always ~2.9k vs ~12.7k (−77%); SPEC-ход rules+шапки ≪ старый full HANDOFF/SESSION
 
 ### Сессия 2026-08-08 (pinpoint code context)
 

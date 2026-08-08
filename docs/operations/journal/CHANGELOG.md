@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-08 — docs: #47 PWA status sync + repeats (intake + SPEC)
+- customer_tasks 1:1 · artifacts `pwa_status_sync_and_repeats_stale` · CBR #47 · ISSUES 🔴
+- SPEC `todo.md`: poll `/orders/active` + visibility + refresh frequent (G1–G3)
+- Token check: always −77%; SPEC-ход rules+шапки ≈ −69% vs старый full memory — `TOKEN_CHECK_2026-08-08.md`
+
 ## 2026-08-08 — chore: pinpoint code context (SPEC files list, no @codebase waste)
 - Always/SBR/task-workflow: SPEC → «Файлы (ожидаемо)» 2–7 путей в todo; BUILD читает список + точечный добор
 - Без Graphify/`codebase-map.md`; запрет зряшного `@codebase`

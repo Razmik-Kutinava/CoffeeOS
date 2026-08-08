@@ -2,17 +2,16 @@
 
 ## Шапка (агент читает только это + todo + 🔴 ISSUES)
 
-**Дата:** 2026-08-08 (pinpoint code context)  
+**Дата:** 2026-08-08 (#47 PWA status sync · SPEC)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Контекст кода: SPEC 2–7 файлов → BUILD только они | Смоук на следующей SBR-задаче |
-| CHANGELOG/session архивы + thin always | — |
-| ISSUES: только 🔴 на старте | Апрув заказчика «ок» (#46/#33) |
+| #47 docs+SPEC | RED poll/visibility/frequent |
+| 🔴 #47 | Апрув «ок» (#46/#33) отдельно |
 
-**last_done:** правило pinpoint context (без Graphify)  
-**next_step:** применить на реальной фиче заказчика  
+**last_done:** #47 PHASE 0 + SPEC (todo файлы OrderStatusSheet/frequent)  
+**next_step:** RED — тесты poll + visibility + refresh frequent  
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -20,6 +19,16 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### #47 PWA status sync + repeats (2026-08-08)
+
+| Что | Статус |
+|-----|--------|
+| Intake 1:1 + artifacts + CBR #47 + ISSUES | **`[x]`** |
+| SPEC todo (G1–G3 poll/visibility/frequent) | **`[x]`** |
+| RED / GREEN / MCP | `[ ]` |
+
+**ТЗ:** `customer_tasks/Статусы с табло не подтягиваются в PWA и повторы после заказа.md`
 
 ### Pinpoint code context (2026-08-08)
 

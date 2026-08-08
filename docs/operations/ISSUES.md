@@ -6,6 +6,14 @@
 
 ## 🔴 Блокеры
 
+[2026-08-08] — #47 Статусы с табло не sync в PWA; повторы после заказа пустые
+**Статус:** 🔴 **open** · SPEC 2026-08-08
+**Источник:** Арам · [`Статусы с табло не подтягиваются…`](milestones/veha_2/requirements/customer_tasks/Статусы%20с%20табло%20не%20подтягиваются%20в%20PWA%20и%20повторы%20после%20заказа.md) · скрин `01_aram_empty_sheet_plus0.png`
+**Симптом:** смена статуса на табло → PWA только после reload; после покупки «повторы»/история не подгружаются (пустая шторка +0₽).
+**Root cause (гипотеза):** live-path только ActionCable, нет polling `/orders/active`; `refreshFrequentProducts` после terminal в основном по Cable → miss на мобильном WS; на `ready` sheet пустой + hide repeat.
+**План:** G1–G3 poll + visibility + refresh frequent (см. `todo.md` #47). Не путать с #42/#43 (TTL stale June — уже закрыты).
+**Осталось:** RED → GREEN → MCP Fly → апрув «ок».
+
 [2026-08-07] — #46 Сбой банка: лимит авторизаций блокирует оплату / статусы
 **Статус:** **resolved** 2026-08-07 · Fly **v441** · MCP PASS
 **Источник:** заказчик · [`Сбой банка…`](milestones/veha_2/requirements/customer_tasks/Сбой%20банка%20не%20могу%20оплатить%20заказ%20для%20статусов.md) · скрин `01`
