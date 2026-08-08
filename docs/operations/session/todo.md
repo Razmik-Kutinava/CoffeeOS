@@ -42,9 +42,9 @@
 ## План SBR
 
 ### RED
-1. Тест: tick/poll вызывает refresh active (+ frequent hook)
-2. Тест: visibility visible → refresh
-3. Коммит `test: … [RED]`
+1. `[x]` Тест: tick/poll вызывает refresh active (+ frequent hook)
+2. `[x]` Тест: visibility visible → refresh
+3. `[x]` Коммит `test: … [RED]` — `order_status_active_poll_test.mjs` 6/0 fail (ожидаемо)
 
 ### GREEN
 1. `OrderStatusSheet`: `setInterval` + visibility (как `startCatalogPolling`)
