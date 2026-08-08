@@ -2,13 +2,13 @@
 
 ## Шапка (агент читает только это + todo + 🔴 ISSUES)
 
-**Дата:** 2026-08-08 (#47 PWA status sync · SPEC)  
+**Дата:** 2026-08-08 (#47 PWA status sync · GREEN)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #47 intake + SPEC в `todo.md` | RED: poll/visibility + refresh frequent |
-| 🔴 #47 open | — |
+| #47 GREEN: poll 8s + visibility + frequent refresh | REVIEW/ops + MCP Fly |
+| 🔴 #47 open до MCP/апрува | — |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

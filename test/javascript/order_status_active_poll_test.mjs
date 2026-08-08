@@ -65,7 +65,8 @@ describe("#47 — orderStatusSheet poll helpers", () => {
     assert.equal(typeof mod.startActiveOrdersPolling, "function")
     assert.equal(typeof mod.stopActiveOrdersPolling, "function")
 
-    mock.timers.enable({ apis: ["setInterval", "clearInterval"] })
+    // Node MockTimers: clearInterval не в apis — stop зовёт реальный clearInterval
+    mock.timers.enable({ apis: ["setInterval"] })
     try {
       let ticks = 0
       mod.startActiveOrdersPolling(() => {

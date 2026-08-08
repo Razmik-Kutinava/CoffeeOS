@@ -1,4 +1,6 @@
-/** #35 — состояние sticky OrderStatusSheet (peek/hidden), cable + reconnect. */
+/** #35 — состояние sticky OrderStatusSheet (peek/hidden), cable + reconnect.
+ *  #47 — polling /orders/active как страховка, если Cable молчит на PWA.
+ */
 
 export const ORDER_STATUS_SHEET_MODES = Object.freeze({
   PEEK: "peek",
@@ -10,6 +12,35 @@ export const SHEET_POINTER_POLICY = Object.freeze({
   catalogClicksPassThrough: true,
   blockCatalogUnderSheet: false
 })
+
+/** Интервал sync активных заказов (как CATALOG_POLL_MS). Cable — fast-path. */
+export const ACTIVE_ORDERS_POLL_MS = 8_000
+
+let activeOrdersPollTimer = null
+
+/**
+ * Периодический tick пока sheet mounted. Visibility — в компоненте (G2).
+ * @param {() => void} onTick
+ */
+export function startActiveOrdersPolling(onTick) {
+  stopActiveOrdersPolling()
+  if (typeof onTick !== "function") return
+
+  activeOrdersPollTimer = setInterval(() => {
+    try {
+      onTick()
+    } catch {
+      /* leave last UI state */
+    }
+  }, ACTIVE_ORDERS_POLL_MS)
+}
+
+export function stopActiveOrdersPolling() {
+  if (activeOrdersPollTimer) {
+    clearInterval(activeOrdersPollTimer)
+    activeOrdersPollTimer = null
+  }
+}
 
 export function shouldScrollStatusList(orders) {
   return (orders?.length || 0) > 2

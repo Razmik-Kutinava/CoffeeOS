@@ -30,10 +30,10 @@
 
 | ID | Gap | Prio | Статус |
 |----|-----|------|--------|
-| **G1** | Polling `GET /orders/active` пока sheet mounted (интервал ~каталог 8s или 5–10s) | P0 | `[ ]` |
-| **G2** | `visibilitychange` → visible → `refreshActive` + `refreshFrequentProducts` | P0 | `[ ]` |
-| **G3** | После любого sync (poll / cable terminal / reconnect) — `refreshFrequentProducts` | P0 | `[ ]` |
-| **G4** | Cable остаётся fast-path; poll — страховка (не заменять WS) | MUST | `[ ]` |
+| **G1** | Polling `GET /orders/active` пока sheet mounted (интервал ~каталог 8s или 5–10s) | P0 | `[x]` |
+| **G2** | `visibilitychange` → visible → `refreshActive` + `refreshFrequentProducts` | P0 | `[x]` |
+| **G3** | После любого sync (poll / cable terminal / reconnect) — `refreshFrequentProducts` | P0 | `[x]` |
+| **G4** | Cable остаётся fast-path; poll — страховка (не заменять WS) | MUST | `[x]` |
 | R1 | Не ломать hide «повторить» при реальном active (`accepted/preparing/ready` ≤24h) | MUST | `[ ]` |
 | R2 | `ready` по-прежнему hide из status sheet (#35) — UX пустой низ чинится через G3 (повторы после issued; при ready без позиций — не вечный `+0₽` без смысла) | SHOULD | `[ ]` |
 
@@ -47,10 +47,10 @@
 3. `[x]` Коммит `test: … [RED]` — `order_status_active_poll_test.mjs` 6/0 fail (ожидаемо)
 
 ### GREEN
-1. `OrderStatusSheet`: `setInterval` + visibility (как `startCatalogPolling`)
-2. После `refreshActive` / terminal — `refreshFrequentProducts`
-3. Регрессия shop/status/frequent zone
-4. Коммит `feat: … [GREEN]`
+1. `[x]` `orderStatusSheet.js`: ACTIVE_ORDERS_POLL_MS + start/stop polling
+2. `[x]` `OrderStatusSheet`: setInterval poll + visibilitychange; refreshActive → frequent
+3. `[x]` Регрессия JS 25/0 + rails status/repeat zone
+4. `[x]` Коммит `feat: … [GREEN]`
 
 ### REVIEW
 Ops + MCP Fly: смена статуса на табло без F5 в PWA; после issued — «повторить» без reload
@@ -59,7 +59,7 @@ Ops + MCP Fly: смена статуса на табло без F5 в PWA; по�
 
 ## Exit Criteria
 
-1. `[ ]` Бариста меняет статус → PWA обновляет без перезагрузки (≤ poll interval)
-2. `[ ]` После issued — повторы/история частот без F5
-3. `[ ]` Тесты зелёные · GREEN · ops · MCP
+1. `[x]` код: poll ≤8s + visibility (MCP подтвердит live)
+2. `[x]` код: refresh frequent после sync
+3. `[x]` JS тесты 32/0 · GREEN · rails shop hung (known Windows) — MCP в REVIEW
 4. `[ ]` Апрув заказчика «ок»

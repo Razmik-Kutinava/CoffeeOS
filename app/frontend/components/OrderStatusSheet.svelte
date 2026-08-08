@@ -9,7 +9,10 @@
     applyCableEvent,
     applyReconnectOrders,
     mapReconnectError,
-    ORDER_STATUS_SHEET_MODES
+    ORDER_STATUS_SHEET_MODES,
+    ACTIVE_ORDERS_POLL_MS,
+    startActiveOrdersPolling,
+    stopActiveOrdersPolling
   } from "../lib/orderStatusSheet.js"
   import {
     createActiveOrdersAccordionState
@@ -108,11 +111,14 @@
       sheet.setConnection("online")
       sync()
       resubscribe(list)
+      // #47 G3: после poll/reconnect — повторы без F5
+      refreshFrequentProducts()
     } catch (err) {
       const status = err?.status || err?.response?.status || 500
       if (mapReconnectError(status) === "hide") applyReconnectOrders(sheet, [])
       else sheet.setConnection("lost")
       sync()
+      refreshFrequentProducts()
     }
   }
 
@@ -161,8 +167,20 @@
   onMount(() => {
     refreshActive()
     const onOnline = () => refreshActive()
+    // #47 G2: возврат на вкладку / PWA — sync без reload (Cable мог умереть в фоне)
+    const onVisibility = () => {
+      if (document.visibilityState === "visible") refreshActive()
+    }
     window.addEventListener("online", onOnline)
-    return () => { window.removeEventListener("online", onOnline); clearSubs() }
+    document.addEventListener("visibilitychange", onVisibility)
+    // #47 G1: ACTIVE_ORDERS_POLL_MS страховка; Cable остаётся fast-path
+    startActiveOrdersPolling(() => { refreshActive() })
+    return () => {
+      window.removeEventListener("online", onOnline)
+      document.removeEventListener("visibilitychange", onVisibility)
+      stopActiveOrdersPolling()
+      clearSubs()
+    }
   })
 
   let scrollable = $derived(shouldScrollStatusList(orders))
