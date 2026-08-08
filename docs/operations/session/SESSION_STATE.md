@@ -2,13 +2,13 @@
 
 ## Шапка (агент читает только это + todo + 🔴 ISSUES)
 
-**Дата:** 2026-08-08 (#47 PWA status sync · GREEN)  
+**Дата:** 2026-08-08 (#47 PWA status sync · REVIEW)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #47 GREEN: poll 8s + visibility + frequent refresh | REVIEW/ops + MCP Fly |
-| 🔴 #47 open до MCP/апрува | — |
+| #47 REVIEW ops done · код на develop | push/deploy + MCP |
+| #47 🟡 до MCP | — |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -16,6 +16,12 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-08 (#47 REVIEW)
+
+- SBR закрыт локально: poll 8s + visibility + frequent after sync; Cable сохранён
+- RED `6c7176fe` · GREEN `aeff9fa7` · JS 32/0
+- MCP/push — ждут явный апрув
 
 ### Сессия 2026-08-08 (#47 intake + SPEC)
 

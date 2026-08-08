@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-08 — feat: #47 PWA status poll + frequent refresh [GREEN+REVIEW]
+- FE: `ACTIVE_ORDERS_POLL_MS` (8s) + `visibilitychange` → `GET /orders/active`; после sync — `refreshFrequentProducts`
+- Cable остаётся fast-path; страховка когда WS молчит на мобильном PWA
+- Тесты: `order_status_active_poll_test.mjs` + zone JS 32/0 · RED `6c7176fe` · GREEN `aeff9fa7`
+- MCP Fly / апрув заказчика — отдельно
+
 ## 2026-08-08 — docs: #47 PWA status sync + repeats (intake + SPEC)
 - customer_tasks 1:1 · artifacts `pwa_status_sync_and_repeats_stale` · CBR #47 · ISSUES 🔴
 - SPEC `todo.md`: poll `/orders/active` + visibility + refresh frequent (G1–G3)

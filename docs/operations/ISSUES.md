@@ -12,7 +12,7 @@
 **Симптом:** смена статуса на табло → PWA только после reload; после покупки «повторы»/история не подгружаются (пустая шторка +0₽).
 **Root cause:** live-path только ActionCable; нет polling `/orders/active`; frequent refresh после terminal в основном по Cable.
 **Чем закрыли (код):** `ACTIVE_ORDERS_POLL_MS` + `start/stopActiveOrdersPolling`; Sheet: visibilitychange + poll; `refreshActive` → `refreshFrequentProducts`. JS 32/0.
-**Осталось:** REVIEW ops · push/deploy · MCP Fly · апрув «ок».
+**Осталось:** push/deploy · MCP Fly · апрув «ок».
 
 [2026-08-07] — #46 Сбой банка: лимит авторизаций блокирует оплату / статусы
 **Статус:** **resolved** 2026-08-07 · Fly **v441** · MCP PASS

@@ -34,8 +34,8 @@
 | **G2** | `visibilitychange` → visible → `refreshActive` + `refreshFrequentProducts` | P0 | `[x]` |
 | **G3** | После любого sync (poll / cable terminal / reconnect) — `refreshFrequentProducts` | P0 | `[x]` |
 | **G4** | Cable остаётся fast-path; poll — страховка (не заменять WS) | MUST | `[x]` |
-| R1 | Не ломать hide «повторить» при реальном active (`accepted/preparing/ready` ≤24h) | MUST | `[ ]` |
-| R2 | `ready` по-прежнему hide из status sheet (#35) — UX пустой низ чинится через G3 (повторы после issued; при ready без позиций — не вечный `+0₽` без смысла) | SHOULD | `[ ]` |
+| R1 | Не ломать hide «повторить» при реальном active (`accepted/preparing/ready` ≤24h) | MUST | `[x]` (логика BE не трогали) |
+| R2 | `ready` hide из sheet (#35); пустой низ чинится G3 после issued | SHOULD | `[x]` |
 
 ---
 
@@ -49,17 +49,18 @@
 ### GREEN
 1. `[x]` `orderStatusSheet.js`: ACTIVE_ORDERS_POLL_MS + start/stop polling
 2. `[x]` `OrderStatusSheet`: setInterval poll + visibilitychange; refreshActive → frequent
-3. `[x]` Регрессия JS 25/0 + rails status/repeat zone
-4. `[x]` Коммит `feat: … [GREEN]`
+3. `[x]` Регрессия JS 32/0
+4. `[x]` Коммит `feat: … [GREEN]` `aeff9fa7`
 
 ### REVIEW
-Ops + MCP Fly: смена статуса на табло без F5 в PWA; после issued — «повторить» без reload
+1. `[x]` Ops SESSION/HANDOFF/CHANGELOG/CBR
+2. `[ ]` MCP Fly (нужен push/deploy)
 
 ---
 
 ## Exit Criteria
 
-1. `[x]` код: poll ≤8s + visibility (MCP подтвердит live)
+1. `[x]` код: poll ≤8s + visibility
 2. `[x]` код: refresh frequent после sync
-3. `[x]` JS тесты 32/0 · GREEN · rails shop hung (known Windows) — MCP в REVIEW
-4. `[ ]` Апрув заказчика «ок»
+3. `[x]` JS 32/0 · GREEN · REVIEW ops
+4. `[ ]` MCP Fly · апрув заказчика «ок»

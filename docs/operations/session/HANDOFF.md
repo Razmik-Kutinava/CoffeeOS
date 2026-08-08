@@ -2,16 +2,16 @@
 
 ## Шапка (агент читает только это + todo + 🔴 ISSUES)
 
-**Дата:** 2026-08-08 (#47 PWA status sync · SPEC)  
+**Дата:** 2026-08-08 (#47 PWA status sync · REVIEW)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #47 docs+SPEC | RED poll/visibility/frequent |
-| 🔴 #47 | Апрув «ок» (#46/#33) отдельно |
+| #47 код GREEN + REVIEW ops | push/deploy + MCP Fly |
+| ISSUES #47 🟡 до MCP/апрува | Апрув «ок» (#46/#33) отдельно |
 
-**last_done:** #47 PHASE 0 + SPEC (todo файлы OrderStatusSheet/frequent)  
-**next_step:** RED — тесты poll + visibility + refresh frequent  
+**last_done:** #47 SBR REVIEW — poll 8s + visibility + frequent refresh  
+**next_step:** push/deploy + MCP: статус с табло без F5; после issued — повторы  
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -25,9 +25,11 @@
 | Что | Статус |
 |-----|--------|
 | Intake 1:1 + artifacts + CBR #47 + ISSUES | **`[x]`** |
-| SPEC todo (G1–G3 poll/visibility/frequent) | **`[x]`** |
-| RED / GREEN / MCP | `[ ]` |
+| SPEC / RED / GREEN | **`[x]`** `6c7176fe` / `aeff9fa7` |
+| REVIEW ops | **`[x]`** |
+| MCP Fly / апрув | `[ ]` |
 
+**Код:** `ACTIVE_ORDERS_POLL_MS` + visibility → `refreshActive` + `refreshFrequentProducts`; Cable fast-path. JS 32/0.  
 **ТЗ:** `customer_tasks/Статусы с табло не подтягиваются в PWA и повторы после заказа.md`
 
 ### Pinpoint code context (2026-08-08)
