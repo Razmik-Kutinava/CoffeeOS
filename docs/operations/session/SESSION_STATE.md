@@ -2,13 +2,13 @@
 
 ## Шапка (агент читает только это + todo + 🔴 ISSUES)
 
-**Дата:** 2026-08-08 (#47 MCP PASS · Fly **v443**)  
+**Дата:** 2026-08-09 (`.cursor/README.md`)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
+| `.cursor/README.md` — карта папок правил | Ждём задачу |
 | #47 MCP PASS · v443 | апрув «ок» |
-| — | — |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -16,6 +16,10 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-09 (`.cursor/README`)
+
+- Добавлен `.cursor/README.md` — что в `rules/workflow`, `rules/project`, symlinks
 
 ### Сессия 2026-08-08 (#47 MCP)
 

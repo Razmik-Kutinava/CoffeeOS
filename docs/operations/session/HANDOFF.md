@@ -2,16 +2,16 @@
 
 ## Шапка (агент читает только это + todo + 🔴 ISSUES)
 
-**Дата:** 2026-08-08 (#47 MCP PASS · Fly **v443**)  
+**Дата:** 2026-08-09 (`.cursor/README.md`)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #47 MCP PASS v443 (повторы без F5) | апрув заказчика «ок» |
-| — | — |
+| Добавлен `.cursor/README.md` — карта rules | Ждём задачу |
+| #47 MCP PASS v443 | апрув заказчика «ок» |
 
-**last_done:** #47 MCP Fly v443 — ready→issued без reload → «повторить»  
-**next_step:** апрув «ок» / следующая задача  
+**last_done:** `.cursor/README.md` (карта workflow/project)  
+**next_step:** явный пункт / апрув #47  
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
