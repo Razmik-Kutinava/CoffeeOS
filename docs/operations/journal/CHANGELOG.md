@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-09 — docs: INTEGRATIONS split (меньше токенов)
+- Корень `INTEGRATIONS.md` → индекс ~45 строк + маршрутизация
+- Детали: `docs/integrations/tbank.md`, `sms-auth.md`, `notify-loyalty.md`
+- `/trace-bug`, `.cursorrules`: индекс → один секционный файл
+
 ## 2026-08-09 — docs: карта интеграций INTEGRATIONS.md + /trace-bug
 - `INTEGRATIONS.md` (корень): bridge Т-Банк, SMS.ru OTP/cascade, identity merge, loyalty [DRAFT], push/WS
 - `.cursor/commands/trace-bug.md` — сквозной аудит hot-path до правок

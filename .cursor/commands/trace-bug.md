@@ -5,7 +5,7 @@ CoffeeOS. Только для багов **оплата / Т-Банк / OTP / me
 
 ## Перед стартом
 
-1. Прочитай `@INTEGRATIONS.md` (релевантные секции).
+1. `@INTEGRATIONS.md` (индекс) → **один** файл из таблицы маршрутизации (не все секции).
 2. Шапка `HANDOFF` + 🔴 `ISSUES` если баг уже заведён.
 3. **Не** `@codebase` — узкий grep/read по цепочке из todo.
 
@@ -25,7 +25,7 @@ Client (PWA) → API route → middleware/session/tenant → service → DB → 
 ### 2. Identity & Auth Gap
 - phone/email/customer_id совпадают между шагами?
 - Был ли `CustomerProfileMerger` / duplicate `mobile_customers`?
-- `CustomerKey` / `OrderId` / `PaymentId` mapping по `@INTEGRATIONS.md`.
+- `CustomerKey` / `OrderId` / `PaymentId` mapping по `docs/integrations/tbank.md` (или индекс).
 
 ### 3. Event & Webhook Audit
 - Дошёл ли webhook? Idempotency (`duplicate: true`)?
@@ -36,7 +36,7 @@ Client (PWA) → API route → middleware/session/tenant → service → DB → 
 Что сломается при «быстром фиксе»: one-click, save_card, SBP autopay, merge, repeat order, Point A tenant.
 
 ### 5. Fix Strategy
-Минимальный diff + какие тесты из «Проверка» в `INTEGRATIONS.md` / `coffeeos-dev-gates`.
+Минимальный diff + тесты из секции «Проверка» в `docs/integrations/*.md` / `coffeeos-dev-gates`.
 
 ## Формат ответа (краткий Impact Assessment)
 

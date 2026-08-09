@@ -36,7 +36,7 @@
 | `project/coffeeos-cart-sheet.mdc` | Shop CartSheet |
 | `project/coffeeos-tests.mdc` | test/ |
 | `project/coffeeos-code-review.mdc` | Ревью по запросу |
-| `INTEGRATIONS.md` (корень) | Карта мостов: банк, OTP, identity, push; `@INTEGRATIONS.md` + `/trace-bug` |
+| `INTEGRATIONS.md` (корень, индекс ~45 строк) | Маршрут → `docs/integrations/*.md`; `@INTEGRATIONS.md` + `/trace-bug` |
 
 ## Ops (память сессии)
 

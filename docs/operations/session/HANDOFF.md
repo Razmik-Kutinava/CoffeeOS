@@ -7,11 +7,11 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| Карта мостов `INTEGRATIONS.md`; команда `/trace-bug` | Арам сверит карту с болями; UserCards / витрина |
+| INTEGRATIONS index + docs/integrations/ | сверка с заказчиком; UserCards / витрина |
 | Legacy suite messenger OTP — 17/17 green | апрув #47 «ок» |
 
-**last_done:** INTEGRATIONS.md (Т-Банк, SMS.ru, identity, loyalty draft) + `/trace-bug` + правило обновления карты  
-**next_step:** заказчик сверяет INTEGRATIONS.md; очередь в `todo.md`  
+**last_done:** INTEGRATIONS split: индекс ~45 строк + `docs/integrations/{tbank,sms-auth,notify-loyalty}.md`  
+**next_step:** заказчик сверяет секции; очередь в `todo.md`  
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
