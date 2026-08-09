@@ -21,7 +21,7 @@ class Shop::ShopSaveCardFalseStep6Test < ActionDispatch::IntegrationTest
     mattr_accessor :last_recurrent, default: nil
 
     module Override
-      def init_payment(order:, return_base_url:, notification_url:, customer_key: nil, recurrent: false)
+      def init_payment(order:, return_base_url:, notification_url:, customer_key: nil, recurrent: false, **)
         return super unless FakeTbankNoSave.enabled
 
         FakeTbankNoSave.last_recurrent = recurrent

@@ -17,7 +17,7 @@ class Shop::ShopSecondCardStep5Test < ActionDispatch::IntegrationTest
     mattr_accessor :rebill, default: "rebill-s5-1594"
 
     module Override
-      def init_payment(order:, return_base_url:, notification_url:, customer_key: nil, recurrent: false)
+      def init_payment(order:, return_base_url:, notification_url:, customer_key: nil, recurrent: false, **)
         return super unless FakeTbankSecondCard.enabled
         raise "Step5 expects recurrent:true" unless recurrent
 
