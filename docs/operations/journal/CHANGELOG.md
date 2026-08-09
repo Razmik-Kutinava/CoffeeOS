@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-09 — fix: legacy shop triage — receipt kwarg regression + messenger OTP gap found
+- `test/integration/shop/{shop_second_card_step5,shop_save_card_false_step6}_test.rb`: `init_payment` stub `**` — fixed `ArgumentError: unknown keyword: :receipt` cascading through prepend chain
+- Regress: T-Bank callback zone 42/0; targeted files 12/0
+- Found (not fixed): `Shop::PhoneOtp::CHANNELS` missing `messenger` — real product gap, needs owner decision (see 🔴 ISSUES)
+
 ## 2026-08-09 — rules: hot-path Не ломать/Проверка + DoD Point A
 - Обязательные блоки SPEC/todo для shop/оплата/статусы/Cable/RLS
 - DoD: Local + Fly MCP Point A; legacy shop ~24 — не гейт

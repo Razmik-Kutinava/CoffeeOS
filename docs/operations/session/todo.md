@@ -24,7 +24,9 @@
 ```
 - [ ] Проход стабилизации + Fly MCP Point A
 
-### C. Legacy shop suite (~24 fail)
-- [ ] Отдельный triage — не смешивать с фичами
+### C. Legacy shop suite (~24 fail) — triage начат 2026-08-09
+- [x] Regression `unknown keyword: :receipt` — фикс `1582f078`
+- [ ] **Решение владельца:** messenger OTP канал — восстановить или удалить тесты (см. 🔴 ISSUES)
+- [ ] Остальные 4-5 failures (structural/ErrorCode 1051/active_orders_receipt) — отдельная итерация
 
 **Статус шага правил:** done

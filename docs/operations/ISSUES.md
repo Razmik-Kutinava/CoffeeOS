@@ -6,6 +6,15 @@
 
 ## 🔴 Блокеры
 
+[2026-08-09] — Legacy shop suite triage: real regression fixed + messenger OTP gap found
+**Статус:** 🔴 **открыт** (messenger gap) · regression **resolved**
+**Источник:** плановый triage `test/integration/shop/` (C из очереди) по запросу владельца
+**Regression (resolved, `1582f078`):** `test/integration/shop/shop_second_card_step5_test.rb` + `shop_save_card_false_step6_test.rb` — `Override#init_payment` с фиксированной сигнатурой без `receipt:`; ломало `ArgumentError: unknown keyword: :receipt` любой тест дальше в prepend-цепочке `TbankAdapter`. Фикс: `**` для форвард-совместимости (как у остальных стабов).
+**Найдено (открыто):** `Shop::PhoneOtp::CHANNELS = %w[sms flash_call]` — канал **`messenger` не поддержан** сервисом, хотя `Shop::MessengerClient` и тесты (`phone_otp_test.rb`, `profile_merge_test.rb`, `auth_funnel_wizard_ui_test.rb`) ожидают его. `send_sms_with_existing_code!` требует уже существующий код (из flash_call) — messenger должен генерировать свой, но ветки для него нет.
+**Осталось:** решение владельца — восстановить messenger-канал в `Shop::PhoneOtp` (реальная доработка) **или** это осознанно убрано → тогда актуализировать/удалить тесты, ожидающие messenger. Без решения — не трогать код `PhoneOtp` наугад.
+**Остальной легаси suite:** `silent_refresh_frontend_structural_test.rb` (структурный тест по тексту `.svelte`), `payment_status_error_code_test.rb` (ErrorCode 1051 nil), `active_orders_receipt_test.rb` (`NoMethodError` nil.key?), `order_status_acceptance_cbr_test.rb`, `shop_user_cards_extremes_test.rb#E7` — не разбирались в этом шаге, отдельная итерация.
+**Прогон (seed 1, детерминированно):** 505 runs, 17 failures, 1 error, 3 skips → после regression-фикса.
+
 [2026-08-08] — #47 Статусы с табло не sync в PWA; повторы после заказа пустые
 **Статус:** 🟡 **MCP PASS** Fly **v443** · апрув заказчика `[ ]`
 **Источник:** Арам · [`Статусы с табло не подтягиваются…`](milestones/veha_2/requirements/customer_tasks/Статусы%20с%20табло%20не%20подтягиваются%20в%20PWA%20и%20повторы%20после%20заказа.md) · скрин `01_aram_empty_sheet_plus0.png`
