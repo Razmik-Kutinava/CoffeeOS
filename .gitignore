@@ -122,6 +122,8 @@ Thumbs.db
 !/docs/operations/**
 !/docs/agents/
 !/docs/agents/**
+!/docs/integrations/
+!/docs/integrations/**
 
 # Vite Ruby
 /public/vite*
