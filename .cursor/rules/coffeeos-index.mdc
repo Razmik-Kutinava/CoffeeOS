@@ -33,7 +33,9 @@ alwaysApply: true
 
 **Память (шапка-only жёстко):** на старте только шапка `HANDOFF`/`SESSION_STATE` (`limit` ~25–40, до `---`) + 🔴 ISSUES + `todo`. **Не** глотать тело SESSION/HANDOFF/CHANGELOG/PRACTICES/QA. Архив — по запросу. CHECKLIST/CBR — только если задача про веху.
 
-**Код:** SPEC → 2–7 путей; hot-path → мягкий blast-radius (+1–3 соседа). Блоки todo «Не ломать»/«Проверка» — пока не обязательны. Не `@codebase` зря.
+**Код:** SPEC → 2–7 путей; hot-path → мягкий blast-radius (+1–3) + **обязательные** блоки todo «Не ломать» / «Проверка». Не `@codebase` зря. Не тащить gem’ы/Stripe/RSpec/skills без просьбы.
+
+**Приёмка:** Point A на Fly; Local ≠ Fly MCP; профиль заказчика не портить тестовым OTP. Детали — `agent-workflow` § Scope / Fly.
 
 **README папок:** не читать при Glob/обходе дерева; только по явной нужде («что в папке» / карта для человека).
 

@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-09 — rules: hot-path Не ломать/Проверка + DoD Point A
+- Обязательные блоки SPEC/todo для shop/оплата/статусы/Cable/RLS
+- DoD: Local + Fly MCP Point A; legacy shop ~24 — не гейт
+- Anti-gem/skills; MCP-safety (не OTP на профиле заказчика); банк≠баг
+- Канон Point A в `DEMO_LOGINS.md`; команды `/spec` `/regress` обновлены
+
 ## 2026-08-09 — feat: CoffeeOS slash commands start→review
 - `.cursor/commands/{start,spec,sbr,regress,review}.md` + README
 - Зеркало `.cursor/skills/*/SKILL.md` (`disable-model-invocation: true`)

@@ -1,11 +1,12 @@
 # Индекс правил агента CoffeeOS
 
-**Обновлено:** 2026-08-09 — slash-команды `/start`…`/review` (+ умный start, `Next: /…`).
+**Обновлено:** 2026-08-09 — hot-path «Не ломать»/«Проверка» обязательны; DoD Local+Fly Point A; anti-gem/MCP-safety.
 
 При конфликте приоритет: **`coffeeos-commit-ops`** > task-workflow > dev-gates > остальное.  
 **Коммит:** канон CoffeeOS (commit после правок) **важнее** глобального User Rule «commit only when asked» — User Rule лучше удалить в Cursor Settings → Rules.  
 **Субагенты:** таблица этапов в `agent-workflow`; карта — `docs/agents/SUBAGENTS.md`.  
-**Команды:** `.cursor/commands/` + `.cursor/skills/` (human `/…`); цепочка start→spec→sbr→regress→review.
+**Команды:** `.cursor/commands/` + `.cursor/skills/` (human `/…`); цепочка start→spec→sbr→regress→review.  
+**Hot-path / приёмка:** `agent-workflow` § Scope + Fly; `dev-gates` § DoD.
 
 ## Always (`alwaysApply: true`) — короткий закон
 
@@ -22,8 +23,8 @@
 | Файл | Когда |
 |------|--------|
 | `workflow/coffeeos-task-workflow.mdc` | Фича / CBR / CHECKLIST / отчёт / старт сессии |
-| `workflow/spec-build-review.mdc` | SBR SPEC→RED→GREEN→REVIEW; в SPEC — 2–7 файлов в todo; BUILD без `@codebase` зря |
-| `workflow/coffeeos-dev-gates.mdc` | DoD, регрессия зон, миграции, hot-path |
+| `workflow/spec-build-review.mdc` | SBR SPEC→RED→GREEN→REVIEW; 2–7 файлов; hot-path: **Не ломать** + **Проверка** обязательны |
+| `workflow/coffeeos-dev-gates.mdc` | DoD (Local + Fly Point A), регрессия зон, миграции, hot-path |
 | `workflow/coffeeos-repo-layout.mdc` | Куда класть файлы; `scripts/scratch/` |
 | `workflow/coffeeos-file-size-split.mdc` | Лимиты 50/120/200 (globs app) |
 | `workflow/coffeeos-customer-intake.mdc` | PHASE 0: ТЗ заказчика → `customer_tasks/` |
@@ -48,6 +49,7 @@
 | CBR / `DEMO_FEEDBACK.md` | Заказчик, backlog — не на каждый старт |
 | Folder `README.md` | Не читать при Glob/дереве; только по явной нужде |
 | Skills / `ce-*` / субагенты | Фича/SBR — триггеры этапа; мелочь — без; карта: `docs/agents/SUBAGENTS.md` |
+| Gem’ы / marketplace MCP | Без просьбы владельца — нет; оплата = `TbankAdapter`; приёмка = Point A |
 
 ## Symlinks в `.cursor/rules/`
 

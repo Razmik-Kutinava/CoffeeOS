@@ -2,16 +2,16 @@
 
 ## Шапка (агент читает только это + todo + 🔴 ISSUES)
 
-**Дата:** 2026-08-09 (slash-команды /start…/review)  
+**Дата:** 2026-08-09 (hot-path rules)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Commands: start→spec→sbr→regress→review | Явный пункт владельца |
-| Умный /start + `Next: /…` | апрув #47 «ок» |
+| Hot-path: Не ломать/Проверка + DoD Point A | A UserCards 3.5 / E2E **или** B витрина |
+| Anti-gem / MCP-safety / Local≠Fly | апрув #47 «ок» |
 
-**last_done:** добавили 5 slash-команд CoffeeOS  
-**next_step:** явный пункт владельца  
+**last_done:** обязательные hot-path rules + канон Point A  
+**next_step:** очередь в `todo.md` (UserCards / витрина / legacy suite)  
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -19,6 +19,15 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Hot-path agent discipline (2026-08-09)
+
+| Что | Статус |
+|-----|--------|
+| Не ломать + Проверка обязательны | **`[x]`** |
+| DoD Local + Fly Point A | **`[x]`** |
+| Anti-gem / MCP-safety / DEMO_LOGINS | **`[x]`** |
+| Продукт: UserCards / витрина | очередь в `todo.md` |
 
 ### #47 PWA status sync + repeats (2026-08-08)
 

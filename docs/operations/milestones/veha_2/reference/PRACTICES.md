@@ -9,6 +9,14 @@
 
 **Product docs sync (2026-05-30):** `docs/product/*` + `qa_scenarios.md` — блок «В2 реализовано»; агенты читают **`development_roadmap.md`** первым по scope.
 
+### Agent hot-path discipline — **2026-08-09**
+
+- Todo hot-path: **Не ломать** (2–4) + **Проверка** (1–2 команды зон) — **обязательно**.
+- Приёмка витрины/оплаты: Fly **Point A** only; Local green ≠ готово заказчику; отчёт **Local | Fly MCP**.
+- Не тащить gem’ы Tinkoff/Stripe / marketplace skills без просьбы; оплата = `TbankAdapter`.
+- MCP: не OTP/PAN на профиле заказчика; банк ErrorCode ≠ сразу баг приложения.
+- Канон URL: `DEMO_LOGINS.md` § Канон приёмки Fly.
+
 ### Code review V2 — **2026-05-30**
 
 - **Вердикт:** к **прогону 10**; правки: OrderCreator N+1, Tbank idempotency claim, callback job lookup, Rack::Attack kiosk path.

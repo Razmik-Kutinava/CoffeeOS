@@ -58,4 +58,9 @@ Rails 8, PostgreSQL, Svelte/Vite, Pundit, Minitest.
 
 ## Definition of Done
 
-См. `coffeeos-dev-gates.mdc` и `coffeeos-task-workflow.mdc`: тесты, ops (SESSION_STATE, CHANGELOG, HANDOFF), честный отчёт, `[x]` в CHECKLIST/CBR — после «ок» пользователя / MCP Fly.
+См. `coffeeos-dev-gates.mdc` и `coffeeos-task-workflow.mdc`: тесты зоны, ops, честный отчёт с **Local | Fly MCP** на hot-path, `[x]` в CHECKLIST/CBR — после «ок» + MCP на **Point A**.
+
+**Не тащить:** gem’ы Tinkoff/Stripe, marketplace skills, RSpec — без просьбы владельца. Оплата = свой `TbankAdapter`.
+
+**MCP safety:** не OTP/PAN на профиле заказчика; приёмка не на Fly Test.
+

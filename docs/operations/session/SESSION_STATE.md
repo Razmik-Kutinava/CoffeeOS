@@ -2,13 +2,13 @@
 
 ## Шапка (агент читает только это + todo + 🔴 ISSUES)
 
-**Дата:** 2026-08-09 (slash commands)  
+**Дата:** 2026-08-09 (hot-path rules)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| `/start` `/spec` `/sbr` `/regress` `/review` | Ждём задачу |
-| subagent triggers | — |
+| Не ломать/Проверка обязательны; DoD Point A | todo: UserCards / витрина |
+| Anti-gem · MCP-safety | — |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -16,6 +16,14 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-09 (hot-path agent discipline)
+
+- «Не ломать» + «Проверка» — обязательны на hot-path (снята отложка)
+- DoD: Local + Fly MCP Point A; отчёт Local | Fly MCP
+- Запрет gem’ов Tinkoff/Stripe / skills без просьбы; TbankAdapter канон
+- MCP: не OTP на профиле заказчика; приёмка не Fly Test
+- `DEMO_LOGINS` канон Point A; очередь продукта в `todo.md`
 
 ### Сессия 2026-08-09 (commands)
 
@@ -32,7 +40,7 @@
 
 - Шапка-only жёстко (limit до `---`; запрет глотать тело SESSION/HANDOFF/CHANGELOG/PRACTICES/QA)
 - README не читать при Glob/дереве; ce-*/skills без роя на мелочь; субагент 1–2 по делу
-- Мягкий blast-radius (+1–3); блоки todo «Не ломать»/«Проверка» — отложены до согласования
+- Мягкий blast-radius (+1–3); блоки «Не ломать»/«Проверка» — **включены** 2026-08-09 (hot-path)
 - commit-ops > User Rule «commit only on ask» (лучше удалить User Rule в Cursor Settings)
 
 ### Сессия 2026-08-09 (docs cleanup)

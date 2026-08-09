@@ -11,6 +11,7 @@ CoffeeOS. Читай: `spec-build-review` PHASE 3, `coffeeos-code-review`, `coff
 
 ## Отчёт
 Сделано | Не сделано + краткие findings bugbot.  
+Hot-path: **Local** · **Fly MCP** (Point A или skip+почему).  
 `Коммит: <хеш>` · `Субагент: bugbot` (± `security-review`)
 
 ## Обязательно в конце (копипаст)
@@ -22,3 +23,7 @@ CoffeeOS. Читай: `spec-build-review` PHASE 3, `coffeeos-code-review`, `coff
 или если ещё дыры в коде:
 
 `Next: /sbr`
+
+Если local PASS, но для заказчика нужен Fly:
+
+`Next: Fly MCP Point A — по апруву владельца`
