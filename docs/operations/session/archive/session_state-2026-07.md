@@ -1015,7 +1015,7 @@
 
 ### Сессия 2026-07-18 (UserCards Фаза 3.2 — root cause 8866531465)
 
-- **Скрипт:** `bin/usercards_fly_payment_root_cause.rb` · **артефакт:** `usercards_fly_payment_root_cause_2026-07-18.json`
+- **Скрипт:** `bin/fly-tools/usercards_fly_payment_root_cause.rb` · **артефакт:** `usercards_fly_payment_root_cause_2026-07-18.json`
 - **Вердикт:** `OUR_FA_WITHOUT_REBILL_DELAYED_WEBHOOK_LATE` — retry GetState (3.3)
 
 ### Сессия 2026-07-18 (UserCards Фаза 3.1 — runbook привязки)
@@ -1026,7 +1026,7 @@
 
 ### Сессия 2026-07-16 (UserCards — расследование 2-й оплаты aramfifa)
 
-- **Скрипт:** `bin/usercards_fly_payment_investigate.rb` · **артефакт:** `usercards_fly_payment_investigate_2026-07-16.json`
+- **Скрипт:** `bin/fly-tools/usercards_fly_payment_investigate.rb` · **артефакт:** `usercards_fly_payment_investigate_2026-07-16.json`
 - **08:42** `8866059239` — Pan *5953, RebillId ok.
 - **09:56** `8866531465` — succeeded, save_card=true, **Pan/RebillId nil** (GetState тоже).
 - **Стоп:** fix Init/recurrent new_card.
@@ -1055,7 +1055,7 @@
 
 ### Сессия 2026-07-16 (UserCards Фаза 0 — Fly diagnose read-only)
 
-- **Скрипт:** `bin/usercards_fly_diagnose.rb` → `usercards_fly_diagnose_2026-07-16.json`.
+- **Скрипт:** `bin/fly-tools/usercards_fly_diagnose.rb` → `usercards_fly_diagnose_2026-07-16.json`.
 - **Release:** v361 · web started · **worker stopped**.
 - **DB prod:** 14 card rows global; **aramfifa100@gmail.com → 0 cards**.
 - **Payment:** `0a7e0f8e…` 2026-07-15 save_card=true succeeded — row не создан (H3b).

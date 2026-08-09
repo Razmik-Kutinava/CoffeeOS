@@ -133,7 +133,7 @@
 - **Артефакт:** `b113_s2a_s2b_rev2_post_deploy_2026-06-27.json` + 6 скринов
 - **Blocked:** S2b-03 swipe — на стенде нет pointer handlers; фикс `onpointerdown/up` в коммите → redeploy + re-run
 - **Deploy:** владелец (предыдущий) + нужен повтор для swipe
-- **Дальше:** redeploy → `node bin/b113_s2a_s2b_rev2_mcp.mjs` → 14/14
+- **Дальше:** redeploy → `node bin/acceptance/b113_s2a_s2b_rev2_mcp.mjs` → 14/14
 
 ### Сессия 2026-06-24 (B1.13-S2a прогон 3: сверка приёмки с товаром)
 
@@ -179,7 +179,7 @@
 ### Сессия 2026-06-26 (B1.13-S3-rev2: Fly MCP 12/12 PASS)
 
 - **Deploy:** владелец 2026-06-26
-- **MCP:** `bin/b113_s3_cart_controls_mcp.mjs` — expanded +/-, minus @1, Удалить, peek, checkout
+- **MCP:** `bin/acceptance/b113_s3_cart_controls_mcp.mjs` — expanded +/-, minus @1, Удалить, peek, checkout
 - **Артефакт:** `b113_s3_rev2_post_deploy_2026-06-26.json` + 3 скрина
 - **Фикс MCP:** retry bump, catalog `#/` для peek, API-empty на 04b
 - **Фикс UI (локально):** очередь PATCH bump, minus/+ без `busy` disabled — **нужен redeploy**
@@ -191,8 +191,8 @@
 - **Frontend:** `cartSheetStore` — `atMinQty`/`atMaxQty`, `optimisticBump`/`optimisticRemove`, `MODE_EMPTY` при последней позиции
 - **UI:** `CartSheet` — minus disabled @1 (peek + expanded)
 - **Тесты:** `b113_s3_rev2_cart_controls_test.rb` (6) + `cart_service_test` + `b113_s2_cart_popup_test` — **30 runs, 0 failures**
-- **MCP:** `bin/b113_s3_cart_controls_mcp.mjs` обновлён (rev2 шаги 03b/03c/04b)
-- **Дальше:** deploy владельца → `node bin/b113_s3_cart_controls_mcp.mjs` → `go` S2a/S2b
+- **MCP:** `bin/acceptance/b113_s3_cart_controls_mcp.mjs` обновлён (rev2 шаги 03b/03c/04b)
+- **Дальше:** deploy владельца → `node bin/acceptance/b113_s3_cart_controls_mcp.mjs` → `go` S2a/S2b
 
 ### Сессия 2026-06-25 (B1.13: КАНОН 2 вкладки + профиль в шапке — закрыто навсегда)
 
@@ -213,7 +213,7 @@
 - **Тесты:** `b113_s3_cart_controls_test.rb` (5 критериев) + `cart_service_test` max qty
 - **Макеты:** `b113_s3_customer_{peek,expanded,hidden_chip}_mode.png`
 - **MCP pre-deploy:** `b113_s3_post_deploy_2026-06-25.json` — step 01 PASS · step 02 FAIL (нет `shop-cart-expanded-plus` на Fly)
-- **Скрипт:** `bin/b113_s3_cart_controls_mcp.mjs`
+- **Скрипт:** `bin/acceptance/b113_s3_cart_controls_mcp.mjs`
 - **Коммит:** `6fcc9d8`
 - **Дальше:** deploy → повтор MCP PASS · `go` S4
 
@@ -229,7 +229,7 @@
 
 ### Сессия 2026-06-25 (B1.13-S2: фаза 3 MCP скрипт + pre-deploy probe)
 
-- **Скрипты:** `bin/b113_s2_cart_popup_prep_fly.rb` · `bin/b113_s2_cart_popup_mcp.mjs`
+- **Скрипты:** `bin/acceptance/b113_s2_cart_popup_prep_fly.rb` · `bin/acceptance/b113_s2_cart_popup_mcp.mjs`
 - **Deploy:** **blocked** — `flyctl auth login` недоступен агенту
 - **MCP probe:** 2/9 PASS на текущем Fly (pre-S2) · артефакт `b113_s2_post_deploy_2026-06-25.json`
 - **ISSUES:** 🔴 deploy pending
@@ -649,14 +649,14 @@
 
 - **Фикс:** `Checkout.svelte` — `canPay` без `name.trim()`; email/OTP без изменений.
 - **Deploy:** `coffeeos.fly.dev` 2026-06-17.
-- **MCP:** `bin/b17_br7_checkout_name_pay_prep_fly.rb` + `bin/b17_br7_checkout_name_pay_mcp.mjs` — **7/7 PASS**.
+- **MCP:** `bin/acceptance/b17_br7_checkout_name_pay_prep_fly.rb` + `bin/acceptance/b17_br7_checkout_name_pay_mcp.mjs` — **7/7 PASS**.
 - **Артефакт:** [`b17_br7_checkout_name_pay_post_deploy_2026-06-17.json`](milestones/veha_2/artifacts/demo-feedback/b17_br7_checkout_name_pay_post_deploy_2026-06-17.json).
 - **Скрин после:** [`screenshots/b17_br7_checkout_name_pay_after_2026-06-17/`](milestones/veha_2/artifacts/demo-feedback/screenshots/b17_br7_checkout_name_pay_after_2026-06-17/).
 - **Дальше:** включено в апрув B1.7 `[x]` 2026-06-04.
 
 - **Реализация:** `OrderBoardSound` + Stimulus `barista-board-sound`; WAV `public/audio/barista_new_order.wav` (2s); turbo-stream hook на `#barista-board-slots`; баннер NotAllowed.
 - **Deploy:** `coffeeos.fly.dev` 2026-06-17.
-- **MCP:** `bin/b21_s1_sound_prep_fly.rb` + `bin/b21_s1_sound_mcp.mjs` — **9/9 PASS** · latency **27 ms**.
+- **MCP:** `bin/acceptance/b21_s1_sound_prep_fly.rb` + `bin/acceptance/b21_s1_sound_mcp.mjs` — **9/9 PASS** · latency **27 ms**.
 - **Артефакт:** [`b21_s1_sound_post_deploy_2026-06-17.json`](milestones/veha_2/artifacts/demo-feedback/b21_s1_sound_post_deploy_2026-06-17.json).
 - **Скрины:** [`screenshots/b21_s1_sound_2026-06-17/`](milestones/veha_2/artifacts/demo-feedback/screenshots/b21_s1_sound_2026-06-17/).
 - **Дальше:** апрув заказчика `[ ]`.
@@ -669,7 +669,7 @@
 - **Артефакт:** [`b21_s1_sound_notification_registration_2026-06-04.json`](milestones/veha_2/artifacts/demo-feedback/b21_s1_sound_notification_registration_2026-06-04.json) — `pending_customer_approval`.
 - **Ссылки заказчика:** [Chrome Autoplay Policy](https://developer.chrome.com/blog/autoplay) · [MDN Web Audio API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Using_Web_Audio_API).
 - **Код:** **не трогаем** до апрува на реализацию (gate в ТЗ).
-- **Дальше (после апрува):** repro Fly → JS + аудио на табло → `bin/b21_s1_sound_mcp.mjs` (TBD) → deploy.
+- **Дальше (после апрува):** repro Fly → JS + аудио на табло → `bin/acceptance/b21_s1_sound_mcp.mjs` (TBD) → deploy.
 
 ### Сессия 2026-06-16 (B1.7 BR-6 — fix cancel on #/payment, OPS CLOSED)
 
@@ -688,7 +688,7 @@
 - **Скрин:** `screenshots/b17_br6_payment_cancel_customer_2026-06-04.png` — положить из чата заказчика в repo при наличии файла.
 - **Код:** **не трогаем** до апрува на фикс (gate в ТЗ).
 - **Контекст:** CBR §2.3 этап 4.4 abandon ранее PASS — трактуем как регрессию / новый repro.
-- **Дальше (после апрува):** repro на Fly → `bin/b17_br6_payment_cancel_mcp.mjs` (TBD) → fix `Payment.svelte` / abandon.
+- **Дальше (после апрува):** repro на Fly → `bin/acceptance/b17_br6_payment_cancel_mcp.mjs` (TBD) → fix `Payment.svelte` / abandon.
 
 ### Сессия 2026-06-04 (B1.7 BR-5 — post-deploy PASS, OPS CLOSED)
 
@@ -703,7 +703,7 @@
 - **Repro Fly:** hash-switch p1→p2 — API 2 товара OK, баннер + DOM корзины FAIL ([`b17_br5_regression_repro_2026-06-04.json`](milestones/veha_2/artifacts/demo-feedback/b17_br5_regression_repro_2026-06-04.json)).
 - **Фикс:** `Product.svelte` (`params.id`), `Cart.svelte` (`hashchange` + `shop:cart-added`), `shopCartAdd.js`, `CategoryProducts.svelte`.
 - **Скрины:** до `b17_br5_regression_before_p2_add_2026-06-04.png`, после `b17_br5_regression_after_2026-06-04.png`.
-- **Дальше:** `fly deploy` → `node bin/b17_br5_cart_second_product_mcp.mjs`.
+- **Дальше:** `fly deploy` → `node bin/acceptance/b17_br5_cart_second_product_mcp.mjs`.
 
 ### Сессия 2026-06-04 (B1.7 BR-5 — регрессия, только доки)
 
@@ -711,7 +711,7 @@
 - **ТЗ / чеклист:** [`B1_7_checkout_order_screen.md`](milestones/veha_2/requirements/customer_tasks/B1_7_checkout_order_screen.md) § BR-5 регрессия.
 - **Журнал:** [`DEMO_FEEDBACK.md`](milestones/veha_2/requirements/DEMO_FEEDBACK.md) — строка **open**.
 - **Код:** **не трогаем** до апрува на фикс.
-- **Прогон (после апрува):** `node bin/b17_br5_cart_second_product_mcp.mjs`.
+- **Прогон (после апрува):** `node bin/acceptance/b17_br5_cart_second_product_mcp.mjs`.
 - **Гипотеза:** регрессия после B1.9 / route-switch в `Product.svelte` или quick-add в каталоге.
 
 ### Сессия 2026-06-15 (B1.10 — убрать «Блог», OPS PASS)
@@ -763,13 +763,13 @@
 
 ### Сессия 2026-06-13 (B2.1 R2 — Fly MCP live)
 
-- **Скрипт:** `bin/b21_revision_r2_live_fly.rb` — разметка 6 слотов + turbo-cable + turbo-stream 200 на Fly.
+- **Скрипт:** `bin/acceptance/b21_revision_r2_live_fly.rb` — разметка 6 слотов + turbo-cable + turbo-stream 200 на Fly.
 - **Артефакты:** `b21_revision_r2_mcp_fly_2026-06-13.json`, `b21_mcp_fly_2026-06-13.json`.
 - **Дальше:** R4 Fly скрины + приёмка заказчика.
 
 ### Сессия 2026-06-13 (B2.1 — приёмка заказчика MCP path)
 
-- **Скрипты:** `bin/b21_revision_customer_mcp.rb`, `bin/b21_revision_customer_mcp.mjs`, `bin/b21_revision_fly_screenshots.*`, `bin/b21_revision_acceptance_fly.rb`.
+- **Скрипты:** `bin/acceptance/b21_revision_customer_mcp.rb`, `bin/acceptance/b21_revision_customer_mcp.mjs`, `bin/acceptance/b21_revision_fly_screenshots.*`, `bin/acceptance/b21_revision_acceptance_fly.rb`.
 - **Скрины:** `screenshots/b21_revision_customer_mcp_2026-06-13/` (01–07, имена как в ТЗ заказчика 1.1–1.4).
 - **Артефакты:** `b21_revision_acceptance_2026-06-12.json` — PASS, `internal_signoff: true`, `customer_signoff: false`.
 - **Chrome DevTools MCP:** login на Fly через браузер → HTTP 500; прогон через Playwright (curl/Ruby login OK).
@@ -777,7 +777,7 @@
 
 ### Сессия 2026-06-13 (B2.1 — сверка скринов и JSON)
 
-- **Скрипт:** `bin/b21_revision_verify_screenshots_json.rb`
+- **Скрипт:** `bin/acceptance/b21_revision_verify_screenshots_json.rb`
 - **Результат:** PASS — 7 PNG `b21_revision_fly_2026-06-13/`, acceptance JSON verdict/status/ui_checks совпадают
 - **Артефакт:** `b21_revision_screenshots_json_verify_2026-06-13.json`
 
@@ -815,14 +815,14 @@
 - **Корень:** верификация была привязана к `session_id`; при смене cookie/PWA терялась
 - **Фикс:** `shop_email_verifications` unique `(tenant_id, email)` — источник истины по email; `Checkout.svelte` без «сессия истекла», optimistic verify + `profileSyncing`
 - **Миграция:** `20260613120000_email_primary_shop_email_verifications`
-- **Fly:** `bin/b17_checkout_session_fly.rb` + MCP после деплоя
+- **Fly:** `bin/acceptance/b17_checkout_session_fly.rb` + MCP после деплоя
 - **Артефакт:** [`b17_checkout_session_2026-06-14.json`](milestones/veha_2/artifacts/demo-feedback/b17_checkout_session_2026-06-14.json)
 
 ### Сессия 2026-06-13 (B1.7 — баг-3 checkout «сессия истекла», partial)
 
 - **Баг:** повторный checkout — OTP «сессия истекла» при сохранённом email в localStorage
 - **Фикс (partial):** `EmailVerification` fallback по tenant+email; `Checkout.svelte` status?email=; UX сообщения
-- **Fly:** `bin/b17_checkout_session_fly.rb` + Playwright + **Chrome DevTools MCP PASS** (isolatedContext)
+- **Fly:** `bin/acceptance/b17_checkout_session_fly.rb` + Playwright + **Chrome DevTools MCP PASS** (isolatedContext)
 - **Артефакт:** [`b17_checkout_session_2026-06-13.json`](milestones/veha_2/artifacts/demo-feedback/b17_checkout_session_2026-06-13.json)
 
 ### Открытый баг заказчика (B1.1, не B2.1)
@@ -836,7 +836,7 @@
 ### Сессия 2026-06-13 (B2.1 R3 — тесты + smoke)
 
 - **Тесты:** tap accepted→preparing→ready off board, limit 6, `OrderBoardBroadcasterTest`.
-- **Smoke:** `bin/b21_revision_fly_smoke.rb` (REVISION=1).
+- **Smoke:** `bin/acceptance/b21_revision_fly_smoke.rb` (REVISION=1).
 
 ### Сессия 2026-06-12 (B1.1 ревизия — UI экрана статуса)
 
@@ -878,7 +878,7 @@
 ### Сессия 2026-06-11 (B2.1 — push pipeline simulation)
 
 - **FCM_SIMULATE=1** — полный цикл без Google и без телефона: notifier → job → `sent`.
-- **Скрипты:** `bin/b21_push_pipeline_fly.rb`, `shop:push:smoke ORDER_ID=…`.
+- **Скрипты:** `bin/acceptance/b21_push_pipeline_fly.rb`, `shop:push:smoke ORDER_ID=…`.
 - **Тесты:** `push_pipeline_simulation_test` + `fcm_client_test` simulate.
 - **Fly:** `b21_push_pipeline_fly.rb` — **PASS** v211, body «начали готовить», `status=sent`.
 - **Артефакт:** `b21_push_pipeline_sim_2026-06-11.json`.
@@ -901,15 +901,15 @@
 
 ### Сессия 2026-06-11 (B2.1 — formal acceptance OPS_PASS)
 
-- **Прогон:** `bin/b21_acceptance_fly.rb` — критерии MVP **1–9 формально PASS** на Fly.
+- **Прогон:** `bin/acceptance/b21_acceptance_fly.rb` — критерии MVP **1–9 формально PASS** на Fly.
 - **Скрипты:** `b21_acceptance_prep.rb`, `b21_acceptance_fly.mjs` — замер табло ~850ms, FIFO, модификаторы, FCM pipeline, stage2/4 Fly.
 - **Артефакт:** `b21_acceptance_2026-06-11.json` — `status: OPS_PASS`, `internal_signoff_ready: true`.
 - **Дальше:** внутренняя приёмка (ты) → подпись заказчика → B2.2.
 
 ### Сессия 2026-06-11 (B2.1 — браузерный e2e витрина→бариста→гость Fly)
 
-- **Playwright:** `bin/b21_mcp_e2e_fly.mjs` — клики ГОТОВИТСЯ/ГОТОВ, гость WS ≤5с без reload — **PASS**.
-- **Оркестратор:** `bin/b21_mcp_e2e_fly.rb` — prep + e2e + smoke + MCP + тесты — **PASS** (`b21_mcp_e2e_2026-06-11.json`).
+- **Playwright:** `bin/acceptance/b21_mcp_e2e_fly.mjs` — клики ГОТОВИТСЯ/ГОТОВ, гость WS ≤5с без reload — **PASS**.
+- **Оркестратор:** `bin/acceptance/b21_mcp_e2e_fly.rb` — prep + e2e + smoke + MCP + тесты — **PASS** (`b21_mcp_e2e_2026-06-11.json`).
 - **Скрины:** `stage5_e2e_*`, пересняты `stage3_guest_preparing/ready`.
 - **Smoke fix:** `ГОТОВИТСЯ` проверяется после заказа на табло, не на пустом board.
 - **Acceptance:** критерии 7, 9 формально PASS.
@@ -922,7 +922,7 @@
 
 ### Сессия 2026-06-11 (B2.1 этап 5 — Fly smoke e2e PASS)
 
-- **Smoke:** `FLY_BIN=flyctl ruby bin/b21_barista_board_fly_smoke.rb` — **PASS** (`order_8e2bc72e`, vitrina→табло).
+- **Smoke:** `FLY_BIN=flyctl ruby bin/acceptance/b21_barista_board_fly_smoke.rb` — **PASS** (`order_8e2bc72e`, vitrina→табло).
 - **Артефакты:** `b21_fly_smoke_2026-06-11.json`, `b21_acceptance_2026-06-11.json` обновлены.
 - **Этап 5 ops gate:** `[x]` код; приёмка заказчика — потом.
 - **Дальше:** stage3 guest скрины, MCP e2e бариста→гость, FCM устройство.
@@ -945,7 +945,7 @@
 ### Сессия 2026-06-11 (B2.1 этап 5 — ops gate)
 
 - **Тесты:** полный suite 702 runs (9 fail / 5 err вне B2.1); B2.1 FIFO/cancel/card PASS.
-- **Скрипты:** `bin/b21_barista_board_fly_smoke.rb`, `bin/b21_mcp_fly_verify.rb`.
+- **Скрипты:** `bin/acceptance/b21_barista_board_fly_smoke.rb`, `bin/acceptance/b21_mcp_fly_verify.rb`.
 - **MCP:** cursor-ide-browser — скрины stage2/4 localhost + Fly vitrina/board.
 - **Артефакты:** `b21_acceptance_2026-06-11.json`, `b21_mcp_fly_2026-06-11.json`, `b21_fly_smoke_2026-06-11.json`.
 - **Fix:** overlay cancel `display:none` по умолчанию (не торчал без `is-visible`).
@@ -988,8 +988,8 @@
 
 ### Сессия 2026-06-10 (B1.1 закрытие — Firebase на Fly)
 
-- **Secrets:** все `FIREBASE_*` на `coffeeos` (`bin/fly_firebase_secrets.sh`).
-- **Локально:** `config/secrets/firebase-service-account.json` + `bin/minify_firebase_env.rb`.
+- **Secrets:** все `FIREBASE_*` на `coffeeos` (`bin/fly-tools/fly_firebase_secrets.sh`).
+- **Локально:** `config/secrets/firebase-service-account.json` + `bin/fly-tools/minify_firebase_env.rb`.
 - **Smoke:** `b11_fly_smoke_2026-06-10.json` **PASS** — в т.ч. `push_register` HTTP 200.
 - **MCP Fly:** `b11_mcp_fly_2026-06-10.json` **PASS** — catalog, firebase SW, OrderStatus bundle.
 - **Тесты:** B1.1 suite 21 runs, 113 assertions PASS.
@@ -1125,7 +1125,7 @@
 - **Артефакт:** [`mcp_w12_uk_menu_vitrina_2026-06-06.json`](milestones/veha_2/artifacts/demo-feedback/mcp_w12_uk_menu_vitrina_2026-06-06.json).
 - **Хвосты закрыты в follow-up:** см. W1.3 сессию и `mcp_w13_…json`.
 
-**Артефакты (для агента в другом редакторе):** точка входа — [`milestones/veha_2/artifacts/README.md`](milestones/veha_2/artifacts/README.md). Прогон 10: `artifacts/prog10/{_index,smoke,kiosk,shop,staff-rbac,connectivity,platform-ent,warehouse}/`. Сводный индекс: `prog10/_index/prog10_final_index.json`. Скрипты `bin/prog10_*` пишут в эти подпапки (OUT обновлён). Старый плоский путь `artifacts/prog10_*.json` **удалён** — везде относительные ссылки `artifacts/prog10/...`.
+**Артефакты (для агента в другом редакторе):** точка входа — [`milestones/veha_2/artifacts/README.md`](milestones/veha_2/artifacts/README.md). Прогон 10: `artifacts/prog10/{_index,smoke,kiosk,shop,staff-rbac,connectivity,platform-ent,warehouse}/`. Сводный индекс: `prog10/_index/prog10_final_index.json`. Скрипты `bin/prog10/prog10_*` пишут в эти подпапки (OUT обновлён). Старый плоский путь `artifacts/prog10_*.json` **удалён** — везде относительные ссылки `artifacts/prog10/...`.
 
 ### Сессия 2026-06-06 (§2A.3 — сессии точки: **PASS**)
 
@@ -1362,7 +1362,7 @@
   - **7 подпапок:** `_index` (сводки, tenant_ids, final_index), `smoke`, `kiosk`, `shop`, `staff-rbac`, `connectivity`, `platform-ent`, `warehouse`.
   - `git mv` всех JSON/MD артефактов прогона 10; `prog10_final_index.json` перенесён в `_index/` с путями относительно `prog10/`.
   - Обновлены ссылки: `QA_ACCEPTANCE_RUN`, `PROG10_TENANTS`, `PRACTICES`, `POSTMORTEM`, `CHANGELOG`, `SESSION_STATE`.
-  - `bin/prog10_*` — дефолты `OUT` и пути к `tenant_ids.json`.
+  - `bin/prog10/prog10_*` — дефолты `OUT` и пути к `tenant_ids.json`.
 - **Не в коммите:** PDF в корне `artifacts/` (untracked) — положить в `demo-feedback/` при §E.
 - **Push:** не делали (локальные коммиты).
 - **Следующий шаг по вехе:** апрув блока 14 → §E [`DEMO_FEEDBACK.md`](milestones/veha_2/requirements/DEMO_FEEDBACK.md) → §I.
@@ -1405,7 +1405,7 @@
 
 ### Сессия 2026-06-02 (прогон 10 — блок 3 закрыт: CR-05 + CR-04)
 
-- **CR-05:** `with_kiosk_tenant_guc!`; тесты **7/0**; Fly `POST /kiosk/api/auth` **9/9** — `prog10/kiosk/prog10_kiosk_auth_fly_cr05.json` (`bin/prog10_kiosk_auth_fly_verify.rb`).
+- **CR-05:** `with_kiosk_tenant_guc!`; тесты **7/0**; Fly `POST /kiosk/api/auth` **9/9** — `prog10/kiosk/prog10_kiosk_auth_fly_cr05.json` (`bin/prog10/prog10_kiosk_auth_fly_verify.rb`).
 - **CR-04:** **wontfix** на Fly 1 pod; при смене хостинга / 2+ инстансов → **Redis** — `PRACTICES`.
 - **Git:** push `develop` **23 коммита** → `d80b518`. **Fly deploy:** не выполнен (нет `flyctl auth`); curl на текущем Fly — PASS.
 - **Следующий:** апрув блока 3 → блок **11** (не начинать без апрува).
@@ -1418,13 +1418,13 @@
 
 ### Сессия 2026-06-02 (прогон 10 — блок 10, витрина 5 точек)
 
-- **curl:** `bin/prog10_shop_vitrina.rb` — меню/корзина/checkout/история API — **5/5** (`prog10/shop/prog10_shop_vitrina_curl.json`).
+- **curl:** `bin/prog10/prog10_shop_vitrina.rb` — меню/корзина/checkout/история API — **5/5** (`prog10/shop/prog10_shop_vitrina_curl.json`).
 - **MCP:** Puppeteer UI — каталог → корзина → наличные → SHP-09 — **5/5** (`prog10/shop/prog10_shop_vitrina_mcp.json`).
 - **Следующий:** блок **11** — после апрува.
 
 ### Сессия 2026-06-02 (прогон 10 — блок 9, kiosk → barista ×9)
 
-- **curl:** `bin/prog10_kiosk_barista.rb` — киоск auth + cash order + barista JSON/HTML — **9/9** (`prog10/kiosk/prog10_kiosk_barista.json`).
+- **curl:** `bin/prog10/prog10_kiosk_barista.rb` — киоск auth + cash order + barista JSON/HTML — **9/9** (`prog10/kiosk/prog10_kiosk_barista.json`).
 - **MCP:** Puppeteer — login barista, заказ на `/barista` — **9/9** (`prog10/kiosk/prog10_kiosk_barista_mcp.json`); demo-prep без панели barista — ожидаемо.
 - **Следующий:** блок **10** — после апрува.
 
