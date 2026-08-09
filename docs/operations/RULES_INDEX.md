@@ -1,9 +1,10 @@
 # Индекс правил агента CoffeeOS
 
-**Обновлено:** 2026-08-09 — шапка-only жёстко; README/ce-* анти-шум; мягкий blast-radius (без обязательных «Не ломать»/«Проверка» в todo до согласования).
+**Обновлено:** 2026-08-09 — триггеры субагентов по этапам (explore/shell/bugbot/…); мелочь без роя.
 
 При конфликте приоритет: **`coffeeos-commit-ops`** > task-workflow > dev-gates > остальное.  
-**Коммит:** канон CoffeeOS (commit после правок) **важнее** глобального User Rule «commit only when asked» — User Rule лучше удалить в Cursor Settings → Rules.
+**Коммит:** канон CoffeeOS (commit после правок) **важнее** глобального User Rule «commit only when asked» — User Rule лучше удалить в Cursor Settings → Rules.  
+**Субагенты:** таблица этапов в `agent-workflow`; карта для людей — `docs/agents/SUBAGENTS.md`.
 
 ## Always (`alwaysApply: true`) — короткий закон
 
@@ -45,7 +46,7 @@
 | `ISSUES.md` | Баги; на старте — только 🔴 (архив позже, если файл раздуется) |
 | CBR / `DEMO_FEEDBACK.md` | Заказчик, backlog — не на каждый старт |
 | Folder `README.md` | Не читать при Glob/дереве; только по явной нужде |
-| Skills / `ce-*` / субагенты | Мелочь — без роя; 1–2 субагента по делу; on-demand |
+| Skills / `ce-*` / субагенты | Фича/SBR — триггеры этапа; мелочь — без; карта: `docs/agents/SUBAGENTS.md` |
 
 ## Symlinks в `.cursor/rules/`
 

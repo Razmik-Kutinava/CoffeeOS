@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + 🔴 ISSUES)
 
-**Дата:** 2026-08-09 (rules: шапка-only / anti-noise)  
+**Дата:** 2026-08-09 (субагенты: триггеры по этапам)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Жёсткая шапка ops + README/ce-* анти-шум | Явный пункт владельца |
-| Мягкий blast-radius; «Не ломать»/«Проверка» в todo — ждут согласования | апрув #47 «ок» |
+| Триггеры explore/shell/bugbot/… в rules | Явный пункт владельца |
+| Карта `docs/agents/SUBAGENTS.md` | апрув #47 «ок» |
 
-**last_done:** anti-noise rules (шапка / README / ce-* / soft blast-radius)  
+**last_done:** внедрили триггеры субагентов по SBR-этапам  
 **next_step:** явный пункт владельца  
 
 **Архив session:** [`archive/README.md`](archive/README.md)  

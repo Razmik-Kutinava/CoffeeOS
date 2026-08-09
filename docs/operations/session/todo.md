@@ -1,6 +1,5 @@
-# todo — rules anti-noise (2026-08-09)
+# todo — subagent triggers (2026-08-09)
 
-**Сделано:** шапка-only жёстко; README/ce-*; мягкий blast-radius.  
-**Отложено (согласование с заказчиком):** обязательные строки todo «Не ломать» / «Проверка».
+**Сделано:** триггеры в rules + `docs/agents/SUBAGENTS.md` + строка в отчёте.
 
 **Статус:** done

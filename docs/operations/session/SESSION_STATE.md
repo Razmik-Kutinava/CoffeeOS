@@ -2,13 +2,13 @@
 
 ## Шапка (агент читает только это + todo + 🔴 ISSUES)
 
-**Дата:** 2026-08-09 (rules anti-noise)  
+**Дата:** 2026-08-09 (субагенты триггеры)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| rules: шапка-only / README / ce-* / soft blast-radius | Ждём задачу |
-| docs cleanup + bin reorg | — |
+| subagent triggers in agent-workflow / SBR | Ждём задачу |
+| rules anti-noise + docs cleanup | — |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -16,6 +16,12 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-09 (субагенты)
+
+- Политика: фича/SBR → субагент по этапу; мелочь → отказ с пометкой
+- Таблица: SPEC explore · RED/GREEN shell · REVIEW bugbot (+ security hot-path) · CI ci-investigator
+- Отчёт: строка `Субагент: …`; карта `docs/agents/SUBAGENTS.md`
 
 ### Сессия 2026-08-09 (rules anti-noise)
 

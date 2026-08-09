@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-09 — rules: subagent triggers by SBR stage
+- `agent-workflow`: политика + таблица explore/shell/bugbot/security-review/ci-investigator
+- SBR: explore на SPEC, shell на длинной регрессии, bugbot(+security) на REVIEW
+- Отчёт: обязательная строка `Субагент: …`; карта `docs/agents/SUBAGENTS.md`
+- Мелочь без субагентов; CE/ce-* не по умолчанию
+
 ## 2026-08-09 — rules: harden header-only + anti-noise (README/ce-*/soft blast-radius)
 - `agent-workflow` / `coffeeos-index` / `.cursorrules` / `RULES_INDEX` / task-workflow / SBR / commit-ops
 - Шапка ops только `limit` до `---`; запрет глотать тело жирных docs

@@ -124,9 +124,11 @@ SBR — это **порядок фаз** (SPEC → RED → GREEN → REVIEW), а
 
 Далее одной строкой:
 
-**Статус:** `done` | `blocked` | `in_progress` · **Коммит:** `<хеш>` · **Ops:** `SESSION_STATE`, `CHANGELOG`, `HANDOFF`, …
+**Статус:** `done` | `blocked` | `in_progress` · **Коммит:** `<хеш>` · **Ops:** `SESSION_STATE`, `CHANGELOG`, `HANDOFF`, … · **Субагент:** `explore` | `shell` | `bugbot` | `нет — мелочь` | …
 
 **Backlog** (если был): что добавлено в CBR / DEMO_FEEDBACK / PRACTICES — или «ничего».
+
+Субагенты по этапам — [`coffeeos-agent-workflow.mdc`](coffeeos-agent-workflow.mdc) § Skills / субагенты. На фиче/SBR без пометки «мелочь» хотя бы один нужный субагент на релевантном этапе.
 
 ---
 
