@@ -71,24 +71,19 @@ class Shop::AuthFunnelWizardUiTest < ActionDispatch::IntegrationTest
     assert_includes cascade, "showRetryFlashButton"
   end
 
-  test "messenger and sms fallback buttons and timings" do
+  # Мессенджер (WhatsApp/Telegram) как у заказчика не подключён — только
+  # flash_call + SMS fallback (см. коммит "remove messenger from Rack::Attack and Svelte").
+  test "sms fallback button and timings" do
     step = File.read(Rails.root.join("app/frontend/components/PhoneAuthCodeStep.svelte"))
     cascade = File.read(Rails.root.join("app/frontend/lib/phoneAuthCascade.js"))
     lib = File.read(Rails.root.join("app/frontend/lib/phoneAuthWizard.js"))
 
-    assert_includes step, 'data-testid="phone-auth-messenger"'
     assert_includes step, 'data-testid="phone-auth-sms"'
-    assert_includes step, "MESSENGER_BTN_LABEL"
     assert_includes step, "SMS_BTN_LABEL"
-    assert_includes step, "afterMessengerDeliveryError"
-    assert_includes step, 'sendChannel("messenger")'
     assert_includes step, 'sendChannel("sms")'
 
-    assert_match(/MESSENGER_WAIT_SEC\s*=\s*30/, cascade)
     assert_match(/SMS_COOLDOWN_SEC\s*=\s*60/, cascade)
-    assert_includes cascade, "WhatsApp / Telegram"
     assert_includes cascade, "Отправить код в СМС"
-    assert_includes cascade, "afterMessengerSend"
     assert_includes cascade, "afterSmsSend"
 
     assert_includes lib, "buildOtpSendBody"

@@ -176,7 +176,7 @@ class Shop::Api::ProfileMergeTest < ActionDispatch::IntegrationTest
 
       sess.post "/shop/api/phone_otp/send",
         headers: shop_tenant_headers(@tenant.id),
-        params: { phone: other_phone, channel: "sms" },
+        params: { phone: other_phone, channel: "flash_call" },
         as: :json
       assert_equal 200, sess.response.status, sess.response.body
       code = latest_phone_otp_code(other_phone)
@@ -196,9 +196,11 @@ class Shop::Api::ProfileMergeTest < ActionDispatch::IntegrationTest
   private
 
   def bind_via_phone!(sess, phone)
+    # Как у заказчика: реальный вход в OTP — flash_call (виджет PhoneAuthWizard),
+    # sms сам код не генерирует — только повторяет уже существующий (cascade).
     sess.post "/shop/api/phone_otp/send",
       headers: shop_tenant_headers(@tenant.id),
-      params: { phone: phone, channel: "sms" },
+      params: { phone: phone, channel: "flash_call" },
       as: :json
     assert_equal 200, sess.response.status, sess.response.body
     code = latest_phone_otp_code(phone)

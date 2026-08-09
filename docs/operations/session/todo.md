@@ -26,7 +26,7 @@
 
 ### C. Legacy shop suite (~24 fail) — triage начат 2026-08-09
 - [x] Regression `unknown keyword: :receipt` — фикс `1582f078`
-- [ ] **Решение владельца:** messenger OTP канал — восстановить или удалить тесты (см. 🔴 ISSUES)
+- [x] Messenger OTP: по git log — осознанно снесён (`b2685910`/`8b76da10`), у заказчика сейчас только flash_call+SMS. Тесты (`phone_otp_test.rb`, `profile_merge_test.rb`, `auth_funnel_wizard_ui_test.rb`) актуализированы под реальный флоу — 17/17 green
 - [ ] Остальные 4-5 failures (structural/ErrorCode 1051/active_orders_receipt) — отдельная итерация
 
 **Статус шага правил:** done

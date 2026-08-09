@@ -2,16 +2,16 @@
 
 ## Шапка (агент читает только это + todo + 🔴 ISSUES)
 
-**Дата:** 2026-08-09 (hot-path rules)  
+**Дата:** 2026-08-09 (legacy triage: messenger OTP тесты актуализированы)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Hot-path: Не ломать/Проверка + DoD Point A | A UserCards 3.5 / E2E **или** B витрина |
+| Legacy suite: receipt regression + messenger OTP тесты — 17/17 green | A UserCards 3.5 / E2E **или** B витрина |
 | Anti-gem / MCP-safety / Local≠Fly | апрув #47 «ок» |
 
-**last_done:** обязательные hot-path rules + канон Point A  
-**next_step:** очередь в `todo.md` (UserCards / витрина / legacy suite)  
+**last_done:** messenger OTP — git log подтвердил осознанный снос, тесты приведены к реальному флоу (flash_call+SMS)  
+**next_step:** очередь в `todo.md` (UserCards / витрина / оставшиеся 4-5 legacy failures)  
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -25,7 +25,7 @@
 | Что | Статус |
 |-----|--------|
 | Regression `:receipt` kwarg | **`[x]`** `1582f078`, зона 42/0 |
-| Messenger OTP канал отсутствует | 🔴 решение владельца нужно |
+| Messenger OTP канал | **`[x]`** осознанно снесён (git log) — тесты → flash_call/sms, 17/17 green |
 | Остальные 4-5 failures | отдельная итерация |
 
 ### Hot-path agent discipline (2026-08-09)

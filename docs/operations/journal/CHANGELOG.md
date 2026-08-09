@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-09 — fix: legacy shop triage — messenger OTP тесты приведены к реальному флоу заказчика
+- Git log подтвердил: канал `messenger` осознанно снесён (`b2685910` cascade flash_call×2→SMS, `8b76da10` remove messenger from Rack::Attack/Svelte) — у заказчика сейчас нет кнопки мессенджера, только flash_call + SMS fallback
+- `phone_otp_test.rb`: `channel: "sms"` на новом номере → `flash_call` (sms сам код не генерирует); 3 теста про `messenger` удалены (фичи нет)
+- `profile_merge_test.rb`: `bind_via_phone!` + `link_phone` тест → `flash_call`
+- `auth_funnel_wizard_ui_test.rb`: тест "messenger and sms fallback" сужен до реального "sms fallback"
+- Проверка: `test/integration/shop/api/phone_otp_test.rb test/integration/shop/api/profile_merge_test.rb test/integration/shop/auth_funnel_wizard_ui_test.rb` → 17/17; полный `test/integration/shop/` → 502 runs, 4 failures/1 error (известный хвост, без новых регрессий)
+
 ## 2026-08-09 — fix: legacy shop triage — receipt kwarg regression + messenger OTP gap found
 - `test/integration/shop/{shop_second_card_step5,shop_save_card_false_step6}_test.rb`: `init_payment` stub `**` — fixed `ArgumentError: unknown keyword: :receipt` cascading through prepend chain
 - Regress: T-Bank callback zone 42/0; targeted files 12/0

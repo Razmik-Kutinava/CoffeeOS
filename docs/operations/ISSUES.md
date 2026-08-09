@@ -6,14 +6,18 @@
 
 ## 🔴 Блокеры
 
-[2026-08-09] — Legacy shop suite triage: real regression fixed + messenger OTP gap found
-**Статус:** 🔴 **открыт** (messenger gap) · regression **resolved**
+[2026-08-09] — Legacy shop suite triage: regression fixed + messenger OTP — тесты актуализированы под реальный флоу заказчика
+**Статус:** **resolved**
 **Источник:** плановый triage `test/integration/shop/` (C из очереди) по запросу владельца
 **Regression (resolved, `1582f078`):** `test/integration/shop/shop_second_card_step5_test.rb` + `shop_save_card_false_step6_test.rb` — `Override#init_payment` с фиксированной сигнатурой без `receipt:`; ломало `ArgumentError: unknown keyword: :receipt` любой тест дальше в prepend-цепочке `TbankAdapter`. Фикс: `**` для форвард-совместимости (как у остальных стабов).
-**Найдено (открыто):** `Shop::PhoneOtp::CHANNELS = %w[sms flash_call]` — канал **`messenger` не поддержан** сервисом, хотя `Shop::MessengerClient` и тесты (`phone_otp_test.rb`, `profile_merge_test.rb`, `auth_funnel_wizard_ui_test.rb`) ожидают его. `send_sms_with_existing_code!` требует уже существующий код (из flash_call) — messenger должен генерировать свой, но ветки для него нет.
-**Осталось:** решение владельца — восстановить messenger-канал в `Shop::PhoneOtp` (реальная доработка) **или** это осознанно убрано → тогда актуализировать/удалить тесты, ожидающие messenger. Без решения — не трогать код `PhoneOtp` наугад.
-**Остальной легаси suite:** `silent_refresh_frontend_structural_test.rb` (структурный тест по тексту `.svelte`), `payment_status_error_code_test.rb` (ErrorCode 1051 nil), `active_orders_receipt_test.rb` (`NoMethodError` nil.key?), `order_status_acceptance_cbr_test.rb`, `shop_user_cards_extremes_test.rb#E7` — не разбирались в этом шаге, отдельная итерация.
-**Прогон (seed 1, детерминированно):** 505 runs, 17 failures, 1 error, 3 skips → после regression-фикса.
+**Messenger OTP — проверено по git log, не код-баг:** канал `messenger` был **осознанно снесён** двумя коммитами рефакторинга (`b2685910` cascade flash_call×2→SMS через SmsRuClient, `8b76da10` "remove messenger from Rack::Attack and Svelte" + `8d94b95b` dead code). У заказчика сейчас в `PhoneAuthWizard`/`PhoneAuthCodeStep.svelte` **нет** кнопки мессенджера — только flash_call (основной) + SMS (fallback, требует уже существующий код). Это подтверждённый текущий продукт, не пропуск.
+**Чем закрыли:** актуализировали тесты под реальный флоу (а не добавляли messenger обратно — это было бы "придумать своё"):
+- `phone_otp_test.rb` — happy path / sms-throttle / "links phone" переведены с `channel: "sms"` (не работает на новом номере) на `channel: "flash_call"`; 3 теста про `messenger` (throttle 30s, send messenger, messenger_delivery_error) удалены — фичи нет.
+- `profile_merge_test.rb` — `bind_via_phone!` и `link_phone` тест переведены с `sms` на `flash_call` (реальный вход в OTP).
+- `auth_funnel_wizard_ui_test.rb` — тест "messenger and sms fallback" сужен до реального "sms fallback" (без messenger-ассертов).
+**Проверка:** `bin/rails test test/integration/shop/api/phone_otp_test.rb test/integration/shop/api/profile_merge_test.rb test/integration/shop/auth_funnel_wizard_ui_test.rb` → 17 runs, 0 failures.
+**Остальной легаси suite (не трогали, отдельная итерация):** `silent_refresh_frontend_structural_test.rb` (структурный тест по тексту `.svelte`), `payment_status_error_code_test.rb` (ErrorCode 1051 nil), `active_orders_receipt_test.rb` (`NoMethodError` nil.key?), `order_status_acceptance_cbr_test.rb`, `shop_user_cards_extremes_test.rb#E7`.
+**Полный прогон после фикса:** `test/integration/shop/` → 502 runs, 3289 assertions, 4 failures, 1 error, 3 skips (только известный хвост выше, без новых регрессий).
 
 [2026-08-08] — #47 Статусы с табло не sync в PWA; повторы после заказа пустые
 **Статус:** 🟡 **MCP PASS** Fly **v443** · апрув заказчика `[ ]`
