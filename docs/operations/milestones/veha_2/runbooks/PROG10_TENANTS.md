@@ -14,15 +14,15 @@
 
 Org IDs (УК): Alpha `83a6d574-e0cd-411f-add9-a5d8a08451ec`; Beta `efc04caf-ca79-4f2a-a231-eb82f02d2787`.
 
-**Киоск:** по одному устройству «Prog10 Kiosk {slug}» на каждую из 9 точек — `bin/prog10_collect_kiosk_tokens.rb` (токены не в git).
+**Киоск:** по одному устройству «Prog10 Kiosk {slug}» на каждую из 9 точек — `bin/prog10/prog10_collect_kiosk_tokens.rb` (токены не в git).
 
 ## Запуск (9 точек)
 
 ```bash
-ORDER_DELAY_SEC=7 ruby bin/prog10_fly_smoke.rb
+ORDER_DELAY_SEC=7 ruby bin/prog10/prog10_fly_smoke.rb
 
-ruby bin/prog10_collect_kiosk_tokens.rb /tmp/prog10_kiosk_tokens.json
+ruby bin/prog10/prog10_collect_kiosk_tokens.rb /tmp/prog10_kiosk_tokens.json
 KIOSK_TOKENS_FILE=/tmp/prog10_kiosk_tokens.json ORDER_DELAY_SEC=7 \
   OUT=docs/operations/milestones/veha_2/artifacts/prog10/smoke/prog10_kiosk_full.json \
-  ruby bin/prog10_fly_smoke.rb
+  ruby bin/prog10/prog10_fly_smoke.rb
 ```

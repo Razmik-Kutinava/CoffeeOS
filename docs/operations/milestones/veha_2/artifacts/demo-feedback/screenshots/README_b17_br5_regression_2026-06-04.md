@@ -13,8 +13,8 @@
 | `b17_br5_regression_after_2026-06-04.png` | post-fix: `#/cart`, оба товара, баннер «добавлен» |
 
 **Прогоны (post-deploy PASS):**
-- `node bin/b17_br5_cart_second_product_mcp.mjs` — 7/7
-- `node bin/b17_br5_catalog_card_flow_mcp.mjs` — 5/5
-- `node bin/b17_br5_quick_add_category_mcp.mjs`
+- `node bin/acceptance/b17_br5_cart_second_product_mcp.mjs` — 7/7
+- `node bin/acceptance/b17_br5_catalog_card_flow_mcp.mjs` — 5/5
+- `node bin/acceptance/b17_br5_quick_add_category_mcp.mjs`
 
 **Артефакт:** [b17_br5_regression_post_deploy_2026-06-04.json](../b17_br5_regression_post_deploy_2026-06-04.json) · апрув: [b17_br5_customer_approval_2026-06-18.json](../b17_br5_customer_approval_2026-06-18.json)

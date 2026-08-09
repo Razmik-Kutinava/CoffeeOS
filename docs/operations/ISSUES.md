@@ -161,7 +161,7 @@
 [2026-06-25] — B1.13-S2 фаза 3: Fly MCP FAIL — S2 не задеплоен
 Статус: **resolved** 2026-06-25
 Описание: pre-deploy probe 2/9 — на Fly старая сборка (вкладка «Корзина»).
-**Закрыли:** deploy владельца → `node bin/b113_s2_cart_popup_mcp.mjs` — **9/9 PASS** · [`b113_s2_post_deploy_2026-06-25.json`](milestones/veha_2/artifacts/demo-feedback/b113_s2_post_deploy_2026-06-25.json).
+**Закрыли:** deploy владельца → `node bin/acceptance/b113_s2_cart_popup_mcp.mjs` — **9/9 PASS** · [`b113_s2_post_deploy_2026-06-25.json`](milestones/veha_2/artifacts/demo-feedback/b113_s2_post_deploy_2026-06-25.json).
 
 [2026-06-19] — Fly deploy + Neon Launch
 Статус: **resolved**

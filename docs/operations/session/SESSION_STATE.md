@@ -2,13 +2,13 @@
 
 ## Шапка (агент читает только это + todo + 🔴 ISSUES)
 
-**Дата:** 2026-08-09 (README во всех папках)  
+**Дата:** 2026-08-09 (реорганизация `bin/`)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| ~320 folder README (простым языком) | Ревизия владельцем |
-| Thin always / архивы ops / pinpoint | — |
+| bin: acceptance / prog10 / fly-tools | Ждём задачу |
+| Folder READMEs | — |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -16,6 +16,11 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-09 (bin reorg)
+
+- Перенос: acceptance (58), prog10 (12), fly-tools (12); корень ~39 stubs
+- Исправлены ROOT/`cd` в подпапках; обновлены ссылки в docs
 
 ### Сессия 2026-08-09 (folder READMEs)
 

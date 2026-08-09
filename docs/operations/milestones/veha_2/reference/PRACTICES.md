@@ -89,7 +89,7 @@
 | V2-SEC-07 | `shop.html.erb` meta `shop-api-key` | **deferred → В3** *(2026-06-02)* | Задача **V3-SEC-07** — [`veha_3/CHECKLIST.md`](../veha_3/CHECKLIST.md) § E. В2 блок 4: wontfix для demo Fly |
 | V2-SEC-08 | **bundler-audit: CVE в гемах (prod)** | **open — обязательно** *(2026-07-03)* | Отдельный шаг до следующего deploy: см. § V2-SEC-08 ниже |
 | V2-P10-01 | Прогон 10: 3 org × 3 точки | **done** *(2026-06-01)* | [`PROG10_TENANTS.md`](PROG10_TENANTS.md) |
-| V2-P10-02 | Прогон 10: kiosk curl | **done** *(2026-06-01)* | `bin/prog10_fly_smoke.rb` + Prog10 Kiosk MCP |
+| V2-P10-02 | Прогон 10: kiosk curl | **done** *(2026-06-01)* | `bin/prog10/prog10_fly_smoke.rb` + Prog10 Kiosk MCP |
 | V2-P10-03 | Прогон 10: RBAC AUTH-01…09 | **done** *(2026-06-01)* | MCP + регрессия прогон 5 |
 | V2-P10-04 | Shop checkout MCP: fixed bottom nav | **done** *(2026-06-01)* | scrollIntoView + клик «Наличные» PASS |
 | V2-P10-05 | Staff/RBAC изоляция 9 точек | **done** *(2026-06-02, блок 7)* | `prog10/staff-rbac/prog10_staff_isolation.json`: own `200`, foreign `404` |

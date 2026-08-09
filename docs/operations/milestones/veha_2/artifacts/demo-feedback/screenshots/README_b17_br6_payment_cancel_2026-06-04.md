@@ -16,4 +16,4 @@
 
 **Repro JSON:** [b17_br6_payment_cancel_repro_2026-06-04.json](../b17_br6_payment_cancel_repro_2026-06-04.json)
 
-**Прогон (после апрува):** `node bin/b17_br6_payment_cancel_mcp.mjs` *(скрипт — TBD)*
+**Прогон (после апрува):** `node bin/acceptance/b17_br6_payment_cancel_mcp.mjs` *(скрипт — TBD)*

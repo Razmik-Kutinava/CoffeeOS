@@ -16,5 +16,5 @@
 |------|------------|
 | [`01_empty_name_email_verified_pay_enabled.png`](b17_br7_checkout_name_pay_after_2026-06-17/01_empty_name_email_verified_pay_enabled.png) | Пустое «Имя», verify email, **«Оплатить →» активна** |
 
-**Прогон:** `ruby bin/b17_br7_checkout_name_pay_prep_fly.rb` → `node bin/b17_br7_checkout_name_pay_mcp.mjs`  
+**Прогон:** `ruby bin/acceptance/b17_br7_checkout_name_pay_prep_fly.rb` → `node bin/acceptance/b17_br7_checkout_name_pay_mcp.mjs`  
 **Артефакт:** [`b17_br7_checkout_name_pay_post_deploy_2026-06-17.json`](../b17_br7_checkout_name_pay_post_deploy_2026-06-17.json)

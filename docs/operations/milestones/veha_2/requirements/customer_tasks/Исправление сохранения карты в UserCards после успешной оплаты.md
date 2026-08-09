@@ -215,7 +215,7 @@
 
 ## Фаза 0 — диагностика Fly (2026-07-16, read-only)
 
-**Артефакт:** [`usercards_fly_diagnose_2026-07-16.json`](../../artifacts/usercards_save_card/usercards_fly_diagnose_2026-07-16.json) · скрипт `bin/usercards_fly_diagnose.rb`
+**Артефакт:** [`usercards_fly_diagnose_2026-07-16.json`](../../artifacts/usercards_save_card/usercards_fly_diagnose_2026-07-16.json) · скрипт `bin/fly-tools/usercards_fly_diagnose.rb`
 
 | Проверка | Результат | Вывод |
 |----------|-----------|-------|

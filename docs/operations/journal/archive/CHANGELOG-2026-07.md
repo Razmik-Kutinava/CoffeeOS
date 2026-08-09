@@ -767,7 +767,7 @@
 
 ## 2026-07-18 — ops: UserCards Фаза 3.2 root cause платёж 8866531465 (Fly)
 
-- `bin/usercards_fly_payment_root_cause.rb` + [`usercards_fly_payment_root_cause_2026-07-18.json`](milestones/veha_2/artifacts/usercards_save_card/usercards_fly_payment_root_cause_2026-07-18.json).
+- `bin/fly-tools/usercards_fly_payment_root_cause.rb` + [`usercards_fly_payment_root_cause_2026-07-18.json`](milestones/veha_2/artifacts/usercards_save_card/usercards_fly_payment_root_cause_2026-07-18.json).
 - FA 09:56 без RebillId; delayed webhook *8782 на следующий день; вердict **наш баг** (нет retry GetState).
 - ISSUES/CHECKLIST/HANDOFF/TZ — сняты противоречия «backend resolved» vs 🔴 открыт.
 
@@ -778,7 +778,7 @@
 
 ## 2026-07-16 — ops: UserCards расследование 2-й оплаты aramfifa (Fly prod)
 
-- `bin/usercards_fly_payment_investigate.rb` + `usercards_fly_payment_investigate_2026-07-16.json`.
+- `bin/fly-tools/usercards_fly_payment_investigate.rb` + `usercards_fly_payment_investigate_2026-07-16.json`.
 - 2× succeeded сегодня: 08:42 *5953 с RebillId; 09:56 save_card=true **без Pan/RebillId** (GetState пустой).
 - ISSUES/SESSION_STATE обновлены.
 
@@ -808,7 +808,7 @@
 
 ## 2026-07-16 — ops: UserCards Фаза 0 Fly diagnose (read-only)
 
-- `bin/usercards_fly_diagnose.rb` — prod Neon stats via `fly machine exec`.
+- `bin/fly-tools/usercards_fly_diagnose.rb` — prod Neon stats via `fly machine exec`.
 - Артефакт: `usercards_fly_diagnose_2026-07-16.json`.
 - **Факты:** 14 cards global; aramfifa100@gmail.com 0 cards; payment save_card=true 2026-07-15 без row; worker stopped; v361.
 - **ISSUES:** 🔴 UserCards bug_13-23.
@@ -1251,7 +1251,7 @@
 
 - **Push:** `develop` → `origin/develop` (13 commits, tip `283d12f`).
 - **Fly:** `coffeeos` · image `deployment-01KWEABJGANTFHS49XY11EKFBX` · release_command OK · rolling 2/2 ✓
-- **MCP:** после апрува владельца (`node bin/b113_s2a_s2b_rev2_mcp.mjs`).
+- **MCP:** после апрува владельца (`node bin/acceptance/b113_s2a_s2b_rev2_mcp.mjs`).
 
 ## 2026-07-01 — B1.13 prog19: код CartSheet по § S2-канон
 

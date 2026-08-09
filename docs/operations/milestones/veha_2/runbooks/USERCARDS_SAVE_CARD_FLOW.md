@@ -77,8 +77,8 @@ flowchart TD
 
 | Команда | Зачем |
 |---------|--------|
-| `ruby bin/usercards_fly_diagnose.rb` | сводка карт / последние tbank payments |
-| `ruby bin/usercards_fly_payment_investigate.rb` | платежи за сегодня: Pan, RebillId по email |
+| `ruby bin/fly-tools/usercards_fly_diagnose.rb` | сводка карт / последние tbank payments |
+| `ruby bin/fly-tools/usercards_fly_payment_investigate.rb` | платежи за сегодня: Pan, RebillId по email |
 
 **Пример инцидента 2026-07-16:** платёж `8866531465` — **succeeded**, `save_card: true`, **Pan/RebillId nil** → карта не в списке. Платёж `8866059239` — Pan *5953 + RebillId → карта есть.  
 Артефакт: [`usercards_fly_payment_investigate_2026-07-16.json`](../artifacts/usercards_save_card/usercards_fly_payment_investigate_2026-07-16.json).

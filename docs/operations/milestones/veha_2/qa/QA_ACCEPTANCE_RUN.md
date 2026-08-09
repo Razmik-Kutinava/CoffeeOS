@@ -14,7 +14,7 @@
 |------|-----|------------|--------|
 | **0. Code review** | Чистый код до прогонов | [`CODE_REVIEW.md`](CODE_REVIEW.md) | ✅ **2026-05-30** |
 | **1. Сухой** | `bin/rails test` + 3 org × 3 точки | WSL | ✅ **554/0** |
-| **2. MCP / curl** | Оплата-имитация, URL, kiosk API, RBAC, stress | Chrome DevTools MCP, `bin/prog10_fly_smoke.rb` | ✅ **2026-06-01** (прогон 10b) |
+| **2. MCP / curl** | Оплата-имитация, URL, kiosk API, RBAC, stress | Chrome DevTools MCP, `bin/prog10/prog10_fly_smoke.rb` | ✅ **2026-06-01** (прогон 10b) |
 
 **Живое демо (реальные деньги)** — **не входит** в прогон 10. Только [`CHECKLIST.md`](CHECKLIST.md) § **I** + [`LIVE_DEMO_SCENARIOS_PLAIN.md`](LIVE_DEMO_SCENARIOS_PLAIN.md).
 
@@ -122,7 +122,7 @@
 
 ### Блок 9 — QA: Kiosk → barista *(2026-06-02)*
 
-Артефакты: `prog10/kiosk/prog10_kiosk_barista.json` · `prog10/kiosk/prog10_kiosk_barista_mcp.json` · `bin/prog10_kiosk_barista.rb`
+Артефакты: `prog10/kiosk/prog10_kiosk_barista.json` · `prog10/kiosk/prog10_kiosk_barista_mcp.json` · `bin/prog10/prog10_kiosk_barista.rb`
 
 - [x] curl киоск 9× — auth + cash + mock card
 - [x] barista JSON/HTML + MCP ×9
@@ -427,7 +427,7 @@ Flutter UI — **В3**; для В2 достаточно curl/E2E как киос
 ### Прогон 10 — полный scope приёмки В2 (2026-06-01)
 
 **Стенд:** `https://coffeeos.fly.dev` (deploy `e97397b`).  
-**Инструменты:** MCP Chrome DevTools, `bin/prog10_fly_smoke.rb`, `bin/prog10_collect_kiosk_tokens.rb`, WSL.  
+**Инструменты:** MCP Chrome DevTools, `bin/prog10/prog10_fly_smoke.rb`, `bin/prog10/prog10_collect_kiosk_tokens.rb`, WSL.  
 **Реестр:** [`PROG10_TENANTS.md`](PROG10_TENANTS.md).
 
 | Блок | PASS/FAIL | Примечание |
@@ -438,7 +438,7 @@ Flutter UI — **В3**; для В2 достаточно curl/E2E как киос
 | 3 org × 3 точки | **PASS** | Demo + Prog10 Alpha + Beta |
 | Оплата **9×** (cash+card) | **PASS** | [`artifacts/prog10/smoke/prog10_curl_full.json`](artifacts/prog10/smoke/prog10_curl_full.json), `ORDER_DELAY_SEC=7` |
 | Stress **8** по 8 точкам | **PASS** | round-robin в том же отчёте |
-| Kiosk **9×** | **PASS** | [`artifacts/prog10/smoke/prog10_kiosk_full.json`](artifacts/prog10/smoke/prog10_kiosk_full.json); токены — `bin/prog10_collect_kiosk_tokens.rb` (не в git) |
+| Kiosk **9×** | **PASS** | [`artifacts/prog10/smoke/prog10_kiosk_full.json`](artifacts/prog10/smoke/prog10_kiosk_full.json); токены — `bin/prog10/prog10_collect_kiosk_tokens.rb` (не в git) |
 | RBAC ≥3/роль | **PASS** | [`artifacts/prog10/staff-rbac/prog10_rbac_matrix.md`](artifacts/prog10/staff-rbac/prog10_rbac_matrix.md) |
 | MCP checkout UI | **PASS** | scrollIntoView + «Наличные» → заказ accepted (MCP) |
 | Barista ↔ заказ | **PASS** | #202606-* на `/barista` после curl/kiosk/MCP |

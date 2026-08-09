@@ -11,7 +11,7 @@
 | **B2-S1 звук** | **CLOSED** · MCP 9/9 · deploy `[x]` · **апрув `[x]` 2026-07-05** — [`b21_s1_customer_approval_2026-07-05.json`](../../artifacts/demo-feedback/b21_s1_customer_approval_2026-07-05.json) |
 | **Внутренняя приёмка** | `[x]` 2026-06-13 · OPS CLOSED |
 | **Приёмка заказчика** | **`[x]` 2026-06-18** · [`b21_customer_approval_2026-06-18.json`](../../artifacts/demo-feedback/b21_customer_approval_2026-06-18.json) |
-| **Прогон** | `FLY_BIN=flyctl ruby bin/b21_acceptance_fly.rb` → `b21_acceptance_2026-06-11.json` |
+| **Прогон** | `FLY_BIN=flyctl ruby bin/acceptance/b21_acceptance_fly.rb` → `b21_acceptance_2026-06-11.json` |
 
 ---
 
@@ -75,7 +75,7 @@
 - [x] Retry WS при сбое (3×, интервал 5 с) — `shopOrderCable.js`
 - [x] Артефакт `b21_stage3_guest_notify_2026-06-11.json`
 - [x] FCM pipeline Fly + `stage3_push_optional.png` — push register, `PushNotification`, FCM v1 (токен smoke)
-- [x] **Push simulation** — `FCM_SIMULATE=1`, `push_pipeline_simulation_test`, `bin/b21_push_pipeline_fly.rb`, `shop:push:smoke`
+- [x] **Push simulation** — `FCM_SIMULATE=1`, `push_pipeline_simulation_test`, `bin/acceptance/b21_push_pipeline_fly.rb`, `shop:push:smoke`
 - [x] Скрины Fly: `stage3_guest_preparing.png`, `stage3_guest_ready.png` *(Playwright, demo A)*
 - [x] Браузерный e2e витрина→бариста→гость — **PASS** Fly 2026-06-11 (`b21_mcp_e2e_2026-06-11.json`, Playwright)
 
@@ -94,14 +94,14 @@
 
 - [x] Полный прогон `bin/rails test` — 702 runs, 9 failures / 5 errors (вне B2.1)
 - [x] B2.1 subset + регрессия табло — FIFO/cancel/card PASS; 2 fail в create-order (не B2.1)
-- [x] `bin/b21_barista_board_fly_smoke.rb` — **PASS** e2e витрина→табло (`b21_fly_smoke_2026-06-11.json`, `order_<uuid>`)
+- [x] `bin/acceptance/b21_barista_board_fly_smoke.rb` — **PASS** e2e витрина→табло (`b21_fly_smoke_2026-06-11.json`, `order_<uuid>`)
 - [x] Fix scope табло (смена+витрина, без `limit(50)`) — regression тест >50 PASS
 - [x] Fly deploy scope fix + vitrina→board smoke **PASS** 2026-06-11 (`FLY_BIN=flyctl`, order `8e2bc72e`)
 - [x] MCP + HTTP verify Fly — **PASS** (`b21_mcp_fly_2026-06-11.json`, post-deploy)
 - [x] Скрины Fly: `barista_board_after.png`, `stage5_e2e_vitrina_to_board.png`
 - [x] Артефакт `b21_acceptance_2026-06-11.json`
 - [x] Артефакт `b21_mcp_fly_2026-06-11.json`
-- [x] Formal acceptance Fly — **OPS_PASS** (`bin/b21_acceptance_fly.rb`, критерии 1–9)
+- [x] Formal acceptance Fly — **OPS_PASS** (`bin/acceptance/b21_acceptance_fly.rb`, критерии 1–9)
 - [x] Браузерный e2e + formal Playwright — `b21_mcp_e2e` + `b21_acceptance_fly.mjs`
 - [x] Внутренняя приёмка → подпись заказчика `[x]` 2026-06-18
 
@@ -211,7 +211,7 @@
 | Broadcast гостю | `app/services/shop/guest_order_broadcaster.rb` |
 | Push | `app/services/shop/order_status_push_notifier.rb` |
 | Экран гостя | `app/frontend/routes/OrderStatus.svelte`, `lib/orderStatusProgress.js` |
-| Fly smoke | `bin/b21_barista_board_fly_smoke.rb` *(создать на этапе 5)* |
+| Fly smoke | `bin/acceptance/b21_barista_board_fly_smoke.rb` *(создать на этапе 5)* |
 
 ### Артефакты
 
@@ -444,23 +444,23 @@
 
 - [x] `OrderBoardBroadcaster` → replace `#barista-board-slots` (весь грид)
 - [x] Turbo `update_status` / `cancel` — тот же target
-- [x] Fly MCP подтверждение после деплоя — [`b21_revision_r2_mcp_fly_2026-06-13.json`](../../artifacts/demo-feedback/b21_revision_r2_mcp_fly_2026-06-13.json) · `bin/b21_revision_r2_live_fly.rb`
+- [x] Fly MCP подтверждение после деплоя — [`b21_revision_r2_mcp_fly_2026-06-13.json`](../../artifacts/demo-feedback/b21_revision_r2_mcp_fly_2026-06-13.json) · `bin/acceptance/b21_revision_r2_live_fly.rb`
 
 ### Этап R3 — тесты + smoke `[x]` 2026-06-13
 
 - [x] Интеграционные тесты табло (tap, лимит 6, broadcast)
-- [x] `bin/b21_revision_fly_smoke.rb` (REVISION=1) — **PARTIAL**, не блокер: live покрыт R4 + `bin/b21_revision_customer_mcp.rb` (PASS)
+- [x] `bin/acceptance/b21_revision_fly_smoke.rb` (REVISION=1) — **PARTIAL**, не блокер: live покрыт R4 + `bin/acceptance/b21_revision_customer_mcp.rb` (PASS)
 
 ### Этап R4 — приёмка Fly MCP `[x]` ops 2026-06-13
 
-- [x] Скрины: 6 слотов, tap white→yellow→gone, live new order → [`screenshots/b21_revision_fly_2026-06-13/`](../../artifacts/demo-feedback/screenshots/b21_revision_fly_2026-06-13/) · `bin/b21_revision_fly_screenshots.rb`
-- [x] Артефакт [`b21_revision_acceptance_2026-06-12.json`](../../artifacts/demo-feedback/b21_revision_acceptance_2026-06-12.json) · `bin/b21_revision_acceptance_fly.rb` — **PASS**, `internal_signoff_ready: true`
-- [x] Прогон пути заказчика (MCP) → [`screenshots/b21_revision_customer_mcp_2026-06-13/`](../../artifacts/demo-feedback/screenshots/b21_revision_customer_mcp_2026-06-13/) · `bin/b21_revision_customer_mcp.rb`
+- [x] Скрины: 6 слотов, tap white→yellow→gone, live new order → [`screenshots/b21_revision_fly_2026-06-13/`](../../artifacts/demo-feedback/screenshots/b21_revision_fly_2026-06-13/) · `bin/acceptance/b21_revision_fly_screenshots.rb`
+- [x] Артефакт [`b21_revision_acceptance_2026-06-12.json`](../../artifacts/demo-feedback/b21_revision_acceptance_2026-06-12.json) · `bin/acceptance/b21_revision_acceptance_fly.rb` — **PASS**, `internal_signoff_ready: true`
+- [x] Прогон пути заказчика (MCP) → [`screenshots/b21_revision_customer_mcp_2026-06-13/`](../../artifacts/demo-feedback/screenshots/b21_revision_customer_mcp_2026-06-13/) · `bin/acceptance/b21_revision_customer_mcp.rb`
 - [x] Заказчик `[x]` 2026-06-18 — [`b21_customer_approval_2026-06-18.json`](../../artifacts/demo-feedback/b21_customer_approval_2026-06-18.json)
 
 ### 2. Сверка со скринами и JSON `[x]` 2026-06-13
 
-**Скрипт:** `ruby bin/b21_revision_verify_screenshots_json.rb`  
+**Скрипт:** `ruby bin/acceptance/b21_revision_verify_screenshots_json.rb`  
 **Артефакт:** [`b21_revision_screenshots_json_verify_2026-06-13.json`](../../artifacts/demo-feedback/b21_revision_screenshots_json_verify_2026-06-13.json) — **PASS**
 
 | Проверка | Результат |
@@ -496,7 +496,7 @@
 ### Приёмка заказчика — прогон Fly MCP (2026-06-13)
 
 **URL:** `https://coffeeos.fly.dev/barista` · `barista-a@demo.coffeeos.local`  
-**Скрипт:** `ruby bin/b21_revision_customer_mcp.rb` · **PASS**
+**Скрипт:** `ruby bin/acceptance/b21_revision_customer_mcp.rb` · **PASS**
 
 | # | Проверка | Статус | Скрин |
 |---|----------|--------|-------|
@@ -540,7 +540,7 @@
 |--|--|
 | **Статус** | **CLOSED OPS** · MCP 9/9 PASS · deploy `[x]` 2026-06-17 |
 | **Фикс** | `OrderBoardSound` + Stimulus `barista-board-sound`; WAV `public/audio/barista_new_order.wav`; turbo-stream hook на `#barista-board-slots` |
-| **Прогон** | `ruby bin/b21_s1_sound_prep_fly.rb` → `node bin/b21_s1_sound_mcp.mjs` |
+| **Прогон** | `ruby bin/acceptance/b21_s1_sound_prep_fly.rb` → `node bin/acceptance/b21_s1_sound_mcp.mjs` |
 | **Артефакт** | [`b21_s1_sound_post_deploy_2026-06-17.json`](../../artifacts/demo-feedback/b21_s1_sound_post_deploy_2026-06-17.json) |
 | **Скрины** | [`screenshots/b21_s1_sound_2026-06-17/`](../../artifacts/demo-feedback/screenshots/b21_s1_sound_2026-06-17/) |
 | **Журнал** | [`DEMO_FEEDBACK.md`](../DEMO_FEEDBACK.md) — **done** |

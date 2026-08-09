@@ -19,14 +19,14 @@
 
 ```bash
 # JSON в .env одной строкой
-ruby bin/minify_firebase_env.rb
+ruby bin/fly-tools/minify_firebase_env.rb
 ```
 
 ## Fly
 
 ```bash
 # из корня репо (WSL, fly в PATH)
-bash bin/fly_firebase_secrets.sh
+bash bin/fly-tools/fly_firebase_secrets.sh
 fly deploy -a coffeeos
 ```
 
@@ -36,5 +36,5 @@ fly deploy -a coffeeos
 
 1. Витрина → заказ → **«Разрешить уведомления»**
 2. Бариста меняет статус → push в шторке
-3. `ruby bin/b11_order_status_fly_smoke.rb` — чек `push_register`
+3. `ruby bin/acceptance/b11_order_status_fly_smoke.rb` — чек `push_register`
 4. SQL: `SELECT status, title FROM push_notifications ORDER BY created_at DESC LIMIT 5;`

@@ -104,7 +104,7 @@
 | Письмо с кодом | Brevo (`BREVO_API_KEY`, `MAIL_FROM` на Fly) |
 | Без кода — нет заказа | API 422, тесты + Fly smoke 4 точки × 2 email |
 
-**Доказательства:** [`checkout_acceptance_2026-06-09.json`](../../artifacts/demo-feedback/checkout_acceptance_2026-06-09.json) · MCP-скрины: [`screenshots/checkout_mcp_2026-06-09/`](../../artifacts/demo-feedback/screenshots/checkout_mcp_2026-06-09/) · Fly: `ruby bin/shop_checkout_otp_fly_multitenant.rb`
+**Доказательства:** [`checkout_acceptance_2026-06-09.json`](../../artifacts/demo-feedback/checkout_acceptance_2026-06-09.json) · MCP-скрины: [`screenshots/checkout_mcp_2026-06-09/`](../../artifacts/demo-feedback/screenshots/checkout_mcp_2026-06-09/) · Fly: `ruby bin/fly-tools/shop_checkout_otp_fly_multitenant.rb`
 
 ### Приёмка по критериям
 
@@ -215,7 +215,7 @@
 | **Причина** | Partial fix 13.06: fallback по email, но unique index оставался на `session_id`; race в `Checkout.svelte` сбрасывал verified до ответа `/status` |
 | **Фикс** | Миграция: unique `(tenant_id, email)` — источник истины по email, не session; `EmailVerification` упрощён; checkout без «сессия истекла», `profileSyncing`, optimistic verify |
 | **Статус** | `[x]` **FIXED** — Fly PASS 2026-06-14 |
-| **Прогон** | `ruby bin/b17_checkout_session_fly.rb` → `node bin/b17_checkout_session_mcp.mjs` |
+| **Прогон** | `ruby bin/acceptance/b17_checkout_session_fly.rb` → `node bin/acceptance/b17_checkout_session_mcp.mjs` |
 | **Артефакт** | [`b17_checkout_session_2026-06-14.json`](../../artifacts/demo-feedback/b17_checkout_session_2026-06-14.json)
 
 ---
@@ -267,7 +267,7 @@
 | **Repro Fly (до фикса)** | hash-switch: API 2 товара **OK**, баннер + DOM корзины **FAIL** — [`b17_br5_regression_repro_2026-06-04.json`](../../artifacts/demo-feedback/b17_br5_regression_repro_2026-06-04.json) |
 | **Причина** | `Cart.svelte` не перечитывал корзину/баннер при повторном `#/cart` после SPA hash-switch; риск stale `product.id` в `Product.svelte` |
 | **Фикс** | `params.id` в add; `shop:cart-added` + `hashchange` в `Cart.svelte`; событие после `push('/cart')`; ошибки quick-add |
-| **Прогон** | `node bin/b17_br5_cart_second_product_mcp.mjs` · `node bin/b17_br5_catalog_card_flow_mcp.mjs` · `node bin/b17_br5_quick_add_category_mcp.mjs` |
+| **Прогон** | `node bin/acceptance/b17_br5_cart_second_product_mcp.mjs` · `node bin/acceptance/b17_br5_catalog_card_flow_mcp.mjs` · `node bin/acceptance/b17_br5_quick_add_category_mcp.mjs` |
 | **Артефакт fix** | [`b17_br5_regression_post_deploy_2026-06-04.json`](../../artifacts/demo-feedback/b17_br5_regression_post_deploy_2026-06-04.json) |
 | **Скрины** | до: `b17_br5_regression_before_p2_add_2026-06-04.png` · после: `b17_br5_regression_after_2026-06-04.png` |
 
@@ -312,7 +312,7 @@
 | **API** | `POST /cart/add` ×2 разных `product_id` → **200**, 2 lines — [`b17_cart_second_product_api_2026-06-14.json`](../../artifacts/demo-feedback/b17_cart_second_product_api_2026-06-14.json) |
 | **MCP pre-deploy** | FAIL repro: header P1, cart qty=2 одного товара |
 | **MCP post-deploy** | **PASS** 2026-06-15 — Playwright 7/7 + Chrome DevTools регрессия — [`b17_cart_second_product_post_deploy_2026-06-15.json`](../../artifacts/demo-feedback/b17_cart_second_product_post_deploy_2026-06-15.json) |
-| **Прогон** | `node bin/b17_br5_cart_second_product_mcp.mjs` |
+| **Прогон** | `node bin/acceptance/b17_br5_cart_second_product_mcp.mjs` |
 
 #### Чеклист (BR-5)
 
@@ -359,7 +359,7 @@
 | **Статус** | **CLOSED** · MCP 6/6 PASS · deploy `[x]` 2026-06-17 · **апрув заказчика `[x]` 2026-06-18** — [`b17_br6_customer_approval_2026-06-18.json`](../../artifacts/demo-feedback/b17_br6_customer_approval_2026-06-18.json) |
 | **Причина** | `onDestroy` → `finished=true` блокировал редирект после abandon; `cancelling` залипал («Отмена…»); abandon без `reconnect_token` при слабой сессии; ошибки не на intro |
 | **Фикс** | `Payment.svelte`: `destroyed` flag, cancel с token + `finally`, err UI, отмена в `loading`; `orders#abandon` + `try_reconnect_from_params!` (`params[:id]`) |
-| **Прогон** | `ruby bin/b17_br6_payment_cancel_prep_fly.rb` → `node bin/b17_br6_payment_cancel_mcp.mjs` |
+| **Прогон** | `ruby bin/acceptance/b17_br6_payment_cancel_prep_fly.rb` → `node bin/acceptance/b17_br6_payment_cancel_mcp.mjs` |
 | **Артефакт** | [`b17_br6_payment_cancel_post_deploy_2026-06-17.json`](../../artifacts/demo-feedback/b17_br6_payment_cancel_post_deploy_2026-06-17.json) |
 | **Скрины** | `b17_br6_payment_cancel_before_2026-06-17.png` · `b17_br6_payment_cancel_after_2026-06-17.png` |
 
@@ -427,7 +427,7 @@
 | **Артефакт** | [`b17_br7_checkout_name_pay_post_deploy_2026-06-17.json`](../../artifacts/demo-feedback/b17_br7_checkout_name_pay_post_deploy_2026-06-17.json) |
 | **Скрины до** | [`screenshots/b17_br7_checkout_name_pay_2026-06-17/`](../../artifacts/demo-feedback/screenshots/b17_br7_checkout_name_pay_2026-06-17/) (баг) |
 | **Скрин после** | [`screenshots/b17_br7_checkout_name_pay_after_2026-06-17/01_empty_name_email_verified_pay_enabled.png`](../../artifacts/demo-feedback/screenshots/b17_br7_checkout_name_pay_after_2026-06-17/01_empty_name_email_verified_pay_enabled.png) |
-| **Прогон** | `ruby bin/b17_br7_checkout_name_pay_prep_fly.rb` → `node bin/b17_br7_checkout_name_pay_mcp.mjs` |
+| **Прогон** | `ruby bin/acceptance/b17_br7_checkout_name_pay_prep_fly.rb` → `node bin/acceptance/b17_br7_checkout_name_pay_mcp.mjs` |
 | **Журнал** | [`DEMO_FEEDBACK.md`](../DEMO_FEEDBACK.md) — `done` |
 
 #### Контекст CoffeeOS
@@ -449,4 +449,4 @@
 - [x] **Закрыть** DEMO_FEEDBACK → `done`
 - [x] **Апрув заказчика** `[x]` 2026-06-04
 
-**Код:** `app/frontend/routes/Checkout.svelte` · скрипты `bin/b17_br7_checkout_name_pay_*` · `bin/fetch_fly_otp.rb`
+**Код:** `app/frontend/routes/Checkout.svelte` · скрипты `bin/acceptance/b17_br7_checkout_name_pay_*` · `bin/fly-tools/fetch_fly_otp.rb`

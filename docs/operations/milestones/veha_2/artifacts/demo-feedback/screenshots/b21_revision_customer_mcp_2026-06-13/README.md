@@ -1,7 +1,7 @@
 # B2.1 ревизия — прогон приёмки заказчика (Fly MCP path)
 
 **Дата:** 2026-06-13 · **Стенд:** `https://coffeeos.fly.dev` · demo A  
-**Скрипт:** `ruby bin/b21_revision_customer_mcp.rb`  
+**Скрипт:** `ruby bin/acceptance/b21_revision_customer_mcp.rb`  
 **Артефакт:** `tmp/b21_revision_customer_mcp.json` — **PASS**
 
 | Файл | Сценарий заказчика |

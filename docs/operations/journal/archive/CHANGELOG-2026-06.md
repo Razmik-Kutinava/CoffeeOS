@@ -218,7 +218,7 @@
 
 - **API:** `CartService#update_quantity!` — guard `MAX_ITEM_QUANTITY` (99)
 - **Тесты:** `b113_s3_cart_controls_test.rb` (5) + `cart_service_test` max qty
-- **MCP скрипт:** `bin/b113_s3_cart_controls_mcp.mjs`
+- **MCP скрипт:** `bin/acceptance/b113_s3_cart_controls_mcp.mjs`
 - **Pre-deploy probe Fly:** `b113_s3_post_deploy_2026-06-25.json` — **FAIL** (step 02, нет testid на стенде) · скрин `b113_s3_post_deploy_expanded_2026-06-25.png`
 - **Дальше:** deploy → повтор MCP S3 PASS · `go` S4
 
@@ -636,12 +636,12 @@
 ## v1.191 — 2026-06-13 (B2.1 R3: revision tests + fly smoke)
 
 - **Тесты:** tap white→yellow→gone, limit 6, `OrderBoardBroadcaster` broadcast target.
-- **Smoke:** `bin/b21_revision_fly_smoke.rb` (REVISION=1).
+- **Smoke:** `bin/acceptance/b21_revision_fly_smoke.rb` (REVISION=1).
 
 ## v1.190 — 2026-06-13 (B2.1 R2: Fly MCP live без F5)
 
 - **Fly MCP:** разметка `#barista-board-slots` + turbo-cable + turbo-stream 200 — PASS.
-- **Скрипт:** `bin/b21_revision_r2_live_fly.rb`.
+- **Скрипт:** `bin/acceptance/b21_revision_r2_live_fly.rb`.
 - **Артефакт:** `b21_revision_r2_mcp_fly_2026-06-13.json`.
 
 ## v1.189 — 2026-06-12 (B2.1 ревизия: 6 слотов, тап, live broadcast)
@@ -660,7 +660,7 @@
 
 - **Приёмка:** chrome-devtools MCP — путь витрина→checkout→статус; 8 скринов на Fly; 4 шага прогресс-бара + WS.
 - **Артефакты:** `b11_revision_acceptance_2026-06-12.json`, `b11_mcp_fly_2026-06-12.json`.
-- **Скрипты:** `bin/b11_revision_fly_prep.rb`, `bin/b11_revision_fly_status.rb`.
+- **Скрипты:** `bin/acceptance/b11_revision_fly_prep.rb`, `bin/acceptance/b11_revision_fly_status.rb`.
 
 ## v1.186 — 2026-06-12 (B1.1 ревизия: экран статуса по макету)
 
@@ -688,7 +688,7 @@
 - **PWA:** `/shop/manifest.webmanifest`, `/shop/service-worker.js`, иконки `public/pwa/`.
 - **Фронт:** `shopPwa.js`, `shopOfflineQueue.js`, `ShopPwaBanner`, offline catalog/cart fallback.
 - **Бэк:** `client_order_uuid` idempotency в `OrderCreator`.
-- **Тесты:** `pwa_manifest_test`, orders idempotent; smoke `bin/b14_pwa_fly_smoke.rb`.
+- **Тесты:** `pwa_manifest_test`, orders idempotent; smoke `bin/acceptance/b14_pwa_fly_smoke.rb`.
 
 ## v1.182 — 2026-06-11 (B1.4 PWA: ТЗ + baseline, без кода)
 
@@ -701,7 +701,7 @@
 
 - **FCM_SIMULATE:** `FcmClient` — отправка без Google; job → `PushNotification.status=sent`.
 - **Тесты:** `push_pipeline_simulation_test` — бариста → job → sent + B2.1 body.
-- **Ops:** `bin/b21_push_pipeline_fly.rb`, `bin/rails shop:push:smoke ORDER_ID=…`.
+- **Ops:** `bin/acceptance/b21_push_pipeline_fly.rb`, `bin/rails shop:push:smoke ORDER_ID=…`.
 
 ## v1.180 — 2026-06-11 (витрина: removed_modifiers на табло бариста)
 
@@ -724,13 +724,13 @@
 
 ## v1.177 — 2026-06-11 (B2.1: formal acceptance OPS_PASS — критерии 1–9)
 
-- **Acceptance:** `bin/b21_acceptance_fly.rb` — Playwright замеры + скрины stage1–5 на Fly, FCM v1 pipeline.
+- **Acceptance:** `bin/acceptance/b21_acceptance_fly.rb` — Playwright замеры + скрины stage1–5 на Fly, FCM v1 pipeline.
 - **Критерии:** 1–9 формально PASS (`b21_acceptance_2026-06-11.json`, `internal_signoff_ready`).
 - **Скрины:** stage2/4 Fly, `stage1_*_fly`, `stage3_push_optional.png`.
 
 ## v1.176 — 2026-06-11 (B2.1: браузерный e2e витрина→бариста→гость Fly PASS)
 
-- **Playwright e2e:** `bin/b21_mcp_e2e_prep.rb`, `b21_mcp_e2e_fly.mjs`, оркестратор `b21_mcp_e2e_fly.rb` — UI-клики бариста + WS гостю ≤5с.
+- **Playwright e2e:** `bin/acceptance/b21_mcp_e2e_prep.rb`, `b21_mcp_e2e_fly.mjs`, оркестратор `b21_mcp_e2e_fly.rb` — UI-клики бариста + WS гостю ≤5с.
 - **Артефакт:** `b21_mcp_e2e_2026-06-11.json` — **PASS**; acceptance крит. 7, 9 формально PASS.
 - **Smoke:** markup `ГОТОВИТСЯ` после заказа на табло (`b21_board_layout` + `b21_board_markup`).
 - **Скрины:** полный набор `stage5_e2e_*` на Fly.
@@ -816,7 +816,7 @@
 ## v1.162 — 2026-06-10 (B1.1 закрытие: Firebase secrets на Fly + приёмка)
 
 - **Fly:** `FIREBASE_*` secrets (FCM HTTP v1); smoke `push_register` PASS.
-- **Ops:** `config/secrets/` + gitignore; `bin/fly_firebase_secrets.sh`, `bin/minify_firebase_env.rb`, `bin/b11_mcp_fly_verify.sh`.
+- **Ops:** `config/secrets/` + gitignore; `bin/fly-tools/fly_firebase_secrets.sh`, `bin/fly-tools/minify_firebase_env.rb`, `bin/acceptance/b11_mcp_fly_verify.sh`.
 - **MCP Fly:** `b11_mcp_fly_2026-06-10.json` PASS (catalog, SW, bundle, meta).
 - **Тесты:** B1.1 suite 21 runs PASS.
 - **Доки:** B1.1 заказчик `[x]` в CBR + customer_tasks; `b11_acceptance` обновлён.
@@ -827,7 +827,7 @@
 - **FCM HTTP v1:** `FcmClient`, `FirebaseConfig`, service worker.
 - **Витрина:** `firebasePush.js`, кнопка на экране статуса.
 - **Док:** `docs/operations/dev/FIREBASE_PUSH.md`.
-- **Smoke:** `push_register` в `bin/b11_order_status_fly_smoke.rb`.
+- **Smoke:** `push_register` в `bin/acceptance/b11_order_status_fly_smoke.rb`.
 
 ## v1.160 — 2026-06-10 (B1.1 этап 5: push + WS session + приёмка)
 
@@ -839,7 +839,7 @@
 ## v1.159 — 2026-06-10 (B1.1 этап 4: приёмка + Fly/MCP)
 
 - **Тесты:** `order_status_acceptance_cbr_test` (7 критериев B1.1).
-- **Скрипт:** `bin/b11_order_status_fly_smoke.rb`.
+- **Скрипт:** `bin/acceptance/b11_order_status_fly_smoke.rb`.
 - **Артефакты:** `b11_acceptance_2026-06-10.json`, `b11_mcp_fly_2026-06-10.json`, MCP скрины.
 - **Fly:** B1.1 не на проде — deploy pending; внутр. приёмка PASS.
 
@@ -1209,7 +1209,7 @@
 - Плоский `veha_2/artifacts/prog10_*` → дерево `artifacts/prog10/{_index,smoke,kiosk,shop,staff-rbac,connectivity,platform-ent,warehouse}/`.
 - README: `artifacts/README.md`, `artifacts/prog10/README.md`, `artifacts/demo-feedback/README.md` (§E).
 - Индекс: `prog10/_index/prog10_final_index.json` (пути относительно `prog10/`).
-- Ссылки в QA/PRACTICES/POSTMORTEM/PROG10_TENANTS + `bin/prog10_*` OUT.
+- Ссылки в QA/PRACTICES/POSTMORTEM/PROG10_TENANTS + `bin/prog10/prog10_*` OUT.
 - **Код/тесты не менялись.** Веха 2 §I по-прежнему не закрыта.
 
 ## v1.99 — 2026-06-02 (SEC-07 → Веха 3)
@@ -1248,7 +1248,7 @@
 
 ## v1.93 — 2026-06-02 (V2 прогон 10 — блок 3 закрыт)
 
-- **CR-05:** Fly `POST /kiosk/api/auth` **9/9** — `prog10/kiosk/prog10_kiosk_auth_fly_cr05.json`, `bin/prog10_kiosk_auth_fly_verify.rb`.
+- **CR-05:** Fly `POST /kiosk/api/auth` **9/9** — `prog10/kiosk/prog10_kiosk_auth_fly_cr05.json`, `bin/prog10/prog10_kiosk_auth_fly_verify.rb`.
 - **CR-04:** wontfix на Fly 1 pod; при multi-pod / смене хостинга → Redis — `PRACTICES`.
 - Push `develop` (23 коммита); `fly deploy` — владелец (`flyctl auth login`).
 
@@ -1271,7 +1271,7 @@
 
 ## v1.89 — 2026-06-02 (V2 прогон 10 — блок 9, kiosk → barista ×9)
 
-- curl **9/9:** киоск auth + cash order `accepted` + заказ на табло barista (`prog10/kiosk/prog10_kiosk_barista.json`, `bin/prog10_kiosk_barista.rb`).
+- curl **9/9:** киоск auth + cash order `accepted` + заказ на табло barista (`prog10/kiosk/prog10_kiosk_barista.json`, `bin/prog10/prog10_kiosk_barista.rb`).
 - MCP Puppeteer **9/9:** login barista → `/barista`, заказ на доске (`prog10/kiosk/prog10_kiosk_barista_mcp.json`).
 - Блок **8** ✅ после апрува; блок **10** — после апрува.
 
@@ -1306,7 +1306,7 @@
 
 ## v1.83 — 2026-06-02 (V2 прогон 10 — блок 7, staff/rbac isolation)
 
-- Добавлен `bin/prog10_staff_rbac_isolation.rb` для проверки изоляции staff/RBAC по 9 точкам.
+- Добавлен `bin/prog10/prog10_staff_rbac_isolation.rb` для проверки изоляции staff/RBAC по 9 точкам.
 - Артефакты: `prog10/staff-rbac/prog10_staff_isolation.json` + `prog10/staff-rbac/prog10_staff_isolation.md` (PASS 9/9).
 - Изоляция подтверждена: own order `200`, foreign order `404`; prep-tenant barista доступ ожидаемо закрыт (`302`).
 
@@ -1357,7 +1357,7 @@
 ## v1.75 — 2026-06-01 (V2 прогон 10b — закрытие QA)
 
 - **QA:** прогон 10 **PASS** — 9× cash/card, 9× kiosk, stress 8, RBAC-матрица, MCP checkout.
-- **Скрипты:** `bin/prog10_fly_smoke.rb` (ORDER_DELAY_SEC), `bin/prog10_collect_kiosk_tokens.rb`.
+- **Скрипты:** `bin/prog10/prog10_fly_smoke.rb` (ORDER_DELAY_SEC), `bin/prog10/prog10_collect_kiosk_tokens.rb`.
 - **Артефакты:** `prog10/smoke/prog10_curl_full.json`, `prog10/smoke/prog10_kiosk_full.json`, `prog10/staff-rbac/prog10_rbac_matrix.md`.
 - **Живое демо** вынесено из QA → только §I [`CHECKLIST.md`](milestones/veha_2/checklists/CHECKLIST.md).
 

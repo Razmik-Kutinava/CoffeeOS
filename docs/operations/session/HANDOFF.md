@@ -2,16 +2,16 @@
 
 ## Шапка (агент читает только это + todo + 🔴 ISSUES)
 
-**Дата:** 2026-08-09 (README во всех папках)  
+**Дата:** 2026-08-09 (реорганизация `bin/`)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Короткие README простым языком почти во всех папках | Ты правишь/убираешь лишние по списку |
-| Агент не always читает эти README | апрув #47 «ок» |
+| `bin/` → корень stubs + `acceptance/` + `prog10/` + `fly-tools/` | Ревизия README папок по желанию |
+| Folder READMEs по репо | апрув #47 «ок» |
 
-**last_done:** массовые folder README + gitignore exceptions  
-**next_step:** ревизия README владельцем  
+**last_done:** разложили скрипты `bin/` по 3 папкам + README  
+**next_step:** явный пункт владельца  
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

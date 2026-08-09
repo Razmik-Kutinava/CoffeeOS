@@ -18,4 +18,4 @@
 | `stage5_e2e_vitrina_to_board.png` | Крит.9 — витрина→табло | Fly e2e |
 | `stage5_e2e_*.png` | Полный e2e цикл | Fly Playwright |
 
-**Прогон:** `FLY_BIN=flyctl ruby bin/b21_acceptance_fly.rb`
+**Прогон:** `FLY_BIN=flyctl ruby bin/acceptance/b21_acceptance_fly.rb`

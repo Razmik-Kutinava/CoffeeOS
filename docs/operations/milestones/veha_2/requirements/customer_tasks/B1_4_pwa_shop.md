@@ -68,7 +68,7 @@
 - [x] localStorage fallback каталога и корзины
 - [x] `shopOfflineCart.js` — очередь `POST /cart/add` офлайн + optimistic cart
 - [x] `ShopPwaBanner` — баннер offline
-- [x] LCP ≤ 2.5 с — замер `bin/b14_pwa_browser_shots.mjs` → `tmp/b14_lcp.json`
+- [x] LCP ≤ 2.5 с — замер `bin/acceptance/b14_pwa_browser_shots.mjs` → `tmp/b14_lcp.json`
 
 ### Этап 4 — офлайн checkout queue `[x]`
 
@@ -78,10 +78,10 @@
 
 ### Этап 5 — приёмка `[x]` 2026-06-12
 
-- [x] **Полный прогон:** `bash bin/b14_run_acceptance.sh` (= smoke → audit → browser_shots → finalize)
-- [x] PWA audit 100% — `bin/b14_pwa_programmatic_audit.rb` (LH 13+ без категории pwa)
-- [x] Fly smoke PASS — `bin/b14_pwa_fly_smoke.rb`
-- [x] LCP + скрины — `bin/b14_pwa_browser_shots.mjs` (не только smoke+finalize)
+- [x] **Полный прогон:** `bash bin/acceptance/b14_run_acceptance.sh` (= smoke → audit → browser_shots → finalize)
+- [x] PWA audit 100% — `bin/acceptance/b14_pwa_programmatic_audit.rb` (LH 13+ без категории pwa)
+- [x] Fly smoke PASS — `bin/acceptance/b14_pwa_fly_smoke.rb`
+- [x] LCP + скрины — `bin/acceptance/b14_pwa_browser_shots.mjs` (не только smoke+finalize)
 - [x] Скрины: `lighthouse_pwa_audit`, `standalone_home_screen`, `install_prompt_android`, `offline_catalog`, `offline_checkout_queued`
 - [ ] **Долг:** слить PWA SW + FCM в один worker (сейчас два — не блокер)
 - [ ] iOS add-to-home скрин — после апрува на устройстве
@@ -203,11 +203,11 @@
 | PWA bootstrap | `app/frontend/lib/shopPwa.js`, `shopNetwork.js` |
 | Офлайн очередь заказа | `app/frontend/lib/shopOfflineQueue.js` |
 | Офлайн add в корзину | `app/frontend/lib/shopOfflineCart.js`, `shopCartAdd.js` |
-| Приёмка Fly | `bin/b14_run_acceptance.sh`, `b14_pwa_browser_shots.mjs` |
+| Приёмка Fly | `bin/acceptance/b14_run_acceptance.sh`, `b14_pwa_browser_shots.mjs` |
 | UI | `app/frontend/components/ShopPwaBanner.svelte` |
 | Idempotency | `Shop::OrderCreator#find_client_order_duplicate!` |
-| Иконки | `public/pwa/*.png`, `bin/generate_pwa_icons.ps1` |
-| Fly smoke | `bin/b14_pwa_fly_smoke.rb` |
+| Иконки | `public/pwa/*.png`, `bin/fly-tools/generate_pwa_icons.ps1` |
+| Fly smoke | `bin/acceptance/b14_pwa_fly_smoke.rb` |
 
 ---
 

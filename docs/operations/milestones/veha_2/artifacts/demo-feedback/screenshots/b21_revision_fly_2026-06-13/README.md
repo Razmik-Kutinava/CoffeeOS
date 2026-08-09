@@ -11,5 +11,5 @@
 | `06_live_new_order_fly.png` | Новый заказ появился без F5 (~4.4с) |
 
 **Стенд:** `https://coffeeos.fly.dev` · demo A · `barista-a@demo.coffeeos.local`  
-**Скрипт:** `ruby bin/b21_revision_fly_screenshots.rb` (prep + Playwright)  
+**Скрипт:** `ruby bin/acceptance/b21_revision_fly_screenshots.rb` (prep + Playwright)  
 **Результат:** `tmp/b21_revision_fly_screenshots.json` — **PASS** 2026-06-13

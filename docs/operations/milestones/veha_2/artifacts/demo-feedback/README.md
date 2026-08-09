@@ -20,6 +20,6 @@
 **Очередь правок (история §1–3):** [`../../DEMO_FEEDBACK.md`](../../DEMO_FEEDBACK.md) — done 2026-06-04.  
 **Активный чеклист (§2.3 этапы 1–5):** [`../../CUSTOMER_BUSINESS_REQUIREMENTS.md`](../../CUSTOMER_BUSINESS_REQUIREMENTS.md) — новые MCP JSON сюда же.
 
-**Checkout email OTP (Fly smoke):** `bin/shop_checkout_otp_fly_multitenant.rb` — OTP из БД только через **`fly machine exec` + `rails runner`**. `fly ssh console` для OTP **не работает** (remote command exited without exit status). Артефакты: `checkout_otp_fly_multitenant_*.json`, `checkout_acceptance_2026-06-09.json`.
+**Checkout email OTP (Fly smoke):** `bin/fly-tools/shop_checkout_otp_fly_multitenant.rb` — OTP из БД только через **`fly machine exec` + `rails runner`**. `fly ssh console` для OTP **не работает** (remote command exited without exit status). Артефакты: `checkout_otp_fly_multitenant_*.json`, `checkout_acceptance_2026-06-09.json`.
 
 **Для агента:** commit + ops всегда (`coffeeos-commit-ops.mdc`); отчёт — Сделано | Не сделано. Push/deploy — только по просьбе. §I / `[x]` CHECKLIST — после «ок» заказчика.

@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-09 — refactor: reorganize bin/ into acceptance, prog10, fly-tools
+- Корень `bin/`: rails/dev/smoke/ci/deploy stubs (~39 файлов)
+- `bin/acceptance/`: приёмка MCP/Fly (`b11*`…`b21*`)
+- `bin/prog10/`: прогон 10 точек
+- `bin/fly-tools/`: usercards/OTP/Firebase/иконки
+- Обновлены пути в скриптах и живых docs; README в каждой папке
+
 ## 2026-08-09 — docs: folder READMEs plain language (owner/customer)
 - ~320 коротких `README.md` по папкам app/test/config/docs/.cursor/… простым языком
 - Ignore-папки (log/tmp/storage/uploads/scratch/node_modules/…) — README + исключения в `.gitignore`

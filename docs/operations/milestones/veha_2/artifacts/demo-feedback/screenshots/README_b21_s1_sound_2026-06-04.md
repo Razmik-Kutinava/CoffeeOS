@@ -13,4 +13,4 @@
 
 **Артефакт:** [`b21_s1_sound_post_deploy_2026-06-17.json`](../b21_s1_sound_post_deploy_2026-06-17.json) — **PASS** 9/9 · latency **27 ms**
 
-**Прогон:** `ruby bin/b21_s1_sound_prep_fly.rb` → `node bin/b21_s1_sound_mcp.mjs`
+**Прогон:** `ruby bin/acceptance/b21_s1_sound_prep_fly.rb` → `node bin/acceptance/b21_s1_sound_mcp.mjs`

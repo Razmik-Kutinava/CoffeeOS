@@ -108,18 +108,18 @@
 export BASE="${BASE:-https://coffeeos.fly.dev}"
 export B14_TENANT_ID="${B14_TENANT_ID:-2fdee1ac-4674-41ee-b89e-87b45643f789}"
 
-bash bin/b14_run_acceptance.sh
+bash bin/acceptance/b14_run_acceptance.sh
 # или одной командой:
-ruby bin/b14_pwa_acceptance_fly.rb
+ruby bin/acceptance/b14_pwa_acceptance_fly.rb
 ```
 
 По шагам:
 
 ```bash
-ruby bin/b14_pwa_fly_smoke.rb              # 1 — HTTP smoke
-ruby bin/b14_pwa_programmatic_audit.rb     # 2 — PWA checklist 100%
-node bin/b14_pwa_browser_shots.mjs         # 3 — скрины + LCP → tmp/b14_lcp.json
-ruby bin/b14_finalize_acceptance.rb        # 4 — b14_pwa_acceptance_*.json OPS_PASS
+ruby bin/acceptance/b14_pwa_fly_smoke.rb              # 1 — HTTP smoke
+ruby bin/acceptance/b14_pwa_programmatic_audit.rb     # 2 — PWA checklist 100%
+node bin/acceptance/b14_pwa_browser_shots.mjs         # 3 — скрины + LCP → tmp/b14_lcp.json
+ruby bin/acceptance/b14_finalize_acceptance.rb        # 4 — b14_pwa_acceptance_*.json OPS_PASS
 ```
 
 Только smoke (без скринов/LCP): первые две команды + finalize **не** дадут свежий LCP.
