@@ -2,13 +2,13 @@
 
 ## Шапка (агент читает только это + todo + 🔴 ISSUES)
 
-**Дата:** 2026-08-09 (субагенты триггеры)  
+**Дата:** 2026-08-09 (slash commands)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| subagent triggers in agent-workflow / SBR | Ждём задачу |
-| rules anti-noise + docs cleanup | — |
+| `/start` `/spec` `/sbr` `/regress` `/review` | Ждём задачу |
+| subagent triggers | — |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -16,6 +16,11 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-09 (commands)
+
+- `.cursor/commands/` + `.cursor/skills/` (human-only): start/spec/sbr/regress/review
+- Умный /start (узкий vs PHASE 0); каждая команда печатает `Next: /…`
 
 ### Сессия 2026-08-09 (субагенты)
 

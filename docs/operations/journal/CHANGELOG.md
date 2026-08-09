@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-09 — feat: CoffeeOS slash commands start→review
+- `.cursor/commands/{start,spec,sbr,regress,review}.md` + README
+- Зеркало `.cursor/skills/*/SKILL.md` (`disable-model-invocation: true`)
+- Умный `/start`; обязательный `Next: /…` после этапа; regress до push/Fly
+
 ## 2026-08-09 — rules: subagent triggers by SBR stage
 - `agent-workflow`: политика + таблица explore/shell/bugbot/security-review/ci-investigator
 - SBR: explore на SPEC, shell на длинной регрессии, bugbot(+security) на REVIEW

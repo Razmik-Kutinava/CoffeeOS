@@ -1,5 +1,5 @@
-# todo — subagent triggers (2026-08-09)
+# todo — slash commands (2026-08-09)
 
-**Сделано:** триггеры в rules + `docs/agents/SUBAGENTS.md` + строка в отчёте.
+**Сделано:** `/start` `/spec` `/sbr` `/regress` `/review` + docs/ops.
 
 **Статус:** done

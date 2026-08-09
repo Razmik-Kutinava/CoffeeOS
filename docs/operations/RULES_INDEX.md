@@ -1,10 +1,11 @@
 # Индекс правил агента CoffeeOS
 
-**Обновлено:** 2026-08-09 — триггеры субагентов по этапам (explore/shell/bugbot/…); мелочь без роя.
+**Обновлено:** 2026-08-09 — slash-команды `/start`…`/review` (+ умный start, `Next: /…`).
 
 При конфликте приоритет: **`coffeeos-commit-ops`** > task-workflow > dev-gates > остальное.  
 **Коммит:** канон CoffeeOS (commit после правок) **важнее** глобального User Rule «commit only when asked» — User Rule лучше удалить в Cursor Settings → Rules.  
-**Субагенты:** таблица этапов в `agent-workflow`; карта для людей — `docs/agents/SUBAGENTS.md`.
+**Субагенты:** таблица этапов в `agent-workflow`; карта — `docs/agents/SUBAGENTS.md`.  
+**Команды:** `.cursor/commands/` + `.cursor/skills/` (human `/…`); цепочка start→spec→sbr→regress→review.
 
 ## Always (`alwaysApply: true`) — короткий закон
 

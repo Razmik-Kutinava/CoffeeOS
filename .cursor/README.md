@@ -7,13 +7,13 @@
 ```
 .cursor/
 ├── README.md                 ← этот файл
+├── commands/                 ← slash /start /spec /sbr /regress /review
+├── skills/                   ← те же slash (disable-model-invocation)
 ├── CURSOR_RULES_REPORT.txt   ← короткий отчёт/снимок структуры (legacy)
 └── rules/                    ← правила агента (*.mdc)
-    ├── coffeeos-index.mdc    ← индекс always vs on-demand (always)
-    ├── coffeeos-*.mdc        ← symlinks → project/ (старые пути)
-    ├── workflow/             ← КАК работать (процесс)
-    └── project/              ← КАК писать код (домен)
 ```
+
+**Команды:** см. [`commands/README.md`](commands/README.md). Цепочка: `/start` → `/spec` → `/sbr` → `/regress` → `/review`. Каждая печатает `Next: /…`.
 
 ---
 
