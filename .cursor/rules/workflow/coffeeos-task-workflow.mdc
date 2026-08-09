@@ -32,13 +32,14 @@ SBR — это **порядок фаз** (SPEC → RED → GREEN → REVIEW), а
 
 ## Старт сессии (обязательно в новом чате)
 
-Прочитать **только тонкий набор** (см. `coffeeos-agent-workflow.mdc`):
+Прочитать **только тонкий набор** (см. `coffeeos-agent-workflow.mdc` § шапка-only):
 
-- **Шапка** `HANDOFF.md` + **шапка** `SESSION_STATE.md` (не весь файл, не `session/archive/`)
+- **Шапка** `HANDOFF.md` + **шапка** `SESSION_STATE.md` — `Read` с `limit` до первого `---` (**запрет** глотать тело / PRACTICES / QA / весь CHANGELOG)
 - `ISSUES.md` — секция 🔴
 - `todo.md` — если есть живая задача
 - Активное ТЗ в `customer_tasks/` — **если** уже ведётся задача заказчика
 - `CHECKLIST.md` / `CBR` — **только если** работа явно про пункт вехи / индекс требований
+- Folder README / рой `ce-*` — не на старте (см. agent-workflow)
 
 Первый ответ пользователю — **таблица** (все три поля заполнены):
 

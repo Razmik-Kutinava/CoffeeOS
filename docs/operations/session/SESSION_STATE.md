@@ -2,13 +2,13 @@
 
 ## Шапка (агент читает только это + todo + 🔴 ISSUES)
 
-**Дата:** 2026-08-09 (чистка docs)  
+**Дата:** 2026-08-09 (rules anti-noise)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| docs cleanup done | Ждём задачу |
-| bin reorg + folder READMEs | — |
+| rules: шапка-only / README / ce-* / soft blast-radius | Ждём задачу |
+| docs cleanup + bin reorg | — |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -16,6 +16,13 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-09 (rules anti-noise)
+
+- Шапка-only жёстко (limit до `---`; запрет глотать тело SESSION/HANDOFF/CHANGELOG/PRACTICES/QA)
+- README не читать при Glob/дереве; ce-*/skills без роя на мелочь; субагент 1–2 по делу
+- Мягкий blast-radius (+1–3); блоки todo «Не ломать»/«Проверка» — отложены до согласования
+- commit-ops > User Rule «commit only on ask» (лучше удалить User Rule в Cursor Settings)
 
 ### Сессия 2026-08-09 (docs cleanup)
 

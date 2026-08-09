@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-09 — rules: harden header-only + anti-noise (README/ce-*/soft blast-radius)
+- `agent-workflow` / `coffeeos-index` / `.cursorrules` / `RULES_INDEX` / task-workflow / SBR / commit-ops
+- Шапка ops только `limit` до `---`; запрет глотать тело жирных docs
+- Folder README не при обходе; мелочь без роя ce-*; субагент 1–2
+- Мягкий blast-radius; обязательные «Не ломать»/«Проверка» в todo — отложены
+- User Rule «commit only when asked» — игнор в репо; лучше удалить в Cursor Settings
+
 ## 2026-08-09 — docs: remove redundant agent/product noise
 - Удалены tech-дубли `LIVE_DEMO_SCENARIOS.md` (оставлен PLAIN), `qa/CODE_REVIEW.md` v1/v2
 - Удалены `docs/agents/AGENTS/*` (канон — `AGENTS.md`), `docs/product/core/*.sql.md` (~440 KB SQL-черновиков)

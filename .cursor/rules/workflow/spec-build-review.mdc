@@ -33,7 +33,9 @@ alwaysApply: false
    - path/one.rb — зачем
    - path/two.svelte — зачем
    ```
-3. **Создание todo-трекера:** Обнови `docs/operations/session/todo.md` — фазы SBR + файлы + галочки. Не путать с `CHECKLIST.md` вехи.
+   Hot-path / shared — мягкий blast-radius: при необходимости +1–3 соседних пути с пометкой почему (`coffeeos-agent-workflow`).  
+   Блоки «Не ломать: …» / «Проверка: bin/rails test …» в todo — **пока не обязательны** (согласование с заказчиком); регрессию зоны на GREEN всё равно см. dev-gates.
+3. **Создание todo-трекера:** Обнови `docs/operations/session/todo.md` — фазы SBR + файлы + галочки. Не путать с `CHECKLIST.md` вехи. Не рой ce-*/skills на мелочь.
 4. **Запись в Ops-память:** обнови **шапку** `SESSION_STATE.md` / `HANDOFF.md` (кратко: что начали, ссылка на todo).
 5. **Блокировка (Gate 1):** СТОП. Выведи структуру todo.md (включая список файлов) в чат.
    > "### 📋 [PHASE 1: SPEC] Спецификация импортирована в todo.md и SESSION_STATE.md.

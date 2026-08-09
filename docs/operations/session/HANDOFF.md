@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + 🔴 ISSUES)
 
-**Дата:** 2026-08-09 (чистка docs: дубли + product/core)  
+**Дата:** 2026-08-09 (rules: шапка-only / anti-noise)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Удалены tech LIVE_DEMO, CODE_REVIEW, `AGENTS/*`, `product/core` | Явный пункт владельца |
-| Ссылки в живых docs поправлены | апрув #47 «ок» |
+| Жёсткая шапка ops + README/ce-* анти-шум | Явный пункт владельца |
+| Мягкий blast-radius; «Не ломать»/«Проверка» в todo — ждут согласования | апрув #47 «ок» |
 
-**last_done:** чистка лишних docs (~502 KB)  
+**last_done:** anti-noise rules (шапка / README / ce-* / soft blast-radius)  
 **next_step:** явный пункт владельца  
 
 **Архив session:** [`archive/README.md`](archive/README.md)  

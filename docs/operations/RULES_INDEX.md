@@ -1,8 +1,9 @@
 # Индекс правил агента CoffeeOS
 
-**Обновлено:** 2026-08-07 — thin always (меньше токенов, без потери канона).
+**Обновлено:** 2026-08-09 — шапка-only жёстко; README/ce-* анти-шум; мягкий blast-radius (без обязательных «Не ломать»/«Проверка» в todo до согласования).
 
-При конфликте приоритет: **`coffeeos-commit-ops`** > task-workflow > dev-gates > остальное.
+При конфликте приоритет: **`coffeeos-commit-ops`** > task-workflow > dev-gates > остальное.  
+**Коммит:** канон CoffeeOS (commit после правок) **важнее** глобального User Rule «commit only when asked» — User Rule лучше удалить в Cursor Settings → Rules.
 
 ## Always (`alwaysApply: true`) — короткий закон
 
@@ -37,12 +38,14 @@
 
 | Файл | Когда |
 |------|--------|
-| `session/SESSION_STATE.md` / `HANDOFF.md` | Живые: **шапка** + текущий месяц. Агент на старте читает **только шапку** |
+| `session/SESSION_STATE.md` / `HANDOFF.md` | Живые: **шапка** + текущий месяц. Старт: **только шапка** (`limit` до `---`); тело/PRACTICES/QA — не глотать |
 | `session/archive/` | Старые месяцы — **не читать** без запроса |
-| `journal/CHANGELOG.md` | Живой: шапка + текущий месяц |
+| `journal/CHANGELOG.md` | Живой: писать в текущий месяц; на старте **не** читать весь файл |
 | `journal/archive/` | Старые CHANGELOG-YYYY-MM — **не читать** без запроса |
 | `ISSUES.md` | Баги; на старте — только 🔴 (архив позже, если файл раздуется) |
 | CBR / `DEMO_FEEDBACK.md` | Заказчик, backlog — не на каждый старт |
+| Folder `README.md` | Не читать при Glob/дереве; только по явной нужде |
+| Skills / `ce-*` / субагенты | Мелочь — без роя; 1–2 субагента по делу; on-demand |
 
 ## Symlinks в `.cursor/rules/`
 
