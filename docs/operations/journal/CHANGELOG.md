@@ -32,6 +32,9 @@
 - SPEC `todo.md`: poll `/orders/active` + visibility + refresh frequent (G1–G3)
 - Token check: always −77%; SPEC-ход rules+шапки ≈ −69% vs старый full memory — `TOKEN_CHECK_2026-08-08.md`
 
+## 2026-08-09 — docs: add .cursor/README.md (rules folder map)
+- Простая карта папок/файлов `.cursor/rules` (workflow + project + symlinks)
+
 ## 2026-08-08 — chore: pinpoint code context (SPEC files list, no @codebase waste)
 - Always/SBR/task-workflow: SPEC → «Файлы (ожидаемо)» 2–7 путей в todo; BUILD читает список + точечный добор
 - Без Graphify/`codebase-map.md`; запрет зряшного `@codebase`
