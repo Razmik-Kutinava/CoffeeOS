@@ -205,7 +205,7 @@
 > **Блокеры §I:** §E (DEMO_FEEDBACK открыт) + живое демо + апрув заказчика.  
 > **Хвосты → В3:** Flutter (киоск/мобилка), offline (§G), касса на всех каналах (§F п.2), refund (§H).
 
-- [x] [`CODE_REVIEW.md`](CODE_REVIEW.md) — вердикт **2026-05-30** (к прогону 10; 554/0)
+- [x] Code review В2 — вердикт **2026-05-30** (к прогону 10; 554/0); протокол `qa/CODE_REVIEW.md` удалён 2026-08-09 → `.cursor/rules/project/coffeeos-code-review.mdc`
 - [x] [`QA_ACCEPTANCE_RUN.md`](QA_ACCEPTANCE_RUN.md) — **прогон 10 PASS** (блоки 0–14 — детали там же, § «Прогон 10 — блоки 0–14»)
 - [ ] **§E** [`DEMO_FEEDBACK.md`](DEMO_FEEDBACK.md) — фидбек и блокеры закрыты
 - [ ] Живое демо В2 — [`LIVE_DEMO_SCENARIOS_PLAIN.md`](LIVE_DEMO_SCENARIOS_PLAIN.md)

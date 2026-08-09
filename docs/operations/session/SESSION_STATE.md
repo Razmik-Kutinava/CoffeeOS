@@ -2,13 +2,13 @@
 
 ## Шапка (агент читает только это + todo + 🔴 ISSUES)
 
-**Дата:** 2026-08-09 (реорганизация `bin/`)  
+**Дата:** 2026-08-09 (чистка docs)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| bin: acceptance / prog10 / fly-tools | Ждём задачу |
-| Folder READMEs | — |
+| docs cleanup done | Ждём задачу |
+| bin reorg + folder READMEs | — |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -16,6 +16,12 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-09 (docs cleanup)
+
+- Удалено: `LIVE_DEMO_SCENARIOS.md` (v1+v2 tech), `qa/CODE_REVIEW.md` (v1+v2), `docs/agents/AGENTS/*`, `docs/product/core/*.sql.md` (+ README)
+- Оставлены: PLAIN live-demo, `AGENTS.md`, product 01–03, archives/artifacts
+- Живые ссылки: PATH_MAP, README вех, CHECKLIST, QA_ACCEPTANCE_RUN, PRACTICES, runbooks
 
 ### Сессия 2026-08-09 (bin reorg)
 

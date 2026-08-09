@@ -1,7 +1,8 @@
 ﻿# GAP LIST: core -> schema
 
 Дата: 2026-05-11  
-Источник сравнения: `docs/product/core/*.md` vs `db/schema.rb`
+Источник сравнения (исторический): `docs/product/core/*.md` vs `db/schema.rb`.  
+**2026-08-09:** папка `docs/product/core/` удалена; актуальная схема — `db/schema.rb`. Этот gap-list оставлен как архив решения.
 
 ## 1) Текущее покрытие
 

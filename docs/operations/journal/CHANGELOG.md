@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-09 — docs: remove redundant agent/product noise
+- Удалены tech-дубли `LIVE_DEMO_SCENARIOS.md` (оставлен PLAIN), `qa/CODE_REVIEW.md` v1/v2
+- Удалены `docs/agents/AGENTS/*` (канон — `AGENTS.md`), `docs/product/core/*.sql.md` (~440 KB SQL-черновиков)
+- Обновлены PATH_MAP / README вех / CHECKLIST / QA / PRACTICES / runbooks
+- ~502 KB с диска; оценка токенов — в отчёте шага
+
 ## 2026-08-09 — refactor: reorganize bin/ into acceptance, prog10, fly-tools
 - Корень `bin/`: rails/dev/smoke/ci/deploy stubs (~39 файлов)
 - `bin/acceptance/`: приёмка MCP/Fly (`b11*`…`b21*`)

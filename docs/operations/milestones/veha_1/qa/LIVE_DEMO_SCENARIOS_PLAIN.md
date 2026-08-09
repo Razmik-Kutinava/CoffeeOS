@@ -9,7 +9,7 @@
 
 Подробные логины — в конце документа (таблица).
 
-*Техническая версия для разработчиков:* [`LIVE_DEMO_SCENARIOS.md`](LIVE_DEMO_SCENARIOS.md)
+*Канон для показа:* этот файл (tech-дубль `LIVE_DEMO_SCENARIOS.md` удалён 2026-08-09).
 
 **Порядок:** сначала это (живое с людьми), потом при необходимости MCP по техническому файлу — см. [`CHECKLIST.md`](CHECKLIST.md) § H.3.
 
@@ -547,4 +547,4 @@
 
 ---
 
-*Для разработчиков:* [`LIVE_DEMO_SCENARIOS.md`](LIVE_DEMO_SCENARIOS.md) · [`DEMO_LOGINS.md`](DEMO_LOGINS.md)
+*Логины стенда:* [`../reference/DEMO_LOGINS.md`](../reference/DEMO_LOGINS.md)

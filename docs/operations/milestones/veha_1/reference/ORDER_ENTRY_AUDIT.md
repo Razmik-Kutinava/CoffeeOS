@@ -39,4 +39,4 @@
 2. **Закрытие блока G** → `[x]` только если эта таблица актуальна и `block_g_cash_shift_test` зелёный.
 3. **Таск-трекер (In Progress)** → не «Done», пока в чеклисте нет `[x]` на «аудит входов» и «решение A/B».
 
-**Связанные доки:** [`CHECKLIST.md`](CHECKLIST.md) §G, [`PRACTICES.md`](PRACTICES.md) § Gate, `docs/agents/AGENTS/qa_scenarios.md` V1-3.1–3.3.
+**Связанные доки:** [`../checklists/CHECKLIST.md`](../checklists/CHECKLIST.md) §G, [`PRACTICES.md`](PRACTICES.md) § Gate, [`../qa/QA_ACCEPTANCE_RUN.md`](../qa/QA_ACCEPTANCE_RUN.md).

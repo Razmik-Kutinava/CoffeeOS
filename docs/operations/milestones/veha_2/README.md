@@ -42,13 +42,11 @@
 | [requirements/DEMO_FEEDBACK.md](requirements/DEMO_FEEDBACK.md) | **шаблон** | Очередь правок заказчика после демо В1 |
 | [requirements/CUSTOMER_BUSINESS_REQUIREMENTS.md](requirements/CUSTOMER_BUSINESS_REQUIREMENTS.md) | **активен** | CBR — требования бизнеса |
 | [qa/QA_ACCEPTANCE_RUN.md](qa/QA_ACCEPTANCE_RUN.md) | **каркас** | Протокол приёмки В2 (заполнять при прогоне) |
-| [qa/CODE_REVIEW.md](qa/CODE_REVIEW.md) | **каркас** | CR перед релизом/демо В2 |
 | [reference/DEMO_LOGINS.md](reference/DEMO_LOGINS.md) | **каркас** | Логины стенда новых org (после `demo:seed` / ручного онбординга) |
 | [runbooks/OFFLINE_SYNC.md](runbooks/OFFLINE_SYNC.md) | **заготовка** | Offline POS, sync, idempotency — этап позже |
-| [qa/LIVE_DEMO_SCENARIOS.md](qa/LIVE_DEMO_SCENARIOS.md) | **заготовка** | Ручные сценарии приёмки В2 (tech) |
-| [qa/LIVE_DEMO_SCENARIOS_PLAIN.md](qa/LIVE_DEMO_SCENARIOS_PLAIN.md) | **заготовка** | То же для заказчика |
+| [qa/LIVE_DEMO_SCENARIOS_PLAIN.md](qa/LIVE_DEMO_SCENARIOS_PLAIN.md) | **заготовка** | Сценарии приёмки В2 для заказчика (tech-дубль удалён) |
 
-**Вне папки:** `docs/agents/AGENTS/qa_scenarios.md`, [journal/CHANGELOG.md](../journal/CHANGELOG.md), [session/SESSION_STATE.md](../session/SESSION_STATE.md), [session/HANDOFF.md](../session/HANDOFF.md), [ISSUES.md](../ISSUES.md).
+**Вне папки:** [`docs/agents/AGENTS.md`](../../../agents/AGENTS.md), [journal/CHANGELOG.md](../journal/CHANGELOG.md), [session/SESSION_STATE.md](../session/SESSION_STATE.md), [session/HANDOFF.md](../session/HANDOFF.md), [ISSUES.md](../ISSUES.md). CR: `.cursor/rules/project/coffeeos-code-review.mdc`.
 
 ---
 

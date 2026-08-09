@@ -20,7 +20,7 @@
 
 ## QA
 
-`docs/agents/AGENTS/qa_scenarios.md` — **[V2] O-1, O-2, O-3**.
+Сценарии offline — [`../qa/QA_ACCEPTANCE_RUN.md`](../qa/QA_ACCEPTANCE_RUN.md) (секция O; старый `AGENTS/qa_scenarios.md` удалён).
 
 ---
 

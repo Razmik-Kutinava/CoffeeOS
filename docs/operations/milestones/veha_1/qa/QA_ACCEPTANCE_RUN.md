@@ -3,7 +3,7 @@
 **Дата:** 2026-05-25  
 **Исполнитель:** агент (этапы 1–2). **Этап 3** (ручной + живое демо) — владелец продукта.
 
-Сценарии: `docs/agents/AGENTS/qa_scenarios.md`  
+Сценарии: этот протокол + [`ONBOARDING_DEVTOOLS_SCENARIOS`](../../veha_2/runbooks/ONBOARDING_DEVTOOLS_SCENARIOS.md) / live-demo PLAIN (старый `docs/agents/AGENTS/qa_scenarios.md` удалён)  
 Чеклист: [`CHECKLIST.md`](CHECKLIST.md) § H
 
 ---

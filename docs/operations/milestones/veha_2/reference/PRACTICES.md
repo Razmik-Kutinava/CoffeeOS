@@ -13,7 +13,7 @@
 
 - **Вердикт:** к **прогону 10**; правки: OrderCreator N+1, Tbank idempotency claim, callback job lookup, Rack::Attack kiosk path.
 - **Тесты:** 554/0 (WSL). **Прогон 10:** частичный PASS — [`QA_ACCEPTANCE_RUN.md`](QA_ACCEPTANCE_RUN.md).
-- **Док:** [`CODE_REVIEW.md`](CODE_REVIEW.md)
+- **Док:** CR-протокол `qa/CODE_REVIEW.md` удалён 2026-08-09 → `.cursor/rules/project/coffeeos-code-review.mdc`
 
 ### Прогон 10 — **2026-05-30**
 
@@ -27,7 +27,7 @@
 - **Точка входа агента:** [`../../session/SESSION_STATE.md`](../../session/SESSION_STATE.md).
 - **План работ:** [`QA_ACCEPTANCE_RUN.md`](QA_ACCEPTANCE_RUN.md) — таблица блоков 0–14; блок **0** ✅.
 - **Не в scope:** Flutter, живое демо, живая оплата, 9 MCP-витрин (делаем 5).
-- **Блок 5 (gate):** полный suite WSL — **559/0** *(2026-06-02)*; статусы CR синхронизированы в `CODE_REVIEW.md`.
+- **Блок 5 (gate):** полный suite WSL — **559/0** *(2026-06-02)*; статусы CR зафиксированы здесь / в QA_ACCEPTANCE_RUN.
 
 ### Gate (как в В1)
 

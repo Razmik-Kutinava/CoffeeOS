@@ -22,8 +22,8 @@
 | `FLUTTER_API.md` | [runbooks/FLUTTER_API.md](veha_2/runbooks/FLUTTER_API.md) |
 | `PROG10_TENANTS.md` | [runbooks/PROG10_TENANTS.md](veha_2/runbooks/PROG10_TENANTS.md) |
 | `QA_ACCEPTANCE_RUN.md` | [qa/QA_ACCEPTANCE_RUN.md](veha_2/qa/QA_ACCEPTANCE_RUN.md) |
-| `CODE_REVIEW.md` | [qa/CODE_REVIEW.md](veha_2/qa/CODE_REVIEW.md) |
-| `LIVE_DEMO_SCENARIOS.md` | [qa/LIVE_DEMO_SCENARIOS.md](veha_2/qa/LIVE_DEMO_SCENARIOS.md) |
+| `CODE_REVIEW.md` | *(удалён 2026-08-09; CR — `.cursor/rules/project/coffeeos-code-review.mdc`)* |
+| `LIVE_DEMO_SCENARIOS.md` | *(удалён; канон — PLAIN)* → [qa/LIVE_DEMO_SCENARIOS_PLAIN.md](veha_2/qa/LIVE_DEMO_SCENARIOS_PLAIN.md) |
 | `LIVE_DEMO_SCENARIOS_PLAIN.md` | [qa/LIVE_DEMO_SCENARIOS_PLAIN.md](veha_2/qa/LIVE_DEMO_SCENARIOS_PLAIN.md) |
 | `POSTMORTEM_2026-05-28.md` | [qa/POSTMORTEM_2026-05-28.md](veha_2/qa/POSTMORTEM_2026-05-28.md) |
 | `PRACTICES.md` | [reference/PRACTICES.md](veha_2/reference/PRACTICES.md) |
@@ -35,8 +35,8 @@
 |-------------------------|-------|
 | `CHECKLIST.md` | [checklists/CHECKLIST.md](veha_1/checklists/CHECKLIST.md) |
 | `QA_ACCEPTANCE_RUN.md` | [qa/QA_ACCEPTANCE_RUN.md](veha_1/qa/QA_ACCEPTANCE_RUN.md) |
-| `CODE_REVIEW.md` | [qa/CODE_REVIEW.md](veha_1/qa/CODE_REVIEW.md) |
-| `LIVE_DEMO_SCENARIOS.md` | [qa/LIVE_DEMO_SCENARIOS.md](veha_1/qa/LIVE_DEMO_SCENARIOS.md) |
+| `CODE_REVIEW.md` | *(удалён 2026-08-09; CR — `.cursor/rules/project/coffeeos-code-review.mdc`)* |
+| `LIVE_DEMO_SCENARIOS.md` | *(удалён; канон — PLAIN)* → [qa/LIVE_DEMO_SCENARIOS_PLAIN.md](veha_1/qa/LIVE_DEMO_SCENARIOS_PLAIN.md) |
 | `LIVE_DEMO_SCENARIOS_PLAIN.md` | [qa/LIVE_DEMO_SCENARIOS_PLAIN.md](veha_1/qa/LIVE_DEMO_SCENARIOS_PLAIN.md) |
 | `PRACTICES.md` | [reference/PRACTICES.md](veha_1/reference/PRACTICES.md) |
 | `DEMO_FEEDBACK.md` | [reference/DEMO_FEEDBACK.md](veha_1/reference/DEMO_FEEDBACK.md) |

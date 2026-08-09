@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + 🔴 ISSUES)
 
-**Дата:** 2026-08-09 (реорганизация `bin/`)  
+**Дата:** 2026-08-09 (чистка docs: дубли + product/core)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| `bin/` → корень stubs + `acceptance/` + `prog10/` + `fly-tools/` | Ревизия README папок по желанию |
-| Folder READMEs по репо | апрув #47 «ок» |
+| Удалены tech LIVE_DEMO, CODE_REVIEW, `AGENTS/*`, `product/core` | Явный пункт владельца |
+| Ссылки в живых docs поправлены | апрув #47 «ок» |
 
-**last_done:** разложили скрипты `bin/` по 3 папкам + README  
+**last_done:** чистка лишних docs (~502 KB)  
 **next_step:** явный пункт владельца  
 
 **Архив session:** [`archive/README.md`](archive/README.md)  

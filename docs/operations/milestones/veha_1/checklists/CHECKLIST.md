@@ -8,7 +8,7 @@
 
 **Как пользоваться:** отмечай `[x]` по мере выполнения. Закрытие вехи — когда критичные пункты (⭐) сделаны и зафиксирован блок «Закрытие вехи» внизу.
 
-**Связанные доки:** [`README.md`](README.md) (карта папки), [`PRACTICES.md`](PRACTICES.md) (журнал), `docs/product/development_roadmap.md`, `docs/agents/AGENTS/qa_scenarios.md`.
+**Связанные доки:** [`README.md`](README.md) (карта папки), [`PRACTICES.md`](PRACTICES.md) (журнал), `docs/product/development_roadmap.md`, [`docs/agents/AGENTS.md`](../../../../agents/AGENTS.md).
 
 ### ⚠️ Gate: чеклист ↔ таск-трекер (обязательно)
 
@@ -161,7 +161,7 @@
 | `docs/product/03_Business_Logic.md` | смена, заказ, списание, отмена с причиной |
 | `docs/product/development_roadmap.md` | В1 закрыта / хвосты в В2–В3 |
 | `docs/product/ARCHITECTURE.md` | при расхождении с кодом — точечно |
-| `docs/agents/AGENTS/qa_scenarios.md` | новые сценарии E/F/G и правки старых |
+| `docs/agents/AGENTS.md` + `qa/QA_ACCEPTANCE_RUN.md` | сценарии E/F/G (старый `AGENTS/qa_scenarios.md` удалён) |
 
 - [x] ⭐ Продуктовые доки + roadmap согласованы с кодом В1 (**2026-05-24:** `01_Vision`, `02_functional`, `03_Business_Logic`, `development_roadmap`, `ARCHITECTURE`)
 - [x] ⭐ `qa_scenarios.md` дополнен под В1 (**2026-05-25:** сценарии V1-*, этапы Авто/MCP/Ручной, журнал)
@@ -176,7 +176,7 @@
 
 ### 2.1 Code review перед демо
 
-- [x] ⭐ Code review В1 + правки по находкам (**2026-05-25:** `docs/operations/milestones/veha_1/qa/CODE_REVIEW.md`; исправлен N+1 в `Shop::OrderCreator`; shop+block_g **51/0**)
+- [x] ⭐ Code review В1 + правки по находкам (**2026-05-25:** протокол CR был в `qa/CODE_REVIEW.md` — удалён 2026-08-09; исправлен N+1 в `Shop::OrderCreator`; shop+block_g **51/0**)
 - [x] Коммит + деплой Fly — **2026-05-25:** 16 коммитов на `develop`; fix npm v1.53 (`4a25187`); CI `Deploy to Fly.io`
 
 ### H.0 После деплоя на Fly (demo-стенд develop) — **обязательно до живого демо**
@@ -192,7 +192,7 @@
 
 ### 3. Живое демо
 
-Показ **не QA-исполнителю**: заказчик / бариста / менеджер. Инструкция простым языком: [`LIVE_DEMO_SCENARIOS_PLAIN.md`](LIVE_DEMO_SCENARIOS_PLAIN.md); техническая — [`LIVE_DEMO_SCENARIOS.md`](LIVE_DEMO_SCENARIOS.md). Минимум для приёмки — 4 истории в конце plain-дока (§ 10).
+Показ **не QA-исполнителю**: заказчик / бариста / менеджер. Инструкция: [`LIVE_DEMO_SCENARIOS_PLAIN.md`](../qa/LIVE_DEMO_SCENARIOS_PLAIN.md) (tech-дубль удалён). Минимум для приёмки — 4 истории в конце plain-дока (§ 10).
 
 **Порядок:** сначала **живое** (H.3) → потом **MCP** по полному списку (~55 сценариев), если нужна регрессия. MCP **не** заменяет живое и **не** гонять до него (кроме срочного релиза без даты демо).
 
@@ -202,7 +202,7 @@
   - **1.3** смена — **частично** (бариста **OK**; витрина и закрытие смены — без скринов)
   - **1.4** склад — **частично** (остаток **OK**; продажа и списание — без скринов)
 - [x] ⭐ Демо: бариста → заказ → склад; shop → заказ; УК → точка/каталог — **принято заочно** (блокеры не заявлены; хвост §2–10 → не блокирует закрытие)
-- [ ] MCP DevTools: полный прогон `LIVE_DEMO_SCENARIOS.md` — **не обязателен для закрытия В1**; при необходимости — регрессия В2
+- [ ] MCP DevTools: полный прогон по `LIVE_DEMO_SCENARIOS_PLAIN.md` — **не обязателен для закрытия В1**; при необходимости — регрессия В2
 
 ---
 

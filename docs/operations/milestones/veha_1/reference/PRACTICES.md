@@ -70,7 +70,7 @@
 
 ### H. Block H — QA приёмка — **H.2 закрыт** (2026-05-25)
 
-**Документы:** `docs/agents/AGENTS/qa_scenarios.md` (сценарии + журнал), `docs/operations/milestones/veha_1/qa/QA_ACCEPTANCE_RUN.md` (протокол).
+**Документы:** `docs/operations/milestones/veha_1/qa/QA_ACCEPTANCE_RUN.md` (протокол); старый `docs/agents/AGENTS/qa_scenarios.md` удалён 2026-08-09.
 
 **Этапы (агент):**
 
@@ -105,12 +105,12 @@
 | Документ | Назначение |
 |----------|------------|
 | `LIVE_DEMO_SCENARIOS_PLAIN.md` | Для заказчика и нетехнарей: шаги, логины, ссылки витрин |
-| `LIVE_DEMO_SCENARIOS.md` | Техническая версия для QA/разработки |
+| `LIVE_DEMO_SCENARIOS_PLAIN.md` | Канон живого демо (tech-дубль удалён 2026-08-09) |
 
 **Витрины (Fly demo):** `bin/rails demo:shop_urls` — режим B. **Прод:** `{slug}.{SHOP_BASE_DOMAIN}/shop` — см. `docs/operations/dev/SHOP_URL_MODES.md`.
 **Минимум приёмки:** 4 истории в plain-доке § 10.
 
-**MCP по ~55 сценариям** (`LIVE_DEMO_SCENARIOS.md`): только **после** живого демо (чеклист H.3 `[x]`); до живого — не гонять.
+**MCP по сценариям** (`LIVE_DEMO_SCENARIOS_PLAIN.md`): только **после** живого демо (чеклист H.3 `[x]`); до живого — не гонять.
 
 ### Git / деплой — **2026-05-25**
 
@@ -119,7 +119,7 @@
 
 ### Code review V1 (перед живым демо) — **2026-05-25**
 
-**Протокол:** `docs/operations/milestones/veha_1/qa/CODE_REVIEW.md`.
+**Протокол CR:** удалён; правила — `.cursor/rules/project/coffeeos-code-review.mdc`.
 
 | CR | Суть | Статус |
 |----|------|--------|

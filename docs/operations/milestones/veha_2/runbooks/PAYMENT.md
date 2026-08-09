@@ -209,4 +209,4 @@
 
 ## QA
 
-`docs/agents/AGENTS/qa_scenarios.md` — секция **[ВЕХА 2] Реальная оплата**.
+Сценарии оплаты В2 — [`../qa/QA_ACCEPTANCE_RUN.md`](../qa/QA_ACCEPTANCE_RUN.md) + integration `test/integration/shop/api/qa_section_2_3_*` (старый `AGENTS/qa_scenarios.md` удалён).

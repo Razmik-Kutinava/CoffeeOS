@@ -2,9 +2,9 @@
 
 **Зачем:** протокол приёмки В2 — по образцу [`../veha_1/QA_ACCEPTANCE_RUN.md`](../veha_1/QA_ACCEPTANCE_RUN.md). **Статус:** приёмка **в работе**; прогоны **0–9** — история; **10+** — актуальный scope (см. ниже).
 
-**Порядок в § I чеклиста:** сначала [`CODE_REVIEW.md`](CODE_REVIEW.md), потом этот документ.
+**Порядок в § I чеклиста:** сначала code review (правила: `.cursor/rules/project/coffeeos-code-review.mdc`; старый `CODE_REVIEW.md` удалён), потом этот документ.
 
-**Сценарии:** `docs/agents/AGENTS/qa_scenarios.md` — **[ВЕХА 2]**; RBAC/онбординг — [`ONBOARDING_DEVTOOLS_SCENARIOS.md`](ONBOARDING_DEVTOOLS_SCENARIOS.md) (AUTH-01…10). **Чеклист:** [`CHECKLIST.md`](CHECKLIST.md) § I.
+**Сценарии:** этот протокол + RBAC/онбординг — [`ONBOARDING_DEVTOOLS_SCENARIOS.md`](../runbooks/ONBOARDING_DEVTOOLS_SCENARIOS.md) (AUTH-01…10). **Чеклист:** [`CHECKLIST.md`](../checklists/CHECKLIST.md) § I.
 
 ---
 
@@ -12,7 +12,7 @@
 
 | Этап | Что | Инструмент | Статус |
 |------|-----|------------|--------|
-| **0. Code review** | Чистый код до прогонов | [`CODE_REVIEW.md`](CODE_REVIEW.md) | ✅ **2026-05-30** |
+| **0. Code review** | Чистый код до прогонов | `.cursor/rules/project/coffeeos-code-review.mdc` | ✅ **2026-05-30** |
 | **1. Сухой** | `bin/rails test` + 3 org × 3 точки | WSL | ✅ **554/0** |
 | **2. MCP / curl** | Оплата-имитация, URL, kiosk API, RBAC, stress | Chrome DevTools MCP, `bin/prog10/prog10_fly_smoke.rb` | ✅ **2026-06-01** (прогон 10b) |
 
@@ -96,7 +96,7 @@
 ### Блок 5 — Гейт кода *(2026-06-02, перегон 562/0)*
 
 - [x] Полный `bin/rails test` WSL — **562/0**
-- [x] Синхрон `PRACTICES.md` / `CODE_REVIEW.md` (статусы CR)
+- [x] Синхрон `PRACTICES.md` / статусы CR (протокол `CODE_REVIEW.md` удалён)
 
 ### Блок 6 — Продукт: staff *(2026-06-02, `cf7a2cf`, тесты 561/0)*
 
@@ -432,7 +432,7 @@ Flutter UI — **В3**; для В2 достаточно curl/E2E как киос
 
 | Блок | PASS/FAIL | Примечание |
 |------|-----------|------------|
-| Code review | **PASS** | [`CODE_REVIEW.md`](CODE_REVIEW.md) |
+| Code review | **PASS** | см. PRACTICES / coffeeos-code-review.mdc |
 | `/up` | **PASS** | 200 |
 | `bin/rails test` | **PASS** | 554/0 (WSL) |
 | 3 org × 3 точки | **PASS** | Demo + Prog10 Alpha + Beta |
