@@ -2,16 +2,16 @@
 
 ## Шапка (агент читает только это + todo + 🔴 ISSUES)
 
-**Дата:** 2026-08-09 (legacy triage: messenger OTP тесты актуализированы)  
+**Дата:** 2026-08-09 (INTEGRATIONS.md + /trace-bug)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Legacy suite: receipt regression + messenger OTP тесты — 17/17 green | A UserCards 3.5 / E2E **или** B витрина |
-| Anti-gem / MCP-safety / Local≠Fly | апрув #47 «ок» |
+| Карта мостов `INTEGRATIONS.md`; команда `/trace-bug` | Арам сверит карту с болями; UserCards / витрина |
+| Legacy suite messenger OTP — 17/17 green | апрув #47 «ок» |
 
-**last_done:** messenger OTP — git log подтвердил осознанный снос, тесты приведены к реальному флоу (flash_call+SMS)  
-**next_step:** очередь в `todo.md` (UserCards / витрина / оставшиеся 4-5 legacy failures)  
+**last_done:** INTEGRATIONS.md (Т-Банк, SMS.ru, identity, loyalty draft) + `/trace-bug` + правило обновления карты  
+**next_step:** заказчик сверяет INTEGRATIONS.md; очередь в `todo.md`  
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

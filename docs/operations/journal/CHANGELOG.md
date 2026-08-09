@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-09 — docs: карта интеграций INTEGRATIONS.md + /trace-bug
+- `INTEGRATIONS.md` (корень): bridge Т-Банк, SMS.ru OTP/cascade, identity merge, loyalty [DRAFT], push/WS
+- `.cursor/commands/trace-bug.md` — сквозной аудит hot-path до правок
+- `.cursorrules`: обновлять карту при правках payments/callbacks/OTP; gitignore exception `!INTEGRATIONS.md`
+- Заказчику: сверить карту с болями (банк, бонусы, регистрация)
+
 ## 2026-08-09 — fix: legacy shop triage — messenger OTP тесты приведены к реальному флоу заказчика
 - Git log подтвердил: канал `messenger` осознанно снесён (`b2685910` cascade flash_call×2→SMS, `8b76da10` remove messenger from Rack::Attack/Svelte) — у заказчика сейчас нет кнопки мессенджера, только flash_call + SMS fallback
 - `phone_otp_test.rb`: `channel: "sms"` на новом номере → `flash_call` (sms сам код не генерирует); 3 теста про `messenger` удалены (фичи нет)

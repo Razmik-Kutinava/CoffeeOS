@@ -2,13 +2,13 @@
 
 ## Шапка (агент читает только это + todo + 🔴 ISSUES)
 
-**Дата:** 2026-08-09 (hot-path rules)  
+**Дата:** 2026-08-09 (INTEGRATIONS.md)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Не ломать/Проверка обязательны; DoD Point A | todo: UserCards / витрина |
-| Anti-gem · MCP-safety | — |
+| Карта интеграций + `/trace-bug` | сверка с заказчиком; UserCards / витрина |
+| Hot-path rules; DoD Point A | — |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
