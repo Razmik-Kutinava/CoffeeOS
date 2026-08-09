@@ -107,6 +107,11 @@ Thumbs.db
 !README.md
 !doc/**/*.md
 !docs/**/*.md
+!.cursor/commands/**/*.md
+!.cursor/skills/**/*.md
+!.cursor/README.md
+!.cursor/rules/**/*.md
+!.cursor/rules/**/*.mdc
 
 # Документы: в git — product/, operations/ (включая milestones), agents/
 /docs/**
