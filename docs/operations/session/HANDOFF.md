@@ -2,16 +2,16 @@
 
 ## Шапка (агент читает только это + todo + 🔴 ISSUES)
 
-**Дата:** 2026-08-09 (`.cursor/README.md`)  
+**Дата:** 2026-08-09 (README во всех папках)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Добавлен `.cursor/README.md` — карта rules | Ждём задачу |
-| #47 MCP PASS v443 | апрув заказчика «ок» |
+| Короткие README простым языком почти во всех папках | Ты правишь/убираешь лишние по списку |
+| Агент не always читает эти README | апрув #47 «ок» |
 
-**last_done:** `.cursor/README.md` (карта workflow/project)  
-**next_step:** явный пункт / апрув #47  
+**last_done:** массовые folder README + gitignore exceptions  
+**next_step:** ревизия README владельцем  
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

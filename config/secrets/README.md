@@ -1,11 +1,9 @@
-# Локальные секреты (не в git)
+# config/secrets
 
-| Файл | Назначение |
-|------|------------|
-| `firebase-service-account.json` | Firebase Admin SDK для FCM HTTP v1 |
+Секреты (ключи). Сами ключи в git не кладём.
 
-Скачать: Firebase Console → Project settings → Service accounts → Generate new private key.
+> Для владельца и заказчика: что лежит в этой папке простыми словами. Агенту читать только если нужно понять зону — **не always**.
 
-В `.env`: `ruby bin/minify_firebase_env.rb` (JSON одной строкой).
+## Зачем это нам
 
-На Fly: `bash bin/fly_firebase_secrets.sh` — см. `docs/operations/dev/FIREBASE_PUSH.md`.
+Чтобы быстро понимать структуру CoffeeOS без чтения кода.

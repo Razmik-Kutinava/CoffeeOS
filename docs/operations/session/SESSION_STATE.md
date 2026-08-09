@@ -2,13 +2,13 @@
 
 ## Шапка (агент читает только это + todo + 🔴 ISSUES)
 
-**Дата:** 2026-08-09 (`.cursor/README.md`)  
+**Дата:** 2026-08-09 (README во всех папках)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| `.cursor/README.md` — карта папок правил | Ждём задачу |
-| #47 MCP PASS · v443 | апрув «ок» |
+| ~320 folder README (простым языком) | Ревизия владельцем |
+| Thin always / архивы ops / pinpoint | — |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -16,6 +16,11 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-09 (folder READMEs)
+
+- Сгенерированы короткие README по дереву репо для владельца/заказчика
+- gitignore: разрешены README в log/tmp/storage/uploads/scratch/node_modules/coverage/…
 
 ### Сессия 2026-08-09 (`.cursor/README`)
 

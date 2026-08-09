@@ -11,6 +11,14 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-09 — docs: folder READMEs plain language (owner/customer)
+- ~320 коротких `README.md` по папкам app/test/config/docs/.cursor/… простым языком
+- Ignore-папки (log/tmp/storage/uploads/scratch/node_modules/…) — README + исключения в `.gitignore`
+- Агенту: не always; только если нужно понять зону (`coffeeos-index`)
+
+## 2026-08-09 — docs: add .cursor/README.md (rules folder map)
+- Простая карта папок/файлов `.cursor/rules` (workflow + project + symlinks)
+
 ## 2026-08-08 — MCP: #47 Fly v443 status poll + repeats PASS
 - Aram Point A: ready `#202608-0027` → issued (barista service); без reload PWA → «повторить» ×3
 - Evidence: `pwa_status_sync_and_repeats_stale/mcp/fly_v443_2026-08-08/`

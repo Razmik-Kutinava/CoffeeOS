@@ -4,38 +4,53 @@
 # belong in git's global ignore instead:
 # `$XDG_CONFIG_HOME/git/ignore` or `~/.config/git/ignore`
 
+# Гемы в каталоге проекта (`path vendor/bundle`)
+/vendor/bundle/
+!/vendor/README.md
+
 # Bundler: не коммитим кэш, но path к гемам — в репо (удобно для WSL без sudo)
 /.bundle/*
 !/.bundle/config
-
-# Гемы в каталоге проекта (`path vendor/bundle`)
-/vendor/bundle/
+!/.bundle/README.md
 
 # Ignore all environment files.
 /.env*
 
 # Ignore all logfiles and tempfiles.
 /log/*
-/tmp/*
 !/log/.keep
+!/log/README.md
+/tmp/*
 !/tmp/.keep
+!/tmp/README.md
 
 # Ignore pidfiles, but keep the directory.
 /tmp/pids/*
 !/tmp/pids/
 !/tmp/pids/.keep
+!/tmp/pids/README.md
+!/tmp/sockets/README.md
+!/tmp/cache/README.md
+!/tmp/storage/
+!/tmp/storage/.keep
+!/tmp/storage/README.md
 
 # Ignore storage (uploaded files in development and any SQLite databases).
 /storage/*
 !/storage/.keep
+!/storage/README.md
 /tmp/storage/*
 !/tmp/storage/
 !/tmp/storage/.keep
+!/tmp/storage/README.md
 
 /public/assets
 
 # Загрузки фото товаров УК (public/uploads/products)
 /public/uploads/
+!/public/uploads/README.md
+!/public/uploads/products/
+!/public/uploads/products/README.md
 
 # Ignore key files for decrypting credentials and more.
 /config/*.key
@@ -44,6 +59,7 @@
 
 # Local Postgres test cluster (never commit)
 /.pg_test/
+!/.pg_test/README.md
 
 # Local scratch/notes file
 /qc
@@ -51,6 +67,7 @@
 # Agent scratch: one-off scripts, commit msgs — только scripts/scratch/, не корень
 /scripts/scratch/*
 !/scripts/scratch/.keep
+!/scripts/scratch/README.md
 /tmp_*
 /-b
 /-F
@@ -61,9 +78,11 @@
 
 # Coverage reports (e.g. SimpleCov)
 /coverage/
+!/coverage/README.md
 
 # Node + Vite (витрина shop)
 /node_modules/
+!/node_modules/README.md
 /public/vite-dev
 /public/vite-test
 /public/vite-ssr
@@ -77,9 +96,11 @@ Thumbs.db
 
 # VSCode settings
 .vscode/
+!.vscode/README.md
 
 # Claude Code free-claude-code
 /free-claude-code/
+!/free-claude-code/README.md
 
 # Все markdown файлы кроме README.md и doc/features/
 *.md
@@ -98,8 +119,7 @@ Thumbs.db
 
 # Vite Ruby
 /public/vite*
-node_modules
-# Vite uses dotenv and suggests to ignore local-only env files. See
-# https://vitejs.dev/guide/env-and-mode.html#env-files
+# node_modules уже выше; README разрешён через !/node_modules/README.md
+# дубль без слэша ломал un-ignore — убран
 *.local
 

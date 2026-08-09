@@ -34,3 +34,5 @@ alwaysApply: true
 **Память:** на старте только шапка `HANDOFF`/`SESSION_STATE` + 🔴 ISSUES (не весь файл) + `todo`. Архив `session/archive/` и `journal/archive/` — по запросу. CHECKLIST/CBR — только если задача про веху.
 
 **Код:** SPEC → 2–7 путей в todo; BUILD → только они (+ точечный добор). Не `@codebase` зря. Без отдельного Graphify/`codebase-map.md`.
+
+**README в папках:** для владельца/заказчика (простым языком). Агенту — **не always**; открывать только если нужно понять зону.

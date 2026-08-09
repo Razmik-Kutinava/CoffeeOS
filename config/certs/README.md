@@ -1,15 +1,9 @@
-# Certificates for T-Bank API (НУЦ Минцифры / Russian Trusted CA)
+# config/certs
 
-Т-Банк перевёл `securepay.tinkoff.ru` на цепочку Russian Trusted Root/Sub CA.
-Без них Ruby `Net::HTTP` на Fly даёт:
+Сертификаты (если нужны для интеграций).
 
-`SSL_connect ... certificate verify failed (self-signed certificate in certificate chain)`
+> Для владельца и заказчика: что лежит в этой папке простыми словами. Агенту читать только если нужно понять зону — **не always**.
 
-Файлы (PEM):
+## Зачем это нам
 
-- `russian_trusted_root_ca.crt`
-- `russian_trusted_sub_ca.crt`
-
-Источник: портал Госуслуг / gu-st.ru (инструкция банка: http://status.tbank.ru/api-setup/).
-
-В образ ставятся через `Dockerfile` → `update-ca-certificates` + `SSL_CERT_FILE`.
+Чтобы быстро понимать структуру CoffeeOS без чтения кода.
