@@ -11,6 +11,10 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-10 — fix: Dockerfile bin sed skip subdirectories (fly deploy)
+
+- `sed: couldn't edit bin/acceptance: not a regular file` — только top-level файлы в `bin/` через `find -maxdepth 1 -type f`
+
 ## 2026-08-10 — docs: Entire Windows git hook PATH note
 
 - `ENTIRE.md`: commit из Windows Git skip hook без Entire в PATH; варианты WSL git / Cursor hooks

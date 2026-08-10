@@ -9,8 +9,8 @@
 |--------|--------|
 | Entire hooks ✅ · ISSUES «🔴 Открыто» · docs sync | UserCards / витрина · SBR |
 
-**last_done:** workflow audit `6b5b5a51` + Entire Windows hook note `da772854`  
-**next_step:** Entire checkpoint — agent-сессия + commit (Entire CLI в Windows PATH или WSL git)  
+**last_done:** fly deploy fix `9cb159e0` — Dockerfile `find bin -maxdepth 1 -type f` (не sed на `bin/acceptance`)  
+**next_step:** `bin/fly_deploy.sh` из WSL  
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
