@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-10 (workflow audit)  
+**Дата:** 2026-08-10 (integration bridge audit)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| ISSUES compact · Entire/WSL runbook · AGENTS sync | UserCards / витрина |
+| Bridge audit + deploy runbook PWA/payments batch | UserCards E2E · deploy по runbook |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,13 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-10 (integration bridge audit)
+
+- **Gap matrix:** `docs/integrations/gap-matrix-pwa-payments.md` (17 задач + hot-path endpoints)
+- **Bridge:** `shop-api.md`, `pwa-realtime.md`; расширены `tbank`, `sms-auth`, `notify-loyalty`, `INTEGRATIONS.md`
+- **Runbook:** `docs/operations/runbooks/DEPLOY_PWA_PAYMENTS_BATCH.md` (preflight → deploy → MCP matrix)
+- Код не менялся; продукт UserCards 🔴 — следующий SBR
 
 ### Сессия 2026-08-10 (workflow audit)
 

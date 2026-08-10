@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-10 — docs: integration bridge audit + PWA/payments deploy runbook
+
+- **Gap matrix:** `docs/integrations/gap-matrix-pwa-payments.md` — 17 задач, слепые зоны, payment decision tree
+- **Bridge:** `shop-api.md`, `pwa-realtime.md`; расширены `tbank.md`, `sms-auth.md`, `notify-loyalty.md`, `INTEGRATIONS.md`
+- **Runbook:** `docs/operations/runbooks/DEPLOY_PWA_PAYMENTS_BATCH.md` — preflight, Fly deploy, MCP matrix Point A
+
 ## 2026-08-10 — fix: Dockerfile bin sed skip subdirectories (fly deploy)
 
 - `sed: couldn't edit bin/acceptance: not a regular file` — только top-level файлы в `bin/` через `find -maxdepth 1 -type f`

@@ -4,13 +4,15 @@
 
 ## Как читать (меньше токенов)
 
-1. **Сначала только этот файл** (~45 строк).
+1. **Сначала только этот файл** (~55 строк).
 2. **Один** секционный файл из таблицы — не все сразу.
-3. `@docs/integrations/INTEGRATIONS.md` = индекс. Детали: `@docs/integrations/tbank.md` и т.д.
+3. `@docs/integrations/INTEGRATIONS.md` = индекс.
 
-**Обновление:** тронул bridge → правь **индекс (если маршрут)** + **секционный файл** (`.cursorrules`).
+**Обновление:** тронул bridge → правь **индекс (если маршрут)** + **секционный файл**.
 
 **Канон:** `Payments::TbankAdapter` · tenant/RLS · hot-path баг → `/trace-bug` · приёмка Fly **Point A** `2fdee1ac-4674-41ee-b89e-87b45643f789`
+
+**Batch deploy:** [`gap-matrix-pwa-payments.md`](gap-matrix-pwa-payments.md) · runbook [`../operations/runbooks/DEPLOY_PWA_PAYMENTS_BATCH.md`](../operations/runbooks/DEPLOY_PWA_PAYMENTS_BATCH.md)
 
 ---
 
@@ -18,10 +20,12 @@
 
 | Задача / симптом | Читай |
 |------------------|--------|
-| Оплата, webhook, 3DS, карты, RebillId, СБП | [`tbank.md`](tbank.md) |
-| Flash call, SMS OTP, cascade «заказ готов» | [`sms-auth.md`](sms-auth.md) |
-| Merge профиля, phone/email, «потерянная история» | [`sms-auth.md`](sms-auth.md) § Identity |
-| Бонусы, push, WS, fiscal callbacks | [`notify-loyalty.md`](notify-loyalty.md) |
+| Любой `/shop/api/*`, cart, orders, frequent | [`shop-api.md`](shop-api.md) |
+| Оплата, webhook, карты, RebillId, СБП, widget | [`tbank.md`](tbank.md) |
+| Flash call, SMS/email OTP, session refresh, merge | [`sms-auth.md`](sms-auth.md) |
+| Cable, push, Wallet, cascade ready, barista→PWA | [`pwa-realtime.md`](pwa-realtime.md) |
+| FCM register, legacy fiscal callbacks, loyalty stub | [`notify-loyalty.md`](notify-loyalty.md) |
+| Gap audit PWA/payments batch | [`gap-matrix-pwa-payments.md`](gap-matrix-pwa-payments.md) |
 
 ---
 
@@ -32,7 +36,10 @@
 | `OrderId` / `PaymentId` | `orders.id` / `payments.provider_payment_id` |
 | `CustomerKey` | `mobile_customers.id` |
 | `RebillId` | `mobile_payment_methods.card_token` |
+| `RequestKey` / AccountToken | SBP bind / autopay |
 | phone OTP | `PhoneNormalizer` → `mobile_otp_codes` |
+| refresh_token | `mobile_sessions` → `POST session/refresh` |
+| reconnect_token | `GuestOrderChannel` + `session/reconnect` |
 
 Webhook idem: `tbank:callback:{PaymentId}:{Status}`. Terminal payment status **не откатывается**.
 
@@ -42,4 +49,4 @@ Webhook idem: `tbank:callback:{PaymentId}:{Status}`. Terminal payment status **�
 
 Секция «Затронутые сервисы»: индекс + пути секций (не `@codebase`).
 
-*2026-08-10 · индекс в docs/integrations/ рядом с секциями*
+*2026-08-10 · audit batch: shop-api, pwa-realtime, gap-matrix, deploy runbook*

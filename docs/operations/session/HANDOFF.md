@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-10 (workflow audit: ISSUES/Entire/docs)  
+**Дата:** 2026-08-10 (integration bridge audit)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Entire hooks ✅ · ISSUES «🔴 Открыто» · docs sync | UserCards / витрина · SBR |
+| Bridge audit + deploy runbook batch | UserCards E2E · `DEPLOY_PWA_PAYMENTS_BATCH.md` |
 
-**last_done:** fly deploy fix `9cb159e0` — Dockerfile `find bin -maxdepth 1 -type f` (не sed на `bin/acceptance`)  
-**next_step:** `bin/fly_deploy.sh` из WSL  
+**last_done:** docs integration bridge audit — gap-matrix, shop-api, pwa-realtime, deploy runbook  
+**next_step:** UserCards E2E Point A **или** deploy по runbook (апрув владельца)  
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
