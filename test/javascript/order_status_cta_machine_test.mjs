@@ -33,7 +33,7 @@ describe("orderStatusCtas (#38 / #40 step 5)", () => {
     )
     assert.equal(view.buttons[0].label, "Отменить заказ")
     assert.equal(view.buttons[0].hint, "Вернем 100% суммы")
-    assert.equal(view.buttons[1].label, "Включить Push")
+    assert.equal(view.buttons[1].label, "🔔 Уведомление о готовности")
     assert.equal(view.style.background, CTA_STYLE.background)
   })
 
@@ -49,7 +49,7 @@ describe("orderStatusCtas (#38 / #40 step 5)", () => {
     )
     assert.equal(view.buttons[0].label, "Отменить заказ")
     assert.equal(view.buttons[0].hint, "Вернем 100% суммы")
-    assert.equal(view.buttons[1].label, "Добавить в Wallet")
+    assert.equal(view.buttons[1].label, "Карта в Apple Wallet")
   })
 
   it("accepted without canCancel: only Push/Wallet (≤2)", () => {
@@ -149,10 +149,10 @@ describe("orderStatusCtas (#41 step 3 ButtonMapper)", () => {
       ["cancel", "wallet"]
     )
     assert.equal(view.buttons[0].label, "Отменить заказ")
-    assert.equal(view.buttons[1].label, "Добавить в Wallet")
+    assert.equal(view.buttons[1].label, "Карта в Apple Wallet")
   })
 
-  it("paid android: cancel + Включить Push", () => {
+  it("paid android: cancel + Уведомление о готовности", () => {
     const view = orderStatusCtas({
       status: "paid",
       os: "android",
@@ -163,7 +163,7 @@ describe("orderStatusCtas (#41 step 3 ButtonMapper)", () => {
       view.buttons.map((b) => b.kind),
       ["cancel", "push"]
     )
-    assert.equal(view.buttons[1].label, "Включить Push")
+    assert.equal(view.buttons[1].label, "🔔 Уведомление о готовности")
   })
 
   it("edge: preparing + !hasPushSubscription → chat + Push (android)", () => {
@@ -177,7 +177,7 @@ describe("orderStatusCtas (#41 step 3 ButtonMapper)", () => {
       ["chat", "push"]
     )
     assert.equal(view.buttons[0].label, "Чат с поддержкой")
-    assert.equal(view.buttons[1].label, "Включить Push")
+    assert.equal(view.buttons[1].label, "🔔 Уведомление о готовности")
   })
 
   it("edge: preparing + !hasPushSubscription → chat + Wallet (ios)", () => {
@@ -190,7 +190,7 @@ describe("orderStatusCtas (#41 step 3 ButtonMapper)", () => {
       view.buttons.map((b) => b.kind),
       ["chat", "wallet"]
     )
-    assert.equal(view.buttons[1].label, "Добавить в Wallet")
+    assert.equal(view.buttons[1].label, "Карта в Apple Wallet")
   })
 
   it("edge: ready + !hasPushSubscription → chat + Push (android)", () => {
@@ -203,7 +203,7 @@ describe("orderStatusCtas (#41 step 3 ButtonMapper)", () => {
       view.buttons.map((b) => b.kind),
       ["chat", "push"]
     )
-    assert.equal(view.buttons[1].label, "Включить Push")
+    assert.equal(view.buttons[1].label, "🔔 Уведомление о готовности")
   })
 
   it("max 2 buttons always", () => {

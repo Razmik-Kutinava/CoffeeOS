@@ -119,6 +119,28 @@ class Shop::OrderReadyCascadeJobTest < ActiveSupport::TestCase
     assert_equal 0, OrderNotificationLog.where(order_id: @order.id, channel: "telegram").count
   end
 
+  test "Group 4: second cascade does not send duplicate SMS when already sent" do
+    Shop::OrderReadyPresence.mark_offline!(@order.id)
+
+    assert_difference -> { OrderNotificationLog.where(order_id: @order.id, channel: "sms", status: "sent").count } => 1 do
+      Shop::OrderReadyCascadeJob.perform_now(@order.id)
+    end
+
+    logs = capture_cascade_logs do
+      assert_no_difference -> { OrderNotificationLog.where(order_id: @order.id, channel: "sms").count } do
+        Shop::OrderReadyCascadeJob.perform_now(@order.id)
+      end
+    end
+
+    assert_match(/SMS skipped: already sent/, logs)
+  end
+
+  test "Group 4: cascade enqueued with SMS_GRACE after ready" do
+    source = File.read(Rails.root.join("app/services/shop/guest_order_broadcaster.rb"))
+    assert_match(/SMS_GRACE/, source)
+    assert_operator Shop::OrderReadyCascadeJob::SMS_GRACE, :>=, 5.seconds
+  end
+
   test "#39 v2 online presence creates no notification logs even with telegram_chat_id" do
     Shop::OrderReadyPresence.mark_online!(@order.id)
     @customer.update!(telegram_chat_id: "183760838")

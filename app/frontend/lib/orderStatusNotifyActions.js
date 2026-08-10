@@ -58,6 +58,11 @@ export function walletAddedStorageKey(orderId) {
   return `order_${orderId}_wallet_added`
 }
 
+/** localStorage: FCM реально зарегистрирован (не только Notification.permission). */
+export function pushRegisteredStorageKey() {
+  return "coffeeos_shop_push_registered_v1"
+}
+
 const WALLET_SUCCESS_LABEL = "✓ Карта добавлена"
 const WALLET_ERROR_TOAST = "Не удалось добавить карту. Попробуйте позже."
 
@@ -131,7 +136,11 @@ const PUSH_NETWORK_TOAST = "Не удалось включить уведомл�
  * }} [opts]
  */
 export async function subscribeOrderPush(opts = {}) {
-  const { registerShopPushImpl, onToast } = opts
+  const {
+    registerShopPushImpl,
+    onToast,
+    storage = typeof localStorage !== "undefined" ? localStorage : null
+  } = opts
   const idleLabel = LABELS.push
 
   try {
@@ -143,6 +152,11 @@ export async function subscribeOrderPush(opts = {}) {
     const result = await register()
 
     if (result?.ok) {
+      try {
+        storage?.setItem(pushRegisteredStorageKey(), "true")
+      } catch {
+        /* private mode */
+      }
       return { ok: true, isLoading: false, primaryLabel: PUSH_SUCCESS_LABEL }
     }
 
@@ -197,7 +211,9 @@ export function resolveNotifyPrimaryInit(opts = {}) {
   }
 
   if (os === "android" || os === "desktop") {
-    if (permission === "granted") {
+    const registered = storage?.getItem(pushRegisteredStorageKey()) === "true"
+    // permission alone ≠ FCM token на сервере (ложный «подписан» → tips вместо Push)
+    if (permission === "granted" && registered) {
       return {
         primaryLabel: PUSH_SUCCESS_LABEL,
         disabled: true,

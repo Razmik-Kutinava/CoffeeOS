@@ -1,31 +1,33 @@
-# todo — Group 3: шторка / статусы / повторы (2026-08-10)
+# todo — Group 4: уведомления (2026-08-10)
 
-**Намерение:** ебашь Группа 3 — compact/multi status · Cable · Quick Repeat · нет слоя поверх слоя
+**Намерение:** ебашь Группа 4 — OS-detect · Wallet/WebPush · FCM · каскад ready→SMS
 
 | last_done | current_state | next_step |
 |-----------|---------------|-----------|
-| Group 3 code: ready in sheet · Cable dedupe · hide status on pay-stack | Local PASS · MCP surface (Fly = old FE) | **deploy под апрув** · Group 4 notify · хвосты backlog |
+| Group 4: SMS idempotency · grace 15s · push LS · CTA #37 labels | Local PASS | **deploy под апрув** · backlog хвосты |
 
 ## Файлы
-- `orderStatusSheet.js` ✅ ready ≠ terminal; `activeOrderIdsKey`
-- `OrderStatusSheet.svelte` ✅ resubscribe dedupe
-- `orders_controller#active` ✅ accepted|preparing|ready
-- `CartSheet.svelte` ✅ `{#if !payStackActive}` status
+- `order_ready_paid_notifier.rb` ✅ skip if sms already sent
+- `order_ready_cascade_job.rb` ✅ `SMS_GRACE = 15s`
+- `guest_order_broadcaster.rb` ✅ `set(wait: SMS_GRACE)`
+- `orderStatusNotifyActions.js` ✅ pushRegisteredStorageKey
+- `firebasePush.js` ✅ LS on register
+- `orderStatusCtaMachine.js` ✅ лейблы #37
 
 ## Не ломать — ок
-- hide «повторить» при live accepted|preparing|ready
-- peek/expanded/hidden thresholds
-- Cable fast-path + poll 8s
+- SMS только если WS offline (presence)
+- Telegram не возвращали
+- ReadyPushClaim для FCM
 
 ## Проверка
 ```bash
-# Rails 45/0 · JS 42/0 (status/sheet/cta/frequent)
+# Rails notify 39/0 · JS 42/0
 ```
 
 ## Чеклист
-- [x] ready остаётся в шторке (контракт API+FE)
-- [x] Cable: poll не tear-down при том же id-наборе
-- [x] pay-stack: статус не в 15vh peek
+- [x] SMS идемпотентен
+- [x] hasPushSubscription = permission + FCM LS
+- [x] cascade grace 15s + re-check presence
 - [x] Local PASS
-- [~] MCP Point A: «повторить» на каталоге PASS; pay-stack/ready — **после deploy**
-- [ ] deploy — ждать апрув владельца
+- [ ] deploy — только под апрув
+- [ ] MCP live push/SMS на Fly — после deploy + SMS_RU

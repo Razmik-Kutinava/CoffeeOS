@@ -24,6 +24,12 @@ module Shop
     private
 
     def deliver_sms!(customer)
+      # Group 4: retry / двойной enqueue не шлёт второй SMS
+      if already_sent_sms?
+        Rails.logger.info("[Cascade][Order ##{@order.id}] SMS skipped: already sent")
+        return
+      end
+
       phone = customer.phone
       if phone.blank?
         Rails.logger.warn("[Cascade][Order ##{@order.id}] SMS skipped: no phone")
@@ -41,6 +47,14 @@ module Shop
       write_log!(channel: "sms", status: "failed", error: e.message, payload: { msg: msg })
       Rails.logger.warn(
         "[Cascade][Order ##{@order.id}] SMS.ru delivery failed: #{e.message}"
+      )
+    end
+
+    def already_sent_sms?
+      OrderNotificationLog.exists?(
+        order_id: @order.id,
+        channel: "sms",
+        status: "sent"
       )
     end
 

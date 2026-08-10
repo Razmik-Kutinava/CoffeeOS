@@ -2,15 +2,18 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-10 (Group 3 sheet/status)  
+**Дата:** 2026-08-10 (Group 4 notify)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Group 3: ready-in-sheet · Cable dedupe · pay-stack hide status ✅ | **deploy FE (G1–G3) под апрув** · Group 4 notify · backlog |
+| Group 4 local PASS · SMS idempotency · grace · push LS | **deploy FE (G1–G4) под апрув** · backlog |
 
-**last_done:** Group 3 — ready в шторке до issued; poll≠resubscribe; статус скрыт на checkout pay-stack  
-**next_step:** `fly deploy` **только после апрува** · или Group 4 notifications  
+**last_done:** Group 4 — cascade SMS idempotent + 15s grace; push registered LS; CTA labels #37  
+**next_step:** `fly deploy` **только после апрува** · хвосты backlog  
+
+**Архив session:** [`archive/README.md`](archive/README.md)  
+**Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

@@ -63,5 +63,11 @@ export async function registerShopPush() {
     body: JSON.stringify({ push_token: token, push_enabled: true })
   })
 
+  try {
+    globalThis.localStorage?.setItem("coffeeos_shop_push_registered_v1", "true")
+  } catch {
+    /* private mode */
+  }
+
   return { ok: true, registered: true, token }
 }

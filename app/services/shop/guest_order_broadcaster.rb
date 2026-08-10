@@ -39,11 +39,14 @@ module Shop
     end
     private_class_method :update_wallet_pass_if_present!
 
-    # #39: платные каналы (TG→SMS) после бесплатных WS/Push/Wallet
+    # #39: платные каналы после бесплатных WS/Push/Wallet.
+    # Group 4: grace → re-check presence в job; SMS только если всё ещё offline.
     def self.enqueue_ready_cascade!(order)
       return unless order.ready?
 
-      Shop::OrderReadyCascadeJob.perform_later(order.id)
+      Shop::OrderReadyCascadeJob
+        .set(wait: Shop::OrderReadyCascadeJob::SMS_GRACE)
+        .perform_later(order.id)
     end
     private_class_method :enqueue_ready_cascade!
   end

@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-10 (Group 3 sheet/status)  
+**Дата:** 2026-08-10 (Group 4 notify)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Group 3 local PASS · ready-in-sheet · Cable dedupe · pay-stack hide status | deploy FE (G1–G3) под апрув · Group 4 notify · backlog хвосты |
+| Group 4 local PASS · SMS idempotency · grace 15s · push LS | deploy FE (G1–G4) под апрув · backlog |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,12 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-10 (Group 4 уведомления)
+
+- SMS: skip if `order_notification_logs` already `sent`; cascade `SMS_GRACE=15s` before presence re-check
+- FE: `pushRegisteredStorageKey` — permission alone ≠ subscribed; CTA labels = #37 MCP
+- Local notify Rails 39/0 + JS 42/0; live Fly push/SMS — после deploy
 
 ### Сессия 2026-08-10 (Group 3 шторка / статусы / повторы)
 

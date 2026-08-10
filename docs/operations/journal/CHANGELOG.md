@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-10 — fix(shop): Group 4 notify SMS idempotency + push subscribe truth
+
+- Cascade: 15s grace before SMS; skip duplicate SMS if already `sent` in logs
+- FE: FCM registered localStorage (permission≠subscribed); CTA labels aligned to #37
+- Local notify 39/0 + JS 42/0; live push/SMS MCP — после deploy + SMS_RU
+
 ## 2026-08-10 — fix(shop): Group 3 ready-in-sheet + Cable dedupe + pay-stack
 
 - `/orders/active` + Cable: `ready` остаётся в шторке до issued (не пусто +0₽)

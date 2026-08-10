@@ -11,7 +11,8 @@ import { dirname, join } from "node:path"
 
 import {
   resolveNotifyPrimaryInit,
-  walletAddedStorageKey
+  walletAddedStorageKey,
+  pushRegisteredStorageKey
 } from "../../app/frontend/lib/orderStatusNotifyActions.js"
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "../..")
@@ -46,11 +47,27 @@ describe("resolveNotifyPrimaryInit (#37 step 6)", () => {
     assert.match(init.primaryLabel, /Карта добавлена/)
   })
 
-  it("android + Notification.permission granted → push success disabled", () => {
+  it("android + permission granted alone → not restored (need FCM register LS)", () => {
     const init = resolveNotifyPrimaryInit({
       os: "android",
       orderId: "7",
       storage: mockStorage(),
+      notificationPermission: "granted"
+    })
+
+    assert.equal(init.restored, false)
+    assert.equal(init.disabled, false)
+    assert.equal(init.primaryLabel, null)
+  })
+
+  it("android + permission + push registered LS → push success disabled", () => {
+    const storage = mockStorage({
+      [pushRegisteredStorageKey()]: "true"
+    })
+    const init = resolveNotifyPrimaryInit({
+      os: "android",
+      orderId: "7",
+      storage,
       notificationPermission: "granted"
     })
 
