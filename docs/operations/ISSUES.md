@@ -30,7 +30,7 @@
 - `profile_merge_test.rb` — `bind_via_phone!` и `link_phone` тест переведены с `sms` на `flash_call` (реальный вход в OTP).
 - `auth_funnel_wizard_ui_test.rb` — тест "messenger and sms fallback" сужен до реального "sms fallback" (без messenger-ассертов).
 **Проверка:** `bin/rails test test/integration/shop/api/phone_otp_test.rb test/integration/shop/api/profile_merge_test.rb test/integration/shop/auth_funnel_wizard_ui_test.rb` → 17 runs, 0 failures.
-**Остальной легаси suite (не трогали, отдельная итерация):** `silent_refresh_frontend_structural_test.rb` (структурный тест по тексту `.svelte`), `payment_status_error_code_test.rb` (ErrorCode 1051 nil), `active_orders_receipt_test.rb` (`NoMethodError` nil.key?), `order_status_acceptance_cbr_test.rb`, `shop_user_cards_extremes_test.rb#E7`.
+**Остальной легаси suite (не трогали, отдельная итерация):** `payment_status_error_code_test.rb` (ErrorCode 1051 nil), `active_orders_receipt_test.rb` (`NoMethodError` nil.key?), `order_status_acceptance_cbr_test.rb`, `shop_user_cards_extremes_test.rb#E7`. *(silent_refresh_frontend_structural — fixed 2026-08-10 Group 1 `ef3ad4ce`)*
 **Полный прогон после фикса:** `test/integration/shop/` → 502 runs, 3289 assertions, 4 failures, 1 error, 3 skips (только известный хвост выше, без новых регрессий).
 
 [2026-08-08] — #47 Статусы с табло не sync в PWA; повторы после заказа пустые
