@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-10 (integration bridge audit)  
+**Дата:** 2026-08-10 (UserCards 3.5 MCP)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Bridge audit + deploy runbook PWA/payments batch | UserCards E2E · deploy по runbook |
+| UserCards 8925 MCP PASS · E2E real PAN blocked | Апрув 3.5 · E2E MIR · витрина B |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -16,12 +16,20 @@
 
 ## Текущий месяц (2026-08)
 
+### Сессия 2026-08-10 (UserCards 3.5 MCP Point A)
+
+- Local: UserCards зона **61/0** PASS
+- Fly v444 worker started · diagnose `usercards_fly_diagnose_2026-08-10.json` — *5953 + *8782 + RebillId
+- MCP PaymentMethodsSheet vs 8925 **PASS** — скрин `usercards_phase35_mcp_2026-08-10_payment_sheet_two_cards.png`
+- E2E «Новая карта» real PAN — **BLOCKED** (prod test PAN → ACTIVATION_ERROR); не гоняли
+- ISSUES UserCards → 🟡; апрув 3.5 ждёт владельца
+
 ### Сессия 2026-08-10 (integration bridge audit)
 
 - **Gap matrix:** `docs/integrations/gap-matrix-pwa-payments.md` (17 задач + hot-path endpoints)
 - **Bridge:** `shop-api.md`, `pwa-realtime.md`; расширены `tbank`, `sms-auth`, `notify-loyalty`, `INTEGRATIONS.md`
 - **Runbook:** `docs/operations/runbooks/DEPLOY_PWA_PAYMENTS_BATCH.md` (preflight → deploy → MCP matrix)
-- Код не менялся; продукт UserCards 🔴 — следующий SBR
+- Код не менялся; продукт UserCards — следующий SBR (закрыто сессией 3.5 MCP ниже по шапке)
 
 ### Сессия 2026-08-10 (workflow audit)
 

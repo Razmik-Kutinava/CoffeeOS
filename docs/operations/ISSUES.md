@@ -8,7 +8,7 @@
 
 | Дата | ID / тема | Статус | Следующий шаг |
 |------|-----------|--------|---------------|
-| 2026-07-16 | **UserCards** save_card / delayed RebillId | 🔴 код частично · MCP 2 карты ✅ · апрув 3.5 ❌ | E2E реальная карта ≠ test PAN; → полная запись |
+| 2026-07-16 | **UserCards** save_card / delayed RebillId | 🟡 Fly v444 MCP 8925 ✅ · апрув 3.5 ❌ · E2E real PAN ⛔ | Апрув скрина 8925; E2E только real MIR; → полная запись |
 | 2026-07-16 | **Checkout UX** stacked sheet (Фаза 2) | 🟡 код ✅ · MCP ❌ · апрув ❌ | После UserCards 3.4; → полная запись |
 | 2026-07-31 | **Legacy shop suite** (~4–5 fail после triage) | 🔴 open | Отдельная итерация; не гейт фичи; → полная запись |
 | 2026-07-27 | **SBP 3001** на Fly | 🟡 не баг приложения | Включить СБП в кабинете Т-Кассы; → полная запись |
@@ -133,7 +133,7 @@
 **Осталось:** владелец включает СБП в кабинете Т-Кассы → повторный MCP → `qr.nspk.ru`
 
 [2026-07-16] — UserCards: карта не сохранилась после оплаты с save_card ON (bug_13-23)
-**Статус:** 🔴 **открыт** · deploy v366 **[x]** · MCP 2 карты **[x]** · апрув 3.5 **[ ]**
+**Статус:** 🟡 **открыт** · код 3.3 **[x]** · Fly **v444** · MCP 8925 **[x]** 2026-08-10 · апрув 3.5 **[ ]** · E2E real PAN **⛔**
 **Источник:** заказчик · [`bug_13-23_repeat_purchase_card_missing.png`](../milestones/veha_2/artifacts/usercards_save_card/screenshots/bug_13-23_repeat_purchase_card_missing.png)
 **Root cause (Фаза 0):** webhook RebillId enqueued, worker stopped → SavedCardStore не вызван.
 **Root cause (Фаза 3.2, платёж 8866531465 / 09:56):** FA CONFIRMED **без RebillId/Pan** → settle + однократный GetState не дожали; банк прислал RebillId *8782 только **2026-07-17** (delayed webhook). Init Recurrent=Y ожидаем при save_card=true. **Наш баг:** нет retry GetState / delayed sync — карта не в 8925 в день оплаты.
@@ -143,9 +143,10 @@
 - Replay webhook 0₽ → [`usercards_fly_phase1_verify_2026-07-16.json`](../milestones/veha_2/artifacts/usercards_save_card/usercards_fly_phase1_verify_2026-07-16.json) — aramfifa **MIR *5953** (replay, не E2E 2-й карты)
 - MCP: [`usercards_phase1_mcp_2026-07-16.json`](../milestones/veha_2/artifacts/usercards_save_card/usercards_phase1_mcp_2026-07-16.json) — *5953 в списке
 **Живая оплата 2026-07-18:** MCP «Новая карта» 4300*0777 → payment `8878842078` **failed**, Pan/RebillId nil (prod отклоняет test PAN).
-**Осталось:** апрув скрина 8925 (шаг 3.5) · E2E fix 3.3 — реальная MIR карта заказчика ≠ *5953
 **Deploy Fly v366 (2026-07-18):** release `deployment-01KXT8NR80HW40FKBRKFJCMDT7` · 3.3 retry GetState на prod
 **Приёмка 3.4:** MCP 2 карты (*5953 + *8782) — [`usercards_phase34_mcp_2026-07-18.json`](../milestones/veha_2/artifacts/usercards_save_card/usercards_phase34_mcp_2026-07-18.json)
+**Приёмка 3.5 re-verify 2026-08-10 (Fly v444):** Local 61/0 · worker started · diagnose + GET `/user/cards` + MCP PaymentMethodsSheet — [`usercards_phase35_mcp_2026-08-10.json`](../milestones/veha_2/artifacts/usercards_save_card/usercards_phase35_mcp_2026-08-10.json) · скрин [`usercards_phase35_mcp_2026-08-10_payment_sheet_two_cards.png`](../milestones/veha_2/artifacts/usercards_save_card/screenshots/usercards_phase35_mcp_2026-08-10_payment_sheet_two_cards.png) · канон [`1000008925_payment_methods_list.png`](../milestones/veha_2/artifacts/usercards_save_card/screenshots/1000008925_payment_methods_list.png)
+**Осталось:** апрув заказчика/владельца скрина 8925 (3.5) · E2E «Новая карта» только **реальной MIR** (test PAN на prod не гонять)
 
 [2026-07-16] — Checkout Фаза 2 UX: нет одной шторки (peek сверху + PaymentMethodsSheet expanded снизу)
 **Статус:** **код done** · **MCP Fly [ ]** · **апрув заказчика [ ]**

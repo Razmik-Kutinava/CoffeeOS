@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-10 (integration bridge audit)  
+**Дата:** 2026-08-10 (UserCards 3.5 MCP)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Bridge audit + deploy runbook batch | UserCards E2E · `DEPLOY_PWA_PAYMENTS_BATCH.md` |
+| UserCards 8925 MCP Fly v444 PASS · апрув 3.5 ждёт | «ок» 8925 · E2E real MIR · или витрина B |
 
-**last_done:** docs integration bridge audit — gap-matrix, shop-api, pwa-realtime, deploy runbook  
-**next_step:** UserCards E2E Point A **или** deploy по runbook (апрув владельца)  
+**last_done:** UserCards Point A — Local 61/0 · diagnose v444 · MCP 8925 *8782/*5953  
+**next_step:** апрув скрина 8925 **или** E2E новой карты реальной MIR (не test PAN)  
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

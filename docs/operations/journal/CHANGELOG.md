@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-10 — ops: UserCards 3.5 MCP 8925 on Fly v444
+
+- Local UserCards зона 61/0; Fly diagnose + GET `/user/cards` — MIR *8782 + *5953
+- MCP PaymentMethodsSheet скрин для апрува 3.5; E2E new card real PAN — blocked (prod test PAN)
+- Артефакты: `usercards_phase35_mcp_2026-08-10.json` + screenshot; ISSUES 🟡
+
 ## 2026-08-10 — docs: integration bridge audit + PWA/payments deploy runbook
 
 - **Gap matrix:** `docs/integrations/gap-matrix-pwa-payments.md` — 17 задач, слепые зоны, payment decision tree

@@ -8,5 +8,6 @@
 | `1000008924_new_card_form.png` | Макет формы новой карты + тумблер save_card ON | ~191, Exit #9 |
 | `bug_13-19_payment_success_save_card_on.png` | 13:19 — оплата с тумблером ON («Установка соединения…») | ~195 |
 | `bug_13-23_repeat_purchase_card_missing.png` | 13:23 — повторная покупка, карта не прикреплена (баг) | ~198 |
+| `usercards_phase35_mcp_2026-08-10_payment_sheet_two_cards.png` | Fly v444 MCP: *8782 + *5953 + СБП + Картой+ (апрув 3.5) | 2026-08-10 |
 
 Канон хранения этой задачи: **эта папка**. Копии вне `usercards_save_card/` по этим кадрам не держать.

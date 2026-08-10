@@ -1,32 +1,42 @@
-# todo — agent hot-path rules (2026-08-09)
+# todo — UserCards E2E Point A (2026-08-10)
 
-**Сделано (этот шаг):** правила — «Не ломать»/«Проверка» обязательны; DoD Local+Fly Point A; anti-gem; MCP-safety; канон Point A в DEMO_LOGINS.
+**Намерение:** Шаг 1 — go UserCards · E2E save_card на Point A → апрув скрин 8925
 
-## Очередь продукта (следующее намерение владельца)
+| last_done | current_state | next_step |
+|-----------|---------------|-----------|
+| UserCards 3.5 MCP Fly v444 | Local 61/0 · 8925 UI PASS · E2E real PAN ⛔ | Апрув 8925 владельцем · E2E real MIR (отдельный шаг) |
 
-### A. UserCards / save_card (ISSUES 🔴)
-- [ ] Апрув заказчика 3.5 (скрин 8925)
-- [ ] E2E: реальная карта ≠ test PAN на Point A
-- [ ] Не путать ErrorCode банка с багом приложения
-
-### B. Витрина стабилизация (статусы ↔ корзина ↔ повторить)
-Шаблон SPEC при старте:
-```
 ## Файлы (ожидаемо)
-- … (2–7)
+- `app/services/payments/tbank_payment_sync.rb`
+- `app/services/payments/saved_card_store.rb`
+- `app/services/shop/new_card_payment_service.rb`
+- `app/controllers/shop/api/user_cards_controller.rb`
+- `app/controllers/callbacks/tbank_controller.rb`
+- `docs/operations/milestones/veha_2/runbooks/USERCARDS_SAVE_CARD_FLOW.md`
+- `docs/operations/ISSUES.md`
+
 ## Не ломать
-- оплата / 1-клик
+- оплата / 1-клик (one_click + RebillId)
 - кнопка «повторить» / frequent
 - табло бариста / статусы в PWA
-- peek корзины / CartSheet layering
+- peek корзины / CartSheet layering / PaymentMethodsSheet 8925
+
 ## Проверка
-- bin/rails test test/integration/shop/   # или узже по зоне из dev-gates
+```bash
+bundle exec rails test test/integration/shop/shop_usercards_phase1_persist_test.rb \
+  test/integration/shop/shop_saved_cards_step3_test.rb \
+  test/integration/shop/shop_save_card_false_step6_test.rb \
+  test/integration/shop/shop_second_card_step5_test.rb \
+  test/controllers/callbacks/tbank_controller_test.rb \
+  test/services/payments/tbank_adapter_test.rb
 ```
-- [ ] Проход стабилизации + Fly MCP Point A
+→ **PASS** 61 runs, 0 failures (2026-08-10)
 
-### C. Legacy shop suite (~24 fail) — triage начат 2026-08-09
-- [x] Regression `unknown keyword: :receipt` — фикс `1582f078`
-- [x] Messenger OTP: по git log — осознанно снесён (`b2685910`/`8b76da10`), у заказчика сейчас только flash_call+SMS. Тесты (`phone_otp_test.rb`, `profile_merge_test.rb`, `auth_funnel_wizard_ui_test.rb`) актуализированы под реальный флоу — 17/17 green
-- [ ] Остальные 4-5 failures (structural/ErrorCode 1051/active_orders_receipt) — отдельная итерация
+## Чеклист шага
+- [x] Local «Проверка» PASS
+- [x] Fly diagnose: cards aramfifa / Point A (`usercards_fly_diagnose_2026-08-10.json`)
+- [x] MCP скрин PaymentMethodsSheet vs 8925 (`usercards_phase35_mcp_2026-08-10_*`)
+- [ ] E2E save_card real PAN — **BLOCKED** (prod отклоняет test PAN; нужна MIR заказчика)
+- [ ] Апрув 3.5 — ждёт «ок» владельца/заказчика по скрину
 
-**Статус шага правил:** done
+**Evidence 8925:** `docs/operations/milestones/veha_2/artifacts/usercards_save_card/screenshots/usercards_phase35_mcp_2026-08-10_payment_sheet_two_cards.png`

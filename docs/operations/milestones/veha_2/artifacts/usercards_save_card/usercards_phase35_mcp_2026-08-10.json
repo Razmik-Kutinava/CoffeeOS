@@ -1,0 +1,55 @@
+{
+  "date": "2026-08-10",
+  "phase": "3.5_mcp_8925_reverify",
+  "fly": {
+    "version": 444,
+    "image": "registry.fly.io/coffeeos:deployment-01KZN806MXTD3QYM8RPMAJHD17",
+    "worker_state": "started",
+    "up": 200
+  },
+  "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "email": "aramfifa100@gmail.com",
+  "local_tests": {
+    "command": "bundle exec rails test shop_usercards_phase1_persist + shop_saved_cards_step3 + shop_save_card_false_step6 + shop_second_card_step5 + tbank_controller + tbank_adapter",
+    "result": "61 runs, 0 failures (7+54)"
+  },
+  "diagnose": "usercards_fly_diagnose_2026-08-10.json",
+  "checks": [
+    {
+      "id": "fly_worker_started",
+      "status": "PASS",
+      "detail": "worker 48ee61ea71d948 started (RebillId webhook path)"
+    },
+    {
+      "id": "db_two_cards_rebill",
+      "status": "PASS",
+      "detail": "aramfifa MIR *5953 + MIR *8782, card_token present; last_used 2026-08-10"
+    },
+    {
+      "id": "api_user_cards",
+      "status": "PASS",
+      "detail": "GET /shop/api/user/cards → *8782 (primary) + *5953"
+    },
+    {
+      "id": "mcp_payment_methods_sheet_8925",
+      "status": "PASS",
+      "screenshot": "screenshots/usercards_phase35_mcp_2026-08-10_payment_sheet_two_cards.png",
+      "detail": "PaymentMethodsSheet: Картой *8782 (selected), Картой *5953, СБП disabled, Картой +"
+    },
+    {
+      "id": "e2e_new_card_real_pan",
+      "status": "BLOCKED",
+      "detail": "Prod terminal rejects test PAN (PAYMENT.md ACTIVATION_ERROR). Need customer real MIR ≠ *5953/*8782. Not attempted — avoid bank ErrorCode noise."
+    }
+  ],
+  "verdict": "PARTIAL_PASS",
+  "verdict_plain": "8925 UI + API + DB PASS on Fly v444 (скрин для апрува 3.5). E2E save_card новой карты — BLOCKED без реальной MIR заказчика.",
+  "maps_to_customer_screens": {
+    "1000008925": "screenshots/usercards_phase35_mcp_2026-08-10_payment_sheet_two_cards.png"
+  },
+  "next": [
+    "Владелец/заказчик: апрув скрина 8925 (3.5)",
+    "E2E: одна живая оплата Новая карта + save ON реальной MIR → третья карта в списке",
+    "Не путать ErrorCode банка с багом приложения"
+  ]
+}
