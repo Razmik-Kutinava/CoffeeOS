@@ -57,10 +57,10 @@ COPY . .
 # -j 1 disable parallel compilation to avoid a QEMU bug: https://github.com/rails/bootsnap/issues/495
 RUN bundle exec bootsnap precompile -j 1 app/ lib/
 
-# Adjust binfiles to be executable on Linux
-RUN chmod +x bin/* && \
-    sed -i "s/\r$//g" bin/* && \
-    sed -i 's/ruby\.exe$/ruby/' bin/*
+# Adjust binfiles to be executable on Linux (top-level files only; bin/acceptance etc. are dirs)
+RUN find bin -maxdepth 1 -type f -exec chmod +x {} + && \
+    find bin -maxdepth 1 -type f -exec sed -i "s/\r$//g" {} + && \
+    find bin -maxdepth 1 -type f -exec sed -i 's/ruby\.exe$/ruby/' {} +
 
 # Install JS dependencies for Vite build (Linux x64; no Windows-only bindings in package.json)
 RUN npm ci
