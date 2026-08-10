@@ -32,10 +32,12 @@ Entire **не меняет** порядок шага. Checkpoint появляе�
 
 ```bash
 curl -fsSL https://entire.io/install.sh | bash   # ~/.local/bin/entire
-cd /mnt/c/Tools/workarea/CoffeeOS
+cd /mnt/c/Tools/workarea/CoffeeOS              # только WSL-путь, не C:\ из PowerShell
 entire enable -y --agent cursor
 entire status   # ● Enabled · Agents · Cursor
 ```
+
+**Windows:** `entire enable` из PowerShell может создать мусорную папку `C:\Tools\...\.git\hooks` в корне репо — включать **из WSL**. Git hooks должны лежать в `.git/hooks/` (commit-msg, post-commit, …).
 
 В репо коммитятся: `.entire/settings.json`, `.entire/.gitignore`. Локально (не в git): `.entire/settings.local.json`, `tmp/`, `logs/`.
 
