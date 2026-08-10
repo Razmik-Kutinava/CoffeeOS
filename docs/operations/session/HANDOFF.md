@@ -2,16 +2,15 @@
 
 ## Шапка (агент читает только это + todo + 🔴 ISSUES)
 
-**Дата:** 2026-08-10 (Entire + INTEGRATIONS)  
+**Дата:** 2026-08-10 (INTEGRATIONS → docs/integrations/)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Entire enabled (Cursor) · INTEGRATIONS index | первая фича с checkpoint; UserCards / витрина |
-| Legacy suite messenger OTP — 17/17 green | апрув #47 «ок» |
+| Entire enabled · интеграции в `docs/integrations/` | SBR + checkpoint; UserCards / витрина |
 
-**last_done:** Entire: `3ff7f467` · hooks fixed in `.git/hooks/` · runbook `ENTIRE.md`  
-**next_step:** SBR на задаче из `todo.md` → commit → `entire checkpoint explain`  
+**last_done:** `INTEGRATIONS.md` из корня → `docs/integrations/INTEGRATIONS.md`; удалён root scratch  
+**next_step:** `@docs/integrations/INTEGRATIONS.md` в hot-path задачах  
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

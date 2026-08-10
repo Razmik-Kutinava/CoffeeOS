@@ -36,4 +36,4 @@ ENV: `CALLBACK_*` как в проекте.
 
 Файлы · endpoints · mapping keys · ENV · idempotency · edge cases · `bin/rails test …`
 
-SPEC: `.cursor/tasks/TASK-NNN/spec.md` — «Затронутые сервисы из @INTEGRATIONS.md».
+SPEC: «Затронутые сервисы из @docs/integrations/INTEGRATIONS.md».

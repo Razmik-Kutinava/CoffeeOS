@@ -2,13 +2,12 @@
 
 ## Шапка (агент читает только это + todo + 🔴 ISSUES)
 
-**Дата:** 2026-08-10 (Entire)  
+**Дата:** 2026-08-10 (INTEGRATIONS в docs/)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Entire enabled · checkpoint на commit | первая задача SBR + checkpoint explain |
-| INTEGRATIONS + `/trace-bug` | UserCards / витрина |
+| `docs/integrations/INTEGRATIONS.md` + Entire | UserCards / витрина |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

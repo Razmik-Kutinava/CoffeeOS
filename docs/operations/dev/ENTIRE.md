@@ -9,7 +9,7 @@
 | `raw_spec.md` | `docs/operations/milestones/veha_2/requirements/customer_tasks/*.md` (текст 1:1) |
 | `plan.md` | `docs/operations/session/todo.md` |
 | `spec` / артефакты | CBR + `docs/operations/milestones/veha_2/artifacts/<slug>/` |
-| интеграции SSOT | `INTEGRATIONS.md` → один `docs/integrations/*.md` |
+| интеграции SSOT | `docs/integrations/INTEGRATIONS.md` → один секционный `docs/integrations/*.md` |
 | код | `app/`, `test/` (не `src/`) |
 
 ---
@@ -20,7 +20,7 @@
 Review (PM)     → bugbot + Fly Point A + Entire why-context
 Entire          → checkpoint ↔ commit (Cursor hooks + git commit)
 Cursor + rules  → SBR, /spec /sbr /review, commit-ops
-Docs (Spec)     → customer_tasks, todo, artifacts, INTEGRATIONS
+Docs (Spec)     → customer_tasks, todo, artifacts, docs/integrations/
 Git             → develop → staging → main
 ```
 
@@ -65,7 +65,7 @@ entire checkpoint explain <commit-sha>    # промпты, файлы, tool cal
 Сверить с:
 - `customer_tasks/<задача>.md` — все пункты ТЗ?
 - `todo.md` — «Не ломать», «Проверка»?
-- `@INTEGRATIONS.md` + секция — для hot-path: агент читал bridge, не выдумал endpoint?
+- `@docs/integrations/INTEGRATIONS.md` + секция — для hot-path: агент читал bridge, не выдумал endpoint?
 
 ### Resume — точечные правки после ревью
 

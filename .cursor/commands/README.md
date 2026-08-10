@@ -14,6 +14,6 @@ Slash-команды в чате Agent: введи `/` и выбери имя ф
 Цепочка: `/start` → `/spec` → `/sbr` → `/regress` → `/review`  
 Диагностика интеграции: `/trace-bug` → `/spec` или `/sbr`
 
-Карта: [`INTEGRATIONS.md`](../../INTEGRATIONS.md) (индекс) · детали [`docs/integrations/`](../../docs/integrations/) · Entire: [`docs/operations/dev/ENTIRE.md`](../../docs/operations/dev/ENTIRE.md)
+Карта: [`docs/integrations/INTEGRATIONS.md`](../../docs/integrations/INTEGRATIONS.md) (индекс) · секции [`docs/integrations/`](../../docs/integrations/) · Entire: [`docs/operations/dev/ENTIRE.md`](../../docs/operations/dev/ENTIRE.md)
 
 Каждая команда **обязана** в конце напечатать строку `Next: /…` для копипаста.

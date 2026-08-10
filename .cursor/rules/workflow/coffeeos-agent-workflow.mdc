@@ -113,7 +113,7 @@ Skills (`.claude/skills`, CE) — только по типу задачи / яв
 
 ## Entire (Review / resume — не Spec-папки)
 
-Слой **поверх Git**, без `docs/tasks/TASK-XX/`. Spec = `customer_tasks/` + `todo.md` + `artifacts/` + `INTEGRATIONS.md`.  
+Слой **поверх Git**, без `docs/tasks/TASK-XX/`. Spec = `customer_tasks/` + `todo.md` + `artifacts/` + `docs/integrations/INTEGRATIONS.md`.  
 Runbook: `docs/operations/dev/ENTIRE.md`. На **REVIEW:** `entire checkpoint explain <sha>` vs spec. **Resume:** `entire session resume <branch>`. Не заменяет SBR/ops.
 
 ## Когда читать остальные правила

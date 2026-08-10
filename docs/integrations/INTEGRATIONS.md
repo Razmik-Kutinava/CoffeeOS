@@ -6,7 +6,7 @@
 
 1. **Сначала только этот файл** (~45 строк).
 2. **Один** секционный файл из таблицы — не все сразу.
-3. `@INTEGRATIONS.md` = индекс. Детали: `@docs/integrations/tbank.md` и т.д.
+3. `@docs/integrations/INTEGRATIONS.md` = индекс. Детали: `@docs/integrations/tbank.md` и т.д.
 
 **Обновление:** тронул bridge → правь **индекс (если маршрут)** + **секционный файл** (`.cursorrules`).
 
@@ -18,10 +18,10 @@
 
 | Задача / симптом | Читай |
 |------------------|--------|
-| Оплата, webhook, 3DS, карты, RebillId, СБП | [`docs/integrations/tbank.md`](docs/integrations/tbank.md) |
-| Flash call, SMS OTP, cascade «заказ готов» | [`docs/integrations/sms-auth.md`](docs/integrations/sms-auth.md) |
-| Merge профиля, phone/email, «потерянная история» | [`docs/integrations/sms-auth.md`](docs/integrations/sms-auth.md) § Identity |
-| Бонусы, push, WS, fiscal callbacks | [`docs/integrations/notify-loyalty.md`](docs/integrations/notify-loyalty.md) |
+| Оплата, webhook, 3DS, карты, RebillId, СБП | [`tbank.md`](tbank.md) |
+| Flash call, SMS OTP, cascade «заказ готов» | [`sms-auth.md`](sms-auth.md) |
+| Merge профиля, phone/email, «потерянная история» | [`sms-auth.md`](sms-auth.md) § Identity |
+| Бонусы, push, WS, fiscal callbacks | [`notify-loyalty.md`](notify-loyalty.md) |
 
 ---
 
@@ -42,4 +42,4 @@ Webhook idem: `tbank:callback:{PaymentId}:{Status}`. Terminal payment status **�
 
 Секция «Затронутые сервисы»: индекс + пути секций (не `@codebase`).
 
-*2026-08-09 · split index + docs/integrations/*
+*2026-08-10 · индекс в docs/integrations/ рядом с секциями*

@@ -75,7 +75,7 @@ alwaysApply: false
 
 После закрытия всех задач в todo.md:
 1. **Субагент REVIEW:** Task `bugbot` (дифф ветки). Hot-path оплата/RLS/auth → ещё `security-review`. Не на каждый RED.
-2. **Entire why-context:** `entire checkpoint explain <sha>` последнего GREEN/docs коммита; сверка с `customer_tasks/`, `todo.md`, `INTEGRATIONS.md` (hot-path). Не заменяет bugbot — дополняет «почему агент так сделал».
+2. **Entire why-context:** `entire checkpoint explain <sha>` последнего GREEN/docs коммита; сверка с `customer_tasks/`, `todo.md`, `docs/integrations/INTEGRATIONS.md` (hot-path). Не заменяет bugbot — дополняет «почему агент так сделал».
 3. **Проверка качества (Sanity Check):** N+1 (coffeeos-performance), RLS (coffeeos-core), `bin/rails test` по зоне, `rubocop` при изменениях Ruby.
 4. **Синхронизация Ops-памяти:**
    - Обнови `docs/operations/session/SESSION_STATE.md` (итог фичи).

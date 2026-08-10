@@ -105,7 +105,6 @@ Thumbs.db
 # Все markdown файлы кроме README.md и doc/features/
 *.md
 !README.md
-!INTEGRATIONS.md
 !doc/**/*.md
 !docs/**/*.md
 !.cursor/commands/**/*.md

@@ -36,7 +36,7 @@
 | `project/coffeeos-cart-sheet.mdc` | Shop CartSheet |
 | `project/coffeeos-tests.mdc` | test/ |
 | `project/coffeeos-code-review.mdc` | Ревью по запросу |
-| `INTEGRATIONS.md` (корень, индекс ~45 строк) | Маршрут → `docs/integrations/*.md`; `@INTEGRATIONS.md` + `/trace-bug` |
+| `docs/integrations/INTEGRATIONS.md` (индекс ~45 строк) | Маршрут → `docs/integrations/*.md`; `@docs/integrations/INTEGRATIONS.md` + `/trace-bug` |
 | `docs/operations/dev/ENTIRE.md` | Entire checkpoint ↔ commit; Review/resume; маппинг spec-путей (on-demand) |
 
 ## Ops (память сессии)

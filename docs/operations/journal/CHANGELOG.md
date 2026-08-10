@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-10 — docs: INTEGRATIONS.md → docs/integrations/
+- Индекс карты интеграций перенесён из корня в `docs/integrations/INTEGRATIONS.md`
+- Обновлены `.cursorrules`, `/trace-bug`, RULES_INDEX, ENTIRE.md; убран `!INTEGRATIONS.md` из gitignore
+- Удалён root scratch: `tmp_fetch_otp.rb`, `tmp_route_debug.png`
+
 ## 2026-08-10 — docs: Entire.io layer (Review/resume, без docs/tasks/)
 - `entire enable -y --agent cursor` · `.entire/settings.json` + `.cursor/hooks.json`
 - Runbook `docs/operations/dev/ENTIRE.md` — маппинг на `customer_tasks/`, `todo.md`, `artifacts/`, `INTEGRATIONS.md`
