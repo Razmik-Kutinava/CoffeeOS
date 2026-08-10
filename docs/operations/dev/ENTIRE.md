@@ -118,6 +118,9 @@ CLI: WSL, `PATH=$HOME/.local/bin:$PATH`. На Windows без WSL — устан�
 | Git hooks Entire | `.git/hooks/` — ставятся только через WSL enable |
 | Cursor hooks (`.cursor/hooks.json`) | `sh -c` — нужен sh (Git Bash/WSL); без `entire` в PATH — тихий skip |
 | **Запрещено** | `entire enable` из **PowerShell** — создаёт мусорную папку `C:…Tools…CoffeeOS.git.hooks` в корне репо (удалить вручную) |
+| **Git commit из Windows** | Hook пишет `Entire CLI … not on PATH. Skipping` — checkpoint **не** создаётся. Варианты: (1) установить Entire CLI в Windows PATH; (2) `wsl git commit` из WSL; (3) checkpoint всё равно может прийти от **Cursor hooks** при agent-сессии + commit |
+
+**Проверка hook:** после commit смотри вывод git — если `Skipping Entire Git hook`, checkpoint только через Cursor session hooks (нужна активная agent-сессия в Cursor до commit).
 
 **Регрессия на Windows:** не гонять полный `test/integration/shop/` — зависает (см. ISSUES). Таргетные файлы из todo «Проверка» или CI.
 
