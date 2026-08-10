@@ -23,7 +23,7 @@ alwaysApply: false
 | Ops журнал | `docs/operations/journal/` | `CHANGELOG.md` |
 | Вехи, чеклисты, runbooks | `docs/operations/milestones/veha_*/` | `checklists/`, `runbooks/`, `requirements/` |
 | MCP / прогоны | `docs/operations/milestones/veha_2/artifacts/` | `demo-feedback/*.json` |
-| Локальная разработка | `docs/operations/dev/` | `LOCAL_DEV.md`, `SHOP_URL_MODES.md` |
+| Локальная разработка | `docs/operations/dev/` | `LOCAL_DEV.md`, `ENTIRE.md`, `SHOP_URL_MODES.md` |
 | Демо / Fly | `docs/operations/demo/` | `FLY_DEMO_STAND.md` |
 | Правила Cursor | `.cursor/rules/workflow/`, `.cursor/rules/project/` | `coffeeos-*.mdc`; symlinks в корне `rules/` → `project/` |
 | Контроллеры (панели) | `app/controllers/{namespace}/` | `platform/`, `barista/`, `shop/` |

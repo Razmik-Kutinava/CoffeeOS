@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-10 — docs: Entire.io layer (Review/resume, без docs/tasks/)
+- `entire enable -y --agent cursor` · `.entire/settings.json` + `.gitignore`
+- Runbook `docs/operations/dev/ENTIRE.md` — маппинг на `customer_tasks/`, `todo.md`, `artifacts/`, `INTEGRATIONS.md`
+- `/review`, `spec-build-review` PHASE 3, `agent-workflow`, `.cursorrules`, `RULES_INDEX`
+
 ## 2026-08-09 — docs: INTEGRATIONS split (меньше токенов)
 - Корень `INTEGRATIONS.md` → индекс ~45 строк + маршрутизация
 - Детали: `docs/integrations/tbank.md`, `sms-auth.md`, `notify-loyalty.md`

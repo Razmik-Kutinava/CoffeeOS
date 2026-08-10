@@ -2,16 +2,16 @@
 
 ## Шапка (агент читает только это + todo + 🔴 ISSUES)
 
-**Дата:** 2026-08-09 (INTEGRATIONS.md + /trace-bug)  
+**Дата:** 2026-08-10 (Entire + INTEGRATIONS)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| INTEGRATIONS index + docs/integrations/ | сверка с заказчиком; UserCards / витрина |
+| Entire enabled (Cursor) · INTEGRATIONS index | первая фича с checkpoint; UserCards / витрина |
 | Legacy suite messenger OTP — 17/17 green | апрув #47 «ок» |
 
-**last_done:** INTEGRATIONS split: индекс ~45 строк + `docs/integrations/{tbank,sms-auth,notify-loyalty}.md`  
-**next_step:** заказчик сверяет секции; очередь в `todo.md`  
+**last_done:** Entire layer: `.entire/` + `docs/operations/dev/ENTIRE.md` + `/review` why-context  
+**next_step:** SBR на задаче из `todo.md` → commit → `entire checkpoint explain`  
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

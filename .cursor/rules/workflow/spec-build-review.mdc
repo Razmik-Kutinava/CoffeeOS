@@ -71,16 +71,17 @@ alwaysApply: false
 ---
 
 ## PHASE 3: REVIEW (Личность: Тимлид / Критик)
-Используй: coffeeos-code-review, coffeeos-dev-gates
+Используй: coffeeos-code-review, coffeeos-dev-gates, `docs/operations/dev/ENTIRE.md`
 
 После закрытия всех задач в todo.md:
 1. **Субагент REVIEW:** Task `bugbot` (дифф ветки). Hot-path оплата/RLS/auth → ещё `security-review`. Не на каждый RED.
-2. **Проверка качества (Sanity Check):** N+1 (coffeeos-performance), RLS (coffeeos-core), `bin/rails test` по зоне, `rubocop` при изменениях Ruby.
-3. **Синхронизация Ops-памяти:**
+2. **Entire why-context:** `entire checkpoint explain <sha>` последнего GREEN/docs коммита; сверка с `customer_tasks/`, `todo.md`, `INTEGRATIONS.md` (hot-path). Не заменяет bugbot — дополняет «почему агент так сделал».
+3. **Проверка качества (Sanity Check):** N+1 (coffeeos-performance), RLS (coffeeos-core), `bin/rails test` по зоне, `rubocop` при изменениях Ruby.
+4. **Синхронизация Ops-памяти:**
    - Обнови `docs/operations/session/SESSION_STATE.md` (итог фичи).
    - Обнови `docs/operations/journal/CHANGELOG.md` (кратко, что изменилось).
    - Заполни `docs/operations/session/HANDOFF.md` (итог работы, готовность к деплою / что блокирует).
-4. **Отчёт (Финал):** Выведи отчет в чат (формат coffeeos-task-workflow), включая `Субагент: bugbot | …`:
+5. **Отчёт (Финал):** Выведи отчет в чат (формат coffeeos-task-workflow), включая `Субагент: bugbot | …` и строку **Entire:** checkpoint sha / spec OK|gap:
    > "### 🟢 [PHASE 3: REVIEW] Фича успешно реализована!
    >
    > | Сделано | Не сделано |

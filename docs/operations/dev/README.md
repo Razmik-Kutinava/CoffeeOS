@@ -7,3 +7,9 @@
 ## Зачем это нам
 
 Чтобы быстро понимать структуру CoffeeOS без чтения кода.
+
+| Файл | Зачем |
+|------|--------|
+| `LOCAL_DEV.md` | поднять проект локально |
+| `ENTIRE.md` | Entire checkpoint ↔ commit, Review/resume (без новых spec-папок) |
+| `INFRA_STACK.md` | Fly, Neon, стек |

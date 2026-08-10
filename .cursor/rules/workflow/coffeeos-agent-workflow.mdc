@@ -14,7 +14,7 @@ alwaysApply: true
 |---|----------|
 | 1 | Один логический шаг |
 | 2 | Тесты (зона — `coffeeos-dev-gates.mdc`) |
-| 3 | **`git commit`** + **ops** (`coffeeos-commit-ops.mdc`) |
+| 3 | **`git commit`** + **ops** (`coffeeos-commit-ops.mdc`) — commit фиксирует **Entire checkpoint** (Cursor hooks) |
 | 4 | Отчёт: таблица **Сделано \| Не сделано** + `Коммит: <хеш>` |
 | 5 | Стоп — ждать **намерения** на следующий шаг («ебашь/сделай/дальше», не культ `go`) |
 
@@ -110,6 +110,11 @@ Folder `README.md` — для владельца/заказчика.
 `/start` умный: узкий режим если баг/todo уже есть; PHASE 0 только для нового ТЗ.
 
 Skills (`.claude/skills`, CE) — только по типу задачи / явной просьбе, не always.
+
+## Entire (Review / resume — не Spec-папки)
+
+Слой **поверх Git**, без `docs/tasks/TASK-XX/`. Spec = `customer_tasks/` + `todo.md` + `artifacts/` + `INTEGRATIONS.md`.  
+Runbook: `docs/operations/dev/ENTIRE.md`. На **REVIEW:** `entire checkpoint explain <sha>` vs spec. **Resume:** `entire session resume <branch>`. Не заменяет SBR/ops.
 
 ## Когда читать остальные правила
 

@@ -5,7 +5,7 @@ CoffeeOS SBR BUILD. Читай: `spec-build-review`, `coffeeos-commit-ops`, `cof
 ## Сделай
 1. Работай **только** по файлам из todo «Файлы (ожидаемо)» (+ зеркальные тесты; добор +1 путь в todo).
 2. **RED:** падающий тест → коммит `test: … [RED]` (без CHANGELOG/HANDOFF).
-3. **GREEN:** реализация → зелёные тесты задачи → коммит `feat: … [GREEN]`.
+3. **GREEN:** реализация → зелёные тесты задачи → коммит `feat: … [GREEN]`. Коммит = checkpoint Entire (Cursor hooks); без commit why-context на Review пустой.
 4. Длинный suite / регрессия зоны → Task **`shell`**; узкий один test-файл — можно сам.
 5. Не `@codebase` зря. Не рой ce-*.
 6. Если пользователь сказал только RED — стоп после RED с `Next: /sbr` (продолжить GREEN) или явным «дальше GREEN».

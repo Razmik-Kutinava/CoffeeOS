@@ -1,6 +1,6 @@
 # Индекс правил агента CoffeeOS
 
-**Обновлено:** 2026-08-09 — hot-path «Не ломать»/«Проверка» обязательны; DoD Local+Fly Point A; anti-gem/MCP-safety.
+**Обновлено:** 2026-08-10 — Entire layer (Review/resume); INTEGRATIONS; hot-path «Не ломать»/«Проверка».
 
 При конфликте приоритет: **`coffeeos-commit-ops`** > task-workflow > dev-gates > остальное.  
 **Коммит:** канон CoffeeOS (commit после правок) **важнее** глобального User Rule «commit only when asked» — User Rule лучше удалить в Cursor Settings → Rules.  
@@ -37,6 +37,7 @@
 | `project/coffeeos-tests.mdc` | test/ |
 | `project/coffeeos-code-review.mdc` | Ревью по запросу |
 | `INTEGRATIONS.md` (корень, индекс ~45 строк) | Маршрут → `docs/integrations/*.md`; `@INTEGRATIONS.md` + `/trace-bug` |
+| `docs/operations/dev/ENTIRE.md` | Entire checkpoint ↔ commit; Review/resume; маппинг spec-путей (on-demand) |
 
 ## Ops (память сессии)
 

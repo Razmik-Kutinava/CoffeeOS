@@ -8,12 +8,12 @@ Slash-команды в чате Agent: введи `/` и выбери имя ф
 | `/spec` | `spec.md` | SPEC + 2–7 файлов | `/sbr` |
 | `/sbr` | `sbr.md` | RED→GREEN | `/regress` |
 | `/regress` | `regress.md` | Тесты зоны **до** push/Fly | `/review` |
-| `/review` | `review.md` | bugbot ± security | push/deploy по апруву |
+| `/review` | `review.md` | bugbot ± security + Entire checkpoint vs spec | push/deploy по апруву |
 | `/trace-bug` | `trace-bug.md` | Сквозной аудит бага оплата/OTP/merge (до правок) | `/spec` или `/sbr` |
 
 Цепочка: `/start` → `/spec` → `/sbr` → `/regress` → `/review`  
 Диагностика интеграции: `/trace-bug` → `/spec` или `/sbr`
 
-Карта: [`INTEGRATIONS.md`](../INTEGRATIONS.md) (индекс) · детали [`docs/integrations/`](../docs/integrations/)
+Карта: [`INTEGRATIONS.md`](../../INTEGRATIONS.md) (индекс) · детали [`docs/integrations/`](../../docs/integrations/) · Entire: [`docs/operations/dev/ENTIRE.md`](../../docs/operations/dev/ENTIRE.md)
 
 Каждая команда **обязана** в конце напечатать строку `Next: /…` для копипаста.
