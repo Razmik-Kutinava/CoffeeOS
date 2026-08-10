@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-10 (Group 4 notify)  
-**Ветка:** `develop`
+**Дата:** 2026-08-10 (deploy G1–G4 v445)  
+**Ветка:** `develop` (= origin)
 
 | Сейчас | Дальше |
 |--------|--------|
-| Group 4 local PASS · SMS idempotency · grace 15s · push LS | deploy FE (G1–G4) под апрув · backlog |
+| Fly **v445** · MCP Point A smoke PASS | апрувы заказчика · backlog хвосты |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,13 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-10 (push + fly deploy v445 + MCP)
+
+- `git push` develop → `4e52ac6e` (G1–G4)
+- `fly deploy` coffeeos **v445** web+worker started · /up ok
+- MCP Point A: session Aram · repeats · PaymentMethods *5953/*8782 · pay-stack **без** OrderStatusSheet
+- Skip: live barista→ready push/SMS; UserCards E2E real MIR
 
 ### Сессия 2026-08-10 (Group 4 уведомления)
 

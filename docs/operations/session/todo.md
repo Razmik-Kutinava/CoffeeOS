@@ -1,33 +1,18 @@
-# todo — Group 4: уведомления (2026-08-10)
-
-**Намерение:** ебашь Группа 4 — OS-detect · Wallet/WebPush · FCM · каскад ready→SMS
+# todo — post-deploy G1–G4 (2026-08-10)
 
 | last_done | current_state | next_step |
 |-----------|---------------|-----------|
-| Group 4: SMS idempotency · grace 15s · push LS · CTA #37 labels | Local PASS | **deploy под апрув** · backlog хвосты |
+| push + fly v445 + MCP Point A smoke | G1–G4 на Fly | апрувы заказчика · хвосты backlog |
 
-## Файлы
-- `order_ready_paid_notifier.rb` ✅ skip if sms already sent
-- `order_ready_cascade_job.rb` ✅ `SMS_GRACE = 15s`
-- `guest_order_broadcaster.rb` ✅ `set(wait: SMS_GRACE)`
-- `orderStatusNotifyActions.js` ✅ pushRegisteredStorageKey
-- `firebasePush.js` ✅ LS on register
-- `orderStatusCtaMachine.js` ✅ лейблы #37
+## MCP Point A v445
+- [x] Point A ул. Ленина, 10
+- [x] Session: Профиль › 2bc3…4c · Aram email+phone (без OTP)
+- [x] «повторить» + 1-клик на каталоге
+- [x] PaymentMethodsSheet *5953/*8782 · СБП disabled
+- [x] pay-stack: OrderStatusSheet **отсутствует** (G3)
+- [ ] Live ready push/SMS — skip (нет live barista→ready в этом прогоне)
+- [ ] E2E real MIR UserCards — backlog
 
-## Не ломать — ок
-- SMS только если WS offline (presence)
-- Telegram не возвращали
-- ReadyPushClaim для FCM
-
-## Проверка
-```bash
-# Rails notify 39/0 · JS 42/0
-```
-
-## Чеклист
-- [x] SMS идемпотентен
-- [x] hasPushSubscription = permission + FCM LS
-- [x] cascade grace 15s + re-check presence
-- [x] Local PASS
-- [ ] deploy — только под апрув
-- [ ] MCP live push/SMS на Fly — после deploy + SMS_RU
+## Deploy
+- push `develop` → `4e52ac6e`
+- fly deploy → **v445** web+worker started

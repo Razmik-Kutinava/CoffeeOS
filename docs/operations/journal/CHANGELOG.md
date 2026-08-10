@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-10 — deploy: G1–G4 на Fly v445 + MCP Point A
+
+- push `develop` `4e52ac6e`; fly deploy coffeeos **v445** (web+worker)
+- MCP Point A: session · repeats · PaymentMethodsSheet · pay-stack без status sheet
+- Skip live ready→push/SMS и UserCards E2E real MIR
+
 ## 2026-08-10 — fix(shop): Group 4 notify SMS idempotency + push subscribe truth
 
 - Cascade: 15s grace before SMS; skip duplicate SMS if already `sent` in logs
