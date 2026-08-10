@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-10 — fix(shop): silent refresh race + Group 1 auth gate
+
+- Parallel App/CartSheet restore wiped rotated refresh_token on 401 — inflight + safe clear
+- Structural test: Checkout↔PhoneAuth `refreshToken` contract; messenger comment cleanup
+- MCP Point A: profile email+phone confirmed; artifact `group1_session_auth_merge/`
+
 ## 2026-08-10 — ops: UserCards 3.5 MCP 8925 on Fly v444
 
 - Local UserCards зона 61/0; Fly diagnose + GET `/user/cards` — MIR *8782 + *5953

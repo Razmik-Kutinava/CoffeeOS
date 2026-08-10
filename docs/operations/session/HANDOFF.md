@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-10 (UserCards 3.5 MCP)  
+**Дата:** 2026-08-10 (Group 1 session/auth)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| UserCards 8925 MCP Fly v444 PASS · апрув 3.5 ждёт | «ок» 8925 · E2E real MIR · или витрина B |
+| Group 1: silent-refresh race fix local ✅ · MCP profile PASS | deploy FE **или** Group 3 шторка/повторы |
 
-**last_done:** UserCards Point A — Local 61/0 · diagnose v444 · MCP 8925 *8782/*5953  
-**next_step:** апрув скрина 8925 **или** E2E новой карты реальной MIR (не test PAN)  
+**last_done:** Group 1 — inflight silent refresh + structural test; Point A profile email+phone  
+**next_step:** `fly deploy` (FE) **или** ебашь Group 3  
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

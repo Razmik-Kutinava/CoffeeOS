@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-10 (UserCards 3.5 MCP)  
+**Дата:** 2026-08-10 (Group 1 session/auth)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| UserCards 8925 MCP PASS · E2E real PAN blocked | Апрув 3.5 · E2E MIR · витрина B |
+| Group 1 local PASS · silent-refresh race fixed | deploy FE · или Group 3 |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,14 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-10 (Group 1 session/auth/merge)
+
+- Bug: parallel `restoreGuestSession` (App+CartSheet) → 2nd 401 wiped rotated `shop_refresh_token`
+- Fix: `silentRefreshSession` inflight + clear-only-if-same-token; JS tests race/inflight
+- Structural silent-refresh test aligned to camelCase `refreshToken` contract
+- Local Group 1 rails+js PASS; MCP Point A profile email+phone Подтвержден
+- FE fix **needs deploy** to land on Fly v444+
 
 ### Сессия 2026-08-10 (UserCards 3.5 MCP Point A)
 

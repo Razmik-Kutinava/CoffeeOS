@@ -24,7 +24,7 @@ export function buildFlashCallSendBody(phoneE164) {
   return buildOtpSendBody(phoneE164, "flash_call")
 }
 
-/** Тело POST send с каналом flash_call | messenger | sms. */
+/** Тело POST send с каналом flash_call | sms. */
 export function buildOtpSendBody(phoneE164, channel) {
   return { phone: phoneE164, channel: String(channel || "flash_call") }
 }

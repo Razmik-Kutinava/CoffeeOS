@@ -24,9 +24,14 @@ class Shop::SilentRefreshFrontendStructuralTest < ActiveSupport::TestCase
     refute_match(/Date\.now\(\)\s*-\s*savedAt\s*>\s*ttlMs/, src)
   end
 
-  test "Checkout saves refresh_token after OTP verify" do
-    src = File.read(Rails.root.join("app/frontend/routes/Checkout.svelte"))
-    assert_includes src, "saveShopRefreshToken"
-    assert_includes src, "refresh_token"
+  test "Checkout saves refresh token after phone OTP verify" do
+    checkout = File.read(Rails.root.join("app/frontend/routes/Checkout.svelte"))
+    assert_includes checkout, "saveShopRefreshToken"
+    assert_match(/onWizardVerified\(\{\s*refreshToken/, checkout)
+    assert_match(/if \(refreshToken\) saveShopRefreshToken\(refreshToken\)/, checkout)
+
+    code_step = File.read(Rails.root.join("app/frontend/components/PhoneAuthCodeStep.svelte"))
+    assert_includes code_step, "refresh_token"
+    assert_match(/refreshToken:\s*res\?\.refresh_token/, code_step)
   end
 end

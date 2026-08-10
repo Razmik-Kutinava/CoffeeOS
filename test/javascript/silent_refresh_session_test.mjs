@@ -10,7 +10,7 @@ function mockStorage() {
   const map = new Map()
   return {
     getItem: (k) => map.get(k) ?? null,
-    setItem: (k, v) => map.set(k, v),
+    setItem: (k, v) => map.set(k, String(v)),
     removeItem: (k) => map.delete(k)
   }
 }
@@ -27,7 +27,7 @@ globalThis.document = {
 globalThis.window = { location: { search: "" } }
 
 const lsUrl = pathToFileURL(path.join(root, "app/frontend/lib/shopLocalStorage.js")).href
-const { saveShopRefreshToken, loadShopRefreshToken } = await import(lsUrl)
+const { saveShopRefreshToken, loadShopRefreshToken } = await import(`${lsUrl}?t=${Date.now()}`)
 
 let fetchImpl = async () => ({ ok: true, status: 200, json: async () => ({}) })
 globalThis.fetch = async (url, opts) => fetchImpl(url, opts)
@@ -35,7 +35,7 @@ globalThis.fetch = async (url, opts) => fetchImpl(url, opts)
 const refreshModUrl = pathToFileURL(path.join(root, "app/frontend/lib/silentRefreshSession.js")).href
 let mod
 try {
-  mod = await import(refreshModUrl)
+  mod = await import(`${refreshModUrl}?t=${Date.now()}`)
 } catch (e) {
   console.error("silent_refresh_session_test: FAIL missing silentRefreshSession.js", e.message)
   process.exit(1)
@@ -73,5 +73,54 @@ fetchImpl = async () => {
 const net = await silentRefreshSession()
 assert.equal(net.verified, false)
 assert.equal(loadShopRefreshToken(), null)
+
+// Race: 401 со старым токеном не должен стереть уже ротированный новый.
+saveShopRefreshToken("token-stale")
+let release
+const gate = new Promise((r) => {
+  release = r
+})
+fetchImpl = async (_url, opts) => {
+  const body = JSON.parse(opts.body)
+  if (body.refresh_token === "token-stale") {
+    await gate
+    return { ok: false, status: 401, json: async () => ({ error: "Unauthorized" }) }
+  }
+  return {
+    ok: true,
+    status: 200,
+    json: async () => ({
+      refresh_token: "token-fresh",
+      profile: { email: "a@test.com" }
+    })
+  }
+}
+const stalePromise = silentRefreshSession()
+saveShopRefreshToken("token-fresh")
+release()
+const stale = await stalePromise
+assert.equal(stale.verified, false)
+assert.equal(loadShopRefreshToken(), "token-fresh")
+
+// Parallel callers share one inflight promise.
+saveShopRefreshToken("token-shared")
+let calls = 0
+fetchImpl = async () => {
+  calls += 1
+  await new Promise((r) => setTimeout(r, 20))
+  return {
+    ok: true,
+    status: 200,
+    json: async () => ({
+      refresh_token: "token-shared-new",
+      profile: { email: "a@test.com" }
+    })
+  }
+}
+const [a, b] = await Promise.all([silentRefreshSession(), silentRefreshSession()])
+assert.equal(a.verified, true)
+assert.equal(b.verified, true)
+assert.equal(calls, 1)
+assert.equal(loadShopRefreshToken(), "token-shared-new")
 
 console.log("silent_refresh_session_test: PASS")

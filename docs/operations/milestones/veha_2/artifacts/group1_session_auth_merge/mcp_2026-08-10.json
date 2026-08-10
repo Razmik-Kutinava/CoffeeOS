@@ -1,0 +1,34 @@
+{
+  "date": "2026-08-10",
+  "group": 1,
+  "scope": ["durable_sessions", "auth_funnel_flash_sms", "profile_email_phone_merge"],
+  "fly": { "version": 444, "note": "silent-refresh race fix local-only until deploy" },
+  "local": {
+    "rails": "session_refresh + guest_session + phone_otp + profile_merge + auth_funnel + silent_refresh_structural → PASS",
+    "js": "silent_refresh_session_test.mjs PASS (incl. race + inflight)"
+  },
+  "fixes": [
+    {
+      "id": "silent_refresh_parallel_race",
+      "file": "app/frontend/lib/silentRefreshSession.js",
+      "detail": "App+CartSheet parallel restore: 2nd refresh 401 wiped rotated token. Fix: inflight singleton + clear only if token still matches."
+    },
+    {
+      "id": "structural_test_refresh_token_contract",
+      "file": "test/integration/shop/silent_refresh_frontend_structural_test.rb",
+      "detail": "Assert camelCase refreshToken path Checkout←PhoneAuthCodeStep (was brittle assert_includes refresh_token in Checkout)."
+    },
+    {
+      "id": "phone_auth_wizard_comment",
+      "file": "app/frontend/lib/phoneAuthWizard.js",
+      "detail": "Remove messenger from channel comment (channel removed)."
+    }
+  ],
+  "mcp_point_a": {
+    "silent_refresh": "PASS (API 200 + new token; email+phone in profile)",
+    "profile_merge_state": "PASS — email+phone both Подтвержден",
+    "auth_cascade_ui": "skip live OTP (no write OTP to customer); covered by auth_funnel_wizard_ui_test + source flash×2→sms",
+    "screenshot": "mcp_2026-08-10_profile_email_phone.png"
+  },
+  "verdict": "PASS_LOCAL + MCP_PARTIAL; deploy needed for FE race fix on Fly"
+}

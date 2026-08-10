@@ -25,12 +25,23 @@ function shopRefreshUrl() {
   return url
 }
 
+/** Один inflight: App + CartSheet + Checkout не гоняют параллельный refresh одним токеном. */
+let inflight = null
+
 /**
  * Silent Refresh по shop_refresh_token.
  * CSRF + API key — как у app/frontend/lib/api.js (иначе Fly Auth → 401).
  * @returns {Promise<{ verified: boolean, email?: string, profile?: object }>}
  */
 export async function silentRefreshSession() {
+  if (inflight) return inflight
+  inflight = doSilentRefresh().finally(() => {
+    inflight = null
+  })
+  return inflight
+}
+
+async function doSilentRefresh() {
   const token = loadShopRefreshToken()
   if (!token) return { verified: false }
 
@@ -52,7 +63,8 @@ export async function silentRefreshSession() {
     })
     const data = await res.json().catch(() => ({}))
     if (!res.ok) {
-      clearShopRefreshToken()
+      // Не стирать ротированный токен: параллельный refresh со старым → 401.
+      if (loadShopRefreshToken() === token) clearShopRefreshToken()
       return { verified: false }
     }
     if (data.refresh_token) saveShopRefreshToken(data.refresh_token)
@@ -62,7 +74,7 @@ export async function silentRefreshSession() {
       profile: data.profile
     }
   } catch {
-    clearShopRefreshToken()
+    if (loadShopRefreshToken() === token) clearShopRefreshToken()
     return { verified: false }
   }
 }
