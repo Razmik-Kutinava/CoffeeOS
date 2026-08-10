@@ -9,8 +9,8 @@
 |--------|--------|
 | Entire hooks ✅ · ISSUES «🔴 Открыто» · docs sync | UserCards / витрина · SBR |
 
-**last_done:** ISSUES compact · Entire git hooks (WSL) · AGENTS/commands sync · удалён CURSOR_RULES_REPORT  
-**next_step:** тест Entire: agent commit → `entire checkpoint list` (WSL)  
+**last_done:** workflow audit `6b5b5a51` + Entire Windows hook note `da772854`  
+**next_step:** Entire checkpoint — agent-сессия + commit (Entire CLI в Windows PATH или WSL git)  
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

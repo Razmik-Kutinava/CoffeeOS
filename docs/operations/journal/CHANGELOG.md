@@ -11,6 +11,10 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-10 — docs: Entire Windows git hook PATH note
+
+- `ENTIRE.md`: commit из Windows Git skip hook без Entire в PATH; варианты WSL git / Cursor hooks
+
 ## 2026-08-10 — chore: workflow audit (ISSUES, Entire, docs sync)
 
 - **ISSUES:** секция `## 🔴 Открыто` (таблица ~15 строк); resolved — ниже; правила обновлены
