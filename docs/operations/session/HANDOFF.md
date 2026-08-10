@@ -10,7 +10,7 @@
 | Entire enabled (Cursor) · INTEGRATIONS index | первая фича с checkpoint; UserCards / витрина |
 | Legacy suite messenger OTP — 17/17 green | апрув #47 «ок» |
 
-**last_done:** Entire layer: `.entire/` + `docs/operations/dev/ENTIRE.md` + `/review` why-context  
+**last_done:** Entire: `3ff7f467` · hooks fixed in `.git/hooks/` · runbook `ENTIRE.md`  
 **next_step:** SBR на задаче из `todo.md` → commit → `entire checkpoint explain`  
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
