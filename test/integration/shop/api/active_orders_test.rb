@@ -47,7 +47,7 @@ class Shop::Api::ActiveOrdersTest < ActionDispatch::IntegrationTest
     )
   end
 
-  test "#35 GET orders/active returns accepted preparing only (no ready)" do
+  test "#35/#47 GET orders/active returns accepted preparing ready (no issued)" do
     verify_shop_email!(tenant_id: @tenant.id, email: @email)
 
     get "/shop/api/orders/active", headers: shop_tenant_headers(@tenant.id), as: :json
@@ -58,13 +58,16 @@ class Shop::Api::ActiveOrdersTest < ActionDispatch::IntegrationTest
     assert_kind_of Array, orders
     ids = orders.map { |o| o["id"] || o["order_id"] }
     assert_includes ids, @active.id
-    assert_not_includes ids, @ready.id
+    assert_includes ids, @ready.id, "ready остаётся в шторке до выдачи (Group 3)"
     assert_not_includes ids, @issued.id
 
     preparing = orders.find { |o| (o["id"] || o["order_id"]) == @active.id }
     assert_equal "preparing", preparing["status"]
     assert preparing.key?("order_number")
     assert_equal false, preparing["can_cancel"]
+
+    ready_row = orders.find { |o| (o["id"] || o["order_id"]) == @ready.id }
+    assert_equal "ready", ready_row["status"]
   end
 
   test "#41 GET orders/active includes can_cancel for accepted guest orders" do

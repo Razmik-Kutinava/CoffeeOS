@@ -422,11 +422,13 @@
     </div>
     {/if}
 
-    <!-- Статус активных заказов — внутри шторки, не overlay поверх (#35 D1/D2) -->
-    <OrderStatusSheet
-      embedded={true}
-      sheetContext={mode === MODE_EXPANDED || payStackActive ? "cart_expanded" : "peek"}
-    />
+    <!-- Статус внутри шторки (#35). На checkout pay-stack — скрыт: иначе клип в 15vh поверх «Оплата». -->
+    {#if !payStackActive}
+      <OrderStatusSheet
+        embedded={true}
+        sheetContext={mode === MODE_EXPANDED ? "cart_expanded" : "peek"}
+      />
+    {/if}
 
     <!-- #44: CTA карточки товара — стык внутри шторки (peek/hidden/expanded) -->
     {#if onProduct}

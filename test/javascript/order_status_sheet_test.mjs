@@ -12,6 +12,7 @@ import {
   applyCableEvent,
   applyReconnectOrders,
   mapReconnectError,
+  activeOrderIdsKey,
   SHEET_POINTER_POLICY,
   ORDER_STATUS_SHEET_MODES
 } from "../../app/frontend/lib/orderStatusSheet.js"
@@ -110,7 +111,7 @@ describe("applyCableEvent (#35 A1/A2)", () => {
     assert.equal(state.mode, ORDER_STATUS_SHEET_MODES.PEEK)
   })
 
-  it("removes order on status=ready status_changed event", () => {
+  it("updates preparing→ready in place (ready stays in sheet)", () => {
     const state = createOrderStatusSheetState()
     state.setOrders([{ id: "42", status: "preparing", order_number: "N" }])
 
@@ -120,20 +121,30 @@ describe("applyCableEvent (#35 A1/A2)", () => {
       status: "ready"
     })
 
-    assert.equal(state.orders.length, 0)
-    assert.equal(state.mode, ORDER_STATUS_SHEET_MODES.HIDDEN)
+    assert.equal(state.orders.length, 1)
+    assert.equal(state.orders[0].status, "ready")
+    assert.equal(state.mode, ORDER_STATUS_SHEET_MODES.PEEK)
   })
 })
 
 describe("reconnect refresh (#35 A3)", () => {
-  it("applyReconnectOrders filters out ready and hides sheet", () => {
+  it("applyReconnectOrders keeps ready orders in sheet", () => {
     const state = createOrderStatusSheetState()
     state.setOrders([{ id: "old", status: "preparing", order_number: "OLD" }])
     applyReconnectOrders(state, [
       { id: "new", status: "ready", order_number: "NEW" }
     ])
-    assert.equal(state.orders.length, 0)
-    assert.equal(state.mode, ORDER_STATUS_SHEET_MODES.HIDDEN)
+    assert.equal(state.orders.length, 1)
+    assert.equal(state.orders[0].status, "ready")
+    assert.equal(state.mode, ORDER_STATUS_SHEET_MODES.PEEK)
+  })
+
+  it("activeOrderIdsKey is order-independent stable", () => {
+    assert.equal(
+      activeOrderIdsKey([{ id: "b" }, { id: "a" }]),
+      activeOrderIdsKey([{ order_id: "a" }, { id: "b" }])
+    )
+    assert.equal(activeOrderIdsKey([]), "")
   })
 
   it("mapReconnectError 404 → hide", () => {

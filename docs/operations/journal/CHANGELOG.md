@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-10 — fix(shop): Group 3 ready-in-sheet + Cable dedupe + pay-stack
+
+- `/orders/active` + Cable: `ready` остаётся в шторке до issued (не пусто +0₽)
+- poll не tear-down Cable при том же наборе id; статус скрыт на checkout pay-stack
+- Local sheet/status 45/0 + JS 42/0; MCP catalog «повторить» PASS; full pay-stack verify после deploy
+
 ## 2026-08-10 — fix(shop): Group 2 payment ErrorCode / cancel / invalid token
 
 - status API: `error_code` из provider_data (inline 1051 «Недостаточно средств»)

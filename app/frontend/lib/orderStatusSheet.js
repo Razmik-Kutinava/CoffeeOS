@@ -75,12 +75,30 @@ export function createOrderStatusSheetState() {
   return state
 }
 
+/** Terminal для снятия карточки / refresh frequent — выдача или отмена (не ready). */
+export const SHEET_TERMINAL_STATUSES = Object.freeze([
+  "issued",
+  "closed",
+  "cancelled"
+])
+
+/** Стабильный ключ набора id — poll не tear-down Cable, если список тот же. */
+export function activeOrderIdsKey(orders) {
+  const ids = (Array.isArray(orders) ? orders : [])
+    .map((o) => normalizeId(o?.id ?? o?.order_id))
+    .filter(Boolean)
+  ids.sort()
+  return ids.join(",")
+}
+
 export function applyCableEvent(state, payload, hooks = {}) {
   if (!payload || payload.type !== "status_changed") return
   const orderId = normalizeId(payload.order_id ?? payload.orderId)
   if (!orderId) return
 
-  const terminal = ["issued", "closed", "cancelled", "ready"].includes(String(payload.status || ""))
+  const status = String(payload.status || "")
+  // ready остаётся в шторке («Готов» + CTA); иначе окно ready → пусто +0₽ без «повторить»
+  const terminal = SHEET_TERMINAL_STATUSES.includes(status)
   if (terminal) {
     state.setOrders(
       state.orders.filter((o) => normalizeId(o.id ?? o.order_id) !== orderId)
@@ -109,8 +127,6 @@ export function applyCableEvent(state, payload, hooks = {}) {
 
 export function applyReconnectOrders(state, orders) {
   const list = Array.isArray(orders) ? orders : []
-  // #35: виджет отображаем только в процессе готовки.
-  // Даже если API по какой-то причине вернул `ready`, фильтруем на клиенте.
-  const filtered = list.filter((o) => String(o?.status || "") !== "ready")
-  state.setOrders(filtered)
+  // accepted|preparing|ready — карточка до выдачи; issued/cancelled отсекает API
+  state.setOrders(list)
 }

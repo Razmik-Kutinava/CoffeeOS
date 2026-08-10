@@ -2,15 +2,18 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-10 (Group 2 payments)  
+**Дата:** 2026-08-10 (Group 3 sheet/status)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Group 2: error_code · Cancel→422 · 1051≠invalid ✅ · MCP sheet PASS | deploy FE (G1+G2) **или** Group 3 шторка/повторы |
+| Group 3: ready-in-sheet · Cable dedupe · pay-stack hide status ✅ | **deploy FE (G1–G3) под апрув** · Group 4 notify · backlog |
 
-**last_done:** Group 2 — presenter error_code + Cancel ApiError map + 1051 CLIENT_ERROR; Point A cards sheet  
-**next_step:** `fly deploy` (FE) **или** ебашь Group 3  
+**last_done:** Group 3 — ready в шторке до issued; poll≠resubscribe; статус скрыт на checkout pay-stack  
+**next_step:** `fly deploy` **только после апрува** · или Group 4 notifications  
+
+**Архив session:** [`archive/README.md`](archive/README.md)  
+**Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

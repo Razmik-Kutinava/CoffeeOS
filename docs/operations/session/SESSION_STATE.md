@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-10 (Group 2 payments)  
+**Дата:** 2026-08-10 (Group 3 sheet/status)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Group 2 local PASS · MCP PaymentMethodsSheet PASS | deploy FE (G1+G2) · или Group 3 шторка |
+| Group 3 local PASS · ready-in-sheet · Cable dedupe · pay-stack hide status | deploy FE (G1–G3) под апрув · Group 4 notify · backlog хвосты |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,13 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-10 (Group 3 шторка / статусы / повторы)
+
+- ready остаётся в `/orders/active` + Cable (не пусто +0₽); «повторить» всё ещё hide до issued
+- Cable: `activeOrderIdsKey` — poll не reconnect каждый тик
+- pay-stack: OrderStatusSheet не монтируется (`!payStackActive`)
+- Local 45/0 + JS 42/0; MCP: repeats на каталоге PASS; FE на Fly ещё старый (нужен deploy)
 
 ### Сессия 2026-08-10 (Group 2 payments / cards / SBP)
 

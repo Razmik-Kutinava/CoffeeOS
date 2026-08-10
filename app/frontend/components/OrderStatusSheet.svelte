@@ -9,6 +9,7 @@
     applyCableEvent,
     applyReconnectOrders,
     mapReconnectError,
+    activeOrderIdsKey,
     ORDER_STATUS_SHEET_MODES,
     ACTIVE_ORDERS_POLL_MS,
     startActiveOrdersPolling,
@@ -42,6 +43,8 @@
   let accordionState = $state(createActiveOrdersAccordionState([]))
   let unsubs = []
   let connectionLost = false
+  /** Стабильный ключ подписок — poll не reconnect Cable при том же наборе id */
+  let subscribedIdsKey = ""
 
   let cancelModalOpen = $state(false)
   let cancelLoading = $state(false)
@@ -69,10 +72,17 @@
   function clearSubs() {
     unsubs.forEach((fn) => { try { fn() } catch { /* */ } })
     unsubs = []
+    subscribedIdsKey = ""
   }
 
   function resubscribe(list) {
+    const nextKey = activeOrderIdsKey(list)
+    if (nextKey === subscribedIdsKey && (nextKey === "" || unsubs.length > 0)) return
+
     clearSubs()
+    subscribedIdsKey = nextKey
+    if (!nextKey) return
+
     const token = guestReconnectToken()
     for (const order of list) {
       const orderId = order.id || order.order_id
@@ -115,8 +125,10 @@
       refreshFrequentProducts()
     } catch (err) {
       const status = err?.status || err?.response?.status || 500
-      if (mapReconnectError(status) === "hide") applyReconnectOrders(sheet, [])
-      else sheet.setConnection("lost")
+      if (mapReconnectError(status) === "hide") {
+        applyReconnectOrders(sheet, [])
+        resubscribe([])
+      } else sheet.setConnection("lost")
       sync()
       refreshFrequentProducts()
     }
