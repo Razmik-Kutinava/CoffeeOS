@@ -2,14 +2,14 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-10 (Group 1 session/auth)  
+**Дата:** 2026-08-10 (Group 2 payments)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Group 1: silent-refresh race fix local ✅ · MCP profile PASS | deploy FE **или** Group 3 шторка/повторы |
+| Group 2: error_code · Cancel→422 · 1051≠invalid ✅ · MCP sheet PASS | deploy FE (G1+G2) **или** Group 3 шторка/повторы |
 
-**last_done:** Group 1 — inflight silent refresh + structural test; Point A profile email+phone  
+**last_done:** Group 2 — presenter error_code + Cancel ApiError map + 1051 CLIENT_ERROR; Point A cards sheet  
 **next_step:** `fly deploy` (FE) **или** ебашь Group 3  
 
 **Архив session:** [`archive/README.md`](archive/README.md)  

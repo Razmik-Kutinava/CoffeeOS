@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-10 (Group 1 session/auth)  
+**Дата:** 2026-08-10 (Group 2 payments)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Group 1 local PASS · silent-refresh race fixed | deploy FE · или Group 3 |
+| Group 2 local PASS · MCP PaymentMethodsSheet PASS | deploy FE (G1+G2) · или Group 3 шторка |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,14 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-10 (Group 2 payments / cards / SBP)
+
+- `PaymentStatusPresenter` → `error_code` из provider_data (1051 inline)
+- `TbankPaymentSync` больше не выкидывает ErrorCode/Message из GetState
+- Cancel ApiError → `GuestOrderCancellationService::Error` (422 + REFUND_UNAVAILABLE)
+- `1051` убран из INVALID_REBILL_CODES (не «мёртвый» токен)
+- Local 70/0 + JS 27; MCP Point A: *8782/*5953, СБП disabled; FE needs deploy
 
 ### Сессия 2026-08-10 (Group 1 session/auth/merge)
 

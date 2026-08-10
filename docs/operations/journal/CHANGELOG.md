@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-10 — fix(shop): Group 2 payment ErrorCode / cancel / invalid token
+
+- status API: `error_code` из provider_data (inline 1051 «Недостаточно средств»)
+- GetState sync сохраняет ErrorCode/Message; Cancel ApiError → 422 REFUND_UNAVAILABLE
+- 1051 больше не триггерит «невалидный RebillId» CTA; MCP Point A PaymentMethodsSheet *8782/*5953
+
 ## 2026-08-10 — fix(shop): silent refresh race + Group 1 auth gate
 
 - Parallel App/CartSheet restore wiped rotated refresh_token on 401 — inflight + safe clear

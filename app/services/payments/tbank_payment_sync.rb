@@ -103,7 +103,7 @@ module Payments
         Callbacks::PaymentStatusUpdater.new(
           payment: @payment,
           new_status: our_status,
-          provider_data: state.except("Token", "Password", "Success", "ErrorCode", "Message"),
+          provider_data: state.except("Token", "Password", "Success"),
           provider_payment_id: provider_id,
           note: "Т-Банк GetState: #{tbank_status}"
         ).call!
@@ -118,7 +118,8 @@ module Payments
     def merge_provider_data!(state, provider_id)
       data = (@payment.provider_data.is_a?(Hash) ? @payment.provider_data : {}).dup
       save_card = data["save_card"]
-      merged = data.merge(state.except("Token", "Password", "Success", "ErrorCode", "Message"))
+      merged = data.merge(state.except("Token", "Password", "Success"))
+      # ErrorCode/Message оставляем — inline FSM (1051 «Недостаточно средств») читает их из status API.
       merged["save_card"] = save_card unless save_card.nil?
       merged["PaymentId"] = provider_id if provider_id.present?
       @payment.update_columns(provider_data: merged)

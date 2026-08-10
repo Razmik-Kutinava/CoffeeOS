@@ -351,7 +351,7 @@ class Shop::GuestOrderCancellationServiceTest < ActiveSupport::TestCase
       calls: calls,
       raise_error: Payments::TbankAdapter::ApiError.new(error_code: "504", message: "Timeout")
     ) do
-      assert_raises(Shop::GuestOrderCancellationService::Error, Payments::TbankAdapter::ApiError) do
+      error = assert_raises(Shop::GuestOrderCancellationService::Error) do
         Shop::GuestOrderCancellationService.new(
           order: order,
           session: @session,
@@ -359,6 +359,7 @@ class Shop::GuestOrderCancellationServiceTest < ActiveSupport::TestCase
         ).call!
       end
 
+      assert_equal Shop::GuestOrderCancellationService::REFUND_UNAVAILABLE, error.message
       assert_equal "accepted", order.reload.status
       assert_equal "succeeded", payment.reload.status
       assert_equal 1, calls.size

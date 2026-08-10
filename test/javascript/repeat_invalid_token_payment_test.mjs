@@ -164,7 +164,7 @@ describe("repeatInvalidTokenStore — HTTP error surface", () => {
 describe("repeatInvalidTokenStore — invalid rebill detection from one_click", () => {
   it("detects client/bank rebill errors", () => {
     assert.equal(isInvalidRebillPaymentError({ error_code: "1014", httpStatus: 422 }), true)
-    assert.equal(isInvalidRebillPaymentError({ error_code: "1051", httpStatus: 422 }), true)
+    assert.equal(isInvalidRebillPaymentError({ error_code: "1051", httpStatus: 422 }), false)
     assert.equal(isInvalidRebillPaymentError({ httpStatus: 500 }), false)
     assert.equal(isInvalidRebillPaymentError({ error_code: "0", httpStatus: 200 }), false)
   })

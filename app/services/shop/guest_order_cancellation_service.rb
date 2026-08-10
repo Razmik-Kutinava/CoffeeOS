@@ -102,6 +102,12 @@ module Shop
         )
         persist_cancelled!(old_status: old_status)
       end
+    rescue Payments::TbankAdapter::ApiError, Payments::TbankAdapter::Error => e
+      Rails.logger.warn(
+        "[GuestOrderCancellation] Cancel failed order=#{@order.id} " \
+        "payment=#{payment.id} #{e.class}: #{e.message}"
+      )
+      raise Error, REFUND_UNAVAILABLE
     end
 
     def persist_cancelled!(old_status:)
