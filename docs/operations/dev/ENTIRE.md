@@ -101,6 +101,26 @@ CLI: WSL, `PATH=$HOME/.local/bin:$PATH`. На Windows без WSL — устан�
 
 ## Критерий «Entire работает»
 
-После commit с кодом: `entire checkpoint list` показывает checkpoint; `explain` — не пустой (не «0 lines» как у чистого чата без commit).
+1. `entire status` → **● Enabled · Agents · Cursor**
+2. `.git/hooks/` содержит `post-commit`, `commit-msg` (после `entire enable` из WSL)
+3. После **agent-сессии в Cursor** + **`git commit`**: `entire checkpoint list` → ≥1 checkpoint
+4. `entire checkpoint explain <sha>` — не пустой (не «0 lines»)
+
+**0 checkpoints сразу после enable — норма.** Checkpoint появляется после первого commit в agent-сессии, не от enable.
+
+---
+
+## Windows (обязательно для CoffeeOS)
+
+| Действие | Где |
+|----------|-----|
+| `entire enable`, `entire status`, `checkpoint list/explain` | **WSL** (`/mnt/c/Tools/workarea/CoffeeOS`) |
+| Git hooks Entire | `.git/hooks/` — ставятся только через WSL enable |
+| Cursor hooks (`.cursor/hooks.json`) | `sh -c` — нужен sh (Git Bash/WSL); без `entire` в PATH — тихий skip |
+| **Запрещено** | `entire enable` из **PowerShell** — создаёт мусорную папку `C:…Tools…CoffeeOS.git.hooks` в корне репо (удалить вручную) |
+
+**Регрессия на Windows:** не гонять полный `test/integration/shop/` — зависает (см. ISSUES). Таргетные файлы из todo «Проверка» или CI.
+
+**User Rules в Cursor:** глобального «commit only on ask» может не быть в UI — канон CoffeeOS (`commit-ops`) всё равно **важнее**: commit после каждого шага без вопроса.
 
 *2026-08-10 · enabled cursor · git-refs backend*

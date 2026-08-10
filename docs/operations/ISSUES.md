@@ -2,9 +2,23 @@
 
 > Канон (`coffeeos-commit-ops.mdc`, `RULES_INDEX.md`): баг фиксируется здесь **сразу**; статус до **«решено»** + **чем закрыли** (код, тесты, миграции).
 >
-> **Агент на старте чата:** читай **только секцию 🔴** (незакрытые). Весь файл — когда правишь/ищешь баг. Архив ISSUES — когда файл раздуется до тысяч строк (сейчас не делаем).
+> **Агент на старте чата:** читай **только секцию `## 🔴 Открыто`** (до следующего `##`). Детали — по ссылке «→ полная запись» ниже. Архив — когда файл раздуется до тысяч строк (сейчас не делаем).
 
-## 🔴 Блокеры
+## 🔴 Открыто
+
+| Дата | ID / тема | Статус | Следующий шаг |
+|------|-----------|--------|---------------|
+| 2026-07-16 | **UserCards** save_card / delayed RebillId | 🔴 код частично · MCP 2 карты ✅ · апрув 3.5 ❌ | E2E реальная карта ≠ test PAN; → полная запись |
+| 2026-07-16 | **Checkout UX** stacked sheet (Фаза 2) | 🟡 код ✅ · MCP ❌ · апрув ❌ | После UserCards 3.4; → полная запись |
+| 2026-07-31 | **Legacy shop suite** (~4–5 fail после triage) | 🔴 open | Отдельная итерация; не гейт фичи; → полная запись |
+| 2026-07-27 | **SBP 3001** на Fly | 🟡 не баг приложения | Включить СБП в кабинете Т-Кассы; → полная запись |
+| 2026-07-28 | **Fly Test** в шапке Арама | 🟡 код local ✅ | push + deploy + MCP Point A; → полная запись |
+| 2026-08-08 | **#47** PWA статусы + повторы | 🟡 MCP PASS v443 | Апрув заказчика; → полная запись |
+| 2026-07-21 | **Windows** полный `test/integration/shop/` зависает | 🟡 env | Таргетные файлы / CI; не полный suite локально; → полная запись |
+
+---
+
+## Решено недавно (детали)
 
 [2026-08-09] — Legacy shop suite triage: regression fixed + messenger OTP — тесты актуализированы под реальный флоу заказчика
 **Статус:** **resolved**
@@ -75,9 +89,9 @@
 - Re-verify: push `6fa90731` · deploy **v417** · MCP [`mcp/fly_v417/`](milestones/veha_2/artifacts/quick_repeat_bottom_sheet/mcp/fly_v417/) — peek/expanded/one-open PASS.
 
 [2026-07-31] — Полная shop regression: 24 legacy OTP/structural failures
-**Статус:** 🔴 **open**, не из diff #35
+**Статус:** 🔴 **open**, не из diff #35 (после triage 2026-08-09: ~4–5 fail осталось)
 **Источник:** после MCP fix #35: `bundle exec rails test test/integration/shop/`
-**Факт:** 460 runs, 2893 assertions, **24 failures**, 0 errors, 3 skips; примеры — phone/profile OTP ожидают старый messenger flow, structural tests ищут удалённые frontend symbols.
+**Факт:** 460 runs, 2893 assertions, **24 failures**, 0 errors, 3 skips; примеры — phone/profile OTP ожидали старый messenger flow, structural tests ищут удалённые frontend symbols.
 **#35:** targeted mount 5/5 + JS 14/14 + Vite build PASS.
 **Осталось:** отдельный triage/fix legacy shop suite; не пакетить в #35.
 
@@ -138,7 +152,7 @@
 **Источник:** заказчик · [`Исправление сохранения карты…`](../milestones/veha_2/requirements/customer_tasks/Исправление%20сохранения%20карты%20в%20UserCards%20после%20успешной%20оплаты.md) § **Канон UX checkout** · макеты **1000008924/8925**
 **Фикс Фаза 2 (код):** `openCheckoutPayStack` + stacked UX · `prog25`
 **Расследование 2026-07-16:** [`usercards_fly_payment_investigate_2026-07-16.json`](../milestones/veha_2/artifacts/usercards_save_card/usercards_fly_payment_investigate_2026-07-16.json) — 2× succeeded; **09:56** без Pan/RebillId в момент FA.
-**Root cause 3.2:** [`usercards_fly_payment_root_cause_2026-07-18.json`](../milestones/veha_2/artifacts/usercards_save_card/usercards_fly_payment_root_cause_2026-07-18.json) — см. 🔴 UserCards (общий поток).
+**Root cause 3.2:** [`usercards_fly_payment_root_cause_2026-07-18.json`](../milestones/veha_2/artifacts/usercards_save_card/usercards_fly_payment_root_cause_2026-07-18.json) — см. UserCards (общий поток).
 **Осталось:** MCP stacked · апрув заказчика (после UserCards 3.4).
 
 [2026-07-21] — Локальный полный прогон `test/integration/shop/` зависает (Windows)
@@ -147,17 +161,15 @@
 **Гипотеза:** тест с сетевым вызовом / ожиданием (payments|callbacks) без таймаута на локальной Windows-машине.
 **Улика 2026-07-21 (шаг B4 Quick Repeat):** зависание воспроизводится на рендере SPA-shell — `GET /shop?tenant_id=` (`pages#home`) в `cart_persistence_test.rb` и на любом GET к `/shop/*` без `as: :json` (уходит в catch-all `pages#home`). Гипотеза сужена: рендер shell ждёт vite dev server. `tenant_isolation_test.rb` отдельно проходит (2/0).
 **Обход:** регрессию зоны гонять таргетными списками файлов; полную зону — в CI.
-**Следующий шаг:** локализовать зависший файл бинарным делением списка (отдельный шаг по go).
+**Следующий шаг:** локализовать зависший файл бинарным делением списка (отдельная итерация).
 
 [2026-07-21] — `checkout_ui_cleanup_test.rb` противоречит канону «оплата через шторку» (pre-existing)
 **Статус:** **resolved** 2026-07-28 · Auth funnel Шаг 1 — ассерты Email/«Способ оплаты» в Checkout сняты; SBP/Оплатить → PaymentMethodsSheet
 **Симптом:** `test/integration/shop/checkout_ui_cleanup_test.rb:71` требовал «Способ оплаты» / Email в `Checkout.svelte`, а `shop_checkout_cart_sheet_ux_test.rb:45` — отсутствие «Способ оплаты».
 **Чем закрыли:** обновление cleanup-теста под phone wizard + PaymentMethodsSheet.
 
-## Решено недавно
-
 [2026-07-15] — Checkout CartSheet (промежуточный код, не приёмка)
-**Статус:** **superseded** 2026-07-16 — см. 🔴 выше
+**Статус:** **superseded** 2026-07-16 — см. UserCards / Checkout UX выше
 **Было:** `isCartSheetRoute` catalog+checkout · deploy v359 · grep-тесты PASS — **заказчик не принял**.
 
 [2026-07-04] — B1.11-BUG-OVERNIGHT: нельзя создать точку с ночной сменой (`must be after opens_at`)
@@ -182,7 +194,7 @@
 Fly MPG `coffeeos-db` destroyed. CI deploy → `workflow_dispatch` only.
 **Neon billing:** spending limit **$15** — поднять заказчиком в Console (2026-06-19).
 
-## 🟡 Жёлтые
+## 🟡 Жёлтые (история)
 
 [2026-05-30] — Kiosk: POST /kiosk/api/auth
 Статус: resolved

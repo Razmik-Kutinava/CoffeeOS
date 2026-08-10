@@ -26,11 +26,24 @@ Rails 8, PostgreSQL, Svelte/Vite, Pundit, Minitest.
 | **On-demand** | остальные `workflow/` + `project/` — по типу задачи (см. `RULES_INDEX.md`) |
 | **Индекс** | `docs/operations/RULES_INDEX.md`, этот файл |
 
-**При конфликте:** `coffeeos-commit-ops.mdc` **важнее** любых User Rules: **коммит всегда в конце шага без вопроса**; push — только по явной просьбе. Фичи/SBR — читай `task-workflow` + `spec-build-review` on-demand.
+**При конфликте:** `coffeeos-commit-ops.mdc` **важнее** любых User Rules: **коммит всегда в конце шага без вопроса**; push — только по явной просьбе.
+
+## Цепочка задач (slash-команды)
+
+| Команда | Когда |
+|---------|-------|
+| `/start` | Старт сессии (шапка ops + todo + `ISSUES` «🔴 Открыто») |
+| `/spec` | SPEC + 2–7 файлов + hot-path «Не ломать»/«Проверка» |
+| `/sbr` | RED → GREEN |
+| `/regress` | Тесты зоны (Local) |
+| `/review` | bugbot ± security + Entire checkpoint |
+| `/trace-bug` | Диагностика hot-path интеграции до правок |
+
+Карта: `.cursor/commands/README.md` · субагенты: `docs/agents/SUBAGENTS.md` · Entire: `docs/operations/dev/ENTIRE.md`
 
 ## Сервис-объекты (Веха 1)
 
-Практика **только Service Objects**, без Domain Folders. Подробности: `.cursor/rules/project/coffeeos-services.mdc`, п. 9 — `coffeeos-core.mdc`. Журнал: `docs/operations/reference/MILESTONE_PRACTICES.md`.
+Практика **только Service Objects**, без Domain Folders. Подробности: `.cursor/rules/project/coffeeos-services.mdc`, п. 9 — `coffeeos-core.mdc`.
 
 | Ситуация | Действие |
 |----------|----------|
@@ -38,29 +51,36 @@ Rails 8, PostgreSQL, Svelte/Vite, Pundit, Minitest.
 | Простой index/show, одна модель, < ~15 строк | Можно в контроллере |
 | Массовый рефакторинг | Только по апруву |
 
-Эталоны: `app/services/barista/order_creation_service.rb`, `app/services/platform/tenant_onboarding/provision.rb`.
-
 ## Правила работы
 
-- Продукт: `docs/product/01_Vision.md`, `02_functional.md`, `03_Business_Logic.md`; `ARCHITECTURE.md` — когда явно канон.
-- **Баги:** сразу `docs/operations/ISSUES.md` до «решено».
-- **SESSION_STATE:** после **каждого шага с правками** (`coffeeos-commit-ops.mdc`).
-- **Коммит:** всегда после шага с изменениями (до отчёта), **не спрашивать**; отчёт — таблица **Сделано | Не сделано** + хеш. **Push** — только по явной просьбе.
-- **Новая задача:** план → **`go`** (`coffeeos-task-workflow.mdc`).
-- Миграции / деструктивный git — только с **`go`** (`coffeeos-dev-gates.mdc`).
-- Файлы >200 строк — сплит с **`go`** (`coffeeos-file-size-split.mdc`).
-- Scratch агента: `scripts/scratch/`, не корень репо.
+- Продукт: `docs/product/01_Vision.md`, `02_functional.md`, `03_Business_Logic.md`
+- **Баги:** сразу `docs/operations/ISSUES.md` (секция «🔴 Открыто»)
+- **Коммит:** всегда после шага с изменениями (до отчёта), **не спрашивать**
+- **Новая задача:** `/start` → `/spec` → `/sbr` (намерение владельца = «ебашь/сделай/дальше»)
+- Миграции / деструктивный git / deploy — **только явный апрув** владельца
+- Scratch: `scripts/scratch/`, не корень репо
 
-## Тестирование
+## Windows (локальная машина)
 
-- Тест на каждое изменение поведения; регрессия зоны — `coffeeos-dev-gates.mdc`.
-- Без зелёных тестов шаг не `done` (или `blocked` + ISSUES).
+- **Entire CLI** и `entire checkpoint list` — только **WSL** (`/mnt/c/Tools/workarea/CoffeeOS`)
+- **`entire enable`** — только из WSL (не PowerShell — мусорная папка в корне репо)
+- **Регрессия:** не гонять полный `test/integration/shop/` на Windows — таргетные файлы из todo «Проверка» или CI
+- Подробнее: `docs/operations/dev/ENTIRE.md` § Windows
+
+## Дисциплина отчёта (контроль без скриптов)
+
+Каждый шаг с правками — таблица **Сделано | Не сделано** + обязательно:
+
+- `Коммит: <хеш>`
+- `Субагент: …` (или `нет — мелочь`)
+- Hot-path: **Local** · **Fly MCP** (Point A или skip + почему)
+
+На `/review`: Entire `checkpoint explain <sha>` vs spec. Нет строки — шаг не `done`.
 
 ## Definition of Done
 
-См. `coffeeos-dev-gates.mdc` и `coffeeos-task-workflow.mdc`: тесты зоны, ops, честный отчёт с **Local | Fly MCP** на hot-path, `[x]` в CHECKLIST/CBR — после «ок» + MCP на **Point A**.
+См. `coffeeos-dev-gates.mdc`: тесты зоны, ops, **Local + Fly MCP Point A** на hot-path.
 
-**Не тащить:** gem’ы Tinkoff/Stripe, marketplace skills, RSpec — без просьбы владельца. Оплата = свой `TbankAdapter`.
+**Не тащить:** gem’ы Tinkoff/Stripe, marketplace skills, RSpec — без просьбы. Оплата = `TbankAdapter`.
 
 **MCP safety:** не OTP/PAN на профиле заказчика; приёмка не на Fly Test.
-

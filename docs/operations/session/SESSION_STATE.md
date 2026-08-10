@@ -1,13 +1,13 @@
 # SESSION_STATE
 
-## Шапка (агент читает только это + todo + 🔴 ISSUES)
+## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-10 (INTEGRATIONS в docs/)  
+**Дата:** 2026-08-10 (workflow audit)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| `docs/integrations/INTEGRATIONS.md` + Entire | UserCards / витрина |
+| ISSUES compact · Entire/WSL runbook · AGENTS sync | UserCards / витрина |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,11 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-10 (workflow audit)
+
+- ISSUES: `## 🔴 Открыто` — таблица на старте; Entire git hooks через WSL enable
+- AGENTS.md → slash-команды; удалён CURSOR_RULES_REPORT; Windows + дисциплина отчёта в rules
 
 ### Сессия 2026-08-09 (hot-path agent discipline)
 

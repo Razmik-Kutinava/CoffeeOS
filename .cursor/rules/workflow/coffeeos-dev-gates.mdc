@@ -13,8 +13,8 @@ alwaysApply: false
 
 0. **`coffeeos-commit-ops.mdc`** — всегда `git commit` + ops (без вопроса); **`git push`** — только по явной просьбе
 1. **Безопасность** — секреты, auth, RLS, prod/Fly
-2. **`docs/operations/ISSUES.md`** — открытые 🔴 блокеры
-3. **`coffeeos-agent-workflow.mdc`** — go, тесты, honest report, стоп между шагами
+2. **`docs/operations/ISSUES.md`** — секция **`## 🔴 Открыто`**
+3. **`coffeeos-agent-workflow.mdc`** — намерение шага, тесты, honest report, стоп между шагами
 4. **`coffeeos-dev-gates.mdc`** (этот файл) — миграции, API, регрессия, hot-path
 5. **`coffeeos-file-size-split.mdc`** + **`../project/coffeeos-*.mdc`**
 6. **`docs/agents/AGENTS.md`** — индекс процесса агента
@@ -38,6 +38,8 @@ alwaysApply: false
 **В отчёте обязательно для hot-path:** строки **Local:** `команда` PASS/FAIL · **Fly MCP:** PASS / skip+почему (нет апрува deploy / …).
 
 **Не гейт:** полный `test/integration/shop/` с известными legacy OTP/structural failures (~24) — triage отдельно; не смешивать с DoD фичи.
+
+**Windows:** полный `bin/rails test test/integration/shop/` на локальной Windows-машине **зависает** (ISSUES env) — гонять **таргетные** файлы из таблицы ниже или из todo «Проверка»; полная зона — CI.
 
 ---
 

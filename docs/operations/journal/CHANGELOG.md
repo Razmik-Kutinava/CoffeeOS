@@ -11,6 +11,16 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-10 — chore: workflow audit (ISSUES, Entire, docs sync)
+
+- **ISSUES:** секция `## 🔴 Открыто` (таблица ~15 строк); resolved — ниже; правила обновлены
+- **Entire:** `entire enable` из WSL · git hooks в `.git/hooks/`; runbook § Windows + критерий работы
+- **AGENTS.md:** slash-команды вместо «go»; Windows + дисциплина отчёта
+- **Удалён** `.cursor/CURSOR_RULES_REPORT.txt` (устарел 2026-06)
+- **code-review.mdc:** ссылка на `/review` + spec-build-review (не несуществующий REVIEW.md)
+- **agent-workflow / dev-gates:** Windows regress · дисциплина отчёта без auto-gate
+- Удалена мусорная папка Windows Entire pitfall в корне репо
+
 ## 2026-08-10 — docs: INTEGRATIONS.md → docs/integrations/
 - Индекс карты интеграций перенесён из корня в `docs/integrations/INTEGRATIONS.md`
 - Обновлены `.cursorrules`, `/trace-bug`, RULES_INDEX, ENTIRE.md; убран `!INTEGRATIONS.md` из gitignore

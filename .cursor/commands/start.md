@@ -9,7 +9,7 @@ CoffeeOS. Следуй `coffeeos-agent-workflow` + `coffeeos-customer-intake` (P
 
 Сделай **только**:
 1. Шапка `HANDOFF.md` + шапка `SESSION_STATE.md` (`Read` limit до `---`, не тело)
-2. `ISSUES.md` — только 🔴, если релевантно багу
+2. `ISSUES.md` — только секция **`## 🔴 Открыто`** (до следующего `##`), если релевантно багу
 3. `todo.md` — если есть
 4. **Не** перечитывай PRACTICES/QA/весь CHECKLIST/весь CHANGELOG
 5. **Не** заново PHASE 0, если ТЗ уже в `customer_tasks/` или задача уже в todo

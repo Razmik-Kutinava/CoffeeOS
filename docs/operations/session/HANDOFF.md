@@ -1,16 +1,16 @@
 # HANDOFF — Веха 2
 
-## Шапка (агент читает только это + todo + 🔴 ISSUES)
+## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-10 (INTEGRATIONS → docs/integrations/)  
+**Дата:** 2026-08-10 (workflow audit: ISSUES/Entire/docs)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Entire enabled · интеграции в `docs/integrations/` | SBR + checkpoint; UserCards / витрина |
+| Entire hooks ✅ · ISSUES «🔴 Открыто» · docs sync | UserCards / витрина · SBR |
 
-**last_done:** `INTEGRATIONS.md` из корня → `docs/integrations/INTEGRATIONS.md`; удалён root scratch  
-**next_step:** `@docs/integrations/INTEGRATIONS.md` в hot-path задачах  
+**last_done:** ISSUES compact · Entire git hooks (WSL) · AGENTS/commands sync · удалён CURSOR_RULES_REPORT  
+**next_step:** тест Entire: agent commit → `entire checkpoint list` (WSL)  
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

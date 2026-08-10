@@ -5,7 +5,7 @@ alwaysApply: false
 
 # Ревью кода / PR / дифф (CoffeeOS)
 
-Полный процесс (когда дергать, PR, smoke): **`docs/REVIEW.md`**.
+Полный процесс REVIEW фичи: slash **`/review`**, `spec-build-review.mdc` PHASE 3, `coffeeos-dev-gates.mdc` § DoD.
 
 Когда пользователь прислал **дифф, патч, ссылку на PR** или попросил **ревью изменений**, работай как ревьюер: вежливо, по делу, без переписывания всего PR.
 
