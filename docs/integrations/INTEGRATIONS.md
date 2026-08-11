@@ -22,7 +22,7 @@
 |------------------|--------|
 | Любой `/shop/api/*`, cart, orders, frequent | [`shop-api.md`](shop-api.md) |
 | Оплата, webhook, карты, RebillId, СБП, widget | [`tbank.md`](tbank.md) |
-| Flash call, SMS/email OTP, session refresh, merge | [`sms-auth.md`](sms-auth.md) |
+| Flash call, SMS/email OTP, session refresh, merge; SMS.ru `sms/send` | [`sms-auth.md`](sms-auth.md) |
 | Cable, push, Wallet, cascade ready, barista→PWA | [`pwa-realtime.md`](pwa-realtime.md) |
 | FCM register, legacy fiscal callbacks, loyalty stub | [`notify-loyalty.md`](notify-loyalty.md) |
 | Gap audit PWA/payments batch | [`gap-matrix-pwa-payments.md`](gap-matrix-pwa-payments.md) |
@@ -49,4 +49,4 @@ Webhook idem: `tbank:callback:{PaymentId}:{Status}`. Terminal payment status **�
 
 Секция «Затронутые сервисы»: индекс + пути секций (не `@codebase`).
 
-*2026-08-10 · audit batch: shop-api, pwa-realtime, gap-matrix, deploy runbook*
+*2026-08-11 · sms-auth: контракт `sms/send` (#48) · 2026-08-10 audit batch*

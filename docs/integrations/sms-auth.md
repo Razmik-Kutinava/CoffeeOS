@@ -9,6 +9,7 @@
 | Email OTP | `app/services/shop/email_otp.rb` |
 | Cascade ready | `OrderReadyCascadeJob` → SMS leg |
 | Логи | `order_notification_logs` |
+| ТЗ send | [`SMS.ru API Отправить СМС HTTP…`](../operations/milestones/veha_2/requirements/customer_tasks/SMS.ru%20API%20Отправить%20СМС%20HTTP%20запросом.md) · artifacts `sms_ru_api_send_http/` |
 
 ### Phone Shop API
 
@@ -34,12 +35,66 @@
 
 `SMS_RU_API_ID` · `SMS_RU_FROM` · dev без ключа → код в лог
 
+**Запрещено:** коммитить `api_id` / login+password из доки ЛК; auth только через ENV `api_id`.
+
 ### Edge cases
 
 - SMS.ru down → `SmsRuClient::Error`
 - Cooldown → `PhoneOtp::Error`
 - User online WS → SMS skip (`OrderReadyPresence`)
 - SMS >70 chars → `ValidationError`
+
+---
+
+## SMS.ru `sms/send` (HTTP)
+
+**URL:** `POST https://sms.ru/sms/send` · всегда `json=1`  
+**Наш вызов:** `SmsRuClient#send_sms!` (OTP) · `#send_message!` (cascade ready ≤70)
+
+### Mapping параметров
+
+| SMS.ru | Обязат. | CoffeeOS |
+|--------|---------|----------|
+| `api_id` | да | `ENV['SMS_RU_API_ID']` |
+| `to` | да | один номер, без `+` (`strip_plus`) |
+| `msg` | да | OTP: `Ваш код: NNNN` · cascade: произвольный ≤70 |
+| `json` | рек. | всегда `"1"` |
+| `from` | нет | `ENV['SMS_RU_FROM']` / `SMS_RU_SENDER` |
+| `ip` | нет | `request.remote_ip` гостя (OTP); cascade — опционально |
+| `time` / `ttl` / `daytime` / `translit` / `partner_id` | нет | **не используем** |
+| `test=1` | нет | не шлём; локально — `SHOP_OTP_LOG_FALLBACK` / blank api_id |
+| multi `to[phone]=msg` | нет | **не используем** (один получатель за вызов) |
+| login/password | альт. | **запрещено** — только `api_id` |
+
+### Ответ (json) — as-is vs gap
+
+| Поле | Сейчас | Цель (после SPEC/кода #48) |
+|------|--------|----------------------------|
+| top `status` / `status_code` | OK / 100 → success; иначе Error | без изменения контракта ошибок |
+| `sms[phone].sms_id` | **игнор** | вернуть / писать в лог (OTP meta / `order_notification_logs`) |
+| `sms[phone].status` ERROR | top-level ok может быть при ERROR на номере | явный fail + `status_code` / `status_text` |
+| `balance` | игнор | позже (health / my/balance) |
+
+**Не экспонируем** `sms/send` как публичный shop API-прокси — только внутренний клиент (OTP + cascade).
+
+### Антифлуд
+
+- SMS.ru: captcha на UI + параметр `ip`
+- CoffeeOS: Rack::Attack + cooldown OTP + `ip` в запросе; captcha на PWA **не** добавляем без отдельного ТЗ
+
+### Коды (частое)
+
+| Код | Смысл | Наше поведение |
+|-----|--------|----------------|
+| 100 | принято в очередь | success |
+| 103 | доставлено | только через status/webhook (ещё нет) |
+| 200/301 | плохой api_id | Error 502 |
+| 201 | нет денег | Error |
+| 202/207 | нет маршрута / номер | Error |
+| 206 | дневной лимит | Error |
+| 209/215 | стоп-лист | Error |
+| 220/500 | сервис | Error + retry policy джобы |
+| 230–233 | лимиты на номер / код | Error (не крутить OTP) |
 
 ---
 

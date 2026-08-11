@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-11 — docs: intake SMS.ru #48 sms/send + bridge enrich
+
+- ТЗ `SMS.ru API Отправить СМС HTTP запросом.md` · artifacts `sms_ru_api_send_http` · CBR #48
+- `sms-auth.md` + индекс: контракт send (params, gap `sms_id`, коды); `api_id` из ЛК редэкт
+- Код не менялся — SPEC после go
+
 ## 2026-08-10 — deploy: G1–G4 на Fly v445 + MCP Point A
 
 - push `develop` `4e52ac6e`; fly deploy coffeeos **v445** (web+worker)

@@ -2,24 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-10 (deploy G1–G4 v445)  
-**Ветка:** `develop` (= origin)
+**Дата:** 2026-08-11 (SMS.ru #48 intake)  
+**Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| push ✅ · fly **v445** ✅ · MCP Point A smoke PASS | апрувы заказчика · хвосты (SBP/UserCards E2E/PKCS7) |
+| #48 sms/send: интейк + bridge ✅ | go → SPEC/код **или** следующий метод SMS.ru |
 
-**last_done:** deploy G1–G4 на Fly v445 + MCP (session · repeats · pay sheet · no status on pay-stack)  
-**next_step:** апрувы заказчика / хвосты backlog (не код G1–4)  
-
-**Архив session:** [`archive/README.md`](archive/README.md)  
-**Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
-
-**Архив session:** [`archive/README.md`](archive/README.md)  
-**Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
-
-**Архив session:** [`archive/README.md`](archive/README.md)  
-**Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
+**last_done:** docs intake SMS.ru `sms/send` + enrich `sms-auth.md` (api_id редэкт)  
+**next_step:** go SPEC #48 **или** кидай следующий кусок доки SMS.ru  
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

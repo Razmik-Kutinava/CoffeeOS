@@ -1,18 +1,15 @@
-# todo — post-deploy G1–G4 (2026-08-10)
+# todo — SMS.ru API bridge (#48+) 2026-08-11
 
 | last_done | current_state | next_step |
 |-----------|---------------|-----------|
-| push + fly v445 + MCP Point A smoke | G1–G4 на Fly | апрувы заказчика · хвосты backlog |
+| intake + bridge `sms/send` | #48 docs ready | go → SPEC/код клиента **или** кидай следующий метод SMS.ru |
 
-## MCP Point A v445
-- [x] Point A ул. Ленина, 10
-- [x] Session: Профиль › 2bc3…4c · Aram email+phone (без OTP)
-- [x] «повторить» + 1-клик на каталоге
-- [x] PaymentMethodsSheet *5953/*8782 · СБП disabled
-- [x] pay-stack: OrderStatusSheet **отсутствует** (G3)
-- [ ] Live ready push/SMS — skip (нет live barista→ready в этом прогоне)
-- [ ] E2E real MIR UserCards — backlog
+## #48 SMS.ru sms/send
+- [x] customer_tasks + artifacts `sms_ru_api_send_http`
+- [x] CBR #48 · `sms-auth.md` контракт send
+- [ ] SPEC → `SmsRuClient`: вернуть `sms_id`, per-phone ERROR (после **go**)
+- [ ] Не публичный shop-прокси всего API
 
-## Deploy
-- push `develop` → `4e52ac6e`
-- fly deploy → **v445** web+worker started
+## Очередь методов (кидай текстом по одному)
+- [x] sms/send (intake)
+- [ ] status / cost / callcheck / balance / limits / free / senders / auth check / stoplist / webhooks
