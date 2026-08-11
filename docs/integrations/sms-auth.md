@@ -129,6 +129,12 @@ Webhook статусов — отдельная задача. Не shop-прок
 **Вызов:** `SmsRuClient.balance!` → `BalanceResult#balance`  
 api_id только ENV · не shop-прокси (для health/ops).
 
+### SMS.ru `my/limit` (#54)
+
+**URL:** `POST https://sms.ru/my/limit` · `json=1`  
+**Вызов:** `SmsRuClient.limit!` → `LimitResult` (`total_limit`, `used_today`)  
+api_id только ENV · не shop-прокси. Код 206 при send = дневной лимит исчерпан.
+
 ### Антифлуд
 
 - SMS.ru: captcha на UI + параметр `ip`

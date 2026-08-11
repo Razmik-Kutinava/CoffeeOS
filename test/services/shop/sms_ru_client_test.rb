@@ -370,6 +370,35 @@ class Shop::SmsRuClientTest < ActiveSupport::TestCase
     assert_equal 301, err.status_code
   end
 
+  # --- #54 my/limit ---
+
+  test "#54 limit! fallback returns zeros" do
+    result = Shop::SmsRuClient.limit!
+    assert_kind_of Shop::SmsRuClient::LimitResult, result
+    assert_equal 0, result.total_limit
+    assert_equal 0, result.used_today
+  end
+
+  test "#54 limit! parses total_limit and used_today" do
+    body = { "status" => "OK", "status_code" => 100, "total_limit" => 100, "used_today" => 7 }
+    result = nil
+    with_live_sms_ru_response(body) do
+      result = Shop::SmsRuClient.limit!
+    end
+    assert_equal 100, result.total_limit
+    assert_equal 7, result.used_today
+  end
+
+  test "#54 limit! raises on top-level ERROR" do
+    body = { "status" => "ERROR", "status_code" => 200 }
+    err = assert_raises(Shop::SmsRuClient::Error) do
+      with_live_sms_ru_response(body) do
+        Shop::SmsRuClient.limit!
+      end
+    end
+    assert_equal 200, err.status_code
+  end
+
   private
 
   # Rails.env.test? всегда включает fallback — для HTTP-пути временно подменяем методы.

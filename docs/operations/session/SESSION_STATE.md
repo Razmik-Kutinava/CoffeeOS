@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-11 (#53 my/balance)  
+**Дата:** 2026-08-11 (#54 my/limit)  
 **Ветка:** `develop` (ahead, не push)
 
 | Сейчас | Дальше |
 |--------|--------|
-| #53 balance! GREEN | limits / free / senders / … |
+| #54 limit! GREEN | free / senders / auth / … |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,10 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-11 (#54 my/limit)
+
+- `SmsRuClient.limit!` → `LimitResult` (total_limit, used_today)
 
 ### Сессия 2026-08-11 (#53 my/balance)
 

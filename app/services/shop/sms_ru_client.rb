@@ -5,7 +5,7 @@ require "json"
 require "uri"
 
 module Shop
-  # Единый клиент SMS.ru: flash_call, sms/*, callcheck, my/balance.
+  # Единый клиент SMS.ru: flash_call, sms/*, callcheck, my/balance|limit.
   # Ключи только из ENV: SMS_RU_API_ID, SMS_RU_FROM.
   class SmsRuClient
     class Error < StandardError
@@ -33,6 +33,7 @@ module Shop
       :check_id, :check_status, :check_status_text, :confirmed, keyword_init: true
     )
     BalanceResult = Struct.new(:balance, keyword_init: true)
+    LimitResult = Struct.new(:total_limit, :used_today, keyword_init: true)
 
     FLASH_CALL_URL     = URI("https://sms.ru/code/call")
     SMS_SEND_URL       = URI("https://sms.ru/sms/send")
@@ -41,6 +42,7 @@ module Shop
     CALLCHECK_ADD_URL  = URI("https://sms.ru/callcheck/add")
     CALLCHECK_STATUS_URL = URI("https://sms.ru/callcheck/status")
     MY_BALANCE_URL     = URI("https://sms.ru/my/balance")
+    MY_LIMIT_URL       = URI("https://sms.ru/my/limit")
     MAX_MSG_LENGTH = 70
     CALLCHECK_CONFIRMED = 401
     CALLCHECK_PENDING = 400
@@ -76,6 +78,10 @@ module Shop
 
     def self.balance!
       new.balance!
+    end
+
+    def self.limit!
+      new.limit!
     end
 
     # @return [String] 4-значный код из ответа SMS.ru
@@ -262,6 +268,21 @@ module Shop
       parse_balance_body!(body)
     end
 
+    # #54 — дневной лимит и used_today. api_id только ENV. Не shop-прокси.
+    # @return [LimitResult]
+    def limit!
+      if fallback?
+        Rails.logger.info("[Shop::SmsRuClient] limit (fallback)")
+        return LimitResult.new(total_limit: 0, used_today: 0)
+      end
+
+      body = post_json!(MY_LIMIT_URL, {
+        "api_id" => api_id,
+        "json" => "1"
+      })
+      parse_limit_body!(body)
+    end
+
     private
 
     def normalize_sms_ids(sms_ids)
@@ -279,6 +300,22 @@ module Shop
       end
 
       BalanceResult.new(balance: body["balance"].to_f)
+    end
+
+    def parse_limit_body!(body)
+      ok = body["status"] == "OK" || body["status_code"].to_i == 100
+      unless ok
+        raise Error.new(
+          "SMS.ru my/limit: status=#{body['status']} code=#{body['status_code']}",
+          http_status: 502,
+          status_code: body["status_code"]
+        )
+      end
+
+      LimitResult.new(
+        total_limit: body["total_limit"].to_i,
+        used_today: body["used_today"].to_i
+      )
     end
 
     def parse_callcheck_add_body!(body)
