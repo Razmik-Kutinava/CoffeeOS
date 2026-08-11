@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-11 (Bugbot fixes: Tbank claim + CI)  
-**Ветка:** `develop`
+**Дата:** 2026-08-11 (regress Tbank security GREEN)  
+**Ветка:** `develop` (ahead origin)
 
 | Сейчас | Дальше |
 |--------|--------|
-| Bugbot 4 findings fixed local | security-review · push/deploy по апруву |
+| Local regress оплаты **PASS 49/0** | `/review` · Fly MCP Point A после deploy · push по апруву |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,12 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-11 (/regress Tbank body+cache)
+
+- Зона: Tbank callback / adapter / CacheCounter
+- `ruby bin/rails test …tbank_controller… tbank_adapter… cache_counter…` → **49 runs, 0 failures PASS**
+- Fly MCP: skip (regress только local)
 
 ### Сессия 2026-08-11 (Bugbot: Tbank idempotency + CI)
 
