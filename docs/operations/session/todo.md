@@ -2,18 +2,18 @@
 
 | last_done | current_state | next_step |
 |-----------|---------------|-----------|
-| Security Review 2 medium | SBR RED→GREEN | /regress после GREEN |
+| GREEN body limit + Rails.cache claim | done local | `/regress` · push по апруву |
 
 ## Файлы (ожидаемо)
-- `app/controllers/callbacks/tbank_controller.rb` — MAX_BODY_BYTES + claim через Rails.cache
-- `test/controllers/callbacks/tbank_controller_test.rb` — 413 + Rails.cache claim/release
+- `app/controllers/callbacks/tbank_controller.rb` — MAX_BODY_BYTES + Rails.cache claim
+- `test/controllers/callbacks/tbank_controller_test.rb` — 413 + Rails.cache
 
 ## Не ломать
 - CONFIRMED → accepted/succeeded
 - duplicate → `duplicate: true`
-- claim release на 500 → retry обрабатывается
-- подпись invalid → 401
-- CacheCounter circuit breaker (не трогаем STORE)
+- claim release на 500
+- invalid token → 401
+- CacheCounter circuit breaker
 
 ## Проверка
-- `ruby bin/rails test test/controllers/callbacks/tbank_controller_test.rb test/services/payments/tbank_adapter_test.rb test/services/payments/cache_counter_test.rb`
+- `ruby bin/rails test test/controllers/callbacks/tbank_controller_test.rb test/services/payments/tbank_adapter_test.rb test/services/payments/cache_counter_test.rb` → **49/0 PASS**

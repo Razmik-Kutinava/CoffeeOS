@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 # SolidCache на Fly: increment ломается, key_hash может давать RangeError (ISSUES 2026-05-01).
-# Circuit breaker / webhook dedup — MemoryStore (как Rack::Attack), same-pod.
-# При 2+ web-машинах нужен shared store (Redis/Postgres) — PRACTICES / V2-CR-04.
+# Circuit breaker — MemoryStore (как Rack::Attack), same-pod.
+# T‑Bank webhook idempotency — Rails.cache в TbankController (не этот STORE).
 module Payments
   module CacheCounter
     STORE = ActiveSupport::Cache::MemoryStore.new

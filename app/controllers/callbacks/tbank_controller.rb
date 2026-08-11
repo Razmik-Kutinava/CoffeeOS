@@ -7,9 +7,12 @@ module Callbacks
     skip_forgery_protection
 
     IDEMPOTENCY_TTL = 24.hours
+    MAX_BODY_BYTES = 256_000
 
     def notify
       idem_key = nil
+      return render_too_large if body_too_large?
+
       payload = parse_payload
       return render_bad_request("missing payload") unless payload
 
@@ -18,11 +21,10 @@ module Callbacks
         return render json: { error: "invalid token" }, status: :unauthorized
       end
 
-      # Idempotency: Т-Банк повторяет webhook при таймауте.
-      # Ключ по PaymentId + Status — защищаем от дублирования.
+      # Idempotency: shared Rails.cache (Solid Cache на Fly) — переживает multi-web.
       # Claim до обработки; при полном фейле (500) — release, иначе retry банка залипнет.
       idem_key = idempotency_key(payload)
-      if idem_key && !Payments::CacheCounter.claim(idem_key, expires_in: IDEMPOTENCY_TTL)
+      if idem_key && !claim_idempotency(idem_key)
         Rails.logger.info("[Tbank::Callback] Duplicate webhook ignored, key=#{idem_key}")
         return render json: { ok: true, duplicate: true }
       end
@@ -59,6 +61,13 @@ module Callbacks
 
     private
 
+    def body_too_large?
+      return true if request.content_length.to_i > MAX_BODY_BYTES
+
+      body = request.raw_post
+      body.present? && body.bytesize > MAX_BODY_BYTES
+    end
+
     def parse_payload
       body = request.raw_post
       return nil if body.blank?
@@ -76,11 +85,20 @@ module Callbacks
       "tbank:callback:#{payment_id}:#{status}"
     end
 
+    # Atomic when store supports unless_exist (MemoryStore / Solid Cache / Redis).
+    def claim_idempotency(key)
+      Rails.cache.write(key, 1, expires_in: IDEMPOTENCY_TTL, unless_exist: true)
+    end
+
     def release_idempotency_claim(key)
       return if key.blank?
 
-      Payments::CacheCounter.delete(key)
+      Rails.cache.delete(key)
       Rails.logger.info("[Tbank::Callback] Released idempotency claim key=#{key}")
+    end
+
+    def render_too_large
+      render json: { error: "too large" }, status: :content_too_large
     end
 
     def render_bad_request(msg)
