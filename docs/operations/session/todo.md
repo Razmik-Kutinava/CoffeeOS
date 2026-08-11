@@ -1,15 +1,15 @@
-# todo — SMS.ru #57 auth/check · GREEN (2026-08-11)
+# todo — SMS.ru #58 stoplist/add · GREEN (2026-08-11)
 
 | last_done | current_state | next_step |
 |-----------|---------------|-----------|
-| #57 `auth_check!` | done | stoplist / webhooks |
+| #58 `stoplist_add!` | done | stoplist del/get · webhooks |
 
 ## Очередь
-- [x] #48–#57 (… · senders · auth/check; login/password SKIP)
+- [x] #48–#58 (… · auth/check · stoplist/add)
 - [ ] PWA funnel на callcheck — только по ТЗ
-- [ ] stoplist · webhooks
+- [ ] stoplist del/get · webhooks
 
-## Файлы (ожидаемо) — #57
+## Файлы (ожидаемо) — #58
 - `app/services/shop/sms_ru_client.rb`
 - `test/services/shop/sms_ru_client_test.rb`
 - `docs/integrations/sms-auth.md`

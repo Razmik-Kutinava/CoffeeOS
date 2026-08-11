@@ -484,6 +484,44 @@ class Shop::SmsRuClientTest < ActiveSupport::TestCase
     assert_equal 301, err.status_code
   end
 
+  # --- #58 stoplist/add ---
+
+  test "#58 stoplist_add! fallback returns ok" do
+    result = Shop::SmsRuClient.stoplist_add!(phone: "+79001112233", text: "spam")
+    assert_kind_of Shop::SmsRuClient::StoplistAddResult, result
+    assert result.ok
+    assert_equal 100, result.status_code
+  end
+
+  test "#58 stoplist_add! raises ValidationError when phone or text blank" do
+    assert_raises(Shop::SmsRuClient::ValidationError) do
+      Shop::SmsRuClient.stoplist_add!(phone: "", text: "spam")
+    end
+    assert_raises(Shop::SmsRuClient::ValidationError) do
+      Shop::SmsRuClient.stoplist_add!(phone: "+79001112233", text: "")
+    end
+  end
+
+  test "#58 stoplist_add! parses OK response" do
+    body = { "status" => "OK", "status_code" => 100 }
+    result = nil
+    with_live_sms_ru_response(body) do
+      result = Shop::SmsRuClient.stoplist_add!(phone: "+79001112233", text: "spam")
+    end
+    assert result.ok
+    assert_equal 100, result.status_code
+  end
+
+  test "#58 stoplist_add! raises on ERROR" do
+    body = { "status" => "ERROR", "status_code" => 202 }
+    err = assert_raises(Shop::SmsRuClient::Error) do
+      with_live_sms_ru_response(body) do
+        Shop::SmsRuClient.stoplist_add!(phone: "+79001112233", text: "spam")
+      end
+    end
+    assert_equal 202, err.status_code
+  end
+
   private
 
   # Rails.env.test? всегда включает fallback — для HTTP-пути временно подменяем методы.

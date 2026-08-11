@@ -5,7 +5,7 @@ require "json"
 require "uri"
 
 module Shop
-  # Единый клиент SMS.ru: flash_call, sms/*, callcheck, my/*, auth/check.
+  # Единый клиент SMS.ru: flash_call, sms/*, callcheck, my/*, auth/check, stoplist.
   # Ключи только из ENV: SMS_RU_API_ID, SMS_RU_FROM.
   class SmsRuClient
     class Error < StandardError
@@ -37,6 +37,7 @@ module Shop
     FreeResult = Struct.new(:total_free, :used_today, keyword_init: true)
     SendersResult = Struct.new(:senders, keyword_init: true)
     AuthCheckResult = Struct.new(:ok, :status_code, keyword_init: true)
+    StoplistAddResult = Struct.new(:ok, :status_code, keyword_init: true)
 
     FLASH_CALL_URL     = URI("https://sms.ru/code/call")
     SMS_SEND_URL       = URI("https://sms.ru/sms/send")
@@ -49,6 +50,7 @@ module Shop
     MY_FREE_URL        = URI("https://sms.ru/my/free")
     MY_SENDERS_URL     = URI("https://sms.ru/my/senders")
     AUTH_CHECK_URL     = URI("https://sms.ru/auth/check")
+    STOPLIST_ADD_URL   = URI("https://sms.ru/stoplist/add")
     MAX_MSG_LENGTH = 70
     CALLCHECK_CONFIRMED = 401
     CALLCHECK_PENDING = 400
@@ -100,6 +102,10 @@ module Shop
 
     def self.auth_check!
       new.auth_check!
+    end
+
+    def self.stoplist_add!(phone:, text:)
+      new.stoplist_add!(phone: phone, text: text)
     end
 
     # @return [String] 4-значный код из ответа SMS.ru
@@ -346,6 +352,29 @@ module Shop
       parse_auth_check_body!(body)
     end
 
+    # #58 — добавить номер в стоплист SMS.ru. api_id только ENV. Не shop-прокси.
+    # @return [StoplistAddResult]
+    def stoplist_add!(phone:, text:)
+      phone_raw = phone.to_s.strip
+      note = text.to_s.strip
+      if phone_raw.blank? || note.blank?
+        raise ValidationError.new("stoplist_phone and stoplist_text required", http_status: 422)
+      end
+
+      if fallback?
+        Rails.logger.info("[Shop::SmsRuClient] stoplist_add #{strip_plus(phone_raw)} (fallback)")
+        return StoplistAddResult.new(ok: true, status_code: 100)
+      end
+
+      body = post_json!(STOPLIST_ADD_URL, {
+        "api_id" => api_id,
+        "stoplist_phone" => strip_plus(phone_raw),
+        "stoplist_text" => note,
+        "json" => "1"
+      })
+      parse_stoplist_add_body!(body)
+    end
+
     private
 
     def normalize_sms_ids(sms_ids)
@@ -422,6 +451,19 @@ module Shop
       end
 
       AuthCheckResult.new(ok: true, status_code: body["status_code"].to_i)
+    end
+
+    def parse_stoplist_add_body!(body)
+      ok = body["status"] == "OK" || body["status_code"].to_i == 100
+      unless ok
+        raise Error.new(
+          "SMS.ru stoplist/add: status=#{body['status']} code=#{body['status_code']}",
+          http_status: 502,
+          status_code: body["status_code"]
+        )
+      end
+
+      StoplistAddResult.new(ok: true, status_code: body["status_code"].to_i)
     end
 
     def parse_callcheck_add_body!(body)

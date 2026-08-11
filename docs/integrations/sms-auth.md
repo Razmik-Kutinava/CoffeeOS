@@ -153,6 +153,12 @@ api_id только ENV · не shop-прокси. Код 206 при send = дн
 **Вызов:** `SmsRuClient.auth_check!` → `AuthCheckResult` (`ok`, `status_code`)  
 Только `api_id` из ENV · **login/password SKIP** · не shop-прокси (health/ops).
 
+### SMS.ru `stoplist/add` (#58)
+
+**URL:** `POST https://sms.ru/stoplist/add` · `json=1`  
+**Вызов:** `SmsRuClient.stoplist_add!(phone:, text:)` → `StoplistAddResult`  
+Параметры `stoplist_phone` / `stoplist_text` · api_id только ENV · не shop-прокси.
+
 ### Антифлуд
 
 - SMS.ru: captcha на UI + параметр `ip`
