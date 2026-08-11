@@ -11,6 +11,10 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-11 — deploy: coffeeos v448 (callbacks security)
+
+- push develop `1c53a065` · fly deploy · `/up` 200 · tbank 401 · **tbank 413** oversized · sms_ru 401 · Point A shop 200 + MCP browser
+
 ## 2026-08-11 — review#2: SMS.ru + Tbank callbacks security OK
 
 - Bugbot: **0 findings**

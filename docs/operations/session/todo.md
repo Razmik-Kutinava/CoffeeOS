@@ -1,14 +1,12 @@
-# todo — Callbacks security CLOSED (2026-08-11)
+# todo — Fly v448 callbacks security (2026-08-11)
 
 | last_done | current_state | next_step |
 |-----------|---------------|-----------|
-| review#2 Bugbot 0 · Security OK | done local | push по апруву · Fly MCP после deploy |
+| push+deploy v448 · MCP Point A PASS | done on Fly | SMS.ru URL в ЛК если нужно |
 
-## Файлы
-- `app/controllers/callbacks/tbank_controller.rb`
-- `app/controllers/callbacks/sms_ru_controller.rb`
-- `app/services/callbacks/sms_ru_webhook.rb`
-- `.github/workflows/ci.yml`
-
-## Проверка
-- regress sms_ru + tbank → **23/0 PASS**
+## Smoke Fly
+- `/up` 200
+- `POST /callbacks/tbank` {} → 401
+- `POST /callbacks/tbank` 256KB+ → **413**
+- `POST /callbacks/sms_ru` bad hash → 401
+- Point A shop MCP → 200 + витрина

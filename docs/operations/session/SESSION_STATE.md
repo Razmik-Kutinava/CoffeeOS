@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-11 (REVIEW#2 callbacks CLOSED)  
-**Ветка:** `develop` (ahead origin)
+**Дата:** 2026-08-11 (Fly v448 · push+deploy+MCP)  
+**Ветка:** `develop` (= origin)
 
 | Сейчас | Дальше |
 |--------|--------|
-| Bugbot 0 · Security OK · regress 23/0 | push/deploy по апруву · Fly MCP Point A после deploy |
+| Fly **v448** deployed · MCP Point A PASS | SMS.ru URL в ЛК (если ещё не) |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,13 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-11 (push + fly deploy v448 + MCP)
+
+- push develop → `1c53a065`
+- `fly deploy` coffeeos **v448** web+worker started
+- Smoke: `/up` 200 · tbank 401 · tbank body 413 · sms_ru 401 · Point A shop 200
+- MCP browser Point A: витрина + корзина OK
 
 ### Сессия 2026-08-11 (PHASE 3 /review #2 residual)
 

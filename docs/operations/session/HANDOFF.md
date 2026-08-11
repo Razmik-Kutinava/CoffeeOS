@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-11 (REVIEW#2 callbacks CLOSED)  
-**Ветка:** `develop` (ahead origin)
+**Дата:** 2026-08-11 (Fly v448 · callbacks security)  
+**Ветка:** `develop` (= origin)
 
 | Сейчас | Дальше |
 |--------|--------|
-| Bugbot 0 · Security OK · local 23/0 | push/deploy по апруву · SMS.ru URL в ЛК · Fly MCP Point A |
+| Fly **v448** · MCP Point A PASS | SMS.ru URL в ЛК |
 
-**last_done:** residual SMS.ru+Tbank GREEN `10774cfe` · regress 23/0 · review#2 clean  
-**next_step:** push/deploy только по апруву
+**last_done:** push `1c53a065` · deploy v448 · smoke /up+413+401 · Point A shop MCP  
+**next_step:** URL webhook в ЛК SMS.ru (если ещё не)
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
