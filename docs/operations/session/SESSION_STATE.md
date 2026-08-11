@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-11 (regress SMS.ru+Tbank residual)  
+**Дата:** 2026-08-11 (REVIEW#2 callbacks CLOSED)  
 **Ветка:** `develop` (ahead origin)
 
 | Сейчас | Дальше |
 |--------|--------|
-| Local regress callbacks **PASS 23/0** | `/review` · push по апруву · CI suite backlog |
+| Bugbot 0 · Security OK · regress 23/0 | push/deploy по апруву · Fly MCP Point A после deploy |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,13 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-11 (PHASE 3 /review #2 residual)
+
+- Bugbot: **no bugs**
+- Security: SMS.ru + Tbank mediums **все CLOSED**; medium+ в callback hot-path нет
+- Entire: `10774cfe` — см. лог (часто no trailer)
+- Local regress: 23/0 · Fly MCP: skip
 
 ### Сессия 2026-08-11 (/regress SMS.ru + Tbank residual)
 

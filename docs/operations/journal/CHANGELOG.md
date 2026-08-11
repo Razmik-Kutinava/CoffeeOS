@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-11 — review#2: SMS.ru + Tbank callbacks security OK
+
+- Bugbot: **0 findings**
+- Security: все прежние medium (Tbank + SMS.ru body/dedup) **CLOSED**; medium+ в callback hot-path нет
+- GREEN residual `10774cfe` · regress 23/0 · Entire no trailer
+
 ## 2026-08-11 — review: Tbank body limit + Rails.cache claim CLOSED
 
 - Security: прежние medium Tbank (413 + shared claim) **закрыты**; regress 49/0
