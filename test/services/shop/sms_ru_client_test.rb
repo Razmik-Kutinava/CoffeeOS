@@ -455,6 +455,35 @@ class Shop::SmsRuClientTest < ActiveSupport::TestCase
     assert_equal 200, err.status_code
   end
 
+  # --- #57 auth/check ---
+
+  test "#57 auth_check! fallback returns ok" do
+    result = Shop::SmsRuClient.auth_check!
+    assert_kind_of Shop::SmsRuClient::AuthCheckResult, result
+    assert result.ok
+    assert_equal 100, result.status_code
+  end
+
+  test "#57 auth_check! parses OK response" do
+    body = { "status" => "OK", "status_code" => 100 }
+    result = nil
+    with_live_sms_ru_response(body) do
+      result = Shop::SmsRuClient.auth_check!
+    end
+    assert result.ok
+    assert_equal 100, result.status_code
+  end
+
+  test "#57 auth_check! raises on invalid api_id" do
+    body = { "status" => "ERROR", "status_code" => 301 }
+    err = assert_raises(Shop::SmsRuClient::Error) do
+      with_live_sms_ru_response(body) do
+        Shop::SmsRuClient.auth_check!
+      end
+    end
+    assert_equal 301, err.status_code
+  end
+
   private
 
   # Rails.env.test? всегда включает fallback — для HTTP-пути временно подменяем методы.

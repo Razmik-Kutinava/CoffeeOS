@@ -142,6 +142,7 @@
 | SMS.ru my/limit | **Интеграции / SMS.ru** — дневной лимит (`limit!`) | [ТЗ](customer_tasks/SMS.ru%20API%20Получить%20информацию%20о%20дневном%20лимите.md) · [`artifacts/sms_ru_my_limit/`](../artifacts/sms_ru_my_limit/) | **GREEN `[x]`** 2026-08-11 · апрув `[ ]` |
 | SMS.ru my/free | **Интеграции / SMS.ru** — бесплатные SMS (`free!`) | [ТЗ](customer_tasks/SMS.ru%20API%20Получить%20информацию%20о%20бесплатных%20сообщениях.md) · [`artifacts/sms_ru_my_free/`](../artifacts/sms_ru_my_free/) | **GREEN `[x]`** 2026-08-11 · апрув `[ ]` |
 | SMS.ru my/senders | **Интеграции / SMS.ru** — список отправителей (`senders!`) | [ТЗ](customer_tasks/SMS.ru%20API%20Получение%20списка%20одобренных%20отправителей.md) · [`artifacts/sms_ru_my_senders/`](../artifacts/sms_ru_my_senders/) | **GREEN `[x]`** 2026-08-11 · апрув `[ ]` |
+| SMS.ru auth/check | **Интеграции / SMS.ru** — валидность api_id (`auth_check!`); login/password SKIP | [ТЗ](customer_tasks/SMS.ru%20API%20Проверить%20валидность%20api_id.md) · [`artifacts/sms_ru_auth_check/`](../artifacts/sms_ru_auth_check/) | **GREEN `[x]`** 2026-08-11 · апрув `[ ]` |
 
 > **B1.8 (не забыть):** сейчас письма с **подтверждённого личного sender** в Brevo. Когда будет **свой домен** — завести **кофейную почту** (напр. `noreply@бренд.ru`), аутентифицировать домен в Brevo, обновить `MAIL_FROM` + secrets. Код OTP/ActionMailer менять не нужно.
 
@@ -208,6 +209,7 @@
 | 54 | **SMS.ru my/limit** | `limit!` total_limit / used_today | **GREEN `[x]`** 2026-08-11 · апрув `[ ]` | [Лимит…](customer_tasks/SMS.ru%20API%20Получить%20информацию%20о%20дневном%20лимите.md) · [artifacts](../artifacts/sms_ru_my_limit/) |
 | 55 | **SMS.ru my/free** | `free!` total_free / used_today | **GREEN `[x]`** 2026-08-11 · апрув `[ ]` | [Бесплатные…](customer_tasks/SMS.ru%20API%20Получить%20информацию%20о%20бесплатных%20сообщениях.md) · [artifacts](../artifacts/sms_ru_my_free/) |
 | 56 | **SMS.ru my/senders** | `senders!` список одобренных | **GREEN `[x]`** 2026-08-11 · апрув `[ ]` | [Отправители…](customer_tasks/SMS.ru%20API%20Получение%20списка%20одобренных%20отправителей.md) · [artifacts](../artifacts/sms_ru_my_senders/) |
+| 57 | **SMS.ru auth/check** | `auth_check!` валидность api_id; login/password SKIP | **GREEN `[x]`** 2026-08-11 · апрув `[ ]` | [auth/check…](customer_tasks/SMS.ru%20API%20Проверить%20валидность%20api_id.md) · [artifacts](../artifacts/sms_ru_auth_check/) |
 
 ---
 

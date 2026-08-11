@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-11 (#56 my/senders)  
+**Дата:** 2026-08-11 (#57 auth/check)  
 **Ветка:** `develop` (ahead, не push)
 
 | Сейчас | Дальше |
 |--------|--------|
-| #56 senders! GREEN | auth check / stoplist / … |
+| #57 auth_check! GREEN | stoplist / webhooks |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,10 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-11 (#57 auth/check)
+
+- `SmsRuClient.auth_check!` → `AuthCheckResult`; login/password SKIP
 
 ### Сессия 2026-08-11 (#56 my/senders)
 

@@ -11,6 +11,10 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-11 — feat(shop): SMS.ru #57 auth/check
+
+- `SmsRuClient.auth_check!` → `AuthCheckResult`; только api_id ENV; login/password SKIP
+
 ## 2026-08-11 — feat(shop): SMS.ru #56 my/senders
 
 - `SmsRuClient.senders!` → `SendersResult#senders`; api_id только ENV

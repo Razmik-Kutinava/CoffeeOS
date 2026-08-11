@@ -5,7 +5,7 @@ require "json"
 require "uri"
 
 module Shop
-  # Единый клиент SMS.ru: flash_call, sms/*, callcheck, my/balance|limit|free|senders.
+  # Единый клиент SMS.ru: flash_call, sms/*, callcheck, my/*, auth/check.
   # Ключи только из ENV: SMS_RU_API_ID, SMS_RU_FROM.
   class SmsRuClient
     class Error < StandardError
@@ -36,6 +36,7 @@ module Shop
     LimitResult = Struct.new(:total_limit, :used_today, keyword_init: true)
     FreeResult = Struct.new(:total_free, :used_today, keyword_init: true)
     SendersResult = Struct.new(:senders, keyword_init: true)
+    AuthCheckResult = Struct.new(:ok, :status_code, keyword_init: true)
 
     FLASH_CALL_URL     = URI("https://sms.ru/code/call")
     SMS_SEND_URL       = URI("https://sms.ru/sms/send")
@@ -47,6 +48,7 @@ module Shop
     MY_LIMIT_URL       = URI("https://sms.ru/my/limit")
     MY_FREE_URL        = URI("https://sms.ru/my/free")
     MY_SENDERS_URL     = URI("https://sms.ru/my/senders")
+    AUTH_CHECK_URL     = URI("https://sms.ru/auth/check")
     MAX_MSG_LENGTH = 70
     CALLCHECK_CONFIRMED = 401
     CALLCHECK_PENDING = 400
@@ -94,6 +96,10 @@ module Shop
 
     def self.senders!
       new.senders!
+    end
+
+    def self.auth_check!
+      new.auth_check!
     end
 
     # @return [String] 4-значный код из ответа SMS.ru
@@ -325,6 +331,21 @@ module Shop
       parse_senders_body!(body)
     end
 
+    # #57 — проверка валидности api_id из ENV. Login/password — не используем.
+    # @return [AuthCheckResult]
+    def auth_check!
+      if fallback?
+        Rails.logger.info("[Shop::SmsRuClient] auth_check (fallback)")
+        return AuthCheckResult.new(ok: true, status_code: 100)
+      end
+
+      body = post_json!(AUTH_CHECK_URL, {
+        "api_id" => api_id,
+        "json" => "1"
+      })
+      parse_auth_check_body!(body)
+    end
+
     private
 
     def normalize_sms_ids(sms_ids)
@@ -388,6 +409,19 @@ module Shop
 
       list = Array(body["senders"]).map(&:to_s)
       SendersResult.new(senders: list)
+    end
+
+    def parse_auth_check_body!(body)
+      ok = body["status"] == "OK" || body["status_code"].to_i == 100
+      unless ok
+        raise Error.new(
+          "SMS.ru auth/check: status=#{body['status']} code=#{body['status_code']}",
+          http_status: 502,
+          status_code: body["status_code"]
+        )
+      end
+
+      AuthCheckResult.new(ok: true, status_code: body["status_code"].to_i)
     end
 
     def parse_callcheck_add_body!(body)
