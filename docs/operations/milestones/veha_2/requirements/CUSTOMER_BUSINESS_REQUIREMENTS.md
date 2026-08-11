@@ -144,6 +144,7 @@
 | SMS.ru my/senders | **Интеграции / SMS.ru** — список отправителей (`senders!`) | [ТЗ](customer_tasks/SMS.ru%20API%20Получение%20списка%20одобренных%20отправителей.md) · [`artifacts/sms_ru_my_senders/`](../artifacts/sms_ru_my_senders/) | **GREEN `[x]`** 2026-08-11 · апрув `[ ]` |
 | SMS.ru auth/check | **Интеграции / SMS.ru** — валидность api_id (`auth_check!`); login/password SKIP | [ТЗ](customer_tasks/SMS.ru%20API%20Проверить%20валидность%20api_id.md) · [`artifacts/sms_ru_auth_check/`](../artifacts/sms_ru_auth_check/) | **GREEN `[x]`** 2026-08-11 · апрув `[ ]` |
 | SMS.ru stoplist/add | **Интеграции / SMS.ru** — добавить номер в стоплист (`stoplist_add!`) | [ТЗ](customer_tasks/SMS.ru%20API%20Добавление%20номера%20в%20стоплист.md) · [`artifacts/sms_ru_stoplist_add/`](../artifacts/sms_ru_stoplist_add/) | **GREEN `[x]`** 2026-08-11 · апрув `[ ]` |
+| SMS.ru stoplist/del | **Интеграции / SMS.ru** — удалить номер из стоплиста (`stoplist_del!`) | [ТЗ](customer_tasks/SMS.ru%20API%20Удаление%20номера%20из%20стоплиста.md) · [`artifacts/sms_ru_stoplist_del/`](../artifacts/sms_ru_stoplist_del/) | **GREEN `[x]`** 2026-08-11 · апрув `[ ]` |
 
 > **B1.8 (не забыть):** сейчас письма с **подтверждённого личного sender** в Brevo. Когда будет **свой домен** — завести **кофейную почту** (напр. `noreply@бренд.ru`), аутентифицировать домен в Brevo, обновить `MAIL_FROM` + secrets. Код OTP/ActionMailer менять не нужно.
 
@@ -212,6 +213,7 @@
 | 56 | **SMS.ru my/senders** | `senders!` список одобренных | **GREEN `[x]`** 2026-08-11 · апрув `[ ]` | [Отправители…](customer_tasks/SMS.ru%20API%20Получение%20списка%20одобренных%20отправителей.md) · [artifacts](../artifacts/sms_ru_my_senders/) |
 | 57 | **SMS.ru auth/check** | `auth_check!` валидность api_id; login/password SKIP | **GREEN `[x]`** 2026-08-11 · апрув `[ ]` | [auth/check…](customer_tasks/SMS.ru%20API%20Проверить%20валидность%20api_id.md) · [artifacts](../artifacts/sms_ru_auth_check/) |
 | 58 | **SMS.ru stoplist/add** | `stoplist_add!(phone:, text:)` | **GREEN `[x]`** 2026-08-11 · апрув `[ ]` | [Стоплист add…](customer_tasks/SMS.ru%20API%20Добавление%20номера%20в%20стоплист.md) · [artifacts](../artifacts/sms_ru_stoplist_add/) |
+| 59 | **SMS.ru stoplist/del** | `stoplist_del!(phone:)` | **GREEN `[x]`** 2026-08-11 · апрув `[ ]` | [Стоплист del…](customer_tasks/SMS.ru%20API%20Удаление%20номера%20из%20стоплиста.md) · [artifacts](../artifacts/sms_ru_stoplist_del/) |
 
 ---
 

@@ -38,6 +38,7 @@ module Shop
     SendersResult = Struct.new(:senders, keyword_init: true)
     AuthCheckResult = Struct.new(:ok, :status_code, keyword_init: true)
     StoplistAddResult = Struct.new(:ok, :status_code, keyword_init: true)
+    StoplistDelResult = Struct.new(:ok, :status_code, keyword_init: true)
 
     FLASH_CALL_URL     = URI("https://sms.ru/code/call")
     SMS_SEND_URL       = URI("https://sms.ru/sms/send")
@@ -51,6 +52,7 @@ module Shop
     MY_SENDERS_URL     = URI("https://sms.ru/my/senders")
     AUTH_CHECK_URL     = URI("https://sms.ru/auth/check")
     STOPLIST_ADD_URL   = URI("https://sms.ru/stoplist/add")
+    STOPLIST_DEL_URL   = URI("https://sms.ru/stoplist/del")
     MAX_MSG_LENGTH = 70
     CALLCHECK_CONFIRMED = 401
     CALLCHECK_PENDING = 400
@@ -106,6 +108,10 @@ module Shop
 
     def self.stoplist_add!(phone:, text:)
       new.stoplist_add!(phone: phone, text: text)
+    end
+
+    def self.stoplist_del!(phone:)
+      new.stoplist_del!(phone: phone)
     end
 
     # @return [String] 4-значный код из ответа SMS.ru
@@ -375,6 +381,27 @@ module Shop
       parse_stoplist_add_body!(body)
     end
 
+    # #59 — удалить номер из стоплиста. api_id только ENV. Не shop-прокси.
+    # @return [StoplistDelResult]
+    def stoplist_del!(phone:)
+      phone_raw = phone.to_s.strip
+      if phone_raw.blank?
+        raise ValidationError.new("stoplist_phone required", http_status: 422)
+      end
+
+      if fallback?
+        Rails.logger.info("[Shop::SmsRuClient] stoplist_del #{strip_plus(phone_raw)} (fallback)")
+        return StoplistDelResult.new(ok: true, status_code: 100)
+      end
+
+      body = post_json!(STOPLIST_DEL_URL, {
+        "api_id" => api_id,
+        "stoplist_phone" => strip_plus(phone_raw),
+        "json" => "1"
+      })
+      parse_stoplist_del_body!(body)
+    end
+
     private
 
     def normalize_sms_ids(sms_ids)
@@ -464,6 +491,19 @@ module Shop
       end
 
       StoplistAddResult.new(ok: true, status_code: body["status_code"].to_i)
+    end
+
+    def parse_stoplist_del_body!(body)
+      ok = body["status"] == "OK" || body["status_code"].to_i == 100
+      unless ok
+        raise Error.new(
+          "SMS.ru stoplist/del: status=#{body['status']} code=#{body['status_code']}",
+          http_status: 502,
+          status_code: body["status_code"]
+        )
+      end
+
+      StoplistDelResult.new(ok: true, status_code: body["status_code"].to_i)
     end
 
     def parse_callcheck_add_body!(body)

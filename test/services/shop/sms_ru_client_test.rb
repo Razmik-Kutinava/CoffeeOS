@@ -522,6 +522,41 @@ class Shop::SmsRuClientTest < ActiveSupport::TestCase
     assert_equal 202, err.status_code
   end
 
+  # --- #59 stoplist/del ---
+
+  test "#59 stoplist_del! fallback returns ok" do
+    result = Shop::SmsRuClient.stoplist_del!(phone: "+79001112233")
+    assert_kind_of Shop::SmsRuClient::StoplistDelResult, result
+    assert result.ok
+    assert_equal 100, result.status_code
+  end
+
+  test "#59 stoplist_del! raises ValidationError when phone blank" do
+    assert_raises(Shop::SmsRuClient::ValidationError) do
+      Shop::SmsRuClient.stoplist_del!(phone: "")
+    end
+  end
+
+  test "#59 stoplist_del! parses OK response" do
+    body = { "status" => "OK", "status_code" => 100 }
+    result = nil
+    with_live_sms_ru_response(body) do
+      result = Shop::SmsRuClient.stoplist_del!(phone: "+79001112233")
+    end
+    assert result.ok
+    assert_equal 100, result.status_code
+  end
+
+  test "#59 stoplist_del! raises on ERROR" do
+    body = { "status" => "ERROR", "status_code" => 202 }
+    err = assert_raises(Shop::SmsRuClient::Error) do
+      with_live_sms_ru_response(body) do
+        Shop::SmsRuClient.stoplist_del!(phone: "+79001112233")
+      end
+    end
+    assert_equal 202, err.status_code
+  end
+
   private
 
   # Rails.env.test? всегда включает fallback — для HTTP-пути временно подменяем методы.

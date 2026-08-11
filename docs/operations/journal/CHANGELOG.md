@@ -11,6 +11,10 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-11 — feat(shop): SMS.ru #59 stoplist/del
+
+- `SmsRuClient.stoplist_del!(phone:)` → `StoplistDelResult`; api_id только ENV
+
 ## 2026-08-11 — feat(shop): SMS.ru #58 stoplist/add
 
 - `SmsRuClient.stoplist_add!(phone:, text:)` → `StoplistAddResult`; api_id только ENV

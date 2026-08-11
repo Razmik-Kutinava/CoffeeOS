@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-11 (#58 stoplist/add)  
+**Дата:** 2026-08-11 (#59 stoplist/del)  
 **Ветка:** `develop` (ahead, не push)
 
 | Сейчас | Дальше |
 |--------|--------|
-| #58 stoplist_add! GREEN | stoplist del/get · webhooks |
+| #59 stoplist_del! GREEN | stoplist get · webhooks |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,10 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-11 (#59 stoplist/del)
+
+- `SmsRuClient.stoplist_del!(phone:)` → `StoplistDelResult`
 
 ### Сессия 2026-08-11 (#58 stoplist/add)
 
