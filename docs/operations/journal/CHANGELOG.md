@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-11 — docs: SMS.ru #49 email2sms SKIP + ENV runbook
+
+- Intake email2sms → код не делаем; канон HTTP #48
+- `SMS_RU_SECRETS.md`; local `.env` плейсхолдеры (не в git); CBR #49
+
 ## 2026-08-11 — feat(shop): SMS.ru #48 sms/send SendResult + REVIEW
 
 - GREEN `61061658`: parse `sms_id`, per-phone ERROR, cascade `payload.sms_id`

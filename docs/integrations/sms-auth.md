@@ -33,9 +33,11 @@
 
 ### ENV
 
-`SMS_RU_API_ID` · `SMS_RU_FROM` · dev без ключа → код в лог
+`SMS_RU_API_ID` · `SMS_RU_FROM` (или `SMS_RU_SENDER`) · для боевой отправки `SHOP_OTP_LOG_FALLBACK` не `true`  
+Runbook: [`SMS_RU_SECRETS.md`](../operations/runbooks/SMS_RU_SECRETS.md)
 
-**Запрещено:** коммитить `api_id` / login+password из доки ЛК; auth только через ENV `api_id`.
+**Запрещено:** коммитить `api_id` / login+password из доки ЛК; auth только через ENV `api_id`.  
+**email2sms / SMTP (`…@sms.ru`):** не внедряем — ТЗ #49 SKIP (канон HTTP #48).
 
 ### Edge cases
 

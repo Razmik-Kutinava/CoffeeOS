@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-11 (#48 REVIEW)  
-**Ветка:** `develop` (ahead origin, не push)
+**Дата:** 2026-08-11 (#49 email2sms SKIP + ENV)  
+**Ветка:** `develop` (ahead, не push)
 
 | Сейчас | Дальше |
 |--------|--------|
-| #48 sms/send **GREEN+REVIEW** ✅ | следующий метод SMS.ru **или** push |
+| #48 HTTP ✅ · #49 email2sms **SKIP** · local ENV блок ✅ | боевые ключи в `.env`/Fly · следующий метод SMS.ru |
 
-**last_done:** #48 SendResult/sms_id + REVIEW (bugbot 0 · security OK) · `61061658`  
-**next_step:** кидай следующий кусок доки SMS.ru · push только по просьбе
+**last_done:** #49 intake SKIP + `SMS_RU_SECRETS` + `.env` плейсхолдеры (не в git)  
+**next_step:** владелец правит api_id/FROM · Fly secrets по просьбе · или следующий метод доки
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
