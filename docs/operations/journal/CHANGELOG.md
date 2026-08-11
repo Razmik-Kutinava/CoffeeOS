@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-11 — review: Tbank body limit + Rails.cache claim CLOSED
+
+- Security: прежние medium Tbank (413 + shared claim) **закрыты**; regress 49/0
+- Bugbot residual: SMS.ru MemoryStore dedup; CI full `test` vs legacy shop fails
+- Entire: `d26acf09` — no checkpoint trailer (CLI not on PATH at commit)
+
 ## 2026-08-11 — fix(payments): Tbank claim release + CacheCounter Mutex + CI Postgres
 
 - Bugbot: webhook claim освобождается на 500 → retry банка не `duplicate`

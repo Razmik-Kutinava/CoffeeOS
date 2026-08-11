@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-11 (Bugbot fixes Tbank/CI · local)  
-**Ветка:** `develop`
+**Дата:** 2026-08-11 (REVIEW Tbank security CLOSED)  
+**Ветка:** `develop` (ahead origin)
 
 | Сейчас | Дальше |
 |--------|--------|
-| Bugbot 4/4 fixed local | security-review · push по апруву · SMS.ru URL в ЛК |
+| Tbank 413 + Rails.cache claim done | push по апруву · SMS.ru URL в ЛК · residual SMS.ru/CI optional |
 
-**last_done:** Tbank claim release + Mutex CacheCounter + CI develop/Postgres  
-**next_step:** `/review` security · push/deploy только по апруву
+**last_done:** `/regress` 49/0 · PHASE 3 review · Tbank mediums CLOSED  
+**next_step:** push/deploy только по апруву · Fly MCP Point A после deploy
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -19,14 +19,16 @@
 
 ## Текущий месяц (2026-08)
 
-### Bugbot fixes (2026-08-11)
+### Bugbot / security Tbank (2026-08-11)
 
 | Что | Статус |
 |-----|--------|
-| Tbank webhook claim release on 500 | **`[x]`** local |
-| CacheCounter Mutex | **`[x]`** same-pod |
-| CI develop + Postgres | **`[x]`** workflow |
-| Security review | очередь |
+| Tbank claim release on 500 | **`[x]`** |
+| CacheCounter Mutex | **`[x]`** |
+| CI develop + Postgres | **`[x]`** |
+| Tbank body 413 + Rails.cache claim | **`[x]`** GREEN `d26acf09` · review CLOSED |
+| SMS.ru body dual-check / Rails.cache dedup | backlog |
+| CI full suite vs legacy shop fails | backlog |
 
 ### C. Legacy shop triage (2026-08-09)
 
