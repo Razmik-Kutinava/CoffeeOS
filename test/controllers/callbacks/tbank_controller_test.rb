@@ -103,6 +103,7 @@ class Callbacks::TbankControllerTest < ActionDispatch::IntegrationTest
     ENV.delete("TBANK_PASSWORD")
     FakeJobTotalFail.enabled = false
     Payments::CacheCounter.clear!
+    Rails.cache.clear
   end
 
   # ---------------------------------------------------------------------------
@@ -203,13 +204,22 @@ class Callbacks::TbankControllerTest < ActionDispatch::IntegrationTest
     assert_equal true, JSON.parse(response.body)["duplicate"]
   end
 
-  test "releases idempotency claim when job and enqueue both fail so bank retry can reprocess" do
+  test "idempotency claim is stored in Rails.cache (shared across workers) [TDD]" do
+    idem_key = "tbank:callback:tbank_pay_777:CONFIRMED"
+    post_notify(tbank_payload(status: "CONFIRMED"))
+    assert_response :ok
+
+    assert Rails.cache.exist?(idem_key), "claim must live in Rails.cache (Solid Cache on Fly)"
+    assert_not Payments::CacheCounter.present?(idem_key), "must not use process-local CacheCounter for webhook dedup"
+  end
+
+  test "releases Rails.cache claim when job and enqueue both fail so bank retry can reprocess" do
     idem_key = "tbank:callback:tbank_pay_777:CONFIRMED"
     FakeJobTotalFail.enabled = true
 
     post_notify(tbank_payload(status: "CONFIRMED"))
     assert_response :internal_server_error
-    assert_not Payments::CacheCounter.present?(idem_key), "claim must be released on 500"
+    assert_not Rails.cache.exist?(idem_key), "claim must be released on 500"
     assert_equal "pending", @payment.reload.status
 
     FakeJobTotalFail.enabled = false
@@ -219,6 +229,17 @@ class Callbacks::TbankControllerTest < ActionDispatch::IntegrationTest
     assert_nil JSON.parse(response.body)["duplicate"]
     assert_equal "succeeded", @payment.reload.status
     assert_equal "accepted", @order.reload.status
+  end
+
+  test "rejects oversized webhook body with 413 [TDD]" do
+    huge_body = "x" * (256_000 + 1)
+    post "/callbacks/tbank",
+      params: huge_body,
+      headers: { "Content-Type" => "application/json" }
+
+    assert_response :content_too_large
+    assert_equal "too large", JSON.parse(response.body)["error"]
+    assert_equal "pending", @payment.reload.status
   end
 
   # ---------------------------------------------------------------------------
