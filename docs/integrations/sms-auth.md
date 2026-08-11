@@ -66,14 +66,15 @@
 | multi `to[phone]=msg` | нет | **не используем** (один получатель за вызов) |
 | login/password | альт. | **запрещено** — только `api_id` |
 
-### Ответ (json) — as-is vs gap
+### Ответ (json) — #48
 
-| Поле | Сейчас | Цель (после SPEC/кода #48) |
-|------|--------|----------------------------|
-| top `status` / `status_code` | OK / 100 → success; иначе Error | без изменения контракта ошибок |
-| `sms[phone].sms_id` | **игнор** | вернуть / писать в лог (OTP meta / `order_notification_logs`) |
-| `sms[phone].status` ERROR | top-level ok может быть при ERROR на номере | явный fail + `status_code` / `status_text` |
-| `balance` | игнор | позже (health / my/balance) |
+| Поле | Поведение |
+|------|-----------|
+| top `status` / `status_code` | OK / 100 → дальше; иначе `Error` |
+| `sms[phone].sms_id` | `SendResult#sms_id`; cascade → `order_notification_logs.payload["sms_id"]` |
+| `sms[phone].status` ERROR | `Error` + `status_code` / текст (даже если top OK) |
+| fallback | `SendResult(sms_id: "fallback-…")` без HTTP |
+| `balance` | игнор (health / my/balance — позже) |
 
 **Не экспонируем** `sms/send` как публичный shop API-прокси — только внутренний клиент (OTP + cascade).
 

@@ -9,15 +9,18 @@ module Shop
   # Ключи только из ENV: SMS_RU_API_ID, SMS_RU_FROM.
   class SmsRuClient
     class Error < StandardError
-      attr_reader :http_status
+      attr_reader :http_status, :status_code
 
-      def initialize(message, http_status: nil)
+      def initialize(message, http_status: nil, status_code: nil)
         super(message)
         @http_status = http_status
+        @status_code = status_code
       end
     end
 
     class ValidationError < Error; end
+
+    SendResult = Struct.new(:sms_id, keyword_init: true)
 
     FLASH_CALL_URL = URI("https://sms.ru/code/call")
     SMS_SEND_URL   = URI("https://sms.ru/sms/send")
@@ -61,6 +64,7 @@ module Shop
     end
 
     # #39 — произвольный текст (каскад «Заказ готов»); ≤70 символов до HTTP.
+    # #48 — возвращает SendResult(sms_id:); per-phone ERROR → Error.
     def send_message!(phone:, msg:, ip: nil)
       text = msg.to_s
       if text.length > MAX_MSG_LENGTH
@@ -72,7 +76,7 @@ module Shop
 
       if fallback?
         Rails.logger.info("[Shop::SmsRuClient] sms to #{phone}: msg=#{text.truncate(40)} (fallback)")
-        return true
+        return SendResult.new(sms_id: "fallback-#{SecureRandom.hex(4)}")
       end
 
       payload = {
@@ -85,13 +89,43 @@ module Shop
       payload["ip"] = ip if ip.present?
 
       body = post_json!(SMS_SEND_URL, payload)
-      ok = body["status"] == "OK" || body["status_code"].to_i == 100
-      raise Error.new("SMS.ru sms: status=#{body['status']}", http_status: 502) unless ok
-
-      true
+      parse_sms_send_body!(body, phone: phone)
     end
 
     private
+
+    def parse_sms_send_body!(body, phone:)
+      ok = body["status"] == "OK" || body["status_code"].to_i == 100
+      unless ok
+        raise Error.new(
+          "SMS.ru sms: status=#{body['status']} code=#{body['status_code']}",
+          http_status: 502,
+          status_code: body["status_code"]
+        )
+      end
+
+      digits = strip_plus(phone)
+      entry = body.dig("sms", digits) || body.dig("sms", phone.to_s)
+      if entry.is_a?(Hash)
+        if entry["status"].to_s.upcase == "ERROR"
+          code = entry["status_code"]
+          text = entry["status_text"].presence || "ERROR"
+          raise Error.new(
+            "SMS.ru sms phone=#{digits}: #{code} #{text}",
+            http_status: 502,
+            status_code: code.to_i
+          )
+        end
+
+        sms_id = entry["sms_id"].presence
+        raise Error.new("SMS.ru sms: empty sms_id", http_status: 502) if sms_id.blank?
+
+        return SendResult.new(sms_id: sms_id)
+      end
+
+      # Ответ без sms{} (редкий) — считаем принятым без id
+      SendResult.new(sms_id: "unknown")
+    end
 
     def post_json!(uri, params)
       request = Net::HTTP::Post.new(uri)

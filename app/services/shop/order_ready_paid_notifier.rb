@@ -37,9 +37,14 @@ module Shop
       end
 
       msg = format(SMS_TEMPLATE, @order.order_number)
-      Shop::SmsRuClient.send_message!(phone: phone, msg: msg)
-      write_log!(channel: "sms", status: "sent", payload: { msg: msg, to: phone })
-      Rails.logger.info("[Cascade][Order ##{@order.id}] SMS delivered.")
+      result = Shop::SmsRuClient.send_message!(phone: phone, msg: msg)
+      sms_id = result.respond_to?(:sms_id) ? result.sms_id : nil
+      write_log!(
+        channel: "sms",
+        status: "sent",
+        payload: { msg: msg, to: phone, sms_id: sms_id }.compact
+      )
+      Rails.logger.info("[Cascade][Order ##{@order.id}] SMS delivered. sms_id=#{sms_id}")
     rescue Shop::SmsRuClient::ValidationError => e
       write_log!(channel: "sms", status: "failed", error: e.message, payload: { msg: msg })
       raise
