@@ -11,6 +11,10 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-11 — feat(shop): SMS.ru #52 callcheck client
+
+- `callcheck_add!` / `callcheck_status!` (401=confirmed); PWA funnel не трогали
+
 ## 2026-08-11 — feat(shop): SMS.ru #51 sms/cost before send
 
 - `SmsRuClient.cost!(phone:, msg:)` → CostResult; api_id ENV only

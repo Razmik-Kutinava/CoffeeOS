@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-11 (#51 sms/cost GREEN)  
+**Дата:** 2026-08-11 (#52 callcheck client)  
 **Ветка:** `develop` (ahead, не push)
 
 | Сейчас | Дальше |
 |--------|--------|
-| #51 `cost!` ✅ | следующий метод SMS.ru (callcheck/balance/…) |
+| #52 callcheck **клиент** ✅ · funnel flash_call без изменений | balance / webhook / след. метод |
 
-**last_done:** #51 оценка стоимости до send (`cost!`, ENV api_id)  
-**next_step:** кидай следующий кусок доки
+**last_done:** `callcheck_add!` / `callcheck_status!` (ENV api_id)  
+**next_step:** кидай следующий метод SMS.ru
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

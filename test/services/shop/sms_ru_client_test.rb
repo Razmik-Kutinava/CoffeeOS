@@ -290,6 +290,59 @@ class Shop::SmsRuClientTest < ActiveSupport::TestCase
     assert_equal 207, result.status_code
   end
 
+  # --- #52 callcheck ---
+
+  test "#52 callcheck_add! fallback returns check_id and call_phone" do
+    result = Shop::SmsRuClient.callcheck_add!(phone: "+79001112233")
+    assert_kind_of Shop::SmsRuClient::CallcheckAddResult, result
+    assert_match(/\Afallback-/, result.check_id)
+    assert_equal "74995555555", result.call_phone
+    assert_match(/\+7/, result.call_phone_pretty)
+  end
+
+  test "#52 callcheck_add! raises when phone blank" do
+    assert_raises(Shop::SmsRuClient::ValidationError) do
+      Shop::SmsRuClient.callcheck_add!(phone: "")
+    end
+  end
+
+  test "#52 callcheck_add! parses json" do
+    body = {
+      "status" => "OK",
+      "status_code" => 100,
+      "check_id" => "201737-542",
+      "call_phone" => "78005008275",
+      "call_phone_pretty" => "+7 (800) 500-8275"
+    }
+    result = nil
+    with_live_sms_ru_response(body) do
+      result = Shop::SmsRuClient.callcheck_add!(phone: "+79001112233")
+    end
+    assert_equal "201737-542", result.check_id
+    assert_equal "78005008275", result.call_phone
+  end
+
+  test "#52 callcheck_status! fallback is pending" do
+    result = Shop::SmsRuClient.callcheck_status!(check_id: "fallback-1")
+    refute result.confirmed
+    assert_equal Shop::SmsRuClient::CALLCHECK_PENDING, result.check_status
+  end
+
+  test "#52 callcheck_status! confirmed when 401" do
+    body = {
+      "status" => "OK",
+      "status_code" => 100,
+      "check_status" => "401",
+      "check_status_text" => "Авторизация по звонку: номер подтвержден"
+    }
+    result = nil
+    with_live_sms_ru_response(body) do
+      result = Shop::SmsRuClient.callcheck_status!(check_id: "201737-542")
+    end
+    assert result.confirmed
+    assert_equal 401, result.check_status
+  end
+
   private
 
   # Rails.env.test? всегда включает fallback — для HTTP-пути временно подменяем методы.

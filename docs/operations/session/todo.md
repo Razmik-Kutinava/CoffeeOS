@@ -1,9 +1,10 @@
-# todo — SMS.ru #51 sms/cost · GREEN (2026-08-11)
+# todo — SMS.ru #52 callcheck · client GREEN (2026-08-11)
 
 | last_done | current_state | next_step |
 |-----------|---------------|-----------|
-| #51 `cost!` | done | callcheck / balance / webhook / … |
+| #52 callcheck client | done (не в PWA funnel) | balance / webhook / funnel ТЗ |
 
 ## Очередь
-- [x] #48 send · #49 email2sms SKIP · #50 status · #51 cost
-- [ ] callcheck · balance · limits · free · senders · auth · stoplist · webhooks
+- [x] #48–#51 · #52 callcheck client
+- [ ] PWA funnel на callcheck — только по ТЗ
+- [ ] balance · limits · free · senders · auth check · stoplist · webhooks

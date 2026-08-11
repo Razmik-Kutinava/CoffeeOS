@@ -110,6 +110,19 @@ Webhook статусов — отдельная задача. Не shop-прок
 | per-phone ERROR | `ok: false` |
 | multi | **не** в этом шаге |
 
+### SMS.ru callcheck (#52)
+
+**Иное, чем flash_call:** пользователь **сам** звонит на `call_phone`; мы сбрасываем (бесплатно).
+
+| Метод | Вызов | Результат |
+|-------|--------|-----------|
+| `POST …/callcheck/add` | `callcheck_add!(phone:)` | `CallcheckAddResult` (check_id, call_phone, pretty) |
+| `POST …/callcheck/status` | `callcheck_status!(check_id:)` | `CallcheckStatusResult` (400/401/402, `confirmed`) |
+
+- Канон PWA auth **без изменений**: flash_call×2→SMS  
+- Callcheck webhook — отдельно  
+- api_id только ENV
+
 ### Антифлуд
 
 - SMS.ru: captcha на UI + параметр `ip`

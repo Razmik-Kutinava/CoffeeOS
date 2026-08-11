@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-11 (#51 cost GREEN)  
+**Дата:** 2026-08-11 (#52 callcheck)  
 **Ветка:** `develop` (ahead, не push)
 
 | Сейчас | Дальше |
 |--------|--------|
-| #51 cost! done | след. метод SMS.ru |
+| #52 callcheck client | balance / webhook / … |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -16,17 +16,13 @@
 
 ## Текущий месяц (2026-08)
 
-### Сессия 2026-08-11 (#51 sms/cost)
+### Сессия 2026-08-11 (#52 callcheck)
 
-- `SmsRuClient.cost!(phone:, msg:)` → CostResult; api_id ENV only
+- `callcheck_add!` / `callcheck_status!`; PWA funnel **не** меняли (flash_call канон)
 
-### Сессия 2026-08-11 (#50 sms/status)
+### Сессия 2026-08-11 (#51/#50/#49/#48)
 
-- `status!(sms_ids:)` → StatusResult
-
-### Сессия 2026-08-11 (#49/#48)
-
-- email2sms SKIP · send SendResult
+- cost · status · email2sms SKIP · send
 
 ### Сессия 2026-08-10 (push + fly deploy v445 + MCP)
 

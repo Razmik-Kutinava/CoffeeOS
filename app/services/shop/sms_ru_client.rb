@@ -5,7 +5,7 @@ require "json"
 require "uri"
 
 module Shop
-  # Единый клиент SMS.ru: flash_call (/code/call) и sms (/sms/send).
+  # Единый клиент SMS.ru: flash_call, sms/send|status|cost, callcheck.
   # Ключи только из ENV: SMS_RU_API_ID, SMS_RU_FROM.
   class SmsRuClient
     class Error < StandardError
@@ -26,12 +26,23 @@ module Shop
       :phone, :cost, :sms_count, :total_cost, :total_sms, :ok, :status_code, :status_text,
       keyword_init: true
     )
+    CallcheckAddResult = Struct.new(
+      :check_id, :call_phone, :call_phone_pretty, keyword_init: true
+    )
+    CallcheckStatusResult = Struct.new(
+      :check_id, :check_status, :check_status_text, :confirmed, keyword_init: true
+    )
 
-    FLASH_CALL_URL = URI("https://sms.ru/code/call")
-    SMS_SEND_URL   = URI("https://sms.ru/sms/send")
-    SMS_STATUS_URL = URI("https://sms.ru/sms/status")
-    SMS_COST_URL   = URI("https://sms.ru/sms/cost")
+    FLASH_CALL_URL     = URI("https://sms.ru/code/call")
+    SMS_SEND_URL       = URI("https://sms.ru/sms/send")
+    SMS_STATUS_URL     = URI("https://sms.ru/sms/status")
+    SMS_COST_URL       = URI("https://sms.ru/sms/cost")
+    CALLCHECK_ADD_URL  = URI("https://sms.ru/callcheck/add")
+    CALLCHECK_STATUS_URL = URI("https://sms.ru/callcheck/status")
     MAX_MSG_LENGTH = 70
+    CALLCHECK_CONFIRMED = 401
+    CALLCHECK_PENDING = 400
+    CALLCHECK_EXPIRED = 402
 
     def self.request_flash_call!(phone:, ip: nil)
       new.request_flash_call!(phone: phone, ip: ip)
@@ -51,6 +62,14 @@ module Shop
 
     def self.cost!(phone:, msg:)
       new.cost!(phone: phone, msg: msg)
+    end
+
+    def self.callcheck_add!(phone:)
+      new.callcheck_add!(phone: phone)
+    end
+
+    def self.callcheck_status!(check_id:)
+      new.callcheck_status!(check_id: check_id)
     end
 
     # @return [String] 4-значный код из ответа SMS.ru
@@ -171,10 +190,103 @@ module Shop
       parse_sms_cost_body!(body, phone: digits)
     end
 
+    # #52 — auth: пользователь звонит на call_phone (не flash_call). Воронку PWA не меняем.
+    # @return [CallcheckAddResult]
+    def callcheck_add!(phone:)
+      digits = strip_plus(phone)
+      if digits.blank?
+        raise ValidationError.new("phone required", http_status: 422)
+      end
+
+      if fallback?
+        check_id = "fallback-#{SecureRandom.hex(4)}"
+        Rails.logger.info("[Shop::SmsRuClient] callcheck_add #{digits} check_id=#{check_id} (fallback)")
+        return CallcheckAddResult.new(
+          check_id: check_id,
+          call_phone: "74995555555",
+          call_phone_pretty: "+7 (499) 555-55-55"
+        )
+      end
+
+      body = post_json!(CALLCHECK_ADD_URL, {
+        "api_id" => api_id,
+        "phone" => digits,
+        "json" => "1"
+      })
+      parse_callcheck_add_body!(body)
+    end
+
+    # @return [CallcheckStatusResult]
+    def callcheck_status!(check_id:)
+      id = check_id.to_s.strip
+      if id.blank?
+        raise ValidationError.new("check_id required", http_status: 422)
+      end
+
+      if fallback?
+        Rails.logger.info("[Shop::SmsRuClient] callcheck_status #{id} (fallback)")
+        return CallcheckStatusResult.new(
+          check_id: id,
+          check_status: CALLCHECK_PENDING,
+          check_status_text: "fallback pending",
+          confirmed: false
+        )
+      end
+
+      body = post_json!(CALLCHECK_STATUS_URL, {
+        "api_id" => api_id,
+        "check_id" => id,
+        "json" => "1"
+      })
+      parse_callcheck_status_body!(body, check_id: id)
+    end
+
     private
 
     def normalize_sms_ids(sms_ids)
       Array(sms_ids).flatten.map { |id| id.to_s.strip }.reject(&:blank?).uniq
+    end
+
+    def parse_callcheck_add_body!(body)
+      ok = body["status"] == "OK" || body["status_code"].to_i == 100
+      unless ok
+        raise Error.new(
+          "SMS.ru callcheck/add: status=#{body['status']} code=#{body['status_code']}",
+          http_status: 502,
+          status_code: body["status_code"]
+        )
+      end
+
+      check_id = body["check_id"].presence
+      call_phone = body["call_phone"].presence
+      if check_id.blank? || call_phone.blank?
+        raise Error.new("SMS.ru callcheck/add: empty check_id/call_phone", http_status: 502)
+      end
+
+      CallcheckAddResult.new(
+        check_id: check_id,
+        call_phone: call_phone,
+        call_phone_pretty: body["call_phone_pretty"].presence || call_phone
+      )
+    end
+
+    def parse_callcheck_status_body!(body, check_id:)
+      ok = body["status"] == "OK" || body["status_code"].to_i == 100
+      unless ok
+        raise Error.new(
+          "SMS.ru callcheck/status: status=#{body['status']} code=#{body['status_code']}",
+          http_status: 502,
+          status_code: body["status_code"]
+        )
+      end
+
+      code = body["check_status"].to_i
+      CallcheckStatusResult.new(
+        check_id: check_id,
+        check_status: code,
+        check_status_text: body["check_status_text"].to_s,
+        confirmed: code == CALLCHECK_CONFIRMED
+      )
     end
 
     def parse_sms_cost_body!(body, phone:)
