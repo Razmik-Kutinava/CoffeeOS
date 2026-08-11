@@ -5,7 +5,7 @@ require "json"
 require "uri"
 
 module Shop
-  # Единый клиент SMS.ru: flash_call, sms/*, callcheck, my/balance|limit|free.
+  # Единый клиент SMS.ru: flash_call, sms/*, callcheck, my/balance|limit|free|senders.
   # Ключи только из ENV: SMS_RU_API_ID, SMS_RU_FROM.
   class SmsRuClient
     class Error < StandardError
@@ -35,6 +35,7 @@ module Shop
     BalanceResult = Struct.new(:balance, keyword_init: true)
     LimitResult = Struct.new(:total_limit, :used_today, keyword_init: true)
     FreeResult = Struct.new(:total_free, :used_today, keyword_init: true)
+    SendersResult = Struct.new(:senders, keyword_init: true)
 
     FLASH_CALL_URL     = URI("https://sms.ru/code/call")
     SMS_SEND_URL       = URI("https://sms.ru/sms/send")
@@ -45,6 +46,7 @@ module Shop
     MY_BALANCE_URL     = URI("https://sms.ru/my/balance")
     MY_LIMIT_URL       = URI("https://sms.ru/my/limit")
     MY_FREE_URL        = URI("https://sms.ru/my/free")
+    MY_SENDERS_URL     = URI("https://sms.ru/my/senders")
     MAX_MSG_LENGTH = 70
     CALLCHECK_CONFIRMED = 401
     CALLCHECK_PENDING = 400
@@ -88,6 +90,10 @@ module Shop
 
     def self.free!
       new.free!
+    end
+
+    def self.senders!
+      new.senders!
     end
 
     # @return [String] 4-значный код из ответа SMS.ru
@@ -304,6 +310,21 @@ module Shop
       parse_free_body!(body)
     end
 
+    # #56 — список одобренных отправителей. api_id только ENV. Не shop-прокси.
+    # @return [SendersResult]
+    def senders!
+      if fallback?
+        Rails.logger.info("[Shop::SmsRuClient] senders (fallback)")
+        return SendersResult.new(senders: [])
+      end
+
+      body = post_json!(MY_SENDERS_URL, {
+        "api_id" => api_id,
+        "json" => "1"
+      })
+      parse_senders_body!(body)
+    end
+
     private
 
     def normalize_sms_ids(sms_ids)
@@ -353,6 +374,20 @@ module Shop
         total_free: body["total_free"].to_i,
         used_today: body["used_today"].to_i
       )
+    end
+
+    def parse_senders_body!(body)
+      ok = body["status"] == "OK" || body["status_code"].to_i == 100
+      unless ok
+        raise Error.new(
+          "SMS.ru my/senders: status=#{body['status']} code=#{body['status_code']}",
+          http_status: 502,
+          status_code: body["status_code"]
+        )
+      end
+
+      list = Array(body["senders"]).map(&:to_s)
+      SendersResult.new(senders: list)
     end
 
     def parse_callcheck_add_body!(body)

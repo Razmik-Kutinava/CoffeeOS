@@ -428,6 +428,33 @@ class Shop::SmsRuClientTest < ActiveSupport::TestCase
     assert_equal 301, err.status_code
   end
 
+  # --- #56 my/senders ---
+
+  test "#56 senders! fallback returns empty list" do
+    result = Shop::SmsRuClient.senders!
+    assert_kind_of Shop::SmsRuClient::SendersResult, result
+    assert_equal [], result.senders
+  end
+
+  test "#56 senders! parses senders array" do
+    body = { "status" => "OK", "status_code" => 100, "senders" => %w[sender1 sender2] }
+    result = nil
+    with_live_sms_ru_response(body) do
+      result = Shop::SmsRuClient.senders!
+    end
+    assert_equal %w[sender1 sender2], result.senders
+  end
+
+  test "#56 senders! raises on top-level ERROR" do
+    body = { "status" => "ERROR", "status_code" => 200 }
+    err = assert_raises(Shop::SmsRuClient::Error) do
+      with_live_sms_ru_response(body) do
+        Shop::SmsRuClient.senders!
+      end
+    end
+    assert_equal 200, err.status_code
+  end
+
   private
 
   # Rails.env.test? всегда включает fallback — для HTTP-пути временно подменяем методы.

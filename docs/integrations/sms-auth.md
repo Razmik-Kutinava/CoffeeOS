@@ -141,6 +141,12 @@ api_id только ENV · не shop-прокси. Код 206 при send = дн
 **Вызов:** `SmsRuClient.free!` → `FreeResult` (`total_free`, `used_today`)  
 Бесплатные SMS на свой номер за день · api_id только ENV · не shop-прокси.
 
+### SMS.ru `my/senders` (#56)
+
+**URL:** `POST https://sms.ru/my/senders` · `json=1`  
+**Вызов:** `SmsRuClient.senders!` → `SendersResult#senders` (массив строк)  
+Сверка с `SMS_RU_FROM` — ops позже · api_id только ENV · не shop-прокси.
+
 ### Антифлуд
 
 - SMS.ru: captcha на UI + параметр `ip`
