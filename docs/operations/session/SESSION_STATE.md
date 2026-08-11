@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-11 (#61 SMS.ru webhooks)  
-**Ветка:** `develop` (ahead, не push)
+**Дата:** 2026-08-11 (Fly v447 · #61)  
+**Ветка:** `develop` (= origin)
 
 | Сейчас | Дальше |
 |--------|--------|
-| #61 webhooks GREEN | Fly URL в ЛК SMS.ru |
+| deployed webhooks | URL → ЛК SMS.ru |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,12 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-11 (push + fly deploy v447)
+
+- push develop → `858821af`
+- `fly deploy` coffeeos **v447** web+worker · /up 200 · webhook 401 invalid hash · Point A shop 200
+- Secrets: `SMS_RU_API_ID`, `SMS_RU_FROM`, `SHOP_OTP_LOG_FALLBACK` уже на Fly
 
 ### Сессия 2026-08-11 (#61 webhooks)
 

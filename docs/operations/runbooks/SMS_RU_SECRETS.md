@@ -41,7 +41,8 @@ SHOP_OTP_LOG_FALLBACK=false
 https://coffeeos.fly.dev/callbacks/sms_ru
 ```
 
-(подставь актуальное имя app; только после deploy). Подпись = `SHA256(SMS_RU_API_ID + data…)`.
+Метод: **POST**. Ответ обработчика: тело **`100`**.  
+Подпись: `SHA256(SMS_RU_API_ID + склейка data[…])` — ключ уже в Fly secrets.
 
 ## Fly
 

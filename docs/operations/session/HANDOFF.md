@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-11 (#61 SMS.ru webhooks)  
-**Ветка:** `develop` (ahead, не push)
+**Дата:** 2026-08-11 (push+deploy v447 · #61 webhooks)  
+**Ветка:** `develop` (= origin)
 
 | Сейчас | Дальше |
 |--------|--------|
-| #61 `/callbacks/sms_ru` ✅ | deploy + URL в ЛК · callcheck funnel |
+| Fly **v447** · webhook URL готов | владелец вносит URL в ЛК SMS.ru |
 
-**last_done:** webhook sms_status → delivery_status; callcheck → cache/лог  
-**next_step:** deploy/secrets + прописать URL в SMS.ru ЛК (апрув)
+**last_done:** push `858821af` · `fly deploy` coffeeos v447 · smoke /up+webhook 401+Point A  
+**next_step:** вписать URL в ЛК SMS.ru (карточка ниже в чате)
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
