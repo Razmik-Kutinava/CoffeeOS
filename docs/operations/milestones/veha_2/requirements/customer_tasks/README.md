@@ -57,6 +57,7 @@
 | **SMS.ru stoplist/add (#58)** | Добавить номер в стоплист | **GREEN `[x]`** 2026-08-11 · апрув `[ ]` | [SMS.ru API Добавление номера в стоплист.md](SMS.ru%20API%20Добавление%20номера%20в%20стоплист.md) |
 | **SMS.ru stoplist/del (#59)** | Удалить номер из стоплиста | **GREEN `[x]`** 2026-08-11 · апрув `[ ]` | [SMS.ru API Удаление номера из стоплиста.md](SMS.ru%20API%20Удаление%20номера%20из%20стоплиста.md) |
 | **SMS.ru stoplist/get (#60)** | Выгрузить весь стоплист | **GREEN `[x]`** 2026-08-11 · апрув `[ ]` | [SMS.ru API Выгрузить весь стоплист.md](SMS.ru%20API%20Выгрузить%20весь%20стоплист.md) |
+| **SMS.ru webhooks (#61)** | Callback sms_status + callcheck_status | **GREEN `[x]`** 2026-08-11 · апрув `[ ]` | [SMS.ru API Webhooks статусы SMS и callcheck.md](SMS.ru%20API%20Webhooks%20статусы%20SMS%20и%20callcheck.md) |
 
 **Порядок работ:** апрув ТЗ Hidden → **go** код · новое ТЗ UserCards (после `go`) · **B1.13 S4** · **B1.14-4** · **B2.2** · **B1.4**.
 

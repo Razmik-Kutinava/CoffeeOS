@@ -94,7 +94,7 @@ Runbook: [`SMS_RU_SECRETS.md`](../operations/runbooks/SMS_RU_SECRETS.md)
 | top ERROR | `Error` |
 | fallback | `ok: true`, code 103 |
 
-Webhook статусов — отдельная задача. Не shop-прокси.
+Webhook статусов — **#61** `POST /callbacks/sms_ru`. Не shop-прокси.
 
 ### SMS.ru `sms/cost` (#51)
 
@@ -120,7 +120,7 @@ Webhook статусов — отдельная задача. Не shop-прок
 | `POST …/callcheck/status` | `callcheck_status!(check_id:)` | `CallcheckStatusResult` (400/401/402, `confirmed`) |
 
 - Канон PWA auth **без изменений**: flash_call×2→SMS  
-- Callcheck webhook — отдельно  
+- Callcheck webhook — **#61** (вместе с sms_status)  
 - api_id только ENV
 
 ### SMS.ru `my/balance` (#53)
@@ -170,6 +170,24 @@ api_id только ENV · не shop-прокси. Код 206 при send = дн
 **URL:** `POST https://sms.ru/stoplist/get` · `json=1`  
 **Вызов:** `SmsRuClient.stoplist_get!` → `StoplistGetResult#stoplist` (Hash phone⇒note)  
 api_id только ENV · не shop-прокси.
+
+### SMS.ru webhooks (#61)
+
+**URL CoffeeOS:** `POST /callbacks/sms_ru`  
+**Провайдер:** ЛК SMS.ru → обработчик оповещений → наш URL (на Fly: `https://<app>.fly.dev/callbacks/sms_ru`)
+
+| Поле | Смысл |
+|------|--------|
+| `data[1]…data[100]` | multiline entries; 1-я строка = тип |
+| `hash` | `SHA256(api_id + склейка data)` |
+| Ответ | **plain `100`** (иначе ретраи до 5 суток) |
+
+| Тип | Строки | Действие |
+|-----|--------|----------|
+| `sms_status` | sms_id · code · unix | `order_notification_logs.payload` → `delivery_status*` (fail-коды → `status=failed`) |
+| `callcheck_status` | check_id · 401/402 · unix | лог + MemoryStore `sms_ru:callcheck:{id}` (persist check_id — с воронкой) |
+
+Код: `Callbacks::SmsRuController` · `Callbacks::SmsRuWebhook` · api_id только ENV.
 
 ### Антифлуд
 

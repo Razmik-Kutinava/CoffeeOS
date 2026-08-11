@@ -33,6 +33,16 @@ SHOP_OTP_LOG_FALLBACK=false
 | логин/пароль SMTP | не используем |
 | номера получателей | приходят из OTP/профиля в рантайме |
 
+## Webhook (#61)
+
+В ЛК SMS.ru → оповещения / обработчик:
+
+```
+https://coffeeos.fly.dev/callbacks/sms_ru
+```
+
+(подставь актуальное имя app; только после deploy). Подпись = `SHA256(SMS_RU_API_ID + data…)`.
+
 ## Fly
 
 ```bash

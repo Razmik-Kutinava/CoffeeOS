@@ -11,6 +11,10 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-11 — feat(callbacks): SMS.ru #61 webhooks
+
+- `POST /callbacks/sms_ru` · SHA256 hash · sms_status → order_notification_logs.payload · callcheck → MemoryStore
+
 ## 2026-08-11 — feat(shop): SMS.ru #60 stoplist/get
 
 - `SmsRuClient.stoplist_get!` → `StoplistGetResult#stoplist` (Hash phone⇒note)

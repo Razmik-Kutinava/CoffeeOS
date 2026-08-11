@@ -17,11 +17,12 @@ Rails.application.routes.draw do
   get "/payment/success", to: "payment_returns#success"
   get "/payment/fail", to: "payment_returns#fail"
 
-  # External callbacks (payment providers / fiscal providers)
+  # External callbacks (payment providers / fiscal providers / SMS.ru)
   namespace :callbacks do
     post "/payments", to: "events#payment"
     post "/fiscal_receipts", to: "events#fiscal_receipt"
     post "/tbank", to: "tbank#notify"
+    post "/sms_ru", to: "sms_ru#notify"
   end
 
   # Dashboard routes (временные заглушки для тестирования)

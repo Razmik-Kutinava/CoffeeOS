@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-11 (#60 stoplist/get)  
+**Дата:** 2026-08-11 (#61 SMS.ru webhooks)  
 **Ветка:** `develop` (ahead, не push)
 
 | Сейчас | Дальше |
 |--------|--------|
-| #60 stoplist_get! GREEN | webhooks |
+| #61 webhooks GREEN | Fly URL в ЛК SMS.ru |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,10 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-11 (#61 webhooks)
+
+- `POST /callbacks/sms_ru` · hash SHA256(api_id+data) · sms_status → payload · callcheck → cache
 
 ### Сессия 2026-08-11 (#60 stoplist/get)
 

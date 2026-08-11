@@ -146,6 +146,7 @@
 | SMS.ru stoplist/add | **Интеграции / SMS.ru** — добавить номер в стоплист (`stoplist_add!`) | [ТЗ](customer_tasks/SMS.ru%20API%20Добавление%20номера%20в%20стоплист.md) · [`artifacts/sms_ru_stoplist_add/`](../artifacts/sms_ru_stoplist_add/) | **GREEN `[x]`** 2026-08-11 · апрув `[ ]` |
 | SMS.ru stoplist/del | **Интеграции / SMS.ru** — удалить номер из стоплиста (`stoplist_del!`) | [ТЗ](customer_tasks/SMS.ru%20API%20Удаление%20номера%20из%20стоплиста.md) · [`artifacts/sms_ru_stoplist_del/`](../artifacts/sms_ru_stoplist_del/) | **GREEN `[x]`** 2026-08-11 · апрув `[ ]` |
 | SMS.ru stoplist/get | **Интеграции / SMS.ru** — выгрузить стоплист (`stoplist_get!`) | [ТЗ](customer_tasks/SMS.ru%20API%20Выгрузить%20весь%20стоплист.md) · [`artifacts/sms_ru_stoplist_get/`](../artifacts/sms_ru_stoplist_get/) | **GREEN `[x]`** 2026-08-11 · апрув `[ ]` |
+| SMS.ru webhooks | **Интеграции / SMS.ru** — `POST /callbacks/sms_ru` (sms_status + callcheck_status) | [ТЗ](customer_tasks/SMS.ru%20API%20Webhooks%20статусы%20SMS%20и%20callcheck.md) · [`artifacts/sms_ru_webhooks/`](../artifacts/sms_ru_webhooks/) | **GREEN `[x]`** 2026-08-11 · апрув `[ ]` · Fly URL в ЛК SMS.ru |
 
 > **B1.8 (не забыть):** сейчас письма с **подтверждённого личного sender** в Brevo. Когда будет **свой домен** — завести **кофейную почту** (напр. `noreply@бренд.ru`), аутентифицировать домен в Brevo, обновить `MAIL_FROM` + secrets. Код OTP/ActionMailer менять не нужно.
 
@@ -216,6 +217,7 @@
 | 58 | **SMS.ru stoplist/add** | `stoplist_add!(phone:, text:)` | **GREEN `[x]`** 2026-08-11 · апрув `[ ]` | [Стоплист add…](customer_tasks/SMS.ru%20API%20Добавление%20номера%20в%20стоплист.md) · [artifacts](../artifacts/sms_ru_stoplist_add/) |
 | 59 | **SMS.ru stoplist/del** | `stoplist_del!(phone:)` | **GREEN `[x]`** 2026-08-11 · апрув `[ ]` | [Стоплист del…](customer_tasks/SMS.ru%20API%20Удаление%20номера%20из%20стоплиста.md) · [artifacts](../artifacts/sms_ru_stoplist_del/) |
 | 60 | **SMS.ru stoplist/get** | `stoplist_get!` Hash phone⇒note | **GREEN `[x]`** 2026-08-11 · апрув `[ ]` | [Стоплист get…](customer_tasks/SMS.ru%20API%20Выгрузить%20весь%20стоплист.md) · [artifacts](../artifacts/sms_ru_stoplist_get/) |
+| 61 | **SMS.ru webhooks** | `POST /callbacks/sms_ru` sms_status + callcheck | **GREEN `[x]`** 2026-08-11 · апрув `[ ]` · URL в ЛК | [Webhooks…](customer_tasks/SMS.ru%20API%20Webhooks%20статусы%20SMS%20и%20callcheck.md) · [artifacts](../artifacts/sms_ru_webhooks/) |
 
 ---
 
