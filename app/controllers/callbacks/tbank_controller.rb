@@ -11,6 +11,8 @@ module Callbacks
 
     def notify
       idem_key = nil
+      claimed = false
+      done = false
       return render_too_large if body_too_large?
 
       payload = parse_payload
@@ -22,11 +24,14 @@ module Callbacks
       end
 
       # Idempotency: shared Rails.cache (Solid Cache на Fly) — переживает multi-web.
-      # Claim до обработки; при полном фейле (500) — release, иначе retry банка залипнет.
+      # Claim до обработки; release только если мы владельцы claim и работа не завершена.
       idem_key = idempotency_key(payload)
-      if idem_key && !claim_idempotency(idem_key)
-        Rails.logger.info("[Tbank::Callback] Duplicate webhook ignored, key=#{idem_key}")
-        return render json: { ok: true, duplicate: true }
+      if idem_key
+        unless claim_idempotency(idem_key)
+          Rails.logger.info("[Tbank::Callback] Duplicate webhook ignored, key=#{idem_key}")
+          return render json: { ok: true, duplicate: true }
+        end
+        claimed = true
       end
 
       tbank_status = payload["Status"].to_s
@@ -51,10 +56,11 @@ module Callbacks
         end
       end
 
+      done = true
       Rails.logger.info("[Tbank::Callback] Enqueued OrderId=#{payload['OrderId']}, status=#{tbank_status}")
       render json: { ok: true }
     rescue StandardError => e
-      release_idempotency_claim(idem_key)
+      release_idempotency_claim(idem_key) if claimed && !done
       Rails.logger.error("[Tbank::Callback] Error: #{e.class} #{e.message}")
       render json: { error: "internal error" }, status: :internal_server_error
     end

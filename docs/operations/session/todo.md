@@ -2,21 +2,18 @@
 
 | last_done | current_state | next_step |
 |-----------|---------------|-----------|
-| Tbank mediums CLOSED | SBR residual | RED→GREEN → `/regress` |
+| GREEN SMS.ru Rails.cache + Tbank claimed/done | done local | `/regress` |
 
 ## Файлы (ожидаемо)
-- `app/controllers/callbacks/sms_ru_controller.rb` — dual body size check (как Tbank)
-- `app/services/callbacks/sms_ru_webhook.rb` — idempotency + callcheck в Rails.cache
+- `app/controllers/callbacks/sms_ru_controller.rb`
+- `app/services/callbacks/sms_ru_webhook.rb`
+- `app/controllers/callbacks/tbank_controller.rb`
 - `test/controllers/callbacks/sms_ru_controller_test.rb`
-- `app/controllers/callbacks/tbank_controller.rb` — release только если claim наш и !done
-- `test/controllers/callbacks/tbank_controller_test.rb` — при необходимости
+- `test/controllers/callbacks/tbank_controller_test.rb`
 
 ## Не ломать
-- SMS.ru valid sms_status → 100 + delivery_status
-- duplicate sms_status → history size 1
-- callcheck caches status
-- invalid hash → 401
-- Tbank CONFIRMED / duplicate / release-on-500 / 413
+- SMS.ru sms_status / duplicate / callcheck / invalid hash
+- Tbank CONFIRMED / duplicate / release-on-500 / 413 / foreign claim
 
 ## Проверка
-- `ruby bin/rails test test/controllers/callbacks/sms_ru_controller_test.rb test/controllers/callbacks/tbank_controller_test.rb`
+- `ruby bin/rails test test/controllers/callbacks/sms_ru_controller_test.rb test/controllers/callbacks/tbank_controller_test.rb` → **23/0 PASS**

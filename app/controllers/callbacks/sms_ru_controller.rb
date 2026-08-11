@@ -9,9 +9,7 @@ module Callbacks
     MAX_BODY_BYTES = 256_000
 
     def notify
-      if request.content_length.to_i > MAX_BODY_BYTES
-        return render plain: "too large", status: :payload_too_large, content_type: "text/plain"
-      end
+      return render_too_large if body_too_large?
 
       entries = normalize_entries(params[:data])
       hash = params[:hash].to_s
@@ -20,7 +18,7 @@ module Callbacks
       render plain: "100", content_type: "text/plain"
     rescue Callbacks::SmsRuWebhook::PayloadTooLargeError => e
       Rails.logger.warn("[SmsRu::Callback] #{e.message}")
-      render plain: "too large", status: :payload_too_large, content_type: "text/plain"
+      render_too_large
     rescue Callbacks::SmsRuWebhook::InvalidHashError => e
       Rails.logger.warn("[SmsRu::Callback] #{e.message}")
       render plain: "invalid hash", status: :unauthorized, content_type: "text/plain"
@@ -31,6 +29,17 @@ module Callbacks
     end
 
     private
+
+    def body_too_large?
+      return true if request.content_length.to_i > MAX_BODY_BYTES
+
+      body = request.raw_post
+      body.present? && body.bytesize > MAX_BODY_BYTES
+    end
+
+    def render_too_large
+      render plain: "too large", status: :content_too_large, content_type: "text/plain"
+    end
 
     # SMS.ru шлёт data[1], data[2]… → Hash {"1"=>…} или Array.
     def normalize_entries(raw)
