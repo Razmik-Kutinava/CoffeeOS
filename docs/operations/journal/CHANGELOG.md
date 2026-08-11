@@ -11,6 +11,10 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-11 — deploy: coffeeos v447 (#61 webhooks)
+
+- push develop `858821af` · fly deploy · smoke `/up` 200 · `POST /callbacks/sms_ru` 401(bad hash) · Point A shop 200
+
 ## 2026-08-11 — feat(callbacks): SMS.ru #61 webhooks
 
 - `POST /callbacks/sms_ru` · SHA256 hash · sms_status → order_notification_logs.payload · callcheck → MemoryStore
