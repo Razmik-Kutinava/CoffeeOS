@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-11 (PHASE 3 REVIEW Tbank security)  
+**Дата:** 2026-08-11 (regress SMS.ru+Tbank residual)  
 **Ветка:** `develop` (ahead origin)
 
 | Сейчас | Дальше |
 |--------|--------|
-| Tbank mediums **закрыты** · regress 49/0 | push по апруву · дыры SMS.ru/CI → backlog или `/sbr` |
+| Local regress callbacks **PASS 23/0** | `/review` · push по апруву · CI suite backlog |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,11 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-11 (/regress SMS.ru + Tbank residual)
+
+- `ruby bin/rails test …sms_ru_controller… tbank_controller…` → **23 runs, 0 failures PASS**
+- Fly MCP: skip (regress только local)
 
 ### Сессия 2026-08-11 (PHASE 3 /review)
 

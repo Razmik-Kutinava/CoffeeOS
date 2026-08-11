@@ -2,7 +2,7 @@
 
 | last_done | current_state | next_step |
 |-----------|---------------|-----------|
-| GREEN SMS.ru Rails.cache + Tbank claimed/done | done local | `/regress` |
+| `/regress` callbacks PASS 23/0 | done local | `/review` · push по апруву |
 
 ## Файлы (ожидаемо)
 - `app/controllers/callbacks/sms_ru_controller.rb`
@@ -16,4 +16,4 @@
 - Tbank CONFIRMED / duplicate / release-on-500 / 413 / foreign claim
 
 ## Проверка
-- `ruby bin/rails test test/controllers/callbacks/sms_ru_controller_test.rb test/controllers/callbacks/tbank_controller_test.rb` → **23/0 PASS**
+- `ruby bin/rails test test/controllers/callbacks/sms_ru_controller_test.rb test/controllers/callbacks/tbank_controller_test.rb` → **23/0 PASS** (regress 2026-08-11)
