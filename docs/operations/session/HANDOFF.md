@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-11 (#50 sms/status GREEN)  
+**Дата:** 2026-08-11 (#51 sms/cost GREEN)  
 **Ветка:** `develop` (ahead, не push)
 
 | Сейчас | Дальше |
 |--------|--------|
-| #50 `status!` ✅ | webhook SMS.ru **или** следующий метод |
+| #51 `cost!` ✅ | следующий метод SMS.ru (callcheck/balance/…) |
 
-**last_done:** #50 poll статуса по `sms_id` (ENV api_id)  
-**next_step:** webhook / cost / … · Fly secrets по просьбе
+**last_done:** #51 оценка стоимости до send (`cost!`, ENV api_id)  
+**next_step:** кидай следующий кусок доки
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

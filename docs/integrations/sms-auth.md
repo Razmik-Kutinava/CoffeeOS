@@ -96,6 +96,20 @@ Runbook: [`SMS_RU_SECRETS.md`](../operations/runbooks/SMS_RU_SECRETS.md)
 
 Webhook статусов — отдельная задача. Не shop-прокси.
 
+### SMS.ru `sms/cost` (#51)
+
+**URL:** `POST https://sms.ru/sms/cost` · `json=1`  
+**Вызов:** `SmsRuClient.cost!(phone:, msg:)` → `CostResult` (один номер)
+
+| SMS.ru | CoffeeOS |
+|--------|----------|
+| `api_id` | ENV only |
+| `to` / `msg` | аргументы; `from` из ENV если есть |
+| `sms[phone].cost` / `sms` | `CostResult#cost` / `#sms_count` |
+| `total_cost` / `total_sms` | поля Result |
+| per-phone ERROR | `ok: false` |
+| multi | **не** в этом шаге |
+
 ### Антифлуд
 
 - SMS.ru: captcha на UI + параметр `ip`

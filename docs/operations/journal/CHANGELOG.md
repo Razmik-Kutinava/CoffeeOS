@@ -11,6 +11,10 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-11 — feat(shop): SMS.ru #51 sms/cost before send
+
+- `SmsRuClient.cost!(phone:, msg:)` → CostResult; api_id ENV only
+
 ## 2026-08-11 — feat(shop): SMS.ru #50 sms/status poll
 
 - `SmsRuClient.status!(sms_ids:)` → StatusResult; api_id только ENV

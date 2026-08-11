@@ -215,6 +215,81 @@ class Shop::SmsRuClientTest < ActiveSupport::TestCase
     assert_equal 301, err.status_code
   end
 
+  # --- #51 sms/cost ---
+
+  test "#51 CostResult is defined" do
+    assert_kind_of Class, Shop::SmsRuClient::CostResult
+  end
+
+  test "#51 cost! fallback returns zero cost" do
+    result = Shop::SmsRuClient.cost!(phone: "+79001112233", msg: "hi")
+    assert_kind_of Shop::SmsRuClient::CostResult, result
+    assert result.ok
+    assert_equal 0, result.cost
+    assert_equal 1, result.sms_count
+  end
+
+  test "#51 cost! raises ValidationError when phone or msg blank" do
+    assert_raises(Shop::SmsRuClient::ValidationError) do
+      Shop::SmsRuClient.cost!(phone: "", msg: "hi")
+    end
+    assert_raises(Shop::SmsRuClient::ValidationError) do
+      Shop::SmsRuClient.cost!(phone: "+79001112233", msg: "")
+    end
+  end
+
+  test "#51 cost! parses total_cost and per-phone cost" do
+    body = {
+      "status" => "OK",
+      "status_code" => 100,
+      "sms" => {
+        "79001112233" => {
+          "status" => "OK",
+          "status_code" => 100,
+          "cost" => 0.50,
+          "sms" => 1
+        }
+      },
+      "total_cost" => 0.50,
+      "total_sms" => 1
+    }
+
+    result = nil
+    with_live_sms_ru_response(body) do
+      result = Shop::SmsRuClient.cost!(phone: "+79001112233", msg: "hello")
+    end
+
+    assert result.ok
+    assert_equal 0.50, result.cost
+    assert_equal 0.50, result.total_cost
+    assert_equal 1, result.sms_count
+    assert_equal "79001112233", result.phone
+  end
+
+  test "#51 cost! per-phone ERROR sets ok false" do
+    body = {
+      "status" => "OK",
+      "status_code" => 100,
+      "sms" => {
+        "79001112233" => {
+          "status" => "ERROR",
+          "status_code" => 207,
+          "status_text" => "нет маршрута"
+        }
+      },
+      "total_cost" => 0,
+      "total_sms" => 0
+    }
+
+    result = nil
+    with_live_sms_ru_response(body) do
+      result = Shop::SmsRuClient.cost!(phone: "+79001112233", msg: "hello")
+    end
+
+    refute result.ok
+    assert_equal 207, result.status_code
+  end
+
   private
 
   # Rails.env.test? всегда включает fallback — для HTTP-пути временно подменяем методы.

@@ -1,15 +1,9 @@
-# todo — SMS.ru #50 sms/status · GREEN (2026-08-11)
+# todo — SMS.ru #51 sms/cost · GREEN (2026-08-11)
 
 | last_done | current_state | next_step |
 |-----------|---------------|-----------|
-| #50 `status!` GREEN | done код | webhook отдельно · или следующий метод |
-
-## #50
-- [x] `SmsRuClient.status!(sms_ids:)` → `StatusResult`
-- [x] api_id только ENV (не из доки)
-- [x] tests 19/0 · cascade 11/0
-- [ ] webhook (следующая задача)
-- [ ] auto-poll джоба — backlog (клиент готов)
+| #51 `cost!` | done | callcheck / balance / webhook / … |
 
 ## Очередь
-- [x] #48 send · [x] #49 email2sms SKIP · [x] #50 status · [ ] webhook · cost · …
+- [x] #48 send · #49 email2sms SKIP · #50 status · #51 cost
+- [ ] callcheck · balance · limits · free · senders · auth · stoplist · webhooks

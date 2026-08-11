@@ -22,10 +22,15 @@ module Shop
 
     SendResult = Struct.new(:sms_id, keyword_init: true)
     StatusResult = Struct.new(:sms_id, :status_code, :status_text, :cost, :ok, keyword_init: true)
+    CostResult = Struct.new(
+      :phone, :cost, :sms_count, :total_cost, :total_sms, :ok, :status_code, :status_text,
+      keyword_init: true
+    )
 
     FLASH_CALL_URL = URI("https://sms.ru/code/call")
     SMS_SEND_URL   = URI("https://sms.ru/sms/send")
     SMS_STATUS_URL = URI("https://sms.ru/sms/status")
+    SMS_COST_URL   = URI("https://sms.ru/sms/cost")
     MAX_MSG_LENGTH = 70
 
     def self.request_flash_call!(phone:, ip: nil)
@@ -42,6 +47,10 @@ module Shop
 
     def self.status!(sms_ids:)
       new.status!(sms_ids: sms_ids)
+    end
+
+    def self.cost!(phone:, msg:)
+      new.cost!(phone: phone, msg: msg)
     end
 
     # @return [String] 4-значный код из ответа SMS.ru
@@ -127,10 +136,69 @@ module Shop
       parse_sms_status_body!(body, requested_ids: ids)
     end
 
+    # #51 — оценка стоимости до отправки. api_id только ENV. Один номер (канон CoffeeOS).
+    # @return [CostResult]
+    def cost!(phone:, msg:)
+      digits = strip_plus(phone)
+      text = msg.to_s
+      if digits.blank? || text.blank?
+        raise ValidationError.new("phone and msg required", http_status: 422)
+      end
+
+      if fallback?
+        Rails.logger.info("[Shop::SmsRuClient] cost to #{digits} (fallback)")
+        return CostResult.new(
+          phone: digits,
+          cost: 0,
+          sms_count: 1,
+          total_cost: 0,
+          total_sms: 1,
+          ok: true,
+          status_code: 100,
+          status_text: "fallback"
+        )
+      end
+
+      payload = {
+        "api_id" => api_id,
+        "to" => digits,
+        "msg" => text,
+        "json" => "1"
+      }
+      payload["from"] = sms_from if sms_from.present?
+
+      body = post_json!(SMS_COST_URL, payload)
+      parse_sms_cost_body!(body, phone: digits)
+    end
+
     private
 
     def normalize_sms_ids(sms_ids)
       Array(sms_ids).flatten.map { |id| id.to_s.strip }.reject(&:blank?).uniq
+    end
+
+    def parse_sms_cost_body!(body, phone:)
+      ok = body["status"] == "OK" || body["status_code"].to_i == 100
+      unless ok
+        raise Error.new(
+          "SMS.ru cost: status=#{body['status']} code=#{body['status_code']}",
+          http_status: 502,
+          status_code: body["status_code"]
+        )
+      end
+
+      entry = body.dig("sms", phone) || {}
+      entry_ok = entry["status"].to_s.upcase == "OK"
+      CostResult.new(
+        phone: phone,
+        cost: entry["cost"],
+        sms_count: entry["sms"],
+        total_cost: body["total_cost"],
+        total_sms: body["total_sms"],
+        ok: entry_ok,
+        status_code: entry["status_code"]&.to_i || body["status_code"]&.to_i,
+        status_text: entry["status_text"].to_s
+      )
     end
 
     def parse_sms_status_body!(body, requested_ids:)

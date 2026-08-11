@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-11 (#50 status GREEN)  
+**Дата:** 2026-08-11 (#51 cost GREEN)  
 **Ветка:** `develop` (ahead, не push)
 
 | Сейчас | Дальше |
 |--------|--------|
-| #50 status! done | webhook / след. метод SMS.ru |
+| #51 cost! done | след. метод SMS.ru |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -16,18 +16,17 @@
 
 ## Текущий месяц (2026-08)
 
+### Сессия 2026-08-11 (#51 sms/cost)
+
+- `SmsRuClient.cost!(phone:, msg:)` → CostResult; api_id ENV only
+
 ### Сессия 2026-08-11 (#50 sms/status)
 
-- `SmsRuClient.status!(sms_ids:)` → StatusResult; api_id только ENV
-- Local: client 19/0 · cascade 11/0; webhook — отдельно
+- `status!(sms_ids:)` → StatusResult
 
-### Сессия 2026-08-11 (#49 email2sms SKIP + ENV)
+### Сессия 2026-08-11 (#49/#48)
 
-- Intake email2sms → код не делаем; runbook + local `.env`
-
-### Сессия 2026-08-11 (#48 REVIEW / GREEN)
-
-- SendResult/sms_id · GREEN `61061658` · REVIEW ok
+- email2sms SKIP · send SendResult
 
 ### Сессия 2026-08-10 (push + fly deploy v445 + MCP)
 
