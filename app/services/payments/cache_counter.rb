@@ -1,10 +1,12 @@
 # frozen_string_literal: true
 
 # SolidCache на Fly: increment ломается, key_hash может давать RangeError (ISSUES 2026-05-01).
-# Circuit breaker — отдельный MemoryStore (как Rack::Attack), достаточно для одной машины Fly.
+# Circuit breaker / webhook dedup — MemoryStore (как Rack::Attack), same-pod.
+# При 2+ web-машинах нужен shared store (Redis/Postgres) — PRACTICES / V2-CR-04.
 module Payments
   module CacheCounter
     STORE = ActiveSupport::Cache::MemoryStore.new
+    MUTEX = Mutex.new
 
     module_function
 
@@ -17,26 +19,31 @@ module Payments
     end
 
     def increment(key, expires_in:)
-      count = read(key) + 1
-      write(key, count, expires_in: expires_in)
-      count
+      MUTEX.synchronize do
+        count = read(key) + 1
+        write(key, count, expires_in: expires_in)
+        count
+      end
     end
 
     def delete(key)
-      STORE.delete(key)
+      MUTEX.synchronize { STORE.delete(key) }
     end
 
     def present?(key)
       STORE.read(key).present?
     end
 
-    # Резервирует ключ до enqueue (same-pod dedup). Возвращает false если ключ уже занят.
+    # Резервирует ключ (same-pod atomic dedup). Возвращает false если ключ уже занят.
     def claim(key, expires_in:)
       return false if key.blank?
-      return false if present?(key)
 
-      write(key, 1, expires_in: expires_in)
-      true
+      MUTEX.synchronize do
+        return false if present?(key)
+
+        write(key, 1, expires_in: expires_in)
+        true
+      end
     end
 
     def clear_circuit!
@@ -45,7 +52,7 @@ module Payments
     end
 
     def clear!
-      STORE.clear
+      MUTEX.synchronize { STORE.clear }
     end
   end
 end

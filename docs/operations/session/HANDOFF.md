@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-11 (push+deploy v447 · #61 webhooks)  
-**Ветка:** `develop` (= origin)
+**Дата:** 2026-08-11 (Bugbot fixes Tbank/CI · local)  
+**Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Fly **v447** · webhook URL готов | владелец вносит URL в ЛК SMS.ru |
+| Bugbot 4/4 fixed local | security-review · push по апруву · SMS.ru URL в ЛК |
 
-**last_done:** push `858821af` · `fly deploy` coffeeos v447 · smoke /up+webhook 401+Point A  
-**next_step:** вписать URL в ЛК SMS.ru (карточка ниже в чате)
+**last_done:** Tbank claim release + Mutex CacheCounter + CI develop/Postgres  
+**next_step:** `/review` security · push/deploy только по апруву
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -18,6 +18,15 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Bugbot fixes (2026-08-11)
+
+| Что | Статус |
+|-----|--------|
+| Tbank webhook claim release on 500 | **`[x]`** local |
+| CacheCounter Mutex | **`[x]`** same-pod |
+| CI develop + Postgres | **`[x]`** workflow |
+| Security review | очередь |
 
 ### C. Legacy shop triage (2026-08-09)
 

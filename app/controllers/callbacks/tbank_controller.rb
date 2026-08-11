@@ -9,6 +9,7 @@ module Callbacks
     IDEMPOTENCY_TTL = 24.hours
 
     def notify
+      idem_key = nil
       payload = parse_payload
       return render_bad_request("missing payload") unless payload
 
@@ -19,6 +20,7 @@ module Callbacks
 
       # Idempotency: Т-Банк повторяет webhook при таймауте.
       # Ключ по PaymentId + Status — защищаем от дублирования.
+      # Claim до обработки; при полном фейле (500) — release, иначе retry банка залипнет.
       idem_key = idempotency_key(payload)
       if idem_key && !Payments::CacheCounter.claim(idem_key, expires_in: IDEMPOTENCY_TTL)
         Rails.logger.info("[Tbank::Callback] Duplicate webhook ignored, key=#{idem_key}")
@@ -50,6 +52,7 @@ module Callbacks
       Rails.logger.info("[Tbank::Callback] Enqueued OrderId=#{payload['OrderId']}, status=#{tbank_status}")
       render json: { ok: true }
     rescue StandardError => e
+      release_idempotency_claim(idem_key)
       Rails.logger.error("[Tbank::Callback] Error: #{e.class} #{e.message}")
       render json: { error: "internal error" }, status: :internal_server_error
     end
@@ -71,6 +74,13 @@ module Callbacks
       return nil if payment_id.blank? || status.blank?
 
       "tbank:callback:#{payment_id}:#{status}"
+    end
+
+    def release_idempotency_claim(key)
+      return if key.blank?
+
+      Payments::CacheCounter.delete(key)
+      Rails.logger.info("[Tbank::Callback] Released idempotency claim key=#{key}")
     end
 
     def render_bad_request(msg)

@@ -41,6 +41,32 @@ class Callbacks::TbankControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  # Симулирует полный провал perform_now + enqueue → 500 (для release claim).
+  module FakeJobTotalFail
+    mattr_accessor :enabled, default: false
+
+    module Override
+      def perform_now(*)
+        raise StandardError, "simulated perform_now failure" if FakeJobTotalFail.enabled
+
+        super
+      end
+
+      def perform_later(*)
+        raise SolidQueue::Job::EnqueueError, "simulated enqueue failure" if FakeJobTotalFail.enabled
+
+        super
+      end
+    end
+
+    def self.install!
+      return if @prepended
+
+      Payments::TbankCallbackJob.singleton_class.prepend(Override)
+      @prepended = true
+    end
+  end
+
   setup do
     ENV["TBANK_TERMINAL_KEY"] = "TestTerminal"
     ENV["TBANK_PASSWORD"]     = "TestPassword"
@@ -48,6 +74,8 @@ class Callbacks::TbankControllerTest < ActionDispatch::IntegrationTest
     @tenant = create_tenant!
     FakePollingConfirm.install!
     FakePollingConfirm.enabled = false
+    FakeJobTotalFail.install!
+    FakeJobTotalFail.enabled = false
 
     @order = Order.create!(
       tenant:          @tenant,
@@ -73,6 +101,7 @@ class Callbacks::TbankControllerTest < ActionDispatch::IntegrationTest
   teardown do
     ENV.delete("TBANK_TERMINAL_KEY")
     ENV.delete("TBANK_PASSWORD")
+    FakeJobTotalFail.enabled = false
     Payments::CacheCounter.clear!
   end
 
@@ -172,6 +201,24 @@ class Callbacks::TbankControllerTest < ActionDispatch::IntegrationTest
     post_notify(tbank_payload(status: "CONFIRMED"))
     assert_response :ok
     assert_equal true, JSON.parse(response.body)["duplicate"]
+  end
+
+  test "releases idempotency claim when job and enqueue both fail so bank retry can reprocess" do
+    idem_key = "tbank:callback:tbank_pay_777:CONFIRMED"
+    FakeJobTotalFail.enabled = true
+
+    post_notify(tbank_payload(status: "CONFIRMED"))
+    assert_response :internal_server_error
+    assert_not Payments::CacheCounter.present?(idem_key), "claim must be released on 500"
+    assert_equal "pending", @payment.reload.status
+
+    FakeJobTotalFail.enabled = false
+
+    post_notify(tbank_payload(status: "CONFIRMED"))
+    assert_response :ok
+    assert_nil JSON.parse(response.body)["duplicate"]
+    assert_equal "succeeded", @payment.reload.status
+    assert_equal "accepted", @order.reload.status
   end
 
   # ---------------------------------------------------------------------------

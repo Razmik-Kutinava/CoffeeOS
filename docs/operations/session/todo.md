@@ -1,26 +1,21 @@
-# todo — SMS.ru #61 webhooks · GREEN (2026-08-11)
+# todo — Bugbot fixes: Tbank idempotency + CacheCounter + CI (2026-08-11)
 
 | last_done | current_state | next_step |
 |-----------|---------------|-----------|
-| #61 `POST /callbacks/sms_ru` | done local | deploy + URL в ЛК SMS.ru · callcheck funnel |
+| Bugbot 4 findings fixed | done local | security-review · push по апруву |
 
-## Очередь
-- [x] #48–#61 (клиент + stoplist + webhooks)
-- [ ] PWA funnel на callcheck — только по ТЗ
-- [ ] Fly secrets + webhook URL в ЛК — апрув владельца
-
-## Файлы (ожидаемо) — #61
-- `app/controllers/callbacks/sms_ru_controller.rb`
-- `app/services/callbacks/sms_ru_webhook.rb`
-- `config/routes.rb`
-- `test/controllers/callbacks/sms_ru_controller_test.rb`
-- `docs/integrations/sms-auth.md`
+## Файлы
+- `app/controllers/callbacks/tbank_controller.rb`
+- `app/services/payments/cache_counter.rb`
+- `.github/workflows/ci.yml`
+- `test/controllers/callbacks/tbank_controller_test.rb`
+- `test/services/payments/cache_counter_test.rb`
 
 ## Не ломать
-- Т-Банк `POST /callbacks/tbank`
-- cascade SMS `order_notification_logs` (status sent)
-- OTP flash_call funnel
+- CONFIRMED → accepted/succeeded
+- duplicate → `duplicate: true`
+- race AUTHORIZED после polling
+- SMS.ru webhook (тот же CacheCounter)
 
 ## Проверка
-- `bin/rails test test/controllers/callbacks/sms_ru_controller_test.rb`
-- `bin/rails test test/services/shop/sms_ru_client_test.rb`
+- `ruby bin/rails test test/controllers/callbacks/tbank_controller_test.rb test/services/payments/cache_counter_test.rb test/services/payments/tbank_adapter_test.rb` → **47/0 PASS**

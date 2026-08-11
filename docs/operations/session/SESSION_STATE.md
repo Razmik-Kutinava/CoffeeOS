@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-11 (Fly v447 · #61)  
-**Ветка:** `develop` (= origin)
+**Дата:** 2026-08-11 (Bugbot fixes: Tbank claim + CI)  
+**Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| deployed webhooks | URL → ЛК SMS.ru |
+| Bugbot 4 findings fixed local | security-review · push/deploy по апруву |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,13 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-11 (Bugbot: Tbank idempotency + CI)
+
+- Tbank callback: release claim на 500 → bank retry не залипает
+- CacheCounter: Mutex на claim/increment/delete/clear (same-pod)
+- CI: push `develop`+`main`, Postgres 16 service для test/system-test
+- Local: `ruby bin/rails test` tbank_controller + cache_counter + tbank_adapter → **47/0**
 
 ### Сессия 2026-08-11 (push + fly deploy v447)
 

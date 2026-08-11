@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-11 — fix(payments): Tbank claim release + CacheCounter Mutex + CI Postgres
+
+- Bugbot: webhook claim освобождается на 500 → retry банка не `duplicate`
+- `Payments::CacheCounter` — Mutex на claim/increment (same-pod)
+- CI: push `develop`+`main` (было `master`); Postgres 16 service для test jobs
+- Тесты: tbank_controller + cache_counter + tbank_adapter → 47/0
+
 ## 2026-08-11 — deploy: coffeeos v447 (#61 webhooks)
 
 - push develop `858821af` · fly deploy · smoke `/up` 200 · `POST /callbacks/sms_ru` 401(bad hash) · Point A shop 200

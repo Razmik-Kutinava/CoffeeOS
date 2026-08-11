@@ -10,4 +10,27 @@ class Payments::CacheCounterTest < ActiveSupport::TestCase
   ensure
     Payments::CacheCounter.delete(key)
   end
+
+  test "claim is exclusive for the same key" do
+    key = "test:claim:#{SecureRandom.hex(4)}"
+    assert Payments::CacheCounter.claim(key, expires_in: 1.minute)
+    assert_not Payments::CacheCounter.claim(key, expires_in: 1.minute)
+    assert Payments::CacheCounter.present?(key)
+  ensure
+    Payments::CacheCounter.delete(key)
+  end
+
+  test "blank key is never claimed" do
+    assert_not Payments::CacheCounter.claim(nil, expires_in: 1.minute)
+    assert_not Payments::CacheCounter.claim("", expires_in: 1.minute)
+  end
+
+  test "delete releases claim for a new claim" do
+    key = "test:claim:release:#{SecureRandom.hex(4)}"
+    assert Payments::CacheCounter.claim(key, expires_in: 1.minute)
+    Payments::CacheCounter.delete(key)
+    assert Payments::CacheCounter.claim(key, expires_in: 1.minute)
+  ensure
+    Payments::CacheCounter.delete(key)
+  end
 end
