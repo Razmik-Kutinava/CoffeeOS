@@ -79,4 +79,86 @@ class Shop::SmsRuClientTest < ActiveSupport::TestCase
       Shop::SmsRuClient.send_sms!(phone: "+79001112233", code: "9999")
     end
   end
+
+  # --- #48 sms/send Result + sms_id + per-phone ERROR ---
+
+  test "#48 SendResult is defined with sms_id" do
+    assert_kind_of Class, Shop::SmsRuClient::SendResult
+    result = Shop::SmsRuClient::SendResult.new(sms_id: "000000-1")
+    assert_equal "000000-1", result.sms_id
+  end
+
+  test "#48 send_message! fallback returns SendResult with fallback sms_id" do
+    result = Shop::SmsRuClient.send_message!(phone: "+79001112233", msg: "hi")
+    assert_kind_of Shop::SmsRuClient::SendResult, result
+    assert_match(/\Afallback-/, result.sms_id.to_s)
+  end
+
+  test "#48 send_sms! fallback returns SendResult with fallback sms_id" do
+    result = Shop::SmsRuClient.send_sms!(phone: "+79001112233", code: "1234")
+    assert_kind_of Shop::SmsRuClient::SendResult, result
+    assert_match(/\Afallback-/, result.sms_id.to_s)
+  end
+
+  test "#48 send_message! returns sms_id from SMS.ru json when HTTP OK" do
+    body = {
+      "status" => "OK",
+      "status_code" => 100,
+      "sms" => {
+        "79001112233" => {
+          "status" => "OK",
+          "status_code" => 100,
+          "sms_id" => "000000-10000000"
+        }
+      },
+      "balance" => 4122.56
+    }
+
+    result = nil
+    with_live_sms_ru_response(body) do
+      result = Shop::SmsRuClient.send_message!(phone: "+79001112233", msg: "hello")
+    end
+
+    assert_kind_of Shop::SmsRuClient::SendResult, result
+    assert_equal "000000-10000000", result.sms_id
+  end
+
+  test "#48 send_message! raises Error when per-phone status is ERROR" do
+    body = {
+      "status" => "OK",
+      "status_code" => 100,
+      "sms" => {
+        "79001112233" => {
+          "status" => "ERROR",
+          "status_code" => 207,
+          "status_text" => "На этот номер нет маршрута"
+        }
+      },
+      "balance" => 4122.56
+    }
+
+    err = assert_raises(Shop::SmsRuClient::Error) do
+      with_live_sms_ru_response(body) do
+        Shop::SmsRuClient.send_message!(phone: "+79001112233", msg: "hello")
+      end
+    end
+    assert_match(/207/, err.message)
+    assert_match(/маршрута|207/, err.message)
+    assert_equal 207, err.status_code if err.respond_to?(:status_code)
+  end
+
+  private
+
+  # Rails.env.test? всегда включает fallback — для HTTP-пути временно подменяем методы.
+  def with_live_sms_ru_response(body)
+    klass = Shop::SmsRuClient
+    orig_fb = klass.instance_method(:fallback?)
+    orig_post = klass.instance_method(:post_json!)
+    klass.define_method(:fallback?) { false }
+    klass.define_method(:post_json!) { |_uri, _params| body }
+    yield
+  ensure
+    klass.define_method(:fallback?, orig_fb)
+    klass.define_method(:post_json!, orig_post)
+  end
 end
