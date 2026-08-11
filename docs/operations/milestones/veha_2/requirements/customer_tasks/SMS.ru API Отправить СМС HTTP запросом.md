@@ -2,7 +2,7 @@
 
 **Дата интейка:** 2026-08-11  
 **Артефакты:** docs/operations/milestones/veha_2/artifacts/sms_ru_api_send_http/  
-**Статус:** интейк `[x]` · bridge enrich `[x]` · SPEC/код `[ ]` ждёт go
+**Статус:** интейк `[x]` · bridge `[x]` · SPEC/RED/GREEN `[x]` · REVIEW `[x]` 2026-08-11 · апрув заказчика `[ ]`
 
 > **Секреты:** в исходном тексте из ЛК SMS.ru был подставлен `api_id`. В репозитории заменён на `[REDACTED_API_ID]`. Живой ключ — только `ENV['SMS_RU_API_ID']`, не в git.
 

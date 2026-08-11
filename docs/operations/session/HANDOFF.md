@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-11 (SMS.ru #48 SPEC)  
-**Ветка:** `develop`
+**Дата:** 2026-08-11 (#48 REVIEW)  
+**Ветка:** `develop` (ahead origin, не push)
 
 | Сейчас | Дальше |
 |--------|--------|
-| #48 **SPEC** в todo ✅ | намерение → RED (sms_id + parse) |
+| #48 sms/send **GREEN+REVIEW** ✅ | следующий метод SMS.ru **или** push |
 
-**last_done:** PHASE 1 SPEC #48 sms/send (Result/`sms_id`, notifier payload, без DDL)  
-**next_step:** RED — `sms_ru_client_test` + `order_ready_paid_notifier_test`
+**last_done:** #48 SendResult/sms_id + REVIEW (bugbot 0 · security OK) · `61061658`  
+**next_step:** кидай следующий кусок доки SMS.ru · push только по просьбе
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

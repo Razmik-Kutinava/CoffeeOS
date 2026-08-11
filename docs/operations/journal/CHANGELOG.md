@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-11 — feat(shop): SMS.ru #48 sms/send SendResult + REVIEW
+
+- GREEN `61061658`: parse `sms_id`, per-phone ERROR, cascade `payload.sms_id`
+- REVIEW: bugbot 0 · security OK · Entire skip (no trailer)
+- Local PASS (client/notifier/cascade/phone_otp); Fly MCP skip
+
 ## 2026-08-11 — docs: SPEC SMS.ru #48 sms/send (Result + sms_id)
 
 - todo: Acceptance, файлы, Не ломать, Проверка; RED следующий

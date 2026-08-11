@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-11 (SMS.ru #48 SPEC)  
-**Ветка:** `develop`
+**Дата:** 2026-08-11 (#48 REVIEW)  
+**Ветка:** `develop` (ahead, не push)
 
 | Сейчас | Дальше |
 |--------|--------|
-| #48 SPEC в todo | RED при намерении |
+| #48 done код+REVIEW | следующий метод SMS.ru |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -16,17 +16,20 @@
 
 ## Текущий месяц (2026-08)
 
-### Сессия 2026-08-11 (#48 SPEC sms/send)
+### Сессия 2026-08-11 (#48 REVIEW)
 
-- todo: Acceptance · файлы · Не ломать · Проверка
-- Scope: Result+`sms_id`, per-phone ERROR, payload лога; без DDL / shop-proxy / captcha
-- Ждём RED
+- bugbot: no bugs · security: no medium+ · Entire: skip (no checkpoint trailer)
+- Local: client 14/0 · notifier 1/0 · cascade 11/0 · phone_otp 6/0
+- Backlog: fail-closed missing `sms{}` (reliability)
+
+### Сессия 2026-08-11 (#48 SPEC / RED / GREEN)
+
+- SPEC → RED `73238b9b` → GREEN `61061658` SendResult/sms_id/per-phone ERROR + cascade payload
 
 ### Сессия 2026-08-11 (SMS.ru #48 sms/send intake + bridge)
 
 - customer_tasks + artifacts `sms_ru_api_send_http`; CBR #48
-- `sms-auth.md`: контракт `sms/send` (params / gap sms_id / коды); api_id **редэкт**
-- Код клиента не трогали — ждём go или следующий метод доки
+- `sms-auth.md`: контракт `sms/send`; api_id **редэкт**
 
 ### Сессия 2026-08-10 (push + fly deploy v445 + MCP)
 
