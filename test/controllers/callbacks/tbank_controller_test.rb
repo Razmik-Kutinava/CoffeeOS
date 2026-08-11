@@ -231,6 +231,17 @@ class Callbacks::TbankControllerTest < ActionDispatch::IntegrationTest
     assert_equal "accepted", @order.reload.status
   end
 
+  test "duplicate path does not delete another request claim [TDD]" do
+    idem_key = "tbank:callback:tbank_pay_777:CONFIRMED"
+    assert Rails.cache.write(idem_key, 1, expires_in: 1.hour, unless_exist: true)
+
+    post_notify(tbank_payload(status: "CONFIRMED"))
+    assert_response :ok
+    assert_equal true, JSON.parse(response.body)["duplicate"]
+    assert Rails.cache.exist?(idem_key), "duplicate handler must not release foreign/in-flight claim"
+    assert_equal "pending", @payment.reload.status
+  end
+
   test "rejects oversized webhook body with 413 [TDD]" do
     huge_body = "x" * (256_000 + 1)
     post "/callbacks/tbank",

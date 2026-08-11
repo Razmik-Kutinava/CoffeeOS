@@ -34,6 +34,7 @@ class Callbacks::SmsRuControllerTest < ActionDispatch::IntegrationTest
     ENV.delete("SMS_RU_API_ID")
     Current.reset
     Payments::CacheCounter.clear!
+    Rails.cache.clear
   end
 
   test "#61 valid sms_status updates delivery_status and returns 100" do
@@ -66,8 +67,8 @@ class Callbacks::SmsRuControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_equal "100", response.body
-    raw = Payments::CacheCounter::STORE.read("sms_ru:callcheck:201737-542")
-    assert_includes raw, "401"
+    raw = Rails.cache.read("sms_ru:callcheck:201737-542")
+    assert_includes raw.to_s, "401"
   end
 
   test "#61 invalid hash returns 401 without body 100" do
@@ -89,6 +90,26 @@ class Callbacks::SmsRuControllerTest < ActionDispatch::IntegrationTest
     assert_equal "100", response.body
     @log.reload
     assert_equal 1, Array(@log.payload["delivery_status_history"]).size
+  end
+
+  test "#61 idempotency claim lives in Rails.cache not CacheCounter [TDD]" do
+    entry = "sms_status\n201737-100000\n103\n1786346415"
+    post callbacks_sms_ru_path, params: signed_params([entry])
+    assert_response :success
+
+    idem_key = "sms_ru:webhook:sms_status:201737-100000:103:1786346415"
+    assert Rails.cache.exist?(idem_key), "shared Rails.cache claim required for multi-web"
+    assert_not Payments::CacheCounter.present?(idem_key)
+  end
+
+  test "#61 rejects oversized body with 413 [TDD]" do
+    huge = "x" * (Callbacks::SmsRuController::MAX_BODY_BYTES + 1)
+    post callbacks_sms_ru_path,
+      params: huge,
+      headers: { "Content-Type" => "application/x-www-form-urlencoded" }
+
+    assert_response :content_too_large
+    assert_equal "too large", response.body
   end
 
   private
