@@ -22,7 +22,7 @@
 |------------------|--------|
 | Любой `/shop/api/*`, cart, orders, frequent | [`shop-api.md`](shop-api.md) |
 | Оплата, webhook, карты, RebillId, СБП, widget | [`tbank.md`](tbank.md) |
-| Flash call, SMS OTP, sms/send|status|cost, callcheck, my/balance|limit | [`sms-auth.md`](sms-auth.md) · runbook [`SMS_RU_SECRETS.md`](../operations/runbooks/SMS_RU_SECRETS.md) |
+| Flash call, SMS OTP, sms/send|status|cost, callcheck, my/balance|limit|free | [`sms-auth.md`](sms-auth.md) · runbook [`SMS_RU_SECRETS.md`](../operations/runbooks/SMS_RU_SECRETS.md) |
 | Cable, push, Wallet, cascade ready, barista→PWA | [`pwa-realtime.md`](pwa-realtime.md) |
 | FCM register, legacy fiscal callbacks, loyalty stub | [`notify-loyalty.md`](notify-loyalty.md) |
 | Gap audit PWA/payments batch | [`gap-matrix-pwa-payments.md`](gap-matrix-pwa-payments.md) |
@@ -49,4 +49,4 @@ Webhook idem: `tbank:callback:{PaymentId}:{Status}`. Terminal payment status **�
 
 Секция «Затронутые сервисы»: индекс + пути секций (не `@codebase`).
 
-*2026-08-11 · #54 my/limit · #53 balance · #52 callcheck · #51–#48 …*
+*2026-08-11 · #55 my/free · #54 limit · #53 balance · #52–#48 …*

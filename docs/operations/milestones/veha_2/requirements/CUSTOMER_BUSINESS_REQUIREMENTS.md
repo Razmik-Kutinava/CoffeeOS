@@ -140,6 +140,7 @@
 | SMS.ru callcheck | **Интеграции / SMS.ru** — auth по входящему звонку (`callcheck_add!`/`status!`); PWA funnel не трогали | [ТЗ](customer_tasks/SMS.ru%20API%20Авторизация%20по%20звонку%20callcheck.md) · [`artifacts/sms_ru_callcheck/`](../artifacts/sms_ru_callcheck/) | **клиент GREEN `[x]`** 2026-08-11 · воронка `[ ]` · апрув `[ ]` |
 | SMS.ru my/balance | **Интеграции / SMS.ru** — баланс аккаунта (`balance!`) | [ТЗ](customer_tasks/SMS.ru%20API%20Получить%20информацию%20о%20балансе.md) · [`artifacts/sms_ru_my_balance/`](../artifacts/sms_ru_my_balance/) | **GREEN `[x]`** 2026-08-11 · апрув `[ ]` |
 | SMS.ru my/limit | **Интеграции / SMS.ru** — дневной лимит (`limit!`) | [ТЗ](customer_tasks/SMS.ru%20API%20Получить%20информацию%20о%20дневном%20лимите.md) · [`artifacts/sms_ru_my_limit/`](../artifacts/sms_ru_my_limit/) | **GREEN `[x]`** 2026-08-11 · апрув `[ ]` |
+| SMS.ru my/free | **Интеграции / SMS.ru** — бесплатные SMS (`free!`) | [ТЗ](customer_tasks/SMS.ru%20API%20Получить%20информацию%20о%20бесплатных%20сообщениях.md) · [`artifacts/sms_ru_my_free/`](../artifacts/sms_ru_my_free/) | **GREEN `[x]`** 2026-08-11 · апрув `[ ]` |
 
 > **B1.8 (не забыть):** сейчас письма с **подтверждённого личного sender** в Brevo. Когда будет **свой домен** — завести **кофейную почту** (напр. `noreply@бренд.ru`), аутентифицировать домен в Brevo, обновить `MAIL_FROM` + secrets. Код OTP/ActionMailer менять не нужно.
 
@@ -204,6 +205,7 @@
 | 52 | **SMS.ru callcheck** | `callcheck_add!` / `callcheck_status!`; ≠ flash_call | **клиент GREEN `[x]`** · PWA funnel `[ ]` | [Авторизация по звонку…](customer_tasks/SMS.ru%20API%20Авторизация%20по%20звонку%20callcheck.md) · [artifacts](../artifacts/sms_ru_callcheck/) |
 | 53 | **SMS.ru my/balance** | `balance!` текущий баланс | **GREEN `[x]`** 2026-08-11 · апрув `[ ]` | [Баланс…](customer_tasks/SMS.ru%20API%20Получить%20информацию%20о%20балансе.md) · [artifacts](../artifacts/sms_ru_my_balance/) |
 | 54 | **SMS.ru my/limit** | `limit!` total_limit / used_today | **GREEN `[x]`** 2026-08-11 · апрув `[ ]` | [Лимит…](customer_tasks/SMS.ru%20API%20Получить%20информацию%20о%20дневном%20лимите.md) · [artifacts](../artifacts/sms_ru_my_limit/) |
+| 55 | **SMS.ru my/free** | `free!` total_free / used_today | **GREEN `[x]`** 2026-08-11 · апрув `[ ]` | [Бесплатные…](customer_tasks/SMS.ru%20API%20Получить%20информацию%20о%20бесплатных%20сообщениях.md) · [artifacts](../artifacts/sms_ru_my_free/) |
 
 ---
 

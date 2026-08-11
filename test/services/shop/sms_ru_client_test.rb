@@ -399,6 +399,35 @@ class Shop::SmsRuClientTest < ActiveSupport::TestCase
     assert_equal 200, err.status_code
   end
 
+  # --- #55 my/free ---
+
+  test "#55 free! fallback returns zeros" do
+    result = Shop::SmsRuClient.free!
+    assert_kind_of Shop::SmsRuClient::FreeResult, result
+    assert_equal 0, result.total_free
+    assert_equal 0, result.used_today
+  end
+
+  test "#55 free! parses total_free and used_today" do
+    body = { "status" => "OK", "status_code" => 100, "total_free" => 5, "used_today" => 3 }
+    result = nil
+    with_live_sms_ru_response(body) do
+      result = Shop::SmsRuClient.free!
+    end
+    assert_equal 5, result.total_free
+    assert_equal 3, result.used_today
+  end
+
+  test "#55 free! raises on top-level ERROR" do
+    body = { "status" => "ERROR", "status_code" => 301 }
+    err = assert_raises(Shop::SmsRuClient::Error) do
+      with_live_sms_ru_response(body) do
+        Shop::SmsRuClient.free!
+      end
+    end
+    assert_equal 301, err.status_code
+  end
+
   private
 
   # Rails.env.test? всегда включает fallback — для HTTP-пути временно подменяем методы.

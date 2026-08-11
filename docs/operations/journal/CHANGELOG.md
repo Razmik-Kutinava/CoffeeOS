@@ -11,6 +11,10 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-11 — feat(shop): SMS.ru #55 my/free
+
+- `SmsRuClient.free!` → `FreeResult` (total_free, used_today); api_id только ENV
+
 ## 2026-08-11 — feat(shop): SMS.ru #54 my/limit
 
 - `SmsRuClient.limit!` → `LimitResult` (total_limit, used_today); api_id только ENV

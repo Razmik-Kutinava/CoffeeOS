@@ -135,6 +135,12 @@ api_id только ENV · не shop-прокси (для health/ops).
 **Вызов:** `SmsRuClient.limit!` → `LimitResult` (`total_limit`, `used_today`)  
 api_id только ENV · не shop-прокси. Код 206 при send = дневной лимит исчерпан.
 
+### SMS.ru `my/free` (#55)
+
+**URL:** `POST https://sms.ru/my/free` · `json=1`  
+**Вызов:** `SmsRuClient.free!` → `FreeResult` (`total_free`, `used_today`)  
+Бесплатные SMS на свой номер за день · api_id только ENV · не shop-прокси.
+
 ### Антифлуд
 
 - SMS.ru: captcha на UI + параметр `ip`

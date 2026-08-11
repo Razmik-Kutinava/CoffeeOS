@@ -5,7 +5,7 @@ require "json"
 require "uri"
 
 module Shop
-  # Единый клиент SMS.ru: flash_call, sms/*, callcheck, my/balance|limit.
+  # Единый клиент SMS.ru: flash_call, sms/*, callcheck, my/balance|limit|free.
   # Ключи только из ENV: SMS_RU_API_ID, SMS_RU_FROM.
   class SmsRuClient
     class Error < StandardError
@@ -34,6 +34,7 @@ module Shop
     )
     BalanceResult = Struct.new(:balance, keyword_init: true)
     LimitResult = Struct.new(:total_limit, :used_today, keyword_init: true)
+    FreeResult = Struct.new(:total_free, :used_today, keyword_init: true)
 
     FLASH_CALL_URL     = URI("https://sms.ru/code/call")
     SMS_SEND_URL       = URI("https://sms.ru/sms/send")
@@ -43,6 +44,7 @@ module Shop
     CALLCHECK_STATUS_URL = URI("https://sms.ru/callcheck/status")
     MY_BALANCE_URL     = URI("https://sms.ru/my/balance")
     MY_LIMIT_URL       = URI("https://sms.ru/my/limit")
+    MY_FREE_URL        = URI("https://sms.ru/my/free")
     MAX_MSG_LENGTH = 70
     CALLCHECK_CONFIRMED = 401
     CALLCHECK_PENDING = 400
@@ -82,6 +84,10 @@ module Shop
 
     def self.limit!
       new.limit!
+    end
+
+    def self.free!
+      new.free!
     end
 
     # @return [String] 4-значный код из ответа SMS.ru
@@ -283,6 +289,21 @@ module Shop
       parse_limit_body!(body)
     end
 
+    # #55 — бесплатные SMS на свой номер. api_id только ENV. Не shop-прокси.
+    # @return [FreeResult]
+    def free!
+      if fallback?
+        Rails.logger.info("[Shop::SmsRuClient] free (fallback)")
+        return FreeResult.new(total_free: 0, used_today: 0)
+      end
+
+      body = post_json!(MY_FREE_URL, {
+        "api_id" => api_id,
+        "json" => "1"
+      })
+      parse_free_body!(body)
+    end
+
     private
 
     def normalize_sms_ids(sms_ids)
@@ -314,6 +335,22 @@ module Shop
 
       LimitResult.new(
         total_limit: body["total_limit"].to_i,
+        used_today: body["used_today"].to_i
+      )
+    end
+
+    def parse_free_body!(body)
+      ok = body["status"] == "OK" || body["status_code"].to_i == 100
+      unless ok
+        raise Error.new(
+          "SMS.ru my/free: status=#{body['status']} code=#{body['status_code']}",
+          http_status: 502,
+          status_code: body["status_code"]
+        )
+      end
+
+      FreeResult.new(
+        total_free: body["total_free"].to_i,
         used_today: body["used_today"].to_i
       )
     end

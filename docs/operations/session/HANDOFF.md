@@ -2,14 +2,14 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-11 (#54 my/limit)  
+**Дата:** 2026-08-11 (#55 my/free)  
 **Ветка:** `develop` (ahead, не push)
 
 | Сейчас | Дальше |
 |--------|--------|
-| #54 `limit!` ✅ | free / senders / auth / stoplist / webhooks |
+| #55 `free!` ✅ | senders / auth / stoplist / webhooks |
 
-**last_done:** `SmsRuClient.limit!` → `LimitResult` (ENV api_id)  
+**last_done:** `SmsRuClient.free!` → `FreeResult` (ENV api_id)  
 **next_step:** кидай следующий метод SMS.ru
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
