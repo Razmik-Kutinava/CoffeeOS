@@ -1,16 +1,15 @@
-# todo — SMS.ru #49 email2sms SKIP + ENV (2026-08-11)
+# todo — SMS.ru #50 sms/status · GREEN (2026-08-11)
 
 | last_done | current_state | next_step |
 |-----------|---------------|-----------|
-| #49 intake SKIP · local `.env` SMS block | HTTP-шлюз готов (код #48) | владелец: боевой api_id/FROM в `.env` · Fly secrets по апруву · следующий метод SMS.ru |
+| #50 `status!` GREEN | done код | webhook отдельно · или следующий метод |
 
-## #49 email2sms
-- [x] customer_tasks + artifacts (код **не** делаем)
-- [x] runbook `SMS_RU_SECRETS.md`
-- [x] local `.env`: `SMS_RU_API_ID` + `SMS_RU_FROM` + `SHOP_OTP_LOG_FALLBACK=false` (плейсхолдер — замени сам)
-- [ ] Fly `fly secrets set` — только по явной просьбе
+## #50
+- [x] `SmsRuClient.status!(sms_ids:)` → `StatusResult`
+- [x] api_id только ENV (не из доки)
+- [x] tests 19/0 · cascade 11/0
+- [ ] webhook (следующая задача)
+- [ ] auto-poll джоба — backlog (клиент готов)
 
 ## Очередь
-- [x] #48 sms/send HTTP
-- [x] #49 email2sms → SKIP
-- [ ] status · cost · callcheck · balance · …
+- [x] #48 send · [x] #49 email2sms SKIP · [x] #50 status · [ ] webhook · cost · …

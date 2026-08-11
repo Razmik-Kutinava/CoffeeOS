@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-11 (#49 SKIP + ENV)  
+**Дата:** 2026-08-11 (#50 status GREEN)  
 **Ветка:** `develop` (ahead, не push)
 
 | Сейчас | Дальше |
 |--------|--------|
-| #49 SKIP · local SMS ENV | боевой ключ владельцем · след. метод |
+| #50 status! done | webhook / след. метод SMS.ru |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -16,24 +16,18 @@
 
 ## Текущий месяц (2026-08)
 
+### Сессия 2026-08-11 (#50 sms/status)
+
+- `SmsRuClient.status!(sms_ids:)` → StatusResult; api_id только ENV
+- Local: client 19/0 · cascade 11/0; webhook — отдельно
+
 ### Сессия 2026-08-11 (#49 email2sms SKIP + ENV)
 
-- Intake email2sms → **код не делаем** (канон HTTP #48)
-- Runbook `SMS_RU_SECRETS.md`; `.env` (gitignored): API_ID + FROM + FALLBACK=false
-- Fly secrets — не трогали (нужен апрув)
+- Intake email2sms → код не делаем; runbook + local `.env`
 
-### Сессия 2026-08-11 (#48 REVIEW)
+### Сессия 2026-08-11 (#48 REVIEW / GREEN)
 
-- bugbot: no bugs · security: no medium+ · Entire: skip
-- Local PASS; GREEN `61061658`
-
-### Сессия 2026-08-11 (#48 SPEC / RED / GREEN)
-
-- SPEC → RED → GREEN SendResult/sms_id
-
-### Сессия 2026-08-11 (SMS.ru #48 sms/send intake + bridge)
-
-- customer_tasks + artifacts; CBR #48; api_id редэкт
+- SendResult/sms_id · GREEN `61061658` · REVIEW ok
 
 ### Сессия 2026-08-10 (push + fly deploy v445 + MCP)
 

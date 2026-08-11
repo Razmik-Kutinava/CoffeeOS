@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-11 (#49 email2sms SKIP + ENV)  
+**Дата:** 2026-08-11 (#50 sms/status GREEN)  
 **Ветка:** `develop` (ahead, не push)
 
 | Сейчас | Дальше |
 |--------|--------|
-| #48 HTTP ✅ · #49 email2sms **SKIP** · local ENV блок ✅ | боевые ключи в `.env`/Fly · следующий метод SMS.ru |
+| #50 `status!` ✅ | webhook SMS.ru **или** следующий метод |
 
-**last_done:** #49 intake SKIP + `SMS_RU_SECRETS` + `.env` плейсхолдеры (не в git)  
-**next_step:** владелец правит api_id/FROM · Fly secrets по просьбе · или следующий метод доки
+**last_done:** #50 poll статуса по `sms_id` (ENV api_id)  
+**next_step:** webhook / cost / … · Fly secrets по просьбе
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

@@ -147,6 +147,74 @@ class Shop::SmsRuClientTest < ActiveSupport::TestCase
     assert_equal 207, err.status_code if err.respond_to?(:status_code)
   end
 
+  # --- #50 sms/status ---
+
+  test "#50 StatusResult is defined" do
+    assert_kind_of Class, Shop::SmsRuClient::StatusResult
+    r = Shop::SmsRuClient::StatusResult.new(
+      sms_id: "000000-1", status_code: 103, status_text: "ok", cost: 0.5, ok: true
+    )
+    assert_equal 103, r.status_code
+    assert r.ok
+  end
+
+  test "#50 status! fallback returns delivered StatusResult" do
+    results = Shop::SmsRuClient.status!(sms_ids: "fallback-abc")
+    assert_equal 1, results.size
+    assert_equal "fallback-abc", results.first.sms_id
+    assert_equal 103, results.first.status_code
+    assert results.first.ok
+  end
+
+  test "#50 status! raises ValidationError when sms_ids blank" do
+    assert_raises(Shop::SmsRuClient::ValidationError) do
+      Shop::SmsRuClient.status!(sms_ids: [])
+    end
+  end
+
+  test "#50 status! parses json delivery codes" do
+    body = {
+      "status" => "OK",
+      "status_code" => 100,
+      "sms" => {
+        "000000-000001" => {
+          "status" => "OK",
+          "status_code" => 103,
+          "cost" => 0.50,
+          "status_text" => "Сообщение доставлено"
+        },
+        "000000-000003" => {
+          "status" => "ERROR",
+          "status_code" => -1,
+          "status_text" => "Сообщение не найдено"
+        }
+      }
+    }
+
+    results = nil
+    with_live_sms_ru_response(body) do
+      results = Shop::SmsRuClient.status!(sms_ids: %w[000000-000001 000000-000003])
+    end
+
+    assert_equal 2, results.size
+    delivered = results.find { |r| r.sms_id == "000000-000001" }
+    missing = results.find { |r| r.sms_id == "000000-000003" }
+    assert delivered.ok
+    assert_equal 103, delivered.status_code
+    refute missing.ok
+    assert_equal(-1, missing.status_code)
+  end
+
+  test "#50 status! raises when top-level status not OK" do
+    body = { "status" => "ERROR", "status_code" => 301, "status_text" => "bad api" }
+    err = assert_raises(Shop::SmsRuClient::Error) do
+      with_live_sms_ru_response(body) do
+        Shop::SmsRuClient.status!(sms_ids: "000000-1")
+      end
+    end
+    assert_equal 301, err.status_code
+  end
+
   private
 
   # Rails.env.test? всегда включает fallback — для HTTP-пути временно подменяем методы.

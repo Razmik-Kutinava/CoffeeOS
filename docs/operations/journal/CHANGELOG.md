@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-11 — feat(shop): SMS.ru #50 sms/status poll
+
+- `SmsRuClient.status!(sms_ids:)` → StatusResult; api_id только ENV
+- Local client 19/0 · cascade 11/0; webhook — backlog
+
 ## 2026-08-11 — docs: SMS.ru #49 email2sms SKIP + ENV runbook
 
 - Intake email2sms → код не делаем; канон HTTP #48

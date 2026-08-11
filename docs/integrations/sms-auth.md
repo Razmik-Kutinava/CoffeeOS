@@ -80,6 +80,22 @@ Runbook: [`SMS_RU_SECRETS.md`](../operations/runbooks/SMS_RU_SECRETS.md)
 
 **Не экспонируем** `sms/send` как публичный shop API-прокси — только внутренний клиент (OTP + cascade).
 
+### SMS.ru `sms/status` (#50)
+
+**URL:** `POST https://sms.ru/sms/status` · `json=1`  
+**Вызов:** `SmsRuClient.status!(sms_ids:)` → `Array<StatusResult>`
+
+| SMS.ru | CoffeeOS |
+|--------|----------|
+| `api_id` | `ENV['SMS_RU_API_ID']` только (не хардкод из доки) |
+| `sms_id` | аргумент (из #48 `SendResult` / log payload) |
+| `sms[id].status_code` | `StatusResult#status_code` (103 = доставлено) |
+| per-id ERROR | `ok: false` (не raise) |
+| top ERROR | `Error` |
+| fallback | `ok: true`, code 103 |
+
+Webhook статусов — отдельная задача. Не shop-прокси.
+
 ### Антифлуд
 
 - SMS.ru: captcha на UI + параметр `ip`
@@ -90,7 +106,7 @@ Runbook: [`SMS_RU_SECRETS.md`](../operations/runbooks/SMS_RU_SECRETS.md)
 | Код | Смысл | Наше поведение |
 |-----|--------|----------------|
 | 100 | принято в очередь | success |
-| 103 | доставлено | только через status/webhook (ещё нет) |
+| 103 | доставлено | `status!` → StatusResult 103 |
 | 200/301 | плохой api_id | Error 502 |
 | 201 | нет денег | Error |
 | 202/207 | нет маршрута / номер | Error |

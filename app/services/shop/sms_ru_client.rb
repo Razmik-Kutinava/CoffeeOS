@@ -21,9 +21,11 @@ module Shop
     class ValidationError < Error; end
 
     SendResult = Struct.new(:sms_id, keyword_init: true)
+    StatusResult = Struct.new(:sms_id, :status_code, :status_text, :cost, :ok, keyword_init: true)
 
     FLASH_CALL_URL = URI("https://sms.ru/code/call")
     SMS_SEND_URL   = URI("https://sms.ru/sms/send")
+    SMS_STATUS_URL = URI("https://sms.ru/sms/status")
     MAX_MSG_LENGTH = 70
 
     def self.request_flash_call!(phone:, ip: nil)
@@ -36,6 +38,10 @@ module Shop
 
     def self.send_message!(phone:, msg:, ip: nil)
       new.send_message!(phone: phone, msg: msg, ip: ip)
+    end
+
+    def self.status!(sms_ids:)
+      new.status!(sms_ids: sms_ids)
     end
 
     # @return [String] 4-значный код из ответа SMS.ru
@@ -92,7 +98,74 @@ module Shop
       parse_sms_send_body!(body, phone: phone)
     end
 
+    # #50 — статус по sms_id (один или массив). api_id только из ENV.
+    # @return [Array<StatusResult>]
+    def status!(sms_ids:)
+      ids = normalize_sms_ids(sms_ids)
+      if ids.empty?
+        raise ValidationError.new("sms_id required", http_status: 422)
+      end
+
+      if fallback?
+        Rails.logger.info("[Shop::SmsRuClient] status #{ids.join(',')} (fallback)")
+        return ids.map do |id|
+          StatusResult.new(
+            sms_id: id,
+            status_code: 103,
+            status_text: "fallback",
+            cost: 0,
+            ok: true
+          )
+        end
+      end
+
+      body = post_json!(SMS_STATUS_URL, {
+        "api_id" => api_id,
+        "sms_id" => ids.join(","),
+        "json" => "1"
+      })
+      parse_sms_status_body!(body, requested_ids: ids)
+    end
+
     private
+
+    def normalize_sms_ids(sms_ids)
+      Array(sms_ids).flatten.map { |id| id.to_s.strip }.reject(&:blank?).uniq
+    end
+
+    def parse_sms_status_body!(body, requested_ids:)
+      ok = body["status"] == "OK" || body["status_code"].to_i == 100
+      unless ok
+        raise Error.new(
+          "SMS.ru status: status=#{body['status']} code=#{body['status_code']}",
+          http_status: 502,
+          status_code: body["status_code"]
+        )
+      end
+
+      sms_hash = body["sms"].is_a?(Hash) ? body["sms"] : {}
+      requested_ids.map do |id|
+        entry = sms_hash[id]
+        if entry.nil?
+          StatusResult.new(
+            sms_id: id,
+            status_code: -1,
+            status_text: "missing in response",
+            cost: nil,
+            ok: false
+          )
+        else
+          entry_ok = entry["status"].to_s.upcase == "OK"
+          StatusResult.new(
+            sms_id: id,
+            status_code: entry["status_code"].to_i,
+            status_text: entry["status_text"].to_s,
+            cost: entry["cost"],
+            ok: entry_ok
+          )
+        end
+      end
+    end
 
     def parse_sms_send_body!(body, phone:)
       ok = body["status"] == "OK" || body["status_code"].to_i == 100

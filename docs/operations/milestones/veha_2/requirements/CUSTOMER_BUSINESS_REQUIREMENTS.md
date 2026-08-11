@@ -135,6 +135,7 @@
 | PWA status sync + repeats stale | **Витрина / PWA** — статусы с табло баристы не едут без reload; после заказа «повторы»/история не подгружаются (пустая шторка +0₽) | [ТЗ](customer_tasks/Статусы%20с%20табло%20не%20подтягиваются%20в%20PWA%20и%20повторы%20после%20заказа.md) · [`artifacts/pwa_status_sync_and_repeats_stale/`](../artifacts/pwa_status_sync_and_repeats_stale/) | **MCP PASS `[x]`** Fly v443 · апрув `[ ]` |
 | SMS.ru API sms/send | **Интеграции / SMS.ru** — `sms/send`: SendResult/`sms_id`, per-phone ERROR, cascade payload | [ТЗ](customer_tasks/SMS.ru%20API%20Отправить%20СМС%20HTTP%20запросом.md) · [`artifacts/sms_ru_api_send_http/`](../artifacts/sms_ru_api_send_http/) | **GREEN+REVIEW `[x]`** 2026-08-11 · апрув `[ ]` |
 | SMS.ru email2sms | **Интеграции / SMS.ru** — дока `@sms.ru` / SMTP; **код SKIP** (канон HTTP #48) · ENV runbook | [ТЗ](customer_tasks/SMS.ru%20API%20Отправить%20СМС%20через%20почтовый%20ящик%20email2sms.md) · [`artifacts/sms_ru_email2sms/`](../artifacts/sms_ru_email2sms/) | **интейк + SKIP `[x]`** 2026-08-11 |
+| SMS.ru sms/status | **Интеграции / SMS.ru** — poll статуса по `sms_id` (`status!`); webhook отдельно | [ТЗ](customer_tasks/SMS.ru%20API%20Проверить%20статус%20отправленных%20сообщений.md) · [`artifacts/sms_ru_api_status/`](../artifacts/sms_ru_api_status/) | **GREEN `[x]`** 2026-08-11 · апрув `[ ]` |
 
 > **B1.8 (не забыть):** сейчас письма с **подтверждённого личного sender** в Brevo. Когда будет **свой домен** — завести **кофейную почту** (напр. `noreply@бренд.ru`), аутентифицировать домен в Brevo, обновить `MAIL_FROM` + secrets. Код OTP/ActionMailer менять не нужно.
 
@@ -194,6 +195,7 @@
 | 47 | **PWA status sync + repeats stale** | Статусы с табло не в PWA без reload; после заказа повторы/история не подгружаются | **MCP PASS `[x]`** Fly v443 · апрув `[ ]` | [Статусы с табло не подтягиваются…](customer_tasks/Статусы%20с%20табло%20не%20подтягиваются%20в%20PWA%20и%20повторы%20после%20заказа.md) · [artifacts](../artifacts/pwa_status_sync_and_repeats_stale/) · [mcp/fly_v443](../artifacts/pwa_status_sync_and_repeats_stale/mcp/fly_v443_2026-08-08/) |
 | 48 | **SMS.ru API sms/send** | `SendResult`/`sms_id`, per-phone ERROR, cascade payload | **GREEN+REVIEW `[x]`** 2026-08-11 · апрув `[ ]` | [SMS.ru API Отправить СМС HTTP…](customer_tasks/SMS.ru%20API%20Отправить%20СМС%20HTTP%20запросом.md) · [artifacts](../artifacts/sms_ru_api_send_http/) |
 | 49 | **SMS.ru email2sms** | Дока email/SMTP `@sms.ru` — **код не делаем**; HTTP + ENV | **интейк + SKIP `[x]`** 2026-08-11 | [SMS.ru API … email2sms](customer_tasks/SMS.ru%20API%20Отправить%20СМС%20через%20почтовый%20ящик%20email2sms.md) · [artifacts](../artifacts/sms_ru_email2sms/) · [runbook](../../../runbooks/SMS_RU_SECRETS.md) |
+| 50 | **SMS.ru sms/status** | `status!(sms_ids:)` poll доставки; api_id из ENV | **GREEN `[x]`** 2026-08-11 · апрув `[ ]` | [Проверить статус…](customer_tasks/SMS.ru%20API%20Проверить%20статус%20отправленных%20сообщений.md) · [artifacts](../artifacts/sms_ru_api_status/) |
 
 ---
 
