@@ -123,6 +123,12 @@ Webhook статусов — отдельная задача. Не shop-прок
 - Callcheck webhook — отдельно  
 - api_id только ENV
 
+### SMS.ru `my/balance` (#53)
+
+**URL:** `POST https://sms.ru/my/balance` · `json=1`  
+**Вызов:** `SmsRuClient.balance!` → `BalanceResult#balance`  
+api_id только ENV · не shop-прокси (для health/ops).
+
 ### Антифлуд
 
 - SMS.ru: captcha на UI + параметр `ip`

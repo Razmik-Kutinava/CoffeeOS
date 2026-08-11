@@ -5,7 +5,7 @@ require "json"
 require "uri"
 
 module Shop
-  # Единый клиент SMS.ru: flash_call, sms/send|status|cost, callcheck.
+  # Единый клиент SMS.ru: flash_call, sms/*, callcheck, my/balance.
   # Ключи только из ENV: SMS_RU_API_ID, SMS_RU_FROM.
   class SmsRuClient
     class Error < StandardError
@@ -32,6 +32,7 @@ module Shop
     CallcheckStatusResult = Struct.new(
       :check_id, :check_status, :check_status_text, :confirmed, keyword_init: true
     )
+    BalanceResult = Struct.new(:balance, keyword_init: true)
 
     FLASH_CALL_URL     = URI("https://sms.ru/code/call")
     SMS_SEND_URL       = URI("https://sms.ru/sms/send")
@@ -39,6 +40,7 @@ module Shop
     SMS_COST_URL       = URI("https://sms.ru/sms/cost")
     CALLCHECK_ADD_URL  = URI("https://sms.ru/callcheck/add")
     CALLCHECK_STATUS_URL = URI("https://sms.ru/callcheck/status")
+    MY_BALANCE_URL     = URI("https://sms.ru/my/balance")
     MAX_MSG_LENGTH = 70
     CALLCHECK_CONFIRMED = 401
     CALLCHECK_PENDING = 400
@@ -70,6 +72,10 @@ module Shop
 
     def self.callcheck_status!(check_id:)
       new.callcheck_status!(check_id: check_id)
+    end
+
+    def self.balance!
+      new.balance!
     end
 
     # @return [String] 4-значный код из ответа SMS.ru
@@ -241,10 +247,38 @@ module Shop
       parse_callcheck_status_body!(body, check_id: id)
     end
 
+    # #53 — баланс аккаунта SMS.ru. api_id только ENV. Не shop-прокси.
+    # @return [BalanceResult]
+    def balance!
+      if fallback?
+        Rails.logger.info("[Shop::SmsRuClient] balance (fallback)")
+        return BalanceResult.new(balance: 0.0)
+      end
+
+      body = post_json!(MY_BALANCE_URL, {
+        "api_id" => api_id,
+        "json" => "1"
+      })
+      parse_balance_body!(body)
+    end
+
     private
 
     def normalize_sms_ids(sms_ids)
       Array(sms_ids).flatten.map { |id| id.to_s.strip }.reject(&:blank?).uniq
+    end
+
+    def parse_balance_body!(body)
+      ok = body["status"] == "OK" || body["status_code"].to_i == 100
+      unless ok
+        raise Error.new(
+          "SMS.ru my/balance: status=#{body['status']} code=#{body['status_code']}",
+          http_status: 502,
+          status_code: body["status_code"]
+        )
+      end
+
+      BalanceResult.new(balance: body["balance"].to_f)
     end
 
     def parse_callcheck_add_body!(body)

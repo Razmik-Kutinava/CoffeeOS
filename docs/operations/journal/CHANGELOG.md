@@ -11,6 +11,10 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-11 — feat(shop): SMS.ru #53 my/balance
+
+- `SmsRuClient.balance!` → `BalanceResult#balance`; api_id только ENV; не публичный shop API
+
 ## 2026-08-11 — feat(shop): SMS.ru #52 callcheck client
 
 - `callcheck_add!` / `callcheck_status!` (401=confirmed); PWA funnel не трогали

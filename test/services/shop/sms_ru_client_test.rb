@@ -343,6 +343,33 @@ class Shop::SmsRuClientTest < ActiveSupport::TestCase
     assert_equal 401, result.check_status
   end
 
+  # --- #53 my/balance ---
+
+  test "#53 balance! fallback returns zero" do
+    result = Shop::SmsRuClient.balance!
+    assert_kind_of Shop::SmsRuClient::BalanceResult, result
+    assert_equal 0.0, result.balance
+  end
+
+  test "#53 balance! parses json balance" do
+    body = { "status" => "OK", "status_code" => 100, "balance" => 4762.58 }
+    result = nil
+    with_live_sms_ru_response(body) do
+      result = Shop::SmsRuClient.balance!
+    end
+    assert_in_delta 4762.58, result.balance, 0.001
+  end
+
+  test "#53 balance! raises on top-level ERROR" do
+    body = { "status" => "ERROR", "status_code" => 301 }
+    err = assert_raises(Shop::SmsRuClient::Error) do
+      with_live_sms_ru_response(body) do
+        Shop::SmsRuClient.balance!
+      end
+    end
+    assert_equal 301, err.status_code
+  end
+
   private
 
   # Rails.env.test? всегда включает fallback — для HTTP-пути временно подменяем методы.

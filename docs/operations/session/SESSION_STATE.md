@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-11 (#52 callcheck)  
+**Дата:** 2026-08-11 (#53 my/balance)  
 **Ветка:** `develop` (ahead, не push)
 
 | Сейчас | Дальше |
 |--------|--------|
-| #52 callcheck client | balance / webhook / … |
+| #53 balance! GREEN | limits / free / senders / … |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,10 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-11 (#53 my/balance)
+
+- `SmsRuClient.balance!` → `BalanceResult`; не shop-прокси
 
 ### Сессия 2026-08-11 (#52 callcheck)
 

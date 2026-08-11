@@ -2,14 +2,14 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-11 (#52 callcheck client)  
+**Дата:** 2026-08-11 (#53 my/balance)  
 **Ветка:** `develop` (ahead, не push)
 
 | Сейчас | Дальше |
 |--------|--------|
-| #52 callcheck **клиент** ✅ · funnel flash_call без изменений | balance / webhook / след. метод |
+| #53 `balance!` ✅ | limits / free / senders / auth / stoplist / webhooks |
 
-**last_done:** `callcheck_add!` / `callcheck_status!` (ENV api_id)  
+**last_done:** `SmsRuClient.balance!` → `BalanceResult` (ENV api_id)  
 **next_step:** кидай следующий метод SMS.ru
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
