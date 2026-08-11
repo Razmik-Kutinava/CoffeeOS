@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-11 (SMS.ru #48 intake)  
+**Дата:** 2026-08-11 (SMS.ru #48 SPEC)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #48 sms/send docs + bridge | go SPEC/код **или** следующий метод SMS.ru |
+| #48 SPEC в todo | RED при намерении |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,12 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-11 (#48 SPEC sms/send)
+
+- todo: Acceptance · файлы · Не ломать · Проверка
+- Scope: Result+`sms_id`, per-phone ERROR, payload лога; без DDL / shop-proxy / captcha
+- Ждём RED
 
 ### Сессия 2026-08-11 (SMS.ru #48 sms/send intake + bridge)
 

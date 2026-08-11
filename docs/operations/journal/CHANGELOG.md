@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-11 — docs: SPEC SMS.ru #48 sms/send (Result + sms_id)
+
+- todo: Acceptance, файлы, Не ломать, Проверка; RED следующий
+- Scope: parse json/`sms_id`, notifier payload; без DDL
+
 ## 2026-08-11 — docs: intake SMS.ru #48 sms/send + bridge enrich
 
 - ТЗ `SMS.ru API Отправить СМС HTTP запросом.md` · artifacts `sms_ru_api_send_http` · CBR #48

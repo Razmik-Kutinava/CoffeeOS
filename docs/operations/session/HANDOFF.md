@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-11 (SMS.ru #48 intake)  
+**Дата:** 2026-08-11 (SMS.ru #48 SPEC)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #48 sms/send: интейк + bridge ✅ | go → SPEC/код **или** следующий метод SMS.ru |
+| #48 **SPEC** в todo ✅ | намерение → RED (sms_id + parse) |
 
-**last_done:** docs intake SMS.ru `sms/send` + enrich `sms-auth.md` (api_id редэкт)  
-**next_step:** go SPEC #48 **или** кидай следующий кусок доки SMS.ru  
+**last_done:** PHASE 1 SPEC #48 sms/send (Result/`sms_id`, notifier payload, без DDL)  
+**next_step:** RED — `sms_ru_client_test` + `order_ready_paid_notifier_test`
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
