@@ -39,6 +39,7 @@ module Shop
     AuthCheckResult = Struct.new(:ok, :status_code, keyword_init: true)
     StoplistAddResult = Struct.new(:ok, :status_code, keyword_init: true)
     StoplistDelResult = Struct.new(:ok, :status_code, keyword_init: true)
+    StoplistGetResult = Struct.new(:stoplist, keyword_init: true)
 
     FLASH_CALL_URL     = URI("https://sms.ru/code/call")
     SMS_SEND_URL       = URI("https://sms.ru/sms/send")
@@ -53,6 +54,7 @@ module Shop
     AUTH_CHECK_URL     = URI("https://sms.ru/auth/check")
     STOPLIST_ADD_URL   = URI("https://sms.ru/stoplist/add")
     STOPLIST_DEL_URL   = URI("https://sms.ru/stoplist/del")
+    STOPLIST_GET_URL   = URI("https://sms.ru/stoplist/get")
     MAX_MSG_LENGTH = 70
     CALLCHECK_CONFIRMED = 401
     CALLCHECK_PENDING = 400
@@ -112,6 +114,10 @@ module Shop
 
     def self.stoplist_del!(phone:)
       new.stoplist_del!(phone: phone)
+    end
+
+    def self.stoplist_get!
+      new.stoplist_get!
     end
 
     # @return [String] 4-значный код из ответа SMS.ru
@@ -402,6 +408,21 @@ module Shop
       parse_stoplist_del_body!(body)
     end
 
+    # #60 — выгрузить весь стоплист. api_id только ENV. Не shop-прокси.
+    # @return [StoplistGetResult] #stoplist — Hash phone => note
+    def stoplist_get!
+      if fallback?
+        Rails.logger.info("[Shop::SmsRuClient] stoplist_get (fallback)")
+        return StoplistGetResult.new(stoplist: {})
+      end
+
+      body = post_json!(STOPLIST_GET_URL, {
+        "api_id" => api_id,
+        "json" => "1"
+      })
+      parse_stoplist_get_body!(body)
+    end
+
     private
 
     def normalize_sms_ids(sms_ids)
@@ -504,6 +525,27 @@ module Shop
       end
 
       StoplistDelResult.new(ok: true, status_code: body["status_code"].to_i)
+    end
+
+    def parse_stoplist_get_body!(body)
+      ok = body["status"] == "OK" || body["status_code"].to_i == 100
+      unless ok
+        raise Error.new(
+          "SMS.ru stoplist/get: status=#{body['status']} code=#{body['status_code']}",
+          http_status: 502,
+          status_code: body["status_code"]
+        )
+      end
+
+      raw = body["stoplist"]
+      map =
+        case raw
+        when Hash
+          raw.transform_keys(&:to_s).transform_values(&:to_s)
+        else
+          {}
+        end
+      StoplistGetResult.new(stoplist: map)
     end
 
     def parse_callcheck_add_body!(body)

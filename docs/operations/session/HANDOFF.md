@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-11 (#59 stoplist/del)  
+**Дата:** 2026-08-11 (#60 stoplist/get)  
 **Ветка:** `develop` (ahead, не push)
 
 | Сейчас | Дальше |
 |--------|--------|
-| #59 `stoplist_del!` ✅ | stoplist get · webhooks |
+| #60 `stoplist_get!` ✅ | webhooks |
 
-**last_done:** `SmsRuClient.stoplist_del!(phone:)`  
-**next_step:** кидай следующий метод SMS.ru
+**last_done:** `SmsRuClient.stoplist_get!` → Hash phone⇒note  
+**next_step:** кидай следующий метод SMS.ru (webhooks?)
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

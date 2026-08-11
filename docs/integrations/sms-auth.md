@@ -165,6 +165,12 @@ api_id только ENV · не shop-прокси. Код 206 при send = дн
 **Вызов:** `SmsRuClient.stoplist_del!(phone:)` → `StoplistDelResult`  
 Параметр `stoplist_phone` · api_id только ENV · не shop-прокси.
 
+### SMS.ru `stoplist/get` (#60)
+
+**URL:** `POST https://sms.ru/stoplist/get` · `json=1`  
+**Вызов:** `SmsRuClient.stoplist_get!` → `StoplistGetResult#stoplist` (Hash phone⇒note)  
+api_id только ENV · не shop-прокси.
+
 ### Антифлуд
 
 - SMS.ru: captcha на UI + параметр `ip`
