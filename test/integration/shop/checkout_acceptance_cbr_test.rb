@@ -66,18 +66,20 @@ class Shop::CheckoutAcceptanceCbrTest < ActionDispatch::IntegrationTest
     end
   end
 
-  # п.5 — СБП: deep link enabled (эпик Т-Касса v2 / Шаг 9)
-  test "cbr_05 sbp row present but disabled per #26 mock" do
+  # п.5 — СБП: selectable → Checkout shopSbpPay / deep link
+  test "cbr_05 sbp row selectable and wired to shopSbpPay" do
     checkout = vitrina_source("routes/Checkout.svelte")
     sheet = vitrina_source("components/PaymentMethodsSheet.svelte")
     assert_includes checkout, "shopSbpPay"
     assert_includes checkout, "initSbpPayment"
     assert_includes sheet, 'data-testid="payment-method-sbp"'
-    assert_match(
-      /data-testid="payment-method-sbp"[\s\S]{0,120}?^\s*disabled\s*$/m,
+    assert_includes sheet, "onSelectSbp?.()"
+    refute_match(
+      /data-testid="payment-method-sbp"[\s\S]{0,160}?^\s*disabled\s*$/m,
       sheet,
-      "СБП disabled по #26 скрин 03"
+      "СБП должна быть selectable"
     )
+    refute_includes sheet, "pm-row--sbp-disabled"
   end
 
   # п.6 — по разделу «Изменения»: чекбокс «в машину» убран (критерий в CBR противоречит — сдаём по изменениям)

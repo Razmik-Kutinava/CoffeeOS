@@ -85,15 +85,17 @@ class Shop::RepeatInvalidTokenPaymentTest < ActionDispatch::IntegrationTest
     refute_includes src, "pm-row__chevron\">⌄"
   end
 
-  test "step3 PaymentMethodsSheet SBP disabled per #26 скрин 03" do
+  test "step3 PaymentMethodsSheet SBP selectable wires onSelectSbp" do
     src = File.read(SHEET)
     assert_includes src, 'data-testid="payment-method-sbp"'
-    assert_includes src, "sbpUnavailable"
-    assert_match(
-      /data-testid="payment-method-sbp"[\s\S]{0,120}?^\s*disabled\s*$/m,
+    assert_includes src, "onSelectSbp?.()"
+    refute_match(
+      /data-testid="payment-method-sbp"[\s\S]{0,160}?^\s*disabled\s*$/m,
       src,
-      "СБП disabled на макете #26 (скрин 03)"
+      "СБП должна быть selectable"
     )
+    refute_includes src, "pm-row--sbp-disabled"
+    refute_includes src, "handleSbpUnavailable"
   end
 
   test "step5 Checkout wires invalid rebill store and sheet inline errors" do

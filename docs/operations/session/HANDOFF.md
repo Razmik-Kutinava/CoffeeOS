@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-11 (Fly v448 · callbacks security)  
-**Ветка:** `develop` (= origin)
+**Дата:** 2026-08-12 (SBP sheet enable)  
+**Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Fly **v448** · MCP Point A PASS | SMS.ru URL в ЛК |
+| СБП unlock local ✅ | push + deploy + MCP Point A |
 
-**last_done:** push `1c53a065` · deploy v448 · smoke /up+413+401 · Point A shop MCP  
-**next_step:** URL webhook в ЛК SMS.ru (если ещё не)
+**last_done:** feat enable SBP in PaymentMethodsSheet (local 29/0)  
+**next_step:** push + fly deploy + MCP: выбрать СБП → init → qr.nspk.ru (или 3001 кабинет)
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -18,6 +18,15 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### SBP enable PaymentMethodsSheet (2026-08-12)
+
+| Что | Статус |
+|-----|--------|
+| Unlock СБП / счёт СБП → onSelectSbp | **`[x]`** local |
+| Тесты UI/CBR | **`[x]`** 29/0 |
+| Fly MCP Point A | **`[ ]`** ждёт push/deploy |
+| Банк 3001 кабинет | отдельно (ISSUES) |
 
 ### Bugbot / security callbacks (2026-08-11)
 

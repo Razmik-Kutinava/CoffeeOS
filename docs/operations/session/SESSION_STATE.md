@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-11 (Fly v448 · push+deploy+MCP)  
-**Ветка:** `develop` (= origin)
+**Дата:** 2026-08-12 (SBP PaymentMethodsSheet enable)  
+**Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Fly **v448** deployed · MCP Point A PASS | SMS.ru URL в ЛК (если ещё не) |
+| СБП unlock local GREEN | push + deploy + Fly MCP Point A |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,13 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-12 (enable SBP in checkout sheet)
+
+- Root cause: #26 G4 hardcoded disabled (не кабинет)
+- `PaymentMethodsSheet` → onSelectSbp / onSelectSbpAccount
+- Local: 29 runs, 0 failures (sbp UI + CBR + invalid token + cleanup + sbp accounts)
+- Fly MCP: skip (нет push/deploy)
 
 ### Сессия 2026-08-11 (push + fly deploy v448 + MCP)
 

@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-12 — feat(shop): enable SBP in PaymentMethodsSheet
+
+- Сняли hardcoded `disabled` (#26 G4); ряд СБП / счёт СБП → `onSelectSbp` / `onSelectSbpAccount`
+- Тесты: sbp_payment_ui + checkout CBR + repeat_invalid_token + cleanup + sbp_accounts → **29/0**
+- Fly MCP: skip до push/deploy; банк 3001 — отдельно
+
 ## 2026-08-11 — deploy: coffeeos v448 (callbacks security)
 
 - push develop `1c53a065` · fly deploy · `/up` 200 · tbank 401 · **tbank 413** oversized · sms_ru 401 · Point A shop 200 + MCP browser

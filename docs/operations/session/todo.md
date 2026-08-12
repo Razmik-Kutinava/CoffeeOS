@@ -1,12 +1,28 @@
-# todo — Fly v448 callbacks security (2026-08-11)
+# todo — Enable SBP in PaymentMethodsSheet (2026-08-12)
 
 | last_done | current_state | next_step |
 |-----------|---------------|-----------|
-| push+deploy v448 · MCP Point A PASS | done on Fly | SMS.ru URL в ЛК если нужно |
+| local GREEN 29/0 · commit | done local | push + deploy + Fly MCP Point A |
 
-## Smoke Fly
-- `/up` 200
-- `POST /callbacks/tbank` {} → 401
-- `POST /callbacks/tbank` 256KB+ → **413**
-- `POST /callbacks/sms_ru` bad hash → 401
-- Point A shop MCP → 200 + витрина
+## Цель
+Заказчик: «кнопка СБП не активна». Root cause: hardcoded disable в `PaymentMethodsSheet` (#26 G4). Unlock → Checkout + `shopSbpPay`.
+
+## Файлы (ожидаемо)
+- `app/frontend/components/PaymentMethodsSheet.svelte` — **[x]**
+- `test/integration/shop/sbp_payment_ui_test.rb` — **[x]**
+- `test/integration/shop/checkout_acceptance_cbr_test.rb` — **[x]**
+- `test/integration/shop/repeat_invalid_token_payment_test.rb` — **[x]**
+
+## Не ломать
+- Карта / «Картой +» / NewCardForm
+- Inline fallback СБП
+- Toast 3001 в `shopSbpPay`
+
+## Проверка
+- `bin/rails test …sbp_payment_ui… checkout_acceptance_cbr… repeat_invalid_token… checkout_ui_cleanup… user_cards_sbp_accounts` → **29/0 PASS**
+
+## SBR
+- [x] SPEC
+- [x] RED→GREEN (тесты + unlock)
+- [x] commit + ops
+- [ ] Fly MCP (после deploy)

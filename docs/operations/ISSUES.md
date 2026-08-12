@@ -11,7 +11,7 @@
 | 2026-07-16 | **UserCards** save_card / delayed RebillId | 🟡 Fly v444 MCP 8925 ✅ · апрув 3.5 ❌ · E2E real PAN ⛔ | Апрув скрина 8925; E2E только real MIR; → полная запись |
 | 2026-07-16 | **Checkout UX** stacked sheet (Фаза 2) | 🟡 на Fly v445 · MCP pay-stack status hidden ✅ · апрув ❌ | Апрув заказчика; → полная запись |
 | 2026-07-31 | **Legacy shop suite** (~3–4 fail после triage) | 🔴 open | silent_refresh structural **fixed** Group1; остальное отдельно; → полная запись |
-| 2026-07-27 | **SBP 3001** на Fly | 🟡 не баг приложения | Включить СБП в кабинете Т-Кассы; → полная запись |
+| 2026-07-27 | **SBP 3001** на Fly | 🟡 банк / кабинет | После UI-enable: push+deploy+MCP; если снова 3001 — кабинет NSPK; → полная запись |
 | 2026-07-28 | **Fly Test** в шапке Арама | 🟡 код local ✅ | push + deploy + MCP Point A; → полная запись |
 | 2026-08-08 | **#47** PWA статусы + повторы | 🟡 на Fly v445 · MCP surface ✅ · апрув ❌ | Апрув заказчика; → полная запись |
 | 2026-07-21 | **Windows** полный `test/integration/shop/` зависает | 🟡 env | Таргетные файлы / CI; не полный suite локально; → полная запись |
@@ -19,6 +19,14 @@
 ---
 
 ## Решено недавно (детали)
+
+[2026-08-12] — Кнопка СБП «не активна» в PaymentMethodsSheet
+**Статус:** **resolved** (local; push/deploy/MCP — ждёт)
+**Источник:** заказчик · «кнопка СБП не активна»
+**Root cause:** #26 G4 — hardcoded `disabled` + toast `sbpUnavailable` вместо `onSelectSbp` (не кабинет Т-Кассы).
+**Чем закрыли:** unlock row СБП / счёт СБП → `onSelectSbp` / `onSelectSbpAccount`; тесты UI/CBR обновлены.
+**Проверка:** `sbp_payment_ui` + `checkout_acceptance_cbr` + `repeat_invalid_token` + `checkout_ui_cleanup` + `user_cards_sbp_accounts` → 29/0.
+**Осталось:** push + deploy + Fly MCP Point A; банк 3001 — отдельно.
 
 [2026-08-09] — Legacy shop suite triage: regression fixed + messenger OTP — тесты актуализированы под реальный флоу заказчика
 **Статус:** **resolved**
