@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-12 — feat(shop): Phone OTP — SMS и Flash Call раздельно
+
+- SMS генерирует свой 4‑значный код (больше не «запросите звонок сначала»)
+- ТЗ: `Вход по телефону Flash Call OTP` · `Вход по телефону SMS OTP`; старые смешанные — superseded
+- Local: 25/0 (`phone_otp` + `sms_ru_phone_otp` + api)
+- Fly MCP: skip до push/deploy
+
 ## 2026-08-12 — feat(shop): enable SBP in PaymentMethodsSheet
 
 - Сняли hardcoded `disabled` (#26 G4); ряд СБП / счёт СБП → `onSelectSbp` / `onSelectSbpAccount`

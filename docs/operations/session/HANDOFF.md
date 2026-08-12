@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-12 (SBP sheet enable)  
+**Дата:** 2026-08-12 (Phone OTP Flash/SMS split)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| СБП unlock local ✅ | push + deploy + MCP Point A |
+| Phone OTP каналы разделены ✅ local 25/0 | push + Fly MCP Point A (SMS-only + flash-only) |
 
-**last_done:** feat enable SBP in PaymentMethodsSheet (local 29/0)  
-**next_step:** push + fly deploy + MCP: выбрать СБП → init → qr.nspk.ru (или 3001 кабинет)
+**last_done:** feat PhoneOtp SMS свой код + ТЗ Flash/SMS split  
+**next_step:** push/deploy · MCP Point A · (SBP enable тоже ждёт push)
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -18,6 +18,14 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Phone OTP Flash / SMS split (2026-08-12)
+
+| Что | Статус |
+|-----|--------|
+| SMS генерит свой код (не flash) | **`[x]`** local 25/0 |
+| ТЗ Flash Call OTP + SMS OTP | **`[x]`** |
+| Fly MCP Point A | **`[ ]`** ждёт push/deploy |
 
 ### SBP enable PaymentMethodsSheet (2026-08-12)
 

@@ -49,20 +49,29 @@ class Shop::PhoneOtpTest < ActiveSupport::TestCase
     assert_match(/20|секунд|подождите/i, err.message)
   end
 
-  test "sms requires existing active code from flash_call" do
-    err = assert_raises(Shop::PhoneOtp::Error) do
-      Shop::PhoneOtp.send_code!(phone: @phone, channel: "sms")
-    end
-    assert_match(/нет активного кода|запросите звонок/i, err.message)
+  test "sms works without prior flash_call" do
+    Shop::PhoneOtp.send_code!(phone: @phone, channel: "sms")
+    record = MobileOtpCode.where(phone: @phone, is_used: false).order(created_at: :desc).first
+    assert record
+    assert_equal 4, record.code.length
   end
 
-  test "sms reuses code from flash_call" do
+  test "sms generates its own code (does not reuse flash_call)" do
     Shop::PhoneOtp.send_code!(phone: @phone, channel: "flash_call")
-    saved_code = MobileOtpCode.where(phone: @phone, is_used: false).order(created_at: :desc).first.code
+    flash = MobileOtpCode.where(phone: @phone, is_used: false).order(created_at: :desc).first
 
     Shop::PhoneOtp.send_code!(phone: @phone, channel: "sms")
-    latest = MobileOtpCode.where(phone: @phone, is_used: false).order(created_at: :desc).first
-    assert_equal saved_code, latest.code
+    sms = MobileOtpCode.where(phone: @phone, is_used: false).order(created_at: :desc).first
+
+    assert flash.reload.is_used
+    assert_not_equal flash.id, sms.id
+    assert_equal 4, sms.code.length
+  end
+
+  test "verify accepts sms-only code" do
+    Shop::PhoneOtp.send_code!(phone: @phone, channel: "sms")
+    record = MobileOtpCode.where(phone: @phone, is_used: false).order(created_at: :desc).first
+    assert_equal @phone, Shop::PhoneOtp.verify!(phone: @phone, code: record.code)
   end
 
   test "verify accepts code and marks used" do

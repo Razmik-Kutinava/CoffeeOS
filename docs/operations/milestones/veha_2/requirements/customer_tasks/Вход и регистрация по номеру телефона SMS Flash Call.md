@@ -77,6 +77,7 @@
 
 ## Заметки агента
 
+- **SUPERSEDED 2026-08-12:** смешанный ТЗ. Канон раздельно → [`Вход по телефону Flash Call OTP.md`](Вход%20по%20телефону%20Flash%20Call%20OTP.md) · [`Вход по телефону SMS OTP.md`](Вход%20по%20телефону%20SMS%20OTP.md). SMS больше не reuse код flash.
 - Интейк 2026-07-24 (PHASE 0). Код / SPEC / todo.md — не трогали; ждём go → PHASE 1: SPEC.
 - SPEC 2026-07-24: `todo.md` as-is/gap + решения; RED ждёт go.
 - GREEN 2026-07-24: PhoneNormalizer/Sms/FlashCall/PhoneOtp/API/Checkout; тесты 41/0 + JS 5/0; redeploy/MCP по апруву.

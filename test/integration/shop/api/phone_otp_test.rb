@@ -16,8 +16,7 @@ class Shop::Api::PhoneOtpTest < ActionDispatch::IntegrationTest
     ENV.delete("SHOP_OTP_LOG_FALLBACK")
   end
 
-  test "send verify status happy path returns refresh_token" do
-    # Как у заказчика: вход в OTP — flash_call; sms сам код не генерирует (cascade).
+  test "send verify status happy path flash_call returns refresh_token" do
     post "/shop/api/phone_otp/send",
       headers: shop_tenant_headers(@tenant.id),
       params: { phone: "89009876543", channel: "flash_call" },
@@ -44,6 +43,25 @@ class Shop::Api::PhoneOtpTest < ActionDispatch::IntegrationTest
       as: :json
     assert_response :success
     assert_equal true, response.parsed_body["verified"]
+  end
+
+  test "send verify happy path sms-only returns refresh_token" do
+    post "/shop/api/phone_otp/send",
+      headers: shop_tenant_headers(@tenant.id),
+      params: { phone: @phone, channel: "sms" },
+      as: :json
+    assert_response :success, response.body
+
+    record = MobileOtpCode.where(phone: @phone, is_used: false).order(created_at: :desc).first
+    assert record
+
+    post "/shop/api/phone_otp/verify",
+      headers: shop_tenant_headers(@tenant.id),
+      params: { phone: @phone, code: record.code },
+      as: :json
+    assert_response :success, response.body
+    assert_equal true, response.parsed_body["verified"]
+    assert response.parsed_body["refresh_token"].present?
   end
 
   test "send rejects invalid phone" do
@@ -80,13 +98,6 @@ class Shop::Api::PhoneOtpTest < ActionDispatch::IntegrationTest
 
   test "rack attack throttles sms by 60 seconds" do
     with_rack_attack do
-      # Как у заказчика: sms сам код не генерирует — сначала flash_call (создаёт активный код).
-      post "/shop/api/phone_otp/send",
-        headers: shop_tenant_headers(@tenant.id),
-        params: { phone: @phone, channel: "flash_call" },
-        as: :json
-      assert_response :success
-
       post "/shop/api/phone_otp/send",
         headers: shop_tenant_headers(@tenant.id),
         params: { phone: @phone, channel: "sms" },
@@ -106,10 +117,9 @@ class Shop::Api::PhoneOtpTest < ActionDispatch::IntegrationTest
     verify_shop_email!(tenant_id: @tenant.id, email: email)
     customer = MobileCustomer.find_by!(email: email)
 
-    # Как у заказчика: вход в OTP — flash_call; sms сам код не генерирует (cascade).
     post "/shop/api/phone_otp/send",
       headers: shop_tenant_headers(@tenant.id),
-      params: { phone: @phone, channel: "flash_call" },
+      params: { phone: @phone, channel: "sms" },
       as: :json
     assert_response :success
     record = MobileOtpCode.where(phone: @phone, is_used: false).order(created_at: :desc).first

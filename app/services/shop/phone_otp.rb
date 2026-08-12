@@ -25,12 +25,13 @@ module Shop
       ch = channel.to_s.strip
       raise Error, "Выберите SMS или звонок" unless CHANNELS.include?(ch)
 
-      enforce_cooldown!(normalized, ch) unless ch == "sms"
+      # SMS: кулдаун только Rack::Attack (60s) — иначе каскад Flash→SMS на ~40с ломается.
+      enforce_cooldown!(normalized, ch) if ch == "flash_call"
 
       if ch == "flash_call"
         send_flash_call!(normalized, ip)
       else
-        send_sms_with_existing_code!(normalized, ip)
+        send_sms!(normalized, ip)
       end
 
       normalized
@@ -99,12 +100,22 @@ module Shop
       end
     end
 
-    # SMS переиспользует последний активный код (не генерирует новый)
-    def send_sms_with_existing_code!(phone, ip)
-      record = MobileOtpCode.active.where(phone: phone).order(created_at: :desc).first
-      raise Error, "Нет активного кода. Запросите звонок сначала." unless record
+    # SMS — отдельный канал: свой код (не код от flash_call).
+    def send_sms!(phone, ip)
+      otp_code = format("%04d", SecureRandom.random_number(10_000))
 
-      SmsRuClient.send_sms!(phone: phone, code: record.code, ip: ip)
+      ActiveRecord::Base.transaction do
+        MobileOtpCode.where(phone: phone, is_used: false).update_all(is_used: true)
+        MobileOtpCode.create!(
+          phone: phone,
+          code: otp_code,
+          expires_at: CODE_TTL.from_now,
+          attempts: 0,
+          is_used: false
+        )
+      end
+
+      SmsRuClient.send_sms!(phone: phone, code: otp_code, ip: ip)
     end
 
     def same_code?(stored, input)

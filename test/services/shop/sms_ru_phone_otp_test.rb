@@ -2,9 +2,7 @@
 
 require "test_helper"
 
-# RED: PhoneOtp интеграция с SmsRuClient.
-# Проверяем: flash_call сохраняет код из SmsRuClient в mobile_otp_codes,
-# sms отправляет ПОСЛЕДНИЙ сохранённый код (не генерирует новый).
+# PhoneOtp × SmsRuClient: flash_call и sms — независимые каналы.
 class Shop::SmsRuPhoneOtpTest < ActiveSupport::TestCase
   setup do
     @phone = "+79001112233"
@@ -35,24 +33,25 @@ class Shop::SmsRuPhoneOtpTest < ActiveSupport::TestCase
     assert_equal 4, active.code.length
   end
 
-  test "send_code sms reuses last saved code from mobile_otp_codes (does not generate new)" do
+  test "send_code sms generates new code without prior flash_call" do
+    Shop::PhoneOtp.send_code!(phone: @phone, channel: "sms")
+    latest = MobileOtpCode.where(phone: @phone, is_used: false).order(created_at: :desc).first
+    assert latest
+    assert_equal 4, latest.code.length
+  end
+
+  test "send_code sms after flash_call replaces code (independent channel)" do
     Shop::PhoneOtp.send_code!(phone: @phone, channel: "flash_call")
-    saved_code = MobileOtpCode.where(phone: @phone, is_used: false).order(created_at: :desc).first.code
+    flash = MobileOtpCode.where(phone: @phone, is_used: false).order(created_at: :desc).first
 
     travel 41.seconds do
       Shop::PhoneOtp.send_code!(phone: @phone, channel: "sms")
     end
 
-    # Код, отправленный в SMS, должен совпадать с последним сохранённым
-    latest = MobileOtpCode.where(phone: @phone, is_used: false).order(created_at: :desc).first
-    assert_equal saved_code, latest.code
-  end
-
-  test "send_code sms raises if no active code exists" do
-    err = assert_raises(Shop::PhoneOtp::Error) do
-      Shop::PhoneOtp.send_code!(phone: @phone, channel: "sms")
-    end
-    assert_match(/код не найден|нет активного кода|запросите звонок/i, err.message)
+    sms = MobileOtpCode.where(phone: @phone, is_used: false).order(created_at: :desc).first
+    assert flash.reload.is_used
+    assert_not_equal flash.id, sms.id
+    assert_equal 4, sms.code.length
   end
 
   test "verify works with code from flash_call" do

@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-12 (SBP PaymentMethodsSheet enable)  
+**Дата:** 2026-08-12 (Phone OTP Flash/SMS split)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| СБП unlock local GREEN | push + deploy + Fly MCP Point A |
+| Phone OTP split GREEN 25/0 | push + Fly MCP Point A |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,13 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-12 (Phone OTP: Flash Call / SMS раздельно)
+
+- Root cause: смешанные ТЗ → SMS reuse код flash («запросите звонок сначала»)
+- Канон: два ТЗ · `PhoneOtp#send_sms!` генерит 4-значный код сам
+- Local: phone_otp + sms_ru_phone_otp + api phone_otp → **25/0**
+- Fly MCP: skip (нет push/deploy)
 
 ### Сессия 2026-08-12 (enable SBP in checkout sheet)
 
