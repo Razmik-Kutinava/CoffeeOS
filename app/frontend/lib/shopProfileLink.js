@@ -22,10 +22,10 @@ export async function sendEmailOtp(email) {
   })
 }
 
-export async function sendPhoneOtp(phone, channel = "sms") {
-  return api("/phone_otp/send", {
+export async function sendPhoneOtp(phone, _channel = "sms") {
+  return api("/phone_otp/send_sms", {
     method: "POST",
-    body: JSON.stringify({ phone, channel })
+    body: JSON.stringify({ phone })
   })
 }
 

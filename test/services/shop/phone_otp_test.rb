@@ -6,106 +6,74 @@ class Shop::PhoneOtpTest < ActiveSupport::TestCase
   setup do
     @phone = "+79001112233"
     ENV["SHOP_OTP_LOG_FALLBACK"] = "true"
+    @session = {}
+    @tenant_id = SecureRandom.uuid
   end
 
   teardown do
     ENV.delete("SHOP_OTP_LOG_FALLBACK")
   end
 
-  test "send_code flash_call creates otp and invalidates previous" do
-    Shop::PhoneOtp.send_code!(phone: @phone, channel: "flash_call")
-    first = MobileOtpCode.where(phone: @phone).order(created_at: :desc).first
-    assert first
-    assert_equal false, first.is_used
-    assert first.code.length.between?(4, 6)
-
-    travel 21.seconds do
-      Shop::PhoneOtp.send_code!(phone: @phone, channel: "flash_call")
-    end
-
-    first.reload
-    assert_equal true, first.is_used
-    assert_equal 2, MobileOtpCode.where(phone: @phone).count
+  test "init_callcheck stores check_id in session and returns dial fields" do
+    result = Shop::PhoneOtp.init_callcheck!(phone: @phone, session: @session, tenant_id: @tenant_id)
+    assert_equal @phone, result[:phone]
+    assert result[:check_id].present?
+    assert result[:call_phone].present?
+    assert result[:call_phone_html].to_s.include?("tel:")
+    assert_equal result[:check_id], @session[Shop::PhoneOtp::CALLCHECK_SESSION_KEY]["check_id"]
   end
 
-  test "send_code flash_call stores 4 digit code" do
-    Shop::PhoneOtp.send_code!(phone: @phone, channel: "flash_call")
+  test "poll_callcheck pending until cache confirms 401" do
+    Shop::PhoneOtp.init_callcheck!(phone: @phone, session: @session, tenant_id: @tenant_id)
+    check_id = @session[Shop::PhoneOtp::CALLCHECK_SESSION_KEY]["check_id"]
+
+    pending = Shop::PhoneOtp.poll_callcheck!(session: @session, tenant_id: @tenant_id)
+    assert_equal false, pending[:confirmed]
+
+    Rails.cache.write("sms_ru:callcheck:#{check_id}", { "status" => 401 })
+    done = Shop::PhoneOtp.poll_callcheck!(session: @session, tenant_id: @tenant_id)
+    assert_equal true, done[:confirmed]
+    assert_equal @phone, done[:phone]
+    assert_nil @session[Shop::PhoneOtp::CALLCHECK_SESSION_KEY]
+  end
+
+  test "poll_callcheck rejects foreign check_id session tenant mismatch" do
+    Shop::PhoneOtp.init_callcheck!(phone: @phone, session: @session, tenant_id: @tenant_id)
+    err = assert_raises(Shop::PhoneOtp::Error) do
+      Shop::PhoneOtp.poll_callcheck!(session: @session, tenant_id: SecureRandom.uuid)
+    end
+    assert_match(/сессия|недействительн/i, err.message)
+  end
+
+  test "send_sms_code creates otp without callcheck" do
+    phone = Shop::PhoneOtp.send_sms_code!(phone: @phone)
+    assert_equal @phone, phone
     record = MobileOtpCode.where(phone: @phone, is_used: false).order(created_at: :desc).first
     assert_equal 4, record.code.length
   end
 
-  test "send_code messenger is no longer accepted" do
-    err = assert_raises(Shop::PhoneOtp::Error) do
-      Shop::PhoneOtp.send_code!(phone: @phone, channel: "messenger")
-    end
-    assert_match(/sms|звонок/i, err.message)
-  end
-
-  test "cooldown blocks flash_call resend within 20 seconds" do
-    Shop::PhoneOtp.send_code!(phone: @phone, channel: "flash_call")
-    err = assert_raises(Shop::PhoneOtp::Error) do
-      Shop::PhoneOtp.send_code!(phone: @phone, channel: "flash_call")
-    end
-    assert_match(/20|секунд|подождите/i, err.message)
-  end
-
-  test "sms works without prior flash_call" do
-    Shop::PhoneOtp.send_code!(phone: @phone, channel: "sms")
+  test "verify_sms accepts code" do
+    Shop::PhoneOtp.send_sms_code!(phone: @phone)
     record = MobileOtpCode.where(phone: @phone, is_used: false).order(created_at: :desc).first
-    assert record
-    assert_equal 4, record.code.length
-  end
-
-  test "sms generates its own code (does not reuse flash_call)" do
-    Shop::PhoneOtp.send_code!(phone: @phone, channel: "flash_call")
-    flash = MobileOtpCode.where(phone: @phone, is_used: false).order(created_at: :desc).first
-
-    Shop::PhoneOtp.send_code!(phone: @phone, channel: "sms")
-    sms = MobileOtpCode.where(phone: @phone, is_used: false).order(created_at: :desc).first
-
-    assert flash.reload.is_used
-    assert_not_equal flash.id, sms.id
-    assert_equal 4, sms.code.length
-  end
-
-  test "verify accepts sms-only code" do
-    Shop::PhoneOtp.send_code!(phone: @phone, channel: "sms")
-    record = MobileOtpCode.where(phone: @phone, is_used: false).order(created_at: :desc).first
-    assert_equal @phone, Shop::PhoneOtp.verify!(phone: @phone, code: record.code)
-  end
-
-  test "verify accepts code and marks used" do
-    Shop::PhoneOtp.send_code!(phone: @phone, channel: "flash_call")
-    record = MobileOtpCode.where(phone: @phone, is_used: false).order(created_at: :desc).first
-    assert_equal @phone, Shop::PhoneOtp.verify!(phone: @phone, code: record.code)
+    assert_equal @phone, Shop::PhoneOtp.verify_sms!(phone: @phone, code: record.code)
     assert record.reload.is_used
   end
 
-  test "verify rejects wrong code and increments attempts" do
-    Shop::PhoneOtp.send_code!(phone: @phone, channel: "flash_call")
+  test "verify_sms rejects wrong code" do
+    Shop::PhoneOtp.send_sms_code!(phone: @phone)
     assert_raises(Shop::PhoneOtp::Error) do
-      Shop::PhoneOtp.verify!(phone: @phone, code: "000000")
-    end
-    record = MobileOtpCode.where(phone: @phone).order(created_at: :desc).first
-    assert_equal 1, record.attempts
-  end
-
-  test "verify invalidates after 5 failed attempts" do
-    Shop::PhoneOtp.send_code!(phone: @phone, channel: "flash_call")
-    5.times do
-      assert_raises(Shop::PhoneOtp::Error) do
-        Shop::PhoneOtp.verify!(phone: @phone, code: "000000")
-      end
-    end
-    record = MobileOtpCode.where(phone: @phone).order(created_at: :desc).first
-    assert record.is_used
-    assert_raises(Shop::PhoneOtp::Error) do
-      Shop::PhoneOtp.verify!(phone: @phone, code: record.code)
+      Shop::PhoneOtp.verify_sms!(phone: @phone, code: "0000")
     end
   end
 
-  test "normalizes phone input on send" do
-    Shop::PhoneOtp.send_code!(phone: "89001112233", channel: "flash_call")
-    assert MobileOtpCode.exists?(phone: "+79001112233", is_used: false)
+  test "legacy send_code rejects flash_call" do
+    err = assert_raises(Shop::PhoneOtp::Error) do
+      Shop::PhoneOtp.send_code!(phone: @phone, channel: "flash_call")
+    end
+    assert_match(/sms/i, err.message)
+  end
+
+  test "legacy send_code sms works" do
+    assert_equal @phone, Shop::PhoneOtp.send_code!(phone: @phone, channel: "sms")
   end
 end

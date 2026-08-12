@@ -1,18 +1,17 @@
-/** Каскад OTP: Flash×2 → SMS (без Messenger). */
+/** Стейт-машина phone auth: Callcheck → SMS fallback (без FlashCall /code/call). */
 
-export const FLASH_WAIT_SEC = 20
+export const CALLCHECK_POLL_MS = 3000
+export const CALLCHECK_TIMEOUT_SEC = 40
 export const SMS_COOLDOWN_SEC = 60
 
-export const CASCADE_PHASE = Object.freeze({
-  FLASH_1: "flash_1",
-  FLASH_2: "flash_2",
+export const AUTH_PHASE = Object.freeze({
+  CALLCHECK: "callcheck",
   SMS: "sms"
 })
 
-export const FLASH_HINT =
-  "Введите последние 4 цифры номера, с которого вам звонят. На звонок отвечать не нужно."
+export const CALLCHECK_HINT =
+  "Позвоните на номер ниже с вашего телефона. На звонок отвечать не нужно — сброс автоматический."
 
-export const RETRY_FLASH_LABEL = "Запросить звонок еще раз"
 export const SMS_BTN_LABEL = "Отправить код в СМС"
 export const SMS_SENT_HINT = "Отправили 4-значный код в СМС"
 
@@ -23,94 +22,89 @@ export function formatMmSs(totalSec) {
   return `${mm}:${ss}`
 }
 
-export function waitingCallLabel(secondsLeft) {
-  return `Ждем звонок... ${formatMmSs(secondsLeft)}`
+export function waitingCallcheckLabel(secondsLeft) {
+  return `Ждем ваш звонок... ${formatMmSs(secondsLeft)}`
 }
 
 export function smsSentHint(phoneDisplay) {
   return `Отправили 4-значный код в СМС на номер ${phoneDisplay || ""}`.trim()
 }
 
-export function initialFlashCascade() {
+export function initialCallcheckState(payload = {}) {
   return {
-    phase: CASCADE_PHASE.FLASH_1,
-    secondsLeft: FLASH_WAIT_SEC,
-    lastChannel: null
+    phase: AUTH_PHASE.CALLCHECK,
+    secondsLeft: CALLCHECK_TIMEOUT_SEC,
+    checkId: payload.check_id || null,
+    callPhone: payload.call_phone || null,
+    callPhonePretty: payload.call_phone_pretty || null,
+    callPhoneHtml: payload.call_phone_html || null,
+    lastChannel: null,
+    smsSent: false
   }
 }
 
-/**
- * Тик каскада (1с).
- * Flash #1 (20с) → Flash #2 (20с) → SMS
- */
-export function tickFlashCascade(state) {
-  const phase = state?.phase || CASCADE_PHASE.FLASH_1
+/** Тик 1с на Callcheck. По истечении 40с → SMS phase + autoSend sms. */
+export function tickCallcheck(state) {
+  const phase = state?.phase || AUTH_PHASE.CALLCHECK
   const left = Math.max(0, Number(state?.secondsLeft) || 0)
-  const lastChannel = state?.lastChannel ?? null
+
+  if (phase !== AUTH_PHASE.CALLCHECK) {
+    if (phase === AUTH_PHASE.SMS && left > 0) {
+      return { ...state, secondsLeft: left - 1, autoSend: null, timedOut: false }
+    }
+    return { ...state, autoSend: null, timedOut: false }
+  }
 
   if (left > 1) {
-    return { phase, secondsLeft: left - 1, lastChannel, autoSend: null }
+    return { ...state, phase, secondsLeft: left - 1, autoSend: null, timedOut: false }
   }
 
-  if (left === 1) {
-    if (phase === CASCADE_PHASE.FLASH_1) {
-      return {
-        phase: CASCADE_PHASE.FLASH_2,
-        secondsLeft: FLASH_WAIT_SEC,
-        lastChannel,
-        autoSend: "flash_call"
-      }
-    }
-    if (phase === CASCADE_PHASE.FLASH_2) {
-      return {
-        phase: CASCADE_PHASE.SMS,
-        secondsLeft: 0,
-        lastChannel,
-        autoSend: "sms"
-      }
-    }
-    return { phase: CASCADE_PHASE.SMS, secondsLeft: 0, lastChannel, autoSend: null }
-  }
-
-  return { phase, secondsLeft: 0, lastChannel, autoSend: null }
-}
-
-export function showRetryFlashButton(phaseOrRound) {
-  if (typeof phaseOrRound === "number") return phaseOrRound >= 2
-  return phaseOrRound === CASCADE_PHASE.FLASH_2
-}
-
-export function showSmsButton(phase) {
-  return phase === CASCADE_PHASE.SMS
-}
-
-export function afterManualFlashResend(_flashRound) {
   return {
-    phase: CASCADE_PHASE.FLASH_2,
-    secondsLeft: FLASH_WAIT_SEC,
-    lastChannel: "flash_call"
+    ...state,
+    phase: AUTH_PHASE.SMS,
+    secondsLeft: 0,
+    autoSend: "sms",
+    timedOut: true
   }
 }
 
-export function afterSmsSend() {
+export function afterSmsSend(state) {
   return {
-    phase: CASCADE_PHASE.SMS,
+    ...state,
+    phase: AUTH_PHASE.SMS,
     secondsLeft: SMS_COOLDOWN_SEC,
-    lastChannel: "sms"
+    lastChannel: "sms",
+    smsSent: true,
+    autoSend: null
   }
 }
 
-export function cascadeHint({ lastChannel, phoneDisplay }) {
-  if (lastChannel === "sms") return smsSentHint(phoneDisplay)
-  return FLASH_HINT
+export function showSmsPin(phase, smsSent) {
+  return phase === AUTH_PHASE.SMS && !!smsSent
 }
 
-export function cascadeTimerLabel({ phase, secondsLeft, lastChannel }) {
-  if (phase === CASCADE_PHASE.FLASH_1 || phase === CASCADE_PHASE.FLASH_2) {
-    return waitingCallLabel(secondsLeft)
+export function showSmsFallbackButton(phase) {
+  return phase === AUTH_PHASE.CALLCHECK || phase === AUTH_PHASE.SMS
+}
+
+export function cascadeHint({ phase, lastChannel, phoneDisplay, smsSent }) {
+  if (phase === AUTH_PHASE.SMS && (lastChannel === "sms" || smsSent)) {
+    return smsSentHint(phoneDisplay)
   }
-  if (phase === CASCADE_PHASE.SMS && lastChannel === "sms" && secondsLeft > 0) {
+  return CALLCHECK_HINT
+}
+
+export function cascadeTimerLabel({ phase, secondsLeft }) {
+  if (phase === AUTH_PHASE.CALLCHECK) return waitingCallcheckLabel(secondsLeft)
+  if (phase === AUTH_PHASE.SMS && secondsLeft > 0) {
     return `Повтор SMS через ${formatMmSs(secondsLeft)}`
   }
   return ""
+}
+
+/** tel: href из call_phone digits. */
+export function telHrefFromCallPhone(callPhone) {
+  const digits = String(callPhone || "").replace(/\D/g, "")
+  if (!digits) return null
+  return `tel:+${digits}`
 }

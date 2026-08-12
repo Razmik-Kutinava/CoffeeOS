@@ -27,7 +27,7 @@ module Shop
       keyword_init: true
     )
     CallcheckAddResult = Struct.new(
-      :check_id, :call_phone, :call_phone_pretty, keyword_init: true
+      :check_id, :call_phone, :call_phone_pretty, :call_phone_html, keyword_init: true
     )
     CallcheckStatusResult = Struct.new(
       :check_id, :check_status, :check_status_text, :confirmed, keyword_init: true
@@ -157,7 +157,7 @@ module Shop
       end
 
       if fallback?
-        Rails.logger.info("[Shop::SmsRuClient] sms to #{phone}: msg=#{text.truncate(40)} (fallback)")
+        Rails.logger.info("[Shop::SmsRuClient] sms to #{phone}: msg=(redacted len=#{text.length}) (fallback)")
         return SendResult.new(sms_id: "fallback-#{SecureRandom.hex(4)}")
       end
 
@@ -248,11 +248,14 @@ module Shop
 
       if fallback?
         check_id = "fallback-#{SecureRandom.hex(4)}"
+        pretty = "+7 (499) 555-55-55"
+        call_phone = "74995555555"
         Rails.logger.info("[Shop::SmsRuClient] callcheck_add #{digits} check_id=#{check_id} (fallback)")
         return CallcheckAddResult.new(
           check_id: check_id,
-          call_phone: "74995555555",
-          call_phone_pretty: "+7 (499) 555-55-55"
+          call_phone: call_phone,
+          call_phone_pretty: pretty,
+          call_phone_html: %(<a href="tel:+#{call_phone}">#{pretty}</a>)
         )
       end
 
@@ -272,6 +275,17 @@ module Shop
       end
 
       if fallback?
+        cached = Rails.cache.read("sms_ru:callcheck:#{id}")
+        cached_status = cached.is_a?(Hash) ? cached["status"].to_i : 0
+        if cached_status == CALLCHECK_CONFIRMED
+          Rails.logger.info("[Shop::SmsRuClient] callcheck_status #{id} confirmed (fallback/cache)")
+          return CallcheckStatusResult.new(
+            check_id: id,
+            check_status: CALLCHECK_CONFIRMED,
+            check_status_text: "confirmed",
+            confirmed: true
+          )
+        end
         Rails.logger.info("[Shop::SmsRuClient] callcheck_status #{id} (fallback)")
         return CallcheckStatusResult.new(
           check_id: id,
@@ -564,10 +578,13 @@ module Shop
         raise Error.new("SMS.ru callcheck/add: empty check_id/call_phone", http_status: 502)
       end
 
+      pretty = body["call_phone_pretty"].presence || call_phone
+      html = body["call_phone_html"].presence
       CallcheckAddResult.new(
         check_id: check_id,
         call_phone: call_phone,
-        call_phone_pretty: body["call_phone_pretty"].presence || call_phone
+        call_phone_pretty: pretty,
+        call_phone_html: html
       )
     end
 

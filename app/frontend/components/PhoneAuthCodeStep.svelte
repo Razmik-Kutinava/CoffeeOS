@@ -1,27 +1,28 @@
 <script>
   /**
-   * Экран 2: PIN + каскад Flash×2 → SMS.
+   * Экран 2: Callcheck (poll) → SMS fallback (PIN).
    */
   import { onDestroy } from "svelte"
   import { api } from "../lib/api.js"
-  import { buildVerifyBody, buildOtpSendBody } from "../lib/phoneAuthWizard.js"
+  import { buildVerifySmsBody, buildSendSmsBody } from "../lib/phoneAuthWizard.js"
   import {
-    RETRY_FLASH_LABEL,
     SMS_BTN_LABEL,
-    initialFlashCascade,
-    tickFlashCascade,
-    showRetryFlashButton,
-    showSmsButton,
-    afterManualFlashResend,
+    CALLCHECK_POLL_MS,
+    initialCallcheckState,
+    tickCallcheck,
     afterSmsSend,
+    showSmsPin,
     cascadeHint,
-    cascadeTimerLabel
+    cascadeTimerLabel,
+    telHrefFromCallPhone,
+    AUTH_PHASE
   } from "../lib/phoneAuthCascade.js"
   import PhoneAuthPinInputs from "./PhoneAuthPinInputs.svelte"
 
   let {
     phoneDisplay = "+7",
     phoneE164 = null,
+    callcheck = null,
     onChangeNumber = undefined,
     onVerified = undefined,
     onError = undefined
@@ -31,58 +32,101 @@
   let resending = $state(false)
   let localError = $state("")
   let pinNonce = $state(0)
-  let cascade = $state(initialFlashCascade())
-  let timerId = null
+  let state = $state(initialCallcheckState(callcheck || {}))
+  let tickId = null
+  let pollId = null
 
-  const hintText = $derived(cascadeHint({ lastChannel: cascade.lastChannel, phoneDisplay }))
-  const waitLabel = $derived(
-    cascadeTimerLabel({
-      phase: cascade.phase,
-      secondsLeft: cascade.secondsLeft,
-      lastChannel: cascade.lastChannel
+  const hintText = $derived(
+    cascadeHint({
+      phase: state.phase,
+      lastChannel: state.lastChannel,
+      phoneDisplay,
+      smsSent: state.smsSent
     })
   )
-  const showRetry = $derived(showRetryFlashButton(cascade.phase))
-  const showSms = $derived(showSmsButton(cascade.phase))
+  const waitLabel = $derived(
+    cascadeTimerLabel({ phase: state.phase, secondsLeft: state.secondsLeft })
+  )
+  const showPin = $derived(showSmsPin(state.phase, state.smsSent))
+  const telHref = $derived(telHrefFromCallPhone(state.callPhone))
   const busy = $derived(resending || verifying)
 
-  function stopTimer() {
-    if (timerId) {
-      clearInterval(timerId)
-      timerId = null
+  function stopTimers() {
+    if (tickId) {
+      clearInterval(tickId)
+      tickId = null
+    }
+    if (pollId) {
+      clearInterval(pollId)
+      pollId = null
     }
   }
 
-  function startTimer() {
-    stopTimer()
-    timerId = setInterval(() => {
-      const next = tickFlashCascade(cascade)
-      cascade = {
+  function startTick() {
+    stopTimers()
+    tickId = setInterval(() => {
+      const next = tickCallcheck(state)
+      state = {
+        ...state,
         phase: next.phase,
         secondsLeft: next.secondsLeft,
-        lastChannel: next.lastChannel
+        lastChannel: next.lastChannel,
+        smsSent: next.smsSent,
+        autoSend: null
       }
-      if (next.autoSend) sendChannel(next.autoSend)
+      if (next.autoSend === "sms") {
+        stopPoll()
+        sendSms()
+      }
     }, 1000)
+    if (state.phase === AUTH_PHASE.CALLCHECK) startPoll()
   }
 
-  startTimer()
-  onDestroy(stopTimer)
+  function stopPoll() {
+    if (pollId) {
+      clearInterval(pollId)
+      pollId = null
+    }
+  }
 
-  async function sendChannel(channel) {
+  function startPoll() {
+    stopPoll()
+    pollId = setInterval(() => {
+      pollStatus()
+    }, CALLCHECK_POLL_MS)
+    pollStatus()
+  }
+
+  async function pollStatus() {
+    if (state.phase !== AUTH_PHASE.CALLCHECK || verifying) return
+    try {
+      const res = await api("/phone_otp/check_status", { method: "GET" })
+      if (res?.confirmed || res?.verified) {
+        stopTimers()
+        onVerified?.({ phone: res?.phone || phoneE164, refreshToken: res?.refresh_token })
+      } else if (res?.expired) {
+        stopPoll()
+        state = { ...state, phase: AUTH_PHASE.SMS, secondsLeft: 0 }
+        await sendSms()
+      }
+    } catch (_) {
+      /* poll soft-fail; timeout/SMS fallback handles UX */
+    }
+  }
+
+  async function sendSms() {
     if (!phoneE164 || resending || verifying) return
     resending = true
     localError = ""
     try {
-      await api("/phone_otp/send", {
+      await api("/phone_otp/send_sms", {
         method: "POST",
-        body: JSON.stringify(buildOtpSendBody(phoneE164, channel))
+        body: JSON.stringify(buildSendSmsBody(phoneE164))
       })
-      if (channel === "flash_call") cascade = afterManualFlashResend()
-      else if (channel === "sms") cascade = afterSmsSend()
-      if (!timerId) startTimer()
+      state = afterSmsSend(state)
+      if (!tickId) startTick()
     } catch (e) {
-      localError = e.message || "Не удалось отправить код"
+      localError = e.message || "Не удалось отправить SMS"
       onError?.(localError)
     } finally {
       resending = false
@@ -94,11 +138,11 @@
     verifying = true
     localError = ""
     try {
-      const res = await api("/phone_otp/verify", {
+      const res = await api("/phone_otp/verify_sms", {
         method: "POST",
-        body: JSON.stringify(buildVerifyBody(phoneE164, code))
+        body: JSON.stringify(buildVerifySmsBody(phoneE164, code))
       })
-      stopTimer()
+      stopTimers()
       onVerified?.({ phone: res?.phone || phoneE164, refreshToken: res?.refresh_token })
     } catch (e) {
       localError = e.message || "Неверный код"
@@ -110,9 +154,17 @@
   }
 
   function handleChangeNumber() {
-    stopTimer()
+    stopTimers()
     onChangeNumber?.()
   }
+
+  function onManualSms() {
+    stopPoll()
+    sendSms()
+  }
+
+  startTick()
+  onDestroy(stopTimers)
 </script>
 
 <div data-testid="phone-auth-screen-2">
@@ -125,40 +177,61 @@
   >
     Изменить номер
   </button>
-  <p class="mb-2 text-sm text-[#a0a0a0]" role="status" data-testid="phone-auth-flash-hint">{hintText}</p>
+  <p class="mb-2 text-sm text-[#a0a0a0]" role="status" data-testid="phone-auth-callcheck-hint">{hintText}</p>
   {#if waitLabel}
-    <p class="mb-3 text-center text-sm text-white" role="status" data-testid="phone-auth-flash-timer">
+    <p class="mb-3 text-center text-sm text-white" role="status" data-testid="phone-auth-callcheck-timer">
       {waitLabel}
     </p>
   {/if}
-  {#key pinNonce}
-    <PhoneAuthPinInputs disabled={verifying} onComplete={submitPin} />
-  {/key}
-  {#if verifying}
-    <p class="text-center text-sm text-[#a0a0a0]" role="status">Проверяем…</p>
+
+  {#if state.phase === AUTH_PHASE.CALLCHECK}
+    <div class="mb-3 text-center" data-testid="phone-auth-callcheck-number">
+      {#if telHref}
+        <a
+          href={telHref}
+          class="text-lg font-medium text-[#ff8c42] underline"
+          data-testid="phone-auth-tel-link"
+        >
+          {state.callPhonePretty || state.callPhone}
+        </a>
+      {:else if state.callPhoneHtml}
+        <!-- SMS.ru html already escaped server-side; tel link preferred -->
+        <p class="text-lg text-white">{state.callPhonePretty}</p>
+      {/if}
+    </div>
   {/if}
-  {#if showRetry}
+
+  {#if showPin}
+    {#key pinNonce}
+      <PhoneAuthPinInputs disabled={verifying} onComplete={submitPin} />
+    {/key}
+    {#if verifying}
+      <p class="text-center text-sm text-[#a0a0a0]" role="status">Проверяем…</p>
+    {/if}
+  {/if}
+
+  {#if state.phase === AUTH_PHASE.CALLCHECK || (state.phase === AUTH_PHASE.SMS && !state.smsSent)}
     <button
       type="button"
       class="mt-3 w-full rounded-lg border border-[#ff8c42] py-2 text-sm text-[#ff8c42] disabled:opacity-50"
       disabled={busy}
-      onclick={() => sendChannel("flash_call")}
-      data-testid="phone-auth-retry-flash"
+      onclick={onManualSms}
+      data-testid="phone-auth-sms"
     >
-      {resending ? "Отправляем…" : RETRY_FLASH_LABEL}
+      {resending ? "Отправляем…" : SMS_BTN_LABEL}
     </button>
-  {/if}
-  {#if showSms}
+  {:else if state.phase === AUTH_PHASE.SMS && state.smsSent}
     <button
       type="button"
       class="mt-3 w-full rounded-lg border border-[#ff8c42] py-2 text-sm text-[#ff8c42] disabled:opacity-50"
-      disabled={busy || cascade.secondsLeft > 0}
-      onclick={() => sendChannel("sms")}
+      disabled={busy || state.secondsLeft > 0}
+      onclick={onManualSms}
       data-testid="phone-auth-sms"
     >
       {resending ? "Отправляем…" : SMS_BTN_LABEL}
     </button>
   {/if}
+
   {#if localError}
     <p class="mt-2 text-sm text-red-400" role="alert">{localError}</p>
   {/if}

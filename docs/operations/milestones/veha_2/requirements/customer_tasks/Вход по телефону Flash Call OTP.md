@@ -33,5 +33,5 @@
 
 ## Заметки агента
 
-- Канал `flash_call` в `Shop::PhoneOtp` + `SmsRuClient.request_flash_call!`.
-- Не путать с **callcheck** (клиент звонит нам) — `#52`.
+- **SUPERSEDED 2026-08-12:** не канон. Auth = Callcheck + SMS fallback — BUG-REPORT Callcheck.
+- Не путать с **callcheck** (клиент звонит нам) — теперь это основной flow.

@@ -11,6 +11,15 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-12 — feat(shop): Phone OTP Callcheck + SMS fallback (BUG-REPORT)
+
+- Убран FlashCall `/code/call` из authorization flow
+- API: `init_callcheck` / `check_status` / `send_sms` / `verify_sms`; `check_id` в session
+- PWA: Callcheck (tel:, poll 3s, timeout 40s) → SMS PIN
+- sms-auth / INTEGRATIONS / shop-api обновлены
+- Local PASS (phone_otp + funnel UI + profile_merge + CBR + JS)
+- Fly MCP: skip
+
 ## 2026-08-12 — feat(shop): Phone OTP — SMS и Flash Call раздельно
 
 - SMS генерирует свой 4‑значный код (больше не «запросите звонок сначала»)

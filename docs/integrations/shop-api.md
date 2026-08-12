@@ -25,8 +25,9 @@ PWA / mobile витрина. Tenant: `@shop_tenant` из `tenant_id` query ил�
 | POST | `session/reconnect` | `Shop::GuestOrderReconnect` | `order_id`, `reconnect_token` → bind guest order |
 | POST | `email_otp/send\|verify` | `Shop::EmailOtp` | checkout email verify |
 | GET | `email_otp/status` | — | cooldown |
-| POST | `phone_otp/send\|verify` | `Shop::PhoneOtp` | `channel`: flash_call → sms |
-| GET | `phone_otp/status` | — | cooldown |
+| POST | `phone_otp/init_callcheck` · `send_sms` · `verify_sms` | `Shop::PhoneOtp` | Callcheck → SMS fallback |
+| GET | `phone_otp/check_status` | session `check_id` | 401 → auth |
+| POST/GET | `phone_otp/send\|verify\|status` | legacy Profile SMS | flash_call **rejected** |
 
 **Mapping:** `mobile_sessions` (refresh_token, expires_at 90d) · cookie `_coffeeos_session` 90d · LS `shop_refresh_token`.
 

@@ -1,8 +1,8 @@
-/** Стейт и хелперы 2-экранного phone auth wizard (каскад OTP). */
+/** Стейт и хелперы 2–3 экранного phone auth (Callcheck → SMS). */
 
 export const WIZARD_SCREEN = Object.freeze({
   PHONE: 1,
-  CODE: 2
+  VERIFY: 2
 })
 
 export const PIN_LENGTH = 4
@@ -19,18 +19,16 @@ export function canContinuePhone(display) {
   return nationalPhoneDigits(display) === 10
 }
 
-/** Тело POST /shop/api/phone_otp/send для старта каскада. */
-export function buildFlashCallSendBody(phoneE164) {
-  return buildOtpSendBody(phoneE164, "flash_call")
+export function buildInitCallcheckBody(phoneE164) {
+  return { phone: phoneE164 }
 }
 
-/** Тело POST send с каналом flash_call | sms. */
-export function buildOtpSendBody(phoneE164, channel) {
-  return { phone: phoneE164, channel: String(channel || "flash_call") }
+export function buildSendSmsBody(phoneE164) {
+  return { phone: phoneE164 }
 }
 
-export function nextScreenAfterSend(current = WIZARD_SCREEN.PHONE) {
-  return current === WIZARD_SCREEN.PHONE ? WIZARD_SCREEN.CODE : current
+export function nextScreenAfterInit(current = WIZARD_SCREEN.PHONE) {
+  return current === WIZARD_SCREEN.PHONE ? WIZARD_SCREEN.VERIFY : current
 }
 
 export function emptyPinCells() {
@@ -41,10 +39,6 @@ export function pinCodeFromCells(cells) {
   return (cells || []).map((c) => String(c || "").replace(/\D/g, "")).join("").slice(0, PIN_LENGTH)
 }
 
-/**
- * Ввод в ячейку index: берём последнюю цифру, сдвигаем фокус вперёд.
- * @returns {{ cells: string[], code: string, focusIndex: number }}
- */
 export function applyPinDigit(cells, index, rawValue) {
   const next = emptyPinCells().map((_, i) => (cells && cells[i]) || "")
   const digits = String(rawValue || "").replace(/\D/g, "")
@@ -57,7 +51,6 @@ export function applyPinDigit(cells, index, rawValue) {
   return { cells: next, code, focusIndex }
 }
 
-/** Backspace на пустой ячейке → фокус назад. */
 export function pinBackspaceFocus(cells, index) {
   if ((cells[index] || "").length > 0) return index
   return Math.max(0, index - 1)
@@ -67,6 +60,24 @@ export function shouldAutoSubmitPin(code) {
   return String(code || "").replace(/\D/g, "").length === PIN_LENGTH
 }
 
-export function buildVerifyBody(phoneE164, code) {
+export function buildVerifySmsBody(phoneE164, code) {
   return { phone: phoneE164, code: String(code || "").replace(/\D/g, "").slice(0, PIN_LENGTH) }
+}
+
+/** @deprecated flash_call removed — aliases for old tests */
+export function buildFlashCallSendBody(phoneE164) {
+  return buildInitCallcheckBody(phoneE164)
+}
+
+export function buildOtpSendBody(phoneE164, channel) {
+  if (String(channel) === "sms") return buildSendSmsBody(phoneE164)
+  return buildInitCallcheckBody(phoneE164)
+}
+
+export function buildVerifyBody(phoneE164, code) {
+  return buildVerifySmsBody(phoneE164, code)
+}
+
+export function nextScreenAfterSend(current) {
+  return nextScreenAfterInit(current)
 }

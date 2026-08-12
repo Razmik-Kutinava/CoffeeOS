@@ -22,7 +22,7 @@
 |------------------|--------|
 | Любой `/shop/api/*`, cart, orders, frequent | [`shop-api.md`](shop-api.md) |
 | Оплата, webhook, карты, RebillId, СБП, widget | [`tbank.md`](tbank.md) |
-| Flash call, SMS OTP, sms/*, callcheck, my/*, auth/check, stoplist, webhooks `/callbacks/sms_ru` | [`sms-auth.md`](sms-auth.md) · runbook [`SMS_RU_SECRETS.md`](../operations/runbooks/SMS_RU_SECRETS.md) |
+| Flash call / Callcheck, SMS OTP, sms/*, my/*, auth/check, stoplist, webhooks `/callbacks/sms_ru` | [`sms-auth.md`](sms-auth.md) · runbook [`SMS_RU_SECRETS.md`](../operations/runbooks/SMS_RU_SECRETS.md) · **auth = Callcheck→SMS** |
 | Cable, push, Wallet, cascade ready, barista→PWA | [`pwa-realtime.md`](pwa-realtime.md) |
 | FCM register, legacy fiscal callbacks, loyalty stub | [`notify-loyalty.md`](notify-loyalty.md) |
 | Gap audit PWA/payments batch | [`gap-matrix-pwa-payments.md`](gap-matrix-pwa-payments.md) |

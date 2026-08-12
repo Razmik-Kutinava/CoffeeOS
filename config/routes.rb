@@ -184,6 +184,11 @@ Rails.application.routes.draw do
       post "email_otp/send", to: "email_otp#send_code"
       post "email_otp/verify", to: "email_otp#verify"
       get "email_otp/status", to: "email_otp#status"
+      post "phone_otp/init_callcheck", to: "phone_otp#init_callcheck"
+      get "phone_otp/check_status", to: "phone_otp#check_status"
+      post "phone_otp/send_sms", to: "phone_otp#send_sms"
+      post "phone_otp/verify_sms", to: "phone_otp#verify_sms"
+      # Legacy Profile link (SMS only)
       post "phone_otp/send", to: "phone_otp#send_code"
       post "phone_otp/verify", to: "phone_otp#verify"
       get "phone_otp/status", to: "phone_otp#status"

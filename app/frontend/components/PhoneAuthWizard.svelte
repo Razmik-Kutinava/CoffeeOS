@@ -1,15 +1,14 @@
 <script>
   /**
-   * 2-экранный phone auth wizard (каскад OTP).
-   * Экран 1: телефон → flash_call. Экран 2: PhoneAuthCodeStep (PIN + Flash cascade).
+   * Phone auth wizard: телефон → Callcheck (+ SMS fallback).
    */
   import { api } from "../lib/api.js"
   import { formatPhoneMask, normalizePhoneToE164Ru } from "../lib/phoneOtp.js"
   import {
     WIZARD_SCREEN,
     canContinuePhone,
-    buildFlashCallSendBody,
-    nextScreenAfterSend
+    buildInitCallcheckBody,
+    nextScreenAfterInit
   } from "../lib/phoneAuthWizard.js"
   import PhoneAuthCodeStep from "./PhoneAuthCodeStep.svelte"
 
@@ -23,6 +22,7 @@
   let phoneDisplay = $state("+7")
   let sending = $state(false)
   let localError = $state("")
+  let callcheckPayload = $state(null)
 
   const phoneE164 = $derived(normalizePhoneToE164Ru(phoneDisplay))
   const canContinue = $derived(canContinuePhone(phoneDisplay) && !sending)
@@ -38,13 +38,14 @@
     localError = ""
     sending = true
     try {
-      await api("/phone_otp/send", {
+      const res = await api("/phone_otp/init_callcheck", {
         method: "POST",
-        body: JSON.stringify(buildFlashCallSendBody(phoneE164))
+        body: JSON.stringify(buildInitCallcheckBody(phoneE164))
       })
-      screen = nextScreenAfterSend(screen)
+      callcheckPayload = res
+      screen = nextScreenAfterInit(screen)
     } catch (e) {
-      localError = e.message || "Не удалось отправить код"
+      localError = e.message || "Не удалось начать проверку"
       onError?.(localError)
     } finally {
       sending = false
@@ -53,6 +54,7 @@
 
   function onChangeNumber() {
     screen = WIZARD_SCREEN.PHONE
+    callcheckPayload = null
     localError = ""
   }
 </script>
@@ -89,6 +91,7 @@
     <PhoneAuthCodeStep
       {phoneDisplay}
       {phoneE164}
+      callcheck={callcheckPayload}
       onChangeNumber={onChangeNumber}
       {onVerified}
       {onError}

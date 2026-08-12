@@ -1,126 +1,99 @@
 /**
- * RED: каскад OTP Flash×2 → SMS (без Messenger).
- *
+ * Callcheck → SMS fallback state machine.
  * node --test test/javascript/shop_phone_auth_cascade_smsru_test.mjs
  */
 import assert from "node:assert/strict"
 import { describe, it } from "node:test"
 
 import {
-  CASCADE_PHASE,
-  FLASH_WAIT_SEC,
+  AUTH_PHASE,
+  CALLCHECK_TIMEOUT_SEC,
+  CALLCHECK_POLL_MS,
   SMS_COOLDOWN_SEC,
-  initialFlashCascade,
-  tickFlashCascade,
-  showRetryFlashButton,
-  showSmsButton,
-  afterManualFlashResend,
+  initialCallcheckState,
+  tickCallcheck,
   afterSmsSend,
+  showSmsPin,
   cascadeHint,
   cascadeTimerLabel,
-  FLASH_HINT,
+  CALLCHECK_HINT,
   SMS_BTN_LABEL,
+  telHrefFromCallPhone,
   smsSentHint
 } from "../../app/frontend/lib/phoneAuthCascade.js"
 
-describe("CASCADE_PHASE — no MESSENGER phase", () => {
-  it("has FLASH_1, FLASH_2, SMS but NOT MESSENGER", () => {
-    assert.ok(CASCADE_PHASE.FLASH_1)
-    assert.ok(CASCADE_PHASE.FLASH_2)
-    assert.ok(CASCADE_PHASE.SMS)
-    assert.equal(CASCADE_PHASE.MESSENGER, undefined)
+describe("AUTH_PHASE", () => {
+  it("has CALLCHECK and SMS only", () => {
+    assert.equal(AUTH_PHASE.CALLCHECK, "callcheck")
+    assert.equal(AUTH_PHASE.SMS, "sms")
+    assert.equal(AUTH_PHASE.FLASH_1, undefined)
   })
 })
 
-describe("initialFlashCascade — starts at FLASH_1 with 20s", () => {
-  it("returns phase FLASH_1 with 20 seconds", () => {
-    const s = initialFlashCascade()
-    assert.equal(s.phase, CASCADE_PHASE.FLASH_1)
-    assert.equal(s.secondsLeft, FLASH_WAIT_SEC)
+describe("initialCallcheckState", () => {
+  it("starts callcheck with 40s and dial payload", () => {
+    const s = initialCallcheckState({
+      check_id: "abc",
+      call_phone: "74995555555",
+      call_phone_pretty: "+7 (499) 555-55-55",
+      call_phone_html: '<a href="tel:+74995555555">x</a>'
+    })
+    assert.equal(s.phase, AUTH_PHASE.CALLCHECK)
+    assert.equal(s.secondsLeft, CALLCHECK_TIMEOUT_SEC)
+    assert.equal(s.checkId, "abc")
+    assert.equal(CALLCHECK_POLL_MS, 3000)
   })
 })
 
-describe("tickFlashCascade — Flash #1 → Flash #2 → SMS", () => {
-  it("FLASH_1 counts down from 20 to 1 then transitions to FLASH_2 with autoSend flash_call", () => {
-    let state = { phase: CASCADE_PHASE.FLASH_1, secondsLeft: 1, lastChannel: null }
-    const next = tickFlashCascade(state)
-    assert.equal(next.phase, CASCADE_PHASE.FLASH_2)
-    assert.equal(next.secondsLeft, FLASH_WAIT_SEC)
-    assert.equal(next.autoSend, "flash_call")
-  })
-
-  it("FLASH_2 at secondsLeft=1 transitions directly to SMS (not MESSENGER)", () => {
-    let state = { phase: CASCADE_PHASE.FLASH_2, secondsLeft: 1, lastChannel: "flash_call" }
-    const next = tickFlashCascade(state)
-    assert.equal(next.phase, CASCADE_PHASE.SMS)
+describe("tickCallcheck", () => {
+  it("counts down then transitions to SMS with autoSend", () => {
+    let state = { ...initialCallcheckState(), secondsLeft: 1 }
+    const next = tickCallcheck(state)
+    assert.equal(next.phase, AUTH_PHASE.SMS)
     assert.equal(next.autoSend, "sms")
+    assert.equal(next.timedOut, true)
   })
 
-  it("total cascade: 20s FLASH_1 + 20s FLASH_2 = SMS at 40s", () => {
-    let state = initialFlashCascade()
-    let totalTicks = 0
-    while (state.phase !== CASCADE_PHASE.SMS) {
-      state = tickFlashCascade(state)
-      totalTicks++
-      if (totalTicks > 100) break
+  it("timeout after 40 ticks", () => {
+    let state = initialCallcheckState()
+    let ticks = 0
+    while (state.phase === AUTH_PHASE.CALLCHECK) {
+      state = tickCallcheck(state)
+      ticks++
+      if (ticks > 50) break
     }
-    assert.equal(state.phase, CASCADE_PHASE.SMS)
-    assert.equal(totalTicks, 40)
+    assert.equal(state.phase, AUTH_PHASE.SMS)
+    assert.equal(ticks, 40)
   })
 })
 
-describe("showSmsButton — appears at SMS phase", () => {
-  it("true when phase is SMS", () => {
-    assert.ok(showSmsButton(CASCADE_PHASE.SMS))
-  })
-  it("false when phase is FLASH_1", () => {
-    assert.ok(!showSmsButton(CASCADE_PHASE.FLASH_1))
-  })
-})
-
-describe("showRetryFlashButton — appears at FLASH_2", () => {
-  it("true when phase is FLASH_2", () => {
-    assert.ok(showRetryFlashButton(CASCADE_PHASE.FLASH_2))
-  })
-  it("false when phase is FLASH_1", () => {
-    assert.ok(!showRetryFlashButton(CASCADE_PHASE.FLASH_1))
+describe("SMS pin visibility", () => {
+  it("pin only after sms sent", () => {
+    assert.equal(showSmsPin(AUTH_PHASE.CALLCHECK, false), false)
+    assert.equal(showSmsPin(AUTH_PHASE.SMS, false), false)
+    assert.equal(showSmsPin(AUTH_PHASE.SMS, true), true)
   })
 })
 
-describe("afterSmsSend — SMS cooldown 60s", () => {
-  it("returns SMS phase with 60s cooldown", () => {
-    const s = afterSmsSend()
-    assert.equal(s.phase, CASCADE_PHASE.SMS)
+describe("hints and tel", () => {
+  it("callcheck hint then sms hint", () => {
+    assert.equal(cascadeHint({ phase: AUTH_PHASE.CALLCHECK }), CALLCHECK_HINT)
+    assert.match(smsSentHint("+7 (900) 111-22-33"), /СМС/)
+    assert.equal(SMS_BTN_LABEL.includes("СМС"), true)
+  })
+
+  it("telHrefFromCallPhone", () => {
+    assert.equal(telHrefFromCallPhone("74995555555"), "tel:+74995555555")
+  })
+
+  it("afterSmsSend sets cooldown", () => {
+    const s = afterSmsSend(initialCallcheckState())
+    assert.equal(s.phase, AUTH_PHASE.SMS)
     assert.equal(s.secondsLeft, SMS_COOLDOWN_SEC)
-    assert.equal(s.lastChannel, "sms")
+    assert.equal(s.smsSent, true)
   })
-})
 
-describe("smsSentHint — includes phone number", () => {
-  it("contains formatted phone and '4-значный код в СМС'", () => {
-    const hint = smsSentHint("+7 (900) 111-22-33")
-    assert.match(hint, /4-значный код в СМС/)
-    assert.match(hint, /\+7.*900/)
-  })
-})
-
-describe("cascadeHint — flash vs sms", () => {
-  it("returns FLASH_HINT for flash channel", () => {
-    assert.equal(cascadeHint({ lastChannel: null }), FLASH_HINT)
-  })
-  it("returns SMS hint for sms channel", () => {
-    const hint = cascadeHint({ lastChannel: "sms", phoneDisplay: "+7 (900) 111-22-33" })
-    assert.match(hint, /СМС|код/i)
-  })
-})
-
-describe("cascadeTimerLabel — flash waiting vs SMS cooldown", () => {
-  it("shows 'Ждем звонок...' for FLASH phases", () => {
-    const label = cascadeTimerLabel({ phase: CASCADE_PHASE.FLASH_1, secondsLeft: 15 })
-    assert.match(label, /Ждем звонок/)
-  })
-  it("shows SMS retry timer for SMS phase with cooldown", () => {
-    const label = cascadeTimerLabel({ phase: CASCADE_PHASE.SMS, secondsLeft: 45, lastChannel: "sms" })
-    assert.match(label, /SMS|СМС/i)
+  it("timer labels", () => {
+    assert.match(cascadeTimerLabel({ phase: AUTH_PHASE.CALLCHECK, secondsLeft: 9 }), /00:09/)
   })
 })

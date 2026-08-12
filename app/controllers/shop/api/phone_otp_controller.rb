@@ -3,21 +3,76 @@
 module Shop
   module Api
     class PhoneOtpController < Shop::Api::BaseController
-      def send_code
-        phone = Shop::PhoneOtp.send_code!(
+      def init_callcheck
+        result = Shop::PhoneOtp.init_callcheck!(
           phone: params.require(:phone),
-          channel: params.require(:channel),
-          ip: request.remote_ip
+          session: session,
+          tenant_id: @shop_tenant.id
         )
-        render json: { ok: true, phone: phone, channel: params[:channel].to_s }
+        render json: {
+          ok: true,
+          phone: result[:phone],
+          check_id: result[:check_id],
+          call_phone: result[:call_phone],
+          call_phone_pretty: result[:call_phone_pretty],
+          call_phone_html: result[:call_phone_html]
+        }
       rescue Shop::PhoneOtp::Error => e
         render json: { error: e.message }, status: :unprocessable_entity
       rescue Shop::SmsRuClient::Error => e
         render json: { error: e.message }, status: :bad_gateway
       end
 
-      def verify
-        phone = Shop::PhoneOtp.verify!(
+      def check_status
+        result = Shop::PhoneOtp.poll_callcheck!(
+          session: session,
+          tenant_id: @shop_tenant.id
+        )
+
+        unless result[:confirmed]
+          return render json: {
+            confirmed: false,
+            phone: result[:phone],
+            check_status: result[:check_status],
+            expired: result[:expired] == true
+          }
+        end
+
+        phone = result[:phone]
+        customer_id = Shop::PhoneVerifiedCustomerLinker.link!(
+          session: session,
+          tenant_id: @shop_tenant.id,
+          phone: phone
+        )
+        payload = { confirmed: true, verified: true, phone: phone }
+        if customer_id.present?
+          payload[:refresh_token] = Shop::MobileSessionIssuer.call!(customer_id: customer_id)
+        end
+        render json: payload
+      rescue Shop::PhoneOtp::Error, Shop::PhoneVerifiedCustomerLinker::Error => e
+        render json: { error: e.message }, status: :unprocessable_entity
+      rescue Shop::SmsRuClient::Error => e
+        render json: { error: e.message }, status: :bad_gateway
+      rescue ActiveRecord::ActiveRecordError => e
+        Rails.logger.error("[Shop::PhoneOtp] callcheck complete failed: #{e.class}: #{e.message}")
+        render json: { error: "Не удалось сохранить подтверждение телефона. Попробуйте ещё раз." },
+          status: :internal_server_error
+      end
+
+      def send_sms
+        phone = Shop::PhoneOtp.send_sms_code!(
+          phone: params.require(:phone),
+          ip: request.remote_ip
+        )
+        render json: { ok: true, phone: phone, channel: "sms" }
+      rescue Shop::PhoneOtp::Error => e
+        render json: { error: e.message }, status: :unprocessable_entity
+      rescue Shop::SmsRuClient::Error => e
+        render json: { error: e.message }, status: :bad_gateway
+      end
+
+      def verify_sms
+        phone = Shop::PhoneOtp.verify_sms!(
           phone: params.require(:phone),
           code: params.require(:code)
         )
@@ -34,9 +89,31 @@ module Shop
       rescue Shop::PhoneOtp::Error, Shop::PhoneVerifiedCustomerLinker::Error => e
         render json: { error: e.message }, status: :unprocessable_entity
       rescue ActiveRecord::ActiveRecordError => e
-        Rails.logger.error("[Shop::PhoneOtp] verify failed: #{e.class}: #{e.message}")
+        Rails.logger.error("[Shop::PhoneOtp] verify_sms failed: #{e.class}: #{e.message}")
         render json: { error: "Не удалось сохранить подтверждение телефона. Попробуйте ещё раз." },
           status: :internal_server_error
+      end
+
+      # Legacy: Profile link — SMS only (flash_call removed from auth).
+      def send_code
+        channel = params.require(:channel).to_s
+        raise Shop::PhoneOtp::Error, "Выберите SMS" unless channel == "sms"
+
+        phone = Shop::PhoneOtp.send_sms_code!(
+          phone: params.require(:phone),
+          ip: request.remote_ip
+        )
+        render json: { ok: true, phone: phone, channel: "sms" }
+      rescue Shop::PhoneOtp::Error => e
+        render json: { error: e.message }, status: :unprocessable_entity
+      rescue Shop::SmsRuClient::Error => e
+        render json: { error: e.message }, status: :bad_gateway
+      rescue ActionController::ParameterMissing => e
+        render json: { error: e.message }, status: :unprocessable_entity
+      end
+
+      def verify
+        verify_sms
       end
 
       def status

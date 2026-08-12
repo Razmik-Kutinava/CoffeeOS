@@ -13,23 +13,25 @@
 
 ### Phone Shop API
 
-- `POST /shop/api/phone_otp/send` · `verify` · `GET …/status`
-- **Канон каналов:** `flash_call` (×2 retry) → `sms` fallback
-- **`messenger` снят** (2026-08) — не восстанавливать без ТЗ
+- `POST /shop/api/phone_otp/init_callcheck` · `GET …/check_status` · `POST …/send_sms` · `POST …/verify_sms`
+- Legacy Profile: `POST …/send` (SMS only) · `verify` · `GET …/status`
+- **Канон auth:** **Callcheck** (пользователь звонит) → **SMS fallback** (свой 4‑значный OTP)
+- **`/code/call` (FlashCall) снят из authorization flow** (2026-08-12 BUG-REPORT)
+- **`messenger` снят** — не восстанавливать без ТЗ
+
+### Mapping OTP / Callcheck
+
+| Ключ | Где |
+|------|-----|
+| phone E.164 | `PhoneNormalizer` → session callcheck + `mobile_otp_codes` / `mobile_customers` |
+| `check_id` | `session[:shop_phone_callcheck]` (привязка к phone + tenant) |
+| SMS код | `mobile_otp_codes`, TTL 10m, max 5 attempts |
+| cooldown | callcheck init 20s, sms 60s; Rack::Attack |
 
 ### Email Shop API
 
 - `POST /shop/api/email_otp/send` · `verify` · `GET …/status`
 - Checkout email verify + durable session issuer
-
-### Mapping OTP
-
-| Ключ | Где |
-|------|-----|
-| phone E.164 | `PhoneNormalizer` → `mobile_otp_codes`, `mobile_customers` |
-| email | `mobile_otp_codes`, `shop_email_verifications` |
-| код | TTL 10m, max 5 attempts |
-| cooldown | flash 20s, sms 60s; Rack::Attack |
 
 ### ENV
 
@@ -110,17 +112,18 @@ Webhook статусов — **#61** `POST /callbacks/sms_ru`. Не shop-про�
 | per-phone ERROR | `ok: false` |
 | multi | **не** в этом шаге |
 
-### SMS.ru callcheck (#52)
+### SMS.ru callcheck (#52 + auth funnel 2026-08-12)
 
-**Иное, чем flash_call:** пользователь **сам** звонит на `call_phone`; мы сбрасываем (бесплатно).
+**Иное, чем flash_call:** пользователь **сам** звонит на `call_phone`; мы сбрасываем (бесплатно).  
+**Канон PWA auth:** Callcheck primary → SMS fallback. `/code/call` **не** в authorization flow.
 
 | Метод | Вызов | Результат |
 |-------|--------|-----------|
-| `POST …/callcheck/add` | `callcheck_add!(phone:)` | `CallcheckAddResult` (check_id, call_phone, pretty) |
+| `POST …/callcheck/add` | `callcheck_add!(phone:)` | `CallcheckAddResult` (check_id, call_phone, pretty, html) |
 | `POST …/callcheck/status` | `callcheck_status!(check_id:)` | `CallcheckStatusResult` (400/401/402, `confirmed`) |
+| Shop API | `init_callcheck` / `check_status` | session-bound `check_id`; 401 → login |
 
-- Канон PWA auth **без изменений**: flash_call×2→SMS  
-- Callcheck webhook — **#61** (вместе с sms_status)  
+- Callcheck webhook — **#61**  
 - api_id только ENV
 
 ### SMS.ru `my/balance` (#53)

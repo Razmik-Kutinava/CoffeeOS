@@ -298,6 +298,7 @@ class Shop::SmsRuClientTest < ActiveSupport::TestCase
     assert_match(/\Afallback-/, result.check_id)
     assert_equal "74995555555", result.call_phone
     assert_match(/\+7/, result.call_phone_pretty)
+    assert_match(/tel:/, result.call_phone_html.to_s)
   end
 
   test "#52 callcheck_add! raises when phone blank" do

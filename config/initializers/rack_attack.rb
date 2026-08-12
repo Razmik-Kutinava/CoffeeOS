@@ -3,7 +3,7 @@
 
 class Rack::Attack
   SHOP_PHONE_OTP_RETRY_AFTER = {
-    'shop/phone_otp_flash_call' => 20,
+    'shop/phone_otp_callcheck' => 20,
     'shop/phone_otp_sms' => 60
   }.freeze
 
@@ -49,13 +49,14 @@ class Rack::Attack
     end
   end
 
-  # Лимиты phone OTP витрины: по каналу + телефону.
-  throttle('shop/phone_otp_flash_call', limit: 1, period: 20.seconds) do |req|
-    Rack::Attack.shop_phone_otp_discriminator(req, 'flash_call')
+  # Callcheck init: 1 / 20s на телефон. SMS fallback: 1 / 60s.
+  throttle('shop/phone_otp_callcheck', limit: 1, period: 20.seconds) do |req|
+    Rack::Attack.shop_phone_otp_phone_from_path(req, '/shop/api/phone_otp/init_callcheck')
   end
 
   throttle('shop/phone_otp_sms', limit: 1, period: 60.seconds) do |req|
-    Rack::Attack.shop_phone_otp_discriminator(req, 'sms')
+    Rack::Attack.shop_phone_otp_phone_from_path(req, '/shop/api/phone_otp/send_sms') ||
+      Rack::Attack.shop_phone_otp_legacy_sms(req)
   end
   
   # Лимит на создание заказов баристой: 30 заказов в минуту с одного IP
@@ -119,17 +120,28 @@ class Rack::Attack
     end
   end
 
-  def self.shop_phone_otp_discriminator(req, channel)
+  def self.shop_phone_otp_phone_from_path(req, path)
+    return unless req.path == path && req.post?
+
+    body = req.body.read
+    req.body.rewind if req.body.respond_to?(:rewind)
+    json = JSON.parse(body) rescue {}
+    phone = json['phone'].to_s.presence
+    return unless phone.present?
+
+    "#{phone}:#{path}"
+  end
+
+  def self.shop_phone_otp_legacy_sms(req)
     return unless req.path == '/shop/api/phone_otp/send' && req.post?
 
     body = req.body.read
     req.body.rewind if req.body.respond_to?(:rewind)
     json = JSON.parse(body) rescue {}
     phone = json['phone'].to_s.presence
-    req_channel = json['channel'].to_s
-    return unless phone.present? && req_channel == channel
+    return unless phone.present? && json['channel'].to_s == 'sms'
 
-    "#{phone}:#{channel}"
+    "#{phone}:sms"
   end
 end
 

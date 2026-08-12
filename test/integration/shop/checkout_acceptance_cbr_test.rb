@@ -34,7 +34,8 @@ class Shop::CheckoutAcceptanceCbrTest < ActionDispatch::IntegrationTest
     refute_includes checkout, 'type="radio"'
     assert_includes wizard, "Продолжить"
     assert_includes wizard, "autofocus"
-    assert_includes lib, "flash_call"
+    assert_includes wizard, "init_callcheck"
+    assert_includes lib, "buildInitCallcheckBody"
   end
 
   # п.2 — отправка кода

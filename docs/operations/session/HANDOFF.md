@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-12 (Phone OTP Flash/SMS split)  
+**Дата:** 2026-08-12 (SMS.ru Callcheck auth)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Phone OTP каналы разделены ✅ local 25/0 | push + Fly MCP Point A (SMS-only + flash-only) |
+| Callcheck→SMS auth GREEN ✅ | push + Fly MCP Point A |
 
-**last_done:** feat PhoneOtp SMS свой код + ТЗ Flash/SMS split  
-**next_step:** push/deploy · MCP Point A · (SBP enable тоже ждёт push)
+**last_done:** feat Phone OTP Callcheck primary + SMS fallback (BUG-REPORT)  
+**next_step:** push/deploy · MCP Point A callcheck/SMS · SBP тоже ждёт push
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -19,13 +19,21 @@
 
 ## Текущий месяц (2026-08)
 
+### SMS.ru Callcheck auth (2026-08-12)
+
+| Что | Статус |
+|-----|--------|
+| `/code/call` убран из auth flow | **`[x]`** |
+| init_callcheck / check_status / send_sms / verify_sms | **`[x]`** |
+| PWA Callcheck→SMS | **`[x]`** |
+| Local tests | **`[x]`** |
+| Fly MCP Point A | **`[ ]`** |
+
 ### Phone OTP Flash / SMS split (2026-08-12)
 
 | Что | Статус |
 |-----|--------|
-| SMS генерит свой код (не flash) | **`[x]`** local 25/0 |
-| ТЗ Flash Call OTP + SMS OTP | **`[x]`** |
-| Fly MCP Point A | **`[ ]`** ждёт push/deploy |
+| Ошибочный канон (равноправные каналы) | **superseded** → Callcheck BUG-REPORT |
 
 ### SBP enable PaymentMethodsSheet (2026-08-12)
 

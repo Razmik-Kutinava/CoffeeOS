@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-12 (Phone OTP Flash/SMS split)  
+**Дата:** 2026-08-12 (SMS.ru Callcheck auth)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Phone OTP split GREEN 25/0 | push + Fly MCP Point A |
+| Callcheck→SMS GREEN | push + Fly MCP Point A |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -16,12 +16,17 @@
 
 ## Текущий месяц (2026-08)
 
+### Сессия 2026-08-12 (BUG-REPORT Callcheck not FlashCall)
+
+- Канон: Callcheck primary + SMS fallback; `/code/call` вне auth
+- API: init_callcheck / check_status / send_sms / verify_sms; session-bound check_id
+- PWA: poll 3s, timeout 40s → SMS; PIN только на SMS
+- Local: phone_otp + auth_funnel + profile_merge + CBR + JS → PASS
+- Fly MCP: skip
+
 ### Сессия 2026-08-12 (Phone OTP: Flash Call / SMS раздельно)
 
-- Root cause: смешанные ТЗ → SMS reuse код flash («запросите звонок сначала»)
-- Канон: два ТЗ · `PhoneOtp#send_sms!` генерит 4-значный код сам
-- Local: phone_otp + sms_ru_phone_otp + api phone_otp → **25/0**
-- Fly MCP: skip (нет push/deploy)
+- **SUPERSEDED** ошибочным каноном равноправных каналов → Callcheck BUG-REPORT
 
 ### Сессия 2026-08-12 (enable SBP in checkout sheet)
 
