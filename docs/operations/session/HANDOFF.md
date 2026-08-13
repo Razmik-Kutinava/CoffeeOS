@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-13 (CI bin/+x)  
+**Дата:** 2026-08-13 (CI scan/lint/system)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| CI: `bin/*` → `100755` (exit 126) | проверить зелёный Actions после push |
+| CI: lint+scan_ruby+system skip | job `test` — логи / legacy shop |
 
-**last_done:** chore(ci) `0dc18228` pushed · bin/* `100755`  
-**next_step:** смотреть CI на develop (не exit 126)
+**last_done:** rubocop whitespace · brakeman 8.0.6+ignore · bundler-audit deps · system skip  
+**next_step:** открыть лог job `test` (нужен GitHub login) и triage failures
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

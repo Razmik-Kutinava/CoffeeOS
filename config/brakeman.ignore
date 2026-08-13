@@ -1,0 +1,18 @@
+{
+  "ignored_warnings": [
+    {
+      "fingerprint": "53df452693ad0ab46740c8d6484cf10be2e31d5f69a508e6385eae1629bba368",
+      "note": "table names are hardcoded literals; ids go through connection.quote"
+    },
+    {
+      "fingerprint": "8ac9d0a8f0a88719561933c37ce18164946534fbf8596c5d492ed3630cacc71d",
+      "note": "port coerced with to_i before shell interpolation; local bin/dev helper only"
+    },
+    {
+      "fingerprint": "98afdb3ed6ab940bf037206fee6e8b22bbc3e2a7476c08a6c066b39828f85a57",
+      "note": "port coerced with to_i before shell interpolation; local bin/dev helper only"
+    }
+  ],
+  "updated": "2026-08-13 12:59:09 +0000",
+  "brakeman_version": "8.0.6"
+}

@@ -137,7 +137,13 @@ jobs:
           DATABASE_PORT: 5432
           DATABASE_SSLMODE: disable
           # RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
-        run: bin/rails db:test:prepare test:system
+        # Нет test/system/* — полный test:system падает на setup; как optional в config/ci.rb
+        run: |
+          if [ -z "$(find test/system -name '*_test.rb' 2>/dev/null)" ]; then
+            echo "No system tests present; skipping"
+            exit 0
+          fi
+          bin/rails db:test:prepare test:system
 
       - name: Keep screenshots from failed system tests
         uses: actions/upload-artifact@v4

@@ -11,6 +11,15 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-13 — chore(ci): lint + brakeman/audit + skip empty system-test
+
+- После bin/+x: lint/scan_ruby/system-test/test красные (не «больше багов продукта»)
+- RuboCop: trailing whitespace / quotes в Cable + LoginForm
+- Brakeman 8.0.6 + `config/brakeman.ignore` (port_killer / profile_merger FP)
+- bundler-audit: rails 8.1.3.1, puma 8.0.2, nokogiri 1.19.4, bcrypt, net-imap, …
+- CI system-test: skip если нет `test/system/*`
+- job `test`: triage по логу (legacy shop backlog)
+
 ## 2026-08-13 — chore(ci): restore executable bit on bin/*
 
 - GitHub Actions CI #20–#25: все jobs **exit 126** (~40s) — не тесты

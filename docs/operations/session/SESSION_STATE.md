@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-13 (CI bin/+x)  
+**Дата:** 2026-08-13 (CI scan/lint)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Push `0dc18228` bin/+x | CI Actions не exit 126 |
+| CI lint+scan_ruby+system fixed locally | job `test` still red on Actions |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,14 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-13 (CI после bin/+x — реальные fails)
+
+- «Стало больше» = exit 126 ушёл, видны настоящие jobs
+- lint: trailing whitespace + StringLiterals (3 файла)
+- scan_ruby: brakeman `--ensure-latest` 8.0.4→8.0.6 + `config/brakeman.ignore` (3 FP) + bundler-audit (rails 8.1.3.1, puma 8.0.2, nokogiri, …)
+- system-test: skip если нет `test/system/*`
+- test: без публичных логов; вероятно legacy shop / suite — triage отдельно
 
 ### Сессия 2026-08-13 (CI exit 126 → bin/+x)
 

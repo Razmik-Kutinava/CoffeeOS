@@ -1,17 +1,17 @@
 module ApplicationCable
   class Connection < ActionCable::Connection::Base
     identified_by :current_user
-    
+
     def connect
       self.current_user = find_verified_user
     end
-    
+
     private
-    
+
     def find_verified_user
       # Получаем user_id из session (если доступна)
       user_id = request.session[:user_id] if request.session
-      
+
       if user_id
         device = nil
         ActiveRecord::Base.connection.transaction do
@@ -25,7 +25,7 @@ module ApplicationCable
       if token.present?
         ActiveRecord::Base.connection.transaction do
           ActiveRecord::Base.connection.execute("SET LOCAL row_security = off")
-          device = Device.active.find_by(device_token: token, device_type: 'tv_board')
+          device = Device.active.find_by(device_token: token, device_type: "tv_board")
           return device if device&.token_valid?
         end
       end
