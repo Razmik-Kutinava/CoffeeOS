@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-13 (payment error user messages)  
+**Дата:** 2026-08-13 (#62 SBP checkbox default)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Понятные сообщения ошибки оплаты GREEN local ✅ | push + Fly MCP Point A |
+| #62 чекбокс СБП default checked GREEN local ✅ | push + Fly MCP Point A |
 
-**last_done:** карта / «Нет связи. Повторить» + CTA retry (One-Click fail)  
-**next_step:** push/deploy · MCP Point A · sheet UX / Callcheck тоже ждёт push
+**last_done:** #62 checkbox «Привязать счет…» checked по умолчанию + preserve toggle  
+**next_step:** push/deploy · MCP Point A (#62 + предыдущие local GREEN)
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -18,6 +18,15 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### #62 SBP autopay checkbox default (2026-08-13)
+
+| Что | Статус |
+|-----|--------|
+| ТЗ 1:1 + CBR #62 | **`[x]`** |
+| Default checked + preserve + `save_sbp_account` | **`[x]`** |
+| Local JS 39/0 | **`[x]`** |
+| Fly MCP Point A | **`[ ]`** |
 
 ### Payment error user messages (2026-08-13)
 

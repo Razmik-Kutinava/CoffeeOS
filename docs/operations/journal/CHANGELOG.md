@@ -11,6 +11,15 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-13 — feat(shop): #62 SBP autopay checkbox checked by default
+
+- Доп к #34: чекбокс «Привязать счет для покупок в один клик» checked по умолчанию
+- `DEFAULT_SAVE_SBP_ACCOUNT` + `resolveSaveSbpAccountForSbpMode` + `saveSbpAccountTouched`
+- Uncheck → `save_sbp_account` не уходит; leave checked → `true`; UI-redraw не сбрасывает выбор
+- Backend / AccountToken / Init-Charge API не менялись
+- Local: JS SBP zone **39/0 PASS** · Fly MCP: skip
+- ТЗ: `customer_tasks/Предустановленный чекбокс автоплатежа СБП.md`
+
 ## 2026-08-13 — feat(shop): понятные сообщения при ошибке оплаты One-Click
 
 - ТЗ: `customer_tasks/Понятные сообщения пользователю при ошибке оплаты.md`

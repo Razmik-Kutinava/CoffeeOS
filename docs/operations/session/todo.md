@@ -28,7 +28,7 @@
 - [x] RED helper + tests
 - [x] GREEN Checkout / PaymentMethodsSheet
 - [x] Local regression zone
-- [ ] REVIEW ops
+- [x] REVIEW ops
 - [ ] Fly MCP Point A (после push/deploy)
 
 ## Subtasks (заказчик)

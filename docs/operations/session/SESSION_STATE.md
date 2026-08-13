@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-13 (#62 SBP checkbox default)  
+**Дата:** 2026-08-13 (#62 SBP checkbox default GREEN)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #62 intake → SPEC/RED/GREEN | default checked чекбокса СБП |
+| #62 GREEN local ✅ | push + Fly MCP Point A |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -20,7 +20,10 @@
 
 - ТЗ 1:1: `customer_tasks/Предустановленный чекбокс автоплатежа СБП.md`
 - CBR #62 · artifacts `sbp_autopay_checkbox_default_checked/`
-- Доп к #34: только UI default + preserve; backend/AccountToken не трогаем
+- UI: `DEFAULT_SAVE_SBP_ACCOUNT=true` + `saveSbpAccountTouched` + `resolveSaveSbpAccountForSbpMode`
+- Backend/AccountToken/#34 не трогали; CHARGE_DECLINED fallback по-прежнему `saveSbpAccount: false`
+- Local: JS SBP zone **39/0 PASS** · Fly MCP: skip (ждёт push/deploy)
+- Коммиты: intake `2c1c6bf2` · RED `e22d3afa` · GREEN `c35a5098`
 
 ### Сессия 2026-08-13 (понятные сообщения при ошибке оплаты)
 
