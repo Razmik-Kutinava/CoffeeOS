@@ -1,35 +1,39 @@
-# todo — понятные сообщения при ошибке оплаты (2026-08-13)
+# todo — #62 Предустановленный чекбокс автоплатежа СБП (2026-08-13)
 
 | last_done | current_state | next_step |
 |-----------|---------------|-----------|
-| GREEN local texts + Retry CTA | done local | push/deploy · Fly MCP Point A |
+| PHASE 0 intake | SPEC → RED | helper default + Checkout wiring |
 
 ## Цель
-Доп. UX к задаче 3 / One-Click fail: понятные тексты «карта» и «Нет связи. Повторить» + CTA повтора без нового payment flow.
+Чекбокс «Привязать счет для покупок в один клик» checked по умолчанию; снятие → `save_sbp_account=false`; выбор пользователя не сбрасывается при UI-redraw. Backend #34 не трогаем.
 
 ## Файлы (ожидаемо)
-- `app/frontend/lib/shopInlinePayFsm.js` — labels + mapTbankInlineError + classify
-- `app/frontend/lib/shopWidgetPayFsm.js` — export isCardErrorCode
-- `app/frontend/lib/widgetRepeatPayFlow.js` — network → showRetry; card → card label
-- `app/frontend/components/InlinePayFallback.svelte` — CTA «Повторить»
-- `app/frontend/components/RepeatSection.svelte` — onRetry → тот же pay flow
-- `app/frontend/lib/shopPayFsm.js` — labels CLIENT/NET
-- `test/javascript/payment_error_user_messages_test.mjs`
+- `app/frontend/lib/shopSbpAutopay.js` — `DEFAULT_SAVE_SBP_ACCOUNT` + `resolveSaveSbpAccountForSbpMode`
+- `app/frontend/routes/Checkout.svelte` — default true + touched + onSelectSbp / loadSavedCards
+- `app/frontend/components/PaymentMethodsSheet.svelte` — bindable default true + notify user toggle
+- `test/javascript/shop_sbp_autopay_checkout_ui_test.mjs` — RED/GREEN сценарии 1–4
 
 ## Не ломать
-- Успешный One-Click / CONFIRMED
-- Charge / one_click payload / API эквайринга
-- PaymentMethodsSheet без дубля ошибки
-- G7 CLIENT_ERROR → open_new_card
+- Оплата картой / NewCard / One-Click
+- Обычный СБП Init без привязки (uncheck → без `save_sbp_account`)
+- Zero-Click `sbp_account` + CHARGE_DECLINED fallback (force `saveSbpAccount: false`)
+- Корзина / сумма заказа / AccountToken backend
 
 ## Проверка
-- `node --test …payment_error… …shop_inline… …widget_repeat…` → **17/0 PASS**
-- `repeat_invalid_token_payment` → **12/0 PASS**
-- `shop_pay_fsm_3ds` → **PASS**
+- `node --test test/javascript/shop_sbp_autopay_checkout_ui_test.mjs test/javascript/shop_sbp_autopay_test.mjs test/javascript/shop_sbp_pay_test.mjs`
+- (опц.) `bin/rails test test/integration/shop/api/sbp_init_save_account_test.rb` — контракт API без изменений
 
-## Чеклист
-- [x] PHASE 0 intake 1:1 + CBR
+## Чеклист SBR
+- [x] PHASE 0 intake 1:1 + CBR #62
 - [x] SPEC todo
-- [x] RED/GREEN messages + Retry
-- [x] Local regression zone
-- [ ] Fly MCP Point A
+- [ ] RED helper + tests
+- [ ] GREEN Checkout / PaymentMethodsSheet
+- [ ] Local regression zone
+- [ ] REVIEW ops
+- [ ] Fly MCP Point A (после push/deploy)
+
+## Subtasks (заказчик)
+- [ ] 1: checkbox default checked=true
+- [ ] 2: uncheck → save_sbp_account=false
+- [ ] 3: leave checked → save_sbp_account=true
+- [ ] 4: после UI-redraw user choice не сбрасывается
