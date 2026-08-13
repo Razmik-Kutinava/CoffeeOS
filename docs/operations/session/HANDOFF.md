@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-13 (#63 Svelte5 status UX)  
+**Дата:** 2026-08-13 (#63 Fly v454 MCP PASS)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#63 GREEN local** — иммутабельный Cable + dismiss/X + hide product/profile/pay | push+deploy → Fly MCP Point A · апрув |
+| **#63 Fly v454 MCP PASS** · CI #32 green · dismiss/X + route hide | апрув заказчика |
 
-**last_done:** #63 Svelte 5 status widget reactivity UX · JS 22/0  
-**next_step:** push/deploy + MCP Point A (или следующая задача пула)
+**last_done:** deploy v454 + MCP Point A #63  
+**next_step:** апрув #63 / следующая задача пула
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -26,7 +26,12 @@
 | Intake + CBR #63 (доп к #35) | **`[x]`** |
 | Immutable Cable/sync + dismiss + route hide | **`[x]`** |
 | Local JS | **`[x]`** 22/0 |
-| Fly MCP Point A | `[ ]` |
+| CI #32 | **`[x]`** green (`79d90704`) |
+| Fly deploy | **`[x]`** v454 |
+| Fly MCP Point A | **`[x]` PASS** |
+| Апрув заказчика | `[ ]` |
+
+**Evidence:** [`mcp/fly_v454_2026-08-13/`](../milestones/veha_2/artifacts/svelte5_status_widget_reactivity_ux/mcp/fly_v454_2026-08-13/)
 
 ### #62 SBP autopay checkbox default (2026-08-13)
 

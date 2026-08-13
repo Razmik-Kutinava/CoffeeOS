@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-13 — deploy+MCP: #63 status widget UX Fly v454 PASS
+
+- Fly `coffeeos` v454 · Point A: dismiss X · hide product/profile/checkout · sheet returns on catalog
+- Evidence: `artifacts/svelte5_status_widget_reactivity_ux/mcp/fly_v454_2026-08-13/`
+- CI #32 green (`79d90704` displayOrders assert + CashShift FK)
+
 ## 2026-08-13 — feat(#63): Svelte 5 status widget reactivity + dismiss UX [GREEN]
 
 - FE: иммутабельный `applyCableEvent` / sync; `dismissOrder` + `userDismissed`; скрытие UI на `#/product` / `#/profile` / checkout / pay-stack

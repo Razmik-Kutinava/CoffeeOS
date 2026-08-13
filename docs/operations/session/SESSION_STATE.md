@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-13 (#63 Svelte5 status UX)  
+**Дата:** 2026-08-13 (#63 Fly v454 MCP PASS)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#63 GREEN local** (доп к #35) · JS order_status_sheet 22/0 | Fly MCP Point A после push/deploy · апрув |
+| **#63 Fly v454 MCP PASS** · CI green · deploy OK | апрув заказчика |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,12 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-13 (#63 deploy + MCP Point A)
+
+- Fly **v454** `deployment-01KZXTPAA7K1YQ8RNHWW6K4BBA`
+- MCP Point A: catalog sheet+X · dismiss · product/profile hide · checkout hide · pay `#202608-0042` → cancel cleanup
+- Evidence: `artifacts/svelte5_status_widget_reactivity_ux/mcp/fly_v454_2026-08-13/`
 
 ### Сессия 2026-08-13 (#63 Svelte 5 status widget UX)
 
