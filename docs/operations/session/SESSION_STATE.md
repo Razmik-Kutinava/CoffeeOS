@@ -7,7 +7,7 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| CI fix: `bin/*` mode `100755` | зелёный GitHub Actions |
+| Push `0dc18228` bin/+x | CI Actions не exit 126 |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

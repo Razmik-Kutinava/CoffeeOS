@@ -9,8 +9,8 @@
 |--------|--------|
 | CI: `bin/*` → `100755` (exit 126) | проверить зелёный Actions после push |
 
-**last_done:** chore(ci): executable bit on bin/*  
-**next_step:** смотреть CI #26+ на develop
+**last_done:** chore(ci) `0dc18228` pushed · bin/* `100755`  
+**next_step:** смотреть CI на develop (не exit 126)
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
