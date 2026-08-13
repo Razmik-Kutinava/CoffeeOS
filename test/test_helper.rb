@@ -46,6 +46,12 @@ module ActiveSupport
     # Tests run against a fresh local Postgres instance; disable RLS so factories can
     # insert data without needing per-connection GUC bootstrap.
     setup do
+      # CI/parallel: некоторые тесты включают Rack::Attack в teardown — сбрасываем каждый case.
+      if defined?(Rack::Attack)
+        Rack::Attack.enabled = false
+        Rack::Attack.cache.store.clear if Rack::Attack.cache.store.respond_to?(:clear)
+      end
+
       # Триггер может пропасть при параллельном прогоне — проверяем каждый раз.
       DatabaseTriggers.ensure_order_number!
 

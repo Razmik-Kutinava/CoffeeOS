@@ -78,10 +78,13 @@ class Auth::PlatformUkRbacTest < ActionDispatch::IntegrationTest
           slug: slug,
           type: "sales_point",
           status: "active",
+          city: "Moscow",
+          address: "Tverskaya 1",
           country: "RU",
           currency: "RUB",
           timezone: "Europe/Moscow"
         },
+        weekday_schedules: default_weekday_schedules_params,
         modules: { "menu" => "1", "barista" => "1" }
       }
     end

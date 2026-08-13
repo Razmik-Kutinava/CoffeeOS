@@ -12,7 +12,6 @@ class Shop::Api::PaymentStatusConfirmTest < ActionDispatch::IntegrationTest
     @confirm_flag = { called: false }
 
     # Стабилизируем ответы Т-Банка на будущее GREEN: AUTHORIZED → Confirm → CONFIRMED
-    @orig_get_state = Payments::TbankAdapter.instance_method(:get_payment_state)
     @had_confirm_before = Payments::TbankAdapter.instance_methods(false).include?(:confirm_payment)
     @orig_confirm = Payments::TbankAdapter.instance_method(:confirm_payment) if @had_confirm_before
 
@@ -43,12 +42,15 @@ class Shop::Api::PaymentStatusConfirmTest < ActionDispatch::IntegrationTest
   end
 
   teardown do
-    # Восстанавливаем переопределённые методы, чтобы не влиять на другие тесты
-    Payments::TbankAdapter.define_method(:get_payment_state, @orig_get_state)
+    # remove_method восстанавливает исходный TbankAdapter#get_payment_state (define_method в setup
+    # подменял только метод класса; restore через @orig_get_state ломал super при prepended stubs).
+    if Payments::TbankAdapter.instance_methods(false).include?(:get_payment_state)
+      Payments::TbankAdapter.send(:remove_method, :get_payment_state)
+    end
     if @had_confirm_before
       Payments::TbankAdapter.define_method(:confirm_payment, @orig_confirm)
-    else
-      Payments::TbankAdapter.send(:remove_method, :confirm_payment) if Payments::TbankAdapter.instance_methods(false).include?(:confirm_payment)
+    elsif Payments::TbankAdapter.instance_methods(false).include?(:confirm_payment)
+      Payments::TbankAdapter.send(:remove_method, :confirm_payment)
     end
 
     Current.reset

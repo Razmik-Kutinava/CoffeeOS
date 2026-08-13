@@ -11,7 +11,7 @@ class Auth::SessionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   teardown do
-    Rack::Attack.enabled = true
+    Rack::Attack.enabled = false if defined?(Rack::Attack)
   end
 
   # ---------------------------------------------------------------------------

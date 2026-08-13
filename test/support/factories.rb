@@ -113,7 +113,6 @@ module TestFactories
   end
 
   def login_as!(user, password: "pass123", tenant_id: nil)
-    rack_attack_enabled = Rack::Attack.enabled if defined?(Rack::Attack)
     Rack::Attack.enabled = false if defined?(Rack::Attack)
 
     post "/login", params: { email: user.email, password: password, tenant_id: tenant_id }
@@ -121,7 +120,7 @@ module TestFactories
     follow_redirect!
     follow_redirect! if response.redirect?
   ensure
-    Rack::Attack.enabled = rack_attack_enabled if defined?(Rack::Attack) && !rack_attack_enabled.nil?
+    Rack::Attack.enabled = false if defined?(Rack::Attack)
   end
 
   # B1.11: create sales_point требует ≥1 включённый день (TenantWeekdaySchedulesSync).

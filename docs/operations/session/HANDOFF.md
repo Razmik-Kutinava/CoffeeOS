@@ -2,14 +2,14 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-13 (CI test clusters A–I)  
+**Дата:** 2026-08-13 (CI #30 — 7 fail + 1 error)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| CI test fixes (Vite/npm · FakeTbank · onboarding weekday · asserts) | смотреть Actions — job `test` green |
+| CI #30 fixes: Rack::Attack test · onboarding · volume · Tbank teardown | смотреть Actions — job `test` green |
 
-**last_done:** CI failure clusters A–I fixed · sample 41 tests PASS · push  
+**last_done:** CI #30 clusters J1–J4 · 8 files local PASS · push  
 **next_step:** подтвердить Actions green; triage 4 legacy shop отдельно
 
 **Архив session:** [`archive/README.md`](archive/README.md)  

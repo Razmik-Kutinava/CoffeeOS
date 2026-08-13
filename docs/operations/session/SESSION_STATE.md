@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-13 (CI test clusters A–I)  
+**Дата:** 2026-08-13 (CI #30 — 7 fail + 1 error)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| CI test A–I fixed + pushed | Actions job `test` green? |
+| CI #30: 429 · onboarding ×2 · count-accepted · Tbank super | Actions job `test` green? |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,14 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-13 (CI #30 — 7 fail + 1 error)
+
+- J1: Rack::Attack — global disable+clear в `test_helper`; `sessions_controller_test` teardown не включает лимит; `login_as!` не восстанавливает enabled
+- J2: onboarding UK — `weekday_schedules` + city/address в `franchise_platform_admin_test` · `platform_uk_rbac_test`
+- J3: `manager_volume_test` — `count-accepted` 250 (total, не cap колонки)
+- J4: `payment_status_confirm_test` teardown — `remove_method` вместо restore prepended `super`
+- Local: 8 target files PASS (75 runs)
 
 ### Сессия 2026-08-13 (CI test clusters A–I)
 

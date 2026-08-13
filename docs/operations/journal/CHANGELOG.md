@@ -11,6 +11,14 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-13 — fix(ci): CI #30 — Rack::Attack test · onboarding · volume · Tbank super
+
+- Rack::Attack: global `enabled=false` + cache clear в `test_helper`; teardown login tests не включает лимит
+- Onboarding UK: `weekday_schedules` + city/address в franchise + platform_uk_rbac
+- `manager_volume_test`: `count-accepted` = 250 (total accepted, UI не cap 50)
+- `payment_status_confirm_test`: teardown `remove_method` — не ломать `super` prepended Tbank stubs
+- Local: 8 target files PASS
+
 ## 2026-08-13 — fix(ci): green `test` job clusters A–I
 
 - Vite/npm: `actions/setup-node` + `npm ci` в CI `test` / `system-test`

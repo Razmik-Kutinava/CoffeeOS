@@ -28,10 +28,13 @@ class FranchisePlatformAdminTest < ActionDispatch::IntegrationTest
           slug: "t1-#{SecureRandom.hex(3)}",
           type: "sales_point",
           status: "active",
+          city: "Moscow",
+          address: "Tverskaya 1",
           country: "RU",
           currency: "RUB",
           timezone: "Europe/Moscow"
         },
+        weekday_schedules: default_weekday_schedules_params,
         modules: { "kiosk" => "1", "menu" => "1" }
       }
     end
