@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-13 (CI lint+legacy exclude)  
+**Дата:** 2026-08-13 (CI test clusters A–I)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| lint autocorrect + CI exclude 4 legacy | Actions all green? |
+| CI test A–I fixed + pushed | Actions job `test` green? |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,18 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-13 (CI test clusters A–I)
+
+- A: `setup-node` + `npm ci` в jobs `test` / `system-test`
+- B: FakeTbank `init_payment` + `pay_type`/`data`
+- C: `include TestFactories` в 3 service tests (+ OpenStruct / roles_summary count)
+- D: B21 push body `🟩🟩⬜ …`
+- E: shop orders — email + `verify_shop_email!`
+- F: onboarding — `weekday_schedules` в payload (+ teardown schedules)
+- G/H: turbo board replace · `count-accepted`
+- I: RLS role CREATE race rescue
+- Local sample: 41 runs PASS
 
 ### Сессия 2026-08-13 (CI после bin/+x — реальные fails)
 

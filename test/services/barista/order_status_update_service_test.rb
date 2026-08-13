@@ -64,7 +64,7 @@ class Barista::OrderStatusUpdateServiceTest < ActiveSupport::TestCase
     end
 
     notification = PushNotification.order(created_at: :desc).first
-    assert_equal "Ваш заказ начали готовить", notification.body
+    assert_match(/\A🟩🟩⬜ Ваш заказ начали готовить\z/, notification.body)
   end
 
   test "rejects invalid transition" do

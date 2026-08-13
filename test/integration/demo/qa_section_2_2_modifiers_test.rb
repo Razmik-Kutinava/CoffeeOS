@@ -59,9 +59,12 @@ class QaSection22ModifiersTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_equal 199.0, response.parsed_body["total"]
 
+    email = "qa22-#{SecureRandom.hex(4)}@test.local"
+    verify_shop_email!(tenant_id: @tenant.id, email: email)
+
     post "/shop/api/orders",
       headers: @headers,
-      params: { phone: "+79002223344", name: "QA 2.2", payment_method: "cash" },
+      params: shop_order_params(email: email, name: "QA 2.2", payment_method: "cash"),
       as: :json
     assert_response :success
     assert_equal 199.0, response.parsed_body["total"]

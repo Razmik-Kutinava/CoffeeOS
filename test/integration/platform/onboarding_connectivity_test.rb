@@ -181,6 +181,7 @@ class Platform::OnboardingConnectivityTest < ActionDispatch::IntegrationTest
         currency: "RUB",
         timezone: "Europe/Moscow"
       },
+      weekday_schedules: default_weekday_schedules_params,
       modules: { "menu" => "1", "barista" => "1", "kiosk" => "0" }
     }
   end

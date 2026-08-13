@@ -11,7 +11,7 @@ class Shop::Api::QaSection23Stage5E2eTest < ActionDispatch::IntegrationTest
     mattr_accessor :provider_payment_id, default: nil
 
     module Override
-      def init_payment(**)
+      def init_payment(pay_type: nil, data: nil, **)
         unless FakeTbankInit.enabled
           return super
         end

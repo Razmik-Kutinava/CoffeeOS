@@ -475,7 +475,7 @@ class ManagerOfficePanelTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "issued"
   end
 
-  test "barista turbo: cancel order returns turbo-stream remove" do
+  test "barista turbo: cancel order returns turbo-stream board replace" do
     tenant = create_tenant!(name: "T10", slug: "t10")
     barista = create_user!(tenant: tenant, role_codes: %w[barista], email: "bar10@test.com", name: "Bar10")
     office = create_user!(tenant: tenant, role_codes: %w[general_manager], email: "office10@test.com", name: "Office10")
@@ -494,8 +494,8 @@ class ManagerOfficePanelTest < ActionDispatch::IntegrationTest
       headers: turbo_headers
 
     assert_response :success
-    assert_includes response.body, "action=\"remove\""
-    assert_includes response.body, "target=\"order_#{order.id}\""
+    assert_includes response.body, "action=\"replace\""
+    assert_includes response.body, "target=\"barista-board-slots\""
     assert_equal "cancelled", Order.find(order.id).reload.status
 
     login_as!(office)

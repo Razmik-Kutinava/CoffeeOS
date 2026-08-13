@@ -123,4 +123,17 @@ module TestFactories
   ensure
     Rack::Attack.enabled = rack_attack_enabled if defined?(Rack::Attack) && !rack_attack_enabled.nil?
   end
+
+  # B1.11: create sales_point требует ≥1 включённый день (TenantWeekdaySchedulesSync).
+  def default_weekday_schedules_params
+    {
+      "0" => { enabled: "1", opens_at: "09:00", closes_at: "21:00" },
+      "1" => { enabled: "1", opens_at: "09:00", closes_at: "21:00" },
+      "2" => { enabled: "1", opens_at: "09:00", closes_at: "21:00" },
+      "3" => { enabled: "1", opens_at: "09:00", closes_at: "21:00" },
+      "4" => { enabled: "1", opens_at: "09:00", closes_at: "21:00" },
+      "5" => { enabled: "0" },
+      "6" => { enabled: "0" }
+    }
+  end
 end

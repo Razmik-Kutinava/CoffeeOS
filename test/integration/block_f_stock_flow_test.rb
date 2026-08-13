@@ -52,9 +52,12 @@ class BlockFStockFlowTest < ActionDispatch::IntegrationTest
       as: :json
     assert_response :success
 
+    email = "bf-shop-#{SecureRandom.hex(4)}@test.local"
+    verify_shop_email!(tenant_id: tenant.id, email: email)
+
     post "/shop/api/orders",
       headers: headers,
-      params: { phone: "+7900#{rand(10_000_000..99_999_999)}", name: "Block F", payment_method: "mock" },
+      params: shop_order_params(email: email, name: "Block F", payment_method: "mock"),
       as: :json
     assert_response :success
 
@@ -74,9 +77,13 @@ class BlockFStockFlowTest < ActionDispatch::IntegrationTest
 
     headers = { "X-Shop-Tenant" => tenant.id.to_s }
     post "/shop/api/cart/add", headers: headers, params: { product_id: product.id, quantity: 1 }, as: :json
+
+    email = "bf-neg-#{SecureRandom.hex(4)}@test.local"
+    verify_shop_email!(tenant_id: tenant.id, email: email)
+
     post "/shop/api/orders",
       headers: headers,
-      params: { phone: "+7900#{rand(10_000_000..99_999_999)}", name: "Negative OK", payment_method: "mock" },
+      params: shop_order_params(email: email, name: "Negative OK", payment_method: "mock"),
       as: :json
     assert_response :success
 

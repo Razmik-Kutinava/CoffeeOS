@@ -46,7 +46,12 @@ class Platform::OnboardingSalesPointTest < ActionDispatch::IntegrationTest
     Order.where(id: @created_order_ids).delete_all
     CashShift.where(id: @created_shift_ids).delete_all
     User.where(id: @created_user_ids).delete_all
-    Tenant.where(id: @created_tenant_ids).delete_all
+    if @created_tenant_ids.any?
+      TenantWeekdaySchedule.where(tenant_id: @created_tenant_ids).delete_all
+      FeatureFlag.where(tenant_id: @created_tenant_ids).delete_all
+      ProductTenantSetting.where(tenant_id: @created_tenant_ids).delete_all
+      Tenant.where(id: @created_tenant_ids).delete_all
+    end
   end
 
   test "GET /admin/tenants/new includes address city slug and organization" do
@@ -198,6 +203,7 @@ class Platform::OnboardingSalesPointTest < ActionDispatch::IntegrationTest
         currency: "RUB",
         timezone: "Europe/Moscow"
       },
+      weekday_schedules: default_weekday_schedules_params,
       modules: { "menu" => "1", "barista" => "1", "kiosk" => "0" }
     }
   end

@@ -16,7 +16,7 @@ class Shop::ShopNewCardPaymentStep2Test < ActionDispatch::IntegrationTest
     mattr_accessor :enabled, default: false
 
     module Override
-      def init_payment(order:, return_base_url:, notification_url:, customer_key: nil, recurrent: false, receipt: nil)
+      def init_payment(order:, return_base_url:, notification_url:, customer_key: nil, recurrent: false, receipt: nil, pay_type: nil, data: nil, **)
         return super unless FakeTbankNewCard.enabled
         raise "Step2 stub expects recurrent:true when save_card" unless recurrent
 

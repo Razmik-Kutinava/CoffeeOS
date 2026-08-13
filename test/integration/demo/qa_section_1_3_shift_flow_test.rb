@@ -28,20 +28,30 @@ class Demo::QaSection13ShiftFlowTest < ActionDispatch::IntegrationTest
   end
 
   test "1.3 shop order without shift then barista open shift sees board order" do
-    order_a = shop_place_order!(tenant: @tenant_a)
-    order_b = shop_place_order!(tenant: @tenant_b)
+    order_before = shop_place_order!(tenant: @tenant_a)
+    assert_equal "accepted", order_before.status
+    assert_nil order_before.cash_shift_id
 
     login_as!(@barista_a)
     get barista_dashboard_path
     assert_response :success
-    assert_includes response.body, order_a.id
-    assert_not_includes response.body, order_b.id
+    # B1.11: без открытой смены табло пусто
+    assert_not_includes response.body, order_before.id.to_s
 
     post barista_open_shift_path, params: { opening_cash: 0 }
     assert_redirected_to barista_dashboard_path
     follow_redirect!
     assert_includes response.body, "Смена открыта"
-    assert_includes response.body, order_a.id
+    # витринные заказы до opened_at на табло не попадают
+    assert_not_includes response.body, order_before.id.to_s
+
+    order_during = shop_place_order!(tenant: @tenant_a)
+    order_b = shop_place_order!(tenant: @tenant_b)
+
+    get barista_dashboard_path
+    assert_response :success
+    assert_includes response.body, order_during.id.to_s
+    assert_not_includes response.body, order_b.id.to_s
   end
 
   test "1.3 barista cannot create pos order without open shift" do
@@ -90,15 +100,20 @@ class Demo::QaSection13ShiftFlowTest < ActionDispatch::IntegrationTest
   private
 
   def shop_place_order!(tenant:)
+    email = "qa13-#{SecureRandom.hex(4)}@test.local"
+    headers = { "X-Shop-Tenant" => tenant.id.to_s }
+
     post "/shop/api/cart/add",
-      headers: { "X-Shop-Tenant" => tenant.id.to_s },
+      headers: headers,
       params: { product_id: @product.id, quantity: 1, selected_modifiers: [] },
       as: :json
     assert_response :success
 
+    verify_shop_email!(tenant_id: tenant.id, email: email)
+
     post "/shop/api/orders",
-      headers: { "X-Shop-Tenant" => tenant.id.to_s },
-      params: { phone: @customer.phone, name: "Guest", payment_method: "cash" },
+      headers: headers,
+      params: shop_order_params(email: email, name: "Guest", payment_method: "cash"),
       as: :json
     assert_response :success
     json = JSON.parse(response.body)

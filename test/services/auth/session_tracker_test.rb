@@ -1,8 +1,11 @@
 # frozen_string_literal: true
 
 require "test_helper"
+require "ostruct"
 
 class Auth::SessionTrackerTest < ActiveSupport::TestCase
+  include TestFactories
+
   setup do
     @tenant = create_tenant!
     @user = create_user!(tenant: @tenant, role_codes: %w[barista])

@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-13 (CI lint+legacy exclude)  
+**Дата:** 2026-08-13 (CI test clusters A–I)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| RuboCop -A + CI exclude 4 legacy shop | смотреть Actions #29+ все green |
+| CI test fixes (Vite/npm · FakeTbank · onboarding weekday · asserts) | смотреть Actions — job `test` green |
 
-**last_done:** rubocop autocorrect · migration syntax · exclude legacy shop in CI test  
-**next_step:** подтвердить зелёный CI; triage 4 legacy отдельно
+**last_done:** CI failure clusters A–I fixed · sample 41 tests PASS · push  
+**next_step:** подтвердить Actions green; triage 4 legacy shop отдельно
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

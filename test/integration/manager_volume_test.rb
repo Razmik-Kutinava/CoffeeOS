@@ -147,7 +147,7 @@ class ManagerVolumeTest < ActionDispatch::IntegrationTest
     login_as!(barista)
     get "/barista"
     assert_response :success
-    assert_includes response.body, 'id="count-new">50</span>'
+    assert_includes response.body, 'id="count-accepted">50</strong>'
 
     # 5) Проверка /manager/incidents cap=50 для очередей (shift-manager)
     login_as!(shift_manager)

@@ -60,6 +60,6 @@ class B21GuestNotifyTest < ActionDispatch::IntegrationTest
     assert_equal "preparing", @order.reload.status
 
     notification = PushNotification.order(created_at: :desc).first
-    assert_equal "Ваш заказ начали готовить", notification.body
+    assert_match(/\A🟩🟩⬜ Ваш заказ начали готовить\z/, notification.body)
   end
 end

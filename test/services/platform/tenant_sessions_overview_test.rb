@@ -3,6 +3,8 @@
 require "test_helper"
 
 class Platform::TenantSessionsOverviewTest < ActiveSupport::TestCase
+  include TestFactories
+
   setup do
     @tenant = create_tenant!
     @user = create_user!(tenant: @tenant, role_codes: %w[barista], name: "Worker")
@@ -22,7 +24,7 @@ class Platform::TenantSessionsOverviewTest < ActiveSupport::TestCase
 
     assert_equal 1, data[:users_count]
     assert_equal 1, data[:active_sessions_count]
-    assert_equal "barista", data[:roles_summary]["barista"]
+    assert_equal 1, data[:roles_summary]["barista"]
     assert_equal "Worker", data[:users].first[:name]
     assert data[:users].first[:online]
   end

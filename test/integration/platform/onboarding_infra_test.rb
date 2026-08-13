@@ -95,6 +95,7 @@ class Platform::OnboardingInfraTest < ActionDispatch::IntegrationTest
         currency: "RUB",
         timezone: "Europe/Moscow"
       },
+      weekday_schedules: default_weekday_schedules_params,
       modules: { "menu" => "1", "barista" => "0", "kiosk" => "0" }
     }
   end

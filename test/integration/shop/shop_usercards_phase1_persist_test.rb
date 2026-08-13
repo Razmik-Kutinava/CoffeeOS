@@ -11,7 +11,7 @@ class Shop::ShopUsercardsPhase1PersistTest < ActionDispatch::IntegrationTest
     mattr_accessor :enabled, default: false
 
     module Override
-      def init_payment(**)
+      def init_payment(pay_type: nil, data: nil, **)
         return super unless Fake3dsThenConfirm.enabled
 
         { payment_url: "https://x", provider_payment_id: "pay-p1-3ds-#{SecureRandom.hex(3)}" }
@@ -282,7 +282,7 @@ class Shop::ShopUsercardsPhase1PersistTest < ActionDispatch::IntegrationTest
     mattr_accessor :attempts, default: 0
 
     module Override
-      def init_payment(**)
+      def init_payment(pay_type: nil, data: nil, **)
         return super unless FakeFaNoRebillRetry.enabled
 
         { payment_url: "https://x", provider_payment_id: "pay-fa-retry-#{SecureRandom.hex(3)}" }

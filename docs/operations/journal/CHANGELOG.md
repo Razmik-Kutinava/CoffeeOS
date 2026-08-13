@@ -11,6 +11,17 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-13 — fix(ci): green `test` job clusters A–I
+
+- Vite/npm: `actions/setup-node` + `npm ci` в CI `test` / `system-test`
+- FakeTbank stubs: `pay_type` / `data` kwargs
+- Service tests: `TestFactories` · OpenStruct · roles_summary count
+- Push body / manager turbo / count-accepted asserts
+- Shop order tests: verified email payload
+- Onboarding: `weekday_schedules` + teardown FK
+- RLS bootstrap: race-safe `CREATE ROLE`
+- Legacy shop 4 files по-прежнему exclude
+
 ## 2026-08-13 — chore(ci): rubocop -A + exclude legacy shop from CI test
 
 - lint: `bin/rubocop -A` (~274 files) + fix broken migration line in stage_2_payments

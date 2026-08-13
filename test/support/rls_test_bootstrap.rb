@@ -41,9 +41,15 @@ module RlsTestBootstrap
 
   def ensure_test_role!(conn)
     unless test_role_exists?(conn)
-      conn.execute <<~SQL.squish
-        CREATE ROLE #{TEST_ROLE} LOGIN PASSWORD 'test' NOSUPERUSER NOBYPASSRLS
-      SQL
+      begin
+        conn.execute <<~SQL.squish
+          CREATE ROLE #{TEST_ROLE} LOGIN PASSWORD 'test' NOSUPERUSER NOBYPASSRLS
+        SQL
+      rescue ActiveRecord::RecordNotUnique, ActiveRecord::StatementInvalid => e
+        # Parallel workers can race on CREATE ROLE; ignore duplicate.
+        raise unless e.message.match?(/already exists|duplicate|UniqueViolation/i) ||
+                     e.cause.is_a?(PG::UniqueViolation)
+      end
     end
 
     conn.execute("GRANT USAGE ON SCHEMA public TO #{TEST_ROLE}")

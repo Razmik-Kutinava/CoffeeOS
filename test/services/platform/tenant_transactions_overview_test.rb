@@ -3,6 +3,8 @@
 require "test_helper"
 
 class Platform::TenantTransactionsOverviewTest < ActiveSupport::TestCase
+  include TestFactories
+
   setup do
     @tenant = create_tenant!
     @order = Order.create!(
