@@ -57,6 +57,21 @@ export function mapSbpAutopayError(status, body = {}) {
   return SBP_AUTOPAY_TOASTS.CONNECTION_ERROR
 }
 
+/** #62: default for «Привязать счет…» checkbox (RED stub until GREEN). */
+export const DEFAULT_SAVE_SBP_ACCOUNT = false
+
+/**
+ * Resolve checkbox when entering/showing SBP mode in checkout.
+ * @param {{ userTouched?: boolean, current?: boolean }} opts
+ */
+export function resolveSaveSbpAccountForSbpMode({
+  userTouched = false,
+  current = DEFAULT_SAVE_SBP_ACCOUNT
+} = {}) {
+  // RED: wrong — ignores default-when-untouched contract
+  return !!current
+}
+
 export function buildSbpInitBody({ orderId, saveSbpAccount = false }) {
   const body = { order_id: orderId }
   if (saveSbpAccount) body.save_sbp_account = true

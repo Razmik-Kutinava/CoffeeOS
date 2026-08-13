@@ -1,13 +1,18 @@
 /**
- * #34 Checkout SBP Autopay UI helpers.
+ * #34 Checkout SBP Autopay UI helpers + #62 default checkbox.
  * node --test test/javascript/shop_sbp_autopay_checkout_ui_test.mjs
  */
 import assert from "node:assert/strict"
+import { readFileSync } from "node:fs"
 import { describe, it } from "node:test"
+import { fileURLToPath } from "node:url"
+import { dirname, join } from "node:path"
 import {
   pickDefaultPaymentSelection,
   chargeSbpAutopay,
   buildSbpInitBody,
+  DEFAULT_SAVE_SBP_ACCOUNT,
+  resolveSaveSbpAccountForSbpMode,
   SBP_AUTOPAY_TOASTS
 } from "../../app/frontend/lib/shopSbpAutopay.js"
 import { initSbpPayment } from "../../app/frontend/lib/shopSbpPay.js"
@@ -15,6 +20,8 @@ import {
   labelSbpAccount,
   labelBindSbpAccount
 } from "../../app/frontend/lib/paymentMethodI18n.js"
+
+const root = join(dirname(fileURLToPath(import.meta.url)), "../..")
 
 describe("i18n — SBP account labels", () => {
   it("exposes account + bind checkbox labels", () => {
@@ -95,5 +102,55 @@ describe("buildSbpInitBody", () => {
     assert.deepEqual(buildSbpInitBody({ orderId: "x", saveSbpAccount: false }), {
       order_id: "x"
     })
+  })
+
+  it("includes save_sbp_account when default-checked path pays", () => {
+    const flag = resolveSaveSbpAccountForSbpMode({ userTouched: false })
+    assert.deepEqual(buildSbpInitBody({ orderId: "x", saveSbpAccount: flag }), {
+      order_id: "x",
+      save_sbp_account: true
+    })
+  })
+})
+
+describe("#62 DEFAULT_SAVE_SBP_ACCOUNT + resolve", () => {
+  it("defaults checkbox to checked=true", () => {
+    assert.equal(DEFAULT_SAVE_SBP_ACCOUNT, true)
+  })
+
+  it("Subtask 1: untouched → checked true", () => {
+    assert.equal(resolveSaveSbpAccountForSbpMode({ userTouched: false }), true)
+  })
+
+  it("Subtask 2/4: user unchecked survives mode redraw", () => {
+    assert.equal(
+      resolveSaveSbpAccountForSbpMode({ userTouched: true, current: false }),
+      false
+    )
+  })
+
+  it("Subtask 3: user left checked → true", () => {
+    assert.equal(
+      resolveSaveSbpAccountForSbpMode({ userTouched: true, current: true }),
+      true
+    )
+  })
+})
+
+describe("#62 Checkout / PaymentMethodsSheet wiring", () => {
+  it("Checkout defaults saveSbpAccount to true and uses resolve helper", () => {
+    const src = readFileSync(join(root, "app/frontend/routes/Checkout.svelte"), "utf8")
+    assert.match(src, /saveSbpAccount\s*=\s*\$state\(true\)/)
+    assert.match(src, /saveSbpAccountTouched/)
+    assert.match(src, /resolveSaveSbpAccountForSbpMode/)
+  })
+
+  it("PaymentMethodsSheet bindable default true + user-change callback", () => {
+    const src = readFileSync(
+      join(root, "app/frontend/components/PaymentMethodsSheet.svelte"),
+      "utf8"
+    )
+    assert.match(src, /saveSbpAccount\s*=\s*\$bindable\(true\)/)
+    assert.match(src, /onSaveSbpAccountUserChange/)
   })
 })
