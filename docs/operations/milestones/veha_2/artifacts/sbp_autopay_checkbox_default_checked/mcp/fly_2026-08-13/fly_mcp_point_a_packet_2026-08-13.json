@@ -1,0 +1,27 @@
+{
+  "date": "2026-08-13",
+  "kind": "mcp_point_a_packet",
+  "fly_release": "v450",
+  "deployment": "01KZXCYNBPG9CVXJGTKG0BSXDS",
+  "commit": "8f51deba",
+  "stand": "https://coffeeos.fly.dev/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "checks": [
+    { "id": "deploy_v450", "status": "PASS" },
+    { "id": "A_repeat_peek", "status": "PASS", "detail": "повторить ×3 + оплатить в 1 клик" },
+    { "id": "A5_active_hides_repeat", "status": "PASS" },
+    { "id": "A6_cancel_restores_repeat", "status": "FAIL", "detail": "frequent has_active_order=true while orders/active=[]" },
+    { "id": "D_status_in_sheet", "status": "PASS" },
+    { "id": "sheet_09_canon", "status": "PASS" },
+    { "id": "new_card_in_sheet", "status": "PASS" },
+    { "id": "sbp_enabled", "status": "PASS" },
+    { "id": "62_checkbox_default_checked", "status": "PASS" },
+    { "id": "62_preserve_uncheck", "status": "PASS" },
+    { "id": "B_net_cta", "status": "PASS", "detail": "Нет связи. Повторить on CTA" },
+    { "id": "B_net_raw_alert", "status": "FAIL", "detail": "Failed to fetch alert in sheet" },
+    { "id": "B_card_copy_in_bundle", "status": "PASS" },
+    { "id": "B_card_cta_persist", "status": "PARTIAL", "detail": "auto-open NewCardForm G7" },
+    { "id": "callcheck", "status": "PASS" },
+    { "id": "code_call_404", "status": "PASS" }
+  ]
+}

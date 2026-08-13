@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-13 (#62 SBP checkbox default)  
+**Дата:** 2026-08-13 (MCP Point A v450)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #62 чекбокс СБП default checked GREEN local ✅ | push + Fly MCP Point A |
+| push+deploy **v450** + MCP пакет | фикс NET raw `Failed to fetch` · A6 frequent after cancel |
 
-**last_done:** #62 checkbox «Привязать счет…» checked по умолчанию + preserve toggle  
-**next_step:** push/deploy · MCP Point A (#62 + предыдущие local GREEN)
+**last_done:** Fly v450 MCP Point A — #62/SBP/sheet/Callcheck PASS; NET raw + A6 FAIL в ISSUES  
+**next_step:** фикс двух MCP FAIL · recheck Point A
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -26,7 +26,7 @@
 | ТЗ 1:1 + CBR #62 | **`[x]`** |
 | Default checked + preserve + `save_sbp_account` | **`[x]`** |
 | Local JS 39/0 | **`[x]`** |
-| Fly MCP Point A | **`[ ]`** |
+| Fly MCP Point A | **`[x]` PASS** v450 checkbox ON + preserve |
 
 ### Payment error user messages (2026-08-13)
 
@@ -35,7 +35,7 @@
 | ТЗ 1:1 + CBR | **`[x]`** |
 | Card / network labels + Retry CTA | **`[x]`** |
 | Local tests | **`[x]`** |
-| Fly MCP Point A | **`[ ]`** |
+| Fly MCP Point A | **`[x]`** CTA NET PASS · raw `Failed to fetch` FAIL → ISSUES |
 
 ### Invalid token + One-Click sheet UX (2026-08-13)
 
@@ -44,7 +44,7 @@
 | Скрины 09/10 в artifacts | **`[x]`** |
 | `openRepeatPaymentSheet` + RepeatSection wiring | **`[x]`** |
 | Local tests | **`[x]`** |
-| Fly MCP Point A | **`[ ]`** |
+| Fly MCP Point A | **`[x]` PASS** sheet vs 09 + NewCard in sheet |
 
 ### SMS.ru Callcheck auth (2026-08-12)
 
@@ -54,7 +54,7 @@
 | init_callcheck / check_status / send_sms / verify_sms | **`[x]`** |
 | PWA Callcheck→SMS | **`[x]`** |
 | Local tests | **`[x]`** |
-| Fly MCP Point A | **`[ ]`** |
+| Fly MCP Point A | **`[x]` PASS** Callcheck UI + `/code/call` 404 |
 
 ### Phone OTP Flash / SMS split (2026-08-12)
 
@@ -68,7 +68,7 @@
 |-----|--------|
 | Unlock СБП / счёт СБП → onSelectSbp | **`[x]`** local |
 | Тесты UI/CBR | **`[x]`** 29/0 |
-| Fly MCP Point A | **`[ ]`** ждёт push/deploy |
+| Fly MCP Point A | **`[x]` PASS** v450 СБП кликабелен |
 | Банк 3001 кабинет | отдельно (ISSUES) |
 
 ### Bugbot / security callbacks (2026-08-11)

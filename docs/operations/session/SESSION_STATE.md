@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-13 (#62 SBP checkbox default GREEN)  
+**Дата:** 2026-08-13 (MCP Point A v450)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #62 GREEN local ✅ | push + Fly MCP Point A |
+| Fly **v450** MCP пакет ✅/#62·sheet·Callcheck | фикс NET raw + A6 frequent |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,14 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-13 (push+deploy v450 + MCP Point A пакет)
+
+- Push `develop` `8f51deba` · `fly deploy --remote-only --depot=false` → **v450** `deployment-01KZXCYNBPG9CVXJGTKG0BSXDS` · `/up` 200
+- MCP Point A: evidence [`sbp_autopay_checkbox_default_checked/mcp/fly_2026-08-13/MCP_RESULT.md`](../../milestones/veha_2/artifacts/sbp_autopay_checkbox_default_checked/mcp/fly_2026-08-13/MCP_RESULT.md)
+- PASS: #62 checkbox ON · SBP enable · sheet 09 · NewCard in sheet · Callcheck · status in sheet · Repeat peek
+- FAIL: NET alert сырой `Failed to fetch` · A6 frequent `has_active_order` после cancel → ISSUES
+- OTP в профиль Арама не писали (mint MobileSession)
 
 ### Сессия 2026-08-13 (#62 предустановленный чекбокс автоплатежа СБП)
 

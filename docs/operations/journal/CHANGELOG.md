@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-13 — deploy+MCP: Point A v450 пакет (#62 / sheet / errors / Callcheck)
+
+- Push `develop` `8f51deba` · Fly **v450** `deployment-01KZXCYNBPG9CVXJGTKG0BSXDS`
+- MCP Point A PASS: #62 checkbox default ON + preserve · СБП active · PaymentMethodsSheet vs 09 · NewCard in sheet · Callcheck (не FlashCall) · `/code/call` 404 · status inside sheet
+- MCP FAIL → ISSUES: сырой `Failed to fetch` рядом с «Нет связи. Повторить»; A6 `frequent_products.has_active_order` после cancel
+- Evidence: `artifacts/sbp_autopay_checkbox_default_checked/mcp/fly_2026-08-13/MCP_RESULT.md`
+
 ## 2026-08-13 — feat(shop): #62 SBP autopay checkbox checked by default
 
 - Доп к #34: чекбокс «Привязать счет для покупок в один клик» checked по умолчанию
