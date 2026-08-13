@@ -11,6 +11,14 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-13 — feat(shop): понятные сообщения при ошибке оплаты One-Click
+
+- ТЗ: `customer_tasks/Понятные сообщения пользователю при ошибке оплаты.md`
+- Карта (коды `isCardErrorCode`) → «Недостаточно средств, или карта заблокирована…»
+- Сеть/timeout → «Нет связи. Повторить» + кнопка `inline-pay-retry` (тот же pay flow)
+- Checkout FSM labels CLIENT/NET синхронизированы; эквайринг/payload не трогали
+- Local: JS 17/0 · repeat_invalid_token 12/0 · shop_pay_fsm_3ds PASS · Fly MCP: skip
+
 ## 2026-08-13 — feat(shop): One-Click fail / invalid token → PaymentMethodsSheet
 
 - Канон UI = скрин `09_customer_payment_methods_sheet_canon_2026-08-13.png` (checkout pay-stack)

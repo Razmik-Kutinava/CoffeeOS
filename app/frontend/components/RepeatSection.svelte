@@ -11,10 +11,15 @@
   import { createWidgetPayFsm } from "../lib/shopWidgetPayFsm.js"
   import {
     runRepeatWidgetPayFlow,
-    resolveCardDeclineFallbackUi
+    resolveCardDeclineFallbackUi,
+    resolveNetworkRetryUi
   } from "../lib/widgetRepeatPayFlow.js"
   import { createRepeatInlineOrder } from "../lib/createRepeatInlineOrder.js"
-  import { INLINE_ROTATION_LABELS } from "../lib/shopInlinePayFsm.js"
+  import {
+    INLINE_ROTATION_LABELS,
+    classifyInlinePayErrorLabel,
+    INLINE_NETWORK_ERROR_LABEL
+  } from "../lib/shopInlinePayFsm.js"
   import {
     repeatInlinePayUi,
     patchRepeatInlinePayUi,
@@ -124,6 +129,7 @@
         statusText: out.statusText,
         errorText: out.errorText,
         showFallbackMethods: out.showFallbackMethods,
+        showRetry: !!out.showRetry,
         showExpandedCards: false,
         showNewCardForm: false,
         savedCards: out.savedCards || []
@@ -138,17 +144,32 @@
     } catch (e) {
       fsm.reject({ error_code: e?.error_code || "" })
       fsm.state = "ERROR"
-      const msg = e?.message || "Ошибка оплаты, попробуйте снова"
-      // S1: ошибка на экране + СБП/«карта +»; S2 → PaymentMethodsSheet (не expand в peek).
+      const msg = classifyInlinePayErrorLabel({
+        error: e,
+        error_code: e?.error_code,
+        message: e?.message
+      })
+      const ui =
+        msg === INLINE_NETWORK_ERROR_LABEL
+          ? resolveNetworkRetryUi()
+          : resolveCardDeclineFallbackUi()
+      // S1: ошибка на экране + СБП/«карта +» или «Повторить»; S2 → PaymentMethodsSheet.
       patchRepeatInlinePayUi({
         fsm,
         errorText: msg,
         statusText: msg,
-        ...resolveCardDeclineFallbackUi()
+        ...ui
       })
     } finally {
       patchRepeatInlinePayUi({ busy: false })
     }
+  }
+
+  /** Сеть: тот же One-Click flow на активной карточке (без нового payment path). */
+  async function onRetryPay() {
+    const item = itemByActiveKey()
+    if (!item) return
+    await onPayCardClick(item)
   }
 
   async function onFallbackSbp() {
@@ -266,9 +287,11 @@
           showFallbackMethods={!!payUi.showFallbackMethods}
           showExpandedCards={!!payUi.showExpandedCards}
           showNewCardForm={!!payUi.showNewCardForm}
+          showRetry={!!payUi.showRetry}
           onSelectSbp={onFallbackSbp}
           onSelectCardPlus={onFallbackCardPlus}
           onSelectSavedCard={onSelectSavedCard}
+          onRetry={onRetryPay}
         />
       </div>
     {/if}

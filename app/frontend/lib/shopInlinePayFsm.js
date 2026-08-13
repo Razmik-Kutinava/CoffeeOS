@@ -4,6 +4,9 @@
  * Poll 1500 мс · ротация 1800 мс · таймаут 15000 мс.
  */
 
+import { isCardErrorCode } from "./shopWidgetPayFsm.js"
+import { isOfflineError } from "./shopNetwork.js"
+
 export const TBANK_INLINE_POLL_MS = 1500
 export const TBANK_INLINE_ROTATION_MS = 1800
 export const TBANK_INLINE_TIMEOUT_MS = 15000
@@ -26,7 +29,12 @@ export const INLINE_ROTATION_LABELS = [
 export const INLINE_SUCCESS_LABEL = "Оплачено!"
 export const INLINE_TIMEOUT_LABEL = "Время ожидания истекло"
 export const INLINE_GENERIC_ERROR_LABEL = "Ошибка оплаты, попробуйте снова"
-export const INLINE_INSUFFICIENT_FUNDS_LABEL = "Недостаточно средств"
+/** @deprecated use INLINE_CARD_ERROR_LABEL — канон заказчика 2026-08-13 */
+export const INLINE_INSUFFICIENT_FUNDS_LABEL =
+  "Недостаточно средств, или карта заблокирована банком, или истёк срок действия карты"
+export const INLINE_CARD_ERROR_LABEL =
+  "Недостаточно средств, или карта заблокирована банком, или истёк срок действия карты"
+export const INLINE_NETWORK_ERROR_LABEL = "Нет связи. Повторить"
 
 function defaultSleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms))
@@ -37,7 +45,30 @@ function defaultSleep(ms) {
  */
 export function mapTbankInlineError(data = {}) {
   const code = String(data?.error_code || "").trim()
-  if (code === "1051") return INLINE_INSUFFICIENT_FUNDS_LABEL
+  if (isCardErrorCode(code)) return INLINE_CARD_ERROR_LABEL
+  return INLINE_GENERIC_ERROR_LABEL
+}
+
+/**
+ * User-facing label for One-Click / inline fail (без кодов эквайринга).
+ * @param {{ error_code?: string, error?: unknown, kind?: string, message?: string }} info
+ */
+export function classifyInlinePayErrorLabel(info = {}) {
+  if (info.kind === "timeout" || info.kind === "network") return INLINE_NETWORK_ERROR_LABEL
+  const msg = String(info.message || info.error?.message || "").toLowerCase()
+  if (/timeout|timed out|abort|failed to fetch|network|offline|err_network/i.test(msg)) {
+    return INLINE_NETWORK_ERROR_LABEL
+  }
+  if (
+    typeof navigator !== "undefined" &&
+    info.error &&
+    isOfflineError(info.error)
+  ) {
+    return INLINE_NETWORK_ERROR_LABEL
+  }
+  const code = String(info.error_code || "").trim()
+  if (isCardErrorCode(code)) return INLINE_CARD_ERROR_LABEL
+  if (info.label) return String(info.label)
   return INLINE_GENERIC_ERROR_LABEL
 }
 

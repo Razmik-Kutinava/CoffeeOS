@@ -7,34 +7,52 @@ import {
   INLINE_ROTATION_LABELS,
   INLINE_SUCCESS_LABEL,
   INLINE_GENERIC_ERROR_LABEL,
+  INLINE_NETWORK_ERROR_LABEL,
   TBANK_INLINE_ERROR_RESET_MS,
-  runTbankInlineButtonCycle
+  runTbankInlineButtonCycle,
+  classifyInlinePayErrorLabel
 } from "./shopInlinePayFsm.js"
 import { userCardsApiPath } from "./userCardsApiPath.js"
 
 /**
  * S1: отказ карты → только СБП / «карта +» (без expanded / формы).
- * @returns {{ showFallbackMethods: boolean, showExpandedCards: boolean, showNewCardForm: boolean }}
+ * @returns {{ showFallbackMethods: boolean, showExpandedCards: boolean, showNewCardForm: boolean, showRetry: boolean }}
  */
 export function resolveCardDeclineFallbackUi() {
   return {
     showFallbackMethods: true,
     showExpandedCards: false,
-    showNewCardForm: false
+    showNewCardForm: false,
+    showRetry: false
+  }
+}
+
+/**
+ * Сеть / нет связи → CTA «Повторить» (тот же pay flow), без дубля в шторке.
+ * @returns {{ showFallbackMethods: boolean, showExpandedCards: boolean, showNewCardForm: boolean, showRetry: boolean, openPaymentSheet: boolean }}
+ */
+export function resolveNetworkRetryUi() {
+  return {
+    showFallbackMethods: false,
+    showExpandedCards: false,
+    showNewCardForm: false,
+    showRetry: true,
+    openPaymentSheet: false
   }
 }
 
 /**
  * S2: тап «карта +» → открыть канон PaymentMethodsSheet (checkout pay-stack),
  * не expanded cards/form внутри peek (клип формы).
- * @returns {{ showFallbackMethods: boolean, showExpandedCards: boolean, showNewCardForm: boolean, openPaymentSheet: boolean }}
+ * @returns {{ showFallbackMethods: boolean, showExpandedCards: boolean, showNewCardForm: boolean, openPaymentSheet: boolean, showRetry: boolean }}
  */
 export function resolveCardPlusExpandedUi() {
   return {
     showFallbackMethods: true,
     showExpandedCards: false,
     showNewCardForm: false,
-    openPaymentSheet: true
+    openPaymentSheet: true,
+    showRetry: false
   }
 }
 
@@ -62,6 +80,7 @@ export async function runRepeatWidgetPayFlow({
   let showFallbackMethods = false
   let showExpandedCards = false
   let showNewCardForm = false
+  let showRetry = false
   let openPaymentSheet = false
   let savedCards = []
   let resetAfterMs = null
@@ -132,40 +151,58 @@ export async function runRepeatWidgetPayFlow({
       statusText = INLINE_SUCCESS_LABEL
       onStatusText?.(statusText)
       resetAfterMs = TBANK_INLINE_ERROR_RESET_MS
-    } else if (result.kind === "http_error" || result.kind === "timeout") {
+    } else if (result.kind === "timeout") {
+      lastErrorCode = result.errorCode || ""
+      fsm.reject({ error_code: lastErrorCode })
+      fsm.state = WIDGET_FSM_STATES.ERROR
+      errorText = INLINE_NETWORK_ERROR_LABEL
+      statusText = errorText
+      onStatusText?.(statusText)
+      ;({ showFallbackMethods, showExpandedCards, showNewCardForm, showRetry } =
+        resolveNetworkRetryUi())
+    } else if (result.kind === "http_error") {
       lastErrorCode = result.errorCode || ""
       fsm.reject({ error_code: lastErrorCode })
       fsm.state = WIDGET_FSM_STATES.ERROR
       errorText = result.errorLabel || INLINE_GENERIC_ERROR_LABEL
       statusText = errorText
       onStatusText?.(statusText)
-      ;({ showFallbackMethods, showExpandedCards, showNewCardForm } =
+      ;({ showFallbackMethods, showExpandedCards, showNewCardForm, showRetry } =
         resolveCardDeclineFallbackUi())
     } else {
       lastErrorCode = result.errorCode || ""
       fsm.reject({ error_code: lastErrorCode })
-      errorText = result.errorLabel || WIDGET_STATUS_LABELS.ERROR
+      errorText =
+        classifyInlinePayErrorLabel({ error_code: lastErrorCode }) ||
+        result.errorLabel ||
+        WIDGET_STATUS_LABELS.ERROR
       statusText = errorText
       onStatusText?.(statusText)
       if (fsm.state !== WIDGET_FSM_STATES.FALLBACK) {
         fsm.state = WIDGET_FSM_STATES.ERROR
       }
-      ;({ showFallbackMethods, showExpandedCards, showNewCardForm } =
+      ;({ showFallbackMethods, showExpandedCards, showNewCardForm, showRetry } =
         resolveCardDeclineFallbackUi())
     }
   } catch (e) {
     lastErrorCode = e?.error_code || ""
     fsm.reject({ error_code: lastErrorCode })
     fsm.state = WIDGET_FSM_STATES.ERROR
-    errorText =
-      (typeof e?.message === "string" && e.message && e.message !== "Payment provider error"
-        ? e.message
-        : null) || INLINE_GENERIC_ERROR_LABEL
+    errorText = classifyInlinePayErrorLabel({
+      error: e,
+      error_code: lastErrorCode,
+      message: e?.message
+    })
     statusText = errorText
     onStatusText?.(statusText)
-    // S1: ошибка на основном экране + СБП/«карта +»; S2 → PaymentMethodsSheet.
-    ;({ showFallbackMethods, showExpandedCards, showNewCardForm } =
-      resolveCardDeclineFallbackUi())
+    if (errorText === INLINE_NETWORK_ERROR_LABEL) {
+      ;({ showFallbackMethods, showExpandedCards, showNewCardForm, showRetry } =
+        resolveNetworkRetryUi())
+    } else {
+      // S1: ошибка на основном экране + СБП/«карта +»; S2 → PaymentMethodsSheet.
+      ;({ showFallbackMethods, showExpandedCards, showNewCardForm, showRetry } =
+        resolveCardDeclineFallbackUi())
+    }
   }
 
   return {
@@ -175,6 +212,7 @@ export async function runRepeatWidgetPayFlow({
     showFallbackMethods,
     showExpandedCards,
     showNewCardForm,
+    showRetry,
     openPaymentSheet,
     savedCards,
     resetAfterMs,

@@ -36,8 +36,13 @@ const CARD_ERROR_CODES = new Set([
   "1096"  // повторите позже
 ])
 
+/** Коды отказа по карте (reuse для user-facing сообщений). */
+export function isCardErrorCode(errorCode) {
+  return CARD_ERROR_CODES.has(String(errorCode || "").trim())
+}
+
 function isCardError(errorCode) {
-  return CARD_ERROR_CODES.has(String(errorCode))
+  return isCardErrorCode(errorCode)
 }
 
 /**

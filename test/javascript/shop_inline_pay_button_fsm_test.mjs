@@ -22,11 +22,11 @@ describe("shopInlinePayFsm — exported intervals", () => {
   })
 })
 
-describe("mapTbankInlineError — 1051 → insufficient funds", () => {
-  it("maps ErrorCode=1051 to «Недостаточно средств»", () => {
+describe("mapTbankInlineError — card codes → customer card message", () => {
+  it("maps ErrorCode=1051 to card user message", () => {
     assert.equal(
       mapTbankInlineError({ status: "REJECTED", error_code: "1051" }),
-      "Недостаточно средств"
+      "Недостаточно средств, или карта заблокирована банком, или истёк срок действия карты"
     )
   })
 
@@ -105,7 +105,7 @@ describe("runTbankInlineButtonCycle — scheduling + terminal outcomes", () => {
     assert.ok(sleeps.length > 0)
   })
 
-  it("maps REJECTED with ErrorCode=1051 into «Недостаточно средств»", async () => {
+  it("maps REJECTED with ErrorCode=1051 into card user message", async () => {
     const pollStatusFn = async ({ attempt }) => {
       if (attempt === 1) {
         return { status: "REJECTED", error_code: "1051" }
@@ -120,7 +120,10 @@ describe("runTbankInlineButtonCycle — scheduling + terminal outcomes", () => {
     assert.equal(res.kind, "rejected")
     assert.equal(res.terminalStatus, "REJECTED")
     assert.equal(res.errorCode, "1051")
-    assert.equal(res.errorLabel, "Недостаточно средств")
+    assert.equal(
+      res.errorLabel,
+      "Недостаточно средств, или карта заблокирована банком, или истёк срок действия карты"
+    )
     assert.equal(res.labelAtTerminal, "Ещё чуть-чуть...")
     assert.deepEqual(res.pollTimes, [1500])
     assert.deepEqual(res.rotationTimes, [])

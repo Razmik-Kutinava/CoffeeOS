@@ -12,6 +12,7 @@ function blank() {
     statusText: "",
     errorText: "",
     showFallbackMethods: false,
+    showRetry: false,
     showExpandedCards: false,
     showNewCardForm: false,
     savedCards: [],

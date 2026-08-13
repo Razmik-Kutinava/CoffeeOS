@@ -23,9 +23,10 @@ export const PAY_FSM_LABELS = {
   [PAY_FSM.PROCESSING]: "Обработка банком…",
   [PAY_FSM.THREE_DS]: "Подтвердите по СМС",
   [PAY_FSM.SUCCESS]: "Оплачено ✔",
-  [PAY_FSM.CLIENT_ERROR]: "Отказ: смените карту",
+  [PAY_FSM.CLIENT_ERROR]:
+    "Недостаточно средств, или карта заблокирована банком, или истёк срок действия карты",
   [PAY_FSM.BANK_ERROR]: "Сбой банка: позже",
-  [PAY_FSM.NET_ERROR]: "Нет сети: повторить"
+  [PAY_FSM.NET_ERROR]: "Нет связи. Повторить"
 }
 
 /** Коды Т-Банка: отказ по карте → State 5 Client Error. */
@@ -74,7 +75,7 @@ export function shouldLockPaymentMethods(state) {
 
 /**
  * G7: действие CTA по FSM.
- * CLIENT_ERROR («Отказ: смените карту») → открыть NewCardForm, не retry той же карты.
+ * CLIENT_ERROR (сообщение про карту) → открыть NewCardForm, не retry той же карты.
  */
 export function resolvePayFsmCtaAction(state) {
   if (state === PAY_FSM.CLIENT_ERROR) return "open_new_card"

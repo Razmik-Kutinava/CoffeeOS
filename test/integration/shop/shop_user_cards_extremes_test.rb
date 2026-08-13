@@ -204,7 +204,7 @@ class Shop::ShopUserCardsExtremesTest < ActionDispatch::IntegrationTest
   test "E6 Checkout maps offline errors to Net Error message" do
     src = File.read(CHECKOUT)
     fsm = File.read(Rails.root.join("app/frontend/lib/shopPayFsm.js"))
-    assert_includes fsm, "Нет сети: повторить"
+    assert_includes fsm, "Нет связи. Повторить"
     assert_includes fsm, "NET_ERROR: 7"
     assert_match(/fsmFromPaymentError|PAY_FSM\.NET_ERROR/, src)
   end

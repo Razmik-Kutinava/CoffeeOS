@@ -17,10 +17,12 @@
     showFallbackMethods = false,
     showExpandedCards = false,
     showNewCardForm = false,
+    showRetry = false,
     onSelectSbp = undefined,
     onSelectCardPlus = undefined,
     onSelectSavedCard = undefined,
-    onNewCardPay = undefined
+    onNewCardPay = undefined,
+    onRetry = undefined
   } = $props()
 
   let processing = $derived(fsmState === WIDGET_FSM_STATES.PROCESSING)
@@ -59,6 +61,15 @@
       {/if}
       {displayText}
     </div>
+
+    {#if showRetry && error}
+      <button
+        type="button"
+        data-testid="inline-pay-retry"
+        class="w-full rounded-lg bg-white px-3 py-2.5 text-center text-[13px] font-semibold text-black"
+        onclick={() => onRetry?.()}
+      >Повторить</button>
+    {/if}
 
     {#if showFallbackMethods && (fallback || error)}
       <div data-testid="inline-fallback-methods" class="flex gap-2">

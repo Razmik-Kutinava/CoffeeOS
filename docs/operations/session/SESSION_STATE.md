@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-13 (invalid token + One-Click sheet UX)  
+**Дата:** 2026-08-13 (payment error user messages)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| PaymentMethodsSheet UX GREEN local | push + Fly MCP Point A (скрин 09) |
+| Payment error messages GREEN local | push + Fly MCP Point A |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,13 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-13 (понятные сообщения при ошибке оплаты)
+
+- ТЗ 1:1: `customer_tasks/Понятные сообщения пользователю при ошибке оплаты.md`
+- Карта → длинный текст; сеть/timeout → «Нет связи. Повторить» + CTA `inline-pay-retry`
+- Повтор = тот же `onPayCardClick` (без нового payment flow)
+- Local: JS **17/0** · `repeat_invalid_token` **12/0** · `shop_pay_fsm_3ds` PASS · Fly MCP: skip
 
 ### Сессия 2026-08-13 (invalid token + One-Click → PaymentMethodsSheet)
 

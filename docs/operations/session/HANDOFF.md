@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-13 (invalid token + One-Click sheet UX)  
+**Дата:** 2026-08-13 (payment error user messages)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| PaymentMethodsSheet UX GREEN local ✅ | push + Fly MCP Point A (скрин 09) |
+| Понятные сообщения ошибки оплаты GREEN local ✅ | push + Fly MCP Point A |
 
-**last_done:** One-Click fail / invalid token → канон PaymentMethodsSheet (не peek)  
-**next_step:** push/deploy · MCP Point A vs скрин 09 · Callcheck/SBP тоже ждёт push
+**last_done:** карта / «Нет связи. Повторить» + CTA retry (One-Click fail)  
+**next_step:** push/deploy · MCP Point A · sheet UX / Callcheck тоже ждёт push
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -18,6 +18,15 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Payment error user messages (2026-08-13)
+
+| Что | Статус |
+|-----|--------|
+| ТЗ 1:1 + CBR | **`[x]`** |
+| Card / network labels + Retry CTA | **`[x]`** |
+| Local tests | **`[x]`** |
+| Fly MCP Point A | **`[ ]`** |
 
 ### Invalid token + One-Click sheet UX (2026-08-13)
 
