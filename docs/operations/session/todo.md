@@ -2,7 +2,7 @@
 
 | last_done | current_state | next_step |
 |-----------|---------------|-----------|
-| PHASE 0 intake | SPEC → RED | helper default + Checkout wiring |
+| GREEN local JS 39/0 | done local | push/deploy · Fly MCP Point A |
 
 ## Цель
 Чекбокс «Привязать счет для покупок в один клик» checked по умолчанию; снятие → `save_sbp_account=false`; выбор пользователя не сбрасывается при UI-redraw. Backend #34 не трогаем.
@@ -20,20 +20,19 @@
 - Корзина / сумма заказа / AccountToken backend
 
 ## Проверка
-- `node --test test/javascript/shop_sbp_autopay_checkout_ui_test.mjs test/javascript/shop_sbp_autopay_test.mjs test/javascript/shop_sbp_pay_test.mjs`
-- (опц.) `bin/rails test test/integration/shop/api/sbp_init_save_account_test.rb` — контракт API без изменений
+- `node --test …shop_sbp_autopay_checkout_ui… …shop_sbp_autopay… …shop_sbp_pay…` → **39/0 PASS**
 
 ## Чеклист SBR
 - [x] PHASE 0 intake 1:1 + CBR #62
 - [x] SPEC todo
-- [ ] RED helper + tests
-- [ ] GREEN Checkout / PaymentMethodsSheet
-- [ ] Local regression zone
+- [x] RED helper + tests
+- [x] GREEN Checkout / PaymentMethodsSheet
+- [x] Local regression zone
 - [ ] REVIEW ops
 - [ ] Fly MCP Point A (после push/deploy)
 
 ## Subtasks (заказчик)
-- [ ] 1: checkbox default checked=true
-- [ ] 2: uncheck → save_sbp_account=false
-- [ ] 3: leave checked → save_sbp_account=true
-- [ ] 4: после UI-redraw user choice не сбрасывается
+- [x] 1: checkbox default checked=true
+- [x] 2: uncheck → save_sbp_account=false
+- [x] 3: leave checked → save_sbp_account=true
+- [x] 4: после UI-redraw user choice не сбрасывается

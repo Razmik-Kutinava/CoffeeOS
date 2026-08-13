@@ -140,7 +140,7 @@ describe("#62 DEFAULT_SAVE_SBP_ACCOUNT + resolve", () => {
 describe("#62 Checkout / PaymentMethodsSheet wiring", () => {
   it("Checkout defaults saveSbpAccount to true and uses resolve helper", () => {
     const src = readFileSync(join(root, "app/frontend/routes/Checkout.svelte"), "utf8")
-    assert.match(src, /saveSbpAccount\s*=\s*\$state\(true\)/)
+    assert.match(src, /saveSbpAccount\s*=\s*\$state\(DEFAULT_SAVE_SBP_ACCOUNT\)/)
     assert.match(src, /saveSbpAccountTouched/)
     assert.match(src, /resolveSaveSbpAccountForSbpMode/)
   })

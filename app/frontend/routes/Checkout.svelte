@@ -56,6 +56,8 @@
   import {
     chargeSbpAutopay,
     pickDefaultPaymentSelection,
+    resolveSaveSbpAccountForSbpMode,
+    DEFAULT_SAVE_SBP_ACCOUNT,
     SBP_AUTOPAY_TOASTS
   } from "../lib/shopSbpAutopay.js"
   import { savePendingOrder } from "../lib/codeblackPendingOrder.js"
@@ -94,7 +96,8 @@
   let cardsLoading = $state(false)
   let selectedCardId = $state(null)
   let selectionMode = $state("saved_card") // saved_card | new_card | sbp | sbp_account
-  let saveSbpAccount = $state(false)
+  let saveSbpAccount = $state(DEFAULT_SAVE_SBP_ACCOUNT)
+  let saveSbpAccountTouched = $state(false)
   let sbpAccounts = $state([])
   let newCardState = $state(createNewCardFormState())
   let payFsmState = $state(PAY_FSM.DEFAULT)
@@ -251,7 +254,12 @@
       })
       selectedCardId = picked.selectedCardId
       selectionMode = picked.selectionMode
-      if (selectionMode !== "sbp") saveSbpAccount = false
+      if (selectionMode === "sbp") {
+        saveSbpAccount = resolveSaveSbpAccountForSbpMode({
+          userTouched: saveSbpAccountTouched,
+          current: saveSbpAccount
+        })
+      }
       return true
     } catch (e) {
       savedCards = []
@@ -368,9 +376,18 @@
   function onSelectSbp() {
     selectionMode = "sbp"
     selectedCardId = null
+    saveSbpAccount = resolveSaveSbpAccountForSbpMode({
+      userTouched: saveSbpAccountTouched,
+      current: saveSbpAccount
+    })
     payFsmState = PAY_FSM.DEFAULT
     sheetInlineError = null
     persistPaymentSelection({ selectedCardId: null, selectionMode: "sbp" })
+  }
+
+  function onSaveSbpAccountUserChange(checked) {
+    saveSbpAccountTouched = true
+    saveSbpAccount = !!checked
   }
 
   function onSelectSbpAccount() {
@@ -733,6 +750,7 @@
     onChangeCard={onSelectNewCard}
     {onSelectSbp}
     {onSelectSbpAccount}
+    {onSaveSbpAccountUserChange}
     onPay={onSheetPay}
     onRetry={onSheetPayRetry}
     onRetryLoad={retryLoadSavedCards}

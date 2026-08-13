@@ -30,7 +30,7 @@
     inlineError = null,
     selectedCardId = null,
     selectionMode = "saved_card", // saved_card | new_card | sbp | sbp_account
-    saveSbpAccount = $bindable(false),
+    saveSbpAccount = $bindable(true),
     canPay = false,
     fsmState = PAY_FSM.DEFAULT,
     newCardState = $bindable(undefined),
@@ -39,6 +39,7 @@
     onSelectNewCard = undefined,
     onSelectSbp = undefined,
     onSelectSbpAccount = undefined,
+    onSaveSbpAccountUserChange = undefined,
     onPay = undefined,
     onRetry = undefined,
     onRetryLoad = undefined,
@@ -189,7 +190,9 @@
             checked={saveSbpAccount}
             disabled={locked}
             onchange={(e) => {
-              saveSbpAccount = !!e.currentTarget.checked
+              const next = !!e.currentTarget.checked
+              saveSbpAccount = next
+              onSaveSbpAccountUserChange?.(next)
             }}
           />
           <span class="pm-bind-sbp__text">{labelBindSbpAccount()}</span>
