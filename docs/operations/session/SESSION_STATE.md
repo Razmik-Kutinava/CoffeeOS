@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-13 (MCP Point A v450)  
+**Дата:** 2026-08-13 (fix MCP FAIL NET+A6)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Fly **v450** MCP пакет ✅/#62·sheet·Callcheck | фикс NET raw + A6 frequent |
+| NET+A6 GREEN local ✅ | push/deploy · Fly MCP recheck |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,12 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-13 (фикс MCP FAIL: NET raw + A6 frequent)
+
+- NET: `resolveCheckoutSheetInlineError` → null для NET/CLIENT/BANK; Checkout не пишет `e.message`/`chargeErr.message` в sheet
+- A6: `GuestOrderCancellationService` → `CustomerFrequentProductsService.bust_cache!`
+- Local: JS payment_error **9/0** · guest_order_cancellation **13/0** · Fly MCP: skip (ждёт push/deploy)
 
 ### Сессия 2026-08-13 (push+deploy v450 + MCP Point A пакет)
 

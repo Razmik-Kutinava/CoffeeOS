@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-13 — fix(shop): MCP FAIL — NET raw Failed to fetch + A6 frequent after cancel
+
+- Checkout: `resolveCheckoutSheetInlineError` — нет сырого `Failed to fetch` в PaymentMethodsSheet (copy на CTA)
+- Guest cancel: `bust_cache!` frequent v3 — иначе `has_active_order=true` после отмены
+- Local: JS **9/0** · `guest_order_cancellation` **13/0** · Fly MCP: skip
+
 ## 2026-08-13 — deploy+MCP: Point A v450 пакет (#62 / sheet / errors / Callcheck)
 
 - Push `develop` `8f51deba` · Fly **v450** `deployment-01KZXCYNBPG9CVXJGTKG0BSXDS`

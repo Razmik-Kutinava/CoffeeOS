@@ -34,6 +34,11 @@ module Shop
       Shop::PendingOrderSession.clear!(@session, @tenant_id)
 
       order = @order.reload
+      # A6 / Quick Repeat: после cancel кэш v3 иначе отдаёт has_active_order=true
+      Shop::CustomerFrequentProductsService.bust_cache!(
+        tenant_id: @tenant_id,
+        customer_id: order.customer_id
+      )
       Shop::GuestOrderBroadcaster.call(order: order, old_status: old_status)
       if old_status != "pending_payment"
         Barista::OrderBoardBroadcaster.call(order: order, old_status: old_status)

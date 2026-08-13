@@ -37,6 +37,7 @@
     apiWithPayTimeout,
     fsmFromPaymentError,
     isPayFsmClickable,
+    resolveCheckoutSheetInlineError,
     shouldAutoOpenNewCardOnClientError,
     withMinLoaderMs
   } from "../lib/shopPayFsm.js"
@@ -545,8 +546,12 @@
               redirectToSbp(paymentUrl)
               return
             }
-            sheetInlineError = chargeErr.message || SBP_AUTOPAY_TOASTS.CONNECTION_ERROR
-            payFsmState = PAY_FSM.CLIENT_ERROR
+            payFsmState = fsmFromPaymentError(chargeErr, { httpStatus: chargeErr.httpStatus })
+            // Не сырой chargeErr.message («Failed to fetch»).
+            sheetInlineError = resolveCheckoutSheetInlineError(chargeErr, payFsmState)
+            if (sheetInlineError == null && payFsmState !== PAY_FSM.NET_ERROR) {
+              sheetInlineError = SBP_AUTOPAY_TOASTS.CONNECTION_ERROR
+            }
             return
           }
         }
@@ -628,8 +633,9 @@
       if (isInvalidRebillPaymentError(e)) {
         setTokenInvalid(selectedCardId)
       }
+      // CTA несёт copy (NET/CLIENT/BANK); сырой e.message («Failed to fetch») в шторку не кладём.
       if (mapPaymentErrorSurface({ httpStatus: e.httpStatus, phase: "pay" }) === "inline") {
-        sheetInlineError = e.message || paymentMethodLoadErrorMessage()
+        sheetInlineError = resolveCheckoutSheetInlineError(e, payFsmState)
       }
       if (/подтвердите email/i.test(e.message || "")) {
         emailVerified = false

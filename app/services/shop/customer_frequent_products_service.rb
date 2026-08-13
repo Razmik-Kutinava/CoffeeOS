@@ -44,7 +44,8 @@ module Shop
       end
     end
 
-    # Сброс: OrderCreator, PaymentStatusUpdater, Barista::OrderStatusUpdateService.
+    # Сброс: OrderCreator, PaymentStatusUpdater, Barista::OrderStatusUpdateService,
+    # GuestOrderCancellationService (A6 — иначе has_active_order залипает после cancel).
     # Hot-path: деградация кэша не роняет заказ/оплату/смену статуса.
     def self.bust_cache!(tenant_id:, customer_id:)
       return if customer_id.blank?

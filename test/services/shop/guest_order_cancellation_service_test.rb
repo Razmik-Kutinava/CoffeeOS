@@ -25,6 +25,29 @@ class Shop::GuestOrderCancellationServiceTest < ActiveSupport::TestCase
     assert_equal "guest", Shop::OrderCancellationPresenter.cancelled_by(result)
   end
 
+  # A6 MCP FAIL: после cancel кэш frequent иначе has_active_order=true
+  test "guest cancel busts frequent products cache" do
+    order = mobile_order!(status: :accepted)
+    key = Shop::CustomerFrequentProductsService.cache_key(
+      tenant_id: @tenant.id,
+      customer_id: @customer.id
+    )
+    Rails.cache.write(
+      key,
+      { has_active_order: true, frequent_items: [] },
+      expires_in: 30.minutes
+    )
+    assert_not_nil Rails.cache.read(key)
+
+    Shop::GuestOrderCancellationService.new(
+      order: order,
+      session: @session,
+      tenant_id: @tenant.id
+    ).call!
+
+    assert_nil Rails.cache.read(key), "bust_cache! после guest cancel обязателен (A6)"
+  end
+
   test "guest cannot cancel preparing order" do
     order = mobile_order!(status: :preparing)
 

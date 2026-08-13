@@ -1,23 +1,21 @@
-# todo — MCP Point A пакет после deploy v450 (2026-08-13)
+# todo — фикс MCP FAIL: NET raw + A6 frequent after cancel (2026-08-13)
 
 | last_done | current_state | next_step |
 |-----------|---------------|-----------|
-| push+deploy v450 + MCP пакет | done MCP report | фикс NET raw `Failed to fetch` · A6 frequent after cancel |
+| GREEN local JS 9/0 · cancel 13/0 | done local | push/deploy · Fly MCP recheck |
 
 ## Цель
-Один deploy → MCP Point A по задачам агентов (шторка / #62 / ошибки / Callcheck / Repeat / статусы).
+1) NET: только «Нет связи. Повторить» на CTA, без alert `Failed to fetch`.  
+2) A6: guest cancel → bust frequent → «повторить» снова.
 
-## Файлы (ожидаемо) — следующий фикс
-- `app/frontend/routes/Checkout.svelte` — не писать сырой `e.message` в `sheetInlineError` на NET
-- `app/frontend/components/PaymentMethodsSheet.svelte` — inline error surface
-- `app/services/shop/customer_frequent_products_service.rb` (+ cache invalidate on cancel) — A6
-
-## Не ломать
-- #62 checkbox default / preserve
-- СБП enable + «Оплатить быстро»
-- Callcheck → SMS fallback
-- Status inside cart sheet
+## Файлы
+- `app/frontend/lib/shopPayFsm.js`
+- `app/frontend/routes/Checkout.svelte`
+- `app/services/shop/guest_order_cancellation_service.rb`
+- `app/services/shop/customer_frequent_products_service.rb` (comment)
+- tests: `payment_error_user_messages_test.mjs` · `guest_order_cancellation_service_test.rb`
 
 ## Проверка
-- `bin/rails test` / JS zone по фиксу (когда будет GREEN)
-- Fly MCP Point A recheck A6 + NET error UI
+- [x] `node --test test/javascript/payment_error_user_messages_test.mjs` → 9/0
+- [x] `ruby bin/rails test test/services/shop/guest_order_cancellation_service_test.rb` → 13/0
+- [ ] Fly MCP Point A: offline pay (нет Failed to fetch) · cancel → повторить

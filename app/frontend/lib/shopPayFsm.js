@@ -88,6 +88,24 @@ export function shouldAutoOpenNewCardOnClientError(state) {
   return state === PAY_FSM.CLIENT_ERROR
 }
 
+/**
+ * Текст в PaymentMethodsSheet (alert). Для NET/CLIENT/BANK — null:
+ * copy уже на CTA (`payFsmLabel`), сырой `Failed to fetch` / ErrorCode не дублируем.
+ * @param {{ message?: string }|Error|null} _error
+ * @param {number} fsmState
+ * @returns {string|null}
+ */
+export function resolveCheckoutSheetInlineError(_error, fsmState) {
+  if (
+    fsmState === PAY_FSM.NET_ERROR ||
+    fsmState === PAY_FSM.CLIENT_ERROR ||
+    fsmState === PAY_FSM.BANK_ERROR
+  ) {
+    return null
+  }
+  return null
+}
+
 /** ErrorCode / HTTP / сеть → FSM 5–7. */
 export function fsmFromPaymentError(error, { httpStatus } = {}) {
   if (typeof navigator !== "undefined" && (!navigator.onLine || isOfflineError(error))) {

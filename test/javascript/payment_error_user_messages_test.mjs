@@ -5,6 +5,9 @@
  */
 import assert from "node:assert/strict"
 import { describe, it } from "node:test"
+import { readFileSync } from "node:fs"
+import { fileURLToPath } from "node:url"
+import { dirname, join } from "node:path"
 
 import {
   INLINE_CARD_ERROR_LABEL,
@@ -12,8 +15,15 @@ import {
   mapTbankInlineError,
   classifyInlinePayErrorLabel
 } from "../../app/frontend/lib/shopInlinePayFsm.js"
-import { PAY_FSM, PAY_FSM_LABELS, fsmFromPaymentError } from "../../app/frontend/lib/shopPayFsm.js"
+import {
+  PAY_FSM,
+  PAY_FSM_LABELS,
+  fsmFromPaymentError,
+  resolveCheckoutSheetInlineError
+} from "../../app/frontend/lib/shopPayFsm.js"
 import { resolveNetworkRetryUi } from "../../app/frontend/lib/widgetRepeatPayFlow.js"
+
+const root = join(dirname(fileURLToPath(import.meta.url)), "../..")
 
 const CARD_MSG =
   "Недостаточно средств, или карта заблокирована банком, или истёк срок действия карты"
@@ -67,5 +77,27 @@ describe("payment error user messages — network retry UI [TDD]", () => {
     assert.equal(ui.showExpandedCards, false)
     assert.equal(ui.showNewCardForm, false)
     assert.equal(ui.openPaymentSheet, false)
+  })
+})
+
+describe("payment error user messages — no raw Failed to fetch in sheet [MCP FAIL]", () => {
+  it("resolveCheckoutSheetInlineError is null for NET/CLIENT/BANK (CTA has copy)", () => {
+    const raw = new Error("Failed to fetch")
+    assert.equal(resolveCheckoutSheetInlineError(raw, PAY_FSM.NET_ERROR), null)
+    assert.equal(resolveCheckoutSheetInlineError(raw, PAY_FSM.CLIENT_ERROR), null)
+    assert.equal(resolveCheckoutSheetInlineError(raw, PAY_FSM.BANK_ERROR), null)
+  })
+
+  it("Checkout catch must not assign e.message into sheetInlineError on pay", () => {
+    const src = readFileSync(join(root, "app/frontend/routes/Checkout.svelte"), "utf8")
+    assert.match(src, /resolveCheckoutSheetInlineError/)
+    assert.ok(
+      !/sheetInlineError\s*=\s*e\.message/.test(src),
+      "сырой e.message в sheetInlineError запрещён (Failed to fetch)"
+    )
+    assert.ok(
+      !/sheetInlineError\s*=\s*chargeErr\.message/.test(src),
+      "сырой chargeErr.message в sheetInlineError запрещён"
+    )
   })
 })
