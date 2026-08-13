@@ -11,7 +11,7 @@
 | 2026-07-16 | **UserCards** save_card / delayed RebillId | 🟡 Fly v444 MCP 8925 ✅ · апрув 3.5 ❌ · E2E real PAN ⛔ | Апрув скрина 8925; E2E только real MIR; → полная запись |
 | 2026-07-16 | **Checkout UX** stacked sheet (Фаза 2) | 🟡 на Fly v445 · MCP pay-stack status hidden ✅ · апрув ❌ | Апрув заказчика; → полная запись |
 | 2026-07-31 | **Legacy shop suite** (~3–4 fail после triage) | 🔴 open | silent_refresh structural **fixed** Group1; остальное отдельно; → полная запись |
-| 2026-08-13 | **CI job `test`** full suite / legacy shop | 🟡 #30 J1–J4 fixed · exclude 4 legacy | смотреть Actions; triage 4 legacy отдельно; → полная запись |
+| 2026-08-13 | **CI job `test`** / 4 legacy shop exclude | 🟢 CI #31 green · exclude 4 legacy | triage 4 legacy отдельно (не гейт); → полная запись |
 | 2026-07-27 | **SBP 3001** на Fly | 🟡 банк / кабинет | После UI-enable: push+deploy+MCP; если снова 3001 — кабинет NSPK; → полная запись |
 | 2026-07-28 | **Fly Test** в шапке Арама | 🟡 код local ✅ | push + deploy + MCP Point A; → полная запись |
 | 2026-08-08 | **#47** PWA статусы + повторы | 🟡 на Fly v445 · MCP surface ✅ · апрув ❌ | Апрув заказчика; → полная запись |

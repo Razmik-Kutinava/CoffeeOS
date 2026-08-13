@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-13 (CI #30 — 7 fail + 1 error)  
+**Дата:** 2026-08-13 (CI #31 green)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| CI #30 fixes: Rack::Attack test · onboarding · volume · Tbank teardown | смотреть Actions — job `test` green |
+| CI **#31 success** (все jobs green) на `353c5a7a` | triage 4 legacy shop отдельно (не гейт CI) |
 
-**last_done:** CI #30 clusters J1–J4 · 8 files local PASS · push  
-**next_step:** подтвердить Actions green; triage 4 legacy shop отдельно
+**last_done:** CI #31 PASS · scan/lint/test/system-test green  
+**next_step:** по желанию — triage 4 excluded legacy shop
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

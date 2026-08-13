@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-13 — CI #31 green (подтверждение)
+
+- Actions run #31 `success` на `353c5a7a`: scan_ruby · scan_js · lint · test · system-test
+- Ops: HANDOFF/SESSION/ISSUES — CI gate закрыт; 4 legacy shop остаются вне suite
+
 ## 2026-08-13 — fix(ci): CI #30 — Rack::Attack test · onboarding · volume · Tbank super
 
 - Rack::Attack: global `enabled=false` + cache clear в `test_helper`; teardown login tests не включает лимит

@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-13 (CI #30 — 7 fail + 1 error)  
+**Дата:** 2026-08-13 (CI #31 green)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| CI #30: 429 · onboarding ×2 · count-accepted · Tbank super | Actions job `test` green? |
+| CI **#31 success** — все jobs green (`353c5a7a`) | triage 4 legacy shop (вне гейта CI) |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,10 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-13 (CI #31 green)
+
+- Подтверждено Actions #31 `success` на `353c5a7a` (все 5 jobs)
 
 ### Сессия 2026-08-13 (CI #30 — 7 fail + 1 error)
 
