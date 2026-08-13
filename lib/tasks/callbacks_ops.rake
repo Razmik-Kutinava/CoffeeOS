@@ -5,7 +5,7 @@ require "securerandom"
 
 namespace :callbacks do
   desc "Run staging soak simulation for payment/fiscal callbacks"
-  task :staging_soak_simulation, [:iterations] => :environment do |_t, args|
+  task :staging_soak_simulation, [ :iterations ] => :environment do |_t, args|
     iterations = (args[:iterations] || 120).to_i
     raise ArgumentError, "iterations must be > 0" if iterations <= 0
 
@@ -144,7 +144,7 @@ namespace :callbacks do
   end
 
   desc "Show callback audit summary for recent window"
-  task :audit_summary, [:window_minutes] => :environment do |_t, args|
+  task :audit_summary, [ :window_minutes ] => :environment do |_t, args|
     window_minutes = (args[:window_minutes] || 60).to_i
     raise ArgumentError, "window_minutes must be > 0" if window_minutes <= 0
 
@@ -153,7 +153,7 @@ namespace :callbacks do
   end
 
   desc "Fail when callback error rate is above threshold"
-  task :audit_alert, [:window_minutes, :max_error_rate_percent, :min_events] => :environment do |_t, args|
+  task :audit_alert, [ :window_minutes, :max_error_rate_percent, :min_events ] => :environment do |_t, args|
     window_minutes = (args[:window_minutes] || 60).to_i
     max_error_rate = (args[:max_error_rate_percent] || 2.0).to_f
     min_events = (args[:min_events] || 20).to_i
@@ -192,7 +192,7 @@ def signed_callback_request(app:, path:, payload:, idempotency_key:)
   status, headers, response = app.call(env)
   response_body = +""
   response.each { |chunk| response_body << chunk.to_s }
-  [status, headers, response_body]
+  [ status, headers, response_body ]
 end
 
 def parse_json_body(body)
@@ -253,4 +253,3 @@ def callback_audit_summary(window_minutes:)
   summary["by_type"] = summary["by_type"].sort.to_h
   summary
 end
-

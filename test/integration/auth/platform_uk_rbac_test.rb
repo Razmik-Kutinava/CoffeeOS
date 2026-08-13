@@ -5,10 +5,10 @@ require "test_helper"
 # Веха 1 / блок C: platform / УК — org, tenant, выдача доступов; только uk_global_admin.
 class Auth::PlatformUkRbacTest < ActionDispatch::IntegrationTest
   UK_PATHS = [
-    [:root, :platform_root_path],
-    [:organizations, :platform_organizations_path],
-    [:tenants, :platform_tenants_path],
-    [:menu, :platform_menu_path]
+    [ :root, :platform_root_path ],
+    [ :organizations, :platform_organizations_path ],
+    [ :tenants, :platform_tenants_path ],
+    [ :menu, :platform_menu_path ]
   ].freeze
 
   FORBIDDEN_ROLES = {

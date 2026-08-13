@@ -96,7 +96,7 @@ class Shop::Api::ActiveOrdersTest < ActionDispatch::IntegrationTest
   test "#35 GET orders/active without session returns empty or unauthorized" do
     get "/shop/api/orders/active", headers: shop_tenant_headers(@tenant.id), as: :json
 
-    assert_includes [200, 401], response.status
+    assert_includes [ 200, 401 ], response.status
     if response.status == 200
       body = response.parsed_body
       orders = body.is_a?(Array) ? body : body["orders"]

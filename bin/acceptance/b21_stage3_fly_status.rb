@@ -30,7 +30,7 @@ machines = JSON.parse(out)
 mid = (machines.find { |m| m["state"] == "started" } || machines.first)["id"]
 remote = "/rails/bin/rails runner #{ruby.inspect}"
 out, err, st = Open3.capture3(fly_bin, "machine", "exec", mid, "-a", app, remote)
-combined = [out, err].join.strip
+combined = [ out, err ].join.strip
 raise "fly status update failed: #{combined}" unless st.success? && combined.match?(/\b(preparing|ready|accepted)\b/)
 
 puts "order #{order_id} -> #{combined.lines.last&.strip}"

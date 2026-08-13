@@ -76,7 +76,7 @@ Dir.chdir(ROOT) do
   screen_dir_rel = steps_doc["screen_dir"]
   screen_dir = File.join(ROOT, screen_dir_rel)
   screens_on_disk = R4_SCREENSHOTS.to_h do |name|
-    [name, File.exist?(File.join(screen_dir, name))]
+    [ name, File.exist?(File.join(screen_dir, name)) ]
   end
   raise "missing R4 screenshots: #{screens_on_disk.reject { |_, v| v }.keys.join(', ')}" unless screens_on_disk.values.all?
 
@@ -243,12 +243,12 @@ Dir.chdir(ROOT) do
       "brandbook: жёлтый vs оранжевый"
     ],
     open_questions_customer: r0&.dig("open_questions") || [],
-    next: ["подпись заказчика"],
+    next: [ "подпись заказчика" ],
     note: "OPS PASS ревизии = R0–R4 без customer_signoff; MVP B2.1 (9 критериев) — отдельно b21_acceptance_2026-06-11.json"
   }
 
   unless r2_ok
-    result[:warnings] = ["R2 artifact missing or not PASS — проверь b21_revision_r2_mcp_fly_*.json"]
+    result[:warnings] = [ "R2 artifact missing or not PASS — проверь b21_revision_r2_mcp_fly_*.json" ]
   end
   unless smoke_ok
     result[:warnings] ||= []

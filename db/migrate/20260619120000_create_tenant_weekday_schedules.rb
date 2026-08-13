@@ -12,7 +12,7 @@ class CreateTenantWeekdaySchedules < ActiveRecord::Migration[8.1]
       t.timestamps
     end
 
-    add_index :tenant_weekday_schedules, [:tenant_id, :weekday], unique: true, if_not_exists: true
+    add_index :tenant_weekday_schedules, [ :tenant_id, :weekday ], unique: true, if_not_exists: true
     add_foreign_key :tenant_weekday_schedules, :tenants, column: :tenant_id, if_not_exists: true
 
     execute "COMMENT ON TABLE tenant_weekday_schedules IS 'B1.11: часы работы точки по дням недели'"

@@ -114,7 +114,7 @@ module Callbacks
 
       unless ActiveSupport::SecurityUtils.secure_compare(expected_signature, @callback_signature)
         audit_event(state: "rejected", callback_type: action_name, tenant_id: params[:tenant_id], details: { reason: "invalid signature" })
-        return render json: { error: "invalid callback signature" }, status: :unauthorized
+        render json: { error: "invalid callback signature" }, status: :unauthorized
       end
     end
 
@@ -128,7 +128,7 @@ module Callbacks
 
       if timestamp <= 0 || (now - timestamp).abs > max_age
         audit_event(state: "rejected", callback_type: action_name, tenant_id: params[:tenant_id], details: { reason: "stale timestamp", timestamp: @callback_timestamp })
-        return render json: { error: "stale callback timestamp" }, status: :unauthorized
+        render json: { error: "stale callback timestamp" }, status: :unauthorized
       end
     end
 
@@ -226,7 +226,5 @@ module Callbacks
     rescue StandardError => e
       Rails.logger.error({ event: "callback_audit_write_failed", error: e.message }.to_json)
     end
-
   end
 end
-

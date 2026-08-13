@@ -38,4 +38,3 @@ module Manager
     end
   end
 end
-

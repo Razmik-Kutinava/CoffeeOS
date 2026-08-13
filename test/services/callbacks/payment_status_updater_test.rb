@@ -47,7 +47,7 @@ class Callbacks::PaymentStatusUpdaterTest < ActiveSupport::TestCase
   end
 
   test "failed payment cancels pending order and journals" do
-    assert_difference ["AdminAuditLog.count", "OrderStatusLog.count"], 1 do
+    assert_difference [ "AdminAuditLog.count", "OrderStatusLog.count" ], 1 do
       Callbacks::PaymentStatusUpdater.new(
         payment: @payment,
         new_status: "failed",

@@ -1,15 +1,15 @@
 class User < ApplicationRecord
   # Временная замена enum для отладки
   # enum status: { active: 'active', blocked: 'blocked' }
-  
-  STATUSES = { active: 'active', blocked: 'blocked' }.freeze
-  
+
+  STATUSES = { active: "active", blocked: "blocked" }.freeze
+
   def active?
-    status == 'active'
+    status == "active"
   end
-  
+
   def blocked?
-    status == 'blocked'
+    status == "blocked"
   end
 
   belongs_to :tenant, optional: true
@@ -17,8 +17,8 @@ class User < ApplicationRecord
   has_many :user_roles, dependent: :destroy
   has_many :roles, through: :user_roles
   has_many :sessions, dependent: :destroy
-  has_many :orders_opened, class_name: 'CashShift', foreign_key: 'opened_by', dependent: :restrict_with_error
-  has_many :orders_closed, class_name: 'CashShift', foreign_key: 'closed_by', dependent: :nullify
+  has_many :orders_opened, class_name: "CashShift", foreign_key: "opened_by", dependent: :restrict_with_error
+  has_many :orders_closed, class_name: "CashShift", foreign_key: "closed_by", dependent: :nullify
 
   validates :name, presence: true
   validates :password_hash, presence: true
@@ -51,18 +51,18 @@ class User < ApplicationRecord
 
     Tenant.where(organization_id: organization_id).order(:name)
   end
-  
+
   # Проверка пароля через bcrypt
   def authenticate(password)
     return false if password_hash.blank? || password.blank?
-    
+
     begin
       BCrypt::Password.new(password_hash) == password
     rescue BCrypt::Errors::InvalidHash
       false
     end
   end
-  
+
   # Установка пароля (хеширование через bcrypt)
   def password=(new_password)
     return if new_password.blank?
@@ -73,7 +73,7 @@ class User < ApplicationRecord
 
   def email_or_phone_present
     return if email.present? || phone.present?
-    errors.add(:base, 'Email или телефон должен быть указан')
+    errors.add(:base, "Email или телефон должен быть указан")
   end
 
   def normalize_blank_phone

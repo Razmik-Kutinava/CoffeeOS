@@ -38,7 +38,7 @@ def first_product_price(tenant_id, api_key)
   product = data.flat_map { |c| c["products"] || [] }.find { |p| p["id"] }
   raise "no product" unless product
 
-  [product["id"], product["price"].to_f]
+  [ product["id"], product["price"].to_f ]
 end
 
 api_key = shop_key(DEMO_A)

@@ -9,7 +9,7 @@ class BroadcastTvColumnsJob < ApplicationJob
         tenant_id: tenant_id,
         show_order_count: 10,
         display_seconds_ready: 60,
-        theme: 'dark'
+        theme: "dark"
       )
 
     Device.where(tenant_id: tenant_id, device_type: "tv_board", is_active: true).find_each do |device|

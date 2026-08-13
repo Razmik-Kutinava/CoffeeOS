@@ -32,6 +32,5 @@ module Platform
 
       redirect_to root_path, alert: "Доступ только для УК"
     end
-
   end
 end

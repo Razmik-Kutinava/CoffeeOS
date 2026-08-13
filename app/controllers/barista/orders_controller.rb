@@ -5,7 +5,7 @@ module Barista
       @order = Order.for_current_tenant.includes(:payments).find(params[:id])
       authorize @order
       @order_items = @order.order_items.includes(:product)
-      
+
       respond_to do |format|
         format.html
         format.json do
@@ -15,7 +15,7 @@ module Barista
             status: @order.status,
             source: @order.source,
             final_amount: @order.final_amount,
-            payment_status: @order.payments.first&.status || 'not_paid',
+            payment_status: @order.payments.first&.status || "not_paid",
             order_items: @order.order_items.map do |item|
               {
                 product_name: item.product_name,
@@ -29,32 +29,32 @@ module Barista
         end
       end
     end
-    
+
     def history
       authorize Order, :history?
       @orders = Order.for_current_tenant
-                    .where(status: ['closed', 'cancelled', 'issued'])
+                    .where(status: [ "closed", "cancelled", "issued" ])
                     .includes(:order_items, :payments)
                     .order(created_at: :desc)
                     .limit(100)
-      
+
       if params[:date].present?
         date = Date.parse(params[:date]) rescue nil
         @orders = @orders.where("DATE(created_at) = ?", date) if date
       end
-      
-      if params[:status].present? && params[:status] != 'all'
+
+      if params[:status].present? && params[:status] != "all"
         @orders = @orders.where(status: params[:status])
       end
     end
-    
+
     def new
       authorize Order, :create?
       @shift = current_shift
       load_tenant_menu!
       @cart = session[:barista_cart] || []
     end
-    
+
     def create
       authorize Order, :create?
 
@@ -86,7 +86,7 @@ module Barista
       Rails.logger.error("Order creation failed: #{e.class} — #{e.message}")
       redirect_to barista_new_order_path, alert: "Не удалось создать заказ. Попробуйте ещё раз."
     end
-    
+
     def update_status
       @order = Order.for_current_tenant.find(params[:id])
       authorize @order, :update_status?
@@ -94,7 +94,7 @@ module Barista
       # BUG-005 FIX: Нельзя менять статус заказа без открытой кассовой смены.
       unless current_shift
         respond_to do |format|
-          format.turbo_stream { render turbo_stream: turbo_stream.replace("order_#{@order.id}", partial: 'barista/dashboard/order_card', locals: { order: @order }) }
+          format.turbo_stream { render turbo_stream: turbo_stream.replace("order_#{@order.id}", partial: "barista/dashboard/order_card", locals: { order: @order }) }
           format.html { redirect_to barista_dashboard_path, alert: "Смена не открыта. Откройте смену перед работой с заказами." }
         end
         return
@@ -118,12 +118,12 @@ module Barista
         end
       rescue Barista::OrderStatusUpdateService::OrderStatusUpdateError => e
         respond_to do |format|
-          format.turbo_stream { render turbo_stream: turbo_stream.replace("order_#{@order.id}", partial: 'barista/dashboard/order_card', locals: { order: @order }) }
+          format.turbo_stream { render turbo_stream: turbo_stream.replace("order_#{@order.id}", partial: "barista/dashboard/order_card", locals: { order: @order }) }
           format.html { redirect_to barista_dashboard_path, alert: e.message }
         end
       end
     end
-    
+
     def cancel
       @order = Order.for_current_tenant.find(params[:id])
       authorize @order, :cancel?
@@ -131,7 +131,7 @@ module Barista
       # BUG-005 FIX: Нельзя отменять заказ без открытой кассовой смены.
       unless current_shift
         respond_to do |format|
-          format.turbo_stream { render turbo_stream: turbo_stream.replace("order_#{@order.id}", partial: 'barista/dashboard/order_card', locals: { order: @order }) }
+          format.turbo_stream { render turbo_stream: turbo_stream.replace("order_#{@order.id}", partial: "barista/dashboard/order_card", locals: { order: @order }) }
           format.html { redirect_to barista_dashboard_path, alert: "Смена не открыта. Откройте смену перед работой с заказами." }
         end
         return
@@ -139,7 +139,7 @@ module Barista
 
       unless @order.can_be_cancelled?
         respond_to do |format|
-          format.turbo_stream { render turbo_stream: turbo_stream.replace("order_#{@order.id}", partial: 'barista/dashboard/order_card', locals: { order: @order }) }
+          format.turbo_stream { render turbo_stream: turbo_stream.replace("order_#{@order.id}", partial: "barista/dashboard/order_card", locals: { order: @order }) }
           format.html { redirect_to barista_dashboard_path, alert: "Заказ нельзя отменить" }
         end
         return
@@ -147,7 +147,7 @@ module Barista
 
       if params[:reason].to_s.strip.blank?
         respond_to do |format|
-          format.turbo_stream { render turbo_stream: turbo_stream.replace("order_#{@order.id}", partial: 'barista/dashboard/order_card', locals: { order: @order }) }
+          format.turbo_stream { render turbo_stream: turbo_stream.replace("order_#{@order.id}", partial: "barista/dashboard/order_card", locals: { order: @order }) }
           format.html { redirect_to barista_dashboard_path, alert: "Укажите причину отмены" }
         end
         return
@@ -175,7 +175,7 @@ module Barista
       end
     rescue Barista::OrderCancellationService::OrderCancellationError => e
       respond_to do |format|
-        format.turbo_stream { render turbo_stream: turbo_stream.replace("order_#{@order.id}", partial: 'barista/dashboard/order_card', locals: { order: @order }) }
+        format.turbo_stream { render turbo_stream: turbo_stream.replace("order_#{@order.id}", partial: "barista/dashboard/order_card", locals: { order: @order }) }
         format.html { redirect_to barista_dashboard_path, alert: e.message }
       end
     end
@@ -201,9 +201,9 @@ module Barista
 
       list = if raw.is_a?(ActionController::Parameters) || raw.is_a?(Hash)
                raw.values
-             else
+      else
                Array(raw)
-             end
+      end
       list.map { |item| item.is_a?(ActionController::Parameters) ? item.to_unsafe_h : item.to_h }
     end
   end

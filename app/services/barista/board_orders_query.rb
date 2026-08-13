@@ -4,7 +4,7 @@ module Barista
   # FIFO-очередь заказов на табло бариста (created_at ASC).
   # Только текущая смена + витрина (cash_shift_id NULL) с момента открытия смены — без лимита «50 старых по всему тенанту».
   class BoardOrdersQuery
-    INCLUDES = [:order_items, :order_status_logs].freeze
+    INCLUDES = [ :order_items, :order_status_logs ].freeze
     # B2.1 ревизия 2026-06-12: 6 слотов, только accepted + preparing на табло.
     SLOT_STATUSES = %w[accepted preparing].freeze
     MAX_SLOTS = 6

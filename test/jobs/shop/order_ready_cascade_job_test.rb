@@ -58,8 +58,8 @@ class Shop::OrderReadyCascadeJobTest < ActiveSupport::TestCase
     ENV["FCM_SIMULATE"] = "1"
     ENV["WALLET_SIMULATE"] = "1"
 
-    assert_enqueued_with(job: Shop::ReadyPushJob, args: [fresh.id, "preparing"]) do
-      assert_enqueued_with(job: Shop::OrderReadyCascadeJob, args: [fresh.id]) do
+    assert_enqueued_with(job: Shop::ReadyPushJob, args: [ fresh.id, "preparing" ]) do
+      assert_enqueued_with(job: Shop::OrderReadyCascadeJob, args: [ fresh.id ]) do
         Shop::GuestOrderBroadcaster.call(order: fresh, old_status: "preparing")
       end
     end

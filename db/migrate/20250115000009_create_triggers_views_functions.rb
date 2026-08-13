@@ -13,17 +13,17 @@ class CreateTriggersViewsFunctions < ActiveRecord::Migration[8.1]
         FROM orders
         WHERE tenant_id = NEW.tenant_id
           AND DATE_TRUNC('month', created_at) = DATE_TRUNC('month', NOW());
-        
+      #{'  '}
         -- Формируем номер: #YYYYMM-####
         year_month := TO_CHAR(NOW(), 'YYYYMM');
         NEW.order_number := '#' || year_month || '-' || LPAD(new_sequence::TEXT, 4, '0');
         NEW.order_sequence := new_sequence;
-        
+      #{'  '}
         RETURN NEW;
       END;
       $$ LANGUAGE plpgsql;
     SQL
-    
+
     execute <<-SQL
       CREATE TRIGGER trg_generate_order_number
       BEFORE INSERT ON orders
@@ -31,9 +31,9 @@ class CreateTriggersViewsFunctions < ActiveRecord::Migration[8.1]
       WHEN (NEW.order_number IS NULL OR NEW.order_number = '')
       EXECUTE FUNCTION generate_order_number();
     SQL
-    
+
     execute "COMMENT ON FUNCTION generate_order_number() IS 'Автоматическая генерация номера заказа'"
-    
+
     # Триггер для автоматического обновления updated_at
     execute <<-SQL
       CREATE OR REPLACE FUNCTION update_updated_at_column()
@@ -44,7 +44,7 @@ class CreateTriggersViewsFunctions < ActiveRecord::Migration[8.1]
       END;
       $$ LANGUAGE plpgsql;
     SQL
-    
+
     # Применяем триггер к основным таблицам
     %w[
       tenants users roles orders order_items payments products categories
@@ -57,7 +57,7 @@ class CreateTriggersViewsFunctions < ActiveRecord::Migration[8.1]
         EXECUTE FUNCTION update_updated_at_column();
       SQL
     end
-    
+
     # Триггер для автоматического списания ингредиентов при подтверждении заказа
     execute <<-SQL
       CREATE OR REPLACE FUNCTION auto_deduct_ingredients_on_order_accept()
@@ -71,19 +71,19 @@ class CreateTriggersViewsFunctions < ActiveRecord::Migration[8.1]
       BEGIN
         -- Срабатывает только при переходе в статус 'accepted'
         IF NEW.status = 'accepted' AND (OLD.status IS NULL OR OLD.status != 'accepted') THEN
-          
+      #{'    '}
           -- Проходим по всем позициям заказа
           FOR item IN SELECT * FROM order_items WHERE order_id = NEW.id LOOP
-            
+      #{'      '}
             -- Получаем рецептуру продукта
             FOR recipe IN SELECT * FROM product_recipes WHERE product_id = item.product_id LOOP
-              
+      #{'        '}
               -- Рассчитываем количество ингредиента на заказ
               qty_needed := recipe.qty_per_serving * item.quantity;
-              
+      #{'        '}
               -- Учитываем модификаторы (если есть)
               IF item.modifier_options IS NOT NULL AND jsonb_typeof(item.modifier_options) = 'object' THEN
-                FOR modifier_recipe IN 
+                FOR modifier_recipe IN#{' '}
                   SELECT mor.* FROM modifier_option_recipes mor
                   WHERE mor.option_id IN (
                     SELECT value::uuid FROM jsonb_each_text(item.modifier_options)
@@ -93,20 +93,20 @@ class CreateTriggersViewsFunctions < ActiveRecord::Migration[8.1]
                   qty_needed := qty_needed + (modifier_recipe.qty_change * item.quantity);
                 END LOOP;
               END IF;
-              
+      #{'        '}
               -- Проверяем остаток
               SELECT * INTO current_stock
               FROM ingredient_tenant_stocks
               WHERE tenant_id = NEW.tenant_id
                 AND ingredient_id = recipe.ingredient_id;
-              
+      #{'        '}
               -- Если остатка нет, создаём запись с нулём
               IF current_stock IS NULL THEN
                 INSERT INTO ingredient_tenant_stocks (tenant_id, ingredient_id, qty, created_at, updated_at)
                 VALUES (NEW.tenant_id, recipe.ingredient_id, 0, NOW(), NOW());
                 current_stock.qty := 0;
               END IF;
-              
+      #{'        '}
               -- Списываем ингредиент
               UPDATE ingredient_tenant_stocks
               SET qty = qty - qty_needed,
@@ -114,19 +114,19 @@ class CreateTriggersViewsFunctions < ActiveRecord::Migration[8.1]
                   updated_at = NOW()
               WHERE tenant_id = NEW.tenant_id
                 AND ingredient_id = recipe.ingredient_id;
-              
+      #{'        '}
               -- Создаём запись движения (если нужно)
               -- Можно создать stock_movement с типом 'order_deduct'
-              
+      #{'        '}
             END LOOP;
           END LOOP;
         END IF;
-        
+      #{'  '}
         RETURN NEW;
       END;
       $$ LANGUAGE plpgsql;
     SQL
-    
+
     execute <<-SQL
       CREATE TRIGGER trg_auto_deduct_ingredients
       AFTER UPDATE ON orders
@@ -134,9 +134,9 @@ class CreateTriggersViewsFunctions < ActiveRecord::Migration[8.1]
       WHEN (NEW.status = 'accepted' AND (OLD.status IS NULL OR OLD.status != 'accepted'))
       EXECUTE FUNCTION auto_deduct_ingredients_on_order_accept();
     SQL
-    
+
     execute "COMMENT ON FUNCTION auto_deduct_ingredients_on_order_accept() IS 'Автоматическое списание ингредиентов при принятии заказа'"
-    
+
     # Триггер для автоматического стоп-листа при нулевом остатке
     execute <<-SQL
       CREATE OR REPLACE FUNCTION auto_stop_list_on_zero_stock()
@@ -146,14 +146,14 @@ class CreateTriggersViewsFunctions < ActiveRecord::Migration[8.1]
       BEGIN
         -- Если остаток стал <= 0
         IF NEW.qty <= 0 THEN
-          
+      #{'    '}
           -- Находим все продукты, использующие этот ингредиент
           FOR product_record IN
             SELECT DISTINCT pr.product_id
             FROM product_recipes pr
             WHERE pr.ingredient_id = NEW.ingredient_id
           LOOP
-            
+      #{'      '}
             -- Устанавливаем стоп-лист для всех точек
             UPDATE product_tenant_settings
             SET is_sold_out = TRUE,
@@ -161,15 +161,15 @@ class CreateTriggersViewsFunctions < ActiveRecord::Migration[8.1]
                 updated_at = NOW()
             WHERE product_id = product_record.product_id
               AND is_sold_out = FALSE;
-              
+      #{'        '}
           END LOOP;
         END IF;
-        
+      #{'  '}
         RETURN NEW;
       END;
       $$ LANGUAGE plpgsql;
     SQL
-    
+
     execute <<-SQL
       CREATE TRIGGER trg_auto_stop_list
       AFTER UPDATE ON ingredient_tenant_stocks
@@ -177,13 +177,13 @@ class CreateTriggersViewsFunctions < ActiveRecord::Migration[8.1]
       WHEN (NEW.qty <= 0 AND (OLD.qty IS NULL OR OLD.qty > 0))
       EXECUTE FUNCTION auto_stop_list_on_zero_stock();
     SQL
-    
+
     execute "COMMENT ON FUNCTION auto_stop_list_on_zero_stock() IS 'Автоматический стоп-лист при нулевом остатке ингредиента'"
-    
+
     # View: v_active_orders_for_barista
     execute <<-SQL
       CREATE OR REPLACE VIEW v_active_orders_for_barista AS
-      SELECT 
+      SELECT#{' '}
         o.id,
         o.tenant_id,
         o.order_number,
@@ -198,7 +198,7 @@ class CreateTriggersViewsFunctions < ActiveRecord::Migration[8.1]
       LEFT JOIN order_status_logs osl ON osl.order_id = o.id
       WHERE o.status IN ('accepted', 'preparing', 'ready')
       GROUP BY o.id, o.tenant_id, o.order_number, o.status, o.source, o.created_at, o.final_amount
-      ORDER BY 
+      ORDER BY#{' '}
         CASE o.status
           WHEN 'ready' THEN 1
           WHEN 'preparing' THEN 2
@@ -206,13 +206,13 @@ class CreateTriggersViewsFunctions < ActiveRecord::Migration[8.1]
         END,
         o.created_at ASC;
     SQL
-    
+
     execute "COMMENT ON VIEW v_active_orders_for_barista IS 'Активные заказы для табло баристы'"
-    
+
     # View: v_kiosk_menu
     execute <<-SQL
       CREATE OR REPLACE VIEW v_kiosk_menu AS
-      SELECT 
+      SELECT#{' '}
         p.id as product_id,
         p.name as product_name,
         p.slug as product_slug,
@@ -238,9 +238,9 @@ class CreateTriggersViewsFunctions < ActiveRecord::Migration[8.1]
         AND pmv.is_visible = TRUE
       ORDER BY c.sort_order, p.sort_order;
     SQL
-    
+
     execute "COMMENT ON VIEW v_kiosk_menu IS 'Меню для киоска (только доступные продукты)'"
-    
+
     # Функция: change_order_status
     execute <<-SQL
       CREATE OR REPLACE FUNCTION change_order_status(
@@ -261,17 +261,17 @@ class CreateTriggersViewsFunctions < ActiveRecord::Migration[8.1]
         SELECT status, tenant_id INTO v_old_status, v_tenant_id
         FROM orders
         WHERE id = p_order_id;
-        
+      #{'  '}
         IF v_old_status IS NULL THEN
           RAISE EXCEPTION 'Order not found: %', p_order_id;
         END IF;
-        
+      #{'  '}
         -- Обновляем статус заказа
         UPDATE orders
         SET status = p_new_status,
             updated_at = NOW()
         WHERE id = p_order_id;
-        
+      #{'  '}
         -- Создаём запись в логе
         INSERT INTO order_status_logs (
           id,
@@ -298,14 +298,14 @@ class CreateTriggersViewsFunctions < ActiveRecord::Migration[8.1]
           NOW()
         )
         RETURNING id INTO v_log_id;
-        
+      #{'  '}
         RETURN v_log_id;
       END;
       $$ LANGUAGE plpgsql;
     SQL
-    
+
     execute "COMMENT ON FUNCTION change_order_status(UUID, order_status, UUID, UUID, TEXT, TEXT) IS 'Изменение статуса заказа с логированием'"
-    
+
     # Функция: cancel_order
     execute <<-SQL
       CREATE OR REPLACE FUNCTION cancel_order(
@@ -324,15 +324,15 @@ class CreateTriggersViewsFunctions < ActiveRecord::Migration[8.1]
         SELECT status INTO v_current_status
         FROM orders
         WHERE id = p_order_id;
-        
+      #{'  '}
         IF v_current_status IS NULL THEN
           RAISE EXCEPTION 'Order not found: %', p_order_id;
         END IF;
-        
+      #{'  '}
         IF v_current_status IN ('issued', 'closed', 'cancelled') THEN
           RAISE EXCEPTION 'Cannot cancel order in status: %', v_current_status;
         END IF;
-        
+      #{'  '}
         -- Обновляем заказ
         UPDATE orders
         SET status = 'cancelled',
@@ -341,7 +341,7 @@ class CreateTriggersViewsFunctions < ActiveRecord::Migration[8.1]
             cancel_stage = p_cancel_stage,
             updated_at = NOW()
         WHERE id = p_order_id;
-        
+      #{'  '}
         -- Создаём запись в логе
         INSERT INTO order_status_logs (
           id,
@@ -366,15 +366,15 @@ class CreateTriggersViewsFunctions < ActiveRecord::Migration[8.1]
           NOW()
         )
         RETURNING id INTO v_log_id;
-        
+      #{'  '}
         RETURN v_log_id;
       END;
       $$ LANGUAGE plpgsql;
     SQL
-    
+
     execute "COMMENT ON FUNCTION cancel_order(UUID, TEXT, TEXT, TEXT, UUID) IS 'Отмена заказа с указанием причины'"
   end
-  
+
   def down
     execute "DROP FUNCTION IF EXISTS cancel_order(UUID, TEXT, TEXT, TEXT, UUID)"
     execute "DROP FUNCTION IF EXISTS change_order_status(UUID, order_status, UUID, UUID, TEXT, TEXT)"
@@ -384,7 +384,7 @@ class CreateTriggersViewsFunctions < ActiveRecord::Migration[8.1]
     execute "DROP FUNCTION IF EXISTS auto_deduct_ingredients_on_order_accept()"
     execute "DROP FUNCTION IF EXISTS update_updated_at_column()"
     execute "DROP FUNCTION IF EXISTS generate_order_number()"
-    
+
     # Удаляем триггеры
     %w[
       tenants users roles orders order_items payments products categories
@@ -392,7 +392,7 @@ class CreateTriggersViewsFunctions < ActiveRecord::Migration[8.1]
     ].each do |table|
       execute "DROP TRIGGER IF EXISTS trg_update_#{table}_updated_at ON #{table}"
     end
-    
+
     execute "DROP TRIGGER IF EXISTS trg_auto_stop_list ON ingredient_tenant_stocks"
     execute "DROP TRIGGER IF EXISTS trg_auto_deduct_ingredients ON orders"
     execute "DROP TRIGGER IF EXISTS trg_generate_order_number ON orders"

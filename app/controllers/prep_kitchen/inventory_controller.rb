@@ -5,10 +5,10 @@ module PrepKitchen
       @stocks = IngredientTenantStock.for_current_tenant.includes(:ingredient)
 
       @stocks = case @filter
-                when "low" then @stocks.low_stock
-                when "out" then @stocks.out_of_stock
-                else @stocks
-                end
+      when "low" then @stocks.low_stock
+      when "out" then @stocks.out_of_stock
+      else @stocks
+      end
 
       if params[:q].present?
         q = "%#{params[:q].strip}%"

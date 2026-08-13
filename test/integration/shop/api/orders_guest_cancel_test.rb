@@ -73,7 +73,7 @@ class Shop::Api::OrdersGuestCancelTest < ActionDispatch::IntegrationTest
     order_id = create_cash_order!
     order = Order.find(order_id)
 
-    barista = create_user!(tenant: @tenant, role_codes: ["barista"])
+    barista = create_user!(tenant: @tenant, role_codes: [ "barista" ])
     Barista::OrderCancellationService.new(
       order: order,
       actor: barista,

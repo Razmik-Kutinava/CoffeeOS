@@ -93,7 +93,7 @@ class Platform::UkMenuW12VitrinaTest < ActionDispatch::IntegrationTest
     }
     assert_response :redirect
 
-    [@tenant_a, @tenant_b].each do |tenant|
+    [ @tenant_a, @tenant_b ].each do |tenant|
       assert_vitrina_catalog!(
         tenant_id: tenant.id,
         category_id: category.id,

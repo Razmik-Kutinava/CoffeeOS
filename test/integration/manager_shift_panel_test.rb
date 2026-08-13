@@ -97,7 +97,7 @@ class ManagerShiftPanelTest < ActionDispatch::IntegrationTest
     category = create_category!(name: "Кат-#{SecureRandom.hex(3)}")
     product = create_product!(category: category, name: "Пр-#{SecureRandom.hex(3)}")
     enable_product_for_tenant!(tenant: tenant, product: product, price: 100, is_sold_out: false, is_enabled: true)
-    [product, category]
+    [ product, category ]
   end
 
   test "shift_manager can open /manager and sees limited pages" do
@@ -334,5 +334,3 @@ class ManagerShiftPanelTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "7.0 ₽"
   end
 end
-
-

@@ -5,10 +5,10 @@ require "test_helper"
 # Веха 1 / блок C: session-login для всех панелей (barista, manager, prep_kitchen, platform/УК).
 class Auth::PanelLoginTest < ActionDispatch::IntegrationTest
   PANEL_ROOTS = [
-    [:barista, :barista_dashboard_path],
-    [:manager, :manager_dashboard_path],
-    [:prep_kitchen, :prep_kitchen_dashboard_path],
-    [:platform, :platform_root_path]
+    [ :barista, :barista_dashboard_path ],
+    [ :manager, :manager_dashboard_path ],
+    [ :prep_kitchen, :prep_kitchen_dashboard_path ],
+    [ :platform, :platform_root_path ]
   ].freeze
 
   setup do
@@ -66,7 +66,7 @@ class Auth::PanelLoginTest < ActionDispatch::IntegrationTest
 
     assert_login_redirects_to!(user, manager_dashboard_path, role_code: "franchise_manager")
     assert session[:manager_tenant_id].present?, "franchise_manager должен получить manager_tenant_id"
-    assert_includes [@tenant_a.id.to_s, @tenant_b.id.to_s], session[:manager_tenant_id].to_s
+    assert_includes [ @tenant_a.id.to_s, @tenant_b.id.to_s ], session[:manager_tenant_id].to_s
     get manager_dashboard_path
     assert_response :success
   end

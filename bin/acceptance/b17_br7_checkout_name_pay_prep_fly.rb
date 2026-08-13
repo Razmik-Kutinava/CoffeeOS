@@ -40,23 +40,23 @@ end
 
 def curl_post_json(url, jar, headers:, body:)
   raw = curl("-c", jar, "-b", jar, "-X", "POST", url,
-    *headers.flat_map { |k, v| ["-H", "#{k}: #{v}"] },
+    *headers.flat_map { |k, v| [ "-H", "#{k}: #{v}" ] },
     "-d", body.to_json,
     "-w", "\n%{http_code}")
   lines = raw.lines
   http = lines.last.to_s.strip.to_i
   body_raw = lines[0..-2].join
-  [JSON.parse(body_raw), http]
+  [ JSON.parse(body_raw), http ]
 end
 
 def curl_get_json(url, jar, headers:)
   raw = curl("-c", jar, "-b", jar, url,
-    *headers.flat_map { |k, v| ["-H", "#{k}: #{v}"] },
+    *headers.flat_map { |k, v| [ "-H", "#{k}: #{v}" ] },
     "-w", "\n%{http_code}")
   lines = raw.lines
   http = lines.last.to_s.strip.to_i
   body_raw = lines[0..-2].join
-  [JSON.parse(body_raw), http]
+  [ JSON.parse(body_raw), http ]
 end
 
 def shop_key(tenant_id)
@@ -78,7 +78,7 @@ end
 def fetch_otp(email)
   ruby = "puts ShopEmailOtpCode.active(#{email.inspect}).order(created_at: :desc).limit(1).pick(:code) || 'NONE'"
   out, err, = Open3.capture3(FLY_BIN, "machine", "exec", fly_machine_id, "-a", FLY_APP, "/rails/bin/rails runner #{ruby.inspect}")
-  code = [out, err].join.scan(/\b(\d{6})\b/).last&.first
+  code = [ out, err ].join.scan(/\b(\d{6})\b/).last&.first
   code unless code == "NONE"
 end
 

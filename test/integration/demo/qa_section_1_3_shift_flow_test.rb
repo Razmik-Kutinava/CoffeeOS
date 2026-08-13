@@ -46,7 +46,7 @@ class Demo::QaSection13ShiftFlowTest < ActionDispatch::IntegrationTest
 
   test "1.3 barista cannot create pos order without open shift" do
     login_as!(@barista_a)
-    post "/barista/orders", params: { cart_items: [{ product_id: @product.id, quantity: 1 }], payment_method: "cash" }
+    post "/barista/orders", params: { cart_items: [ { product_id: @product.id, quantity: 1 } ], payment_method: "cash" }
     assert_response :redirect
     follow_redirect!
     assert_match(/Смена не открыта|Смена закрыта/, response.body)
@@ -64,7 +64,7 @@ class Demo::QaSection13ShiftFlowTest < ActionDispatch::IntegrationTest
     assert_equal "closed", shift.reload.status
 
     login_as!(@barista_a)
-    post "/barista/orders", params: { cart_items: [{ product_id: @product.id, quantity: 1 }], payment_method: "cash" }
+    post "/barista/orders", params: { cart_items: [ { product_id: @product.id, quantity: 1 } ], payment_method: "cash" }
     assert_response :redirect
 
     order = shop_place_order!(tenant: @tenant_a)

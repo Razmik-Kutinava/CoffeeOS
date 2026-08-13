@@ -34,7 +34,7 @@ class BlockEShopFlowTest < ActionDispatch::IntegrationTest
   end
 
   test "cart add remove and modifiers one level" do
-    mods = [{ id: @option.id, name: "L", price: 40.0 }]
+    mods = [ { id: @option.id, name: "L", price: 40.0 } ]
 
     post "/shop/api/cart/add",
       headers: @headers,

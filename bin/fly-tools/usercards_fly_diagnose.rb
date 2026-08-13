@@ -188,21 +188,21 @@ report = {
 }
 
 [
-  [:H1_empty_usercards, db.dig(:counts, :mobile_payment_methods_card).to_i.zero?, "critical",
-   "mobile_payment_methods (card) = 0", "список карт пуст → bug_13-23"],
-  [:H1b_customer_no_cards, db.dig(:aramfifa_cards).is_a?(Array) && db.dig(:aramfifa_cards).empty?, "critical",
-   "aramfifa100@gmail.com — 0 saved cards", "оплата save_card=true 2026-07-15 но карта не в UserCards этого email"],
-  [:H2_worker_stopped, fly_worker_state == "stopped", "high",
-   "worker stopped", "webhook/async save не обрабатывается"],
-  [:H3_no_tbank, db.dig(:counts, :payments_tbank_30d).to_i.zero?, "high",
-   "payments tbank 30d = 0", "nonPCI new_card не использовался на prod"],
-  [:H3b_save_card_without_persist, begin
+  [ :H1_empty_usercards, db.dig(:counts, :mobile_payment_methods_card).to_i.zero?, "critical",
+   "mobile_payment_methods (card) = 0", "список карт пуст → bug_13-23" ],
+  [ :H1b_customer_no_cards, db.dig(:aramfifa_cards).is_a?(Array) && db.dig(:aramfifa_cards).empty?, "critical",
+   "aramfifa100@gmail.com — 0 saved cards", "оплата save_card=true 2026-07-15 но карта не в UserCards этого email" ],
+  [ :H2_worker_stopped, fly_worker_state == "stopped", "high",
+   "worker stopped", "webhook/async save не обрабатывается" ],
+  [ :H3_no_tbank, db.dig(:counts, :payments_tbank_30d).to_i.zero?, "high",
+   "payments tbank 30d = 0", "nonPCI new_card не использовался на prod" ],
+  [ :H3b_save_card_without_persist, begin
      pays = db.dig(:recent_tbank_payments)
      pays.is_a?(Array) && pays.any? { |p| p["save_card"] == true } && db.dig(:aramfifa_cards).is_a?(Array) && db.dig(:aramfifa_cards).empty?
    end, "critical",
-   "save_card payment succeeded but customer cards empty", "SavedCardStore/webhook/finalize не создал row"],
-  [:H4_simulate, db.dig(:env, :shop_simulate_payment) == "1", "critical",
-   "SHOP_SIMULATE_PAYMENT=1", "new_card reject; simulate без токена"]
+   "save_card payment succeeded but customer cards empty", "SavedCardStore/webhook/finalize не создал row" ],
+  [ :H4_simulate, db.dig(:env, :shop_simulate_payment) == "1", "critical",
+   "SHOP_SIMULATE_PAYMENT=1", "new_card reject; simulate без токена" ]
 ].each do |id, cond, sev, finding, meaning|
   next unless cond
 

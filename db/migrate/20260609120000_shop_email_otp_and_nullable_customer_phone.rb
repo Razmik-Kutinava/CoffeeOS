@@ -15,7 +15,7 @@ class ShopEmailOtpAndNullableCustomerPhone < ActiveRecord::Migration[8.0]
 
     add_index :shop_email_otp_codes, :email
     add_index :shop_email_otp_codes, :expires_at
-    add_index :shop_email_otp_codes, [:email, :is_used]
+    add_index :shop_email_otp_codes, [ :email, :is_used ]
 
     execute <<~SQL.squish
       COMMENT ON TABLE shop_email_otp_codes IS 'OTP коды подтверждения email на витрине /shop';

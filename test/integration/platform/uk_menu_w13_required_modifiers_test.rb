@@ -67,7 +67,7 @@ class Platform::UkMenuW13RequiredModifiersTest < ActionDispatch::IntegrationTest
   end
 
   test "cart add with required modifier selection succeeds and prices modifier delta" do
-    mods = [{ id: @option.id, name: "Vanilla", price: 30.0 }]
+    mods = [ { id: @option.id, name: "Vanilla", price: 30.0 } ]
     post "/shop/api/cart/add",
       params: { product_id: @product.id, quantity: 1, selected_modifiers: mods },
       headers: { "X-Shop-Tenant" => @tenant.id.to_s },

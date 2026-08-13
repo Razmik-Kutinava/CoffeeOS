@@ -16,5 +16,5 @@ mid = (machines.find { |m| m["state"] == "started" } || machines.first)["id"]
 ruby = "puts Order.find(#{order_id.inspect}).status"
 remote = "/rails/bin/rails runner #{ruby.inspect}"
 out, err, st = Open3.capture3(fly_bin, "machine", "exec", mid, "-a", app, remote)
-puts [out, err].join
+puts [ out, err ].join
 exit(st.success? ? 0 : 1)

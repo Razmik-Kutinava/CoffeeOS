@@ -23,17 +23,17 @@ class SeedBlackCoffeeCatalog < ActiveRecord::Migration[8.1]
     create_modifiers!(brazil, [
       { name: "Температура", required: true, options: [
         { name: "Со льдом", price: 0 }
-      ]},
+      ] },
       { name: "Вкус", required: true, options: [
         { name: "Кардамон и корица — пряный акцент, без сладости", price: 0 },
         { name: "Яблочный с корицей — мягкий, с лёгкой фруктовостью", price: 15 },
         { name: "Пивной кордиал — сладкий, глубокий, насыщенный", price: 20 }
-      ]},
+      ] },
       { name: "Интенсивность", required: true, options: [
         { name: "Сахар — мягкая сладость", price: 0 },
         { name: "Топинамбур — нейтральная сладость без послевкусия", price: 15 },
         { name: "Мёд — натуральная сладость с цветочным оттенком", price: 40 }
-      ]}
+      ] }
     ])
     say "Товар: #{brazil.name} — #{brazil.base_price}₽"
 
@@ -50,22 +50,22 @@ class SeedBlackCoffeeCatalog < ActiveRecord::Migration[8.1]
     create_modifiers!(decaf, [
       { name: "Температура", required: true, options: [
         { name: "Со льдом", price: 0 }
-      ]},
+      ] },
       { name: "Вкус", required: true, options: [
         { name: "Кардамон и корица — пряный акцент, без сладости", price: 0 },
         { name: "Яблочный с корицей — мягкий, с лёгкой фруктовостью", price: 0 }
-      ]},
+      ] },
       { name: "Интенсивность", required: true, options: [
         { name: "Сахар — мягкая сладость", price: 0 },
         { name: "Топинамбур — нейтральная сладость без послевкусия", price: 0 },
         { name: "Мёд — натуральная сладость с цветочным оттенком", price: 0 }
-      ]}
+      ] }
     ])
     say "Товар: #{decaf.name} — #{decaf.base_price}₽"
 
     # ── PTS для всех тенантов ──
     tenants = Tenant.all.to_a
-    [brazil, decaf].each do |product|
+    [ brazil, decaf ].each do |product|
       tenants.each do |tenant|
         ActiveRecord::Base.transaction do
           conn = ActiveRecord::Base.connection

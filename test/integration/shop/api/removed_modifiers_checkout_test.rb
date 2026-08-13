@@ -33,7 +33,7 @@ class Shop::Api::RemovedModifiersCheckoutTest < ActionDispatch::IntegrationTest
   end
 
   test "cart and order persist removed_modifiers for barista board" do
-    selected = [{ id: @sugar.id, name: "Сахар", price: 0 }]
+    selected = [ { id: @sugar.id, name: "Сахар", price: 0 } ]
 
     post "/shop/api/cart/add",
       headers: shop_tenant_headers(@tenant.id),

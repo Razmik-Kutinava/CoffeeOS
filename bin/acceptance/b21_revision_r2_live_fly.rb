@@ -33,7 +33,7 @@ def csrf_token(html)
 end
 
 def order_cards(html)
-  html.scan(/board-slot-card board-slot-card--(\w+)" id="order_([a-f0-9-]+)"/).map { |status, id| [id, status] }
+  html.scan(/board-slot-card board-slot-card--(\w+)" id="order_([a-f0-9-]+)"/).map { |status, id| [ id, status ] }
 end
 
 def login_user!(email:, jar:)

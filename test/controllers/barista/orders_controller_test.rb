@@ -14,7 +14,7 @@ class Barista::OrdersControllerTest < ActionDispatch::IntegrationTest
   # ── авторизация ────────────────────────────────────────────────────────────
 
   test "unauthenticated user cannot create order" do
-    post "/barista/orders", params: { cart_items: [{ product_id: @product.id, quantity: 1 }] }
+    post "/barista/orders", params: { cart_items: [ { product_id: @product.id, quantity: 1 } ] }
     assert_response :redirect
     assert_no_orders_created
   end
@@ -22,7 +22,7 @@ class Barista::OrdersControllerTest < ActionDispatch::IntegrationTest
   test "manager cannot create order via barista endpoint" do
     manager = create_user!(tenant: @tenant, role_codes: %w[general_manager], email: "mgr-bctrl@test.local", name: "Mgr")
     login_as!(manager)
-    post "/barista/orders", params: { cart_items: [{ product_id: @product.id, quantity: 1 }] }
+    post "/barista/orders", params: { cart_items: [ { product_id: @product.id, quantity: 1 } ] }
     assert_no_orders_created
   end
 
@@ -33,7 +33,7 @@ class Barista::OrdersControllerTest < ActionDispatch::IntegrationTest
     before = Order.where(tenant: @tenant).count
 
     post "/barista/orders", params: {
-      cart_items: [{ "product_id" => @product.id.to_s, "quantity" => "2" }],
+      cart_items: [ { "product_id" => @product.id.to_s, "quantity" => "2" } ],
       payment_method: "cash"
     }
 
@@ -50,7 +50,7 @@ class Barista::OrdersControllerTest < ActionDispatch::IntegrationTest
     before = Order.where(tenant: @tenant).count
 
     post "/barista/orders", params: {
-      cart_items: [{ "product_id" => @product.id.to_s, "quantity" => "1" }]
+      cart_items: [ { "product_id" => @product.id.to_s, "quantity" => "1" } ]
     }
 
     assert_response :redirect
@@ -63,7 +63,7 @@ class Barista::OrdersControllerTest < ActionDispatch::IntegrationTest
     before = Order.where(tenant: @tenant).count
 
     post "/barista/orders", params: {
-      cart_items: [{ "product_id" => @product.id.to_s, "quantity" => "1" }]
+      cart_items: [ { "product_id" => @product.id.to_s, "quantity" => "1" } ]
     }
 
     assert_response :redirect
@@ -74,7 +74,7 @@ class Barista::OrdersControllerTest < ActionDispatch::IntegrationTest
     # Сломанный продукт — несуществующий ID
     login_as!(@barista)
     post "/barista/orders", params: {
-      cart_items: [{ "product_id" => SecureRandom.uuid, "quantity" => "1" }]
+      cart_items: [ { "product_id" => SecureRandom.uuid, "quantity" => "1" } ]
     }
 
     follow_redirect!

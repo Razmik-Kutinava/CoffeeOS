@@ -23,7 +23,7 @@ class BaristaToManagersFullFlowTest < ActionDispatch::IntegrationTest
     login_as!(barista)
     post "/barista/orders",
       params: {
-        cart_items: [{ "product_id" => product.id, "quantity" => 1 }],
+        cart_items: [ { "product_id" => product.id, "quantity" => 1 } ],
         payment_method: "cash",
         promo_code: "PROMO10"
       }
@@ -58,4 +58,3 @@ class BaristaToManagersFullFlowTest < ActionDispatch::IntegrationTest
     assert_includes response.body, order.order_number
   end
 end
-

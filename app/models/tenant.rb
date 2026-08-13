@@ -1,40 +1,40 @@
 class Tenant < ApplicationRecord
   # Отключаем STI, так как type используется как обычное поле
   self.inheritance_column = nil
-  
+
   # Временная замена enum для отладки
   # enum type: { sales_point: 'sales_point', production_kitchen: 'production_kitchen' }
   # enum status: { active: 'active', warning: 'warning', suspended: 'suspended', blocked: 'blocked', frozen: 'frozen' }
-  
-  TYPES = { sales_point: 'sales_point', production_kitchen: 'production_kitchen' }.freeze
-  STATUSES = { active: 'active', warning: 'warning', suspended: 'suspended', blocked: 'blocked', frozen: 'frozen' }.freeze
-  
+
+  TYPES = { sales_point: "sales_point", production_kitchen: "production_kitchen" }.freeze
+  STATUSES = { active: "active", warning: "warning", suspended: "suspended", blocked: "blocked", frozen: "frozen" }.freeze
+
   def sales_point?
-    type == 'sales_point'
+    type == "sales_point"
   end
-  
+
   def production_kitchen?
-    type == 'production_kitchen'
+    type == "production_kitchen"
   end
-  
+
   def active?
-    status == 'active'
+    status == "active"
   end
-  
+
   def warning?
-    status == 'warning'
+    status == "warning"
   end
-  
+
   def suspended?
-    status == 'suspended'
+    status == "suspended"
   end
-  
+
   def blocked?
-    status == 'blocked'
+    status == "blocked"
   end
-  
+
   def frozen?
-    status == 'frozen'
+    status == "frozen"
   end
 
   belongs_to :organization, optional: true

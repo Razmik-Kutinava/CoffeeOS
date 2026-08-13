@@ -42,7 +42,7 @@ class Barista::BoardOrdersQueryTest < ActiveSupport::TestCase
     )
 
     ids = Barista::BoardOrdersQuery.for_column(tenant_id: @tenant.id, status: "accepted").map(&:id)
-    assert_equal [older.id, newer.id], ids
+    assert_equal [ older.id, newer.id ], ids
   end
 
   test "column_dom_id maps board statuses" do

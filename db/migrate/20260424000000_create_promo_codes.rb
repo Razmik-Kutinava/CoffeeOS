@@ -18,7 +18,7 @@ class CreatePromoCodes < ActiveRecord::Migration[8.1]
       t.timestamps
     end
 
-    add_index :promo_codes, [:tenant_id, :code], unique: true, name: "idx_promo_codes_tenant_code"
+    add_index :promo_codes, [ :tenant_id, :code ], unique: true, name: "idx_promo_codes_tenant_code"
     add_index :promo_codes, :tenant_id
     add_index :promo_codes, :is_active
     add_index :promo_codes, :valid_from

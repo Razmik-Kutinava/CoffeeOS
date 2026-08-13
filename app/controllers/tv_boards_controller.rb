@@ -64,4 +64,3 @@ class TvBoardsController < ApplicationController
          .to_a
   end
 end
-

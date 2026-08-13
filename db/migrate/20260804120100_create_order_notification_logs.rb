@@ -16,9 +16,9 @@ class CreateOrderNotificationLogs < ActiveRecord::Migration[8.0]
     end
 
     add_index :order_notification_logs, :order_id, name: "idx_order_notification_logs_order"
-    add_index :order_notification_logs, [:tenant_id, :created_at],
+    add_index :order_notification_logs, [ :tenant_id, :created_at ],
       name: "idx_order_notification_logs_tenant_created", order: { created_at: :desc }
-    add_index :order_notification_logs, [:order_id, :channel, :created_at],
+    add_index :order_notification_logs, [ :order_id, :channel, :created_at ],
       name: "idx_order_notification_logs_order_channel"
 
     add_foreign_key :order_notification_logs, :orders

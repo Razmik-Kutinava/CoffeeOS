@@ -42,11 +42,11 @@ module Platform
         raw = schedule_params[weekday.to_s] || schedule_params[weekday] || {}
         enabled = ActiveModel::Type::Boolean.new.cast(raw[:enabled] || raw["enabled"])
         enabled = false if enabled.nil?
-        [weekday, {
+        [ weekday, {
           enabled: enabled,
           opens_at: enabled ? parse_time(raw[:opens_at] || raw["opens_at"]) : nil,
           closes_at: enabled ? parse_time(raw[:closes_at] || raw["closes_at"]) : nil
-        }]
+        } ]
       end
     end
 

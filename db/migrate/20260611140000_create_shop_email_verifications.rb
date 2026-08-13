@@ -10,9 +10,9 @@ class CreateShopEmailVerifications < ActiveRecord::Migration[8.0]
       t.timestamps
     end
 
-    add_index :shop_email_verifications, [:tenant_id, :session_id], unique: true,
+    add_index :shop_email_verifications, [ :tenant_id, :session_id ], unique: true,
       name: "index_shop_email_verifications_on_tenant_and_session"
-    add_index :shop_email_verifications, [:tenant_id, :email],
+    add_index :shop_email_verifications, [ :tenant_id, :email ],
       name: "index_shop_email_verifications_on_tenant_and_email"
     add_index :shop_email_verifications, :expires_at
 

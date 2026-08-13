@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-13 (CI scan/lint)  
+**Дата:** 2026-08-13 (CI lint+legacy exclude)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| CI lint+scan_ruby+system fixed locally | job `test` still red on Actions |
+| lint autocorrect + CI exclude 4 legacy | Actions all green? |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

@@ -1,14 +1,14 @@
 class OrderStatusLog < ApplicationRecord
   enum :source, {
-    system: 'system',
-    barista: 'barista',
-    shift_manager: 'shift_manager',
-    payment_callback: 'payment_callback',
-    customer: 'customer'
+    system: "system",
+    barista: "barista",
+    shift_manager: "shift_manager",
+    payment_callback: "payment_callback",
+    customer: "customer"
   }
 
   belongs_to :order
-  belongs_to :changed_by, class_name: 'User', optional: true
+  belongs_to :changed_by, class_name: "User", optional: true
   belongs_to :device, optional: true
 
   # status_from и status_to хранятся как строки (order_status ENUM из БД)

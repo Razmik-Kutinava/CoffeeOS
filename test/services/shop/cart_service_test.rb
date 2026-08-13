@@ -143,7 +143,7 @@ class Shop::CartServiceTest < ActiveSupport::TestCase
     group = ProductModifierGroup.create!(product: @product, name: "Добавки", is_required: false, sort_order: 1)
     sugar = ProductModifierOption.create!(group: group, name: "Сахар", price_delta: 0, sort_order: 1)
     ProductModifierOption.create!(group: group, name: "Сироп", price_delta: 30, sort_order: 2)
-    selected = [{ id: sugar.id, name: "Сахар", price: 0 }]
+    selected = [ { id: sugar.id, name: "Сахар", price: 0 } ]
 
     cart.add!(product_id: @product.id, quantity: 1, selected_modifiers: selected)
     line = @session[:shop_cart].first
@@ -156,7 +156,7 @@ class Shop::CartServiceTest < ActiveSupport::TestCase
   test "add! stores only modifier id in session to avoid cookie overflow" do
     group = ProductModifierGroup.create!(product: @product, name: "Молоко", is_required: false, sort_order: 1)
     oat = ProductModifierOption.create!(group: group, name: "Овсяное молоко", price_delta: 50, sort_order: 1)
-    selected = [{ id: oat.id, name: "Овсяное молоко", price: 50 }]
+    selected = [ { id: oat.id, name: "Овсяное молоко", price: 50 } ]
 
     cart.add!(product_id: @product.id, quantity: 1, selected_modifiers: selected)
     stored = @session[:shop_cart].first["selected_modifiers"].first
@@ -169,7 +169,7 @@ class Shop::CartServiceTest < ActiveSupport::TestCase
     group = ProductModifierGroup.create!(product: @product, name: "Молоко", is_required: false, sort_order: 1)
     oat = ProductModifierOption.create!(group: group, name: "Овсяное молоко", price_delta: 50, sort_order: 1)
 
-    cart.add!(product_id: @product.id, quantity: 1, selected_modifiers: [{ id: oat.id, name: "Овсяное молоко", price: 50 }])
+    cart.add!(product_id: @product.id, quantity: 1, selected_modifiers: [ { id: oat.id, name: "Овсяное молоко", price: 50 } ])
     mod = cart.json_lines[:items].first[:selected_modifiers].first
     assert_equal oat.id, mod["id"]
     assert_equal "Овсяное молоко", mod["name"]

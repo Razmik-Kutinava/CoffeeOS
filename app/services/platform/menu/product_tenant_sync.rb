@@ -64,8 +64,8 @@ module Platform
       end
 
       def bust_categories_cache_for!(tenant_id)
-        pages = [nil, "", *1..5]
-        per_pages = [nil, "", "1", "10", "50"]
+        pages = [ nil, "", *1..5 ]
+        per_pages = [ nil, "", "1", "10", "50" ]
         pages.each do |page|
           per_pages.each do |per|
             Rails.cache.delete("shop/categories/#{tenant_id}/#{page}/#{per}")

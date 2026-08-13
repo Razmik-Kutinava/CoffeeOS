@@ -108,7 +108,7 @@ class Shop::ReadyPushJobTest < ActiveSupport::TestCase
       final_amount: 150
     )
 
-    assert_enqueued_with(job: Shop::ReadyPushJob, args: [fresh.id, "preparing"]) do
+    assert_enqueued_with(job: Shop::ReadyPushJob, args: [ fresh.id, "preparing" ]) do
       Shop::OrderStatusPushNotifier.call(order: fresh, old_status: "preparing")
     end
     assert_nil fresh.reload.ready_notified_at

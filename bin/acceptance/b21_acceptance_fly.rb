@@ -31,7 +31,7 @@ end
 def fly_runner(ruby)
   remote = "/rails/bin/rails runner #{ruby.inspect}"
   out, err, st = Open3.capture3(FLY_BIN, "machine", "exec", fly_machine_id, "-a", FLY_APP, remote)
-  combined = [out, err].join.strip
+  combined = [ out, err ].join.strip
   raise "fly runner: #{combined}" unless st.success?
 
   combined
@@ -161,7 +161,7 @@ Dir.chdir(ROOT) do
       screenshots: screens.values.all?
     },
     status: ops_status,
-    next: ["внутренняя приёмка (ты)", "подпись заказчика"]
+    next: [ "внутренняя приёмка (ты)", "подпись заказчика" ]
   }
 
   File.write(OUT, JSON.pretty_generate(result))

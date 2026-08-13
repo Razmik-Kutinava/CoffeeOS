@@ -6,8 +6,8 @@ class KioskCart < ApplicationRecord
   validates :total_amount, presence: true, numericality: { greater_than_or_equal_to: 0 }
   validate :items_format
 
-  scope :active, -> { where('expires_at > ?', Time.current) }
-  scope :expired, -> { where('expires_at <= ?', Time.current) }
+  scope :active, -> { where("expires_at > ?", Time.current) }
+  scope :expired, -> { where("expires_at <= ?", Time.current) }
   scope :for_current_tenant, -> { where(tenant_id: Current.tenant_id) }
 
   def expired?
@@ -23,6 +23,6 @@ class KioskCart < ApplicationRecord
   def items_format
     return if items.is_a?(Array)
 
-    errors.add(:items, 'должен быть массивом')
+    errors.add(:items, "должен быть массивом")
   end
 end

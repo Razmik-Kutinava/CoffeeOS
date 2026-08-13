@@ -10,9 +10,9 @@ Rails.application.routes.draw do
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
   # Authentication routes
-  get '/login', to: 'auth/sessions#new', as: :login
-  post '/login', to: 'auth/sessions#create'
-  delete '/logout', to: 'auth/sessions#destroy', as: :logout
+  get "/login", to: "auth/sessions#new", as: :login
+  post "/login", to: "auth/sessions#create"
+  delete "/logout", to: "auth/sessions#destroy", as: :logout
 
   get "/payment/success", to: "payment_returns#success"
   get "/payment/fail", to: "payment_returns#fail"
@@ -126,7 +126,7 @@ Rails.application.routes.draw do
 
   # Health API — мониторинг точек для центральной админки (JSON)
   namespace :health do
-    resources :tenants, only: [:index, :show] do
+    resources :tenants, only: [ :index, :show ] do
       member do
         get :events
         get :transactions
@@ -136,20 +136,20 @@ Rails.application.routes.draw do
 
   # Barista namespace
   namespace :barista do
-    get '/', to: 'dashboard#index', as: :dashboard
-    get '/orders/history', to: 'orders#history', as: :orders_history
-    get '/create-order', to: 'orders#new', as: :new_order
-    post '/orders', to: 'orders#create'
-    get '/menu', to: 'menu#index', as: :menu
-    get '/reports', to: 'reports#index', as: :reports
-    resources :orders, only: [:show] do
+    get "/", to: "dashboard#index", as: :dashboard
+    get "/orders/history", to: "orders#history", as: :orders_history
+    get "/create-order", to: "orders#new", as: :new_order
+    post "/orders", to: "orders#create"
+    get "/menu", to: "menu#index", as: :menu
+    get "/reports", to: "reports#index", as: :reports
+    resources :orders, only: [ :show ] do
       member do
         patch :update_status
         post :cancel
       end
     end
-    get '/shift', to: 'shifts#show', as: :shift
-    post '/shift/open', to: 'shifts#create', as: :open_shift
+    get "/shift", to: "shifts#show", as: :shift
+    post "/shift/open", to: "shifts#create", as: :open_shift
   end
 
   # Публичный блог
@@ -224,7 +224,7 @@ Rails.application.routes.draw do
   end
 
   # Defines the root path route ("/")
-  root 'auth/sessions#new'
+  root "auth/sessions#new"
 
   if Rails.env.local?
     namespace :test do

@@ -12,14 +12,14 @@ class CreateStage6Kiosk < ActiveRecord::Migration[8.1]
       t.jsonb :display_settings, default: {}
       t.timestamps
     end
-    
-    add_index :kiosk_settings, [:tenant_id, :device_id], unique: true, name: 'idx_ks_tenant_device', if_not_exists: true
+
+    add_index :kiosk_settings, [ :tenant_id, :device_id ], unique: true, name: 'idx_ks_tenant_device', if_not_exists: true
     add_index :kiosk_settings, :tenant_id, if_not_exists: true
     add_index :kiosk_settings, :device_id, if_not_exists: true
     add_index :kiosk_settings, :is_active, if_not_exists: true
-    
+
     execute "COMMENT ON TABLE kiosk_settings IS 'Настройки киоска точки'"
-    
+
     # Таблица kiosk_sessions (сессии пользователей киоска)
     create_table :kiosk_sessions, id: :uuid, default: -> { "gen_random_uuid()" } do |t|
       t.references :device, type: :uuid, null: false, foreign_key: { on_delete: :cascade }
@@ -33,15 +33,15 @@ class CreateStage6Kiosk < ActiveRecord::Migration[8.1]
       t.jsonb :metadata, default: {}
       t.timestamps
     end
-    
+
     add_index :kiosk_sessions, :session_token, unique: true, if_not_exists: true
     add_index :kiosk_sessions, :device_id, if_not_exists: true
     add_index :kiosk_sessions, :tenant_id, if_not_exists: true
     add_index :kiosk_sessions, :ended_at, where: "ended_at IS NULL", if_not_exists: true
     add_index :kiosk_sessions, :last_activity_at, if_not_exists: true
-    
+
     execute "COMMENT ON TABLE kiosk_sessions IS 'Сессии пользователей киоска'"
-    
+
     # Таблица kiosk_carts (корзины киоска)
     create_table :kiosk_carts, id: :uuid, default: -> { "gen_random_uuid()" } do |t|
       t.references :tenant, type: :uuid, null: false, foreign_key: { on_delete: :cascade }
@@ -52,19 +52,19 @@ class CreateStage6Kiosk < ActiveRecord::Migration[8.1]
       t.timestamp :expires_at, null: false
       t.timestamps
     end
-    
+
     add_index :kiosk_carts, :session_token, unique: true, if_not_exists: true
     add_index :kiosk_carts, :tenant_id, if_not_exists: true
     add_index :kiosk_carts, :device_id, if_not_exists: true
     add_index :kiosk_carts, :expires_at, if_not_exists: true
-    
+
     execute "COMMENT ON TABLE kiosk_carts IS 'Корзины киоска (привязка к сессии)'"
-    
+
     # Включаем RLS
     execute "ALTER TABLE kiosk_settings ENABLE ROW LEVEL SECURITY"
     execute "ALTER TABLE kiosk_sessions ENABLE ROW LEVEL SECURITY"
     execute "ALTER TABLE kiosk_carts ENABLE ROW LEVEL SECURITY"
-    
+
     # RLS политики для kiosk_settings
     execute <<-SQL
       CREATE POLICY rls_kiosk_settings_isolation ON kiosk_settings
@@ -73,7 +73,7 @@ class CreateStage6Kiosk < ActiveRecord::Migration[8.1]
           tenant_id = NULLIF(current_setting('app.current_tenant_id', TRUE), '')::UUID
         )
     SQL
-    
+
     # RLS политики для kiosk_sessions
     execute <<-SQL
       CREATE POLICY rls_kiosk_sessions_isolation ON kiosk_sessions
@@ -82,7 +82,7 @@ class CreateStage6Kiosk < ActiveRecord::Migration[8.1]
           tenant_id = NULLIF(current_setting('app.current_tenant_id', TRUE), '')::UUID
         )
     SQL
-    
+
     # RLS политики для kiosk_carts
     execute <<-SQL
       CREATE POLICY rls_kiosk_carts_isolation ON kiosk_carts
@@ -92,12 +92,12 @@ class CreateStage6Kiosk < ActiveRecord::Migration[8.1]
         )
     SQL
   end
-  
+
   def down
     execute "DROP POLICY IF EXISTS rls_kiosk_carts_isolation ON kiosk_carts"
     execute "DROP POLICY IF EXISTS rls_kiosk_sessions_isolation ON kiosk_sessions"
     execute "DROP POLICY IF EXISTS rls_kiosk_settings_isolation ON kiosk_settings"
-    
+
     drop_table :kiosk_carts, if_exists: true
     drop_table :kiosk_sessions, if_exists: true
     drop_table :kiosk_settings, if_exists: true

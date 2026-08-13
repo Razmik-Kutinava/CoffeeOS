@@ -103,31 +103,31 @@ provider_rebill = target.dig("provider_data", "RebillId")
 
 root_cause = if fa_rebill_at_incident && delayed_with_rebill.any?
                "OUR_FA_WITHOUT_REBILL_DELAYED_WEBHOOK_LATE"
-             elsif fa_rebill_at_incident && !present_val?(provider_rebill)
+elsif fa_rebill_at_incident && !present_val?(provider_rebill)
                "OUR_FA_WITHOUT_REBILL_GETSTATE_NO_RETRY"
-             elsif present_val?(provider_rebill) && !present_val?(fa_rebill)
+elsif present_val?(provider_rebill) && !present_val?(fa_rebill)
                "OUR_FA_WITHOUT_REBILL_LATER_WEBHOOK_MERGED"
-             elsif present_val?(fa_rebill) || present_val?(gs_rebill) || webhook_rebills.any?
+elsif present_val?(fa_rebill) || present_val?(gs_rebill) || webhook_rebills.any?
                "REBILL_PRESENT_SHOULD_HAVE_PERSISTED"
-             elsif target["save_card_intent"] == true && target["finish_authorize_note"]
+elsif target["save_card_intent"] == true && target["finish_authorize_note"]
                "TBANK_NO_REBILL_AFTER_SAVE_CARD_NEW_CARD"
-             else
+else
                "NOT_NEW_CARD_OR_SAVE_OFF"
-             end
+end
 
 fix_plan = case root_cause
-           when "OUR_FA_WITHOUT_REBILL_DELAYED_WEBHOOK_LATE", "OUR_FA_WITHOUT_REBILL_GETSTATE_NO_RETRY", "OUR_FA_WITHOUT_REBILL_LATER_WEBHOOK_MERGED"
+when "OUR_FA_WITHOUT_REBILL_DELAYED_WEBHOOK_LATE", "OUR_FA_WITHOUT_REBILL_GETSTATE_NO_RETRY", "OUR_FA_WITHOUT_REBILL_LATER_WEBHOOK_MERGED"
              [
                "Retry GetState 3–5× с паузой после FA CONFIRMED без RebillId (NewCardPaymentService#settle_confirmed → TbankPaymentSync)",
                "Background job: отложенный sync если save_card && succeeded && RebillId blank через 30s/2m/5m",
                "TbankCallbackJob уже persist на delayed CONFIRMED+RebillId — проверить idempotent upsert *8782",
                "E2E Fly: новая карта видна в 8925 в течение минуты после оплаты (не на следующий день)"
              ]
-           when "REBILL_PRESENT_SHOULD_HAVE_PERSISTED"
-             ["Audit SavedCardStore / allowed_for? / persist errors for payment #{PAYMENT_UUID}"]
-           else
-             ["Уточнить flow: one_click vs new_card для #{PAYMENT_UUID}"]
-           end
+when "REBILL_PRESENT_SHOULD_HAVE_PERSISTED"
+             [ "Audit SavedCardStore / allowed_for? / persist errors for payment #{PAYMENT_UUID}" ]
+else
+             [ "Уточнить flow: one_click vs new_card для #{PAYMENT_UUID}" ]
+end
 
 report = {
   date: DATE,
@@ -172,15 +172,15 @@ report = {
   fly_logs: { payment_id: logs_target, rebill: logs_rebill },
   root_cause: root_cause,
   root_cause_plain: case root_cause
-                  when "OUR_FA_WITHOUT_REBILL_DELAYED_WEBHOOK_LATE", "OUR_FA_WITHOUT_REBILL_LATER_WEBHOOK_MERGED"
+                    when "OUR_FA_WITHOUT_REBILL_DELAYED_WEBHOOK_LATE", "OUR_FA_WITHOUT_REBILL_LATER_WEBHOOK_MERGED"
                     "Наш баг: FA 09:56 без RebillId/Pan → settle + однократный GetState не дожали; банк прислал RebillId *8782 только на следующий день. Init Recurrent=Y (ожидаем). Фикс: retry GetState + delayed sync."
-                  when "OUR_FA_WITHOUT_REBILL_GETSTATE_NO_RETRY"
+                    when "OUR_FA_WITHOUT_REBILL_GETSTATE_NO_RETRY"
                     "Наш баг: FA без RebillId, GetState не вернул RebillId, retry не было."
-                  when "TBANK_NO_REBILL_AFTER_SAVE_CARD_NEW_CARD"
+                    when "TBANK_NO_REBILL_AFTER_SAVE_CARD_NEW_CARD"
                     "Банк не выдал RebillId ни в FA, ни webhook, ни GetState при save_card ON."
-                  else
+                    else
                     root_cause
-                  end,
+                    end,
   fix_plan: fix_plan
 }
 

@@ -34,7 +34,7 @@ class Barista::CartValidationServiceTest < ActiveSupport::TestCase
   # ---------------------------------------------------------------------------
 
   test "valid item returns array with product, quantity, price and total_price keys" do
-    result = validate([{ product_id: @product.id, quantity: 2 }])
+    result = validate([ { product_id: @product.id, quantity: 2 } ])
     assert_equal 1, result.size
     line = result.first
     assert_equal @product.id, line[:product].id
@@ -44,17 +44,17 @@ class Barista::CartValidationServiceTest < ActiveSupport::TestCase
   end
 
   test "quantity defaults to 1 when not specified in item hash" do
-    result = validate([{ product_id: @product.id }])
+    result = validate([ { product_id: @product.id } ])
     assert_equal 1, result.first[:quantity]
   end
 
   test "total_price equals price multiplied by quantity" do
-    result = validate([{ product_id: @product.id, quantity: 5 }])
+    result = validate([ { product_id: @product.id, quantity: 5 } ])
     assert_equal 500, result.first[:total_price]
   end
 
   test "string product_id works as UUID comes as string from forms" do
-    result = validate([{ product_id: @product.id.to_s, quantity: 1 }])
+    result = validate([ { product_id: @product.id.to_s, quantity: 1 } ])
     assert_equal @product.id, result.first[:product].id
   end
 
@@ -80,7 +80,7 @@ class Barista::CartValidationServiceTest < ActiveSupport::TestCase
   test "unknown product_id raises ActiveRecord::RecordNotFound" do
     fake_id = SecureRandom.uuid
     assert_raises(ActiveRecord::RecordNotFound) do
-      validate([{ product_id: fake_id, quantity: 1 }])
+      validate([ { product_id: fake_id, quantity: 1 } ])
     end
   end
 
@@ -91,7 +91,7 @@ class Barista::CartValidationServiceTest < ActiveSupport::TestCase
     # product exists globally but has no ProductTenantSetting for @tenant
     # The service will find the product in products_map but no matching setting
     assert_raises(Barista::CartValidationService::CartValidationError) do
-      validate([{ product_id: other_product.id, quantity: 1 }])
+      validate([ { product_id: other_product.id, quantity: 1 } ])
     end
   end
 
@@ -112,7 +112,7 @@ class Barista::CartValidationServiceTest < ActiveSupport::TestCase
     )
 
     assert_raises(Barista::CartValidationService::CartValidationError) do
-      validate([{ product_id: product2.id, quantity: 1 }])
+      validate([ { product_id: product2.id, quantity: 1 } ])
     end
   end
 
@@ -124,7 +124,7 @@ class Barista::CartValidationServiceTest < ActiveSupport::TestCase
                         .update_columns(is_sold_out: true, sold_out_reason: "manual")
 
     error = assert_raises(Barista::CartValidationService::CartValidationError) do
-      validate([{ product_id: product2.id, quantity: 1 }])
+      validate([ { product_id: product2.id, quantity: 1 } ])
     end
     assert_match "недоступен", error.message
   end
@@ -141,7 +141,7 @@ class Barista::CartValidationServiceTest < ActiveSupport::TestCase
     )
 
     assert_raises(Barista::CartValidationService::CartValidationError) do
-      validate([{ product_id: product2.id, quantity: 1 }])
+      validate([ { product_id: product2.id, quantity: 1 } ])
     end
   end
 end

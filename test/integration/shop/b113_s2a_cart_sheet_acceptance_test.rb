@@ -19,7 +19,7 @@ class Shop::B113S2aCartSheetAcceptanceTest < ActionDispatch::IntegrationTest
     assert_includes store, "export function onCartAdded"
     assert_includes store, "cartSheetMode.set(MODE_PEEK)"
     assert_includes store, "CART_JUST_ADDED_KEY"
-    assert_includes store, 'shop:cart-added'
+    assert_includes store, "shop:cart-added"
   end
 
   test "product add navigates to catalog and dispatches cart-added" do
@@ -27,7 +27,7 @@ class Shop::B113S2aCartSheetAcceptanceTest < ActionDispatch::IntegrationTest
     add_js = File.read(Rails.root.join("app/frontend/lib/shopCartAdd.js"))
 
     assert_includes product, 'push("/")'
-    assert_includes add_js, 'shop:cart-added'
+    assert_includes add_js, "shop:cart-added"
   end
 
   test "CartSheet S2a expanded card fields image name price modifiers" do
@@ -56,7 +56,7 @@ class Shop::B113S2aCartSheetAcceptanceTest < ActionDispatch::IntegrationTest
     sheet = File.read(Rails.root.join("app/frontend/components/CartSheet.svelte"))
     thresholds = File.read(Rails.root.join("app/frontend/lib/cartSheetThresholds.js"))
 
-    assert_includes sheet, 'data-cart-sheet-mode={mode}'
+    assert_includes sheet, "data-cart-sheet-mode={mode}"
     assert_includes sheet, "MODE_EXPANDED"
     assert_includes sheet, "MODE_PEEK"
     assert_includes sheet, "MODE_HIDDEN"

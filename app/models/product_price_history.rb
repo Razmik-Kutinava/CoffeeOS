@@ -1,7 +1,7 @@
 class ProductPriceHistory < ApplicationRecord
   belongs_to :tenant
   belongs_to :product
-  belongs_to :changed_by, class_name: 'User', optional: true
+  belongs_to :changed_by, class_name: "User", optional: true
 
   validates :price_new, presence: true, numericality: { greater_than: 0 }
   validates :price_old, numericality: { greater_than: 0 }, allow_nil: true

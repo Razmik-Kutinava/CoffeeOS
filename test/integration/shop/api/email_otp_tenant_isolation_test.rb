@@ -37,7 +37,7 @@ class Shop::Api::EmailOtpTenantIsolationTest < ActionDispatch::IntegrationTest
 
   test "two emails on same tenant each verify and checkout independently" do
     open_session do |sess|
-      [@email1, @email2].each_with_index do |email, idx|
+      [ @email1, @email2 ].each_with_index do |email, idx|
         add_to_cart!(sess, @tenant_a)
         verify_shop_email!(tenant_id: @tenant_a.id, email: email, session: sess)
         create_order!(sess, @tenant_a, email: email, name: "Guest #{idx + 1}")

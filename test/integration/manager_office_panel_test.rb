@@ -97,7 +97,7 @@ class ManagerOfficePanelTest < ActionDispatch::IntegrationTest
     category = create_category!(name: "Кат-#{SecureRandom.hex(3)}")
     product = create_product!(category: category, name: "Пр-#{SecureRandom.hex(3)}")
     enable_product_for_tenant!(tenant: tenant, product: product, price: 100, is_sold_out: false, is_enabled: true)
-    [product, category]
+    [ product, category ]
   end
 
   test "office manager can open /manager and main pages" do
@@ -444,7 +444,7 @@ class ManagerOfficePanelTest < ActionDispatch::IntegrationTest
     enable_product_for_tenant!(tenant: tenant, product: product, price: 50, is_sold_out: false, is_enabled: true)
 
     post "/barista/orders", params: {
-      cart_items: [{ product_id: product.id, quantity: 1 }],
+      cart_items: [ { product_id: product.id, quantity: 1 } ],
       payment_method: "cash"
     }
     follow_redirect!
@@ -504,4 +504,3 @@ class ManagerOfficePanelTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "cancelled"
   end
 end
-

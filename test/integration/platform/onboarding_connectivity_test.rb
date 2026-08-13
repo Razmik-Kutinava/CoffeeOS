@@ -81,7 +81,7 @@ class Platform::OnboardingConnectivityTest < ActionDispatch::IntegrationTest
     login_as!(barista, password: "pass123456")
 
     post "/barista/orders", params: {
-      cart_items: [{ "product_id" => @product.id, "quantity" => 1 }],
+      cart_items: [ { "product_id" => @product.id, "quantity" => 1 } ],
       payment_method: "cash"
     }
     assert_response :redirect
@@ -142,7 +142,7 @@ class Platform::OnboardingConnectivityTest < ActionDispatch::IntegrationTest
         movement: {
           movement_type: "receipt",
           note: "Onboard connect",
-          items: [{ ingredient_id: ingredient_a.id, qty_change: 3, unit_cost: 10 }]
+          items: [ { ingredient_id: ingredient_a.id, qty_change: 3, unit_cost: 10 } ]
         }
       }
     end

@@ -18,7 +18,7 @@ class CreateBillingAndTenantInvitations < ActiveRecord::Migration[8.1]
     end
 
     add_index :billing_plans, :code, unique: true, if_not_exists: true
-    add_index :billing_plans, [:is_active, :sort_order], if_not_exists: true
+    add_index :billing_plans, [ :is_active, :sort_order ], if_not_exists: true
     add_check_constraint :billing_plans, "price_monthly >= 0", name: "chk_billing_price"
 
     add_column :tenants, :plan_id, :uuid unless column_exists?(:tenants, :plan_id)
@@ -42,7 +42,7 @@ class CreateBillingAndTenantInvitations < ActiveRecord::Migration[8.1]
     add_check_constraint :billing_subscriptions, "billing_period IN ('monthly', 'yearly', 'trial', 'free')", name: "chk_billing_period"
     add_check_constraint :billing_subscriptions, "status IN ('active', 'cancelled', 'expired', 'past_due')", name: "chk_subscription_status"
     add_check_constraint :billing_subscriptions, "amount_paid >= 0", name: "chk_amount_paid"
-    add_index :billing_subscriptions, [:tenant_id, :status], if_not_exists: true, name: "idx_billing_subscriptions_tenant_status"
+    add_index :billing_subscriptions, [ :tenant_id, :status ], if_not_exists: true, name: "idx_billing_subscriptions_tenant_status"
     add_index :billing_subscriptions, :plan_id, if_not_exists: true, name: "idx_billing_subscriptions_plan"
     add_index :billing_subscriptions, :expires_at, if_not_exists: true, where: "status = 'active'", name: "idx_billing_subscriptions_expires"
 
@@ -60,8 +60,8 @@ class CreateBillingAndTenantInvitations < ActiveRecord::Migration[8.1]
     end
 
     add_index :tenant_invitations, :token, unique: true, if_not_exists: true, name: "idx_tenant_invitations_token"
-    add_index :tenant_invitations, [:tenant_id, :status], if_not_exists: true, name: "idx_tenant_invitations_tenant_status"
-    add_index :tenant_invitations, [:email, :status], if_not_exists: true, name: "idx_tenant_invitations_email_status"
+    add_index :tenant_invitations, [ :tenant_id, :status ], if_not_exists: true, name: "idx_tenant_invitations_tenant_status"
+    add_index :tenant_invitations, [ :email, :status ], if_not_exists: true, name: "idx_tenant_invitations_email_status"
     add_check_constraint :tenant_invitations, "status IN ('pending', 'accepted', 'expired', 'cancelled')", name: "chk_invitation_status"
   end
 

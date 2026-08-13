@@ -19,6 +19,6 @@ class KioskSetting < ApplicationRecord
   def at_least_one_payment_method
     return if allow_cash || allow_card
 
-    errors.add(:base, 'Должен быть разрешён хотя бы один способ оплаты')
+    errors.add(:base, "Должен быть разрешён хотя бы один способ оплаты")
   end
 end

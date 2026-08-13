@@ -40,7 +40,7 @@ class Platform::TenantsMapPinsTest < ActiveSupport::TestCase
       longitude: 37.63
     )
 
-    pins = Platform::TenantsMapPins.build([with_coords, without_coords, kitchen], url_helpers: url_helper)
+    pins = Platform::TenantsMapPins.build([ with_coords, without_coords, kitchen ], url_helpers: url_helper)
 
     assert_equal 1, pins.size
     assert_equal with_coords.id.to_s, pins.first[:id]

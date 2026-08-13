@@ -183,6 +183,6 @@ class Platform::TenantsControllerTest < ActionDispatch::IntegrationTest
   end
 
   def empty_weekday_schedules
-    TenantWeekdaySchedule::WEEKDAYS.each_value.to_h { |wd| [wd.to_s, { enabled: "0" }] }
+    TenantWeekdaySchedule::WEEKDAYS.each_value.to_h { |wd| [ wd.to_s, { enabled: "0" } ] }
   end
 end

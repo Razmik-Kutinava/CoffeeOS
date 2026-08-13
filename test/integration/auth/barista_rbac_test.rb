@@ -5,30 +5,30 @@ require "test_helper"
 # Веха 1 / блок C: barista — только POS и своя смена; чужие панели закрыты.
 class Auth::BaristaRbacTest < ActionDispatch::IntegrationTest
   MANAGER_FORBIDDEN_PATHS = [
-    [:manager_dashboard, :manager_dashboard_path],
-    [:manager_menu, :manager_menu_path],
-    [:manager_staff, :manager_staff_members_path],
-    [:manager_reports, :manager_reports_path],
-    [:manager_inventory, :manager_inventory_path],
-    [:manager_shifts, :manager_shifts_path],
-    [:manager_devices, :manager_devices_path],
-    [:manager_tv_settings, :manager_tv_board_settings_path]
+    [ :manager_dashboard, :manager_dashboard_path ],
+    [ :manager_menu, :manager_menu_path ],
+    [ :manager_staff, :manager_staff_members_path ],
+    [ :manager_reports, :manager_reports_path ],
+    [ :manager_inventory, :manager_inventory_path ],
+    [ :manager_shifts, :manager_shifts_path ],
+    [ :manager_devices, :manager_devices_path ],
+    [ :manager_tv_settings, :manager_tv_board_settings_path ]
   ].freeze
 
   OTHER_PANEL_PATHS = [
-    [:prep_kitchen, :prep_kitchen_dashboard_path],
-    [:prep_kitchen_movements, :prep_kitchen_movements_path],
-    [:platform_root, :platform_root_path],
-    [:platform_menu, :platform_menu_path],
-    [:platform_tenants, :platform_tenants_path]
+    [ :prep_kitchen, :prep_kitchen_dashboard_path ],
+    [ :prep_kitchen_movements, :prep_kitchen_movements_path ],
+    [ :platform_root, :platform_root_path ],
+    [ :platform_menu, :platform_menu_path ],
+    [ :platform_tenants, :platform_tenants_path ]
   ].freeze
 
   BARISTA_ALLOWED_PATHS = [
-    [:dashboard, :barista_dashboard_path],
-    [:pos_menu, :barista_menu_path],
-    [:shift, :barista_shift_path],
-    [:orders_history, :barista_orders_history_path],
-    [:new_order, :barista_new_order_path]
+    [ :dashboard, :barista_dashboard_path ],
+    [ :pos_menu, :barista_menu_path ],
+    [ :shift, :barista_shift_path ],
+    [ :orders_history, :barista_orders_history_path ],
+    [ :new_order, :barista_new_order_path ]
   ].freeze
 
   setup do

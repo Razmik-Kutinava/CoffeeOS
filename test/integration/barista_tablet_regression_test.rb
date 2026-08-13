@@ -308,7 +308,7 @@ class BaristaTabletRegressionTest < ActionDispatch::IntegrationTest
     CashShift.where(tenant_id: @tenant_a.id, status: "open").update_all(status: "closed", closed_at: Time.current)
     assert_nil CashShift.find_by(tenant_id: @tenant_a.id, status: "open")
 
-    post "/barista/orders", params: { cart_items: [{ product_id: @product.id, quantity: 1 }], payment_method: "cash" }
+    post "/barista/orders", params: { cart_items: [ { product_id: @product.id, quantity: 1 } ], payment_method: "cash" }
     assert_redirected_to barista_new_order_path
     assert_includes flash[:alert].to_s, "Смена не открыта"
 
@@ -321,7 +321,7 @@ class BaristaTabletRegressionTest < ActionDispatch::IntegrationTest
     setting.update!(is_sold_out: true, sold_out_reason: "stock_empty")
 
     assert_no_difference -> { Order.count } do
-      post "/barista/orders", params: { cart_items: [{ product_id: @product.id, quantity: 1 }], payment_method: "cash" }
+      post "/barista/orders", params: { cart_items: [ { product_id: @product.id, quantity: 1 } ], payment_method: "cash" }
     end
     assert_redirected_to barista_new_order_path
     assert_match(/недоступен|закончился/i, flash[:alert].to_s)
@@ -373,8 +373,8 @@ class BaristaTabletRegressionTest < ActionDispatch::IntegrationTest
       unit_price: 100,
       total_price: 100,
       modifier_options: {
-        "selected_modifiers" => [{ "name" => "Со льдом" }],
-        "removed_modifiers" => [{ "name" => "Сахар" }]
+        "selected_modifiers" => [ { "name" => "Со льдом" } ],
+        "removed_modifiers" => [ { "name" => "Сахар" } ]
       }
     )
 
@@ -517,4 +517,3 @@ class BaristaTabletRegressionTest < ActionDispatch::IntegrationTest
     assert_not_nil keep.id
   end
 end
-

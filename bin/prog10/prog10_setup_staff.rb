@@ -52,14 +52,14 @@ SETUP.each do |point|
     new_html = curl("#{BASE}/manager/staff/new")
     tok2 = csrf(new_html)
     body = [
-      ["authenticity_token", tok2],
-      ["user[name]", s[:name]],
-      ["user[email]", s[:email]],
-      ["user[password]", PASSWORD]
+      [ "authenticity_token", tok2 ],
+      [ "user[name]", s[:name] ],
+      [ "user[email]", s[:email] ],
+      [ "user[password]", PASSWORD ]
     ]
-    s[:roles].each { |r| body << ["role_codes[]", r] }
-    args = ["-X", "POST", "#{BASE}/manager/staff", "-H", "Content-Type: application/x-www-form-urlencoded"]
-    body.each { |k, v| args += ["--data-urlencode", "#{k}=#{v}"] }
+    s[:roles].each { |r| body << [ "role_codes[]", r ] }
+    args = [ "-X", "POST", "#{BASE}/manager/staff", "-H", "Content-Type: application/x-www-form-urlencoded" ]
+    body.each { |k, v| args += [ "--data-urlencode", "#{k}=#{v}" ] }
     resp = curl(*args)
     ok = resp.include?("Сотрудник создан") || resp.include?("manager/staff")
     point_results[:staff] << { email: s[:email], roles: s[:roles], created: ok }

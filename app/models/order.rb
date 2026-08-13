@@ -1,17 +1,17 @@
 class Order < ApplicationRecord
   enum :status, {
-    pending_payment: 'pending_payment',
-    accepted: 'accepted',
-    preparing: 'preparing',
-    ready: 'ready',
-    issued: 'issued',
-    closed: 'closed',
-    cancelled: 'cancelled'
+    pending_payment: "pending_payment",
+    accepted: "accepted",
+    preparing: "preparing",
+    ready: "ready",
+    issued: "issued",
+    closed: "closed",
+    cancelled: "cancelled"
   }
-  enum :source, { kiosk: 'kiosk', app: 'app', manual: 'manual', mobile: 'mobile' }
+  enum :source, { kiosk: "kiosk", app: "app", manual: "manual", mobile: "mobile" }
 
   belongs_to :tenant
-  belongs_to :customer, class_name: 'MobileCustomer', foreign_key: 'customer_id', optional: true
+  belongs_to :customer, class_name: "MobileCustomer", foreign_key: "customer_id", optional: true
   belongs_to :cash_shift, optional: true
   # cancel_reason_code - ссылка на order_cancel_reasons.code (без FK в Rails, только в БД)
   # cancel_stage - строка, не enum
@@ -34,11 +34,11 @@ class Order < ApplicationRecord
 
   scope :for_current_tenant, -> { where(tenant_id: Current.tenant_id) }
   scope :for_barista_board, ->(tenant_id) { where(tenant_id: tenant_id).where(status: %w[accepted preparing ready]) }
-  scope :active, -> { where(status: ['accepted', 'preparing', 'ready']) }
+  scope :active, -> { where(status: [ "accepted", "preparing", "ready" ]) }
   scope :recent, -> { order(created_at: :desc) }
-  scope :mobile, -> { where(source: 'mobile') }
+  scope :mobile, -> { where(source: "mobile") }
   scope :with_qr_token, -> { where.not(qr_token: nil) }
-  scope :qr_valid, -> { where('qr_expires_at > ?', Time.current) }
+  scope :qr_valid, -> { where("qr_expires_at > ?", Time.current) }
 
   def qr_expired?
     qr_expires_at.present? && qr_expires_at <= Time.current
@@ -58,9 +58,9 @@ class Order < ApplicationRecord
   end
 
   VALID_TRANSITIONS = {
-    'accepted'  => %w[preparing cancelled],
-    'preparing' => %w[ready cancelled],
-    'ready'     => %w[issued cancelled]
+    "accepted"  => %w[preparing cancelled],
+    "preparing" => %w[ready cancelled],
+    "ready"     => %w[issued cancelled]
   }.freeze
 
   def can_change_status?
@@ -77,6 +77,6 @@ class Order < ApplicationRecord
     return unless total_amount && discount_amount && final_amount
     return if final_amount == total_amount - discount_amount
 
-    errors.add(:final_amount, 'должна равняться total_amount - discount_amount')
+    errors.add(:final_amount, "должна равняться total_amount - discount_amount")
   end
 end

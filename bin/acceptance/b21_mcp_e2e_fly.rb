@@ -24,7 +24,7 @@ end
 
 def run_capture(cmd)
   out, status = Open3.capture2e(cmd)
-  [out, status.success?]
+  [ out, status.success? ]
 end
 
 checks = []

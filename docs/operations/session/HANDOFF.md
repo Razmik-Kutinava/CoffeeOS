@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-13 (CI scan/lint/system)  
+**Дата:** 2026-08-13 (CI lint+legacy exclude)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| CI: lint+scan_ruby+system skip | job `test` — логи / legacy shop |
+| RuboCop -A + CI exclude 4 legacy shop | смотреть Actions #29+ все green |
 
-**last_done:** rubocop whitespace · brakeman 8.0.6+ignore · bundler-audit deps · system skip  
-**next_step:** открыть лог job `test` (нужен GitHub login) и triage failures
+**last_done:** rubocop autocorrect · migration syntax · exclude legacy shop in CI test  
+**next_step:** подтвердить зелёный CI; triage 4 legacy отдельно
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

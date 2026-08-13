@@ -45,12 +45,12 @@ class RlsTenantIsolationTest < ActiveSupport::TestCase
   teardown do
     disable_rls_on_mvp_tables!
 
-    [@payment_a, @payment_b].compact.each { |row| row.destroy rescue nil }
-    [@order_a, @order_b].compact.each { |row| row.destroy rescue nil }
-    [@shift_a, @shift_b].compact.each { |row| row.destroy rescue nil }
-    [@stock_a, @stock_b, @pts_a, @pts_b].compact.each { |row| row.destroy rescue nil }
-    [@barista_a, @barista_b].compact.each { |row| row.destroy rescue nil }
-    [@tenant_a, @tenant_b].compact.each { |row| row.destroy rescue nil }
+    [ @payment_a, @payment_b ].compact.each { |row| row.destroy rescue nil }
+    [ @order_a, @order_b ].compact.each { |row| row.destroy rescue nil }
+    [ @shift_a, @shift_b ].compact.each { |row| row.destroy rescue nil }
+    [ @stock_a, @stock_b, @pts_a, @pts_b ].compact.each { |row| row.destroy rescue nil }
+    [ @barista_a, @barista_b ].compact.each { |row| row.destroy rescue nil }
+    [ @tenant_a, @tenant_b ].compact.each { |row| row.destroy rescue nil }
     @product&.destroy
     @category&.destroy
     @ingredient&.destroy

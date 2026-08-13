@@ -12,7 +12,7 @@ class Platform::TenantWeekdaySchedulesSyncTest < ActiveSupport::TestCase
   test "saves enabled weekdays from params" do
     ok = Platform::TenantWeekdaySchedulesSync.call(
       tenant: @tenant,
-      schedule_params: weekday_params(mon: ["09:00", "21:00"], wed: ["10:00", "20:00"])
+      schedule_params: weekday_params(mon: [ "09:00", "21:00" ], wed: [ "10:00", "20:00" ])
     )
 
     assert ok
@@ -44,7 +44,7 @@ class Platform::TenantWeekdaySchedulesSyncTest < ActiveSupport::TestCase
   test "saves overnight shift closes before opens" do
     ok = Platform::TenantWeekdaySchedulesSync.call(
       tenant: @tenant,
-      schedule_params: weekday_params(mon: ["09:23", "01:24"])
+      schedule_params: weekday_params(mon: [ "09:23", "01:24" ])
     )
 
     assert ok, @tenant.errors.full_messages.join(", ")

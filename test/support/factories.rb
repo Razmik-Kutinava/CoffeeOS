@@ -124,4 +124,3 @@ module TestFactories
     Rack::Attack.enabled = rack_attack_enabled if defined?(Rack::Attack) && !rack_attack_enabled.nil?
   end
 end
-

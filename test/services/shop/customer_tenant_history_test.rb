@@ -49,7 +49,7 @@ class Shop::CustomerTenantHistoryTest < ActiveSupport::TestCase
 
     assert_equal true, payload[:switchable]
     ids = payload[:tenants].map { |t| t[:id] }
-    assert_equal [@tenant_a.id, @tenant_c.id, @tenant_b.id], ids
+    assert_equal [ @tenant_a.id, @tenant_c.id, @tenant_b.id ], ids
     assert payload[:tenants].first[:is_current]
     assert_nil payload[:last_ordered_tenant_id]
     refute_includes ids, @tenant_spb.id

@@ -96,7 +96,7 @@ module Shop
     end
 
     def body_for_status
-      transition_body = BARISTA_TRANSITION_BODIES[[@old_status.to_s, @order.status.to_s]]
+      transition_body = BARISTA_TRANSITION_BODIES[[ @old_status.to_s, @order.status.to_s ]]
       return transition_body if transition_body.present?
 
       number = @order.order_number.presence || @order.id.to_s.first(8)

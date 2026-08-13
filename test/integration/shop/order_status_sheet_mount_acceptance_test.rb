@@ -39,7 +39,7 @@ class Shop::OrderStatusSheetMountAcceptanceTest < ActionDispatch::IntegrationTes
   test "status sheet exposes hidden peek expanded modes and one-expanded state" do
     sheet = File.read(Rails.root.join("app/frontend/components/OrderStatusSheet.svelte"))
 
-    assert_includes sheet, 'data-status-sheet-mode={statusSheetMode}'
+    assert_includes sheet, "data-status-sheet-mode={statusSheetMode}"
     assert_match(/statusSheetMode[\s\S]*?HIDDEN/, sheet)
     assert_match(/statusSheetMode[\s\S]*?PEEK/, sheet)
     assert_match(/statusSheetMode[\s\S]*?EXPANDED/, sheet)

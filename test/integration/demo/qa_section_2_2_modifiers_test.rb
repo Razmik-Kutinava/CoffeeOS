@@ -50,7 +50,7 @@ class QaSection22ModifiersTest < ActionDispatch::IntegrationTest
   end
 
   test "§2.2 order final_amount matches cart with priced modifiers" do
-    mods = [{ id: @cordial.id, name: @cordial.name, price: 20.0 }]
+    mods = [ { id: @cordial.id, name: @cordial.name, price: 20.0 } ]
 
     post "/shop/api/cart/add",
       headers: @headers,

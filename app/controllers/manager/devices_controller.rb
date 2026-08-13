@@ -51,7 +51,7 @@ module Manager
         return
       end
 
-      mode = params[:tv_mode].presence_in([Device::TV_MODE_ADS, Device::TV_MODE_ORDERS]) || Device::TV_MODE_ORDERS
+      mode = params[:tv_mode].presence_in([ Device::TV_MODE_ADS, Device::TV_MODE_ORDERS ]) || Device::TV_MODE_ORDERS
       meta = (@tv_device.metadata || {}).stringify_keys
       meta["tv_mode"] = mode
       @tv_device.update!(metadata: meta)

@@ -52,7 +52,7 @@ class CashShiftTest < ActiveSupport::TestCase
     )
     barista.password = "pass123"
     barista.save!
-    [tenant, barista]
+    [ tenant, barista ]
   end
 
   def create_order_for_shift!(overrides = {})

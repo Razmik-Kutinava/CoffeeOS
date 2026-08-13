@@ -1,6 +1,6 @@
 class FeatureFlag < ApplicationRecord
   belongs_to :tenant
-  belongs_to :enabled_by, class_name: 'User', optional: true
+  belongs_to :enabled_by, class_name: "User", optional: true
 
   validates :module, presence: true
   validates :tenant_id, uniqueness: { scope: :module }

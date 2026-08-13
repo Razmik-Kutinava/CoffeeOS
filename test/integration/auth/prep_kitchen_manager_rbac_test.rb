@@ -5,21 +5,21 @@ require "test_helper"
 # Веха 1 / блок C: prep_kitchen_manager — полный доступ к цеху; чужие панели закрыты.
 class Auth::PrepKitchenManagerRbacTest < ActionDispatch::IntegrationTest
   ALLOWED_PATHS = [
-    [:dashboard, :prep_kitchen_dashboard_path],
-    [:queue, :prep_kitchen_queue_path],
-    [:recipes, :prep_kitchen_recipes_path],
-    [:inventory, :prep_kitchen_inventory_path],
-    [:movements, :prep_kitchen_movements_path],
-    [:stop_list, :prep_kitchen_stop_list_path],
-    [:incidents, :prep_kitchen_incidents_path],
-    [:reports, :prep_kitchen_reports_path],
-    [:new_movement, :prep_kitchen_new_movement_path]
+    [ :dashboard, :prep_kitchen_dashboard_path ],
+    [ :queue, :prep_kitchen_queue_path ],
+    [ :recipes, :prep_kitchen_recipes_path ],
+    [ :inventory, :prep_kitchen_inventory_path ],
+    [ :movements, :prep_kitchen_movements_path ],
+    [ :stop_list, :prep_kitchen_stop_list_path ],
+    [ :incidents, :prep_kitchen_incidents_path ],
+    [ :reports, :prep_kitchen_reports_path ],
+    [ :new_movement, :prep_kitchen_new_movement_path ]
   ].freeze
 
   FORBIDDEN_PANELS = [
-    [:barista, :barista_dashboard_path],
-    [:manager, :manager_dashboard_path],
-    [:platform, :platform_root_path]
+    [ :barista, :barista_dashboard_path ],
+    [ :manager, :manager_dashboard_path ],
+    [ :platform, :platform_root_path ]
   ].freeze
 
   setup do
@@ -86,7 +86,7 @@ class Auth::PrepKitchenManagerRbacTest < ActionDispatch::IntegrationTest
         movement: {
           movement_type: "receipt",
           note: "PK RBAC",
-          items: [{ ingredient_id: @ingredient.id, qty_change: 4, unit_cost: 50 }]
+          items: [ { ingredient_id: @ingredient.id, qty_change: 4, unit_cost: 50 } ]
         }
       }
     end

@@ -96,7 +96,7 @@ class Shop::RepeatInvalidTokenPaymentTest < ActionDispatch::IntegrationTest
     assert_includes src, "loadError"
     assert_includes src, "onRetryLoad"
     assert_includes src, 'accent="orange"'
-    assert_includes src, 'pm-row__plus'
+    assert_includes src, "pm-row__plus"
     refute_includes src, "pm-row__chevron\">⌄"
   end
 

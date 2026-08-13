@@ -44,7 +44,7 @@ merged = {
   lcp_ms_repeat_visit: lcp&.dig("lcp_ms_repeat_visit"),
   lcp_pass: lcp&.dig("lcp_pass") == true,
   lcp_measured_at: lcp&.dig("measured_at"),
-  screenshots: shots_present.to_h { |f| [File.basename(f, ".png"), f] },
+  screenshots: shots_present.to_h { |f| [ File.basename(f, ".png"), f ] },
   screenshots_dir: screenshots_dir,
   notes: [
     "lighthouse_pwa: programmatic_audit (LH 13+ без категории pwa)",

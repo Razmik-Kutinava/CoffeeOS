@@ -40,12 +40,12 @@ def api_json(path, key, method: "GET", body: nil)
     "#{BASE}/shop/api#{path}",
     "-w", "\n%{http_code}"
   ]
-  args += ["-d", body.to_json] if body
+  args += [ "-d", body.to_json ] if body
   raw = curl(*args)
   lines = raw.lines
   http = lines.last.to_s.strip.to_i
   body_raw = lines[0..-2].join
-  [JSON.parse(body_raw), http]
+  [ JSON.parse(body_raw), http ]
 end
 
 key = shop_key(TENANT_ID)

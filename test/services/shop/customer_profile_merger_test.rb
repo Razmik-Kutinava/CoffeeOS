@@ -47,7 +47,7 @@ class Shop::CustomerProfileMergerTest < ActiveSupport::TestCase
     cart = MobileCart.create!(
       customer_id: donor.id,
       tenant_id: @tenant.id,
-      items: [{ "product_id" => SecureRandom.uuid, "quantity" => 1 }],
+      items: [ { "product_id" => SecureRandom.uuid, "quantity" => 1 } ],
       total_amount: 100
     )
 

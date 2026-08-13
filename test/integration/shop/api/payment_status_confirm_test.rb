@@ -88,4 +88,3 @@ class Shop::Api::PaymentStatusConfirmTest < ActionDispatch::IntegrationTest
     assert @confirm_flag[:called], "ожидали auto Confirm при AUTHORIZED"
   end
 end
-

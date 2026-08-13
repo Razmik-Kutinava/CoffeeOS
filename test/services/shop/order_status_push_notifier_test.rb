@@ -66,7 +66,7 @@ class Shop::OrderStatusPushNotifierTest < ActiveSupport::TestCase
     ENV["WALLET_SIMULATE"] = "1"
     ENV["FCM_SIMULATE"] = "1"
 
-    assert_enqueued_with(job: Shop::ReadyPushJob, args: [@order.id, "preparing"]) do
+    assert_enqueued_with(job: Shop::ReadyPushJob, args: [ @order.id, "preparing" ]) do
       Shop::OrderStatusPushNotifier.call(order: @order.reload, old_status: "preparing")
     end
 

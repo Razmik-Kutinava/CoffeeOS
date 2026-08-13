@@ -21,7 +21,7 @@ class PrepKitchen::Stock::MovementCreatorTest < ActiveSupport::TestCase
       params: {
         movement_type: "receipt",
         note: "Test receipt",
-        items: [{ ingredient_id: @ingredient.id, qty_change: 10 }]
+        items: [ { ingredient_id: @ingredient.id, qty_change: 10 } ]
       }
     )
 
@@ -51,7 +51,7 @@ class PrepKitchen::Stock::MovementCreatorTest < ActiveSupport::TestCase
     result = PrepKitchen::Stock::MovementCreator.call(
       tenant_id: @tenant.id,
       user: @user,
-      params: { movement_type: "unknown", items: [{ ingredient_id: @ingredient.id, qty_change: 1 }] }
+      params: { movement_type: "unknown", items: [ { ingredient_id: @ingredient.id, qty_change: 1 } ] }
     )
 
     assert_not result.success?

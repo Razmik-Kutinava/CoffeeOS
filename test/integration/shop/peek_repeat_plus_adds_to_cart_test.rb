@@ -12,7 +12,7 @@ class Shop::PeekRepeatPlusAddsToCartTest < ActionDispatch::IntegrationTest
     assert_includes lib, "addToCart("
     assert_includes lib, "bumpCartLine("
     assert_includes lib, "refreshCartSheet("
-    assert_includes lib, 'selected_modifiers: selectedMods(item)'
+    assert_includes lib, "selected_modifiers: selectedMods(item)"
   end
 
   test "embedded RepeatSection wires plus to cart bump not only setFrequentQty" do

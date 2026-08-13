@@ -34,7 +34,7 @@ class Platform::Menu::PublishProductServiceTest < ActiveSupport::TestCase
     end
 
     pts = ProductTenantSetting.where(product_id: product.id)
-    assert_equal 2, pts.where(tenant_id: [@tenant_a.id, @tenant_b.id]).count
+    assert_equal 2, pts.where(tenant_id: [ @tenant_a.id, @tenant_b.id ]).count
     assert pts.all? { |row| row.is_enabled? && row.price.to_d == 150.to_d }
     assert_equal Tenant.count, pts.count
   end

@@ -14,7 +14,7 @@ def fetch(url)
   uri = URI(url)
   Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme == "https") do |http|
     res = http.get(uri.request_uri)
-    [res.code.to_i, res.body, res["content-type"]]
+    [ res.code.to_i, res.body, res["content-type"] ]
   end
 end
 

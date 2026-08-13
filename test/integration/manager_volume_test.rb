@@ -159,4 +159,3 @@ class ManagerVolumeTest < ActionDispatch::IntegrationTest
     assert_equal 50, response.body.scan(/INC-REF-\d+/).size
   end
 end
-

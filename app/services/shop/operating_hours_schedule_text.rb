@@ -27,11 +27,11 @@ module Shop
 
     def group_rows(rows)
       rows.each_with_object([]) do |row, groups|
-        key = [clock_label(row.opens_at), clock_label(row.closes_at)]
+        key = [ clock_label(row.opens_at), clock_label(row.closes_at) ]
         if groups.last && groups.last[:key] == key && groups.last[:weekdays].last == row.weekday - 1
           groups.last[:weekdays] << row.weekday
         else
-          groups << { key: key, weekdays: [row.weekday], opens: row.opens_at, closes: row.closes_at }
+          groups << { key: key, weekdays: [ row.weekday ], opens: row.opens_at, closes: row.closes_at }
         end
       end
     end

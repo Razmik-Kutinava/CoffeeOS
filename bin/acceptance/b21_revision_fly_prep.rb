@@ -38,7 +38,7 @@ def curl_post_json(*args)
   lines = raw.lines
   http = lines.last.to_s.strip.to_i
   body_raw = lines[0..-2].join
-  [JSON.parse(body_raw), http]
+  [ JSON.parse(body_raw), http ]
 end
 
 def csrf_token(html)
@@ -81,7 +81,7 @@ end
 def fly_runner(ruby)
   remote_cmd = "/rails/bin/rails runner #{ruby.inspect}"
   out, err, st = Open3.capture3(FLY_BIN, "machine", "exec", fly_machine_id, "-a", FLY_APP, remote_cmd)
-  combined = [out, err].join.strip
+  combined = [ out, err ].join.strip
   raise "fly runner failed: #{combined}" unless st.success?
 
   combined
@@ -104,7 +104,7 @@ def fetch_otp_from_fly(email)
   ruby = "puts ShopEmailOtpCode.active(#{email.inspect}).order(created_at: :desc).limit(1).pick(:code) || 'NONE'"
   remote_cmd = "/rails/bin/rails runner #{ruby.inspect}"
   out, err, = Open3.capture3(FLY_BIN, "machine", "exec", fly_machine_id, "-a", FLY_APP, remote_cmd)
-  combined = [out, err].join
+  combined = [ out, err ].join
   code = combined.scan(/\b(\d{6})\b/).last&.first
   code = nil if code == "NONE"
   code

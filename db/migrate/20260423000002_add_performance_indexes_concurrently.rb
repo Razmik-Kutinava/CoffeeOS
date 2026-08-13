@@ -21,8 +21,8 @@ class AddPerformanceIndexesConcurrently < ActiveRecord::Migration[8.1]
     end
 
     # stock_movements (tenant_id, created_at) — отчёты по движениям склада за период
-    unless index_exists?(:stock_movements, [:tenant_id, :created_at], name: "idx_stock_movements_tenant_created")
-      add_index :stock_movements, [:tenant_id, :created_at],
+    unless index_exists?(:stock_movements, [ :tenant_id, :created_at ], name: "idx_stock_movements_tenant_created")
+      add_index :stock_movements, [ :tenant_id, :created_at ],
                 name: "idx_stock_movements_tenant_created",
                 order: { created_at: :desc },
                 algorithm: :concurrently

@@ -13,8 +13,8 @@ class CreateAdminAuditAndFeatureFlagsLogs < ActiveRecord::Migration[8.1]
       t.timestamps
     end
 
-    add_index :admin_audit_logs, [:tenant_id, :created_at], if_not_exists: true
-    add_index :admin_audit_logs, [:tenant_id, :entity_type, :entity_id], if_not_exists: true
+    add_index :admin_audit_logs, [ :tenant_id, :created_at ], if_not_exists: true
+    add_index :admin_audit_logs, [ :tenant_id, :entity_type, :entity_id ], if_not_exists: true
     add_index :admin_audit_logs, :action, if_not_exists: true
     add_index :admin_audit_logs, :request_id, if_not_exists: true
     add_index :admin_audit_logs, :details, using: :gin, if_not_exists: true
@@ -32,7 +32,7 @@ class CreateAdminAuditAndFeatureFlagsLogs < ActiveRecord::Migration[8.1]
       t.timestamps
     end
 
-    add_index :feature_flags_logs, [:tenant_id, :module, :changed_at], if_not_exists: true
+    add_index :feature_flags_logs, [ :tenant_id, :module, :changed_at ], if_not_exists: true
     add_index :feature_flags_logs, :action, if_not_exists: true
     add_index :feature_flags_logs, :changed_by_id, if_not_exists: true
     add_index :feature_flags_logs, :meta, using: :gin, if_not_exists: true

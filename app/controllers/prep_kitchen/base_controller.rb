@@ -55,6 +55,5 @@ module PrepKitchen
     def prep_kitchen_manager?
       Current.role_code == "prep_kitchen_manager"
     end
-
   end
 end

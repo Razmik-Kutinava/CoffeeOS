@@ -39,7 +39,7 @@ class Callbacks::SmsRuControllerTest < ActionDispatch::IntegrationTest
 
   test "#61 valid sms_status updates delivery_status and returns 100" do
     entry = "sms_status\n201737-100000\n103\n1786346415"
-    post callbacks_sms_ru_path, params: signed_params([entry])
+    post callbacks_sms_ru_path, params: signed_params([ entry ])
 
     assert_response :success
     assert_equal "100", response.body
@@ -52,7 +52,7 @@ class Callbacks::SmsRuControllerTest < ActionDispatch::IntegrationTest
 
   test "#61 fail delivery status marks log failed" do
     entry = "sms_status\n201737-100000\n104\n1786346415"
-    post callbacks_sms_ru_path, params: signed_params([entry])
+    post callbacks_sms_ru_path, params: signed_params([ entry ])
 
     assert_response :success
     assert_equal "100", response.body
@@ -63,7 +63,7 @@ class Callbacks::SmsRuControllerTest < ActionDispatch::IntegrationTest
 
   test "#61 callcheck_status returns 100 and caches status" do
     entry = "callcheck_status\n201737-542\n401\n1786346415"
-    post callbacks_sms_ru_path, params: signed_params([entry])
+    post callbacks_sms_ru_path, params: signed_params([ entry ])
 
     assert_response :success
     assert_equal "100", response.body
@@ -83,8 +83,8 @@ class Callbacks::SmsRuControllerTest < ActionDispatch::IntegrationTest
 
   test "#61 duplicate sms_status is idempotent" do
     entry = "sms_status\n201737-100000\n103\n1786346415"
-    post callbacks_sms_ru_path, params: signed_params([entry])
-    post callbacks_sms_ru_path, params: signed_params([entry])
+    post callbacks_sms_ru_path, params: signed_params([ entry ])
+    post callbacks_sms_ru_path, params: signed_params([ entry ])
 
     assert_response :success
     assert_equal "100", response.body
@@ -94,7 +94,7 @@ class Callbacks::SmsRuControllerTest < ActionDispatch::IntegrationTest
 
   test "#61 idempotency claim lives in Rails.cache not CacheCounter [TDD]" do
     entry = "sms_status\n201737-100000\n103\n1786346415"
-    post callbacks_sms_ru_path, params: signed_params([entry])
+    post callbacks_sms_ru_path, params: signed_params([ entry ])
     assert_response :success
 
     idem_key = "sms_ru:webhook:sms_status:201737-100000:103:1786346415"

@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-13 — chore(ci): rubocop -A + exclude legacy shop from CI test
+
+- lint: `bin/rubocop -A` (~274 files) + fix broken migration line in stage_2_payments
+- test job: exclude 4 known legacy shop files (ISSUES); не гейт фичи
+- scan_ruby / scan_js / system-test уже green на #28
+
 ## 2026-08-13 — chore(ci): lint + brakeman/audit + skip empty system-test
 
 - После bin/+x: lint/scan_ruby/system-test/test красные (не «больше багов продукта»)

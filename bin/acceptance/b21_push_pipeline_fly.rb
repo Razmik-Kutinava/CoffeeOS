@@ -26,7 +26,7 @@ end
 def fly_runner(ruby)
   remote = "/rails/bin/rails runner #{ruby.inspect}"
   out, err, st = Open3.capture3(FLY_BIN, "machine", "exec", fly_machine_id, "-a", FLY_APP, remote)
-  combined = [out, err].join.strip
+  combined = [ out, err ].join.strip
   raise "fly runner failed: #{combined}" unless st.success?
 
   combined

@@ -48,7 +48,7 @@ class Barista::B111OperatingHoursBoardTest < ActionDispatch::IntegrationTest
       login_as!(@barista)
 
       post barista_orders_path, params: {
-        cart_items: [{ product_id: @product.id, quantity: 1, selected_modifiers: [] }],
+        cart_items: [ { product_id: @product.id, quantity: 1, selected_modifiers: [] } ],
         payment_method: "cash"
       }
 

@@ -7,7 +7,7 @@ class TenantOperatingHoursTest < ActiveSupport::TestCase
 
   setup do
     @tenant = create_tenant!
-    seed_weekdays(mon_fri: ["09:00", "21:00"])
+    seed_weekdays(mon_fri: [ "09:00", "21:00" ])
   end
 
   test "open_now during business hours" do
@@ -52,7 +52,7 @@ class TenantOperatingHoursTest < ActiveSupport::TestCase
 
   test "respects tenant timezone" do
     @tenant.update!(timezone: "Asia/Vladivostok")
-    seed_weekdays(mon_fri: ["10:00", "20:00"])
+    seed_weekdays(mon_fri: [ "10:00", "20:00" ])
 
     travel_to Time.utc(2026, 6, 15, 0, 30, 0) do
       assert TenantOperatingHours.open_now?(@tenant)

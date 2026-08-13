@@ -29,7 +29,7 @@ Rails.application.config.to_prepare do
           unless api_key == valid_key
             Rails.logger.warn("[Shop::Auth] Invalid API key attempt")
             render json: { error: "Неверный API ключ" }, status: :unauthorized
-            return
+            nil
           end
         end
 

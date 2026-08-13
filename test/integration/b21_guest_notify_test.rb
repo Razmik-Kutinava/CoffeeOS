@@ -62,5 +62,4 @@ class B21GuestNotifyTest < ActionDispatch::IntegrationTest
     notification = PushNotification.order(created_at: :desc).first
     assert_equal "Ваш заказ начали готовить", notification.body
   end
-
 end

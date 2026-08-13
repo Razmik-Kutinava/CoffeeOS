@@ -15,13 +15,13 @@ class CreatePickupTablesAndOrdersFields < ActiveRecord::Migration[8.1]
       t.timestamps
     end
 
-    add_index :pickup_display_settings, [:tenant_id, :device_id], unique: true, if_not_exists: true
+    add_index :pickup_display_settings, [ :tenant_id, :device_id ], unique: true, if_not_exists: true
     add_check_constraint :pickup_display_settings, "display_mode IN ('number', 'name', 'both')", name: "chk_pickup_display_mode"
     add_check_constraint :pickup_display_settings, "items_visible_count BETWEEN 1 AND 20", name: "chk_pickup_items_visible_count"
     add_check_constraint :pickup_display_settings, "auto_complete_seconds IS NULL OR auto_complete_seconds > 0", name: "chk_pickup_auto_complete_seconds"
     add_index :pickup_display_settings, :tenant_id, if_not_exists: true, name: "idx_pickup_display_settings_tenant"
     add_index :pickup_display_settings, :device_id, if_not_exists: true, name: "idx_pickup_display_settings_device"
-    add_index :pickup_display_settings, [:tenant_id, :is_active], if_not_exists: true, where: "is_active = TRUE", name: "idx_pickup_display_settings_active"
+    add_index :pickup_display_settings, [ :tenant_id, :is_active ], if_not_exists: true, where: "is_active = TRUE", name: "idx_pickup_display_settings_active"
 
     create_table :pickup_calls, id: :uuid, default: -> { "gen_random_uuid()" } do |t|
       t.references :order, type: :uuid, null: false, foreign_key: { on_delete: :cascade }
@@ -35,8 +35,8 @@ class CreatePickupTablesAndOrdersFields < ActiveRecord::Migration[8.1]
 
     add_check_constraint :pickup_calls, "call_type IN ('ready', 'reminder')", name: "chk_pickup_call_type"
     add_index :pickup_calls, :order_id, if_not_exists: true, name: "idx_pickup_calls_order"
-    add_index :pickup_calls, [:tenant_id, :called_at], order: { called_at: :desc }, if_not_exists: true, name: "idx_pickup_calls_tenant_created"
-    add_index :pickup_calls, [:order_id, :called_at], if_not_exists: true, where: "acknowledged_at IS NULL", name: "idx_pickup_calls_unacknowledged"
+    add_index :pickup_calls, [ :tenant_id, :called_at ], order: { called_at: :desc }, if_not_exists: true, name: "idx_pickup_calls_tenant_created"
+    add_index :pickup_calls, [ :order_id, :called_at ], if_not_exists: true, where: "acknowledged_at IS NULL", name: "idx_pickup_calls_unacknowledged"
 
     create_table :pickup_events, id: :uuid, default: -> { "gen_random_uuid()" } do |t|
       t.references :order, type: :uuid, null: false, foreign_key: { on_delete: :cascade }
@@ -50,7 +50,7 @@ class CreatePickupTablesAndOrdersFields < ActiveRecord::Migration[8.1]
 
     add_check_constraint :pickup_events, "event_type IN ('ready', 'called', 'qr_scanned', 'issued', 'timeout', 'not_picked_up')", name: "chk_pickup_event_type"
     add_index :pickup_events, :order_id, if_not_exists: true, name: "idx_pickup_events_order"
-    add_index :pickup_events, [:tenant_id, :created_at], order: { created_at: :desc }, if_not_exists: true, name: "idx_pickup_events_tenant_created"
+    add_index :pickup_events, [ :tenant_id, :created_at ], order: { created_at: :desc }, if_not_exists: true, name: "idx_pickup_events_tenant_created"
     add_index :pickup_events, :event_type, if_not_exists: true, name: "idx_pickup_events_type"
 
     add_column :orders, :ready_at, :timestamptz unless column_exists?(:orders, :ready_at)

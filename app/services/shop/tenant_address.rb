@@ -8,7 +8,7 @@ module Shop
     module_function
 
     def display(city:, address:)
-      parts = [city, address].map { |p| p.to_s.strip }.reject(&:blank?)
+      parts = [ city, address ].map { |p| p.to_s.strip }.reject(&:blank?)
       return STUB if parts.empty?
 
       parts.join(", ")

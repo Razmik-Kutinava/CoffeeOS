@@ -3,7 +3,7 @@ module Manager
     def index
       @open_shift = current_cash_shift
       if shift_manager?
-        @shifts = @open_shift ? [@open_shift] : CashShift.for_current_tenant.recent.limit(20)
+        @shifts = @open_shift ? [ @open_shift ] : CashShift.for_current_tenant.recent.limit(20)
       else
         @shifts = CashShift.for_current_tenant.recent.limit(200)
       end
@@ -45,4 +45,3 @@ module Manager
     end
   end
 end
-

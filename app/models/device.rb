@@ -1,6 +1,6 @@
 class Device < ApplicationRecord
   belongs_to :tenant
-  belongs_to :registered_by, class_name: 'User', optional: true
+  belongs_to :registered_by, class_name: "User", optional: true
   has_many :device_sessions, dependent: :destroy
   has_many :order_status_logs, dependent: :nullify
   has_many :kiosk_settings, dependent: :destroy
@@ -13,7 +13,7 @@ class Device < ApplicationRecord
 
   scope :active, -> { where(is_active: true) }
   scope :for_current_tenant, -> { where(tenant_id: Current.tenant_id) }
-  scope :online, -> { where('last_seen_at > ?', 2.minutes.ago) }
+  scope :online, -> { where("last_seen_at > ?", 2.minutes.ago) }
 
   def online?
     last_seen_at.present? && last_seen_at > 2.minutes.ago

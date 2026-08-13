@@ -37,7 +37,7 @@ out, err, status = Open3.capture3(
   FLY_BIN, "machine", "exec", fly_machine_id, "-a", FLY_APP,
   "/rails/bin/rails runner #{ruby.inspect}"
 )
-text = [out, err].join
+text = [ out, err ].join
 code = text.scan(/\b(\d{6})\b/).last&.first
 if code && code != "NONE"
   puts code

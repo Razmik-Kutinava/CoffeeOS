@@ -1,6 +1,6 @@
 class TvBoardSetting < ApplicationRecord
   belongs_to :tenant
-  belongs_to :updated_by, class_name: 'User', optional: true
+  belongs_to :updated_by, class_name: "User", optional: true
 
   validates :tenant_id, uniqueness: true
   validates :show_order_count, presence: true, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 50 }

@@ -5,7 +5,7 @@ module Shop
     class OrdersController < Shop::Api::BaseController
       include Shop::Api::OperatingHoursGuard
 
-      before_action :reject_orders_when_closed!, only: [:create]
+      before_action :reject_orders_when_closed!, only: [ :create ]
 
       def create
         Rails.logger.info("[Shop::Order] Creating order for tenant #{@shop_tenant.id}, email: #{order_params[:email]}")
@@ -118,8 +118,8 @@ module Shop
             orders = orders.where("orders.created_at >= ?", Time.zone.today.beginning_of_day)
           end
 
-          page = [params[:page].to_i, 1].max
-          per_page = [[params[:per_page].to_i, 1].max, 50].min
+          page = [ params[:page].to_i, 1 ].max
+          per_page = [ [ params[:per_page].to_i, 1 ].max, 50 ].min
           orders = orders.limit(per_page).offset((page - 1) * per_page)
 
           render json: orders.map { |o|

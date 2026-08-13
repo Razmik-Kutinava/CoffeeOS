@@ -40,7 +40,7 @@ class BlockGCashShiftTest < ActionDispatch::IntegrationTest
   test "barista order requires open shift and sets cash_shift_id" do
     login_as!(@barista)
     post "/barista/orders", params: {
-      cart_items: [{ product_id: @product.id, quantity: 1 }],
+      cart_items: [ { product_id: @product.id, quantity: 1 } ],
       payment_method: "cash"
     }
     assert_response :redirect
@@ -68,7 +68,7 @@ class BlockGCashShiftTest < ActionDispatch::IntegrationTest
     before = Order.where(tenant: @tenant).count
 
     post "/barista/orders", params: {
-      cart_items: [{ product_id: @product.id, quantity: 1 }],
+      cart_items: [ { product_id: @product.id, quantity: 1 } ],
       payment_method: "cash"
     }
 

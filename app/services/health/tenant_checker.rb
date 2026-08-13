@@ -44,28 +44,28 @@ module Health
     private
 
     def check_cash_register
-      open_shift = CashShift.where(tenant_id: @tenant.id, status: 'open').first
+      open_shift = CashShift.where(tenant_id: @tenant.id, status: "open").first
       if open_shift
         {
-          status: 'ok',
+          status: "ok",
           message: "Касса открыта с #{I18n.l(open_shift.opened_at, format: :short)}",
           shift_id: open_shift.id,
           opened_at: open_shift.opened_at
         }
       else
         {
-          status: 'warning',
-          message: 'Нет открытой кассы',
+          status: "warning",
+          message: "Нет открытой кассы",
           shift_id: nil
         }
       end
     end
 
     def check_orders
-      count = Order.where(tenant_id: @tenant.id).where('created_at > ?', @since).count
+      count = Order.where(tenant_id: @tenant.id).where("created_at > ?", @since).count
       {
-        status: count.positive? ? 'ok' : 'warning',
-        message: count.positive? ? "Заказов за последний час: #{count}" : 'Нет заказов за последний час',
+        status: count.positive? ? "ok" : "warning",
+        message: count.positive? ? "Заказов за последний час: #{count}" : "Нет заказов за последний час",
         count: count,
         since: @since
       }
@@ -76,21 +76,21 @@ module Health
                   .where(status: %w[accepted preparing ready])
                   .count
       {
-        status: 'ok',
+        status: "ok",
         message: "В очереди: #{count} заказов",
         count: count
       }
     end
 
     def check_kiosk
-      devices = Device.where(tenant_id: @tenant.id, device_type: 'kiosk')
+      devices = Device.where(tenant_id: @tenant.id, device_type: "kiosk")
       online = devices.select { |d| d.online? }.size
       total = devices.size
-      kiosk_orders = Order.where(tenant_id: @tenant.id, source: 'kiosk')
-                         .where('created_at > ?', @since)
+      kiosk_orders = Order.where(tenant_id: @tenant.id, source: "kiosk")
+                         .where("created_at > ?", @since)
                          .count
       {
-        status: total.positive? ? (online.positive? ? 'ok' : 'warning') : 'ok',
+        status: total.positive? ? (online.positive? ? "ok" : "warning") : "ok",
         message: "Киоски: #{online}/#{total} онлайн, заказов за час: #{kiosk_orders}",
         devices_total: total,
         devices_online: online,
@@ -99,11 +99,11 @@ module Health
     end
 
     def check_pending_payment
-      scope = Order.where(tenant_id: @tenant.id, status: 'pending_payment')
+      scope = Order.where(tenant_id: @tenant.id, status: "pending_payment")
       total = scope.count
       stuck_since = Time.current - PENDING_PAYMENT_STUCK
-      stuck = scope.where('created_at < ?', stuck_since).count
-      status = stuck.positive? ? 'warning' : 'ok'
+      stuck = scope.where("created_at < ?", stuck_since).count
+      status = stuck.positive? ? "warning" : "ok"
       {
         status: status,
         message: stuck.positive? ? "Зависших оплат (>30 мин): #{stuck} из #{total}" : "Ожидают оплату: #{total}",
@@ -114,34 +114,34 @@ module Health
     end
 
     def check_shop_vitrina
-      count = Order.where(tenant_id: @tenant.id, source: 'mobile')
-                  .where('created_at > ?', @since)
+      count = Order.where(tenant_id: @tenant.id, source: "mobile")
+                  .where("created_at > ?", @since)
                   .count
       {
-        status: 'ok',
+        status: "ok",
         message: "Заказы витрины (mobile) за час: #{count}",
         count: count,
-        channel: 'shop_mobile'
+        channel: "shop_mobile"
       }
     end
 
     def check_app
-      count = Order.where(tenant_id: @tenant.id, source: 'app')
-                  .where('created_at > ?', @since)
+      count = Order.where(tenant_id: @tenant.id, source: "app")
+                  .where("created_at > ?", @since)
                   .count
       {
-        status: 'ok',
+        status: "ok",
         message: "Заказы приложения за час: #{count}",
         count: count
       }
     end
 
     def check_payments
-      scope = Payment.where(tenant_id: @tenant.id, status: 'succeeded').where('created_at > ?', @since)
+      scope = Payment.where(tenant_id: @tenant.id, status: "succeeded").where("created_at > ?", @since)
       count = scope.count
       amount = scope.sum(:amount)
       {
-        status: count.positive? ? 'ok' : 'warning',
+        status: count.positive? ? "ok" : "warning",
         message: "Оплат за час: #{count} на #{amount} #{@tenant.currency}",
         count: count,
         amount: amount.to_f
@@ -151,9 +151,9 @@ module Health
     def check_inventory
       out = IngredientTenantStock.where(tenant_id: @tenant.id, qty: 0).count
       low = IngredientTenantStock.where(tenant_id: @tenant.id)
-                                .where('qty <= min_qty AND min_qty > 0')
+                                .where("qty <= min_qty AND min_qty > 0")
                                 .count
-      status = out.positive? ? 'error' : (low.positive? ? 'warning' : 'ok')
+      status = out.positive? ? "error" : (low.positive? ? "warning" : "ok")
       {
         status: status,
         message: "Нулевых остатков: #{out}, низких: #{low}",
@@ -163,12 +163,12 @@ module Health
     end
 
     def check_failed_payments
-      count = Payment.where(tenant_id: @tenant.id, status: 'failed')
-                    .where('created_at > ?', @since_long)
+      count = Payment.where(tenant_id: @tenant.id, status: "failed")
+                    .where("created_at > ?", @since_long)
                     .count
       recent_events = Shop::PaymentFailureJournal.recent_for_tenant(@tenant.id, since: @since_long, limit: 10)
       {
-        status: (count.positive? || recent_events.any?) ? 'warning' : 'ok',
+        status: (count.positive? || recent_events.any?) ? "warning" : "ok",
         message: "Неудачных оплат за 24ч: #{count}",
         count: count,
         recent_events: recent_events
@@ -177,10 +177,10 @@ module Health
 
     def overall_status
       statuses = collect_statuses
-      return 'error' if statuses.include?('error')
-      return 'warning' if statuses.include?('warning')
+      return "error" if statuses.include?("error")
+      return "warning" if statuses.include?("warning")
 
-      'ok'
+      "ok"
     end
 
     def collect_statuses
@@ -192,7 +192,7 @@ module Health
     def recent_audit_events(limit: 20)
       AdminAuditLog
         .for_tenant(@tenant.id)
-        .where('created_at >= ?', @since_long)
+        .where("created_at >= ?", @since_long)
         .recent
         .limit(limit)
         .map do |log|

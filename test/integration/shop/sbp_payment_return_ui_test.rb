@@ -33,7 +33,7 @@ class Shop::SbpPaymentReturnUiTest < ActionDispatch::IntegrationTest
   test "App recovers codeblack_pending_order on visibility and cold start" do
     app = File.read(Rails.root.join("app/frontend/App.svelte"))
     pending = File.read(Rails.root.join("app/frontend/lib/codeblackPendingOrder.js"))
-    assert_includes pending, 'codeblack_pending_order'
+    assert_includes pending, "codeblack_pending_order"
     assert_includes app, "loadPendingOrder"
     assert_includes app, "visibilitychange"
     assert_includes app, "recoverCodeblackPendingOrder"

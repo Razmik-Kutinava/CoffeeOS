@@ -39,7 +39,7 @@ module Shop
     def deliver_via_api!(to:, code:)
       payload = {
         sender: { name: sender_name, email: mail_from },
-        to: [{ email: to }],
+        to: [ { email: to } ],
         subject: "Код подтверждения CoffeeOS: #{code}",
         htmlContent: otp_html(code)
       }

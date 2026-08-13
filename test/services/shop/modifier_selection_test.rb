@@ -29,7 +29,7 @@ class Shop::ModifierSelectionTest < ActiveSupport::TestCase
   end
 
   test "build returns unselected modifiers as removed" do
-    selected = [{ id: @opt_strong.id, name: "По крепче", price: 10 }]
+    selected = [ { id: @opt_strong.id, name: "По крепче", price: 10 } ]
     result = Shop::ModifierSelection.build(product: @product, selected_modifiers: selected)
 
     assert_equal 1, result[:selected_modifiers].size

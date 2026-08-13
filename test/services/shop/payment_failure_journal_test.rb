@@ -27,7 +27,7 @@ class Shop::PaymentFailureJournalTest < ActiveSupport::TestCase
   end
 
   test "guest_abandon cancels order and writes audit log" do
-    assert_difference ["OrderStatusLog.count", "AdminAuditLog.count"], 1 do
+    assert_difference [ "OrderStatusLog.count", "AdminAuditLog.count" ], 1 do
       Shop::PaymentFailureJournal.record!(
         order: @order,
         payment: @payment,

@@ -199,4 +199,3 @@ class CallbacksE2ETest < ActionDispatch::IntegrationTest
     ENV["CALLBACK_SHARED_SECRET"] = previous_secret
   end
 end
-

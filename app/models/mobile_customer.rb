@@ -11,14 +11,14 @@ class MobileCustomer < ApplicationRecord
   validates :telegram_chat_id, uniqueness: true, allow_nil: true,
                                length: { maximum: 64 }
   validate :phone_or_email_present
-  validates :is_active, inclusion: { in: [true, false] }
-  validates :push_enabled, inclusion: { in: [true, false] }
+  validates :is_active, inclusion: { in: [ true, false ] }
+  validates :push_enabled, inclusion: { in: [ true, false ] }
 
   scope :active, -> { where(is_active: true) }
   scope :with_push, -> { where(push_enabled: true) }
 
   def full_name
-    [first_name, last_name].compact.join(' ')
+    [ first_name, last_name ].compact.join(" ")
   end
 
   def update_last_login!

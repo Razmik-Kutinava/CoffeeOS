@@ -11,7 +11,7 @@ class PromoCode < ApplicationRecord
   validates :valid_to, presence: true
   validates :max_uses, presence: true, numericality: { greater_than_or_equal_to: 0 }
   validates :used_count, presence: true, numericality: { greater_than_or_equal_to: 0 }
-  validates :is_active, inclusion: { in: [true, false] }
+  validates :is_active, inclusion: { in: [ true, false ] }
 
   validate :valid_to_after_valid_from
   validate :code_uniqueness_in_tenant

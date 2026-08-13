@@ -136,7 +136,7 @@ module Demo
         ensure_module_flags!(tenant_kitchen, KITCHEN_MODULES)
         load_catalog! if @load_catalog
         repair_brazil_shop_modifier_prices!
-        ensure_pts_for_tenants!([tenant_a, tenant_b, tenant_c])
+        ensure_pts_for_tenants!([ tenant_a, tenant_b, tenant_c ])
         apply_point_price_markup!(tenant_b, markup: 10)
         apply_point_price_markup!(tenant_c, markup: 20)
         ensure_users!(
@@ -322,7 +322,7 @@ module Demo
       ensure_demo_shifts_open!(tenant_a, tenant_b)
       ensure_demo_recipes_and_stock!(tenant_a:, tenant_b:)
       ensure_kitchen_stock!(tenant_kitchen)
-      reset_demo_pts_availability!([tenant_a, tenant_b])
+      reset_demo_pts_availability!([ tenant_a, tenant_b ])
     end
 
     # Демо: смены A/B открыты — можно проверять оплату и табло без ручного open.
@@ -376,9 +376,9 @@ module Demo
         end
       end
 
-      [tenant_a, tenant_b].each do |tenant|
+      [ tenant_a, tenant_b ].each do |tenant|
         with_tenant_rls!(tenant) do
-          [coffee, milk].each do |ingredient|
+          [ coffee, milk ].each do |ingredient|
             IngredientTenantStock.find_or_create_by!(tenant_id: tenant.id, ingredient_id: ingredient.id) do |stock|
               stock.qty = 5_000
               stock.min_qty = 200

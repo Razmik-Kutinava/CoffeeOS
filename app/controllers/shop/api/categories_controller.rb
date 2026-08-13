@@ -3,7 +3,7 @@
 module Shop
   module Api
     class CategoriesController < Shop::Api::BaseController
-      skip_before_action :authenticate_shop_api!, only: [:index]
+      skip_before_action :authenticate_shop_api!, only: [ :index ]
 
       def index
         tenant_id = @shop_tenant.id
@@ -28,10 +28,10 @@ module Shop
         categories = Category.active.where(id: products_by_category.keys.compact).order(:sort_order)
 
         # Пагинация по категориям (витрина без per_page — отдаём все категории, до 50)
-        page = [params[:page].to_i, 1].max
+        page = [ params[:page].to_i, 1 ].max
         default_per_page = 50
         per_page = if params[:per_page].present?
-          [[params[:per_page].to_i, 1].max, default_per_page].min
+          [ [ params[:per_page].to_i, 1 ].max, default_per_page ].min
         else
           default_per_page
         end

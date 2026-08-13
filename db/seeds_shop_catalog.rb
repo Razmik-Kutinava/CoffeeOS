@@ -10,7 +10,6 @@ Product.where("slug LIKE ?", "seed-shop-%").find_each(&:destroy!)
 Category.where("slug LIKE ?", "seed-shop-%").find_each(&:destroy!)
 
 ActiveRecord::Base.transaction do
-
   # ── КАТЕГОРИИ ──────────────────────────────────────────────────────────────
   cat_filter = Category.find_or_initialize_by(slug: "menu-cat-filter")
   cat_filter.assign_attributes(name: "Фильтр-кофе", sort_order: 1, is_active: true)
@@ -47,7 +46,7 @@ ActiveRecord::Base.transaction do
   cold_base_modifiers = [
     {
       name: "Температура", required: true,
-      options: [{ name: "Убрать лёд", price: 0 }]
+      options: [ { name: "Убрать лёд", price: 0 } ]
     },
     {
       name: "Сладость", required: true,
@@ -59,7 +58,7 @@ ActiveRecord::Base.transaction do
     },
     {
       name: "Как получить", required: false,
-      options: [{ name: "В машине", price: 0 }]
+      options: [ { name: "В машине", price: 0 } ]
     }
   ].freeze
 
@@ -116,11 +115,11 @@ ActiveRecord::Base.transaction do
         },
         {
           name: "Текстура", required: false,
-          options: [{ name: "Сливки", price: 30 }]
+          options: [ { name: "Сливки", price: 30 } ]
         },
         {
           name: "Как получить", required: false,
-          options: [{ name: "В машине", price: 0 }]
+          options: [ { name: "В машине", price: 0 } ]
         }
       ]
     },
@@ -173,11 +172,11 @@ ActiveRecord::Base.transaction do
         },
         {
           name: "Текстура", required: false,
-          options: [{ name: "Сливки", price: 30 }]
+          options: [ { name: "Сливки", price: 30 } ]
         },
         {
           name: "Как получить", required: false,
-          options: [{ name: "В машине", price: 0 }]
+          options: [ { name: "В машине", price: 0 } ]
         }
       ]
     },
@@ -210,7 +209,7 @@ ActiveRecord::Base.transaction do
       modifiers: [
         {
           name: "Температура", required: true,
-          options: [{ name: "Убрать лёд", price: 0 }]
+          options: [ { name: "Убрать лёд", price: 0 } ]
         },
         {
           name: "Сладость", required: true,
@@ -222,11 +221,11 @@ ActiveRecord::Base.transaction do
         },
         {
           name: "Вкус", required: true,
-          options: [{ name: "Ярче кофе", price: 30 }]
+          options: [ { name: "Ярче кофе", price: 30 } ]
         },
         {
           name: "Как получить", required: false,
-          options: [{ name: "В машине", price: 0 }]
+          options: [ { name: "В машине", price: 0 } ]
         }
       ]
     },
@@ -257,7 +256,7 @@ ActiveRecord::Base.transaction do
       modifiers: [
         {
           name: "Температура", required: true,
-          options: [{ name: "Убрать лёд", price: 0 }]
+          options: [ { name: "Убрать лёд", price: 0 } ]
         },
         {
           name: "Сладость", required: true,
@@ -269,11 +268,11 @@ ActiveRecord::Base.transaction do
         },
         {
           name: "Вкус", required: true,
-          options: [{ name: "Ярче кофе", price: 30 }]
+          options: [ { name: "Ярче кофе", price: 30 } ]
         },
         {
           name: "Как получить", required: false,
-          options: [{ name: "В машине", price: 0 }]
+          options: [ { name: "В машине", price: 0 } ]
         }
       ]
     },
@@ -304,7 +303,7 @@ ActiveRecord::Base.transaction do
       modifiers: [
         {
           name: "Температура", required: true,
-          options: [{ name: "Убрать лёд", price: 0 }]
+          options: [ { name: "Убрать лёд", price: 0 } ]
         },
         {
           name: "Сладость", required: true,
@@ -316,11 +315,11 @@ ActiveRecord::Base.transaction do
         },
         {
           name: "Вкус", required: true,
-          options: [{ name: "Ярче матча", price: 30 }]
+          options: [ { name: "Ярче матча", price: 30 } ]
         },
         {
           name: "Как получить", required: false,
-          options: [{ name: "В машине", price: 0 }]
+          options: [ { name: "В машине", price: 0 } ]
         }
       ]
     },
@@ -398,7 +397,6 @@ ActiveRecord::Base.transaction do
 
     upsert_modifier_groups.call(product, spec[:modifiers])
   end
-
 end
 
 puts "\n[shop] Каталог CoffeeOS загружен: tenant(s)=#{Tenant.count} | Категории: Фильтр-кофе, Холодные | Товаров: 9\n"

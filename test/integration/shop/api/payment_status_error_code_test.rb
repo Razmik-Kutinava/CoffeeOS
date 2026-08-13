@@ -52,4 +52,3 @@ class Shop::Api::PaymentStatusErrorCodeTest < ActionDispatch::IntegrationTest
     assert_equal "1051", body["error_code"]
   end
 end
-

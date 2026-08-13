@@ -23,7 +23,7 @@ class PrepKitchen::Queue::DemandCalculatorTest < ActiveSupport::TestCase
     )
     OrderItem.create!(order: order, product_id: product.id, product_name: product.name, quantity: 2, unit_price: 50, total_price: 100)
 
-    result = PrepKitchen::Queue::DemandCalculator.call(orders: [order])
+    result = PrepKitchen::Queue::DemandCalculator.call(orders: [ order ])
 
     row = result[:ingredient_demand].find { |item| item[:ingredient_id] == ingredient.id }
     assert_equal 400.to_d, row[:qty]

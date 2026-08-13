@@ -96,7 +96,7 @@ class Shop::OrderStatusAcceptanceCbrTest < ActionDispatch::IntegrationTest
   test "b11_06 staff cancel message in order json" do
     order_id = create_cash_order!
     order = Order.find(order_id)
-    barista = create_user!(tenant: @tenant, role_codes: ["barista"])
+    barista = create_user!(tenant: @tenant, role_codes: [ "barista" ])
 
     Barista::OrderCancellationService.new(
       order: order,

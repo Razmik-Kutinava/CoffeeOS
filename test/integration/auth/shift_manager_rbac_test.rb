@@ -5,25 +5,25 @@ require "test_helper"
 # Веха 1 / блок C: shift_manager — оперативка текущей смены; без «глубокой» истории и привилегий GM.
 class Auth::ShiftManagerRbacTest < ActionDispatch::IntegrationTest
   OPERATIONAL_PATHS = [
-    [:dashboard, :manager_dashboard_path],
-    [:orders, :manager_orders_path],
-    [:payments, :manager_finance_payments_path],
-    [:refunds, :manager_finance_refunds_path],
-    [:fiscal, :manager_finance_fiscal_receipts_path],
-    [:shifts, :manager_shifts_path],
-    [:reports, :manager_reports_path],
-    [:incidents, :manager_incidents_path],
-    [:menu_read, :manager_menu_path]
+    [ :dashboard, :manager_dashboard_path ],
+    [ :orders, :manager_orders_path ],
+    [ :payments, :manager_finance_payments_path ],
+    [ :refunds, :manager_finance_refunds_path ],
+    [ :fiscal, :manager_finance_fiscal_receipts_path ],
+    [ :shifts, :manager_shifts_path ],
+    [ :reports, :manager_reports_path ],
+    [ :incidents, :manager_incidents_path ],
+    [ :menu_read, :manager_menu_path ]
   ].freeze
 
   FORBIDDEN_PATHS = [
-    [:inventory, :manager_inventory_path],
-    [:staff, :manager_staff_members_path],
-    [:devices, :manager_devices_path],
-    [:tv_settings, :manager_tv_board_settings_path],
-    [:barista, :barista_dashboard_path],
-    [:prep_kitchen, :prep_kitchen_dashboard_path],
-    [:platform, :platform_root_path]
+    [ :inventory, :manager_inventory_path ],
+    [ :staff, :manager_staff_members_path ],
+    [ :devices, :manager_devices_path ],
+    [ :tv_settings, :manager_tv_board_settings_path ],
+    [ :barista, :barista_dashboard_path ],
+    [ :prep_kitchen, :prep_kitchen_dashboard_path ],
+    [ :platform, :platform_root_path ]
   ].freeze
 
   setup do

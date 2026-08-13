@@ -29,19 +29,19 @@ begin
   # 3. User - устанавливаем Current перед сохранением
   Current.tenant_id = tenant.id
   Current.user_id = nil
-  
+
   barista = User.find_or_initialize_by(email: 'barista@test.com')
   barista.name = 'Бариста Тест'
   barista.phone = '+79991234567'
   barista.tenant_id = tenant.id
   barista.status = 'active'
   barista.password = 'test123456'
-  
+
   unless barista.save
     puts "❌ Ошибка сохранения пользователя: #{barista.errors.full_messages.join(', ')}"
     raise ActiveRecord::Rollback
   end
-  
+
   Current.user_id = barista.id
 
   unless barista.roles.include?(barista_role)
@@ -99,7 +99,7 @@ begin
       p.sort_order = prod_data[:sort_order]
       p.is_active = true
     end
-    
+
     # ProductTenantSetting
     setting = ProductTenantSetting.find_or_create_by!(
       product_id: product.id,
@@ -110,7 +110,7 @@ begin
       s.is_sold_out = prod_data[:sold_out] || false
       s.stock_qty = prod_data[:sold_out] ? 0 : rand(10..100)
     end
-    
+
     products << product
     puts "✅ Product: #{product.name} (#{setting.price} ₽)"
   end
@@ -142,7 +142,7 @@ begin
     { status: 'preparing', count: 3 },
     { status: 'ready', count: 2 }
   ]
-  sources = ['kiosk', 'app', 'manual']
+  sources = [ 'kiosk', 'app', 'manual' ]
 
   order_statuses.each do |status_data|
     status_data[:count].times do |i|
@@ -157,18 +157,18 @@ begin
         final_amount: 0,
         created_at: (rand(1..30)).minutes.ago
       )
-      
+
       # OrderItems
       num_items = rand(1..4)
       selected_products = products.sample(num_items)
       total = 0
-      
+
       selected_products.each do |product|
         setting = product.product_tenant_settings.find_by(tenant_id: tenant.id)
         quantity = rand(1..3)
         item_total = setting.price * quantity
         total += item_total
-        
+
         OrderItem.create!(
           order_id: order.id,
           product_id: product.id,
@@ -178,23 +178,23 @@ begin
           total_price: item_total
         )
       end
-      
+
       # Обновляем суммы заказа
       order.total_amount = total
       order.discount_amount = 0
       order.final_amount = total
       order.save!
-      
+
       # Payment
       Payment.create!(
         order_id: order.id,
         tenant_id: tenant.id,
         amount: total,
-        method: ['card', 'cash', 'sbp'].sample,
+        method: [ 'card', 'cash', 'sbp' ].sample,
         status: 'succeeded',
         processed_at: order.created_at + 1.minute
       )
-      
+
       # OrderStatusLog
       OrderStatusLog.create!(
         order_id: order.id,
@@ -205,7 +205,7 @@ begin
         source: 'barista',
         created_at: order.created_at
       )
-      
+
       puts "✅ Order: #{order.order_number} (#{status_data[:status]}, #{total} ₽)"
     end
   end
@@ -230,17 +230,17 @@ begin
         final_amount: 0,
         created_at: (i + 1).hours.ago
       )
-      
+
       num_items = rand(1..3)
       selected_products = products.sample(num_items)
       total = 0
-      
+
       selected_products.each do |product|
         setting = product.product_tenant_settings.find_by(tenant_id: tenant.id)
         quantity = rand(1..2)
         item_total = setting.price * quantity
         total += item_total
-        
+
         OrderItem.create!(
           order_id: order.id,
           product_id: product.id,
@@ -250,24 +250,24 @@ begin
           total_price: item_total
         )
       end
-      
+
       # Обновляем суммы заказа
       order.total_amount = total
       order.discount_amount = 0
       order.final_amount = total
       order.save!
-      
+
       if status_data[:status] != 'cancelled'
         Payment.create!(
           order_id: order.id,
           tenant_id: tenant.id,
           amount: total,
-          method: ['card', 'cash'].sample,
+          method: [ 'card', 'cash' ].sample,
           status: 'succeeded',
           processed_at: order.created_at + 1.minute
         )
       end
-      
+
       OrderStatusLog.create!(
         order_id: order.id,
         tenant_id: tenant.id,
@@ -277,7 +277,7 @@ begin
         source: 'barista',
         created_at: order.created_at
       )
-      
+
       puts "✅ History Order: #{order.order_number} (#{status_data[:status]}, #{total} ₽)"
     end
   end
@@ -290,8 +290,8 @@ begin
   puts "  ✅ ProductTenantSettings: #{ProductTenantSetting.where(tenant_id: tenant.id).count}"
   puts "  ✅ CashShift: ##{cash_shift.id}"
   puts "  ✅ ShiftStaff: #{ShiftStaff.where(cash_shift_id: cash_shift.id).count}"
-  puts "  ✅ Orders (active): #{Order.where(tenant_id: tenant.id, status: ['accepted', 'preparing', 'ready']).count}"
-  puts "  ✅ Orders (history): #{Order.where(tenant_id: tenant.id, status: ['closed', 'cancelled', 'issued']).count}"
+  puts "  ✅ Orders (active): #{Order.where(tenant_id: tenant.id, status: [ 'accepted', 'preparing', 'ready' ]).count}"
+  puts "  ✅ Orders (history): #{Order.where(tenant_id: tenant.id, status: [ 'closed', 'cancelled', 'issued' ]).count}"
   puts "  ✅ OrderItems: #{OrderItem.joins(:order).where(orders: { tenant_id: tenant.id }).count}"
   puts "  ✅ Payments: #{Payment.joins(:order).where(orders: { tenant_id: tenant.id }).count}"
   puts "  ✅ OrderStatusLogs: #{OrderStatusLog.where(tenant_id: tenant.id).count}"

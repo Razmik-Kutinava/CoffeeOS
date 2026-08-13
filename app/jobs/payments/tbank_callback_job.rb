@@ -27,7 +27,7 @@ module Payments
       payment ||= Payment
         .joins(:order)
         .where(orders: { id: order_id }, provider: "tbank", status: :pending)
-        .where(provider_payment_id: [nil, ""])
+        .where(provider_payment_id: [ nil, "" ])
         .order(created_at: :desc)
         .first
 

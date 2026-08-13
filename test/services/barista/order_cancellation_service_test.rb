@@ -63,7 +63,7 @@ class Barista::OrderCancellationServiceTest < ActiveSupport::TestCase
   test "cancels accepted order and writes audit log" do
     order = build_order!(status: "accepted")
 
-    assert_difference ["OrderStatusLog.count", "AdminAuditLog.count"], 1 do
+    assert_difference [ "OrderStatusLog.count", "AdminAuditLog.count" ], 1 do
       assert_no_difference "StockMovement.count" do
         result = call_service(order, reason: "Клиент ушёл")
         assert_equal "cancelled", result.status

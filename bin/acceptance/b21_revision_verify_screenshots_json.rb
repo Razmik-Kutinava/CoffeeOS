@@ -48,7 +48,7 @@ Dir.chdir(ROOT) do
 
   png_on_disk = R4_PNG.to_h do |name|
     path = File.join(SCREEN_DIR, name)
-    [name, File.file?(path)]
+    [ name, File.file?(path) ]
   end
   png_missing = png_on_disk.reject { |_, ok| ok }.keys
   png_ok = png_missing.empty?
@@ -63,7 +63,7 @@ Dir.chdir(ROOT) do
   status_ok = acceptance["status"] == "PASS"
 
   ui = acceptance["ui_checks"] || {}
-  ui_results = UI_CHECKS.to_h { |k| [k, ui[k] == true] }
+  ui_results = UI_CHECKS.to_h { |k| [ k, ui[k] == true ] }
   ui_missing = UI_CHECKS - ui.keys
   ui_false = ui_results.reject { |_, v| v }.keys
   ui_ok = ui_missing.empty? && ui_false.empty?

@@ -32,7 +32,7 @@ class CreateLoyaltyPromoPushFeedback < ActiveRecord::Migration[8.1]
     add_check_constraint :loyalty_transactions, "transaction_type IN ('earn', 'spend', 'expire', 'manual_add', 'manual_subtract')", name: "chk_loyalty_txn_type"
     add_check_constraint :loyalty_transactions, "points > 0", name: "chk_loyalty_txn_points"
     add_check_constraint :loyalty_transactions, "balance_after >= 0", name: "chk_loyalty_txn_balance_after"
-    add_index :loyalty_transactions, [:customer_id, :created_at], order: { created_at: :desc }, if_not_exists: true, name: "idx_loyalty_tx_customer_created"
+    add_index :loyalty_transactions, [ :customer_id, :created_at ], order: { created_at: :desc }, if_not_exists: true, name: "idx_loyalty_tx_customer_created"
     add_index :loyalty_transactions, :order_id, if_not_exists: true
     add_index :loyalty_transactions, :tenant_id, if_not_exists: true
     add_index :loyalty_transactions, :transaction_type, if_not_exists: true, name: "idx_loyalty_tx_type"
@@ -53,7 +53,7 @@ class CreateLoyaltyPromoPushFeedback < ActiveRecord::Migration[8.1]
     add_index :promo_code_usages, :promo_code_id, if_not_exists: true
     add_index :promo_code_usages, :customer_id, if_not_exists: true
     add_index :promo_code_usages, :order_id, if_not_exists: true
-    add_index :promo_code_usages, [:tenant_id, :used_at], order: { used_at: :desc }, if_not_exists: true, name: "idx_promo_usage_tenant_used"
+    add_index :promo_code_usages, [ :tenant_id, :used_at ], order: { used_at: :desc }, if_not_exists: true, name: "idx_promo_usage_tenant_used"
 
     create_table :push_notifications, id: :uuid, default: -> { "gen_random_uuid()" } do |t|
       t.references :customer, type: :uuid, null: false, foreign_key: { to_table: :mobile_customers, on_delete: :cascade }
@@ -71,8 +71,8 @@ class CreateLoyaltyPromoPushFeedback < ActiveRecord::Migration[8.1]
     end
 
     add_check_constraint :push_notifications, "status IN ('pending', 'sent', 'failed', 'read')", name: "chk_push_status"
-    add_index :push_notifications, [:customer_id, :created_at], order: { created_at: :desc }, if_not_exists: true, name: "idx_push_customer_created"
-    add_index :push_notifications, [:tenant_id, :notification_type], if_not_exists: true, name: "idx_push_tenant_type"
+    add_index :push_notifications, [ :customer_id, :created_at ], order: { created_at: :desc }, if_not_exists: true, name: "idx_push_customer_created"
+    add_index :push_notifications, [ :tenant_id, :notification_type ], if_not_exists: true, name: "idx_push_tenant_type"
     add_index :push_notifications, :status, if_not_exists: true
     add_index :push_notifications, :scheduled_at, if_not_exists: true
 
@@ -93,7 +93,7 @@ class CreateLoyaltyPromoPushFeedback < ActiveRecord::Migration[8.1]
 
     add_check_constraint :order_feedback, "rating BETWEEN 1 AND 5", name: "chk_feedback_rating"
     add_check_constraint :order_feedback, "sentiment IS NULL OR sentiment IN ('positive', 'neutral', 'negative')", name: "chk_feedback_sentiment"
-    add_index :order_feedback, [:tenant_id, :created_at], order: { created_at: :desc }, if_not_exists: true, name: "idx_feedback_tenant_created"
+    add_index :order_feedback, [ :tenant_id, :created_at ], order: { created_at: :desc }, if_not_exists: true, name: "idx_feedback_tenant_created"
     add_index :order_feedback, :rating, if_not_exists: true
     add_index :order_feedback, :resolved, if_not_exists: true
     add_index :order_feedback, :positive_tags, using: :gin, if_not_exists: true

@@ -45,7 +45,7 @@ module PortKiller
     warn "=> Порт #{port} занят (PID #{old_pid}), завершаю старый процесс..."
     Process.kill("TERM", old_pid)
   rescue Errno::ESRCH, Errno::EPERM
-    return
+    nil
   else
     sleep 1.5
     begin

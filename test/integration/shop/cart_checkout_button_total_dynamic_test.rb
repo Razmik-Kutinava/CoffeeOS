@@ -63,4 +63,3 @@ class Shop::CartCheckoutButtonTotalDynamicTest < ActionDispatch::IntegrationTest
     assert_includes store, "Товар недоступен. Корзина обновлена."
   end
 end
-

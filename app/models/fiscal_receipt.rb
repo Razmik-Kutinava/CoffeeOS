@@ -3,8 +3,8 @@ class FiscalReceipt < ApplicationRecord
   # а не для STI. Поэтому отключаем STI-интерпретацию.
   self.inheritance_column = :_type_disabled
 
-  enum :type, { payment: 'payment', refund: 'refund' }
-  enum :status, { pending: 'pending', sent: 'sent', confirmed: 'confirmed', failed: 'failed' }
+  enum :type, { payment: "payment", refund: "refund" }
+  enum :status, { pending: "pending", sent: "sent", confirmed: "confirmed", failed: "failed" }
 
   belongs_to :tenant
   belongs_to :order
@@ -18,17 +18,17 @@ class FiscalReceipt < ApplicationRecord
   validate :refund_consistency
 
   scope :for_current_tenant, -> { where(tenant_id: Current.tenant_id) }
-  scope :pending, -> { where(status: 'pending') }
+  scope :pending, -> { where(status: "pending") }
 
   private
 
   def refund_consistency
     return unless type && refund_id
 
-    if type == 'payment' && refund_id.present?
-      errors.add(:refund_id, 'не должен быть указан для чека типа payment')
-    elsif type == 'refund' && refund_id.blank?
-      errors.add(:refund_id, 'должен быть указан для чека типа refund')
+    if type == "payment" && refund_id.present?
+      errors.add(:refund_id, "не должен быть указан для чека типа payment")
+    elsif type == "refund" && refund_id.blank?
+      errors.add(:refund_id, "должен быть указан для чека типа refund")
     end
   end
 end

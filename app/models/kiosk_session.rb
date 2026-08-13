@@ -1,9 +1,9 @@
 class KioskSession < ApplicationRecord
   enum :end_reason, {
-    timeout: 'timeout',
-    order_completed: 'order_completed',
-    manual_reset: 'manual_reset',
-    device_offline: 'device_offline'
+    timeout: "timeout",
+    order_completed: "order_completed",
+    manual_reset: "manual_reset",
+    device_offline: "device_offline"
   }
 
   belongs_to :device

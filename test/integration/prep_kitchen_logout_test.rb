@@ -52,4 +52,3 @@ class PrepKitchenLogoutTest < ActionDispatch::IntegrationTest
     assert_includes response.headers["Location"].to_s, "/login"
   end
 end
-

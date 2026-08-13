@@ -18,7 +18,7 @@ class CreateMobileCartsAndPaymentMethods < ActiveRecord::Migration[8.1]
     add_check_constraint :mobile_payment_methods, "payment_type IN ('card', 'sbp', 'ya_pay')", name: "chk_pm_type"
     add_index :mobile_payment_methods, :customer_id, if_not_exists: true, name: "idx_pm_customer"
     add_index :mobile_payment_methods, :customer_id, if_not_exists: true, where: "is_default = TRUE AND is_active = TRUE", name: "idx_pm_default"
-    add_index :mobile_payment_methods, [:customer_id, :is_active], if_not_exists: true, where: "is_active = TRUE", name: "idx_pm_active"
+    add_index :mobile_payment_methods, [ :customer_id, :is_active ], if_not_exists: true, where: "is_active = TRUE", name: "idx_pm_active"
 
     create_table :mobile_carts, id: :uuid, default: -> { "gen_random_uuid()" } do |t|
       t.references :customer, type: :uuid, null: false, foreign_key: { to_table: :mobile_customers, on_delete: :cascade }
@@ -29,7 +29,7 @@ class CreateMobileCartsAndPaymentMethods < ActiveRecord::Migration[8.1]
       t.timestamps
     end
 
-    add_index :mobile_carts, [:customer_id, :tenant_id], unique: true, if_not_exists: true
+    add_index :mobile_carts, [ :customer_id, :tenant_id ], unique: true, if_not_exists: true
     add_check_constraint :mobile_carts, "total_amount >= 0", name: "chk_mobile_cart_total"
     add_index :mobile_carts, :customer_id, if_not_exists: true, name: "idx_mobile_carts_customer"
     add_index :mobile_carts, :tenant_id, if_not_exists: true, name: "idx_mobile_carts_tenant"

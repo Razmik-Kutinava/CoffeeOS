@@ -66,7 +66,7 @@ class FranchisePlatformAdminTest < ActionDispatch::IntegrationTest
           email: "om-#{SecureRandom.hex(4)}@test.local",
           password: "pass123"
         },
-        role_codes: ["general_manager"]
+        role_codes: [ "general_manager" ]
       }
     end
     assert_redirected_to manager_dashboard_path

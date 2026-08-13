@@ -21,7 +21,7 @@ module Barista
       return unless Barista::OperatingHoursBoard.new(tenant: tenant, shift: shift).schedule_conflict?
 
       line = "#{CashShift::SCHEDULE_CLOSE_NOTE_TAG} #{Time.current.iso8601}] #{user.name} вышел: смена открыта вне расписания — закрыть через менеджера."
-      note = [shift.note, line].compact.join("\n")
+      note = [ shift.note, line ].compact.join("\n")
       shift.update!(note: note)
     end
 

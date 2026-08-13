@@ -71,7 +71,7 @@ module Manager
       codes = (codes & assignable_role_codes).map(&:to_s)
 
       if general_manager? && !franchise_manager? && !current_user.uk_global_admin?
-        codes -= ["general_manager"]
+        codes -= [ "general_manager" ]
       end
 
       desired_ids = codes.filter_map do |c|
@@ -94,7 +94,7 @@ module Manager
     def assignable_staff_role_codes
       c = assignable_role_codes.dup
       if general_manager? && !franchise_manager? && !current_user.uk_global_admin?
-        c -= ["general_manager"]
+        c -= [ "general_manager" ]
       end
       c
     end

@@ -113,7 +113,7 @@ class Shop::GuestOrderBroadcasterTest < ActiveSupport::TestCase
   test "#39 enqueues OrderReadyCascadeJob when status becomes ready" do
     @order.update!(status: :ready)
 
-    assert_enqueued_with(job: Shop::OrderReadyCascadeJob, args: [@order.id]) do
+    assert_enqueued_with(job: Shop::OrderReadyCascadeJob, args: [ @order.id ]) do
       Shop::GuestOrderBroadcaster.call(order: @order.reload, old_status: "preparing")
     end
   end
@@ -134,7 +134,7 @@ class Shop::GuestOrderBroadcasterTest < ActiveSupport::TestCase
     end
 
     assert_nothing_raised do
-      assert_enqueued_with(job: Shop::OrderReadyCascadeJob, args: [@order.id]) do
+      assert_enqueued_with(job: Shop::OrderReadyCascadeJob, args: [ @order.id ]) do
         Shop::GuestOrderBroadcaster.call(order: @order.reload, old_status: "preparing")
       end
     end

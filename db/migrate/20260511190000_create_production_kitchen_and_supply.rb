@@ -23,7 +23,7 @@ class CreateProductionKitchenAndSupply < ActiveRecord::Migration[8.1]
 
     add_foreign_key :production_recipes, :ingredients, column: :semifinished_id, on_delete: :cascade
     add_foreign_key :production_recipes, :ingredients, column: :ingredient_id, on_delete: :cascade
-    add_index :production_recipes, [:semifinished_id, :ingredient_id], unique: true, name: "idx_production_recipes_semifinished_ingredient"
+    add_index :production_recipes, [ :semifinished_id, :ingredient_id ], unique: true, name: "idx_production_recipes_semifinished_ingredient"
     add_index :production_recipes, :semifinished_id, name: "idx_production_recipes_semifinished"
     add_index :production_recipes, :ingredient_id, name: "idx_production_recipes_ingredient"
     add_check_constraint :production_recipes, "quantity > 0", name: "chk_production_recipe_quantity"
@@ -45,7 +45,7 @@ class CreateProductionKitchenAndSupply < ActiveRecord::Migration[8.1]
 
     add_check_constraint :production_batches, "quantity > 0", name: "chk_batch_quantity"
     add_check_constraint :production_batches, "status IN ('planned', 'in_progress', 'completed', 'cancelled')", name: "chk_batch_status"
-    add_index :production_batches, [:tenant_id, :status], name: "idx_production_batches_tenant_status"
+    add_index :production_batches, [ :tenant_id, :status ], name: "idx_production_batches_tenant_status"
     add_index :production_batches, :semifinished_id, name: "idx_production_batches_semifinished"
     add_index :production_batches, :planned_at, order: { planned_at: :desc }, name: "idx_production_batches_planned_at"
     add_index :production_batches, :expires_at, where: "expires_at IS NOT NULL", name: "idx_production_batches_expires"
@@ -66,8 +66,8 @@ class CreateProductionKitchenAndSupply < ActiveRecord::Migration[8.1]
     add_foreign_key :supply_orders, :tenants, column: :to_tenant_id, on_delete: :cascade
     add_check_constraint :supply_orders, "from_tenant_id <> to_tenant_id", name: "chk_supply_order_tenants"
     add_check_constraint :supply_orders, "status IN ('pending', 'confirmed', 'shipped', 'received', 'cancelled')", name: "chk_supply_order_status"
-    add_index :supply_orders, [:from_tenant_id, :status], name: "idx_supply_orders_from_tenant_status"
-    add_index :supply_orders, [:to_tenant_id, :status], name: "idx_supply_orders_to_tenant_status"
+    add_index :supply_orders, [ :from_tenant_id, :status ], name: "idx_supply_orders_from_tenant_status"
+    add_index :supply_orders, [ :to_tenant_id, :status ], name: "idx_supply_orders_to_tenant_status"
     add_index :supply_orders, :created_at, order: { created_at: :desc }, name: "idx_supply_orders_created_at"
 
     create_table :supply_order_items, id: :uuid, default: -> { "gen_random_uuid()" } do |t|
@@ -79,7 +79,7 @@ class CreateProductionKitchenAndSupply < ActiveRecord::Migration[8.1]
       t.text :note
     end
 
-    add_index :supply_order_items, [:supply_order_id, :ingredient_id], unique: true, name: "idx_supply_order_items_order_ingredient"
+    add_index :supply_order_items, [ :supply_order_id, :ingredient_id ], unique: true, name: "idx_supply_order_items_order_ingredient"
     add_index :supply_order_items, :supply_order_id, name: "idx_supply_order_items_supply_order"
     add_index :supply_order_items, :ingredient_id, name: "idx_supply_order_items_ingredient"
     add_check_constraint :supply_order_items, "quantity_requested > 0", name: "chk_supply_item_requested"

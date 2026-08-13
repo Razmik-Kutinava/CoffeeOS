@@ -5,16 +5,16 @@ require "test_helper"
 # Веха 1 / блок C: prep_kitchen_worker — просмотр своего цеха; без мутаций и чужих панелей.
 class Auth::PrepKitchenWorkerRbacTest < ActionDispatch::IntegrationTest
   READONLY_PATHS = [
-    [:dashboard, :prep_kitchen_dashboard_path],
-    [:queue, :prep_kitchen_queue_path],
-    [:inventory, :prep_kitchen_inventory_path],
-    [:movements, :prep_kitchen_movements_path]
+    [ :dashboard, :prep_kitchen_dashboard_path ],
+    [ :queue, :prep_kitchen_queue_path ],
+    [ :inventory, :prep_kitchen_inventory_path ],
+    [ :movements, :prep_kitchen_movements_path ]
   ].freeze
 
   FORBIDDEN_PANELS = [
-    [:barista, :barista_dashboard_path],
-    [:manager, :manager_dashboard_path],
-    [:platform, :platform_root_path]
+    [ :barista, :barista_dashboard_path ],
+    [ :manager, :manager_dashboard_path ],
+    [ :platform, :platform_root_path ]
   ].freeze
 
   setup do
@@ -103,7 +103,7 @@ class Auth::PrepKitchenWorkerRbacTest < ActionDispatch::IntegrationTest
         movement: {
           movement_type: "receipt",
           note: "blocked",
-          items: [{ ingredient_id: @ingredient.id, qty_change: 1, unit_cost: 10 }]
+          items: [ { ingredient_id: @ingredient.id, qty_change: 1, unit_cost: 10 } ]
         }
       }
     end

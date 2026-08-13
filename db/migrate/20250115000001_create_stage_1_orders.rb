@@ -12,7 +12,7 @@ class CreateStage1Orders < ActiveRecord::Migration[8.1]
         'cancelled'
       )
     SQL
-    
+
     # ENUM для источника заказа
     execute <<-SQL
       CREATE TYPE order_source AS ENUM (
@@ -22,7 +22,7 @@ class CreateStage1Orders < ActiveRecord::Migration[8.1]
         'mobile'
       )
     SQL
-    
+
     # Таблица order_cancel_reasons (справочник причин отмены)
     create_table :order_cancel_reasons, id: false do |t|
       t.string :code, primary_key: true, limit: 50
@@ -32,9 +32,9 @@ class CreateStage1Orders < ActiveRecord::Migration[8.1]
       t.boolean :is_active, default: true, null: false
       t.timestamps
     end
-    
+
     execute "COMMENT ON TABLE order_cancel_reasons IS 'Справочник причин отмены заказа'"
-    
+
     # Таблица orders (заказы)
     create_table :orders, id: :uuid, default: -> { "gen_random_uuid()" } do |t|
       t.references :tenant, type: :uuid, null: false, foreign_key: { on_delete: :cascade }
@@ -56,18 +56,18 @@ class CreateStage1Orders < ActiveRecord::Migration[8.1]
       t.timestamp :qr_expires_at
       t.timestamps
     end
-    
-    add_index :orders, [:tenant_id, :order_number], unique: true, name: 'idx_orders_tenant_number', if_not_exists: true
+
+    add_index :orders, [ :tenant_id, :order_number ], unique: true, name: 'idx_orders_tenant_number', if_not_exists: true
     add_index :orders, :tenant_id, if_not_exists: true
     add_index :orders, :status, if_not_exists: true
-    add_index :orders, [:tenant_id, :status], if_not_exists: true
-    add_index :orders, [:tenant_id, :created_at], order: { created_at: :desc }, if_not_exists: true
+    add_index :orders, [ :tenant_id, :status ], if_not_exists: true
+    add_index :orders, [ :tenant_id, :created_at ], order: { created_at: :desc }, if_not_exists: true
     add_index :orders, :order_number, if_not_exists: true
     add_index :orders, :customer_id, if_not_exists: true
     add_index :orders, :qr_token, where: "qr_token IS NOT NULL", if_not_exists: true
-    
+
     add_foreign_key :orders, :order_cancel_reasons, column: :cancel_reason_code, primary_key: :code, on_delete: :nullify
-    
+
     execute <<-SQL
       ALTER TABLE orders
       ADD CONSTRAINT chk_order_amounts CHECK (
@@ -77,11 +77,11 @@ class CreateStage1Orders < ActiveRecord::Migration[8.1]
         final_amount = total_amount - discount_amount
       )
     SQL
-    
+
     execute "COMMENT ON TABLE orders IS 'Заказы клиентов'"
     execute "COMMENT ON COLUMN orders.order_number IS 'Читаемый номер заказа #YYYYMM-#### (уникален в пределах тенанта)'"
     execute "COMMENT ON COLUMN orders.order_sequence IS 'Автоинкремент для генерации номера заказа'"
-    
+
     # Таблица order_items (позиции заказа)
     create_table :order_items, id: :uuid, default: -> { "gen_random_uuid()" } do |t|
       t.references :order, type: :uuid, null: false, foreign_key: { on_delete: :cascade }
@@ -93,11 +93,11 @@ class CreateStage1Orders < ActiveRecord::Migration[8.1]
       t.jsonb :modifier_options, default: {}
       t.timestamps
     end
-    
+
     add_index :order_items, :order_id, if_not_exists: true
     add_index :order_items, :product_id, if_not_exists: true
     add_index :order_items, :modifier_options, using: :gin, if_not_exists: true
-    
+
     execute <<-SQL
       ALTER TABLE order_items
       ADD CONSTRAINT chk_order_item_quantity CHECK (quantity > 0),
@@ -106,11 +106,11 @@ class CreateStage1Orders < ActiveRecord::Migration[8.1]
         total_price = unit_price * quantity
       )
     SQL
-    
+
     execute "COMMENT ON TABLE order_items IS 'Позиции заказа (продукты + модификаторы)'"
     execute "COMMENT ON COLUMN order_items.product_name IS 'Снапшот названия на момент заказа'"
     execute "COMMENT ON COLUMN order_items.modifier_options IS 'JSON: {\"milk_type\": \"uuid\", \"syrup\": \"uuid\"}'"
-    
+
     # Таблица order_status_log (история статусов)
     create_table :order_status_logs, id: :uuid, default: -> { "gen_random_uuid()" } do |t|
       t.references :order, type: :uuid, null: false, foreign_key: { on_delete: :cascade }
@@ -122,18 +122,18 @@ class CreateStage1Orders < ActiveRecord::Migration[8.1]
       t.text :comment
       t.timestamps
     end
-    
+
     add_index :order_status_logs, :order_id, if_not_exists: true
     add_index :order_status_logs, :changed_by_id, if_not_exists: true
     add_index :order_status_logs, :created_at, if_not_exists: true
-    
+
     execute "COMMENT ON TABLE order_status_logs IS 'История изменений статуса заказа'"
-    
+
     # Включаем RLS
     execute "ALTER TABLE orders ENABLE ROW LEVEL SECURITY"
     execute "ALTER TABLE order_items ENABLE ROW LEVEL SECURITY"
     execute "ALTER TABLE order_status_logs ENABLE ROW LEVEL SECURITY"
-    
+
     # RLS политики для orders
     execute <<-SQL
       CREATE POLICY rls_orders_isolation ON orders
@@ -148,7 +148,7 @@ class CreateStage1Orders < ActiveRecord::Migration[8.1]
           )
         )
     SQL
-    
+
     # RLS политики для order_items (через order.tenant_id)
     execute <<-SQL
       CREATE POLICY rls_order_items_isolation ON order_items
@@ -167,7 +167,7 @@ class CreateStage1Orders < ActiveRecord::Migration[8.1]
           )
         )
     SQL
-    
+
     # RLS политики для order_status_logs (через order.tenant_id)
     execute <<-SQL
       CREATE POLICY rls_order_status_logs_isolation ON order_status_logs
@@ -181,17 +181,17 @@ class CreateStage1Orders < ActiveRecord::Migration[8.1]
         )
     SQL
   end
-  
+
   def down
     execute "DROP POLICY IF EXISTS rls_order_status_logs_isolation ON order_status_logs"
     execute "DROP POLICY IF EXISTS rls_order_items_isolation ON order_items"
     execute "DROP POLICY IF EXISTS rls_orders_isolation ON orders"
-    
+
     drop_table :order_status_logs, if_exists: true
     drop_table :order_items, if_exists: true
     drop_table :orders, if_exists: true
     drop_table :order_cancel_reasons, if_exists: true
-    
+
     execute "DROP TYPE IF EXISTS order_source"
     execute "DROP TYPE IF EXISTS order_status"
   end

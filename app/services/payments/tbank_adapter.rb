@@ -67,7 +67,7 @@ module Payments
       end
       raise ApiError.new(
         error_code: response["ErrorCode"],
-        message: [response["Message"], response["Details"]].compact_blank.join(" — ")
+        message: [ response["Message"], response["Details"] ].compact_blank.join(" — ")
       ) unless response["Success"]
 
       {
@@ -90,7 +90,7 @@ module Payments
       end
       raise ApiError.new(
         error_code: response["ErrorCode"],
-        message: [response["Message"], response["Details"]].compact_blank.join(" — ")
+        message: [ response["Message"], response["Details"] ].compact_blank.join(" — ")
       ) unless response["Success"]
 
       response
@@ -111,7 +111,7 @@ module Payments
 
       raise ApiError.new(
         error_code: response["ErrorCode"],
-        message: [response["Message"], response["Details"]].compact_blank.join(" — ")
+        message: [ response["Message"], response["Details"] ].compact_blank.join(" — ")
       ) unless response["Success"]
 
       response
@@ -132,7 +132,7 @@ module Payments
 
       raise ApiError.new(
         error_code: response["ErrorCode"],
-        message: [response["Message"], response["Details"]].compact_blank.join(" — ")
+        message: [ response["Message"], response["Details"] ].compact_blank.join(" — ")
       ) unless response["Success"]
 
       response

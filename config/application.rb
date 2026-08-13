@@ -23,9 +23,9 @@ module CoffeeOs
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
-    
+
     # Автозагрузка middleware
-    config.autoload_paths << Rails.root.join('app/middleware')
+    config.autoload_paths << Rails.root.join("app/middleware")
 
     # Лог каждого запроса в JSON (шумно). Включить: LOG_TENANT_MIDDLEWARE=1
     if ENV["LOG_TENANT_MIDDLEWARE"].present?

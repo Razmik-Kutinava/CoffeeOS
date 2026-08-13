@@ -8,8 +8,8 @@ class Barista::DashboardHelperTest < ActionView::TestCase
   test "barista_modifier_tags splits added and removed" do
     item = Struct.new(:modifier_options).new(
       {
-        "selected_modifiers" => [{ "name" => "Со льдом" }],
-        "removed_modifiers" => [{ "name" => "Сахар" }]
+        "selected_modifiers" => [ { "name" => "Со льдом" } ],
+        "removed_modifiers" => [ { "name" => "Сахар" } ]
       }
     )
 
@@ -29,10 +29,10 @@ class Barista::DashboardHelperTest < ActionView::TestCase
 
   test "barista_board_modifier_label" do
     assert_equal "+ Со льдом", barista_board_modifier_label(
-      added: [{ "name" => "Со льдом" }], removed: []
+      added: [ { "name" => "Со льдом" } ], removed: []
     )
     assert_equal "БЕЗ Сахар", barista_board_modifier_label(
-      added: [], removed: [{ "name" => "Сахар" }]
+      added: [], removed: [ { "name" => "Сахар" } ]
     )
     assert_nil barista_board_modifier_label(added: [], removed: [])
   end

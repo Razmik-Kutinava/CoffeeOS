@@ -34,9 +34,9 @@ NULL_DEV = Gem.win_platform? ? "NUL" : "/dev/null"
 
 def curl_json(*args)
   raw = curl(*args)
-  [JSON.parse(raw), raw]
+  [ JSON.parse(raw), raw ]
 rescue JSON::ParserError
-  [{ "raw" => raw }, raw]
+  [ { "raw" => raw }, raw ]
 end
 
 def curl_post_json(*args)
@@ -45,9 +45,9 @@ def curl_post_json(*args)
   http = lines.last.to_s.strip.to_i
   body_raw = lines[0..-2].join
   body = JSON.parse(body_raw)
-  [body, http]
+  [ body, http ]
 rescue JSON::ParserError
-  [{ "raw" => body_raw }, http]
+  [ { "raw" => body_raw }, http ]
 end
 
 def curl(*args)
@@ -103,7 +103,7 @@ def fetch_otp_from_fly(email)
   out, err, status = Open3.capture3(
     FLY_BIN, "machine", "exec", fly_machine_id, "-a", FLY_APP, remote_cmd
   )
-  combined = [out, err].join("\n")
+  combined = [ out, err ].join("\n")
   code = extract_otp_code(combined)
   code = nil if code == "NONE"
 

@@ -10,16 +10,16 @@ class AlertService
         context: context
       ).deliver_later
     end
-    
+
     # Telegram (если настроен)
-    if ENV['TELEGRAM_BOT_TOKEN'] && ENV['TELEGRAM_CHAT_ID']
+    if ENV["TELEGRAM_BOT_TOKEN"] && ENV["TELEGRAM_CHAT_ID"]
       TelegramAlertJob.perform_later(message, context)
     end
-    
+
     # Логирование
     Rails.logger.error("[ALERT] CRITICAL: #{message}", context)
   end
-  
+
   # Предупреждения (только email)
   def self.warning(message:, context: {})
     AdminUser.where(receive_alerts: true).each do |admin|
@@ -29,10 +29,10 @@ class AlertService
         context: context
       ).deliver_later
     end
-    
+
     Rails.logger.warn("[ALERT] WARNING: #{message}", context)
   end
-  
+
   # Информационные сообщения (только логи)
   def self.info(message:, context: {})
     Rails.logger.info("[ALERT] INFO: #{message}", context)

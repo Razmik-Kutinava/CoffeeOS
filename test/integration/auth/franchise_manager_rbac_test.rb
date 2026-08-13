@@ -5,9 +5,9 @@ require "test_helper"
 # Веха 1 / блок C: franchise_manager — просмотр своих точек; без POS и редактирования меню.
 class Auth::FranchiseManagerRbacTest < ActionDispatch::IntegrationTest
   FORBIDDEN_PANELS = [
-    [:barista, :barista_dashboard_path],
-    [:prep_kitchen, :prep_kitchen_dashboard_path],
-    [:platform, :platform_root_path]
+    [ :barista, :barista_dashboard_path ],
+    [ :prep_kitchen, :prep_kitchen_dashboard_path ],
+    [ :platform, :platform_root_path ]
   ].freeze
 
   setup do

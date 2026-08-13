@@ -1,7 +1,7 @@
 class ProductTenantSetting < ApplicationRecord
   belongs_to :tenant
   belongs_to :product
-  belongs_to :price_updated_by, class_name: 'User', optional: true
+  belongs_to :price_updated_by, class_name: "User", optional: true
 
   validates :tenant_id, uniqueness: { scope: :product_id }
   validates :price, numericality: { greater_than: 0 }, allow_nil: true
@@ -22,13 +22,13 @@ class ProductTenantSetting < ApplicationRecord
   def enabled_requires_price
     return unless is_enabled && price.blank?
 
-    errors.add(:price, 'должна быть указана для включённого продукта')
+    errors.add(:price, "должна быть указана для включённого продукта")
   end
 
   def sold_out_reason_consistency
     return if is_sold_out == false && sold_out_reason.blank?
     return if is_sold_out == true && sold_out_reason.in?(%w[manual stock_empty])
 
-    errors.add(:sold_out_reason, 'должна быть manual или stock_empty при is_sold_out=true')
+    errors.add(:sold_out_reason, "должна быть manual или stock_empty при is_sold_out=true")
   end
 end

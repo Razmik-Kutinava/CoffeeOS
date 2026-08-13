@@ -29,4 +29,3 @@ class Shop::CartExpandedImageOpenEditCardTest < ActionDispatch::IntegrationTest
     assert_includes sheet, "selected_modifiers"
   end
 end
-

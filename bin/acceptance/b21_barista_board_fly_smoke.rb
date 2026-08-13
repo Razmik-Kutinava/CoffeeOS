@@ -55,9 +55,9 @@ def curl_post_json(*args)
   lines = raw.lines
   http = lines.last.to_s.strip.to_i
   body_raw = lines[0..-2].join
-  [JSON.parse(body_raw), http]
+  [ JSON.parse(body_raw), http ]
 rescue JSON::ParserError
-  [{ "raw" => body_raw }, http]
+  [ { "raw" => body_raw }, http ]
 end
 
 def csrf_token(html)
@@ -103,7 +103,7 @@ def fetch_otp_from_fly(email)
   ruby = "puts ShopEmailOtpCode.active(#{email.inspect}).order(created_at: :desc).limit(1).pick(:code) || 'NONE'"
   remote_cmd = "/rails/bin/rails runner #{ruby.inspect}"
   out, err, = Open3.capture3(FLY_BIN, "machine", "exec", fly_machine_id, "-a", FLY_APP, remote_cmd)
-  combined = [out, err].join
+  combined = [ out, err ].join
   code = combined.scan(/\b(\d{6})\b/).last&.first
   code = nil if code == "NONE"
   code
@@ -243,7 +243,7 @@ begin
                     cancel_overlay: card_html.include?("СТОП! ЗАКАЗ ОТМЕНЁН"),
                     cancel_confirm: card_html.include?("ПОДТВЕРДИТЬ ОТМЕНУ")
                   }
-                else
+  else
                   {
                     order_card: card_html.include?("board-slot-card"),
                     status_button: card_html.include?("card-btn-status"),
@@ -251,7 +251,7 @@ begin
                     cancel_overlay: card_html.include?("СТОП! ЗАКАЗ ОТМЕНЁН"),
                     cancel_confirm: card_html.include?("ПОДТВЕРДИТЬ ОТМЕНУ")
                   }
-                end
+  end
   result[:checks] << {
     id: REVISION ? "b21_revision_board_markup" : "b21_board_markup",
     pass: on_board && b21_markers.values.all?,

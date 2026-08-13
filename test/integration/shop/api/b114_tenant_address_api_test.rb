@@ -68,7 +68,7 @@ class Shop::Api::B114TenantAddressApiTest < ActionDispatch::IntegrationTest
     assert_equal true, json["switchable"]
     assert_equal 3, json["tenants"].size
     ids = json["tenants"].map { |t| t["id"] }
-    assert_equal [@tenant_a.id, @tenant_c.id, @tenant_b.id], ids
+    assert_equal [ @tenant_a.id, @tenant_c.id, @tenant_b.id ], ids
     assert json["tenants"].first["is_current"]
     assert_nil json["last_ordered_tenant_id"]
   end

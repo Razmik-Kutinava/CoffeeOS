@@ -30,11 +30,11 @@ class Manager::MenuPriceVitrinaCacheTest < ActionDispatch::IntegrationTest
   test "manager price update busts shop categories cache so vitrina shows new price" do
     cache_key = "shop/categories/#{@tenant.id}//"
     stale = {
-      "data" => [{
+      "data" => [ {
         "id" => @product.category_id,
         "name" => "Stale",
-        "products" => [{ "id" => @product.id, "name" => @product.name, "price" => 100.0 }]
-      }],
+        "products" => [ { "id" => @product.id, "name" => @product.name, "price" => 100.0 } ]
+      } ],
       "meta" => { "page" => 1, "per_page" => 50 }
     }
     Rails.cache.write(cache_key, stale, expires_in: 5.minutes)

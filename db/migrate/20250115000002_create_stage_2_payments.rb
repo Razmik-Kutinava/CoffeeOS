@@ -12,7 +12,7 @@ class CreateStage2Payments < ActiveRecord::Migration[8.1]
         'mixed'
       )
     SQL
-    
+
     # ENUM для статусов платежа
     execute <<-SQL
       CREATE TYPE payment_status AS ENUM (
@@ -25,7 +25,7 @@ class CreateStage2Payments < ActiveRecord::Migration[8.1]
         'requires_review'
       )
     SQL
-    
+
     # Таблица payments (платежи)
     create_table :payments, id: :uuid, default: -> { "gen_random_uuid()" } do |t|
       t.references :tenant, type: :uuid, null: false, foreign_key: { on_delete: :cascade }
@@ -39,15 +39,15 @@ class CreateStage2Payments < ActiveRecord::Migration[8.1]
       t.timestamp :paid_at
       t.timestamps
     end
-    
+
     add_index :payments, :tenant_id, if_not_exists: true
     add_index :payments, :order_id, if_not_exists: true
     add_index :payments, :status, if_not_exists: true
     add_index :payments, :provider_payment_id, where: "provider_payment_id IS NOT NULL", if_not_exists: true
-    add_index :payments, [:tenant_id, :status], if_not_exists: true
-    
+    add_index :payments, [ :tenant_id, :status ], if_not_exists: true
+
     execute "COMMENT ON TABLE payments IS 'Платежи по заказам'"
-    
+
     # Таблица payment_status_logs (история статусов платежей)
     create_table :payment_status_logs, id: :uuid, default: -> { "gen_random_uuid()" } do |t|
       t.references :payment, type: :uuid, null: false, foreign_key: { on_delete: :cascade }
@@ -58,12 +58,12 @@ class CreateStage2Payments < ActiveRecord::Migration[8.1]
       t.text :note
       t.timestamps
     end
-    
+
     add_index :payment_status_logs, :payment_id, if_not_exists: true
     add_index :payment_status_logs, :created_at, if_not_exists: true
-    
+
     execute "COMMENT ON TABLE payment_status_logs IS 'История статусов платежей'"
-    
+
     # Таблица payment_polling_attempts (попытки опроса статуса)
     create_table :payment_polling_attempts, id: :uuid, default: -> { "gen_random_uuid()" } do |t|
       t.references :payment, type: :uuid, null: false, foreign_key: { on_delete: :cascade }
@@ -74,12 +74,12 @@ class CreateStage2Payments < ActiveRecord::Migration[8.1]
       t.text :error_message
       t.timestamps
     end
-    
+
     add_index :payment_polling_attempts, :payment_id, if_not_exists: true
     add_index :payment_polling_attempts, :created_at, if_not_exists: true
-    
+
     execute "COMMENT ON TABLE payment_polling_attempts IS 'Попытки опроса статуса платежа у провайдера'"
-    
+
     # Таблица refunds (возвраты)
     create_table :refunds, id: :uuid, default: -> { "gen_random_uuid()" } do |t|
       t.references :tenant, type: :uuid, null: false, foreign_key: { on_delete: :cascade }
@@ -93,15 +93,15 @@ class CreateStage2Payments < ActiveRecord::Migration[8.1]
       t.jsonb :provider_data, default: {}
       t.timestamps
     end
-    
+
     add_index :refunds, :tenant_id, if_not_exists: true
     add_index :refunds, :payment_id, if_not_exists: true
     add_index :refunds, :order_id, if_not_exists: true
     add_index :refunds, :status, if_not_exists: true
     add_index :refunds, :provider_refund_id, where: "provider_refund_id IS NOT NULL", if_not_exists: true
-    
+
     execute "COMMENT ON TABLE refunds IS 'Возвраты средств'"
-    
+
     # Таблица fiscal_receipts (фискальные чеки)
     create_table :fiscal_receipts, id: :uuid, default: -> { "gen_random_uuid()" } do |t|
       t.references :tenant, type: :uuid, null: false, foreign_key: { on_delete: :cascade }
@@ -118,16 +118,16 @@ class CreateStage2Payments < ActiveRecord::Migration[8.1]
       t.text :error_message
       t.timestamps
     end
-    
+
     add_index :fiscal_receipts, :tenant_id, if_not_exists: true
     add_index :fiscal_receipts, :order_id, if_not_exists: true
     add_index :fiscal_receipts, :payment_id, if_not_exists: true
     add_index :fiscal_receipts, :refund_id, if_not_exists: true
     add_index :fiscal_receipts, :status, if_not_exists: true
     add_index :fiscal_receipts, :ofd_receipt_id, where: "ofd_receipt_id IS NOT NULL", if_not_exists: true
-    
+
     execute "COMMENT ON TABLE fiscal_receipts IS 'Фискальные чеки (ОФД)'"
-    
+
     # Таблица cash_shifts (кассовые смены)
     create_table :cash_shifts, id: :uuid, default: -> { "gen_random_uuid()" } do |t|
       t.references :tenant, type: :uuid, null: false, foreign_key: { on_delete: :cascade }
@@ -145,15 +145,14 @@ class CreateStage2Payments < ActiveRecord::Migration[8.1]
       t.text :note
       t.timestamps
     end
-    
+
     add_index :cash_shifts, :tenant_id, if_not_exists: true
     add_index :cash_shifts, :status, if_not_exists: true
     add_index :cash_shifts, :opened_at, order: { opened_at: :desc }, if_not_exists: true
-, if_not_exists: true, if_not_exists: true
-    add_index :cash_shifts, [:tenant_id, :status], where: "status = 'open'", unique: true, name: 'idx_one_open_shift_per_tenant'
-    
+    add_index :cash_shifts, [ :tenant_id, :status ], where: "status = 'open'", unique: true, name: "idx_one_open_shift_per_tenant", if_not_exists: true
+
     execute "COMMENT ON TABLE cash_shifts IS 'Кассовые смены'"
-    
+
     # Включаем RLS
     execute "ALTER TABLE payments ENABLE ROW LEVEL SECURITY"
     execute "ALTER TABLE payment_status_logs ENABLE ROW LEVEL SECURITY"
@@ -161,7 +160,7 @@ class CreateStage2Payments < ActiveRecord::Migration[8.1]
     execute "ALTER TABLE refunds ENABLE ROW LEVEL SECURITY"
     execute "ALTER TABLE fiscal_receipts ENABLE ROW LEVEL SECURITY"
     execute "ALTER TABLE cash_shifts ENABLE ROW LEVEL SECURITY"
-    
+
     # RLS политики для payments
     execute <<-SQL
       CREATE POLICY rls_payments_isolation ON payments
@@ -176,7 +175,7 @@ class CreateStage2Payments < ActiveRecord::Migration[8.1]
           )
         )
     SQL
-    
+
     # RLS политики для payment_status_logs (через payment.tenant_id)
     execute <<-SQL
       CREATE POLICY rls_payment_status_logs_isolation ON payment_status_logs
@@ -189,7 +188,7 @@ class CreateStage2Payments < ActiveRecord::Migration[8.1]
           )
         )
     SQL
-    
+
     # RLS политики для payment_polling_attempts (через payment.tenant_id)
     execute <<-SQL
       CREATE POLICY rls_payment_polling_attempts_isolation ON payment_polling_attempts
@@ -202,7 +201,7 @@ class CreateStage2Payments < ActiveRecord::Migration[8.1]
           )
         )
     SQL
-    
+
     # RLS политики для refunds
     execute <<-SQL
       CREATE POLICY rls_refunds_isolation ON refunds
@@ -211,7 +210,7 @@ class CreateStage2Payments < ActiveRecord::Migration[8.1]
           tenant_id = NULLIF(current_setting('app.current_tenant_id', TRUE), '')::UUID
         )
     SQL
-    
+
     # RLS политики для fiscal_receipts
     execute <<-SQL
       CREATE POLICY rls_fiscal_receipts_isolation ON fiscal_receipts
@@ -220,7 +219,7 @@ class CreateStage2Payments < ActiveRecord::Migration[8.1]
           tenant_id = NULLIF(current_setting('app.current_tenant_id', TRUE), '')::UUID
         )
     SQL
-    
+
     # RLS политики для cash_shifts
     execute <<-SQL
       CREATE POLICY rls_cash_shifts_isolation ON cash_shifts
@@ -230,7 +229,7 @@ class CreateStage2Payments < ActiveRecord::Migration[8.1]
         )
     SQL
   end
-  
+
   def down
     execute "DROP POLICY IF EXISTS rls_cash_shifts_isolation ON cash_shifts"
     execute "DROP POLICY IF EXISTS rls_fiscal_receipts_isolation ON fiscal_receipts"
@@ -238,14 +237,14 @@ class CreateStage2Payments < ActiveRecord::Migration[8.1]
     execute "DROP POLICY IF EXISTS rls_payment_polling_attempts_isolation ON payment_polling_attempts"
     execute "DROP POLICY IF EXISTS rls_payment_status_logs_isolation ON payment_status_logs"
     execute "DROP POLICY IF EXISTS rls_payments_isolation ON payments"
-    
+
     drop_table :cash_shifts, if_exists: true
     drop_table :fiscal_receipts, if_exists: true
     drop_table :refunds, if_exists: true
     drop_table :payment_polling_attempts, if_exists: true
     drop_table :payment_status_logs, if_exists: true
     drop_table :payments, if_exists: true
-    
+
     execute "DROP TYPE IF EXISTS payment_status"
     execute "DROP TYPE IF EXISTS payment_method"
   end

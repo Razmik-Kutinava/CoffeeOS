@@ -1,5 +1,5 @@
 class Category < ApplicationRecord
-  belongs_to :created_by, class_name: 'User', optional: true
+  belongs_to :created_by, class_name: "User", optional: true
   has_many :products, dependent: :restrict_with_error
 
   validates :name, presence: true

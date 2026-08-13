@@ -18,7 +18,7 @@ class Barista::OrderCreationServiceTest < ActiveSupport::TestCase
   teardown { Current.reset }
 
   def call_service(cart_items: nil, payment_method: "cash", promo_code: nil)
-    cart_items ||= [{ product_id: @product.id, quantity: 2 }]
+    cart_items ||= [ { product_id: @product.id, quantity: 2 } ]
     Barista::OrderCreationService.new(
       cart_items:     cart_items,
       payment_method: payment_method,
@@ -58,7 +58,7 @@ class Barista::OrderCreationServiceTest < ActiveSupport::TestCase
 
   test "raises RecordNotFound when product_id does not exist" do
     assert_raises(ActiveRecord::RecordNotFound) do
-      call_service(cart_items: [{ product_id: 0, quantity: 1 }])
+      call_service(cart_items: [ { product_id: 0, quantity: 1 } ])
     end
   end
 
@@ -95,14 +95,14 @@ class Barista::OrderCreationServiceTest < ActiveSupport::TestCase
 
   test "creates two orders with distinct order numbers" do
     first = call_service
-    second = call_service(cart_items: [{ product_id: @product.id, quantity: 1 }])
+    second = call_service(cart_items: [ { product_id: @product.id, quantity: 1 } ])
 
     assert_not_equal first.order_number, second.order_number
     assert_match(/\A#\d{6}-\d{4}\z/, second.order_number)
   end
 
   test "order total_amount equals price * quantity" do
-    order = call_service(cart_items: [{ product_id: @product.id, quantity: 3 }])
+    order = call_service(cart_items: [ { product_id: @product.id, quantity: 3 } ])
     assert_equal 450, order.total_amount
   end
 
@@ -168,7 +168,7 @@ class Barista::OrderCreationServiceTest < ActiveSupport::TestCase
   test "valid active promo code applies discount" do
     build_promo!(code: "SAVE10", percent: 10)
     order = call_service(
-      cart_items: [{ product_id: @product.id, quantity: 2 }],
+      cart_items: [ { product_id: @product.id, quantity: 2 } ],
       promo_code: "SAVE10"
     )
     assert_equal 30, order.discount_amount
@@ -178,7 +178,7 @@ class Barista::OrderCreationServiceTest < ActiveSupport::TestCase
   test "expired promo code results in zero discount" do
     build_promo!(code: "OLD20", percent: 20, from: 10.days.ago, to: 2.days.ago)
     order = call_service(
-      cart_items: [{ product_id: @product.id, quantity: 2 }],
+      cart_items: [ { product_id: @product.id, quantity: 2 } ],
       promo_code: "OLD20"
     )
     assert_equal 0, order.discount_amount
@@ -187,7 +187,7 @@ class Barista::OrderCreationServiceTest < ActiveSupport::TestCase
   test "inactive promo code results in zero discount" do
     build_promo!(code: "OFF15", percent: 15, active: false)
     order = call_service(
-      cart_items: [{ product_id: @product.id, quantity: 2 }],
+      cart_items: [ { product_id: @product.id, quantity: 2 } ],
       promo_code: "OFF15"
     )
     assert_equal 0, order.discount_amount
@@ -197,7 +197,7 @@ class Barista::OrderCreationServiceTest < ActiveSupport::TestCase
     build_promo!(code: "USED5", percent: 5, max_uses: 1)
     PromoCode.find_by(code: "USED5").update!(used_count: 1)
     order = call_service(
-      cart_items: [{ product_id: @product.id, quantity: 2 }],
+      cart_items: [ { product_id: @product.id, quantity: 2 } ],
       promo_code: "USED5"
     )
     assert_equal 0, order.discount_amount
@@ -215,7 +215,7 @@ class Barista::OrderCreationServiceTest < ActiveSupport::TestCase
 
     assert_raises(ActiveRecord::RecordNotFound, Barista::CartValidationService::CartValidationError) do
       Barista::OrderCreationService.new(
-        cart_items:     [{ product_id: SecureRandom.uuid, quantity: 1 }],
+        cart_items:     [ { product_id: SecureRandom.uuid, quantity: 1 } ],
         payment_method: "cash",
         customer_name:  "Test",
         promo_code:     nil,

@@ -8,7 +8,7 @@ class Shop::Api::B111OperatingHoursTest < ActionDispatch::IntegrationTest
 
   setup do
     @tenant = create_tenant!
-    seed_weekdays(mon_fri: ["09:00", "21:00"])
+    seed_weekdays(mon_fri: [ "09:00", "21:00" ])
     category = create_category!
     @product = create_product!(category: category)
     enable_product_for_tenant!(tenant: @tenant, product: @product, price: 200)

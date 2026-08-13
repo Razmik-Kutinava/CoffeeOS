@@ -15,6 +15,6 @@ class OrderItem < ApplicationRecord
     return unless unit_price && quantity && total_price
     return if total_price == unit_price * quantity
 
-    errors.add(:total_price, 'должна равняться unit_price * quantity')
+    errors.add(:total_price, "должна равняться unit_price * quantity")
   end
 end

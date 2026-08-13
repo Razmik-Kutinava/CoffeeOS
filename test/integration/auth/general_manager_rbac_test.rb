@@ -5,17 +5,17 @@ require "test_helper"
 # Веха 1 / блок C: general_manager — меню, цены, staff, склад своей точки; чужие панели закрыты.
 class Auth::GeneralManagerRbacTest < ActionDispatch::IntegrationTest
   PRIVILEGED_PATHS = [
-    [:menu, :manager_menu_path],
-    [:inventory, :manager_inventory_path],
-    [:staff, :manager_staff_members_path],
-    [:devices, :manager_devices_path],
-    [:reports, :manager_reports_path]
+    [ :menu, :manager_menu_path ],
+    [ :inventory, :manager_inventory_path ],
+    [ :staff, :manager_staff_members_path ],
+    [ :devices, :manager_devices_path ],
+    [ :reports, :manager_reports_path ]
   ].freeze
 
   OTHER_PANEL_PATHS = [
-    [:barista, :barista_dashboard_path],
-    [:prep_kitchen, :prep_kitchen_dashboard_path],
-    [:platform, :platform_root_path]
+    [ :barista, :barista_dashboard_path ],
+    [ :prep_kitchen, :prep_kitchen_dashboard_path ],
+    [ :platform, :platform_root_path ]
   ].freeze
 
   setup do

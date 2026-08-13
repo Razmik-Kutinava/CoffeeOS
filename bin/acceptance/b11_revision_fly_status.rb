@@ -18,7 +18,7 @@ fly_bin = ENV.fetch("FLY_BIN", "flyctl")
 app = ENV.fetch("FLY_APP", "coffeeos")
 
 ruby = case action
-       when "accept_payment"
+when "accept_payment"
          [
            "order = Order.find(#{order_id.inspect})",
            "payment = order.payments.order(created_at: :desc).first",
@@ -26,7 +26,7 @@ ruby = case action
            "Callbacks::PaymentStatusUpdater.new(payment: payment, new_status: 'succeeded', note: 'b11_revision_fly').call!",
            "puts order.reload.status"
          ].join("; ")
-       when "preparing", "ready"
+when "preparing", "ready"
          [
            "order = Order.find(#{order_id.inspect})",
            "user = User.find_by!(email: #{barista_email.inspect})",
@@ -35,9 +35,9 @@ ruby = case action
            "Barista::OrderStatusUpdateService.new(order: order, new_status: #{action.inspect}, user_id: user.id).call!",
            "puts order.reload.status"
          ].join("; ")
-       else
+else
          raise "unknown action: #{action}"
-       end
+end
 
 out, status_list = Open3.capture2(fly_bin, "machine", "list", "-a", app, "--json")
 raise "fly machine list failed" unless status_list.success?
@@ -46,7 +46,7 @@ machines = JSON.parse(out)
 mid = (machines.find { |m| m["state"] == "started" } || machines.first)["id"]
 remote = "/rails/bin/rails runner #{ruby.inspect}"
 out, err, st = Open3.capture3(fly_bin, "machine", "exec", mid, "-a", app, remote)
-combined = [out, err].join.strip
+combined = [ out, err ].join.strip
 raise "fly status update failed: #{combined}" unless st.success?
 
 puts "order #{order_id} #{action} -> #{combined.lines.last&.strip}"

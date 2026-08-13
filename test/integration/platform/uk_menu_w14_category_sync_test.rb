@@ -70,7 +70,7 @@ class Platform::UkMenuW14CategorySyncTest < ActionDispatch::IntegrationTest
     pts.update!(is_enabled: false)
 
     expected_tree = Shop::Catalog.category_product_ids(@tenant.id)
-    assert_equal [visible.id], expected_tree[category.id]
+    assert_equal [ visible.id ], expected_tree[category.id]
 
     get "/shop/api/categories", headers: { "X-Shop-Tenant" => @tenant.id.to_s }
     assert_response :success

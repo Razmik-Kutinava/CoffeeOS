@@ -36,7 +36,7 @@ module PrepKitchen
         end
 
         ingredient_names = Ingredient.where(id: ingredient_totals.keys).pluck(:id, :name, :unit).to_h do |id, name, unit|
-          [id, { name: name, unit: unit }]
+          [ id, { name: name, unit: unit } ]
         end
 
         ingredient_demand = ingredient_totals.map do |ingredient_id, qty|

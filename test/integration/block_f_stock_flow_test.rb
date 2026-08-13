@@ -26,7 +26,7 @@ class BlockFStockFlowTest < ActionDispatch::IntegrationTest
 
     login_as!(barista)
     post "/barista/orders", params: {
-      cart_items: [{ product_id: product.id, quantity: 2 }],
+      cart_items: [ { product_id: product.id, quantity: 2 } ],
       payment_method: "cash"
     }
     assert_response :redirect
@@ -134,7 +134,7 @@ class BlockFStockFlowTest < ActionDispatch::IntegrationTest
       movement: {
         movement_type: "receipt",
         note: "Block F receipt",
-        items: [{ ingredient_id: ingredient.id, qty_change: "25", unit_cost: "100" }]
+        items: [ { ingredient_id: ingredient.id, qty_change: "25", unit_cost: "100" } ]
       }
     }
     assert_redirected_to prep_kitchen_movements_path

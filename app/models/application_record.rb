@@ -4,7 +4,7 @@ class ApplicationRecord < ActiveRecord::Base
   # Автоматически устанавливаем tenant_id для новых записей
   before_create :set_tenant_id, if: :tenant_id_column?
   before_create :ensure_tenant_id, if: :tenant_id_column?
-  
+
   # Автоматически устанавливаем Postgres context для RLS
   around_save :with_postgres_context, if: :tenant_id_column?
 
@@ -17,7 +17,7 @@ class ApplicationRecord < ActiveRecord::Base
   def set_tenant_id
     self.tenant_id = Current.tenant_id if Current.tenant_id && !tenant_id.present?
   end
-  
+
   def ensure_tenant_id
     if tenant_id.blank?
       # В development/test режиме не выбрасываем исключение, только логируем
@@ -28,13 +28,13 @@ class ApplicationRecord < ActiveRecord::Base
       end
     end
   end
-  
+
   def with_postgres_context
     conn = ActiveRecord::Base.connection
-    
+
     # Пропускаем если нет активной транзакции
     return yield unless conn.transaction_open?
-    
+
     # Проверяем, не провалилась ли транзакция
     begin
       # Пробуем выполнить простую команду для проверки состояния транзакции
@@ -43,7 +43,7 @@ class ApplicationRecord < ActiveRecord::Base
       # Транзакция провалилась, пропускаем установку контекста
       return yield
     end
-    
+
     begin
       # Установить новые значения
       if Current.tenant_id
@@ -61,7 +61,7 @@ class ApplicationRecord < ActiveRecord::Base
           raise e unless e.message.include?("unrecognized configuration parameter")
         end
       end
-      
+
       yield
     rescue PG::InFailedSqlTransaction, ActiveRecord::StatementInvalid => e
       # If transaction failed or context isn't supported, let the error propagate

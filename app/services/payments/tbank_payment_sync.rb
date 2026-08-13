@@ -28,7 +28,7 @@ module Payments
     def self.resolve_payment(order)
       payment = order.payments.where(provider: "tbank").order(created_at: :desc).first
       payment ||= order.payments
-        .where.not(provider_payment_id: [nil, ""])
+        .where.not(provider_payment_id: [ nil, "" ])
         .order(created_at: :desc)
         .first
       payment
@@ -59,7 +59,7 @@ module Payments
       return true if rebill_already_persisted?
 
       pause_sec = pause.nil? ? self.class.rebill_pause_seconds : pause.to_f
-      max_attempts = [(retries || DEFAULT_REBILL_RETRIES).to_i, 1].max
+      max_attempts = [ (retries || DEFAULT_REBILL_RETRIES).to_i, 1 ].max
 
       max_attempts.times do |attempt|
         state = fetch_state!(provider_id)
