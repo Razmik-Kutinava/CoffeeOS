@@ -8,8 +8,6 @@
 
 | Дата | ID / тема | Статус | Следующий шаг |
 |------|-----------|--------|---------------|
-| 2026-08-13 | **Pay NET_ERROR** сырой `Failed to fetch` в PaymentMethodsSheet | ✅ fixed local | push+deploy+MCP recheck; → полная запись |
-| 2026-08-13 | **A6 Repeat** после cancel: `frequent_products.has_active_order=true` | ✅ fixed local | GuestOrderCancellation bust_cache!; push+deploy+MCP; → полная запись |
 | 2026-07-16 | **UserCards** save_card / delayed RebillId | 🟡 Fly v444 MCP 8925 ✅ · апрув 3.5 ❌ · E2E real PAN ⛔ | Апрув скрина 8925; E2E только real MIR; → полная запись |
 | 2026-07-16 | **Checkout UX** stacked sheet (Фаза 2) | 🟡 на Fly v445 · MCP pay-stack status hidden ✅ · апрув ❌ | Апрув заказчика; → полная запись |
 | 2026-07-31 | **Legacy shop suite** (~3–4 fail после triage) | 🔴 open | silent_refresh structural **fixed** Group1; остальное отдельно; → полная запись |
@@ -23,18 +21,20 @@
 ## Решено недавно (детали)
 
 [2026-08-13] — Pay NET_ERROR: сырой `Failed to fetch` в PaymentMethodsSheet
-**Статус:** **resolved** local (push/deploy/MCP — ждёт)
+**Статус:** **resolved** Fly **v451** MCP PASS
 **Источник:** MCP Point A v450
-**Root cause:** Checkout `sheetInlineError = e.message` при `mapPaymentErrorSurface(pay)=inline`.
-**Чем закрыли:** `resolveCheckoutSheetInlineError` → null для NET/CLIENT/BANK; CTA несёт copy.
-**Проверка:** `payment_error_user_messages_test.mjs` 9/0.
+**Root cause:** Checkout `sheetInlineError = e.message` при pay inline.
+**Чем закрыли:** `resolveCheckoutSheetInlineError` → null для NET/CLIENT/BANK.
+**Проверка:** local JS 9/0 · MCP v451 offline: CTA «Нет связи. Повторить», alerts без Failed to fetch.
+**Evidence:** `mcp/fly_2026-08-13_recheck/MCP_RESULT.md`
 
 [2026-08-13] — A6 Repeat: `has_active_order=true` после guest cancel
-**Статус:** **resolved** local (push/deploy/MCP — ждёт)
-**Источник:** MCP Point A v450
-**Root cause:** `GuestOrderCancellationService` не вызывал `bust_cache!` frequent v3.
-**Чем закрыли:** bust после cancel; FE уже звал `refreshFrequentProducts`.
-**Проверка:** `guest_order_cancellation_service_test` 13/0.
+**Статус:** **resolved** Fly **v452** MCP PASS
+**Источник:** MCP Point A v450/v451
+**Root cause:** нет bust на cancel + race: poll frequent перезаписывал SolidCache после delete-only.
+**Чем закрыли:** `refresh_cache!` (bust+write) в GuestOrderCancellation; FE clear LS.
+**Проверка:** cancel #202608-0041 → без reload `has_active_order=false` · frequent×3 · «повторить».
+**Evidence:** `mcp/fly_2026-08-13_recheck/MCP_RESULT.md`
 
 [2026-08-12] — Кнопка СБП «не активна» в PaymentMethodsSheet
 **Статус:** **resolved** (local; push/deploy/MCP — ждёт)

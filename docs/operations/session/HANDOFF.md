@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-13 (fix MCP FAIL NET+A6)  
+**Дата:** 2026-08-13 (MCP recheck NET+A6 PASS)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| NET raw + A6 frequent GREEN local ✅ | push + deploy + Fly MCP recheck |
+| Fly **v452** MCP NET+A6 PASS ✅ | апрув / следующая задача |
 
-**last_done:** фикс `Failed to fetch` в sheet + `bust_cache!` на guest cancel  
-**next_step:** push/deploy · MCP Point A (NET offline + cancel→повторить)
+**last_done:** push+deploy v451/v452 · MCP recheck NET+A6 PASS  
+**next_step:** по намерению владельца
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

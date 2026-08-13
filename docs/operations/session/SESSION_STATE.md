@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-13 (fix MCP FAIL NET+A6)  
+**Дата:** 2026-08-13 (MCP recheck NET+A6 PASS)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| NET+A6 GREEN local ✅ | push/deploy · Fly MCP recheck |
+| Fly **v452** MCP NET+A6 PASS ✅ | next по намерению |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -16,11 +16,16 @@
 
 ## Текущий месяц (2026-08)
 
+### Сессия 2026-08-13 (push+deploy+MCP recheck NET+A6)
+
+- Push `7d4e9c2c` → Fly **v451** · NET MCP PASS (нет Failed to fetch)
+- A6 на v451 ещё race → `refresh_cache!` `c17c67cd` → Fly **v452** · cancel→повторить PASS без reload
+- Evidence: `mcp/fly_2026-08-13_recheck/MCP_RESULT.md` · ISSUES закрыты
+
 ### Сессия 2026-08-13 (фикс MCP FAIL: NET raw + A6 frequent)
 
-- NET: `resolveCheckoutSheetInlineError` → null для NET/CLIENT/BANK; Checkout не пишет `e.message`/`chargeErr.message` в sheet
-- A6: `GuestOrderCancellationService` → `CustomerFrequentProductsService.bust_cache!`
-- Local: JS payment_error **9/0** · guest_order_cancellation **13/0** · Fly MCP: skip (ждёт push/deploy)
+- NET: `resolveCheckoutSheetInlineError` → null для NET/CLIENT/BANK
+- A6: сначала bust, затем refresh_cache! (bust+write) против race poll
 
 ### Сессия 2026-08-13 (push+deploy v450 + MCP Point A пакет)
 

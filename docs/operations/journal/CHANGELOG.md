@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-13 — deploy+MCP: recheck NET+A6 on Fly v451/v452 PASS
+
+- Push `7d4e9c2c` → v451 · NET offline: CTA «Нет связи. Повторить», без `Failed to fetch`
+- A6 race на v451 → `refresh_cache!` `c17c67cd` → v452 · cancel #0041 → «повторить» без reload
+- Evidence: `artifacts/.../mcp/fly_2026-08-13_recheck/MCP_RESULT.md`
+
 ## 2026-08-13 — fix(shop): MCP FAIL — NET raw Failed to fetch + A6 frequent after cancel
 
 - Checkout: `resolveCheckoutSheetInlineError` — нет сырого `Failed to fetch` в PaymentMethodsSheet (copy на CTA)
