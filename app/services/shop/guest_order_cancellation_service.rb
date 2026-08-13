@@ -34,8 +34,8 @@ module Shop
       Shop::PendingOrderSession.clear!(@session, @tenant_id)
 
       order = @order.reload
-      # A6 / Quick Repeat: после cancel кэш v3 иначе отдаёт has_active_order=true
-      Shop::CustomerFrequentProductsService.bust_cache!(
+      # A6 / Quick Repeat: refresh (bust+write), не только delete — гонка с poll frequent
+      Shop::CustomerFrequentProductsService.refresh_cache!(
         tenant_id: @tenant_id,
         customer_id: order.customer_id
       )

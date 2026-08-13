@@ -163,6 +163,7 @@
       cancelToast = outcome.toast
       cancelModalOpen = false
       cancelTarget = null
+      try { localStorage.removeItem("coffeeos_shop_frequent_v1") } catch (_e) {}
       refreshFrequentProducts()
       sync()
     } catch (e) {

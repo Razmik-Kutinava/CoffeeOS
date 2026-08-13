@@ -56,6 +56,24 @@ module Shop
       nil
     end
 
+    # A6: delete + write свежего payload — иначе параллельный GET frequent
+    # (начатый до cancel) может снова записать has_active_order=true поверх bust.
+    def self.refresh_cache!(tenant_id:, customer_id:)
+      return if customer_id.blank?
+
+      bust_cache!(tenant_id: tenant_id, customer_id: customer_id)
+      data = payload(customer_id: customer_id, tenant_id: tenant_id)
+      Rails.cache.write(
+        cache_key(tenant_id: tenant_id, customer_id: customer_id),
+        data,
+        expires_in: CACHE_TTL
+      )
+      data
+    rescue StandardError => e
+      Rails.logger.warn("[Shop::FrequentProducts] refresh_cache! failed: #{e.class}: #{e.message}")
+      nil
+    end
+
     def initialize(customer_id:, tenant_id:)
       @customer_id = customer_id
       @tenant_id = tenant_id

@@ -85,6 +85,20 @@ class Shop::CustomerFrequentProductsCacheTest < ActiveSupport::TestCase
     assert_equal 2, cached_call.length
   end
 
+  test "refresh_cache! writes fresh payload with has_active_order false after cancel" do
+    order = create_paid_order!(created_at: 1.hour.ago, status: :accepted)
+    key = Shop::CustomerFrequentProductsService.cache_key(tenant_id: @tenant.id, customer_id: @customer.id)
+    Rails.cache.write(key, { has_active_order: true, frequent_items: [] }, expires_in: 30.minutes)
+
+    order.update!(status: :cancelled)
+    data = Shop::CustomerFrequentProductsService.refresh_cache!(
+      tenant_id: @tenant.id,
+      customer_id: @customer.id
+    )
+    assert_equal false, data[:has_active_order]
+    assert_equal false, Rails.cache.read(key)[:has_active_order]
+  end
+
   test "OrderCreator invalidates frequent products cache on order creation" do
     create_paid_order!(created_at: 1.day.ago, status: :issued)
     cached_call
