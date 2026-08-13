@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-13 (MCP recheck NET+A6 PASS)  
+**Дата:** 2026-08-13 (CI bin/+x)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Fly **v452** MCP NET+A6 PASS ✅ | апрув / следующая задача |
+| CI: `bin/*` → `100755` (exit 126) | проверить зелёный Actions после push |
 
-**last_done:** push+deploy v451/v452 · MCP recheck NET+A6 PASS  
-**next_step:** по намерению владельца
+**last_done:** chore(ci): executable bit on bin/*  
+**next_step:** смотреть CI #26+ на develop
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

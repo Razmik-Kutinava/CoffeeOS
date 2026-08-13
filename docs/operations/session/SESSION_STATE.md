@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-13 (MCP recheck NET+A6 PASS)  
+**Дата:** 2026-08-13 (CI bin/+x)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Fly **v452** MCP NET+A6 PASS ✅ | next по намерению |
+| CI fix: `bin/*` mode `100755` | зелёный GitHub Actions |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,12 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-13 (CI exit 126 → bin/+x)
+
+- Все jobs CI падали за ~40s с **exit 126** (Permission denied на `bin/rails` / brakeman / rubocop / importmap)
+- Причина: в git index mode **100644** вместо **100755** (Windows)
+- Fix: `git update-index --chmod=+x` на скрипты `bin/**` (без README/.cmd/.ps1)
 
 ### Сессия 2026-08-13 (push+deploy+MCP recheck NET+A6)
 

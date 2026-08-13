@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-13 — chore(ci): restore executable bit on bin/*
+
+- GitHub Actions CI #20–#25: все jobs **exit 126** (~40s) — не тесты
+- `bin/rails` / `brakeman` / `rubocop` / `importmap` были `100644` → `100755`
+- Windows git не сохранял +x; на ubuntu-latest `run: bin/…` → Permission denied
+
 ## 2026-08-13 — deploy+MCP: recheck NET+A6 on Fly v451/v452 PASS
 
 - Push `7d4e9c2c` → v451 · NET offline: CTA «Нет связи. Повторить», без `Failed to fetch`
