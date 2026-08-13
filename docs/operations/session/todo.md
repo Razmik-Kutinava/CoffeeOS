@@ -1,26 +1,34 @@
-# todo — SMS.ru auth Callcheck + SMS fallback (2026-08-12)
+# todo — invalid token sheet + One-Click fail → PaymentMethodsSheet (2026-08-13)
 
 | last_done | current_state | next_step |
 |-----------|---------------|-----------|
-| Callcheck API + PWA + tests | GREEN local | push + Fly MCP Point A |
+| intake скрины + UX ТЗ | BUILD GREEN | push/deploy · Fly MCP Point A |
 
 ## Цель
-BUG-REPORT: убрать FlashCall `/code/call` из auth; Callcheck primary + SMS fallback.
+1. Повторный заказ (невалидный токен): CTA «Добавить карту» + шторка = скрин `09_customer_payment_methods_sheet_canon_2026-08-13.png`.
+2. UX после ошибки One-Click: «карта +» → полная `PaymentMethodsSheet` (не клип формы в peek).
 
 ## Файлы (ожидаемо)
-- `app/services/shop/phone_otp.rb` — **[x]**
-- `app/controllers/shop/api/phone_otp_controller.rb` — **[x]**
-- `app/services/shop/sms_ru_client.rb` — **[x]**
-- `app/frontend/lib/phoneAuthCascade.js` · `phoneAuthWizard.js` · `PhoneAuth*.svelte` — **[x]**
-- `docs/integrations/sms-auth.md` — **[x]**
-- tests phone_otp / cascade JS — **[x]**
+- `app/frontend/lib/openRepeatPaymentSheet.js` — nav + markOpenPaymentSheet
+- `app/frontend/lib/widgetRepeatPayFlow.js` — resolveCardPlus → openPaymentSheet
+- `app/frontend/components/RepeatSection.svelte` — fail → setTokenInvalid; card+ → sheet
+- `app/frontend/lib/repeatInvalidTokenStore.js` — reuse (без смены API)
+- `app/frontend/components/PaymentMethodsSheet.svelte` — канон UI (без дубля ошибки)
+- `app/frontend/components/CartSheet.svelte` — CTA Добавить карту (neighbor)
+- `app/frontend/routes/Checkout.svelte` — consumeOpenPaymentSheet (neighbor)
 
 ## Не ломать
-- Profile link SMS (`send_sms` / legacy send channel=sms)
-- Email OTP / MobileSessionIssuer
-- SMS.ru webhooks / order-ready SMS
-- Платежи
+- Успешный One-Click / widget pay
+- Checkout one_click / Charge payload
+- Auth store / refresh
+- Inline error на основном экране после fail (красная плашка)
 
 ## Проверка
-- `ruby bin/rails test test/services/shop/phone_otp_test.rb test/services/shop/sms_ru_phone_otp_test.rb test/integration/shop/api/phone_otp_test.rb`
-- `node --test test/javascript/shop_phone_auth_cascade_smsru_test.mjs test/javascript/phone_auth_wizard_test.mjs`
+- `node --test test/javascript/widget_repeat_pay_flow_fallback_ui_test.mjs test/javascript/open_repeat_payment_sheet_test.mjs test/javascript/repeat_invalid_token_payment_test.mjs`
+- `bin/rails test test/integration/shop/repeat_invalid_token_payment_test.rb`
+
+## Чеклист
+- [x] PHASE 0: скрины в artifacts + ТЗ UX + CBR
+- [x] SPEC: todo
+- [x] RED/GREEN: open sheet UI + wiring
+- [x] REVIEW / ops (bugbot: cart dup fixed)

@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-12 (SMS.ru Callcheck auth)  
+**Дата:** 2026-08-13 (invalid token + One-Click sheet UX)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Callcheck→SMS GREEN | push + Fly MCP Point A |
+| PaymentMethodsSheet UX GREEN local | push + Fly MCP Point A (скрин 09) |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,13 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-13 (invalid token + One-Click → PaymentMethodsSheet)
+
+- Скрины заказчика: `09_…canon`, `10_…new_card`, `09_…clipped` в artifacts
+- `openRepeatPaymentSheet`: markOpen + checkout pay-stack; addToCart только если cart empty
+- RepeatSection: fail → `setTokenInvalid`; «карта +» → полная шторка (не peek expand)
+- Local: JS UX + `repeat_invalid_token_payment` **12/0** · Fly MCP: skip
 
 ### Сессия 2026-08-12 (BUG-REPORT Callcheck not FlashCall)
 

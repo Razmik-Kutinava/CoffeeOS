@@ -1,5 +1,6 @@
 /**
- * #33 F1–F2: после отказа карты — только СБП/карта+; expanded — после «карта +».
+ * #33 F1–F2 + UX 2026-08-13: отказ → СБП/карта+ на экране;
+ * «карта +» → openPaymentSheet (PaymentMethodsSheet), не expand в peek.
  *
  * node --test test/javascript/widget_repeat_pay_flow_fallback_ui_test.mjs
  */
@@ -20,11 +21,12 @@ describe("#33 F1 — card decline → fallback methods only (no expanded)", () =
   })
 })
 
-describe("#33 F2 — tap «карта +» → expanded + form", () => {
-  it("resolveCardPlusExpandedUi opens saved cards and new card form", () => {
+describe("#33 F2 / UX — tap «карта +» → PaymentMethodsSheet flag (not peek expand)", () => {
+  it("resolveCardPlusExpandedUi opens payment sheet without peek form", () => {
     const ui = resolveCardPlusExpandedUi()
     assert.equal(ui.showFallbackMethods, true)
-    assert.equal(ui.showExpandedCards, true)
-    assert.equal(ui.showNewCardForm, true)
+    assert.equal(ui.showExpandedCards, false)
+    assert.equal(ui.showNewCardForm, false)
+    assert.equal(ui.openPaymentSheet, true)
   })
 })

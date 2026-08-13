@@ -11,8 +11,7 @@
   import { createWidgetPayFsm } from "../lib/shopWidgetPayFsm.js"
   import {
     runRepeatWidgetPayFlow,
-    resolveCardDeclineFallbackUi,
-    resolveCardPlusExpandedUi
+    resolveCardDeclineFallbackUi
   } from "../lib/widgetRepeatPayFlow.js"
   import { createRepeatInlineOrder } from "../lib/createRepeatInlineOrder.js"
   import { INLINE_ROTATION_LABELS } from "../lib/shopInlinePayFsm.js"
@@ -23,7 +22,11 @@
   } from "../lib/repeatInlinePayUiStore.js"
   import { initSbpPayment, redirectToSbp } from "../lib/shopSbpPay.js"
   import { api } from "../lib/api.js"
-  import { userCardsApiPath } from "../lib/userCardsApiPath.js"
+  import {
+    setTokenInvalid,
+    isInvalidRebillPaymentError
+  } from "../lib/repeatInvalidTokenStore.js"
+  import { openRepeatPaymentSheet } from "../lib/openRepeatPaymentSheet.js"
   import InlinePayFallback from "./InlinePayFallback.svelte"
 
   /** full — empty; embedded — peek с заказом */
@@ -74,6 +77,18 @@
     setFrequentQty(key, qtyOf(key) + delta)
   }
 
+  function itemByActiveKey() {
+    return items.find((i) => frequentCardKey(i) === payUi.activeKey) || items[0] || null
+  }
+
+  function markInvalidTokenFromPay(out) {
+    const code = out?.error_code || out?.fsm?.error_code || ""
+    const cardId = out?.cardId
+    if (cardId && isInvalidRebillPaymentError({ error_code: code })) {
+      setTokenInvalid(cardId)
+    }
+  }
+
   async function onPayCardClick(item) {
     if (payUi.busy) return
     const key = frequentCardKey(item)
@@ -103,30 +118,34 @@
         fsm,
         onStatusText: (label) => patchRepeatInlinePayUi({ statusText: label })
       })
+      markInvalidTokenFromPay(out)
       patchRepeatInlinePayUi({
         fsm: out.fsm,
         statusText: out.statusText,
         errorText: out.errorText,
         showFallbackMethods: out.showFallbackMethods,
-        showExpandedCards: !!out.showExpandedCards,
-        showNewCardForm: !!out.showNewCardForm,
+        showExpandedCards: false,
+        showNewCardForm: false,
         savedCards: out.savedCards || []
       })
+      if (out.openPaymentSheet) {
+        await openRepeatPaymentSheet(item, { preferNewCard: true })
+        return
+      }
       if (out.resetAfterMs) {
         setTimeout(() => resetRepeatInlinePayUi(), out.resetAfterMs)
       }
     } catch (e) {
-      fsm.reject({ error_code: "" })
+      fsm.reject({ error_code: e?.error_code || "" })
       fsm.state = "ERROR"
       const msg = e?.message || "Ошибка оплаты, попробуйте снова"
-      // S1: только СБП / «карта +»; expanded — после тапа «карта +».
+      // S1: ошибка на экране + СБП/«карта +»; S2 → PaymentMethodsSheet (не expand в peek).
       patchRepeatInlinePayUi({
         fsm,
         errorText: msg,
         statusText: msg,
         ...resolveCardDeclineFallbackUi()
       })
-      // не auto-reset — нужны СБП / карта+
     } finally {
       patchRepeatInlinePayUi({ busy: false })
     }
@@ -143,69 +162,18 @@
   }
 
   async function onFallbackCardPlus() {
+    // UX: полная PaymentMethodsSheet (скрин 09), не NewCardForm в peek.
     patchRepeatInlinePayUi({
-      ...resolveCardPlusExpandedUi()
+      showExpandedCards: false,
+      showNewCardForm: false,
+      showFallbackMethods: true
     })
-    try {
-      const data = await api(userCardsApiPath())
-      patchRepeatInlinePayUi({
-        savedCards: Array.isArray(data?.cards) ? data.cards : []
-      })
-    } catch (_e) {
-      patchRepeatInlinePayUi({ savedCards: [] })
-    }
+    await openRepeatPaymentSheet(itemByActiveKey(), { preferNewCard: true })
   }
 
-  /** Тап по сохранённой карте → Charge по card_id (не сброс UI). */
-  async function onSelectSavedCard(card) {
-    const orderId = payUi.fsm?.orderId
-    const cardId = card?.id
-    if (!orderId || !cardId || payUi.busy) return
-
-    const fsm = payUi.fsm || createWidgetPayFsm({ orderId })
-    fsm.start()
-    patchRepeatInlinePayUi({
-      busy: true,
-      fsm,
-      statusText: INLINE_ROTATION_LABELS[0],
-      errorText: "",
-      showFallbackMethods: false,
-      showExpandedCards: false,
-      showNewCardForm: false
-    })
-    try {
-      const out = await runRepeatWidgetPayFlow({
-        orderId,
-        api,
-        fsm,
-        cardId,
-        onStatusText: (label) => patchRepeatInlinePayUi({ statusText: label })
-      })
-      patchRepeatInlinePayUi({
-        fsm: out.fsm,
-        statusText: out.statusText,
-        errorText: out.errorText,
-        showFallbackMethods: out.showFallbackMethods,
-        showExpandedCards: !!out.showExpandedCards,
-        showNewCardForm: !!out.showNewCardForm,
-        savedCards: out.savedCards || payUi.savedCards || []
-      })
-      if (out.resetAfterMs) {
-        setTimeout(() => resetRepeatInlinePayUi(), out.resetAfterMs)
-      }
-    } catch (e) {
-      fsm.reject({ error_code: "" })
-      fsm.state = "ERROR"
-      const msg = e?.message || "Ошибка оплаты, попробуйте снова"
-      patchRepeatInlinePayUi({
-        fsm,
-        errorText: msg,
-        statusText: msg,
-        ...resolveCardDeclineFallbackUi()
-      })
-    } finally {
-      patchRepeatInlinePayUi({ busy: false })
-    }
+  /** Тап по сохранённой карте в inline — тоже в канон-шторку (не Charge в peek). */
+  async function onSelectSavedCard(_card) {
+    await openRepeatPaymentSheet(itemByActiveKey(), { preferNewCard: false })
   }
 
   function roundPrice(n) {

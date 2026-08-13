@@ -11,6 +11,15 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-13 — feat(shop): One-Click fail / invalid token → PaymentMethodsSheet
+
+- Канон UI = скрин `09_customer_payment_methods_sheet_canon_2026-08-13.png` (checkout pay-stack)
+- «карта +» после отказа One-Click → `openRepeatPaymentSheet` (не NewCardForm в peek)
+- Repeat fail → `setTokenInvalid` → CTA «Добавить карту»
+- addToCart только при пустой корзине (не дублировать qty после defer_init)
+- ТЗ UX: `customer_tasks/UX повторная оплата после ошибки One-Click…`
+- Local: JS UX 5/0 · `repeat_invalid_token_payment` 12/0 · Fly MCP: skip
+
 ## 2026-08-12 — feat(shop): Phone OTP Callcheck + SMS fallback (BUG-REPORT)
 
 - Убран FlashCall `/code/call` из authorization flow

@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-12 (SMS.ru Callcheck auth)  
+**Дата:** 2026-08-13 (invalid token + One-Click sheet UX)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Callcheck→SMS auth GREEN ✅ | push + Fly MCP Point A |
+| PaymentMethodsSheet UX GREEN local ✅ | push + Fly MCP Point A (скрин 09) |
 
-**last_done:** feat Phone OTP Callcheck primary + SMS fallback (BUG-REPORT)  
-**next_step:** push/deploy · MCP Point A callcheck/SMS · SBP тоже ждёт push
+**last_done:** One-Click fail / invalid token → канон PaymentMethodsSheet (не peek)  
+**next_step:** push/deploy · MCP Point A vs скрин 09 · Callcheck/SBP тоже ждёт push
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -18,6 +18,15 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Invalid token + One-Click sheet UX (2026-08-13)
+
+| Что | Статус |
+|-----|--------|
+| Скрины 09/10 в artifacts | **`[x]`** |
+| `openRepeatPaymentSheet` + RepeatSection wiring | **`[x]`** |
+| Local tests | **`[x]`** |
+| Fly MCP Point A | **`[ ]`** |
 
 ### SMS.ru Callcheck auth (2026-08-12)
 

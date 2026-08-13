@@ -25,14 +25,16 @@ export function resolveCardDeclineFallbackUi() {
 }
 
 /**
- * S2: тап «карта +» → expanded список карт + форма новой карты.
- * @returns {{ showFallbackMethods: boolean, showExpandedCards: boolean, showNewCardForm: boolean }}
+ * S2: тап «карта +» → открыть канон PaymentMethodsSheet (checkout pay-stack),
+ * не expanded cards/form внутри peek (клип формы).
+ * @returns {{ showFallbackMethods: boolean, showExpandedCards: boolean, showNewCardForm: boolean, openPaymentSheet: boolean }}
  */
 export function resolveCardPlusExpandedUi() {
   return {
     showFallbackMethods: true,
-    showExpandedCards: true,
-    showNewCardForm: true
+    showExpandedCards: false,
+    showNewCardForm: false,
+    openPaymentSheet: true
   }
 }
 
@@ -60,12 +62,14 @@ export async function runRepeatWidgetPayFlow({
   let showFallbackMethods = false
   let showExpandedCards = false
   let showNewCardForm = false
+  let openPaymentSheet = false
   let savedCards = []
   let resetAfterMs = null
+  let lastErrorCode = ""
+  let cardId = forcedCardId
   onStatusText?.(statusText)
 
   try {
-    let cardId = forcedCardId
     let cardsData = null
     try {
       cardsData = await api(userCardsApiPath())
@@ -75,7 +79,7 @@ export async function runRepeatWidgetPayFlow({
       if (!cardId) cardId = undefined
     }
 
-    // API ответил пустым списком и нет cardId → форма привязки (не Widget-poll вхолостую).
+    // API ответил пустым списком и нет cardId → канон PaymentMethodsSheet (не форма в peek).
     // Если /user/cards упал — всё равно идём в widget_init: бэкенд возьмёт RebillId по order.customer_id.
     if (!cardId && cardsData && savedCards.length === 0) {
       fsm.reject({ error_code: "NO_CARD" })
@@ -83,7 +87,7 @@ export async function runRepeatWidgetPayFlow({
       errorText = "Добавьте карту для оплаты"
       statusText = errorText
       onStatusText?.(statusText)
-      // Нет привязанной карты — сразу форма (не «сначала fallback»).
+      lastErrorCode = "NO_CARD"
       return {
         fsm,
         statusText,
@@ -91,7 +95,9 @@ export async function runRepeatWidgetPayFlow({
         ...resolveCardPlusExpandedUi(),
         savedCards: [],
         resetAfterMs: null,
-        state: fsm.state
+        state: fsm.state,
+        cardId: null,
+        error_code: lastErrorCode
       }
     }
 
@@ -127,7 +133,8 @@ export async function runRepeatWidgetPayFlow({
       onStatusText?.(statusText)
       resetAfterMs = TBANK_INLINE_ERROR_RESET_MS
     } else if (result.kind === "http_error" || result.kind === "timeout") {
-      fsm.reject({ error_code: result.errorCode || "" })
+      lastErrorCode = result.errorCode || ""
+      fsm.reject({ error_code: lastErrorCode })
       fsm.state = WIDGET_FSM_STATES.ERROR
       errorText = result.errorLabel || INLINE_GENERIC_ERROR_LABEL
       statusText = errorText
@@ -135,7 +142,8 @@ export async function runRepeatWidgetPayFlow({
       ;({ showFallbackMethods, showExpandedCards, showNewCardForm } =
         resolveCardDeclineFallbackUi())
     } else {
-      fsm.reject({ error_code: result.errorCode || "" })
+      lastErrorCode = result.errorCode || ""
+      fsm.reject({ error_code: lastErrorCode })
       errorText = result.errorLabel || WIDGET_STATUS_LABELS.ERROR
       statusText = errorText
       onStatusText?.(statusText)
@@ -146,7 +154,8 @@ export async function runRepeatWidgetPayFlow({
         resolveCardDeclineFallbackUi())
     }
   } catch (e) {
-    fsm.reject({ error_code: e?.error_code || "" })
+    lastErrorCode = e?.error_code || ""
+    fsm.reject({ error_code: lastErrorCode })
     fsm.state = WIDGET_FSM_STATES.ERROR
     errorText =
       (typeof e?.message === "string" && e.message && e.message !== "Payment provider error"
@@ -154,7 +163,7 @@ export async function runRepeatWidgetPayFlow({
         : null) || INLINE_GENERIC_ERROR_LABEL
     statusText = errorText
     onStatusText?.(statusText)
-    // S1: только СБП / «карта +»; expanded — после тапа «карта +» (S2).
+    // S1: ошибка на основном экране + СБП/«карта +»; S2 → PaymentMethodsSheet.
     ;({ showFallbackMethods, showExpandedCards, showNewCardForm } =
       resolveCardDeclineFallbackUi())
   }
@@ -166,9 +175,12 @@ export async function runRepeatWidgetPayFlow({
     showFallbackMethods,
     showExpandedCards,
     showNewCardForm,
+    openPaymentSheet,
     savedCards,
     resetAfterMs,
-    state: fsm.state
+    state: fsm.state,
+    cardId: cardId || null,
+    error_code: lastErrorCode
   }
 }
 

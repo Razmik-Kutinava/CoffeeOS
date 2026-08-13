@@ -14,6 +14,8 @@
 | `screenshots/06_otp_bank_card_5953_low_balance_2026-08-07.png` | Контекст банка: МИР *5953 баланс **159,33 ₽** (денег на оплату нет) |
 | `screenshots/07_fly_pay_connecting_spinner_5953_2026-08-07.png` | Попытка оплаты *5953: FSM «Установка соединения…» |
 | `screenshots/08_fly_insufficient_funds_inline_error_again_2026-08-07.png` | Повтор отказа: снова inline + «Отказ: смените карту», форма не открыта |
+| `screenshots/09_customer_payment_methods_sheet_canon_2026-08-13.png` | **Канон 2026-08-13:** checkout pay-stack «Способ оплаты» — Картой *1594 / СБП / Картой + / Оплатить |
+| `screenshots/10_customer_new_card_form_in_sheet_expected_2026-08-13.png` | **Ожидание:** форма новой карты внутри шторки (не в peek) — номер / ММ/ГГ / CVV / Оплатить |
 
 ## MCP / история
 

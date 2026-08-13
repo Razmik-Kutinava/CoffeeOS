@@ -61,12 +61,27 @@ class Shop::RepeatInvalidTokenPaymentTest < ActionDispatch::IntegrationTest
                     "Checkout должен auto-open NewCardForm при CLIENT_ERROR"
   end
 
+  REPEAT = Rails.root.join("app/frontend/components/RepeatSection.svelte")
+  OPEN_SHEET = Rails.root.join("app/frontend/lib/openRepeatPaymentSheet.js")
+
   test "step1 CartSheet exposes Add card CTA when invalid rebill in repeat context" do
     src = File.read(CART)
     assert_includes src, 'data-testid="shop-cart-add-card"'
     assert_includes src, "repeatInvalidTokenStore"
     assert_includes src, "shouldShowAddCardCta"
     assert_includes src, "ctaAddCard"
+  end
+
+  test "UX One-Click fail: RepeatSection opens PaymentMethodsSheet not peek expand" do
+    repeat = File.read(REPEAT)
+    helper = File.read(OPEN_SHEET)
+    assert_includes helper, "markOpenPaymentSheet"
+    assert_includes helper, 'push("/checkout")'
+    assert_includes repeat, "openRepeatPaymentSheet"
+    assert_includes repeat, "setTokenInvalid"
+    assert_includes repeat, "onFallbackCardPlus"
+    refute_includes repeat, "resolveCardPlusExpandedUi"
+    refute_match(/showNewCardForm:\s*true/, repeat)
   end
 
   test "step2 PaymentMethodsSheet inline load error and i18n labels" do
