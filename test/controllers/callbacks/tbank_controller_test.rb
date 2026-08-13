@@ -149,6 +149,8 @@ class Callbacks::TbankControllerTest < ActionDispatch::IntegrationTest
   # ---------------------------------------------------------------------------
 
   test "CONFIRMED performs TbankCallbackJob inline (worker optional)" do
+    # class-level stub: не оставлять enabled после соседних тестов в том же worker
+    FakeJobTotalFail.enabled = false
     assert_no_enqueued_jobs(only: Payments::TbankCallbackJob) do
       post_notify(tbank_payload(status: "CONFIRMED"))
     end
@@ -216,13 +218,14 @@ class Callbacks::TbankControllerTest < ActionDispatch::IntegrationTest
   test "releases Rails.cache claim when job and enqueue both fail so bank retry can reprocess" do
     idem_key = "tbank:callback:tbank_pay_777:CONFIRMED"
     FakeJobTotalFail.enabled = true
-
-    post_notify(tbank_payload(status: "CONFIRMED"))
-    assert_response :internal_server_error
-    assert_not Rails.cache.exist?(idem_key), "claim must be released on 500"
-    assert_equal "pending", @payment.reload.status
-
-    FakeJobTotalFail.enabled = false
+    begin
+      post_notify(tbank_payload(status: "CONFIRMED"))
+      assert_response :internal_server_error
+      assert_not Rails.cache.exist?(idem_key), "claim must be released on 500"
+      assert_equal "pending", @payment.reload.status
+    ensure
+      FakeJobTotalFail.enabled = false
+    end
 
     post_notify(tbank_payload(status: "CONFIRMED"))
     assert_response :ok

@@ -17,8 +17,8 @@ class User < ApplicationRecord
   has_many :user_roles, dependent: :destroy
   has_many :roles, through: :user_roles
   has_many :sessions, dependent: :destroy
-  has_many :orders_opened, class_name: "CashShift", foreign_key: "opened_by", dependent: :restrict_with_error
-  has_many :orders_closed, class_name: "CashShift", foreign_key: "closed_by", dependent: :nullify
+  has_many :orders_opened, class_name: "CashShift", foreign_key: "opened_by_id", dependent: :restrict_with_error
+  has_many :orders_closed, class_name: "CashShift", foreign_key: "closed_by_id", dependent: :nullify
 
   validates :name, presence: true
   validates :password_hash, presence: true

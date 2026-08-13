@@ -57,7 +57,8 @@ class Shop::OrderStatusSheetMountAcceptanceTest < ActionDispatch::IntegrationTes
     sheet = File.read(Rails.root.join("app/frontend/components/OrderStatusSheet.svelte"))
 
     assert_includes sheet, "oss__scroll-hint"
-    assert_includes sheet, "shouldScrollStatusList(orders)"
+    # #63: scroll gated on visibleOrders → displayOrders (не сырой orders)
+    assert_includes sheet, "shouldScrollStatusList(displayOrders)"
     assert_match(/\{#if\s+scrollable\}[\s\S]*oss__scroll-hint/, sheet)
   end
 
