@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-13 — feat(#63): Svelte 5 status widget reactivity + dismiss UX [GREEN]
+
+- FE: иммутабельный `applyCableEvent` / sync; `dismissOrder` + `userDismissed`; скрытие UI на `#/product` / `#/profile` / checkout / pay-stack
+- FE: кнопка X в `ActiveOrdersAccordion`; Cable-подписка после dismiss сохраняется
+- Тесты: `order_status_sheet_test.mjs` 22/0
+- ТЗ: `customer_tasks/Исправление реактивности Svelte 5…` · CBR #63
+
 ## 2026-08-13 — CI #31 green (подтверждение)
 
 - Actions run #31 `success` на `353c5a7a`: scan_ruby · scan_js · lint · test · system-test

@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-13 (CI #31 green)  
+**Дата:** 2026-08-13 (#63 Svelte5 status UX)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| CI **#31 success** (все jobs green) на `353c5a7a` | triage 4 legacy shop отдельно (не гейт CI) |
+| **#63 GREEN local** — иммутабельный Cable + dismiss/X + hide product/profile/pay | push+deploy → Fly MCP Point A · апрув |
 
-**last_done:** CI #31 PASS · scan/lint/test/system-test green  
-**next_step:** по желанию — triage 4 excluded legacy shop
+**last_done:** #63 Svelte 5 status widget reactivity UX · JS 22/0  
+**next_step:** push/deploy + MCP Point A (или следующая задача пула)
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -18,6 +18,15 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### #63 Svelte 5 status widget reactivity UX (2026-08-13)
+
+| Что | Статус |
+|-----|--------|
+| Intake + CBR #63 (доп к #35) | **`[x]`** |
+| Immutable Cable/sync + dismiss + route hide | **`[x]`** |
+| Local JS | **`[x]`** 22/0 |
+| Fly MCP Point A | `[ ]` |
 
 ### #62 SBP autopay checkbox default (2026-08-13)
 

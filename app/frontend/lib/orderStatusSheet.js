@@ -1,6 +1,12 @@
 /** #35 — состояние sticky OrderStatusSheet (peek/hidden), cable + reconnect.
  *  #47 — polling /orders/active как страховка, если Cable молчит на PWA.
+ *  #63 — иммутабельные обновления (Svelte 5) + userDismissed + route visibility.
  */
+
+import { writable } from "svelte/store"
+
+/** CartSheet: резерв vh только пока статусный UI реально виден (не product/dismiss). */
+export const statusWidgetUiVisible = writable(false)
 
 export const ORDER_STATUS_SHEET_MODES = Object.freeze({
   PEEK: "peek",
@@ -56,23 +62,74 @@ function normalizeId(id) {
   return id == null ? "" : String(id)
 }
 
+/** Заказы, которые рисуем в виджете (не закрыты крестиком). */
+export function visibleOrders(orders) {
+  return (Array.isArray(orders) ? orders : []).filter((o) => !o?.userDismissed)
+}
+
+/**
+ * Где показывать статусный виджет (UI). Cable/state живут независимо.
+ * @param {{ hash?: string, payStackActive?: boolean, orders?: Array<object> }} opts
+ */
+export function shouldShowStatusSheetUi(opts = {}) {
+  if (opts.payStackActive) return false
+  const raw = opts.hash ?? (typeof window !== "undefined" ? window.location.hash : "")
+  const h = String(raw || "").replace(/^#/, "") || "/"
+  if (h.startsWith("/product/")) return false
+  if (h === "/profile" || h.startsWith("/profile?") || h.startsWith("/profile/")) return false
+  if (h === "/checkout" || h.startsWith("/checkout?") || h.startsWith("/checkout/")) return false
+  return visibleOrders(opts.orders).length > 0
+}
+
+function refreshMode(state) {
+  state.mode =
+    visibleOrders(state.orders).length > 0
+      ? ORDER_STATUS_SHEET_MODES.PEEK
+      : ORDER_STATUS_SHEET_MODES.HIDDEN
+}
+
+function withDismissFlags(state, orders) {
+  const list = Array.isArray(orders) ? orders : []
+  return list.map((o) => {
+    const id = normalizeId(o?.id ?? o?.order_id)
+    const dismissed = !!(id && state.dismissedIds[id]) || !!o?.userDismissed
+    if (id && dismissed) state.dismissedIds[id] = true
+    return { ...o, userDismissed: dismissed }
+  })
+}
+
 export function createOrderStatusSheetState() {
   const state = {
     mode: ORDER_STATUS_SHEET_MODES.HIDDEN,
     orders: [],
     connection: "idle",
+    /** @type {Record<string, true>} */
+    dismissedIds: Object.create(null),
     setOrders(orders) {
-      state.orders = Array.isArray(orders) ? orders.slice() : []
-      state.mode =
-        state.orders.length > 0
-          ? ORDER_STATUS_SHEET_MODES.PEEK
-          : ORDER_STATUS_SHEET_MODES.HIDDEN
+      state.orders = withDismissFlags(state, orders)
+      refreshMode(state)
     },
     setConnection(value) {
       state.connection = value
     }
   }
   return state
+}
+
+/**
+ * Ручное закрытие виджета по заказу (X). Cable продолжает обновлять state.
+ * @param {{ orders: Array<object>, dismissedIds: Record<string, true>, mode: string }} state
+ * @param {string|number} orderId
+ */
+export function dismissOrder(state, orderId) {
+  const id = normalizeId(orderId)
+  if (!id || !state) return
+  state.dismissedIds[id] = true
+  const prev = state.orders
+  state.orders = (prev || []).map((o) =>
+    normalizeId(o.id ?? o.order_id) === id ? { ...o, userDismissed: true } : o
+  )
+  refreshMode(state)
 }
 
 /** Terminal для снятия карточки / refresh frequent — выдача или отмена (не ready). */
@@ -100,6 +157,7 @@ export function applyCableEvent(state, payload, hooks = {}) {
   // ready остаётся в шторке («Готов» + CTA); иначе окно ready → пусто +0₽ без «повторить»
   const terminal = SHEET_TERMINAL_STATUSES.includes(status)
   if (terminal) {
+    delete state.dismissedIds[orderId]
     state.setOrders(
       state.orders.filter((o) => normalizeId(o.id ?? o.order_id) !== orderId)
     )
@@ -116,13 +174,16 @@ export function applyCableEvent(state, payload, hooks = {}) {
     ...prev,
     status: payload.status,
     order_number: payload.order_number ?? prev.order_number,
-    payment_settled: payload.payment_settled ?? prev.payment_settled
+    payment_settled: payload.payment_settled ?? prev.payment_settled,
+    userDismissed: !!prev.userDismissed || !!state.dismissedIds[orderId]
   }
   // #41: sticky CTA зависит от can_cancel вместе со status
   if (Object.prototype.hasOwnProperty.call(payload, "can_cancel")) {
     next.can_cancel = payload.can_cancel
   }
-  state.orders[idx] = next
+  // #63: новая ссылка массива — Svelte 5 re-render без F5
+  state.orders = state.orders.map((o, i) => (i === idx ? next : o))
+  refreshMode(state)
 }
 
 export function applyReconnectOrders(state, orders) {

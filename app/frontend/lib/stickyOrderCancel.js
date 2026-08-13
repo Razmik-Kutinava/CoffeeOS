@@ -54,10 +54,11 @@ export function applyStickyCancelError(state, orderId, error) {
   )
   if (idx < 0) return outcome
 
-  state.orders[idx] = {
-    ...state.orders[idx],
-    status: outcome.forceStatus,
-    can_cancel: outcome.canCancel
-  }
+  // #63: новая ссылка массива (Svelte 5), без in-place мутации
+  state.orders = state.orders.map((o, i) =>
+    i === idx
+      ? { ...o, status: outcome.forceStatus, can_cancel: outcome.canCancel }
+      : o
+  )
   return outcome
 }

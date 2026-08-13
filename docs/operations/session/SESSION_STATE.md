@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-13 (CI #31 green)  
+**Дата:** 2026-08-13 (#63 Svelte5 status UX)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| CI **#31 success** — все jobs green (`353c5a7a`) | triage 4 legacy shop (вне гейта CI) |
+| **#63 GREEN local** (доп к #35) · JS order_status_sheet 22/0 | Fly MCP Point A после push/deploy · апрув |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,12 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-13 (#63 Svelte 5 status widget UX)
+
+- Доп к #35: `orderStatusSheet` — map/filter без in-place; `dismissOrder`/`userDismissed`; `shouldShowStatusSheetUi` (product/profile/checkout/pay)
+- UI: X на accordion row; Cable живёт после dismiss; ready не поднимает закрытый виджет
+- Local: `node --test test/javascript/order_status_sheet_test.mjs` → 22/0
 
 ### Сессия 2026-08-13 (CI #31 green)
 

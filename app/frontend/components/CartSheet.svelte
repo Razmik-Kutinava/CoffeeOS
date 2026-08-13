@@ -25,6 +25,7 @@
   import OrderStatusSheet from "./OrderStatusSheet.svelte"
   import ProductSheetCta from "./ProductSheetCta.svelte"
   import { initFrequentFromCache, frequentItems, hasActiveOrder } from "../lib/frequentRepeatStore.js"
+  import { statusWidgetUiVisible } from "../lib/orderStatusSheet.js"
   import { restoreGuestSession } from "../lib/restoreGuestSession.js"
   import { ctaAddCard } from "../lib/paymentMethodI18n.js"
   import {
@@ -65,6 +66,8 @@
   let brokenThumbUrls = $state(/** @type {Set<string>} */ (new Set()))
   let frequentCount = $state(0)
   let hasActiveOrderFlag = $state(false)
+  /** #63: vh под статус только когда UI виден (не product/dismiss) */
+  let statusWidgetVisible = $state(false)
   let tokenInvalid = $state(false)
   let productCta = $state(/** @type {Record<string, any>} */ ({ active: false }))
 
@@ -101,8 +104,8 @@
     } else {
       base = sheetHeightVh(mode, count)
     }
-    // Активный заказ + позиции: статус и peek стык в стык (не mutex)
-    if (hasActiveOrderFlag && count > 0 && !payStackActive) base += STATUS_IN_SHEET_EXTRA_VH
+    // #63: резерв vh только пока статусный виджет реально на экране
+    if (statusWidgetVisible && count > 0 && !payStackActive) base += STATUS_IN_SHEET_EXTRA_VH
     // #44: CTA карточки товара внутри шторки — добавляем vh, не второй fixed-слой
     if (onProduct && !payStackActive) base += PRODUCT_CTA_EXTRA_VH
     return base
@@ -260,6 +263,9 @@
     const unsubHasActive = hasActiveOrder.subscribe((v) => {
       hasActiveOrderFlag = !!v
     })
+    const unsubStatusUi = statusWidgetUiVisible.subscribe((v) => {
+      statusWidgetVisible = !!v
+    })
     refreshInvalidRebillFlag()
     const unsubInvalid = invalidRebillActive.subscribe((v) => {
       tokenInvalid = v
@@ -286,8 +292,8 @@
 
     return () => {
       unsubItems(); unsubTotal(); unsubMode(); unsubBusy()
-      unsubErr(); unsubPay(); unsubFrequent(); unsubHasActive(); unsubInvalid()
-      unsubProductCta()
+      unsubErr(); unsubPay(); unsubFrequent(); unsubHasActive(); unsubStatusUi()
+      unsubInvalid(); unsubProductCta()
       window.removeEventListener("hashchange", onHash)
       if (typeof document !== "undefined") {
         document.documentElement.style.removeProperty("--cart-sheet-h")

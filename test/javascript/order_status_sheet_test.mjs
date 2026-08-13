@@ -1,5 +1,5 @@
 /**
- * #35 Order status sticky sheet — RED [TDD].
+ * #35 Order status sticky sheet + #63 Svelte 5 reactivity / dismiss UX.
  *
  * node --test test/javascript/order_status_sheet_test.mjs
  */
@@ -14,7 +14,10 @@ import {
   mapReconnectError,
   activeOrderIdsKey,
   SHEET_POINTER_POLICY,
-  ORDER_STATUS_SHEET_MODES
+  ORDER_STATUS_SHEET_MODES,
+  dismissOrder,
+  visibleOrders,
+  shouldShowStatusSheetUi
 } from "../../app/frontend/lib/orderStatusSheet.js"
 
 describe("orderStatusSheet — modes + pointer policy (#35 A2)", () => {
@@ -68,7 +71,7 @@ describe("shouldScrollStatusList (#35 A2b)", () => {
   })
 })
 
-describe("applyCableEvent (#35 A1/A2)", () => {
+describe("applyCableEvent (#35 A1/A2 + #63 immutable)", () => {
   it("updates matching order status from cable payload", () => {
     const state = createOrderStatusSheetState()
     state.setOrders([
@@ -80,6 +83,19 @@ describe("applyCableEvent (#35 A1/A2)", () => {
       status: "preparing",
       order_number: "202607-42"
     })
+    assert.equal(state.orders[0].status, "preparing")
+  })
+
+  it("#63 Subtask 1: replaces orders array reference (no in-place mutate)", () => {
+    const state = createOrderStatusSheetState()
+    state.setOrders([{ id: "42", status: "accepted", order_number: "N" }])
+    const before = state.orders
+    applyCableEvent(state, {
+      type: "status_changed",
+      order_id: "42",
+      status: "preparing"
+    })
+    assert.notEqual(state.orders, before)
     assert.equal(state.orders[0].status, "preparing")
   })
 
@@ -101,14 +117,30 @@ describe("applyCableEvent (#35 A1/A2)", () => {
       { id: "42", status: "ready", order_number: "N" },
       { id: "7", status: "preparing", order_number: "M" }
     ])
+    const before = state.orders
     applyCableEvent(state, {
       type: "status_changed",
       order_id: "42",
       status: "issued"
     })
+    assert.notEqual(state.orders, before)
     assert.equal(state.orders.length, 1)
     assert.equal(state.orders[0].id, "7")
     assert.equal(state.mode, ORDER_STATUS_SHEET_MODES.PEEK)
+  })
+
+  it("#63 Subtask 3: removes on closed via new array", () => {
+    const state = createOrderStatusSheetState()
+    state.setOrders([{ id: "9", status: "ready", order_number: "C" }])
+    const before = state.orders
+    applyCableEvent(state, {
+      type: "status_changed",
+      order_id: "9",
+      status: "closed"
+    })
+    assert.notEqual(state.orders, before)
+    assert.equal(state.orders.length, 0)
+    assert.equal(state.mode, ORDER_STATUS_SHEET_MODES.HIDDEN)
   })
 
   it("updates preparing→ready in place (ready stays in sheet)", () => {
@@ -127,13 +159,15 @@ describe("applyCableEvent (#35 A1/A2)", () => {
   })
 })
 
-describe("reconnect refresh (#35 A3)", () => {
+describe("reconnect refresh (#35 A3 + #63 Subtask 2)", () => {
   it("applyReconnectOrders keeps ready orders in sheet", () => {
     const state = createOrderStatusSheetState()
     state.setOrders([{ id: "old", status: "preparing", order_number: "OLD" }])
+    const before = state.orders
     applyReconnectOrders(state, [
       { id: "new", status: "ready", order_number: "NEW" }
     ])
+    assert.notEqual(state.orders, before)
     assert.equal(state.orders.length, 1)
     assert.equal(state.orders[0].status, "ready")
     assert.equal(state.mode, ORDER_STATUS_SHEET_MODES.PEEK)
@@ -161,5 +195,86 @@ describe("reconnect refresh (#35 A3)", () => {
     assert.equal(state.connection, "lost")
     state.setConnection("online")
     assert.equal(state.connection, "online")
+  })
+})
+
+describe("#63 dismiss + route visibility", () => {
+  it("Subtask 5/14: dismissOrder sets userDismissed only for that id", () => {
+    const state = createOrderStatusSheetState()
+    state.setOrders([
+      { id: "a", status: "preparing", order_number: "A" },
+      { id: "b", status: "accepted", order_number: "B" }
+    ])
+    dismissOrder(state, "a")
+    assert.equal(state.orders[0].userDismissed, true)
+    assert.equal(state.orders[1].userDismissed, false)
+    assert.deepEqual(
+      visibleOrders(state.orders).map((o) => o.id),
+      ["b"]
+    )
+    assert.equal(state.mode, ORDER_STATUS_SHEET_MODES.PEEK)
+  })
+
+  it("Subtask 6/11: cable updates dismissed order; UI stays hidden for it", () => {
+    const state = createOrderStatusSheetState()
+    state.setOrders([{ id: "42", status: "preparing", order_number: "N" }])
+    dismissOrder(state, "42")
+    assert.equal(state.mode, ORDER_STATUS_SHEET_MODES.HIDDEN)
+
+    applyCableEvent(state, {
+      type: "status_changed",
+      order_id: "42",
+      status: "ready"
+    })
+    assert.equal(state.orders[0].status, "ready")
+    assert.equal(state.orders[0].userDismissed, true)
+    assert.equal(visibleOrders(state.orders).length, 0)
+    assert.equal(state.mode, ORDER_STATUS_SHEET_MODES.HIDDEN)
+  })
+
+  it("preserves userDismissed across reconnect sync", () => {
+    const state = createOrderStatusSheetState()
+    state.setOrders([{ id: "42", status: "preparing", order_number: "N" }])
+    dismissOrder(state, "42")
+    applyReconnectOrders(state, [
+      { id: "42", status: "preparing", order_number: "N" }
+    ])
+    assert.equal(state.orders[0].userDismissed, true)
+    assert.equal(state.mode, ORDER_STATUS_SHEET_MODES.HIDDEN)
+  })
+
+  it("Subtask 7–10/15: shouldShowStatusSheetUi by route + pay stack", () => {
+    const orders = [{ id: "1", status: "preparing" }]
+    assert.equal(
+      shouldShowStatusSheetUi({ hash: "#/", orders }),
+      true
+    )
+    assert.equal(
+      shouldShowStatusSheetUi({ hash: "#/category/2", orders }),
+      true
+    )
+    assert.equal(
+      shouldShowStatusSheetUi({ hash: "#/product/99", orders }),
+      false
+    )
+    assert.equal(
+      shouldShowStatusSheetUi({ hash: "#/profile", orders }),
+      false
+    )
+    assert.equal(
+      shouldShowStatusSheetUi({ hash: "#/checkout", orders }),
+      false
+    )
+    assert.equal(
+      shouldShowStatusSheetUi({ hash: "#/", orders, payStackActive: true }),
+      false
+    )
+    assert.equal(
+      shouldShowStatusSheetUi({
+        hash: "#/",
+        orders: [{ id: "1", userDismissed: true }]
+      }),
+      false
+    )
   })
 })

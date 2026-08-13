@@ -13,7 +13,11 @@
     ORDER_STATUS_SHEET_MODES,
     ACTIVE_ORDERS_POLL_MS,
     startActiveOrdersPolling,
-    stopActiveOrdersPolling
+    stopActiveOrdersPolling,
+    dismissOrder,
+    visibleOrders,
+    shouldShowStatusSheetUi,
+    statusWidgetUiVisible
   } from "../lib/orderStatusSheet.js"
   import {
     createActiveOrdersAccordionState
@@ -45,6 +49,9 @@
   let connectionLost = false
   /** Стабильный ключ подписок — poll не reconnect Cable при том же наборе id */
   let subscribedIdsKey = ""
+  let routeHash = $state(
+    typeof window !== "undefined" ? window.location.hash : "#/"
+  )
 
   let cancelModalOpen = $state(false)
   let cancelLoading = $state(false)
@@ -58,15 +65,24 @@
   })
 
   function sync() {
-    orders = sheet.orders
+    // #63: всегда новая ссылка массива для Svelte 5
+    orders = (sheet.orders || []).slice()
     mode = sheet.mode
     connection = sheet.connection
+    const shown = visibleOrders(orders)
     const prev = accordionState.activeExpandedOrderId
-    accordionState = createActiveOrdersAccordionState(orders)
-    const stillThere = orders.some(
+    accordionState = createActiveOrdersAccordionState(shown)
+    const stillThere = shown.some(
       (o) => String(o.id || o.order_id) === String(prev || "")
     )
     if (stillThere) accordionState.activeExpandedOrderId = prev
+  }
+
+  function onDismissOrder(order) {
+    const id = order?.id || order?.order_id
+    if (!id) return
+    dismissOrder(sheet, id)
+    sync()
   }
 
   function clearSubs() {
@@ -184,30 +200,47 @@
     const onVisibility = () => {
       if (document.visibilityState === "visible") refreshActive()
     }
+    const onHash = () => {
+      routeHash = window.location.hash || "#/"
+    }
     window.addEventListener("online", onOnline)
     document.addEventListener("visibilitychange", onVisibility)
+    window.addEventListener("hashchange", onHash)
     // #47 G1: ACTIVE_ORDERS_POLL_MS страховка; Cable остаётся fast-path
     startActiveOrdersPolling(() => { refreshActive() })
     return () => {
       window.removeEventListener("online", onOnline)
       document.removeEventListener("visibilitychange", onVisibility)
+      window.removeEventListener("hashchange", onHash)
       stopActiveOrdersPolling()
       clearSubs()
     }
   })
 
-  let scrollable = $derived(shouldScrollStatusList(orders))
+  let displayOrders = $derived(visibleOrders(orders))
+  let scrollable = $derived(shouldScrollStatusList(displayOrders))
   let panelExpanded = $derived(!!accordionState.activeExpandedOrderId)
   let statusSheetMode = $derived(
-    orders.length === 0
+    displayOrders.length === 0
       ? ORDER_STATUS_SHEET_MODES.HIDDEN
       : panelExpanded
         ? ORDER_STATUS_SHEET_MODES.EXPANDED
         : ORDER_STATUS_SHEET_MODES.PEEK
   )
+  let showStatusUi = $derived(
+    shouldShowStatusSheetUi({ hash: routeHash, orders }) &&
+      statusSheetMode !== ORDER_STATUS_SHEET_MODES.HIDDEN
+  )
+
+  $effect(() => {
+    statusWidgetUiVisible.set(!!showStatusUi)
+    return () => {
+      statusWidgetUiVisible.set(false)
+    }
+  })
 </script>
 
-{#if statusSheetMode !== ORDER_STATUS_SHEET_MODES.HIDDEN}
+{#if showStatusUi}
   <div
     class="oss"
     class:embedded
@@ -231,13 +264,14 @@
       {#if cancelToast}
         <p class="oss__toast" data-testid="sticky-cancel-toast" role="status">{cancelToast}</p>
       {/if}
-      {#each orders as order (order.id || order.order_id)}
+      {#each displayOrders as order (order.id || order.order_id)}
         <ActiveOrdersAccordion
           {order}
           {sheetContext}
           bind:accordionState
           onOpenDetail={(o) => push(`/order/${o.id || o.order_id}`)}
           onCancelRequest={onCancelRequest}
+          onDismiss={onDismissOrder}
         />
       {/each}
       {#if scrollable}
