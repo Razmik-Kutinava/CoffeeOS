@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-14 (develop pushed `41b22c12`)  
+**Дата:** 2026-08-14 (#65 intake)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Push `41b22c12` · пайплайн в rules · **#64** GREEN local | CI · Fly deploy #64 по апруву · пачка логов + MCP |
+| **#65** intake связка TG/IG In-App → `/shop` | `go` → SPEC · #64 deploy/MCP — отдельно по апруву |
 
-**last_done:** push develop `4daa2a36..41b22c12`  
-**next_step:** CI green → Fly deploy #64 по апруву · пачка приёмки + MCP Point A
+**last_done:** intake CBR #65 (задача 2 серии)  
+**next_step:** PHASE 1 SPEC по `go` · не смешивать с #64 MCP
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -18,6 +18,19 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### #65 Telegram/Instagram In-App → /shop linkage (2026-08-14)
+
+| Что | Статус |
+|-----|--------|
+| Intake + CBR #65 | **`[x]`** |
+| SPEC (`todo.md`) | `[ ]` ждать `go` |
+| Диагностика / RED / GREEN | `[ ]` |
+| Fly MCP Point A | `[ ]` |
+| TG/IG устройства | `[ ]` |
+
+**ТЗ:** [`customer_tasks/Изменения в связке Telegram Instagram…`](../milestones/veha_2/requirements/customer_tasks/Изменения%20в%20связке%20Telegram%20Instagram%20In-App%20Browser%20к%20CoffeeOS%20shop.md)  
+**Артефакты:** [`artifacts/telegram_instagram_inapp_shop_linkage/`](../milestones/veha_2/artifacts/telegram_instagram_inapp_shop_linkage/)
 
 ### #64 Shop Telegram/Instagram in-app open (2026-08-14)
 

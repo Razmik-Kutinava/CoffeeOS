@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-14 — docs: intake #65 TG/IG In-App → /shop linkage
+
+- ТЗ 1:1: связка Telegram/Instagram In-App Browser → CoffeeOS `/shop`
+- CBR #65 · artifacts `telegram_instagram_inapp_shop_linkage/`
+- Серия задача 2; #64 MCP не закрыт — не смешивать
+- Дальше: SPEC по `go`
+
 ## 2026-08-14 — chore: push develop `41b22c12`
 
 - `origin/develop` = `41b22c12` (пайплайн rules + #64 GREEN + MCP v455)

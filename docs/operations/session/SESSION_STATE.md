@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-14 (develop pushed `41b22c12`)  
+**Дата:** 2026-08-14 (#65 intake)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Push `41b22c12` · #64 GREEN local | CI · deploy #64 по апруву |
+| **#65** intake связка TG/IG → `/shop` | `go` → PHASE 1 SPEC · #64 Fly MCP отдельно |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,13 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-14 (#65 intake linkage)
+
+- CBR **#65** · ТЗ 1:1 связка Telegram/Instagram In-App → CoffeeOS `/shop`
+- Артефакты: `artifacts/telegram_instagram_inapp_shop_linkage/`
+- Не смешивать с недозакрытым #64 (Fly MCP / TG-IG устройства)
+- Код / SPEC не трогали — ждём `go`
 
 ### Сессия 2026-08-14 (push develop)
 
