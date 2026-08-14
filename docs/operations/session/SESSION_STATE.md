@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-14 (Sentry N+1 + noise filter)  
+**Дата:** 2026-08-14 (Sentry N+1 pushed, CI green)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **Sentry:** N+1 products/cart + drop ConcurrentMigration/SystemExit/CLI | push · deploy |
+| **CI green** `75e9d91e` Sentry N+1 + filter | deploy |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -22,6 +22,7 @@
 - RUBY-V: `CartService#json_lines` — available из пачки settings, без EXISTS на строку
 - Filter: ConcurrentMigrationError / SystemExit / CLI NameError… — не HTTP гостя
 - Local: presenter+cart+sentry+mount 34/0 · products API отдельно
+- Push `75e9d91e` · CI https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/31792302569 — 5/5 green
 
 ### Сессия 2026-08-14 (WSL full shop suite + CI flake)
 

@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-14 (Sentry N+1 + noise filter)  
+**Дата:** 2026-08-14 (Sentry N+1 pushed, CI green)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **Sentry RUBY-19/V N+1 + filter console/migrate** | push · deploy · Archive в UI Sentry |
+| **CI #34 green** `75e9d91e` Sentry N+1 + filter | deploy · Archive Sentry UI |
 
-**last_done:** Sentry N+1 shop + noise filter (console/migrate)  
-**next_step:** push · deploy · Archive старых issues в Sentry UI
+**last_done:** push `75e9d91e` · CI all 5 jobs green  
+**next_step:** deploy · Archive старых issues в Sentry UI
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
