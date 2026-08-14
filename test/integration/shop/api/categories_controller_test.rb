@@ -48,4 +48,26 @@ class Shop::Api::CategoriesControllerTest < ActionDispatch::IntegrationTest
     json = JSON.parse(response.body)
     assert json["data"].is_a?(Array)
   end
+
+  # #65 linkage: query tenant_id (как во внешней ссылке TG/IG), не только X-Shop-Tenant
+  test "GET /shop/api/categories?tenant_id= uses query tenant without header" do
+    get "/shop/api/categories", params: { tenant_id: @tenant.id }
+    assert_response :success
+    json = JSON.parse(response.body)
+    assert json["data"].is_a?(Array)
+  end
+
+  test "GET /shop/api/categories?tenant_id= unknown returns 404 not fallback" do
+    get "/shop/api/categories", params: { tenant_id: "00000000-0000-0000-0000-000000000099" }
+    assert_response :not_found
+    json = JSON.parse(response.body)
+    assert_equal "Точка не найдена", json["error"]
+  end
+
+  test "GET /shop/api/categories?tenant_id= blank returns 422 not silent fallback" do
+    get "/shop/api/categories", params: { tenant_id: "" }
+    assert_response :unprocessable_entity
+    json = JSON.parse(response.body)
+    assert_match(/tenant_id|точка/i, json["error"])
+  end
 end
