@@ -122,7 +122,7 @@ Runbook: `docs/operations/dev/ENTIRE.md`. На **REVIEW:** `entire checkpoint ex
 |----------|---------|
 | Фича / CBR / CHECKLIST / честный отчёт | `coffeeos-task-workflow.mdc` |
 | SBR цикл | `spec-build-review.mdc` |
-| Регрессия / миграции / hot-path | `coffeeos-dev-gates.mdc` |
+| Регрессия / миграции / hot-path / **пайплайн стенд** | `coffeeos-dev-gates.mdc` |
 | Куда класть файл | `coffeeos-repo-layout.mdc` |
 | Текст от заказчика | `coffeeos-customer-intake.mdc` |
 | Файл >120–200 строк | `coffeeos-file-size-split.mdc` |
@@ -161,6 +161,7 @@ Runbook: `docs/operations/dev/ENTIRE.md` § Windows.
 | `Субагент: …` | Всегда (или `нет — мелочь`) |
 | **Local:** команда PASS/FAIL | После `/regress` или GREEN |
 | **Fly MCP:** PASS / skip+почему | Hot-path витрина/оплата |
+| **Sentry 24h · Fly logs · Neon · УК** | После deploy на стенд — пачка вместе с MCP (`dev-gates` § пайплайн) |
 | Entire `explain <sha>` | `/review` — why-context vs spec |
 
 Нет строки — шаг не `done`. Владелец проверяет отчёт; цепочка `/start`→`/review` ведёт этапы.

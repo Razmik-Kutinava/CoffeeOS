@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-14 (#64 GREEN local)  
+**Дата:** 2026-08-14 (пайплайн стенд в rules)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#64** GREEN local · watchdog + Catalog retry | Fly deploy по апруву · MCP Point A · TG/IG устройства |
+| Пайплайн стенд записан в `coffeeos-dev-gates` · **#64** GREEN local | Fly deploy #64 по апруву · MCP + пачка логов |
 
-**last_done:** GREEN #64 shop boot watchdog (classic script + mount catch + retry)  
-**next_step:** Fly deploy по апруву · MCP Point A · проверка Telegram/Instagram на устройствах
+**last_done:** канон приёмки Fly: local→CI→deploy→Sentry+логи+MCP  
+**next_step:** Fly deploy #64 по апруву · пачка приёмки + MCP Point A
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-14 — docs(rules): пайплайн на стенд (CI → Sentry+логи+MCP)
+
+- `coffeeos-dev-gates`: порядок local → review → push → CI → deploy → пачка Sentry/Fly/Neon/УК + MCP Point A
+- Мелочь/docs без пачки; push/deploy только по апруву
+
 ## 2026-08-14 — feat: #64 shop boot watchdog for embedded browsers [GREEN]
 
 - Classic `shop-boot-watchdog`: нет вечного «Загрузка меню…» если `type=module` не исполнился
