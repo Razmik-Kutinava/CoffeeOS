@@ -132,3 +132,21 @@ bin/rails test test/integration/shop/shop_usercards_phase1_persist_test.rb
 ```
 
 Приёмка: Fly MCP **Point A** `2fdee1ac-4674-41ee-b89e-87b45643f789`.
+
+---
+
+## Embedded browser (Telegram / Instagram In-App)
+
+Связка: пользователь открывает публичную витрину **ссылкой** `GET /shop?tenant_id=<UUID>` во встроенном браузере Telegram или Instagram. Это **не** Mini App и **не** авторизация.
+
+| Внешнее | Наше |
+|---------|------|
+| ссылка `/shop?tenant_id=` | `@shop_tenant` / catalog API `tenant_id` |
+| Telegram/Instagram user_id, username, phone | **не маппятся** на `user_id` |
+| User-Agent / факт WebView | **не** механизм auth |
+
+Каталог: `GET /shop/api/categories?tenant_id=<UUID>` (same-origin). CORS «на всякий случай» не добавляем.
+
+Bootstrap: HTML содержит `shop-boot-skeleton`; единственный Vite entry — `type="module"`. Если module не исполнился, classic `shop-boot-watchdog` снимает вечную «Загрузка меню…». UA-ветки и redirect «открой в Chrome» — не канон фикса.
+
+**#64** · тесты: `shop_boot_skeleton_test.rb` · `shop_catalog_load_test.mjs`

@@ -42,5 +42,20 @@
       </div>
     <% end %>
     <%= yield %>
+    <script id="shop-boot-watchdog">
+      (function () {
+        window.setTimeout(function () {
+          var sk = document.querySelector(".shop-boot-skeleton");
+          if (!sk) return;
+          sk.setAttribute("aria-busy", "false");
+          sk.innerHTML =
+            '<p class="shop-boot-message">Не удалось загрузить меню</p>' +
+            '<p class="shop-boot-message">Обновите страницу и проверьте интернет.</p>' +
+            '<p class="shop-boot-message"><button type="button" id="shop-boot-reload" style="background:#ff8c42;color:#1a1a1a;border:0;border-radius:8px;padding:0.6rem 1rem;font:inherit;cursor:pointer">Обновить</button></p>';
+          var btn = document.getElementById("shop-boot-reload");
+          if (btn) btn.onclick = function () { window.location.reload(); };
+        }, 12000);
+      })();
+    </script>
   </body>
 </html>

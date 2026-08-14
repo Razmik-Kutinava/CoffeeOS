@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-14 — feat: #64 shop boot watchdog for embedded browsers [GREEN]
+
+- Classic `shop-boot-watchdog`: нет вечного «Загрузка меню…» если `type=module` не исполнился
+- `application.js` ловит mount; Catalog — «Повторить»; storage throw не роняет loadCatalog
+- Chrome Point A эталон PASS; UA-веток нет
+- Local: JS catalog+ls 5/0 · boot structural 3/0
+
 ## 2026-08-14 — docs: intake + SPEC #64 shop Telegram/Instagram in-app
 
 - ТЗ 1:1: открытие `/shop?tenant_id=` во встроенных браузерах Telegram и Instagram

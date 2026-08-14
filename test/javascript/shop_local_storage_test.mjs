@@ -57,4 +57,22 @@ assert.equal(loadShopRefreshToken(), "abc123token")
 clearShopRefreshToken()
 assert.equal(loadShopRefreshToken(), null)
 
+const throwing = {
+  getItem() {
+    throw new Error("SecurityError")
+  },
+  setItem() {
+    throw new Error("SecurityError")
+  },
+  removeItem() {
+    throw new Error("SecurityError")
+  }
+}
+globalThis.localStorage = throwing
+assert.equal(readShopLocalStorage("any"), null)
+writeShopLocalStorage("any", { x: 1 })
+removeShopLocalStorage("any")
+assert.equal(loadShopRefreshToken(), null)
+saveShopRefreshToken("nope")
+
 console.log("shop_local_storage_test: PASS")

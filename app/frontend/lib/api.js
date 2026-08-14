@@ -21,7 +21,7 @@ const API_PREFIX = "/shop/api"
 function shopApiKey() {
   const meta = document.querySelector('meta[name="shop-api-key"]')?.getAttribute("content")
   if (meta && meta.trim()) return meta.trim()
-  const env = import.meta.env.VITE_SHOP_API_KEY
+  const env = import.meta.env?.VITE_SHOP_API_KEY
   return env && String(env).trim() ? String(env).trim() : ""
 }
 

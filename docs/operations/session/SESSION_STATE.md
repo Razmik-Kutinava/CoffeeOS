@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-14 (#64 intake+SPEC)  
+**Дата:** 2026-08-14 (#64 GREEN local)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#64** `/shop` Telegram/Instagram in-app · intake+SPEC | Диагностика точки отказа (Chrome эталон → TG/IG) |
+| **#64** GREEN local · watchdog + Catalog retry | Fly deploy по апруву · MCP Point A · TG/IG устройства |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,14 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-14 (#64 GREEN boot watchdog)
+
+- Chrome Point A: HTML+module+mount+каталог PASS; cookie не нужен для меню
+- Точка отказа: единственный boot = `type=module`; без classic fallback вечный skeleton
+- GREEN: `shop-boot-watchdog` · try/catch mount · Catalog «Повторить» · loadCatalog storage/API tests
+- Local: JS 5/0 · boot structural 3/0 · Fly MCP / TG/IG устройства — после deploy
+- Без UA-веток и без redirect «открой в Chrome»
 
 ### Сессия 2026-08-14 (#64 intake+SPEC)
 

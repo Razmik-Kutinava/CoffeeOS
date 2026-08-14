@@ -9,23 +9,31 @@
   let loading = $state(true)
   let err = $state(null)
 
+  async function fetchMenu() {
+    loading = true
+    err = null
+    try {
+      categories = await loadCatalog()
+      startCatalogPolling((cats) => {
+        categories = cats
+      })
+    } catch (e) {
+      err = e.message
+    } finally {
+      loading = false
+    }
+  }
+
   onMount(() => {
     const onScroll = () => handleCatalogScroll()
     window.addEventListener("scroll", onScroll, { passive: true })
-    refreshCartSheet().catch(() => {})
+    try {
+      refreshCartSheet().catch(() => {})
+    } catch {
+      /* storage / sync — не блокировать каталог */
+    }
 
-    ;(async () => {
-      try {
-        categories = await loadCatalog()
-        startCatalogPolling((cats) => {
-          categories = cats
-        })
-      } catch (e) {
-        err = e.message
-      } finally {
-        loading = false
-      }
-    })()
+    fetchMenu()
 
     return () => {
       stopCatalogPolling()
@@ -45,6 +53,11 @@
     {:else}
       <p class="text-[#888] text-xs mt-3">Проверьте интернет и обновите страницу</p>
     {/if}
+    <button
+      type="button"
+      class="mt-4 rounded-lg bg-[#ff8c42] px-4 py-2 text-sm font-medium text-[#1a1a1a]"
+      onclick={fetchMenu}
+    >Повторить</button>
   </div>
 {:else if categories.length === 0}
   <div class="no-results">

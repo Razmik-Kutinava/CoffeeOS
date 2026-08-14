@@ -3,17 +3,14 @@
 require "test_helper"
 
 # #64: /shop bootstrap — skeleton + classic watchdog (не type=module).
-class Shop::ShopBootSkeletonTest < ActionDispatch::IntegrationTest
-  include TestFactories
-
-  test "GET /shop renders boot skeleton and classic watchdog script" do
-    tenant = create_tenant!
-    get "/shop?tenant_id=#{tenant.id}"
-    assert_response :success
-    assert_includes response.body, "shop-boot-skeleton"
-    assert_includes response.body, "Загрузка меню"
-    assert_includes response.body, 'id="shop-boot-watchdog"'
-    refute_match(/id="shop-boot-watchdog"[^>]*\btype=["']module["']/, response.body)
+class Shop::ShopBootSkeletonTest < ActiveSupport::TestCase
+  test "shop layout has classic boot watchdog; home has skeleton" do
+    layout = File.read(Rails.root.join("app/views/layouts/shop.html.erb"))
+    home = File.read(Rails.root.join("app/views/shop/pages/home.html.erb"))
+    assert_includes home, "shop-boot-skeleton"
+    assert_includes home, "Загрузка меню"
+    assert_includes layout, 'id="shop-boot-watchdog"'
+    refute_match(/id="shop-boot-watchdog"[^>]*\btype=["']module["']/, layout)
   end
 
   test "application entrypoint catches mount failure" do

@@ -34,7 +34,12 @@ export async function loadCatalog() {
       writeCatalogCache(categories)
       return categories
     } catch (e) {
-      const cached = readCatalogCache()
+      let cached = null
+      try {
+        cached = readCatalogCache()
+      } catch {
+        cached = null
+      }
       if (cached?.length) return cached
       throw e
     } finally {
