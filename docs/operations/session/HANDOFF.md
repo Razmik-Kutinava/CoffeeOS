@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-14 (пайплайн стенд в rules)  
+**Дата:** 2026-08-14 (develop pushed `41b22c12`)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Пайплайн стенд записан в `coffeeos-dev-gates` · **#64** GREEN local | Fly deploy #64 по апруву · MCP + пачка логов |
+| Push `41b22c12` · пайплайн в rules · **#64** GREEN local | CI · Fly deploy #64 по апруву · пачка логов + MCP |
 
-**last_done:** канон приёмки Fly: local→CI→deploy→Sentry+логи+MCP  
-**next_step:** Fly deploy #64 по апруву · пачка приёмки + MCP Point A
+**last_done:** push develop `4daa2a36..41b22c12`  
+**next_step:** CI green → Fly deploy #64 по апруву · пачка приёмки + MCP Point A
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

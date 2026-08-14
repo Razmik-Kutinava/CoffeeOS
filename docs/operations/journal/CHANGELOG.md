@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-14 — chore: push develop `41b22c12`
+
+- `origin/develop` = `41b22c12` (пайплайн rules + #64 GREEN + MCP v455)
+- Deploy — по апруву
+
 ## 2026-08-14 — docs(rules): пайплайн на стенд (CI → Sentry+логи+MCP)
 
 - `coffeeos-dev-gates`: порядок local → review → push → CI → deploy → пачка Sentry/Fly/Neon/УК + MCP Point A

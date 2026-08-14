@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-14 (пайплайн стенд в rules)  
+**Дата:** 2026-08-14 (develop pushed `41b22c12`)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Пайплайн стенд в `coffeeos-dev-gates` · #64 GREEN local | Deploy #64 по апруву |
+| Push `41b22c12` · #64 GREEN local | CI · deploy #64 по апруву |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,12 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-14 (push develop)
+
+- `git push origin develop` `4daa2a36..41b22c12`
+- Включает: MCP v455 · #64 intake/RED/GREEN · пайплайн стенд в rules
+- Deploy не делали
 
 ### Сессия 2026-08-14 (пайплайн стенд → rules)
 

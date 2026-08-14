@@ -2,7 +2,7 @@
 
 | last_done | current_state | next_step |
 |-----------|---------------|-----------|
-| GREEN local #64 boot watchdog + catalog retry | ждать deploy | Fly deploy по апруву · **пачка** Sentry+логи+MCP (`dev-gates`) · TG/IG |
+| push `41b22c12` (#64 GREEN + пайплайн rules) | ждать CI / deploy | CI green · Fly deploy по апруву · **пачка** Sentry+логи+MCP · TG/IG |
 
 **ТЗ:** [`customer_tasks/Исправление открытия shop во встроенных браузерах Telegram и Instagram.md`](../milestones/veha_2/requirements/customer_tasks/Исправление%20открытия%20shop%20во%20встроенных%20браузерах%20Telegram%20и%20Instagram.md)
 **Артефакты:** [`artifacts/shop_telegram_instagram_inapp_browser/`](../milestones/veha_2/artifacts/shop_telegram_instagram_inapp_browser/)
