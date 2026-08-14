@@ -2,16 +2,31 @@ function csrfToken() {
   return document.querySelector('meta[name="csrf-token"]')?.getAttribute("content") || ""
 }
 
-/** Сначала ?tenant_id= в URL (совпадает с выбранной точкой в менеджере), иначе meta с сервера. */
-function resolvedShopTenantId() {
-  const q = new URLSearchParams(window.location.search).get("tenant_id")
-  if (q && String(q).trim()) return String(q).trim()
+/**
+ * Tenant для shop API.
+ * Если ключ ?tenant_id= есть в URL (даже пустой) — не подменяем meta/fallback (связка #65).
+ * Без ключа — meta с сервера.
+ */
+export function resolvedShopTenantId() {
+  const params = new URLSearchParams(window.location.search)
+  if (params.has("tenant_id")) {
+    const q = params.get("tenant_id")
+    return q && String(q).trim() ? String(q).trim() : ""
+  }
   return document.querySelector('meta[name="shop-tenant-id"]')?.getAttribute("content") || ""
 }
 
-function withTenantQuery(url) {
+/** Добавляет tenant_id в URL. Явный (в т.ч. пустой) query сохраняем — сервер вернёт ошибку связки. */
+export function withTenantQuery(url) {
+  if (url.includes("tenant_id=")) return url
+  const params = new URLSearchParams(window.location.search)
+  if (params.has("tenant_id")) {
+    const q = (params.get("tenant_id") || "").trim()
+    const sep = url.includes("?") ? "&" : "?"
+    return `${url}${sep}tenant_id=${encodeURIComponent(q)}`
+  }
   const tid = resolvedShopTenantId()
-  if (!tid || url.includes("tenant_id=")) return url
+  if (!tid) return url
   const sep = url.includes("?") ? "&" : "?"
   return `${url}${sep}tenant_id=${encodeURIComponent(tid)}`
 }

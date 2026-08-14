@@ -2,13 +2,13 @@
 
 | last_done | current_state | next_step |
 |-----------|---------------|-----------|
-| intake `33482ffa` | **SPEC** записан | RED: тесты целостности `tenant_id` + error/cache связки |
+| GREEN local tenant_id linkage | GREEN local · MCP нет | REVIEW / Fly MCP по апруву · TG/IG устройства |
 
 **CBR:** #65  
 **ТЗ:** [`customer_tasks/Изменения в связке Telegram Instagram In-App Browser к CoffeeOS shop.md`](../milestones/veha_2/requirements/customer_tasks/Изменения%20в%20связке%20Telegram%20Instagram%20In-App%20Browser%20к%20CoffeeOS%20shop.md)  
 **Артефакты:** [`artifacts/telegram_instagram_inapp_shop_linkage/`](../milestones/veha_2/artifacts/telegram_instagram_inapp_shop_linkage/)  
 **Point A:** `https://coffeeos.fly.dev/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789`  
-**Серия:** задача 2 (связка). Задача 1 = #64 open/boot — не переписывать watchdog; не закрывать #64 MCP в этом шаге.
+**Серия:** задача 2 (связка). #64 MCP не закрыт этим шагом.
 
 ## Цель (1 предложение)
 
@@ -33,9 +33,9 @@
 
 - [x] PHASE 0 intake
 - [x] PHASE 1 SPEC
-- [ ] Диагностика связки (Chrome Point A эталон + фиксация `tenant_id` на HTML/API; TG/IG — устройства / после deploy)
-- [ ] RED
-- [ ] GREEN
+- [x] Диагностика связки (local): явный blank/unknown `tenant_id` → ошибка, не silent fallback; Chrome/TG устройства — после deploy
+- [x] RED — `fa2a7f84`
+- [x] GREEN — export helpers · explicit `tenant_id` key · docs § integrity
 - [ ] REVIEW / Fly MCP Point A / TG-IG
 
 ## Файлы (ожидаемо)
@@ -46,7 +46,7 @@
 - `app/controllers/shop/pages_controller.rb` — HTML `/shop` резолвит тот же `tenant_id` из query → `@shop_tenant` / meta
 - `app/frontend/lib/stores/catalog.js` — cache/API fallback (регрессия #64 в контексте связки)
 - `docs/integrations/shop-api.md` § Embedded browser — контракт связки (точки входа, identity, integrity, errors)
-- `test/javascript/shop_api_tenant_query_test.mjs` *(новый)* + при необходимости добор integration categories `?tenant_id=`
+- `test/javascript/shop_api_tenant_query_test.mjs` + `test/integration/shop/shop_tenant_linkage_test.rb` + categories `?tenant_id=`
 
 ## Не ломать
 
@@ -58,13 +58,15 @@
 
 ## Проверка
 
-- `node --test test/javascript/shop_api_tenant_query_test.mjs test/javascript/shop_catalog_load_test.mjs test/javascript/shop_local_storage_test.mjs`
-- `bundle exec ruby -Itest test/integration/shop/api/categories_controller_test.rb test/integration/shop/shop_boot_skeleton_test.rb`
+- `node --test test/javascript/shop_api_tenant_query_test.mjs test/javascript/shop_catalog_load_test.mjs test/javascript/shop_local_storage_test.mjs` — **9/0 PASS**
+- `bundle exec ruby -Itest test/integration/shop/api/categories_controller_test.rb` — **7/0 PASS**
+- `bundle exec ruby -Itest test/integration/shop/shop_tenant_linkage_test.rb` — **3/0 PASS**
+- `bundle exec ruby -Itest test/integration/shop/shop_boot_skeleton_test.rb` — **3/0 PASS**
 
 Fly MCP Point A — после deploy (апрув). TG/IG на телефонах — отдельно.
 
 ## Риски / заметки
 
-- `TenantResolution` имеет fallbacks (single tenant / `ORG_SLUG` / `SHOP_DEFAULT` / dev) — при **явном** `tenant_id` в ссылке связка не должна молча уехать на другую точку, если query потерян на FE или подменён.
+- Явный `params.key?(:tenant_id)` (даже пустой) блокирует fallback — без ключа fallbacks как раньше.
 - Не плодить UA-ветки «если Telegram».
 - Не смешивать закрытие #64 MCP с кодом #65.

@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-14 (#65 SPEC)  
+**Дата:** 2026-08-14 (#65 GREEN)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#65** SPEC связка TG/IG → `/shop` | RED: tenant_id integrity + tests |
+| **#65** GREEN local tenant_id linkage | REVIEW / Fly MCP по апруву · TG/IG |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,14 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-14 (#65 GREEN linkage)
+
+- Явный `?tenant_id=` (даже blank) → без silent fallback; query > meta
+- FE: export `resolvedShopTenantId` / `withTenantQuery`; blank key → `tenant_id=` в API URL
+- Rails: `params.key?(:tenant_id)` short-circuit
+- Local: JS 9/0 · categories 7/0 · linkage 3/0 · boot 3/0
+- Fly MCP / TG-IG — после deploy
 
 ### Сессия 2026-08-14 (#65 SPEC)
 

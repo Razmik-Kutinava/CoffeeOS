@@ -7,9 +7,14 @@ module Shop
 
     private
 
+    # Явный ?tenant_id= (даже пустой) из внешней ссылки TG/IG — без silent fallback на другую точку (#65).
+    # Без ключа tenant_id — прежние fallbacks (header / host / ENV / single / dev).
     def resolved_shop_tenant_id
-      params[:tenant_id].presence ||
-        request.headers["X-Shop-Tenant"].presence ||
+      if params.key?(:tenant_id)
+        return params[:tenant_id].presence
+      end
+
+      request.headers["X-Shop-Tenant"].presence ||
         Platform::TenantOnboarding::UrlBuilder.tenant_id_for_host(request.host).presence ||
         ENV.fetch("SHOP_DEFAULT_TENANT_ID", nil).presence ||
         single_tenant_fallback_id ||

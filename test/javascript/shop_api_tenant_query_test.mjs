@@ -15,7 +15,6 @@ const OTHER = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"
 describe("shop api tenant query (#65 linkage)", () => {
   const originalWindow = globalThis.window
   const originalDocument = globalThis.document
-  const originalImportMeta = globalThis.import
 
   beforeEach(() => {
     globalThis.document = {

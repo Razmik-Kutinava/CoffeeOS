@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-14 — feat: #65 tenant_id linkage integrity [GREEN]
+
+- Явный `?tenant_id=` (в т.ч. blank) не silent-fallback на другую точку
+- FE: export helpers; blank key → `tenant_id=` в categories URL
+- Rails: `params.key?(:tenant_id)` short-circuit; shop-api.md § integrity
+- Local: JS 9/0 · categories 7/0 · linkage 3/0 · boot 3/0
+
 ## 2026-08-14 — docs: SPEC #65 TG/IG In-App → /shop linkage
 
 - todo: целостность `tenant_id` link→HTML→categories; identity без UA/TG auth; errors/cache; без forced redirect

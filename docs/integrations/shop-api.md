@@ -145,8 +145,18 @@ bin/rails test test/integration/shop/shop_usercards_phase1_persist_test.rb
 | Telegram/Instagram user_id, username, phone | **не маппятся** на `user_id` |
 | User-Agent / факт WebView | **не** механизм auth |
 
-Каталог: `GET /shop/api/categories?tenant_id=<UUID>` (same-origin). CORS «на всякий случай» не добавляем.
+### Целостность tenant_id (#65)
 
-Bootstrap: HTML содержит `shop-boot-skeleton`; единственный Vite entry — `type="module"`. Если module не исполнился, classic `shop-boot-watchdog` снимает вечную «Загрузка меню…». UA-ветки и redirect «открой в Chrome» — не канон фикса.
+Цепочка: внешняя ссылка → `GET /shop?tenant_id=` (meta `shop-tenant-id`) → FE `withTenantQuery` → `GET /shop/api/categories?tenant_id=`.
 
-**#64** · тесты: `shop_boot_skeleton_test.rb` · `shop_catalog_load_test.mjs`
+- Query `tenant_id` **побеждает** meta и silent fallbacks.
+- Ключ `tenant_id` **присутствует, но пуст** → ошибка связки (нет meta / API 422), **не** подмена другой точкой.
+- Неизвестный UUID → нет meta / API 404.
+- Без ключа `tenant_id` — прежние fallbacks (header / ENV / single tenant) для обычного Chrome.
+
+Каталог: `GET /shop/api/categories?tenant_id=<UUID>` (same-origin). CORS «на всякий случай» не добавляем. Forced redirect в Chrome/Safari — не основной фикс.
+
+Bootstrap: HTML содержит `shop-boot-skeleton`; единственный Vite entry — `type="module"`. Если module не исполнился, classic `shop-boot-watchdog` снимает вечную «Загрузка меню…». UA-ветки — не канон фикса.
+
+**#64** · тесты: `shop_boot_skeleton_test.rb` · `shop_catalog_load_test.mjs`  
+**#65** · тесты: `shop_api_tenant_query_test.mjs` · `shop_tenant_linkage_test.rb` · categories `?tenant_id=`
