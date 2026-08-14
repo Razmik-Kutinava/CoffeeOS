@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-14 (Fly v455 MCP Point A PASS)  
+**Дата:** 2026-08-14 (#64 intake+SPEC)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **Fly v455** MCP Point A **PASS** · косяков кода нет | Archive старых 14 в Sentry UI |
+| **#64** `/shop` Telegram/Instagram in-app · intake+SPEC | Диагностика точки отказа (Chrome эталон → TG/IG) |
 
-**last_done:** MCP Point A v455 PASS (pay stack / hide status / catalog)  
-**next_step:** Archive Sentry UI · апрув заказчика #63
+**last_done:** intake + SPEC #64 shop TG/IG in-app  
+**next_step:** диагностика `/shop` — Chrome эталон, затем Telegram/Instagram; фикс только по доказанной причине
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -18,6 +18,20 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### #64 Shop Telegram/Instagram in-app open (2026-08-14)
+
+| Что | Статус |
+|-----|--------|
+| Intake + CBR #64 | **`[x]`** |
+| SPEC (`todo.md`) | **`[x]`** |
+| Диагностика точки отказа | `[ ]` |
+| RED / GREEN | `[ ]` |
+| Fly MCP Point A | `[ ]` |
+| TG/IG реальные устройства | `[ ]` |
+| Апрув заказчика | `[ ]` |
+
+**ТЗ:** [`customer_tasks/Исправление открытия shop…`](../milestones/veha_2/requirements/customer_tasks/Исправление%20открытия%20shop%20во%20встроенных%20браузерах%20Telegram%20и%20Instagram.md)
 
 ### #63 Svelte 5 status widget reactivity UX (2026-08-13)
 

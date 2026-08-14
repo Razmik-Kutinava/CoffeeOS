@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-14 — docs: intake + SPEC #64 shop Telegram/Instagram in-app
+
+- ТЗ 1:1: открытие `/shop?tenant_id=` во встроенных браузерах Telegram и Instagram
+- CBR #64 · SPEC в `todo.md` · код не меняли
+- Дальше: диагностика точки отказа, не фикс «на всякий случай»
+
 ## 2026-08-14 — MCP: Point A Fly v455 PASS
 
 - Каталог / product / checkout / pay stack / profile — без регресса #63

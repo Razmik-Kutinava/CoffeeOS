@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-14 (Fly v455 MCP Point A PASS)  
+**Дата:** 2026-08-14 (#64 intake+SPEC)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **Fly v455** MCP Point A **PASS** | Archive Sentry UI |
+| **#64** `/shop` Telegram/Instagram in-app · intake+SPEC | Диагностика точки отказа (Chrome эталон → TG/IG) |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,13 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-14 (#64 intake+SPEC)
+
+- ТЗ 1:1: `customer_tasks/Исправление открытия shop во встроенных браузерах Telegram и Instagram.md`
+- CBR #64 · artifacts `shop_telegram_instagram_inapp_browser/`
+- SPEC в `todo.md`: 7 файлов · Не ломать Chrome/Safari/cart/CSRF · Проверка `node --test` + 2 shop tests
+- Код не меняли; причина не доказана; задачи 2–5 серии — другие диалоги
 
 ### Сессия 2026-08-14 (MCP Point A v455)
 
