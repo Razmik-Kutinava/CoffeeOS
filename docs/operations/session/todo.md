@@ -2,7 +2,7 @@
 
 | last_done | current_state | next_step |
 |-----------|---------------|-----------|
-| REVIEW + CI Vite linkage fix | local PASS · push CI | CI green · deploy только апрув |
+| CI green `c9b8f04d` | REVIEW+push done | **deploy — апрув** · потом MCP |
 
 **CBR:** #65  
 **ТЗ:** [`customer_tasks/Изменения в связке Telegram Instagram In-App Browser к CoffeeOS shop.md`](../milestones/veha_2/requirements/customer_tasks/Изменения%20в%20связке%20Telegram%20Instagram%20In-App%20Browser%20к%20CoffeeOS%20shop.md)  

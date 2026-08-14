@@ -7,7 +7,7 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| Local #65 PASS · REVIEW · CI Vite linkage fix | push → CI green · **deploy только апрув** |
+| Local PASS · REVIEW · push `c9b8f04d` · **CI green** | **deploy — только апрув** |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

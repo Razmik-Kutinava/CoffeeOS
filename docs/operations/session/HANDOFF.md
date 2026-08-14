@@ -7,10 +7,10 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| Local PASS · REVIEW · CI Vite fix | CI green после push · **deploy — апрув** |
+| Local PASS · REVIEW · push · **CI green** `c9b8f04d` | **deploy — апрув** |
 
-**last_done:** REVIEW #65 + linkage tests без Vite layout  
-**next_step:** push → CI · deploy только по апруву
+**last_done:** push #65 CI fix · CI green run 31815909292  
+**next_step:** deploy только по апруву · потом MCP Point A
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -27,7 +27,7 @@
 | SPEC (`todo.md`) | **`[x]`** |
 | RED / GREEN | **`[x]`** local |
 | REVIEW | **`[x]`** manual |
-| CI | fix Vite linkage → push |
+| CI | **green** `c9b8f04d` · [run 31815909292](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/31815909292) |
 | Fly MCP Point A | `[ ]` ждать deploy апрув |
 | TG/IG устройства | `[ ]` |
 
