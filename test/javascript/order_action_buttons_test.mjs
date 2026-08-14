@@ -41,7 +41,7 @@ describe("ACTION_CTA_STYLE (#41 step 4)", () => {
 })
 
 describe("static matrix paid + ios (#41 step 4)", () => {
-  it("renders config: Отменить заказ + Добавить в Wallet", () => {
+  it("renders config: Отменить заказ + Карта в Apple Wallet", () => {
     const view = orderStatusCtas({
       status: "paid",
       os: "ios",
@@ -50,7 +50,7 @@ describe("static matrix paid + ios (#41 step 4)", () => {
     })
     assert.equal(view.buttons.length, 2)
     assert.equal(view.buttons[0].label, "Отменить заказ")
-    assert.equal(view.buttons[1].label, "Добавить в Wallet")
+    assert.equal(view.buttons[1].label, "Карта в Apple Wallet")
     assert.deepEqual(
       view.buttons.map((b) => b.kind),
       ["cancel", "wallet"]

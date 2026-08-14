@@ -36,13 +36,15 @@ class Shop::OrderStatusAcceptanceCbrTest < ActionDispatch::IntegrationTest
     assert_includes screen, "Самовывоз"
   end
 
-  # Критерий: маршрут /order/:id и редирект после cash checkout
+  # Критерий: маршрут /order/:id и редирект на экран статуса (не из Checkout — pay-result / offline queue)
   test "b11_02 order status route and checkout redirect" do
     app = File.read(Rails.root.join("app/frontend/App.svelte"))
-    checkout = vitrina_source("routes/Checkout.svelte")
+    payment_result = vitrina_source("routes/PaymentResult.svelte")
 
     assert_includes app, '"/order/:id"'
-    assert_includes checkout, "push(`/order/${orderId}`)"
+    assert_includes payment_result, "push(`/order/${orderId}`)"
+    assert_includes app, "shop:offline-order-sent"
+    assert_includes app, "push(`/order/${orderId}`)"
   end
 
   # Критерий: API отдаёт поля для экрана статуса

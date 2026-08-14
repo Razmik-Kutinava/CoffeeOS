@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-13 (#63 Fly v454 MCP PASS)  
+**Дата:** 2026-08-14 (legacy triage + dismissedIds)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#63 Fly v454 MCP PASS** · CI #32 green · dismiss/X + route hide | апрув заказчика |
+| **Legacy 4 green** · JS 294/294 · dismissedIds terminal fix | Sentry alert · push+CI |
 
-**last_done:** deploy v454 + MCP Point A #63  
-**next_step:** апрув #63 / следующая задача пула
+**last_done:** legacy triage (CBR b11_02, E7, Wallet JS, dismissedIds)  
+**next_step:** push develop · Sentry alert · апрув #63
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

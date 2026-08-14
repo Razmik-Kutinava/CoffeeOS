@@ -157,7 +157,7 @@ export function applyCableEvent(state, payload, hooks = {}) {
   // ready остаётся в шторке («Готов» + CTA); иначе окно ready → пусто +0₽ без «повторить»
   const terminal = SHEET_TERMINAL_STATUSES.includes(status)
   if (terminal) {
-    delete state.dismissedIds[orderId]
+    // dismissedIds не сбрасываем: если id вернётся из stale sync — виджет не всплывёт снова
     state.setOrders(
       state.orders.filter((o) => normalizeId(o.id ?? o.order_id) !== orderId)
     )

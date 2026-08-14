@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-13 (#63 Fly v454 MCP PASS)  
+**Дата:** 2026-08-14 (legacy triage + dismissedIds)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#63 Fly v454 MCP PASS** · CI green · deploy OK | апрув заказчика |
+| **Legacy 4 + JS 294/294 green** · dismissedIds не сбрасывается на terminal | push · Sentry |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,12 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-14 (legacy triage + dismissedIds)
+
+- Legacy 4 + mount acceptance: 27 runs green (CBR b11_02, UserCards E7)
+- JS suite: 294/294 (Wallet label i18n)
+- `orderStatusSheet`: terminal cable не `delete dismissedIds` — dismiss сохраняется при stale re-sync
 
 ### Сессия 2026-08-13 (#63 deploy + MCP Point A)
 

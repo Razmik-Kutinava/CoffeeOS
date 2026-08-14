@@ -215,6 +215,25 @@ describe("#63 dismiss + route visibility", () => {
     assert.equal(state.mode, ORDER_STATUS_SHEET_MODES.PEEK)
   })
 
+  it("terminal after dismiss keeps dismissedIds if order re-syncs", () => {
+    const state = createOrderStatusSheetState()
+    state.setOrders([{ id: "42", status: "preparing", order_number: "N" }])
+    dismissOrder(state, "42")
+    applyCableEvent(state, {
+      type: "status_changed",
+      order_id: "42",
+      status: "issued"
+    })
+    assert.equal(state.orders.length, 0)
+    assert.equal(state.dismissedIds["42"], true)
+
+    applyReconnectOrders(state, [
+      { id: "42", status: "preparing", order_number: "N" }
+    ])
+    assert.equal(state.orders[0].userDismissed, true)
+    assert.equal(state.mode, ORDER_STATUS_SHEET_MODES.HIDDEN)
+  })
+
   it("Subtask 6/11: cable updates dismissed order; UI stays hidden for it", () => {
     const state = createOrderStatusSheetState()
     state.setOrders([{ id: "42", status: "preparing", order_number: "N" }])

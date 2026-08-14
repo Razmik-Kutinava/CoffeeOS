@@ -11,6 +11,14 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-14 — fix: legacy shop asserts + dismissedIds terminal + Wallet i18n test
+
+- Legacy: `order_status_acceptance_cbr_test` b11_02 → PaymentResult + offline queue redirect (не Checkout)
+- Legacy: `shop_user_cards_extremes` E7 → `labelAddCard()` / «Картой +»
+- JS: `order_action_buttons_test` → «Карта в Apple Wallet» (#41 i18n)
+- FE: `dismissedIds` не сбрасывается на terminal — stale re-sync не поднимает виджет
+- Local: legacy 4 + mount 27/0 · JS 294/294
+
 ## 2026-08-13 — deploy+MCP: #63 status widget UX Fly v454 PASS
 
 - Fly `coffeeos` v454 · Point A: dismiss X · hide product/profile/checkout · sheet returns on catalog

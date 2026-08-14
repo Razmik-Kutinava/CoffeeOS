@@ -213,8 +213,10 @@ class Shop::ShopUserCardsExtremesTest < ActionDispatch::IntegrationTest
 
   test "E7 PaymentMethodsSheet empty list shows SBP, New card, Pay gate" do
     src = File.read(SHEET)
-    assert_includes src, "Новая карта"
-    assert_includes src, "СБП"
+    i18n = File.read(Rails.root.join("app/frontend/lib/paymentMethodI18n.js"))
+    assert_includes src, "labelAddCard"
+    assert_includes i18n, 'return "Картой +"'
+    assert_includes src, "labelSbp"
     assert_includes src, "CheckoutPayButton"
     assert_includes src, "{#each cards as card"
   end
