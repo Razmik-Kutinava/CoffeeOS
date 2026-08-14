@@ -121,10 +121,8 @@ module Shop
 
       lines = @session[SESSION_KEY].map.with_index do |line, idx|
         product = products[line["product_id"]]
-        raise ActiveRecord::RecordNotFound, "Товар недоступен" unless shop_available?(product)
-
-        setting = tenant_settings[product.id]
-        raise ActiveRecord::RecordNotFound, "Настройки цены для товара '#{product.name}' не найдены для данной точки" unless setting
+        setting = product && tenant_settings[product.id]
+        raise ActiveRecord::RecordNotFound, "Товар недоступен" unless line_available?(product, setting)
 
         unit_price = line_unit_price(product, line, setting)
         qty = line["quantity"]
@@ -211,8 +209,14 @@ module Shop
     end
 
     def shop_available?(product)
-      ProductTenantSetting.available.exists?(product_id: product.id, tenant_id: @tenant_id) &&
-        product.is_active?
+      return false unless product&.is_active?
+
+      ProductTenantSetting.available.exists?(product_id: product.id, tenant_id: @tenant_id)
+    end
+
+    # json_lines: без EXISTS на строку (Sentry RUBY-V). add!/replace_line! по-прежнему бьют shop_available?.
+    def line_available?(product, setting)
+      product&.is_active? && setting.present? && setting.is_enabled && !setting.is_sold_out
     end
 
     def line_key(line)

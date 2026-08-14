@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-14 (WSL shop 506/506 + CI fix)  
+**Дата:** 2026-08-14 (Sentry N+1 + noise filter)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **WSL shop suite 506/506** · Tbank idempotency flake fix | CI green · Sentry alert |
+| **Sentry RUBY-19/V N+1 + filter console/migrate** | push · deploy · Archive в UI Sentry |
 
-**last_done:** WSL full shop 506/506 · Tbank parallel idempotency fix  
-**next_step:** CI green · Sentry alert
+**last_done:** Sentry N+1 shop + noise filter (console/migrate)  
+**next_step:** push · deploy · Archive старых issues в Sentry UI
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

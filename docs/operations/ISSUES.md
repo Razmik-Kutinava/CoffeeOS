@@ -21,6 +21,14 @@
 
 ## Решено недавно (детали)
 
+[2026-08-14] — Sentry: N+1 shop + шум деплоя/консоли
+**Статус:** **resolved** код (нужен push+deploy, затем Archive в UI)
+**Источник:** Sentry feed 14 issues, Users=0
+**Root cause:** `.active.ordered` ломает preload; `json_lines` → EXISTS на строку; DSN ловит fly:release lock и `rails c` опечатки.
+**Чем закрыли:** in-memory options; `line_available?`; `SentryNoiseFilter` + excluded_exceptions.
+**Проверка:** local presenter+cart+sentry+mount 34/0.
+**Archive в Sentry после deploy:** RUBY-10/13/14 (migrate lock) · RUBY-15/16/18/1A/1B/1C/17 (bin/rails) · RUBY-Y/F (SystemExit) · RUBY-19/V (N+1).
+
 [2026-08-13] — Pay NET_ERROR: сырой `Failed to fetch` в PaymentMethodsSheet
 **Статус:** **resolved** Fly **v451** MCP PASS
 **Источник:** MCP Point A v450

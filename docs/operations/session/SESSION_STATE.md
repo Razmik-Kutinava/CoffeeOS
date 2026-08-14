@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-14 (legacy triage + dismissedIds)  
+**Дата:** 2026-08-14 (Sentry N+1 + noise filter)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **Legacy 4 + JS 294/294 green** · dismissedIds не сбрасывается на terminal | push · Sentry |
+| **Sentry:** N+1 products/cart + drop ConcurrentMigration/SystemExit/CLI | push · deploy |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,13 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-14 (Sentry triage)
+
+- RUBY-19: `ModifierGroupsPresenter` — active options из preload, без `.active.ordered`
+- RUBY-V: `CartService#json_lines` — available из пачки settings, без EXISTS на строку
+- Filter: ConcurrentMigrationError / SystemExit / CLI NameError… — не HTTP гостя
+- Local: presenter+cart+sentry+mount 34/0 · products API отдельно
 
 ### Сессия 2026-08-14 (WSL full shop suite + CI flake)
 

@@ -17,7 +17,7 @@ module Shop
       rows = []
       by_key = {}
 
-      @product.product_modifier_groups.ordered.includes(:product_modifier_options).each do |group|
+      loaded_groups.each do |group|
         key = group.name.to_s.strip.downcase
         if (existing = by_key[key])
           merge_modifiers!(existing, group)
@@ -54,8 +54,21 @@ module Shop
       end
     end
 
+    def loaded_groups
+      assoc = @product.association(:product_modifier_groups)
+      records = if assoc.loaded?
+        assoc.target
+      else
+        @product.product_modifier_groups.includes(:product_modifier_options).to_a
+      end
+      records.sort_by { |g| g.sort_order.to_i }
+    end
+
+    # Не .active.ordered — scope на preload бьёт SELECT на каждую группу (Sentry RUBY-19).
     def active_options(group)
-      group.product_modifier_options.active.ordered.to_a
+      opts = group.product_modifier_options
+      records = opts.loaded? ? opts.target : opts.to_a
+      records.select(&:is_active).sort_by { |o| o.sort_order.to_i }
     end
 
     def normalize_name(name)

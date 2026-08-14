@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-14 — fix: Sentry shop N+1 + drop migrate/console noise
+
+- FE/API: `ModifierGroupsPresenter` не бьёт SELECT опций после includes (RUBY-19)
+- Cart: `json_lines` без EXISTS `product_tenant_settings` на строку (RUBY-V)
+- Sentry: `SentryNoiseFilter` — ConcurrentMigrationError, SystemExit, bin/rails NameError/NoMethodError/…
+- Не добавляли Customer / paid / payment_status / reconnect_token в схему
+
 ## 2026-08-14 — test: WSL full shop suite green + Tbank idempotency flake
 
 - WSL Linux: `test/integration/shop/` 506/506 (npm ci + local PG)

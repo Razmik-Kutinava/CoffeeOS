@@ -11,10 +11,16 @@ Sentry.init do |config|
   # Не шлём личные данные пользователей без явного разрешения
   config.send_default_pii = false
 
-  # Фильтруем чувствительные параметры
-  config.before_send = lambda do |event, _hint|
-    event.request&.data&.delete("password")
-    event.request&.data&.delete("password_confirmation")
-    event
+  config.excluded_exceptions += %w[
+    ActiveRecord::ConcurrentMigrationError
+    SystemExit
+    SignalException
+  ]
+
+  # Фильтруем секреты + шум console/rake/fly:release (не HTTP гостя).
+  config.before_send = lambda do |event, hint|
+    next nil if SentryNoiseFilter.drop?(event, hint)
+
+    SentryNoiseFilter.scrub_request!(event)
   end
 end

@@ -204,6 +204,30 @@ class Shop::CartServiceTest < ActiveSupport::TestCase
     assert_equal 500.0, result[:total]
   end
 
+  test "json_lines does not EXISTS product_tenant_settings per line" do
+    category2 = create_category!
+    product2  = create_product!(category: category2)
+    enable_product_for_tenant!(tenant: @tenant, product: product2, price: 200)
+
+    svc = cart
+    svc.add!(product_id: @product.id, quantity: 1, selected_modifiers: [])
+    svc.add!(product_id: product2.id, quantity: 1, selected_modifiers: [])
+
+    exists_count = 0
+    subscriber = ActiveSupport::Notifications.subscribe("sql.active_record") do |*, payload|
+      sql = payload[:sql].to_s
+      next unless sql.match?(/product_tenant_settings/i)
+      next unless sql.match?(/SELECT 1 AS one|EXISTS/i) || sql.include?("LIMIT $") && sql.include?("is_sold_out")
+
+      exists_count += 1
+    end
+
+    svc.json_lines
+    ActiveSupport::Notifications.unsubscribe(subscriber)
+
+    assert_equal 0, exists_count, "RUBY-V: json_lines must use preloaded settings, got #{exists_count} EXISTS"
+  end
+
   test "json_lines includes product description for peek full card" do
     @product.update!(description: "Кардамон и корица — пряный акцент")
     cart.add!(product_id: @product.id, quantity: 1, selected_modifiers: [])
