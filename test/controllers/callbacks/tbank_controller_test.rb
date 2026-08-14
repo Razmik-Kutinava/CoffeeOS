@@ -70,6 +70,14 @@ class Callbacks::TbankControllerTest < ActionDispatch::IntegrationTest
   setup do
     ENV["TBANK_TERMINAL_KEY"] = "TestTerminal"
     ENV["TBANK_PASSWORD"]     = "TestPassword"
+    # не ходить в GetState (5×1с) и не открывать circuit соседнему worker
+    ENV["TBANK_REBILL_SYNC_RETRIES"] = "1"
+    ENV["TBANK_REBILL_SYNC_PAUSE_SEC"] = "0"
+
+    disable_rls_on_orders_payments!
+    clear_enqueued_jobs
+    clear_performed_jobs
+    Payments::CacheCounter.clear!
 
     @tenant = create_tenant!
     FakePollingConfirm.install!
@@ -96,13 +104,17 @@ class Callbacks::TbankControllerTest < ActionDispatch::IntegrationTest
       method:              "card",
       provider:            "tbank",
       provider_payment_id: @provider_payment_id,
-      status:              "pending"
+      status:              "pending",
+      # иначе CONFIRMED без RebillId → live GetState → retry_on enqueue (CI flake)
+      provider_data:       { "save_card" => false }
     )
   end
 
   teardown do
     ENV.delete("TBANK_TERMINAL_KEY")
     ENV.delete("TBANK_PASSWORD")
+    ENV.delete("TBANK_REBILL_SYNC_RETRIES")
+    ENV.delete("TBANK_REBILL_SYNC_PAUSE_SEC")
     FakeJobTotalFail.enabled = false
     Payments::CacheCounter.clear!
     Rails.cache.clear
@@ -131,6 +143,16 @@ class Callbacks::TbankControllerTest < ActionDispatch::IntegrationTest
       headers: { "Content-Type" => "application/json" }
   end
 
+  # Parallel CI: соседний worker может ENABLE RLS на shared DB; @@rls_disabled в test_helper — один раз.
+  def disable_rls_on_orders_payments!
+    conn = ActiveRecord::Base.connection
+    %w[orders payments].each do |table|
+      next unless conn.table_exists?(table)
+
+      conn.execute("ALTER TABLE #{conn.quote_table_name(table)} DISABLE ROW LEVEL SECURITY")
+    end
+  end
+
   # ---------------------------------------------------------------------------
   # Auth
   # ---------------------------------------------------------------------------
@@ -154,10 +176,11 @@ class Callbacks::TbankControllerTest < ActionDispatch::IntegrationTest
   test "CONFIRMED performs TbankCallbackJob inline (worker optional)" do
     # class-level stub: не оставлять enabled после соседних тестов в том же worker
     FakeJobTotalFail.enabled = false
-    assert_no_enqueued_jobs(only: Payments::TbankCallbackJob) do
-      post_notify(tbank_payload(status: "CONFIRMED"))
-    end
+    clear_enqueued_jobs
+    post_notify(tbank_payload(status: "CONFIRMED"))
     assert_response :ok
+    leftover = enqueued_jobs.count { |job| job[:job] == Payments::TbankCallbackJob }
+    assert_equal 0, leftover, "perform_now must not leave TbankCallbackJob in queue (retry_on/fallback)"
     assert_equal "succeeded", @payment.reload.status
     assert_equal "accepted", @order.reload.status
   end

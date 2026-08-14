@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-14 — test: Tbank callback CI enqueue flake
+
+- `assert_no_enqueued_jobs` на CONFIRMED ловил retry/fallback под parallel
+- `save_card: false` + RLS off + clear queue в `tbank_controller_test`
+- Local: 16 runs / 0 failures (WSL)
+
 ## 2026-08-14 — feat: #65 tenant_id linkage integrity [GREEN]
 
 - Явный `?tenant_id=` (в т.ч. blank) не silent-fallback на другую точку

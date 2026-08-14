@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-14 (#65 GREEN)  
+**Дата:** 2026-08-14 (CI Tbank flake)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#65** GREEN local tenant_id linkage | REVIEW / Fly MCP по апруву · TG/IG |
+| Tbank CI flake local PASS · #65 GREEN uncommitted | push CI-fix · #65 REVIEW |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,14 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-14 (CI Tbank enqueue flake)
+
+- Run https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/31797599803 · job `test`
+- `CONFIRMED performs TbankCallbackJob inline`: 0 jobs expected, 1 enqueued
+- Причина: CONFIRMED без RebillId → GetState/`retry_on`; RLS ENABLE соседним worker
+- Фикс теста: `save_card:false` · disable RLS каждый setup · clear queue
+- Local WSL: `bin/rails test test/controllers/callbacks/tbank_controller_test.rb` → 16/0
 
 ### Сессия 2026-08-14 (#65 GREEN linkage)
 

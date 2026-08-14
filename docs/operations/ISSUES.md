@@ -21,6 +21,13 @@
 
 ## Решено недавно (детали)
 
+[2026-08-14] — CI: Tbank CONFIRMED `assert_no_enqueued_jobs` flake
+**Статус:** **resolved** local (нужен push)
+**Источник:** https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/31797599803
+**Root cause:** webhook CONFIRMED без RebillId звал GetState; `retry_on` клал job в очередь; RLS соседнего worker.
+**Чем закрыли:** `provider_data save_card:false`; disable RLS на orders/payments каждый setup; clear enqueued jobs.
+**Проверка:** WSL `bin/rails test test/controllers/callbacks/tbank_controller_test.rb` → 16/0.
+
 [2026-08-14] — Sentry: N+1 shop + шум деплоя/консоли
 **Статус:** **resolved** Fly **v455** (нужен Archive в UI)
 **Источник:** Sentry feed 14 issues, Users=0

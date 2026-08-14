@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-14 (#65 GREEN)  
+**Дата:** 2026-08-14 (CI Tbank flake)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#65** GREEN local | REVIEW / deploy+MCP по апруву · #64 MCP отдельно |
+| CI flake Tbank enqueue починен local · **#65** GREEN local | push CI-fix · REVIEW #65 / deploy по апруву |
 
-**last_done:** GREEN #65 tenant_id linkage (без silent fallback)  
-**next_step:** REVIEW · Fly MCP Point A после deploy · TG/IG устройства
+**last_done:** CI `TbankControllerTest` inline job — без live GetState / RLS race  
+**next_step:** CI green на push · #65 REVIEW / MCP по апруву
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
