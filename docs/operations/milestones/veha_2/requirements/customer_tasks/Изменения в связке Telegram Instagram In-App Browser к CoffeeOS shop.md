@@ -63,3 +63,4 @@ Scope связки:
 - Серия TG/IG → `/shop`, **задача 2** (связка In-App → `/shop`). Задача 1 = CBR **#64** (открытие `/shop`; GREEN local; Fly MCP / TG-IG устройства ещё не закрыты — не смешивать).
 - PHASE 0 only: код и SPEC (`todo.md`) не трогали. Дальше по `go` → PHASE 1 SPEC.
 - Point A: `tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789`. Профиль заказчика не портить. Push/deploy только по апруву.
+- **2026-08-14:** PHASE 1 SPEC в `docs/operations/session/todo.md` (CBR #65).

@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-14 (#65 intake)  
+**Дата:** 2026-08-14 (#65 SPEC)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#65** intake связка TG/IG → `/shop` | `go` → PHASE 1 SPEC · #64 Fly MCP отдельно |
+| **#65** SPEC связка TG/IG → `/shop` | RED: tenant_id integrity + tests |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,12 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-14 (#65 SPEC)
+
+- todo: целостность `tenant_id` link→HTML→API; identity без TG/UA auth; errors/cache; без forced redirect
+- Файлы: `api.js` · `tenant_resolution` · shop base/pages · `catalog.js` · `shop-api.md`
+- Дальше RED по намерению; #64 MCP не смешивать
 
 ### Сессия 2026-08-14 (#65 intake linkage)
 

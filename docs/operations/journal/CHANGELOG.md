@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-14 — docs: SPEC #65 TG/IG In-App → /shop linkage
+
+- todo: целостность `tenant_id` link→HTML→categories; identity без UA/TG auth; errors/cache; без forced redirect
+- Риск: silent fallback `TenantResolution` при потере query
+- Дальше RED
+
 ## 2026-08-14 — docs: intake #65 TG/IG In-App → /shop linkage
 
 - ТЗ 1:1: связка Telegram/Instagram In-App Browser → CoffeeOS `/shop`

@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-14 (#65 intake)  
+**Дата:** 2026-08-14 (#65 SPEC)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#65** intake связка TG/IG In-App → `/shop` | `go` → SPEC · #64 deploy/MCP — отдельно по апруву |
+| **#65** SPEC в `todo.md` | RED · #64 deploy/MCP — отдельно |
 
-**last_done:** intake CBR #65 (задача 2 серии)  
-**next_step:** PHASE 1 SPEC по `go` · не смешивать с #64 MCP
+**last_done:** SPEC #65 (целостность tenant_id связки)  
+**next_step:** RED тесты `tenant_id` link→API
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -24,13 +24,14 @@
 | Что | Статус |
 |-----|--------|
 | Intake + CBR #65 | **`[x]`** |
-| SPEC (`todo.md`) | `[ ]` ждать `go` |
+| SPEC (`todo.md`) | **`[x]`** |
 | Диагностика / RED / GREEN | `[ ]` |
 | Fly MCP Point A | `[ ]` |
 | TG/IG устройства | `[ ]` |
 
 **ТЗ:** [`customer_tasks/Изменения в связке Telegram Instagram…`](../milestones/veha_2/requirements/customer_tasks/Изменения%20в%20связке%20Telegram%20Instagram%20In-App%20Browser%20к%20CoffeeOS%20shop.md)  
-**Артефакты:** [`artifacts/telegram_instagram_inapp_shop_linkage/`](../milestones/veha_2/artifacts/telegram_instagram_inapp_shop_linkage/)
+**Артефакты:** [`artifacts/telegram_instagram_inapp_shop_linkage/`](../milestones/veha_2/artifacts/telegram_instagram_inapp_shop_linkage/)  
+**todo:** целостность `tenant_id`; без UA-auth; errors/cache; без forced redirect
 
 ### #64 Shop Telegram/Instagram in-app open (2026-08-14)
 
