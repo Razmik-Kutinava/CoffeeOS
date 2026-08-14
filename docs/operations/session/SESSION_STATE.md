@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-14 (Sentry N+1 pushed, CI green)  
+**Дата:** 2026-08-14 (Fly v455 Sentry filter live)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **CI green** `75e9d91e` Sentry N+1 + filter | deploy |
+| **Fly v455** `deployment-01KZZXM710GG6FWTXYN47PBBHC` · `/up` 200 | Archive Sentry · MCP по апруву |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,13 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-14 (Fly v455 Sentry)
+
+- Deploy `coffeeos` v455 `deployment-01KZZXM710GG6FWTXYN47PBBHC`
+- release: OK, без ConcurrentMigrationError; migrate:cache 1 file; queue/cable skip
+- `/up` 200 · health passing · Point A API 200 в логах
+- MCP: не делали (по апруву)
 
 ### Сессия 2026-08-14 (Sentry triage)
 

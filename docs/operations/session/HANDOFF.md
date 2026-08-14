@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-14 (Sentry N+1 pushed, CI green)  
+**Дата:** 2026-08-14 (Fly v455 Sentry filter live)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **CI #34 green** `75e9d91e` Sentry N+1 + filter | deploy · Archive Sentry UI |
+| **Fly v455** N+1 + Sentry filter · release OK без lock | Archive старых 14 в Sentry UI · MCP по апруву |
 
-**last_done:** push `75e9d91e` · CI all 5 jobs green  
-**next_step:** deploy · Archive старых issues в Sentry UI
+**last_done:** Fly v455 deploy (Sentry N+1 + noise filter)  
+**next_step:** Archive Sentry UI · MCP Point A только по апруву
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

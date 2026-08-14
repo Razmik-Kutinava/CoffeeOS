@@ -22,7 +22,7 @@
 ## Решено недавно (детали)
 
 [2026-08-14] — Sentry: N+1 shop + шум деплоя/консоли
-**Статус:** **resolved** код (нужен push+deploy, затем Archive в UI)
+**Статус:** **resolved** Fly **v455** (нужен Archive в UI)
 **Источник:** Sentry feed 14 issues, Users=0
 **Root cause:** `.active.ordered` ломает preload; `json_lines` → EXISTS на строку; DSN ловит fly:release lock и `rails c` опечатки.
 **Чем закрыли:** in-memory options; `line_available?`; `SentryNoiseFilter` + excluded_exceptions.

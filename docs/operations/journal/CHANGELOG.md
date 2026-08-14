@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-14 — deploy: Fly v455 Sentry N+1 + noise filter
+
+- Fly `coffeeos` v455 · release OK без advisory lock error
+- Фильтр Sentry live: ConcurrentMigrationError / SystemExit / bin/rails CLI
+- `/up` 200 · MCP skip (апрув)
+
 ## 2026-08-14 — fix: Sentry shop N+1 + drop migrate/console noise
 
 - FE/API: `ModifierGroupsPresenter` не бьёт SELECT опций после includes (RUBY-19)

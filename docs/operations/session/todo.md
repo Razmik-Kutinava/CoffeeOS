@@ -1,10 +1,10 @@
-# todo — Sentry N+1 + noise filter DONE
+# todo — Fly v455 Sentry filter LIVE
 
 | last_done | current_state | next_step |
 |-----------|---------------|-----------|
-| Sentry RUBY-19/V + filter | done local | push · deploy · Archive UI |
+| Fly v455 Sentry N+1 + filter | deployed | Archive Sentry UI · MCP по апруву |
 
 ## Результат
-- Presenter preload без SELECT опций
-- Cart json_lines без EXISTS на строку
-- Console/migrate/SystemExit не в Sentry
+- release OK, без ConcurrentMigrationError
+- `/up` 200
+- MCP не делали
