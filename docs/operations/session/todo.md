@@ -1,10 +1,10 @@
-# todo — Fly v455 Sentry filter LIVE
+# todo — Fly v455 MCP Point A PASS
 
 | last_done | current_state | next_step |
 |-----------|---------------|-----------|
-| Fly v455 Sentry N+1 + filter | deployed | Archive Sentry UI · MCP по апруву |
+| MCP Point A v455 PASS | live | Archive Sentry UI · апрув #63 |
 
 ## Результат
-- release OK, без ConcurrentMigrationError
-- `/up` 200
-- MCP не делали
+- `/up` 200 · pay stack / hide status / catalog PASS
+- Dismiss X skip (нет active order)
+- Косяков на правку нет

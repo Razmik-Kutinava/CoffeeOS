@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-14 — MCP: Point A Fly v455 PASS
+
+- Каталог / product / checkout / pay stack / profile — без регресса #63
+- Оплату картой Арама не проводили; dismiss X skip (нет active order)
+- Код не меняли — косяков на правку нет
+- Evidence: `mcp/fly_v455_2026-08-14/`
+
 ## 2026-08-14 — deploy: Fly v455 Sentry N+1 + noise filter
 
 - Fly `coffeeos` v455 · release OK без advisory lock error

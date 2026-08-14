@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-14 (Fly v455 Sentry filter live)  
+**Дата:** 2026-08-14 (Fly v455 MCP Point A PASS)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **Fly v455** `deployment-01KZZXM710GG6FWTXYN47PBBHC` · `/up` 200 | Archive Sentry · MCP по апруву |
+| **Fly v455** MCP Point A **PASS** | Archive Sentry UI |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -16,12 +16,19 @@
 
 ## Текущий месяц (2026-08)
 
+### Сессия 2026-08-14 (MCP Point A v455)
+
+- Point A: каталог / product / checkout / pay stack / profile — **PASS**
+- Статусный sheet скрыт на product/checkout/profile; pay: СБП + `*8782`/`*5953` + «Картой +», без Failed to fetch
+- Dismiss X skip (нет активного заказа; карту Арама не чарджили)
+- Косяков на правку не найдено
+- Evidence: `mcp/fly_v455_2026-08-14/`
+
 ### Сессия 2026-08-14 (Fly v455 Sentry)
 
 - Deploy `coffeeos` v455 `deployment-01KZZXM710GG6FWTXYN47PBBHC`
 - release: OK, без ConcurrentMigrationError; migrate:cache 1 file; queue/cable skip
 - `/up` 200 · health passing · Point A API 200 в логах
-- MCP: не делали (по апруву)
 
 ### Сессия 2026-08-14 (Sentry triage)
 

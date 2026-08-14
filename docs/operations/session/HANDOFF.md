@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-14 (Fly v455 Sentry filter live)  
+**Дата:** 2026-08-14 (Fly v455 MCP Point A PASS)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **Fly v455** N+1 + Sentry filter · release OK без lock | Archive старых 14 в Sentry UI · MCP по апруву |
+| **Fly v455** MCP Point A **PASS** · косяков кода нет | Archive старых 14 в Sentry UI |
 
-**last_done:** Fly v455 deploy (Sentry N+1 + noise filter)  
-**next_step:** Archive Sentry UI · MCP Point A только по апруву
+**last_done:** MCP Point A v455 PASS (pay stack / hide status / catalog)  
+**next_step:** Archive Sentry UI · апрув заказчика #63
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -28,10 +28,10 @@
 | Local JS | **`[x]`** 22/0 |
 | CI #32 | **`[x]`** green (`79d90704`) |
 | Fly deploy | **`[x]`** v454 |
-| Fly MCP Point A | **`[x]` PASS** |
+| Fly MCP Point A | **`[x]` PASS** v454 + **v455** |
 | Апрув заказчика | `[ ]` |
 
-**Evidence:** [`mcp/fly_v454_2026-08-13/`](../milestones/veha_2/artifacts/svelte5_status_widget_reactivity_ux/mcp/fly_v454_2026-08-13/)
+**Evidence:** [`mcp/fly_v455_2026-08-14/`](../milestones/veha_2/artifacts/svelte5_status_widget_reactivity_ux/mcp/fly_v455_2026-08-14/) · v454: [`mcp/fly_v454_2026-08-13/`](../milestones/veha_2/artifacts/svelte5_status_widget_reactivity_ux/mcp/fly_v454_2026-08-13/)
 
 ### #62 SBP autopay checkbox default (2026-08-13)
 
