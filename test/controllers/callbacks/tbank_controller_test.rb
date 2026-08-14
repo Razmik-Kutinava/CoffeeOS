@@ -87,13 +87,15 @@ class Callbacks::TbankControllerTest < ActionDispatch::IntegrationTest
       final_amount:    500
     )
 
+    @provider_payment_id = "tbank_pay_#{SecureRandom.hex(6)}"
+
     @payment = Payment.create!(
       order:               @order,
       tenant:              @tenant,
       amount:              500,
       method:              "card",
       provider:            "tbank",
-      provider_payment_id: "tbank_pay_777",
+      provider_payment_id: @provider_payment_id,
       status:              "pending"
     )
   end
@@ -110,11 +112,12 @@ class Callbacks::TbankControllerTest < ActionDispatch::IntegrationTest
   # Helpers
   # ---------------------------------------------------------------------------
 
-  def tbank_payload(status: "CONFIRMED", payment_id: "tbank_pay_777", order_id: nil)
+  def tbank_payload(status: "CONFIRMED", payment_id: nil, order_id: nil)
+    pid = payment_id || @provider_payment_id
     p = {
       "TerminalKey" => "TestTerminal",
       "OrderId"     => (order_id || @order.id).to_s,
-      "PaymentId"   => payment_id,
+      "PaymentId"   => pid,
       "Status"      => status,
       "Amount"      => 50000
     }
@@ -174,7 +177,7 @@ class Callbacks::TbankControllerTest < ActionDispatch::IntegrationTest
 
   test "CONFIRMED stores provider_payment_id after job" do
     post_notify(tbank_payload(status: "CONFIRMED"))
-    assert_equal "tbank_pay_777", @payment.reload.provider_payment_id
+    assert_equal @provider_payment_id, @payment.reload.provider_payment_id
   end
 
   test "CONFIRMED response body contains ok: true" do
@@ -207,7 +210,7 @@ class Callbacks::TbankControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "idempotency claim is stored in Rails.cache (shared across workers) [TDD]" do
-    idem_key = "tbank:callback:tbank_pay_777:CONFIRMED"
+    idem_key = "tbank:callback:#{@provider_payment_id}:CONFIRMED"
     post_notify(tbank_payload(status: "CONFIRMED"))
     assert_response :ok
 
@@ -216,7 +219,7 @@ class Callbacks::TbankControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "releases Rails.cache claim when job and enqueue both fail so bank retry can reprocess" do
-    idem_key = "tbank:callback:tbank_pay_777:CONFIRMED"
+    idem_key = "tbank:callback:#{@provider_payment_id}:CONFIRMED"
     FakeJobTotalFail.enabled = true
     begin
       post_notify(tbank_payload(status: "CONFIRMED"))
@@ -235,7 +238,7 @@ class Callbacks::TbankControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "duplicate path does not delete another request claim [TDD]" do
-    idem_key = "tbank:callback:tbank_pay_777:CONFIRMED"
+    idem_key = "tbank:callback:#{@provider_payment_id}:CONFIRMED"
     assert Rails.cache.write(idem_key, 1, expires_in: 1.hour, unless_exist: true)
 
     post_notify(tbank_payload(status: "CONFIRMED"))

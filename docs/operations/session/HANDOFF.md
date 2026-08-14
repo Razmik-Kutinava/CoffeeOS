@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-14 (legacy triage + dismissedIds)  
+**Дата:** 2026-08-14 (WSL shop 506/506 + CI fix)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **Legacy 4 green** · JS 294/294 · dismissedIds terminal fix | Sentry alert · push+CI |
+| **WSL shop suite 506/506** · Tbank idempotency flake fix | CI green · Sentry alert |
 
-**last_done:** legacy triage (CBR b11_02, E7, Wallet JS, dismissedIds)  
-**next_step:** push develop · Sentry alert · апрув #63
+**last_done:** WSL full shop 506/506 · Tbank parallel idempotency fix  
+**next_step:** CI green · Sentry alert
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

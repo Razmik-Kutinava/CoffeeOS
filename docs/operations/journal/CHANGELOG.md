@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-14 — test: WSL full shop suite green + Tbank idempotency flake
+
+- WSL Linux: `test/integration/shop/` 506/506 (npm ci + local PG)
+- `tbank_controller_test`: unique `provider_payment_id` — нет коллизии Rails.cache idempotency в parallel CI
+
 ## 2026-08-14 — fix: legacy shop asserts + dismissedIds terminal + Wallet i18n test
 
 - Legacy: `order_status_acceptance_cbr_test` b11_02 → PaymentResult + offline queue redirect (не Checkout)

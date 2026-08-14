@@ -16,6 +16,11 @@
 
 ## Текущий месяц (2026-08)
 
+### Сессия 2026-08-14 (WSL full shop suite + CI flake)
+
+- WSL `test/integration/shop/`: **506 runs, 0 failures, 3 skips** (`scripts/scratch/run_shop_suite_wsl.sh`)
+- CI #33: Tbank `assert_no_enqueued_jobs` flake — unique `provider_payment_id` per test (parallel idempotency cache)
+
 ### Сессия 2026-08-14 (legacy triage + dismissedIds)
 
 - Legacy 4 + mount acceptance: 27 runs green (CBR b11_02, UserCards E7)
