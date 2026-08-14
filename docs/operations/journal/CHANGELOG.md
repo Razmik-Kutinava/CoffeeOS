@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-14 — test: #65 linkage without Vite layout (CI)
+
+- `ShopTenantLinkageTest`: ResolveProbe + structural meta (без GET /shop)
+- CI `f861048d`: Vite missing `application.js` на layout render
+
 ## 2026-08-14 — test: Tbank callback CI enqueue flake
 
 - `assert_no_enqueued_jobs` на CONFIRMED ловил retry/fallback под parallel

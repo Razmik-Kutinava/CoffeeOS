@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-14 (CI Tbank flake)  
+**Дата:** 2026-08-14 (#65 REVIEW+CI)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Tbank CI flake local PASS · #65 GREEN uncommitted | push CI-fix · #65 REVIEW |
+| Local #65 PASS · REVIEW · CI Vite linkage fix | push → CI green · **deploy только апрув** |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,13 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-14 (#65 REVIEW / CI Vite)
+
+- Local зона: JS 9/0 · categories 7/0 · linkage 4/0 · boot 3/0
+- REVIEW manual (bugbot/security — лимит Cursor): без CSRF/CORS/UA-auth OK
+- CI `f861048d` FAIL Vite на GET /shop → linkage tests без layout
+- Deploy не делали
 
 ### Сессия 2026-08-14 (CI Tbank enqueue flake)
 

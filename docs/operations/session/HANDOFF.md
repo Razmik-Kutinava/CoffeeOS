@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-14 (CI Tbank flake)  
+**Дата:** 2026-08-14 (#65 REVIEW+CI)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| CI flake Tbank enqueue починен local · **#65** GREEN local | push CI-fix · REVIEW #65 / deploy по апруву |
+| Local PASS · REVIEW · CI Vite fix | CI green после push · **deploy — апрув** |
 
-**last_done:** CI `TbankControllerTest` inline job — без live GetState / RLS race  
-**next_step:** CI green на push · #65 REVIEW / MCP по апруву
+**last_done:** REVIEW #65 + linkage tests без Vite layout  
+**next_step:** push → CI · deploy только по апруву
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -26,7 +26,9 @@
 | Intake + CBR #65 | **`[x]`** |
 | SPEC (`todo.md`) | **`[x]`** |
 | RED / GREEN | **`[x]`** local |
-| Fly MCP Point A | `[ ]` ждать deploy |
+| REVIEW | **`[x]`** manual |
+| CI | fix Vite linkage → push |
+| Fly MCP Point A | `[ ]` ждать deploy апрув |
 | TG/IG устройства | `[ ]` |
 
 **ТЗ:** [`customer_tasks/Изменения в связке Telegram Instagram…`](../milestones/veha_2/requirements/customer_tasks/Изменения%20в%20связке%20Telegram%20Instagram%20In-App%20Browser%20к%20CoffeeOS%20shop.md)  

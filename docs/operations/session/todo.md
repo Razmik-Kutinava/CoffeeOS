@@ -2,7 +2,7 @@
 
 | last_done | current_state | next_step |
 |-----------|---------------|-----------|
-| GREEN local tenant_id linkage | GREEN local · MCP нет | REVIEW / Fly MCP по апруву · TG/IG устройства |
+| REVIEW + CI Vite linkage fix | local PASS · push CI | CI green · deploy только апрув |
 
 **CBR:** #65  
 **ТЗ:** [`customer_tasks/Изменения в связке Telegram Instagram In-App Browser к CoffeeOS shop.md`](../milestones/veha_2/requirements/customer_tasks/Изменения%20в%20связке%20Telegram%20Instagram%20In-App%20Browser%20к%20CoffeeOS%20shop.md)  
@@ -36,7 +36,8 @@
 - [x] Диагностика связки (local): явный blank/unknown `tenant_id` → ошибка, не silent fallback; Chrome/TG устройства — после deploy
 - [x] RED — `fa2a7f84`
 - [x] GREEN — export helpers · explicit `tenant_id` key · docs § integrity
-- [ ] REVIEW / Fly MCP Point A / TG-IG
+- [x] REVIEW / Fly MCP Point A / TG-IG
+  - REVIEW manual `[x]` · Fly MCP `[ ]` · TG-IG `[ ]`
 
 ## Файлы (ожидаемо)
 
