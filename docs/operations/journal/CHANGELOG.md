@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-15 — mcp: Fly v456 Point A #64–#68 (Chrome)
+
+- #64 Chrome PASS · #65 PASS · #66 PASS · #67 PARTIAL (S7 SKIP) · #68 PASS
+- TG/IG skip. Артефакты `artifacts/.../mcp/fly_v456_2026-08-15/`
+- Пачка: Sentry skip · Fly logs OK (poll 8с) · Neon skip · УК skip
+
 ## 2026-08-15 — deploy: Fly coffeeos v456 (#64–#68)
 
 - Push `d8e61821` · `fly deploy --remote-only --depot=false`

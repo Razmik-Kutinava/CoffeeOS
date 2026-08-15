@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-15 (Fly v456 · MCP ждёт апрув)  
+**Дата:** 2026-08-15 (Fly v456 · MCP Chrome PASS)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Fly v456 up | MCP Point A — апрув |
+| Fly v456 MCP Chrome #64–#68 | TG/IG на телефоне |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -16,12 +16,22 @@
 
 ## Текущий месяц (2026-08)
 
+### Сессия 2026-08-15 (MCP Point A Chrome #64–#68)
+
+- Fly **v456**. Point A: skeleton снят, Ленина 10, `categories?tenant_id=` 200
+- #64 Chrome PASS · #65 PASS (unknown 404, blank 422, restore Point A)
+- #66 Chrome PASS (hash product, cache key scoped, нет telegram.org)
+- #67 PARTIAL (S7 keyboard SKIP)
+- #68 PASS (offline баннер один, корзина +5₽ жива)
+- TG/IG устройства skip. CBR не `[x]`
+- Пачка: Sentry skip (нет MCP) · Fly logs poll 8с 200, 404/422 #65 ожидаемы · Neon skip · УК skip (не логинились /manager)
+
 ### Сессия 2026-08-15 (push + fly deploy v456)
 
 - Push `develop` `d8e61821`
 - `fly deploy -a coffeeos --remote-only --depot=false` → **v456** `deployment-01M02H0BQ0HYY6AFTRNWCS8RS5`
 - `/up` 200 · Point A `/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789` 200
-- MCP / Sentry / Neon pack — стоп до апрува MCP
+- MCP Point A выполнен 2026-08-15 (см. сессию выше)
 
 ### Сессия 2026-08-15 (#64–#68 pre-deploy suite)
 
