@@ -28,6 +28,25 @@ Entire **не меняет** порядок шага. Checkpoint появляе�
 
 ---
 
+## Закон: обогащать Entire (не галочка)
+
+**Обогатить** = why-context (промпты, файлы, tool calls) **записан** в checkpoint: `entire checkpoint explain <sha>` **не пустой**.
+
+**Запрещено** (это не ревью):
+
+- «Entire: spec vs todo/shop-api OK» при `no trailer` / empty explain
+- «hook skip Windows» и идти на push
+- PHASE 3 шаг 3 закрыт без **checkpoint id**
+
+После RED/GREEN/docs-коммита задачи (SBR, не typo одного файла):
+
+1. `entire checkpoint explain <sha>` (или `HEAD`)
+2. Пусто / `no Entire-Checkpoint trailer` → **стоп, не push.**  
+   `entire session attach <cursor-session-id> --agent cursor` на **ещё не запушенный** коммит. Уже на `origin` GREEN **не** `--amend` / не `--force` rewrite — тогда docs-коммит + attach (как backfill #64–#68).
+3. Отчёт: **`Entire: <checkpoint-id> на <sha>`**. Без id шаг не `done`.
+
+---
+
 ## One-time setup (WSL)
 
 ```bash
@@ -49,20 +68,21 @@ entire status   # ● Enabled · Agents · Cursor
 |------|----------|--------|
 | **0 Intake** | `customer_tasks/` + `artifacts/` | — |
 | **1 SPEC** | `/spec` → `todo.md` | — |
-| **2 BUILD** | `/sbr` RED→GREEN → **commit** | checkpoint на commit |
-| **3 REVIEW** | `/review` = SBR PHASE 3 (оба субагента → Entire → push/CI) | `entire checkpoint explain <sha>` (шаг 3, до push) |
+| **2 BUILD** | `/sbr` RED→GREEN → **commit** | checkpoint на commit; `explain HEAD` не пустой |
+| **3 REVIEW** | `/review` = SBR PHASE 3 (оба субагента → Entire → push/CI) | `explain <sha>` не пустой **до** push; иначе attach |
 | **Resume** | новый чат / засорился контекст | `entire session resume <branch>` |
 
 ### REVIEW — проверка why-context
 
-После последнего GREEN (или docs) коммита задачи:
+После последнего GREEN (или docs) коммита задачи. **Сначала enrichment, потом сверка spec.** Empty explain = шаг 3 не пройден → не шаг 4 push.
 
 ```bash
 entire checkpoint list
-entire checkpoint explain <commit-sha>    # промпты, файлы, tool calls
+entire checkpoint explain <commit-sha>    # не пустой: промпты, файлы, tool calls
 ```
 
-Сверить с:
+Пусто → attach (закон выше), потом снова `explain`. Только после этого сверить:
+
 - `customer_tasks/<задача>.md` — все пункты ТЗ?
 - `todo.md` — «Не ломать», «Проверка»?
 - `@docs/integrations/INTEGRATIONS.md` + секция — для hot-path: агент читал bridge, не выдумал endpoint?
@@ -104,9 +124,10 @@ CLI: WSL, `PATH=$HOME/.local/bin:$PATH`. На Windows без WSL — устан�
 1. `entire status` → **● Enabled · Agents · Cursor**
 2. `.git/hooks/` содержит `post-commit`, `commit-msg` (после `entire enable` из WSL)
 3. После **agent-сессии в Cursor** + **`git commit`**: `entire checkpoint list` → ≥1 checkpoint
-4. `entire checkpoint explain <sha>` — не пустой (не «0 lines»)
+4. `entire checkpoint explain <sha>` — не пустой (не «0 lines» / не `no trailer`)
+5. В отчёте `/review` есть **`Entire: <id> на <sha>`** — не «spec OK» без id
 
-**0 checkpoints сразу после enable — норма.** Checkpoint появляется после первого commit в agent-сессии, не от enable.
+**0 checkpoints сразу после enable — норма.** Checkpoint появляется после первого commit в agent-сессии, не от enable. Enable ≠ обогащение.
 
 ---
 

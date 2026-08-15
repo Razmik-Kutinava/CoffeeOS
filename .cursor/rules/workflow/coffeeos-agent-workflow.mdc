@@ -113,7 +113,7 @@ Skills (`.claude/skills`, CE) — только по типу задачи / яв
 ## Entire (Review / resume — не Spec-папки)
 
 Слой **поверх Git**, без `docs/tasks/TASK-XX/`. Spec = `customer_tasks/` + `todo.md` + `artifacts/` + `docs/integrations/INTEGRATIONS.md`.  
-Runbook: `docs/operations/dev/ENTIRE.md`. PHASE 3 шаг 3: `entire checkpoint explain <sha>` vs spec. **Resume:** `entire session resume <branch>`. Не заменяет SBR/ops.
+Runbook: `docs/operations/dev/ENTIRE.md`. **Обогатить** = записать why-context; пустой `explain` ≠ ревью. PHASE 3 шаг 3: `explain <sha>` не пустой, иначе attach, не push. **Resume:** `entire session resume <branch>`. Не заменяет SBR/ops.
 
 ## Когда читать остальные правила
 
@@ -161,6 +161,6 @@ Runbook: `docs/operations/dev/ENTIRE.md` § Windows.
 | **Local:** команда PASS/FAIL | После `/regress` или GREEN |
 | **Fly MCP:** PASS / skip+почему | Hot-path витрина/оплата |
 | **Sentry 24h · Fly logs · Neon · УК** | После deploy на стенд — пачка вместе с MCP (`dev-gates` § пайплайн) |
-| Entire `explain <sha>` | `/review` — why-context vs spec |
+| **Entire:** `<id>` на `<sha>` | `/review` и GREEN; empty / «spec OK» без id = не `done` |
 
 Нет строки — шаг не `done`. Владелец проверяет отчёт; цепочка `/start`→`/review` ведёт этапы.

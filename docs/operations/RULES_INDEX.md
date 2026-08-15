@@ -37,7 +37,7 @@
 | `project/coffeeos-tests.mdc` | test/ |
 | `project/coffeeos-code-review.mdc` | Ревью по запросу |
 | `docs/integrations/INTEGRATIONS.md` (индекс ~45 строк) | Маршрут → `docs/integrations/*.md`; `@docs/integrations/INTEGRATIONS.md` + `/trace-bug` |
-| `docs/operations/dev/ENTIRE.md` | Entire checkpoint ↔ commit; Review/resume; маппинг spec-путей (on-demand) |
+| `docs/operations/dev/ENTIRE.md` | Entire checkpoint ↔ commit; **обогащать обязательно** (пустой explain — стоп); Review/resume (on-demand) |
 
 ## Ops (память сессии)
 

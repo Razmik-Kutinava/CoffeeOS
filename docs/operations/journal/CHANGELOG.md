@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-15 — docs: Entire must be enriched (not a review checkbox)
+
+- `ENTIRE.md` закон: empty `explain` → стоп + attach, не push
+- PHASE 3 / GREEN / отчёт: обязателен `Entire: <id> на <sha>`
+- «spec vs shop-api OK» без checkpoint id — запрещено
+
 ## 2026-08-15 — docs: Entire backfill #64–#68 Telegram/Instagram shop
 
 - GREEN SHA без trailer не переписывали

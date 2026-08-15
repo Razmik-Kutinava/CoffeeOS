@@ -2,14 +2,14 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-15 (#64–#68 Entire backfill)  
+**Дата:** 2026-08-15 (Entire: обогащать обязательно)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Entire backfill #64–#68 | **deploy — только апрув** |
+| Закон Entire: empty explain ≠ ревью | **deploy — только апрув** |
 
-**last_done:** Entire backfill `54e79d1a` · checkpoint `01M02FTNFTCX13ZSPHDGCNC292` · push develop  
+**last_done:** правило Entire — checkpoint id обязателен; пустой explain — стоп + attach  
 **next_step:** deploy только по апруву · MCP Point A + Telegram после deploy
 
 **Архив session:** [`archive/README.md`](archive/README.md)  

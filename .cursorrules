@@ -14,7 +14,7 @@
 - ISSUES на старте → **только `## 🔴 Открыто`** (таблица до следующего `##`); детали — ниже по ссылке
 - Код: SPEC → 2–7 файлов; hot-path → +1–3 соседа + **обязательные** «Не ломать» / «Проверка» в todo; без `@codebase` зря
 - Интеграции: `@docs/integrations/INTEGRATIONS.md` (~45 строк) → **один** секционный `docs/integrations/*.md`; правки bridge → индекс + секция; hot-path баг → `/trace-bug`
-- Entire: checkpoint на **commit** (Review why-context); runbook `docs/operations/dev/ENTIRE.md`; **не** `docs/tasks/` — spec в `customer_tasks/` + `todo.md`
+- Entire: **обогащать** (записать why-context на commit); пустой `explain` / «spec OK» без checkpoint id — **не** ревью; runbook `docs/operations/dev/ENTIRE.md`; **не** `docs/tasks/` — spec в `customer_tasks/` + `todo.md`
 - Folder README — **не** читать при обходе дерева; только по явной нужде
 - Мелочь — без субагентов (`Субагент: нет — мелочь`); фича/SBR — субагент по этапу (explore/shell/bugbot/…), не рой ce-*
 - Отчёт: **Сделано | Не сделано** + `Коммит: <хеш>` + `Субагент: …`; hot-path ещё **Local | Fly MCP**

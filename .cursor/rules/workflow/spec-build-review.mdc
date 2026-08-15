@@ -78,13 +78,13 @@ alwaysApply: false
 |---|-----|-----------|
 | 1 | **Local тесты** зоны («Проверка» / `dev-gates`) | FAIL → не дальше |
 | 2 | **Ревью + 2 субагента:** `bugbot` **и** `security-review` (оба; не «если hot-path») | дыры → фикс, к #1 |
-| 3 | **Entire:** `entire checkpoint explain <sha>` (WSL) vs `customer_tasks/` · `todo.md` · `INTEGRATIONS.md` | gap spec → фикс |
+| 3 | **Entire:** `explain <sha>` **не пустой**, затем vs `customer_tasks/` · `todo.md` · `INTEGRATIONS.md`. Канон `ENTIRE.md` § закон | empty / no trailer → attach, **не push**; gap spec → фикс; «spec OK» без id **запрещено** |
 | 4 | **`git push` → GitHub CI** — без вопроса «пушить?». Смотреть **все** логи job | — |
 | 5 | CI красный → `ci-investigator` + чин + local + commit + **снова push**. Пока не green | крутить цикл |
 | 6 | **CI green → СТОП.** `fly deploy` **только** по апруву владельца | нет апрува → не деплой |
 
 Ops (SESSION / CHANGELOG / HANDOFF) — в этом PHASE (до или с push).  
-Отчёт: Сделано\|Не сделано · **Local** · **CI** · `Коммит:` · `Субагент: bugbot \| security-review` · **Entire:** sha / spec OK\|gap.  
+Отчёт: Сделано\|Не сделано · **Local** · **CI** · `Коммит:` · `Субагент: bugbot \| security-review` · **Entire: `<id>` на `<sha>`** (пусто/«spec OK» без id = шаг не `done`).  
 `Next: deploy — только по апруву владельца`
 
 ---

@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-15 (#64–#68 Entire backfill)  
+**Дата:** 2026-08-15 (Entire: обогащать обязательно)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Entire backfill #64–#68 attach | deploy — апрув |
+| Закон Entire: empty ≠ ревью | deploy — апрув |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,12 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-15 (Entire: обогащать обязательно)
+
+- Закон в `ENTIRE.md`: пустой `explain` / «spec OK» без checkpoint id — не ревью
+- PHASE 3 шаг 3 стоп до attach; отчёт `Entire: <id> на <sha>`
+- Указатели: spec-build-review, commit-ops GREEN, agent-workflow, `.cursorrules`, `/sbr` `/review`
 
 ### Сессия 2026-08-15 (#64–#68 Entire backfill)
 

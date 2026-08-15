@@ -22,7 +22,7 @@ alwaysApply: true
 |-------|------|
 | Фича / CHECKLIST / CBR / отчёт | `workflow/coffeeos-task-workflow.mdc` |
 | SBR (SPEC→RED→GREEN→REVIEW) | `workflow/spec-build-review.mdc` (PHASE 3 — канон сдачи) |
-| Entire checkpoint / Review why-context | `docs/operations/dev/ENTIRE.md` |
+| Entire checkpoint / Review why-context | `docs/operations/dev/ENTIRE.md` (пустой explain — стоп + attach; не «spec OK») |
 | Тесты / регрессия / миграции / **пайплайн стенд** | `workflow/coffeeos-dev-gates.mdc` |
 | Новые файлы / куда класть | `workflow/coffeeos-repo-layout.mdc` |
 | ТЗ заказчика (intake) | `workflow/coffeeos-customer-intake.mdc` |
