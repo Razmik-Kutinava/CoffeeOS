@@ -14,6 +14,7 @@
   import Catalog from "./routes/Catalog.svelte"
   import CartRedirect from "./routes/CartRedirect.svelte"
   import { initTelegram } from "./lib/telegram.js"
+  import { installShopWebViewCompat } from "./lib/shopWebView.js"
   import { installSlowRequestTracker } from "./lib/slowRequest.js"
   import { api } from "./lib/api.js"
   import { bootstrapShopTenant } from "./lib/shopTenantHeader.js"
@@ -32,6 +33,7 @@
 
   installSlowRequestTracker()
   initTelegram()
+  installShopWebViewCompat()
 
   const pendingStatusGuard = createVisibilityStatusGuard()
 

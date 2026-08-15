@@ -158,5 +158,25 @@ bin/rails test test/integration/shop/shop_usercards_phase1_persist_test.rb
 
 Bootstrap: HTML содержит `shop-boot-skeleton`; единственный Vite entry — `type="module"`. Если module не исполнился, classic `shop-boot-watchdog` снимает вечную «Загрузка меню…». UA-ветки — не канон фикса.
 
+### Telegram WebView runtime (#66)
+
+Связка: Telegram In-App Browser (WebView) → `GET /shop?tenant_id=` (PWA/Svelte) → same-origin `GET /shop/api/*`. Это **не** Bot API и **не** Mini App.
+
+| Внешнее | Наше |
+|---------|------|
+| In-App Browser как runtime | `app/frontend/lib/shopWebView.js` |
+| cookies `_coffeeos_session` | `fetch(..., { credentials: "same-origin" })` |
+| localStorage / sessionStorage | try/catch + memory fallback; catalog cache `coffeeos_shop_catalog_v1:<tenant_id>` |
+| visualViewport / keyboard | `--shop-vvh` + `viewport-fit=cover` |
+
+- Origin витрины = origin API → CORS не расширяем.
+- CSP: `connect-src 'self'` (+ банк). `telegram.org` SDK не подключаем.
+- Identity: WebView **не** подменяет `user_id`; `tenant_id` только по контракту #65 (query > meta; не client-only cache).
+- Storage недоступен → меню через API; ошибка API → error/retry (#64), не бесконечный loading.
+- SPA hash остаётся в WebView; внешние `t.me` не считаются внутренними маршрутами.
+- Повторное открытие: URL `tenant_id` побеждает кэш другой точки.
+- Фактические ограничения WebView — в `artifacts/mobile_storefront_telegram_webview/diag/`, не копия доки Telegram.
+
 **#64** · тесты: `shop_boot_skeleton_test.rb` · `shop_catalog_load_test.mjs`  
-**#65** · тесты: `shop_api_tenant_query_test.mjs` · `shop_tenant_linkage_test.rb` · categories `?tenant_id=`
+**#65** · тесты: `shop_api_tenant_query_test.mjs` · `shop_tenant_linkage_test.rb` · categories `?tenant_id=`  
+**#66** · тесты: `shop_telegram_webview_test.mjs` · `shop_telegram_webview_test.rb`

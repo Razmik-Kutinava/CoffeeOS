@@ -2,7 +2,7 @@
 
 | last_done | current_state | next_step |
 |-----------|---------------|-----------|
-| intake `f956d1ae` | SPEC | RED compatibility tests |
+| GREEN local | REVIEW | Fly MCP / TG устройство после deploy апрув |
 
 **CBR:** #66  
 **ТЗ:** [`customer_tasks/Полноценная работа мобильной витрины CoffeeOS внутри Telegram In-App Browser.md`](../milestones/veha_2/requirements/customer_tasks/Полноценная%20работа%20мобильной%20витрины%20CoffeeOS%20внутри%20Telegram%20In-App%20Browser.md)  
@@ -28,9 +28,9 @@
 ## Фазы SBR
 
 - [x] PHASE 0 intake
-- [ ] PHASE 1 SPEC
-- [ ] RED
-- [ ] GREEN
+- [x] PHASE 1 SPEC
+- [x] RED
+- [x] GREEN
 - [ ] REVIEW / Fly MCP Point A / Telegram устройство
   - REVIEW `[ ]` · Fly MCP `[ ]` · TG устройство `[ ]`
 

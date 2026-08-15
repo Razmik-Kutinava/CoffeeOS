@@ -1,6 +1,7 @@
 @import "tailwindcss";
 
 :root {
+  --shop-vvh: 100dvh;
   --bg-primary: #1a1a1a;
   --bg-secondary: #2a2a2a;
   --text-primary: #ffffff;

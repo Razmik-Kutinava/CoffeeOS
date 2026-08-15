@@ -100,4 +100,20 @@ describe("loadCatalog", () => {
     const cats = await loadCatalog()
     assert.equal(cats[0].name, "Черный")
   })
+
+  it("does not reuse another tenant catalog cache on reopen", async () => {
+    await loadCatalog()
+    assert.equal(getCatalogCache()[0].id, "c1")
+    invalidateCatalog()
+    globalThis.window = {
+      location: {
+        search: `?tenant_id=${"aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"}`,
+        href: "https://x/shop?tenant_id=aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"
+      }
+    }
+    fetchImpl = async () => {
+      throw new Error("Failed to fetch")
+    }
+    await assert.rejects(() => loadCatalog(), /Failed to fetch/)
+  })
 })

@@ -37,7 +37,7 @@ export function clearGuestOrderSession() {
 
 export async function reconnectGuestOrder(api) {
   const orderId = lastGuestOrderId()
-  const token = sessionStorage.getItem(TOKEN_KEY)
+  const token = guestReconnectToken()
   if (!orderId || !token) return null
 
   try {

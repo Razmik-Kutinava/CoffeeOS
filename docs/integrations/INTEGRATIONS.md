@@ -21,7 +21,7 @@
 | Задача / симптом | Читай |
 |------------------|--------|
 | Любой `/shop/api/*`, cart, orders, frequent | [`shop-api.md`](shop-api.md) |
-| Telegram / Instagram In-App Browser → `/shop` | [`shop-api.md`](shop-api.md) § Embedded browser |
+| Telegram / Instagram In-App Browser → `/shop` | [`shop-api.md`](shop-api.md) § Embedded browser · WebView runtime |
 | Оплата, webhook, карты, RebillId, СБП, widget | [`tbank.md`](tbank.md) |
 | Flash call / Callcheck, SMS OTP, sms/*, my/*, auth/check, stoplist, webhooks `/callbacks/sms_ru` | [`sms-auth.md`](sms-auth.md) · runbook [`SMS_RU_SECRETS.md`](../operations/runbooks/SMS_RU_SECRETS.md) · **auth = Callcheck→SMS** |
 | Cable, push, Wallet, cascade ready, barista→PWA | [`pwa-realtime.md`](pwa-realtime.md) |

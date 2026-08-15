@@ -1,9 +1,10 @@
-import { api } from "../api.js"
+import { api, resolvedShopTenantId } from "../api.js"
 import { applyOperatingHours } from "../shopOperatingHours.js"
 import {
   readShopLocalStorage,
   writeShopLocalStorage
 } from "../shopLocalStorage.js"
+import { catalogCacheKey } from "../shopWebView.js"
 
 let inflight = null
 let pollTimer = null
@@ -12,15 +13,17 @@ let visibilityHandler = null
 /** Интервал автообновления меню на открытой витрине (планшет без F5). */
 export const CATALOG_POLL_MS = 8_000
 
-const CATALOG_LS_KEY = "coffeeos_shop_catalog_v1"
+function catalogLsKey() {
+  return catalogCacheKey(resolvedShopTenantId())
+}
 
 function readCatalogCache() {
-  const parsed = readShopLocalStorage(CATALOG_LS_KEY)
+  const parsed = readShopLocalStorage(catalogLsKey())
   return Array.isArray(parsed) ? parsed : null
 }
 
 function writeCatalogCache(categories) {
-  writeShopLocalStorage(CATALOG_LS_KEY, categories)
+  writeShopLocalStorage(catalogLsKey(), categories)
 }
 
 /** Каждый заход на витрину — свежий каталог; polling подхватывает изменения из УК. */
