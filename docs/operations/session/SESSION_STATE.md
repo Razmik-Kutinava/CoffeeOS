@@ -7,7 +7,7 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| Fly v456 MCP Chrome #64–#68 | TG/IG на телефоне |
+| Fly v456 MCP + Entire на `7f5925e` | CI после push · TG/IG |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -18,6 +18,7 @@
 
 ### Сессия 2026-08-15 (MCP Point A Chrome #64–#68)
 
+- Entire trailer: `01M02FTNFTCX13ZSPHDGCNC292` на `7f5925e` (`explain HEAD` не пустой)
 - Fly **v456**. Point A: skeleton снят, Ленина 10, `categories?tenant_id=` 200
 - #64 Chrome PASS · #65 PASS (unknown 404, blank 422, restore Point A)
 - #66 Chrome PASS (hash product, cache key scoped, нет telegram.org)

@@ -9,8 +9,8 @@
 |--------|--------|
 | Fly **v456** MCP Chrome **#64–#68** | Telegram/Instagram на телефоне владельца |
 
-**last_done:** MCP Point A Chrome v456 (#64 PASS · #65 PASS · #66 PASS · #67 PARTIAL S7 skip · #68 PASS)  
-**next_step:** TG/IG тап владельца; не закрывать CBR `[x]` без «ок» заказчика
+**last_done:** MCP Chrome v456 + Entire `01M02FTNFTCX13ZSPHDGCNC292` на `7f5925e`  
+**next_step:** CI после push · TG/IG тап владельца
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
