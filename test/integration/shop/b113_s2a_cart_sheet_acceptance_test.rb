@@ -82,7 +82,7 @@ class Shop::B113S2aCartSheetAcceptanceTest < ActionDispatch::IntegrationTest
     assert_includes thresholds, "CART_SHEET_BOTTOM_REM = 0"
     assert_includes thresholds, "CART_SHEET_MAX_WIDTH_PX = 414"
     assert_includes sheet, "SHEET_TRANSITION_MS"
-    assert_includes sheet, "CART_SHEET_BOTTOM_REM"
+    assert_includes sheet, "--shop-safe-bottom"
     assert_includes sheet, "CART_SHEET_MAX_WIDTH_PX"
     assert_includes sheet, "z-50"
     assert_match(/transition-\[height(?:,bottom)?\]/, sheet)

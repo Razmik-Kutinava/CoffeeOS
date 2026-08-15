@@ -52,6 +52,7 @@
 
 - `app/frontend/routes/CategoryProducts.svelte` — *почему: sticky header + `min-height: 100vh` на категории, тот же WebView chrome*
 - `app/frontend/App.svelte` — *почему: `installShopWebViewLayout()` рядом с `installShopWebViewCompat()` (#66), одна точка boot*
+- `test/integration/shop/b113_s2a_cart_sheet_acceptance_test.rb` — *почему: CI assertion CART_SHEET_BOTTOM_REM → `--shop-safe-bottom`*
 
 ## Не ломать
 
