@@ -2,7 +2,7 @@
 
 | last_done | current_state | next_step |
 |-----------|---------------|-----------|
-| GREEN layout | local JS+Rails PASS | /regress · REVIEW; Fly/TG после deploy #66 |
+| /regress PASS | local JS 27/0 · Rails 8/0 | `/review` · Fly MCP после deploy |
 
 **CBR:** #67  
 **ТЗ:** [`customer_tasks/Адаптация Mobile UI витрины CoffeeOS под Telegram WebView.md`](../milestones/veha_2/requirements/customer_tasks/Адаптация%20Mobile%20UI%20витрины%20CoffeeOS%20под%20Telegram%20WebView.md)  

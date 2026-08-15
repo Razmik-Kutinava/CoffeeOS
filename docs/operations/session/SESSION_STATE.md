@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-15 (#67 intake + SPEC)  
+**Дата:** 2026-08-15 (#67 regress PASS)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #67 SPEC · #66 CI `044f3130` | апрув RED #67 |
+| #67 GREEN `8daadddf` · regress JS 27/0 · Rails 8/0 | `/review` · Fly MCP после deploy |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,12 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-15 (#67 /regress shop WebView UI)
+
+- Зона shop WebView: JS 27/0 · Rails webview+boot 8/0
+- Полный `test/integration/shop/` на Windows не гоняли (канон)
+- Fly MCP Point A — skip, только local; «готово заказчику» после deploy + MCP
 
 ### Сессия 2026-08-15 (#67 intake + SPEC Telegram WebView UI)
 
