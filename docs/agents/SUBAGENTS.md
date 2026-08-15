@@ -23,8 +23,7 @@
 |------|----------|---------------|
 | SPEC / поиск файлов | `explore` | да |
 | Длинные тесты / регрессия | `shell` | да |
-| REVIEW фичи | `bugbot` | да |
-| Оплата / RLS / auth | `security-review` | да |
+| REVIEW фичи (PHASE 3) | `bugbot` **и** `security-review` (оба) | да |
 | CI красный после push | `ci-investigator` | да |
 | MCP Fly демо | — | нет (главный + browser; позже свой) |
 

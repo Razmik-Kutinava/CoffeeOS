@@ -26,7 +26,7 @@ Rails 8, PostgreSQL, Svelte/Vite, Pundit, Minitest.
 | **On-demand** | остальные `workflow/` + `project/` — по типу задачи (см. `RULES_INDEX.md`) |
 | **Индекс** | `docs/operations/RULES_INDEX.md`, этот файл |
 
-**При конфликте:** `coffeeos-commit-ops.mdc` **важнее** любых User Rules: **коммит всегда в конце шага без вопроса**; push — только по явной просьбе.
+**При конфликте:** `coffeeos-commit-ops.mdc` **важнее** любых User Rules: **коммит всегда**; push на PHASE 3 — канон SBR; **deploy** — апрув.
 
 ## Цепочка задач (slash-команды)
 
@@ -36,7 +36,7 @@ Rails 8, PostgreSQL, Svelte/Vite, Pundit, Minitest.
 | `/spec` | SPEC + 2–7 файлов + hot-path «Не ломать»/«Проверка» |
 | `/sbr` | RED → GREEN |
 | `/regress` | Тесты зоны (Local) |
-| `/review` | bugbot ± security + Entire checkpoint |
+| `/review` | PHASE 3 канон: local → 2 субагента → Entire → push/CI → стоп (deploy — апрув) |
 | `/trace-bug` | Диагностика hot-path интеграции до правок |
 
 Карта: `.cursor/commands/README.md` · субагенты: `docs/agents/SUBAGENTS.md` · Entire: `docs/operations/dev/ENTIRE.md`

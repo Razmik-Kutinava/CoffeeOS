@@ -26,7 +26,7 @@ SBR — это **порядок фаз** (SPEC → RED → GREEN → REVIEW), а
 
 Между фазами SBR: короткий отчёт → если в следующем сообщении снова «делай/ебашь/дальше» — идём дальше без цирка про `go`.
 
-**По-прежнему только явный апрув (не путать с «ебашь»):** `git push`, `fly deploy`, деструктив БД/git — см. `coffeeos-commit-ops.mdc` / Migration Gate.
+**По-прежнему только явный апрув (не путать с «ебашь»):** `fly deploy`, деструктив БД/git. **`git push` на PHASE 3** — канон [`spec-build-review.mdc`](spec-build-review.mdc), не ждать «пушь». Иначе push — просьба (`coffeeos-commit-ops.mdc`).
 
 ---
 
@@ -93,10 +93,10 @@ SBR — это **порядок фаз** (SPEC → RED → GREEN → REVIEW), а
 
 ## Только с явным апрувом (`coffeeos-commit-ops.mdc`)
 
-- **`git push`**
-- deploy / prod (`fly deploy`)
+- **deploy / prod** (`fly deploy`)
 - деструктивный git
 - смена scope / вехи без согласования
+- **`git push` вне PHASE 3** (на `/review` push — канон SBR)
 
 ---
 

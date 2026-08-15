@@ -8,7 +8,7 @@ Slash-команды в чате Agent: введи `/` и выбери имя ф
 | `/spec` | `spec.md` | SPEC + 2–7 файлов | `/sbr` |
 | `/sbr` | `sbr.md` | RED→GREEN | `/regress` |
 | `/regress` | `regress.md` | Тесты зоны **до** push/Fly | `/review` |
-| `/review` | `review.md` | bugbot ± security + Entire checkpoint vs spec | push/deploy по апруву |
+| `/review` | `review.md` | PHASE 3: local → 2 субагента → Entire → push/CI → стоп | `deploy — только по апруву` |
 | `/trace-bug` | `trace-bug.md` | Сквозной аудит бага оплата/OTP/merge (до правок) | `/spec` или `/sbr` |
 
 Цепочка: `/start` → `/spec` → `/sbr` → `/regress` → `/review`  

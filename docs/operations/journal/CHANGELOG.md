@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-15 — docs(rules): PHASE 3 REVIEW канон
+
+- Таблица 6 шагов: local → bugbot+security-review → Entire → push/CI цикл → CI green → стоп
+- Deploy только апрув владельца; push на `/review` без вопроса
+- Указатели: commit-ops, `/review`, agent-workflow, dev-gates (пачка после deploy)
+
 ## 2026-08-15 — feat: #66 Telegram WebView storefront compatibility [GREEN]
 
 - Isolated `shopWebView.js`: detect (не auth), storage fallback, `--shop-vvh`, SPA stay-in-webview

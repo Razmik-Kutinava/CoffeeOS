@@ -11,7 +11,7 @@ alwaysApply: false
 
 ## Приоритет правил (при конфликте)
 
-0. **`coffeeos-commit-ops.mdc`** — всегда `git commit` + ops (без вопроса); **`git push`** — только по явной просьбе
+0. **`coffeeos-commit-ops.mdc`** — всегда `git commit` + ops; **push** на PHASE 3 (SBR); **deploy** — апрув
 1. **Безопасность** — секреты, auth, RLS, prod/Fly
 2. **`docs/operations/ISSUES.md`** — секция **`## 🔴 Открыто`**
 3. **`coffeeos-agent-workflow.mdc`** — намерение шага, тесты, honest report, стоп между шагами
@@ -43,20 +43,14 @@ alwaysApply: false
 
 ---
 
-## Пайплайн на стенд (канон)
+## Пайплайн на стенд (после PHASE 3)
 
-**Когда:** hot-path / фикс заказчика / «на Fly» / после апрува push+deploy.  
-**Не когда:** мелочь, только docs/rules, GREEN без просьбы push/deploy.
+**До deploy:** канон [`spec-build-review.mdc`](spec-build-review.mdc) § PHASE 3 (local → 2 субагента → Entire → push/CI → **стоп**). Не копировать сюда.
 
-Порядок **не переставлять**. **Push** и **deploy** — только явная просьба владельца (не из «ебашь код»).
+**Когда этот §:** после апрува **deploy**. **Не:** мелочь / только docs. **Deploy** — не из «ебашь» и не из CI green автоматически.
 
 | # | Шаг | Стоп если |
 |---|-----|-----------|
-| 1 | Local тесты зоны («Проверка» / таблица зон) | FAIL |
-| 2 | Review: diff; фича/PHASE 3 — `bugbot`; оплата/RLS/auth — `security-review` | дыры не закрыты |
-| 3 | `git commit` + ops | — |
-| 4 | **Push** по апруву | — |
-| 5 | **CI зелёный** на запушенном SHA | красный → `ci-investigator`, **не** deploy |
 | 6 | **Deploy** по апруву (`fly deploy` / `bin/fly_deploy.sh`) | release/lock fail |
 | 7 | **Пачка приёмки вместе** (MCP **не** вместо логов) | любая FAIL в таблице ниже |
 | 8 | Апрув заказчика глазами | не путать с MCP PASS |

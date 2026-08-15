@@ -11,7 +11,7 @@ alwaysApply: true
 
 | Файл | Зачем |
 |------|--------|
-| `workflow/coffeeos-commit-ops.mdc` | commit + ops всегда; push только по просьбе |
+| `workflow/coffeeos-commit-ops.mdc` | commit + ops всегда; push в PHASE 3 / иначе просьба; deploy — апрув |
 | `workflow/coffeeos-agent-workflow.mdc` | порядок шага + когда читать остальные |
 | `project/coffeeos-core.mdc` | tenant / RLS / панели / честность |
 | этот индекс + `.cursorrules` | навигация |
@@ -21,7 +21,7 @@ alwaysApply: true
 | Когда | Файл |
 |-------|------|
 | Фича / CHECKLIST / CBR / отчёт | `workflow/coffeeos-task-workflow.mdc` |
-| SBR (SPEC→RED→GREEN→REVIEW) | `workflow/spec-build-review.mdc` |
+| SBR (SPEC→RED→GREEN→REVIEW) | `workflow/spec-build-review.mdc` (PHASE 3 — канон сдачи) |
 | Entire checkpoint / Review why-context | `docs/operations/dev/ENTIRE.md` |
 | Тесты / регрессия / миграции / **пайплайн стенд** | `workflow/coffeeos-dev-gates.mdc` |
 | Новые файлы / куда класть | `workflow/coffeeos-repo-layout.mdc` |
@@ -36,7 +36,7 @@ alwaysApply: true
 
 **Код:** SPEC → 2–7 путей; hot-path → мягкий blast-radius (+1–3) + **обязательные** блоки todo «Не ломать» / «Проверка». Не `@codebase` зря. Не тащить gem’ы/Stripe/RSpec/skills без просьбы.
 
-**Приёмка на Fly:** Local → review → push → **CI green** → deploy → **пачка** Sentry 24ч + Fly logs + Neon + УК Point A **вместе с** MCP Point A. Канон: `coffeeos-dev-gates` § пайплайн. Не OTP/PAN в профиль заказчика.
+**Приёмка на Fly:** PHASE 3 (`spec-build-review`) → CI green → **deploy только апрув** → пачка Sentry+логи+MCP Point A. Канон после deploy: `coffeeos-dev-gates` § пайплайн. Не OTP/PAN в профиль заказчика.
 
 **README папок:** не читать при Glob/обходе дерева; только по явной нужде («что в папке» / карта для человека).
 

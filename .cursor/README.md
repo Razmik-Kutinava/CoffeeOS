@@ -21,7 +21,7 @@
 
 | Файл | Простыми словами |
 |------|------------------|
-| `coffeeos-commit-ops.mdc` | **Always.** Коммит + ops сам; push только по просьбе |
+| `coffeeos-commit-ops.mdc` | **Always.** Коммит + ops сам; push в PHASE 3; deploy — апрув |
 | `coffeeos-agent-workflow.mdc` | **Always.** Порядок шага; старт = шапка памяти; список файлов в SPEC |
 | `coffeeos-task-workflow.mdc` | Фичи / отчёт Сделано\|Не сделано / старт сессии |
 | `spec-build-review.mdc` | SBR: SPEC → RED → GREEN → REVIEW |

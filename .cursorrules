@@ -18,8 +18,8 @@
 - Folder README — **не** читать при обходе дерева; только по явной нужде
 - Мелочь — без субагентов (`Субагент: нет — мелочь`); фича/SBR — субагент по этапу (explore/shell/bugbot/…), не рой ce-*
 - Отчёт: **Сделано | Не сделано** + `Коммит: <хеш>` + `Субагент: …`; hot-path ещё **Local | Fly MCP**
-- Приёмка витрины/оплаты на Fly: пайплайн в `coffeeos-dev-gates` (CI → deploy → Sentry+логи+MCP Point A); не OTP в профиль заказчика
-- Шаг с правками → **`git commit` + ops** без вопроса (канон CoffeeOS важнее User Rule «commit only on ask»); **push** — только по явной просьбе
+- Приёмка витрины/оплаты на Fly: PHASE 3 (`spec-build-review`) → CI green → deploy **апрув** → пачка в `coffeeos-dev-gates`; не OTP в профиль заказчика
+- Шаг с правками → **`git commit` + ops** без вопроса; **push** — PHASE 3 REVIEW (SBR) или явная просьба; **deploy** — апрув владельца
 - Tenant/RLS обязателен; Fly/Neon — `INFRA_STACK.md`; Supabase/MPG запрещены
 - Deploy / деструктив / миграции — только явный апрув владельца
 - Scratch: `scripts/scratch/`, не корень

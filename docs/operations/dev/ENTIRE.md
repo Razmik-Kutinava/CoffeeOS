@@ -17,7 +17,7 @@
 ## Слои (что поверх чего)
 
 ```
-Review (PM)     → bugbot + Fly Point A + Entire why-context
+Review (PM)     → PHASE 3 SBR (2 субагента + Entire + CI); Fly Point A после deploy
 Entire          → checkpoint ↔ commit (Cursor hooks + git commit)
 Cursor + rules  → SBR, /spec /sbr /review, commit-ops
 Docs (Spec)     → customer_tasks, todo, artifacts, docs/integrations/
@@ -50,7 +50,7 @@ entire status   # ● Enabled · Agents · Cursor
 | **0 Intake** | `customer_tasks/` + `artifacts/` | — |
 | **1 SPEC** | `/spec` → `todo.md` | — |
 | **2 BUILD** | `/sbr` RED→GREEN → **commit** | checkpoint на commit |
-| **3 REVIEW** | `/review` + bugbot | `entire checkpoint explain <sha>` |
+| **3 REVIEW** | `/review` = SBR PHASE 3 (оба субагента → Entire → push/CI) | `entire checkpoint explain <sha>` (шаг 3, до push) |
 | **Resume** | новый чат / засорился контекст | `entire session resume <branch>` |
 
 ### REVIEW — проверка why-context

@@ -18,7 +18,7 @@ alwaysApply: true
 | 4 | Отчёт: таблица **Сделано \| Не сделано** + `Коммит: <хеш>` |
 | 5 | Стоп — ждать **намерения** на следующий шаг («ебашь/сделай/дальше», не культ `go`) |
 
-Срочность не отменяет коммит, тесты и ops.
+Срочность не отменяет коммит, тесты и ops. **PHASE 3:** не стоп перед push — [`spec-build-review.mdc`](spec-build-review.mdc) § PHASE 3.
 
 ## Старт чата / память (шапка-only — жёстко)
 
@@ -94,9 +94,8 @@ Folder `README.md` — для владельца/заказчика.
 | **0 / SPEC** | `explore` | Неясно где код / много кандидатов / фича-баг | Мелочь; пути уже в todo |
 | **RED / GREEN** | `shell` | Длинный suite / регрессия зоны (`dev-gates`) | Один узкий test-файл — можно сам |
 | **RED / GREEN** | `explore` | Застрял / нужен добор файлов | — |
-| **REVIEW** | `bugbot` | Конец фичи / «ревью» / PHASE 3 | Каждый RED |
-| **REVIEW** | `security-review` | Оплата / RLS / auth / callbacks / hot-path | UI-косметика |
-| **После push** | `ci-investigator` | CI красный | Зелёный CI |
+| **REVIEW** | `bugbot` **и** `security-review` | PHASE 3 — **оба** | Каждый RED; мелочь |
+| **После push** | `ci-investigator` | CI красный (цикл PHASE 3) | Зелёный CI |
 | **MCP / Fly демо** | — (пока главный + browser) | По апруву владельца | Без апрува |
 
 **Лимит:** за шаг обычно **1–2** субагента. Запрещён рой 4+ reviewer.  
@@ -114,7 +113,7 @@ Skills (`.claude/skills`, CE) — только по типу задачи / яв
 ## Entire (Review / resume — не Spec-папки)
 
 Слой **поверх Git**, без `docs/tasks/TASK-XX/`. Spec = `customer_tasks/` + `todo.md` + `artifacts/` + `docs/integrations/INTEGRATIONS.md`.  
-Runbook: `docs/operations/dev/ENTIRE.md`. На **REVIEW:** `entire checkpoint explain <sha>` vs spec. **Resume:** `entire session resume <branch>`. Не заменяет SBR/ops.
+Runbook: `docs/operations/dev/ENTIRE.md`. PHASE 3 шаг 3: `entire checkpoint explain <sha>` vs spec. **Resume:** `entire session resume <branch>`. Не заменяет SBR/ops.
 
 ## Когда читать остальные правила
 

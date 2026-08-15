@@ -1,19 +1,19 @@
 # Индекс правил агента CoffeeOS
 
-**Обновлено:** 2026-08-14 — пайплайн на стенд в `coffeeos-dev-gates`.
+**Обновлено:** 2026-08-15 — PHASE 3 REVIEW канон в `spec-build-review` (push в фазе; deploy — апрув).
 
 При конфликте приоритет: **`coffeeos-commit-ops`** > task-workflow > dev-gates > остальное.  
 **Коммит:** канон CoffeeOS (commit после правок) **важнее** глобального User Rule «commit only when asked» — User Rule лучше удалить в Cursor Settings → Rules.  
 **Субагенты:** таблица этапов в `agent-workflow`; карта — `docs/agents/SUBAGENTS.md`.  
 **Команды:** `.cursor/commands/` + `.cursor/skills/` (human `/…`); цепочка start→spec→sbr→regress→review.  
-**Hot-path / приёмка:** `dev-gates` § пайплайн на стенд (CI → deploy → Sentry+логи+MCP) + `agent-workflow` § Scope / Fly.
+**Hot-path / приёмка:** PHASE 3 (`spec-build-review`) → CI green → deploy (апрув) → `dev-gates` § пайплайн (Sentry+логи+MCP).
 
 ## Always (`alwaysApply: true`) — короткий закон
 
 | Файл | Назначение |
 |------|------------|
 | `coffeeos-index.mdc` | Карта always vs on-demand |
-| `workflow/coffeeos-commit-ops.mdc` | commit + ops всегда; push только по просьбе |
+| `workflow/coffeeos-commit-ops.mdc` | commit + ops всегда; push в PHASE 3 / иначе просьба; deploy — апрув |
 | `workflow/coffeeos-agent-workflow.mdc` | Порядок шага + когда читать остальные |
 | `project/coffeeos-core.mdc` | RLS, панели, enum, честность |
 | `.cursorrules` | Краткий индекс корня |
@@ -23,7 +23,7 @@
 | Файл | Когда |
 |------|--------|
 | `workflow/coffeeos-task-workflow.mdc` | Фича / CBR / CHECKLIST / отчёт / старт сессии |
-| `workflow/spec-build-review.mdc` | SBR SPEC→RED→GREEN→REVIEW; 2–7 файлов; hot-path: **Не ломать** + **Проверка** обязательны |
+| `workflow/spec-build-review.mdc` | SBR SPEC→RED→GREEN→REVIEW; **PHASE 3 канон** (local → 2 субагента → Entire → push/CI → стоп) |
 | `workflow/coffeeos-dev-gates.mdc` | DoD, **пайплайн стенд**, регрессия зон, миграции, hot-path |
 | `workflow/coffeeos-repo-layout.mdc` | Куда класть файлы; `scripts/scratch/` |
 | `workflow/coffeeos-file-size-split.mdc` | Лимиты 50/120/200 (globs app) |

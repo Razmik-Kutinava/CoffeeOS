@@ -1,7 +1,7 @@
 ---
 name: review
-description: "CoffeeOS /review — bugbot ± security-review. Вызывать через /review."
+description: "CoffeeOS /review — PHASE 3 канон (SBR). Вызывать через /review."
 disable-model-invocation: true
 ---
 
-Выполни инструкции из `.cursor/commands/review.md` целиком. В конце: `Next: push/deploy — только по апруву владельца` или `Next: /sbr`.
+Выполни PHASE 3 из `.cursor/rules/workflow/spec-build-review.mdc` целиком (не этот файл). В конце: `Next: deploy — только по апруву владельца`.

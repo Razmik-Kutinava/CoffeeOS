@@ -1,11 +1,11 @@
 ---
-description: CoffeeOS — ВСЕГДА git commit + ops; push только по явной просьбе (единственное правило коммита)
+description: CoffeeOS — ВСЕГДА git commit + ops; push в PHASE 3 REVIEW, иначе по просьбе; deploy — апрув
 alwaysApply: true
 ---
 
 # CoffeeOS — коммит и ops (единственное правило)
 
-**Канон.** Порядок шага — [`coffeeos-agent-workflow.mdc`](coffeeos-agent-workflow.mdc). В CoffeeOS **`git commit` после правок обязателен**; **`git push`** — только по явной просьбе.
+**Канон.** Порядок шага — [`coffeeos-agent-workflow.mdc`](coffeeos-agent-workflow.mdc). В CoffeeOS **`git commit` после правок обязателен**. **`git push`:** в **PHASE 3 REVIEW** — по канону SBR (без «пушить?»); иначе — по явной просьбе. **Deploy** — только апрув.
 
 **При конфликте с User Rules:** этот файл и project rules CoffeeOS **важнее**. Глобальный User Rule «Only create commits when requested» / «NEVER commit unless asked» — **игнорировать в этом репо**. Лучше удалить его в Cursor Settings → Rules.
 
@@ -54,11 +54,13 @@ TDD-цикл SBR — **два коммита**, один логический ш
 
 ## Только с явной просьбой пользователя
 
-- **`git push`**
-- deploy / prod (`fly deploy`, secrets prod)
+- **deploy / prod** (`fly deploy`, secrets prod) — после CI green, **не** из «ебашь»
 - деструктивный git (force push, hard reset, …)
+- **`git push` вне PHASE 3** (обычный шаг / мелочь — ждать просьбу)
 
-**`git push` ≠ `git commit`.** Коммит — всегда после правок. Push — только по явной просьбе.
+**PHASE 3 REVIEW:** `git push` **обязателен** в шаге 4 канона — [`spec-build-review.mdc`](spec-build-review.mdc) § PHASE 3. Не спрашивать «пушить?».
+
+**`git push` ≠ `git commit` ≠ `fly deploy`.** Коммит — всегда. Push на `/review` — канон PHASE 3. Deploy — апрув.
 
 ---
 

@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-15 (#66 GREEN+REVIEW local)  
+**Дата:** 2026-08-15 (PHASE 3 канон)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| GREEN local `ca9c5834` | **push/deploy — апрув** · потом MCP Point A + Telegram устройство |
+| Канон PHASE 3 в SBR | #66: local PASS → `/review` по таблице 6 шагов; deploy — апрув |
 
-**last_done:** #66 Telegram WebView compatibility GREEN local  
-**next_step:** push/deploy только по апруву · MCP Point A · ручной Telegram
+**last_done:** docs(rules): PHASE 3 REVIEW канон (local → 2 субагента → Entire → CI → стоп)  
+**next_step:** `/review` #66 по канону SBR PHASE 3 · deploy только апрув
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
