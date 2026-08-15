@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-15 (#68 PHASE 3 CI green)  
+**Дата:** 2026-08-15 (#68 Entire Windows CLI)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| CI green `c5898e0e` | deploy — апрув |
+| Entire CLI Windows PATH · checkpoint | deploy — апрув |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,13 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-15 (#68 Entire Windows CLI)
+
+- Gap: GREEN `ff9374d1` без trailer (commit из PowerShell, `entire` не был в PATH)
+- Фикс: `scoop install entire/cli` 0.8.42 · git hook находит `entire`
+- SHA GREEN не переписываем (уже на origin). Checkpoint — этот коммит + attach Cursor-сессии
+- Deploy по-прежнему апрув
 
 ### Сессия 2026-08-15 (#68 PHASE 3 /review CI)
 

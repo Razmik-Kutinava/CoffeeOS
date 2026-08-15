@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-15 (#68 PHASE 3 CI green)  
+**Дата:** 2026-08-15 (#68 Entire Windows CLI)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| CI green [run 31878722151](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/31878722151) | **deploy — только апрув** |
+| Entire native CLI в PATH | **deploy — только апрув** |
 
-**last_done:** #68 `/review` PHASE 3 · push · CI green (5/5 jobs)  
-**next_step:** deploy только по апруву · потом MCP Point A + Telegram устройство
+**last_done:** #68 Entire CLI Windows (scoop) · checkpoint на этот шаг, GREEN sha без rewrite  
+**next_step:** deploy только по апруву · MCP Point A + Telegram после deploy
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

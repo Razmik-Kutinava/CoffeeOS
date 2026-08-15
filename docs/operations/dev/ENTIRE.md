@@ -118,7 +118,7 @@ CLI: WSL, `PATH=$HOME/.local/bin:$PATH`. На Windows без WSL — устан�
 | Git hooks Entire | `.git/hooks/` — ставятся только через WSL enable |
 | Cursor hooks (`.cursor/hooks.json`) | `sh -c` — нужен sh (Git Bash/WSL); без `entire` в PATH — тихий skip |
 | **Запрещено** | `entire enable` из **PowerShell** — создаёт мусорную папку `C:…Tools…CoffeeOS.git.hooks` в корне репо (удалить вручную) |
-| **Git commit из Windows** | Hook пишет `Entire CLI … not on PATH. Skipping` — checkpoint **не** создаётся. Варианты: (1) установить Entire CLI в Windows PATH; (2) `wsl git commit` из WSL; (3) checkpoint всё равно может прийти от **Cursor hooks** при agent-сессии + commit |
+| **Git commit из Windows** | Hook пишет `Entire CLI … not on PATH. Skipping` — checkpoint **не** создаётся. **Фикс:** native CLI в PATH: `scoop bucket add entire https://github.com/entireio/scoop-bucket.git` · `scoop install entire/cli` (shim `~\scoop\shims\entire`). Затем `git` из Windows видит `entire` в commit-msg. Альтернативы: `wsl git commit`; или Cursor hooks при `entire` в PATH. `entire enable` — только WSL. |
 
 **Проверка hook:** после commit смотри вывод git — если `Skipping Entire Git hook`, checkpoint только через Cursor session hooks (нужна активная agent-сессия в Cursor до commit).
 
@@ -126,4 +126,5 @@ CLI: WSL, `PATH=$HOME/.local/bin:$PATH`. На Windows без WSL — устан�
 
 **User Rules в Cursor:** глобального «commit only on ask» может не быть в UI — канон CoffeeOS (`commit-ops`) всё равно **важнее**: commit после каждого шага без вопроса.
 
+*2026-08-15 · Windows scoop `entire/cli` 0.8.42 в PATH (git hooks больше не skip)*
 *2026-08-10 · enabled cursor · git-refs backend*

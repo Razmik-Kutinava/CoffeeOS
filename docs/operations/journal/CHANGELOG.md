@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-15 — docs: Entire CLI on Windows PATH (scoop entire/cli)
+
+- GREEN `ff9374d1` без trailer не переписываем (уже push)
+- Native `entire.exe` 0.8.42 · git hooks больше не skip
+- Checkpoint на этот коммит · why-context vs #68 spec
+
 ## 2026-08-15 — docs(ops): #68 PHASE 3 CI green `c5898e0e`
 
 - Push develop · CI 5/5 [run 31878722151](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/31878722151)
