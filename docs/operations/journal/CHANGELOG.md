@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-15 — docs: SPEC #66 Telegram WebView storefront runtime
+
+- Compatibility layer `shopWebView.js`; safe sessionStorage; catalog cache keyed by tenant
+- Viewport-fit + `--shop-vvh`; shop-api.md WebView runtime; без bot/CORS/CSP loosening
+- Дальше RED
+
 ## 2026-08-15 — docs: intake #66 Telegram WebView storefront runtime
 
 - ТЗ 1:1: полноценная работа `/shop` внутри Telegram In-App Browser

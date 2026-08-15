@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-15 (#66 intake)  
+**Дата:** 2026-08-15 (#66 SPEC)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Intake #66 | SPEC → RED → GREEN (намерение «ебашь полностью») |
+| SPEC #66 в todo | RED (намерение «ебашь полностью» → сразу) |
 
-**last_done:** intake #66 Telegram WebView storefront runtime  
-**next_step:** SPEC `todo.md` · не трогать bot / #64 MCP / #65 MCP
+**last_done:** SPEC #66 Telegram WebView storefront  
+**next_step:** RED `shop_telegram_webview` tests
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -24,7 +24,7 @@
 | Что | Статус |
 |-----|--------|
 | Intake + CBR #66 | **`[x]`** |
-| SPEC (`todo.md`) | `[ ]` |
+| SPEC (`todo.md`) | **`[x]`** |
 | RED / GREEN | `[ ]` |
 | Fly MCP Point A | `[ ]` ждать deploy |
 | Telegram устройство | `[ ]` |

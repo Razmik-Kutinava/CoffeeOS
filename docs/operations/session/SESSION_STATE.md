@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-15 (#66 intake)  
+**Дата:** 2026-08-15 (#66 SPEC)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Intake #66 | SPEC → RED → GREEN |
+| SPEC #66 | RED → GREEN |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,11 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-15 (#66 SPEC Telegram WebView)
+
+- Compatibility layer `shopWebView.js`; guest session try/catch; catalog cache by tenant; viewport-fit
+- Дальше RED
 
 ### Сессия 2026-08-15 (#66 intake Telegram WebView)
 
