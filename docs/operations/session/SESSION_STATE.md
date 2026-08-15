@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-15 (#66 SPEC)  
+**Дата:** 2026-08-15 (#66 GREEN+REVIEW local)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| SPEC #66 | RED → GREEN |
+| GREEN local `ca9c5834` | push/deploy апрув · MCP Point A |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,13 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-15 (#66 GREEN+REVIEW Telegram WebView)
+
+- Layer `shopWebView.js`; guest sessionStorage throw; catalog cache by tenant; viewport-fit
+- Local JS 23/0 · Rails webview 5/0 · boot+linkage 7/0
+- bugbot skip (Cursor usage limit) · Entire checkpoint нет (hook skip Windows)
+- Fly MCP / TG устройство — после deploy
 
 ### Сессия 2026-08-15 (#66 SPEC Telegram WebView)
 

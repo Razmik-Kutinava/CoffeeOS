@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-15 — feat: #66 Telegram WebView storefront compatibility [GREEN]
+
+- Isolated `shopWebView.js`: detect (не auth), storage fallback, `--shop-vvh`, SPA stay-in-webview
+- `reconnectGuestOrder` без голого sessionStorage; catalog cache `v1:<tenant_id>`
+- viewport-fit=cover; shop-api.md WebView runtime; без bot/CORS/CSP loosening
+- Local: JS 23/0 · Rails webview 5/0 · boot+linkage 7/0
+
 ## 2026-08-15 — docs: SPEC #66 Telegram WebView storefront runtime
 
 - Compatibility layer `shopWebView.js`; safe sessionStorage; catalog cache keyed by tenant

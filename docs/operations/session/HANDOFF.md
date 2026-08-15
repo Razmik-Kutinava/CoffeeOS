@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-15 (#66 SPEC)  
+**Дата:** 2026-08-15 (#66 GREEN+REVIEW local)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| SPEC #66 в todo | RED (намерение «ебашь полностью» → сразу) |
+| GREEN local `ca9c5834` | **push/deploy — апрув** · потом MCP Point A + Telegram устройство |
 
-**last_done:** SPEC #66 Telegram WebView storefront  
-**next_step:** RED `shop_telegram_webview` tests
+**last_done:** #66 Telegram WebView compatibility GREEN local  
+**next_step:** push/deploy только по апруву · MCP Point A · ручной Telegram
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -25,7 +25,8 @@
 |-----|--------|
 | Intake + CBR #66 | **`[x]`** |
 | SPEC (`todo.md`) | **`[x]`** |
-| RED / GREEN | `[ ]` |
+| RED / GREEN | **`[x]`** local `ca9c5834` |
+| REVIEW | **`[x]`** manual (bugbot skip: usage limit) |
 | Fly MCP Point A | `[ ]` ждать deploy |
 | Telegram устройство | `[ ]` |
 
