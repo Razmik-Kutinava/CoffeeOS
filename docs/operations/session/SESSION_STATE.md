@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-15 (PHASE 3 канон)  
+**Дата:** 2026-08-15 (#66 PHASE 3 CI green)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Канон PHASE 3 в SBR | `/review` #66 по таблице 6 шагов |
+| CI green `044f3130` | deploy — апрув |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,14 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-15 (#66 PHASE 3 /review)
+
+- Local JS 23/0 · Rails 12/0
+- bugbot+security-review: Cursor Task usage limit → manual review, блокеров нет
+- Entire: нет checkpoint (hook skip Windows) · spec vs todo/shop-api OK
+- Push `044f3130` · CI green 5/5 · --log-failed пусто
+- Стоп: deploy апрув
 
 ### Сессия 2026-08-15 (канон PHASE 3 REVIEW)
 

@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-15 (PHASE 3 канон)  
+**Дата:** 2026-08-15 (#66 PHASE 3 CI green)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Канон PHASE 3 в SBR | #66: local PASS → `/review` по таблице 6 шагов; deploy — апрув |
+| CI green `044f3130` · run 31876503882 | **deploy — только апрув** |
 
-**last_done:** docs(rules): PHASE 3 REVIEW канон (local → 2 субагента → Entire → CI → стоп)  
-**next_step:** `/review` #66 по канону SBR PHASE 3 · deploy только апрув
+**last_done:** #66 `/review` PHASE 3 · push · CI green (5/5 jobs)  
+**next_step:** deploy только по апруву · потом MCP Point A + Telegram устройство
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -26,8 +26,8 @@
 | Intake + CBR #66 | **`[x]`** |
 | SPEC (`todo.md`) | **`[x]`** |
 | RED / GREEN | **`[x]`** local `ca9c5834` |
-| REVIEW | **`[x]`** manual (bugbot skip: usage limit) |
-| Fly MCP Point A | `[ ]` ждать deploy |
+| REVIEW | **`[x]`** PHASE 3 · CI [run 31876503882](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/31876503882) |
+| Fly MCP Point A | `[ ]` ждать апрув deploy |
 | Telegram устройство | `[ ]` |
 
 **ТЗ:** [`customer_tasks/Полноценная работа мобильной витрины…`](../milestones/veha_2/requirements/customer_tasks/Полноценная%20работа%20мобильной%20витрины%20CoffeeOS%20внутри%20Telegram%20In-App%20Browser.md)  

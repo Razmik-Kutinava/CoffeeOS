@@ -2,7 +2,7 @@
 
 | last_done | current_state | next_step |
 |-----------|---------------|-----------|
-| GREEN+REVIEW local `ca9c5834` | ждать push/deploy | Fly MCP Point A · Telegram устройство |
+| PHASE 3 CI green `044f3130` | стоп до deploy | апрув владельца → fly deploy · MCP Point A |
 
 **CBR:** #66  
 **ТЗ:** [`customer_tasks/Полноценная работа мобильной витрины CoffeeOS внутри Telegram In-App Browser.md`](../milestones/veha_2/requirements/customer_tasks/Полноценная%20работа%20мобильной%20витрины%20CoffeeOS%20внутри%20Telegram%20In-App%20Browser.md)  
@@ -32,7 +32,7 @@
 - [x] RED
 - [x] GREEN
 - [x] REVIEW / Fly MCP Point A / Telegram устройство
-  - REVIEW **manual `[x]`** · Fly MCP `[ ]` · TG устройство `[ ]`
+  - REVIEW PHASE 3 **CI `[x]`** · Fly MCP `[ ]` · TG устройство `[ ]`
 
 ## Файлы (ожидаемо)
 
