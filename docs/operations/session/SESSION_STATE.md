@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-15 (#66 PHASE 3 CI green)  
+**Дата:** 2026-08-15 (#67 intake + SPEC)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| CI green `044f3130` | deploy — апрув |
+| #67 SPEC · #66 CI `044f3130` | апрув RED #67 |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,12 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-15 (#67 intake + SPEC Telegram WebView UI)
+
+- CBR #67 · ТЗ 1:1 · artifacts `mobile_storefront_telegram_webview_ui/`
+- SPEC: `shopWebViewLayout.js` + CartSheet/Header/Catalog на `--shop-vvh`; тесты `shop_telegram_webview_ui_test.mjs`
+- Стоп до апрува RED. #66 deploy не этот шаг. Задача 5 (perf) вне scope.
 
 ### Сессия 2026-08-15 (#66 PHASE 3 /review)
 

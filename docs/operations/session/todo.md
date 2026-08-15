@@ -1,65 +1,74 @@
-# todo — #66 полноценная работа /shop внутри Telegram WebView
+# todo — #67 адаптация Mobile UI /shop под Telegram WebView
 
 | last_done | current_state | next_step |
 |-----------|---------------|-----------|
-| PHASE 3 CI green `044f3130` | стоп до deploy | апрув владельца → fly deploy · MCP Point A |
+| intake + SPEC | стоп до апрува RED | намерение → RED (тесты layout/viewport/keyboard) |
 
-**CBR:** #66  
-**ТЗ:** [`customer_tasks/Полноценная работа мобильной витрины CoffeeOS внутри Telegram In-App Browser.md`](../milestones/veha_2/requirements/customer_tasks/Полноценная%20работа%20мобильной%20витрины%20CoffeeOS%20внутри%20Telegram%20In-App%20Browser.md)  
-**Артефакты:** [`artifacts/mobile_storefront_telegram_webview/`](../milestones/veha_2/artifacts/mobile_storefront_telegram_webview/)  
+**CBR:** #67  
+**ТЗ:** [`customer_tasks/Адаптация Mobile UI витрины CoffeeOS под Telegram WebView.md`](../milestones/veha_2/requirements/customer_tasks/Адаптация%20Mobile%20UI%20витрины%20CoffeeOS%20под%20Telegram%20WebView.md)  
+**Артефакты:** [`artifacts/mobile_storefront_telegram_webview_ui/`](../milestones/veha_2/artifacts/mobile_storefront_telegram_webview_ui/)  
 **Point A:** `https://coffeeos.fly.dev/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789`  
-**Серия:** задача 3. #64/#65 MCP не закрывать этим шагом. Задачи 4 (UI) и 5 (perf) — не этот шаг.
+**Серия:** задача 4. Опирается на #66 runtime (`shopWebView.js`, `--shop-vvh`). Задача 5 (UX/perf) — не этот шаг. #66 deploy/MCP — отдельно, не блокер local RED/GREEN.
 
 ## Цель (1 предложение)
 
-Витрина `/shop` в Telegram In-App Browser работает как обычный мобильный браузер: mount → API same-origin → tenant_id по контракту #65 → storage/cookies с fallback → SPA-навигация внутри WebView → viewport без перекрытия ключевого UI.
+В Telegram WebView каталог, sticky-шапка, CartSheet (peek/expanded) и CTA живут в **visual viewport** + safe-area: ничего не прячется под chrome Telegram / клавиатуру, внутренний скролл шторки не залипает, обычный мобильный браузер не ломается.
 
 ## Acceptance (DoD)
 
-1. Compatibility-слой изолирован (`shopWebView.js`); UA **не** auth.
-2. API `/shop/api/*` same-origin + `credentials: same-origin`; глобальный CORS не добавляем.
-3. CSP не расширяем «под Telegram»; `connect-src 'self'` достаточен (origin = витрина).
-4. localStorage/sessionStorage throw → fallback, приложение не падает.
-5. Повторное открытие: `tenant_id` из URL, не чужой catalog cache.
-6. Hash-навигация остаётся в WebView; не `window.open` внутренних `/shop` маршрутов.
-7. `--shop-vvh` + `viewport-fit=cover`; визуальная полировка экранов — задача 4.
-8. Обычный Chrome/Safari и #64/#65 не регрессируют. Bot/payments/auth — вне scope.
+1. Высота layout от `visualViewport` / `--shop-vvh`, не от физического `100vh` экрана.
+2. Sticky header (каталог / категория) в доступной зоне WebView (верхний safe-area).
+3. CartSheet peek/expanded целиком в visual viewport; CTA видна; одна шторка, без второго `fixed`.
+4. Overflow внутри шторки, если контент выше доступной высоты; page scroll каталога не «залипает».
+5. Нижний safe-area у cart/CTA; верхний — у Header.
+6. Клавиатура сжимает доступную высоту (input + CTA видимы); закрытие без пустого хвоста и без сброса mode/state корзины.
+7. Resize/orientation пересчитывает viewport + sheet без сломанного overlay.
+8. Контракт в `shop-api.md` § Embedded browser (WebView UI); identity/tenant/API #65/#66 не трогаем.
+9. Chrome/Safari mobile и #64/#65/#66 runtime не регрессируют. Bot / payments / Prisma — вне scope.
+10. Подзадача 17 (устройство Telegram) — после deploy #66; не блокер local GREEN.
 
 ## Фазы SBR
 
 - [x] PHASE 0 intake
 - [x] PHASE 1 SPEC
-- [x] RED
-- [x] GREEN
-- [x] REVIEW / Fly MCP Point A / Telegram устройство
-  - REVIEW PHASE 3 **CI `[x]`** · Fly MCP `[ ]` · TG устройство `[ ]`
+- [ ] RED
+- [ ] GREEN
+- [ ] REVIEW / Fly MCP Point A / Telegram устройство
 
 ## Файлы (ожидаемо)
 
-- `app/frontend/lib/shopWebView.js` — isolated layer: detect (не auth), safe storage, viewport CSS var, SPA stay-in-webview, cold start/reopen tenant
-- `app/frontend/App.svelte` — `installShopWebViewCompat()` на boot (рядом с `initTelegram`, без Mini App SDK)
-- `app/frontend/lib/shopGuestSession.js` — `reconnectGuestOrder` без голого `sessionStorage` (throw → не падать)
-- `app/frontend/lib/stores/catalog.js` — cache key с `tenant_id` (reopen без чужого меню) — *почему: storage fallback иначе отдаёт каталог другой точки*
-- `app/views/layouts/shop.html.erb` — `viewport-fit=cover`; watchdog #64 не трогать
-- `docs/integrations/shop-api.md` § Embedded browser — контракт WebView runtime (#66)
-- `test/javascript/shop_telegram_webview_test.mjs` + `test/integration/shop/shop_telegram_webview_test.rb`
+- `app/frontend/lib/shopWebViewLayout.js` — **новый**: px от `--shop-vvh`, keyboard open/close (visualViewport height/offsetTop), safe-area CSS vars, max-height sheet; без auth/UA
+- `app/frontend/styles/app.css` — html/body: `--shop-vvh`, overflow, `env(safe-area-inset-*)`; не считать layout от голого `100vh`
+- `app/frontend/components/CartSheet.svelte` — высота/bottom/CTA в px visual viewport (не `${vh}vh` экрана); внутренний scroll; **не** раздувать файл — логика в layout.js
+- `app/frontend/components/Header.svelte` — верхний safe-area / Telegram chrome (подзадача 9)
+- `app/frontend/routes/Catalog.svelte` — нижний padding каталога от высоты шторки/`--shop-vvh`, полный скролл до конца (подзадача 13)
+- `test/javascript/shop_telegram_webview_ui_test.mjs` — **новый**: viewport, resize, keyboard, safe-area, sheet-in-vvh, без потери state
+- `docs/integrations/shop-api.md` — § Embedded browser: WebView UI (#67); индекс INTEGRATIONS уже указывает сюда
+
+### Blast-radius (+2)
+
+- `app/frontend/routes/CategoryProducts.svelte` — *почему: sticky header + `min-height: 100vh` на категории, тот же WebView chrome*
+- `app/frontend/App.svelte` — *почему: `installShopWebViewLayout()` рядом с `installShopWebViewCompat()` (#66), одна точка boot*
 
 ## Не ломать
 
-- #64 boot watchdog / Catalog «Повторить» / storage throw → loadCatalog
-- #65 query `tenant_id` > meta; blank key ≠ silent fallback
-- CartSheet / peek / «повторить»
-- Rails CSRF; без глобального CORS; Telegram Bot / payments / SMS
+- CartSheet канон одной шторки: peek / «повторить» / checkout pay-stack / CTA товара — секции, не второй `fixed`
+- `handleCatalogScroll` (window scroll → peek/hidden) — не заменить page-scroll на lock, который залипает каталог
+- #66 `shopWebView.js`: detect ≠ auth, storage fallback, `--shop-vvh` setter, SPA stay-in-webview
+- #65 query `tenant_id` > meta; Chrome/Safari mobile вне Telegram
 
 ## Проверка
 
-- `node --test test/javascript/shop_telegram_webview_test.mjs test/javascript/shop_api_tenant_query_test.mjs test/javascript/shop_catalog_load_test.mjs test/javascript/shop_local_storage_test.mjs`
-- `bundle exec ruby -Itest test/integration/shop/shop_telegram_webview_test.rb test/integration/shop/shop_boot_skeleton_test.rb test/integration/shop/shop_tenant_linkage_test.rb`
+- `node --test test/javascript/shop_telegram_webview_ui_test.mjs test/javascript/shop_telegram_webview_test.mjs`
+- `bundle exec ruby -Itest test/integration/shop/shop_telegram_webview_test.rb test/integration/shop/shop_boot_skeleton_test.rb`
 
-Fly MCP Point A — после deploy (апрув). Telegram на телефоне — отдельно.
+Fly MCP Point A + Telegram на телефоне — после апрува deploy (подзадача 17). Задача 5 (perf) — не этот шаг.
 
 ## Риски / заметки
 
-- `initTelegram()` = Mini App `WebApp`; In-App Browser по ссылке ≠ Mini App. Не подключать telegram.org SDK «на всякий случай» (CSP).
-- Instagram — зона #64/#65, не плодить IG-ветки.
-- Viewport: только CSS-переменная и meta; не переписывать все `100vh` (это задача 4).
+- `CartSheet.svelte` уже >700 строк — GREEN только подставляет px из layout.js, иначе сплит + апрув.
+- `SHEET_VH` проценты оставляем; множитель = visualViewport height, не `window.innerHeight`.
+- Checkout `CHECKOUT_PAY_STACK_VH = 92` на коротком WebView обязан **капиться** в доступную высоту (иначе CTA под клавиатурой).
+- Нет visualViewport → fallback `innerHeight`, UI не падает (контракт заказчика).
+- Keyboard нельзя честно закрыть в node:тест — мок `visualViewport.height` вверх/вниз; устройство — подзадача 17.
+- Не тащить Mini App SDK / Bot API / глобальный CORS / desktop layout.

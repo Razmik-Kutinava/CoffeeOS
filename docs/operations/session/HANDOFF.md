@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-15 (#66 PHASE 3 CI green)  
+**Дата:** 2026-08-15 (#67 intake + SPEC)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| CI green `044f3130` · run 31876503882 | **deploy — только апрув** |
+| #67 SPEC в `todo.md` · #66 CI green `044f3130` | апрув RED #67 · deploy #66 отдельно |
 
-**last_done:** #66 `/review` PHASE 3 · push · CI green (5/5 jobs)  
-**next_step:** deploy только по апруву · потом MCP Point A + Telegram устройство
+**last_done:** #67 PHASE 0+1 intake + SPEC (Mobile UI Telegram WebView)  
+**next_step:** апрув → RED (`shopWebViewLayout` + UI tests). #66 deploy — только апрув (не этот шаг)
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -18,6 +18,19 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### #67 Telegram WebView mobile UI (2026-08-15)
+
+| Что | Статус |
+|-----|--------|
+| Intake + CBR #67 | **`[x]`** |
+| SPEC (`todo.md`) | **`[x]`** стоп до апрува |
+| RED / GREEN | `[ ]` |
+| REVIEW / Fly MCP / TG устройство | `[ ]` (устройство после deploy #66) |
+
+**ТЗ:** [`customer_tasks/Адаптация Mobile UI витрины CoffeeOS под Telegram WebView.md`](../milestones/veha_2/requirements/customer_tasks/Адаптация%20Mobile%20UI%20витрины%20CoffeeOS%20под%20Telegram%20WebView.md)  
+**Артефакты:** [`artifacts/mobile_storefront_telegram_webview_ui/`](../milestones/veha_2/artifacts/mobile_storefront_telegram_webview_ui/)  
+Серия задача 4. Runtime #66 не переписывать. Задача 5 (perf) — вне scope.
 
 ### #66 Telegram WebView storefront runtime (2026-08-15)
 
