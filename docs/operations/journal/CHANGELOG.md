@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-15 — docs(ops): #67 PHASE 3 REVIEW local
+
+- Local JS 27/0 · Rails webview+boot 8/0
+- Cursor Task bugbot/security-review: usage limit → manual; блокеров нет
+- Entire checkpoint нет (Windows hook skip)
+- Push → CI; deploy только апрув
+
 ## 2026-08-15 — docs: intake + SPEC #67 Telegram WebView mobile UI
 
 - ТЗ 1:1 `customer_tasks/Адаптация Mobile UI витрины CoffeeOS под Telegram WebView.md` · CBR #67
