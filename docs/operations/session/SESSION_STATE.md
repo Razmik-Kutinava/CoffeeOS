@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-15 (#64–#68 pre-deploy suite PASS)  
+**Дата:** 2026-08-15 (Fly v456 · MCP ждёт апрув)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Local JS 50/0 · Rails 36/0 | deploy — апрув |
+| Fly v456 up | MCP Point A — апрув |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,13 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-15 (push + fly deploy v456)
+
+- Push `develop` `d8e61821`
+- `fly deploy -a coffeeos --remote-only --depot=false` → **v456** `deployment-01M02H0BQ0HYY6AFTRNWCS8RS5`
+- `/up` 200 · Point A `/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789` 200
+- MCP / Sentry / Neon pack — стоп до апрува MCP
 
 ### Сессия 2026-08-15 (#64–#68 pre-deploy suite)
 

@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-15 (#64–#68 pre-deploy suite PASS)  
+**Дата:** 2026-08-15 (Fly v456 · MCP ждёт апрув)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Local suite #64–#68 PASS | **deploy — только апрув** |
+| Fly **v456** · `/up` 200 · Point A shop 200 | **MCP Point A — апрув** |
 
-**last_done:** pre-deploy regress JS 50/0 · Rails 36/0  
-**next_step:** deploy только по апруву · MCP Point A + Telegram после deploy
+**last_done:** push `d8e61821` · fly deploy coffeeos **v456**  
+**next_step:** MCP Point A + Telegram — только по апруву
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -29,7 +29,8 @@
 | `/regress` | **`[x]`** JS 46/0 · Rails 8/0 |
 | REVIEW | **`[x]`** PHASE 3 · CI [run 31878722151](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/31878722151) |
 | Entire backfill | **`[x]`** attach сессий на docs-коммит (GREEN SHA без trailer) |
-| Fly MCP Point A | `[ ]` ждать апрув deploy |
+| Fly deploy | **`[x]`** v456 · `/up` 200 · Point A shop 200 |
+| Fly MCP Point A | `[ ]` ждать апрув MCP |
 | Telegram устройство | `[ ]` |
 
 **ТЗ:** [`customer_tasks/UX и Performance мобильной витрины CoffeeOS внутри Telegram WebView.md`](../milestones/veha_2/requirements/customer_tasks/UX%20и%20Performance%20мобильной%20витрины%20CoffeeOS%20внутри%20Telegram%20WebView.md)  
@@ -44,7 +45,7 @@
 | SPEC (`todo.md`) | **`[x]`** |
 | RED / GREEN | **`[x]`** `8daadddf` |
 | REVIEW | **`[x]`** PHASE 3 · CI [run 31877829022](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/31877829022) |
-| Fly MCP Point A | `[ ]` ждать апрув deploy |
+| Fly MCP Point A | `[ ]` ждать апрув MCP (стенд v456) |
 | Telegram устройство | `[ ]` |
 
 **ТЗ:** [`customer_tasks/Адаптация Mobile UI витрины CoffeeOS под Telegram WebView.md`](../milestones/veha_2/requirements/customer_tasks/Адаптация%20Mobile%20UI%20витрины%20CoffeeOS%20под%20Telegram%20WebView.md)  
@@ -59,7 +60,7 @@
 | SPEC (`todo.md`) | **`[x]`** |
 | RED / GREEN | **`[x]`** local `ca9c5834` |
 | REVIEW | **`[x]`** PHASE 3 · CI [run 31876503882](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/31876503882) |
-| Fly MCP Point A | `[ ]` ждать апрув deploy |
+| Fly MCP Point A | `[ ]` ждать апрув MCP (стенд v456) |
 | Telegram устройство | `[ ]` |
 
 **ТЗ:** [`customer_tasks/Полноценная работа мобильной витрины…`](../milestones/veha_2/requirements/customer_tasks/Полноценная%20работа%20мобильной%20витрины%20CoffeeOS%20внутри%20Telegram%20In-App%20Browser.md)  
@@ -75,7 +76,7 @@
 | RED / GREEN | **`[x]`** local |
 | REVIEW | **`[x]`** manual |
 | CI | **green** `c9b8f04d` · [run 31815909292](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/31815909292) |
-| Fly MCP Point A | `[ ]` ждать deploy апрув |
+| Fly MCP Point A | `[ ]` ждать апрув MCP (стенд v456) |
 | TG/IG устройства | `[ ]` |
 
 **ТЗ:** [`customer_tasks/Изменения в связке Telegram Instagram…`](../milestones/veha_2/requirements/customer_tasks/Изменения%20в%20связке%20Telegram%20Instagram%20In-App%20Browser%20к%20CoffeeOS%20shop.md)  
@@ -90,7 +91,7 @@
 | SPEC (`todo.md`) | **`[x]`** |
 | Диагностика точки отказа | **`[x]`** Chrome Point A · TG/IG устройства `[ ]` |
 | RED / GREEN | **`[x]`** local |
-| Fly MCP Point A | `[ ]` ждать deploy |
+| Fly MCP Point A | `[ ]` ждать апрув MCP (стенд v456) |
 | TG/IG реальные устройства | `[ ]` |
 | Апрув заказчика | `[ ]` |
 

@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-15 — deploy: Fly coffeeos v456 (#64–#68)
+
+- Push `d8e61821` · `fly deploy --remote-only --depot=false`
+- `/up` 200 · Point A shop 200
+- MCP Point A — ждём апрув (пачка Sentry/логи/Neon вместе с MCP)
+
 ## 2026-08-15 — test: #64–#68 pre-deploy suite PASS
 
 - JS 50/0 (webview/catalog/tenant query)
