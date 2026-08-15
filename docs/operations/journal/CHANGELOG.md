@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-15 — docs(ops): #68 /regress shop WebView UX/perf PASS
+
+- JS 46/0 (ux_perf + catalog_load + webview + webview_ui)
+- Rails webview+boot 8/0
+- Полный `test/integration/shop/` на Windows не гоняли (канон)
+- Next: `/review` · Fly MCP после deploy
+
 ## 2026-08-15 — docs: intake + SPEC #68 Telegram WebView UX/perf
 
 - ТЗ 1:1 `customer_tasks/UX и Performance мобильной витрины CoffeeOS внутри Telegram WebView.md` · CBR #68

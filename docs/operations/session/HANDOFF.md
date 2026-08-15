@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-15 (#68 intake + SPEC)  
+**Дата:** 2026-08-15 (#68 /regress PASS)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #68 SPEC · стоп до RED | RED при намерении |
+| #68 local JS 46/0 · Rails 8/0 | `/review` |
 
-**last_done:** #68 PHASE 0 + SPEC · UX/perf витрины в Telegram WebView  
-**next_step:** `/sbr` RED · #67 deploy отдельно — только апрув
+**last_done:** #68 `/regress` shop WebView UX/perf PASS  
+**next_step:** `/review` PHASE 3 · Fly MCP Point A после deploy
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -25,7 +25,8 @@
 |-----|--------|
 | Intake + CBR #68 | **`[x]`** |
 | SPEC (`todo.md`) | **`[x]`** |
-| RED / GREEN | `[ ]` |
+| RED / GREEN | **`[x]`** `ff9374d1` |
+| `/regress` | **`[x]`** JS 46/0 · Rails 8/0 |
 | REVIEW | `[ ]` |
 | Fly MCP Point A | `[ ]` после deploy |
 | Telegram устройство | `[ ]` |

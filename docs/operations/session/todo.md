@@ -2,7 +2,7 @@
 
 | last_done | current_state | next_step |
 |-----------|---------------|-----------|
-| GREEN local | JS UX/perf + webview PASS | `/regress` зоны |
+| `/regress` PASS | JS 46/0 · Rails 8/0 | `/review` PHASE 3 |
 
 **CBR:** #68  
 **ТЗ:** [`customer_tasks/UX и Performance мобильной витрины CoffeeOS внутри Telegram WebView.md`](../milestones/veha_2/requirements/customer_tasks/UX%20и%20Performance%20мобильной%20витрины%20CoffeeOS%20внутри%20Telegram%20WebView.md)  
