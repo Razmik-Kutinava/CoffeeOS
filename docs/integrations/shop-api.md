@@ -168,6 +168,7 @@ Bootstrap: HTML содержит `shop-boot-skeleton`; единственный 
 | cookies `_coffeeos_session` | `fetch(..., { credentials: "same-origin" })` |
 | localStorage / sessionStorage | try/catch + memory fallback; catalog cache `coffeeos_shop_catalog_v1:<tenant_id>` |
 | visualViewport / keyboard | `--shop-vvh` + `viewport-fit=cover` |
+| WebView UI (#67) | `app/frontend/lib/shopWebViewLayout.js` · CartSheet/Header в px visual viewport |
 
 - Origin витрины = origin API → CORS не расширяем.
 - CSP: `connect-src 'self'` (+ банк). `telegram.org` SDK не подключаем.
@@ -177,6 +178,24 @@ Bootstrap: HTML содержит `shop-boot-skeleton`; единственный 
 - Повторное открытие: URL `tenant_id` побеждает кэш другой точки.
 - Фактические ограничения WebView — в `artifacts/mobile_storefront_telegram_webview/diag/`, не копия доки Telegram.
 
+### Telegram WebView UI (#67)
+
+Связка: Telegram In-App Browser / WebView → CoffeeOS Mobile UI. Поверх runtime #66, **без** новых backend endpoints.
+
+| Внешнее | Наше |
+|---------|------|
+| visual viewport (не `window.innerHeight`) | `--shop-vvh` + `shopWebViewLayout.js` |
+| keyboard / resize | `--shop-keyboard-inset`; sheet px пересчёт; state peek/cart **не** сбрасывается |
+| safe-area top/bottom | `--shop-safe-top` / `--shop-safe-bottom` → Header / CartSheet |
+| bottom sheet / cart CTA | `sheetHeightPx` капит высоту в доступную область |
+
+- Identity: UI viewport **не** меняет `tenant_id` / `user_id` (#65/#66).
+- Нет visualViewport → fallback `innerHeight`, UI не падает.
+- Page scroll каталога **не** lock-ается шторкой (`handleCatalogScroll`).
+- Обычный мобильный Chrome/Safari без необходимости не меняем.
+- Не auth: viewport state не заменяет серверную валидацию tenant/user.
+
 **#64** · тесты: `shop_boot_skeleton_test.rb` · `shop_catalog_load_test.mjs`  
 **#65** · тесты: `shop_api_tenant_query_test.mjs` · `shop_tenant_linkage_test.rb` · categories `?tenant_id=`  
-**#66** · тесты: `shop_telegram_webview_test.mjs` · `shop_telegram_webview_test.rb`
+**#66** · тесты: `shop_telegram_webview_test.mjs` · `shop_telegram_webview_test.rb`  
+**#67** · тесты: `shop_telegram_webview_ui_test.mjs` · `shop_telegram_webview_test.rb` (layout/UI contract)

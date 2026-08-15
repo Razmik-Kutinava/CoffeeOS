@@ -2,7 +2,7 @@
 
 | last_done | current_state | next_step |
 |-----------|---------------|-----------|
-| RED tests | in_progress (намеренный RED) | GREEN layout.js + CartSheet/Header/Catalog |
+| GREEN layout | local JS+Rails PASS | /regress · REVIEW; Fly/TG после deploy #66 |
 
 **CBR:** #67  
 **ТЗ:** [`customer_tasks/Адаптация Mobile UI витрины CoffeeOS под Telegram WebView.md`](../milestones/veha_2/requirements/customer_tasks/Адаптация%20Mobile%20UI%20витрины%20CoffeeOS%20под%20Telegram%20WebView.md)  
@@ -32,7 +32,7 @@
 - [x] PHASE 0 intake
 - [x] PHASE 1 SPEC
 - [x] RED
-- [ ] GREEN
+- [x] GREEN
 - [ ] REVIEW / Fly MCP Point A / Telegram устройство
 
 ## Файлы (ожидаемо)

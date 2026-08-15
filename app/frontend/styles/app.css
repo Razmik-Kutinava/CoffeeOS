@@ -2,6 +2,9 @@
 
 :root {
   --shop-vvh: 100dvh;
+  --shop-safe-top: env(safe-area-inset-top, 0px);
+  --shop-safe-bottom: env(safe-area-inset-bottom, 0px);
+  --shop-keyboard-inset: 0px;
   --bg-primary: #1a1a1a;
   --bg-secondary: #2a2a2a;
   --text-primary: #ffffff;
@@ -16,7 +19,8 @@
 html,
 body {
   margin: 0;
-  min-height: 100%;
+  min-height: var(--shop-vvh);
+  overflow-x: hidden;
   background: var(--bg-primary);
   color: var(--text-primary);
   font-family:

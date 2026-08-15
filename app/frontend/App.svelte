@@ -15,6 +15,7 @@
   import CartRedirect from "./routes/CartRedirect.svelte"
   import { initTelegram } from "./lib/telegram.js"
   import { installShopWebViewCompat } from "./lib/shopWebView.js"
+  import { installShopWebViewLayout } from "./lib/shopWebViewLayout.js"
   import { installSlowRequestTracker } from "./lib/slowRequest.js"
   import { api } from "./lib/api.js"
   import { bootstrapShopTenant } from "./lib/shopTenantHeader.js"
@@ -34,6 +35,7 @@
   installSlowRequestTracker()
   initTelegram()
   installShopWebViewCompat()
+  installShopWebViewLayout()
 
   const pendingStatusGuard = createVisibilityStatusGuard()
 
@@ -147,12 +149,12 @@
 
 </script>
 
-<div class="min-h-screen bg-[#1a1a1a] text-white">
+<div class="min-h-[var(--shop-vvh)] bg-[#1a1a1a] text-white">
   <SlowRequestOverlay />
   <ShopPwaBanner />
   <ShopClosedBanner />
   <Header />
-  <main class="mx-auto max-w-lg px-3 pb-4 pt-[4.5rem]">
+  <main class="mx-auto max-w-lg px-3 pb-4 pt-[calc(4.5rem+var(--shop-safe-top))]">
     <Router {routes} options={{ hash: true }} />
   </main>
   <CartSheet />

@@ -140,19 +140,20 @@
 
 <style>
   .category-page {
-    min-height: 100vh;
+    min-height: var(--shop-vvh, 100dvh);
     background: var(--bg-primary, #1a1a1a);
-    padding-bottom: 80px;
+    padding-bottom: max(80px, var(--cart-sheet-h, 80px));
   }
 
   .page-header {
     display: flex;
     align-items: center;
     padding: 16px 20px;
+    padding-top: calc(16px + var(--shop-safe-top, 0px));
     background: var(--bg-secondary, #2a2a2a);
     gap: 12px;
     position: sticky;
-    top: 0;
+    top: var(--shop-safe-top, 0px);
     z-index: 10;
   }
 

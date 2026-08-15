@@ -45,12 +45,16 @@
     PRODUCT_CTA_EXTRA_VH,
     STATUS_IN_SHEET_EXTRA_VH,
     SHEET_TRANSITION_MS,
-    CART_SHEET_BOTTOM_REM,
     CART_SHEET_MAX_WIDTH_PX,
     CART_SHEET_BUILD,
     CHECKOUT_PAY_STACK_VH,
     CHECKOUT_PEEK_VH
   } from "../lib/cartSheetThresholds.js"
+  import {
+    sheetHeightPx,
+    shopVisualViewportHeight,
+    subscribeShopViewport
+  } from "../lib/shopWebViewLayout.js"
 
   let hash = $state(typeof window !== "undefined" ? window.location.hash : "")
   let items = $state([])
@@ -110,14 +114,17 @@
     if (onProduct && !payStackActive) base += PRODUCT_CTA_EXTRA_VH
     return base
   })
+  let vvh = $state(typeof window !== "undefined" ? shopVisualViewportHeight() : 0)
   let stackBottomVh = $derived(CHECKOUT_PAY_STACK_VH - CHECKOUT_PEEK_VH)
+  let heightPx = $derived(sheetHeightPx(heightVh, { visualViewport: { height: vvh } }))
+  let stackBottomPx = $derived(sheetHeightPx(stackBottomVh, { visualViewport: { height: vvh } }))
   let singleItem = $derived(count === 1 ? items[0] : null)
 
   // Spacer на Product синхронизируется с реальной высотой шторки (стык)
   $effect(() => {
     if (typeof document === "undefined") return
     if (showSheet) {
-      document.documentElement.style.setProperty("--cart-sheet-h", `${heightVh}vh`)
+      document.documentElement.style.setProperty("--cart-sheet-h", `${heightPx}px`)
     } else {
       document.documentElement.style.removeProperty("--cart-sheet-h")
     }
@@ -284,6 +291,9 @@
     }
 
     bindCartSheetEvents()
+    const unsubVvh = subscribeShopViewport((h) => {
+      if (h > 0) vvh = h
+    })
     window.addEventListener("hashchange", onHash)
     refreshCartSheet().catch(() => {})
     // Секция «повторить»: кэш сразу; status+customer_id без нового OTP после F5
@@ -293,7 +303,7 @@
     return () => {
       unsubItems(); unsubTotal(); unsubMode(); unsubBusy()
       unsubErr(); unsubPay(); unsubFrequent(); unsubHasActive(); unsubStatusUi()
-      unsubInvalid(); unsubProductCta()
+      unsubInvalid(); unsubProductCta(); unsubVvh()
       window.removeEventListener("hashchange", onHash)
       if (typeof document !== "undefined") {
         document.documentElement.style.removeProperty("--cart-sheet-h")
@@ -396,8 +406,8 @@
     data-checkout-pay-stack={payStackActive ? "true" : "false"}
     class="cart-sheet fixed left-0 right-0 z-50 mx-auto flex flex-col overflow-hidden border-t border-[#3a3a3a] bg-[#2a2a2a]/98 backdrop-blur transition-[height,bottom] ease-out"
     class:cart-sheet--pay-stack-peek={payStackActive}
-    style:height="{heightVh}vh"
-    style:bottom={payStackActive ? `${stackBottomVh}vh` : `${CART_SHEET_BOTTOM_REM}rem`}
+    style:height="{heightPx}px"
+    style:bottom={payStackActive ? `${stackBottomPx}px` : "var(--shop-safe-bottom, 0px)"}
     style:max-width="{CART_SHEET_MAX_WIDTH_PX}px"
     style:transition-duration="{SHEET_TRANSITION_MS}ms"
     style:z-index={payStackActive ? 52 : 50}
