@@ -2,7 +2,7 @@
 
 | last_done | current_state | next_step |
 |-----------|---------------|-----------|
-| PHASE 3 local review | push → CI | CI green → стоп · deploy апрув |
+| PHASE 3 CI green | [run 31878722151](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/31878722151) | deploy — только апрув |
 
 **CBR:** #68  
 **ТЗ:** [`customer_tasks/UX и Performance мобильной витрины CoffeeOS внутри Telegram WebView.md`](../milestones/veha_2/requirements/customer_tasks/UX%20и%20Performance%20мобильной%20витрины%20CoffeeOS%20внутри%20Telegram%20WebView.md)  
@@ -36,7 +36,7 @@
 - [x] RED
 - [x] GREEN
 - [x] REVIEW / Fly MCP Point A / Telegram устройство
-  - REVIEW PHASE 3 **local `[x]`** · CI `[ ]` · Fly MCP `[ ]` · TG устройство `[ ]`
+  - REVIEW PHASE 3 **local `[x]`** · CI **`[x]`** [31878722151](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/31878722151) · Fly MCP `[ ]` · TG устройство `[ ]`
 
 ## Файлы (ожидаемо)
 
