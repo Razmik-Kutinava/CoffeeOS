@@ -195,7 +195,27 @@ Bootstrap: HTML содержит `shop-boot-skeleton`; единственный 
 - Обычный мобильный Chrome/Safari без необходимости не меняем.
 - Не auth: viewport state не заменяет серверную валидацию tenant/user.
 
+### Telegram WebView UX / Performance (#68)
+
+Связка: Telegram In-App Browser / WebView → CoffeeOS UX/perf каталога. Поверх #66/#67, **без** новых backend endpoints.
+
+| Внешнее | Наше |
+|---------|------|
+| Mobile storefront в In-App Browser | `Catalog.svelte` + `PageSkeleton` / error / retry |
+| `GET /shop/api/categories` | `loadCatalog()` · SWR cache `coffeeos_shop_catalog_v1:<tenant_id>` |
+| Картинки `product.image_url` | lazy + aspect-ratio + onerror placeholder; без нового CDN/variant API |
+| Сеть online/offline | `shopNetwork.js` + существующий `ShopPwaBanner` |
+
+- Identity: задача **не** меняет mapping. Кэш изолирован по tenant; `tenant_id` не берётся только из cache (#65 query > meta).
+- Cache — UX-ускорение, не source of truth и не auth credentials.
+- Network error → retry (inflight coalesce); offline → баннер, не падение; online → refetch.
+- HTTP 4xx/5xx → error state без бесконечного auto-retry.
+- Background refresh error → оставить уже показанное меню.
+- Storage error → network path, если доступен (#66 try/catch).
+- Skeleton / error / retry живут в visual viewport #67 (не ломать `--shop-vvh` / safe-area / keyboard).
+
 **#64** · тесты: `shop_boot_skeleton_test.rb` · `shop_catalog_load_test.mjs`  
 **#65** · тесты: `shop_api_tenant_query_test.mjs` · `shop_tenant_linkage_test.rb` · categories `?tenant_id=`  
 **#66** · тесты: `shop_telegram_webview_test.mjs` · `shop_telegram_webview_test.rb`  
-**#67** · тесты: `shop_telegram_webview_ui_test.mjs` · `shop_telegram_webview_test.rb` (layout/UI contract)
+**#67** · тесты: `shop_telegram_webview_ui_test.mjs` · `shop_telegram_webview_test.rb` (layout/UI contract)  
+**#68** · тесты: `shop_telegram_webview_ux_perf_test.mjs` · `shop_catalog_load_test.mjs` (SWR / tenant cache)

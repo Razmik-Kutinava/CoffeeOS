@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-15 (#67 PHASE 3 CI green)  
+**Дата:** 2026-08-15 (#68 intake + SPEC)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| CI green `cbcb58f9` | deploy — апрув |
+| #68 SPEC | RED при намерении |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,12 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-15 (#68 intake + SPEC Telegram WebView UX/perf)
+
+- CBR #68 · ТЗ 1:1 · artifacts `mobile_storefront_telegram_webview_ux_perf/`
+- SPEC: SWR catalog + lazy images + retry/offline kinds; тесты `shop_telegram_webview_ux_perf_test.mjs`
+- Стоп до RED. #67 deploy не этот шаг. #64–#67 runtime/layout не трогаем.
 
 ### Сессия 2026-08-15 (#67 PHASE 3 /review CI)
 

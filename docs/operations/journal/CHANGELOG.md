@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-15 — docs: intake + SPEC #68 Telegram WebView UX/perf
+
+- ТЗ 1:1 `customer_tasks/UX и Performance мобильной витрины CoffeeOS внутри Telegram WebView.md` · CBR #68
+- artifacts `mobile_storefront_telegram_webview_ux_perf/` · shop-api.md § WebView UX/perf
+- Стоп до RED. Runtime #66 и UI #67 не трогаем. #67 deploy — отдельно
+
 ## 2026-08-15 — docs(ops): #67 PHASE 3 CI green `cbcb58f9`
 
 - Push develop · CI 5/5 [run 31877829022](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/31877829022)

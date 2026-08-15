@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-15 (#67 PHASE 3 CI green)  
+**Дата:** 2026-08-15 (#68 intake + SPEC)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| CI green `cbcb58f9` · [run 31877829022](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/31877829022) | **deploy — только апрув** |
+| #68 SPEC · стоп до RED | RED при намерении |
 
-**last_done:** #67 `/review` PHASE 3 · push · CI green (5/5 jobs)  
-**next_step:** deploy только по апруву · потом MCP Point A + Telegram устройство
+**last_done:** #68 PHASE 0 + SPEC · UX/perf витрины в Telegram WebView  
+**next_step:** `/sbr` RED · #67 deploy отдельно — только апрув
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -18,6 +18,21 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### #68 Telegram WebView UX / Performance (2026-08-15)
+
+| Что | Статус |
+|-----|--------|
+| Intake + CBR #68 | **`[x]`** |
+| SPEC (`todo.md`) | **`[x]`** |
+| RED / GREEN | `[ ]` |
+| REVIEW | `[ ]` |
+| Fly MCP Point A | `[ ]` после deploy |
+| Telegram устройство | `[ ]` |
+
+**ТЗ:** [`customer_tasks/UX и Performance мобильной витрины CoffeeOS внутри Telegram WebView.md`](../milestones/veha_2/requirements/customer_tasks/UX%20и%20Performance%20мобильной%20витрины%20CoffeeOS%20внутри%20Telegram%20WebView.md)  
+**Артефакты:** [`artifacts/mobile_storefront_telegram_webview_ux_perf/`](../milestones/veha_2/artifacts/mobile_storefront_telegram_webview_ux_perf/)  
+Серия задача 5. Runtime #66 и UI #67 не переписывать. #67 deploy — не этот шаг.
 
 ### #67 Telegram WebView mobile UI (2026-08-15)
 
