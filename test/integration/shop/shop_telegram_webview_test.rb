@@ -39,4 +39,20 @@ class Shop::ShopTelegramWebviewTest < ActiveSupport::TestCase
     assert_match(/WebView runtime/i, src)
     assert_match(/same-origin/, src)
   end
+
+  test "App installs WebView layout layer" do
+    app = File.read(Rails.root.join("app/frontend/App.svelte"))
+    assert_includes app, "installShopWebViewLayout"
+  end
+
+  test "CartSheet height uses visual viewport px helper" do
+    src = File.read(Rails.root.join("app/frontend/components/CartSheet.svelte"))
+    assert_includes src, "shopWebViewLayout"
+    assert_includes src, "sheetHeightPx"
+  end
+
+  test "shop-api documents Telegram WebView UI contract" do
+    src = File.read(Rails.root.join("docs/integrations/shop-api.md"))
+    assert_match(/WebView UI/i, src)
+  end
 end
