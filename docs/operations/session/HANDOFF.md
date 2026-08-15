@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-15 (#67 PHASE 3 REVIEW)  
+**Дата:** 2026-08-15 (#67 PHASE 3 CI green)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #67 local PASS · push/CI | CI green → стоп · deploy только апрув |
+| CI green `cbcb58f9` · [run 31877829022](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/31877829022) | **deploy — только апрув** |
 
-**last_done:** #67 `/review` PHASE 3 local · bugbot/security-review: usage limit → manual, блокеров нет  
-**next_step:** CI; deploy только по апруву · MCP Point A + Telegram устройство после deploy
+**last_done:** #67 `/review` PHASE 3 · push · CI green (5/5 jobs)  
+**next_step:** deploy только по апруву · потом MCP Point A + Telegram устройство
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -26,8 +26,8 @@
 | Intake + CBR #67 | **`[x]`** |
 | SPEC (`todo.md`) | **`[x]`** |
 | RED / GREEN | **`[x]`** `8daadddf` |
-| REVIEW | **in_progress** local PASS · Cursor Task limit → manual review |
-| Fly MCP Point A | `[ ]` после deploy |
+| REVIEW | **`[x]`** PHASE 3 · CI [run 31877829022](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/31877829022) |
+| Fly MCP Point A | `[ ]` ждать апрув deploy |
 | Telegram устройство | `[ ]` |
 
 **ТЗ:** [`customer_tasks/Адаптация Mobile UI витрины CoffeeOS под Telegram WebView.md`](../milestones/veha_2/requirements/customer_tasks/Адаптация%20Mobile%20UI%20витрины%20CoffeeOS%20под%20Telegram%20WebView.md)  

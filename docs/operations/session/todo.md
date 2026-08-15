@@ -2,7 +2,9 @@
 
 | last_done | current_state | next_step |
 |-----------|---------------|-----------|
-| PHASE 3 local review | push → CI | CI green → стоп · deploy апрув |
+| PHASE 3 CI green `cbcb58f9` | стоп до deploy | апрув владельца → fly deploy · MCP Point A |
+
+**CBR:** #67
 
 **CBR:** #67
 
@@ -36,7 +38,7 @@
 - [x] RED
 - [x] GREEN
 - [x] REVIEW / Fly MCP Point A / Telegram устройство
-  - REVIEW PHASE 3 **local `[x]`** · CI `[ ]` · Fly MCP `[ ]` · TG устройство `[ ]`
+  - REVIEW PHASE 3 **CI `[x]`** · Fly MCP `[ ]` · TG устройство `[ ]`
 
 ## Файлы (ожидаемо)
 
