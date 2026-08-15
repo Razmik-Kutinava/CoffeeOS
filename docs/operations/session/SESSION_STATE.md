@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-14 (#65 REVIEW+CI)  
+**Дата:** 2026-08-15 (#66 intake)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Local PASS · REVIEW · push `c9b8f04d` · **CI green** | **deploy — только апрув** |
+| Intake #66 | SPEC → RED → GREEN |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,13 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-15 (#66 intake Telegram WebView)
+
+- CBR #66 · задача 3 серии TG/IG → `/shop`
+- ТЗ 1:1 + artifacts `mobile_storefront_telegram_webview/`
+- Bot / payments / Instagram-specific / UI#4 / perf#5 — вне scope
+- Дальше SPEC
 
 ### Сессия 2026-08-14 (#65 REVIEW / CI Vite)
 

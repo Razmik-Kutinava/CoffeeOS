@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-15 — docs: intake #66 Telegram WebView storefront runtime
+
+- ТЗ 1:1: полноценная работа `/shop` внутри Telegram In-App Browser
+- CBR #66 · artifacts `mobile_storefront_telegram_webview/`
+- Серия задача 3; bot/payments/UI#4/perf#5 — не смешивать
+- Дальше: SPEC
+
 ## 2026-08-14 — test: #65 linkage without Vite layout (CI)
 
 - `ShopTenantLinkageTest`: ResolveProbe + structural meta (без GET /shop)

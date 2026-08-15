@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-14 (#65 REVIEW+CI)  
+**Дата:** 2026-08-15 (#66 intake)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Local PASS · REVIEW · push · **CI green** `c9b8f04d` | **deploy — апрув** |
+| Intake #66 | SPEC → RED → GREEN (намерение «ебашь полностью») |
 
-**last_done:** push #65 CI fix · CI green run 31815909292  
-**next_step:** deploy только по апруву · потом MCP Point A
+**last_done:** intake #66 Telegram WebView storefront runtime  
+**next_step:** SPEC `todo.md` · не трогать bot / #64 MCP / #65 MCP
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -18,6 +18,20 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### #66 Telegram WebView storefront runtime (2026-08-15)
+
+| Что | Статус |
+|-----|--------|
+| Intake + CBR #66 | **`[x]`** |
+| SPEC (`todo.md`) | `[ ]` |
+| RED / GREEN | `[ ]` |
+| Fly MCP Point A | `[ ]` ждать deploy |
+| Telegram устройство | `[ ]` |
+
+**ТЗ:** [`customer_tasks/Полноценная работа мобильной витрины…`](../milestones/veha_2/requirements/customer_tasks/Полноценная%20работа%20мобильной%20витрины%20CoffeeOS%20внутри%20Telegram%20In-App%20Browser.md)  
+**Артефакты:** [`artifacts/mobile_storefront_telegram_webview/`](../milestones/veha_2/artifacts/mobile_storefront_telegram_webview/)  
+Серия задача 3. Bot / UI#4 / perf#5 — вне scope.
 
 ### #65 Telegram/Instagram In-App → /shop linkage (2026-08-14)
 
