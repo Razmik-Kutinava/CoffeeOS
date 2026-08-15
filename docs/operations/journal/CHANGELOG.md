@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-15 — test: #64–#68 pre-deploy suite PASS
+
+- JS 50/0 (webview/catalog/tenant query)
+- Rails 36/0 (webview+boot+linkage+categories+S2a + tenant isolation)
+- Полный shop/ на Windows не гоняли · deploy — апрув
+
 ## 2026-08-15 — docs: Entire must be enriched (not a review checkbox)
 
 - `ENTIRE.md` закон: empty `explain` → стоп + attach, не push

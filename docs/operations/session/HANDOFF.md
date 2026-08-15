@@ -2,14 +2,14 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-15 (Entire: обогащать обязательно)  
+**Дата:** 2026-08-15 (#64–#68 pre-deploy suite PASS)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Закон Entire: empty explain ≠ ревью | **deploy — только апрув** |
+| Local suite #64–#68 PASS | **deploy — только апрув** |
 
-**last_done:** правило Entire — checkpoint id обязателен; пустой explain — стоп + attach  
+**last_done:** pre-deploy regress JS 50/0 · Rails 36/0  
 **next_step:** deploy только по апруву · MCP Point A + Telegram после deploy
 
 **Архив session:** [`archive/README.md`](archive/README.md)  

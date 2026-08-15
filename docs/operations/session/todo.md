@@ -2,7 +2,7 @@
 
 | last_done | current_state | next_step |
 |-----------|---------------|-----------|
-| Entire backfill #64–#68 | CI [31878722151](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/31878722151) | deploy — только апрув |
+| pre-deploy suite JS 50/0 · Rails 36/0 | CI [31878722151](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/31878722151) | deploy — только апрув |
 
 **CBR:** #68  
 **ТЗ:** [`customer_tasks/UX и Performance мобильной витрины CoffeeOS внутри Telegram WebView.md`](../milestones/veha_2/requirements/customer_tasks/UX%20и%20Performance%20мобильной%20витрины%20CoffeeOS%20внутри%20Telegram%20WebView.md)  

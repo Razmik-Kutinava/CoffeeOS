@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-15 (Entire: обогащать обязательно)  
+**Дата:** 2026-08-15 (#64–#68 pre-deploy suite PASS)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Закон Entire: empty ≠ ревью | deploy — апрув |
+| Local JS 50/0 · Rails 36/0 | deploy — апрув |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,14 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-15 (#64–#68 pre-deploy suite)
+
+- JS 50/0: webview ux/perf + catalog + webview + ui + tenant query
+- Rails 34/0 (211 assert): webview + boot + linkage + categories + S2a CartSheet
+- + tenant isolation API 2/0
+- Полный `test/integration/shop/` на Windows не гоняли (канон)
+- Deploy не делали
 
 ### Сессия 2026-08-15 (Entire: обогащать обязательно)
 
