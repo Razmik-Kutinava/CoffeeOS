@@ -7,7 +7,7 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| Fly v456 MCP + Entire на `7f5925e` | CI после push · TG/IG |
+| Fly v456 Entire+push · CI green | TG/IG на телефоне |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

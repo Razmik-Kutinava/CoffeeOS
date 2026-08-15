@@ -9,8 +9,8 @@
 |--------|--------|
 | Fly **v456** MCP Chrome **#64–#68** | Telegram/Instagram на телефоне владельца |
 
-**last_done:** MCP Chrome v456 + Entire `01M02FTNFTCX13ZSPHDGCNC292` на `7f5925e`  
-**next_step:** CI после push · TG/IG тап владельца
+**last_done:** Entire `01M02FTNFTCX13ZSPHDGCNC292` · push `645eda9c` · CI [31888110550](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/31888110550) green  
+**next_step:** TG/IG тап владельца; CBR не `[x]` без «ок»
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
