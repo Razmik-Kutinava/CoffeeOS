@@ -19,7 +19,8 @@
 ### Сессия 2026-08-15 (#64–#68 Entire backfill)
 
 - GREEN SHA не переписывали (`ed324b20` `89ecfaf7` `ca9c5834` `8daadddf` `ff9374d1`)
-- Why-context: `entire session attach` Cursor-сессий на docs-коммит backfill
+- Why-context: `entire session attach` → checkpoint `01M02FTNFTCX13ZSPHDGCNC292` на `54e79d1a` (push + git-ref)
+- Сессии: #64 `f6ad5bfa` · #65 `f141e171` · #66 `8b384332` · #67 `7b9bead5` · backfill `fc6715de`; #68 `7851e58b` на `d01b1ac`
 - Новых endpoints нет · spec vs `shop-api.md` § Embedded/WebView OK
 - Дальше: deploy апрув · MCP Point A + TG/IG устройство
 

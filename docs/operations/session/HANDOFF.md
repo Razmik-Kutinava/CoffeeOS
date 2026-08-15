@@ -9,7 +9,7 @@
 |--------|--------|
 | Entire backfill #64–#68 | **deploy — только апрув** |
 
-**last_done:** Entire attach сессий #64–#68 · GREEN SHA без rewrite  
+**last_done:** Entire backfill `54e79d1a` · checkpoint `01M02FTNFTCX13ZSPHDGCNC292` · push develop  
 **next_step:** deploy только по апруву · MCP Point A + Telegram после deploy
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
