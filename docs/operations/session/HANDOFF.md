@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-15 (#68 /regress PASS)  
+**Дата:** 2026-08-15 (#68 PHASE 3 REVIEW local)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #68 local JS 46/0 · Rails 8/0 | `/review` |
+| #68 local PASS · push/CI | CI green → стоп · deploy только апрув |
 
-**last_done:** #68 `/regress` shop WebView UX/perf PASS  
-**next_step:** `/review` PHASE 3 · Fly MCP Point A после deploy
+**last_done:** #68 `/review` PHASE 3 local · bugbot/security-review: usage limit → manual, блокеров нет  
+**next_step:** CI; deploy только по апруву · MCP Point A + Telegram после deploy
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -27,7 +27,7 @@
 | SPEC (`todo.md`) | **`[x]`** |
 | RED / GREEN | **`[x]`** `ff9374d1` |
 | `/regress` | **`[x]`** JS 46/0 · Rails 8/0 |
-| REVIEW | `[ ]` |
+| REVIEW | **in_progress** local PASS · Cursor Task limit → manual review |
 | Fly MCP Point A | `[ ]` после deploy |
 | Telegram устройство | `[ ]` |
 

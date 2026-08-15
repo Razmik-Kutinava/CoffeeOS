@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-15 (#68 /regress PASS)  
+**Дата:** 2026-08-15 (#68 PHASE 3 REVIEW local)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #68 local JS 46/0 · Rails 8/0 | `/review` |
+| #68 local JS 46/0 · Rails 8/0 · push | CI · deploy апрув |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,13 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-15 (#68 PHASE 3 /review)
+
+- Local JS 46/0 · Rails 8/0
+- bugbot+security-review: Cursor Task usage limit → manual review, блокеров нет (кэш по tenant, не auth; retry inflight; storage try/catch; layout #67 не трогали)
+- Entire: `explain ff9374d1` no trailer (hook skip Windows) · spec vs todo/shop-api WebView UX/perf OK
+- Push develop · стоп до CI green · deploy апрув
 
 ### Сессия 2026-08-15 (#68 /regress shop WebView UX/perf)
 

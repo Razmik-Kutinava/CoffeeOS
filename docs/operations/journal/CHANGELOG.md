@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-15 — docs(ops): #68 PHASE 3 REVIEW local
+
+- Local JS 46/0 · Rails webview+boot 8/0
+- bugbot/security-review: Cursor Task usage limit → manual, блокеров нет
+- Entire: нет checkpoint `ff9374d1` (Windows hook skip) · spec vs todo/shop-api OK
+- Push develop · стоп до CI green · deploy апрув
+
 ## 2026-08-15 — docs(ops): #68 /regress shop WebView UX/perf PASS
 
 - JS 46/0 (ux_perf + catalog_load + webview + webview_ui)

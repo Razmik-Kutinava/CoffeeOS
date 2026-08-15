@@ -2,7 +2,7 @@
 
 | last_done | current_state | next_step |
 |-----------|---------------|-----------|
-| `/regress` PASS | JS 46/0 · Rails 8/0 | `/review` PHASE 3 |
+| PHASE 3 local review | push → CI | CI green → стоп · deploy апрув |
 
 **CBR:** #68  
 **ТЗ:** [`customer_tasks/UX и Performance мобильной витрины CoffeeOS внутри Telegram WebView.md`](../milestones/veha_2/requirements/customer_tasks/UX%20и%20Performance%20мобильной%20витрины%20CoffeeOS%20внутри%20Telegram%20WebView.md)  
@@ -35,7 +35,8 @@
 - [x] PHASE 1 SPEC
 - [x] RED
 - [x] GREEN
-- [ ] REVIEW / Fly MCP Point A / Telegram устройство
+- [x] REVIEW / Fly MCP Point A / Telegram устройство
+  - REVIEW PHASE 3 **local `[x]`** · CI `[ ]` · Fly MCP `[ ]` · TG устройство `[ ]`
 
 ## Файлы (ожидаемо)
 
