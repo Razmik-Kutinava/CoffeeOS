@@ -126,5 +126,28 @@ CLI: WSL, `PATH=$HOME/.local/bin:$PATH`. На Windows без WSL — устан�
 
 **User Rules в Cursor:** глобального «commit only on ask» может не быть в UI — канон CoffeeOS (`commit-ops`) всё равно **важнее**: commit после каждого шага без вопроса.
 
-*2026-08-15 · Windows scoop `entire/cli` 0.8.42 в PATH (git hooks больше не skip)*
+## Backfill #64–#68 (Telegram / Instagram → `/shop`)
+
+GREEN SHA **не переписываем** (уже на `origin/develop`, hook тогда skip). Why-context ловим **attach сессий** на docs-коммит backfill + поиск `entire checkpoint search`.
+
+**Эндпоинты:** новых нет. Канон: `GET /shop?tenant_id=` → `GET /shop/api/categories?tenant_id=`. Bridge: [`shop-api.md`](../../integrations/shop-api.md) § Embedded browser · WebView runtime · UI · UX/perf.
+
+| CBR | GREEN (без trailer) | Cursor session | Spec / shop-api |
+|-----|---------------------|----------------|-----------------|
+| #64 boot watchdog | `ed324b20` | `f6ad5bfa-b451-4447-bcd2-d347bbc5c1c3` | Embedded browser · skeleton |
+| #65 tenant linkage | `89ecfaf7` | `f141e171-bb87-46b2-9cd1-bcae7466a739` | query > meta; blank key = ошибка |
+| #66 WebView runtime | `ca9c5834` | `8b384332-afc2-4a25-93b1-5c11264df863` | `shopWebView.js`; не Bot/Mini App |
+| #67 WebView UI | `8daadddf` | `7b9bead5-11c5-4849-8092-81e48220de71` | layout; без backend endpoints |
+| #68 UX/perf | `ff9374d1` | `7851e58b-593c-4e43-b9c1-2784bc831eeb` | SWR/lazy/retry; без backend endpoints |
+
+```bash
+# после docs-коммита backfill (не --force на уже запушенных GREEN)
+entire session attach <session-id> --agent cursor
+entire checkpoint search "Telegram WebView"
+entire checkpoint explain <backfill-sha>
+```
+
+`entire explain <GREEN-sha>` по-прежнему пустой (нет trailer) — смотри backfill-SHA / search.
+
+*2026-08-15 · backfill #64–#68 attach · scoop `entire/cli` 0.8.42*
 *2026-08-10 · enabled cursor · git-refs backend*

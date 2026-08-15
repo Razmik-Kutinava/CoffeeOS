@@ -2,14 +2,14 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-15 (#68 Entire Windows CLI)  
+**Дата:** 2026-08-15 (#64–#68 Entire backfill)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Entire native CLI в PATH | **deploy — только апрув** |
+| Entire backfill #64–#68 | **deploy — только апрув** |
 
-**last_done:** #68 Entire CLI Windows (scoop) · checkpoint на этот шаг, GREEN sha без rewrite  
+**last_done:** Entire attach сессий #64–#68 · GREEN SHA без rewrite  
 **next_step:** deploy только по апруву · MCP Point A + Telegram после deploy
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
@@ -28,6 +28,7 @@
 | RED / GREEN | **`[x]`** `ff9374d1` |
 | `/regress` | **`[x]`** JS 46/0 · Rails 8/0 |
 | REVIEW | **`[x]`** PHASE 3 · CI [run 31878722151](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/31878722151) |
+| Entire backfill | **`[x]`** attach сессий на docs-коммит (GREEN SHA без trailer) |
 | Fly MCP Point A | `[ ]` ждать апрув deploy |
 | Telegram устройство | `[ ]` |
 

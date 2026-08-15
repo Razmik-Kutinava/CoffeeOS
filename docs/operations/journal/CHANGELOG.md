@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-15 — docs: Entire backfill #64–#68 Telegram/Instagram shop
+
+- GREEN SHA без trailer не переписывали
+- `ENTIRE.md` карта CBR → SHA → Cursor session; attach why-context на этот коммит
+- Новых backend endpoints нет (`GET /shop` + `GET /shop/api/categories`)
+
 ## 2026-08-15 — docs: Entire CLI on Windows PATH (scoop entire/cli)
 
 - GREEN `ff9374d1` без trailer не переписываем (уже push)

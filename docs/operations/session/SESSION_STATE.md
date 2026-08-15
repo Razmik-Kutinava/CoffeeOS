@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-15 (#68 Entire Windows CLI)  
+**Дата:** 2026-08-15 (#64–#68 Entire backfill)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Entire CLI Windows PATH · checkpoint | deploy — апрув |
+| Entire backfill #64–#68 attach | deploy — апрув |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,13 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-15 (#64–#68 Entire backfill)
+
+- GREEN SHA не переписывали (`ed324b20` `89ecfaf7` `ca9c5834` `8daadddf` `ff9374d1`)
+- Why-context: `entire session attach` Cursor-сессий на docs-коммит backfill
+- Новых endpoints нет · spec vs `shop-api.md` § Embedded/WebView OK
+- Дальше: deploy апрув · MCP Point A + TG/IG устройство
 
 ### Сессия 2026-08-15 (#68 Entire Windows CLI)
 
