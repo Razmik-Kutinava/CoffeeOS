@@ -1,9 +1,6 @@
 import { api, resolvedShopTenantId } from "../api.js"
 import { applyOperatingHours } from "../shopOperatingHours.js"
-import {
-  readShopLocalStorage,
-  writeShopLocalStorage
-} from "../shopLocalStorage.js"
+import { writeShopLocalStorage } from "../shopLocalStorage.js"
 import { catalogCacheKey } from "../shopWebView.js"
 
 let inflight = null
@@ -13,20 +10,44 @@ let visibilityHandler = null
 /** Интервал автообновления меню на открытой витрине (планшет без F5). */
 export const CATALOG_POLL_MS = 8_000
 
+/** Кэш витрины не живёт бесконечно; reopen старше порога → skeleton + сеть. */
+export const CATALOG_CACHE_MAX_AGE_MS = 30 * 60 * 1000
+
+export function shouldShowCatalogSkeleton(cached) {
+  return !Array.isArray(cached) || cached.length === 0
+}
+
+export function catalogRetryShowsSkeleton({ visibleCount } = {}) {
+  return !(Number(visibleCount) > 0)
+}
+
 function catalogLsKey() {
   return catalogCacheKey(resolvedShopTenantId())
 }
 
 function readCatalogCache() {
-  const parsed = readShopLocalStorage(catalogLsKey())
-  return Array.isArray(parsed) ? parsed : null
+  try {
+    const raw = localStorage.getItem(catalogLsKey())
+    if (!raw) return null
+    const parsed = JSON.parse(raw)
+    if (!parsed || typeof parsed !== "object" || parsed.savedAt == null || !("payload" in parsed)) {
+      return null
+    }
+    const saved = Date.parse(parsed.savedAt)
+    if (!Number.isFinite(saved) || Date.now() - saved > CATALOG_CACHE_MAX_AGE_MS) {
+      return null
+    }
+    return Array.isArray(parsed.payload) ? parsed.payload : null
+  } catch {
+    return null
+  }
 }
 
 function writeCatalogCache(categories) {
   writeShopLocalStorage(catalogLsKey(), categories)
 }
 
-/** Каждый заход на витрину — свежий каталог; polling подхватывает изменения из УК. */
+/** SWR: UI рисует getCatalogCache() сразу; этот вызов — сеть + обновление кэша. */
 export async function loadCatalog() {
   if (inflight) return inflight
   inflight = (async () => {

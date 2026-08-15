@@ -12,8 +12,21 @@ export function initShopNetwork() {
 }
 
 export function isOfflineError(error) {
-  if (!navigator.onLine) return true
+  if (typeof navigator !== "undefined" && !navigator.onLine) return true
   if (error instanceof TypeError) return true
   const msg = String(error?.message || "")
   return /failed to fetch|network|offline/i.test(msg)
+}
+
+/** Каталог: network vs HTTP. Пустой список — не ошибка (ветка UI «нет товаров»). */
+export function catalogErrorKind(error, { online } = {}) {
+  if (error == null) return null
+  const isOnline =
+    online ?? (typeof navigator === "undefined" ? true : navigator.onLine)
+  if (isOnline === false) return "network"
+  if (error instanceof TypeError) return "network"
+  const msg = String(error?.message || "")
+  if (/failed to fetch|network|offline/i.test(msg)) return "network"
+  if (Number(error.httpStatus) >= 400) return "server"
+  return "server"
 }

@@ -2,7 +2,7 @@
   import { onMount } from "svelte"
   import { push } from "svelte-spa-router"
   import { addToCart as shopAddToCart } from "../lib/shopCartAdd.js"
-  import { loadCatalog, startCatalogPolling, stopCatalogPolling } from "../lib/stores/catalog.js"
+  import { loadCatalog, getCatalogCache, startCatalogPolling, stopCatalogPolling } from "../lib/stores/catalog.js"
   import { useTelegramBack } from "../lib/telegram.js"
   import { favorites } from "../lib/stores/favorites.js"
   import PageSkeleton from "../components/PageSkeleton.svelte"
@@ -14,8 +14,15 @@
   let loading = $state(true)
   let error = $state(null)
   let addingId = $state(null)
+  let brokenIds = $state(/** @type {Set<string|number>} */ (new Set()))
 
   useTelegramBack(() => push('/'))
+
+  function markBroken(productId) {
+    const next = new Set(brokenIds)
+    next.add(productId)
+    brokenIds = next
+  }
 
   function applyCategories(categories) {
     const want = String(params.id ?? "")
@@ -29,12 +36,17 @@
   }
 
   onMount(async () => {
+    const cached = getCatalogCache()
+    if (cached?.length) {
+      applyCategories(cached)
+      loading = false
+    }
     try {
       applyCategories(await loadCatalog())
       startCatalogPolling(applyCategories)
       await favorites.load()
     } catch (e) {
-      error = e.message
+      if (!products.length) error = e.message
     } finally {
       loading = false
     }
@@ -87,12 +99,14 @@
           >
             <span class="card-nav-inner">
               <span class="card-image-wrap">
-                {#if product.image_url}
+                {#if product.image_url && !brokenIds.has(product.id)}
                   <img
                     src={product.image_url}
                     alt={product.name}
                     class="product-img"
                     decoding="async"
+                    loading="lazy"
+                    onerror={() => markBroken(product.id)}
                   />
                 {:else}
                   <span class="product-img-placeholder">☕</span>

@@ -2,7 +2,7 @@
 
 | last_done | current_state | next_step |
 |-----------|---------------|-----------|
-| PHASE 0 + PHASE 1 SPEC | SPEC в todo | RED (тесты), когда будет намерение |
+| GREEN local | JS UX/perf + webview PASS | `/regress` зоны |
 
 **CBR:** #68  
 **ТЗ:** [`customer_tasks/UX и Performance мобильной витрины CoffeeOS внутри Telegram WebView.md`](../milestones/veha_2/requirements/customer_tasks/UX%20и%20Performance%20мобильной%20витрины%20CoffeeOS%20внутри%20Telegram%20WebView.md)  
@@ -33,8 +33,8 @@
 
 - [x] PHASE 0 intake
 - [x] PHASE 1 SPEC
-- [ ] RED
-- [ ] GREEN
+- [x] RED
+- [x] GREEN
 - [ ] REVIEW / Fly MCP Point A / Telegram устройство
 
 ## Файлы (ожидаемо)

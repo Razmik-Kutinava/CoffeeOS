@@ -58,6 +58,7 @@
               alt=""
               class="h-full w-full object-cover object-top"
               decoding="async"
+              loading="lazy"
               onerror={() => markBroken(product.id)}
             />
           {:else}
