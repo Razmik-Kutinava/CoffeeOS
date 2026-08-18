@@ -69,6 +69,10 @@
 **AC:** ✅ 12 критериев Acceptance, 12/12 Subtask TDD  
 **Готово к:** PHASE 3 REVIEW
 
+### Rules/meta: уменьшение токенов always-подсказок (2026-08-18)
+
+- Оценка: ≈6648 -> ≈4594 токенов на always applied rules (~-31%); ключевые триггеры/формат отчёта сохранены.
+
 ### #68 Telegram WebView UX / Performance (2026-08-15)
 
 | Что | Статус |

@@ -23,6 +23,10 @@
 - Регрессия Header/Profile: не сломано, все работает
 - Готово к PHASE 3: REVIEW
 
+## 2026-08-18 — docs(rules): сжатие always rules (токены -31%)
+
+- Оценка: ≈6648 -> ≈4594 токенов на always applied rules; ключевые триггеры/формат отчёта сохранены.
+
 ## 2026-08-15 — push: `645eda9c` Entire MCP · CI green [31888110550](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/31888110550)
 
 ## 2026-08-15 — entire: MCP SHA `7f5925e` ← `01M02FTNFTCX13ZSPHDGCNC292`

@@ -29,6 +29,10 @@
   - ✅ Регрессия Header/Profile: не сломано
 - Готово к PHASE 3: REVIEW
 
+### Сессия 2026-08-18 — rules: уменьшение токенов always-подсказок
+
+- Оценка: ≈6648 токенов -> ≈4594 токенов (~-31%) на always applied rules; ключевые триггеры/формат отчёта сохранены.
+
 ### Сессия 2026-08-15 (MCP Point A Chrome #64–#68)
 
 - Entire trailer: `01M02FTNFTCX13ZSPHDGCNC292` на `7f5925e` (`explain HEAD` не пустой)
