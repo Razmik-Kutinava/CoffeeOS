@@ -5,29 +5,10 @@
 ## Always vs on-demand
 
 В контексте **всегда** только: `commit-ops`, `agent-workflow`, `project/coffeeos-core`, `coffeeos-index`, этот файл.  
-Остальное агент **подключает по типу задачи** (см. `coffeeos-index.mdc` / `agent-workflow`).
+Остальное агент **подключает по триггерам** (см. `coffeeos-index.mdc`).
 
-## Главное
-
-- Баги → `docs/operations/ISSUES.md` сразу
-- Старт чата → **только шапка** HANDOFF/SESSION_STATE (`limit` до `---`) + 🔴 ISSUES + todo; **запрет** глотать тело SESSION/HANDOFF/CHANGELOG/PRACTICES/QA
-- ISSUES на старте → **только `## 🔴 Открыто`** (таблица до следующего `##`); детали — ниже по ссылке
-- Код: SPEC → 2–7 файлов; hot-path → +1–3 соседа + **обязательные** «Не ломать» / «Проверка» в todo; без `@codebase` зря
-- Интеграции: `@docs/integrations/INTEGRATIONS.md` (~45 строк) → **один** секционный `docs/integrations/*.md`; правки bridge → индекс + секция; hot-path баг → `/trace-bug`
-- Entire: **обогащать** (записать why-context на commit); пустой `explain` / «spec OK» без checkpoint id — **не** ревью; runbook `docs/operations/dev/ENTIRE.md`; **не** `docs/tasks/` — spec в `customer_tasks/` + `todo.md`
-- Folder README — **не** читать при обходе дерева; только по явной нужде
-- Мелочь — без субагентов (`Субагент: нет — мелочь`); фича/SBR — субагент по этапу (explore/shell/bugbot/…), не рой ce-*
-- Отчёт: **Сделано | Не сделано** + `Коммит: <хеш>` + `Субагент: …`; hot-path ещё **Local | Fly MCP**
-- Приёмка витрины/оплаты на Fly: PHASE 3 (`spec-build-review`) → CI green → deploy **апрув** → пачка в `coffeeos-dev-gates`; не OTP в профиль заказчика
-- Шаг с правками → **`git commit` + ops** без вопроса; **push** — PHASE 3 REVIEW (SBR) или явная просьба; **deploy** — апрув владельца
-- Tenant/RLS обязателен; Fly/Neon — `INFRA_STACK.md`; Supabase/MPG запрещены
-- Deploy / деструктив / миграции — только явный апрув владельца
-- Scratch: `scripts/scratch/`, не корень
-
-## Стек / ветки
-
-Rails 8, PostgreSQL, Svelte. develop → staging → main.
-
-## Эскалация
-
-Не хватает данных — стоп и уточнение.
+## Канон (коротко)
+- Старт чата: только шапки `HANDOFF`/`SESSION_STATE` до `---` + `ISSUES` только `## 🔴 Открыто` + `todo`.
+- Без просьбы не глотать тело `SESSION/HANDOFF/CHANGELOG/PRACTICES/QA`.
+- Depoy/миграции/деструктив — только явный апрув владельца.
+- Tenant/RLS обязателен; не выдумывать поля/эндпоинты.

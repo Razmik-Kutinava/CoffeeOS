@@ -11,7 +11,7 @@ alwaysApply: true
 ## Порядок шага
 
 | # | Действие |
-|---|----------|
+| --- | ---------- |
 | 1 | Один логический шаг |
 | 2 | Тесты (зона — `coffeeos-dev-gates.mdc`) |
 | 3 | **`git commit`** + **ops** (`coffeeos-commit-ops.mdc`) — commit фиксирует **Entire checkpoint** (Cursor hooks) |
@@ -23,12 +23,14 @@ alwaysApply: true
 ## Старт чата / память (шапка-only — жёстко)
 
 Читать **только**:
+
 1. **Шапка** `HANDOFF.md` — строки **до первого** `---` / «Текущий месяц» (обычно `Read` с `limit` ~25–40)
 2. **Шапка** `SESSION_STATE.md` — то же
 3. `ISSUES.md` — **только `## 🔴 Открыто`** (таблица до следующего `##`; ~15 строк; детали — ниже по ссылке)
 4. `todo.md` — если есть живая задача
 
 **Запрещено (нарушение = шум):**
+
 - `Read` всего `HANDOFF.md` / `SESSION_STATE.md` / `CHANGELOG.md` / `PRACTICES.md` / `QA_ACCEPTANCE_RUN.md` без явной просьбы владельца или узкого `offset`/`Grep` по нужной дате
 - `session/archive/` / `journal/archive/` без запроса
 - CHECKLIST/CBR на старте, если задача **не** про веху/пункт чеклиста
@@ -37,48 +39,26 @@ alwaysApply: true
 
 Новый месяц → старое в `session/archive/` и `journal/archive/`; в живых файлах — шапка + текущий месяц.
 
-## Контекст кода (без Graphify / без жратвы)
+## Контекст кода (минимум)
 
-1. **Не** тащить весь репо (`@codebase` / «просканируй проект») без крайней нужды.
-2. **SPEC / план:** в `todo.md` секция **«Файлы (ожидаемо)»** — **2–7 точных путей**. Узкий поиск по панели/имени ок; весь codebase — нет.
-3. **BUILD (RED/GREEN):** читать и править **в первую очередь** файлы из списка (+ их зеркальные тесты). Не хватило — **добавь 1 путь в todo** и открой точечно, не «весь проект».
-4. **Blast-radius (мягко):** если правка в shared/hot-path (заказ, оплата, Cable, статусы, RLS — см. `coffeeos-dev-gates`) — добери **+1–3** соседних файла/точки входа с пометкой в todo *почему*. Не весь репо.
-5. **Hot-path SPEC (обязательно)** — shop / оплата / статусы / «повторить» / CartSheet / Cable / RLS / callbacks. В `todo.md` **обязаны** две секции (мелочь/docs — нет):
-   ```
-   ## Не ломать
-   - … (2–4 соседних сценария; напр. оплата · повторить · табло/статус · peek корзины)
-   ## Проверка
-   - bin/rails test …   # 1–2 команды зоны из coffeeos-dev-gates
-   ```
-   GREEN без прогона «Проверка» → шаг не `done`. «Готово для заказчика» по витрине/оплате — ещё **Fly MCP на Point A** (`coffeeos-dev-gates` § DoD).
+- Не тащить весь репо (`@codebase` / «просканируй проект») без крайней нужды.
+- `todo.md`: SPEC — 2–7 точных путей; hot-path — +1–3 соседа (почему в todo).
+- Для hot-path в `todo.md` обязательно: `## Не ломать` и `## Проверка` (команды из `coffeeos-dev-gates`).
 
-Мелочь (1 файл / typo) — список не обязателен; всё равно без `@codebase`.
+## Scope / стек (минимум)
 
-## Scope / стек (не тащить лишнее)
+- Без явной просьбы владельца: не добавлять gem’ы/skills оплаты (канон `Payments::TbankAdapter`), не CE/`ce-*`, не MCP prod (`TBANK_*` / TerminalKey).
+- Платежи: ErrorCode != сразу «наш баг»; сначала webhook / GetState / кабинет терминала.
 
-**Запрещено без явной просьбы владельца:**
-- новые gem’ы оплаты / Tinkoff / Stripe / «удобные» HTTP-клиенты к банку (`tinkoff_kassa`, `tinkoff_client`, …) — канон: `Payments::TbankAdapter` и соседние сервисы
-- marketplace skills / CE/`ce-*` / RSpec-скиллы / чужой стек «на всякий случай»
-- MCP с **prod** `TBANK_*` / TerminalKey (агент сможет Cancel/Charge) — только **test**-терминал и только по апруву
-- рой плагинов «улучшит мозги» вместо узкого SBR
+## Fly / MCP / tenant (коротко)
 
-**Платежи:** ErrorCode банка (3001, 119, 2200, …) ≠ автоматически «баг приложения». Сначала webhook / GetState / кабинет терминала; потом код.
-
-## Fly / MCP / tenant (канон приёмки)
-
-| Правило | Суть |
-|---------|------|
-| **Point A** | Канон витрины на Fly: `tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789` (см. `DEMO_LOGINS` / runbooks). Приёмка shop/оплата/статусы — **только** Point A. |
-| **Не Fly Test** | Inactive / Overnight / «ул. Fly Test» — **не** стенд приёмки; не липнуть `tenant_id` тестовых точек в MCP заказчика. |
-| **Профиль заказчика** | Данные Арама **смотреть** можно. **Запрещено** писать в его профиль тестовый OTP/телефон/PAN — для экспериментов отдельный test-customer. |
-| **Local ≠ Fly** | Local green **не** закрывает пункт для заказчика. В отчёте: **Local** (команда+PASS) · **Fly MCP** (PASS/skip+почему). |
-| **Legacy shop suite** | Известные ~24 legacy fail в `test/integration/shop/` — **не** гейт фичи и не повод «всё красное». Гейт = команды из «Проверка» / таблицы зон. |
+- Point A (приёмка shop/оплата/статусы): `tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789`.
+- Local green != готово заказчику: в отчёте Local PASS и отдельный Fly MCP (PASS/skip+почему).
+- Не писать в профиль заказчика тестовый OTP/телефон/PAN (для экспериментов отдельный test-customer).
 
 ## README папок
 
-Folder `README.md` — для владельца/заказчика.  
-**Запрещено:** открывать их при `Glob` / обходе дерева / «что в папке» ради карты.  
-**Можно:** только если задача явно про карту папки / онбординг человека / «что лежит в …».
+Folder `README.md` — для владельца/заказчика: не открывать при обходе дерева; только по явной задаче.
 
 ## Skills / субагенты (триггеры)
 
@@ -89,17 +69,15 @@ Folder `README.md` — для владельца/заказчика.
 **Канон Cursor Task (есть в IDE):** `explore` · `shell` · `bugbot` · `security-review` · `ci-investigator`.  
 Не путать с CE/`ce-*` (~50) — их **не** звать по умолчанию. Свои CoffeeOS-субагенты в `.claude/agents/` пока **нет**.
 
-| Этап | Субагент | Триггер (звать) | Не звать |
-|------|----------|-----------------|----------|
-| **0 / SPEC** | `explore` | Неясно где код / много кандидатов / фича-баг | Мелочь; пути уже в todo |
-| **RED / GREEN** | `shell` | Длинный suite / регрессия зоны (`dev-gates`) | Один узкий test-файл — можно сам |
-| **RED / GREEN** | `explore` | Застрял / нужен добор файлов | — |
-| **REVIEW** | `bugbot` **и** `security-review` | PHASE 3 — **оба** | Каждый RED; мелочь |
-| **После push** | `ci-investigator` | CI красный (цикл PHASE 3) | Зелёный CI |
-| **MCP / Fly демо** | — (пока главный + browser) | По апруву владельца | Без апрува |
+| Этап | Субагент (кратко) |
+| ------ | --------------------- |
+| SPEC | `explore` |
+| RED/GREEN | чаще `shell` (dev-gates); `explore` если неясно где код |
+| REVIEW (PHASE 3) | `bugbot` + `security-review` |
+| После push | `ci-investigator` (если CI красный) |
 
-**Лимит:** за шаг обычно **1–2** субагента. Запрещён рой 4+ reviewer.  
-**Отчёт:** всегда строка `Субагент: explore | shell | bugbot | нет — мелочь | …`.
+**Лимит:** обычно 1–2 субагента.  
+В отчёте всегда `Субагент: ...` (или `нет — мелочь`).
 
 ## Slash-команды (ярлыки этапа)
 
@@ -115,52 +93,14 @@ Skills (`.claude/skills`, CE) — только по типу задачи / яв
 Слой **поверх Git**, без `docs/tasks/TASK-XX/`. Spec = `customer_tasks/` + `todo.md` + `artifacts/` + `docs/integrations/INTEGRATIONS.md`.  
 Runbook: `docs/operations/dev/ENTIRE.md`. **Обогатить** = записать why-context; пустой `explain` ≠ ревью. PHASE 3 шаг 3: `explain <sha>` не пустой, иначе attach, не push. **Resume:** `entire session resume <branch>`. Не заменяет SBR/ops.
 
-## Когда читать остальные правила
+## Windows (локально)
 
-| Ситуация | Открыть |
-|----------|---------|
-| Фича / CBR / CHECKLIST / честный отчёт | `coffeeos-task-workflow.mdc` |
-| SBR цикл | `spec-build-review.mdc` |
-| Регрессия / миграции / hot-path / **пайплайн стенд** | `coffeeos-dev-gates.mdc` |
-| Куда класть файл | `coffeeos-repo-layout.mdc` |
-| Текст от заказчика | `coffeeos-customer-intake.mdc` |
-| Файл >120–200 строк | `coffeeos-file-size-split.mdc` |
-| Код Rails (N+1) | `../project/coffeeos-performance.mdc` |
+`entire` / `Entire CLI`: только WSL (не PowerShell).
 
 ## Ops-файлы (писать)
 
-| Файл | Когда |
-|------|--------|
-| `SESSION_STATE.md` | После шага — **обновить шапку** + короткая запись в текущий месяц |
-| `HANDOFF.md` | Конец шага — **шапка** + кратко |
-| `CHANGELOG.md` | Конец шага — запись в **текущий месяц**; не читать архив на старте |
-| `ISSUES.md` | Баг; на старте — только **`## 🔴 Открыто`** |
-| CBR / `DEMO_FEEDBACK.md` | Заказчик / backlog |
+После шага/коммита обновляй `SESSION_STATE` + `HANDOFF`, `CHANGELOG` (текущий месяц). При баге — `ISSUES` (на старте только `## Открыто`).
 
-После **`git push`** — SESSION_STATE + HANDOFF (шапки).
+## Дисциплина отчёта
 
-## Windows (локальная разработка)
-
-| Что | Правило |
-|-----|---------|
-| **Entire CLI** | Только **WSL**: `cd /mnt/c/Tools/workarea/CoffeeOS` |
-| **`entire enable`** | Только из WSL — не PowerShell (мусорная папка `C:…\.git\hooks` в корне репо) |
-| **Регрессия shop** | **Не** полный `test/integration/shop/` на Windows (зависает) — таргетные файлы из todo «Проверка» или CI |
-| **Fly MCP Point A** | Local green ≠ готово заказчику; см. § Scope / Fly выше |
-
-Runbook: `docs/operations/dev/ENTIRE.md` § Windows.
-
-## Дисциплина отчёта (контроль без автоматического gate)
-
-Скриптов проверки агента **нет** — контроль через **обязательные строки отчёта**:
-
-| Строка | Когда |
-|--------|-------|
-| `Коммит: <хеш>` | Любой шаг с правками |
-| `Субагент: …` | Всегда (или `нет — мелочь`) |
-| **Local:** команда PASS/FAIL | После `/regress` или GREEN |
-| **Fly MCP:** PASS / skip+почему | Hot-path витрина/оплата |
-| **Sentry 24h · Fly logs · Neon · УК** | После deploy на стенд — пачка вместе с MCP (`dev-gates` § пайплайн) |
-| **Entire:** `<id>` на `<sha>` | `/review` и GREEN; empty / «spec OK» без id = не `done` |
-
-Нет строки — шаг не `done`. Владелец проверяет отчёт; цепочка `/start`→`/review` ведёт этапы.
+В отчёте обязательно: `Коммит`, `Субагент`, `Local PASS/FAIL`, `Fly MCP PASS/skip`, `Entire: id на sha` (для `/review` + GREEN).
