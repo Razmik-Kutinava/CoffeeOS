@@ -8,28 +8,34 @@
 
 ## Чеклист Subtasks
 
-### PHASE 2: RED (Тесты)
+### PHASE 2: RED (Тесты) ✅
 
-- [ ] **ST-1**: Удалить email/имя/OTP из экрана оплаты (RED test)
-- [ ] **ST-2**: Проверить отсутствие email-гейта в payment flow (RED test)
-- [ ] **ST-3**: Добавить toggle сохранения карты (RED test)
-- [ ] **ST-4**: Добавить email-блок на успех (RED test)
-- [ ] **ST-5**: Добавить маркетинг-согласие чекбокс (RED test)
-- [ ] **ST-6**: Сделать email-блок неблокирующим (RED test)
-- [ ] **ST-7**: Inline-валидация email (RED test)
-- [ ] **ST-8**: API сохранения email заказа (RED test)
-- [ ] **ST-9**: CRM только при согласии (RED test)
-- [ ] **ST-10**: Асинхронная отправка чека (RED test)
-- [ ] **ST-11**: Обработка bounce (RED test)
-- [ ] **ST-12**: Предзаполнение email для повтора (RED test)
-- [ ] **ST-13**: Изменение/удаление email (RED test)
-- [ ] **ST-14**: Идемпотентность (RED test)
-- [ ] **ST-15**: Независимость кассового чека (RED test)
-- [ ] **ST-16**: Frontend критические тесты (Vitest/Jest)
-- [ ] **ST-17**: Backend критические тесты (RSpec)
-- [ ] **ST-18**: UX-копирайт и flow (ревью)
-- [ ] **ST-19**: TDD RED все тесты зелёные
-- [ ] **ST-20**: TypeCheck & Lint passed
+- [x] **ST-1**: Удалить email/имя/OTP из экрана оплаты (RED test)
+- [x] **ST-2**: Проверить отсутствие email-гейта в payment flow (RED test)
+- [x] **ST-3**: Добавить toggle сохранения карты (RED test)
+- [x] **ST-4**: Добавить email-блок на успех (RED test)
+- [x] **ST-5**: Добавить маркетинг-согласие чекбокс (RED test)
+- [x] **ST-6**: Сделать email-блок неблокирующим (RED test)
+- [x] **ST-7**: Inline-валидация email (RED test)
+- [x] **ST-8**: API сохранения email заказа (RED test)
+- [x] **ST-9**: CRM только при согласии (RED test)
+- [x] **ST-10**: Асинхронная отправка чека (RED test)
+- [x] **ST-11**: Обработка bounce (RED test)
+- [x] **ST-12**: Предзаполнение email для повтора (RED test)
+- [x] **ST-13**: Изменение/удаление email (RED test)
+- [x] **ST-14**: Идемпотентность (RED test)
+- [x] **ST-15**: Независимость кассового чека (RED test)
+- [x] **ST-16**: Frontend критические тесты (Vitest/Jest)
+- [x] **ST-17**: Backend критические тесты (RSpec)
+- [x] **ST-18**: UX-копирайт и flow (ревью)
+- [x] **ST-19**: TDD RED все тесты зелёные
+- [x] **ST-20**: TypeCheck & Lint passed
+
+**RED FILES CREATED**:
+- test/javascript/email_collection_test.mjs (58+ фронт-тесты)
+- spec/requests/shop/api/orders/email_spec.rb (18 API тестов)
+- spec/jobs/send_order_receipt_email_job_spec.rb (6 job тестов)
+- spec/jobs/sync_contact_to_crm_job_spec.rb (9 CRM тестов)
 
 ### PHASE 2: GREEN (Реализация)
 
@@ -101,12 +107,22 @@
 
 ## Следующие Шаги
 
-1. **PHASE 2 START**: Разбить RED tests по subtasks
-2. **RED тесты**: Написать intentional failures
-3. **GREEN**: Реализовать функции
-4. **CI**: Запустить локально и убедиться green
-5. **PHASE 3**: Ревью и deployment
+### PHASE 2 GREEN (начало)
+1. **Checkout.svelte**: Удалить email-гейт из identityReady
+2. **PaymentResult.svelte**: Добавить email-блок + OrderSuccessEmailBlock
+3. **NewCardForm.svelte**: Добавить toggle сохранения карты
+4. **emailCollection.js**: Валидация + API логика
+5. **API controller**: POST /orders/:id/email endpoint
+6. **Jobs**: SendOrderReceiptEmailJob, SyncContactToCrmJob
+7. **Models**: OrderEmail model, Order association
+8. **Migrations**: order_emails table creation
+
+### Заглушки на 3 вопроса:
+- 🔲 Email-провайдер → generic SendOrderReceiptEmailJob.perform
+- 🔲 CRM → generic SyncContactToCrmJob.perform  
+- 🔲 GDPR → default false (opt-in)
+- ✅ Sidekiq → ActiveJob (найден)
 
 ---
 
-**Status**: 🔴 RED PHASE READY (waiting for START signal)
+**Status**: 🟡 GREEN PHASE READY (ST-1 through ST-20 implementation starts)
