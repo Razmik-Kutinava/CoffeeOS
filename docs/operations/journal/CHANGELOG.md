@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-19 — spec: TASK-TELEGRAM-SUPPORT PHASE 0 & PHASE 1 (`72c70f5`)
+
+- PHASE 0 (Intake): создан файл задачи customer_tasks/TASK-TELEGRAM-SUPPORT.md
+- PHASE 1 (SPEC): выделены файлы, создан todo.md, обновлена SESSION_STATE/HANDOFF
+- Готово к PHASE 2: BUILD (RED) при намерении работать
+
 ## 2026-08-15 — push: `645eda9c` Entire MCP · CI green [31888110550](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/31888110550)
 
 ## 2026-08-15 — entire: MCP SHA `7f5925e` ← `01M02FTNFTCX13ZSPHDGCNC292`

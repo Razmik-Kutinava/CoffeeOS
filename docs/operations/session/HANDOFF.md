@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-15 (Fly v456 · MCP Chrome PASS)  
-**Ветка:** `develop`
+**Дата:** 2026-08-19 (TASK-TELEGRAM-SUPPORT · PHASE 1: SPEC)  
+**Ветка:** `claude/client-task-understanding-9c9a23`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Fly **v456** MCP Chrome **#64–#68** | Telegram/Instagram на телефоне владельца |
+| PHASE 1: SPEC (файлы, todo, шапка) | PHASE 2: BUILD RED (тесты) при намерении |
 
-**last_done:** Entire `01M02FTNFTCX13ZSPHDGCNC292` · push `645eda9c` · CI [31888110550](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/31888110550) green  
-**next_step:** TG/IG тап владельца; CBR не `[x]` без «ок»
+**last_done:** PHASE 0 Intake · PHASE 1 SPEC · коммит `72c70f5`  
+**next_step:** PHASE 2 BUILD (RED) при намерении работать («ебашь/сделай/дальше»)
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -18,6 +18,20 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### TASK-TELEGRAM-SUPPORT: Связь через Telegram-бота поддержки в ЛК (2026-08-19)
+
+| Что | Статус |
+|-----|--------|
+| PHASE 0: Intake | **`[x]`** `72c70f5` |
+| PHASE 1: SPEC | **`[x]`** todo.md, файлы, шапка SESSION_STATE |
+| RED / GREEN | `[ ]` |
+| PHASE 3: REVIEW | `[ ]` |
+
+**ТЗ:** [`customer_tasks/TASK-TELEGRAM-SUPPORT.md`](../milestones/veha_2/requirements/customer_tasks/TASK-TELEGRAM-SUPPORT.md)  
+**Файлы (ожидаемо):** Header.svelte · Profile.svelte · новый SupportContactSheet · config · deepLink утилита · тесты  
+**AC:** 12 критериев · 12 subtask'ов TDD  
+**Готово к:** PHASE 2 BUILD (RED) при намерении работать
 
 ### #68 Telegram WebView UX / Performance (2026-08-15)
 
