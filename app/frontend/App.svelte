@@ -53,6 +53,8 @@
     "/checkout": lazyRoute(() => import("./routes/Checkout.svelte")),
     "/payment-result": lazyRoute(() => import("./routes/PaymentResult.svelte")),
     "/profile": lazyRoute(() => import("./routes/Profile.svelte")),
+    "/personal-account": lazyRoute(() => import("./routes/PersonalAccount.svelte")),
+    "/about": lazyRoute(() => import("./routes/About.svelte")),
     "/orders": lazyRoute(() => import("./routes/Orders.svelte")),
     "/order/:id": lazyRoute(() => import("./routes/OrderStatus.svelte")),
     "/reviews": lazyRoute(() => import("./routes/Reviews.svelte")),

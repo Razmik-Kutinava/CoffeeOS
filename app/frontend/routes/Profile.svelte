@@ -106,6 +106,15 @@
       supportSheetRef.open()
     }
   }
+
+  async function logout() {
+    try {
+      await fetch("/logout", { method: "DELETE", credentials: "same-origin" })
+      window.location.href = "/"
+    } catch (e) {
+      showToast("Не удалось выйти. Попробуйте снова")
+    }
+  }
 </script>
 
 <div class="profile-page" data-testid="shop-profile-page">
@@ -183,6 +192,9 @@
       <button type="button" class="menu-item menu-btn" data-testid="shop-profile-support-button" onclick={onSupportChatClick}>
         <span>💬 Написать нам</span><span>›</span>
       </button>
+      <button type="button" class="menu-item menu-btn logout-btn" onclick={logout}>
+        <span>🚪 Выход</span><span>›</span>
+      </button>
     </div>
   {/if}
 </div>
@@ -215,4 +227,5 @@
   .menu-item { display: flex; justify-content: space-between; padding: 16px 20px; color: #fff; text-decoration: none; border-bottom: 1px solid #3a3a3a; }
   .menu-item:last-child { border-bottom: none; }
   .menu-btn { background: none; border: none; cursor: pointer; width: 100%; text-align: left; }
+  .logout-btn { color: #f44336; }
 </style>

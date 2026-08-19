@@ -2,7 +2,7 @@
   import { push } from "svelte-spa-router"
 
   const APP_VERSION = "1.0.0"
-  const BUILD_CODE = "2026-08-19-001"
+  const BUILD_CODE = "20260819001"
 
   const ABOUT_LINKS = [
     {

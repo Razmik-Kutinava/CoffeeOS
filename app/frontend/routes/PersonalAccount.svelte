@@ -50,6 +50,15 @@
     const name = user.first_name || user.name || ""
     return name[0]?.toUpperCase() || "G"
   }
+
+  async function logout() {
+    try {
+      await fetch("/logout", { method: "DELETE", credentials: "same-origin" })
+      window.location.href = "/"
+    } catch (e) {
+      alert("Не удалось выйти")
+    }
+  }
 </script>
 
 <div class="personal-account-page">
@@ -113,8 +122,6 @@
               <div class="order-amount">{Math.round(order.total)} ₽</div>
               <button class="repeat-btn" onclick={(e) => {
                 e.preventDefault()
-                // TODO: repeat order functionality
-                alert("Функция повтора в разработке")
               }}>
                 Повторить
               </button>
@@ -134,10 +141,7 @@
         <span>ℹ️ О приложении</span>
         <span>›</span>
       </a>
-      <button type="button" class="menu-item menu-btn" onclick={() => {
-        // TODO: logout
-        alert("Logout в разработке")
-      }}>
+      <button type="button" class="menu-item menu-btn logout-btn" onclick={logout}>
         <span>🚪 Выход</span>
         <span>›</span>
       </button>
@@ -376,6 +380,10 @@
     cursor: pointer;
     width: 100%;
     text-align: left;
+  }
+
+  .logout-btn {
+    color: #f44336;
   }
 
   .btn-primary {
