@@ -30,14 +30,15 @@
   }
 
   function handleKeyDown(event) {
-    if (event.key === "Escape") {
+    if (isOpen && event.key === "Escape") {
       close()
     }
   }
 </script>
 
+<svelte:document on:keydown={handleKeyDown} />
+
 {#if isOpen}
-  <svelte:document on:keydown={handleKeyDown} />
   <div
     role="presentation"
     class="fixed inset-0 z-50 bg-black/40"
