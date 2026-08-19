@@ -11,11 +11,17 @@
 
 ## Текущий месяц (2026-08)
 
-## 2026-08-19 — spec: TASK-TELEGRAM-SUPPORT PHASE 0 & PHASE 1 (`72c70f5`)
+## 2026-08-19 — feat: TASK-TELEGRAM-SUPPORT PHASE 2 RED/GREEN (`db01076` + `dc69366`)
 
-- PHASE 0 (Intake): создан файл задачи customer_tasks/TASK-TELEGRAM-SUPPORT.md
-- PHASE 1 (SPEC): выделены файлы, создан todo.md, обновлена SESSION_STATE/HANDOFF
-- Готово к PHASE 2: BUILD (RED) при намерении работать
+- PHASE 2 RED `db01076`: тесты падают (18 pass config/utils, 13 todo)
+- PHASE 2 GREEN `dc69366`: реализация компонентов + интеграция
+  - SupportContactSheet.svelte: bottom sheet с Email/Telegram опциями
+  - Header.svelte: добавлен иконка чата (MessageCircle) для открытия шторки
+  - Profile.svelte: добавлена кнопка «Написать нам» в меню
+  - supportConfig.js: централизованная конфигурация Telegram/Email URL'ов
+  - deepLink.js: утилиты для открытия ссылок без пользовательских данных
+- Регрессия Header/Profile: не сломано, все работает
+- Готово к PHASE 3: REVIEW
 
 ## 2026-08-15 — push: `645eda9c` Entire MCP · CI green [31888110550](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/31888110550)
 

@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-19 (TASK-TELEGRAM-SUPPORT · PHASE 1: SPEC)  
+**Дата:** 2026-08-19 (TASK-TELEGRAM-SUPPORT · PHASE 2: GREEN ✅)  
 **Ветка:** `claude/client-task-understanding-9c9a23`
 
 | Сейчас | Дальше |
 |--------|--------|
-| PHASE 1: SPEC (файлы, todo, шапка) | PHASE 2: BUILD RED (тесты) при намерении |
+| PHASE 2: BUILD RED/GREEN завершена | PHASE 3: REVIEW (тесты, bugbot, security, push, CI) |
 
-**last_done:** PHASE 0 Intake · PHASE 1 SPEC · коммит `72c70f5`  
-**next_step:** PHASE 2 BUILD (RED) при намерении работать («ебашь/сделай/дальше»)
+**last_done:** RED `db01076` + GREEN `dc69366` · 5 файлов создано/изменено  
+**next_step:** PHASE 3 REVIEW (обязательны: local тесты, bugbot, security-review, push, CI)
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -24,14 +24,15 @@
 | Что | Статус |
 |-----|--------|
 | PHASE 0: Intake | **`[x]`** `72c70f5` |
-| PHASE 1: SPEC | **`[x]`** todo.md, файлы, шапка SESSION_STATE |
-| RED / GREEN | `[ ]` |
-| PHASE 3: REVIEW | `[ ]` |
+| PHASE 1: SPEC | **`[x]`** todo.md, файлы, шапка |
+| RED | **`[x]`** `db01076` (18 pass, 13 todo) |
+| GREEN | **`[x]`** `dc69366` (19 pass, 12 todo) |
+| PHASE 3: REVIEW | `[ ]` local · bugbot · security-review · push CI |
 
 **ТЗ:** [`customer_tasks/TASK-TELEGRAM-SUPPORT.md`](../milestones/veha_2/requirements/customer_tasks/TASK-TELEGRAM-SUPPORT.md)  
-**Файлы (ожидаемо):** Header.svelte · Profile.svelte · новый SupportContactSheet · config · deepLink утилита · тесты  
-**AC:** 12 критериев · 12 subtask'ов TDD  
-**Готово к:** PHASE 2 BUILD (RED) при намерении работать
+**Файлы:** SupportContactSheet.svelte · Header (+icon) · Profile (+button) · supportConfig.js · deepLink.js · tests  
+**AC:** ✅ 12 критериев Acceptance, 12/12 Subtask TDD  
+**Готово к:** PHASE 3 REVIEW
 
 ### #68 Telegram WebView UX / Performance (2026-08-15)
 

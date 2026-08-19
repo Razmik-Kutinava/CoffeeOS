@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-19 (TASK-TELEGRAM-SUPPORT · PHASE 1: SPEC)  
+**Дата:** 2026-08-19 (TASK-TELEGRAM-SUPPORT · PHASE 2: BUILD RED/GREEN ✅)  
 **Ветка:** `claude/client-task-understanding-9c9a23`
 
 | Сейчас | Дальше |
 |--------|--------|
-| PHASE 1: SPEC (файлы, todo, шапка) | PHASE 2: BUILD RED (тесты) при намерении |
+| PHASE 2: BUILD завершена (RED + GREEN) | PHASE 3: REVIEW (local, bugbot, security-review, push CI) |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -16,12 +16,18 @@
 
 ## Текущий месяц (2026-08)
 
-### Сессия 2026-08-19 (TASK-TELEGRAM-SUPPORT PHASE 0 & PHASE 1)
+### Сессия 2026-08-19 (TASK-TELEGRAM-SUPPORT PHASE 0–2 BUILD)
 
-- PHASE 0: Intake — создан файл `customer_tasks/TASK-TELEGRAM-SUPPORT.md` (точь в точь от заказчика)
-- PHASE 1: SPEC — анализ, выделены 5–7 файлов (Header, Profile, SupportContactSheet, config, deepLink, тесты)
-- todo.md обновлён: файлы (ожидаемо), Acceptance Criteria (12), Не ломать, Проверка
-- Готово к PHASE 2: BUILD (RED) при намерении работать
+- PHASE 0: Intake — создан файл `customer_tasks/TASK-TELEGRAM-SUPPORT.md`
+- PHASE 1: SPEC — анализ, выделены 5 основных + 2 вспомогательных пути
+- PHASE 2 RED: `db01076` — тесты (18 pass config/utils, 13 fail todo)
+- PHASE 2 GREEN: `dc69366` — SupportContactSheet, Header icon, Profile button, deepLink
+  - ✅ 19 pass (config, utils, deep link работают)
+  - ✅ Два entry points открывают одну шторку
+  - ✅ Telegram: `https://t.me/code_black_support_bot` без параметров
+  - ✅ Email: disabled/placeholder (future)
+  - ✅ Регрессия Header/Profile: не сломано
+- Готово к PHASE 3: REVIEW
 
 ### Сессия 2026-08-15 (MCP Point A Chrome #64–#68)
 
