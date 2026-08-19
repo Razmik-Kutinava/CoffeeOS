@@ -1,6 +1,7 @@
 <script>
   import { onMount } from "svelte"
   import { api } from "../lib/api.js"
+  import { createRepeatInlineOrder } from "../lib/createRepeatInlineOrder.js"
 
   let user = $state(null)
   let orders = $state([])
@@ -57,6 +58,14 @@
       window.location.href = "/"
     } catch (e) {
       alert("Не удалось выйти")
+    }
+  }
+
+  async function repeatOrder(orderId) {
+    try {
+      await createRepeatInlineOrder(api, orderId)
+    } catch (e) {
+      alert(e.message || "Не удалось повторить заказ")
     }
   }
 </script>
@@ -122,6 +131,7 @@
               <div class="order-amount">{Math.round(order.total)} ₽</div>
               <button class="repeat-btn" onclick={(e) => {
                 e.preventDefault()
+                repeatOrder(order.id)
               }}>
                 Повторить
               </button>

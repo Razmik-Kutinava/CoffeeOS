@@ -25,6 +25,9 @@
   let linkBusy = $state(false)
   let linkErr = $state("")
 
+  let notificationsEnabled = $state(true)
+  let savingNotifications = $state(false)
+
   function showToast(msg) {
     toast = msg
     setTimeout(() => {
@@ -36,6 +39,7 @@
     user = data
     firstName = data?.first_name || ""
     lastName = data?.last_name || ""
+    notificationsEnabled = data?.notifications_enabled !== false
   }
 
   onMount(async () => {
@@ -98,6 +102,22 @@
       linkErr = e.message
     } finally {
       linkBusy = false
+    }
+  }
+
+  async function saveNotifications() {
+    savingNotifications = true
+    try {
+      applyUser(await api("profile", {
+        method: "PATCH",
+        body: JSON.stringify({ notifications_enabled: notificationsEnabled })
+      }))
+      showToast("Настройки уведомлений сохранены")
+    } catch (e) {
+      notificationsEnabled = !notificationsEnabled
+      showToast(e.message || "Не удалось сохранить настройки")
+    } finally {
+      savingNotifications = false
     }
   }
 
@@ -186,6 +206,24 @@
       <button type="button" class="btn primary" disabled={savingNames} onclick={saveNames}>Сохранить</button>
     </section>
 
+    <section class="card">
+      <h3>Уведомления</h3>
+      <div class="notification-row">
+        <label class="label" for="pf-notif">Получать уведомления</label>
+        <input
+          id="pf-notif"
+          type="checkbox"
+          bind:checked={notificationsEnabled}
+          disabled={savingNotifications}
+          onchange={saveNotifications}
+          class="checkbox"
+        />
+      </div>
+      {#if savingNotifications}
+        <p class="saving-hint">Сохранение...</p>
+      {/if}
+    </section>
+
     <div class="menu-list">
       <a href="/#/orders" class="menu-item"><span>📦 Мои заказы</span><span>›</span></a>
       <a href="/#/bonuses" class="menu-item"><span>🎁 Бонусы</span><span>›</span></a>
@@ -228,4 +266,8 @@
   .menu-item:last-child { border-bottom: none; }
   .menu-btn { background: none; border: none; cursor: pointer; width: 100%; text-align: left; }
   .logout-btn { color: #f44336; }
+  .notification-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; }
+  .checkbox { width: 20px; height: 20px; cursor: pointer; }
+  .checkbox:disabled { opacity: 0.6; cursor: not-allowed; }
+  .saving-hint { font-size: 12px; color: #a0a0a0; margin-top: 8px; }
 </style>
