@@ -11,7 +11,7 @@ class OrderEmail < ApplicationRecord
 
   validates :order_id, presence: true
   validates :email, presence: true, format: { with: URI::MailTo::EMAIL_REGEXP, message: "is invalid" }
-  validates :marketing_consent, inclusion: { in: [true, false] }
+  validates :marketing_consent, inclusion: { in: [ true, false ] }
 
   validates :order_id, uniqueness: { scope: :email, message: "email must be unique per order" }
 
