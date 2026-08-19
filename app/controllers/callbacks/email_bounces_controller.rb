@@ -1,7 +1,7 @@
 module Callbacks
   class EmailBouncesController < ApplicationController
     skip_before_action :verify_authenticity_token
-    before_action :verify_webhook_signature, only: [:bounce]
+    before_action :verify_webhook_signature, only: [ :bounce ]
 
     def bounce
       event = params[:event] || params[:type]
