@@ -4,12 +4,17 @@
  */
 
 /**
- * Open a deep link URL, respecting platform-specific behavior.
- * On mobile with native app installed: opens native app
- * On mobile without native app: opens web version
- * On desktop: opens in new tab
+ * Open a deep link URL in browser.
+ * Browser handles platform-specific behavior for https:// URLs:
+ * - Mobile with app installed: browser can route to native app via intent handlers
+ * - Mobile without app: opens web version in browser
+ * - Desktop: opens in new tab with web version
  *
- * @param {string} url - URL to open (e.g., https://t.me/bot_username)
+ * Note: This function uses https:// URLs (e.g., https://t.me/bot).
+ * The browser's built-in URL handling and OS-level app routing determine
+ * whether the native app opens or the web version is used.
+ *
+ * @param {string} url - URL to open (must be https://, e.g., https://t.me/bot_username)
  * @param {Object} options - Optional configuration
  * @param {string} options.target - Window target ('_blank' | '_self'), default '_blank'
  * @returns {void}
@@ -18,12 +23,6 @@ export function openDeepLink(url, options = {}) {
   if (!url) return;
 
   const target = options.target || "_blank";
-
-  // Browser's standard window.open handles platform-specific behavior:
-  // - On iOS with Telegram app: iOS recognizes tg:// and routes to native app
-  // - On Android with Telegram app: Android recognizes tg:// and routes to native app
-  // - Fallback: web.telegram.org opens in browser
-  // - Desktop: opens new tab with web version
   window.open(url, target);
 }
 
