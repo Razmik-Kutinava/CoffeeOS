@@ -28,7 +28,7 @@ class Shop::ShopNewCardFormStep1Test < ActionDispatch::IntegrationTest
     assert_match(/Номер карты/i, src)
     assert_match(%r{ММ/ГГ}i, src)
     assert_match(/CMC\/CVV|CVV|CMC/i, src)
-    assert_match(/Использовать карту для будущих заказов/i, src)
+    assert_match(/Сохранить карту для быстрой оплаты/i, src)
     assert_includes src, 'data-testid="shop-new-card-form"'
     assert_includes src, 'data-testid="shop-new-card-pan"'
     assert_includes src, 'data-testid="shop-new-card-exp"'
