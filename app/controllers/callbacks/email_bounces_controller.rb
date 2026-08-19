@@ -4,7 +4,6 @@ module Callbacks
     before_action :verify_webhook_signature, only: [ :bounce ]
 
     def bounce
-      event = params[:event] || params[:type]
       email = params[:email]
       reason = params[:reason] || "unknown"
 
@@ -25,10 +24,10 @@ module Callbacks
     private
 
     def verify_webhook_signature
-      # TODO: Implement HMAC-SHA256 signature verification
-      # signature = request.headers['X-Webhook-Signature']
-      # computed = OpenSSL::HMAC.hexdigest('sha256', webhook_secret, request.body.read)
-      # return render json: { error: 'Invalid signature' }, status: :unauthorized unless ActiveSupport::SecurityUtils.secure_compare(signature, computed)
+      # Webhook signature verification will be implemented when email provider is selected
+      # Expected signature header: X-Webhook-Signature
+      # Expected format: HMAC-SHA256(webhook_secret, request_body)
+      true
     end
   end
 end
