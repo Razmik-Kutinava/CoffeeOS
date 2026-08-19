@@ -23,6 +23,7 @@ Rails.application.routes.draw do
     post "/fiscal_receipts", to: "events#fiscal_receipt"
     post "/tbank", to: "tbank#notify"
     post "/sms_ru", to: "sms_ru#notify"
+    post "/email/bounce", to: "email_bounces#bounce"
   end
 
   # Dashboard routes (временные заглушки для тестирования)

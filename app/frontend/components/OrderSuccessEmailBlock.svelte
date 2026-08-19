@@ -1,5 +1,5 @@
 <script>
-  import { isValidEmail } from "../lib/shopGuestProfile.js"
+  import { getEmailValidationError } from "../lib/emailCollection.js"
 
   let {
     orderId = "",
@@ -14,13 +14,7 @@
   let submitting = $state(false)
 
   function validateEmail(value) {
-    if (!value || value.trim() === "") {
-      return ""
-    }
-    if (!isValidEmail(value)) {
-      return "Некорректный email"
-    }
-    return ""
+    return getEmailValidationError(value)
   }
 
   function onEmailChange(e) {
