@@ -2,7 +2,8 @@
   import { onMount } from "svelte"
   import { push } from "svelte-spa-router"
   import { api } from "../lib/api.js"
-  import { clearGuestOrderSession, reconnectGuestOrder, loadGuestProfile } from "../lib/shopGuestSession.js"
+  import { clearGuestOrderSession, reconnectGuestOrder } from "../lib/shopGuestSession.js"
+  import { loadGuestProfile } from "../lib/shopGuestProfile.js"
   import { clearPaymentSession } from "../lib/tbankPayment.js"
   import { clearPendingOrder } from "../lib/codeblackPendingOrder.js"
   import {

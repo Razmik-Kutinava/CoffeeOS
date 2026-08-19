@@ -39,19 +39,19 @@
 
 ### PHASE 2: GREEN (Реализация)
 
-- [ ] **ST-1**: Изменение Checkout.svelte
-- [ ] **ST-2**: Проверка shopPayFsm.js
-- [ ] **ST-3**: NewCardForm.svelte + toggle
-- [ ] **ST-4**: PaymentResult.svelte + email-блок
-- [ ] **ST-5-7**: OrderSuccessEmailBlock.svelte (валидация + маркетинг)
-- [ ] **ST-8**: email_controller.rb + endpoint
-- [ ] **ST-9**: email_service.rb (логика + очередь)
-- [ ] **ST-10**: send_order_receipt_email_job.rb
-- [ ] **ST-11**: email_provider webhook + bounce handling
-- [ ] **ST-12-14**: OrderEmail Model + идемпотентность
-- [ ] **ST-15**: Проверка Receipt formation
-- [ ] **ST-16-17**: Все тесты GREEN
-- [ ] **ST-18**: UX review + текст
+- [x] **ST-1**: Изменение Checkout.svelte (identityReady only checks phoneVerified)
+- [x] **ST-2**: Проверка shopPayFsm.js (no email dependency found)
+- [x] **ST-3**: NewCardForm.svelte + toggle ("Сохранить карту для быстрой оплаты")
+- [x] **ST-4**: PaymentResult.svelte + email-блок (shows on status=ok/ok_sbp)
+- [x] **ST-5-7**: OrderSuccessEmailBlock.svelte (validation + marketing consent checkbox)
+- [x] **ST-8**: email_controller.rb + endpoint (POST /orders/:order_id/email)
+- [x] **ST-9**: email_service.rb + SyncContactToCrmJob (queues only if consent=true)
+- [x] **ST-10**: send_order_receipt_email_job.rb (async receipt sending)
+- [x] **ST-11**: email bounce webhook + handler (/callbacks/email/bounce)
+- [x] **ST-12-14**: OrderEmail Model + idempotency (find_or_initialize_by + unique index)
+- [x] **ST-15**: SendOrderReceiptEmailJob always queues (independent of email)
+- [ ] **ST-16-17**: Frontend/Backend critical tests passing
+- [x] **ST-18**: UX text updated ("Куда прислать чек и предложения")
 - [ ] **ST-19-20**: CI green (npm test, npx tsc, rspec)
 
 ### PHASE 3: REVIEW

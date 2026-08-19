@@ -1,0 +1,11 @@
+<html>
+  <body>
+    <h1>Чек заказа <%= @order.order_number %></h1>
+    <p>Здравствуйте!</p>
+    <p>Ваш заказ успешно оплачен.</p>
+
+    <h2>Сумма: <%= number_to_currency(@order.final_amount, unit: "₽") %></h2>
+
+    <p>Спасибо за покупку!</p>
+  </body>
+</html>
