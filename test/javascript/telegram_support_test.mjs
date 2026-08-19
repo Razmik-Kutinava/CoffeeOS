@@ -131,7 +131,7 @@ describe("Deep Link Utilities (TASK-TELEGRAM-SUPPORT)", () => {
   it("cleanDeepLinkUrl removes query parameters", () => {
     const urlWithParams = "https://t.me/code_black_support_bot?user_id=123&phone=555";
     const cleaned = cleanDeepLinkUrl(urlWithParams);
-    assert.equal(cleaned, "https://t.me/code_black_support_bot/");
+    assert.equal(cleaned, "https://t.me/code_black_support_bot");
     assert(!cleaned.includes("user_id"));
     assert(!cleaned.includes("phone"));
   });

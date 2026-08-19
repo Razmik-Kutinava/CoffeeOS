@@ -9,6 +9,7 @@
     patchProfileNames
   } from "../lib/shopProfileLink.js"
   import { formatPhoneMask, normalizePhoneToE164Ru } from "../lib/phoneOtp.js"
+  import SupportContactSheet from "../components/SupportContactSheet.svelte"
 
   let user = $state(null)
   let loading = $state(true)
@@ -16,6 +17,7 @@
   let firstName = $state("")
   let lastName = $state("")
   let savingNames = $state(false)
+  let supportSheetRef = $state(null)
 
   let linkMode = $state(null) // email | phone | null
   let linkValue = $state("")
@@ -98,6 +100,12 @@
       linkBusy = false
     }
   }
+
+  function onSupportChatClick() {
+    if (supportSheetRef) {
+      supportSheetRef.open()
+    }
+  }
 </script>
 
 <div class="profile-page" data-testid="shop-profile-page">
@@ -172,9 +180,14 @@
     <div class="menu-list">
       <a href="/#/orders" class="menu-item"><span>📦 Мои заказы</span><span>›</span></a>
       <a href="/#/bonuses" class="menu-item"><span>🎁 Бонусы</span><span>›</span></a>
+      <button type="button" class="menu-item menu-btn" data-testid="shop-profile-support-button" onclick={onSupportChatClick}>
+        <span>💬 Написать нам</span><span>›</span>
+      </button>
     </div>
   {/if}
 </div>
+
+<SupportContactSheet bind:this={supportSheetRef} />
 
 <style>
   .profile-page { min-height: 100vh; background: var(--bg-primary, #1a1a1a); padding-bottom: 80px; color: #fff; }
@@ -201,4 +214,5 @@
   .menu-list { margin: 0 16px; background: #2a2a2a; border-radius: 16px; overflow: hidden; }
   .menu-item { display: flex; justify-content: space-between; padding: 16px 20px; color: #fff; text-decoration: none; border-bottom: 1px solid #3a3a3a; }
   .menu-item:last-child { border-bottom: none; }
+  .menu-btn { background: none; border: none; cursor: pointer; width: 100%; text-align: left; }
 </style>
