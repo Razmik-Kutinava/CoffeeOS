@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_04_120100) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_19_000000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_stat_statements"
@@ -517,6 +517,19 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_04_120100) do
     t.index ["tenant_id"], name: "index_order_feedback_on_tenant_id"
     t.check_constraint "rating >= 1 AND rating <= 5", name: "chk_feedback_rating"
     t.check_constraint "sentiment IS NULL OR (sentiment::text = ANY (ARRAY['positive'::character varying::text, 'neutral'::character varying::text, 'negative'::character varying::text]))", name: "chk_feedback_sentiment"
+  end
+
+  create_table "order_emails", force: :cascade do |t|
+    t.bigint "order_id", null: false
+    t.string "email", null: false
+    t.boolean "marketing_consent", default: false, null: false
+    t.string "status", default: "pending", null: false
+    t.string "bounce_reason"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index [ :order_id, :email ], name: "index_order_emails_on_order_id_and_email", unique: true
+    t.index [ :status ], name: "index_order_emails_on_status"
+    t.index [ :created_at ], name: "index_order_emails_on_created_at"
   end
 
   create_table "order_items", id: :uuid, default: -> { "gen_random_uuid()" }, comment: "Позиции заказа (продукты + модификаторы)", force: :cascade do |t|
@@ -1293,6 +1306,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_04_120100) do
   add_foreign_key "order_feedback", "orders", on_delete: :cascade
   add_foreign_key "order_feedback", "tenants", on_delete: :cascade
   add_foreign_key "order_feedback", "users", column: "resolved_by_id", on_delete: :nullify
+  add_foreign_key "order_emails", "orders", on_delete: :cascade
   add_foreign_key "order_items", "orders", on_delete: :cascade
   add_foreign_key "order_items", "products", name: "fk_order_items_product", on_delete: :restrict
   add_foreign_key "order_notification_logs", "orders"

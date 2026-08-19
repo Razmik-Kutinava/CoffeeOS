@@ -9,7 +9,7 @@ class CreateOrderEmails < ActiveRecord::Migration[7.0]
       t.timestamps
     end
 
-    add_index :order_emails, [:order_id, :email], unique: true
+    add_index :order_emails, [ :order_id, :email ], unique: true
     add_index :order_emails, :status
     add_index :order_emails, :created_at
   end
