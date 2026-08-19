@@ -36,9 +36,8 @@
   }
 </script>
 
-<svelte:document on:keydown={handleKeyDown} />
-
 {#if isOpen}
+  <svelte:document on:keydown={handleKeyDown} />
   <div
     role="presentation"
     class="fixed inset-0 z-50 bg-black/40"
@@ -58,6 +57,7 @@
       <h2 class="text-lg font-semibold text-[#e8e8e8]">Связь с поддержкой</h2>
       <button
         type="button"
+        aria-label="Close"
         class="border-none bg-transparent p-0 text-[#a0a0a0] hover:text-[#e8e8e8] cursor-pointer text-sm"
         onclick={() => close()}
         data-testid="support-sheet-close"
