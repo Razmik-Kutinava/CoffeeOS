@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-15 (Fly v456 · MCP Chrome PASS)  
-**Ветка:** `develop`
+**Дата:** 2026-08-19 (TASK-TELEGRAM-SUPPORT · PHASE 1: SPEC)  
+**Ветка:** `claude/client-task-understanding-9c9a23`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Fly v456 Entire+push · CI green | TG/IG на телефоне |
+| PHASE 1: SPEC (файлы, todo, шапка) | PHASE 2: BUILD RED (тесты) при намерении |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,13 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-19 (TASK-TELEGRAM-SUPPORT PHASE 0 & PHASE 1)
+
+- PHASE 0: Intake — создан файл `customer_tasks/TASK-TELEGRAM-SUPPORT.md` (точь в точь от заказчика)
+- PHASE 1: SPEC — анализ, выделены 5–7 файлов (Header, Profile, SupportContactSheet, config, deepLink, тесты)
+- todo.md обновлён: файлы (ожидаемо), Acceptance Criteria (12), Не ломать, Проверка
+- Готово к PHASE 2: BUILD (RED) при намерении работать
 
 ### Сессия 2026-08-15 (MCP Point A Chrome #64–#68)
 
