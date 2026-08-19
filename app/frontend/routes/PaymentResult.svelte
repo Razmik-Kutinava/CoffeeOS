@@ -2,7 +2,7 @@
   import { onMount } from "svelte"
   import { push } from "svelte-spa-router"
   import { api } from "../lib/api.js"
-  import { clearGuestOrderSession, reconnectGuestOrder } from "../lib/shopGuestSession.js"
+  import { clearGuestOrderSession, reconnectGuestOrder, loadGuestProfile } from "../lib/shopGuestSession.js"
   import { clearPaymentSession } from "../lib/tbankPayment.js"
   import { clearPendingOrder } from "../lib/codeblackPendingOrder.js"
   import {
@@ -13,6 +13,8 @@
     SBP_WAITING_FOR_BANK_MESSAGE,
     SBP_I_PAID_LABEL
   } from "../lib/shopSbpPay.js"
+  import OrderSuccessEmailBlock from "../components/OrderSuccessEmailBlock.svelte"
+  import { submitOrderEmail } from "../lib/emailCollection.js"
 
   let status = $state("fail")
   let orderId = $state("")
@@ -21,6 +23,8 @@
   let loading = $state(true)
   let waitingForBank = $state(false)
   let checkingPaid = $state(false)
+  let emailSubmitting = $state(false)
+  let prefillEmail = $state("")
 
   async function settleSuccess() {
     await pollSbpPaymentStatus(api, { orderId })
@@ -52,6 +56,25 @@
     }
   }
 
+  async function handleEmailSubmit({ email, marketing_consent }) {
+    emailSubmitting = true
+    try {
+      await submitOrderEmail(api, { orderId, email, marketing_consent })
+      err = null
+      await new Promise((r) => setTimeout(r, 800))
+      push(`/order/${orderId}`)
+    } catch (e) {
+      err = e.message || "Не удалось сохранить email"
+    } finally {
+      emailSubmitting = false
+    }
+  }
+
+  async function handleEmailSkip() {
+    await new Promise((r) => setTimeout(r, 200))
+    push(`/order/${orderId}`)
+  }
+
   onMount(async () => {
     const query = window.location.hash.split("?")[1] || ""
     const params = new URLSearchParams(query)
@@ -62,6 +85,11 @@
       err = "Не найден заказ"
       loading = false
       return
+    }
+
+    const profile = loadGuestProfile()
+    if (profile?.email) {
+      prefillEmail = profile.email
     }
 
     try {
@@ -123,6 +151,25 @@
     >
       [ {checkingPaid ? "…" : SBP_I_PAID_LABEL} ]
     </button>
+  </div>
+{:else if status === "ok" || status === "ok_sbp"}
+  <div class="py-8" data-testid="payment-result-success">
+    <div class="mb-4 text-center">
+      <p class="text-lg font-medium text-green-400">✔ Чек сформирован</p>
+    </div>
+
+    <OrderSuccessEmailBlock
+      {orderId}
+      email={prefillEmail}
+      marketingConsent={false}
+      loading={emailSubmitting}
+      onSubmit={handleEmailSubmit}
+      onSkip={handleEmailSkip}
+    />
+
+    {#if err}
+      <p class="mt-4 text-sm text-red-400" role="alert">{err}</p>
+    {/if}
   </div>
 {:else if err}
   <p class="mb-4 text-red-400" role="alert">{err}</p>

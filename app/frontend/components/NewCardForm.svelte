@@ -101,7 +101,7 @@
   <label class="toggle" data-testid="shop-new-card-save-toggle">
     <input type="checkbox" checked={state.save_card} onchange={onSaveToggle} />
     <span>
-      Использовать карту для будущих заказов
+      Сохранить карту для быстрой оплаты
       {#if showSmsPinPad}
         <small>Это безопасно, данные зашифрованы</small>
       {/if}

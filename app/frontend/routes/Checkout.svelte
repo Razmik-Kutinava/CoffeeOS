@@ -108,9 +108,7 @@
   let cardsLoadError = $state(null)
 
   const phoneE164 = $derived(normalizePhoneToE164Ru(phoneDisplay))
-  const identityReady = $derived(
-    phoneVerified || (isValidEmail(email) && emailVerified)
-  )
+  const identityReady = $derived(phoneVerified)
   const canPay = $derived(identityReady && !submitting && shopIsOpenForPay())
   const sheetCanPay = $derived(
     canPay &&
