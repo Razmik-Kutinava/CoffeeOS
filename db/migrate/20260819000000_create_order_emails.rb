@@ -1,7 +1,7 @@
 class CreateOrderEmails < ActiveRecord::Migration[7.0]
   def change
-    create_table :order_emails do |t|
-      t.references :order, null: false, foreign_key: true
+    create_table :order_emails, id: :uuid, default: -> { "gen_random_uuid()" } do |t|
+      t.references :order, null: false, foreign_key: true, type: :uuid
       t.string :email, null: false
       t.boolean :marketing_consent, null: false, default: false
       t.string :status, null: false, default: "pending"

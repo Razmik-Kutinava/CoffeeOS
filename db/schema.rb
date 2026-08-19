@@ -519,8 +519,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_19_000000) do
     t.check_constraint "sentiment IS NULL OR (sentiment::text = ANY (ARRAY['positive'::character varying::text, 'neutral'::character varying::text, 'negative'::character varying::text]))", name: "chk_feedback_sentiment"
   end
 
-  create_table "order_emails", force: :cascade do |t|
-    t.bigint "order_id", null: false
+  create_table "order_emails", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "order_id", null: false
     t.string "email", null: false
     t.boolean "marketing_consent", default: false, null: false
     t.string "status", default: "pending", null: false
