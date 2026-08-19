@@ -28,9 +28,13 @@ stage_from_windows_mount() {
   git -C "${REPO_ROOT}" archive HEAD | tar -x -C "${stage}"
 
   mapfile -t changed < <(git -C "${REPO_ROOT}" ls-files -m -o --exclude-standard)
-  if ((${#changed[@]} > 0)); then
-    echo "[fly_deploy] overlay ${#changed[@]} uncommitted path(s)"
-    (cd "${REPO_ROOT}" && rsync -a --relative "${changed[@]}" "${stage}/")
+  local existing=()
+  for path in "${changed[@]}"; do
+    [[ -e "${REPO_ROOT}/${path}" ]] && existing+=("${path}")
+  done
+  if ((${#existing[@]} > 0)); then
+    echo "[fly_deploy] overlay ${#existing[@]} uncommitted path(s)"
+    (cd "${REPO_ROOT}" && rsync -a --relative "${existing[@]}" "${stage}/")
   fi
 
   run_deploy "${stage}"
