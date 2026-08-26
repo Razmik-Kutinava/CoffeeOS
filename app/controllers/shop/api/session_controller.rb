@@ -41,7 +41,7 @@ module Shop
           ms = MobileSession.find_by(refresh_token: token)
           ms&.deactivate!
         end
-        render json: { ok: true }
+        render json: { ok: true, logged_out: true }
       end
     end
   end
