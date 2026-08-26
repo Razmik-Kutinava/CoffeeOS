@@ -11,6 +11,10 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-26 — fix: #69 Profile.svelte UTF-8 (CI mojibake после rebase)
+
+- Восстановлена кириллица («повторить», «История заказов» и др.) — grep-тест `pwa_personal_account_lk_test.rb`
+
 ## 2026-08-26 — #69 REVIEW: logout pending fix + push
 
 - Security review: `PendingOrderSession.clear!` on DELETE session

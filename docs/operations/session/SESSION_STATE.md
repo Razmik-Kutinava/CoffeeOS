@@ -7,7 +7,7 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| #69 REVIEW fix logout · push CI | deploy — апрув |
+| #69 CI fix Profile.svelte UTF-8 | push CI · ждём green |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

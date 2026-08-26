@@ -39,7 +39,7 @@
   })
 
   function displayName() {
-    return user?.name || user?.first_name || "╨У╨╛╤Б╤В╤М"
+    return user?.name || user?.first_name || "Гость"
   }
 
   function avatarLetter() {
@@ -54,16 +54,16 @@
 
 <div class="lk-page" data-testid="shop-lk-home">
   <div class="lk-header">
-    <button type="button" class="back-btn" onclick={() => push("/")} aria-label="╨Э╨░╨╖╨░╨┤">тА╣</button>
+    <button type="button" class="back-btn" onclick={() => push("/")} aria-label="Назад">‹</button>
     <div class="lk-user">
       <div class="avatar">{avatarLetter()}</div>
       <div class="name">{displayName()}</div>
     </div>
     <div class="lk-actions">
-      <button type="button" class="icon-btn" aria-label="╨Э╨░╨┐╨╕╤Б╨░╤В╤М ╨╜╨░╨╝" onclick={() => (supportSheetOpen = true)}>
+      <button type="button" class="icon-btn" aria-label="Написать нам" onclick={() => (supportSheetOpen = true)}>
         <MessageCircle size={22} />
       </button>
-      <button type="button" class="icon-btn" aria-label="╨Э╨░╤Б╤В╤А╨╛╨╣╨║╨╕" onclick={() => push("/profile/settings")}>
+      <button type="button" class="icon-btn" aria-label="Настройки" onclick={() => push("/profile/settings")}>
         <Settings size={22} />
       </button>
     </div>
@@ -72,24 +72,24 @@
   <PlgBlockSection />
 
   <section class="history" data-testid="shop-lk-order-history">
-    <h2>╨Ш╤Б╤В╨╛╤А╨╕╤П ╨╖╨░╨║╨░╨╖╨╛╨▓</h2>
+    <h2>История заказов</h2>
 
     {#if historyLoading}
       <PageSkeleton />
     {:else if historyError}
       <div class="state-error" data-testid="shop-lk-history-error">
         {#if historyError === "network"}
-          ╨Э╨╡╤В ╤Б╨▓╤П╨╖╨╕. ╨Я╤А╨╛╨▓╨╡╤А╤М╤В╨╡ ╨╕╨╜╤В╨╡╤А╨╜╨╡╤В ╨╕ ╨┐╨╛╨┐╤А╨╛╨▒╤Г╨╣╤В╨╡ ╨┐╨╛╨╖╨╢╨╡.
+          Нет связи. Проверьте интернет и попробуйте позже.
         {:else if historyError === "auth"}
-          ╨Т╨╛╨╣╨┤╨╕╤В╨╡, ╤З╤В╨╛╨▒╤Л ╨▓╨╕╨┤╨╡╤В╤М ╨╕╤Б╤В╨╛╤А╨╕╤О ╨╖╨░╨║╨░╨╖╨╛╨▓.
+          Войдите, чтобы видеть историю заказов.
         {:else}
-          ╨Э╨╡ ╤Г╨┤╨░╨╗╨╛╤Б╤М ╨╖╨░╨│╤А╤Г╨╖╨╕╤В╤М ╨╕╤Б╤В╨╛╤А╨╕╤О. ╨Я╨╛╨┐╤А╨╛╨▒╤Г╨╣╤В╨╡ ╨┐╨╛╨╖╨╢╨╡.
+          Не удалось загрузить историю. Попробуйте позже.
         {/if}
       </div>
     {:else if orders.length === 0}
       <div class="state-empty" data-testid="shop-lk-history-empty">
-        <p>╨Ч╨┤╨╡╤Б╤М ╨▒╤Г╨┤╤Г╤В ╨▓╨░╤И╨╕ ╨╖╨░╨║╨░╨╖╤Л</p>
-        <button type="button" class="btn" onclick={() => push("/")}>╨б╨┤╨╡╨╗╨░╤В╤М ╨╖╨░╨║╨░╨╖</button>
+        <p>Здесь будут ваши заказы</p>
+        <button type="button" class="btn" onclick={() => push("/")}>Сделать заказ</button>
       </div>
     {:else}
       <div class="history-list">
@@ -97,13 +97,13 @@
           <div class="history-row" data-testid="shop-lk-order-row">
             <button type="button" class="history-main" onclick={() => openReceipt(order.id)}>
               <div class="history-top">
-                <span class="order-no">тДЦ{orderHistoryLabel(order)}</span>
+                <span class="order-no">№{orderHistoryLabel(order)}</span>
                 <span class="order-date">{formatOrderHistoryDate(order.created_at)}</span>
               </div>
               <div class="order-title">{orderHistoryTitle(order)}</div>
             </button>
             <button type="button" class="repeat-btn" data-testid="shop-lk-repeat-btn" onclick={() => openReceipt(order.id)}>
-              ╨┐╨╛╨▓╤В╨╛╤А╨╕╤В╤М
+              повторить
             </button>
           </div>
         {/each}

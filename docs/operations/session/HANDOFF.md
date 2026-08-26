@@ -7,10 +7,10 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| #69 REVIEW · logout pending fix · push | deploy — апрув · Fly MCP |
+| #69 CI fix Profile UTF-8 (rebase mojibake) | CI green → deploy апрув |
 
-**last_done:** #69 REVIEW fix logout pending · commit `99a8dd1e`  
-**next_step:** CI green → deploy только апрув · Fly MCP Point A
+**last_done:** fix Profile.svelte кириллица после rebase Out-File  
+**next_step:** CI green · Fly MCP после deploy
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
