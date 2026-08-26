@@ -7,7 +7,7 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| #70 REVIEW push | CI green |
+| #70 CI green 32967225563 | deploy апрув |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

@@ -7,10 +7,10 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| #70 push/CI | CI green → deploy апрув |
+| #70 CI green | deploy — апрув · Fly MCP |
 
-**last_done:** #70 REVIEW · bugbot fix env · Entire `01M0YNQZGQSNJ5Z6XSNGHGHHZB` на `f2cfceb2`  
-**next_step:** CI green · deploy только апрув · Fly MCP Point A
+**last_done:** #70 REVIEW · CI [32967225563](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/32967225563) green  
+**next_step:** deploy только апрув · Fly MCP Point A
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
