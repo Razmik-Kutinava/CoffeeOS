@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-26 (#71 GREEN)  
+**Дата:** 2026-08-26 (#71 regress)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #71 GREEN `31cf0e21` | /regress |
+| #71 regress PASS | /review |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,12 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-26 — #71 regress PASS
+
+- JS: email_collection 12/0 · shop_personal_account_lk 6/0 · telegram_support 13/0
+- Rails: orders_email 6/0 · checkout_acceptance_cbr 10/0
+- Next: /review (Entire attach + push); Fly MCP Point A — после deploy
 
 ### Сессия 2026-08-26 — #71 Email after pay GREEN slice 1
 

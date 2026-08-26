@@ -11,6 +11,10 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-26 — #71 /regress PASS (Email after pay)
+
+- JS 31/0 · Rails 16/0 · GREEN `31cf0e21` · next /review
+
 ## 2026-08-26 — #71 intake+SPEC: Email-сбор после оплаты (Callcheck)
 
 - ТЗ 1:1 + artifacts `email_collection_after_payment/` + CBR #71

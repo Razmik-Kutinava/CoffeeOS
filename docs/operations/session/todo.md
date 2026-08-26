@@ -2,7 +2,7 @@
 
 | last_done | current_state | next_step |
 |-----------|---------------|-----------|
-| GREEN slice 1 | тесты #71 green | /regress |
+| /regress PASS | Local green | /review |
 
 **CBR:** #71  
 **ТЗ:** [`customer_tasks/Email-сбор после оплаты (Callcheck-флоу).md`](../milestones/veha_2/requirements/customer_tasks/Email-сбор%20после%20оплаты%20(Callcheck-флоу).md)  
@@ -46,7 +46,7 @@
 - [x] PHASE 1 SPEC
 - [x] RED `0eeaea77`
 - [x] GREEN (slice 1: PaymentResult + `::Orders::EmailService` + Checkout без имени + tests)
-- [ ] /regress
+- [x] /regress (JS 31/0 · Rails 16/0)
 - [ ] REVIEW
 
 ## Файлы (ожидаемо)
@@ -101,5 +101,5 @@
 - [x] S16 FE tests (node:test)
 - [x] S17 BE tests (Minitest)
 - [x] S18 UX copy
-- [ ] S19 Full TDD run → /regress
-- [ ] S20 Lint (зона)
+- [x] S19 Full TDD run → /regress PASS
+- [ ] S20 Lint (зона) — /review

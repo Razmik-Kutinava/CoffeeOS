@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-26 (#71 GREEN)  
+**Дата:** 2026-08-26 (#71 regress)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #71 GREEN `31cf0e21` | /regress |
+| #71 regress PASS | /review |
 
-**last_done:** #71 GREEN · RED `0eeaea77` · Entire attach pending (transcript not found CLI)  
-**next_step:** /regress
+**last_done:** #71 /regress Local PASS · GREEN `31cf0e21`  
+**next_step:** /review (Entire attach + bugbot + security + push)
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -25,7 +25,8 @@
 |-----|--------|
 | Intake + CBR #71 | **`[x]`** `0aed04f8` |
 | SPEC (`todo.md`) | **`[x]`** |
-| RED / GREEN | `[ ]` |
+| RED / GREEN | **`[x]`** `0eeaea77` / `31cf0e21` |
+| `/regress` | **`[x]`** JS 31/0 · Rails 16/0 |
 | REVIEW | `[ ]` |
 
 **ТЗ:** [`customer_tasks/Email-сбор после оплаты (Callcheck-флоу).md`](../milestones/veha_2/requirements/customer_tasks/Email-сбор%20после%20оплаты%20(Callcheck-флоу).md)  
