@@ -2,7 +2,7 @@
   import { onMount } from "svelte"
   import { push } from "svelte-spa-router"
   import { api } from "../lib/api.js"
-  import { clearGuestOrderSession, reconnectGuestOrder } from "../lib/shopGuestSession.js"
+  import { clearGuestOrderSession, reconnectGuestOrder, guestReconnectToken } from "../lib/shopGuestSession.js"
   import { loadGuestProfile } from "../lib/shopGuestProfile.js"
   import { clearPaymentSession } from "../lib/tbankPayment.js"
   import { clearPendingOrder } from "../lib/codeblackPendingOrder.js"
@@ -26,6 +26,7 @@
   let checkingPaid = $state(false)
   let emailSubmitting = $state(false)
   let prefillEmail = $state("")
+  let reconnectToken = $state("")
 
   /** После успешной оплаты: финализировать сессию, но остаться на экране с email-блоком. */
   async function prepareSuccessScreen() {
@@ -42,6 +43,7 @@
     }
     clearPendingOrder()
     clearGuestOrderSession()
+    waitingForBank = false
     status = "ok"
     return true
   }
@@ -73,7 +75,12 @@
   async function handleEmailSubmit({ email, marketing_consent }) {
     emailSubmitting = true
     try {
-      await submitOrderEmail(api, { orderId, email, marketing_consent })
+      await submitOrderEmail(api, {
+        orderId,
+        email,
+        marketing_consent,
+        reconnect_token: reconnectToken || undefined
+      })
       err = null
       await new Promise((r) => setTimeout(r, 800))
       push(`/order/${orderId}`)
@@ -101,6 +108,7 @@
       return
     }
 
+    reconnectToken = guestReconnectToken() || ""
     const profile = loadGuestProfile()
     if (profile?.email) {
       prefillEmail = profile.email

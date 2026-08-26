@@ -26,9 +26,31 @@ module Shop
 
         private
 
+        # Канон как OrdersController: session customer / pending order / reconnect_token
         def order_visible_to_session_customer?(order)
-          customer_id = Shop::CustomerSession.customer_id(session, @shop_tenant.id)
-          order.customer_id.nil? || order.customer_id == customer_id
+          cid = Shop::CustomerSession.customer_id(session, @shop_tenant.id)
+          if cid.present? && order.customer_id.present? && order.customer_id.to_s == cid.to_s
+            return true
+          end
+
+          pending_id = Shop::PendingOrderSession.order_id(session, @shop_tenant.id)
+          if pending_id.present? && pending_id.to_s == order.id.to_s
+            Shop::CustomerSession.set_customer_id!(session, @shop_tenant.id, order.customer_id) if order.customer_id.present?
+            return true
+          end
+
+          token = params[:reconnect_token].presence
+          if token.present?
+            rebound = Shop::GuestOrderReconnect.bind!(
+              session,
+              tenant_id: @shop_tenant.id,
+              order_id: order.id,
+              token: token
+            )
+            return rebound.present?
+          end
+
+          false
         end
       end
     end

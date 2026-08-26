@@ -77,7 +77,7 @@ PWA / mobile витрина. Tenant: `@shop_tenant` из `tenant_id` query ил�
 | POST | `orders/:order_id/email` | `::Orders::EmailService` | #71 post-pay optional email; **без OTP**; CRM job только при `marketing_consent` |
 
 **Edge:** stale `accepted` в active → блок оплаты / скрытые повторы (#35, #42). `abandon` ≠ `cancel`.  
-**#71:** email не гейтит оплату; кассовый ОФД независим; `SendOrderReceiptEmailJob` / `SyncContactToCrmJob` после `OrderEmail` create; bounce `POST /callbacks/email/bounce`.
+**#71:** email не гейтит оплату; кассовый ОФД независим; `SendOrderReceiptEmailJob` / `SyncContactToCrmJob` после `OrderEmail` create; bounce `POST /callbacks/email/bounce` + HMAC `EMAIL_BOUNCE_WEBHOOK_SECRET` (или `CALLBACK_SHARED_SECRET`), header `X-Webhook-Signature`.
 
 **Tests:** `active_orders_test.rb` · `active_orders_receipt_test.rb` · `orders_controller_test.rb` · `orders_email_test.rb` (#71)
 

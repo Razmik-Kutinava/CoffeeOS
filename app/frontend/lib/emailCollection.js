@@ -18,7 +18,7 @@ export function getEmailValidationError(email) {
 
 export async function submitOrderEmail(
   api,
-  { orderId, email, marketing_consent }
+  { orderId, email, marketing_consent, reconnect_token }
 ) {
   if (!orderId) {
     throw new Error("Order ID is required")
@@ -28,8 +28,11 @@ export async function submitOrderEmail(
     email: email && email.trim() ? email.trim().toLowerCase() : "",
     marketing_consent: !!marketing_consent
   }
+  if (reconnect_token) {
+    payload.reconnect_token = reconnect_token
+  }
 
-  const response = await api(`/shop/api/orders/${orderId}/email`, {
+  const response = await api(`/orders/${orderId}/email`, {
     method: "POST",
     body: JSON.stringify(payload)
   })

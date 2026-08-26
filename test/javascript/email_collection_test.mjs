@@ -80,6 +80,12 @@ describe("#71 PaymentResult success shows email block (S4/S6)", () => {
     assert.match(src, /status === ["']ok["'][\s\S]*OrderSuccessEmailBlock/)
   })
 
+  it("prepareSuccessScreen clears waitingForBank before email block", () => {
+    const src = readFront("routes/PaymentResult.svelte")
+    assert.match(src, /waitingForBank\s*=\s*false/)
+    assert.match(src, /prepareSuccessScreen/)
+  })
+
   it("ok / ok_sbp / success stay on success UI path", () => {
     const src = readFront("routes/PaymentResult.svelte")
     assert.match(src, /ok_sbp/)
@@ -136,7 +142,7 @@ describe("#71 OrderSuccessEmailBlock UX (S5/S7/S18)", () => {
       email: "A@B.com",
       marketing_consent: true
     })
-    assert.equal(url, "/shop/api/orders/ord-1/email")
+    assert.equal(url, "/orders/ord-1/email")
     assert.equal(body.email, "a@b.com")
     assert.equal(body.marketing_consent, true)
     assert.equal(res.success, true)
