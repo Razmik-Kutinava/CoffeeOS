@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-26 (#71 SPEC)  
+**Дата:** 2026-08-26 (#71 GREEN)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #71 SPEC | RED (Minitest + node:test) |
+| #71 GREEN `31cf0e21` | /regress |
 
-**last_done:** #71 intake `0aed04f8` + SPEC todo  
-**next_step:** RED — runnable тесты email-after-pay
+**last_done:** #71 GREEN · RED `0eeaea77` · Entire attach pending (transcript not found CLI)  
+**next_step:** /regress
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

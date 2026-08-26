@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-26 (#71 SPEC)  
+**Дата:** 2026-08-26 (#71 GREEN)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #71 SPEC готово | RED |
+| #71 GREEN `31cf0e21` | /regress |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,13 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-26 — #71 Email after pay GREEN slice 1
+
+- RED `0eeaea77` · GREEN `31cf0e21`: PaymentResult показывает email-блок; `::Orders::EmailService`; Checkout без «Имя»
+- Tests: JS 12/0 · Rails orders_email 6/0
+- Entire: attach CLI transcript-not-found → pending /review
+- Next: /regress
 
 ### Сессия 2026-08-26 — #71 Email after pay (intake+SPEC)
 
