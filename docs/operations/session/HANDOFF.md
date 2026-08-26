@@ -9,8 +9,8 @@
 |--------|--------|
 | #69 regress PASS · fix profile_ui_contract | /review + push CI |
 
-**last_done:** #69 PWA ЛК GREEN slice 1 (hub, settings, about, receipt, logout API)  
-**next_step:** REVIEW #69 · push CI · Fly MCP Point A после deploy
+**last_done:** #69 regress local PASS (Ruby 24/0 · Node 6/0)  
+**next_step:** /review #69 · push CI · Fly MCP Point A после deploy
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
