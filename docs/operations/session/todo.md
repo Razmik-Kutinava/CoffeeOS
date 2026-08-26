@@ -2,7 +2,7 @@
 
 | last_done | current_state | next_step |
 |-----------|---------------|-----------|
-| /regress PASS | JS 19/0 · Rails 6/0 | /review |
+| /review local+push | Entire 01M0YNQZGQSNJ5Z6XSNGHGHHZB | CI green → deploy апрув |
 
 **CBR:** #70  
 **ТЗ:** [`customer_tasks/Связь через Telegram-бота поддержки в ЛК.md`](../milestones/veha_2/requirements/customer_tasks/Связь%20через%20Telegram-бота%20поддержки%20в%20ЛК.md)  
@@ -39,7 +39,7 @@
 - [x] RED
 - [x] GREEN
 - [x] /regress
-- [ ] REVIEW
+- [x] REVIEW
 
 ## Файлы (ожидаемо)
 

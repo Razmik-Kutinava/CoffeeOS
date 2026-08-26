@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-26 — #70 REVIEW: Telegram bot support ЛК
+
+- Bugbot fix: support URL ≠ product `VITE_SHOP_TELEGRAM_URL` (`f2cfceb2`)
+- Security: #70 PASS · Entire `01M0YNQZGQSNJ5Z6XSNGHGHHZB`
+- Next: CI green · deploy апрув · Fly MCP
+
 ## 2026-08-26 — #70 /regress PASS (Telegram bot support ЛК)
 
 - JS 19/0 · Rails LK 6/0 · GREEN `7cfc3736` · next /review

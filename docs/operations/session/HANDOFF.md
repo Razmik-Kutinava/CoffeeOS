@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-26 (#70 regress PASS)  
+**Дата:** 2026-08-26 (#70 REVIEW)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #70 /regress PASS | /review |
+| #70 push/CI | CI green → deploy апрув |
 
-**last_done:** #70 GREEN `7cfc3736` + regress JS 19/0 · Rails 6/0  
-**next_step:** /review (Entire attach · bugbot · security · push)
+**last_done:** #70 REVIEW · bugbot fix env · Entire `01M0YNQZGQSNJ5Z6XSNGHGHHZB` на `f2cfceb2`  
+**next_step:** CI green · deploy только апрув · Fly MCP Point A
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
