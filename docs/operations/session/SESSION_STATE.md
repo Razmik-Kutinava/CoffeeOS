@@ -7,7 +7,7 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| #69 CI fix Profile.svelte UTF-8 | push CI · ждём green |
+| #69 CI green run 32953148661 | deploy — апрув · Fly MCP |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

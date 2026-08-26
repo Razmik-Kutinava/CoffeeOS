@@ -11,6 +11,10 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-26 — CI green: #69 UTF-8 fix [32953148661](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/32953148661)
+
+- Commit `4b0733cb` · all jobs pass (test, lint, scan, system-test)
+
 ## 2026-08-26 — fix: #69 Profile.svelte UTF-8 (CI mojibake после rebase)
 
 - Восстановлена кириллица («повторить», «История заказов» и др.) — grep-тест `pwa_personal_account_lk_test.rb`

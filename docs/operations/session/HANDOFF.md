@@ -7,10 +7,10 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| #69 CI fix Profile UTF-8 (rebase mojibake) | CI green → deploy апрув |
+| #69 CI green | deploy — апрув · Fly MCP |
 
-**last_done:** fix Profile.svelte кириллица после rebase Out-File  
-**next_step:** CI green · Fly MCP после deploy
+**last_done:** fix Profile UTF-8 · CI [32953148661](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/32953148661) green  
+**next_step:** deploy только апрув · Fly MCP Point A
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
