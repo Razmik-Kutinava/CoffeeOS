@@ -36,6 +36,7 @@ module Shop
 
       def destroy
         Shop::CustomerSession.clear!(session, @shop_tenant.id)
+        Shop::PendingOrderSession.clear!(session, @shop_tenant.id)
         token = params[:refresh_token].to_s.strip
         if token.present?
           ms = MobileSession.find_by(refresh_token: token)

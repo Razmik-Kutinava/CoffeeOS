@@ -57,6 +57,7 @@ class Shop::PwaPersonalAccountLkTest < ActiveSupport::TestCase
     routes = File.read(Rails.root.join("config/routes.rb"))
     assert_includes src, "def destroy"
     assert_includes src, "CustomerSession.clear!"
+    assert_includes src, "PendingOrderSession.clear!"
     assert_includes routes, 'delete "session"'
   end
 end

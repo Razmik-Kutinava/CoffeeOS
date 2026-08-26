@@ -76,4 +76,43 @@ class Shop::Api::PwaLkApiTest < ActionDispatch::IntegrationTest
       assert_equal false, ms.is_active
     end
   end
+
+  test "DELETE session clears pending order so show does not re-bind customer" do
+    open_session do |sess|
+      sess.post "/shop/api/cart/add",
+        headers: shop_tenant_headers(@tenant.id),
+        params: { product_id: @product.id, quantity: 1, selected_modifiers: [] },
+        as: :json
+      verify_shop_email!(tenant_id: @tenant.id, email: @email, session: sess)
+
+      sess.post "/shop/api/orders",
+        headers: shop_tenant_headers(@tenant.id),
+        params: shop_order_params(email: @email, name: "LK Guest", payment_method: "mock"),
+        as: :json
+      assert_equal 200, sess.response.status, sess.response.body
+      order_id = sess.response.parsed_body["order_id"]
+
+      refresh_token = sess.response.parsed_body["refresh_token"] ||
+        MobileSession.where(customer_id: MobileCustomer.find_by!(email: @email).id).order(created_at: :desc).first&.refresh_token
+      refresh_token ||= begin
+        verify_shop_email!(tenant_id: @tenant.id, email: @email, session: sess)
+        sess.response.parsed_body["refresh_token"]
+      end
+
+      sess.delete "/shop/api/session",
+        headers: shop_tenant_headers(@tenant.id),
+        params: { refresh_token: refresh_token },
+        as: :json
+      assert_equal 200, sess.response.status
+
+      sess.get "/shop/api/profile", headers: shop_tenant_headers(@tenant.id), as: :json
+      assert_equal 401, sess.response.status
+
+      sess.get "/shop/api/orders/#{order_id}", headers: shop_tenant_headers(@tenant.id), as: :json
+      assert_equal 404, sess.response.status
+
+      sess.get "/shop/api/profile", headers: shop_tenant_headers(@tenant.id), as: :json
+      assert_equal 401, sess.response.status
+    end
+  end
 end

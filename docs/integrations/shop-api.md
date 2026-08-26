@@ -22,7 +22,7 @@ PWA / mobile витрина. Tenant: `@shop_tenant` из `tenant_id` query ил�
 | Method | Path | Service | Keys / response |
 |--------|------|---------|-----------------|
 | POST | `session/refresh` | `Shop::SessionRefresh` | `{ refresh_token }` → новый token, profile; 401 ротация fail |
-| DELETE | `session` | `CustomerSession.clear!` | logout ЛК (#69); `{ ok, logged_out }`; optional `{ refresh_token }` → deactivate `mobile_sessions` |
+| DELETE | `session` | `CustomerSession.clear!` + `PendingOrderSession.clear!` | logout ЛК (#69); `{ ok, logged_out }`; optional `{ refresh_token }` → deactivate `mobile_sessions` |
 | POST | `session/reconnect` | `Shop::GuestOrderReconnect` | `order_id`, `reconnect_token` → bind guest order |
 | POST | `email_otp/send\|verify` | `Shop::EmailOtp` | checkout email verify |
 | GET | `email_otp/status` | — | cooldown |

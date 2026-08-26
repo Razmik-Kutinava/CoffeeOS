@@ -31,7 +31,8 @@
 - [x] RED (slice 2: runtime API logout/history)
 - [x] GREEN (slice 1 + slice 2 logged_out contract)
 - [x] /regress local PASS
-- [ ] REVIEW / Fly MCP Point A
+- [x] REVIEW local + subagents (logout pending fix)
+- [ ] CI green post-push
 
 ## Файлы (hot-path)
 
