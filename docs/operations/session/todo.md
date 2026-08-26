@@ -2,7 +2,7 @@
 
 | last_done | current_state | next_step |
 |-----------|---------------|-----------|
-| GREEN unified Telegram URL | JS 13/0 · LK tests | /regress |
+| /regress PASS | JS 19/0 · Rails 6/0 | /review |
 
 **CBR:** #70  
 **ТЗ:** [`customer_tasks/Связь через Telegram-бота поддержки в ЛК.md`](../milestones/veha_2/requirements/customer_tasks/Связь%20через%20Telegram-бота%20поддержки%20в%20ЛК.md)  
@@ -38,7 +38,7 @@
 - [x] PHASE 1 SPEC
 - [x] RED
 - [x] GREEN
-- [ ] /regress
+- [x] /regress
 - [ ] REVIEW
 
 ## Файлы (ожидаемо)
@@ -83,4 +83,4 @@
 - [ ] S8–S9 mobile/desktop deep link (ручное + MCP)
 - [x] S10 нет context params в URL
 - [x] S11 один URL обе точки
-- [ ] S12 регресс ЛК (/regress)
+- [x] S12 регресс ЛК (/regress)

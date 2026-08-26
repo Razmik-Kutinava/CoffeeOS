@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-26 (#70 intake+SPEC)  
+**Дата:** 2026-08-26 (#70 regress PASS)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #70 Telegram bot support ЛК | RED — единый URL |
+| #70 /regress PASS | /review |
 
-**last_done:** #70 intake + SPEC (gap: ContactSupportSheet URL empty)  
-**next_step:** RED `telegram_support_test` + единый URL из обеих точек ЛК
+**last_done:** #70 GREEN `7cfc3736` + regress JS 19/0 · Rails 6/0  
+**next_step:** /review (Entire attach · bugbot · security · push)
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

@@ -11,6 +11,10 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-26 — #70 /regress PASS (Telegram bot support ЛК)
+
+- JS 19/0 · Rails LK 6/0 · GREEN `7cfc3736` · next /review
+
 ## 2026-08-26 — #70 intake+SPEC: Telegram bot support в ЛК
 
 - Канон ТЗ + artifacts + CBR #70; gap: единый URL (Header OK, ЛК `shopSupportTelegramUrl` empty)
