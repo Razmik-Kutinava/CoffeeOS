@@ -684,14 +684,6 @@
       </button>
     </div>
   {:else}
-    <label class="mb-3 block">
-      <span class="mb-1 block text-sm text-[#a0a0a0]">Имя</span>
-      <input
-        bind:value={name}
-        class="w-full rounded-lg border border-[#3a3a3a] bg-[#2a2a2a] px-3 py-2"
-        autocomplete="name"
-      />
-    </label>
     {#if otpNotice}
       <p class="mb-3 text-sm text-green-400" role="status">{otpNotice}</p>
     {/if}

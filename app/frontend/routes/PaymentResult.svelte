@@ -27,11 +27,23 @@
   let emailSubmitting = $state(false)
   let prefillEmail = $state("")
 
-  async function settleSuccess() {
-    await pollSbpPaymentStatus(api, { orderId })
+  /** После успешной оплаты: финализировать сессию, но остаться на экране с email-блоком. */
+  async function prepareSuccessScreen() {
+    try {
+      await pollSbpPaymentStatus(api, { orderId })
+    } catch (e) {
+      if (e?.kind === "sbp_timeout" || e?.kind === "sbp_terminal") {
+        message = e.message || SBP_INCOMPLETE_MESSAGE
+        err = null
+        status = "fail"
+        return false
+      }
+      throw e
+    }
     clearPendingOrder()
     clearGuestOrderSession()
-    push(`/order/${orderId}`)
+    status = "ok"
+    return true
   }
 
   async function onIPaid() {
@@ -41,7 +53,8 @@
     try {
       const st = await checkOrderStatus(api, { orderId })
       if (st === "CONFIRMED") {
-        await settleSuccess()
+        const ok = await prepareSuccessScreen()
+        if (!ok) return
         return
       }
       if (st === "REJECTED" || st === "CANCELED") {
@@ -103,8 +116,10 @@
         return
       }
 
-      if (isSbpReturnSuccessStatus(status)) {
-        await settleSuccess()
+      // success / ok / ok_sbp — показать email-блок, не редиректить сразу
+      if (status === "ok" || status === "ok_sbp" || isSbpReturnSuccessStatus(status)) {
+        await prepareSuccessScreen()
+        loading = false
         return
       }
 

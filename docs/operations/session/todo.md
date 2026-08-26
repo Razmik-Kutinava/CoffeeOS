@@ -2,7 +2,7 @@
 
 | last_done | current_state | next_step |
 |-----------|---------------|-----------|
-| PHASE 0 intake `0aed04f8` | SPEC готов | RED — runnable Minitest + node:test |
+| GREEN slice 1 | тесты #71 green | /regress |
 
 **CBR:** #71  
 **ТЗ:** [`customer_tasks/Email-сбор после оплаты (Callcheck-флоу).md`](../milestones/veha_2/requirements/customer_tasks/Email-сбор%20после%20оплаты%20(Callcheck-флоу).md)  
@@ -44,8 +44,8 @@
 
 - [x] PHASE 0 intake
 - [x] PHASE 1 SPEC
-- [ ] RED
-- [ ] GREEN
+- [x] RED `0eeaea77`
+- [x] GREEN (slice 1: PaymentResult + `::Orders::EmailService` + Checkout без имени + tests)
 - [ ] /regress
 - [ ] REVIEW
 
@@ -83,23 +83,23 @@
 
 ## Subtasks (трекер)
 
-- [ ] S1 Checkout: нет email/имя/OTP-гейта; pay без email
-- [ ] S2 Payment flow без email-ошибки
-- [ ] S3 save_card toggle необязателен
-- [ ] S4 Email-блок на success + «Чек сформирован»
-- [ ] S5 Marketing checkbox
-- [ ] S6 Неблокирующий skip
-- [ ] S7 Inline validate без сети
-- [ ] S8 API save без OTP
-- [ ] S9 CRM только при consent
-- [ ] S10 Async receipt job
-- [ ] S11 Bounce → invalid
-- [ ] S12 Prefill
-- [ ] S13 Change/clear
-- [ ] S14 Idempotent POST
-- [ ] S15 ОФД независим
-- [ ] S16 FE tests (node:test)
-- [ ] S17 BE tests (Minitest)
-- [ ] S18 UX copy
-- [ ] S19 Full TDD run
+- [x] S1 Checkout: нет email/имя/OTP-гейта; pay без email
+- [x] S2 Payment flow без email-ошибки (canPay = phone)
+- [x] S3 save_card toggle необязателен
+- [x] S4 Email-блок на success + «Чек сформирован»
+- [x] S5 Marketing checkbox
+- [x] S6 Неблокирующий skip
+- [x] S7 Inline validate без сети
+- [x] S8 API save без OTP (`::Orders::EmailService`)
+- [x] S9 CRM только при consent
+- [x] S10 Async receipt job
+- [x] S11 Bounce → invalid
+- [ ] S12 Prefill (есть loadGuestProfile — добить в regress/MCP)
+- [x] S13 Change/clear (UI input)
+- [x] S14 Idempotent POST
+- [ ] S15 ОФД независим (не ломали — smoke в regress)
+- [x] S16 FE tests (node:test)
+- [x] S17 BE tests (Minitest)
+- [x] S18 UX copy
+- [ ] S19 Full TDD run → /regress
 - [ ] S20 Lint (зона)
