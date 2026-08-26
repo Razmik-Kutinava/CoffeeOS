@@ -7,10 +7,10 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| #71 REVIEW push/CI | CI green → deploy апрув |
+| #71 CI green 32971396113 | deploy — апрув · Fly MCP |
 
-**last_done:** #71 review fixes `94f36822` · bugbot+security  
-**next_step:** CI green · deploy только апрув · Fly MCP Point A
+**last_done:** #71 REVIEW · CI [32971396113](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/32971396113) green  
+**next_step:** deploy только апрув · Fly MCP Point A · ENV `EMAIL_BOUNCE_WEBHOOK_SECRET`
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

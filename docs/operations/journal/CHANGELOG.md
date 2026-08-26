@@ -15,7 +15,8 @@
 
 - Bugbot+security fixes `94f36822` (API path, waitingForBank, bounce HMAC, visibility)
 - Entire attach CLI fail (transcript) — backfill
-- push → CI · deploy апрув · Fly MCP Point A
+- CI [32971396113](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/32971396113) **green** · deploy апрув · Fly MCP Point A
+- Prod: set `EMAIL_BOUNCE_WEBHOOK_SECRET` (or `CALLBACK_SHARED_SECRET`)
 
 ## 2026-08-26 — #71 /regress PASS (Email after pay)
 
