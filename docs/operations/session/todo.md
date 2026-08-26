@@ -2,7 +2,7 @@
 
 | last_done | current_state | next_step |
 |-----------|---------------|-----------|
-| Fly v458 MCP PARTIAL | deploy+MCP done | опц. live-pay B5/B6 |
+| Fly v458 MCP PASS (no live pay) | D1–D5 + A3* done | опц. B5/B6 live-pay |
 
 **CBR:** #71  
 **ТЗ:** [`customer_tasks/Email-сбор после оплаты (Callcheck-флоу).md`](../milestones/veha_2/requirements/customer_tasks/Email-сбор%20после%20оплаты%20(Callcheck-флоу).md)  

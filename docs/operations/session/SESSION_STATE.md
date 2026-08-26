@@ -7,7 +7,7 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| Fly v458 MCP done | #71 live-pay опц. · апрув #69/#70 |
+| Fly v458 · #71 PASS без live pay | опц. B5/B6 live-pay |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,13 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-26 — #71 MCP API догон (без live pay)
+
+- D1 HTTP 200 + reconnect_token + `tenant_id` query · D2 404 · D4 HMAC bounce → `bounced`
+- A3: `save_card` в Fly JS bundle; UI после Callcheck
+- D5: EmailService не трогает FiscalReceipt; Point A fiscal_receipts=0 (demo)
+- Вердикт: **PASS (без live pay)**; B5/B6 SKIP
 
 ### Сессия 2026-08-26 — Deploy v458 + MCP #69/#70/#71
 

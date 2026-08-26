@@ -7,10 +7,10 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| Fly **v458** · MCP пачка | #70 PASS · #69 PASS · #71 PARTIAL (live pay SKIP) |
+| Fly **v458** · MCP пачка | #70 PASS · #69 PASS · #71 **PASS** (без live pay; B5/B6 SKIP) |
 
-**last_done:** deploy v458 + MCP Point A #69/#70/#71  
-**next_step:** опц. короткий live-pay для #71 B5/B6 + bounce HMAC D4; апрув заказчику по #69/#70
+**last_done:** #71 API догон D1/D2/D4/D5 + A3 bundle на v458  
+**next_step:** опц. live-pay B5/B6; апрув заказчику #69/#70/#71 (без live pay)
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -25,7 +25,7 @@
 |-----|---------|----------|
 | #70 Telegram support ЛК | **PASS** | `artifacts/telegram_bot_support_lk/mcp/fly_v458_2026-08-26/` |
 | #69 PWA ЛК | **PASS** | `artifacts/pwa_personal_account_lk/mcp/fly_v458_2026-08-26/` |
-| #71 Email after pay | **PARTIAL** | `artifacts/email_collection_after_payment/mcp/fly_v458_2026-08-26/` |
+| #71 Email after pay | **PASS** (без live pay) | `artifacts/email_collection_after_payment/mcp/fly_v458_2026-08-26/` |
 
 ### #71 Email-сбор после оплаты / Callcheck (2026-08-26)
 

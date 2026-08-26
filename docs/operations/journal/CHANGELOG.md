@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-26 — #71 MCP API догон (без live pay) → PASS
+
+- D1 `POST …/email?tenant_id=` + API key + reconnect_token → 200
+- D2 без token → 404; D4 HMAC bounce → `order_emails.status=bounced`
+- A3 save_card в Fly bundle; D5 EmailService ≠ FiscalReceipt
+- Артефакт: `email_collection_after_payment/mcp/fly_v458_2026-08-26/MCP_RESULT.md`
+
 ## 2026-08-26 — Fly v458 deploy + MCP #69/#70/#71
 
 - Deploy coffeeos **v458** (v457 release_command ConcurrentMigrationError после migrate `order_emails`; retry OK)
