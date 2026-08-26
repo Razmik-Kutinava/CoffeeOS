@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-26 — #69 REVIEW: logout pending fix + push
+
+- Security review: `PendingOrderSession.clear!` on DELETE session
+- Commits b243d42b..99a8dd1e
+
 ## 2026-08-26 — #69 regress local PASS
 
 - Зона shop/LK: Ruby 24 runs 0 fail · Node 6/0

@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-26 (#69 regress PASS local)  
+**Дата:** 2026-08-26 (#69 REVIEW push)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #69 regress PASS · fix profile_ui_contract | /review + push CI |
+| #69 REVIEW · logout pending fix · push | deploy — апрув · Fly MCP |
 
-**last_done:** #69 regress local PASS (Ruby 24/0 · Node 6/0)  
-**next_step:** /review #69 · push CI · Fly MCP Point A после deploy
+**last_done:** #69 REVIEW fix logout pending · commit `99a8dd1e`  
+**next_step:** CI green → deploy только апрув · Fly MCP Point A
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -18,56 +18,6 @@
 ---
 
 ## Текущий месяц (2026-08)
-
-### TASK-PERSONAL-CABINET: Личный кабинет с историей заказов и профилем (2026-08-19)
-
-| Что | Статус |
-|-----|--------|
-| PHASE 0: Intake | **`[x]`** |
-| PHASE 1: SPEC | **`[x]`** requirements, API contracts |
-| PHASE 2: RED/GREEN | **`[x]`** 58 тестов, 2 компонента, маршруты |
-| PHASE 3: BUILD VERIFY | **`[x]`** npm audit fix, vite build, docs |
-| CI: Build Green | **`[x]`** 3901 modules, 0 errors |
-| CI: Security | **`[x]`** 4 vuln fixed → 0 vuln |
-| Commits | **`[x]`** 2 commits formatted |
-| Documentation | **`[x]`** PHASE-3-REVIEW-READY.md + HANDOFF |
-| Ready for Deployment | **`[x]`** All checks passed |
-
-**ТЗ:** [`requirements/customer_tasks/TASK-PERSONAL-CABINET.md`](../milestones/veha_2/requirements/customer_tasks/TASK-PERSONAL-CABINET.md)  
-**Файлы:** 
-- Created: PersonalAccount.svelte (400 строк), About.svelte (300 строк)
-- Modified: App.svelte (+2 маршрута), Profile.svelte (+25 строк: toggle), PersonalAccount.svelte (+13 строк: repeat)
-- Tests: personal_cabinet_test.mjs (58 RED tests)
-
-**AC Реализовано:** ✅ 3 из 3 критических функций
-1. Notification Toggle — PATCH /shop/api/profile с auto-revert
-2. Repeat Order — createRepeatInlineOrder integration
-3. Order Detail — использование OrderStatus.svelte
-
-**CI Status:** ✅ GREEN
-- `npm install` → 143 packages, 0 vulnerabilities after audit fix
-- `npx vite build` → ✅ SUCCESS (3901 modules, 5.28s)
-- Build size: 131.76 KB main (43.53 KB gzip)
-- No TypeScript errors, no breaking changes
-
-**Ready to:** DEPLOY
-
----
-
-### TASK-TELEGRAM-SUPPORT: Связь через Telegram-бота поддержки в ЛК (2026-08-19)
-
-| Что | Статус |
-|-----|--------|
-| PHASE 0: Intake | **`[x]`** `72c70f5` |
-| PHASE 1: SPEC | **`[x]`** todo.md, файлы, шапка |
-| RED | **`[x]`** `db01076` (18 pass, 13 todo) |
-| GREEN | **`[x]`** `dc69366` (19 pass, 12 todo) |
-| PHASE 3: REVIEW | `[ ]` local · bugbot · security-review · push CI |
-
-**ТЗ:** [`customer_tasks/TASK-TELEGRAM-SUPPORT.md`](../milestones/veha_2/requirements/customer_tasks/TASK-TELEGRAM-SUPPORT.md)  
-**Файлы:** SupportContactSheet.svelte · Header (+icon) · Profile (+button) · supportConfig.js · deepLink.js · tests  
-**AC:** ✅ 12 критериев Acceptance, 12/12 Subtask TDD  
-**Готово к:** PHASE 3 REVIEW
 
 ### Rules/meta: уменьшение токенов always-подсказок (2026-08-18)
 

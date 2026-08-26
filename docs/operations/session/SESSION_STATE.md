@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-26 (#69 regress PASS local)  
+**Дата:** 2026-08-26 (#69 REVIEW push)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #69 regress Ruby 24/0 Node 6/0 | /review + push CI |
+| #69 REVIEW fix logout · push CI | deploy — апрув |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -24,19 +24,6 @@
 
 - Intake + SPEC + hub/settings/about/receipt + logout API
 - Local: Ruby 6/0 · Node 6/0 по зоне #69
-
-### Сессия 2026-08-19 (TASK-TELEGRAM-SUPPORT PHASE 0–2 BUILD)
-
-- PHASE 0: Intake — создан файл `customer_tasks/TASK-TELEGRAM-SUPPORT.md`
-- PHASE 1: SPEC — анализ, выделены 5 основных + 2 вспомогательных пути
-- PHASE 2 RED: `db01076` — тесты (18 pass config/utils, 13 fail todo)
-- PHASE 2 GREEN: `dc69366` — SupportContactSheet, Header icon, Profile button, deepLink
-  - ✅ 19 pass (config, utils, deep link работают)
-  - ✅ Два entry points открывают одну шторку
-  - ✅ Telegram: `https://t.me/code_black_support_bot` без параметров
-  - ✅ Email: disabled/placeholder (future)
-  - ✅ Регрессия Header/Profile: не сломано
-- Готово к PHASE 3: REVIEW
 
 ### Сессия 2026-08-18 — rules: уменьшение токенов always-подсказок
 
