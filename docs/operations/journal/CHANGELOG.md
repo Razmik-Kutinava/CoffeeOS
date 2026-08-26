@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-26 — #69 PWA ЛК: intake + SPEC + GREEN slice 1
+
+- PHASE 0: `customer_tasks/Доработка личного кабинета (ЛК) в PWA.md` · артефакт `artifacts/pwa_personal_account_lk/mockup_lk_screens_2026-08-26.png`
+- Hub `#/profile`, settings `#/profile/settings`, `#/about`, `#/order/:id/receipt`; PLG placeholders; history inline; logout `DELETE /shop/api/session`
+- Tests: `pwa_personal_account_lk_test.rb` · `shop_personal_account_lk_test.mjs` PASS local
+
 ## 2026-08-19 — feat: TASK-TELEGRAM-SUPPORT PHASE 2 RED/GREEN (`db01076` + `dc69366`)
 
 - PHASE 2 RED `db01076`: тесты падают (18 pass config/utils, 13 todo)

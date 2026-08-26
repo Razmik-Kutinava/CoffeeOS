@@ -27,5 +27,20 @@ module Shop
       session[BUCKET_KEY] = bucket
       session[LEGACY_KEY] = cid
     end
+
+    def self.clear!(session, tenant_id)
+      tid = tenant_id.to_s
+      bucket = session[BUCKET_KEY]
+      return unless bucket.is_a?(Hash)
+
+      bucket = bucket.dup
+      bucket.delete(tid)
+      if bucket.empty?
+        session.delete(BUCKET_KEY)
+        session.delete(LEGACY_KEY)
+      else
+        session[BUCKET_KEY] = bucket
+      end
+    end
   end
 end

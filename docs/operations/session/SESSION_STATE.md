@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-19 (TASK-TELEGRAM-SUPPORT · PHASE 2: BUILD RED/GREEN ✅)  
-**Ветка:** `claude/client-task-understanding-9c9a23`
+**Дата:** 2026-08-26 (#69 PWA ЛК GREEN slice 1)  
+**Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| PHASE 2: BUILD завершена (RED + GREEN) | PHASE 3: REVIEW (local, bugbot, security-review, push CI) |
+| #69 ЛК GREEN local · tests PASS | REVIEW + push CI |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,11 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-26 — #69 PWA ЛК GREEN slice 1
+
+- Intake + SPEC + hub/settings/about/receipt + logout API
+- Local: Ruby 6/0 · Node 6/0 по зоне #69
 
 ### Сессия 2026-08-19 (TASK-TELEGRAM-SUPPORT PHASE 0–2 BUILD)
 

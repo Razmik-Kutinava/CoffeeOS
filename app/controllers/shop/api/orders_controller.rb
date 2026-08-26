@@ -123,8 +123,11 @@ module Shop
           orders = orders.limit(per_page).offset((page - 1) * per_page)
 
           render json: orders.map { |o|
+            first_item = o.order_items.first
             {
               id: o.id,
+              order_number: o.order_number,
+              title: first_item&.product_name.presence || "Заказ",
               status: o.status,
               total: o.final_amount.to_f,
               created_at: o.created_at.iso8601,

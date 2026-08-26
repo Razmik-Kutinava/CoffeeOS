@@ -1,126 +1,75 @@
-# todo — TASK-TELEGRAM-SUPPORT: Связь через Telegram-бота поддержки в ЛК
+﻿# todo тАФ #69 PWA ╨Ы╨Ъ (╨╗╨╕╤З╨╜╤Л╨╣ ╨║╨░╨▒╨╕╨╜╨╡╤В)
 
 | last_done | current_state | next_step |
 |-----------|---------------|-----------|
-| PHASE 0: Intake | PHASE 1: SPEC | PHASE 2: BUILD (RED) при намерении работать |
+| GREEN slice 1 #69 ╨Ы╨Ъ | hub/settings/about/receipt local PASS | REVIEW / Fly MCP ┬╖ subtask 30 UI polish |
 
-**CBR:** TASK-TELEGRAM-SUPPORT  
-**ТЗ:** [`customer_tasks/TASK-TELEGRAM-SUPPORT.md`](../milestones/veha_2/requirements/customer_tasks/TASK-TELEGRAM-SUPPORT.md)
+**CBR:** #69  
+**╨в╨Ч:** [`customer_tasks/╨Ф╨╛╤А╨░╨▒╨╛╤В╨║╨░ ╨╗╨╕╤З╨╜╨╛╨│╨╛ ╨║╨░╨▒╨╕╨╜╨╡╤В╨░ (╨Ы╨Ъ) ╨▓ PWA.md`](../milestones/veha_2/requirements/customer_tasks/╨Ф╨╛╤А╨░╨▒╨╛╤В╨║╨░%20╨╗╨╕╤З╨╜╨╛╨│╨╛%20╨║╨░╨▒╨╕╨╜╨╡╤В╨░%20(╨Ы╨Ъ)%20╨▓%20PWA.md)  
+**╨Р╤А╤В╨╡╤Д╨░╨║╤В╤Л:** [`artifacts/pwa_personal_account_lk/`](../milestones/veha_2/artifacts/pwa_personal_account_lk/)  
+**Point A:** `https://coffeeos.fly.dev/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789`  
+**╨б╨╡╤А╨╕╤П:** ╨╖╨░╨┤╨░╤З╨░ 1 ╨╕╨╖ ╤В╤А╤С╤Е (TG-support, ╨Ы╨Ъ, email-after-pay). ╨Э╨╡ ╨╗╨╛╨╝╨░╤В╤М #64тАУ#68 WebView, CartSheet, checkout, payments.
 
----
+## ╨ж╨╡╨╗╤М (1 ╨┐╤А╨╡╨┤╨╗╨╛╨╢╨╡╨╜╨╕╨╡)
 
-## Цель (1 предложение)
+╨Ч╨░╨▓╨╡╤А╤И╨╕╤В╤М ╤Б╤Ж╨╡╨╜╨░╤А╨╕╨╣ ╨Ы╨Ъ ╨▓ PWA ╨┐╨╛ ╨╝╨░╨║╨╡╤В╤Г: hub ╤Б ╨╕╤Б╤В╨╛╤А╨╕╨╡╨╣ ╨╖╨░╨║╨░╨╖╨╛╨▓, ╤Н╨║╤А╨░╨╜ ╨┤╨╡╤В╨░╨╗╨╡╨╣ (╨▒╨╡╨╖ ╨Ю╨д╨Ф), ╨╜╨░╤Б╤В╤А╨╛╨╣╨║╨╕/╨║╨╛╨╜╤В╨░╨║╤В╤Л, ┬л╨Ю ╨╜╨░╤Б┬╗, bottom sheet ┬л╨Э╨░╨┐╨╕╤Б╨░╤В╤М ╨╜╨░╨╝┬╗, logout тАФ ╨╜╨░ ╤Б╤Г╤Й╨╡╤Б╤В╨▓╤Г╤О╤Й╨╕╤Е shop API ╨▒╨╡╨╖ ╨╜╨╛╨▓╤Л╤Е ╨▓╨╜╨╡╤И╨╜╨╕╤Е ╨╕╨╜╤В╨╡╨│╤А╨░╤Ж╨╕╨╣.
 
-Добавить в личный кабинет PWA канал связи с поддержкой через Telegram-бота из двух точек входа (иконка чата в шапке ЛК и кнопка «Написать нам» в профиле), используя deep link без передачи пользовательских данных.
+## Acceptance (DoD) тАФ ╨║╨╗╤О╤З╨╡╨▓╨╛╨╡
 
----
+1. `#/profile` тАФ hub ╨Ы╨Ъ: ╤И╨░╨┐╨║╨░ (╨░╨▓╨░╤В╨░╤А, ╨╕╨╝╤П, chat), 2 PLG-placeholder, ╨╕╤Б╤В╨╛╤А╨╕╤П ╨╖╨░╨║╨░╨╖╨╛╨▓ ╤Б ┬л╨Я╨╛╨▓╤В╨╛╤А╨╕╤В╤М┬╗, empty/error states.
+2. `#/profile/settings` тАФ ╨╕╨╝╤П, ╤Г╨▓╨╡╨┤╨╛╨╝╨╗╨╡╨╜╨╕╤П (local prefs ╨┤╨╛ backend API), ╨║╨╛╨╜╤В╨░╨║╤В╤Л OTP, ┬л╨Ю ╨╜╨░╤Б┬╗, ┬л╨Э╨░╨┐╨╕╤Б╨░╤В╤М ╨╜╨░╨╝┬╗, ╨Т╨л╨е╨Ю╨Ф.
+3. `#/order/:id/receipt` тАФ ╨┤╨╡╤В╨░╨╗╨╕ ╨╖╨░╨║╨░╨╖╨░ ╨┐╨╛ UX-ref (items/total), stub ╨Ю╨дD-╤В╨╡╨║╤Б╤В, ╨║╨╜╨╛╨┐╨║╨░ ╨Я╨Ю╨Т╨в╨Ю╨а╨Ш╨в╨м ╨▒╨╡╨╖ ╨▒╨╕╨╖╨╜╨╡╤Б-╨╗╨╛╨│╨╕╨║╨╕.
+4. `#/about` тАФ ╨▓╨╡╤А╤Б╨╕╤П/build, copy, legal links ╨╕╨╖ config, footer.
+5. Bottom sheet email/TG тАФ config URLs, ╨╜╨╡ ╤Е╨░╤А╨┤╨║╨╛╨┤ ╨▓ ╨║╨╛╨╝╨┐╨╛╨╜╨╡╨╜╤В╨╡.
+6. `DELETE /shop/api/session` тАФ logout customer session (shop/api, ╨╜╨╡ auth/**).
+7. ╨С╨╡╨╖ ╨Ю╨дD API, PLG-╨▒╨╕╨╖╨╜╨╡╤Б-╨╗╨╛╨│╨╕╨║╨╕, subscription/referral, ╨┐╤А╨░╨▓╨╛╨║ checkout/payments.
 
-## Acceptance Criteria (12 пунктов)
+## ╨д╨░╨╖╤Л SBR
 
-- [ ] Иконка-чата на главном экране ЛК открывает bottom sheet с вариантами Email/Telegram
-- [ ] Кнопка «Написать нам» на экране профиля открывает такой же bottom sheet
-- [ ] Выбор Telegram из любой точки открывает `https://t.me/code_black_support_bot`
-- [ ] Telegram-ссылка не содержит пользовательских или заказных параметров
-- [ ] Встроенный Telegram Web App/iframe не используется
-- [ ] На мобильном устройстве deep link передается нативному Telegram при его наличии
-- [ ] На desktop проверено открытие Telegram Web в новой вкладке
-- [ ] Email-канал не реализуется в рамках этой задачи
-- [ ] Профиль пользователя продолжает работать без изменений
-- [ ] История заказов не затрагивается
-- [ ] Авторизация и logout не меняются
-- [ ] Регрессия: bottom sheet, header, profile работают корректно
+- [x] PHASE 0 intake
+- [x] PHASE 1 SPEC
+- [x] RED
+- [x] GREEN (slice 1: hub/settings/about/receipt/logout)
+- [ ] REVIEW / Fly MCP Point A
 
----
+## ╨д╨░╨╣╨╗╤Л (hot-path)
 
-## Файлы (ожидаемо) — 2–7 путей
+- `app/frontend/routes/Profile.svelte` тАФ hub ╨Ы╨Ъ (╨┐╨╡╤А╨╡╨┐╨╕╤Б╨░╤В╤М)
+- `app/frontend/routes/AccountSettings.svelte` тАФ **╨╜╨╛╨▓╤Л╨╣** settings
+- `app/frontend/routes/AboutUs.svelte` тАФ **╨╜╨╛╨▓╤Л╨╣** ┬л╨Ю ╨╜╨░╤Б┬╗
+- `app/frontend/routes/OrderReceipt.svelte` тАФ **╨╜╨╛╨▓╤Л╨╣** ╨┤╨╡╤В╨░╨╗╨╕ ╨╖╨░╨║╨░╨╖╨░
+- `app/frontend/lib/shopAboutConfig.js` тАФ **╨╜╨╛╨▓╤Л╨╣** legal/support/version config
+- `app/frontend/lib/shopPlgBlocks.js` тАФ **╨╜╨╛╨▓╤Л╨╣** PLG config interface
+- `app/frontend/lib/shopAccountOrders.js` тАФ **╨╜╨╛╨▓╤Л╨╣** fetch history helper
+- `app/frontend/components/PlgBlockSection.svelte` тАФ **╨╜╨╛╨▓╤Л╨╣**
+- `app/frontend/components/ContactSupportSheet.svelte` тАФ **╨╜╨╛╨▓╤Л╨╣**
+- `app/frontend/App.svelte` тАФ ╨╝╨░╤А╤И╤А╤Г╤В╤Л `/profile/settings`, `/about`, `/order/:id/receipt`
+- `app/controllers/shop/api/orders_controller.rb` тАФ `title`/`order_number` ╨▓ history JSON
+- `app/controllers/shop/api/session_controller.rb` тАФ `destroy` logout
+- `app/services/shop/customer_session.rb` тАФ `clear!`
+- `test/integration/shop/pwa_personal_account_lk_test.rb` тАФ **╨╜╨╛╨▓╤Л╨╣** grep/API contract
+- `test/javascript/shop_personal_account_lk_test.mjs` тАФ **╨╜╨╛╨▓╤Л╨╣** config/helpers
 
-### Основные
-1. **`app/frontend/components/Header.svelte`** — иконка-чата в шапке главного экрана ЛК + обработчик клика
-2. **`app/frontend/routes/Profile.svelte`** — кнопка «Написать нам» + обработчик клика
-3. **`app/frontend/components/SupportContactSheet.svelte`** — **новый** компонент bottom sheet с вариантами Email/Telegram
+### Blast-radius (+3)
 
-### Конфигурация & вспомогательные
-4. **`app/frontend/lib/config.js` или `constants.js`** — конфигурация URL поддержки `SUPPORT_TELEGRAM_BOT_URL`
-5. **`app/frontend/lib/deepLink.js` или `utils/deepLink.js`** — **новый** или расширить: утилита открытия deep link (без параметров пользователя)
+- `test/integration/shop/profile_ui_contract_test.rb` тАФ *╨┐╨╛╤З╨╡╨╝╤Г: ╨║╨╛╨╜╤В╨░╨║╤В╤Л ╨┐╨╡╤А╨╡╨╡╤Е╨░╨╗╨╕ ╨▓ AccountSettings*
+- `app/frontend/routes/Orders.svelte` тАФ *╨┐╨╛╤З╨╡╨╝╤Г: ╤Б╤В╨░╤А╤Л╨╣ `/orders` ╨╜╨╡ ╨┤╨╛╨╗╨╢╨╡╨╜ ╤А╨╡╨│╤А╨╡╤Б╤Б╨╜╤Г╤В╤М*
+- `docs/integrations/shop-api.md` тАФ *╨┐╨╛╤З╨╡╨╝╤Г: history fields + DELETE session*
 
-### Тесты
-6. **`test/javascript/telegram_support_test.mjs`** — **новый**: unit-тесты deep link, конфиг, компонент открытия
-7. **`test/integration/telegram_support_integration_test.mjs`** — **новый**: интеграционные тесты открытия шторки из Header и Profile
+## ╨Э╨╡ ╨╗╨╛╨╝╨░╤В╤М
 
----
+- Header ┬л╨Я╤А╨╛╤Д╨╕╨╗╤М тА║ ID┬╗ (B1.13-S1), CartSheet ╨║╨░╨╜╨╛╨╜, checkout autofill profile, OTP link email/phone merge
+- `#/order/:id` OrderStatus (╨░╨║╤В╨╕╨▓╨╜╤Л╨╣ ╨╖╨░╨║╨░╨╖) тАФ ╨╛╤В╨┤╨╡╨╗╤М╨╜╤Л╨╣ ╨╛╤В receipt
+- WebView #66тАУ#68, tenant RLS, payment/webhook ╨║╨╛╨╜╤В╤А╨░╨║╤В╤Л
 
-## Blast-radius (+1–2)
+## ╨Я╤А╨╛╨▓╨╡╤А╨║╨░
 
-- **`app/frontend/components/CartSheet.svelte` / другие Bottom Sheet компоненты** — *почему: необходимо изучить паттерн существующих шторок для единообразия UI/UX*
-- **`app/frontend/lib/stores/`** — *почему: может потребоваться store для состояния шторки поддержки (open/close)*
+- `bundle exec ruby -Itest test/integration/shop/pwa_personal_account_lk_test.rb test/integration/shop/profile_ui_contract_test.rb test/integration/shop/api/orders_controller_test.rb`
+- `node --test test/javascript/shop_personal_account_lk_test.mjs`
 
----
+Fly MCP Point A тАФ ╨┐╨╛╤Б╨╗╨╡ GREEN + deploy.
 
-## Не ломать
+## ╨Ю╤В╨║╤А╤Л╤В╤Л╨╡ ╨▓╨╛╨┐╤А╨╛╤Б╤Л (╨╜╨╡ ╨▒╨╗╨╛╨║╨╡╤А slice 1)
 
-- Header: иконки, логотип, навигация, мобильный/desktop layout
-- Profile: форма профиля, avatar, кнопки logout, выход, история заказов
-- Bottom Sheet паттерн: существующие шторки (CartSheet, PaymentMethodsSheet, OrderStatusSheet) продолжают работать
-- Авторизация: login/logout не меняются
-- Интеграция email (на будущее) — не реализуется, но структура допускает расширение
-
----
-
-## Проверка
-
-```bash
-# Юнит-тесты
-npm test test/javascript/telegram_support_test.mjs
-
-# Интеграционные тесты (если есть)
-npm test test/javascript/telegram_support_integration_test.mjs
-
-# Type check
-npx tsc --noEmit
-
-# Мобильный (ручной): Chrome DevTools, установленный Telegram + без Telegram
-# Desktop (ручной): Chrome, Firefox
-```
-
-**Ручная проверка:**
-- Мобильный браузер + установленный Telegram: deep link передается нативному клиенту
-- Мобильный браузер без Telegram: открывается Telegram Web
-- Desktop браузер: Telegram Web в новой вкладке
-- Проверить URL в DevTools — **без user_id, phone, order_id**
-
----
-
-## Риски / заметки
-
-- Deep link в браузере зависит от ОС и браузера — не гарантировать одинаковое поведение везде, но документировать
-- Конфигурация URL должна быть единой точкой — `SUPPORT_TELEGRAM_BOT_URL` в одном файле
-- Bottom Sheet должна закрываться по свайпу и по клику вне (паттерн, как в CartSheet)
-- Email вариант: оставить disabled или как визуальный элемент без обработчика (для будущей реализации)
-- Не трогать `shopWebView.js`, `shopWebViewLayout.js` (#67, #66) и прочие компоненты витрины
-
----
-
-## Фазы SBR
-
-- [x] PHASE 0: Intake — создан файл задачи в customer_tasks/
-- [x] PHASE 1: SPEC — анализ файлов, todo.md, шапка SESSION_STATE
-- [ ] PHASE 2: RED — написание тестов (падающие)
-- [ ] PHASE 2: GREEN — реализация + регрессия
-- [ ] PHASE 3: REVIEW — local тесты, bugbot, security-review, push CI, deploy
-
----
-
-## Subtask'и TDD (чек-лист)
-
-- [ ] **Subtask 1:** Подключить Telegram-ссылку через конфигурацию (SUPPORT_TELEGRAM_BOT_URL)
-- [ ] **Subtask 2:** Реализовать открытие шторки из иконки-чата в Header
-- [ ] **Subtask 3:** Реализовать Telegram-вариант в шторке главного экрана
-- [ ] **Subtask 4:** Сохранить email-вариант без реализации (disabled/placeholder)
-- [ ] **Subtask 5:** Реализовать открытие шторки из Profile кнопки «Написать нам»
-- [ ] **Subtask 6:** Реализовать Telegram-вариант в шторке Profile
-- [ ] **Subtask 7:** Исключить встроенный Telegram Web App / iframe
-- [ ] **Subtask 8:** Проверить мобильный deep link (с Telegram и без)
-- [ ] **Subtask 9:** Проверить desktop deep link
-- [ ] **Subtask 10:** Проверить отсутствие контекстных параметров в URL
-- [ ] **Subtask 11:** Проверить единообразие двух точек входа (шапка & профиль)
-- [ ] **Subtask 12:** Регрессионная проверка ЛК (профиль, заказы, logout)
+- ╨д╨╕╨╜╨░╨╗╤М╨╜╤Л╨╡ Google Docs URL, Telegram bot URL, legal entity тАФ placeholder ╨▓ `shopAboutConfig.js` + `VITE_*` env.
+- Backend API notification toggle тАФ interim `localStorage` ╨┤╨╛ ╨╛╤В╨┤╨╡╨╗╤М╨╜╨╛╨│╨╛ ╨║╨╛╨╜╤В╤А╨░╨║╤В╨░.

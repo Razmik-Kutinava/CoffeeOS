@@ -33,6 +33,16 @@ module Shop
       rescue Shop::SessionRefresh::Unauthorized
         render json: { error: "Unauthorized" }, status: :unauthorized
       end
+
+      def destroy
+        Shop::CustomerSession.clear!(session, @shop_tenant.id)
+        token = params[:refresh_token].to_s.strip
+        if token.present?
+          ms = MobileSession.find_by(refresh_token: token)
+          ms&.deactivate!
+        end
+        render json: { ok: true }
+      end
     end
   end
 end

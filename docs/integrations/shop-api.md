@@ -22,6 +22,7 @@ PWA / mobile витрина. Tenant: `@shop_tenant` из `tenant_id` query ил�
 | Method | Path | Service | Keys / response |
 |--------|------|---------|-----------------|
 | POST | `session/refresh` | `Shop::SessionRefresh` | `{ refresh_token }` → новый token, profile; 401 ротация fail |
+| DELETE | `session` | `CustomerSession.clear!` | logout ЛК (#69); optional `{ refresh_token }` → deactivate `mobile_sessions` |
 | POST | `session/reconnect` | `Shop::GuestOrderReconnect` | `order_id`, `reconnect_token` → bind guest order |
 | POST | `email_otp/send\|verify` | `Shop::EmailOtp` | checkout email verify |
 | GET | `email_otp/status` | — | cooldown |
@@ -68,7 +69,7 @@ PWA / mobile витрина. Tenant: `@shop_tenant` из `tenant_id` query ил�
 | POST | `orders` | `Shop::OrderCreator` | create + optional payment init |
 | GET | `orders/:id` | — | `reconnect_token` в JSON для Cable |
 | GET | `orders/active` | — | sticky sheet; receipt lines (#36) |
-| GET | `orders/history` | — | прошлые заказы |
+| GET | `orders/history` | — | `{ id, order_number, title, status, total, created_at, items_count }`; `?page=&per_page=` |
 | POST | `orders/:id/abandon` | `PaymentFailureJournal` | pending_payment только; clear pending session |
 | POST | `orders/:id/cancel` | `GuestOrderCancellationService` | refund via TbankAdapter (#40) |
 | POST | `orders/:id/finalize` | `TbankPaymentSync` | post-return sync; clear cart if accepted |

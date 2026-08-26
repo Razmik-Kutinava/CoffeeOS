@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-19 (TASK-TELEGRAM-SUPPORT · PHASE 2: GREEN ✅)  
-**Ветка:** `claude/client-task-understanding-9c9a23`
+**Дата:** 2026-08-26 (#69 PWA ЛК GREEN slice 1)  
+**Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| PHASE 2: BUILD RED/GREEN завершена | PHASE 3: REVIEW (тесты, bugbot, security, push, CI) |
+| #69 ЛК hub/settings/about/receipt GREEN local | REVIEW + push CI |
 
-**last_done:** RED `db01076` + GREEN `dc69366` · 5 файлов создано/изменено  
-**next_step:** PHASE 3 REVIEW (обязательны: local тесты, bugbot, security-review, push, CI)
+**last_done:** #69 PWA ЛК GREEN slice 1 (hub, settings, about, receipt, logout API)  
+**next_step:** REVIEW #69 · push CI · Fly MCP Point A после deploy
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
