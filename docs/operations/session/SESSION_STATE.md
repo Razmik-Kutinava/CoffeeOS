@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-26 (#69 REVIEW push)  
+**Дата:** 2026-08-26 (#70 intake+SPEC)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #69 CI green run 32953148661 | deploy — апрув · Fly MCP |
+| #70 SPEC done · gap LK URL | RED |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,12 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-26 — #70 Telegram bot support ЛК (intake+SPEC)
+
+- Канон ТЗ: `customer_tasks/Связь через Telegram-бота поддержки в ЛК.md` · CBR #70 · artifacts `telegram_bot_support_lk/`
+- Gap: Header/`supportConfig` OK (Cloud Code GREEN); ЛК `shopSupportTelegramUrl` default пустой → Subtask 11 open
+- todo: RED next
 
 ### Сессия 2026-08-26 — #69 regress local PASS
 

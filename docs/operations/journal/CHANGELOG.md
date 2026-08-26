@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-26 — #70 intake+SPEC: Telegram bot support в ЛК
+
+- Канон ТЗ + artifacts + CBR #70; gap: единый URL (Header OK, ЛК `shopSupportTelegramUrl` empty)
+- todo → RED next
+
 ## 2026-08-26 — CI green: #69 UTF-8 fix [32953148661](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/32953148661)
 
 - Commit `4b0733cb` · all jobs pass (test, lint, scan, system-test)

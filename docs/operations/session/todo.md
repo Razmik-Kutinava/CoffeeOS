@@ -1,78 +1,86 @@
-# todo — #69 PWA ЛК (личный кабинет)
+# todo — #70 Telegram bot support в ЛК
 
 | last_done | current_state | next_step |
 |-----------|---------------|-----------|
-| /regress #69 PASS local | Ruby 24/0 · Node 6/0 | /review |
+| intake + SPEC #70 | gap: два конфига URL | RED — тесты единого URL |
 
-**CBR:** #69  
-**ТЗ:** [`customer_tasks/Доработка личного кабинета (ЛК) в PWA.md`](../milestones/veha_2/requirements/customer_tasks/Доработка%20личного%20кабинета%20(ЛК)%20в%20PWA.md)  
-**Артефакты:** [`artifacts/pwa_personal_account_lk/`](../milestones/veha_2/artifacts/pwa_personal_account_lk/)  
+**CBR:** #70  
+**ТЗ:** [`customer_tasks/Связь через Telegram-бота поддержки в ЛК.md`](../milestones/veha_2/requirements/customer_tasks/Связь%20через%20Telegram-бота%20поддержки%20в%20ЛК.md)  
+**Артефакты:** [`artifacts/telegram_bot_support_lk/`](../milestones/veha_2/artifacts/telegram_bot_support_lk/)  
 **Point A:** `https://coffeeos.fly.dev/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789`  
-**Серия:** задача 1 из трёх (TG-support, ЛК, email-after-pay). Не ломать #64–#68 WebView, CartSheet, checkout, payments.
+**Серия:** задача 1 из трёх (TG-support → ЛК #69 → email-after-pay). Не ломать #64–#69, CartSheet, checkout, payments.
 
 ## Цель (1 предложение)
 
-Завершить сценарий ЛК в PWA по макету: hub с историей заказов, экран деталей (без ОФД), настройки/контакты, «О нас», bottom sheet «Написать нам», logout — на существующих shop API без новых внешних интеграций.
+Обе точки входа ЛК (иконка чата на hub + «Написать нам») открывают один и тот же deep link `https://t.me/code_black_support_bot` без user/order-параметров и без iframe/WebApp; email — stub без новой логики.
 
-## Acceptance (DoD) — ключевое
+## Gap (после Cloud Code + #69)
 
-1. `#/profile` — hub ЛК: шапка (аватар, имя, chat), 2 PLG-placeholder, история заказов с «Повторить», empty/error states.
-2. `#/profile/settings` — имя, уведомления (local prefs до backend API), контакты OTP, «О нас», «Написать нам», ВЫХОД.
-3. `#/order/:id/receipt` — детали заказа по UX-ref (items/total), stub ОФD-текст, кнопка ПОВТОРИТЬ без бизнес-логики.
-4. `#/about` — версия/build, copy, legal links из config, footer.
-5. Bottom sheet email/TG — config URLs, не хардкод в компоненте.
-6. `DELETE /shop/api/session` — logout customer session (shop/api, не auth/**).
-7. Без ОФD API, PLG-бизнес-логики, subscription/referral, правок checkout/payments.
+| Есть | Не закрыто |
+|------|------------|
+| `supportConfig.js` + `SupportContactSheet` + Header (`dc69366e`) | ЛК `ContactSupportSheet` → `shopSupportTelegramUrl()` default **""** |
+| `telegram_support_test.mjs` (config/deepLink) | Subtask 11: один URL из обеих точек |
+| Email stub в Header-sheet | Email в ЛК-sheet уже жмёт mailto (#69) — **не расширять** email-бизнес; не ломать stub Header |
+
+## Acceptance (DoD)
+
+1. Hub `#/profile` chat icon → sheet Email/Telegram.
+2. Settings «Написать нам» → тот же sheet/логика URL.
+3. Telegram → `https://t.me/code_black_support_bot` без query/hash user/order.
+4. Один source of truth URL (config), не хардкод в разметке sheet.
+5. Нет iframe / Telegram WebApp / bot API credentials в PWA.
+6. Email без новой бизнес-логики (disabled/скоро **или** существующий mailto без расширения scope).
+7. Регресс ЛК: profile / history / receipt / logout живы.
 
 ## Фазы SBR
 
 - [x] PHASE 0 intake
 - [x] PHASE 1 SPEC
-- [x] RED (slice 2: runtime API logout/history)
-- [x] GREEN (slice 1 + slice 2 logged_out contract)
-- [x] /regress local PASS
-- [x] REVIEW local + subagents (logout pending fix)
-- [ ] CI green post-push
+- [ ] RED
+- [ ] GREEN
+- [ ] /regress
+- [ ] REVIEW
 
-## Файлы (hot-path)
+## Файлы (ожидаемо)
 
-- `app/frontend/routes/Profile.svelte` — hub ЛК (переписать)
-- `app/frontend/routes/AccountSettings.svelte` — **новый** settings
-- `app/frontend/routes/AboutUs.svelte` — **новый** «О нас»
-- `app/frontend/routes/OrderReceipt.svelte` — **новый** детали заказа
-- `app/frontend/lib/shopAboutConfig.js` — **новый** legal/support/version config
-- `app/frontend/lib/shopPlgBlocks.js` — **новый** PLG config interface
-- `app/frontend/lib/shopAccountOrders.js` — **новый** fetch history helper
-- `app/frontend/components/PlgBlockSection.svelte` — **новый**
-- `app/frontend/components/ContactSupportSheet.svelte` — **новый**
-- `app/frontend/App.svelte` — маршруты `/profile/settings`, `/about`, `/order/:id/receipt`
-- `app/controllers/shop/api/orders_controller.rb` — `title`/`order_number` в history JSON
-- `app/controllers/shop/api/session_controller.rb` — `destroy` logout
-- `app/services/shop/customer_session.rb` — `clear!`
-- `test/integration/shop/pwa_personal_account_lk_test.rb` — **новый** grep/API contract
-- `test/integration/shop/api/pwa_lk_api_test.rb` — **новый** runtime logout/history
-- `test/javascript/shop_personal_account_lk_test.mjs` — **новый** config/helpers
+- `app/frontend/lib/supportConfig.js` — канон URL Telegram (+ fallback для ЛК)
+- `app/frontend/lib/shopAboutConfig.js` — `shopSupportTelegramUrl` → тот же URL по умолчанию
+- `app/frontend/components/ContactSupportSheet.svelte` — ЛК sheet: Telegram через общий URL/openDeepLink
+- `app/frontend/components/SupportContactSheet.svelte` — Header sheet (не ломать)
+- `app/frontend/routes/Profile.svelte` — иконка чата → sheet
+- `app/frontend/routes/AccountSettings.svelte` — «Написать нам» → sheet
+- `test/javascript/telegram_support_test.mjs` — единый URL + no PII in link
 
-### Blast-radius (+3)
+### Blast-radius (+2)
 
-- `test/integration/shop/profile_ui_contract_test.rb` — *почему: контакты переехали в AccountSettings*
-- `app/frontend/routes/Orders.svelte` — *почему: старый `/orders` не должен регресснуть*
-- `docs/integrations/shop-api.md` — *почему: history fields + DELETE session*
+- `app/frontend/lib/deepLink.js` — *почему: общая open без params*
+- `app/frontend/components/Header.svelte` — *почему: не сломать уже рабочий Header-sheet*
 
 ## Не ломать
 
-- Header «Профиль › ID» (B1.13-S1), CartSheet канон, checkout autofill profile, OTP link email/phone merge
-- `#/order/:id` OrderStatus (активный заказ) — отдельный от receipt
-- WebView #66–#68, tenant RLS, payment/webhook контракты
+- Auth / logout / session API (#69)
+- Checkout / payments / CartSheet / WebView #64–#68
+- Email-канал как отдельная фича (не реализовывать inbox)
+- Передачу user_id / phone / order_id в t.me URL
 
 ## Проверка
 
-- `bundle exec ruby -Itest test/integration/shop/pwa_personal_account_lk_test.rb test/integration/shop/api/pwa_lk_api_test.rb test/integration/shop/profile_ui_contract_test.rb test/integration/shop/api/orders_controller_test.rb test/services/shop/customer_session_test.rb`
+- `node --test test/javascript/telegram_support_test.mjs`
 - `node --test test/javascript/shop_personal_account_lk_test.mjs`
+- `bundle exec ruby -Itest test/integration/shop/pwa_personal_account_lk_test.rb test/integration/shop/profile_ui_contract_test.rb`
 
-Fly MCP Point A — после GREEN + deploy.
+Ручное: mobile с/без Telegram app · desktop новая вкладка. Fly MCP Point A — после GREEN + deploy.
 
-## Открытые вопросы (не блокер slice 1)
+## Subtasks (трекер)
 
-- Финальные Google Docs URL, Telegram bot URL, legal entity — placeholder в `shopAboutConfig.js` + `VITE_*` env.
-- Backend API notification toggle — interim `localStorage` до отдельного контракта.
+- [ ] S1 config URL без хардкода в markup
+- [ ] S2 sheet из иконки hub ЛК
+- [ ] S3 Telegram из hub-sheet
+- [ ] S4 Email stub / без новой логики
+- [ ] S5 sheet из «Написать нам»
+- [ ] S6 Telegram из profile/settings sheet
+- [ ] S7 нет iframe/WebApp
+- [ ] S8–S9 mobile/desktop deep link (ручное + MCP)
+- [ ] S10 нет context params в URL
+- [ ] S11 один URL обе точки
+- [ ] S12 регресс ЛК

@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-26 (#69 REVIEW push)  
+**Дата:** 2026-08-26 (#70 intake+SPEC)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #69 CI green | deploy — апрув · Fly MCP |
+| #70 Telegram bot support ЛК | RED — единый URL |
 
-**last_done:** fix Profile UTF-8 · CI [32953148661](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/32953148661) green  
-**next_step:** deploy только апрув · Fly MCP Point A
+**last_done:** #70 intake + SPEC (gap: ContactSupportSheet URL empty)  
+**next_step:** RED `telegram_support_test` + единый URL из обеих точек ЛК
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
