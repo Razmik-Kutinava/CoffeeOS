@@ -4,7 +4,6 @@
 
 | Файл | Описание |
 |------|----------|
-| [`MCP_DEPLOY_CHECKLIST.md`](MCP_DEPLOY_CHECKLIST.md) | **Для агента после deploy:** что проверить через MCP Point A + API/bounce/пачка |
 | `mcp/fly_vNNN_…/` | Скрины + `MCP_RESULT.md` — после приёмки |
 
 **API:** `POST /shop/api/orders/:id/email` · bounce: `POST /callbacks/email/bounce` + HMAC  
