@@ -9,7 +9,7 @@
 |--------|--------|
 | #71 CI green 32971396113 | deploy — апрув · Fly MCP |
 
-**last_done:** #71 REVIEW · CI [32971396113](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/32971396113) green  
+**last_done:** #71 REVIEW · CI green · Entire `01M0Z3E52ZCDTRECJT1F22G954` на `2e551ea7`  
 **next_step:** deploy только апрув · Fly MCP Point A · ENV `EMAIL_BOUNCE_WEBHOOK_SECRET`
 
 **Архив session:** [`archive/README.md`](archive/README.md)  

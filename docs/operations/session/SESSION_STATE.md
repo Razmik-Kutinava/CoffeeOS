@@ -16,6 +16,12 @@
 
 ## Текущий месяц (2026-08)
 
+### Сессия 2026-08-26 — #71 Entire backfill
+
+- Symlink WSL `~/.cursor` → Windows Cursor projects (иначе attach transcript-not-found)
+- `entire session attach 5a70b841… --force` → checkpoint `01M0Z3E52ZCDTRECJT1F22G954` на `2e551ea7`
+- `explain` не пустой (Intent + Transcript)
+
 ### Сессия 2026-08-26 — #71 REVIEW
 
 - Bugbot: API path `/orders/:id/email` · `waitingForBank=false` на success

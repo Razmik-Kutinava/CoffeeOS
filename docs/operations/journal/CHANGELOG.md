@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-26 — #71 Entire backfill
+
+- Checkpoint `01M0Z3E52ZCDTRECJT1F22G954` на `2e551ea7` (session `5a70b841…`)
+- Fix: WSL `ln -sfn /mnt/c/Users/darks/.cursor ~/.cursor`
+
 ## 2026-08-26 — #71 REVIEW: Email after pay
 
 - Bugbot+security fixes `94f36822` (API path, waitingForBank, bounce HMAC, visibility)

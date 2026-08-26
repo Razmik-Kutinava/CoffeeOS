@@ -143,6 +143,14 @@ CLI: WSL, `PATH=$HOME/.local/bin:$PATH`. На Windows без WSL — устан�
 
 **Проверка hook:** после commit смотри вывод git — если `Skipping Entire Git hook`, checkpoint только через Cursor session hooks (нужна активная agent-сессия в Cursor до commit).
 
+**WSL + Cursor transcripts (2026-08-26 #71):** Entire CLI в WSL ищет `~/.cursor/projects/.../agent-transcripts/`. На Windows Cursor пишет в `/mnt/c/Users/<user>/.cursor/...`. Без symlink attach → `transcript not found`. Фикс один раз:
+
+```bash
+ln -sfn /mnt/c/Users/$USER/.cursor ~/.cursor   # в WSL; путь Windows-user при необходимости поправить
+entire session attach <session-id> --agent cursor --force
+entire checkpoint explain <id|HEAD>            # не пустой
+```
+
 **Регрессия на Windows:** не гонять полный `test/integration/shop/` — зависает (см. ISSUES). Таргетные файлы из todo «Проверка» или CI.
 
 **User Rules в Cursor:** глобального «commit only on ask» может не быть в UI — канон CoffeeOS (`commit-ops`) всё равно **важнее**: commit после каждого шага без вопроса.
