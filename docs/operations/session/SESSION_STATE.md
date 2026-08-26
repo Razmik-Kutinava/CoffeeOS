@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-26 (#71 regress)  
+**Дата:** 2026-08-26 (#71 REVIEW)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #71 regress PASS | /review |
+| #71 REVIEW pushed | CI · deploy апрув |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,13 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-26 — #71 REVIEW
+
+- Bugbot: API path `/orders/:id/email` · `waitingForBank=false` на success
+- Security: bounce HMAC ENV · visibility = OrdersController · reconnect_token
+- Entire: attach transcript-not-found (CLI) — backfill later
+- Next: push → CI → deploy апрув · Fly MCP
 
 ### Сессия 2026-08-26 — #71 regress PASS
 

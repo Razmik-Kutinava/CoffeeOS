@@ -47,7 +47,7 @@
 - [x] RED `0eeaea77`
 - [x] GREEN (slice 1: PaymentResult + `::Orders::EmailService` + Checkout без имени + tests)
 - [x] /regress (JS 31/0 · Rails 16/0)
-- [ ] REVIEW
+- [x] REVIEW (bugbot+security → fix `94f36822` · push/CI)
 
 ## Файлы (ожидаемо)
 

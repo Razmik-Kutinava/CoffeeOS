@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-26 — #71 REVIEW: Email after pay
+
+- Bugbot+security fixes `94f36822` (API path, waitingForBank, bounce HMAC, visibility)
+- Entire attach CLI fail (transcript) — backfill
+- push → CI · deploy апрув · Fly MCP Point A
+
 ## 2026-08-26 — #71 /regress PASS (Email after pay)
 
 - JS 31/0 · Rails 16/0 · GREEN `31cf0e21` · next /review

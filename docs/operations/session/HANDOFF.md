@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-26 (#71 regress)  
+**Дата:** 2026-08-26 (#71 REVIEW)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #71 regress PASS | /review |
+| #71 REVIEW push/CI | CI green → deploy апрув |
 
-**last_done:** #71 /regress Local PASS · GREEN `31cf0e21`  
-**next_step:** /review (Entire attach + bugbot + security + push)
+**last_done:** #71 review fixes `94f36822` · bugbot+security  
+**next_step:** CI green · deploy только апрув · Fly MCP Point A
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -27,7 +27,7 @@
 | SPEC (`todo.md`) | **`[x]`** |
 | RED / GREEN | **`[x]`** `0eeaea77` / `31cf0e21` |
 | `/regress` | **`[x]`** JS 31/0 · Rails 16/0 |
-| REVIEW | `[ ]` |
+| REVIEW | **`[x]`** bugbot+security fixed `94f36822` · Entire attach CLI fail · push/CI |
 
 **ТЗ:** [`customer_tasks/Email-сбор после оплаты (Callcheck-флоу).md`](../milestones/veha_2/requirements/customer_tasks/Email-сбор%20после%20оплаты%20(Callcheck-флоу).md)  
 **Артефакты:** [`artifacts/email_collection_after_payment/`](../milestones/veha_2/artifacts/email_collection_after_payment/)
