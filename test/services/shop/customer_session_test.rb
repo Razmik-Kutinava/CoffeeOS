@@ -24,4 +24,23 @@ class Shop::CustomerSessionTest < ActiveSupport::TestCase
     assert_nil Shop::CustomerSession.customer_id(session, "tenant-b")
     assert_equal "cust-a", Shop::CustomerSession.customer_id(session, "tenant-a")
   end
+
+  test "clear! removes customer for tenant and legacy key when bucket empty" do
+    session = {}
+    Shop::CustomerSession.set_customer_id!(session, "tenant-a", "cust-a")
+    Shop::CustomerSession.clear!(session, "tenant-a")
+
+    assert_nil Shop::CustomerSession.customer_id(session, "tenant-a")
+    refute session.key?(:shop_customer_id)
+  end
+
+  test "clear! keeps other tenants in bucket" do
+    session = {}
+    Shop::CustomerSession.set_customer_id!(session, "tenant-a", "cust-a")
+    Shop::CustomerSession.set_customer_id!(session, "tenant-b", "cust-b")
+    Shop::CustomerSession.clear!(session, "tenant-a")
+
+    assert_nil Shop::CustomerSession.customer_id(session, "tenant-a")
+    assert_equal "cust-b", Shop::CustomerSession.customer_id(session, "tenant-b")
+  end
 end
