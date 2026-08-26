@@ -61,7 +61,8 @@ export function shopAboutFooter() {
 }
 
 export function shopSupportTelegramUrl() {
-  return env("VITE_SHOP_SUPPORT_TELEGRAM_URL", env("VITE_SHOP_TELEGRAM_URL", SUPPORT_TELEGRAM_URL))
+  // Only VITE_SHOP_SUPPORT_TELEGRAM_URL — not VITE_SHOP_TELEGRAM_URL (product card marketing).
+  return env("VITE_SHOP_SUPPORT_TELEGRAM_URL", SUPPORT_TELEGRAM_URL)
 }
 
 export function shopSupportMailto() {
