@@ -1,6 +1,6 @@
 <script>
   import { shopSupportMailto, shopSupportTelegramUrl } from "../lib/shopAboutConfig.js"
-  import { openSupportChat } from "../lib/supportChatAdapter.js"
+  import { cleanDeepLinkUrl, openDeepLink } from "../lib/deepLink.js"
   import { shopSpaHrefStaysInWebView } from "../lib/shopWebView.js"
 
   let { open = $bindable(false), onClose = undefined } = $props()
@@ -22,14 +22,12 @@
   }
 
   function openTelegram() {
-    const url = shopSupportTelegramUrl()
-    openSupportChat("lk", url)
-    if (url) {
-      if (shopSpaHrefStaysInWebView(url)) {
-        window.location.href = url
-      } else {
-        window.open(url, "_blank")
-      }
+    const url = cleanDeepLinkUrl(shopSupportTelegramUrl())
+    if (!url) return
+    if (shopSpaHrefStaysInWebView(url)) {
+      window.location.href = url
+    } else {
+      openDeepLink(url)
     }
     closeSheet()
   }

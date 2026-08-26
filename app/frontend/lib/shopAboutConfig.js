@@ -1,4 +1,6 @@
-/** Конфиг экрана «О нас» и поддержки (#69). URL не хардкодить в Svelte. */
+/** Конфиг экрана «О нас» и поддержки (#69/#70). URL не хардкодить в Svelte. */
+
+import { SUPPORT_TELEGRAM_URL } from "./supportConfig.js"
 
 const PLACEHOLDER_DOC = "https://docs.google.com/document/d/placeholder"
 
@@ -59,7 +61,7 @@ export function shopAboutFooter() {
 }
 
 export function shopSupportTelegramUrl() {
-  return env("VITE_SHOP_SUPPORT_TELEGRAM_URL", env("VITE_SHOP_TELEGRAM_URL", ""))
+  return env("VITE_SHOP_SUPPORT_TELEGRAM_URL", env("VITE_SHOP_TELEGRAM_URL", SUPPORT_TELEGRAM_URL))
 }
 
 export function shopSupportMailto() {

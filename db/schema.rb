@@ -492,6 +492,20 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_19_000000) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "order_emails", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "bounce_reason"
+    t.datetime "created_at", null: false
+    t.string "email", null: false
+    t.boolean "marketing_consent", default: false, null: false
+    t.uuid "order_id", null: false
+    t.string "status", default: "pending", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_at"], name: "index_order_emails_on_created_at"
+    t.index ["order_id", "email"], name: "index_order_emails_on_order_id_and_email", unique: true
+    t.index ["order_id"], name: "index_order_emails_on_order_id"
+    t.index ["status"], name: "index_order_emails_on_status"
+  end
+
   create_table "order_feedback", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.text "comment"
     t.datetime "created_at", null: false
@@ -517,19 +531,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_19_000000) do
     t.index ["tenant_id"], name: "index_order_feedback_on_tenant_id"
     t.check_constraint "rating >= 1 AND rating <= 5", name: "chk_feedback_rating"
     t.check_constraint "sentiment IS NULL OR (sentiment::text = ANY (ARRAY['positive'::character varying::text, 'neutral'::character varying::text, 'negative'::character varying::text]))", name: "chk_feedback_sentiment"
-  end
-
-  create_table "order_emails", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "order_id", null: false
-    t.string "email", null: false
-    t.boolean "marketing_consent", default: false, null: false
-    t.string "status", default: "pending", null: false
-    t.string "bounce_reason"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index [ :order_id, :email ], name: "index_order_emails_on_order_id_and_email", unique: true
-    t.index [ :status ], name: "index_order_emails_on_status"
-    t.index [ :created_at ], name: "index_order_emails_on_created_at"
   end
 
   create_table "order_items", id: :uuid, default: -> { "gen_random_uuid()" }, comment: "Позиции заказа (продукты + модификаторы)", force: :cascade do |t|
@@ -561,8 +562,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_19_000000) do
     t.index ["order_id", "channel", "created_at"], name: "idx_order_notification_logs_order_channel"
     t.index ["order_id"], name: "idx_order_notification_logs_order"
     t.index ["tenant_id", "created_at"], name: "idx_order_notification_logs_tenant_created", order: { created_at: :desc }
-    t.check_constraint "channel::text = ANY (ARRAY['telegram'::character varying, 'sms'::character varying]::text[])", name: "chk_order_notification_logs_channel"
-    t.check_constraint "status::text = ANY (ARRAY['pending'::character varying, 'sent'::character varying, 'failed'::character varying, 'skipped'::character varying]::text[])", name: "chk_order_notification_logs_status"
+    t.check_constraint "channel::text = ANY (ARRAY['telegram'::character varying::text, 'sms'::character varying::text])", name: "chk_order_notification_logs_channel"
+    t.check_constraint "status::text = ANY (ARRAY['pending'::character varying::text, 'sent'::character varying::text, 'failed'::character varying::text, 'skipped'::character varying::text])", name: "chk_order_notification_logs_status"
   end
 
   create_table "order_status_logs", id: :uuid, default: -> { "gen_random_uuid()" }, comment: "История изменений статуса заказа", force: :cascade do |t|
@@ -1302,11 +1303,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_19_000000) do
   add_foreign_key "modifier_option_tenant_settings", "product_modifier_options", column: "option_id", on_delete: :cascade
   add_foreign_key "modifier_option_tenant_settings", "tenants", on_delete: :cascade
   add_foreign_key "modifier_option_tenant_settings", "users", column: "updated_by_id", on_delete: :nullify
+  add_foreign_key "order_emails", "orders"
   add_foreign_key "order_feedback", "mobile_customers", column: "customer_id", on_delete: :cascade
   add_foreign_key "order_feedback", "orders", on_delete: :cascade
   add_foreign_key "order_feedback", "tenants", on_delete: :cascade
   add_foreign_key "order_feedback", "users", column: "resolved_by_id", on_delete: :nullify
-  add_foreign_key "order_emails", "orders", on_delete: :cascade
   add_foreign_key "order_items", "orders", on_delete: :cascade
   add_foreign_key "order_items", "products", name: "fk_order_items_product", on_delete: :restrict
   add_foreign_key "order_notification_logs", "orders"

@@ -2,7 +2,7 @@
 
 | last_done | current_state | next_step |
 |-----------|---------------|-----------|
-| intake + SPEC #70 | gap: два конфига URL | RED — тесты единого URL |
+| GREEN unified Telegram URL | JS 13/0 · LK tests | /regress |
 
 **CBR:** #70  
 **ТЗ:** [`customer_tasks/Связь через Telegram-бота поддержки в ЛК.md`](../milestones/veha_2/requirements/customer_tasks/Связь%20через%20Telegram-бота%20поддержки%20в%20ЛК.md)  
@@ -18,9 +18,9 @@
 
 | Есть | Не закрыто |
 |------|------------|
-| `supportConfig.js` + `SupportContactSheet` + Header (`dc69366e`) | ЛК `ContactSupportSheet` → `shopSupportTelegramUrl()` default **""** |
-| `telegram_support_test.mjs` (config/deepLink) | Subtask 11: один URL из обеих точек |
-| Email stub в Header-sheet | Email в ЛК-sheet уже жмёт mailto (#69) — **не расширять** email-бизнес; не ломать stub Header |
+| `supportConfig.js` + `SupportContactSheet` + Header | ~~ЛК empty URL~~ → `SUPPORT_TELEGRAM_URL` default |
+| `telegram_support_test.mjs` | Subtask 11 closed in GREEN |
+| Email stub Header / mailto ЛК | без расширения scope |
 
 ## Acceptance (DoD)
 
@@ -36,31 +36,31 @@
 
 - [x] PHASE 0 intake
 - [x] PHASE 1 SPEC
-- [ ] RED
-- [ ] GREEN
+- [x] RED
+- [x] GREEN
 - [ ] /regress
 - [ ] REVIEW
 
 ## Файлы (ожидаемо)
 
-- `app/frontend/lib/supportConfig.js` — канон URL Telegram (+ fallback для ЛК)
-- `app/frontend/lib/shopAboutConfig.js` — `shopSupportTelegramUrl` → тот же URL по умолчанию
-- `app/frontend/components/ContactSupportSheet.svelte` — ЛК sheet: Telegram через общий URL/openDeepLink
-- `app/frontend/components/SupportContactSheet.svelte` — Header sheet (не ломать)
-- `app/frontend/routes/Profile.svelte` — иконка чата → sheet
-- `app/frontend/routes/AccountSettings.svelte` — «Написать нам» → sheet
-- `test/javascript/telegram_support_test.mjs` — единый URL + no PII in link
+- `app/frontend/lib/supportConfig.js` — канон `SUPPORT_TELEGRAM_URL`
+- `app/frontend/lib/shopAboutConfig.js` — default = `SUPPORT_TELEGRAM_URL`
+- `app/frontend/components/ContactSupportSheet.svelte` — `openDeepLink` + clean URL
+- `app/frontend/components/SupportContactSheet.svelte` — Header sheet
+- `app/frontend/routes/Profile.svelte` — иконка чата
+- `app/frontend/routes/AccountSettings.svelte` — «Написать нам»
+- `test/javascript/telegram_support_test.mjs` — единый URL + no PII
 
 ### Blast-radius (+2)
 
-- `app/frontend/lib/deepLink.js` — *почему: общая open без params*
-- `app/frontend/components/Header.svelte` — *почему: не сломать уже рабочий Header-sheet*
+- `app/frontend/lib/deepLink.js`
+- `app/frontend/components/Header.svelte`
 
 ## Не ломать
 
 - Auth / logout / session API (#69)
 - Checkout / payments / CartSheet / WebView #64–#68
-- Email-канал как отдельная фича (не реализовывать inbox)
+- Email-канал как отдельная фича
 - Передачу user_id / phone / order_id в t.me URL
 
 ## Проверка
@@ -69,18 +69,18 @@
 - `node --test test/javascript/shop_personal_account_lk_test.mjs`
 - `bundle exec ruby -Itest test/integration/shop/pwa_personal_account_lk_test.rb test/integration/shop/profile_ui_contract_test.rb`
 
-Ручное: mobile с/без Telegram app · desktop новая вкладка. Fly MCP Point A — после GREEN + deploy.
+Ручное: mobile/desktop deep link. Fly MCP Point A — после GREEN + deploy.
 
 ## Subtasks (трекер)
 
-- [ ] S1 config URL без хардкода в markup
-- [ ] S2 sheet из иконки hub ЛК
-- [ ] S3 Telegram из hub-sheet
-- [ ] S4 Email stub / без новой логики
-- [ ] S5 sheet из «Написать нам»
-- [ ] S6 Telegram из profile/settings sheet
-- [ ] S7 нет iframe/WebApp
+- [x] S1 config URL без хардкода в markup
+- [x] S2 sheet из иконки hub ЛК
+- [x] S3 Telegram из hub-sheet
+- [x] S4 Email stub / без новой логики
+- [x] S5 sheet из «Написать нам»
+- [x] S6 Telegram из profile/settings sheet
+- [x] S7 нет iframe/WebApp
 - [ ] S8–S9 mobile/desktop deep link (ручное + MCP)
-- [ ] S10 нет context params в URL
-- [ ] S11 один URL обе точки
-- [ ] S12 регресс ЛК
+- [x] S10 нет context params в URL
+- [x] S11 один URL обе точки
+- [ ] S12 регресс ЛК (/regress)
