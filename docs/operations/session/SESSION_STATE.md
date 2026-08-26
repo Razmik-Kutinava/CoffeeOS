@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-26 (#70 REVIEW)  
+**Дата:** 2026-08-26 (#71 SPEC)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #70 CI green 32967225563 | deploy апрув |
+| #71 SPEC готово | RED |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,12 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-26 — #71 Email after pay (intake+SPEC)
+
+- Канон ТЗ: `customer_tasks/Email-сбор после оплаты (Callcheck-флоу).md` · CBR #71 · artifacts `email_collection_after_payment/`
+- Gap: Cloud Code `c73308ae`/`18968c05` каркас есть; happy-path email-блок, Minitest вместо RSpec stubs, INTEGRATIONS
+- Next: RED
 
 ### Сессия 2026-08-26 — #70 REVIEW
 

@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-26 — #71 intake+SPEC: Email-сбор после оплаты (Callcheck)
+
+- ТЗ 1:1 + artifacts `email_collection_after_payment/` + CBR #71
+- Gap: каркас Cloud Code есть; happy-path email-блок, Minitest/`node --test`, INTEGRATIONS
+- Next: RED
+
 ## 2026-08-26 — #70 REVIEW: Telegram bot support ЛК
 
 - Bugbot fix: support URL ≠ product `VITE_SHOP_TELEGRAM_URL` (`f2cfceb2`)

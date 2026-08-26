@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-26 (#70 REVIEW)  
+**Дата:** 2026-08-26 (#71 SPEC)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #70 CI green | deploy — апрув · Fly MCP |
+| #71 SPEC | RED (Minitest + node:test) |
 
-**last_done:** #70 REVIEW · CI [32967225563](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/32967225563) green  
-**next_step:** deploy только апрув · Fly MCP Point A
+**last_done:** #71 intake `0aed04f8` + SPEC todo  
+**next_step:** RED — runnable тесты email-after-pay
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -18,6 +18,18 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### #71 Email-сбор после оплаты / Callcheck (2026-08-26)
+
+| Что | Статус |
+|-----|--------|
+| Intake + CBR #71 | **`[x]`** `0aed04f8` |
+| SPEC (`todo.md`) | **`[x]`** |
+| RED / GREEN | `[ ]` |
+| REVIEW | `[ ]` |
+
+**ТЗ:** [`customer_tasks/Email-сбор после оплаты (Callcheck-флоу).md`](../milestones/veha_2/requirements/customer_tasks/Email-сбор%20после%20оплаты%20(Callcheck-флоу).md)  
+**Артефакты:** [`artifacts/email_collection_after_payment/`](../milestones/veha_2/artifacts/email_collection_after_payment/)
 
 ### Rules/meta: уменьшение токенов always-подсказок (2026-08-18)
 
