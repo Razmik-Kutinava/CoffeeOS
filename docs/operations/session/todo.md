@@ -2,7 +2,7 @@
 
 | last_done | current_state | next_step |
 |-----------|---------------|-----------|
-| RED+GREEN slice 2 runtime API | logout/history tests PASS | /regress или /review |
+| /regress #69 PASS local | Ruby 24/0 · Node 6/0 | /review |
 
 **CBR:** #69  
 **ТЗ:** [`customer_tasks/Доработка личного кабинета (ЛК) в PWA.md`](../milestones/veha_2/requirements/customer_tasks/Доработка%20личного%20кабинета%20(ЛК)%20в%20PWA.md)  
@@ -30,6 +30,7 @@
 - [x] PHASE 1 SPEC
 - [x] RED (slice 2: runtime API logout/history)
 - [x] GREEN (slice 1 + slice 2 logged_out contract)
+- [x] /regress local PASS
 - [ ] REVIEW / Fly MCP Point A
 
 ## Файлы (hot-path)

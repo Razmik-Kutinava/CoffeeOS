@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-26 (#69 PWA ЛК GREEN slice 1)  
+**Дата:** 2026-08-26 (#69 regress PASS local)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #69 ЛК GREEN local · tests PASS | REVIEW + push CI |
+| #69 regress Ruby 24/0 Node 6/0 | /review + push CI |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,10 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-26 — #69 regress local PASS
+
+- Ruby 24/0 · Node 6/0 · fix profile_ui_contract «Подтвердить»
 
 ### Сессия 2026-08-26 — #69 PWA ЛК GREEN slice 1
 

@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-26 — #69 regress local PASS
+
+- Зона shop/LK: Ruby 24 runs 0 fail · Node 6/0
+- Fix: `profile_ui_contract_test` — «Подтвердить» вместо «Привязать» (#69 settings)
+
 ## 2026-08-26 — #69 PWA ЛК: intake + SPEC + GREEN slice 1
 
 - PHASE 0: `customer_tasks/Доработка личного кабинета (ЛК) в PWA.md` · артефакт `artifacts/pwa_personal_account_lk/mockup_lk_screens_2026-08-26.png`

@@ -14,7 +14,7 @@ class Shop::ProfileUiContractTest < ActiveSupport::TestCase
     assert_includes src, "first_name"
     assert_includes src, "last_name"
     assert_match(/Подтвержден|подтвержд/i, src)
-    assert_match(/Привязать|Добавить/i, src)
+    assert_match(/Подтвердить/i, src)
     assert_match(/toast|ошибк/i, src)
   end
 

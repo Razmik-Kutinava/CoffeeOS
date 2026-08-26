@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-26 (#69 PWA ЛК GREEN slice 1)  
+**Дата:** 2026-08-26 (#69 regress PASS local)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #69 ЛК hub/settings/about/receipt GREEN local | REVIEW + push CI |
+| #69 regress PASS · fix profile_ui_contract | /review + push CI |
 
 **last_done:** #69 PWA ЛК GREEN slice 1 (hub, settings, about, receipt, logout API)  
 **next_step:** REVIEW #69 · push CI · Fly MCP Point A после deploy
