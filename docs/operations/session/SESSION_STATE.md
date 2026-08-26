@@ -7,7 +7,7 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| #71 CI green 32971396113 | deploy апрув |
+| #71 CI green · Entire OK | deploy апрув → MCP checklist |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,11 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-26 — #71 MCP checklist for deploy agent
+
+- Артефакт: `artifacts/email_collection_after_payment/MCP_DEPLOY_CHECKLIST.md` (Point A A1–C3 + bounce HMAC + пачка)
+- Deploy из этого чата нет
 
 ### Сессия 2026-08-26 — #71 Entire backfill
 
