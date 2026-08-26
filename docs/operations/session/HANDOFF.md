@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-26 (#71 REVIEW)  
+**Дата:** 2026-08-26 (Fly v458 MCP #69/#70/#71)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #71 CI green 32971396113 | deploy — апрув · Fly MCP |
+| Fly **v458** · MCP пачка | #70 PASS · #69 PASS · #71 PARTIAL (live pay SKIP) |
 
-**last_done:** #71 REVIEW · CI green · Entire `01M0Z3E52ZCDTRECJT1F22G954` на `2e551ea7`  
-**next_step:** deploy только апрув · Fly MCP Point A · ENV `EMAIL_BOUNCE_WEBHOOK_SECRET`
+**last_done:** deploy v458 + MCP Point A #69/#70/#71  
+**next_step:** опц. короткий live-pay для #71 B5/B6 + bounce HMAC D4; апрув заказчику по #69/#70
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -18,6 +18,14 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Fly v458 + MCP пачка #69/#70/#71 (2026-08-26)
+
+| CBR | Fly MCP | Артефакт |
+|-----|---------|----------|
+| #70 Telegram support ЛК | **PASS** | `artifacts/telegram_bot_support_lk/mcp/fly_v458_2026-08-26/` |
+| #69 PWA ЛК | **PASS** | `artifacts/pwa_personal_account_lk/mcp/fly_v458_2026-08-26/` |
+| #71 Email after pay | **PARTIAL** | `artifacts/email_collection_after_payment/mcp/fly_v458_2026-08-26/` |
 
 ### #71 Email-сбор после оплаты / Callcheck (2026-08-26)
 

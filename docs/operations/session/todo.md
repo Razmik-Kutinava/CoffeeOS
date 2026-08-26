@@ -2,7 +2,7 @@
 
 | last_done | current_state | next_step |
 |-----------|---------------|-----------|
-| /regress PASS | Local green | /review |
+| Fly v458 MCP PARTIAL | deploy+MCP done | опц. live-pay B5/B6 |
 
 **CBR:** #71  
 **ТЗ:** [`customer_tasks/Email-сбор после оплаты (Callcheck-флоу).md`](../milestones/veha_2/requirements/customer_tasks/Email-сбор%20после%20оплаты%20(Callcheck-флоу).md)  

@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-26 (#71 REVIEW)  
+**Дата:** 2026-08-26 (Fly v458 MCP)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #71 CI green · Entire OK | deploy апрув · Fly MCP |
+| Fly v458 MCP done | #71 live-pay опц. · апрув #69/#70 |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,15 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-26 — Deploy v458 + MCP #69/#70/#71
+
+- Deploy: v457 fail (advisory lock после `CreateOrderEmails`) → retry **v458** OK
+- `#70` Telegram support ЛК: **Fly MCP PASS** → `artifacts/telegram_bot_support_lk/mcp/fly_v458_2026-08-26/`
+- `#69` PWA ЛК: **Fly MCP PASS** → `artifacts/pwa_personal_account_lk/mcp/fly_v458_2026-08-26/`
+- `#71` Email after pay: **Fly MCP PARTIAL** (A1/B1–B4 UI PASS; B5/B6 live pay SKIP) → `artifacts/email_collection_after_payment/mcp/fly_v458_2026-08-26/`
+- Bounce: `CALLBACK_SHARED_SECRET` set; POST без подписи → 401
+- Sentry/УК: SKIP в этом прогоне
 
 ### Сессия 2026-08-26 — #71 Entire backfill
 

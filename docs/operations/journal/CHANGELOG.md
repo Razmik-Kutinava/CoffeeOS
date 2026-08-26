@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-26 — Fly v458 deploy + MCP #69/#70/#71
+
+- Deploy coffeeos **v458** (v457 release_command ConcurrentMigrationError после migrate `order_emails`; retry OK)
+- MCP Point A: **#70 PASS** · **#69 PASS** · **#71 PARTIAL** (email-блок UI OK; live pay SKIP)
+- Артефакты: `…/mcp/fly_v458_2026-08-26/` в `telegram_bot_support_lk`, `pwa_personal_account_lk`, `email_collection_after_payment`
+
 ## 2026-08-26 — #71 Entire backfill
 
 - Checkpoint `01M0Z3E52ZCDTRECJT1F22G954` на `2e551ea7` (session `5a70b841…`)
