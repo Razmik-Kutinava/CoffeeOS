@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-27 — SPEC: T-Bank webhook plain `OK`
+
+- `todo.md`: не-fiscal success → `render plain: "OK"`; fiscal/ошибки без изменений; Не ломать/Проверка (tbank callback+adapter)
+- Ждёт `/sbr` RED; #74 REVIEW на паузе
+
 ## 2026-08-27 — #74 /regress PASS
 
 - saved_card_store 5/0 · tbank callback+adapter 46/0 · step5+step6 8/0

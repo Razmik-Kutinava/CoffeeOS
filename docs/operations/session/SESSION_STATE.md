@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-27 (#74 card binding unique hash · /regress PASS)  
+**Дата:** 2026-08-27 (T-Bank webhook plain `OK` · SPEC)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#74** /regress PASS 5+46+8 | `/review` |
+| Webhook `OK` SPEC | `/sbr` → RED |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,12 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-27 — T-Bank webhook plain `OK` SPEC
+
+- Цель: не-fiscal success → `render plain: "OK"` (дока банка; иначе ретраи)
+- Файлы 3 + blast 2 · Не ломать/Проверка в `todo.md`
+- #74 REVIEW на паузе
 
 ### Сессия 2026-08-27 — #74 /regress PASS
 

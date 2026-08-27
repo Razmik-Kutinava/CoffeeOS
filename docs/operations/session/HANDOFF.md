@@ -2,15 +2,17 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-27 (#74 card binding unique hash · /regress PASS)  
+**Дата:** 2026-08-27 (T-Bank webhook plain `OK` · SPEC)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#74** /regress PASS | `/review` · затем push/CI |
+| Webhook `OK` SPEC | `/sbr` → RED |
 
-**last_done:** #74 /regress 5+46+8 PASS  
-**next_step:** `/review` (bugbot + security-review + Entire + push)
+**last_done:** SPEC — todo: платёжный notify → plain `OK`  
+**next_step:** `/sbr` RED (`tbank_controller_test` ждёт `OK`)
+
+**Пауза:** #74 Card binding — `/review` отложен
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -18,6 +20,17 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### T-Bank webhook plain `OK` (2026-08-27)
+
+| Что | Статус |
+|-----|--------|
+| SPEC (`todo.md`) | **`[x]`** (этот шаг) |
+| RED / GREEN | **`[ ]`** |
+| REVIEW | **`[ ]`** |
+
+**Канон:** офиц. Notification → HTTP 200 + тело `OK`  
+**Файлы:** `tbank_controller.rb` · `tbank_controller_test.rb` · `docs/integrations/tbank.md`
 
 ### #74 Card binding unique hash (2026-08-27)
 
