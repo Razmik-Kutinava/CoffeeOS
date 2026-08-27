@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-27 (#72 REVIEW push)  
+**Дата:** 2026-08-27 (#72 MCP checklist · deploy отложен)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#72** CI green | deploy — апрув · Fly MCP Point A |
+| **#72** CI green · deploy SKIP | агент: deploy + MCP по `MCP_DEPLOY_CHECKLIST.md` |
 
-**last_done:** #72 REVIEW · push · CI green `33051192100`  
-**next_step:** deploy — только апрув · затем MCP Point A
+**last_done:** #72 MCP_DEPLOY_CHECKLIST для handoff  
+**next_step:** другой агент — deploy (апрув) + MCP Point A по чеклисту
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

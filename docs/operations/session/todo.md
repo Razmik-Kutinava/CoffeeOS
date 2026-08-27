@@ -2,7 +2,7 @@
 
 | last_done | current_state | next_step |
 |-----------|---------------|-----------|
-| REVIEW push | **CI** | deploy апрув |
+| MCP checklist | **deploy отложен** | handoff: `MCP_DEPLOY_CHECKLIST.md` |
 
 **CBR:** #72  
 **ТЗ:** [`customer_tasks/Доработка бэкенда — передача email покупателя в Receipt для фискальных чеков.md`](../milestones/veha_2/requirements/customer_tasks/Доработка%20бэкенда%20—%20передача%20email%20покупателя%20в%20Receipt%20для%20фискальных%20чеков.md)  

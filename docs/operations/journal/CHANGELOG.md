@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-27 — #72 MCP_DEPLOY_CHECKLIST (deploy отложен)
+
+- Чеклист Point A для агента: `artifacts/receipt_email_fiscal_checks/MCP_DEPLOY_CHECKLIST.md`
+- Deploy в этой сессии **не** делали (экономия)
+
 ## 2026-08-27 — #72 REVIEW: Receipt.Email/Phone Init
 
 - Local 70/0 · security clean · bugbot out-of-scope (#71 webhook/bounce) not blocking

@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-27 (#72 REVIEW → push)  
+**Дата:** 2026-08-27 (#72 MCP checklist · deploy отложен)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #72 CI **green** [33051192100](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/33051192100) | deploy — апрув · Fly MCP Point A |
+| #72 CI green · **deploy SKIP** (экономия) | другой агент: deploy + [`MCP_DEPLOY_CHECKLIST`](../milestones/veha_2/artifacts/receipt_email_fiscal_checks/MCP_DEPLOY_CHECKLIST.md) |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,12 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-27 — #72 MCP checklist (без deploy)
+
+- Deploy **не** делаем (экономия владельца)
+- Чеклист для агента: `artifacts/receipt_email_fiscal_checks/MCP_DEPLOY_CHECKLIST.md`
+- Копипаст промпта — в файле
 
 ### Сессия 2026-08-27 — #72 REVIEW
 
