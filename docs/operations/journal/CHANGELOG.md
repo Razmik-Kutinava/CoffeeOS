@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-27 — #73 /regress PASS
+
+- callback+adapter 46/0 · pwa_lk 3/0 · fiscal 6/0
+- Ждёт `/review`; Fly MCP Point A после deploy
+
 ## 2026-08-27 — #73 SPEC: фискальные чеки в ЛК
 
 - `todo.md`: gap, 6 путей + blast 3, Не ломать/Проверка (tbank callback + pwa_lk)

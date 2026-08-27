@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-27 (#73 fiscal receipts ЛК · SPEC)  
+**Дата:** 2026-08-27 (#73 fiscal receipts ЛК · /regress PASS)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#73** SPEC done | `/sbr` RED · блокер payload; #72 deploy SKIP отдельно |
+| **#73** /regress PASS (46+3+6) | `/review` · Fly MCP после deploy |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,13 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-27 — #73 /regress PASS
+
+- T-Bank callback+adapter **46/0**
+- pwa_lk_api **3/0**
+- fiscal handler+API **6/0**
+- Fly MCP Point A — после deploy (апрув)
 
 ### Сессия 2026-08-27 — #73 SPEC fiscal receipts ЛК
 

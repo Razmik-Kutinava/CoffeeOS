@@ -2,7 +2,7 @@
 
 | last_done | current_state | next_step |
 |-----------|---------------|-----------|
-| GREEN `8e923305` | Local PASS · Entire `01M11269…` | `/regress` |
+| /regress PASS | 46+3+6 green | `/review` |
 
 **CBR:** #73  
 **ТЗ:** [`customer_tasks/Хранение и отображение фискальных чеков в личном кабинете.md`](../milestones/veha_2/requirements/customer_tasks/Хранение%20и%20отображение%20фискальных%20чеков%20в%20личном%20кабинете.md)  
@@ -45,7 +45,7 @@ bin/rails test test/services/payments/tbank_fiscal_notification_handler_test.rb 
 - [x] PHASE 1 SPEC (`ec76fa02`)
 - [x] RED (`579f9468`)
 - [x] GREEN (`8e923305`) · Entire `01M11269FD48FXF42NCW98AG0X`
-- [ ] /regress
+- [x] /regress (46+3+6)
 - [ ] REVIEW
 
 ## Ops вне кода

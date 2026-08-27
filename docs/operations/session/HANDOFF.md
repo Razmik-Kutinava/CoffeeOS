@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-27 (#73 fiscal receipts ЛК · SPEC)  
+**Дата:** 2026-08-27 (#73 fiscal receipts ЛК · /regress PASS)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#73** PHASE 1 SPEC | `/sbr` RED · блокер: схема fiscal payload |
+| **#73** /regress PASS | `/review` · deploy+MCP апрув |
 
-**last_done:** #73 SPEC → `todo.md` (пути + Не ломать/Проверка)  
-**next_step:** `/sbr` RED (fixture схемы до GREEN)
+**last_done:** #73 GREEN + /regress (46+3+6)  
+**next_step:** `/review`
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -25,8 +25,9 @@
 |-----|--------|
 | Intake + CBR #73 | **`[x]`** `fb5334d8` |
 | SPEC (`todo.md`) | **`[x]`** (этот шаг) |
-| RED / GREEN | **`[ ]`** |
-| Блокер | схема fiscal notification + пример payload |
+| RED / GREEN | **`[x]`** `579f9468` / `8e923305` · Entire `01M11269…` |
+| /regress | **`[x]`** PASS 46+3+6 |
+| Блокер схемы | **закрыт** — SCHEMA.md (Status=RECEIPT) |
 
 **ТЗ:** [`customer_tasks/Хранение и отображение фискальных чеков в личном кабинете.md`](../milestones/veha_2/requirements/customer_tasks/Хранение%20и%20отображение%20фискальных%20чеков%20в%20личном%20кабинете.md)  
 **Артефакты:** [`artifacts/fiscal_receipts_personal_cabinet/`](../milestones/veha_2/artifacts/fiscal_receipts_personal_cabinet/)  
