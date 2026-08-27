@@ -2,7 +2,7 @@
 
 | last_done | current_state | next_step |
 |-----------|---------------|-----------|
-| GREEN (этот шаг) | Local PASS; schema закрыта | `/regress` |
+| GREEN `8e923305` | Local PASS · Entire `01M11269…` | `/regress` |
 
 **CBR:** #73  
 **ТЗ:** [`customer_tasks/Хранение и отображение фискальных чеков в личном кабинете.md`](../milestones/veha_2/requirements/customer_tasks/Хранение%20и%20отображение%20фискальных%20чеков%20в%20личном%20кабинете.md)  
