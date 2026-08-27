@@ -1,0 +1,27 @@
+{
+  "TerminalKey": "TBankTest",
+  "OrderId": "21050",
+  "Success": true,
+  "Status": "RECEIPT",
+  "PaymentId": 13660,
+  "ErrorCode": "0",
+  "Amount": 100000,
+  "FiscalNumber": 1,
+  "ShiftNumber": 12,
+  "ReceiptDatetime": "2026-08-27T12:00:00+03:00",
+  "FnNumber": "9999078900001234",
+  "EcrRegNumber": "0000000000000000",
+  "FiscalDocumentNumber": 12345,
+  "FiscalDocumentAttribute": 987654321,
+  "Receipt": {
+    "Taxation": "osn",
+    "Email": "a@test.ru",
+    "Phone": "+79031234567",
+    "Items": []
+  },
+  "Type": "Income",
+  "Ofd": "platformaofd",
+  "Url": "https://receipt.example/check/abc",
+  "QrCodeUrl": "https://receipt.example/qr/abc",
+  "Token": "REPLACE_WITH_VALID_TOKEN"
+}
