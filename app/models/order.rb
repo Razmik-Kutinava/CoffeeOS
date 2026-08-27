@@ -19,6 +19,7 @@ class Order < ApplicationRecord
   has_many :order_status_logs, dependent: :destroy
   has_many :payments, dependent: :destroy
   has_many :order_emails, dependent: :destroy
+  has_many :fiscal_receipts, dependent: :destroy
 
   # `barista/orders#create` создаёт Order с пустым `order_number: ''`,
   # рассчитывая на заполнение на уровне БД (триггер). Чтобы Rails не

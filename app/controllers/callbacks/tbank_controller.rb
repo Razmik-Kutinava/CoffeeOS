@@ -29,13 +29,25 @@ module Callbacks
       if idem_key
         unless claim_idempotency(idem_key)
           Rails.logger.info("[Tbank::Callback] Duplicate webhook ignored, key=#{idem_key}")
+          if fiscal_notification?(payload)
+            return render plain: "OK", status: :ok
+          end
           return render json: { ok: true, duplicate: true }
         end
         claimed = true
       end
 
       tbank_status = payload["Status"].to_s
-      our_status   = Payments::TbankAdapter.map_status(tbank_status)
+
+      # #73 NotificationFiscalization: Status=RECEIPT (офиц. дока Т-Банк)
+      if fiscal_notification?(payload)
+        Payments::TbankFiscalNotificationHandler.new(payload: payload.to_h).call!
+        done = true
+        Rails.logger.info("[Tbank::Callback] Fiscal RECEIPT OrderId=#{payload['OrderId']} PaymentId=#{payload['PaymentId']}")
+        return render plain: "OK", status: :ok
+      end
+
+      our_status = Payments::TbankAdapter.map_status(tbank_status)
 
       unless our_status
         Rails.logger.info("[Tbank::Callback] Ignored status=#{tbank_status} for OrderId=#{payload['OrderId']}")
@@ -83,10 +95,24 @@ module Callbacks
       nil
     end
 
+    def fiscal_notification?(payload)
+      status = payload["Status"].to_s.upcase
+      return true if status == "RECEIPT"
+
+      payload["NotificationType"].to_s == "NotificationFiscalization"
+    end
+
     def idempotency_key(payload)
       payment_id = payload["PaymentId"].to_s
       status     = payload["Status"].to_s
       return nil if payment_id.blank? || status.blank?
+
+      if status.upcase == "RECEIPT" || payload["NotificationType"].to_s == "NotificationFiscalization"
+        fn = payload["FnNumber"].to_s
+        fd = payload["FiscalDocumentNumber"].to_s
+        fp = payload["FiscalDocumentAttribute"].to_s
+        return "tbank:callback:#{payment_id}:RECEIPT:#{fn}:#{fd}:#{fp}"
+      end
 
       "tbank:callback:#{payment_id}:#{status}"
     end

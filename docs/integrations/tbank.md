@@ -125,6 +125,21 @@ Terminal-статус **не даунгрейдится** устаревшим w
 
 NotificationURL в кабинете → `https://<fly-host>/callbacks/tbank`
 
+### Fiscalization (#73)
+
+Тот же `POST /callbacks/tbank`. Детект: `Status=RECEIPT` (или `NotificationType=NotificationFiscalization`).
+
+| Поле | Использование |
+|------|----------------|
+| `Url` | ссылка на чек в ЛК |
+| `FnNumber` / `FiscalDocumentNumber` / `FiscalDocumentAttribute` | ФН/ФД/ФП + idempotency |
+| `Type` | признак расчёта → `payment` / `refund` |
+| raw | `fiscal_receipts.receipt_data.raw` |
+
+Ответ fiscal: HTTP 200 + тело **`OK`** (plain). Платёжный webhook без изменений (`JSON { ok: true }`).
+
+Схема/пример: `docs/operations/milestones/veha_2/artifacts/fiscal_receipts_personal_cabinet/`.
+
 ---
 
 ## Риски

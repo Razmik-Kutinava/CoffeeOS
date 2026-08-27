@@ -19,7 +19,9 @@ module Shop
       end
 
       def show
-        order = Order.where(tenant_id: @shop_tenant.id, source: :mobile).includes(:order_items).find(params[:id])
+        order = Order.where(tenant_id: @shop_tenant.id, source: :mobile)
+                     .includes(:order_items, :fiscal_receipts)
+                     .find(params[:id])
         unless order_visible_to_session_customer?(order)
           Rails.logger.warn(
             "[Shop::Order] Order #{order.id} not visible to customer #{Shop::CustomerSession.customer_id(session, @shop_tenant.id).inspect}"
@@ -262,6 +264,7 @@ module Shop
           reconnect_token: Shop::GuestOrderReconnect.token_for(order),
           tenant: tenant_pickup_json,
           **Shop::OrderCancellationPresenter.meta_for(order),
+          fiscal_receipts: fiscal_receipts_json(order),
           items: order.order_items.map do |item|
             {
               product_name: item.product_name,
@@ -272,6 +275,22 @@ module Shop
             }
           end
         }
+      end
+
+      def fiscal_receipts_json(order)
+        order.fiscal_receipts.order(created_at: :asc).map do |r|
+          data = r.receipt_data.is_a?(Hash) ? r.receipt_data : {}
+          {
+            id: r.id,
+            operation_type: r.type,
+            url: data["Url"].presence,
+            fn_number: data["FnNumber"].presence,
+            fiscal_document_number: data["FiscalDocumentNumber"],
+            fiscal_document_attribute: data["FiscalDocumentAttribute"],
+            type_label: data["Type"].presence,
+            received_at: (r.confirmed_at || r.created_at)&.iso8601
+          }
+        end
       end
 
       def tenant_pickup_json

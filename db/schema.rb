@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_19_000000) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_27_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_stat_statements"
@@ -235,7 +235,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_19_000000) do
     t.uuid "tenant_id", null: false
     t.string "type", limit: 20, null: false
     t.datetime "updated_at", null: false
-    t.index ["ofd_receipt_id"], name: "index_fiscal_receipts_on_ofd_receipt_id", where: "(ofd_receipt_id IS NOT NULL)"
+    t.index ["ofd_receipt_id"], name: "index_fiscal_receipts_on_ofd_receipt_id_unique", unique: true, where: "(ofd_receipt_id IS NOT NULL)"
     t.index ["order_id"], name: "index_fiscal_receipts_on_order_id"
     t.index ["payment_id"], name: "index_fiscal_receipts_on_payment_id"
     t.index ["refund_id"], name: "index_fiscal_receipts_on_refund_id"

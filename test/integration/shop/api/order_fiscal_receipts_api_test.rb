@@ -51,19 +51,16 @@ class Shop::Api::OrderFiscalReceiptsApiTest < ActionDispatch::IntegrationTest
         params: shop_order_params(email: @email, name: "Fiscal Guest", payment_method: "cash"),
         as: :json
       assert_equal 200, sess.response.status, sess.response.body
-      order_id = sess.response.parsed_body["id"]
+      order_id = sess.response.parsed_body["order_id"] || sess.response.parsed_body["id"]
       order = Order.find(order_id)
       order.update!(status: "accepted")
 
-      payment = Payment.create!(
-        order: order,
-        tenant: @tenant,
-        amount: order.final_amount,
-        method: "card",
+      payment = order.payments.order(created_at: :desc).first!
+      payment.update!(
         provider: "tbank",
         provider_payment_id: "fiscal_api_#{SecureRandom.hex(4)}",
         status: "succeeded",
-        provider_data: { "save_card" => false }
+        provider_data: (payment.provider_data || {}).merge("save_card" => false)
       )
 
       # delay: no receipt yet → empty list (UI «формируется»)
