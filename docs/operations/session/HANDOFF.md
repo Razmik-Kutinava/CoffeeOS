@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-27 (T-Bank webhook plain `OK` · SPEC)  
+**Дата:** 2026-08-27 (T-Bank webhook plain `OK` · /regress PASS)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Webhook `OK` SPEC | `/sbr` → RED |
+| Webhook `OK` /regress PASS | `/review` · затем push/CI |
 
-**last_done:** SPEC — todo: платёжный notify → plain `OK`  
-**next_step:** `/sbr` RED (`tbank_controller_test` ждёт `OK`)
+**last_done:** /regress tbank callback+adapter **46/0**  
+**next_step:** `/review` (bugbot + security-review + Entire + push)
 
 **Пауза:** #74 Card binding — `/review` отложен
 
@@ -25,8 +25,9 @@
 
 | Что | Статус |
 |-----|--------|
-| SPEC (`todo.md`) | **`[x]`** (этот шаг) |
-| RED / GREEN | **`[ ]`** |
+| SPEC (`todo.md`) | **`[x]`** |
+| RED / GREEN | **`[x]`** `747b8e76` / `0ee54a9` · Entire `01M11PSG…` |
+| /regress | **`[x]`** PASS 46/0 |
 | REVIEW | **`[ ]`** |
 
 **Канон:** офиц. Notification → HTTP 200 + тело `OK`  

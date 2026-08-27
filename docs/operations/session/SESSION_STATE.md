@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-27 (T-Bank webhook plain `OK` · SPEC)  
+**Дата:** 2026-08-27 (T-Bank webhook plain `OK` · /regress PASS)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Webhook `OK` SPEC | `/sbr` → RED |
+| Webhook `OK` /regress PASS 46/0 | `/review` |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,11 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-27 — T-Bank webhook plain `OK` /regress PASS
+
+- tbank callback+adapter **46/0**
+- Fly MCP Point A — после deploy (апрув); hot-path оплата
 
 ### Сессия 2026-08-27 — T-Bank webhook plain `OK` SPEC
 

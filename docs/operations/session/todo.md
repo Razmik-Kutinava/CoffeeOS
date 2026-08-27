@@ -2,7 +2,7 @@
 
 | last_done | current_state | next_step |
 |-----------|---------------|-----------|
-| GREEN | ждёт `/regress` | `/regress` |
+| /regress PASS 46/0 | ждёт `/review` | `/review` |
 
 **CBR:** нет (внутр. hot-path / канон банка)  
 **Контекст:** NotificationURL `POST /callbacks/tbank`; офиц. дока Т‑Банка — HTTP 200 + тело ровно `OK`  
@@ -27,6 +27,7 @@
 - [x] PHASE 1 SPEC
 - [x] RED (`747b8e76`)
 - [x] GREEN (`0ee54a9` / Entire `01M11PSGEBSPNB7VMM6MFKDWG3`)
+- [x] /regress (зона Проверка) — 46/0 PASS
 - [ ] REVIEW (bugbot + security + Entire + push/CI)
 
 ## Файлы (ожидаемо)

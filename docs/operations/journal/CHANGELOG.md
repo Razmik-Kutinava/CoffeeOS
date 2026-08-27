@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-27 — T-Bank webhook plain `OK` /regress PASS
+
+- tbank callback+adapter **46/0**
+- Ждёт `/review`; Fly MCP Point A после deploy
+
 ## 2026-08-27 — SPEC: T-Bank webhook plain `OK`
 
 - `todo.md`: не-fiscal success → `render plain: "OK"`; fiscal/ошибки без изменений; Не ломать/Проверка (tbank callback+adapter)
