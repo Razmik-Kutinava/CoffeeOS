@@ -3,56 +3,62 @@
 require "test_helper"
 
 # Шаг 2 ТЗ: GET payments/status → GetState → если AUTHORIZED — auto Confirm → CONFIRMED
+#
+# Stub через flag-gated prepend (как shop_usercards_phase1) — НЕ define_method/remove_method
+# на TbankAdapter: remove_method стирает настоящий #get_payment_state и ломает параллельные
+# тесты с Override#get_payment_state → super (CI flake).
 class Shop::Api::PaymentStatusConfirmTest < ActionDispatch::IntegrationTest
   include TestFactories
 
-  setup do
-    @tenant = create_tenant!
-    Current.tenant_id = @tenant.id
-    @confirm_flag = { called: false }
+  module FakeAuthorizedThenConfirm
+    mattr_accessor :enabled, default: false
+    mattr_accessor :confirm_called, default: false
 
-    # Стабилизируем ответы Т-Банка на будущее GREEN: AUTHORIZED → Confirm → CONFIRMED
-    @had_confirm_before = Payments::TbankAdapter.instance_methods(false).include?(:confirm_payment)
-    @orig_confirm = Payments::TbankAdapter.instance_method(:confirm_payment) if @had_confirm_before
+    module Override
+      def get_payment_state(payment_id:)
+        return super unless FakeAuthorizedThenConfirm.enabled
 
-    get_state_response = {
-      "Success" => true,
-      "ErrorCode" => "0",
-      "Status" => "AUTHORIZED",
-      "PaymentId" => "pay-auth-1"
-    }
+        {
+          "Success" => true,
+          "ErrorCode" => "0",
+          "Status" => "AUTHORIZED",
+          "PaymentId" => payment_id.to_s
+        }
+      end
 
-    Payments::TbankAdapter.define_method(:get_payment_state) do |payment_id:|
-      # Тестовой идентичности достаточно; логика выбора payment_id будет реализована в GREEN
-      get_state_response.merge("PaymentId" => payment_id.to_s)
+      def confirm_payment(payment_id:)
+        return super unless FakeAuthorizedThenConfirm.enabled
+
+        FakeAuthorizedThenConfirm.confirm_called = true
+        {
+          "Success" => true,
+          "ErrorCode" => "0",
+          "Status" => "CONFIRMED",
+          "PaymentId" => payment_id.to_s
+        }
+      end
     end
 
-    confirm_response = {
-      "Success" => true,
-      "ErrorCode" => "0",
-      "Status" => "CONFIRMED",
-      "PaymentId" => "pay-auth-1"
-    }
+    def self.install!
+      return if @done
 
-    confirm_flag = @confirm_flag
-    Payments::TbankAdapter.define_method(:confirm_payment) do |payment_id:|
-      confirm_flag[:called] = true
-      confirm_response.merge("PaymentId" => payment_id.to_s)
+      Payments::TbankAdapter.prepend(Override)
+      @done = true
     end
   end
 
-  teardown do
-    # remove_method восстанавливает исходный TbankAdapter#get_payment_state (define_method в setup
-    # подменял только метод класса; restore через @orig_get_state ломал super при prepended stubs).
-    if Payments::TbankAdapter.instance_methods(false).include?(:get_payment_state)
-      Payments::TbankAdapter.send(:remove_method, :get_payment_state)
-    end
-    if @had_confirm_before
-      Payments::TbankAdapter.define_method(:confirm_payment, @orig_confirm)
-    elsif Payments::TbankAdapter.instance_methods(false).include?(:confirm_payment)
-      Payments::TbankAdapter.send(:remove_method, :confirm_payment)
-    end
+  setup do
+    FakeAuthorizedThenConfirm.install!
+    FakeAuthorizedThenConfirm.enabled = true
+    FakeAuthorizedThenConfirm.confirm_called = false
 
+    @tenant = create_tenant!
+    Current.tenant_id = @tenant.id
+  end
+
+  teardown do
+    FakeAuthorizedThenConfirm.enabled = false
+    FakeAuthorizedThenConfirm.confirm_called = false
     Current.reset
   end
 
@@ -87,6 +93,6 @@ class Shop::Api::PaymentStatusConfirmTest < ActionDispatch::IntegrationTest
     assert_response :success
     body = JSON.parse(response.body)
     assert_equal "CONFIRMED", body["status"]
-    assert @confirm_flag[:called], "ожидали auto Confirm при AUTHORIZED"
+    assert FakeAuthorizedThenConfirm.confirm_called, "ожидали auto Confirm при AUTHORIZED"
   end
 end
