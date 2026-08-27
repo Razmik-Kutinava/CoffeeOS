@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-27 (#72 MCP checklist · deploy отложен)  
+**Дата:** 2026-08-27 (#73 fiscal receipts ЛК · intake)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#72** CI green · deploy SKIP | агент: deploy + MCP по `MCP_DEPLOY_CHECKLIST.md` |
+| **#73** PHASE 0 intake | `/spec` — gap + пути; блокер: схема fiscal notification |
 
-**last_done:** #72 MCP_DEPLOY_CHECKLIST для handoff  
-**next_step:** другой агент — deploy (апрув) + MCP Point A по чеклисту
+**last_done:** #73 intake ТЗ + CBR + artifacts  
+**next_step:** `/spec` (#72 deploy/MCP — отдельно, отложен)
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -18,6 +18,19 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### #73 Fiscal receipts в ЛК (2026-08-27)
+
+| Что | Статус |
+|-----|--------|
+| Intake + CBR #73 | **`[x]`** (этот коммит) |
+| SPEC (`todo.md`) | **`[ ]`** ждёт `/spec` |
+| RED / GREEN | **`[ ]`** |
+| Блокер | схема fiscal notification + пример payload |
+
+**ТЗ:** [`customer_tasks/Хранение и отображение фискальных чеков в личном кабинете.md`](../milestones/veha_2/requirements/customer_tasks/Хранение%20и%20отображение%20фискальных%20чеков%20в%20личном%20кабинете.md)  
+**Артефакты:** [`artifacts/fiscal_receipts_personal_cabinet/`](../milestones/veha_2/artifacts/fiscal_receipts_personal_cabinet/)  
+**Серия:** после #72; не путать с исходящим Receipt.Email
 
 ### #72 Receipt.Email / Phone фискальные чеки (2026-08-27)
 

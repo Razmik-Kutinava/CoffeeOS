@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-27 (#72 MCP checklist · deploy отложен)  
+**Дата:** 2026-08-27 (#73 fiscal receipts ЛК · intake)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #72 CI green · **deploy SKIP** (экономия) | другой агент: deploy + [`MCP_DEPLOY_CHECKLIST`](../milestones/veha_2/artifacts/receipt_email_fiscal_checks/MCP_DEPLOY_CHECKLIST.md) |
+| **#73** intake done | `/spec` · блокер payload схемы; #72 deploy SKIP отдельно |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,13 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-27 — #73 intake fiscal receipts ЛК
+
+- ТЗ 1:1: `customer_tasks/Хранение и отображение фискальных чеков в личном кабинете.md`
+- Артефакты: `artifacts/fiscal_receipts_personal_cabinet/`
+- CBR строка #73 · статус intake · ждёт `/spec`
+- Блокер: Subtask 1 — схема/пример fiscal notification до GREEN
 
 ### Сессия 2026-08-27 — CI flake get_payment_state
 

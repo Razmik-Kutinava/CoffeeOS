@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-27 — #73 intake: фискальные чеки в ЛК
+
+- ТЗ 1:1 + CBR #73 + `artifacts/fiscal_receipts_personal_cabinet/`
+- Входящие fiscal notification Т-Банк → хранение → секция «Чек» в истории PWA
+- Ждёт `/spec`; блокер — схема payload
+
 ## 2026-08-27 — #72 MCP_DEPLOY_CHECKLIST (deploy отложен)
 
 - Чеклист Point A для агента: `artifacts/receipt_email_fiscal_checks/MCP_DEPLOY_CHECKLIST.md`
