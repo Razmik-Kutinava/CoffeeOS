@@ -24,7 +24,7 @@ module Payments
       hash_dupes = MobilePaymentMethod.dedupe_active_card_hashes!(dry_run: @dry_run)
       pending_backfill = MobilePaymentMethod.where(payment_type: "card")
         .where(card_hash: nil)
-        .where.not(bank_card_id: [nil, ""])
+        .where.not(bank_card_id: [ nil, "" ])
         .count
 
       payload = {
@@ -44,7 +44,7 @@ module Payments
 
     def bank_card_id_duplicate_groups
       ids = MobilePaymentMethod.active_cards
-        .where.not(bank_card_id: [nil, ""])
+        .where.not(bank_card_id: [ nil, "" ])
         .group(:bank_card_id)
         .having("COUNT(*) > 1")
         .pluck(:bank_card_id)
@@ -72,7 +72,7 @@ module Payments
     def backfill_card_hashes!
       MobilePaymentMethod.where(payment_type: "card")
         .where(card_hash: nil)
-        .where.not(bank_card_id: [nil, ""])
+        .where.not(bank_card_id: [ nil, "" ])
         .find_each do |row|
           hash = Payments::SavedCardStore.card_hash_for(row.bank_card_id)
           next if hash.blank?

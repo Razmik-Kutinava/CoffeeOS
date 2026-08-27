@@ -2,15 +2,25 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-27 (T-Bank webhook plain `OK` · /regress PASS)  
+**Дата:** 2026-08-27 (#74 card binding · REVIEW push/CI)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Webhook `OK` /regress PASS 46/0 | `/review` |
+| **#74** push `4a114590` | CI · deploy апрув · Fly MCP |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
+
+---
+
+## Текущий месяц (2026-08)
+
+### Сессия 2026-08-27 — #74 REVIEW
+
+- bugbot High: legacy bank_card_id + pepper; pan+exp extreme сохранён
+- security medium: CardId absent остаётся best-effort (SPEC)
+- Entire `01M11NEP02FPMW463C1RK4A1T5` · push develop
 
 ---
 

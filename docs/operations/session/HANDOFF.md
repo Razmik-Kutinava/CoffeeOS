@@ -2,17 +2,17 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-27 (T-Bank webhook plain `OK` · /regress PASS)  
+**Дата:** 2026-08-27 (#74 card binding · REVIEW push/CI)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Webhook `OK` /regress PASS | `/review` · затем push/CI |
+| **#74** REVIEW pushed `4a114590` | CI green → deploy только апрув |
 
-**last_done:** /regress tbank callback+adapter **46/0**  
-**next_step:** `/review` (bugbot + security-review + Entire + push)
+**last_done:** #74 REVIEW — bugbot/security фиксы + Entire + push  
+**next_step:** CI green; deploy — только апрув; Fly MCP Point A
 
-**Пауза:** #74 Card binding — `/review` отложен
+**Также в push:** T-Bank webhook plain `OK` (GREEN `0ee54a97`)
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
