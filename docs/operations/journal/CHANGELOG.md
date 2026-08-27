@@ -11,6 +11,10 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-27 — #73 CI green 33056529818
+
+- Push `ad195d4d` · CI success · deploy/Fly MCP — апрув
+
 ## 2026-08-27 — #73 REVIEW: fiscal receipts ЛК
 
 - Local 55/0 · bugbot: cash forever-forming → `fiscal_expected` fix

@@ -7,7 +7,7 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#73** REVIEW → push/CI | CI green → deploy только апрув · Fly MCP |
+| **#73** CI green `33056529818` | deploy только апрув · Fly MCP Point A |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

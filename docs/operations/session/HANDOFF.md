@@ -7,10 +7,10 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#73** REVIEW push/CI | CI green → deploy апрув · Fly MCP Point A |
+| **#73** CI green | deploy апрув · Fly MCP · fiscal NotificationURL в кабинете |
 
-**last_done:** #73 REVIEW bugbot fix fiscal_expected + security clean  
-**next_step:** CI green → deploy только апрув владельца
+**last_done:** #73 REVIEW + CI green https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/33056529818  
+**next_step:** deploy — только по апруву владельца
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
