@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-27 — #73 REVIEW: fiscal receipts ЛК
+
+- Local 55/0 · bugbot: cash forever-forming → `fiscal_expected` fix
+- Security: no medium+ (Token/tenant/IDOR/PWA whitelist OK)
+- Entire `01M11269FD48FXF42NCW98AG0X` на GREEN `8e923305`
+- Push develop → CI; deploy/Fly MCP — апрув
+
 ## 2026-08-27 — #73 /regress PASS
 
 - callback+adapter 46/0 · pwa_lk 3/0 · fiscal 6/0

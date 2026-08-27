@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-27 (#73 fiscal receipts ЛК · /regress PASS)  
+**Дата:** 2026-08-27 (#73 fiscal receipts ЛК · REVIEW)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#73** /regress PASS | `/review` · deploy+MCP апрув |
+| **#73** REVIEW push/CI | CI green → deploy апрув · Fly MCP Point A |
 
-**last_done:** #73 GREEN + /regress (46+3+6)  
-**next_step:** `/review`
+**last_done:** #73 REVIEW bugbot fix fiscal_expected + security clean  
+**next_step:** CI green → deploy только апрув владельца
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -27,6 +27,7 @@
 | SPEC (`todo.md`) | **`[x]`** (этот шаг) |
 | RED / GREEN | **`[x]`** `579f9468` / `8e923305` · Entire `01M11269…` |
 | /regress | **`[x]`** PASS 46+3+6 |
+| REVIEW | **`[x]`** bugbot fix fiscal_expected · security no medium+ · Entire · push |
 | Блокер схемы | **закрыт** — SCHEMA.md (Status=RECEIPT) |
 
 **ТЗ:** [`customer_tasks/Хранение и отображение фискальных чеков в личном кабинете.md`](../milestones/veha_2/requirements/customer_tasks/Хранение%20и%20отображение%20фискальных%20чеков%20в%20личном%20кабинете.md)  

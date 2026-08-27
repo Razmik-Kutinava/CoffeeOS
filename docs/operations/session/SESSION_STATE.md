@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-27 (#73 fiscal receipts ЛК · /regress PASS)  
+**Дата:** 2026-08-27 (#73 fiscal receipts ЛК · REVIEW)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#73** /regress PASS (46+3+6) | `/review` · Fly MCP после deploy |
+| **#73** REVIEW → push/CI | CI green → deploy только апрув · Fly MCP |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
