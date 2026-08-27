@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-27 — #74 /regress PASS
+
+- saved_card_store 5/0 · tbank callback+adapter 46/0 · step5+step6 8/0
+- Ждёт `/review`; Fly MCP Point A после deploy
+
 ## 2026-08-27 — #74 SPEC: card binding unique hash
 
 - `todo.md`: gap (`CardId`→hash), 5 путей + blast 3, Не ломать/Проверка (SavedCardStore + tbank callback + save_card steps)

@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-27 (#74 card binding unique hash · SPEC)  
+**Дата:** 2026-08-27 (#74 card binding unique hash · /regress PASS)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#74** SPEC (`todo.md`) | `/sbr` → RED |
+| **#74** /regress PASS | `/review` · затем push/CI |
 
-**last_done:** #74 SPEC — файлы / Не ломать / Проверка  
-**next_step:** `/sbr` RED (`SavedCardStore` + `card_hash`)
+**last_done:** #74 /regress 5+46+8 PASS  
+**next_step:** `/review` (bugbot + security-review + Entire + push)
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -24,8 +24,9 @@
 | Что | Статус |
 |-----|--------|
 | Intake + CBR #74 | **`[x]`** `6e88b962` |
-| SPEC (`todo.md`) | **`[x]`** (этот шаг) |
-| RED / GREEN | **`[ ]`** |
+| SPEC (`todo.md`) | **`[x]`** `bdda8687` |
+| RED / GREEN | **`[x]`** `951a349b` / `37ae717c` · Entire `01M11NEP…` |
+| /regress | **`[x]`** PASS 5+46+8 |
 | REVIEW | **`[ ]`** |
 
 **ТЗ:** [`customer_tasks/Устранение утечки данных чужой карты при привязке.md`](../milestones/veha_2/requirements/customer_tasks/Устранение%20утечки%20данных%20чужой%20карты%20при%20привязке.md)  

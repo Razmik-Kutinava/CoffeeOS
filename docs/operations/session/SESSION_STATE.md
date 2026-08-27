@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-27 (#74 card binding unique hash · SPEC)  
+**Дата:** 2026-08-27 (#74 card binding unique hash · /regress PASS)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#74** SPEC | `/sbr` → RED |
+| **#74** /regress PASS 5+46+8 | `/review` |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,13 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-27 — #74 /regress PASS
+
+- saved_card_store **5/0**
+- tbank callback+adapter **46/0**
+- step5+step6 save_card **8/0**
+- Fly MCP Point A — после deploy (апрув)
 
 ### Сессия 2026-08-27 — #74 SPEC card binding unique hash
 

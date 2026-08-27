@@ -2,7 +2,7 @@
 
 | last_done | current_state | next_step |
 |-----------|---------------|-----------|
-| GREEN `[GREEN]` | ждёт `/regress` | `/regress` зона Проверка |
+| /regress PASS 5+46+8 | ждёт `/review` | `/review` |
 
 **CBR:** #74  
 **ТЗ:** [`customer_tasks/Устранение утечки данных чужой карты при привязке.md`](../milestones/veha_2/requirements/customer_tasks/Устранение%20утечки%20данных%20чужой%20карты%20при%20привязке.md)  
@@ -29,7 +29,7 @@
 - [x] PHASE 1 SPEC (`bdda8687`)
 - [x] RED (`951a349b`)
 - [x] GREEN (`37ae717c`) · Entire `01M11NEP02FPMW463C1RK4A1T5`
-- [ ] /regress (зона Проверка)
+- [x] /regress (зона Проверка) — 5+46+8 PASS
 - [ ] REVIEW (bugbot + security-review + Entire + push/CI)
 
 ## Subtasks (из ТЗ)
