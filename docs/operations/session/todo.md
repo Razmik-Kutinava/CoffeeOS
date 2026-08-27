@@ -2,7 +2,7 @@
 
 | last_done | current_state | next_step |
 |-----------|---------------|-----------|
-| GREEN `5f68efea` | **GREEN done** · Entire `01M11269FD48FXF42NCW98AG0X` | `/regress` |
+| /regress PASS | **ready for REVIEW** | `/review` |
 
 **CBR:** #72  
 **ТЗ:** [`customer_tasks/Доработка бэкенда — передача email покупателя в Receipt для фискальных чеков.md`](../milestones/veha_2/requirements/customer_tasks/Доработка%20бэкенда%20—%20передача%20email%20покупателя%20в%20Receipt%20для%20фискальных%20чеков.md)  
@@ -28,7 +28,7 @@
 - [x] PHASE 1 SPEC (`d99894dc`)
 - [x] RED (`d138c116`)
 - [x] GREEN (`5f68efea`)
-- [ ] /regress (зона оплаты)
+- [x] /regress (зона оплаты) — 48+24+12 PASS
 - [ ] REVIEW (bugbot+security · Entire · push/CI)
 
 ## Файлы (ожидаемо)
