@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-26 (Fly v458 MCP #69/#70/#71)  
+**Дата:** 2026-08-27 (intake #72 Receipt.Email)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Fly **v458** · MCP пачка | #70 PASS · #69 PASS · #71 **PASS** (без live pay; B5/B6 SKIP) |
+| **#72** Receipt.Email/Phone фискальные чеки | PHASE 0 intake → `/spec` |
 
-**last_done:** #71 API догон D1/D2/D4/D5 + A3 bundle на v458  
-**next_step:** опц. live-pay B5/B6; апрув заказчику #69/#70/#71 (без live pay)
+**last_done:** #72 intake (ТЗ + CBR + artifacts)  
+**next_step:** `/spec` → todo + blast-radius Init/Confirm/Cancel/SendClosingReceipt
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -18,6 +18,18 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### #72 Receipt.Email / Phone фискальные чеки (2026-08-27)
+
+| Что | Статус |
+|-----|--------|
+| Intake + CBR #72 | **`[x]`** |
+| SPEC (`todo.md`) | **`[ ]`** ← next `/spec` |
+| RED / GREEN / REVIEW | **`[ ]`** |
+
+**ТЗ:** [`customer_tasks/Доработка бэкенда — передача email покупателя в Receipt для фискальных чеков.md`](../milestones/veha_2/requirements/customer_tasks/Доработка%20бэкенда%20—%20передача%20email%20покупателя%20в%20Receipt%20для%20фискальных%20чеков.md)  
+**Артефакты:** [`artifacts/receipt_email_fiscal_checks/`](../milestones/veha_2/artifacts/receipt_email_fiscal_checks/)  
+**Серия:** security review (задача 1); остальные — отдельно после #72
 
 ### Fly v458 + MCP пачка #69/#70/#71 (2026-08-26)
 

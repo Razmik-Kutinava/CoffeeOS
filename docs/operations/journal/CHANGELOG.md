@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-27 — #72 intake: Receipt.Email / Phone для фискальных чеков
+
+- PHASE 0: ТЗ 1:1 → `customer_tasks/Доработка бэкенда — передача email покупателя в Receipt для фискальных чеков.md`
+- CBR #72 · artifacts `receipt_email_fiscal_checks/`
+- Серия security review: старт с #72; код/todo — после `/spec`
+
 ## 2026-08-26 — #71 MCP API догон (без live pay) → PASS
 
 - D1 `POST …/email?tenant_id=` + API key + reconnect_token → 200

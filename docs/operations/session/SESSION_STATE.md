@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-26 (Fly v458 MCP)  
+**Дата:** 2026-08-27 (intake #72)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Fly v458 · #71 PASS без live pay | опц. B5/B6 live-pay |
+| #72 Receipt.Email intake | `/spec` |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,15 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-27 — #72 Receipt.Email intake (PHASE 0)
+
+- Серия security review: старт с #72 (остальные задачи серии — отдельно)
+- ТЗ 1:1 → `customer_tasks/Доработка бэкенда — передача email покупателя в Receipt для фискальных чеков.md`
+- Артефакты → `artifacts/receipt_email_fiscal_checks/`
+- CBR строка #72 · статус **intake** · ждёт `/spec`
+- Open decisions: полный Cancel без Receipt; триггер SendClosingReceipt
+- Напряжение с #71: не возвращать email-OTP гейт; Callcheck phone → Receipt.Phone fallback
 
 ### Сессия 2026-08-26 — #71 MCP API догон (без live pay)
 
