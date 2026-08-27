@@ -136,7 +136,7 @@ NotificationURL в кабинете → `https://<fly-host>/callbacks/tbank`
 | `Type` | признак расчёта → `payment` / `refund` |
 | raw | `fiscal_receipts.receipt_data.raw` |
 
-Ответ fiscal: HTTP 200 + тело **`OK`** (plain). Платёжный webhook без изменений (`JSON { ok: true }`).
+Ответ на **любое** успешное уведомление (платёж и fiscal): HTTP 200 + тело **`OK`** (plain text, без JSON). Иначе банк ретраит (час → сутки → архив). Ошибки (невалидный Token и т.п.) — по-прежнему 4xx/5xx JSON.
 
 Схема/пример: `docs/operations/milestones/veha_2/artifacts/fiscal_receipts_personal_cabinet/`.
 
@@ -147,7 +147,7 @@ NotificationURL в кабинете → `https://<fly-host>/callbacks/tbank`
 | Риск | Куда |
 |------|------|
 | Webhook без RebillId + save_card | `TbankPaymentSync#sync_for_rebill!` |
-| Duplicate webhook | `{ ok: true, duplicate: true }` |
+| Duplicate webhook | plain `OK` (idempotency claim; без `duplicate: true` в теле) |
 | Race webhook vs polling | тест race webhook/polling |
 | save_card=false | `SavedCardStore.allowed_for?` |
 | Worker stopped Fly | delayed RebillId · `artifacts/usercards_*` |

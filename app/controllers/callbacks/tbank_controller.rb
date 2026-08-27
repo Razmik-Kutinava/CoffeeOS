@@ -29,10 +29,7 @@ module Callbacks
       if idem_key
         unless claim_idempotency(idem_key)
           Rails.logger.info("[Tbank::Callback] Duplicate webhook ignored, key=#{idem_key}")
-          if fiscal_notification?(payload)
-            return render plain: "OK", status: :ok
-          end
-          return render json: { ok: true, duplicate: true }
+          return render plain: "OK", status: :ok
         end
         claimed = true
       end
@@ -51,7 +48,7 @@ module Callbacks
 
       unless our_status
         Rails.logger.info("[Tbank::Callback] Ignored status=#{tbank_status} for OrderId=#{payload['OrderId']}")
-        return render json: { ok: true }
+        return render plain: "OK", status: :ok
       end
 
       # Обработка на web-процессе: worker на Fly часто stopped → perform_later не бежит,
@@ -70,7 +67,7 @@ module Callbacks
 
       done = true
       Rails.logger.info("[Tbank::Callback] Enqueued OrderId=#{payload['OrderId']}, status=#{tbank_status}")
-      render json: { ok: true }
+      render plain: "OK", status: :ok
     rescue StandardError => e
       release_idempotency_claim(idem_key) if claimed && !done
       Rails.logger.error("[Tbank::Callback] Error: #{e.class} #{e.message}")

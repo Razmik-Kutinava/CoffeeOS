@@ -2,7 +2,7 @@
 
 | last_done | current_state | next_step |
 |-----------|---------------|-----------|
-| /spec | SPEC готов | `/sbr` → RED |
+| GREEN | ждёт `/regress` | `/regress` |
 
 **CBR:** нет (внутр. hot-path / канон банка)  
 **Контекст:** NotificationURL `POST /callbacks/tbank`; офиц. дока Т‑Банка — HTTP 200 + тело ровно `OK`  
@@ -24,9 +24,9 @@
 
 ## Фазы SBR
 
-- [x] PHASE 1 SPEC (этот шаг)
-- [ ] RED — тесты ждут `OK` / падают на текущем JSON
-- [ ] GREEN — контроллер + docs + зелёные тесты + регрессия зоны
+- [x] PHASE 1 SPEC
+- [x] RED (`747b8e76`)
+- [x] GREEN (этот шаг)
 - [ ] REVIEW (bugbot + security + Entire + push/CI)
 
 ## Файлы (ожидаемо)
