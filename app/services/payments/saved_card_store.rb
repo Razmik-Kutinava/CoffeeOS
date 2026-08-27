@@ -111,17 +111,14 @@ module Payments
           payment_type: "card"
         )
       end
-      # pan+exp только если не подменяем чужой CardId через коллизию last4.
+      # Дубликат по pan + exp_date (extreme ТЗ) — обновляем RebillId, не создаём второй ряд.
       if card.nil? && masked.present? && exp_date.present?
-        candidate = MobilePaymentMethod.find_by(
+        card = MobilePaymentMethod.find_by(
           customer_id: customer_id,
           card_masked: masked,
           card_expires_at: exp_date,
           payment_type: "card"
         )
-        if candidate && (bank_card_id.blank? || candidate.bank_card_id.blank? || candidate.bank_card_id == bank_card_id)
-          card = candidate
-        end
       end
       card
     end

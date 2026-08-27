@@ -128,14 +128,14 @@ class Payments::SavedCardStoreTest < ActiveSupport::TestCase
     assert_equal 0, MobilePaymentMethod.where(customer_id: @customer_b.id, payment_type: "card", is_active: true).count
   end
 
-  test "pan+exp match does not rewrite row when CardId differs" do
+  test "same account pan+exp with rotated CardId upserts one row (extreme)" do
     first = persist!(@customer_a, card_id: "card-pan-old", rebill: "rebill-pan-old", pan: "430000******7777")
     second = persist!(@customer_a, card_id: "card-pan-new", rebill: "rebill-pan-new", pan: "430000******7777")
 
     assert second.persisted?
-    refute_equal first.id, second.id, "разный CardId при том же last4+exp — отдельная строка, не угон hash"
-    assert_equal "card-pan-old", first.reload.bank_card_id
+    assert_equal first.id, second.id
     assert_equal "card-pan-new", second.bank_card_id
+    assert_equal 1, MobilePaymentMethod.where(customer_id: @customer_a.id, card_masked: "*7777", is_active: true).count
   end
 
   test "card_hash_pepper prefers CARD_HASH_PEPPER over secret_key_base" do
