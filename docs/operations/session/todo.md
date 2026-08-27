@@ -1,105 +1,90 @@
-# todo — #71 Email-сбор после оплаты (Callcheck-флоу)
+# todo — #72 Receipt.Email / Phone для фискальных чеков
 
 | last_done | current_state | next_step |
 |-----------|---------------|-----------|
-| Fly v458 MCP PASS (no live pay) | D1–D5 + A3* done | опц. B5/B6 live-pay |
+| PHASE 0 intake `750b488c` | **SPEC ready** | `/sbr` → RED |
 
-**CBR:** #71  
-**ТЗ:** [`customer_tasks/Email-сбор после оплаты (Callcheck-флоу).md`](../milestones/veha_2/requirements/customer_tasks/Email-сбор%20после%20оплаты%20(Callcheck-флоу).md)  
-**Артефакты:** [`artifacts/email_collection_after_payment/`](../milestones/veha_2/artifacts/email_collection_after_payment/)  
+**CBR:** #72  
+**ТЗ:** [`customer_tasks/Доработка бэкенда — передача email покупателя в Receipt для фискальных чеков.md`](../milestones/veha_2/requirements/customer_tasks/Доработка%20бэкенда%20—%20передача%20email%20покупателя%20в%20Receipt%20для%20фискальных%20чеков.md)  
+**Артефакты:** [`artifacts/receipt_email_fiscal_checks/`](../milestones/veha_2/artifacts/receipt_email_fiscal_checks/)  
 **Point A:** `https://coffeeos.fly.dev/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789`  
-**Серия:** задача 3 из трёх (TG #70 → ЛК #69 → **email-after-pay #71**). Не ломать Callcheck, SBP/card pay, ОФД, #64–#70.
+**Серия:** security review · задача 1 из 5. Не ломать Callcheck/#71, ОФД-состав Items, Cancel #40.
 
 ## Цель (1 предложение)
 
-Убрать email/OTP-гейт с оплаты (идентификация = Callcheck-телефон); опциональный email на success для копии чека и CRM-согласия без блокировки pay/навигации.
+Во всех Init (и Cancel/закрытии, если формируют Receipt) передавать контакт покупателя в `Receipt.Email` (приоритет) или `Receipt.Phone` из доверенных данных заказа/`MobileCustomer`; отправку чека делает касса Т-Банк, не наш mailer.
 
-## Gap (Cloud Code `c73308ae` / `18968c05` vs ТЗ)
+## Gap (код vs ТЗ)
 
 | Есть | Не закрыто / дыра |
 |------|-------------------|
-| `POST orders/:id/email`, `Orders::EmailService`, `OrderEmail`, jobs receipt/CRM, bounce stub | Happy-path `PaymentResult`: `status=ok` → `settleSuccess()` сразу уходит с success — email-блок часто не виден |
-| `OrderSuccessEmailBlock` + `emailCollection.js` | Checkout: ещё **имя** + PhoneAuth (Callcheck) на UI; email-input/OTP-гейта нет, но state `email`/`emailVerified` и ошибка «подтвердите email» живут |
-| `NewCardForm` save_card toggle | CRM job = placeholder; bounce signature = stub |
-| RSpec stubs `spec/.../email_spec.rb` + JS `assert.fail` | **Не канон** — нужен Minitest + `node --test`; RSpec gem нет |
-| — | `INTEGRATIONS.md` / shop-api — нет секции order email / CRM / bounce |
+| `Payments::TbankReceiptBuilder` — Email **и** Phone в API | Callers почти всегда передают только `email:`; **нет приоритета Email>Phone** (сейчас кладёт оба, если оба переданы) |
+| SBP Init / SBP autopay — Receipt в Init | **Card/widget/new_card/OrderCreator Init — без Receipt** |
+| Confirm — без Receipt (`TbankAdapter#confirm_payment`) | Зафиксировать как **ожидаемое** (не баг) |
+| Cancel полный — без Receipt (#40) | Partial Cancel + Receipt — **нет** в продукте |
+| `PaymentMethod=full_payment` only | `SendClosingReceipt` / prepayment/advance — **NOT FOUND** |
+| Контакт: `mobile_customers.email/phone`; `order_emails` = свой mailer (#71) | Не путать `OrderEmail` / `SendOrderReceiptEmailJob` с ОФД Receipt |
+| Checkout: identity = Callcheck phone (#71) | Email-гейт на pay **не возвращать**; phone уже закрывает «email или phone» |
 
-**Канон тестов:** Minitest `test/` · `node --test test/javascript/*.mjs` (не RSpec/Vitest из ТЗ).
+## Решения SPEC (open → closed для BUILD)
 
-## Acceptance (DoD)
+| Вопрос | Решение |
+|--------|---------|
+| Confirm + Receipt? | **Нет** — Confirm не формирует Receipt; документировать в `tbank.md` / INTEGRATIONS |
+| Полный Cancel без Receipt? | **Оставить** (#40): касса формирует чек возврата по исходному платежу; документировать |
+| Partial Cancel + Receipt? | **Вне slice 1**, если нет готового partial Cancel API — backlog / отдельный шаг после доказательства необходимости |
+| SendClosingReceipt? | **SKIP в коде**: в продукте только `full_payment`; нет prepayment/advance. Документировать open→closed: «триггер N/A до появления предоплаты» |
+| Checkout email обязателен? | **Нет**, если есть verified phone (Callcheck). Обязателен контакт для Init: phone и/или valid email с `MobileCustomer` (или сохранённый order email только если явно связан с заказом — приоритет customer) |
+| Где валидация email перед Init? | В builder / тонком resolver **до** `init_payment`; невалидный email → Error, запрос в Т-Банк не уходит |
+| Схема БД? | **Не трогать** — контакт уже на `mobile_customers` |
 
-1. На оплате нет email-полей и email-OTP; `canPay` не зависит от email.
-2. Callcheck/телефон — единственный identity-гейт (не ломать).
-3. Toggle «Сохранить карту» необязателен.
-4. После успешной оплаты виден необязательный блок «Куда прислать чек и предложения» + marketing checkbox.
-5. Skip/закрытие без email — без ошибки и без повторного обязательного запроса.
-6. Inline-валидация на клиенте до сети.
-7. `POST /shop/api/orders/:id/email` без OTP; идемпотентность; async receipt job; CRM только при consent.
-8. Bounce → email invalid, без навязчивого UI.
-9. Prefill / change / clear сохранённого email.
-10. Кассовый ОФД-чек независим от email.
-11. Runnable тесты + INTEGRATIONS bridge.
+## Acceptance (DoD) — slice 1
+
+1. `TbankReceiptBuilder`: при email+phone → только `Receipt.Email` (Phone не дублировать); при отсутствии email → `Receipt.Phone`; при отсутствии обоих → Error до Init.
+2. Невалидный email → Error; Init не вызывается.
+3. Все актуальные Init-пути витрины передают Receipt (SBP + card/widget/new_card + OrderCreator gateway Init + SBP autopay).
+4. Confirm без Receipt — явно в docs/тестах как ожидаемое.
+5. Полный Cancel без Receipt — docs + существующий тест adapter; partial/SendClosing — documented SKIP.
+6. Не ломать #71 mailer / Callcheck / состав Items.
+7. Тесты Minitest (не `npm test`/`tsc` из ТЗ) + bridge в `docs/integrations/tbank.md`.
 
 ## Фазы SBR
 
-- [x] PHASE 0 intake
+- [x] PHASE 0 intake (`750b488c`)
 - [x] PHASE 1 SPEC
-- [x] RED `0eeaea77`
-- [x] GREEN (slice 1: PaymentResult + `::Orders::EmailService` + Checkout без имени + tests)
-- [x] /regress (JS 31/0 · Rails 16/0)
-- [x] REVIEW (bugbot+security → fix `94f36822` · push/CI)
+- [ ] RED — builder policy + Init callers без контакта / с приоритетом
+- [ ] GREEN
+- [ ] /regress (зона оплаты)
+- [ ] REVIEW (bugbot+security · Entire · push/CI)
 
 ## Файлы (ожидаемо)
 
-- `app/frontend/routes/Checkout.svelte` — убрать остатки email-гейта / имя по ТЗ S1; pay без email
-- `app/frontend/routes/PaymentResult.svelte` — не уходить с success до показа/skip email-блока на `ok`
-- `app/frontend/components/OrderSuccessEmailBlock.svelte` — UI блок + consent + skip
-- `app/frontend/lib/emailCollection.js` — validate + POST client
-- `app/controllers/shop/api/orders/email_controller.rb` — API
-- `app/services/orders/email_service.rb` — save / idempotent / enqueue
-- `test/integration/shop/api/orders_email_test.rb` — Minitest (новый канон вместо RSpec stub)
-- `test/javascript/email_collection_test.mjs` — заменить `assert.fail` на реальные кейсы
+- `app/services/payments/tbank_receipt_builder.rb` — политика Email>Phone, валидация, отказ без контакта
+- `app/services/shop/sbp_payment_initiator.rb` — передавать email **и** phone с customer в builder
+- `app/services/shop/sbp_autopay_charge_service.rb` — то же для autopay Init
+- `app/services/shop/order_creator.rb` — `init_gateway_payment!` + Receipt (сейчас без)
+- `app/services/shop/widget_payment_initiator.rb` — Init + Receipt
+- `app/services/shop/new_card_payment_service.rb` — Init + Receipt
+- `docs/integrations/tbank.md` — Receipt policy, Confirm/Cancel/SendClosing decisions
 
 ### Blast-radius (+3)
 
-- `app/frontend/components/NewCardForm.svelte` / `lib/shopNewCardForm.js` — save_card toggle
-- `app/jobs/send_order_receipt_email_job.rb` · `sync_contact_to_crm_job.rb` · `callbacks/email_bounces_controller.rb`
-- `docs/integrations/INTEGRATIONS.md` (+ shop-api / notify секция) — bridge email/CRM
+- `app/services/payments/tbank_adapter.rb` — Init уже принимает `receipt:`; Confirm/Cancel не расширять в slice 1 (почему: #40 + Confirm без Receipt)
+- `test/services/payments/tbank_receipt_builder_test.rb` · `tbank_adapter_test.rb` · `sbp_payment_initiator_test.rb` — зеркала RED/GREEN
+- `app/frontend/routes/Checkout.svelte` — **только audit**: не возвращать email-гейт; при необходимости убедиться что phone/email уходят в create order (почему: Subtask 1–4 vs #71)
 
 ## Не ломать
 
-- Callcheck / `PhoneAuthWizard` / `Shop::PhoneOtp` / SMS fallback
-- Основной pay flow SBP/карта / `shopPayFsm` / UserCards RebillId
-- Создание заказа + обязательный кассовый чек ОФД (`fiscal_receipts`)
-- Auth/session, #69 ЛК, #70 Telegram support
+- Callcheck / phone identity / `#71` post-pay email mailer (`Orders::EmailService`, `order_emails`)
+- Состав Receipt Items / Taxation / Token (Receipt вне Token)
+- Полный guest Cancel #40 и платёжный статус webhook
+- История заказов / ЛК чеки (следующая задача серии — вне scope)
 
 ## Проверка
 
-- `node --test test/javascript/email_collection_test.mjs`
-- `bin/rails test test/integration/shop/api/orders_email_test.rb`
-- Регресс зоны (после GREEN): `bin/rails test test/integration/shop/checkout_acceptance_cbr_test.rb` · `node --test test/javascript/shop_personal_account_lk_test.mjs` (или pay-fsm сосед)
+- `bin/rails test test/services/payments/tbank_receipt_builder_test.rb test/services/payments/tbank_adapter_test.rb test/services/shop/sbp_payment_initiator_test.rb`
+- `bin/rails test test/services/shop/order_creator_test.rb test/integration/shop/api/qa_section_2_3_payment_cart_test.rb`
 
-Ручное / Fly MCP Point A — после GREEN + deploy апрув.
+## Канон тестов
 
-## Subtasks (трекер)
-
-- [x] S1 Checkout: нет email/имя/OTP-гейта; pay без email
-- [x] S2 Payment flow без email-ошибки (canPay = phone)
-- [x] S3 save_card toggle необязателен
-- [x] S4 Email-блок на success + «Чек сформирован»
-- [x] S5 Marketing checkbox
-- [x] S6 Неблокирующий skip
-- [x] S7 Inline validate без сети
-- [x] S8 API save без OTP (`::Orders::EmailService`)
-- [x] S9 CRM только при consent
-- [x] S10 Async receipt job
-- [x] S11 Bounce → invalid
-- [ ] S12 Prefill (есть loadGuestProfile — добить в regress/MCP)
-- [x] S13 Change/clear (UI input)
-- [x] S14 Idempotent POST
-- [ ] S15 ОФД независим (не ломали — smoke в regress)
-- [x] S16 FE tests (node:test)
-- [x] S17 BE tests (Minitest)
-- [x] S18 UX copy
-- [x] S19 Full TDD run → /regress PASS
-- [ ] S20 Lint (зона) — /review
+Minitest `test/` · **не** `npm test` / `npx tsc` из формулировки ТЗ (в репо канон Rails+`node --test` для JS; эта задача — backend Receipt).

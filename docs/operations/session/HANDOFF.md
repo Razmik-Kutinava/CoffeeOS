@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-27 (intake #72 Receipt.Email)  
+**Дата:** 2026-08-27 (#72 SPEC)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#72** Receipt.Email/Phone фискальные чеки | PHASE 0 intake → `/spec` |
+| **#72** SPEC ready · todo | `/sbr` → RED (Receipt.Email/Phone) |
 
-**last_done:** #72 intake (ТЗ + CBR + artifacts)  
-**next_step:** `/spec` → todo + blast-radius Init/Confirm/Cancel/SendClosingReceipt
+**last_done:** #72 PHASE 1 SPEC → `todo.md`  
+**next_step:** `/sbr` RED — builder policy + Init callers без Receipt
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -23,9 +23,9 @@
 
 | Что | Статус |
 |-----|--------|
-| Intake + CBR #72 | **`[x]`** |
-| SPEC (`todo.md`) | **`[ ]`** ← next `/spec` |
-| RED / GREEN / REVIEW | **`[ ]`** |
+| Intake + CBR #72 | **`[x]`** `750b488c` |
+| SPEC (`todo.md`) | **`[x]`** |
+| RED / GREEN / REVIEW | **`[ ]`** ← next `/sbr` |
 
 **ТЗ:** [`customer_tasks/Доработка бэкенда — передача email покупателя в Receipt для фискальных чеков.md`](../milestones/veha_2/requirements/customer_tasks/Доработка%20бэкенда%20—%20передача%20email%20покупателя%20в%20Receipt%20для%20фискальных%20чеков.md)  
 **Артефакты:** [`artifacts/receipt_email_fiscal_checks/`](../milestones/veha_2/artifacts/receipt_email_fiscal_checks/)  

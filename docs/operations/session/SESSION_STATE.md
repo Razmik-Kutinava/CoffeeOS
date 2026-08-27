@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-27 (intake #72)  
+**Дата:** 2026-08-27 (#72 SPEC)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #72 Receipt.Email intake | `/spec` |
+| #72 SPEC ready | `/sbr` RED |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,13 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-27 — #72 SPEC (Receipt.Email)
+
+- Gap: Receipt только на SBP Init; card/widget/new_card Init без Receipt; Confirm/Cancel без Receipt (ожидаемо)
+- SendClosingReceipt / prepayment — NOT FOUND → SKIP + docs
+- Политика: Email>Phone из MobileCustomer; не возвращать email-гейт #71
+- todo: `docs/operations/session/todo.md`
 
 ### Сессия 2026-08-27 — #72 Receipt.Email intake (PHASE 0)
 

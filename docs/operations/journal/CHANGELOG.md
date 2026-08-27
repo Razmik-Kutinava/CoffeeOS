@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-27 — #72 SPEC: Receipt.Email / Phone
+
+- todo: политика Email>Phone; Init на всех путях витрины; Confirm/Cancel/SendClosing — documented
+- Gap: card Init без Receipt; SendClosing NOT FOUND → SKIP
+
 ## 2026-08-27 — #72 intake: Receipt.Email / Phone для фискальных чеков
 
 - PHASE 0: ТЗ 1:1 → `customer_tasks/Доработка бэкенда — передача email покупателя в Receipt для фискальных чеков.md`
