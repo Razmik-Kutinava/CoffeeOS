@@ -28,7 +28,7 @@
 - [x] PHASE 0 intake (`6e88b962`)
 - [x] PHASE 1 SPEC (`bdda8687`)
 - [x] RED (`951a349b`)
-- [x] GREEN (этот шаг) · Entire — после commit
+- [x] GREEN (`37ae717c`) · Entire `01M11NEP02FPMW463C1RK4A1T5`
 - [ ] /regress (зона Проверка)
 - [ ] REVIEW (bugbot + security-review + Entire + push/CI)
 
