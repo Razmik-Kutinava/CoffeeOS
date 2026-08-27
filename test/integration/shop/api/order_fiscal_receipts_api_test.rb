@@ -114,7 +114,7 @@ class Shop::Api::OrderFiscalReceiptsApiTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test "[TDD] payment CONFIRMED webhook still returns JSON ok (regression)" do
+  test "[TDD] payment CONFIRMED webhook returns plain OK (regression)" do
     order = Order.create!(
       tenant: @tenant,
       order_number: "ORD-REG-#{SecureRandom.hex(3)}",
@@ -147,8 +147,7 @@ class Shop::Api::OrderFiscalReceiptsApiTest < ActionDispatch::IntegrationTest
       params: payload.to_json,
       headers: { "Content-Type" => "application/json" }
     assert_response :ok
-    body = JSON.parse(response.body)
-    assert_equal true, body["ok"]
+    assert_equal "OK", response.body
     assert_equal "succeeded", payment.reload.status
   end
 end
