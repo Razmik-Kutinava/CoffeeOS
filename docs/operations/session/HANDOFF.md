@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-27 (T-Bank webhook plain `OK` · REVIEW / CI)  
+**Дата:** 2026-08-27 (Fly **v459** · MCP пачка #72/#73/#74 + webhook OK)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Webhook `OK` + #74 на develop | CI green → deploy апрув |
+| Fly v459 на стенде | live pay + fiscal notify кабинет; `card_hash:apply` |
 
-**last_done:** webhook OK REVIEW (bugbot+security) · CI fix plain OK regress test `86ead973`  
-**next_step:** CI green → deploy только апрув; Fly MCP Point A
+**last_done:** deploy v459 + MCP Point A (webhook OK **PASS**; #72/#73/#74 **PARTIAL**)  
+**next_step:** кабинет Т-Банка fiscalization ON; live test-customer; backfill card_hash по апруву
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -18,6 +18,16 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Fly v459 deploy + MCP (2026-08-27)
+
+| Что | Статус |
+|-----|--------|
+| Deploy | **v459** |
+| Webhook plain OK | **PASS** |
+| #72 Receipt contact | **PARTIAL** (live Init SKIP) |
+| #73 Fiscal ЛК | **PARTIAL** (fiscal notify OFF / fr=0) |
+| #74 card_hash | **PARTIAL** (schema+dry_run; E2E SKIP) |
 
 ### T-Bank webhook plain `OK` (2026-08-27)
 

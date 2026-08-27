@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-27 (T-Bank webhook plain `OK` · REVIEW / CI)  
+**Дата:** 2026-08-27 (Fly **v459** deploy + MCP #72/#73/#74 + webhook OK)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Webhook `OK` REVIEW + CI fix | CI green → deploy апрув |
+| Fly v459 MCP PARTIAL/PASS | live pay + fiscal notify в кабинете Т-Банка; `card_hash:apply` апрув |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,14 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-27 — Fly v459 deploy + MCP пачка
+
+- Deploy **v459** (`deployment-01M11RD5W850BADA7T5CS7C5Q5`) с develop `0609ae6b`
+- Local: tbank+adapter+fiscal+saved_card zones PASS
+- Webhook plain OK на Fly: Rack `[200,"OK","text/plain"]` · invalid Token 401
+- #72 PARTIAL (smoke+D PASS; live Init SKIP) · #73 PARTIAL (fiscal notify OFF / fr=0) · #74 PARTIAL (schema+dry_run; E2E SKIP)
+- Артефакты: `…/mcp/fly_v459_2026-08-27/`
 
 ### Сессия 2026-08-27 — T-Bank webhook plain `OK` REVIEW
 

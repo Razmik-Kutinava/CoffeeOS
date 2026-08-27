@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-27 — Fly v459 deploy + MCP #72/#73/#74 + webhook OK
+
+- Deploy **v459** Point A; Local gate PASS; webhook body plain `OK` на Fly подтверждён
+- #72/#73/#74: smoke PASS · live Init/fiscal RECEIPT SKIP/PARTIAL · dry-run card_hash 0 dupes
+- Артефакты `mcp/fly_v459_2026-08-27/`
+
 ## 2026-08-27 — T-Bank webhook plain `OK` REVIEW
 
 - bugbot clean · security no medium+ · Entire `01M11PSGE…` на `0ee54a97`
