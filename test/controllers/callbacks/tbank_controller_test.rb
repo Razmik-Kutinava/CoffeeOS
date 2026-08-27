@@ -203,9 +203,10 @@ class Callbacks::TbankControllerTest < ActionDispatch::IntegrationTest
     assert_equal @provider_payment_id, @payment.reload.provider_payment_id
   end
 
-  test "CONFIRMED response body contains ok: true" do
+  test "CONFIRMED response body is plain OK [TDD]" do
     post_notify(tbank_payload(status: "CONFIRMED"))
-    assert_equal true, JSON.parse(response.body)["ok"]
+    assert_response :ok
+    assert_equal "OK", response.body
   end
 
   # ---------------------------------------------------------------------------
@@ -223,13 +224,14 @@ class Callbacks::TbankControllerTest < ActionDispatch::IntegrationTest
   # Idempotency — дубль игнорируется
   # ---------------------------------------------------------------------------
 
-  test "duplicate webhook returns ok with duplicate: true" do
+  test "duplicate webhook returns plain OK [TDD]" do
     post_notify(tbank_payload(status: "CONFIRMED"))
     assert_response :ok
+    assert_equal "OK", response.body
 
     post_notify(tbank_payload(status: "CONFIRMED"))
     assert_response :ok
-    assert_equal true, JSON.parse(response.body)["duplicate"]
+    assert_equal "OK", response.body
   end
 
   test "idempotency claim is stored in Rails.cache (shared across workers) [TDD]" do
@@ -255,7 +257,7 @@ class Callbacks::TbankControllerTest < ActionDispatch::IntegrationTest
 
     post_notify(tbank_payload(status: "CONFIRMED"))
     assert_response :ok
-    assert_nil JSON.parse(response.body)["duplicate"]
+    assert_equal "OK", response.body
     assert_equal "succeeded", @payment.reload.status
     assert_equal "accepted", @order.reload.status
   end
@@ -266,7 +268,7 @@ class Callbacks::TbankControllerTest < ActionDispatch::IntegrationTest
 
     post_notify(tbank_payload(status: "CONFIRMED"))
     assert_response :ok
-    assert_equal true, JSON.parse(response.body)["duplicate"]
+    assert_equal "OK", response.body
     assert Rails.cache.exist?(idem_key), "duplicate handler must not release foreign/in-flight claim"
     assert_equal "pending", @payment.reload.status
   end
@@ -286,11 +288,12 @@ class Callbacks::TbankControllerTest < ActionDispatch::IntegrationTest
   # Ignored statuses
   # ---------------------------------------------------------------------------
 
-  test "FORM_SHOWED returns ok without enqueuing job" do
+  test "FORM_SHOWED returns plain OK without enqueuing job [TDD]" do
     assert_no_enqueued_jobs do
       post_notify(tbank_payload(status: "FORM_SHOWED"))
     end
     assert_response :ok
+    assert_equal "OK", response.body
     assert_equal "pending", @payment.reload.status
   end
 
@@ -326,10 +329,11 @@ class Callbacks::TbankControllerTest < ActionDispatch::IntegrationTest
   # Payment not found — job logs warning, no error
   # ---------------------------------------------------------------------------
 
-  test "unknown order runs job inline and returns ok" do
+  test "unknown order runs job inline and returns plain OK [TDD]" do
     assert_no_enqueued_jobs(only: Payments::TbankCallbackJob) do
       post_notify(tbank_payload(order_id: 999999, payment_id: "no_such_id"))
     end
     assert_response :ok
+    assert_equal "OK", response.body
   end
 end
