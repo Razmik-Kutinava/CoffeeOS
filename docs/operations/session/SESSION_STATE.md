@@ -7,7 +7,7 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| #72 REVIEW · push/CI | CI green → deploy апрув |
+| #72 CI **green** [33051192100](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/33051192100) | deploy — апрув · Fly MCP Point A |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

@@ -7,10 +7,10 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#72** REVIEW · CI | deploy — апрув · Fly MCP Point A |
+| **#72** CI green | deploy — апрув · Fly MCP Point A |
 
-**last_done:** #72 REVIEW bugbot+security · Entire · push  
-**next_step:** CI green → deploy апрув · MCP Point A
+**last_done:** #72 REVIEW · push · CI green `33051192100`  
+**next_step:** deploy — только апрув · затем MCP Point A
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
