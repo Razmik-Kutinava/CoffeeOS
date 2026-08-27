@@ -3,6 +3,18 @@
 module Payments
   # Upsert UserCards (mobile_payment_methods) после CONFIRMED + RebillId.
   class SavedCardStore
+    # Стабильный keyed hash от CardId эквайринга (глобальная идентичность карты).
+    def self.card_hash_for(bank_card_id)
+      id = bank_card_id.to_s.presence
+      return if id.blank?
+
+      OpenSSL::HMAC.hexdigest(
+        "SHA256",
+        Rails.application.secret_key_base,
+        "mobile_payment_methods.card_hash.v1:#{id}"
+      )
+    end
+
     def self.persist_from_tbank!(payment:, payload:)
       new(payment: payment, payload: payload).call!
     end
@@ -35,29 +47,23 @@ module Payments
       masked = extract_masked_pan(@payload)
       brand = normalize_brand(@payload)
       bank_card_id = @payload["CardId"].to_s.presence
+      card_hash = self.class.card_hash_for(bank_card_id)
       exp_date = normalize_exp_date(@payload["ExpDate"].to_s.presence)
 
+      if card_hash.present? && foreign_active_card_hash?(card_hash, customer_id)
+        log_binding_rejected
+        return nil
+      end
+
       MobilePaymentMethod.transaction do
-        card = MobilePaymentMethod.find_by(
-          customer_id: customer_id,
-          card_token: rebill_id,
-          payment_type: "card"
-        )
-        # Дубликат по pan + exp_date (extreme ТЗ) — обновляем RebillId, не создаём второй ряд.
-        if card.nil? && masked.present? && exp_date.present?
-          card = MobilePaymentMethod.find_by(
-            customer_id: customer_id,
-            card_masked: masked,
-            card_expires_at: exp_date,
-            payment_type: "card"
-          )
-        end
+        card = find_existing_card(customer_id, rebill_id, masked, exp_date, card_hash)
         card ||= MobilePaymentMethod.new(customer_id: customer_id, payment_type: "card")
 
         card.card_token = rebill_id
         card.card_masked = masked
         card.card_brand = brand
         card.bank_card_id = bank_card_id if bank_card_id
+        card.card_hash = card_hash if card_hash
         card.card_expires_at = exp_date if exp_date
         card.is_active = true
         card.last_used_at = Time.current
@@ -71,9 +77,48 @@ module Payments
         card.update!(is_default: true)
         card
       end
+    rescue ActiveRecord::RecordNotUnique
+      log_binding_rejected
+      nil
     end
 
     private
+
+    def find_existing_card(customer_id, rebill_id, masked, exp_date, card_hash)
+      card = MobilePaymentMethod.find_by(
+        customer_id: customer_id,
+        card_token: rebill_id,
+        payment_type: "card"
+      )
+      # Дубликат по pan + exp_date (extreme ТЗ) — обновляем RebillId, не создаём второй ряд.
+      if card.nil? && masked.present? && exp_date.present?
+        card = MobilePaymentMethod.find_by(
+          customer_id: customer_id,
+          card_masked: masked,
+          card_expires_at: exp_date,
+          payment_type: "card"
+        )
+      end
+      if card.nil? && card_hash.present?
+        card = MobilePaymentMethod.find_by(
+          customer_id: customer_id,
+          card_hash: card_hash,
+          payment_type: "card"
+        )
+      end
+      card
+    end
+
+    def foreign_active_card_hash?(card_hash, customer_id)
+      MobilePaymentMethod
+        .where(card_hash: card_hash, is_active: true, payment_type: "card")
+        .where.not(customer_id: customer_id)
+        .exists?
+    end
+
+    def log_binding_rejected
+      Rails.logger.info("[SavedCardStore] card_binding_rejected")
+    end
 
     def extract_masked_pan(payload)
       %w[Pan MaskedPan].each do |key|
