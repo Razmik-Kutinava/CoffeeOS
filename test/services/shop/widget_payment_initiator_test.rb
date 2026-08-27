@@ -84,6 +84,52 @@ class Shop::WidgetPaymentInitiatorTest < ActiveSupport::TestCase
     assert_predicate @order.reload, :accepted?
   end
 
+  test "#72 Init+Charge passes Receipt with customer contact" do
+    category = create_category!
+    product = create_product!(category: category)
+    OrderItem.create!(
+      order_id: @order.id,
+      product_id: product.id,
+      product_name: "Латте",
+      quantity: 1,
+      unit_price: 100,
+      total_price: 100
+    )
+    MobilePaymentMethod.create!(
+      customer_id: @customer.id,
+      payment_type: "card",
+      card_token: "rebill-receipt",
+      card_masked: "*9999",
+      is_active: true,
+      is_default: true
+    )
+
+    captured = nil
+    fake = Object.new
+    fake.define_singleton_method(:init_payment) do |**kw|
+      captured = kw
+      { provider_payment_id: "pid-receipt", payment_url: "https://pay.example/pid-receipt" }
+    end
+    fake.define_singleton_method(:charge) do |payment_id:, rebill_id:|
+      {
+        "Success" => true,
+        "Status" => "CONFIRMED",
+        "PaymentId" => payment_id,
+        "ErrorCode" => "0"
+      }
+    end
+
+    Shop::WidgetPaymentInitiator.call(
+      order: @order.reload,
+      return_base_url: "https://example.com",
+      notification_url: "https://example.com/cb",
+      adapter: fake
+    )
+
+    assert captured[:receipt].is_a?(Hash), "Init должен получить Receipt"
+    assert_equal @customer.phone, captured[:receipt]["Phone"]
+  end
+
   # #46: после REJECTED Charge нельзя оставлять pid — иначе retry бьёт charge_existing! → Error 119.
   test "clears provider_payment_id when Charge fails [TDD #46]" do
     MobilePaymentMethod.create!(

@@ -247,6 +247,7 @@ class Payments::TbankAdapterTest < ActiveSupport::TestCase
     assert captured[:url].end_with?("/Confirm")
     assert_equal "pay-confirm-1", captured[:payload]["PaymentId"]
     assert captured[:payload]["Token"].present?
+    refute captured[:payload].key?("Receipt"), "#72 Confirm не передаёт Receipt (ожидаемо)"
     assert_equal "CONFIRMED", response["Status"]
   end
 

@@ -64,7 +64,7 @@ class Payments::TbankReceiptBuilderTest < ActiveSupport::TestCase
       ]
     )
 
-    receipt = Payments::TbankReceiptBuilder.call!(order: order)
+    receipt = Payments::TbankReceiptBuilder.call!(order: order, phone: "+79001112233")
     assert_equal 'Какао "Горький" 70% & ещё', receipt["Items"].first["Name"]
   end
 
@@ -76,7 +76,7 @@ class Payments::TbankReceiptBuilderTest < ActiveSupport::TestCase
     )
 
     assert_raises(Payments::TbankReceiptBuilder::Error) do
-      Payments::TbankReceiptBuilder.call!(order: order)
+      Payments::TbankReceiptBuilder.call!(order: order, phone: "+79001112233")
     end
   end
 
@@ -97,8 +97,81 @@ class Payments::TbankReceiptBuilderTest < ActiveSupport::TestCase
       ]
     )
 
-    receipt = Payments::TbankReceiptBuilder.call!(order: order)
+    receipt = Payments::TbankReceiptBuilder.call!(order: order, phone: "+79001112233")
     assert_equal "osn", receipt["Taxation"]
     assert_equal "vat20", receipt["Items"].first["Tax"]
+  end
+
+  # --- #72 Receipt contact policy [RED] ---
+
+  test "#72 prefers Email over Phone when both present" do
+    order = minimal_order
+    receipt = Payments::TbankReceiptBuilder.call!(
+      order: order,
+      email: "guest@example.com",
+      phone: "+79001234567"
+    )
+
+    assert_equal "guest@example.com", receipt["Email"]
+    refute receipt.key?("Phone"), "при наличии Email Phone не передаём"
+  end
+
+  test "#72 uses Phone when email blank" do
+    order = minimal_order
+    receipt = Payments::TbankReceiptBuilder.call!(
+      order: order,
+      phone: "+79001234567"
+    )
+
+    assert_equal "+79001234567", receipt["Phone"]
+    refute receipt.key?("Email")
+  end
+
+  test "#72 raises when email and phone both blank" do
+    order = minimal_order
+    assert_raises(Payments::TbankReceiptBuilder::Error) do
+      Payments::TbankReceiptBuilder.call!(order: order)
+    end
+  end
+
+  test "#72 raises on invalid email before Init" do
+    order = minimal_order
+    err = assert_raises(Payments::TbankReceiptBuilder::Error) do
+      Payments::TbankReceiptBuilder.call!(
+        order: order,
+        email: "test@",
+        phone: "+79001234567"
+      )
+    end
+    assert_match(/email/i, err.message)
+  end
+
+  test "#72 for_order! maps customer email and phone" do
+    customer = Struct.new(:email, :phone).new("a@b.co", "+79007654321")
+    order = Struct.new(:id, :final_amount, :order_items, :customer).new(
+      SecureRandom.uuid,
+      BigDecimal("100.00"),
+      [ ItemStub.new(product_name: "Чай", unit_price: BigDecimal("100"), quantity: 1, total_price: BigDecimal("100")) ],
+      customer
+    )
+
+    receipt = Payments::TbankReceiptBuilder.for_order!(order)
+    assert_equal "a@b.co", receipt["Email"]
+    refute receipt.key?("Phone")
+  end
+
+  def minimal_order
+    OrderStub.new(
+      id: SecureRandom.uuid,
+      final_amount: BigDecimal("100.00"),
+      order_items: [
+        ItemStub.new(
+          product_name: "Эспрессо",
+          unit_price: BigDecimal("100.00"),
+          quantity: 1,
+          total_price: BigDecimal("100.00")
+        )
+      ]
+    )
   end
 end
