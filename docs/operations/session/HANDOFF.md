@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-27 (#72 /regress PASS)  
+**Дата:** 2026-08-27 (#72 REVIEW push)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#72** GREEN+regress PASS | `/review` → push/CI · Fly MCP после deploy |
+| **#72** REVIEW · CI | deploy — апрув · Fly MCP Point A |
 
-**last_done:** #72 Receipt.Email/Phone Init · regress 84/0 (+12 soft)  
-**next_step:** `/review`
+**last_done:** #72 REVIEW bugbot+security · Entire · push  
+**next_step:** CI green → deploy апрув · MCP Point A
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -27,7 +27,7 @@
 | SPEC (`todo.md`) | **`[x]`** `d99894dc` |
 | RED / GREEN | **`[x]`** `d138c116` / `5f68efea` · Entire `01M11269…` |
 | /regress | **`[x]`** PASS 48+24+12 |
-| REVIEW | **`[ ]`** ← next `/review` |
+| REVIEW | **`[x]`** bugbot+security · Entire · push/CI |
 
 **ТЗ:** [`customer_tasks/Доработка бэкенда — передача email покупателя в Receipt для фискальных чеков.md`](../milestones/veha_2/requirements/customer_tasks/Доработка%20бэкенда%20—%20передача%20email%20покупателя%20в%20Receipt%20для%20фискальных%20чеков.md)  
 **Артефакты:** [`artifacts/receipt_email_fiscal_checks/`](../milestones/veha_2/artifacts/receipt_email_fiscal_checks/)  

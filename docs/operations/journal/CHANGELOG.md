@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-27 — #72 REVIEW: Receipt.Email/Phone Init
+
+- Local 70/0 · security clean · bugbot out-of-scope (#71 webhook/bounce) not blocking
+- Entire `01M11269FD48FXF42NCW98AG0X` на `5f68efea` · push develop → CI
+- Deploy / Fly MCP Point A — апрув
+
 ## 2026-08-27 — #72 /regress PASS (Receipt.Email)
 
 - builder+adapter+sbp 48/0 · order_creator+qa_2.3 24/0 (2 skip) · widget+inline 12/0

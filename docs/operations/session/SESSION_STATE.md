@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-27 (#72 /regress PASS)  
+**Дата:** 2026-08-27 (#72 REVIEW → push)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #72 regress PASS (оплата) | `/review` |
+| #72 REVIEW · push/CI | CI green → deploy апрув |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,14 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-27 — #72 REVIEW
+
+- Local: builder+adapter+sbp+order_creator **70/0**
+- Bugbot: findings вне #72 (webhook claim / bounce #71) — backlog, не блокер Receipt
+- Security: **no medium+** на Receipt Init
+- Entire: `01M11269FD48FXF42NCW98AG0X` на `5f68efea` (не пустой)
+- Push develop → CI
 
 ### Сессия 2026-08-27 — #72 /regress PASS
 
