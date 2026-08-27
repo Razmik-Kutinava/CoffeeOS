@@ -26,7 +26,7 @@
 
 - [x] PHASE 1 SPEC
 - [x] RED (`747b8e76`)
-- [x] GREEN (этот шаг)
+- [x] GREEN (`0ee54a9` / Entire `01M11PSGEBSPNB7VMM6MFKDWG3`)
 - [ ] REVIEW (bugbot + security + Entire + push/CI)
 
 ## Файлы (ожидаемо)
