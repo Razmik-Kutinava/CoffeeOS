@@ -16,6 +16,11 @@
 
 ## Текущий месяц (2026-08)
 
+### Сессия 2026-08-27 — CI flake get_payment_state
+
+- Root: `payment_status_confirm_test` `remove_method :get_payment_state` + prepend Override → super NoMethodError в parallel
+- Fix: flag-gated prepend stub (как usercards phase1)
+
 ### Сессия 2026-08-27 — #72 MCP checklist (без deploy)
 
 - Deploy **не** делаем (экономия владельца)
