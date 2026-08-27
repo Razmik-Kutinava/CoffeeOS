@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-27 — #74 intake: card binding unique hash
+
+- ТЗ 1:1 + CBR #74 + `artifacts/card_binding_unique_hash/`
+- Security review · задача 1: `card_hash` + unique active + нейтральный отказ без утечки карты
+- Ждёт `/spec`
+
 ## 2026-08-27 — #73 CI green 33056529818
 
 - Push `ad195d4d` · CI success · deploy/Fly MCP — апрув

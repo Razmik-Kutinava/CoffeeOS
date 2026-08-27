@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-27 (#73 fiscal receipts ЛК · REVIEW)  
+**Дата:** 2026-08-27 (#74 card binding unique hash · intake)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#73** CI green `33056529818` | deploy только апрув · Fly MCP Point A |
+| **#74** intake | `/spec` |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,14 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-27 — #74 intake card binding unique hash
+
+- ТЗ 1:1: `customer_tasks/Устранение утечки данных чужой карты при привязке.md`
+- Артефакты: `artifacts/card_binding_unique_hash/`
+- CBR строка #74 · статус intake · ждёт `/spec`
+- Группа: security review (задача 1)
+- Заметка: в ТЗ `rspec/spec` → в репо Minitest `test/`
 
 ### Сессия 2026-08-27 — #73 /regress PASS
 

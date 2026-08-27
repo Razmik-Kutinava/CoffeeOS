@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-27 (#73 fiscal receipts ЛК · REVIEW)  
+**Дата:** 2026-08-27 (#74 card binding unique hash · intake)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#73** CI green | deploy апрув · Fly MCP · fiscal NotificationURL в кабинете |
+| **#74** intake | `/spec` · затем SBR |
 
-**last_done:** #73 REVIEW + CI green https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/33056529818  
-**next_step:** deploy — только по апруву владельца
+**last_done:** #74 PHASE 0 intake — ТЗ + CBR + artifacts  
+**next_step:** `/spec` (карта файлов / `todo.md`)
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -18,6 +18,19 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### #74 Card binding unique hash (2026-08-27)
+
+| Что | Статус |
+|-----|--------|
+| Intake + CBR #74 | **`[x]`** (этот шаг) |
+| SPEC (`todo.md`) | **`[ ]`** ждёт `/spec` |
+| RED / GREEN | **`[ ]`** |
+| REVIEW | **`[ ]`** |
+
+**ТЗ:** [`customer_tasks/Устранение утечки данных чужой карты при привязке.md`](../milestones/veha_2/requirements/customer_tasks/Устранение%20утечки%20данных%20чужой%20карты%20при%20привязке.md)  
+**Артефакты:** [`artifacts/card_binding_unique_hash/`](../milestones/veha_2/artifacts/card_binding_unique_hash/)  
+**Серия:** security review · задача 1
 
 ### #73 Fiscal receipts в ЛК (2026-08-27)
 
