@@ -62,15 +62,12 @@ module Shop
       notify = notification_url.presence || "#{base}/callbacks/tbank"
       raise Error.new("Не задан return_base_url / TBANK_RETURN_URL", http_status: :internal_server_error) if base.blank?
 
-      # Email для 54-ФЗ из MobileCustomer; без Email/Phone банк часто отвечает 329.
-      receipt = Payments::TbankReceiptBuilder.call!(
-        order: order,
-        email: order.customer&.email
-      )
       payment = order.payments.order(created_at: :desc).first
       raise Error.new("У заказа нет платежа", http_status: :unprocessable_entity) unless payment
 
       begin
+        # #72: контакт покупателя в Receipt (Email > Phone) из MobileCustomer.
+        receipt = Payments::TbankReceiptBuilder.for_order!(order)
         init_kwargs = {
           order: order,
           return_base_url: base,

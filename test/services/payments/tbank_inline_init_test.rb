@@ -16,7 +16,19 @@ class Payments::TbankInlineInitTest < ActiveSupport::TestCase
   end
 
   def order_stub(amount: "200.00")
-    Struct.new(:id, :final_amount).new(SecureRandom.uuid, BigDecimal(amount))
+    item = Struct.new(:product_name, :unit_price, :quantity, :total_price, keyword_init: true).new(
+      product_name: "Латте",
+      unit_price: BigDecimal(amount),
+      quantity: 1,
+      total_price: BigDecimal(amount)
+    )
+    customer = Struct.new(:email, :phone).new(nil, "+79001112233")
+    Struct.new(:id, :final_amount, :order_items, :customer).new(
+      SecureRandom.uuid,
+      BigDecimal(amount),
+      [ item ],
+      customer
+    )
   end
 
   def adapter_capturing(captured)

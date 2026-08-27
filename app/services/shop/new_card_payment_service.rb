@@ -32,7 +32,8 @@ module Shop
         return_base_url: urls[:return_base_url],
         notification_url: urls[:notification_url],
         customer_key: order.customer_id.to_s,
-        recurrent: save_card
+        recurrent: save_card,
+        receipt: Payments::TbankReceiptBuilder.for_order!(order)
       )
       payment.update_columns(
         provider: "tbank",
@@ -71,6 +72,8 @@ module Shop
       build_response(order, result, save_card: save_card)
     rescue Payments::TbankAdapter::ApiError => e
       raise TbankPaymentError.from_api(error_code: e.error_code, message: e.api_message)
+    rescue Payments::TbankReceiptBuilder::Error => e
+      raise OrderCreator::Error, e.message
     rescue Payments::TbankAdapter::Error => e
       raise OrderCreator::Error, e.message
     end

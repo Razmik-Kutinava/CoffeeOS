@@ -9,6 +9,8 @@ class Shop::WidgetPaymentInitiatorTest < ActiveSupport::TestCase
     @tenant = create_tenant!(slug: "wpi-#{SecureRandom.hex(3)}")
     Current.tenant_id = @tenant.id
     @customer = create_mobile_customer!
+    category = create_category!
+    @product = create_product!(category: category)
     @order = Order.create!(
       tenant_id: @tenant.id,
       customer_id: @customer.id,
@@ -19,6 +21,14 @@ class Shop::WidgetPaymentInitiatorTest < ActiveSupport::TestCase
       total_amount: 100,
       discount_amount: 0,
       final_amount: 100
+    )
+    OrderItem.create!(
+      order_id: @order.id,
+      product_id: @product.id,
+      product_name: "Латте",
+      quantity: 1,
+      unit_price: 100,
+      total_price: 100
     )
     @payment = Payment.create!(
       tenant_id: @tenant.id,
@@ -85,16 +95,6 @@ class Shop::WidgetPaymentInitiatorTest < ActiveSupport::TestCase
   end
 
   test "#72 Init+Charge passes Receipt with customer contact" do
-    category = create_category!
-    product = create_product!(category: category)
-    OrderItem.create!(
-      order_id: @order.id,
-      product_id: product.id,
-      product_name: "Латте",
-      quantity: 1,
-      unit_price: 100,
-      total_price: 100
-    )
     MobilePaymentMethod.create!(
       customer_id: @customer.id,
       payment_type: "card",

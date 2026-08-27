@@ -58,12 +58,14 @@ module Shop
     # Как Shop::RecurrentOrderCreator: Init → Charge, проверка Success, settle CONFIRMED.
     # Init PaymentId сохраняем сразу — иначе при падении Charge в БД остаётся pid=nil.
     def charge_with_rebill!(payment, rebill_id)
+      receipt = Payments::TbankReceiptBuilder.for_order!(@order)
       init_result = @adapter.init_payment(
         order: @order,
         return_base_url: @return_base_url,
         notification_url: @notification_url,
         customer_key: @order.customer_id&.to_s,
-        recurrent: false
+        recurrent: false,
+        receipt: receipt
       )
       pid = init_result[:provider_payment_id].to_s
       payment.update_columns(provider: "tbank", provider_payment_id: pid)

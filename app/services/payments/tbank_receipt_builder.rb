@@ -4,6 +4,8 @@ module Payments
   # Собирает объект Receipt для Init Т-Кассы (54-ФЗ / ФФД).
   # Taxation и Tax позиции — из ENV (без хардкода секретов).
   #
+  # Контакт (#72): приоритет Email над Phone; без контакта / невалидный email → Error до Init.
+  #
   # ENV:
   #   TBANK_TAXATION — система налогообложения (osn, usn_income, …); default usn_income
   #   TBANK_TAX      — ставка НДС позиции (none, vat20, …); default none
@@ -13,9 +15,16 @@ module Payments
     DEFAULT_TAXATION = "usn_income"
     DEFAULT_TAX = "none"
     NAME_MAX_LEN = 128
+    EMAIL_FORMAT = /\A[^\s@]+@[^\s@]+\.[^\s@]+\z/
 
     def self.call!(order:, email: nil, phone: nil)
       new(order: order, email: email, phone: phone).call!
+    end
+
+    # Контакт из MobileCustomer заказа (доверенные данные, не UI).
+    def self.for_order!(order)
+      customer = order.respond_to?(:customer) ? order.customer : nil
+      call!(order: order, email: customer&.email, phone: customer&.phone)
     end
 
     def initialize(order:, email: nil, phone: nil)
@@ -32,12 +41,34 @@ module Payments
         "Taxation" => taxation,
         "Items" => items.map { |item| build_item(item) }
       }
-      receipt["Email"] = @email.to_s if @email.present?
-      receipt["Phone"] = @phone.to_s if @phone.present?
+      apply_contact!(receipt)
       receipt
     end
 
     private
+
+    def apply_contact!(receipt)
+      email = @email.to_s.strip.presence
+      phone = @phone.to_s.strip.presence
+
+      if email
+        raise Error, "Некорректный email для чека 54-ФЗ" unless valid_email?(email)
+
+        receipt["Email"] = email
+        return
+      end
+
+      if phone
+        receipt["Phone"] = phone
+        return
+      end
+
+      raise Error, "Нужен email или телефон покупателя для чека 54-ФЗ"
+    end
+
+    def valid_email?(email)
+      email.match?(EMAIL_FORMAT)
+    end
 
     def taxation
       ENV.fetch("TBANK_TAXATION", DEFAULT_TAXATION).to_s.presence || DEFAULT_TAXATION

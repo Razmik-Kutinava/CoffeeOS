@@ -140,12 +140,14 @@ module Payments
 
     # Рекуррент: Init → Charge по RebillId (Шаг 4 ТЗ).
     def charge_recurrent(order:, rebill_id:, return_base_url:, notification_url:, customer_key: nil)
+      receipt = TbankReceiptBuilder.for_order!(order)
       init_result = init_payment(
         order: order,
         return_base_url: return_base_url,
         notification_url: notification_url,
         customer_key: customer_key,
-        recurrent: false
+        recurrent: false,
+        receipt: receipt
       )
 
       charge_response = charge(

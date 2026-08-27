@@ -322,12 +322,14 @@ module Shop
       customer_key = order.customer_id&.to_s
       @card_binding = false
 
+      receipt = Payments::TbankReceiptBuilder.for_order!(order)
       result = Payments::TbankAdapter.new.init_payment(
         order: order,
         return_base_url: return_base_url,
         notification_url: notification_url,
         customer_key: customer_key,
-        recurrent: save_card
+        recurrent: save_card,
+        receipt: receipt
       )
 
       payment.update_columns(
@@ -337,6 +339,8 @@ module Shop
 
       @payment_url = result[:payment_url]
       @provider_payment_id = result[:provider_payment_id]
+    rescue Payments::TbankReceiptBuilder::Error => e
+      raise Error, "Не удалось инициировать оплату: #{e.message}"
     rescue Payments::TbankAdapter::Error => e
       raise Error, "Не удалось инициировать оплату: #{e.message}"
     end

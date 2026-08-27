@@ -37,14 +37,30 @@ Base URL: `https://securepay.tinkoff.ru/v2/`
 
 | Shop endpoint | Flow | T-Bank chain | UX задача |
 |---------------|------|--------------|-----------|
-| `POST payments/new_card` | Новая карта + save_card | Init → FinishAuthorize → webhook RebillId | UserCards |
+| `POST payments/new_card` | Новая карта + save_card | Init (+Receipt) → FinishAuthorize → webhook RebillId | UserCards |
 | `POST payments/one_click` | Saved card | Init → Charge | Inline FSM, Quick Repeat |
 | `POST payments/sbp/init` | СБП разовый / bind | Init (+Receipt) → GetQr | CODE:BLACK deep link |
-| `POST payments/sbp/charge` | СБП autopay | Init → ChargeQr(AccountToken) | Autopay |
-| `POST payments/widget_init` | T-Kassa SDK | Init `DATA.connection_type=Widget` | SpeedPay |
-| `GET payments/status/:id` | Poll | GetState → Confirm if AUTHORIZED | SBP return, inline |
+| `POST payments/sbp/charge` | СБП autopay | Init (+Receipt) → ChargeQr(AccountToken) | Autopay |
+| `POST payments/widget_init` | T-Kassa SDK | Init (+Receipt) `DATA.connection_type=Widget` | SpeedPay |
+| `GET payments/status/:id` | Poll | GetState → Confirm if AUTHORIZED (**без Receipt**) | SBP return, inline |
 | `POST orders/:id/finalize` | Cold start return | sync_order! / sync_for_rebill! | CODE:BLACK lifecycle |
-| `POST orders/:id/cancel` | Refund | Cancel (no Receipt) | Auto refund |
+| `POST orders/:id/cancel` | Refund | Cancel (**без Receipt**, #40) | Auto refund |
+
+---
+
+## Receipt contact policy (#72)
+
+| Правило | Поведение |
+|---------|-----------|
+| Источник | `MobileCustomer` заказа через `Payments::TbankReceiptBuilder.for_order!` |
+| Приоритет | валидный **Email** → только `Receipt.Email`; иначе **Phone** → `Receipt.Phone` |
+| Без контакта / битый email | Error **до** Init (запрос в Т-Банк не уходит) |
+| Confirm | **не** передаёт Receipt (чек уже с Init) |
+| Полный Cancel | **не** передаёт Receipt (#40) — касса по исходному платежу |
+| Partial Cancel + Receipt | вне slice / нет API в продукте |
+| SendClosingReceipt | **N/A** — в Receipt только `PaymentMethod=full_payment`; prepayment/advance нет |
+
+Собственный mailer чека (`Orders::EmailService` / #71) — **отдельно** от ОФД Receipt.
 
 ---
 

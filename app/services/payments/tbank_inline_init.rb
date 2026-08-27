@@ -4,9 +4,11 @@ module Payments
   # [TDD] Шаг 1 ТЗ: inline-инициализация для Т-Банка
   # - если есть RebillId: делаем Init → Charge (для Charge нужен PaymentId)
   # - иначе: делаем Init с PayType: "O" (двухстадийная оплата)
+  # #72: Init всегда с Receipt (контакт из заказа).
   class TbankInlineInit
     def self.call(order:, return_base_url:, notification_url:, rebill_id: nil, customer_key: nil, connection_type: nil, adapter: Payments::TbankAdapter.new)
       data = connection_type.present? ? { "connection_type" => connection_type.to_s } : nil
+      receipt = Payments::TbankReceiptBuilder.for_order!(order)
 
       if rebill_id.to_s.present?
         init_result = adapter.init_payment(
@@ -15,7 +17,8 @@ module Payments
           notification_url: notification_url,
           customer_key: customer_key,
           recurrent: false,
-          data: data
+          data: data,
+          receipt: receipt
         )
 
         charge_response = adapter.charge(
@@ -32,7 +35,8 @@ module Payments
           customer_key: customer_key,
           recurrent: false,
           pay_type: "O",
-          data: data
+          data: data,
+          receipt: receipt
         )
 
         { provider_payment_id: init_result[:provider_payment_id] }

@@ -103,7 +103,7 @@ module Shop
         end
       end
 
-      receipt = Payments::TbankReceiptBuilder.call!(order: order, email: order.customer&.email)
+      receipt = Payments::TbankReceiptBuilder.for_order!(order)
 
       init = @adapter.init_payment(
         order: order,

@@ -80,8 +80,10 @@ class Shop::SbpPaymentInitiatorTest < ActiveSupport::TestCase
 
   test "call! live mode runs Init with Receipt then GetQr and returns nspk url" do
     ENV["SHOP_SIMULATE_PAYMENT"] = "0"
+    customer = create_mobile_customer!(phone: "+79001110001", email: nil)
     order = build_pending_order!
-    order = Order.includes(:order_items, :payments).find(order.id)
+    order.update_columns(customer_id: customer.id)
+    order = Order.includes(:order_items, :payments, :customer).find(order.id)
 
     captured_init = nil
     captured_qr_payment_id = nil
@@ -112,6 +114,7 @@ class Shop::SbpPaymentInitiatorTest < ActiveSupport::TestCase
     assert_equal "pay-sbp-1", captured_qr_payment_id
     assert captured_init[:receipt].is_a?(Hash), "Init должен получить Receipt 54-ФЗ"
     assert_equal "usn_income", captured_init[:receipt]["Taxation"]
+    assert_equal "+79001110001", captured_init[:receipt]["Phone"]
     assert order.payments.reload.first.provider_payment_id == "pay-sbp-1"
   end
 
@@ -217,7 +220,9 @@ class Shop::SbpPaymentInitiatorTest < ActiveSupport::TestCase
 
   test "call! raises on bank transport failure" do
     ENV["SHOP_SIMULATE_PAYMENT"] = "0"
+    customer = create_mobile_customer!(phone: "+79002220002", email: nil)
     order = build_pending_order!
+    order.update_columns(customer_id: customer.id)
 
     adapter = Payments::TbankAdapter.new
     adapter.define_singleton_method(:init_payment) do |**_kwargs|
@@ -235,7 +240,9 @@ class Shop::SbpPaymentInitiatorTest < ActiveSupport::TestCase
 
   test "call! maps bank 3001 into friendly sbp unavailable message" do
     ENV["SHOP_SIMULATE_PAYMENT"] = "0"
+    customer = create_mobile_customer!(phone: "+79003330003", email: nil)
     order = build_pending_order!
+    order.update_columns(customer_id: customer.id)
 
     adapter = Payments::TbankAdapter.new
     adapter.define_singleton_method(:init_payment) do |**_kwargs|

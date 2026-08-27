@@ -2,7 +2,7 @@
 
 | last_done | current_state | next_step |
 |-----------|---------------|-----------|
-| PHASE 0 intake `750b488c` | **SPEC ready** | `/sbr` → RED |
+| SPEC `d99894dc` | **RED in progress** | GREEN после RED commit |
 
 **CBR:** #72  
 **ТЗ:** [`customer_tasks/Доработка бэкенда — передача email покупателя в Receipt для фискальных чеков.md`](../milestones/veha_2/requirements/customer_tasks/Доработка%20бэкенда%20—%20передача%20email%20покупателя%20в%20Receipt%20для%20фискальных%20чеков.md)  
@@ -69,9 +69,9 @@
 
 ### Blast-radius (+3)
 
-- `app/services/payments/tbank_adapter.rb` — Init уже принимает `receipt:`; Confirm/Cancel не расширять в slice 1 (почему: #40 + Confirm без Receipt)
-- `test/services/payments/tbank_receipt_builder_test.rb` · `tbank_adapter_test.rb` · `sbp_payment_initiator_test.rb` — зеркала RED/GREEN
-- `app/frontend/routes/Checkout.svelte` — **только audit**: не возвращать email-гейт; при необходимости убедиться что phone/email уходят в create order (почему: Subtask 1–4 vs #71)
+- `app/services/payments/tbank_adapter.rb` — Init уже принимает `receipt:`; `charge_recurrent` тоже с Receipt; Confirm/Cancel не расширять в slice 1
+- `app/services/payments/tbank_inline_init.rb` — widget Init (+Receipt) через for_order!
+- `test/services/payments/tbank_receipt_builder_test.rb` · `tbank_adapter_test.rb` · `sbp_payment_initiator_test.rb` · `widget_payment_initiator_test.rb` · `tbank_inline_init_test.rb`
 
 ## Не ломать
 
