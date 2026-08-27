@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-27 — T-Bank webhook plain `OK` REVIEW
+
+- bugbot clean · security no medium+ · Entire `01M11PSGE…` на `0ee54a97`
+- Local 46/0 · на origin/develop · deploy — апрув
+
 ## 2026-08-27 — T-Bank webhook plain `OK` /regress PASS
 
 - tbank callback+adapter **46/0**

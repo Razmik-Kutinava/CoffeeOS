@@ -28,7 +28,7 @@
 | SPEC (`todo.md`) | **`[x]`** |
 | RED / GREEN | **`[x]`** `747b8e76` / `0ee54a9` · Entire `01M11PSG…` |
 | /regress | **`[x]`** PASS 46/0 |
-| REVIEW | **`[ ]`** |
+| REVIEW | **`[x]`** bugbot clean · security no medium+ · Entire · push |
 
 **Канон:** офиц. Notification → HTTP 200 + тело `OK`  
 **Файлы:** `tbank_controller.rb` · `tbank_controller_test.rb` · `docs/integrations/tbank.md`
