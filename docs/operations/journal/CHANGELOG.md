@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-27 — #74 SPEC: card binding unique hash
+
+- `todo.md`: gap (`CardId`→hash), 5 путей + blast 3, Не ломать/Проверка (SavedCardStore + tbank callback + save_card steps)
+- Ждёт `/sbr` RED; DDL — Migration Gate
+
 ## 2026-08-27 — #74 intake: card binding unique hash
 
 - ТЗ 1:1 + CBR #74 + `artifacts/card_binding_unique_hash/`

@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-27 (#74 card binding unique hash · intake)  
+**Дата:** 2026-08-27 (#74 card binding unique hash · SPEC)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#74** intake | `/spec` · затем SBR |
+| **#74** SPEC (`todo.md`) | `/sbr` → RED |
 
-**last_done:** #74 PHASE 0 intake — ТЗ + CBR + artifacts  
-**next_step:** `/spec` (карта файлов / `todo.md`)
+**last_done:** #74 SPEC — файлы / Не ломать / Проверка  
+**next_step:** `/sbr` RED (`SavedCardStore` + `card_hash`)
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -23,8 +23,8 @@
 
 | Что | Статус |
 |-----|--------|
-| Intake + CBR #74 | **`[x]`** (этот шаг) |
-| SPEC (`todo.md`) | **`[ ]`** ждёт `/spec` |
+| Intake + CBR #74 | **`[x]`** `6e88b962` |
+| SPEC (`todo.md`) | **`[x]`** (этот шаг) |
 | RED / GREEN | **`[ ]`** |
 | REVIEW | **`[ ]`** |
 

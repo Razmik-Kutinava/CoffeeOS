@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-27 (#74 card binding unique hash · intake)  
+**Дата:** 2026-08-27 (#74 card binding unique hash · SPEC)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#74** intake | `/spec` |
+| **#74** SPEC | `/sbr` → RED |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,12 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-27 — #74 SPEC card binding unique hash
+
+- Gap: `card_hash` ← keyed hash `CardId`/`bank_card_id`; Minitest не RSpec
+- Файлы 5 + blast 3 · Не ломать/Проверка в `todo.md`
+- Migration Gate на DDL/data-migration apply
 
 ### Сессия 2026-08-27 — #74 intake card binding unique hash
 
