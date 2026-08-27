@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-27 (#73 fiscal receipts ЛК · intake)  
+**Дата:** 2026-08-27 (#73 fiscal receipts ЛК · SPEC)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#73** intake done | `/spec` · блокер payload схемы; #72 deploy SKIP отдельно |
+| **#73** SPEC done | `/sbr` RED · блокер payload; #72 deploy SKIP отдельно |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,12 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-27 — #73 SPEC fiscal receipts ЛК
+
+- Gap: inbound fiscal greenfield; reuse `FiscalReceipt`; webhook `/callbacks/tbank`; UI `OrderReceipt.svelte`
+- Файлы 6 + blast 3 · Не ломать/Проверка в `todo.md`
+- Блокер: схема+пример payload до GREEN
 
 ### Сессия 2026-08-27 — #73 intake fiscal receipts ЛК
 

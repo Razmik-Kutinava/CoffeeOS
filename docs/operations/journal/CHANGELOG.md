@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-27 — #73 SPEC: фискальные чеки в ЛК
+
+- `todo.md`: gap, 6 путей + blast 3, Не ломать/Проверка (tbank callback + pwa_lk)
+- Reuse `FiscalReceipt`; детект на `/callbacks/tbank` или отдельный endpoint — после схемы
+- Блокер Subtask 1: пример fiscal notification в artifacts
+
 ## 2026-08-27 — #73 intake: фискальные чеки в ЛК
 
 - ТЗ 1:1 + CBR #73 + `artifacts/fiscal_receipts_personal_cabinet/`

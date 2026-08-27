@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-27 (#73 fiscal receipts ЛК · intake)  
+**Дата:** 2026-08-27 (#73 fiscal receipts ЛК · SPEC)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#73** PHASE 0 intake | `/spec` — gap + пути; блокер: схема fiscal notification |
+| **#73** PHASE 1 SPEC | `/sbr` RED · блокер: схема fiscal payload |
 
-**last_done:** #73 intake ТЗ + CBR + artifacts  
-**next_step:** `/spec` (#72 deploy/MCP — отдельно, отложен)
+**last_done:** #73 SPEC → `todo.md` (пути + Не ломать/Проверка)  
+**next_step:** `/sbr` RED (fixture схемы до GREEN)
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -23,8 +23,8 @@
 
 | Что | Статус |
 |-----|--------|
-| Intake + CBR #73 | **`[x]`** (этот коммит) |
-| SPEC (`todo.md`) | **`[ ]`** ждёт `/spec` |
+| Intake + CBR #73 | **`[x]`** `fb5334d8` |
+| SPEC (`todo.md`) | **`[x]`** (этот шаг) |
 | RED / GREEN | **`[ ]`** |
 | Блокер | схема fiscal notification + пример payload |
 
