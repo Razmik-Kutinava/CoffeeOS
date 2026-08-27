@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-27 — #72 /regress PASS (Receipt.Email)
+
+- builder+adapter+sbp 48/0 · order_creator+qa_2.3 24/0 (2 skip) · widget+inline 12/0
+- GREEN `5f68efea` · Entire `01M11269FD48FXF42NCW98AG0X` · next `/review`
+
 ## 2026-08-27 — #72 SPEC: Receipt.Email / Phone
 
 - todo: политика Email>Phone; Init на всех путях витрины; Confirm/Cancel/SendClosing — documented

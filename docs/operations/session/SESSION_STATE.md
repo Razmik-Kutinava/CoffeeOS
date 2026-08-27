@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-27 (#72 SPEC)  
+**Дата:** 2026-08-27 (#72 /regress PASS)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #72 SPEC ready | `/sbr` RED |
+| #72 regress PASS (оплата) | `/review` |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,12 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-27 — #72 /regress PASS
+
+- Зона оплаты: builder+adapter+sbp **48/0** · order_creator+qa_2.3 **24/0** (2 skip) · widget+inline **12/0**
+- GREEN `5f68efea` · Entire `01M11269FD48FXF42NCW98AG0X`
+- Next: `/review` (bugbot+security · push/CI); Fly MCP Point A после deploy
 
 ### Сессия 2026-08-27 — #72 SPEC (Receipt.Email)
 
