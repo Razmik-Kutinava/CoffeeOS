@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_27_180100) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_27_180200) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_stat_statements"
@@ -436,6 +436,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_27_180100) do
     t.boolean "is_default", default: false, null: false
     t.datetime "last_used_at", precision: nil
     t.string "payment_type", limit: 20, default: "card", null: false
+    t.index ["bank_card_id"], name: "idx_mpm_active_bank_card_id_unique", unique: true, where: "((is_active = true) AND (bank_card_id IS NOT NULL) AND ((payment_type)::text = 'card'::text))"
     t.index ["card_hash"], name: "idx_mpm_active_card_hash_unique", unique: true, where: "((is_active = true) AND (card_hash IS NOT NULL) AND ((payment_type)::text = 'card'::text))"
     t.index ["customer_id", "is_active"], name: "idx_pm_active", where: "(is_active = true)"
     t.index ["customer_id"], name: "idx_pm_customer"

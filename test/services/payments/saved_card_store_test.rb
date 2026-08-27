@@ -109,6 +109,52 @@ class Payments::SavedCardStoreTest < ActiveSupport::TestCase
     assert_equal 1, MobilePaymentMethod.where(card_hash: hash, is_active: true).count
   end
 
+  test "legacy foreign row with same bank_card_id and nil card_hash blocks second account" do
+    MobilePaymentMethod.create!(
+      customer_id: @customer_a.id,
+      payment_type: "card",
+      card_token: "rebill-legacy-a",
+      card_masked: "*6666",
+      card_brand: "MIR",
+      card_expires_at: "12/28",
+      bank_card_id: "card-legacy-1",
+      card_hash: nil,
+      is_active: true,
+      is_default: true
+    )
+
+    refusal = persist!(@customer_b, card_id: "card-legacy-1", rebill: "rebill-legacy-b", pan: "430000******6666")
+    assert_nil refusal
+    assert_equal 0, MobilePaymentMethod.where(customer_id: @customer_b.id, payment_type: "card", is_active: true).count
+  end
+
+  test "pan+exp match does not rewrite row when CardId differs" do
+    first = persist!(@customer_a, card_id: "card-pan-old", rebill: "rebill-pan-old", pan: "430000******7777")
+    second = persist!(@customer_a, card_id: "card-pan-new", rebill: "rebill-pan-new", pan: "430000******7777")
+
+    assert second.persisted?
+    refute_equal first.id, second.id, "разный CardId при том же last4+exp — отдельная строка, не угон hash"
+    assert_equal "card-pan-old", first.reload.bank_card_id
+    assert_equal "card-pan-new", second.bank_card_id
+  end
+
+  test "card_hash_pepper prefers CARD_HASH_PEPPER over secret_key_base" do
+    old = ENV["CARD_HASH_PEPPER"]
+    ENV["CARD_HASH_PEPPER"] = "stable-pepper-for-tests"
+    begin
+      a = Payments::SavedCardStore.card_hash_for("card-pepper-1")
+      b = OpenSSL::HMAC.hexdigest("SHA256", "stable-pepper-for-tests", "mobile_payment_methods.card_hash.v1:card-pepper-1")
+      assert_equal b, a
+      refute_equal OpenSSL::HMAC.hexdigest("SHA256", Rails.application.secret_key_base, "mobile_payment_methods.card_hash.v1:card-pepper-1"), a
+    ensure
+      if old
+        ENV["CARD_HASH_PEPPER"] = old
+      else
+        ENV.delete("CARD_HASH_PEPPER")
+      end
+    end
+  end
+
   private
 
   def persist!(customer, card_id:, rebill:, pan:)

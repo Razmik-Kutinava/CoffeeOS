@@ -4,15 +4,22 @@ module Payments
   # Upsert UserCards (mobile_payment_methods) после CONFIRMED + RebillId.
   class SavedCardStore
     # Стабильный keyed hash от CardId эквайринга (глобальная идентичность карты).
+    # Pepper: CARD_HASH_PEPPER / credentials — не ротировать вместе с SECRET_KEY_BASE.
     def self.card_hash_for(bank_card_id)
       id = bank_card_id.to_s.presence
       return if id.blank?
 
       OpenSSL::HMAC.hexdigest(
         "SHA256",
-        Rails.application.secret_key_base,
+        card_hash_pepper,
         "mobile_payment_methods.card_hash.v1:#{id}"
       )
+    end
+
+    def self.card_hash_pepper
+      ENV["CARD_HASH_PEPPER"].presence ||
+        Rails.application.credentials.dig(:payments, :card_hash_pepper).presence ||
+        Rails.application.secret_key_base
     end
 
     def self.persist_from_tbank!(payment:, payload:)
@@ -50,13 +57,13 @@ module Payments
       card_hash = self.class.card_hash_for(bank_card_id)
       exp_date = normalize_exp_date(@payload["ExpDate"].to_s.presence)
 
-      if card_hash.present? && foreign_active_card_hash?(card_hash, customer_id)
+      if foreign_active_binding?(customer_id, card_hash: card_hash, bank_card_id: bank_card_id)
         log_binding_rejected
         return nil
       end
 
       MobilePaymentMethod.transaction do
-        card = find_existing_card(customer_id, rebill_id, masked, exp_date, card_hash)
+        card = find_existing_card(customer_id, rebill_id, masked, exp_date, card_hash, bank_card_id)
         card ||= MobilePaymentMethod.new(customer_id: customer_id, payment_type: "card")
 
         card.card_token = rebill_id
@@ -84,21 +91,12 @@ module Payments
 
     private
 
-    def find_existing_card(customer_id, rebill_id, masked, exp_date, card_hash)
+    def find_existing_card(customer_id, rebill_id, masked, exp_date, card_hash, bank_card_id)
       card = MobilePaymentMethod.find_by(
         customer_id: customer_id,
         card_token: rebill_id,
         payment_type: "card"
       )
-      # Дубликат по pan + exp_date (extreme ТЗ) — обновляем RebillId, не создаём второй ряд.
-      if card.nil? && masked.present? && exp_date.present?
-        card = MobilePaymentMethod.find_by(
-          customer_id: customer_id,
-          card_masked: masked,
-          card_expires_at: exp_date,
-          payment_type: "card"
-        )
-      end
       if card.nil? && card_hash.present?
         card = MobilePaymentMethod.find_by(
           customer_id: customer_id,
@@ -106,14 +104,37 @@ module Payments
           payment_type: "card"
         )
       end
+      if card.nil? && bank_card_id.present?
+        card = MobilePaymentMethod.find_by(
+          customer_id: customer_id,
+          bank_card_id: bank_card_id,
+          payment_type: "card"
+        )
+      end
+      # pan+exp только если не подменяем чужой CardId через коллизию last4.
+      if card.nil? && masked.present? && exp_date.present?
+        candidate = MobilePaymentMethod.find_by(
+          customer_id: customer_id,
+          card_masked: masked,
+          card_expires_at: exp_date,
+          payment_type: "card"
+        )
+        if candidate && (bank_card_id.blank? || candidate.bank_card_id.blank? || candidate.bank_card_id == bank_card_id)
+          card = candidate
+        end
+      end
       card
     end
 
-    def foreign_active_card_hash?(card_hash, customer_id)
-      MobilePaymentMethod
-        .where(card_hash: card_hash, is_active: true, payment_type: "card")
+    def foreign_active_binding?(customer_id, card_hash:, bank_card_id:)
+      scope = MobilePaymentMethod
+        .where(is_active: true, payment_type: "card")
         .where.not(customer_id: customer_id)
-        .exists?
+
+      return true if card_hash.present? && scope.where(card_hash: card_hash).exists?
+      return true if bank_card_id.present? && scope.where(bank_card_id: bank_card_id).exists?
+
+      false
     end
 
     def log_binding_rejected
