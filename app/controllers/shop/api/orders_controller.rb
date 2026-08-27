@@ -20,7 +20,7 @@ module Shop
 
       def show
         order = Order.where(tenant_id: @shop_tenant.id, source: :mobile)
-                     .includes(:order_items, :fiscal_receipts)
+                     .includes(:order_items, :fiscal_receipts, :payments)
                      .find(params[:id])
         unless order_visible_to_session_customer?(order)
           Rails.logger.warn(
@@ -260,6 +260,7 @@ module Shop
           status: order.status,
           discount_amount: order.discount_amount.to_f,
           payment_settled: !order.pending_payment?,
+          fiscal_expected: order.payments.any? { |p| p.provider.to_s == "tbank" },
           created_at: order.created_at.iso8601,
           reconnect_token: Shop::GuestOrderReconnect.token_for(order),
           tenant: tenant_pickup_json,

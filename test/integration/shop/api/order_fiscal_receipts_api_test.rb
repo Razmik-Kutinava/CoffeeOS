@@ -55,6 +55,13 @@ class Shop::Api::OrderFiscalReceiptsApiTest < ActionDispatch::IntegrationTest
       order = Order.find(order_id)
       order.update!(status: "accepted")
 
+      # cash/shop: settled but OFD not expected → UI must not spin «Чек формируется»
+      sess.get "/shop/api/orders/#{order_id}", headers: shop_tenant_headers(@tenant.id), as: :json
+      assert_equal 200, sess.response.status
+      body0 = sess.response.parsed_body
+      assert_equal [], body0["fiscal_receipts"]
+      assert_equal false, body0["fiscal_expected"]
+
       payment = order.payments.order(created_at: :desc).first!
       payment.update!(
         provider: "tbank",
@@ -63,9 +70,8 @@ class Shop::Api::OrderFiscalReceiptsApiTest < ActionDispatch::IntegrationTest
         provider_data: (payment.provider_data || {}).merge("save_card" => false)
       )
 
-      # delay: no receipt yet → empty list (UI «формируется»)
       sess.get "/shop/api/orders/#{order_id}", headers: shop_tenant_headers(@tenant.id), as: :json
-      assert_equal 200, sess.response.status
+      assert_equal true, sess.response.parsed_body["fiscal_expected"]
       assert_equal [], sess.response.parsed_body["fiscal_receipts"]
 
       payload = sign_payload(

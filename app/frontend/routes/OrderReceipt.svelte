@@ -47,7 +47,9 @@
 
   const receipts = $derived(Array.isArray(order?.fiscal_receipts) ? order.fiscal_receipts : [])
   const hasReceipts = $derived(receipts.some((r) => r?.url))
-  const showForming = $derived(order?.payment_settled && !hasReceipts)
+  const showForming = $derived(
+    Boolean(order?.payment_settled && order?.fiscal_expected && !hasReceipts)
+  )
 </script>
 
 <div class="receipt-page" data-testid="shop-order-receipt">
