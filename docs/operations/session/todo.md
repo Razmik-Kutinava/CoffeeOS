@@ -44,7 +44,7 @@ bin/rails test test/services/payments/tbank_fiscal_notification_handler_test.rb 
 - [x] PHASE 0 intake (`fb5334d8`)
 - [x] PHASE 1 SPEC (`ec76fa02`)
 - [x] RED (`579f9468`)
-- [x] GREEN (этот коммит)
+- [x] GREEN (`8e923305`) · Entire `01M11269FD48FXF42NCW98AG0X`
 - [ ] /regress
 - [ ] REVIEW
 
