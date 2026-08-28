@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-28 (/sbr cash-block verify 46/0)  
+**Дата:** 2026-08-28 (/regress shop+payment 113/0)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| SBR verify cash-block | `/regress` shop checkout |
+| Regress cash-block local PASS | `/review` |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

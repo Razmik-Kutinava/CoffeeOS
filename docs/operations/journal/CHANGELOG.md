@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-28 — /regress block cash shop API (shop checkout zone)
+
+- Local: 113 runs / 417 assertions / 0 failures / 2 skips
+- Зона: todo 4 файла + §2.3 + mvp_flow + checkout CBR + block_e + tbank callback/adapter
+- Fly MCP Point A: skip (regress local only; v461 cash 422 уже PASS)
+
 ## 2026-08-28 — /sbr verify block cash on public shop API
 
 - Local: 46 runs / 146 assertions / 0 failures (payment_config, order_creator, orders_controller, barista orders)

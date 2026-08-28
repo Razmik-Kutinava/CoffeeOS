@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-28 (/sbr cash-block verify 46/0)  
+**Дата:** 2026-08-28 (/regress shop+payment 113/0)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| SBR verify cash-block GREEN | `/regress` shop checkout zone |
+| Regress cash-block PASS local | `/review` |
 
-**last_done:** /sbr 46/0 local (1220d3e2)  
-**next_step:** `/regress`; затем #72/#73 live MCP
+**last_done:** /regress 113/0 (shop checkout + §2.3 + T-Bank)  
+**next_step:** `/review`; Fly MCP Point A при deploy
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
