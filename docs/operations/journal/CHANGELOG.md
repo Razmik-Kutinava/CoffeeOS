@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-28 — REVIEW block cash shop API
+
+- Local regress 113/0; Bugbot: no bugs; Security: no medium+
+- Entire: `1220d3e2`/HEAD без trailer — push ops отложен (attach/backfill)
+- Fly MCP cash 422 уже PASS (v461)
+
 ## 2026-08-28 — /regress block cash shop API (shop checkout zone)
 
 - Local: 113 runs / 417 assertions / 0 failures / 2 skips

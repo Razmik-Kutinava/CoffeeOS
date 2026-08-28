@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-28 (/regress shop+payment 113/0)  
+**Дата:** 2026-08-28 (REVIEW cash-block PASS)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Regress cash-block PASS local | `/review` |
+| REVIEW PASS · push ждёт Entire | deploy по апруву |
 
-**last_done:** /regress 113/0 (shop checkout + §2.3 + T-Bank)  
-**next_step:** `/review`; Fly MCP Point A при deploy
+**last_done:** bugbot+security PASS; regress 113/0  
+**next_step:** Entire attach/backfill → push ops; deploy + MCP при апруве
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

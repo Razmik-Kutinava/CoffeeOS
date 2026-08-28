@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-28 (/regress shop+payment 113/0)  
+**Дата:** 2026-08-28 (REVIEW cash-block PASS)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Regress cash-block local PASS | `/review` |
+| REVIEW PASS · Entire gap HEAD | deploy апрув |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
