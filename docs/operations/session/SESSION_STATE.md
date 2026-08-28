@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-28 (shop API order show customer_id)  
+**Дата:** 2026-08-28 (barista SBR verify)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| GET `/shop/api/orders/:id` scoped by `customer_id` | barista `/sbr` verify |
+| barista GREEN `af05031b` verify 58/0 | /regress |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
