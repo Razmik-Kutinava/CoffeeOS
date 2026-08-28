@@ -1,0 +1,38 @@
+<timestamp>Friday, Aug 28, 2026, 7:08 PM (UTC+4)</timestamp>
+
+В app/controllers/shop/api/orders_controller.rb, метод show (строка ~19):
+
+Сейчас:
+  order = Order.where(tenant_id: @shop_tenant.id, source: :mobile).find(params[:id])
+
+Проблема: customer_id не проверяется — гость может прочитать чужой заказ по id, зная только
+tenant и order_id.
+
+Задача:
+1. Добавь обязательную проверку customer_id:
+   return head :unauthorized if session[:shop_customer_id].blank?
+   order = Order.where(
+     tenant_id: @shop_tenant.id,
+     source: :mobile,
+     customer_id: session[:shop_customer_id]
+   ).find(params[:id])
+
+   Не делай customer_id опциональным ("if session present") — если сессии нет, доступа к
+   заказу по id быть не должно вообще.
+
+2. Проверь, есть ли у гостя механизм GuestOrderReconnect (использовался ранее для /payment/fail) —
+   если гость может законно открыть заказ без активной сессии (например, вернувшись по ссылке
+   после оплаты), интегрируй ту же проверку reconnect_token сюда, а не только чистый
+   session[:shop_customer_id].
+
+3. Проверь метод history в этом же контроллере — там customer_id уже проверяется (по прошлому
+   отчёту). Используй тот же паттерн для консистентности между show и history.
+
+4. Добавь тест: гость A создаёт заказ, гость B (другая сессия/customer_id, тот же tenant)
+   пытается получить GET /shop/api/orders/:id с order_id гостя A → должен получить
+   401/403/404, не данные заказа.
+
+5. Добавь тест: гость A с активной сессией получает GET /shop/api/orders/:id со своим
+   заказом → работает как раньше (регресс не сломан).
+
+6. Покажи diff и результат прогона.

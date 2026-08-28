@@ -1,0 +1,14 @@
+{
+  "cli_version": "0.8.42",
+  "checkpoint_id": "01M14FWV6BGWDXVYYFV0ETG5KS",
+  "session_id": "3fb7aeb1-23c4-4188-9894-9a560a38b8eb",
+  "strategy": "manual-commit",
+  "created_at": "2026-08-28T15:30:28.9394424Z",
+  "checkpoints_count": 4,
+  "files_touched": null,
+  "agent": "Cursor",
+  "model": "",
+  "compact_transcript_start": 0,
+  "kind": "agent_review",
+  "review_prompt": "<timestamp>Friday, Aug 28, 2026, 7:08 PM (UTC+4)</timestamp>\n\nВ app/controllers/shop/api/orders_controller.rb, метод show (строка ~19):\n\nСейчас:\n  order = Order.where(tenant_id: @shop_tenant.id, source: :mobile).find(params[:id])\n\nПроблема: customer_id не проверяется — гость может прочитать чужой заказ по id, зная только\ntenant и order_id.\n\nЗадача:\n1. Добавь обязательную проверку customer_id:\n   return head :unauthorized if session[:shop_customer_id].blank?\n   order = Order.where(\n     tenant_id: @shop_tenant.id,\n     source: :mobile,\n     customer_id: session[:shop_customer_id]\n   ).find(params[:id])\n\n   Не делай customer_id опциональным (\"if session present\") — если сессии нет, доступа к\n   заказу по id быть не должно вообще.\n\n2. Проверь, есть ли у гостя механизм GuestOrderReconnect (использовался ранее для /payment/fail) —\n   если гость может законно открыть заказ без активной сессии (например, вернувшись по ссылке\n   после оплаты), интегрируй ту же проверку reconnect_token сюда, а не только чистый\n   session[:shop_customer_id].\n\n3. Проверь метод history в этом же контроллере — там customer_id уже проверяется (по прошлому\n   отчёту). Используй тот же паттерн для консистентности между show и history.\n\n4. Добавь тест: гость A создаёт заказ, гость B (другая сессия/customer_id, тот же tenant)\n   пытается получить GET /shop/api/orders/:id с order_id гостя A → должен получить\n   401/403/404, не данные заказа.\n\n5. Добавь тест: гость A с активной сессией получает GET /shop/api/orders/:id со своим\n   заказом → работает как раньше (регресс не сломан).\n\n6. Покажи diff и результат прогона."
+}
