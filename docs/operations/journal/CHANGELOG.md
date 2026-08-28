@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-28 — fix: Sentry RUBY-1D receipt email + RUBY-X runner noise
+
+- **RUBY-1D:** `SendOrderReceiptEmailJob` → `Shop::OrderReceiptEmailDelivery` + Brevo API (не ActionMailer localhost:25)
+- **RUBY-X:** `SentryNoiseFilter` — drop `StatementInvalid` из `rails runner` / `application.runner`
+- Local: `send_order_receipt_email_job` + `sentry_noise_filter` PASS
+
 ## 2026-08-27 — Fly v459 deploy + MCP #72/#73/#74 + webhook OK
 
 - Deploy **v459** Point A; Local gate PASS; webhook body plain `OK` на Fly подтверждён

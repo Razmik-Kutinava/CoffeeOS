@@ -21,6 +21,11 @@
 
 ## Решено недавно (детали)
 
+[2026-08-28] — Sentry RUBY-1D / RUBY-X
+**Статус:** **resolved** local (deploy апрув)
+**RUBY-1D:** `OrderReceiptMailer.deliver_later` → localhost:25 на Fly; чек через `Shop::BrevoClient.deliver_html!`
+**RUBY-X:** ad-hoc `rails runner` с `payment_method` на orders — шум; фильтр runner в `SentryNoiseFilter`
+
 [2026-08-14] — CI: Tbank CONFIRMED `assert_no_enqueued_jobs` flake
 **Статус:** **resolved** local (нужен push)
 **Источник:** https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/31797599803

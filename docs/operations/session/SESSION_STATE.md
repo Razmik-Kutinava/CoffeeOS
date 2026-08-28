@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-27 (Fly **v459** deploy + MCP #72/#73/#74 + webhook OK)  
+**Дата:** 2026-08-28 (Sentry RUBY-1D/RUBY-X fix · local tests)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Fly v459 MCP PARTIAL/PASS | live pay + fiscal notify в кабинете Т-Банка; `card_hash:apply` апрув |
+| Sentry triage: receipt→Brevo, runner noise filter | deploy апрув → Fly MCP Point A |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
