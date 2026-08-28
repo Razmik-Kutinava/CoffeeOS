@@ -14,8 +14,8 @@
 | RED / GREEN | **`[x]`** `af05031b` (сделано до формального SBR) |
 | /sbr verify | **`[x]`** 58 runs, 370 assertions, 0 failures |
 | /regress | **`[x]`** 107 runs, 485 assertions, 0 failures |
-| REVIEW | **`[~]`** local 58/0 · bugbot 1 medium (history/show — out of scope) · security OK · Entire gap → attach |
-| push | **`[ ]`** |
+| REVIEW | **`[x]`** local 58/0 · bugbot 1 medium (history/show — out of scope) · security OK · push CI |
+| push | **`[~]`** CI fix pwa_lk 401 |
 | deploy | **`[ ]`** |
 | Fly MCP | **`[ ]`** skip (не shop/pay hot-path) |
 

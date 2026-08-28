@@ -109,7 +109,7 @@ class Shop::Api::PwaLkApiTest < ActionDispatch::IntegrationTest
       assert_equal 401, sess.response.status
 
       sess.get "/shop/api/orders/#{order_id}", headers: shop_tenant_headers(@tenant.id), as: :json
-      assert_equal 404, sess.response.status
+      assert_equal 401, sess.response.status
 
       sess.get "/shop/api/profile", headers: shop_tenant_headers(@tenant.id), as: :json
       assert_equal 401, sess.response.status
