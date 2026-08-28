@@ -9,8 +9,8 @@
 |--------|--------|
 | v461 на Fly · MCP session commits PASS | fiscal notify ON → live pay |
 
-**last_done:** deploy v461 + MCP Point A PASS (cash block, simulate=0, fail-redirect)  
-**next_step:** кабинет Т-Банка fiscalization ON; live test-customer pay
+**last_done:** CI rubocop fix (EmptyLineAfterMagicComment ×3 dead clients) · push `9540afc0`  
+**next_step:** дождаться CI green → deploy v462 по апруву; fiscal notify ON
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
