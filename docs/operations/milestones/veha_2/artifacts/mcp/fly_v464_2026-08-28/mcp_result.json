@@ -1,0 +1,24 @@
+{
+  "task": "fly_v464_mcp_acceptance",
+  "date": "2026-08-28",
+  "base": "https://coffeeos.fly.dev",
+  "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "head": "20518d1f",
+  "deployment": "deployment-01M143HBYRQB50Y04HZA1RVAZZ",
+  "release": "v464",
+  "deploy_commits": [
+    "1220d3e2 block shop cash online",
+    "2146ac33..20518d1f ops SPEC/SBR/regress/REVIEW/push"
+  ],
+  "checks": [
+    { "id": "P0_up", "pass": true, "http": 200 },
+    { "id": "P1_shop_point_a", "pass": true },
+    { "id": "P2_release", "pass": true, "version": 464 },
+    { "id": "P3_simulate_off", "pass": true, "value": "0" },
+    { "id": "P4_webhook_invalid_token", "pass": true, "http": 401 },
+    { "id": "P5_shop_cash_rejected", "pass": true, "http": 422, "error": "cash payment not available online" },
+    { "id": "P6_card_pending_payment", "pass": true, "http": 200, "status": "pending_payment" },
+    { "id": "P7_fail_redirect_no_ownership", "pass": true, "http": 302 }
+  ],
+  "status": "PASS"
+}

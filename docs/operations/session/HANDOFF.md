@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-28 (push develop + CI green)  
+**Дата:** 2026-08-28 (Fly v464 deploy + MCP PASS)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| push `96b790e3` · CI #33168443668 green | deploy по апруву |
+| v464 · MCP P0–P7 PASS | #72/#73 live MCP |
 
-**last_done:** git push develop + CI success  
-**next_step:** deploy + Fly MCP Point A (апрув)
+**last_done:** deploy v464 + MCP PASS (cash 422)  
+**next_step:** live pay #72/#73; fiscal notify
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

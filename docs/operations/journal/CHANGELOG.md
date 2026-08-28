@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-28 — Fly v464 deploy + MCP PASS (cash-block)
+
+- Deploy **v464** · `deployment-01M143HBYRQB50Y04HZA1RVAZZ` · HEAD `20518d1f`
+- MCP P0–P7 **PASS** (cash 422, simulate=0, card pending, webhook 401, fail-redirect 302)
+- v463 failed → v464 complete (rolling)
+- Артефакты: `…/mcp/fly_v464_2026-08-28/`
+
 ## 2026-08-28 — push develop + CI green (cash-block ops)
 
 - Push `07c9e6ab..96b790e3` → develop

@@ -16,7 +16,8 @@
 | /regress | **`[x]`** 113/0 |
 | REVIEW | **`[x]`** bugbot+security PASS; Entire gap на HEAD |
 | push | **`[x]`** `96b790e3` · CI #33168443668 green |
-| deploy | **`[ ]`** — апрув |
+| deploy | **`[x]`** v464 · `deployment-01M143HBYRQB50Y04HZA1RVAZZ` |
+| Fly MCP | **`[x]`** P0–P7 PASS |
 
 ## Проверка
 

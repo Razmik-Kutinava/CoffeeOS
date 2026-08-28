@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-28 (push develop + CI green)  
+**Дата:** 2026-08-28 (Fly v464 deploy + MCP PASS)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| push + CI green | deploy апрув |
+| v464 · MCP P0–P7 PASS | #72/#73 live |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,14 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Fly v464 deploy + MCP (2026-08-28)
+
+| Что | Статус |
+|-----|--------|
+| Deploy | **v464** · `deployment-01M143HBYRQB50Y04HZA1RVAZZ` · HEAD `20518d1f` |
+| P0–P7 MCP | **PASS** (cash 422) |
+| Артефакты | `…/mcp/fly_v464_2026-08-28/` |
 
 ### Fly v462 deploy + MCP (2026-08-28)
 
