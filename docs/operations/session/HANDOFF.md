@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-28 (barista regress PASS)  
+**Дата:** 2026-08-28 (/review barista shift-scope — push blocked Entire)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| barista regress 107/0 PASS | /review |
+| REVIEW partial · Entire gap на HEAD | attach → push → CI |
 
-**last_done:** /regress barista zone  
-**next_step:** /review
+**last_done:** /review local + bugbot + security  
+**next_step:** Entire attach → push
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

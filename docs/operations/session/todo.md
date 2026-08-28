@@ -2,7 +2,7 @@
 
 | last_done | current_state | next_step |
 |-----------|---------------|-----------|
-| /regress barista 107/0 | GREEN `af05031b` · Entire gap | /review |
+| /review local+субагенты | bugbot 1 medium (history UX) · Entire gap HEAD | attach → push |
 
 **Задача:** `OrdersController#show`, `#update_status`, `#cancel` не должны отдавать/менять заказы вне текущей открытой смены (и витрины mobile с `opened_at` смены — канон `BoardOrdersQuery`).
 
@@ -14,7 +14,7 @@
 | RED / GREEN | **`[x]`** `af05031b` (сделано до формального SBR) |
 | /sbr verify | **`[x]`** 58 runs, 370 assertions, 0 failures |
 | /regress | **`[x]`** 107 runs, 485 assertions, 0 failures |
-| REVIEW | **`[ ]`** |
+| REVIEW | **`[~]`** local 58/0 · bugbot 1 medium (history/show — out of scope) · security OK · Entire gap → attach |
 | push | **`[ ]`** |
 | deploy | **`[ ]`** |
 | Fly MCP | **`[ ]`** skip (не shop/pay hot-path) |

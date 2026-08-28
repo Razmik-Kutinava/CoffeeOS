@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-28 — /review barista shift-scoped orders (partial)
+
+- Local verify 58/0; Bugbot: history→show 404 (out of scope SPEC); Security: no medium+
+- Entire: `explain HEAD` empty (no trailer) — push отложен до attach
+- Коммит: (этот шаг)
+
 ## 2026-08-28 — shop API: GET order show только свой customer_id
 
 - `Shop::Api::OrdersController#show`: как `history` — сначала `GuestOrderReconnect`, затем обязательный `customer_id` в `where` (без сессии — 401)
