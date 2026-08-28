@@ -22,6 +22,14 @@
 - `Shop::Api::OrdersController#show`: как `history` — сначала `GuestOrderReconnect`, затем обязательный `customer_id` в `where` (без сессии — 401)
 - Тесты: чужой гость 404; своя сессия 200; reconnect_token без cookie 200
 
+## 2026-08-28 — PHASE 3 REVIEW: barista shift-scoped orders
+
+- Bugbot: no bugs (barista scope)
+- Security: barista IDOR/shift OK; medium advisory email bounce webhook (вне задачи)
+- Entire: `01M14FWV6BGWDXVYYFV0ETG5KS` на `b67d8b4f`
+- Local: 107/0 regress
+- Fly MCP: skip
+
 ## 2026-08-28 — /regress barista shift-scoped orders
 
 - 107 runs, 485 assertions, 0 failures (orders_controller + board_orders_query + barista services + integration)
