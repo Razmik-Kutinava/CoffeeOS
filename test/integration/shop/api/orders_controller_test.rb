@@ -249,7 +249,7 @@ class Shop::Api::OrdersControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test "GET /shop/api/orders/:id hides order from another session" do
+  test "GET /shop/api/orders/:id without session is unauthorized" do
     order_id = nil
     open_session do |sess|
       sess.post "/shop/api/cart/add",
@@ -267,7 +267,69 @@ class Shop::Api::OrdersControllerTest < ActionDispatch::IntegrationTest
     open_session do |other|
       other.get "/shop/api/orders/#{order_id}",
         headers: shop_tenant_headers(@tenant.id)
-      assert_equal 404, other.response.status
+      assert_equal 401, other.response.status
+      assert_not_includes other.response.body, "order_number"
+      assert_not_includes other.response.body, "items"
+    end
+  end
+
+  test "GET /shop/api/orders/:id hides order from another guest on same tenant" do
+    order_id = nil
+    open_session do |sess_a|
+      sess_a.post "/shop/api/cart/add",
+        headers: shop_tenant_headers(@tenant.id),
+        params: { product_id: @product.id, quantity: 1, selected_modifiers: [] },
+        as: :json
+      verify_shop_email!(tenant_id: @tenant.id, email: @email, session: sess_a)
+      sess_a.post "/shop/api/orders",
+        headers: shop_tenant_headers(@tenant.id),
+        params: shop_order_params(email: @email, name: "Guest A", payment_method: "card"),
+        as: :json
+      assert_equal 200, sess_a.response.status
+      order_id = sess_a.response.parsed_body["order_id"]
+    end
+
+    email_b = "guest-b-#{SecureRandom.hex(4)}@example.com"
+    open_session do |sess_b|
+      sess_b.post "/shop/api/cart/add",
+        headers: shop_tenant_headers(@tenant.id),
+        params: { product_id: @product.id, quantity: 1, selected_modifiers: [] },
+        as: :json
+      verify_shop_email!(tenant_id: @tenant.id, email: email_b, session: sess_b)
+      sess_b.get "/shop/api/orders/#{order_id}",
+        headers: shop_tenant_headers(@tenant.id)
+      assert_includes [ 401, 403, 404 ], sess_b.response.status
+      body = sess_b.response.body.to_s
+      assert_not_includes body, "order_number"
+      refute_equal order_id, sess_b.response.parsed_body&.dig("id") if sess_b.response.content_type.to_s.include?("json")
+    end
+  end
+
+  test "GET /shop/api/orders/:id reconnects guest via reconnect_token without prior session" do
+    order_id = nil
+    token = nil
+    open_session do |sess|
+      sess.post "/shop/api/cart/add",
+        headers: shop_tenant_headers(@tenant.id),
+        params: { product_id: @product.id, quantity: 1, selected_modifiers: [] },
+        as: :json
+      verify_shop_email!(tenant_id: @tenant.id, email: @email, session: sess)
+      sess.post "/shop/api/orders",
+        headers: shop_tenant_headers(@tenant.id),
+        params: shop_order_params(email: @email, name: "Return Guest", payment_method: "card"),
+        as: :json
+      assert_equal 200, sess.response.status
+      order_id = sess.response.parsed_body["order_id"]
+      token = sess.response.parsed_body["reconnect_token"]
+      assert token.present?
+    end
+
+    open_session do |lost|
+      lost.get "/shop/api/orders/#{order_id}",
+        headers: shop_tenant_headers(@tenant.id),
+        params: { reconnect_token: token }
+      assert_equal 200, lost.response.status
+      assert_equal order_id, lost.response.parsed_body["id"]
     end
   end
 end

@@ -21,6 +21,12 @@
 
 ## Решено недавно (детали)
 
+[2026-08-28] — Shop API IDOR: GET `/shop/api/orders/:id` без `customer_id`
+**Статус:** **resolved** local (deploy не делали)
+**Root cause:** `show` искал заказ по tenant+id, видимость — post-check; чужой id теоретически читался до фильтра.
+**Чем закрыли:** `try_reconnect_from_params!` + `head :unauthorized` без cid + `where(customer_id:)`.
+**Проверка:** `orders_controller_test` 12/0.
+
 [2026-08-28] — Sentry RUBY-1D / RUBY-X
 **Статус:** **resolved** local (deploy апрув)
 **RUBY-1D:** `OrderReceiptMailer.deliver_later` → localhost:25 на Fly; чек через `Shop::BrevoClient.deliver_html!`

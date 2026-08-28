@@ -19,6 +19,13 @@
 
 ## Текущий месяц (2026-08)
 
+### Shop API order show customer_id (2026-08-28)
+
+| Что | Статус |
+|-----|--------|
+| `show` scoped by `customer_id` + reconnect | **local done** |
+| Fly MCP | skip |
+
 ### Fly v460 deploy + MCP #72/#73 (2026-08-28)
 
 | Что | Статус |

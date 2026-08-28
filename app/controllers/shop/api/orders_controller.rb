@@ -20,19 +20,17 @@ module Shop
       end
 
       def show
-        order = Order.where(tenant_id: @shop_tenant.id, source: :mobile)
-                     .includes(:order_items, :fiscal_receipts, :payments)
-                     .find(params[:id])
-        unless order_visible_to_session_customer?(order)
-          Rails.logger.warn(
-            "[Shop::Order] Order #{order.id} not visible to customer #{Shop::CustomerSession.customer_id(session, @shop_tenant.id).inspect}"
-          )
-          return render json: { error: "Order not found", status: 404 }, status: :not_found
-        end
+        try_reconnect_from_params!
+        cid = Shop::CustomerSession.customer_id(session, @shop_tenant.id)
+        return head :unauthorized if cid.blank?
 
-        Rails.logger.info(
-          "[Shop::Order] Viewing order #{order.id} by customer #{Shop::CustomerSession.customer_id(session, @shop_tenant.id)}"
-        )
+        order = Order.where(
+          tenant_id: @shop_tenant.id,
+          source: :mobile,
+          customer_id: cid
+        ).includes(:order_items, :fiscal_receipts, :payments).find(params[:id])
+
+        Rails.logger.info("[Shop::Order] Viewing order #{order.id} by customer #{cid}")
         render json: order_json(order)
       rescue ActiveRecord::RecordNotFound
         Rails.logger.warn("[Shop::Order] Order not found: #{params[:id]}")
