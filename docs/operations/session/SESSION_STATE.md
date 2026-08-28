@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-28 (SPEC: barista shift-scoped orders)  
+**Дата:** 2026-08-28 (shop API order show customer_id)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| SPEC · GREEN `af05031b` | /sbr verify |
+| GET `/shop/api/orders/:id` scoped by `customer_id` | barista `/sbr` verify |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,14 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Shop API order show — customer_id (2026-08-28)
+
+| Что | Статус |
+|-----|--------|
+| `OrdersController#show` | `try_reconnect_from_params!` → 401 без cid → `where(customer_id:)` |
+| Тесты | `orders_controller_test` 12/0; регресс show/cancel/fiscal 11/0 (+1 skip T-Bank) |
+| Fly MCP | skip — local IDOR, нет deploy |
 
 ### Fly v464 deploy + MCP (2026-08-28)
 

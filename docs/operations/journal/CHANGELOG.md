@@ -11,6 +11,17 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-28 — shop API: GET order show только свой customer_id
+
+- `Shop::Api::OrdersController#show`: как `history` — сначала `GuestOrderReconnect`, затем обязательный `customer_id` в `where` (без сессии — 401)
+- Тесты: чужой гость 404; своя сессия 200; reconnect_token без cookie 200
+
+## 2026-08-28 — SBR verify: barista shift-scoped orders
+
+- GREEN `af05031b` · verify 58/0 (orders_controller + board_orders_query + integration barista)
+- Entire: gap на `af05031b` (no trailer) — attach на /review
+- Следующий шаг: /regress
+
 ## 2026-08-28 — SPEC: barista shift-scoped orders (show/update/cancel)
 
 - todo.md: SPEC + 6 файлов + Не ломать/Проверка; GREEN уже `af05031b`

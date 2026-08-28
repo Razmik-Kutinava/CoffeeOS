@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-28 (SPEC: barista shift-scoped orders)  
+**Дата:** 2026-08-28 (shop API order show customer_id)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| SPEC barista shift scope · GREEN `af05031b` | /sbr verify + regress |
+| GET `/shop/api/orders/:id` scoped by `customer_id` | barista `/sbr` verify · #72/#73 live |
 
-**last_done:** SPEC в todo.md  
-**next_step:** /sbr verify
+**last_done:** shop API `show` — обязательный `customer_id` + reconnect_token  
+**next_step:** barista `/sbr` verify (параллельный трек)
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
