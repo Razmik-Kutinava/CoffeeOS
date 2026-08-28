@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-28 — SPEC block cash on public shop API
+
+- `todo.md`: SBR SPEC, 7 файлов, Не ломать / Проверка (shop+barista cash)
+- Код уже в `1220d3e2`; следующий шаг `/sbr` regress
+
 ## 2026-08-28 — Fly v462 deploy + MCP PASS (rubocop fix)
 
 - Deploy **v462** · `deployment-01M13ZVNYK4Y3M75G9ZHN7RY2J` · HEAD `9f4f8ee0`

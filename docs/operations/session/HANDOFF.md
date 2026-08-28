@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-28 (Fly v462 deploy + MCP PASS)  
+**Дата:** 2026-08-28 (SPEC block cash shop API)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| v462 на Fly · MCP P0–P7 PASS | live pay #72/#73 + fiscal notify ON |
+| SPEC cash-block · код в `1220d3e2` | `/sbr` регрессия shop+barista cash |
 
-**last_done:** deploy v462 + MCP PASS повторно  
-**next_step:** test-customer live Init; fiscal ЛК; закрыть #72/#73 MCP
+**last_done:** /spec block cash on public shop API  
+**next_step:** `/sbr` — прогон тестов + gap-check; затем #72/#73 live MCP
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
