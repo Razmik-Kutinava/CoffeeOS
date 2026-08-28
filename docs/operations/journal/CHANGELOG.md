@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-28 — /review barista shift-scope DONE
+
+- Bugbot: 1 medium (history→show 404 — out of scope SPEC); Security: no medium+
+- Entire: `01M14FWV6BGWDXVYYFV0ETG5KS` на ops commit (attach)
+- Push `81ed6782`; CI #33185812722 **green** (fix pwa_lk 401)
+
 ## 2026-08-28 — /review barista shift-scoped orders (partial)
 
 - Local verify 58/0; Bugbot: history→show 404 (out of scope SPEC); Security: no medium+

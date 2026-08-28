@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-28 (/review barista shift-scope — push blocked Entire)  
+**Дата:** 2026-08-28 (/review DONE · CI green)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| REVIEW partial · Entire gap на HEAD | attach → push → CI |
+| barista shift-scope REVIEW done · CI #33185812722 green | deploy — апрув |
 
-**last_done:** /review local + bugbot + security  
-**next_step:** Entire attach → push
+**last_done:** /review + push · CI green `81ed6782`  
+**next_step:** deploy — апрув
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

@@ -2,7 +2,7 @@
 
 | last_done | current_state | next_step |
 |-----------|---------------|-----------|
-| /review local+субагенты | bugbot 1 medium (history UX) · Entire gap HEAD | attach → push |
+| /review + CI green | GREEN `af05031b` · push `81ed6782` | deploy апрув |
 
 **Задача:** `OrdersController#show`, `#update_status`, `#cancel` не должны отдавать/менять заказы вне текущей открытой смены (и витрины mobile с `opened_at` смены — канон `BoardOrdersQuery`).
 
@@ -15,7 +15,7 @@
 | /sbr verify | **`[x]`** 58 runs, 370 assertions, 0 failures |
 | /regress | **`[x]`** 107 runs, 485 assertions, 0 failures |
 | REVIEW | **`[x]`** local 58/0 · bugbot 1 medium (history/show — out of scope) · security OK · push CI |
-| push | **`[~]`** CI fix pwa_lk 401 |
+| push | **`[x]`** CI #33185812722 green |
 | deploy | **`[ ]`** |
 | Fly MCP | **`[ ]`** skip (не shop/pay hot-path) |
 
