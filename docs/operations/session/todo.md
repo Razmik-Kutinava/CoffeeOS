@@ -2,7 +2,7 @@
 
 | last_done | current_state | next_step |
 |-----------|---------------|-----------|
-| /sbr verify 58/0 PASS | GREEN `af05031b` · Entire gap | /regress |
+| /regress barista 107/0 | GREEN `af05031b` · Entire gap | /review |
 
 **Задача:** `OrdersController#show`, `#update_status`, `#cancel` не должны отдавать/менять заказы вне текущей открытой смены (и витрины mobile с `opened_at` смены — канон `BoardOrdersQuery`).
 
@@ -13,7 +13,7 @@
 | SPEC | **`[x]`** |
 | RED / GREEN | **`[x]`** `af05031b` (сделано до формального SBR) |
 | /sbr verify | **`[x]`** 58 runs, 370 assertions, 0 failures |
-| /regress | **`[ ]`** |
+| /regress | **`[x]`** 107 runs, 485 assertions, 0 failures |
 | REVIEW | **`[ ]`** |
 | push | **`[ ]`** |
 | deploy | **`[ ]`** |

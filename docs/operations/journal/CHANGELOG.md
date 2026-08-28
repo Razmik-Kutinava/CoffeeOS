@@ -16,6 +16,12 @@
 - `Shop::Api::OrdersController#show`: как `history` — сначала `GuestOrderReconnect`, затем обязательный `customer_id` в `where` (без сессии — 401)
 - Тесты: чужой гость 404; своя сессия 200; reconnect_token без cookie 200
 
+## 2026-08-28 — /regress barista shift-scoped orders
+
+- 107 runs, 485 assertions, 0 failures (orders_controller + board_orders_query + barista services + integration)
+- Fly MCP: skip (не shop/pay hot-path)
+- Следующий шаг: /review
+
 ## 2026-08-28 — SBR verify: barista shift-scoped orders
 
 - GREEN `af05031b` · verify 58/0 (orders_controller + board_orders_query + integration barista)
