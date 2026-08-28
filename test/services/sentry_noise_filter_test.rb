@@ -23,6 +23,12 @@ class SentryNoiseFilterTest < ActiveSupport::TestCase
     assert SentryNoiseFilter.drop?(event, hint)
   end
 
+  test "drops StatementInvalid from rails runner" do
+    event = Event.new(transaction: "application.runner.railties")
+    hint = { exception: ActiveRecord::StatementInvalid.new("PG::UndefinedColumn") }
+    assert SentryNoiseFilter.drop?(event, hint)
+  end
+
   test "keeps NameError from shop HTTP" do
     event = Event.new(transaction: "Shop::Api::ProductsController#show")
     hint = { exception: NameError.new("uninitialized constant Customer") }

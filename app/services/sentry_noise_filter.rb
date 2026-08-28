@@ -53,6 +53,8 @@ module SentryNoiseFilter
     return true if tx.include?("bin/rails")
     return true if tx.include?("fly:release")
     return true if tx.include?("db:migrate")
+    return true if tx.include?("runner")
+    return true if tx.include?("application.runner")
 
     false
   end
