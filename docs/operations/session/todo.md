@@ -1,8 +1,8 @@
-# todo — #72 + #73 closure prep (до REVIEW)
+# todo — #72 + #73 (REVIEW done · CI watch)
 
 | last_done | current_state | next_step |
 |-----------|---------------|-----------|
-| intake 2026-08-28 + CLOSURE_PREP + /regress 31/0 | готово к REVIEW | `/review` (отдельно) → deploy апрув → MCP |
+| REVIEW bugbot+security+Entire+push | CI watch | deploy — апрув |
 
 **CBR:** #72 · #73  
 **Контекст:** Receipt.Email/Phone в Init (#72) + fiscal RECEIPT webhook → ЛК (#73)  
@@ -22,7 +22,7 @@
 | RED / GREEN | **`[x]`** | **`[x]`** |
 | /regress | **`[x]`** 31/0 (2026-08-28) | **`[x]`** (в составе) |
 | CLOSURE_PREP | **`[x]`** | **`[x]`** |
-| REVIEW | **`[ ]`** отдельный шаг | **`[ ]`** |
+| REVIEW | **`[x]`** bugbot · security · Entire · push | **`[x]`** |
 | Deploy + Fly MCP | **`[ ]`** апрув | **`[ ]`** fiscal notify ON |
 
 ## Не ломать

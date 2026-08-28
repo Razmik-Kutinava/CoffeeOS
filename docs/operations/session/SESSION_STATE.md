@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-28 (#72+#73 closure prep)  
+**Дата:** 2026-08-28 (#72+#73 REVIEW push)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #72+#73 CLOSURE_PREP · regress 31/0 | `/review` → deploy апрув → MCP |
+| REVIEW pushed · CI watch | deploy апрув → MCP |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,13 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-28 — #72 + #73 REVIEW
+
+- Local regress 31/0 · bugbot clean · security no medium+
+- Entire `01M13J1QDE9SHEEARP15VV3P1H` на `8437244b` (attach session `8eebd79a…`)
+- push develop · CI watch
+- Следующий: deploy апрув → fiscal notify ON → live MCP
 
 ### Сессия 2026-08-28 — #72 + #73 closure prep
 

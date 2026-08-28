@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-28 (#72+#73 closure prep → REVIEW)  
+**Дата:** 2026-08-28 (#72+#73 REVIEW push)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #72+#73 CLOSURE_PREP · regress 31/0 | `/review` отдельно → deploy апрув → MCP |
+| #72+#73 REVIEW pushed · CI watch | deploy апрув → fiscal notify ON → MCP |
 
-**last_done:** intake 2026-08-28 + CLOSURE_PREP + RECOVERY.md + /regress 31/0  
-**next_step:** `/review` (bugbot + security + Entire); deploy + fiscal notify ON — апрув
+**last_done:** REVIEW bugbot clean · security no medium+ · Entire `01M13J1QDE9SHEEARP15VV3P1H` на `8437244b` · push  
+**next_step:** CI green → deploy апрув → live MCP #72+#73
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -26,7 +26,7 @@
 | Intake заказчика 2026-08-28 | **`[x]`** #72 CONFIRMED · #73 Subtask 0/9а/`/callbacks/tbank` |
 | CLOSURE_PREP + RECOVERY.md | **`[x]`** |
 | /regress зона #72+#73 | **`[x]`** 31/0 |
-| REVIEW | **`[ ]`** отдельный шаг |
+| REVIEW | **`[x]`** bugbot · security · Entire · push |
 | Deploy + Fly MCP live | **`[ ]`** апрув + fiscal notify ON |
 
 ### Fly v459 deploy + MCP (2026-08-27)

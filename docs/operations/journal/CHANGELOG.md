@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-28 — #72 + #73 REVIEW (push develop)
+
+- bugbot: no bugs · security: no medium+ (hardening notes only)
+- Entire `01M13J1QDE9SHEEARP15VV3P1H` на `8437244b`
+- push develop · CI watch · deploy/MCP — апрув
+
 ## 2026-08-28 — docs: #72 + #73 closure prep (до REVIEW)
 
 - Intake заказчика 2026-08-28: #72 CONFIRMED/SendClosing; #73 Subtask 0, 9а, `/callbacks/tbank`
