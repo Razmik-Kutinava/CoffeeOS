@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-28 (SPEC block cash shop API)  
+**Дата:** 2026-08-28 (/sbr cash-block verify 46/0)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| SPEC cash-block · код в `1220d3e2` | `/sbr` регрессия shop+barista cash |
+| SBR verify cash-block GREEN | `/regress` shop checkout zone |
 
-**last_done:** /spec block cash on public shop API  
-**next_step:** `/sbr` — прогон тестов + gap-check; затем #72/#73 live MCP
+**last_done:** /sbr 46/0 local (1220d3e2)  
+**next_step:** `/regress`; затем #72/#73 live MCP
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

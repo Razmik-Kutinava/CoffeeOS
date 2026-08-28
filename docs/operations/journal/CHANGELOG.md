@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-28 — /sbr verify block cash on public shop API
+
+- Local: 46 runs / 146 assertions / 0 failures (payment_config, order_creator, orders_controller, barista orders)
+- GREEN код без изменений — `1220d3e2`
+
 ## 2026-08-28 — SPEC block cash on public shop API
 
 - `todo.md`: SBR SPEC, 7 файлов, Не ломать / Проверка (shop+barista cash)
