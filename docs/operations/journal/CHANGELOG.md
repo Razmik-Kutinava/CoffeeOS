@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-28 — barista: заказы только текущей смены (show/update/cancel)
+
+- `BoardOrdersQuery.shift_accessible_scope` — смена + витрина mobile с `opened_at`
+- `OrdersController#show` / `#update_status` / `#cancel` — scope вместо всего тенанта; без смены 403/redirect
+- Тесты: `orders_controller_test` + регрессия barista integration 58/0
+- Коммит: `af05031b`
+
 ## 2026-08-28 — Fly v464 deploy + MCP PASS (cash-block)
 
 - Deploy **v464** · `deployment-01M143HBYRQB50Y04HZA1RVAZZ` · HEAD `20518d1f`

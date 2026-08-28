@@ -2,14 +2,14 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-28 (Fly v464 deploy + MCP PASS)  
+**Дата:** 2026-08-28 (barista shift-scoped order access)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| v464 · MCP P0–P7 PASS | #72/#73 live MCP |
+| barista show/update/cancel — только текущая смена | #72/#73 live MCP |
 
-**last_done:** deploy v464 + MCP PASS (cash 422)  
+**last_done:** shift_accessible_scope в OrdersController  
 **next_step:** live pay #72/#73; fiscal notify
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
