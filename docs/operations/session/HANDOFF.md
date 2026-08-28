@@ -9,7 +9,7 @@
 |--------|--------|
 | OTP коды убраны из Rails.logger | fiscal notify ON → live pay → PASS |
 
-**last_done:** OTP tests: fallback + brevo_client; DEAD CODE на 3 legacy clients  
+**last_done:** fail-redirect ownership check + reconnect_token in FailURL  
 **next_step:** кабинет Т-Банка fiscalization ON; live test-customer pay
 
 **Архив session:** [`archive/README.md`](archive/README.md)  

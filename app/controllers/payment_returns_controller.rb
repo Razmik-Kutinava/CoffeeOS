@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "cgi"
+
 # Редирект с SuccessURL/FailURL Т-Банка в hash-SPA витрины.
 class PaymentReturnsController < ApplicationController
   def success
@@ -17,6 +19,18 @@ class PaymentReturnsController < ApplicationController
     order = Order.find_by(id: order_id)
     return unless order&.pending_payment? && order.mobile?
 
+    unless Shop::GuestOrderReconnect.owned_by_session?(
+      session,
+      order: order,
+      reconnect_token: params[:reconnect_token]
+    )
+      Rails.logger.warn(
+        "[PaymentReturns] fail redirect ignored: order #{order_id} not owned by session " \
+        "(ip=#{request.remote_ip})"
+      )
+      return
+    end
+
     payment = order.payments.find_by(status: :pending) || order.payments.order(created_at: :desc).first
     Shop::PaymentFailureJournal.record!(
       order: order,
@@ -26,7 +40,7 @@ class PaymentReturnsController < ApplicationController
       details: { trigger: "tbank_fail_url" }
     )
   rescue StandardError => e
-    Rails.logger.error("[PaymentReturns] fail journal error: #{e.class} #{e.message}")
+    Rails.logger.error("[PaymentReturns] fail journal error: #{e.class}: #{e.message}")
   end
 
   def shop_payment_hash(status, order_id, bound: false)
@@ -34,7 +48,8 @@ class PaymentReturnsController < ApplicationController
     base = ENV.fetch("TBANK_RETURN_URL", request.base_url).to_s.chomp("/")
     tenant_q = order ? "?tenant_id=#{order.tenant_id}" : ""
     bound_q = bound ? "&bound=1" : ""
-    "#{base}/shop#{tenant_q}#/payment-result?status=#{status}&order_id=#{order_id}#{bound_q}"
+    token_q = params[:reconnect_token].present? ? "&reconnect_token=#{CGI.escape(params[:reconnect_token])}" : ""
+    "#{base}/shop#{tenant_q}#/payment-result?status=#{status}&order_id=#{order_id}#{bound_q}#{token_q}"
   end
 
   def card_binding?(order_id)

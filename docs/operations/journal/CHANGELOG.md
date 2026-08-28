@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-28 — fail-redirect order ownership check
+
+- `/payment/fail`: journal только если reconnect_token / pending session / customer session
+- Init T-Bank: FailURL + SuccessURL с `reconnect_token`
+
 ## 2026-08-28 — OTP tests + DEAD CODE legacy delivery clients
 
 - email_otp fallback test; brevo_client_test (лог без кода)

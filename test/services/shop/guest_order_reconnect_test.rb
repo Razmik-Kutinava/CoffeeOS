@@ -72,4 +72,37 @@ class Shop::GuestOrderReconnectTest < ActiveSupport::TestCase
 
     assert_equal @order.id, found.id
   end
+
+  test "owned_by_session? accepts reconnect token" do
+    session = {}
+    token = Shop::GuestOrderReconnect.token_for(@order)
+
+    assert Shop::GuestOrderReconnect.owned_by_session?(session, order: @order, reconnect_token: token)
+    assert_equal @customer.id.to_s, Shop::CustomerSession.customer_id(session, @tenant.id)
+  end
+
+  test "owned_by_session? accepts pending order session" do
+    session = {}
+    Shop::PendingOrderSession.set!(session, @tenant.id, @order.id)
+
+    assert Shop::GuestOrderReconnect.owned_by_session?(session, order: @order)
+  end
+
+  test "owned_by_session? rejects foreign order" do
+    session = {}
+    other = Order.create!(
+      tenant_id: @tenant.id,
+      customer_id: @customer.id,
+      customer_name: "Other",
+      order_number: "X-9",
+      source: :mobile,
+      status: :pending_payment,
+      total_amount: 100,
+      discount_amount: 0,
+      final_amount: 100
+    )
+    Shop::PendingOrderSession.set!(session, @tenant.id, other.id)
+
+    assert_not Shop::GuestOrderReconnect.owned_by_session?(session, order: @order)
+  end
 end

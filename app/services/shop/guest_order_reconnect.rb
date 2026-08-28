@@ -47,6 +47,32 @@ module Shop
         false
       end
 
+      # PaymentReturns / cable: та же логика, что order_visible_to_session_customer? на витрине.
+      def owned_by_session?(session, order:, reconnect_token: nil)
+        return false unless order.source == "mobile"
+
+        tenant_id = order.tenant_id
+        token = reconnect_token.to_s.presence
+
+        if token.present? && token_matches_order?(order, tenant_id: tenant_id, token: token)
+          bind!(session, tenant_id: tenant_id, order_id: order.id, token: token)
+          return true
+        end
+
+        cid = CustomerSession.customer_id(session, tenant_id)
+        if cid.present? && order.customer_id.present? && order.customer_id.to_s == cid.to_s
+          return true
+        end
+
+        pending_id = PendingOrderSession.order_id(session, tenant_id)
+        if pending_id.present? && pending_id.to_s == order.id.to_s
+          CustomerSession.set_customer_id!(session, tenant_id, order.customer_id) if order.customer_id.present?
+          return true
+        end
+
+        false
+      end
+
       def verifier
         Rails.application.message_verifier(PURPOSE)
       end

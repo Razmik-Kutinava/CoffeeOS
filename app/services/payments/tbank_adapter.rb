@@ -44,14 +44,15 @@ module Payments
     # Возвращает { payment_url:, provider_payment_id: }
     def init_payment(order:, return_base_url:, notification_url:, customer_key: nil, recurrent: false, receipt: nil, pay_type: nil, data: nil)
       amount_kopecks = (order.final_amount * 100).to_i
+      return_query = shop_return_query(order)
 
       payload = {
         "TerminalKey"    => terminal_key,
         "Amount"         => amount_kopecks,
         "OrderId"        => order.id.to_s,
         "Description"    => "Заказ ##{order.id}",
-        "SuccessURL"     => "#{return_base_url}/payment/success?order_id=#{order.id}",
-        "FailURL"        => "#{return_base_url}/payment/fail?order_id=#{order.id}",
+        "SuccessURL"     => "#{return_base_url}/payment/success?#{return_query}",
+        "FailURL"        => "#{return_base_url}/payment/fail?#{return_query}",
         "NotificationURL" => notification_url
       }
       payload["CustomerKey"] = customer_key.to_s if customer_key.present?
@@ -228,6 +229,14 @@ module Payments
     end
 
     private
+
+    def shop_return_query(order)
+      base = "order_id=#{order.id}"
+      return base unless order.respond_to?(:customer_id) && order.respond_to?(:tenant_id)
+
+      token = CGI.escape(Shop::GuestOrderReconnect.token_for(order))
+      "#{base}&reconnect_token=#{token}"
+    end
 
     def with_circuit_breaker
       if Payments::CacheCounter.present?(CB_OPEN_KEY)

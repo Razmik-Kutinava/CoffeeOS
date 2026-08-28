@@ -3,6 +3,7 @@
 require "test_helper"
 
 class Payments::TbankAdapterTest < ActiveSupport::TestCase
+  include TestFactories
   setup do
     ENV["TBANK_TERMINAL_KEY"] = "TestTerminal"
     ENV["TBANK_PASSWORD"]     = "TestPassword"
@@ -314,6 +315,42 @@ class Payments::TbankAdapterTest < ActiveSupport::TestCase
   # ---------------------------------------------------------------------------
   # Init + Receipt 54-ФЗ (Шаг 1 RED)
   # ---------------------------------------------------------------------------
+
+  test "init_payment FailURL and SuccessURL include signed reconnect_token" do
+    adapter = Payments::TbankAdapter.new
+    tenant = create_tenant!
+    customer = create_mobile_customer!(email: "tbank-url-#{SecureRandom.hex(3)}@example.com")
+    order = Order.create!(
+      tenant_id: tenant.id,
+      customer_id: customer.id,
+      customer_name: "Guest",
+      order_number: "TB-URL",
+      source: :mobile,
+      status: :pending_payment,
+      total_amount: 200,
+      discount_amount: 0,
+      final_amount: 200
+    )
+
+    captured = nil
+    adapter.define_singleton_method(:post_json) do |_url, payload|
+      captured = payload
+      { "Success" => true, "PaymentURL" => "https://pay.tbank.ru/x", "PaymentId" => "pid-url" }
+    end
+
+    adapter.init_payment(
+      order: order,
+      return_base_url: "https://example.com",
+      notification_url: "https://example.com/callbacks/tbank"
+    )
+
+    assert_includes captured["FailURL"], "order_id=#{order.id}"
+    assert_includes captured["FailURL"], "reconnect_token="
+    assert_includes captured["SuccessURL"], "reconnect_token="
+
+    token = CGI.unescape(captured["FailURL"][/reconnect_token=([^&]+)/, 1])
+    assert Shop::GuestOrderReconnect.token_matches_order?(order, tenant_id: tenant.id, token: token)
+  end
 
   test "init_payment includes Receipt in payload before Token" do
     adapter = Payments::TbankAdapter.new

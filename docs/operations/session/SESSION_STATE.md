@@ -7,7 +7,7 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| OTP log leak fix | fiscal notify ON → live pay |
+| OTP log leak fix + fail-redirect ownership | fiscal notify ON → live pay |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,12 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-28 — fail-redirect ownership
+
+- PaymentReturns: GuestOrderReconnect.owned_by_session? перед PaymentFailureJournal
+- TbankAdapter FailURL/SuccessURL: reconnect_token (MessageVerifier)
+- Тесты: payment_returns_controller, guest_order_reconnect, tbank_adapter
 
 ### Сессия 2026-08-28 — OTP tests + DEAD CODE legacy clients
 
