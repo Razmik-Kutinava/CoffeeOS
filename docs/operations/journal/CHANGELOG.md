@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-28 — push develop + CI green (cash-block ops)
+
+- Push `07c9e6ab..96b790e3` → develop
+- CI run **33168443668** · success · HEAD `96b790e3`
+
 ## 2026-08-28 — REVIEW block cash shop API
 
 - Local regress 113/0; Bugbot: no bugs; Security: no medium+

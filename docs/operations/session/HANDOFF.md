@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-28 (REVIEW cash-block PASS)  
+**Дата:** 2026-08-28 (push develop + CI green)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| REVIEW PASS · push ждёт Entire | deploy по апруву |
+| push `96b790e3` · CI #33168443668 green | deploy по апруву |
 
-**last_done:** bugbot+security PASS; regress 113/0  
-**next_step:** Entire attach/backfill → push ops; deploy + MCP при апруве
+**last_done:** git push develop + CI success  
+**next_step:** deploy + Fly MCP Point A (апрув)
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

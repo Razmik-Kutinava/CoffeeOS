@@ -15,7 +15,7 @@
 | /sbr verify | **`[x]`** 46/0 |
 | /regress | **`[x]`** 113/0 |
 | REVIEW | **`[x]`** bugbot+security PASS; Entire gap на HEAD |
-| push | **`[ ]`** — Entire `explain HEAD` пустой |
+| push | **`[x]`** `96b790e3` · CI #33168443668 green |
 | deploy | **`[ ]`** — апрув |
 
 ## Проверка
