@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-28 (Fly v461 deploy + MCP PASS)  
+**Дата:** 2026-08-28 (Fly v462 deploy + MCP PASS)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| v461 на Fly · MCP session commits PASS | fiscal notify ON → live pay |
+| v462 · MCP P0–P7 PASS | live pay #72/#73 |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,15 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Fly v462 deploy + MCP (2026-08-28)
+
+| Что | Статус |
+|-----|--------|
+| Deploy | **v462** · `deployment-01M13ZVNYK4Y3M75G9ZHN7RY2J` · HEAD `9f4f8ee0` |
+| P0–P7 MCP | **PASS** |
+| B2.1 barista | **PARTIAL** |
+| Артефакты | `…/mcp/fly_v462_2026-08-28/` |
 
 ### Fly v461 deploy + MCP (2026-08-28)
 

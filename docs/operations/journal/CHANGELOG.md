@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-28 — Fly v462 deploy + MCP PASS (rubocop fix)
+
+- Deploy **v462** · `deployment-01M13ZVNYK4Y3M75G9ZHN7RY2J` · HEAD `9f4f8ee0`
+- MCP P0–P7 PASS повторно; B2.1 PARTIAL
+
 ## 2026-08-28 — Fly v461 deploy + MCP PASS (session commits)
 
 - Deploy **v461** · image `deployment-01M13YCKVJ4CDQBFQFKTHM1NZC`

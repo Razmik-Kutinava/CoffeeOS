@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-28 (Fly v461 deploy + MCP PASS)  
+**Дата:** 2026-08-28 (Fly v462 deploy + MCP PASS)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| v461 на Fly · MCP session commits PASS | fiscal notify ON → live pay |
+| v462 на Fly · MCP P0–P7 PASS | live pay #72/#73 + fiscal notify ON |
 
-**last_done:** CI rubocop fix (EmptyLineAfterMagicComment ×3 dead clients) · push `9540afc0`  
-**next_step:** дождаться CI green → deploy v462 по апруву; fiscal notify ON
+**last_done:** deploy v462 + MCP PASS повторно  
+**next_step:** test-customer live Init; fiscal ЛК; закрыть #72/#73 MCP
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
