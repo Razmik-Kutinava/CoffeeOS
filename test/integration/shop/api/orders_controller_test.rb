@@ -24,7 +24,7 @@ class Shop::Api::OrdersControllerTest < ActionDispatch::IntegrationTest
     verify_shop_email!(tenant_id: @tenant.id, email: @email)
 
     uuid = SecureRandom.uuid
-    params = shop_order_params(email: @email, name: "Dup User", payment_method: "cash").merge(client_order_uuid: uuid)
+    params = shop_order_params(email: @email, name: "Dup User", payment_method: "card").merge(client_order_uuid: uuid)
 
     post "/shop/api/orders",
       headers: shop_tenant_headers(@tenant.id),
@@ -53,7 +53,7 @@ class Shop::Api::OrdersControllerTest < ActionDispatch::IntegrationTest
     verify_shop_email!(tenant_id: @tenant.id, email: @email)
 
     uuid = SecureRandom.uuid
-    params = shop_order_params(email: @email, name: "Cache Free", payment_method: "cash").merge(client_order_uuid: uuid)
+    params = shop_order_params(email: @email, name: "Cache Free", payment_method: "card").merge(client_order_uuid: uuid)
 
     Rails.cache.clear
 
@@ -74,6 +74,30 @@ class Shop::Api::OrdersControllerTest < ActionDispatch::IntegrationTest
     assert_equal first_id, response.parsed_body["order_id"]
   end
 
+  test "POST /shop/api/orders with payment_method cash returns 422 and creates nothing" do
+    post "/shop/api/cart/add",
+      headers: shop_tenant_headers(@tenant.id),
+      params: { product_id: @product.id, quantity: 1, selected_modifiers: [] },
+      as: :json
+    assert_response :success
+
+    verify_shop_email!(tenant_id: @tenant.id, email: @email)
+
+    before_orders = Order.count
+    before_payments = Payment.count
+
+    post "/shop/api/orders",
+      headers: shop_tenant_headers(@tenant.id),
+      params: shop_order_params(email: @email, name: "Cash Guest", payment_method: "cash"),
+      as: :json
+
+    assert_response :unprocessable_entity
+    json = JSON.parse(response.body)
+    assert_equal Shop::PaymentConfig::CASH_ONLINE_ERROR, json["error"]
+    assert_equal before_orders, Order.count
+    assert_equal before_payments, Payment.count
+  end
+
   test "POST /shop/api/orders creates order" do
     post "/shop/api/cart/add",
       headers: shop_tenant_headers(@tenant.id),
@@ -85,7 +109,7 @@ class Shop::Api::OrdersControllerTest < ActionDispatch::IntegrationTest
 
     post "/shop/api/orders",
       headers: shop_tenant_headers(@tenant.id),
-      params: shop_order_params(email: @email, name: "Test User", payment_method: "cash"),
+      params: shop_order_params(email: @email, name: "Test User", payment_method: "card"),
       as: :json
 
     assert_response :success
@@ -104,7 +128,7 @@ class Shop::Api::OrdersControllerTest < ActionDispatch::IntegrationTest
 
     post "/shop/api/orders",
       headers: shop_tenant_headers(@tenant.id),
-      params: { payment_method: "cash" },
+      params: { payment_method: "card" },
       as: :json
 
     assert_response :unprocessable_entity
@@ -132,7 +156,7 @@ class Shop::Api::OrdersControllerTest < ActionDispatch::IntegrationTest
 
     post "/shop/api/orders",
       headers: shop_tenant_headers(@tenant.id),
-      params: shop_order_params(email: @email, name: "Today User", payment_method: "mock"),
+      params: shop_order_params(email: @email, name: "Today User", payment_method: "card"),
       as: :json
     assert_response :success
 
@@ -158,7 +182,7 @@ class Shop::Api::OrdersControllerTest < ActionDispatch::IntegrationTest
 
       sess.post "/shop/api/orders",
         headers: shop_tenant_headers(@tenant.id),
-        params: shop_order_params(email: @email, name: "Owner", payment_method: "cash"),
+        params: shop_order_params(email: @email, name: "Owner", payment_method: "card"),
         as: :json
       assert_equal 200, sess.response.status
       order_id = sess.response.parsed_body["order_id"]
@@ -190,7 +214,7 @@ class Shop::Api::OrdersControllerTest < ActionDispatch::IntegrationTest
       verify_shop_email!(tenant_id: @tenant.id, email: email, session: sess)
       sess.post "/shop/api/orders",
         headers: shop_tenant_headers(@tenant.id),
-        params: shop_order_params(email: email, name: "A Guest", payment_method: "cash"),
+        params: shop_order_params(email: email, name: "A Guest", payment_method: "card"),
         as: :json
       order_a = sess.response.parsed_body["order_id"]
 
@@ -212,7 +236,7 @@ class Shop::Api::OrdersControllerTest < ActionDispatch::IntegrationTest
       verify_shop_email!(tenant_id: tenant_b.id, email: email, session: sess)
       sess.post "/shop/api/orders",
         headers: shop_tenant_headers(tenant_b.id),
-        params: shop_order_params(email: email, name: "B Guest", payment_method: "cash"),
+        params: shop_order_params(email: email, name: "B Guest", payment_method: "card"),
         as: :json
       order_b = sess.response.parsed_body["order_id"]
 
@@ -235,7 +259,7 @@ class Shop::Api::OrdersControllerTest < ActionDispatch::IntegrationTest
       verify_shop_email!(tenant_id: @tenant.id, email: @email, session: sess)
       sess.post "/shop/api/orders",
         headers: shop_tenant_headers(@tenant.id),
-        params: shop_order_params(email: @email, name: "Owner", payment_method: "cash"),
+        params: shop_order_params(email: @email, name: "Owner", payment_method: "card"),
         as: :json
       order_id = sess.response.parsed_body["order_id"]
     end

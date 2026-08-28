@@ -48,7 +48,7 @@ class Shop::Api::OrderFiscalReceiptsApiTest < ActionDispatch::IntegrationTest
 
       sess.post "/shop/api/orders",
         headers: shop_tenant_headers(@tenant.id),
-        params: shop_order_params(email: @email, name: "Fiscal Guest", payment_method: "cash"),
+        params: shop_order_params(email: @email, name: "Fiscal Guest", payment_method: "card"),
         as: :json
       assert_equal 200, sess.response.status, sess.response.body
       order_id = sess.response.parsed_body["order_id"] || sess.response.parsed_body["id"]

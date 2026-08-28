@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-28 — block cash on public shop API
+
+- Guest `/shop/api/orders`: `payment_method: cash` → 422, Order/Payment не создаются
+- `PaymentConfig.ONLINE_PAYMENT_METHODS` + валидация в controller и OrderCreator
+- Barista `POST /barista/orders` cash без изменений (staff session + open shift)
+- Frontend: убран «Наличные» из shop labels
+
 ## 2026-08-28 — SHOP_SIMULATE_PAYMENT safe default (0 + prod guard)
 
 - `Shop::PaymentConfig.simulate?` — default off, raise in production

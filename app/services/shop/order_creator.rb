@@ -32,9 +32,11 @@ module Shop
       total = (subtotal - discount).round(2)
       raise Error, "Сумма заказа некорректна" if total < 0
 
+      payment_method = map_payment_method(params[:payment_method])
+      PaymentConfig.validate_online_payment_method!(params[:payment_method])
+
       customer = find_or_create_customer!(params)
 
-      payment_method = map_payment_method(params[:payment_method])
       flow = payment_flow(payment_method)
 
       order = nil
@@ -164,12 +166,11 @@ module Shop
         }
       end
 
-      cash_payment = payment_method == :cash
       {
-        order_status: cash_payment ? :accepted : :pending_payment,
-        payment_status: cash_payment ? :succeeded : :pending,
-        paid_at: cash_payment ? Time.current : nil,
-        comment: cash_payment ? "Наличная оплата на витрине /shop" : "Ожидание подтверждения оплаты #{payment_method}"
+        order_status: :pending_payment,
+        payment_status: :pending,
+        paid_at: nil,
+        comment: "Ожидание подтверждения оплаты #{payment_method}"
       }
     end
 

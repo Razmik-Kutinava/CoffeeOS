@@ -3,8 +3,7 @@ const INTEGRATION_NAME = "shop-payment"
 
 export const PAYMENT_METHOD_LABELS = {
   card: "Картой",
-  sbp: "СБП",
-  cash: "Наличные"
+  sbp: "СБП"
 }
 
 const SUCCESS_STATUSES = new Set(["CONFIRMED", "AUTHORIZED"])

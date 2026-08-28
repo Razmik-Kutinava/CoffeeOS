@@ -29,7 +29,7 @@ class Shop::Api::EmailVerificationDbFallbackTest < ActionDispatch::IntegrationTe
 
       sess.post "/shop/api/orders",
         headers: shop_tenant_headers(@tenant.id),
-        params: shop_order_params(email: @email, name: "DB Fallback", payment_method: "cash"),
+        params: shop_order_params(email: @email, name: "DB Fallback", payment_method: "card"),
         as: :json
 
       assert_equal 200, sess.response.status, sess.response.body
@@ -92,7 +92,7 @@ class Shop::Api::EmailVerificationDbFallbackTest < ActionDispatch::IntegrationTe
 
       sess.post "/shop/api/orders",
         headers: shop_tenant_headers(@tenant.id),
-        params: shop_order_params(email: @email, name: "Rotated Session", payment_method: "cash"),
+        params: shop_order_params(email: @email, name: "Rotated Session", payment_method: "card"),
         as: :json
 
       assert_equal 200, sess.response.status, sess.response.body

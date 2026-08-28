@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-28 (fix OTP log leak)  
+**Дата:** 2026-08-28 (block shop cash online)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| fail-redirect ownership + simulate default 0 | fiscal notify ON → live pay |
+| cash запрещён в shop/api | fiscal notify ON → live pay |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -16,7 +16,12 @@
 
 ## Текущий месяц (2026-08)
 
-### Сессия 2026-08-28 — SHOP_SIMULATE_PAYMENT safe default
+### Сессия 2026-08-28 — block cash on public shop API
+
+- `PaymentConfig.validate_online_payment_method!` — card/sbp/apple_pay/google_pay; cash → 422
+- `OrderCreator#payment_flow` — убран cash→accepted; barista POS без изменений
+- shop UI: убран label «Наличные» из `tbankPayment.js`
+- тесты shop: default `card`; cash 422 + barista cash OK
 
 - Default 0; `PaymentConfig.simulate?` raise in production if enabled
 - Единая точка: OrderCreator, NewCard, Recurrent → PaymentConfig

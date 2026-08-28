@@ -111,7 +111,7 @@ class Shop::CustomerFrequentProductsCacheTest < ActiveSupport::TestCase
     }
     Shop::EmailVerificationSession.mark_verified!(session, @tenant.id, email)
     Shop::OrderCreator.new(session, tenant: @tenant).call!(
-      { payment_method: "cash", email: email, name: "Test Customer" }
+      { payment_method: "card", email: email, name: "Test Customer" }
     )
 
     assert_nil Rails.cache.read(key), "создание заказа должно сбрасывать кэш shop/freq"

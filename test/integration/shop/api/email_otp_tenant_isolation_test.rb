@@ -27,7 +27,7 @@ class Shop::Api::EmailOtpTenantIsolationTest < ActionDispatch::IntegrationTest
 
       sess.post "/shop/api/orders",
         headers: shop_tenant_headers(@tenant_b.id),
-        params: shop_order_params(email: @email1, name: "Cross Tenant", payment_method: "cash"),
+        params: shop_order_params(email: @email1, name: "Cross Tenant", payment_method: "card"),
         as: :json
 
       assert_equal 422, sess.response.status, sess.response.body
@@ -173,7 +173,7 @@ class Shop::Api::EmailOtpTenantIsolationTest < ActionDispatch::IntegrationTest
   def create_order!(sess, tenant, email:, name:)
     sess.post "/shop/api/orders",
       headers: shop_tenant_headers(tenant.id),
-      params: shop_order_params(email: email, name: name, payment_method: "cash"),
+      params: shop_order_params(email: email, name: name, payment_method: "card"),
       as: :json
     assert_equal 200, sess.response.status, sess.response.body
   end

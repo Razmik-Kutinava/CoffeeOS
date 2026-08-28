@@ -8,6 +8,7 @@ module Shop
       before_action :reject_orders_when_closed!, only: [ :create ]
 
       def create
+        Shop::PaymentConfig.validate_online_payment_method!(order_params[:payment_method])
         Rails.logger.info("[Shop::Order] Creating order for tenant #{@shop_tenant.id}, email: #{order_params[:email]}")
         creator = Shop::OrderCreator.new(session, tenant: @shop_tenant, request: request)
         order = creator.call!(order_params.to_h.symbolize_keys)

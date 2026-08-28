@@ -31,7 +31,7 @@ class Shop::OrderCreatorTest < ActiveSupport::TestCase
     }
   end
 
-  def run_creator(session, payment_method: "cash", email: "guest@example.com")
+  def run_creator(session, payment_method: "card", email: "guest@example.com")
     Shop::EmailVerificationSession.mark_verified!(session, @tenant.id, email)
     Shop::OrderCreator.new(session, tenant: @tenant).call!({
       payment_method: payment_method,
@@ -67,7 +67,7 @@ class Shop::OrderCreatorTest < ActiveSupport::TestCase
     Shop::EmailVerificationSession.mark_verified!(session, @tenant.id, "guest@example.com")
     error   = assert_raises(Shop::OrderCreator::Error) do
       Shop::OrderCreator.new(session, tenant: @tenant).call!({
-        payment_method: "cash",
+        payment_method: "card",
         email: "",
         name: "Test User"
       })
@@ -79,7 +79,7 @@ class Shop::OrderCreatorTest < ActiveSupport::TestCase
     session = build_session_with_item
     error   = assert_raises(Shop::OrderCreator::Error) do
       Shop::OrderCreator.new(session, tenant: @tenant).call!({
-        payment_method: "cash",
+        payment_method: "card",
         email: "guest@example.com",
         name: "Test User"
       })
@@ -88,34 +88,30 @@ class Shop::OrderCreatorTest < ActiveSupport::TestCase
   end
 
   # ---------------------------------------------------------------------------
-  # Cash payment → accepted + succeeded
+  # Cash payment — rejected on public shop API
   # ---------------------------------------------------------------------------
 
-  test "cash payment creates order with accepted status" do
+  test "cash payment raises Error and does not create order" do
     session = build_session_with_item
-    begin
-      order = run_creator(session, payment_method: "cash")
-      assert_equal "accepted", order.status
-    rescue Shop::OrderCreator::Error => e
-      raise unless e.message.match?(/order_number/i)
-      pass "DB trigger not installed; skipping"
-    end
-  end
+    Shop::EmailVerificationSession.mark_verified!(session, @tenant.id, "guest@example.com")
+    before_orders = Order.count
+    before_payments = Payment.count
 
-  test "cash payment creates payment with succeeded status" do
-    session = build_session_with_item
-    begin
-      order   = run_creator(session, payment_method: "cash")
-      payment = order.payments.first
-      assert_equal "succeeded", payment.status
-    rescue Shop::OrderCreator::Error => e
-      raise unless e.message.match?(/order_number/i)
-      pass "DB trigger not installed; skipping"
+    error = assert_raises(Shop::OrderCreator::Error) do
+      Shop::OrderCreator.new(session, tenant: @tenant).call!({
+        payment_method: "cash",
+        email: "guest@example.com",
+        name: "Test User"
+      })
     end
+
+    assert_equal Shop::PaymentConfig::CASH_ONLINE_ERROR, error.message
+    assert_equal before_orders, Order.count
+    assert_equal before_payments, Payment.count
   end
 
   # ---------------------------------------------------------------------------
-  # Card payment → pending_payment + pending
+  # Card payment → pending_payment + pending (or simulated accepted)
   # ---------------------------------------------------------------------------
 
   test "card payment creates order with accepted status when payment is simulated (v1 default)" do
@@ -279,7 +275,7 @@ class Shop::OrderCreatorTest < ActiveSupport::TestCase
   test "cart is cleared from session after successful order" do
     session = build_session_with_item
     begin
-      run_creator(session, payment_method: "cash")
+      run_creator(session, payment_method: "card")
       assert_empty session[Shop::CartService::SESSION_KEY]
     rescue Shop::OrderCreator::Error => e
       raise unless e.message.match?(/order_number/i)
@@ -350,7 +346,7 @@ class Shop::OrderCreatorTest < ActiveSupport::TestCase
 
     begin
       order = Shop::OrderCreator.new(session, tenant: @tenant).call!({
-        payment_method: "cash",
+        payment_method: "card",
         email: "",
         name: ""
       })

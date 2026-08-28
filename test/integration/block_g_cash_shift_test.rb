@@ -29,7 +29,7 @@ class BlockGCashShiftTest < ActionDispatch::IntegrationTest
 
     post "/shop/api/orders",
       headers: headers,
-      params: { email: email, name: "BG Shop", payment_method: "cash" },
+      params: { email: email, name: "BG Shop", payment_method: "card" },
       as: :json
     assert_response :success
 

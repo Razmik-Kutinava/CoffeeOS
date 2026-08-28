@@ -130,7 +130,7 @@ class Shop::CheckoutAcceptanceCbrTest < ActionDispatch::IntegrationTest
 
     post "/shop/api/orders",
       headers: shop_tenant_headers(@tenant.id),
-      params: shop_order_params(email: @email, payment_method: "cash"),
+      params: shop_order_params(email: @email, payment_method: "card"),
       as: :json
 
     assert_response :unprocessable_entity

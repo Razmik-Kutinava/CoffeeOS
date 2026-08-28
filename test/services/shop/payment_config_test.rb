@@ -48,4 +48,18 @@ class Shop::PaymentConfigTest < ActiveSupport::TestCase
     assert json[:iframe]
     assert_equal "TestTerminal", json[:terminal_key]
   end
+
+  test "validate_online_payment_method rejects cash" do
+    error = assert_raises(Shop::OrderCreator::Error) do
+      Shop::PaymentConfig.validate_online_payment_method!("cash")
+    end
+    assert_equal Shop::PaymentConfig::CASH_ONLINE_ERROR, error.message
+  end
+
+  test "validate_online_payment_method allows card and sbp" do
+    assert Shop::PaymentConfig.online_payment_method_allowed?("card")
+    assert Shop::PaymentConfig.online_payment_method_allowed?("sbp")
+    assert Shop::PaymentConfig.validate_online_payment_method!("card").nil?
+    assert Shop::PaymentConfig.validate_online_payment_method!(nil).nil?
+  end
 end

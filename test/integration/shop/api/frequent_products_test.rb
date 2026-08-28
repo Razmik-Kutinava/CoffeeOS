@@ -182,7 +182,7 @@ class Shop::Api::FrequentProductsTest < ActionDispatch::IntegrationTest
 
     post "/shop/api/orders",
       headers: shop_headers,
-      params: shop_order_params(email: email, name: "Freq Customer", payment_method: "cash"),
+      params: shop_order_params(email: email, name: "Freq Customer", payment_method: "card"),
       as: :json
     assert_response :success
   end

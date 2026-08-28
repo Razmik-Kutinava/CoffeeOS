@@ -25,7 +25,7 @@ class Shop::Api::EmailOtpCheckoutTest < ActionDispatch::IntegrationTest
 
     post "/shop/api/orders",
       headers: shop_tenant_headers(@tenant.id),
-      params: shop_order_params(email: @email, name: "Email QA", payment_method: "cash"),
+      params: shop_order_params(email: @email, name: "Email QA", payment_method: "card"),
       as: :json
 
     assert_response :success, response.body
@@ -43,7 +43,7 @@ class Shop::Api::EmailOtpCheckoutTest < ActionDispatch::IntegrationTest
 
     post "/shop/api/orders",
       headers: shop_tenant_headers(@tenant.id),
-      params: shop_order_params(email: @email, payment_method: "cash"),
+      params: shop_order_params(email: @email, payment_method: "card"),
       as: :json
 
     assert_response :unprocessable_entity
@@ -89,7 +89,7 @@ class Shop::Api::EmailOtpCheckoutTest < ActionDispatch::IntegrationTest
 
     post "/shop/api/orders",
       headers: shop_tenant_headers(@tenant.id),
-      params: shop_order_params(email: @email, payment_method: "cash"),
+      params: shop_order_params(email: @email, payment_method: "card"),
       as: :json
     assert_response :unprocessable_entity
     assert_match(/подтвердите email/i, response.parsed_body["error"].to_s)

@@ -97,7 +97,7 @@ class Shop::Api::B111OperatingHoursTest < ActionDispatch::IntegrationTest
 
       post "/shop/api/orders",
         headers: shop_tenant_headers(@tenant.id),
-        params: shop_order_params(email: @email, payment_method: "cash"),
+        params: shop_order_params(email: @email, payment_method: "card"),
         as: :json
       assert_response :unprocessable_entity
       body = response.parsed_body
@@ -120,7 +120,7 @@ class Shop::Api::B111OperatingHoursTest < ActionDispatch::IntegrationTest
 
       post "/shop/api/orders",
         headers: shop_tenant_headers(@tenant.id),
-        params: shop_order_params(email: @email, payment_method: "cash"),
+        params: shop_order_params(email: @email, payment_method: "card"),
         as: :json
       assert_response :success
       assert response.parsed_body["order_id"].present?

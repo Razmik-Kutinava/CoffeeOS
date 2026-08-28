@@ -57,7 +57,7 @@ class BlockFStockFlowTest < ActionDispatch::IntegrationTest
 
     post "/shop/api/orders",
       headers: headers,
-      params: shop_order_params(email: email, name: "Block F", payment_method: "mock"),
+      params: shop_order_params(email: email, name: "Block F", payment_method: "card"),
       as: :json
     assert_response :success
 
@@ -83,7 +83,7 @@ class BlockFStockFlowTest < ActionDispatch::IntegrationTest
 
     post "/shop/api/orders",
       headers: headers,
-      params: shop_order_params(email: email, name: "Negative OK", payment_method: "mock"),
+      params: shop_order_params(email: email, name: "Negative OK", payment_method: "card"),
       as: :json
     assert_response :success
 

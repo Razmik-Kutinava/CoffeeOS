@@ -25,7 +25,7 @@ class Shop::Api::PwaLkApiTest < ActionDispatch::IntegrationTest
 
       sess.post "/shop/api/orders",
         headers: shop_tenant_headers(@tenant.id),
-        params: shop_order_params(email: @email, name: "LK Guest", payment_method: "cash"),
+        params: shop_order_params(email: @email, name: "LK Guest", payment_method: "card"),
         as: :json
       assert_equal 200, sess.response.status, sess.response.body
 
@@ -87,7 +87,7 @@ class Shop::Api::PwaLkApiTest < ActionDispatch::IntegrationTest
 
       sess.post "/shop/api/orders",
         headers: shop_tenant_headers(@tenant.id),
-        params: shop_order_params(email: @email, name: "LK Guest", payment_method: "mock"),
+        params: shop_order_params(email: @email, name: "LK Guest", payment_method: "card"),
         as: :json
       assert_equal 200, sess.response.status, sess.response.body
       order_id = sess.response.parsed_body["order_id"]

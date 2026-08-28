@@ -152,7 +152,7 @@ class Shop::OrderStatusAcceptanceCbrTest < ActionDispatch::IntegrationTest
 
     post "/shop/api/orders",
       headers: shop_tenant_headers(@tenant.id),
-      params: shop_order_params(email: @email, name: "B11 QA", payment_method: "cash"),
+      params: shop_order_params(email: @email, name: "B11 QA", payment_method: "card"),
       as: :json
     assert_response :success
     response.parsed_body["order_id"]

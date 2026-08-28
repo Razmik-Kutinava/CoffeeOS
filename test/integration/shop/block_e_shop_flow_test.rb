@@ -74,7 +74,7 @@ class BlockEShopFlowTest < ActionDispatch::IntegrationTest
 
     post "/shop/api/orders",
       headers: @headers,
-      params: shop_order_params(email: @email, name: "Block E", payment_method: "mock"),
+      params: shop_order_params(email: @email, name: "Block E", payment_method: "card"),
       as: :json
     assert_response :success
 
@@ -97,7 +97,7 @@ class BlockEShopFlowTest < ActionDispatch::IntegrationTest
 
     post "/shop/api/orders",
       headers: @headers,
-      params: shop_order_params(email: @email, name: "Today", payment_method: "mock"),
+      params: shop_order_params(email: @email, name: "Today", payment_method: "card"),
       as: :json
     assert_response :success
     today_id = response.parsed_body["order_id"]
@@ -109,7 +109,7 @@ class BlockEShopFlowTest < ActionDispatch::IntegrationTest
       as: :json
     post "/shop/api/orders",
       headers: @headers,
-      params: shop_order_params(email: @email, name: "Yesterday", payment_method: "mock"),
+      params: shop_order_params(email: @email, name: "Yesterday", payment_method: "card"),
       as: :json
     assert_response :success
     old_id = response.parsed_body["order_id"]

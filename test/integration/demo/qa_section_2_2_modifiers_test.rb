@@ -64,7 +64,7 @@ class QaSection22ModifiersTest < ActionDispatch::IntegrationTest
 
     post "/shop/api/orders",
       headers: @headers,
-      params: shop_order_params(email: email, name: "QA 2.2", payment_method: "cash"),
+      params: shop_order_params(email: email, name: "QA 2.2", payment_method: "card"),
       as: :json
     assert_response :success
     assert_equal 199.0, response.parsed_body["total"]

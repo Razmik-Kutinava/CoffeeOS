@@ -113,7 +113,7 @@ class Demo::QaSection13ShiftFlowTest < ActionDispatch::IntegrationTest
 
     post "/shop/api/orders",
       headers: headers,
-      params: shop_order_params(email: email, name: "Guest", payment_method: "cash"),
+      params: shop_order_params(email: email, name: "Guest", payment_method: "card"),
       as: :json
     assert_response :success
     json = JSON.parse(response.body)
