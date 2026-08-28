@@ -2,14 +2,14 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-28 (block shop cash online)  
+**Дата:** 2026-08-28 (Fly v461 deploy + MCP PASS)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| cash запрещён в shop/api | fiscal notify ON → live pay |
+| v461 на Fly · MCP session commits PASS | fiscal notify ON → live pay |
 
-**last_done:** shop cash online blocked; barista POS cash OK  
+**last_done:** deploy v461 + MCP Point A PASS (cash block, simulate=0, fail-redirect)  
 **next_step:** кабинет Т-Банка fiscalization ON; live test-customer pay
 
 **Архив session:** [`archive/README.md`](archive/README.md)  

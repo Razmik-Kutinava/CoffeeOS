@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-28 — Fly v461 deploy + MCP PASS (session commits)
+
+- Deploy **v461** · image `deployment-01M13YCKVJ4CDQBFQFKTHM1NZC`
+- Push `f5ce8118` (OTP leak, fail-redirect, simulate=0, cash block)
+- MCP Point A: cash 422, SHOP_SIMULATE=0, card→pending_payment, webhook 401, fail-redirect 302
+- Script: `bin/acceptance/fly_v461_mcp_acceptance.rb`
+
 ## 2026-08-28 — block cash on public shop API
 
 - Guest `/shop/api/orders`: `payment_method: cash` → 422, Order/Payment не создаются

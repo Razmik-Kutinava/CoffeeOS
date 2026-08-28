@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-28 (block shop cash online)  
+**Дата:** 2026-08-28 (Fly v461 deploy + MCP PASS)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| cash запрещён в shop/api | fiscal notify ON → live pay |
+| v461 на Fly · MCP session commits PASS | fiscal notify ON → live pay |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,16 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Fly v461 deploy + MCP (2026-08-28)
+
+| Что | Статус |
+|-----|--------|
+| Deploy | **v461** · `deployment-01M13YCKVJ4CDQBFQFKTHM1NZC` · HEAD `f5ce8118` |
+| Push | `3e476f66..f5ce8118` |
+| P0–P7 MCP | **PASS** (cash 422, simulate=0, card pending, fail-redirect) |
+| B2.1 barista | **PARTIAL** (b21_cancel marker — pre-existing) |
+| Артефакты | `…/mcp/fly_v461_2026-08-28/` |
 
 ### Сессия 2026-08-28 — block cash on public shop API
 
