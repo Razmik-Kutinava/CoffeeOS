@@ -97,4 +97,22 @@ class Shop::Api::DebugControllerTest < ActionDispatch::IntegrationTest
     assert_equal [], data["products_for_tenant"]
     assert_equal [], data["product_tenant_settings"]
   end
+
+  # ── Defense-in-depth: production guard ───────────────────────────────────────
+
+  test "контроллер имеет before_action, блокирующий production (defense-in-depth)" do
+    controller_class = Shop::Api::DebugController
+    callbacks = controller_class._process_action_callbacks.select { |c| c.kind == :before }
+
+    production_guard_present = callbacks.any? do |cb|
+      cb.filter.is_a?(Proc) || cb.filter.to_s.include?("production")
+    end
+    assert production_guard_present, "DebugController должен иметь before_action с проверкой production"
+
+    source_file = Rails.root.join("app/controllers/shop/api/debug_controller.rb").read
+    assert_match(/before_action.*production\?/, source_file,
+      "before_action должен содержать проверку Rails.env.production?")
+    assert_match(/head\s+:not_found/, source_file,
+      "before_action должен возвращать 404 в production")
+  end
 end

@@ -4,7 +4,11 @@ module Shop
   module Api
     # Диагностический endpoint для проверки tenant resolution и каталога.
     # Доступен только вне production. В production маршрут не регистрируется (см. routes.rb).
+    # Defense-in-depth: контроллер сам возвращает 404 в production, даже если роут случайно
+    # окажется доступен (копирование в engine, рефакторинг routes и т.п.).
     class DebugController < Shop::Api::BaseController
+      before_action { head :not_found if Rails.env.production? }
+
       def index
         # @shop_tenant и Current.tenant_id установлены через around_action :with_shop_tenant! из BaseController
         tenant = @shop_tenant
