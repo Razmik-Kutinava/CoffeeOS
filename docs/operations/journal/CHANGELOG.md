@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-28 — SHOP_SIMULATE_PAYMENT safe default (0 + prod guard)
+
+- `Shop::PaymentConfig.simulate?` — default off, raise in production
+- Дубли ENV.fetch убраны из OrderCreator/NewCard/Recurrent
+
 ## 2026-08-28 — fail-redirect order ownership check
 
 - `/payment/fail`: journal только если reconnect_token / pending session / customer session

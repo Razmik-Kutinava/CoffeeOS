@@ -15,6 +15,23 @@ class Shop::PaymentConfigTest < ActiveSupport::TestCase
     ENV["TBANK_TERMINAL_KEY"] = @old_key
   end
 
+  test "simulate defaults to false when env unset" do
+    ENV.delete("SHOP_SIMULATE_PAYMENT")
+    refute Shop::PaymentConfig.simulate?
+  end
+
+  test "simulate raises in production when enabled" do
+    ENV["SHOP_SIMULATE_PAYMENT"] = "1"
+    saved_env = Rails.env
+    Rails.singleton_class.define_method(:env) { ActiveSupport::StringInquirer.new("production") }
+    begin
+      error = assert_raises(RuntimeError) { Shop::PaymentConfig.simulate? }
+      assert_match(/must not be enabled in production/, error.message)
+    ensure
+      Rails.singleton_class.define_method(:env) { saved_env }
+    end
+  end
+
   test "simulate disables iframe" do
     ENV["SHOP_SIMULATE_PAYMENT"] = "1"
     ENV["SHOP_PAYMENT_IFRAME"] = "1"

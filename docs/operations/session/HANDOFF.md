@@ -9,7 +9,7 @@
 |--------|--------|
 | OTP коды убраны из Rails.logger | fiscal notify ON → live pay → PASS |
 
-**last_done:** fail-redirect ownership check + reconnect_token in FailURL  
+**last_done:** SHOP_SIMULATE_PAYMENT default 0 + prod guard  
 **next_step:** кабинет Т-Банка fiscalization ON; live test-customer pay
 
 **Архив session:** [`archive/README.md`](archive/README.md)  

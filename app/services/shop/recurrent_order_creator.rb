@@ -88,7 +88,7 @@ module Shop
     end
 
     def simulate_shop_payment?
-      ActiveModel::Type::Boolean.new.cast(ENV.fetch("SHOP_SIMULATE_PAYMENT", "1"))
+      Shop::PaymentConfig.simulate?
     end
 
     def find_saved_card!(params)

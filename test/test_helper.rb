@@ -2,6 +2,9 @@ ENV["RAILS_ENV"] ||= "test"
 require_relative "../config/environment"
 require "rails/test_help"
 
+# Большинство shop-тестов писались под simulate=1 по умолчанию; явный default теперь 0.
+ENV["SHOP_SIMULATE_PAYMENT"] = "1" if ENV["SHOP_SIMULATE_PAYMENT"].nil?
+
 require "securerandom"
 require_relative "support/factories"
 require_relative "support/shop_email_test_helper"

@@ -139,10 +139,9 @@ module Shop
 
     private
 
-    # В1: реального платёжного шлюза нет — имитация успешной оплаты (SHOP_SIMULATE_PAYMENT=1 по умолчанию).
-    # В2: SHOP_SIMULATE_PAYMENT=0 — card/sbp ждут callback (Callbacks::PaymentStatusUpdater).
+    # Имитация оплаты только при SHOP_SIMULATE_PAYMENT=1 (default 0). Prod: raise если включена.
     def simulate_shop_payment?
-      ActiveModel::Type::Boolean.new.cast(ENV.fetch("SHOP_SIMULATE_PAYMENT", "1"))
+      PaymentConfig.simulate?
     end
 
     def payment_flow(payment_method)

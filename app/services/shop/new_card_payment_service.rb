@@ -81,7 +81,7 @@ module Shop
     private
 
     def simulate?
-      ActiveModel::Type::Boolean.new.cast(ENV.fetch("SHOP_SIMULATE_PAYMENT", "1"))
+      Shop::PaymentConfig.simulate?
     end
 
     def order_params(params)

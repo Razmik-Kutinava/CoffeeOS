@@ -7,7 +7,7 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| OTP log leak fix + fail-redirect ownership | fiscal notify ON → live pay |
+| fail-redirect ownership + simulate default 0 | fiscal notify ON → live pay |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,12 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-28 — SHOP_SIMULATE_PAYMENT safe default
+
+- Default 0; `PaymentConfig.simulate?` raise in production if enabled
+- Единая точка: OrderCreator, NewCard, Recurrent → PaymentConfig
+- test_helper: explicit `SHOP_SIMULATE_PAYMENT=1` для legacy shop-тестов
 
 ### Сессия 2026-08-28 — fail-redirect ownership
 

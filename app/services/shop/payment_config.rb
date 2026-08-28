@@ -7,7 +7,12 @@ module Shop
     TBANK_SCRIPT_URL = "https://integrationjs.tbank.ru/integration.js"
 
     def simulate?
-      ActiveModel::Type::Boolean.new.cast(ENV.fetch("SHOP_SIMULATE_PAYMENT", "1"))
+      value = ActiveModel::Type::Boolean.new.cast(ENV.fetch("SHOP_SIMULATE_PAYMENT", "0"))
+      if value && Rails.env.production?
+        raise "SHOP_SIMULATE_PAYMENT must not be enabled in production"
+      end
+
+      value
     end
 
     def iframe_enabled?
