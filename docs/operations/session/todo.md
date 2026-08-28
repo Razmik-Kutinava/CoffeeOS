@@ -2,7 +2,7 @@
 
 | last_done | current_state | next_step |
 |-----------|---------------|-----------|
-| REVIEW bugbot+security+Entire+push | CI watch | deploy — апрув |
+| REVIEW bugbot+security+Entire+push | CI green `33149337416` | deploy — апрув |
 
 **CBR:** #72 · #73  
 **Контекст:** Receipt.Email/Phone в Init (#72) + fiscal RECEIPT webhook → ЛК (#73)  

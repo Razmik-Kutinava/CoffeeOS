@@ -7,7 +7,7 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| REVIEW pushed · CI watch | deploy апрув → MCP |
+| CI green #72+#73 REVIEW | deploy апрув → MCP |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -20,7 +20,7 @@
 
 - Local regress 31/0 · bugbot clean · security no medium+
 - Entire `01M13J1QDE9SHEEARP15VV3P1H` на `8437244b` (attach session `8eebd79a…`)
-- push develop · CI watch
+- push develop · **CI green** [33149337416](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/33149337416)
 - Следующий: deploy апрув → fiscal notify ON → live MCP
 
 ### Сессия 2026-08-28 — #72 + #73 closure prep

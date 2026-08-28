@@ -7,9 +7,9 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| #72+#73 REVIEW pushed · CI watch | deploy апрув → fiscal notify ON → MCP |
+| #72+#73 REVIEW · CI green `33149337416` | deploy апрув → fiscal notify ON → MCP |
 
-**last_done:** REVIEW bugbot clean · security no medium+ · Entire `01M13J1QDE9SHEEARP15VV3P1H` на `8437244b` · push  
+**last_done:** REVIEW · CI green [33149337416](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/33149337416) · Entire `01M13J1QDE9SHEEARP15VV3P1H` на `8437244b`  
 **next_step:** CI green → deploy апрув → live MCP #72+#73
 
 **Архив session:** [`archive/README.md`](archive/README.md)  

@@ -15,7 +15,7 @@
 
 - bugbot: no bugs · security: no medium+ (hardening notes only)
 - Entire `01M13J1QDE9SHEEARP15VV3P1H` на `8437244b`
-- push develop · CI watch · deploy/MCP — апрув
+- push develop · **CI green** [33149337416](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/33149337416) · deploy/MCP — апрув
 
 ## 2026-08-28 — docs: #72 + #73 closure prep (до REVIEW)
 
