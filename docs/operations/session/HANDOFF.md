@@ -2,14 +2,14 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-28 (deploy v460 + MCP #72/#73)  
+**Дата:** 2026-08-28 (fix OTP log leak)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Fly v460 · MCP #72/#73 **PARTIAL** | fiscal notify ON → live pay → PASS |
+| OTP коды убраны из Rails.logger | fiscal notify ON → live pay → PASS |
 
-**last_done:** deploy **v460** + MCP Point A (smoke PASS; live Init/RECEIPT SKIP)  
+**last_done:** fix OTP code leak in shop delivery clients (6 files)  
 **next_step:** кабинет Т-Банка fiscalization ON; live test-customer pay
 
 **Архив session:** [`archive/README.md`](archive/README.md)  

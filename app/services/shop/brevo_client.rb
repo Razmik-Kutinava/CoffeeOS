@@ -40,12 +40,12 @@ module Shop
 
     def deliver_otp!(to:, code:)
       if Rails.env.test?
-        Rails.logger.info("[Shop::Brevo] TEST OTP to #{to}: #{code}")
+        Rails.logger.info("[Shop::Brevo] TEST OTP sent to #{to}")
         return true
       end
 
       if credential.blank?
-        Rails.logger.warn("[Shop::Brevo] BREVO_API_KEY missing — OTP to #{to}: #{code}")
+        Rails.logger.warn("[Shop::Brevo] BREVO_API_KEY missing — OTP skipped for #{to}")
         return true
       end
 

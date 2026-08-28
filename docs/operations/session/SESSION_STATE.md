@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-28 (deploy v460 + MCP)  
+**Дата:** 2026-08-28 (fix OTP log leak)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Fly v460 MCP PARTIAL | fiscal notify ON → live pay |
+| OTP log leak fix | fiscal notify ON → live pay |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,11 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-28 — OTP log leak fix
+
+- Убраны OTP-коды из Rails.logger в shop delivery clients (Brevo, SMS, Messenger, FlashCall, EmailOtp, SmsRu flash_call)
+- Тесты email/phone OTP: green
 
 ### Сессия 2026-08-28 — #72 + #73 REVIEW
 

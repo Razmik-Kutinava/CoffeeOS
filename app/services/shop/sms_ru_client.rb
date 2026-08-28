@@ -124,7 +124,7 @@ module Shop
     def request_flash_call!(phone:, ip: nil)
       if fallback?
         code = test_code
-        Rails.logger.info("[Shop::SmsRuClient] flash_call to #{phone}: code=#{code} (fallback)")
+        Rails.logger.info("[Shop::SmsRuClient] flash_call sent to #{phone} (fallback)")
         return code
       end
 

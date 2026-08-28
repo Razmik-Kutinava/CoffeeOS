@@ -25,7 +25,7 @@ module Shop
     def request_call!(to:)
       if Rails.env.test? || otp_log_fallback? || api_key.blank?
         code = test_or_fallback_code
-        Rails.logger.info("[Shop::FlashCallClient] Flash Call to #{to}: code=#{code}")
+        Rails.logger.info("[Shop::FlashCallClient] Flash Call sent to #{to}")
         return code
       end
 

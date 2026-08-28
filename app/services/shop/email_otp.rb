@@ -73,7 +73,7 @@ module Shop
       BrevoClient.deliver_otp!(to: to, code: code)
     rescue BrevoClient::Error => e
       if otp_log_fallback?
-        Rails.logger.warn("[Shop::EmailOtp] Brevo недоступен (#{e.message}) — OTP для #{to}: #{code}")
+        Rails.logger.warn("[Shop::EmailOtp] Brevo недоступен (#{e.message}) — OTP fallback for #{to}")
         return
       end
 

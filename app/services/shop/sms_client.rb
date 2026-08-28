@@ -24,7 +24,7 @@ module Shop
 
     def deliver_otp!(to:, code:)
       if Rails.env.test? || otp_log_fallback? || api_id.blank?
-        Rails.logger.info("[Shop::SmsClient] OTP SMS to #{to}: #{code}")
+        Rails.logger.info("[Shop::SmsClient] OTP SMS sent to #{to}")
         return true
       end
 

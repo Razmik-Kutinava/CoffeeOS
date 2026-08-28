@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-28 — fix OTP code leak in shop delivery logs
+
+- Убраны значения `code`/`otp_code` из Rails.logger в BrevoClient, SmsClient, MessengerClient, FlashCallClient, EmailOtp, SmsRuClient flash_call fallback
+- grep по репо: утечек OTP в логах не осталось
+
 ## 2026-08-28 — Fly v460 deploy + MCP #72/#73
 
 - Deploy **v460** · image `deployment-01M13JTWPKPJBB3YCG2ZGMWP5P`
