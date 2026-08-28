@@ -2,7 +2,7 @@
 
 | last_done | current_state | next_step |
 |-----------|---------------|-----------|
-| REVIEW bugbot+security+Entire+push | CI green `33149337416` | deploy — апрув |
+| REVIEW bugbot+security+Entire+push | CI green | deploy **v460** MCP PARTIAL |
 
 **CBR:** #72 · #73  
 **Контекст:** Receipt.Email/Phone в Init (#72) + fiscal RECEIPT webhook → ЛК (#73)  
@@ -23,7 +23,7 @@
 | /regress | **`[x]`** 31/0 (2026-08-28) | **`[x]`** (в составе) |
 | CLOSURE_PREP | **`[x]`** | **`[x]`** |
 | REVIEW | **`[x]`** bugbot · security · Entire · push | **`[x]`** |
-| Deploy + Fly MCP | **`[ ]`** апрув | **`[ ]`** fiscal notify ON |
+| Deploy + Fly MCP | **`[x]`** v460 PARTIAL | **`[x]`** PARTIAL |
 
 ## Не ломать
 

@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-28 — Fly v460 deploy + MCP #72/#73
+
+- Deploy **v460** · image `deployment-01M13JTWPKPJBB3YCG2ZGMWP5P`
+- MCP PARTIAL: smoke/webhook PASS; live Init + RECEIPT SKIP (fiscal notify OFF, fr=0)
+- Артефакты `mcp/fly_v460_2026-08-28/`
+
 ## 2026-08-28 — #72 + #73 REVIEW (push develop)
 
 - bugbot: no bugs · security: no medium+ (hardening notes only)

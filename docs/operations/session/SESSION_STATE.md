@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-28 (#72+#73 REVIEW push)  
+**Дата:** 2026-08-28 (deploy v460 + MCP)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| CI green #72+#73 REVIEW | deploy апрув → MCP |
+| Fly v460 MCP PARTIAL | fiscal notify ON → live pay |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -23,7 +23,13 @@
 - push develop · **CI green** [33149337416](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/33149337416)
 - Следующий: deploy апрув → fiscal notify ON → live MCP
 
-### Сессия 2026-08-28 — #72 + #73 closure prep
+### Сессия 2026-08-28 — Fly v460 deploy + MCP #72/#73
+
+- Deploy **v460** (`deployment-01M13JTWPKPJBB3YCG2ZGMWP5P`) с develop `3e476f66`
+- MCP: P0/P1 PASS · webhook 401 PASS · #72 PARTIAL · #73 PARTIAL (fr=0, fiscal notify OFF)
+- Артефакты: `receipt_email_fiscal_checks/mcp/fly_v460_2026-08-28/` · `fiscal_receipts_personal_cabinet/mcp/fly_v460_2026-08-28/`
+
+### Сессия 2026-08-28 — #72 + #73 REVIEW
 
 - Intake заказчика 2026-08-28: #72 CONFIRMED для SendClosing; #73 Subtask 0, 9а, endpoint `/callbacks/tbank`
 - `CLOSURE_PREP.md` + `RECOVERY.md` (Subtask 23)

@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-28 (#72+#73 REVIEW push)  
+**Дата:** 2026-08-28 (deploy v460 + MCP #72/#73)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #72+#73 REVIEW · CI green `33149337416` | deploy апрув → fiscal notify ON → MCP |
+| Fly v460 · MCP #72/#73 **PARTIAL** | fiscal notify ON → live pay → PASS |
 
-**last_done:** REVIEW · CI green [33149337416](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/33149337416) · Entire `01M13J1QDE9SHEEARP15VV3P1H` на `8437244b`  
-**next_step:** CI green → deploy апрув → live MCP #72+#73
+**last_done:** deploy **v460** + MCP Point A (smoke PASS; live Init/RECEIPT SKIP)  
+**next_step:** кабинет Т-Банка fiscalization ON; live test-customer pay
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -18,6 +18,16 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Fly v460 deploy + MCP #72/#73 (2026-08-28)
+
+| Что | Статус |
+|-----|--------|
+| Deploy | **v460** · `deployment-01M13JTWPKPJBB3YCG2ZGMWP5P` |
+| Webhook invalid Token | **PASS** 401 |
+| #72 Receipt contact | **PARTIAL** (smoke+D PASS; live Init SKIP) |
+| #73 Fiscal ЛК | **PARTIAL** (fiscal notify OFF / fr=0) |
+| Артефакты | `…/mcp/fly_v460_2026-08-28/` |
 
 ### #72 + #73 closure prep (2026-08-28)
 
@@ -27,7 +37,7 @@
 | CLOSURE_PREP + RECOVERY.md | **`[x]`** |
 | /regress зона #72+#73 | **`[x]`** 31/0 |
 | REVIEW | **`[x]`** bugbot · security · Entire · push |
-| Deploy + Fly MCP live | **`[ ]`** апрув + fiscal notify ON |
+| Deploy + Fly MCP live | **`[x]`** v460 PARTIAL | **`[x]`** PARTIAL (fiscal notify OFF) |
 
 ### Fly v459 deploy + MCP (2026-08-27)
 
