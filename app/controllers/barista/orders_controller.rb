@@ -2,7 +2,9 @@ module Barista
   class OrdersController < BaseController
     include MenuCatalogLoadable
     def show
-      @order = Order.for_current_tenant.includes(:payments).find(params[:id])
+      return redirect_no_open_shift unless current_shift
+
+      @order = shift_accessible_orders.includes(:payments).find(params[:id])
       authorize @order
       @order_items = @order.order_items.includes(:product)
 
@@ -88,17 +90,10 @@ module Barista
     end
 
     def update_status
-      @order = Order.for_current_tenant.find(params[:id])
-      authorize @order, :update_status?
+      return redirect_no_open_shift unless current_shift
 
-      # BUG-005 FIX: Нельзя менять статус заказа без открытой кассовой смены.
-      unless current_shift
-        respond_to do |format|
-          format.turbo_stream { render turbo_stream: turbo_stream.replace("order_#{@order.id}", partial: "barista/dashboard/order_card", locals: { order: @order }) }
-          format.html { redirect_to barista_dashboard_path, alert: "Смена не открыта. Откройте смену перед работой с заказами." }
-        end
-        return
-      end
+      @order = shift_accessible_orders.find(params[:id])
+      authorize @order, :update_status?
 
       begin
         result = Barista::OrderStatusUpdateService.new(
@@ -125,17 +120,10 @@ module Barista
     end
 
     def cancel
-      @order = Order.for_current_tenant.find(params[:id])
-      authorize @order, :cancel?
+      return redirect_no_open_shift unless current_shift
 
-      # BUG-005 FIX: Нельзя отменять заказ без открытой кассовой смены.
-      unless current_shift
-        respond_to do |format|
-          format.turbo_stream { render turbo_stream: turbo_stream.replace("order_#{@order.id}", partial: "barista/dashboard/order_card", locals: { order: @order }) }
-          format.html { redirect_to barista_dashboard_path, alert: "Смена не открыта. Откройте смену перед работой с заказами." }
-        end
-        return
-      end
+      @order = shift_accessible_orders.find(params[:id])
+      authorize @order, :cancel?
 
       unless @order.can_be_cancelled?
         respond_to do |format|
@@ -181,6 +169,23 @@ module Barista
     end
 
     private
+
+    def shift_accessible_orders
+      BoardOrdersQuery.shift_accessible_scope(
+        tenant_id: Current.tenant_id,
+        cash_shift: current_shift
+      )
+    end
+
+    def redirect_no_open_shift
+      message = "Смена не открыта. Откройте смену перед работой с заказами."
+      respond_to do |format|
+        format.turbo_stream { redirect_to barista_dashboard_path, alert: message }
+        format.html { redirect_to barista_dashboard_path, alert: message }
+        format.json { render json: { error: message }, status: :forbidden }
+      end
+      nil
+    end
 
     def broadcast_order_counts
       counts = Barista::BoardOrdersQuery.slot_counts(tenant_id: Current.tenant_id)

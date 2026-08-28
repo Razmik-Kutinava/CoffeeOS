@@ -87,6 +87,74 @@ class Barista::OrdersControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  # ── изоляция смен ──────────────────────────────────────────────────────────
+
+  test "barista can show and update order from current open shift" do
+    login_as!(@barista)
+    order = Order.create!(
+      tenant: @tenant, cash_shift: @shift,
+      order_number: "CUR-001", source: "manual", status: "accepted",
+      total_amount: 200, discount_amount: 0, final_amount: 200
+    )
+
+    get "/barista/orders/#{order.id}.json"
+    assert_response :success
+    assert_equal order.id, response.parsed_body["id"]
+
+    patch "/barista/orders/#{order.id}/update_status", params: { status: "preparing" }
+    assert_equal "preparing", order.reload.status
+  end
+
+  test "barista can access vitrina mobile order created after shift opened" do
+    login_as!(@barista)
+    vitrina = Order.create!(
+      tenant: @tenant, cash_shift: nil,
+      order_number: "VIT-CUR", source: "mobile", status: "accepted",
+      total_amount: 200, discount_amount: 0, final_amount: 200,
+      created_at: @shift.opened_at + 1.minute
+    )
+
+    get "/barista/orders/#{vitrina.id}.json"
+    assert_response :success
+
+    patch "/barista/orders/#{vitrina.id}/update_status", params: { status: "preparing" }
+    assert_equal "preparing", vitrina.reload.status
+  end
+
+  test "barista cannot access order from closed previous shift of same tenant" do
+    stale = Order.create!(
+      tenant: @tenant, cash_shift: @shift,
+      order_number: "OLD-SHIFT", source: "manual", status: "accepted",
+      total_amount: 200, discount_amount: 0, final_amount: 200
+    )
+    @shift.update!(status: "closed", closed_at: Time.current, closed_by: @barista, closing_cash: 0)
+    open_cash_shift!(tenant: @tenant, opened_by: @barista)
+
+    login_as!(@barista)
+
+    get "/barista/orders/#{stale.id}.json"
+    assert_response :not_found
+
+    patch "/barista/orders/#{stale.id}/update_status", params: { status: "preparing" }
+    assert_equal "accepted", stale.reload.status
+
+    post "/barista/orders/#{stale.id}/cancel", params: { reason: "test" }
+    assert_equal "accepted", stale.reload.status
+  end
+
+  test "show without open shift returns forbidden json" do
+    @shift.update!(status: "closed", closed_at: Time.current, closed_by: @barista, closing_cash: 0)
+    order = Order.create!(
+      tenant: @tenant, cash_shift: @shift,
+      order_number: "NO-SHIFT", source: "manual", status: "accepted",
+      total_amount: 200, discount_amount: 0, final_amount: 200
+    )
+
+    login_as!(@barista)
+    get "/barista/orders/#{order.id}.json"
+    assert_response :forbidden
+  end
+
   # ── изоляция тенантов ──────────────────────────────────────────────────────
 
   # ── аудит отмены ───────────────────────────────────────────────────────────

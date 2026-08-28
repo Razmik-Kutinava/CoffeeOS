@@ -19,28 +19,23 @@ module Barista
       COLUMN_DOM_IDS[status.to_s]
     end
 
-    # Заказы, которые бариста должен видеть на табло (без обрезки новых из-за LIMIT).
-    def self.board_scope(tenant_id:, cash_shift: :auto)
+    # Заказы текущей смены + витрина (mobile, cash_shift_id NULL) с opened_at смены.
+    # Без фильтра по статусу — для show/update/cancel по id.
+    def self.shift_accessible_scope(tenant_id:, cash_shift: :auto)
       shift = resolve_cash_shift(tenant_id, cash_shift)
-      base = Order.for_barista_board(tenant_id)
+      base = Order.where(tenant_id: tenant_id)
 
       if shift
-        base.where(
-          <<~SQL.squish,
-            orders.cash_shift_id = :shift_id
-            OR (
-              orders.cash_shift_id IS NULL
-              AND orders.source = 'mobile'
-              AND orders.created_at >= :shift_opened_at
-            )
-          SQL
-          shift_id: shift.id,
-          shift_opened_at: shift.opened_at
-        )
+        base.where(shift_accessible_sql, shift_id: shift.id, shift_opened_at: shift.opened_at)
       else
-        # B1.11: смена закрыта — табло пусто (ночью ничего не показываем).
         base.none
       end
+    end
+
+    # Заказы, которые бариста должен видеть на табло (без обрезки новых из-за LIMIT).
+    def self.board_scope(tenant_id:, cash_shift: :auto)
+      shift_accessible_scope(tenant_id: tenant_id, cash_shift: cash_shift)
+        .where(status: %w[accepted preparing ready])
     end
 
     def self.for_slots(tenant_id:, cash_shift: :auto, limit: MAX_SLOTS)
@@ -83,6 +78,17 @@ module Barista
 
       CashShift.find_by(tenant_id: tenant_id, status: "open")
     end
-    private_class_method :resolve_cash_shift
+
+    def self.shift_accessible_sql
+      <<~SQL.squish
+        orders.cash_shift_id = :shift_id
+        OR (
+          orders.cash_shift_id IS NULL
+          AND orders.source = 'mobile'
+          AND orders.created_at >= :shift_opened_at
+        )
+      SQL
+    end
+    private_class_method :resolve_cash_shift, :shift_accessible_sql
   end
 end
