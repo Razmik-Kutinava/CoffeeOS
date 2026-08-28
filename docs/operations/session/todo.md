@@ -1,29 +1,65 @@
-# todo — block cash on public shop API (REVIEW)
+# todo — barista: заказы только текущей смены (show/update/cancel)
 
 | last_done | current_state | next_step |
 |-----------|---------------|-----------|
-| PHASE 3 REVIEW local+subagents | push ops отложен (Entire gap HEAD) | deploy по апруву; Entire backfill |
+| SPEC (этот шаг) | GREEN уже в `af05031b` — нужен /sbr verify | /sbr RED→GREEN verify + regress |
 
-**GREEN:** `1220d3e2` · **Fly v461:** cash 422 PASS
+**Задача:** `OrdersController#show`, `#update_status`, `#cancel` не должны отдавать/менять заказы вне текущей открытой смены (и витрины mobile с `opened_at` смены — канон `BoardOrdersQuery`).
 
 ## SBR
 
 | Фаза | Статус |
 |------|--------|
 | SPEC | **`[x]`** |
-| RED / GREEN | **`[x]`** `1220d3e2` |
-| /sbr verify | **`[x]`** 46/0 |
-| /regress | **`[x]`** 113/0 |
-| REVIEW | **`[x]`** bugbot+security PASS; Entire gap на HEAD |
-| push | **`[x]`** `96b790e3` · CI #33168443668 green |
-| deploy | **`[x]`** v464 · `deployment-01M143HBYRQB50Y04HZA1RVAZZ` |
-| Fly MCP | **`[x]`** P0–P7 PASS |
+| RED / GREEN | **`[x]`** `af05031b` (сделано до формального SBR) |
+| /sbr verify | **`[ ]`** |
+| /regress | **`[ ]`** |
+| REVIEW | **`[ ]`** |
+| push | **`[ ]`** |
+| deploy | **`[ ]`** |
+| Fly MCP | **`[ ]`** skip (не shop/pay hot-path) |
 
-## Проверка
+## SPEC
 
-Regress: **113 runs, 417 assertions, 0 failures, 2 skips** (2026-08-28)
+### Проблема
+
+`Order.for_current_tenant.find(params[:id])` в трёх экшенах даёт доступ ко всей истории точки — бариста может открыть/изменить заказ закрытой смены по прямому URL.
+
+### Решение
+
+1. Общий scope **`BoardOrdersQuery.shift_accessible_scope`** (уже на табло):
+   - `cash_shift_id = current_shift.id`
+   - **ИЛИ** витрина: `cash_shift_id IS NULL` + `source = mobile` + `created_at >= shift.opened_at`
+2. `show` / `update_status` / `cancel` → `shift_accessible_orders.find(params[:id])`
+3. Без открытой смены → **403 JSON** / redirect HTML+turbo («Смена не открыта…»), не `where(cash_shift_id: nil)`.
+
+### Не в scope
+
+- `history` — отдельный экран архива (остаётся `for_current_tenant` + фильтры)
+- Заказы **прошлой закрытой смены** на стыке смен — **не доступны** (согласовано с B1.11 / пустое табло)
+
+## Файлы (ожидаемо)
+
+| Путь | Зачем |
+|------|--------|
+| `app/controllers/barista/orders_controller.rb` | `show` / `update_status` / `cancel` + `shift_accessible_orders`, guard без смены |
+| `app/services/barista/board_orders_query.rb` | `shift_accessible_scope` — единый SQL с табло |
+| `test/controllers/barista/orders_controller_test.rb` | смена OK · чужая смена 404 · витрина OK · без смены 403 |
+| `app/controllers/barista/base_controller.rb` | *(blast)* `current_shift` — источник открытой смены |
+| `test/integration/block_g_cash_shift_test.rb` | *(blast)* guard «смена закрыта» на update_status |
+| `test/integration/barista_tablet_regression_test.rb` | *(blast)* tenant isolation + tablet flows |
 
 ## Не ломать
 
-- Barista POS cash + CashShift
-- Shop card/sbp + T-Bank callback
+- Табло бариста (`BoardOrdersQuery.board_scope`) — тот же SQL, что и доступ по id
+- Витринные mobile-заказы (`cash_shift_id NULL`) после `opened_at` смены — видны и на табло, и в API
+- POS create (`#create`) — по-прежнему требует открытую смену, пишет `cash_shift_id`
+- Shop card/sbp + T-Bank callback — не трогаем
+- `history` — полная история точки для отчёта бариста
+
+## Проверка
+
+```bash
+ruby bin/rails test test/controllers/barista/orders_controller_test.rb test/services/barista/board_orders_query_test.rb
+ruby bin/rails test test/integration/block_g_cash_shift_test.rb test/integration/barista_tablet_regression_test.rb test/integration/auth/barista_rbac_test.rb
+```

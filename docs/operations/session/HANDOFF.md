@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-28 (barista shift-scoped order access)  
+**Дата:** 2026-08-28 (SPEC: barista shift-scoped orders)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| barista show/update/cancel — только текущая смена | #72/#73 live MCP |
+| SPEC barista shift scope · GREEN `af05031b` | /sbr verify + regress |
 
-**last_done:** shift_accessible_scope в OrdersController  
-**next_step:** live pay #72/#73; fiscal notify
+**last_done:** SPEC в todo.md  
+**next_step:** /sbr verify
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

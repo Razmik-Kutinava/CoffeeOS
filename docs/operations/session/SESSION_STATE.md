@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-28 (barista shift-scoped order access)  
+**Дата:** 2026-08-28 (SPEC: barista shift-scoped orders)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| barista OrdersController — shift scope | #72/#73 live |
+| SPEC · GREEN `af05031b` | /sbr verify |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

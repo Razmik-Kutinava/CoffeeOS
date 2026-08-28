@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-28 — SPEC: barista shift-scoped orders (show/update/cancel)
+
+- todo.md: SPEC + 6 файлов + Не ломать/Проверка; GREEN уже `af05031b`
+- Следующий шаг: /sbr verify + regress
+
 ## 2026-08-28 — barista: заказы только текущей смены (show/update/cancel)
 
 - `BoardOrdersQuery.shift_accessible_scope` — смена + витрина mobile с `opened_at`
