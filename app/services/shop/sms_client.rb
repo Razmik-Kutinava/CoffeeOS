@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+# DEAD CODE: not called from app/ as of 2026-08-28, verify before use
 
 require "net/http"
 require "json"

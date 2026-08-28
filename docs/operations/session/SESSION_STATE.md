@@ -16,6 +16,13 @@
 
 ## Текущий месяц (2026-08)
 
+### Сессия 2026-08-28 — OTP tests + DEAD CODE legacy clients
+
+- email_otp_test: fallback при ошибке Brevo + SHOP_OTP_LOG_FALLBACK
+- brevo_client_test: deliver_otp! в test env, код не в логе
+- sms_client / messenger_client / flash_call_client: grep app+config — вызовов нет, пометка DEAD CODE
+- OTP suite: 73 runs, 170 assertions, 0 failures
+
 ### Сессия 2026-08-28 — OTP log leak fix
 
 - Убраны OTP-коды из Rails.logger в shop delivery clients (Brevo, SMS, Messenger, FlashCall, EmailOtp, SmsRu flash_call)
