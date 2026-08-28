@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-28 (Sentry RUBY-1D/RUBY-X fix · local tests)  
+**Дата:** 2026-08-28 (#72+#73 closure prep)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Sentry triage: receipt→Brevo, runner noise filter | deploy апрув → Fly MCP Point A |
+| #72+#73 CLOSURE_PREP · regress 31/0 | `/review` → deploy апрув → MCP |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,14 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Сессия 2026-08-28 — #72 + #73 closure prep
+
+- Intake заказчика 2026-08-28: #72 CONFIRMED для SendClosing; #73 Subtask 0, 9а, endpoint `/callbacks/tbank`
+- `CLOSURE_PREP.md` + `RECOVERY.md` (Subtask 23)
+- `todo.md` — единая пачка до REVIEW
+- Local regress: tbank_receipt + fiscal_handler + tbank_controller + order_fiscal_api **31/0**
+- Следующий: `/review` отдельно; deploy + fiscal notify ON — апрув
 
 ### Сессия 2026-08-27 — Fly v459 deploy + MCP пачка
 

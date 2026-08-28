@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-28 (Sentry RUBY-1D/RUBY-X · receipt Brevo)  
+**Дата:** 2026-08-28 (#72+#73 closure prep → REVIEW)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Sentry triage 2 issues fixed local | deploy апрув → MCP Point A |
+| #72+#73 CLOSURE_PREP · regress 31/0 | `/review` отдельно → deploy апрув → MCP |
 
-**last_done:** deploy v459 + MCP Point A (webhook OK **PASS**; #72/#73/#74 **PARTIAL**)  
-**next_step:** кабинет Т-Банка fiscalization ON; live test-customer; backfill card_hash по апруву
+**last_done:** intake 2026-08-28 + CLOSURE_PREP + RECOVERY.md + /regress 31/0  
+**next_step:** `/review` (bugbot + security + Entire); deploy + fiscal notify ON — апрув
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -18,6 +18,16 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### #72 + #73 closure prep (2026-08-28)
+
+| Что | Статус |
+|-----|--------|
+| Intake заказчика 2026-08-28 | **`[x]`** #72 CONFIRMED · #73 Subtask 0/9а/`/callbacks/tbank` |
+| CLOSURE_PREP + RECOVERY.md | **`[x]`** |
+| /regress зона #72+#73 | **`[x]`** 31/0 |
+| REVIEW | **`[ ]`** отдельный шаг |
+| Deploy + Fly MCP live | **`[ ]`** апрув + fiscal notify ON |
 
 ### Fly v459 deploy + MCP (2026-08-27)
 

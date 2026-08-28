@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-28 — docs: #72 + #73 closure prep (до REVIEW)
+
+- Intake заказчика 2026-08-28: #72 CONFIRMED/SendClosing; #73 Subtask 0, 9а, `/callbacks/tbank`
+- `CLOSURE_PREP.md` (единая матрица subtasks) · `RECOVERY.md` (#73 Subtask 23)
+- `todo.md` — пачка #72+#73 до `/review`; deploy/MCP — после апрува
+- Local regress зона: **31/0** (receipt_builder + fiscal_handler + tbank_controller + fiscal_api)
+
 ## 2026-08-28 — fix: Sentry RUBY-1D receipt email + RUBY-X runner noise
 
 - **RUBY-1D:** `SendOrderReceiptEmailJob` → `Shop::OrderReceiptEmailDelivery` + Brevo API (не ActionMailer localhost:25)

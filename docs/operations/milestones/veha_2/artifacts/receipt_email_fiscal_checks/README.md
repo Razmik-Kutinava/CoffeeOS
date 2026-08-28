@@ -7,3 +7,5 @@
 **MCP после deploy:** [`MCP_DEPLOY_CHECKLIST.md`](MCP_DEPLOY_CHECKLIST.md) — отдать агенту, который деплоит и гоняет Point A.
 
 Результаты приёмки → `mcp/fly_vNNN_YYYY-MM-DD/MCP_RESULT.md`.
+
+**Closure:** [`CLOSURE_PREP.md`](CLOSURE_PREP.md) — матрица subtasks #72+#73 до REVIEW.
