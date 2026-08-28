@@ -2,14 +2,14 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-28 (fix OTP log leak)  
+**Дата:** 2026-08-28 (block shop cash online)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| OTP коды убраны из Rails.logger | fiscal notify ON → live pay → PASS |
+| cash запрещён в shop/api | fiscal notify ON → live pay |
 
-**last_done:** SHOP_SIMULATE_PAYMENT default 0 + prod guard  
+**last_done:** shop cash online blocked; barista POS cash OK  
 **next_step:** кабинет Т-Банка fiscalization ON; live test-customer pay
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
