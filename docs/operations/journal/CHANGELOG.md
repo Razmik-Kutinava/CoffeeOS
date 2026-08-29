@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-29 — Callbacks payments: amount mismatch guard
+
+- `EventsController#payment`: при `succeeded`, если в params/`provider_data` есть amount — сверка с `payment.amount` / `order.final_amount`
+- mismatch → 422 + `Rails.logger.error` + audit `rejected`; статус payment не меняется
+- amount опционален (колбэки без суммы проходят как раньше)
+- Тесты: `test/controllers/callbacks/events_controller_test.rb` 27/0
+
 ## 2026-08-29 — Fly v465 deploy + MCP PASS (barista shift-scope)
 
 - Deploy **v465** · `deployment-01M167Z816GPZYVX109PBWXQQD` · HEAD `4a416668`

@@ -17,6 +17,14 @@ module Callbacks
         return render json: { error: "invalid payment status" }, status: :unprocessable_entity
       end
 
+      # Defense-in-depth: if callback carries an amount, it must match payment/order.
+      if new_status == "succeeded"
+        callback_amount = extract_callback_amount(provider_data)
+        if callback_amount && !amount_matches_payment?(payment, callback_amount)
+          return reject_amount_mismatch!(payment, callback_amount, tenant_id: tenant_id)
+        end
+      end
+
       payment = Callbacks::PaymentStatusUpdater.new(
         payment: payment,
         new_status: new_status,
@@ -187,6 +195,53 @@ module Callbacks
       return value.to_h if value.respond_to?(:to_h)
 
       {}
+    end
+
+    # Optional amount from top-level params or provider_data (Amount / amount).
+    # Returns BigDecimal or nil when absent / unparsable.
+    def extract_callback_amount(provider_data)
+      raw = params[:amount]
+      if raw.blank? && provider_data.present?
+        raw = provider_data["Amount"].presence ||
+              provider_data["amount"].presence ||
+              provider_data[:Amount].presence ||
+              provider_data[:amount].presence
+      end
+      return nil if raw.blank?
+
+      BigDecimal(raw.to_s)
+    rescue ArgumentError
+      nil
+    end
+
+    def amount_matches_payment?(payment, callback_amount)
+      expected_payment = BigDecimal(payment.amount.to_s)
+      expected_order = BigDecimal(payment.order.final_amount.to_s)
+      callback_amount == expected_payment || callback_amount == expected_order
+    end
+
+    def reject_amount_mismatch!(payment, callback_amount, tenant_id:)
+      expected_payment = payment.amount
+      expected_order = payment.order.final_amount
+      Rails.logger.error(
+        "[Callbacks::Events#payment] amount mismatch " \
+        "payment_id=#{payment.id} order_id=#{payment.order_id} " \
+        "expected_payment=#{expected_payment} expected_order=#{expected_order} " \
+        "actual=#{callback_amount}"
+      )
+      audit_event(
+        state: "rejected",
+        callback_type: "payment",
+        tenant_id: tenant_id,
+        record_id: payment.id,
+        details: {
+          reason: "amount_mismatch",
+          expected_payment: expected_payment.to_s,
+          expected_order: expected_order.to_s,
+          actual: callback_amount.to_s
+        }
+      )
+      render json: { error: "amount mismatch" }, status: :unprocessable_entity
     end
 
     def audit_event(state:, callback_type:, tenant_id:, record_id: nil, details: {})

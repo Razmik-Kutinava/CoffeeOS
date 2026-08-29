@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-29 (Fly v465 deploy + MCP PASS)  
+**Дата:** 2026-08-29 (callback amount mismatch guard)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| v465 · barista shift-scope live · MCP P0–P7 PASS | #72/#73 live / next |
+| HMAC `/callbacks/payments` amount check | next by intent |
 
-**last_done:** deploy v465 + MCP PASS (barista shift scope)  
-**next_step:** по намерению — #72/#73 live / следующая задача
+**last_done:** defense-in-depth amount mismatch на EventsController#payment  
+**next_step:** по намерению
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -18,6 +18,13 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Callbacks payments amount mismatch (2026-08-29)
+
+| Что | Статус |
+|-----|--------|
+| optional amount vs payment/order | **local done** |
+| Fly MCP | skip |
 
 ### Shop API order show customer_id (2026-08-28)
 

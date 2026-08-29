@@ -332,6 +332,60 @@ class Callbacks::EventsControllerTest < ActionDispatch::IntegrationTest
   end
 
   # ---------------------------------------------------------------------------
+  # Amount defense-in-depth (optional field)
+  # ---------------------------------------------------------------------------
+
+  test "callback with mismatched amount is rejected and payment status unchanged" do
+    assert_equal "pending", @payment.status
+
+    post_payment(
+      params: { status: "succeeded", amount: 1 },
+      headers: {}
+    )
+
+    assert_response :unprocessable_entity
+    body = JSON.parse(response.body)
+    assert_equal "amount mismatch", body["error"]
+
+    @payment.reload
+    assert_equal "pending", @payment.status
+    @order.reload
+    assert_equal "pending_payment", @order.status
+  end
+
+  test "callback with mismatched amount in provider_data is rejected" do
+    post_payment(
+      params: {
+        status: "succeeded",
+        provider_data: { "Amount" => "1" }
+      },
+      headers: {}
+    )
+
+    assert_response :unprocessable_entity
+    @payment.reload
+    assert_equal "pending", @payment.status
+  end
+
+  test "callback with matching amount succeeds" do
+    post_payment(
+      params: { status: "succeeded", amount: 300 },
+      headers: {}
+    )
+
+    assert_response :ok
+    @payment.reload
+    assert_equal "succeeded", @payment.status
+  end
+
+  test "callback without amount still succeeds (amount optional)" do
+    post_payment(params: { status: "succeeded" }, headers: {})
+    assert_response :ok
+    @payment.reload
+    assert_equal "succeeded", @payment.status
+  end
+
+  # ---------------------------------------------------------------------------
   # Invalid status
   # ---------------------------------------------------------------------------
 

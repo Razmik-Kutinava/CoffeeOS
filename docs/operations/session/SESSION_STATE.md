@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-29 (Fly v465 deploy + MCP PASS)  
+**Дата:** 2026-08-29 (callback amount mismatch guard)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| v465 · MCP P0–P7 PASS | next task |
+| HMAC payments: amount defense-in-depth | next by intent |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,15 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Callbacks payments amount mismatch (2026-08-29)
+
+| Что | Статус |
+|-----|--------|
+| `EventsController#payment` | optional amount / provider_data Amount vs payment.amount · order.final_amount |
+| mismatch → 422 | payment status unchanged; `Rails.logger.error` + audit rejected |
+| Тесты | `events_controller_test` 27/0 |
+| Fly MCP | skip — local HMAC guard |
 
 ### Fly v465 deploy + MCP (2026-08-29)
 
