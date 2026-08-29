@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-29 — Fly v465 deploy + MCP PASS (barista shift-scope)
+
+- Deploy **v465** · `deployment-01M167Z816GPZYVX109PBWXQQD` · HEAD `4a416668`
+- MCP P0–P7 **PASS**; `/barista` 302; Sentry 24h clean; Fly logs OK после boot
+- GREEN: `af05031b` (shift_accessible_scope на show/update/cancel)
+- Артефакты: `…/mcp/fly_v465_2026-08-29/`
+
 ## 2026-08-28 — /review barista shift-scope DONE
 
 - Bugbot: 1 medium (history→show 404 — out of scope SPEC); Security: no medium+

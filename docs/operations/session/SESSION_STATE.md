@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-28 (/review DONE · CI green)  
+**Дата:** 2026-08-29 (Fly v465 deploy + MCP PASS)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| barista shift-scope REVIEW · CI green | deploy апрув |
+| v465 · MCP P0–P7 PASS | next task |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,15 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Fly v465 deploy + MCP (2026-08-29)
+
+| Что | Статус |
+|-----|--------|
+| Deploy | **v465** · `deployment-01M167Z816GPZYVX109PBWXQQD` · HEAD `4a416668` |
+| P0–P7 MCP | **PASS** |
+| Sentry 24h | **clean** |
+| Артефакты | `…/mcp/fly_v465_2026-08-29/` |
 
 ### Shop API order show — customer_id (2026-08-28)
 

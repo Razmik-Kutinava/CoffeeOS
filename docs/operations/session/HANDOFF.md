@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-28 (/review DONE · CI green)  
+**Дата:** 2026-08-29 (Fly v465 deploy + MCP PASS)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| barista shift-scope REVIEW done · CI #33185812722 green | deploy — апрув |
+| v465 · barista shift-scope live · MCP P0–P7 PASS | #72/#73 live / next |
 
-**last_done:** /review + push · CI green `81ed6782`  
-**next_step:** deploy — апрув
+**last_done:** deploy v465 + MCP PASS (barista shift scope)  
+**next_step:** по намерению — #72/#73 live / следующая задача
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

@@ -1,0 +1,30 @@
+{
+  "task": "fly_v465_barista_shift_scope_deploy",
+  "date": "2026-08-29",
+  "base": "https://coffeeos.fly.dev",
+  "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "head": "4a416668",
+  "deploy": {
+    "version": 465,
+    "deployment": "01M167Z816GPZYVX109PBWXQQD",
+    "feature": "barista shift-scoped show/update_status/cancel"
+  },
+  "checks": [
+    { "id": "P0_up", "pass": true, "http": 200 },
+    { "id": "P1_shop_point_a", "pass": true },
+    { "id": "P2_release_v465", "pass": true, "version": 465 },
+    { "id": "P3_simulate_off", "pass": true, "value": "0" },
+    { "id": "P4_webhook_invalid_token", "pass": true, "http": 401 },
+    { "id": "P5_shop_cash_rejected", "pass": true, "http": 422 },
+    { "id": "P6_card_not_simulated_accepted", "pass": true, "http": 200, "status": "pending_payment", "order_id": "020fb54b-02df-4fbb-bf4e-7ad5add1aa06" },
+    { "id": "P7_fail_redirect_no_ownership", "pass": true, "http": 302 },
+    { "id": "barista_login_redirect", "pass": true, "http": 302 }
+  ],
+  "acceptance_pack": {
+    "sentry_24h": "clean",
+    "fly_logs": "OK",
+    "neon": "skip",
+    "uk": "skip"
+  },
+  "status": "PASS"
+}
