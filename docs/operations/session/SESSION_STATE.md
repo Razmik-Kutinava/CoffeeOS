@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-30 (IB Phase 0 baseline docs)  
+**Дата:** 2026-08-30 (IB Phase 1 shop ownership)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| IB Phase 0: `docs/product/security/` — actors, shop API matrix, staff RBAC | апрув владельца → Phase 1 shop ownership |
+| IB Phase 1: unified OrderOwnership, payments IDOR closed, docs | апрув владельца → Phase 2 staff Pundit |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

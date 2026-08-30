@@ -11,6 +11,14 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-30 — fix: IB Phase 1 shop API ownership [GREEN]
+
+- `Shop::Api::OrderOwnership` concern — единый visibility для session/pending/reconnect
+- Закрыты IDOR: `payments/status`, `widget_init`, `sbp/init`, `sbp/charge`
+- `test/integration/shop/api/ownership_idor_test.rb` — 9 runs green
+- Docs: `phase_1_rbac_closure/SHOP_API_AUTH.md`, matrix HOLE→FIXED
+- Коммиты: `7bb3f609` [RED] · `dcee5214` [GREEN] · `0fd6a10b` docs
+
 ## 2026-08-30 — docs: IB phase 0 baseline — actors, shop API matrix, staff RBAC
 
 - `docs/product/security/` — roadmap фаз 0→5, phase_0_baseline (IB-0-1..3), заглушки phase_1/2
