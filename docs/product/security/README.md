@@ -13,7 +13,14 @@
 | **2** | [`phase_2_abac_layer/`](phase_2_abac_layer/) | **done** 2026-08-30 | staff Pundit, role×tenant |
 | **3** | [`phase_3_tenant_rls/`](phase_3_tenant_rls/) | **done** 2026-08-30 | RLS/GUC audit, device runbook, franchise/UK tests |
 | **4** | [`phase_4_rbac_dod/`](phase_4_rbac_dod/) | **done** 2026-08-30 · апрув | DoD RBAC, ROLES_AND_PERMISSIONS, acceptance checklist |
-| 5 | [`00_ROADMAP_RBAC_ABAC.md`](00_ROADMAP_RBAC_ABAC.md) | roadmap | ABAC-lite |
+| **5** | [`phase_5_abac/`](phase_5_abac/) | **done** 2026-08-30 local | ABAC-lite: PolicyContext, 58 rules, shift_open enforce |
+| 5b | [`00_ROADMAP_RBAC_ABAC.md`](00_ROADMAP_RBAC_ABAC.md) | backlog | full ABAC enforce, kiosk/TV |
+
+## Мастер-верификация (все фазы)
+
+| Документ | Назначение |
+|----------|------------|
+| [**IB_MASTER_VERIFICATION_CHECKLIST.md**](IB_MASTER_VERIFICATION_CHECKLIST.md) | Полный прогон Phase 0–5: docs, тесты, smoke, исключения |
 
 ## Phase 4 — что читать
 

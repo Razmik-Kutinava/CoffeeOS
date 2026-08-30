@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-30 (IB Phase 5 ABAC-lite)  
+**Дата:** 2026-08-30 (IB master verification Phase 0–5)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| IB Phase 5: ABAC catalog 58 rules, PolicyContext, critical enforce | апрув владельца → push · Phase 5b |
+| IB master checklist пройден: 309 tests 0 failures, 3 skip legacy | апрув → push CI · Fly MCP · Phase 5b |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,16 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### IB master verification Phase 0–5 (2026-08-30)
+
+| Что | Статус |
+|-----|--------|
+| `IB_MASTER_VERIFICATION_CHECKLIST.md` — docs + tests + smoke mapping | **local done** |
+| Mega-regression WSL 309 runs | **0 failures, 3 skips** |
+| `tenant_guc_inventory.rb` | exit 0 |
+| Prog10 staff isolation | **SKIP** — cash 422 |
+| Fly MCP / push | skip — апрув |
 
 ### IB Phase 5 ABAC-lite (2026-08-30)
 

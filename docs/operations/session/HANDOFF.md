@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-30 (IB Phase 5 ABAC-lite)  
+**Дата:** 2026-08-30 (IB master verification Phase 0–5)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| IB Phase 5: PolicyContext, 58 ABAC rules, shift_open enforce | **апрув владельца** → push CI · Phase 5b |
+| IB master checklist: 309 tests green, docs verified, Prog10 SKIP | **апрув владельца** → push CI · Fly MCP · Phase 5b |
 
-**last_done:** IB-5-1..5 — ABAC catalog, PolicyContext, Order/CashShift/StockMovement policies, 22 ABAC tests, docs sync  
-**next_step:** CI green после fix #127 · апрув Phase 5 · Phase 5b
+**last_done:** `IB_MASTER_VERIFICATION_CHECKLIST.md` — полный прогон WSL: shop/staff/auth/policies 0 failures; audit exit 0  
+**next_step:** апрув ИТОГО · push · CI · Prog10 на Fly после deploy
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

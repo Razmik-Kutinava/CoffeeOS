@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-30 — docs: IB master verification checklist Phase 0–5
+
+- `docs/product/security/IB_MASTER_VERIFICATION_CHECKLIST.md` — полный прогон ИБ
+- WSL: 309 runs, 0 failures, 3 skips (legacy shop); policies 33/33; audit exit 0
+- Prog10 staff isolation SKIP (cash payment 422); manual smoke → AUTO via integration tests
+- `docs/product/security/README.md` — ссылка на master checklist, Phase 5 done
+
 ## 2026-08-30 — fix: CI #127 — ABAC regressions + tbank shop session
 
 - barista orders: shift check before authorize on create; new skips authorize when shift closed
