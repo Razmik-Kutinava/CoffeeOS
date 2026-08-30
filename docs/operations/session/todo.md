@@ -30,7 +30,7 @@
 | 3 | Close не блокируется заказами | уже так; **оставить** блокеры wizard: pending payments / failed receipts / pending refunds |
 | 4 | Refund без дублирования | extract `Payments::TbankOrderRefund` (или аналог) из `GuestOrderCancellationService#refund_succeeded_via_tbank!`; гость и shift-close вызывают общий метод |
 | 5 | Системная отмена ready | `cancel_reason` «Смена закрыта, заказ не забран», `OrderStatusLog.source` = `system`, audit отдельный action |
-| 6 | Ошибка T-Bank на ready | **не закрывать смену**, flash с `order_number`; успешные ready до ошибки — откат транзакции (all-or-nothing на фазе ready) |
+| 6 | Ошибка T-Bank на ready | **не блокирует close!**; заказ остаётся `ready`, `TelegramAlertJob` с деталями ошибки; остальные ready и смена закрываются |
 | 7 | Carryover на табло | preparing из закрытых смен в `board_scope` / слотах новой смены + персистентный баннер (turbo target в layout) |
 | 8 | Telegram менеджеру | reuse `TelegramAlertJob` / `AlertService.critical` (не `@code_black_support_bot` — это гостевой deep link) |
 | 9 | Barista actions | `OrdersController` show/update/cancel: разрешить carryover-preparing при **открытой** новой смене (через расширенный `shift_accessible_scope`) |

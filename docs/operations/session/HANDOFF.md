@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-30 (shift close REVIEW)  
+**Дата:** 2026-08-30 (shift close: T-Bank fail не блокирует close)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| push CI #33302675605 green | deploy — апрув |
+| fix T-Bank fail → alert + close | deploy — апрув |
 
-**last_done:** PHASE 3 REVIEW · push · CI green  
-**next_step:** deploy — только апрув владельца
+**last_done:** ShiftCloseService: refund fail не блокирует close · 7/0  
+**next_step:** deploy — апрув
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

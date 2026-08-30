@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-30 — fix: T-Bank refund failure не блокирует shift close
+
+- `ShiftCloseService`: сбой Cancel на одном ready → заказ остаётся ready + Telegram alert; смена закрывается
+- Тест: `tbank failure on one ready order does not block shift close`
+
 ## 2026-08-30 — shift close orders (ready refund + preparing carryover)
 
 - GREEN `1f14dc49`: `ShiftCloseService`, `TbankOrderRefund`, carryover `BoardOrdersQuery`, broadcast баннер, `TelegramAlertJob`

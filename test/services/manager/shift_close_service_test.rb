@@ -71,7 +71,7 @@ class Manager::ShiftCloseServiceTest < ActiveSupport::TestCase
     assert_equal 0, Refund.where(order_id: ready.id).count
   end
 
-  test "tbank failure reconciles prior bank refunds and aborts close" do
+  test "tbank failure on one ready order does not block shift close" do
     first = shift_order!(status: "ready", number: "RDY-A")
     second = shift_order!(status: "ready", number: "RDY-B")
     pay_a = Payment.create!(
@@ -93,16 +93,26 @@ class Manager::ShiftCloseServiceTest < ActiveSupport::TestCase
         { "Success" => true, "PaymentId" => kwargs[:payment_id] }
       }
     ) do
-      error = assert_raises(Manager::ShiftCloseService::Error) { call_service! }
-      assert_includes error.message, "RDY-B"
+      assert_enqueued_with(job: TelegramAlertJob) do
+        result = call_service!
+        assert_equal "closed", result.status
+      end
     end
 
-    assert_equal "open", @shift.reload.status
+    assert_equal "closed", @shift.reload.status
     assert_equal "cancelled", first.reload.status
     assert_equal "ready", second.reload.status
     assert_equal "refunded", pay_a.reload.status
     assert_equal "succeeded", pay_b.reload.status
     assert_equal 2, calls.size
+
+    alert = enqueued_jobs.find { |j| j[:job] == TelegramAlertJob && j[:args].first.to_s.include?("RDY-B") }
+    assert alert, "expected Telegram alert for failed refund on RDY-B"
+    assert_includes alert[:args].first, "ready"
+    context = alert[:args].last.stringify_keys
+    assert_equal "RDY-B", context["order_number"]
+    assert_includes context["error_message"], "Timeout"
+    assert_equal "Payments::TbankAdapter::ApiError", context["error_class"]
   end
 
   test "enqueues telegram alert when preparing orders remain" do

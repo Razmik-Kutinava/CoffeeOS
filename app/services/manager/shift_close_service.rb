@@ -26,6 +26,7 @@ module Manager
       preparing_count = @shift.orders.where(status: "preparing").count
 
       refund_ready_orders!(ready_orders)
+      @shift.close!(@closed_by, @closing_cash)
 
       if preparing_count.positive?
         notify_carryover!(preparing_count)
@@ -38,61 +39,41 @@ module Manager
 
     private
 
-    # T-Bank Cancel необратим — сначала все вызовы банка, затем одна транзакция БД + close!.
-    # При ошибке на N-м заказе — сверяем БД с уже успешными Cancel (reconcile), смену не закрываем.
+    # Каждый ready обрабатывается отдельно; сбой T-Bank не блокирует close!.
     def refund_ready_orders!(ready_orders)
-      bank_completed = []
-      current_order = nil
-
       ready_orders.each do |order|
-        current_order = order
-        succeeded = order.payments.find_by(status: :succeeded)
-        response = nil
-
-        if refundable_via_tbank?(succeeded)
-          response = Payments::TbankAdapter.new.cancel_payment(
-            payment_id: succeeded.provider_payment_id
-          )
-        end
-
-        bank_completed << { order: order, payment: succeeded, response: response }
+        process_ready_order!(order)
       end
-
-      persist_ready_entries_and_close!(bank_completed)
-    rescue Payments::TbankAdapter::ApiError, Payments::TbankAdapter::Error
-      persist_ready_entries!(bank_completed) if bank_completed.any?
-      raise Error, "Не удалось вернуть оплату по заказу #{current_order&.order_number}. Смена не закрыта."
     end
 
-    def persist_ready_entries_and_close!(entries)
+    def process_ready_order!(order)
+      succeeded = order.payments.find_by(status: :succeeded)
+
+      if refundable_via_tbank?(succeeded)
+        response = Payments::TbankAdapter.new.cancel_payment(
+          payment_id: succeeded.provider_payment_id
+        )
+        persist_ready_refund_and_cancel!(order, payment: succeeded, response: response)
+      else
+        persist_system_cancelled!(order, old_status: "ready")
+      end
+    rescue Payments::TbankAdapter::ApiError, Payments::TbankAdapter::Error => e
+      notify_refund_failure!(order, payment: succeeded, error: e)
+    end
+
+    def persist_ready_refund_and_cancel!(order, payment:, response:)
       ActiveRecord::Base.transaction do
-        write_ready_entries!(entries)
-        @shift.close!(@closed_by, @closing_cash)
-      end
-    end
-
-    def persist_ready_entries!(entries)
-      ActiveRecord::Base.transaction do
-        write_ready_entries!(entries)
-      end
-    end
-
-    def write_ready_entries!(entries)
-      entries.each do |entry|
-        if entry[:payment] && entry[:response]
-          entry[:payment].update!(status: :refunded)
-          Refund.create!(
-            tenant_id: @tenant_id,
-            payment_id: entry[:payment].id,
-            order_id: entry[:order].id,
-            amount: entry[:payment].amount,
-            reason: READY_CANCEL_REASON,
-            status: :succeeded,
-            provider_refund_id: entry[:response]["PaymentId"].presence || entry[:payment].provider_payment_id
-          )
-        end
-
-        persist_system_cancelled!(entry[:order], old_status: "ready")
+        payment.update!(status: :refunded)
+        Refund.create!(
+          tenant_id: @tenant_id,
+          payment_id: payment.id,
+          order_id: order.id,
+          amount: payment.amount,
+          reason: READY_CANCEL_REASON,
+          status: :succeeded,
+          provider_refund_id: response["PaymentId"].presence || payment.provider_payment_id
+        )
+        persist_system_cancelled!(order, old_status: "ready")
       end
     end
 
@@ -127,6 +108,28 @@ module Manager
           cash_shift_id: @shift.id
         },
         request_id: @request_id
+      )
+    end
+
+    def notify_refund_failure!(order, payment:, error:)
+      Rails.logger.warn(
+        "[ShiftCloseService] T-Bank refund failed order=#{order.id} " \
+        "payment=#{payment&.id} #{error.class}: #{error.message}"
+      )
+
+      TelegramAlertJob.perform_later(
+        "Не удалось вернуть оплату при закрытии смены: заказ ##{order.order_number}. " \
+        "Заказ остаётся ready — обработайте вручную.",
+        {
+          tenant_id: @tenant_id,
+          shift_id: @shift.id,
+          order_id: order.id,
+          order_number: order.order_number,
+          payment_id: payment&.id,
+          provider_payment_id: payment&.provider_payment_id,
+          error_class: error.class.name,
+          error_message: error.message
+        }
       )
     end
 
