@@ -7,10 +7,10 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| REVIEW shift close · push pending | deploy — апрув |
+| push CI #33302675605 green | deploy — апрув |
 
-**last_done:** bugbot fix reconcile + security OK · regress 74/0  
-**next_step:** push + CI green
+**last_done:** PHASE 3 REVIEW · push · CI green  
+**next_step:** deploy — только апрув владельца
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

@@ -7,7 +7,7 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| REVIEW shift close · push pending | deploy — апрув |
+| push CI #33302675605 green | deploy — апрув |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

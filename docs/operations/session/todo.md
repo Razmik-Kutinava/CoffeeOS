@@ -2,7 +2,7 @@
 
 | last_done | current_state | next_step |
 |-----------|---------------|-----------|
-| regress 74/0 local PASS | GREEN `1f14dc49` | `/review` |
+| push CI #33302675605 green | REVIEW done | deploy — апрув |
 
 **Задача:** при закрытии смены (manager close wizard) — автоматически отменить + вернуть деньги по **ready** (T-Bank через общий refund); **preparing** оставить доступными следующей смене; не блокировать close из‑за незавершённых заказов; баннер на табло + Telegram-алерт при остатке preparing.
 
@@ -17,7 +17,7 @@
 | /sbr verify | **`[x]`** 45/0 |
 | /regress | **`[x]`** 74/0 (45 task + 29 manager/barista zone) |
 | REVIEW | **`[x]`** bugbot fix + security OK |
-| push | **`[ ]`** |
+| push | **`[x]`** CI #33302675605 green |
 | deploy | **`[ ]`** |
 | Fly MCP | **`[ ]`** |
 
