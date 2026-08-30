@@ -117,7 +117,7 @@ Auth gate Shop API: Referer+CSRF (браузер) или `X-Shop-Api-Key` (се�
 | **Kiosk / TV / ActionCable** RLS bypass при lookup device | **Phase 5b:** `Devices::TokenResolver` (centralized); full RLS refactor — backlog prod kiosk |
 | **ABAC** (`shift_open`, атрибуты заказа) | Phase 5 local done | [phase_5_abac/](phase_5_abac/) · Phase 5b full enforce |
 | **Blog RBAC** (`blog_editor`) | Отдельный CMS-контур | Не блокер coffee ops |
-| **Platform Pundit** (tenants CRUD, catalog) | **Phase 5b:** PlatformPolicy + authorize tenants/orgs | menu — base UK gate |
+| **Platform Pundit** (tenants/orgs, **menu/catalog**) | **Phase 5b/5c:** PlatformPolicy + authorize tenants/orgs/menu | |
 | **Favorites** в shop | Session-only, не в БД per customer | P3 backlog |
 | **shift_manager + inventory URL** | URL доступен, не в FORBIDDEN_PATHS | [OWNER REVIEW] в STAFF_RBAC_MATRIX |
 | **Global `user_roles` без tenant_id** | TECH DEBT — legacy grant | Мониторинг |

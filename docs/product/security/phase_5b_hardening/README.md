@@ -8,7 +8,7 @@
 |----|-----------|------|
 | 5b-1 | Prog10: заказы через **barista POS** (не shop cash) | Fly smoke |
 | 5b-2 | `Devices::TokenResolver` — единый device lookup (kiosk/TV/cable) | RLS backlog |
-| 5b-3 | Platform Pundit: `PlatformPolicy` + `authorize` tenants/orgs | `/admin` |
+| 5b-3 | Platform Pundit: `PlatformPolicy` + authorize tenants/orgs/**menu catalog** | `/admin` |
 | 5b-4 | `TenantPolicy#open_as_manager?` → только UK | platform |
 | 5b-5 | `UserRole` validation: tenant_id обязателен для point staff | TECH DEBT G-11 |
 | 5c | **Full ABAC enforce** — все 58 правил `Y` в каталоге | policies + scopes |

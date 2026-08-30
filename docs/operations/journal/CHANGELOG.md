@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-30 — feat: Platform /admin/menu Pundit (catalog CRUD)
+
+- `Platform::MenuController` — authorize на все actions + `policy_scope(Category)`
+- `ProductPolicy` create/update → uk_global_admin (глобальный каталог)
+- Tests: `product_policy_platform_catalog_test`, `platform_uk_rbac_test` GM block
+
 ## 2026-08-30 — feat: ABAC full enforce Phase 5c (58/58 rules Y)
 
 - Policies: TenantModule, Blog::Post, DeviceAuth, TvBoard, Incident, Report

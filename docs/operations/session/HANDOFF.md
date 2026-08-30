@@ -7,10 +7,10 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| ABAC full enforce (58/58 Y) local | deploy после апрува |
+| Platform menu Pundit wired | push + deploy |
 
-**last_done:** Phase 5c — все Partial/N ABAC правила закрыты policies+scopes  
-**next_step:** deploy v469 + Fly MCP
+**last_done:** `/admin/menu` — authorize Category/Product/modifiers + policy_scope  
+**next_step:** deploy после апрува
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

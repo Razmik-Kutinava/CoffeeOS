@@ -5,6 +5,7 @@ module Platform
     before_action :load_categories, only: :index
 
     def index
+      authorize Category, :index?
       repair_catalog_pts_if_needed!
       @new_category = Category.new
       @new_product = Product.new
@@ -15,6 +16,7 @@ module Platform
     end
 
     def create_category
+      authorize Category, :create?
       category = Category.new(category_params)
       category.slug = unique_slug(Category, category_params[:slug], category.name)
       category.created_by = current_user
@@ -31,6 +33,7 @@ module Platform
 
     def update_category
       category = Category.find(params[:id])
+      authorize category, :update?
       attrs = category_params
       if attrs[:slug].present?
         attrs[:slug] = unique_slug(Category, attrs[:slug], category.name, skip_id: category.id)
@@ -46,6 +49,7 @@ module Platform
     end
 
     def create_product
+      authorize Product, :create?
       image_file = params.dig(:product, :image)
       attrs = normalized_product_attrs
       product = Product.new(attrs)
@@ -67,6 +71,7 @@ module Platform
     def update_product
       image_file = params.dig(:product, :image)
       product = Product.find(params[:id])
+      authorize product, :update?
       attrs = normalized_product_attrs(product: product)
       if attrs[:slug].present?
         attrs[:slug] = unique_slug(Product, attrs[:slug], product.name, skip_id: product.id)
@@ -86,6 +91,7 @@ module Platform
     end
 
     def create_modifier_group
+      authorize ProductModifierGroup, :create?
       group = ProductModifierGroup.new(modifier_group_params)
       if group.save
         bust_shop_catalog_cache!
@@ -97,6 +103,7 @@ module Platform
 
     def update_modifier_group
       group = ProductModifierGroup.find(params[:id])
+      authorize group, :update?
       if group.update(modifier_group_params)
         bust_shop_catalog_cache!
         redirect_to platform_menu_path, notice: "Группа модификаторов обновлена"
@@ -108,6 +115,7 @@ module Platform
     end
 
     def create_modifier_option
+      authorize ProductModifierOption, :create?
       option = ProductModifierOption.new(modifier_option_params)
       if option.save
         bust_shop_catalog_cache!
@@ -119,6 +127,7 @@ module Platform
 
     def update_modifier_option
       option = ProductModifierOption.find(params[:id])
+      authorize option, :update?
       if option.update(modifier_option_params)
         bust_shop_catalog_cache!
         redirect_to platform_menu_path, notice: "Опция модификатора обновлена"
@@ -131,6 +140,7 @@ module Platform
 
     def destroy_product
       product = Product.find(params[:id])
+      authorize product, :destroy?
       ActiveRecord::Base.transaction { product.destroy! }
       redirect_to platform_menu_path, notice: "Товар удалён из базы"
     rescue ActiveRecord::RecordNotFound
@@ -142,6 +152,7 @@ module Platform
 
     def destroy_category
       category = Category.find(params[:id])
+      authorize category, :destroy?
       ActiveRecord::Base.transaction do
         category.products.order(:id).find_each do |product|
           product.destroy!
@@ -173,7 +184,7 @@ module Platform
     end
 
     def load_categories
-      @categories = Category
+      @categories = policy_scope(Category)
         .includes(products: { product_modifier_groups: :product_modifier_options })
         .ordered
         .limit(500)

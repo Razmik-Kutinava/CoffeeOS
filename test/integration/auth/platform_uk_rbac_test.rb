@@ -138,4 +138,28 @@ class Auth::PlatformUkRbacTest < ActionDispatch::IntegrationTest
     end
     assert_response :redirect
   end
+
+  test "general_manager cannot create platform catalog product" do
+    gm = create_user!(
+      tenant: @anchor,
+      role_codes: %w[general_manager],
+      email: "gm-menu-#{SecureRandom.hex(3)}@test.local"
+    )
+    category = Category.create!(name: "RBAC Cat", slug: "rbac-cat-#{SecureRandom.hex(3)}", sort_order: 1, is_active: true)
+    login_as!(gm)
+
+    assert_no_difference -> { Product.count } do
+      post platform_menu_products_path, params: {
+        product: {
+          category_id: category.id,
+          name: "Hack Product",
+          slug: "hack-prod-#{SecureRandom.hex(3)}",
+          base_price: 100,
+          sort_order: 1,
+          is_active: true
+        }
+      }
+    end
+    assert_response :redirect
+  end
 end
