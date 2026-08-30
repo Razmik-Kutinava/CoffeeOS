@@ -2,14 +2,14 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-30 (shift close: T-Bank fail не блокирует close)  
+**Дата:** 2026-08-30 (01_Vision.md актуализирован под В2)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| fix T-Bank fail → alert + close | deploy — апрув |
+| docs/product/01_Vision.md — для заказчика | deploy — апрув |
 
-**last_done:** accepted carryover в BoardOrdersQuery · 23/0  
+**last_done:** `01_Vision.md` актуализация 2026-08 · `3a7a71d9`  
 **next_step:** deploy — апрув
 
 **Архив session:** [`archive/README.md`](archive/README.md)  

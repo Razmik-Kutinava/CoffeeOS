@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-30 — docs: актуализировать 01_Vision.md под В2
+
+- Краткий блок для заказчика, таблицы В1/В2/В3, УК-мониторинг, витрина PWA/оплата/профиль, табло B2.1
+- Статус §I честно «открыта»; убраны устаревшие 554/0 и май-2026
+
 ## 2026-08-30 — feat: accepted carryover alongside preparing in BoardOrdersQuery
 
 - `shift_accessible_sql`: `accepted` + `preparing` с `cash_shift_id` закрытой смены
