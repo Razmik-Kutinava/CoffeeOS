@@ -9,7 +9,7 @@
 |--------|--------|
 | fix T-Bank fail → alert + close | deploy — апрув |
 
-**last_done:** ShiftCloseService: refund fail не блокирует close · 7/0  
+**last_done:** accepted carryover в BoardOrdersQuery · 23/0  
 **next_step:** deploy — апрув
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
