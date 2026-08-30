@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-30 (01_Vision.md актуализирован под В2)  
+**Дата:** 2026-08-30 (Fly v466 deploy + push CI green)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| docs/product/01_Vision.md — для заказчика | deploy — апрув |
+| Fly **v466** на стенде · Point A 200 | следующие задачи заказчика |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,18 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Fly v466 deploy (2026-08-30)
+
+| Что | Статус |
+|-----|--------|
+| Push | 5 коммитов `e22cbff6..4496346d` → `origin/develop` |
+| CI | **#33305782903** green (test/lint/system-test/scan) |
+| Deploy | **v466** · `deployment-01M192HPGQK85J684EJ71XY5KS` · HEAD `4496346d` |
+| Point A smoke | HTTP **200** |
+| Fly MCP | skip — ссылка заказчику; полная пачка по запросу |
+
+**В релизе:** T-Bank refund не блокирует закрытие смены · carryover accepted на табло · 01_Vision актуализация.
 
 ### Callbacks payments amount mismatch (2026-08-29)
 

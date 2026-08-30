@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-30 — ops: Fly v466 deploy (push 5 коммитов, CI green)
+
+- Push `e22cbff6..4496346d` → develop · CI **#33305782903** green
+- Deploy **v466** · `deployment-01M192HPGQK85J684EJ71XY5KS` · Point A 200
+- В релизе: refund-on-shift-close fix, accepted carryover, 01_Vision docs
+
 ## 2026-08-30 — docs: актуализировать 01_Vision.md под В2
 
 - Краткий блок для заказчика, таблицы В1/В2/В3, УК-мониторинг, витрина PWA/оплата/профиль, табло B2.1

@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-30 (01_Vision.md актуализирован под В2)  
+**Дата:** 2026-08-30 (Fly v466 deploy + push CI green)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| docs/product/01_Vision.md — для заказчика | deploy — апрув |
+| Fly **v466** на стенде · Point A 200 | следующие задачи заказчика |
 
-**last_done:** `01_Vision.md` актуализация 2026-08 · `3a7a71d9`  
-**next_step:** deploy — апрув
+**last_done:** push 5 коммитов · CI #33305782903 green · deploy v466 · `4496346d`  
+**next_step:** продолжение задач · MCP Point A по запросу
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
