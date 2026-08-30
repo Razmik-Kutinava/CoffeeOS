@@ -2,7 +2,7 @@
 
 | last_done | current_state | next_step |
 |-----------|---------------|-----------|
-| /start исследование 4 точек | SPEC готов | `/sbr` RED |
+| GREEN `1f14dc49` | 45/0 local | `/regress` |
 
 **Задача:** при закрытии смены (manager close wizard) — автоматически отменить + вернуть деньги по **ready** (T-Bank через общий refund); **preparing** оставить доступными следующей смене; не блокировать close из‑за незавершённых заказов; баннер на табло + Telegram-алерт при остатке preparing.
 
@@ -13,8 +13,8 @@
 | Фаза | Статус |
 |------|--------|
 | SPEC | **`[x]`** |
-| RED / GREEN | **`[ ]`** |
-| /sbr verify | **`[ ]`** |
+| RED / GREEN | **`[x]`** RED `c8cd9627` · GREEN `1f14dc49` |
+| /sbr verify | **`[x]`** 45/0 |
 | /regress | **`[ ]`** |
 | REVIEW | **`[ ]`** |
 | push | **`[ ]`** |

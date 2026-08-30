@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-30 (shift close: ready refund + preparing carryover)  
+**Дата:** 2026-08-30 (shift close GREEN)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| SPEC shift close orders | `/sbr` RED |
+| GREEN shift close `1f14dc49` | `/regress` |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
