@@ -7,7 +7,7 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| Phase 5b local done — TokenResolver, platform Pundit, Prog10 barista POS | push · Fly Prog10 · MCP |
+| Fly deploy v468 · MCP PASS · Prog10 9/9 | апрув ИБ ИТОГО |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,15 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Fly IB приёмка Phase 5b (2026-08-30)
+
+| Что | Статус |
+|-----|--------|
+| CI #33315924160 develop | **green** |
+| Fly deploy release | **v468** |
+| MCP Point A (`fly_v461_mcp_acceptance`) | **PASS** 7/7 — artifact `mcp/fly_v461_2026-08-30/` |
+| Prog10 staff isolation 9 points | **PASS** 9/9 — artifact `prog10_staff_isolation_2026-08-30.json` |
 
 ### IB Phase 5b hardening (2026-08-30)
 

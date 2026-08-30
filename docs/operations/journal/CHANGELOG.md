@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-30 — ops: Fly deploy v468 + MCP PASS + Prog10 9/9
+
+- Deploy `coffeeos` release v468 (Phase 5b `52dd21be`)
+- MCP Point A: P0–P7 PASS — `artifacts/mcp/fly_v461_2026-08-30/mcp_result.json`
+- Prog10 staff RBAC: 9/9 own 200 foreign 404 — `prog10_staff_isolation_2026-08-30.json`
+- Prog10 script fixes: role_codes[], CSRF paths, foreign point skip prep kitchen
+
 ## 2026-08-30 — feat: IB Phase 5b hardening
 
 - `Devices::TokenResolver` — kiosk/TV/cable device lookup (ABAC-056/057 Partial)

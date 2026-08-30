@@ -7,10 +7,10 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| Phase 5b: TokenResolver, platform Pundit, Prog10 barista POS, UserRole guard | push CI · Fly Prog10 · апрув |
+| Fly v468 deploy + MCP PASS + Prog10 9/9 | апрув владельца ИБ ИТОГО |
 
-**last_done:** IB-5b — Devices::TokenResolver, PlatformPolicy, Prog10 fix, UserRole tenant validation, docs  
-**next_step:** push · Fly prog10 · MCP Point A после deploy
+**last_done:** push 52dd21be · deploy v468 · MCP Point A 7/7 · Prog10 staff isolation 9/9 Fly  
+**next_step:** апрув · legacy shop skips triage (low)
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

@@ -19,7 +19,7 @@
 - [x] `rbac_tenant_isolation_test` green (в составе staff/* suite)
 - [x] `test/integration/auth/*` green — 84 runs suite (auth + staff isolation)
 - [x] `tenant_rls_isolation_test` green — 6 cases (franchise/UK/barista/shift_manager device)
-- [ ] Prog10 staff isolation — **Phase 5b fix** (barista POS); Fly run после deploy
+- [x] Prog10 staff isolation — **PASS 9/9 Fly** 2026-08-30 (`prog10_staff_isolation_2026-08-30.json`)
 - [x] Pundit: manager staff/shifts/devices/menu/finance + prep movements/inventory
 - [x] shift_manager deny staff/devices — Pundit + `require_privileged_manager!` + UI + test
 
@@ -44,7 +44,7 @@
 
 ## Post-deploy (не блокер Phase 4)
 
-- [ ] Fly MCP Point A — **SKIP Phase 4**, run after deploy (owner approval)
+- [ ] Fly MCP Point A — **PASS** 2026-08-30 v468 (`fly_v461_2026-08-30/mcp_result.json`)
 
 ---
 

@@ -1,0 +1,60 @@
+{
+  "task": "fly_v461_mcp_acceptance",
+  "date": "2026-08-30",
+  "base": "https://coffeeos.fly.dev",
+  "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "head": "52dd21be",
+  "deploy_commits": [
+    "bea1c226 OTP log leak",
+    "5a061aa6 fail-redirect ownership",
+    "a0023a8a SHOP_SIMULATE default 0",
+    "1220d3e2 block shop cash online"
+  ],
+  "checks": [
+    {
+      "id": "P0_up",
+      "pass": true,
+      "http": 200
+    },
+    {
+      "id": "P1_shop_point_a",
+      "pass": true
+    },
+    {
+      "id": "P2_release_v461",
+      "pass": true,
+      "version": 468
+    },
+    {
+      "id": "P3_simulate_off",
+      "pass": true,
+      "value": "0"
+    },
+    {
+      "id": "P4_webhook_invalid_token",
+      "pass": true,
+      "http": 401,
+      "body": "{\"error\":\"invalid token\"}\n"
+    },
+    {
+      "id": "P5_shop_cash_rejected",
+      "pass": true,
+      "http": 422,
+      "error": "cash payment not available online"
+    },
+    {
+      "id": "P6_card_not_simulated_accepted",
+      "pass": true,
+      "http": 200,
+      "status": "pending_payment",
+      "order_id": "3174217b-3e96-4e14-ad1d-463ed341340f"
+    },
+    {
+      "id": "P7_fail_redirect_no_ownership",
+      "pass": true,
+      "http": 302,
+      "note": "journal без reconnect_token — заказ остаётся pending (unit-tested)"
+    }
+  ],
+  "status": "PASS"
+}

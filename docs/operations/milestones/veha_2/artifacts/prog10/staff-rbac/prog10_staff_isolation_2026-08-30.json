@@ -1,0 +1,106 @@
+{
+  "at": "2026-08-30T14:36:15Z",
+  "base": "https://coffeeos.fly.dev",
+  "note": "staff/rbac isolation for 9 points; barista POS orders; own visible, foreign 404",
+  "results": [
+    {
+      "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+      "slug": "demo-a",
+      "barista_expected": true,
+      "barista_email": "iso-bar-demo-a-08301434-eb4cc4b2@prog10.local",
+      "staff_created": true,
+      "barista_http": "200",
+      "own_order_http": "200",
+      "foreign_order_http": "404",
+      "pass": true
+    },
+    {
+      "tenant_id": "655aaccb-004a-4bb9-a50a-ce618854dda3",
+      "slug": "demo-b",
+      "barista_expected": true,
+      "barista_email": "iso-bar-demo-b-08301434-eb4cc4b2@prog10.local",
+      "staff_created": true,
+      "barista_http": "200",
+      "own_order_http": "200",
+      "foreign_order_http": "404",
+      "pass": true
+    },
+    {
+      "tenant_id": "d47165db-81c9-4e9d-bc50-e37fe610d86c",
+      "slug": "demo-prep",
+      "barista_expected": false,
+      "barista_email": "iso-bar-demo-prep-08301434-eb4cc4b2@prog10.local",
+      "staff_created": true,
+      "barista_http": "302",
+      "own_order_http": "n/a",
+      "foreign_order_http": "302",
+      "pass": true
+    },
+    {
+      "tenant_id": "1c064640-4301-4435-8ded-c92fb075e9cc",
+      "slug": "alpha-p1",
+      "barista_expected": true,
+      "barista_email": "iso-bar-alpha-p1-08301434-eb4cc4b2@prog10.local",
+      "staff_created": true,
+      "barista_http": "200",
+      "own_order_http": "200",
+      "foreign_order_http": "404",
+      "pass": true
+    },
+    {
+      "tenant_id": "edf8a0a9-38e7-4049-b9c6-3e08c6c23a76",
+      "slug": "alpha-p2",
+      "barista_expected": true,
+      "barista_email": "iso-bar-alpha-p2-08301434-eb4cc4b2@prog10.local",
+      "staff_created": true,
+      "barista_http": "200",
+      "own_order_http": "200",
+      "foreign_order_http": "404",
+      "pass": true
+    },
+    {
+      "tenant_id": "d29fcf3a-da72-4a95-9683-9cfa71a2d865",
+      "slug": "alpha-p3",
+      "barista_expected": true,
+      "barista_email": "iso-bar-alpha-p3-08301434-eb4cc4b2@prog10.local",
+      "staff_created": true,
+      "barista_http": "200",
+      "own_order_http": "200",
+      "foreign_order_http": "404",
+      "pass": true
+    },
+    {
+      "tenant_id": "03a4d457-e16f-4998-b764-69b3de083732",
+      "slug": "beta-p1",
+      "barista_expected": true,
+      "barista_email": "iso-bar-beta-p1-08301434-eb4cc4b2@prog10.local",
+      "staff_created": true,
+      "barista_http": "200",
+      "own_order_http": "200",
+      "foreign_order_http": "404",
+      "pass": true
+    },
+    {
+      "tenant_id": "628a937b-f4e2-43b7-bd7f-9fa44f031460",
+      "slug": "beta-p2",
+      "barista_expected": true,
+      "barista_email": "iso-bar-beta-p2-08301434-eb4cc4b2@prog10.local",
+      "staff_created": true,
+      "barista_http": "200",
+      "own_order_http": "200",
+      "foreign_order_http": "404",
+      "pass": true
+    },
+    {
+      "tenant_id": "b57c2a88-91a5-481e-b44f-29e29c77cfb5",
+      "slug": "beta-p3",
+      "barista_expected": true,
+      "barista_email": "iso-bar-beta-p3-08301434-eb4cc4b2@prog10.local",
+      "staff_created": true,
+      "barista_http": "200",
+      "own_order_http": "200",
+      "foreign_order_http": "404",
+      "pass": true
+    }
+  ]
+}

@@ -87,10 +87,12 @@ def create_staff!(uk_jar:, name:, email:, role_code:)
     "--data-urlencode", "user[email]=#{email}",
     "--data-urlencode", "user[password]=#{PASSWORD}",
     "--data-urlencode", "user[password_confirmation]=#{PASSWORD}",
-    "--data-urlencode", "role_code=#{role_code}",
+    "--data-urlencode", "role_codes[]=#{role_code}",
     "-D", "-", "-o", "-"
   )
   created = response.include?("HTTP/2 302") || response.include?("HTTP/1.1 302")
+  raise "staff create failed for #{email}: #{response.lines.first(5).join}" unless created
+
   { created: created, email: email }
 end
 
@@ -113,14 +115,15 @@ def product_id_for_tenant(tenant_id)
   product_id
 end
 
-def post_with_csrf!(jar:, path:, fields:)
+def post_with_csrf!(jar:, path:, fields:, post_path: nil)
   html = run_curl("-b", jar, "-c", jar, "#{BASE}#{path}")
   token = csrf_token(html)
   raise "no csrf for #{path}" if token.nil? || token.empty?
 
+  target = post_path || path
   args = [
     "-b", jar, "-c", jar,
-    "-X", "POST", "#{BASE}#{path}",
+    "-X", "POST", "#{BASE}#{target}",
     "--data-urlencode", "authenticity_token=#{token}"
   ]
   fields.each { |k, v| args += [ "--data-urlencode", "#{k}=#{v}" ] }
@@ -128,13 +131,14 @@ def post_with_csrf!(jar:, path:, fields:)
 end
 
 def open_barista_shift!(jar)
-  post_with_csrf!(jar: jar, path: "/barista/shift/open", fields: { "opening_cash" => "0" })
+  post_with_csrf!(jar: jar, path: "/barista/shift", fields: { "opening_cash" => "0" }, post_path: "/barista/shift/open")
 end
 
 def create_barista_pos_order!(jar:, product_id:)
   post_with_csrf!(
     jar: jar,
-    path: "/barista/orders",
+    path: "/barista",
+    post_path: "/barista/orders",
     fields: {
       "cart_items[0][product_id]" => product_id,
       "cart_items[0][quantity]" => "1",
@@ -160,19 +164,32 @@ def prepare_barista_order!(uk_jar:, point:, timestamp_suffix:)
   open_barista_shift!(barista_jar)
   product_id = product_id_for_tenant(point[:tenant_id])
   order_id = create_barista_pos_order!(jar: barista_jar, product_id: product_id)
-  { email: email, order_id: order_id }
+  { email: email, order_id: order_id, jar: barista_jar }
+end
+
+def foreign_point_for(idx, orders_by_tenant)
+  n = POINTS.length
+  (1...n).each do |offset|
+    candidate = POINTS[(idx + offset) % n]
+    next unless candidate[:barista_expected]
+    next if orders_by_tenant[candidate[:tenant_id]].nil?
+
+    return candidate
+  end
+  raise "no foreign order source for #{POINTS[idx][:slug]}"
 end
 
 def code_for(path, jar:)
   run_curl("-b", jar, "-o", "/dev/null", "-w", "%{http_code}", "#{BASE}#{path}").strip
 end
 
-timestamp_suffix = Time.now.utc.strftime("%m%d%H%M")
+timestamp_suffix = "#{Time.now.utc.strftime('%m%d%H%M')}-#{SecureRandom.hex(4)}"
 uk_jar = "/tmp/prog10-iso-uk.cookies"
 login_user!(email: "uk@demo.coffeeos.local", password: PASSWORD, jar: uk_jar)
 
 orders_by_tenant = {}
 barista_by_tenant = {}
+barista_jars = {}
 
 POINTS.each do |point|
   next unless point[:barista_expected]
@@ -180,18 +197,18 @@ POINTS.each do |point|
   prep = prepare_barista_order!(uk_jar: uk_jar, point: point, timestamp_suffix: timestamp_suffix)
   orders_by_tenant[point[:tenant_id]] = prep[:order_id]
   barista_by_tenant[point[:tenant_id]] = prep[:email]
+  barista_jars[point[:tenant_id]] = prep[:jar]
 end
 
 results = []
 POINTS.each_with_index do |point, idx|
-  foreign_point = POINTS[(idx + 1) % POINTS.length]
+  foreign_point = foreign_point_for(idx, orders_by_tenant)
   foreign_tid = foreign_point[:tenant_id]
   foreign_order_id = orders_by_tenant[foreign_tid]
 
   if point[:barista_expected]
     email = barista_by_tenant[point[:tenant_id]]
-    staff_jar = "/tmp/prog10-iso-#{point[:slug]}.cookies"
-    login_user!(email: email, password: PASSWORD, jar: staff_jar)
+    staff_jar = barista_jars[point[:tenant_id]]
     create_res = { created: true, email: email }
   else
     open_as_manager!(uk_jar: uk_jar, tenant_id: point[:tenant_id])
