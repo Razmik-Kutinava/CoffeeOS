@@ -11,6 +11,16 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-30 — docs: IB Phase 4 DoD «RBAC контур закрыт»
+
+- `docs/product/security/ROLES_AND_PERMISSIONS.md` — главный doc для заказчика (RU)
+- `IB_ACCEPTANCE_CHECKLIST.md` — чеклист приёмки DoD 4/4
+- `phase_4_rbac_dod/README.md` — GAP REGISTER (12 остатков, все backlog/exception)
+- Docs sync: matrices Phase 4 COMPLETE, ACTORS gaps updated, roadmap Phase 4 ✅
+- Tests (WSL): shop/api 201 green, auth+staff 84 green, ownership_idor 9 green
+- Prog10 staff: SKIP (Fly shop cash disabled); last PASS artifact 2026-06-02
+- Push: after commit (owner approved)
+
 ## 2026-08-30 — docs: IB Phase 3 tenant RLS audit + isolation tests
 
 - `docs/product/security/phase_3_tenant_rls/RLS_TENANT_AUDIT.md` — GUC/RLS inventory (734 rb files via audit script)

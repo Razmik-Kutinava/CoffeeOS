@@ -1,6 +1,6 @@
 # IB-0-3 — Staff RBAC Matrix
 
-**Фаза:** 0 (baseline) + **Phase 2 updates** · дата baseline: 2026-08-30 · Phase 2: 2026-08-30
+**Фаза:** 0 (baseline) + Phase 2–4 updates · дата baseline: 2026-08-30 · **Phase 4 COMPLETE:** 2026-08-30
 
 Baseline-матрица staff RBAC: роль → панель → tenant → может/не может. Сверка **код + Prog10**. ABAC — placeholder Phase 5.
 

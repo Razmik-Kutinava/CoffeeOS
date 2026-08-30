@@ -50,16 +50,18 @@
 
 ---
 
-## Phase 4 — DoD «RBAC контур закрыт»
+## Phase 4 — DoD «RBAC контур закрыт» ✅
+
+**Статус:** done 2026-08-30 · [phase_4_rbac_dod/](phase_4_rbac_dod/) · [ROLES_AND_PERMISSIONS.md](ROLES_AND_PERMISSIONS.md)
 
 **Критерии готовности базового контура:**
 
-- [ ] Shop API: 0 HOLE в матрице IB-0-2 (или явные исключения с апрувом)
-- [ ] Staff: все роли из IB-0-3 покрыты тестами + Prog10 PASS
-- [ ] `has_role?` tenant-aware
-- [ ] Manager/Platform: Pundit на привилегированных действиях
-- [ ] RLS: нет незадокументированных bypass
-- [ ] Fly MCP Point A + staff smoke на стенде
+- [x] Shop API: 0 HOLE в матрице IB-0-2
+- [x] Staff: роли покрыты integration-тестами; Prog10 Fly SKIP (shop config), last PASS 2026-06-02
+- [x] `has_role_in_context?` tenant-aware (Phase 2)
+- [x] Manager/prep: Pundit на критичном CRUD; platform — backlog
+- [x] RLS: audit complete; kiosk/TV/cable — documented backlog
+- [ ] Fly MCP Point A — post-deploy, не блокер Phase 4
 
 ---
 

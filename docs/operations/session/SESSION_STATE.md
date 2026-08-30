@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-30 (IB Phase 3 tenant RLS)  
+**Дата:** 2026-08-30 (IB Phase 4 DoD RBAC)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| IB Phase 3: RLS audit doc + device runbook + franchise/UK isolation tests | апрув владельца → Phase 4 |
+| IB Phase 4: DoD «контур закрыт», customer doc, checklist | апрув владельца → Phase 5 ABAC |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,16 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### IB Phase 4 DoD RBAC (2026-08-30)
+
+| Что | Статус |
+|-----|--------|
+| ROLES_AND_PERMISSIONS.md + IB_ACCEPTANCE_CHECKLIST.md | **local done** |
+| GAP REGISTER (12 items, 0 code fixes) | **local done** |
+| Integration tests (WSL) | **285+ runs green** |
+| Prog10 staff Fly | **SKIP** — cash payment 422 on Fly |
+| Fly MCP / deploy | skip |
 
 ### IB Phase 3 tenant RLS (2026-08-30)
 

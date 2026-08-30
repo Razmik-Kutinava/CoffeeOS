@@ -11,8 +11,17 @@
 | **0** | [`phase_0_baseline/`](phase_0_baseline/) | **baseline docs** (апрув владельца) | актёры, Shop API matrix, Staff RBAC matrix |
 | **1** | [`phase_1_rbac_closure/`](phase_1_rbac_closure/) | **done** 2026-08-30 | shop ownership в коде, IDOR fixes |
 | **2** | [`phase_2_abac_layer/`](phase_2_abac_layer/) | **done** 2026-08-30 | staff Pundit, role×tenant |
-| **3** | [`phase_3_tenant_rls/`](phase_3_tenant_rls/) | **done** 2026-08-30 · апрув | RLS/GUC audit, device runbook, franchise/UK tests |
-| 4–5 | [`00_ROADMAP_RBAC_ABAC.md`](00_ROADMAP_RBAC_ABAC.md) | roadmap | DoD RBAC, ABAC-lite |
+| **3** | [`phase_3_tenant_rls/`](phase_3_tenant_rls/) | **done** 2026-08-30 | RLS/GUC audit, device runbook, franchise/UK tests |
+| **4** | [`phase_4_rbac_dod/`](phase_4_rbac_dod/) | **done** 2026-08-30 · апрув | DoD RBAC, ROLES_AND_PERMISSIONS, acceptance checklist |
+| 5 | [`00_ROADMAP_RBAC_ABAC.md`](00_ROADMAP_RBAC_ABAC.md) | roadmap | ABAC-lite |
+
+## Phase 4 — что читать
+
+| Документ | Назначение |
+|----------|------------|
+| [ROLES_AND_PERMISSIONS.md](ROLES_AND_PERMISSIONS.md) | Главный doc для заказчика (RU) |
+| [IB_ACCEPTANCE_CHECKLIST.md](IB_ACCEPTANCE_CHECKLIST.md) | Чеклист приёмки DoD |
+| [phase_4_rbac_dod/README.md](phase_4_rbac_dod/README.md) | GAP REGISTER, прогоны |
 
 ## Phase 3 — что читать
 
@@ -31,7 +40,7 @@
 
 ## Связанные документы (вне папки)
 
-- `docs/architecture/ROLES_AND_PERMISSIONS.md`
+- [ROLES_AND_PERMISSIONS.md](ROLES_AND_PERMISSIONS.md) (канон Phase 4)
 - `docs/stack/Authorization.md`
 - `docs/guides/RLS_AND_TENANT_CONTEXT.md`
 - Prog10: `docs/operations/milestones/veha_2/artifacts/prog10/staff-rbac/`

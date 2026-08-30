@@ -1,6 +1,6 @@
 # IB-0-1 — Актёры и модели доступа
 
-**Фаза:** 0 (baseline) · **Код не менялся** · дата: 2026-08-30
+**Фаза:** 0 (baseline) · **Код не менялся** · дата: 2026-08-30 · DoD: [ROLES_AND_PERMISSIONS.md](../ROLES_AND_PERMISSIONS.md)
 
 ## Кратко: три модели доступа
 
@@ -119,24 +119,31 @@ Post-login redirect: `Auth::SessionsController#dashboard_path_for_role` — bari
 
 ---
 
-## Known gaps → Phase 1+
+## Known gaps → Phase 4 status
 
-1. **Shop payments без ownership:** `payments#status`, `widget_init`, `sbp_init`, `sbp_charge` — только `tenant_id`, не `customer_id` (см. IB-0-2 HOLE list).
-2. **`User#has_role?`** не фильтрует `user_roles.tenant_id` — роль на точке A теоретически видна на точке B при смене tenant в сессии.
-3. **Manager `skip_authorization`** на base — большинство экранов без Pundit (только staff + menu price).
-4. **Prep kitchen / Platform** — `skip_authorization`; policies существуют, но не вызываются из controllers.
-5. **Franchise manager** — нет `staff_management_visible?`; доступ к staff/devices закрыт redirect, не policy.
-6. **TenantPolicy#open_as_manager?** = `true` для любого user — фактически только UK доходит до platform tenants.
-7. **Shop guest flows** — `order_visible_to_session_customer?` допускает `pending_order` и `reconnect_token` без OTP — by design, но риск утечки при утечке token.
-8. **Favorites** — только `session[:shop_favorites]`, не привязаны к `customer_id` в БД.
-9. **Categories index** — публичный без API key (намеренно для SEO/витрины).
-10. **Debug endpoint** — `GET /shop/api/debug` только non-production; defense-in-depth в controller.
-11. **Background jobs** — нет единого audit trail tenant GUC (разные паттерны в services).
-12. **Health `/health/tenants`** — UK session only; не путать с public `/up`.
-13. **blog_editor** — не в Prog10 staff matrix; отдельный контур.
-14. **ActionCable guest** — `current_user` nil; каналы сами проверяют reconnect_token.
-15. **RLS bypass** — kiosk/TV/cable login используют `row_security off` для lookup device → [Phase 3 audit](../phase_3_tenant_rls/RLS_TENANT_AUDIT.md) (BACKLOG, refactor SKIP).
-16. **Phase 3 RLS audit** — полная инвентаризация GUC/jobs: [RLS_TENANT_AUDIT.md](../phase_3_tenant_rls/RLS_TENANT_AUDIT.md); device runbook: [DEVICE_TOKENS.md](../phase_3_tenant_rls/DEVICE_TOKENS.md). **NEED_MIGRATION:** none (2026-08-30).
+**DoD doc:** [ROLES_AND_PERMISSIONS.md](../ROLES_AND_PERMISSIONS.md) · **GAP REGISTER:** [phase_4_rbac_dod/README.md](../phase_4_rbac_dod/README.md)
+
+### Закрыто (Phase 1–3)
+
+1. ~~Shop payments без ownership~~ — **FIXED** Phase 1 (`OrderOwnership` concern)
+2. ~~`User#has_role?` без tenant~~ — **FIXED** Phase 2 (`has_role_in_context?`)
+3. ~~Manager critical CRUD без Pundit~~ — **FIXED** Phase 2 (staff, devices, shifts, orders, menu, finance, prep)
+4. ~~Franchise/UK tenant escape~~ — **OK** Phase 3 tests
+
+### Documented backlog / exceptions (не блокер «контур закрыт»)
+
+5. **Platform** — policies exist, controllers без full Pundit rollout
+6. **Prep kitchen** — `skip_authorization` on base; movements/inventory opt-in Pundit
+7. **Franchise manager** — staff UI blocked (`staff_management_visible?` = GM \| UK); devices allowed
+8. **Shop guest flows** — `pending_order` / `reconnect_token` by design
+9. **Favorites** — session-only (P3 backlog)
+10. **Categories index** — public without API key (SEO)
+11. **Debug endpoint** — non-production only
+12. **Background jobs** — audited Phase 3; patterns documented in RLS_TENANT_AUDIT
+13. **blog_editor** — отдельный CMS-контур
+14. **ActionCable guest** — channels verify reconnect_token
+15. **RLS bypass** — kiosk/TV/cable device lookup → [Phase 3 audit](../phase_3_tenant_rls/RLS_TENANT_AUDIT.md) (**BACKLOG**)
+16. **NEED_MIGRATION:** none (2026-08-30)
 
 ---
 

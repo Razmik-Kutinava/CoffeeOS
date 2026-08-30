@@ -1,6 +1,6 @@
 # IB-0-2 — Shop API Access Matrix
 
-**Фаза:** 0 (baseline) · обновлено Phase 1: 2026-08-30
+**Фаза:** 0 (baseline) · обновлено Phase 1 + Phase 4: 2026-08-30 · **0 HOLE**
 
 Полная матрица `namespace :shop → namespace :api` из `config/routes.rb` (строки 171–224).
 

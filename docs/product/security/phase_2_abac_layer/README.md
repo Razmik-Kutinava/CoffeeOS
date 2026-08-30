@@ -1,6 +1,6 @@
 # Phase 2 — Staff Pundit + role×tenant
 
-**Статус:** реализовано 2026-08-30 · апрув владельца → Phase 3
+**Статус:** реализовано 2026-08-30 · апрув → Phase 4
 
 ## Deliverables (Phase 2)
 
