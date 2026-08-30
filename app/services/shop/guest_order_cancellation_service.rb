@@ -90,28 +90,14 @@ module Shop
 
     # Сначала банк (без тихого cancel при ошибке), затем БД.
     def refund_succeeded_via_tbank!(payment, old_status:)
-      response = Payments::TbankAdapter.new.cancel_payment(
-        payment_id: payment.provider_payment_id
+      Payments::TbankOrderRefund.call!(
+        payment: payment,
+        tenant_id: @tenant_id,
+        order_id: @order.id,
+        reason: GUEST_REASON
       )
-
-      ActiveRecord::Base.transaction do
-        payment.update!(status: :refunded)
-        Refund.create!(
-          tenant_id: @tenant_id,
-          payment_id: payment.id,
-          order_id: @order.id,
-          amount: payment.amount,
-          reason: GUEST_REASON,
-          status: :succeeded,
-          provider_refund_id: response["PaymentId"].presence || payment.provider_payment_id
-        )
-        persist_cancelled!(old_status: old_status)
-      end
-    rescue Payments::TbankAdapter::ApiError, Payments::TbankAdapter::Error => e
-      Rails.logger.warn(
-        "[GuestOrderCancellation] Cancel failed order=#{@order.id} " \
-        "payment=#{payment.id} #{e.class}: #{e.message}"
-      )
+      persist_cancelled!(old_status: old_status)
+    rescue Payments::TbankOrderRefund::Error
       raise Error, REFUND_UNAVAILABLE
     end
 

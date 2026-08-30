@@ -78,9 +78,16 @@ module Manager
         return
       end
 
-      @shift.close!(current_user, closing_cash)
+      Manager::ShiftCloseService.call!(
+        shift: @shift,
+        closed_by: current_user,
+        closing_cash: closing_cash,
+        request_id: request.request_id
+      )
 
       redirect_to manager_shift_path(@shift), notice: "Смена закрыта"
+    rescue Manager::ShiftCloseService::Error => e
+      redirect_to manager_close_shift_path(@shift), alert: e.message
     rescue ActiveRecord::RecordInvalid => e
       redirect_to manager_close_shift_path(@shift), alert: e.record.errors.full_messages.join(", ")
     end

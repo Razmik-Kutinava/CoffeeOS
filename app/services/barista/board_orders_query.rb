@@ -87,7 +87,17 @@ module Barista
           AND orders.source = 'mobile'
           AND orders.created_at >= :shift_opened_at
         )
+        OR orders.status = 'preparing'
       SQL
+    end
+
+    def self.carryover_preparing_count(tenant_id:, cash_shift: :auto)
+      shift = resolve_cash_shift(tenant_id, cash_shift)
+      return 0 unless shift
+
+      Order.where(tenant_id: tenant_id, status: "preparing")
+           .where.not(cash_shift_id: shift.id)
+           .count
     end
     private_class_method :resolve_cash_shift, :shift_accessible_sql
   end

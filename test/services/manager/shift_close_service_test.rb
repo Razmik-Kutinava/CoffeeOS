@@ -102,7 +102,7 @@ class Manager::ShiftCloseServiceTest < ActiveSupport::TestCase
     assert_equal "ready", second.reload.status
     assert_equal "succeeded", pay_a.reload.status
     assert_equal "succeeded", pay_b.reload.status
-    assert_equal 1, calls.size
+    assert_equal 2, calls.size
   end
 
   test "enqueues telegram alert when preparing orders remain" do

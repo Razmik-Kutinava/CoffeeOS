@@ -1,0 +1,9 @@
+<div id="barista-carryover-banner">
+  <% if count.to_i.positive? %>
+    <div class="barista-carryover-banner"
+         data-testid="barista-carryover-banner"
+         role="alert">
+      <%= "Незавершённые заказы с прошлой смены: #{count} в работе — доведите до выдачи." %>
+    </div>
+  <% end %>
+</div>

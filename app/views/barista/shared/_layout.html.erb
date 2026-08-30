@@ -111,6 +111,9 @@
       <%= @board_hours[:conflict_message] %>
     </div>
   <% end %>
+
+  <%= render partial: "barista/dashboard/carryover_banner",
+             locals: { count: @board_hours&.dig(:carryover_preparing_count).to_i } %>
 </div>
 
 <style>
@@ -1062,6 +1065,24 @@
     background: #4a1212;
     border: 2px solid #f07c7c;
     color: #ffe8e8;
+    font-size: 15px;
+    font-weight: 700;
+    text-align: center;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  }
+
+  .barista-carryover-banner {
+    position: fixed;
+    top: 72px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2998;
+    max-width: min(640px, 94vw);
+    padding: 14px 20px;
+    border-radius: 10px;
+    background: #3d2f0a;
+    border: 2px solid #f0c07c;
+    color: #fff3d6;
     font-size: 15px;
     font-weight: 700;
     text-align: center;

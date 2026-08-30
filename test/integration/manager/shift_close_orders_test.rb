@@ -25,8 +25,7 @@ class Manager::ShiftCloseOrdersTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to manager_shift_path(@shift)
     assert_equal "closed", @shift.reload.status
-    follow_redirect!
-    assert_match(/Смена закрыта/i, response.body)
+    assert_equal "Смена закрыта", flash[:notice]
   end
 
   test "carryover preparing visible on barista board after new shift opened" do

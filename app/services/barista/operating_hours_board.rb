@@ -15,11 +15,21 @@ module Barista
     end
 
     def context
+      carryover_count = BoardOrdersQuery.carryover_preparing_count(
+        tenant_id: tenant.id,
+        cash_shift: shift
+      )
       {
         schedule_conflict: schedule_conflict?,
         conflict_message: schedule_conflict? ? CONFLICT_MESSAGE : nil,
-        tenant_open: TenantOperatingHours.open_now?(tenant)
+        tenant_open: TenantOperatingHours.open_now?(tenant),
+        carryover_preparing_count: carryover_count,
+        carryover_message: carryover_count.positive? ? carryover_message(carryover_count) : nil
       }
+    end
+
+    def carryover_message(count)
+      "Незавершённые заказы с прошлой смены: #{count} в работе — доведите до выдачи."
     end
 
     def schedule_conflict?
