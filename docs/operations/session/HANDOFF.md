@@ -9,6 +9,9 @@
 |--------|--------|
 | regress shift close PASS 74/0 | `/review` |
 
+**last_done:** regress manager/barista 74/0 local  
+**next_step:** `/review`
+
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
 
