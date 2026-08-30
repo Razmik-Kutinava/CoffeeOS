@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-30 — ops: post-deploy pack v468 (logs + Sentry MCP)
+
+- Fly logs: no 5xx in recent buffer; /up + shop Point A 200
+- Sentry (llc-manageengine): 1 new issue RUBY-1E — Prog10 duplicate email smoke noise @ 14:19 UTC
+- Artifact: `artifacts/mcp/fly_post_deploy_2026-08-30/post_deploy_pack.json`
+- Neon/UK UI: skip (MCP+Prog10 достаточно для IB)
+
 ## 2026-08-30 — ops: Fly deploy v468 + MCP PASS + Prog10 9/9
 
 - Deploy `coffeeos` release v468 (Phase 5b `52dd21be`)

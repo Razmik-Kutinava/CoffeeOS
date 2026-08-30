@@ -7,10 +7,10 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| Fly v468 deploy + MCP PASS + Prog10 9/9 | апрув владельца ИБ ИТОГО |
+| Post-deploy pack v468 закрыт (logs/Sentry/MCP/Prog10) | следующая фича / апрув ИБ |
 
-**last_done:** push 52dd21be · deploy v468 · MCP Point A 7/7 · Prog10 staff isolation 9/9 Fly  
-**next_step:** апрув · legacy shop skips triage (low)
+**last_done:** post-deploy: fly logs OK · Sentry 1 noise (Prog10) · /up+shop 200 · artifact post_deploy_pack.json  
+**next_step:** дальше по вехе / новая задача
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

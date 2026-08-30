@@ -1,0 +1,55 @@
+{
+  "task": "post_deploy_acceptance_pack",
+  "date": "2026-08-30",
+  "release": "v468",
+  "head": "1b24c0cc",
+  "base": "https://coffeeos.fly.dev",
+  "checks": [
+    {
+      "id": "fly_logs_5xx_recent",
+      "pass": true,
+      "note": "fly logs --no-tail: no 500/Exception in recent buffer; health poll 200 OK"
+    },
+    {
+      "id": "fly_up",
+      "pass": true,
+      "http": 200
+    },
+    {
+      "id": "shop_point_a",
+      "pass": true,
+      "http": 200,
+      "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789"
+    },
+    {
+      "id": "sentry_24h",
+      "pass": true,
+      "note": "1 new event RUBY-1E @ 14:19 UTC — Prog10 duplicate email retry (smoke noise, not v468 regression)",
+      "new_issues_after_deploy": 1,
+      "sentry_url": "https://llc-manageengine.sentry.io/issues/RUBY-1E"
+    },
+    {
+      "id": "mcp_point_a",
+      "pass": true,
+      "artifact": "docs/operations/milestones/veha_2/artifacts/mcp/fly_v461_2026-08-30/mcp_result.json"
+    },
+    {
+      "id": "prog10_staff_isolation",
+      "pass": true,
+      "artifact": "docs/operations/milestones/veha_2/artifacts/prog10/staff-rbac/prog10_staff_isolation_2026-08-30.json",
+      "points": "9/9"
+    },
+    {
+      "id": "neon",
+      "pass": null,
+      "skip": "no CLI/API in agent session — manual dashboard if needed"
+    },
+    {
+      "id": "uk_feed",
+      "pass": null,
+      "skip": "MCP+Prog10 cover Point A; UK admin UI not scripted this step"
+    }
+  ],
+  "status": "PASS",
+  "verdict": "Post-deploy pack closed for IB Phase 5b v468. Sentry RUBY-1E = Prog10 artifact noise."
+}
