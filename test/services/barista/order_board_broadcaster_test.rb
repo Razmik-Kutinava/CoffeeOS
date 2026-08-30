@@ -16,6 +16,25 @@ class Barista::OrderBoardBroadcasterTest < ActiveSupport::TestCase
     )
   end
 
+  test "broadcast_carryover replaces barista-carryover-banner target" do
+    calls = []
+    original = Turbo::StreamsChannel.method(:broadcast_replace_to)
+    Turbo::StreamsChannel.define_singleton_method(:broadcast_replace_to) do |stream, **kwargs|
+      calls << { stream: stream, **kwargs }
+    end
+
+    begin
+      Barista::OrderBoardBroadcaster.broadcast_carryover(tenant_id: @tenant.id)
+    ensure
+      Turbo::StreamsChannel.define_singleton_method(:broadcast_replace_to, original)
+    end
+
+    banner = calls.find { |c| c[:target] == "barista-carryover-banner" }
+    assert banner, "expected broadcast on barista-carryover-banner"
+    assert_equal "orders_#{@tenant.id}", banner[:stream]
+    assert_includes banner[:partial], "carryover_banner"
+  end
+
   test "call broadcasts replace on barista-board-slots and slot counts" do
     calls = []
     original = Turbo::StreamsChannel.method(:broadcast_replace_to)

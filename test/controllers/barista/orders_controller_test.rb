@@ -121,7 +121,7 @@ class Barista::OrdersControllerTest < ActionDispatch::IntegrationTest
     assert_equal "preparing", vitrina.reload.status
   end
 
-  test "barista cannot access order from closed previous shift of same tenant" do
+  test "barista cannot access accepted order from closed previous shift of same tenant" do
     stale = Order.create!(
       tenant: @tenant, cash_shift: @shift,
       order_number: "OLD-SHIFT", source: "manual", status: "accepted",
@@ -140,6 +140,24 @@ class Barista::OrdersControllerTest < ActionDispatch::IntegrationTest
 
     post "/barista/orders/#{stale.id}/cancel", params: { reason: "test" }
     assert_equal "accepted", stale.reload.status
+  end
+
+  test "barista can update carryover preparing order from closed previous shift" do
+    carryover = Order.create!(
+      tenant: @tenant, cash_shift: @shift,
+      order_number: "CARRY-PREP", source: "manual", status: "preparing",
+      total_amount: 200, discount_amount: 0, final_amount: 200
+    )
+    @shift.update!(status: "closed", closed_at: Time.current, closed_by: @barista, closing_cash: 0)
+    open_cash_shift!(tenant: @tenant, opened_by: @barista)
+
+    login_as!(@barista)
+
+    get "/barista/orders/#{carryover.id}.json"
+    assert_response :success
+
+    patch "/barista/orders/#{carryover.id}/update_status", params: { status: "ready" }
+    assert_equal "ready", carryover.reload.status
   end
 
   test "show without open shift returns forbidden json" do
