@@ -13,7 +13,7 @@ class StaffRbacTenantIsolationTest < ActionDispatch::IntegrationTest
     @tenant_a = create_tenant!(organization: @org, name: "Point A", slug: "ib2-a-#{SecureRandom.hex(4)}")
     @tenant_b = create_tenant!(organization: @org, name: "Point B", slug: "ib2-b-#{SecureRandom.hex(4)}")
     @foreign_tenant = create_tenant!(organization: @other_org, name: "Foreign", slug: "ib2-x-#{SecureRandom.hex(4)}")
-    @kitchen_a = create_tenant!(name: "Kitchen A", slug: "ib2-k-a-#{SecureRandom.hex(4)}", type: "prep_kitchen")
+    @kitchen_a = create_prep_kitchen_tenant!(name: "Kitchen A", slug: "ib2-k-a-#{SecureRandom.hex(4)}")
   end
 
   teardown do

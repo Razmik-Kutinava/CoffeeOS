@@ -23,7 +23,7 @@ class PrepKitchenLogoutTest < ActionDispatch::IntegrationTest
   end
 
   test "prep_kitchen_worker sees logout button and can logout" do
-    tenant = create_tenant!(name: "Logout Kitchen Worker", slug: "logout-kw-#{SecureRandom.hex(4)}")
+    tenant = create_prep_kitchen_tenant!(name: "Logout Kitchen Worker", slug: "logout-kw-#{SecureRandom.hex(4)}")
     worker = create_user!(tenant: tenant, role_codes: %w[prep_kitchen_worker], email: "logout-kw@test.com", name: "LogoutWorker")
 
     login_as!(worker)
@@ -38,7 +38,7 @@ class PrepKitchenLogoutTest < ActionDispatch::IntegrationTest
   end
 
   test "prep_kitchen_manager sees logout button and can logout" do
-    tenant = create_tenant!(name: "Logout Kitchen Manager", slug: "logout-km-#{SecureRandom.hex(4)}")
+    tenant = create_prep_kitchen_tenant!(name: "Logout Kitchen Manager", slug: "logout-km-#{SecureRandom.hex(4)}")
     manager = create_user!(tenant: tenant, role_codes: %w[prep_kitchen_manager], email: "logout-km@test.com", name: "LogoutManager")
 
     login_as!(manager)

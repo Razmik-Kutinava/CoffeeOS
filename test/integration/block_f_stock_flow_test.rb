@@ -132,7 +132,7 @@ class BlockFStockFlowTest < ActionDispatch::IntegrationTest
   end
 
   test "prep_kitchen draft movement confirm updates stock" do
-    tenant = create_tenant!(slug: "bf-pk-#{SecureRandom.hex(3)}")
+    tenant = create_prep_kitchen_tenant!(slug: "bf-pk-#{SecureRandom.hex(3)}")
     manager = create_user!(tenant: tenant, role_codes: %w[prep_kitchen_manager], email: "bf-pk@#{SecureRandom.hex(4)}.test")
     ingredient = Ingredient.create!(name: "BF PK #{SecureRandom.hex(2)}", unit: "g", is_active: true)
 

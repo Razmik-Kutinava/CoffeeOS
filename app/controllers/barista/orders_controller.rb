@@ -51,20 +51,20 @@ module Barista
     end
 
     def new
-      authorize Order, :create?
       @shift = current_shift
+      authorize Order, :create? if @shift
       load_tenant_menu!
       @cart = session[:barista_cart] || []
     end
 
     def create
-      authorize Order, :create?
-
       shift = current_shift
       unless shift
         redirect_to barista_new_order_path, alert: "Смена не открыта"
         return
       end
+
+      authorize Order, :create?
 
       order = Barista::OrderCreationService.new(
         cart_items:     normalize_cart_items(params[:cart_items]),

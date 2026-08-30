@@ -10,7 +10,7 @@
 | IB Phase 5: PolicyContext, 58 ABAC rules, shift_open enforce | **апрув владельца** → push CI · Phase 5b |
 
 **last_done:** IB-5-1..5 — ABAC catalog, PolicyContext, Order/CashShift/StockMovement policies, 22 ABAC tests, docs sync  
-**next_step:** апрув Phase 5 · push → CI · Phase 5b backlog
+**next_step:** CI green после fix #127 · апрув Phase 5 · Phase 5b
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

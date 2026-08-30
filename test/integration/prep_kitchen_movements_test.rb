@@ -6,7 +6,7 @@ class PrepKitchenMovementsTest < ActionDispatch::IntegrationTest
   end
 
   test "manager can create and confirm movement" do
-    tenant = create_tenant!(name: "Kitchen D", slug: "kitchen-d")
+    tenant = create_prep_kitchen_tenant!(name: "Kitchen D", slug: "kitchen-d")
     manager = create_user!(tenant: tenant, role_codes: %w[prep_kitchen_manager], email: "km2@test.com", name: "Manager")
     ingredient = create_ingredient!
 
@@ -28,7 +28,7 @@ class PrepKitchenMovementsTest < ActionDispatch::IntegrationTest
   end
 
   test "worker cannot confirm movement" do
-    tenant = create_tenant!(name: "Kitchen E", slug: "kitchen-e")
+    tenant = create_prep_kitchen_tenant!(name: "Kitchen E", slug: "kitchen-e")
     manager = create_user!(tenant: tenant, role_codes: %w[prep_kitchen_manager], email: "km3@test.com", name: "Manager2")
     worker = create_user!(tenant: tenant, role_codes: %w[prep_kitchen_worker], email: "kw3@test.com", name: "Worker2")
     ingredient = create_ingredient!
@@ -48,7 +48,7 @@ class PrepKitchenMovementsTest < ActionDispatch::IntegrationTest
   end
 
   test "manager can create movement via form-style params" do
-    tenant = create_tenant!(name: "Kitchen F", slug: "kitchen-f")
+    tenant = create_prep_kitchen_tenant!(name: "Kitchen F", slug: "kitchen-f")
     manager = create_user!(tenant: tenant, role_codes: %w[prep_kitchen_manager], email: "km4@test.com", name: "Manager3")
     ingredient = create_ingredient!
 

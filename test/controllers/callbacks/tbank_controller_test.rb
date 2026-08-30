@@ -4,6 +4,7 @@ require "test_helper"
 
 class Callbacks::TbankControllerTest < ActionDispatch::IntegrationTest
   include TestFactories
+  include ShopEmailTestHelper
   include ActiveJob::TestHelper
 
   module FakePollingConfirm
@@ -80,6 +81,7 @@ class Callbacks::TbankControllerTest < ActionDispatch::IntegrationTest
     Payments::CacheCounter.clear!
 
     @tenant = create_tenant!
+    @customer = create_mobile_customer!(email: "tbank-race-#{SecureRandom.hex(4)}@example.com")
     FakePollingConfirm.install!
     FakePollingConfirm.enabled = false
     FakeJobTotalFail.install!
@@ -87,6 +89,7 @@ class Callbacks::TbankControllerTest < ActionDispatch::IntegrationTest
 
     @order = Order.create!(
       tenant:          @tenant,
+      customer_id:     @customer.id,
       order_number:    "ORD-#{SecureRandom.hex(3)}",
       source:          "mobile",
       status:          "pending_payment",
@@ -306,14 +309,17 @@ class Callbacks::TbankControllerTest < ActionDispatch::IntegrationTest
     FakePollingConfirm.enabled = true
     @payment.update!(status: :processing)
 
-    get(
-      "/shop/api/payments/status/#{@order.id}",
-      headers: { "X-Shop-Tenant" => @tenant.id.to_s },
-      as: :json
-    )
+    open_session do |sess|
+      bind_shop_order_to_session!(sess, tenant_id: @tenant.id, order: @order, email: @customer.email)
+      sess.get(
+        "/shop/api/payments/status/#{@order.id}",
+        headers: { "X-Shop-Tenant" => @tenant.id.to_s },
+        as: :json
+      )
 
-    assert_response :success
-    assert_equal "CONFIRMED", JSON.parse(response.body)["status"]
+      assert_equal 200, sess.response.status
+      assert_equal "CONFIRMED", JSON.parse(sess.response.body)["status"]
+    end
     assert_equal "succeeded", @payment.reload.status
 
     FakePollingConfirm.enabled = false

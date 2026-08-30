@@ -2,7 +2,7 @@ require "test_helper"
 
 class PrepKitchenAccessTest < ActionDispatch::IntegrationTest
   test "kitchen manager can open prep kitchen pages" do
-    tenant = create_tenant!(name: "Kitchen A", slug: "kitchen-a")
+    tenant = create_prep_kitchen_tenant!(name: "Kitchen A", slug: "kitchen-a")
     manager = create_user!(tenant: tenant, role_codes: %w[prep_kitchen_manager], email: "kman@test.com", name: "KMan")
 
     login_as!(manager)
@@ -23,7 +23,7 @@ class PrepKitchenAccessTest < ActionDispatch::IntegrationTest
   end
 
   test "kitchen worker can open prep kitchen pages" do
-    tenant = create_tenant!(name: "Kitchen B", slug: "kitchen-b")
+    tenant = create_prep_kitchen_tenant!(name: "Kitchen B", slug: "kitchen-b")
     worker = create_user!(tenant: tenant, role_codes: %w[prep_kitchen_worker], email: "kworker@test.com", name: "KWorker")
 
     login_as!(worker)
@@ -44,7 +44,7 @@ class PrepKitchenAccessTest < ActionDispatch::IntegrationTest
   end
 
   test "worker cannot PATCH inventory min_qty" do
-    tenant = create_tenant!(name: "Kitchen RBAC", slug: "kitchen-rbac-#{SecureRandom.hex(4)}")
+    tenant = create_prep_kitchen_tenant!(name: "Kitchen RBAC", slug: "kitchen-rbac-#{SecureRandom.hex(4)}")
     manager = create_user!(tenant: tenant, role_codes: %w[prep_kitchen_manager], email: "mgr-rbac@test.com", name: "Manager")
     worker = create_user!(tenant: tenant, role_codes: %w[prep_kitchen_worker], email: "wrk-rbac@test.com", name: "Worker")
 
@@ -59,7 +59,7 @@ class PrepKitchenAccessTest < ActionDispatch::IntegrationTest
   end
 
   test "worker cannot PATCH stop_list" do
-    tenant = create_tenant!(name: "Kitchen Stop RBAC", slug: "kitchen-stop-#{SecureRandom.hex(4)}")
+    tenant = create_prep_kitchen_tenant!(name: "Kitchen Stop RBAC", slug: "kitchen-stop-#{SecureRandom.hex(4)}")
     worker = create_user!(tenant: tenant, role_codes: %w[prep_kitchen_worker], email: "wrk-stop@test.com", name: "Worker")
 
     category = create_category!
@@ -77,7 +77,7 @@ class PrepKitchenAccessTest < ActionDispatch::IntegrationTest
   end
 
   test "manager can PATCH inventory min_qty" do
-    tenant = create_tenant!(name: "Kitchen Mgr Inv", slug: "kitchen-mgr-inv-#{SecureRandom.hex(4)}")
+    tenant = create_prep_kitchen_tenant!(name: "Kitchen Mgr Inv", slug: "kitchen-mgr-inv-#{SecureRandom.hex(4)}")
     manager = create_user!(tenant: tenant, role_codes: %w[prep_kitchen_manager], email: "mgr-inv@test.com", name: "Manager")
 
     ingredient = Ingredient.create!(name: "ing-mgr-#{SecureRandom.hex(3)}", unit: "g", is_active: true)

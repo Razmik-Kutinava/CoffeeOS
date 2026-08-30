@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-30 — fix: CI #127 — ABAC regressions + tbank shop session
+
+- barista orders: shift check before authorize on create; new skips authorize when shift closed
+- `create_prep_kitchen_tenant!` factory; prep integration tests → production_kitchen
+- tbank race test: shop session + customer_id for payments/status (IDOR Phase 1)
+- Fixes 12 failures in CI test job
+
 ## 2026-08-30 — feat: IB Phase 5 ABAC-lite (PolicyContext + shift_open enforce)
 
 - `docs/product/security/phase_5_abac/` — ABAC_ATTRIBUTES, ABAC_POLICIES (58 rules), README

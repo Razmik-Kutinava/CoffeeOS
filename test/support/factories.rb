@@ -33,6 +33,24 @@ module TestFactories
     )
   end
 
+  def create_prep_kitchen_tenant!(name: "Цех", slug: nil, organization: nil, **attrs)
+    tenant = create_tenant!(
+      name: name,
+      slug: slug || "kitchen-#{SecureRandom.hex(4)}",
+      organization: organization,
+      type: "production_kitchen",
+      **attrs
+    )
+    FeatureFlag.find_or_create_by!(tenant: tenant, module: "prep_kitchen") { |ff| ff.enabled = true }
+    tenant
+  end
+
+  def create_prep_kitchen_tenant!(name: "Цех", slug: nil, **attrs)
+    tenant = create_tenant!(name: name, slug: slug, type: "production_kitchen", **attrs)
+    FeatureFlag.find_or_create_by!(tenant: tenant, module: "prep_kitchen") { |ff| ff.enabled = true }
+    tenant
+  end
+
   def create_role!(code:, name: nil)
     Role.find_or_create_by!(code: code) { |r| r.name = name || code.humanize }
   end

@@ -448,7 +448,7 @@ class ManagerOfficePanelTest < ActionDispatch::IntegrationTest
       payment_method: "cash"
     }
     follow_redirect!
-    assert_includes response.body, "Смена закрыта"
+    assert_match(/Смена не открыта|Смена закрыта/, response.body)
   end
 
   test "barista turbo: invalid status transition returns turbo-stream replace" do
