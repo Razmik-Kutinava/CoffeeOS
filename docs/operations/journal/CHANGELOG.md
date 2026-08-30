@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-30 — shift close orders (ready refund + preparing carryover)
+
+- GREEN `1f14dc49`: `ShiftCloseService`, `TbankOrderRefund`, carryover `BoardOrdersQuery`, broadcast баннер, `TelegramAlertJob`
+- bugbot fix `d230e39d`: reconcile partial T-Bank refunds при ошибке на N-м ready
+- regress **74/0** local; security: no medium+ on shift-close scope
+
 ## 2026-08-30 — SPEC: shift close orders (ready refund + preparing carryover)
 
 - `todo.md`: SBR SPEC — `ShiftCloseService`, extract `TbankOrderRefund`, `BoardOrdersQuery` carryover, broadcast баннер, `TelegramAlertJob`

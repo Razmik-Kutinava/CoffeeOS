@@ -16,7 +16,7 @@
 | RED / GREEN | **`[x]`** RED `c8cd9627` · GREEN `1f14dc49` |
 | /sbr verify | **`[x]`** 45/0 |
 | /regress | **`[x]`** 74/0 (45 task + 29 manager/barista zone) |
-| REVIEW | **`[ ]`** |
+| REVIEW | **`[x]`** bugbot fix + security OK |
 | push | **`[ ]`** |
 | deploy | **`[ ]`** |
 | Fly MCP | **`[ ]`** |

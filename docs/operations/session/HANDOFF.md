@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-30 (shift close GREEN)  
+**Дата:** 2026-08-30 (shift close REVIEW)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| regress shift close PASS 74/0 | `/review` |
+| REVIEW shift close · push pending | deploy — апрув |
 
-**last_done:** regress manager/barista 74/0 local  
-**next_step:** `/review`
+**last_done:** bugbot fix reconcile + security OK · regress 74/0  
+**next_step:** push + CI green
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

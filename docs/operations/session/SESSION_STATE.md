@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-30 (shift close GREEN)  
+**Дата:** 2026-08-30 (shift close REVIEW)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| regress shift close PASS 74/0 | `/review` |
+| REVIEW shift close · push pending | deploy — апрув |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
