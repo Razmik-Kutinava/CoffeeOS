@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-30 (IB Phase 4 DoD RBAC)  
+**Дата:** 2026-08-30 (IB Phase 5 ABAC-lite)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| IB Phase 4: DoD «контур закрыт», customer doc, checklist | апрув владельца → Phase 5 ABAC |
+| IB Phase 5: ABAC catalog 58 rules, PolicyContext, critical enforce | апрув владельца → push · Phase 5b |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,15 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### IB Phase 5 ABAC-lite (2026-08-30)
+
+| Что | Статус |
+|-----|--------|
+| ABAC_ATTRIBUTES + ABAC_POLICIES (58 rules) | **local done** |
+| PolicyContext + 4 policies refactor | **local done** |
+| ABAC tests 22/22 + regression 110/110 (WSL) | **local done** |
+| Fly MCP / deploy | skip |
 
 ### IB Phase 4 DoD RBAC (2026-08-30)
 

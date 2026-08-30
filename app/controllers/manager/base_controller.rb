@@ -166,5 +166,14 @@ module Manager
 
       redirect_to manager_dashboard_path, alert: "Доступ запрещён"
     end
+
+    def pundit_user
+      @pundit_user ||= PolicyContext.build(
+        user: current_user,
+        tenant_id: Current.tenant_id,
+        role_code: Current.role_code,
+        shift: current_cash_shift
+      )
+    end
   end
 end

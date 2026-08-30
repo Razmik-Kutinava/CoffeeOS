@@ -1,6 +1,6 @@
 # CoffeeOS — Роли и права доступа
 
-**Дата:** 2026-08-30 · **Фаза ИБ:** 4 (контур RBAC закрыт)  
+**Дата:** 2026-08-30 · **Фаза ИБ:** 5 (ABAC-lite local)  
 **Аудитория:** владелец, заказчик, менеджеры продукта
 
 ---
@@ -115,7 +115,7 @@ Auth gate Shop API: Referer+CSRF (браузер) или `X-Shop-Api-Key` (се�
 | Область | Статус | Следующий шаг |
 |---------|--------|---------------|
 | **Kiosk / TV / ActionCable** RLS bypass при lookup device | BACKLOG (документировано Phase 3) | Отдельный refactor при prod-киоске |
-| **ABAC** (`shift_open`, атрибуты заказа) | Phase 5 | После апрува Phase 4 |
+| **ABAC** (`shift_open`, атрибуты заказа) | Phase 5 local done | [phase_5_abac/](phase_5_abac/) · Phase 5b full enforce |
 | **Blog RBAC** (`blog_editor`) | Отдельный CMS-контур | Не блокер coffee ops |
 | **Platform Pundit** (tenants CRUD, catalog) | Policies есть, controllers без authorize | Phase N / по запросу |
 | **Favorites** в shop | Session-only, не в БД per customer | P3 backlog |
@@ -142,7 +142,24 @@ Auth gate Shop API: Referer+CSRF (браузер) или `X-Shop-Api-Key` (се�
 - Blog editor — вне staff matrix Prog10
 
 **Приёмка:** [IB_ACCEPTANCE_CHECKLIST.md](IB_ACCEPTANCE_CHECKLIST.md)  
-**Следующая фаза:** [Phase 5 ABAC](00_ROADMAP_RBAC_ABAC.md#phase-5--abac-lite)
+**Следующая фаза:** Phase 5b (full ABAC enforce) · см. [phase_5_abac/](phase_5_abac/)
+
+---
+
+## 9. ABAC rules (summary)
+
+Phase 5 добавляет атрибутный слой поверх RBAC. Ключевое правило для бариста:
+
+> Отмена/изменение заказа — только при **открытой смене** и если заказ **в scope смены** (своя смена, витрина с opened_at, carryover preparing).
+
+| Атрибут | Пример |
+|---------|--------|
+| `shift_open` | POS create — только при open CashShift |
+| `in_shift` | show/cancel/update_status barista |
+| `module_enabled` | FeatureFlag barista / prep_kitchen |
+| `tenant.type` | prep_kitchen только на production_kitchen |
+
+Полный каталог (**58 правил**): [ABAC_POLICIES.md](phase_5_abac/ABAC_POLICIES.md) · атрибуты: [ABAC_ATTRIBUTES.md](phase_5_abac/ABAC_ATTRIBUTES.md)
 
 ---
 

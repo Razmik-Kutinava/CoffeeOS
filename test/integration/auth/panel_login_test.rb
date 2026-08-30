@@ -18,7 +18,13 @@ class Auth::PanelLoginTest < ActionDispatch::IntegrationTest
     @org = create_organization!(slug: "auth-org-#{SecureRandom.hex(3)}")
     @tenant_a = create_tenant!(organization: @org, name: "Auth A", slug: "auth-a-#{SecureRandom.hex(3)}")
     @tenant_b = create_tenant!(organization: @org, name: "Auth B", slug: "auth-b-#{SecureRandom.hex(3)}")
-    @kitchen_tenant = create_tenant!(organization: @org, name: "Auth Kitchen", slug: "auth-k-#{SecureRandom.hex(3)}")
+    @kitchen_tenant = create_tenant!(
+      organization: @org,
+      name: "Auth Kitchen",
+      slug: "auth-k-#{SecureRandom.hex(3)}",
+      type: "production_kitchen"
+    )
+    FeatureFlag.create!(tenant: @kitchen_tenant, module: "prep_kitchen", enabled: true)
   end
 
   teardown do
@@ -36,6 +42,7 @@ class Auth::PanelLoginTest < ActionDispatch::IntegrationTest
     user = create_user!(tenant: @tenant_a, role_codes: %w[barista], email: "auth-bar-#{SecureRandom.hex(3)}@test.local")
 
     assert_login_redirects_to!(user, barista_dashboard_path, role_code: "barista")
+    open_cash_shift!(tenant: @tenant_a, opened_by: user)
     get barista_new_order_path
     assert_response :success
   end

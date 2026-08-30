@@ -11,6 +11,16 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-30 — feat: IB Phase 5 ABAC-lite (PolicyContext + shift_open enforce)
+
+- `docs/product/security/phase_5_abac/` — ABAC_ATTRIBUTES, ABAC_POLICIES (58 rules), README
+- `app/policies/policy_context.rb` — ABAC context для Pundit (shift_open, in_shift, module flags)
+- OrderPolicy / CashShiftPolicy / StockMovementPolicy — shift_open + in_shift + prep tenant type
+- pundit_user → PolicyContext в barista/manager/prep base controllers
+- Tests: `test/policies/*_abac_test.rb` (22 cases) + auth/barista regression 110/110 WSL
+- Docs sync: ROLES_AND_PERMISSIONS §9 ABAC, roadmap Phase 5 ✅
+- Fly MCP / deploy: skip
+
 ## 2026-08-30 — docs: IB Phase 4 DoD «RBAC контур закрыт»
 
 - `docs/product/security/ROLES_AND_PERMISSIONS.md` — главный doc для заказчика (RU)

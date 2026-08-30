@@ -1,10 +1,17 @@
 class ApplicationPolicy
-  attr_reader :user, :record
+  attr_reader :user, :record, :context
 
-  def initialize(user, record)
+  def initialize(pundit_user, record)
+    if pundit_user.is_a?(PolicyContext)
+      @context = pundit_user
+      @user    = pundit_user.user
+    else
+      @user    = pundit_user
+      @context = nil
+    end
+
     raise Pundit::NotAuthorizedError, "Необходима авторизация" unless user
 
-    @user   = user
     @record = record
   end
 
@@ -69,5 +76,24 @@ class ApplicationPolicy
 
   def prep_kitchen_worker?
     user.has_role_in_context?("prep_kitchen_worker", tenant_id: context_tenant_id)
+  end
+
+  def shift_open?
+    context&.shift_open? || false
+  end
+
+  def in_shift?(order = record)
+    return false unless context
+
+    target = order.is_a?(Order) ? order : record
+    context.in_shift?(target)
+  end
+
+  def module_enabled?(mod)
+    context ? context.module_enabled?(mod) : true
+  end
+
+  def prep_kitchen_tenant?
+    context ? context.production_kitchen? : false
   end
 end

@@ -1,12 +1,34 @@
 class OrderPolicy < ApplicationPolicy
-  # Барист видит только заказы своей смены/точки; менеджеры — все заказы точки.
-  # Изоляция по tenant уже обеспечена RLS + for_current_tenant; здесь — роли.
-  def show?          = barista? || any_manager?
-  def index?         = barista? || any_manager?
-  def history?       = barista? || any_manager?
-  def create?        = barista?
-  def update_status? = barista?
-  def cancel?        = barista? || shift_manager? || general_manager? || uk_global_admin?
+  # RBAC + ABAC: роль + shift_open + in_shift scope (barista).
+  def show?
+    return false unless barista? || any_manager?
+    return true if any_manager?
+
+    in_shift?
+  end
+
+  def index?   = barista? || any_manager?
+  def history? = barista? || any_manager?
+
+  def create?
+    barista? && shift_open?
+  end
+
+  def update_status?
+    barista? && shift_open? && in_shift?
+  end
+
+  def cancel?
+    if barista?
+      shift_open? && in_shift?
+    elsif shift_manager?
+      shift_open?
+    elsif general_manager? || uk_global_admin?
+      true
+    else
+      false
+    end
+  end
 
   class Scope < ApplicationPolicy::Scope
     def resolve

@@ -26,8 +26,9 @@ class Auth::PrepKitchenManagerRbacTest < ActionDispatch::IntegrationTest
     @rack_attack_was_enabled = Rack::Attack.enabled
     Rack::Attack.enabled = false
 
-    @tenant = create_tenant!(name: "PK Kitchen", slug: "pk-k-#{SecureRandom.hex(4)}")
-    @other_tenant = create_tenant!(name: "Other Kitchen", slug: "pk-o-#{SecureRandom.hex(4)}")
+    @tenant = create_tenant!(name: "PK Kitchen", slug: "pk-k-#{SecureRandom.hex(4)}", type: "production_kitchen")
+    FeatureFlag.create!(tenant: @tenant, module: "prep_kitchen", enabled: true)
+    @other_tenant = create_tenant!(name: "Other Kitchen", slug: "pk-o-#{SecureRandom.hex(4)}", type: "production_kitchen")
     @manager = create_user!(
       tenant: @tenant,
       role_codes: %w[prep_kitchen_manager],

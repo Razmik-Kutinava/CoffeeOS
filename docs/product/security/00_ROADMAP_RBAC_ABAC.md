@@ -65,11 +65,22 @@
 
 ---
 
-## Phase 5 — ABAC-lite
+## Phase 5 — ABAC-lite ✅ (local)
+
+**Статус:** local done 2026-08-30 · [phase_5_abac/](phase_5_abac/)
 
 **Цель:** тонкий атрибутный слой поверх закрытого RBAC.
 
-Атрибуты (placeholder в STAFF_RBAC_MATRIX):
+| Deliverable | Статус |
+|-------------|--------|
+| ABAC_ATTRIBUTES.md + ABAC_POLICIES.md (58 rules) | ✅ |
+| PolicyContext + pundit_user (3 panels) | ✅ |
+| Order/CashShift/StockMovement ABAC enforce | ✅ |
+| ABAC tests ≥15 | ✅ |
+
+**Phase 5b:** kiosk/TV, full enforce Partial rules, platform ABAC.
+
+Атрибуты:
 
 | Attribute | Пример правила |
 |-----------|----------------|
@@ -80,4 +91,4 @@
 | `user.active` | блокировка на каждом запросе (уже частично) |
 | `tenant.type` | beta vs prod capabilities |
 
-Реализация — отдельные SBR после Phase 4.
+Реализация — [phase_5_abac/](phase_5_abac/) · Phase 5b — full enforce.

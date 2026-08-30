@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-30 (IB Phase 4 DoD RBAC)  
+**Дата:** 2026-08-30 (IB Phase 5 ABAC-lite)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| IB Phase 4: ROLES_AND_PERMISSIONS, acceptance checklist, DoD 4/4 | **апрув владельца** → Phase 5 ABAC |
+| IB Phase 5: PolicyContext, 58 ABAC rules, shift_open enforce | **апрув владельца** → push CI · Phase 5b |
 
-**last_done:** IB-4-1..6 — GAP REGISTER, ROLES_AND_PERMISSIONS, IB_ACCEPTANCE_CHECKLIST, docs sync, WSL tests green  
-**next_step:** апрув Phase 4 · push → CI · Phase 5 ABAC prompt
+**last_done:** IB-5-1..5 — ABAC catalog, PolicyContext, Order/CashShift/StockMovement policies, 22 ABAC tests, docs sync  
+**next_step:** апрув Phase 5 · push → CI · Phase 5b backlog
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

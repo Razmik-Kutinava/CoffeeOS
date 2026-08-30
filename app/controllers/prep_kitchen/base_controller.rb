@@ -61,5 +61,14 @@ module PrepKitchen
     def prep_kitchen_manager?
       Current.role_code == "prep_kitchen_manager"
     end
+
+    def pundit_user
+      @pundit_user ||= PolicyContext.build(
+        user: current_user,
+        tenant_id: Current.tenant_id,
+        role_code: Current.role_code,
+        shift: nil
+      )
+    end
   end
 end

@@ -65,5 +65,14 @@ module Barista
     def current_shift
       @current_shift ||= CashShift.lock.find_by(tenant_id: Current.tenant_id, status: "open")
     end
+
+    def pundit_user
+      @pundit_user ||= PolicyContext.build(
+        user: current_user,
+        tenant_id: Current.tenant_id,
+        role_code: Current.role_code,
+        shift: current_shift
+      )
+    end
   end
 end

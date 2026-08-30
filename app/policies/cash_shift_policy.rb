@@ -1,9 +1,15 @@
 class CashShiftPolicy < ApplicationPolicy
   def show?   = barista? || any_manager?
   def index?  = barista? || any_manager?
-  def create? = barista? || general_manager? || shift_manager? || uk_global_admin?
+
+  def create?
+    return false unless barista? || general_manager? || shift_manager? || uk_global_admin?
+
+    !shift_open?
+  end
+
   def update? = barista? || general_manager? || shift_manager? || uk_global_admin?
-  def close?  = update?
+  def close?  = update? && shift_open?
 
   class Scope < ApplicationPolicy::Scope
     def resolve
