@@ -23,11 +23,8 @@ module ApplicationCable
       # TV board: аутентификация по cookie с device_token (без user login)
       token = request.cookies["tv_device_token"] if request&.cookies
       if token.present?
-        ActiveRecord::Base.connection.transaction do
-          ActiveRecord::Base.connection.execute("SET LOCAL row_security = off")
-          device = Device.active.find_by(device_token: token, device_type: "tv_board")
-          return device if device&.token_valid?
-        end
+        device = Devices::TokenResolver.find_active(token: token, device_type: "tv_board")
+        return device if device
       end
 
       # Гость витрины: без user_id — каналы сами проверяют reconnect_token (Shop::GuestOrderChannel).

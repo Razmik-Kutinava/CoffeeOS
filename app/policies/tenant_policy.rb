@@ -15,18 +15,20 @@ class TenantPolicy < ApplicationPolicy
     user.uk_global_admin?
   end
 
+  alias_method :new?, :create?
+
   def update?
     user.uk_global_admin?
   end
+
+  alias_method :edit?, :update?
 
   def destroy?
     user.uk_global_admin?
   end
 
   def open_as_manager?
-    # Любой авторизованный пользователь может открыть точку как менеджер
-    # (переключение контекста)
-    true
+    user.uk_global_admin?
   end
 
   class Scope < Scope

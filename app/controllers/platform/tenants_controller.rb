@@ -3,16 +3,19 @@
 module Platform
   class TenantsController < BaseController
     def index
+      authorize Tenant
       @tenants = Tenant.includes(:organization).order(:name).limit(500)
       @map_pins = Platform::TenantsMapPins.build(@tenants, url_helpers: self)
     end
 
     def new
+      authorize Tenant
       @tenant = Tenant.new(organization_id: params[:organization_id], type: "sales_point", status: "active")
       build_default_weekday_schedules(@tenant)
     end
 
     def create
+      authorize Tenant
       @tenant = Tenant.new(tenant_params)
       build_default_weekday_schedules(@tenant) unless @tenant.weekday_schedules.any?
       committed = false
@@ -50,6 +53,7 @@ module Platform
 
     def show
       @tenant = Tenant.includes(:organization, :feature_flags).find(params[:id])
+      authorize @tenant
       @entry_points = Platform::TenantOnboarding::EntryPoints.for(
         @tenant,
         host: entry_points_host
@@ -58,6 +62,7 @@ module Platform
 
     def edit
       @tenant = Tenant.includes(:organization, :feature_flags, :weekday_schedules).find(params[:id])
+      authorize @tenant
       build_default_weekday_schedules(@tenant)
       @entry_points = Platform::TenantOnboarding::EntryPoints.for(
         @tenant,
@@ -67,6 +72,7 @@ module Platform
 
     def update
       @tenant = Tenant.includes(:weekday_schedules).find(params[:id])
+      authorize @tenant
       committed = false
       ActiveRecord::Base.transaction do
         unless @tenant.update(tenant_params)
@@ -105,6 +111,7 @@ module Platform
 
     def open_as_manager
       tenant = Tenant.find(params[:id])
+      authorize tenant, :open_as_manager?
       session[:manager_tenant_id] = tenant.id.to_s
       destination =
         case params[:to].to_s

@@ -4,8 +4,10 @@
 # Блок 7 (прогон 10): staff/RBAC изоляция по 9 точкам.
 # Проверяет:
 # 1) UK -> open_as_manager -> create barista staff на каждой точке
-# 2) login barista на своей точке
+# 2) login barista на своей точке, open shift, POS order (cash — barista only)
 # 3) own order JSON доступен, foreign order JSON недоступен (404)
+#
+# IB Phase 5b: заказы через barista POS (shop API cash online запрещён).
 #
 # Usage:
 #   ruby bin/prog10/prog10_staff_rbac_isolation.rb
@@ -80,16 +82,16 @@ def create_staff!(uk_jar:, name:, email:, role_code:)
   response = run_curl(
     "-b", uk_jar, "-c", uk_jar,
     "-X", "POST", "#{BASE}/manager/staff",
-    "-H", "Content-Type: application/x-www-form-urlencoded",
     "--data-urlencode", "authenticity_token=#{token}",
     "--data-urlencode", "user[name]=#{name}",
     "--data-urlencode", "user[email]=#{email}",
     "--data-urlencode", "user[password]=#{PASSWORD}",
-    "--data-urlencode", "role_codes[]=#{role_code}"
+    "--data-urlencode", "user[password_confirmation]=#{PASSWORD}",
+    "--data-urlencode", "role_code=#{role_code}",
+    "-D", "-", "-o", "-"
   )
-
-  created = response.include?("Сотрудник создан")
-  { created: created }
+  created = response.include?("HTTP/2 302") || response.include?("HTTP/1.1 302")
+  { created: created, email: email }
 end
 
 def shop_key_for(tenant_id)
@@ -100,36 +102,65 @@ def shop_key_for(tenant_id)
   key
 end
 
-def create_order_for_tenant!(tenant_id:, key:, label:)
-  jar = "/tmp/prog10-iso-cart-#{tenant_id[0, 8]}.cookies"
-  File.delete(jar) if File.exist?(jar)
-  run_curl("-c", jar, "#{BASE}/shop?tenant_id=#{tenant_id}", "-o", "/dev/null")
-
+def product_id_for_tenant(tenant_id)
+  key = shop_key_for(tenant_id)
   products = JSON.parse(
     run_curl("#{BASE}/shop/api/products", "-H", "X-Shop-Tenant: #{tenant_id}", "-H", "X-Shop-Api-Key: #{key}")
   )
   product_id = products.dig("data", 0, "id")
   raise "no products for #{tenant_id}" if product_id.nil?
 
-  run_curl(
-    "-X", "POST", "#{BASE}/shop/api/cart/add", "-c", jar, "-b", jar,
-    "-H", "X-Shop-Tenant: #{tenant_id}", "-H", "X-Shop-Api-Key: #{key}",
-    "-H", "Content-Type: application/json",
-    "--data-binary", { product_id: product_id, quantity: 1, selected_modifiers: [] }.to_json
-  )
+  product_id
+end
 
-  phone = format("+7905%07d", rand(10_000_000))
-  body = run_curl(
-    "-X", "POST", "#{BASE}/shop/api/orders", "-c", jar, "-b", jar,
-    "-H", "X-Shop-Tenant: #{tenant_id}", "-H", "X-Shop-Api-Key: #{key}",
-    "-H", "Content-Type: application/json",
-    "--data-binary", { name: label, phone: phone, payment_method: "cash" }.to_json
-  )
-  parsed = JSON.parse(body)
-  oid = parsed["order_id"]
-  raise "order create failed for #{tenant_id}: #{body}" if oid.nil?
+def post_with_csrf!(jar:, path:, fields:)
+  html = run_curl("-b", jar, "-c", jar, "#{BASE}#{path}")
+  token = csrf_token(html)
+  raise "no csrf for #{path}" if token.nil? || token.empty?
 
-  oid
+  args = [
+    "-b", jar, "-c", jar,
+    "-X", "POST", "#{BASE}#{path}",
+    "--data-urlencode", "authenticity_token=#{token}"
+  ]
+  fields.each { |k, v| args += [ "--data-urlencode", "#{k}=#{v}" ] }
+  run_curl(*args, "-D", "-", "-o", "-")
+end
+
+def open_barista_shift!(jar)
+  post_with_csrf!(jar: jar, path: "/barista/shift/open", fields: { "opening_cash" => "0" })
+end
+
+def create_barista_pos_order!(jar:, product_id:)
+  post_with_csrf!(
+    jar: jar,
+    path: "/barista/orders",
+    fields: {
+      "cart_items[0][product_id]" => product_id,
+      "cart_items[0][quantity]" => "1",
+      "payment_method" => "cash"
+    }
+  )
+  html = run_curl("-b", jar, "#{BASE}/barista")
+  ids = html.scan(%r{/barista/orders/([0-9a-f-]{36})}).flatten.uniq
+  raise "no order id on barista dashboard" if ids.empty?
+
+  ids.first
+end
+
+def prepare_barista_order!(uk_jar:, point:, timestamp_suffix:)
+  return nil unless point[:barista_expected]
+
+  open_as_manager!(uk_jar: uk_jar, tenant_id: point[:tenant_id])
+  email = "iso-bar-#{point[:slug]}-#{timestamp_suffix}@prog10.local"
+  create_staff!(uk_jar: uk_jar, name: "ISO Barista #{point[:slug]}", email: email, role_code: "barista")
+
+  barista_jar = "/tmp/prog10-iso-setup-#{point[:slug]}.cookies"
+  login_user!(email: email, password: PASSWORD, jar: barista_jar)
+  open_barista_shift!(barista_jar)
+  product_id = product_id_for_tenant(point[:tenant_id])
+  order_id = create_barista_pos_order!(jar: barista_jar, product_id: product_id)
+  { email: email, order_id: order_id }
 end
 
 def code_for(path, jar:)
@@ -140,43 +171,51 @@ timestamp_suffix = Time.now.utc.strftime("%m%d%H%M")
 uk_jar = "/tmp/prog10-iso-uk.cookies"
 login_user!(email: "uk@demo.coffeeos.local", password: PASSWORD, jar: uk_jar)
 
-shop_key = shop_key_for(POINTS.first[:tenant_id])
 orders_by_tenant = {}
+barista_by_tenant = {}
 
 POINTS.each do |point|
-  orders_by_tenant[point[:tenant_id]] = create_order_for_tenant!(
-    tenant_id: point[:tenant_id],
-    key: shop_key,
-    label: "ISO-#{point[:slug]}"
-  )
+  next unless point[:barista_expected]
+
+  prep = prepare_barista_order!(uk_jar: uk_jar, point: point, timestamp_suffix: timestamp_suffix)
+  orders_by_tenant[point[:tenant_id]] = prep[:order_id]
+  barista_by_tenant[point[:tenant_id]] = prep[:email]
 end
 
 results = []
 POINTS.each_with_index do |point, idx|
   foreign_point = POINTS[(idx + 1) % POINTS.length]
-  open_as_manager!(uk_jar: uk_jar, tenant_id: point[:tenant_id])
+  foreign_tid = foreign_point[:tenant_id]
+  foreign_order_id = orders_by_tenant[foreign_tid]
 
-  email = "iso-bar-#{point[:slug]}-#{timestamp_suffix}@prog10.local"
-  create_res = create_staff!(
-    uk_jar: uk_jar,
-    name: "ISO Barista #{point[:slug]}",
-    email: email,
-    role_code: "barista"
-  )
-
-  staff_jar = "/tmp/prog10-iso-#{point[:slug]}.cookies"
-  login_user!(email: email, password: PASSWORD, jar: staff_jar)
+  if point[:barista_expected]
+    email = barista_by_tenant[point[:tenant_id]]
+    staff_jar = "/tmp/prog10-iso-#{point[:slug]}.cookies"
+    login_user!(email: email, password: PASSWORD, jar: staff_jar)
+    create_res = { created: true, email: email }
+  else
+    open_as_manager!(uk_jar: uk_jar, tenant_id: point[:tenant_id])
+    email = "iso-bar-#{point[:slug]}-#{timestamp_suffix}@prog10.local"
+    create_res = create_staff!(
+      uk_jar: uk_jar,
+      name: "ISO Barista #{point[:slug]}",
+      email: email,
+      role_code: "barista"
+    )
+    staff_jar = "/tmp/prog10-iso-#{point[:slug]}.cookies"
+    login_user!(email: email, password: PASSWORD, jar: staff_jar)
+  end
 
   barista_code = code_for("/barista", jar: staff_jar)
-  own_code = code_for("/barista/orders/#{orders_by_tenant[point[:tenant_id]]}.json", jar: staff_jar)
-  foreign_code = code_for("/barista/orders/#{orders_by_tenant[foreign_point[:tenant_id]]}.json", jar: staff_jar)
+  own_order_id = orders_by_tenant[point[:tenant_id]]
+  own_code = own_order_id ? code_for("/barista/orders/#{own_order_id}.json", jar: staff_jar) : "n/a"
+  foreign_code = foreign_order_id ? code_for("/barista/orders/#{foreign_order_id}.json", jar: staff_jar) : "n/a"
 
   pass =
     if point[:barista_expected]
       barista_code == "200" && own_code == "200" && foreign_code == "404"
     else
-      # Для production kitchen barista-панель закрыта по модулю/роли.
-      barista_code == "302" && own_code == "302" && foreign_code == "302"
+      barista_code == "302" && own_code != "200" && foreign_code != "200"
     end
 
   results << {
@@ -195,7 +234,7 @@ end
 report = {
   at: Time.now.utc.strftime("%Y-%m-%dT%H:%M:%SZ"),
   base: BASE,
-  note: "staff/rbac isolation for 9 points; own order visible, foreign order hidden",
+  note: "staff/rbac isolation for 9 points; barista POS orders; own visible, foreign 404",
   results: results
 }
 

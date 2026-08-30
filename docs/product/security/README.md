@@ -13,8 +13,7 @@
 | **2** | [`phase_2_abac_layer/`](phase_2_abac_layer/) | **done** 2026-08-30 | staff Pundit, role×tenant |
 | **3** | [`phase_3_tenant_rls/`](phase_3_tenant_rls/) | **done** 2026-08-30 | RLS/GUC audit, device runbook, franchise/UK tests |
 | **4** | [`phase_4_rbac_dod/`](phase_4_rbac_dod/) | **done** 2026-08-30 · апрув | DoD RBAC, ROLES_AND_PERMISSIONS, acceptance checklist |
-| **5** | [`phase_5_abac/`](phase_5_abac/) | **done** 2026-08-30 local | ABAC-lite: PolicyContext, 58 rules, shift_open enforce |
-| 5b | [`00_ROADMAP_RBAC_ABAC.md`](00_ROADMAP_RBAC_ABAC.md) | backlog | full ABAC enforce, kiosk/TV |
+| **5b** | [`phase_5b_hardening/`](phase_5b_hardening/) | **done** 2026-08-30 local | TokenResolver, platform Pundit, Prog10 fix, UserRole guard |
 
 ## Мастер-верификация (все фазы)
 

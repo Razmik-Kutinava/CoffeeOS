@@ -78,7 +78,7 @@
 | Order/CashShift/StockMovement ABAC enforce | ✅ |
 | ABAC tests ≥15 | ✅ |
 
-**Phase 5b:** kiosk/TV, full enforce Partial rules, platform ABAC.
+**Phase 5b:** kiosk/TV TokenResolver, platform Pundit, UserRole tenant guard, Prog10 barista POS.
 
 Атрибуты:
 

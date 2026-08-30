@@ -22,11 +22,11 @@
 | G-04 | Phase 0 REVIEW | Shop `phone_otp/status` auto-bind | low | **documented** — by design |
 | G-05 | Phase 0 REVIEW | Shop `DELETE session` refresh deactivation | low | **documented** |
 | G-06 | Phase 0 P3 | Favorites session-only | low | **backlog** product |
-| G-07 | STAFF matrix | shift_manager + `/manager/inventory` URL | low | **owner review** |
+| G-07 | STAFF matrix | shift_manager + `/manager/inventory` URL | low | **FIXED** — `require_general_or_franchise_manager!` |
 | G-08 | STAFF matrix | franchise + staff UI | info | **by design** — GM/UK only |
-| G-09 | Phase 2 | Platform Pundit not wired | low | **backlog** Phase N |
+| G-09 | Phase 2 | Platform Pundit not wired | low | **FIXED Phase 5b** — PlatformPolicy + tenants/orgs authorize |
 | G-10 | Phase 2 | blog_editor outside staff matrix | info | **backlog** blog CMS |
-| G-11 | TECH DEBT | Global `user_roles` without `tenant_id` | low | **monitor** |
+| G-11 | TECH DEBT | Global `user_roles` without `tenant_id` | low | **FIXED new grants** — validation; legacy rows monitor |
 | G-12 | Phase 3 | Prep multi-point (1 kitchen → N sales) | info | **product backlog** |
 
 **NEED_MIGRATION:** none  

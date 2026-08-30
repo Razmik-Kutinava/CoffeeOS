@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-30 (IB master verification Phase 0–5)  
+**Дата:** 2026-08-30 (IB Phase 5b hardening)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| IB master checklist пройден: 309 tests 0 failures, 3 skip legacy | апрув → push CI · Fly MCP · Phase 5b |
+| Phase 5b local done — TokenResolver, platform Pundit, Prog10 barista POS | push · Fly Prog10 · MCP |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,16 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### IB Phase 5b hardening (2026-08-30)
+
+| Что | Статус |
+|-----|--------|
+| Devices::TokenResolver (kiosk/TV/cable) | **local done** |
+| Platform Pundit + TenantPolicy open_as_manager UK-only | **local done** |
+| Prog10 barista POS orders (не shop cash) | **local done** — Fly TBD |
+| UserRole tenant_id validation point staff | **local done** |
+| Tests platform + devices + user_role | **green** |
 
 ### IB master verification Phase 0–5 (2026-08-30)
 

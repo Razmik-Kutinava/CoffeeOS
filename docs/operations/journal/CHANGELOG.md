@@ -11,6 +11,14 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-30 — feat: IB Phase 5b hardening
+
+- `Devices::TokenResolver` — kiosk/TV/cable device lookup (ABAC-056/057 Partial)
+- Platform: `PlatformPolicy`, Pundit authorize tenants/orgs; `open_as_manager?` UK-only
+- Prog10: заказы через barista POS (fix shop cash 422)
+- `UserRole`: tenant_id required for point staff roles (G-11 new grants)
+- Docs: `phase_5b_hardening/README`, GAP register, ROLES §7
+
 ## 2026-08-30 — docs: IB master verification checklist Phase 0–5
 
 - `docs/product/security/IB_MASTER_VERIFICATION_CHECKLIST.md` — полный прогон ИБ

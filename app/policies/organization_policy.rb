@@ -15,9 +15,13 @@ class OrganizationPolicy < ApplicationPolicy
     user.uk_global_admin?
   end
 
+  alias_method :new?, :create?
+
   def update?
     user.uk_global_admin?
   end
+
+  alias_method :edit?, :update?
 
   def destroy?
     user.uk_global_admin?

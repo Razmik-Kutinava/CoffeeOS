@@ -124,8 +124,8 @@
 
 | ID | Name | Subject | Object | Action | Condition | Pri | Impl | Code ref | 5b |
 |----|------|---------|--------|--------|-----------|-----|------|----------|-----|
-| ABAC-056 | Kiosk device token | device.type, token | Device | api | valid device_token | — | N | RLS bypass backlog | **Y** |
-| ABAC-057 | TV board token | device.type=tv | Device | board | token + tenant | — | N | documented Phase 3 | **Y** |
+| ABAC-056 | Kiosk device token | device.type, token | Device | api | valid device_token | — | **Partial** | `Devices::TokenResolver` Phase 5b | **Y** |
+| ABAC-057 | TV board token | device.type=tv | Device | board | token + tenant | — | **Partial** | TokenResolver + TvBoardsController | **Y** |
 | ABAC-058 | Kiosk order create | shift_open, module kiosk | Order | create | device-bound | — | N | skip Phase 5 | **Y** |
 
 ---

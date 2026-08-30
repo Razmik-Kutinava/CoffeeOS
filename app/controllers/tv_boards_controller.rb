@@ -3,18 +3,8 @@ class TvBoardsController < ApplicationController
     token = params[:token].presence
     return head :forbidden if token.blank?
 
-    device = nil
-    ActiveRecord::Base.connection.transaction do
-      ActiveRecord::Base.connection.execute("SET LOCAL row_security = off")
-      device = Device.unscoped.find_by(
-        device_token: token,
-        device_type: "tv_board",
-        is_active: true
-      )
-    end
-
+    device = Devices::TokenResolver.find_active(token: token, device_type: "tv_board")
     return head :not_found if device.nil?
-    return head :forbidden unless device.token_valid?
 
     @device = device
 

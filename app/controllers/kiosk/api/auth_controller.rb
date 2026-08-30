@@ -8,7 +8,7 @@ module Kiosk
         token = device_token_from_request
         return render json: { error: "missing device token" }, status: :unauthorized if token.blank?
 
-        device = find_active_kiosk(token)
+        device = Devices::TokenResolver.find_active(token: token, device_type: "kiosk")
         return render json: { error: "invalid or inactive device token" }, status: :unauthorized unless device
 
         device.update_columns(last_seen_at: Time.current, updated_at: Time.current)
@@ -31,21 +31,7 @@ module Kiosk
         request.headers["X-Device-Token"].presence || params[:device_token].presence
       end
 
-      def find_active_kiosk(token)
-        device = nil
-        ActiveRecord::Base.connection.transaction do
-          # RLS: devices привязаны к tenant; lookup по token — до SET LOCAL tenant.
-          ActiveRecord::Base.connection.execute("SET LOCAL row_security = off")
-          device = Device.unscoped.find_by(
-            device_token: token,
-            device_type: "kiosk",
-            is_active: true
-          )
-        end
-        device if device&.token_valid?
-      end
-
-      # После lookup device с row_security off — KioskSetting только с tenant GUC (RLS).
+      # После lookup device — KioskSetting только с tenant GUC (RLS).
       def with_kiosk_tenant_guc!(tenant_id)
         result = nil
         ActiveRecord::Base.transaction do

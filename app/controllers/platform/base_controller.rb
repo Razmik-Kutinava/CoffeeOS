@@ -7,10 +7,18 @@ module Platform
     before_action :require_login
     before_action :require_uk_global_admin
     before_action :assign_current_for_rls
-    # Доступ ограничен require_uk_global_admin; fine-grained authorize при необходимости в подклассах.
-    before_action :skip_authorization
+    before_action :authorize_platform_access!
+    after_action :verify_authorized
+
+    def pundit_user
+      current_user
+    end
 
     private
+
+    def authorize_platform_access!
+      authorize :platform, :access?
+    end
 
     # RLS на product_tenant_settings и др. читает app.current_user_id / app.current_tenant_id в PostgreSQL.
     # BUG-014 FIX: Устанавливаем PostgreSQL GUC-переменные чтобы RLS работало корректно в Platform-разделе.

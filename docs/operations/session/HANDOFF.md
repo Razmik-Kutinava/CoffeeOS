@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-30 (IB master verification Phase 0–5)  
+**Дата:** 2026-08-30 (IB Phase 5b hardening)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| IB master checklist: 309 tests green, docs verified, Prog10 SKIP | **апрув владельца** → push CI · Fly MCP · Phase 5b |
+| Phase 5b: TokenResolver, platform Pundit, Prog10 barista POS, UserRole guard | push CI · Fly Prog10 · апрув |
 
-**last_done:** `IB_MASTER_VERIFICATION_CHECKLIST.md` — полный прогон WSL: shop/staff/auth/policies 0 failures; audit exit 0  
-**next_step:** апрув ИТОГО · push · CI · Prog10 на Fly после deploy
+**last_done:** IB-5b — Devices::TokenResolver, PlatformPolicy, Prog10 fix, UserRole tenant validation, docs  
+**next_step:** push · Fly prog10 · MCP Point A после deploy
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

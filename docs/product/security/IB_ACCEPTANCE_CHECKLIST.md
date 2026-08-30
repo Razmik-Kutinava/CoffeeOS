@@ -19,7 +19,7 @@
 - [x] `rbac_tenant_isolation_test` green (в составе staff/* suite)
 - [x] `test/integration/auth/*` green — 84 runs suite (auth + staff isolation)
 - [x] `tenant_rls_isolation_test` green — 6 cases (franchise/UK/barista/shift_manager device)
-- [ ] Prog10 staff isolation **SKIP** — Fly: `cash payment not available online` при создании заказа; последний PASS: `prog10_staff_isolation.json` 2026-06-02 (9/9)
+- [ ] Prog10 staff isolation — **Phase 5b fix** (barista POS); Fly run после deploy
 - [x] Pundit: manager staff/shifts/devices/menu/finance + prep movements/inventory
 - [x] shift_manager deny staff/devices — Pundit + `require_privileged_manager!` + UI + test
 
