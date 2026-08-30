@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-30 (Fly v466 deploy + push CI green)  
+**Дата:** 2026-08-30 (IB Phase 0 baseline docs)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Fly **v466** на стенде · Point A 200 | следующие задачи заказчика |
+| IB Phase 0: `docs/product/security/` — actors, shop API matrix, staff RBAC | апрув владельца → Phase 1 shop ownership |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-30 (Fly v466 deploy + push CI green)  
+**Дата:** 2026-08-30 (IB Phase 0 baseline docs)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Fly **v466** на стенде · Point A 200 | следующие задачи заказчика |
+| IB Phase 0 deliverables в `docs/product/security/` | апрув владельца → Phase 1 (shop IDOR fixes) |
 
-**last_done:** push 5 коммитов · CI #33305782903 green · deploy v466 · `4496346d`  
-**next_step:** продолжение задач · MCP Point A по запросу
+**last_done:** IB-0-0..3 baseline docs (actors, shop API 51 routes, staff RBAC + Prog10)  
+**next_step:** апрув Phase 0 · затем Phase 1 ownership по HOLE list
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-30 — docs: IB phase 0 baseline — actors, shop API matrix, staff RBAC
+
+- `docs/product/security/` — roadmap фаз 0→5, phase_0_baseline (IB-0-1..3), заглушки phase_1/2
+- Shop API: 51 endpoints, 4 HOLE (payments status/widget/sbp), Phase 1 backlog
+- Staff RBAC: 8 ролей, Pundit inventory, Prog10 vs code, ABAC placeholder
+
 ## 2026-08-30 — ops: Fly v466 deploy (push 5 коммитов, CI green)
 
 - Push `e22cbff6..4496346d` → develop · CI **#33305782903** green
