@@ -7,6 +7,8 @@ module Barista
     INCLUDES = [ :order_items, :order_status_logs ].freeze
     # B2.1 ревизия 2026-06-12: 6 слотов, только accepted + preparing на табло.
     SLOT_STATUSES = %w[accepted preparing].freeze
+    # Заказы с прошлой смены, доступные баристе до issued/cancelled.
+    CARRYOVER_STATUSES = SLOT_STATUSES.freeze
     MAX_SLOTS = 6
 
     COLUMN_DOM_IDS = {
@@ -87,7 +89,11 @@ module Barista
           AND orders.source = 'mobile'
           AND orders.created_at >= :shift_opened_at
         )
-        OR orders.status = 'preparing'
+        OR (
+          orders.status IN ('accepted', 'preparing')
+          AND orders.cash_shift_id IS NOT NULL
+          AND orders.cash_shift_id <> :shift_id
+        )
       SQL
     end
 
@@ -95,7 +101,8 @@ module Barista
       shift = resolve_cash_shift(tenant_id, cash_shift)
       return 0 unless shift
 
-      Order.where(tenant_id: tenant_id, status: "preparing")
+      Order.where(tenant_id: tenant_id, status: CARRYOVER_STATUSES)
+           .where.not(cash_shift_id: nil)
            .where.not(cash_shift_id: shift.id)
            .count
     end

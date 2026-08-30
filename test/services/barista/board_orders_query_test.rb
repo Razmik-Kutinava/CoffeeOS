@@ -108,13 +108,13 @@ class Barista::BoardOrdersQueryTest < ActiveSupport::TestCase
     assert_includes ids, carryover.id
   end
 
-  test "shift_accessible_scope excludes accepted from closed shift but includes preparing carryover" do
-    stale_accepted = Order.create!(
+  test "shift_accessible_scope includes accepted and preparing carryover from closed shift" do
+    carryover_accepted = Order.create!(
       tenant: @tenant, cash_shift: @shift, order_number: "STALE-ACC",
       source: "manual", status: "accepted",
       total_amount: 100, discount_amount: 0, final_amount: 100
     )
-    carryover = Order.create!(
+    carryover_preparing = Order.create!(
       tenant: @tenant, cash_shift: @shift, order_number: "STALE-PREP",
       source: "manual", status: "preparing",
       total_amount: 100, discount_amount: 0, final_amount: 100
@@ -123,8 +123,8 @@ class Barista::BoardOrdersQueryTest < ActiveSupport::TestCase
     open_cash_shift!(tenant: @tenant, opened_by: @barista)
 
     ids = Barista::BoardOrdersQuery.shift_accessible_scope(tenant_id: @tenant.id).pluck(:id)
-    assert_not_includes ids, stale_accepted.id
-    assert_includes ids, carryover.id
+    assert_includes ids, carryover_accepted.id
+    assert_includes ids, carryover_preparing.id
   end
 
   test "for_column returns more than 50 accepted in current shift" do

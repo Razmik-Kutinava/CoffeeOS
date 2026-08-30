@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-30 — feat: accepted carryover alongside preparing in BoardOrdersQuery
+
+- `shift_accessible_sql`: `accepted` + `preparing` с `cash_shift_id` закрытой смены
+- `carryover_preparing_count` считает оба статуса
+
 ## 2026-08-30 — fix: T-Bank refund failure не блокирует shift close
 
 - `ShiftCloseService`: сбой Cancel на одном ready → заказ остаётся ready + Telegram alert; смена закрывается

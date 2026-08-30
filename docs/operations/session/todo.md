@@ -26,7 +26,7 @@
 | # | Правило | Реализация |
 |---|---------|------------|
 | 1 | **ready** на close | cancel + refund (T-Bank если `provider_payment_id`; иначе локальный cancel как у гостя) |
-| 2 | **preparing** на close | не cancel/refund; `BoardOrdersQuery.shift_accessible_sql` + OR `status = preparing` на tenant до `issued`/`cancelled` |
+| 2 | **preparing** / **accepted** на close | не cancel/refund; carryover в `BoardOrdersQuery` (`accepted` + `preparing` с `cash_shift_id` закрытой смены) |
 | 3 | Close не блокируется заказами | уже так; **оставить** блокеры wizard: pending payments / failed receipts / pending refunds |
 | 4 | Refund без дублирования | extract `Payments::TbankOrderRefund` (или аналог) из `GuestOrderCancellationService#refund_succeeded_via_tbank!`; гость и shift-close вызывают общий метод |
 | 5 | Системная отмена ready | `cancel_reason` «Смена закрыта, заказ не забран», `OrderStatusLog.source` = `system`, audit отдельный action |
