@@ -1,10 +1,12 @@
 # IB-0-2 — Shop API Access Matrix
 
-**Фаза:** 0 (baseline) · **Код не менялся** · дата: 2026-08-30
+**Фаза:** 0 (baseline) · обновлено Phase 1: 2026-08-30
 
 Полная матрица `namespace :shop → namespace :api` из `config/routes.rb` (строки 171–224).
 
 Kiosk (`POST /kiosk/api/auth`) и callbacks — см. [ACTORS_AND_ACCESS.md](ACTORS_AND_ACCESS.md).
+
+Phase 1 ownership: [SHOP_API_AUTH.md](../phase_1_rbac_closure/SHOP_API_AUTH.md) · [OWNERSHIP in README](../phase_1_rbac_closure/README.md).
 
 ---
 
@@ -13,18 +15,18 @@ Kiosk (`POST /kiosk/api/auth`) и callbacks — см. [ACTORS_AND_ACCESS.md](ACT
 | Метрика | Значение |
 |---------|----------|
 | **Endpoints total** | **51** (50 в production без `debug`) |
-| **OK** | 38 |
+| **OK** | 42 |
 | **REVIEW** | 9 |
-| **HOLE** | 4 |
+| **HOLE** | 0 (Phase 1: 4 P0 закрыты) |
 
-### HOLE list (кратко)
+### HOLE list (Phase 0 → Phase 1 FIXED)
 
-| Path | File:line | Проблема |
-|------|-----------|----------|
-| `GET /shop/api/payments/status/:order_id` | `payments_controller.rb:111-122` | Статус платежа любого заказа tenant без `customer_id` |
-| `POST /shop/api/payments/widget_init` | `payments_controller.rb:80-82` | Init widget по `order_id` без ownership check |
-| `POST /shop/api/payments/sbp/init` | `sbp_payment_initiator.rb:41-48` | SBP init для любого `pending_payment` заказа tenant |
-| `POST /shop/api/payments/sbp/charge` | `sbp_autopay_charge_service.rb:41-58` | Charge без session: `cid = order.customer_id` — инициация оплаты чужого заказа |
+| Path | Было | Phase 1 |
+|------|------|---------|
+| `GET /shop/api/payments/status/:order_id` | tenant only | **FIXED** — `OrderOwnership#find_visible_order!` |
+| `POST /shop/api/payments/widget_init` | tenant only | **FIXED** |
+| `POST /shop/api/payments/sbp/init` | tenant only | **FIXED** |
+| `POST /shop/api/payments/sbp/charge` | charge без session gate | **FIXED** — controller visibility before service |
 
 ---
 
@@ -55,7 +57,7 @@ Order.where(tenant_id:, source: :mobile, customer_id: cid).find(params[:id])
 
 Используется в: `orders#show`, `orders#history`, `orders#active`.
 
-### 2. `order_visible_to_session_customer?(order)`
+### 2. `order_visible_to_session?(order)` (concern `Shop::Api::OrderOwnership`)
 
 Проверки (любая = true):
 
@@ -103,10 +105,10 @@ Order.where(tenant_id:, source: :mobile, customer_id: cid).find(params[:id])
 | 24 | POST | `/shop/api/orders` | `orders#create` | GUEST | mixed | resolved | OrderCreator session | optional | no | OK | `orders_controller.rb:10-19` | creates order for session/guest |
 | 25 | POST | `/shop/api/payments/new_card` | `payments#new_card` | GUEST | mixed | resolved | creates order in service | via new order | no | OK | `payments_controller.rb:16-19`, `new_card_payment_service.rb` | card ownership N/A (new card) |
 | 26 | POST | `/shop/api/payments/one_click` | `payments#one_click` | CUSTOMER | mixed | resolved | RecurrentOrderCreator: card.customer == customer | yes | no | OK | `one_click_payment_service.rb`, `recurrent_order_creator.rb:23-25` | — |
-| 27 | POST | `/shop/api/payments/sbp/init` | `payments#sbp_init` | GUEST | mixed | resolved | **tenant + order_id only** | **no** | no | **HOLE** | `sbp_payment_initiator.rb:41-48` | add `order_visible_to_session_customer?` |
-| 28 | POST | `/shop/api/payments/sbp/charge` | `payments#sbp_charge` | CUSTOMER | mixed | resolved | partial: rejects session≠order customer | partial | no | **HOLE** | `sbp_autopay_charge_service.rb:52-58` | require session ownership; no charge on foreign order |
-| 29 | POST | `/shop/api/payments/widget_init` | `payments#widget_init` | GUEST | mixed | resolved | **tenant + order_id only** | partial (rebill only) | no | **HOLE** | `payments_controller.rb:80-82` | add ownership before Init |
-| 30 | GET | `/shop/api/payments/status/:order_id` | `payments#status` | GUEST | mixed | resolved | **tenant only** | **no** | no | **HOLE** | `payments_controller.rb:111-122` | scope by customer or visibility helper |
+| 27 | POST | `/shop/api/payments/sbp/init` | `payments#sbp_init` | GUEST | mixed | resolved | `find_visible_order!` | via helper | no | **OK** | `payments_controller.rb:38-43` | Phase 1 FIXED |
+| 28 | POST | `/shop/api/payments/sbp/charge` | `payments#sbp_charge` | CUSTOMER | mixed | resolved | `find_visible_order!` + service cid check | yes | no | **OK** | `payments_controller.rb:59-62` | Phase 1 FIXED |
+| 29 | POST | `/shop/api/payments/widget_init` | `payments#widget_init` | GUEST | mixed | resolved | `find_visible_order!` | via helper | no | **OK** | `payments_controller.rb:80-82` | Phase 1 FIXED |
+| 30 | GET | `/shop/api/payments/status/:order_id` | `payments#status` | GUEST | mixed | resolved | `find_visible_order!` | via helper | no | **OK** | `payments_controller.rb:111-122` | Phase 1 FIXED |
 | 31 | GET | `/shop/api/payments/card_config` | `payments#card_config` | PUBLIC | mixed | resolved | RSA public key | no | no | OK | `payments_controller.rb:11-12` | public key by design |
 | 32 | GET | `/shop/api/user/cards` | `user_cards#index` | GUEST | mixed | resolved | GuestCustomerResolver(email) | optional | no | REVIEW | `user_cards_controller.rb:8-11` | empty without customer; email param needs verified email |
 | 33 | GET | `/shop/api/orders/history` | `orders#history` | CUSTOMER | mixed | resolved | `where(customer_id: cid)` | yes | no | OK | `orders_controller.rb:110-140` | empty array if no cid |
@@ -133,18 +135,15 @@ Order.where(tenant_id:, source: :mobile, customer_id: cid).find(params[:id])
 
 ---
 
-## Phase 1 backlog (code fixes)
+## Phase 1 backlog (закрыто / остаток)
 
-| Priority | Endpoint | File:line | Proposed fix (1 line) |
-|----------|----------|-----------|------------------------|
-| P0 | `GET payments/status/:order_id` | `payments_controller.rb:111` | After find order, `return 404 unless order_visible_to_session_customer?(order)` (extract shared concern) |
-| P0 | `POST payments/widget_init` | `payments_controller.rb:80` | Same visibility check before `WidgetPaymentInitiator.call` |
-| P0 | `POST payments/sbp/init` | `payments_controller.rb:38-43` | Pass session into initiator; reject unless order visible to session |
-| P0 | `POST payments/sbp/charge` | `payments_controller.rb:59-62` | Require `session_cid` present and match `order.customer_id`; never charge on order_id alone |
-| P2 | `GET phone_otp/status` | `phone_otp_controller.rb:136-140` | Document or restrict auto-bind; require prior OTP in session |
-| P2 | `DELETE session` | `session_controller.rb:40-43` | Bind refresh_token deactivation to same customer session |
-| P3 | `GET/POST/DELETE favorites` | `favorites_controller.rb` | Persist favorites per `customer_id` when logged in |
-| P3 | `GET categories` | `categories_controller.rb:6` | [OWNER REVIEW] keep public or require API key on all routes |
+| Priority | Endpoint | Status |
+|----------|----------|--------|
+| ~~P0~~ | payments status / widget_init / sbp/init / sbp/charge | **FIXED** Phase 1 |
+| P2 | `GET phone_otp/status` | REVIEW — document auto-bind |
+| P2 | `DELETE session` | REVIEW — refresh_token binding |
+| P3 | favorites persist per customer | backlog |
+| P3 | `GET categories` public | OWNER REVIEW |
 
 ---
 

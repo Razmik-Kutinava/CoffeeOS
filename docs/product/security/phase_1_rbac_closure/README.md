@@ -1,14 +1,25 @@
 # Phase 1 — RBAC closure (shop ownership)
 
-**Статус:** заглушка — ждём апрув Phase 0.
+**Статус:** реализовано 2026-08-30 · ждём апрув владельца
 
-## Scope (план)
+## Deliverables
 
-Следующая фаза после baseline docs:
+| ID | Артефакт | Статус |
+|----|----------|--------|
+| IB-1-1 | `Shop::Api::OrderOwnership` concern | done |
+| IB-1-2 | payments status / widget_init / sbp_init / sbp_charge ownership | done |
+| IB-1-3 | `test/integration/shop/api/ownership_idor_test.rb` | done |
+| IB-1-4 | [SHOP_API_AUTH.md](SHOP_API_AUTH.md) + matrix update | done |
 
-1. Shop API ownership fixes по backlog из [SHOP_API_ACCESS_MATRIX.md](../phase_0_baseline/SHOP_API_ACCESS_MATRIX.md)
-2. Единый helper/guard для order-scoped endpoints
-3. Интеграционные тесты IDOR на payment flow
-4. SBR: RED → GREEN → REVIEW
+## HOLE → FIXED (Phase 1)
 
-**Не начинать код** до апрува владельца на Phase 0 deliverables.
+| Endpoint | Commit area |
+|----------|-------------|
+| `GET payments/status/:order_id` | `PaymentsController#status` + concern |
+| `POST payments/widget_init` | `PaymentsController#widget_init` |
+| `POST payments/sbp/init` | `PaymentsController#sbp_init` |
+| `POST payments/sbp/charge` | `PaymentsController#sbp_charge` (controller gate) |
+
+## Next (Phase 2)
+
+Staff Pundit / manager RBAC — отдельный промпт после апрува Phase 1.
