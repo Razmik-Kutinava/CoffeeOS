@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-30 — SPEC: shift close orders (ready refund + preparing carryover)
+
+- `todo.md`: SBR SPEC — `ShiftCloseService`, extract `TbankOrderRefund`, `BoardOrdersQuery` carryover, broadcast баннер, `TelegramAlertJob`
+- Решения: ready all-or-nothing T-Bank; preparing OR в `shift_accessible_sql`; wizard blockers payments/receipts сохраняем
+
 ## 2026-08-29 — Callbacks payments: amount mismatch guard
 
 - `EventsController#payment`: при `succeeded`, если в params/`provider_data` есть amount — сверка с `payment.amount` / `order.final_amount`

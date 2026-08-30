@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-29 (callback amount mismatch guard)  
+**Дата:** 2026-08-30 (shift close: ready refund + preparing carryover)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| HMAC `/callbacks/payments` amount check | next by intent |
+| SPEC shift close orders | `/sbr` RED |
 
-**last_done:** defense-in-depth amount mismatch на EventsController#payment  
-**next_step:** по намерению
+**last_done:** /start исследование close wizard · refund · broadcast · Telegram  
+**next_step:** `/sbr` — failing tests
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
