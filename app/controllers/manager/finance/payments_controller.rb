@@ -6,14 +6,8 @@ module Manager
 
       def index
         authorize Payment, :index?, policy_class: ::Finance::PaymentPolicy
-        scope = Payment.for_current_tenant.includes(:order)
-
-        if shift_manager?
-          shift = current_cash_shift
-          return @payments = [] unless shift
-
-          scope = scope.joins(:order).where(orders: { cash_shift_id: shift.id })
-        end
+        scope = policy_scope(Payment, policy_scope_class: ::Finance::PaymentPolicy::Scope)
+        scope = scope.includes(:order)
 
         scope = scope.order(created_at: :desc)
         scope = scope.where(status: params[:status]) if params[:status].present?

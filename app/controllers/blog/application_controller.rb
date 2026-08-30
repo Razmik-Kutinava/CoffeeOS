@@ -13,5 +13,9 @@ module Blog
     def blog_editor?
       current_user&.has_role?("blog_editor")
     end
+
+    def pundit_user
+      current_user
+    end
   end
 end

@@ -8,8 +8,9 @@ module Shop
       private
 
       def reject_orders_when_closed!
+        return if TenantOperatingHoursEnforcement.accepting_online_orders?(@shop_tenant)
+
         hours = Shop::OperatingHours.for(@shop_tenant)
-        return if hours.open_now?
 
         payload = hours.client_json
         render json: payload.merge(

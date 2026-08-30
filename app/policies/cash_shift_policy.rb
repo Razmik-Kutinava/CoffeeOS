@@ -4,12 +4,18 @@ class CashShiftPolicy < ApplicationPolicy
 
   def create?
     return false unless barista? || general_manager? || shift_manager? || uk_global_admin?
+    return false unless module_enabled?(:barista) if barista?
 
     !shift_open?
   end
 
   def update? = barista? || general_manager? || shift_manager? || uk_global_admin?
-  def close?  = update? && shift_open?
+  def close?
+    return false unless update? && shift_open?
+    return false if shift_manager? && record.id != context&.shift&.id
+
+    true
+  end
 
   class Scope < ApplicationPolicy::Scope
     def resolve

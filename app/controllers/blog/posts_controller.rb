@@ -2,7 +2,7 @@
 
 module Blog
   class PostsController < Blog::ApplicationController
-    before_action :require_blog_editor!, except: %i[show]
+    before_action :authorize_blog_editor!, except: %i[show]
     before_action :set_post, only: %i[show edit update destroy]
     before_action :set_categories, only: %i[new edit create update]
 
@@ -57,9 +57,9 @@ module Blog
       )
     end
 
-    def require_blog_editor!
-      return if blog_editor?
-
+    def authorize_blog_editor!
+      authorize BlogPost, :create?, policy_class: Blog::PostPolicy
+    rescue Pundit::NotAuthorizedError
       redirect_to blog_root_path, alert: "Нужны права редактора блога."
     end
 

@@ -1,6 +1,10 @@
 module Manager
   class ReportsController < BaseController
+    skip_before_action :skip_authorization
+    after_action :verify_authorized
+
     def index
+      authorize :report, :index?, policy_class: Manager::ReportPolicy
       from = params[:from].present? ? Time.zone.parse(params[:from]) : 7.days.ago.beginning_of_day
       to = params[:to].present? ? Time.zone.parse(params[:to]) : Time.zone.now
 

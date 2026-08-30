@@ -3,9 +3,10 @@ class TvBoardsController < ApplicationController
     token = params[:token].presence
     return head :forbidden if token.blank?
 
-    device = Devices::TokenResolver.find_active(token: token, device_type: "tv_board")
-    return head :not_found if device.nil?
+    policy = TvBoardPolicy.new(token: token)
+    return head :not_found unless policy.show?
 
+    device = policy.device
     @device = device
 
     # Нужен токен для ActionCable соединения (без user login).
@@ -46,8 +47,9 @@ class TvBoardsController < ApplicationController
   end
 
   def tv_orders_for_status(status, limit)
-    Order.for_current_tenant
-         .where(status: status)
+    shift = CashShift.find_by(tenant_id: Current.tenant_id, status: "open")
+    scope = Barista::BoardOrdersQuery.board_scope(tenant_id: Current.tenant_id, cash_shift: shift)
+    scope.where(status: status)
          .order(created_at: :asc)
          .limit(limit)
          .select(:id, :order_number, :created_at, :status)

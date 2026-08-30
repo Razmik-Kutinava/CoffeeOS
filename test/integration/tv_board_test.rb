@@ -1,6 +1,7 @@
 require "test_helper"
 
 class TvBoardTest < ActionDispatch::IntegrationTest
+  include TestFactories
   # ERB часто рендерит атрибуты с переносами строк — матчим гибко.
   def assert_accepted_card!(body, position:, order_number:)
     assert_match(
@@ -32,10 +33,10 @@ class TvBoardTest < ActionDispatch::IntegrationTest
     )
   end
 
-  def create_order!(tenant:, status:, order_number:, created_at:)
+  def create_order!(tenant:, status:, order_number:, created_at:, cash_shift:)
     Order.create!(
       tenant: tenant,
-      cash_shift: nil,
+      cash_shift: cash_shift,
       order_number: order_number,
       source: "manual",
       status: status,
@@ -45,6 +46,15 @@ class TvBoardTest < ActionDispatch::IntegrationTest
       created_at: created_at,
       updated_at: created_at
     )
+  end
+
+  def open_tv_shift!(tenant)
+    barista = create_user!(
+      tenant: tenant,
+      role_codes: %w[barista],
+      email: "tv-barista-#{SecureRandom.hex(3)}@test.local"
+    )
+    open_cash_shift!(tenant: tenant, opened_by: barista)
   end
 
   test "tv_board: missing token -> forbidden" do
@@ -65,14 +75,15 @@ class TvBoardTest < ActionDispatch::IntegrationTest
     tenant = create_tenant!(name: "T-TV3", slug: "t-tv3")
     device = create_tv_device!(tenant: tenant, device_token: "tok-1", tv_mode: Device::TV_MODE_ORDERS)
     create_tv_setting!(tenant: tenant, show_order_count: 10)
+    shift = open_tv_shift!(tenant)
 
     t1 = Time.current - 30.minutes
     t2 = Time.current - 20.minutes
     t3 = Time.current - 10.minutes
 
-    create_order!(tenant: tenant, status: "accepted", order_number: "A1", created_at: t1)
-    create_order!(tenant: tenant, status: "accepted", order_number: "A2", created_at: t2)
-    create_order!(tenant: tenant, status: "accepted", order_number: "A3", created_at: t3)
+    create_order!(tenant: tenant, status: "accepted", order_number: "A1", created_at: t1, cash_shift: shift)
+    create_order!(tenant: tenant, status: "accepted", order_number: "A2", created_at: t2, cash_shift: shift)
+    create_order!(tenant: tenant, status: "accepted", order_number: "A3", created_at: t3, cash_shift: shift)
 
     get "/tv_board", params: { token: device.device_token }
     assert_response :success
@@ -91,8 +102,9 @@ class TvBoardTest < ActionDispatch::IntegrationTest
     tenant = create_tenant!(name: "T-TV-ADS", slug: "t-tv-ads")
     device = create_tv_device!(tenant: tenant, device_token: "tok-ads", tv_mode: Device::TV_MODE_ADS)
     create_tv_setting!(tenant: tenant, show_order_count: 10)
+    shift = open_tv_shift!(tenant)
 
-    create_order!(tenant: tenant, status: "accepted", order_number: "HIDE-1", created_at: Time.current - 5.minutes)
+    create_order!(tenant: tenant, status: "accepted", order_number: "HIDE-1", created_at: Time.current - 5.minutes, cash_shift: shift)
 
     get "/tv_board", params: { token: device.device_token }
     assert_response :success
@@ -107,14 +119,15 @@ class TvBoardTest < ActionDispatch::IntegrationTest
     tenant = create_tenant!(name: "T-TV4", slug: "t-tv4")
     device = create_tv_device!(tenant: tenant, device_token: "tok-2", tv_mode: Device::TV_MODE_ORDERS)
     create_tv_setting!(tenant: tenant, show_order_count: 2)
+    shift = open_tv_shift!(tenant)
 
     t1 = Time.current - 30.minutes
     t2 = Time.current - 20.minutes
     t3 = Time.current - 10.minutes
 
-    create_order!(tenant: tenant, status: "accepted", order_number: "L1", created_at: t1)
-    create_order!(tenant: tenant, status: "accepted", order_number: "L2", created_at: t2)
-    create_order!(tenant: tenant, status: "accepted", order_number: "L3", created_at: t3)
+    create_order!(tenant: tenant, status: "accepted", order_number: "L1", created_at: t1, cash_shift: shift)
+    create_order!(tenant: tenant, status: "accepted", order_number: "L2", created_at: t2, cash_shift: shift)
+    create_order!(tenant: tenant, status: "accepted", order_number: "L3", created_at: t3, cash_shift: shift)
 
     get "/tv_board", params: { token: device.device_token }
     assert_response :success
@@ -130,8 +143,9 @@ class TvBoardTest < ActionDispatch::IntegrationTest
     tenant = create_tenant!(name: "T-TV5", slug: "t-tv5")
     device = create_tv_device!(tenant: tenant, device_token: "tok-3", tv_mode: Device::TV_MODE_ORDERS)
     create_tv_setting!(tenant: tenant, show_order_count: 0)
+    shift = open_tv_shift!(tenant)
 
-    create_order!(tenant: tenant, status: "accepted", order_number: "OFF-1", created_at: Time.current - 5.minutes)
+    create_order!(tenant: tenant, status: "accepted", order_number: "OFF-1", created_at: Time.current - 5.minutes, cash_shift: shift)
 
     get "/tv_board", params: { token: device.device_token }
     assert_response :success

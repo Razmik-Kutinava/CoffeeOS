@@ -22,8 +22,15 @@ class ApplicationPolicy
   def destroy? = false
 
   class Scope
-    def initialize(user, scope)
-      @user  = user
+    def initialize(pundit_user, scope)
+      if pundit_user.is_a?(PolicyContext)
+        @context = pundit_user
+        @user    = pundit_user.user
+      else
+        @user    = pundit_user
+        @context = nil
+      end
+
       @scope = scope
     end
 
@@ -33,7 +40,35 @@ class ApplicationPolicy
 
     private
 
-    attr_reader :user, :scope
+    attr_reader :user, :scope, :context
+
+    def context_tenant_id
+      Current.tenant_id || user.tenant_id
+    end
+
+    def shift_manager?
+      user.has_role_in_context?("shift_manager", tenant_id: context_tenant_id)
+    end
+
+    def general_manager?
+      user.has_role_in_context?("general_manager", tenant_id: context_tenant_id)
+    end
+
+    def franchise_manager?
+      user.has_role_in_context?("franchise_manager", organization_id: user.organization_id)
+    end
+
+    def uk_global_admin?
+      user.has_role_in_context?("ук_global_admin")
+    end
+
+    def any_manager?
+      shift_manager? || general_manager? || franchise_manager? || uk_global_admin?
+    end
+
+    def shift_open?
+      context&.shift_open? || false
+    end
   end
 
   private

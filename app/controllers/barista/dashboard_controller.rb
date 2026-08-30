@@ -1,6 +1,7 @@
 module Barista
   class DashboardController < BaseController
     def index
+      authorize Order, :read_board?
       tid = Current.tenant_id
       @shift = current_shift
       @board_orders = BoardOrdersQuery.for_slots(tenant_id: tid, cash_shift: @shift)

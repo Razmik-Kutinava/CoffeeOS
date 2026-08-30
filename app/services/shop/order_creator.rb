@@ -10,9 +10,11 @@ module Shop
       @session = session
       @tenant = tenant
       @request = request
+      @order_source = :mobile
     end
 
     def call!(params, gateway: true)
+      resolve_kiosk_channel!
       if params[:client_order_uuid].present?
         existing = find_client_order_duplicate!(params[:client_order_uuid])
         return existing if existing
@@ -231,7 +233,7 @@ module Shop
         customer_id: customer.id,
         customer_name: customer.full_name.presence || params[:name].presence || "Гость",
         order_number: "",
-        source: :mobile,
+        source: @order_source,
         status: flow[:order_status],
         total_amount: subtotal,
         discount_amount: discount,
@@ -250,7 +252,7 @@ module Shop
       order = Order.where(
         tenant_id: @tenant.id,
         client_order_uuid: client_order_uuid,
-        source: :mobile
+        source: @order_source
       ).includes(:payments).first
       return nil unless order
 
@@ -280,7 +282,7 @@ module Shop
       pending_id = Shop::PendingOrderSession.order_id(@session, @tenant.id)
       return nil if pending_id.blank?
 
-      order = Order.where(id: pending_id, tenant_id: @tenant.id, source: :mobile, status: :pending_payment)
+      order = Order.where(id: pending_id, tenant_id: @tenant.id, source: @order_source, status: :pending_payment)
         .includes(:payments)
         .first
       return nil unless order
@@ -406,6 +408,13 @@ module Shop
 
     def shop_browser_session_id
       @request&.session&.id&.to_s
+    end
+
+    def resolve_kiosk_channel!
+      return unless @request
+
+      channel = Devices::KioskOrderGuard.resolve(request: @request, tenant: @tenant)
+      @order_source = channel.source
     end
   end
 end

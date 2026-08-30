@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-30 — feat: ABAC full enforce Phase 5c (58/58 rules Y)
+
+- Policies: TenantModule, Blog::Post, DeviceAuth, TvBoard, Incident, Report
+- Order/CashShift/Payment scopes; kiosk order guard; TV BoardOrdersQuery
+- Tests: `abac_full_enforcement_test`, prep feature_flags, tv_board shift scope
+- Catalog: `ABAC_POLICIES.md` — all rules Implemented=Y
+
 ## 2026-08-30 — fix: Sentry RUBY-1E duplicate staff email (422 not 500)
 
 - `User`: validates email/phone uniqueness (RU message «уже занят»)

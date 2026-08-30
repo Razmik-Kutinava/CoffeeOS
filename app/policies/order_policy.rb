@@ -10,15 +10,20 @@ class OrderPolicy < ApplicationPolicy
   def index?   = barista? || any_manager?
   def history? = barista? || any_manager?
 
+  def read_board?
+    barista? && module_enabled?(:barista)
+  end
+
   def create?
-    barista? && shift_open?
+    barista? && module_enabled?(:barista) && shift_open?
   end
 
   def update_status?
-    barista? && shift_open? && in_shift?
+    barista? && module_enabled?(:barista) && shift_open? && in_shift?
   end
 
   def cancel?
+    return false unless module_enabled?(:barista) if barista?
     if barista?
       shift_open? && in_shift?
     elsif shift_manager?

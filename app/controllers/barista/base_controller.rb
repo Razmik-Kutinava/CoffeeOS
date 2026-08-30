@@ -55,9 +55,7 @@ module Barista
 
     def require_barista_module!
       return unless Current.tenant_id
-
-      ff = FeatureFlag.find_by(tenant_id: Current.tenant_id, module: "barista")
-      return if ff.nil? || ff.enabled?
+      return if TenantModulePolicy.new(pundit_user, :tenant_module).barista_panel?
 
       redirect_to root_path, alert: "Модуль «Касса / бариста» выключен для этой точки"
     end

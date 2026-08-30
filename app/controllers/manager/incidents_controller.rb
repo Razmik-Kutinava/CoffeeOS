@@ -1,6 +1,10 @@
 module Manager
   class IncidentsController < BaseController
+    skip_before_action :skip_authorization
+    after_action :verify_authorized
+
     def index
+      authorize :incident_dashboard, :index?, policy_class: Manager::IncidentPolicy
       # MVP: инциденты как "виртуальный список" из основных источников.
       # Дальше вынесем в service + scoring + быстрые действия.
       if shift_manager?

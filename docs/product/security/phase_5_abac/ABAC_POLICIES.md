@@ -17,7 +17,7 @@
 | ABAC-004 | Prep → /prep_kitchen | role∈prep set | — | panel_access | prep role on tenant | 100 | Y | `prep_kitchen/base_controller` | |
 | ABAC-005 | UK → /admin | role=ук_global_admin | — | panel_access | UK role | 100 | Y | `platform/base_controller` | |
 | ABAC-006 | Role на tenant | role, tenant_id | — | any_staff | has_role_in_context?(role, tenant_id) | 90 | Y | `User#has_role_in_context?` Phase 2 | |
-| ABAC-007 | Blog editor | role=blog_editor | — | /blog/* | blog role | 100 | N | skip Phase 5 | Y |
+| ABAC-007 | Blog editor | role=blog_editor | — | /blog/* | blog role | 100 | **Y** | `Blog::PostPolicy` | |
 | ABAC-008 | Login без ролей | role count | — | login | roles > 0 | 100 | Y | `auth/sessions_controller` | |
 | ABAC-009 | Session user_id | session | — | staff_request | session present | 100 | Y | base `require_login` | |
 | ABAC-010 | Tenant GUC | tenant_id | — | staff_mutation | Current.tenant_id set + SET LOCAL | 100 | Y | base `set_tenant_context` | |
@@ -28,11 +28,11 @@
 
 | ID | Name | Subject | Object | Action | Condition | Pri | Impl | Code ref | 5b |
 |----|------|---------|--------|--------|-----------|-----|------|----------|-----|
-| ABAC-011 | Barista panel module | module_enabled.barista | tenant | panel | FF barista enabled or absent | 80 | Partial | `require_barista_module!` + PolicyContext | Y |
-| ABAC-012 | Prep panel module | module_enabled.prep_kitchen | tenant | panel | FF prep_kitchen enabled | 80 | Partial | `require_prep_kitchen_module!` | Y |
+| ABAC-011 | Barista panel module | module_enabled.barista | tenant | panel | FF barista enabled or absent | 80 | **Y** | `TenantModulePolicy` + `OrderPolicy` | |
+| ABAC-012 | Prep panel module | module_enabled.prep_kitchen | tenant | panel | FF prep_kitchen enabled | 80 | **Y** | `TenantModulePolicy` + `StockMovementPolicy` | |
 | ABAC-013 | Shop public menu | tenant_id | tenant | read_menu | tenant resolved | 90 | Y | shop base tenant | |
 | ABAC-014 | Shop API tenant | tenant_id | request | api_call | X-Shop-Tenant / slug | 90 | Y | shop API middleware | |
-| ABAC-015 | Operating hours closed | tenant hours | order | create | reject if closed (guard) | 70 | Partial | `OperatingHoursBoard` / services | Y |
+| ABAC-015 | Operating hours closed | tenant hours | order | create | reject if closed (shop/kiosk) | 70 | **Y** | `TenantOperatingHoursEnforcement` + shop guard | |
 
 ---
 
@@ -43,10 +43,10 @@
 | ABAC-016 | Barista POS create | shift_open, role=barista | Order | create | shift_open AND barista | 90 | **Y** | `OrderPolicy#create?` | |
 | ABAC-017 | Barista update_status | shift_open, in_shift | Order | update_status | shift_open AND in_shift | 90 | **Y** | `OrderPolicy#update_status?` | |
 | ABAC-018 | Barista cancel | shift_open, in_shift | Order | cancel | shift_open AND in_shift | 90 | **Y** | `OrderPolicy#cancel?` | |
-| ABAC-019 | Barista board view | shift_open ∨ vitrina | Order | read_board | BoardOrdersQuery scope | 80 | Partial | controller + query | Y |
+| ABAC-019 | Barista board view | shift_open ∨ vitrina | Order | read_board | BoardOrdersQuery scope | 80 | **Y** | `OrderPolicy#read_board?` + query | |
 | ABAC-020 | Open shift | shift_open | CashShift | create | NOT shift_open | 85 | **Y** | `CashShiftPolicy#create?` | |
 | ABAC-021 | Close shift | shift_open | CashShift | close | shift_open | 85 | **Y** | `CashShiftPolicy#close?` | |
-| ABAC-022 | Shift_manager close wizard | shift_open, role | CashShift | close_wizard | open shift exists | 80 | Partial | `CloseWizardController` | Y |
+| ABAC-022 | Shift_manager close wizard | shift_open, role | CashShift | close_wizard | open shift exists + id match | 80 | **Y** | `CashShiftPolicy#close?` + CloseWizard | |
 | ABAC-023 | Carryover preparing | shift_open | Order | update | carryover in BoardOrdersQuery | 75 | Y | `BoardOrdersQuery` SQL | |
 | ABAC-024 | Order cash_shift_id POS | shift_open | Order | mutate | order.cash_shift_id = open shift OR in_shift | 90 | **Y** | OrderPolicy + query | |
 | ABAC-025 | Vitrina cash_shift null | shift_open | Order(mobile) | read/mutate | created_at >= shift.opened_at | 85 | **Y** | `BoardOrdersQuery` | |
@@ -64,9 +64,9 @@
 | ABAC-030 | Order cancel GM | tenant_id | Order | cancel | tenant OK, no shift gate | 85 | **Y** | OrderPolicy | |
 | ABAC-031 | Order status FSM | order.status | Order | transition | valid transition | 80 | Y | `OrderStatusUpdateService` | |
 | ABAC-032 | Order history manager | tenant_id | Order | history | tenant scope | 85 | Y | OrderPolicy#history? | |
-| ABAC-033 | Finance payments index | tenant_id, shift? | Payment | index | tenant + shift filter UI | 75 | Partial | Finance::PaymentPolicy | Y |
+| ABAC-033 | Finance payments index | tenant_id, shift? | Payment | index | tenant + shift Scope | 75 | **Y** | `Finance::PaymentPolicy::Scope` | |
 | ABAC-034 | Finance refunds | tenant_id | Refund | index | tenant | 80 | Y | Finance::RefundPolicy | |
-| ABAC-035 | Incidents | tenant_id | Incident | CRUD | tenant scope | 75 | Partial | manager incidents controller | Y |
+| ABAC-035 | Incidents | tenant_id | Incident | CRUD | tenant scope | 75 | **Y** | `Manager::IncidentPolicy` | |
 
 ---
 
@@ -80,7 +80,7 @@
 | ABAC-039 | Menu price patch | privileged_manager | ProductTenantSetting | update | GM/franchise/UK | 85 | Y | `ProductTenantSettingPolicy` | |
 | ABAC-040 | Shift_manager sidebar staff | role=shift_manager | — | UI | NOT staff_management_visible | 80 | Y | `staff_management_visible?` | |
 | ABAC-041 | Shift_manager devices | role=shift_manager | Device | access | require_privileged_manager! | 90 | Y | devices controller gate | |
-| ABAC-042 | Reports/incidents privileged | role | — | access | shift_manager OK read | 70 | Partial | path tests | Y |
+| ABAC-042 | Reports/incidents privileged | role | — | access | shift_manager OK read | 70 | **Y** | `Manager::ReportPolicy` | |
 
 ---
 
@@ -124,9 +124,9 @@
 
 | ID | Name | Subject | Object | Action | Condition | Pri | Impl | Code ref | 5b |
 |----|------|---------|--------|--------|-----------|-----|------|----------|-----|
-| ABAC-056 | Kiosk device token | device.type, token | Device | api | valid device_token | — | **Partial** | `Devices::TokenResolver` Phase 5b | **Y** |
-| ABAC-057 | TV board token | device.type=tv | Device | board | token + tenant | — | **Partial** | TokenResolver + TvBoardsController | **Y** |
-| ABAC-058 | Kiosk order create | shift_open, module kiosk | Order | create | device-bound | — | N | skip Phase 5 | **Y** |
+| ABAC-056 | Kiosk device token | device.type, token | Device | api | valid device_token + kiosk module | — | **Y** | `Devices::DeviceAuthPolicy` | |
+| ABAC-057 | TV board token | device.type=tv | Device | board | token + BoardOrdersQuery scope | — | **Y** | `TvBoardPolicy` + query | |
+| ABAC-058 | Kiosk order create | module kiosk | Order | create | device-bound via X-Device-Token | — | **Y** | `Devices::KioskOrderGuard` + OrderCreator | |
 
 ---
 
@@ -155,13 +155,6 @@
 | ABAC-036–038 | `UserPolicy`, `DevicePolicy` (RBAC + tenant context) |
 | Infrastructure | `PolicyContext`, `pundit_user` in 3 base controllers |
 
-**Enforced count:** 15 правил жёстко в policies · **Partial/backlog:** остальные (controller gates, shop, kiosk).
+**Enforced count:** 58 правил — полный каталог **Y** (barista POS вне shop hours — осознанное исключение ABAC-015, см. `OperatingHoursBoard`).
 
----
-
-## Приложение C — Сводка для заказчика
-
-> **RBAC:** «ты barista».  
-> **ABAC:** «barista **+ смена открыта + заказ в смене** → cancel».
-
-Phase 5b доведёт оставшиеся правила до полного enforce в коде без изменения RBAC-контура.
+Phase 5c: policies + scopes без изменения RBAC-контура.

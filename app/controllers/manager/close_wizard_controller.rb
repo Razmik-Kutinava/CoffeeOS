@@ -1,14 +1,19 @@
 module Manager
   class CloseWizardController < BaseController
+    skip_before_action :skip_authorization
+    after_action :verify_authorized
+
     def show
       if shift_manager?
         current_shift = current_cash_shift
         unless current_shift
+          skip_authorization
           redirect_to manager_shifts_path, alert: "Нет открытой смены"
           return
         end
 
         unless current_shift.id.to_s == params[:id].to_s
+          skip_authorization
           redirect_to manager_shift_path(current_shift), alert: "Недоступно"
           return
         end
@@ -17,6 +22,8 @@ module Manager
       else
         @shift = CashShift.for_current_tenant.find(params[:id])
       end
+
+      authorize @shift, :close?
 
       @pending_payments = Payment.for_current_tenant.includes(:order).joins(:order).where(orders: { cash_shift_id: @shift.id }).pending_or_processing.limit(50)
       @failed_receipts = FiscalReceipt.for_current_tenant.includes(:payment).joins(:order).where(orders: { cash_shift_id: @shift.id }, status: "failed").limit(50)
@@ -47,11 +54,13 @@ module Manager
       if shift_manager?
         current_shift = current_cash_shift
         unless current_shift
+          skip_authorization
           redirect_to manager_shifts_path, alert: "Нет открытой смены"
           return
         end
 
         unless current_shift.id.to_s == params[:id].to_s
+          skip_authorization
           redirect_to manager_shift_path(current_shift), alert: "Недоступно"
           return
         end
@@ -60,6 +69,8 @@ module Manager
       else
         @shift = CashShift.for_current_tenant.find(params[:id])
       end
+
+      authorize @shift, :close?
 
       closing_cash = params[:closing_cash].to_f
       pending_payments = Payment.for_current_tenant.joins(:order)

@@ -8,8 +8,10 @@ module Kiosk
         token = device_token_from_request
         return render json: { error: "missing device token" }, status: :unauthorized if token.blank?
 
-        device = Devices::TokenResolver.find_active(token: token, device_type: "kiosk")
-        return render json: { error: "invalid or inactive device token" }, status: :unauthorized unless device
+        auth = Devices::DeviceAuthPolicy.new(token: token, device_type: "kiosk")
+        return render json: { error: "invalid or inactive device token" }, status: :unauthorized unless auth.authenticate?
+
+        device = auth.device
 
         device.update_columns(last_seen_at: Time.current, updated_at: Time.current)
 

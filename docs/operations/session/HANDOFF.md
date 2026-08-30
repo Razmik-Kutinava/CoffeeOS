@@ -7,10 +7,10 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| RUBY-1E fix: duplicate staff email → 422 | push + deploy по апруву |
+| ABAC full enforce (58/58 Y) local | deploy после апрува |
 
-**last_done:** fix Sentry RUBY-1E — User uniqueness + staff#create rescue 422  
-**next_step:** push develop / deploy v469
+**last_done:** Phase 5c — все Partial/N ABAC правила закрыты policies+scopes  
+**next_step:** deploy v469 + Fly MCP
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

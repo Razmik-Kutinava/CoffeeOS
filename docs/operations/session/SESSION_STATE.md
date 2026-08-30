@@ -7,7 +7,7 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| RUBY-1E fixed local | push + deploy |
+| ABAC 58/58 enforce local | push + deploy |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
