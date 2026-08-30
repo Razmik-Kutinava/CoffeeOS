@@ -1,7 +1,11 @@
 module Manager
   module Finance
     class RefundsController < ::Manager::BaseController
+      skip_before_action :skip_authorization
+      after_action :verify_authorized
+
       def index
+        authorize Refund, :index?, policy_class: ::Finance::RefundPolicy
         scope = Refund.for_current_tenant.includes(:payment, :order)
 
         if shift_manager?

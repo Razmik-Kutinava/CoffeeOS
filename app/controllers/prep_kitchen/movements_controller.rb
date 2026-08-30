@@ -1,6 +1,10 @@
 module PrepKitchen
   class MovementsController < BaseController
+    skip_before_action :skip_authorization
+    after_action :verify_authorized
+
     def index
+      authorize StockMovement, :index?
       @status = sanitize_status(params[:status])
       @movement_type = sanitize_type(params[:movement_type])
 
@@ -11,14 +15,13 @@ module PrepKitchen
     end
 
     def new
-      return no_rights unless prep_kitchen_manager?
-
+      authorize StockMovement, :create?
       @movement = StockMovement.new
       @ingredients = Ingredient.active.order(:name).limit(500)
     end
 
     def create
-      return no_rights unless prep_kitchen_manager?
+      authorize StockMovement, :create?
 
       result = PrepKitchen::Stock::MovementCreator.call(
         tenant_id: Current.tenant_id,
@@ -36,9 +39,9 @@ module PrepKitchen
     end
 
     def confirm
-      return no_rights unless prep_kitchen_manager?
-
+      authorize StockMovement, :confirm?
       movement = StockMovement.for_current_tenant.find(params[:id])
+
       result = PrepKitchen::Stock::MovementConfirmer.call(movement: movement, user: current_user)
 
       if result.success?
@@ -51,9 +54,9 @@ module PrepKitchen
     end
 
     def cancel
-      return no_rights unless prep_kitchen_manager?
-
+      authorize StockMovement, :cancel?
       movement = StockMovement.for_current_tenant.find(params[:id])
+
       result = PrepKitchen::Stock::MovementCanceller.call(movement: movement)
       if result.success?
         redirect_to prep_kitchen_movements_path, notice: "Движение отменено"
@@ -81,10 +84,6 @@ module PrepKitchen
     def sanitize_type(value)
       allowed = %w[all receipt write_off inventory order_deduct return]
       allowed.include?(value) ? value : "all"
-    end
-
-    def no_rights
-      redirect_to prep_kitchen_movements_path, alert: "Недостаточно прав"
     end
 
     def normalize_items(items)

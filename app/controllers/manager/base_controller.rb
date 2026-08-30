@@ -52,7 +52,11 @@ module Manager
         redirect_to login_path, alert: "Ваша учётная запись заблокирована"
         return
       end
-      return if user.has_any_role?("general_manager", "shift_manager", "franchise_manager") || user.uk_global_admin?
+      tid = Current.tenant_id || user.tenant_id
+      return if user.has_any_role_in_context?(
+        "general_manager", "shift_manager", "franchise_manager",
+        tenant_id: tid, organization_id: user.organization_id
+      ) || user.has_role_in_context?("ук_global_admin")
 
       redirect_to root_path, alert: "Доступ запрещён"
     end
@@ -106,14 +110,18 @@ module Manager
     end
 
     def manager_role_code
-      return "general_manager" if current_user&.uk_global_admin?
+      user = current_user
+      return "general_manager" if user&.has_role_in_context?("ук_global_admin")
 
       role_from_session = session[:role_code]
-      return role_from_session if current_user&.has_role?(role_from_session)
+      tid = Current.tenant_id || user&.tenant_id
+      return role_from_session if role_from_session.present? && user&.has_role_in_context?(
+        role_from_session, tenant_id: tid, organization_id: user.organization_id
+      )
 
-      return "shift_manager" if current_user&.has_role?("shift_manager")
-      return "franchise_manager" if current_user&.franchise_manager?
-      return "general_manager" if current_user&.has_role?("general_manager")
+      return "shift_manager" if user&.has_role_in_context?("shift_manager", tenant_id: tid)
+      return "franchise_manager" if user&.franchise_manager?
+      return "general_manager" if user&.has_role_in_context?("general_manager", tenant_id: tid)
       "general_manager"
     end
 

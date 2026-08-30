@@ -38,6 +38,33 @@ class User < ApplicationRecord
     roles.where(code: role_codes).exists?
   end
 
+  # IB Phase 2: role in tenant/org context (see STAFF_RBAC_MATRIX.md).
+  # barista/shift_manager/general_manager/prep_kitchen_* — user_roles.tenant_id must match context
+  # (or tenant_id nil [TECH DEBT]). franchise_manager — org match. ук_global_admin — global.
+  def has_role_in_context?(role_code, tenant_id: Current.tenant_id, organization_id: nil)
+    code = role_code.to_s
+    return false unless roles.exists?(code: code)
+
+    case code
+    when "ук_global_admin"
+      true
+    when "franchise_manager"
+      franchise_manager? && organization_context_match?(organization_id)
+    when "barista", "shift_manager", "general_manager"
+      point_staff_role_in_context?(code, tenant_id)
+    when "prep_kitchen_manager", "prep_kitchen_worker"
+      point_staff_role_in_context?(code, tenant_id || self.tenant_id)
+    else
+      roles.exists?(code: code)
+    end
+  end
+
+  def has_any_role_in_context?(*role_codes, tenant_id: Current.tenant_id, organization_id: nil)
+    role_codes.any? do |code|
+      has_role_in_context?(code, tenant_id: tenant_id, organization_id: organization_id)
+    end
+  end
+
   def franchise_manager?
     roles.exists?(code: "franchise_manager")
   end
@@ -70,6 +97,27 @@ class User < ApplicationRecord
   end
 
   private
+
+  def organization_context_match?(organization_id)
+    oid = organization_id || self.organization_id
+    oid.present? && self.organization_id&.to_s == oid.to_s
+  end
+
+  def point_staff_role_in_context?(role_code, tenant_id)
+    role = Role.find_by(code: role_code)
+    return false unless role
+
+    bindings = user_roles.where(role_id: role.id)
+    return false unless bindings.exists?
+
+    # [TECH DEBT] global user_roles without tenant_id — Phase 3+
+    return true if bindings.where(tenant_id: nil).exists?
+
+    tid = tenant_id&.to_s
+    return false if tid.blank?
+
+    bindings.where(tenant_id: tid).exists?
+  end
 
   def email_or_phone_present
     return if email.present? || phone.present?

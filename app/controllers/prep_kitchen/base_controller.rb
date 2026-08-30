@@ -19,7 +19,9 @@ module PrepKitchen
     end
 
     def require_prep_kitchen_role
-      return if current_user&.has_any_role?("prep_kitchen_manager", "prep_kitchen_worker")
+      return if current_user&.has_any_role_in_context?(
+        "prep_kitchen_manager", "prep_kitchen_worker", tenant_id: current_user.tenant_id
+      )
 
       redirect_to root_path, alert: "Доступ запрещён"
     end
@@ -36,9 +38,13 @@ module PrepKitchen
 
     def prep_kitchen_role_code
       role_from_session = session[:role_code]
-      return role_from_session if current_user&.has_role?(role_from_session)
+      return role_from_session if current_user&.has_role_in_context?(
+        role_from_session, tenant_id: current_user.tenant_id
+      )
 
-      return "prep_kitchen_manager" if current_user&.has_role?("prep_kitchen_manager")
+      return "prep_kitchen_manager" if current_user&.has_role_in_context?(
+        "prep_kitchen_manager", tenant_id: current_user.tenant_id
+      )
 
       "prep_kitchen_worker"
     end

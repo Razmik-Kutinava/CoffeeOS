@@ -1,7 +1,11 @@
 module Manager
   module Finance
     class PaymentsController < ::Manager::BaseController
+      skip_before_action :skip_authorization
+      after_action :verify_authorized
+
       def index
+        authorize Payment, :index?, policy_class: ::Finance::PaymentPolicy
         scope = Payment.for_current_tenant.includes(:order)
 
         if shift_manager?

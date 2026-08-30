@@ -36,7 +36,7 @@ module Barista
         redirect_to login_path, alert: "Ваша учётная запись заблокирована"
         return
       end
-      unless user.has_role?("barista")
+      unless user.has_role_in_context?("barista", tenant_id: user.tenant_id)
         redirect_to root_path, alert: "Доступ запрещён"
         nil
       end

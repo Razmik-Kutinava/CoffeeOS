@@ -1,6 +1,10 @@
 module Manager
   class MenuController < BaseController
+    skip_before_action :skip_authorization
+    after_action :verify_authorized
+
     def index
+      authorize ProductTenantSetting, :index?
       @settings = ProductTenantSetting
         .where(tenant_id: Current.tenant_id)
         .includes(:product)
@@ -9,8 +13,8 @@ module Manager
     end
 
     def update_price
+      authorize ProductTenantSetting, :update?
       setting = ProductTenantSetting.where(tenant_id: Current.tenant_id).find(params[:id])
-      authorize setting, :update?
 
       if setting.update(price_params)
         Platform::Menu::ProductTenantSync.bust_shop_catalog_cache!(tenant_ids: [ Current.tenant_id ])

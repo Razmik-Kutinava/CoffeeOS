@@ -1,6 +1,10 @@
 module Manager
   class OrdersController < BaseController
+    skip_before_action :skip_authorization
+    after_action :verify_authorized
+
     def index
+      authorize Order, :index?
       scope = Order.for_current_tenant.order(created_at: :desc)
       scope = scope.where(status: params[:status]) if params[:status].present?
 
@@ -22,6 +26,7 @@ module Manager
       else
         @order = Order.for_current_tenant.includes(:customer, :order_items).find(params[:id])
       end
+      authorize @order, :show?
       # OrderItem хранит product_name/product_id снимком — belongs_to :product нет (Sentry RUBY-9)
       @items = @order.order_items
       @payments = Payment.for_current_tenant.includes(:order).where(order_id: @order.id).order(created_at: :desc)

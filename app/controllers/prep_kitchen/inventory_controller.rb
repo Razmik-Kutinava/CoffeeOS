@@ -1,6 +1,10 @@
 module PrepKitchen
   class InventoryController < BaseController
+    skip_before_action :skip_authorization
+    after_action :verify_authorized
+
     def index
+      authorize IngredientTenantStock, :index?
       @filter = sanitize_filter(params[:filter])
       @stocks = IngredientTenantStock.for_current_tenant.includes(:ingredient)
 
@@ -19,9 +23,9 @@ module PrepKitchen
     end
 
     def update_min_qty
-      return forbidden unless prep_kitchen_manager?
-
+      authorize IngredientTenantStock, :update_min_qty?
       stock = IngredientTenantStock.for_current_tenant.find(params[:id])
+
       if stock.update(min_qty: params[:min_qty])
         redirect_to prep_kitchen_inventory_path, notice: "Минимальный остаток обновлён"
       else
@@ -36,10 +40,6 @@ module PrepKitchen
     def sanitize_filter(value)
       allowed = %w[all low out]
       allowed.include?(value) ? value : "all"
-    end
-
-    def forbidden
-      redirect_to prep_kitchen_inventory_path, alert: "Недостаточно прав"
     end
   end
 end

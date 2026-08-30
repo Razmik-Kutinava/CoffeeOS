@@ -1,13 +1,17 @@
 module Manager
   class DevicesController < BaseController
+    skip_before_action :skip_authorization
+    after_action :verify_authorized
     before_action :require_privileged_manager!
 
     def index
+      authorize Device, :index?
       @devices = Device.for_current_tenant.order(created_at: :desc).limit(500)
       @new_device = Device.new(device_type: "tv_board", is_active: true, metadata: { "tv_mode" => Device::TV_MODE_ORDERS })
     end
 
     def create
+      authorize Device, :create?
       @new_device = Device.new(create_device_params)
       @new_device.tenant_id = Current.tenant_id
       @new_device.device_type = "tv_board"
@@ -27,6 +31,7 @@ module Manager
     end
 
     def create_kiosk
+      authorize Device, :create_kiosk?
       @new_kiosk = Device.new(name: params.dig(:device, :name).to_s.strip)
       @new_kiosk.tenant_id   = Current.tenant_id
       @new_kiosk.device_type = "kiosk"
@@ -46,6 +51,7 @@ module Manager
 
     def update_tv_mode
       @tv_device = Device.for_current_tenant.find(params[:id])
+      authorize @tv_device, :update_tv_mode?
       unless @tv_device.device_type == "tv_board"
         redirect_to manager_devices_path, alert: "Только для TV-устройств"
         return

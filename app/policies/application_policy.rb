@@ -31,24 +31,28 @@ class ApplicationPolicy
 
   private
 
+  def context_tenant_id
+    Current.tenant_id || user.tenant_id
+  end
+
   def barista?
-    user.has_role?("barista")
+    user.has_role_in_context?("barista", tenant_id: context_tenant_id)
   end
 
   def shift_manager?
-    user.has_role?("shift_manager")
+    user.has_role_in_context?("shift_manager", tenant_id: context_tenant_id)
   end
 
   def general_manager?
-    user.has_role?("general_manager")
+    user.has_role_in_context?("general_manager", tenant_id: context_tenant_id)
   end
 
   def franchise_manager?
-    user.has_role?("franchise_manager")
+    user.has_role_in_context?("franchise_manager", organization_id: user.organization_id)
   end
 
   def uk_global_admin?
-    user.uk_global_admin?
+    user.has_role_in_context?("ук_global_admin")
   end
 
   def any_manager?
@@ -60,10 +64,10 @@ class ApplicationPolicy
   end
 
   def prep_kitchen_manager?
-    user.has_role?("prep_kitchen_manager")
+    user.has_role_in_context?("prep_kitchen_manager", tenant_id: context_tenant_id)
   end
 
   def prep_kitchen_worker?
-    user.has_role?("prep_kitchen_worker")
+    user.has_role_in_context?("prep_kitchen_worker", tenant_id: context_tenant_id)
   end
 end
