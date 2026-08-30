@@ -14,10 +14,14 @@ module Manager
 
     helper_method :franchise_manager?, :general_manager?, :general_or_franchise_manager?, :shift_manager?,
                   :accessible_manager_tenants, :current_tenant, :uk_in_manager?, :current_cash_shift,
-                  :staff_management_visible?
+                  :staff_management_visible?, :inventory_management_visible?
 
     def staff_management_visible?
       general_manager? || uk_in_manager?
+    end
+
+    def inventory_management_visible?
+      general_or_franchise_manager?
     end
 
     def require_staff_management!

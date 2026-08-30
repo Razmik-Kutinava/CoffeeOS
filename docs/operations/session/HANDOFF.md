@@ -7,10 +7,10 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| Platform menu Pundit wired | push + deploy |
+| shift_manager inventory hole closed | push + deploy |
 
-**last_done:** `/admin/menu` — authorize Category/Product/modifiers + policy_scope  
-**next_step:** deploy после апрува
+**last_done:** inventory: Pundit + sidebar hidden для shift_manager  
+**next_step:** push develop
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

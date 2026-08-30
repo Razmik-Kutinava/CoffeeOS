@@ -95,6 +95,13 @@ class Auth::ShiftManagerRbacTest < ActionDispatch::IntegrationTest
     end
   end
 
+  test "shift_manager sidebar hides inventory link" do
+    get manager_dashboard_path
+    assert_response :success
+    assert_no_match(/#{Regexp.escape(manager_inventory_path)}/, response.body)
+    assert_no_match(/<span>Склад<\/span>/, response.body)
+  end
+
   test "shift_manager cannot patch menu price" do
     category = create_category!
     product = create_product!(category: category)

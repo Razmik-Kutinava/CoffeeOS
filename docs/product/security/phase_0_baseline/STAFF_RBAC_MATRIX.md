@@ -59,6 +59,7 @@ Baseline-матрица staff RBAC: роль → панель → tenant → м�
 | `Finance::FiscalReceiptPolicy` | index? | **`manager/finance/fiscal_receipts_controller`** | ✅ NEW |
 | `StockMovementPolicy` | index?, show?, create?, confirm?, cancel? | **`prep_kitchen/movements_controller`** | ✅ |
 | `IngredientTenantStockPolicy` | index?, show?, update_min_qty? | **`prep_kitchen/inventory_controller`** | ✅ |
+| `Manager::InventoryPolicy` | index? | **`manager/inventory_controller`** | ✅ |
 | `ProductPolicy` | show?, index?, create?, update?, destroy? | — | platform Phase N |
 | `CategoryPolicy` | CRUD | — | platform Phase N |
 | `ProductModifierGroupPolicy` | CRUD | — | platform Phase N |
@@ -70,7 +71,7 @@ Baseline-матрица staff RBAC: роль → панель → tenant → м�
 
 | Panel | File | Note |
 |-------|------|------|
-| Manager | `manager/base_controller.rb` | blanket skip; **critical controllers opt-in** (staff, menu, orders, shifts, devices, finance) |
+| Manager | `manager/base_controller.rb` | blanket skip; **critical controllers opt-in** (staff, menu, orders, shifts, devices, finance, **inventory**) |
 | Prep kitchen | `prep_kitchen/base_controller.rb` | skip on base; **movements + inventory opt-in** |
 | Platform | `platform/base_controller.rb` | UK gate only — **Phase 2 not touched** |
 | Barista | — | **нет skip** — Pundit active on orders |
@@ -92,7 +93,7 @@ Baseline-матрица staff RBAC: роль → панель → tenant → м�
 | prep_kitchen_manager dashboard | PASS | `require_prep_kitchen_role` | ✅ | — |
 | inactive user login | PASS (negative bad pwd) | `active?` check on login + each request | ✅ | — |
 | blog_editor staff panels | not in Prog10 | redirect root / blog only | ⚠️ N/A | low — separate product |
-| manager inventory for shift_manager | not explicit in Prog10 | **no redirect** — path accessible | ⚠️ REVIEW | shift_manager may open inventory URL |
+| manager inventory for shift_manager | `shift_manager_rbac_test` FORBIDDEN + sidebar hidden | redirect + `Manager::InventoryPolicy` | ✅ FIXED |
 | `has_role?` cross-tenant | `rbac_tenant_isolation_test` | **`has_role_in_context?`** + gate fixes | ✅ FIXED Phase 2 |
 | Pundit on manager orders#show | integration + Pundit | **`authorize @order`** in manager orders | ✅ FIXED Phase 2 |
 
@@ -117,7 +118,7 @@ Baseline-матрица staff RBAC: роль → панель → tenant → м�
 
 | Topic | Question to owner |
 |-------|-------------------|
-| shift_manager + `/manager/inventory` | Должен ли shift_manager видеть склад (inventory)? Сейчас URL не в FORBIDDEN_PATHS теста — только staff/devices/tv. |
+| shift_manager + `/manager/inventory` | **Нет** — только GM/franchise; URL redirect + Pundit + sidebar скрыт | ✅ FIXED 2026-08-30 |
 | franchise_manager + staff | Нужен ли франчайзи доступ к персоналу своих точек? Сейчас `staff_management_visible?` = GM \| UK only. |
 | `has_role?` без tenant | **Phase 2:** `has_role_in_context?` в staff gates; `has_role?` legacy | ✅ Phase 2 |
 | blog_editor в staff matrix | **Phase 2 skipped — backlog** (отдельный blog CMS) | backlog |
@@ -151,7 +152,7 @@ Baseline-матрица staff RBAC: роль → панель → tenant → м�
 
 `Manager::StaffController` фильтрует staff по `UserRole.where(tenant_id: tid)` — эталон tenant-aware назначения ролей.
 
-**shift_manager Pundit denies:** `UserPolicy` (staff) — `privileged_manager?` false; `DevicePolicy` — `privileged_manager?` false; UI gates `require_staff_management!` / `require_privileged_manager!` — defense in depth.
+**shift_manager Pundit denies:** `UserPolicy` (staff) — `privileged_manager?` false; `DevicePolicy` — `privileged_manager?` false; `Manager::InventoryPolicy` — `general_or_franchise_manager?` false; UI gates `require_staff_management!` / `require_privileged_manager!` / `inventory_management_visible?` — defense in depth.
 
 ---
 

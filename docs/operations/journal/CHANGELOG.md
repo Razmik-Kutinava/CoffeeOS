@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-30 — fix: shift_manager blocked from /manager/inventory (URL + UI + Pundit)
+
+- `Manager::InventoryPolicy` + authorize на inventory#index
+- Sidebar: `inventory_management_visible?` (GM/franchise only)
+- Tests: `inventory_policy_test`, shift_manager sidebar hidden
+- STAFF_RBAC_MATRIX G-07 / owner review — FIXED
+
 ## 2026-08-30 — feat: Platform /admin/menu Pundit (catalog CRUD)
 
 - `Platform::MenuController` — authorize на все actions + `policy_scope(Category)`

@@ -44,8 +44,10 @@
     <%= link_to manager_shifts_path, class: "nav-item #{'active' if request.path.start_with?(manager_shifts_path)}" do %>
       <span class="emoji">⏱️</span><span>Смены/Касса</span>
     <% end %>
-    <%= link_to manager_inventory_path, class: "nav-item #{'active' if request.path == manager_inventory_path}" do %>
-      <span class="emoji">📦</span><span>Склад</span>
+    <% if inventory_management_visible? %>
+      <%= link_to manager_inventory_path, class: "nav-item #{'active' if request.path == manager_inventory_path}" do %>
+        <span class="emoji">📦</span><span>Склад</span>
+      <% end %>
     <% end %>
     <%= link_to manager_menu_path, class: "nav-item #{'active' if request.path == manager_menu_path}" do %>
       <span class="emoji">🍽️</span><span>Меню</span>
