@@ -6,10 +6,12 @@ require "test_helper"
 # Сумма из БД по orderId, connection_type: Widget, 404 при отсутствии заказа.
 class Shop::Api::PaymentWidgetInitTest < ActionDispatch::IntegrationTest
   include TestFactories
+  include ShopEmailTestHelper
 
   setup do
     @tenant = create_tenant!
     Current.tenant_id = @tenant.id
+    @customer = create_mobile_customer!(email: "widget-#{SecureRandom.hex(4)}@example.com")
     ENV["TBANK_TERMINAL_KEY"] = "TestTerminal"
     ENV["TBANK_PASSWORD"] = "TestPassword"
   end
@@ -27,6 +29,7 @@ class Shop::Api::PaymentWidgetInitTest < ActionDispatch::IntegrationTest
   def create_order!(amount: 350)
     order = Order.create!(
       tenant_id: @tenant.id,
+      customer_id: @customer.id,
       customer_name: "Widget Guest",
       order_number: "",
       source: :mobile,
@@ -57,20 +60,29 @@ class Shop::Api::PaymentWidgetInitTest < ActionDispatch::IntegrationTest
     Payments::TbankInlineInit.define_singleton_method(:call, original)
   end
 
+  def post_widget_init!(order_id:, **params)
+    result = nil
+    open_session do |sess|
+      order = Order.find(order_id)
+      bind_shop_order_to_session!(sess, tenant_id: @tenant.id, order: order, email: @customer.email)
+      sess.post "/shop/api/payments/widget_init",
+        params: { order_id: order_id, **params },
+        headers: shop_headers,
+        as: :json
+      result = [ sess.response.status, sess.response.parsed_body ]
+    end
+    result
+  end
+
   test "[TDD] POST widget_init returns paymentUrl from T-Kassa Init with connection_type Widget" do
     order = create_order!
 
     with_inline_init_stub do
-      post "/shop/api/payments/widget_init",
-        params: { order_id: order.id },
-        headers: shop_headers,
-        as: :json
+      status, json = post_widget_init!(order_id: order.id)
+      assert_equal 200, status
+      assert json["paymentUrl"].present?, "ожидали paymentUrl в ответе"
+      assert_includes json["paymentUrl"], "pid-widget-stub"
     end
-
-    assert_response :success
-    json = JSON.parse(response.body)
-    assert json["paymentUrl"].present?, "ожидали paymentUrl в ответе"
-    assert_includes json["paymentUrl"], "pid-widget-stub"
   end
 
   test "[TDD] POST widget_init returns 404 for missing order" do
@@ -88,13 +100,9 @@ class Shop::Api::PaymentWidgetInitTest < ActionDispatch::IntegrationTest
     order = create_order!(amount: 500)
 
     with_inline_init_stub do
-      post "/shop/api/payments/widget_init",
-        params: { order_id: order.id, amount: 1 },
-        headers: shop_headers,
-        as: :json
+      status, _json = post_widget_init!(order_id: order.id, amount: 1)
+      assert_equal 200, status
     end
-
-    assert_response :success
   end
 
   test "[TDD] POST widget_init returns standardized error without leaking secrets" do
@@ -102,17 +110,12 @@ class Shop::Api::PaymentWidgetInitTest < ActionDispatch::IntegrationTest
 
     api_err = Payments::TbankAdapter::ApiError.new(error_code: "501", message: "test error")
     with_inline_init_stub(error: api_err) do
-      post "/shop/api/payments/widget_init",
-        params: { order_id: order.id },
-        headers: shop_headers,
-        as: :json
+      status, json = post_widget_init!(order_id: order.id)
+      assert_equal 422, status
+      assert json["error"].present?
+      assert_equal "501", json["error_code"]
+      refute json.key?("terminal_key"), "секреты не должны попадать в ответ"
+      refute json.key?("password"), "секреты не должны попадать в ответ"
     end
-
-    assert_response :unprocessable_entity
-    json = JSON.parse(response.body)
-    assert json["error"].present?
-    assert_equal "501", json["error_code"]
-    refute json.key?("terminal_key"), "секреты не должны попадать в ответ"
-    refute json.key?("password"), "секреты не должны попадать в ответ"
   end
 end

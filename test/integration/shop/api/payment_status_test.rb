@@ -5,10 +5,12 @@ require "test_helper"
 # GET /shop/api/payments/status/:order_id — CODE:BLACK ревизия Шаг 3.2
 class Shop::Api::PaymentStatusTest < ActionDispatch::IntegrationTest
   include TestFactories
+  include ShopEmailTestHelper
 
   setup do
     @tenant = create_tenant!
     Current.tenant_id = @tenant.id
+    @customer = create_mobile_customer!(email: "status-guest-#{SecureRandom.hex(4)}@example.com")
   end
 
   teardown do
@@ -22,6 +24,7 @@ class Shop::Api::PaymentStatusTest < ActionDispatch::IntegrationTest
   def build_order!(status:, payment_status: nil)
     order = Order.create!(
       tenant_id: @tenant.id,
+      customer_id: @customer.id,
       customer_name: "Status Guest",
       order_number: "",
       source: :mobile,
@@ -43,13 +46,21 @@ class Shop::Api::PaymentStatusTest < ActionDispatch::IntegrationTest
     order
   end
 
+  def get_payment_status!(order)
+    result = nil
+    open_session do |sess|
+      bind_shop_order_to_session!(sess, tenant_id: @tenant.id, order: order, email: @customer.email)
+      sess.get "/shop/api/payments/status/#{order.id}", headers: shop_headers, as: :json
+      result = [ sess.response.status, JSON.parse(sess.response.body) ]
+    end
+    result
+  end
+
   test "GET payments/status returns PENDING for pending_payment order" do
     order = build_order!(status: :pending_payment, payment_status: :pending)
 
-    get "/shop/api/payments/status/#{order.id}", headers: shop_headers, as: :json
-
-    assert_response :success
-    body = JSON.parse(response.body)
+    status, body = get_payment_status!(order)
+    assert_equal 200, status
     assert_equal "PENDING", body["status"]
     assert_equal order.id, body["order_id"]
   end
@@ -57,28 +68,25 @@ class Shop::Api::PaymentStatusTest < ActionDispatch::IntegrationTest
   test "GET payments/status returns CONFIRMED when order accepted" do
     order = build_order!(status: :accepted, payment_status: :succeeded)
 
-    get "/shop/api/payments/status/#{order.id}", headers: shop_headers, as: :json
-
-    assert_response :success
-    assert_equal "CONFIRMED", JSON.parse(response.body)["status"]
+    status, body = get_payment_status!(order)
+    assert_equal 200, status
+    assert_equal "CONFIRMED", body["status"]
   end
 
   test "GET payments/status returns CANCELED when order cancelled" do
     order = build_order!(status: :cancelled)
 
-    get "/shop/api/payments/status/#{order.id}", headers: shop_headers, as: :json
-
-    assert_response :success
-    assert_equal "CANCELED", JSON.parse(response.body)["status"]
+    status, body = get_payment_status!(order)
+    assert_equal 200, status
+    assert_equal "CANCELED", body["status"]
   end
 
   test "GET payments/status returns REJECTED when payment failed" do
     order = build_order!(status: :pending_payment, payment_status: :failed)
 
-    get "/shop/api/payments/status/#{order.id}", headers: shop_headers, as: :json
-
-    assert_response :success
-    assert_equal "REJECTED", JSON.parse(response.body)["status"]
+    status, body = get_payment_status!(order)
+    assert_equal 200, status
+    assert_equal "REJECTED", body["status"]
   end
 
   test "GET payments/status 404 for unknown order" do

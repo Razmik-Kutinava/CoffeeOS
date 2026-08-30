@@ -4,6 +4,7 @@ module Shop
   module Api
     class PaymentsController < Shop::Api::BaseController
       include Shop::Api::OperatingHoursGuard
+      include Shop::Api::OrderOwnership
 
       before_action :reject_orders_when_closed!, only: %i[new_card one_click sbp_init sbp_charge widget_init]
 
@@ -36,9 +37,10 @@ module Shop
 
       # POST /shop/api/payments/sbp/init — Init+Receipt → GetQr → { payment_url }.
       def sbp_init
+        order = find_visible_order!(params.require(:order_id))
         result = Shop::SbpPaymentInitiator.new(tenant: @shop_tenant, request: request)
           .call!(
-            order_id: params.require(:order_id),
+            order_id: order.id,
             save_sbp_account: params[:save_sbp_account]
           )
         render json: {
@@ -48,6 +50,8 @@ module Shop
         }
       rescue ActionController::ParameterMissing => e
         render json: { error: e.message }, status: :bad_request
+      rescue ActiveRecord::RecordNotFound
+        render json: { error: "Order not found" }, status: :not_found
       rescue Shop::SbpPaymentInitiator::Error => e
         render json: {
           error: e.message,
@@ -58,6 +62,7 @@ module Shop
       # POST /shop/api/payments/sbp/charge — Zero-Click ChargeQr по AccountToken.
       def sbp_charge
         session_cid = Shop::CustomerSession.customer_id(session, @shop_tenant.id)
+        find_visible_order!(params.require(:order_id))
         result = Shop::SbpAutopayChargeService.new(tenant: @shop_tenant, request: request)
           .call!(order_id: params.require(:order_id), customer_id: session_cid)
         render json: {
@@ -68,6 +73,8 @@ module Shop
         }.compact
       rescue ActionController::ParameterMissing => e
         render json: { error: e.message }, status: :bad_request
+      rescue ActiveRecord::RecordNotFound
+        render json: { error: "Order not found" }, status: :not_found
       rescue Shop::SbpAutopayChargeService::Error => e
         render json: {
           error: e.message,
@@ -78,8 +85,7 @@ module Shop
 
       # POST /shop/api/payments/widget_init — Widget SDK: сумма из БД, connection_type: Widget.
       def widget_init
-        order = Order.find_by(id: params[:order_id], tenant_id: @shop_tenant.id)
-        return render json: { error: "Order not found" }, status: :not_found unless order
+        order = find_visible_order!(params[:order_id])
 
         session_cid = Shop::CustomerSession.customer_id(session, @shop_tenant.id)
         email_cid = Shop::GuestCustomerResolver.call(
@@ -98,6 +104,8 @@ module Shop
         )
 
         render json: { paymentUrl: adapter_payment_url(result), order_id: order.id.to_s }
+      rescue ActiveRecord::RecordNotFound
+        render json: { error: "Order not found" }, status: :not_found
       rescue Shop::WidgetPaymentInitiator::Error => e
         render json: { error: e.message }, status: :unprocessable_entity
       rescue Payments::TbankAdapter::ApiError => e
@@ -109,8 +117,8 @@ module Shop
 
       # GET /shop/api/payments/status/:order_id — PENDING|CONFIRMED|REJECTED|CANCELED.
       def status
-        order = Order.includes(:payments).find_by(id: params[:order_id], tenant_id: @shop_tenant.id)
-        return render json: { error: "Order not found" }, status: :not_found unless order
+        order = find_visible_order!(params[:order_id])
+        order = Order.includes(:payments).find(order.id)
 
       # Шаг 2 ТЗ: sync статуса через GetState; при AUTHORIZED инициируем Confirm.
       Payments::TbankPaymentSync.sync_order!(order: order)
@@ -120,6 +128,8 @@ module Shop
       order.payments.reload
 
         render json: Shop::PaymentStatusPresenter.call(order)
+      rescue ActiveRecord::RecordNotFound
+        render json: { error: "Order not found" }, status: :not_found
       end
 
       private

@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
-# Авторизация для Shop API через API ключи
+# Shop API auth: browser CSRF+Referer vs server API key.
+# Документация и план ротации ключа: docs/product/security/phase_1_rbac_closure/SHOP_API_AUTH.md
+# Order ownership (Phase 1): app/controllers/concerns/shop/api/order_ownership.rb
 Rails.application.config.to_prepare do
   module Shop
     module Api

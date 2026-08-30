@@ -5,6 +5,7 @@ require "test_helper"
 # RED [TDD] #34 Шаг 3–4: POST /shop/api/payments/sbp/charge + CHARGE_DECLINED.
 class Shop::Api::SbpAutopayChargeTest < ActionDispatch::IntegrationTest
   include TestFactories
+  include ShopEmailTestHelper
 
   setup do
     @tenant = create_tenant!
@@ -85,15 +86,17 @@ class Shop::Api::SbpAutopayChargeTest < ActionDispatch::IntegrationTest
     create_sbp_token!
     order = build_pending_order!
 
-    post "/shop/api/payments/sbp/charge",
-      headers: shop_headers,
-      params: { order_id: order.id },
-      as: :json
-
-    assert_response :success
-    body = JSON.parse(response.body)
-    assert_includes %w[CONFIRMED succeeded paid], body["status"].to_s
-    assert_equal order.id.to_s, body["order_id"].to_s
+    open_session do |sess|
+      bind_shop_order_to_session!(sess, tenant_id: @tenant.id, order: order, email: @customer.email)
+      sess.post "/shop/api/payments/sbp/charge",
+        headers: shop_headers,
+        params: { order_id: order.id },
+        as: :json
+      assert_equal 200, sess.response.status, sess.response.body
+      body = JSON.parse(sess.response.body)
+      assert_includes %w[CONFIRMED succeeded paid], body["status"].to_s
+      assert_equal order.id.to_s, body["order_id"].to_s
+    end
   end
 
   test "Shop::SbpAutopayChargeService is defined for Zero-Click orchestration" do

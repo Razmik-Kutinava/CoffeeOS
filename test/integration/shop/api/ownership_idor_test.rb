@@ -141,19 +141,40 @@ class Shop::Api::OwnershipIdorTest < ActionDispatch::IntegrationTest
   end
 
   test "guest with pending order in session can GET status without customer_id" do
-    order = build_pending_order!(customer: @customer_a)
+    old_sim = ENV["SHOP_SIMULATE_PAYMENT"]
+    ENV["SHOP_SIMULATE_PAYMENT"] = "0"
+    guest_email = "guest-pending-#{SecureRandom.hex(4)}@example.com"
 
     open_session do |sess|
-      sess.get "/shop/api/config", headers: headers
+      sess.post "/shop/api/cart/add",
+        headers: headers,
+        params: { product_id: @product.id, quantity: 1, selected_modifiers: [] },
+        as: :json
       assert_equal 200, sess.response.status
 
-      Shop::PendingOrderSession.set!(sess.session, @tenant.id, order.id)
+      verify_shop_email!(tenant_id: @tenant.id, email: guest_email, session: sess)
+
+      sess.post "/shop/api/orders",
+        headers: headers,
+        params: shop_order_params(
+          email: guest_email,
+          name: "Guest Pending",
+          payment_method: "sbp",
+          defer_payment_init: true
+        ),
+        as: :json
+      assert_equal 200, sess.response.status, sess.response.body
+      order_id = sess.response.parsed_body["order_id"]
+      assert_equal "pending_payment", sess.response.parsed_body["status"]
+
       Shop::CustomerSession.clear!(sess.session, @tenant.id)
 
-      sess.get "/shop/api/payments/status/#{order.id}", headers: headers, as: :json
+      sess.get "/shop/api/payments/status/#{order_id}", headers: headers, as: :json
       assert_equal 200, sess.response.status, sess.response.body
       assert_equal "PENDING", sess.response.parsed_body["status"]
     end
+  ensure
+    ENV["SHOP_SIMULATE_PAYMENT"] = old_sim
   end
 
   test "valid reconnect_token allows show invalid token returns 404" do

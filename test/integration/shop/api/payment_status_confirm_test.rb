@@ -9,6 +9,7 @@ require "test_helper"
 # тесты с Override#get_payment_state → super (CI flake).
 class Shop::Api::PaymentStatusConfirmTest < ActionDispatch::IntegrationTest
   include TestFactories
+  include ShopEmailTestHelper
 
   module FakeAuthorizedThenConfirm
     mattr_accessor :enabled, default: false
@@ -54,6 +55,7 @@ class Shop::Api::PaymentStatusConfirmTest < ActionDispatch::IntegrationTest
 
     @tenant = create_tenant!
     Current.tenant_id = @tenant.id
+    @customer = create_mobile_customer!(email: "confirm-#{SecureRandom.hex(4)}@example.com")
   end
 
   teardown do
@@ -69,6 +71,7 @@ class Shop::Api::PaymentStatusConfirmTest < ActionDispatch::IntegrationTest
   test "GET payments/status triggers GetState+Confirm for AUTHORIZED and returns CONFIRMED [TDD]" do
     order = Order.create!(
       tenant_id: @tenant.id,
+      customer_id: @customer.id,
       customer_name: "Status Confirm Guest",
       order_number: "",
       source: :mobile,
@@ -88,11 +91,13 @@ class Shop::Api::PaymentStatusConfirmTest < ActionDispatch::IntegrationTest
       provider_payment_id: "pay-auth-1"
     )
 
-    get "/shop/api/payments/status/#{order.id}", headers: shop_headers, as: :json
-
-    assert_response :success
-    body = JSON.parse(response.body)
-    assert_equal "CONFIRMED", body["status"]
-    assert FakeAuthorizedThenConfirm.confirm_called, "ожидали auto Confirm при AUTHORIZED"
+    open_session do |sess|
+      bind_shop_order_to_session!(sess, tenant_id: @tenant.id, order: order, email: @customer.email)
+      sess.get "/shop/api/payments/status/#{order.id}", headers: shop_headers, as: :json
+      assert_equal 200, sess.response.status
+      body = JSON.parse(sess.response.body)
+      assert_equal "CONFIRMED", body["status"]
+      assert FakeAuthorizedThenConfirm.confirm_called, "ожидали auto Confirm при AUTHORIZED"
+    end
   end
 end

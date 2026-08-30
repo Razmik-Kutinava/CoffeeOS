@@ -4,6 +4,7 @@ module Shop
   module Api
     class OrdersController < Shop::Api::BaseController
       include Shop::Api::OperatingHoursGuard
+      include Shop::Api::OrderOwnership
 
       before_action :reject_orders_when_closed!, only: [ :create ]
 
@@ -40,7 +41,7 @@ module Shop
       def abandon
         try_reconnect_from_params!
         order = Order.where(tenant_id: @shop_tenant.id, source: :mobile).find(params[:id])
-        unless order_visible_to_session_customer?(order)
+        unless order_visible_to_session?(order)
           return render json: { error: "Order not found", status: 404 }, status: :not_found
         end
 
@@ -63,7 +64,7 @@ module Shop
 
       def cancel
         order = Order.where(tenant_id: @shop_tenant.id, source: :mobile).find(params[:id])
-        unless order_visible_to_session_customer?(order)
+        unless order_visible_to_session?(order)
           return render json: { error: "Order not found", status: 404 }, status: :not_found
         end
 
@@ -83,7 +84,7 @@ module Shop
 
       def finalize
         order = Order.where(tenant_id: @shop_tenant.id, source: :mobile).find(params[:id])
-        unless order_visible_to_session_customer?(order)
+        unless order_visible_to_session?(order)
           return render json: { error: "Order not found", status: 404 }, status: :not_found
         end
 
@@ -168,7 +169,7 @@ module Shop
       # #37 — скачать .pkpass для Apple Wallet (simulate stub или signed bytes).
       def wallet_pass
         order = Order.where(tenant_id: @shop_tenant.id, source: :mobile).find(params[:id])
-        unless order_visible_to_session_customer?(order)
+        unless order_visible_to_session?(order)
           return render json: { error: "Order not found", status: 404 }, status: :not_found
         end
 
@@ -185,32 +186,6 @@ module Shop
       end
 
       private
-
-      def order_visible_to_session_customer?(order)
-        cid = Shop::CustomerSession.customer_id(session, @shop_tenant.id)
-        if cid.present? && order.customer_id.present? && order.customer_id.to_s == cid.to_s
-          return true
-        end
-
-        pending_id = Shop::PendingOrderSession.order_id(session, @shop_tenant.id)
-        if pending_id.present? && pending_id.to_s == order.id.to_s
-          Shop::CustomerSession.set_customer_id!(session, @shop_tenant.id, order.customer_id)
-          return true
-        end
-
-        token = params[:reconnect_token].presence
-        if token.present?
-          rebound = Shop::GuestOrderReconnect.bind!(
-            session,
-            tenant_id: @shop_tenant.id,
-            order_id: order.id,
-            token: token
-          )
-          return rebound.present?
-        end
-
-        false
-      end
 
       def order_create_json(order, creator)
         payload = {
