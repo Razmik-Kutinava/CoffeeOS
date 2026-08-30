@@ -1,8 +1,10 @@
 # IB-0-3 — Staff RBAC Matrix
 
-**Фаза:** 0 (baseline) · **Код не менялся** · дата: 2026-08-30
+**Фаза:** 0 (baseline) + **Phase 2 updates** · дата baseline: 2026-08-30 · Phase 2: 2026-08-30
 
 Baseline-матрица staff RBAC: роль → панель → tenant → может/не может. Сверка **код + Prog10**. ABAC — placeholder Phase 5.
+
+**Phase 2 FIXED:** `has_role_in_context?`, Pundit на критичных manager/prep_kitchen CRUD, `test/integration/staff/rbac_tenant_isolation_test.rb`.
 
 ---
 
@@ -44,29 +46,33 @@ Baseline-матрица staff RBAC: роль → панель → tenant → м�
 
 ## Таблица 3 — Pundit policies
 
-| Policy class | Actions defined | Controllers using `authorize` | Panels with `skip_authorization` |
-|--------------|-----------------|------------------------------|----------------------------------|
-| `ApplicationPolicy` | index/show/create/update/destroy (default deny) | — | — |
-| `OrderPolicy` | show?, index?, history?, create?, update_status?, cancel? | `barista/orders_controller.rb` | barista: **no skip** |
-| `UserPolicy` | index?, show?, create?, update?, destroy? | `manager/staff_controller.rb` | manager base: **skip** (staff overrides) |
-| `ProductTenantSettingPolicy` | index?, show?, update? | `manager/menu_controller.rb` (update_price) | manager base: skip except menu |
-| `CashShiftPolicy` | show?, index?, create?, update?, close? | — (не вызывается из controllers) | manager, barista |
-| `ProductPolicy` | show?, index?, create?, update?, destroy? | — | manager, platform |
-| `CategoryPolicy` | CRUD | — | platform |
-| `ProductModifierGroupPolicy` | CRUD | — | platform |
-| `ProductModifierOptionPolicy` | CRUD | — | platform |
-| `OrganizationPolicy` | CRUD (UK only) | — | platform |
-| `TenantPolicy` | CRUD + open_as_manager? | — | platform |
-| `StockMovementPolicy` | index?, show?, create?, confirm?, cancel? | — | prep_kitchen |
-| `IngredientTenantStockPolicy` | index?, show?, update_min_qty? | — | prep_kitchen |
+| Policy class | Actions defined | Controllers using `authorize` + `verify_authorized` | Phase 2 FIXED |
+|--------------|-----------------|-----------------------------------------------------|---------------|
+| `ApplicationPolicy` | index/show/create/update/destroy (default deny) | helpers → `has_role_in_context?` | ✅ |
+| `OrderPolicy` | show?, index?, history?, create?, update_status?, cancel? | `barista/orders_controller`, **`manager/orders_controller`** | ✅ manager |
+| `UserPolicy` | index?, show?, create?, update?, destroy? | `manager/staff_controller` | ✅ |
+| `ProductTenantSettingPolicy` | index?, show?, update? | **`manager/menu_controller`** (index + update_price) | ✅ |
+| `CashShiftPolicy` | show?, index?, create?, update?, close? | **`manager/shifts_controller`** | ✅ |
+| `DevicePolicy` | index?, create?, create_kiosk?, update_tv_mode? | **`manager/devices_controller`** | ✅ NEW |
+| `Finance::PaymentPolicy` | index? | **`manager/finance/payments_controller`** | ✅ NEW |
+| `Finance::RefundPolicy` | index? | **`manager/finance/refunds_controller`** | ✅ NEW |
+| `Finance::FiscalReceiptPolicy` | index? | **`manager/finance/fiscal_receipts_controller`** | ✅ NEW |
+| `StockMovementPolicy` | index?, show?, create?, confirm?, cancel? | **`prep_kitchen/movements_controller`** | ✅ |
+| `IngredientTenantStockPolicy` | index?, show?, update_min_qty? | **`prep_kitchen/inventory_controller`** | ✅ |
+| `ProductPolicy` | show?, index?, create?, update?, destroy? | — | platform Phase N |
+| `CategoryPolicy` | CRUD | — | platform Phase N |
+| `ProductModifierGroupPolicy` | CRUD | — | platform Phase N |
+| `ProductModifierOptionPolicy` | CRUD | — | platform Phase N |
+| `OrganizationPolicy` | CRUD (UK only) | — | platform Phase N |
+| `TenantPolicy` | CRUD + open_as_manager? | — | platform Phase N |
 
 **`skip_authorization` on base controllers:**
 
 | Panel | File | Note |
 |-------|------|------|
-| Manager | `manager/base_controller.rb:12` | blanket skip; staff + menu opt-in |
-| Prep kitchen | `prep_kitchen/base_controller.rb:11` | role gate only |
-| Platform | `platform/base_controller.rb:11` | UK gate only |
+| Manager | `manager/base_controller.rb` | blanket skip; **critical controllers opt-in** (staff, menu, orders, shifts, devices, finance) |
+| Prep kitchen | `prep_kitchen/base_controller.rb` | skip on base; **movements + inventory opt-in** |
+| Platform | `platform/base_controller.rb` | UK gate only — **Phase 2 not touched** |
 | Barista | — | **нет skip** — Pundit active on orders |
 
 ---
@@ -87,8 +93,8 @@ Baseline-матрица staff RBAC: роль → панель → tenant → м�
 | inactive user login | PASS (negative bad pwd) | `active?` check on login + each request | ✅ | — |
 | blog_editor staff panels | not in Prog10 | redirect root / blog only | ⚠️ N/A | low — separate product |
 | manager inventory for shift_manager | not explicit in Prog10 | **no redirect** — path accessible | ⚠️ REVIEW | shift_manager may open inventory URL |
-| `has_role?` cross-tenant | not tested | **no tenant filter on UserRole** | ❌ HOLE | role leak across tenant switch |
-| Pundit on manager orders#show | not in Prog10 | **no authorize** — role gate only | ⚠️ REVIEW | relies on RLS + manager_role |
+| `has_role?` cross-tenant | `rbac_tenant_isolation_test` | **`has_role_in_context?`** + gate fixes | ✅ FIXED Phase 2 |
+| Pundit on manager orders#show | integration + Pundit | **`authorize @order`** in manager orders | ✅ FIXED Phase 2 |
 
 ---
 
@@ -113,31 +119,39 @@ Baseline-матрица staff RBAC: роль → панель → tenant → м�
 |-------|-------------------|
 | shift_manager + `/manager/inventory` | Должен ли shift_manager видеть склад (inventory)? Сейчас URL не в FORBIDDEN_PATHS теста — только staff/devices/tv. |
 | franchise_manager + staff | Нужен ли франчайзи доступ к персоналу своих точек? Сейчас `staff_management_visible?` = GM \| UK only. |
-| `User#has_role?` без tenant | Закрывать в Phase 2: `has_role?(code, tenant_id: Current.tenant_id)`? |
-| blog_editor в staff matrix | Оставляем вне coffee ops RBAC или включаем в Phase 4 DoD? |
-| TenantPolicy#open_as_manager? = true | Ограничить только UK или любой manager role? Сейчас platform gate достаточен. |
-| Manager Pundit rollout | Phase 2: приоритет — devices, inventory, shift close, refunds? |
+| `has_role?` без tenant | **Phase 2:** `has_role_in_context?` в staff gates; `has_role?` legacy | ✅ Phase 2 |
+| blog_editor в staff matrix | **Phase 2 skipped — backlog** (отдельный blog CMS) | backlog |
+| Manager Pundit rollout | Phase 2: devices, finance, orders, shifts, menu, prep_kitchen | ✅ done |
 
 ---
 
-## Дополнительно: `has_role?` и tenant
+## Phase 2 — `has_role_in_context?` rules
 
-```33:35:app/models/user.rb
-  def has_role?(role_code)
-    roles.exists?(code: role_code)
-  end
-```
+| Role code | Tenant check |
+|-----------|--------------|
+| `barista`, `shift_manager`, `general_manager` | `user_roles.tenant_id` = context tenant OR `[TECH DEBT]` `tenant_id` nil |
+| `franchise_manager` | role + `organization_id` match; tenant via `session[:manager_tenant_id]` |
+| `ук_global_admin` | global role; manager mode uses `Current.tenant_id` from session |
+| `prep_kitchen_manager`, `prep_kitchen_worker` | `user_roles.tenant_id` = prep kitchen tenant |
+| `blog_editor` | **out of scope Phase 2** — legacy `has_role?` |
 
-`UserRole` имеет `tenant_id`, но **не используется** в `has_role?`:
+**`[TECH DEBT]`** Global `user_roles` without `tenant_id` still grant access in context — fix in Phase 3+.
 
-```1:7:app/models/user_role.rb
-class UserRole < ApplicationRecord
-  belongs_to :user
-  belongs_to :role
-  belongs_to :tenant, optional: true
-```
+**API:** `User#has_role_in_context?(code, tenant_id: Current.tenant_id, organization_id: nil)` · `has_any_role_in_context?`
+
+---
+
+## Дополнительно: role context (Phase 2)
+
+`has_role?` — legacy, без tenant filter (для blog и обратной совместимости).
+
+`has_role_in_context?` — **канон staff gates** (`app/models/user.rb`).
+
+`UserRole.tenant_id` используется в `point_staff_role_in_context?`.
 
 `Manager::StaffController` фильтрует staff по `UserRole.where(tenant_id: tid)` — эталон tenant-aware назначения ролей.
+
+**shift_manager Pundit denies:** `UserPolicy` (staff) — `privileged_manager?` false; `DevicePolicy` — `privileged_manager?` false; UI gates `require_staff_management!` / `require_privileged_manager!` — defense in depth.
 
 ---
 
@@ -149,4 +163,4 @@ class UserRole < ApplicationRecord
 
 ## Источники
 
-Policies: `app/policies/*.rb`. Controllers: manager/barista/prep_kitchen/platform/blog bases. Tests: `test/integration/auth/*_rbac_test.rb`. Prog10: `prog10_rbac_matrix.md`, `prog10_staff_isolation.json`.
+Policies: `app/policies/*.rb`, `app/policies/finance/*.rb`. Controllers: manager/barista/prep_kitchen/platform/blog bases. Tests: `test/integration/auth/*_rbac_test.rb`, **`test/integration/staff/rbac_tenant_isolation_test.rb`**. Prog10: `prog10_rbac_matrix.md`, `prog10_staff_isolation.json`.
