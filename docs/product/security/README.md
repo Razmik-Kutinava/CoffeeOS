@@ -9,9 +9,17 @@
 | Фаза | Папка | Статус | Deliverables |
 |------|-------|--------|--------------|
 | **0** | [`phase_0_baseline/`](phase_0_baseline/) | **baseline docs** (апрув владельца) | актёры, Shop API matrix, Staff RBAC matrix |
-| **1** | [`phase_1_rbac_closure/`](phase_1_rbac_closure/) | заглушка | shop ownership в коде, IDOR fixes |
-| **2** | [`phase_2_abac_layer/`](phase_2_abac_layer/) | заглушка | staff Pundit, role×tenant |
-| 3–5 | [`00_ROADMAP_RBAC_ABAC.md`](00_ROADMAP_RBAC_ABAC.md) | roadmap | RLS audit, DoD RBAC, ABAC-lite |
+| **1** | [`phase_1_rbac_closure/`](phase_1_rbac_closure/) | **done** 2026-08-30 | shop ownership в коде, IDOR fixes |
+| **2** | [`phase_2_abac_layer/`](phase_2_abac_layer/) | **done** 2026-08-30 | staff Pundit, role×tenant |
+| **3** | [`phase_3_tenant_rls/`](phase_3_tenant_rls/) | **done** 2026-08-30 · апрув | RLS/GUC audit, device runbook, franchise/UK tests |
+| 4–5 | [`00_ROADMAP_RBAC_ABAC.md`](00_ROADMAP_RBAC_ABAC.md) | roadmap | DoD RBAC, ABAC-lite |
+
+## Phase 3 — что читать
+
+| Документ | ID | Назначение |
+|----------|-----|------------|
+| [RLS_TENANT_AUDIT.md](phase_3_tenant_rls/RLS_TENANT_AUDIT.md) | IB-3-1 | GUC / row_security inventory |
+| [DEVICE_TOKENS.md](phase_3_tenant_rls/DEVICE_TOKENS.md) | IB-3-4 | Создание/отзыв устройств |
 
 ## Phase 0 — что читать
 

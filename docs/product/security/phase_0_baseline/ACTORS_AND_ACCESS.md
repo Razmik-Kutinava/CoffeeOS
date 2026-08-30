@@ -135,7 +135,8 @@ Post-login redirect: `Auth::SessionsController#dashboard_path_for_role` — bari
 12. **Health `/health/tenants`** — UK session only; не путать с public `/up`.
 13. **blog_editor** — не в Prog10 staff matrix; отдельный контур.
 14. **ActionCable guest** — `current_user` nil; каналы сами проверяют reconnect_token.
-15. **RLS bypass** — kiosk/TV/cable login используют `row_security off` для lookup device (задокументировано, Phase 3 audit).
+15. **RLS bypass** — kiosk/TV/cable login используют `row_security off` для lookup device → [Phase 3 audit](../phase_3_tenant_rls/RLS_TENANT_AUDIT.md) (BACKLOG, refactor SKIP).
+16. **Phase 3 RLS audit** — полная инвентаризация GUC/jobs: [RLS_TENANT_AUDIT.md](../phase_3_tenant_rls/RLS_TENANT_AUDIT.md); device runbook: [DEVICE_TOKENS.md](../phase_3_tenant_rls/DEVICE_TOKENS.md). **NEED_MIGRATION:** none (2026-08-30).
 
 ---
 

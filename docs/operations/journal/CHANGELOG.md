@@ -11,6 +11,15 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-30 — docs: IB Phase 3 tenant RLS audit + isolation tests
+
+- `docs/product/security/phase_3_tenant_rls/RLS_TENANT_AUDIT.md` — GUC/RLS inventory (734 rb files via audit script)
+- `DEVICE_TOKENS.md` — privileged_manager create, manual revoke runbook
+- `bin/audit/tenant_guc_inventory.rb` — static grep report (exit 0)
+- `test/integration/staff/tenant_rls_isolation_test.rb` — franchise/UK/barista/device (6 cases)
+- row_security off: 6 total, 3 BACKLOG (kiosk/TV/cable), NEED_MIGRATION: none
+- Local tests: skip — PostgreSQL 127.0.0.1 unavailable
+
 ## 2026-08-30 — feat: IB Phase 2 staff RBAC [GREEN]
 
 - `User#has_role_in_context?` — tenant-scoped role checks (UK/franchise exceptions)

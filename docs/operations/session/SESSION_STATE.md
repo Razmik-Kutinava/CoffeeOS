@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-30 (IB Phase 2 staff RBAC)  
+**Дата:** 2026-08-30 (IB Phase 3 tenant RLS)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| IB Phase 2: role context + Pundit on manager/prep_kitchen critical CRUD | апрув владельца → Phase 3 |
+| IB Phase 3: RLS audit doc + device runbook + franchise/UK isolation tests | апрув владельца → Phase 4 |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,16 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### IB Phase 3 tenant RLS (2026-08-30)
+
+| Что | Статус |
+|-----|--------|
+| RLS_TENANT_AUDIT.md + DEVICE_TOKENS.md | **local done** |
+| bin/audit/tenant_guc_inventory.rb | **local done** |
+| tenant_rls_isolation_test (6 cases) | **local skip** — PG 127.0.0.1 down |
+| NEED_MIGRATION | none |
+| Fly MCP / deploy | skip |
 
 ### Fly v466 deploy (2026-08-30)
 

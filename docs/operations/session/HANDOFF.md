@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-30 (IB Phase 2 staff RBAC)  
+**Дата:** 2026-08-30 (IB Phase 3 tenant RLS)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| IB Phase 2: has_role_in_context?, Pundit critical paths, rbac_tenant_isolation_test | **апрув владельца** → Phase 3 RLS/devices |
+| IB Phase 3: RLS/GUC audit, device runbook, franchise/UK tests | **апрув владельца** → Phase 4 DoD |
 
-**last_done:** IB-2-1..3 — role context, Device/Finance policies, manager/prep_kitchen authorize  
-**next_step:** апрув Phase 2 · Phase 3 backlog
+**last_done:** IB-3-1..5 — RLS_TENANT_AUDIT, DEVICE_TOKENS, tenant_rls_isolation_test, audit script  
+**next_step:** апрув Phase 3 · Phase 4 backlog
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

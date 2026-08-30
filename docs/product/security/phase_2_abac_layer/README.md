@@ -1,14 +1,11 @@
-# Phase 2 — ABAC layer (staff Pundit)
+# Phase 2 — Staff Pundit + role×tenant
 
-**Статус:** заглушка — после закрытия shop ownership (Phase 1).
+**Статус:** реализовано 2026-08-30 · апрув владельца → Phase 3
 
-## Scope (план)
+## Deliverables (Phase 2)
 
-После закрытия RBAC в shop:
+- `has_role_in_context?` с учётом `user_roles.tenant_id`
+- Pundit на manager/prep_kitchen critical paths
+- `test/integration/staff/rbac_tenant_isolation_test.rb`
 
-1. Staff Pundit на manager / prep_kitchen / platform
-2. `has_role?` с учётом `user_roles.tenant_id`
-3. Role×tenant matrix в коде = матрица IB-0-3
-4. ABAC placeholder → дизайн Phase 5
-
-**Не начинать** до завершения Phase 1.
+**Next:** [Phase 3 tenant RLS](../phase_3_tenant_rls/) — отдельный промпт (апрув Phase 2).
