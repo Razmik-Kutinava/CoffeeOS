@@ -2,7 +2,7 @@
 
 | last_done | current_state | next_step |
 |-----------|---------------|-----------|
-| GREEN `1f14dc49` | 45/0 local | `/regress` |
+| regress 74/0 local PASS | GREEN `1f14dc49` | `/review` |
 
 **Задача:** при закрытии смены (manager close wizard) — автоматически отменить + вернуть деньги по **ready** (T-Bank через общий refund); **preparing** оставить доступными следующей смене; не блокировать close из‑за незавершённых заказов; баннер на табло + Telegram-алерт при остатке preparing.
 
@@ -15,7 +15,7 @@
 | SPEC | **`[x]`** |
 | RED / GREEN | **`[x]`** RED `c8cd9627` · GREEN `1f14dc49` |
 | /sbr verify | **`[x]`** 45/0 |
-| /regress | **`[ ]`** |
+| /regress | **`[x]`** 74/0 (45 task + 29 manager/barista zone) |
 | REVIEW | **`[ ]`** |
 | push | **`[ ]`** |
 | deploy | **`[ ]`** |

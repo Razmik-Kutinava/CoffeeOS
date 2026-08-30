@@ -7,10 +7,7 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| GREEN shift close orders `1f14dc49` | `/regress` |
-
-**last_done:** feat shift close ready refund + preparing carryover · 45/0  
-**next_step:** `/regress`
+| regress shift close PASS 74/0 | `/review` |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

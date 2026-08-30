@@ -7,7 +7,7 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| GREEN shift close `1f14dc49` | `/regress` |
+| regress shift close PASS 74/0 | `/review` |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
