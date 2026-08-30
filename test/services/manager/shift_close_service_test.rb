@@ -71,7 +71,7 @@ class Manager::ShiftCloseServiceTest < ActiveSupport::TestCase
     assert_equal 0, Refund.where(order_id: ready.id).count
   end
 
-  test "tbank failure on ready order aborts close and rolls back prior ready cancels" do
+  test "tbank failure reconciles prior bank refunds and aborts close" do
     first = shift_order!(status: "ready", number: "RDY-A")
     second = shift_order!(status: "ready", number: "RDY-B")
     pay_a = Payment.create!(
@@ -98,9 +98,9 @@ class Manager::ShiftCloseServiceTest < ActiveSupport::TestCase
     end
 
     assert_equal "open", @shift.reload.status
-    assert_equal "ready", first.reload.status
+    assert_equal "cancelled", first.reload.status
     assert_equal "ready", second.reload.status
-    assert_equal "succeeded", pay_a.reload.status
+    assert_equal "refunded", pay_a.reload.status
     assert_equal "succeeded", pay_b.reload.status
     assert_equal 2, calls.size
   end

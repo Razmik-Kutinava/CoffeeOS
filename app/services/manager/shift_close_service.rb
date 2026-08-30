@@ -27,8 +27,6 @@ module Manager
 
       refund_ready_orders!(ready_orders)
 
-      @shift.close!(@closed_by, @closing_cash)
-
       if preparing_count.positive?
         notify_carryover!(preparing_count)
       end
@@ -40,8 +38,10 @@ module Manager
 
     private
 
+    # T-Bank Cancel необратим — сначала все вызовы банка, затем одна транзакция БД + close!.
+    # При ошибке на N-м заказе — сверяем БД с уже успешными Cancel (reconcile), смену не закрываем.
     def refund_ready_orders!(ready_orders)
-      entries = []
+      bank_completed = []
       current_order = nil
 
       ready_orders.each do |order|
@@ -55,29 +55,45 @@ module Manager
           )
         end
 
-        entries << { order: order, payment: succeeded, response: response }
+        bank_completed << { order: order, payment: succeeded, response: response }
       end
 
-      ActiveRecord::Base.transaction do
-        entries.each do |entry|
-          if entry[:payment] && entry[:response]
-            entry[:payment].update!(status: :refunded)
-            Refund.create!(
-              tenant_id: @tenant_id,
-              payment_id: entry[:payment].id,
-              order_id: entry[:order].id,
-              amount: entry[:payment].amount,
-              reason: READY_CANCEL_REASON,
-              status: :succeeded,
-              provider_refund_id: entry[:response]["PaymentId"].presence || entry[:payment].provider_payment_id
-            )
-          end
-
-          persist_system_cancelled!(entry[:order], old_status: "ready")
-        end
-      end
+      persist_ready_entries_and_close!(bank_completed)
     rescue Payments::TbankAdapter::ApiError, Payments::TbankAdapter::Error
+      persist_ready_entries!(bank_completed) if bank_completed.any?
       raise Error, "Не удалось вернуть оплату по заказу #{current_order&.order_number}. Смена не закрыта."
+    end
+
+    def persist_ready_entries_and_close!(entries)
+      ActiveRecord::Base.transaction do
+        write_ready_entries!(entries)
+        @shift.close!(@closed_by, @closing_cash)
+      end
+    end
+
+    def persist_ready_entries!(entries)
+      ActiveRecord::Base.transaction do
+        write_ready_entries!(entries)
+      end
+    end
+
+    def write_ready_entries!(entries)
+      entries.each do |entry|
+        if entry[:payment] && entry[:response]
+          entry[:payment].update!(status: :refunded)
+          Refund.create!(
+            tenant_id: @tenant_id,
+            payment_id: entry[:payment].id,
+            order_id: entry[:order].id,
+            amount: entry[:payment].amount,
+            reason: READY_CANCEL_REASON,
+            status: :succeeded,
+            provider_refund_id: entry[:response]["PaymentId"].presence || entry[:payment].provider_payment_id
+          )
+        end
+
+        persist_system_cancelled!(entry[:order], old_status: "ready")
+      end
     end
 
     def refundable_via_tbank?(payment)
