@@ -32,6 +32,10 @@ module Manager
       else
         render :new, status: :unprocessable_entity
       end
+    rescue ActiveRecord::RecordNotUnique
+      @user ||= User.new(staff_user_params.merge(tenant_id: Current.tenant_id, status: "active"))
+      attach_duplicate_identity_error!(@user)
+      render :new, status: :unprocessable_entity
     end
 
     def edit
@@ -97,6 +101,16 @@ module Manager
         c -= [ "general_manager" ]
       end
       c
+    end
+
+    def attach_duplicate_identity_error!(user)
+      if User.where.not(id: user.id).exists?(email: user.email)
+        user.errors.add(:email, "уже занят")
+      elsif user.phone.present? && User.where.not(id: user.id).exists?(phone: user.phone)
+        user.errors.add(:phone, "уже занят")
+      else
+        user.errors.add(:base, "Такой сотрудник уже существует")
+      end
     end
   end
 end

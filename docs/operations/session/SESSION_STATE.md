@@ -7,7 +7,7 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| Post-deploy pack v468 PASS | следующая задача |
+| RUBY-1E fixed local | push + deploy |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

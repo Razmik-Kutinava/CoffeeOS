@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-30 — fix: Sentry RUBY-1E duplicate staff email (422 not 500)
+
+- `User`: validates email/phone uniqueness (RU message «уже занят»)
+- `Manager::StaffController#create`: rescue `RecordNotUnique` → 422
+- Test: `test/integration/manager/staff_duplicate_email_test.rb`
+- Sentry RUBY-1E: **resolved**
+
 ## 2026-08-30 — ops: post-deploy pack v468 (logs + Sentry MCP)
 
 - Fly logs: no 5xx in recent buffer; /up + shop Point A 200

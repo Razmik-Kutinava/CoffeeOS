@@ -7,10 +7,10 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| Post-deploy pack v468 закрыт (logs/Sentry/MCP/Prog10) | следующая фича / апрув ИБ |
+| RUBY-1E fix: duplicate staff email → 422 | push + deploy по апруву |
 
-**last_done:** post-deploy: fly logs OK · Sentry 1 noise (Prog10) · /up+shop 200 · artifact post_deploy_pack.json  
-**next_step:** дальше по вехе / новая задача
+**last_done:** fix Sentry RUBY-1E — User uniqueness + staff#create rescue 422  
+**next_step:** push develop / deploy v469
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

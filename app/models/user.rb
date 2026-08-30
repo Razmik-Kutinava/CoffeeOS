@@ -23,6 +23,8 @@ class User < ApplicationRecord
   validates :name, presence: true
   validates :password_hash, presence: true
   validates :status, presence: true
+  validates :email, uniqueness: { case_sensitive: false, message: "уже занят" }, allow_nil: true
+  validates :phone, uniqueness: { case_sensitive: false, message: "уже занят" }, allow_nil: true
   validate :email_or_phone_present
 
   before_validation :normalize_blank_phone
