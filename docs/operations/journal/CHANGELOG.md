@@ -11,6 +11,15 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-30 — feat: IB Phase 2 staff RBAC [GREEN]
+
+- `User#has_role_in_context?` — tenant-scoped role checks (UK/franchise exceptions)
+- Pundit + `verify_authorized`: manager orders/shifts/devices/menu/finance, prep_kitchen movements/inventory
+- New policies: `DevicePolicy`, `Finance::PaymentPolicy`, `Finance::RefundPolicy`, `Finance::FiscalReceiptPolicy`
+- `test/integration/staff/rbac_tenant_isolation_test.rb` — 8 runs green
+- Docs: `STAFF_RBAC_MATRIX.md` Phase 2 FIXED column
+- Коммиты: `5cf2d791` [RED] · `c305848f` [GREEN] · `9d5ead0b` docs
+
 ## 2026-08-30 — fix: IB Phase 1 shop API ownership [GREEN]
 
 - `Shop::Api::OrderOwnership` concern — единый visibility для session/pending/reconnect

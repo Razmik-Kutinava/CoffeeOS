@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-30 (IB Phase 1 shop ownership)  
+**Дата:** 2026-08-30 (IB Phase 2 staff RBAC)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| IB Phase 1: unified OrderOwnership, payments IDOR closed, docs | апрув владельца → Phase 2 staff Pundit |
+| IB Phase 2: role context + Pundit on manager/prep_kitchen critical CRUD | апрув владельца → Phase 3 |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

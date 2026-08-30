@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-30 (IB Phase 1 shop ownership)  
+**Дата:** 2026-08-30 (IB Phase 2 staff RBAC)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| IB Phase 1: OrderOwnership concern + IDOR tests + docs | **апрув владельца** → Phase 2 staff Pundit |
+| IB Phase 2: has_role_in_context?, Pundit critical paths, rbac_tenant_isolation_test | **апрув владельца** → Phase 3 RLS/devices |
 
-**last_done:** IB-1-1..4 — concern, payments HOLE closed, ownership_idor_test, SHOP_API_AUTH.md  
-**next_step:** апрув Phase 1 · затем Phase 2 staff RBAC промпт
+**last_done:** IB-2-1..3 — role context, Device/Finance policies, manager/prep_kitchen authorize  
+**next_step:** апрув Phase 2 · Phase 3 backlog
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
