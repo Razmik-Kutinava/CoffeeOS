@@ -27,6 +27,7 @@
 | MCP Shop REVIEW | **PASS** 4/4 v473 — `mcp/fly_shop_review_2026-08-31/` |
 | Prog10 staff isolation 9 points | **PASS** 9/9 v473 — `prog10_staff_isolation_2026-08-31_v473.json` |
 | Sentry 24h | **clean** — MCP `llc-manageengine/ruby` 0 unresolved · `sentry/sentry_24h_2026-08-31.json` |
+| CI develop | **green** #33404159890 (push `64d43992`) |
 
 ### Fly IB приёмка Phase 5b (2026-08-30)
 

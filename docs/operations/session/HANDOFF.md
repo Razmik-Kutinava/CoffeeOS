@@ -9,7 +9,7 @@
 |--------|--------|
 | Fly **v473** · MCP **PASS** · Sentry 24h **clean** | IB sign-off / backlog |
 
-**last_done:** Fly MCP full pack v473 · HEAD `38284c9b`  
+**last_done:** Sentry 24h clean + push · CI **#33404159890** green · HEAD `64d43992`  
 **next_step:** IB sign-off или backlog по запросу
 
 **Архив session:** [`archive/README.md`](archive/README.md)  

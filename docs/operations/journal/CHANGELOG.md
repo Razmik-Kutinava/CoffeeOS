@@ -11,6 +11,18 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-31 — push develop + CI green #33404159890
+
+- Push `baf50689..64d43992` (Sentry 24h + script + post_deploy pack)
+- CI **green:** test · lint · scan_ruby · scan_js · system-test
+
+## 2026-08-31 — ops: Sentry 24h clean v473 + push develop
+
+- MCP plugin-sentry-sentry: org **llc-manageengine** / project **ruby** / region **de.sentry.io**
+- Queries: `is:unresolved lastSeen:-24h` → 0 · `firstSeen:-24h` → 0 · error events 24h → 0
+- Script: `bin/acceptance/sentry_24h_check.rb` (SENTRY_AUTH_TOKEN для CI/локально без MCP)
+- Post-deploy pack: sentry_24h **PASS** · verdict `deploy_pass_mcp_pass_sentry_clean`
+
 ## 2026-08-31 — ops: Fly MCP full pack v473 (Point A + Shop REVIEW + Prog10)
 
 - MCP Point A **PASS** 7/7 — `fly_v461_2026-08-31/mcp_result.json`
