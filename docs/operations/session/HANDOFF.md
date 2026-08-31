@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-31 (IB-D-02 bundler-audit)  
+**Дата:** 2026-08-31 (G-12 queue wiring)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| IB-D-02 FIXED — Gemfile CVE floors + audit green | push develop |
+| G-12 queue wiring — linked sales points orders | push develop / IB-P-01 supply |
 
-**last_done:** V2-SEC-08 closed; rails 8.1.3.1 / puma 8.0.2 / nokogiri 1.19.4 pinned  
-**next_step:** push develop
+**last_done:** `LinkedSalesPointOrdersQuery` + queue UI; IB-D-01 org guard; IB-D-02 bundler-audit  
+**next_step:** push develop · supply/stop-list wiring (IB-P-01 хвост)
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

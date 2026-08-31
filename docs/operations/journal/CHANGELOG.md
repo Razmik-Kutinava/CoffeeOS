@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-31 — feat: G-12 prep queue wiring по linked sales points
+
+- `PrepKitchen::Queue::LinkedSalesPointOrdersQuery` — RLS per linked tenant GUC
+- Queue controller/view: заказы всех привязанных точек, empty-state → sales_points
+- Tests: service + integration; IB-P-01 queue → done
+
 ## 2026-08-31 — chore(security): IB-D-02 bundler-audit CVE floors (V2-SEC-08)
 
 - Gemfile: rails ≥8.1.3.1, puma ≥8.0.2, nokogiri ≥1.19.4, bcrypt ≥3.1.20

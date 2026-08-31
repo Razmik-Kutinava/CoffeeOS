@@ -1,8 +1,35 @@
 <h1 class="pk-title">Очередь в производство</h1>
 <div class="pk-card">
   <div class="pk-muted">Период: <%= @from %> — <%= @to %></div>
+  <div class="pk-muted">Точек в обслуживании: <%= @linked_sales_points.size %></div>
   <div class="pk-muted">Заказов: <%= @orders.size %></div>
+  <% if @linked_sales_points.empty? %>
+    <p class="pk-muted" style="margin-top: 8px;">
+      Нет привязанных точек продаж —
+      <%= link_to "настроить", prep_kitchen_sales_points_path %>.
+    </p>
+  <% end %>
 </div>
+
+<% if @orders.any? %>
+<div class="pk-card">
+  <h3>Заказы по точкам</h3>
+  <table class="pk-table">
+    <thead><tr><th>Точка</th><th>№</th><th>Статус</th><th>Сумма</th><th>Время</th></tr></thead>
+    <tbody>
+      <% @orders.each do |order| %>
+        <tr>
+          <td><%= order.tenant&.name || "—" %></td>
+          <td><%= order.order_number %></td>
+          <td><%= order.status %></td>
+          <td><%= order.final_amount %></td>
+          <td><%= order.created_at&.strftime("%d.%m %H:%M") %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+<% end %>
 
 <div class="pk-card">
   <h3>Спрос по продуктам</h3>

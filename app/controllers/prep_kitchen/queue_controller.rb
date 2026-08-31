@@ -10,12 +10,14 @@ module PrepKitchen
         return
       end
 
-      @orders = Order.for_current_tenant
-                     .where(status: @statuses)
-                     .where(created_at: @from..@to)
-                     .includes(:order_items)
-                     .order(created_at: :asc)
-                     .limit(200)
+      @linked_sales_points = SalesPointRegistry.sales_points_for(Current.tenant_id)
+      @orders = Queue::LinkedSalesPointOrdersQuery.call(
+        prep_kitchen_tenant_id: Current.tenant_id,
+        from: @from,
+        to: @to,
+        statuses: @statuses,
+        user_id: Current.user_id
+      )
 
       @demand_result = PrepKitchen::Queue::DemandCalculator.call(orders: @orders)
     end

@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-31 (IB-D-02 bundler-audit)  
+**Дата:** 2026-08-31 (G-12 queue wiring)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| IB-D-02 closed · bundler-audit green | push develop |
+| G-12 queue по linked points · IB-D-01/02 closed | push develop / IB-P-01 supply |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

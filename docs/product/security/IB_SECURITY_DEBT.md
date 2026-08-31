@@ -44,7 +44,7 @@
 
 | ID | Задача | Сейчас | Доделать |
 |----|--------|--------|----------|
-| IB-P-01 | **G-12 multi-point** | Таблица + MVP UI; **IB-D-01 org guard FIXED** | Cross-tenant wiring: очередь/supply по linked points; platform UI |
+| IB-P-01 | **G-12 multi-point** | Links + MVP UI + org guard + **очередь по linked points FIXED** | Supply/stop-list/reports по linked points; platform UI (optional) |
 | IB-P-02 | **Device token cron** | TTL via `DEVICE_TOKEN_TTL_DAYS`, ручная rotate/revoke, banner в manager UI | `Devices::RotateExpiringTokensJob` + `config/recurring.yml`; политика (за N дн. / при expiry); уведомление GM; **не** ломать TV/kiosk без процесса |
 | IB-P-03 | **Docs drift** | `ROLES_AND_PERMISSIONS.md` §7: favorites «session-only»; SHOP matrix favorites «session-only» | Sync: G-06 FIXED; обновить REVIEW строки |
 | IB-P-04 | **Phase 4 G-12 статус** | GAP register: **FIXED** | Уточнить: **data + MVP UI**; product wiring = IB-P-01 |
@@ -54,12 +54,12 @@
 
 ## ✅ Закрыто недавно (не долг)
 
-- G-01…G-03 device lookup RLS · G-06 favorites DB · G-11 user_roles · **IB-D-01 org guard** · **IB-D-02 bundler-audit** · ABAC full enforce · legacy shop CI · device TTL banner UI
+- G-01…G-03 device lookup RLS · G-06 favorites DB · G-11 user_roles · **IB-D-01 org guard** · **IB-D-02 bundler-audit** · **G-12 queue wiring** · ABAC full enforce · legacy shop CI · device TTL banner UI
 
 ---
 
 ## Приоритет следующего шага
 
-1. **IB-P-01** (G-12 wiring) — продукт + cross-tenant очередь/supply  
+1. **IB-P-01** (G-12 wiring) — supply/stop-list/reports по linked points  
 2. **IB-P-02** (cron) — после продуктового решения по политике ротации  
 3. **IB-D-03** (shop-api-key V3) — клиентский ключ в meta  
