@@ -2,9 +2,8 @@
 
 module Devices
   # Ручная ротация device_token (manager UI). Старый token перестаёт работать сразу.
+  # Также реактивирует отозванное устройство (is_active=true).
   class TokenRotation
-    class Error < StandardError; end
-
     def self.call!(device:)
       new(device: device).call!
     end
@@ -14,14 +13,7 @@ module Devices
     end
 
     def call!
-      raise Error, "Устройство неактивно" unless @device.is_active?
-
-      new_token = SecureRandom.hex(24)
-      @device.update!(
-        device_token: new_token,
-        is_active: true
-      )
-      new_token
+      TokenCredentials.assign_new!(device: @device)
     end
   end
 end

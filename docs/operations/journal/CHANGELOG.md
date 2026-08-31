@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-31 — feat: device token TTL + revoke/rotate UI complete
+
+- `Devices::TokenCredentials` — генерация token + `DEVICE_TOKEN_TTL_DAYS`
+- Manager UI: срок токена, «Восстановить + токен» на отозванных
+- Rotate реактивирует устройство; expired token → 401
+- Tests: `token_credentials_test`, lifecycle + kiosk auth
+
 ## 2026-08-31 — fix: backfill legacy user_roles tenant_id (G-11)
 
 - Migration `20260831140000` — NULL point staff grants → `users.tenant_id`; drop orphans/duplicates

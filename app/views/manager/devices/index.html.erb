@@ -59,6 +59,7 @@
             </div>
             <div class="row-meta" style="flex-wrap: wrap; gap: 8px; justify-content: flex-end;">
               <span class="muted">last_seen: <%= d.last_seen_at&.strftime("%d.%m %H:%M") || "-" %></span>
+              <span class="muted">токен: <%= d.token_expiry_label %></span>
               <% if d.device_type == "tv_board" %>
                 <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
                   <span class="muted">экран:</span>
@@ -77,6 +78,9 @@
                     data: { turbo_confirm: "Старый токен сразу перестанет работать. Продолжить?" } %>
               <% else %>
                 <span class="pill" style="border-color: rgba(255, 0, 110, 0.45);">отозвано</span>
+                <%= button_to "Восстановить + токен", manager_device_rotate_token_path(d),
+                    method: :patch, class: "btn btn-ghost", form: { style: "display:inline;" },
+                    data: { turbo_confirm: "Выдать новый токен и снова включить устройство?" } %>
               <% end %>
             </div>
           </div>

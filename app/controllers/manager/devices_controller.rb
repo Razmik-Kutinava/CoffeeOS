@@ -16,7 +16,7 @@ module Manager
       @new_device.tenant_id = Current.tenant_id
       @new_device.device_type = "tv_board"
       @new_device.is_active = true
-      @new_device.device_token = SecureRandom.hex(24)
+      Devices::TokenCredentials.apply_attributes!(device: @new_device)
       @new_device.metadata = (@new_device.metadata.presence || {}).stringify_keys
       @new_device.metadata["tv_mode"] ||= Device::TV_MODE_ORDERS
 
@@ -36,7 +36,7 @@ module Manager
       @new_kiosk.tenant_id   = Current.tenant_id
       @new_kiosk.device_type = "kiosk"
       @new_kiosk.is_active   = true
-      @new_kiosk.device_token = SecureRandom.hex(24)
+      Devices::TokenCredentials.apply_attributes!(device: @new_kiosk)
 
       if @new_kiosk.save
         redirect_to manager_devices_path,
@@ -74,16 +74,17 @@ module Manager
     def rotate_token
       device = Device.for_current_tenant.find(params[:id])
       authorize device, :rotate_token?
+      was_inactive = !device.is_active?
       new_token = Devices::TokenRotation.call!(device: device)
       notice =
         if device.device_type == "tv_board"
-          "Новый токен TV. Обновите URL: /tv_board?token=#{new_token}"
+          prefix = was_inactive ? "Устройство восстановлено. " : ""
+          "#{prefix}Новый токен TV. Обновите URL: /tv_board?token=#{new_token}"
         else
-          "Новый токен киоска: #{new_token}"
+          prefix = was_inactive ? "Устройство восстановлено. " : ""
+          "#{prefix}Новый токен киоска: #{new_token}"
         end
       redirect_to manager_devices_path, notice: notice
-    rescue Devices::TokenRotation::Error => e
-      redirect_to manager_devices_path, alert: e.message
     end
 
     private

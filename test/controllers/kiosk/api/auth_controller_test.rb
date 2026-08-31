@@ -50,6 +50,12 @@ class Kiosk::Api::AuthControllerTest < ActionDispatch::IntegrationTest
     assert_response :unauthorized
   end
 
+  test "returns unauthorized for expired token" do
+    @device.update!(token_expires_at: 1.hour.ago)
+    post "/kiosk/api/auth", headers: { "X-Device-Token" => @device.device_token }
+    assert_response :unauthorized
+  end
+
   test "returns persisted kiosk_settings under tenant GUC" do
     KioskSetting.create!(
       tenant: @tenant,

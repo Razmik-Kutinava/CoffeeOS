@@ -23,10 +23,11 @@ class Devices::TokenRotationTest < ActiveSupport::TestCase
     assert_equal new_token, @device.reload.device_token
   end
 
-  test "call! raises on inactive device" do
+  test "call! reactivates revoked device with new token" do
     @device.update!(is_active: false)
-    assert_raises(Devices::TokenRotation::Error) do
-      Devices::TokenRotation.call!(device: @device)
-    end
+    new_token = Devices::TokenRotation.call!(device: @device)
+    @device.reload
+    assert @device.is_active?
+    assert_equal new_token, @device.device_token
   end
 end

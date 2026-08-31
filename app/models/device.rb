@@ -26,6 +26,17 @@ class Device < ApplicationRecord
     token_expires_at > Time.current
   end
 
+  def token_expired?
+    token_expires_at.present? && token_expires_at <= Time.current
+  end
+
+  def token_expiry_label
+    return "без срока" if token_expires_at.blank?
+    return "истёк #{token_expires_at.strftime('%d.%m.%Y')}" if token_expired?
+
+    "до #{token_expires_at.strftime('%d.%m.%Y')}"
+  end
+
   # Per-TV режим: "ads" | "orders" (в metadata). Лимит карточек — tenant-wide из TvBoardSetting.
   TV_MODE_ADS = "ads".freeze
   TV_MODE_ORDERS = "orders".freeze

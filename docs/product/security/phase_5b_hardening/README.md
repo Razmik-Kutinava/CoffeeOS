@@ -42,6 +42,11 @@
 - Migration `backfill_user_roles_tenant_id` — NULL point staff → `users.tenant_id`
 - `has_role_in_context?` — убран global nil bypass
 
+## Device token lifecycle (2026-08-31)
+
+- `Devices::TokenCredentials` + ENV `DEVICE_TOKEN_TTL_DAYS`
+- Manager: revoke, rotate, reactivate + expiry label in UI
+
 ## Проверка
 
 ```bash

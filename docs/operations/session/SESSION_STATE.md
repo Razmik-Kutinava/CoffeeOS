@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-31 (G-11 user_roles backfill)  
+**Дата:** 2026-08-31 (device token TTL + revoke/rotate UI)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| G-11 user_roles backfill local done | push develop |
+| device tokens lifecycle local done | push develop |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

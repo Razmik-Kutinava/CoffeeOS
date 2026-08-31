@@ -23,48 +23,52 @@
 
 ## Показ token once
 
-При создании TV/kiosk контроллер генерирует `SecureRandom.hex(24)` и показывает token **один раз** в flash/notice:
+При создании TV/kiosk контроллер генерирует token через `Devices::TokenCredentials` и показывает его **один раз** в flash/notice:
 
 - TV: redirect с URL `/tv_board?token=…`
-- Kiosk: notice «Токен: …»
+- Kiosk: notice «Токен: …`
 
-Повторный просмотр полного token в UI **не предусмотрен** (Phase 3 без auto-rotation).
+Повторный просмотр полного token в UI **не предусмотрен** — только ротация.
 
-## Включить / выключить (отзыв)
-
-| Действие | Как |
-|----------|-----|
-| **Деактивировать** | `device.update!(is_active: false)` — manager UI или Rails console |
-| **Активировать снова** | `is_active: true` (если token ещё валиден) |
-| **Полный отзыв** | deactivate → при необходимости создать новое устройство |
+## Валидность токена
 
 Проверка при auth: `Device#token_valid?` + `is_active`.
 
-**Out of scope Phase 3:** auto-rotation, `last_seen_at` audit.
+| Условие | Результат |
+|---------|-----------|
+| `is_active: false` | 401 |
+| `token_expires_at` в прошлом | 401 |
+| `token_expires_at` nil | без срока (OK) |
+| token пустой | 401 |
 
-## Runbook ротации (manual)
+## TTL (срок действия)
 
-1. В manager → Устройства: деактивировать старое (`is_active=false`) или удалить из клиента.
-2. Создать новое устройство (privileged manager) — сохранить token из notice.
-3. Обновить клиент (TV URL / kiosk config) новым token.
-4. Проверить: TV board открывается, kiosk auth проходит.
+ENV **`DEVICE_TOKEN_TTL_DAYS`** (опционально):
 
-Без автоматизации — отдельная задача при prod kiosk/TV.
+| Значение | Поведение |
+|----------|-----------|
+| не задан / пусто | `token_expires_at = nil` (без срока) |
+| `> 0` | при создании и ротации — срок = now + N дней |
 
-## Tenant / RLS при lookup
+Пример prod: `DEVICE_TOKEN_TTL_DAYS=365`.
 
-Device lookup по token **до** установки GUC: политика `rls_devices_token_lookup` + `SET LOCAL app.device_token_lookup = 'on'` через `Rls::GucContext` / `Devices::TokenResolver`. **Без** `row_security off`.
-
-После lookup — `SET LOCAL app.current_tenant_id` из `device.tenant_id`.
+Сервис: `Devices::TokenCredentials` · UI manager показывает `token_expiry_label`.
 
 ## Manager UI (отзыв / ротация)
 
 | Действие | Route | Эффект |
 |----------|-------|--------|
 | **Отозвать** | `PATCH /manager/devices/:id/revoke` | `is_active=false`, auth 401 |
-| **Новый токен** | `PATCH /manager/devices/:id/rotate_token` | новый `device_token`, старый недействителен |
+| **Новый токен** | `PATCH /manager/devices/:id/rotate_token` | новый `device_token`, сброс TTL, старый недействителен |
+| **Восстановить + токен** | тот же `rotate_token` на отозванном | `is_active=true` + новый token |
 
 Policy: `DevicePolicy#revoke?`, `#rotate_token?` → `privileged_manager?`.
+
+## Tenant / RLS при lookup
+
+Device lookup по token **до** установки GUC: политика `rls_devices_token_lookup` + `SET LOCAL app.device_token_lookup = 'on'` через `Rls::GucContext` / `Devices::TokenResolver`. **Без** `row_security off`.
+
+После lookup — `SET LOCAL app.current_tenant_id` из `device.tenant_id`.
 
 ## Rate limit (Rack::Attack)
 
@@ -75,5 +79,5 @@ Policy: `DevicePolicy#revoke?`, `#rotate_token?` → `privileged_manager?`.
 
 - Kiosk prod flows (продукт не в prod)
 - TV deep security / ActionCable refactor
-- Token TTL / scheduled rotation
-- `last_seen_at` changes
+- Scheduled auto-rotation job (cron) — ротация только вручную из manager UI
+- `last_seen_at` audit changes

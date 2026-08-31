@@ -54,4 +54,20 @@ class Manager::DevicesTokenLifecycleTest < ActionDispatch::IntegrationTest
     post "/kiosk/api/auth", headers: { "X-Device-Token" => @device.device_token }
     assert_response :success
   end
+
+  test "rotate_token reactivates revoked device" do
+    patch manager_device_revoke_path(@device)
+    assert_redirected_to manager_devices_path
+    @device.reload
+    assert_not @device.is_active?
+
+    patch manager_device_rotate_token_path(@device)
+    assert_redirected_to manager_devices_path
+
+    @device.reload
+    assert @device.is_active?
+
+    post "/kiosk/api/auth", headers: { "X-Device-Token" => @device.device_token }
+    assert_response :success
+  end
 end
