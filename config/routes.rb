@@ -58,6 +58,8 @@ Rails.application.routes.draw do
     post "/devices", to: "devices#create"
     post "/devices/kiosk", to: "devices#create_kiosk", as: :devices_kiosk
     patch "/devices/:id/tv_mode", to: "devices#update_tv_mode", as: :device_tv_mode
+    patch "/devices/:id/revoke", to: "devices#revoke", as: :device_revoke
+    patch "/devices/:id/rotate_token", to: "devices#rotate_token", as: :device_rotate_token
 
     get "/incidents", to: "incidents#index", as: :incidents
 

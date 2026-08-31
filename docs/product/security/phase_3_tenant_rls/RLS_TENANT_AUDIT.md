@@ -6,9 +6,9 @@
 
 | # | Location | Severity | Action |
 |---|----------|----------|--------|
-| 1 | `kiosk/api/auth_controller.rb` | medium (prod N/A) | **BACKLOG** — Phase 3 SKIP |
-| 2 | `tv_boards_controller.rb` | medium (prod N/A) | **BACKLOG** — Phase 3 SKIP |
-| 3 | `application_cable/connection.rb` | medium (prod N/A) | **BACKLOG** — Phase 3 SKIP |
+| 1 | `kiosk/api/auth_controller.rb` | medium (prod N/A) | **FIXED** — GUC policy |
+| 2 | `tv_boards_controller.rb` | medium (prod N/A) | **FIXED** — TokenResolver |
+| 3 | `application_cable/connection.rb` | medium (prod N/A) | **FIXED** — auth_login GUC |
 | 4 | `shop/customer_tenant_history.rb` | low | **OK** — cross-city shop by design |
 | 5 | Jobs: `Order.find_by(id)` без GUC | low | **OK** — enqueue internal; broadcaster scopes by `order.tenant_id` |
 | 6 | `Payments::StuckPaymentsCheckJob` | info | **OK** — intentional global scan |
@@ -46,9 +46,9 @@
 
 | Location | Sets tenant GUC? | row_security off? | Why | Risk | Action |
 |----------|------------------|-------------------|-----|------|--------|
-| `Kiosk::Api::AuthController` | ✅ after device lookup | ✅ device lookup | Token lookup before tenant known | token brute-force | **BACKLOG** |
-| `TvBoardsController#show` | ✅ after device lookup | ✅ device lookup | URL token auth | same | **BACKLOG** |
-| `ApplicationCable::Connection` | no | ✅ user/device lookup | Session or tv cookie | guest channels separate | **BACKLOG** |
+| `Kiosk::Api::AuthController` | ✅ after device lookup | no | TokenResolver + GUC | token brute-force | **OK** (Rack::Attack) |
+| `TvBoardsController#show` | ✅ after device lookup | no | TokenResolver + GUC | same | **OK** |
+| `ApplicationCable::Connection` | no | no | auth_login GUC for user; TokenResolver for TV | guest channels separate | **OK** |
 
 ### Services
 

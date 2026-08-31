@@ -114,7 +114,7 @@ Auth gate Shop API: Referer+CSRF (браузер) или `X-Shop-Api-Key` (се�
 
 | Область | Статус | Следующий шаг |
 |---------|--------|---------------|
-| **Kiosk / TV / ActionCable** RLS bypass при lookup device | **Phase 5b:** `Devices::TokenResolver` (centralized); full RLS refactor — backlog prod kiosk |
+| **Kiosk / TV / ActionCable** RLS device lookup | **FIXED** — `rls_devices_token_lookup` + `Rls::GucContext`; rotate/revoke UI |
 | **ABAC** (`shift_open`, атрибуты заказа) | Phase 5 local done | [phase_5_abac/](phase_5_abac/) · Phase 5b full enforce |
 | **Blog RBAC** (`blog_editor`) | Отдельный CMS-контур | Не блокер coffee ops |
 | **Platform Pundit** (tenants/orgs, **menu/catalog**) | **Phase 5b/5c:** PlatformPolicy + authorize tenants/orgs/menu | |
@@ -137,7 +137,7 @@ Auth gate Shop API: Referer+CSRF (браузер) или `X-Shop-Api-Key` (се�
 
 **Оговорки (не блокер «контур закрыт»):**
 
-- Kiosk/TV/ActionCable — `row_security off` при lookup device ([RLS_TENANT_AUDIT.md](phase_3_tenant_rls/RLS_TENANT_AUDIT.md))
+- Kiosk/TV/ActionCable — lookup через `rls_devices_token_lookup` + GUC ([DEVICE_TOKENS.md](phase_3_tenant_rls/DEVICE_TOKENS.md))
 - Platform admin без полного Pundit rollout
 - Blog editor — вне staff matrix Prog10
 

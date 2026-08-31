@@ -61,13 +61,8 @@ def print_report(result)
   end
 
   puts "\n---"
-  puts "BACKLOG (Phase 3 SKIP — see docs/product/security/phase_3_tenant_rls/RLS_TENANT_AUDIT.md):"
-  %w[
-    app/controllers/kiosk/api/auth_controller.rb
-    app/controllers/tv_boards_controller.rb
-    app/channels/application_cable/connection.rb
-  ].each { |f| puts "  SKIP #{f}" }
-
+  puts "Device token lookup: Rls::GucContext + rls_devices_token_lookup (no row_security off in hot path)."
+  puts "Remaining row_security off (if any) — see hits above; shop/customer_tenant_history by design."
   puts "\nExit 0 (informational audit)."
 end
 

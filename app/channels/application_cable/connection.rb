@@ -13,11 +13,8 @@ module ApplicationCable
       user_id = request.session[:user_id] if request.session
 
       if user_id
-        device = nil
-        ActiveRecord::Base.connection.transaction do
-          ActiveRecord::Base.connection.execute("SET LOCAL row_security = off")
-          return User.find_by(id: user_id)
-        end
+        user = Rls::GucContext.with_auth_login { User.find_by(id: user_id) }
+        return user if user
       end
 
       # TV board: аутентификация по cookie с device_token (без user login)

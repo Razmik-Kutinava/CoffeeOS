@@ -64,6 +64,28 @@ module Manager
       redirect_to manager_devices_path, notice: "Режим ТВ обновлён"
     end
 
+    def revoke
+      device = Device.for_current_tenant.find(params[:id])
+      authorize device, :revoke?
+      device.update!(is_active: false)
+      redirect_to manager_devices_path, notice: "Устройство «#{device.name}» отключено. Токен больше не принимается."
+    end
+
+    def rotate_token
+      device = Device.for_current_tenant.find(params[:id])
+      authorize device, :rotate_token?
+      new_token = Devices::TokenRotation.call!(device: device)
+      notice =
+        if device.device_type == "tv_board"
+          "Новый токен TV. Обновите URL: /tv_board?token=#{new_token}"
+        else
+          "Новый токен киоска: #{new_token}"
+        end
+      redirect_to manager_devices_path, notice: notice
+    rescue Devices::TokenRotation::Error => e
+      redirect_to manager_devices_path, alert: e.message
+    end
+
     private
 
     def create_device_params

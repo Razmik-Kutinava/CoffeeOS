@@ -1,6 +1,6 @@
 # IB-3-4 — Device tokens (runbook)
 
-**Фаза:** 3 · дата: 2026-08-30 · **код kiosk/TV/cable не менялся**
+**Фаза:** 3 · дата: 2026-08-31 · **код готов к prod kiosk/TV (железа пока нет)**
 
 ## Кто создаёт устройства
 
@@ -53,7 +53,23 @@
 
 ## Tenant / RLS при lookup
 
-Device lookup по token **до** установки GUC использует `row_security off` (kiosk, TV, ActionCable) — см. [RLS_TENANT_AUDIT.md](RLS_TENANT_AUDIT.md) § Backlog. После lookup — `SET LOCAL app.current_tenant_id` из `device.tenant_id`.
+Device lookup по token **до** установки GUC: политика `rls_devices_token_lookup` + `SET LOCAL app.device_token_lookup = 'on'` через `Rls::GucContext` / `Devices::TokenResolver`. **Без** `row_security off`.
+
+После lookup — `SET LOCAL app.current_tenant_id` из `device.tenant_id`.
+
+## Manager UI (отзыв / ротация)
+
+| Действие | Route | Эффект |
+|----------|-------|--------|
+| **Отозвать** | `PATCH /manager/devices/:id/revoke` | `is_active=false`, auth 401 |
+| **Новый токен** | `PATCH /manager/devices/:id/rotate_token` | новый `device_token`, старый недействителен |
+
+Policy: `DevicePolicy#revoke?`, `#rotate_token?` → `privileged_manager?`.
+
+## Rate limit (Rack::Attack)
+
+- Kiosk: `kiosk/device`, `kiosk/auth/ip` (см. `config/initializers/rack_attack.rb`)
+- TV: `tv_board/token`, `tv_board/ip`
 
 ## Out of scope
 

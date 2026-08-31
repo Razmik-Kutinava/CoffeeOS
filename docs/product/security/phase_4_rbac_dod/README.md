@@ -16,9 +16,9 @@
 
 | ID | Source | Gap | Severity | Action |
 |----|--------|-----|----------|--------|
-| G-01 | Phase 3 | Kiosk auth `row_security off` | medium (prod N/A) | **backlog** — refactor при prod kiosk |
-| G-02 | Phase 3 | TV board device lookup bypass | medium (prod N/A) | **backlog** |
-| G-03 | Phase 3 | ActionCable connection lookup | medium (prod N/A) | **backlog** |
+| G-01 | Phase 3 | Kiosk auth RLS bypass | medium (prod N/A) | **FIXED** — `rls_devices_token_lookup` + `Rls::GucContext` |
+| G-02 | Phase 3 | TV board device lookup bypass | medium (prod N/A) | **FIXED** — TokenResolver + GUC policy |
+| G-03 | Phase 3 | ActionCable connection lookup | medium (prod N/A) | **FIXED** — `Rls::GucContext.with_auth_login` for staff session |
 | G-04 | Phase 0 REVIEW | Shop `phone_otp/status` auto-bind | low | **documented** — by design |
 | G-05 | Phase 0 REVIEW | Shop `DELETE session` refresh deactivation | low | **documented** |
 | G-06 | Phase 0 P3 | Favorites session-only | low | **backlog** product |

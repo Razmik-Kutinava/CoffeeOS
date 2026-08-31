@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-30 (IB Phase 5b hardening)  
+**Дата:** 2026-08-31 (device token RLS prep)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| ABAC 58/58 enforce local | push + deploy |
+| device token RLS local done | push develop |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

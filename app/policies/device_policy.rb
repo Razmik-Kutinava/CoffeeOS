@@ -7,6 +7,8 @@ class DevicePolicy < ApplicationPolicy
   def update?        = privileged_manager?
   def create_kiosk?  = privileged_manager?
   def update_tv_mode? = privileged_manager?
+  def rotate_token? = privileged_manager?
+  def revoke? = privileged_manager?
 
   class Scope < ApplicationPolicy::Scope
     def resolve

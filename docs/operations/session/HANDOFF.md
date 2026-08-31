@@ -2,14 +2,14 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-30 (IB Phase 5b hardening)  
+**Дата:** 2026-08-31 (device token RLS prep)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| shift_manager inventory hole closed | push + deploy |
+| device token RLS без row_security off | push develop |
 
-**last_done:** inventory: Pundit + sidebar hidden для shift_manager  
+**last_done:** kiosk/TV/cable: GUC policy + revoke/rotate + Rack::Attack  
 **next_step:** push develop
 
 **Архив session:** [`archive/README.md`](archive/README.md)  

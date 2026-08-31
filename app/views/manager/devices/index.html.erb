@@ -60,13 +60,23 @@
             <div class="row-meta" style="flex-wrap: wrap; gap: 8px; justify-content: flex-end;">
               <span class="muted">last_seen: <%= d.last_seen_at&.strftime("%d.%m %H:%M") || "-" %></span>
               <% if d.device_type == "tv_board" %>
-                <div style="display: flex; gap: 6px; align-items: center;">
+                <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
                   <span class="muted">экран:</span>
                   <%= button_to "Очередь", manager_device_tv_mode_path(d, tv_mode: Device::TV_MODE_ORDERS),
                       method: :patch, class: "btn btn-ghost", form: { style: "display:inline;" } %>
                   <%= button_to "Реклама", manager_device_tv_mode_path(d, tv_mode: Device::TV_MODE_ADS),
                       method: :patch, class: "btn btn-ghost", form: { style: "display:inline;" } %>
                 </div>
+              <% end %>
+              <% if d.is_active? %>
+                <%= button_to "Отозвать", manager_device_revoke_path(d),
+                    method: :patch, class: "btn btn-ghost", form: { style: "display:inline;" },
+                    data: { turbo_confirm: "Отключить устройство? Токен перестанет работать." } %>
+                <%= button_to "Новый токен", manager_device_rotate_token_path(d),
+                    method: :patch, class: "btn btn-ghost", form: { style: "display:inline;" },
+                    data: { turbo_confirm: "Старый токен сразу перестанет работать. Продолжить?" } %>
+              <% else %>
+                <span class="pill" style="border-color: rgba(255, 0, 110, 0.45);">отозвано</span>
               <% end %>
             </div>
           </div>

@@ -11,6 +11,14 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-31 — feat: device token RLS без row_security off (kiosk/TV/cable prep)
+
+- Migration `rls_devices_token_lookup` + `Rls::GucContext.with_device_token_lookup`
+- `Devices::TokenResolver` — GUC вместо `row_security off`
+- Manager: revoke + rotate_token UI; Rack::Attack tv_board throttles
+- Tests: `device_token_lookup_test`, `devices_token_lifecycle_test`, `token_rotation_test`
+- Docs: RLS_TENANT_AUDIT G-01..G-03 FIXED, DEVICE_TOKENS runbook
+
 ## 2026-08-30 — fix: shift_manager blocked from /manager/inventory (URL + UI + Pundit)
 
 - `Manager::InventoryPolicy` + authorize на inventory#index

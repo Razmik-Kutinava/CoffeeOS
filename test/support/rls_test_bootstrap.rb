@@ -33,6 +33,7 @@ module RlsTestBootstrap
 
     apply_cash_shifts_policy!(conn)
     apply_stock_movements_policy!(conn)
+    apply_devices_token_lookup_policy!(conn)
   end
 
   def policies_bootstrapped?(conn)
@@ -93,6 +94,17 @@ module RlsTestBootstrap
         USING (
           tenant_id = NULLIF(current_setting('app.current_tenant_id', TRUE), '')::UUID
         )
+    SQL
+  end
+
+  def apply_devices_token_lookup_policy!(conn)
+    return unless conn.table_exists?("devices")
+
+    conn.execute("DROP POLICY IF EXISTS rls_devices_token_lookup ON devices")
+    conn.execute <<-SQL.squish
+      CREATE POLICY rls_devices_token_lookup ON devices
+        FOR SELECT
+        USING (NULLIF(current_setting('app.device_token_lookup', true), '') = 'on')
     SQL
   end
 end

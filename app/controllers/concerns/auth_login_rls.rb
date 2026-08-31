@@ -7,10 +7,6 @@ module AuthLoginRls
   private
 
   def with_auth_login_rls!
-    conn = ActiveRecord::Base.connection
-    ActiveRecord::Base.transaction do
-      conn.execute("SET LOCAL app.auth_login = 'on'")
-      yield
-    end
+    Rls::GucContext.with_auth_login { yield }
   end
 end

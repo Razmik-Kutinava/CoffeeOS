@@ -8,7 +8,7 @@
 |--------|-----|-------|-------|--------|-----|
 | **Staff RBAC** | `User` (сотрудники) | session `user_id` + пароль | роль → панель (`has_role?`) | `user.tenant_id` или `session[:manager_tenant_id]` (UK/franchise) | `SET LOCAL app.current_tenant_id` + `app.current_user_id` |
 | **Shop ownership** | `MobileCustomer` (гость/клиент) | cookie-сессия + OTP | `customer_id` в сессии, не staff-RBAC | `X-Shop-Tenant` / `tenant_id` / default env | `with_shop_tenant!` → GUC в транзакции |
-| **Device token** | `Device` (kiosk, TV) | `X-Device-Token` / URL token | тип устройства + `is_active` | из записи `devices.tenant_id` | lookup: `row_security off`; далее GUC |
+| **Device token** | `Device` (kiosk, TV) | `X-Device-Token` / URL token | тип устройства + `is_active` | из записи `devices.tenant_id` | lookup: `app.device_token_lookup` GUC + `rls_devices_token_lookup`; далее GUC |
 | **Webhooks** | внешние провайдеры | подпись / shared token | нет пользователя | из payload / payment.tenant_id | в job/service по tenant заказа |
 
 **Staff ≠ Customer:** `User` и `MobileCustomer` — разные сущности, разные сессии, разные панели. Shop API не использует `User` / Pundit staff.

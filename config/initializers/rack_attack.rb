@@ -25,6 +25,15 @@ class Rack::Attack
     req.ip if req.path == "/kiosk/api/auth" && req.post?
   end
 
+  # TV board: brute-force token в URL (до prod TV — готово заранее)
+  throttle("tv_board/token", limit: 20, period: 1.minute) do |req|
+    req.params["token"].presence if req.path == "/tv_board" && req.get?
+  end
+
+  throttle("tv_board/ip", limit: 60, period: 1.minute) do |req|
+    req.ip if req.path == "/tv_board" && req.get?
+  end
+
   # Лимит для мобильного API: 200 запросов в минуту по refresh_token
   throttle("mobile/api", limit: 200, period: 1.minute) do |req|
     if req.path.start_with?("/api/mobile/")

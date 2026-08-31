@@ -28,7 +28,14 @@
 
 - Favorites session-only (G-06)
 - Prep multi-point (G-12)
-- Fly MCP Point A post-deploy
+- Fly MCP Point A post-deploy (после включения kiosk/TV на точке)
+
+## Phase 6 prep — device tokens (2026-08-31)
+
+- `rls_devices_token_lookup` — без `row_security off`
+- `Rls::GucContext` — auth_login + device_token_lookup
+- Manager: revoke + rotate_token UI
+- Rack::Attack: tv_board throttles
 
 ## Проверка
 
