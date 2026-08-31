@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-31 (G-12 sales points UI + device TTL UI)  
+**Дата:** 2026-08-31 (IB debt register)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Prep sales points UI · device token TTL banner | push develop |
+| IB_SECURITY_DEBT.md | IB-D-01 / push |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

@@ -105,7 +105,7 @@
 | V2-P10-07 | Kiosk→barista: mock card ×9 | **done** *(2026-06-02)* | `prog10/kiosk/prog10_kiosk_barista_card.json` |
 | V2-P10-09 | Витрина MCP 5 точек + SHP-09 | **done** *(2026-06-02, блок 10)* | cash+card+SHP-03: `prog10_shop_vitrina_*`, `prog10_shop_vitrina_card_*`, `prog10_shop_shp03*` |
 | V2-P10-08 | **Заказ киоска помечается `source=mobile`, не `kiosk`** | **open — после блоков 1–14** | `Shop::OrderCreator` + передача device token в shop API; UI бариста «Киоск» vs «Витрина» |
-| V2-BACKLOG-PREP-MULTI | Один заготовочный цех на **несколько** точек продаж | **backlog — после В2** | Сейчас **1 `production_kitchen` = 1 tenant**, RLS верный; CON-06 — изоляция на этой модели. Потом: связь цех↔точки, права не только `Current.tenant_id` |
+| V2-BACKLOG-PREP-MULTI | Один заготовочный цех на **несколько** точек продаж | **partial 2026-08-31** | Links + UI `/prep_kitchen/sales_points` · **IB:** org guard IB-D-01 · wiring очередь/supply → [IB_SECURITY_DEBT.md](../../../product/security/IB_SECURITY_DEBT.md) IB-P-01 |
 | V2-QR-NIT | Quick Repeat nits из код-ревью *(2026-07-21)* | **backlog** | `categories_by_name` в `frequent_products_controller` без кэша (дубль пути categories#index — общий кэш при росте меню); тост-таймер 2.5с захардкожен в `RepeatSection.svelte` → константа |
 | V2-SBP-AUTOPAY-UI | #34 Checkout UI + charge idempotency *(2026-07-30)* | **UI `[x]`** · idempotency backlog | Чекбокс/«Ваш счет СБП» в Checkout `[x]`; полный idempotency key на параллельный `sbp/charge` — ещё backlog (`with_lock` есть) |
 | V2-#35-WALLET-PROD | #35/#37 Apple Wallet PKCS7 + device register *(2026-08-03)* | **backlog** | Download UI `#37` `[x]` simulate; prod PKCS7/APNs device register ещё open · runbook `APPLE_WALLET_ORDER_PASS.md` |

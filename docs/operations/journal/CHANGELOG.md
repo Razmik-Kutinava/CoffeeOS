@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-31 — docs: IB security debt register (G-12 partial, device cron, holes)
+
+- `docs/product/security/IB_SECURITY_DEBT.md` — IB-D-01…08, IB-P-01…05
+- G-12 GAP → PARTIAL; ISSUES + PRACTICES V2-BACKLOG-PREP-MULTI sync
+
 ## 2026-08-31 — feat: prep kitchen sales points UI + device token TTL banner
 
 - `/prep_kitchen/sales_points` — список, привязка/отвязка точек (manager)

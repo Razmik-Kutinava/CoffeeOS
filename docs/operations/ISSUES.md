@@ -15,7 +15,7 @@
 | 2026-07-27 | **SBP 3001** на Fly | 🟡 банк / кабинет | После UI-enable: push+deploy+MCP; если снова 3001 — кабинет NSPK; → полная запись |
 | 2026-07-28 | **Fly Test** в шапке Арама | 🟡 код local ✅ | push + deploy + MCP Point A; → полная запись |
 | 2026-08-08 | **#47** PWA статусы + повторы | 🟡 на Fly v445 · MCP surface ✅ · апрув ❌ | Апрув заказчика; → полная запись |
-| 2026-07-21 | **Windows** полный `test/integration/shop/` зависает | 🟡 env | Таргетные файлы / CI; не полный suite локально; → полная запись |
+| 2026-08-31 | **IB security debt** G-12 org guard · device cron · bundler-audit | 🔴 open | [IB_SECURITY_DEBT.md](../product/security/IB_SECURITY_DEBT.md) · IB-D-01 first | triage по severity |
 
 ---
 

@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-31 (G-12 sales points UI + device TTL UI)  
+**Дата:** 2026-08-31 (IB debt register)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Prep kitchen: UI точек продаж · Manager: TTL policy banner | push develop |
+| IB_SECURITY_DEBT.md — аудит дыр и долга | IB-D-01 org guard / push |
 
-**last_done:** sales_points UI + DEVICE_TOKEN_TTL_DAYS banner/expiry pills  
-**next_step:** push develop
+**last_done:** IB contour analysis + debt doc (no code)  
+**next_step:** fix IB-D-01 или push develop
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
