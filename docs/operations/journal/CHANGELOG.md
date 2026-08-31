@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-31 — ops: Prog10 staff isolation PASS 9/9 Fly v472 (IB sign-off)
+
+- `bin/prog10/prog10_staff_rbac_isolation.rb` → Fly v472 — **9/9 PASS**
+- Артефакты: `prog10_staff_isolation_2026-08-31_v472.json`, canonical `prog10_staff_isolation.json` обновлён
+
 ## 2026-08-31 — fix(security): Shop REVIEW G-04/G-05 + categories throttle + user/cards session-only
 
 - **G-04:** `phone_otp/status` — убран auto-bind по phone lookup; только session customer с совпадающим phone

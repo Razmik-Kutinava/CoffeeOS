@@ -1,6 +1,6 @@
 # IB Acceptance Checklist — Phase 4 DoD
 
-**Дата прогона:** 2026-08-30  
+**Дата прогона:** 2026-08-31 (Prog10 v472 re-run)  
 **Ветка:** `develop`  
 **Исполнитель:** IB Phase 4 agent
 
@@ -19,7 +19,7 @@
 - [x] `rbac_tenant_isolation_test` green (в составе staff/* suite)
 - [x] `test/integration/auth/*` green — 84 runs suite (auth + staff isolation)
 - [x] `tenant_rls_isolation_test` green — 6 cases (franchise/UK/barista/shift_manager device)
-- [x] Prog10 staff isolation — **PASS 9/9 Fly** 2026-08-30 (`prog10_staff_isolation_2026-08-30.json`)
+- [x] Prog10 staff isolation — **PASS 9/9 Fly** 2026-08-31 v472 (`prog10_staff_isolation_2026-08-31_v472.json`)
 - [x] Pundit: manager staff/shifts/devices/menu/finance + prep movements/inventory
 - [x] shift_manager deny staff/devices — Pundit + `require_privileged_manager!` + UI + test
 
@@ -57,7 +57,7 @@
 | `ruby bin/rails test test/integration/shop/api/` | WSL | **201/201 PASS** (3 skip) |
 | `ruby bin/rails test test/integration/staff/rbac_tenant_isolation_test.rb test/integration/staff/tenant_rls_isolation_test.rb test/integration/auth/` | WSL | **84/84 PASS** |
 | `ruby bin/rails test test/integration/manager_office_panel_test.rb test/controllers/barista/orders_controller_test.rb` | WSL | included in suites above / green |
-| `ruby bin/prog10/prog10_staff_rbac_isolation.rb` | WSL→Fly | **SKIP** — shop order 422 cash disabled |
+| `ruby bin/prog10/prog10_staff_rbac_isolation.rb` | WSL→Fly v472 | **PASS 9/9** — `prog10_staff_isolation_2026-08-31_v472.json` |
 | Windows native rails test | Windows | **FAIL** — PG client `server closed connection` (env) |
 
 **Примечание:** локальные integration-тесты на Windows хосте не проходят из-за pg_hba/client; канон прогона — WSL или CI.

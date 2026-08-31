@@ -7,10 +7,10 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| Shop REVIEW **FIXED** — phone_otp/status, session destroy, categories throttle, user/cards | push → CI · deploy по апруву |
+| Prog10 staff isolation **PASS 9/9** Fly v472 · Shop REVIEW FIXED | push → CI · deploy по апруву |
 
-**last_done:** G-04/G-05 code + SHOP matrix 49 OK / 0 REVIEW  
-**next_step:** push → CI · deploy по апруву
+**last_done:** Prog10 v472 9/9 · G-04/G-05 + SHOP matrix 49 OK  
+**next_step:** push → CI · deploy Shop fixes по апруву
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

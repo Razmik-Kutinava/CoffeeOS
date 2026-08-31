@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-31 (Shop REVIEW fixes)  
+**Дата:** 2026-08-31 (Prog10 v472 + Shop REVIEW)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Shop G-04/G-05 + categories + user/cards **FIXED** | push → CI · deploy по апруву |
+| Prog10 **PASS 9/9** v472 · Shop G-04/G-05 FIXED (local) | push → CI · deploy Shop fixes |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -15,6 +15,14 @@
 ---
 
 ## Текущий месяц (2026-08)
+
+### Fly IB приёмка Phase 5b (2026-08-31)
+
+| Что | Статус |
+|-----|--------|
+| Fly deploy | **v472** |
+| Prog10 staff isolation 9 points | **PASS** 9/9 — `prog10_staff_isolation_2026-08-31_v472.json` |
+| MCP Point A | **PASS** 7/7 — `mcp/fly_v461_2026-08-31/` |
 
 ### Fly IB приёмка Phase 5b (2026-08-30)
 
