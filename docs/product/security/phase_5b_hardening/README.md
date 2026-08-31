@@ -52,6 +52,11 @@
 - By design: shop/kiosk guard, barista POS при открытой смене вне расписания — не блокируется
 - Каталог §B + `abac_full_enforcement_test`
 
+## ActionCable G-03 (2026-08-31)
+
+- `ApplicationCable::Connection` — auth_login + TV TokenResolver
+- `OrdersChannel` — connection.current_user; tests `connection_test`
+
 ## Проверка
 
 ```bash

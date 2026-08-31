@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-31 (ABAC-015 barista POS by design)  
+**Дата:** 2026-08-31 (ActionCable G-03)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| ABAC-015 catalog + tests local | push develop |
+| G-01..G-03 device lookup complete | push develop |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

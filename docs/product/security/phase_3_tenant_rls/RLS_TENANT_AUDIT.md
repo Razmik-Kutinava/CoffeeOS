@@ -8,7 +8,7 @@
 |---|----------|----------|--------|
 | 1 | `kiosk/api/auth_controller.rb` | medium (prod N/A) | **FIXED** — GUC policy |
 | 2 | `tv_boards_controller.rb` | medium (prod N/A) | **FIXED** — TokenResolver |
-| 3 | `application_cable/connection.rb` | medium (prod N/A) | **FIXED** — auth_login GUC |
+| 3 | `application_cable/connection.rb` | medium (prod N/A) | **FIXED** — `auth_login` GUC (staff) + `TokenResolver` (TV cookie) |
 | 4 | `shop/customer_tenant_history.rb` | low | **OK** — cross-city shop by design |
 | 5 | Jobs: `Order.find_by(id)` без GUC | low | **OK** — enqueue internal; broadcaster scopes by `order.tenant_id` |
 | 6 | `Payments::StuckPaymentsCheckJob` | info | **OK** — intentional global scan |
@@ -42,13 +42,13 @@
 | `ApplicationRecord#with_postgres_context` | ✅ on save if transaction + Current | no | Backup GUC on AR writes | double-set harmless | **OK** |
 | `ApplicationRecord#set_tenant_id` | Current → column | no | Auto tenant_id on create | blank tenant in dev/test warn | **OK** |
 
-### Device / TV / Kiosk / Cable (SKIP refactor)
+### Device / TV / Kiosk / Cable
 
 | Location | Sets tenant GUC? | row_security off? | Why | Risk | Action |
 |----------|------------------|-------------------|-----|------|--------|
 | `Kiosk::Api::AuthController` | ✅ after device lookup | no | TokenResolver + GUC | token brute-force | **OK** (Rack::Attack) |
 | `TvBoardsController#show` | ✅ after device lookup | no | TokenResolver + GUC | same | **OK** |
-| `ApplicationCable::Connection` | no | no | auth_login GUC for user; TokenResolver for TV | guest channels separate | **OK** |
+| `ApplicationCable::Connection` | no | no | `with_auth_login` (staff); `TokenResolver` (TV cookie); guest nil | guest channels verify token | **OK** |
 
 ### Services
 
@@ -96,13 +96,15 @@
 
 ---
 
-## Backlog section (explicit SKIP)
+## Historical SKIP (closed 2026-08-31)
 
-| File | Reason |
-|------|--------|
-| `app/controllers/kiosk/api/auth_controller.rb` | Phase 3 SKIP — отдельная задача когда kiosk в prod |
-| `app/controllers/tv_boards_controller.rb` | Phase 3 SKIP — TV refactor отложен |
-| `app/channels/application_cable/connection.rb` | Phase 3 SKIP — cable refactor отложен |
+Строки ниже — **закрыты** миграцией `rls_devices_token_lookup` + `Rls::GucContext` + `TokenResolver` (G-01..G-03). Оставлено для истории аудита Phase 3.
+
+| File | Was | Now |
+|------|-----|-----|
+| `kiosk/api/auth_controller.rb` | SKIP | **FIXED** |
+| `tv_boards_controller.rb` | SKIP | **FIXED** |
+| `application_cable/connection.rb` | SKIP | **FIXED** — см. `connection_test.rb` |
 | Prep 1 kitchen → N sales points | Product backlog, не RLS Phase 3 |
 
 ---

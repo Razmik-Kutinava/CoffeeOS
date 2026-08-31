@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-31 — fix: ActionCable G-03 device lookup tests and docs sync
+
+- `ApplicationCable::Connection` — staff auth_login + TV TokenResolver (G-03)
+- `OrdersChannel` — `connection.current_user`, без raw `User.find_by`
+- Tests: `connection_test`, `orders_channel_test`
+- Docs: RLS_TENANT_AUDIT, G-03, IB_ACCEPTANCE_CHECKLIST, DEVICE_TOKENS § ActionCable
+
 ## 2026-08-31 — docs: ABAC-015 barista POS outside hours by design
 
 - Каталог ABAC §B: shop/kiosk guard vs barista POS exempt

@@ -1,4 +1,6 @@
 module ApplicationCable
+  # G-03: staff lookup — `Rls::GucContext.with_auth_login`; TV — `Devices::TokenResolver`.
+  # Guest shop — `current_user` nil; каналы сами проверяют reconnect_token.
   class Connection < ActionCable::Connection::Base
     identified_by :current_user
 

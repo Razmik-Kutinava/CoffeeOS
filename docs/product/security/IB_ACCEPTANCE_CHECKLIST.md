@@ -38,7 +38,7 @@
 
 ## Explicit exceptions (не блокер Phase 4)
 
-- [x] Kiosk/TV/ActionCable documented backlog — [RLS_TENANT_AUDIT.md](phase_3_tenant_rls/RLS_TENANT_AUDIT.md) § Backlog
+- [x] Kiosk/TV/ActionCable RLS lookup — **FIXED** G-01..G-03 ([RLS_TENANT_AUDIT.md](phase_3_tenant_rls/RLS_TENANT_AUDIT.md), `connection_test.rb`)
 - [x] Platform Pundit partial — documented in STAFF_RBAC_MATRIX + ROLES §7
 - [x] Blog editor — out of staff contour
 

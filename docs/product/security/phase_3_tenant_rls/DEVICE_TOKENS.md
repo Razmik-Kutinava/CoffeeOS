@@ -75,6 +75,18 @@ Device lookup по token **до** установки GUC: политика `rls_
 - Kiosk: `kiosk/device`, `kiosk/auth/ip` (см. `config/initializers/rack_attack.rb`)
 - TV: `tv_board/token`, `tv_board/ip`
 
+## ActionCable (G-03)
+
+| Актор | Lookup | RLS |
+|-------|--------|-----|
+| Staff (`session[:user_id]`) | `Rls::GucContext.with_auth_login` → `User` | `rls_users_auth_login` |
+| TV board (`tv_device_token` cookie) | `Devices::TokenResolver` | `rls_devices_token_lookup` |
+| Shop guest | `current_user` nil | `Shop::GuestOrderChannel` — reconnect_token / customer session |
+
+`OrdersChannel` использует `connection.current_user` (User или Device), без повторного `User.find_by` без GUC.
+
+Тесты: `test/channels/application_cable/connection_test.rb`
+
 ## Out of scope
 
 - Kiosk prod flows (продукт не в prod)

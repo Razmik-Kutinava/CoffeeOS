@@ -14,11 +14,9 @@
 
 ## Scope OUT (backlog, не Phase 3)
 
-- Kiosk auth refactor (`kiosk/api/auth_controller.rb`)
-- TV board deep audit (`tv_boards_controller.rb`)
-- ActionCable connection refactor (`application_cable/connection.rb`)
+- ~~Kiosk / TV / ActionCable device lookup~~ — **FIXED** 2026-08-31 (G-01..G-03)
 - Prep multi-point (1 цех → N точек)
-- `last_seen_at`, token auto-rotation
+- `last_seen_at`, scheduled auto-rotation (cron)
 - Новые PostgreSQL RLS policies / миграции без апрува
 
 ## Связанные фазы

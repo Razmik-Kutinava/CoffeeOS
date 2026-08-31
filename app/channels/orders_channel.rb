@@ -1,9 +1,12 @@
+# frozen_string_literal: true
+
 class OrdersChannel < ApplicationCable::Channel
   def subscribed
-    return reject unless current_user
+    actor = connection.current_user
+    tenant_id = actor_tenant_id(actor)
+    return reject unless tenant_id
 
-    # Подписка на обновления заказов для текущего тенанта
-    stream_from "orders_#{current_user.tenant_id}"
+    stream_from "orders_#{tenant_id}"
   end
 
   def unsubscribed
@@ -12,10 +15,10 @@ class OrdersChannel < ApplicationCable::Channel
 
   private
 
-  def current_user
-    @current_user ||= begin
-      user_id = connection.session[:user_id] if connection.session
-      User.find_by(id: user_id) if user_id
+  def actor_tenant_id(actor)
+    case actor
+    when User, Device
+      actor.tenant_id
     end
   end
 end
