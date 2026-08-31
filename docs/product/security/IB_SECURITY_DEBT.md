@@ -54,13 +54,12 @@
 
 ## ✅ Закрыто недавно (не долг)
 
-- G-01…G-03 device lookup RLS · G-06 favorites DB · G-11 user_roles tenant_id · ABAC full enforce · legacy shop CI · device TTL banner UI
+- G-01…G-03 device lookup RLS · G-06 favorites DB · G-11 user_roles · **IB-D-01 org guard** · ABAC full enforce · legacy shop CI · device TTL banner UI
 
 ---
 
 ## Приоритет следующего шага
 
-1. **IB-D-01** (org guard на prep link) — быстрый security fix  
-2. **IB-D-02** (bundler-audit) — infra  
-3. **IB-P-01** (G-12 wiring) — продукт + IB согласованность cross-tenant  
-4. **IB-P-02** (cron) — после продуктового решения по политике ротации  
+1. **IB-D-02** (bundler-audit) — infra  
+2. **IB-P-01** (G-12 wiring) — продукт + cross-tenant очередь/supply  
+3. **IB-P-02** (cron) — после продуктового решения по политике ротации  
