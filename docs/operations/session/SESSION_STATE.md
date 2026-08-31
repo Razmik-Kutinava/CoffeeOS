@@ -7,7 +7,7 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| IB-P-03/04 FIXED · IB product debt closed | deploy по апруву |
+| IB-P-03/04 FIXED · CI **green** (#33394790512) | deploy по апруву |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
