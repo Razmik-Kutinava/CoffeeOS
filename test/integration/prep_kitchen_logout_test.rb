@@ -3,19 +3,24 @@
 require "test_helper"
 
 class PrepKitchenLogoutTest < ActionDispatch::IntegrationTest
-  PREP_KITCHEN_PATHS = %w[
+  WORKER_PATHS = %w[
     /prep_kitchen
     /prep_kitchen/queue
-    /prep_kitchen/recipes
     /prep_kitchen/inventory
     /prep_kitchen/movements
     /prep_kitchen/stop_list
+  ].freeze
+
+  MANAGER_ONLY_PATHS = %w[
+    /prep_kitchen/recipes
     /prep_kitchen/incidents
     /prep_kitchen/reports
   ].freeze
 
-  def assert_logout_present!
-    PREP_KITCHEN_PATHS.each do |path|
+  PREP_KITCHEN_PATHS = (WORKER_PATHS + MANAGER_ONLY_PATHS).freeze
+
+  def assert_logout_present!(paths)
+    paths.each do |path|
       get path
       assert_response :success, "expected success for #{path}"
       assert_includes response.body, "Выйти", "expected logout control on #{path}"
@@ -27,7 +32,7 @@ class PrepKitchenLogoutTest < ActionDispatch::IntegrationTest
     worker = create_user!(tenant: tenant, role_codes: %w[prep_kitchen_worker], email: "logout-kw@test.com", name: "LogoutWorker")
 
     login_as!(worker)
-    assert_logout_present!
+    assert_logout_present!(WORKER_PATHS)
 
     delete "/logout"
     assert_response :redirect
@@ -42,7 +47,7 @@ class PrepKitchenLogoutTest < ActionDispatch::IntegrationTest
     manager = create_user!(tenant: tenant, role_codes: %w[prep_kitchen_manager], email: "logout-km@test.com", name: "LogoutManager")
 
     login_as!(manager)
-    assert_logout_present!
+    assert_logout_present!(PREP_KITCHEN_PATHS)
 
     delete "/logout"
     assert_response :redirect

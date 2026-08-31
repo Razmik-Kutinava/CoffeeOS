@@ -138,7 +138,11 @@ class BlockDPanelScreensTest < ActionDispatch::IntegrationTest
     )
     login_as!(worker)
 
-    prep_kitchen_get_screens(include_new_movement: false).each { |path| assert_get_success path }
+    prep_kitchen_worker_read_screens.each { |path| assert_get_success path }
+    prep_kitchen_manager_only_screens.each do |path|
+      get path
+      assert_response :redirect, "worker не должен открывать #{path}"
+    end
     get prep_kitchen_new_movement_path
     assert_response :redirect
   end
@@ -169,17 +173,26 @@ class BlockDPanelScreensTest < ActionDispatch::IntegrationTest
   end
 
   def prep_kitchen_get_screens(include_new_movement:)
-    paths = [
+    paths = prep_kitchen_worker_read_screens + prep_kitchen_manager_only_screens
+    paths << prep_kitchen_new_movement_path if include_new_movement
+    paths
+  end
+
+  def prep_kitchen_worker_read_screens
+    [
       prep_kitchen_dashboard_path,
       prep_kitchen_queue_path,
       prep_kitchen_inventory_path,
       prep_kitchen_movements_path,
-      prep_kitchen_stop_list_path,
+      prep_kitchen_stop_list_path
+    ]
+  end
+
+  def prep_kitchen_manager_only_screens
+    [
       prep_kitchen_recipes_path,
       prep_kitchen_incidents_path,
       prep_kitchen_reports_path
     ]
-    paths << prep_kitchen_new_movement_path if include_new_movement
-    paths
   end
 end
