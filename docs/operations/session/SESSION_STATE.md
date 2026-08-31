@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-31 (ActionCable G-03)  
+**Дата:** 2026-08-31 (G-06/G-12 + legacy shop CI)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| G-01..G-03 device lookup complete | push develop |
+| G-06/G-12 closed · CI full shop suite | push develop |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

@@ -26,6 +26,7 @@ module Shop
       bucket[tid] = cid
       session[BUCKET_KEY] = bucket
       session[LEGACY_KEY] = cid
+      FavoritesStore.merge_session_into_db!(session: session, tenant_id: tid, customer_id: cid)
     end
 
     def self.clear!(session, tenant_id)

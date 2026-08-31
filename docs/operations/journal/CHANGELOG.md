@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-31 — feat: G-06 favorites DB, G-12 prep multi-point, legacy shop CI
+
+- `shop_customer_favorites` + `Shop::FavoritesStore` — persist для залогиненного гостя
+- `prep_kitchen_sales_point_links` + `PrepKitchen::SalesPointRegistry` — 1 kitchen → N точек
+- CI: сняты exclude 4 legacy shop файлов; `FakeTbankInit` — card pending без skip
+- Tests: favorites_persistence, sales_point_registry, guest reconnect, qa23 cart — green
+
 ## 2026-08-31 — fix: ActionCable G-03 device lookup tests and docs sync
 
 - `ApplicationCable::Connection` — staff auth_login + TV TokenResolver (G-03)

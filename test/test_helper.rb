@@ -8,6 +8,7 @@ ENV["SHOP_SIMULATE_PAYMENT"] = "1" if ENV["SHOP_SIMULATE_PAYMENT"].nil?
 require "securerandom"
 require_relative "support/factories"
 require_relative "support/shop_email_test_helper"
+require_relative "support/fake_tbank_init"
 
 module ActiveSupport
   class TestCase

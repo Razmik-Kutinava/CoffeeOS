@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_31_140000) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_31_160000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_stat_statements"
@@ -756,6 +756,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_31_140000) do
     t.check_constraint "event_type::text = ANY (ARRAY['ready'::character varying, 'called'::character varying, 'qr_scanned'::character varying, 'issued'::character varying, 'timeout'::character varying, 'not_picked_up'::character varying]::text[])", name: "chk_pickup_event_type"
   end
 
+  create_table "prep_kitchen_sales_point_links", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.uuid "prep_kitchen_tenant_id", null: false
+    t.uuid "sales_point_tenant_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["prep_kitchen_tenant_id"], name: "idx_prep_kitchen_links_kitchen"
+    t.index ["prep_kitchen_tenant_id"], name: "index_prep_kitchen_sales_point_links_on_prep_kitchen_tenant_id"
+    t.index ["sales_point_tenant_id"], name: "idx_prep_kitchen_links_sales_point_unique", unique: true
+    t.index ["sales_point_tenant_id"], name: "index_prep_kitchen_sales_point_links_on_sales_point_tenant_id"
+  end
+
   create_table "product_menu_visibilities", id: :uuid, default: -> { "gen_random_uuid()" }, comment: "Видимость продуктов в разных меню", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.boolean "is_visible", default: true, null: false
@@ -1058,6 +1069,18 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_31_140000) do
     t.index ["tenant_id"], name: "index_shifts_on_tenant_id"
   end
 
+  create_table "shop_customer_favorites", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.uuid "customer_id", null: false
+    t.uuid "product_id", null: false
+    t.uuid "tenant_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["customer_id", "tenant_id", "product_id"], name: "idx_shop_customer_favorites_unique", unique: true
+    t.index ["customer_id"], name: "index_shop_customer_favorites_on_customer_id"
+    t.index ["product_id"], name: "index_shop_customer_favorites_on_product_id"
+    t.index ["tenant_id"], name: "index_shop_customer_favorites_on_tenant_id"
+  end
+
   create_table "shop_email_otp_codes", id: :uuid, default: -> { "gen_random_uuid()" }, comment: "OTP коды подтверждения email на витрине /shop", force: :cascade do |t|
     t.integer "attempts", default: 0, null: false
     t.string "code", limit: 6, null: false
@@ -1337,6 +1360,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_31_140000) do
   add_foreign_key "pickup_events", "orders", on_delete: :cascade
   add_foreign_key "pickup_events", "tenants", on_delete: :cascade
   add_foreign_key "pickup_events", "users", column: "created_by_id", on_delete: :nullify
+  add_foreign_key "prep_kitchen_sales_point_links", "tenants", column: "prep_kitchen_tenant_id", on_delete: :cascade
+  add_foreign_key "prep_kitchen_sales_point_links", "tenants", column: "sales_point_tenant_id", on_delete: :cascade
   add_foreign_key "product_menu_visibilities", "menu_types", on_delete: :cascade
   add_foreign_key "product_menu_visibilities", "products", on_delete: :cascade
   add_foreign_key "product_modifier_groups", "products", on_delete: :cascade
@@ -1378,6 +1403,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_31_140000) do
   add_foreign_key "shifts", "tenants", on_delete: :cascade
   add_foreign_key "shifts", "users", column: "closed_by_id", on_delete: :nullify
   add_foreign_key "shifts", "users", column: "opened_by_id", on_delete: :restrict
+  add_foreign_key "shop_customer_favorites", "mobile_customers", column: "customer_id", on_delete: :cascade
+  add_foreign_key "shop_customer_favorites", "products", on_delete: :cascade
+  add_foreign_key "shop_customer_favorites", "tenants", on_delete: :cascade
   add_foreign_key "shop_email_verifications", "tenants"
   add_foreign_key "stock_movement_items", "ingredients", on_delete: :restrict
   add_foreign_key "stock_movement_items", "stock_movements", column: "movement_id", on_delete: :cascade

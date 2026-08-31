@@ -14,15 +14,30 @@ class Shop::Api::GuestOrderReconnectFlowTest < ActionDispatch::IntegrationTest
     @email = "reconnect-#{SecureRandom.hex(4)}@example.com"
     @customer = create_mobile_customer!(email: @email)
     @old_simulate = ENV["SHOP_SIMULATE_PAYMENT"]
+    @old_tbank_key = ENV["TBANK_TERMINAL_KEY"]
+    @old_tbank_pass = ENV["TBANK_PASSWORD"]
     ENV["SHOP_SIMULATE_PAYMENT"] = "0"
-    @old_tbank = ENV["TBANK_TERMINAL_KEY"]
-    ENV.delete("TBANK_TERMINAL_KEY")
+    ENV["TBANK_TERMINAL_KEY"] = "TestTerminal"
+    ENV["TBANK_PASSWORD"] = "TestPassword"
+    FakeTbankInit.enable_for_test!
+    Payments::CacheCounter.clear!
   end
 
   teardown do
     Current.reset
+    FakeTbankInit.disable!
     ENV["SHOP_SIMULATE_PAYMENT"] = @old_simulate
-    ENV["TBANK_TERMINAL_KEY"] = @old_tbank if @old_tbank
+    if @old_tbank_key
+      ENV["TBANK_TERMINAL_KEY"] = @old_tbank_key
+    else
+      ENV.delete("TBANK_TERMINAL_KEY")
+    end
+    if @old_tbank_pass
+      ENV["TBANK_PASSWORD"] = @old_tbank_pass
+    else
+      ENV.delete("TBANK_PASSWORD")
+    end
+    Payments::CacheCounter.clear!
   end
 
   test "reconnect restores guest session and history shows pending order" do
@@ -43,14 +58,9 @@ class Shop::Api::GuestOrderReconnectFlowTest < ActionDispatch::IntegrationTest
         as: :json
 
       body = JSON.parse(sess.response.body)
-      if sess.response.status == 422 && body["error"].to_s.match?(/TBANK|оплат/i)
-        skip "T-Bank not configured in test env"
-      end
-
       assert_equal 200, sess.response.status, body.inspect
       assert body["reconnect_token"].present?
 
-      # Имитация «потерянной» сессии гостя после банка
       sess.reset!
 
       sess.post "/shop/api/session/reconnect",

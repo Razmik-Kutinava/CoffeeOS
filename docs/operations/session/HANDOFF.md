@@ -2,14 +2,14 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-31 (ActionCable G-03)  
+**Дата:** 2026-08-31 (G-06/G-12 + legacy shop CI)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| G-03 ActionCable lookup closed | push develop |
+| G-06 favorites DB · G-12 prep multi-point · legacy shop CI green | push develop |
 
-**last_done:** connection TokenResolver + tests + docs sync G-01..G-03  
+**last_done:** FavoritesStore + prep kitchen links + CI full suite + FakeTbankInit  
 **next_step:** push develop
 
 **Архив session:** [`archive/README.md`](archive/README.md)  

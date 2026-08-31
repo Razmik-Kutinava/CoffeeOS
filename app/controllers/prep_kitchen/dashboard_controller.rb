@@ -9,6 +9,7 @@ module PrepKitchen
       @today_movements_count = StockMovement.for_current_tenant.where(created_at: Time.zone.today.all_day).count
       @critical_ingredients = stocks.low_stock.includes(:ingredient).order(qty: :asc).limit(10)
       @recent_movements = StockMovement.for_current_tenant.includes(:created_by).recent.limit(10)
+      @linked_sales_points = PrepKitchen::SalesPointRegistry.sales_points_for(Current.tenant_id)
     end
   end
 end

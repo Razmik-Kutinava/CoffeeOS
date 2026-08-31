@@ -14,15 +14,30 @@ class Shop::Api::QaSection23PaymentCartTest < ActionDispatch::IntegrationTest
     @email = "qa23-cart-#{SecureRandom.hex(4)}@example.com"
     @customer = create_mobile_customer!(email: @email)
     @old_simulate = ENV["SHOP_SIMULATE_PAYMENT"]
+    @old_tbank_key = ENV["TBANK_TERMINAL_KEY"]
+    @old_tbank_pass = ENV["TBANK_PASSWORD"]
     ENV["SHOP_SIMULATE_PAYMENT"] = "0"
-    @old_tbank = ENV["TBANK_TERMINAL_KEY"]
-    ENV.delete("TBANK_TERMINAL_KEY")
+    ENV["TBANK_TERMINAL_KEY"] = "TestTerminal"
+    ENV["TBANK_PASSWORD"] = "TestPassword"
+    FakeTbankInit.enable_for_test!
+    Payments::CacheCounter.clear!
   end
 
   teardown do
     Current.reset
+    FakeTbankInit.disable!
     ENV["SHOP_SIMULATE_PAYMENT"] = @old_simulate
-    ENV["TBANK_TERMINAL_KEY"] = @old_tbank if @old_tbank
+    if @old_tbank_key
+      ENV["TBANK_TERMINAL_KEY"] = @old_tbank_key
+    else
+      ENV.delete("TBANK_TERMINAL_KEY")
+    end
+    if @old_tbank_pass
+      ENV["TBANK_PASSWORD"] = @old_tbank_pass
+    else
+      ENV.delete("TBANK_PASSWORD")
+    end
+    Payments::CacheCounter.clear!
   end
 
   test "pending card order keeps cart in session" do
@@ -41,10 +56,6 @@ class Shop::Api::QaSection23PaymentCartTest < ActionDispatch::IntegrationTest
         as: :json
 
       body = JSON.parse(sess.response.body)
-      if sess.response.status == 422 && body["error"].to_s.match?(/TBANK|оплат/i)
-        skip "T-Bank not configured in test env"
-      end
-
       assert_equal 200, sess.response.status, body.inspect
       assert_equal "pending_payment", body["status"]
 
@@ -52,9 +63,6 @@ class Shop::Api::QaSection23PaymentCartTest < ActionDispatch::IntegrationTest
       cart = JSON.parse(sess.response.body)
       assert cart["items"].any?, "cart must stay until payment succeeds"
     end
-  rescue Shop::OrderCreator::Error => e
-    skip e.message if e.message.match?(/order_number|TBANK/i)
-    raise
   end
 
   test "double submit reuses pending order without empty cart error" do
@@ -72,13 +80,10 @@ class Shop::Api::QaSection23PaymentCartTest < ActionDispatch::IntegrationTest
           headers: headers,
           params: shop_order_params(email: @email, name: "QA Guest", payment_method: "card"),
           as: :json
-        break if sess.response.status == 422
       end
 
       first = JSON.parse(sess.response.body)
-      if sess.response.status == 422 && first["error"].to_s.match?(/TBANK|оплат/i)
-        skip "T-Bank not configured in test env"
-      end
+      assert_equal 200, sess.response.status, first.inspect
 
       order_id = first["order_id"]
       sess.post "/shop/api/orders",

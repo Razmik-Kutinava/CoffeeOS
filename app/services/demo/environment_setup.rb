@@ -148,6 +148,7 @@ module Demo
         )
         repair_franchise_organization_links!(organization: org)
         ensure_order_cancel_reasons!
+        ensure_prep_kitchen_sales_point_links!(tenant_kitchen: tenant_kitchen, tenant_a: tenant_a, tenant_b: tenant_b)
         ensure_demo_operations!(tenant_a: tenant_a, tenant_b: tenant_b, tenant_kitchen: tenant_kitchen)
         ensure_weekday_schedules!(tenant_a: tenant_a, tenant_b: tenant_b, tenant_c: tenant_c)
       end
@@ -306,6 +307,11 @@ module Demo
 
         user.update!(organization_id: organization.id, tenant_id: user.tenant_id || anchor.id)
       end
+    end
+
+    def ensure_prep_kitchen_sales_point_links!(tenant_kitchen:, tenant_a:, tenant_b:)
+      PrepKitchen::SalesPointRegistry.link!(prep_kitchen_tenant: tenant_kitchen, sales_point_tenant: tenant_a)
+      PrepKitchen::SalesPointRegistry.link!(prep_kitchen_tenant: tenant_kitchen, sales_point_tenant: tenant_b)
     end
 
     def ensure_order_cancel_reasons!

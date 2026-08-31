@@ -3,10 +3,8 @@
 module Shop
   module Api
     class FavoritesController < Shop::Api::BaseController
-      before_action :load_favorites
-
       def index
-        ids = @favorites
+        ids = favorites_store.product_ids
         return render json: [] if ids.empty?
 
         tenant_id = @shop_tenant.id
@@ -15,9 +13,10 @@ module Shop
           .where(product_id: products.map(&:id), tenant_id: tenant_id)
           .index_by(&:product_id)
 
-        render json: products.map { |p|
+        render json: products.filter_map { |p|
           setting = settings[p.id]
           next unless setting
+
           {
             id: p.id,
             name: p.name,
@@ -26,30 +25,30 @@ module Shop
             description: p.description,
             category_id: p.category_id
           }
-        }.compact
+        }
       end
 
       def create
         product = Shop::Catalog.products_scope(@shop_tenant.id).find(params[:product_id])
-        @favorites |= [ product.id.to_s ]
-        session[:shop_favorites] = @favorites
+        favorites_store.add!(product.id)
         render json: { favorited: true }
       rescue ActiveRecord::RecordNotFound
         render json: { error: "Product not found" }, status: :not_found
       end
 
       def destroy
-        pid = params[:product_id].to_s
-        @favorites.reject! { |x| x == pid }
-        session[:shop_favorites] = @favorites
+        favorites_store.remove!(params[:product_id])
         render json: { favorited: false }
       end
 
       private
 
-      def load_favorites
-        session[:shop_favorites] ||= []
-        @favorites = session[:shop_favorites].map(&:to_s)
+      def favorites_store
+        @favorites_store ||= Shop::FavoritesStore.new(
+          session: session,
+          tenant: @shop_tenant,
+          customer_id: Shop::CustomerSession.customer_id(session, @shop_tenant.id)
+        )
       end
     end
   end

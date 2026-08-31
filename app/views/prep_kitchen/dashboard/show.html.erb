@@ -7,6 +7,17 @@
   <div class="pk-kpi"><div class="pk-muted">Сегодня движений</div><strong><%= @today_movements_count %></strong></div>
 </div>
 
+<% if @linked_sales_points.any? %>
+<div class="pk-card">
+  <h3>Обслуживаемые точки продаж</h3>
+  <ul>
+    <% @linked_sales_points.each do |point| %>
+      <li><%= point.name %> <span class="pk-muted">(<%= point.slug %>)</span></li>
+    <% end %>
+  </ul>
+</div>
+<% end %>
+
 <div class="pk-card">
   <h3>Критичные ингредиенты</h3>
   <table class="pk-table">

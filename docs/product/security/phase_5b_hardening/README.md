@@ -26,9 +26,21 @@
 
 ## Остаётся (low / product)
 
-- Favorites session-only (G-06)
-- Prep multi-point (G-12)
 - Fly MCP Point A post-deploy (после включения kiosk/TV на точке)
+
+## G-06 favorites persist (2026-08-31)
+
+- `shop_customer_favorites` (RLS per tenant) + `Shop::FavoritesStore`
+- Login merge session → DB via `CustomerSession.set_customer_id!`
+
+## G-12 prep multi-point (2026-08-31)
+
+- `prep_kitchen_sales_point_links` + `PrepKitchen::SalesPointRegistry`
+- Demo: kitchen → Point A/B; dashboard список точек
+
+## Legacy shop CI (2026-08-31)
+
+- CI: сняты exclude 4 файлов; `FakeTbankInit` stub — без skip на card pending
 
 ## Phase 6 prep — device tokens (2026-08-31)
 
