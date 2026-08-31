@@ -7,7 +7,7 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| IB-D-05..08 FIXED | push → CI · IB-P-03 docs |
+| IB-D-05..08 FIXED · CI **green** (#33393190721) | IB-P-03 docs · deploy по апруву |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
