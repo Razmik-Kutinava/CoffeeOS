@@ -7,7 +7,7 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| CI **green** · HEAD `b524c188` on origin/develop | deploy v473+ по апруvу |
+| CI **green** · HEAD `b524c188` on origin/develop | deploy v473+ по апруву |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
