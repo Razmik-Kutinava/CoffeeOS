@@ -10,7 +10,7 @@
 | 5b-2 | `Devices::TokenResolver` — единый device lookup (kiosk/TV/cable) | RLS backlog |
 | 5b-3 | Platform Pundit: `PlatformPolicy` + authorize tenants/orgs/**menu catalog** | `/admin` |
 | 5b-4 | `TenantPolicy#open_as_manager?` → только UK | platform |
-| 5b-5 | `UserRole` validation: tenant_id обязателен для point staff | TECH DEBT G-11 |
+| 5b-5 | `UserRole` validation + backfill legacy `tenant_id` | TECH DEBT G-11 **FIXED** |
 | 5c | **Full ABAC enforce** — все 58 правил `Y` в каталоге | policies + scopes |
 
 ## Phase 5c — ABAC full enforce (2026-08-30)
@@ -36,6 +36,11 @@
 - `Rls::GucContext` — auth_login + device_token_lookup
 - Manager: revoke + rotate_token UI
 - Rack::Attack: tv_board throttles
+
+## G-11 legacy user_roles (2026-08-31)
+
+- Migration `backfill_user_roles_tenant_id` — NULL point staff → `users.tenant_id`
+- `has_role_in_context?` — убран global nil bypass
 
 ## Проверка
 

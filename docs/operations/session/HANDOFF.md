@@ -2,14 +2,14 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-31 (device token RLS prep)  
+**Дата:** 2026-08-31 (G-11 user_roles backfill)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| device token RLS без row_security off | push develop |
+| G-11 legacy user_roles backfill local | push develop |
 
-**last_done:** kiosk/TV/cable: GUC policy + revoke/rotate + Rack::Attack  
+**last_done:** user_roles tenant_id backfill + strict has_role_in_context?  
 **next_step:** push develop
 
 **Архив session:** [`archive/README.md`](archive/README.md)  

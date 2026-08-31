@@ -130,13 +130,11 @@ Baseline-матрица staff RBAC: роль → панель → tenant → м�
 
 | Role code | Tenant check |
 |-----------|--------------|
-| `barista`, `shift_manager`, `general_manager` | `user_roles.tenant_id` = context tenant OR `[TECH DEBT]` `tenant_id` nil |
+| `barista`, `shift_manager`, `general_manager` | `user_roles.tenant_id` = context tenant |
 | `franchise_manager` | role + `organization_id` match; tenant via `session[:manager_tenant_id]` |
 | `ук_global_admin` | global role; manager mode uses `Current.tenant_id` from session |
 | `prep_kitchen_manager`, `prep_kitchen_worker` | `user_roles.tenant_id` = prep kitchen tenant |
 | `blog_editor` | **out of scope Phase 2** — legacy `has_role?` |
-
-**`[TECH DEBT]`** Global `user_roles` without `tenant_id` still grant access in context — fix in Phase 3+.
 
 **API:** `User#has_role_in_context?(code, tenant_id: Current.tenant_id, organization_id: nil)` · `has_any_role_in_context?`
 

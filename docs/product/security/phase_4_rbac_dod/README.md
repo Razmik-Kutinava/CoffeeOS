@@ -26,7 +26,7 @@
 | G-08 | STAFF matrix | franchise + staff UI | info | **by design** — GM/UK only |
 | G-09 | Phase 2 | Platform Pundit not wired | low | **FIXED Phase 5b** — PlatformPolicy + tenants/orgs authorize |
 | G-10 | Phase 2 | blog_editor outside staff matrix | info | **backlog** blog CMS |
-| G-11 | TECH DEBT | Global `user_roles` without `tenant_id` | low | **FIXED new grants** — validation; legacy rows monitor |
+| G-11 | TECH DEBT | Global `user_roles` without `tenant_id` | low | **FIXED** — backfill migration + `has_role_in_context?` strict |
 | G-12 | Phase 3 | Prep multi-point (1 kitchen → N sales) | info | **product backlog** |
 
 **NEED_MIGRATION:** none  

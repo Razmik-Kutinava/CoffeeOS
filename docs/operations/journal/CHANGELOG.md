@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-31 — fix: backfill legacy user_roles tenant_id (G-11)
+
+- Migration `20260831140000` — NULL point staff grants → `users.tenant_id`; drop orphans/duplicates
+- `User#has_role_in_context?` — убран bypass для `tenant_id IS NULL`
+- Tests: `user_has_role_in_context_test`, `backfill_user_roles_tenant_id_migration_test`
+
 ## 2026-08-31 — feat: device token RLS без row_security off (kiosk/TV/cable prep)
 
 - Migration `rls_devices_token_lookup` + `Rls::GucContext.with_device_token_lookup`

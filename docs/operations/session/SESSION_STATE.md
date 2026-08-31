@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-31 (device token RLS prep)  
+**Дата:** 2026-08-31 (G-11 user_roles backfill)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| device token RLS local done | push develop |
+| G-11 user_roles backfill local done | push develop |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
