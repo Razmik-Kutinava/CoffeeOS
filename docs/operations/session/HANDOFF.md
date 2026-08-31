@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-31 (IB-D-04 prep kitchen Pundit)  
+**Дата:** 2026-08-31 (IB-D-05..08 defense in depth)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| IB-D-04 **FIXED** — PrepKitchen policies + authorize | IB-D-05..08 backlog · deploy по апруву |
+| IB-D-05..08 **FIXED** | push → CI · IB-P-03 docs · deploy по апруву |
 
-**last_done:** PrepKitchen::*Policy на 6 контроллеров; worker read dashboard/queue/stop_list; manager recipes/reports/incidents  
-**next_step:** push → CI · deploy по апруву
+**last_done:** Manager DashboardPolicy; blog_editor has_role_in_context; has_role_in_context else deny  
+**next_step:** push → CI
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

@@ -40,15 +40,15 @@ class User < ApplicationRecord
     roles.where(code: role_codes).exists?
   end
 
-  # IB Phase 2: role in tenant/org context (see STAFF_RBAC_MATRIX.md).
-  # barista/shift_manager/general_manager/prep_kitchen_* — user_roles.tenant_id must match context.
-  # franchise_manager — org match. ук_global_admin — global.
+  # franchise_manager — org match. ук_global_admin / blog_editor — global CMS/staff.
+  GLOBAL_ROLE_CODES = %w[ук_global_admin blog_editor].freeze
+
   def has_role_in_context?(role_code, tenant_id: Current.tenant_id, organization_id: nil)
     code = role_code.to_s
     return false unless roles.exists?(code: code)
 
     case code
-    when "ук_global_admin"
+    when *GLOBAL_ROLE_CODES
       true
     when "franchise_manager"
       franchise_manager? && organization_context_match?(organization_id)
@@ -57,7 +57,7 @@ class User < ApplicationRecord
     when "prep_kitchen_manager", "prep_kitchen_worker"
       point_staff_role_in_context?(code, tenant_id || self.tenant_id)
     else
-      roles.exists?(code: code)
+      false
     end
   end
 

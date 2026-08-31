@@ -1,6 +1,10 @@
 module Manager
   class DashboardController < BaseController
+    skip_before_action :skip_authorization
+    after_action :verify_authorized
+
     def show
+      authorize :manager_dashboard, :show?, policy_class: Manager::DashboardPolicy
       @tenant = current_tenant
 
       # MVP: быстрые метрики для офиса. Умные расчёты (health/incidents) добавим следующим шагом.

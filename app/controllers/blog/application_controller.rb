@@ -11,7 +11,7 @@ module Blog
     end
 
     def blog_editor?
-      current_user&.has_role?("blog_editor")
+      current_user&.has_role_in_context?("blog_editor")
     end
 
     def pundit_user

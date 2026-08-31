@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-31 (IB-D-04 prep kitchen Pundit)  
+**Дата:** 2026-08-31 (IB-D-05..08)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| IB-D-04 **FIXED** · CI **green** (#33391722169) | IB-D-05..08 backlog · deploy по апруву |
+| IB-D-05..08 FIXED | push → CI · IB-P-03 docs |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

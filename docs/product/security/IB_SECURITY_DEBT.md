@@ -22,10 +22,10 @@
 | ID | Область | Gap | Severity | Что сделать |
 |----|---------|-----|----------|-------------|
 | IB-D-04 | **Prep kitchen Pundit** | `queue`, `dashboard`, `recipes`, `reports`, `incidents`, `stop_list` — только `base#require_prep_kitchen_role`, **без** `authorize` / `verify_authorized`. Различие manager/worker — ручное (`stop_list#no_rights`). | low–medium | **FIXED** 2026-08-31 — `PrepKitchen::*Policy` + authorize; worker read dashboard/queue/stop_list; manager-only recipes/reports/incidents |
-| IB-D-05 | **Manager dashboard** | `DashboardController#show` без Pundit — опирается на base role gate. | low | `authorize :dashboard, :show?` или явный policy |
-| IB-D-06 | **blog_editor** | `has_role?("blog_editor")` **глобально**, не `has_role_in_context?`. Отдельный CMS-контур. | low | Context-aware role или UK-only assign |
+| IB-D-05 | **Manager dashboard** | `DashboardController#show` без Pundit — опирается на base role gate. | low | **FIXED** 2026-08-31 — `Manager::DashboardPolicy#show?` + authorize |
+| IB-D-06 | **blog_editor** | `has_role?("blog_editor")` **глобально**, не `has_role_in_context?`. Отдельный CMS-контур. | low | **FIXED** 2026-08-31 — global role in `has_role_in_context?`; blog uses context API; UserRole без tenant_id |
 | IB-D-07 | **Device TTL без cron** | Истёкший token → 401, но `is_active` остаётся true | low (ops) | **FIXED** 2026-08-31 — `RotateExpiringTokensJob` деактивирует + warn alerts |
-| IB-D-08 | **User#has_role_in_context?` else`** | Неизвестные role codes падают в `roles.exists?(code: code)` без tenant_id. | low | Whitelist role codes в else → deny |
+| IB-D-08 | **User#has_role_in_context?` else`** | Неизвестные role codes падают в `roles.exists?(code: code)` без tenant_id. | low | **FIXED** 2026-08-31 — else → deny; unknown codes не дают global grant |
 
 ---
 
@@ -54,10 +54,10 @@
 
 ## ✅ Закрыто недавно (не долг)
 
-- G-01…G-03 device lookup RLS · G-06 favorites DB · G-11 user_roles · **IB-D-01…04** · **G-12 wiring** · **IB-P-02 cron** · ABAC · legacy shop CI
+- G-01…G-03 device lookup RLS · G-06 favorites DB · G-11 user_roles · **IB-D-01…08** · **G-12 wiring** · **IB-P-02 cron** · ABAC · legacy shop CI
 
 ---
 
 ## Приоритет следующего шага
 
-1. **IB-D-05..08** — Pundit defense in depth (backlog)
+1. **IB-P-03** — docs drift favorites (backlog)

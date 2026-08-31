@@ -8,7 +8,7 @@ module Blog
 
       user = User.find_by("LOWER(email) = ? OR phone = ?", email_or_phone, email_or_phone)
 
-      if user&.authenticate(password) && user.active? && user.has_role?("blog_editor")
+      if user&.authenticate(password) && user.active? && user.has_role_in_context?("blog_editor")
         reset_session
         session[:user_id] = user.id
         session[:role_code] = "blog_editor"

@@ -15,7 +15,7 @@ module Blog
     private
 
     def blog_editor?
-      user.has_role?("blog_editor")
+      user.has_role_in_context?("blog_editor")
     end
   end
 end

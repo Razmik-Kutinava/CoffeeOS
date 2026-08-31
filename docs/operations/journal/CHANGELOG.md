@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-31 — feat(security): IB-D-05..08 manager dashboard Pundit + blog_editor context + role deny
+
+- **IB-D-05:** `Manager::DashboardPolicy#show?` + authorize на dashboard
+- **IB-D-06:** `blog_editor` в `GLOBAL_ROLE_CODES`; blog → `has_role_in_context?`; UserRole без tenant_id
+- **IB-D-08:** `has_role_in_context?` else → deny (unknown codes)
+- Tests: dashboard policy, user role context, factory global roles
+
 ## 2026-08-31 — feat(security): IB-D-04 prep kitchen Pundit policies
 
 - `PrepKitchen::BasePolicy` + Dashboard/Queue/Recipe/Report/Incident/StopList policies

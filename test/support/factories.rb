@@ -69,7 +69,8 @@ module TestFactories
 
     role_codes.each do |code|
       role = create_role!(code: code, name: code.humanize)
-      UserRole.create!(user: user, role: role, tenant: tenant)
+      role_tenant = User::GLOBAL_ROLE_CODES.include?(code.to_s) ? nil : tenant
+      UserRole.create!(user: user, role: role, tenant: role_tenant)
     end
 
     user
