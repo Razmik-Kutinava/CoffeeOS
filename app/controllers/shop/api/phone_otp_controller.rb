@@ -132,14 +132,6 @@ module Shop
         customer = session_cid.present? ? MobileCustomer.find_by(id: session_cid) : nil
         verified = customer.present? && customer.phone == normalized
 
-        if !verified && customer.nil?
-          by_phone = MobileCustomer.find_by(phone: normalized)
-          if by_phone
-            Shop::CustomerSession.set_customer_id!(session, @shop_tenant.id, by_phone.id)
-            verified = true
-          end
-        end
-
         render json: { verified: verified, phone: verified ? normalized : nil }
       end
     end

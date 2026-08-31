@@ -127,6 +127,46 @@ class Shop::Api::PhoneOtpTest < ActionDispatch::IntegrationTest
     assert_response :unprocessable_entity
   end
 
+  test "status does not auto-bind customer by phone without session link" do
+    create_mobile_customer!(phone: @phone, email: "status-no-bind-#{SecureRandom.hex(3)}@example.com")
+
+    get "/shop/api/phone_otp/status",
+      headers: shop_tenant_headers(@tenant.id),
+      params: { phone: @phone },
+      as: :json
+    assert_response :success
+    body = response.parsed_body
+    assert_equal false, body["verified"]
+    assert_nil body["phone"]
+    assert_nil Shop::CustomerSession.customer_id(session, @tenant.id)
+  end
+
+  test "status returns verified when session customer phone matches" do
+    open_session do |sess|
+      sess.post "/shop/api/phone_otp/send_sms",
+        headers: shop_tenant_headers(@tenant.id),
+        params: { phone: @phone },
+        as: :json
+      assert_equal 200, sess.response.status, sess.response.body
+
+      record = MobileOtpCode.where(phone: @phone, is_used: false).order(created_at: :desc).first
+      sess.post "/shop/api/phone_otp/verify_sms",
+        headers: shop_tenant_headers(@tenant.id),
+        params: { phone: @phone, code: record.code },
+        as: :json
+      assert_equal 200, sess.response.status, sess.response.body
+
+      sess.get "/shop/api/phone_otp/status",
+        headers: shop_tenant_headers(@tenant.id),
+        params: { phone: @phone },
+        as: :json
+      assert_equal 200, sess.response.status
+      body = sess.response.parsed_body
+      assert_equal true, body["verified"]
+      assert_equal @phone, body["phone"]
+    end
+  end
+
   test "links phone onto email-verified session via verify_sms" do
     email = "phone-api-link-#{SecureRandom.hex(3)}@example.com"
     verify_shop_email!(tenant_id: @tenant.id, email: email)

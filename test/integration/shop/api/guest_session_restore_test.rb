@@ -93,9 +93,15 @@ class Shop::Api::GuestSessionRestoreTest < ActionDispatch::IntegrationTest
     end
 
     open_session do |sess|
-      sess.get "/shop/api/user/cards",
+      sess.get "/shop/api/email_otp/status",
         headers: shop_tenant_headers(@tenant.id),
         params: { email: email },
+        as: :json
+      assert_equal 200, sess.response.status, sess.response.body
+      assert_equal true, sess.response.parsed_body["verified"]
+
+      sess.get "/shop/api/user/cards",
+        headers: shop_tenant_headers(@tenant.id),
         as: :json
       assert_equal 200, sess.response.status, sess.response.body
       body = sess.response.parsed_body

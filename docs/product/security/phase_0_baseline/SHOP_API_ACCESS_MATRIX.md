@@ -15,8 +15,8 @@ Phase 1 ownership: [SHOP_API_AUTH.md](../phase_1_rbac_closure/SHOP_API_AUTH.md) 
 | Метрика | Значение |
 |---------|----------|
 | **Endpoints total** | **51** (50 в production без `debug`) |
-| **OK** | 45 |
-| **REVIEW** | 6 |
+| **OK** | 49 |
+| **REVIEW** | 0 |
 | **HOLE** | 0 (Phase 1: 4 P0 закрыты) |
 
 ### HOLE list (Phase 0 → Phase 1 FIXED)
@@ -71,7 +71,8 @@ Order.where(tenant_id:, source: :mobile, customer_id: cid).find(params[:id])
 
 `Shop::GuestCustomerResolver` — session customer_id или verified email.
 
-Используется в: `user_cards#index`, `frequent_products#index`, `payments#widget_init` (partial).
+Используется в: `frequent_products#index`, `payments#widget_init` (partial).  
+`user_cards#index` — только `CustomerSession.customer_id` (без email param).
 
 ---
 
@@ -83,7 +84,7 @@ Order.where(tenant_id:, source: :mobile, customer_id: cid).find(params[:id])
 | 2 | GET | `/shop/api/tenants` | `tenants#index` | GUEST | mixed | resolved | session history | no | no | OK | `tenants_controller.rb:6-8` | — |
 | 3 | POST | `/shop/api/push/register` | `push#register` | CUSTOMER | mixed | resolved | `current_shop_customer` required | yes | no | OK | `push_controller.rb:11-12` | — |
 | 4 | GET | `/shop/api/debug` | `debug#index` | INTERNAL | mixed | resolved | non-prod only | no | no | OK | `debug_controller.rb:9-10`, `routes.rb:175` | route absent in production |
-| 5 | GET | `/shop/api/categories` | `categories#index` | PUBLIC | **none** (skip API key) | resolved | catalog public | no | no | REVIEW | `categories_controller.rb:6` | intentional public catalog; rate limit? |
+| 5 | GET | `/shop/api/categories` | `categories#index` | PUBLIC | **none** (skip API key) | resolved | catalog public | no | no | OK | `categories_controller.rb:6`, `rack_attack.rb` | public catalog; `shop/categories` 60/min per IP |
 | 6 | GET | `/shop/api/frequent_products` | `frequent_products#index` | GUEST | mixed | resolved | GuestCustomerResolver; empty if no customer | optional | no | OK | `frequent_products_controller.rb:8-24` | — |
 | 7 | GET | `/shop/api/products` | `products#index` | PUBLIC | mixed | resolved | catalog scope | no | no | OK | `products_controller.rb:6-37` | — |
 | 8 | GET | `/shop/api/products/:id` | `products#show` | PUBLIC | mixed | resolved | catalog scope | no | no | OK | `products_controller.rb:40-47` | — |
@@ -101,7 +102,7 @@ Order.where(tenant_id:, source: :mobile, customer_id: cid).find(params[:id])
 | 20 | POST | `/shop/api/phone_otp/verify_sms` | `phone_otp#verify_sms` | GUEST | mixed | resolved | SMS verify → link | sets session | no | OK | `phone_otp_controller.rb:74-88` | — |
 | 21 | POST | `/shop/api/phone_otp/send` | `phone_otp#send_code` | GUEST | mixed | resolved | legacy SMS | no | no | OK | `phone_otp_controller.rb:98-106` | legacy alias |
 | 22 | POST | `/shop/api/phone_otp/verify` | `phone_otp#verify` | GUEST | mixed | resolved | delegates verify_sms | sets session | no | OK | `phone_otp_controller.rb:115-116` | legacy alias |
-| 23 | GET | `/shop/api/phone_otp/status` | `phone_otp#status` | GUEST | mixed | resolved | phone match / auto-bind | REVIEW | no | REVIEW | `phone_otp_controller.rb:119-143` | auto `set_customer_id!` by phone lookup |
+| 23 | GET | `/shop/api/phone_otp/status` | `phone_otp#status` | GUEST | mixed | resolved | session customer phone match only | optional | no | OK | `phone_otp_controller.rb:119-135` | no auto-bind by phone lookup |
 | 24 | POST | `/shop/api/orders` | `orders#create` | GUEST | mixed | resolved | OrderCreator session | optional | no | OK | `orders_controller.rb:10-19` | creates order for session/guest |
 | 25 | POST | `/shop/api/payments/new_card` | `payments#new_card` | GUEST | mixed | resolved | creates order in service | via new order | no | OK | `payments_controller.rb:16-19`, `new_card_payment_service.rb` | card ownership N/A (new card) |
 | 26 | POST | `/shop/api/payments/one_click` | `payments#one_click` | CUSTOMER | mixed | resolved | RecurrentOrderCreator: card.customer == customer | yes | no | OK | `one_click_payment_service.rb`, `recurrent_order_creator.rb:23-25` | — |
@@ -110,12 +111,12 @@ Order.where(tenant_id:, source: :mobile, customer_id: cid).find(params[:id])
 | 29 | POST | `/shop/api/payments/widget_init` | `payments#widget_init` | GUEST | mixed | resolved | `find_visible_order!` | via helper | no | **OK** | `payments_controller.rb:80-82` | Phase 1 FIXED |
 | 30 | GET | `/shop/api/payments/status/:order_id` | `payments#status` | GUEST | mixed | resolved | `find_visible_order!` | via helper | no | **OK** | `payments_controller.rb:111-122` | Phase 1 FIXED |
 | 31 | GET | `/shop/api/payments/card_config` | `payments#card_config` | PUBLIC | mixed | resolved | RSA public key | no | no | OK | `payments_controller.rb:11-12` | public key by design |
-| 32 | GET | `/shop/api/user/cards` | `user_cards#index` | GUEST | mixed | resolved | GuestCustomerResolver(email) | optional | no | REVIEW | `user_cards_controller.rb:8-11` | empty without customer; email param needs verified email |
+| 32 | GET | `/shop/api/user/cards` | `user_cards#index` | CUSTOMER | mixed | resolved | `CustomerSession.customer_id` only | yes | no | OK | `user_cards_controller.rb:8-11` | empty without session customer; restore via `email_otp/status` |
 | 33 | GET | `/shop/api/orders/history` | `orders#history` | CUSTOMER | mixed | resolved | `where(customer_id: cid)` | yes | no | OK | `orders_controller.rb:110-140` | empty array if no cid |
 | 34 | GET | `/shop/api/orders/active` | `orders#active` | CUSTOMER | mixed | resolved | `where(customer_id: cid)` | yes | no | OK | `orders_controller.rb:147-165` | — |
 | 35 | POST | `/shop/api/session/reconnect` | `session#reconnect` | GUEST | mixed | resolved | `GuestOrderReconnect` token | via token | no | OK | `session_controller.rb:6-23` | needs valid reconnect_token |
 | 36 | POST | `/shop/api/session/refresh` | `session#refresh` | CUSTOMER | mixed | resolved | `MobileSession` refresh_token | yes | no | OK | `session_controller.rb:26-34` | — |
-| 37 | DELETE | `/shop/api/session` | `session#destroy` | GUEST | mixed | resolved | clears session; deactivates refresh if param | REVIEW | no | REVIEW | `session_controller.rb:37-45` | anyone with refresh_token can deactivate |
+| 37 | DELETE | `/shop/api/session` | `session#destroy` | GUEST | mixed | resolved | clears session; deactivates refresh if matches session customer | optional | no | OK | `session_controller.rb:37-49` | refresh deactivation scoped to session customer |
 | 38 | POST | `/shop/api/orders/:id/abandon` | `orders#abandon` | GUEST | mixed | resolved | `order_visible_to_session_customer?` | via helper | no | OK | `orders_controller.rb:40-45` | guest pending path by design |
 | 39 | POST | `/shop/api/orders/:id/cancel` | `orders#cancel` | GUEST | mixed | resolved | `order_visible_to_session_customer?` | via helper | no | OK | `orders_controller.rb:64-68` | — |
 | 40 | POST | `/shop/api/orders/:id/finalize` | `orders#finalize` | GUEST | mixed | resolved | `order_visible_to_session_customer?` | via helper | no | OK | `orders_controller.rb:84-88` | — |
@@ -140,10 +141,10 @@ Order.where(tenant_id:, source: :mobile, customer_id: cid).find(params[:id])
 | Priority | Endpoint | Status |
 |----------|----------|--------|
 | ~~P0~~ | payments status / widget_init / sbp/init / sbp/charge | **FIXED** Phase 1 |
-| P2 | `GET phone_otp/status` | REVIEW — document auto-bind |
-| P2 | `DELETE session` | REVIEW — refresh_token binding |
+| P2 | ~~`GET phone_otp/status`~~ | **FIXED** — session phone match only |
+| P2 | ~~`DELETE session`~~ | **FIXED** — refresh_token must match session customer |
 | P3 | ~~favorites persist per customer~~ | **FIXED G-06** — `shop_customer_favorites` + `Shop::FavoritesStore` |
-| P3 | `GET categories` public | OWNER REVIEW |
+| P3 | ~~`GET categories` public~~ | **FIXED** — `shop/categories` throttle 60/min |
 
 ---
 

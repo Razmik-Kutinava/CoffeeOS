@@ -2,14 +2,14 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-31 (IB-P-03/04 docs sync)  
+**Дата:** 2026-08-31 (Shop REVIEW G-04/G-05 fixes)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| IB-P-03/04 **FIXED** — favorites + G-12 docs sync | deploy по апруву |
+| Shop REVIEW **FIXED** — phone_otp/status, session destroy, categories throttle, user/cards | push → CI · deploy по апруву |
 
-**last_done:** ROLES §7, SHOP matrix, ACTORS, phase_4 G-12 gap register  
+**last_done:** G-04/G-05 code + SHOP matrix 49 OK / 0 REVIEW  
 **next_step:** push → CI · deploy по апруву
 
 **Архив session:** [`archive/README.md`](archive/README.md)  

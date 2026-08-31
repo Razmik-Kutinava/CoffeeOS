@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-31 (IB-P-03/04 docs)  
+**Дата:** 2026-08-31 (Shop REVIEW fixes)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| IB-P-03/04 FIXED · CI **green** (#33394790512) | deploy по апруву |
+| Shop G-04/G-05 + categories + user/cards **FIXED** | push → CI · deploy по апруву |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

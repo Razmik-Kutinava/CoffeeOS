@@ -19,8 +19,8 @@
 | G-01 | Phase 3 | Kiosk auth RLS bypass | medium (prod N/A) | **FIXED** — `rls_devices_token_lookup` + `Rls::GucContext` |
 | G-02 | Phase 3 | TV board device lookup bypass | medium (prod N/A) | **FIXED** — TokenResolver + GUC policy |
 | G-03 | Phase 3 | ActionCable connection lookup | medium (prod N/A) | **FIXED** — `with_auth_login` (staff) + `TokenResolver` (TV cookie) |
-| G-04 | Phase 0 REVIEW | Shop `phone_otp/status` auto-bind | low | **documented** — by design |
-| G-05 | Phase 0 REVIEW | Shop `DELETE session` refresh deactivation | low | **documented** |
+| G-04 | Phase 0 REVIEW | Shop `phone_otp/status` auto-bind | low | **FIXED** 2026-08-31 — session phone match only |
+| G-05 | Phase 0 REVIEW | Shop `DELETE session` refresh deactivation | low | **FIXED** 2026-08-31 — refresh scoped to session customer |
 | G-06 | Phase 0 P3 | Favorites session-only | low | **FIXED** — `shop_customer_favorites` + `Shop::FavoritesStore` |
 | G-07 | STAFF matrix | shift_manager + `/manager/inventory` URL | low | **FIXED** — `require_general_or_franchise_manager!` |
 | G-08 | STAFF matrix | franchise + staff UI | info | **by design** — GM/UK only |

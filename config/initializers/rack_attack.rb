@@ -78,6 +78,11 @@ class Rack::Attack
     req.ip if req.path == "/login" && req.post?
   end
 
+  # Публичный каталог без API key — отдельный лимит (скрейпинг).
+  throttle("shop/categories", limit: 60, period: 1.minute) do |req|
+    req.ip if req.path == "/shop/api/categories" && req.get?
+  end
+
   # Лимит для shop API: 150 запросов в минуту с одного IP
   throttle("shop/api", limit: 150, period: 1.minute) do |req|
     req.ip if req.path.start_with?("/shop/api/")

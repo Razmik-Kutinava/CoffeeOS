@@ -70,4 +70,29 @@ class Shop::Api::CategoriesControllerTest < ActionDispatch::IntegrationTest
     json = JSON.parse(response.body)
     assert_match(/tenant_id|точка/i, json["error"])
   end
+
+  test "rack attack throttles public categories catalog" do
+    headers = { "X-Shop-Tenant" => @tenant.id.to_s }
+    with_rack_attack do
+      60.times do
+        get "/shop/api/categories", headers: headers
+        assert_response :success
+      end
+
+      get "/shop/api/categories", headers: headers
+      assert_response :too_many_requests
+    end
+  end
+
+  private
+
+  def with_rack_attack
+    was_enabled = Rack::Attack.enabled
+    Rack::Attack.enabled = true
+    Rack::Attack.cache.store.clear if Rack::Attack.cache.store.respond_to?(:clear)
+    yield
+  ensure
+    Rack::Attack.cache.store.clear if Rack::Attack.cache.store.respond_to?(:clear)
+    Rack::Attack.enabled = was_enabled
+  end
 end

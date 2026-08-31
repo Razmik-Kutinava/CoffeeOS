@@ -35,12 +35,16 @@ module Shop
       end
 
       def destroy
+        session_customer_id = Shop::CustomerSession.customer_id(session, @shop_tenant.id)
         Shop::CustomerSession.clear!(session, @shop_tenant.id)
         Shop::PendingOrderSession.clear!(session, @shop_tenant.id)
         token = params[:refresh_token].to_s.strip
         if token.present?
           ms = MobileSession.find_by(refresh_token: token)
-          ms&.deactivate!
+          if ms && session_customer_id.present? &&
+              ms.customer_id.to_s == session_customer_id.to_s
+            ms.deactivate!
+          end
         end
         render json: { ok: true, logged_out: true }
       end

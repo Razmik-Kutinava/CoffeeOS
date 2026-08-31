@@ -25,11 +25,7 @@ module Shop
       private
 
       def resolve_customer_id!
-        Shop::GuestCustomerResolver.call(
-          session: session,
-          tenant_id: @shop_tenant.id,
-          email: params[:email]
-        )
+        Shop::CustomerSession.customer_id(session, @shop_tenant.id)
       end
 
       # Карта валидна до конца месяца exp_date (ММ/ГГ или MMYY).

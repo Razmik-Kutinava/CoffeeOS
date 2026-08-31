@@ -11,6 +11,15 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-31 — fix(security): Shop REVIEW G-04/G-05 + categories throttle + user/cards session-only
+
+- **G-04:** `phone_otp/status` — убран auto-bind по phone lookup; только session customer с совпадающим phone
+- **G-05:** `DELETE /shop/api/session` — deactivate refresh_token только если customer_id совпадает с session
+- **categories:** Rack::Attack `shop/categories` 60/min per IP
+- **user/cards:** только `CustomerSession.customer_id`; F5 restore через `email_otp/status`
+- SHOP matrix: 49 OK / 0 REVIEW; IB_SECURITY_DEBT Shop REVIEW закрыты
+- Tests: phone_otp, ownership_idor, guest_session_restore, categories throttle
+
 ## 2026-08-31 — docs: IB-P-03/04 favorites G-06 + G-12 gap register sync
 
 - **IB-P-03:** ROLES §7, SHOP_API_ACCESS_MATRIX (#49–51), ACTORS — favorites G-06 FIXED (session + DB)

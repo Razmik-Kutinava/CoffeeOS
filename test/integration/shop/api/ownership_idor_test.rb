@@ -209,6 +209,47 @@ class Shop::Api::OwnershipIdorTest < ActionDispatch::IntegrationTest
     assert_nil response.parsed_body["primary"]
   end
 
+  test "user_cards ignores unverified email param without session customer" do
+    MobilePaymentMethod.create!(
+      customer_id: @customer_a.id,
+      payment_type: "card",
+      card_masked: "220220******5953",
+      card_expires_at: "09/27",
+      card_token: "rebill-idor-#{SecureRandom.hex(4)}",
+      is_active: true,
+      is_default: true
+    )
+
+    get "/shop/api/user/cards",
+      headers: headers,
+      params: { email: @email_a },
+      as: :json
+    assert_response :success
+    assert_equal [], response.parsed_body["cards"]
+  end
+
+  test "DELETE session does not deactivate another customers refresh_token" do
+    refresh_token_a = nil
+    open_session do |sess_a|
+      verify_shop_email!(tenant_id: @tenant.id, email: @email_a, session: sess_a)
+      refresh_token_a = sess_a.response.parsed_body["refresh_token"]
+      assert refresh_token_a.present?
+    end
+
+    open_session do |sess_b|
+      verify_shop_email!(tenant_id: @tenant.id, email: @email_b, session: sess_b)
+      sess_b.delete "/shop/api/session",
+        headers: headers,
+        params: { refresh_token: refresh_token_a },
+        as: :json
+      assert_equal 200, sess_b.response.status
+    end
+
+    ms = MobileSession.find_by(refresh_token: refresh_token_a)
+    assert ms
+    assert_equal true, ms.is_active, "logout B must not revoke A refresh token"
+  end
+
   test "profile is scoped to session customer after OTP" do
     open_session do |sess|
       verify_shop_email!(tenant_id: @tenant.id, email: @email_a, session: sess)

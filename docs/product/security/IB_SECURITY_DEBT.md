@@ -29,14 +29,14 @@
 
 ---
 
-## 🟢 Shop — осознанные REVIEW (не HOLE, но зафиксировать)
+## 🟢 Shop — REVIEW закрыты (2026-08-31)
 
-| ID | Endpoint / тема | Риск | Статус |
+| ID | Endpoint / тема | Было | Статус |
 |----|-----------------|------|--------|
-| G-04 | `GET /shop/api/phone_otp/status` auto-bind customer по phone | Слабая привязка session↔customer при совпадении phone | **documented** by design |
-| G-05 | `DELETE /shop/api/session` + refresh_token | Деактивация refresh без строгой привязки к session | **documented** REVIEW |
-| — | `GET /shop/api/categories` public без API key | Каталог публичный | **by design** + rate limit backlog |
-| — | `GET /shop/api/user/cards` по email param | Нужен verified email flow | REVIEW в матрице |
+| G-04 | `GET /shop/api/phone_otp/status` auto-bind | auto `set_customer_id!` по phone | **FIXED** — только session customer с совпадающим phone |
+| G-05 | `DELETE /shop/api/session` + refresh_token | деактивация чужого refresh | **FIXED** — deactivate только если `ms.customer_id` == session customer |
+| — | `GET /shop/api/categories` public | без dedicated rate limit | **FIXED** — `shop/categories` 60/min per IP |
+| — | `GET /shop/api/user/cards` по email param | GuestCustomerResolver(email) | **FIXED** — session `customer_id` only; F5 через `email_otp/status` |
 
 ---
 
