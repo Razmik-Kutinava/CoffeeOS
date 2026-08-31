@@ -23,7 +23,7 @@ class PrepKitchen::SalesPointRegistryTest < ActiveSupport::TestCase
 
     points = PrepKitchen::SalesPointRegistry.sales_points_for(@kitchen.id)
     assert_equal 2, points.count
-    assert_equal [@point_a.id, @point_b.id].sort, points.pluck(:id).sort
+    assert_equal [ @point_a.id, @point_b.id ].sort, points.pluck(:id).sort
   end
 
   test "resolves prep kitchen from sales point" do

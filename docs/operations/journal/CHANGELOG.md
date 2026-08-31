@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-31 — fix(ci): prep kitchen user_id services + rubocop + brakeman GUC
+
+- `PrepKitchen::Reports::Builder` / `Incidents::Collector` — `user_id:` для LinkedTenantScope (fix CI test errors)
+- `Rls::GucContext` — hardcoded SET LOCAL keys (Brakeman SQL injection false positive)
+- RuboCop `Layout/SpaceInsideArrayLiteralBrackets` в prep_kitchen tests
+
 ## 2026-08-31 — fix(security): IB-D-03 remove shop-api-key from vitrina meta (V2-SEC-07)
 
 - `shop.html.erb` — без meta `shop-api-key`; browser auth CSRF + Referer

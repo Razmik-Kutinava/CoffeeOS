@@ -15,8 +15,16 @@ module Rls
     def self.with_local_guc(key, value)
       conn = ActiveRecord::Base.connection
       validate_guc_key!(key)
+      sql = case key
+      when "app.auth_login"
+        "SET LOCAL app.auth_login = #{conn.quote(value)}"
+      when "app.device_token_lookup"
+        "SET LOCAL app.device_token_lookup = #{conn.quote(value)}"
+      else
+        raise ArgumentError, "unsupported RLS GUC: #{key}"
+      end
       ActiveRecord::Base.transaction do
-        conn.execute("SET LOCAL #{key} = #{conn.quote(value)}")
+        conn.execute(sql)
         yield
       end
     end

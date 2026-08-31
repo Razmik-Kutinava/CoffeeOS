@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-31 (IB-D-03 shop-api-key)  
+**Дата:** 2026-08-31 (CI fix prep kitchen + brakeman)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| IB-D-03 FIXED — shop-api-key убран из meta | push develop |
+| CI fix pushed — builder/collector user_id + rubocop + brakeman | green CI → deploy по апруву |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

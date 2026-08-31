@@ -42,6 +42,6 @@ class PrepKitchen::StopList::LinkedSalesPointSettingsQueryTest < ActiveSupport::
       user_id: @manager.id
     )
 
-    assert_equal [@setting_a.id], items.map(&:id)
+    assert_equal [ @setting_a.id ], items.map(&:id)
   end
 end
