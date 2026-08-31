@@ -7,7 +7,7 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| CI fix pushed — builder/collector user_id + rubocop + brakeman | green CI → deploy по апруву |
+| CI **green** (#33370517697) | deploy только по апруву · IB-P-05 Fly re-verify |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

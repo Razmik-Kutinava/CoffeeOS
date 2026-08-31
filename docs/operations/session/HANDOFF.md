@@ -7,10 +7,10 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| CI fix — builder/collector user_id + rubocop + brakeman GUC | push develop · ждать green CI |
+| CI **green** develop (#33370517697) | deploy по апруву · IB-P-05 Fly re-verify |
 
-**last_done:** CI round 2 — rubocop builder brackets; FavoritesStore find_by для unit-тестов  
-**next_step:** CI green → deploy только по апруву · IB-P-05 Fly re-verify
+**last_done:** CI green — lint/test/scan_ruby/system-test/scan_js all pass  
+**next_step:** ждать апрув deploy · IB-P-05 Fly re-verify после deploy
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
