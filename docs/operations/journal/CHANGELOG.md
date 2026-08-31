@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-31 — deploy Fly v473 Shop REVIEW fixes
+
+- `fly deploy --remote-only --depot=false` → **v473** (`deployment-01M1C2Z4HMEKJ8D9075REQ9ESW`)
+- Release command **PASS** · rolling update web+worker **PASS**
+- Post-deploy: `/up` 200 · `GET /shop/api/categories` 200
+- MCP Point A — **skip** (апрув)
+
 ## 2026-08-31 — push develop + CI green #33400720124
 
 - Push `eff54100..b524c188` (Shop REVIEW + Prog10 v472 ops + IB doc sync)

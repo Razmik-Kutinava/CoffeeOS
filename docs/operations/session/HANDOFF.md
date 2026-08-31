@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-31 (push + CI green #33400720124)  
+**Дата:** 2026-08-31 (Fly v473 Shop REVIEW deploy)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| develop **pushed** · CI **green** (#33400720124) · HEAD `b524c188` | deploy Shop fixes v473+ по апруву |
+| Fly **v473** deployed · release OK · `/up` 200 | MCP Point A по апруву |
 
-**last_done:** push 3 commits · CI test/lint/scan/system-test PASS  
-**next_step:** deploy v473+ по апруву
+**last_done:** deploy Shop G-04/G-05 + categories + user/cards · HEAD `c8010a57`  
+**next_step:** MCP Point A по апруву
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

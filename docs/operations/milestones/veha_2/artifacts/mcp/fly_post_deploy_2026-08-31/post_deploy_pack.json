@@ -1,0 +1,43 @@
+{
+  "task": "post_deploy_acceptance_pack",
+  "date": "2026-08-31",
+  "release": "v473",
+  "head": "c8010a57",
+  "image": "deployment-01M1C2Z4HMEKJ8D9075REQ9ESW",
+  "base": "https://coffeeos.fly.dev",
+  "note": "Shop REVIEW G-04/G-05 + categories throttle + user/cards session-only",
+  "checks": [
+    {
+      "id": "fly_release_command",
+      "pass": true,
+      "note": "release_command 080e9279c95138 completed successfully"
+    },
+    {
+      "id": "fly_up",
+      "pass": true,
+      "http": 200
+    },
+    {
+      "id": "shop_categories_public",
+      "pass": true,
+      "http": 200,
+      "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789"
+    },
+    {
+      "id": "mcp_point_a",
+      "pass": null,
+      "skip": "awaiting owner approval — next step after deploy"
+    },
+    {
+      "id": "prog10_staff_isolation",
+      "pass": null,
+      "skip": "last PASS v472 2026-08-31; optional re-run post-MCP"
+    },
+    {
+      "id": "sentry_24h",
+      "pass": null,
+      "skip": "not scripted this step"
+    }
+  ],
+  "verdict": "deploy_pass_mcp_pending"
+}

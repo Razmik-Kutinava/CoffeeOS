@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-31 (CI green #33400720124)  
+**Дата:** 2026-08-31 (Fly v473 deploy)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| CI **green** · HEAD `b524c188` on origin/develop | deploy v473+ по апруву |
+| Fly **v473** · Shop REVIEW on prod | MCP Point A по апруву |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
@@ -20,9 +20,11 @@
 
 | Что | Статус |
 |-----|--------|
-| Fly deploy | **v472** |
-| Prog10 staff isolation 9 points | **PASS** 9/9 — `prog10_staff_isolation_2026-08-31_v472.json` |
-| MCP Point A | **PASS** 7/7 — `mcp/fly_v461_2026-08-31/` |
+| Fly deploy | **v473** — Shop REVIEW G-04/G-05 + categories throttle + user/cards |
+| Release command | **PASS** (`fly:release` OK) |
+| Post-deploy smoke | **PASS** — `/up` 200, `GET categories` 200 |
+| Prog10 staff isolation 9 points | **PASS** 9/9 v472 (pre-deploy; re-run optional post-MCP) |
+| MCP Point A | **skip** — ждёт апрув |
 
 ### Fly IB приёмка Phase 5b (2026-08-30)
 
