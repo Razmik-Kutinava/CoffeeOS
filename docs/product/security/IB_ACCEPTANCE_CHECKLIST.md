@@ -39,12 +39,12 @@
 ## Explicit exceptions (не блокер Phase 4)
 
 - [x] Kiosk/TV/ActionCable RLS lookup — **FIXED** G-01..G-03 ([RLS_TENANT_AUDIT.md](phase_3_tenant_rls/RLS_TENANT_AUDIT.md), `connection_test.rb`)
-- [x] Platform Pundit partial — documented in STAFF_RBAC_MATRIX + ROLES §7
+- [x] Platform Pundit — **FIXED Phase 5b** (`PlatformPolicy` + tenants/orgs/menu)
 - [x] Blog editor — out of staff contour
 
 ## Post-deploy (не блокер Phase 4)
 
-- [ ] Fly MCP Point A — **PASS** 2026-08-30 v468 (`fly_v461_2026-08-30/mcp_result.json`)
+- [x] Fly MCP Point A — **PASS 7/7** v472 2026-08-31 (`fly_v461_2026-08-31/mcp_result.json`); post–Shop-REVIEW deploy — pending
 
 ---
 

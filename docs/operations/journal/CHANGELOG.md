@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-31 — docs: IB doc sync (master checklist, ROLES, STAFF, ACTORS, acceptance)
+
+- Prog10 **PASS 9/9** v472, MCP **PASS 7/7** — убраны SKIP/422/9 REVIEW из живых IB docs
+- ROLES §5/§8, STAFF_RBAC prep+platform Pundit, ACTORS backlog, roadmap, phase_4/5b README
+
 ## 2026-08-31 — ops: Prog10 staff isolation PASS 9/9 Fly v472 (IB sign-off)
 
 - `bin/prog10/prog10_staff_rbac_isolation.rb` → Fly v472 — **9/9 PASS**

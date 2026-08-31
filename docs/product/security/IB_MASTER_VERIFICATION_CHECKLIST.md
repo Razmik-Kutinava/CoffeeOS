@@ -3,8 +3,8 @@
 **Как пользоваться:** иди сверху вниз. Пункт без `[x]` = работа **не закрыта**.  
 **PASS** = команда дала `0 failures, 0 errors` или ручной/интеграционный сценарий с ожидаемым результатом.
 
-**Последний прогон:** 2026-08-30 · ветка `develop` · коммит до `99215692`  
-**Исполнитель:** IB master verification agent (WSL, локально)  
+**Последний прогон:** 2026-08-31 · ветка `develop` · коммит `a967a4ea` (Prog10 v472 + doc sync)  
+**Исполнитель:** IB master verification agent (WSL, локально + Fly v472)  
 **Окружение:** `bundle install` OK · `db:test:prepare` OK · Rails test parallel 12 workers
 
 ### Краткий итог прогона
@@ -12,16 +12,15 @@
 | Блок | Результат | Детали |
 |------|-----------|--------|
 | Phase 0 docs | **PASS** | все baseline-файлы на месте, содержание OK |
-| Phase 1 Shop | **PASS** | 0 HOLE, ownership + auth + suite green |
+| Phase 1 Shop | **PASS** | 0 HOLE, 0 REVIEW, ownership + auth + suite green |
 | Phase 2 Staff RBAC | **PASS** | Pundit + tenant isolation, auth suite 61/61 |
-| Phase 3 Tenant RLS | **PASS** | audit exit 0, tenant_rls 6/6, backlog явный |
-| Phase 4 DoD | **PASS*** | мега-регресс 309/309 (3 skip legacy); Prog10 **SKIP** |
+| Phase 3 Tenant RLS | **PASS** | audit exit 0, tenant_rls 6/6, G-01..G-03 FIXED |
+| Phase 4 DoD | **PASS** | мега-регресс 309/309 (3 skip legacy); Prog10 **PASS 9/9** Fly v472 |
 | Phase 5 ABAC | **PASS** | 58 rules doc, PolicyContext, policies 33/33 |
+| Phase 5b hardening | **PASS** | TokenResolver, platform Pundit, prep Pundit, UserRole guard |
 | Мега-прогон §Финал | **PASS** | 0 failures, 0 errors |
 | Ручной smoke M1–M14 | **AUTO-PASS** | покрыто интеграционными тестами (браузер не гоняли) |
-| Push / CI / Fly | **ожидание** | push и deploy — только апрув владельца |
-
-\* Prog10 staff isolation — известное исключение (cash payment 422 на стенде).
+| Push / CI / Fly | **ожидание** | push и deploy Shop fixes — только апрув владельца |
 
 ---
 
@@ -267,7 +266,7 @@ ruby bin/prog10/prog10_staff_rbac_isolation.rb
 
 | Ожидание | OK | Факт |
 |----------|-----|------|
-| PASS / own 200, foreign 404 | `[ ]` **SKIP** | **RuntimeError:** `cash payment not available online` status 422 при create order Point A. Последний PASS: `prog10_staff_isolation.json` 2026-06-02 (9/9). Не блокер local DoD — см. IB_ACCEPTANCE §exceptions |
+| PASS / own 200, foreign 404 | `[x]` | **PASS 9/9** Fly v472 2026-08-31 — `prog10_staff_isolation_2026-08-31_v472.json` (barista POS orders, не shop cash) |
 
 ### 4.D Полный регресс Phase 4
 
@@ -287,7 +286,7 @@ ruby bin/rails test test/integration/shop/api/ownership_idor_test.rb test/integr
 | 4.E.2 | Push на remote (если ты разрешал) | `[ ]` | **ожидание апрува владельца** (HANDOFF) |
 | 4.E.3 | CI green (если push был) | `[ ]` | fix #127 локально; CI после push — TBD |
 
-**Phase 4 закрыта:** 4.A все `[x]` + 4.B все PASS + 4.C SKIP (exception) + 4.D.
+**Phase 4 закрыта:** 4.A все `[x]` + 4.B все PASS + 4.C Prog10 PASS v472 + 4.D.
 
 ---
 
@@ -380,11 +379,9 @@ echo "=== AUDIT (optional) ==="
 ruby bin/audit/tenant_guc_inventory.rb
 ```
 
-| Итог | OK | Факт 2026-08-30 |
+| Итог | OK | Факт 2026-08-31 |
 |------|-----|-----------------|
-| Все блоки без FAIL | `[x]`* | **309 runs, 1592 assertions, 0 failures, 0 errors, 3 skips** (shop legacy). Prog10 **FAIL/SKIP** (422 cash). barista_shift_abac — N/A (policies cover). Audit **exit 0**. |
-
-\* Prog10 — единственный красный блок; задокументирован как exception Phase 4.
+| Все блоки без FAIL | `[x]` | **309 runs, 1592 assertions, 0 failures, 0 errors, 3 skips** (shop legacy). Prog10 **PASS 9/9** v472. Audit **exit 0**. |
 
 ### Объединённая команда (использовалась при прогоне)
 
@@ -436,13 +433,11 @@ ruby bin/rails test \
 | 1 Shop | `[x]` | `[x]` | M1–M3 AUTO | `[ ]` |
 | 2 Staff RBAC | `[x]` | `[x]` | M4–M9 AUTO | `[ ]` |
 | 3 Tenant RLS | `[x]` | `[x]` | M8–M9 AUTO | `[ ]` |
-| 4 DoD | `[x]` | `[x]`* | Prog10 SKIP | `[ ]` |
+| 4 DoD | `[x]` | `[x]` | Prog10 PASS v472 | `[ ]` |
 | 5 ABAC | `[x]` | `[x]` | M10–M11 AUTO | `[ ]` |
-| **ИТОГО** | `[x]` | **Мега-прогон §Финал** `[x]`* | **M1–M14 AUTO** `[x]` | `[ ]` |
+| **ИТОГО** | `[x]` | **Мега-прогон §Финал** `[x]` | **M1–M14 AUTO** `[x]` | `[ ]` |
 
-\* Prog10 exception; push/CI — после апрува.
-
-**Вся работа сделана** = последняя строка ИТОГО все `[x]` + мега-прогон 0 failures — **локально выполнено**, ожидает **апрув владельца** (push, Fly, глазами на стенде).
+**Вся работа сделана** = последняя строка ИТОГО все `[x]` + мега-прогон 0 failures — **локально выполнено**, Fly Prog10/MCP v472 — **PASS**; ожидает **апрув владельца** (push Shop fixes, deploy v473+).
 
 ---
 
@@ -455,7 +450,7 @@ ruby bin/rails test \
 | franchise чужой tenant | 3 | TenantContextController |
 | barista cancel без смены | 5 | OrderPolicy + shift_open |
 | doc PASS, test FAIL | любая | **верь тесту**, не doc |
-| Prog10 cash 422 | 4 | стенд / payment method config; не регрессия RBAC |
+| Prog10 cash 422 | 4 | **historical** — скрипт переведён на barista POS (Phase 5b); last PASS v472 2026-08-31 |
 
 ---
 
@@ -465,7 +460,7 @@ ruby bin/rails test \
 
 1. Запуск блока «Финал» (Rails test paths выше).
 2. `tenant_guc_inventory.rb` — exit code.
-3. Prog10 — optional `--fly` flag; local SKIP с кодом 2 если 422.
+3. Prog10 — WSL→Fly с `SHOP_API_KEY`; ожидание **PASS 9/9** (`prog10_staff_isolation_*.json`). Barista POS orders (не shop cash).
 4. Печать PASS/FAIL по секциям Phase 0–5 + JSON artifact в `docs/operations/milestones/veha_2/artifacts/ib/`.
 
 ---

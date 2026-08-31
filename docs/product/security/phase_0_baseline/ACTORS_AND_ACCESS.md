@@ -132,18 +132,18 @@ Post-login redirect: `Auth::SessionsController#dashboard_path_for_role` — bari
 
 ### Documented backlog / exceptions (не блокер «контур закрыт»)
 
-5. **Platform** — policies exist, controllers без full Pundit rollout
-6. **Prep kitchen** — `skip_authorization` on base; movements/inventory opt-in Pundit
+5. ~~**Platform** — partial Pundit~~ — **FIXED Phase 5b**
+6. ~~**Prep kitchen** — skip on base only~~ — **FIXED IB-D-04** (panel Pundit)
 7. **Franchise manager** — staff UI blocked (`staff_management_visible?` = GM \| UK); devices allowed
 8. **Shop guest flows** — `pending_order` / `reconnect_token` by design
-9. **Favorites** — **FIXED G-06** — session per tenant + DB persist for logged-in customer (`Shop::FavoritesStore`)
-10. **Categories index** — public without API key (SEO)
+9. **Favorites** — **FIXED G-06** — session per tenant + DB persist (`Shop::FavoritesStore`)
+10. **Categories index** — public without API key + `shop/categories` rate limit 60/min
 11. **Debug endpoint** — non-production only
-12. **Background jobs** — audited Phase 3; patterns documented in RLS_TENANT_AUDIT
-13. **blog_editor** — отдельный CMS-контур
+12. **Background jobs** — audited Phase 3; patterns in RLS_TENANT_AUDIT
+13. **blog_editor / G-10** — отдельный CMS-контур; hardening backlog
 14. **ActionCable guest** — channels verify reconnect_token
-15. **RLS bypass** — kiosk/TV/cable device lookup → [Phase 3 audit](../phase_3_tenant_rls/RLS_TENANT_AUDIT.md) (**BACKLOG**)
-16. **NEED_MIGRATION:** none (2026-08-30)
+15. ~~**RLS bypass** kiosk/TV/cable~~ — **FIXED G-01..G-03**
+16. **NEED_MIGRATION:** none (2026-08-31)
 
 ---
 

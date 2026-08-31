@@ -4,7 +4,8 @@
 
 Baseline-матрица staff RBAC: роль → панель → tenant → может/не может. Сверка **код + Prog10**. ABAC — placeholder Phase 5.
 
-**Phase 2 FIXED:** `has_role_in_context?`, Pundit на критичных manager/prep_kitchen CRUD, `test/integration/staff/rbac_tenant_isolation_test.rb`.
+**Phase 2 FIXED:** `has_role_in_context?`, Pundit на критичных manager/prep_kitchen CRUD, `test/integration/staff/rbac_tenant_isolation_test.rb`.  
+**Phase 5b FIXED (2026-08-31):** prep kitchen panel Pundit (IB-D-04), platform Pundit, manager dashboard (IB-D-05).
 
 ---
 
@@ -59,21 +60,29 @@ Baseline-матрица staff RBAC: роль → панель → tenant → м�
 | `Finance::FiscalReceiptPolicy` | index? | **`manager/finance/fiscal_receipts_controller`** | ✅ NEW |
 | `StockMovementPolicy` | index?, show?, create?, confirm?, cancel? | **`prep_kitchen/movements_controller`** | ✅ |
 | `IngredientTenantStockPolicy` | index?, show?, update_min_qty? | **`prep_kitchen/inventory_controller`** | ✅ |
+| `PrepKitchen::DashboardPolicy` | show? | **`prep_kitchen/dashboard_controller`** | ✅ IB-D-04 |
+| `PrepKitchen::QueuePolicy` | index? | **`prep_kitchen/queue_controller`** | ✅ IB-D-04 |
+| `PrepKitchen::RecipePolicy` | index?, show?, create?, update?, destroy? | **`prep_kitchen/recipes_controller`** | ✅ IB-D-04 |
+| `PrepKitchen::ReportPolicy` | index? | **`prep_kitchen/reports_controller`** | ✅ IB-D-04 |
+| `PrepKitchen::IncidentPolicy` | index?, show?, create?, update? | **`prep_kitchen/incidents_controller`** | ✅ IB-D-04 |
+| `PrepKitchen::StopListPolicy` | index?, update? | **`prep_kitchen/stop_list_controller`** | ✅ IB-D-04 |
+| `Manager::DashboardPolicy` | show? | **`manager/dashboard_controller`** | ✅ IB-D-05 |
 | `Manager::InventoryPolicy` | index? | **`manager/inventory_controller`** | ✅ |
-| `ProductPolicy` | show?, index?, create?, update?, destroy? | — | platform Phase N |
-| `CategoryPolicy` | CRUD | — | platform Phase N |
-| `ProductModifierGroupPolicy` | CRUD | — | platform Phase N |
-| `ProductModifierOptionPolicy` | CRUD | — | platform Phase N |
-| `OrganizationPolicy` | CRUD (UK only) | — | platform Phase N |
-| `TenantPolicy` | CRUD + open_as_manager? | — | platform Phase N |
+| `PlatformPolicy` | access? | **`platform/base_controller`** + menu/tenants/orgs | ✅ Phase 5b |
+| `ProductPolicy` | show?, index?, create?, update?, destroy? | **`platform/menu_controller`** | ✅ Phase 5b |
+| `CategoryPolicy` | CRUD | **`platform/menu_controller`** | ✅ Phase 5b |
+| `ProductModifierGroupPolicy` | CRUD | **`platform/menu_controller`** | ✅ Phase 5b |
+| `ProductModifierOptionPolicy` | CRUD | **`platform/menu_controller`** | ✅ Phase 5b |
+| `OrganizationPolicy` | CRUD (UK only) | platform org controllers | ✅ Phase 5b |
+| `TenantPolicy` | CRUD + open_as_manager? | **`platform/tenants_controller`** | ✅ Phase 5b |
 
 **`skip_authorization` on base controllers:**
 
 | Panel | File | Note |
 |-------|------|------|
 | Manager | `manager/base_controller.rb` | blanket skip; **critical controllers opt-in** (staff, menu, orders, shifts, devices, finance, **inventory**) |
-| Prep kitchen | `prep_kitchen/base_controller.rb` | skip on base; **movements + inventory opt-in** |
-| Platform | `platform/base_controller.rb` | UK gate only — **Phase 2 not touched** |
+| Prep kitchen | `prep_kitchen/base_controller.rb` | skip on base; **dashboard/queue/recipes/reports/incidents/stop_list + movements/inventory opt-in** (IB-D-04) |
+| Platform | `platform/base_controller.rb` | **`authorize_platform_access!` + verify_authorized** (Phase 5b) |
 | Barista | — | **нет skip** — Pundit active on orders |
 
 ---
@@ -88,7 +97,7 @@ Baseline-матрица staff RBAC: роль → панель → tenant → м�
 | GM → `/manager/devices` | PASS | no path-level deny for GM | ✅ | — |
 | shift_manager → no staff/devices | PASS | integration test FORBIDDEN_PATHS | ✅ | — |
 | barista → only `/barista` | PASS | `require_barista_role` | ✅ | — |
-| barista foreign order 404 | PASS (`prog10_staff_isolation.json`) | RLS + tenant scope | ✅ | — |
+| barista foreign order 404 | PASS (`prog10_staff_isolation_2026-08-31_v472.json`) | RLS + tenant scope | ✅ | — |
 | prep_kitchen on sales tenant | 302 expected | barista role absent → redirect | ✅ | — |
 | prep_kitchen_manager dashboard | PASS | `require_prep_kitchen_role` | ✅ | — |
 | inactive user login | PASS (negative bad pwd) | `active?` check on login + each request | ✅ | — |
@@ -122,7 +131,7 @@ Baseline-матрица staff RBAC: роль → панель → tenant → м�
 | franchise_manager + staff | Нужен ли франчайзи доступ к персоналу своих точек? Сейчас `staff_management_visible?` = GM \| UK only. |
 | `has_role?` без tenant | **Phase 2:** `has_role_in_context?` в staff gates; `has_role?` legacy | ✅ Phase 2 |
 | blog_editor в staff matrix | **Phase 2 skipped — backlog** (отдельный blog CMS) | backlog |
-| Manager Pundit rollout | Phase 2: devices, finance, orders, shifts, menu, prep_kitchen | ✅ done |
+| Manager Pundit rollout | Phase 2 + 5b: devices, finance, orders, shifts, menu, prep_kitchen panel, platform, manager dashboard | ✅ done |
 
 ---
 

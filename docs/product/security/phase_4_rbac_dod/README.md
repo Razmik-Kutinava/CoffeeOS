@@ -1,6 +1,6 @@
 # Phase 4 — DoD «RBAC контур закрыт»
 
-**Статус:** реализовано 2026-08-30 · ждём апрув владельца  
+**Статус:** реализовано 2026-08-31 · Prog10/MCP v472 PASS · ждём апрув deploy Shop fixes  
 **Предусловие:** Phase 1–3 апрувнуты.
 
 ## Deliverables
@@ -30,8 +30,8 @@
 | G-12 | Phase 3 | Prep multi-point (1 kitchen → N sales) | info | **FIXED** (2026-08-31) — **data:** `prep_kitchen_sales_point_links` + `SalesPointRegistry` + same-org guard · **prep UI:** `/prep_kitchen/sales_points` · **wiring:** queue/stop-list/reports/incidents via `LinkedTenantScope` · **platform:** card on `/admin/tenants/:id` · см. IB-P-01, phase_5b README |
 
 **NEED_MIGRATION:** none  
-**Code fixes Phase 4:** none required (gaps = backlog or documented exceptions)  
-**IB debt register:** [IB_SECURITY_DEBT.md](../IB_SECURITY_DEBT.md) (2026-08-31)
+**Code fixes post–Phase 4:** Shop G-04/G-05 + categories throttle + user/cards — **FIXED local** 2026-08-31 (deploy pending)  
+**IB debt register:** [IB_SECURITY_DEBT.md](../IB_SECURITY_DEBT.md) (2026-08-31) — **0 open holes**
 
 ## Проверка
 
@@ -45,7 +45,7 @@ ruby bin/rails test test/integration/auth/
 ruby bin/rails test test/integration/shop/api/
 ```
 
-Prog10 (Fly HTTP, не MCP):
+Prog10 (Fly HTTP, не MCP) — **PASS 9/9** v472 (`prog10_staff_isolation_2026-08-31_v472.json`):
 
 ```bash
 ruby bin/prog10/prog10_staff_rbac_isolation.rb

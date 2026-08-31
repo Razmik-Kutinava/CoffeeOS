@@ -13,7 +13,7 @@
 | **2** | [`phase_2_abac_layer/`](phase_2_abac_layer/) | **done** 2026-08-30 | staff Pundit, role×tenant |
 | **3** | [`phase_3_tenant_rls/`](phase_3_tenant_rls/) | **done** 2026-08-30 | RLS/GUC audit, device runbook, franchise/UK tests |
 | **4** | [`phase_4_rbac_dod/`](phase_4_rbac_dod/) | **done** 2026-08-30 · апрув | DoD RBAC, ROLES_AND_PERMISSIONS, acceptance checklist |
-| **5b** | [`phase_5b_hardening/`](phase_5b_hardening/) | **done** 2026-08-30 local | TokenResolver, platform Pundit, Prog10 fix, UserRole guard |
+| **5b** | [`phase_5b_hardening/`](phase_5b_hardening/) | **done** 2026-08-31 · Fly v472 | TokenResolver, platform/prep Pundit, Prog10 PASS, UserRole guard |
 
 ## Мастер-верификация (все фазы)
 

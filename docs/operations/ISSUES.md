@@ -15,7 +15,7 @@
 | 2026-07-27 | **SBP 3001** на Fly | 🟡 банк / кабинет | После UI-enable: push+deploy+MCP; если снова 3001 — кабинет NSPK; → полная запись |
 | 2026-07-28 | **Fly Test** в шапке Арама | 🟡 код local ✅ | push + deploy + MCP Point A; → полная запись |
 | 2026-08-08 | **#47** PWA статусы + повторы | 🟡 на Fly v445 · MCP surface ✅ · апрув ❌ | Апрув заказчика; → полная запись |
-| 2026-08-31 | **IB security debt** G-12 org guard · device cron · bundler-audit · shop-api-key | 🟢 resolved | IB-D-01…03 + IB-P-02 **FIXED** → [IB_SECURITY_DEBT.md](../product/security/IB_SECURITY_DEBT.md) |
+| 2026-08-31 | **IB security debt** IB-D-01…08 · Shop REVIEW · Prog10 v472 | 🟢 resolved | Всё FIXED → [IB_SECURITY_DEBT.md](../product/security/IB_SECURITY_DEBT.md) |
 
 ---
 

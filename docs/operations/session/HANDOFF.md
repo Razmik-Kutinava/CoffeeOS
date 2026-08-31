@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-31 (Shop REVIEW G-04/G-05 fixes)  
+**Дата:** 2026-08-31 (IB docs sync)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Prog10 staff isolation **PASS 9/9** Fly v472 · Shop REVIEW FIXED | push → CI · deploy по апруву |
+| IB docs **synced** · Prog10/MCP v472 PASS | push → CI · deploy Shop fixes |
 
-**last_done:** Prog10 v472 9/9 · G-04/G-05 + SHOP matrix 49 OK  
-**next_step:** push → CI · deploy Shop fixes по апруву
+**last_done:** master checklist, ROLES, STAFF matrix, ACTORS, acceptance  
+**next_step:** push → CI · deploy v473+
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

@@ -1,6 +1,6 @@
 # CoffeeOS — Роли и права доступа
 
-**Дата:** 2026-08-30 · **Фаза ИБ:** 5 (ABAC-lite local)  
+**Дата:** 2026-08-31 · **Фаза ИБ:** 5b (hardening + Shop REVIEW closed)  
 **Аудитория:** владелец, заказчик, менеджеры продукта
 
 ---
@@ -75,6 +75,7 @@ CoffeeOS обслуживает несколько типов пользоват
 | Меню (цены) | `manager/menu` | GM, franchise, УК |
 | Финансы | `manager/finance/*` | менеджеры точки |
 | Склад цеха | `prep_kitchen/movements`, `inventory` | manager/worker по policy |
+| Prep kitchen (IB-D-04) | `dashboard`, `queue`, `recipes`, `reports`, `incidents`, `stop_list` | manager vs worker по `PrepKitchen::*Policy` |
 
 **shift_manager + устройства:** блокируется `require_privileged_manager!` + `DevicePolicy` + интеграционный тест (`tenant_rls_isolation_test`).
 
@@ -90,7 +91,7 @@ CoffeeOS обслуживает несколько типов пользоват
 | **Клиент** | `customer_id` в сессии после OTP | История, профиль, карты, `GET orders/:id` |
 | **Проверка заказа** | `customer_id` scope или `order_visible_to_session_customer?` | cancel, finalize, payments |
 
-**IDOR в shop:** 4 P0-дыры Phase 1 закрыты; матрица IB-0-2: **0 HOLE** (9 REVIEW — осознанные компромиссы, не дыры).
+**IDOR в shop:** 4 P0-дыры Phase 1 закрыты; матрица IB-0-2: **0 HOLE, 0 REVIEW** (G-04/G-05 и прочие REVIEW закрыты 2026-08-31).
 
 Auth gate Shop API: Referer+CSRF (браузер) или `X-Shop-Api-Key` (сервер). Tenant: `X-Shop-Tenant` / param.
 
@@ -106,7 +107,7 @@ Auth gate Shop API: Referer+CSRF (браузер) или `X-Shop-Api-Key` (се�
 **Франчайзи:** switcher не даёт выбрать точку чужой организации (контроллер + тесты).  
 **УК:** в manager только с выбранной точкой; platform — глобальный доступ by design.
 
-Устройства (kiosk/TV): lookup по токену до GUC — [оговорка §7](#7-что-сознательно-не-в-контуре).
+Устройства (kiosk/TV): lookup через `rls_devices_token_lookup` + GUC — **FIXED** G-01..G-03 ([DEVICE_TOKENS.md](phase_3_tenant_rls/DEVICE_TOKENS.md)).
 
 ---
 
@@ -117,7 +118,7 @@ Auth gate Shop API: Referer+CSRF (браузер) или `X-Shop-Api-Key` (се�
 | **Kiosk / TV / ActionCable** RLS device lookup | **FIXED** — `rls_devices_token_lookup` + `Rls::GucContext`; rotate/revoke UI |
 | **ABAC** (`shift_open`, атрибуты заказа) | Phase 5 local done | [phase_5_abac/](phase_5_abac/) · Phase 5b full enforce |
 | **Blog RBAC** (`blog_editor`) | Отдельный CMS-контур | Не блокер coffee ops |
-| **Platform Pundit** (tenants/orgs, **menu/catalog**) | **Phase 5b/5c:** PlatformPolicy + authorize tenants/orgs/menu | |
+| **Platform Pundit** (tenants/orgs, **menu/catalog**) | **FIXED Phase 5b** — `PlatformPolicy` + authorize tenants/orgs/menu | — |
 | **Favorites** в shop | **FIXED G-06** — session per tenant для гостя; `shop_customer_favorites` (RLS) для залогиненного customer; merge при login | — |
 | **Prep multi-point (1 kitchen → N sales)** | **FIXED G-12** — `prep_kitchen_sales_point_links`, prep UI, org guard, wiring (queue/stop-list/reports/incidents), platform `/admin/tenants/:id` | — |
 | **shift_manager + inventory URL** | **FIXED G-07** — `require_general_or_franchise_manager!` | — |
@@ -128,23 +129,23 @@ Auth gate Shop API: Referer+CSRF (браузер) или `X-Shop-Api-Key` (се�
 
 ## 8. Статус на дату
 
-**Контур RBAC закрыт с оговорками** (2026-08-30).
+**Контур RBAC закрыт** (2026-08-31).
 
 | Критерий DoD | Статус |
 |--------------|--------|
-| Shop IDOR: 0 HOLE | ✅ PASS |
+| Shop IDOR: 0 HOLE, 0 REVIEW | ✅ PASS |
 | Staff: роль + tenant + Pundit на критичном CRUD | ✅ PASS |
 | RLS/GUC предсказуемо, NEED_MIGRATION = 0 | ✅ PASS |
 | Матрица = код | ✅ PASS |
+| Prog10 staff isolation Fly v472 | ✅ PASS 9/9 |
 
 **Оговорки (не блокер «контур закрыт»):**
 
-- Kiosk/TV/ActionCable — lookup через `rls_devices_token_lookup` + GUC ([DEVICE_TOKENS.md](phase_3_tenant_rls/DEVICE_TOKENS.md))
-- Platform admin без полного Pundit rollout
-- Blog editor — вне staff matrix Prog10
+- Blog editor / G-10 — отдельный CMS-контур; hardening backlog
+- Shop REVIEW fixes — **local done**, deploy v473+ pending
 
-**Приёмка:** [IB_ACCEPTANCE_CHECKLIST.md](IB_ACCEPTANCE_CHECKLIST.md)  
-**Следующая фаза:** Phase 5b (full ABAC enforce) · см. [phase_5_abac/](phase_5_abac/)
+**Приёмка:** [IB_ACCEPTANCE_CHECKLIST.md](IB_ACCEPTANCE_CHECKLIST.md) · Prog10: `prog10_staff_isolation_2026-08-31_v472.json`  
+**Phase 5b:** done local · см. [phase_5b_hardening/](phase_5b_hardening/)
 
 ---
 

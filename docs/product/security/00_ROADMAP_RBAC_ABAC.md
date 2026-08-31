@@ -57,11 +57,11 @@
 **Критерии готовности базового контура:**
 
 - [x] Shop API: 0 HOLE в матрице IB-0-2
-- [x] Staff: роли покрыты integration-тестами; Prog10 Fly SKIP (shop config), last PASS 2026-06-02
+- [x] Staff: роли покрыты integration-тестами; Prog10 Fly **PASS 9/9** v472 (2026-08-31)
 - [x] `has_role_in_context?` tenant-aware (Phase 2)
-- [x] Manager/prep: Pundit на критичном CRUD; platform — backlog
-- [x] RLS: audit complete; kiosk/TV/cable — documented backlog
-- [ ] Fly MCP Point A — post-deploy, не блокер Phase 4
+- [x] Manager/prep/platform: Pundit на критичном CRUD (Phase 5b)
+- [x] RLS: audit complete; kiosk/TV/cable — **FIXED** G-01..G-03
+- [x] Fly MCP Point A — **PASS 7/7** v472 (`fly_v461_2026-08-31/mcp_result.json`)
 
 ---
 
@@ -78,7 +78,7 @@
 | Order/CashShift/StockMovement ABAC enforce | ✅ |
 | ABAC tests ≥15 | ✅ |
 
-**Phase 5b:** kiosk/TV TokenResolver, platform Pundit, UserRole tenant guard, Prog10 barista POS.
+**Phase 5b:** kiosk/TV TokenResolver, platform Pundit, prep kitchen Pundit, UserRole tenant guard, Prog10 barista POS — **done** 2026-08-31.
 
 Атрибуты:
 

@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-31 (Prog10 v472 + Shop REVIEW)  
+**Дата:** 2026-08-31 (IB docs sync)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Prog10 **PASS 9/9** v472 · Shop G-04/G-05 FIXED (local) | push → CI · deploy Shop fixes |
+| IB docs synced · Prog10/MCP v472 · Shop fixes local | push → CI · deploy v473+ |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

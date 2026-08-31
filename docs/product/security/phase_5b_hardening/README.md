@@ -1,6 +1,6 @@
-# Phase 5b — IB hardening (2026-08-30)
+# Phase 5b — IB hardening (2026-08-31)
 
-**Статус:** local done · ABAC full enforce (Phase 5c) · deploy — после апрува
+**Статус:** local done · Fly Prog10 **PASS 9/9** v472 · MCP Point A **PASS 7/7** v472 · deploy Shop REVIEW fixes — pending
 
 ## Что сделано в 5b
 
@@ -11,6 +11,7 @@
 | 5b-3 | Platform Pundit: `PlatformPolicy` + authorize tenants/orgs/**menu catalog** | `/admin` |
 | 5b-4 | `TenantPolicy#open_as_manager?` → только UK | platform |
 | 5b-5 | `UserRole` validation + backfill legacy `tenant_id` | TECH DEBT G-11 **FIXED** |
+| 5b-6 | Prep kitchen panel Pundit (IB-D-04) + manager dashboard (IB-D-05) | `/prep_kitchen`, `/manager` |
 | 5c | **Full ABAC enforce** — все 58 правил `Y` в каталоге | policies + scopes |
 
 ## Phase 5c — ABAC full enforce (2026-08-30)
@@ -26,7 +27,8 @@
 
 ## Остаётся (low / product)
 
-- Fly MCP Point A post-deploy (после включения kiosk/TV на точке)
+- Deploy Shop REVIEW fixes (G-04/G-05, categories throttle, user/cards) — v473+
+- G-10 blog CMS hardening — backlog, не coffee ops
 
 ## G-06 favorites persist (2026-08-31)
 
