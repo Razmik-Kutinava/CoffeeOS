@@ -47,6 +47,11 @@
 - `Devices::TokenCredentials` + ENV `DEVICE_TOKEN_TTL_DAYS`
 - Manager: revoke, rotate, reactivate + expiry label in UI
 
+## ABAC-015 barista POS (2026-08-31)
+
+- By design: shop/kiosk guard, barista POS при открытой смене вне расписания — не блокируется
+- Каталог §B + `abac_full_enforcement_test`
+
 ## Проверка
 
 ```bash

@@ -15,6 +15,7 @@ class OrderPolicy < ApplicationPolicy
   end
 
   def create?
+    # ABAC-015: barista POS не проверяет operating hours — gate = shift_open (ABAC-016).
     barista? && module_enabled?(:barista) && shift_open?
   end
 

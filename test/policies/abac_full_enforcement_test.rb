@@ -83,6 +83,23 @@ class AbacFullEnforcementTest < ActiveSupport::TestCase
     Current.tenant_id = nil
   end
 
+  test "ABAC-015 tenant_open? false outside schedule" do
+    seed_weekdays_closed_weekend!
+    travel_to moscow("2026-06-14 15:00") do
+      context = PolicyContext.build(user: @barista, tenant_id: @tenant.id, shift: @open_shift, tenant: @tenant)
+      assert_not context.tenant_open?
+      assert_not TenantOperatingHoursEnforcement.accepting_online_orders?(@tenant)
+    end
+  end
+
+  test "ABAC-015 barista POS create allowed outside online hours when shift open" do
+    seed_weekdays_closed_weekend!
+    travel_to moscow("2026-06-14 15:00") do
+      policy = OrderPolicy.new(ctx(@barista, shift: @open_shift), Order)
+      assert policy.create?, "barista POS exempt from ABAC-015 online-hours guard"
+    end
+  end
+
   test "ABAC-007 blog editor policy" do
     editor = create_user!(tenant: @tenant, role_codes: %w[blog_editor], email: "editor@t.local")
     reader = create_user!(tenant: @tenant, role_codes: %w[barista], email: "reader@t.local")
@@ -117,5 +134,21 @@ class AbacFullEnforcementTest < ActiveSupport::TestCase
     policy = TvBoardPolicy.new(token: device.device_token)
     assert policy.show?
     assert_equal device.id, policy.device.id
+  end
+
+  private
+
+  def seed_weekdays_closed_weekend!
+    @tenant.weekday_schedules.delete_all
+    (0..4).each do |wd|
+      TenantWeekdaySchedule.create!(
+        tenant: @tenant, weekday: wd, enabled: true, opens_at: "09:00", closes_at: "21:00"
+      )
+    end
+    (5..6).each { |wd| TenantWeekdaySchedule.create!(tenant: @tenant, weekday: wd, enabled: false) }
+  end
+
+  def moscow(local_time)
+    Time.find_zone("Europe/Moscow").parse(local_time).utc
   end
 end

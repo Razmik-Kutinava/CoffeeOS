@@ -2,14 +2,14 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-31 (device token TTL + revoke/rotate UI)  
+**Дата:** 2026-08-31 (ABAC-015 barista POS by design)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| device tokens TTL + revoke/rotate UI | push develop |
+| ABAC-015 documented + tested | push develop |
 
-**last_done:** TokenCredentials TTL, rotate/revoke UI, reactivate  
+**last_done:** ABAC-015 barista POS exempt from online hours guard  
 **next_step:** push develop
 
 **Архив session:** [`archive/README.md`](archive/README.md)  

@@ -11,7 +11,13 @@
 
 ## Текущий месяц (2026-08)
 
-## 2026-08-31 — feat: device token TTL + revoke/rotate UI complete
+## 2026-08-31 — docs: ABAC-015 barista POS outside hours by design
+
+- Каталог ABAC §B: shop/kiosk guard vs barista POS exempt
+- `OrderPolicy#create?` comment; `abac_full_enforcement_test` ABAC-015
+- ROLES_AND_PERMISSIONS §7 оговорка
+
+## 2026-08-31 — feat: device token TTL credentials and complete revoke rotate UI
 
 - `Devices::TokenCredentials` — генерация token + `DEVICE_TOKEN_TTL_DAYS`
 - Manager UI: срок токена, «Восстановить + токен» на отозванных

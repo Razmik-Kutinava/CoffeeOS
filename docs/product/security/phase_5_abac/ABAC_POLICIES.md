@@ -32,7 +32,22 @@
 | ABAC-012 | Prep panel module | module_enabled.prep_kitchen | tenant | panel | FF prep_kitchen enabled | 80 | **Y** | `TenantModulePolicy` + `StockMovementPolicy` | |
 | ABAC-013 | Shop public menu | tenant_id | tenant | read_menu | tenant resolved | 90 | Y | shop base tenant | |
 | ABAC-014 | Shop API tenant | tenant_id | request | api_call | X-Shop-Tenant / slug | 90 | Y | shop API middleware | |
-| ABAC-015 | Operating hours closed | tenant hours | order | create | reject if closed (shop/kiosk) | 70 | **Y** | `TenantOperatingHoursEnforcement` + shop guard | |
+| ABAC-015 | Operating hours closed | tenant hours | order | create | **shop/kiosk:** reject if closed · **barista POS:** exempt (shift gate) | 70 | **Y** | `TenantOperatingHoursEnforcement`, `OperatingHoursGuard`, `OrderPolicy` (no hours check) | |
+
+---
+
+### ABAC-015 — режим работы точки (by design)
+
+| Канал | Вне расписания | Блокировка | Компонент |
+|-------|----------------|------------|-----------|
+| **Shop API** (`POST /shop/api/orders`, payments) | 422 `tenant_closed` | ✅ | `Shop::Api::OperatingHoursGuard` |
+| **Kiosk** (shop API + `X-Device-Token`) | то же | ✅ | guard + `Devices::KioskOrderGuard` |
+| **Barista POS** (`POST /barista/orders`) | заказ **разрешён** при `shift_open` | ❌ (by design) | `OrderPolicy#create?` — только смена |
+| **Barista табло** | баннер конфликта, не блок | UX | `Barista::OperatingHoursBoard#schedule_conflict?` |
+
+**Почему:** офлайн-точка может принимать наличные/карту вручную вне витринного расписания; онлайн-каналы (гость/киоск) закрываются по УК-расписанию.
+
+**Тесты:** `b111_operating_hours_test` (shop 422) · `b111_operating_hours_board_test` (POS вне часов OK + баннер) · `abac_full_enforcement_test` (ABAC-015).
 
 ---
 
@@ -155,6 +170,6 @@
 | ABAC-036–038 | `UserPolicy`, `DevicePolicy` (RBAC + tenant context) |
 | Infrastructure | `PolicyContext`, `pundit_user` in 3 base controllers |
 
-**Enforced count:** 58 правил — полный каталог **Y** (barista POS вне shop hours — осознанное исключение ABAC-015, см. `OperatingHoursBoard`).
+**Enforced count:** 58 правил — полный каталог **Y**. Исключение ABAC-015 (barista POS вне shop hours) — **by design**, см. §B выше и `Barista::OperatingHoursBoard`.
 
 Phase 5c: policies + scopes без изменения RBAC-контура.

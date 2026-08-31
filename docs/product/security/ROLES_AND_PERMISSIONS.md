@@ -120,6 +120,7 @@ Auth gate Shop API: Referer+CSRF (браузер) или `X-Shop-Api-Key` (се�
 | **Platform Pundit** (tenants/orgs, **menu/catalog**) | **Phase 5b/5c:** PlatformPolicy + authorize tenants/orgs/menu | |
 | **Favorites** в shop | Session-only, не в БД per customer | P3 backlog |
 | **shift_manager + inventory URL** | URL доступен, не в FORBIDDEN_PATHS | [OWNER REVIEW] в STAFF_RBAC_MATRIX |
+| **ABAC-015 barista POS вне часов** | **by design** — shop/kiosk guard есть; POS при открытой смене не блокируется | [ABAC_POLICIES.md](phase_5_abac/ABAC_POLICIES.md) §B |
 | **Global `user_roles` без tenant_id** | **FIXED** — backfill + strict context check | G-11 |
 
 ---

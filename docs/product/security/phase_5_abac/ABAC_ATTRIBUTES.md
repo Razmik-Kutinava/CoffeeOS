@@ -39,6 +39,7 @@ ABAC (Attribute-Based Access Control) в CoffeeOS — **тонкий слой п
 | `in_shift` | derived | `BoardOrdersQuery.shift_accessible_scope` | Заказ виден баристе в текущей смене |
 | `tenant.type` | enum | Tenant | `sales_point` / `production_kitchen` |
 | `customer_id` | uuid? | Order / MobileCustomer | Shop ownership (не role) |
+| `tenant.hours_open` | derived | `TenantOperatingHours#open_now?` | Точка в расписании УК (B1.11) |
 | `device.type` | string | Device | kiosk / tv (Phase 5b backlog) |
 
 ---
@@ -64,6 +65,7 @@ PolicyContext.build(
 | `shift_open?` | Есть open CashShift |
 | `in_shift?(order)` | Заказ в scope текущей смены (POS + vitrina + carryover) |
 | `module_enabled?(:barista)` | FeatureFlag; nil → enabled (как в base controller) |
+| `tenant_open?` | `TenantOperatingHoursEnforcement.accepting_online_orders?` — shop/kiosk guard (ABAC-015); **не** применяется к barista POS |
 | `production_kitchen?` | tenant.type = production_kitchen |
 | `user_active?` | status active |
 
