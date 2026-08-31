@@ -7,7 +7,7 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| CI **green** (#33372275081) · local 1727/0 | мониторинг по запросу |
+| CI **green** (#33390384967) · local 1727/0 | мониторинг по запросу |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
