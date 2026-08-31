@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-31 (CI fix prep kitchen + brakeman)  
+**Дата:** 2026-08-31 (deploy v472 + MCP PASS)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| CI **green** develop (#33370517697) | deploy по апруву · IB-P-05 Fly re-verify |
+| Fly **v472** deploy complete · MCP Point A **PASS** 7/7 | IB-P-05 закрыт · мониторинг УК/Sentry |
 
-**last_done:** CI green — lint/test/scan_ruby/system-test/scan_js all pass  
-**next_step:** ждать апрув deploy · IB-P-05 Fly re-verify после deploy
+**last_done:** deploy v472; fly:release retry fix; MCP 7/7; ShopApiKeyResolver без ActiveSupport в bin  
+**next_step:** push develop · Sentry 24h по запросу
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

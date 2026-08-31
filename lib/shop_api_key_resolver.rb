@@ -6,11 +6,11 @@ module ShopApiKeyResolver
 
   def resolve!(fly_env: nil)
     key = ENV["SHOP_API_KEY"].to_s.strip
-    return key if key.present?
+    return key unless key.empty?
 
     if fly_env.respond_to?(:call)
       key = fly_env.call("SHOP_API_KEY").to_s.strip
-      return key if key.present?
+      return key unless key.empty?
     end
 
     raise "SHOP_API_KEY not set — export ENV or provide fly_env (fly secrets / printenv)"

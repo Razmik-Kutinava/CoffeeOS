@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-31 — deploy Fly v472 + MCP Point A PASS 7/7
+
+- Release v472 (develop `04e6934d` + fly:release retry)
+- Миграции: RLS devices token lookup, backfill user_roles, shop_customer_favorites, prep_kitchen_sales_point_links
+- MCP: `artifacts/mcp/fly_v461_2026-08-31/mcp_result.json` — P0–P7 PASS
+- Fix: `fly:release` retry `db:prepare` on ConcurrentMigrationError; `ShopApiKeyResolver` без `.present?` для bin/MCP
+
 ## 2026-08-31 — fix(ci): FavoritesStore find_by + rubocop builder brackets
 
 - `FavoritesStore.merge_session_into_db!` — `find_by` вместо `find` (CustomerSession unit tests без Tenant в БД)

@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-31 (CI fix prep kitchen + brakeman)  
+**Дата:** 2026-08-31 (deploy v472 + MCP PASS)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| CI **green** (#33370517697) | deploy только по апруву · IB-P-05 Fly re-verify |
+| Fly **v472** · MCP Point A **PASS** 7/7 | мониторинг по запросу |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
