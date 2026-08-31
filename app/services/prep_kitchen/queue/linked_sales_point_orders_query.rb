@@ -25,22 +25,9 @@ module PrepKitchen
       end
 
       def call
-        tenant_ids = SalesPointRegistry.sales_points_for(@prep_kitchen_tenant_id).pluck(:id)
-        return [] if tenant_ids.empty?
+        return [] if LinkedTenantScope.linked_tenant_ids(@prep_kitchen_tenant_id).empty?
 
-        merged = tenant_ids.flat_map { |tenant_id| fetch_for_tenant(tenant_id) }
-        merged.sort_by!(&:created_at)
-        merged.take(@limit)
-      end
-
-      private
-
-      def fetch_for_tenant(tenant_id)
-        ActiveRecord::Base.transaction do
-          conn = ActiveRecord::Base.connection
-          conn.execute("SET LOCAL app.current_tenant_id = #{conn.quote(tenant_id.to_s)}")
-          conn.execute("SET LOCAL app.current_user_id = #{conn.quote(@user_id.to_s)}") if @user_id.present?
-
+        merged = LinkedTenantScope.flat_map(prep_kitchen_tenant_id: @prep_kitchen_tenant_id, user_id: @user_id) do |tenant_id|
           Order.where(tenant_id: tenant_id)
                .where(status: @statuses)
                .where(created_at: @from..@to)
@@ -49,6 +36,8 @@ module PrepKitchen
                .limit(@limit)
                .to_a
         end
+        merged.sort_by!(&:created_at)
+        merged.take(@limit)
       end
     end
   end

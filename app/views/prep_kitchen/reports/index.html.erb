@@ -1,11 +1,12 @@
 <h1 class="pk-title">Отчеты цеха</h1>
 <div class="pk-card">
+  <div class="pk-muted">Точек в обслуживании: <%= @linked_sales_points.size %></div>
   <div>Период: <%= @from %> — <%= @to %></div>
-  <div>Приход (qty): <strong><%= @report[:receipt_qty] %></strong></div>
+  <div>Приход (qty): <strong><%= @report[:receipt_qty] %></strong> <span class="pk-muted">(склад цеха)</span></div>
   <div>Списание (qty): <strong><%= @report[:write_off_qty] %></strong></div>
   <div>Net (qty): <strong><%= @report[:net_qty] %></strong></div>
-  <div>Stop-list manual: <strong><%= @report[:stop_list_manual] %></strong></div>
-  <div>Stop-list auto: <strong><%= @report[:stop_list_auto] %></strong></div>
+  <div>Stop-list manual: <strong><%= @report[:stop_list_manual] %></strong> <span class="pk-muted">(по точкам)</span></div>
+  <div>Stop-list auto: <strong><%= @report[:stop_list_auto] %></strong> <span class="pk-muted">(по точкам)</span></div>
 </div>
 
 <div class="pk-card">

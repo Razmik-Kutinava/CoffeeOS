@@ -7,3 +7,10 @@
 </p>
 
 <%= render "entry_points_card", tenant: @tenant, entry_points: @entry_points %>
+
+<% if @tenant.production_kitchen? %>
+  <%= render "prep_kitchen_links_card",
+             kitchen: @tenant,
+             linked_sales_points: @linked_sales_points,
+             candidate_sales_points: @candidate_sales_points %>
+<% end %>

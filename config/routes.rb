@@ -117,6 +117,8 @@ Rails.application.routes.draw do
     resources :tenants, only: %i[index show new create edit update] do
       member do
         post :open_as_manager
+        post :prep_kitchen_sales_point_links, to: "prep_kitchen_links#create"
+        delete "prep_kitchen_sales_point_links/:sales_point_id", to: "prep_kitchen_links#destroy", as: :prep_kitchen_sales_point_link
       end
     end
     resources :franchise_owners, only: %i[new create], path: "franchise_owners"

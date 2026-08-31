@@ -44,7 +44,7 @@
 
 | ID | Задача | Сейчас | Доделать |
 |----|--------|--------|----------|
-| IB-P-01 | **G-12 multi-point** | Links + MVP UI + org guard + **очередь по linked points FIXED** | Supply/stop-list/reports по linked points; platform UI (optional) |
+| IB-P-01 | **G-12 multi-point** | Links + UI + org guard + queue/stop-list/reports/incidents + **platform UI** | — |
 | IB-P-02 | **Device token cron** | TTL via `DEVICE_TOKEN_TTL_DAYS`, ручная rotate/revoke, banner в manager UI | `Devices::RotateExpiringTokensJob` + `config/recurring.yml`; политика (за N дн. / при expiry); уведомление GM; **не** ломать TV/kiosk без процесса |
 | IB-P-03 | **Docs drift** | `ROLES_AND_PERMISSIONS.md` §7: favorites «session-only»; SHOP matrix favorites «session-only» | Sync: G-06 FIXED; обновить REVIEW строки |
 | IB-P-04 | **Phase 4 G-12 статус** | GAP register: **FIXED** | Уточнить: **data + MVP UI**; product wiring = IB-P-01 |
@@ -60,6 +60,6 @@
 
 ## Приоритет следующего шага
 
-1. **IB-P-01** (G-12 wiring) — supply/stop-list/reports по linked points  
-2. **IB-P-02** (cron) — после продуктового решения по политике ротации  
-3. **IB-D-03** (shop-api-key V3) — клиентский ключ в meta  
+1. **IB-P-02** (cron) — после продуктового решения по политике ротации  
+2. **IB-D-03** (shop-api-key V3) — клиентский ключ в meta  
+3. **IB-P-05** (Fly re-verify) — push → CI → deploy апрув

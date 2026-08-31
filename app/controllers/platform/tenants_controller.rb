@@ -58,6 +58,7 @@ module Platform
         @tenant,
         host: entry_points_host
       )
+      load_prep_kitchen_links if @tenant.production_kitchen?
     end
 
     def edit
@@ -159,6 +160,14 @@ module Platform
 
     def entry_points_host
       ENV.fetch("APP_HOST", request.host_with_port)
+    end
+
+    def load_prep_kitchen_links
+      set_pg_context(tenant_id: @tenant.id, user_id: current_user.id)
+      @linked_sales_points = PrepKitchen::SalesPointRegistry.sales_points_for(@tenant.id)
+      @candidate_sales_points = PrepKitchen::SalesPointRegistry.candidate_sales_points_for(@tenant)
+    ensure
+      set_pg_context(user_id: current_user.id)
     end
   end
 end

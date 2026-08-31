@@ -1,7 +1,10 @@
 <h1 class="pk-title">Инциденты цеха</h1>
+<div class="pk-card">
+  <div class="pk-muted">Точек в обслуживании: <%= @linked_sales_points.size %></div>
+</div>
 
 <div class="pk-card">
-  <h3>Out of stock</h3>
+  <h3>Out of stock <span class="pk-muted">(склад цеха)</span></h3>
   <ul>
     <% @incidents[:out_of_stock].each do |row| %>
       <li><%= row.ingredient&.name %> — остаток <%= row.qty %></li>
@@ -10,7 +13,7 @@
 </div>
 
 <div class="pk-card">
-  <h3>Low stock</h3>
+  <h3>Low stock <span class="pk-muted">(склад цеха)</span></h3>
   <ul>
     <% @incidents[:low_stock].each do |row| %>
       <li><%= row.ingredient&.name %> — <%= row.qty %> / min <%= row.min_qty %></li>
@@ -19,10 +22,19 @@
 </div>
 
 <div class="pk-card">
-  <h3>Старые черновики</h3>
+  <h3>Старые черновики <span class="pk-muted">(склад цеха)</span></h3>
   <ul>
     <% @incidents[:stale_drafts].each do |row| %>
       <li><%= row.id %> — <%= row.movement_type %> — <%= row.created_at %></li>
+    <% end %>
+  </ul>
+</div>
+
+<div class="pk-card">
+  <h3>Auto stop-list на точках</h3>
+  <ul>
+    <% @incidents[:stock_empty_stop_list].each do |row| %>
+      <li><%= row.tenant&.name %> — <%= row.product&.name %> — <%= row.updated_at&.strftime("%d.%m %H:%M") %></li>
     <% end %>
   </ul>
 </div>

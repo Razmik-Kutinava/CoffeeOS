@@ -1,0 +1,44 @@
+<% return unless kitchen.production_kitchen? %>
+
+<section style="margin-bottom: 24px; padding: 16px; border: 1px solid #334155; border-radius: 8px; background: #1e293b;">
+  <h2 style="font-size: 1.1rem; margin: 0 0 12px;">Точки продаж цеха (G-12)</h2>
+
+  <h3 style="font-size: 0.95rem; margin: 0 0 8px;">Привязанные</h3>
+  <% if linked_sales_points.any? %>
+    <ul style="margin: 0 0 16px;">
+      <% linked_sales_points.each do |point| %>
+        <li style="margin: 8px 0;">
+          <%= point.name %> <span style="color: #94a3b8;">(<%= point.slug %>)</span>
+          <%= button_to "Отвязать",
+                        prep_kitchen_sales_point_link_platform_tenant_path(kitchen, point),
+                        method: :delete,
+                        form: { style: "display:inline; margin-left: 8px;" } %>
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    <p style="color: #94a3b8; margin: 0 0 16px;">Нет привязанных точек.</p>
+  <% end %>
+
+  <% if candidate_sales_points.any? %>
+    <h3 style="font-size: 0.95rem; margin: 0 0 8px;">Доступные для привязки</h3>
+    <ul style="margin: 0;">
+      <% candidate_sales_points.each do |point| %>
+        <li style="margin: 8px 0;">
+          <%= point.name %>
+          <%= button_to "Привязать",
+                        prep_kitchen_sales_point_links_platform_tenant_path(kitchen),
+                        method: :post,
+                        params: { sales_point_tenant_id: point.id },
+                        form: { style: "display:inline; margin-left: 8px;" } %>
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    <p style="color: #94a3b8; margin: 0;">Нет свободных точек в организации.</p>
+  <% end %>
+
+  <p style="font-size: 12px; color: #94a3b8; margin-top: 12px;">
+    Менеджер цеха: <%= link_to "prep_kitchen/sales_points", prep_kitchen_sales_points_path, style: "color: #93c5fd;" %>
+  </p>
+</section>

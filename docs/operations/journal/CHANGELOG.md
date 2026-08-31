@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-31 — feat: G-12 stop-list/reports/incidents wiring + platform links UI
+
+- `PrepKitchen::LinkedTenantScope` — DRY RLS GUC per linked tenant
+- Stop-list, reports, incidents, dashboard — агрегация по linked sales points
+- Platform: `/admin/tenants/:id` карточка привязки точек (УК)
+- IB-P-01 closed; V2-BACKLOG-PREP-MULTI → done
+
 ## 2026-08-31 — feat: G-12 prep queue wiring по linked sales points
 
 - `PrepKitchen::Queue::LinkedSalesPointOrdersQuery` — RLS per linked tenant GUC

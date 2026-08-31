@@ -2,29 +2,52 @@ module PrepKitchen
   class StopListController < BaseController
     def index
       @reason = sanitize_reason(params[:reason])
-      @items = ProductTenantSetting.where(tenant_id: Current.tenant_id, is_sold_out: true).includes(:product)
-      @items = @items.where(sold_out_reason: @reason) if @reason != "all"
-      if params[:q].present?
-        q = "%#{params[:q].strip}%"
-        @items = @items.joins(:product).where("products.name ILIKE ?", q)
-      end
-      @items = @items.order(updated_at: :desc).limit(300)
+      @linked_sales_points = SalesPointRegistry.sales_points_for(Current.tenant_id)
+      @items = StopList::LinkedSalesPointSettingsQuery.call(
+        prep_kitchen_tenant_id: Current.tenant_id,
+        reason: @reason,
+        q: params[:q],
+        user_id: Current.user_id
+      )
     end
 
     def update
       return no_rights unless prep_kitchen_manager?
 
-      setting = ProductTenantSetting.where(tenant_id: Current.tenant_id).find(params[:id])
-      if setting.update(stop_list_params)
+      setting = find_linked_setting(params[:id])
+      unless setting
+        redirect_to prep_kitchen_stop_list_path, alert: "Запись не найдена"
+        return
+      end
+
+      updated = false
+      errors = nil
+      LinkedTenantScope.with_linked_sales_point(
+        prep_kitchen_tenant_id: Current.tenant_id,
+        sales_point_tenant_id: setting.tenant_id,
+        user_id: Current.user_id
+      ) do
+        record = ProductTenantSetting.where(tenant_id: setting.tenant_id).find(setting.id)
+        updated = record.update(stop_list_params)
+        errors = record.errors.full_messages.join(", ") unless updated
+      end
+
+      if updated
         redirect_to prep_kitchen_stop_list_path, notice: "Стоп-лист обновлён"
       else
-        redirect_to prep_kitchen_stop_list_path, alert: setting.errors.full_messages.join(", ")
+        redirect_to prep_kitchen_stop_list_path, alert: errors.presence || "Не удалось обновить стоп-лист"
       end
     rescue ActiveRecord::RecordNotFound
       redirect_to prep_kitchen_stop_list_path, alert: "Запись не найдена"
     end
 
     private
+
+    def find_linked_setting(id)
+      LinkedTenantScope.flat_map(prep_kitchen_tenant_id: Current.tenant_id, user_id: Current.user_id) do |tenant_id|
+        ProductTenantSetting.where(tenant_id: tenant_id, id: id).includes(:product, :tenant).first
+      end.compact.first
+    end
 
     def stop_list_params
       attrs = params.require(:product_tenant_setting).permit(:is_sold_out, :sold_out_reason)

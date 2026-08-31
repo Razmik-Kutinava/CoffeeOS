@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-31 (G-12 queue wiring)  
+**Дата:** 2026-08-31 (G-12 IB-P-01 closed)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| G-12 queue wiring — linked sales points orders | push develop / IB-P-01 supply |
+| G-12 full wiring + platform UI · IB-P-01 closed | push develop |
 
-**last_done:** `LinkedSalesPointOrdersQuery` + queue UI; IB-D-01 org guard; IB-D-02 bundler-audit  
-**next_step:** push develop · supply/stop-list wiring (IB-P-01 хвост)
+**last_done:** LinkedTenantScope; stop-list/reports/incidents/dashboard; platform prep_kitchen links  
+**next_step:** push develop · IB-P-02 device cron (backlog)
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

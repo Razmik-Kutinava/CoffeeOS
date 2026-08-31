@@ -38,6 +38,8 @@
 - `prep_kitchen_sales_point_links` + `PrepKitchen::SalesPointRegistry`
 - Demo: kitchen → Point A/B; dashboard + **UI `/prep_kitchen/sales_points`**
 - **Queue wiring:** `LinkedSalesPointOrdersQuery` — заказы linked points (RLS per tenant GUC)
+- **Stop-list / reports / incidents:** `LinkedTenantScope` + агрегация по linked points
+- **Platform UI:** `/admin/tenants/:id` — карточка привязки точек (УК)
 
 ## Legacy shop CI (2026-08-31)
 

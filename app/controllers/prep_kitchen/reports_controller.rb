@@ -10,7 +10,14 @@ module PrepKitchen
         return
       end
 
-      @report = PrepKitchen::Reports::Builder.call(tenant_id: Current.tenant_id, from: from, to: to, group_by: group_by)
+      @report = PrepKitchen::Reports::Builder.call(
+        tenant_id: Current.tenant_id,
+        from: from,
+        to: to,
+        group_by: group_by,
+        user_id: Current.user_id
+      )
+      @linked_sales_points = SalesPointRegistry.sales_points_for(Current.tenant_id)
       @from = from
       @to = to
       @group_by = group_by

@@ -27,8 +27,10 @@ class Auth::PrepKitchenManagerRbacTest < ActionDispatch::IntegrationTest
     @rack_attack_was_enabled = Rack::Attack.enabled
     Rack::Attack.enabled = false
 
-    @tenant = create_tenant!(name: "PK Kitchen", slug: "pk-k-#{SecureRandom.hex(4)}", type: "production_kitchen")
+    @org = Organization.create!(name: "PK RBAC Org", slug: "pk-rbac-#{SecureRandom.hex(4)}")
+    @tenant = create_tenant!(name: "PK Kitchen", slug: "pk-k-#{SecureRandom.hex(4)}", type: "production_kitchen", organization: @org)
     FeatureFlag.create!(tenant: @tenant, module: "prep_kitchen", enabled: true)
+    @sales_point = create_tenant!(name: "PK Sales", slug: "pk-sp-#{SecureRandom.hex(4)}", organization: @org)
     @other_tenant = create_tenant!(name: "Other Kitchen", slug: "pk-o-#{SecureRandom.hex(4)}", type: "production_kitchen")
     @manager = create_user!(
       tenant: @tenant,
@@ -42,8 +44,9 @@ class Auth::PrepKitchenManagerRbacTest < ActionDispatch::IntegrationTest
 
     category = create_category!
     product = create_product!(category: category, name: "PK Product")
-    @pts = enable_product_for_tenant!(tenant: @tenant, product: product, price: 99)
+    @pts = enable_product_for_tenant!(tenant: @sales_point, product: product, price: 99)
     @pts.update!(is_sold_out: true, sold_out_reason: "manual")
+    PrepKitchen::SalesPointRegistry.link!(prep_kitchen_tenant: @tenant, sales_point_tenant: @sales_point)
 
     login_as!(@manager)
   end
@@ -73,7 +76,7 @@ class Auth::PrepKitchenManagerRbacTest < ActionDispatch::IntegrationTest
     assert_equal 7.to_d, @stock.reload.min_qty
   end
 
-  test "prep_kitchen_manager can update stop list for own tenant" do
+  test "prep_kitchen_manager can update stop list for linked sales point" do
     patch prep_kitchen_stop_list_item_path(@pts), params: {
       product_tenant_setting: { is_sold_out: "0" }
     }
