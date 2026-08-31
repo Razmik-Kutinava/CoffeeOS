@@ -8,7 +8,14 @@ class Auth::PrepKitchenWorkerRbacTest < ActionDispatch::IntegrationTest
     [ :dashboard, :prep_kitchen_dashboard_path ],
     [ :queue, :prep_kitchen_queue_path ],
     [ :inventory, :prep_kitchen_inventory_path ],
-    [ :movements, :prep_kitchen_movements_path ]
+    [ :movements, :prep_kitchen_movements_path ],
+    [ :stop_list, :prep_kitchen_stop_list_path ]
+  ].freeze
+
+  MANAGER_ONLY_PATHS = [
+    [ :recipes, :prep_kitchen_recipes_path ],
+    [ :incidents, :prep_kitchen_incidents_path ],
+    [ :reports, :prep_kitchen_reports_path ]
   ].freeze
 
   FORBIDDEN_PANELS = [
@@ -62,10 +69,17 @@ class Auth::PrepKitchenWorkerRbacTest < ActionDispatch::IntegrationTest
     Rack::Attack.enabled = @rack_attack_was_enabled
   end
 
-  test "prep_kitchen_worker can view dashboard queue inventory and movements list" do
+  test "prep_kitchen_worker can view dashboard queue inventory movements and stop list" do
     READONLY_PATHS.each do |_name, path_helper|
       get send(path_helper)
       assert_response :success, "worker должен открывать #{path_helper}"
+    end
+  end
+
+  test "prep_kitchen_worker is redirected from manager-only prep kitchen pages" do
+    MANAGER_ONLY_PATHS.each do |_name, path_helper|
+      get send(path_helper)
+      assert_response :redirect, "worker не должен видеть #{path_helper}"
     end
   end
 

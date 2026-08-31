@@ -1,6 +1,10 @@
 module PrepKitchen
   class ReportsController < BaseController
+    skip_before_action :skip_authorization
+    after_action :verify_authorized
+
     def index
+      authorize :prep_kitchen_report, :index?, policy_class: PrepKitchen::ReportPolicy
       from = parse_time(params[:from]) || 7.days.ago.beginning_of_day
       to = parse_time(params[:to]) || Time.zone.now
       group_by = %w[day ingredient movement_type].include?(params[:group_by]) ? params[:group_by] : "day"

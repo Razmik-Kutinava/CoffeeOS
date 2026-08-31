@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-31 (deploy v472 + MCP PASS)  
+**Дата:** 2026-08-31 (IB-D-04 prep kitchen Pundit)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| CI **green** (#33390384967) · local 1727/0 | мониторинг по запросу |
+| IB-D-04 **FIXED** — PrepKitchen policies + authorize | IB-D-05..08 backlog · deploy по апруву |
 
-**last_done:** deploy v472; fly:release retry fix; MCP 7/7; ShopApiKeyResolver без ActiveSupport в bin  
-**next_step:** push develop · Sentry 24h по запросу
+**last_done:** PrepKitchen::*Policy на 6 контроллеров; worker read dashboard/queue/stop_list; manager recipes/reports/incidents  
+**next_step:** push → CI · deploy по апруву
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

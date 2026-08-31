@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-31 — feat(security): IB-D-04 prep kitchen Pundit policies
+
+- `PrepKitchen::BasePolicy` + Dashboard/Queue/Recipe/Report/Incident/StopList policies
+- 6 контроллеров: `skip_authorization` → `authorize` + `verify_authorized`
+- Worker: dashboard, queue, stop_list index; manager: recipes, reports, incidents, stop_list update
+- Tests: `panel_policies_abac_test` + worker RBAC manager-only paths
+
 ## 2026-08-31 — docs: CI re-verify (local 1727/0, GitHub #33390384967 green)
 
 - Утренние red runs (#33368652321, #33370129096) уже исправлены ранее; HEAD green

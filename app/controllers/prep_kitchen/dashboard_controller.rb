@@ -1,6 +1,10 @@
 module PrepKitchen
   class DashboardController < BaseController
+    skip_before_action :skip_authorization
+    after_action :verify_authorized
+
     def show
+      authorize :prep_kitchen_dashboard, :show?, policy_class: PrepKitchen::DashboardPolicy
       stocks = IngredientTenantStock.for_current_tenant
       @low_stock_count = stocks.low_stock.count
       @out_of_stock_count = stocks.out_of_stock.count

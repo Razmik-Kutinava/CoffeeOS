@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-31 (CI re-verify local 1727/0)  
+**Дата:** 2026-08-31 (IB-D-04 prep kitchen Pundit)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| CI **green** (#33390384967) · local 1727/0 | мониторинг по запросу |
+| IB-D-04 FIXED — PrepKitchen Pundit | push → CI · IB-D-05..08 backlog |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

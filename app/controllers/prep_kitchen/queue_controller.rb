@@ -1,6 +1,10 @@
 module PrepKitchen
   class QueueController < BaseController
+    skip_before_action :skip_authorization
+    after_action :verify_authorized
+
     def index
+      authorize :prep_kitchen_queue, :index?, policy_class: PrepKitchen::QueuePolicy
       @from = parsed_time(params[:from]) || 2.hours.ago
       @to = parsed_time(params[:to]) || 6.hours.from_now
       @statuses = normalize_statuses(params[:status])

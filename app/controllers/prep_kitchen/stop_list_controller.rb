@@ -1,6 +1,10 @@
 module PrepKitchen
   class StopListController < BaseController
+    skip_before_action :skip_authorization
+    after_action :verify_authorized
+
     def index
+      authorize :prep_kitchen_stop_list, :index?, policy_class: PrepKitchen::StopListPolicy
       @reason = sanitize_reason(params[:reason])
       @linked_sales_points = SalesPointRegistry.sales_points_for(Current.tenant_id)
       @items = StopList::LinkedSalesPointSettingsQuery.call(
@@ -12,7 +16,7 @@ module PrepKitchen
     end
 
     def update
-      return no_rights unless prep_kitchen_manager?
+      authorize :prep_kitchen_stop_list, :update?, policy_class: PrepKitchen::StopListPolicy
 
       setting = find_linked_setting(params[:id])
       unless setting
@@ -62,10 +66,6 @@ module PrepKitchen
     def sanitize_reason(value)
       allowed = %w[all manual stock_empty]
       allowed.include?(value) ? value : "all"
-    end
-
-    def no_rights
-      redirect_to prep_kitchen_stop_list_path, alert: "Недостаточно прав"
     end
   end
 end

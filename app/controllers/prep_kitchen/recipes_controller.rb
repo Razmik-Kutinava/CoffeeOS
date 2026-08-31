@@ -1,6 +1,10 @@
 module PrepKitchen
   class RecipesController < BaseController
+    skip_before_action :skip_authorization
+    after_action :verify_authorized
+
     def index
+      authorize :prep_kitchen_recipe, :index?, policy_class: PrepKitchen::RecipePolicy
       @products = Product.includes(:category).order(:sort_order, :name)
       @products = @products.where(category_id: params[:category_id]) if params[:category_id].present?
       @products = @products.where(id: params[:product_id]) if params[:product_id].present?
