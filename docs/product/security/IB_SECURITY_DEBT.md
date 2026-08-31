@@ -54,7 +54,7 @@
 
 ## ✅ Закрыто недавно (не долг)
 
-- G-01…G-03 device lookup RLS · G-06 favorites DB · G-11 user_roles · **IB-D-01 org guard** · **IB-D-02 bundler-audit** · **G-12 queue wiring** · ABAC full enforce · legacy shop CI · device TTL banner UI
+- G-01…G-03 device lookup RLS · G-06 favorites DB · G-11 user_roles · **IB-D-01…03** · **G-12 wiring** · **IB-P-02 cron** · ABAC · legacy shop CI
 
 ---
 
