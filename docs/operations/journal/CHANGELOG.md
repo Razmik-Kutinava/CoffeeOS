@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-31 — feat: prep kitchen sales points UI + device token TTL banner
+
+- `/prep_kitchen/sales_points` — список, привязка/отвязка точек (manager)
+- Manager devices: баннер `DEVICE_TOKEN_TTL_DAYS`, цветные pill срока токена
+- Cron auto-rotation — не делали (out of scope)
+
 ## 2026-08-31 — feat: G-06 favorites DB, G-12 prep multi-point, legacy shop CI
 
 - `shop_customer_favorites` + `Shop::FavoritesStore` — persist для залогиненного гостя

@@ -1,0 +1,68 @@
+<h1 class="pk-title">Точки продаж</h1>
+<p class="pk-muted" style="margin-bottom: 16px;">
+  Один заготовочный цех может обслуживать несколько точек продаж в рамках организации.
+  Связь нужна для учёта поставок и очереди (контур G-12, MVP).
+</p>
+
+<div class="pk-card" style="margin-bottom: 16px;">
+  <h3>Привязанные точки</h3>
+  <% if @linked_sales_points.any? %>
+    <table class="pk-table">
+      <thead>
+        <tr>
+          <th>Название</th>
+          <th>Slug</th>
+          <th>Адрес</th>
+          <% if prep_kitchen_manager? %>
+            <th></th>
+          <% end %>
+        </tr>
+      </thead>
+      <tbody>
+        <% @linked_sales_points.each do |point| %>
+          <tr>
+            <td><%= point.name %></td>
+            <td><code><%= point.slug %></code></td>
+            <td><%= [point.city, point.address].compact_blank.join(", ").presence || "—" %></td>
+            <% if prep_kitchen_manager? %>
+              <td>
+                <%= button_to "Отвязать",
+                  prep_kitchen_sales_point_path(point),
+                  method: :delete,
+                  class: "pk-btn pk-btn-ghost",
+                  form: { data: { turbo_confirm: "Отвязать точку «#{point.name}» от цеха?" } } %>
+              </td>
+            <% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <p class="pk-muted">Пока нет привязанных точек. Добавьте первую ниже.</p>
+  <% end %>
+</div>
+
+<% if prep_kitchen_manager? %>
+  <div class="pk-card">
+    <h3>Добавить точку</h3>
+    <% if @candidate_sales_points.any? %>
+      <%= form_with url: prep_kitchen_sales_points_path, method: :post, local: true, class: "pk-form-inline" do |f| %>
+        <label class="pk-label">
+          Точка продаж
+          <%= select_tag :sales_point_tenant_id,
+                options_from_collection_for_select(@candidate_sales_points, :id, :name),
+                class: "pk-input",
+                required: true %>
+        </label>
+        <%= f.submit "Привязать", class: "pk-btn" %>
+      <% end %>
+    <% else %>
+      <p class="pk-muted">
+        Нет свободных точек в организации «<%= @kitchen.organization&.name || "—" %>».
+        Все точки уже привязаны к цехам или созданы в другой организации.
+      </p>
+    <% end %>
+  </div>
+<% else %>
+  <p class="pk-muted">Изменение связей доступно только менеджеру цеха.</p>
+<% end %>

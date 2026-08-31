@@ -7,6 +7,7 @@
 
   <nav class="pk-nav">
     <%= link_to "Дашборд", prep_kitchen_dashboard_path, class: "pk-nav-item #{'active' if request.path == prep_kitchen_dashboard_path}" %>
+    <%= link_to "Точки продаж", prep_kitchen_sales_points_path, class: "pk-nav-item #{'active' if request.path == prep_kitchen_sales_points_path}" %>
     <%= link_to "Очередь", prep_kitchen_queue_path, class: "pk-nav-item #{'active' if request.path == prep_kitchen_queue_path}" %>
     <%= link_to "Техкарты", prep_kitchen_recipes_path, class: "pk-nav-item #{'active' if request.path == prep_kitchen_recipes_path}" %>
     <%= link_to "Склад", prep_kitchen_inventory_path, class: "pk-nav-item #{'active' if request.path == prep_kitchen_inventory_path}" %>

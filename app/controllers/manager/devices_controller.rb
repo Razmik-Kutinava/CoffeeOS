@@ -8,6 +8,8 @@ module Manager
       authorize Device, :index?
       @devices = Device.for_current_tenant.order(created_at: :desc).limit(500)
       @new_device = Device.new(device_type: "tv_board", is_active: true, metadata: { "tv_mode" => Device::TV_MODE_ORDERS })
+      @token_ttl_days = Devices::TokenCredentials.ttl_days
+      @token_ttl_policy = Devices::TokenCredentials.policy_description
     end
 
     def create

@@ -40,4 +40,23 @@ class PrepKitchen::SalesPointRegistryTest < ActiveSupport::TestCase
       PrepKitchen::SalesPointRegistry.link!(prep_kitchen_tenant: @point_a, sales_point_tenant: @point_b)
     end
   end
+
+  test "unlink removes association" do
+    PrepKitchen::SalesPointRegistry.link!(prep_kitchen_tenant: @kitchen, sales_point_tenant: @point_a)
+    PrepKitchen::SalesPointRegistry.unlink!(prep_kitchen_tenant: @kitchen, sales_point_tenant_id: @point_a.id)
+
+    assert_empty PrepKitchen::SalesPointRegistry.sales_points_for(@kitchen.id)
+  end
+
+  test "candidate_sales_points excludes already linked" do
+    PrepKitchen::SalesPointRegistry.link!(prep_kitchen_tenant: @kitchen, sales_point_tenant: @point_a)
+    org = Organization.create!(name: "Org2", slug: "org2-#{SecureRandom.hex(3)}")
+    @kitchen.update!(organization: org)
+    @point_a.update!(organization: org)
+    @point_b.update!(organization: org)
+
+    candidates = PrepKitchen::SalesPointRegistry.candidate_sales_points_for(@kitchen)
+    assert_includes candidates.pluck(:id), @point_b.id
+    assert_not_includes candidates.pluck(:id), @point_a.id
+  end
 end

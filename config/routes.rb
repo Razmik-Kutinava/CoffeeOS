@@ -93,6 +93,9 @@ Rails.application.routes.draw do
     patch "/stop_list/:id", to: "stop_list#update", as: :stop_list_item
     get "/incidents", to: "incidents#index", as: :incidents
     get "/reports", to: "reports#index", as: :reports
+    get "/sales_points", to: "sales_points#index", as: :sales_points
+    post "/sales_points", to: "sales_points#create"
+    delete "/sales_points/:id", to: "sales_points#destroy", as: :sales_point
   end
 
   get "/prep_kitchen", to: redirect("/prep_kitchen/")

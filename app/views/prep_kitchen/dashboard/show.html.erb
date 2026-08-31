@@ -9,12 +9,19 @@
 
 <% if @linked_sales_points.any? %>
 <div class="pk-card">
-  <h3>Обслуживаемые точки продаж</h3>
+  <h3>Обслуживаемые точки продаж (<%= @linked_sales_points.size %>)</h3>
   <ul>
-    <% @linked_sales_points.each do |point| %>
+    <% @linked_sales_points.first(5).each do |point| %>
       <li><%= point.name %> <span class="pk-muted">(<%= point.slug %>)</span></li>
     <% end %>
   </ul>
+  <%= link_to "Управление точками →", prep_kitchen_sales_points_path, class: "pk-btn pk-btn-ghost" %>
+</div>
+<% else %>
+<div class="pk-card">
+  <h3>Точки продаж</h3>
+  <p class="pk-muted">Цех пока не привязан к точкам продаж.</p>
+  <%= link_to "Настроить →", prep_kitchen_sales_points_path, class: "pk-btn" %>
 </div>
 <% end %>
 

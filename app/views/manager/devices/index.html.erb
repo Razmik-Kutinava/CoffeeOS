@@ -8,6 +8,17 @@
     </div>
   </div>
 
+  <div class="card" style="margin-bottom: 14px; border-color: rgba(0, 180, 255, 0.35);">
+    <div class="card-title">Срок действия токенов</div>
+    <div class="card-muted"><%= @token_ttl_policy %></div>
+    <% if @token_ttl_days %>
+      <div class="muted" style="margin-top: 6px; font-size: 12px;">
+        ENV: DEVICE_TOKEN_TTL_DAYS=<%= @token_ttl_days %>
+        · авто-ротация по cron — не включена (out of scope)
+      </div>
+    <% end %>
+  </div>
+
   <div style="display: flex; gap: 14px; margin-bottom: 14px; flex-wrap: wrap;">
     <div class="card" style="flex: 1; min-width: 260px;">
       <div class="card-title">Добавить TV-борд</div>
@@ -59,7 +70,14 @@
             </div>
             <div class="row-meta" style="flex-wrap: wrap; gap: 8px; justify-content: flex-end;">
               <span class="muted">last_seen: <%= d.last_seen_at&.strftime("%d.%m %H:%M") || "-" %></span>
-              <span class="muted">токен: <%= d.token_expiry_label %></span>
+              <% expiry_status = d.token_expiry_status %>
+              <% expiry_style = case expiry_status
+                when :expired then "border-color: rgba(255, 0, 110, 0.55); background: rgba(255, 0, 110, 0.12);"
+                when :soon then "border-color: rgba(255, 193, 7, 0.55); background: rgba(255, 193, 7, 0.10);"
+                when :active then "border-color: rgba(0, 255, 136, 0.35); background: rgba(0, 255, 136, 0.06);"
+                else "border-color: rgba(150, 150, 150, 0.35);"
+                end %>
+              <span class="pill" style="<%= expiry_style %>">токен: <%= d.token_expiry_label %></span>
               <% if d.device_type == "tv_board" %>
                 <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
                   <span class="muted">экран:</span>

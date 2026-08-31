@@ -1,7 +1,7 @@
 module PrepKitchen
   class BaseController < ApplicationController
     layout "prep_kitchen"
-    helper_method :current_user
+    helper_method :current_user, :prep_kitchen_manager?
 
     before_action :require_login
     before_action :require_prep_kitchen_role

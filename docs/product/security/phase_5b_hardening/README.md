@@ -36,7 +36,7 @@
 ## G-12 prep multi-point (2026-08-31)
 
 - `prep_kitchen_sales_point_links` + `PrepKitchen::SalesPointRegistry`
-- Demo: kitchen → Point A/B; dashboard список точек
+- Demo: kitchen → Point A/B; dashboard + **UI `/prep_kitchen/sales_points`**
 
 ## Legacy shop CI (2026-08-31)
 
@@ -57,7 +57,8 @@
 ## Device token lifecycle (2026-08-31)
 
 - `Devices::TokenCredentials` + ENV `DEVICE_TOKEN_TTL_DAYS`
-- Manager: revoke, rotate, reactivate + expiry label in UI
+- Manager: revoke, rotate, reactivate + **policy banner + expiry pills** в UI
+- Cron auto-rotation — out of scope
 
 ## ABAC-015 barista POS (2026-08-31)
 

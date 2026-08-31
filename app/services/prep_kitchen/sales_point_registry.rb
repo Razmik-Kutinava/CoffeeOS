@@ -26,6 +26,23 @@ module PrepKitchen
       )
     end
 
+    def self.unlink!(prep_kitchen_tenant:, sales_point_tenant_id:)
+      SalesPointLink.where(
+        prep_kitchen_tenant_id: prep_kitchen_tenant.id,
+        sales_point_tenant_id: sales_point_tenant_id
+      ).delete_all
+    end
+
+    def self.candidate_sales_points_for(prep_kitchen_tenant)
+      org_id = prep_kitchen_tenant.organization_id
+      return Tenant.none if org_id.blank?
+
+      linked_ids = SalesPointLink.select(:sales_point_tenant_id)
+      Tenant.where(organization_id: org_id, type: "sales_point", status: "active")
+            .where.not(id: linked_ids)
+            .order(:name)
+    end
+
     def initialize(prep_kitchen_tenant)
       @prep_kitchen_tenant = prep_kitchen_tenant
     end

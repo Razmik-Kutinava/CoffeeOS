@@ -6,6 +6,7 @@ require "test_helper"
 class Auth::PrepKitchenManagerRbacTest < ActionDispatch::IntegrationTest
   ALLOWED_PATHS = [
     [ :dashboard, :prep_kitchen_dashboard_path ],
+    [ :sales_points, :prep_kitchen_sales_points_path ],
     [ :queue, :prep_kitchen_queue_path ],
     [ :recipes, :prep_kitchen_recipes_path ],
     [ :inventory, :prep_kitchen_inventory_path ],

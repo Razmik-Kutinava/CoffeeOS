@@ -8,14 +8,28 @@ module Devices
     end
 
     # nil = без срока (legacy / ENV не задан или <= 0).
-    def self.default_expires_at
+    def self.ttl_days
       days = ENV.fetch("DEVICE_TOKEN_TTL_DAYS", "").to_s.strip
       return nil if days.blank?
 
-      ttl_days = days.to_i
-      return nil if ttl_days <= 0
+      ttl = days.to_i
+      ttl.positive? ? ttl : nil
+    end
 
-      ttl_days.days.from_now
+    def self.default_expires_at
+      ttl = ttl_days
+      return nil unless ttl
+
+      ttl.days.from_now
+    end
+
+    def self.policy_description
+      ttl = ttl_days
+      if ttl
+        "Новые и перевыпущенные токены действуют #{ttl} дн. (ENV DEVICE_TOKEN_TTL_DAYS)."
+      else
+        "Срок токенов не ограничен — DEVICE_TOKEN_TTL_DAYS не задан или ≤ 0."
+      end
     end
 
     def self.apply_attributes!(device:)

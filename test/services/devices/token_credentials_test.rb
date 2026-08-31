@@ -45,4 +45,10 @@ class Devices::TokenCredentialsTest < ActiveSupport::TestCase
     assert @device.is_active?
     assert_equal new_token, @device.device_token
   end
+
+  test "policy_description reflects env ttl" do
+    ENV["DEVICE_TOKEN_TTL_DAYS"] = "365"
+    assert_includes Devices::TokenCredentials.policy_description, "365"
+    assert_equal 365, Devices::TokenCredentials.ttl_days
+  end
 end

@@ -2,14 +2,14 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-31 (G-06/G-12 + legacy shop CI)  
+**Дата:** 2026-08-31 (G-12 sales points UI + device TTL UI)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| G-06 favorites DB · G-12 prep multi-point · legacy shop CI green | push develop |
+| Prep kitchen: UI точек продаж · Manager: TTL policy banner | push develop |
 
-**last_done:** FavoritesStore + prep kitchen links + CI full suite + FakeTbankInit  
+**last_done:** sales_points UI + DEVICE_TOKEN_TTL_DAYS banner/expiry pills  
 **next_step:** push develop
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
