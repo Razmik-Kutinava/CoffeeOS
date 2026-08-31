@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
+require_relative "../support/shop_api_key"
+
 # Подготовка заказа на Fly для скринов stage3 guest (preparing / ready).
 #   FLY_BIN=flyctl ruby bin/acceptance/b21_stage3_guest_screenshots_prep.rb
 #
@@ -55,12 +57,8 @@ def login_user!(email:, jar:)
   raise "login failed for #{email}" unless hdr.include?("302")
 end
 
-def shop_key(tenant_id)
-  html = curl("#{BASE}/shop?tenant_id=#{tenant_id}")
-  key = html[/shop-api-key" content="([^"]+)/, 1]
-  raise "no shop-api-key" if key.nil? || key.empty?
-
-  key
+def shop_key(_tenant_id = nil)
+  resolve_shop_api_key(fly_env: (respond_to?(:fly_env, true) ? method(:fly_env) : nil))
 end
 
 def fly_machine_id

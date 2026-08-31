@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
+require_relative "../support/shop_api_key"
+
 # Блок 10 добивка: mock card checkout на 5 точках (curl).
 # Usage: ruby bin/prog10/prog10_shop_vitrina_card.rb
 
@@ -37,9 +39,7 @@ def pause
   sleep ORDER_DELAY if ORDER_DELAY.positive?
 end
 
-shop_key = run_curl("#{BASE}/shop?tenant_id=#{POINTS.first[:tenant_id]}")
-key = shop_key[/shop-api-key" content="([^"]+)/, 1]
-raise "no shop-api-key" if key.nil? || key.empty?
+key = resolve_shop_api_key(fly_env: nil)
 
 suffix = Time.now.utc.strftime("%m%d%H%M")
 results = POINTS.map do |point|

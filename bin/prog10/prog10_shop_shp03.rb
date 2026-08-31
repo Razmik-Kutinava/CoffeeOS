@@ -26,7 +26,7 @@ end
 
 html = run_curl("#{BASE}/shop")
 shop_http = curl_code("#{BASE}/shop")
-has_api_key = html.include?("shop-api-key")
+sec07_no_meta_key = !html.include?("shop-api-key")
 has_products_hint = html.include?("₽") || html.include?("Пока нет товаров")
 has_tenant_meta = html[/shop-tenant-id" content="([^"]+)"/, 1]
 has_banner = html.match?(/tenant|точк|SHOP_DEFAULT|выбер/i)
@@ -45,6 +45,10 @@ report = {
   at: Time.now.utc.strftime("%Y-%m-%dT%H:%M:%SZ"),
   base: BASE,
   scenario: "SHP-03 + SHP-05",
+  sec07: {
+    no_meta_key: sec07_no_meta_key,
+    pass: sec07_no_meta_key
+  },
   shp03: {
     shop_http: shop_http,
     has_tenant_meta: has_tenant_meta,
@@ -58,7 +62,7 @@ report = {
     pass: api_no_tenant_ok && api_no_tenant_not_500,
     note: cats_code == "200" ? "Fly fallback tenant (не 404, но ок)" : nil
   },
-  pass: page_ok && api_no_tenant_ok && api_no_tenant_not_500
+  pass: page_ok && api_no_tenant_ok && api_no_tenant_not_500 && sec07_no_meta_key
 }
 
 File.write(OUT, JSON.pretty_generate(report))

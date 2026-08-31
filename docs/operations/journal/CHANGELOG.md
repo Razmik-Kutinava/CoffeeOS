@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-31 — fix(security): IB-D-03 remove shop-api-key from vitrina meta (V2-SEC-07)
+
+- `shop.html.erb` — без meta `shop-api-key`; browser auth CSRF + Referer
+- `api.js` / `silentRefreshSession.js` — без клиентского ключа
+- `ShopApiKeyResolver` + bin scripts → `ENV SHOP_API_KEY` / fly secrets
+
 ## 2026-08-31 — feat: IB-P-02 device token cron (RotateExpiringTokensJob)
 
 - `Devices::ExpiringTokensProcessor` — deactivate expired + warn ≤ ROTATE_WARN_DAYS

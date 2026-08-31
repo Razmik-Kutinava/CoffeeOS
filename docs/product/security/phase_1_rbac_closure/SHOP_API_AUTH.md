@@ -51,7 +51,7 @@ Multi-key в коде **не реализован**. Ротация — ручн
 
 **Частота:** по инциденту или планово 1×/год для server key (когда появятся non-browser клиенты).
 
-**Browser PWA** не использует `SHOP_API_KEY` — ротация CSRF/session не затрагивает этот документ.
+**Browser PWA** не использует `SHOP_API_KEY` — только `X-CSRF-Token` + Referer `/shop` (meta `shop-api-key` **удалён**, IB-D-03 / V2-SEC-07 2026-08-31).
 
 ---
 

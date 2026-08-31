@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
+require_relative "../support/shop_api_key"
+
 # Блок 11 CON-02: PTS на Fly — одна цена на demo-a, другая на demo-b (тот же product_id).
 # Usage: ruby bin/prog10/prog10_connectivity_fly.rb
 
@@ -20,12 +22,8 @@ def curl_json(*args)
   JSON.parse(raw)
 end
 
-def shop_key(tenant_id)
-  html, = Open3.capture2("curl", "-sS", "#{BASE}/shop?tenant_id=#{tenant_id}")
-  key = html[/shop-api-key" content="([^"]+)/, 1]
-  raise "no shop-api-key" if key.nil? || key.empty?
-
-  key
+def shop_key(_tenant_id = nil)
+  resolve_shop_api_key(fly_env: (respond_to?(:fly_env, true) ? method(:fly_env) : nil))
 end
 
 def first_product_price(tenant_id, api_key)

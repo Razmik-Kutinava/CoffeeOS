@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
+require_relative "../support/shop_api_key"
+
 # Блок 9 (прогон 10): kiosk auth → shop cash order → заказ на табло barista.
 # Usage:
 #   ruby bin/prog10/prog10_collect_kiosk_tokens.rb /tmp/prog10_kiosk_tokens.json
@@ -73,12 +75,8 @@ def login_user!(email:, jar:)
   raise "login failed for #{email}" unless ok
 end
 
-def shop_key_for(tenant_id)
-  html = run_curl("#{BASE}/shop?tenant_id=#{tenant_id}")
-  key = html[/shop-api-key" content="([^"]+)/, 1]
-  raise "no shop-api-key for #{tenant_id}" if key.nil? || key.empty?
-
-  key
+def shop_key_for(_tenant_id = nil)
+  resolve_shop_api_key(fly_env: (respond_to?(:fly_env, true) ? method(:fly_env) : nil))
 end
 
 def kiosk_auth!(device_token)

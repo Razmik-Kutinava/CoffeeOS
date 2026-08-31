@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
+require_relative "../support/shop_api_key"
+
 # Fly MCP Point A — v461 undeployed commits (2026-08-28 session).
 #
 # Covers: OTP log safety (code path), fail-redirect ownership, SHOP_SIMULATE=0, shop cash block.
@@ -43,12 +45,8 @@ rescue JSON::ParserError
   [ { "raw" => body_raw }, http ]
 end
 
-def shop_key(tenant_id)
-  html = curl("#{BASE}/shop?tenant_id=#{tenant_id}")
-  key = html[/shop-api-key" content="([^"]+)/, 1]
-  raise "no shop-api-key" if key.nil? || key.empty?
-
-  key
+def shop_key(_tenant_id = nil)
+  resolve_shop_api_key(fly_env: (respond_to?(:fly_env, true) ? method(:fly_env) : nil))
 end
 
 def fly_web_machine_id

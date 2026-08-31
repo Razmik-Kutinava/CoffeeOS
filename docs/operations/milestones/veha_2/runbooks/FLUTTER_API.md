@@ -134,14 +134,14 @@ Content-Type: application/json
 
 Проверка backend: **token → auth → shop API → barista табло**.
 
-Секреты **не коммитить**: `SHOP_API_KEY` из meta `shop-api-key` на `/shop` или `fly secrets list`; `DEVICE_TOKEN` из manager.
+Секреты **не коммитить**: `SHOP_API_KEY` из `fly secrets list` / `ENV` (не из HTML meta); `DEVICE_TOKEN` из manager.
 
 > **Корзина:** сначала `GET /shop?tenant_id=…` (cookie), дальше все запросы с `-c/-b`. JSON body — `--data-binary @file.json` (PowerShell ломает inline JSON).  
 > **CSRF:** Shop API с `X-Shop-Api-Key` не требует CSRF-токена (`skip_forgery_protection`); `null_session` без токена обнулял session — см. прогон 7 в `QA_ACCEPTANCE_RUN.md`.
 
 ```bash
 export BASE="https://coffeeos.fly.dev"
-export SHOP_API_KEY="<из meta shop-api-key>"
+export SHOP_API_KEY="<fly secrets / ENV>"
 export DEVICE_TOKEN="<manager/devices>"
 export COOKIE_JAR="/tmp/kiosk-smoke-cookies.txt"
 rm -f "$COOKIE_JAR"

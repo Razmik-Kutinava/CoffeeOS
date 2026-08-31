@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-31 (IB-P-02 device cron)  
+**Дата:** 2026-08-31 (IB-D-03 shop-api-key)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| IB-P-02 FIXED — RotateExpiringTokensJob daily | push develop |
+| IB-D-03 / V2-SEC-07 — meta key removed | push develop |
 
-**last_done:** ExpiringTokensProcessor — deactivate expired + warn Telegram; recurring 06:00  
-**next_step:** push develop · IB-D-03 shop-api-key V3
+**last_done:** shop layout без shop-api-key; api.js CSRF-only; ShopApiKeyResolver + 23 bin scripts  
+**next_step:** push develop · IB-P-05 Fly re-verify
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

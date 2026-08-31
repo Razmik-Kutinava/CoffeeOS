@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-31 (IB-P-02 device cron)  
+**Дата:** 2026-08-31 (IB-D-03 shop-api-key)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| IB-P-02 device token cron · IB-D-07 fixed | push develop |
+| IB-D-03 FIXED — shop-api-key убран из meta | push develop |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

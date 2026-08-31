@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
+require_relative "../support/shop_api_key"
+
 # B1.1 баг-1 — prep Fly: заказ + guest URL + barista login для MCP DevTools прогона WS.
 #
 #   FLY_BIN=flyctl ruby bin/acceptance/b11_bug1_guest_ws_fly.rb
@@ -49,12 +51,8 @@ def curl_post_json(*args)
   [ JSON.parse(body_raw), http ]
 end
 
-def shop_key(tenant_id)
-  html = curl("#{BASE}/shop?tenant_id=#{tenant_id}")
-  key = html[/shop-api-key" content="([^"]+)/, 1]
-  raise "no shop-api-key" if key.nil? || key.empty?
-
-  key
+def shop_key(_tenant_id = nil)
+  resolve_shop_api_key(fly_env: (respond_to?(:fly_env, true) ? method(:fly_env) : nil))
 end
 
 def fly_machine_id

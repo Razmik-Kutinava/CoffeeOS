@@ -13,7 +13,7 @@
 |----|---------|------|----------|--------|
 | IB-D-01 | **G-12 prep link** | POST без проверки org | **medium** | **FIXED** 2026-08-31 — `SalesPointRegistry#validate_same_organization!`, model validation, controller candidate gate, tests |
 | IB-D-02 | **V2-SEC-08** | `bundler-audit` CVE | **high** (infra) | **FIXED** 2026-08-31 — rails 8.1.3.1, puma 8.0.2, nokogiri 1.19.4; Gemfile floors; `bin/bundler-audit check` clean |
-| IB-D-03 | **Shop API key** (V2-SEC-07) | ключ в meta витрины | **medium** | open → V3 |
+| IB-D-03 | **Shop API key** (V2-SEC-07) | ключ в meta витрины | **medium** | **FIXED** 2026-08-31 — meta удалён; browser CSRF+Referer; MCP scripts → `SHOP_API_KEY` env |
 
 ---
 
@@ -60,6 +60,5 @@
 
 ## Приоритет следующего шага
 
-1. **IB-D-03** (shop-api-key V3) — клиентский ключ в meta  
-2. **IB-P-05** (Fly re-verify) — push → CI → deploy апрув  
-3. **IB-D-04..08** — Pundit defense in depth (backlog)
+1. **IB-P-05** (Fly re-verify) — push → CI → deploy апрув  
+2. **IB-D-04..08** — Pundit defense in depth (backlog)

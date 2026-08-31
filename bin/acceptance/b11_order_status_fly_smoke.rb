@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
+require_relative "../support/shop_api_key"
+
 # Fly smoke: B1.1 экран статуса заказа (API + тайминги).
 #
 #   ruby bin/acceptance/b11_order_status_fly_smoke.rb
@@ -45,12 +47,8 @@ rescue JSON::ParserError
   [ { "raw" => body_raw }, http ]
 end
 
-def shop_key(tenant_id)
-  html = curl("#{BASE}/shop?tenant_id=#{tenant_id}")
-  key = html[/shop-api-key" content="([^"]+)/, 1]
-  raise "no shop-api-key for #{tenant_id}" if key.nil? || key.empty?
-
-  key
+def shop_key(_tenant_id = nil)
+  resolve_shop_api_key(fly_env: (respond_to?(:fly_env, true) ? method(:fly_env) : nil))
 end
 
 def fly_machine_id

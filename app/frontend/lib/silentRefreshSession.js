@@ -8,12 +8,6 @@ function csrfToken() {
   return document.querySelector('meta[name="csrf-token"]')?.getAttribute("content") || ""
 }
 
-function shopApiKey() {
-  const meta = document.querySelector('meta[name="shop-api-key"]')?.getAttribute("content")
-  if (meta && meta.trim()) return meta.trim()
-  return ""
-}
-
 function shopRefreshUrl() {
   const tid =
     (typeof window !== "undefined" &&
@@ -30,7 +24,7 @@ let inflight = null
 
 /**
  * Silent Refresh по shop_refresh_token.
- * CSRF + API key — как у app/frontend/lib/api.js (иначе Fly Auth → 401).
+ * Browser auth: CSRF + Referer /shop (см. Shop::Api::Auth) — без SHOP_API_KEY в клиенте.
  * @returns {Promise<{ verified: boolean, email?: string, profile?: object }>}
  */
 export async function silentRefreshSession() {
@@ -51,8 +45,6 @@ async function doSilentRefresh() {
       "Content-Type": "application/json",
       "X-CSRF-Token": csrfToken()
     }
-    const apiKey = shopApiKey()
-    if (apiKey) headers["X-Shop-Api-Key"] = apiKey
 
     const res = await fetch(shopRefreshUrl(), {
       method: "POST",

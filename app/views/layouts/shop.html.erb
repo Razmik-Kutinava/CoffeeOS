@@ -13,9 +13,6 @@
     <% if @shop_tenant %>
       <meta name="shop-tenant-id" content="<%= @shop_tenant.id %>">
     <% end %>
-    <% if ENV["SHOP_API_KEY"].present? %>
-      <meta name="shop-api-key" content="<%= ENV["SHOP_API_KEY"] %>">
-    <% end %>
     <meta name="action-cable-url" content="<%= ENV.fetch("ACTION_CABLE_URL", "/cable") %>">
     <% if Shop::FirebaseConfig.client_configured? %>
       <meta name="firebase-api-key" content="<%= Shop::FirebaseConfig.api_key %>">

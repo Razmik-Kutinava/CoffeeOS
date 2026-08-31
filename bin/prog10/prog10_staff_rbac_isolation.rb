@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
+require_relative "../support/shop_api_key"
+
 # Блок 7 (прогон 10): staff/RBAC изоляция по 9 точкам.
 # Проверяет:
 # 1) UK -> open_as_manager -> create barista staff на каждой точке
@@ -96,12 +98,8 @@ def create_staff!(uk_jar:, name:, email:, role_code:)
   { created: created, email: email }
 end
 
-def shop_key_for(tenant_id)
-  html = run_curl("#{BASE}/shop?tenant_id=#{tenant_id}")
-  key = html[/shop-api-key" content="([^"]+)/, 1]
-  raise "no shop-api-key for #{tenant_id}" if key.nil? || key.empty?
-
-  key
+def shop_key_for(_tenant_id = nil)
+  resolve_shop_api_key(fly_env: (respond_to?(:fly_env, true) ? method(:fly_env) : nil))
 end
 
 def product_id_for_tenant(tenant_id)

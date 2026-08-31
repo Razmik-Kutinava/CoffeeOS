@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
+require_relative "../support/shop_api_key"
+
 # B1.13-S2 — prep Fly MCP: очистка корзины + product_id для add-to-cart.
 #
 #   ruby bin/acceptance/b113_s2_cart_popup_prep_fly.rb
@@ -23,12 +25,8 @@ def curl(*args)
   out
 end
 
-def shop_key(tenant_id)
-  html = curl("#{BASE}/shop?tenant_id=#{tenant_id}")
-  key = html[/shop-api-key" content="([^"]+)/, 1]
-  raise "no shop-api-key on #{BASE}" if key.nil? || key.empty?
-
-  key
+def shop_key(_tenant_id = nil)
+  resolve_shop_api_key(fly_env: (respond_to?(:fly_env, true) ? method(:fly_env) : nil))
 end
 
 def api_json(path, key, method: "GET", body: nil)

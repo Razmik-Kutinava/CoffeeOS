@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
+require_relative "../support/shop_api_key"
+
 # Блок 10: витрина — curl API (5 точек): меню, корзина, заказ cash, история (SHP-09 API).
 # Usage:
 #   ruby bin/prog10/prog10_shop_vitrina.rb
@@ -33,12 +35,8 @@ def pause
   sleep ORDER_DELAY if ORDER_DELAY.positive?
 end
 
-def shop_key(tenant_id)
-  html = run_curl("#{BASE}/shop?tenant_id=#{tenant_id}")
-  key = html[/shop-api-key" content="([^"]+)/, 1]
-  raise "no shop-api-key for #{tenant_id}" if key.nil? || key.empty?
-
-  key
+def shop_key(_tenant_id = nil)
+  resolve_shop_api_key(fly_env: (respond_to?(:fly_env, true) ? method(:fly_env) : nil))
 end
 
 suffix = Time.now.utc.strftime("%m%d%H%M")

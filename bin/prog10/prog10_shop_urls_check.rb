@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
+require_relative "../support/shop_api_key"
+
 require "json"
 require "open3"
 
@@ -15,9 +17,8 @@ def curl_code(url)
 end
 
 def shop_ok?(tid)
-  html, = Open3.capture2("curl", "-s", "#{BASE}/shop?tenant_id=#{tid}")
   code = curl_code("#{BASE}/shop?tenant_id=#{tid}")
-  key = html[/shop-api-key" content="([^"]+)/, 1]
+  key = resolve_shop_api_key(fly_env: nil)
   n = 0
   if key && !key.empty?
     products, = Open3.capture2("curl", "-s", "-H", "X-Shop-Tenant: #{tid}", "-H", "X-Shop-Api-Key: #{key}",

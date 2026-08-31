@@ -48,9 +48,9 @@
 
 | ID | Задача | Источник | Когда |
 |----|--------|----------|--------|
-| **V3-SEC-07** | Убрать `shop-api-key` из `<meta>` в `app/views/shop/shop.html.erb`; ключ только header/session/сервер | CODE_REVIEW SEC-07, V2-SEC-07 | До боевого домена / prod hardening (не блокер demo Fly) |
+| **V3-SEC-07** | Убрать `shop-api-key` из meta витрины | **done** *(2026-08-31, early)* | IB-D-03 / V2-SEC-07 — `shop.html.erb` без meta; `ShopApiKeyResolver` для curl |
 
-- [ ] **V3-SEC-07** — PR: убрать meta key, обновить shop Svelte/Flutter curl (`FLUTTER_API.md`), smoke витрины
+- [x] **V3-SEC-07** — meta key removed, shop JS CSRF-only, MCP scripts → ENV
 
 ---
 
