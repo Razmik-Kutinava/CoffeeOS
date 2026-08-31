@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-31 (IB docs sync)  
+**Дата:** 2026-08-31 (CI green #33400720124)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| IB docs synced · Prog10/MCP v472 · Shop fixes local | push → CI · deploy v473+ |
+| CI **green** · HEAD `b524c188` on origin/develop | deploy v473+ по апруvу |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

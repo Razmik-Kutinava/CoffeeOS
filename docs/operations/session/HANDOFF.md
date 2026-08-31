@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-31 (IB docs sync)  
+**Дата:** 2026-08-31 (push + CI green #33400720124)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| IB docs **synced** · Prog10/MCP v472 PASS | push → CI · deploy Shop fixes |
+| develop **pushed** · CI **green** (#33400720124) · HEAD `b524c188` | deploy Shop fixes v473+ по апруву |
 
-**last_done:** master checklist, ROLES, STAFF matrix, ACTORS, acceptance  
-**next_step:** push → CI · deploy v473+
+**last_done:** push 3 commits · CI test/lint/scan/system-test PASS  
+**next_step:** deploy v473+ по апруву
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-31 — push develop + CI green #33400720124
+
+- Push `eff54100..b524c188` (Shop REVIEW + Prog10 v472 ops + IB doc sync)
+- CI **green:** test · lint · scan_ruby · scan_js · system-test
+
 ## 2026-08-31 — docs: IB doc sync (master checklist, ROLES, STAFF, ACTORS, acceptance)
 
 - Prog10 **PASS 9/9** v472, MCP **PASS 7/7** — убраны SKIP/422/9 REVIEW из живых IB docs
