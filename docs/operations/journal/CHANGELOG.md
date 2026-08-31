@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-31 — fix: IB-D-01 G-12 prep link same-organization guard
+
+- `SalesPointRegistry#validate_same_organization!` + model `same_organization`
+- Controller: только `candidate_sales_points_for` (org + not linked)
+- Tests: cross-org deny registry + integration POST
+
 ## 2026-08-31 — docs: IB security debt register (G-12 partial, device cron, holes)
 
 - `docs/product/security/IB_SECURITY_DEBT.md` — IB-D-01…08, IB-P-01…05

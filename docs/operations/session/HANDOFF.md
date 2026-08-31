@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-31 (IB debt register)  
+**Дата:** 2026-08-31 (IB-D-01 org guard)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| IB_SECURITY_DEBT.md — аудит дыр и долга | IB-D-01 org guard / push |
+| IB-D-01 FIXED — G-12 org guard | push develop |
 
-**last_done:** IB contour analysis + debt doc (no code)  
-**next_step:** fix IB-D-01 или push develop
+**last_done:** SalesPointRegistry same-org validation + candidate gate + tests  
+**next_step:** push develop
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

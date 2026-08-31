@@ -22,6 +22,11 @@ module PrepKitchen
         return
       end
 
+      unless SalesPointRegistry.candidate_sales_points_for(kitchen).exists?(id: sales_point.id)
+        redirect_to prep_kitchen_sales_points_path, alert: "Точка недоступна для привязки"
+        return
+      end
+
       SalesPointRegistry.link!(prep_kitchen_tenant: kitchen, sales_point_tenant: sales_point)
       redirect_to prep_kitchen_sales_points_path, notice: "Точка «#{sales_point.name}» привязана к цеху"
     rescue SalesPointRegistry::Error, ActiveRecord::RecordInvalid => e

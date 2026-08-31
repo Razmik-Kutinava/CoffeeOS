@@ -9,11 +9,11 @@
 
 ## 🔴 Критично (дыры / fix до prod sign-off)
 
-| ID | Область | Дыра | Severity | Что сделать |
-|----|---------|------|----------|-------------|
-| IB-D-01 | **G-12 prep link** | `POST /prep_kitchen/sales_points` принимает любой `sales_point_tenant_id` без проверки **той же organization**, что у цеха. Dropdown фильтрует, но POST — IDOR-подобный vector. | **medium** | `SalesPointRegistry#link!` + controller: `sales_point.organization_id == kitchen.organization_id`; тест cross-org deny |
-| IB-D-02 | **V2-SEC-08** | `bundler-audit` — CVE в prod-гемах (rails, puma, …). Открыт в PRACTICES. | **high** (infra) | Обновить гемы, CI gate, deploy |
-| IB-D-03 | **Shop API key** (V2-SEC-07) | `shop-api-key` в meta витрины — ключ на клиенте. Deferred → V3. | **medium** (demo/Fly) | V3: server-only / rotate / scope |
+| ID | Область | Дыра | Severity | Статус |
+|----|---------|------|----------|--------|
+| IB-D-01 | **G-12 prep link** | POST без проверки org | **medium** | **FIXED** 2026-08-31 — `SalesPointRegistry#validate_same_organization!`, model validation, controller candidate gate, tests |
+| IB-D-02 | **V2-SEC-08** | `bundler-audit` CVE | **high** (infra) | open |
+| IB-D-03 | **Shop API key** (V2-SEC-07) | ключ в meta витрины | **medium** | open → V3 |
 
 ---
 
@@ -44,7 +44,7 @@
 
 | ID | Задача | Сейчас | Доделать |
 |----|--------|--------|----------|
-| IB-P-01 | **G-12 multi-point** | Таблица + MVP UI `/prep_kitchen/sales_points` | Cross-tenant: очередь/supply/stop-list по **linked** sales points; platform UI; org guard (IB-D-01) |
+| IB-P-01 | **G-12 multi-point** | Таблица + MVP UI; **IB-D-01 org guard FIXED** | Cross-tenant wiring: очередь/supply по linked points; platform UI |
 | IB-P-02 | **Device token cron** | TTL via `DEVICE_TOKEN_TTL_DAYS`, ручная rotate/revoke, banner в manager UI | `Devices::RotateExpiringTokensJob` + `config/recurring.yml`; политика (за N дн. / при expiry); уведомление GM; **не** ломать TV/kiosk без процесса |
 | IB-P-03 | **Docs drift** | `ROLES_AND_PERMISSIONS.md` §7: favorites «session-only»; SHOP matrix favorites «session-only» | Sync: G-06 FIXED; обновить REVIEW строки |
 | IB-P-04 | **Phase 4 G-12 статус** | GAP register: **FIXED** | Уточнить: **data + MVP UI**; product wiring = IB-P-01 |

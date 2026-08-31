@@ -58,4 +58,19 @@ class PrepKitchen::SalesPointsControllerTest < ActionDispatch::IntegrationTest
       sales_point_tenant_id: @point_a.id
     )
   end
+
+  test "create rejects sales point from another organization" do
+    other_org = Organization.create!(name: "Foreign Org", slug: "foreign-org-#{SecureRandom.hex(4)}")
+    foreign_point = create_tenant!(name: "Foreign Point", slug: "foreign-pt-#{SecureRandom.hex(4)}", organization: other_org)
+
+    post prep_kitchen_sales_points_path, params: { sales_point_tenant_id: foreign_point.id }
+    assert_redirected_to prep_kitchen_sales_points_path
+
+    assert_not PrepKitchen::SalesPointRegistry.serves_sales_point?(
+      prep_kitchen_tenant_id: @kitchen.id,
+      sales_point_tenant_id: foreign_point.id
+    )
+    follow_redirect!
+    assert_match(/недоступна|organization/i, response.body)
+  end
 end

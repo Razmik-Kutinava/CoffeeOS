@@ -55,10 +55,24 @@ module PrepKitchen
         raise Error, "sales point tenant must be sales_point"
       end
 
+      validate_same_organization!(sales_point_tenant)
+
       SalesPointLink.find_or_create_by!(
         prep_kitchen_tenant: @prep_kitchen_tenant,
         sales_point_tenant: sales_point_tenant
       )
+    end
+
+    def validate_same_organization!(sales_point_tenant)
+      kitchen_org_id = @prep_kitchen_tenant.organization_id
+      point_org_id = sales_point_tenant.organization_id
+
+      if kitchen_org_id.blank?
+        raise Error, "prep kitchen must belong to an organization"
+      end
+      if point_org_id.blank? || point_org_id != kitchen_org_id
+        raise Error, "sales point must belong to the same organization as prep kitchen"
+      end
     end
   end
 end

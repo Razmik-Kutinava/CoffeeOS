@@ -6,9 +6,10 @@ class PrepKitchen::SalesPointRegistryTest < ActiveSupport::TestCase
   include TestFactories
 
   setup do
-    @kitchen = create_prep_kitchen_tenant!
-    @point_a = create_tenant!(name: "Point A", slug: "pk-sp-a-#{SecureRandom.hex(3)}")
-    @point_b = create_tenant!(name: "Point B", slug: "pk-sp-b-#{SecureRandom.hex(3)}")
+    @org = Organization.create!(name: "PK Registry Org", slug: "pk-reg-#{SecureRandom.hex(4)}")
+    @kitchen = create_prep_kitchen_tenant!(organization: @org)
+    @point_a = create_tenant!(name: "Point A", slug: "pk-sp-a-#{SecureRandom.hex(3)}", organization: @org)
+    @point_b = create_tenant!(name: "Point B", slug: "pk-sp-b-#{SecureRandom.hex(3)}", organization: @org)
     Current.tenant_id = @kitchen.id
   end
 
@@ -50,13 +51,27 @@ class PrepKitchen::SalesPointRegistryTest < ActiveSupport::TestCase
 
   test "candidate_sales_points excludes already linked" do
     PrepKitchen::SalesPointRegistry.link!(prep_kitchen_tenant: @kitchen, sales_point_tenant: @point_a)
-    org = Organization.create!(name: "Org2", slug: "org2-#{SecureRandom.hex(3)}")
-    @kitchen.update!(organization: org)
-    @point_a.update!(organization: org)
-    @point_b.update!(organization: org)
 
     candidates = PrepKitchen::SalesPointRegistry.candidate_sales_points_for(@kitchen)
     assert_includes candidates.pluck(:id), @point_b.id
     assert_not_includes candidates.pluck(:id), @point_a.id
+  end
+
+  test "rejects cross organization link" do
+    other_org = Organization.create!(name: "Other Org", slug: "other-org-#{SecureRandom.hex(3)}")
+    foreign_point = create_tenant!(name: "Foreign", slug: "foreign-#{SecureRandom.hex(3)}", organization: other_org)
+
+    error = assert_raises(PrepKitchen::SalesPointRegistry::Error) do
+      PrepKitchen::SalesPointRegistry.link!(prep_kitchen_tenant: @kitchen, sales_point_tenant: foreign_point)
+    end
+    assert_match(/same organization/i, error.message)
+  end
+
+  test "rejects link when kitchen has no organization" do
+    @kitchen.update!(organization_id: nil)
+    error = assert_raises(PrepKitchen::SalesPointRegistry::Error) do
+      PrepKitchen::SalesPointRegistry.link!(prep_kitchen_tenant: @kitchen, sales_point_tenant: @point_a)
+    end
+    assert_match(/organization/i, error.message)
   end
 end
