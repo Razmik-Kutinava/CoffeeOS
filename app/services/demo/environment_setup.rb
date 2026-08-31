@@ -287,7 +287,10 @@ module Demo
         scope.destroy_all
 
         role_codes.each do |code|
-          UserRole.create!(user: user, role: roles.fetch(code), tenant_id: tenant.id)
+          role = roles.fetch(code)
+          role_tenant_id = User::GLOBAL_ROLE_CODES.include?(code) ? nil : tenant.id
+          user.user_roles.where(role_id: role.id).where.not(tenant_id: role_tenant_id).destroy_all
+          UserRole.find_or_create_by!(user: user, role: role, tenant_id: role_tenant_id)
         end
 
         user
