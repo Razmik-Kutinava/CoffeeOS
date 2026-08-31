@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-31 — chore(security): IB-D-02 bundler-audit CVE floors (V2-SEC-08)
+
+- Gemfile: rails ≥8.1.3.1, puma ≥8.0.2, nokogiri ≥1.19.4, bcrypt ≥3.1.20
+- `bin/bundler-audit check` — No vulnerabilities found
+- PRACTICES V2-SEC-08 → done; IB_SECURITY_DEBT IB-D-02 FIXED
+
 ## 2026-08-31 — fix: IB-D-01 G-12 prep link same-organization guard
 
 - `SalesPointRegistry#validate_same_organization!` + model `same_organization`

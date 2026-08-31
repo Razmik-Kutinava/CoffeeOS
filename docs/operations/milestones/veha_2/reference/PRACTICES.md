@@ -95,7 +95,7 @@
 | V2-CR-04 | `CacheCounter` MemoryStore | **accepted / wontfix** *(2026-06-02, блок 3)* | Fly **1 pod** — in-process OK; при **2+ серверах** или смене хостинга → **Redis** (или Solid Cache) для общего счётчика |
 | V2-CR-05 | Kiosk `KioskSetting` без tenant GUC | **done** *(2026-06-02, блок 3)* | `SET LOCAL` в `kiosk/api/auth` |
 | V2-SEC-07 | `shop.html.erb` meta `shop-api-key` | **deferred → В3** *(2026-06-02)* | Задача **V3-SEC-07** — [`veha_3/CHECKLIST.md`](../veha_3/CHECKLIST.md) § E. В2 блок 4: wontfix для demo Fly |
-| V2-SEC-08 | **bundler-audit: CVE в гемах (prod)** | **open — обязательно** *(2026-07-03)* | Отдельный шаг до следующего deploy: см. § V2-SEC-08 ниже |
+| V2-SEC-08 | **bundler-audit: CVE в гемах (prod)** | **done** *(2026-08-31)* | rails 8.1.3.1, puma 8.0.2, nokogiri 1.19.4; Gemfile floors; CI `bin/bundler-audit` green |
 | V2-P10-01 | Прогон 10: 3 org × 3 точки | **done** *(2026-06-01)* | [`PROG10_TENANTS.md`](PROG10_TENANTS.md) |
 | V2-P10-02 | Прогон 10: kiosk curl | **done** *(2026-06-01)* | `bin/prog10/prog10_fly_smoke.rb` + Prog10 Kiosk MCP |
 | V2-P10-03 | Прогон 10: RBAC AUTH-01…09 | **done** *(2026-06-01)* | MCP + регрессия прогон 5 |
@@ -121,6 +121,10 @@
 **Когда править V2-P10-08:** после закрытия QA-блоков 10–14 и §E; отдельный кодовый PR (не смешивать с витриной/RBAC). Иначе отчёты и табло врут про канал заказа.
 
 ### V2-SEC-08 — bundler-audit CVE (обязательный техдолг)
+
+**Статус:** **closed** 2026-08-31 · коммит с Gemfile floors + docs sync (lock уже был на patched versions с `a26b4fb4`).
+
+**Проверка:** `bin/bundler-audit check` → `No vulnerabilities found` (advisory-db 2026-08-29).
 
 **Зафиксировано:** 2026-07-03 · после коммита `b7481dc` (закрыты только `rack`, `rack-session`, `view_component`).
 

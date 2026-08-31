@@ -2,14 +2,14 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-31 (IB-D-01 org guard)  
+**Дата:** 2026-08-31 (IB-D-02 bundler-audit)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| IB-D-01 FIXED — G-12 org guard | push develop |
+| IB-D-02 FIXED — Gemfile CVE floors + audit green | push develop |
 
-**last_done:** SalesPointRegistry same-org validation + candidate gate + tests  
+**last_done:** V2-SEC-08 closed; rails 8.1.3.1 / puma 8.0.2 / nokogiri 1.19.4 pinned  
 **next_step:** push develop
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
