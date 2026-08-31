@@ -2,7 +2,7 @@
   "task": "post_deploy_acceptance_pack",
   "date": "2026-08-31",
   "release": "v473",
-  "head": "c8010a57",
+  "head": "cdcc0ad7",
   "image": "deployment-01M1C2Z4HMEKJ8D9075REQ9ESW",
   "base": "https://coffeeos.fly.dev",
   "note": "Shop REVIEW G-04/G-05 + categories throttle + user/cards session-only",
@@ -25,13 +25,21 @@
     },
     {
       "id": "mcp_point_a",
-      "pass": null,
-      "skip": "awaiting owner approval — next step after deploy"
+      "pass": true,
+      "artifact": "docs/operations/milestones/veha_2/artifacts/mcp/fly_v461_2026-08-31/mcp_result.json",
+      "checks": "7/7 PASS release 473"
+    },
+    {
+      "id": "mcp_shop_review",
+      "pass": true,
+      "artifact": "docs/operations/milestones/veha_2/artifacts/mcp/fly_shop_review_2026-08-31/mcp_result.json",
+      "checks": "S1-S4 PASS (G-04, G-05, user/cards, categories 429)"
     },
     {
       "id": "prog10_staff_isolation",
-      "pass": null,
-      "skip": "last PASS v472 2026-08-31; optional re-run post-MCP"
+      "pass": true,
+      "artifact": "docs/operations/milestones/veha_2/artifacts/prog10/staff-rbac/prog10_staff_isolation_2026-08-31_v473.json",
+      "checks": "9/9 PASS"
     },
     {
       "id": "sentry_24h",
@@ -39,5 +47,5 @@
       "skip": "not scripted this step"
     }
   ],
-  "verdict": "deploy_pass_mcp_pending"
+  "verdict": "deploy_pass_mcp_pass"
 }

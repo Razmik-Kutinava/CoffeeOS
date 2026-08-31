@@ -11,6 +11,14 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-31 — ops: Fly MCP full pack v473 (Point A + Shop REVIEW + Prog10)
+
+- MCP Point A **PASS** 7/7 — `fly_v461_2026-08-31/mcp_result.json`
+- MCP Shop REVIEW **PASS** 4/4 — G-04/G-05, user/cards, categories 429
+- Prog10 staff isolation **PASS** 9/9 v473
+- Скрипты: Windows-safe `tmpdir`/`NUL` в `fly_shop_review_mcp.rb`, `prog10_staff_rbac_isolation.rb`
+- Post-deploy pack: `verdict: deploy_pass_mcp_pass`
+
 ## 2026-08-31 — deploy Fly v473 Shop REVIEW fixes
 
 - `fly deploy --remote-only --depot=false` → **v473** (`deployment-01M1C2Z4HMEKJ8D9075REQ9ESW`)

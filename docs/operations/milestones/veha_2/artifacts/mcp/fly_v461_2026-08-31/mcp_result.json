@@ -3,7 +3,7 @@
   "date": "2026-08-31",
   "base": "https://coffeeos.fly.dev",
   "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
-  "head": "04e6934d",
+  "head": "cdcc0ad7",
   "deploy_commits": [
     "bea1c226 OTP log leak",
     "5a061aa6 fail-redirect ownership",
@@ -23,7 +23,7 @@
     {
       "id": "P2_release_v461",
       "pass": true,
-      "version": 472
+      "version": 473
     },
     {
       "id": "P3_simulate_off",
@@ -47,7 +47,7 @@
       "pass": true,
       "http": 200,
       "status": "pending_payment",
-      "order_id": "d0d4395a-0742-41b8-9b92-62c6901dbf87"
+      "order_id": "4e6ef34d-774f-45df-aa9b-33d36629c65b"
     },
     {
       "id": "P7_fail_redirect_no_ownership",

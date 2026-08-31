@@ -18,10 +18,13 @@ require_relative "../support/shop_api_key"
 require "json"
 require "open3"
 require "securerandom"
+require "tmpdir"
 
 BASE = ENV.fetch("BASE", "https://coffeeos.fly.dev")
 PASSWORD = ENV.fetch("STAFF_PASSWORD", "demo123456")
 OUT = ENV.fetch("OUT", "docs/operations/milestones/veha_2/artifacts/prog10/staff-rbac/prog10_staff_isolation.json")
+NULL_DEV = Gem.win_platform? ? "NUL" : "/dev/null"
+COOKIE_DIR = ENV.fetch("PROG10_COOKIE_DIR", Dir.tmpdir)
 
 POINTS = [
   { slug: "demo-a", tenant_id: "2fdee1ac-4674-41ee-b89e-87b45643f789", barista_expected: true },
@@ -72,7 +75,7 @@ def open_as_manager!(uk_jar:, tenant_id:)
     "-b", uk_jar, "-c", uk_jar,
     "-X", "POST", "#{BASE}/admin/tenants/#{tenant_id}/open_as_manager",
     "--data-urlencode", "authenticity_token=#{token}",
-    "-o", "/dev/null"
+    "-o", NULL_DEV
   )
 end
 
@@ -157,7 +160,7 @@ def prepare_barista_order!(uk_jar:, point:, timestamp_suffix:)
   email = "iso-bar-#{point[:slug]}-#{timestamp_suffix}@prog10.local"
   create_staff!(uk_jar: uk_jar, name: "ISO Barista #{point[:slug]}", email: email, role_code: "barista")
 
-  barista_jar = "/tmp/prog10-iso-setup-#{point[:slug]}.cookies"
+  barista_jar = File.join(COOKIE_DIR, "prog10-iso-setup-#{point[:slug]}.cookies")
   login_user!(email: email, password: PASSWORD, jar: barista_jar)
   open_barista_shift!(barista_jar)
   product_id = product_id_for_tenant(point[:tenant_id])
@@ -178,11 +181,11 @@ def foreign_point_for(idx, orders_by_tenant)
 end
 
 def code_for(path, jar:)
-  run_curl("-b", jar, "-o", "/dev/null", "-w", "%{http_code}", "#{BASE}#{path}").strip
+  run_curl("-b", jar, "-o", NULL_DEV, "-w", "%{http_code}", "#{BASE}#{path}").strip
 end
 
 timestamp_suffix = "#{Time.now.utc.strftime('%m%d%H%M')}-#{SecureRandom.hex(4)}"
-uk_jar = "/tmp/prog10-iso-uk.cookies"
+uk_jar = File.join(COOKIE_DIR, "prog10-iso-uk.cookies")
 login_user!(email: "uk@demo.coffeeos.local", password: PASSWORD, jar: uk_jar)
 
 orders_by_tenant = {}
@@ -217,7 +220,7 @@ POINTS.each_with_index do |point, idx|
       email: email,
       role_code: "barista"
     )
-    staff_jar = "/tmp/prog10-iso-#{point[:slug]}.cookies"
+    staff_jar = File.join(COOKIE_DIR, "prog10-iso-#{point[:slug]}.cookies")
     login_user!(email: email, password: PASSWORD, jar: staff_jar)
   end
 

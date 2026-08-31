@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-31 (Fly v473 Shop REVIEW deploy)  
+**Дата:** 2026-08-31 (Fly v473 MCP PASS)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Fly **v473** deployed · release OK · `/up` 200 | MCP Point A по апруву |
+| Fly **v473** · MCP Point A **7/7** · Shop REVIEW **4/4** · Prog10 **9/9** | IB sign-off / backlog (SBP 3001, G-10 blog) |
 
-**last_done:** deploy Shop G-04/G-05 + categories + user/cards · HEAD `c8010a57`  
-**next_step:** MCP Point A по апруву
+**last_done:** Fly MCP full pack v473 · HEAD pending commit  
+**next_step:** IB sign-off или backlog по запросу
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

@@ -1,0 +1,34 @@
+{
+  "task": "fly_shop_review_mcp",
+  "date": "2026-08-31",
+  "base": "https://coffeeos.fly.dev",
+  "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "head": "cdcc0ad7",
+  "release": 473,
+  "checks": [
+    {
+      "id": "S1_phone_otp_status_no_autobind",
+      "pass": true,
+      "verified": false,
+      "phone": null
+    },
+    {
+      "id": "S2_user_cards_email_param_empty",
+      "pass": true,
+      "cards_count": 0
+    },
+    {
+      "id": "S3_session_destroy_scoped_refresh",
+      "pass": true,
+      "refresh_http": 200,
+      "note": "B logout with A refresh_token must not revoke A"
+    },
+    {
+      "id": "S4_categories_rate_limit",
+      "pass": true,
+      "ok_before_throttle": 60,
+      "throttled": true
+    }
+  ],
+  "status": "PASS"
+}
