@@ -3,7 +3,7 @@
 **Статус:** живой регистр · **не** дублирует закрытые G-01…G-12 Phase 4  
 **Связано:** [phase_4_rbac_dod/README.md](phase_4_rbac_dod/README.md) · [phase_5b_hardening/README.md](phase_5b_hardening/README.md) · [DEVICE_TOKENS.md](phase_3_tenant_rls/DEVICE_TOKENS.md)
 
-> Контур RBAC/RLS **закрыт с оговорками** (Phase 4 DoD). Ниже — что **ещё доделать** по ИБ и смежным задачам (G-12 UI, device TTL/cron).
+> Контур RBAC/RLS **закрыт с оговорками** (Phase 4 DoD). Продуктовый docs-drift (IB-P-03/04) — **FIXED** 2026-08-31.
 
 ---
 
@@ -40,15 +40,15 @@
 
 ---
 
-## 📦 Продуктовый долг (не дыра RLS, но G-12 / devices «не доделано»)
+## 📦 Продуктовый долг (docs / scope — не дыра RLS)
 
-| ID | Задача | Сейчас | Доделать |
-|----|--------|--------|----------|
-| IB-P-01 | **G-12 multi-point** | Links + UI + org guard + queue/stop-list/reports/incidents + **platform UI** | — |
-| IB-P-02 | **Device token cron** | `RotateExpiringTokensJob` + warn/deactivate + Telegram | **FIXED** 2026-08-31 |
-| IB-P-03 | **Docs drift** | `ROLES_AND_PERMISSIONS.md` §7: favorites «session-only»; SHOP matrix favorites «session-only» | Sync: G-06 FIXED; обновить REVIEW строки |
-| IB-P-04 | **Phase 4 G-12 статус** | GAP register: **FIXED** | Уточнить: **data + MVP UI**; product wiring = IB-P-01 |
-| IB-P-05 | **Fly / IB re-verify** | Локально green после 2026-08-31 commits | Push → CI → deploy апрув → Prog10 + MCP Point A |
+| ID | Задача | Статус |
+|----|--------|--------|
+| IB-P-01 | **G-12 multi-point** | **FIXED** 2026-08-31 — links + UI + org guard + wiring + platform UI |
+| IB-P-02 | **Device token cron** | **FIXED** 2026-08-31 |
+| IB-P-03 | **Docs drift favorites** | **FIXED** 2026-08-31 — ROLES §7, SHOP matrix, ACTORS sync G-06 |
+| IB-P-04 | **Phase 4 G-12 gap register** | **FIXED** 2026-08-31 — G-12 row: data + MVP UI + full wiring vs IB-P-01 |
+| IB-P-05 | **Fly / IB re-verify** | **FIXED** 2026-08-31 — v472 MCP 7/7 |
 
 ---
 
@@ -60,4 +60,5 @@
 
 ## Приоритет следующего шага
 
-1. **IB-P-03** — docs drift favorites (backlog)
+1. Deploy по апруву (v472+ на Fly) · мониторинг Sentry/УК по запросу
+2. Blog CMS hardening (G-10 backlog) — вне coffee ops hot-path

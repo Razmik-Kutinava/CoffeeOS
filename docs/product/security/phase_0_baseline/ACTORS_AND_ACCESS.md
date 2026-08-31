@@ -136,7 +136,7 @@ Post-login redirect: `Auth::SessionsController#dashboard_path_for_role` — bari
 6. **Prep kitchen** — `skip_authorization` on base; movements/inventory opt-in Pundit
 7. **Franchise manager** — staff UI blocked (`staff_management_visible?` = GM \| UK); devices allowed
 8. **Shop guest flows** — `pending_order` / `reconnect_token` by design
-9. **Favorites** — session-only (P3 backlog)
+9. **Favorites** — **FIXED G-06** — session per tenant + DB persist for logged-in customer (`Shop::FavoritesStore`)
 10. **Categories index** — public without API key (SEO)
 11. **Debug endpoint** — non-production only
 12. **Background jobs** — audited Phase 3; patterns documented in RLS_TENANT_AUDIT

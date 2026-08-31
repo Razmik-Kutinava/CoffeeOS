@@ -1,6 +1,6 @@
 # IB-0-2 — Shop API Access Matrix
 
-**Фаза:** 0 (baseline) · обновлено Phase 1 + Phase 4: 2026-08-30 · **0 HOLE**
+**Фаза:** 0 (baseline) · обновлено Phase 1 + Phase 4 + G-06: 2026-08-31 · **0 HOLE**
 
 Полная матрица `namespace :shop → namespace :api` из `config/routes.rb` (строки 171–224).
 
@@ -15,8 +15,8 @@ Phase 1 ownership: [SHOP_API_AUTH.md](../phase_1_rbac_closure/SHOP_API_AUTH.md) 
 | Метрика | Значение |
 |---------|----------|
 | **Endpoints total** | **51** (50 в production без `debug`) |
-| **OK** | 42 |
-| **REVIEW** | 9 |
+| **OK** | 45 |
+| **REVIEW** | 6 |
 | **HOLE** | 0 (Phase 1: 4 P0 закрыты) |
 
 ### HOLE list (Phase 0 → Phase 1 FIXED)
@@ -127,9 +127,9 @@ Order.where(tenant_id:, source: :mobile, customer_id: cid).find(params[:id])
 | 46 | PATCH | `/shop/api/profile` | `profile#update` | CUSTOMER | mixed | resolved | `require_customer!` | yes | no | OK | `profile_controller.rb:12-21` | — |
 | 47 | POST | `/shop/api/profile/link_email` | `profile#link_email` | CUSTOMER | mixed | resolved | `require_customer!` + OTP | yes | no | OK | `profile_controller.rb:26-37` | — |
 | 48 | POST | `/shop/api/profile/link_phone` | `profile#link_phone` | CUSTOMER | mixed | resolved | `require_customer!` + OTP | yes | no | OK | `profile_controller.rb:46-51` | — |
-| 49 | GET | `/shop/api/favorites` | `favorites#index` | GUEST | mixed | resolved | `session[:shop_favorites]` | no | no | REVIEW | `favorites_controller.rb:8-29` | session-only, not persisted per customer |
-| 50 | POST | `/shop/api/favorites` | `favorites#create` | GUEST | mixed | resolved | session array | no | no | REVIEW | `favorites_controller.rb:32-36` | — |
-| 51 | DELETE | `/shop/api/favorites/:product_id` | `favorites#destroy` | GUEST | mixed | resolved | session array | no | no | REVIEW | `favorites_controller.rb:41-45` | — |
+| 49 | GET | `/shop/api/favorites` | `favorites#index` | GUEST/CUSTOMER | mixed | resolved | `FavoritesStore` session + DB if `customer_id` | yes (logged-in) | no | OK | `favorites_controller.rb:6-28` | G-06 FIXED — guest session bucket; customer persist + merge on login |
+| 50 | POST | `/shop/api/favorites` | `favorites#create` | GUEST/CUSTOMER | mixed | resolved | `FavoritesStore#add!` | yes (logged-in) | no | OK | `favorites_controller.rb:31-37` | — |
+| 51 | DELETE | `/shop/api/favorites/:product_id` | `favorites#destroy` | GUEST/CUSTOMER | mixed | resolved | `FavoritesStore#remove!` | yes (logged-in) | no | OK | `favorites_controller.rb:39-42` | — |
 
 **Count check:** 51 rows = 51 routes in `routes.rb` (including `debug`; 50 in production).
 
@@ -142,7 +142,7 @@ Order.where(tenant_id:, source: :mobile, customer_id: cid).find(params[:id])
 | ~~P0~~ | payments status / widget_init / sbp/init / sbp/charge | **FIXED** Phase 1 |
 | P2 | `GET phone_otp/status` | REVIEW — document auto-bind |
 | P2 | `DELETE session` | REVIEW — refresh_token binding |
-| P3 | favorites persist per customer | backlog |
+| P3 | ~~favorites persist per customer~~ | **FIXED G-06** — `shop_customer_favorites` + `Shop::FavoritesStore` |
 | P3 | `GET categories` public | OWNER REVIEW |
 
 ---

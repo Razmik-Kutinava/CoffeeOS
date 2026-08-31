@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-31 (IB-D-05..08 defense in depth)  
+**Дата:** 2026-08-31 (IB-P-03/04 docs sync)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| IB-D-05..08 **FIXED** | push → CI · IB-P-03 docs · deploy по апруву |
+| IB-P-03/04 **FIXED** — favorites + G-12 docs sync | deploy по апруву |
 
-**last_done:** Manager DashboardPolicy; blog_editor has_role_in_context; has_role_in_context else deny  
-**next_step:** push → CI
+**last_done:** ROLES §7, SHOP matrix, ACTORS, phase_4 G-12 gap register  
+**next_step:** push → CI · deploy по апруву
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

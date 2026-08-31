@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-31 — docs: IB-P-03/04 favorites G-06 + G-12 gap register sync
+
+- **IB-P-03:** ROLES §7, SHOP_API_ACCESS_MATRIX (#49–51), ACTORS — favorites G-06 FIXED (session + DB)
+- **IB-P-04:** phase_4 GAP G-12 — data / prep UI / wiring / platform layers documented
+- IB_SECURITY_DEBT: product debt IB-P-01…05 all FIXED
+
 ## 2026-08-31 — feat(security): IB-D-05..08 manager dashboard Pundit + blog_editor context + role deny
 
 - **IB-D-05:** `Manager::DashboardPolicy#show?` + authorize на dashboard

@@ -56,7 +56,7 @@ PWA / mobile витрина. Tenant: `@shop_tenant` из `tenant_id` query ил�
 | GET | `categories`, `products`, `products/:id` | catalog + tenant settings |
 | GET | `frequent_products` | Quick Repeat: `has_active_order`, `frequent_items`, `categories` |
 | POST/PATCH/DELETE | `cart/*` | `Shop::CartService`; offline queue в SW |
-| GET/POST/DELETE | `favorites/*` | избранное |
+| GET/POST/DELETE | `favorites/*` | избранное; гость — session per tenant; залогиненный customer — `shop_customer_favorites` (G-06) + merge при login |
 
 **Tests:** `frequent_products_test.rb` · `quick_repeat_*_test.rb`
 

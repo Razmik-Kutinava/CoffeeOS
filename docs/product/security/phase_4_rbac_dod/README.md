@@ -27,7 +27,7 @@
 | G-09 | Phase 2 | Platform Pundit not wired | low | **FIXED Phase 5b** — PlatformPolicy + tenants/orgs authorize |
 | G-10 | Phase 2 | blog_editor outside staff matrix | info | **backlog** blog CMS |
 | G-11 | TECH DEBT | Global `user_roles` without `tenant_id` | low | **FIXED** — backfill migration + `has_role_in_context?` strict |
-| G-12 | Phase 3 | Prep multi-point (1 kitchen → N sales) | info | **FIXED** — links + UI + org guard + wiring (queue/stop-list/reports/incidents) + platform UI |
+| G-12 | Phase 3 | Prep multi-point (1 kitchen → N sales) | info | **FIXED** (2026-08-31) — **data:** `prep_kitchen_sales_point_links` + `SalesPointRegistry` + same-org guard · **prep UI:** `/prep_kitchen/sales_points` · **wiring:** queue/stop-list/reports/incidents via `LinkedTenantScope` · **platform:** card on `/admin/tenants/:id` · см. IB-P-01, phase_5b README |
 
 **NEED_MIGRATION:** none  
 **Code fixes Phase 4:** none required (gaps = backlog or documented exceptions)  
