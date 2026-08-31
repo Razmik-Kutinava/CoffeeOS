@@ -9,7 +9,7 @@
 |--------|--------|
 | Fly **v473** · MCP Point A **7/7** · Shop REVIEW **4/4** · Prog10 **9/9** | IB sign-off / backlog (SBP 3001, G-10 blog) |
 
-**last_done:** Fly MCP full pack v473 · HEAD pending commit  
+**last_done:** Fly MCP full pack v473 · HEAD `38284c9b`  
 **next_step:** IB sign-off или backlog по запросу
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
