@@ -85,7 +85,7 @@ namespace :fly do
   desc "Fly release: db:prepare + solid migrations + demo:seed (DEMO_AUTO_SEED=true)"
   task release: :environment do
     puts "[fly:release] db:prepare..."
-    Rake::Task["db:prepare"].invoke
+    FlyRelease.migrate_with_retry!("db:prepare")
 
     puts "[fly:release] db:ensure_triggers..."
     Rake::Task["db:ensure_triggers"].invoke
