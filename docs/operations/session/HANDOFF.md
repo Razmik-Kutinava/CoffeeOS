@@ -9,7 +9,7 @@
 |--------|--------|
 | CI fix — builder/collector user_id + rubocop + brakeman GUC | push develop · ждать green CI |
 
-**last_done:** prep kitchen services user_id; Rls::GucContext hardcoded SET LOCAL; rubocop brackets  
+**last_done:** CI round 2 — rubocop builder brackets; FavoritesStore find_by для unit-тестов  
 **next_step:** CI green → deploy только по апруву · IB-P-05 Fly re-verify
 
 **Архив session:** [`archive/README.md`](archive/README.md)  

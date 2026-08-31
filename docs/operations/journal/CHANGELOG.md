@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-31 — fix(ci): FavoritesStore find_by + rubocop builder brackets
+
+- `FavoritesStore.merge_session_into_db!` — `find_by` вместо `find` (CustomerSession unit tests без Tenant в БД)
+- RuboCop brackets в `PrepKitchen::Reports::Builder`
+
 ## 2026-08-31 — fix(ci): prep kitchen user_id services + rubocop + brakeman GUC
 
 - `PrepKitchen::Reports::Builder` / `Incidents::Collector` — `user_id:` для LinkedTenantScope (fix CI test errors)

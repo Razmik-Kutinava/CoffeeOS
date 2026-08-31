@@ -59,7 +59,7 @@ module PrepKitchen
           ).count
         end
 
-        [manual, auto]
+        [ manual, auto ]
       end
 
       def grouped_data(base_scope)

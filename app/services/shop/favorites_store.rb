@@ -7,7 +7,10 @@ module Shop
     LEGACY_KEY = :shop_favorites
 
     def self.merge_session_into_db!(session:, tenant_id:, customer_id:)
-      new(session: session, tenant: Tenant.find(tenant_id), customer_id: customer_id).merge_session_into_db!
+      tenant = Tenant.find_by(id: tenant_id)
+      return unless tenant
+
+      new(session: session, tenant: tenant, customer_id: customer_id).merge_session_into_db!
     end
 
     def initialize(session:, tenant:, customer_id: nil)
