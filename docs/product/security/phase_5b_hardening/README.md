@@ -59,7 +59,8 @@
 
 ## Device token lifecycle (2026-08-31)
 
-- `Devices::TokenCredentials` + ENV `DEVICE_TOKEN_TTL_DAYS`
+- `Devices::TokenCredentials` + ENV `DEVICE_TOKEN_TTL_DAYS`, `DEVICE_TOKEN_ROTATE_WARN_DAYS`
+- **Cron IB-P-02:** `RotateExpiringTokensJob` — deactivate expired + Telegram warn (no auto-rotate)
 - Manager: revoke, rotate, reactivate + **policy banner + expiry pills** в UI
 - Cron auto-rotation — out of scope
 

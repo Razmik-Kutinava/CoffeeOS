@@ -16,6 +16,11 @@ module Devices
       ttl.positive? ? ttl : nil
     end
 
+    def self.rotate_warn_days
+      days = ENV.fetch("DEVICE_TOKEN_ROTATE_WARN_DAYS", "14").to_s.strip.to_i
+      days.positive? ? days : 14
+    end
+
     def self.default_expires_at
       ttl = ttl_days
       return nil unless ttl
@@ -36,7 +41,17 @@ module Devices
       device.device_token = generate
       device.token_expires_at = default_expires_at
       device.is_active = true
+      clear_expiry_cron_metadata!(device)
       device
+    end
+
+    def self.clear_expiry_cron_metadata!(device)
+      meta = (device.metadata || {}).except(
+        Devices::ExpiringTokensProcessor::METADATA_WARNED_AT,
+        Devices::ExpiringTokensProcessor::METADATA_DEACTIVATED_AT,
+        Devices::ExpiringTokensProcessor::METADATA_DEACTIVATED_BY
+      )
+      device.metadata = meta
     end
 
     def self.assign_new!(device:)

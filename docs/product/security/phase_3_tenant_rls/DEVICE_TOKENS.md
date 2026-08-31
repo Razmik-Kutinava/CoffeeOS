@@ -52,7 +52,24 @@ ENV **`DEVICE_TOKEN_TTL_DAYS`** (опционально):
 
 Пример prod: `DEVICE_TOKEN_TTL_DAYS=365`.
 
-Сервис: `Devices::TokenCredentials` · UI manager показывает `token_expiry_label`.
+**Предупреждение до истечения:** ENV **`DEVICE_TOKEN_ROTATE_WARN_DAYS`** (default `14`) — совпадает с pill «скоро» в manager UI.
+
+## Cron (IB-P-02)
+
+| Компонент | Назначение |
+|-----------|------------|
+| `Devices::RotateExpiringTokensJob` | Solid Queue recurring, **06:00 daily** (`config/recurring.yml`) |
+| `Devices::ExpiringTokensProcessor` | Логика: деактивация + алерты |
+
+**Политика (не ломает kiosk/TV без процесса):**
+
+| Состояние | Действие cron |
+|-----------|---------------|
+| `token_expires_at` в прошлом, `is_active: true` | `is_active=false` + Telegram алерт GM |
+| истекает ≤ `DEVICE_TOKEN_ROTATE_WARN_DAYS` | Telegram алерт (раз в 7 дн. max), **без** auto-rotate |
+| `DEVICE_TOKEN_TTL_DAYS` не задан | job no-op |
+
+Ротация token — **только вручную** manager → «Новый токен»; cron metadata сбрасывается при `TokenCredentials.assign_new!`.
 
 ## Manager UI (отзыв / ротация)
 
@@ -91,5 +108,4 @@ Device lookup по token **до** установки GUC: политика `rls_
 
 - Kiosk prod flows (продукт не в prod)
 - TV deep security / ActionCable refactor
-- Scheduled auto-rotation job (cron) — ротация только вручную из manager UI
 - `last_seen_at` audit changes

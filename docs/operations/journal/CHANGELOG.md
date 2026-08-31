@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-31 — feat: IB-P-02 device token cron (RotateExpiringTokensJob)
+
+- `Devices::ExpiringTokensProcessor` — deactivate expired + warn ≤ ROTATE_WARN_DAYS
+- `Devices::RotateExpiringTokensJob` + `config/recurring.yml` 06:00 daily
+- ENV `DEVICE_TOKEN_ROTATE_WARN_DAYS` (default 14); без auto-rotate (не ломает kiosk/TV)
+- IB-P-02 + IB-D-07 FIXED; DEVICE_TOKENS runbook updated
+
 ## 2026-08-31 — feat: G-12 stop-list/reports/incidents wiring + platform links UI
 
 - `PrepKitchen::LinkedTenantScope` — DRY RLS GUC per linked tenant

@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-08-31 (G-12 IB-P-01 closed)  
+**Дата:** 2026-08-31 (IB-P-02 device cron)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| G-12 full wiring + platform UI · IB-P-01 closed | push develop |
+| IB-P-02 FIXED — RotateExpiringTokensJob daily | push develop |
 
-**last_done:** LinkedTenantScope; stop-list/reports/incidents/dashboard; platform prep_kitchen links  
-**next_step:** push develop · IB-P-02 device cron (backlog)
+**last_done:** ExpiringTokensProcessor — deactivate expired + warn Telegram; recurring 06:00  
+**next_step:** push develop · IB-D-03 shop-api-key V3
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

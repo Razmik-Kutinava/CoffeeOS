@@ -39,7 +39,7 @@ class Device < ApplicationRecord
   def token_expiring_soon?
     return false if token_expires_at.blank? || token_expired?
 
-    token_expires_in_days <= 14
+    token_expires_in_days <= Devices::TokenCredentials.rotate_warn_days
   end
 
   def token_expiry_label

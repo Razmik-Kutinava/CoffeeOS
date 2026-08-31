@@ -51,4 +51,23 @@ class Devices::TokenCredentialsTest < ActiveSupport::TestCase
     assert_includes Devices::TokenCredentials.policy_description, "365"
     assert_equal 365, Devices::TokenCredentials.ttl_days
   end
+
+  test "rotate_warn_days defaults to 14" do
+    ENV.delete("DEVICE_TOKEN_ROTATE_WARN_DAYS")
+    assert_equal 14, Devices::TokenCredentials.rotate_warn_days
+  end
+
+  test "assign_new! clears expiry cron metadata" do
+    @device.update!(
+      metadata: {
+        "token_expiry_deactivated_at" => Time.current.iso8601,
+        "token_expiry_deactivated_by" => "cron"
+      }
+    )
+
+    Devices::TokenCredentials.assign_new!(device: @device)
+
+    @device.reload
+    assert_nil @device.metadata["token_expiry_deactivated_at"]
+  end
 end
