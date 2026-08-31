@@ -7,7 +7,7 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| Fly **v472** deploy complete · MCP Point A **PASS** 7/7 | IB-P-05 закрыт · мониторинг УК/Sentry |
+| CI **green** (#33390384967) · local 1727/0 | мониторинг по запросу |
 
 **last_done:** deploy v472; fly:release retry fix; MCP 7/7; ShopApiKeyResolver без ActiveSupport в bin  
 **next_step:** push develop · Sentry 24h по запросу

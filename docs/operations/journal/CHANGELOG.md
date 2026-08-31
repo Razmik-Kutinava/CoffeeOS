@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-08)
 
+## 2026-08-31 — docs: CI re-verify (local 1727/0, GitHub #33390384967 green)
+
+- Утренние red runs (#33368652321, #33370129096) уже исправлены ранее; HEAD green
+- ISSUES: IB-D-03 → resolved
+
 ## 2026-08-31 — deploy Fly v472 + MCP Point A PASS 7/7
 
 - Release v472 (develop `04e6934d` + fly:release retry)
