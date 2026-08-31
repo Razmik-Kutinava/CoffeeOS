@@ -1,0 +1,33 @@
+{
+  "task": "sentry_24h_check",
+  "date": "2026-08-31",
+  "at": "2026-08-31T14:40:00Z",
+  "org": "llc-manageengine",
+  "project": "ruby",
+  "sentry_host": "https://de.sentry.io",
+  "sentry_web": "https://llc-manageengine.sentry.io",
+  "method": "cursor_sentry_mcp",
+  "release": "v473",
+  "head": "baf50689",
+  "queries": {
+    "unresolved_last_24h": {
+      "query": "is:unresolved lastSeen:-24h",
+      "count": 0,
+      "issues": []
+    },
+    "first_seen_24h": {
+      "query": "firstSeen:-24h",
+      "count": 0,
+      "issues": []
+    },
+    "error_events_24h": {
+      "query": "level:error",
+      "dataset": "errors",
+      "count": 0
+    }
+  },
+  "unresolved_last_24h": 0,
+  "first_seen_24h": 0,
+  "status": "PASS",
+  "note": "clean — MCP plugin-sentry-sentry connected; 0 unresolved / 0 new / 0 error events in 24h post v473 deploy"
+}

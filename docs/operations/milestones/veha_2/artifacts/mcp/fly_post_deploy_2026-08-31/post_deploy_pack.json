@@ -2,7 +2,7 @@
   "task": "post_deploy_acceptance_pack",
   "date": "2026-08-31",
   "release": "v473",
-  "head": "cdcc0ad7",
+  "head": "baf50689",
   "image": "deployment-01M1C2Z4HMEKJ8D9075REQ9ESW",
   "base": "https://coffeeos.fly.dev",
   "note": "Shop REVIEW G-04/G-05 + categories throttle + user/cards session-only",
@@ -43,9 +43,13 @@
     },
     {
       "id": "sentry_24h",
-      "pass": null,
-      "skip": "not scripted this step"
+      "pass": true,
+      "method": "cursor_sentry_mcp",
+      "artifact": "docs/operations/milestones/veha_2/artifacts/sentry/sentry_24h_2026-08-31.json",
+      "unresolved_last_24h": 0,
+      "first_seen_24h": 0,
+      "note": "clean — org llc-manageengine / ruby / de.sentry.io"
     }
   ],
-  "verdict": "deploy_pass_mcp_pass"
+  "verdict": "deploy_pass_mcp_pass_sentry_clean"
 }
