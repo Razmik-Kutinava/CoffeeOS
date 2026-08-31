@@ -7,7 +7,7 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| IB-D-04 FIXED — PrepKitchen Pundit | push → CI · IB-D-05..08 backlog |
+| IB-D-04 **FIXED** · CI **green** (#33391722169) | IB-D-05..08 backlog · deploy по апруву |
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
