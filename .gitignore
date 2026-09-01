@@ -46,10 +46,9 @@
 
 /public/assets
 
-# Загрузки фото товаров УК (public/uploads/products)
+# Загрузки фото товаров УК (public/uploads/products) — локально/Fly эфемерно, в git только README
 /public/uploads/
 !/public/uploads/README.md
-!/public/uploads/products/
 !/public/uploads/products/README.md
 
 # Ignore key files for decrypting credentials and more.

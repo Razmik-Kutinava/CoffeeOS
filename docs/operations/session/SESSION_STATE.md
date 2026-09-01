@@ -7,7 +7,7 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| Fly **v473** · MCP **PASS** (Point A 7/7, Shop REVIEW 4/4, Prog10 9/9) | IB sign-off / backlog |
+| Fly **v473** · MCP **PASS** (Point A 7/7, Shop REVIEW 4/4, Prog10 9/9) | IB sign-off / backlog / токены |
 
 **ctx_trim:** `2026-09-01`
 
@@ -18,10 +18,10 @@
 
 ## Текущий месяц (2026-09)
 
-### ctx-trim — архив августа (2026-09-01)
+### uploads gitignore (2026-09-01)
 
 | Что | Статус |
 |-----|--------|
-| SESSION_STATE август | **archived** → `archive/session_state-2026-08.md` |
-| HANDOFF / CHANGELOG / ISSUES resolved | **archived** |
-| Fly baseline | **v473** · MCP PASS · Sentry clean (на 2026-08-31) |
+| `.gitignore` | картинки `public/uploads/products/*` не в git status |
+| Локальные тест-файлы | удалены (15 шт.) |
+

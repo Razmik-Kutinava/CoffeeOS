@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-01 — chore: uploads gitignore (меньше шума в git status)
+
+- `.gitignore`: убран `!/public/uploads/products/` — картинки локально/Fly эфемерны, в git только README
+- Удалены 15 тестовых файлов из `public/uploads/products/` (MCP/локальные загрузки)
+
 ## 2026-09-01 — ops: ctx-trim + архив августа
 
 - Коммит `e929d3bd` · ops ref `5b1519a5`
