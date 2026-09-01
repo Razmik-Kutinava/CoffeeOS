@@ -9,7 +9,7 @@
 |--------|--------|
 | Fly **v473** · MCP **PASS** · Sentry 24h **clean** | IB sign-off / backlog |
 
-**last_done:** `ctx-trim` 2026-09-01 — август SESSION/HANDOFF/CHANGELOG/ISSUES → archive  
+**last_done:** `ctx-trim` 2026-09-01 — август SESSION/HANDOFF/CHANGELOG/ISSUES → archive · `e929d3bd`  
 **next_step:** IB sign-off или backlog по запросу
 
 **ctx_trim:** `2026-09-01` (следующий: `/ctx-trim` или пт–вс через ≥7 дней)
@@ -29,6 +29,6 @@
 | `session_state-2026-08.md` | **done** — 1601 строка из SESSION_STATE |
 | `CHANGELOG-2026-08.md` | **done** — 1608 строк |
 | `ISSUES-resolved-through-2026-08.md` | **done** — детали resolved |
-| Правило `/ctx-trim` + `coffeeos-context-hygiene.mdc` | **done** |
+- Команда `/ctx-trim` + правило `coffeeos-context-hygiene.mdc` | **done** · `e929d3bd`
 
 **Эффект:** живые ops ~18 строк шапки + этот блок; тело августа — только по запросу / archive.
