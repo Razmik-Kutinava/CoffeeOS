@@ -14,6 +14,7 @@ CoffeeOS. Следуй `coffeeos-agent-workflow` + `coffeeos-customer-intake` (P
 4. **Не** перечитывай PRACTICES/QA/весь CHECKLIST/весь CHANGELOG
 5. **Не** заново PHASE 0, если ТЗ уже в `customer_tasks/` или задача уже в todo
 6. Коротко: `last_done` / `current_state` / `next_step` (одна строка каждый)
+7. **ctx-trim:** если пт–вс и в шапке HANDOFF `ctx_trim` старше 7 дней — одна строка: «рекомендуется `/ctx-trim`» (не блокировать старт)
 
 ### B) Полный старт + PHASE 0
 Только если **новое** ТЗ от заказчика ещё не в `customer_tasks/` / CBR, или пользователь явно просит intake.

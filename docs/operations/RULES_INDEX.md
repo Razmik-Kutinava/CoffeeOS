@@ -28,6 +28,7 @@
 | `workflow/coffeeos-repo-layout.mdc` | Куда класть файлы; `scripts/scratch/` |
 | `workflow/coffeeos-file-size-split.mdc` | Лимиты 50/120/200 (globs app) |
 | `workflow/coffeeos-customer-intake.mdc` | PHASE 0: ТЗ заказчика → `customer_tasks/` |
+| `workflow/coffeeos-context-hygiene.mdc` | `/ctx-trim` — архив ops, сжатие ISSUES; weekly пт–вс + 1–3 число месяца |
 | `project/coffeeos-performance.mdc` | N+1 / SQL (globs `app|db|test|lib/**/*.rb`) |
 | `project/coffeeos-services.mdc` | Сервис-объекты |
 | `project/coffeeos-http.mdc` | Контроллеры, routes |
@@ -47,7 +48,7 @@
 | `session/archive/` | Старые месяцы — **не читать** без запроса |
 | `journal/CHANGELOG.md` | Живой: писать в текущий месяц; на старте **не** читать весь файл |
 | `journal/archive/` | Старые CHANGELOG-YYYY-MM — **не читать** без запроса |
-| `ISSUES.md` | Баги; на старте — только **`## 🔴 Открыто`** (таблица ~15 строк до следующего `##`) |
+| `ISSUES.md` | Баги; на старте — только **`## 🔴 Открыто`**; resolved → `issues/archive/` |
 | CBR / `DEMO_FEEDBACK.md` | Заказчик, backlog — не на каждый старт |
 | Folder `README.md` | Не читать при Glob/дереве; только по явной нужде |
 | Skills / `ce-*` / субагенты | Фича/SBR — триггеры этапа; мелочь — без; карта: `docs/agents/SUBAGENTS.md` |

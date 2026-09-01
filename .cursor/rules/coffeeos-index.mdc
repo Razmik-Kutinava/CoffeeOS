@@ -27,6 +27,7 @@ alwaysApply: true
 | Новые файлы / куда класть | `workflow/coffeeos-repo-layout.mdc` |
 | ТЗ заказчика (intake) | `workflow/coffeeos-customer-intake.mdc` |
 | Файл растёт / сплит | `workflow/coffeeos-file-size-split.mdc` |
+| **ctx-trim** / оптимизация токенов / архив ops | `workflow/coffeeos-context-hygiene.mdc` + `/ctx-trim` |
 | Rails N+1 / SQL | `project/coffeeos-performance.mdc` (также globs `app|db|test/**/*.rb`) |
 | Сервисы / HTTP / UI / cart / data / tests | `project/coffeeos-*.mdc` по зоне |
 

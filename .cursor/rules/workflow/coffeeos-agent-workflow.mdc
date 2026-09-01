@@ -88,6 +88,14 @@ Folder `README.md` — для владельца/заказчика: не отк
 
 Skills (`.claude/skills`, CE) — только по типу задачи / явной просьбе, не always.
 
+## Context hygiene (`/ctx-trim`)
+
+**Ручной:** `/ctx-trim` или «оптимизируй контекст» → [`coffeeos-context-hygiene.mdc`](coffeeos-context-hygiene.mdc) (on-demand, **не** always).
+
+**Weekly (авто-подсказка):** пт–вс, если в шапке `HANDOFF` поле **`ctx_trim`** старше **7 дней** — на `/start` одна строка: «рекомендуется `/ctx-trim`». Выполнять только по намерению владельца («ебашь» / `/ctx-trim`).
+
+**1–3 число месяца:** если прошлый месяц ещё в теле SESSION/HANDOFF/CHANGELOG — предложить trim (архив месяца).
+
 ## Entire (Review / resume — не Spec-папки)
 
 Слой **поверх Git**, без `docs/tasks/TASK-XX/`. Spec = `customer_tasks/` + `todo.md` + `artifacts/` + `docs/integrations/INTEGRATIONS.md`.  
