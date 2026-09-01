@@ -29,6 +29,6 @@
 | `session_state-2026-08.md` | **done** — 1601 строка из SESSION_STATE |
 | `CHANGELOG-2026-08.md` | **done** — 1608 строк |
 | `ISSUES-resolved-through-2026-08.md` | **done** — детали resolved |
-- Команда `/ctx-trim` + правило `coffeeos-context-hygiene.mdc` | **done** · `e929d3bd`
+| `/ctx-trim` + `coffeeos-context-hygiene.mdc` | **done** · `e929d3bd` |
 
 **Эффект:** живые ops ~18 строк шапки + этот блок; тело августа — только по запросу / archive.

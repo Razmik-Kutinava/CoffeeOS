@@ -13,6 +13,7 @@
 
 ## 2026-09-01 — ops: ctx-trim + архив августа
 
-- Коммит `e929d3bd`
+- Коммит `e929d3bd` · ops ref `5b1519a5`
+- Команда `/ctx-trim` + правило `coffeeos-context-hygiene.mdc` (ручной + weekly пт–вс)
 - Архив: `handoff-2026-08.md`, `session_state-2026-08.md`, `CHANGELOG-2026-08.md`, `ISSUES-resolved-through-2026-08.md`
 - Живые HANDOFF/SESSION/CHANGELOG/ISSUES — шапка + сентябрь; **~4k tok** экономии на старте vs проглатывание августа
