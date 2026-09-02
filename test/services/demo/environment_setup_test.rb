@@ -123,4 +123,21 @@ class Demo::EnvironmentSetupTest < ActiveSupport::TestCase
     assert Category.exists?(slug: "menu-cat-filter")
     assert Product.exists?(slug: "menu-prod-brazil")
   end
+
+  test "DEMO_SINGLE_POINT keeps only point a and kitchen active" do
+    old = ENV["DEMO_SINGLE_POINT"]
+    ENV["DEMO_SINGLE_POINT"] = "true"
+    result = Demo::EnvironmentSetup.call(load_catalog: false)
+
+    assert_equal "active", result.tenant_a.reload.status
+    assert_equal "inactive", result.tenant_b.reload.status
+    assert_equal "inactive", result.tenant_c.reload.status
+    assert_equal "active", result.tenant_kitchen.reload.status
+  ensure
+    if old.nil?
+      ENV.delete("DEMO_SINGLE_POINT")
+    else
+      ENV["DEMO_SINGLE_POINT"] = old
+    end
+  end
 end

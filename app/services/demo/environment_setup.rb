@@ -187,12 +187,24 @@ module Demo
       Organization.find_or_create_by!(slug: ORG_ALT_SLUG) { |o| o.name = ORG_ALT_NAME }
     end
 
+    def single_point_mode?
+      ActiveModel::Type::Boolean.new.cast(ENV.fetch("DEMO_SINGLE_POINT", "false"))
+    end
+
+    def tenant_status_for(slug, type)
+      return "active" unless single_point_mode?
+
+      return "active" if slug == TENANT_A_SLUG || type == "production_kitchen"
+
+      "inactive"
+    end
+
     def ensure_tenant!(slug:, name:, organization:, type: "sales_point")
       tenant = Tenant.find_or_initialize_by(slug: slug)
       tenant.assign_attributes(
         name: name,
         type: type,
-        status: "active",
+        status: tenant_status_for(slug, type),
         country: "RU",
         currency: "RUB",
         timezone: "Europe/Moscow",

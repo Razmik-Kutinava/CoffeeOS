@@ -104,6 +104,13 @@ namespace :fly do
     if ActiveModel::Type::Boolean.new.cast(ENV.fetch("DEMO_AUTO_SEED", "false"))
       puts "[fly:release] demo:seed..."
       Rake::Task["demo:seed"].invoke
+
+      if ActiveModel::Type::Boolean.new.cast(ENV.fetch("DEMO_SINGLE_POINT", "false"))
+        puts "[fly:release] platform:prod_single_point (DEMO_SINGLE_POINT)..."
+        Rake::Task["platform:prod_single_point"].reenable
+        ENV["DRY_RUN"] = "0"
+        Rake::Task["platform:prod_single_point"].invoke
+      end
     else
       puts "[fly:release] DEMO_AUTO_SEED not set — skip demo:seed"
     end

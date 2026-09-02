@@ -13,6 +13,7 @@
 | **Shop URL** | `https://coffeeos.fly.dev/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789` |
 
 **Запрещено для приёмки заказчика:** Fly Overnight / «ул. Fly Test» / inactive tenant как основной стенд.  
+**Prod (2026-09-02):** одна active sales_point — Point A; см. [`runbooks/SINGLE_POINT_A.md`](../runbooks/SINGLE_POINT_A.md).  
 **Профиль Арама:** читать/смотреть сценарии можно; **не** писать тестовый OTP/телефон/PAN в его customer.
 
 ---

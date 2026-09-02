@@ -21,6 +21,9 @@ primary_region = "ams"
   # Период живого демо на develop→Fly: идемпотентный demo:seed после каждого деплоя.
   # Убрать demo:seed из release_command после закрытия H.3 (см. veha_1/CHECKLIST § H.0).
   DEMO_AUTO_SEED    = "true"
+  # Одна боевая точка для заказчика (Point A); B/C и мусор — inactive после seed/cleanup.
+  DEMO_SINGLE_POINT = "true"
+  SHOP_DEFAULT_TENANT_ID = "2fdee1ac-4674-41ee-b89e-87b45643f789"
   # Solid Queue на web — fallback если worker machine stopped (UserCards webhook RebillId).
   SOLID_QUEUE_IN_PUMA = "true"
   # Отдельный worker (bin/jobs). После deploy проверить: fly machines list — worker=started.
