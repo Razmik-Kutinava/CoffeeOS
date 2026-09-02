@@ -1,44 +1,35 @@
 ---
-description: CoffeeOS — индекс правил: что always, что читать по типу задачи
+description: CoffeeOS — индекс правил: always vs on-demand
 alwaysApply: true
 ---
 
 # CoffeeOS — индекс правил
 
-**Канон карты:** `docs/operations/RULES_INDEX.md`
+**Карта:** `docs/operations/RULES_INDEX.md`
 
-## Always (каждый ход) — короткий закон
+## Always
 
 | Файл | Зачем |
 |------|--------|
-| `workflow/coffeeos-commit-ops.mdc` | commit + ops всегда; push в PHASE 3 / иначе просьба; deploy — апрув |
-| `workflow/coffeeos-agent-workflow.mdc` | порядок шага + когда читать остальные |
-| `project/coffeeos-core.mdc` | tenant / RLS / панели / честность |
+| `workflow/coffeeos-commit-ops.mdc` | commit + ops; push PHASE 3; deploy — апрув |
+| `workflow/coffeeos-agent-workflow.mdc` | порядок шага, память, отчёт |
+| `project/coffeeos-core.mdc` | tenant / RLS / панели |
 | этот индекс + `.cursorrules` | навигация |
 
-## On-demand — читай сам по типу работы
+## On-demand
 
 | Когда | Файл |
 |-------|------|
-| Фича / CHECKLIST / CBR / отчёт | `workflow/coffeeos-task-workflow.mdc` |
-| SBR (SPEC→RED→GREEN→REVIEW) | `workflow/spec-build-review.mdc` (PHASE 3 — канон сдачи) |
-| Entire checkpoint / Review why-context | `docs/operations/dev/ENTIRE.md` (пустой explain — стоп + attach; не «spec OK») |
-| Тесты / регрессия / миграции / **пайплайн стенд** | `workflow/coffeeos-dev-gates.mdc` |
-| Новые файлы / куда класть | `workflow/coffeeos-repo-layout.mdc` |
-| ТЗ заказчика (intake) | `workflow/coffeeos-customer-intake.mdc` |
-| Файл растёт / сплит | `workflow/coffeeos-file-size-split.mdc` |
-| **ctx-trim** / оптимизация токенов / архив ops | `workflow/coffeeos-context-hygiene.mdc` + `/ctx-trim` |
-| Rails N+1 / SQL | `project/coffeeos-performance.mdc` (также globs `app|db|test/**/*.rb`) |
-| Сервисы / HTTP / UI / cart / data / tests | `project/coffeeos-*.mdc` по зоне |
+| Фича / CBR / CHECKLIST | `workflow/coffeeos-task-workflow.mdc` |
+| SBR | `workflow/spec-build-review.mdc` |
+| Entire / Review | `docs/operations/dev/ENTIRE.md` |
+| Тесты / deploy / hot-path | `workflow/coffeeos-dev-gates.mdc` |
+| Новые файлы | `workflow/coffeeos-repo-layout.mdc` |
+| ТЗ заказчика | `workflow/coffeeos-customer-intake.mdc` |
+| Сплит файлов | `workflow/coffeeos-file-size-split.mdc` |
+| `/ctx-trim` | `workflow/coffeeos-context-hygiene.mdc` |
+| N+1 / SQL | `project/coffeeos-performance.mdc` |
+| Зона кода | `project/coffeeos-{services,http,ui,data,tests,cart-sheet}.mdc` |
+| Ревью PR | `project/coffeeos-code-review.mdc` |
 
-**Запрещено:** тащить все workflow-файлы в мелочь. Сначала always-закон → нужный on-demand.
-
-**Память (шапка-only жёстко):** на старте только шапка `HANDOFF`/`SESSION_STATE` (`limit` ~25–40, до `---`) + **`ISSUES` «🔴 Открыто»** + `todo`. **Не** глотать тело SESSION/HANDOFF/CHANGELOG/PRACTICES/QA.
-
-**Код:** SPEC → 2–7 путей; hot-path → мягкий blast-radius (+1–3) + **обязательные** блоки todo «Не ломать» / «Проверка». Не `@codebase` зря. Не тащить gem’ы/Stripe/RSpec/skills без просьбы.
-
-**Приёмка на Fly:** PHASE 3 (`spec-build-review`) → CI green → **deploy только апрув** → пачка Sentry+логи+MCP Point A. Канон после deploy: `coffeeos-dev-gates` § пайплайн. Не OTP/PAN в профиль заказчика.
-
-**README папок:** не читать при Glob/обходе дерева; только по явной нужде («что в папке» / карта для человека).
-
-**Skills / субагенты:** фича/SBR → по триггерам этапа (`explore`/`shell`/`bugbot`/…); мелочь → `Субагент: нет — мелочь`. CE/`ce-*` не по умолчанию. Детали — `agent-workflow` § Skills / субагенты.
+**Не тащить всё сразу.** Детали старта, памяти, субагентов — только `agent-workflow.mdc`.

@@ -1,14 +1,5 @@
-# CoffeeOS — Cursor Rules (краткий индекс)
+# CoffeeOS — Cursor Rules
 
-**Канон:** `.cursor/rules/workflow/` + `.cursor/rules/project/` — карта: `docs/operations/RULES_INDEX.md`.
+**Канон:** `.cursor/rules/coffeeos-index.mdc` · карта: `docs/operations/RULES_INDEX.md`
 
-## Always vs on-demand
-
-В контексте **всегда** только: `commit-ops`, `agent-workflow`, `project/coffeeos-core`, `coffeeos-index`, этот файл.  
-Остальное агент **подключает по триггерам** (см. `coffeeos-index.mdc`).
-
-## Канон (коротко)
-- Старт чата: только шапки `HANDOFF`/`SESSION_STATE` до `---` + `ISSUES` только `## 🔴 Открыто` + `todo`.
-- Без просьбы не глотать тело `SESSION/HANDOFF/CHANGELOG/PRACTICES/QA`.
-- Depoy/миграции/деструктив — только явный апрув владельца.
-- Tenant/RLS обязателен; не выдумывать поля/эндпоинты.
+Always: `commit-ops`, `agent-workflow`, `coffeeos-core`, index, этот файл. Остальное — on-demand по index.

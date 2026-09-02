@@ -54,7 +54,7 @@
 | Skills / `ce-*` / субагенты | Фича/SBR — триггеры этапа; мелочь — без; карта: `docs/agents/SUBAGENTS.md` |
 | Gem’ы / marketplace MCP | Без просьбы владельца — нет; оплата = `TbankAdapter`; приёмка = Point A |
 
-## Symlinks в `.cursor/rules/`
+## Дубликаты в `.cursor/rules/`
 
-Оставлен `coffeeos-code-review.mdc` → `project/` (совместимость).  
-Симлинки `coffeeos-core` / `coffeeos-performance` **удалены** — Cursor дублировал их в always-контекст.
+Корневые копии `coffeeos-{services,http,data,ui,tests,cart-sheet,code-review}.mdc` **удалены** (2026-09-02) — только `project/`.  
+В корне остаётся **`coffeeos-index.mdc`** (always).
