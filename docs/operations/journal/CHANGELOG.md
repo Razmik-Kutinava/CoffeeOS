@@ -11,6 +11,16 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-02 — feat: single Point A prod (Fly cleanup + DEMO_SINGLE_POINT)
+
+- `Platform::ProdSinglePointCleanup` — inactive лишних sales_point, без DELETE
+- `DEMO_SINGLE_POINT=true` + `SHOP_DEFAULT_TENANT_ID` в `fly.toml`
+- `fly:release` → `platform:prod_single_point` после `demo:seed`
+- Deploy **v474** · release `[platform:prod_single_point] OK`
+- Активны: **demo-point-a** + demo-prep-kitchen (backend)
+- Артефакт: `artifacts/single_point_a/cleanup_2026-09-02.json`
+- Тесты: platform cleanup + environment_setup + RLS (19 runs PASS)
+
 ## 2026-09-02 — ops: ctx-trim токенов (rules + todo + ISSUES)
 
 - Удалены 7 дублей `.cursor/rules/coffeeos-*.mdc` в корне (канон — `project/`)

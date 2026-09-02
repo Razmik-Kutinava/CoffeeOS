@@ -1,0 +1,33 @@
+{
+  "task": "fly_v461_mcp_acceptance",
+  "date": "2026-09-02",
+  "base": "https://coffeeos.fly.dev",
+  "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "head": "cd0c779e",
+  "deploy_commits": [
+    "bea1c226 OTP log leak",
+    "5a061aa6 fail-redirect ownership",
+    "a0023a8a SHOP_SIMULATE default 0",
+    "1220d3e2 block shop cash online"
+  ],
+  "error": "Errno::ENOENT: No such file or directory - fly",
+  "backtrace": [
+    "/usr/lib/ruby/3.2.0/open3.rb:222:in `spawn'",
+    "/usr/lib/ruby/3.2.0/open3.rb:222:in `popen_run'",
+    "/usr/lib/ruby/3.2.0/open3.rb:161:in `popen2'",
+    "/usr/lib/ruby/3.2.0/open3.rb:351:in `capture2'",
+    "bin/acceptance/fly_v461_mcp_acceptance.rb:67:in `fly_release_version'"
+  ],
+  "checks": [
+    {
+      "id": "P0_up",
+      "pass": true,
+      "http": 200
+    },
+    {
+      "id": "P1_shop_point_a",
+      "pass": true
+    }
+  ],
+  "status": "FAIL"
+}

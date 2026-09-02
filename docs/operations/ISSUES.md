@@ -9,7 +9,6 @@
 | UserCards / RebillId | 🟡 | апрув 3.5; E2E real MIR |
 | Checkout UX (Фаза 2) | 🟡 | апрув заказчика |
 | SBP 3001 | 🟡 | банк / кабинет |
-| Fly Test в шапке | 🟡 | deploy + MCP |
 | #47 PWA статусы | 🟡 | апрув заказчика |
 
 Детали до 2026-08 → [`issues/archive/ISSUES-resolved-through-2026-08.md`](issues/archive/ISSUES-resolved-through-2026-08.md)

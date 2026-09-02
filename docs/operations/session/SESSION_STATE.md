@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-02 (`ctx-trim` · rules/todo/ISSUES)  
+**Дата:** 2026-09-02 (single Point A prod)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| ctx-trim · ~1.5k tok/ход rules+ops | deploy shift-close · Settings токены |
+| Fly: одна точка Point A (Ленина 10) | боевое тестирование заказчика |
 
 **ctx_trim:** `2026-09-02`
 
@@ -17,6 +17,15 @@
 ---
 
 ## Текущий месяц (2026-09)
+
+### single Point A prod (2026-09-02)
+
+| Что | Статус |
+|-----|--------|
+| Cleanup service + DEMO_SINGLE_POINT | **done** |
+| Fly deploy v474 + release cleanup | **done** |
+| Active sales_point | **только demo-point-a** |
+| Shop URL 200 | **PASS** |
 
 ### ctx-trim токенов (2026-09-02)
 

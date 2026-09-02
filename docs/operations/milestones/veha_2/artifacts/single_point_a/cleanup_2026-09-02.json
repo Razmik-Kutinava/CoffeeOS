@@ -1,0 +1,28 @@
+{
+  "task": "platform:prod_single_point",
+  "date": "2026-09-02",
+  "commit": "cd0c779e",
+  "deploy": "deployment-01M1H9ENVXS4TXG87GCAWGYKXG",
+  "dry_run": false,
+  "point_a": {
+    "id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+    "slug": "demo-point-a",
+    "name": "Demo Coffee Point A",
+    "address": "ул. Ленина, 10",
+    "shop_url": "https://coffeeos.fly.dev/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789"
+  },
+  "active_after_cleanup": {
+    "sales_points": ["demo-point-a"],
+    "production_kitchen": ["demo-prep-kitchen"]
+  },
+  "fly_release_log": "[platform:prod_single_point] OK — applied.",
+  "verification": {
+    "demo_shop_urls": "only demo-point-a + demo-prep-kitchen active",
+    "mcp_p0_p1": "PASS",
+    "orders_preserved": "release verification pass"
+  },
+  "env": {
+    "DEMO_SINGLE_POINT": "true",
+    "SHOP_DEFAULT_TENANT_ID": "2fdee1ac-4674-41ee-b89e-87b45643f789"
+  }
+}

@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-02 (`ctx-trim` · rules/todo/ISSUES)  
+**Дата:** 2026-09-02 (single Point A prod)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| ctx-trim rules/todo/ISSUES · shift-close deploy pending | deploy shift-close (апрув) · Settings: skills/MCP/user_rules |
+| Point A единственная active sales_point на Fly | боевое тестирование заказчика на одной URL |
 
-**last_done:** ctx-trim токенов — 7 дублей rules, always-бандл, todo→archive, ISSUES 🔴  
-**next_step:** deploy shift-close (апрув) · владелец: Settings skills/MCP/commit User Rule
+**last_done:** single Point A — cleanup + deploy v474 + DEMO_SINGLE_POINT  
+**next_step:** живое демо §I · закрыть open DEMO_FEEDBACK UX
 
 **ctx_trim:** `2026-09-02`
 
