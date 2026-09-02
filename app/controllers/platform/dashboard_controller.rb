@@ -3,10 +3,10 @@
 module Platform
   class DashboardController < BaseController
     def show
-      @organizations = Organization.order(:name).limit(200)
-      @tenants = Tenant.includes(:organization).left_joins(:organization)
-        .order(Arel.sql("organizations.name NULLS LAST, tenants.name"))
-        .limit(500)
+      @organizations = Platform::UkCatalogScope.organizations
+      @tenants = Platform::UkCatalogScope.tenants
+        .left_joins(:organization)
+        .reorder(Arel.sql("organizations.name NULLS LAST, tenants.name"))
     end
   end
 end

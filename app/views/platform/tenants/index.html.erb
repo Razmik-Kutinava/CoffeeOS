@@ -1,5 +1,7 @@
 <h1>Точки</h1>
-<p><%= link_to "Новая", new_platform_tenant_path, style: "color: #93c5fd;" %></p>
+<% unless single_point_mode? %>
+  <p><%= link_to "Новая", new_platform_tenant_path, style: "color: #93c5fd;" %></p>
+<% end %>
 
 <%= render "tenants_index_map", map_pins: @map_pins %>
 

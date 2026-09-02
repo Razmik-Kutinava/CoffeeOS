@@ -4,7 +4,7 @@ module Platform
   class OrganizationsController < BaseController
     def index
       authorize Organization
-      @organizations = Organization.order(:name)
+      @organizations = Platform::UkCatalogScope.organizations
     end
 
     def new

@@ -10,6 +10,12 @@ module Platform
     before_action :authorize_platform_access!
     after_action :verify_authorized
 
+    helper_method :single_point_mode?
+
+    def single_point_mode?
+      Platform::SinglePointMode.enabled?
+    end
+
     def pundit_user
       current_user
     end

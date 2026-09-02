@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-02 — feat: УК single-point lists (UkCatalogScope)
+
+- `Platform::UkCatalogScope` — в `DEMO_SINGLE_POINT` только Point A + org в `/admin`
+- Без single-point: только `active` sales_point (inactive/prog10 скрыты)
+- Скрыты «Новая точка/орг» в single-point; show/edit по id не трогаем
+- Тесты: uk_catalog_scope + uk_single_point_dashboard (9 runs PASS в зоне)
+
 ## 2026-09-02 — feat: single Point A prod (Fly cleanup + DEMO_SINGLE_POINT)
 
 - `Platform::ProdSinglePointCleanup` — inactive лишних sales_point, без DELETE

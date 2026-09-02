@@ -7,10 +7,10 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| Point A единственная active sales_point на Fly | боевое тестирование заказчика на одной URL |
+| УК: одна точка в списках (UkCatalogScope) | deploy · боевое тестирование Point A |
 
-**last_done:** single Point A — cleanup + deploy v474 + DEMO_SINGLE_POINT  
-**next_step:** живое демо §I · закрыть open DEMO_FEEDBACK UX
+**last_done:** УК filter single point + UkCatalogScope  
+**next_step:** deploy · живое демо §I
 
 **ctx_trim:** `2026-09-02`
 

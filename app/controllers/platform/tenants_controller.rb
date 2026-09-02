@@ -4,7 +4,7 @@ module Platform
   class TenantsController < BaseController
     def index
       authorize Tenant
-      @tenants = Tenant.includes(:organization).order(:name).limit(500)
+      @tenants = Platform::UkCatalogScope.tenants
       @map_pins = Platform::TenantsMapPins.build(@tenants, url_helpers: self)
     end
 

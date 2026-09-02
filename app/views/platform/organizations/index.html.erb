@@ -1,5 +1,7 @@
 <h1 style="font-size: 1.4rem;">Организации</h1>
-<p><%= link_to "Новая", new_platform_organization_path, style: "color: #93c5fd;" %></p>
+<% unless single_point_mode? %>
+  <p><%= link_to "Новая", new_platform_organization_path, style: "color: #93c5fd;" %></p>
+<% end %>
 <ul>
   <% @organizations.each do |o| %>
     <li style="margin: 8px 0;">

@@ -26,6 +26,8 @@ OUTPUT_JSON=docs/operations/milestones/veha_2/artifacts/single_point_a/cleanup.j
 
 **Prep kitchen** остаётся `active` (backend, не витрина).
 
+**УК (`/admin`):** при `DEMO_SINGLE_POINT=true` списки точек и организаций — только Point A и её org (`Platform::UkCatalogScope`). Inactive/тест не показываются; карточка по прямому URL по-прежнему доступна.
+
 ## Проверка
 
 - `bin/rails test test/services/platform/prod_single_point_cleanup_test.rb`
