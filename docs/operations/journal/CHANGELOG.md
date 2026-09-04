@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-04 — ops: clear stuck T-Bank pending (StuckPayments spam)
+
+- Fly runner: mark `tbank` pending/processing `< 2026-09-01` → `failed` (186); related `pending_payment` orders → `cancelled` (182)
+- Also cleared 2 Point A MCP leftovers from 2026-09-04 (live charge SKIP)
+- `STUCK_ALERT_CANDIDATES_NOW=0` (Telegram StuckPaymentsCheckJob quiet)
+- One-shot scripts under `tmp/` (not productized)
+
 ## 2026-09-04 — fix: Sentry RUBY-1F / RUBY-16 runner Current noise
 
 - `SentryNoiseFilter`: `LocalJumpError` + `tags.source=runner` (пустой transaction)

@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-04 (Sentry RUBY-1F / RUBY-16)  
+**Дата:** 2026-09-04 (stuck T-Bank cleanup)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Sentry runner noise fix | deploy апрув (фильтр на стенд) |
+| StuckPayments spam cleared | deploy апрув (Sentry filter) |
 | Fly **v479** MCP PASS | апрув заказчика |
 
-**last_done:** Fixes RUBY-1F + RUBY-16 (noise filter + Current.assign!)  
+**last_done:** ops cleanup stuck T-Bank pending (186 pre-Sep + 2 MCP today → alert=0)  
 **next_step:** deploy апрув · апрув заказчика по MCP
 
 **ctx_trim:** `2026-09-02`
