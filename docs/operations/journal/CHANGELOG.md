@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-04 — fix: Sentry RUBY-1F / RUBY-16 runner Current noise
+
+- `SentryNoiseFilter`: `LocalJumpError` + `tags.source=runner` (пустой transaction)
+- `Current.assign!` — assign без блока (вместо ошибочного `set!` / `set` без `do`)
+- Tests: noise filter + Current
+- Fixes RUBY-1F · Fixes RUBY-16
+
 ## 2026-09-04 — deploy: Fly v479 + MCP #75/#76/#77 Point A
 
 - `fly deploy` → **v479**; release: ConcurrentMigrationError → soft-skip when schema current (`fly_release.rake`)

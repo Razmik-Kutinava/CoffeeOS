@@ -2,13 +2,21 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-04 (deploy v479 + MCP #75/#76/#77)  
+**Дата:** 2026-09-04 (Sentry RUBY-1F / RUBY-16)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Fly **v479** | апрув заказчика |
-| MCP #75/#76/#77 | PASS (см. artifacts `fly_v479_2026-09-04`) |
+| RUBY-1F / RUBY-16 | fixed · deploy апрув |
+| Fly **v479** MCP | PASS |
+
+### Sentry (2026-09-04)
+
+| Issue | Root cause | Fix |
+|-------|------------|-----|
+| RUBY-16 | `Current.set!` в `rails runner` (MCP mint); transaction пустой → шум проходил фильтр | `tags.source=runner` + CLI drop |
+| RUBY-1F | `Current.set` без блока → LocalJumpError | LocalJumpError в CLI_CLASSES |
+| API | — | `Current.assign!(…)` без блока |
 
 ### Deploy + MCP (2026-09-04)
 

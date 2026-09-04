@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
-# Sentry: не слать шум деплоя/консоли (RUBY-10..1C). Гостевые HTTP-ошибки не трогаем.
+# Sentry: не слать шум деплоя/консоли (RUBY-10..1C, RUBY-16, RUBY-1F).
+# Гостевые HTTP-ошибки не трогаем.
 module SentryNoiseFilter
   DROPPED_CLASSES = %w[
     ActiveRecord::ConcurrentMigrationError
@@ -12,6 +13,7 @@ module SentryNoiseFilter
     NameError
     NoMethodError
     TypeError
+    LocalJumpError
     ActiveRecord::StatementInvalid
     ActiveRecord::ConfigurationError
     ActiveModel::UnknownAttributeError
@@ -48,6 +50,7 @@ module SentryNoiseFilter
     nil
   end
 
+  # rails runner / console / rake: transaction часто пустой — смотрим tags.source.
   def self.cli_source?(event)
     tx = transaction_of(event).to_s
     return true if tx.include?("bin/rails")
@@ -55,6 +58,10 @@ module SentryNoiseFilter
     return true if tx.include?("db:migrate")
     return true if tx.include?("runner")
     return true if tx.include?("application.runner")
+
+    tags = tags_of(event)
+    return true if tags["source"].to_s == "runner"
+    return true if tags[:source].to_s == "runner"
 
     false
   end
@@ -65,6 +72,14 @@ module SentryNoiseFilter
     return event["transaction"] if event.respond_to?(:[]) && event["transaction"]
 
     nil
+  end
+
+  def self.tags_of(event)
+    return event.tags if event.respond_to?(:tags) && event.tags.is_a?(Hash)
+    return event[:tags] if event.respond_to?(:[]) && event[:tags].is_a?(Hash)
+    return event["tags"] if event.respond_to?(:[]) && event["tags"].is_a?(Hash)
+
+    {}
   end
 
   def self.exception_values(event)
@@ -83,5 +98,5 @@ module SentryNoiseFilter
 
     nil
   end
-  private_class_method :exception_values, :request_data
+  private_class_method :exception_values, :request_data, :tags_of
 end

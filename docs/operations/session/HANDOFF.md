@@ -2,16 +2,16 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-04 (deploy v479 + MCP #75/#76/#77)  
+**Дата:** 2026-09-04 (Sentry RUBY-1F / RUBY-16)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Fly **v479** MCP Point A | апрув заказчика глазами |
-| #75 / #76 / #77 post-deploy | — |
+| Sentry runner noise fix | deploy апрув (фильтр на стенд) |
+| Fly **v479** MCP PASS | апрув заказчика |
 
-**last_done:** deploy coffeeos **v479** + Fly MCP #75+#76+#77 PASS  
-**next_step:** апрув заказчика; live T-Bank charge SKIP в MCP
+**last_done:** Fixes RUBY-1F + RUBY-16 (noise filter + Current.assign!)  
+**next_step:** deploy апрув · апрув заказчика по MCP
 
 **ctx_trim:** `2026-09-02`
 
