@@ -2,27 +2,26 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-04 (intake #76)  
+**Дата:** 2026-09-04 (SPEC #76)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #76 УК point campaign promo 11₽ — PHASE 0 intake | `/spec` → SBR |
+| #76 SPEC в todo.md | `/sbr` RED |
 
 ### #76 УК — включение промо 11₽ при создании точки (2026-09-04)
 
 | Что | Статус |
 |-----|--------|
-| PHASE 0 intake (ТЗ 1:1 + artifacts + CBR) | **done** |
-| SPEC / SBR | **pending** |
+| PHASE 0 intake | **done** |
+| PHASE 1 SPEC (файлы + Не ломать + Проверка) | **done** |
+| RED / GREEN / REVIEW | **pending** |
 
 ### #75 Payment method binding + promo 11₽ (2026-09-04)
 
 | Что | Статус |
 |-----|--------|
 | Core + REVIEW + follow-up | **done** |
-| CI scan_js Net::ReadTimeout flake | **fix: retry ×3 + soft-skip transport** |
-| Matching перевыпущенной карты | **out of scope** |
 | deploy / Fly MCP | **pending апрув** |
 
 **ctx_trim:** `2026-09-02`

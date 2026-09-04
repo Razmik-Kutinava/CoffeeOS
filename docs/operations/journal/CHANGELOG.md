@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-04 — docs: SPEC #76 point_campaign_settings
+
+- todo.md: Tenant=точка · УК form/show · GrowthPromo.point_allows_promo? · sync upsert
+- Не ломать: checkout full price · attempts semantics · изоляция точек
+- Проверка: tenants_controller + growth_promo + order_creator / user_cards
+
 ## 2026-09-04 — docs: intake #76 УК point campaign promo 11₽
 
 - ТЗ 1:1: `customer_tasks/УК — включение промо 11₽ при создании точки.md`
