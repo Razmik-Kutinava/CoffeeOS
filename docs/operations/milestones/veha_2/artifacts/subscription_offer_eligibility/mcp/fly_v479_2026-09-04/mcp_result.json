@@ -1,0 +1,18 @@
+{
+  "task": "#77 subscription_offer_eligibility",
+  "slot": "3/3",
+  "point": "Point A",
+  "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "fly_version": "v479",
+  "guest_customer_id": "da143c8c-2043-436f-9631-d2fc0febfd07",
+  "steps": {
+    "A_uk_settings": "PASS",
+    "B_profile_flag_false": "PASS",
+    "C_engagement_signal": "PASS",
+    "D_eligible_true": "PASS",
+    "E_ready_cta_subscription": "PASS",
+    "F_disabled_fallback": "PASS"
+  },
+  "notes": "Guest minted via Fly console (no OTP into Aram). Engagement=email_collected_at. Completed+ready orders seeded for eligibility/CTA (not live pay). Push flag coffeeos_shop_push_registered_v1 + Notification.permission=granted for second CTA path. Offer re-enabled after F.",
+  "screenshots": ["01_ready_subscription_cta.png"]
+}

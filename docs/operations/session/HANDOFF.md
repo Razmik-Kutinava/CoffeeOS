@@ -2,17 +2,16 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-04 (/review #77 CI green)  
+**Дата:** 2026-09-04 (deploy v479 + MCP #75/#76/#77)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #77 CI **green** | deploy апрув · Fly MCP Point A |
-| #76 CI green | deploy апрув |
-| #75 | deploy апрув |
+| Fly **v479** MCP Point A | апрув заказчика глазами |
+| #75 / #76 / #77 post-deploy | — |
 
-**last_done:** /review #77 CI green (run 33869649351)  
-**next_step:** deploy только по апруву; Fly MCP Point A после deploy
+**last_done:** deploy coffeeos **v479** + Fly MCP #75+#76+#77 PASS  
+**next_step:** апрув заказчика; live T-Bank charge SKIP в MCP
 
 **ctx_trim:** `2026-09-02`
 

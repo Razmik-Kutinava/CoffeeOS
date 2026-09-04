@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-04 — deploy: Fly v479 + MCP #75/#76/#77 Point A
+
+- `fly deploy` → **v479**; release: ConcurrentMigrationError → soft-skip when schema current (`fly_release.rake`)
+- MCP Point A: #76 PASS · #75 UI PASS (live charge SKIP) · #77 A–F PASS
+- Artifacts: `…/mcp/fly_v479_2026-09-04/`
+- Next: апрув заказчика
+
 ## 2026-09-04 — review: #77 subscription offer eligibility · CI
 
 - bugbot: no bugs · security: no medium+
