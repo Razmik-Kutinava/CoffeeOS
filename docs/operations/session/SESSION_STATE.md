@@ -2,27 +2,26 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-04 (/regress #77 PASS)  
+**Дата:** 2026-09-04 (/review #76 CI green)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #77 Local regress PASS (20+10) | `/review` |
-| #76 REVIEW / push | CI · deploy апрув |
+| #76 REVIEW **CI green** | deploy только апрув · Fly MCP Point A |
+| #77 GREEN | `/regress` #77 (отдельно) |
 
-### #77 Subscription offer eligibility (2026-09-04)
-
-| Что | Статус |
-|-----|--------|
-| RED `6dc4df51` / GREEN `d83acc4c` | **done** |
-| /regress zone shop+platform hooks | **PASS** 20+10 |
-| REVIEW | **pending** |
-
-### #76 УК point campaign promo 11₽
+### #76 УК — включение промо 11₽ при создании точки (2026-09-04)
 
 | Что | Статус |
 |-----|--------|
-| REVIEW / push / CI | **in progress** (отдельно) |
+| SPEC→RED→GREEN→regress | **done** |
+| bugbot medium (kitchen) | **fixed** `611fae1e` |
+| security-review | **no medium+** |
+| Entire | `01M1P2BSG7MY3C0VM0FXCSZXRK` на `6c1966d2` |
+| push + CI | **green** [run 33868365000](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/33868365000) |
+| deploy / Fly MCP | **pending апрув** |
+
+### #77 — GREEN done · regress отдельно · REVIEW отдельно
 
 ### #75 — deploy / Fly MCP pending апрув
 
