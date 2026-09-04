@@ -1,5 +1,5 @@
 /**
- * #38 / #40 / #41 — PWA CTA state machine карточки заказа (макс. 2 кнопки).
+ * #38 / #40 / #41 / #77 — PWA CTA state machine карточки заказа (макс. 2 кнопки).
  */
 
 import { CTA_STYLE } from "./orderStatusNotifyActions.js"
@@ -13,7 +13,8 @@ const LABELS = Object.freeze({
   push: "🔔 Уведомление о готовности",
   wallet: "Карта в Apple Wallet",
   chat: "Чат с поддержкой",
-  tips: "Оставить чаевые"
+  tips: "Оставить чаевые",
+  subscription: "Оформить подписку"
 })
 
 /**
@@ -21,7 +22,10 @@ const LABELS = Object.freeze({
  *   status?: string,
  *   os?: "ios"|"android"|"desktop",
  *   canCancel?: boolean,
- *   hasPushSubscription?: boolean
+ *   hasPushSubscription?: boolean,
+ *   subscriptionOfferEnabled?: boolean,
+ *   secondCtaMode?: "tips"|"subscription",
+ *   eligibleForSubscriptionOffer?: boolean
  * }} opts
  * @returns {{
  *   buttons: Array<{ kind: string, label: string, hint?: string }>,
@@ -36,6 +40,9 @@ export function orderStatusCtas(opts = {}) {
   const canCancel = Boolean(opts.canCancel)
   const hasPushSubscription = Boolean(opts.hasPushSubscription)
   const notifyKind = os === "ios" ? "wallet" : "push"
+  const offerOn =
+    Boolean(opts.subscriptionOfferEnabled) && String(opts.secondCtaMode || "") === "subscription"
+  const eligible = Boolean(opts.eligibleForSubscriptionOffer)
 
   /** @type {Array<{ kind: string, label: string, hint?: string }>} */
   let buttons = []
@@ -56,7 +63,12 @@ export function orderStatusCtas(opts = {}) {
   } else if (status === "preparing" || status === "ready") {
     buttons.push({ kind: "chat", label: LABELS.chat })
     if (hasPushSubscription) {
-      buttons.push({ kind: "tips", label: LABELS.tips })
+      // #77: subscription offer only on ready when enabled + eligible; else tips fallback
+      if (status === "ready" && offerOn && eligible) {
+        buttons.push({ kind: "subscription", label: LABELS.subscription })
+      } else {
+        buttons.push({ kind: "tips", label: LABELS.tips })
+      }
     } else {
       buttons.push({ kind: notifyKind, label: LABELS[notifyKind] })
     }

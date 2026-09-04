@@ -2,17 +2,17 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-04 (/regress #76 PASS)  
+**Дата:** 2026-09-04 (GREEN #77)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #76 Local regress PASS | `/review` |
-| #77 SPEC parked | после #76 REVIEW |
+| #77 GREEN · subscription offer eligibility | `/regress` |
+| #76 GREEN + regress | `/review` (отдельно) |
 | CI / deploy #75 | апрув |
 
-**last_done:** /regress #76 PASS (31+23 tests)  
-**next_step:** `/review` #76 (bugbot + security · Entire · push · CI); Fly MCP Point A после deploy
+**last_done:** GREEN #77 — signals + settings + eligibility + УК + CTA  
+**next_step:** `/regress` #77
 
 **ctx_trim:** `2026-09-02`
 

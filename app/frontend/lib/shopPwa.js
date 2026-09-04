@@ -1,3 +1,5 @@
+import { api } from "./api.js"
+
 let deferredInstallPrompt = null
 
 export function installPromptAvailable() {
@@ -12,6 +14,17 @@ export async function promptPwaInstall() {
   return outcome === "accepted"
 }
 
+/** #77: best-effort telemetry — never throw into UI. */
+function reportPwaInstalled() {
+  try {
+    api("/pwa_install", { method: "POST" }).catch((err) => {
+      console.warn("[shop-pwa] appinstalled report failed", err)
+    })
+  } catch (err) {
+    console.warn("[shop-pwa] appinstalled report failed", err)
+  }
+}
+
 export function initShopPwa() {
   if (!("serviceWorker" in navigator)) return
 
@@ -19,6 +32,11 @@ export function initShopPwa() {
     event.preventDefault()
     deferredInstallPrompt = event
     window.dispatchEvent(new CustomEvent("shop:pwa-installable"))
+  })
+
+  window.addEventListener("appinstalled", () => {
+    deferredInstallPrompt = null
+    reportPwaInstalled()
   })
 
   const register = () => {

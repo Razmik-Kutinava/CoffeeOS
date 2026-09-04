@@ -10,7 +10,8 @@ module Shop
           push_configured: Shop::FirebaseConfig.client_configured?,
           operating_hours: Shop::OperatingHours.for(@shop_tenant).client_json,
           tenant: Shop::TenantAddress.client_json(@shop_tenant),
-          last_ordered_tenant_id: history[:last_ordered_tenant_id]
+          last_ordered_tenant_id: history[:last_ordered_tenant_id],
+          subscription_offer: SubscriptionOfferSetting.client_json_for(@shop_tenant.id)
         )
       end
     end

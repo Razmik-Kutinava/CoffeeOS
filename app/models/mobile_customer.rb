@@ -37,6 +37,25 @@ class MobileCustomer < ApplicationRecord
     update!(last_login_at: Time.current)
   end
 
+  # #77: first-write-wins engagement signals (subscription offer eligibility).
+  def mark_pwa_installed!
+    return if pwa_installed_at.present?
+
+    update!(pwa_installed_at: Time.current)
+  end
+
+  def mark_push_enabled!
+    return if push_enabled_at.present?
+
+    update!(push_enabled_at: Time.current)
+  end
+
+  def mark_email_collected!
+    return if email_collected_at.present?
+
+    update!(email_collected_at: Time.current)
+  end
+
   private
 
   def sync_phone_status_from_flags

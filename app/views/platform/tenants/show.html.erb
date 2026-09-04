@@ -3,6 +3,7 @@
 <p style="margin-bottom: 16px;">
   <%= link_to "← К списку", platform_tenants_path, style: "color: #93c5fd;" %>
   · <%= link_to "Правка", edit_platform_tenant_path(@tenant), style: "color: #93c5fd;" %>
+  · <%= link_to "Оффер подписки", edit_platform_tenant_subscription_offer_setting_path(@tenant), style: "color: #93c5fd;" %>
   · <%= button_to "Менеджер", open_as_manager_platform_tenant_path(@tenant), method: :post, form: { style: "display:inline;" } %>
 </p>
 

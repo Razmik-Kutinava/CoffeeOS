@@ -2,28 +2,29 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-04 (/regress #76 PASS)  
+**Дата:** 2026-09-04 (GREEN #77)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #76 Local regress **PASS** | `/review` |
-| #77 SPEC parked | не смешивать |
-
-### #76 УК — включение промо 11₽ при создании точки (2026-09-04)
-
-| Что | Статус |
-|-----|--------|
-| PHASE 0–2 (intake→SPEC→RED→GREEN) | **done** |
-| Local regress (platform+promo + order_creator/user_cards) | **PASS** |
-| REVIEW / Fly MCP Point A | **pending** |
+| #77 GREEN done | `/regress` → `/review` |
+| #76 GREEN + regress | `/review` (отдельно) |
 
 ### #77 Subscription offer eligibility (2026-09-04)
 
 | Что | Статус |
 |-----|--------|
-| PHASE 0 + SPEC | **done** (parked, `35c2cc35`) |
-| RED / GREEN | **pending** |
+| PHASE 0 + SPEC | **done** |
+| RED `6dc4df51` | **done** |
+| GREEN signals/settings/eligibility/CTA | **done** |
+| REVIEW | **pending** |
+
+### #76 УК — включение промо 11₽ при создании точки (2026-09-04)
+
+| Что | Статус |
+|-----|--------|
+| GREEN + regress | **done** |
+| REVIEW | **pending** |
 
 ### #75 Payment method binding + promo 11₽ (2026-09-04)
 

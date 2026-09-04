@@ -55,6 +55,8 @@ class Tenant < ApplicationRecord
   has_many :shift_staffs, dependent: :destroy
   has_many :shift_cash_operations, dependent: :destroy
   has_many :weekday_schedules, class_name: "TenantWeekdaySchedule", dependent: :destroy
+  has_one :subscription_offer_setting, class_name: "SubscriptionOfferSetting", foreign_key: :point_id,
+                                       inverse_of: :point, dependent: :destroy
   has_many :point_campaign_settings, class_name: "PointCampaignSetting", foreign_key: :point_id,
            inverse_of: :point, dependent: :destroy
 

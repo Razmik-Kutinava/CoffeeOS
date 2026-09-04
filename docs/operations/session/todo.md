@@ -1,48 +1,60 @@
-﻿# todo — #76 УК — включение промо 11₽ при создании точки
+﻿# todo — #77 Умный показ оффера подписки (eligibility + УК)
 
 | Поле | Значение |
 |------|----------|
-| **CBR** | #76 |
-| **ТЗ** | [`customer_tasks/УК — включение промо 11₽ при создании точки.md`](../milestones/veha_2/requirements/customer_tasks/УК%20—%20включение%20промо%2011₽%20при%20создании%20точки.md) |
-| **Артефакты** | [`artifacts/uk_point_campaign_promo_11rub/`](../milestones/veha_2/artifacts/uk_point_campaign_promo_11rub/) |
-| **Предшественник** | #75 GrowthPromo + `card_binding_attempts` |
+| **CBR** | #77 |
+| **ТЗ** | [`customer_tasks/Умный показ оффера подписки — сигналы толерантности и УК-переключатель.md`](../milestones/veha_2/requirements/customer_tasks/Умный%20показ%20оффера%20подписки%20—%20сигналы%20толерантности%20и%20УК-переключатель.md) |
+| **Артефакты** | [`artifacts/subscription_offer_eligibility/`](../milestones/veha_2/artifacts/subscription_offer_eligibility/) |
 | **Ветка** | `develop` |
 | **Модель точки** | `Tenant` (sales_point); `point_id` = `tenant.id` |
-| **Parked** | #77 SPEC в `35c2cc35` — не смешивать |
+| **Parked** | #76 GREEN/regress done — REVIEW отдельно |
 
 ## SBR
 
-- [x] **SPEC** — файлы + Не ломать + Проверка
-- [x] **RED** — `d4409c57` падающие тесты `[RED]`
-- [x] **GREEN** — `6c1966d2` миграция + sync + GrowthPromo gate + УК UI `[GREEN]`
-- [x] **/regress** — Local PASS (31+23)
-- [ ] **REVIEW** — bugbot + security · Entire · push · CI · Fly MCP Point A после deploy
+- [x] **SPEC** — файлы + Не ломать + Проверка + решения §4
+- [x] **RED** — `6dc4df51` падающие тесты `[RED]`
+- [x] **GREEN** — миграции + сервисы + hooks + УК + Shop CTA `[GREEN]`
+- [ ] **REVIEW** — bugbot + security · Entire · push · CI · Fly MCP
+
+## Решения SPEC (§4)
+
+| # | Решение |
+|---|---------|
+| 1 | Fallback при не eligible → **tips** |
+| 2 | Сигналы на **mobile_customers** timestamps |
+| 3 | Пороги **per-point** |
+| 4 | `completed_orders_count` = query issued/closed |
+| 5 | `second_cta_mode`: `tips` \| `subscription` |
+
+- eligibility → `GET /shop/api/profile`
+- `enabled` + `second_cta_mode` → `GET /shop/api/config` → `subscription_offer`
+- Absent settings ≡ enabled=false
 
 ## Файлы (ожидаемо)
 
-1. `db/migrate/*_create_point_campaign_settings.rb` + `app/models/point_campaign_setting.rb`
-2. `app/services/platform/point_campaign_settings_sync.rb`
-3. `app/controllers/platform/tenants_controller.rb`
-4. `app/views/platform/tenants/_form.html.erb`
-5. `app/views/platform/tenants/show.html.erb`
-6. `app/services/payments/growth_promo.rb` + `app/models/card_binding_attempt.rb` (`growth_count_for_point`)
-7. тесты: tenants_controller + growth_promo_point_campaign + model/sync
+1. migration + `mobile_customer` — engagement timestamps
+2. migration + `subscription_offer_setting`
+3. `shop/subscription_offer_eligibility.rb`
+4. `profile_controller` + `config_controller`
+5. push + email services + `pwa_installs_controller`
+6. `platform/subscription_offer_settings_controller` + views
+7. `orderStatusCtaMachine.js` + `shopPwa.js`
+
+### Blast-radius
+
+- OrderStatus / ActiveOrdersAccordion — прокинуть flags
+- push_controller — без смены контракта
+- push_register + orders_email tests
 
 ## Не ломать
 
-- Checkout полной суммы при выкл. чекбоксе
-- Семантика `card_binding_attempts`
-- УК CRUD / RBAC
-- Изоляция threshold между точками
+- `orders_count` семантика
+- CTA при enabled=false
+- FCM register / orders email
+- ShopPwaBanner show/hide
+- Tbank / фискал / 11₽ / billing
 
 ## Проверка
 
-- `bin/rails test test/controllers/platform/tenants_controller_test.rb test/services/payments/growth_promo_test.rb test/services/payments/growth_promo_point_campaign_test.rb test/models/point_campaign_setting_test.rb test/services/platform/point_campaign_settings_sync_test.rb`
-- `bin/rails test test/services/shop/order_creator_test.rb test/integration/shop/api/user_cards_sbp_accounts_test.rb`
-
-## Regress 2026-09-04
-
-| Команда | Результат |
-|---------|-----------|
-| platform + growth + point_campaign | **31 / 96 PASS** |
-| order_creator + user_cards_sbp | **23 / 50 PASS** |
+- `bin/rails test test/services/shop/subscription_offer_eligibility_test.rb test/models/subscription_offer_setting_test.rb test/integration/shop/api/profile_subscription_offer_test.rb test/controllers/platform/subscription_offer_settings_controller_test.rb`
+- `bin/rails test test/integration/shop/api/push_register_test.rb test/integration/shop/api/orders_email_test.rb`

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_04_160000) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_04_180001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_stat_statements"
@@ -416,6 +416,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_04_160000) do
   create_table "mobile_customers", id: :uuid, default: -> { "gen_random_uuid()" }, comment: "Клиенты мобильного приложения", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "email", limit: 255
+    t.datetime "email_collected_at"
     t.boolean "email_verified", default: false, null: false
     t.string "first_name", limit: 100
     t.boolean "is_active", default: true, null: false
@@ -425,7 +426,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_04_160000) do
     t.string "phone_status", limit: 32, default: "unknown", null: false
     t.boolean "phone_verified", default: false, null: false
     t.boolean "push_enabled", default: false, null: false
+    t.datetime "push_enabled_at"
     t.string "push_token", limit: 255
+    t.datetime "pwa_installed_at"
     t.string "telegram_chat_id", limit: 64, comment: "Telegram chat_id гостя для OrderReadyCascade (#39)"
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_mobile_customers_on_email", unique: true, where: "(email IS NOT NULL)"
@@ -1185,6 +1188,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_04_160000) do
     t.index ["tenant_id"], name: "index_stock_movements_on_tenant_id"
   end
 
+  create_table "subscription_offer_settings", id: :uuid, default: -> { "gen_random_uuid()" }, comment: "#77: point-scoped subscription offer CTA + eligibility thresholds", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.boolean "enabled", default: false, null: false
+    t.integer "min_completed_orders", default: 1, null: false
+    t.uuid "point_id", null: false
+    t.integer "required_signals_count", default: 1, null: false
+    t.string "second_cta_mode", limit: 32, default: "tips", null: false
+    t.datetime "updated_at", null: false
+    t.index ["point_id"], name: "idx_subscription_offer_settings_point", unique: true
+  end
+
   create_table "supply_order_items", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "ingredient_id", null: false
     t.text "note"
@@ -1451,6 +1465,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_04_160000) do
   add_foreign_key "stock_movements", "tenants", on_delete: :cascade
   add_foreign_key "stock_movements", "users", column: "confirmed_by_id", on_delete: :nullify
   add_foreign_key "stock_movements", "users", column: "created_by_id", on_delete: :nullify
+  add_foreign_key "subscription_offer_settings", "tenants", column: "point_id"
   add_foreign_key "supply_order_items", "ingredients", on_delete: :cascade
   add_foreign_key "supply_order_items", "supply_orders", on_delete: :cascade
   add_foreign_key "supply_orders", "tenants", column: "from_tenant_id", on_delete: :cascade

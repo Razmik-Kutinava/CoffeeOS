@@ -81,7 +81,8 @@ module Shop
           points: 0,
           discount_percent: 0,
           orders_count: Order.where(tenant_id: @shop_tenant.id, customer_id: customer.id).count,
-          favorites_count: (session[:shop_favorites] || []).size
+          favorites_count: (session[:shop_favorites] || []).size,
+          eligible_for_subscription_offer: Shop::SubscriptionOfferEligibility.check(customer, @shop_tenant)
         }
       end
     end

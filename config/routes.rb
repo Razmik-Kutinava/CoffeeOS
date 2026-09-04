@@ -120,6 +120,8 @@ Rails.application.routes.draw do
         post :prep_kitchen_sales_point_links, to: "prep_kitchen_links#create"
         delete "prep_kitchen_sales_point_links/:sales_point_id", to: "prep_kitchen_links#destroy", as: :prep_kitchen_sales_point_link
       end
+      resource :subscription_offer_setting, only: %i[show edit update],
+               controller: "subscription_offer_settings"
     end
     resources :franchise_owners, only: %i[new create], path: "franchise_owners"
     get "monitoring", to: "monitoring#index", as: :monitoring
@@ -179,6 +181,7 @@ Rails.application.routes.draw do
       get "config", to: "config#show"
       get "tenants", to: "tenants#index"
       post "push/register", to: "push#register"
+      post "pwa_install", to: "pwa_installs#create"
       get "debug", to: "debug#index" unless Rails.env.production?
       get "categories", to: "categories#index"
       get "frequent_products", to: "frequent_products#index"

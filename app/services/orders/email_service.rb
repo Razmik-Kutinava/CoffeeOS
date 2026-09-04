@@ -23,6 +23,7 @@ module Orders
         success_response(order_email, queued_receipt: true)
       else
         if order_email.save
+          mark_customer_email_collected!
           success_response(order_email, queued_receipt: true)
         else
           raise ValidationError, order_email.errors.full_messages.join(", ")
@@ -49,6 +50,14 @@ module Orders
         queued_receipt: queued_receipt,
         marketing_consent: order_email.marketing_consent
       }
+    end
+
+    # #77: first successful order email → customer.email_collected_at (idempotent).
+    def mark_customer_email_collected!
+      customer = @order.customer
+      return unless customer
+
+      customer.mark_email_collected!
     end
   end
 end

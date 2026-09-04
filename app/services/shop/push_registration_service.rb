@@ -22,6 +22,7 @@ module Shop
         raise Error, "push_token обязателен" if token.blank?
 
         @customer.update!(push_enabled: true, push_token: token)
+        @customer.mark_push_enabled!
       else
         @customer.update!(push_enabled: false)
       end
