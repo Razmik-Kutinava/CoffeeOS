@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-04 — ops: /regress #77 PASS subscription offer zone
+
+- eligibility + settings + profile/UK API: 20 runs / 79 assert PASS
+- push_register + orders_email: 10 runs / 38 assert PASS
+- Next: `/review` · Fly MCP Point A после deploy
+
 ## 2026-09-04 — fix+review: #76 kitchen disables promo · REVIEW
 
 - bugbot medium: смена типа на `production_kitchen` гасит `card_binding_promo` (counter сохранён)
