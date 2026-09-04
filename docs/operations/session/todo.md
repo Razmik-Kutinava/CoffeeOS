@@ -14,6 +14,7 @@
 - [x] **SPEC** — файлы + Не ломать + Проверка + решения §4
 - [x] **RED** — `6dc4df51` падающие тесты `[RED]`
 - [x] **GREEN** — миграции + сервисы + hooks + УК + Shop CTA `[GREEN]`
+- [x] **/regress** — Local PASS (20+10)
 - [ ] **REVIEW** — bugbot + security · Entire · push · CI · Fly MCP
 
 ## Решения SPEC (§4)

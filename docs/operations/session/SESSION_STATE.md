@@ -2,25 +2,27 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-04 (/review #76)  
+**Дата:** 2026-09-04 (/regress #77 PASS)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #76 REVIEW: bugbot fix + push/CI | CI green → стоп · deploy апрув |
-| #77 SPEC parked | не смешивать |
+| #77 Local regress PASS (20+10) | `/review` |
+| #76 REVIEW / push | CI · deploy апрув |
 
-### #76 УК — включение промо 11₽ при создании точки (2026-09-04)
+### #77 Subscription offer eligibility (2026-09-04)
 
 | Что | Статус |
 |-----|--------|
-| RED/GREEN/regress | **done** |
-| bugbot medium (kitchen stuck promo) | **fixed** |
-| security-review | **no medium+** |
-| Entire GREEN | `01M1P2BSG7MY3C0VM0FXCSZXRK` на `6c1966d2` |
-| push / CI | **in progress** |
+| RED `6dc4df51` / GREEN `d83acc4c` | **done** |
+| /regress zone shop+platform hooks | **PASS** 20+10 |
+| REVIEW | **pending** |
 
-### #77 Subscription offer eligibility — parked (SPEC `35c2cc35`)
+### #76 УК point campaign promo 11₽
+
+| Что | Статус |
+|-----|--------|
+| REVIEW / push / CI | **in progress** (отдельно) |
 
 ### #75 — deploy / Fly MCP pending апрув
 
