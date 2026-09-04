@@ -34,11 +34,14 @@ class Platform::OnboardingOrganizationTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to platform_organizations_path
 
+    org = Organization.find_by!(slug: slug)
+    # UkCatalogScope lists only orgs with active sales_point — attach one for index visibility.
+    create_tenant!(organization: org, name: "Point #{slug}", slug: "point-#{slug}")
+
     get platform_organizations_path
     assert_response :success
     assert_match name, response.body
     assert_match slug, response.body
-    assert Organization.find_by!(slug: slug)
   end
 
   test "new tenant from org index link is bound to that organization" do

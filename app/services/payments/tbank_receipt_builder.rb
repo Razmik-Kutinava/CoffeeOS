@@ -40,7 +40,7 @@ module Payments
       receipt = if growth_promo_receipt?
         {
           "Taxation" => taxation,
-          "Items" => [growth_promo_item]
+          "Items" => [ growth_promo_item ]
         }
       else
         {

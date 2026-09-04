@@ -20,7 +20,7 @@ class CreateCardBindingAttempts < ActiveRecord::Migration[8.0]
 
     add_index :card_binding_attempts, :method_hash, name: "idx_card_binding_attempts_method_hash"
     add_index :card_binding_attempts, :phone, name: "idx_card_binding_attempts_phone"
-    add_index :card_binding_attempts, [:is_growth_event, :phone], name: "idx_card_binding_attempts_growth_phone"
-    add_index :card_binding_attempts, [:is_growth_event, :method_hash], name: "idx_card_binding_attempts_growth_hash"
+    add_index :card_binding_attempts, [ :is_growth_event, :phone ], name: "idx_card_binding_attempts_growth_phone"
+    add_index :card_binding_attempts, [ :is_growth_event, :method_hash ], name: "idx_card_binding_attempts_growth_hash"
   end
 end
