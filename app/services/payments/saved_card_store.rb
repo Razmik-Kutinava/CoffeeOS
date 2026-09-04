@@ -84,6 +84,11 @@ module Payments
           .update_all(is_default: false)
 
         card.update!(is_default: true)
+        Payments::GrowthPromo.consume_from_payment!(
+          payment: @payment,
+          method_hash: card_hash,
+          method_type: "card"
+        )
         card
       end
     rescue ActiveRecord::RecordNotUnique

@@ -15,6 +15,31 @@ module Payments
       true
     end
 
+    # Суммы заказа с учётом chk_order_amounts: final = total_amount - discount_amount.
+    # method_hash на этапе create НЕ принимаем от клиента — только phone-дедуп.
+    def self.price!(subtotal:, discount:, tenant:, customer:, bind_requested:)
+      sub = BigDecimal(subtotal.to_s)
+      disc = BigDecimal(discount.to_s)
+      cart = (sub - disc).round(2)
+
+      if eligible?(tenant: tenant, customer: customer, bind_requested: bind_requested, method_hash: nil)
+        final = AMOUNT_RUB.to_d
+        {
+          final_amount: final,
+          discount_amount: (sub - final).round(2),
+          growth_intent: true,
+          cart_total_before: cart
+        }
+      else
+        {
+          final_amount: cart,
+          discount_amount: disc,
+          growth_intent: false,
+          cart_total_before: cart
+        }
+      end
+    end
+
     def self.charge_amount(cart_total:, tenant:, customer:, bind_requested:, method_hash: nil)
       total = cart_total.to_d
       if eligible?(tenant: tenant, customer: customer, bind_requested: bind_requested, method_hash: method_hash)
@@ -36,8 +61,31 @@ module Payments
       )
     end
 
+    # После успешной привязки при росте: серверный method_hash, без доверия клиенту.
+    def self.consume_from_payment!(payment:, method_hash:, method_type:)
+      return if payment.blank?
+      return if method_hash.blank?
+
+      data = payment.provider_data
+      data = {} unless data.is_a?(Hash)
+      return unless ActiveModel::Type::Boolean.new.cast(data["growth_promo_intent"])
+
+      order = payment.order
+      customer = order&.customer
+      return if customer.blank?
+      return if CardBindingAttempt.growth_used_for_phone?(customer.phone)
+      return if CardBindingAttempt.growth_used_for_method_hash?(method_hash)
+
+      mark_used!(
+        phone: customer.phone,
+        method_hash: method_hash,
+        method_type: method_type,
+        customer_id: customer.id,
+        tenant_id: order.tenant_id
+      )
+    end
+
     def self.point_allows_promo?(tenant)
-      # Пока нет флага на точке — промо доступно (выключение точки = отдельный follow-up).
       tenant.present?
     end
     private_class_method :point_allows_promo?

@@ -42,15 +42,16 @@ module Shop
       save_card = ActiveModel::Type::Boolean.new.cast(params.fetch(:save_card, false))
       save_sbp = ActiveModel::Type::Boolean.new.cast(params.fetch(:save_sbp_account, false))
       bind_requested = save_card || save_sbp
-      charge_total = Payments::GrowthPromo.charge_amount(
-        cart_total: total,
+      priced = Payments::GrowthPromo.price!(
+        subtotal: subtotal,
+        discount: discount,
         tenant: @tenant,
         customer: customer,
-        bind_requested: bind_requested,
-        method_hash: params[:method_hash]
+        bind_requested: bind_requested
       )
-      growth_intent = bind_requested && charge_total == Payments::GrowthPromo::AMOUNT_RUB.to_d
-      total = charge_total
+      discount = priced[:discount_amount]
+      total = priced[:final_amount]
+      growth_intent = priced[:growth_intent]
 
       flow = payment_flow(payment_method)
 
@@ -115,7 +116,7 @@ module Shop
             "save_card" => save_card,
             "save_sbp_account" => save_sbp,
             "growth_promo_intent" => growth_intent,
-            "cart_total_before_growth" => (subtotal - discount).round(2).to_s
+            "cart_total_before_growth" => priced[:cart_total_before].to_s
           }
         )
 

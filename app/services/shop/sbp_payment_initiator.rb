@@ -49,6 +49,8 @@ module Shop
     end
 
     def simulate_result(order)
+      payment = order.payments.order(created_at: :desc).first
+      apply_growth_pricing!(order, payment) if payment
       mark_save_sbp_account!(order)
       {
         payment_url: "https://qr.nspk.ru/SIMULATE-#{order.id.to_s.delete("-")[0, 12]}",
@@ -66,6 +68,8 @@ module Shop
       raise Error.new("У заказа нет платежа", http_status: :unprocessable_entity) unless payment
 
       begin
+        apply_growth_pricing!(order, payment)
+
         # #72: контакт покупателя в Receipt (Email > Phone) из MobileCustomer.
         receipt = Payments::TbankReceiptBuilder.for_order!(order)
         init_kwargs = {
@@ -114,6 +118,38 @@ module Shop
       data = payment.provider_data.is_a?(Hash) ? payment.provider_data.deep_dup : {}
       data["save_sbp_account"] = true
       payment.update_columns(provider_data: data)
+    end
+
+    # #75: промо 11₽ на SBP bind — apply at init (save_sbp_account приходит сюда, не в POST /orders).
+    def apply_growth_pricing!(order, payment)
+      return unless @save_sbp_account
+
+      data = payment.provider_data.is_a?(Hash) ? payment.provider_data : {}
+      return if ActiveModel::Type::Boolean.new.cast(data["growth_promo_intent"])
+
+      customer = order.customer || MobileCustomer.find_by(id: order.customer_id)
+      return if customer.blank?
+
+      priced = Payments::GrowthPromo.price!(
+        subtotal: order.total_amount,
+        discount: 0,
+        tenant: @tenant,
+        customer: customer,
+        bind_requested: true
+      )
+      return unless priced[:growth_intent]
+
+      order.update!(
+        discount_amount: priced[:discount_amount],
+        final_amount: priced[:final_amount]
+      )
+      merged = data.deep_dup
+      merged["save_sbp_account"] = true
+      merged["growth_promo_intent"] = true
+      merged["cart_total_before_growth"] = priced[:cart_total_before].to_s
+      payment.update!(amount: priced[:final_amount], provider_data: merged)
+      order.reload
+      payment.reload
     end
 
     def friendly_api_message(error)

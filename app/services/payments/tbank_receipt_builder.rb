@@ -37,15 +37,43 @@ module Payments
       items = Array(@order.order_items)
       raise Error, "Нет позиций заказа для чека 54-ФЗ" if items.empty?
 
-      receipt = {
-        "Taxation" => taxation,
-        "Items" => items.map { |item| build_item(item) }
-      }
+      receipt = if growth_promo_receipt?
+        {
+          "Taxation" => taxation,
+          "Items" => [growth_promo_item]
+        }
+      else
+        {
+          "Taxation" => taxation,
+          "Items" => items.map { |item| build_item(item) }
+        }
+      end
       apply_contact!(receipt)
       receipt
     end
 
     private
+
+    def growth_promo_receipt?
+      payment = @order.payments.order(created_at: :desc).first
+      data = payment&.provider_data
+      return false unless data.is_a?(Hash)
+
+      ActiveModel::Type::Boolean.new.cast(data["growth_promo_intent"])
+    end
+
+    def growth_promo_item
+      amount_kopecks = (BigDecimal(@order.final_amount.to_s) * 100).to_i
+      {
+        "Name" => truncate_name("Привязка способа оплаты"),
+        "Price" => amount_kopecks,
+        "Quantity" => 1.0,
+        "Amount" => amount_kopecks,
+        "Tax" => tax,
+        "PaymentMethod" => "full_payment",
+        "PaymentObject" => "service"
+      }
+    end
 
     def apply_contact!(receipt)
       email = @email.to_s.strip.presence

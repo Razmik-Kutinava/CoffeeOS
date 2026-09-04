@@ -47,6 +47,33 @@ class Payments::GrowthPromoTest < ActiveSupport::TestCase
     assert_equal 11, amount
   end
 
+  test "price! keeps chk_order_amounts identity when growth applies" do
+    priced = Payments::GrowthPromo.price!(
+      subtotal: 450,
+      discount: 0,
+      tenant: @tenant,
+      customer: @customer,
+      bind_requested: true
+    )
+    assert priced[:growth_intent]
+    assert_equal 11, priced[:final_amount]
+    assert_equal 439, priced[:discount_amount]
+    assert_equal priced[:final_amount], 450 - priced[:discount_amount]
+  end
+
+  test "price! without bind keeps full cart" do
+    priced = Payments::GrowthPromo.price!(
+      subtotal: 450,
+      discount: 0,
+      tenant: @tenant,
+      customer: @customer,
+      bind_requested: false
+    )
+    refute priced[:growth_intent]
+    assert_equal 450, priced[:final_amount]
+    assert_equal 0, priced[:discount_amount]
+  end
+
   test "charge_amount returns full cart when checkbox off" do
     amount = Payments::GrowthPromo.charge_amount(
       cart_total: 450,

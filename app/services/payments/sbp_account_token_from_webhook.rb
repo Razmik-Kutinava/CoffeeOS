@@ -26,6 +26,11 @@ module Payments
       )
       return if stored == SbpAccountTokenStore::BLOCKED
 
+      GrowthPromo.consume_from_payment!(
+        payment: payment,
+        method_hash: stored.method_hash,
+        method_type: "sbp"
+      )
       stored
     end
 
