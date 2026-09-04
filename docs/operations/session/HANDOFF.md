@@ -2,17 +2,17 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-04 (/review #76 → push)  
+**Дата:** 2026-09-04 (GREEN #77)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #76 REVIEW kitchen fix + push/CI | CI green → стоп · deploy апрув |
-| #77 GREEN done | `/regress` #77 (отдельно) |
+| #77 GREEN `d83acc4c` | `/regress` #77 |
+| #76 REVIEW / push | CI · deploy апрув |
 | #75 deploy | апрув |
 
-**last_done:** /review #76 — bugbot kitchen fix · security clean · Entire GREEN  
-**next_step:** CI green #76; deploy только апрув; Fly MCP Point A после deploy
+**last_done:** GREEN #77 — signals + settings + eligibility + УК + CTA (20+10 tests PASS)  
+**next_step:** `/regress` #77; Entire trailer на GREEN — добрать на `/review` (ветка diverged с #76)
 
 **ctx_trim:** `2026-09-02`
 
