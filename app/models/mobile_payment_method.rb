@@ -44,6 +44,35 @@ class MobilePaymentMethod < ApplicationRecord
     report
   end
 
+  # #75: аудит/нормализация дублей SBP method_hash (колонка card_hash).
+  def self.dedupe_active_sbp_method_hashes!(dry_run: true)
+    groups = active_sbp.where.not(card_hash: nil)
+      .group(:card_hash)
+      .having("COUNT(*) > 1")
+      .count
+
+    report = []
+    groups.each_key do |hash|
+      rows = active_sbp.where(card_hash: hash).order(:created_at, :id).to_a
+      keeper = rows.first
+      losers = rows.drop(1)
+      report << {
+        method_hash: hash,
+        method_type: "sbp",
+        keeper_id: keeper.id,
+        keeper_customer_id: keeper.customer_id,
+        deactivate_ids: losers.map(&:id),
+        deactivate_customer_ids: losers.map(&:customer_id)
+      }
+      next if dry_run
+
+      losers.each do |row|
+        row.update!(is_active: false, is_default: false)
+      end
+    end
+    report
+  end
+
 
   def self.for_customer(customer_id)
     active_cards.where(customer_id: customer_id).order(last_used_at: :desc, created_at: :desc)

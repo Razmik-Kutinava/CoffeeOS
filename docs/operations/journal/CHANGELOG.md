@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-04 — feat: #75 follow-up velocity phone_status Checkout PII
+
+- `BindingVelocity` 15м (hash/phone/device/IP/BIN; BIN не для СБП)
+- `phone_status` enum + `BindingStepUp` (OTP только телефон аккаунта)
+- Checkout `promoEligible`/`cartTotalRub` + `growth_promo` в `/user/cards`
+- `phone_digest` + `purge_expired!`; SBP `dedupe_active_sbp_method_hashes!`
+
 ## 2026-09-04 — fix: #75 REVIEW growth promo amounts + mark_used
 
 - `GrowthPromo.price!` — discount под `chk_order_amounts`

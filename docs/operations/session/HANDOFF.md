@@ -2,14 +2,14 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-04 (#75 CI green)  
+**Дата:** 2026-09-04 (#75 follow-up)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #75 CI green | deploy — апрув · Fly MCP Point A |
+| #75 follow-up closed | deploy — апрув · Fly MCP Point A |
 
-**last_done:** #75 PHASE 3 REVIEW + CI PASS  
+**last_done:** #75 velocity + phone_status + Checkout promo + PII retention  
 **next_step:** deploy только по апруву владельца
 
 **ctx_trim:** `2026-09-02`

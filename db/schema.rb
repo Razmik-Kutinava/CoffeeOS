@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_04_120100) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_04_140000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_stat_statements"
@@ -124,6 +124,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_04_120100) do
     t.string "method_hash", limit: 64
     t.string "method_type", limit: 20, null: false
     t.string "phone", limit: 20
+    t.string "phone_digest", limit: 64
     t.uuid "point_id"
     t.string "reason", limit: 128
     t.string "result", limit: 64, default: "ok", null: false
@@ -131,8 +132,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_04_120100) do
     t.boolean "verification_charge_required", default: false, null: false
     t.index ["is_growth_event", "method_hash"], name: "idx_card_binding_attempts_growth_hash"
     t.index ["is_growth_event", "phone"], name: "idx_card_binding_attempts_growth_phone"
+    t.index ["is_growth_event", "phone_digest"], name: "idx_card_binding_attempts_growth_phone_digest"
     t.index ["method_hash"], name: "idx_card_binding_attempts_method_hash"
     t.index ["phone"], name: "idx_card_binding_attempts_phone"
+    t.index ["phone_digest"], name: "idx_card_binding_attempts_phone_digest"
   end
 
   create_table "cash_shifts", id: :uuid, default: -> { "gen_random_uuid()" }, comment: "Кассовые смены", force: :cascade do |t|
@@ -419,6 +422,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_04_120100) do
     t.datetime "last_login_at", precision: nil
     t.string "last_name", limit: 100
     t.string "phone", limit: 20
+    t.string "phone_status", limit: 32, default: "unknown", null: false
     t.boolean "phone_verified", default: false, null: false
     t.boolean "push_enabled", default: false, null: false
     t.string "push_token", limit: 255

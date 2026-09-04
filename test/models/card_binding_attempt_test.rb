@@ -16,7 +16,7 @@ class CardBindingAttemptTest < ActiveSupport::TestCase
     Current.reset
   end
 
-  test "record! stores method_type method_hash phone and growth flag" do
+  test "record! stores method_type method_hash phone_digest and growth flag" do
     row = CardBindingAttempt.record!(
       method_type: "card",
       method_hash: "abc123",
@@ -35,7 +35,8 @@ class CardBindingAttemptTest < ActiveSupport::TestCase
     assert row.persisted?
     assert_equal "card", row.method_type
     assert_equal "abc123", row.method_hash
-    assert_equal @customer.phone, row.phone
+    assert_nil row.phone
+    assert_equal CardBindingAttempt.phone_digest_for(@customer.phone), row.phone_digest
     assert_equal @customer.id, row.account_id
     assert row.is_growth_event
   end

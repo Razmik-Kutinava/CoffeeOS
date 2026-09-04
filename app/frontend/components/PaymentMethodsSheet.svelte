@@ -212,6 +212,11 @@
         <div class="pm-new-card" data-testid="checkout-new-card-wrap">
           <NewCardForm bind:state={newCardState} />
         </div>
+        {#if promoEligible}
+          <p class="pm-promo" data-testid="payment-promo-11rub-card">
+            {newCardState.save_card ? promoSaveToday11() : promoNudgeInsteadOf(cartTotalRub)}
+          </p>
+        {/if}
       {/if}
     {/if}
 

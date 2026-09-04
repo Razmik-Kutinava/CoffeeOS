@@ -60,8 +60,20 @@ module Shop
       end
 
       def send_sms
+        if ActiveModel::Type::Boolean.new.cast(params[:binding_step_up])
+          cid = Shop::CustomerSession.customer_id(session, @shop_tenant.id)
+          customer = MobileCustomer.find_by(id: cid)
+          phone_param = Payments::BindingStepUp.resolve_otp_destination(
+            customer: customer,
+            form_phone: params[:phone]
+          )
+          raise Shop::PhoneOtp::Error, "Нет телефона аккаунта для подтверждения" if phone_param.blank?
+        else
+          phone_param = params.require(:phone)
+        end
+
         phone = Shop::PhoneOtp.send_sms_code!(
-          phone: params.require(:phone),
+          phone: phone_param,
           ip: request.remote_ip
         )
         render json: { ok: true, phone: phone, channel: "sms" }

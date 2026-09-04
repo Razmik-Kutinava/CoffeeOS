@@ -4,6 +4,7 @@ module Payments
   # Upsert UserCards (mobile_payment_methods) после CONFIRMED + RebillId.
   class SavedCardStore
     BLOCKED = :blocked_method_taken
+    RATE_LIMITED = :rate_limited
 
     # Стабильный keyed hash от CardId эквайринга (глобальная идентичность карты).
     # Pepper: CARD_HASH_PEPPER / credentials — не ротировать вместе с SECRET_KEY_BASE.
@@ -61,7 +62,30 @@ module Payments
 
       if foreign_active_binding?(customer_id, card_hash: card_hash, bank_card_id: bank_card_id)
         log_binding_rejected
+        record_attempt!(
+          customer_id: customer_id,
+          method_hash: card_hash,
+          bin: bin_from_payload,
+          result: "blocked_method_taken"
+        )
         return BLOCKED
+      end
+
+      velocity = BindingVelocity.check!(
+        method_type: "card",
+        method_hash: card_hash,
+        phone: order&.customer&.phone,
+        bin: bin_from_payload
+      )
+      unless velocity.allowed?
+        record_attempt!(
+          customer_id: customer_id,
+          method_hash: card_hash,
+          bin: bin_from_payload,
+          result: "rate_limited",
+          reason: velocity.reason
+        )
+        return RATE_LIMITED
       end
 
       MobilePaymentMethod.transaction do
@@ -89,14 +113,50 @@ module Payments
           method_hash: card_hash,
           method_type: "card"
         )
+        record_attempt!(
+          customer_id: customer_id,
+          method_hash: card_hash,
+          bin: bin_from_payload,
+          result: "ok"
+        )
         card
       end
     rescue ActiveRecord::RecordNotUnique
       log_binding_rejected
+      record_attempt!(
+        customer_id: @payment.order&.customer_id,
+        method_hash: self.class.card_hash_for(@payload["CardId"]),
+        result: "blocked_method_taken"
+      )
       BLOCKED
     end
 
     private
+
+    def bin_from_payload
+      raw = @payload["Pan"].presence || @payload["MaskedPan"].presence || ""
+      digits = raw.to_s.gsub(/\D/, "")
+      return if digits.length < 6
+
+      digits[0, 6]
+    end
+
+    def record_attempt!(customer_id:, method_hash:, result:, bin: nil, reason: nil)
+      customer = MobileCustomer.find_by(id: customer_id)
+      CardBindingAttempt.record!(
+        method_type: "card",
+        method_hash: method_hash,
+        phone: customer&.phone,
+        account_id: customer_id,
+        bin: bin,
+        point_id: @payment&.tenant_id || @payment&.order&.tenant_id,
+        result: result,
+        reason: reason,
+        is_growth_event: false
+      )
+    rescue StandardError => e
+      Rails.logger.warn("[SavedCardStore] attempt log failed: #{e.class}: #{e.message}")
+    end
 
     def find_existing_card(customer_id, rebill_id, masked, exp_date, card_hash, bank_card_id)
       card = MobilePaymentMethod.find_by(

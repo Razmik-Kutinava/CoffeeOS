@@ -18,12 +18,12 @@
 
 ### Follow-up (после CI / следующий slice)
 
-- [ ] velocity limits (phone/device/IP/BIN) + phone_status enum + step-up OTP
+- [x] velocity limits (phone/device/IP/BIN) + phone_status enum + step-up OTP
 - [x] mark_used! на успешной привязке (SavedCardStore / SbpAccountTokenFromWebhook)
-- [ ] Checkout.svelte: прокинуть `promoEligible` / `cartTotalRub` в sheet
-- [ ] audit/dedupe существующих SBP дублей
+- [x] Checkout.svelte: прокинуть `promoEligible` / `cartTotalRub` в sheet
+- [x] audit/dedupe существующих SBP дублей (`dedupe_active_sbp_method_hashes!`)
 - [ ] matching перевыпущенной карты — out of scope без надёжного признака
-- [ ] PII retention для card_binding_attempts (MEDIUM security)
+- [x] PII retention для card_binding_attempts (phone_digest + purge_expired!)
 
 ## Файлы (ожидаемо)
 

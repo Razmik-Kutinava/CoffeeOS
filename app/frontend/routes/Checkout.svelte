@@ -48,7 +48,8 @@
     CHECKOUT_PAY_EVENT,
     openCheckoutPayStack,
     closeCheckoutPayStack,
-    cartSheetError
+    cartSheetError,
+    cartTotal
   } from "../lib/cartSheetStore.js"
   import { REPEAT_AUTOPAY_KEY } from "../lib/frequentRepeatStore.js"
   import { restoreGuestSession } from "../lib/restoreGuestSession.js"
@@ -100,6 +101,8 @@
   let saveSbpAccount = $state(DEFAULT_SAVE_SBP_ACCOUNT)
   let saveSbpAccountTouched = $state(false)
   let sbpAccounts = $state([])
+  let promoEligible = $state(false)
+  let cartTotalRub = $state(0)
   let newCardState = $state(createNewCardFormState())
   let payFsmState = $state(PAY_FSM.DEFAULT)
   let showThreeDsOverlay = $state(false)
@@ -209,6 +212,9 @@
     const offHours = subscribeOperatingHours((next) => {
       operatingHours = next
     })
+    const unsubCartTotal = cartTotal.subscribe((v) => {
+      cartTotalRub = Number(v) || 0
+    })
 
     const onPageShow = (event) => {
       if (event.persisted) recover()
@@ -218,6 +224,7 @@
       window.removeEventListener("pageshow", onPageShow)
       window.removeEventListener(CHECKOUT_PAY_EVENT, onCheckoutPay)
       offHours?.()
+      unsubCartTotal()
       closeCheckoutPayStack()
     }
   })
@@ -230,6 +237,7 @@
     if (!identityReady) {
       savedCards = []
       sbpAccounts = []
+      promoEligible = false
       cardsLoadError = null
       return true
     }
@@ -243,6 +251,7 @@
       const res = await api(`/user/cards${q}`)
       savedCards = Array.isArray(res?.cards) ? res.cards : []
       sbpAccounts = Array.isArray(res?.sbp_accounts) ? res.sbp_accounts : []
+      promoEligible = !!res?.growth_promo?.eligible
       const primary = res?.primary
       const persisted = loadPaymentSelection()
       const picked = pickDefaultPaymentSelection({
@@ -263,6 +272,7 @@
     } catch (e) {
       savedCards = []
       sbpAccounts = []
+      promoEligible = false
       cardsLoadError = e?.message || paymentMethodLoadErrorMessage()
       return false
     } finally {
@@ -735,6 +745,8 @@
     {selectedCardId}
     {selectionMode}
     bind:saveSbpAccount
+    {promoEligible}
+    {cartTotalRub}
     canPay={sheetCanPay}
     fsmState={payFsmState}
     bind:newCardState
