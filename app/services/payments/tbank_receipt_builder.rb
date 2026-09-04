@@ -55,11 +55,15 @@ module Payments
     private
 
     def growth_promo_receipt?
+      return false unless @order.respond_to?(:payments)
+
       payment = @order.payments.order(created_at: :desc).first
       data = payment&.provider_data
       return false unless data.is_a?(Hash)
 
       ActiveModel::Type::Boolean.new.cast(data["growth_promo_intent"])
+    rescue NoMethodError
+      false
     end
 
     def growth_promo_item

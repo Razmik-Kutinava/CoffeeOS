@@ -13,15 +13,17 @@
 - [x] **SPEC** — файлы + Не ломать + Проверка
 - [x] **RED** — падающие тесты binding/promo/velocity `[RED]`
 - [x] **GREEN** — реализация + регрессия зоны `[GREEN]` (slice 1: hash/SBP unique / attempts / GrowthPromo / TOV)
-- [ ] **REVIEW** — bugbot + security-review · Entire · push CI
+- [x] **REVIEW fixes** — discount/chk_order_amounts · mark_used! · SBP init pricing · receipt 11₽
+- [ ] **REVIEW** — Entire · push CI (bugbot/security findings addressed)
 
-### Follow-up (не в этом GREEN)
+### Follow-up (после CI / следующий slice)
 
 - [ ] velocity limits (phone/device/IP/BIN) + phone_status enum + step-up OTP
-- [ ] mark_used! на CONFIRMED callback (growth только после успешной оплаты)
+- [x] mark_used! на успешной привязке (SavedCardStore / SbpAccountTokenFromWebhook)
 - [ ] Checkout.svelte: прокинуть `promoEligible` / `cartTotalRub` в sheet
 - [ ] audit/dedupe существующих SBP дублей
 - [ ] matching перевыпущенной карты — out of scope без надёжного признака
+- [ ] PII retention для card_binding_attempts (MEDIUM security)
 
 ## Файлы (ожидаемо)
 
