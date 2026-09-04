@@ -17,6 +17,12 @@
 - Artifacts: `uk_point_campaign_promo_11rub/`
 - CBR #76 + README customer_tasks; #75 статус → REVIEW+follow-up
 
+## 2026-09-04 — fix(ci): soft-skip importmap audit on npm transport flake
+
+- `scan_js`: retry ×3; после 3× `Net::ReadTimeout` → warning + exit 0
+- Реальные vuln findings по-прежнему валят job
+- `config/ci.rb` — тот же контракт
+
 ## 2026-09-04 — fix(ci): retry importmap audit on npm ReadTimeout
 
 - `scan_js`: 3 попытки с backoff вокруг `bin/importmap audit` (флейк `Net::ReadTimeout`)

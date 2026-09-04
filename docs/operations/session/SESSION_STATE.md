@@ -21,7 +21,7 @@
 | Что | Статус |
 |-----|--------|
 | Core + REVIEW + follow-up | **done** |
-| CI scan_js Net::ReadTimeout flake | **fix: retry ×3** |
+| CI scan_js Net::ReadTimeout flake | **fix: retry ×3 + soft-skip transport** |
 | Matching перевыпущенной карты | **out of scope** |
 | deploy / Fly MCP | **pending апрув** |
 

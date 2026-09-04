@@ -2,15 +2,16 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-04 (intake #76)  
+**Дата:** 2026-09-04 (intake #76 + CI scan_js)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
 | #76 УК point campaign promo 11₽ — intake | `/spec` → SBR |
+| CI scan_js soft-skip transport | CI green |
 
-**last_done:** docs intake #76 УК промо 11₽ при создании точки  
-**next_step:** `/spec` по #76 (`point_campaign_settings`)
+**last_done:** docs intake #76; fix(ci) soft-skip importmap audit после 3× npm timeout  
+**next_step:** CI green → `/spec` #76; deploy #75 по апруву
 
 **ctx_trim:** `2026-09-02`
 

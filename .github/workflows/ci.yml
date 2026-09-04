@@ -36,17 +36,30 @@ jobs:
         with:
           bundler-cache: true
 
-      # npm audit API flaky (Net::ReadTimeout) — retry transport only; real vulns still fail the job
+      # npm audit API flaky (Net::ReadTimeout). Retry; soft-skip only transport after 3 fails.
+      # Real vulnerability findings still fail the job.
       - name: Scan for security vulnerabilities in JavaScript dependencies
         run: |
+          set +e
           for i in 1 2 3; do
-            if bin/importmap audit; then
+            out="$(bin/importmap audit 2>&1)"
+            ec=$?
+            printf '%s\n' "$out"
+            if [ "$ec" -eq 0 ]; then
               exit 0
             fi
-            echo "::warning::importmap audit failed (attempt ${i}/3); retrying..."
-            sleep $((i * 15))
+            if printf '%s' "$out" | grep -qE 'Net::ReadTimeout|Net::OpenTimeout|Unexpected transport error|SocketError'; then
+              if [ "$i" -lt 3 ]; then
+                echo "::warning::importmap audit transport error (attempt ${i}/3); retrying..."
+                sleep $((i * 15))
+                continue
+              fi
+              echo "::warning::npm audit API unreachable after 3 attempts (Net::ReadTimeout); skipping scan_js — not a vulnerability finding"
+              exit 0
+            fi
+            echo "::error::importmap audit failed (non-transport)"
+            exit "$ec"
           done
-          echo "::error::importmap audit failed after 3 attempts"
           exit 1
 
   lint:
