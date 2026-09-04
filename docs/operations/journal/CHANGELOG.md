@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-04 — ops: /regress #76 PASS
+
+- Platform/promo: 31 runs / 96 assert PASS
+- order_creator + user_cards_sbp: 23 runs / 50 assert PASS
+- Next: `/review` · Fly MCP Point A после deploy
+
 ## 2026-09-04 — docs: SPEC #77 subscription offer eligibility
 
 - todo.md: signals на mobile_customers · settings per-point · Eligibility service · profile/config · CTA + appinstalled
