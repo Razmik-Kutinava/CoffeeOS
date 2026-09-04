@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-04 — docs: SPEC #77 subscription offer eligibility
+
+- todo.md: signals на mobile_customers · settings per-point · Eligibility service · profile/config · CTA + appinstalled
+- Решения §4: fallback=tips · enum tips|subscription · completed_orders query · без денормализации
+- Не ломать: orders_count · CTA при enabled=false · FCM/email · PWA banner · Tbank/фискал/11₽/billing
+- Проверка: eligibility + settings + profile API; регресс push_register + orders_email
+
 ## 2026-09-04 — docs: intake #77 subscription offer eligibility
 
 - ТЗ 1:1: `customer_tasks/Умный показ оффера подписки — сигналы толерантности и УК-переключатель.md`
