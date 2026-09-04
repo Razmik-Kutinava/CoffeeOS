@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-04 (#75 REVIEW → CI)  
+**Дата:** 2026-09-04 (#75 CI green)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #75 REVIEW fixes → push CI | CI green · deploy апрув |
+| #75 CI green | deploy — апрув · Fly MCP Point A |
 
-**last_done:** #75 PHASE 3 — HIGH fixes (amounts/mark_used/SBP/receipt) · Entire  
-**next_step:** CI green → deploy только по апруву
+**last_done:** #75 PHASE 3 REVIEW + CI PASS  
+**next_step:** deploy только по апруву владельца
 
 **ctx_trim:** `2026-09-02`
 

@@ -14,7 +14,7 @@
 - [x] **RED** — падающие тесты binding/promo/velocity `[RED]`
 - [x] **GREEN** — реализация + регрессия зоны `[GREEN]` (slice 1: hash/SBP unique / attempts / GrowthPromo / TOV)
 - [x] **REVIEW fixes** — discount/chk_order_amounts · mark_used! · SBP init pricing · receipt 11₽
-- [ ] **REVIEW** — Entire · push CI (bugbot/security findings addressed)
+- [x] **REVIEW** — bugbot + security HIGH fixed · Entire · push · **CI green**
 
 ### Follow-up (после CI / следующий slice)
 
