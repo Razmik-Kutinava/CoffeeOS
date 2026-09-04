@@ -256,6 +256,44 @@ class Platform::TenantsControllerTest < ActionDispatch::IntegrationTest
     assert inherited.nil? || (!inherited.enabled? && inherited.counter == 0 && inherited.threshold != 99)
   end
 
+  test "update to production_kitchen disables leftover card_binding_promo" do
+    tenant = create_tenant!(organization: @org, slug: "to-kitchen-#{SecureRandom.hex(4)}")
+    Platform::TenantWeekdaySchedulesSync.call(
+      tenant: tenant,
+      schedule_params: { "0" => { enabled: "1", opens_at: "09:00", closes_at: "21:00" } }
+    )
+    PointCampaignSetting.create!(
+      point_id: tenant.id,
+      campaign_type: "card_binding_promo",
+      enabled: true,
+      threshold: 20,
+      counter: 3,
+      config: { "promo_amount_rub" => 11 }
+    )
+
+    patch "/admin/tenants/#{tenant.id}", params: {
+      tenant: {
+        name: tenant.name,
+        slug: tenant.slug,
+        organization_id: @org.id,
+        type: "production_kitchen",
+        status: "active",
+        country: "RU",
+        currency: "RUB",
+        timezone: "Europe/Moscow"
+      }
+    }
+
+    assert_response :redirect
+    setting = PointCampaignSetting.find_by!(point_id: tenant.id, campaign_type: "card_binding_promo")
+    refute setting.enabled?
+    assert_equal 3, setting.counter
+
+    get "/admin/tenants/#{tenant.id}"
+    assert_response :success
+    refute_match(/Счётчик:/, response.body)
+  end
+
   private
 
   def tenant_create_params(slug:, name: "Точка", weekday_schedules: default_weekday_schedules, modules: nil, point_campaign: nil, city: nil)

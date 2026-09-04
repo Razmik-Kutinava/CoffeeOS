@@ -166,8 +166,19 @@ module Platform
       )
     end
 
-    # Sync only when form sent point_campaign keys (create/edit with promo block).
+    # Sync promo for sales points when form sent keys; kitchens never keep enabled promo.
     def sync_point_campaign!
+      if @tenant.production_kitchen?
+        setting = PointCampaignSetting.card_binding_promo_for(@tenant.id)
+        return true if setting.blank? || !setting.enabled?
+
+        return Platform::PointCampaignSettingsSync.call(
+          tenant: @tenant,
+          enabled: false,
+          threshold: setting.threshold
+        )
+      end
+
       raw = point_campaign_params
       return true if raw.blank?
 
@@ -179,6 +190,8 @@ module Platform
     end
 
     def load_card_binding_promo!
+      return unless @tenant.sales_point?
+
       @card_binding_promo = PointCampaignSetting.card_binding_promo_for(@tenant.id)
       @card_binding_promo&.refresh_counter!
     end
