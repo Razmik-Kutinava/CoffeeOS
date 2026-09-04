@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-02 (single Point A prod)  
+**Дата:** 2026-09-04 (#75 intake binding+promo 11₽)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| УК: одна точка в списках (UkCatalogScope) | deploy · боевое тестирование Point A |
+| #75 Привязка способа оплаты + промо 11₽ — intake | `/spec` → SBR |
 
-**last_done:** УК filter single point + UkCatalogScope  
-**next_step:** deploy · живое демо §I
+**last_done:** PHASE 0 intake #75 (ТЗ 1:1 + скрин + CBR)  
+**next_step:** `/spec` по #75 (задачи 2–3 ещё не присланы)
 
 **ctx_trim:** `2026-09-02`
 

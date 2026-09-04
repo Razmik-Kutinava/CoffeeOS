@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-04 — docs: intake #75 Привязка способа оплаты и промо 11₽
+
+- ТЗ 1:1: `customer_tasks/Привязка способа оплаты и промо 11₽.md`
+- Артефакты: `artifacts/payment_method_binding_promo_11rub/` (скрин шторки + P2 placeholder)
+- CBR / README: строка #75 · статус intake · ждёт `/spec`
+- Задача 1 из 3 (две следующие ещё не присланы)
+
 ## 2026-09-02 — feat: УК single-point lists (UkCatalogScope)
 
 - `Platform::UkCatalogScope` — в `DEMO_SINGLE_POINT` только Point A + org в `/admin`

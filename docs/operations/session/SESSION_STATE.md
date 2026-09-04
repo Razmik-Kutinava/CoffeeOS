@@ -2,19 +2,21 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-02 (single Point A prod)  
+**Дата:** 2026-09-04 (#75 intake)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| УК: одна точка в списках | deploy · боевое тест Point A |
+| #75 binding + promo 11₽ intake | `/spec` |
 
-### UK single-point (2026-09-02)
+### #75 Payment method binding + promo 11₽ (2026-09-04)
 
 | Что | Статус |
 |-----|--------|
-| UkCatalogScope — только Point A в /admin | **done** |
-| Deploy Fly v475 | **done** |
+| ТЗ 1:1 в customer_tasks | **done** |
+| Артефакт скрин шторки | **done** |
+| CBR + README индекс | **done** |
+| SPEC / SBR | **pending** |
 
 **ctx_trim:** `2026-09-02`
 
