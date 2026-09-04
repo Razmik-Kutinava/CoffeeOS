@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-04 — fix+review: #76 kitchen disables promo · REVIEW
+
+- bugbot medium: смена типа на `production_kitchen` гасит `card_binding_promo` (counter сохранён)
+- security-review: no medium+
+- Entire GREEN: `01M1P2BSG7MY3C0VM0FXCSZXRK` на `6c1966d2`
+- Next: CI green · deploy апрув · Fly MCP Point A
+
 ## 2026-09-04 — ops: /regress #76 PASS
 
 - Platform/promo: 31 runs / 96 assert PASS
