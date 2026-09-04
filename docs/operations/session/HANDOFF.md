@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-04 (#75 follow-up)  
+**Дата:** 2026-09-04 (CI scan_js retry)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #75 follow-up closed | deploy — апрув · Fly MCP Point A |
+| CI importmap audit retry ×3 | CI green → deploy апрув · Fly MCP |
 
-**last_done:** #75 velocity + phone_status + Checkout promo + PII retention  
-**next_step:** deploy только по апруву владельца
+**last_done:** fix(ci) retry `bin/importmap audit` на npm ReadTimeout  
+**next_step:** дождаться CI green; deploy только по апруву
 
 **ctx_trim:** `2026-09-02`
 

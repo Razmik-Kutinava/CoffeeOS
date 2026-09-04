@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-04 — fix(ci): retry importmap audit on npm ReadTimeout
+
+- `scan_js`: 3 попытки с backoff вокруг `bin/importmap audit` (флейк `Net::ReadTimeout`)
+- `config/ci.rb`: тот же retry для локального `bin/ci`
+- Реальные уязвимости по-прежнему валят job (без continue-on-error)
+
 ## 2026-09-04 — feat: #75 follow-up velocity phone_status Checkout PII
 
 - `BindingVelocity` 15м (hash/phone/device/IP/BIN; BIN не для СБП)

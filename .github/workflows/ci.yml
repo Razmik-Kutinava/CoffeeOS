@@ -36,8 +36,18 @@ jobs:
         with:
           bundler-cache: true
 
+      # npm audit API flaky (Net::ReadTimeout) — retry transport only; real vulns still fail the job
       - name: Scan for security vulnerabilities in JavaScript dependencies
-        run: bin/importmap audit
+        run: |
+          for i in 1 2 3; do
+            if bin/importmap audit; then
+              exit 0
+            fi
+            echo "::warning::importmap audit failed (attempt ${i}/3); retrying..."
+            sleep $((i * 15))
+          done
+          echo "::error::importmap audit failed after 3 attempts"
+          exit 1
 
   lint:
     runs-on: ubuntu-latest

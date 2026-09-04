@@ -2,19 +2,19 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-04 (#75 follow-up done)  
+**Дата:** 2026-09-04 (CI scan_js retry)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #75 velocity/phone_status/Checkout/PII | deploy апрув · Fly MCP Point A |
+| CI importmap audit retry | CI green → deploy апрув · Fly MCP |
 
 ### #75 Payment method binding + promo 11₽ (2026-09-04)
 
 | Что | Статус |
 |-----|--------|
-| Core + REVIEW + CI | **done** |
-| Follow-up: velocity, phone_status, promoEligible, PII, SBP dedupe | **done** |
+| Core + REVIEW + follow-up | **done** |
+| CI scan_js Net::ReadTimeout flake | **fix: retry ×3** |
 | Matching перевыпущенной карты | **out of scope** |
 | deploy / Fly MCP | **pending апрув** |
 
