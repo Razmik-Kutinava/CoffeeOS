@@ -16,3 +16,9 @@ production:
   rotate_expiring_device_tokens:
     class: Devices::RotateExpiringTokensJob
     schedule: at 6am every day
+  stuck_payments_check:
+    class: Payments::StuckPaymentsCheckJob
+    schedule: every 15 minutes
+  channel_order_stats:
+    class: Analytics::ChannelOrderStatsJob
+    schedule: every 15 minutes

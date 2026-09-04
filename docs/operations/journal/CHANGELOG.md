@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-04 — feat: stuck payments cron + channel order stats log
+
+- `config/recurring.yml`: `Payments::StuckPaymentsCheckJob` every 15m (TelegramAlertJob без дедупа)
+- `Analytics::ChannelOrderStatsJob` + Collector — счётчики `orders.source` / 15m / `open_now`, только лог `[ChannelOrderStats]`
+- Без правок `Health::TenantChecker`; без Telegram на stats
+- Local: analytics collector+job PASS
+
 ## 2026-09-04 — ops: /regress #75 binding+promo PASS
 
 - payments+growth 28 runs PASS · order_creator+qa§2.3 23 PASS · i18n 4 PASS

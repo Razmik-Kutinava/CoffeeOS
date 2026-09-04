@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-04 (#75 regress PASS)  
+**Дата:** 2026-09-04 (stuck payments + channel stats)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #75 Local regress PASS | `/review` · Fly MCP Point A после deploy |
+| StuckPayments + ChannelOrderStats в recurring | deploy для cron; #75 `/review` |
 
-**last_done:** /regress зона оплата/binding — PASS  
-**next_step:** `/review` (bugbot + security · Entire · push CI)
+**last_done:** stuck payments 15m + тихий `Analytics::ChannelOrderStatsJob` (лог, без Telegram)  
+**next_step:** по намерению — deploy (cron на Fly) или #75 `/review`
 
 **ctx_trim:** `2026-09-02`
 

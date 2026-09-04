@@ -2,12 +2,21 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-04 (#75 regress PASS)  
+**Дата:** 2026-09-04 (stuck payments + channel stats)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #75 Local regress PASS (оплата/binding) | `/review` |
+| StuckPayments + ChannelOrderStats в recurring | deploy для cron на prod |
+
+### Stuck payments + channel order stats (2026-09-04)
+
+| Что | Статус |
+|-----|--------|
+| `Payments::StuckPaymentsCheckJob` → recurring every 15m | **done** |
+| `Analytics::ChannelOrderStatsJob` — JSON-лог source + `open_now` | **done** |
+| Telegram на stats | **нет** |
+| Local analytics tests | **PASS** |
 
 ### #75 Payment method binding + promo 11₽ (2026-09-04)
 
