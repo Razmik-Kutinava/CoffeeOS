@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-04 (#75 SPEC binding+promo 11₽)  
+**Дата:** 2026-09-04 (#75 regress PASS)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #75 SPEC в `todo.md` | `/sbr` RED |
+| #75 Local regress PASS | `/review` · Fly MCP Point A после deploy |
 
-**last_done:** PHASE 1 SPEC #75 (7 файлов + Не ломать + Проверка)  
-**next_step:** `/sbr` → RED (binding/promo/velocity)
+**last_done:** /regress зона оплата/binding — PASS  
+**next_step:** `/review` (bugbot + security · Entire · push CI)
 
 **ctx_trim:** `2026-09-02`
 

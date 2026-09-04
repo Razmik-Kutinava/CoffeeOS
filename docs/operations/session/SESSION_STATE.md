@@ -2,20 +2,20 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-04 (#75 SPEC)  
+**Дата:** 2026-09-04 (#75 regress PASS)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #75 SPEC done → todo.md | `/sbr` RED |
+| #75 Local regress PASS (оплата/binding) | `/review` |
 
 ### #75 Payment method binding + promo 11₽ (2026-09-04)
 
 | Что | Статус |
 |-----|--------|
-| Intake ТЗ + артефакт | **done** |
-| SPEC / todo.md | **done** |
-| RED / GREEN / REVIEW | **pending** |
+| Intake / SPEC / RED / GREEN slice 1 | **done** |
+| Local regress (Проверка + #75 tests) | **PASS** |
+| REVIEW / Fly MCP Point A | **pending** |
 
 **ctx_trim:** `2026-09-02`
 

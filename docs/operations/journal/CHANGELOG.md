@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-04 — ops: /regress #75 binding+promo PASS
+
+- payments+growth 28 runs PASS · order_creator+qa§2.3 23 PASS · i18n 4 PASS
+- Зона: shop/оплата · Fly MCP Point A ещё нужен для заказчика
+- Next: `/review`
+
 ## 2026-09-04 — docs: SPEC #75 binding + promo 11₽
 
 - `todo.md` — SBR фазы, 7 файлов (SavedCardStore / SbpAccountTokenStore / MPM / OrderCreator / PaymentMethodsSheet + net-new attempts + growth_promo)

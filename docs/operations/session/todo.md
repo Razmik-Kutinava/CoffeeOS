@@ -53,7 +53,8 @@ bin/rails test test/services/payments/saved_card_store_test.rb test/services/pay
 bin/rails test test/services/shop/order_creator_test.rb test/integration/shop/api/qa_section_2_3_payment_cart_test.rb
 ```
 
-(После появления тестов #75 — добавить зеркала `growth_promo` / `card_binding_attempt` / JS sheet.)
+**Local regress 2026-09-04:** PASS — payments+growth 28/70 · order_creator+qa§2.3 23/44 · i18n 4/4  
+(После появления тестов #75 — зеркала `growth_promo` / `card_binding_attempt` / JS sheet уже в прогоне.)
 
 ## Скоуп (кратко)
 
