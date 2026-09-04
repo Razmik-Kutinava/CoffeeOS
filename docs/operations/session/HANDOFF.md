@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-04 (stuck payments + channel stats)  
+**Дата:** 2026-09-04 (#75 REVIEW → CI)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| StuckPayments + ChannelOrderStats в recurring | deploy для cron; #75 `/review` |
+| #75 REVIEW fixes → push CI | CI green · deploy апрув |
 
-**last_done:** stuck payments 15m + тихий `Analytics::ChannelOrderStatsJob` (лог, без Telegram)  
-**next_step:** по намерению — deploy (cron на Fly) или #75 `/review`
+**last_done:** #75 PHASE 3 — HIGH fixes (amounts/mark_used/SBP/receipt) · Entire  
+**next_step:** CI green → deploy только по апруву
 
 **ctx_trim:** `2026-09-02`
 

@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-04 — fix: #75 REVIEW growth promo amounts + mark_used
+
+- `GrowthPromo.price!` — discount под `chk_order_amounts`
+- `consume_from_payment!` после успешной card/SBP bind
+- SBP init применяет 11₽ при `save_sbp_account`
+- Receipt: одна позиция 11₽ при `growth_promo_intent`
+
 ## 2026-09-04 — feat: stuck payments cron + channel order stats log
 
 - `config/recurring.yml`: `Payments::StuckPaymentsCheckJob` every 15m (TelegramAlertJob без дедупа)
