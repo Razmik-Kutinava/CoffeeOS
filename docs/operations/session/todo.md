@@ -11,7 +11,7 @@
 ## SBR
 
 - [x] **SPEC** — файлы + Не ломать + Проверка
-- [ ] **RED** — падающие тесты binding/promo/velocity `[RED]`
+- [x] **RED** — падающие тесты binding/promo/velocity `[RED]`
 - [ ] **GREEN** — реализация + регрессия зоны `[GREEN]`
 - [ ] **REVIEW** — bugbot + security-review · Entire · push CI
 
