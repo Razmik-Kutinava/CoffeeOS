@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-04 — docs: SPEC #75 binding + promo 11₽
+
+- `todo.md` — SBR фазы, 7 файлов (SavedCardStore / SbpAccountTokenStore / MPM / OrderCreator / PaymentMethodsSheet + net-new attempts + growth_promo)
+- Не ломать: полная оплата · UserCards/one-click · СБП bind · callback
+- Проверка: saved_card_store + sbp_account_token_store; order_creator + qa §2.3 cart
+- Ждёт `/sbr` RED
+
 ## 2026-09-04 — docs: intake #75 Привязка способа оплаты и промо 11₽
 
 - ТЗ 1:1: `customer_tasks/Привязка способа оплаты и промо 11₽.md`

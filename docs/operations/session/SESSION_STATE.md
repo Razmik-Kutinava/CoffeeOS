@@ -2,21 +2,20 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-04 (#75 intake)  
+**Дата:** 2026-09-04 (#75 SPEC)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #75 binding + promo 11₽ intake | `/spec` |
+| #75 SPEC done → todo.md | `/sbr` RED |
 
 ### #75 Payment method binding + promo 11₽ (2026-09-04)
 
 | Что | Статус |
 |-----|--------|
-| ТЗ 1:1 в customer_tasks | **done** |
-| Артефакт скрин шторки | **done** |
-| CBR + README индекс | **done** |
-| SPEC / SBR | **pending** |
+| Intake ТЗ + артефакт | **done** |
+| SPEC / todo.md | **done** |
+| RED / GREEN / REVIEW | **pending** |
 
 **ctx_trim:** `2026-09-02`
 

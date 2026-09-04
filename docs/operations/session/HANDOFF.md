@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-04 (#75 intake binding+promo 11₽)  
+**Дата:** 2026-09-04 (#75 SPEC binding+promo 11₽)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #75 Привязка способа оплаты + промо 11₽ — intake | `/spec` → SBR |
+| #75 SPEC в `todo.md` | `/sbr` RED |
 
-**last_done:** PHASE 0 intake #75 (ТЗ 1:1 + скрин + CBR)  
-**next_step:** `/spec` по #75 (задачи 2–3 ещё не присланы)
+**last_done:** PHASE 1 SPEC #75 (7 файлов + Не ломать + Проверка)  
+**next_step:** `/sbr` → RED (binding/promo/velocity)
 
 **ctx_trim:** `2026-09-02`
 
