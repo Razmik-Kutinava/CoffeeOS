@@ -2,17 +2,17 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-04 (GREEN #77)  
+**Дата:** 2026-09-04 (/review #76 → push)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #77 GREEN · subscription offer eligibility | `/regress` |
-| #76 GREEN + regress | `/review` (отдельно) |
-| CI / deploy #75 | апрув |
+| #76 REVIEW kitchen fix + push/CI | CI green → стоп · deploy апрув |
+| #77 GREEN done | `/regress` #77 (отдельно) |
+| #75 deploy | апрув |
 
-**last_done:** GREEN #77 — signals + settings + eligibility + УК + CTA  
-**next_step:** `/regress` #77
+**last_done:** /review #76 — bugbot kitchen fix · security clean · Entire GREEN  
+**next_step:** CI green #76; deploy только апрув; Fly MCP Point A после deploy
 
 **ctx_trim:** `2026-09-02`
 
@@ -20,22 +20,3 @@
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
 
 ---
-
-## Текущий месяц (2026-09)
-
-### ctx-trim токенов (2026-09-02)
-
-| Что | Статус |
-|-----|--------|
-| 7 дублей `.cursor/rules/coffeeos-*.mdc` | удалены (остался `project/`) |
-| always-бандл index + agent-workflow + `.cursorrules` | сжат |
-| `todo.md` shift-close | stub · полный → `archive/todo-shift-close-2026-09.md` |
-| ISSUES 🔴 | короткая таблица ID/статус |
-| `coffeeos-performance` globs | без `test/**` (есть `coffeeos-tests`) |
-
-### uploads gitignore (2026-09-01)
-
-| Что | Статус |
-|-----|--------|
-| `.gitignore` — убран `!/public/uploads/products/` | **done** |
-| Локальные тест-файлы `public/uploads/products/*` | **удалены** (15 шт.) |
