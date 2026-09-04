@@ -38,13 +38,30 @@ module FlyRelease
     puts "[fly:release] WARN schema #{db_name}: #{e.class} #{e.message}"
   end
 
-  def migrate_with_retry!(task_name, marker_table: nil, attempts: 5)
+  def pending_primary_migrations?
+    versions = ActiveRecord::Base.connection.select_values("SELECT version FROM schema_migrations")
+    files = Dir[Rails.root.join("db/migrate/*.rb")].map { |f| File.basename(f).split("_", 2).first }
+    (files - versions).any?
+  rescue StandardError => e
+    puts "[fly:release] pending check failed: #{e.class} #{e.message}"
+    true
+  end
+
+  def migrate_with_retry!(task_name, marker_table: nil, attempts: 12)
     attempts.times do |i|
       Rake::Task[task_name].reenable
       Rake::Task[task_name].invoke
       return
     rescue ActiveRecord::ConcurrentMigrationError => e
-      puts "[fly:release] #{task_name} lock busy (attempt #{i + 1}/#{attempts}): #{e.message}"
+      msg = e.message.to_s
+      puts "[fly:release] #{task_name} lock busy (attempt #{i + 1}/#{attempts}): #{msg}"
+
+      # Neon/AR: DDL закоммичен, unlock упал — если pending нет, не валить release.
+      if task_name == "db:prepare" && !pending_primary_migrations?
+        puts "[fly:release] WARN #{task_name}: lock stuck, but no pending migrations — continue"
+        return
+      end
+
       if i >= attempts - 1
         if marker_table.present? && solid_marker_present?(marker_table)
           puts "[fly:release] WARN #{task_name}: lock stuck, but #{marker_table} exists — skip (same Neon URL as primary)"
@@ -53,7 +70,8 @@ module FlyRelease
         raise e
       end
 
-      sleep(2 * (i + 1))
+      # "another process" часто зомби после Failed to release — ждём дольше.
+      sleep(msg.include?("another migration process") ? (4 * (i + 1)) : (2 * (i + 1)))
     end
   end
 
