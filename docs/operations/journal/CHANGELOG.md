@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-04 — docs: intake #76 УК point campaign promo 11₽
+
+- ТЗ 1:1: `customer_tasks/УК — включение промо 11₽ при создании точки.md`
+- Artifacts: `uk_point_campaign_promo_11rub/`
+- CBR #76 + README customer_tasks; #75 статус → REVIEW+follow-up
+
 ## 2026-09-04 — fix(ci): retry importmap audit on npm ReadTimeout
 
 - `scan_js`: 3 попытки с backoff вокруг `bin/importmap audit` (флейк `Net::ReadTimeout`)

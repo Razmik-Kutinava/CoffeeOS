@@ -71,7 +71,8 @@
 | **SMS.ru stoplist/del (#59)** | Удалить номер из стоплиста | **GREEN `[x]`** 2026-08-11 · апрув `[ ]` | [SMS.ru API Удаление номера из стоплиста.md](SMS.ru%20API%20Удаление%20номера%20из%20стоплиста.md) |
 | **SMS.ru stoplist/get (#60)** | Выгрузить весь стоплист | **GREEN `[x]`** 2026-08-11 · апрув `[ ]` | [SMS.ru API Выгрузить весь стоплист.md](SMS.ru%20API%20Выгрузить%20весь%20стоплист.md) |
 | **SMS.ru webhooks (#61)** | Callback sms_status + callcheck_status | **GREEN `[x]`** 2026-08-11 · апрув `[ ]` | [SMS.ru API Webhooks статусы SMS и callcheck.md](SMS.ru%20API%20Webhooks%20статусы%20SMS%20и%20callcheck.md) |
-| **#75 Payment method binding + promo 11₽** | Единая привязка card+СБП + промо 11₽ + antifraud/velocity | **интейк `[x]`** 2026-09-04 · SPEC `[ ]` | [Привязка способа оплаты и промо 11₽.md](Привязка%20способа%20оплаты%20и%20промо%2011₽.md) |
+| **#75 Payment method binding + promo 11₽** | Единая привязка card+СБП + промо 11₽ + antifraud/velocity | **REVIEW + follow-up `[x]`** 2026-09-04 · CI/deploy апрув | [Привязка способа оплаты и промо 11₽.md](Привязка%20способа%20оплаты%20и%20промо%2011₽.md) |
+| **#76 УК point campaign promo 11₽** | УК: вкл. промо 11₽ на точке · `point_campaign_settings` · threshold/counter · без наследования | **интейк `[x]`** 2026-09-04 · SPEC `[ ]` | [УК — включение промо 11₽ при создании точки.md](УК%20—%20включение%20промо%2011₽%20при%20создании%20точки.md) |
 
 **Порядок работ:** апрув ТЗ Hidden → **go** код · новое ТЗ UserCards (после `go`) · **B1.13 S4** · **B1.14-4** · **B2.2** · **B1.4**.
 

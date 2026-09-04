@@ -2,12 +2,19 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-04 (CI scan_js retry)  
+**Дата:** 2026-09-04 (intake #76)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| CI importmap audit retry | CI green → deploy апрув · Fly MCP |
+| #76 УК point campaign promo 11₽ — PHASE 0 intake | `/spec` → SBR |
+
+### #76 УК — включение промо 11₽ при создании точки (2026-09-04)
+
+| Что | Статус |
+|-----|--------|
+| PHASE 0 intake (ТЗ 1:1 + artifacts + CBR) | **done** |
+| SPEC / SBR | **pending** |
 
 ### #75 Payment method binding + promo 11₽ (2026-09-04)
 

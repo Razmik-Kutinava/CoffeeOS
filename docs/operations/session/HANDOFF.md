@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-04 (CI scan_js retry)  
+**Дата:** 2026-09-04 (intake #76)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| CI importmap audit retry ×3 | CI green → deploy апрув · Fly MCP |
+| #76 УК point campaign promo 11₽ — intake | `/spec` → SBR |
 
-**last_done:** fix(ci) retry `bin/importmap audit` на npm ReadTimeout  
-**next_step:** дождаться CI green; deploy только по апруву
+**last_done:** docs intake #76 УК промо 11₽ при создании точки  
+**next_step:** `/spec` по #76 (`point_campaign_settings`)
 
 **ctx_trim:** `2026-09-02`
 
