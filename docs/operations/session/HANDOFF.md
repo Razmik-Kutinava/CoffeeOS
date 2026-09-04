@@ -2,16 +2,17 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-04 (SPEC #76)  
+**Дата:** 2026-09-04 (intake #77)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #76 SPEC · `point_campaign_settings` | `/sbr` RED |
+| #77 intake · subscription offer eligibility | `/spec` |
+| #76 SPEC · `point_campaign_settings` (parked) | `/sbr` RED |
 | CI scan_js soft-skip (отдельно) | CI green · deploy #75 апрув |
 
-**last_done:** SPEC #76 — todo файлы + Не ломать + Проверка  
-**next_step:** RED — тесты УК toggle / GrowthPromo gate / counter
+**last_done:** PHASE 0 intake #77 — ТЗ 1:1 + CBR + artifacts  
+**next_step:** `/spec` #77 (открытые вопросы §4 ТЗ)
 
 **ctx_trim:** `2026-09-02`
 

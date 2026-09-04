@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-04 — docs: intake #77 subscription offer eligibility
+
+- ТЗ 1:1: `customer_tasks/Умный показ оффера подписки — сигналы толерантности и УК-переключатель.md`
+- Artifacts: `subscription_offer_eligibility/`
+- CBR #77; #76 parked (SPEC done → `/sbr`); фокус сессии → `/spec` #77
+
 ## 2026-09-04 — docs: SPEC #76 point_campaign_settings
 
 - todo.md: Tenant=точка · УК form/show · GrowthPromo.point_allows_promo? · sync upsert
