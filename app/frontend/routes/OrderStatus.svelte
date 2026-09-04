@@ -13,6 +13,10 @@
     showReconnectBanner,
     CTA_STYLE
   } from "../lib/orderStatusCtaMachine.js"
+  import {
+    loadSubscriptionOfferCta,
+    subscriptionOfferCtaDefaults
+  } from "../lib/subscriptionOfferCta.js"
   import { downloadWalletPass } from "../lib/orderStatusNotifyActions.js"
   import { orderDeepLink } from "../lib/swNotificationActions.js"
   import {
@@ -41,6 +45,7 @@
   let ctaToast = $state("")
   let ctaLoading = $state(false)
   let unsubscribeCable = null
+  let offerCta = $state(subscriptionOfferCtaDefaults())
 
   const progress = $derived(order ? orderProgressView(order) : null)
   const deviceOs = $derived(getDeviceOS())
@@ -49,7 +54,10 @@
       ? orderStatusCtas({
           status: order.status,
           os: deviceOs,
-          canCancel: Boolean(order.can_cancel)
+          canCancel: Boolean(order.can_cancel),
+          subscriptionOfferEnabled: offerCta.subscriptionOfferEnabled,
+          secondCtaMode: offerCta.secondCtaMode,
+          eligibleForSubscriptionOffer: offerCta.eligibleForSubscriptionOffer
         })
       : { buttons: [], style: CTA_STYLE }
   )
@@ -173,9 +181,15 @@
       const url = orderDeepLink(order.id, kind)
       window.location.assign(url)
     }
+    if (kind === "subscription") {
+      push("/profile")
+    }
   }
 
   onMount(async () => {
+    loadSubscriptionOfferCta().then((v) => {
+      if (v) offerCta = v
+    })
     const orderId = params?.id
     if (!orderId) {
       err = "Не указан заказ"

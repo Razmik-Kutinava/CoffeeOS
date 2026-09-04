@@ -10,8 +10,9 @@ PWA / mobile витрина. Tenant: `@shop_tenant` из `tenant_id` query ил�
 
 | Method | Path | Service / controller | Notes |
 |--------|------|----------------------|-------|
-| GET | `config` | `ConfigController#show` | `operating_hours` (B1.11), tenant meta |
+| GET | `config` | `ConfigController#show` | `operating_hours` (B1.11), tenant meta; **#77** `subscription_offer: { enabled, second_cta_mode }` |
 | GET | `tenants` | `TenantsController#index` | выбор точки (B1.14) |
+| POST | `pwa_install` | `PwaInstallsController#create` | **#77** first `pwa_installed_at` (auth customer; idempotent) |
 
 **Edge:** `OperatingHoursGuard` — `orders#create` и все `payments/*` возвращают 422 если точка закрыта.
 
@@ -40,7 +41,7 @@ PWA / mobile витрина. Tenant: `@shop_tenant` из `tenant_id` query ил�
 
 | Method | Path | Service | Keys |
 |--------|------|---------|------|
-| GET/PATCH | `profile` | `ProfileController` | `mobile_customers.id` |
+| GET/PATCH | `profile` | `ProfileController` | `mobile_customers.id`; **#77** `eligible_for_subscription_offer` (server `SubscriptionOfferEligibility`; не путать с `orders_count`) |
 | POST | `profile/link_email` | `CustomerProfileMerger#link_email!` | merge donor→survivor |
 | POST | `profile/link_phone` | `CustomerProfileMerger#link_phone!` | перенос cards FK |
 | GET | `user/cards` | `UserCardsController` | `?email=` fallback; filter expired exp |
@@ -105,7 +106,7 @@ PWA / mobile витрина. Tenant: `@shop_tenant` из `tenant_id` query ил�
 
 | Method | Path | Service |
 |--------|------|---------|
-| POST | `push/register` | `PushRegistrationService` | `push_token`, FCM |
+| POST | `push/register` | `PushRegistrationService` | `push_token`, FCM; **#77** first `push_enabled_at` |
 
 Требует авторизованного customer (email). Детали: [`notify-loyalty.md`](notify-loyalty.md)
 

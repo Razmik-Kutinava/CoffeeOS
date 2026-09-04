@@ -2,26 +2,25 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-04 (/review #76 CI green)  
+**Дата:** 2026-09-04 (/review #77)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #76 REVIEW **CI green** | deploy только апрув · Fly MCP Point A |
-| #77 GREEN | `/regress` #77 (отдельно) |
+| #77 REVIEW → push/CI | CI green → стоп · deploy апрув |
+| #76 CI green | deploy апрув |
 
-### #76 УК — включение промо 11₽ при создании точки (2026-09-04)
+### #77 Subscription offer eligibility (2026-09-04)
 
 | Что | Статус |
 |-----|--------|
-| SPEC→RED→GREEN→regress | **done** |
-| bugbot medium (kitchen) | **fixed** `611fae1e` |
+| RED/GREEN/regress | **done** |
+| bugbot | **no bugs** |
 | security-review | **no medium+** |
-| Entire | `01M1P2BSG7MY3C0VM0FXCSZXRK` на `6c1966d2` |
-| push + CI | **green** [run 33868365000](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/33868365000) |
-| deploy / Fly MCP | **pending апрув** |
+| CTA wiring OrderActionButtons/OrderStatus | **done** (review follow-up) |
+| Entire / push / CI | **in progress** |
 
-### #77 — GREEN done · regress отдельно · REVIEW отдельно
+### #76 — CI green · deploy апрув
 
 ### #75 — deploy / Fly MCP pending апрув
 

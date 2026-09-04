@@ -1,13 +1,18 @@
 <script>
   /**
-   * #41 — изолированный блок CTA справа от progress bar.
+   * #41 / #77 — изолированный блок CTA справа от progress bar.
    * Маппинг только через orderStatusCtas; клики → onAction(kind).
    */
+  import { onMount } from "svelte"
   import { orderStatusCtas } from "../lib/orderStatusCtaMachine.js"
   import {
     ACTION_CTA_STYLE,
     ORDER_ACTION_TEST_IDS
   } from "../lib/orderActionButtons.js"
+  import {
+    loadSubscriptionOfferCta,
+    subscriptionOfferCtaDefaults
+  } from "../lib/subscriptionOfferCta.js"
 
   let {
     status = "",
@@ -18,12 +23,23 @@
     onAction = undefined
   } = $props()
 
+  let offerCta = $state(subscriptionOfferCtaDefaults())
+
+  onMount(() => {
+    loadSubscriptionOfferCta().then((v) => {
+      if (v) offerCta = v
+    })
+  })
+
   let view = $derived(
     orderStatusCtas({
       status,
       os,
       canCancel,
-      hasPushSubscription
+      hasPushSubscription,
+      subscriptionOfferEnabled: offerCta.subscriptionOfferEnabled,
+      secondCtaMode: offerCta.secondCtaMode,
+      eligibleForSubscriptionOffer: offerCta.eligibleForSubscriptionOffer
     })
   )
 

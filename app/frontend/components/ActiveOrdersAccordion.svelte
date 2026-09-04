@@ -87,6 +87,12 @@
       return
     }
 
+    // #77: subscription purchase UI out of scope — ЛК as landing until billing ships
+    if (kind === "subscription") {
+      window.location.hash = "#/profile"
+      return
+    }
+
     if (kind === "wallet" || kind === "push") {
       actionLoading = true
       const onToast = (msg) => {

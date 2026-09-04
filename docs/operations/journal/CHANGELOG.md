@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-04 — review: #77 subscription offer eligibility
+
+- bugbot: no bugs · security: no medium+
+- follow-up: wire config/profile into OrderActionButtons + OrderStatus; subscription click → ЛК
+- docs: shop-api + pwa-realtime (#77 contract)
+- Next: CI green · deploy апрув · Fly MCP Point A
+
 ## 2026-09-04 — ops: /regress #77 PASS subscription offer zone
 
 - eligibility + settings + profile/UK API: 20 runs / 79 assert PASS
