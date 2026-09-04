@@ -47,9 +47,38 @@ export function labelSbpAccount() {
   return "Ваш счет СБП"
 }
 
+/** #75 TOV сохранённого СБП без last4. */
+export function labelSbpBoundUsual() {
+  return "СБП · как обычно"
+}
+
 /** Чекбокс привязки счёта при первой оплате СБП. */
 export function labelBindSbpAccount() {
   return "Привязать счет для покупок в один клик"
+}
+
+/** #75 промо: чекбокс включён. */
+export function promoSaveToday11() {
+  return "Сохрани — счёт сегодня 11 ₽."
+}
+
+/** #75 nudge: чекбокс выключен. */
+export function promoNudgeInsteadOf(cartTotalRub) {
+  const sum = Number(cartTotalRub)
+  const pretty = Number.isFinite(sum) ? String(Math.round(sum)) : String(cartTotalRub ?? "")
+  return `Сохрани — счёт станет 11 ₽ вместо ${pretty} ₽.`
+}
+
+export function bindingBlockedMessage() {
+  return "Код не принят. Попробуй другой способ."
+}
+
+export function bindingStepUpMessage() {
+  return "Нужно подтверждение. Ещё раз код с SMS."
+}
+
+export function bindingRateLimitedMessage() {
+  return "Слишком часто. Следующая попытка — через 15 мин."
 }
 
 /** CTA кнопки оплаты при выбранном СБП (CODE:BLACK / deep link). */

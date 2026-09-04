@@ -8,8 +8,10 @@
     labelCardBy,
     labelAddCard,
     labelSbp,
-    labelSbpAccount,
+    labelSbpBoundUsual,
     labelBindSbpAccount,
+    promoSaveToday11,
+    promoNudgeInsteadOf,
     ctaSbpFastPay,
     ctaSbpAccountPay,
     paymentMethodLoadErrorMessage,
@@ -31,6 +33,8 @@
     selectedCardId = null,
     selectionMode = "saved_card", // saved_card | new_card | sbp | sbp_account
     saveSbpAccount = $bindable(true),
+    promoEligible = false,
+    cartTotalRub = 0,
     canPay = false,
     fsmState = PAY_FSM.DEFAULT,
     newCardState = $bindable(undefined),
@@ -124,7 +128,7 @@
               disabled={locked}
               onclick={() => onSelectSbpAccount?.()}
             >
-              <span class="pm-row__label pm-row__label--solo">{labelSbpAccount()}</span>
+              <span class="pm-row__label pm-row__label--solo">{labelSbpBoundUsual()}</span>
             </button>
           </li>
         {/if}
@@ -197,6 +201,11 @@
           />
           <span class="pm-bind-sbp__text">{labelBindSbpAccount()}</span>
         </label>
+        {#if promoEligible}
+          <p class="pm-promo" data-testid="payment-promo-11rub">
+            {saveSbpAccount ? promoSaveToday11() : promoNudgeInsteadOf(cartTotalRub)}
+          </p>
+        {/if}
       {/if}
 
       {#if selectionMode === "new_card" && newCardState}
@@ -384,6 +393,14 @@
 
   .pm-bind-sbp__text {
     flex: 1;
+  }
+
+  .pm-promo {
+    margin: 0 0 0.75rem;
+    padding: 0 0.25rem;
+    font-size: 0.8125rem;
+    line-height: 1.35;
+    color: #a0a0a0;
   }
 
   .pm-row__brand {

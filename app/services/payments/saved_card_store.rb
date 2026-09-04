@@ -3,6 +3,8 @@
 module Payments
   # Upsert UserCards (mobile_payment_methods) после CONFIRMED + RebillId.
   class SavedCardStore
+    BLOCKED = :blocked_method_taken
+
     # Стабильный keyed hash от CardId эквайринга (глобальная идентичность карты).
     # Pepper: CARD_HASH_PEPPER / credentials — не ротировать вместе с SECRET_KEY_BASE.
     def self.card_hash_for(bank_card_id)
@@ -59,7 +61,7 @@ module Payments
 
       if foreign_active_binding?(customer_id, card_hash: card_hash, bank_card_id: bank_card_id)
         log_binding_rejected
-        return nil
+        return BLOCKED
       end
 
       MobilePaymentMethod.transaction do
@@ -86,7 +88,7 @@ module Payments
       end
     rescue ActiveRecord::RecordNotUnique
       log_binding_rejected
-      nil
+      BLOCKED
     end
 
     private

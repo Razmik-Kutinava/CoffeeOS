@@ -19,11 +19,14 @@ module Payments
       return if customer_id.blank?
 
       result = @autopay.get_add_account_qr_state(request_key: request_key)
-      SbpAccountTokenStore.persist!(
+      stored = SbpAccountTokenStore.persist!(
         customer_id: customer_id,
         account_token: result[:account_token],
         request_key: request_key
       )
+      return if stored == SbpAccountTokenStore::BLOCKED
+
+      stored
     end
 
     private

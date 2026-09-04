@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_31_160000) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_04_120100) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_stat_statements"
@@ -81,8 +81,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_31_160000) do
     t.index ["tenant_id", "status"], name: "idx_billing_subscriptions_tenant_status"
     t.index ["tenant_id"], name: "index_billing_subscriptions_on_tenant_id"
     t.check_constraint "amount_paid >= 0::numeric", name: "chk_amount_paid"
-    t.check_constraint "billing_period::text = ANY (ARRAY['monthly'::character varying, 'yearly'::character varying, 'trial'::character varying, 'free'::character varying]::text[])", name: "chk_billing_period"
-    t.check_constraint "status::text = ANY (ARRAY['active'::character varying, 'cancelled'::character varying, 'expired'::character varying, 'past_due'::character varying]::text[])", name: "chk_subscription_status"
+    t.check_constraint "billing_period::text = ANY (ARRAY['monthly'::character varying::text, 'yearly'::character varying::text, 'trial'::character varying::text, 'free'::character varying::text])", name: "chk_billing_period"
+    t.check_constraint "status::text = ANY (ARRAY['active'::character varying::text, 'cancelled'::character varying::text, 'expired'::character varying::text, 'past_due'::character varying::text])", name: "chk_subscription_status"
   end
 
   create_table "blog_categories", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -112,6 +112,27 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_31_160000) do
     t.index ["blog_category_id"], name: "index_blog_posts_on_blog_category_id"
     t.index ["published_at"], name: "index_blog_posts_on_published_at"
     t.index ["slug"], name: "index_blog_posts_on_slug", unique: true
+  end
+
+  create_table "card_binding_attempts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "account_id"
+    t.string "bin", limit: 8
+    t.datetime "created_at", null: false
+    t.string "device_fingerprint", limit: 128
+    t.string "ip", limit: 64
+    t.boolean "is_growth_event", default: false, null: false
+    t.string "method_hash", limit: 64
+    t.string "method_type", limit: 20, null: false
+    t.string "phone", limit: 20
+    t.uuid "point_id"
+    t.string "reason", limit: 128
+    t.string "result", limit: 64, default: "ok", null: false
+    t.datetime "updated_at", null: false
+    t.boolean "verification_charge_required", default: false, null: false
+    t.index ["is_growth_event", "method_hash"], name: "idx_card_binding_attempts_growth_hash"
+    t.index ["is_growth_event", "phone"], name: "idx_card_binding_attempts_growth_phone"
+    t.index ["method_hash"], name: "idx_card_binding_attempts_method_hash"
+    t.index ["phone"], name: "idx_card_binding_attempts_phone"
   end
 
   create_table "cash_shifts", id: :uuid, default: -> { "gen_random_uuid()" }, comment: "Кассовые смены", force: :cascade do |t|
@@ -272,7 +293,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_31_160000) do
     t.index ["is_semifinished"], name: "idx_ingredients_semifinished", where: "(is_semifinished = true)"
     t.index ["name"], name: "index_ingredients_on_name"
     t.index ["storage_temp"], name: "idx_ingredients_storage_temp"
-    t.check_constraint "storage_temp IS NULL OR (storage_temp::text = ANY (ARRAY['room'::character varying, 'refrigerated'::character varying, 'frozen'::character varying]::text[]))", name: "chk_ingredient_storage_temp"
+    t.check_constraint "storage_temp IS NULL OR (storage_temp::text = ANY (ARRAY['room'::character varying::text, 'refrigerated'::character varying::text, 'frozen'::character varying::text]))", name: "chk_ingredient_storage_temp"
   end
 
   create_table "kiosk_carts", id: :uuid, default: -> { "gen_random_uuid()" }, comment: "Корзины киоска (привязка к сессии)", force: :cascade do |t|
@@ -337,7 +358,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_31_160000) do
     t.index ["customer_id"], name: "index_loyalty_accounts_on_customer_id", unique: true
     t.index ["level"], name: "index_loyalty_accounts_on_level"
     t.check_constraint "balance >= 0", name: "chk_loyalty_balance"
-    t.check_constraint "level::text = ANY (ARRAY['bronze'::character varying, 'silver'::character varying, 'gold'::character varying, 'platinum'::character varying]::text[])", name: "chk_loyalty_level"
+    t.check_constraint "level::text = ANY (ARRAY['bronze'::character varying::text, 'silver'::character varying::text, 'gold'::character varying::text, 'platinum'::character varying::text])", name: "chk_loyalty_level"
     t.check_constraint "lifetime_earned >= 0", name: "chk_loyalty_lifetime_earned"
     t.check_constraint "lifetime_spent >= 0", name: "chk_loyalty_lifetime_spent"
   end
@@ -360,7 +381,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_31_160000) do
     t.index ["transaction_type"], name: "idx_loyalty_tx_type"
     t.check_constraint "balance_after >= 0", name: "chk_loyalty_txn_balance_after"
     t.check_constraint "points > 0", name: "chk_loyalty_txn_points"
-    t.check_constraint "transaction_type::text = ANY (ARRAY['earn'::character varying, 'spend'::character varying, 'expire'::character varying, 'manual_add'::character varying, 'manual_subtract'::character varying]::text[])", name: "chk_loyalty_txn_type"
+    t.check_constraint "transaction_type::text = ANY (ARRAY['earn'::character varying::text, 'spend'::character varying::text, 'expire'::character varying::text, 'manual_add'::character varying::text, 'manual_subtract'::character varying::text])", name: "chk_loyalty_txn_type"
   end
 
   create_table "menu_types", id: :uuid, default: -> { "gen_random_uuid()" }, comment: "Типы меню (kiosk, main, seasonal)", force: :cascade do |t|
@@ -438,11 +459,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_31_160000) do
     t.string "payment_type", limit: 20, default: "card", null: false
     t.index ["bank_card_id"], name: "idx_mpm_active_bank_card_id_unique", unique: true, where: "((is_active = true) AND (bank_card_id IS NOT NULL) AND ((payment_type)::text = 'card'::text))"
     t.index ["card_hash"], name: "idx_mpm_active_card_hash_unique", unique: true, where: "((is_active = true) AND (card_hash IS NOT NULL) AND ((payment_type)::text = 'card'::text))"
+    t.index ["card_hash"], name: "idx_mpm_active_sbp_method_hash_unique", unique: true, where: "((is_active = true) AND (card_hash IS NOT NULL) AND ((payment_type)::text = 'sbp'::text))"
     t.index ["customer_id", "is_active"], name: "idx_pm_active", where: "(is_active = true)"
     t.index ["customer_id"], name: "idx_pm_customer"
     t.index ["customer_id"], name: "idx_pm_default", where: "((is_default = true) AND (is_active = true))"
     t.index ["customer_id"], name: "index_mobile_payment_methods_on_customer_id"
-    t.check_constraint "payment_type::text = ANY (ARRAY['card'::character varying, 'sbp'::character varying, 'ya_pay'::character varying]::text[])", name: "chk_pm_type"
+    t.check_constraint "payment_type::text = ANY (ARRAY['card'::character varying::text, 'sbp'::character varying::text, 'ya_pay'::character varying::text])", name: "chk_pm_type"
   end
 
   create_table "mobile_sessions", id: :uuid, default: -> { "gen_random_uuid()" }, comment: "Сессии мобильного приложения", force: :cascade do |t|
@@ -533,7 +555,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_31_160000) do
     t.index ["tenant_id", "created_at"], name: "idx_feedback_tenant_created", order: { created_at: :desc }
     t.index ["tenant_id"], name: "index_order_feedback_on_tenant_id"
     t.check_constraint "rating >= 1 AND rating <= 5", name: "chk_feedback_rating"
-    t.check_constraint "sentiment IS NULL OR (sentiment::text = ANY (ARRAY['positive'::character varying, 'neutral'::character varying, 'negative'::character varying]::text[]))", name: "chk_feedback_sentiment"
+    t.check_constraint "sentiment IS NULL OR (sentiment::text = ANY (ARRAY['positive'::character varying::text, 'neutral'::character varying::text, 'negative'::character varying::text]))", name: "chk_feedback_sentiment"
   end
 
   create_table "order_items", id: :uuid, default: -> { "gen_random_uuid()" }, comment: "Позиции заказа (продукты + модификаторы)", force: :cascade do |t|
@@ -565,8 +587,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_31_160000) do
     t.index ["order_id", "channel", "created_at"], name: "idx_order_notification_logs_order_channel"
     t.index ["order_id"], name: "idx_order_notification_logs_order"
     t.index ["tenant_id", "created_at"], name: "idx_order_notification_logs_tenant_created", order: { created_at: :desc }
-    t.check_constraint "channel::text = ANY (ARRAY['telegram'::character varying, 'sms'::character varying]::text[])", name: "chk_order_notification_logs_channel"
-    t.check_constraint "status::text = ANY (ARRAY['pending'::character varying, 'sent'::character varying, 'failed'::character varying, 'skipped'::character varying]::text[])", name: "chk_order_notification_logs_status"
+    t.check_constraint "channel::text = ANY (ARRAY['telegram'::character varying::text, 'sms'::character varying::text])", name: "chk_order_notification_logs_channel"
+    t.check_constraint "status::text = ANY (ARRAY['pending'::character varying::text, 'sent'::character varying::text, 'failed'::character varying::text, 'skipped'::character varying::text])", name: "chk_order_notification_logs_status"
   end
 
   create_table "order_status_logs", id: :uuid, default: -> { "gen_random_uuid()" }, comment: "История изменений статуса заказа", force: :cascade do |t|
@@ -638,7 +660,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_31_160000) do
     t.index ["tenant_id", "order_number"], name: "idx_orders_tenant_number", unique: true
     t.index ["tenant_id", "status"], name: "index_orders_on_tenant_id_and_status"
     t.index ["tenant_id"], name: "index_orders_on_tenant_id"
-    t.check_constraint "pickup_method IS NULL OR (pickup_method::text = ANY (ARRAY['qr'::character varying, 'manual'::character varying, 'auto'::character varying]::text[]))", name: "chk_pickup_method"
+    t.check_constraint "pickup_method IS NULL OR (pickup_method::text = ANY (ARRAY['qr'::character varying::text, 'manual'::character varying::text, 'auto'::character varying::text]))", name: "chk_pickup_method"
     t.check_constraint "total_amount > 0::numeric AND discount_amount >= 0::numeric AND final_amount >= 0::numeric AND final_amount = (total_amount - discount_amount)", name: "chk_order_amounts"
   end
 
@@ -712,7 +734,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_31_160000) do
     t.index ["order_id"], name: "index_pickup_calls_on_order_id"
     t.index ["tenant_id", "called_at"], name: "idx_pickup_calls_tenant_created", order: { called_at: :desc }
     t.index ["tenant_id"], name: "index_pickup_calls_on_tenant_id"
-    t.check_constraint "call_type::text = ANY (ARRAY['ready'::character varying, 'reminder'::character varying]::text[])", name: "chk_pickup_call_type"
+    t.check_constraint "call_type::text = ANY (ARRAY['ready'::character varying::text, 'reminder'::character varying::text])", name: "chk_pickup_call_type"
   end
 
   create_table "pickup_display_settings", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -734,7 +756,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_31_160000) do
     t.index ["tenant_id"], name: "idx_pickup_display_settings_tenant"
     t.index ["tenant_id"], name: "index_pickup_display_settings_on_tenant_id"
     t.check_constraint "auto_complete_seconds IS NULL OR auto_complete_seconds > 0", name: "chk_pickup_auto_complete_seconds"
-    t.check_constraint "display_mode::text = ANY (ARRAY['number'::character varying, 'name'::character varying, 'both'::character varying]::text[])", name: "chk_pickup_display_mode"
+    t.check_constraint "display_mode::text = ANY (ARRAY['number'::character varying::text, 'name'::character varying::text, 'both'::character varying::text])", name: "chk_pickup_display_mode"
     t.check_constraint "items_visible_count >= 1 AND items_visible_count <= 20", name: "chk_pickup_items_visible_count"
   end
 
@@ -753,7 +775,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_31_160000) do
     t.index ["order_id"], name: "index_pickup_events_on_order_id"
     t.index ["tenant_id", "created_at"], name: "idx_pickup_events_tenant_created", order: { created_at: :desc }
     t.index ["tenant_id"], name: "index_pickup_events_on_tenant_id"
-    t.check_constraint "event_type::text = ANY (ARRAY['ready'::character varying, 'called'::character varying, 'qr_scanned'::character varying, 'issued'::character varying, 'timeout'::character varying, 'not_picked_up'::character varying]::text[])", name: "chk_pickup_event_type"
+    t.check_constraint "event_type::text = ANY (ARRAY['ready'::character varying::text, 'called'::character varying::text, 'qr_scanned'::character varying::text, 'issued'::character varying::text, 'timeout'::character varying::text, 'not_picked_up'::character varying::text])", name: "chk_pickup_event_type"
   end
 
   create_table "prep_kitchen_sales_point_links", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -844,7 +866,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_31_160000) do
     t.index ["product_id"], name: "index_product_tenant_settings_on_product_id"
     t.index ["tenant_id", "is_enabled", "is_sold_out"], name: "idx_pts_tenant_enabled"
     t.index ["tenant_id"], name: "index_product_tenant_settings_on_tenant_id"
-    t.check_constraint "is_sold_out = false AND sold_out_reason IS NULL OR is_sold_out = true AND (sold_out_reason::text = ANY (ARRAY['manual'::character varying, 'stock_empty'::character varying]::text[]))", name: "chk_sold_out_reason"
+    t.check_constraint "is_sold_out = false AND sold_out_reason IS NULL OR is_sold_out = true AND (sold_out_reason::text = ANY (ARRAY['manual'::character varying::text, 'stock_empty'::character varying::text]))", name: "chk_sold_out_reason"
   end
 
   create_table "production_batches", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -867,7 +889,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_31_160000) do
     t.index ["tenant_id", "status"], name: "idx_production_batches_tenant_status"
     t.index ["tenant_id"], name: "index_production_batches_on_tenant_id"
     t.check_constraint "quantity > 0::numeric", name: "chk_batch_quantity"
-    t.check_constraint "status::text = ANY (ARRAY['planned'::character varying, 'in_progress'::character varying, 'completed'::character varying, 'cancelled'::character varying]::text[])", name: "chk_batch_status"
+    t.check_constraint "status::text = ANY (ARRAY['planned'::character varying::text, 'in_progress'::character varying::text, 'completed'::character varying::text, 'cancelled'::character varying::text])", name: "chk_batch_status"
   end
 
   create_table "production_recipes", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -922,7 +944,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_31_160000) do
     t.index ["tenant_id", "used_at"], name: "idx_promo_usage_tenant_used", order: { used_at: :desc }
     t.index ["tenant_id"], name: "index_promo_code_usages_on_tenant_id"
     t.check_constraint "discount_amount >= 0::numeric", name: "chk_promo_usage_discount"
-    t.check_constraint "status::text = ANY (ARRAY['applied'::character varying, 'reverted'::character varying]::text[])", name: "chk_promo_usage_status"
+    t.check_constraint "status::text = ANY (ARRAY['applied'::character varying::text, 'reverted'::character varying::text])", name: "chk_promo_usage_status"
   end
 
   create_table "promo_codes", id: :uuid, default: -> { "gen_random_uuid()" }, comment: "Промокоды для скидок", force: :cascade do |t|
@@ -964,7 +986,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_31_160000) do
     t.index ["status"], name: "index_push_notifications_on_status"
     t.index ["tenant_id", "notification_type"], name: "idx_push_tenant_type"
     t.index ["tenant_id"], name: "index_push_notifications_on_tenant_id"
-    t.check_constraint "status::text = ANY (ARRAY['pending'::character varying, 'sent'::character varying, 'failed'::character varying, 'read'::character varying]::text[])", name: "chk_push_status"
+    t.check_constraint "status::text = ANY (ARRAY['pending'::character varying::text, 'sent'::character varying::text, 'failed'::character varying::text, 'read'::character varying::text])", name: "chk_push_status"
   end
 
   create_table "refunds", id: :uuid, default: -> { "gen_random_uuid()" }, comment: "Возвраты средств", force: :cascade do |t|
@@ -1180,7 +1202,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_31_160000) do
     t.index ["requested_by_id"], name: "index_supply_orders_on_requested_by_id"
     t.index ["to_tenant_id", "status"], name: "idx_supply_orders_to_tenant_status"
     t.check_constraint "from_tenant_id <> to_tenant_id", name: "chk_supply_order_tenants"
-    t.check_constraint "status::text = ANY (ARRAY['pending'::character varying, 'confirmed'::character varying, 'shipped'::character varying, 'received'::character varying, 'cancelled'::character varying]::text[])", name: "chk_supply_order_status"
+    t.check_constraint "status::text = ANY (ARRAY['pending'::character varying::text, 'confirmed'::character varying::text, 'shipped'::character varying::text, 'received'::character varying::text, 'cancelled'::character varying::text])", name: "chk_supply_order_status"
   end
 
   create_table "tenant_invitations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -1201,7 +1223,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_31_160000) do
     t.index ["tenant_id", "status"], name: "idx_tenant_invitations_tenant_status"
     t.index ["tenant_id"], name: "index_tenant_invitations_on_tenant_id"
     t.index ["token"], name: "idx_tenant_invitations_token", unique: true
-    t.check_constraint "status::text = ANY (ARRAY['pending'::character varying, 'accepted'::character varying, 'expired'::character varying, 'cancelled'::character varying]::text[])", name: "chk_invitation_status"
+    t.check_constraint "status::text = ANY (ARRAY['pending'::character varying::text, 'accepted'::character varying::text, 'expired'::character varying::text, 'cancelled'::character varying::text])", name: "chk_invitation_status"
   end
 
   create_table "tenant_weekday_schedules", id: :uuid, default: -> { "gen_random_uuid()" }, comment: "B1.11: часы работы точки по дням недели", force: :cascade do |t|

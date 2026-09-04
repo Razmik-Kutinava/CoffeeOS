@@ -66,6 +66,15 @@ class MobilePaymentMethod < ApplicationRecord
     card_masked
   end
 
+  # #75: method_hash — канон дедупа; для card/sbp хранится в card_hash.
+  def method_hash
+    card_hash
+  end
+
+  def method_hash=(value)
+    self.card_hash = value
+  end
+
   # UserCards.rebill_id в ТЗ
   def rebill_id
     card_token

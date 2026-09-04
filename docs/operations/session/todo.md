@@ -12,8 +12,16 @@
 
 - [x] **SPEC** — файлы + Не ломать + Проверка
 - [x] **RED** — падающие тесты binding/promo/velocity `[RED]`
-- [ ] **GREEN** — реализация + регрессия зоны `[GREEN]`
+- [x] **GREEN** — реализация + регрессия зоны `[GREEN]` (slice 1: hash/SBP unique / attempts / GrowthPromo / TOV)
 - [ ] **REVIEW** — bugbot + security-review · Entire · push CI
+
+### Follow-up (не в этом GREEN)
+
+- [ ] velocity limits (phone/device/IP/BIN) + phone_status enum + step-up OTP
+- [ ] mark_used! на CONFIRMED callback (growth только после успешной оплаты)
+- [ ] Checkout.svelte: прокинуть `promoEligible` / `cartTotalRub` в sheet
+- [ ] audit/dedupe существующих SBP дублей
+- [ ] matching перевыпущенной карты — out of scope без надёжного признака
 
 ## Файлы (ожидаемо)
 

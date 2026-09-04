@@ -39,6 +39,19 @@ module Shop
 
       customer = find_or_create_customer!(params)
 
+      save_card = ActiveModel::Type::Boolean.new.cast(params.fetch(:save_card, false))
+      save_sbp = ActiveModel::Type::Boolean.new.cast(params.fetch(:save_sbp_account, false))
+      bind_requested = save_card || save_sbp
+      charge_total = Payments::GrowthPromo.charge_amount(
+        cart_total: total,
+        tenant: @tenant,
+        customer: customer,
+        bind_requested: bind_requested,
+        method_hash: params[:method_hash]
+      )
+      growth_intent = bind_requested && charge_total == Payments::GrowthPromo::AMOUNT_RUB.to_d
+      total = charge_total
+
       flow = payment_flow(payment_method)
 
       order = nil
@@ -97,7 +110,13 @@ module Shop
           method: payment_method,
           provider: "shop",
           status: flow[:payment_status],
-          paid_at: flow[:paid_at]
+          paid_at: flow[:paid_at],
+          provider_data: {
+            "save_card" => save_card,
+            "save_sbp_account" => save_sbp,
+            "growth_promo_intent" => growth_intent,
+            "cart_total_before_growth" => (subtotal - discount).round(2).to_s
+          }
         )
 
         Inventory::OrderRecipeDeduction.call!(order: order.reload) if flow[:order_status] == :accepted

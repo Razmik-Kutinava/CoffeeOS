@@ -1,10 +1,21 @@
 # frozen_string_literal: true
 
 module Payments
-  # #34: AccountToken СБП в mobile_payment_methods (payment_type=sbp).
-  # RequestKey → bank_card_id для идемпотентности без DDL.
+  # #34 + #75: AccountToken СБП в mobile_payment_methods; стабильный method_hash + unique active.
   class SbpAccountTokenStore
     REQUEST_CACHE_TTL = 30.days
+    BLOCKED = :blocked_method_taken
+
+    def self.method_hash_for(account_token)
+      token = account_token.to_s.presence
+      return if token.blank?
+
+      OpenSSL::HMAC.hexdigest(
+        "SHA256",
+        SavedCardStore.card_hash_pepper,
+        "mobile_payment_methods.sbp_method_hash.v1:#{token}"
+      )
+    end
 
     def self.persist!(customer_id:, account_token:, request_key:)
       new.persist!(customer_id: customer_id, account_token: account_token, request_key: request_key)
@@ -20,10 +31,16 @@ module Payments
 
       rk = request_key.to_s.presence
       cache_key = rk.present? ? "tbank:sbp_account:#{rk}" : nil
+      method_hash = self.class.method_hash_for(account_token)
 
       if cache_key && (cached_id = Rails.cache.read(cache_key)).present?
         existing = MobilePaymentMethod.find_by(id: cached_id, customer_id: customer_id, payment_type: "sbp")
         return existing if existing
+      end
+
+      if foreign_active_binding?(customer_id, method_hash: method_hash)
+        log_binding_rejected
+        return BLOCKED
       end
 
       MobilePaymentMethod.transaction do
@@ -35,10 +52,18 @@ module Payments
           payment_type: "sbp",
           card_token: account_token.to_s
         )
+        if row.nil? && method_hash.present?
+          row = MobilePaymentMethod.find_by(
+            customer_id: customer_id,
+            payment_type: "sbp",
+            card_hash: method_hash
+          )
+        end
         row ||= MobilePaymentMethod.new(customer_id: customer_id, payment_type: "sbp")
 
         row.card_token = account_token.to_s
         row.bank_card_id = rk if rk.present?
+        row.card_hash = method_hash if method_hash
         row.card_masked = "СБП"
         row.card_brand = "SBP"
         row.is_active = true
@@ -48,6 +73,9 @@ module Payments
         Rails.cache.write(cache_key, row.id, expires_in: REQUEST_CACHE_TTL) if cache_key
         row
       end
+    rescue ActiveRecord::RecordNotUnique
+      log_binding_rejected
+      BLOCKED
     end
 
     def handle_charge_outcome!(customer_id:, account_token:, fatal:)
@@ -56,6 +84,21 @@ module Payments
       MobilePaymentMethod
         .where(customer_id: customer_id, payment_type: "sbp", card_token: account_token.to_s)
         .update_all(is_active: false)
+    end
+
+    private
+
+    def foreign_active_binding?(customer_id, method_hash:)
+      return false if method_hash.blank?
+
+      MobilePaymentMethod
+        .where(is_active: true, payment_type: "sbp", card_hash: method_hash)
+        .where.not(customer_id: customer_id)
+        .exists?
+    end
+
+    def log_binding_rejected
+      Rails.logger.info("[SbpAccountTokenStore] method_binding_rejected")
     end
   end
 end

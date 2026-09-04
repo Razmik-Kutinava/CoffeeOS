@@ -54,7 +54,7 @@ class Payments::SavedCardStoreTest < ActiveSupport::TestCase
     end
 
     assert_nil error, "[TDD] unique conflict не должен давать 500/исключение наружу: #{error&.class}: #{error&.message}"
-    assert_nil refusal, "[TDD] отказ привязки — nil (нейтральный результат)"
+    assert_equal :blocked_method_taken, refusal
 
     assert_equal 1, MobilePaymentMethod.where(card_hash: first.card_hash, is_active: true).count
     assert_equal 0, MobilePaymentMethod.where(customer_id: @customer_b.id, payment_type: "card", is_active: true).count
@@ -103,7 +103,7 @@ class Payments::SavedCardStoreTest < ActiveSupport::TestCase
     threads.each(&:join)
 
     assert errors.all?(&:nil?), "[TDD] race не должен ронять необработанным: #{errors.compact.map { |e| "#{e.class}: #{e.message}" }}"
-    winners = results.compact
+    winners = results.select { |r| r.is_a?(MobilePaymentMethod) }
     assert_equal 1, winners.size, "[TDD] ровно одна успешная привязка, got=#{results.inspect}"
     hash = Payments::SavedCardStore.card_hash_for(card_id)
     assert_equal 1, MobilePaymentMethod.where(card_hash: hash, is_active: true).count
@@ -124,7 +124,7 @@ class Payments::SavedCardStoreTest < ActiveSupport::TestCase
     )
 
     refusal = persist!(@customer_b, card_id: "card-legacy-1", rebill: "rebill-legacy-b", pan: "430000******6666")
-    assert_nil refusal
+    assert_equal :blocked_method_taken, refusal
     assert_equal 0, MobilePaymentMethod.where(customer_id: @customer_b.id, payment_type: "card", is_active: true).count
   end
 
