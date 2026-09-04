@@ -52,6 +52,13 @@ class CardBindingAttempt < ApplicationRecord
     where(is_growth_event: true, method_hash: method_hash.to_s).exists?
   end
 
+  # #76: MVP-счётчик точки — все method_type (card+SBP), только is_growth_event.
+  def self.growth_count_for_point(point_id)
+    return 0 if point_id.blank?
+
+    where(point_id: point_id, is_growth_event: true).count
+  end
+
   # PII retention: обычные попытки — 90д; growth — 2г (только digest/hash).
   def self.purge_expired!
     deleted = where(is_growth_event: false).where("created_at < ?", RETENTION.ago).delete_all

@@ -83,10 +83,21 @@ module Payments
         customer_id: customer.id,
         tenant_id: order.tenant_id
       )
+
+      setting = PointCampaignSetting.card_binding_promo_for(order.tenant_id)
+      setting&.refresh_counter!
     end
 
+    # #76: промо только при enabled campaign и counter < threshold (агрегат по point_id).
     def self.point_allows_promo?(tenant)
-      tenant.present?
+      return false if tenant.blank?
+
+      setting = PointCampaignSetting.card_binding_promo_for(tenant.id)
+      return false unless setting&.enabled?
+
+      count = CardBindingAttempt.growth_count_for_point(tenant.id)
+      setting.update_column(:counter, count) if setting.counter != count
+      count < setting.threshold.to_i
     end
     private_class_method :point_allows_promo?
   end

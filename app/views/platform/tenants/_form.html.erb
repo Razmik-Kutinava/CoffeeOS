@@ -39,5 +39,25 @@
     </p>
   <% end %>
 
+  <% if tenant.sales_point? || tenant.type.to_s == "sales_point" || tenant.new_record? %>
+    <% promo = local_assigns[:card_binding_promo] || @card_binding_promo || (tenant.persisted? ? PointCampaignSetting.card_binding_promo_for(tenant.id) : nil) %>
+    <h2 style="font-size: 1rem; margin-top: 1.5rem;">Промо 11₽</h2>
+    <p style="font-size: 12px; color: #94a3b8;">Пилот привязки способа оплаты на этой точке. Не наследуется другими точками города.</p>
+    <p>
+      <%= hidden_field_tag "point_campaign[card_binding_promo_enabled]", "0" %>
+      <%= check_box_tag "point_campaign[card_binding_promo_enabled]", "1", promo&.enabled?, id: "promo_11_enabled" %>
+      <%= label_tag "promo_11_enabled", "Промо 11₽" %>
+    </p>
+    <p>
+      <%= label_tag "promo_11_threshold", "Порог (сохранённых способов)" %>
+      <%= number_field_tag "point_campaign[card_binding_promo_threshold]",
+            promo&.threshold || PointCampaignSetting::DEFAULT_THRESHOLD,
+            min: 1, id: "promo_11_threshold", style: "width: 6rem;" %>
+    </p>
+    <% if promo %>
+      <p style="font-size: 12px; color: #94a3b8;">Счётчик: <%= promo.counter %> / <%= promo.threshold %></p>
+    <% end %>
+  <% end %>
+
   <%= f.submit tenant.persisted? ? "Сохранить" : "Создать" %>
 <% end %>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_04_140000) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_04_160000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_stat_statements"
@@ -782,6 +782,18 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_04_140000) do
     t.check_constraint "event_type::text = ANY (ARRAY['ready'::character varying::text, 'called'::character varying::text, 'qr_scanned'::character varying::text, 'issued'::character varying::text, 'timeout'::character varying::text, 'not_picked_up'::character varying::text])", name: "chk_pickup_event_type"
   end
 
+  create_table "point_campaign_settings", id: :uuid, default: -> { "gen_random_uuid()" }, comment: "#76: point-level campaigns (card_binding_promo, …)", force: :cascade do |t|
+    t.string "campaign_type", limit: 64, null: false
+    t.jsonb "config", default: {}, null: false
+    t.integer "counter", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.boolean "enabled", default: false, null: false
+    t.uuid "point_id", null: false
+    t.integer "threshold", default: 100, null: false
+    t.datetime "updated_at", null: false
+    t.index ["point_id", "campaign_type"], name: "idx_point_campaign_settings_point_type", unique: true
+  end
+
   create_table "prep_kitchen_sales_point_links", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.uuid "prep_kitchen_tenant_id", null: false
@@ -1386,6 +1398,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_04_140000) do
   add_foreign_key "pickup_events", "orders", on_delete: :cascade
   add_foreign_key "pickup_events", "tenants", on_delete: :cascade
   add_foreign_key "pickup_events", "users", column: "created_by_id", on_delete: :nullify
+  add_foreign_key "point_campaign_settings", "tenants", column: "point_id"
   add_foreign_key "prep_kitchen_sales_point_links", "tenants", column: "prep_kitchen_tenant_id", on_delete: :cascade
   add_foreign_key "prep_kitchen_sales_point_links", "tenants", column: "sales_point_tenant_id", on_delete: :cascade
   add_foreign_key "product_menu_visibilities", "menu_types", on_delete: :cascade

@@ -8,6 +8,14 @@
 
 <%= render "entry_points_card", tenant: @tenant, entry_points: @entry_points %>
 
+<% if @card_binding_promo %>
+  <section style="margin: 1.25rem 0; padding: 1rem; border: 1px solid #334155; border-radius: 8px; max-width: 520px;">
+    <h2 style="font-size: 1rem; margin: 0 0 0.5rem;">Промо 11₽</h2>
+    <p style="margin: 0.25rem 0;">Состояние: <strong><%= @card_binding_promo.enabled? ? "включено" : "выключено" %></strong></p>
+    <p style="margin: 0.25rem 0;">Счётчик: <strong><%= @card_binding_promo.counter %></strong> / порог <strong><%= @card_binding_promo.threshold %></strong></p>
+  </section>
+<% end %>
+
 <% if @tenant.production_kitchen? %>
   <%= render "prep_kitchen_links_card",
              kitchen: @tenant,

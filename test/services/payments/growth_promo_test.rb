@@ -9,6 +9,14 @@ class Payments::GrowthPromoTest < ActiveSupport::TestCase
   setup do
     @tenant = create_tenant!
     Current.tenant_id = @tenant.id
+    PointCampaignSetting.create!(
+      point_id: @tenant.id,
+      campaign_type: PointCampaignSetting::CAMPAIGN_CARD_BINDING_PROMO,
+      enabled: true,
+      threshold: 1000,
+      counter: 0,
+      config: { "promo_amount_rub" => 11 }
+    )
     @phone = "+7900#{format('%07d', rand(10_000_000))}"
     @customer = create_mobile_customer!(phone: @phone, email: "growth-#{SecureRandom.hex(3)}@example.com")
   end

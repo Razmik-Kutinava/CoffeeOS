@@ -2,29 +2,30 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-04 (SPEC #77)  
+**Дата:** 2026-09-04 (GREEN #76)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #77 SPEC в todo.md | `/sbr` RED |
-| #76 SPEC parked | `/sbr` (не смешивать) |
-
-### #77 Subscription offer eligibility (2026-09-04)
-
-| Что | Статус |
-|-----|--------|
-| PHASE 0 intake | **done** |
-| PHASE 1 SPEC (файлы + Не ломать + Проверка + §4) | **done** |
-| RED / GREEN / REVIEW | **pending** |
+| #76 GREEN done | `/regress` → `/review` |
+| #77 SPEC parked | не смешивать |
 
 ### #76 УК — включение промо 11₽ при создании точки (2026-09-04)
 
 | Что | Статус |
 |-----|--------|
 | PHASE 0 intake | **done** |
-| PHASE 1 SPEC | **done** (parked) |
-| RED / GREEN / REVIEW | **pending** |
+| PHASE 1 SPEC | **done** |
+| RED `d4409c57` | **done** |
+| GREEN point_campaign_settings | **done** |
+| REVIEW | **pending** |
+
+### #77 Subscription offer eligibility (2026-09-04)
+
+| Что | Статус |
+|-----|--------|
+| PHASE 0 + SPEC | **done** (parked, todo в `35c2cc35`) |
+| RED / GREEN | **pending** |
 
 ### #75 Payment method binding + promo 11₽ (2026-09-04)
 

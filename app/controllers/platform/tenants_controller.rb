@@ -34,12 +34,16 @@ module Platform
             actor_user_id: current_user.id,
             module_params: module_params
           )
-          committed = true
         rescue => e
           Rails.logger.error("TenantOnboarding::Provision failed: #{e.class} — #{e.message}")
           @tenant.errors.add(:base, "Не удалось инициализировать точку. Попробуйте ещё раз.")
           raise ActiveRecord::Rollback
         end
+
+        unless sync_point_campaign!
+          raise ActiveRecord::Rollback
+        end
+        committed = true
       end
 
       unless committed
@@ -58,6 +62,7 @@ module Platform
         @tenant,
         host: entry_points_host
       )
+      load_card_binding_promo!
       load_prep_kitchen_links if @tenant.production_kitchen?
     end
 
@@ -69,6 +74,7 @@ module Platform
         @tenant,
         host: entry_points_host
       )
+      load_card_binding_promo!
     end
 
     def update
@@ -90,12 +96,16 @@ module Platform
             actor_user_id: current_user.id,
             module_params: module_params
           )
-          committed = true
         rescue => e
           Rails.logger.error("TenantOnboarding::Provision failed on update: #{e.class} — #{e.message}")
           @tenant.errors.add(:base, "Не удалось обновить настройки точки. Попробуйте ещё раз.")
           raise ActiveRecord::Rollback
         end
+
+        unless sync_point_campaign!
+          raise ActiveRecord::Rollback
+        end
+        committed = true
       end
 
       unless committed
@@ -104,6 +114,7 @@ module Platform
           @tenant,
           host: entry_points_host
         )
+        load_card_binding_promo!
         return render(:edit, status: :unprocessable_entity)
       end
 
@@ -146,6 +157,30 @@ module Platform
         tenant: @tenant,
         schedule_params: weekday_schedule_params
       )
+    end
+
+    def point_campaign_params
+      params.fetch(:point_campaign, ActionController::Parameters.new).permit(
+        :card_binding_promo_enabled,
+        :card_binding_promo_threshold
+      )
+    end
+
+    # Sync only when form sent point_campaign keys (create/edit with promo block).
+    def sync_point_campaign!
+      raw = point_campaign_params
+      return true if raw.blank?
+
+      Platform::PointCampaignSettingsSync.call(
+        tenant: @tenant,
+        enabled: raw[:card_binding_promo_enabled],
+        threshold: raw[:card_binding_promo_threshold]
+      )
+    end
+
+    def load_card_binding_promo!
+      @card_binding_promo = PointCampaignSetting.card_binding_promo_for(@tenant.id)
+      @card_binding_promo&.refresh_counter!
     end
 
     def build_default_weekday_schedules(tenant)
