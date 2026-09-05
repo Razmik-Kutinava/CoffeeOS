@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-05 — docs: SPEC #78 subscription billing slice-1
+
+- todo: plans/subscriptions + PurchaseService; backlog usage/renewal/API/UI
+- Не ломать: checkout, binding, webhook idempotency, #77 offer OFF
+- Next: `/sbr` RED
+
 ## 2026-09-05 — docs: intake #78 Архитектура подписки
 
 - customer_tasks + CBR + artifacts `subscription_billing_architecture/`

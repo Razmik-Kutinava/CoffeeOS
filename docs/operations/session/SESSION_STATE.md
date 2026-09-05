@@ -2,17 +2,17 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-05 (intake #78 subscription billing)  
+**Дата:** 2026-09-05 (SPEC #78 subscription billing slice-1)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #78 intake `[x]` | `/spec` |
+| #78 SPEC `[x]` slice-1 | `/sbr` RED |
 | subscription offer Point A | **OFF** |
-| Задача-2 promo | parked (SPEC done, RED pending) |
+| Задача-2 promo | parked |
 
-**last_done:** docs intake #78 Архитектура подписки  
-**next_step:** `/spec` — 2–7 путей + Не ломать + Проверка
+**last_done:** SPEC #78 → todo.md (plans/subscriptions + PurchaseService)  
+**next_step:** `/sbr` RED — failing PurchaseService test
 
 ### Ops: stuck T-Bank pending (2026-09-04)
 
