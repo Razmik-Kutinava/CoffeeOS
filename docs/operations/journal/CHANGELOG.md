@@ -15,8 +15,9 @@
 
 - bugbot: no bugs · security HIGH → fix webhook `subscription_intent` → closed + PaymentFulfillment
 - Local: purchase + PaymentStatusUpdater + qa_2_3/order_creator PASS
+- Push `develop` → CI **green** https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/33951753636
 - Entire: `01M1R4VQH6TPMM6SQ2RZ5JTM46` на `cb02d8b4`
-- Next: push/CI; deploy — апрув; Fly MCP после deploy
+- Deploy / Fly MCP: **только по апруву**
 
 ## 2026-09-05 — REVIEW: promo amount from point_campaign_settings
 
