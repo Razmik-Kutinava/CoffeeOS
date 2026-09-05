@@ -11,8 +11,8 @@
 ## SBR
 
 - [x] **SPEC** — пути + Не ломать + Проверка + решения
-- [ ] **RED** — failing-тесты: `promo_amount_rub=15` → 15₽; fallback без ключа → 11₽; API `amount_rub=15` (in progress)
-- [ ] **GREEN** — `price!` / `charge_amount` / `UserCardsController` на один источник; убрать дубль констант
+- [x] **RED** — failing-тесты: `promo_amount_rub=15` → 15₽; fallback без ключа → 11₽; API `amount_rub=15`
+- [x] **GREEN** — `price!` / `charge_amount` / `UserCardsController` на один источник; убрать дубль констант
 - [ ] **/regress** — growth/one-click suite из «Проверка»
 - [ ] **REVIEW** — bugbot + security-review + Entire + push; live Point A — только после deploy (апрув)
 
@@ -58,10 +58,10 @@
 
 ## Чеклист (Gherkin → SBR)
 
-- [ ] Subtask 1–3, 6: RED/GREEN `GrowthPromo` — 15₽ из конфига + fallback 11₽
-- [ ] Subtask 4–5: единый дефолт, без дубля литерала `11`
-- [ ] Subtask 7–8: API `amount_rub` синхронен с `charge_amount`
-- [ ] Subtask 9–10: регресс дефолт 11₽ + `is_growth_event`/дедуп
+- [x] Subtask 1–3, 6: RED/GREEN `GrowthPromo` — 15₽ из конфига + fallback 11₽
+- [x] Subtask 4–5: единый дефолт, без дубля литерала `11`
+- [x] Subtask 7–8: API `amount_rub` синхронен с `charge_amount`
+- [x] Subtask 9–10: регресс дефолт 11₽ + `is_growth_event`/дедуп
 - [ ] Subtask 11: regress «Проверка»
 - [ ] Subtask 12: live Point A — после deploy (апрув)
 )

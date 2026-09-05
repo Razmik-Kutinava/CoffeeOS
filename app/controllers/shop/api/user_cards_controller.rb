@@ -12,7 +12,7 @@ module Shop
             cards: [],
             sbp_accounts: [],
             has_sbp_account: false,
-            growth_promo: { eligible: false, amount_rub: Payments::GrowthPromo::AMOUNT_RUB, step_up_required: false }
+            growth_promo: { eligible: false, amount_rub: Payments::GrowthPromo.promo_amount_rub(@shop_tenant), step_up_required: false }
           }
         end
 
@@ -40,7 +40,7 @@ module Shop
         )
         {
           eligible: eligible,
-          amount_rub: Payments::GrowthPromo::AMOUNT_RUB,
+          amount_rub: Payments::GrowthPromo.promo_amount_rub(@shop_tenant),
           step_up_required: Payments::BindingStepUp.requires_step_up?(customer)
         }
       end

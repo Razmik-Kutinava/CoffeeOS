@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
 module Payments
-  # #75: промо 11₽ при сохранении способа оплаты (единый payment object, без отдельной verification).
+  # #75: промо при сохранении способа оплаты (единый payment object, без отдельной verification).
+  # Сумма: point_campaign_settings.config["promo_amount_rub"], иначе DEFAULT_PROMO_AMOUNT_RUB.
   class GrowthPromo
-    AMOUNT_RUB = 11
+    AMOUNT_RUB = PointCampaignSetting::DEFAULT_PROMO_AMOUNT_RUB
 
     def self.eligible?(tenant:, customer:, bind_requested:, method_hash: nil)
       return false unless ActiveModel::Type::Boolean.new.cast(bind_requested)
@@ -23,7 +24,7 @@ module Payments
       cart = (sub - disc).round(2)
 
       if eligible?(tenant: tenant, customer: customer, bind_requested: bind_requested, method_hash: nil)
-        final = AMOUNT_RUB.to_d
+        final = promo_amount_rub(tenant).to_d
         {
           final_amount: final,
           discount_amount: (sub - final).round(2),
@@ -43,10 +44,21 @@ module Payments
     def self.charge_amount(cart_total:, tenant:, customer:, bind_requested:, method_hash: nil)
       total = cart_total.to_d
       if eligible?(tenant: tenant, customer: customer, bind_requested: bind_requested, method_hash: method_hash)
-        AMOUNT_RUB.to_d
+        promo_amount_rub(tenant).to_d
       else
         total
       end
+    end
+
+    # Единый источник промо-суммы для price! / charge_amount / API amount_rub.
+    def self.promo_amount_rub(tenant)
+      setting = PointCampaignSetting.card_binding_promo_for(tenant&.id)
+      raw = setting&.config.is_a?(Hash) ? setting.config["promo_amount_rub"] : nil
+      return AMOUNT_RUB if raw.nil? || raw == ""
+
+      Integer(raw)
+    rescue ArgumentError, TypeError
+      AMOUNT_RUB
     end
 
     def self.mark_used!(phone:, method_hash:, method_type:, customer_id:, tenant_id:)
