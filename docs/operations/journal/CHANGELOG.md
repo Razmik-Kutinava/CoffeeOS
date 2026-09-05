@@ -11,11 +11,19 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-05 — ops: emergency disable subscription offer (Point A) [GREEN]
+
+- УК PATCH Point A: `enabled=false` + `second_cta_mode=tips` (было subscription)
+- Audit: в УК visible только Point A (SINGLE_POINT_A); других risky нет
+- Verify: `GET /shop/api/config` → `subscription_offer.enabled=false`
+- Artifact: `subscription_offer_eligibility/ops/rollback_point_a_2026-09-05.json`
+- Код CTA/eligibility / `INTEGRATIONS.md` не менялись; ready CTA E2E → `/regress`
+
 ## 2026-09-05 — SPEC: promo amount from point_campaign_settings
 
 - Задача-2: `price!` / `charge_amount` / API `amount_rub` ← `promo_amount_rub`; дефолт один (`DEFAULT_PROMO_AMOUNT_RUB`)
 - Scope: GrowthPromo + UserCardsController + тесты; Tbank/antifraud/subscriptions вне
-- Next: `/sbr` RED; subscription-offer rollback parked
+- Next: `/sbr` RED; subscription-offer rollback → **done** (см. запись выше)
 
 ## 2026-09-05 — SPEC: emergency disable subscription offer (Point A)
 

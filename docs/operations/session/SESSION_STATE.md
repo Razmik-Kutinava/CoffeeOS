@@ -2,17 +2,17 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-05 (promo amount from config SPEC)  
+**Дата:** 2026-09-05 (promo SPEC · sub-offer rollback GREEN)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| SPEC Задача-2 в todo.md | `/sbr` RED |
+| SPEC Задача-2 в todo.md | `/sbr` RED promo |
 | Хардкод `GrowthPromo::AMOUNT_RUB=11` | читать `config["promo_amount_rub"]` |
-| subscription rollback | **parked** (Point A offer still on) |
+| subscription offer Point A | **OFF** (`enabled=false` + tips) |
 
-**last_done:** SPEC: промо-цена из `point_campaign_settings` (пути + Не ломать + Проверка)  
-**next_step:** `/sbr` RED — тесты GrowthPromo + UserCardsController
+**last_done:** УК PATCH emergency disable subscription offer Point A  
+**next_step:** `/sbr` RED — тесты GrowthPromo + UserCardsController (Задача-2)
 
 ### Ops: stuck T-Bank pending (2026-09-04)
 
@@ -30,7 +30,7 @@
 |-----|--------|
 | `fly deploy` | **v479** |
 | #76 / #75 / #77 | PASS (live charge SKIP) |
-| Point A restore | promo on · sub offer on |
+| Point A restore | promo on · sub offer **OFF** (2026-09-05 rollback) |
 
 **Fly logs:** shop API 200; StuckPayments spam source cleared · **Fly MCP:** PASS
 

@@ -1,0 +1,54 @@
+{
+  "task": "emergency_disable_subscription_offer_point_a",
+  "at": "2026-09-05T06:28:00Z",
+  "fly": "v479",
+  "method": "UK PATCH /admin/tenants/:id/subscription_offer_setting (JSON Accept)",
+  "audit": {
+    "source": "UK HTML scrape of /admin/tenants + GET subscription_offer_setting",
+    "note": "SINGLE_POINT_A: only Point A tenant links visible in UK",
+    "tenant_ids_visible": ["2fdee1ac-4674-41ee-b89e-87b45643f789"],
+    "rows": [
+      {
+        "point_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+        "tenant_name": "Demo Coffee Point A",
+        "enabled": true,
+        "second_cta_mode": "subscription",
+        "min_completed_orders": 1,
+        "required_signals_count": 1,
+        "risky": true
+      }
+    ],
+    "risky_count": 1
+  },
+  "rollback": {
+    "point_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+    "before": {
+      "enabled": true,
+      "second_cta_mode": "subscription",
+      "min_completed_orders": 1,
+      "required_signals_count": 1
+    },
+    "after": {
+      "enabled": false,
+      "second_cta_mode": "tips",
+      "min_completed_orders": 1,
+      "required_signals_count": 1
+    },
+    "patch_http": 200,
+    "other_points": "none visible / none rolled back"
+  },
+  "verify": {
+    "uk_form": {
+      "checkbox_checked": false,
+      "second_cta_mode": "tips"
+    },
+    "shop_api_config": {
+      "http": 200,
+      "subscription_offer": {
+        "enabled": false,
+        "second_cta_mode": "tips"
+      }
+    },
+    "ready_cta_e2e": "pending /regress"
+  }
+}

@@ -27,7 +27,7 @@
 | 5 | Структура БД / sync / УК-форма — **не** менять; `point_campaign_settings_sync` трогать только если нужно убрать дубль литерала (оставить `DEFAULT_PROMO_AMOUNT_RUB`) |
 | 6 | Тесты проекта — **Minitest** (`bin/rails test`), не RSpec из черновика задачи |
 | 7 | Live-проверка конфига на тестовой точке — **после deploy** (REVIEW/апрув), не гейт GREEN |
-| 8 | Предыдущий `todo` (emergency rollback subscription offer) — **припаркован**; не смешивать scope |
+| 8 | Предыдущий `todo` (emergency rollback subscription offer) — **закрыт ops 2026-09-05** (`enabled=false`+tips); не смешивать scope |
 
 ## Файлы (ожидаемо)
 
