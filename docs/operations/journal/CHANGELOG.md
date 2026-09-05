@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-05 — feat: promo amount from point_campaign_settings [GREEN]
+
+- `GrowthPromo.promo_amount_rub(tenant)` ← `config["promo_amount_rub"]`; fallback `DEFAULT_PROMO_AMOUNT_RUB`
+- `AMOUNT_RUB` alias на DEFAULT; UserCards API `amount_rub` с того же helper
+- Entire: `01M1R4VQH6TPMM6SQ2RZ5JTM46` (impl `34a899d4`); next `/regress`
+
 ## 2026-09-05 — docs: SPEC #78 subscription billing slice-1
 
 - todo: plans/subscriptions + PurchaseService; backlog usage/renewal/API/UI
