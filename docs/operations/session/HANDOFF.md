@@ -2,17 +2,17 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-05 (promo amount GREEN)  
+**Дата:** 2026-09-05 (promo amount regress PASS)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| GREEN `34a899d4` promo из конфига | `/regress` зона оплаты |
-| Entire `01M1R4VQH6TPMM6SQ2RZ5JTM46` | `/review` после regress |
-| #78 SPEC (`15f24cb5`) | отдельный чат / не смешивать |
+| Regress оплата **PASS** | `/review` |
+| GREEN `34a899d4` | push + CI |
+| Fly MCP Point A | после deploy (апрув) |
 
-**last_done:** GREEN — `GrowthPromo.promo_amount_rub` + UserCards `amount_rub`  
-**next_step:** `/regress` — команды из todo «Проверка»
+**last_done:** `/regress` — growth + UserCards + qa_2_3 + order_creator PASS  
+**next_step:** `/review`
 
 **ctx_trim:** `2026-09-02`  
 **done (ops):** emergency rollback subscription offer — Point A OFF · REVIEW bugbot/security clean · CI green `33950595431` · Entire `01M1P2BSG7MY3C0VM0FXCSZXRK`

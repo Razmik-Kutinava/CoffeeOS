@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-05 — regress: promo amount from config PASS
+
+- growth_promo 13 + point_campaign 4 + user_cards 3 + qa_2_3 2 + order_creator 21 — 0 failures
+- Next: `/review`; Fly MCP Point A — после deploy
+
 ## 2026-09-05 — REVIEW: emergency disable subscription offer Point A
 
 - bugbot: no bugs · security: no medium+ · Local regress PASS

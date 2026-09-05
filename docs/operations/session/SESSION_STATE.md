@@ -2,17 +2,17 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-05 (promo amount GREEN)  
+**Дата:** 2026-09-05 (promo amount regress PASS)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Задача-2 GREEN `[x]` | `/regress` |
-| Entire `01M1R4VQH6TPMM6SQ2RZ5JTM46` на `34a899d4` | `/review` |
-| #78 SPEC в git | не в этом todo |
+| Задача-2 regress **PASS** | `/review` |
+| growth 13+4 · cards 3 · qa 2 · order_creator 21 | Fly MCP Point A после deploy |
+| Entire `01M1R4VQH6TPMM6SQ2RZ5JTM46` | push на REVIEW |
 
-**last_done:** GREEN promo_amount_rub из `point_campaign_settings`  
-**next_step:** `/regress` — growth + qa_section_2_3 + order_creator
+**last_done:** `/regress` зона оплата — все команды «Проверка» PASS  
+**next_step:** `/review` — bugbot + security-review + Entire + push
 
 ### Ops: stuck T-Bank pending (2026-09-04)
 
