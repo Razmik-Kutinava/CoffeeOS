@@ -42,10 +42,7 @@ module Subscriptions
       payment.update_columns(
         provider: "tbank",
         provider_payment_id: pid,
-        provider_data: (payment.provider_data || {}).merge(
-          "subscription_intent" => true,
-          "subscription_plan_id" => @plan.id
-        )
+        provider_data: (payment.provider_data || {}).merge(subscription_provider_data)
       )
 
       charge_response = @adapter.charge(payment_id: pid, rebill_id: @payment_method.rebill_id)
@@ -100,11 +97,19 @@ module Subscriptions
         method: :card,
         status: :pending,
         provider: "pending",
-        provider_data: {
-          "subscription_intent" => true,
-          "subscription_plan_id" => @plan.id
-        }
+        provider_data: subscription_provider_data
       )
+    end
+
+    def subscription_provider_data
+      {
+        "subscription_intent" => true,
+        "subscription_plan_id" => @plan.id,
+        "subscription_payment_method_id" => @payment_method.id,
+        "auto_renew" => @auto_renew,
+        # Webhook SavedCardStore defaults save_card=true when absent — never for subscription.
+        "save_card" => false
+      }
     end
 
     def build_receipt(order)
@@ -148,23 +153,13 @@ module Subscriptions
           paid_at: Time.current,
           provider: "tbank",
           provider_payment_id: pid,
-          provider_data: (payment.provider_data || {}).merge(charge_response.except("Token", "Password"))
+          provider_data: (payment.provider_data || {}).merge(
+            subscription_provider_data
+          ).merge(charge_response.except("Token", "Password"))
         )
         # Не PaymentStatusUpdater → accepted (иначе попадёт на табло баристы).
         order.update!(status: :closed)
-
-        subscription = Subscription.new(
-          customer_id: @customer.id,
-          plan_id: @plan.id,
-          purchase_point_id: @purchase_point.id,
-          payment_method_id: @payment_method.id,
-          payment_id: payment.id,
-          auto_renew: @auto_renew,
-          status: :active
-        )
-        subscription.start_period_from_plan!(@plan)
-        subscription.save!
-        subscription
+        Subscriptions::PaymentFulfillment.call(payment: payment.reload)
       end
     end
   end

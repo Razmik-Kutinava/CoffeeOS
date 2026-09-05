@@ -58,6 +58,13 @@ module Callbacks
 
     def accept_order_if_paid!
       return unless @payment.status == "succeeded"
+
+      # #78: subscription tech-order must not go to barista board; fulfill subscription instead.
+      if subscription_intent?
+        fulfill_subscription_payment!
+        return
+      end
+
       return unless @payment.order.status == "pending_payment"
 
       @payment.order.update!(status: "accepted")
@@ -75,6 +82,30 @@ module Callbacks
       Shop::GuestOrderBroadcaster.call(order: order, old_status: "pending_payment")
       # Quick Repeat: оплаченный заказ меняет частоту покупок — сбрасываем кэш секции «повторить»
       Shop::CustomerFrequentProductsService.bust_cache!(tenant_id: order.tenant_id, customer_id: order.customer_id)
+    end
+
+    def subscription_intent?
+      data = @payment.provider_data
+      return false unless data.is_a?(Hash)
+
+      ActiveModel::Type::Boolean.new.cast(data["subscription_intent"])
+    end
+
+    def fulfill_subscription_payment!
+      order = @payment.order
+      if order.pending_payment? || order.accepted?
+        old_status = order.status
+        order.update!(status: "closed")
+        OrderStatusLog.create!(
+          order: order,
+          status_from: old_status,
+          status_to: "closed",
+          changed_by_id: nil,
+          source: "payment_callback",
+          comment: "Оплата подписки подтверждена callback"
+        )
+      end
+      Subscriptions::PaymentFulfillment.call(payment: @payment.reload)
     end
 
     def fail_order_if_rejected!
