@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-05 — ops: /regress #78 subscription PurchaseService PASS
+
+- `purchase_service_test` 1/19 PASS
+- `qa_section_2_3_payment_cart` + `order_creator` 23/44 PASS
+- Next: `/review`; Fly MCP Point A — после deploy
+
 ## 2026-09-05 — regress: promo amount from config PASS
 
 - growth_promo 13 + point_campaign 4 + user_cards 3 + qa_2_3 2 + order_creator 21 — 0 failures
