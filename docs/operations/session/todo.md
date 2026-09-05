@@ -1,72 +1,67 @@
-﻿# todo — Экстренный откат subscription-оффера (Point A)
+﻿# todo — Задача-2: промо-цена из `point_campaign_settings`
 
 | Поле | Значение |
 |------|----------|
-| **Тип** | Ops / prod config (не код) |
-| **CBR / связь** | #77 уже на Fly; billing/экран подписки ещё нет → CTA «Оформить подписку» опасна |
+| **Тип** | Fix / hot-path оплата (growth promo) |
+| **Цель** | `price!` / `charge_amount` / API `amount_rub` читают `promo_amount_rub` из конфига точки; единый fallback `11₽` |
 | **Point A** | `tenant_id` = `2fdee1ac-4674-41ee-b89e-87b45643f789` |
-| **Ветка** | `develop` (код не меняем) |
-| **Вариант отката (канон)** | `enabled = false` (+ при желании `second_cta_mode = tips`) |
-| **Путь УК** | `/admin/tenants/<point_id>/subscription_offer_setting/edit` |
-| **Запрет** | прямой SQL в prod, если УК доступен; не трогать `INTEGRATIONS.md` |
+| **Ветка** | `develop` |
+| **Запрет** | миграции / структура `point_campaign_settings`; УК-форма точки; `card_binding_attempts`; velocity; antifraud; `TbankAdapter`; billing подписки; `INTEGRATIONS.md` |
 
-## SBR (адаптация под config-only)
+## SBR
 
 - [x] **SPEC** — пути + Не ломать + Проверка + решения
-- [ ] **RED** — N/A код; вместо этого **Audit SELECT** всех `subscription_offer_settings` (зафиксировать `enabled` / `second_cta_mode` по `point_id`)
-- [ ] **GREEN** — откат через УК API/UI: Point A + любые другие с `enabled=true` и `second_cta_mode=subscription`
-- [ ] **/regress** — ручная CTA на Point A (`ready`) + tips если выбран tips; Local suite зоны (без правок кода — smoke)
-- [ ] **REVIEW** — фиксация в DEMO_FEEDBACK/SESSION + (при коде — bugbot; здесь ops-only)
+- [ ] **RED** — failing-тесты: `promo_amount_rub=15` → 15₽; fallback без ключа → 11₽; API `amount_rub=15`
+- [ ] **GREEN** — `price!` / `charge_amount` / `UserCardsController` на один источник; убрать дубль констант
+- [ ] **/regress** — growth/one-click suite из «Проверка»
+- [ ] **REVIEW** — bugbot + security-review + Entire + push; live Point A — только после deploy (апрув)
 
 ## Решения SPEC
 
 | # | Решение |
 |---|---------|
-| 1 | Откат **только данными** `subscription_offer_settings` — код CTA/eligibility не трогать |
-| 2 | Канон безопасного состояния: **`enabled = false`** (absent ≡ disabled; CTA → tips fallback в машине) |
-| 3 | Альтернатива: `second_cta_mode = tips` при `enabled = true` — тоже безопасно; Subtask 5 тогда обязателен |
-| 4 | Изменение через **УК** HTML или `PATCH …/subscription_offer_setting` (JSON), не raw SQL |
-| 5 | Полный SELECT до/после; другие точки с тем же риском — откатить тем же правилом |
-| 6 | Фиксация: `DEMO_FEEDBACK.md` + шапки SESSION/HANDOFF/CHANGELOG; **не** `INTEGRATIONS.md` |
+| 1 | Канон дефолта: **`PointCampaignSetting::DEFAULT_PROMO_AMOUNT_RUB` (= 11)**. `Payments::GrowthPromo::AMOUNT_RUB` — либо удалить, либо сделать тонкий alias на этот дефолт (без второго литерала `11`) |
+| 2 | Источник суммы при eligible: `point_campaign_settings.config["promo_amount_rub"]` для `campaign_type=card_binding_promo` текущей точки; нет ключа / нет записи → `DEFAULT_PROMO_AMOUNT_RUB` |
+| 3 | Один helper (напр. `promo_amount_rub(tenant)`) внутри `GrowthPromo` — им пользуются `price!`, `charge_amount` и (через сервис) API |
+| 4 | `Shop::Api::UserCardsController#growth_promo_payload` / anonymous payload: `amount_rub` из того же helper, **не** константа |
+| 5 | Структура БД / sync / УК-форма — **не** менять; `point_campaign_settings_sync` трогать только если нужно убрать дубль литерала (оставить `DEFAULT_PROMO_AMOUNT_RUB`) |
+| 6 | Тесты проекта — **Minitest** (`bin/rails test`), не RSpec из черновика задачи |
+| 7 | Live-проверка конфига на тестовой точке — **после deploy** (REVIEW/апрув), не гейт GREEN |
+| 8 | Предыдущий `todo` (emergency rollback subscription offer) — **припаркован**; не смешивать scope |
 
 ## Файлы (ожидаемо)
 
-Изменяем (ops/docs):
+1. `app/services/payments/growth_promo.rb` — `price!` / `charge_amount` + helper чтения `promo_amount_rub`
+2. `app/controllers/shop/api/user_cards_controller.rb` — `amount_rub` из того же источника
+3. `app/models/point_campaign_setting.rb` — канон `DEFAULT_PROMO_AMOUNT_RUB` (без смены схемы)
+4. `test/services/payments/growth_promo_test.rb` — RED: 15₽ / fallback 11₽ / регресс is_growth + дедуп
+5. `test/controllers/shop/api/user_cards_controller_test.rb` — **новый**: API `amount_rub` при `promo_amount_rub=15` и дефолт 11
 
-1. `docs/operations/milestones/veha_2/requirements/DEMO_FEEDBACK.md` — факт временного отката, точки, выбранный вариант
-2. `docs/operations/session/SESSION_STATE.md` / `HANDOFF.md` / `CHANGELOG.md` — ops-память после GREEN
+### Blast-radius (соседи, менять только при необходимости)
 
-Справка / путь отката (read-only, код не правим):
-
-3. `app/controllers/platform/subscription_offer_settings_controller.rb` — УК `show`/`edit`/`update` (`enabled`, `second_cta_mode`)
-4. `app/views/platform/subscription_offer_settings/edit.html.erb` — форма отката
-5. `app/controllers/shop/api/config_controller.rb` — `GET /shop/api/config` → `subscription_offer` (проверка после)
-6. `app/models/subscription_offer_setting.rb` — модель / `client_json_for` (контракт)
-
-### Blast-radius (read-only, НЕ менять)
-
-- `app/frontend/lib/orderStatusCtaMachine.js` — уже fallback на tips при `enabled=false`
-- `OrderStatus.svelte` / `ActiveOrdersAccordion.svelte` — потребители флагов
-- `app/services/shop/subscription_offer_eligibility.rb` — eligibility не ломать
+6. `test/services/payments/growth_promo_point_campaign_test.rb` — регресс point-campaign eligible
+7. `app/services/platform/point_campaign_settings_sync.rb` — только если убрать дубль литерала дефолта
 
 ## Не ломать
 
-- Pending-адаптер чаевых на `ready` (вторая CTA tips)
-- CTA заказа / статусы / peek без subscription stub redirect
-- `SubscriptionOfferEligibility` + сигналы вовлечённости + УК-переключатель (код)
-- Tbank / фискал / billing подписки (его ещё нет — не трогать)
+- `Payments::TbankAdapter` и create/callback платежа (сумма уже приходит из growth; адаптер не трогаем)
+- Дедуп промо: `CardBindingAttempt` по `phone` / `method_hash`; `is_growth_event` независим от суммы
+- Velocity / antifraud / binding step-up
+- Обычный checkout без чекбокса bind → полная сумма корзины
+- Billing / `subscription_*` / CTA подписки
 
 ## Проверка
 
-- `bin/rails test test/controllers/platform/subscription_offer_settings_controller_test.rb test/models/subscription_offer_setting_test.rb`
-- Ручная / Fly MCP Point A: `GET /shop/api/config?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789` → `subscription_offer.enabled=false`; на `ready` нет «Оформить подписку»
-- `npx tsc --noEmit` — только если трогали TS (здесь skip: config-only)
+- `bin/rails test test/services/payments/growth_promo_test.rb test/services/payments/growth_promo_point_campaign_test.rb test/controllers/shop/api/user_cards_controller_test.rb`
+- `bin/rails test test/integration/shop/api/qa_section_2_3_payment_cart_test.rb test/services/shop/order_creator_test.rb`  
+  (зона оплата §2.3; TbankAdapter suite **не** гоняем без нужды — адаптер вне scope)
 
-## Чеклист задачи (Gherkin)
+## Чеклист (Gherkin → SBR)
 
-- [ ] Subtask 1: полный SELECT `subscription_offer_settings`
-- [ ] Subtask 2: откат Point A через УК
-- [ ] Subtask 3: откат других точек с тем же риском (если есть)
-- [ ] Subtask 4: CTA на Point A без subscription
-- [ ] Subtask 5: tips OK (если откат через `second_cta_mode=tips`)
-- [ ] Subtask 6: фиксация отката в DEMO_FEEDBACK (+ session ops)
+- [ ] Subtask 1–3, 6: RED/GREEN `GrowthPromo` — 15₽ из конфига + fallback 11₽
+- [ ] Subtask 4–5: единый дефолт, без дубля литерала `11`
+- [ ] Subtask 7–8: API `amount_rub` синхронен с `charge_amount`
+- [ ] Subtask 9–10: регресс дефолт 11₽ + `is_growth_event`/дедуп
+- [ ] Subtask 11: regress «Проверка»
+- [ ] Subtask 12: live Point A — после deploy (апрув)
+)

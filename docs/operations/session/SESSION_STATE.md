@@ -2,17 +2,17 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-05 (sub-offer emergency rollback SPEC)  
+**Дата:** 2026-09-05 (promo amount from config SPEC)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Point A `subscription_offer` on (v479) | `/sbr` Audit SELECT → УК `enabled=false` |
-| SPEC rollback | todo.md |
-| Код CTA / eligibility | **не трогать** |
+| SPEC Задача-2 в todo.md | `/sbr` RED |
+| Хардкод `GrowthPromo::AMOUNT_RUB=11` | читать `config["promo_amount_rub"]` |
+| subscription rollback | **parked** (Point A offer still on) |
 
-**last_done:** SPEC экстренного отката subscription-оффера  
-**next_step:** `/sbr` — SELECT всех точек → откат Point A через УК
+**last_done:** SPEC: промо-цена из `point_campaign_settings` (пути + Не ломать + Проверка)  
+**next_step:** `/sbr` RED — тесты GrowthPromo + UserCardsController
 
 ### Ops: stuck T-Bank pending (2026-09-04)
 

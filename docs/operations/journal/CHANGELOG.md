@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-05 — SPEC: promo amount from point_campaign_settings
+
+- Задача-2: `price!` / `charge_amount` / API `amount_rub` ← `promo_amount_rub`; дефолт один (`DEFAULT_PROMO_AMOUNT_RUB`)
+- Scope: GrowthPromo + UserCardsController + тесты; Tbank/antifraud/subscriptions вне
+- Next: `/sbr` RED; subscription-offer rollback parked
+
 ## 2026-09-05 — SPEC: emergency disable subscription offer (Point A)
 
 - Config-only rollback plan: УК `subscription_offer_setting` → `enabled=false`
