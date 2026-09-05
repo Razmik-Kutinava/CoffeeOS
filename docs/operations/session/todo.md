@@ -6,6 +6,7 @@
 | **Тип** | Feature / hot-path оплата + Shop API + PWA |
 | **Цель** | Пилот: планы в БД, покупка через `TbankAdapter`, период с фиксацией лимитов; дальше — usage/renewal/API/UI |
 | **Point A** | `tenant_id` = `2fdee1ac-4674-41ee-b89e-87b45643f789` · sub-offer **OFF** |
+| **Fly** | **v480** · post-deploy MCP offer/promo/#78 **PASS** |
 | **Ветка** | `develop` |
 | **Запрет** | правки `TbankAdapter` / `TbankReceiptBuilder` / auto-Refund; `RecurrentOrderCreator` для renewal; `card_binding_attempts`; `point_campaign_settings` / промо-11₽; antifraud; ограничение по `point_id`; tips restore |
 

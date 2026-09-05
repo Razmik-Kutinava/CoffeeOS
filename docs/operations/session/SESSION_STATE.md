@@ -2,16 +2,16 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-05 (#78 REVIEW CI green)  
+**Дата:** 2026-09-05 (Fly v480 + MCP ×3)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #78 slice-1 REVIEW **done** | deploy апрув |
-| CI | **green** `33951753636` |
+| Deploy **v480** | done |
+| MCP offer / promo / #78 | **PASS** |
 | Point A offer | **OFF** |
 
-**last_done:** CI green after webhook subscription_intent fix  
-**next_step:** deploy — только по апруву; Fly MCP Point A после
+**last_done:** fly deploy v480 + three post-deploy MCP Point A  
+**next_step:** #78 slice-2 — по намерению
 
 **ctx_trim:** `2026-09-02`

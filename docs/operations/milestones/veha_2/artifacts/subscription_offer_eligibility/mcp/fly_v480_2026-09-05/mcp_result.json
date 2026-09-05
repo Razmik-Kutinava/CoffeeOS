@@ -1,0 +1,42 @@
+{
+  "task": "post_deploy_subscription_offer_rollback_verify",
+  "at": "2026-09-05T07:35:00Z",
+  "fly": "v480",
+  "image": "registry.fly.io/coffeeos:deployment-01M1R6VMAJFWR0VDA4V5TCGRJ7",
+  "point": "Point A",
+  "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "guest_customer_id": "da143c8c-2043-436f-9631-d2fc0febfd07",
+  "order_ready": "379472aa-7258-4858-b7e4-e00988cc9f9f",
+  "result": "PASS",
+  "steps": {
+    "uk_settings": {
+      "result": "PASS",
+      "enabled": false,
+      "second_cta_mode": "tips",
+      "url": "/admin/tenants/2fdee1ac-4674-41ee-b89e-87b45643f789/subscription_offer_setting/edit"
+    },
+    "shop_api_config": {
+      "result": "PASS",
+      "http": 200,
+      "subscription_offer": {
+        "enabled": false,
+        "second_cta_mode": "tips"
+      }
+    },
+    "ready_cta": {
+      "result": "PASS",
+      "second_button": "Оставить чаевые",
+      "no_subscription_cta": true,
+      "no_subscription_redirect": true
+    },
+    "tips_path": {
+      "result": "PASS",
+      "note": "TipsAdapter pending — console `[Tips Integration Pending] Order: …`; no error / no crash"
+    }
+  },
+  "screenshots": ["uk_offer_off.png", "ready_cta_tips.png"],
+  "stand_pack": {
+    "sentry_24h_new": "none (project ruby)",
+    "fly_logs": "OK — shop/api 200, no 5xx/Exception in sampled window"
+  }
+}

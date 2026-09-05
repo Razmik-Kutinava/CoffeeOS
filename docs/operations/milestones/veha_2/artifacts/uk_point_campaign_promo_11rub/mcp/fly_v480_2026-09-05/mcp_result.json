@@ -1,0 +1,40 @@
+{
+  "task": "post_deploy_promo_amount_rub_from_point_campaign_settings",
+  "at": "2026-09-05T07:36:00Z",
+  "fly": "v480",
+  "point": "Point A",
+  "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "result": "PASS",
+  "steps": {
+    "fly_version": { "result": "PASS", "version": 480 },
+    "baseline_api": {
+      "result": "PASS",
+      "endpoint": "GET /shop/api/user/cards",
+      "growth_promo.amount_rub": 11,
+      "config": { "promo_amount_rub": 11 }
+    },
+    "temp_config_15": {
+      "result": "PASS",
+      "method": "fly ssh rails runner PointCampaignSetting.update config",
+      "growth_promo.amount_rub": 15
+    },
+    "restore_11": {
+      "result": "PASS",
+      "growth_promo.amount_rub": 11,
+      "config": { "promo_amount_rub": 11 }
+    },
+    "live_charge": {
+      "result": "SKIP",
+      "why": "API amount_rub follows config; live Init/Charge not required for this verify; no OTP/PAN on Aram profile"
+    },
+    "subscription_offer_still_off": {
+      "result": "PASS",
+      "enabled": false,
+      "second_cta_mode": "tips"
+    }
+  },
+  "stand_pack": {
+    "sentry_24h_new": "none",
+    "fly_logs": "OK"
+  }
+}

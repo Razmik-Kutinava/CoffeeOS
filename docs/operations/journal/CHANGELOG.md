@@ -11,6 +11,16 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-05 — deploy v480 + Fly MCP ×3 Point A PASS
+
+- `git push` develop up-to-date · CI green `33951901384`
+- `fly deploy --remote-only --depot=false` → **v480** `deployment-01M1R6VMAJFWR0VDA4V5TCGRJ7`
+- MCP-1 offer rollback: УК OFF + config `enabled=false` + ready CTA tips · PASS
+- MCP-2 promo `amount_rub` 11→15→11 via `point_campaign_settings` · PASS (live charge SKIP)
+- MCP-3 #78: `subscription_*` tables on Fly · shop smoke PASS · purchase E2E SKIP (no API/UI)
+- Sentry 24h new: none · Fly logs: OK
+- Artifacts: `…/mcp/fly_v480_2026-09-05/` (offer / promo / subscription_billing)
+
 ## 2026-09-05 — review: #78 subscription slice-1
 
 - bugbot: no bugs · security HIGH → fix webhook `subscription_intent` → closed + PaymentFulfillment

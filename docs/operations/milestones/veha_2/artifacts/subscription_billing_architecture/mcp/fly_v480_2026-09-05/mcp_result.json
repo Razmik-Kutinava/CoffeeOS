@@ -1,0 +1,40 @@
+{
+  "task": "post_deploy_78_guest_subscription_slice1",
+  "at": "2026-09-05T07:37:00Z",
+  "fly": "v480",
+  "image": "registry.fly.io/coffeeos:deployment-01M1R6VMAJFWR0VDA4V5TCGRJ7",
+  "point": "Point A",
+  "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "result": "PASS",
+  "steps": {
+    "migrations": {
+      "result": "PASS",
+      "tables": [
+        "subscription_plans",
+        "subscriptions",
+        "subscription_usage_events"
+      ],
+      "subscriptions_columns_sample": "id,customer_id,plan_id,purchase_point_id,status,current_period_start,current_period_end,drinks_used_this_period,auto_renew,payment_id",
+      "counts": { "plans": 0, "subscriptions": 0, "usage_events": 0 }
+    },
+    "shop_smoke": {
+      "result": "PASS",
+      "menu": "categories/products load",
+      "active_order_ready": "379472aa-7258-4858-b7e4-e00988cc9f9f",
+      "no_5xx": true
+    },
+    "regress_offer_off": {
+      "result": "PASS",
+      "subscription_offer.enabled": false
+    },
+    "purchase_webhook_e2e": {
+      "result": "SKIP",
+      "why": "slice-1: no public Shop API/UI purchase yet (slices 5–6); do not enable offer; no live Purchase on stand"
+    }
+  },
+  "stand_pack": {
+    "sentry_24h_new": "none (Sentry project ruby)",
+    "fly_logs": "OK — no Exception/5xx on shop in sampled window",
+    "uk_point_a": "dashboard reachable; offer edit form OK"
+  }
+}
