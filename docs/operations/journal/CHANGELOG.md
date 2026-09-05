@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-05 — docs: intake #78 Архитектура подписки
+
+- customer_tasks + CBR + artifacts `subscription_billing_architecture/`
+- Scope: plans/subscriptions/usage, Purchase/Renewal/Cancel, Shop API, PWA, jobs; без правок `TbankAdapter`
+- Next: `/spec`; Задача-2 promo parked
+
 ## 2026-09-05 — regress: subscription offer zone PASS (post-rollback)
 
 - Local: rails 20/79 PASS + CTA JS 16 PASS
