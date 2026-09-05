@@ -25,8 +25,76 @@ class Payments::GrowthPromoTest < ActiveSupport::TestCase
     Current.reset
   end
 
-  test "GROWTH_AMOUNT_RUB is 11" do
+  test "GROWTH_AMOUNT_RUB aliases PointCampaignSetting default" do
+    assert_equal PointCampaignSetting::DEFAULT_PROMO_AMOUNT_RUB, Payments::GrowthPromo::AMOUNT_RUB
     assert_equal 11, Payments::GrowthPromo::AMOUNT_RUB
+  end
+
+  test "price! and charge_amount use promo_amount_rub from point config (15)" do
+    setting = PointCampaignSetting.card_binding_promo_for(@tenant.id)
+    setting.update!(config: { "promo_amount_rub" => 15 })
+
+    priced = Payments::GrowthPromo.price!(
+      subtotal: 450,
+      discount: 0,
+      tenant: @tenant,
+      customer: @customer,
+      bind_requested: true
+    )
+    amount = Payments::GrowthPromo.charge_amount(
+      cart_total: 450,
+      tenant: @tenant,
+      customer: @customer,
+      bind_requested: true
+    )
+
+    assert priced[:growth_intent]
+    assert_equal 15.to_d, priced[:final_amount]
+    assert_equal 15.to_d, amount
+    assert_equal priced[:final_amount], amount
+  end
+
+  test "price! and charge_amount fallback to 11 when promo_amount_rub missing" do
+    setting = PointCampaignSetting.card_binding_promo_for(@tenant.id)
+    setting.update!(config: {})
+
+    priced = Payments::GrowthPromo.price!(
+      subtotal: 450,
+      discount: 0,
+      tenant: @tenant,
+      customer: @customer,
+      bind_requested: true
+    )
+    amount = Payments::GrowthPromo.charge_amount(
+      cart_total: 450,
+      tenant: @tenant,
+      customer: @customer,
+      bind_requested: true
+    )
+
+    assert_equal PointCampaignSetting::DEFAULT_PROMO_AMOUNT_RUB.to_d, priced[:final_amount]
+    assert_equal PointCampaignSetting::DEFAULT_PROMO_AMOUNT_RUB.to_d, amount
+  end
+
+  test "mark_used! sets is_growth_event regardless of promo amount" do
+    setting = PointCampaignSetting.card_binding_promo_for(@tenant.id)
+    setting.update!(config: { "promo_amount_rub" => 15 })
+
+    Payments::GrowthPromo.mark_used!(
+      phone: @phone,
+      method_hash: "hash-promo-15",
+      method_type: "card",
+      customer_id: @customer.id,
+      tenant_id: @tenant.id
+    )
+
+    attempt = CardBindingAttempt.find_by!(method_hash: "hash-promo-15")
+    assert attempt.is_growth_event
+    refute Payments::GrowthPromo.eligible?(
+      tenant: @tenant,
+      customer: @customer,
+      bind_requested: true
+    )
   end
 
   test "eligible when point allows, no prior growth for phone, bind requested" do

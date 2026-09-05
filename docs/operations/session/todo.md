@@ -11,7 +11,7 @@
 ## SBR
 
 - [x] **SPEC** — пути + Не ломать + Проверка + решения
-- [ ] **RED** — failing-тесты: `promo_amount_rub=15` → 15₽; fallback без ключа → 11₽; API `amount_rub=15`
+- [ ] **RED** — failing-тесты: `promo_amount_rub=15` → 15₽; fallback без ключа → 11₽; API `amount_rub=15` (in progress)
 - [ ] **GREEN** — `price!` / `charge_amount` / `UserCardsController` на один источник; убрать дубль констант
 - [ ] **/regress** — growth/one-click suite из «Проверка»
 - [ ] **REVIEW** — bugbot + security-review + Entire + push; live Point A — только после deploy (апрув)
