@@ -2,36 +2,31 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-05 (promo amount regress PASS)  
+**Дата:** 2026-09-05 (#78 GREEN slice-1)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Задача-2 regress **PASS** | `/review` |
-| growth 13+4 · cards 3 · qa 2 · order_creator 21 | Fly MCP Point A после deploy |
-| Entire `01M1R4VQH6TPMM6SQ2RZ5JTM46` | push на REVIEW |
+| #78 GREEN `[x]` slice-1 | `/regress` |
+| GREEN sha | `e8d7e3db` |
+| Entire | `01M1R4VQH6TPMM6SQ2RZ5JTM46` |
+| Point A offer | **OFF** |
 
-**last_done:** `/regress` зона оплата — все команды «Проверка» PASS  
-**next_step:** `/review` — bugbot + security-review + Entire + push
+**last_done:** tables + PurchaseService (TbankAdapter Init→Charge, order closed)  
+**next_step:** `/regress` — todo «Проверка»
 
 ### Ops: stuck T-Bank pending (2026-09-04)
 
 | Что | Результат |
 |-----|-----------|
 | Cutoff `< 2026-09-01` | failed **186** · cancelled orders **182** · left **0** |
-| By month | May 9 · Jun 155 · Jul 8 · Aug 14 |
-| MCP leftovers today (Point A) | failed **2** · cancelled **2** |
 | `STUCK_ALERT_CANDIDATES_NOW` | **0** |
-| Script | `tmp/cleanup_stuck_tbank_payments.rb` (one-shot Fly runner) |
 
 ### Deploy + MCP (2026-09-04)
 
 | Что | Статус |
 |-----|--------|
 | `fly deploy` | **v479** |
-| #76 / #75 / #77 | PASS (live charge SKIP) |
-| Point A restore | promo on · sub offer **OFF** · REVIEW bugbot/security clean |
-
-**Fly logs:** shop API 200; StuckPayments spam source cleared · **Fly MCP:** PASS
+| Point A | promo on · sub offer **OFF** |
 
 **ctx_trim:** `2026-09-02`
