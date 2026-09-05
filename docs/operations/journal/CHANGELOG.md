@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-05 — REVIEW: emergency disable subscription offer Point A
+
+- bugbot: no bugs · security: no medium+ · Local regress PASS
+- Push `develop` → CI **green** https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/33950595431
+- Entire: `01M1P2BSG7MY3C0VM0FXCSZXRK` · Point A offer remains OFF (config, no deploy needed)
+- Deploy: не требуется для этого отката (уже на Fly v479)
+
 ## 2026-09-05 — feat: promo amount from point_campaign_settings [GREEN]
 
 - `GrowthPromo.promo_amount_rub(tenant)` ← `config["promo_amount_rub"]`; fallback `DEFAULT_PROMO_AMOUNT_RUB`

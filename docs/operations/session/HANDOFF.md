@@ -15,7 +15,7 @@
 **next_step:** `/regress` — команды из todo «Проверка»
 
 **ctx_trim:** `2026-09-02`  
-**done (ops):** emergency rollback subscription offer — Point A offer OFF
+**done (ops):** emergency rollback subscription offer — Point A OFF · REVIEW bugbot/security clean · CI green `33950595431` · Entire `01M1P2BSG7MY3C0VM0FXCSZXRK`
 
 **Архив session:** [`archive/README.md`](archive/README.md) — incl. `todo-shift-close-2026-09.md`  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
