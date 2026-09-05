@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-05 — SPEC: emergency disable subscription offer (Point A)
+
+- Config-only rollback plan: УК `subscription_offer_setting` → `enabled=false`
+- Point A `2fdee1ac-4674-41ee-b89e-87b45643f789`; код CTA/eligibility не трогаем
+- todo: Audit SELECT → GREEN УК → CTA verify → DEMO_FEEDBACK
+
 ## 2026-09-04 — ops: clear stuck T-Bank pending (StuckPayments spam)
 
 - Fly runner: mark `tbank` pending/processing `< 2026-09-01` → `failed` (186); related `pending_payment` orders → `cancelled` (182)

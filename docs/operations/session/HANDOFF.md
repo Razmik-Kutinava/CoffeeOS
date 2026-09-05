@@ -2,16 +2,16 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-04 (stuck T-Bank cleanup)  
+**Дата:** 2026-09-05 (sub-offer emergency rollback)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| StuckPayments spam cleared | deploy апрув (Sentry filter) |
-| Fly **v479** MCP PASS | апрув заказчика |
+| SPEC: откат subscription CTA Point A | `/sbr` Audit → УК `enabled=false` |
+| Fly **v479** · sub offer still on | ручная CTA / MCP после GREEN |
 
-**last_done:** ops cleanup stuck T-Bank pending (186 pre-Sep + 2 MCP today → alert=0)  
-**next_step:** deploy апрув · апрув заказчика по MCP
+**last_done:** SPEC экстренного отката `subscription_offer_settings` (config-only)  
+**next_step:** `/sbr` — полный SELECT → Point A через УК edit/PATCH
 
 **ctx_trim:** `2026-09-02`
 

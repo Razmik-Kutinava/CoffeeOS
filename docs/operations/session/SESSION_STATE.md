@@ -2,14 +2,17 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-04 (stuck T-Bank cleanup)  
+**Дата:** 2026-09-05 (sub-offer emergency rollback SPEC)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| StuckPayments Telegram spam | cleared (alert candidates=0) |
-| RUBY-1F / RUBY-16 | fixed · deploy апрув |
-| Fly **v479** MCP | PASS |
+| Point A `subscription_offer` on (v479) | `/sbr` Audit SELECT → УК `enabled=false` |
+| SPEC rollback | todo.md |
+| Код CTA / eligibility | **не трогать** |
+
+**last_done:** SPEC экстренного отката subscription-оффера  
+**next_step:** `/sbr` — SELECT всех точек → откат Point A через УК
 
 ### Ops: stuck T-Bank pending (2026-09-04)
 
