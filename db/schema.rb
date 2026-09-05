@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_04_180001) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_05_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_stat_statements"
@@ -1199,6 +1199,64 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_04_180001) do
     t.index ["point_id"], name: "idx_subscription_offer_settings_point", unique: true
   end
 
+  create_table "subscription_plans", id: :uuid, default: -> { "gen_random_uuid()" }, comment: "#78: guest PWA subscription plans (not platform billing_plans)", force: :cascade do |t|
+    t.boolean "active", default: true, null: false
+    t.string "code", limit: 64, null: false
+    t.datetime "created_at", null: false
+    t.string "currency", limit: 3, default: "RUB", null: false
+    t.decimal "discount_price_per_drink", precision: 10, scale: 2, null: false
+    t.integer "drink_limit", null: false
+    t.datetime "launch_price_valid_until"
+    t.integer "over_limit_discount_percent", null: false
+    t.integer "period_days", null: false
+    t.decimal "price", precision: 10, scale: 2, null: false
+    t.datetime "updated_at", null: false
+    t.index ["active"], name: "idx_subscription_plans_active"
+    t.index ["code"], name: "idx_subscription_plans_code", unique: true
+    t.check_constraint "discount_price_per_drink >= 0::numeric", name: "chk_subscription_plans_discount_price"
+    t.check_constraint "drink_limit >= 0", name: "chk_subscription_plans_drink_limit"
+    t.check_constraint "over_limit_discount_percent >= 0 AND over_limit_discount_percent <= 100", name: "chk_subscription_plans_over_limit_pct"
+    t.check_constraint "period_days > 0", name: "chk_subscription_plans_period"
+    t.check_constraint "price >= 0::numeric", name: "chk_subscription_plans_price"
+  end
+
+  create_table "subscription_usage_events", id: :uuid, default: -> { "gen_random_uuid()" }, comment: "#78: per-order subscription pricing usage", force: :cascade do |t|
+    t.decimal "applied_price", precision: 10, scale: 2, null: false
+    t.datetime "created_at", null: false
+    t.uuid "order_id", null: false
+    t.uuid "point_id", null: false
+    t.string "pricing_kind", limit: 32, null: false
+    t.decimal "savings_amount", precision: 10, scale: 2, default: "0.0", null: false
+    t.uuid "subscription_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["order_id"], name: "idx_subscription_usage_events_order"
+    t.index ["subscription_id"], name: "idx_subscription_usage_events_sub"
+  end
+
+  create_table "subscriptions", id: :uuid, default: -> { "gen_random_uuid()" }, comment: "#78: guest PWA subscriptions (not billing_subscriptions)", force: :cascade do |t|
+    t.boolean "auto_renew", default: true, null: false
+    t.datetime "created_at", null: false
+    t.datetime "current_period_end"
+    t.datetime "current_period_start"
+    t.uuid "customer_id", null: false
+    t.integer "discount_percent_at_period_start"
+    t.integer "drink_limit_at_period_start"
+    t.integer "drinks_used_this_period", default: 0, null: false
+    t.uuid "payment_id"
+    t.uuid "payment_method_id"
+    t.uuid "plan_id", null: false
+    t.decimal "price_at_period_start", precision: 10, scale: 2
+    t.uuid "purchase_point_id", null: false
+    t.string "status", limit: 32, default: "pending", null: false
+    t.datetime "updated_at", null: false
+    t.index ["current_period_end"], name: "idx_subscriptions_period_end"
+    t.index ["customer_id", "status"], name: "idx_subscriptions_customer_status"
+    t.index ["customer_id"], name: "idx_subscriptions_customer"
+    t.index ["plan_id"], name: "idx_subscriptions_plan"
+    t.check_constraint "drinks_used_this_period >= 0", name: "chk_subscriptions_drinks_used"
+    t.check_constraint "status::text = ANY (ARRAY['pending'::text, 'active'::text, 'canceled'::text, 'past_due'::text])", name: "chk_subscriptions_status"
+  end
+
   create_table "supply_order_items", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "ingredient_id", null: false
     t.text "note"
@@ -1466,6 +1524,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_04_180001) do
   add_foreign_key "stock_movements", "users", column: "confirmed_by_id", on_delete: :nullify
   add_foreign_key "stock_movements", "users", column: "created_by_id", on_delete: :nullify
   add_foreign_key "subscription_offer_settings", "tenants", column: "point_id"
+  add_foreign_key "subscription_usage_events", "orders"
+  add_foreign_key "subscription_usage_events", "subscriptions"
+  add_foreign_key "subscription_usage_events", "tenants", column: "point_id"
+  add_foreign_key "subscriptions", "mobile_customers", column: "customer_id"
+  add_foreign_key "subscriptions", "mobile_payment_methods", column: "payment_method_id"
+  add_foreign_key "subscriptions", "payments"
+  add_foreign_key "subscriptions", "subscription_plans", column: "plan_id"
+  add_foreign_key "subscriptions", "tenants", column: "purchase_point_id"
   add_foreign_key "supply_order_items", "ingredients", on_delete: :cascade
   add_foreign_key "supply_order_items", "supply_orders", on_delete: :cascade
   add_foreign_key "supply_orders", "tenants", column: "from_tenant_id", on_delete: :cascade

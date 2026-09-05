@@ -13,7 +13,7 @@
 
 - [x] **SPEC** — slice-1 пути + Не ломать + Проверка + решения
 - [x] **RED** — failing-тест `Subscriptions::PurchaseService` (NameError SubscriptionPlan / PurchaseService)
-- [ ] **GREEN** — миграции/модели + `PurchaseService`
+- [x] **GREEN** — миграции/модели + `PurchaseService` (Init→Charge → active + closed order)
 - [ ] **/regress** — команды из «Проверка»
 - [ ] **REVIEW** — bugbot + security-review + Entire + push
 
