@@ -2,17 +2,17 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-05 (promo SPEC · sub-offer rollback GREEN)  
+**Дата:** 2026-09-05 (sub-offer rollback regress PASS · promo SPEC)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| SPEC Задача-2 в todo.md | `/sbr` RED promo |
-| Хардкод `GrowthPromo::AMOUNT_RUB=11` | читать `config["promo_amount_rub"]` |
-| subscription offer Point A | **OFF** (`enabled=false` + tips) |
+| subscription offer Point A **OFF** · regress **PASS** | `/review` откат (ops) или `/sbr` RED promo |
+| SPEC Задача-2 в todo.md | `/sbr` RED GrowthPromo |
+| Хардкод `GrowthPromo::AMOUNT_RUB=11` | читать `promo_amount_rub` |
 
-**last_done:** УК PATCH emergency disable subscription offer Point A  
-**next_step:** `/sbr` RED — тесты GrowthPromo + UserCardsController (Задача-2)
+**last_done:** regress subscription-offer zone PASS (20+16) + UK still OFF  
+**next_step:** `/review` на ops-откат **или** `/sbr` RED Задача-2
 
 ### Ops: stuck T-Bank pending (2026-09-04)
 

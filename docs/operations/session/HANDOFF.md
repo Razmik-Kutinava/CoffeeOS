@@ -2,16 +2,16 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-05 (promo SPEC · sub-offer OFF)  
+**Дата:** 2026-09-05 (sub-offer regress PASS · promo SPEC)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| SPEC: промо-цена из `promo_amount_rub` | `/sbr` RED → GrowthPromo + UserCards API |
-| Point A subscription offer **OFF** | `/regress` CTA ready (откат) |
+| Point A subscription offer **OFF** · regress PASS | `/review` откат |
+| SPEC: промо-цена из `promo_amount_rub` | `/sbr` RED Задача-2 |
 
-**last_done:** УК PATCH Point A → `enabled=false` + `tips` (config verified)  
-**next_step:** `/sbr` RED — failing-тесты 15₽ / fallback 11₽ / API `amount_rub`
+**last_done:** regress subscription zone Local PASS (rails 20 + JS 16); UK `enabled=false`  
+**next_step:** `/review` (откат) или `/sbr` RED promo
 
 **ctx_trim:** `2026-09-02`  
 **done (ops):** emergency rollback subscription offer — [`rollback_point_a_2026-09-05.json`](../milestones/veha_2/artifacts/subscription_offer_eligibility/ops/rollback_point_a_2026-09-05.json)

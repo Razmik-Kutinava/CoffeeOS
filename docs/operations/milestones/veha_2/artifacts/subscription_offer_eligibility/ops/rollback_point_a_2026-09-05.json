@@ -49,6 +49,12 @@
         "second_cta_mode": "tips"
       }
     },
-    "ready_cta_e2e": "pending /regress"
+    "regress_2026-09-05": {
+      "local_rails": "20 runs, 79 assertions, PASS",
+      "local_cta_js": "16 tests PASS (order_status_cta_machine_test.mjs)",
+      "uk_recheck": "enabled=false, second_cta_mode=tips",
+      "cta_matrix": "offerOn=false → ready+push → tips (no «Оформить подписку»)",
+      "ready_order_e2e_live": "skip — config+matrix enough for regress; full guest ready MCP optional for customer"
+    }
   }
 }

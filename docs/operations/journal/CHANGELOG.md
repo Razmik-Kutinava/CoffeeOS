@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-05 — regress: subscription offer zone PASS (post-rollback)
+
+- Local: rails 20/79 PASS + CTA JS 16 PASS
+- UK Point A recheck: `enabled=false`, `second_cta_mode=tips`
+- CTA matrix: offerOff → tips on ready (no subscription stub)
+
 ## 2026-09-05 — ops: emergency disable subscription offer (Point A) [GREEN]
 
 - УК PATCH Point A: `enabled=false` + `second_cta_mode=tips` (было subscription)
