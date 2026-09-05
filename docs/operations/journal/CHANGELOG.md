@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-05 — review: #78 subscription slice-1
+
+- bugbot: no bugs · security HIGH → fix webhook `subscription_intent` → closed + PaymentFulfillment
+- Local: purchase + PaymentStatusUpdater + qa_2_3/order_creator PASS
+- Entire: `01M1R4VQH6TPMM6SQ2RZ5JTM46` на `cb02d8b4`
+- Next: push/CI; deploy — апрув; Fly MCP после deploy
+
 ## 2026-09-05 — REVIEW: promo amount from point_campaign_settings
 
 - bugbot: no bugs · security: no medium+ · Local 43 runs PASS

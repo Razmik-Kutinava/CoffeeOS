@@ -2,23 +2,23 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-05 (Задача-2 REVIEW CI green)  
+**Дата:** 2026-09-05 (#78 REVIEW)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Задача-2 promo | **REVIEW done** · deploy по апруву |
-| #78 slice-1 | regress PASS → их `/review` |
-| Point A offer | **OFF** |
+| #78 REVIEW in progress | push → CI |
+| Local zone | PASS 28/81 |
+| Security fix | `cb02d8b4` webhook subscription_intent |
 
-**last_done:** REVIEW promo amount — Local/CI green · Entire `01M1R4VQH6TPMM6SQ2RZ5JTM46`  
-**next_step:** deploy — только апрув владельца (Fly MCP Point A live check)
+**last_done:** PaymentFulfillment + PaymentStatusUpdater branch; save_card=false  
+**next_step:** push + CI green → стоп (deploy апрув)
 
 ### Deploy + MCP
 
 | Что | Статус |
 |-----|--------|
-| `fly deploy` | **v479** (до #78) |
-| Fly MCP Point A | **skip** — regress local only; нужен после deploy |
+| Fly | v479 (до #78) |
+| Fly MCP Point A | после deploy |
 
 **ctx_trim:** `2026-09-02`

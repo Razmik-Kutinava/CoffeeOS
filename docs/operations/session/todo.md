@@ -15,7 +15,7 @@
 - [x] **RED** — failing-тест `Subscriptions::PurchaseService` (NameError SubscriptionPlan / PurchaseService)
 - [x] **GREEN** — миграции/модели + `PurchaseService` (Init→Charge → active + closed order)
 - [x] **/regress** — команды из «Проверка»
-- [ ] **REVIEW** — bugbot + security-review + Entire + push
+- [x] **REVIEW** — bugbot + security-review + Entire + push
 
 ## Slice backlog (после GREEN slice-1)
 
