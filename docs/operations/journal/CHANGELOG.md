@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-05 — REVIEW: promo amount from point_campaign_settings
+
+- bugbot: no bugs · security: no medium+ · Local 43 runs PASS
+- Push `develop` → CI **green** https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/33951212810
+- Entire: `01M1R4VQH6TPMM6SQ2RZ5JTM46` · impl GREEN `34a899d4`
+- Deploy / Fly MCP Point A: **только по апруву** (live Subtask 12)
+
 ## 2026-09-05 — ops: /regress #78 subscription PurchaseService PASS
 
 - `purchase_service_test` 1/19 PASS
