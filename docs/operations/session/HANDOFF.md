@@ -15,7 +15,7 @@
 **next_step:** CI green → стоп; deploy только апрув
 
 **ctx_trim:** `2026-09-02`  
-**CI:** (после push)  
+**CI:** https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/34026912791 **green**  
 **Entire:** `01M1V2FH9A8C7J6X35YF5RQSFE` на `0c17ee9f`  
 **Fly MCP:** skip — после deploy Point A
 
