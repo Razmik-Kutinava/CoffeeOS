@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-06 — SPEC: #26 QA reopen step5 inline pay error
+
+- Root: `resolveCheckoutSheetInlineError` → null; G7 `$effect` сбрасывает FSM/selection
+- Решение: friendly label в слот sheet; selection сохранить; CTA click → new card
+- `todo.md` → #26 · SPEC `[x]` · RED `[ ]`
+
 ## 2026-09-06 — docs: #26 QA reopen (pay error inline copy)
 
 - Фидбек заказчика: отказ карты есть, **нет** пояснения («попробуйте другую карту» / что делать)

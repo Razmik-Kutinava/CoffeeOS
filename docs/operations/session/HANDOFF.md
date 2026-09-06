@@ -2,17 +2,17 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-06 (PHASE 0 reopen #26 QA pay error copy)  
+**Дата:** 2026-09-06 (SPEC #26 QA reopen step5 inline)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #26 QA: отказ банка → нет надписи пользователю (шаг 5) | `/spec` → SBR добить путь ошибки |
-| Скрин `qa_2026-09-06/01_bug_…` | не новая фича — дополнение #26 + тексты #payment-error-msgs |
-| #35 reopen статусной шторки | пауза |
+| #26 SPEC: inline при отказе банка | RED `/sbr` |
+| Root: `resolveCheckoutSheetInlineError`=null + G7 `$effect` стирает copy | не новая фича |
+| #35 reopen | пауза |
 
-**last_done:** PHASE 0 reopen #26 · фидбек + скрин в artifacts  
-**next_step:** `/spec`
+**last_done:** SPEC #26 QA · todo пути + Не ломать/Проверка  
+**next_step:** `/sbr` RED
 
 **ctx_trim:** `2026-09-02`  
 **CI:** https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/33951901384  

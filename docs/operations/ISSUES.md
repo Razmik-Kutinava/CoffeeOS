@@ -10,7 +10,7 @@
 | Checkout UX (Фаза 2) | 🟡 | апрув заказчика |
 | SBP 3001 | 🟡 | банк / кабинет |
 | #47 / #35 PWA статусы | 🟡 | QA reopen SPEC готов · **пауза** (фокус #26) |
-| #26 invalid token / pay error copy | 🟡 | QA reopen 2026-09-06: шаг 5 нет надписи при отказе банка → `/spec` |
+| #26 invalid token / pay error copy | 🟡 | SPEC 2026-09-06 → `/sbr` RED (шаг 5 inline) |
 
 Детали до 2026-08 → [`issues/archive/ISSUES-resolved-through-2026-08.md`](issues/archive/ISSUES-resolved-through-2026-08.md)
 
