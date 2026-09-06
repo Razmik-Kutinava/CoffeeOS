@@ -1,56 +1,58 @@
-﻿# todo — #26 QA reopen: inline надпись при отказе банка (шаг 5)
+﻿# todo — #35 reopen: QA правки статусной шторки PWA
 
 | Поле | Значение |
 |------|----------|
-| **CBR** | #26 · [ТЗ](../milestones/veha_2/requirements/customer_tasks/Главный%20экран%20—%20повторный%20заказ%20(невалидный%20токен)%20BottomSheet%20выбора%20способа%20оплаты.md) · UX-тексты [Понятные сообщения…](../milestones/veha_2/requirements/customer_tasks/Понятные%20сообщения%20пользователю%20при%20ошибке%20оплаты.md) |
-| **Тип** | Fix / hot-path оплата · PaymentMethodsSheet |
-| **Цель** | При отказе банка / 400/500 на «Оплатить» — **inline-надпись** в шторке (что произошло / попробуйте другую карту), sheet не закрывать, выбор карты сохранить, CTA разблокировать |
+| **CBR** | #35 · [ТЗ](../milestones/veha_2/requirements/customer_tasks/Интеграция%20статусной%20модели%20в%20компактную%20шторку%20PWA%20и%20Push.md) |
+| **Тип** | Fix / hot-path статусы + шторка + post-pay routing |
+| **Цель** | Добить #35 по QA заказчика: единый compact-sheet после оплаты с гл. экрана; статусная модель без состава заказа; крестик = скрыть; hint отмены «1–3 дня»; UX по референсам |
 | **Point A** | `tenant_id` = `2fdee1ac-4674-41ee-b89e-87b45643f789` |
 | **Fly** | после GREEN / REVIEW — MCP (не Local-only) |
 | **Ветка** | `develop` |
-| **Артефакты QA** | [`…/repeat_order_invalid_token_payment_sheet/screenshots/qa_2026-09-06/`](../milestones/veha_2/artifacts/repeat_order_invalid_token_payment_sheet/screenshots/qa_2026-09-06/) |
-| **Запрет** | новый BottomSheet; трогать auth store / refresh; legacy/ui; gem’ы оплаты; параллельная фича рядом с #26 |
+| **Артефакты QA** | [`…/order_status_compact_sheet_push/screenshots/qa_2026-09-06/`](../milestones/veha_2/artifacts/order_status_compact_sheet_push/screenshots/qa_2026-09-06/) |
+| **Запрет** | новая параллельная фича / новый `OrderStatusChannel`; ломать `orders` schema; gem’ы оплаты; матрица CTA #41 без апрува |
 
 ## SBR
 
 - [x] **SPEC** — пути + Не ломать + Проверка + решения
-- [ ] **RED** — failing-тесты: `resolveCheckoutSheetInlineError` ≠ null на CLIENT/NET/BANK; выбор карты сохраняется
-- [ ] **GREEN** — wire inline + согласовать G7 auto-open с шагом 5
+- [x] **RED** — failing-тесты под 3 бага QA (`785fa2e3`)
+- [x] **GREEN** — PaymentResult → `/`; status без receipt; cancel hint 1–3д; X=Скрыть (`7ab3f3e6`)
 - [ ] **/regress** — команды из «Проверка»
 - [ ] **REVIEW** — bugbot + security-review + Entire + push
 
-## Баг заказчика → решение SPEC
+## Баги заказчика → решения SPEC
 
 | # | QA | Решение |
 |---|-----|---------|
-| 1 | Отказ карты есть, **нет** пояснения («попробуйте другую карту» / что делать) | `resolveCheckoutSheetInlineError` сейчас **всегда `null`** (copy только на CTA). Вернуть `payFsmLabel(fsmState)` / `INLINE_*` для `CLIENT_ERROR` / `NET_ERROR` / `BANK_ERROR` → слот `payment-method-inline-error` в `PaymentMethodsSheet`. Сырой `e.message` / ErrorCode **запрещён**. |
-| 2 | После отказа UI снова «Оплатить» без текста | `$effect` G7 (`shouldAutoOpenNewCardOnClientError` → `onSelectNewCard()`) сбрасывает `payFsmState=DEFAULT` и `sheetInlineError=null`. **Шаг 5:** выбранный способ **сохраняется** → **не** авто-сбрасывать FSM/selection; CTA при `CLIENT_ERROR` по клику → `open_new_card` (`resolvePayFsmCtaAction`). Auto-open `$effect` убрать или не вызывать `onSelectNewCard` при pay-decline. |
-| 3 | Связка с «Понятные сообщения» | Не форкать тексты: reuse `PAY_FSM_LABELS` / `INLINE_CARD_ERROR_LABEL` / `INLINE_NETWORK_ERROR_LABEL` из `shopPayFsm` + `shopInlinePayFsm`. |
+| 1 | После оплаты с гл. экрана — full-screen `/order/:id`; «повторить» — compact sheet | `PaymentResult` после ok → каталог (`/`). Deep-link `/order/:id` для push/offline. |
+| 2a | Непонятен крестик | `aria-label="Скрыть статус заказа"` · dismissOrder |
+| 2b | В статусной модели виден состав | Убран receipt/chevron из `ActiveOrdersAccordion` |
+| 2c | Отмена: банк 1–3 дня | CTA hint `Вернем 100% · 1–3 дня` |
+| 3 | UX по референсам | peek/multi без новой архитектуры |
 
 ## Файлы (ожидаемо)
 
-1. `app/frontend/lib/shopPayFsm.js` — `resolveCheckoutSheetInlineError` → friendly label; согласовать `shouldAutoOpenNewCardOnClientError` со шагом 5
-2. `app/frontend/routes/Checkout.svelte` — catch уже зовёт resolver; убрать/ослабить `$effect` G7, чтобы не стирать inline + selection
-3. `app/frontend/components/PaymentMethodsSheet.svelte` — слот `inlineError` уже есть (verify wiring)
-4. `app/frontend/components/CheckoutPayButton.svelte` — CTA `CLIENT_ERROR` → `onChangeCard` / `open_new_card` (не silent retry)
-5. `test/javascript/payment_error_user_messages_test.mjs` — RED: flip «null for NET/CLIENT/BANK» → ожидать card/network copy
-6. `test/javascript/repeat_invalid_token_payment_test.mjs` — RED: шаг 5 inline + selection preserved
-7. `test/integration/shop/repeat_invalid_token_payment_test.rb` — зеркало: grep/wiring step5 inline
+1. `app/frontend/routes/PaymentResult.svelte` — post-pay → `/`
+2. `app/frontend/components/ActiveOrdersAccordion.svelte` — без receipt; dismiss = Скрыть
+3. `app/frontend/lib/orderStatusCtaMachine.js` — hint 1–3 дня
+4. `app/frontend/lib/activeOrdersAccordion.js` — receiptView остаётся в lib (#36 unit); UI не зовёт
+5. `test/javascript/order_action_buttons_cancel_test.mjs`
+6. `test/javascript/active_orders_accordion_test.mjs`
+7. `test/integration/shop/order_status_acceptance_cbr_test.rb` — `b11_02`
 
-### Blast-radius (только читать / не ломать без нужды)
+### Blast-radius (только читать)
 
-8. `app/frontend/lib/shopInlinePayFsm.js` — source of truth текстов (reuse)
-9. `app/frontend/components/CartSheet.svelte` — peek CTA / pay-stack open
-10. `app/frontend/components/NewCardForm.svelte` — шаг 4 inline внутри sheet
+8. `app/frontend/lib/orderStatusSheet.js`
+9. `app/frontend/components/CartSheet.svelte`
+10. `app/frontend/routes/Checkout.svelte`
 
 ## Не ломать
 
-- One-Click / `POST /shop/api/payments/one_click` + webhook idempotency (Tbank)
-- «Повторить» / invalid token → открытие `PaymentMethodsSheet` (шаги 1–4, 6)
-- Peek/hidden/expanded CartSheet + checkout pay-stack высота
-- G7: клик CTA при отказе карты всё ещё ведёт к форме новой карты (без silent retry той же карты)
+- Оплата / finalize / webhook idempotency
+- «Повторить» one-click → compact sheet
+- Табло + GuestOrderChannel / hide on ready + `ready_notified_at`
+- Peek/hidden/expanded + клики каталога
 
 ## Проверка
 
-- `node --test test/javascript/payment_error_user_messages_test.mjs test/javascript/repeat_invalid_token_payment_test.mjs`
-- `bin/rails test test/integration/shop/repeat_invalid_token_payment_test.rb`
+- `node --test test/javascript/order_action_buttons_cancel_test.mjs test/javascript/active_orders_accordion_test.mjs test/javascript/order_status_sheet_test.mjs test/javascript/order_status_notify_actions_test.mjs`
+- `bundle exec rails test test/integration/shop/order_status_acceptance_cbr_test.rb test/integration/shop/order_status_sheet_mount_acceptance_test.rb`
