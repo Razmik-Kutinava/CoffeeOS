@@ -2,22 +2,22 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-06 (#71 regress PASS)  
+**Дата:** 2026-09-06 (#71 REVIEW)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #71 remember receipt email · regress **PASS** | `/review` |
-| Entire `01M1V2FH9A8C7J6X35YF5RQSFE` | push в PHASE 3 |
-| Fly MCP Point A | после REVIEW/deploy |
+| #71 remember receipt email · REVIEW | CI green → стоп |
+| Bugbot: hide only after LS · fixed `0c17ee9f` | deploy — апрув |
+| Entire `01M1V2FH9A8C7J6X35YF5RQSFE` | |
 
-**last_done:** /regress #71 · JS 16 · rails 10 PASS  
-**next_step:** `/review`
+**last_done:** /review #71 · bugbot+security · push  
+**next_step:** CI green → стоп; deploy только апрув
 
 **ctx_trim:** `2026-09-02`  
-**CI:** (после /review push)  
-**Entire:** `01M1V2FH9A8C7J6X35YF5RQSFE` на `870df0be` / `79f34353`  
-**Fly MCP:** skip — regress только local · Point A ещё нужен для заказчика
+**CI:** (после push)  
+**Entire:** `01M1V2FH9A8C7J6X35YF5RQSFE` на `0c17ee9f`  
+**Fly MCP:** skip — после deploy Point A
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

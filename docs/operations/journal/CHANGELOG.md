@@ -11,6 +11,14 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-06 — REVIEW: #71 email remember / don’t re-ask
+
+- bugbot: hide только после LS save (не profile) → fix `0c17ee9f`
+- security: no issues
+- Local: JS 16 · rails 10 PASS · Entire `01M1V2FH9A8C7J6X35YF5RQSFE`
+- Push develop · CI (см. HANDOFF)
+- Deploy / Fly MCP Point A — только по апруву
+
 ## 2026-09-06 — regress: #71 email remember / don’t re-ask PASS
 
 - JS: `email_collection_test` **16/0**
