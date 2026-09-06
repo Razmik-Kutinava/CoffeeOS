@@ -11,7 +11,7 @@
 | SBP 3001 | 🟡 | банк / кабинет |
 | #47 / #35 PWA статусы | 🟡 | REVIEW CI green · ждёт deploy + Fly MCP Point A + апрув |
 | #26 invalid token / pay error copy | 🟡 | SPEC 2026-09-06 → `/sbr` RED (шаг 5 inline) |
-| #71 email after pay — remember | 🟡 | SPEC 2026-09-06 → `/sbr` RED |
+| #71 email after pay — remember | 🟡 | regress PASS 2026-09-06 → `/review` |
 
 Детали до 2026-08 → [`issues/archive/ISSUES-resolved-through-2026-08.md`](issues/archive/ISSUES-resolved-through-2026-08.md)
 

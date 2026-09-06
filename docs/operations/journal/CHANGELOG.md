@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-06 — regress: #71 email remember / don’t re-ask PASS
+
+- JS: `email_collection_test` **16/0**
+- rails: `checkout_acceptance_cbr` **10/0**
+- Next: `/review` · Fly MCP Point A ещё для заказчика
+
 ## 2026-09-06 — REVIEW: #35 QA reopen compact status sheet
 
 - bugbot: no bugs · security: no issues

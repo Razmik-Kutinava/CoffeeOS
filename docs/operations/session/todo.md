@@ -13,7 +13,7 @@
 - [x] **SPEC**
 - [x] **RED** (`efc9fe59`)
 - [x] **GREEN** (`870df0be`) · Entire `01M1V2FH9A8C7J6X35YF5RQSFE` (`79f34353`)
-- [ ] **/regress** — команды из «Проверка»
+- [x] **/regress** — JS 16/0 · rails 10/0
 - [ ] **REVIEW**
 
 ## Решение
