@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-06 — SPEC: #71 QA reopen email remember / don’t re-ask
+
+- Канон: после первого email для чека — блок не показывать на следующих заказах
+- `todo.md` → #71 · SPEC `[x]` · RED `[ ]`
+- Решение: tenant LS receipt-email + hide `OrderSuccessEmailBlock` в `PaymentResult`
+
 ## 2026-09-06 — feat: CartSheet видимое «Итого» (правка 5) [GREEN]
 
 - `checkoutBar`: слева **Итого N₽** (`shop-cart-order-total`), справа кнопка `+N₽`
