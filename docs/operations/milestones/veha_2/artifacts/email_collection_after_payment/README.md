@@ -5,6 +5,7 @@
 | Файл | Описание |
 |------|----------|
 | `mcp/fly_vNNN_…/` | Скрины + `MCP_RESULT.md` — после приёмки |
+| QA reopen 2026-09-06 | Текст: после сбора email для чека — **не спрашивать** на последующих заказах (дополнение к #71 Subtask 12) |
 
 **API:** `POST /shop/api/orders/:id/email` · bounce: `POST /callbacks/email/bounce` + HMAC  
 **Point A:** `https://coffeeos.fly.dev/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789`  

@@ -2,17 +2,18 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-06 (SPEC #26 QA reopen step5 inline)  
+**Дата:** 2026-09-06 (PHASE 0 reopen #71 email remember)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #26 SPEC: inline при отказе банка | RED `/sbr` |
-| Root: `resolveCheckoutSheetInlineError`=null + G7 `$effect` стирает copy | не новая фича |
-| #35 reopen | пауза |
+| #71 QA: после email для чека — не спрашивать снова | `/spec` → SBR |
+| Правка 5 CartSheet «Итого» | параллельно / SPEC→RED |
+| #26 QA pay error | пауза |
+| #35 reopen | GREEN local · regress/REVIEW пауза |
 
-**last_done:** SPEC #26 QA · todo пути + Не ломать/Проверка  
-**next_step:** `/sbr` RED
+**last_done:** PHASE 0 reopen #71 · фидбек в ТЗ + CBR  
+**next_step:** `/spec`
 
 **ctx_trim:** `2026-09-02`  
 **CI:** https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/33951901384  

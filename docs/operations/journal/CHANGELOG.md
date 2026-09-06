@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-06 — docs: #71 QA reopen (email remember, don’t re-ask)
+
+- Фидбек заказчика: почту после оплаты для чека — **запомнить**, на следующих заказах **не спрашивать**
+- ТЗ #71 без перезаписи; артефакт `…/email_collection_after_payment/`
+- CBR #71 → QA reopen · Next `/spec`
+- Мета: правки заказчика — **как сказано** (очередь 1–5 + эта)
+
 ## 2026-09-06 — SPEC: #26 QA reopen step5 inline pay error
 
 - Root: `resolveCheckoutSheetInlineError` → null; G7 `$effect` сбрасывает FSM/selection

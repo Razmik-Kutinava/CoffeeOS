@@ -2,16 +2,17 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-06 (CartSheet Итого / правка 5)  
+**Дата:** 2026-09-06 (PHASE 0 reopen #71 email remember)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| CartSheet «Итого» (правка 5) | RED → GREEN |
+| #71 QA reopen (не спрашивать email повторно) | `/spec` |
+| Правка 5 CartSheet «Итого» | RED → GREEN (параллельный чат) |
 | #26 SPEC `[x]` | пауза |
-| #35 / #78 | пауза |
+| #35 GREEN local | пауза |
 
-**last_done:** SPEC правка 5 · todo CartSheet Итого  
-**next_step:** RED → GREEN
+**last_done:** intake QA #71 · текст 1:1 в customer_tasks  
+**next_step:** `/spec` (пути + todo, не новая архитектура)
 
 **ctx_trim:** `2026-09-02`
