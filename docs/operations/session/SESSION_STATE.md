@@ -2,16 +2,16 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-06 (#26 regress PASS)  
+**Дата:** 2026-09-06 (#35 REVIEW CI green)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #26 step5 inline · regress **PASS** | `/review` |
-| #35 reopen | своя очередь `/review` |
-| #78 slice-2 | пауза |
+| #35 QA reopen REVIEW **done** | deploy по апруву + Fly MCP Point A |
+| CI `34026092095` green | |
+| #71 / #26 / правка 5 | свои очереди |
 
-**last_done:** /regress #26 · JS 29 + rails 12 PASS  
-**next_step:** `/review` (#26)
+**last_done:** /review #35 · bugbot+security · push · CI green  
+**next_step:** deploy — только по апруву владельца
 
 **ctx_trim:** `2026-09-02`

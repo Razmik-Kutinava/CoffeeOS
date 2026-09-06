@@ -9,7 +9,7 @@
 | UserCards / RebillId | 🟡 | апрув 3.5; E2E real MIR |
 | Checkout UX (Фаза 2) | 🟡 | апрув заказчика |
 | SBP 3001 | 🟡 | банк / кабинет |
-| #47 / #35 PWA статусы | 🟡 | QA reopen SPEC готов · **пауза** (фокус #26) |
+| #47 / #35 PWA статусы | 🟡 | REVIEW CI green · ждёт deploy + Fly MCP Point A + апрув |
 | #26 invalid token / pay error copy | 🟡 | SPEC 2026-09-06 → `/sbr` RED (шаг 5 inline) |
 | #71 email after pay — remember | 🟡 | SPEC 2026-09-06 → `/sbr` RED |
 

@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-06 — REVIEW: #35 QA reopen compact status sheet
+
+- bugbot: no bugs · security: no issues
+- Local: JS 60 · rails 15 PASS · Entire `01M1V0RTYSBYRP8NWWEAWR24W0` на `fa7d6d75`
+- Push develop · CI **green** https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/34026092095
+- Deploy / Fly MCP Point A — только по апруву
+
 ## 2026-09-06 — regress: #26 step5 pay inline PASS
 
 - JS: payment_error + repeat_invalid_token **29/0**

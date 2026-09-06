@@ -2,22 +2,22 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-06 (#26 regress PASS)  
+**Дата:** 2026-09-06 (#35 REVIEW CI green)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #26 QA step5: bank decline → inline · regress **PASS** | `/review` |
-| GREEN `dcb5a861` · Entire `01M1V1SBJ6NVZ0K0X3RQ0CSE4Z` | push в PHASE 3 |
-| #35 reopen | своя очередь |
+| #35 QA: compact sheet post-pay · REVIEW **CI green** | deploy + MCP Point A по апруву |
+| GREEN `7ab3f3e6` · Entire `01M1V0RTYSBYRP8NWWEAWR24W0` | |
+| Параллельно #71/#26/CartSheet | на develop |
 
-**last_done:** /regress #26 · JS 29 · rails 12 PASS  
-**next_step:** `/review` (#26)
+**last_done:** /review #35 · bugbot no bugs · security no issues · CI green  
+**next_step:** deploy — только по апруву владельца
 
 **ctx_trim:** `2026-09-02`  
-**CI:** (после /review push)  
-**Entire:** `01M1V1SBJ6NVZ0K0X3RQ0CSE4Z` на `dcb5a861`  
-**Fly MCP:** skip — regress только local · Point A ещё нужен для заказчика
+**CI:** https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/34026092095  
+**Entire:** `01M1V0RTYSBYRP8NWWEAWR24W0` на `fa7d6d75`  
+**Fly MCP:** skip до deploy · Point A обязателен для заказчика
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
