@@ -14,15 +14,17 @@ class Shop::RepeatInvalidTokenPaymentTest < ActionDispatch::IntegrationTest
   PAY_BTN  = Rails.root.join("app/frontend/components/CheckoutPayButton.svelte")
   PAY_FSM  = Rails.root.join("app/frontend/lib/shopPayFsm.js")
 
-  # G7 live: insufficient funds → «Отказ: смените карту» открывает NewCardForm (не retry pay).
+  # G7 + #26 step5: CTA open_new_card; auto-open OFF (inline + selection preserve).
   test "G7 shopPayFsm exports CLIENT_ERROR → open_new_card helpers [TDD]" do
     src = File.read(PAY_FSM)
     assert_includes src, "resolvePayFsmCtaAction",
                     "ожидаем resolvePayFsmCtaAction(CLIENT_ERROR)=open_new_card"
     assert_includes src, "shouldAutoOpenNewCardOnClientError",
-                    "ожидаем auto-open NewCardForm при входе в CLIENT_ERROR (D4=C)"
+                    "helper остаётся; step5 → false (не wipe inline)"
+    assert_includes src, "resolveCheckoutSheetInlineError",
+                    "step5: inline friendly label при отказе оплаты"
     assert_equal "open_new_card", js_pay_fsm_export("resolvePayFsmCtaAction", 5)
-    assert_equal true, js_pay_fsm_export("shouldAutoOpenNewCardOnClientError", 5)
+    assert_equal false, js_pay_fsm_export("shouldAutoOpenNewCardOnClientError", 5)
   end
 
   # #46: ErrorCode 119/2200 (лимит авторизаций) → CLIENT_ERROR, не BANK_ERROR retry.
@@ -50,15 +52,18 @@ class Shop::RepeatInvalidTokenPaymentTest < ActionDispatch::IntegrationTest
     )
   end
 
-  test "G7 Checkout wires onChangeCard to onSelectNewCard and auto-open [TDD]" do
+  test "G7 Checkout wires onChangeCard to onSelectNewCard without auto-open wipe [TDD]" do
     src = File.read(CHECKOUT)
     assert_match(
       /onChangeCard=\{onSelectNewCard\}/,
       src,
       "PaymentMethodsSheet/CheckoutPayButton: onChangeCard={onSelectNewCard}"
     )
-    assert_includes src, "shouldAutoOpenNewCardOnClientError",
-                    "Checkout должен auto-open NewCardForm при CLIENT_ERROR"
+    refute_match(
+      /shouldAutoOpenNewCardOnClientError\s*\(\s*payFsmState\s*\)/,
+      src,
+      "step5: не auto-open NewCardForm — иначе стирается inline/selection"
+    )
   end
 
   REPEAT = Rails.root.join("app/frontend/components/RepeatSection.svelte")

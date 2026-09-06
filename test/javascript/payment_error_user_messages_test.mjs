@@ -80,12 +80,16 @@ describe("payment error user messages — network retry UI [TDD]", () => {
   })
 })
 
-describe("payment error user messages — no raw Failed to fetch in sheet [MCP FAIL]", () => {
-  it("resolveCheckoutSheetInlineError is null for NET/CLIENT/BANK (CTA has copy)", () => {
+describe("payment error user messages — sheet inline on pay decline [TDD #26 step5]", () => {
+  it("resolveCheckoutSheetInlineError returns friendly labels for NET/CLIENT/BANK", () => {
     const raw = new Error("Failed to fetch")
-    assert.equal(resolveCheckoutSheetInlineError(raw, PAY_FSM.NET_ERROR), null)
-    assert.equal(resolveCheckoutSheetInlineError(raw, PAY_FSM.CLIENT_ERROR), null)
-    assert.equal(resolveCheckoutSheetInlineError(raw, PAY_FSM.BANK_ERROR), null)
+    assert.equal(resolveCheckoutSheetInlineError(raw, PAY_FSM.NET_ERROR), NET_MSG)
+    assert.equal(resolveCheckoutSheetInlineError(raw, PAY_FSM.CLIENT_ERROR), CARD_MSG)
+    assert.equal(
+      resolveCheckoutSheetInlineError(raw, PAY_FSM.BANK_ERROR),
+      PAY_FSM_LABELS[PAY_FSM.BANK_ERROR]
+    )
+    assert.ok(!/Failed to fetch/i.test(resolveCheckoutSheetInlineError(raw, PAY_FSM.NET_ERROR)))
   })
 
   it("Checkout catch must not assign e.message into sheetInlineError on pay", () => {

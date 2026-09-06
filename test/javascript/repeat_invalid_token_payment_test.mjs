@@ -170,7 +170,7 @@ describe("repeatInvalidTokenStore — invalid rebill detection from one_click", 
   })
 })
 
-/** G7: insufficient funds / CLIENT_ERROR → открыть NewCardForm, не retry той же карты. */
+/** G7 + #26 step5: CLIENT_ERROR → CTA open_new_card; без auto-open (сохраняем selection + inline). */
 describe("shopPayFsm — G7 CLIENT_ERROR CTA → open_new_card [TDD]", () => {
   it("resolvePayFsmCtaAction maps CLIENT_ERROR to open_new_card", async () => {
     const { PAY_FSM, resolvePayFsmCtaAction } = await import(
@@ -189,14 +189,24 @@ describe("shopPayFsm — G7 CLIENT_ERROR CTA → open_new_card [TDD]", () => {
     assert.equal(resolvePayFsmCtaAction(PAY_FSM.DEFAULT), "pay")
   })
 
-  it("shouldAutoOpenNewCardOnClientError is true for CLIENT_ERROR (D4=C)", async () => {
+  it("shouldAutoOpenNewCardOnClientError is false (step5 keep selection + inline)", async () => {
     const { PAY_FSM, shouldAutoOpenNewCardOnClientError } = await import(
       "../../app/frontend/lib/shopPayFsm.js"
     )
     assert.equal(typeof shouldAutoOpenNewCardOnClientError, "function")
-    assert.equal(shouldAutoOpenNewCardOnClientError(PAY_FSM.CLIENT_ERROR), true)
+    assert.equal(shouldAutoOpenNewCardOnClientError(PAY_FSM.CLIENT_ERROR), false)
     assert.equal(shouldAutoOpenNewCardOnClientError(PAY_FSM.DEFAULT), false)
     assert.equal(shouldAutoOpenNewCardOnClientError(PAY_FSM.NET_ERROR), false)
+  })
+
+  it("resolveCheckoutSheetInlineError surfaces card copy on CLIENT_ERROR", async () => {
+    const { PAY_FSM, resolveCheckoutSheetInlineError, PAY_FSM_LABELS } = await import(
+      "../../app/frontend/lib/shopPayFsm.js"
+    )
+    assert.equal(
+      resolveCheckoutSheetInlineError({ error_code: "1051" }, PAY_FSM.CLIENT_ERROR),
+      PAY_FSM_LABELS[PAY_FSM.CLIENT_ERROR]
+    )
   })
 })
 
