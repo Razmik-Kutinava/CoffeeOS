@@ -6,7 +6,7 @@
 import assert from "node:assert/strict"
 import { readFileSync } from "node:fs"
 import { dirname, join } from "node:path"
-import { describe, it } from "node:test"
+import { describe, it, beforeEach, afterEach } from "node:test"
 import { fileURLToPath } from "node:url"
 
 import {
@@ -146,5 +146,76 @@ describe("#71 OrderSuccessEmailBlock UX (S5/S7/S18)", () => {
     assert.equal(body.email, "a@b.com")
     assert.equal(body.marketing_consent, true)
     assert.equal(res.success, true)
+  })
+})
+
+describe("#71 QA reopen — remember receipt email, don't re-ask", () => {
+  const store = new Map()
+  const originalWindow = globalThis.window
+  const originalDocument = globalThis.document
+  const originalLocalStorage = globalThis.localStorage
+
+  beforeEach(() => {
+    store.clear()
+    globalThis.window = {
+      location: { search: "?tenant_id=t-qa71" }
+    }
+    globalThis.document = {
+      querySelector: () => ({ getAttribute: () => "t-qa71" })
+    }
+    globalThis.localStorage = {
+      getItem: (k) => store.get(k) ?? null,
+      setItem: (k, v) => store.set(k, String(v)),
+      removeItem: (k) => store.delete(k)
+    }
+  })
+
+  afterEach(() => {
+    globalThis.window = originalWindow
+    globalThis.document = originalDocument
+    globalThis.localStorage = originalLocalStorage
+  })
+
+  it("shouldAskReceiptEmail is false when email already saved [TDD]", async () => {
+    const { shouldAskReceiptEmail } = await import(
+      "../../app/frontend/lib/emailCollection.js"
+    )
+    assert.equal(typeof shouldAskReceiptEmail, "function")
+    assert.equal(shouldAskReceiptEmail(""), true)
+    assert.equal(shouldAskReceiptEmail(null), true)
+    assert.equal(shouldAskReceiptEmail("  "), true)
+    assert.equal(shouldAskReceiptEmail("guest@example.com"), false)
+  })
+
+  it("saveReceiptEmail / loadReceiptEmail roundtrip (tenant LS, no name) [TDD]", async () => {
+    const { loadReceiptEmail, saveReceiptEmail } = await import(
+      "../../app/frontend/lib/shopGuestProfile.js"
+    )
+    assert.equal(typeof loadReceiptEmail, "function")
+    assert.equal(typeof saveReceiptEmail, "function")
+    assert.equal(loadReceiptEmail(), "")
+    saveReceiptEmail("Guest@Example.COM")
+    assert.equal(loadReceiptEmail(), "guest@example.com")
+    assert.ok([...store.keys()].some((k) => k.includes("shop_receipt_email")))
+  })
+
+  it("PaymentResult skips OrderSuccessEmailBlock when receipt email known [TDD]", () => {
+    const src = readFront("routes/PaymentResult.svelte")
+    assert.match(src, /loadReceiptEmail/)
+    assert.match(src, /saveReceiptEmail/)
+    assert.match(src, /shouldAskReceiptEmail/)
+    assert.match(src, /askReceiptEmail/)
+    assert.match(
+      src,
+      /\{#if\s+askReceiptEmail\}[\s\S]*OrderSuccessEmailBlock[\s\S]*\{\/if\}/
+    )
+    assert.match(
+      src,
+      /async function handleEmailSubmit[\s\S]*?saveReceiptEmail\([\s\S]*?async function handleEmailSkip/
+    )
+    assert.doesNotMatch(
+      src,
+      /async function handleEmailSkip[\s\S]{0,250}saveReceiptEmail/
+    )
   })
 })

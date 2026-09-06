@@ -1,55 +1,44 @@
-﻿# todo — #26 QA reopen: inline надпись при отказе банка (шаг 5)
+﻿# todo — #71 QA reopen: не спрашивать email повторно после чека
 
 | Поле | Значение |
 |------|----------|
-| **CBR** | #26 · [ТЗ](../milestones/veha_2/requirements/customer_tasks/Главный%20экран%20—%20повторный%20заказ%20(невалидный%20токен)%20BottomSheet%20выбора%20способа%20оплаты.md) · UX [Понятные сообщения…](../milestones/veha_2/requirements/customer_tasks/Понятные%20сообщения%20пользователю%20при%20ошибке%20оплаты.md) |
-| **Тип** | Fix / hot-path оплата · PaymentMethodsSheet |
-| **Цель** | Отказ банка / 400/500 → inline в шторке; selection сохранить; CTA разблокировать; клик → new card |
+| **CBR** | #71 · [ТЗ](../milestones/veha_2/requirements/customer_tasks/Email-сбор%20после%20оплаты%20(Callcheck-флоу).md) |
+| **Тип** | Fix / UX · hot-path post-pay (витрина) |
+| **Цель** | После первого ввода email для чека — на следующих заказах **не показывать** блок «Куда прислать чек…» |
 | **Point A** | `tenant_id` = `2fdee1ac-4674-41ee-b89e-87b45643f789` |
-| **Fly** | после GREEN / REVIEW — MCP |
+| **Fly** | MCP после REVIEW/deploy |
 | **Ветка** | `develop` |
-| **Артефакты QA** | [`…/screenshots/qa_2026-09-06/`](../milestones/veha_2/artifacts/repeat_order_invalid_token_payment_sheet/screenshots/qa_2026-09-06/) |
+| **Запрет** | email-гейт на Checkout; OTP email; gem’ы оплаты |
 
 ## SBR
 
 - [x] **SPEC**
-- [x] **RED** (`58a177a1`)
-- [x] **GREEN** (`dcb5a861`) · Entire `01M1V1SBJ6NVZ0K0X3RQ0CSE4Z`
-- [x] **/regress** — JS 29/0 · rails 12/0
+- [ ] **RED**
+- [ ] **GREEN**
+- [ ] **/regress**
 - [ ] **REVIEW**
 
-## Баг → решение
+## Решение
 
-| # | Решение |
-|---|---------|
-| 1 | `resolveCheckoutSheetInlineError` → `payFsmLabel` (не null, не raw message) |
-| 2 | `shouldAutoOpenNewCardOnClientError` → false; убрать `$effect` auto-open в Checkout |
-| 3 | CTA click `CLIENT_ERROR` → `onChangeCard` / `open_new_card` (G7 без wipe) |
+| QA | Решение |
+|----|---------|
+| Запомнить почту → не спрашивать снова | `loadReceiptEmail`/`saveReceiptEmail` (tenant LS). `shouldAskReceiptEmail`. Hide `OrderSuccessEmailBlock` если email есть. Persist после submit. Skip без ввода — не писать LS. |
 
 ## Файлы (ожидаемо)
 
-1. `app/frontend/lib/shopPayFsm.js`
-2. `app/frontend/routes/Checkout.svelte`
-3. `app/frontend/components/PaymentMethodsSheet.svelte`
-4. `app/frontend/components/CheckoutPayButton.svelte`
-5. `test/javascript/payment_error_user_messages_test.mjs`
-6. `test/javascript/repeat_invalid_token_payment_test.mjs`
-7. `test/integration/shop/repeat_invalid_token_payment_test.rb`
-
-### Blast-radius
-
-8. `app/frontend/lib/shopInlinePayFsm.js`
-9. `app/frontend/components/CartSheet.svelte`
-10. `app/frontend/components/NewCardForm.svelte`
+1. `app/frontend/lib/shopGuestProfile.js` — load/save receipt email
+2. `app/frontend/lib/emailCollection.js` — `shouldAskReceiptEmail`
+3. `app/frontend/routes/PaymentResult.svelte` — conditional block + persist
+4. `test/javascript/email_collection_test.mjs` — RED asserts
 
 ## Не ломать
 
-- One-Click / webhook idempotency
-- Invalid token → PaymentMethodsSheet (шаги 1–4, 6)
-- CartSheet peek / pay-stack
-- CTA при отказе карты → new card (не silent retry)
+- Checkout без email-гейта
+- Первый заказ без email — блок есть
+- Skip без записи
+- `POST /orders/:id/email`
 
 ## Проверка
 
-- `node --test test/javascript/payment_error_user_messages_test.mjs test/javascript/repeat_invalid_token_payment_test.mjs`
-- `bin/rails test test/integration/shop/repeat_invalid_token_payment_test.rb`
+- `node --test test/javascript/email_collection_test.mjs`
+- `bundle exec rails test test/integration/shop/checkout_acceptance_cbr_test.rb`
