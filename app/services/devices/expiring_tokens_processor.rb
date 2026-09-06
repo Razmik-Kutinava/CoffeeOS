@@ -72,7 +72,7 @@ module Devices
       Device.where(tenant_id: tenant.id, is_active: true)
             .where.not(token_expires_at: nil)
             .where("token_expires_at > ?", @now)
-            .where("token_expires_at <= ?", @warn_days.days.from_now)
+            .where("token_expires_at <= ?", @now + @warn_days.days)
     end
 
     def deactivate_expired!(device, tenant)
@@ -109,7 +109,7 @@ module Devices
       parsed = Time.zone.parse(warned_at.to_s)
       return true unless parsed
 
-      parsed < 7.days.ago
+      parsed < (@now - 7.days)
     end
 
     def expired_message(device, tenant)
