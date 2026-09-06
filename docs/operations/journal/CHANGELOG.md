@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-06 — GREEN: #35 QA reopen compact status sheet
+
+- RED `785fa2e3` · GREEN `7ab3f3e6` · Entire `01M1V0RTYSBYRP8NWWEAWR24W0`
+- Post-pay → `/` + compact sheet; status без receipt; cancel hint «1–3 дня»; X = Скрыть
+- Local: JS zone 60 PASS · rails acceptance/mount 15 PASS
+
 ## 2026-09-06 — SPEC: #71 QA reopen email remember / don’t re-ask
 
 - Канон: после первого email для чека — блок не показывать на следующих заказах
