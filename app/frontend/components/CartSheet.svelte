@@ -512,7 +512,7 @@
         <span
           data-testid="shop-cart-hidden-total"
           class="shrink-0 text-sm font-semibold text-[#ff8c42]"
-        >{roundPrice(total)}₽</span>
+        >{formatThousands(roundPrice(total))}₽</span>
         {#if showAddCardCta}
           <button
             type="button"

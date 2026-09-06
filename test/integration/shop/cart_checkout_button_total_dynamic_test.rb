@@ -42,7 +42,7 @@ class Shop::CartCheckoutButtonTotalDynamicTest < ActionDispatch::IntegrationTest
       sheet
     )
     assert_match(
-      /data-testid="shop-cart-hidden-total"[^>]*>\{roundPrice\(total\)\}₽/,
+      /data-testid="shop-cart-hidden-total"[^>]*>\{formatThousands\(roundPrice\(total\)\)\}₽/,
       sheet
     )
   end
