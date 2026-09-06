@@ -16,7 +16,7 @@
 
 **ctx_trim:** `2026-09-02`  
 **CI:** (после /review push)  
-**Entire:** `01M1V2FH9A8C7J6X35YF5RQSFE` на `f8b4e3ba`  
+**Entire:** `01M1V2FH9A8C7J6X35YF5RQSFE` на `870df0be` / ops `79f34353`  
 **Fly MCP:** skip — после REVIEW/deploy
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
