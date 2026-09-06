@@ -83,14 +83,17 @@ export function resolvePayFsmCtaAction(state) {
   return "pay"
 }
 
-/** D4=C: при входе в CLIENT_ERROR сразу открываем форму новой карты. */
-export function shouldAutoOpenNewCardOnClientError(state) {
-  return state === PAY_FSM.CLIENT_ERROR
+/**
+ * #26 step5: не auto-open NewCardForm при CLIENT_ERROR —
+ * иначе стираются selection + inline. CTA click → open_new_card.
+ */
+export function shouldAutoOpenNewCardOnClientError(_state) {
+  return false
 }
 
 /**
- * Текст в PaymentMethodsSheet (alert). Для NET/CLIENT/BANK — null:
- * copy уже на CTA (`payFsmLabel`), сырой `Failed to fetch` / ErrorCode не дублируем.
+ * Текст в PaymentMethodsSheet (alert) при отказе оплаты.
+ * Friendly FSM labels; сырой `Failed to fetch` / ErrorCode не кладём.
  * @param {{ message?: string }|Error|null} _error
  * @param {number} fsmState
  * @returns {string|null}
@@ -101,7 +104,7 @@ export function resolveCheckoutSheetInlineError(_error, fsmState) {
     fsmState === PAY_FSM.CLIENT_ERROR ||
     fsmState === PAY_FSM.BANK_ERROR
   ) {
-    return null
+    return payFsmLabel(fsmState)
   }
   return null
 }

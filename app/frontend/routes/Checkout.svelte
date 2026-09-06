@@ -38,7 +38,6 @@
     fsmFromPaymentError,
     isPayFsmClickable,
     resolveCheckoutSheetInlineError,
-    shouldAutoOpenNewCardOnClientError,
     withMinLoaderMs
   } from "../lib/shopPayFsm.js"
   import { waitForOrderSettled } from "../lib/shopPaySettle.js"
@@ -372,16 +371,6 @@
     persistPaymentSelection({ selectedCardId: null, selectionMode: "new_card" })
   }
 
-  /** G7 D4=C: отказ банка (CLIENT_ERROR) → сразу форма новой карты; уже на new_card — только сброс FSM. */
-  $effect(() => {
-    if (!shouldAutoOpenNewCardOnClientError(payFsmState)) return
-    if (selectionMode === "new_card") {
-      payFsmState = PAY_FSM.DEFAULT
-      return
-    }
-    onSelectNewCard()
-  })
-
   function onSelectSbp() {
     selectionMode = "sbp"
     selectedCardId = null
@@ -641,7 +630,7 @@
       if (isInvalidRebillPaymentError(e)) {
         setTokenInvalid(selectedCardId)
       }
-      // CTA несёт copy (NET/CLIENT/BANK); сырой e.message («Failed to fetch») в шторку не кладём.
+      // #26 step5: inline friendly copy в шторке; сырой e.message не кладём.
       if (mapPaymentErrorSurface({ httpStatus: e.httpStatus, phase: "pay" }) === "inline") {
         sheetInlineError = resolveCheckoutSheetInlineError(e, payFsmState)
       }
