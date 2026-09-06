@@ -68,11 +68,11 @@ describe("notifyActionsView by OS (#37 step 2)", () => {
 })
 
 describe("ActiveOrdersAccordion wires notify CTAs (#37 step 2 / #41)", () => {
-  it("imports OrderActionButtons; receipt via chevron (no stub placeholders)", () => {
+  it("imports OrderActionButtons; no stub placeholders (#35: no receipt chevron)", () => {
     const src = readFileSync(accordionPath, "utf8")
     assert.match(src, /OrderActionButtons/)
-    assert.match(src, /aoa__chevron|onToggle/)
     assert.doesNotMatch(src, /кнопка с текстом/)
+    assert.doesNotMatch(src, /aoa__chevron/)
   })
 })
 
@@ -98,9 +98,10 @@ describe("openOrderReceipt (#37 step 3)", () => {
     assert.equal(result.isLoading, false)
   })
 
-  it("ActiveOrdersAccordion wires receipt toggle via chevron", () => {
+  it("ActiveOrdersAccordion status model has dismiss, no receipt chevron (#35 QA)", () => {
     const src = readFileSync(accordionPath, "utf8")
-    assert.match(src, /toggleExpandedOrder|onToggle/)
-    assert.match(src, /aoa__chevron|active-order-receipt/)
+    assert.match(src, /status-widget-dismiss/)
+    assert.match(src, /Скрыть статус заказа/)
+    assert.doesNotMatch(src, /aoa__chevron|active-order-receipt/)
   })
 })

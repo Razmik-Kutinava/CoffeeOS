@@ -8,7 +8,7 @@ export { CTA_STYLE }
 
 const LABELS = Object.freeze({
   cancel: "Отменить заказ",
-  cancelHintAccepted: "Вернем 100% суммы",
+  cancelHintAccepted: "Вернем 100% · 1–3 дня",
   // #37 MCP-канон (не #41 черновик «Включить Push»)
   push: "🔔 Уведомление о готовности",
   wallet: "Карта в Apple Wallet",

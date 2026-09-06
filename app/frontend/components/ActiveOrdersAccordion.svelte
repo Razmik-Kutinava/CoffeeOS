@@ -1,12 +1,6 @@
 <script>
-  /** #36/#37/#41 accordion: статус + OrderActionButtons + текстовый чек. */
-  import {
-    toggleExpandedOrder,
-    accordionRowView,
-    receiptView,
-    receiptScrollStyle,
-    CHEVRON
-  } from "../lib/activeOrdersAccordion.js"
+  /** #35/#37/#41 accordion: статус + OrderActionButtons (без состава чека в статусной модели). */
+  import { accordionRowView } from "../lib/activeOrdersAccordion.js"
   import { getDeviceOS } from "../lib/deviceDetect.js"
   import {
     downloadWalletPass,
@@ -29,8 +23,6 @@
   let row = $derived(
     accordionRowView(order, accordionState?.activeExpandedOrderId, { sheetContext })
   )
-  let receipt = $derived(row.expanded ? receiptView(order) : null)
-  let scrollStyle = receiptScrollStyle()
   let deviceOs = $derived(getDeviceOS())
   let actionLoading = $state(false)
   let toastMsg = $state("")
@@ -51,11 +43,6 @@
     })
     if (init.restored) pushSubscribed = true
   })
-
-  function onToggle(e) {
-    e.stopPropagation()
-    toggleExpandedOrder(accordionState, orderId)
-  }
 
   function onDetail() {
     if (typeof onOpenDetail === "function") onOpenDetail(order)
@@ -149,7 +136,8 @@
         type="button"
         class="aoa__dismiss"
         data-testid="status-widget-dismiss"
-        aria-label="Закрыть статус заказа"
+        aria-label="Скрыть статус заказа"
+        title="Скрыть"
         onclick={(e) => {
           e.stopPropagation()
           onDismiss(order)
@@ -159,40 +147,6 @@
   </div>
   {#if toastMsg}
     <div class="aoa__toast" data-testid="active-order-notify-toast" role="status">{toastMsg}</div>
-  {/if}
-  <button
-    type="button"
-    class="aoa__chevron"
-    aria-expanded={row.expanded}
-    aria-label={row.expanded ? "Свернуть чек" : "Развернуть чек"}
-    onclick={onToggle}
-  >{row.expanded ? CHEVRON.expanded : CHEVRON.collapsed}</button>
-
-  {#if receipt}
-    <div
-      class="aoa__receipt"
-      data-testid="active-order-receipt"
-      style="max-height: {scrollStyle.maxHeight}; overflow-y: {scrollStyle.overflowY}"
-    >
-      {#each receipt.lines as line, i (i)}
-        <div class="aoa__line">
-          <div class="aoa__line-name">{line.name}</div>
-          {#each line.modifiers as mod (mod.name)}
-            <div class="aoa__mod">+ {mod.name}{#if mod.price} · {mod.price}₽{/if}</div>
-          {/each}
-          <div class="aoa__line-meta">
-            ×{line.quantity} · {line.price}₽
-            {#if line.discount} · скидка {line.discount}₽{/if}
-            · итог {line.lineTotal}₽
-          </div>
-        </div>
-      {/each}
-      <div class="aoa__totals">
-        <div>Subtotal: {receipt.subtotal}₽</div>
-        <div>Discount: {receipt.discount}₽</div>
-        <div class="aoa__total">Total Amount: {receipt.totalAmount}₽</div>
-      </div>
-    </div>
   {/if}
 </div>
 
@@ -305,35 +259,4 @@
     font-size: 0.62rem;
     color: #ffb74d;
   }
-  .aoa__chevron {
-    display: block;
-    margin: 0.15rem auto 0;
-    background: transparent;
-    border: 0;
-    color: #eee;
-    font-size: 0.75rem;
-    cursor: pointer;
-    padding: 0.1rem 0.5rem;
-  }
-  .aoa__receipt {
-    margin-top: 0.35rem;
-    border: 1px solid #888;
-    border-radius: 0.65rem;
-    padding: 0.45rem 0.55rem;
-    background: #1a1a1a;
-    color: #ddd;
-    font-size: 0.68rem;
-    line-height: 1.35;
-  }
-  .aoa__line { margin-bottom: 0.4rem; }
-  .aoa__line-name { color: #fff; font-weight: 500; }
-  .aoa__mod { color: #aaa; padding-left: 0.35rem; }
-  .aoa__line-meta { color: #b0b0b0; margin-top: 0.1rem; }
-  .aoa__totals {
-    border-top: 1px solid #444;
-    margin-top: 0.35rem;
-    padding-top: 0.35rem;
-    color: #ccc;
-  }
-  .aoa__total { color: #ff8c42; font-weight: 600; margin-top: 0.15rem; }
 </style>

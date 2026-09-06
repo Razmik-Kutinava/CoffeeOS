@@ -83,7 +83,7 @@
       })
       err = null
       await new Promise((r) => setTimeout(r, 800))
-      push(`/order/${orderId}`)
+      push("/")
     } catch (e) {
       err = e.message || "Не удалось сохранить email"
     } finally {
@@ -93,7 +93,7 @@
 
   async function handleEmailSkip() {
     await new Promise((r) => setTimeout(r, 200))
-    push(`/order/${orderId}`)
+    push("/")
   }
 
   onMount(async () => {
