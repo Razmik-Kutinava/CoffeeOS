@@ -15,8 +15,8 @@
 **next_step:** deploy — только по апруву владельца
 
 **ctx_trim:** `2026-09-02`  
-**CI:** https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/34025628548 (GREEN) · regress https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/34025794993  
-**Entire:** `01M1V1SBJ6NVZ0K0X3RQ0CSE4Z` (на amend `dcb5a861` / tree=`32c79960`)  
+**CI:** https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/34027634076 (**green**)  
+**Entire:** `01M1V1SBJ6NVZ0K0X3RQ0CSE4Z` на `d7766ead`  
 **Fly MCP:** skip — ещё нужен Point A после deploy
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
