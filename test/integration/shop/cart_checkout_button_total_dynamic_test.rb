@@ -18,9 +18,31 @@ class Shop::CartCheckoutButtonTotalDynamicTest < ActionDispatch::IntegrationTest
     refute_includes sheet, ">Оформить</button>"
     assert_includes sheet, "formatCartButtonTotal(total)"
     assert_includes sheet, "disabled={checkoutDisabled}"
-    # Сумма только внутри кнопки — отдельный span рядом с кнопкой убран
+  end
+
+  # Правка 5: явная общая сумма («Итого»), не только +N₽ на кнопке
+  test "checkoutBar shows visible order total Итого next to checkout button" do
+    assert_includes sheet, 'data-testid="shop-cart-order-total"'
+    assert_includes sheet, ">Итого<"
+    assert_match(
+      /data-testid="shop-cart-order-total"[\s\S]*?\{formatThousands\(roundPrice\(total\)\}₽/,
+      sheet
+    )
+    # Кнопка +N₽ остаётся; старый серый span без подписи «Итого» не возвращаем
     refute_match(
       /checkoutBar[\s\S]*?<span class="text-sm text-\[#a0a0a0\]"[^>]*>\{roundPrice\(total\)\}₽<\/span>/,
+      sheet
+    )
+  end
+
+  test "hidden mode order total is visible not sr-only" do
+    assert_includes sheet, 'data-testid="shop-cart-hidden-total"'
+    refute_match(
+      /data-testid="shop-cart-hidden-total"[^>]*class="[^"]*sr-only/,
+      sheet
+    )
+    assert_match(
+      /data-testid="shop-cart-hidden-total"[^>]*>\{roundPrice\(total\)\}₽/,
       sheet
     )
   end
