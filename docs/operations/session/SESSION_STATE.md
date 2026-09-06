@@ -2,16 +2,16 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-06 (#35 regress PASS)  
+**Дата:** 2026-09-06 (#26 regress PASS)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #35 QA reopen regress **PASS** | `/review` |
-| Правка 5 CartSheet REVIEW | deploy по апруву |
-| #71 / #26 | свои очереди |
+| #26 step5 inline · regress **PASS** | `/review` |
+| #35 reopen | своя очередь `/review` |
+| #78 slice-2 | пауза |
 
-**last_done:** /regress #35 · JS 60 + rails 15+9 PASS  
-**next_step:** `/review` (#35)
+**last_done:** /regress #26 · JS 29 + rails 12 PASS  
+**next_step:** `/review` (#26)
 
 **ctx_trim:** `2026-09-02`

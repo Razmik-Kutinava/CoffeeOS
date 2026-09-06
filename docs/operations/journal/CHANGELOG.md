@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-06 — regress: #26 step5 pay inline PASS
+
+- JS: payment_error + repeat_invalid_token **29/0**
+- rails: repeat_invalid_token_payment **12/0**
+- Next: `/review` · Fly MCP Point A ещё для заказчика
+
 ## 2026-09-06 — regress: #35 QA status sheet PASS
 
 - JS: cancel/accordion/sheet/notify **60/0**
