@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-06 — regress: #35 QA status sheet PASS
+
+- JS: cancel/accordion/sheet/notify **60/0**
+- rails: acceptance+mount **15/0** · peek/expanded stack **9/0**
+- Next: `/review` · Fly MCP Point A ещё для заказчика
+
 ## 2026-09-06 — REVIEW: CartSheet «Итого» (правка 5)
 
 - GREEN `7d7cfbec` · fix thousands `91daaf19` · Entire `01M1V145Z4ABQQM5APY2EXEG6N`
