@@ -1,64 +1,58 @@
-﻿# todo — #78 Архитектура подписки (guest billing)
+﻿# todo — #35 reopen: QA правки статусной шторки PWA
 
 | Поле | Значение |
 |------|----------|
-| **CBR** | #78 · [ТЗ](../milestones/veha_2/requirements/customer_tasks/Архитектура%20подписки%20—%20планы%20биллинг%20и%20автосписание.md) |
-| **Тип** | Feature / hot-path оплата + Shop API + PWA |
-| **Цель** | Пилот: планы в БД, покупка через `TbankAdapter`, период с фиксацией лимитов; дальше — usage/renewal/API/UI |
-| **Point A** | `tenant_id` = `2fdee1ac-4674-41ee-b89e-87b45643f789` · sub-offer **OFF** |
-| **Fly** | **v480** · post-deploy MCP offer/promo/#78 **PASS** |
+| **CBR** | #35 · [ТЗ](../milestones/veha_2/requirements/customer_tasks/Интеграция%20статусной%20модели%20в%20компактную%20шторку%20PWA%20и%20Push.md) |
+| **Тип** | Fix / hot-path статусы + шторка + post-pay routing |
+| **Цель** | Добить #35 по QA заказчика: единый compact-sheet после оплаты с гл. экрана; статусная модель без состава заказа; крестик = скрыть; hint отмены «1–3 дня»; UX по референсам |
+| **Point A** | `tenant_id` = `2fdee1ac-4674-41ee-b89e-87b45643f789` |
+| **Fly** | после GREEN / REVIEW — MCP (не Local-only) |
 | **Ветка** | `develop` |
-| **Запрет** | правки `TbankAdapter` / `TbankReceiptBuilder` / auto-Refund; `RecurrentOrderCreator` для renewal; `card_binding_attempts`; `point_campaign_settings` / промо-11₽; antifraud; ограничение по `point_id`; tips restore |
+| **Артефакты QA** | [`…/order_status_compact_sheet_push/screenshots/qa_2026-09-06/`](../milestones/veha_2/artifacts/order_status_compact_sheet_push/screenshots/qa_2026-09-06/) |
+| **Запрет** | новая параллельная фича / новый `OrderStatusChannel`; ломать `orders` schema; gem’ы оплаты; матрица CTA #41 без апрува |
 
 ## SBR
 
-- [x] **SPEC** — slice-1 пути + Не ломать + Проверка + решения
-- [x] **RED** — failing-тест `Subscriptions::PurchaseService` (NameError SubscriptionPlan / PurchaseService)
-- [x] **GREEN** — миграции/модели + `PurchaseService` (Init→Charge → active + closed order)
-- [x] **/regress** — команды из «Проверка»
-- [x] **REVIEW** — bugbot + security-review + Entire + push
+- [x] **SPEC** — пути + Не ломать + Проверка + решения
+- [ ] **RED** — failing-тесты под 3 бага QA
+- [ ] **GREEN** — правки в существующих файлах #35
+- [ ] **/regress** — команды из «Проверка»
+- [ ] **REVIEW** — bugbot + security-review + Entire + push
 
-## Slice backlog (после GREEN slice-1)
+## Баги заказчика → решения SPEC
 
-| Slice | Scope |
-|-------|--------|
-| 2 | usage events + UsagePricingService |
-| 3 | CancellationService + auto_renew |
-| 4 | RenewalService + jobs + past_due |
-| 5 | Shop API subscriptions |
-| 6 | PWA screens + CTA |
-| 7 | E2E Fly |
+| # | QA | Решение |
+|---|-----|---------|
+| 1 | После оплаты с гл. экрана — full-screen `/order/:id`; «повторить» — compact sheet | `PaymentResult` после ok → каталог (`/` / shop home), **не** `push(/order/:id)`. Compact `OrderStatusSheet` в CartSheet ловит active через poll/cable. Deep-link `/order/:id` оставить для push/share. |
+| 2a | Непонятен крестик | Уже `dismissOrder` (скрыть виджет). Уточнить `aria-label` / видимый смысл «Скрыть» — **не** отмена заказа. |
+| 2b | В статусной модели виден состав (qty/удалить) | Убрать receipt / line-items из статусной строки (`ActiveOrdersAccordion`): только степпер + мета + CTA. Состав — не в status-model. |
+| 2c | Отмена: банк 1–3 дня | CTA hint в `orderStatusCtaMachine` (сейчас только «Вернем 100%»); modal/toast уже имеют 1–3 дня — синхронизировать hint на кнопке. |
+| 3 | UX по референсам | После #1–2 сверить peek home/product + multi>2 scroll; без новой архитектуры. |
 
-## Решения SPEC (канон)
+## Файлы (ожидаемо)
 
-1. Guest `subscription_*` ≠ platform `billing_*`
-2. `Subscriptions::*` вызывает `TbankAdapter` без правок адаптера
-3. Технический `Order` + `Payment` для Init/Charge; после CONFIRMED → order `closed` (не barista board)
-4. Snapshot периода с плана; point-agnostic usage позже
-5. Тесты Minitest; план в setup (не fixtures.yml)
-
-## Файлы (ожидаемо) — slice-1
-
-1. `db/migrate/*_create_guest_subscription_tables.rb`
-2. `app/models/subscription_plan.rb`
-3. `app/models/subscription.rb`
-4. `app/services/subscriptions/purchase_service.rb`
-5. `test/services/subscriptions/purchase_service_test.rb`
+1. `app/frontend/routes/PaymentResult.svelte` — post-pay redirect без full-screen OrderStatus
+2. `app/frontend/components/ActiveOrdersAccordion.svelte` — без receipt/line-items; ясный dismiss (X)
+3. `app/frontend/lib/orderStatusCtaMachine.js` — hint отмены с «1–3 дня»
+4. `app/frontend/lib/activeOrdersAccordion.js` — view без состава в status-model (если логика не только в Svelte)
+5. `test/javascript/order_action_buttons_cancel_test.mjs` — RED/GREEN hint 1–3 дня
+6. `test/javascript/active_orders_accordion_test.mjs` — RED/GREEN: нет line-items в status row
+7. `test/integration/shop/order_status_acceptance_cbr_test.rb` — обновить `b11_02` (больше не требует `/order/:id` после PaymentResult)
 
 ### Blast-radius (только читать)
 
-6. `app/services/payments/tbank_adapter.rb`
-7. `app/controllers/callbacks/tbank_controller.rb`
-8. `app/services/shop/recurrent_order_creator.rb` — не использовать
+8. `app/frontend/lib/orderStatusSheet.js` — show/dismiss/scroll>2 / pointer-events
+9. `app/frontend/components/CartSheet.svelte` — embedded mount OrderStatusSheet
+10. `app/frontend/routes/Checkout.svelte` — вход в payment-result (не менять без нужды)
 
 ## Не ломать
 
-- Checkout / GrowthPromo / промо-11₽
-- Binding / RebillId / SBP / card_binding_attempts
-- Webhook idempotency `tbank:callback:{PaymentId}:{Status}`
-- #77 eligibility / Point A offer OFF
+- Оплата / finalize / webhook idempotency (Tbank callback)
+- «Повторить» one-click + frequentRepeat → compact sheet
+- Табло бариста + `GuestOrderChannel` / hide on `ready` + Push idempotency `ready_notified_at`
+- Peek/hidden/expanded CartSheet + клики по каталогу (`pointer-events`)
 
 ## Проверка
 
-- `bin/rails test test/services/subscriptions/purchase_service_test.rb`
-- `bin/rails test test/integration/shop/api/qa_section_2_3_payment_cart_test.rb test/services/shop/order_creator_test.rb`
+- `node --test test/javascript/order_action_buttons_cancel_test.mjs test/javascript/active_orders_accordion_test.mjs test/javascript/order_status_sheet_test.mjs`
+- `bin/rails test test/integration/shop/order_status_acceptance_cbr_test.rb test/integration/shop/order_status_sheet_mount_acceptance_test.rb`

@@ -2,16 +2,16 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-05 (Fly v480 + MCP ×3)  
+**Дата:** 2026-09-06 (SPEC #35 reopen QA)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Deploy **v480** | done |
-| MCP offer / promo / #78 | **PASS** |
-| Point A offer | **OFF** |
+| #35 reopen SPEC `[x]` | RED → GREEN → REVIEW |
+| QA скрины в artifacts | `/sbr` |
+| #78 slice-2 | пауза |
 
-**last_done:** fly deploy v480 + three post-deploy MCP Point A  
-**next_step:** #78 slice-2 — по намерению
+**last_done:** SPEC #35 QA правки статусной шторки → `todo.md`  
+**next_step:** `/sbr` RED (3 бага)
 
 **ctx_trim:** `2026-09-02`

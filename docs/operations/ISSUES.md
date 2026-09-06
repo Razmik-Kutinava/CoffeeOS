@@ -9,7 +9,7 @@
 | UserCards / RebillId | 🟡 | апрув 3.5; E2E real MIR |
 | Checkout UX (Фаза 2) | 🟡 | апрув заказчика |
 | SBP 3001 | 🟡 | банк / кабинет |
-| #47 PWA статусы | 🟡 | апрув заказчика |
+| #47 / #35 PWA статусы | 🟡 | QA reopen SPEC 2026-09-06 → `/sbr` |
 
 Детали до 2026-08 → [`issues/archive/ISSUES-resolved-through-2026-08.md`](issues/archive/ISSUES-resolved-through-2026-08.md)
 

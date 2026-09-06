@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-06 — SPEC: #35 reopen QA статусной шторки
+
+- Заказчик: 3 правки (home post-pay full-screen; X/состав/cancel 1–3д; UX референс)
+- `todo.md` → #35 reopen · SPEC `[x]` · RED `[ ]`
+- QA скрины → `artifacts/order_status_compact_sheet_push/screenshots/qa_2026-09-06/`
+- Решения: PaymentResult → `/`; status row без receipt; CTA hint 1–3 дня; X = dismiss
+
 ## 2026-09-05 — deploy v480 + Fly MCP ×3 Point A PASS
 
 - `git push` develop up-to-date · CI green `33951901384`

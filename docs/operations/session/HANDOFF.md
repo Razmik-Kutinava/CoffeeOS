@@ -2,17 +2,17 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-05 (Fly v480 deploy + 3× MCP PASS)  
+**Дата:** 2026-09-06 (SPEC #35 reopen QA)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Fly **v480** deploy + MCP ×3 **PASS** | #78 slices 2–7 |
-| Point A sub-offer **OFF** | не включать без апрува |
-| Promo `amount_rub` follows config | live charge optional |
+| #35 reopen: post-pay → compact sheet; status без состава; cancel 1–3д; X=скрыть | RED `/sbr` |
+| QA `screenshots/qa_2026-09-06/` | не создавать параллельную фичу |
+| Fly v480 / #78 slice-1 | done · slice-2 на паузе |
 
-**last_done:** deploy v480 · MCP offer/promo/#78 Point A PASS  
-**next_step:** #78 slice-2 usage — по намерению
+**last_done:** SPEC #35 reopen · todo + QA артефакты  
+**next_step:** `/sbr` RED
 
 **ctx_trim:** `2026-09-02`  
 **CI:** https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/33951901384  
