@@ -3,7 +3,7 @@
   import { push } from "svelte-spa-router"
   import { api } from "../lib/api.js"
   import { clearGuestOrderSession, reconnectGuestOrder, guestReconnectToken } from "../lib/shopGuestSession.js"
-  import { loadGuestProfile } from "../lib/shopGuestProfile.js"
+  import { loadGuestProfile, loadReceiptEmail, saveReceiptEmail } from "../lib/shopGuestProfile.js"
   import { clearPaymentSession } from "../lib/tbankPayment.js"
   import { clearPendingOrder } from "../lib/codeblackPendingOrder.js"
   import {
@@ -15,7 +15,7 @@
     SBP_I_PAID_LABEL
   } from "../lib/shopSbpPay.js"
   import OrderSuccessEmailBlock from "../components/OrderSuccessEmailBlock.svelte"
-  import { submitOrderEmail } from "../lib/emailCollection.js"
+  import { submitOrderEmail, shouldAskReceiptEmail } from "../lib/emailCollection.js"
 
   let status = $state("fail")
   let orderId = $state("")
@@ -26,6 +26,7 @@
   let checkingPaid = $state(false)
   let emailSubmitting = $state(false)
   let prefillEmail = $state("")
+  let askReceiptEmail = $state(true)
   let reconnectToken = $state("")
 
   /** После успешной оплаты: финализировать сессию, но остаться на экране с email-блоком. */
@@ -81,6 +82,8 @@
         marketing_consent,
         reconnect_token: reconnectToken || undefined
       })
+      saveReceiptEmail(email)
+      askReceiptEmail = false
       err = null
       await new Promise((r) => setTimeout(r, 800))
       push("/")
@@ -109,10 +112,10 @@
     }
 
     reconnectToken = guestReconnectToken() || ""
+    const savedReceipt = loadReceiptEmail()
     const profile = loadGuestProfile()
-    if (profile?.email) {
-      prefillEmail = profile.email
-    }
+    prefillEmail = savedReceipt || profile?.email || ""
+    askReceiptEmail = shouldAskReceiptEmail(prefillEmail)
 
     try {
       await reconnectGuestOrder(api)
@@ -182,14 +185,27 @@
       <p class="text-lg font-medium text-green-400">✔ Чек сформирован</p>
     </div>
 
-    <OrderSuccessEmailBlock
-      {orderId}
-      email={prefillEmail}
-      marketingConsent={false}
-      loading={emailSubmitting}
-      onSubmit={handleEmailSubmit}
-      onSkip={handleEmailSkip}
-    />
+    {#if askReceiptEmail}
+      <OrderSuccessEmailBlock
+        {orderId}
+        email={prefillEmail}
+        marketingConsent={false}
+        loading={emailSubmitting}
+        onSubmit={handleEmailSubmit}
+        onSkip={handleEmailSkip}
+      />
+    {:else}
+      <div class="mt-4 text-center">
+        <button
+          type="button"
+          class="text-[#ff8c42]"
+          data-testid="payment-result-continue"
+          onclick={handleEmailSkip}
+        >
+          В каталог
+        </button>
+      </div>
+    {/if}
 
     {#if err}
       <p class="mt-4 text-sm text-red-400" role="alert">{err}</p>

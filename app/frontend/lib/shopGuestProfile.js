@@ -4,15 +4,23 @@ import {
   writeShopLocalStorage
 } from "./shopLocalStorage.js"
 
-function profileStorageKey() {
-  if (typeof window === "undefined") return "shop_guest_profile:default"
+function tenantIdForStorage() {
+  if (typeof window === "undefined") return "default"
   const q = new URLSearchParams(window.location.search).get("tenant_id")
-  const tid =
+  return (
     (q && String(q).trim()) ||
     (typeof document !== "undefined" &&
       document.querySelector('meta[name="shop-tenant-id"]')?.getAttribute("content")) ||
     "default"
-  return `shop_guest_profile:${tid}`
+  )
+}
+
+function profileStorageKey() {
+  return `shop_guest_profile:${tenantIdForStorage()}`
+}
+
+function receiptEmailStorageKey() {
+  return `shop_receipt_email:${tenantIdForStorage()}`
 }
 
 export function maskEmail(email) {
@@ -57,4 +65,24 @@ export function clearEmailVerifiedInProfile() {
   const profile = loadGuestProfile()
   if (!profile) return
   saveGuestProfile({ ...profile, emailVerified: false })
+}
+
+/** Email для чека после оплаты — без name (Callcheck-only). */
+export function loadReceiptEmail() {
+  const data = readShopLocalStorage(receiptEmailStorageKey())
+  const raw =
+    typeof data === "string"
+      ? data
+      : data && typeof data === "object"
+        ? data.email
+        : ""
+  const email = String(raw || "").trim().toLowerCase()
+  if (!email || !isValidEmail(email)) return ""
+  return email
+}
+
+export function saveReceiptEmail(email) {
+  const e = String(email || "").trim().toLowerCase()
+  if (!e || !isValidEmail(e)) return
+  writeShopLocalStorage(receiptEmailStorageKey(), { email: e })
 }

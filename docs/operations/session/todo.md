@@ -13,8 +13,8 @@
 ## SBR
 
 - [x] **SPEC**
-- [ ] **RED**
-- [ ] **GREEN**
+- [x] **RED** (`efc9fe59`)
+- [x] **GREEN**
 - [ ] **/regress**
 - [ ] **REVIEW**
 

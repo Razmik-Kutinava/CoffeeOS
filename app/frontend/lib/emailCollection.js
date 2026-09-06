@@ -16,6 +16,11 @@ export function getEmailValidationError(email) {
   return ""
 }
 
+/** true = показать блок «Куда прислать чек»; false = email уже запомнен. */
+export function shouldAskReceiptEmail(savedEmail) {
+  return !String(savedEmail || "").trim()
+}
+
 export async function submitOrderEmail(
   api,
   { orderId, email, marketing_consent, reconnect_token }
