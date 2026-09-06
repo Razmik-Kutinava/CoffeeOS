@@ -2,22 +2,22 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-06 (SPEC #71 email remember)  
+**Дата:** 2026-09-06 (правка 5 CartSheet REVIEW · #71 SPEC)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #71 QA: не спрашивать email повторно | RED → GREEN |
-| Правка 5 CartSheet «Итого» | параллельно |
+| Правка 5: «Итого» в корзине | CI → deploy по апруву |
+| #71 QA: email remember | `/sbr` RED |
 | #26 / #35 | пауза |
 
-**last_done:** SPEC #71 · todo email remember  
-**next_step:** `/sbr` RED
+**last_done:** REVIEW правка 5 · bugbot+security · Entire `01M1V145Z4ABQQM5APY2EXEG6N`  
+**next_step:** deploy — только по апруву владельца
 
 **ctx_trim:** `2026-09-02`  
-**CI:** https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/33951901384  
-**Entire:** `01M1R4VQH6TPMM6SQ2RZ5JTM46` на `cb02d8b4`  
-**Fly MCP:** PASS · artifacts `…/mcp/fly_v480_2026-09-05/`
+**CI:** (после push)  
+**Entire:** `01M1V145Z4ABQQM5APY2EXEG6N` на `91daaf19`  
+**Fly MCP:** skip до deploy
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

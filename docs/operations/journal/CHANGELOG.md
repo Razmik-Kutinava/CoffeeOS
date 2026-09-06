@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-06 — REVIEW: CartSheet «Итого» (правка 5)
+
+- GREEN `7d7cfbec` · fix thousands `91daaf19` · Entire `01M1V145Z4ABQQM5APY2EXEG6N`
+- bugbot: hidden total → `formatThousands` · security: no issues
+- Local: cart zone 36/0 · Next: deploy по апруву
+
 ## 2026-09-06 — GREEN: #35 QA reopen compact status sheet
 
 - RED `785fa2e3` · GREEN `7ab3f3e6` · Entire `01M1V0RTYSBYRP8NWWEAWR24W0`
