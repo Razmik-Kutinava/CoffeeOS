@@ -36,13 +36,14 @@ class Shop::OrderStatusAcceptanceCbrTest < ActionDispatch::IntegrationTest
     assert_includes screen, "Самовывоз"
   end
 
-  # Критерий: маршрут /order/:id и редирект на экран статуса (не из Checkout — pay-result / offline queue)
+  # #35 QA: после оплаты — каталог + compact sheet; /order/:id остаётся deep-link (push/offline)
   test "b11_02 order status route and checkout redirect" do
     app = File.read(Rails.root.join("app/frontend/App.svelte"))
     payment_result = vitrina_source("routes/PaymentResult.svelte")
 
     assert_includes app, '"/order/:id"'
-    assert_includes payment_result, "push(`/order/${orderId}`)"
+    assert_includes payment_result, 'push("/")'
+    refute_includes payment_result, "push(`/order/${orderId}`)"
     assert_includes app, "shop:offline-order-sent"
     assert_includes app, "push(`/order/${orderId}`)"
   end

@@ -1,10 +1,14 @@
 /**
  * #36 Active orders accordion + text receipt — RED [TDD].
+ * #35 QA reopen — status model without receipt / clear dismiss.
  *
  * node --test test/javascript/active_orders_accordion_test.mjs
  */
 import assert from "node:assert/strict"
 import { describe, it } from "node:test"
+import { readFileSync } from "node:fs"
+import { fileURLToPath } from "node:url"
+import { dirname, join } from "node:path"
 
 import {
   RECEIPT_SCROLL,
@@ -15,6 +19,12 @@ import {
   receiptView,
   statusMetaThird
 } from "../../app/frontend/lib/activeOrdersAccordion.js"
+
+const root = join(dirname(fileURLToPath(import.meta.url)), "../..")
+const accordionComponentPath = join(
+  root,
+  "app/frontend/components/ActiveOrdersAccordion.svelte"
+)
 
 const sampleOrders = [
   {
@@ -195,5 +205,30 @@ describe("receiptView — text only (#36 B4/B5)", () => {
   it("item without modifiers yields empty modifiers on line", () => {
     const receipt = receiptView(sampleOrders[1])
     assert.deepEqual(receipt.lines[0].modifiers, [])
+  })
+})
+
+describe("#35 QA reopen — status model UI (no receipt, dismiss = hide)", () => {
+  it("ActiveOrdersAccordion does not render receipt / line-items in status sheet", () => {
+    const src = readFileSync(accordionComponentPath, "utf8")
+    assert.doesNotMatch(
+      src,
+      /aoa__receipt|data-testid=["']active-order-receipt["']/,
+      "status model must not show order composition"
+    )
+    assert.doesNotMatch(
+      src,
+      /receiptView\s*\(/,
+      "status sheet row must not call receiptView"
+    )
+  })
+
+  it("dismiss button aria-label is Скрыть (not cancel)", () => {
+    const src = readFileSync(accordionComponentPath, "utf8")
+    assert.match(
+      src,
+      /aria-label=["']Скрыть[^"']*["']/,
+      "X must read as hide/dismiss, not close/cancel order"
+    )
   })
 })

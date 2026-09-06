@@ -131,3 +131,20 @@ describe("sticky panel cancel wiring (#41 step 6)", () => {
     assert.equal(result.toast, CANCEL_SUCCESS_TOAST)
   })
 })
+
+describe("#35 QA reopen — cancel CTA hint 1–3 days", () => {
+  it("accepted cancel hint mentions bank refund in 1–3 days", () => {
+    const ctas = orderStatusCtas({
+      status: "accepted",
+      os: "android",
+      canCancel: true
+    })
+    const cancel = ctas.buttons.find((b) => b.kind === "cancel")
+    assert.ok(cancel, "cancel CTA present")
+    assert.match(
+      String(cancel.hint || ""),
+      /1\s*[-–]\s*3/,
+      "CTA hint must say refund takes 1–3 days (visible on button, not only modal)"
+    )
+  })
+})
