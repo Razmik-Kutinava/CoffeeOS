@@ -3,33 +3,31 @@
 | Поле | Значение |
 |------|----------|
 | **CBR** | #71 · [ТЗ](../milestones/veha_2/requirements/customer_tasks/Email-сбор%20после%20оплаты%20(Callcheck-флоу).md) |
-| **Тип** | Fix / UX · hot-path post-pay (витрина) |
-| **Цель** | После первого ввода email для чека — на следующих заказах **не показывать** блок «Куда прислать чек…» |
+| **Тип** | Fix / UX · hot-path post-pay |
+| **Цель** | После первого email для чека — не показывать блок снова |
 | **Point A** | `tenant_id` = `2fdee1ac-4674-41ee-b89e-87b45643f789` |
-| **Fly** | MCP после REVIEW/deploy |
 | **Ветка** | `develop` |
-| **Запрет** | email-гейт на Checkout; OTP email; gem’ы оплаты |
 
 ## SBR
 
 - [x] **SPEC**
 - [x] **RED** (`efc9fe59`)
-- [x] **GREEN**
-- [ ] **/regress**
+- [x] **GREEN** (`f8b4e3ba`) · Entire `01M1V2FH9A8C7J6X35YF5RQSFE`
+- [ ] **/regress** — команды из «Проверка»
 - [ ] **REVIEW**
 
 ## Решение
 
 | QA | Решение |
 |----|---------|
-| Запомнить почту → не спрашивать снова | `loadReceiptEmail`/`saveReceiptEmail` (tenant LS). `shouldAskReceiptEmail`. Hide `OrderSuccessEmailBlock` если email есть. Persist после submit. Skip без ввода — не писать LS. |
+| Запомнить → не спрашивать | `load/saveReceiptEmail` + `shouldAskReceiptEmail`; hide блок; persist после submit |
 
 ## Файлы (ожидаемо)
 
-1. `app/frontend/lib/shopGuestProfile.js` — load/save receipt email
-2. `app/frontend/lib/emailCollection.js` — `shouldAskReceiptEmail`
-3. `app/frontend/routes/PaymentResult.svelte` — conditional block + persist
-4. `test/javascript/email_collection_test.mjs` — RED asserts
+1. `app/frontend/lib/shopGuestProfile.js`
+2. `app/frontend/lib/emailCollection.js`
+3. `app/frontend/routes/PaymentResult.svelte`
+4. `test/javascript/email_collection_test.mjs`
 
 ## Не ломать
 

@@ -2,22 +2,22 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-06 (#35 REVIEW CI green)  
+**Дата:** 2026-09-06 (#71 GREEN email remember)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #35 QA: compact sheet post-pay · REVIEW **CI green** | deploy + MCP Point A по апруву |
-| GREEN `7ab3f3e6` · Entire `01M1V0RTYSBYRP8NWWEAWR24W0` | |
-| Параллельно #71/#26/CartSheet | на develop |
+| #71 remember receipt email · GREEN | `/regress` |
+| Entire `01M1V2FH9A8C7J6X35YF5RQSFE` на `f8b4e3ba` | |
+| #26 regress PASS | `/review` (своя очередь) |
 
-**last_done:** /review #35 · bugbot no bugs · security no issues · CI green  
-**next_step:** deploy — только по апруву владельца
+**last_done:** /sbr #71 RED→GREEN · email LS + hide block  
+**next_step:** `/regress`
 
 **ctx_trim:** `2026-09-02`  
-**CI:** https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/34026092095  
-**Entire:** `01M1V0RTYSBYRP8NWWEAWR24W0` на `fa7d6d75`  
-**Fly MCP:** skip до deploy · Point A обязателен для заказчика
+**CI:** (после /review push)  
+**Entire:** `01M1V2FH9A8C7J6X35YF5RQSFE` на `f8b4e3ba`  
+**Fly MCP:** skip — после REVIEW/deploy
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
