@@ -114,8 +114,9 @@
     reconnectToken = guestReconnectToken() || ""
     const savedReceipt = loadReceiptEmail()
     const profile = loadGuestProfile()
+    // Prefill may use profile email; hide block only after receipt LS was saved (#71 QA).
     prefillEmail = savedReceipt || profile?.email || ""
-    askReceiptEmail = shouldAskReceiptEmail(prefillEmail)
+    askReceiptEmail = shouldAskReceiptEmail(savedReceipt)
 
     try {
       await reconnectGuestOrder(api)

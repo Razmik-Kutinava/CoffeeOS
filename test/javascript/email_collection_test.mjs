@@ -204,7 +204,7 @@ describe("#71 QA reopen — remember receipt email, don't re-ask", () => {
     assert.match(src, /loadReceiptEmail/)
     assert.match(src, /saveReceiptEmail/)
     assert.match(src, /shouldAskReceiptEmail/)
-    assert.match(src, /askReceiptEmail/)
+    assert.match(src, /askReceiptEmail\s*=\s*shouldAskReceiptEmail\(savedReceipt\)/)
     assert.match(
       src,
       /\{#if\s+askReceiptEmail\}[\s\S]*OrderSuccessEmailBlock[\s\S]*\{\/if\}/
