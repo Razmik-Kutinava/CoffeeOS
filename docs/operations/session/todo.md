@@ -14,7 +14,7 @@
 
 - [x] **SPEC**
 - [x] **RED** (`58a177a1`)
-- [x] **GREEN**
+- [x] **GREEN** (`dcb5a861`) · Entire `01M1V1SBJ6NVZ0K0X3RQ0CSE4Z`
 - [ ] **/regress**
 - [ ] **REVIEW**
 
