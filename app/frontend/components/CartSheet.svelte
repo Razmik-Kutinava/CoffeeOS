@@ -365,7 +365,13 @@
 
 {#snippet checkoutBar(totalTestId = null, hidden = false)}
   {#if !hidden}
-  <div class="mt-2 flex shrink-0 items-center justify-end gap-2 border-t border-[#3a3a3a] pt-2">
+  <div class="mt-2 flex shrink-0 items-center justify-between gap-2 border-t border-[#3a3a3a] pt-2">
+    <div class="min-w-0" data-testid="shop-cart-order-total">
+      <span class="block text-[10px] leading-none text-[#a0a0a0]">Итого</span>
+      <span class="mt-0.5 block text-sm font-semibold leading-tight text-[#ff8c42]">
+        {formatThousands(roundPrice(total))}₽
+      </span>
+    </div>
     {#if showAddCardCta}
       <button
         type="button"
@@ -503,7 +509,10 @@
             </button>
           {/each}
         </div>
-        <span data-testid="shop-cart-hidden-total" class="sr-only">{roundPrice(total)}₽</span>
+        <span
+          data-testid="shop-cart-hidden-total"
+          class="shrink-0 text-sm font-semibold text-[#ff8c42]"
+        >{roundPrice(total)}₽</span>
         {#if showAddCardCta}
           <button
             type="button"

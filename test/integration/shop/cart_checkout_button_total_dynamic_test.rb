@@ -25,7 +25,7 @@ class Shop::CartCheckoutButtonTotalDynamicTest < ActionDispatch::IntegrationTest
     assert_includes sheet, 'data-testid="shop-cart-order-total"'
     assert_includes sheet, ">Итого<"
     assert_match(
-      /data-testid="shop-cart-order-total"[\s\S]*?\{formatThousands\(roundPrice\(total\)\}₽/,
+      /data-testid="shop-cart-order-total"[\s\S]*?\{formatThousands\(roundPrice\(total\)\)\}₽/,
       sheet
     )
     # Кнопка +N₽ остаётся; старый серый span без подписи «Итого» не возвращаем

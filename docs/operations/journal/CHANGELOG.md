@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-06 — feat: CartSheet видимое «Итого» (правка 5) [GREEN]
+
+- `checkoutBar`: слева **Итого N₽** (`shop-cart-order-total`), справа кнопка `+N₽`
+- Hidden: `shop-cart-hidden-total` без `sr-only`
+- Тесты: `cart_checkout_button_total_dynamic` + регрессия b113/quick_repeat PASS
+- Next: `/review`
+
 ## 2026-09-06 — docs: #71 QA reopen (email remember, don’t re-ask)
 
 - Фидбек заказчика: почту после оплаты для чека — **запомнить**, на следующих заказах **не спрашивать**

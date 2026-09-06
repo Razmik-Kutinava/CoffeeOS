@@ -2,18 +2,17 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-06 (PHASE 0 reopen #71 email remember)  
+**Дата:** 2026-09-06 (SPEC #71 email remember)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #71 QA: после email для чека — не спрашивать снова | `/spec` → SBR |
-| Правка 5 CartSheet «Итого» | параллельно / SPEC→RED |
-| #26 QA pay error | пауза |
-| #35 reopen | GREEN local · regress/REVIEW пауза |
+| #71 QA: не спрашивать email повторно | RED → GREEN |
+| Правка 5 CartSheet «Итого» | параллельно |
+| #26 / #35 | пауза |
 
-**last_done:** PHASE 0 reopen #71 · фидбек в ТЗ + CBR  
-**next_step:** `/spec`
+**last_done:** SPEC #71 · todo email remember  
+**next_step:** `/sbr` RED
 
 **ctx_trim:** `2026-09-02`  
 **CI:** https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/33951901384  
