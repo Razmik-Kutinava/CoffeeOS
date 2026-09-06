@@ -10,7 +10,7 @@
 | Checkout UX (Фаза 2) | 🟡 | апрув заказчика |
 | SBP 3001 | 🟡 | банк / кабинет |
 | #47 / #35 PWA статусы | 🟡 | REVIEW CI green · ждёт deploy + Fly MCP Point A + апрув |
-| #26 invalid token / pay error copy | 🟡 | SPEC 2026-09-06 → `/sbr` RED (шаг 5 inline) |
+| #26 invalid token / pay error copy | 🟡 | REVIEW 2026-09-06 · CI green · MCP Point A после deploy |
 | #71 email after pay — remember | 🟡 | REVIEW 2026-09-06 · ждёт CI / deploy апрув · Fly MCP |
 
 Детали до 2026-08 → [`issues/archive/ISSUES-resolved-through-2026-08.md`](issues/archive/ISSUES-resolved-through-2026-08.md)

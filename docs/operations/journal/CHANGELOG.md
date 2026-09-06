@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-06 — REVIEW: #26 step5 pay sheet inline
+
+- GREEN `32c79960` · regress `f5f73d3e` · bugbot OK · security OK
+- Entire `01M1V1SBJ6NVZ0K0X3RQ0CSE4Z` · CI GREEN `34025628548` / `34025794993`
+- Next: deploy по апруву · Fly MCP Point A для заказчика
+
 ## 2026-09-06 — REVIEW: #71 email remember / don’t re-ask
 
 - bugbot: hide только после LS save (не profile) → fix `0c17ee9f`
