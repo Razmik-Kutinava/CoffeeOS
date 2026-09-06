@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-06 — docs: #26 QA reopen (pay error inline copy)
+
+- Фидбек заказчика: отказ карты есть, **нет** пояснения («попробуйте другую карту» / что делать)
+- ТЗ #26 без перезаписи; артефакт `…/repeat_order_invalid_token_payment_sheet/screenshots/qa_2026-09-06/`
+- CBR #26 → QA reopen · #35 на паузе · Next `/spec`
+
 ## 2026-09-06 — SPEC: #35 reopen QA статусной шторки
 
 - Заказчик: 3 правки (home post-pay full-screen; X/состав/cancel 1–3д; UX референс)

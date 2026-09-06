@@ -16,6 +16,7 @@
 | `screenshots/08_fly_insufficient_funds_inline_error_again_2026-08-07.png` | Повтор отказа: снова inline + «Отказ: смените карту», форма не открыта |
 | `screenshots/09_customer_payment_methods_sheet_canon_2026-08-13.png` | **Канон 2026-08-13:** checkout pay-stack «Способ оплаты» — Картой *1594 / СБП / Картой + / Оплатить |
 | `screenshots/10_customer_new_card_form_in_sheet_expected_2026-08-13.png` | **Ожидание:** форма новой карты внутри шторки (не в peek) — номер / ММ/ГГ / CVV / Оплатить |
+| `screenshots/qa_2026-09-06/01_bug_sheet_pay_no_inline_bank_error_message.png` | **QA reopen 2026-09-06:** отказ карты есть, **нет** пояснения пользователю (попробуйте другую карту / что произошло) над CTA |
 
 ## MCP / история
 
