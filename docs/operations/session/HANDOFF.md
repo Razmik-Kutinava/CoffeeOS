@@ -2,21 +2,21 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-07 (REVIEW #82 CI green)  
+**Дата:** 2026-09-07 (REVIEW #81)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| REVIEW #82 CI **green** | deploy — апрув |
-| tip `dd7f3987` | Fly MCP #82 после deploy |
+| REVIEW #81 · push/CI | CI green → deploy **апрув** · Fly MCP Point A |
+| Slice | denied→settings + Telegram chat |
 
-**last_done:** REVIEW #82 — bugbot+security · push · CI green  
-**next_step:** deploy апрув · Fly MCP Point A (#82 hide-on-ready + SMS)
+**last_done:** REVIEW #81 — bugbot toast gate · security OK · Entire `01M1XF20DA5E0PXJ99E9DH2HM6`  
+**next_step:** CI green → deploy только апрув; MCP Point A
 
 **ctx_trim:** `2026-09-02`  
-**CI:** https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/34101618655 (**green**)  
-**Fly:** **v481** (pre-#82)  
-**Fly MCP:** #82 после deploy
+**CI:** (после push)  
+**Fly:** **v481**  
+**Fly MCP:** #81 pending после deploy
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

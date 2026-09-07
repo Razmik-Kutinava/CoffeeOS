@@ -1,24 +1,27 @@
-﻿# todo — #82 Cascade SMS ready + status sheet stuck
+﻿# todo — #81 Notifications / Wallet / WebPush gaps
 
 | Поле | Значение |
 |------|----------|
-| **CBR** | #82 · [ТЗ](../milestones/veha_2/requirements/customer_tasks/Каскад%20SMS%20после%20Заказ%20готов%20и%20шторка%20статуса%20на%20главном.md) |
-| **Тип** | Fix / hot-path витрина · статусы + уведомления |
-| **Цель** | hide-on-ready + SMS cascade presence; repeats после ready |
+| **CBR** | #81 · [ТЗ](../milestones/veha_2/requirements/customer_tasks/Косяки%20уведомлений%20Wallet%20WebPush%20фоновые%20и%20кнопка%20чат.md) |
+| **Тип** | Fix / hot-path витрина · статусная модель + push/chat CTA |
+| **Цель** | Denied-баннер → настройки браузера; «Чат с поддержкой» → Telegram |
 | **Point A** | `tenant_id` = `2fdee1ac-4674-41ee-b89e-87b45643f789` |
 | **Ветка** | `develop` |
-| **Артефакты** | [`…/order_ready_cascade_sms_status_sheet_fix/`](../milestones/veha_2/artifacts/order_ready_cascade_sms_status_sheet_fix/) |
+| **Артефакты** | [`…/notifications_wallet_webpush_gaps_reopen/`](../milestones/veha_2/artifacts/notifications_wallet_webpush_gaps_reopen/) |
 
 ## SBR
 
-- [x] **SPEC** · **RED** · **GREEN** (`8cae376d`) · **/regress**
-- [x] **REVIEW** — bugbot HIDE_REPEAT · security OK · CI [34101618655](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/34101618655) green
-- Entire: `01M1XDGFW23WY77ZRW73D5KGT4` на `959f2fa0`
-- Next: deploy апрув · Fly MCP Point A
+- [x] **SPEC** (`80dad7ee`)
+- [x] **RED** (`ded3fb8f`)
+- [x] **GREEN** / **/regress** — JS 21/0
+- [x] **REVIEW** — bugbot fix `ffd48c6b` · security OK · Entire `01M1XF20DA5E0PXJ99E9DH2HM6` · push/CI
 
-## Local /regress + REVIEW fix
+## REVIEW
 
-- JS sheet+poll+frequent terminal: **33/0**
-- rails frequent+cascade+active: **44/0**
-- bugbot: HIDE_REPEAT без ready · medium presence mitigated by unsubscribe on hide
-- security: no medium+
+- bugbot: medium — settings CTA only when `openSettings` (denied) — **fixed** [`Bugbot`](c308d8da-65a3-4425-9a8f-08857bff1ce2)
+- security: no medium+ [`Security Review`](7b9c4fb9-e596-499a-8dcd-ef197465ead5)
+- Entire: `01M1XF20DA5E0PXJ99E9DH2HM6` на `ffd48c6b`
+
+## Проверка
+
+- `node --test test/javascript/order_status_push_subscribe_test.mjs test/javascript/support_chat_adapter_test.mjs test/javascript/order_status_notify_actions_test.mjs` → **21/0**

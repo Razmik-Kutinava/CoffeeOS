@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-07 — REVIEW: #81 denied→settings + chat Telegram
+
+- bugbot: settings CTA только при `openSettings` (denied) · fix `ffd48c6b`
+- security: no medium+
+- Entire: `01M1XF20DA5E0PXJ99E9DH2HM6` · Local JS 21/0 · push/CI
+- Next: deploy апрув · Fly MCP Point A
+
 ## 2026-09-07 — REVIEW: #82 hide-on-ready + cascade SMS
 
 - bugbot: HIDE_REPEAT без `ready` (repeats после hide) · medium presence OK с unsubscribe
