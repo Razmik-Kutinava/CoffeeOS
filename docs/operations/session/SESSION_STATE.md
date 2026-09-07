@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-07 (min 10₽)  
+**Дата:** 2026-09-07 (v488 min 10₽)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| код min 10₽ закоммичен | deploy · owner review CBR |
-| Fly data | 48 PTS bumped ≥10 |
+| Fly **v488** · tip `0314c3be` | #80 live · owner review |
+| min 10₽ | PTS validation + Init guard · below=0 on Fly |
 
-**last_done:** AmountLimits 10₽ · PTS validation · Fly bump  
-**next_step:** deploy tip
+**last_done:** min 10₽ + deploy v488  
+**next_step:** не `[x]` без ок
 
 **ctx_trim:** `2026-09-02`

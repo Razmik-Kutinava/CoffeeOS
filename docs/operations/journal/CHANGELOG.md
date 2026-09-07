@@ -15,8 +15,10 @@
 
 - `Payments::AmountLimits::MIN_CHARGE_RUB = 10`
 - `ProductTenantSetting` / `ProductPriceHistory` ≥10 · `TbankAdapter` + `SbpPaymentInitiator` reject below
-- rake `shop:catalog:bump_min_prices` · Fly: **48** PTS bumped (1.79/2.95/3.35 → 10)
-- tests: amount_limits + PTS + sbp + tbank + growth (10&lt;11)
+- `ProductTenantSync` / demo markup clamp ≥10 (release `demo:seed` OK)
+- rake `shop:catalog:bump_min_prices` · Fly PTS below=0 after v488
+- tip `0314c3be` · Fly **v488** `deployment-01M1XWZAJMGWHW89JR7T43K07C` · `/up` 200
+- tests: amount_limits + PTS + sbp + tbank + growth + sync clamp
 
 ## 2026-09-07 — v486 · #79 MCP PASS · GH Deploy token fixed
 
