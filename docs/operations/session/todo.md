@@ -1,13 +1,13 @@
-﻿# todo — #79 SBP return + autopay labels (остаток CODE:BLACK)
+﻿# todo — #80 Registration UI/UX + Callcheck cascade
 
 | Поле | Значение |
 |------|----------|
-| **CBR** | #79 · [ТЗ](../milestones/veha_2/requirements/customer_tasks/Надписи%20автоплатежа%20и%20экран%20после%20возврата%20из%20банка%20СБП.md) |
-| **Тип** | Fix / hot-path оплата · PWA return + SBP autopay UI |
-| **Цель** | После банка — ясный экран (WAITING/ok/fail); надписи автоплатежа по ответу банка; регресс 11/8 СБП |
+| **CBR** | #80 · [ТЗ](../milestones/veha_2/requirements/customer_tasks/Регистрация%20PWA%20UI%20UX%20и%20каскад%20Callcheck%20x2%20SMS.md) |
+| **Тип** | Fix / hot-path витрина · phone auth + CartSheet |
+| **Цель** | P0: скрыть сумму при клавиатуре; копирайт Callcheck (номер = CTA); переход в PWA после подтверждённого звонка |
 | **Point A** | `tenant_id` = `2fdee1ac-4674-41ee-b89e-87b45643f789` |
 | **Ветка** | `develop` |
-| **Артефакты** | [`…/sbp_return_status_screen_autopay_labels/`](../milestones/veha_2/artifacts/sbp_return_status_screen_autopay_labels/) |
+| **Артефакты** | [`…/registration_callcheck_cascade_ui_ux/`](../milestones/veha_2/artifacts/registration_callcheck_cascade_ui_ux/) |
 
 ## SBR
 
@@ -21,44 +21,36 @@
 
 | # | Решение |
 |---|---------|
-| 1 | Перед `redirectToSbp` — `savePendingOrder` + переход на `#/payment-result?status=waiting` (явный экран до ухода в банк; Android return не «пустой») |
-| 2 | Автоплатёж СБП: wire `createSbpAutopayFsm` / `SBP_AUTOPAY_TOASTS` + `mapSbpAutopayError`; не подменять card-`payFsmLabel` («Обработка банком…») на decline/network/service |
-| 3 | `visibilitychange` / cold start в `App.svelte` — оставить; усилить тестами recover → waiting/ok/fail |
-| 4 | **Вне slice:** SMS со ссылкой на гл. экран (гипотеза заказчика → backlog); greenfield Init/GetQr из повторного CODE:BLACK ТЗ (уже есть) |
+| 1 | Канон канала = **Callcheck** (`init_callcheck` / `check_status`). ТЗ-чек-лист с `flash_call` / `code/call` — **не внедрять** (deprecated с 2026-08-12). |
+| 2 | При открытой цифровой клавиатуре на экране телефона — **скрыть** CTA суммы заказа в `CartSheet` (и/или свернуть pay-stack); после закрытия клавиатуры — снова peek/заказ. |
+| 3 | Копирайт Callcheck: номер для звонка — **кнопка/ссылка** (`tel:`); текст «позвони / пройди регистрацию» → ясная инструкция + номер как CTA (см. скрин 02 / UX Guide). |
+| 4 | После `check_status` = confirmed — гарантированный `onVerified` → сессия (`refresh_token`) → checkout без «застряли на звонке»; починить poll/linker, если confirmed не доезжает. |
+| 5 | **Вне slice:** Callcheck×2 (повторный звонок 20+20) из Google Doc — backlog (сейчас Callcheck×1 → SMS @40s). SMS = свой код (не код звонка). |
 
 ## Файлы (ожидаемо)
 
-- `app/frontend/routes/Checkout.svelte` — SBP/autopay pay: pending + waiting route до redirect; labels ошибок ChargeQr
-- `app/frontend/App.svelte` — `recoverCodeblackPendingOrder` (visibility + cold start)
-- `app/frontend/routes/PaymentResult.svelte` — WAITING_FOR_BANK + «Я оплатил»
-- `app/frontend/lib/shopSbpAutopay.js` — FSM + `SBP_AUTOPAY_TOASTS` / `mapSbpAutopayError`
-- `app/frontend/lib/shopSbpPay.js` — `checkOrderStatus`, waiting copy, `redirectToSbp`
-- `app/frontend/lib/codeblackPendingOrder.js` — LS `codeblack_pending_order`, TTL 15 мин, visibility guard
+- `app/frontend/components/CartSheet.svelte` — скрыть `+N₽` / checkout CTA при keyboard open на phone-auth
+- `app/frontend/lib/shopWebViewLayout.js` — `isShopKeyboardOpen` / `--shop-keyboard-inset` (сигнал для шторки)
+- `app/frontend/routes/Checkout.svelte` — хост `PhoneAuthWizard` + pad/peek при вводе телефона
+- `app/frontend/lib/phoneAuthCascade.js` — константы копирайта / фазы Callcheck→SMS
+- `app/frontend/components/PhoneAuthCodeStep.svelte` — UI звонка (номер-кнопка), poll, `onVerified`
+- `app/frontend/components/PhoneAuthWizard.svelte` — экран 1 телефона (фокус/маска; сигнал keyboard→sheet)
+- `app/services/shop/phone_otp.rb` — Callcheck session / `check_status` → linker (если confirmed не закрывает auth)
 
-### Blast-radius (+2)
+### Blast-radius (+3)
 
-- `app/frontend/lib/shopPayFsm.js` — сейчас смешивается с SBP errors через `fsmFromPaymentError` / `resolveCheckoutSheetInlineError`
-- `app/frontend/components/PaymentMethodsSheet.svelte` — CTA/labels `sbp` / `sbp_account`
+- `app/frontend/lib/cartSheetStore.js` — checkout peek / `checkoutPayOpen` при фокусе телефона
+- `app/services/shop/phone_verified_customer_linker.rb` — сессия после confirmed call / SMS
+- `app/controllers/shop/api/phone_otp_controller.rb` — API surface init/check/send_sms/verify
 
 ## Не ломать
 
-- Оплата картой One-Click / 3DS / `payFsmLabel` для card
-- «Повторить» + init SBP из `RepeatSection` (pending+redirect path)
-- Статусная шторка / peek CartSheet (#35)
-- Webhook Т‑Кассы → `accepted` / AccountToken bind
+- Оплата card One-Click / SBP (CTA `+сумма` вне phone-auth)
+- Повтор заказа / peek шторки на витрине (не `#/checkout` auth)
+- Callcheck→SMS fallback @40s + rate limit (20s callcheck / 60s SMS)
+- Статусная шторка #35 / Compact status (не auth)
 
 ## Проверка
 
-- `node --test test/javascript/codeblack_pending_order_test.mjs test/javascript/shop_sbp_pay_test.mjs test/javascript/shop_sbp_autopay_test.mjs test/javascript/shop_sbp_autopay_checkout_ui_test.mjs`
-- `bin/rails test test/integration/shop/sbp_payment_return_ui_test.rb test/integration/shop/api/sbp_autopay_charge_test.rb test/integration/shop/api/payment_status_test.rb`
-
-## Проверка (после deploy)
-
-- Fly MCP Point A: SBP 11₽/8₽ · return → waiting/ok · autopay decline/success copy · Android (+ iOS если устройство)
-- SMS-гипотеза — **не** в DoD этого slice
-
-## Зеркальные тесты (ожидаемо RED)
-
-- `test/javascript/codeblack_pending_order_test.mjs` — дописать: recover path / waiting before redirect contract
-- `test/javascript/shop_sbp_autopay_checkout_ui_test.mjs` — FSM wired; bank response → autopay toasts, не card FSM
-- `test/integration/shop/sbp_payment_return_ui_test.rb` — Checkout пишет waiting hash / pending до redirect
+- `node --test test/javascript/shop_phone_auth_cascade_smsru_test.mjs test/javascript/phone_auth_wizard_test.mjs test/javascript/shop_telegram_webview_ui_test.mjs`
+- `bin/rails test test/integration/shop/api/phone_otp_test.rb test/integration/shop/auth_funnel_wizard_ui_test.rb test/services/shop/phone_otp_test.rb`

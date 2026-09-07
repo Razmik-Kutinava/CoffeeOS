@@ -11,6 +11,20 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-07 — docs: SPEC #80 registration UI/UX + Callcheck
+
+- `todo.md`: Callcheck канон (не flash_call); P0 keyboard/CTA · copy · post-call; ×2 backlog
+- Файлы: CartSheet / shopWebViewLayout / Checkout / phoneAuthCascade / PhoneAuth{Wizard,CodeStep} / phone_otp
+- Не ломать: One-Click/SBP · peek · Callcheck→SMS@40s · #35 status
+- Проверка: JS cascade+wizard+webview · rails phone_otp + auth_funnel_wizard
+
+## 2026-09-07 — docs: intake #81 notifications / Wallet / WebPush gaps
+
+- PHASE 0: reopen #37/#38/#41 — denied→настройки браузера; фоновые FCM/Wallet «не реализовано»; чат поддержки не кликается
+- ТЗ: `customer_tasks/Косяки уведомлений Wallet WebPush фоновые и кнопка чат.md`
+- Артефакты: `artifacts/notifications_wallet_webpush_gaps_reopen/`
+- CBR #81 (#80 = Registration) · код не трогали · ждёт `/spec`
+
 ## 2026-09-07 — docs: intake #80 registration UI/UX + Callcheck cascade
 
 - PHASE 0: правки п.8 (клавиатура/сумма, копирайт Callcheck, нет перехода после звонка) + Google Doc каскада Callcheck×2→SMS

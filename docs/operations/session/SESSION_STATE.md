@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-07 (intake #80)  
+**Дата:** 2026-09-07 (SPEC #80)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| PHASE 0 #80 intake done | `/spec` — #80 регистрация / Callcheck |
-| Fly v481 · tip до intake | код после SPEC |
+| SPEC #80 в `todo.md` | `/sbr` RED |
+| Fly v481 | код на GREEN |
 
-**last_done:** docs intake #80 registration UI/UX + Callcheck cascade  
-**next_step:** `/spec` по #80
+**last_done:** SPEC #80 registration UI/UX + Callcheck (P0 slice)  
+**next_step:** RED — failing tests keyboard/CTA · copy · post-call
 
 **ctx_trim:** `2026-09-02`
