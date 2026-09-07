@@ -132,8 +132,9 @@ export function dismissOrder(state, orderId) {
   refreshMode(state)
 }
 
-/** Terminal для снятия карточки / refresh frequent — выдача или отмена (не ready). */
+/** Terminal для снятия карточки / refresh frequent — ready (#82/#35) + выдача/отмена. */
 export const SHEET_TERMINAL_STATUSES = Object.freeze([
+  "ready",
   "issued",
   "closed",
   "cancelled"
@@ -154,7 +155,7 @@ export function applyCableEvent(state, payload, hooks = {}) {
   if (!orderId) return
 
   const status = String(payload.status || "")
-  // ready остаётся в шторке («Готов» + CTA); иначе окно ready → пусто +0₽ без «повторить»
+  // #82/#35: ready скрывает виджет с гл. экрана (+ onTerminal → frequent/повторить)
   const terminal = SHEET_TERMINAL_STATUSES.includes(status)
   if (terminal) {
     // dismissedIds не сбрасываем: если id вернётся из stale sync — виджет не всплывёт снова
@@ -187,7 +188,10 @@ export function applyCableEvent(state, payload, hooks = {}) {
 }
 
 export function applyReconnectOrders(state, orders) {
-  const list = Array.isArray(orders) ? orders : []
-  // accepted|preparing|ready — карточка до выдачи; issued/cancelled отсекает API
+  const list = (Array.isArray(orders) ? orders : []).filter((o) => {
+    const status = String(o?.status || "")
+    return status && !SHEET_TERMINAL_STATUSES.includes(status)
+  })
+  // accepted|preparing — карточка во время готовки; ready+terminal отсекает API/фильтр
   state.setOrders(list)
 }

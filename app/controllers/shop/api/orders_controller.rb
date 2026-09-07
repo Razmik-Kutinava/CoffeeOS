@@ -155,9 +155,8 @@ module Shop
           tenant_id: @shop_tenant.id,
           customer_id: cid,
           source: :mobile,
-          # Group 3: accepted|preparing|ready — карточка до выдачи (ready ≠ пусто +0₽).
-          # «повторить» по-прежнему гасится HIDE_REPEAT пока status=ready.
-          status: %w[accepted preparing ready]
+          # #82/#35: только accepted|preparing — hide-on-ready (виджет во время готовки).
+          status: %w[accepted preparing]
         ).where("orders.created_at >= ?", ACTIVE_ORDERS_WINDOW.ago)
           .includes(:order_items).order(created_at: :desc)
 
