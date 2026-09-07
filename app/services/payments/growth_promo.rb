@@ -18,19 +18,29 @@ module Payments
 
     # Суммы заказа с учётом chk_order_amounts: final = total_amount - discount_amount.
     # method_hash на этапе create НЕ принимаем от клиента — только phone-дедуп.
+    # Промо = скидка до promo_amount (не доплата): если cart ≤ promo — без growth.
     def self.price!(subtotal:, discount:, tenant:, customer:, bind_requested:)
       sub = BigDecimal(subtotal.to_s)
       disc = BigDecimal(discount.to_s)
       cart = (sub - disc).round(2)
 
       if eligible?(tenant: tenant, customer: customer, bind_requested: bind_requested, method_hash: nil)
-        final = promo_amount_rub(tenant).to_d
-        {
-          final_amount: final,
-          discount_amount: (sub - final).round(2),
-          growth_intent: true,
-          cart_total_before: cart
-        }
+        promo = promo_amount_rub(tenant).to_d
+        if cart > promo
+          {
+            final_amount: promo,
+            discount_amount: (sub - promo).round(2),
+            growth_intent: true,
+            cart_total_before: cart
+          }
+        else
+          {
+            final_amount: cart,
+            discount_amount: disc,
+            growth_intent: false,
+            cart_total_before: cart
+          }
+        end
       else
         {
           final_amount: cart,
@@ -44,7 +54,8 @@ module Payments
     def self.charge_amount(cart_total:, tenant:, customer:, bind_requested:, method_hash: nil)
       total = cart_total.to_d
       if eligible?(tenant: tenant, customer: customer, bind_requested: bind_requested, method_hash: method_hash)
-        promo_amount_rub(tenant).to_d
+        promo = promo_amount_rub(tenant).to_d
+        [ total, promo ].min
       else
         total
       end

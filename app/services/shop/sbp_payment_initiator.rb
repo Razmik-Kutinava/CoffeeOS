@@ -132,12 +132,14 @@ module Shop
 
       priced = Payments::GrowthPromo.price!(
         subtotal: order.total_amount,
-        discount: 0,
+        discount: order.discount_amount.to_d,
         tenant: @tenant,
         customer: customer,
         bind_requested: true
       )
       return unless priced[:growth_intent]
+      # Guard: chk_order_amounts / validates discount >= 0 (cart ≤ promo → GrowthPromo skips).
+      return if priced[:discount_amount].to_d.negative?
 
       order.update!(
         discount_amount: priced[:discount_amount],
