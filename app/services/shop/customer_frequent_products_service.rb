@@ -17,8 +17,8 @@ module Shop
     ACTIVE_ORDERS_WINDOW = 24.hours
     # Учитываем только оформленные заказы (оплаченные/выданные), не черновики и не отмены
     COUNTED_STATUSES = %w[accepted preparing ready issued closed].freeze
-    # Скрыть «повторить» пока заказ в работе (= Order.active / #35)
-    HIDE_REPEAT_STATUSES = %w[accepted preparing ready].freeze
+    # Скрыть «повторить» пока заказ готовится (#82: ready ≠ hide — шторка уже скрыта)
+    HIDE_REPEAT_STATUSES = %w[accepted preparing].freeze
 
     def self.call(customer_id:, tenant_id:)
       new(customer_id: customer_id, tenant_id: tenant_id).call

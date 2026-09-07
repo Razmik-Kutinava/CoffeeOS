@@ -50,7 +50,7 @@ describe("F3 — applyCableEvent terminal hook", () => {
     assert.equal(state.orders.length, 0)
   })
 
-  it("does not invoke onTerminal for ready (stays in sheet)", () => {
+  it("#82 invokes onTerminal for ready (hide-on-ready + frequent refresh)", () => {
     const state = createOrderStatusSheetState()
     state.setOrders([{ id: "42", status: "preparing", order_number: "N" }])
     let called = 0
@@ -59,7 +59,7 @@ describe("F3 — applyCableEvent terminal hook", () => {
       { type: "status_changed", order_id: "42", status: "ready" },
       { onTerminal: () => { called += 1 } }
     )
-    assert.equal(called, 0)
-    assert.equal(state.orders[0].status, "ready")
+    assert.equal(called, 1)
+    assert.equal(state.orders.length, 0)
   })
 })

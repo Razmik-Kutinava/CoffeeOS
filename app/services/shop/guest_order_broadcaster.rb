@@ -41,7 +41,8 @@ module Shop
 
     # #39: платные каналы после бесплатных WS/Push/Wallet.
     # Group 4: grace → re-check presence в job; SMS только если всё ещё offline.
-    # #82: сброс stale order:{id}:online (убитый WS без unsubscribe) — иначе SMS навсегда skip.
+    # #82: сброс stale order:{id}:online (убитый WS без unsubscribe).
+    # Live Cable при hide-on-ready снимает подписку → unsubscribed → offline до SMS_GRACE.
     def self.enqueue_ready_cascade!(order)
       return unless order.ready?
 

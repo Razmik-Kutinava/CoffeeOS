@@ -33,9 +33,9 @@ class Shop::CustomerFrequentProductsServiceTest < ActiveSupport::TestCase
     assert_includes 30..60, Shop::CustomerFrequentProductsService::WINDOW_DAYS
     assert_equal 3, Shop::CustomerFrequentProductsService::MAX_REPEAT_ITEMS
     assert_equal 24.hours, Shop::CustomerFrequentProductsService::ACTIVE_ORDERS_WINDOW
-    assert_equal %w[accepted preparing ready],
+    assert_equal %w[accepted preparing],
                  Shop::CustomerFrequentProductsService::HIDE_REPEAT_STATUSES,
-                 "статусы hide = Order.active (SPEC ревизия 2026-07-31)"
+                 "#82 hide-on-ready: ready не гасит «повторить»"
   end
 
   # --- Ревизия 2026-07-31: B1 active-order gate ---
@@ -45,7 +45,7 @@ class Shop::CustomerFrequentProductsServiceTest < ActiveSupport::TestCase
     create_paid_order!(product: @bumble, created_at: 1.hour.ago, status: :accepted)
 
     assert_equal [], call_service,
-      "при активном заказе (accepted/preparing/ready) frequent_items = []"
+      "при активном заказе (accepted/preparing) frequent_items = []"
   end
 
   test "#43 stale accepted outside ACTIVE_ORDERS_WINDOW does not hide frequent items" do
@@ -78,7 +78,7 @@ class Shop::CustomerFrequentProductsServiceTest < ActiveSupport::TestCase
       "pending_payment ≠ hide (SPEC: иначе peek без #35 и без повтора)"
   end
 
-  test "preparing and ready also hide frequent items" do
+  test "preparing hides frequent; ready does not (#82 hide-on-ready)" do
     create_paid_order!(product: @filter, created_at: 5.days.ago, status: :issued)
 
     create_paid_order!(product: @bumble, created_at: 1.hour.ago, status: :preparing)
@@ -87,7 +87,9 @@ class Shop::CustomerFrequentProductsServiceTest < ActiveSupport::TestCase
     Order.where(customer_id: @customer.id, tenant_id: @tenant.id, status: :preparing)
          .update_all(status: "issued")
     create_paid_order!(product: @tonic, created_at: 30.minutes.ago, status: :ready)
-    assert_equal [], call_service
+    items = call_service
+    assert_includes items.map { |i| i[:product_id] }, @filter.id,
+                    "#82: после ready «повторить» снова доступен"
   end
 
   test "aggregates same drink with same modifiers across orders in window" do
