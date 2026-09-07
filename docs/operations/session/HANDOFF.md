@@ -10,7 +10,7 @@
 | GREEN #81 · Fly **v481** | `/regress` |
 | Slice | denied→settings + Telegram chat |
 
-**last_done:** GREEN #81 (`0722edd3`) — clickable denied banner + chat URL  
+**last_done:** GREEN #81 — clickable denied banner + chat URL · Entire `01M1XF20DA5E0PXJ99E9DH2HM6`  
 **next_step:** `/regress` — JS зона #81
 
 **ctx_trim:** `2026-09-02`  
