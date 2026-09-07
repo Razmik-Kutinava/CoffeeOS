@@ -2,22 +2,22 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-07 (v486 + #79 MCP PASS)  
+**Дата:** 2026-09-07 (min charge 10₽)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Fly **v486** · tip `d81990b4` | owner review; не `[x]` без ок |
-| Пачка | #82 PASS · #81 PASS · #79 **PASS** · #80 PARTIAL (live call) |
+| Min 10₽ catalog + T-Bank guard | deploy tip · #80 live call |
+| Пачка #79–#82 | #79 PASS · #80 PARTIAL · #81/#82 PASS |
 
-**last_done:** discount+resume GetQr · GH Deploy org token green · MCP #79 R1 waiting  
-**next_step:** #80 live Callcheck (телефон) · backlog: cart≤promo+bind → T-Bank 3016 min 10₽
+**last_done:** min 10₽ PTS/Init · Fly bump 48 prices · #79 MCP PASS  
+**next_step:** deploy кода min-10 · не `[x]` без ок
 
 **ctx_trim:** `2026-09-02`  
-**CI:** https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/34109574092 (**green**)  
-**Fly:** **v486** `deployment-01M1XTQFXH415JDZ7P2AT857BV`  
-**GH Deploy:** https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/34117804689 (**green**)  
-**Fly MCP:** #82 PASS · #81 PASS · #79 PASS · #80 PARTIAL
+**CI:** (push)  
+**Fly:** **v486** (+ data bump prices≥10)  
+**GH Deploy:** [34117804689](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/34117804689) green  
+**Fly MCP:** #79 PASS · #80 PARTIAL · #81/#82 PASS
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

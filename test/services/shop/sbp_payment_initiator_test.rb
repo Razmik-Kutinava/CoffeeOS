@@ -298,4 +298,30 @@ class Shop::SbpPaymentInitiatorTest < ActiveSupport::TestCase
     assert_equal "https://qr.nspk.ru/AS10000RESUME", result[:payment_url]
     assert_equal "pay-existing-sbp", result[:provider_payment_id]
   end
+
+  test "call! live rejects final_amount below 10 rubles before Init" do
+    ENV["SHOP_SIMULATE_PAYMENT"] = "0"
+    order = build_pending_order!
+    order.update_columns(total_amount: 2, discount_amount: 0, final_amount: 2)
+    order.payments.first.update_columns(amount: 2)
+
+    init_called = false
+    adapter = Payments::TbankAdapter.new
+    adapter.define_singleton_method(:init_payment) do |**_kwargs|
+      init_called = true
+      raise "Init must not run under min charge"
+    end
+
+    error = assert_raises(Shop::SbpPaymentInitiator::Error) do
+      Shop::SbpPaymentInitiator.new(tenant: @tenant, adapter: adapter).call!(
+        order_id: order.id,
+        return_base_url: "https://example.com",
+        notification_url: "https://example.com/callbacks/tbank"
+      )
+    end
+
+    refute init_called
+    assert_equal "amount_too_small", error.error_code
+    assert_match(/Минимальная сумма оплаты — 10/i, error.message)
+  end
 end

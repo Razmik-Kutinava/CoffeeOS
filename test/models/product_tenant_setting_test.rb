@@ -122,6 +122,17 @@ class ProductTenantSettingTest < ActiveSupport::TestCase
   # price numericality
   # ---------------------------------------------------------------------------
 
+  test "price must be at least 10 rubles" do
+    setting = build_setting(is_enabled: true, price: 9.99)
+    assert_not setting.valid?
+    assert setting.errors[:price].any?
+  end
+
+  test "price of 10 rubles is valid" do
+    setting = build_setting(is_enabled: true, price: 10)
+    assert setting.valid?
+  end
+
   test "price must be greater than 0" do
     setting = build_setting(is_enabled: true, price: 0)
     assert_not setting.valid?

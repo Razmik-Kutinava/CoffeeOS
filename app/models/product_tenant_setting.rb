@@ -4,7 +4,10 @@ class ProductTenantSetting < ApplicationRecord
   belongs_to :price_updated_by, class_name: "User", optional: true
 
   validates :tenant_id, uniqueness: { scope: :product_id }
-  validates :price, numericality: { greater_than: 0 }, allow_nil: true
+  # Т-Банк / витрина: не ниже 10 ₽ (Payments::AmountLimits::MIN_CHARGE_RUB).
+  validates :price,
+            numericality: { greater_than_or_equal_to: Payments::AmountLimits::MIN_CHARGE_RUB },
+            allow_nil: true
   validates :stock_qty, numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
   validate :enabled_requires_price
   validate :sold_out_reason_consistency

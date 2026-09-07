@@ -499,4 +499,25 @@ class Payments::TbankAdapterTest < ActiveSupport::TestCase
 
     assert_nil captured["PayType"]
   end
+
+  test "init_payment rejects amount below 10 rubles before bank call" do
+    adapter = Payments::TbankAdapter.new
+    order = Struct.new(:id, :final_amount).new(SecureRandom.uuid, BigDecimal("2.00"))
+    called = false
+    adapter.define_singleton_method(:post_json) do |_url, _payload|
+      called = true
+      { "Success" => true }
+    end
+
+    error = assert_raises(Payments::TbankAdapter::Error) do
+      adapter.init_payment(
+        order: order,
+        return_base_url: "https://example.com",
+        notification_url: "https://example.com/callbacks/tbank"
+      )
+    end
+
+    refute called
+    assert_match(/Минимальная сумма оплаты — 10/i, error.message)
+  end
 end

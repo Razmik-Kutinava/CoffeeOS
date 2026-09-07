@@ -74,6 +74,7 @@ module Shop
         end
 
         apply_growth_pricing!(order, payment)
+        ensure_min_charge!(order)
 
         # #72: контакт покупателя в Receipt (Email > Phone) из MobileCustomer.
         receipt = Payments::TbankReceiptBuilder.for_order!(order)
@@ -122,6 +123,16 @@ module Shop
         order_id: order.id,
         provider_payment_id: payment.provider_payment_id.to_s
       }
+    end
+
+    def ensure_min_charge!(order)
+      return unless Payments::AmountLimits.below_minimum?(order.final_amount)
+
+      raise Error.new(
+        "Минимальная сумма оплаты — #{Payments::AmountLimits::MIN_CHARGE_RUB} ₽",
+        http_status: :unprocessable_entity,
+        error_code: "amount_too_small"
+      )
     end
 
     def mark_save_sbp_account!(order)

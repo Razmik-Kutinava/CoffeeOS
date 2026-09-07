@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-07 — min charge 10₽ (T-Bank + catalog)
+
+- `Payments::AmountLimits::MIN_CHARGE_RUB = 10`
+- `ProductTenantSetting` / `ProductPriceHistory` ≥10 · `TbankAdapter` + `SbpPaymentInitiator` reject below
+- rake `shop:catalog:bump_min_prices` · Fly: **48** PTS bumped (1.79/2.95/3.35 → 10)
+- tests: amount_limits + PTS + sbp + tbank + growth (10&lt;11)
+
 ## 2026-09-07 — v486 · #79 MCP PASS · GH Deploy token fixed
 
 - tip `d81990b4`: resume SBP GetQr if `provider_payment_id` set (T-Bank error 8)

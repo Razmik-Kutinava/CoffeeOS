@@ -43,6 +43,9 @@ module Payments
     # receipt — опциональный объект 54-ФЗ (вложенный; в Token не входит).
     # Возвращает { payment_url:, provider_payment_id: }
     def init_payment(order:, return_base_url:, notification_url:, customer_key: nil, recurrent: false, receipt: nil, pay_type: nil, data: nil)
+      if Payments::AmountLimits.below_minimum?(order.final_amount)
+        raise Error, "Минимальная сумма оплаты — #{Payments::AmountLimits::MIN_CHARGE_RUB} ₽"
+      end
       amount_kopecks = (order.final_amount * 100).to_i
       return_query = shop_return_query(order)
 

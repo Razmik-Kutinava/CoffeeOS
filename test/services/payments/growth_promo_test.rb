@@ -150,29 +150,29 @@ class Payments::GrowthPromoTest < ActiveSupport::TestCase
     assert_equal 0, priced[:discount_amount]
   end
 
-  # Fly MCP v482: cart 2₽ + save_sbp → discount = 2-11 < 0 → Order 422.
+  # Cart ≤ promo → no growth discount (не доплата). Min charge 10₽ — используем 10 < 11.
   test "price! when cart at or below promo keeps cart and no negative discount" do
     priced = Payments::GrowthPromo.price!(
-      subtotal: 2,
+      subtotal: 10,
       discount: 0,
       tenant: @tenant,
       customer: @customer,
       bind_requested: true
     )
     refute priced[:growth_intent]
-    assert_equal 2.to_d, priced[:final_amount]
+    assert_equal 10.to_d, priced[:final_amount]
     assert_equal 0.to_d, priced[:discount_amount]
     assert priced[:discount_amount].to_d >= 0
   end
 
   test "charge_amount when cart below promo charges cart not promo" do
     amount = Payments::GrowthPromo.charge_amount(
-      cart_total: 2,
+      cart_total: 10,
       tenant: @tenant,
       customer: @customer,
       bind_requested: true
     )
-    assert_equal 2.to_d, amount
+    assert_equal 10.to_d, amount
   end
 
   test "charge_amount returns full cart when checkbox off" do
