@@ -11,6 +11,14 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-07 — docs: SPEC #82 cascade SMS + status sheet
+
+- `todo.md`: hide-on-ready (`orderStatusSheet` + `#active` без ready) · cascade presence→SMS
+- Файлы: orderStatusSheet · orders#active · OrderReadyCascadeJob · GuestOrderChannel · PaidNotifier · Broadcaster
+- Не ломать: One-Click/SBP · repeats после ready · табло · peek accepted/preparing
+- Проверка: JS order_status_sheet+poll · rails cascade+notifier+broadcaster+channel+active_orders
+- Вне slice: SMS URL-шаблон · RSpec из Google Doc
+
 ## 2026-09-07 — docs: SPEC #81 notifications gaps (denied→settings + chat)
 
 - `todo.md`: кликабельный denied-баннер → настройки; chat → `SUPPORT_TELEGRAM_URL`; #38 вне slice

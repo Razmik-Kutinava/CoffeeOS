@@ -13,7 +13,7 @@
 | #79 SBP return + autopay labels | 🟡 | SPEC 2026-09-07 · parked · `/sbr` pending |
 | #80 Registration UI/UX + Callcheck cascade | 🟡 | SPEC 2026-09-07 · ждёт `/sbr` · P0: клавиатура/сумма · копирайт · post-call |
 | #81 Notifications / Wallet / WebPush gaps | 🟡 | SPEC 2026-09-07 · ждёт `/sbr` · slice: denied→settings + chat |
-| #82 Cascade SMS ready + sheet stuck | 🟡 | intake 2026-09-07 · ждёт `/spec` · reopen #39/#35 |
+| #82 Cascade SMS ready + sheet stuck | 🟡 | SPEC 2026-09-07 · ждёт `/sbr` · reopen #39/#35 |
 | #26 invalid token / pay error copy | 🟡 | v481 MCP PARTIAL · M2 нужен guest с saved card decline |
 | #71 email after pay — remember | 🟡 | Fly v481 MCP PASS · ждёт апрув заказчика |
 
