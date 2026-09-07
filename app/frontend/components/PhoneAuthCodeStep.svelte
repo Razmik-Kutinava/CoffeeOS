@@ -15,6 +15,8 @@
     cascadeHint,
     cascadeTimerLabel,
     telHrefFromCallPhone,
+    callPhoneButtonLabel,
+    interpretCallcheckPoll,
     AUTH_PHASE
   } from "../lib/phoneAuthCascade.js"
   import PhoneAuthPinInputs from "./PhoneAuthPinInputs.svelte"
@@ -29,6 +31,7 @@
   } = $props()
 
   let verifying = $state(false)
+  let completing = $state(false)
   let resending = $state(false)
   let localError = $state("")
   let pinNonce = $state(0)
@@ -49,7 +52,8 @@
   )
   const showPin = $derived(showSmsPin(state.phase, state.smsSent))
   const telHref = $derived(telHrefFromCallPhone(state.callPhone))
-  const busy = $derived(resending || verifying)
+  const dialLabel = $derived(callPhoneButtonLabel(state.callPhonePretty, state.callPhone))
+  const busy = $derived(resending || verifying || completing)
 
   function stopTimers() {
     if (tickId) {
@@ -98,19 +102,27 @@
   }
 
   async function pollStatus() {
-    if (state.phase !== AUTH_PHASE.CALLCHECK || verifying) return
+    if (state.phase !== AUTH_PHASE.CALLCHECK || verifying || completing) return
     try {
       const res = await api("/phone_otp/check_status", { method: "GET" })
-      if (res?.confirmed || res?.verified) {
+      const outcome = interpretCallcheckPoll(res)
+      if (outcome.action === "complete") {
+        completing = true
         stopTimers()
-        onVerified?.({ phone: res?.phone || phoneE164, refreshToken: res?.refresh_token })
-      } else if (res?.expired) {
+        onVerified?.({
+          phone: outcome.phone || phoneE164,
+          refreshToken: outcome.refreshToken
+        })
+        return
+      }
+      if (outcome.action === "sms_fallback") {
         stopPoll()
         state = { ...state, phase: AUTH_PHASE.SMS, secondsLeft: 0 }
         await sendSms()
       }
-    } catch (_) {
-      /* poll soft-fail; timeout/SMS fallback handles UX */
+    } catch (e) {
+      localError = e?.message || "Не удалось проверить звонок. Попробуйте SMS."
+      onError?.(localError)
     }
   }
 
@@ -189,14 +201,14 @@
       {#if telHref}
         <a
           href={telHref}
-          class="text-lg font-medium text-[#ff8c42] underline"
-          data-testid="phone-auth-tel-link"
+          class="inline-flex w-full items-center justify-center rounded-lg bg-[#ff8c42] px-4 py-3 text-base font-semibold text-black no-underline"
+          data-testid="phone-auth-tel-btn"
         >
-          {state.callPhonePretty || state.callPhone}
+          {dialLabel}
         </a>
       {:else if state.callPhoneHtml}
         <!-- SMS.ru html already escaped server-side; tel link preferred -->
-        <p class="text-lg text-white">{state.callPhonePretty}</p>
+        <p class="text-lg text-white">{dialLabel}</p>
       {/if}
     </div>
   {/if}

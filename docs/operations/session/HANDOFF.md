@@ -2,16 +2,16 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-07 (/regress #79 PASS)  
+**Дата:** 2026-09-07 (GREEN #80)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| /regress #79 PASS · Fly **v481** | `/review` |
-| GREEN `5b3bc76e` | bugbot + security + push/CI · Fly MCP после deploy |
+| GREEN #80 · Fly **v481** | `/regress` #80 |
+| Фокус | phone auth: keyboard/CTA · Callcheck btn · poll complete |
 
-**last_done:** regress #79 — JS 54/0 · rails 15/0 PASS  
-**next_step:** `/review` PHASE 3
+**last_done:** feat #80 keyboard hide CTA + Callcheck copy + poll [GREEN]  
+**next_step:** `/regress` — JS cascade/webview · rails phone_otp / auth_funnel
 
 **ctx_trim:** `2026-09-02`  
 **CI:** https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/34088874139 (**green**)  

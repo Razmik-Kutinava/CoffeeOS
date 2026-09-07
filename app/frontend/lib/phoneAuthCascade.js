@@ -10,10 +10,30 @@ export const AUTH_PHASE = Object.freeze({
 })
 
 export const CALLCHECK_HINT =
-  "Позвоните на номер ниже с вашего телефона. На звонок отвечать не нужно — сброс автоматический."
+  "Позвоните на номер в кнопке ниже — регистрация пройдёт автоматически. На звонок отвечать не нужно."
 
 export const SMS_BTN_LABEL = "Отправить код в СМС"
 export const SMS_SENT_HINT = "Отправили 4-значный код в СМС"
+
+export function callPhoneButtonLabel(pretty, raw) {
+  const p = String(pretty || "").trim()
+  if (p) return p
+  const r = String(raw || "").trim()
+  return r || "Позвонить"
+}
+
+/** Результат GET /phone_otp/check_status → действие UI. */
+export function interpretCallcheckPoll(res) {
+  if (res?.confirmed || res?.verified) {
+    return {
+      action: "complete",
+      phone: res?.phone || null,
+      refreshToken: res?.refresh_token || null
+    }
+  }
+  if (res?.expired) return { action: "sms_fallback" }
+  return { action: "wait" }
+}
 
 export function formatMmSs(totalSec) {
   const s = Math.max(0, Math.floor(Number(totalSec) || 0))

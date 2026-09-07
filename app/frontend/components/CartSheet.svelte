@@ -53,7 +53,9 @@
   import {
     sheetHeightPx,
     shopVisualViewportHeight,
-    subscribeShopViewport
+    subscribeShopViewport,
+    isShopKeyboardOpen,
+    shouldHideCartCheckoutCta
   } from "../lib/shopWebViewLayout.js"
 
   let hash = $state(typeof window !== "undefined" ? window.location.hash : "")
@@ -74,12 +76,14 @@
   let statusWidgetVisible = $state(false)
   let tokenInvalid = $state(false)
   let productCta = $state(/** @type {Record<string, any>} */ ({ active: false }))
+  let keyboardOpen = $state(false)
 
   let showSheet = $derived(isCartSheetRoute(hash))
   let onCheckout = $derived(isCheckoutRoute(hash))
   let onProduct = $derived(Boolean(productCta?.active))
   let count = $derived(items.length)
   let oosProductId = $derived(productCta?.outOfStockProductId ?? null)
+  let hideCheckoutCta = $derived(shouldHideCartCheckoutCta({ onCheckout, keyboardOpen }))
 
   function lineUnavailable(line) {
     if (oosProductId == null || oosProductId === "") return false
@@ -293,7 +297,9 @@
     bindCartSheetEvents()
     const unsubVvh = subscribeShopViewport((h) => {
       if (h > 0) vvh = h
+      keyboardOpen = isShopKeyboardOpen()
     })
+    keyboardOpen = isShopKeyboardOpen()
     window.addEventListener("hashchange", onHash)
     refreshCartSheet().catch(() => {})
     // Секция «повторить»: кэш сразу; status+customer_id без нового OTP после F5
@@ -473,7 +479,7 @@
           тут будут твои заказы
         </p>
       {/if}
-      {@render checkoutBar("shop-cart-empty-total")}
+      {@render checkoutBar("shop-cart-empty-total", hideCheckoutCta)}
       {#if showRepeat}
         <div data-testid="shop-repeat-slot-empty" class="shrink-0 px-2">
           <RepeatSection layout="full" />
@@ -513,6 +519,7 @@
           data-testid="shop-cart-hidden-total"
           class="shrink-0 text-sm font-semibold text-[#ff8c42]"
         >{formatThousands(roundPrice(total))}₽</span>
+        {#if !hideCheckoutCta}
         {#if showAddCardCta}
           <button
             type="button"
@@ -538,6 +545,7 @@
             {formatCartButtonTotal(total)}
           </span>
         </button>
+        {/if}
         {/if}
       </div>
 
@@ -617,7 +625,7 @@
             {/each}
           </div>
         {/if}
-        {@render checkoutBar("shop-cart-peek-total", payStackActive)}
+        {@render checkoutBar("shop-cart-peek-total", payStackActive || hideCheckoutCta)}
         <div data-testid="shop-repeat-slot-peek" class="shrink-0 border-t border-[#3a3a3a]/40">
           {#if showRepeat}<RepeatSection layout="embedded" />{/if}
         </div>
@@ -684,7 +692,7 @@
             </div>
           {/each}
         </div>
-        {@render checkoutBar(null, payStackActive)}
+        {@render checkoutBar(null, payStackActive || hideCheckoutCta)}
         <div data-testid="shop-repeat-slot-expanded" class="shrink-0 border-t border-[#3a3a3a]/40">
           {#if showRepeat}<RepeatSection layout="embedded" />{/if}
         </div>
@@ -758,7 +766,7 @@
         {#if onProduct}
           <div data-testid="shop-product-peek-scroll" class="sr-only" aria-hidden="true"></div>
         {/if}
-        {@render checkoutBar(null, payStackActive)}
+        {@render checkoutBar(null, payStackActive || hideCheckoutCta)}
         <div data-testid="shop-repeat-slot-single" class="shrink-0 border-t border-[#3a3a3a]/40">
           {#if showRepeat}<RepeatSection layout="embedded" />{/if}
         </div>

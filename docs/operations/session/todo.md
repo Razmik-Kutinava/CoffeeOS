@@ -12,10 +12,15 @@
 ## SBR
 
 - [x] **SPEC** (`9c28d388`)
-- [ ] **RED**
-- [ ] **GREEN**
+- [x] **RED** (`cbd1d8a4`)
+- [x] **GREEN**
 - [ ] **/regress**
 - [ ] **REVIEW**
+
+## Local GREEN
+
+- JS: 33/0 PASS (cascade + wizard + webview)
+- rails phone_otp + auth_funnel + phone_otp service: 23/0 PASS
 
 ## Решение (slice)
 
