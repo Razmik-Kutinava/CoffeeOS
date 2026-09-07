@@ -10,11 +10,11 @@
 | Checkout UX (Фаза 2) | 🟡 | апрув заказчика |
 | SBP 3001 | 🟡 | банк / кабинет |
 | #47 / #35 PWA статусы | 🟡 | Fly v481 MCP MUST PASS · ждёт апрув заказчика |
-| #79 SBP return + autopay labels | 🟡 | v482 MCP PARTIAL · R1 blocked `sbp_init` 422 Discount amount < 0 · R3 labels PASS |
-| #80 Registration UI/UX + Callcheck cascade | 🟡 | v482 MCP PARTIAL · Callcheck UI PASS · V live skip (`SHOP_OTP_LOG_FALLBACK`) · ждёт апрув |
+| #79 SBP return + autopay labels | 🟡 | v486 MCP **PASS** R1 waiting · ждёт апрув заказчика · note: cart≤promo+bind → T-Bank 3016 |
+| #80 Registration UI/UX + Callcheck cascade | 🟡 | v486: OTP fallback **false** · UI PASS · live Callcheck ещё SKIP · ждёт апрув / телефон |
 | #81 Notifications / Wallet / WebPush gaps | 🟡 | v482 MCP PASS · ждёт апрув заказчика |
 | #82 Cascade SMS ready + sheet stuck | 🟡 | v482 MCP PASS · hide+SMS sent · ждёт апрув заказчика |
-| GH FLY_API_TOKEN | 🟡 | workflow Deploy unauthorized 2026-09-07 — обновить secret |
+| GH FLY_API_TOKEN | 🟢 | org token · Deploy [34117804689](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/34117804689) green 2026-09-07 |
 | #26 invalid token / pay error copy | 🟡 | v481 MCP PARTIAL · M2 нужен guest с saved card decline |
 | #71 email after pay — remember | 🟡 | Fly v481 MCP PASS · ждёт апрув заказчика |
 

@@ -11,6 +11,16 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-07 — v486 · #79 MCP PASS · GH Deploy token fixed
+
+- tip `d81990b4`: resume SBP GetQr if `provider_payment_id` set (T-Bank error 8)
+- prior `fa1762c8`: cart ≤ promo → no negative discount
+- CI [34109574092](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/34109574092) green
+- `FLY_API_TOKEN` → **org** token (deploy token + CRLF ломали Authorization) · GH Deploy [34117804689](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/34117804689) **green** → **v486**
+- MCP #79 Point A: sbp_init 200 · growth 11₽ · NSPK QR · waiting UI PASS · artifacts `…/fly_v486_2026-09-07/`
+- #80: `SHOP_OTP_LOG_FALLBACK=false` · live call всё ещё SKIP
+- Backlog: demo cart ≤10₽ + bind → T-Bank 3016 (min 1000 коп.)
+
 ## 2026-09-07 — deploy v482 + MCP Point A (#79/#80/#81/#82)
 
 - tip `4f980e96` · CI [34103028345](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/34103028345) green

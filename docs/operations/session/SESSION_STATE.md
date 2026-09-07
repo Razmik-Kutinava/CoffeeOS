@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-07 (deploy v482 + MCP #79–#82)  
+**Дата:** 2026-09-07 (v486 · #79 PASS · GH Deploy green)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| v482 MCP done | #79 discount 422 triage · GH Fly token |
-| Artifacts | `…/mcp/fly_v482_2026-09-07/` ×4 |
+| tip `d81990b4` on Fly v486 | #80 live Callcheck · owner ок → `[x]` |
+| Artifacts | #79 `…/fly_v486_2026-09-07/` · #80–#82 v482 + #80 note v486 |
 
-**last_done:** deploy v482 · MCP batch Point A  
-**next_step:** owner review вердиктов; не `[x]` без ок
+**last_done:** fix discount + resume GetQr · org `FLY_API_TOKEN` · MCP #79 R1  
+**next_step:** не `[x]` без ок; optional live Callcheck
 
 **ctx_trim:** `2026-09-02`
