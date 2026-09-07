@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-07 (Sentry RUBY-1G close)  
+**Дата:** 2026-09-07 (deploy v489)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| RUBY-1G resolvedInNextRelease | **deploy апрув** |
-| CI green | deactivate_each! на Fly |
+| Fly **v489** live | #80 live Callcheck / заказчик |
+| RUBY-1G на prod | CBR апрувы |
 
-**last_done:** RUBY-1G — unique deactivate + deactivate_each! (ops update_all)  
-**next_step:** deploy апрув
+**last_done:** deploy v489 · RUBY-1G deactivate_each! live · smoke Point A  
+**next_step:** заказчик / #80
 
 **ctx_trim:** `2026-09-02`

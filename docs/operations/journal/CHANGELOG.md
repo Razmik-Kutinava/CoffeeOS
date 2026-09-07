@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-07 — deploy Fly v489 (RUBY-1G)
+
+- GH Deploy [34130234929](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/34130234929) green · tip `3a579022`
+- Image `deployment-01M1Y2J4PV5Z5SP7JWM317N8CC` · `/up` 200 · shop+categories Point A 200
+- Fly: `deactivate_each!` + unique `revoked-{id}-{hex}` confirmed via runner
+- Sentry unresolved 24h: **0** · logs: boot OK (proxy refuse during release — transient)
+
 ## 2026-09-07 — Sentry RUBY-1G close
 
 - Root: `rails runner` `update_all(refresh_token: "revoked-"+hex)` — один токен на N строк

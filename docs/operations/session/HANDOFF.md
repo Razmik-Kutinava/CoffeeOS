@@ -2,20 +2,20 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-07 (Sentry RUBY-1G)  
+**Дата:** 2026-09-07 (deploy v489)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| RUBY-1G closed (resolvedInNextRelease) | **deploy апрув** |
-| Fly v488 | tip has deactivate_each! |
+| Fly **v489** · RUBY-1G live | #80 / CBR апрувы |
+| tip `3a579022` | |
 
-**last_done:** Sentry RUBY-1G — ops update_all shared revoked; app `deactivate_each!`  
-**next_step:** deploy по апруву
+**last_done:** GH Deploy [34130234929](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/34130234929) → **v489** · smoke Point A PASS  
+**next_step:** заказчик / #80 live
 
 **ctx_trim:** `2026-09-02`  
-**Fly:** v488  
-**Sentry:** [RUBY-1G](https://llc-manageengine.sentry.io/issues/RUBY-1G) resolvedInNextRelease · [RUBY-1H](https://llc-manageengine.sentry.io/issues/RUBY-1H) resolved
+**Fly:** v489 `deployment-01M1Y2J4PV5Z5SP7JWM317N8CC`  
+**Sentry:** unresolved 24h **0** · RUBY-1G/1H resolved
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
