@@ -12,7 +12,9 @@
 ## SBR
 
 - [x] **SPEC** · **RED** · **GREEN** (`8cae376d`) · **/regress**
-- [x] **REVIEW** — bugbot HIDE_REPEAT · security OK · push/CI (pending)
+- [x] **REVIEW** — bugbot HIDE_REPEAT · security OK · CI [34101618655](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/34101618655) green
+- Entire: `01M1XDGFW23WY77ZRW73D5KGT4` на `959f2fa0`
+- Next: deploy апрув · Fly MCP Point A
 
 ## Local /regress + REVIEW fix
 

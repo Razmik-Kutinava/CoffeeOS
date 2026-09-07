@@ -16,7 +16,8 @@
 - bugbot: HIDE_REPEAT без `ready` (repeats после hide) · medium presence OK с unsubscribe
 - security: no medium+
 - GREEN `8cae376d` · fix `959f2fa` · Entire `01M1XDGFW23WY77ZRW73D5KGT4`
-- push → CI · deploy стоп · Fly MCP Point A после deploy
+- CI [34101618655](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/34101618655) **green**
+- deploy стоп · Fly MCP Point A после deploy
 
 ## 2026-09-07 — REVIEW: #80 registration Callcheck UI/UX CI green
 
