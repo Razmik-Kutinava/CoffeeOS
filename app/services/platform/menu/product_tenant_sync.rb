@@ -85,6 +85,7 @@ module Platform
           bp = product.base_price.presence&.to_d
           pts.price = (bp.present? && bp.positive?) ? bp : (pts.price.presence || fallback)
           pts.price = fallback if pts.price.blank? || pts.price <= 0
+          pts.price = clamp_min_charge(pts.price)
           pts.is_enabled = enabled
           pts.is_sold_out = false if enabled
           pts.sold_out_reason = nil if enabled
@@ -94,8 +95,14 @@ module Platform
 
       def price_fallback(product)
         bp = product.base_price.presence&.to_d
-        bp = BigDecimal("1") if bp.blank? || bp <= 0
-        bp
+        bp = BigDecimal(Payments::AmountLimits::MIN_CHARGE_RUB.to_s) if bp.blank? || bp <= 0
+        clamp_min_charge(bp)
+      end
+
+      def clamp_min_charge(amount)
+        min = Payments::AmountLimits::MIN_CHARGE_RUB.to_d
+        amt = amount.to_d
+        amt < min ? min : amt
       end
 
       def fallback_uk_user

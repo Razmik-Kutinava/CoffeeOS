@@ -255,6 +255,7 @@ module Demo
           next unless pts
 
           target = bp + markup
+          target = Platform::Menu::ProductTenantSync.clamp_min_charge(target)
           pts.update!(price: target) if pts.price.to_d != target
         end
       end
