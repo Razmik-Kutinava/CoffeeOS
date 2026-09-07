@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-07 — deploy v481 + MCP Point A (#35/#71/#26/Итого)
+
+- Push `a9148d9b` · CI [34088874139](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/34088874139) green
+- `fly deploy --remote-only --depot=false` → **v481** · `/up` 200
+- MCP: #35 MUST PASS · #71 PASS · CartSheet Итого PASS · #26 PARTIAL (нет saved card для M2)
+- Артефакты: `…/mcp/fly_v481_2026-09-07/`
+
 ## 2026-09-07 — docs: #71 MCP plan remember receipt email (post-deploy agent)
 
 - План Point A R0–R6 · hide только после LS `shop_receipt_email` (не profile)

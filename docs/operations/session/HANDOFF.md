@@ -2,23 +2,21 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-07 (#71 MCP plan for deploy agent)  
+**Дата:** 2026-09-07 (deploy v481 + MCP пачка)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #71 REVIEW done · **MCP plan готов** | общий deploy другим агентом → MCP Point A |
-| План #71 | [`…/email_collection_after_payment/MCP_DEPLOY_CHECKLIST.md`](../milestones/veha_2/artifacts/email_collection_after_payment/MCP_DEPLOY_CHECKLIST.md) |
-| План #26 (рядом) | [`…/MCP_PLAN_STEP5_2026-09-07.md`](../milestones/veha_2/artifacts/repeat_order_invalid_token_payment_sheet/MCP_PLAN_STEP5_2026-09-07.md) |
-| Deploy этим агентом | **нет** |
+| Fly **v481** · tip `a9148d9b` · CI green | апрув заказчика по MCP · #26 M2 нужен guest с картой |
+| MCP | #35 MUST PASS · #71 PASS · Итого PASS · #26 PARTIAL (нет saved card) |
 
-**last_done:** план MCP #71 remember receipt email (R0–R6)  
-**next_step:** другой агент: deploy → MCP по `MCP_DEPLOY_CHECKLIST.md` (#71)
+**last_done:** один deploy + MCP Point A по #35/#71/#26/Итого  
+**next_step:** владелец — ок заказчику; #26 M2 с картой decline
 
 **ctx_trim:** `2026-09-02`  
-**CI:** https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/34026912791 (**green**, #71 REVIEW)  
-**Entire:** `01M1V2FH9A8C7J6X35YF5RQSFE` на `0c17ee9f`  
-**Fly MCP:** план готов · прогон после общего deploy
+**CI:** https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/34088874139 (**green**)  
+**Fly:** **v481**  
+**Fly MCP:** #35 PASS · #71 PASS · Итого PASS · #26 PARTIAL
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
