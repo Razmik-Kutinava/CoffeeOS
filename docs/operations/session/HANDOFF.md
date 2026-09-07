@@ -2,21 +2,21 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-07 (GREEN #82)  
+**Дата:** 2026-09-07 (REVIEW #80)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| GREEN #82 · Fly **v481** | `/regress` |
-| Slice | hide-on-ready + presence clear |
+| REVIEW #80 · push/CI | CI green → deploy **апрув** · Fly MCP Point A |
+| Фокус | registration Callcheck UI/UX |
 
-**last_done:** GREEN #82 — sheet terminal ready + cascade mark_offline  
-**next_step:** `/regress` — JS sheet+poll · rails cascade zone
+**last_done:** REVIEW #80 — bugbot poll-error clear · security OK · push  
+**next_step:** CI green → deploy только апрув; MCP Point A
 
 **ctx_trim:** `2026-09-02`  
-**CI:** https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/34088874139 (**green**)  
+**CI:** (после push)  
 **Fly:** **v481**  
-**Fly MCP:** #35 PASS · #71 PASS · Итого PASS · #26 PARTIAL
+**Fly MCP:** #80 pending после deploy
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

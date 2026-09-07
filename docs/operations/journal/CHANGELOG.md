@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-07 — REVIEW: #80 registration Callcheck UI/UX
+
+- bugbot: clear poll `localError` / checkout `err` after successful check_status
+- security-review: no medium+
+- Local regress PASS · push → CI · Fly MCP после deploy
+
 ## 2026-09-07 — ops: #79 REVIEW CI green 34098247173
 
 - tip `e0c4d1a6` · CI [34098247173](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/34098247173) green

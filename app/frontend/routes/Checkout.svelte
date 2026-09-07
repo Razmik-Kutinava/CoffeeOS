@@ -349,10 +349,11 @@
     otpNotice = "Телефон подтверждён"
     savedProfile = true
     editContact = false
+    err = null
   }
 
   function onWizardError(message) {
-    err = message
+    err = message ? message : null
   }
 
   function onSelectCard(card) {

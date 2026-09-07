@@ -105,6 +105,8 @@
     if (state.phase !== AUTH_PHASE.CALLCHECK || verifying || completing) return
     try {
       const res = await api("/phone_otp/check_status", { method: "GET" })
+      localError = ""
+      onError?.("")
       const outcome = interpretCallcheckPoll(res)
       if (outcome.action === "complete") {
         completing = true
