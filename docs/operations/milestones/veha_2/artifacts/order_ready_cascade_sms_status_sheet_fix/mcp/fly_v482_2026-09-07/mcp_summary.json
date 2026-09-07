@@ -1,0 +1,7 @@
+{
+  "cbr": 82,
+  "fly": "v482",
+  "hide_on_ready": "PASS",
+  "cascade_sms": "PASS",
+  "notes": "Order #202609-0013 ready → sheet hidden; SMS sent (cd93b9f2); dedupe already_sent OK"
+}

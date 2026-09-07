@@ -2,21 +2,21 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-07 (REVIEW #81)  
+**Дата:** 2026-09-07 (deploy v482 + MCP batch)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| REVIEW #81 · push/CI | CI green → deploy **апрув** · Fly MCP Point A |
-| Slice | denied→settings + Telegram chat |
+| Fly **v482** · MCP #79–#82 | triage #79 sbp_init 422 discount · обновить GH `FLY_API_TOKEN` |
+| Пачка | #82 PASS · #81 PASS · #80 PARTIAL · #79 PARTIAL |
 
-**last_done:** REVIEW #81 — bugbot toast gate · security OK · Entire `01M1XF20DA5E0PXJ99E9DH2HM6`  
-**next_step:** CI green → deploy только апрув; MCP Point A
+**last_done:** push tip `4f980e96` CI green · `fly deploy` → **v482** · MCP Point A  
+**next_step:** не `[x]` заказчику без ок; #79 R1 blocked discount validation
 
 **ctx_trim:** `2026-09-02`  
-**CI:** https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/34102734432 (**green**)  
-**Fly:** **v481**  
-**Fly MCP:** #81 pending после deploy
+**CI:** https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/34103028345 (**green**)  
+**Fly:** **v482** `deployment-01M1XHPPYGV4M7QBCGZAZK4CQB`  
+**Fly MCP:** #82 PASS · #81 PASS · #80 PARTIAL · #79 PARTIAL
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

@@ -1,0 +1,18 @@
+{
+  "cbr": 81,
+  "fly": "v482",
+  "sha": "4f980e96",
+  "point_a": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "verdict": "PASS",
+  "M1_denied_settings": "PASS",
+  "M1_network_toast_no_settings": "PASS",
+  "M2_telegram_chat": "PASS",
+  "M2_url": "https://t.me/code_black_support_bot",
+  "order": "#202609-0013",
+  "notes": "Denied toast is BUTTON with underline + aria-label settings. Network toast plain status without settings CTA. Chat opens t.me/code_black_support_bot without order_id. Desktop openSettings opened:false expected.",
+  "screenshots": [
+    "01_network_toast_no_settings.png",
+    "02_denied_toast_as_button.png",
+    "03_chat_support_cta.png"
+  ]
+}

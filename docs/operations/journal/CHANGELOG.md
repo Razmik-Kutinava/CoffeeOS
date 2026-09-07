@@ -11,6 +11,14 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-07 — deploy v482 + MCP Point A (#79/#80/#81/#82)
+
+- tip `4f980e96` · CI [34103028345](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/34103028345) green
+- GH Actions Deploy **fail** (`FLY_API_TOKEN` unauthorized) → local `fly auth login` + `fly deploy --remote-only --depot=false` → **v482**
+- `/up` 200 · SMS secrets OK · Solid Queue OK · Sentry 24h: 0 new
+- Fly MCP: **#82 PASS** · **#81 PASS** · **#80 PARTIAL** (desktop KB + OTP log fallback) · **#79 PARTIAL** (sbp_init 422 discount; R3 labels OK)
+- Артефакты: `…/mcp/fly_v482_2026-09-07/` под каждым CBR
+
 ## 2026-09-07 — REVIEW: #81 denied→settings + chat Telegram
 
 - bugbot: settings CTA только при `openSettings` (denied) · fix `ffd48c6b`
