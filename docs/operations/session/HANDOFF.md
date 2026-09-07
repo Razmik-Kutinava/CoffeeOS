@@ -2,16 +2,16 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-07 (SPEC #80)  
+**Дата:** 2026-09-07 (intake #81)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #80 SPEC · Fly **v481** | `/sbr` RED #80 · #79 SPEC ждёт `/sbr` |
-| Фокус | phone auth: keyboard/сумма · Callcheck copy · post-call → PWA |
+| intake #81 · Fly **v481** | `/spec` #81 |
+| #80 SPEC · #82 intake · #79 parked | очередь после #81 |
 
-**last_done:** SPEC #80 → `todo.md` (Callcheck канон; P0 UI/UX slice)  
-**next_step:** `/sbr` RED — тесты keyboard+CTA, copy, post-call verify
+**last_done:** PHASE 0 intake #81 (gaps Wallet/WebPush/фоновые/чат)  
+**next_step:** `/spec` — план slice по #81
 
 **ctx_trim:** `2026-09-02`  
 **CI:** https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/34088874139 (**green**)  
