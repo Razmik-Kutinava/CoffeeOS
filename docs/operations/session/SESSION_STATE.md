@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-07 (/regress #82 PASS)  
+**Дата:** 2026-09-07 (GREEN #81)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| /regress #82 PASS | `/review` |
-| Зона shop/статусы+cascade | JS 29 · rails 35 |
+| GREEN #81 в `todo.md` | `/regress` |
+| Local JS PASS (зона #81) | cta_machine hint — вне slice |
 
-**last_done:** /regress #82 — sheet+poll + cascade zone PASS  
-**next_step:** `/review` — bugbot + security + Entire + push
+**last_done:** GREEN #81 denied→settings + SUPPORT_TELEGRAM_URL chat  
+**next_step:** `/regress`
 
 **ctx_trim:** `2026-09-02`

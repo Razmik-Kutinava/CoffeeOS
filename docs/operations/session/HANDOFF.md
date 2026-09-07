@@ -2,21 +2,21 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-07 (/regress #82 PASS)  
+**Дата:** 2026-09-07 (GREEN #81)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| /regress #82 PASS · Fly **v481** | `/review` |
-| Local | JS 29/0 · rails 35/0 |
+| GREEN #81 · Fly **v481** | `/regress` |
+| Slice | denied→settings + Telegram chat |
 
-**last_done:** /regress #82 — hide-on-ready + cascade presence zone PASS  
-**next_step:** `/review` — субагенты + Entire + push CI
+**last_done:** GREEN #81 (`0722edd3`) — clickable denied banner + chat URL  
+**next_step:** `/regress` — JS зона #81
 
 **ctx_trim:** `2026-09-02`  
 **CI:** https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/34088874139 (**green**)  
 **Fly:** **v481**  
-**Fly MCP:** #35 PASS · #71 PASS · Итого PASS · #26 PARTIAL · **#82 MCP после deploy**
+**Fly MCP:** skip до REVIEW
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
