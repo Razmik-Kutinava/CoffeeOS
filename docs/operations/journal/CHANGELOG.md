@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-07 — REVIEW: #82 hide-on-ready + cascade SMS
+
+- bugbot: HIDE_REPEAT без `ready` (repeats после hide) · medium presence OK с unsubscribe
+- security: no medium+
+- GREEN `8cae376d` · fix `959f2fa` · Entire `01M1XDGFW23WY77ZRW73D5KGT4`
+- push → CI · deploy стоп · Fly MCP Point A после deploy
+
 ## 2026-09-07 — REVIEW: #80 registration Callcheck UI/UX CI green
 
 - bugbot: clear poll error after success · security: no medium+

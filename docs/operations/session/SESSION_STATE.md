@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-07 (REVIEW #80 CI green)  
+**Дата:** 2026-09-07 (REVIEW #82)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| REVIEW #80 CI **green** | deploy апрув · MCP Point A |
-| Fly v481 | |
+| REVIEW #82 push/CI | CI green → стоп |
+| Local | JS 33 · rails 44 PASS |
 
-**last_done:** #80 REVIEW complete · CI 34100150077 green  
-**next_step:** deploy — только апрув
+**last_done:** bugbot HIGH fix (HIDE_REPEAT) · security OK  
+**next_step:** push → CI green · deploy апрув
 
 **ctx_trim:** `2026-09-02`
