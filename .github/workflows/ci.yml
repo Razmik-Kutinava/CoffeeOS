@@ -123,6 +123,11 @@ jobs:
       - name: Install JS dependencies
         run: npm ci
 
+      - name: Build Vite assets for test (shop layout / PWA)
+        env:
+          RAILS_ENV: test
+        run: bundle exec vite build --mode=test
+
       - name: Run tests
         env:
           RAILS_ENV: test

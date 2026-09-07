@@ -64,7 +64,11 @@ class Shop::Api::SessionRefreshTest < ActionDispatch::IntegrationTest
       cid = Shop::CustomerSession.customer_id(sess.request.session, @tenant.id)
       assert cid.present?
 
-      assert_equal false, MobileSession.find_by!(refresh_token: old_token).is_active
+      # Old raw token is rewritten on deactivate (unique revoked-…); must not resolve.
+      assert_nil MobileSession.find_by(refresh_token: old_token)
+      revoked = MobileSession.find_by(customer_id: cid, is_active: false)
+      assert revoked
+      assert_match(/\Arevoked-/, revoked.refresh_token)
       fresh = MobileSession.find_by!(refresh_token: new_token)
       assert fresh.is_active
       assert fresh.expires_at > 89.days.from_now

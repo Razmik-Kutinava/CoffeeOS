@@ -2,16 +2,16 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-07 (Sentry RUBY-1H/1G)  
+**Дата:** 2026-09-07 (CI red after RUBY-1G)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Sentry 2 issues fixed in code | **deploy апрув** · #80 live |
-| Fly v488 | min 10₽ live; MobileSession deactivate pending deploy |
+| CI fix: logout/refresh assertions + vite prebuild | ждать CI green |
+| Fly v488 | RUBY-1G + CI fix — **deploy апрув** |
 
-**last_done:** Sentry triage · Fixes RUBY-1H (clamp live) · RUBY-1G deactivate unique token  
-**next_step:** deploy по апруву
+**last_done:** CI [34122299116](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/34122299116) — assert revoked token; vite build before tests  
+**next_step:** CI green · deploy по апруву
 
 **ctx_trim:** `2026-09-02`  
 **Fly:** v488  

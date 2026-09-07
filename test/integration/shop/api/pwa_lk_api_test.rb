@@ -71,9 +71,12 @@ class Shop::Api::PwaLkApiTest < ActionDispatch::IntegrationTest
       assert_equal 200, sess.response.status
       assert_empty sess.response.parsed_body
 
-      ms = MobileSession.find_by(refresh_token: refresh_token)
-      assert ms, "MobileSession expected"
-      assert_equal false, ms.is_active
+      # deactivate! rewrites refresh_token → old value must not resolve
+      assert_nil MobileSession.find_by(refresh_token: refresh_token)
+      customer = MobileCustomer.find_by!(email: @email)
+      revoked = MobileSession.find_by(customer_id: customer.id, is_active: false)
+      assert revoked, "MobileSession should remain as revoked row"
+      assert_match(/\Arevoked-/, revoked.refresh_token)
     end
   end
 

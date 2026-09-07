@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-07 — CI: deactivate assertions + vite prebuild
+
+- Root: `833cb113` rewrite `refresh_token` on deactivate — integration still `find_by(old)`
+- Fix: `pwa_lk_api_test` / `session_refresh_test` expect nil old token + `revoked-…` row
+- CI: `bundle exec vite build --mode=test` before rails test (PwaManifest flake)
+- Local PASS: unit 3 + failing 2 · **deploy:** стоп
+
 ## 2026-09-07 — Sentry RUBY-1H / RUBY-1G
 
 - [RUBY-1H](https://llc-manageengine.sentry.io/issues/RUBY-1H): Price ≥10 на `fly:release`/`demo:seed` — clamp в ProductTenantSync (уже v488)
