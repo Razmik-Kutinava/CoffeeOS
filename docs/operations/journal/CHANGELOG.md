@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-07 — docs: #71 MCP plan remember receipt email (post-deploy agent)
+
+- План Point A R0–R6 · hide только после LS `shop_receipt_email` (не profile)
+- Файл: `artifacts/email_collection_after_payment/MCP_DEPLOY_CHECKLIST.md`
+- Deploy этим агентом нет — общий deploy + MCP другим
+
 ## 2026-09-07 — docs: #26 MCP plan step5 (post-deploy agent)
 
 - План Point A M1–M6 · P0 = M2 inline на отказе банка

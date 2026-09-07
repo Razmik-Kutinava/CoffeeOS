@@ -4,6 +4,7 @@
 
 | Файл | Описание |
 |------|----------|
+| `MCP_DEPLOY_CHECKLIST.md` | **План MCP для агента после deploy** — QA reopen remember / don’t re-ask (R0–R6) |
 | `mcp/fly_vNNN_…/` | Скрины + `MCP_RESULT.md` — после приёмки |
 | QA reopen 2026-09-06 | Текст: после сбора email для чека — **не спрашивать** на последующих заказах (дополнение к #71 Subtask 12) |
 

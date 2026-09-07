@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-07 (#26 MCP plan)  
+**Дата:** 2026-09-07 (#71 MCP plan)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #26 MCP plan `[x]` | deploy+MCP другим агентом |
-| Deploy этим чатом | нет |
+| #71 MCP checklist для deploy-агента | общий deploy → MCP R0–R6 |
+| Deploy этой сессией | нет |
 
-**last_done:** `MCP_PLAN_STEP5_2026-09-07.md`  
-**next_step:** передать план агенту после общего deploy
+**last_done:** `MCP_DEPLOY_CHECKLIST.md` #71 remember email  
+**next_step:** другой агент по чеклисту после deploy
 
 **ctx_trim:** `2026-09-02`
