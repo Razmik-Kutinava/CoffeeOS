@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-07 (GREEN #79)  
+**Дата:** 2026-09-07 (/regress #79 PASS)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| GREEN #79 `5b3bc76e` | `/regress` |
-| beginSbpBankRedirect + autopay labels | REVIEW после regress |
+| /regress #79 PASS · JS 54/0 · rails 15/0 | `/review` |
+| GREEN `5b3bc76e` | push/CI на REVIEW |
 
-**last_done:** feat #79 waiting before SBP + autopay sheet errors [GREEN]  
-**next_step:** `/regress` — JS + rails зона #79
+**last_done:** regress #79 — оплата/SBP зона PASS  
+**next_step:** `/review` — bugbot + security + Entire + push
 
 **ctx_trim:** `2026-09-02`

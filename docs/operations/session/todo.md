@@ -14,7 +14,7 @@
 - [x] **SPEC** (`b9d80b99`)
 - [x] **RED** (`14b968dd`)
 - [x] **GREEN** (`5b3bc76e`)
-- [ ] **/regress**
+- [x] **/regress** — JS 54/0 · rails 15/0
 - [ ] **REVIEW**
 
 ## Решение (slice)
@@ -53,5 +53,4 @@
 ## Local GREEN
 
 - JS: 54/0 PASS
-- rails `sbp_payment_return_ui`: 5/0 PASS
-- rails `sbp_autopay_charge` (+ status): 5/0 PASS
+- rails zone (return_ui + charge + status): **15 runs / 70 assertions / 0 fail** PASS (`bundle exec rails test …`)

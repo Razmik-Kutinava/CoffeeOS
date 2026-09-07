@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-07 — ops: /regress #79 PASS (SBP return + autopay)
+
+- JS: `codeblack` + `shop_sbp_*` → **54/0**
+- rails: `sbp_payment_return_ui` + `sbp_autopay_charge` + `payment_status` → **15/70/0**
+- GREEN `5b3bc76e` · next `/review` · Fly MCP Point A после deploy (hot-path)
+
 ## 2026-09-07 — docs: SPEC #82 cascade SMS + status sheet
 
 - `todo.md`: hide-on-ready (`orderStatusSheet` + `#active` без ready) · cascade presence→SMS

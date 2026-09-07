@@ -2,16 +2,16 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-07 (GREEN #79)  
+**Дата:** 2026-09-07 (/regress #79 PASS)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| GREEN #79 `5b3bc76e` · Fly **v481** | `/regress` → `/review` |
-| Parallel | #80–#82 docs на develop (не этот чат) |
+| /regress #79 PASS · Fly **v481** | `/review` |
+| GREEN `5b3bc76e` | bugbot + security + push/CI · Fly MCP после deploy |
 
-**last_done:** feat #79 waiting before SBP + autopay labels [GREEN]  
-**next_step:** `/regress` — JS sbp_* + rails return_ui / charge / status
+**last_done:** regress #79 — JS 54/0 · rails 15/0 PASS  
+**next_step:** `/review` PHASE 3
 
 **ctx_trim:** `2026-09-02`  
 **CI:** https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/34088874139 (**green**)  
