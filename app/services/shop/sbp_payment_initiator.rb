@@ -68,6 +68,11 @@ module Shop
       raise Error.new("У заказа нет платежа", http_status: :unprocessable_entity) unless payment
 
       begin
+        # Retry after Init: same OrderId → T-Bank error 8; resume GetQr (как WidgetPaymentInitiator).
+        if payment.provider_payment_id.present?
+          return resume_existing_qr!(order, payment)
+        end
+
         apply_growth_pricing!(order, payment)
 
         # #72: контакт покупателя в Receipt (Email > Phone) из MobileCustomer.
@@ -107,6 +112,16 @@ module Shop
         Rails.logger.error("[SbpPaymentInitiator] #{e.class}: #{e.message}")
         raise Error.new(e.message, http_status: :internal_server_error)
       end
+    end
+
+    def resume_existing_qr!(order, payment)
+      mark_save_sbp_account!(order)
+      qr = @qr_fetcher.call!(payment_id: payment.provider_payment_id, adapter: @adapter)
+      {
+        payment_url: qr[:payment_url],
+        order_id: order.id,
+        provider_payment_id: payment.provider_payment_id.to_s
+      }
     end
 
     def mark_save_sbp_account!(order)

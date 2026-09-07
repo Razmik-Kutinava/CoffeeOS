@@ -264,4 +264,38 @@ class Shop::SbpPaymentInitiatorTest < ActiveSupport::TestCase
     assert_equal :unprocessable_entity, error.http_status
     assert_match(/СБП сейчас недоступна.*оплату картой.*попробуйте позже/i, error.message)
   end
+
+  test "call! live resumes GetQr when provider_payment_id already set (no re-Init)" do
+    ENV["SHOP_SIMULATE_PAYMENT"] = "0"
+    order = build_pending_order!
+    order.payments.first.update_columns(provider_payment_id: "pay-existing-sbp")
+
+    init_called = false
+    adapter = Payments::TbankAdapter.new
+    adapter.define_singleton_method(:init_payment) do |**_kwargs|
+      init_called = true
+      raise "Init must not be called on resume"
+    end
+    captured_qr_payment_id = nil
+    qr = Object.new
+    qr.define_singleton_method(:call!) do |payment_id:, adapter: nil|
+      captured_qr_payment_id = payment_id
+      { payment_url: "https://qr.nspk.ru/AS10000RESUME", data: "https://qr.nspk.ru/AS10000RESUME" }
+    end
+
+    result = Shop::SbpPaymentInitiator.new(
+      tenant: @tenant,
+      adapter: adapter,
+      qr_fetcher: qr
+    ).call!(
+      order_id: order.id,
+      return_base_url: "https://example.com",
+      notification_url: "https://example.com/callbacks/tbank"
+    )
+
+    refute init_called
+    assert_equal "pay-existing-sbp", captured_qr_payment_id
+    assert_equal "https://qr.nspk.ru/AS10000RESUME", result[:payment_url]
+    assert_equal "pay-existing-sbp", result[:provider_payment_id]
+  end
 end
