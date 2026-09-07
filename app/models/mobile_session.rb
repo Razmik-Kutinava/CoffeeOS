@@ -11,7 +11,11 @@ class MobileSession < ApplicationRecord
   end
 
   def deactivate!
-    update!(is_active: false)
+    update!(
+      is_active: false,
+      # Unique revoked token: keeps unique index; prevents replay of old refresh_token.
+      refresh_token: "revoked-#{id}-#{SecureRandom.hex(16)}"
+    )
   end
 
   def update_last_used!

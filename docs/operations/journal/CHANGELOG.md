@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-07 — Sentry RUBY-1H / RUBY-1G
+
+- [RUBY-1H](https://llc-manageengine.sentry.io/issues/RUBY-1H): Price ≥10 на `fly:release`/`demo:seed` — clamp в ProductTenantSync (уже v488)
+- [RUBY-1G](https://llc-manageengine.sentry.io/issues/RUBY-1G): UniqueViolation `refresh_token` — `MobileSession#deactivate!` пишет уникальный `revoked-{id}-{hex}`
+- **deploy:** стоп до апрува
+
 ## 2026-09-07 — min charge 10₽ (T-Bank + catalog)
 
 - `Payments::AmountLimits::MIN_CHARGE_RUB = 10`

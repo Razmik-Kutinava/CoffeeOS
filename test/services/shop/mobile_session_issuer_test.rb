@@ -21,10 +21,14 @@ class Shop::MobileSessionIssuerTest < ActiveSupport::TestCase
 
   test "deactivates previous active sessions for same customer" do
     old = Shop::MobileSessionIssuer.call!(customer_id: @customer.id)
+    old_row = MobileSession.find_by!(refresh_token: old)
     new_token = Shop::MobileSessionIssuer.call!(customer_id: @customer.id)
 
     refute_equal old, new_token
-    assert_equal false, MobileSession.find_by!(refresh_token: old).is_active
+    old_row.reload
+    refute old_row.is_active
+    assert_match(/\Arevoked-/, old_row.refresh_token)
+    refute_equal old, old_row.refresh_token
     assert MobileSession.find_by!(refresh_token: new_token).is_active
   end
 end

@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-07 (v488 min 10₽)  
+**Дата:** 2026-09-07 (Sentry fix, no deploy)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Fly **v488** · tip `0314c3be` | #80 live · owner review |
-| min 10₽ | PTS validation + Init guard · below=0 on Fly |
+| RUBY-1G fix committed | deploy апрув |
+| RUBY-1H | уже на v488 |
 
-**last_done:** min 10₽ + deploy v488  
-**next_step:** не `[x]` без ок
+**last_done:** Sentry 2 issues · deactivate! unique revoked token  
+**next_step:** ждать апрув deploy
 
 **ctx_trim:** `2026-09-02`

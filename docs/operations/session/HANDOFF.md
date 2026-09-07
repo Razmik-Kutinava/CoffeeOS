@@ -2,20 +2,20 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-07 (min 10₽ on Fly)  
+**Дата:** 2026-09-07 (Sentry RUBY-1H/1G)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| tip min-10 deployed | #80 live · owner `[x]` |
-| Пачка | #79 PASS · #80 PARTIAL · #81/#82 PASS |
+| Sentry 2 issues fixed in code | **deploy апрув** · #80 live |
+| Fly v488 | min 10₽ live; MobileSession deactivate pending deploy |
 
-**last_done:** min 10₽ catalog/Init + Fly bump + deploy  
-**next_step:** не `[x]` без ок
+**last_done:** Sentry triage · Fixes RUBY-1H (clamp live) · RUBY-1G deactivate unique token  
+**next_step:** deploy по апруву
 
 **ctx_trim:** `2026-09-02`  
-**Fly:** tip `0314c3be` (min charge)  
-**Fly MCP:** #79 PASS · #80 PARTIAL · #81/#82 PASS
+**Fly:** v488  
+**Sentry:** [RUBY-1H](https://llc-manageengine.sentry.io/issues/RUBY-1H) · [RUBY-1G](https://llc-manageengine.sentry.io/issues/RUBY-1G)
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
