@@ -38,4 +38,15 @@ class MobileSessionTest < ActiveSupport::TestCase
     assert_match(/\Arevoked-#{a.id}-[0-9a-f]{32}\z/, a.refresh_token)
     assert_match(/\Arevoked-#{b.id}-[0-9a-f]{32}\z/, b.refresh_token)
   end
+
+  test "deactivate_each! revokes many rows with distinct refresh_tokens" do
+    ids = 3.times.map { |i| build_session!(suffix: "bulk#{i}").id }
+
+    MobileSession.deactivate_each!(MobileSession.where(id: ids))
+
+    tokens = MobileSession.where(id: ids).pluck(:refresh_token, :is_active)
+    assert_equal 3, tokens.size
+    assert tokens.all? { |tok, active| !active && tok.match?(/\Arevoked-/) }
+    assert_equal 3, tokens.map(&:first).uniq.size
+  end
 end

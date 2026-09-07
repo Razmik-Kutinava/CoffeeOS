@@ -18,7 +18,7 @@ module Shop
 
       token = nil
       ActiveRecord::Base.transaction do
-        MobileSession.where(customer_id: @customer_id, is_active: true).find_each(&:deactivate!)
+        MobileSession.deactivate_each!(MobileSession.where(customer_id: @customer_id, is_active: true))
         token = SecureRandom.hex(32)
         MobileSession.create!(
           customer_id: @customer_id,

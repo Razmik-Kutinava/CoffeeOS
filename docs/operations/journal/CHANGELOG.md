@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-07 — Sentry RUBY-1G close
+
+- Root: `rails runner` `update_all(refresh_token: "revoked-"+hex)` — один токен на N строк
+- App: `MobileSession.deactivate_each!` + unique `deactivate!` (`revoked-{id}-{hex}`)
+- Sentry: resolvedInNextRelease · **deploy:** стоп до апрува
+
 ## 2026-09-07 — CI: deactivate assertions + vite prebuild
 
 - Root: `833cb113` rewrite `refresh_token` on deactivate — integration still `find_by(old)`

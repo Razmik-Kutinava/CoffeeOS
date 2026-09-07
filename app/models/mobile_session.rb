@@ -6,6 +6,11 @@ class MobileSession < ApplicationRecord
   scope :active, -> { where(is_active: true).where("expires_at > ?", Time.current) }
   scope :expired, -> { where("expires_at <= ?", Time.current) }
 
+  # Bulk revoke — never update_all with one shared refresh_token (UniqueViolation / RUBY-1G).
+  def self.deactivate_each!(relation = all)
+    relation.find_each(&:deactivate!)
+  end
+
   def active?
     is_active && expires_at > Time.current
   end
