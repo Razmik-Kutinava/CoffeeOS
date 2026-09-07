@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-07 — feat: #80 registration UI/UX Callcheck [GREEN]
+
+- Hide checkout `+N₽` when keyboard open on `#/checkout`
+- Callcheck hint + номер в кнопке `phone-auth-tel-btn`
+- Poll: `interpretCallcheckPoll` → onVerified; ошибки не soft-swallow
+- RED `cbd1d8a4` · GREEN `61593bb2` · ждёт `/regress`
+
 ## 2026-09-07 — feat: #79 REVIEW — bugbot fixes (sync hash + SBP labels + waiting poll)
 
 - Sync `location.hash` before nspk (`beginSbpBankRedirect`)

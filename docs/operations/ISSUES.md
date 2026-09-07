@@ -11,7 +11,7 @@
 | SBP 3001 | 🟡 | банк / кабинет |
 | #47 / #35 PWA статусы | 🟡 | Fly v481 MCP MUST PASS · ждёт апрув заказчика |
 | #79 SBP return + autopay labels | 🟡 | REVIEW 2026-09-07 · push/CI · MCP после deploy |
-| #80 Registration UI/UX + Callcheck cascade | 🟡 | SPEC 2026-09-07 · ждёт `/sbr` · P0: клавиатура/сумма · копирайт · post-call |
+| #80 Registration UI/UX + Callcheck cascade | 🟡 | GREEN `61593bb2` · ждёт `/regress` |
 | #81 Notifications / Wallet / WebPush gaps | 🟡 | SPEC 2026-09-07 · ждёт `/sbr` · slice: denied→settings + chat |
 | #82 Cascade SMS ready + sheet stuck | 🟡 | SPEC 2026-09-07 · ждёт `/sbr` · reopen #39/#35 |
 | #26 invalid token / pay error copy | 🟡 | v481 MCP PARTIAL · M2 нужен guest с saved card decline |
