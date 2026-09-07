@@ -24,7 +24,7 @@ namespace :shop do
       puts "[shop:catalog:load] готово."
     end
 
-    desc "Поднять product_tenant_settings.price ниже #{Payments::AmountLimits::MIN_CHARGE_RUB} ₽ до минимума (Т-Банк). " \
+    desc "Поднять product_tenant_settings.price ниже 10 ₽ до минимума (Т-Банк). " \
          "DRY_RUN=1 — только показать. TENANT_ID=uuid — только точка."
     task bump_min_prices: :environment do
       min = Payments::AmountLimits::MIN_CHARGE_RUB
