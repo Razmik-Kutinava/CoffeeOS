@@ -109,7 +109,9 @@ describe("ActiveOrdersAccordion wires push + denied settings (#81)", () => {
     const src = readFileSync(accordionPath, "utf8")
     assert.match(src, /openNotificationSettings/)
     assert.match(src, /active-order-notify-toast/)
-    assert.match(src, /onclick|on:click/)
+    assert.match(src, /toastOpensSettings/)
+    assert.match(src, /result\?\.openSettings|result\.openSettings/)
+    assert.match(src, /aoa__toast--action/)
   })
 
   it("opens support chat with default Telegram URL path", () => {

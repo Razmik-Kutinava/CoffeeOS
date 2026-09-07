@@ -28,6 +28,7 @@
   let deviceOs = $derived(getDeviceOS())
   let actionLoading = $state(false)
   let toastMsg = $state("")
+  let toastOpensSettings = $state(false)
   let pushSubscribed = $state(false)
 
   let orderId = $derived(order?.id || order?.order_id)
@@ -56,6 +57,7 @@
   async function onAction(kind) {
     if (actionLoading) return
     toastMsg = ""
+    toastOpensSettings = false
 
     if (kind === "cancel") {
       if (typeof onCancelRequest === "function") {
@@ -92,6 +94,7 @@
           ? await downloadWalletPass({ orderId, onToast })
           : await subscribeOrderPush({ onToast })
       actionLoading = false
+      toastOpensSettings = Boolean(result?.openSettings)
       if (result.ok) pushSubscribed = true
     }
   }
@@ -148,16 +151,20 @@
     {/if}
   </div>
   {#if toastMsg}
-    <button
-      type="button"
-      class="aoa__toast"
-      data-testid="active-order-notify-toast"
-      aria-label="Открыть настройки уведомлений браузера"
-      onclick={(e) => {
-        e.stopPropagation()
-        openNotificationSettings()
-      }}
-    >{toastMsg}</button>
+    {#if toastOpensSettings}
+      <button
+        type="button"
+        class="aoa__toast aoa__toast--action"
+        data-testid="active-order-notify-toast"
+        aria-label="Открыть настройки уведомлений браузера"
+        onclick={(e) => {
+          e.stopPropagation()
+          openNotificationSettings()
+        }}
+      >{toastMsg}</button>
+    {:else}
+      <div class="aoa__toast" data-testid="active-order-notify-toast" role="status">{toastMsg}</div>
+    {/if}
   {/if}
 </div>
 
@@ -275,9 +282,11 @@
     text-align: left;
     font-size: 0.62rem;
     color: #ffb74d;
+  }
+  .aoa__toast--action {
     cursor: pointer;
     text-decoration: underline;
     text-underline-offset: 2px;
   }
-  .aoa__toast:active { opacity: 0.85; }
+  .aoa__toast--action:active { opacity: 0.85; }
 </style>
