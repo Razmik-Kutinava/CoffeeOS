@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-07 (deploy v481 + MCP)  
+**Дата:** 2026-09-07 (intake #79)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| v481 на Fly · MCP артефакты `fly_v481_2026-09-07` | апрув · #26 M2 с saved card |
-| Deploy этой сессией | **done** |
+| PHASE 0 #79 intake done | `/spec` — экран после банка + статусы автоплатежа |
+| Fly v481 · tip до intake | код после SPEC |
 
-**last_done:** push CI green → fly deploy v481 → MCP #35/#71/#26/Итого  
-**next_step:** #26 decline с картой; апрув заказчика
+**last_done:** docs intake #79 SBP return + autopay labels (остаток CODE:BLACK)  
+**next_step:** `/spec` по #79
 
 **ctx_trim:** `2026-09-02`

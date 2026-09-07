@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-07 — docs: intake #79 SBP return + autopay labels
+
+- PHASE 0: правки п.7 заказчика (статусы автоплатежа, экран после банка, 11/8 СБП) + повтор CODE:BLACK ТЗ
+- ТЗ: `customer_tasks/Надписи автоплатежа и экран после возврата из банка СБП.md`
+- Артефакты: `artifacts/sbp_return_status_screen_autopay_labels/`
+- CBR + README индекс · код не трогали · ждёт `/spec`
+
 ## 2026-09-07 — deploy v481 + MCP Point A (#35/#71/#26/Итого)
 
 - Push `a9148d9b` · CI [34088874139](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/34088874139) green
