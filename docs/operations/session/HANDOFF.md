@@ -2,16 +2,16 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-07 (intake #82)  
+**Дата:** 2026-09-07 (SPEC #81)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| intake #82 · Fly **v481** | `/spec` #82 |
-| #80 SPEC · #81 intake · #79 parked | очередь: #82 / #80 / #81 / #79 |
+| SPEC #81 · Fly **v481** | `/sbr` RED |
+| Slice | denied→settings + chat Telegram; #38 backlog |
 
-**last_done:** PHASE 0 intake #82 (SMS cascade + шторка на гл.)  
-**next_step:** `/spec` — #82 cascade SMS ready + status sheet hide
+**last_done:** PHASE 1 SPEC #81 → `todo.md` + скрин в artifacts  
+**next_step:** `/sbr` RED — denied settings + chat URL tests
 
 **ctx_trim:** `2026-09-02`  
 **CI:** https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/34088874139 (**green**)  

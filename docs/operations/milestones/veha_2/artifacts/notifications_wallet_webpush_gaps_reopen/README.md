@@ -9,6 +9,12 @@
 - [`background_notifications_fcm_apple_wallet/`](../background_notifications_fcm_apple_wallet/) — #38
 - [`order_action_buttons_status_panel/`](../order_action_buttons_status_panel/) — #41
 
+## Скрины заказчика
+
+| Файл | Что видно |
+|------|-----------|
+| [`01_push_denied_browser_settings_2026-09-07.png`](01_push_denied_browser_settings_2026-09-07.png) | Point A `/shop`: статусная модель (accepted/paid), CTA «🔔 Уведомление о готовности», под кнопками оранжевый текст **«Уведомления запрещены в настройках браузера»** без перехода в настройки |
+
 ## Этот пакет
 
-Скринов в сообщении заказчика не было. Сюда класть MCP/smoke и скрины приёмки по gap-фиксам (denied→settings, background push, chat CTA).
+MCP/smoke и скрины приёмки по gap-фиксам (denied→settings, chat CTA; фоновые FCM/Wallet — backlog вне slice SPEC).

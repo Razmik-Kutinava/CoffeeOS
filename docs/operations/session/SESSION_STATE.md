@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-07 (intake #82)  
+**Дата:** 2026-09-07 (SPEC #81)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| intake #82 в CBR/ТЗ | `/spec` #82 |
-| todo.md = #80 (SPEC) | после SPEC #82 — переключить todo |
+| SPEC #81 в `todo.md` | `/sbr` RED |
+| Скрин denied в artifacts | код не трогали |
 
-**last_done:** PHASE 0 intake #82 (п.10 SMS cascade + шторка не скрывается)  
-**next_step:** `/spec` — файлы + Не ломать/Проверка для #82
+**last_done:** PHASE 1 SPEC #81 (файлы + Не ломать/Проверка)  
+**next_step:** `/sbr` RED — тесты denied→settings + chat default URL
 
 **ctx_trim:** `2026-09-02`

@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-07 — docs: SPEC #81 notifications gaps (denied→settings + chat)
+
+- `todo.md`: кликабельный denied-баннер → настройки; chat → `SUPPORT_TELEGRAM_URL`; #38 вне slice
+- Скрин: `artifacts/…/01_push_denied_browser_settings_2026-09-07.png`
+- Файлы: orderStatusNotifyActions · ActiveOrdersAccordion · supportChatAdapter · supportConfig + JS tests
+- Не ломать: Wallet · push granted · cancel · #35 peek
+
 ## 2026-09-07 — docs: intake #82 cascade SMS + status sheet
 
 - PHASE 0: правки п.10 — SMS после «заказ готов» не работает; шторка статуса остаётся на гл. экране

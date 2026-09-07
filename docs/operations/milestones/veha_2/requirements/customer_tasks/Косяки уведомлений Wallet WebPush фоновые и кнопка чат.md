@@ -155,6 +155,7 @@ https://docs.google.com/document/d/1gcML9WkV4n2s6KNsDN0sobY3ITm4Dge9kOjStzf917g/
 
 - Reopen пакета #37 (denied → переход в настройки браузера), #38 (фоновые FCM/Wallet «не реализовано»), #41 (кнопка «Чат с поддержкой» показывается, клик не работает).
 - Полные исходные ТЗ уже в `customer_tasks/`; здесь — фидбек + повтор ТЗ 1:1.
-- Ссылки Google Docs сохранены в тексте заказчика; локальных скринов в сообщении не было.
+- Ссылки Google Docs сохранены в тексте заказчика.
+- Скрин 2026-09-07: `artifacts/notifications_wallet_webpush_gaps_reopen/01_push_denied_browser_settings_2026-09-07.png` — toast/баннер denied без CTA перехода в настройки.
 - #80 = Registration Callcheck; #82 = SMS cascade + stuck sheet; этот пакет = **#81**.
-- #79 (SBP return + autopay labels) SPEC готов, `/sbr` parked — текущий фокус после intake: `/spec` по #81.
+- SPEC slice: denied→settings + chat URL; полный #38 background FCM/Wallet — backlog.
