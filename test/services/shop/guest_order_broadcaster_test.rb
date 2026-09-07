@@ -118,6 +118,17 @@ class Shop::GuestOrderBroadcasterTest < ActiveSupport::TestCase
     end
   end
 
+  test "#82 clears stale presence on ready so cascade SMS is not blocked" do
+    @order.update!(status: :ready)
+    Shop::OrderReadyPresence.mark_online!(@order.id)
+    assert Shop::OrderReadyPresence.online?(@order.id)
+
+    Shop::GuestOrderBroadcaster.call(order: @order.reload, old_status: "preparing")
+
+    assert_not Shop::OrderReadyPresence.online?(@order.id),
+               "stale order:{id}:online after ready must clear (SMS after grace)"
+  end
+
   test "#39 does not enqueue OrderReadyCascadeJob when status is preparing" do
     @order.update!(status: :preparing)
 

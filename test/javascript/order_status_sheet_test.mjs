@@ -143,33 +143,40 @@ describe("applyCableEvent (#35 A1/A2 + #63 immutable)", () => {
     assert.equal(state.mode, ORDER_STATUS_SHEET_MODES.HIDDEN)
   })
 
-  it("updates preparing→ready in place (ready stays in sheet)", () => {
+  it("#82 preparing→ready removes card (hide-on-ready) and calls onTerminal", () => {
     const state = createOrderStatusSheetState()
     state.setOrders([{ id: "42", status: "preparing", order_number: "N" }])
+    let terminalHits = 0
 
-    applyCableEvent(state, {
-      type: "status_changed",
-      order_id: "42",
-      status: "ready"
-    })
+    applyCableEvent(
+      state,
+      {
+        type: "status_changed",
+        order_id: "42",
+        status: "ready"
+      },
+      { onTerminal: () => { terminalHits += 1 } }
+    )
 
-    assert.equal(state.orders.length, 1)
-    assert.equal(state.orders[0].status, "ready")
-    assert.equal(state.mode, ORDER_STATUS_SHEET_MODES.PEEK)
+    assert.equal(state.orders.length, 0)
+    assert.equal(state.mode, ORDER_STATUS_SHEET_MODES.HIDDEN)
+    assert.equal(terminalHits, 1)
   })
 })
 
 describe("reconnect refresh (#35 A3 + #63 Subtask 2)", () => {
-  it("applyReconnectOrders keeps ready orders in sheet", () => {
+  it("#82 applyReconnectOrders drops ready (API/sheet hide-on-ready)", () => {
     const state = createOrderStatusSheetState()
     state.setOrders([{ id: "old", status: "preparing", order_number: "OLD" }])
     const before = state.orders
     applyReconnectOrders(state, [
-      { id: "new", status: "ready", order_number: "NEW" }
+      { id: "new", status: "ready", order_number: "NEW" },
+      { id: "keep", status: "preparing", order_number: "KEEP" }
     ])
     assert.notEqual(state.orders, before)
     assert.equal(state.orders.length, 1)
-    assert.equal(state.orders[0].status, "ready")
+    assert.equal(state.orders[0].id, "keep")
+    assert.equal(state.orders[0].status, "preparing")
     assert.equal(state.mode, ORDER_STATUS_SHEET_MODES.PEEK)
   })
 
@@ -245,8 +252,8 @@ describe("#63 dismiss + route visibility", () => {
       order_id: "42",
       status: "ready"
     })
-    assert.equal(state.orders[0].status, "ready")
-    assert.equal(state.orders[0].userDismissed, true)
+    assert.equal(state.orders.length, 0)
+    assert.equal(state.dismissedIds["42"], true)
     assert.equal(visibleOrders(state.orders).length, 0)
     assert.equal(state.mode, ORDER_STATUS_SHEET_MODES.HIDDEN)
   })
