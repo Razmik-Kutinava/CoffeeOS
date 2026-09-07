@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-07 — REVIEW: #80 registration Callcheck UI/UX CI green
+
+- bugbot: clear poll error after success · security: no medium+
+- CI [34100150077](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/34100150077) green (tip includes receipt test fix)
+- Entire `01M1XDGFW23WY77ZRW73D5KGT4` · deploy стоп до апрува · Fly MCP после deploy
+
 ## 2026-09-07 — ops: /regress #81 PASS (denied→settings + chat)
 
 - JS: push_subscribe + support_chat + notify_actions → **21/0**

@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-07 (regress #81 PASS)  
+**Дата:** 2026-09-07 (REVIEW #80 CI green)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| regress #81 · JS 21/0 | `/review` |
-| Зона | shop PWA status CTA (push/chat) |
+| REVIEW #80 CI **green** | deploy апрув · MCP Point A |
+| Fly v481 | |
 
-**last_done:** `/regress` #81 PASS — push_subscribe + support_chat + notify_actions  
-**next_step:** `/review`
+**last_done:** #80 REVIEW complete · CI 34100150077 green  
+**next_step:** deploy — только апрув
 
 **ctx_trim:** `2026-09-02`
