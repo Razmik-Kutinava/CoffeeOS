@@ -13,8 +13,12 @@ import {
   buildSbpInitBody,
   DEFAULT_SAVE_SBP_ACCOUNT,
   resolveSaveSbpAccountForSbpMode,
-  SBP_AUTOPAY_TOASTS
+  SBP_AUTOPAY_TOASTS,
+  createSbpAutopayFsm,
+  resolveSbpAutopaySheetError,
+  SBP_AUTOPAY_STATES
 } from "../../app/frontend/lib/shopSbpAutopay.js"
+import { PAY_FSM, resolveCheckoutSheetInlineError } from "../../app/frontend/lib/shopPayFsm.js"
 import { initSbpPayment } from "../../app/frontend/lib/shopSbpPay.js"
 import {
   labelSbpAccount,
@@ -152,5 +156,44 @@ describe("#62 Checkout / PaymentMethodsSheet wiring", () => {
     )
     assert.match(src, /saveSbpAccount\s*=\s*\$bindable\(true\)/)
     assert.match(src, /onSaveSbpAccountUserChange/)
+  })
+})
+
+describe("#79 SBP autopay labels + waiting before redirect", () => {
+  it("resolveSbpAutopaySheetError prefers autopay toasts, not card payFsmLabel", () => {
+    const declined = Object.assign(new Error(SBP_AUTOPAY_TOASTS.CHARGE_DECLINED), {
+      error_code: "CHARGE_DECLINED",
+      status: 422,
+      body: { error_code: "CHARGE_DECLINED" }
+    })
+    const fsm = createSbpAutopayFsm({ orderId: "o1" })
+    fsm.startCharge()
+    fsm.decline({ error_code: "CHARGE_DECLINED" })
+    assert.equal(resolveSbpAutopaySheetError(declined, fsm), SBP_AUTOPAY_TOASTS.CHARGE_DECLINED)
+
+    const net = Object.assign(new Error(SBP_AUTOPAY_TOASTS.CONNECTION_ERROR), {
+      error_code: "NETWORK",
+      status: 0,
+      body: { error_code: "NETWORK" }
+    })
+    fsm.failNetwork({ error_code: "NETWORK" })
+    assert.equal(resolveSbpAutopaySheetError(net, fsm), SBP_AUTOPAY_TOASTS.CONNECTION_ERROR)
+
+    // Card helper would show «Нет связи. Повторить» / «Сбой банка» — autopay must not.
+    const cardNet = resolveCheckoutSheetInlineError(net, PAY_FSM.NET_ERROR)
+    assert.match(String(cardNet || ""), /нет связи|повторить/i)
+    assert.notEqual(resolveSbpAutopaySheetError(net, fsm), cardNet)
+  })
+
+  it("Checkout wires createSbpAutopayFsm + resolveSbpAutopaySheetError + beginSbpBankRedirect", () => {
+    const src = readFileSync(join(root, "app/frontend/routes/Checkout.svelte"), "utf8")
+    assert.match(src, /createSbpAutopayFsm/)
+    assert.match(src, /resolveSbpAutopaySheetError/)
+    assert.match(src, /beginSbpBankRedirect/)
+    assert.doesNotMatch(
+      src,
+      /sbp_account[\s\S]{0,800}resolveCheckoutSheetInlineError/,
+      "sbp_account catch must not use card resolveCheckoutSheetInlineError"
+    )
   })
 })

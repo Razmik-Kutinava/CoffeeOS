@@ -38,4 +38,15 @@ class Shop::SbpPaymentReturnUiTest < ActionDispatch::IntegrationTest
     assert_includes app, "visibilitychange"
     assert_includes app, "recoverCodeblackPendingOrder"
   end
+
+  # #79: до ухода в банк — waiting hash + pending (Android resume не на пустом checkout)
+  test "Checkout beginSbpBankRedirect waiting before nspk leave" do
+    checkout = File.read(Rails.root.join("app/frontend/routes/Checkout.svelte"))
+    sbp = File.read(SBP_LIB)
+    assert_includes sbp, "export function beginSbpBankRedirect"
+    assert_includes sbp, "payment-result?status=waiting"
+    assert_includes checkout, "beginSbpBankRedirect"
+    assert_includes checkout, "createSbpAutopayFsm"
+    assert_includes checkout, "resolveSbpAutopaySheetError"
+  end
 end

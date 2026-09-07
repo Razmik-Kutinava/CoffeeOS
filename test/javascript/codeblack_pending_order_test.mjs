@@ -17,7 +17,8 @@ import {
   SBP_WAITING_FOR_BANK_MESSAGE,
   SBP_I_PAID_LABEL,
   mapPaymentStatusPayload,
-  checkOrderStatus
+  checkOrderStatus,
+  beginSbpBankRedirect
 } from "../../app/frontend/lib/shopSbpPay.js"
 
 function memoryStorage() {
@@ -143,5 +144,26 @@ describe("shopSbpPay — WAITING_FOR_BANK + checkOrderStatus", () => {
     const result = await checkOrderStatus(api, { orderId: "ord-p", storage })
     assert.equal(result, "PENDING")
     assert.ok(storage.getItem(CODEBLACK_PENDING_KEY))
+  })
+})
+
+describe("#79 beginSbpBankRedirect — waiting screen before bank", () => {
+  it("saves pending, navigates to waiting, then redirects to nspk", () => {
+    const storage = memoryStorage()
+    const nav = []
+    const redirects = []
+    beginSbpBankRedirect({
+      orderId: "ord-79",
+      paymentUrl: "https://qr.nspk.ru/AS79",
+      storage,
+      now: 1_700_000_000_000,
+      navigate: (hash) => nav.push(hash),
+      redirect: (url) => redirects.push(url)
+    })
+    assert.equal(JSON.parse(storage.getItem(CODEBLACK_PENDING_KEY)).orderId, "ord-79")
+    assert.equal(nav[0], "/payment-result?status=waiting&order_id=ord-79")
+    assert.deepEqual(redirects, ["https://qr.nspk.ru/AS79"])
+    assert.equal(nav.length, 1)
+    assert.ok(nav[0].includes("waiting"), "waiting route must run before bank leave")
   })
 })
