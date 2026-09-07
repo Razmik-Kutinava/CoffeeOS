@@ -56,5 +56,6 @@
 
 ## Local GREEN
 
-- JS sheet: 23/0 PASS · poll: (see regress)
+- JS sheet: 23/0 PASS · poll: 6/0 PASS
 - rails zone: 35/0 PASS
+- Entire: `01M1XDGFW23WY77ZRW73D5KGT4` на `04bd55b7` (ops after GREEN `8cae376d`)
