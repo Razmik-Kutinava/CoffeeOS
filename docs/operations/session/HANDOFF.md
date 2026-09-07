@@ -2,16 +2,16 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-07 (SPEC #82)  
+**Дата:** 2026-09-07 (GREEN #79)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| SPEC #82 · Fly **v481** | `/sbr` RED |
-| Slice | hide-on-ready + SMS cascade presence |
+| GREEN #79 `5b3bc76e` · Fly **v481** | `/regress` → `/review` |
+| Parallel | #80–#82 docs на develop (не этот чат) |
 
-**last_done:** PHASE 1 SPEC #82 → `todo.md`  
-**next_step:** `/sbr` RED — sheet hide-on-ready + cascade SMS tests
+**last_done:** feat #79 waiting before SBP + autopay labels [GREEN]  
+**next_step:** `/regress` — JS sbp_* + rails return_ui / charge / status
 
 **ctx_trim:** `2026-09-02`  
 **CI:** https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/34088874139 (**green**)  

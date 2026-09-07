@@ -1,19 +1,19 @@
-﻿# todo — #82 Cascade SMS ready + status sheet stuck
+﻿# todo — #79 SBP return + autopay labels (остаток CODE:BLACK)
 
 | Поле | Значение |
 |------|----------|
-| **CBR** | #82 · [ТЗ](../milestones/veha_2/requirements/customer_tasks/Каскад%20SMS%20после%20Заказ%20готов%20и%20шторка%20статуса%20на%20главном.md) |
-| **Тип** | Fix / hot-path витрина · статусы + уведомления |
-| **Цель** | После «готов» на табло: шторка статуса исчезает с гл. экрана; офлайн-гость получает SMS.ru (каскад #39) |
+| **CBR** | #79 · [ТЗ](../milestones/veha_2/requirements/customer_tasks/Надписи%20автоплатежа%20и%20экран%20после%20возврата%20из%20банка%20СБП.md) |
+| **Тип** | Fix / hot-path оплата · PWA return + SBP autopay UI |
+| **Цель** | После банка — ясный экран (WAITING/ok/fail); надписи автоплатежа по ответу банка |
 | **Point A** | `tenant_id` = `2fdee1ac-4674-41ee-b89e-87b45643f789` |
 | **Ветка** | `develop` |
-| **Артефакты** | [`…/order_ready_cascade_sms_status_sheet_fix/`](../milestones/veha_2/artifacts/order_ready_cascade_sms_status_sheet_fix/) |
+| **Артефакты** | [`…/sbp_return_status_screen_autopay_labels/`](../milestones/veha_2/artifacts/sbp_return_status_screen_autopay_labels/) |
 
 ## SBR
 
-- [x] **SPEC**
-- [ ] **RED**
-- [ ] **GREEN**
+- [x] **SPEC** (`b9d80b99`)
+- [x] **RED** (`14b968dd`)
+- [x] **GREEN** (`5b3bc76e`)
 - [ ] **/regress**
 - [ ] **REVIEW**
 
@@ -21,35 +21,37 @@
 
 | # | Решение |
 |---|---------|
-| 1 | **Шторка:** `ready` = terminal для виджета (#35/#82). `applyCableEvent` снимает карточку на `ready`; `/orders/active` **без** `ready` (сейчас accepted\|preparing\|ready — поэтому залипает). |
-| 2 | После hide-on-ready — refresh frequent / «повторить» (уже в terminal-path); не возвращать пустой +0₽ без repeats (#42/#43 риск). |
-| 3 | **SMS-каскад:** цепочка уже есть (`GuestOrderBroadcaster` → `OrderReadyCascadeJob` @15s → presence → `OrderReadyPaidNotifier`). Починить регрессию: ложный `online` / не сброс presence / enqueue; логи — `order_notification_logs` (не `notification_histories`). |
-| 4 | Триггер баристы = `PATCH update_status` → `ready` (не `POST …/ready` из ТЗ). RSpec/WebMock из Google Doc — **не** внедрять; канон Minitest + существующие JS tests. |
-| 5 | **Вне slice:** смена SMS-шаблона на URL `codeblack.xyz/o/{hash}` (сейчас `#order_number` ≤70); Apple Wallet/WebPush greenfield; RSpec-пути из дока. |
+| 1 | `beginSbpBankRedirect`: pending LS + `#/payment-result?status=waiting` до nspk |
+| 2 | `createSbpAutopayFsm` + `resolveSbpAutopaySheetError` — не card `payFsmLabel` |
+| 3 | App recover — без дельты |
+| 4 | **Вне slice:** SMS; greenfield CODE:BLACK |
 
 ## Файлы (ожидаемо)
 
-- `app/frontend/lib/orderStatusSheet.js` — `ready` в terminal; Cable снимает карточку с гл. экрана
-- `app/controllers/shop/api/orders_controller.rb` — `#active` только `accepted`/`preparing` (без `ready`)
-- `app/jobs/shop/order_ready_cascade_job.rb` — presence → SMS или skip + лог
-- `app/channels/shop/guest_order_channel.rb` — set/clear `order:{id}:online` (липкий online блокирует SMS)
-- `app/services/shop/order_ready_paid_notifier.rb` — SMS.ru + `order_notification_logs`
-- `app/services/shop/guest_order_broadcaster.rb` — WS/push + enqueue cascade на `ready`
+- `app/frontend/routes/Checkout.svelte`
+- `app/frontend/lib/shopSbpPay.js` — `beginSbpBankRedirect`
+- `app/frontend/lib/shopSbpAutopay.js` — `resolveSbpAutopaySheetError`
+- `app/frontend/App.svelte` / `PaymentResult.svelte` / `codeblackPendingOrder.js` — без дельты GREEN
 
-### Blast-radius (+3)
+### Blast-radius (+2)
 
-- `app/frontend/components/OrderStatusSheet.svelte` — UI/poll/`shouldShowStatusSheetUi` (не ломать dismiss/routes)
-- `app/services/shop/order_ready_presence.rb` — ключ presence (Rails.cache, не Redis)
-- `app/services/shop/sms_ru_client.rb` — HTTP sms.ru / ValidationError ≤70
+- `shopPayFsm.js` — card path не трогали
+- `PaymentMethodsSheet.svelte` — без дельты
 
 ## Не ломать
 
-- Оплата One-Click / СБП / webhook → `accepted`
-- «Повторить» / frequent после выдачи (hide-on-ready не должен гасить repeats навсегда)
-- Табло баристы `update_status` + board broadcast
-- Peek CartSheet / status-inside-sheet (#35 mount) на `accepted`/`preparing`
+- Card One-Click / 3DS / `payFsmLabel`
+- Repeat SBP
+- #35 шторка
+- Webhook / AccountToken bind
 
 ## Проверка
 
-- `node --test test/javascript/order_status_sheet_test.mjs test/javascript/order_status_active_poll_test.mjs`
-- `bin/rails test test/jobs/shop/order_ready_cascade_job_test.rb test/services/shop/order_ready_paid_notifier_test.rb test/services/shop/guest_order_broadcaster_test.rb test/channels/shop/guest_order_channel_test.rb test/integration/shop/api/active_orders_test.rb`
+- `node --test test/javascript/codeblack_pending_order_test.mjs test/javascript/shop_sbp_pay_test.mjs test/javascript/shop_sbp_autopay_test.mjs test/javascript/shop_sbp_autopay_checkout_ui_test.mjs`
+- `bin/rails test test/integration/shop/sbp_payment_return_ui_test.rb test/integration/shop/api/sbp_autopay_charge_test.rb test/integration/shop/api/payment_status_test.rb`
+
+## Local GREEN
+
+- JS: 54/0 PASS
+- rails `sbp_payment_return_ui`: 5/0 PASS
+- rails `sbp_autopay_charge` (+ status): 5/0 PASS
