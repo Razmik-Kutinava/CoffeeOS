@@ -14,7 +14,7 @@
 - [x] **SPEC** (`80dad7ee`)
 - [x] **RED** (`ded3fb8f`)
 - [x] **GREEN** (`199344f4` contains code; Entire `01M1XF20DA5E0PXJ99E9DH2HM6`)
-- [ ] **/regress**
+- [x] **/regress** — JS 21/0 PASS
 - [ ] **REVIEW**
 
 ## Решение (slice)
@@ -45,5 +45,5 @@
 
 ## Local GREEN
 
-- JS зона #81: **21/0 PASS**
+- JS зона #81: **21/0 PASS** (regress)
 - Entire: `01M1XF20DA5E0PXJ99E9DH2HM6` (session `974a53cf-…`)

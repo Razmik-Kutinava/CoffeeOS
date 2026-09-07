@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-07 — ops: /regress #81 PASS (denied→settings + chat)
+
+- JS: push_subscribe + support_chat + notify_actions → **21/0**
+- Next: `/review` · Fly MCP Point A после REVIEW/deploy (hot-path витрина)
+
 ## 2026-09-07 — ops: /regress #82 PASS (hide-on-ready + cascade)
 
 - JS: order_status_sheet + active_poll → **29/0**
