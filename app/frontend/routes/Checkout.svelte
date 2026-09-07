@@ -53,15 +53,16 @@
   import { REPEAT_AUTOPAY_KEY } from "../lib/frequentRepeatStore.js"
   import { restoreGuestSession } from "../lib/restoreGuestSession.js"
   import { paymentMethodLoadErrorMessage } from "../lib/paymentMethodI18n.js"
-  import { initSbpPayment, redirectToSbp } from "../lib/shopSbpPay.js"
+  import { initSbpPayment, beginSbpBankRedirect } from "../lib/shopSbpPay.js"
   import {
     chargeSbpAutopay,
+    createSbpAutopayFsm,
+    resolveSbpAutopaySheetError,
     pickDefaultPaymentSelection,
     resolveSaveSbpAccountForSbpMode,
     DEFAULT_SAVE_SBP_ACCOUNT,
     SBP_AUTOPAY_TOASTS
   } from "../lib/shopSbpAutopay.js"
-  import { savePendingOrder } from "../lib/codeblackPendingOrder.js"
   import {
     setTokenInvalid,
     clearTokenInvalid,
@@ -526,29 +527,38 @@
         saveGuestOrderSession(orderRes.order_id, orderRes.reconnect_token)
 
         if (selectionMode === "sbp_account") {
+          const autopayFsm = createSbpAutopayFsm({ orderId: orderRes.order_id })
+          autopayFsm.startCharge()
           try {
             const charged = await chargeSbpAutopay(sbpApi, { orderId: orderRes.order_id })
+            autopayFsm.confirm()
             await completePaySuccess(charged.order_id || orderRes.order_id, { wantedSave: false })
             return
           } catch (chargeErr) {
             if (chargeErr?.error_code === "CHARGE_DECLINED" || /CHARGE_DECLINED/i.test(chargeErr?.body?.error_code || "")) {
-              sheetInlineError = SBP_AUTOPAY_TOASTS.CHARGE_DECLINED
+              autopayFsm.decline({ error_code: "CHARGE_DECLINED" })
+              sheetInlineError = resolveSbpAutopaySheetError(chargeErr, autopayFsm)
               selectionMode = "sbp"
               saveSbpAccount = false
               const paymentUrl = await initSbpPayment(sbpApi, {
                 orderId: orderRes.order_id,
                 saveSbpAccount: false
               })
-              savePendingOrder(orderRes.order_id)
-              redirectToSbp(paymentUrl)
+              autopayFsm.redirectToManual()
+              beginSbpBankRedirect({
+                orderId: orderRes.order_id,
+                paymentUrl,
+                navigate: push
+              })
               return
             }
-            payFsmState = fsmFromPaymentError(chargeErr, { httpStatus: chargeErr.httpStatus })
-            // Не сырой chargeErr.message («Failed to fetch»).
-            sheetInlineError = resolveCheckoutSheetInlineError(chargeErr, payFsmState)
-            if (sheetInlineError == null && payFsmState !== PAY_FSM.NET_ERROR) {
-              sheetInlineError = SBP_AUTOPAY_TOASTS.CONNECTION_ERROR
-            }
+            autopayFsm.failNetwork({
+              error_code: chargeErr?.error_code,
+              status: chargeErr?.status ?? chargeErr?.httpStatus
+            })
+            // #79: не card payFsmLabel («Обработка банком…» / «Сбой банка»)
+            sheetInlineError = resolveSbpAutopaySheetError(chargeErr, autopayFsm)
+            payFsmState = PAY_FSM.DEFAULT
             return
           }
         }
@@ -558,8 +568,11 @@
             orderId: orderRes.order_id,
             saveSbpAccount: !!saveSbpAccount
           })
-          savePendingOrder(orderRes.order_id)
-          redirectToSbp(paymentUrl)
+          beginSbpBankRedirect({
+            orderId: orderRes.order_id,
+            paymentUrl,
+            navigate: push
+          })
         } catch (initErr) {
           sheetInlineError = SBP_AUTOPAY_TOASTS.SERVICE_UNAVAILABLE
           payFsmState = PAY_FSM.CLIENT_ERROR

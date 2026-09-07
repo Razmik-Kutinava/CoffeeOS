@@ -57,6 +57,26 @@ export function mapSbpAutopayError(status, body = {}) {
   return SBP_AUTOPAY_TOASTS.CONNECTION_ERROR
 }
 
+/**
+ * #79: inline в шторке для автоплатежа СБП — только SBP_AUTOPAY_TOASTS, не card payFsmLabel.
+ * @param {Error & { error_code?: string, status?: number, httpStatus?: number, body?: object }} error
+ * @param {{ state?: string } | null} [fsm]
+ */
+export function resolveSbpAutopaySheetError(error, fsm = null) {
+  if (
+    fsm?.state === SBP_AUTOPAY_STATES.DECLINED ||
+    error?.error_code === "CHARGE_DECLINED" ||
+    /CHARGE_DECLINED/i.test(error?.body?.error_code || "")
+  ) {
+    return SBP_AUTOPAY_TOASTS.CHARGE_DECLINED
+  }
+  const msg = String(error?.message || "").trim()
+  if (msg && Object.values(SBP_AUTOPAY_TOASTS).includes(msg)) return msg
+  return mapSbpAutopayError(error?.status ?? error?.httpStatus ?? 0, error?.body || {
+    error_code: error?.error_code
+  })
+}
+
 /** #62: default for «Привязать счет…» checkbox. */
 export const DEFAULT_SAVE_SBP_ACCOUNT = true
 

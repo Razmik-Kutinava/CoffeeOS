@@ -3,7 +3,7 @@
  * CODE:BLACK lifecycle: checkOrderStatus + WAITING_FOR_BANK (ревизия 4.x / 5.2).
  */
 
-import { clearPendingOrder } from "./codeblackPendingOrder.js"
+import { clearPendingOrder, savePendingOrder } from "./codeblackPendingOrder.js"
 
 export const SBP_LOADING_LABEL = "Оплата через СБП…"
 export const SBP_INCOMPLETE_MESSAGE = "Оплата не завершена, попробовать снова"
@@ -125,6 +125,39 @@ export function redirectToSbp(url, assignFn) {
       window.location.assign(u)
     })
   go(href)
+}
+
+/**
+ * #79: перед уходом в банк — LS pending + hash WAITING, затем nspk redirect.
+ * Android resume возвращает на waiting, не на «пустой» checkout.
+ *
+ * @param {{
+ *   orderId: string,
+ *   paymentUrl: string,
+ *   storage?: Storage,
+ *   now?: number,
+ *   navigate?: (path: string) => void,
+ *   redirect?: (url: string) => void,
+ *   savePending?: typeof savePendingOrder
+ * }} opts
+ */
+export function beginSbpBankRedirect({
+  orderId,
+  paymentUrl,
+  storage,
+  now,
+  navigate,
+  redirect,
+  savePending = savePendingOrder
+} = {}) {
+  const id = String(orderId || "").trim()
+  if (!id) throw new Error("Не указан orderId")
+  savePending(id, { storage, now })
+  if (typeof navigate === "function") {
+    navigate(`/payment-result?status=waiting&order_id=${encodeURIComponent(id)}`)
+  }
+  const go = redirect || ((url) => redirectToSbp(url))
+  go(paymentUrl)
 }
 
 /**
