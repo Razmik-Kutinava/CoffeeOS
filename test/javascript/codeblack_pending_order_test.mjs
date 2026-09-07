@@ -152,16 +152,19 @@ describe("#79 beginSbpBankRedirect — waiting screen before bank", () => {
     const storage = memoryStorage()
     const nav = []
     const redirects = []
+    const loc = { hash: "" }
     beginSbpBankRedirect({
       orderId: "ord-79",
       paymentUrl: "https://qr.nspk.ru/AS79",
       storage,
       now: 1_700_000_000_000,
       navigate: (hash) => nav.push(hash),
-      redirect: (url) => redirects.push(url)
+      redirect: (url) => redirects.push(url),
+      location: loc
     })
     assert.equal(JSON.parse(storage.getItem(CODEBLACK_PENDING_KEY)).orderId, "ord-79")
     assert.equal(nav[0], "/payment-result?status=waiting&order_id=ord-79")
+    assert.equal(loc.hash, "#/payment-result?status=waiting&order_id=ord-79")
     assert.deepEqual(redirects, ["https://qr.nspk.ru/AS79"])
     assert.equal(nav.length, 1)
     assert.ok(nav[0].includes("waiting"), "waiting route must run before bank leave")

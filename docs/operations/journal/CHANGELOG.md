@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-07 — feat: #79 REVIEW — bugbot fixes (sync hash + SBP labels + waiting poll)
+
+- Sync `location.hash` before nspk (`beginSbpBankRedirect`)
+- SBP init fail: no rethrow into card `payFsmLabel`
+- App recover polls on `status=waiting`
+- security-review: no medium+ · Local JS 54 · rails 15/75
+
 ## 2026-09-07 — ops: /regress #79 PASS (SBP return + autopay)
 
 - JS: `codeblack` + `shop_sbp_*` → **54/0**

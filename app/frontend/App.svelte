@@ -88,7 +88,8 @@
     if (!pending?.orderId) return
 
     const hash = window.location.hash || ""
-    if (hash.includes("payment-result")) return
+    // #79: на waiting всё ещё poll; стоп только на финальных ok/fail/success
+    if (/payment-result/.test(hash) && /status=(ok|fail|success)\b/i.test(hash)) return
 
     return pendingStatusGuard.run(async () => {
       try {

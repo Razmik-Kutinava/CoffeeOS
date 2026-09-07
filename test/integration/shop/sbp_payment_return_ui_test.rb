@@ -37,6 +37,15 @@ class Shop::SbpPaymentReturnUiTest < ActionDispatch::IntegrationTest
     assert_includes app, "loadPendingOrder"
     assert_includes app, "visibilitychange"
     assert_includes app, "recoverCodeblackPendingOrder"
+    # #79: recoverCodeblackPendingOrder polls on waiting; skip only ok/fail/success
+    recover_fn = app[/async function recoverCodeblackPendingOrder\(\) \{.*?\n  \}/m]
+    assert recover_fn, "recoverCodeblackPendingOrder missing"
+    assert_match(/status=\(ok\|fail\|success\)/, recover_fn)
+    refute_match(
+      /if \(hash\.includes\("payment-result"\)\) return/,
+      recover_fn,
+      "must not skip recover on waiting payment-result"
+    )
   end
 
   # #79: до ухода в банк — waiting hash + pending (Android resume не на пустом checkout)

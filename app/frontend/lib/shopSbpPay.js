@@ -148,13 +148,26 @@ export function beginSbpBankRedirect({
   now,
   navigate,
   redirect,
-  savePending = savePendingOrder
+  savePending = savePendingOrder,
+  location
 } = {}) {
   const id = String(orderId || "").trim()
   if (!id) throw new Error("Не указан orderId")
   savePending(id, { storage, now })
+  const waitingPath = `/payment-result?status=waiting&order_id=${encodeURIComponent(id)}`
   if (typeof navigate === "function") {
-    navigate(`/payment-result?status=waiting&order_id=${encodeURIComponent(id)}`)
+    navigate(waitingPath)
+  }
+  // Sync hash: svelte-spa-router `push` is async; nspk assign must not win the race (#79 bugbot).
+  const loc =
+    location ||
+    (typeof window !== "undefined" && window.location ? window.location : null)
+  if (loc) {
+    try {
+      loc.hash = `#${waitingPath}`
+    } catch {
+      /* ignore */
+    }
   }
   const go = redirect || ((url) => redirectToSbp(url))
   go(paymentUrl)

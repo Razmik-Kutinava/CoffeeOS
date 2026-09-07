@@ -195,5 +195,12 @@ describe("#79 SBP autopay labels + waiting before redirect", () => {
       /sbp_account[\s\S]{0,800}resolveCheckoutSheetInlineError/,
       "sbp_account catch must not use card resolveCheckoutSheetInlineError"
     )
+    // init fail: SBP toast, no rethrow into card outer catch
+    assert.match(src, /SBP_AUTOPAY_TOASTS\.SERVICE_UNAVAILABLE/)
+    assert.doesNotMatch(
+      src,
+      /catch \(initErr\)[\s\S]{0,200}throw initErr/,
+      "SBP initErr must not rethrow into card FSM catch"
+    )
   })
 })

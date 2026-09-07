@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-07 (GREEN #80)  
+**Дата:** 2026-09-07 (REVIEW #79)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| GREEN #80 local PASS | `/regress` |
-| Fly v481 | deploy после REVIEW |
+| REVIEW #79 · bugbot fixes · security OK | push → CI green → стоп |
+| Local JS 54 · rails 15/75 PASS | deploy — апрув · Fly MCP Point A |
 
-**last_done:** #80 CartSheet keyboard CTA · Callcheck tel-btn · poll interpret  
-**next_step:** `/regress` #80
+**last_done:** REVIEW #79 — bugbot high fixed · security no findings  
+**next_step:** `git push` → CI; deploy только по апруву
 
 **ctx_trim:** `2026-09-02`

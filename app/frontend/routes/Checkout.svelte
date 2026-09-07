@@ -540,16 +540,23 @@
               sheetInlineError = resolveSbpAutopaySheetError(chargeErr, autopayFsm)
               selectionMode = "sbp"
               saveSbpAccount = false
-              const paymentUrl = await initSbpPayment(sbpApi, {
-                orderId: orderRes.order_id,
-                saveSbpAccount: false
-              })
-              autopayFsm.redirectToManual()
-              beginSbpBankRedirect({
-                orderId: orderRes.order_id,
-                paymentUrl,
-                navigate: push
-              })
+              try {
+                const paymentUrl = await initSbpPayment(sbpApi, {
+                  orderId: orderRes.order_id,
+                  saveSbpAccount: false
+                })
+                autopayFsm.redirectToManual()
+                beginSbpBankRedirect({
+                  orderId: orderRes.order_id,
+                  paymentUrl,
+                  navigate: push
+                })
+              } catch (initErr) {
+                autopayFsm.failNetwork({ error_code: initErr?.error_code })
+                sheetInlineError = resolveSbpAutopaySheetError(initErr, autopayFsm)
+                if (!sheetInlineError) sheetInlineError = SBP_AUTOPAY_TOASTS.SERVICE_UNAVAILABLE
+                payFsmState = PAY_FSM.DEFAULT
+              }
               return
             }
             autopayFsm.failNetwork({
@@ -574,9 +581,9 @@
             navigate: push
           })
         } catch (initErr) {
+          // Не rethrow — outer catch иначе затрёт SBP toast card-`payFsmLabel` (#79 bugbot)
           sheetInlineError = SBP_AUTOPAY_TOASTS.SERVICE_UNAVAILABLE
-          payFsmState = PAY_FSM.CLIENT_ERROR
-          throw initErr
+          payFsmState = PAY_FSM.DEFAULT
         }
         return
       }
