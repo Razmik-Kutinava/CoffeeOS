@@ -1,11 +1,17 @@
 /**
- * #41 — SupportChatAdapter: открытие чата поддержки или pending-лог.
- *
+ * #41 / #81 — SupportChatAdapter: открытие чата поддержки.
+ * Без явного URL — default `SUPPORT_TELEGRAM_URL` (#70 / #81).
+ */
+
+import { SUPPORT_TELEGRAM_URL } from "./supportConfig.js"
+
+/**
  * @param {string|number} orderId
  * @param {string} [chatUrl]
  * @param {{
  *   openWindow?: (url: string, target: string) => unknown,
- *   log?: (msg: string) => void
+ *   log?: (msg: string) => void,
+ *   defaultUrl?: string
  * }} [deps]
  * @returns {{ opened: boolean, pending: boolean }}
  */
@@ -26,7 +32,16 @@ export function openSupportChat(orderId, chatUrl, deps = {}) {
       }
     })
 
-  const url = typeof chatUrl === "string" ? chatUrl.trim() : ""
+  const fallback =
+    Object.prototype.hasOwnProperty.call(deps, "defaultUrl")
+      ? deps.defaultUrl
+      : SUPPORT_TELEGRAM_URL
+
+  let url = typeof chatUrl === "string" ? chatUrl.trim() : ""
+  if (!url) {
+    url = typeof fallback === "string" ? fallback.trim() : ""
+  }
+
   if (!url) {
     log(`[Chat Integration Pending] Order: ${orderId}`)
     return { opened: false, pending: true }

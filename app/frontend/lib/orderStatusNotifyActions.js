@@ -124,8 +124,48 @@ export async function downloadWalletPass(opts = {}) {
 }
 
 const PUSH_SUCCESS_LABEL = "✓ Уведомления включены"
-const PUSH_DENIED_TOAST = "Уведомления запрещены в настройках браузера"
+/** Публичный текст denied-баннера (#81). */
+export const PUSH_DENIED_TOAST = "Уведомления запрещены в настройках браузера"
 const PUSH_NETWORK_TOAST = "Не удалось включить уведомления. Проверьте сеть."
+
+/**
+ * Best-effort открытие настроек уведомлений браузера / site settings (#81).
+ * Web API не даёт надёжный deep-link — injectable `openSettings` для тестов и платформы.
+ *
+ * @param {{
+ *   openSettings?: () => unknown,
+ *   openWindow?: (url: string, target?: string) => unknown
+ * }} [deps]
+ * @returns {{ attempted: boolean, opened: boolean }}
+ */
+export function openNotificationSettings(deps = {}) {
+  try {
+    if (typeof deps.openSettings === "function") {
+      const out = deps.openSettings()
+      return { attempted: true, opened: out !== false && out != null }
+    }
+    // Chrome/Android: chrome:// и intent часто блокируются — пробуем без краша.
+    const openWindow =
+      deps.openWindow ||
+      ((url, target) => {
+        if (typeof globalThis.open === "function") return globalThis.open(url, target || "_blank")
+        return null
+      })
+    const ua = typeof navigator !== "undefined" ? String(navigator.userAgent || "") : ""
+    let url = null
+    if (/Android/i.test(ua)) {
+      url =
+        "intent://settings/apps/notification_settings#Intent;scheme=android.settings;end"
+    }
+    if (!url) {
+      return { attempted: true, opened: false }
+    }
+    const win = openWindow(url, "_blank")
+    return { attempted: true, opened: Boolean(win) }
+  } catch {
+    return { attempted: true, opened: false }
+  }
+}
 
 /**
  * Android/Desktop: FCM через registerShopPush.
@@ -162,7 +202,13 @@ export async function subscribeOrderPush(opts = {}) {
 
     if (result?.reason === "denied") {
       if (typeof onToast === "function") onToast(PUSH_DENIED_TOAST)
-      return { ok: false, isLoading: false, primaryLabel: idleLabel, error: "denied" }
+      return {
+        ok: false,
+        isLoading: false,
+        primaryLabel: idleLabel,
+        error: "denied",
+        openSettings: true
+      }
     }
 
     if (typeof onToast === "function") onToast(PUSH_NETWORK_TOAST)

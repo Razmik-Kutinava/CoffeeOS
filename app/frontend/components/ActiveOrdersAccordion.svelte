@@ -5,9 +5,11 @@
   import {
     downloadWalletPass,
     subscribeOrderPush,
-    resolveNotifyPrimaryInit
+    resolveNotifyPrimaryInit,
+    openNotificationSettings
   } from "../lib/orderStatusNotifyActions.js"
   import { openSupportChat } from "../lib/supportChatAdapter.js"
+  import { SUPPORT_TELEGRAM_URL } from "../lib/supportConfig.js"
   import { openTipsService } from "../lib/tipsAdapter.js"
   import OrderActionButtons from "./OrderActionButtons.svelte"
 
@@ -64,7 +66,7 @@
     }
 
     if (kind === "chat") {
-      openSupportChat(orderId)
+      openSupportChat(orderId, SUPPORT_TELEGRAM_URL)
       return
     }
 
@@ -146,7 +148,16 @@
     {/if}
   </div>
   {#if toastMsg}
-    <div class="aoa__toast" data-testid="active-order-notify-toast" role="status">{toastMsg}</div>
+    <button
+      type="button"
+      class="aoa__toast"
+      data-testid="active-order-notify-toast"
+      aria-label="Открыть настройки уведомлений браузера"
+      onclick={(e) => {
+        e.stopPropagation()
+        openNotificationSettings()
+      }}
+    >{toastMsg}</button>
   {/if}
 </div>
 
@@ -255,8 +266,18 @@
   .aoa__step.current .aoa__label { color: #4caf50; }
   .aoa__step.current .aoa__label { font-weight: 600; }
   .aoa__toast {
+    display: block;
+    width: 100%;
     margin-top: 0.25rem;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    text-align: left;
     font-size: 0.62rem;
     color: #ffb74d;
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 2px;
   }
+  .aoa__toast:active { opacity: 0.85; }
 </style>
