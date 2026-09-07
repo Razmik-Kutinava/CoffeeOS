@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-07 — ops: /regress #80 PASS (phone auth / CartSheet)
+
+- JS: cascade + wizard + webview → **33/0**
+- rails: phone_otp API + auth_funnel + phone_otp service → **23/138/0**
+- GREEN `61593bb2` · next `/review` · Fly MCP Point A после deploy
+
 ## 2026-09-07 — feat: #80 registration UI/UX Callcheck [GREEN]
 
 - Hide checkout `+N₽` when keyboard open on `#/checkout`

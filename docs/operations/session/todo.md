@@ -14,7 +14,7 @@
 - [x] **SPEC** (`9c28d388`)
 - [x] **RED** (`cbd1d8a4`)
 - [x] **GREEN** (`61593bb2`)
-- [ ] **/regress**
+- [x] **/regress** — JS 33/0 · rails 23/0
 - [ ] **REVIEW**
 
 ## Решение (slice)
@@ -22,17 +22,10 @@
 | # | Решение |
 |---|---------|
 | 1 | Канон = Callcheck (не flash_call) |
-| 2 | `#/checkout` + keyboard → скрыть CTA `+N₽` (`shouldHideCartCheckoutCta`) |
-| 3 | Hint про регистрацию; номер = кнопка `phone-auth-tel-btn` |
-| 4 | `interpretCallcheckPoll` → `onVerified`; ошибки check_status не глотать |
+| 2 | `#/checkout` + keyboard → скрыть CTA `+N₽` |
+| 3 | Hint про регистрацию; номер = `phone-auth-tel-btn` |
+| 4 | `interpretCallcheckPoll` → onVerified; ошибки не soft-swallow |
 | 5 | **Вне slice:** Callcheck×2 |
-
-## Файлы (ожидаемо)
-
-- `app/frontend/lib/shopWebViewLayout.js`
-- `app/frontend/components/CartSheet.svelte`
-- `app/frontend/lib/phoneAuthCascade.js`
-- `app/frontend/components/PhoneAuthCodeStep.svelte`
 
 ## Не ломать
 
@@ -46,8 +39,8 @@
 - `node --test test/javascript/shop_phone_auth_cascade_smsru_test.mjs test/javascript/phone_auth_wizard_test.mjs test/javascript/shop_telegram_webview_ui_test.mjs`
 - `bin/rails test test/integration/shop/api/phone_otp_test.rb test/integration/shop/auth_funnel_wizard_ui_test.rb test/services/shop/phone_otp_test.rb`
 
-## Local GREEN
+## Local GREEN + regress
 
-- JS: 33/0 PASS
-- rails: 23/0 PASS
-- Entire: `61593bb2` no trailer — attach на docs ops (session `6516e70c…`)
+- JS: **33/0 PASS**
+- rails: **23 runs / 138 assertions / 0 fail**
+- Entire: `01M1XDGFW23WY77ZRW73D5KGT4` на ops
