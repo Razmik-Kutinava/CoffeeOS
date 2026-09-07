@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-07 — ops: /regress #82 PASS (hide-on-ready + cascade)
+
+- JS: order_status_sheet + active_poll → **29/0**
+- rails: cascade job + notifier + broadcaster + channel + active_orders → **35/0**
+- Next: `/review` · Fly MCP Point A после deploy
+
 ## 2026-09-07 — REVIEW: #80 registration Callcheck UI/UX
 
 - bugbot: clear poll `localError` / checkout `err` after successful check_status

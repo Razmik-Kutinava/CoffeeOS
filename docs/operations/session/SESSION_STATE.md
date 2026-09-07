@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-07 (REVIEW #80)  
+**Дата:** 2026-09-07 (/regress #82 PASS)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| REVIEW #80 push/CI | CI green → стоп (deploy апрув) |
-| Fly v481 | MCP Point A после deploy |
+| /regress #82 PASS | `/review` |
+| Зона shop/статусы+cascade | JS 29 · rails 35 |
 
-**last_done:** bugbot fix + security OK + push #80  
-**next_step:** ждать CI green · deploy апрув
+**last_done:** /regress #82 — sheet+poll + cascade zone PASS  
+**next_step:** `/review` — bugbot + security + Entire + push
 
 **ctx_trim:** `2026-09-02`
