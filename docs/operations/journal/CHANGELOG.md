@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-07 — docs: intake #80 registration UI/UX + Callcheck cascade
+
+- PHASE 0: правки п.8 (клавиатура/сумма, копирайт Callcheck, нет перехода после звонка) + Google Doc каскада Callcheck×2→SMS
+- ТЗ: `customer_tasks/Регистрация PWA UI UX и каскад Callcheck x2 SMS.md`
+- Артефакты: `artifacts/registration_callcheck_cascade_ui_ux/` (2 скрина)
+- CBR #80 + ISSUES · код не трогали · ждёт `/spec`
+
 ## 2026-09-07 — docs: SPEC #79 SBP return + autopay labels
 
 - `todo.md`: waiting до `redirectToSbp` · wire `createSbpAutopayFsm` · SMS вне slice
