@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-07 — docs: #26 MCP plan step5 (post-deploy agent)
+
+- План Point A M1–M6 · P0 = M2 inline на отказе банка
+- Файл: `artifacts/repeat_order_invalid_token_payment_sheet/MCP_PLAN_STEP5_2026-09-07.md`
+- Deploy этим агентом нет — общий deploy + MCP другим
+
 ## 2026-09-06 — REVIEW: #26 step5 pay sheet inline
 
 - GREEN `32c79960` · regress `f5f73d3e` · bugbot OK · security OK
