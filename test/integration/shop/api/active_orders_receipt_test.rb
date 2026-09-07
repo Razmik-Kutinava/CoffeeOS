@@ -132,7 +132,7 @@ class Shop::Api::ActiveOrdersReceiptTest < ActionDispatch::IntegrationTest
       customer_name: "Guest",
       order_number: "202607-36zero",
       source: :mobile,
-      status: :ready,
+      status: :preparing,
       total_amount: 120,
       discount_amount: 0,
       final_amount: 120
