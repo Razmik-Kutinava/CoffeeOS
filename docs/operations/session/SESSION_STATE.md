@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-07 (REVIEW #79 CI green)  
+**Дата:** 2026-09-07 (GREEN #82)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| REVIEW #79 **CI green** `34098247173` | deploy — апрув · Fly MCP Point A |
-| tip `e0c4d1a6` | |
+| GREEN #82 (`8cae376d`) | `/regress` |
+| Local | JS 23+6 · rails 35 PASS |
 
-**last_done:** PHASE 3 #79 — bugbot+security · push · CI green  
-**next_step:** deploy только по апруву владельца
+**last_done:** GREEN #82 hide-on-ready + clear presence before cascade  
+**next_step:** `/regress` по «Проверка» в todo
 
 **ctx_trim:** `2026-09-02`

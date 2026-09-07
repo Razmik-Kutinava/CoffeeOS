@@ -13,7 +13,7 @@
 
 - [x] **SPEC** (`25c1a3ce`)
 - [x] **RED** (`c30478ad`)
-- [ ] **GREEN** (pending commit)
+- [x] **GREEN** (`8cae376d`)
 - [ ] **/regress**
 - [ ] **REVIEW**
 
