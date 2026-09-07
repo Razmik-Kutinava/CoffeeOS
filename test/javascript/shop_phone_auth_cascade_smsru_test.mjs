@@ -19,7 +19,9 @@ import {
   CALLCHECK_HINT,
   SMS_BTN_LABEL,
   telHrefFromCallPhone,
-  smsSentHint
+  smsSentHint,
+  callPhoneButtonLabel,
+  interpretCallcheckPoll
 } from "../../app/frontend/lib/phoneAuthCascade.js"
 
 describe("AUTH_PHASE", () => {
@@ -76,10 +78,28 @@ describe("SMS pin visibility", () => {
 })
 
 describe("hints and tel", () => {
-  it("callcheck hint then sms hint", () => {
+  it("callcheck hint mentions registration and button number", () => {
+    assert.match(CALLCHECK_HINT, /регистрац/i)
+    assert.match(CALLCHECK_HINT, /кнопк/i)
     assert.equal(cascadeHint({ phase: AUTH_PHASE.CALLCHECK }), CALLCHECK_HINT)
     assert.match(smsSentHint("+7 (900) 111-22-33"), /СМС/)
     assert.equal(SMS_BTN_LABEL.includes("СМС"), true)
+  })
+
+  it("callPhoneButtonLabel prefers pretty number", () => {
+    assert.equal(callPhoneButtonLabel("+7 (499) 555-55-55", "74995555555"), "+7 (499) 555-55-55")
+    assert.equal(callPhoneButtonLabel("", "74995555555"), "74995555555")
+  })
+
+  it("interpretCallcheckPoll completes on confirmed", () => {
+    assert.deepEqual(
+      interpretCallcheckPoll({ confirmed: true, phone: "+79001112233", refresh_token: "rt" }),
+      { action: "complete", phone: "+79001112233", refreshToken: "rt" }
+    )
+    assert.deepEqual(interpretCallcheckPoll({ confirmed: false, expired: true }), {
+      action: "sms_fallback"
+    })
+    assert.deepEqual(interpretCallcheckPoll({ confirmed: false }), { action: "wait" })
   })
 
   it("telHrefFromCallPhone", () => {

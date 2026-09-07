@@ -1,56 +1,55 @@
-﻿# todo — #79 SBP return + autopay labels (остаток CODE:BLACK)
+﻿# todo — #80 Registration UI/UX + Callcheck cascade
 
 | Поле | Значение |
 |------|----------|
-| **CBR** | #79 · [ТЗ](../milestones/veha_2/requirements/customer_tasks/Надписи%20автоплатежа%20и%20экран%20после%20возврата%20из%20банка%20СБП.md) |
-| **Тип** | Fix / hot-path оплата · PWA return + SBP autopay UI |
-| **Цель** | После банка — ясный экран (WAITING/ok/fail); надписи автоплатежа по ответу банка |
+| **CBR** | #80 · [ТЗ](../milestones/veha_2/requirements/customer_tasks/Регистрация%20PWA%20UI%20UX%20и%20каскад%20Callcheck%20x2%20SMS.md) |
+| **Тип** | Fix / hot-path витрина · phone auth + CartSheet |
+| **Цель** | P0: скрыть сумму при клавиатуре; копирайт Callcheck (номер = кнопка); переход после confirmed |
 | **Point A** | `tenant_id` = `2fdee1ac-4674-41ee-b89e-87b45643f789` |
 | **Ветка** | `develop` |
-| **Артефакты** | [`…/sbp_return_status_screen_autopay_labels/`](../milestones/veha_2/artifacts/sbp_return_status_screen_autopay_labels/) |
+| **Артефакты** | [`…/registration_callcheck_cascade_ui_ux/`](../milestones/veha_2/artifacts/registration_callcheck_cascade_ui_ux/) |
 
 ## SBR
 
-- [x] **SPEC** (`b9d80b99`)
-- [x] **RED** (`14b968dd`)
-- [x] **GREEN** (`5b3bc76e`)
-- [x] **/regress** — JS 54/0 · rails 15/0
+- [x] **SPEC** (`9c28d388`)
+- [ ] **RED**
+- [ ] **GREEN**
+- [ ] **/regress**
 - [ ] **REVIEW**
 
 ## Решение (slice)
 
 | # | Решение |
 |---|---------|
-| 1 | `beginSbpBankRedirect`: pending LS + `#/payment-result?status=waiting` до nspk |
-| 2 | `createSbpAutopayFsm` + `resolveSbpAutopaySheetError` — не card `payFsmLabel` |
-| 3 | App recover — без дельты |
-| 4 | **Вне slice:** SMS; greenfield CODE:BLACK |
+| 1 | Канон = Callcheck (не flash_call) |
+| 2 | `#/checkout` + keyboard → скрыть CTA `+N₽` |
+| 3 | Hint про регистрацию; номер = кнопка `tel:` |
+| 4 | Poll: confirmed → `onVerified`; ошибки check_status не глотать |
+| 5 | **Вне slice:** Callcheck×2 |
 
 ## Файлы (ожидаемо)
 
-- `app/frontend/routes/Checkout.svelte`
-- `app/frontend/lib/shopSbpPay.js` — `beginSbpBankRedirect`
-- `app/frontend/lib/shopSbpAutopay.js` — `resolveSbpAutopaySheetError`
-- `app/frontend/App.svelte` / `PaymentResult.svelte` / `codeblackPendingOrder.js` — без дельты GREEN
+- `app/frontend/lib/shopWebViewLayout.js` — `shouldHideCartCheckoutCta`
+- `app/frontend/components/CartSheet.svelte` — hide CTA при keyboard
+- `app/frontend/lib/phoneAuthCascade.js` — hint / CTA label / interpret poll
+- `app/frontend/components/PhoneAuthCodeStep.svelte` — кнопка номера + poll complete
+- `app/frontend/components/PhoneAuthWizard.svelte` — без дельты если не нужно
+- `app/frontend/routes/Checkout.svelte` — без дельты если не нужно
+- `app/services/shop/phone_otp.rb` — без дельты если poll FE хватает
 
-### Blast-radius (+2)
+### Blast-radius
 
-- `shopPayFsm.js` — card path не трогали
-- `PaymentMethodsSheet.svelte` — без дельты
+- `cartSheetStore.js` — не трогаем без нужды
+- `phone_otp_controller.rb` — без дельты
 
 ## Не ломать
 
-- Card One-Click / 3DS / `payFsmLabel`
-- Repeat SBP
-- #35 шторка
-- Webhook / AccountToken bind
+- One-Click / SBP CTA вне phone-keyboard
+- Peek витрины
+- Callcheck→SMS @40s
+- #35 status
 
 ## Проверка
 
-- `node --test test/javascript/codeblack_pending_order_test.mjs test/javascript/shop_sbp_pay_test.mjs test/javascript/shop_sbp_autopay_test.mjs test/javascript/shop_sbp_autopay_checkout_ui_test.mjs`
-- `bin/rails test test/integration/shop/sbp_payment_return_ui_test.rb test/integration/shop/api/sbp_autopay_charge_test.rb test/integration/shop/api/payment_status_test.rb`
-
-## Local GREEN
-
-- JS: 54/0 PASS
-- rails zone (return_ui + charge + status): **15 runs / 70 assertions / 0 fail** PASS (`bundle exec rails test …`)
+- `node --test test/javascript/shop_phone_auth_cascade_smsru_test.mjs test/javascript/phone_auth_wizard_test.mjs test/javascript/shop_telegram_webview_ui_test.mjs`
+- `bin/rails test test/integration/shop/api/phone_otp_test.rb test/integration/shop/auth_funnel_wizard_ui_test.rb test/services/shop/phone_otp_test.rb`

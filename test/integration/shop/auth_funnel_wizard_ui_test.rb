@@ -25,16 +25,19 @@ class Shop::AuthFunnelWizardUiTest < ActionDispatch::IntegrationTest
     refute_includes lib, 'channel: "flash_call"'
   end
 
-  test "screen 2 callcheck has tel link and no pin until sms" do
+  test "screen 2 callcheck has tel button CTA and no pin until sms" do
     step = File.read(Rails.root.join("app/frontend/components/PhoneAuthCodeStep.svelte"))
     pin = File.read(Rails.root.join("app/frontend/components/PhoneAuthPinInputs.svelte"))
     lib = File.read(Rails.root.join("app/frontend/lib/phoneAuthWizard.js"))
+    cascade = File.read(Rails.root.join("app/frontend/lib/phoneAuthCascade.js"))
 
     assert_includes step, 'data-testid="phone-auth-screen-2"'
     assert_includes step, 'data-testid="phone-auth-change-number"'
     assert_includes step, "check_status"
     assert_includes step, "phone_otp/verify_sms"
-    assert_includes step, 'data-testid="phone-auth-tel-link"'
+    assert_includes step, 'data-testid="phone-auth-tel-btn"'
+    assert_includes step, "interpretCallcheckPoll"
+    assert_includes cascade, "регистрац"
     refute_includes step, "Подтвердить код"
 
     assert_includes pin, 'data-testid="phone-auth-pin"'
@@ -45,6 +48,7 @@ class Shop::AuthFunnelWizardUiTest < ActionDispatch::IntegrationTest
   test "callcheck cascade timeout 40s and poll 3s" do
     step = File.read(Rails.root.join("app/frontend/components/PhoneAuthCodeStep.svelte"))
     cascade = File.read(Rails.root.join("app/frontend/lib/phoneAuthCascade.js"))
+    sheet = File.read(Rails.root.join("app/frontend/components/CartSheet.svelte"))
 
     assert_includes step, 'data-testid="phone-auth-callcheck-timer"'
     assert_includes step, 'data-testid="phone-auth-callcheck-hint"'
@@ -54,6 +58,7 @@ class Shop::AuthFunnelWizardUiTest < ActionDispatch::IntegrationTest
     assert_match(/CALLCHECK_TIMEOUT_SEC\s*=\s*40/, cascade)
     assert_match(/CALLCHECK_POLL_MS\s*=\s*3000/, cascade)
     assert_includes cascade, "Ждем ваш звонок"
+    assert_includes sheet, "shouldHideCartCheckoutCta"
     refute_includes cascade, "FLASH_WAIT_SEC"
     refute_includes step, "tickFlashCascade"
   end

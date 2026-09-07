@@ -14,6 +14,7 @@ import {
   pageScrollLockedBySheet,
   sheetHeightPx,
   shopVisualViewportHeight,
+  shouldHideCartCheckoutCta,
   stickyOffsetTopPx,
   subscribeShopViewport
 } from "../../app/frontend/lib/shopWebViewLayout.js"
@@ -65,6 +66,12 @@ describe("sheet height in visual viewport", () => {
 })
 
 describe("keyboard open / close", () => {
+  it("hides checkout +sum CTA when keyboard open on #/checkout", () => {
+    assert.equal(shouldHideCartCheckoutCta({ onCheckout: true, keyboardOpen: true }), true)
+    assert.equal(shouldHideCartCheckoutCta({ onCheckout: true, keyboardOpen: false }), false)
+    assert.equal(shouldHideCartCheckoutCta({ onCheckout: false, keyboardOpen: true }), false)
+  })
+
   it("detects keyboard when visualViewport shrinks vs innerHeight", () => {
     assert.equal(
       isShopKeyboardOpen({
