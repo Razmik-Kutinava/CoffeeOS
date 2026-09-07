@@ -15,7 +15,7 @@
 
 - bugbot: settings CTA только при `openSettings` (denied) · fix `ffd48c6b`
 - security: no medium+
-- Entire: `01M1XF20DA5E0PXJ99E9DH2HM6` · Local JS 21/0 · push/CI
+- Entire: `01M1XF20DA5E0PXJ99E9DH2HM6` · Local JS 21/0 · CI [34102734432](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/34102734432) green
 - Next: deploy апрув · Fly MCP Point A
 
 ## 2026-09-07 — REVIEW: #82 hide-on-ready + cascade SMS

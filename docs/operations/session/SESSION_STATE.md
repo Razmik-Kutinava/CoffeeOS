@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-07 (REVIEW #81)  
+**Дата:** 2026-09-07 (REVIEW #81 CI green)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| REVIEW #81 · fix `ffd48c6b` | push/CI |
+| REVIEW #81 CI green | deploy **апрув** |
 | Local JS 21/0 | Fly MCP Point A после deploy |
 
-**last_done:** bugbot gate `toastOpensSettings` · security no medium+ · Entire attach  
-**next_step:** CI green → стоп (deploy апрув)
+**last_done:** REVIEW #81 — bugbot fix · security OK · push · CI green  
+**next_step:** deploy только по апруву владельца
 
 **ctx_trim:** `2026-09-02`

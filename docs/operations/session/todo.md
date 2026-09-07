@@ -14,7 +14,7 @@
 - [x] **SPEC** (`80dad7ee`)
 - [x] **RED** (`ded3fb8f`)
 - [x] **GREEN** / **/regress** — JS 21/0
-- [x] **REVIEW** — bugbot fix `ffd48c6b` · security OK · Entire `01M1XF20DA5E0PXJ99E9DH2HM6` · push/CI
+- [x] **REVIEW** — bugbot fix `ffd48c6b` · security OK · Entire `01M1XF20DA5E0PXJ99E9DH2HM6` · CI [34102734432](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/34102734432) green
 
 ## REVIEW
 

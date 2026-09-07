@@ -14,7 +14,7 @@
 **next_step:** CI green → deploy только апрув; MCP Point A
 
 **ctx_trim:** `2026-09-02`  
-**CI:** (после push)  
+**CI:** https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/34102734432 (**green**)  
 **Fly:** **v481**  
 **Fly MCP:** #81 pending после deploy
 
