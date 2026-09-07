@@ -10,7 +10,7 @@
 | Checkout UX (Фаза 2) | 🟡 | апрув заказчика |
 | SBP 3001 | 🟡 | банк / кабинет |
 | #47 / #35 PWA статусы | 🟡 | Fly v481 MCP MUST PASS · ждёт апрув заказчика |
-| #79 SBP return + autopay labels | 🟡 | intake 2026-09-07 · SPEC pending · reopen CODE:BLACK |
+| #79 SBP return + autopay labels | 🟡 | SPEC 2026-09-07 · ждёт `/sbr` · reopen CODE:BLACK |
 | #26 invalid token / pay error copy | 🟡 | v481 MCP PARTIAL · M2 нужен guest с saved card decline |
 | #71 email after pay — remember | 🟡 | Fly v481 MCP PASS · ждёт апрув заказчика |
 

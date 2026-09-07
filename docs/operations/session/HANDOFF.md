@@ -2,16 +2,16 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-07 (intake #79)  
+**Дата:** 2026-09-07 (SPEC #79)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #79 intake · Fly **v481** | `/spec` #79 · апрув MCP #35/#71/#26 |
-| Фокус | экран после банка СБП + надписи автоплатежа |
+| SPEC #79 · Fly **v481** | `/sbr` RED |
+| Slice | waiting до банка + autopay labels (не SMS) |
 
-**last_done:** PHASE 0 intake #79 (остаток CODE:BLACK / правки п.7)  
-**next_step:** `/spec` — экран после возврата из банка + статусы автоплатежа; тест Android/iOS
+**last_done:** PHASE 1 SPEC #79 → `todo.md`  
+**next_step:** `/sbr` RED — return screen + autopay labels
 
 **ctx_trim:** `2026-09-02`  
 **CI:** https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/34088874139 (**green**)  

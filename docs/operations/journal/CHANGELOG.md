@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-07 — docs: SPEC #79 SBP return + autopay labels
+
+- `todo.md`: waiting до `redirectToSbp` · wire `createSbpAutopayFsm` · SMS вне slice
+- Файлы: Checkout / App / PaymentResult / shopSbp{Pay,Autopay} / codeblackPendingOrder
+- Не ломать: card One-Click · Repeat SBP · #35 шторка · webhook
+- Проверка: JS codeblack+sbp_* · rails sbp_payment_return_ui + sbp_autopay_charge + payment_status
+
 ## 2026-09-07 — docs: intake #79 SBP return + autopay labels
 
 - PHASE 0: правки п.7 заказчика (статусы автоплатежа, экран после банка, 11/8 СБП) + повтор CODE:BLACK ТЗ
