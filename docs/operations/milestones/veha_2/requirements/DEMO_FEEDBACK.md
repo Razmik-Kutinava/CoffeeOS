@@ -27,6 +27,7 @@
 
 | Дата | Источник | Сценарий / экран | Суть | Статус | PR / коммит |
 |------|----------|------------------|------|--------|-------------|
+| 2026-09-07 | заказчик правки п.10 | ready → SMS + гл. экран | Каскад SMS после «заказ готов» не работает; статусная модель не пропадает с гл. экрана после «готов» на табло | **intake** · CBR #82 · SPEC `[ ]` | [ТЗ](customer_tasks/Каскад%20SMS%20после%20Заказ%20готов%20и%20шторка%20статуса%20на%20главном.md) |
 | 2026-09-05 | ops / владелец | Point A CTA `ready` | **Временный откат** subscription-оффера: billing/экран ещё нет. УК → `enabled=false` + `second_cta_mode=tips`. Visible risky points: только Point A. Код CTA/eligibility не трогали. `INTEGRATIONS.md` без изменений. | **done** *(config; ready CTA E2E → /regress)* | [`rollback_point_a_2026-09-05.json`](../artifacts/subscription_offer_eligibility/ops/rollback_point_a_2026-09-05.json) |
 | 2026-07-23 | заказчик/владелец | expanded шторка | Убрать сетку товаров внутри expanded; оставить только список заказов; expanded «пропал» из‑за сетки | **in_progress** *(код prog30 — ждёт redeploy+MCP)* | [ТЗ](customer_tasks/Убрать%20сетку%20товаров%20из%20expanded%20шторки.md) |
 | 2026-07-23 | заказчик cart sheet | свайп шторки | Hit-area: реагировать на весь прямоугольник полосы (не только крючок), чувствительнее | **done** *(MCP prog29 PASS)* | [`fly_gesture_hit_area_mcp_2026-07-23.json`](../artifacts/cart_sheet_gesture_hit_area/fly_gesture_hit_area_mcp_2026-07-23.json) |

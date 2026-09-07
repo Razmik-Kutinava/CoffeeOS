@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-07 — docs: intake #82 cascade SMS + status sheet
+
+- PHASE 0: правки п.10 — SMS после «заказ готов» не работает; шторка статуса остаётся на гл. экране
+- ТЗ: `customer_tasks/Каскад SMS после Заказ готов и шторка статуса на главном.md`
+- Артефакты: `artifacts/order_ready_cascade_sms_status_sheet_fix/`
+- CBR #82 + reopen #39/#35 · DEMO_FEEDBACK · код не трогали · ждёт `/spec`
+
 ## 2026-09-07 — docs: SPEC #80 registration UI/UX + Callcheck
 
 - `todo.md`: Callcheck канон (не flash_call); P0 keyboard/CTA · copy · post-call; ×2 backlog

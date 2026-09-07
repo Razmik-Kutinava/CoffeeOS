@@ -2,16 +2,16 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-07 (intake #81)  
+**Дата:** 2026-09-07 (intake #82)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| intake #81 · Fly **v481** | `/spec` #81 |
-| #80 SPEC · #82 intake · #79 parked | очередь после #81 |
+| intake #82 · Fly **v481** | `/spec` #82 |
+| #80 SPEC · #81 intake · #79 parked | очередь: #82 / #80 / #81 / #79 |
 
-**last_done:** PHASE 0 intake #81 (gaps Wallet/WebPush/фоновые/чат)  
-**next_step:** `/spec` — план slice по #81
+**last_done:** PHASE 0 intake #82 (SMS cascade + шторка на гл.)  
+**next_step:** `/spec` — #82 cascade SMS ready + status sheet hide
 
 **ctx_trim:** `2026-09-02`  
 **CI:** https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/34088874139 (**green**)  
