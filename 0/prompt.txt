@@ -1,0 +1,261 @@
+<cursor_commands>
+
+--- Cursor Command: start ---
+# /start — старт сессии / задачи (умный)
+
+CoffeeOS. Следуй `coffeeos-agent-workflow` + `coffeeos-customer-intake` (PHASE 0) при нужде.
+
+## Режим (выбери один, не гоняй всё)
+
+### A) Узкий старт (по умолчанию, если контекст уже есть)
+Используй, если в чате/todo уже: баг локализован, есть список файлов, живой `todo.md`, или пользователь продолжает ту же задачу.
+
+Сделай **только**:
+1. Шапка `HANDOFF.md` + шапка `SESSION_STATE.md` (`Read` limit до `---`, не тело)
+2. `ISSUES.md` — только секция **`## 🔴 Открыто`** (до следующего `##`), если релевантно багу
+3. `todo.md` — если есть
+4. **Не** перечитывай PRACTICES/QA/весь CHECKLIST/весь CHANGELOG
+5. **Не** заново PHASE 0, если ТЗ уже в `customer_tasks/` или задача уже в todo
+6. Коротко: `last_done` / `current_state` / `next_step` (одна строка каждый)
+7. **ctx-trim:** если пт–вс и в шапке HANDOFF `ctx_trim` старше 7 дней — одна строка: «рекомендуется `/ctx-trim`» (не блокировать старт)
+
+### B) Полный старт + PHASE 0
+Только если **новое** ТЗ от заказчика ещё не в `customer_tasks/` / CBR, или пользователь явно просит intake.
+
+Тогда: PHASE 0 (intake 1:1) → краткая шапка ops → стоп до `/spec`.
+
+## Отчёт
+Таблица Сделано | Не сделано.  
+`Субагент: нет — старт` (или explore, если уже звал).  
+**Не пиши код** на этом шаге.
+
+## Обязательно в конце (копипаст для пользователя)
+
+Одной строкой, без лишнего текста вокруг:
+
+- Если нужен план/файлы → `Next: /spec`
+- Если SPEC/todo уже готов → `Next: /sbr`
+- Если только что завершили PHASE 0 → `Next: /spec`
+
+--- End Command ---
+</cursor_commands>
+<timestamp>Tuesday, Sep 8, 2026, 5:06 PM (UTC+4)</timestamp>
+
+Ниже промпт. Это **verify-first hot-path SBR**: сначала живой E2E (MIR + decline→sheet), код — только при доказанном FAIL у нас (в т.ч. delayed RebillId).
+
+---
+
+## Задание агенту (SBR): UserCards / RebillId + #26 M2 (decline → sheet)
+
+### Контекст
+
+**Две связанные дыры приёмки (код в основном уже есть):**
+
+1. **UserCards / RebillId** — сохранение карты (`save_card`) + 1-click в коде есть; **живой E2E с реальной MIR** до конца не закрыт. Риск: **delayed RebillId** после FA (webhook без RebillId → `sync_for_rebill!`).  
+2. **#26 M2** — отказ банка по saved card → inline error в шторке; на v481 **SKIP**: у MCP-гостя не было `MobilePaymentMethod`.
+
+**Канон:**
+
+| Тема | Путь |
+|------|------|
+| UserCards ТЗ | `customer_tasks/Исправление сохранения карты в UserCards после успешной оплаты.md` |
+| #26 ТЗ | `customer_tasks/Главный экран — повторный заказ (невалидный токен)…` |
+| Тексты ошибок | `customer_tasks/Понятные сообщения пользователю при ошибке оплаты.md` |
+| Bridge | `docs/integrations/tbank.md` · gap-matrix UserCards / Repeat invalid token |
+| MCP plan #26 | `artifacts/repeat_order_invalid_token_payment_sheet/MCP_PLAN_STEP5_2026-09-07.md` |
+| MCP v481 | `…/mcp/fly_v481_2026-09-07/MCP_RESULT.md` **PARTIAL** |
+| ISSUES | UserCards/RebillId 🟡 · #26 M2 🟡 |
+
+**Стек (не выдумывать):**  
+`UserCards` в продукте = **`mobile_payment_methods`** + `Payments::SavedCardStore` (не отдельная таблица из старого текста ТЗ).
+
+**As-is код:**
+
+| Поток | Компоненты |
+|-------|------------|
+| Новая карта | `POST payments/new_card` → Init → FA → `SavedCardStore` / webhook RebillId |
+| Delayed RebillId | `TbankCallbackJob` → `TbankPaymentSync#sync_for_rebill!` (+ finalize) |
+| 1-click | `POST payments/one_click` → `OneClickPaymentService` → Charge(RebillId) |
+| Список карт | `GET user/cards` (session customer only) |
+| #26 sheet | PaymentMethods sheet · `isTokenInvalid` = fail RebillId/one_click · inline error |
+
+---
+
+### Жёсткие правила
+
+- ErrorCode / rate-limit / insufficient funds банка ≠ сразу баг приложения.  
+- Не коммитить PAN/CVV/полные RebillId в артефакты (маска `*5953` ок).  
+- Не трогать TbankAdapter «ради красоты»; не новые payment gems.  
+- `isTokenInvalid` = **токен карты**, не auth refresh.  
+- Min charge ≥10₽.
+
+---
+
+### Карта slices
+
+| Slice | Цель | Когда |
+|-------|------|--------|
+| **P** | Preflight: гость + session + (для M2) **есть saved card** | всегда сначала |
+| **U** | UserCards E2E: `save_card=true` → MIR в списке → RebillId в БД (сразу или после sync) | после P |
+| **O** | One-click happy: Charge по RebillId → заказ accepted | после U |
+| **M** | #26 M2: decline/fail one_click → шторка открыта + inline error + карта selected | после P с картой |
+| **C** | Code fix | только при FAIL нашего слоя |
+
+Порядок: **P → U → O → M**; C условный.
+
+---
+
+### Slice P — Preflight (блокер v481)
+
+**DoD:**
+1. Point A: `tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789`.  
+2. Гость залогинен (phone/email session), `GET /shop/api/user/cards` не пустой **или** готов сценарий new_card с `save_card`.  
+3. Для M2: известный decline (тест-карта *5953 / low balance / банк decline) **или** явный SKIP с причиной.  
+4. Корзина ≥10₽.
+
+Без saved card → **не писать FAIL #26** — BLOCKED как v481.
+
+---
+
+### Slice U — UserCards / RebillId E2E (DoD)
+
+```
+Given гость на Point A, save_card=true
+When оплата новой картой (Init → FA / виджет — канон new_card)
+Then payment succeeded / order accepted
+And в mobile_payment_methods есть карта (mask, exp, type MIR/…)
+And card_token (RebillId) заполнен:
+   - либо сразу из FA/webhook
+   - либо после sync_for_rebill! / finalize (доказать GetState/retry, не «карта навсегда без токена»)
+And GET user/cards отдаёт эту карту этой сессии
+```
+
+**Матрица FAIL → Slice C:**
+
+| Симптом | Слой |
+|---------|------|
+| FA OK, карты нет, webhook был с RebillId | `SavedCardStore` / `allowed_for?` / save_card flag |
+| Webhook без RebillId, sync не добрал | `sync_for_rebill!` retries / worker / finalize |
+| Карта в БД, GET cards пусто | session / customer_id / merge |
+| save_card=false, карта появилась | bug consent |
+| Дубль pan+exp | upsert SavedCardStore |
+
+**Delayed RebillId:** если токен появляется в окне sync (логи/повтор GET cards) → **PASS с пометкой delayed**; если через N минут/finalize всё ещё null → **FAIL** нашего sync.
+
+---
+
+### Slice O — One-click happy (DoD)
+
+```
+Given U PASS (RebillId есть)
+When POST one_click / UI «Оплатить» по сохранённой карте
+Then Charge OK → заказ/оплата success
+And NewCardForm не открывается сама
+```
+
+Bank rate-limit / 119 → зафиксировать BANK_ERROR, не путать с отсутствием RebillId.
+
+---
+
+### Slice M — #26 M2 decline → sheet (DoD)
+
+Канон: `MCP_PLAN_STEP5_2026-09-07.md` (M1–M6; **P0 = M2**).
+
+```
+Given гость с saved card, шторка «Способ оплаты», карта selected
+When one_click → отказ банка (insufficient / block / invalid token)
+Then шторка НЕ закрывается
+And inline data-testid="payment-method-inline-error" с канон-текстом (без сырого ErrorCode)
+And карта остаётся selected
+And NewCardForm НЕ auto-open (только по CTA / «Картой +»)
+```
+
+Тексты — из плана / «Понятные сообщения…».
+
+Артефакт:  
+`artifacts/repeat_order_invalid_token_payment_sheet/mcp/fly_vNNN_YYYY-MM-DD/MCP_RESULT.md` + скрины.
+
+---
+
+### Slice C — Code (условный)
+
+Только после доказанного FAIL U/O/M (не «нет карты у MCP»).
+
+#### Типичный scope
+
+```
+app/services/payments/saved_card_store.rb
+app/services/payments/tbank_payment_sync.rb      # sync_for_rebill!
+app/jobs/payments/tbank_callback_job.rb
+app/services/shop/one_click_payment_service.rb
+app/services/shop/new_card_payment_service.rb
+app/frontend/… payment sheet / inline error / isTokenInvalid
+test/services/payments/*saved_card* / *tbank_payment_sync*
+test/integration/shop/api/*one_click* / *user_cards* / *new_card*
+test/javascript/*payment*sheet* / *one_click*
+```
+
+#### OUT
+
+- SBP 3001 / AccountToken (другая задача)  
+- Подписка #78  
+- Смена TbankAdapter протокола  
+- Hardcode demo RebillId в prod  
+
+#### Не ломать
+
+1. Webhook idempotency  
+2. `save_card=false` → карты нет  
+3. Card hash / antifraud binding (#74/#75)  
+4. Session ownership `user/cards`  
+5. Min 10₽ · Receipt на Init где принято  
+
+#### Проверка
+
+```bash
+ruby bin/rails test test/services/payments/ test/services/shop/one_click_payment_service_test.rb
+# + integration one_click / user_cards / new_card по зоне
+node --test test/javascript/*payment* test/javascript/*one_click*   # что есть в репо
+```
+
+После GREEN — снова live U/O/M на Point A.
+
+---
+
+### Канон SBR
+
+1. **SPEC** — `todo.md`: slices P/U/O/M, Не ломать, Проверка; «C только после FAIL».  
+2. Verify-only (всё PASS) → артефакт MCP + ops; без лишнего feat.  
+3. FAIL нашего слоя → RED → GREEN → REVIEW (bugbot + security + Entire + push).  
+4. Deploy — только апрув владельца (для live после fix нужен стенд с кодом).
+
+Point A: `2fdee1ac-4674-41ee-b89e-87b45643f789`.
+
+---
+
+### Критерий «готово»
+
+- [ ] Live MIR (или тест-карта канона) сохранена + RebillId (сразу или доказанный delayed sync)  
+- [ ] One-click happy PASS  
+- [ ] #26 M2 PASS **или** BLOCKED «нет decline-карты» с явным preflight  
+- [ ] Delayed RebillId: либо PASS с evidence sync, либо FIXED + regress  
+
+---
+
+### Короткий старт для чата
+
+```
+@spec-build-review.mdc
+UserCards / RebillId + #26 M2.
+
+Сначала Slice P (гость + saved card), затем U (save_card→RebillId, учесть sync_for_rebill!), O (one_click happy), M (#26 decline→inline sheet по MCP_PLAN_STEP5).
+Код (Slice C) только при FAIL нашего слоя — не при «нет карты у MCP» и не при чистом ErrorCode банка.
+Канон: tbank.md · UserCards ТЗ · #26 ТЗ · MCP_PLAN_STEP5.
+Не ломать: webhook idempotency, save_card=false, card hash, session cards.
+Point A: 2fdee1ac-4674-41ee-b89e-87b45643f789
+Артефакты: repeat_order_invalid_token_payment_sheet/mcp/…
+```
+
+Без гостя с картой и/или живого decline агент **не** закрывает M2 кодом — только снимает BLOCKED preflight или чинит U (появление RebillId).
+
+/start
