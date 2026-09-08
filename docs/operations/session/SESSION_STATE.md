@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-08 (REVIEW #38 PKCS7 · CI blocked #71 RED)  
+**Дата:** 2026-09-08 (GREEN #71 CRM Slice A)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #38 PKCS7 on origin · lint OK | CI green после #71 GREEN |
-| Entire `01M1ZYPHF0EZYHM7C12W5PSPA7` | deploy апрув |
+| #71 CRM GREEN `cb1e336d` | `/regress` |
+| Entire `01M1ZZXV23N5BFK4SGDQV0H4KG` | `/review` |
 
-**last_done:** REVIEW #38 · bugbot/security fixes · rubocop · push `fbad4440`  
-**next_step:** CI tip fails #71 `CrmContactSync` NameError (не Wallet) · deploy — апрув
+**last_done:** Brevo Contacts upsert из SyncContactToCrmJob  
+**next_step:** `/regress` email/CRM зона
 
 **ctx_trim:** `2026-09-02`

@@ -88,7 +88,7 @@ module Shop
       }
 
       list_id = ENV["BREVO_CRM_LIST_ID"].to_s.strip
-      payload["listIds"] = [ list_id.to_i ] if list_id.present?
+      payload["listIds"] = [list_id.to_i] if list_id.present?
 
       payload
     end
