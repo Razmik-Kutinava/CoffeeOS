@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-08 (UserCards/#26 M2 MCP PASS v493)  
+**Дата:** 2026-09-08 (UserCards/#26 regress PASS)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| P/U/O/M **PASS** · C n/a | апрув / следующая задача |
-| #26 M2 inline OK | артефакт `…/fly_v493_2026-09-08/` |
+| Local regress **PASS** · зона оплата/UserCards | `/review` (verify-only, код не меняли) |
+| Fly MCP **PASS** v493 | deploy не нужен |
 
-**last_done:** verify-first live Point A · ISSUES UserCards/#26 → 🟢  
-**next_step:** стоп (код не меняли)
+**last_done:** rails 20/84 · node 23/23 · MCP v493 already PASS  
+**next_step:** `/review`
 
 **ctx_trim:** `2026-09-02`

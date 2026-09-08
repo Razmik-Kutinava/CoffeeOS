@@ -1,4 +1,4 @@
-﻿# todo — UserCards / RebillId + #26 M2 (verify-first)
+# todo — UserCards / RebillId + #26 M2 (verify-first)
 
 | Поле | Значение |
 |------|----------|
@@ -39,6 +39,9 @@
 ## Проверка
 
 ```bash
-# Live Point A v493 — см. MCP_RESULT.md
-# Local (если C): rails payments/one_click + node repeat_invalid_token
+# Live Point A v493 — MCP PASS (см. MCP_RESULT.md)
+ruby bin/rails test test/services/payments/saved_card_store_test.rb test/services/payments/tbank_payment_sync_test.rb test/integration/shop/shop_one_click_payment_step4_test.rb test/controllers/shop/api/user_cards_controller_test.rb
+# → 20 runs, 84 assertions, 0 failures (2026-09-08)
+node --test test/javascript/repeat_invalid_token_payment_test.mjs test/javascript/open_repeat_payment_sheet_test.mjs
+# → 23 pass / 0 fail
 ```

@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-08 — regress: UserCards/#26 zone PASS
+
+- rails payments/user_cards/one_click: **20/84** · node repeat_invalid_token: **23/0**
+- Fly MCP v493 already PASS · код не меняли (verify-only)
+- Next: `/review`
 ## 2026-09-08 — UserCards / RebillId + #26 M2 MCP PASS (v493)
 
 - Verify-first: P/U/O/M **PASS** · Slice C **n/a** (код не меняли)
