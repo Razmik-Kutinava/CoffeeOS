@@ -13,12 +13,14 @@
         <% @categories.each do |category| %>
           <% category_products = @products.select { |p| p.category_id == category.id } %>
           <% next if category_products.empty? %>
-          <h2 class="menu-category-title" data-category="<%= category.slug %>"><%= category.name %></h2>
-          <% category_products.each do |product| %>
-            <% setting = @settings_by_product_id[product.id] %>
-            <% next unless setting %>
-            <%= render "barista/menu/product_card", product: product, setting: setting %>
-          <% end %>
+          <div class="menu-category-block" data-category-block="<%= category.slug %>">
+            <h2 class="menu-category-title" data-category="<%= category.slug %>"><%= category.name %></h2>
+            <% category_products.each do |product| %>
+              <% setting = @settings_by_product_id[product.id] %>
+              <% next unless setting %>
+              <%= render "barista/menu/product_card", product: product, setting: setting %>
+            <% end %>
+          </div>
         <% end %>
       </div>
     </section>
@@ -91,6 +93,10 @@
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
     gap: 12px;
+  }
+
+  .menu-category-block {
+    display: contents;
   }
 
   .menu-category-title {
@@ -246,9 +252,15 @@
 
     searchInput.addEventListener("input", (e) => {
       const query = e.target.value.toLowerCase();
-      document.querySelectorAll("[data-menu-product-card]").forEach((card) => {
-        const productName = card.dataset.productName || "";
-        card.style.display = productName.includes(query) ? "" : "none";
+      document.querySelectorAll("[data-category-block]").forEach((block) => {
+        let visible = 0;
+        block.querySelectorAll("[data-menu-product-card]").forEach((card) => {
+          const productName = card.dataset.productName || "";
+          const show = productName.includes(query);
+          card.style.display = show ? "" : "none";
+          if (show) visible += 1;
+        });
+        block.style.display = visible > 0 ? "contents" : "none";
       });
     });
   });
