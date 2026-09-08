@@ -1,0 +1,185 @@
+<cursor_commands>
+
+--- Cursor Command: start ---
+# /start — старт сессии / задачи (умный)
+
+CoffeeOS. Следуй `coffeeos-agent-workflow` + `coffeeos-customer-intake` (PHASE 0) при нужде.
+
+## Режим (выбери один, не гоняй всё)
+
+### A) Узкий старт (по умолчанию, если контекст уже есть)
+Используй, если в чате/todo уже: баг локализован, есть список файлов, живой `todo.md`, или пользователь продолжает ту же задачу.
+
+Сделай **только**:
+1. Шапка `HANDOFF.md` + шапка `SESSION_STATE.md` (`Read` limit до `---`, не тело)
+2. `ISSUES.md` — только секция **`## 🔴 Открыто`** (до следующего `##`), если релевантно багу
+3. `todo.md` — если есть
+4. **Не** перечитывай PRACTICES/QA/весь CHECKLIST/весь CHANGELOG
+5. **Не** заново PHASE 0, если ТЗ уже в `customer_tasks/` или задача уже в todo
+6. Коротко: `last_done` / `current_state` / `next_step` (одна строка каждый)
+7. **ctx-trim:** если пт–вс и в шапке HANDOFF `ctx_trim` старше 7 дней — одна строка: «рекомендуется `/ctx-trim`» (не блокировать старт)
+
+### B) Полный старт + PHASE 0
+Только если **новое** ТЗ от заказчика ещё не в `customer_tasks/` / CBR, или пользователь явно просит intake.
+
+Тогда: PHASE 0 (intake 1:1) → краткая шапка ops → стоп до `/spec`.
+
+## Отчёт
+Таблица Сделано | Не сделано.  
+`Субагент: нет — старт` (или explore, если уже звал).  
+**Не пиши код** на этом шаге.
+
+## Обязательно в конце (копипаст для пользователя)
+
+Одной строкой, без лишнего текста вокруг:
+
+- Если нужен план/файлы → `Next: /spec`
+- Если SPEC/todo уже готов → `Next: /sbr`
+- Если только что завершили PHASE 0 → `Next: /spec`
+
+--- End Command ---
+
+--- Cursor Command: spec ---
+# /spec — PHASE 1 SPEC
+
+CoffeeOS SBR. Читай on-demand: `spec-build-review`, `coffeeos-task-workflow`.
+
+## Сделай
+1. Обнови `docs/operations/session/todo.md`: фазы SBR + галочки.
+2. Секция **«Файлы (ожидаемо)»** — **2–7 точных путей** + зачем каждый.
+3. Если неясно где код / много кандидатов → Task субагент **`explore`** (1 раз). Мелочь — без explore.
+4. Hot-path: мягкий blast-radius +1–3 соседа с пометкой почему.
+5. **Hot-path (shop/оплата/статусы/Cable/RLS)** — в todo **обязательно**:
+   ```
+   ## Не ломать
+   - … (2–4: оплата · повторить · табло/статус · peek …)
+   ## Проверка
+   - bin/rails test …   # 1–2 команды из coffeeos-dev-gates
+   ```
+   Без этих секций SPEC неполный — не звать `/sbr`.
+6. Не предлагать gem’ы Tinkoff/Stripe / чужой стек без просьбы владельца.
+7. Обнови **только шапки** SESSION_STATE / HANDOFF (кратко).
+8. **Не** пиши код и не RED на этом шаге (если пользователь в том же сообщении не сказал «ебашь до конца / сразу sbr»).
+
+## Отчёт
+Сделано | Не сделано + список файлов + Не ломать/Проверка (если hot-path).  
+`Субагент: explore | нет — пути ясны`
+
+## Обязательно в конце (копипаст)
+
+`Next: /sbr`
+
+→ todo → RED → GREEN → /review.
+--- End Command ---
+</cursor_commands>
+<timestamp>Tuesday, Sep 8, 2026, 11:15 AM (UTC+4)</timestamp>
+
+Ниже готовый промпт — копируй в **Agent mode**, приложи `@spec-build-review.mdc`, старт: `/spec` или «ебашь SBR».
+
+---
+
+## Задание агенту (SBR): Apple Wallet PassKit signing — prod `.pkpass`
+
+### Контекст
+
+Сейчас `Shop::AppleWallet::PassBuilder`:
+- `WALLET_SIMULATE=1` / нет certs → stub `PKPASS_STUB:…` (`simulated: true`);
+- certs в ENV есть → **падает** `GenerationError: WALLET signer configured but PassKit signing not implemented yet`.
+
+Скачивание: `GET /shop/api/orders/:id/wallet_pass` → `PassUpdater` → `send_data` `application/vnd.apple.pkpass`.
+
+Runbook: `docs/operations/milestones/veha_2/runbooks/APPLE_WALLET_ORDER_PASS.md`  
+ТЗ-корни: #38 / #35 B3 · `customer_tasks/Фоновые уведомления прогресс-бар Android FCM и Apple Wallet iOS.md`
+
+### Цель (DoD этого SBR)
+
+Когда `Config.certs_configured?` и **не** `simulate?`:
+1. `PassBuilder.build!` возвращает **реальные байты ZIP `.pkpass`** (не stub-строку).
+2. В ZIP минимум: `pass.json`, `manifest.json`, `signature` (PKCS#7 detached), обязательные иконки/картинки pass.
+3. `pass.json` содержит face/back/strip семантику как сейчас (status / QR на `ready`, chat/tips deep links, strip progress).
+4. Simulate / test без certs — **без регрессии** (текущие `pass_builder_test` остаются зелёными).
+5. Без certs / `WALLET_FORCE_UNAVAILABLE` — поведение как сейчас.
+
+### Scope IN
+
+- `Shop::AppleWallet::PassBuilder` — ветка prod signing вместо `raise … not implemented`.
+- Новый узкий сервис/модуль подписи (например `PassSigner` / `PkpassArchive`) в `app/services/shop/apple_wallet/` — не раздувать `PassBuilder`.
+- ENV: уже есть `WALLET_PASS_TYPE_ID`, `WALLET_TEAM_ID`, `WALLET_SIGNER_CERT_PEM`, `WALLET_SIGNER_KEY_PEM`. При необходимости добавить **`WALLET_WWDR_CERT_PEM`** (Apple WWDR intermediate) — документировать в runbook + `Config.certs_configured?`.
+- Тесты Minitest: зеркало `test/services/shop/apple_wallet/`.
+- Обновить runbook: убрать «signing TBD» для PKCS7; описать ENV и smoke.
+
+### Scope OUT (не трогать в этом SBR)
+
+- **APNs Wallet push + device tokens** (`ApnsClient` сейчас тоже stub) — **отдельный SBR** (нужен Wallet web service register device).
+- Wallet web service (`/v1/devices/...` Apple pass update endpoints) — OUT.
+- Barista status / FCM / SMS cascade / payment — **не ломать**.
+- Новые gem’ы оплаты / Stripe — запрещено. Если нужен gem для PKCS7/ZIP — **спросить владельца**; предпочтительно OpenSSL + stdlib `Zip` (как принято в Rails), без лишних зависимостей.
+- RSpec / Vitest — запрещено (только Minitest / `.mjs` если фронт).
+
+### Канон / ограничения CoffeeOS
+
+- SBR: SPEC → RED → GREEN → REVIEW (`spec-build-review.mdc`).
+- Сервисы в `app/services/shop/…`; ownership `wallet_pass` не ломать.
+- Tenant/RLS: pass уже через `OrderWalletPass` + order ownership — не обходить RLS.
+- Секреты: PEM только из ENV / Fly secrets — **не коммитить** ключи/certs в репо; в тестах — inline fake PEM или fixture в `test/fixtures/files/wallet/` (тестовые самоподписанные, не prod).
+- Hot-path: в `todo.md` обязательны **Не ломать** + **Проверка**.
+
+### Файлы (ожидаемо, уточни в SPEC)
+
+```
+app/services/shop/apple_wallet/pass_builder.rb
+app/services/shop/apple_wallet/config.rb
+app/services/shop/apple_wallet/pass_signer.rb          # NEW (или pkpass_archive.rb)
+app/services/shop/apple_wallet/pass_updater.rb         # только если меняется контракт built[:bytes]
+app/controllers/shop/api/orders_controller.rb          # только если Content-Type/filename; иначе не трогать
+test/services/shop/apple_wallet/pass_builder_test.rb
+test/services/shop/apple_wallet/pass_signer_test.rb     # NEW
+docs/operations/milestones/veha_2/runbooks/APPLE_WALLET_ORDER_PASS.md
+docs/integrations/notify-loyalty.md                    # 1 абзац про prod signing, если там Wallet
+```
+
+### Acceptance (тесты RED→GREEN)
+
+1. **Simulate (как сейчас):** `WALLET_SIMULATE=1` → `built[:simulated] == true`, face/back/strip без изменений.
+2. **Prod signing (новый):** stub ENV certs + WWDR → `build!` → `bytes` — бинарный ZIP; внутри есть `pass.json`, `manifest.json`, `signature`; `simulated` отсутствует или false.
+3. **pass.json:** `passTypeIdentifier` / `teamIdentifier` / `serialNumber` / `authenticationToken` / `storeCard` (или eventTicket — зафиксируй один тип в SPEC) / релевантные fields по статусу; на `ready` — barcode/QR с order number.
+4. **Невалидный PEM** → `GenerationError` (не 500 без класса).
+5. **Регрессия:**  
+   `ruby bin/rails test test/services/shop/apple_wallet/ test/jobs/shop/ready_push_job_test.rb`  
+   (+ точечный integration `wallet_pass` если есть).
+
+### Не ломать
+
+1. `WALLET_SIMULATE=1` / test без certs — stub path.
+2. `ReadyPushJob`: Unavailable → FCM fallback; GenerationError → retry.
+3. `GET …/wallet_pass` ownership / 404 чужого заказа.
+4. FCM `firebase-messaging-sw.js` и каскад SMS.
+
+### Порядок работы агента
+
+1. **PHASE 1 SPEC** — `todo.md` (файлы, Не ломать, Проверка), шапка SESSION/HANDOFF; зафиксируй формат pass (`storeCard` vs `eventTicket`), список файлов внутри `.pkpass`, нужно ли `WALLET_WWDR_CERT_PEM`.
+2. **RED** — падающие тесты на prod bytes / ZIP / pass.json; коммит `test: … [RED]`; стоп если нет «ебашь до конца».
+3. **GREEN** — реализация signing; регрессия зоны; коммит `feat: … [GREEN]`.
+4. **REVIEW** — bugbot + security-review + Entire + push CI. Deploy — только по апруву владельца.
+
+### Критерий «готово»
+
+- Certs configured → `.pkpass` валидной структуры (локально: unzip + наличие signature; на iOS device — отдельный ручной smoke вне CI, если есть Apple Pass Type ID).
+- Без certs / simulate — как до задачи.
+- APNs real push — **не** входит; в отчёте явно: «slice PKCS7 done · APNs device register — следующий SBR».
+
+---
+
+### Короткий старт для чата
+
+```
+@spec-build-review.mdc
+Задача: Apple Wallet PassKit PKCS7 signing (slice PKCS7 only, APNs OUT).
+Канон выше. Сделай SBR: сначала /spec → todo → RED → GREEN → /review.
+Point A tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789.
+Не трогай ApnsClient device tokens / Wallet web service.
+```
+
+Если нужно — в Agent mode могу сам оформить intake в `customer_tasks/` + CBR `#8x` и сразу SPEC.
+
+/start
