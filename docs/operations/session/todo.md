@@ -14,11 +14,13 @@
 - [x] **RED** (`9c0c7801`)
 - [x] **GREEN** (`7c76a125`)
 - [x] **regress** PASS (62/0)
-- [ ] **REVIEW** — in progress (bugbot low fixed · security OK · push CI)
+- [x] **REVIEW** — bugbot search-fix · security OK · CI [34208612629](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/34208612629) green
+- [ ] **deploy** — только апрув владельца
+- [ ] **этап 2** — отдельным намерением
 
 ## Bugbot
 
-- low: search empty category headers → fixed `28cca017`
+- low: search empty category headers → `28cca017`
 
 ## Проверка
 

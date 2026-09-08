@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-08 — REVIEW: B2.2 этап 1 CI green
+
+- tip `f03a46e1` · CI [34208612629](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/34208612629) **green**
+- bugbot search-fix `28cca017` · security no medium+ · Entire на `7c76a125`
+- **deploy:** стоп до апрува · этап 2 — отдельным намерением
+
 ## 2026-09-08 — REVIEW: B2.2 этап 1 barista menu dual-pane
 
 - bugbot low: search empty category headers → `28cca017`
