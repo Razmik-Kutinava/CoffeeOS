@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-08 — SPEC: B2.2 этап 1 barista menu dual-pane
+
+- SBR B2.2 этап 1: единый layout `/barista/menu` (сетка карточек + панель корзины)
+- OUT: sold_out PATCH / POS / удаление create-order / cash (этапы 2–5)
+- todo: menu views + MenuController cart session · Не ломать B2.1/W1.4/create-order · Проверка tablet regress
+
 ## 2026-09-08 — SPEC: #78 slice-5 Shop API subscriptions
 
 - SBR #78 после slice-1: публичный Shop API (GET current + POST create)
