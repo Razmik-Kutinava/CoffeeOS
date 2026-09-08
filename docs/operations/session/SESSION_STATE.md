@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-08 (GREEN Wallet PKCS7)  
+**Дата:** 2026-09-08 (regress Wallet PKCS7 PASS)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #38 PassKit PKCS7 GREEN | `/regress` → `/review` |
-| Entire `01M1ZYPHF0EZYHM7C12W5PSPA7` | APNs OUT |
+| #38 PKCS7 zone **PASS** (21 runs) | `/review` |
+| Entire `01M1ZYPHF0EZYHM7C12W5PSPA7` | Fly MCP — после deploy |
 
-**last_done:** GREEN PassSigner + WWDR · zone tests PASS  
-**next_step:** `/regress` / `/review`
+**last_done:** regress apple_wallet + ReadyPushJob + wallet_pass API  
+**next_step:** `/review`
 
 **ctx_trim:** `2026-09-02`

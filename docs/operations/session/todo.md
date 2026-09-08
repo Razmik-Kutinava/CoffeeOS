@@ -24,6 +24,7 @@
 - [x] **SPEC** (`4731ec5b`)
 - [x] **RED** (`cc7efa4a`)
 - [x] **GREEN** (`2df9279d` · Entire `f8cd57a8` / `01M1ZYPHF0EZYHM7C12W5PSPA7`)
+- [x] **regress** — zone PASS 2026-09-08
 - [ ] **REVIEW** — bugbot + security-review + Entire + push CI
 
 ## Файлы
@@ -31,8 +32,7 @@
 - `app/services/shop/apple_wallet/pass_builder.rb`
 - `app/services/shop/apple_wallet/config.rb`
 - `app/services/shop/apple_wallet/pass_signer.rb` (NEW)
-- `test/services/shop/apple_wallet/pass_builder_test.rb`
-- `test/services/shop/apple_wallet/pass_signer_test.rb` (NEW)
+- `test/services/shop/apple_wallet/pass_*_test.rb`
 - runbook + `notify-loyalty.md`
 
 ## Не ломать
@@ -44,5 +44,5 @@
 
 ## Проверка
 
-- `ruby bin/rails test test/services/shop/apple_wallet/ test/jobs/shop/ready_push_job_test.rb` → **PASS**
-- `ruby bin/rails test test/integration/shop/api/wallet_pass_test.rb` → **PASS**
+- `ruby bin/rails test test/services/shop/apple_wallet/ test/jobs/shop/ready_push_job_test.rb` → **18/0 PASS**
+- `ruby bin/rails test test/integration/shop/api/wallet_pass_test.rb` → **3/0 PASS**
