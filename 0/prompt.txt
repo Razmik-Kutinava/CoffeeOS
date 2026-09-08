@@ -1,0 +1,303 @@
+<cursor_commands>
+
+--- Cursor Command: start ---
+# /start — старт сессии / задачи (умный)
+
+CoffeeOS. Следуй `coffeeos-agent-workflow` + `coffeeos-customer-intake` (PHASE 0) при нужде.
+
+## Режим (выбери один, не гоняй всё)
+
+### A) Узкий старт (по умолчанию, если контекст уже есть)
+Используй, если в чате/todo уже: баг локализован, есть список файлов, живой `todo.md`, или пользователь продолжает ту же задачу.
+
+Сделай **только**:
+1. Шапка `HANDOFF.md` + шапка `SESSION_STATE.md` (`Read` limit до `---`, не тело)
+2. `ISSUES.md` — только секция **`## 🔴 Открыто`** (до следующего `##`), если релевантно багу
+3. `todo.md` — если есть
+4. **Не** перечитывай PRACTICES/QA/весь CHECKLIST/весь CHANGELOG
+5. **Не** заново PHASE 0, если ТЗ уже в `customer_tasks/` или задача уже в todo
+6. Коротко: `last_done` / `current_state` / `next_step` (одна строка каждый)
+7. **ctx-trim:** если пт–вс и в шапке HANDOFF `ctx_trim` старше 7 дней — одна строка: «рекомендуется `/ctx-trim`» (не блокировать старт)
+
+### B) Полный старт + PHASE 0
+Только если **новое** ТЗ от заказчика ещё не в `customer_tasks/` / CBR, или пользователь явно просит intake.
+
+Тогда: PHASE 0 (intake 1:1) → краткая шапка ops → стоп до `/spec`.
+
+## Отчёт
+Таблица Сделано | Не сделано.  
+`Субагент: нет — старт` (или explore, если уже звал).  
+**Не пиши код** на этом шаге.
+
+## Обязательно в конце (копипаст для пользователя)
+
+Одной строкой, без лишнего текста вокруг:
+
+- Если нужен план/файлы → `Next: /spec`
+- Если SPEC/todo уже готов → `Next: /sbr`
+- Если только что завершили PHASE 0 → `Next: /spec`
+
+--- End Command ---
+
+--- Cursor Command: spec ---
+# /spec — PHASE 1 SPEC
+
+CoffeeOS SBR. Читай on-demand: `spec-build-review`, `coffeeos-task-workflow`.
+
+## Сделай
+1. Обнови `docs/operations/session/todo.md`: фазы SBR + галочки.
+2. Секция **«Файлы (ожидаемо)»** — **2–7 точных путей** + зачем каждый.
+3. Если неясно где код / много кандидатов → Task субагент **`explore`** (1 раз). Мелочь — без explore.
+4. Hot-path: мягкий blast-radius +1–3 соседа с пометкой почему.
+5. **Hot-path (shop/оплата/статусы/Cable/RLS)** — в todo **обязательно**:
+   ```
+   ## Не ломать
+   - … (2–4: оплата · повторить · табло/статус · peek …)
+   ## Проверка
+   - bin/rails test …   # 1–2 команды из coffeeos-dev-gates
+   ```
+   Без этих секций SPEC неполный — не звать `/sbr`.
+6. Не предлагать gem’ы Tinkoff/Stripe / чужой стек без просьбы владельца.
+7. Обнови **только шапки** SESSION_STATE / HANDOFF (кратко).
+8. **Не** пиши код и не RED на этом шаге (если пользователь в том же сообщении не сказал «ебашь до конца / сразу sbr»).
+
+## Отчёт
+Сделано | Не сделано + список файлов + Не ломать/Проверка (если hot-path).  
+`Субагент: explore | нет — пути ясны`
+
+## Обязательно в конце (копипаст)
+
+`Next: /sbr`
+
+→ RED → GREEN → /review.
+--- End Command ---
+</cursor_commands>
+<timestamp>Tuesday, Sep 8, 2026, 11:26 AM (UTC+4)</timestamp>
+
+Ниже готовый промпт в стиле ТЗ заказчика + SBR для агента. **Важный gate:** провайдер CRM в ТЗ #71 не назван — в SPEC зафиксировать **Brevo Contacts** (уже есть `BREVO_API_KEY`) или стоп и спросить владельца.
+
+---
+
+## Задание агенту (SBR): CRM sync после оплаты — убрать stub `#71` ST-9
+
+### Контекст (как у заказчика)
+
+**CBR / серия:** #71 Email-сбор после оплаты (Callcheck-флоу)  
+**ТЗ:**  
+`docs/operations/milestones/veha_2/requirements/customer_tasks/Email-сбор после оплаты (Callcheck-флоу).md`  
+**Bridge:** `docs/integrations/shop-api.md` § Orders · `INTEGRATIONS.md` (post-pay email / CRM queue / bounce)
+
+**Бизнес-цель (из ТЗ):**  
+После оплаты гость опционально оставляет email для чека и маркетинга. При **явном** `marketing_consent` контакт уходит в CRM. Без согласия — только чек (Brevo), в маркетинг не пишем. Сбой CRM **не** ломает оплату и сохранение email.
+
+**As-is (дыра):**
+| Компонент | Статус |
+|-----------|--------|
+| `POST /shop/api/orders/:id/email` + `Orders::EmailService` | работает |
+| `OrderEmail` after_create → `SendOrderReceiptEmailJob` | работает (Brevo HTML) |
+| `OrderEmail` after_create → `SyncContactToCrmJob` **если** `marketing_consent` | **очередь есть** |
+| `SyncContactToCrmJob#sync_contact_to_crm` | **stub: только `Rails.logger.info`** |
+| Bounce `POST /callbacks/email/bounce` + HMAC | работает; job скип при `status=bounced` |
+| `spec/jobs/sync_contact_to_crm_job_spec.rb` | мёртвый RSpec `assert false` — **не канон** |
+
+Фрагмент stub:
+
+```25:35:app/jobs/sync_contact_to_crm_job.rb
+  def sync_contact_to_crm(order, order_email)
+    contact_data = {
+      user_id: order.customer_id,
+      order_id: order.id,
+      email: order_email.email,
+      marketing_consent: order_email.marketing_consent
+    }
+    # TODO: Integrate with actual CRM provider
+    Rails.logger.info("[SyncContactToCrmJob] Syncing contact: #{contact_data}")
+  end
+```
+
+---
+
+### Решение заказчика (Gherkin / Acceptance) — что закрыть
+
+Из ТЗ #71 (CRM-связка + Subtask 9 / bounce / idempotency):
+
+1. **Consent gate:** `marketing_consent=false` → CRM job **не** enqueue (уже в модели); повторно не синкать.  
+2. **Enqueue:** `marketing_consent=true` → `SyncContactToCrmJob.perform_later`.  
+3. **Identity:** в CRM уходит минимум `email`, `user_id`/`customer_id`, `order_id`, флаг opt-in; телефон — если есть у customer.  
+4. **Реальный HTTP** в CRM API (не log-only).  
+5. **Ошибки CRM:** не блокируют `EmailService` / оплату; job retry по Solid Queue; лог ошибки.  
+6. **Bounce:** `OrderEmail.status=bounced` → job no-op; контакт не в рассылках (opt-out / exclude list — по возможностям провайдера).  
+7. **Idempotency:** повтор job / повторный webhook не плодит дубли контактов (upsert по email).  
+8. **Security:** ключи только ENV; фронт credentials не видит.
+
+---
+
+### Gate перед RED (обязательно в SPEC)
+
+**Провайдер CRM не зафиксирован в ТЗ.** Канон CoffeeOS для почты уже **Brevo** (`Shop::BrevoClient`, `BREVO_API_KEY`).
+
+**Дефолт для этого SBR (если владелец не сказал иное):**  
+→ **Brevo Contacts API** (`POST/PUT` contact + list / attributes), тот же `BREVO_API_KEY` (или отдельный `BREVO_CRM_*` только если нужен другой ключ — спросить).
+
+Если владелец скажет «не Brevo, а X» — остановиться и переписать адаптер под X, не городить два провайдера.
+
+В `todo.md` SPEC явно: `CRM provider = Brevo Contacts` (или имя от владельца).
+
+---
+
+### Карта slices (один SBR = один slice)
+
+| Slice | Содержание | Статус |
+|-------|------------|--------|
+| **A** | `Crm::ContactSync` (или `Shop::CrmClient`) + реальный вызов из `SyncContactToCrmJob`; consent/bounce/idempotency тесты | **← СТАРТ** |
+| **B** | Bounce → opt-out в CRM (если контакт уже создан); атрибуты/list id из ENV | опционально следом |
+| **C** | Docs: `shop-api.md` / `INTEGRATIONS.md` / runbook ENV; удалить/игнор мёртвый `spec/jobs/…` | в конце A или отдельный мелкий шаг |
+
+Не смешивать с: #71 remember-email UX, ОФД Receipt.Email (#72), loyalty stub, SMS/Callcheck.
+
+---
+
+### Этот проход: **Slice A — живой CRM sync**
+
+#### Цель (DoD)
+
+1. При `marketing_consent=true` и `status != bounced` job вызывает CRM API и создаёт/обновляет контакт.  
+2. При `consent=false` job не ставится (регресс модели).  
+3. При `bounced` mid-flight job выходит без вызова API.  
+4. Повторный `perform` того же `order_email_id` — upsert, не дубль.  
+5. CRM down → исключение → retry job; email в БД уже сохранён.  
+6. Без API key в non-test → явная ошибка/skip с логом (как Brevo email: не silent success в prod без политики — зафиксируй в SPEC: `raise` для retry **или** log+return; предпочтительно raise → Solid Queue retry).  
+7. Minitest зелёные; RSpec-заготовки **не** использовать как гейт (переписать в `test/jobs/sync_contact_to_crm_job_test.rb`).
+
+#### Scope IN
+
+```
+app/jobs/sync_contact_to_crm_job.rb
+app/services/shop/crm_contact_sync.rb          # NEW (рекомендуемое имя) — или расширение BrevoClient
+app/services/shop/brevo_client.rb             # только если Contacts методы рядом; не ломать deliver_*
+app/models/order_email.rb                     # только если нужен crm_synced_at / external_id (минимальный DDL)
+test/jobs/sync_contact_to_crm_job_test.rb     # NEW Minitest
+test/services/shop/crm_contact_sync_test.rb   # NEW
+docs/integrations/shop-api.md
+docs/integrations/INTEGRATIONS.md             # 1 абзац CRM adapter
+```
+
+Опциональный DDL (если нужен idempotency без «слепого» upsert только по email):  
+`order_emails.crm_synced_at` / `crm_external_id` — **только если** без этого нельзя доказать идемпотентность; иначе upsert по email в Brevo достаточен.
+
+#### Scope OUT
+
+- Менять UI `OrderSuccessEmailBlock` / remember-email (#71 reopen)  
+- Менять bounce HMAC / controller (уже ок)  
+- Менять `SendOrderReceiptEmailJob` / чек  
+- Loyalty / SMS / payments / Tbank  
+- Новые gem’ы CRM  
+- RSpec / Vitest  
+- Auto-marketing campaigns / templates в Brevo UI (только contact upsert + attributes)
+
+#### ENV (зафиксировать в runbook / SPEC)
+
+| Var | Назначение |
+|-----|------------|
+| `BREVO_API_KEY` | уже есть; Contacts API |
+| `BREVO_CRM_LIST_ID` (опц.) | id списка «маркетинг consent» |
+| `CRM_SYNC_ENABLED` (опц.) | kill-switch `0` → no-op log (для staging) |
+
+Секреты не в репо; Fly secrets — вне этого SBR (документ «что выставить»).
+
+#### Identity mapping (контракт payload)
+
+```
+email: order_email.email
+EXT_ID / attributes:
+  coffeeos_customer_id: order.customer_id
+  coffeeos_order_id: order.id
+  coffeeos_tenant_id: order.tenant_id
+  marketing_consent: true
+  phone: customer.phone (если есть, E.164)
+```
+
+Имена attributes — как принимает Brevo (создать/задокументировать); не слать PAN/RebillId/OTP.
+
+#### Не ломать
+
+1. Post-pay email save без OTP  
+2. Receipt через Brevo  
+3. Consent=false → нет CRM enqueue  
+4. Bounce webhook HMAC  
+5. Оплата / webhook T-Bank / Order status  
+6. `#77` `email_collected_at` через `mark_customer_email_collected!`
+
+#### Проверка
+
+```bash
+ruby bin/rails test test/jobs/sync_contact_to_crm_job_test.rb test/services/shop/crm_contact_sync_test.rb test/jobs/send_order_receipt_email_job_test.rb
+# + точечно email API если трогали model callbacks:
+ruby bin/rails test test/integration/shop/api/  # или существующий email integration test
+```
+
+Stub HTTP в тестах (WebMock / stub `Net::HTTP` / singleton stub как в `brevo_client_test`) — **без** live Brevo в CI.
+
+Live smoke (опционально после CI): Point A, заказ + email + consent=true → контакт в Brevo UI; consent=false → контакта нет.
+
+---
+
+### Subtasks для RED (Minitest, зеркало ТЗ)
+
+Переписать дух `spec/jobs/sync_contact_to_crm_job_spec.rb` → Minitest:
+
+1. consent=true → job enqueued on create  
+2. consent=false → job **not** enqueued  
+3. perform → CRM client called with email + customer_id + order_id  
+4. bounced → no CRM call  
+5. CRM error → raises / retries (assert error path)  
+6. second perform → upsert / no duplicate create (stub returns same id)  
+7. marketing_consent attribute/opt-in preserved in payload  
+
+GREEN: реализация клиента + job вызывает клиент вместо log.
+
+---
+
+### Канон CoffeeOS / SBR
+
+1. **SPEC** — `todo.md`: provider, файлы, Не ломать, Проверка, ENV; шапка SESSION/HANDOFF.  
+2. **RED** — `test: #71 CRM contact sync … [RED]` (без CHANGELOG).  
+3. **GREEN** — `feat: #71 sync OrderEmail to Brevo CRM … [GREEN]` + regress.  
+4. **REVIEW** — bugbot + security-review (ключи, PII, нет утечки в логи лишнего) + Entire + push CI.  
+
+Сервис в `app/services/shop/` (панель shop / guest email), не толстый job.  
+Tenant/RLS: job читает `OrderEmail`/`Order` — выставить GUC/tenant как в соседних jobs (сверить `SendOrderReceiptEmailJob` / RLS audit); не `row_security off` без комментария.
+
+Удалить или пометить obsolete `spec/jobs/sync_contact_to_crm_job_spec.rb` — **не** держать падающий RSpec в дереве, если CI его не гоняет; канон только `test/`.
+
+---
+
+### Критерий «готово»
+
+- Stub log-only убран.  
+- Consent/bounce/idempotency покрыты тестами.  
+- Docs: CRM больше не «placeholder».  
+- Slice B (CRM opt-out on bounce) — отдельным намерением, если не влез в A.
+
+---
+
+### Короткий старт для чата
+
+```
+@spec-build-review.mdc
+#71 CRM после оплаты — убрать stub SyncContactToCrmJob.
+
+ТЗ: customer_tasks/Email-сбор после оплаты (Callcheck-флоу).md
+Канон CRM provider: Brevo Contacts (тот же BREVO_API_KEY), если владелец не сказал иначе.
+Сделать Slice A: CrmContactSync + job + Minitest (не RSpec spec/jobs stubs).
+
+Не трогать: UI email block, receipt job, bounce HMAC, payments, loyalty.
+Не ломать: consent=false no enqueue; bounced skip; EmailService sync save.
+
+SBR: /spec → RED → GREEN → /review.
+Point A: 2fdee1ac-4674-41ee-b89e-87b45643f789
+```
+
+Если провайдер CRM **не** Brevo — сначала одна строка от владельца («CRM = …»), потом тот же SBR с другим adapter.
+
+/start
