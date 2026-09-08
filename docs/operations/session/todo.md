@@ -1,22 +1,27 @@
-﻿# todo — #71 Slice A · CRM sync после оплаты
+﻿# todo — B2.2 этап 1 · единый layout `/barista/menu`
 
 | Поле | Значение |
 |------|----------|
-| **CBR** | #71 Email-сбор · ST-9 |
-| **CRM provider** | **Brevo Contacts** (`BREVO_API_KEY`) |
+| **CBR / ID** | B2.2 · Поток 2 · CBR `[ ]` |
+| **ТЗ** | [`B2_2_barista_menu_create_merge.md`](../milestones/veha_2/requirements/customer_tasks/B2_2_barista_menu_create_merge.md) |
+| **GREEN** | `7c76a125` · Entire `01M1ZZXV23N5BFK4SGDQV0H4KG` |
 | **Point A** | `2fdee1ac-4674-41ee-b89e-87b45643f789` |
-| **OUT** | UI email · Slice B bounce opt-out · payments |
+| **OUT** | mods/qty (2) · sold_out (3) · POS/cash (4) · remove create-order (5) |
 
 ## SBR
 
-- [x] **SPEC**
-- [x] **RED** (`6b3d714b`)
-- [x] **GREEN** (`cb1e336d` · Entire `01M1ZZXV23N5BFK4SGDQV0H4KG`)
-- [x] **regress** PASS (20/0)
-- [x] **REVIEW** — bugbot `retry_on` · security OK · CI [34207477722](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/34207477722) green
-- [ ] **deploy** — только апрув владельца
+- [x] **SPEC** (`acddd923`)
+- [x] **RED** (`9c0c7801`)
+- [x] **GREEN** (`7c76a125`)
+- [x] **regress** PASS (62/0)
+- [ ] **REVIEW** — in progress (bugbot low fixed · security OK · push CI)
 
-## Bugbot / CI tip
+## Bugbot
 
-- `retry_on` — `fecee7e3`
-- rubocop `[ list_id.to_i ]` + B2.2 menu `@categories` grouping — `e247f9b1`
+- low: search empty category headers → fixed `28cca017`
+
+## Проверка
+
+```bash
+ruby bin/rails test test/integration/barista_tablet_regression_test.rb test/controllers/barista/orders_controller_test.rb test/services/barista/order_creation_service_test.rb
+```

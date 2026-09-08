@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-08 (REVIEW #71 CRM · CI green)  
+**Дата:** 2026-09-08 (REVIEW B2.2 этап 1 · push CI)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #71 CRM REVIEW **CI green** | deploy — апрув |
-| Entire `01M1ZZXV23N5BFK4SGDQV0H4KG` на `cb1e336d` | Fly MCP после deploy |
+| B2.2 этап 1 REVIEW · push CI | CI green → стоп |
+| Entire `01M1ZZXV23N5BFK4SGDQV0H4KG` на `7c76a125` | deploy — апрув |
 
-**last_done:** bugbot+security+#71 CRM · CI tip green `e247f9b1`  
-**next_step:** deploy — только апрув владельца
+**last_done:** bugbot search-fix · security OK · local menu tests PASS  
+**next_step:** CI green · deploy — только апрув
 
 **ctx_trim:** `2026-09-02`

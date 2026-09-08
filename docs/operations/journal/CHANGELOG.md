@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-08 — REVIEW: B2.2 этап 1 barista menu dual-pane
+
+- bugbot low: search empty category headers → `28cca017`
+- security: no medium+ (auth/RLS/XSS/session cart display-only)
+- Entire `01M1ZZXV23N5BFK4SGDQV0H4KG` на `7c76a125` · push CI
+- **deploy:** стоп до апрува
+
 ## 2026-09-08 — regress: B2.2 этап 1 barista menu PASS
 
 - Zone: tablet_regression + orders_controller + order_creation_service → **62/0**
