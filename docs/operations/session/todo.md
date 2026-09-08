@@ -1,91 +1,99 @@
-﻿# todo — B2.2 этап 1 · единый layout `/barista/menu`
+﻿# todo — #71 Slice A · CRM sync после оплаты (убрать stub)
 
 | Поле | Значение |
 |------|----------|
-| **CBR / ID** | B2.2 · Поток 2 (обработка заказа) · реализация CBR `[ ]` |
-| **ТЗ** | [`B2_2_barista_menu_create_merge.md`](../milestones/veha_2/requirements/customer_tasks/B2_2_barista_menu_create_merge.md) |
-| **Артефакты** | [`b22_stage0_mapping_2026-06-10.json`](../milestones/veha_2/artifacts/demo-feedback/b22_stage0_mapping_2026-06-10.json) · макет [`customer_mockup_menu_cards_checkout.png`](../milestones/veha_2/artifacts/demo-feedback/screenshots/b22_menu_create_merge_2026-06-10/customer_mockup_menu_cards_checkout.png) |
-| **Тип** | Feat / barista hot-path (табло · смена · каталог W1.4) |
-| **Цель (DoD этапа 1)** | `/barista/menu` = dual-pane: сетка карточек (фото+название+цена) + панель корзины (позиции/итог; «Оплатить» disabled/placeholder). Каталог через `MenuCatalogLoadable` + `Shop::Catalog.tenant_menu`. `create-order` **жив**. |
+| **CBR / корень** | #71 Email-сбор после оплаты (Callcheck-флоу) · ST-9 |
+| **ТЗ** | [`Email-сбор после оплаты (Callcheck-флоу).md`](../milestones/veha_2/requirements/customer_tasks/Email-сбор%20после%20оплаты%20(Callcheck-флоу).md) |
+| **Bridge** | [`shop-api.md`](../../integrations/shop-api.md) § Orders · [`INTEGRATIONS.md`](../../integrations/INTEGRATIONS.md) |
+| **Тип** | Feat / hot-path shop · post-pay CRM |
+| **Цель** | `SyncContactToCrmJob` → реальный Brevo Contacts upsert (не log-only) |
+| **CRM provider** | **Brevo Contacts** (тот же `BREVO_API_KEY`) |
 | **Point A** | `tenant_id` = `2fdee1ac-4674-41ee-b89e-87b45643f789` |
 | **Ветка** | `develop` |
-| **OUT (этап 1)** | модификаторы/qty/промо (2) · sold_out PATCH (3) · POS stub / убрать cash (4) · удаление create-order + sidebar (5) · реальный Сбер (6+) · Shop PWA / TbankAdapter · gem’ы эквайринга |
+| **OUT** | UI email block · receipt job · bounce HMAC · payments · loyalty · Slice B opt-out · gem’ы CRM |
 
-## Карта этапов B2.2 (= карта SBR)
-
-| Этап | Содержание | Статус |
-|------|------------|--------|
-| 0 | Маппинг, макеты, stage0 JSON | **DONE** |
-| **1** | Единый layout: сетка + cart panel | **SPEC** ← этот проход |
-| 2 | Модификаторы, qty ±, сумма, промокод | TODO |
-| 3 | Чек-бокс «В наличии» → PATCH `is_sold_out` | TODO |
-| 4 | «Оплатить» → PosPaymentService stub; без cash | TODO |
-| 5 | Убрать create-order из nav; redirect; smoke/MCP | TODO |
-| 6+ | Реальный Сбер POS | OUT MVP |
-
-Один SBR = один этап. После REVIEW этапа 1 — стоп; этап 2 отдельным намерением.
-
-## Решения SPEC (зафиксировано)
+## Решения SPEC
 
 | Тема | Решение |
 |------|---------|
-| Layout | Dual-pane по макету `customer_mockup_menu_cards_checkout.png` (Hotwire/ERB/TUI как соседние barista views; не pixel-perfect DS) |
-| Корзина | `session[:barista_cart]` как в `OrdersController#new`; можно читать/показывать; add/qty — этап 2 |
-| Каталог | Только `MenuCatalogLoadable` + `Shop::Catalog.tenant_menu` (W1.4) — не дублировать источник |
-| Смена | Поведение как `OrdersController#new` (`@shift = current_shift`; authorize create только если смена есть; без open shift — нельзя оформить, UI не ломает просмотр) |
-| create-order | **Не** удалять, **не** трогать sidebar в этапе 1 |
-| Оплатить | Кнопка в панели может быть disabled / placeholder — без POS |
-| Стек | Rails + Hotwire/Turbo (+ Stimulus если уже принято). **Не** Svelte CartSheet |
-| Тесты | Расширить `barista_tablet_regression_test` (+ controller test menu при нужде) |
+| CRM provider | **Brevo Contacts API** (`POST/PUT` contact); не второй провайдер |
+| Клиент | **`Shop::CrmContactSync`** (NEW) — отдельно от `BrevoClient` deliver_*; HTTP Contacts |
+| API key | тот же **`BREVO_API_KEY`**; отдельный `BREVO_CRM_*` — нет |
+| List | опц. **`BREVO_CRM_LIST_ID`** — listIds при upsert |
+| Kill-switch | опц. **`CRM_SYNC_ENABLED=0`** → no-op + log (staging) |
+| Missing key (non-test) | **`raise`** (`Shop::BrevoClient::Error` или свой) → Solid Queue retry |
+| CRM HTTP error | **`raise`** из sync → job **не** глотает (сейчас `rescue` — убрать silent swallow) |
+| Idempotency | upsert **по email** в Brevo; **без DDL** (`crm_synced_at` не нужен) |
+| Identity attrs | `COFFEEOS_CUSTOMER_ID`, `COFFEEOS_ORDER_ID`, `COFFEEOS_TENANT_ID`, `MARKETING_CONSENT`; phone E.164 если есть |
+| DDL | **нет** |
+| RSpec stub | `spec/jobs/sync_contact_to_crm_job_spec.rb` — **удалить** на GREEN (канон только `test/`) |
+| Slice B | bounce → CRM opt-out — **отдельно**, не в A |
 
 ## SBR
 
 - [x] **SPEC** (этот файл)
-- [ ] **RED** — падающие тесты: menu page = карточки + cart panel
-- [ ] **GREEN** — dual-pane layout + cart из session + regress
+- [ ] **RED** — `test: #71 CRM contact sync … [RED]`
+- [ ] **GREEN** — `feat: #71 sync OrderEmail to Brevo CRM … [GREEN]` + regress
 - [ ] **REVIEW** — bugbot + security-review + Entire + push CI
 
 ## Файлы (ожидаемо)
 
-- `app/views/barista/menu/index.html.erb` — dual-pane: сетка карточек + панель корзины
-- `app/controllers/barista/menu_controller.rb` — `load_tenant_menu!` + `@cart` из `session[:barista_cart]` (+ shift как new)
-- `app/views/barista/menu/_product_card.html.erb` — **NEW** partial карточки (фото, имя, цена)
-- `app/views/barista/menu/_cart_panel.html.erb` — **NEW** partial корзины (позиции, итог, Оплатить placeholder)
-- `test/integration/barista_tablet_regression_test.rb` — assert карточки + cart panel на `/barista/menu`; не ломать sold_out hide / create-order
-- `docs/operations/session/todo.md` — этот SPEC
+- `app/services/shop/crm_contact_sync.rb` — NEW: upsert contact Brevo Contacts + attributes/list
+- `app/jobs/sync_contact_to_crm_job.rb` — вызов sync; consent/bounce guard; **re-raise** ошибок
+- `test/services/shop/crm_contact_sync_test.rb` — NEW: payload, upsert, error/missing key
+- `test/jobs/sync_contact_to_crm_job_test.rb` — NEW: enqueue / bounced skip / CRM called / raise
+- `docs/integrations/shop-api.md` — CRM больше не placeholder; ENV
+- `docs/integrations/INTEGRATIONS.md` — 1 абзац Brevo Contacts adapter
+- `spec/jobs/sync_contact_to_crm_job_spec.rb` — удалить (мёртвый RSpec)
 
-### Blast-radius (соседи — read/донор, не менять без нужды)
+### Соседи (blast-radius, не менять без нужды)
 
-- `app/views/barista/orders/new.html.erb` — донор UX сетки/корзины; **не удалять**
-- `app/controllers/concerns/barista/menu_catalog_loadable.rb` — только read/reuse
-- `app/views/barista/shared/_sidebar.html.erb` — этап 1: **не трогать**
+- `app/services/shop/brevo_client.rb` — эталон HTTP/key; **не ломать** `deliver_*`
+- `app/models/order_email.rb` — enqueue при consent (уже ок; регресс)
+- `test/integration/shop/api/orders_email_test.rb` — S9 consent enqueue
+- `test/jobs/send_order_receipt_email_job_test.rb` — receipt не трогаем
+
+## ENV (runbook / docs)
+
+| Var | Назначение |
+|-----|------------|
+| `BREVO_API_KEY` | Contacts API (уже есть) |
+| `BREVO_CRM_LIST_ID` | опц. list «маркетинг consent» |
+| `CRM_SYNC_ENABLED` | опц. `0` → no-op log |
+
+Секреты не в репо; Fly secrets — вне этого SBR (только документ).
 
 ## Не ломать
 
-1. **B2.1 табло** — `OrderBoardBroadcaster`, dashboard, звук, статусы
-2. **`Barista::OrderCreationService`** через create-order (`source: manual`) ещё работает
-3. **W1.4** — menu hides sold_out = как витрина (`barista_tablet_regression_test` «menu hides sold out»)
-4. **RBAC + смена** — только barista (+ shift для оформления); manager не создаёт через barista endpoint
+1. Post-pay email save без OTP (`EmailService` / `POST …/email`)
+2. Receipt через Brevo (`SendOrderReceiptEmailJob`)
+3. `marketing_consent=false` → **нет** enqueue CRM
+4. Bounce webhook HMAC + `status=bounced` → CRM job no-op
+5. Оплата / T-Bank webhook / Order status
+6. `#77` `email_collected_at` / `mark_customer_email_collected!`
 
 ## Проверка
 
 ```bash
-ruby bin/rails test test/integration/barista_tablet_regression_test.rb test/controllers/barista/orders_controller_test.rb test/services/barista/order_creation_service_test.rb
+ruby bin/rails test test/jobs/sync_contact_to_crm_job_test.rb test/services/shop/crm_contact_sync_test.rb test/jobs/send_order_receipt_email_job_test.rb
+ruby bin/rails test test/integration/shop/api/orders_email_test.rb
 ```
 
-Local/MCP после GREEN: barista → `/barista/menu` → карточки + cart panel; `/barista/create-order` ещё открывается.
+HTTP stub в тестах (как `brevo_client_test` / Net::HTTP) — **без** live Brevo в CI.
 
-## Acceptance (RED→GREEN этап 1)
+## RED subtasks (Minitest)
 
-1. GET `/barista/menu` рендерит product cards (имя/цена; фото если есть) и cart panel
-2. Корзина читается из `session[:barista_cart]` (пустая — пустая панель)
-3. Каталог = `Shop::Catalog.tenant_menu` path (sold_out hide регрессия зелёная)
-4. create-order + OrderCreationService + табло-регрессия зелёные
-5. Нет sold_out PATCH / POS / удаления create-order / убирания cash
+1. consent=true → job enqueued on create  
+2. consent=false → job **not** enqueued  
+3. perform → CrmContactSync called with email + customer_id + order_id (+ tenant)  
+4. bounced → no CRM call  
+5. CRM error → raises (retry path)  
+6. second perform → upsert / same external id (stub)  
+7. marketing_consent / opt-in в payload  
 
-## След. этапы (не этот SBR)
+## Критерий «готово» (DoD Slice A)
 
-- **2** — модификаторы + qty + промо (`customer_mockup_modifiers_acquiring.png`)
-- **3** — `ProductAvailabilityController` PATCH `is_sold_out`
-- **4** — `PosPaymentService` stub; убрать cash
-- **5** — sidebar + redirect create→menu + smoke/MCP + CBR галочки
+- Stub log-only убран  
+- Consent / bounce / idempotency в тестах  
+- Docs: CRM adapter = Brevo Contacts  
+- Slice B — отдельным намерением  

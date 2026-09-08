@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-08 (SPEC B2.2 этап 1)  
+**Дата:** 2026-09-08 (SPEC #71 CRM Slice A)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| B2.2 этап 1 SPEC в todo | `/sbr` RED — menu dual-pane |
-| Fly **v489** live | Этап 2 — после REVIEW этапа 1 |
+| #71 Slice A SPEC в todo | `/sbr` RED — CRM Minitest |
+| Fly **v489** live | GREEN → `/review` |
 
-**last_done:** SPEC B2.2 этап 1 — единый layout `/barista/menu` (сетка + cart panel)  
-**next_step:** `/sbr` RED — assert карточки + cart panel
+**last_done:** SPEC #71 — CRM provider = Brevo Contacts; stub → CrmContactSync  
+**next_step:** `/sbr` RED — job + sync tests
 
 **ctx_trim:** `2026-09-02`

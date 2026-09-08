@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-08 — SPEC: #71 Slice A CRM Brevo Contacts sync
+
+- SBR #71 ST-9: убрать stub `SyncContactToCrmJob` → `Shop::CrmContactSync` (Brevo Contacts upsert)
+- Решения: тот же `BREVO_API_KEY` · без DDL · raise→retry · kill-switch `CRM_SYNC_ENABLED` · удалить мёртвый RSpec
+- todo: job + sync + Minitest + shop-api/INTEGRATIONS · Не ломать consent/receipt/bounce/pay · Проверка
+
 ## 2026-09-08 — SPEC: B2.2 этап 1 barista menu dual-pane
 
 - SBR B2.2 этап 1: единый layout `/barista/menu` (сетка карточек + панель корзины)
