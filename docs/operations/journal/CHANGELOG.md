@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-08 — regress: #78 slice-5 Shop API PASS
+
+- Zone: `test/services/subscriptions/` + `subscriptions_api_test` → **11/0**
+- Regress #77: `profile_subscription_offer_test` → **7/0**
+- Next: `/review` (bugbot + security + push CI); Fly MCP Point A — после deploy
+
 ## 2026-09-08 — REVIEW: Wallet PKCS7 bugbot/security fixes
 
 - bugbot high: `paula.r@example.org` → `icon@2x.png`
