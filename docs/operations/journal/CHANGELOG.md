@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-08 — #80 Slice V sync «звоню»: confirmed не пришёл
+
+- Callcheck UI + poll 200 OK · `confirmed:false` до timeout → SMS.ru 204
+- Leave wizard не проверяли; код не трогали
+- Артефакт MCP_RESULT обновлён (`fly_v492_2026-09-08`)
+
 ## 2026-09-08 — #80 Slice V live Callcheck: V1 PASS · V2/V3 not verified
 
 - Phone live ×2: `init_callcheck` + «Ждем звонок» + `tel:8-800…` PASS

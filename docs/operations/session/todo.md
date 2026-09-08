@@ -11,7 +11,7 @@
 
 | Slice | Статус |
 |-------|--------|
-| **V** | [ ] V0–V1 **PASS** · V2–V3 **NOT VERIFIED** (нет confirmed; 2× timeout→SMS) |
+| **V** | [ ] V0–V1 **PASS** · V2 **NOT CONFIRMED** (sync «звоню» → 200 confirmed:false → SMS 204) · V3 n/a |
 | **F** | [ ] n/a — нет FAIL `confirmed→leave` |
 | **R** | [ ] |
 
