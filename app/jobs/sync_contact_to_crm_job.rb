@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SyncContactToCrmJob < ApplicationJob
   queue_as :default
 
@@ -13,25 +15,12 @@ class SyncContactToCrmJob < ApplicationJob
     return if order.blank?
     return if order_email.email.blank?
 
-    begin
-      sync_contact_to_crm(order, order_email)
-    rescue => e
-      Rails.logger.error("[SyncContactToCrmJob] Failed to sync contact for order_email #{order_email_id}: #{e.message}")
-    end
-  end
-
-  private
-
-  def sync_contact_to_crm(order, order_email)
-    contact_data = {
-      user_id: order.customer_id,
-      order_id: order.id,
-      email: order_email.email,
-      marketing_consent: order_email.marketing_consent
-    }
-
-    # TODO: Integrate with actual CRM provider
-    # For now, this is a placeholder that logs the sync attempt
-    Rails.logger.info("[SyncContactToCrmJob] Syncing contact: #{contact_data}")
+    Shop::CrmContactSync.call!(order: order, order_email: order_email)
+  rescue Shop::CrmContactSync::Error => e
+    Rails.logger.error("[SyncContactToCrmJob] CRM sync failed for order_email #{order_email_id}: #{e.message}")
+    raise
+  rescue => e
+    Rails.logger.error("[SyncContactToCrmJob] Failed to sync contact for order_email #{order_email_id}: #{e.message}")
+    raise
   end
 end

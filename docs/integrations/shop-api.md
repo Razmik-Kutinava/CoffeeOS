@@ -80,6 +80,8 @@ PWA / mobile витрина. Tenant: `@shop_tenant` из `tenant_id` query ил�
 **Edge:** stale `accepted` в active → блок оплаты / скрытые повторы (#35, #42). `abandon` ≠ `cancel`.  
 **#71:** email не гейтит оплату; кассовый ОФД независим; `SendOrderReceiptEmailJob` / `SyncContactToCrmJob` после `OrderEmail` create; bounce `POST /callbacks/email/bounce` + HMAC `EMAIL_BOUNCE_WEBHOOK_SECRET` (или `CALLBACK_SHARED_SECRET`), header `X-Webhook-Signature`.
 
+**#71 CRM (Slice A):** при `marketing_consent=true` job → `Shop::CrmContactSync` → Brevo Contacts upsert (`POST /v3/contacts`, `updateEnabled: true`). Тот же `BREVO_API_KEY`. Опц. `BREVO_CRM_LIST_ID`, kill-switch `CRM_SYNC_ENABLED=0`. Attributes: `COFFEEOS_CUSTOMER_ID`, `COFFEEOS_ORDER_ID`, `COFFEEOS_TENANT_ID`, `MARKETING_CONSENT`, `SMS` (phone). CRM down → raise → Solid Queue retry; не ломает save email / receipt. `status=bounced` → job no-op.
+
 **Tests:** `active_orders_test.rb` · `active_orders_receipt_test.rb` · `orders_controller_test.rb` · `orders_email_test.rb` (#71)
 
 ---

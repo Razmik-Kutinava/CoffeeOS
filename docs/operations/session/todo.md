@@ -1,18 +1,40 @@
-﻿# todo — #38 slice PKCS7 · Apple Wallet PassKit signing
+﻿# todo — #71 Slice A · CRM sync после оплаты (убрать stub)
 
 | Поле | Значение |
 |------|----------|
-| **CBR / корень** | #38 / #35 B3 · `V2-#35-WALLET-PROD` (PKCS7 only) |
-| **Цель** | certs → ZIP `.pkpass` PKCS7; simulate без регрессии |
-| **Point A** | `tenant_id` = `2fdee1ac-4674-41ee-b89e-87b45643f789` |
-| **OUT** | APNs · device tokens · Wallet web service |
+| **CBR / корень** | #71 Email-сбор · ST-9 |
+| **CRM provider** | **Brevo Contacts** (`BREVO_API_KEY`) |
+| **Point A** | `2fdee1ac-4674-41ee-b89e-87b45643f789` |
+| **OUT** | UI email · receipt · bounce HMAC · Slice B · payments |
 
 ## SBR
 
-- [x] SPEC / RED / GREEN / regress
-- [x] **REVIEW** — bugbot `icon@2x` · security generic error · Entire `01M1ZYPHF0EZYHM7C12W5PSPA7`
-- [ ] CI green (после push)
+- [x] **SPEC**
+- [x] **RED** (`6b3d714b`)
+- [x] **GREEN** (this commit)
+- [ ] **regress** → `/regress`
+- [ ] **REVIEW**
+
+## Файлы
+
+- `app/services/shop/crm_contact_sync.rb` — NEW
+- `app/jobs/sync_contact_to_crm_job.rb`
+- `test/services/shop/crm_contact_sync_test.rb` · `test/jobs/sync_contact_to_crm_job_test.rb`
+- `docs/integrations/shop-api.md` · `INTEGRATIONS.md`
+- ~~`spec/jobs/sync_contact_to_crm_job_spec.rb`~~ удалён
+
+## Не ломать
+
+1. Post-pay email без OTP
+2. Receipt Brevo
+3. consent=false → no CRM enqueue
+4. Bounce HMAC / bounced skip
+5. Pay / T-Bank
+6. `#77` email_collected
 
 ## Проверка
 
-- zone 21/0 PASS
+```bash
+ruby bin/rails test test/jobs/sync_contact_to_crm_job_test.rb test/services/shop/crm_contact_sync_test.rb test/jobs/send_order_receipt_email_job_test.rb
+ruby bin/rails test test/integration/shop/api/orders_email_test.rb
+```
