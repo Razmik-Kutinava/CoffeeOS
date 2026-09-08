@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-08 — GREEN: B2.2 этап 1 barista menu dual-pane
+
+- `/barista/menu`: сетка карточек + панель корзины (`session[:barista_cart]`); «Оплатить» disabled
+- create-order / sidebar / POS / sold_out PATCH — не трогали (этапы 2–5)
+- Local: tablet+orders+OrderCreationService **62/0** · Entire `01M1ZZXV23N5BFK4SGDQV0H4KG` на `7c76a125`
+- Next: `/regress` → `/review`
+
 ## 2026-09-08 — REVIEW: #71 CRM Brevo Contacts
 
 - bugbot high: `retry_on` CrmContactSync::Error + StandardError (5 attempts) — `fecee7e3`
