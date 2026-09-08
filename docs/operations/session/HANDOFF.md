@@ -2,16 +2,16 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-07 (deploy v489)  
+**Дата:** 2026-09-08 (SPEC Wallet PKCS7)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Fly **v489** · RUBY-1G live | #80 / CBR апрувы |
-| tip `3a579022` | |
+| #38 PassKit PKCS7 SPEC | `/sbr` RED |
+| Fly **v489** · tip `3a579022` | APNs OUT (след. SBR) |
 
-**last_done:** GH Deploy [34130234929](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/34130234929) → **v489** · smoke Point A PASS  
-**next_step:** заказчик / #80 live
+**last_done:** SPEC — `storeCard` · `WALLET_WWDR_CERT_PEM` · файлы в todo  
+**next_step:** `/sbr` RED — падающие тесты prod `.pkpass`
 
 **ctx_trim:** `2026-09-02`  
 **Fly:** v489 `deployment-01M1Y2J4PV5Z5SP7JWM317N8CC`  

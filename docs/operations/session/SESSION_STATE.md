@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-07 (deploy v489)  
+**Дата:** 2026-09-08 (SPEC Wallet PKCS7)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Fly **v489** live | #80 live Callcheck / заказчик |
-| RUBY-1G на prod | CBR апрувы |
+| #38 PKCS7 SPEC в todo | `/sbr` RED → GREEN |
+| Fly **v489** live | APNs register — след. SBR |
 
-**last_done:** deploy v489 · RUBY-1G deactivate_each! live · smoke Point A  
-**next_step:** заказчик / #80
+**last_done:** SPEC Apple Wallet PassKit PKCS7 (`storeCard` · WWDR ENV)  
+**next_step:** `/sbr` RED — prod ZIP / pass.json / bad PEM
 
 **ctx_trim:** `2026-09-02`

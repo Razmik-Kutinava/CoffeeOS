@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-08 — SPEC: Apple Wallet PassKit PKCS7
+
+- SBR #38 / #35 B3 slice: prod `.pkpass` signing (APNs device register OUT)
+- Решения: `storeCard` · `WALLET_WWDR_CERT_PEM` · OpenSSL + Zip (rubyzip в lock) · без новых gem’ов
+- todo: файлы PassBuilder/Config/PassSigner + Не ломать / Проверка
+
 ## 2026-09-07 — deploy Fly v489 (RUBY-1G)
 
 - GH Deploy [34130234929](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/34130234929) green · tip `3a579022`
