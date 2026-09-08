@@ -27,7 +27,9 @@
 
 - bugbot high: `retry_on` CrmContactSync::Error + StandardError (5 attempts) — `fecee7e3`
 - security: no medium+ (ENV keys, consent/bounce, no PAN)
-- Local 20/0 · Entire `01M1ZZXV23N5BFK4SGDQV0H4KG` на `cb1e336d` · push CI
+- CI tip fix: rubocop listIds spaces + B2.2 menu `@categories` grouping — `e247f9b1`
+- Local 20/0 · Entire `01M1ZZXV23N5BFK4SGDQV0H4KG` на `cb1e336d` · CI [34207477722](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/34207477722) **green**
+- Next: deploy — апрув; Fly MCP Point A после deploy
 
 ## 2026-09-08 — regress: #71 CRM Brevo Contacts PASS
 
