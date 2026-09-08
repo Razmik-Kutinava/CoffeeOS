@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-08 — SPEC: UserCards / RebillId + #26 M2 (verify-first)
+
+- `todo.md`: slices **P→U→O→M**, **C** только при FAIL нашего слоя
+- Hot-path: Не ломать (webhook / save_card=false / card hash / session cards) · Проверка rails+node зоны
+- Канон: UserCards ТЗ · #26 · MCP_PLAN_STEP5 · Point A
+- Next: `/sbr` Slice P
 ## 2026-09-08 — #80 Slice V Callcheck leave wizard: BLOCKED (нет телефона)
 
 - Fly **v492** · `SHOP_OTP_LOG_FALLBACK=false` (ssh)

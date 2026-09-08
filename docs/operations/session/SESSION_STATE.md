@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-08 (#80 Slice V BLOCKED)  
+**Дата:** 2026-09-08 (SPEC: UserCards / RebillId + #26 M2)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #80 V0 PASS · V1–V3 **BLOCKED** (нет телефона) | дать `+79…` → `/sbr` live V |
-| `SHOP_OTP_LOG_FALLBACK=false` · Fly **v492** | F только при FAIL |
+| SPEC verify-first · todo P→U→O→M | `/sbr` live Slice **P** |
+| C условный (FAIL нашего слоя) | не «нет карты у MCP» / не чистый ErrorCode |
 
-**last_done:** Slice V partial — UI phone wizard + MCP_RESULT BLOCKED  
-**next_step:** телефон владельца → повтор live Callcheck leave wizard
+**last_done:** SPEC imported · hot-path Не ломать/Проверка  
+**next_step:** Slice P preflight Point A (`2fdee1ac-…`)
 
 **ctx_trim:** `2026-09-02`
