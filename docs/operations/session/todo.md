@@ -14,7 +14,7 @@
 | Этап | Статус |
 |------|--------|
 | 0 stage0 | DONE |
-| **1 layout** | **GREEN** ← ждёт `/regress` |
+| **1 layout** | **regress PASS** ← `/review` |
 | 2–5 | TODO |
 
 ## SBR
@@ -22,8 +22,8 @@
 - [x] **SPEC** (`acddd923`)
 - [x] **RED** (`9c0c7801`)
 - [x] **GREEN** (`7c76a125` · Entire `01M1ZZXV23N5BFK4SGDQV0H4KG`)
-- [ ] **regress** → `/regress`
-- [ ] **REVIEW**
+- [x] **regress** PASS (62/0)
+- [ ] **REVIEW** → `/review`
 
 ## Файлы (ожидаемо)
 

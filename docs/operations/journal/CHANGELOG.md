@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-08 — regress: B2.2 этап 1 barista menu PASS
+
+- Zone: tablet_regression + orders_controller + order_creation_service → **62/0**
+- Next: `/review`; Fly MCP — не обязателен (этап 1 UI layout, не shop pay)
+
 ## 2026-09-08 — GREEN: B2.2 этап 1 barista menu dual-pane
 
 - `/barista/menu`: сетка карточек + панель корзины (`session[:barista_cart]`); «Оплатить» disabled
