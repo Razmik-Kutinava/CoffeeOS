@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-08 — regress: #71 CRM Brevo Contacts PASS
+
+- Zone: CRM job+sync + receipt + orders_email → **20/0** (12+8)
+- Next: `/review`; Fly MCP Point A — после deploy (live Brevo smoke опц.)
+
 ## 2026-09-08 — regress: #78 slice-5 Shop API PASS
 
 - Zone: `test/services/subscriptions/` + `subscriptions_api_test` → **11/0**

@@ -2,16 +2,16 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-08 (GREEN #71 CRM Slice A)  
+**Дата:** 2026-09-08 (regress #71 CRM PASS)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #71 CRM Brevo Contacts GREEN | `/regress` |
-| Fly **v489** | `/review` после regress |
+| #71 CRM regress **PASS** | `/review` |
+| Fly **v489** | push CI · Fly MCP после deploy |
 
-**last_done:** `Shop::CrmContactSync` + job (stub убран) · Entire `01M1ZZXV23N5BFK4SGDQV0H4KG`  
-**next_step:** `/regress` — зона email/CRM tests
+**last_done:** regress CRM zone 20/0  
+**next_step:** `/review` — bugbot + security-review + Entire + push
 
 **ctx_trim:** `2026-09-02`  
 **Fly:** v489 `deployment-01M1Y2J4PV5Z5SP7JWM317N8CC`  

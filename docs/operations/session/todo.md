@@ -12,8 +12,8 @@
 - [x] **SPEC**
 - [x] **RED** (`6b3d714b`)
 - [x] **GREEN** (`cb1e336d` · Entire `01M1ZZXV23N5BFK4SGDQV0H4KG`)
-- [ ] **regress** → `/regress`
-- [ ] **REVIEW**
+- [x] **regress** PASS (12+8 = 20/0)
+- [ ] **REVIEW** → `/review`
 
 ## Файлы
 
