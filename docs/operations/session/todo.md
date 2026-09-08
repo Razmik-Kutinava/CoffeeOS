@@ -1,72 +1,102 @@
-﻿# todo — UserCards / RebillId + #26 M2 (verify-first)
+# todo — СБП банк-ограничения: 3001 + Zero-Click AccountToken
 
 | Поле | Значение |
 |------|----------|
-| **Режим** | Verify-first hot-path SBR · **Slice C только после FAIL нашего слоя** |
-| **CBR / корни** | UserCards · #26 M2 (decline → sheet) |
-| **ТЗ** | [`Исправление сохранения карты в UserCards…`](../milestones/veha_2/requirements/customer_tasks/Исправление%20сохранения%20карты%20в%20UserCards%20после%20успешной%20оплаты.md) · [`Главный экран — повторный заказ (невалидный токен)…`](../milestones/veha_2/requirements/customer_tasks/Главный%20экран%20—%20повторный%20заказ%20(невалидный%20токен)%20BottomSheet%20выбора%20способа%20оплаты.md) · [`Понятные сообщения…`](../milestones/veha_2/requirements/customer_tasks/Понятные%20сообщения%20пользователю%20при%20ошибке%20оплаты.md) |
-| **Bridge / plan** | `docs/integrations/tbank.md` · [`MCP_PLAN_STEP5_2026-09-07.md`](../milestones/veha_2/artifacts/repeat_order_invalid_token_payment_sheet/MCP_PLAN_STEP5_2026-09-07.md) |
-| **Стек** | `mobile_payment_methods` + `Payments::SavedCardStore` (не отдельная UserCards-таблица) |
+| **Режим** | ops/bank-first SBR · **не** «переписать оплату» |
+| **Primary** | Slice **O** → **B** → **Z** |
+| **Conditional** | Slice **C** (код) — только если после O банк OK, а падает наш слой |
+| **ТЗ** | [`Интеграция Автоплатежей СБП Т-Касса в PWA.md`](../milestones/veha_2/requirements/customer_tasks/Интеграция%20Автоплатежей%20СБП%20Т-Касса%20в%20PWA.md) (#34) |
+| **Канон** | `docs/integrations/tbank.md` · runbook `DEPLOY_PWA_PAYMENTS_BATCH.md` · ISSUES `SBP 3001` 🟡 |
+| **Артефакты** | `docs/operations/milestones/veha_2/artifacts/tbank_sbp_autopayments_account_token/` |
 | **Point A** | `tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789` |
-| **Fly as-is** | v490 · #26 v481 MCP **PARTIAL** (нет saved card у MCP-гостя) |
-| **Артефакты** | `…/repeat_order_invalid_token_payment_sheet/mcp/fly_vNNN_YYYY-MM-DD/` |
-| **OUT** | SBP 3001 · #78 · смена TbankAdapter · hardcode RebillId · gem’ы оплаты |
+| **Блокер** | **3001 без кабинета = BLOCKED ops, не баг кода** |
+
+## Жёсткие запреты
+
+- Фиктивный GREEN «обошли 3001 в коде» / мок prod-оплаты как «готово»
+- Новые платёжные gem’ы / другой эквайринг
+- ErrorCode банка ≠ сразу баг CoffeeOS
+
+## Slices
+
+| Slice | DoD | Статус |
+|-------|-----|--------|
+| **O** Кабинет / 3001 | ЛК: СБП на терминале Point A · Fly TerminalKey совпадает · `POST …/sbp/init` **без** `error_code: 3001` → `payment_url` | [ ] |
+| **B** Bind AccountToken | O PASS · `save_sbp_account: true` · webhook `RequestKey` · `GetAddAccountQRState` → token в `mobile_payment_methods` (sbp) · токен не в логах/UI целиком | [ ] |
+| **Z** Zero-Click | B PASS · `POST …/sbp/charge` → ChargeQr CONFIRMED (или soft decline → fallback **без** удаления token) | [ ] SKIP пока нет B |
+| **C** Code | Только доказанный FAIL нашего слоя после O PASS · RED→GREEN→REVIEW | [ ] условный |
+
+### Вердикт O → дальше
+
+| Результат | Действие |
+|-----------|----------|
+| PASS (`payment_url`) | → B |
+| FAIL 3001 | артефакт JSON · **код не трогать** · эскалировать кабинет |
+| FAIL другой ErrorCode | матрица кабинет vs Init/Token |
+
+### FAIL matrix → когда C
+
+| Симптом | Слой |
+|---------|------|
+| Банк OK, webhook не дошёл / 401 подпись | callbacks / NotificationURL / Token |
+| Webhook есть, AccountToken не сохранён | `SbpAccountTokenFromWebhook` / store |
+| Токен есть, UI не предлагает «Ваш счёт СБП» | shop API methods / frontend |
+| 3001 на init bind | снова **O**, не C |
 
 ## SBR
 
-- [x] **SPEC** — этот файл
-- [ ] **P** Preflight — гость + session + (для M2) saved card · корзина ≥10₽
-- [ ] **U** UserCards E2E — `save_card=true` → MIR в списке → RebillId (сразу **или** delayed `sync_for_rebill!`)
-- [ ] **O** One-click happy — Charge → accepted · NewCardForm не auto-open
-- [ ] **M** #26 M2 — decline → sheet open + `payment-method-inline-error` + карта selected
-- [ ] **C** Code — **только** при FAIL нашего слоя (не «нет карты у MCP», не чистый ErrorCode банка)
-- [ ] **RED** / **GREEN** / **REVIEW** — только если C
-- [ ] **deploy** — только апрув владельца (live после fix)
+- [x] **SPEC** (этот файл)
+- [ ] **Verify O** — live init Point A + артефакт MCP (docs/artifact commit OK; без feat)
+- [ ] **Verify B** — live bind → AccountToken в БД
+- [ ] **Verify Z** — charge PASS **или** BLOCKED «банк не отдал token» с доказательством
+- [ ] **RED** — только если Slice C
+- [ ] **GREEN** — только если Slice C
+- [ ] **REVIEW** — только если был C (bugbot + security + Entire + push)
 
 ## Файлы (ожидаемо)
 
-*Scope C при FAIL; verify читает те же пути + MCP plan.*
+Verify / условный C (2–7 + blast):
 
-- `app/services/payments/saved_card_store.rb` — persist mask/exp/RebillId · consent `save_card` · upsert
-- `app/services/payments/tbank_payment_sync.rb` — `sync_for_rebill!` (delayed RebillId)
-- `app/services/shop/one_click_payment_service.rb` — Charge(RebillId) · fail → token-invalid сигнал
-- `app/services/shop/new_card_payment_service.rb` — Init/`save_card` → FA path
-- `app/frontend/components/PaymentMethodsSheet.svelte` — inline `data-testid="payment-method-inline-error"` · selected
-- `app/frontend/lib/shopPayFsm.js` — канон-тексты отказа (без сырого ErrorCode)
-- `app/frontend/lib/openRepeatPaymentSheet.js` — шторка остаётся / без auto NewCardForm
+- `docs/integrations/tbank.md` — канон СБП / autopay / ErrorCode 3001
+- `app/services/payments/sbp_account_token_from_webhook.rb` — RequestKey → GetAddAccountQRState → store
+- `app/services/payments/sbp_account_token_store.rb` — idempotent запись sbp method
+- `app/services/payments/tbank_sbp_autopay.rb` — ChargeQr zero-click
+- `app/frontend/lib/shopSbpPay.js` — `mapSbpInitError` 3001 + fallback copy (C только если сломан)
+- `test/integration/shop/api/sbp_autopay_charge_test.rb` — зона charge при C
+- `test/integration/shop/api/sbp_init_save_account_test.rb` — bind/init save_account при C
 
-### Соседи (blast-radius)
+### Blast-radius (+соседи)
 
-- `app/jobs/payments/tbank_callback_job.rb` — webhook → sync/finalize (idempotency)
-- `test/services/payments/tbank_payment_sync_test.rb` · `test/services/payments/saved_card_store_test.rb` — зеркало U/C
-- `test/integration/shop/shop_one_click_payment_step4_test.rb` · `test/javascript/repeat_invalid_token_payment_test.mjs` — O/M
-
-## Slices DoD (кратко)
-
-| Slice | PASS | Не путать с FAIL |
-|-------|------|------------------|
-| **P** | Session guest · `GET /shop/api/user/cards` не пустой **или** готов new_card+save · для M2 известный decline **или** SKIP | — |
-| **U** | Карта в `mobile_payment_methods` + `card_token` · GET cards этой сессии | delayed RebillId в окне sync = **PASS + delayed** |
-| **O** | Charge OK → order/pay success | bank 119 / rate-limit = **BANK_ERROR** |
-| **M** | Sheet open · inline канон · card selected · NewCardForm не auto | нет saved card = **BLOCKED** (как v481), не FAIL #26 |
-| **C** | Fix + regress + повтор live U/O/M | — |
-
-**Fail→C матрица (U):** FA OK + webhook RebillId но карты нет → SavedCardStore/flag · webhook без RebillId и sync не довёл → `sync_for_rebill!` · карта в БД / GET пусто → session/merge · `save_card=false` но карта есть → consent · дубль pan+exp → upsert.
+- `app/jobs/payments/tbank_callback_job.rb` — ветка `RequestKey` → FromWebhook (если webhook path в C)
+- `docs/operations/runbooks/DEPLOY_PWA_PAYMENTS_BATCH.md` — «SBP 3001 = кабинет, не hotfix»
+- артефакт: `…/artifacts/tbank_sbp_autopayments_account_token/mcp/fly_vNNN_…/MCP_RESULT.md`
 
 ## Не ломать
 
-- Webhook idempotency (`TbankCallbackJob` / sync)
-- `save_card=false` → карта **не** появляется
-- Card hash / antifraud binding (#74/#75)
-- Session ownership `GET user/cards` (чужая сессия пусто)
-- Min charge ≥10₽ · Receipt на Init где принято
-- `isTokenInvalid` = токен **карты**, не auth refresh
+1. Разовый СБП deep link (CODE:BLACK) / `sbp/init` без bind
+2. Card Init/Charge / UserCards / RebillId
+3. Webhook idempotency `tbank:callback:{PaymentId}:{Status}`
+4. Min charge ≥10₽ · `mapSbpInitError` 3001 → понятный текст + путь на карту
+5. Soft decline zero-click — **не** удалять AccountToken
 
 ## Проверка
 
 ```bash
-ruby bin/rails test test/services/payments/saved_card_store_test.rb test/services/payments/tbank_payment_sync_test.rb test/services/shop/one_click_payment_service_test.rb test/integration/shop/shop_one_click_payment_step4_test.rb test/controllers/shop/api/user_cards_controller_test.rb
-node --test test/javascript/repeat_invalid_token_payment_test.mjs test/javascript/open_repeat_payment_sheet_test.mjs
+# Local (обязательно при Slice C; при O/B/Z — smoke зоны по желанию)
+ruby bin/rails test test/integration/shop/api/sbp_autopay_charge_test.rb
+ruby bin/rails test test/services/payments/sbp_account_token_store_test.rb test/services/payments/sbp_account_token_from_webhook_test.rb
+
+# Live Point A (O / B / Z)
+# POST /shop/api/payments/sbp/init  → не 3001
+# bind save_sbp_account=true → AccountToken в БД
+# POST /shop/api/payments/sbp/charge → CONFIRMED или явный BLOCKED
 ```
 
-Live (после P): Point A MCP · артефакт `MCP_RESULT.md` (+ скрины M) · PAN/CVV/полные RebillId **не** в артефакты (маска `*5953` ок).
+## Критерий «готово»
+
+- [ ] Init СБП Point A **без 3001**
+- [ ] Хотя бы один live bind → `AccountToken` в БД
+- [ ] Zero-Click PASS **или** BLOCKED «банк не отдал token» с доказательством
+- [ ] Если был C — тесты + live после фикса
+
+Продукт «СБП работает» ≠ «написали ещё адаптер».
