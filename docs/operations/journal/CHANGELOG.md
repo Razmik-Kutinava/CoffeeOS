@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-08 — SPEC: #78 slice-5 Shop API subscriptions
+
+- SBR #78 после slice-1: публичный Shop API (GET current + POST create)
+- Решения: cancel/confirm → **501** до Slice 3/4; PATCH auto_renew real; PurchaseService вызов only
+- todo: routes + SubscriptionsController + integration test + shop-api.md · Не ломать / Проверка
+
 ## 2026-09-08 — SPEC: Apple Wallet PassKit PKCS7
 
 - SBR #38 / #35 B3 slice: prod `.pkpass` signing (APNs device register OUT)

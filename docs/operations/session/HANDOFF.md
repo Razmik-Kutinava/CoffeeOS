@@ -2,16 +2,16 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-08 (SPEC Wallet PKCS7)  
+**Дата:** 2026-09-08 (SPEC #78 slice-5 Shop API)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #38 PassKit PKCS7 SPEC | `/sbr` RED |
-| Fly **v489** · tip `3a579022` | APNs OUT (след. SBR) |
+| #78 slice-5 Shop API SPEC | `/sbr` RED |
+| Fly **v489** · tip `3a579022` | Slice 6 PWA — после REVIEW |
 
-**last_done:** SPEC — `storeCard` · `WALLET_WWDR_CERT_PEM` · файлы в todo  
-**next_step:** `/sbr` RED — падающие тесты prod `.pkpass`
+**last_done:** SPEC — GET/POST subscriptions; cancel/confirm 501  
+**next_step:** `/sbr` RED — `subscriptions_api_test`
 
 **ctx_trim:** `2026-09-02`  
 **Fly:** v489 `deployment-01M1Y2J4PV5Z5SP7JWM317N8CC`  
