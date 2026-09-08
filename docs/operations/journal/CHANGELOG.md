@@ -11,6 +11,14 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-08 — REVIEW: #78 slice-5 Shop API
+
+- bugbot high: reject POST if already `active`/`past_due`
+- security medium: `resolve_payment_method!` requires `is_active: true`
+- Local: subscriptions zone **13/0** · Entire `01M1ZYPHF0EZYHM7C12W5PSPA7` · push CI
+
+## 2026-09-08 — REVIEW: B2.2 stage-1 CI green
+
 ## 2026-09-08 — REVIEW: B2.2 этап 1 CI green
 
 - tip `f03a46e1` · CI [34208612629](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/34208612629) **green**

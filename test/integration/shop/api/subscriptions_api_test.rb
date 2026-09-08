@@ -197,6 +197,35 @@ class Shop::Api::SubscriptionsApiTest < ActionDispatch::IntegrationTest
     end
   end
 
+  test "POST subscriptions rejects when customer already has active subscription" do
+    create_active_subscription!
+
+    open_session do |sess|
+      login!(sess)
+      sess.post "/shop/api/subscriptions",
+        headers: shop_headers,
+        params: { plan_code: @plan.code, payment_method_id: @payment_method.id },
+        as: :json
+      assert_equal 422, sess.response.status, sess.response.body
+      assert_match(/already active/i, sess.response.parsed_body["error"].to_s)
+      assert_equal 1, Subscription.for_customer(@customer.id).where(status: :active).count
+    end
+  end
+
+  test "POST subscriptions rejects inactive payment_method" do
+    @payment_method.update!(is_active: false)
+
+    open_session do |sess|
+      login!(sess)
+      sess.post "/shop/api/subscriptions",
+        headers: shop_headers,
+        params: { plan_id: @plan.id, payment_method_id: @payment_method.id },
+        as: :json
+      assert_equal 422, sess.response.status, sess.response.body
+      assert_nil Subscription.find_by(customer_id: @customer.id)
+    end
+  end
+
   # --- PATCH auto_renew ---
 
   test "PATCH auto_renew updates flag on current subscription" do

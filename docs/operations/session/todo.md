@@ -1,29 +1,33 @@
-﻿# todo — B2.2 этап 1 · единый layout `/barista/menu`
+﻿# todo — #78 slice-5 · Shop API subscriptions
 
 | Поле | Значение |
 |------|----------|
-| **CBR / ID** | B2.2 · Поток 2 · CBR `[ ]` |
-| **ТЗ** | [`B2_2_barista_menu_create_merge.md`](../milestones/veha_2/requirements/customer_tasks/B2_2_barista_menu_create_merge.md) |
-| **GREEN** | `7c76a125` · Entire `01M1ZZXV23N5BFK4SGDQV0H4KG` |
+| **CBR / корень** | #78 · Subtasks 24–28 |
+| **ТЗ** | [`Архитектура подписки — планы биллинг и автосписание.md`](../milestones/veha_2/requirements/customer_tasks/Архитектура%20подписки%20—%20планы%20биллинг%20и%20автосписание.md) |
+| **GREEN** | `c4e48db8` · Entire `01M1ZYPHF0EZYHM7C12W5PSPA7` |
 | **Point A** | `2fdee1ac-4674-41ee-b89e-87b45643f789` |
-| **OUT** | mods/qty (2) · sold_out (3) · POS/cash (4) · remove create-order (5) |
+| **OUT** | PWA (6) · Usage (2) · Cancel (3) · Renewal (4) · E2E (7) |
 
 ## SBR
 
-- [x] **SPEC** (`acddd923`)
-- [x] **RED** (`9c0c7801`)
-- [x] **GREEN** (`7c76a125`)
-- [x] **regress** PASS (62/0)
-- [x] **REVIEW** — bugbot search-fix · security OK · CI [34208612629](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/34208612629) green
+- [x] **SPEC** (`39544ab0`)
+- [x] **RED** (`084f0451`)
+- [x] **GREEN** (`c4e48db8`)
+- [x] **regress** PASS
+- [x] **REVIEW** — bugbot+security fixes (duplicate purchase + inactive PM) · push CI
 - [ ] **deploy** — только апрув владельца
-- [ ] **этап 2** — отдельным намерением
+- [ ] **Slice 6** — отдельным намерением
 
-## Bugbot
+## Bugbot / Security
 
-- low: search empty category headers → `28cca017`
+| Severity | Location | Finding | Fix |
+|----------|----------|---------|-----|
+| high | `subscriptions_controller#create` | duplicate purchase if already active/past_due | 422 `subscription already active` |
+| medium | `resolve_payment_method!` | inactive PM accepted | `is_active: true` |
 
 ## Проверка
 
 ```bash
-ruby bin/rails test test/integration/barista_tablet_regression_test.rb test/controllers/barista/orders_controller_test.rb test/services/barista/order_creation_service_test.rb
+ruby bin/rails test test/services/subscriptions/ test/integration/shop/api/subscriptions_api_test.rb
+# → 13/0 PASS after REVIEW fixes
 ```

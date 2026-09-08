@@ -14,6 +14,10 @@ module Shop
       end
 
       def create
+        if current_subscription
+          return render json: { error: "subscription already active" }, status: :unprocessable_entity
+        end
+
         plan = resolve_plan!
         payment_method = resolve_payment_method!
 
@@ -91,7 +95,11 @@ module Shop
       end
 
       def resolve_payment_method!
-        pm = MobilePaymentMethod.find_by(id: params.require(:payment_method_id), customer_id: @customer.id)
+        pm = MobilePaymentMethod.find_by(
+          id: params.require(:payment_method_id),
+          customer_id: @customer.id,
+          is_active: true
+        )
         raise Subscriptions::PurchaseService::Error, "payment method not found" unless pm
 
         pm

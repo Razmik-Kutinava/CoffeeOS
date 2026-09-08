@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-08 (REVIEW B2.2 этап 1 · CI green)  
+**Дата:** 2026-09-08 (REVIEW #78 slice-5)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| B2.2 этап 1 REVIEW **CI green** | deploy — апрув |
-| Entire `01M1ZZXV23N5BFK4SGDQV0H4KG` на `7c76a125` | этап 2 — после апрува/намерения |
+| #78 Shop API REVIEW fixes | push CI → стоп |
+| Entire `01M1ZYPHF0EZYHM7C12W5PSPA7` | Slice 6 — отдельным намерением |
 
-**last_done:** bugbot+security+push · CI [34208612629](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/34208612629) green  
-**next_step:** deploy — только апрув владельца
+**last_done:** bugbot duplicate purchase + security inactive PM  
+**next_step:** `git push` → CI green → deploy только апрув
 
 **ctx_trim:** `2026-09-02`
