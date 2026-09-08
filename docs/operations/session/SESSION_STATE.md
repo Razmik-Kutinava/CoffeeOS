@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-08 (SPEC #71 CRM Slice A)  
+**Дата:** 2026-09-08 (GREEN Wallet PKCS7)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #71 Slice A SPEC в todo | `/sbr` RED — CRM Minitest |
-| Fly **v489** live | GREEN → `/review` |
+| #38 PassKit PKCS7 GREEN | `/regress` → `/review` |
+| Entire `01M1ZYPHF0EZYHM7C12W5PSPA7` | APNs OUT |
 
-**last_done:** SPEC #71 — CRM provider = Brevo Contacts; stub → CrmContactSync  
-**next_step:** `/sbr` RED — job + sync tests
+**last_done:** GREEN PassSigner + WWDR · zone tests PASS  
+**next_step:** `/regress` / `/review`
 
 **ctx_trim:** `2026-09-02`

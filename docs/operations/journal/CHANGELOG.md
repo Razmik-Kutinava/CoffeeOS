@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-08 — GREEN: Apple Wallet PassKit PKCS7
+
+- `PassSigner`: ZIP + SHA1 manifest + PKCS7 detached; `WALLET_WWDR_CERT_PEM` в `certs_configured?`
+- `PassBuilder` prod path → signed `.pkpass` (`storeCard`); simulate stub без регрессии
+- Tests: apple_wallet 9 · ready_push + wallet_pass 12 PASS · Entire `01M1ZYPHF0EZYHM7C12W5PSPA7` на `f8cd57a8`
+- OUT: APNs device register (след. SBR)
+
 ## 2026-09-08 — SPEC: #71 Slice A CRM Brevo Contacts sync
 
 - SBR #71 ST-9: убрать stub `SyncContactToCrmJob` → `Shop::CrmContactSync` (Brevo Contacts upsert)
