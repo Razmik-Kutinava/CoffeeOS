@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-08 — #80 Slice V live Callcheck: V1 PASS · V2/V3 not verified
+
+- Phone live ×2: `init_callcheck` + «Ждем звонок» + `tel:8-800…` PASS
+- Нет `confirmed` до auto SMS (~40с); leave wizard не проверяли
+- SMS fallback → SMS.ru **204** (оператор/отправитель) — ops, не leave-wizard F
+- Артефакт: `registration_callcheck_cascade_ui_ux/mcp/fly_v492_2026-09-08/`
+
 ## 2026-09-08 — Follow-up Fly v493: B6 + Wallet simulate + plan seed
 
 - `WALLET_SIMULATE=1` · wallet stub `PKPASS_STUB` **PASS**

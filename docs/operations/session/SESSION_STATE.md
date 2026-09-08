@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-08 (Fly v493 follow-up)  
+**Дата:** 2026-09-08 (#80 Slice V partial)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| v493 · B6 PASS · Wallet stub PASS | #78 Charge нужен свежий Rebill |
-| plan `pilot_weekly` live | |
+| #80 V1 PASS · V2/V3 не verified | синхронный звонок в окне 40с |
+| SMS 204 на fallback | кабинет SMS.ru · не leave-wizard F |
 
-**last_done:** secrets WALLET_SIMULATE · seed plan · menu content_for fix · MCP recheck  
-**next_step:** test-guest save_card → retry purchase
+**last_done:** live Callcheck UI ×2 · timeout→SMS 204 · код не трогали  
+**next_step:** `/sbr` — звонок сразу на `8-800…` после init
 
 **ctx_trim:** `2026-09-02`
