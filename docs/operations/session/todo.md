@@ -1,95 +1,102 @@
-﻿# todo — #80 Callcheck → leave wizard (verify-first)
+﻿# todo — СБП банк-ограничения: 3001 + Zero-Click AccountToken
 
 | Поле | Значение |
 |------|----------|
-| **CBR / корень** | #80 · Registration UI/UX + Callcheck cascade |
-| **ТЗ** | [`Регистрация PWA UI UX и каскад Callcheck x2 SMS.md`](../milestones/veha_2/requirements/customer_tasks/Регистрация%20PWA%20UI%20UX%20и%20каскад%20Callcheck%20x2%20SMS.md) |
-| **Канон** | Callcheck (`init_callcheck` / `check_status`) — **не** FlashCall |
-| **Point A** | `2fdee1ac-4674-41ee-b89e-87b45643f789` |
-| **Fly** | v490 · `SHOP_OTP_LOG_FALLBACK` must be **false** |
-| **Артефакт** | `…/artifacts/registration_callcheck_cascade_ui_ux/mcp/fly_vNNN_YYYY-MM-DD/` |
-| **Режим** | **verify-first**: код **не трогать**, пока Slice V ≠ FAIL |
+| **Режим** | ops/bank-first SBR · **не** «переписать оплату» |
+| **Primary** | Slice **O** → **B** → **Z** |
+| **Conditional** | Slice **C** (код) — только если после O банк OK, а падает наш слой |
+| **ТЗ** | [`Интеграция Автоплатежей СБП Т-Касса в PWA.md`](../milestones/veha_2/requirements/customer_tasks/Интеграция%20Автоплатежей%20СБП%20Т-Касса%20в%20PWA.md) (#34) |
+| **Канон** | `docs/integrations/tbank.md` · runbook `DEPLOY_PWA_PAYMENTS_BATCH.md` · ISSUES `SBP 3001` 🟡 |
+| **Артефакты** | `docs/operations/milestones/veha_2/artifacts/tbank_sbp_autopayments_account_token/` |
+| **Point A** | `tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789` |
+| **Блокер** | **3001 без кабинета = BLOCKED ops, не баг кода** |
+
+## Жёсткие запреты
+
+- Фиктивный GREEN «обошли 3001 в коде» / мок prod-оплаты как «готово»
+- Новые платёжные gem’ы / другой эквайринг
+- ErrorCode банка ≠ сразу баг CoffeeOS
 
 ## Slices
 
-| Slice | Что | Когда | Статус |
-|-------|-----|-------|--------|
-| **V** | Live verify: звонок → `confirmed` → leave wizard / session | **← СТАРТ** | [ ] |
-| **F** | Узкий fix по матрице отказа (RED→GREEN) | только если V = FAIL | [ ] n/a пока |
-| **R** | REVIEW + MCP_RESULT PASS | после V PASS или после F | [ ] |
+| Slice | DoD | Статус |
+|-------|-----|--------|
+| **O** Кабинет / 3001 | ЛК: СБП на терминале Point A · Fly TerminalKey совпадает · `POST …/sbp/init` **без** `error_code: 3001` → `payment_url` | [ ] |
+| **B** Bind AccountToken | O PASS · `save_sbp_account: true` · webhook `RequestKey` · `GetAddAccountQRState` → token в `mobile_payment_methods` (sbp) · токен не в логах/UI целиком | [ ] |
+| **Z** Zero-Click | B PASS · `POST …/sbp/charge` → ChargeQr CONFIRMED (или soft decline → fallback **без** удаления token) | [ ] SKIP пока нет B |
+| **C** Code | Только доказанный FAIL нашего слоя после O PASS · RED→GREEN→REVIEW | [ ] условный |
+
+### Вердикт O → дальше
+
+| Результат | Действие |
+|-----------|----------|
+| PASS (`payment_url`) | → B |
+| FAIL 3001 | артефакт JSON · **код не трогать** · эскалировать кабинет |
+| FAIL другой ErrorCode | матрица кабинет vs Init/Token |
+
+### FAIL matrix → когда C
+
+| Симптом | Слой |
+|---------|------|
+| Банк OK, webhook не дошёл / 401 подпись | callbacks / NotificationURL / Token |
+| Webhook есть, AccountToken не сохранён | `SbpAccountTokenFromWebhook` / store |
+| Токен есть, UI не предлагает «Ваш счёт СБП» | shop API methods / frontend |
+| 3001 на init bind | снова **O**, не C |
 
 ## SBR
 
-- [x] **SPEC** — этот файл
-- [ ] **Slice V** live (телефон владельца/агента обязателен; иначе **BLOCKED**)
-- [ ] **RED** — только после V FAIL
-- [ ] **GREEN** — только после RED
-- [ ] **Slice V again** — после GREEN (без live PASS шаг не `done`)
-- [ ] **REVIEW** — bugbot + security + Entire + push
-
-## Slice V — DoD (Gherkin)
-
-```
-Given гость на /shop?tenant_id=<Point A> открыл вход по телефону
-When ввёл +79… → экран Callcheck → tel: / звонок (отвечать не нужно)
-And SMS.ru отметил check confirmed
-Then GET …/phone_otp/check_status → confirmed (+ refresh_token при customer)
-And interpretCallcheckPoll → complete → onVerified
-And wizard закрыт / гость вошёл (не «Ждем звонок»)
-And повторный вход в той же сессии без нового звонка (базовая проверка)
-```
-
-**Out:** `MCP_RESULT.md` (V0–V3) + скрины waiting → after call.  
-**FAIL:** network `check_status` + console.  
-**Вердикт:** PASS → F не делать · FAIL → Slice F · BLOCKED → стоп (нет телефона / fallback=true / SMS.ru down).
-
-## Матрица отказа (Slice F)
-
-| Симптом | Куда |
-|---------|------|
-| `check_status` вечно `confirmed:false` | SMS.ru / `SmsRuClient` / status parse / TTL |
-| API `confirmed:true`, UI не уходит | `interpretCallcheckPoll` / poll / `onVerified` |
-| UI complete, «не вошли» | linker / `MobileSessionIssuer` / cookie |
-| 422/500 после звонка | linker / AR / tenant mismatch |
-| Только SMS работает | Callcheck path; SMS fallback не ломать |
+- [x] **SPEC** (этот файл)
+- [ ] **Verify O** — live init Point A + артефакт MCP (docs/artifact commit OK; без feat)
+- [ ] **Verify B** — live bind → AccountToken в БД
+- [ ] **Verify Z** — charge PASS **или** BLOCKED «банк не отдал token» с доказательством
+- [ ] **RED** — только если Slice C
+- [ ] **GREEN** — только если Slice C
+- [ ] **REVIEW** — только если был C (bugbot + security + Entire + push)
 
 ## Файлы (ожидаемо)
 
-Код читать/править **только** при V FAIL (или для точечного разбора FAIL).
+Verify / условный C (2–7 + blast):
 
-- `app/frontend/lib/phoneAuthCascade.js` — `interpretCallcheckPoll` → `action: "complete"`
-- `app/frontend/components/PhoneAuthCodeStep.svelte` — poll `check_status` → `onVerified`
-- `app/frontend/components/PhoneAuthWizard.svelte` — `init_callcheck` + закрытие wizard
-- `app/controllers/shop/api/phone_otp_controller.rb` — `init_callcheck` / `check_status` API
-- `app/services/shop/phone_otp.rb` — Callcheck status → confirmed
-- `app/services/shop/phone_verified_customer_linker.rb` — customer + session после confirmed
+- `docs/integrations/tbank.md` — канон СБП / autopay / ErrorCode 3001
+- `app/services/payments/sbp_account_token_from_webhook.rb` — RequestKey → GetAddAccountQRState → store
+- `app/services/payments/sbp_account_token_store.rb` — idempotent запись sbp method
+- `app/services/payments/tbank_sbp_autopay.rb` — ChargeQr zero-click
+- `app/frontend/lib/shopSbpPay.js` — `mapSbpInitError` 3001 + fallback copy (C только если сломан)
+- `test/integration/shop/api/sbp_autopay_charge_test.rb` — зона charge при C
+- `test/integration/shop/api/sbp_init_save_account_test.rb` — bind/init save_account при C
 
-**Соседи (blast-radius, по FAIL):**
+### Blast-radius (+соседи)
 
-- `app/services/shop/mobile_session_issuer.rb` — `refresh_token` / cookie, если «не вошли»
-- `app/services/shop/sms_ru_client.rb` — только parse `callcheck` status, если API не confirmed
+- `app/jobs/payments/tbank_callback_job.rb` — ветка `RequestKey` → FromWebhook (если webhook path в C)
+- `docs/operations/runbooks/DEPLOY_PWA_PAYMENTS_BATCH.md` — «SBP 3001 = кабинет, не hotfix»
+- артефакт: `…/artifacts/tbank_sbp_autopayments_account_token/mcp/fly_vNNN_…/MCP_RESULT.md`
 
 ## Не ломать
 
-- SMS fallback после ~40с / кнопка SMS
-- Rate limits / cooldown Callcheck
-- Session ownership shop API + tenant RLS
-- Callcheck ≠ FlashCall (`/code/call` запрещён)
-- Checkout гостем без auth
+1. Разовый СБП deep link (CODE:BLACK) / `sbp/init` без bind
+2. Card Init/Charge / UserCards / RebillId
+3. Webhook idempotency `tbank:callback:{PaymentId}:{Status}`
+4. Min charge ≥10₽ · `mapSbpInitError` 3001 → понятный текст + путь на карту
+5. Soft decline zero-click — **не** удалять AccountToken
 
 ## Проверка
 
 ```bash
-# Local (только если был Slice F):
-node --test test/javascript/phone_auth*.mjs test/javascript/*callcheck*.mjs
-ruby bin/rails test test/services/shop/phone_otp* test/integration/shop/api/*phone_otp* test/services/shop/phone_verified_customer_linker_test.rb
+# Local (обязательно при Slice C; при O/B/Z — smoke зоны по желанию)
+ruby bin/rails test test/integration/shop/api/sbp_autopay_charge_test.rb
+ruby bin/rails test test/services/payments/sbp_account_token_store_test.rb test/services/payments/sbp_account_token_from_webhook_test.rb
 
-# Обязательно live Slice V (Point A, fallback=false, реальный звонок)
+# Live Point A (O / B / Z)
+# POST /shop/api/payments/sbp/init  → не 3001
+# bind save_sbp_account=true → AccountToken в БД
+# POST /shop/api/payments/sbp/charge → CONFIRMED или явный BLOCKED
 ```
 
-## OUT
+## Критерий «готово»
 
-- Рефакторинг wizard «с нуля» / FlashCall / email в wizard
-- Payments / CartSheet / #71
-- Менять default `SHOP_OTP_LOG_FALLBACK` без нужды
-- RSpec/Vitest — только Minitest + `node --test`
+- [ ] Init СБП Point A **без 3001**
+- [ ] Хотя бы один live bind → `AccountToken` в БД
+- [ ] Zero-Click PASS **или** BLOCKED «банк не отдал token» с доказательством
+- [ ] Если был C — тесты + live после фикса
+
+Продукт «СБП работает» ≠ «написали ещё адаптер».
