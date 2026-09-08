@@ -84,6 +84,22 @@ PWA / mobile витрина. Tenant: `@shop_tenant` из `tenant_id` query ил�
 
 ---
 
+## Subscriptions (#78 slice-5)
+
+| Method | Path | Service / controller | Notes |
+|--------|------|----------------------|-------|
+| GET | `subscriptions/current` | `SubscriptionsController#current` | auth customer; `active`/`past_due`; 404 если нет; payload: `status`, `drinks_remaining`, `savings_amount`, `current_period_end`, `auto_renew`, `plan_code`, … |
+| POST | `subscriptions` | `Subscriptions::PurchaseService` | body: `plan_id` **или** `plan_code`, `payment_method_id`, optional `auto_renew`; technical order → **closed** |
+| PATCH | `subscriptions/current/auto_renew` | controller update | `{ auto_renew: bool }`; ветки used≥1 — Slice 3 |
+| POST | `subscriptions/current/cancel` | — | **501** `{ error: not_implemented, slice: 3 }` до CancellationService |
+| POST | `subscriptions/current/confirm_payment` | — | **501** `{ error: not_implemented, slice: 4 }` до Renewal |
+
+**Edge:** ownership = session customer only (чужая карта / sub → 404/422). Не табло barista. Usage pricing — Slice 2; PWA UI — Slice 6.
+
+**Tests:** `subscriptions_api_test.rb` · `test/services/subscriptions/`
+
+---
+
 ## Payments (shop → T-Bank)
 
 | Method | Path | Service | T-Bank |

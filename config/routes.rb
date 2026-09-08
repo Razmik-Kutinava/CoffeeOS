@@ -231,6 +231,12 @@ Rails.application.routes.draw do
       get "favorites", to: "favorites#index"
       post "favorites", to: "favorites#create"
       delete "favorites/:product_id", to: "favorites#destroy"
+      # #78 slice-5: guest subscription Shop API
+      get "subscriptions/current", to: "subscriptions#current"
+      post "subscriptions", to: "subscriptions#create"
+      patch "subscriptions/current/auto_renew", to: "subscriptions#update_auto_renew"
+      post "subscriptions/current/cancel", to: "subscriptions#cancel"
+      post "subscriptions/current/confirm_payment", to: "subscriptions#confirm_payment"
     end
     # SPA hash-routes иногда попадают на сервер как /shop/... — отдаём shell витрины
     get "*spa_path", to: "pages#home", constraints: ->(req) { req.format.html? }
