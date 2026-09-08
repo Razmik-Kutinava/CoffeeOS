@@ -1,7 +1,7 @@
 {
   "task": "B2.2 stage-1 menu dual-pane",
   "fly_version": "v493",
-  "git_tip": "pending_commit",
+  "git_tip": "d209b9ca",
   "point_a_tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
   "tool": "cursor-ide-browser",
   "checks": {
