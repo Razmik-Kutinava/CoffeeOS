@@ -11,13 +11,6 @@
 
 ## Текущий месяц (2026-09)
 
-## 2026-09-08 — SPEC: СБП 3001 + Zero-Click AccountToken
-
-- Ops/bank-first SBR: primary **O→B→Z**, код (**C**) только после PASS кабинета
-- `todo.md` · канон `tbank.md` / #34 / ISSUES SBP 3001 🟡
-- Запрет фиктивного GREEN и «чинить 3001» аппом
-- Next: `/sbr` Slice O
-
 ## 2026-09-08 — SPEC: UserCards / RebillId + #26 M2 (verify-first)
 
 - `todo.md`: slices **P→U→O→M**, **C** только при FAIL нашего слоя
@@ -30,6 +23,7 @@
 - Ops/bank-first SBR: primary **O→B→Z**, код (**C**) только после PASS кабинета
 - `todo.md` · канон `tbank.md` / #34 / ISSUES SBP 3001 🟡
 - Запрет фиктивного GREEN и «чинить 3001» аппом
+- Next: `/sbr` Slice O
 
 ## 2026-09-08 — SPEC: #80 Callcheck → leave wizard (verify-first)
 
