@@ -1,0 +1,16 @@
+<% setting = local_assigns[:setting] %>
+<% price = setting&.price || 0 %>
+<div class="menu-product-card"
+     data-menu-product-card="true"
+     data-product-name="<%= product.name.downcase %>"
+     data-product-id="<%= product.id %>">
+  <% if product.image_url.present? %>
+    <div class="menu-product-card__media">
+      <img src="<%= product.image_url %>" alt="" class="menu-product-card__img" loading="lazy" decoding="async">
+    </div>
+  <% else %>
+    <div class="menu-product-card__media menu-product-card__media--placeholder" aria-hidden="true">☕</div>
+  <% end %>
+  <div class="menu-product-card__name"><%= product.name %></div>
+  <div class="menu-product-card__price"><%= number_to_currency(price, unit: "₽", format: "%n %u", delimiter: " ") %></div>
+</div>

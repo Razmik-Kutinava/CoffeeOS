@@ -1,0 +1,40 @@
+<% cart = Array(@cart) %>
+<%
+  cart_total = cart.sum do |raw|
+    item = raw.respond_to?(:with_indifferent_access) ? raw.with_indifferent_access : raw
+    qty = (item[:quantity] || item[:qty] || 1).to_i
+    price = (item[:price] || item[:unit_price] || 0).to_d
+    qty * price
+  end
+%>
+<aside id="menu-cart-panel" class="menu-cart-panel" aria-label="Корзина">
+  <h2 class="menu-cart-panel__title">Корзина</h2>
+
+  <div id="menu-cart-items" class="menu-cart-panel__items">
+    <% if cart.empty? %>
+      <div class="menu-cart-panel__empty">Корзина пуста</div>
+    <% else %>
+      <% cart.each do |raw| %>
+        <% item = raw.respond_to?(:with_indifferent_access) ? raw.with_indifferent_access : raw %>
+        <% qty = (item[:quantity] || item[:qty] || 1).to_i %>
+        <% name = item[:name] || item[:product_name] || "Товар" %>
+        <% price = (item[:price] || item[:unit_price] || 0).to_d %>
+        <div class="menu-cart-panel__line">
+          <div class="menu-cart-panel__line-name"><%= qty %>× <%= name %></div>
+          <div class="menu-cart-panel__line-price"><%= number_to_currency(qty * price, unit: "₽", format: "%n %u", delimiter: " ") %></div>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+
+  <div class="menu-cart-panel__totals">
+    <div class="menu-cart-panel__total-row">
+      <span>Итого:</span>
+      <span id="menu-cart-total"><%= number_to_currency(cart_total, unit: "₽", format: "%n %u", delimiter: " ") %></span>
+    </div>
+  </div>
+
+  <button type="button" id="menu-pay-btn" class="menu-cart-panel__pay" disabled title="Оплата — этап 4">
+    Оплатить
+  </button>
+</aside>

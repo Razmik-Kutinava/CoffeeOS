@@ -1,79 +1,57 @@
 <% content_for :content do %>
-<div class="menu-page">
+<div class="menu-page" id="menu-pos-layout">
   <div class="menu-header">
-    <h1 class="menu-title">📖 Меню</h1>
+    <h1 class="menu-title">Меню</h1>
     <div class="menu-search">
-      <input type="text" id="menu-search-input" placeholder="🔍 Поиск..." class="search-input">
+      <input type="text" id="menu-search-input" placeholder="Поиск..." class="search-input" autocomplete="off">
     </div>
   </div>
-  
-  <% @categories.each do |category| %>
-    <% category_products = @products.select { |p| p.category_id == category.id } %>
-    <% next if category_products.empty? %>
-    
-    <div class="menu-category" data-category="<%= category.slug %>">
-      <div class="category-header">
-        <h2 class="category-title">
-          <%= category.name %>
-          <span class="category-count">[<%= category_products.count %> позиций]</span>
-        </h2>
-      </div>
-      
-      <div class="products-list">
-        <% category_products.each do |product| %>
+
+  <div class="menu-pos-grid">
+    <section class="menu-catalog-pane" aria-label="Каталог">
+      <div id="menu-product-grid" class="menu-product-grid">
+        <% @products.each do |product| %>
           <% setting = @settings_by_product_id[product.id] %>
-          <div class="product-row" data-product-name="<%= product.name.downcase %>">
-            <% if product.image_url.present? %>
-              <img src="<%= product.image_url %>" alt="" class="product-thumb" width="48" height="48" loading="lazy" decoding="async">
-            <% end %>
-            <div class="product-info">
-              <span class="product-name"><%= product.name %></span>
-              <span class="product-price"><%= number_to_currency(setting&.price || 0, unit: '₽', format: '%n %u', delimiter: ' ') %></span>
-            </div>
-            <div class="product-status">
-              <span class="status-available">✅ В наличии</span>
-            </div>
-          </div>
+          <% next unless setting %>
+          <%= render "barista/menu/product_card", product: product, setting: setting %>
         <% end %>
       </div>
-    </div>
-  <% end %>
-  
-  <div class="menu-footer">
-    <div class="menu-note">⚠️ Редактирование меню доступно только офис-менеджеру</div>
+    </section>
+
+    <%= render "barista/menu/cart_panel" %>
   </div>
 </div>
 <% end %>
 
-<%= render 'barista/shared/layout' %>
+<%= render "barista/shared/layout" %>
 
 <style>
   .menu-page {
-    max-width: 900px;
+    max-width: none;
   }
-  
+
   .menu-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 24px;
+    margin-bottom: 20px;
     padding-bottom: 16px;
     border-bottom: 1px solid #1e262c;
+    gap: 16px;
   }
-  
+
   .menu-title {
     font-size: 20px;
     font-weight: 500;
     color: #d4dcec;
     margin: 0;
   }
-  
+
   .menu-search {
     flex: 1;
-    max-width: 300px;
-    margin-left: 24px;
+    max-width: 320px;
   }
-  
+
   .search-input {
     width: 100%;
     background: #141a1f;
@@ -84,124 +62,181 @@
     font-size: 13px;
     font-family: inherit;
   }
-  
+
   .search-input:focus {
     outline: none;
     border-color: #2d4c66;
   }
-  
-  .menu-category {
-    margin-bottom: 32px;
+
+  .menu-pos-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(280px, 1fr);
+    gap: 20px;
+    align-items: start;
   }
-  
-  .category-header {
-    margin-bottom: 16px;
+
+  .menu-catalog-pane {
+    background: #141a1f;
+    border: 1px solid #1e262c;
+    border-radius: 12px;
+    padding: 16px;
   }
-  
-  .category-title {
-    font-size: 16px;
-    font-weight: 500;
-    color: #d4dcec;
-    margin: 0;
+
+  .menu-product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 12px;
   }
-  
-  .category-count {
-    font-size: 12px;
-    color: #6e7b8c;
-    font-weight: normal;
-  }
-  
-  .products-list {
+
+  .menu-product-card {
     background: #0f1214;
     border: 1px solid #1e262c;
     border-radius: 12px;
-    overflow: hidden;
-  }
-  
-  .product-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 12px;
-    padding: 12px 16px;
-    border-bottom: 1px solid #1e262c;
+    padding: 12px;
+    transition: border-color 0.15s ease;
   }
 
-  .product-thumb {
-    flex-shrink: 0;
-    width: 48px;
-    height: 48px;
+  .menu-product-card:hover {
+    border-color: #2d4c66;
+  }
+
+  .menu-product-card__media {
+    aspect-ratio: 1;
+    width: 100%;
+    overflow: hidden;
     border-radius: 8px;
-    object-fit: cover;
-    border: 1px solid #1e262c;
     background: #1a1f24;
-  }
-  
-  .product-row:last-child {
-    border-bottom: none;
-  }
-  
-  .product-info {
+    margin-bottom: 8px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    flex: 1;
-    gap: 16px;
+    justify-content: center;
   }
-  
-  .product-name {
-    color: #d4dcec;
-    font-size: 14px;
+
+  .menu-product-card__media--placeholder {
+    font-size: 28px;
   }
-  
-  .product-price {
-    color: #7bc5f0;
+
+  .menu-product-card__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .menu-product-card__name {
+    font-size: 13px;
     font-weight: 500;
+    color: #d4dcec;
+    margin-bottom: 4px;
+    line-height: 1.3;
+  }
+
+  .menu-product-card__price {
     font-size: 14px;
+    font-weight: 600;
+    color: #7bc5f0;
   }
-  
-  .product-status {
-    margin-left: 16px;
+
+  .menu-cart-panel {
+    background: #141a1f;
+    border: 1px solid #1e262c;
+    border-radius: 12px;
+    padding: 16px;
+    position: sticky;
+    top: 12px;
   }
-  
-  .status-available {
-    color: #7cf0a0;
-    font-size: 12px;
+
+  .menu-cart-panel__title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #d4dcec;
+    margin: 0 0 16px;
   }
-  
-  .status-sold-out {
-    color: #f07c7c;
-    font-size: 12px;
+
+  .menu-cart-panel__items {
+    min-height: 120px;
+    max-height: 40vh;
+    overflow-y: auto;
+    margin-bottom: 16px;
   }
-  
-  .menu-footer {
-    margin-top: 32px;
-    padding-top: 16px;
-    border-top: 1px solid #1e262c;
-  }
-  
-  .menu-note {
-    font-size: 12px;
+
+  .menu-cart-panel__empty {
     color: #6e7b8c;
     text-align: center;
+    padding: 32px 8px;
+    font-size: 13px;
+  }
+
+  .menu-cart-panel__line {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 12px;
+    background: #0f1214;
+    border-radius: 8px;
+    margin-bottom: 8px;
+  }
+
+  .menu-cart-panel__line-name {
+    font-size: 13px;
+    color: #e5e9f0;
+  }
+
+  .menu-cart-panel__line-price {
+    font-size: 12px;
+    color: #9aa8b9;
+    white-space: nowrap;
+  }
+
+  .menu-cart-panel__totals {
+    border-top: 1px solid #1e262c;
+    padding-top: 12px;
+    margin-bottom: 16px;
+  }
+
+  .menu-cart-panel__total-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 16px;
+    font-weight: 700;
+    color: #d4dcec;
+  }
+
+  .menu-cart-panel__pay {
+    width: 100%;
+    padding: 12px 16px;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    font-family: inherit;
+    background: #2d4c66;
+    color: #9aa8b9;
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+
+  @media (max-width: 900px) {
+    .menu-pos-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .menu-cart-panel {
+      position: static;
+    }
   }
 </style>
 
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const searchInput = document.getElementById('menu-search-input');
-    if (searchInput) {
-      searchInput.addEventListener('input', (e) => {
-        const query = e.target.value.toLowerCase();
-        document.querySelectorAll('.product-row').forEach(row => {
-          const productName = row.dataset.productName || '';
-          if (productName.includes(query)) {
-            row.style.display = 'flex';
-          } else {
-            row.style.display = 'none';
-          }
-        });
+  document.addEventListener("DOMContentLoaded", () => {
+    const searchInput = document.getElementById("menu-search-input");
+    if (!searchInput) return;
+
+    searchInput.addEventListener("input", (e) => {
+      const query = e.target.value.toLowerCase();
+      document.querySelectorAll("[data-menu-product-card]").forEach((card) => {
+        const productName = card.dataset.productName || "";
+        card.style.display = productName.includes(query) ? "" : "none";
       });
-    }
+    });
   });
 </script>
