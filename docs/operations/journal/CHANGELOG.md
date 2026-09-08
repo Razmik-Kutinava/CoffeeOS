@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-08 — #80 Slice V Callcheck leave wizard: BLOCKED (нет телефона)
+
+- Fly **v492** · `SHOP_OTP_LOG_FALLBACK=false` (ssh)
+- V0 PASS: checkout → «Вход по телефону»
+- V1–V3 BLOCKED: нет `+79…` владельца — код не трогали
+- Артефакт: `registration_callcheck_cascade_ui_ux/mcp/fly_v492_2026-09-08/`
+
 ## 2026-09-08 — SPEC: СБП 3001 + Zero-Click AccountToken
 
 - Ops/bank-first SBR: primary **O→B→Z**, код (**C**) только после PASS кабинета

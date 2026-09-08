@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-08 (SPEC: SBP 3001 + Zero-Click)  
+**Дата:** 2026-09-08 (#80 Slice V BLOCKED)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| SPEC bank-first SBP O→B→Z | Verify O (кабинет Т-Кассы / init) |
-| C = conditional | 3001 = BLOCKED ops, не hotfix кода |
+| #80 V0 PASS · V1–V3 **BLOCKED** (нет телефона) | дать `+79…` → `/sbr` live V |
+| `SHOP_OTP_LOG_FALLBACK=false` · Fly **v492** | F только при FAIL |
 
-**last_done:** SPEC → `todo.md` СБП 3001 + AccountToken  
-**next_step:** `/sbr` Slice O — MCP init Point A
+**last_done:** Slice V partial — UI phone wizard + MCP_RESULT BLOCKED  
+**next_step:** телефон владельца → повтор live Callcheck leave wizard
 
 **ctx_trim:** `2026-09-02`
