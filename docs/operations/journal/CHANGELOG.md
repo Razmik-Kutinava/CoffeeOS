@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-08 — Follow-up Fly v493: B6 + Wallet simulate + plan seed
+
+- `WALLET_SIMULATE=1` · wallet stub `PKPASS_STUB` **PASS**
+- Seed `SubscriptionPlan` `pilot_weekly` · Charge **SKIP** (T-Bank ErrorCode **223** на старых Rebill)
+- Fix B6: menu `style`/`script` → внутрь `content_for` (layout barista без yield)
+- MCP: B2.2 **PASS** · #38 simulate **PASS** · #78 PARTIAL
+
 ## 2026-09-08 — SPEC: UserCards / RebillId + #26 M2 (verify-first)
 
 - `todo.md`: slices **P→U→O→M**, **C** только при FAIL нашего слоя

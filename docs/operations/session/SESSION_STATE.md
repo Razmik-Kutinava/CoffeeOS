@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-08 (SPEC: UserCards / RebillId + #26 M2)  
+**Дата:** 2026-09-08 (Fly v493 follow-up)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| SPEC verify-first · todo P→U→O→M | `/sbr` live Slice **P** |
-| C условный (FAIL нашего слоя) | не «нет карты у MCP» / не чистый ErrorCode |
+| v493 · B6 PASS · Wallet stub PASS | #78 Charge нужен свежий Rebill |
+| plan `pilot_weekly` live | |
 
-**last_done:** SPEC imported · hot-path Не ломать/Проверка  
-**next_step:** Slice P preflight Point A (`2fdee1ac-…`)
+**last_done:** secrets WALLET_SIMULATE · seed plan · menu content_for fix · MCP recheck  
+**next_step:** test-guest save_card → retry purchase
 
 **ctx_trim:** `2026-09-02`

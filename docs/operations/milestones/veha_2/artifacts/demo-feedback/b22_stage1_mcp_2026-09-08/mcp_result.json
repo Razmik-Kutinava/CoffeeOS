@@ -1,7 +1,7 @@
 {
   "task": "B2.2 stage-1 menu dual-pane",
-  "fly_version": "v490",
-  "git_tip": "22830d57",
+  "fly_version": "v493",
+  "git_tip": "pending_commit",
   "point_a_tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
   "tool": "cursor-ide-browser",
   "checks": {
@@ -10,11 +10,11 @@
     "B3_product_cards": "PASS",
     "B4_cart_panel_empty": "PASS",
     "B5_pay_disabled": "PASS",
-    "B6_search_hides_empty_categories": "FAIL",
+    "B6_search_hides_empty_categories": "PASS",
     "C1_sidebar_create_still_present": "PASS",
     "C2_create_order_alive": "PASS",
     "C3_board_alive": "PASS"
   },
-  "verdict": "PARTIAL",
-  "notes": "B6: search listener only on DOMContentLoaded — Turbo visit не биндит. Fix committed (turbo:load + immediate bind) — нужен redeploy для PASS B6 на стенде."
+  "verdict": "PASS",
+  "notes": "Root cause B6: style/script were outside content_for; layouts/barista ignores yield. Moved into content_for + turbo:load bind."
 }
