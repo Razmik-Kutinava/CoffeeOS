@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-08 — REVIEW: #71 CRM Brevo Contacts
+
+- bugbot high: `retry_on` CrmContactSync::Error + StandardError (5 attempts) — `fecee7e3`
+- security: no medium+ (ENV keys, consent/bounce, no PAN)
+- Local 20/0 · Entire `01M1ZZXV23N5BFK4SGDQV0H4KG` на `cb1e336d` · push CI
+
 ## 2026-09-08 — regress: #71 CRM Brevo Contacts PASS
 
 - Zone: CRM job+sync + receipt + orders_email → **20/0** (12+8)
