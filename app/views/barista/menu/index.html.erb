@@ -10,10 +10,15 @@
   <div class="menu-pos-grid">
     <section class="menu-catalog-pane" aria-label="Каталог">
       <div id="menu-product-grid" class="menu-product-grid">
-        <% @products.each do |product| %>
-          <% setting = @settings_by_product_id[product.id] %>
-          <% next unless setting %>
-          <%= render "barista/menu/product_card", product: product, setting: setting %>
+        <% @categories.each do |category| %>
+          <% category_products = @products.select { |p| p.category_id == category.id } %>
+          <% next if category_products.empty? %>
+          <h2 class="menu-category-title" data-category="<%= category.slug %>"><%= category.name %></h2>
+          <% category_products.each do |product| %>
+            <% setting = @settings_by_product_id[product.id] %>
+            <% next unless setting %>
+            <%= render "barista/menu/product_card", product: product, setting: setting %>
+          <% end %>
         <% end %>
       </div>
     </section>
@@ -86,6 +91,14 @@
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
     gap: 12px;
+  }
+
+  .menu-category-title {
+    grid-column: 1 / -1;
+    margin: 8px 0 4px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #9aa8b9;
   }
 
   .menu-product-card {
