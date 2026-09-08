@@ -99,7 +99,7 @@ class SyncContactToCrmJobTest < ActiveJob::TestCase
     Shop::CrmContactSync.define_singleton_method(:call!, original) if original
   end
 
-  test "ST-9 CRM error is re-raised for retry" do
+  test "ST-9 CRM error schedules Solid Queue retry" do
     order_email = OrderEmail.create!(
       order: @order,
       email: "err-#{SecureRandom.hex(3)}@example.com",
@@ -113,7 +113,7 @@ class SyncContactToCrmJobTest < ActiveJob::TestCase
       raise Shop::CrmContactSync::Error, "CRM down"
     end
 
-    assert_raises(Shop::CrmContactSync::Error) do
+    assert_enqueued_with(job: SyncContactToCrmJob) do
       SyncContactToCrmJob.perform_now(order_email.id)
     end
   ensure

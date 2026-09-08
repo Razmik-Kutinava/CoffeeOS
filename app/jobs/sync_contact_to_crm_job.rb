@@ -3,6 +3,10 @@
 class SyncContactToCrmJob < ApplicationJob
   queue_as :default
 
+  # Transient Brevo/network failures → Solid Queue auto-retry (raise alone is not enough).
+  retry_on Shop::CrmContactSync::Error, wait: :polynomially_longer, attempts: 5
+  retry_on StandardError, wait: :polynomially_longer, attempts: 5
+
   def perform(order_email_id)
     order_email = OrderEmail.find_by(id: order_email_id)
     return if order_email.blank?
