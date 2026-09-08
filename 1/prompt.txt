@@ -1,0 +1,267 @@
+<cursor_commands>
+
+--- Cursor Command: start ---
+# /start — старт сессии / задачи (умный)
+
+CoffeeOS. Следуй `coffeeos-agent-workflow` + `coffeeos-customer-intake` (PHASE 0) при нужде.
+
+## Режим (выбери один, не гоняй всё)
+
+### A) Узкий старт (по умолчанию, если контекст уже есть)
+Используй, если в чате/todo уже: баг локализован, есть список файлов, живой `todo.md`, или пользователь продолжает ту же задачу.
+
+Сделай **только**:
+1. Шапка `HANDOFF.md` + шапка `SESSION_STATE.md` (`Read` limit до `---`, не тело)
+2. `ISSUES.md` — только секция **`## 🔴 Открыто`** (до следующего `##`), если релевантно багу
+3. `todo.md` — если есть
+4. **Не** перечитывай PRACTICES/QA/весь CHECKLIST/весь CHANGELOG
+5. **Не** заново PHASE 0, если ТЗ уже в `customer_tasks/` или задача уже в todo
+6. Коротко: `last_done` / `current_state` / `next_step` (одна строка каждый)
+7. **ctx-trim:** если пт–вс и в шапке HANDOFF `ctx_trim` старше 7 дней — одна строка: «рекомендуется `/ctx-trim`» (не блокировать старт)
+
+### B) Полный старт + PHASE 0
+Только если **новое** ТЗ от заказчика ещё не в `customer_tasks/` / CBR, или пользователь явно просит intake.
+
+Тогда: PHASE 0 (intake 1:1) → краткая шапка ops → стоп до `/spec`.
+
+## Отчёт
+Таблица Сделано | Не сделано.  
+`Субагент: нет — старт` (или explore, если уже звал).  
+**Не пиши код** на этом шаге.
+
+## Обязательно в конце (копипаст для пользователя)
+
+Одной строкой, без лишнего текста вокруг:
+
+- Если нужен план/файлы → `Next: /spec`
+- Если SPEC/todo уже готов → `Next: /sbr`
+- Если только что завершили PHASE 0 → `Next: /spec`
+
+--- End Command ---
+
+--- Cursor Command: spec ---
+# /spec — PHASE 1 SPEC
+
+CoffeeOS SBR. Читай on-demand: `spec-build-review`, `coffeeos-task-workflow`.
+
+## Сделай
+1. Обнови `docs/operations/session/todo.md`: фазы SBR + галочки.
+2. Секция **«Файлы (ожидаемо)»** — **2–7 точных путей** + зачем каждый.
+3. Если неясно где код / много кандидатов → Task субагент **`explore`** (1 раз). Мелочь — без explore.
+4. Hot-path: мягкий blast-radius +1–3 соседа с пометкой почему.
+5. **Hot-path (shop/оплата/статусы/Cable/RLS)** — в todo **обязательно**:
+   ```
+   ## Не ломать
+   - … (2–4: оплата · повторить · табло/статус · peek …)
+   ## Проверка
+   - bin/rails test …   # 1–2 команды из coffeeos-dev-gates
+   ```
+   Без этих секций SPEC неполный — не звать `/sbr`.
+6. Не предлагать gem’ы Tinkoff/Stripe / чужой стек без просьбы владельца.
+7. Обнови **только шапки** SESSION_STATE / HANDOFF (кратко).
+8. **Не** пиши код и не RED на этом шаге (если пользователь в том же сообщении не сказал «ебашь до конца / сразу sbr»).
+
+## Отчёт
+Сделано | Не сделано + список файлов + Не ломать/Проверка (если hot-path).  
+`Субагент: explore | нет — пути ясны`
+
+## Обязательно в конце (копипаст)
+
+`Next: /sbr`
+
+→ RED → GREEN → /review.
+--- End Command ---
+</cursor_commands>
+<timestamp>Tuesday, Sep 8, 2026, 11:22 AM (UTC+4)</timestamp>
+
+Ниже готовый промпт для другого агента. **B2.2 уже разрезан на этапы 1–5 в ТЗ** — один SBR = один этап. Старт: **этап 1**.
+
+---
+
+## Задание агенту (SBR): B2.2 — бариста «Меню + Создать» → единый POS-экран
+
+### Контекст
+
+**ID:** B2.2 · Поток 2 (обработка заказа)  
+**ТЗ (канон):**  
+`docs/operations/milestones/veha_2/requirements/customer_tasks/B2_2_barista_menu_create_merge.md`  
+**CBR:** `CUSTOMER_BUSINESS_REQUIREMENTS.md` — B2.2 · реализация `[ ]`  
+**Связано:** B2.1 табло **закрыто** · W1.3/W1.4 каталог общий с витриной  
+
+**Артефакты stage0 (уже есть):**  
+- `artifacts/demo-feedback/b22_stage0_mapping_2026-06-10.json`  
+- скрины baseline + макеты: `artifacts/demo-feedback/screenshots/b22_menu_create_merge_2026-06-10/`  
+  - `customer_mockup_menu_cards_checkout.png`  
+  - `customer_mockup_modifiers_acquiring.png`  
+
+**Сейчас в коде:**
+| Путь | Роль |
+|------|------|
+| `GET /barista/menu` | read-only каталог (`MenuController#index`) |
+| `GET /barista/create-order` | сетка + корзина session + оплата (`OrdersController#new`) |
+| Sidebar | «Новый заказ» → create-order (`_sidebar.html.erb`) |
+| `Barista::OrderCreationService` | `source: manual` → табло |
+| `ProductTenantSetting#is_sold_out` | есть; у баристы **нет** PATCH с карточки |
+| Наличные | ещё в create-order UI — **убрать** (как B1.7) |
+
+**Проблема:** два экрана → лишние переключения; нет единого POS; нет стоп-листа с карточки; нет пути «Оплатить → POS».
+
+---
+
+### Карта этапов = карта SBR (один проход = один этап)
+
+| Этап | Содержание | Статус | Этот проход? |
+|------|------------|--------|----------------|
+| **0** | Маппинг, макеты, stage0 JSON | **DONE** | — |
+| **1** | Единый layout `/barista/menu`: сетка карточек + панель корзины по макету | `[ ]` | **← СТАРТ** |
+| **2** | Модификаторы на карточке, qty ±, сумма, промокод (опционально) | `[ ]` | следующий |
+| **3** | Чек-бокс «В наличии» → `PATCH` → `is_sold_out` + UI «Раскупили»; блок add если sold_out | `[ ]` | |
+| **4** | «Оплатить» → `PosPaymentService` **stub/adapter** (не полная спека Сбера); убрать наличные; заказ → табло как сейчас | `[ ]` | |
+| **5** | Убрать create-order из nav; redirect `/create-order` → `/menu`; тесты + MCP/smoke | `[ ]` | |
+| **6+** | Реальный Сбер POS по внешней спеки заказчика | **вне MVP** | OUT |
+
+**Не смешивать** этап 1 с POS Сбера / удалением create-order / стоп-листом — это следующие SBR.
+
+---
+
+### Этот проход: **Этап 1 — единый layout**
+
+#### Цель (DoD этапа 1)
+
+1. `/barista/menu` — **один экран**: слева/центр сетка карточек (фото + название + цена), справа (или по макету) **панель корзины** (позиции, итог, кнопка «Оплатить» может быть disabled / placeholder).
+2. Логику корзины можно **перенести/разделить** из `orders#new` (session `barista_cart`), но create-order **ещё жив** (не удалять до этапа 5).
+3. UI ориентир — макет `customer_mockup_menu_cards_checkout.png` (не pixel-perfect дизайн-система ради «красоты» — Hotwire/ERB/TUI как соседние barista views).
+4. Каталог через существующий `MenuCatalogLoadable` + `Shop::Catalog.tenant_menu` (W1.4) — **не** дублировать другой источник меню.
+5. Без открытой смены — поведение как у create-order (redirect / блок) — сверить `OrdersController#new`.
+6. Тесты: страница menu отдаёт карточки + cart panel; регрессия create-order и табло зелёная.
+
+#### Scope IN (этап 1)
+
+- `app/views/barista/menu/index.html.erb` — переписать под dual-pane  
+- `app/controllers/barista/menu_controller.rb` — загрузка меню + cart из session (как new)  
+- partials при необходимости: `app/views/barista/menu/_product_card.html.erb`, `_cart_panel.html.erb`  
+- Stimulus/Turbo только если уже принято на barista (не тащить React/Svelte на barista)  
+- Тесты: расширить `test/integration/barista_tablet_regression_test.rb` и/или controller tests  
+- Обновить `todo.md` + шапку SESSION/HANDOFF  
+
+#### Scope OUT (этап 1)
+
+- Полные модификаторы / qty UX (этап 2)  
+- PATCH sold_out (этап 3)  
+- POS Сбер / убрать cash (этап 4)  
+- Удаление `/create-order` и пункта сайдбара (этап 5)  
+- Shop PWA / TbankAdapter витрины  
+- Частичная оплата, кастомные заказы вне меню  
+- «Наличный расчёт» в corner case заказчика — **не делаем** (решение CoffeeOS в ТЗ)  
+- Новые gem’ы эквайринга  
+
+#### Не ломать
+
+1. **B2.1 табло** — `OrderBoardBroadcaster`, dashboard, звук, статусы  
+2. **`Barista::OrderCreationService`** — create order с create-order ещё работает  
+3. **W1.4** — menu hide sold_out = как витрина (`barista_tablet_regression_test` «menu hides sold out»)  
+4. **RBAC** — только barista (+ shift); manager не создаёт через barista endpoint  
+5. Смена: без open shift нельзя оформить заказ  
+
+#### Проверка (этап 1)
+
+```bash
+ruby bin/rails test test/integration/barista_tablet_regression_test.rb test/controllers/barista/orders_controller_test.rb test/services/barista/order_creation_service_test.rb
+# + новые тесты menu controller / menu page если добавишь
+```
+
+MCP/local: залогиненный barista → `/barista/menu` → видны карточки + cart panel; `/barista/create-order` ещё открывается.
+
+---
+
+### Последующие этапы (для todo / следующих агентов)
+
+**Этап 2 — модификаторы + qty + промо**  
+- Карточка: модификаторы (как W1.3 / create-order); ± qty; пересчёт; промокод в панели корзины (как сейчас в create).  
+- Макет: `customer_mockup_modifiers_acquiring.png`.  
+- Не ломать `modifier_options.selected_modifiers` в OrderItem.
+
+**Этап 3 — стоп-лист с карточки**  
+- NEW: `Barista::ProductAvailabilityController` (или аналог) `PATCH` → `ProductTenantSetting#is_sold_out` **без DDL**.  
+- UI: чек-бокс «В наличии» → «Раскупили»; ошибка API → откат чек-бокса.  
+- Блок добавления sold_out в корзину.  
+- Витрина уже скрывает sold_out — проверить sync.  
+- Pundit/authorize на barista + tenant.
+
+**Этап 4 — оплата без наличных + POS stub**  
+- Убрать cash из UI.  
+- NEW: `Barista::PosPaymentService` — stub «запрос на терминал» (успех/fail/timeout сообщения).  
+- Успех → существующий `OrderCreationService` + табло (`source: manual`).  
+- Полный Сбер API — **этап 6+**, нужна внешняя спека заказчика (в репо нет).  
+- Не подменять оплату витрины T-Bank.
+
+**Этап 5 — выпилить create-order**  
+- Sidebar: один пункт «Меню» (или переименовать «Новый заказ» → menu).  
+- `GET /create-order` → redirect `/menu`.  
+- Обновить все тесты, что бьют create-order.  
+- `bin/b22_barista_menu_fly_smoke.rb` + MCP Point A.  
+- Обновить CBR/CHECKLIST статусы этапа.
+
+---
+
+### Файлы (ожидаемо этап 1 — уточни в SPEC)
+
+```
+app/views/barista/menu/index.html.erb
+app/controllers/barista/menu_controller.rb
+app/controllers/concerns/barista/menu_catalog_loadable.rb   # только read, если нужно
+app/views/barista/orders/new.html.erb                      # не удалять; можно смотреть как донор UX
+app/views/barista/shared/_sidebar.html.erb                 # этап 1: можно НЕ трогать
+test/integration/barista_tablet_regression_test.rb
+docs/operations/session/todo.md
+```
+
+Этапы 3–4 добавят:  
+`product_availability_controller.rb`, `pos_payment_service.rb`, routes, policies.
+
+---
+
+### Канон CoffeeOS / SBR
+
+1. **SPEC** — `todo.md`: этап N, файлы, **Не ломать**, **Проверка**; шапка SESSION/HANDOFF; ссылка на ТЗ + макеты.  
+2. **RED** — падающие тесты UI/controller → `test: B2.2 stage-N … [RED]`.  
+3. **GREEN** — layout/логика → regress → `feat: B2.2 stage-N … [GREEN]`.  
+4. **REVIEW** — bugbot + security-review + Entire + push CI. Deploy — только апрув владельца.
+
+Правила: `coffeeos-http` (namespace barista), `coffeeos-services` (создание заказа/оплата не в толстом контроллере), `coffeeos-ui` (Hotwire/ERB), `coffeeos-core` (tenant/смена).  
+Субагент на SPEC: `explore` если пути размазаны; на BUILD — по необходимости `shell` для тестов.
+
+**Стек barista:** Rails + Hotwire/Turbo (+ Stimulus при необходимости). **Не** переносить Svelte shop CartSheet на barista.
+
+---
+
+### Критерий «B2.2 MVP закрыт» (после этапов 1–5)
+
+- Один экран оформления, 0 переключений Menu↔Create  
+- Стоп-лист с карточки → витрина  
+- Оплата без наличных через POS stub → заказ на табло  
+- create-order убран из nav + redirect  
+- Реальный Сбер — отдельная задача после спеки заказчика  
+
+---
+
+### Короткий старт для чата
+
+```
+@spec-build-review.mdc
+B2.2 — объединить Меню+Создать баристы.
+Канон: customer_tasks/B2_2_barista_menu_create_merge.md
+Макеты: artifacts/demo-feedback/screenshots/b22_menu_create_merge_2026-06-10/
+
+Этот проход: только этап 1 — единый layout /barista/menu (сетка + панель корзины).
+НЕ делать: sold_out PATCH, POS Сбер, удаление create-order, убрать наличные.
+
+SBR: /spec → RED → GREEN → /review.
+Не ломать: B2.1 табло, OrderCreationService через create-order, W1.4 sold_out hide, RBAC barista+shift.
+Point A tenant: 2fdee1ac-4674-41ee-b89e-87b45643f789
+После REVIEW стоп; этап 2 — отдельным намерением.
+```
+
+Если владелец скажет «ебашь этапы 1–3» — в SPEC явно список этапов и отдельные RED/GREEN коммиты **на каждый этап** (не один гигантский GREEN).
+
+/start
