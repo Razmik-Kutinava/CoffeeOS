@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-08 (#80 Slice V sync)  
+**Дата:** 2026-09-08 (SBP Slice O PASS v493)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #80 sync: check_status 200 confirmed:false | подтвердить: звонок 8-800 реально ушёл? |
-| SMS 204 | кабинет SMS.ru · F только если confirmed+UI stuck |
+| O **PASS** · init ≠ 3001 · NSPK QR | Slice **B** — live bind в банке |
+| C n/a | Z SKIP до AccountToken |
 
-**last_done:** sync «звоню» · Callcheck UI OK · confirmed не пришёл  
-**next_step:** ответ владельца / кабинет SMS.ru Callcheck
+**last_done:** MCP Slice O Fly v493 · order `b87b63ea…` · `qr.nspk.ru`  
+**next_step:** владелец: оплатить СБП с привязкой → AccountToken → Z
 
 **ctx_trim:** `2026-09-02`

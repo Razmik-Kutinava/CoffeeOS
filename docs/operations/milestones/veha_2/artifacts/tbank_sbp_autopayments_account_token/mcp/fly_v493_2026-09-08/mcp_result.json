@@ -1,0 +1,16 @@
+{
+  "date": "2026-09-08",
+  "slice": "O",
+  "verdict": "PASS",
+  "fly": "v493",
+  "deployment": "deployment-01M20JBGBP9VBQ1JN3HM1K58Z5",
+  "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "order_id": "b87b63ea-1599-4455-8067-c24428d011f6",
+  "amount_rub": 179,
+  "save_sbp_account": true,
+  "sbp_init_http": 200,
+  "error_code_3001": false,
+  "payment_url_host": "qr.nspk.ru",
+  "payment_url_id": "AD1P103IEBA77RP79I38RKM66BLF5AAI",
+  "next": "Slice B live bank bind for AccountToken; Z SKIP; C n/a"
+}

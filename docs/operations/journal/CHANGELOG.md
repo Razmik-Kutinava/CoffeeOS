@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-08 — SBP Slice O PASS (v493): init ≠ 3001
+
+- Live Point A: `POST sbp/init` + `save_sbp_account` → **200** → `qr.nspk.ru`
+- order `b87b63ea-1599-4455-8067-c24428d011f6` · 179₽ · код не меняли
+- Артефакт: `tbank_sbp_autopayments_account_token/mcp/fly_v493_2026-09-08/`
+- Next: Slice B (bind в банке) · Z SKIP · C n/a
 ## 2026-09-08 — #80 Slice V sync «звоню»: confirmed не пришёл
 
 - Callcheck UI + poll 200 OK · `confirmed:false` до timeout → SMS.ru 204

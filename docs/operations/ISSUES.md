@@ -1,4 +1,4 @@
-﻿# ISSUES
+# ISSUES
 
 > **Агент на старте:** только `## 🔴 Открыто`. Resolved → [`issues/archive/`](issues/archive/).
 
@@ -8,7 +8,7 @@
 |----|--------|--------|
 | UserCards / RebillId | 🟡 | апрув 3.5; E2E real MIR |
 | Checkout UX (Фаза 2) | 🟡 | апрув заказчика |
-| SBP 3001 | 🟡 | банк / кабинет |
+| SBP 3001 | 🟢 live init v493 ≠3001 · остаток: bind AccountToken (B) |
 | #47 / #35 PWA статусы | 🟡 | Fly v481 MCP MUST PASS · ждёт апрув заказчика |
 | #79 SBP return + autopay labels | 🟡 | v486 MCP **PASS** · ждёт апрув · demo &lt;10₽ убраны (min 10) |
 | #80 Registration UI/UX + Callcheck cascade | 🟡 | OTP fallback false · live Callcheck SKIP · ждёт апрув / телефон |
