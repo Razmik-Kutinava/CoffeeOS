@@ -2,16 +2,16 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-08 (regress #78 slice-5 PASS)  
+**Дата:** 2026-09-08 (REVIEW Wallet PKCS7)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #78 Shop API regress PASS | `/review` |
-| Fly **v489** | Slice 6 после REVIEW |
+| #38 PKCS7 REVIEW · push | CI · deploy апрув |
+| Fly **v489** | APNs OUT |
 
-**last_done:** regress subscriptions API + #77 offer — PASS  
-**next_step:** `/review` — bugbot + security + push CI
+**last_done:** icon@2x + generic GenerationError · Entire `01M1ZYPHF0EZYHM7C12W5PSPA7`  
+**next_step:** CI green → стоп; deploy — апрув
 
 **ctx_trim:** `2026-09-02`  
 **Fly:** v489 `deployment-01M1Y2J4PV5Z5SP7JWM317N8CC`  
