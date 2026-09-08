@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-08 — Ops: отмена/возврат заказов Point A (жалоба Aram)
+
+- Card: `#202609-0022` / `#202609-0023` уже `refunded` (pid 9205922796 / 9205941727)
+- Pending без charge → cancelled/failed; SBP pending `9205846937` void в Т-Банке
+- Live pay дальше — только по явному апруву
 ## 2026-09-08 — regress: UserCards/#26 zone PASS
 
 - rails payments/user_cards/one_click: **20/84** · node repeat_invalid_token: **23/0**
