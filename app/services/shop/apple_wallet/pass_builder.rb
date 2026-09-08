@@ -2,7 +2,7 @@
 
 module Shop
   module AppleWallet
-    # Сборка .pkpass (simulate stub; prod — PKCS7). #38 — face / back / strip.
+    # Сборка .pkpass (simulate stub; prod — PKCS7 via PassSigner). #38 — face / back / strip.
     class PassBuilder
       # B1.1 orderStatusProgress: fillPercent = activeIndex / 3 * 100
       FILL_PERCENT = {
@@ -41,7 +41,7 @@ module Shop
           return simulate_payload
         end
 
-        raise GenerationError, "WALLET signer configured but PassKit signing not implemented yet"
+        signed_payload
       end
 
       private
@@ -57,6 +57,82 @@ module Shop
           strip: strip_fields,
           bytes: "PKPASS_STUB:#{@order.id}:#{@status_label}"
         }
+      end
+
+      def signed_payload
+        face = face_fields
+        back = back_fields
+        strip = strip_fields
+        bytes = PassSigner.sign!(pass_json: pass_json_hash(face: face, back: back, strip: strip))
+
+        {
+          serial_number: @serial_number,
+          authentication_token: @authentication_token,
+          status_label: @status_label,
+          face: face,
+          back: back,
+          strip: strip,
+          bytes: bytes
+        }
+      end
+
+      def pass_json_hash(face:, back:, strip:)
+        payload = {
+          formatVersion: 1,
+          passTypeIdentifier: Config.pass_type_identifier,
+          serialNumber: @serial_number.to_s,
+          teamIdentifier: ENV.fetch("WALLET_TEAM_ID"),
+          authenticationToken: @authentication_token.to_s,
+          organizationName: "CoffeeOS",
+          description: "Статус заказа CoffeeOS",
+          storeCard: {
+            primaryFields: [
+              {
+                key: "status",
+                label: "Статус",
+                value: face[:text].to_s
+              }
+            ],
+            secondaryFields: [
+              {
+                key: "order",
+                label: "Заказ",
+                value: (@order.order_number.presence || @order.id).to_s
+              }
+            ],
+            auxiliaryFields: [
+              {
+                key: "progress",
+                label: "Прогресс",
+                value: strip[:progress].to_s
+              }
+            ],
+            backFields: [
+              {
+                key: "chat",
+                label: "Чат",
+                value: back[:chat_url].to_s
+              },
+              {
+                key: "tips",
+                label: "Чаевые",
+                value: back[:tips_url].to_s
+              }
+            ]
+          }
+        }
+
+        if face[:kind] == "qr" && face[:qr_payload].present?
+          payload[:barcodes] = [
+            {
+              format: "PKBarcodeFormatQR",
+              message: face[:qr_payload].to_s,
+              messageEncoding: "iso-8859-1"
+            }
+          ]
+        end
+
+        payload
       end
 
       def face_fields

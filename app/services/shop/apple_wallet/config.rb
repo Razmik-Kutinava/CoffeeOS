@@ -22,7 +22,8 @@ module Shop
         pass_type_identifier.present? &&
           ENV["WALLET_TEAM_ID"].present? &&
           ENV["WALLET_SIGNER_CERT_PEM"].present? &&
-          ENV["WALLET_SIGNER_KEY_PEM"].present?
+          ENV["WALLET_SIGNER_KEY_PEM"].present? &&
+          ENV["WALLET_WWDR_CERT_PEM"].present?
       end
 
       def self.pass_type_identifier

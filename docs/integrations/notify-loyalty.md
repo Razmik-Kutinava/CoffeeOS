@@ -40,6 +40,8 @@ ENV: Firebase admin + VAPID (`Shop::FirebaseConfig`). Dev: `FCM_SIMULATE=1`.
 | Update | `Shop::AppleWallet::PassUpdater` (from broadcaster) |
 | Storage | `order_wallet_passes` |
 
+**Signing:** без certs / `WALLET_SIMULATE=1` → stub `PKPASS_STUB:…`; с `WALLET_SIGNER_*` + `WALLET_WWDR_CERT_PEM` → `PassSigner` PKCS7 ZIP `.pkpass` (`storeCard`). APNs device register — отдельный SBR.
+
 Runbook детали: `docs/operations/milestones/veha_2/runbooks/APPLE_WALLET_ORDER_PASS.md`
 
 ---
