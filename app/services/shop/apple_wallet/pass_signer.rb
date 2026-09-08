@@ -63,7 +63,7 @@ module Shop
         wwdr = OpenSSL::X509::Certificate.new(ENV.fetch("WALLET_WWDR_CERT_PEM"))
 
         flags = OpenSSL::PKCS7::BINARY | OpenSSL::PKCS7::DETACHED
-        p7 = OpenSSL::PKCS7.sign(cert, key, manifest_json, [wwdr], flags)
+        p7 = OpenSSL::PKCS7.sign(cert, key, manifest_json, [ wwdr ], flags)
         p7.to_der
       end
 
