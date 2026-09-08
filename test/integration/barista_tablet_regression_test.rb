@@ -103,6 +103,24 @@ class BaristaTabletRegressionTest < ActionDispatch::IntegrationTest
     refute_includes response.body, @product.name
   end
 
+  # B2.2 этап 1: единый POS-layout — сетка карточек + панель корзины
+  test "menu page shows product cards and cart panel dual pane" do
+    login_as!(@barista)
+    get "/barista/menu"
+    assert_response :success
+
+    assert_includes response.body, 'id="menu-pos-layout"'
+    assert_includes response.body, 'id="menu-product-grid"'
+    assert_includes response.body, 'id="menu-cart-panel"'
+    assert_includes response.body, 'data-menu-product-card="true"'
+    assert_includes response.body, @product.name
+    assert_includes response.body, "150"
+    assert_includes response.body, "Корзина"
+    assert_includes response.body, "Корзина пуста"
+    assert_includes response.body, "Оплатить"
+    assert_match(/id="menu-pay-btn"[^>]*disabled/, response.body)
+  end
+
   # 7. Смена: отображает статистику (выручка/кол-во заказов)
   test "shift page shows shift stats for current shift" do
     login_as!(@barista)
