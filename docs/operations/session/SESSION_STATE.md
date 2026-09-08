@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-08 (REVIEW #78 slice-5 · CI green)  
+**Дата:** 2026-09-08 (Fly v490 · 4× MCP)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #78 Shop API REVIEW **CI green** | deploy — апрув |
-| Entire `01M1ZYPHF0EZYHM7C12W5PSPA7` на `1f433a75` | Slice 6 — отдельным намерением |
+| Deploy **v490** + MCP pack | redeploy B2.2 search fix (апрув) |
+| #71 CRM **PASS** · #78/#38/B2.2 **PARTIAL** | wallet simulate secret / plan seed |
 
-**last_done:** bugbot+security fixes · CI [34224418988](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/34224418988) green  
-**next_step:** deploy — только апрув владельца
+**last_done:** fly deploy v490 · MCP Point A ×4 · turbo:load menu search fix  
+**next_step:** апрув redeploy для B6 PASS
 
 **ctx_trim:** `2026-09-02`

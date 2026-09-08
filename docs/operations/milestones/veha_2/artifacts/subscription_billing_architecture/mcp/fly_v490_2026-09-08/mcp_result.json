@@ -1,0 +1,17 @@
+{
+  "task": "#78 slice-5 Shop API",
+  "fly_version": "v490",
+  "git_sha": "22830d57",
+  "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "verdict": "PARTIAL",
+  "checks": {
+    "up": "PASS",
+    "get_current_404": "PASS",
+    "get_unauth_401": "PASS",
+    "post_create": "SKIP_no_plan_no_rebill",
+    "cancel_501": "PASS",
+    "confirm_501": "PASS",
+    "config_offer": "PASS",
+    "user_cards": "PASS"
+  }
+}

@@ -11,6 +11,14 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-08 — Deploy Fly v490 + MCP pack (#38/#71/B2.2/#78)
+
+- CI tip green [34224737257](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/34224737257) → **fly deploy** v490
+- MCP: #71 CRM **PASS** · #38 Wallet **PARTIAL** (нет SIMULATE/certs) · B2.2 **PARTIAL** (B6 Turbo) · #78 **PARTIAL** (нет plan/RebillId)
+- Fix: barista menu search `turbo:load` bind — ждёт redeploy
+- Артефакты: `…/mcp/fly_v490_2026-09-08/` · `b22_stage1_mcp_2026-09-08/`
+- Sentry 24h unresolved **0**
+
 ## 2026-09-08 — REVIEW: #78 slice-5 Shop API
 
 - bugbot high: reject POST if already `active`/`past_due`

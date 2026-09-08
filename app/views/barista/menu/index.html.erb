@@ -246,9 +246,11 @@
 </style>
 
 <script>
-  document.addEventListener("DOMContentLoaded", () => {
+  // Turbo Drive: DOMContentLoaded не повторяется на visit — вешаем на turbo:load + сразу.
+  function bindMenuSearch() {
     const searchInput = document.getElementById("menu-search-input");
-    if (!searchInput) return;
+    if (!searchInput || searchInput.dataset.bound === "1") return;
+    searchInput.dataset.bound = "1";
 
     searchInput.addEventListener("input", (e) => {
       const query = e.target.value.toLowerCase();
@@ -263,5 +265,9 @@
         block.style.display = visible > 0 ? "contents" : "none";
       });
     });
-  });
+  }
+
+  document.addEventListener("DOMContentLoaded", bindMenuSearch);
+  document.addEventListener("turbo:load", bindMenuSearch);
+  bindMenuSearch();
 </script>
