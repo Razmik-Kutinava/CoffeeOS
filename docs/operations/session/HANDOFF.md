@@ -2,16 +2,16 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-08 (Fly v490 deploy + 4× MCP)  
+**Дата:** 2026-09-08 (#80 SPEC Callcheck → leave wizard)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Fly **v490** · MCP pack done | B2.2 B6 fix → redeploy (апрув) |
-| Wallet PARTIAL (нет SIMULATE/certs) | `WALLET_SIMULATE=1` или prod certs |
+| #80 SPEC · verify-first | Slice V live Point A (реальный звонок) |
+| v486 live Callcheck был SKIP | код только при V FAIL |
 
-**last_done:** one deploy v490 + MCP #38/#71/B2.2/#78 · turbo search fix committed  
-**next_step:** апрув redeploy для B6 · опц. wallet secrets
+**last_done:** SPEC #80 в `todo.md` (V→F→R)  
+**next_step:** `/sbr` Slice V · без телефона = BLOCKED
 
 **ctx_trim:** `2026-09-02`  
 **Fly:** v490 `deployment-01M20F5EE72MF45628JYTFG8ZG`  

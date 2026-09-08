@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-08 — SPEC: #80 Callcheck → leave wizard (verify-first)
+
+- CBR #80 · Slice V live first · код не трогать до FAIL
+- `todo.md`: V→F→R · 6 файлов + 2 соседа · Не ломать / Проверка
+- Канон Callcheck (не FlashCall); Point A; артефакт `registration_callcheck_cascade_ui_ux/mcp/`
+
 ## 2026-09-08 — Deploy Fly v490 + MCP pack (#38/#71/B2.2/#78)
 
 - CI tip green [34224737257](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/34224737257) → **fly deploy** v490

@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-08 (Fly v490 · 4× MCP)  
+**Дата:** 2026-09-08 (#80 SPEC Callcheck leave wizard)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Deploy **v490** + MCP pack | redeploy B2.2 search fix (апрув) |
-| #71 CRM **PASS** · #78/#38/B2.2 **PARTIAL** | wallet simulate secret / plan seed |
+| #80 SPEC done · verify-first | Slice V live (телефон + fallback=false) |
+| Код не трогать до V FAIL | F только по матрице · иначе REVIEW/артефакт |
 
-**last_done:** fly deploy v490 · MCP Point A ×4 · turbo:load menu search fix  
-**next_step:** апрув redeploy для B6 PASS
+**last_done:** SPEC #80 → `todo.md` (Slice V first)  
+**next_step:** `/sbr` → Slice V live Point A
 
 **ctx_trim:** `2026-09-02`
