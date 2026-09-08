@@ -22,9 +22,11 @@ class Shop::AppleWallet::PassBuilderTest < ActiveSupport::TestCase
   end
 
   teardown do
-    ENV.delete("WALLET_SIMULATE")
-    ENV.delete("WALLET_FORCE_UNAVAILABLE")
-    ENV.delete("WALLET_FORCE_GEN_ERROR")
+    %w[
+      WALLET_SIMULATE WALLET_FORCE_UNAVAILABLE WALLET_FORCE_GEN_ERROR
+      WALLET_PASS_TYPE_ID WALLET_TEAM_ID
+      WALLET_SIGNER_CERT_PEM WALLET_SIGNER_KEY_PEM WALLET_WWDR_CERT_PEM
+    ].each { |k| ENV.delete(k) }
   end
 
   test "#38 accepted pass has status face, back chat/tips, strip progress 🟩⬜⬜" do
