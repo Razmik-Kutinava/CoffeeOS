@@ -15,7 +15,8 @@
 
 - bugbot high: reject POST if already `active`/`past_due`
 - security medium: `resolve_payment_method!` requires `is_active: true`
-- Local: subscriptions zone **13/0** · Entire `01M1ZYPHF0EZYHM7C12W5PSPA7` · push CI
+- Local: subscriptions zone **13/0** · Entire `01M1ZYPHF0EZYHM7C12W5PSPA7` на `1f433a75`
+- CI [34224418988](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/34224418988) **green** · deploy — апрув
 
 ## 2026-09-08 — REVIEW: B2.2 stage-1 CI green
 

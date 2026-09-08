@@ -14,7 +14,7 @@
 - [x] **RED** (`084f0451`)
 - [x] **GREEN** (`c4e48db8`)
 - [x] **regress** PASS
-- [x] **REVIEW** — bugbot+security fixes (duplicate purchase + inactive PM) · push CI
+- [x] **REVIEW** — bugbot+security fixes · CI [34224418988](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/34224418988) green
 - [ ] **deploy** — только апрув владельца
 - [ ] **Slice 6** — отдельным намерением
 
