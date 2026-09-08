@@ -37,7 +37,8 @@ module Shop
 
         zip_bytes(files.merge("manifest.json" => manifest_json, "signature" => signature))
       rescue OpenSSL::OpenSSLError, ArgumentError, TypeError => e
-        raise GenerationError, "PassKit signing failed: #{e.message}"
+        Rails.logger.error("[AppleWallet::PassSigner] #{e.class}: #{e.message}")
+        raise GenerationError, "PassKit signing failed"
       end
 
       private
@@ -46,7 +47,7 @@ module Shop
         {
           "pass.json" => JSON.generate(@pass_json),
           "icon.png" => asset_bytes("icon.png"),
-          "paula.r@example.org" => asset_bytes("paula.r@example.org"),
+          "icon@2x.png" => asset_bytes("icon@2x.png"),
           "strip.png" => asset_bytes("strip.png")
         }
       end

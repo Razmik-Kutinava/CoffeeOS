@@ -2,20 +2,20 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-08 (regress Wallet PKCS7 PASS)  
+**Дата:** 2026-09-08 (REVIEW Wallet PKCS7)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #38 PKCS7 regress **PASS** | `/review` |
-| Fly **v489** · tip `3a579022` | APNs — след. SBR |
+| #38 PKCS7 REVIEW · push | CI green → deploy апрув |
+| Fly **v489** | APNs OUT |
 
-**last_done:** zone regress 18+3 runs · 0 fail  
-**next_step:** `/review` (bugbot + security + Entire + push CI)
+**last_done:** REVIEW fixes icon@2x + generic GenerationError  
+**next_step:** push CI · deploy — только апрув
 
 **ctx_trim:** `2026-09-02`  
 **Fly:** v489 `deployment-01M1Y2J4PV5Z5SP7JWM317N8CC`  
-**Sentry:** unresolved 24h **0** · RUBY-1G/1H resolved
+**Sentry:** unresolved 24h **0**
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

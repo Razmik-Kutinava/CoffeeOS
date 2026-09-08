@@ -60,7 +60,7 @@ class Shop::AppleWallet::PassSignerTest < ActiveSupport::TestCase
     assert_includes entries.keys, "manifest.json"
     assert_includes entries.keys, "signature"
     assert_includes entries.keys, "icon.png"
-    assert_includes entries.keys, "paula.r@example.org"
+    assert_includes entries.keys, "icon@2x.png"
     assert_includes entries.keys, "strip.png"
   end
 

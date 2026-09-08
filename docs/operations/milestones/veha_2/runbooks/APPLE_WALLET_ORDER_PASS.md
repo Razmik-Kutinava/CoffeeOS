@@ -30,8 +30,8 @@
 Когда certs настроены и **не** `simulate?`:
 
 1. `PassBuilder` собирает `pass.json` (`storeCard`: status / order / progress / chat+tips; на `ready` — QR barcode).
-2. `PassSigner` пакует ZIP: `pass.json`, `icon.png`, `paula.r@example.org`, `strip.png`, `manifest.json` (SHA1), `signature` (PKCS#7 detached, signer + WWDR).
-3. `built[:bytes]` — бинарный `.pkpass`; `simulated` отсутствует.
+2. `PassSigner` пакует ZIP: `pass.json`, `icon.png`, `icon@2x.png`, `strip.png`, `manifest.json` (SHA1), `signature` (PKCS#7 detached, signer + WWDR).
+3. `built[:bytes]` — бинарный `.pkpass`; `simulated` отсутствует. OpenSSL details — только в лог; клиенту стабильный `GenerationError`.
 
 ### Smoke (local)
 

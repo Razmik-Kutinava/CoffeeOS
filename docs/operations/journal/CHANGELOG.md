@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-08 — REVIEW: Wallet PKCS7 bugbot/security fixes
+
+- bugbot high: `paula.r@example.org` → `icon@2x.png`
+- security medium: OpenSSL details в лог; клиенту стабильный `PassKit signing failed`
+- Local zone 21/0 · Entire `01M1ZYPHF0EZYHM7C12W5PSPA7` · push CI
+
 ## 2026-09-08 — GREEN: Apple Wallet PassKit PKCS7
 
 - `PassSigner`: ZIP + SHA1 manifest + PKCS7 detached; `WALLET_WWDR_CERT_PEM` в `certs_configured?`

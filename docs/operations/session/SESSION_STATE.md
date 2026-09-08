@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-08 (regress Wallet PKCS7 PASS)  
+**Дата:** 2026-09-08 (REVIEW Wallet PKCS7)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #38 PKCS7 zone **PASS** (21 runs) | `/review` |
-| Entire `01M1ZYPHF0EZYHM7C12W5PSPA7` | Fly MCP — после deploy |
+| #38 PKCS7 REVIEW fixes | push CI · deploy апрув |
+| Entire `01M1ZYPHF0EZYHM7C12W5PSPA7` | APNs — след. SBR |
 
-**last_done:** regress apple_wallet + ReadyPushJob + wallet_pass API  
-**next_step:** `/review`
+**last_done:** bugbot `icon@2x.png` · security no OpenSSL leak to client  
+**next_step:** `git push` → CI green → стоп (deploy апрув)
 
 **ctx_trim:** `2026-09-02`
