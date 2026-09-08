@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-08 — UserCards / RebillId + #26 M2 MCP PASS (v493)
+
+- Verify-first: P/U/O/M **PASS** · Slice C **n/a** (код не меняли)
+- Guest Aram · MIR `*5953`/`*8782` RebillId · one_click → чек · M2 invalid token → inline «Сбой банка: позже»
+- Артефакт: `repeat_order_invalid_token_payment_sheet/mcp/fly_v493_2026-09-08/`
+- ISSUES UserCards/#26 → 🟢
+
 ## 2026-09-08 — SBP Slice O PASS (v493): init ≠ 3001
 
 - Live Point A: `POST sbp/init` + `save_sbp_account` → **200** → `qr.nspk.ru`

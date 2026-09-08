@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-08 (SBP Slice O PASS v493)  
+**Дата:** 2026-09-08 (UserCards/#26 M2 MCP PASS v493)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| O **PASS** · init ≠ 3001 · NSPK QR | Slice **B** — live bind в банке |
-| C n/a | Z SKIP до AccountToken |
+| P/U/O/M **PASS** · C n/a | апрув / следующая задача |
+| #26 M2 inline OK | артефакт `…/fly_v493_2026-09-08/` |
 
-**last_done:** MCP Slice O Fly v493 · order `b87b63ea…` · `qr.nspk.ru`  
-**next_step:** владелец: оплатить СБП с привязкой → AccountToken → Z
+**last_done:** verify-first live Point A · ISSUES UserCards/#26 → 🟢  
+**next_step:** стоп (код не меняли)
 
 **ctx_trim:** `2026-09-02`
