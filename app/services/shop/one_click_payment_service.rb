@@ -10,6 +10,15 @@ module Shop
     end
 
     def call!(params)
+      cid = CustomerSession.customer_id(@session, @tenant.id)
+      customer = cid.present? ? MobileCustomer.find_by(id: cid) : nil
+      if Payments::BindingStepUp.requires_step_up?(customer, session: @session, tenant_id: @tenant.id)
+        raise OrderCreator::Error.new(
+          "Требуется подтверждение телефона (step-up) перед списанием с сохранённой карты",
+          step_up_required: true
+        )
+      end
+
       normalized = params.to_h.symbolize_keys
       normalized[:saved_card_id] ||= normalized[:card_id]
 

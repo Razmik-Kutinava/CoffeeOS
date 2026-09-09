@@ -18,14 +18,27 @@ module Shop
       end
     end
 
-    def initialize(tenant:, request: nil, adapter: nil, autopay: nil)
+    def initialize(tenant:, request: nil, adapter: nil, autopay: nil, session: nil)
       @tenant = tenant
       @request = request
       @adapter = adapter || Payments::TbankAdapter.new
       @autopay = autopay || Payments::TbankSbpAutopay.new(adapter: @adapter)
+      @session = session
     end
 
     def call!(order_id:, customer_id: nil)
+      if @session.present?
+        cid = customer_id.presence || Shop::CustomerSession.customer_id(@session, @tenant.id)
+        customer = cid.present? ? MobileCustomer.find_by(id: cid) : nil
+        if Payments::BindingStepUp.requires_step_up?(customer, session: @session, tenant_id: @tenant.id)
+          raise Error.new(
+            "Требуется подтверждение телефона (step-up) перед списанием СБП",
+            http_status: :unprocessable_entity,
+            error_code: "step_up_required"
+          )
+        end
+      end
+
       order = find_pending_order!(order_id)
       token_row = find_account_token!(order, customer_id: customer_id)
 

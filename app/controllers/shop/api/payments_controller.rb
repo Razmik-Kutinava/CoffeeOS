@@ -21,7 +21,9 @@ module Shop
       rescue Shop::TbankPaymentError => e
         render_payment_error(e)
       rescue Shop::OrderCreator::Error => e
-        render json: { error: e.message, status: 422 }, status: :unprocessable_entity
+        body = { error: e.message, status: 422 }
+        body[:step_up_required] = true if e.step_up_required
+        render json: body, status: :unprocessable_entity
       end
 
       # POST /shop/api/payments/one_click — Init → Charge по card_id / RebillId.
@@ -32,7 +34,9 @@ module Shop
       rescue Shop::TbankPaymentError => e
         render_payment_error(e)
       rescue Shop::OrderCreator::Error => e
-        render json: { error: e.message, status: 422 }, status: :unprocessable_entity
+        body = { error: e.message, status: 422 }
+        body[:step_up_required] = true if e.step_up_required
+        render json: body, status: :unprocessable_entity
       end
 
       # POST /shop/api/payments/sbp/init — Init+Receipt → GetQr → { payment_url }.
@@ -63,7 +67,7 @@ module Shop
       def sbp_charge
         session_cid = Shop::CustomerSession.customer_id(session, @shop_tenant.id)
         find_visible_order!(params.require(:order_id))
-        result = Shop::SbpAutopayChargeService.new(tenant: @shop_tenant, request: request)
+        result = Shop::SbpAutopayChargeService.new(tenant: @shop_tenant, request: request, session: session)
           .call!(order_id: params.require(:order_id), customer_id: session_cid)
         render json: {
           order_id: result[:order_id],

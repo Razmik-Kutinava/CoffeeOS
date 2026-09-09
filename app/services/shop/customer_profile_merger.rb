@@ -5,8 +5,8 @@ module Shop
   class CustomerProfileMerger
     class Error < StandardError; end
 
-    def self.merge!(survivor:, donor:)
-      new(survivor: survivor, donor: donor).merge!
+    def self.merge!(survivor:, donor:, allow_payment_methods: false)
+      new(survivor: survivor, donor: donor).merge!(allow_payment_methods: allow_payment_methods)
     end
 
     def self.link_email!(survivor:, email:)
@@ -22,7 +22,7 @@ module Shop
       @donor = donor
     end
 
-    def merge!
+    def merge!(allow_payment_methods: false)
       raise Error, "Нет целевого профиля" if @survivor.blank?
       raise Error, "Нет профиля-донора" if @donor.blank?
       return @survivor if @survivor.id == @donor.id
@@ -30,7 +30,7 @@ module Shop
       ActiveRecord::Base.transaction do
         lock_pair!
         absorb_contacts!
-        reassign_foreign_keys!
+        reassign_foreign_keys!(allow_payment_methods: allow_payment_methods)
         soft_deactivate_donor!
         @survivor.save!
       end
@@ -49,7 +49,8 @@ module Shop
         if other
           @donor = other
           absorb_contacts!
-          reassign_foreign_keys!
+          # Явная привязка контакта к уже открытому профилю — карты переносим.
+          reassign_foreign_keys!(allow_payment_methods: true)
           soft_deactivate_donor!
         end
         @survivor.email = normalized
@@ -71,7 +72,7 @@ module Shop
         if other
           @donor = other
           absorb_contacts!
-          reassign_foreign_keys!
+          reassign_foreign_keys!(allow_payment_methods: true)
           soft_deactivate_donor!
         end
         @survivor.phone = normalized
@@ -117,13 +118,15 @@ module Shop
       @survivor.last_name = @donor.last_name if @survivor.last_name.blank? && @donor.last_name.present?
     end
 
-    def reassign_foreign_keys!
+    def reassign_foreign_keys!(allow_payment_methods: false)
       Order.where(customer_id: @donor.id).update_all(customer_id: @survivor.id)
-      MobilePaymentMethod.where(customer_id: @donor.id).find_each do |pm|
-        if pm.is_default && MobilePaymentMethod.where(customer_id: @survivor.id, is_default: true, is_active: true).exists?
-          pm.update_columns(customer_id: @survivor.id, is_default: false)
-        else
-          pm.update_columns(customer_id: @survivor.id)
+      if allow_payment_methods
+        MobilePaymentMethod.where(customer_id: @donor.id).find_each do |pm|
+          if pm.is_default && MobilePaymentMethod.where(customer_id: @survivor.id, is_default: true, is_active: true).exists?
+            pm.update_columns(customer_id: @survivor.id, is_default: false)
+          else
+            pm.update_columns(customer_id: @survivor.id)
+          end
         end
       end
       MobileSession.where(customer_id: @donor.id).update_all(customer_id: @survivor.id)

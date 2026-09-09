@@ -2,7 +2,14 @@
 
 module Shop
   class OrderCreator
-    class Error < StandardError; end
+    class Error < StandardError
+      attr_reader :step_up_required
+
+      def initialize(message = nil, step_up_required: false)
+        @step_up_required = step_up_required
+        super(message)
+      end
+    end
 
     attr_reader :payment_url, :provider_payment_id, :card_binding
 

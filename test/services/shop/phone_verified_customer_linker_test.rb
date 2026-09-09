@@ -38,25 +38,41 @@ class Shop::PhoneVerifiedCustomerLinkerTest < ActiveSupport::TestCase
     assert_equal email, existing.email
   end
 
-  test "merges phone customer into session email customer on conflict" do
-    email = "merge-email-#{SecureRandom.hex(3)}@example.com"
-    email_customer = MobileCustomer.create!(email: email, first_name: "Mail", is_active: true, email_verified: true)
-    Shop::CustomerSession.set_customer_id!(@session, @tenant.id, email_customer.id)
+  # V3-SEC-OTP-MERGE: switch to OTP profile — do NOT absorb donor cards into guest session.
+  test "switches session to existing phone customer instead of absorbing into guest" do
+    guest = MobileCustomer.create!(email: "guest-#{SecureRandom.hex(3)}@example.com", first_name: "Гость", is_active: true)
+    Shop::CustomerSession.set_customer_id!(@session, @tenant.id, guest.id)
 
-    phone_customer = MobileCustomer.create!(phone: @phone, first_name: "Phone", is_active: true, phone_verified: true)
+    phone_customer = MobileCustomer.create!(
+      phone: @phone,
+      first_name: "Phone",
+      is_active: true,
+      phone_verified: true
+    )
+    card = MobilePaymentMethod.create!(
+      customer_id: phone_customer.id,
+      payment_type: "card",
+      card_token: "rebill-otp-#{SecureRandom.hex(4)}",
+      card_masked: "4300****0777",
+      card_brand: "MIR",
+      is_active: true,
+      is_default: true
+    )
 
     cid = Shop::PhoneVerifiedCustomerLinker.link!(
       session: @session,
       tenant_id: @tenant.id,
       phone: @phone
     )
-    assert_equal email_customer.id, cid
-    email_customer.reload
-    phone_customer.reload
-    assert_equal @phone, email_customer.phone
-    assert email_customer.phone_verified
-    assert_equal email, email_customer.email
-    assert_equal false, phone_customer.is_active
-    assert_nil phone_customer.phone
+
+    assert_equal phone_customer.id, cid
+    assert_equal phone_customer.id, Shop::CustomerSession.customer_id(@session, @tenant.id)
+    assert_equal phone_customer.id, card.reload.customer_id
+    assert_equal 0, MobilePaymentMethod.where(customer_id: guest.id).count
+    assert Payments::BindingStepUp.requires_step_up?(
+      phone_customer.reload,
+      session: @session,
+      tenant_id: @tenant.id
+    )
   end
 end

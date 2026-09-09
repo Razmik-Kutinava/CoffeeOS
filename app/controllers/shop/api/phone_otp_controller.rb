@@ -44,6 +44,9 @@ module Shop
           tenant_id: @shop_tenant.id,
           phone: phone
         )
+        if ActiveModel::Type::Boolean.new.cast(params[:binding_step_up])
+          Payments::BindingStepUp.unlock_payments!(session, @shop_tenant.id)
+        end
         payload = { confirmed: true, verified: true, phone: phone }
         if customer_id.present?
           payload[:refresh_token] = Shop::MobileSessionIssuer.call!(customer_id: customer_id)
@@ -93,6 +96,9 @@ module Shop
           tenant_id: @shop_tenant.id,
           phone: phone
         )
+        if ActiveModel::Type::Boolean.new.cast(params[:binding_step_up])
+          Payments::BindingStepUp.unlock_payments!(session, @shop_tenant.id)
+        end
         payload = { verified: true, phone: phone }
         if customer_id.present?
           payload[:refresh_token] = Shop::MobileSessionIssuer.call!(customer_id: customer_id)

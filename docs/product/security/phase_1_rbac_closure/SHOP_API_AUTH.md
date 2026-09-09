@@ -83,6 +83,14 @@ Filter logs: `:api_key`, `:shop_api_key` в `filter_parameter_logging.rb`.
 
 ---
 
+## OTP login vs saved cards (V3-SEC-OTP-MERGE)
+
+- **OTP (phone/email)** = login-фактор: сессия переключается на существующий verified-профиль (`switch`), а не «гость поглощает донора с картами».
+- **Saved cards / one-click / SBP AccountToken** = отдельный контур: после входа в профиль с `MobilePaymentMethod` списание блокируется до `Payments::BindingStepUp` unlock в этой сессии (`step_up_required: true`).
+- `CustomerProfileMerger.merge!` по умолчанию **не** переносит карты (`allow_payment_methods: false`); явный allow — только для осознанных сценариев (`link_email!` / `link_phone!`).
+
+---
+
 ## Чеклист для нового shop/api endpoint
 
 1. Класс данных: PUBLIC / GUEST / CUSTOMER?
