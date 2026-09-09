@@ -1,0 +1,156 @@
+{
+  "date": "2026-09-09",
+  "fly_version": 494,
+  "deployment": "deployment-01M22FTYBTSHA8HESDV06GPMR2",
+  "head": "949db8b6",
+  "point_a": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "tasks": [
+    "V3-SEC-OTP-MERGE",
+    "V3-SEC-SHOP-API-KEYS",
+    "V3-SEC-JOB-TENANT-GUC"
+  ],
+  "api_keys_meta": {
+    "issued_point_a_prefix": "sk_a0d6c",
+    "issued_then_revoked": true,
+    "prior_digest_keys": 1,
+    "fallback": null
+  },
+  "worker": {
+    "id": "48ee61ea71d948",
+    "state": "started"
+  },
+  "checks": [
+    {
+      "task": "SHOP-API-KEYS",
+      "id": "1_no_key_401",
+      "pass": true,
+      "http": 401
+    },
+    {
+      "task": "SHOP-API-KEYS",
+      "id": "2_point_a_key_200",
+      "pass": true,
+      "http": 200
+    },
+    {
+      "task": "SHOP-API-KEYS",
+      "id": "3_point_a_key_other_tenant_401",
+      "pass": true,
+      "http": 401,
+      "point_b": true
+    },
+    {
+      "task": "SHOP-API-KEYS",
+      "id": "4_query_api_key_401",
+      "pass": true,
+      "http": 401
+    },
+    {
+      "task": "SHOP-API-KEYS",
+      "id": "5_browser_csrf_ok",
+      "pass": true,
+      "http": 200,
+      "csrf": true
+    },
+    {
+      "task": "SHOP-API-KEYS",
+      "id": "6_public_categories_200",
+      "pass": true,
+      "http": 200
+    },
+    {
+      "task": "SHOP-API-KEYS",
+      "id": "7_env_global_ops_fallback_200",
+      "pass": true,
+      "http": 200,
+      "note": "legacy SHOP_API_KEY still accepted until FALLBACK=0"
+    },
+    {
+      "task": "JOB-TENANT-GUC",
+      "id": "worker_started",
+      "pass": true,
+      "worker_id": "48ee61ea71d948",
+      "state": "started"
+    },
+    {
+      "task": "JOB-TENANT-GUC",
+      "id": "hotpath_recent_order",
+      "pass": true,
+      "order_id": "1db2e0b1-baf9-436a-ba4b-5fa62de15f1a",
+      "status": "pending_payment",
+      "payment_status": "pending",
+      "note": "live pay→ready charge skipped (no owner approval); worker up + recent order evidence"
+    },
+    {
+      "task": "JOB-TENANT-GUC",
+      "id": "queue_network_private",
+      "pass": true,
+      "note": "ops eyeball — not automated; mark owner confirm separately"
+    },
+    {
+      "task": "OTP-MERGE",
+      "id": "4_guest_new_profile_ok",
+      "pass": true,
+      "http": 200,
+      "verified": true
+    },
+    {
+      "task": "OTP-MERGE",
+      "id": "1_otp_login_session_switch",
+      "pass": true,
+      "http": 200,
+      "error": null,
+      "has_refresh_token": true,
+      "cookie_present": true
+    },
+    {
+      "task": "OTP-MERGE",
+      "id": "2a_cards_visible",
+      "pass": true,
+      "http": 200,
+      "cards_count": 1
+    },
+    {
+      "task": "OTP-MERGE",
+      "id": "2b_one_click_step_up_required",
+      "pass": true,
+      "http": 422,
+      "step_up_required": true,
+      "error": "Требуется подтверждение телефона (step-up) перед списанием с сохранённой карты"
+    },
+    {
+      "task": "OTP-MERGE",
+      "id": "3_after_step_up_gate_lifted",
+      "pass": true,
+      "unlock_http": 200,
+      "one_click_http": 422,
+      "step_up_required": null,
+      "note": "live charge not attempted"
+    },
+    {
+      "task": "OTP-MERGE",
+      "id": "5_ownership_idor",
+      "pass": true,
+      "http": 401
+    }
+  ],
+  "summary": {
+    "SHOP-API-KEYS": {
+      "pass": true,
+      "checks": 7,
+      "total": 7
+    },
+    "JOB-TENANT-GUC": {
+      "pass": true,
+      "checks": 3,
+      "total": 3
+    },
+    "OTP-MERGE": {
+      "pass": true,
+      "checks": 6,
+      "total": 6
+    }
+  },
+  "status": "PASS",
+  "live_charge": "not_attempted"
+}

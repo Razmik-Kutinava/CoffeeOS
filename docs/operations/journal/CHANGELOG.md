@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-09 — deploy+MCP: V3-SEC OTP-MERGE / SHOP-API-KEYS / JOB-TENANT
+
+- CI green pre-deploy · Fly **v494** `deployment-01M22FTYBTSHA8HESDV06GPMR2`
+- MCP Point A **PASS**: SHOP-API-KEYS 7/7 · OTP-MERGE 6/6 · JOB-TENANT worker+evidence 3/3
+- Live charge / pay→ready A–D **не** гоняли (нет апрува) · disposable Point A API key issued+revoked
+- Артефакт: `milestones/veha_2/artifacts/v3_sec_triple_mcp/mcp/fly_v494_2026-09-09/` · runner `bin/acceptance/v3_sec_post_deploy_mcp.rb`
+
 ## 2026-09-09 — ops: refund Point A MIR *5953 (витрина)
 
 - T-Bank `/v2/Cancel` via `Payments::TbankOrderRefund`: `#202609-0031` + `#0032` (10₽×2) → bank `REFUNDED`
