@@ -2,22 +2,22 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-09 (GREEN: V3-SEC-SHOP-API-KEYS)  
+**Дата:** 2026-09-09 (regress: V3-SEC-SHOP-API-KEYS PASS)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| GREEN shop API keys (tenant digest + header-only) | `/regress` → `/review` |
+| Local regress shop API keys **PASS** 30/76 | `/review` |
 | Fly **v493** · live pay стоп | deploy/secrets — апрув |
-| Parked: `V3-SEC-OTP-MERGE` SPEC `c9733b8b` | после review keys |
+| Parked: OTP-MERGE · JOB-TENANT-GUC | после review keys |
 
-**last_done:** GREEN tenant-scoped shop API keys · auth 19/21 · ownership 11/55 PASS  
-**next_step:** `/regress` · затем `/review` (bugbot + security + Entire + push)
+**last_done:** regress auth+resolver+ownership PASS после GREEN `8f9cd956`  
+**next_step:** `/review` — bugbot + security-review + Entire + push CI
 
 **ctx_trim:** `2026-09-02`  
 **Fly:** v493 `deployment-01M20JBGBP9VBQ1JN3HM1K58Z5`  
 **Sentry:** unresolved 24h **0**  
-**Entire:** `01M1ZYPHF0EZYHM7C12W5PSPA7`  
+**Entire:** `01M22C4CV16HA4XDFZ4T4ZGQ23` (attach GREEN)  
 **CI:** tip pre-deploy green [34224737257](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/34224737257)
 
 **Архив session:** [`archive/README.md`](archive/README.md)  

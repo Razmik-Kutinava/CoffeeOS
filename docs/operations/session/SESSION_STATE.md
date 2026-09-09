@@ -2,18 +2,16 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-09 (SPEC: V3-SEC-JOB-TENANT-GUC)  
+**Дата:** 2026-09-09 (regress: V3-SEC-SHOP-API-KEYS PASS)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| SPEC jobs → tenant GUC (Solid Queue, срез A) в `todo.md` | `/sbr` RED |
-| Live pay / Fly network queue audit — стоп | deploy/ops — только апрув |
-| Parked: OTP-MERGE · SHOP-API-KEYS WIP | не смешивать с этим SBR |
+| Local regress shop API keys **PASS** 30/76 | `/review` |
+| Parked: OTP-MERGE · JOB-TENANT-GUC SPECs | после review keys |
+| Live pay / deploy secrets — стоп | только апрув |
 
-**last_done:** SPEC `V3-SEC-JOB-TENANT-GUC` импортирован в todo (MVP срез A)  
-**next_step:** `/sbr` RED — JobTenantContext + job GUC failing tests
+**last_done:** regress zone auth+ownership PASS after GREEN `8f9cd956`  
+**next_step:** `/review` — bugbot + security-review + Entire + push CI
 
 **ctx_trim:** `2026-09-02`
-
----

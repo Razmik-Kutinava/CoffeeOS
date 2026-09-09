@@ -1,86 +1,49 @@
-# todo — V3-SEC-JOB-TENANT-GUC (Solid Queue jobs → tenant GUC)
+# todo — V3-SEC-SHOP-API-KEYS (tenant-scoped shop API keys)
 
 | Поле | Значение |
 |------|----------|
-| **ID** | `V3-SEC-JOB-TENANT-GUC` |
-| **Тип** | security / background jobs / RLS |
-| **Приоритет** | medium (код) · high если queue DB торчит (ops) |
+| **ID** | `V3-SEC-SHOP-API-KEYS` / `IB-D-09` |
+| **Тип** | security / hot-path shop auth |
+| **Приоритет** | high (blast radius при утечке) |
 | **Ветка** | `develop` |
-| **Канон** | `@spec-build-review` · `@coffeeos-core` (tenant/RLS) · `@coffeeos-commit-ops` |
-| **MVP** | **срез A** — `Rls::JobTenantContext` + wrap order-scoped jobs + тесты + audit/ops абзац |
-| **Очередь** | **Solid Queue (Postgres)** — не Sidekiq/Redis (`production.rb` → `queue_adapter = :solid_queue`; worker `./bin/jobs`) |
+| **Канон** | `@spec-build-review` · `@coffeeos-commit-ops` · `@coffeeos-dev-gates` |
 | **Point A** | `tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789` |
-| **OUT** | signed job args · полный `tenant_guc_inventory` всех jobs · Sidekiq/Redis · `fly deploy` / network audit без апрува · ломать global jobs |
-| **Parked** | `V3-SEC-OTP-MERGE` (SPEC готов, RED не начат) · `V3-SEC-SHOP-API-KEYS` (RED tip + GREEN WIP) |
+| **OUT** | Flutter device tokens · Platform CRUD UI · fly deploy без апрува |
+| **Parked** | `V3-SEC-OTP-MERGE` `c9733b8b` · `V3-SEC-JOB-TENANT-GUC` `022552d5` — resume после `/review` keys |
 
 ## SBR
 
-- [x] **SPEC** — todo + шапки SESSION/HANDOFF
-- [ ] **RED** — тесты хелпера/job GUC · `test: job tenant GUC context [RED]`
-- [ ] **GREEN** — helper + wrap order jobs + `RLS_TENANT_AUDIT` · `feat: set tenant GUC in order-scoped jobs [GREEN]`
+- [x] **SPEC**
+- [x] **RED** — `84a85554`
+- [x] **GREEN** — `8f9cd956`
+- [x] **regress** — auth+resolver+ownership **30/76 PASS** (2026-09-09)
 - [ ] **REVIEW** — bugbot + security-review + Entire + push CI
-- [ ] **Ops live** — Fly queue network / creds — **только апрув** владельца
+- [ ] **deploy / secrets** — только апрув владельца
 
 ## Файлы (ожидаемо)
 
 | Path | Зачем |
 |------|--------|
-| `app/services/rls/job_tenant_context.rb` | **новый** — `with(order)` / `with_tenant_id`: `Current.tenant_id` + `SET LOCAL app.current_tenant_id` (quote) + ensure сброс; **не** смешивать с flag-GUC в `guc_context.rb` |
-| `app/jobs/application_job.rb` | тонкий wrapper `with_order_tenant!(order)` → JobTenantContext |
-| `app/jobs/barista/broadcast_order_board_job.rb` | после `Order.find_by` → GUC по `order.tenant_id` |
-| `app/jobs/shop/ready_push_job.rb` | то же |
-| `app/jobs/shop/order_ready_cascade_job.rb` | то же |
-| `app/jobs/payments/tbank_callback_job.rb` | после resolve payment/order → GUC по tenant заказа |
-| `docs/product/security/phase_3_tenant_rls/RLS_TENANT_AUDIT.md` | Background jobs: OK(queue internal) → **FIXED** defense-in-depth + ops runbook абзац |
-
-**Соседи (blast-radius, hot-path):**
-
-| Path | Почему |
-|------|--------|
-| `app/jobs/send_order_receipt_email_job.rb` | OrderEmail → order → тот же helper |
-| `app/jobs/shop/send_push_notification_job.rb` | notification.tenant_id → GUC |
-| `app/jobs/broadcast_tv_columns_job.rb` | уже `tenant_id` arg — сверить/добавить GUC |
-| `app/services/rls/guc_context.rb` | **не ломать** flag GUCs; JobTenantContext — отдельный класс |
-
-**Не трогать (OK intentional):** `Payments::StuckPaymentsCheckJob`, `TelegramAlertJob` — global by design.
-
-**Тесты (зеркало):**
-
-| Path | Зачем |
-|------|--------|
-| `test/services/rls/job_tenant_context_test.rb` | без order → raise/no-op; с order A → GUC == A внутри блока |
-| `test/jobs/barista/broadcast_order_board_job_test.rb` | создать при отсутствии — perform не падает; GUC выставлен |
-| `test/jobs/shop/ready_push_job_test.rb` / `order_ready_cascade_job_test.rb` | регрессия happy-path зелёная |
-
-## Acceptance (срез A)
-
-1. **AC-1** — helper ставит `Current.tenant_id` + `SET LOCAL app.current_tenant_id` из **записи**, не из HTTP args.
-2. **AC-2** — order-scoped jobs из таблицы обёрнуты (минимум 5–6 из ТЗ).
-3. **AC-3** — нет публичного `perform_later(params[:order_id])` без ownership (grep; fix или ISSUES).
-4. **AC-4** — ops чеклист в audit: Solid Queue DB private · worker только Fly · инцидент → rotate + audit `solid_queue_jobs`.
-5. **AC-5** — тесты helper + регрессия существующих job tests.
-
-## RED-сценарии
-
-1. Helper без order → raise / documented no-op.
-2. Order tenant A → внутри блока GUC == A (`SHOW` / connection helper).
-3. `BroadcastOrderBoardJob` или `ReadyPushJob` perform — не падает; GUC выставлен.
-4. Существующий ready/cascade happy-path остаётся зелёным после GREEN.
+| `config/initializers/shop_api_auth.rb` | header-only + verifier |
+| `app/services/shop/api_key_authenticator.rb` | digest + tenant match |
+| `app/models/shop_api_key.rb` | модель |
+| `db/migrate/20260909120000_create_shop_api_keys.rb` | схема |
+| `app/services/rls/guc_context.rb` | `with_shop_api_key_lookup` |
+| `docs/product/security/phase_1_rbac_closure/SHOP_API_AUTH.md` | канон |
+| `config/initializers/filter_parameter_logging.rb` | filter keys |
 
 ## Не ломать
 
-1. Tbank callback → RebillId / статус оплаты (`perform_now` fallback при недоступной queue).
-2. Ready cascade / push / WS board после смены статуса баристой.
-3. `StuckPaymentsCheckJob` global scan + `TelegramAlertJob`.
-4. HTTP ownership IDOR suite — не ослаблять.
+1. Browser CSRF+Referer без API key
+2. Ownership IDOR
+3. MCP ENV fallback до `SHOP_API_KEY_FALLBACK=0`
+4. Public `GET /shop/api/categories`
 
 ## Проверка
 
 ```bash
-bin/rails test test/services/rls/job_tenant_context_test.rb
-bin/rails test test/jobs/shop/ready_push_job_test.rb test/jobs/shop/order_ready_cascade_job_test.rb
-# после GREEN точечно новые job tests; inventory — глазами, не CI-блокер:
-# ruby bin/audit/tenant_guc_inventory.rb
+bin/rails test test/integration/shop/api/authentication_test.rb test/services/shop/api_key_authenticator_test.rb test/lib/shop_api_key_resolver_test.rb test/integration/shop/api/ownership_idor_test.rb
+# → 30 runs, 76 assertions, 0 failures (2026-09-09 regress)
 ```
 
-Ops (владелец, не агент без апрува): `fly postgres` / network — queue не public.
+После `/review` + deploy (апрув): Fly MCP Point A — без ключа 401; A+A 200; A+B 401.

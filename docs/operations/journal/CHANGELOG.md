@@ -11,6 +11,10 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-09 — regress: V3-SEC-SHOP-API-KEYS PASS
+
+- rails auth+resolver+ownership_idor: **30/76** · 0 fail
+- GREEN `8f9cd956` · Next: `/review` · Fly MCP после deploy (апрув)
 ## 2026-09-09 — SPEC: V3-SEC-JOB-TENANT-GUC (Solid Queue jobs → tenant GUC)
 
 - todo: срез A — `Rls::JobTenantContext` · wrap order-scoped jobs · audit FIXED + ops абзац
