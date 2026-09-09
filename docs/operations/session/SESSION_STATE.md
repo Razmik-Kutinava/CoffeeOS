@@ -2,18 +2,16 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-09 (GREEN: V3-SEC-JOB-TENANT-GUC)  
+**Дата:** 2026-09-09 (REVIEW CI green: V3-SEC-SHOP-API-KEYS)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| GREEN jobs → tenant GUC (`8f9f5aa2`) | `/regress` → `/review` |
-| Parallel tip: shop API keys REVIEW pushed | CI / deploy — апрув |
-| Parked: OTP-MERGE | не смешивать |
+| REVIEW shop API keys · **CI green** [34318508943](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/34318508943) | **стоп** · deploy — апрув |
+| Parked: JOB-TENANT-GUC GREEN · OTP-MERGE SPEC | свой `/review` / `/sbr` |
+| Fly MCP Point A | только после deploy |
 
-**last_done:** GREEN `Rls::JobTenantContext` + order-scoped jobs · tests 28/28  
-**next_step:** `/regress` зоны jobs + затем `/review`
+**last_done:** PHASE 3 REVIEW CI green · tip `442e7920` (Zeitwerk+Brakeman fix)  
+**next_step:** deploy/secrets — только апрув владельца
 
 **ctx_trim:** `2026-09-02`
-
----
