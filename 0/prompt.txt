@@ -1,0 +1,246 @@
+<cursor_commands>
+
+--- Cursor Command: start ---
+# /start — старт сессии / задачи (умный)
+
+CoffeeOS. Следуй `coffeeos-agent-workflow` + `coffeeos-customer-intake` (PHASE 0) при нужде.
+
+## Режим (выбери один, не гоняй всё)
+
+### A) Узкий старт (по умолчанию, если контекст уже есть)
+Используй, если в чате/todo уже: баг локализован, есть список файлов, живой `todo.md`, или пользователь продолжает ту же задачу.
+
+Сделай **только**:
+1. Шапка `HANDOFF.md` + шапка `SESSION_STATE.md` (`Read` limit до `---`, не тело)
+2. `ISSUES.md` — только секция **`## 🔴 Открыто`** (до следующего `##`), если релевантно багу
+3. `todo.md` — если есть
+4. **Не** перечитывай PRACTICES/QA/весь CHECKLIST/весь CHANGELOG
+5. **Не** заново PHASE 0, если ТЗ уже в `customer_tasks/` или задача уже в todo
+6. Коротко: `last_done` / `current_state` / `next_step` (одна строка каждый)
+7. **ctx-trim:** если пт–вс и в шапке HANDOFF `ctx_trim` старше 7 дней — одна строка: «рекомендуется `/ctx-trim`» (не блокировать старт)
+
+### B) Полный старт + PHASE 0
+Только если **новое** ТЗ от заказчика ещё не в `customer_tasks/` / CBR, или пользователь явно просит intake.
+
+Тогда: PHASE 0 (intake 1:1) → краткая шапка ops → стоп до `/spec`.
+
+## Отчёт
+Таблица Сделано | Не сделано.  
+`Субагент: нет — старт` (или explore, если уже звал).  
+**Не пиши код** на этом шаге.
+
+## Обязательно в конце (копипаст для пользователя)
+
+Одной строкой, без лишнего текста вокруг:
+
+- Если нужен план/файлы → `Next: /spec`
+- Если SPEC/todo уже готов → `Next: /sbr`
+- Если только что завершили PHASE 0 → `Next: /spec`
+
+--- End Command ---
+</cursor_commands>
+<timestamp>Wednesday, Sep 9, 2026, 9:46 AM (UTC+4)</timestamp>
+
+Ниже готовый **SBR SPEC** — копируй агенту в Agent mode вместе с `@spec-build-review.mdc`.
+
+---
+
+# SBR: Shop API keys — убрать «один ключ на все точки»
+
+**ID:** `V3-SEC-SHOP-API-KEYS` (или `IB-D-09`)  
+**Тип:** security / hot-path shop auth  
+**Приоритет:** high (blast radius при утечке)  
+**Ветка:** `develop`  
+**Канон:** `@spec-build-review.mdc` · `@coffeeos-commit-ops` · `@coffeeos-dev-gates`  
+**Доки-якоря:**  
+- `docs/product/security/phase_1_rbac_closure/SHOP_API_AUTH.md`  
+- `config/initializers/shop_api_auth.rb`  
+- `lib/shop_api_key_resolver.rb`  
+- `test/integration/shop/api/authentication_test.rb`
+
+---
+
+## Проблема (зачем)
+
+Сейчас серверный доступ к `/shop/api/*`:
+
+- один `ENV["SHOP_API_KEY"]` на **всё приложение**;
+- ключ принимается из `X-Shop-Api-Key` **или** `params[:api_key]` (query = риск утечки в логи/Referer);
+- при валидном ключе + любом `X-Shop-Tenant` — доступ к API **любой** точки.
+
+Браузерная витрина уже OK: CSRF + Referer, без ключа в HTML (IB-D-03).  
+**Цель задачи:** закрыть серверный blast radius — ключ не должен открывать чужие тенанты; query-ключ запретить; ротация без даунтайма.
+
+---
+
+## Цель / DoD
+
+1. Серверный ключ **привязан к tenant** (или явно помечен как ops-global с узким использованием).
+2. Ключ тенанта A **не** проходит на запросы с `X-Shop-Tenant` = B → **401**.
+3. Приём ключа **только** header `X-Shop-Api-Key` — **запрет** `?api_key=` / body `api_key`.
+4. Браузерный путь (CSRF+Referer) **не ломается**, ключ в meta/JS **не возвращаем**.
+5. Ротация: два активных ключа на tenant (current + previous) или `expires_at` / `revoked_at`.
+6. Сырой ключ **не** хранить в БД (только digest); не логировать.
+7. Тесты RED→GREEN + регрессия shop auth/ownership; docs `SHOP_API_AUTH.md` обновлены.
+8. Deploy / `fly secrets` — **только** по апруву владельца (не в GREEN).
+
+---
+
+## Решение (как делать) — MVP
+
+### Модель доступа
+
+| Режим | Gate | Scope |
+|--------|------|--------|
+| Browser PWA | Referer `/shop` + `X-CSRF-Token` | без API key (как сейчас) |
+| Server / curl / MCP / kiosk proxy | **только** `X-Shop-Api-Key` | ключ → `tenant_id` **должен совпасть** с resolved shop tenant |
+| Ops global (опционально, 1 ключ) | тот же header | `tenant_id: null` + флаг `global_ops: true` — **только** для MCP/acceptance; в лог warn; **не** для клиентских приложений |
+
+### Данные
+
+Новая таблица / модель, например `shop_api_keys`:
+
+- `id` (uuid)
+- `tenant_id` (uuid, **null** только для `global_ops`)
+- `name` (string, human label)
+- `token_digest` (string, SHA-256 hex или `ActiveSupport::Digest` / bcrypt — выбрать один стиль проекта)
+- `token_prefix` (optional, первые 6–8 символов для UI/debug **без** секрета)
+- `active` (boolean)
+- `global_ops` (boolean, default false)
+- `expires_at` (nullable)
+- `revoked_at` (nullable)
+- `last_used_at` (nullable)
+- timestamps  
+Индекс по `token_digest` unique среди active (или unique всегда).
+
+**Миграция минимальная.** RLS: если RLS на таблице нужна — как у соседних tenant-таблиц; lookup ключа **до/вне** tenant GUC может потребовать узкий GUC/`Rls::GucContext` по аналогии с device tokens — **не** `row_security off` без комментария.
+
+### Auth flow (`Shop::Api::Auth`)
+
+1. Если `browser_shop_session?` → OK (без изменений).
+2. Иначе взять ключ **только** из `request.headers["X-Shop-Api-Key"]`.
+3. Если ключ в `params[:api_key]` / query — **игнорировать и 401** (или 401 даже если header пуст; не принимать query).
+4. `Shop::ApiKeyAuthenticator.call!(raw_key:, tenant_id:)`  
+   - найти active, not revoked, not expired по digest;  
+   - если `global_ops` → allow;  
+   - иначе `key.tenant_id == tenant_id` иначе 401;  
+   - touch `last_used_at` (опционально, без шума на каждый запрос — можно throttle).
+5. Bootstrap совместимости (один релиз):  
+   - если в БД нет ключей — fallback на `ENV["SHOP_API_KEY"]` как **global_ops** (warn в лог), чтобы MCP не умер;  
+   - в docs: после seed per-tenant ключей — убрать fallback отдельным шагом/апрувом (можно оставить fallback до явного `SHOP_API_KEY_FALLBACK=0`).
+
+### Выдача / ops (минимум кода, без жирного UI если не просили)
+
+- Сервис `Shop::ApiKeys::Issue` / rake `shop:api_keys:issue[tenant_id,name]` → печатает **сырой ключ один раз** в stdout, в БД только digest.
+- Platform UI **out of scope** MVP (если успеете — только UK, не обязательно для GREEN).
+- Обновить `ShopApiKeyResolver`: для скриптов Point A читать ENV **или** явный per-tenant env `SHOP_API_KEY_<slug>` / файл — **не** ломать `bin/acceptance/*` и `bin/prog10/*`. Минимум: resolver по-прежнему берёт ENV global для MCP; документировать, что на Fly после миграции кладут tenant-key Point A в тот же secret **или** новый `SHOP_API_KEY_POINT_A` — выбрать один вариант и зафиксировать в `SHOP_API_AUTH.md`.
+
+### Hardening
+
+- `config/initializers/filter_parameter_logging.rb` — добавить `:api_key`, `:shop_api_key`.
+- Никогда не писать raw key в `Rails.logger`.
+- Не возвращать ключ в JSON API витрины.
+
+---
+
+## Out of scope (не делать)
+
+- Flutter/kiosk device tokens (уже отдельный контур `X-Device-Token`).
+- Смена CSRF-модели браузера.
+- Per-organization keys, OAuth, JWT shop clients.
+- Полный Platform CRUD UI (можно backlog).
+- `fly deploy` без апрува.
+- Рефакторинг всего shop API / ownership (уже закрыт).
+
+---
+
+## Файлы (ожидаемо) — 2–7 + тесты
+
+| Path | Зачем |
+|------|--------|
+| `config/initializers/shop_api_auth.rb` | gate: header-only + verifier |
+| `app/services/shop/api_key_authenticator.rb` (или `shop/api_keys/authenticate.rb`) | digest lookup + tenant match |
+| `app/models/shop_api_key.rb` | модель |
+| `db/migrate/*_create_shop_api_keys.rb` | схема |
+| `lib/shop_api_key_resolver.rb` | MCP/curl совместимость |
+| `docs/product/security/phase_1_rbac_closure/SHOP_API_AUTH.md` | канон auth + ротация |
+| `config/initializers/filter_parameter_logging.rb` | не логировать ключ |
+
+**Тесты (зеркало):**
+
+| Path | Зачем |
+|------|--------|
+| `test/integration/shop/api/authentication_test.rb` | расширить: tenant mismatch, query forbidden, rotation |
+| `test/services/shop/api_key_authenticator_test.rb` | unit digest/scope |
+| `test/lib/shop_api_key_resolver_test.rb` | не сломать resolver |
+
+При необходимости +1: `test/models/shop_api_key_test.rb`.
+
+---
+
+## Не ломать
+
+1. Браузер `/shop`: CSRF+Referer → 200 на публичные/сессионные API **без** `X-Shop-Api-Key`.
+2. Ownership IDOR: `test/integration/shop/api/ownership_idor_test.rb` — зелёный.
+3. MCP/acceptance Point A: curl с ключом + `X-Shop-Tenant` Point A → работает после bootstrap.
+4. `GET /shop/api/categories` public skip auth — без регрессии.
+
+---
+
+## Проверка
+
+```bash
+bin/rails test test/integration/shop/api/authentication_test.rb test/services/shop/api_key_authenticator_test.rb test/lib/shop_api_key_resolver_test.rb
+bin/rails test test/integration/shop/api/ownership_idor_test.rb
+```
+
+После GREEN (hot-path): Fly MCP Point A **после deploy по апруву** — smoke: без ключа 401; ключ Point A + tenant A 200; ключ A + tenant B 401.
+
+---
+
+## RED-тесты (обязательные сценарии)
+
+1. Valid key tenant A + `X-Shop-Tenant=A` → auth OK.  
+2. Valid key tenant A + `X-Shop-Tenant=B` → **401**.  
+3. Header отсутствует, `?api_key=...` даже верный → **401**.  
+4. Revoked / expired / inactive → **401**.  
+5. Browser CSRF+Referer без ключа → OK.  
+6. Wrong key → 401.  
+7. (Если dual-key) previous key ещё active → OK до revoke.
+
+Коммит RED: `test: shop API tenant-scoped keys [RED]`  
+Коммит GREEN: `feat: tenant-scoped shop API keys [GREEN]`
+
+---
+
+## PHASE порядок для агента
+
+1. **SPEC** → записать это в `docs/operations/session/todo.md` (файлы / Не ломать / Проверка) + шапка SESSION/HANDOFF. Стоп, если нет намерения кодить.  
+2. **RED** → падающие тесты → commit `[RED]` → без CHANGELOG.  
+3. **GREEN** → миграция + authenticator + auth initializer + filter + docs → зелёные тесты + регрессия ownership → commit `[GREEN]`.  
+4. **REVIEW** (`/review`): bugbot + security-review + Entire + push CI. Deploy secrets/DB migrate — **апрув владельца**.
+
+---
+
+## Ops после кода (владелец)
+
+1. `rails shop:api_keys:issue[<PointA uuid>,mcp]` → сохранить ключ в password manager.  
+2. Fly secret: положить ключ Point A для MCP (схема как в обновлённом `SHOP_API_AUTH.md`).  
+3. Выпустить ключи другим точкам по мере нужды.  
+4. Когда per-tenant ключи живут — `SHOP_API_KEY_FALLBACK=0` / удалить global fallback.  
+5. Старый единый ключ — revoke.
+
+---
+
+## Критерий «дыра закрыта»
+
+- Утечка ключа точки A **не** даёт доступ к точке B.  
+- Ключ нельзя передать через URL.  
+- Браузер по-прежнему без ключа.  
+- Ротация возможна без «один секрет навсегда».
+
+---
+
+Ask mode: в репо сам не пишу. В Agent mode: «ебашь по этому SPEC /sbr» — агент начинает с todo + RED.
+
+/start
