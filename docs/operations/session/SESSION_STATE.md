@@ -2,17 +2,17 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-09 (REVIEW: V3-SEC-OTP-MERGE)  
+**Дата:** 2026-09-09 (ops: refund MIR *5953)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| OTP-MERGE REVIEW · local PASS · CI green tip | **стоп** · Fly MCP/deploy — апрув |
-| bugbot/security | **usage blocked** (как JOB-TENANT) |
-| Entire на GREEN `a7839074` · tip `a98e978a` CI fix | attach на ops commit |
+| Ops refund `#0031`+`#0032` · банк **REFUNDED** | **стоп** |
+| OTP-MERGE CI green | deploy — апрув |
+| bugbot/security | **usage blocked** |
 
-**last_done:** REVIEW OTP-MERGE · CI green [34321450447](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/34321450447)  
-**next_step:** deploy / Fly MCP Point A — только апрув
+**last_done:** Cancel Point A MIR `*5953` 2×10₽ · `artifacts/ops_refunds_2026-09-09/`  
+**next_step:** ждать намерения
 
 **ctx_trim:** `2026-09-02`
 

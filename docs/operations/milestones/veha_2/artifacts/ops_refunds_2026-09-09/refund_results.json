@@ -1,0 +1,21 @@
+{
+  "applied_at": "2026-09-09T07:15:37Z",
+  "results": [
+    {
+      "ok": true,
+      "payment_id": "ac5bd048-c7a2-412a-80d9-bd4e24dbd2be",
+      "order_number": "#202609-0032",
+      "provider_payment_id": "9209785225",
+      "bank_status": "REFUNDED",
+      "bank_error": "0"
+    },
+    {
+      "ok": true,
+      "payment_id": "b400f367-a7a2-42d4-b4a0-f26f36658692",
+      "order_number": "#202609-0031",
+      "provider_payment_id": "9209742037",
+      "bank_status": "REFUNDED",
+      "bank_error": "0"
+    }
+  ]
+}

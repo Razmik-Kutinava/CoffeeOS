@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-09 — ops: refund Point A MIR *5953 (витрина)
+
+- T-Bank `/v2/Cancel` via `Payments::TbankOrderRefund`: `#202609-0031` + `#0032` (10₽×2) → bank `REFUNDED`
+- Уже refunded ранее: `#0022`–`#0023`, `#0025`, `#0027`–`#0030`; failed/pending не трогали
+- Артефакт: `milestones/veha_2/artifacts/ops_refunds_2026-09-09/`
+
 ## 2026-09-09 — REVIEW CI green: V3-SEC-OTP-MERGE
 
 - CI [34321450447](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/34321450447) tip `084be2ba` · code tip `a98e978a` already green
