@@ -17,8 +17,8 @@
 **ctx_trim:** `2026-09-02`  
 **Fly:** v493 `deployment-01M20JBGBP9VBQ1JN3HM1K58Z5`  
 **Sentry:** unresolved 24h **0**  
-**Entire:** (attach after GREEN commit)  
-**CI:** tip after JOB-TENANT REVIEW push
+**Entire:** `01M22D5GHQKN7FEQE7Y87CCN3T` на `a7839074` (OTP-MERGE GREEN)  
+**CI:** tip ahead of origin (OTP-MERGE GREEN not pushed)
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

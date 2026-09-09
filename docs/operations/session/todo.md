@@ -16,7 +16,7 @@
 
 - [x] **SPEC** — `c9733b8b` (позже parked другим агентом; восстановлен)
 - [x] **RED** — `51aa657e` · `test: otp profile switch and card step-up [RED]`
-- [x] **GREEN** — linkers switch + BindingStepUp lock + one_click/SBP gate + docs
+- [x] **GREEN** — `a7839074` · switch + BindingStepUp lock + one_click/SBP gate + docs (fix after race on `3a81f8a9`)
 - [ ] **REVIEW** — bugbot + security-review + Entire + push CI
 - [ ] **deploy** — только апрув владельца
 
