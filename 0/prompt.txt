@@ -1,0 +1,247 @@
+<cursor_commands>
+
+--- Cursor Command: start ---
+# /start — старт сессии / задачи (умный)
+
+CoffeeOS. Следуй `coffeeos-agent-workflow` + `coffeeos-customer-intake` (PHASE 0) при нужде.
+
+## Режим (выбери один, не гоняй всё)
+
+### A) Узкий старт (по умолчанию, если контекст уже есть)
+Используй, если в чате/todo уже: баг локализован, есть список файлов, живой `todo.md`, или пользователь продолжает ту же задачу.
+
+Сделай **только**:
+1. Шапка `HANDOFF.md` + шапка `SESSION_STATE.md` (`Read` limit до `---`, не тело)
+2. `ISSUES.md` — только секция **`## 🔴 Открыто`** (до следующего `##`), если релевантно багу
+3. `todo.md` — если есть
+4. **Не** перечитывай PRACTICES/QA/весь CHECKLIST/весь CHANGELOG
+5. **Не** заново PHASE 0, если ТЗ уже в `customer_tasks/` или задача уже в todo
+6. Коротко: `last_done` / `current_state` / `next_step` (одна строка каждый)
+7. **ctx-trim:** если пт–вс и в шапке HANDOFF `ctx_trim` старше 7 дней — одна строка: «рекомендуется `/ctx-trim`» (не блокировать старт)
+
+### B) Полный старт + PHASE 0
+Только если **новое** ТЗ от заказчика ещё не в `customer_tasks/` / CBR, или пользователь явно просит intake.
+
+Тогда: PHASE 0 (intake 1:1) → краткая шапка ops → стоп до `/spec`.
+
+## Отчёт
+Таблица Сделано | Не сделано.  
+`Субагент: нет — старт` (или explore, если уже звал).  
+**Не пиши код** на этом шаге.
+
+## Обязательно в конце (копипаст для пользователя)
+
+Одной строкой, без лишнего текста вокруг:
+
+- Если нужен план/файлы → `Next: /spec`
+- Если SPEC/todo уже готов → `Next: /sbr`
+- Если только что завершили PHASE 0 → `Next: /spec`
+
+--- End Command ---
+</cursor_commands>
+<timestamp>Wednesday, Sep 9, 2026, 9:57 AM (UTC+4)</timestamp>
+
+Важно: у вас в prod очередь — **Solid Queue (Postgres)**, не Sidekiq/Redis. Смысл риска тот же: «внутренняя очередь = доверенная зона». Ниже ТЗ уже под ваш стек.
+
+---
+
+# SBR: Jobs / очередь — не доверять «голому» PK без tenant-контекста
+
+**ID:** `V3-SEC-JOB-TENANT-GUC`  
+**Источник:** security backlog (ops-граница + defense in depth)  
+**Тип:** security / background jobs / RLS  
+**Приоритет:** medium (код) + **high если queue БД торчит наружу** (ops)  
+**Ветка:** `develop`  
+**Канон:** `@spec-build-review.mdc` · `@coffeeos-core` (tenant/RLS)  
+**Якоря:**
+- `docs/product/security/phase_3_tenant_rls/RLS_TENANT_AUDIT.md` § Background jobs  
+- `config/environments/production.rb` → `queue_adapter = :solid_queue`  
+- `app/jobs/**/*.rb`  
+- `app/jobs/application_job.rb`  
+- `fly.toml` (`worker = ./bin/jobs`)
+
+---
+
+## 1. Проблема простыми словами
+
+HTTP-запрос витрины/кассы обычно делает: «я точка X» → Postgres RLS режет чужие строки.
+
+Фоновые job’ы часто делают иначе:
+
+1. В очередь кладут `order_id`  
+2. Worker: `Order.find_by(id: order_id)` **без** `SET LOCAL app.current_tenant_id`  
+3. Дальше шлёт пуш/SMS/broadcast
+
+Это **нормально**, пока задачи в очередь кладёт **только наш код** (после webhook/подписи/своего сервиса).
+
+Плохо, если кто-то может **подложить задачу в очередь** (доступ к queue DB / админке очереди / скомпрометированный worker). Тогда «обработай заказ UUID» выполнится без проверки сессии гостя.
+
+Это **не дыра в `/shop/api`**. Это: *очередь = служебный вход*.
+
+**Уточнение по стеку CoffeeOS:** ActiveJob в production = **Solid Queue** (отдельная DB `queue`), не Sidekiq. Исторически в доках/ТЗ заказчика писали «Sidekiq» — для агента значит **фоновые job’ы**, адаптер смотреть в `production.rb`.
+
+---
+
+## 2. Цель / DoD
+
+### A. Ops (обязательно задокументировать + проверить)
+
+1. Queue DB / Solid Queue **не** доступны из интернета.  
+2. Нет публичного UI очереди без auth УК.  
+3. Runbook: кто имеет доступ к `fly console` / DB queue, что считается инцидентом.  
+4. Запись в security doc: «queue = trusted; compromise = high».
+
+### B. Code defense in depth (основной SBR-код)
+
+1. Общий хелпер: после загрузки `Order` (или сущности с `tenant_id`) job **ставит GUC** на `order.tenant_id` (+ `Current.tenant_id`) на время работы.  
+2. Order-scoped job’ы из аудита переведены на хелпер (список ниже).  
+3. Job **не** принимает «произвольный tenant_id от клиента HTTP» без связи с записью — tenant берётся из найденной записи.  
+4. Тесты: job с order точки A не пишет/не читает «как будто» точка B без GUC там, где RLS включён на роли теста.  
+5. Обновить `RLS_TENANT_AUDIT.md`: было OK(queue internal) → FIXED defense-in-depth.
+
+**Не цель:** выкинуть PK lookup; переписать все job’ы мира; внедрять Redis/Sidekiq; `fly deploy` без апрува.
+
+---
+
+## 3. Acceptance Criteria
+
+### AC-1 — Хелпер
+
+Существует что-то вроде:
+
+`ApplicationJob#with_order_tenant!(order)`  
+или `Rls::JobTenantContext.with(order)` / `ApplicationRecord` helper  
+
+Внутри transaction/`connection`:
+- `Current.tenant_id = order.tenant_id`
+- `SET LOCAL app.current_tenant_id = …` (quote как в project rules)
+- optional `app.current_user_id` = nil / system
+- `ensure` сброс Current
+
+### AC-2 — Order-scoped jobs используют хелпер
+
+Минимум обернуть (из аудита + grep):
+
+| Job | Сейчас |
+|-----|--------|
+| `Barista::BroadcastOrderBoardJob` | `Order.find_by(id:)` |
+| `Shop::ReadyPushJob` | `Order.find_by(id:)` |
+| `Shop::OrderReadyCascadeJob` | `Order.find_by(id:)` |
+| `SendOrderReceiptEmailJob` | через OrderEmail → order |
+| `Shop::SendPushNotificationJob` | notification → tenant |
+| `Payments::TbankCallbackJob` | найти payment/order → GUC по tenant заказа |
+
+`BroadcastTvColumnsJob` уже с `tenant_id` — сверить, что GUC тоже ставится (или оставить scoped `where(tenant_id:)` + GUC).  
+`StuckPaymentsCheckJob` / `TelegramAlertJob` — global by design; в audit пометить **OK intentional**, не ломать.
+
+### AC-3 — Enqueue только из доверенного кода
+
+Не добавлять публичный HTTP «запусти job по order_id» без auth.  
+Проверить grep: нет контроллера, который `perform_later(params[:order_id])` без ownership (если найдётся — fix или ISSUES).
+
+### AC-4 — Ops checklist в doc
+
+Новый короткий runbook **или** секция в `DEVICE_TOKENS`/`RLS_TENANT_AUDIT`:
+
+- Solid Queue DB только private  
+- worker process только внутри Fly  
+- инцидент: подозрение на forge job args → ротация DB creds + audit `solid_queue_jobs`
+
+### AC-5 — Тесты
+
+1. Unit/job test: после `perform`, внутри блока GUC = tenant заказа (можно читать через `SHOW app.current_tenant_id` / helper).  
+2. Regression: ready cascade / broadcast smoke local (существующие job tests, если есть — не красные).  
+3. Негатив (опционально MVP+): подсунуть order_id другой точки — job либо no-op, либо работает только в tenant записи (не «переключает» на чужой GUC из args).
+
+---
+
+## 4. Рекомендуемый MVP (чтобы агент не расползся)
+
+**Срез A (GREEN):**
+1. `Rls::JobTenantContext` (или метод на `ApplicationJob`)  
+2. Обернуть 5–6 order-scoped jobs из таблицы  
+3. 2–3 теста + update `RLS_TENANT_AUDIT.md`  
+4. Ops абзац в том же doc (чеклист; фактический `fly` audit — **с апрувом владельца**, не молча)
+
+**Срез B (backlog / отдельный шаг):**  
+полный проход `bin/audit/tenant_guc_inventory.rb` → все jobs; signed job args (ActiveJob + secret) — **не** в MVP без апрува.
+
+---
+
+## 5. Файлы (ожидаемо)
+
+| Path | Зачем |
+|------|--------|
+| `app/services/rls/job_tenant_context.rb` (новый) или расширение `guc_context.rb` | единый SET LOCAL для jobs |
+| `app/jobs/application_job.rb` | удобный wrapper |
+| `app/jobs/barista/broadcast_order_board_job.rb` | GUC |
+| `app/jobs/shop/ready_push_job.rb` | GUC |
+| `app/jobs/shop/order_ready_cascade_job.rb` | GUC |
+| `app/jobs/payments/tbank_callback_job.rb` | GUC после resolve order |
+| `docs/product/security/phase_3_tenant_rls/RLS_TENANT_AUDIT.md` | статус FIXED + ops |
+
+Тесты: `test/jobs/...` зеркально + при необходимости `test/services/rls/job_tenant_context_test.rb`.
+
+---
+
+## 6. Не ломать
+
+1. Tbank callback → RebillId / статус оплаты (уже был `perform_now` fallback).  
+2. Ready cascade / push / WS board после смены статуса баристой.  
+3. `StuckPaymentsCheckJob` global scan.  
+4. HTTP ownership IDOR suite.  
+5. Не включать `row_security off` «чтобы job видел строку» — сначала GUC по `order.tenant_id`.
+
+---
+
+## 7. Проверка
+
+```bash
+bin/rails test test/services/rls/job_tenant_context_test.rb
+bin/rails test test/jobs/  # или точечно изменённые job tests
+ruby bin/audit/tenant_guc_inventory.rb   # отчёт глазами, не блокер CI без апрува
+```
+
+Ops (владелец): `fly postgres` / network — queue не public; machines worker only private.
+
+---
+
+## 8. RED-сценарии
+
+1. Job helper: без order → raise / no-op documented.  
+2. С order tenant A → внутри блока GUC == A.  
+3. `BroadcastOrderBoardJob` (или ReadyPush) perform — не падает; GUC выставлен (assert в test с stub/spy connection или SHOW).  
+4. Существующий happy-path ready/cascade остаётся зелёным.
+
+Коммиты:
+- `test: job tenant GUC context [RED]`
+- `feat: set tenant GUC in order-scoped jobs [GREEN]`
+
+---
+
+## 9. PHASE для агента
+
+1. **SPEC** → `todo.md` (файлы, Не ломать, Проверка, MVP=срез A; явно: **не Sidekiq, Solid Queue**).  
+2. **RED** → тесты хелпера/job → commit `[RED]`.  
+3. **GREEN** → хелпер + wrap jobs + docs → commit `[GREEN]`.  
+4. **REVIEW** → bugbot + security-review + Entire + push.  
+5. Live Fly network audit / secret rotation — **только апрув**.
+
+---
+
+## 10. Критерий «закрыто»
+
+| Слой | Результат |
+|------|-----------|
+| Ops | Очередь не торчит; runbook есть |
+| Code | Order job работает под tenant заказа; подложенный `order_id` чужой точки не даёт «работы от имени другой точки» через пустой GUC |
+| Docs | Audit больше не говорит «OK только потому что queue internal» без defense-in-depth |
+
+**Критичность до фикса кода:** низкая при закрытой queue DB; **критичная**, если queue/credentials утекли.  
+**После среза A:** даже при странных job args ущерб ограничен tenant’ом найденной записи + RLS.
+
+---
+
+Ask mode — в репо не пишу. Agent: «ебашь `/sbr` по V3-SEC-JOB-TENANT-GUC».
+
+/start
