@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-09 — REVIEW CI green: V3-SEC-JOB-TENANT-GUC
+
+- CI [34319445414](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/34319445414) · tip after removing stray OTP `[RED]` from develop
+- Entire `01M22D5GHQKN7FEQE7Y87CCN3T` · bugbot/security usage blocked
+- Next: Fly queue network / deploy — апрув
 ## 2026-09-09 — REVIEW: V3-SEC-JOB-TENANT-GUC
 
 - Local regress **28/86 PASS** · GREEN `8f9f5aa2`
