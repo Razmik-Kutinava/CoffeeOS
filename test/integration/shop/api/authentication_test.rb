@@ -18,11 +18,28 @@ class Shop::Api::AuthenticationTest < ActionDispatch::IntegrationTest
     @controller.request = ActionDispatch::TestRequest.create
     @controller.response = ActionDispatch::TestResponse.new
     @old_key = ENV["SHOP_API_KEY"]
-    ENV["SHOP_API_KEY"] = "test-shop-api-key"
+    @old_fallback = ENV["SHOP_API_KEY_FALLBACK"]
+    ENV.delete("SHOP_API_KEY")
+    ENV.delete("SHOP_API_KEY_FALLBACK")
+
+    @tenant_a = create_tenant!(name: "Auth A", slug: "shop-auth-a-#{SecureRandom.hex(3)}")
+    @tenant_b = create_tenant!(name: "Auth B", slug: "shop-auth-b-#{SecureRandom.hex(3)}")
+    @raw_a = "sk_int_a_#{SecureRandom.hex(8)}"
+    ShopApiKey.create!(
+      tenant_id: @tenant_a.id,
+      name: "int-a",
+      token_digest: ShopApiKey.digest(@raw_a),
+      token_prefix: @raw_a[0, 8],
+      active: true,
+      global_ops: false
+    )
+    Current.tenant_id = @tenant_a.id
   end
 
   teardown do
     ENV["SHOP_API_KEY"] = @old_key
+    ENV["SHOP_API_KEY_FALLBACK"] = @old_fallback
+    Current.tenant_id = nil
   end
 
   test "missing api key returns unauthorized" do
@@ -37,10 +54,28 @@ class Shop::Api::AuthenticationTest < ActionDispatch::IntegrationTest
     assert_equal :unauthorized, @controller.rendered[:status]
   end
 
-  test "valid api key passes" do
-    @controller.request.headers["X-Shop-Api-Key"] = "test-shop-api-key"
+  test "valid tenant key for matching tenant passes" do
+    @controller.request.headers["X-Shop-Api-Key"] = @raw_a
+    Current.tenant_id = @tenant_a.id
     @controller.send(:authenticate_shop_api!)
     assert_nil @controller.rendered
+  end
+
+  test "valid tenant key for other tenant returns unauthorized" do
+    @controller.request.headers["X-Shop-Api-Key"] = @raw_a
+    Current.tenant_id = @tenant_b.id
+    @controller.send(:authenticate_shop_api!)
+    assert_equal :unauthorized, @controller.rendered[:status]
+  end
+
+  test "query api_key is rejected even when value is valid" do
+    @controller.request = ActionDispatch::TestRequest.create(
+      "QUERY_STRING" => "api_key=#{@raw_a}"
+    )
+    @controller.response = ActionDispatch::TestResponse.new
+    Current.tenant_id = @tenant_a.id
+    @controller.send(:authenticate_shop_api!)
+    assert_equal :unauthorized, @controller.rendered[:status]
   end
 
   test "browser shop session with valid csrf and referer passes without api key" do
