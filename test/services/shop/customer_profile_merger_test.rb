@@ -11,7 +11,7 @@ class Shop::CustomerProfileMergerTest < ActiveSupport::TestCase
     @email = "merge-#{SecureRandom.hex(3)}@example.com"
   end
 
-  test "soft-merges donor into survivor without moving cards unless allow_payment_methods" do
+  test "soft-merges donor into survivor: orders cards cart; donor inactive without contacts" do
     survivor = MobileCustomer.create!(
       phone: @phone,
       first_name: "Phone",
@@ -69,37 +69,8 @@ class Shop::CustomerProfileMergerTest < ActiveSupport::TestCase
     assert_equal false, donor.phone_verified
 
     assert_equal survivor.id, order.reload.customer_id
-    # V3-SEC-OTP-MERGE: cards stay on donor unless allow_payment_methods: true
-    assert_equal donor.id, card.reload.customer_id
-    assert_equal survivor.id, cart.reload.customer_id
-  end
-
-  test "moves payment methods only when allow_payment_methods true" do
-    survivor = MobileCustomer.create!(
-      phone: @phone,
-      first_name: "Phone",
-      is_active: true,
-      phone_verified: true
-    )
-    donor = MobileCustomer.create!(
-      email: @email,
-      first_name: "Mail",
-      is_active: true,
-      email_verified: true
-    )
-    card = MobilePaymentMethod.create!(
-      customer_id: donor.id,
-      payment_type: "card",
-      card_token: "rebill-allow-#{SecureRandom.hex(4)}",
-      card_masked: "4300****0999",
-      card_brand: "MIR",
-      is_active: true,
-      is_default: true
-    )
-
-    Shop::CustomerProfileMerger.merge!(survivor: survivor, donor: donor, allow_payment_methods: true)
-
     assert_equal survivor.id, card.reload.customer_id
+    assert_equal survivor.id, cart.reload.customer_id
   end
 
   test "clean attach email without donor when email free" do

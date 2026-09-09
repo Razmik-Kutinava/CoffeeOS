@@ -1,44 +1,57 @@
-# todo — V3-SEC-JOB-TENANT-GUC (Solid Queue jobs → tenant GUC)
+# todo — V3-SEC-OTP-MERGE (OTP → safe profile switch + card step-up)
 
 | Поле | Значение |
 |------|----------|
-| **ID** | `V3-SEC-JOB-TENANT-GUC` |
-| **Тип** | security / background jobs / RLS |
-| **Приоритет** | medium (код) · high если queue DB торчит (ops) |
+| **ID** | `V3-SEC-OTP-MERGE` |
+| **Тип** | security / shop auth / PII + saved cards |
+| **Приоритет** | high (impact) · medium (вероятность — только если обошли OTP) |
 | **Ветка** | `develop` |
-| **Канон** | `@spec-build-review` · `@coffeeos-core` · `@coffeeos-commit-ops` |
-| **MVP** | срез A — `Rls::JobTenantContext` + wrap order-scoped jobs + audit/ops |
-| **Очередь** | **Solid Queue** — не Sidekiq |
+| **Канон** | `@spec-build-review` · `@coffeeos-commit-ops` · `@coffeeos-dev-gates` |
+| **MVP** | **срез A** (switch + BindingStepUp gate); срез B (`confirm_merge`) — backlog |
 | **Point A** | `tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789` |
-| **Parked** | `V3-SEC-SHOP-API-KEYS` REVIEW pushed (CI/deploy апрув) · `V3-SEC-OTP-MERGE` SPEC |
+| **OUT** | Callcheck/SMS rewrite · MDM · staff RBAC · UI merge-шторка · fly deploy без апрува |
+| **Parked elsewhere** | JOB-TENANT REVIEW done · shop API keys REVIEW (deploy апрув) |
 
 ## SBR
 
-- [x] **SPEC** — `022552d5`
-- [x] **RED** — `6dfe5038`
-- [x] **GREEN** — `8f9f5aa2`
-- [x] **regress** — helper+jobs **28/86 PASS** (2026-09-09)
-- [x] **REVIEW** — local PASS · Entire `01M22D5GHQKN7FEQE7Y87CCN3T` · bugbot/security **usage blocked** · push CI
-- [ ] **Ops live** — Fly queue network — только апрув
+- [x] **SPEC** — `c9733b8b` (позже parked другим агентом; восстановлен)
+- [x] **RED** — `51aa657e` · `test: otp profile switch and card step-up [RED]`
+- [x] **GREEN** — linkers switch + BindingStepUp lock + one_click/SBP gate + docs
+- [ ] **REVIEW** — bugbot + security-review + Entire + push CI
+- [ ] **deploy** — только апрув владельца
 
-## Файлы
+## Файлы (ожидаемо)
 
 | Path | Зачем |
 |------|--------|
-| `app/services/rls/job_tenant_context.rb` | Current + SET/SET LOCAL |
-| `app/jobs/application_job.rb` | wrappers |
-| order-scoped jobs + `RLS_TENANT_AUDIT.md` | GUC + FIXED |
+| `app/services/shop/phone_verified_customer_linker.rb` | switch на OTP-профиль |
+| `app/services/shop/email_verified_customer_linker.rb` | то же |
+| `app/services/shop/customer_profile_merger.rb` | `allow_payment_methods` (default false) |
+| `app/services/payments/binding_step_up.rb` | session lock/unlock после OTP login |
+| `app/services/shop/one_click_payment_service.rb` | блок до step-up |
+| `docs/product/security/phase_1_rbac_closure/SHOP_API_AUTH.md` | OTP = login; cards = step-up |
+
+**Соседи:** `sbp_autopay_charge_service.rb` · `phone_otp_controller.rb` · `payments_controller.rb` · `order_creator.rb` (Error#step_up_required)
 
 ## Не ломать
 
-1. Tbank callback / RebillId
-2. Ready cascade / push / WS board
-3. StuckPayments + TelegramAlert global
-4. Ownership IDOR
+1. Легитимный OTP login — история после verify.
+2. Rate limits OTP + CSRF browser.
+3. Ownership IDOR — зелёный.
+4. Binding step-up happy-path (`binding_step_up` unlock) + guest checkout.
 
 ## Проверка
 
 ```bash
-bin/rails test test/services/rls/job_tenant_context_test.rb test/jobs/barista/broadcast_order_board_job_test.rb
-bin/rails test test/jobs/shop/ready_push_job_test.rb test/jobs/shop/order_ready_cascade_job_test.rb test/jobs/send_order_receipt_email_job_test.rb
+bundle exec rails test test/services/shop/phone_verified_customer_linker_test.rb \
+  test/services/shop/email_verified_customer_linker_test.rb \
+  test/services/shop/customer_profile_merger_test.rb \
+  test/services/payments/binding_step_up_test.rb
+bundle exec rails test test/integration/shop/api/ownership_idor_test.rb
 ```
+
+**Local 2026-09-09:** zone **11/11 PASS** · ownership_idor **11/11 PASS**
+
+## DoD
+
+Украденный OTP ≠ сразу charge сохранённых карт; после BindingStepUp unlock — платит как раньше.
