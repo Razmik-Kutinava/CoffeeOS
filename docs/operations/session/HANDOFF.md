@@ -2,17 +2,17 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-09 (REVIEW: V3-SEC-SHOP-API-KEYS)  
+**Дата:** 2026-09-09 (GREEN: V3-SEC-JOB-TENANT-GUC)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| REVIEW tenant-scoped shop API keys | CI green → стоп |
-| Fly **v493** · deploy/secrets — апрув | MCP Point A после deploy |
-| Parked: OTP-MERGE · JOB-TENANT-GUC | resume после CI |
+| GREEN Solid Queue job tenant GUC (`8f9f5aa2`) | `/regress` → `/review` |
+| Fly **v493** · shop API keys tip pushed | deploy/secrets — апрув |
+| Parked: OTP-MERGE · shop API CI | не смешивать |
 
-**last_done:** REVIEW — local 30/76 · Entire `01M22C4CV16HA4XDFZ4T4ZGQ23` · bugbot/security usage blocked · push  
-**next_step:** ждать CI green · deploy только по апруву
+**last_done:** GREEN `JobTenantContext` + wrap order jobs + audit FIXED  
+**next_step:** `/regress` job tests zone
 
 **ctx_trim:** `2026-09-02`  
 **Fly:** v493 `deployment-01M20JBGBP9VBQ1JN3HM1K58Z5`  

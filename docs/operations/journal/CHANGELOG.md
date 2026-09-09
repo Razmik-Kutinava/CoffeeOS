@@ -11,6 +11,10 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-09 — GREEN: V3-SEC-JOB-TENANT-GUC (Solid Queue job tenant GUC)
+
+- `Rls::JobTenantContext` + wrap order-scoped jobs · audit FIXED + ops абзац
+- Local helper+jobs **28/28** · commit `8f9f5aa2` · Next: `/regress`
 ## 2026-09-09 — REVIEW: V3-SEC-SHOP-API-KEYS
 
 - Local regress **30/76 PASS** · GREEN `8f9cd956`
