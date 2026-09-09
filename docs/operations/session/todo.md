@@ -18,7 +18,7 @@
 - [x] **RED** — `6dfe5038`
 - [x] **GREEN** — `8f9f5aa2`
 - [x] **regress** — helper+jobs **28/86 PASS** (2026-09-09)
-- [ ] **REVIEW** — bugbot + security-review + Entire + push
+- [x] **REVIEW** — local PASS · Entire `01M22D5GHQKN7FEQE7Y87CCN3T` · bugbot/security **usage blocked** · push CI
 - [ ] **Ops live** — Fly queue network — только апрув
 
 ## Файлы
