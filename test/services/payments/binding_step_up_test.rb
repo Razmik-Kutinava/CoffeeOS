@@ -66,4 +66,3 @@ class Payments::BindingStepUpTest < ActiveSupport::TestCase
     )
   end
 end
-

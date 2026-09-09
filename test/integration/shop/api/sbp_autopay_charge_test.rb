@@ -14,6 +14,7 @@ class Shop::Api::SbpAutopayChargeTest < ActionDispatch::IntegrationTest
     @product = create_product!(category: category)
     enable_product_for_tenant!(tenant: @tenant, product: @product, price: 200)
     @customer = create_mobile_customer!(email: "charge-#{SecureRandom.hex(3)}@example.com")
+    @customer.update_columns(phone_verified: true, phone_status: "verified", updated_at: Time.current)
     @old_simulate = ENV["SHOP_SIMULATE_PAYMENT"]
     ENV["SHOP_SIMULATE_PAYMENT"] = "1"
   end
@@ -88,6 +89,7 @@ class Shop::Api::SbpAutopayChargeTest < ActionDispatch::IntegrationTest
 
     open_session do |sess|
       bind_shop_order_to_session!(sess, tenant_id: @tenant.id, order: order, email: @customer.email)
+      clear_shop_payment_step_up!(customer: @customer, tenant_id: @tenant.id, session: sess)
       sess.post "/shop/api/payments/sbp/charge",
         headers: shop_headers,
         params: { order_id: order.id },

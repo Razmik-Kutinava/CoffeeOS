@@ -20,6 +20,7 @@ class Shop::Api::SbpEpicCardTokenizationCharTest < ActionDispatch::IntegrationTe
     enable_product_for_tenant!(tenant: @tenant, product: @product, price: 179)
     @email = "sbp-char-#{SecureRandom.hex(4)}@example.com"
     @customer = create_mobile_customer!(email: @email)
+    @customer.update_columns(phone_verified: true, phone_status: "verified", updated_at: Time.current)
 
     @old_simulate = ENV["SHOP_SIMULATE_PAYMENT"]
     @old_key = ENV["TBANK_TERMINAL_KEY"]
@@ -138,6 +139,7 @@ class Shop::Api::SbpEpicCardTokenizationCharTest < ActionDispatch::IntegrationTe
         assert_equal 200, sess.response.status
 
         verify_shop_email!(tenant_id: @tenant.id, email: @email, session: sess)
+        clear_shop_payment_step_up!(customer: @customer, tenant_id: @tenant.id, session: sess)
 
         sess.post "/shop/api/payments/one_click",
           headers: shop_headers,

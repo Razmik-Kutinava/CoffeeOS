@@ -66,6 +66,7 @@ class Shop::ShopOneClickPaymentStep4Test < ActionDispatch::IntegrationTest
     enable_product_for_tenant!(tenant: @tenant, product: @product, price: 179)
     @email = "step4-#{SecureRandom.hex(4)}@example.com"
     @customer = create_mobile_customer!(email: @email)
+    @customer.update_columns(phone_verified: true, phone_status: "verified", updated_at: Time.current)
     @card = MobilePaymentMethod.create!(
       customer_id: @customer.id,
       payment_type: "card",
@@ -146,6 +147,7 @@ class Shop::ShopOneClickPaymentStep4Test < ActionDispatch::IntegrationTest
       assert_equal 200, sess.response.status
 
       verify_shop_email!(tenant_id: @tenant.id, email: @email, session: sess)
+      clear_shop_payment_step_up!(customer: @customer, tenant_id: @tenant.id, session: sess)
 
       sess.post "/shop/api/payments/one_click",
         headers: shop_headers,

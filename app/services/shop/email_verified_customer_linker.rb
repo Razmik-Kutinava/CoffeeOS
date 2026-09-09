@@ -42,7 +42,7 @@ module Shop
       previous_cid = session_cid.to_s
       CustomerSession.set_customer_id!(@session, @tenant_id, customer.id)
 
-      if has_active_payment_methods?(customer) && previous_cid != customer.id.to_s
+      if has_active_payment_methods?(customer) && previous_cid.present? && previous_cid != customer.id.to_s
         Payments::BindingStepUp.lock_payments!(@session, @tenant_id)
       end
 

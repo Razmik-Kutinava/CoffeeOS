@@ -44,4 +44,23 @@ module ShopEmailTestHelper
 
     Shop::PendingOrderSession.set!(integration_session.session, tenant_id, order.id)
   end
+
+  # Happy-path charge/one_click: фабрика даёт phone → unverified; после switch OTP может lock.
+  # Снимаем оба условия (verified phone + unlock session) перед Charge.
+  def clear_shop_payment_step_up!(customer:, tenant_id:, session:)
+    return if customer.blank?
+
+    if customer.phone.present?
+      customer.update_columns(
+        phone_verified: true,
+        phone_status: "verified",
+        updated_at: Time.current
+      )
+    end
+
+    rack = session.respond_to?(:session) ? session.session : session
+    Payments::BindingStepUp.unlock_payments!(rack, tenant_id)
+    rack.delete("shop_payments_locked_by_tenant")
+    rack.delete(:shop_payments_locked_by_tenant)
+  end
 end
