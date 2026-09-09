@@ -2,17 +2,17 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-09 (SPEC: V3-SEC-OTP-MERGE)  
+**Дата:** 2026-09-09 (SPEC: V3-SEC-JOB-TENANT-GUC)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| SPEC OTP → switch + BindingStepUp (срез A) | `/sbr` RED |
-| Fly **v493** · live pay стоп | deploy/secrets — апрув |
-| Parked: shop API keys (RED tip + local GREEN WIP) | отдельно после OTP-merge |
+| SPEC jobs → tenant GUC (Solid Queue, срез A) | `/sbr` RED |
+| Fly **v493** · live pay / queue network — стоп | deploy/ops — апрув |
+| Parked: OTP-MERGE · shop API keys WIP | не смешивать |
 
-**last_done:** SPEC `V3-SEC-OTP-MERGE` в `todo.md` (MVP=срез A; confirm_merge = backlog)  
-**next_step:** RED — linker switch + card step-up failing tests
+**last_done:** SPEC `V3-SEC-JOB-TENANT-GUC` в `todo.md` (MVP=срез A; не Sidekiq)  
+**next_step:** RED — JobTenantContext + order-scoped job GUC tests
 
 **ctx_trim:** `2026-09-02`  
 **Fly:** v493 `deployment-01M20JBGBP9VBQ1JN3HM1K58Z5`  

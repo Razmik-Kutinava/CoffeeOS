@@ -11,6 +11,10 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-09 — SPEC: V3-SEC-JOB-TENANT-GUC (Solid Queue jobs → tenant GUC)
+
+- todo: срез A — `Rls::JobTenantContext` · wrap order-scoped jobs · audit FIXED + ops абзац
+- Parked: OTP-MERGE · SHOP-API-KEYS WIP · Next: `/sbr` RED
 ## 2026-09-09 — SPEC: V3-SEC-OTP-MERGE (OTP switch + card step-up)
 
 - todo: MVP срез A — linker switch (не absorb карт) · BindingStepUp gate · audit log
