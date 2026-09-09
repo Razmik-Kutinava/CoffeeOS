@@ -11,6 +11,10 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-09 — regress: V3-SEC-JOB-TENANT-GUC PASS
+
+- helper + broadcast/ready/cascade/receipt jobs: **28/86** · 0 fail
+- GREEN `8f9f5aa2` · Next: `/review`
 ## 2026-09-09 — REVIEW CI green: V3-SEC-SHOP-API-KEYS
 
 - CI [34318508943](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/34318508943) · tip `442e7920` (Zeitwerk ApiKeys + Brakeman GUC)

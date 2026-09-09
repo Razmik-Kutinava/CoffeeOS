@@ -17,7 +17,7 @@
 - [x] **SPEC** — `022552d5`
 - [x] **RED** — `6dfe5038`
 - [x] **GREEN** — `8f9f5aa2`
-- [ ] **regress** — `/regress`
+- [x] **regress** — helper+jobs **28/86 PASS** (2026-09-09)
 - [ ] **REVIEW** — bugbot + security-review + Entire + push
 - [ ] **Ops live** — Fly queue network — только апрув
 

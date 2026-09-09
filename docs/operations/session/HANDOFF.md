@@ -2,23 +2,23 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-09 (REVIEW CI green: V3-SEC-SHOP-API-KEYS)  
+**Дата:** 2026-09-09 (regress PASS: V3-SEC-JOB-TENANT-GUC)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Shop API keys REVIEW · **CI green** | deploy/secrets — апрув |
-| Fly **v493** | MCP Point A после deploy |
-| Parked: JOB-TENANT-GUC · OTP-MERGE | отдельно |
+| JOB-TENANT regress **28/86 PASS** | `/review` |
+| Fly **v493** · shop API keys CI green | deploy/secrets — апрув |
+| Parked: OTP-MERGE | не смешивать |
 
-**last_done:** CI green [34318508943](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/34318508943) · tip `442e7920`  
-**next_step:** стоп · deploy только по апруву
+**last_done:** regress jobs/GUC zone PASS · GREEN `8f9f5aa2`  
+**next_step:** `/review` bugbot + security-review + Entire + push
 
 **ctx_trim:** `2026-09-02`  
 **Fly:** v493 `deployment-01M20JBGBP9VBQ1JN3HM1K58Z5`  
 **Sentry:** unresolved 24h **0**  
-**Entire:** `01M22C4CV16HA4XDFZ4T4ZGQ23`  
-**CI:** green [34318508943](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/34318508943)
+**Entire:** `01M22D5GHQKN7FEQE7Y87CCN3T` (JOB-TENANT) · shop API `01M22C4CV16HA4XDFZ4T4ZGQ23`  
+**CI:** shop API green [34318508943](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/34318508943)
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
