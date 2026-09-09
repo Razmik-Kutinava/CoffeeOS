@@ -11,6 +11,10 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-09 — SPEC: V3-SEC-OTP-MERGE (OTP switch + card step-up)
+
+- todo: MVP срез A — linker switch (не absorb карт) · BindingStepUp gate · audit log
+- Parked: `V3-SEC-SHOP-API-KEYS` GREEN WIP · Next: `/sbr` RED
 ## 2026-09-09 — SPEC: V3-SEC-SHOP-API-KEYS (tenant-scoped shop API keys)
 
 - todo: header-only `X-Shop-Api-Key` · digest per-tenant · rotation · ENV fallback bootstrap
