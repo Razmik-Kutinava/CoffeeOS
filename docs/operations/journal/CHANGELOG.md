@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-09 — REVIEW: V3-SEC-OTP-MERGE
+
+- Local zone+IDOR **22/102 PASS** · CI green [34320783026](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/34320783026) tip `a98e978a`
+- Entire `01M22D5GHQKN7FEQE7Y87CCN3T` на GREEN `a7839074` · bugbot/security **usage blocked**
+- Next: deploy / Fly MCP Point A — апрув
 ## 2026-09-09 — regress: V3-SEC-OTP-MERGE PASS
 
 - linker/merger/BindingStepUp: **11/47** · ownership_idor: **11/55**

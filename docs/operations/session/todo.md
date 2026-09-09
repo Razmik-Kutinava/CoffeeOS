@@ -18,8 +18,8 @@
 - [x] **RED** — `51aa657e` · `test: otp profile switch and card step-up [RED]`
 - [x] **GREEN** — `a7839074` · switch + BindingStepUp lock + one_click/SBP gate + docs (fix after race on `3a81f8a9`)
 - [x] **regress** — zone **11/47 PASS** · ownership_idor **11/55 PASS** (2026-09-09)
-- [ ] **REVIEW** — bugbot + security-review + Entire + push CI
-- [ ] **deploy** — только апрув владельца
+- [x] **REVIEW** — local PASS · CI green `a98e978a` · Entire на GREEN · bugbot/security **usage blocked** · push done
+- [ ] **deploy** — только апрув владельца (+ Fly MCP Point A)
 
 ## Файлы (ожидаемо)
 
