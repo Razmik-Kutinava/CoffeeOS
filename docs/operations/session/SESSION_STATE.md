@@ -2,16 +2,16 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-09 (SPEC: V3-SEC-OTP-MERGE)  
+**Дата:** 2026-09-09 (GREEN: V3-SEC-SHOP-API-KEYS)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| SPEC OTP switch + card step-up в `todo.md` (MVP срез A) | `/sbr` RED |
+| GREEN tenant-scoped shop API keys | `/regress` → `/review` |
+| Parked: `V3-SEC-OTP-MERGE` SPEC `c9733b8b` | resume после review keys |
 | Live pay / SBP B — стоп без апрува | deploy/secrets — только апрув |
-| Parked: `V3-SEC-SHOP-API-KEYS` GREEN WIP | не смешивать с этим SBR |
 
-**last_done:** SPEC `V3-SEC-OTP-MERGE` импортирован в todo  
-**next_step:** `/sbr` RED — switch + step_up_required тесты
+**last_done:** GREEN shop API keys — digest + header-only + tenant match · local tests PASS  
+**next_step:** `/regress` зоны auth/ownership · затем `/review`
 
 **ctx_trim:** `2026-09-02`

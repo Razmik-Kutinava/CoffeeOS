@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_05_120000) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_09_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_stat_statements"
@@ -1110,6 +1110,22 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_05_120000) do
     t.index ["tenant_id"], name: "index_shifts_on_tenant_id"
   end
 
+  create_table "shop_api_keys", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.boolean "active", default: true, null: false
+    t.datetime "created_at", null: false
+    t.datetime "expires_at"
+    t.boolean "global_ops", default: false, null: false
+    t.datetime "last_used_at"
+    t.string "name", null: false
+    t.datetime "revoked_at"
+    t.uuid "tenant_id"
+    t.string "token_digest", null: false
+    t.string "token_prefix"
+    t.datetime "updated_at", null: false
+    t.index ["tenant_id"], name: "index_shop_api_keys_on_tenant_id"
+    t.index ["token_digest"], name: "index_shop_api_keys_on_token_digest", unique: true
+  end
+
   create_table "shop_customer_favorites", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.uuid "customer_id", null: false
@@ -1514,6 +1530,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_05_120000) do
   add_foreign_key "shifts", "tenants", on_delete: :cascade
   add_foreign_key "shifts", "users", column: "closed_by_id", on_delete: :nullify
   add_foreign_key "shifts", "users", column: "opened_by_id", on_delete: :restrict
+  add_foreign_key "shop_api_keys", "tenants", on_delete: :cascade
   add_foreign_key "shop_customer_favorites", "mobile_customers", column: "customer_id", on_delete: :cascade
   add_foreign_key "shop_customer_favorites", "products", on_delete: :cascade
   add_foreign_key "shop_customer_favorites", "tenants", on_delete: :cascade

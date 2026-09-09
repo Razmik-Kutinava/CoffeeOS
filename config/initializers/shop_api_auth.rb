@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-# Shop API auth: browser CSRF+Referer vs server API key.
-# Документация и план ротации ключа: docs/product/security/phase_1_rbac_closure/SHOP_API_AUTH.md
+# Shop API auth: browser CSRF+Referer vs server API key (tenant-scoped).
+# Документация: docs/product/security/phase_1_rbac_closure/SHOP_API_AUTH.md
 # Order ownership (Phase 1): app/controllers/concerns/shop/api/order_ownership.rb
 Rails.application.config.to_prepare do
   module Shop
@@ -18,20 +18,25 @@ Rails.application.config.to_prepare do
         def authenticate_shop_api!
           return if browser_shop_session?
 
-          api_key = request.headers["X-Shop-Api-Key"] || params[:api_key]
+          # Query/body api_key — запрещены (утечка в логи/Referer).
+          if params[:api_key].present?
+            render json: { error: "Требуется авторизация" }, status: :unauthorized
+            return
+          end
 
+          api_key = request.headers["X-Shop-Api-Key"].to_s
           unless api_key.present?
             render json: { error: "Требуется авторизация" }, status: :unauthorized
             return
           end
 
-          # Проверка API ключа (простая реализация)
-          # В проде использовать зашифрованные ключи в БД
-          valid_key = ENV["SHOP_API_KEY"]
-          unless api_key == valid_key
-            Rails.logger.warn("[Shop::Auth] Invalid API key attempt")
+          tenant_id = Current.tenant_id.presence || request.headers["X-Shop-Tenant"].presence
+
+          begin
+            Shop::ApiKeyAuthenticator.call!(raw_key: api_key, tenant_id: tenant_id)
+          rescue Shop::ApiKeyAuthenticator::Unauthorized
+            Rails.logger.warn("[Shop::Auth] Invalid or mismatched shop API key")
             render json: { error: "Неверный API ключ" }, status: :unauthorized
-            nil
           end
         end
 
