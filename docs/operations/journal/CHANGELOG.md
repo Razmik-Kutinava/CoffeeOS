@@ -11,6 +11,14 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-09 — seed: V3-SEC-SHOP-API-KEYS per-tenant (FALLBACK still ON)
+
+- Issued **17** `sales_point` keys (`seed-2026-09-09`) on Fly v494
+- Smoke **8/8 PASS** (A↔B isolation, query dead, ENV fallback still works)
+- **`SHOP_API_KEY_FALLBACK` не выключали** — по решению владельца
+- RAW gitignored: `config/secrets/shop_api_keys_fly_seed_2026-09-09.json`
+- Артефакт: `artifacts/v3_sec_shop_api_keys_seed/mcp/fly_v494_2026-09-09/`
+
 ## 2026-09-09 — deploy+MCP: V3-SEC OTP-MERGE / SHOP-API-KEYS / JOB-TENANT
 
 - CI green pre-deploy · Fly **v494** `deployment-01M22FTYBTSHA8HESDV06GPMR2`

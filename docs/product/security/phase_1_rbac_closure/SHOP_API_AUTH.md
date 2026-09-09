@@ -57,6 +57,8 @@ RLS: isolation по `app.current_tenant_id` + lookup policy `app.shop_api_key_lo
 2. Fly: положить raw Point A в `SHOP_API_KEY` **или** оставить ENV только для fallback и передавать tenant-key в MCP-скриптах через тот же secret (resolver пока берёт `SHOP_API_KEY` — не ломает `bin/acceptance/*`).
 3. Когда все точки на digest-ключах — `SHOP_API_KEY_FALLBACK=0`, revoke старых ENV-only клиентов.
 
+**Статус seed (2026-09-09, Fly v494):** выданы tenant-ключи всем `sales_point` (`seed-2026-09-09`, 17 шт.). Smoke A↔B PASS. **`SHOP_API_KEY_FALLBACK` пока НЕ выключали** (ENV global ещё жив). RAW: `config/secrets/shop_api_keys_fly_seed_2026-09-09.json` (gitignored). Артефакт: `artifacts/v3_sec_shop_api_keys_seed/mcp/fly_v494_2026-09-09/`.
+
 Filter logs: `:api_key`, `:shop_api_key` в `filter_parameter_logging.rb`.
 
 ---

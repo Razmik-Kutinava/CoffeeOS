@@ -1,0 +1,58 @@
+{
+  "date": "2026-09-09",
+  "fly_version": 494,
+  "fallback_disabled": false,
+  "point_a_prefix": "sk_c71a9",
+  "point_b_prefix": "sk_6bd88",
+  "checks": [
+    {
+      "id": "A_key_on_A",
+      "http": 200,
+      "expect": 200,
+      "pass": true
+    },
+    {
+      "id": "A_key_on_B",
+      "http": 401,
+      "expect": 401,
+      "pass": true
+    },
+    {
+      "id": "B_key_on_B",
+      "http": 200,
+      "expect": 200,
+      "pass": true
+    },
+    {
+      "id": "B_key_on_A",
+      "http": 401,
+      "expect": 401,
+      "pass": true
+    },
+    {
+      "id": "no_key",
+      "http": 401,
+      "expect": 401,
+      "pass": true
+    },
+    {
+      "id": "query_key_dead",
+      "http": 401,
+      "expect": 401,
+      "pass": true
+    },
+    {
+      "id": "env_fallback_still_on",
+      "http": 200,
+      "expect": 200,
+      "pass": true
+    },
+    {
+      "id": "categories_public",
+      "http": 200,
+      "expect": 200,
+      "pass": true
+    }
+  ],
+  "status": "PASS"
+}

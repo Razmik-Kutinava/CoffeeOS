@@ -1,0 +1,165 @@
+{
+  "date": "2026-09-09",
+  "fly_version": 494,
+  "fallback": null,
+  "has_env_key": true,
+  "fallback_disabled": false,
+  "issued_count": 17,
+  "keys": [
+    {
+      "tenant_id": "3d9f95bb-28d7-4bea-9229-7f72d6fbf977",
+      "slug": "test-cafe",
+      "name": "Тестовая кофейня",
+      "status": "inactive",
+      "key_id": "23dd1742-5bcb-4b8d-b762-c81c30b47da3",
+      "prefix": "sk_23ef8",
+      "previous_active_prefix": null
+    },
+    {
+      "tenant_id": "2377b3f2-d39c-43c6-a6b2-bd7f56151877",
+      "slug": "test-cafe-2",
+      "name": "Тестовая кофейня 2",
+      "status": "inactive",
+      "key_id": "296390ee-40b9-4636-8b76-1151ea1f09b5",
+      "prefix": "sk_5b04b",
+      "previous_active_prefix": null
+    },
+    {
+      "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+      "slug": "demo-point-a",
+      "name": "Demo Coffee Point A",
+      "status": "active",
+      "key_id": "f28c0e18-ecd8-4e7d-8231-cdc7abe1e3d0",
+      "prefix": "sk_c71a9",
+      "previous_active_prefix": "sk_859f1"
+    },
+    {
+      "tenant_id": "655aaccb-004a-4bb9-a50a-ce618854dda3",
+      "slug": "demo-point-b",
+      "name": "Demo Coffee Point B",
+      "status": "inactive",
+      "key_id": "4ef024a7-a7cf-4cca-b356-728120110571",
+      "prefix": "sk_6bd88",
+      "previous_active_prefix": null
+    },
+    {
+      "tenant_id": "7cfa9b7e-aa64-4d13-8ed9-5d5821fe873c",
+      "slug": "mcp-prod-point-0627",
+      "name": "MCP Prod Point",
+      "status": "inactive",
+      "key_id": "099ecff6-1090-4d7f-beb9-549ed19786ad",
+      "prefix": "sk_946f1",
+      "previous_active_prefix": null
+    },
+    {
+      "tenant_id": "d8e287c5-5524-423c-8e5a-605570c69517",
+      "slug": "smoke-point-qa6-1",
+      "name": "Smoke Point QA6",
+      "status": "inactive",
+      "key_id": "43c6d41e-07c6-45ac-ab55-d70ad0bf7b9e",
+      "prefix": "sk_2db18",
+      "previous_active_prefix": null
+    },
+    {
+      "tenant_id": "1c064640-4301-4435-8ded-c92fb075e9cc",
+      "slug": "prog10-alpha-p1",
+      "name": "Prog10 Alpha Point 1",
+      "status": "inactive",
+      "key_id": "e2984be0-e340-41d9-981d-99f23e838e64",
+      "prefix": "sk_79d43",
+      "previous_active_prefix": null
+    },
+    {
+      "tenant_id": "edf8a0a9-38e7-4049-b9c6-3e08c6c23a76",
+      "slug": "prog10-alpha-p2",
+      "name": "Prog10 Alpha Point 2",
+      "status": "inactive",
+      "key_id": "fcdb70b6-c6eb-4597-a27e-336a6d768d3e",
+      "prefix": "sk_1068d",
+      "previous_active_prefix": null
+    },
+    {
+      "tenant_id": "d29fcf3a-da72-4a95-9683-9cfa71a2d865",
+      "slug": "prog10-alpha-p3",
+      "name": "Prog10 Alpha Point 3",
+      "status": "inactive",
+      "key_id": "92650152-50c6-4632-9e38-a02d29616064",
+      "prefix": "sk_6c836",
+      "previous_active_prefix": null
+    },
+    {
+      "tenant_id": "03a4d457-e16f-4998-b764-69b3de083732",
+      "slug": "prog10-beta-p1",
+      "name": "Prog10 Beta Point 1",
+      "status": "inactive",
+      "key_id": "86a610a3-a974-4f44-8998-e51a51aba78d",
+      "prefix": "sk_006bb",
+      "previous_active_prefix": null
+    },
+    {
+      "tenant_id": "628a937b-f4e2-43b7-bd7f-9fa44f031460",
+      "slug": "prog10-beta-p2",
+      "name": "Prog10 Beta Point 2",
+      "status": "inactive",
+      "key_id": "81336e43-78af-47ff-b68e-4ad91355eb76",
+      "prefix": "sk_2f9c2",
+      "previous_active_prefix": null
+    },
+    {
+      "tenant_id": "b57c2a88-91a5-481e-b44f-29e29c77cfb5",
+      "slug": "prog10-beta-p3",
+      "name": "Prog10 Beta Point 3",
+      "status": "inactive",
+      "key_id": "9e596079-63ad-4ad1-87ad-f4ca703bb72a",
+      "prefix": "sk_c1583",
+      "previous_active_prefix": null
+    },
+    {
+      "tenant_id": "24e1749e-628e-4fe4-95c0-f6cab73c116d",
+      "slug": "demo-point-a-test_new",
+      "name": "Тестновая новая точка",
+      "status": "inactive",
+      "key_id": "9e189b5e-4dbb-4ff1-b49f-917667ab0226",
+      "prefix": "sk_cd776",
+      "previous_active_prefix": null
+    },
+    {
+      "tenant_id": "8d350bb3-0bf5-4abe-b017-fe045155b2e7",
+      "slug": "demo-point-c",
+      "name": "Demo Coffee Point C",
+      "status": "inactive",
+      "key_id": "3b600c82-c0e8-4592-a187-fd52d6d6d659",
+      "prefix": "sk_72297",
+      "previous_active_prefix": null
+    },
+    {
+      "tenant_id": "af4f78d6-c66b-428e-8ee4-5a609c5c9131",
+      "slug": "fly-overnight-1783239109276",
+      "name": "Fly Overnight 1783239109276",
+      "status": "inactive",
+      "key_id": "44a1af57-e8fd-4d08-beb9-7fc0dc020d52",
+      "prefix": "sk_d2184",
+      "previous_active_prefix": null
+    },
+    {
+      "tenant_id": "859c04ae-3227-4046-9c60-2600f6f1db59",
+      "slug": "Juk",
+      "name": "Жук",
+      "status": "inactive",
+      "key_id": "97e14e47-0c8a-4926-9ece-382eacf8c456",
+      "prefix": "sk_dc06c",
+      "previous_active_prefix": null
+    },
+    {
+      "tenant_id": "b5e9b8c0-b156-47ac-96d5-d0e62247d3a9",
+      "slug": "Juk_2",
+      "name": "Жук_2",
+      "status": "inactive",
+      "key_id": "cbd7ff49-8e28-43a2-a796-bedbb9e9e256",
+      "prefix": "sk_a3632",
+      "previous_active_prefix": null
+    }
+  ],
+  "secret_file_gitignored": "config/secrets/shop_api_keys_fly_seed_2026-09-09.json",
+  "status": "PASS"
+}
