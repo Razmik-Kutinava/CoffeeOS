@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-09 — feat: UK onboarding auto shop API key (FALLBACK still ON)
+
+- `Provision` выдаёт tenant key для sales_point (1×); flash RAW на show; kitchen — skip
+- Local: provision + tenants controller **14/88 PASS**
+- Fly **v495**: create `mcp-key-b7845686` → prefix `sk_27213` → API 200/401 → delete · Point A OK
+- Артефакт: `artifacts/v3_sec_shop_api_keys_onboarding/mcp/fly_v495_2026-09-09/`
+
 ## 2026-09-09 — seed: V3-SEC-SHOP-API-KEYS per-tenant (FALLBACK still ON)
 
 - Issued **17** `sales_point` keys (`seed-2026-09-09`) on Fly v494

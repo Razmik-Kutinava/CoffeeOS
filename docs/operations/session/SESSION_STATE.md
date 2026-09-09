@@ -2,15 +2,14 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-09 (SHOP-API-KEYS seed)  
+**Дата:** 2026-09-09 (onboarding shop API key)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| keys seeded 17 · smoke PASS · FALLBACK still ON | FALLBACK=0 — апрув |
-| артефакт `v3_sec_shop_api_keys_seed/mcp/fly_v494_2026-09-09/` | |
+| auto-key on UK create · Fly v495 PASS | FALLBACK=0 — апрув |
 
-**last_done:** per-tenant shop API keys seed + smoke  
+**last_done:** Provision issues key; test point created+deleted  
 **next_step:** stop
 
 **ctx_trim:** `2026-09-02`
