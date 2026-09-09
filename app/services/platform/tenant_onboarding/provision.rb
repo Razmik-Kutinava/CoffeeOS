@@ -4,6 +4,7 @@ module Platform
   module TenantOnboarding
     # Единый сценарий после создания/сохранения точки в УК: модули + каталог (PTS) для точки.
     # Вызывать внутри общей транзакции с сохранением Tenant (см. TenantsController).
+    # Sales point: shop API key выдаётся один раз (если ещё нет usable tenant-ключа). RAW — только в return.
     class Provision
       def self.call(tenant:, actor_user_id:, module_params:)
         new(tenant: tenant, actor_user_id: actor_user_id, module_params: module_params).call
@@ -29,22 +30,47 @@ module Platform
           Current.tenant_id = previous_tid
         end
 
+        shop_api_key = ensure_shop_api_key!
+
         Rails.logger.info(
           {
             event: "platform.tenant_onboarding.provision",
             tenant_id: @tenant.id,
             organization_id: @tenant.organization_id,
             actor_user_id: @actor_user_id,
-            slug: @tenant.slug
+            slug: @tenant.slug,
+            shop_api_key_issued: shop_api_key.present?,
+            shop_api_key_prefix: shop_api_key && shop_api_key[:prefix]
           }.to_json
         )
 
-        true
+        { ok: true, shop_api_key: shop_api_key }
       end
 
       private
 
       attr_reader :tenant, :actor_user_id, :module_params
+
+      # Только sales_point; RAW не логируем. Повторный update не плодит ключи.
+      def ensure_shop_api_key!
+        return nil unless @tenant.sales_point?
+
+        existing = Rls::GucContext.with_shop_api_key_lookup do
+          ShopApiKey.usable.where(tenant_id: @tenant.id, global_ops: false).exists?
+        end
+        return nil if existing
+
+        result = Shop::ApiKeys::Issue.call!(
+          tenant_id: @tenant.id,
+          name: "onboarding",
+          global_ops: false
+        )
+        {
+          raw: result[:raw_token],
+          prefix: result[:record].token_prefix,
+          id: result[:record].id
+        }
+      end
     end
   end
 end

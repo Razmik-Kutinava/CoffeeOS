@@ -9,6 +9,20 @@
 
 <%= render "entry_points_card", tenant: @tenant, entry_points: @entry_points %>
 
+<% if flash[:shop_api_key_raw].present? %>
+  <section style="margin: 1.25rem 0; padding: 1rem; border: 1px solid #f59e0b; border-radius: 8px; max-width: 640px; background: #1c1917;">
+    <h2 style="font-size: 1rem; margin: 0 0 0.5rem; color: #fbbf24;">Shop API ключ (один раз)</h2>
+    <p style="margin: 0.25rem 0; color: #a8a29e; font-size: 0.875rem;">
+      Сохраните в password manager. В БД хранится только отпечаток
+      <% if flash[:shop_api_key_prefix].present? %>(prefix <code><%= flash[:shop_api_key_prefix] %></code>)<% end %>.
+      Header: <code>X-Shop-Api-Key</code> + <code>X-Shop-Tenant</code> = id этой точки.
+    </p>
+    <p style="margin: 0.75rem 0 0; word-break: break-all; font-family: ui-monospace, monospace; color: #fef3c7;">
+      <%= flash[:shop_api_key_raw] %>
+    </p>
+  </section>
+<% end %>
+
 <% if @card_binding_promo %>
   <section style="margin: 1.25rem 0; padding: 1rem; border: 1px solid #334155; border-radius: 8px; max-width: 520px;">
     <h2 style="font-size: 1rem; margin: 0 0 0.5rem;">Промо 11₽</h2>

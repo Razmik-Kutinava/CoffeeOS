@@ -57,6 +57,22 @@ class Platform::TenantsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 1, tenant.weekday_schedules.enabled.count
   end
 
+  test "create sales_point issues shop api key and shows raw once on show" do
+    slug = "api-key-point-#{SecureRandom.hex(4)}"
+    assert_difference -> { ShopApiKey.count }, +1 do
+      post "/admin/tenants", params: tenant_create_params(slug: slug, name: "Ключ точка")
+    end
+    assert_response :redirect
+    follow_redirect!
+    assert_response :success
+
+    tenant = Tenant.find_by!(slug: slug)
+    key = ShopApiKey.usable.find_by!(tenant_id: tenant.id, global_ops: false)
+    assert key.token_prefix.present?
+    assert_match(/Shop API ключ/, response.body)
+    assert_match(key.token_prefix, response.body)
+  end
+
   test "create requires at least one weekday for sales point" do
     slug = "no-hours-#{SecureRandom.hex(4)}"
 

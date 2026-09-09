@@ -29,11 +29,12 @@ module Platform
         end
 
         begin
-          Platform::TenantOnboarding::Provision.call(
+          provision = Platform::TenantOnboarding::Provision.call(
             tenant: @tenant,
             actor_user_id: current_user.id,
             module_params: module_params
           )
+          @issued_shop_api_key = provision.is_a?(Hash) ? provision[:shop_api_key] : nil
         rescue => e
           Rails.logger.error("TenantOnboarding::Provision failed: #{e.class} — #{e.message}")
           @tenant.errors.add(:base, "Не удалось инициализировать точку. Попробуйте ещё раз.")
@@ -51,8 +52,14 @@ module Platform
         return render(:new, status: :unprocessable_entity)
       end
 
-      redirect_to platform_tenant_path(@tenant),
-                  notice: "Точка создана"
+      if @issued_shop_api_key && @issued_shop_api_key[:raw].present?
+        flash[:shop_api_key_raw] = @issued_shop_api_key[:raw]
+        flash[:shop_api_key_prefix] = @issued_shop_api_key[:prefix]
+        redirect_to platform_tenant_path(@tenant),
+                    notice: "Точка создана. Скопируйте Shop API ключ — он показывается один раз."
+      else
+        redirect_to platform_tenant_path(@tenant), notice: "Точка создана"
+      end
     end
 
     def show

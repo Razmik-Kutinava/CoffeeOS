@@ -59,6 +59,8 @@ RLS: isolation по `app.current_tenant_id` + lookup policy `app.shop_api_key_lo
 
 **Статус seed (2026-09-09, Fly v494):** выданы tenant-ключи всем `sales_point` (`seed-2026-09-09`, 17 шт.). Smoke A↔B PASS. **`SHOP_API_KEY_FALLBACK` пока НЕ выключали** (ENV global ещё жив). RAW: `config/secrets/shop_api_keys_fly_seed_2026-09-09.json` (gitignored). Артефакт: `artifacts/v3_sec_shop_api_keys_seed/mcp/fly_v494_2026-09-09/`.
 
+**Онбординг УК:** `Platform::TenantOnboarding::Provision` для новой **sales_point** выдаёт ключ `onboarding` (если usable ещё нет). RAW один раз во flash на `show`. Prep kitchen — без ключа. Update не плодит второй ключ.
+
 Filter logs: `:api_key`, `:shop_api_key` в `filter_parameter_logging.rb`.
 
 ---
