@@ -18,7 +18,7 @@
 **Fly:** v493 `deployment-01M20JBGBP9VBQ1JN3HM1K58Z5`  
 **Sentry:** unresolved 24h **0**  
 **Entire:** `01M22D5GHQKN7FEQE7Y87CCN3T` на `a7839074` (GREEN) · tip CI fix `a98e978a`  
-**CI:** green [34320783026](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/34320783026)
+**CI:** green tip [34321450447](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/34321450447) · prior fix [34320783026](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/34320783026)
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

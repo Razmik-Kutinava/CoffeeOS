@@ -11,7 +11,7 @@
 | bugbot/security | **usage blocked** (как JOB-TENANT) |
 | Entire на GREEN `a7839074` · tip `a98e978a` CI fix | attach на ops commit |
 
-**last_done:** REVIEW — local 22/102 · CI [34320783026](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/34320783026) green  
+**last_done:** REVIEW OTP-MERGE · CI green [34321450447](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/34321450447)  
 **next_step:** deploy / Fly MCP Point A — только апрув
 
 **ctx_trim:** `2026-09-02`
