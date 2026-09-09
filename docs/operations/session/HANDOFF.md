@@ -2,16 +2,16 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-08 (ops: cancel/refund Aram)  
+**Дата:** 2026-09-09 (SPEC: V3-SEC-SHOP-API-KEYS)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Жалоба: списание с карты → **возвраты сделаны** | SBP B только с апрувом |
-| Fly **v493** | не тестировать оплату без нужды |
+| SPEC shop API keys → tenant-scoped | `/sbr` RED |
+| Fly **v493** · live pay стоп | deploy/secrets — апрув |
 
-**last_done:** отмена заказов Point A · #0022/#0023 refunded · pending void/failed  
-**next_step:** ждать намерения · без live charge
+**last_done:** SPEC `V3-SEC-SHOP-API-KEYS` в `todo.md` (header-only + digest + rotation)  
+**next_step:** RED — authentication_test + authenticator unit
 
 **ctx_trim:** `2026-09-02`  
 **Fly:** v493 `deployment-01M20JBGBP9VBQ1JN3HM1K58Z5`  

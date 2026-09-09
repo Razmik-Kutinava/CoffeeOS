@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-08 (ops: отмена/возврат заказов Aram)  
+**Дата:** 2026-09-09 (SPEC: V3-SEC-SHOP-API-KEYS)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Aram #0022/#0023 **refunded** · прочие cancelled | SBP Slice B — только после апрува / без живых списаний |
-| O был PASS | не гонять live pay без нужды |
+| SPEC tenant-scoped shop API keys в `todo.md` | RED → GREEN → REVIEW |
+| Live pay / SBP B — стоп без апрува | deploy/secrets — только апрув |
 
-**last_done:** Fly ops cancel/refund Point A (Aram card refunded; pending voided)  
-**next_step:** стоп live pay · B только по явному апруву
+**last_done:** SPEC `V3-SEC-SHOP-API-KEYS` импортирован в todo  
+**next_step:** `/sbr` RED — падающие тесты tenant mismatch / query forbidden
 
 **ctx_trim:** `2026-09-02`

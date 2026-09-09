@@ -1,47 +1,83 @@
-# todo — UserCards / RebillId + #26 M2 (verify-first)
+# todo — V3-SEC-SHOP-API-KEYS (tenant-scoped shop API keys)
 
 | Поле | Значение |
 |------|----------|
-| **Режим** | Verify-first hot-path SBR · **Slice C только после FAIL нашего слоя** |
-| **CBR / корни** | UserCards · #26 M2 (decline → sheet) |
-| **ТЗ** | UserCards · #26 · Понятные сообщения · MCP_PLAN_STEP5 |
-| **Bridge / plan** | `docs/integrations/tbank.md` · `MCP_PLAN_STEP5_2026-09-07.md` |
-| **Стек** | `mobile_payment_methods` + `Payments::SavedCardStore` |
+| **ID** | `V3-SEC-SHOP-API-KEYS` / `IB-D-09` |
+| **Тип** | security / hot-path shop auth |
+| **Приоритет** | high (blast radius при утечке) |
+| **Ветка** | `develop` |
+| **Канон** | `@spec-build-review` · `@coffeeos-commit-ops` · `@coffeeos-dev-gates` |
+| **Доки** | `docs/product/security/phase_1_rbac_closure/SHOP_API_AUTH.md` |
 | **Point A** | `tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789` |
-| **Fly** | **v493** · MCP **PASS** · `…/mcp/fly_v493_2026-09-08/` |
-| **OUT** | SBP 3001 · #78 · смена TbankAdapter · hardcode RebillId |
+| **OUT** | Flutter device tokens · CSRF browser model · Platform CRUD UI · OAuth/JWT · fly deploy без апрува |
 
 ## SBR
 
-- [x] **SPEC**
-- [x] **P** Preflight — guest Aram + cards `*5953`/`*8782` · cart ≥10₽
-- [x] **U** MIR + RebillId (existing) + Charge proves token · new save_card FA не re-run
-- [x] **O** One-click `*5953` → `#202609-0022` · чек
-- [x] **M** #26 M2 — invalid RebillId `*0001` → inline «Сбой банка: позже» · sheet open · selected
-- [x] **C** — n/a (verify PASS)
-- [x] **RED/GREEN/REVIEW** — n/a
-- [ ] **deploy** — не нужен
+- [x] **SPEC** — todo + шапки SESSION/HANDOFF
+- [ ] **RED** — падающие тесты tenant mismatch / query forbidden / revoke · `test: … [RED]`
+- [ ] **GREEN** — миграция `shop_api_keys` + authenticator + header-only + filter + docs · `feat: … [GREEN]`
+- [ ] **REVIEW** — bugbot + security-review + Entire + push CI
+- [ ] **deploy / secrets** — только апрув владельца (не в GREEN)
 
-## Файлы (ожидаемо) — C не открывали
+## Файлы (ожидаемо)
 
-- `app/services/payments/saved_card_store.rb`
-- `app/services/payments/tbank_payment_sync.rb`
-- `app/services/shop/one_click_payment_service.rb`
-- `app/services/shop/new_card_payment_service.rb`
-- `app/frontend/components/PaymentMethodsSheet.svelte`
-- `app/frontend/lib/shopPayFsm.js`
-- `app/frontend/lib/openRepeatPaymentSheet.js`
+| Path | Зачем |
+|------|--------|
+| `config/initializers/shop_api_auth.rb` | gate: header-only + verifier (убрать `params[:api_key]` + ENV-only) |
+| `app/services/shop/api_key_authenticator.rb` | digest lookup + tenant match / global_ops + ENV fallback |
+| `app/models/shop_api_key.rb` | модель ключей (digest, tenant, rotation) |
+| `db/migrate/*_create_shop_api_keys.rb` | схема `shop_api_keys` |
+| `lib/shop_api_key_resolver.rb` | MCP/curl: не сломать Point A scripts |
+| `docs/product/security/phase_1_rbac_closure/SHOP_API_AUTH.md` | канон auth + ротация + Fly secret schema |
+| `config/initializers/filter_parameter_logging.rb` | не логировать `:api_key` / `:shop_api_key` |
+
+**Соседи (blast-radius, hot-path):**
+
+| Path | Почему |
+|------|--------|
+| `bin/support/shop_api_key.rb` | общий helper для acceptance/MCP — проверить после resolver |
+| `test/integration/shop/api/ownership_idor_test.rb` | регрессия ownership IDOR (не ломать) |
+
+**Тесты (зеркало):**
+
+| Path | Зачем |
+|------|--------|
+| `test/integration/shop/api/authentication_test.rb` | tenant mismatch, query forbidden, rotation, browser OK |
+| `test/services/shop/api_key_authenticator_test.rb` | unit digest/scope |
+| `test/lib/shop_api_key_resolver_test.rb` | не сломать resolver |
+
+При необходимости +1: `test/models/shop_api_key_test.rb` · rake `shop:api_keys:issue`.
 
 ## Не ломать
 
-- Webhook idempotency · `save_card=false` · card hash · session `user/cards` · min 10₽ · `isTokenInvalid` = токен карты
+1. Браузер `/shop`: CSRF+Referer → 200 на сессионные API **без** `X-Shop-Api-Key`; ключ в meta/JS не возвращать.
+2. Ownership IDOR: `ownership_idor_test` — зелёный (чужой заказ → 404).
+3. MCP/acceptance Point A: ключ + `X-Shop-Tenant` Point A → работает после bootstrap (ENV fallback до seed).
+4. `GET /shop/api/categories` public skip auth — без регрессии.
 
 ## Проверка
 
 ```bash
-# Live Point A v493 — MCP PASS (см. MCP_RESULT.md)
-ruby bin/rails test test/services/payments/saved_card_store_test.rb test/services/payments/tbank_payment_sync_test.rb test/integration/shop/shop_one_click_payment_step4_test.rb test/controllers/shop/api/user_cards_controller_test.rb
-# → 20 runs, 84 assertions, 0 failures (2026-09-08)
-node --test test/javascript/repeat_invalid_token_payment_test.mjs test/javascript/open_repeat_payment_sheet_test.mjs
-# → 23 pass / 0 fail
+bin/rails test test/integration/shop/api/authentication_test.rb test/services/shop/api_key_authenticator_test.rb test/lib/shop_api_key_resolver_test.rb
+bin/rails test test/integration/shop/api/ownership_idor_test.rb
 ```
+
+После GREEN (hot-path, **после deploy по апруву**): Fly MCP Point A — без ключа 401; ключ A + tenant A 200; ключ A + tenant B 401.
+
+## RED-сценарии (обязательные)
+
+1. Valid key tenant A + `X-Shop-Tenant=A` → auth OK
+2. Valid key tenant A + `X-Shop-Tenant=B` → **401**
+3. Header отсутствует, `?api_key=...` даже верный → **401**
+4. Revoked / expired / inactive → **401**
+5. Browser CSRF+Referer без ключа → OK
+6. Wrong key → 401
+7. Dual-key: previous ещё active → OK до revoke
+
+## DoD (дыра закрыта)
+
+- Утечка ключа точки A **не** даёт доступ к точке B
+- Ключ нельзя передать через URL
+- Браузер по-прежнему без ключа
+- Ротация: current + previous (или expires/revoked) без даунтайма
+- Сырой ключ **не** в БД (только digest); не логировать

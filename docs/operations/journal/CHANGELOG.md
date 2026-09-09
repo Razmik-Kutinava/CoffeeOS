@@ -11,6 +11,10 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-09 — SPEC: V3-SEC-SHOP-API-KEYS (tenant-scoped shop API keys)
+
+- todo: header-only `X-Shop-Api-Key` · digest per-tenant · rotation · ENV fallback bootstrap
+- Next: `/sbr` RED · deploy/secrets — апрув
 ## 2026-09-08 — Ops: отмена/возврат заказов Point A (жалоба Aram)
 
 - Card: `#202609-0022` / `#202609-0023` уже `refunded` (pid 9205922796 / 9205941727)
