@@ -2,16 +2,16 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-09 (regress: V3-SEC-SHOP-API-KEYS PASS)  
+**Дата:** 2026-09-09 (REVIEW: V3-SEC-SHOP-API-KEYS)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Local regress shop API keys **PASS** 30/76 | `/review` |
-| Parked: OTP-MERGE · JOB-TENANT-GUC SPECs | после review keys |
-| Live pay / deploy secrets — стоп | только апрув |
+| REVIEW shop API keys — local PASS · Entire OK · bugbot/security **usage blocked** | CI после push |
+| Parked: OTP-MERGE · JOB-TENANT-GUC | после CI green |
+| Deploy / secrets — **только апрув** | Fly MCP Point A после deploy |
 
-**last_done:** regress zone auth+ownership PASS after GREEN `8f9cd956`  
-**next_step:** `/review` — bugbot + security-review + Entire + push CI
+**last_done:** PHASE 3 REVIEW — push CI (bugbot/security blocked by usage limit)  
+**next_step:** CI green → стоп · deploy только апрув
 
 **ctx_trim:** `2026-09-02`

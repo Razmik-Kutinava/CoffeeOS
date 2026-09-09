@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-09 — REVIEW: V3-SEC-SHOP-API-KEYS
+
+- Local regress **30/76 PASS** · GREEN `8f9cd956`
+- Entire `01M22C4CV16HA4XDFZ4T4ZGQ23` · bugbot/security **blocked by usage** (как UserCards)
+- Push develop → CI · deploy/secrets — апрув · затем Fly MCP Point A
 ## 2026-09-09 — regress: V3-SEC-SHOP-API-KEYS PASS
 
 - rails auth+resolver+ownership_idor: **30/76** · 0 fail
