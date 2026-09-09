@@ -17,8 +17,8 @@
 **ctx_trim:** `2026-09-02`  
 **Fly:** v493 `deployment-01M20JBGBP9VBQ1JN3HM1K58Z5`  
 **Sentry:** unresolved 24h **0**  
-**Entire:** `01M22C4CV16HA4XDFZ4T4ZGQ23` на GREEN/`bd8f69b2`  
-**CI:** pushing tip (see latest Actions)
+**Entire:** `01M22D5GHQKN7FEQE7Y87CCN3T` на `fb34b5a` (JOB-TENANT GREEN attach)  
+**CI:** tip pre-deploy green [34224737257](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/34224737257)
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
