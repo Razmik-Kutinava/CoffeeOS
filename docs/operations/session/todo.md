@@ -17,6 +17,7 @@
 - [x] **SPEC** — `c9733b8b` (позже parked другим агентом; восстановлен)
 - [x] **RED** — `51aa657e` · `test: otp profile switch and card step-up [RED]`
 - [x] **GREEN** — `a7839074` · switch + BindingStepUp lock + one_click/SBP gate + docs (fix after race on `3a81f8a9`)
+- [x] **regress** — zone **11/47 PASS** · ownership_idor **11/55 PASS** (2026-09-09)
 - [ ] **REVIEW** — bugbot + security-review + Entire + push CI
 - [ ] **deploy** — только апрув владельца
 
@@ -50,7 +51,7 @@ bundle exec rails test test/services/shop/phone_verified_customer_linker_test.rb
 bundle exec rails test test/integration/shop/api/ownership_idor_test.rb
 ```
 
-**Local 2026-09-09:** zone **11/11 PASS** · ownership_idor **11/11 PASS**
+**Local 2026-09-09 regress:** zone **11 runs / 47 assert PASS** · ownership_idor **11 / 55 PASS**
 
 ## DoD
 

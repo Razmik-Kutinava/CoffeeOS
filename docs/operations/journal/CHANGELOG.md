@@ -11,6 +11,10 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-09 — regress: V3-SEC-OTP-MERGE PASS
+
+- linker/merger/BindingStepUp: **11/47** · ownership_idor: **11/55**
+- Next: `/review` · Fly MCP Point A после deploy (апрув)
 ## 2026-09-09 — REVIEW CI green: V3-SEC-JOB-TENANT-GUC
 
 - CI [34319445414](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/34319445414) · tip after removing stray OTP `[RED]` from develop
