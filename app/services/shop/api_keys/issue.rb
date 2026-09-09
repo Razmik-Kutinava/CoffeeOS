@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Shop
-  class ApiKeys
+  module ApiKeys
     # Issue a shop API key: prints raw once to stdout; DB stores digest only.
     class Issue
       def self.call!(tenant_id: nil, name:, global_ops: false)

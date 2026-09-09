@@ -3,13 +3,8 @@
 module Rls
   # Узкие временные GUC для обхода tenant RLS без `row_security off`.
   # Канон: auth_login · device_token_lookup · shop_api_key_lookup.
+  # SET LOCAL strings hardcoded (allowlist) — Brakeman SQL injection gate.
   class GucContext
-    SUPPORTED = %w[
-      app.auth_login
-      app.device_token_lookup
-      app.shop_api_key_lookup
-    ].freeze
-
     def self.with_auth_login
       with_local_guc("app.auth_login", "on") { yield }
     end
@@ -24,19 +19,20 @@ module Rls
 
     def self.with_local_guc(key, value)
       conn = ActiveRecord::Base.connection
-      validate_guc_key!(key)
-      sql = "SET LOCAL #{key} = #{conn.quote(value)}"
+      sql = case key
+      when "app.auth_login"
+        "SET LOCAL app.auth_login = #{conn.quote(value)}"
+      when "app.device_token_lookup"
+        "SET LOCAL app.device_token_lookup = #{conn.quote(value)}"
+      when "app.shop_api_key_lookup"
+        "SET LOCAL app.shop_api_key_lookup = #{conn.quote(value)}"
+      else
+        raise ArgumentError, "unsupported RLS GUC: #{key}"
+      end
       ActiveRecord::Base.transaction do
         conn.execute(sql)
         yield
       end
     end
-
-    def self.validate_guc_key!(key)
-      return if SUPPORTED.include?(key)
-
-      raise ArgumentError, "unsupported RLS GUC: #{key}"
-    end
-    private_class_method :validate_guc_key!
   end
 end
