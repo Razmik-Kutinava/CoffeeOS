@@ -11,7 +11,9 @@ module Barista
       order = Order.find_by(id: order_id)
       return unless order
 
-      Barista::OrderBoardBroadcaster.call(order: order, old_status: old_status)
+      with_order_tenant!(order) do
+        Barista::OrderBoardBroadcaster.call(order: order, old_status: old_status)
+      end
     end
   end
 end

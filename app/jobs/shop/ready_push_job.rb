@@ -15,14 +15,16 @@ module Shop
       return unless order&.ready? && order.source == "mobile"
       return if order.customer_id.blank?
 
-      customer = MobileCustomer.find_by(id: order.customer_id)
-      return unless customer&.push_enabled? && customer.push_token.present?
+      with_order_tenant!(order) do
+        customer = MobileCustomer.find_by(id: order.customer_id)
+        return unless customer&.push_enabled? && customer.push_token.present?
 
-      # #35 C1: атомарно фиксируем первую отправку и пропускаем любые дубли.
-      return unless Shop::ReadyPushClaim.claim!(order)
+        # #35 C1: атомарно фиксируем первую отправку и пропускаем любые дубли.
+        return unless Shop::ReadyPushClaim.claim!(order)
 
-      update_wallet!(order)
-      deliver_fcm!(order, customer, old_status)
+        update_wallet!(order)
+        deliver_fcm!(order, customer, old_status)
+      end
     end
 
     private

@@ -1,49 +1,50 @@
-# todo — V3-SEC-SHOP-API-KEYS (tenant-scoped shop API keys)
+# todo — V3-SEC-JOB-TENANT-GUC (Solid Queue jobs → tenant GUC)
 
 | Поле | Значение |
 |------|----------|
-| **ID** | `V3-SEC-SHOP-API-KEYS` / `IB-D-09` |
-| **Тип** | security / hot-path shop auth |
-| **Приоритет** | high (blast radius при утечке) |
+| **ID** | `V3-SEC-JOB-TENANT-GUC` |
+| **Тип** | security / background jobs / RLS |
+| **Приоритет** | medium (код) · high если queue DB торчит (ops) |
 | **Ветка** | `develop` |
-| **Канон** | `@spec-build-review` · `@coffeeos-commit-ops` · `@coffeeos-dev-gates` |
+| **Канон** | `@spec-build-review` · `@coffeeos-core` (tenant/RLS) · `@coffeeos-commit-ops` |
+| **MVP** | **срез A** — `Rls::JobTenantContext` + wrap order-scoped jobs + тесты + audit/ops абзац |
+| **Очередь** | **Solid Queue (Postgres)** — не Sidekiq/Redis (`queue_adapter = :solid_queue`; worker `./bin/jobs`) |
 | **Point A** | `tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789` |
-| **OUT** | Flutter device tokens · Platform CRUD UI · fly deploy без апрува |
-| **Parked** | `V3-SEC-OTP-MERGE` `c9733b8b` · `V3-SEC-JOB-TENANT-GUC` `022552d5` — resume после `/review` keys |
+| **OUT** | signed job args · полный `tenant_guc_inventory` · Sidekiq/Redis · `fly deploy` / network audit без апрува |
+| **Parked** | `V3-SEC-SHOP-API-KEYS` (GREEN+regress, ждёт `/review`) · `V3-SEC-OTP-MERGE` (SPEC) |
 
 ## SBR
 
-- [x] **SPEC**
-- [x] **RED** — `84a85554`
-- [x] **GREEN** — `8f9cd956`
-- [x] **regress** — auth+resolver+ownership **30/76 PASS** (2026-09-09)
+- [x] **SPEC** — todo + шапки SESSION/HANDOFF
+- [x] **RED** — `6dfe5038` · `test: job tenant GUC context [RED]`
+- [x] **GREEN** — helper + wrap order jobs + `RLS_TENANT_AUDIT` · `feat: set tenant GUC in order-scoped jobs [GREEN]`
 - [ ] **REVIEW** — bugbot + security-review + Entire + push CI
-- [ ] **deploy / secrets** — только апрув владельца
+- [ ] **Ops live** — Fly queue network / creds — **только апрув** владельца
 
 ## Файлы (ожидаемо)
 
 | Path | Зачем |
 |------|--------|
-| `config/initializers/shop_api_auth.rb` | header-only + verifier |
-| `app/services/shop/api_key_authenticator.rb` | digest + tenant match |
-| `app/models/shop_api_key.rb` | модель |
-| `db/migrate/20260909120000_create_shop_api_keys.rb` | схема |
-| `app/services/rls/guc_context.rb` | `with_shop_api_key_lookup` |
-| `docs/product/security/phase_1_rbac_closure/SHOP_API_AUTH.md` | канон |
-| `config/initializers/filter_parameter_logging.rb` | filter keys |
+| `app/services/rls/job_tenant_context.rb` | `with(order)` / `with_tenant_id` — Current + SET/SET LOCAL + ensure |
+| `app/jobs/application_job.rb` | `with_order_tenant!` / `with_job_tenant_id!` |
+| `app/jobs/barista/broadcast_order_board_job.rb` | GUC после find |
+| `app/jobs/shop/ready_push_job.rb` | GUC |
+| `app/jobs/shop/order_ready_cascade_job.rb` | GUC |
+| `app/jobs/payments/tbank_callback_job.rb` | GUC после resolve order |
+| `docs/product/security/phase_3_tenant_rls/RLS_TENANT_AUDIT.md` | FIXED + ops runbook |
+
+**Соседи:** receipt email · send push · `BroadcastTvColumnsJob` · (не трогать `guc_context` flags)
 
 ## Не ломать
 
-1. Browser CSRF+Referer без API key
-2. Ownership IDOR
-3. MCP ENV fallback до `SHOP_API_KEY_FALLBACK=0`
-4. Public `GET /shop/api/categories`
+1. Tbank callback → RebillId / статус (`perform_now` fallback).
+2. Ready cascade / push / WS board.
+3. `StuckPaymentsCheckJob` + `TelegramAlertJob` global.
+4. Ownership IDOR suite.
 
 ## Проверка
 
 ```bash
-bin/rails test test/integration/shop/api/authentication_test.rb test/services/shop/api_key_authenticator_test.rb test/lib/shop_api_key_resolver_test.rb test/integration/shop/api/ownership_idor_test.rb
-# → 30 runs, 76 assertions, 0 failures (2026-09-09 regress)
+bin/rails test test/services/rls/job_tenant_context_test.rb
+bin/rails test test/jobs/shop/ready_push_job_test.rb test/jobs/shop/order_ready_cascade_job_test.rb
 ```
-
-После `/review` + deploy (апрув): Fly MCP Point A — без ключа 401; A+A 200; A+B 401.

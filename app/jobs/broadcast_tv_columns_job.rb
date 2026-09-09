@@ -4,6 +4,14 @@ class BroadcastTvColumnsJob < ApplicationJob
   # Рассылает обновление TV-колонок для всех активных TV-устройств тенанта.
   # Принимает tenant_id явно, чтобы не зависеть от Current.tenant_id в контексте джоба.
   def perform(tenant_id)
+    with_job_tenant_id!(tenant_id) do
+      perform_for_tenant(tenant_id)
+    end
+  end
+
+  private
+
+  def perform_for_tenant(tenant_id)
     tv_setting = TvBoardSetting.find_by(tenant_id: tenant_id) ||
       TvBoardSetting.create!(
         tenant_id: tenant_id,
@@ -49,8 +57,6 @@ class BroadcastTvColumnsJob < ApplicationJob
       )
     end
   end
-
-  private
 
   def orders_for_column(tenant_id, status, limit)
     Order.for_barista_board(tenant_id)

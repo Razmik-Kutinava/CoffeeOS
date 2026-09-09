@@ -10,9 +10,9 @@
 | 2 | `tv_boards_controller.rb` | medium (prod N/A) | **FIXED** — TokenResolver |
 | 3 | `application_cable/connection.rb` | medium (prod N/A) | **FIXED** — `auth_login` GUC (staff) + `TokenResolver` (TV cookie) |
 | 4 | `shop/customer_tenant_history.rb` | low | **OK** — cross-city shop by design |
-| 5 | Jobs: `Order.find_by(id)` без GUC | low | **OK** — enqueue internal; broadcaster scopes by `order.tenant_id` |
-| 6 | `Payments::StuckPaymentsCheckJob` | info | **OK** — intentional global scan |
-| 7 | `Payments::TbankCallbackJob` | info | **OK** — webhook lookup by signed OrderId |
+| 5 | Jobs: `Order.find_by(id)` без GUC | low | **FIXED** — `Rls::JobTenantContext` (2026-09-09, V3-SEC-JOB-TENANT-GUC) |
+| 6 | `Payments::StuckPaymentsCheckJob` | info | **OK intentional** — global scan |
+| 7 | `Payments::TbankCallbackJob` | info | **FIXED** — GUC after resolve order (lookup still by signed OrderId) |
 | 8 | Prep multi-point | info | **BACKLOG** — не Phase 3 |
 | — | New RLS policies | — | **NEED_MIGRATION:** none (awaiting owner if found later) |
 
@@ -62,18 +62,36 @@
 
 ### Background jobs
 
+Очередь production = **Solid Queue** (Postgres `queue`), не Sidekiq. Worker: `./bin/jobs` (Fly).  
+Хелпер: `Rls::JobTenantContext` / `ApplicationJob#with_order_tenant!` — tenant из **записи**, не из HTTP.
+
 | Location | Sets tenant GUC? | row_security off? | Why | Risk | Action |
 |----------|------------------|-------------------|-----|------|--------|
-| `BroadcastTvColumnsJob` | explicit `tenant_id` arg; queries `where(tenant_id:)` | no | Pattern reference for jobs | — | **OK** |
-| `Barista::BroadcastOrderBoardJob` | no; uses `Order.find_by(id)` | no | Internal enqueue; broadcaster uses order.tenant_id | IDOR if job args forged | **OK** (queue internal) |
-| `Shop::ReadyPushJob` | via `ReadyPushClaim` for UPDATE | no | Push on ready | — | **OK** |
-| `Shop::OrderReadyCascadeJob` | no | no | SMS cascade | same as above | **OK** |
-| `Shop::SendPushNotificationJob` | no; notification has tenant_id | no | FCM delivery | — | **OK** |
-| `Payments::TbankCallbackJob` | no | no | Webhook: find Payment by OrderId from signed payload | — | **OK** |
-| `Payments::StuckPaymentsCheckJob` | no | no | Global stuck scan + Telegram | cross-tenant read intentional | **OK** |
-| `SendOrderReceiptEmailJob` | no | no | Lookup OrderEmail by PK | — | **OK** |
-| `SyncContactToCrmJob` | no | no | CRM placeholder | — | **OK** |
-| `TelegramAlertJob` | no | no | External HTTP only | — | **OK** |
+| `Rls::JobTenantContext` | ✅ Current + SET/SET LOCAL | no | Shared job tenant context | — | **FIXED** |
+| `BroadcastTvColumnsJob` | ✅ `with_job_tenant_id!` + scoped queries | no | Explicit tenant_id arg | — | **FIXED** |
+| `Barista::BroadcastOrderBoardJob` | ✅ after `Order.find_by` | no | Board broadcast | forged args limited to order's tenant | **FIXED** |
+| `Shop::ReadyPushJob` | ✅ + `ReadyPushClaim` | no | Push on ready | — | **FIXED** |
+| `Shop::OrderReadyCascadeJob` | ✅ after find | no | SMS cascade | — | **FIXED** |
+| `Shop::SendPushNotificationJob` | ✅ from notification.tenant_id | no | FCM delivery | — | **FIXED** |
+| `Payments::TbankCallbackJob` | ✅ after payment→order resolve | no | Webhook: find by signed OrderId, then GUC | — | **FIXED** |
+| `Payments::StuckPaymentsCheckJob` | no | no | Global stuck scan + Telegram | cross-tenant read intentional | **OK intentional** |
+| `SendOrderReceiptEmailJob` | ✅ via OrderEmail→order | no | Receipt email | — | **FIXED** |
+| `SyncContactToCrmJob` | no | no | CRM placeholder | — | backlog (срез B) |
+| `TelegramAlertJob` | no | no | External HTTP only | — | **OK intentional** |
+
+### Solid Queue ops (trusted boundary)
+
+Queue = **доверенная зона**. Compromise queue DB / worker credentials = high.
+
+Checklist (owner audit — не молча `fly` без апрува):
+
+1. Solid Queue DB / Postgres `queue` **не** публичны из интернета (private Fly network only).
+2. Нет публичного UI очереди без auth УК.
+3. Worker process (`bin/jobs`) только внутри Fly private.
+4. Инцидент (подозрение на forge job args): ротация DB creds + audit `solid_queue_jobs` + review recent `perform` args.
+
+**Критичность до defense-in-depth:** низкая при закрытой queue; критичная если credentials утекли.  
+**После JobTenantContext:** подложенный `order_id` чужой точки не даёт «работы от имени другой точки» через пустой GUC — GUC = tenant найденной записи + RLS.
 
 ### Rake / test / acceptance
 
@@ -113,7 +131,7 @@
 
 **None in this audit.** Новые PostgreSQL RLS policies не предлагались.
 
-Если при prod-включении RLS на app role jobs перестанут находить записи — рассмотреть `ApplicationRecord.with_tenant` wrapper (код) без новых policies.
+Если при prod-включении RLS на app role jobs перестанут находить записи — `Rls::JobTenantContext` уже ставит GUC по tenant записи (срез A 2026-09-09). Срез B: полный `tenant_guc_inventory` + signed job args — только с апрувом.
 
 ---
 
@@ -121,10 +139,10 @@
 
 | Strategy | Jobs |
 |----------|------|
-| Explicit `tenant_id` argument + scoped queries | `BroadcastTvColumnsJob` |
-| GUC in service transaction | `ReadyPushClaim` (used by `ReadyPushJob`) |
-| PK lookup + downstream scoped by association | `BroadcastOrderBoardJob`, receipt/cascade jobs |
-| Global / webhook cross-tenant | `TbankCallbackJob`, `StuckPaymentsCheckJob` |
+| `Rls::JobTenantContext` / `with_order_tenant!` | Order-scoped: board, ready push, cascade, receipt, Tbank after resolve |
+| `with_job_tenant_id!` + scoped queries | `BroadcastTvColumnsJob`, `SendPushNotificationJob` |
+| GUC in service transaction | `ReadyPushClaim` (nested SET LOCAL) |
+| Global intentional (no GUC) | `StuckPaymentsCheckJob`, `TelegramAlertJob` |
 
 ---
 

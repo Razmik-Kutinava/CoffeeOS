@@ -13,14 +13,16 @@ module Shop
       order = Order.find_by(id: order_id)
       return unless order&.ready? && order.source == "mobile"
 
-      if Shop::OrderReadyPresence.online?(order.id)
-        Rails.logger.info(
-          "[Cascade][Order ##{order.id}] User is online via WebSocket. SMS skipped."
-        )
-        return
-      end
+      with_order_tenant!(order) do
+        if Shop::OrderReadyPresence.online?(order.id)
+          Rails.logger.info(
+            "[Cascade][Order ##{order.id}] User is online via WebSocket. SMS skipped."
+          )
+          return
+        end
 
-      Shop::OrderReadyPaidNotifier.call(order: order)
+        Shop::OrderReadyPaidNotifier.call(order: order)
+      end
     end
   end
 end

@@ -36,43 +36,48 @@ module Payments
         return
       end
 
-      Callbacks::PaymentStatusUpdater.new(
-        payment:             payment,
-        new_status:          our_status,
-        provider_data:       payload.except("Token", "Password"),
-        provider_payment_id: tbank_payment_id,
-        note:                "Т-Банк: #{tbank_status}"
-      ).call!
+      order = payment.order
+      return unless order
 
-      # Extreme/Exit#7: webhook upsert UserCards (idempotent по RebillId / pan+exp).
-      # Шаг 6: только если payment.provider_data["save_card"] разрешает (SavedCardStore.allowed_for?).
-      payment = payment.reload
-      if tbank_status.to_s.upcase == "CONFIRMED"
-        if payload["RebillId"].to_s.present?
-          if Payments::SavedCardStore.allowed_for?(payment)
-            begin
-              Payments::SavedCardStore.persist_from_tbank!(payment: payment, payload: payload)
-            rescue StandardError => e
-              Rails.logger.error("[TbankCallbackJob] UserCards persist failed: #{e.class}: #{e.message}")
+      with_order_tenant!(order) do
+        Callbacks::PaymentStatusUpdater.new(
+          payment:             payment,
+          new_status:          our_status,
+          provider_data:       payload.except("Token", "Password"),
+          provider_payment_id: tbank_payment_id,
+          note:                "Т-Банк: #{tbank_status}"
+        ).call!
+
+        # Extreme/Exit#7: webhook upsert UserCards (idempotent по RebillId / pan+exp).
+        # Шаг 6: только если payment.provider_data["save_card"] разрешает (SavedCardStore.allowed_for?).
+        payment = payment.reload
+        if tbank_status.to_s.upcase == "CONFIRMED"
+          if payload["RebillId"].to_s.present?
+            if Payments::SavedCardStore.allowed_for?(payment)
+              begin
+                Payments::SavedCardStore.persist_from_tbank!(payment: payment, payload: payload)
+              rescue StandardError => e
+                Rails.logger.error("[TbankCallbackJob] UserCards persist failed: #{e.class}: #{e.message}")
+              end
+            else
+              Rails.logger.info("[TbankCallbackJob] skip UserCards: save_card=false OrderId=#{order_id}")
             end
-          else
-            Rails.logger.info("[TbankCallbackJob] skip UserCards: save_card=false OrderId=#{order_id}")
+          elsif Payments::SavedCardStore.allowed_for?(payment)
+            Payments::TbankPaymentSync.new(payment: payment).sync_for_rebill!
           end
-        elsif Payments::SavedCardStore.allowed_for?(payment)
-          Payments::TbankPaymentSync.new(payment: payment).sync_for_rebill!
+
+          if payload["RequestKey"].to_s.present?
+            begin
+              Payments::SbpAccountTokenFromWebhook.new.call!(payment: payment, payload: payload)
+            rescue StandardError => e
+              Rails.logger.error("[TbankCallbackJob] SBP AccountToken persist failed: #{e.class}: #{e.message}")
+              raise
+            end
+          end
         end
 
-        if payload["RequestKey"].to_s.present?
-          begin
-            Payments::SbpAccountTokenFromWebhook.new.call!(payment: payment, payload: payload)
-          rescue StandardError => e
-            Rails.logger.error("[TbankCallbackJob] SBP AccountToken persist failed: #{e.class}: #{e.message}")
-            raise
-          end
-        end
+        Rails.logger.info("[TbankCallbackJob] Processed OrderId=#{order_id}, status=#{tbank_status}→#{our_status}")
       end
-
-      Rails.logger.info("[TbankCallbackJob] Processed OrderId=#{order_id}, status=#{tbank_status}→#{our_status}")
     end
   end
 end
