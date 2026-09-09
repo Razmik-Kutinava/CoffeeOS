@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-09 — REVIEW CI green: V3-SEC-SHOP-API-KEYS
+
+- CI [34318508943](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/34318508943) · tip `442e7920` (Zeitwerk ApiKeys + Brakeman GUC)
+- Entire `01M22C4CV16HA4XDFZ4T4ZGQ23` · bugbot/security usage blocked
+- Next: deploy/secrets — апрув · Fly MCP Point A
 ## 2026-09-09 — GREEN: V3-SEC-JOB-TENANT-GUC (Solid Queue job tenant GUC)
 
 - `Rls::JobTenantContext` + wrap order-scoped jobs · audit FIXED + ops абзац
