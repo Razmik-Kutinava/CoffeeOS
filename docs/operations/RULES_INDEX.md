@@ -45,6 +45,7 @@
 | Файл | Когда |
 |------|--------|
 | `session/SESSION_STATE.md` / `HANDOFF.md` | Живые: **шапка** + текущий месяц. Старт: **только шапка** (`limit` до `---`); тело/PRACTICES/QA — не глотать |
+| `session/COMPONENT_MAP.md` | Карта UI-компонентов (shop / active orders). **Не** читать на `/start`. Читать/править on-demand (зона карты; после Review — БЛОК 4) |
 | `session/archive/` | Старые месяцы — **не читать** без запроса |
 | `journal/CHANGELOG.md` | Живой: писать в текущий месяц; на старте **не** читать весь файл |
 | `journal/archive/` | Старые CHANGELOG-YYYY-MM — **не читать** без запроса |

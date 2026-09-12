@@ -2,14 +2,14 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-09 (onboarding shop API key)  
+**Дата:** 2026-09-12 (COMPONENT_MAP)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| auto-key on UK create · Fly v495 PASS | FALLBACK=0 — апрув |
+| COMPONENT_MAP shop/active orders · rules on-demand | next task: TASK-* intake + todo patch |
 
-**last_done:** Provision issues key; test point created+deleted  
+**last_done:** docs: COMPONENT_MAP + start/review/intake guards  
 **next_step:** stop
 
 **ctx_trim:** `2026-09-02`

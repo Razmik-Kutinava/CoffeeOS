@@ -6,9 +6,10 @@
 
 | Шаблон заказчика | CoffeeOS |
 |------------------|----------|
-| `raw_spec.md` | `docs/operations/milestones/veha_2/requirements/customer_tasks/*.md` (текст 1:1) |
-| `plan.md` | `docs/operations/session/todo.md` |
+| `raw_spec.md` | `docs/operations/milestones/veha_2/requirements/customer_tasks/TASK-*.md` (текст 1:1; старые без префикса OK) |
+| `plan.md` | `docs/operations/session/todo.md` (один живой файл) |
 | `spec` / артефакты | CBR + `docs/operations/milestones/veha_2/artifacts/<slug>/` |
+| UI-карта зоны | `docs/operations/session/COMPONENT_MAP.md` (on-demand; БЛОК 4 после Review) |
 | интеграции SSOT | `docs/integrations/INTEGRATIONS.md` → один секционный `docs/integrations/*.md` |
 | код | `app/`, `test/` (не `src/`) |
 

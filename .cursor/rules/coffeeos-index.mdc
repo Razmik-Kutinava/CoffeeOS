@@ -31,5 +31,6 @@ alwaysApply: true
 | N+1 / SQL | `project/coffeeos-performance.mdc` |
 | Зона кода | `project/coffeeos-{services,http,ui,data,tests,cart-sheet}.mdc` |
 | Ревью PR | `project/coffeeos-code-review.mdc` |
+| UI-карта shop active orders | `docs/operations/session/COMPONENT_MAP.md` — **не** на `/start`; только зона CartSheet/OrderStatus*/GuestOrder*; после Review — БЛОК 4 |
 
 **Не тащить всё сразу.** Детали старта, памяти, субагентов — только `agent-workflow.mdc`.

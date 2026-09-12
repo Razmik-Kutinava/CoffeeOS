@@ -11,7 +11,7 @@ CoffeeOS. Следуй `coffeeos-agent-workflow` + `coffeeos-customer-intake` (P
 1. Шапка `HANDOFF.md` + шапка `SESSION_STATE.md` (`Read` limit до `---`, не тело)
 2. `ISSUES.md` — только секция **`## 🔴 Открыто`** (до следующего `##`), если релевантно багу
 3. `todo.md` — если есть
-4. **Не** перечитывай PRACTICES/QA/весь CHECKLIST/весь CHANGELOG
+4. **Не** перечитывай PRACTICES/QA/весь CHECKLIST/весь CHANGELOG / **`COMPONENT_MAP.md`**
 5. **Не** заново PHASE 0, если ТЗ уже в `customer_tasks/` или задача уже в todo
 6. Коротко: `last_done` / `current_state` / `next_step` (одна строка каждый)
 7. **ctx-trim:** если пт–вс и в шапке HANDOFF `ctx_trim` старше 7 дней — одна строка: «рекомендуется `/ctx-trim`» (не блокировать старт)

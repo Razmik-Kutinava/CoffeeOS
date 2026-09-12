@@ -14,8 +14,8 @@ alwaysApply: false
 ## Порядок (обязательно, без вопросов)
 
 1. **Док задачи — дословно.** Создать
-   `docs/operations/milestones/veha_2/requirements/customer_tasks/<Название задачи>.md`
-   — текст заказчика **1:1, без правок и пересказа**. Название файла — по-русски, по сути задачи, как существующие доки в этой папке.
+   `docs/operations/milestones/veha_2/requirements/customer_tasks/TASK-<НАЗВАНИЕ-ЗАДАЧИ>.md`
+   — текст заказчика **1:1, без правок и пересказа**. **Новые** файлы — префикс `TASK-` (латиница/кириллица по смыслу). Старые доки без префикса **не** переименовывать.
 2. **Артефакты.** Скрины, JSON, файлы от заказчика →
    `docs/operations/milestones/veha_2/artifacts/<slug>/`
    - `<slug>` — латиницей, snake_case, **понятные слова**, не сокращения: `bottom_sheet_expanded_grid`, `usercards_save_card` — да; `bse_grid`, `task17` — нет.

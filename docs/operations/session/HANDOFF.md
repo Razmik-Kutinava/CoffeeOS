@@ -2,16 +2,16 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-09 (UK onboarding auto shop API key)  
+**Дата:** 2026-09-12 (COMPONENT_MAP bootstrap)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Fly **v495** · Provision auto-key **PASS** | `FALLBACK=0` — апрув |
-| Point A не трогали | live pay JOB A–D — апрув |
+| `session/COMPONENT_MAP.md` live · on-demand | первая новая задача → `TASK-*.md` + БЛОК 4 после Review |
+| Fly v495 · auto-key PASS (ранее) | FALLBACK=0 — апрув |
 
-**last_done:** auto-issue key on sales_point create; Fly create/smoke/delete PASS  
-**next_step:** stop · FALLBACK=0 только апрув
+**last_done:** bootstrap COMPONENT_MAP (shop active orders) + token-guard rules  
+**next_step:** stop · ждать новое ТЗ заказчика
 
 **ctx_trim:** `2026-09-02`  
 **Fly:** v495 `deployment-01M22JRN95TXRSV1PQDN49227M`

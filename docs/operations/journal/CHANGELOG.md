@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-12 — docs: COMPONENT_MAP shop active orders + token guards
+
+- Добавлен `docs/operations/session/COMPONENT_MAP.md` (bootstrap из аудита зоны)
+- On-demand: не читать на `/start`; `/review` — БЛОК 4 только если задача главная для зоны
+- Intake: новые ТЗ → `customer_tasks/TASK-*.md`; прогресс → один `todo.md`
+- Правки: `agent-workflow`, `coffeeos-index`, `RULES_INDEX`, `start`/`review`, `repo-layout`, `customer-intake`, `ENTIRE`, `session/README`
+
 ## 2026-09-09 — feat: UK onboarding auto shop API key (FALLBACK still ON)
 
 - `Provision` выдаёт tenant key для sales_point (1×); flash RAW на show; kitchen — skip
