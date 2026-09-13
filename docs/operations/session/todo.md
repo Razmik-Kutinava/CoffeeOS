@@ -16,7 +16,7 @@
 
 - [x] **SPEC** — этот файл · пути + Не ломать/Проверка
 - [x] **RED** — `90af2982` · positive receipt + openOrderReceipt [TDD]
-- [x] **GREEN** — restore receipt block + CTA «Состав заказа» via `openOrderReceipt`
+- [x] **GREEN** — `a695ff08` · receipt + CTA · Entire `01M2D8PZAPT8XDC2KY95GFCFVN`
 - [ ] **regress** — команды из «Проверка»
 - [ ] **REVIEW** — local · bugbot + security · Entire · push · CI
 - [ ] **deploy** — только апрув · затем Fly MCP Point A
