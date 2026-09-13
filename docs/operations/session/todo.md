@@ -69,4 +69,5 @@ node --test test/javascript/order_status_sheet_test.mjs
 - [x] `dismissOrder` / `refreshMode` = контракт
 - [x] TDD-тесты на dismiss зелёные
 - [x] Чек / Cable не изменены
-- [x] «Проверка» PASS · REVIEW/CI · MCP после deploy
+- [x] «Проверка» PASS (regress 37/37)
+- [ ] REVIEW/CI · MCP после deploy
