@@ -50,7 +50,7 @@ def fly_runner(mid, ruby_src)
   inner = "echo #{b64} | base64 -d | /rails/bin/rails runner -"
   cmd = "sh -c #{inner.inspect}"
   out, err, st = Open3.capture3(FLY_BIN, "machine", "exec", mid, "-a", FLY_APP, cmd)
-  text = [out, err].join
+  text = [ out, err ].join
   raise "runner fail (#{st.exitstatus}): #{text[-1500..]}" unless st.success?
 
   lines = text.lines.map(&:strip).reject(&:empty?)
@@ -120,7 +120,7 @@ head = `git -C "#{ROOT}" rev-parse --short HEAD`.strip
 env_key = ENV["SHOP_API_KEY"].to_s.strip
 if env_key.empty?
   out, err, st = Open3.capture3(FLY_BIN, "machine", "exec", mid, "-a", FLY_APP, "printenv SHOP_API_KEY")
-  env_key = [out, err].join.lines.map(&:strip).find { |l| l.match?(%r{\A[A-Za-z0-9+/=_-]{16,}\z}) }.to_s
+  env_key = [ out, err ].join.lines.map(&:strip).find { |l| l.match?(%r{\A[A-Za-z0-9+/=_-]{16,}\z}) }.to_s
 end
 raise "SHOP_API_KEY empty" if env_key.empty?
 
@@ -164,9 +164,9 @@ checks << { task: "SHOP-API-KEYS", id: "2_point_a_key_200", pass: r2[:http] == 2
 
 r3 = if point_b
        http(:get, "/shop/api/cart?tenant_id=#{point_b}", headers: shop_h(point_a_key, point_b))
-     else
+else
        { http: nil }
-     end
+end
 checks << {
   task: "SHOP-API-KEYS",
   id: "3_point_a_key_other_tenant_401",
@@ -437,7 +437,7 @@ idor = http(
 checks << {
   task: "OTP-MERGE",
   id: "5_ownership_idor",
-  pass: [401, 404].include?(idor[:http]),
+  pass: [ 401, 404 ].include?(idor[:http]),
   http: idor[:http]
 }
 
@@ -485,10 +485,10 @@ File.write(
   <<~MD
     # MCP triple post-deploy — Fly v#{artifact[:fly_version]}
 
-    **Date:** #{DATE}  
-    **Deployment:** `deployment-01M22FTYBTSHA8HESDV06GPMR2`  
-    **Head:** `#{head}`  
-    **Point A:** `#{POINT_A}`  
+    **Date:** #{DATE}#{'  '}
+    **Deployment:** `deployment-01M22FTYBTSHA8HESDV06GPMR2`#{'  '}
+    **Head:** `#{head}`#{'  '}
+    **Point A:** `#{POINT_A}`#{'  '}
     **Status:** **#{overall}**
 
     | Task | Result |
