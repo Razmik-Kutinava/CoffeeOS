@@ -22,6 +22,17 @@ export const SHEET_POINTER_POLICY = Object.freeze({
 /** Интервал sync активных заказов (как CATALOG_POLL_MS). Cable — fast-path. */
 export const ACTIVE_ORDERS_POLL_MS = 8_000
 
+/**
+ * #83 — продуктовый контракт крестика (local dismiss).
+ * Cable: скрытый заказ остаётся скрытым до terminal/ready.
+ * Reload: in-memory only — после перезагрузки заказ снова виден.
+ */
+export const DISMISS_CONTRACT = Object.freeze({
+  localOnly: true,
+  surviveCableUntilReady: true,
+  surviveReload: false
+})
+
 let activeOrdersPollTimer = null
 
 /**
@@ -117,7 +128,9 @@ export function createOrderStatusSheetState() {
 }
 
 /**
- * Ручное закрытие виджета по заказу (X). Cable продолжает обновлять state.
+ * Ручное закрытие виджета по заказу (X). Локально (#83 DISMISS_CONTRACT):
+ * без API; Cable продолжает обновлять state, но UI остаётся скрытым до ready;
+ * после reload state новый — заказ снова виден.
  * @param {{ orders: Array<object>, dismissedIds: Record<string, true>, mode: string }} state
  * @param {string|number} orderId
  */

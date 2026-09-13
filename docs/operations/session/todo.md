@@ -15,8 +15,8 @@
 ## SBR
 
 - [x] **SPEC** — этот файл · пути + Не ломать/Проверка
-- [ ] **RED** — `test: … [RED]` · #83 DISMISS_CONTRACT + сценарии (in progress)
-- [ ] **GREEN** — реализация только в scope dismiss `[GREEN]`
+- [x] **RED** — `9dca9c26` · `test: TASK_83 dismiss contract DISMISS_CONTRACT [RED]`
+- [x] **GREEN** — `feat: TASK_83 DISMISS_CONTRACT [GREEN]` (этот коммит)
 - [ ] **regress** — команды из «Проверка»
 - [ ] **REVIEW** — local · bugbot+security · Entire · push/CI
 - [ ] **deploy** — только апрув · затем Fly MCP Point A
@@ -64,9 +64,9 @@ node --test test/javascript/order_status_sheet_test.mjs
 
 ## DoD
 
-- [ ] Решения Cable + reload зафиксированы
-- [ ] Локальный dismiss × без API
-- [ ] `dismissOrder` / `refreshMode` = контракт
-- [ ] TDD-тесты на dismiss зелёные
-- [ ] Чек / Cable не изменены
+- [x] Решения Cable + reload зафиксированы
+- [x] Локальный dismiss × без API
+- [x] `dismissOrder` / `refreshMode` = контракт
+- [x] TDD-тесты на dismiss зелёные
+- [x] Чек / Cable не изменены
 - [ ] «Проверка» PASS · REVIEW/CI · MCP после deploy
