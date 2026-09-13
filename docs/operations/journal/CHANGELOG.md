@@ -17,7 +17,7 @@
 - Reverse QA no-receipt; dismiss / `orderStatusSheet` не трогали
 - TDD RED→GREEN · regress **58/58 PASS**
 - Entire `01M2D8PZAPT8XDC2KY95GFCFVN` на GREEN `a695ff08`
-- bugbot/security: **usage blocked** · push/CI pending
+- bugbot/security: **usage blocked** · push · **CI green** `34755030736`
 
 ## 2026-09-13 — test: TASK_84 status sheet receipt restore [regress]
 
