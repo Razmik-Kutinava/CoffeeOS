@@ -11,6 +11,10 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-13 — docs: update COMPONENT_MAP — ActiveOrdersAccordion
+
+- БЛОК 4 #84: владение чек/CTA; общий файл с dismiss; `aoa__dismiss` не трогать
+
 ## 2026-09-13 — feat: TASK_84 status sheet receipt restore [REVIEW]
 
 - Restore `receiptView` + CTA «Состав заказа» (`openOrderReceipt`) в `ActiveOrdersAccordion`
