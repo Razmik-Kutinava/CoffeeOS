@@ -16,7 +16,8 @@
 - `DISMISS_CONTRACT` в `orderStatusSheet.js` (local ×; Cable keep; no reload persist)
 - TDD: `#83` suite + `aoa__dismiss` assert · regress **37/37 PASS**
 - Entire `01M2D37YG7XPHV6CV978P0MXBN` на GREEN `a2f323b0`
-- bugbot/security: **usage blocked** (как OTP-MERGE) · push/CI в этом шаге
+- bugbot/security: **usage blocked** · push · **CI green** `34751138556`
+- lint follow-up: rubocop Layout в `bin/acceptance/v3_sec_post_deploy_mcp.rb` (`366730dc`)
 - COMPONENT_MAP БЛОК 4 — после принятия владельцем
 
 ## 2026-09-13 — docs: SPEC TASK_83 status sheet dismiss
