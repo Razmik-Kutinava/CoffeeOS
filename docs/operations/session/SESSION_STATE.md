@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-13 (TASK_83 intake)  
+**Дата:** 2026-09-13 (TASK_83 SPEC)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #83 dismiss status sheet · intake в `customer_tasks/` | `/spec` · продуктовые решения Cable/reload |
+| #83 dismiss × · SPEC в `todo.md` | продуктовые решения Cable/reload → `/sbr` RED |
 
-**last_done:** docs: intake TASK_83 status sheet dismiss из Google Doc  
-**next_step:** stop · ждать `/spec`
+**last_done:** SPEC TASK_83 → todo (файлы + Не ломать/Проверка)  
+**next_step:** stop · ответы на Gate §6 → `/sbr`
 
 **ctx_trim:** `2026-09-02`
 

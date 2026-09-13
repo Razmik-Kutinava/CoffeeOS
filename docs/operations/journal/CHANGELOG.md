@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-13 — docs: SPEC TASK_83 status sheet dismiss
+
+- `session/todo.md` → TASK_83 (SBR, файлы, Не ломать, Проверка)
+- Gate до RED: продуктовые решения Cable-update + reload (ТЗ §6)
+- Scope: `ActiveOrdersAccordion` dismiss + `orderStatusSheet.dismissOrder` only
+
 ## 2026-09-13 — docs: intake TASK_83 status sheet dismiss
 
 - Google Doc → `customer_tasks/TASK-83-status-sheet-dismiss.md` (1:1)
