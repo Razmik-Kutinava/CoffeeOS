@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-13 — docs: intake TASK_83 status sheet dismiss
+
+- Google Doc → `customer_tasks/TASK-83-status-sheet-dismiss.md` (1:1)
+- Artifacts: `artifacts/status_sheet_dismiss_behavior/`
+- CBR #83 + `customer_tasks/README.md`
+- Scope: local dismiss × в статусной шторке; Cable/reload — ждут продуктовые решения до RED
+
 ## 2026-09-12 — docs: COMPONENT_MAP shop active orders + token guards
 
 - Добавлен `docs/operations/session/COMPONENT_MAP.md` (bootstrap из аудита зоны)

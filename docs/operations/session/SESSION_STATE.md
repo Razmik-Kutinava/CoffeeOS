@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-12 (COMPONENT_MAP)  
+**Дата:** 2026-09-13 (TASK_83 intake)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| COMPONENT_MAP shop/active orders · rules on-demand | next task: TASK-* intake + todo patch |
+| #83 dismiss status sheet · intake в `customer_tasks/` | `/spec` · продуктовые решения Cable/reload |
 
-**last_done:** docs: COMPONENT_MAP + start/review/intake guards  
-**next_step:** stop
+**last_done:** docs: intake TASK_83 status sheet dismiss из Google Doc  
+**next_step:** stop · ждать `/spec`
 
 **ctx_trim:** `2026-09-02`
 

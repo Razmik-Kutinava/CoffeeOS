@@ -78,6 +78,7 @@
 | **#79 SBP return + autopay labels** | Остаток CODE:BLACK: статусы автоплатежа; экран после банка (Android/iOS); 11/8 СБП | **SPEC `[x]`** 2026-09-07 · `/sbr` pending (parked) | [Надписи автоплатежа и экран после возврата из банка СБП.md](Надписи%20автоплатежа%20и%20экран%20после%20возврата%20из%20банка%20СБП.md) |
 | **#80 Registration UI/UX + Callcheck cascade** | П.8: клавиатура/сумма; копирайт Callcheck; нет перехода после звонка; каскад Callcheck×2→SMS | **intake `[x]`** 2026-09-07 · ждёт `/spec` | [Регистрация PWA UI UX и каскад Callcheck x2 SMS.md](Регистрация%20PWA%20UI%20UX%20и%20каскад%20Callcheck%20x2%20SMS.md) |
 | **#81 Notifications / Wallet / WebPush gaps** | Reopen #37/#38/#41: denied→settings; фоновые FCM/Wallet; чат поддержки не работает | **SPEC `[x]`** 2026-09-07 · `/sbr` pending · #38 backlog | [Косяки уведомлений Wallet WebPush фоновые и кнопка чат.md](Косяки%20уведомлений%20Wallet%20WebPush%20фоновые%20и%20кнопка%20чат.md) |
+| **#83 Status sheet dismiss (×)** | Локальный dismiss крестиком в статусной шторке; без API/чека/Cable; Cable+reload — продуктовые решения до RED | **intake `[x]`** 2026-09-13 · ждёт `/spec` | [TASK-83-status-sheet-dismiss.md](TASK-83-status-sheet-dismiss.md) |
 
 **Порядок работ:** апрув ТЗ Hidden → **go** код · новое ТЗ UserCards (после `go`) · **B1.13 S4** · **B1.14-4** · **B2.2** · **B1.4**.
 
