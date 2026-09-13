@@ -98,11 +98,13 @@ describe("openOrderReceipt (#37 step 3)", () => {
     assert.equal(result.isLoading, false)
   })
 
-  it("ActiveOrdersAccordion status model has dismiss, no receipt chevron (#35 QA)", () => {
+  it("ActiveOrdersAccordion status model has dismiss + receipt (#84); no chevron", () => {
     const src = readFileSync(accordionPath, "utf8")
     assert.match(src, /status-widget-dismiss/)
     assert.match(src, /Скрыть статус заказа/)
-    assert.doesNotMatch(src, /aoa__chevron|active-order-receipt/)
+    assert.match(src, /active-order-receipt/)
+    assert.match(src, /openOrderReceipt/)
+    assert.doesNotMatch(src, /aoa__chevron/)
   })
 
   it("#83 aoa__dismiss calls onDismiss(order) locally", () => {

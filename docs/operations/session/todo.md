@@ -15,8 +15,8 @@
 ## SBR
 
 - [x] **SPEC** — этот файл · пути + Не ломать/Проверка
-- [x] **RED** — positive receipt + openOrderReceipt contract [TDD]
-- [ ] **GREEN** — рендер чека + CTA «Состав заказа» через существующие хелперы
+- [x] **RED** — `90af2982` · positive receipt + openOrderReceipt [TDD]
+- [x] **GREEN** — restore receipt block + CTA «Состав заказа» via `openOrderReceipt`
 - [ ] **regress** — команды из «Проверка»
 - [ ] **REVIEW** — local · bugbot + security · Entire · push · CI
 - [ ] **deploy** — только апрув · затем Fly MCP Point A
@@ -27,7 +27,8 @@
 |------|--------|
 | `app/frontend/components/ActiveOrdersAccordion.svelte` | восстановить блок чека после `meta/progress/CTA` + CTA `LABELS.receipt`; **не** трогать `aoa__dismiss` (~139–150) |
 | `app/frontend/lib/orderStatusNotifyActions.js` | подключить существующий `openOrderReceipt` к CTA (без переписывания хелпера без нужды) |
-| `test/javascript/active_orders_accordion_test.mjs` | участок ~211–223: убрать запрет `receiptView` / заменить позитивом |
+| `test/javascript/active_orders_accordion_test.mjs` | участок ~211+: позитив receipt + CTA |
+| `test/javascript/order_status_notify_actions_test.mjs` | +1: снять #35 forbid `active-order-receipt` (регресс dismiss остаётся) |
 
 **Использовать, не менять реализацию:**
 - `app/frontend/lib/activeOrdersAccordion.js` — `receiptView` / `receiptScrollStyle` / `toggleExpandedOrder` (только import + вызов)
@@ -57,10 +58,10 @@ node --test test/javascript/order_status_notify_actions_test.mjs test/javascript
 
 ## DoD
 
-- [ ] Тест-запрет `receiptView` (~211–223) снят или заменён позитивом
-- [ ] В `ActiveOrdersAccordion.svelte` блок чека после `meta/progress/CTA` через `receiptView(order)`
-- [ ] Видны: наименование, модификаторы, qty, цена, скидка, итог
-- [ ] CTA «Состав заказа» (`accepted`/`paid`/`preparing`) → `openOrderReceipt` → `toggleExpandedOrder`
-- [ ] Длинный чек: внутренний scroll (`receiptScrollStyle` / max-height + overflow-y auto)
-- [ ] `aoa__dismiss` / `orderStatusSheet.js` не изменены
+- [x] Тест-запрет `receiptView` (~211–223) снят или заменён позитивом
+- [x] В `ActiveOrdersAccordion.svelte` блок чека после `meta/progress/CTA` через `receiptView(order)`
+- [x] Видны: наименование, модификаторы, qty, цена, скидка, итог
+- [x] CTA «Состав заказа» (`accepted`/`paid`/`preparing`) → `openOrderReceipt` → `toggleExpandedOrder`
+- [x] Длинный чек: внутренний scroll (`receiptScrollStyle` / max-height + overflow-y auto)
+- [x] `aoa__dismiss` / `orderStatusSheet.js` не изменены
 - [ ] «Проверка» PASS

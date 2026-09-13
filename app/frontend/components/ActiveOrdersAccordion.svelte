@@ -1,12 +1,18 @@
 <script>
-  /** #35/#37/#41 accordion: статус + OrderActionButtons (без состава чека в статусной модели). */
-  import { accordionRowView } from "../lib/activeOrdersAccordion.js"
+  /** #36/#37/#41/#84 accordion: статус + OrderActionButtons + текстовый чек. */
+  import {
+    accordionRowView,
+    receiptView,
+    receiptScrollStyle
+  } from "../lib/activeOrdersAccordion.js"
   import { getDeviceOS } from "../lib/deviceDetect.js"
   import {
     downloadWalletPass,
     subscribeOrderPush,
     resolveNotifyPrimaryInit,
-    openNotificationSettings
+    openNotificationSettings,
+    openOrderReceipt,
+    notifyActionsView
   } from "../lib/orderStatusNotifyActions.js"
   import { openSupportChat } from "../lib/supportChatAdapter.js"
   import { SUPPORT_TELEGRAM_URL } from "../lib/supportConfig.js"
@@ -25,7 +31,10 @@
   let row = $derived(
     accordionRowView(order, accordionState?.activeExpandedOrderId, { sheetContext })
   )
+  let receipt = $derived(row.expanded ? receiptView(order) : null)
+  let scrollStyle = receiptScrollStyle()
   let deviceOs = $derived(getDeviceOS())
+  let receiptLabel = $derived(notifyActionsView({ os: deviceOs }).secondaryLabel)
   let actionLoading = $state(false)
   let toastMsg = $state("")
   let toastOpensSettings = $state(false)
@@ -38,6 +47,9 @@
   )
   let canCancel = $derived(Boolean(order?.can_cancel))
   let status = $derived(String(order?.status || ""))
+  let showReceiptCta = $derived(
+    status === "accepted" || status === "paid" || status === "preparing"
+  )
 
   $effect(() => {
     const init = resolveNotifyPrimaryInit({
@@ -49,6 +61,11 @@
 
   function onDetail() {
     if (typeof onOpenDetail === "function") onOpenDetail(order)
+  }
+
+  function onReceiptClick(e) {
+    e.stopPropagation()
+    openOrderReceipt(accordionState, orderId)
   }
 
   /**
@@ -150,6 +167,16 @@
       >×</button>
     {/if}
   </div>
+  {#if showReceiptCta}
+    <button
+      type="button"
+      class="aoa__receipt-cta"
+      data-testid="active-order-receipt-cta"
+      aria-expanded={row.expanded}
+      aria-label={receiptLabel}
+      onclick={onReceiptClick}
+    >{receiptLabel}</button>
+  {/if}
   {#if toastMsg}
     {#if toastOpensSettings}
       <button
@@ -165,6 +192,32 @@
     {:else}
       <div class="aoa__toast" data-testid="active-order-notify-toast" role="status">{toastMsg}</div>
     {/if}
+  {/if}
+  {#if receipt}
+    <div
+      class="aoa__receipt"
+      data-testid="active-order-receipt"
+      style="max-height: {scrollStyle.maxHeight}; overflow-y: {scrollStyle.overflowY}"
+    >
+      {#each receipt.lines as line, i (i)}
+        <div class="aoa__line">
+          <div class="aoa__line-name">{line.name}</div>
+          {#each line.modifiers as mod (mod.name)}
+            <div class="aoa__mod">+ {mod.name}{#if mod.price} · {mod.price}₽{/if}</div>
+          {/each}
+          <div class="aoa__line-meta">
+            ×{line.quantity} · {line.price}₽
+            {#if line.discount} · скидка {line.discount}₽{/if}
+            · итог {line.lineTotal}₽
+          </div>
+        </div>
+      {/each}
+      <div class="aoa__totals">
+        <div>Subtotal: {receipt.subtotal}₽</div>
+        <div>Discount: {receipt.discount}₽</div>
+        <div class="aoa__total">Total Amount: {receipt.totalAmount}₽</div>
+      </div>
+    </div>
   {/if}
 </div>
 
@@ -289,4 +342,40 @@
     text-underline-offset: 2px;
   }
   .aoa__toast--action:active { opacity: 0.85; }
+  .aoa__receipt-cta {
+    display: block;
+    width: 100%;
+    margin-top: 0.25rem;
+    padding: 0.35rem 0.5rem;
+    border: 0;
+    border-radius: 0.5rem;
+    background: #ff8c42;
+    color: #000;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: center;
+  }
+  .aoa__receipt-cta:active { opacity: 0.9; }
+  .aoa__receipt {
+    margin-top: 0.35rem;
+    border: 1px solid #888;
+    border-radius: 0.65rem;
+    padding: 0.45rem 0.55rem;
+    background: #1a1a1a;
+    color: #ddd;
+    font-size: 0.68rem;
+    line-height: 1.35;
+  }
+  .aoa__line { margin-bottom: 0.4rem; }
+  .aoa__line-name { color: #fff; font-weight: 500; }
+  .aoa__mod { color: #aaa; padding-left: 0.35rem; }
+  .aoa__line-meta { color: #b0b0b0; margin-top: 0.1rem; }
+  .aoa__totals {
+    border-top: 1px solid #444;
+    margin-top: 0.35rem;
+    padding-top: 0.35rem;
+    color: #ccc;
+  }
+  .aoa__total { color: #ff8c42; font-weight: 600; margin-top: 0.15rem; }
 </style>
