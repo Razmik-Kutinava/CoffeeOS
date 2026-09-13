@@ -16,7 +16,7 @@
 
 - [x] **SPEC** — этот файл · пути + Не ломать/Проверка
 - [x] **RED** — `9dca9c26` · `test: TASK_83 dismiss contract DISMISS_CONTRACT [RED]`
-- [x] **GREEN** — `feat: TASK_83 DISMISS_CONTRACT [GREEN]` (этот коммит)
+- [x] **GREEN** — `a2f323b0` · `feat: TASK_83 DISMISS_CONTRACT local dismiss [GREEN]` · Entire `01M2D37YG7XPHV6CV978P0MXBN`
 - [ ] **regress** — команды из «Проверка»
 - [ ] **REVIEW** — local · bugbot+security · Entire · push/CI
 - [ ] **deploy** — только апрув · затем Fly MCP Point A

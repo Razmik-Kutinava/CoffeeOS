@@ -7,9 +7,9 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| #83 dismiss · RED+GREEN · DISMISS_CONTRACT | `/regress` → `/review` |
+| #83 dismiss · RED+GREEN · Entire OK | `/regress` → `/review` |
 
-**last_done:** feat TASK_83 DISMISS_CONTRACT [GREEN] · local JS 37 PASS  
+**last_done:** GREEN `a2f323b0` DISMISS_CONTRACT · Entire `01M2D37YG7XPHV6CV978P0MXBN`  
 **next_step:** `/regress`
 
 **ctx_trim:** `2026-09-02`
