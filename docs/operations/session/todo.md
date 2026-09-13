@@ -18,7 +18,7 @@
 - [x] **RED** — `90af2982` · positive receipt + openOrderReceipt [TDD]
 - [x] **GREEN** — `a695ff08` · receipt + CTA · Entire `01M2D8PZAPT8XDC2KY95GFCFVN`
 - [x] **regress** — accordion 21/21 + notify/sheet 37/37 · **58/58 PASS** (2026-09-13)
-- [ ] **REVIEW** — local · bugbot + security · Entire · push · CI
+- [x] **REVIEW** — local PASS · bugbot/security **usage blocked** · Entire `01M2D8PZAPT8XDC2KY95GFCFVN` на `a695ff08` · push · CI …
 - [ ] **deploy** — только апрув · затем Fly MCP Point A
 
 ## Файлы (ожидаемо)

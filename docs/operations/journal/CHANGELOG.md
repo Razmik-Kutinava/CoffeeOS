@@ -11,6 +11,14 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-13 — feat: TASK_84 status sheet receipt restore [REVIEW]
+
+- Restore `receiptView` + CTA «Состав заказа» (`openOrderReceipt`) в `ActiveOrdersAccordion`
+- Reverse QA no-receipt; dismiss / `orderStatusSheet` не трогали
+- TDD RED→GREEN · regress **58/58 PASS**
+- Entire `01M2D8PZAPT8XDC2KY95GFCFVN` на GREEN `a695ff08`
+- bugbot/security: **usage blocked** · push/CI pending
+
 ## 2026-09-13 — test: TASK_84 status sheet receipt restore [regress]
 
 - Зона: PWA status sheet / ActiveOrdersAccordion

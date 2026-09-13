@@ -2,16 +2,16 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-13 (TASK_84 regress PASS)  
+**Дата:** 2026-09-13 (TASK_84 REVIEW)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #84 receipt restore · **regress PASS** 58/58 | `/review` |
-| #83 dismiss · REVIEW · CI green | deploy апрув · Fly MCP Point A |
+| #84 receipt restore · **REVIEW** · push/CI | CI green → deploy апрув · Fly MCP Point A |
+| #83 dismiss · CI green | deploy апрув |
 
-**last_done:** regress status sheet · accordion 21 + notify/sheet 37 · **58/58 PASS**  
-**next_step:** `/review` · Fly MCP Point A после deploy
+**last_done:** REVIEW · Entire `01M2D8PZAPT8XDC2KY95GFCFVN` на GREEN `a695ff08` · bugbot/security usage blocked · local 58/58  
+**next_step:** CI green → stop · deploy только апрув · COMPONENT_MAP БЛОК 4 после принятия
 
 **ctx_trim:** `2026-09-02`  
 **Fly:** v495 `deployment-01M22JRN95TXRSV1PQDN49227M`
