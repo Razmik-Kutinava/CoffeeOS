@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-13 — docs: SPEC TASK_84 status sheet receipt restore
+
+- `todo.md` → #84 · 3 пути + use-only `activeOrdersAccordion.js`
+- Не ломать: dismiss #83 · `orderStatusSheet` · pay-path · `receiptView` impl
+- Проверка: `node --test` accordion + notify/sheet regress
+- Ждёт `/sbr`
+
 ## 2026-09-13 — docs: intake TASK_84 status sheet receipt restore
 
 - ТЗ 1:1: `customer_tasks/TASK-84-status-sheet-receipt-restore.md` (Google Doc)
