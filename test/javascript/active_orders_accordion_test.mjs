@@ -1,6 +1,6 @@
 /**
  * #36 Active orders accordion + text receipt — RED [TDD].
- * #35 QA reopen — status model without receipt / clear dismiss.
+ * #84 restore receipt in status sheet (reverse #35 QA no-receipt).
  *
  * node --test test/javascript/active_orders_accordion_test.mjs
  */
@@ -208,18 +208,28 @@ describe("receiptView — text only (#36 B4/B5)", () => {
   })
 })
 
-describe("#35 QA reopen — status model UI (no receipt, dismiss = hide)", () => {
-  it("ActiveOrdersAccordion does not render receipt / line-items in status sheet", () => {
+describe("#84 restore receipt in status sheet", () => {
+  it("ActiveOrdersAccordion renders receipt via receiptView", () => {
     const src = readFileSync(accordionComponentPath, "utf8")
-    assert.doesNotMatch(
-      src,
-      /aoa__receipt|data-testid=["']active-order-receipt["']/,
-      "status model must not show order composition"
-    )
-    assert.doesNotMatch(
+    assert.match(
       src,
       /receiptView\s*\(/,
-      "status sheet row must not call receiptView"
+      "status sheet row must call receiptView"
+    )
+    assert.match(
+      src,
+      /aoa__receipt|data-testid=["']active-order-receipt["']/,
+      "status model must show order composition block"
+    )
+  })
+
+  it("CTA Состав заказа wires openOrderReceipt", () => {
+    const src = readFileSync(accordionComponentPath, "utf8")
+    assert.match(src, /openOrderReceipt/, "must call openOrderReceipt")
+    assert.match(
+      src,
+      /Состав заказа|secondaryLabel|LABELS\.receipt/,
+      "must expose CTA label Состав заказа"
     )
   })
 

@@ -15,7 +15,7 @@
 ## SBR
 
 - [x] **SPEC** — этот файл · пути + Не ломать/Проверка
-- [ ] **RED** — снять/переписать тест-запрет `receiptView` (~211–223) → позитив; падает до UI
+- [x] **RED** — positive receipt + openOrderReceipt contract [TDD]
 - [ ] **GREEN** — рендер чека + CTA «Состав заказа» через существующие хелперы
 - [ ] **regress** — команды из «Проверка»
 - [ ] **REVIEW** — local · bugbot + security · Entire · push · CI
