@@ -17,7 +17,8 @@ import {
   ORDER_STATUS_SHEET_MODES,
   dismissOrder,
   visibleOrders,
-  shouldShowStatusSheetUi
+  shouldShowStatusSheetUi,
+  DISMISS_CONTRACT
 } from "../../app/frontend/lib/orderStatusSheet.js"
 
 describe("orderStatusSheet — modes + pointer policy (#35 A2)", () => {
@@ -302,5 +303,54 @@ describe("#63 dismiss + route visibility", () => {
       }),
       false
     )
+  })
+})
+
+describe("#83 dismiss contract (local ×)", () => {
+  it("exports DISMISS_CONTRACT: local-only, survive Cable, not reload", () => {
+    assert.equal(DISMISS_CONTRACT.localOnly, true)
+    assert.equal(DISMISS_CONTRACT.surviveCableUntilReady, true)
+    assert.equal(DISMISS_CONTRACT.surviveReload, false)
+  })
+
+  it("dismissOrder is local: dismissedIds + userDismissed + HIDDEN, no status change", () => {
+    const state = createOrderStatusSheetState()
+    state.setOrders([{ id: "7", status: "preparing", order_number: "N7" }])
+    dismissOrder(state, "7")
+    assert.equal(state.dismissedIds["7"], true)
+    assert.equal(state.orders[0].userDismissed, true)
+    assert.equal(state.orders[0].status, "preparing")
+    assert.equal(visibleOrders(state.orders).length, 0)
+    assert.equal(state.mode, ORDER_STATUS_SHEET_MODES.HIDDEN)
+  })
+
+  it("Cable status change before ready keeps dismiss hidden", () => {
+    const state = createOrderStatusSheetState()
+    state.setOrders([{ id: "7", status: "accepted", order_number: "N7" }])
+    dismissOrder(state, "7")
+    applyCableEvent(state, {
+      type: "status_changed",
+      order_id: "7",
+      status: "preparing"
+    })
+    assert.equal(state.orders[0].status, "preparing")
+    assert.equal(state.orders[0].userDismissed, true)
+    assert.equal(state.dismissedIds["7"], true)
+    assert.equal(visibleOrders(state.orders).length, 0)
+    assert.equal(state.mode, ORDER_STATUS_SHEET_MODES.HIDDEN)
+  })
+
+  it("reload = new sheet state: dismiss does not survive", () => {
+    const state = createOrderStatusSheetState()
+    state.setOrders([{ id: "7", status: "preparing", order_number: "N7" }])
+    dismissOrder(state, "7")
+    assert.equal(state.mode, ORDER_STATUS_SHEET_MODES.HIDDEN)
+
+    const reloaded = createOrderStatusSheetState()
+    reloaded.setOrders([{ id: "7", status: "preparing", order_number: "N7" }])
+    assert.equal(!!reloaded.orders[0].userDismissed, false)
+    assert.equal(reloaded.dismissedIds["7"], undefined)
+    assert.equal(visibleOrders(reloaded.orders).length, 1)
+    assert.equal(reloaded.mode, ORDER_STATUS_SHEET_MODES.PEEK)
   })
 })

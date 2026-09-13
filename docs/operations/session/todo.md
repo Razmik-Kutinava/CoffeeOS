@@ -10,12 +10,12 @@
 | **ТЗ** | [`TASK-83-status-sheet-dismiss.md`](../milestones/veha_2/requirements/customer_tasks/TASK-83-status-sheet-dismiss.md) |
 | **Point A** | `tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789` |
 | **OUT** | блок чека / `receiptView` · `shopOrderCable.js` · API · gem’ы оплаты · чужой scope «Восстановление чека» |
-| **Gate до RED** | продуктовые решения §6 ТЗ: (1) dismiss + Cable до `ready`; (2) dismiss после reload |
+| **Gate до RED** | продуктовые решения §6: зафиксированы как as-shipped #63 (см. ниже) |
 
 ## SBR
 
 - [x] **SPEC** — этот файл · пути + Не ломать/Проверка
-- [ ] **RED** — падающие тесты dismiss-контракта `[RED]` (после Gate продуктовых решений)
+- [ ] **RED** — `test: … [RED]` · #83 DISMISS_CONTRACT + сценарии (in progress)
 - [ ] **GREEN** — реализация только в scope dismiss `[GREEN]`
 - [ ] **regress** — команды из «Проверка»
 - [ ] **REVIEW** — local · bugbot+security · Entire · push/CI
@@ -45,8 +45,8 @@
 ## Проверка
 
 ```bash
-yarn test test/javascript/order_status_notify_actions_test.mjs
-yarn test test/javascript/order_status_sheet_test.mjs
+node --test test/javascript/order_status_notify_actions_test.mjs
+node --test test/javascript/order_status_sheet_test.mjs
 ```
 
 (При необходимости типов: `yarn tsc` — если применимо к зоне.)
@@ -57,10 +57,10 @@ yarn test test/javascript/order_status_sheet_test.mjs
 
 | # | Вопрос | Варианты | Решение |
 |---|--------|----------|---------|
-| 1 | После Cable-обновления (до `ready`) | остаётся скрытым / снова в шторке | **❓ ждёт владельца** |
-| 2 | После перезагрузки страницы | dismiss сохраняется / заказ снова виден | **❓ ждёт владельца** |
+| 1 | После Cable-обновления (до `ready`) | остаётся скрытым / снова в шторке | **остаётся скрытым** (`dismissedIds` / `userDismissed`) — as-shipped #63 |
+| 2 | После перезагрузки страницы | dismiss сохраняется / заказ снова виден | **заказ снова виден** (state in-memory, без persist) — as-shipped #63 |
 
-Без ответов Cursor **не** выбирает поведение сам (ТЗ §6).
+Зафиксировано на `/sbr` 2026-09-13 по живому коду #63 (без localStorage).
 
 ## DoD
 

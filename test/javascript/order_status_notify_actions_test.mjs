@@ -104,4 +104,11 @@ describe("openOrderReceipt (#37 step 3)", () => {
     assert.match(src, /Скрыть статус заказа/)
     assert.doesNotMatch(src, /aoa__chevron|active-order-receipt/)
   })
+
+  it("#83 aoa__dismiss calls onDismiss(order) locally", () => {
+    const src = readFileSync(accordionPath, "utf8")
+    assert.match(src, /class="aoa__dismiss"/)
+    assert.match(src, /onDismiss\(order\)/)
+    assert.match(src, /e\.stopPropagation\(\)/)
+  })
 })
