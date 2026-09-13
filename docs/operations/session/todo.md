@@ -18,7 +18,7 @@
 - [x] **RED** — `9dca9c26` · `test: TASK_83 dismiss contract DISMISS_CONTRACT [RED]`
 - [x] **GREEN** — `a2f323b0` · `feat: TASK_83 DISMISS_CONTRACT local dismiss [GREEN]` · Entire `01M2D37YG7XPHV6CV978P0MXBN`
 - [x] **regress** — `node --test` notify + sheet · **37/37 PASS** (2026-09-13)
-- [ ] **REVIEW** — local · bugbot+security · Entire · push/CI
+- [x] **REVIEW** — local PASS · bugbot/security **usage blocked** · Entire `01M2D37YG7XPHV6CV978P0MXBN` на `a2f323b0` · push/CI (ниже)
 - [ ] **deploy** — только апрув · затем Fly MCP Point A
 
 ## Файлы (ожидаемо)

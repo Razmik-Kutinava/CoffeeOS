@@ -11,6 +11,14 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-13 — feat: TASK_83 status sheet dismiss contract [REVIEW]
+
+- `DISMISS_CONTRACT` в `orderStatusSheet.js` (local ×; Cable keep; no reload persist)
+- TDD: `#83` suite + `aoa__dismiss` assert · regress **37/37 PASS**
+- Entire `01M2D37YG7XPHV6CV978P0MXBN` на GREEN `a2f323b0`
+- bugbot/security: **usage blocked** (как OTP-MERGE) · push/CI в этом шаге
+- COMPONENT_MAP БЛОК 4 — после принятия владельцем
+
 ## 2026-09-13 — docs: SPEC TASK_83 status sheet dismiss
 
 - `session/todo.md` → TASK_83 (SBR, файлы, Не ломать, Проверка)
