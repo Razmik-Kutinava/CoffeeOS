@@ -17,7 +17,7 @@
 - [x] **SPEC** — этот файл · пути + Не ломать/Проверка
 - [x] **RED** — `9dca9c26` · `test: TASK_83 dismiss contract DISMISS_CONTRACT [RED]`
 - [x] **GREEN** — `a2f323b0` · `feat: TASK_83 DISMISS_CONTRACT local dismiss [GREEN]` · Entire `01M2D37YG7XPHV6CV978P0MXBN`
-- [ ] **regress** — команды из «Проверка»
+- [x] **regress** — `node --test` notify + sheet · **37/37 PASS** (2026-09-13)
 - [ ] **REVIEW** — local · bugbot+security · Entire · push/CI
 - [ ] **deploy** — только апрув · затем Fly MCP Point A
 
@@ -69,4 +69,4 @@ node --test test/javascript/order_status_sheet_test.mjs
 - [x] `dismissOrder` / `refreshMode` = контракт
 - [x] TDD-тесты на dismiss зелёные
 - [x] Чек / Cable не изменены
-- [ ] «Проверка» PASS · REVIEW/CI · MCP после deploy
+- [x] «Проверка» PASS · REVIEW/CI · MCP после deploy
