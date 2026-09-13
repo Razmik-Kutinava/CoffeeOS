@@ -17,7 +17,7 @@
 - [x] **SPEC** — этот файл · пути + Не ломать/Проверка
 - [x] **RED** — `90af2982` · positive receipt + openOrderReceipt [TDD]
 - [x] **GREEN** — `a695ff08` · receipt + CTA · Entire `01M2D8PZAPT8XDC2KY95GFCFVN`
-- [ ] **regress** — команды из «Проверка»
+- [x] **regress** — accordion 21/21 + notify/sheet 37/37 · **58/58 PASS** (2026-09-13)
 - [ ] **REVIEW** — local · bugbot + security · Entire · push · CI
 - [ ] **deploy** — только апрув · затем Fly MCP Point A
 
@@ -64,4 +64,4 @@ node --test test/javascript/order_status_notify_actions_test.mjs test/javascript
 - [x] CTA «Состав заказа» (`accepted`/`paid`/`preparing`) → `openOrderReceipt` → `toggleExpandedOrder`
 - [x] Длинный чек: внутренний scroll (`receiptScrollStyle` / max-height + overflow-y auto)
 - [x] `aoa__dismiss` / `orderStatusSheet.js` не изменены
-- [ ] «Проверка» PASS
+- [x] «Проверка» PASS

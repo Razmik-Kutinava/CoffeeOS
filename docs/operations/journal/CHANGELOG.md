@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-13 — test: TASK_84 status sheet receipt restore [regress]
+
+- Зона: PWA status sheet / ActiveOrdersAccordion
+- `node --test` accordion **21/21** + notify/sheet **37/37** · **58/58 PASS**
+- Ждёт `/review` · Fly MCP Point A после deploy
+
 ## 2026-09-13 — docs: SPEC TASK_84 status sheet receipt restore
 
 - `todo.md` → #84 · 3 пути + use-only `activeOrdersAccordion.js`
