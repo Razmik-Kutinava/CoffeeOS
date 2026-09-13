@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-13 — docs: intake TASK_84 status sheet receipt restore
+
+- ТЗ 1:1: `customer_tasks/TASK-84-status-sheet-receipt-restore.md` (Google Doc)
+- CBR #84 + `customer_tasks/README` · artifacts `status_sheet_receipt_restore/`
+- Scope: вернуть чек + CTA «Состав заказа»; OUT dismiss / `orderStatusSheet`
+- Ждёт `/spec`
+
 ## 2026-09-13 — feat: TASK_83 status sheet dismiss contract [REVIEW]
 
 - `DISMISS_CONTRACT` в `orderStatusSheet.js` (local ×; Cable keep; no reload persist)
