@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-14 — docs: fix COMPONENT_MAP БЛОК 4 (фидбек)
+
+- ActiveOrdersAccordion: вернули Файл/Назначение; «Не трогать» = #83 + #84
+- activeOrdersAccordion.js / orderStatusNotifyActions.js: закрыли «дыры» фактом #84
+- orderStatusSheet.js: без изменений (#83 уже в PR)
+- «Известные дыры»: убраны чек и крестик; оставлен факт ActiveOrdersPresenter
+
 ## 2026-09-14 — chore: install unlazy Solo overlay (CoffeeOS)
 
 - Vendor: `npx skills add Leonxlnx/unlazy` → `.agents/skills/unlazy/` · pin `skills-lock.json`

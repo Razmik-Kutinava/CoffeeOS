@@ -9,16 +9,16 @@
 |---|---|---|---|---|---|
 | CartSheet | app/frontend/components/CartSheet.svelte | Хост-контейнер; монтирует OrderStatusSheet; gate hasActiveOrder | → OrderStatusSheet; store hasActiveOrder, statusWidgetUiVisible; cartSheetThresholds | #80, #67, #63 | Высота STATUS_IN_SHEET_EXTRA_VH — общая с cartSheetThresholds |
 | OrderStatusSheet | app/frontend/components/OrderStatusSheet.svelte | Sticky-панель активных заказов: GET /orders/active, Cable, poll, dismiss, cancel-modal | → ActiveOrdersAccordion, OrderCancelModal; множество lib | #63, #35 | Родитель ActiveOrdersAccordion — правки в дочернем компоненте влияют на этот файл |
-| ActiveOrdersAccordion | `app/frontend/components/ActiveOrdersAccordion.svelte`; `app/frontend/lib/activeOrdersAccordion.js`; `app/frontend/lib/orderStatusNotifyActions.js`; `test/javascript/active_orders_accordion_test.mjs` | Восстановление состава чека в статусной шторке — EXT | Общий файл с: Поведение крестика (dismiss) | #84 | В `ActiveOrdersAccordion.svelte` текущая задача изменяет только блок чека и CTA «Состав заказа» после `meta/progress/CTA`; `aoa__dismiss` / обработчик `×` не трогать |
+| ActiveOrdersAccordion | app/frontend/components/ActiveOrdersAccordion.svelte | Строка заказа: meta + progress + CTA + X; клик → #/order/:id | → OrderActionButtons; lib activeOrdersAccordion | #81, #35, #77, #63, #84 | Крестик (обработчик ×) — задача "Поведение крестика" (#83); блок чека и CTA "Состав заказа" после meta/progress/CTA — задача "Восстановление чека" (#84); остальная разметка общая |
 | OrderActionButtons | app/frontend/components/OrderActionButtons.svelte | До 2 CTA (cancel/push/wallet/chat/tips/subscription) | → orderStatusCtaMachine, orderActionButtons, subscriptionOfferCta | #77, #41 | — |
 | OrderCancelModal | app/frontend/components/OrderCancelModal.svelte | Confirm-модалка отмены accepted-заказа | Пропсы из OrderStatusSheet/OrderStatus | — | — |
 | OrderStatus (route) | app/frontend/routes/OrderStatus.svelte | Полноэкранный #/order/:id: статус, progress, CTA, cancel | Cable, orderStatusProgress, orderStatusCtaMachine, OrderCancelModal | #77 | Отдельный маршрут — не путать со sticky-виджетом |
 | orderStatusSheet.js | app/frontend/lib/orderStatusSheet.js | Поведение крестика (dismiss) в статусной шторке | Общий файл с: Восстановление чека | #83 | Блок чека / receiptView; изменения только в `dismissOrder` / `refreshMode` (119–132) |
-| activeOrdersAccordion.js | app/frontend/lib/activeOrdersAccordion.js | Стейт accordion; receiptView — хелпер чека, не используется в текущем .svelte | OrderStatusSheet, ActiveOrdersAccordion | #35, #36 | Требует аудита: почему receiptView не подключён |
+| activeOrdersAccordion.js | app/frontend/lib/activeOrdersAccordion.js | Стейт accordion; receiptView — хелпер чека | OrderStatusSheet, ActiveOrdersAccordion | #35, #36, #84 | receiptView подключается задачей "Восстановление чека" (#84); саму функцию receiptView не менять, только вызывать |
 | shopOrderCable.js | app/frontend/lib/shopOrderCable.js | Подписка ActionCable Shop::GuestOrderChannel + retry | OrderStatusSheet, OrderStatus | #35 | — |
 | orderStatusProgress.js | app/frontend/lib/orderStatusProgress.js | Маппинг Order.status → шаги progress/ETA | activeOrdersAccordion, OrderStatus | B1.1, b2.1 | — |
 | orderStatusCtaMachine.js | app/frontend/lib/orderStatusCtaMachine.js | CTA-машина по status/OS/can_cancel/push/subscription | OrderActionButtons, OrderStatus | #35, #77 | — |
-| orderStatusNotifyActions.js | app/frontend/lib/orderStatusNotifyActions.js | Wallet download, push subscribe, open receipt toggle | ActiveOrdersAccordion, OrderStatus | #81 | Есть "open receipt toggle" — уточнить связь с receiptView |
+| orderStatusNotifyActions.js | app/frontend/lib/orderStatusNotifyActions.js | Wallet download, push subscribe, open receipt toggle | ActiveOrdersAccordion, OrderStatus | #81, #84 | openOrderReceipt подключается к CTA задачей "Восстановление чека" (#84); toggleExpandedOrder не менять сигнатуру |
 | frequentRepeatStore.js | app/frontend/lib/frequentRepeatStore.js | Store hasActiveOrder; gate Repeat в CartSheet | CartSheet, OrderStatusSheet, RepeatSection | — | — |
 | shopGuestSession.js | app/frontend/lib/shopGuestSession.js | reconnect_token / last order id | OrderStatusSheet, OrderStatus, Cable | #66 | — |
 | OrdersController#active/cancel/wallet_pass | app/controllers/shop/api/orders_controller.rb | GET orders/active, POST cancel, GET wallet_pass | ActiveOrdersPresenter, GuestOrderCancellationService | #82 | — |
@@ -32,9 +32,7 @@
 **Маршруты API зоны:** GET /shop/api/orders/active · POST /shop/api/orders/:id/cancel · GET /shop/api/orders/:id/wallet_pass
 
 **Известные дыры (требуют точечного аудита перед следующей задачей):**
-1. Чек (receiptView) существует как хелпер, но не рендерится в ActiveOrdersAccordion.svelte.
-2. ActiveOrdersPresenter уже отдаёт items/modifiers/totals в JSON — backend, вероятно, готов.
-3. Крестик (×) — находится в ActiveOrdersAccordion.svelte, поведение не проверено.
+1. ActiveOrdersPresenter уже отдаёт items/modifiers/totals в JSON — backend, вероятно, готов.
 
 **Известный технический долг (вне этой зоны, зафиксировано отдельно):**  
 `todo-email-collection.md` и `todo-personal-cabinet.md` существуют параллельно основному `todo.md`, нарушая правило «один живой файл» (`coffeeos-context-hygiene.mdc`). Не трогать без отдельной задачи на очистку.
