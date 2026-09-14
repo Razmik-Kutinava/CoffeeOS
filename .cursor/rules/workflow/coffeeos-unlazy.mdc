@@ -1,0 +1,20 @@
+---
+description: "CoffeeOS unlazy — ledger + gate-check для substantial work. Подключай при /unlazy, GATES.md, «доделай до конца»."
+alwaysApply: false
+---
+
+# CoffeeOS — unlazy (on-demand)
+
+**Канон:** `docs/operations/dev/unlazy/README.md` · `/unlazy` · skill `.agents/skills/unlazy/SKILL.md`.
+
+## Суть
+
+Перед substantial work — короткий **GATES.md** (CHECK/EXPECT/EVIDENCE). «Готово» только по evidence checker’а или честному ABANDON.
+
+## Вписывается в
+
+SBR + `coffeeos-dev-gates`. Commit-ops **выше**. Мелочь — без unlazy.
+
+## Не делать
+
+Stop-hook · полный Depth Tree / parallel без явного `tree N` · авто-грузить `UPSTREAM_SKILL.md` / research.

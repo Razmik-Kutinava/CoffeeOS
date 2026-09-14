@@ -11,10 +11,12 @@ Slash-команды в чате Agent: введи `/` и выбери имя ф
 | `/review` | `review.md` | PHASE 3: local → 2 субагента → Entire → push/CI → стоп | `deploy — только по апруву` |
 | `/trace-bug` | `trace-bug.md` | Сквозной аудит бага оплата/OTP/merge (до правок) | `/spec` или `/sbr` |
 | `/ctx-trim` | `ctx-trim.md` | Архив ops, сжатие ISSUES, аудит rules, анализ токенов | `/start` |
+| `/unlazy` | `unlazy.md` | Substantial: GATES ledger + gate-check (не мелочь) | `/sbr` / `/regress` / `/review` |
 
-Цепочка: `/start` → `/spec` → `/sbr` → `/regress` → `/review`  
+Цепочка: `/start` → (`/unlazy` при substantial) → `/spec` → `/sbr` → `/regress` → `/review`  
 **Периодика:** `/ctx-trim` — вручную или пт–вс (если `ctx_trim` >7 дней в HANDOFF)  
-Диагностика интеграции: `/trace-bug` → `/spec` или `/sbr`
+Диагностика интеграции: `/trace-bug` → `/spec` или `/sbr`  
+Unlazy: [`docs/operations/dev/unlazy/README.md`](../../docs/operations/dev/unlazy/README.md)
 
 Карта: [`docs/integrations/INTEGRATIONS.md`](../../docs/integrations/INTEGRATIONS.md) (индекс) · секции [`docs/integrations/`](../../docs/integrations/) · Entire: [`docs/operations/dev/ENTIRE.md`](../../docs/operations/dev/ENTIRE.md)
 

@@ -2,16 +2,17 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-13 (TASK_84 REVIEW CI green)  
+**Дата:** 2026-09-14 (unlazy install)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #84 receipt restore · REVIEW · **CI green** | deploy апрув · Fly MCP Point A |
-| #83 dismiss · CI green | deploy апрув |
+| unlazy Solo · smoke **ALL MET** | `/unlazy` на substantial · #84 deploy апрув |
+| #84 · CI green | deploy апрув · Fly MCP |
+| #83 · CI green | deploy апрув |
 
-**last_done:** COMPONENT_MAP · ActiveOrdersAccordion #84 receipt restore  
-**next_step:** stop · deploy только апрув
+**last_done:** unlazy `.agents/skills/unlazy` + `/unlazy` overlay · smoke PASS  
+**next_step:** stop · deploy #84 только апрув
 
 **ctx_trim:** `2026-09-02`
 

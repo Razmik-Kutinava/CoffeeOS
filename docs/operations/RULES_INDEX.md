@@ -29,6 +29,7 @@
 | `workflow/coffeeos-file-size-split.mdc` | Лимиты 50/120/200 (globs app) |
 | `workflow/coffeeos-customer-intake.mdc` | PHASE 0: ТЗ заказчика → `customer_tasks/` |
 | `workflow/coffeeos-context-hygiene.mdc` | `/ctx-trim` — архив ops, сжатие ISSUES; weekly пт–вс + 1–3 число месяца |
+| `workflow/coffeeos-unlazy.mdc` | `/unlazy` · GATES ledger для substantial work; Stop-hook/Depth Tree — нет по умолчанию |
 | `project/coffeeos-performance.mdc` | N+1 / SQL (globs `app|db|test|lib/**/*.rb`) |
 | `project/coffeeos-services.mdc` | Сервис-объекты |
 | `project/coffeeos-http.mdc` | Контроллеры, routes |

@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-14 — chore: install unlazy Solo overlay (CoffeeOS)
+
+- Vendor: `npx skills add Leonxlnx/unlazy` → `.agents/skills/unlazy/` · pin `skills-lock.json`
+- Thin `/unlazy` skill+command · on-demand `coffeeos-unlazy.mdc` · template + smoke
+- Smoke G1 **ALL MET** (`gate-check --approve` / `--reverify`)
+- Без Stop-hook / Depth Tree по умолчанию (токены)
+
 ## 2026-09-13 — docs: update COMPONENT_MAP — ActiveOrdersAccordion
 
 - БЛОК 4 #84: владение чек/CTA; общий файл с dismiss; `aoa__dismiss` не трогать

@@ -9,6 +9,12 @@
 
 **Product docs sync (2026-05-30):** `docs/product/*` + `qa_scenarios.md` — блок «В2 реализовано»; агенты читают **`development_roadmap.md`** первым по scope.
 
+### Unlazy (acceptance ledger) — **2026-09-14**
+
+- Substantial work: `/unlazy` → короткий `GATES.md` + `gate-check.mjs` (`--status` / `--approve` / `--reverify`).
+- Канон: [`../../../dev/unlazy/README.md`](../../../dev/unlazy/README.md). Vendor: `.agents/skills/unlazy/` · pin `skills-lock.json`.
+- **Не** по умолчанию: Claude Stop-hook, Depth Tree / parallel. Мелочь — без unlazy. SBR + commit-ops выше.
+
 ### Agent hot-path discipline — **2026-08-09**
 
 - Todo hot-path: **Не ломать** (2–4) + **Проверка** (1–2 команды зон) — **обязательно**.

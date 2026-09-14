@@ -111,6 +111,13 @@ Thumbs.db
 !.cursor/README.md
 !.cursor/rules/**/*.md
 !.cursor/rules/**/*.mdc
+!.agents/skills/**/*.md
+!skills-lock.json
+
+# Unlazy runtime (approvals live in ~/.unlazy/ outside the repo)
+.unlazy/
+.unlazy-hook-state.json
+docs/operations/session/GATES.md
 
 # Документы: в git — product/, operations/ (включая milestones), agents/
 /docs/**
