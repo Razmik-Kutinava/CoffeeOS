@@ -11,6 +11,10 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-14 — docs: COMPONENT_MAP — Назначение orderStatusSheet.js
+
+- «Назначение»: описание файла (peek/hidden/dismiss/poll/cable), не имя задачи #83
+
 ## 2026-09-14 — docs: fix COMPONENT_MAP БЛОК 4 (фидбек)
 
 - ActiveOrdersAccordion: вернули Файл/Назначение; «Не трогать» = #83 + #84

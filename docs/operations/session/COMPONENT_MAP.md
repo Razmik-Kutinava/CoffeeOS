@@ -13,7 +13,7 @@
 | OrderActionButtons | app/frontend/components/OrderActionButtons.svelte | До 2 CTA (cancel/push/wallet/chat/tips/subscription) | → orderStatusCtaMachine, orderActionButtons, subscriptionOfferCta | #77, #41 | — |
 | OrderCancelModal | app/frontend/components/OrderCancelModal.svelte | Confirm-модалка отмены accepted-заказа | Пропсы из OrderStatusSheet/OrderStatus | — | — |
 | OrderStatus (route) | app/frontend/routes/OrderStatus.svelte | Полноэкранный #/order/:id: статус, progress, CTA, cancel | Cable, orderStatusProgress, orderStatusCtaMachine, OrderCancelModal | #77 | Отдельный маршрут — не путать со sticky-виджетом |
-| orderStatusSheet.js | app/frontend/lib/orderStatusSheet.js | Поведение крестика (dismiss) в статусной шторке | Общий файл с: Восстановление чека | #83 | Блок чека / receiptView; изменения только в `dismissOrder` / `refreshMode` (119–132) |
+| orderStatusSheet.js | app/frontend/lib/orderStatusSheet.js | Стейт peek/hidden/visible/dismiss, poll, cable apply | Общий файл с: Восстановление чека | #83 | Блок чека / receiptView; изменения только в `dismissOrder` / `refreshMode` (119–132) |
 | activeOrdersAccordion.js | app/frontend/lib/activeOrdersAccordion.js | Стейт accordion; receiptView — хелпер чека | OrderStatusSheet, ActiveOrdersAccordion | #35, #36, #84 | receiptView подключается задачей "Восстановление чека" (#84); саму функцию receiptView не менять, только вызывать |
 | shopOrderCable.js | app/frontend/lib/shopOrderCable.js | Подписка ActionCable Shop::GuestOrderChannel + retry | OrderStatusSheet, OrderStatus | #35 | — |
 | orderStatusProgress.js | app/frontend/lib/orderStatusProgress.js | Маппинг Order.status → шаги progress/ETA | activeOrdersAccordion, OrderStatus | B1.1, b2.1 | — |
