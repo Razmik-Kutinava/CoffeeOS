@@ -2,17 +2,17 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-14 (/patch thin)  
+**Дата:** 2026-09-14 (COMPONENT_MAP Связи)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| `/patch` thin layer | stop · кривая → `/patch` |
+| docs: COMPONENT_MAP orderStatusSheet «Связи» | stop |
 | #84 · CI green | deploy апрув · Fly MCP |
 | #83 · CI green | deploy апрув |
 
-**last_done:** docs+rules: `/patch` · TASK_PATCH · coffeeos-task-patch.mdc  
-**next_step:** stop · deploy #84 только апрув
+**last_done:** COMPONENT_MAP — «Связи» orderStatusSheet.js = OrderStatusSheet, CartSheet  
+**next_step:** stop
 
 **ctx_trim:** `2026-09-02`
 

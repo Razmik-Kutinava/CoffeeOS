@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-14 — docs: COMPONENT_MAP — Связи orderStatusSheet.js
+
+- «Связи»: OrderStatusSheet, CartSheet (не метаданные задачи)
+- владение #84 остаётся в «Не трогать без пометки»
+
 ## 2026-09-14 — chore: /patch thin layer (task patch / EXT)
 
 - Канон `docs/operations/dev/TASK_PATCH.md`
