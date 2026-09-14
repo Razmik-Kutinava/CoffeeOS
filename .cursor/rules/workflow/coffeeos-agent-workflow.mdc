@@ -50,7 +50,7 @@ PHASE 3: push без стопа — `spec-build-review.mdc` § PHASE 3.
 
 ## Slash / Entire / ctx-trim
 
-- Команды: `.cursor/commands/` · цепочка `/start` → `/spec` → `/sbr` → `/regress` → `/review` · после команды: `Next: /…`
+- Команды: `.cursor/commands/` · цепочка `/start` → `/spec` → `/sbr` → `/regress` → `/review` · кривая задача: `/patch` · после команды: `Next: /…`
 - Entire: `docs/operations/dev/ENTIRE.md`; пустой `explain` на REVIEW — стоп; CLI только WSL
 - `/ctx-trim`: `coffeeos-context-hygiene.mdc` (weekly пт–вс если `ctx_trim` >7d)
 

@@ -12,11 +12,13 @@ Slash-команды в чате Agent: введи `/` и выбери имя ф
 | `/trace-bug` | `trace-bug.md` | Сквозной аудит бага оплата/OTP/merge (до правок) | `/spec` или `/sbr` |
 | `/ctx-trim` | `ctx-trim.md` | Архив ops, сжатие ISSUES, аудит rules, анализ токенов | `/start` |
 | `/unlazy` | `unlazy.md` | Substantial: GATES ledger + gate-check (не мелочь) | `/sbr` / `/regress` / `/review` |
+| `/patch` | `patch.md` | Кривая задача / кривой ответ: патч / EXT / переписать | `/sbr` или `/spec` |
 
 Цепочка: `/start` → (`/unlazy` при substantial) → `/spec` → `/sbr` → `/regress` → `/review`  
+Кривая после Review: `/patch` → `/sbr` (карта — после следующего Review)  
 **Периодика:** `/ctx-trim` — вручную или пт–вс (если `ctx_trim` >7 дней в HANDOFF)  
 Диагностика интеграции: `/trace-bug` → `/spec` или `/sbr`  
-Unlazy: [`docs/operations/dev/unlazy/README.md`](../../docs/operations/dev/unlazy/README.md)
+Unlazy: [`docs/operations/dev/unlazy/README.md`](../../docs/operations/dev/unlazy/README.md) · Patch: [`docs/operations/dev/TASK_PATCH.md`](../../docs/operations/dev/TASK_PATCH.md)
 
 Карта: [`docs/integrations/INTEGRATIONS.md`](../../docs/integrations/INTEGRATIONS.md) (индекс) · секции [`docs/integrations/`](../../docs/integrations/) · Entire: [`docs/operations/dev/ENTIRE.md`](../../docs/operations/dev/ENTIRE.md)
 

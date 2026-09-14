@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-14 — chore: /patch thin layer (task patch / EXT)
+
+- Канон `docs/operations/dev/TASK_PATCH.md`
+- On-demand `coffeeos-task-patch.mdc` · команда `/patch`
+- Индексы: coffeeos-index · RULES_INDEX · commands/README · agent-workflow
+- COMPONENT_MAP БЛОК 4 → ссылка на TASK_PATCH § шаг 6
+
 ## 2026-09-14 — docs: COMPONENT_MAP — Назначение orderStatusSheet.js
 
 - «Назначение»: описание файла (peek/hidden/dismiss/poll/cable), не имя задачи #83

@@ -29,6 +29,7 @@ alwaysApply: true
 | Сплит файлов | `workflow/coffeeos-file-size-split.mdc` |
 | `/ctx-trim` | `workflow/coffeeos-context-hygiene.mdc` |
 | `/unlazy` · GATES ledger | `workflow/coffeeos-unlazy.mdc` · `docs/operations/dev/unlazy/README.md` |
+| `/patch` · кривая задача | `workflow/coffeeos-task-patch.mdc` · `docs/operations/dev/TASK_PATCH.md` |
 | N+1 / SQL | `project/coffeeos-performance.mdc` |
 | Зона кода | `project/coffeeos-{services,http,ui,data,tests,cart-sheet}.mdc` |
 | Ревью PR | `project/coffeeos-code-review.mdc` |
