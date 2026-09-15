@@ -271,6 +271,22 @@ export async function refreshCartSheet() {
   }
 }
 
+/**
+ * #87 / 7.1: после успешной оплаты (Quick Repeat one-click) убрать leftover
+ * позиций из session cart, чтобы status sheet не показывал интерактивную корзину.
+ * @param {{ api?: Function, refreshCart?: Function }} [opts]
+ */
+export async function clearCartAfterSuccessfulPay(opts = {}) {
+  const callApi = opts.api || api
+  const refresh = opts.refreshCart
+  await callApi("/cart", { method: "DELETE" })
+  if (typeof refresh === "function") {
+    await refresh()
+  } else {
+    await refreshCartSheet().catch(() => {})
+  }
+}
+
 /** Добавили товар: всегда peek (localStorage не переопределяет add-flow) */
 export function onCartAdded() {
   clearCartUndo()

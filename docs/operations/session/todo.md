@@ -17,8 +17,8 @@
 
 - [x] PHASE 0 intake
 - [x] PHASE 1 `/spec` — канон в этом todo
-- [ ] PHASE 2 RED — падающие тесты: post-pay без cart UI · состав из Order · не из cart
-- [ ] PHASE 2 GREEN — реализация + регрессия зоны (G1–G3)
+- [x] PHASE 2 RED — падающие тесты: post-pay без cart UI · состав из Order · не из cart
+- [x] PHASE 2 GREEN — `clearCartAfterSuccessfulPay` + wire в `widgetRepeatPayFlow` · зона PASS
 - [ ] PHASE 3 `/review` — bugbot+security · Entire · push/CI · Fly MCP G4
 
 ## Файлы (ожидаемо)
@@ -58,9 +58,9 @@ ruby bin/rails test test/integration/shop/quick_repeat_pay_one_click_test.rb tes
 
 ## DoD (из ТЗ + 7.1)
 
-- [ ] Quick Repeat one-click после оплаты → Order в status model
-- [ ] Состав = позиции Order (+ кастомизации), не текущая корзина
-- [ ] 7.1: после card autopay нет интерактивного блока корзины (Удалить / ± / Итого+CTA)
-- [ ] Защитный контракт стандартного checkout не сломан
+- [x] Quick Repeat one-click после оплаты → Order в status model
+- [x] Состав = позиции Order (+ кастомизации), не текущая корзина
+- [x] 7.1: после card autopay нет интерактивного блока корзины (Удалить / ± / Итого+CTA)
+- [x] Защитный контракт стандартного checkout не сломан
 - [ ] G1–G3 `--reverify` met · G4 Fly или skip+reason
 - [ ] До Review `COMPONENT_MAP.md` не трогать; после Review — точечно

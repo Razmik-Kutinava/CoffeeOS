@@ -13,6 +13,7 @@ import {
   classifyInlinePayErrorLabel
 } from "./shopInlinePayFsm.js"
 import { userCardsApiPath } from "./userCardsApiPath.js"
+import { clearCartAfterSuccessfulPay } from "./cartSheetStore.js"
 
 /**
  * S1: отказ карты → только СБП / «карта +» (без expanded / формы).
@@ -151,6 +152,12 @@ export async function runRepeatWidgetPayFlow({
       statusText = INLINE_SUCCESS_LABEL
       onStatusText?.(statusText)
       resetAfterMs = TBANK_INLINE_ERROR_RESET_MS
+      // #87 / 7.1: не оставлять купленную корзину под status (Удалить / ± / +N₽)
+      try {
+        await clearCartAfterSuccessfulPay({ api })
+      } catch (_e) {
+        /* pay UX уже успешен — clear best-effort */
+      }
     } else if (result.kind === "timeout") {
       lastErrorCode = result.errorCode || ""
       fsm.reject({ error_code: lastErrorCode })
