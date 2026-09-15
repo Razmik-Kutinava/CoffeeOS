@@ -19,7 +19,8 @@
 - [x] PHASE 1 `/spec` — канон в этом todo
 - [x] PHASE 2 RED — падающие тесты recovery (TTL/race/CONFIRMED…/cold start)
 - [x] PHASE 2 GREEN — реализация + регрессия зоны
-- [ ] PHASE 3 `/review` — bugbot + security · push · device Android/iOS без SKIP · Entire
+- [x] PHASE 3 `/review` — manual bugbot+security (Task usage limit) · Entire · push/CI
+- [ ] Device Android/iOS без SKIP · Fly MCP Point A (после deploy)
 
 ## Файлы (ожидаемо)
 

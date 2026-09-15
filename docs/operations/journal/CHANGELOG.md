@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-15 — feat: #86 REVIEW — SBP PWA recovery (push)
+
+- GREEN `recoverPendingPayment` + pageshow; regress PASS; Entire `01M2JSNRNQCYGRZ6BCSXFTSG4A`
+- Task bugbot/security: usage limit → manual review #86 (no blocker)
+- Device Android/iOS + Fly MCP Point A — после deploy апрува
+
 ## 2026-09-15 — test: #86 regress PASS (SBP PWA recovery zone)
 
 - node: 37 pass (`codeblack_pending_order` + `shop_sbp_pay`)
