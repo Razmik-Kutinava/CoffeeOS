@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-15 — docs: #86 unlazy GATES ledger (baseline)
+
+- `session/GATES.md`: G1 node unit · G2 rails SBP UI — **met**; G3 Fly MCP · G4/G5 device — pending
+- Baseline до RED; после GREEN — `--reverify`; G3–G5 на Review/device
+
 ## 2026-09-15 — docs: #86 SPEC — SBP PWA recovery after bank
 
 - `todo.md`: SBR фазы · 7 путей · Не ломать · Проверка (node + rails SBP return UI)

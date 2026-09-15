@@ -10,6 +10,7 @@
 | **ТЗ** | [`TASK-86-Восстановление PWA после оплаты СБП-EXT.md`](../milestones/veha_2/requirements/customer_tasks/TASK-86-Восстановление%20PWA%20после%20оплаты%20СБП-EXT.md) |
 | **Google** | https://docs.google.com/document/d/1i12UGabEH3UJQrR9y7tQS9ONZMvOxG_ARCg3bKcdDoU/edit?usp=drivesdk |
 | **Артефакты** | [`sbp_pwa_recovery_after_bank_ext/`](../milestones/veha_2/artifacts/sbp_pwa_recovery_after_bank_ext/) |
+| **Unlazy** | [`GATES.md`](GATES.md) — G1–G2 runnable · G3–G5 manual (Fly/device) |
 | **OUT** | надписи автоплатежа / 11·8 СБП → #79 · SMS-ссылка → каскад (отдельная задача) |
 
 ## SBR
