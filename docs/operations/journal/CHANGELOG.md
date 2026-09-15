@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-15 — docs: #87 unlazy GATES ledger (baseline)
+
+- `session/GATES.md`: G1 node unit · G2 active_orders/receipt · G3 quick_repeat+cart stack — **met**; G4 Fly MCP — pending
+- Baseline до `/spec` / RED; после GREEN — `--reverify`; G4 на Review
+
 ## 2026-09-15 — docs: intake #87 Quick Repeat status composition
 
 - `TASK-87-Quick-Repeat-status-model-composition.md` — Google Doc Spec 1:1 + правка 7.1 (cart block after card autopay)
