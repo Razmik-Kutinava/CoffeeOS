@@ -2,18 +2,18 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-15 (#86 unlazy · GATES baseline)  
+**Дата:** 2026-09-15 (#86 regress PASS · SBP recovery)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #86 SPEC + unlazy · G1/G2 met · G3–G5 pending | `/sbr` RED |
+| #86 GREEN + **regress PASS** (оплата/SBP PWA) | `/review` · Fly MCP Point A · device |
 | #79 parked · надписи/11·8 | после #86 или отдельно |
 | #84 · CI green | deploy апрув · Fly MCP |
 | #83 · CI green | deploy апрув |
 
-**last_done:** #86 `/unlazy` — `session/GATES.md` · G1/G2 PASS baseline  
-**next_step:** stop · **Next: /sbr** (RED)
+**last_done:** #86 `/regress` — node 37 pass · rails 10 runs / 0 fail  
+**next_step:** stop · **Next: /review**
 
 **ctx_trim:** `2026-09-02`
 

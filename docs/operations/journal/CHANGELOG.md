@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-15 — test: #86 regress PASS (SBP PWA recovery zone)
+
+- node: 37 pass (`codeblack_pending_order` + `shop_sbp_pay`)
+- rails: 10 runs / 0 fail (`sbp_payment_return_ui` + `sbp_payment_ui`)
+- next: `/review` · Fly MCP Point A ещё нужен для заказчика
+
 ## 2026-09-15 — docs: #86 unlazy GATES ledger (baseline)
 
 - `session/GATES.md`: G1 node unit · G2 rails SBP UI — **met**; G3 Fly MCP · G4/G5 device — pending
