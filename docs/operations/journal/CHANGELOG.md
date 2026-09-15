@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-15 — docs: intake #86 SBP PWA recovery after bank (EXT)
+
+- `TASK-86-Восстановление PWA после оплаты СБП-EXT.md` — правки заказчика 1:1 + Spec из Google Doc
+- artifacts `sbp_pwa_recovery_after_bank_ext/` · CBR/README/ISSUES · #79 split (recovery → #86; SMS → каскад OUT)
+- todo stub · stop до `/spec`
+
 ## 2026-09-15 — docs: #26 Патч 1 — Subtask 5 HTTP 422 + error_code
 
 - Секция **Патч 1** в ТЗ invalid-token BottomSheet: бизнес-ошибка T-Bank = `422` + `error_code` (не `400`)

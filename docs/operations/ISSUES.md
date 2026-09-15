@@ -10,7 +10,8 @@
 | Checkout UX (Фаза 2) | 🟡 | апрув заказчика |
 | SBP 3001 | 🟢 | live init v493 ≠3001 · остаток: bind AccountToken (B) |
 | #47 / #35 PWA статусы | 🟡 | Fly v481 MCP MUST PASS · ждёт апрув заказчика |
-| #79 SBP return + autopay labels | 🟡 | v486 MCP **PASS** · ждёт апрув · demo &lt;10₽ убраны (min 10) |
+| #79 SBP return + autopay labels | 🟡 | parked · recovery → **#86** · надписи/11·8 остаются |
+| #86 SBP PWA recovery after bank | 🟡 | intake 2026-09-15 · Spec Google · ждёт `/spec` → SBR |
 | #80 Registration UI/UX + Callcheck cascade | 🟡 | OTP fallback false · live Callcheck SKIP · ждёт апрув / телефон |
 | #81 Notifications / Wallet / WebPush gaps | 🟡 | v482 MCP PASS · ждёт апрув заказчика |
 | #82 Cascade SMS ready + sheet stuck | 🟡 | v482 MCP PASS · hide+SMS sent · ждёт апрув заказчика |
