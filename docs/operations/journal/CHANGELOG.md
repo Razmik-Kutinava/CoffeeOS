@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-15 — docs: #87 SPEC — Quick Repeat status composition
+
+- `todo.md`: SBR · 6 путей · blast-radius · Не ломать · Проверка (node + rails zone)
+- Фокус 7.1: post card autopay — status без интерактивной корзины; состав из Order
+- stop до `/sbr` RED
+
 ## 2026-09-15 — docs: #87 unlazy GATES ledger (baseline)
 
 - `session/GATES.md`: G1 node unit · G2 active_orders/receipt · G3 quick_repeat+cart stack — **met**; G4 Fly MCP — pending

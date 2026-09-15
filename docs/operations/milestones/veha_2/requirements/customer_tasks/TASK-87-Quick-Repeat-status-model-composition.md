@@ -5,7 +5,7 @@
 **Артефакты:** docs/operations/milestones/veha_2/artifacts/quick_repeat_status_model_composition/  
 **Google Doc:** https://docs.google.com/document/d/1sdkJYZzLgVKiUTWfZuKDkL8kSuBPRNFSRiEFDQsxGbo/edit?usp=drivesdk  
 **Расширяет:** [`Быстрый повтор частых покупок Quick Repeat Bottom Sheet.md`](Быстрый%20повтор%20частых%20покупок%20Quick%20Repeat%20Bottom%20Sheet.md)  
-**Статус:** Spec (Google) · intake `[x]` · ждёт `/spec`
+**Статус:** Spec (Google) · intake `[x]` · `/spec` `[x]` · ждёт `/sbr`
 
 ---
 
