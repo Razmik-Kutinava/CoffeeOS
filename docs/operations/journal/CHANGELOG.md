@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-15 — feat: #87 REVIEW — Quick Repeat clear cart after pay (push)
+
+- Local PASS · manual bugbot+security (Task usage limit) · no blocker
+- Entire `01M2JVMYKV47VGQ1SCRBC5V77R` на `06dca7c3`
+- clear only on `confirmed` · DELETE `/cart` session · receipt = Order interactive:false
+- Fly MCP G4 / deploy — после CI green · только апрув
+
 ## 2026-09-15 — test: #87 regress PASS (Quick Repeat status zone)
 
 - node: 33 pass (`create_repeat` + `order_status_sheet` + `clear_cart_after_pay`)

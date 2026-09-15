@@ -19,7 +19,7 @@
 - [x] PHASE 1 `/spec` — канон в этом todo
 - [x] PHASE 2 RED — падающие тесты: post-pay без cart UI · состав из Order · не из cart
 - [x] PHASE 2 GREEN — `clearCartAfterSuccessfulPay` + wire в `widgetRepeatPayFlow` · зона PASS
-- [ ] PHASE 3 `/review` — bugbot+security · Entire · push/CI · Fly MCP G4
+- [x] PHASE 3 `/review` — manual bugbot+security (Task usage limit) · Entire · push/CI
 
 ## Файлы (ожидаемо)
 
