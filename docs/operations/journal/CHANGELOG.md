@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-15 — docs: intake #87 Quick Repeat status composition
+
+- `TASK-87-Quick-Repeat-status-model-composition.md` — Google Doc Spec 1:1 + правка 7.1 (cart block after card autopay)
+- artifacts `quick_repeat_status_model_composition/` · скрин `01_status_after_card_autopay_cart_block.png`
+- CBR #87 · ISSUES · stop до `/spec`
+
 ## 2026-09-15 — feat: #86 REVIEW — SBP PWA recovery (push)
 
 - GREEN `recoverPendingPayment` + pageshow; regress PASS; Entire `01M2JSNRNQCYGRZ6BCSXFTSG4A`

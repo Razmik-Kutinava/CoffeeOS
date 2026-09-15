@@ -2,18 +2,18 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-15 (#86 REVIEW · push/CI)  
+**Дата:** 2026-09-15 (#87 intake)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #86 REVIEW · **CI green** | stop · deploy апрув · Fly MCP · device |
+| #87 Quick Repeat status composition · **intake** | `/spec` |
+| #86 REVIEW · CI green | deploy апрув · Fly MCP · device |
 | #79 parked · надписи/11·8 | после #86 или отдельно |
 | #84 · CI green | deploy апрув · Fly MCP |
-| #83 · CI green | deploy апрув |
 
-**last_done:** #86 `/review` CI green `34987062132` · Entire `01M2JSNRNQCYGRZ6BCSXFTSG4A` на `fef80dc8`  
-**next_step:** stop · deploy только апрув
+**last_done:** #87 PHASE 0 intake · TASK + artifacts + CBR  
+**next_step:** `/spec`
 
 **ctx_trim:** `2026-09-02`
 
