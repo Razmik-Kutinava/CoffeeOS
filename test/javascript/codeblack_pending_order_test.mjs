@@ -18,7 +18,9 @@ import {
   SBP_I_PAID_LABEL,
   mapPaymentStatusPayload,
   checkOrderStatus,
-  beginSbpBankRedirect
+  beginSbpBankRedirect,
+  recoverPendingPayment,
+  resetPendingRecoverySession
 } from "../../app/frontend/lib/shopSbpPay.js"
 
 function memoryStorage() {
@@ -168,5 +170,134 @@ describe("#79 beginSbpBankRedirect — waiting screen before bank", () => {
     assert.deepEqual(redirects, ["https://qr.nspk.ru/AS79"])
     assert.equal(nav.length, 1)
     assert.ok(nav[0].includes("waiting"), "waiting route must run before bank leave")
+  })
+})
+
+describe("#86 recoverPendingPayment — SBP PWA recovery", () => {
+  beforeEach(() => {
+    resetPendingRecoverySession()
+  })
+
+  it("CONFIRMED → ui ok and clears pending", async () => {
+    const storage = memoryStorage()
+    savePendingOrder("ord-ok", { storage, now: Date.now() })
+    const api = async () => ({ status: "CONFIRMED" })
+    const out = await recoverPendingPayment(api, { storage })
+    assert.equal(out.ui, "ok")
+    assert.equal(out.orderId, "ord-ok")
+    assert.equal(out.status, "CONFIRMED")
+    assert.equal(storage.getItem(CODEBLACK_PENDING_KEY), null)
+  })
+
+  it("REJECTED → ui fail and clears pending", async () => {
+    const storage = memoryStorage()
+    savePendingOrder("ord-rej", { storage, now: Date.now() })
+    const api = async () => ({ status: "REJECTED" })
+    const out = await recoverPendingPayment(api, { storage })
+    assert.equal(out.ui, "fail")
+    assert.equal(out.status, "REJECTED")
+    assert.equal(storage.getItem(CODEBLACK_PENDING_KEY), null)
+  })
+
+  it("CANCELED → ui fail and clears pending", async () => {
+    const storage = memoryStorage()
+    savePendingOrder("ord-can", { storage, now: Date.now() })
+    const api = async () => ({ status: "CANCELED" })
+    const out = await recoverPendingPayment(api, { storage })
+    assert.equal(out.ui, "fail")
+    assert.equal(out.status, "CANCELED")
+    assert.equal(storage.getItem(CODEBLACK_PENDING_KEY), null)
+  })
+
+  it("PENDING → ui waiting and keeps pending", async () => {
+    const storage = memoryStorage()
+    const now = Date.now()
+    savePendingOrder("ord-p", { storage, now })
+    const api = async () => ({ status: "PENDING" })
+    const out = await recoverPendingPayment(api, { storage })
+    assert.equal(out.ui, "waiting")
+    assert.equal(out.status, "PENDING")
+    assert.ok(storage.getItem(CODEBLACK_PENDING_KEY))
+  })
+
+  it("network error → ui waiting, pending kept, not REJECTED", async () => {
+    const storage = memoryStorage()
+    savePendingOrder("ord-net", { storage, now: Date.now() })
+    const api = async () => {
+      throw Object.assign(new Error("network"), { kind: "network" })
+    }
+    const out = await recoverPendingPayment(api, { storage })
+    assert.equal(out.ui, "waiting")
+    assert.notEqual(out.status, "REJECTED")
+    assert.notEqual(out.status, "CANCELED")
+    assert.ok(storage.getItem(CODEBLACK_PENDING_KEY))
+  })
+
+  it("no pending → ui none", async () => {
+    const storage = memoryStorage()
+    const api = async () => ({ status: "CONFIRMED" })
+    const out = await recoverPendingPayment(api, { storage })
+    assert.equal(out.ui, "none")
+  })
+
+  it("expired TTL → ui none and does not call status API", async () => {
+    const storage = memoryStorage()
+    const now = 1_700_000_000_000
+    savePendingOrder("ord-exp", { storage, now })
+    let calls = 0
+    const api = async () => {
+      calls += 1
+      return { status: "CONFIRMED" }
+    }
+    const out = await recoverPendingPayment(api, {
+      storage,
+      now: now + PENDING_TTL_MS + 1
+    })
+    assert.equal(out.ui, "none")
+    assert.equal(calls, 0)
+    assert.equal(storage.getItem(CODEBLACK_PENDING_KEY), null)
+  })
+
+  it("duplicate terminal for same order → second recover is skip", async () => {
+    const storage = memoryStorage()
+    savePendingOrder("ord-dup", { storage, now: Date.now() })
+    const api = async () => ({ status: "CONFIRMED" })
+    const first = await recoverPendingPayment(api, { storage })
+    assert.equal(first.ui, "ok")
+    // Simulate leftover pending from race / second lifecycle after clear failed
+    savePendingOrder("ord-dup", { storage, now: Date.now() })
+    const second = await recoverPendingPayment(api, { storage })
+    assert.equal(second.ui, "skip")
+    assert.equal(second.reason, "terminal_already_shown")
+  })
+
+  it("overlapping recoveries serialize — one active status check", async () => {
+    const storage = memoryStorage()
+    savePendingOrder("ord-race", { storage, now: Date.now() })
+    let concurrent = 0
+    let maxConcurrent = 0
+    const api = async () => {
+      concurrent += 1
+      maxConcurrent = Math.max(maxConcurrent, concurrent)
+      await new Promise((r) => setTimeout(r, 30))
+      concurrent -= 1
+      return { status: "PENDING" }
+    }
+    const a = recoverPendingPayment(api, { storage })
+    const b = recoverPendingPayment(api, { storage })
+    await Promise.all([a, b])
+    assert.equal(maxConcurrent, 1)
+  })
+})
+
+describe("#86 checkOrderStatus — network does not clear pending", () => {
+  it("keeps pending when status request throws", async () => {
+    const storage = memoryStorage()
+    savePendingOrder("ord-e", { storage, now: Date.now() })
+    const api = async () => {
+      throw new Error("offline")
+    }
+    await assert.rejects(() => checkOrderStatus(api, { orderId: "ord-e", storage }))
+    assert.ok(storage.getItem(CODEBLACK_PENDING_KEY))
   })
 })

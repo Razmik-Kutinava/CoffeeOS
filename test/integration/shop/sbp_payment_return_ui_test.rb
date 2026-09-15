@@ -48,6 +48,19 @@ class Shop::SbpPaymentReturnUiTest < ActionDispatch::IntegrationTest
     )
   end
 
+  # #86: recovery не только visibility — pageshow + shared recoverPendingPayment
+  test "App pageshow recovers codeblack pending and uses recoverPendingPayment" do
+    app = File.read(Rails.root.join("app/frontend/App.svelte"))
+    sbp = File.read(SBP_LIB)
+    assert_includes sbp, "export async function recoverPendingPayment"
+    assert_includes sbp, "export function resetPendingRecoverySession"
+    assert_includes app, "recoverPendingPayment"
+    assert_includes app, "pageshow"
+    pageshow_fn = app[/const onPageShow = \(event\) => \{.*?\n    \}/m]
+    assert pageshow_fn, "onPageShow missing"
+    assert_includes pageshow_fn, "recoverCodeblackPendingOrder"
+  end
+
   # #79: до ухода в банк — waiting hash + pending (Android resume не на пустом checkout)
   test "Checkout beginSbpBankRedirect waiting before nspk leave" do
     checkout = File.read(Rails.root.join("app/frontend/routes/Checkout.svelte"))
