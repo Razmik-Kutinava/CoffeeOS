@@ -1,67 +1,50 @@
-# todo — TASK_84 Status sheet receipt restore
+# todo — #26 Repeat invalid token · Патч 1 (HTTP 422)
 
 | Поле | Значение |
 |------|----------|
-| **ID** | `TASK_84` / CBR **#84** |
-| **Тип** | витрина / PWA / статусная шторка (hot-path) |
-| **Приоритет** | medium |
+| **ID** | CBR **#26** · Патч 1 |
+| **Тип** | docs patch (контракт Subtask 5) |
+| **Приоритет** | high |
 | **Ветка** | `develop` |
-| **Канон** | `@spec-build-review` · `@coffeeos-commit-ops` · `@coffeeos-dev-gates` |
-| **ТЗ** | [`TASK-84-status-sheet-receipt-restore.md`](../milestones/veha_2/requirements/customer_tasks/TASK-84-status-sheet-receipt-restore.md) |
-| **Point A** | `tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789` |
-| **OUT** | `aoa__dismiss` / × · `orderStatusSheet.js` · реализация `receiptView` · API · Cable · gem’ы оплаты · `todo-[feature].md` |
-| **EXT** | расширяет «Мульти-статусная шторка…» · reverse QA `7ab3f3e6` (status row without receipt) |
+| **Канон** | `@coffeeos-task-patch` · `TASK_PATCH.md` · `@coffeeos-commit-ops` |
+| **ТЗ** | [`Главный экран — повторный заказ (невалидный токен) BottomSheet выбора способа оплаты.md`](../milestones/veha_2/requirements/customer_tasks/Главный%20экран%20—%20повторный%20заказ%20(невалидный%20токен)%20BottomSheet%20выбора%20способа%20оплаты.md) · секция **Патч 1: 2026-09-15** |
+| **OUT** | код оплаты · FSM · i18n · TASK_85 / тексты по `error_code` |
+| **EXT** | точные inline-ошибки по `error_code` → отдельная задача (TASK_85), не этот патч |
 
-## SBR
+## SBR: docs patch (без RED/GREEN кода)
 
-- [x] **SPEC** — этот файл · пути + Не ломать/Проверка
-- [x] **RED** — `90af2982` · positive receipt + openOrderReceipt [TDD]
-- [x] **GREEN** — `a695ff08` · receipt + CTA · Entire `01M2D8PZAPT8XDC2KY95GFCFVN`
-- [x] **regress** — accordion 21/21 + notify/sheet 37/37 · **58/58 PASS** (2026-09-13)
-- [x] **REVIEW** — local PASS · bugbot/security **usage blocked** · Entire `01M2D8PZAPT8XDC2KY95GFCFVN` на `a695ff08` · push · **CI green** `34755030736`
-- [ ] **deploy** — только апрув · затем Fly MCP Point A
+- [x] **Патч 1** — секция в TASK · Subtask 5 (patch v2): `422` + `error_code` / `500` без кода
+- [ ] **TASK_85** — отдельный SBR (не в этой итерации)
 
 ## Файлы (ожидаемо)
 
 | Path | Зачем |
 |------|--------|
-| `app/frontend/components/ActiveOrdersAccordion.svelte` | восстановить блок чека после `meta/progress/CTA` + CTA `LABELS.receipt`; **не** трогать `aoa__dismiss` (~139–150) |
-| `app/frontend/lib/orderStatusNotifyActions.js` | подключить существующий `openOrderReceipt` к CTA (без переписывания хелпера без нужды) |
-| `test/javascript/active_orders_accordion_test.mjs` | участок ~211+: позитив receipt + CTA |
-| `test/javascript/order_status_notify_actions_test.mjs` | +1: снять #35 forbid `active-order-receipt` (регресс dismiss остаётся) |
+| `…/customer_tasks/Главный экран — повторный заказ (невалидный токен)….md` | секция Патч 1 + заметки агента |
+| `docs/operations/session/todo.md` | эта итерация |
 
-**Использовать, не менять реализацию:**
-- `app/frontend/lib/activeOrdersAccordion.js` — `receiptView` / `receiptScrollStyle` / `toggleExpandedOrder` (только import + вызов)
-
-**Соседи (blast-radius, не менять):**
-- `app/frontend/lib/orderStatusSheet.js` — dismiss/`refreshMode` (#83)
-- `app/frontend/components/OrderActionButtons.svelte` — чужие CTA (cancel/chat/tips/wallet/push)
-- `test/javascript/order_status_notify_actions_test.mjs` · `order_status_sheet_test.mjs` — регресс dismiss
+**Не менять:** `payments_controller.rb`, `shopPayFsm*`, `Checkout*`, `PaymentMethodsSheet*`, i18n, тесты.
 
 ## Не ломать
 
-1. Dismiss × / `aoa__dismiss` (#83) — локальный hide без API.
-2. `orderStatusSheet.js` (`dismissOrder` / `refreshMode` / Cable keep) — без диффа.
-3. Оплата / checkout / Repeat — статусная шторка не ломает pay-path.
-4. Реализация `receiptView` / Cable (`shopOrderCable.js`) — только использование чека, без переписывания хелпера и подписки.
+1. Existing FSM / selection / invalid-token UI (см. «Не трогать» в Патче 1).
+2. Соседние payment / SBP / auth flows.
+3. Исходный дословный текст заказчика в шапке TASK (Шаг 5 с `400` остаётся как история; канон = Патч 1).
 
 ## Проверка
 
 ```bash
-node --test test/javascript/active_orders_accordion_test.mjs
-node --test test/javascript/order_status_notify_actions_test.mjs test/javascript/order_status_sheet_test.mjs
+# docs-only — код не трогали
+rg -n "Патч 1: 2026-09-15|patch v2|status: :unprocessable_entity" \
+  "docs/operations/milestones/veha_2/requirements/customer_tasks/Главный экран — повторный заказ (невалидный токен) BottomSheet выбора способа оплаты.md" \
+  app/controllers/shop/api/payments_controller.rb
 ```
 
-(ТЗ упоминает `yarn test` / `yarn tsc` — в репо нет script `test`; канон зоны — `node --test` как у #83.)
-
-После deploy (не на SPEC): Fly MCP Point A + артефакт в `artifacts/status_sheet_receipt_restore/mcp/`.
+Факт backend (аудит): `render_payment_error` → HTTP `422` + `error_code` (`payments_controller.rb:174–180`); `OrderCreator::Error` → `422` (`:36–39`).
 
 ## DoD
 
-- [x] Тест-запрет `receiptView` (~211–223) снят или заменён позитивом
-- [x] В `ActiveOrdersAccordion.svelte` блок чека после `meta/progress/CTA` через `receiptView(order)`
-- [x] Видны: наименование, модификаторы, qty, цена, скидка, итог
-- [x] CTA «Состав заказа» (`accepted`/`paid`/`preparing`) → `openOrderReceipt` → `toggleExpandedOrder`
-- [x] Длинный чек: внутренний scroll (`receiptScrollStyle` / max-height + overflow-y auto)
-- [x] `aoa__dismiss` / `orderStatusSheet.js` не изменены
-- [x] «Проверка» PASS
+- [x] В TASK есть **Патч 1** с Исправленным сценарием Subtask 5 (patch v2)
+- [x] Контракт: бизнес-ошибка T-Bank = `error_code` + HTTP `422`; системная без кода = `500`
+- [x] Код оплаты / FSM / UI / i18n **не** изменены
+- [x] Детализация текстов по `error_code` **не** в этом патче (→ EXT / TASK_85)

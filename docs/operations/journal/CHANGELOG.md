@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-15 — docs: #26 Патч 1 — Subtask 5 HTTP 422 + error_code
+
+- Секция **Патч 1** в ТЗ invalid-token BottomSheet: бизнес-ошибка T-Bank = `422` + `error_code` (не `400`)
+- `todo.md` под итерацию патча; код/FSM/UI не трогали
+- Тексты по `error_code` → отдельно TASK_85
+
 ## 2026-09-14 — docs: COMPONENT_MAP — Связи orderStatusSheet.js
 
 - «Связи»: OrderStatusSheet, CartSheet (не метаданные задачи)
