@@ -3,7 +3,7 @@
  * CODE:BLACK lifecycle: checkOrderStatus + WAITING_FOR_BANK (ревизия 4.x / 5.2).
  */
 
-import { clearPendingOrder, savePendingOrder } from "./codeblackPendingOrder.js"
+import { clearPendingOrder, savePendingOrder, loadPendingOrder, createVisibilityStatusGuard } from "./codeblackPendingOrder.js"
 
 export const SBP_LOADING_LABEL = "Оплата через СБП…"
 export const SBP_INCOMPLETE_MESSAGE = "Оплата не завершена, попробовать снова"
@@ -207,4 +207,74 @@ export async function checkOrderStatus(api, { orderId, storage } = {}) {
     clearPendingOrder({ storage })
   }
   return status
+}
+
+/** #86: session state for recovery race + duplicate terminal UI. */
+let pendingRecoveryGuard = createVisibilityStatusGuard()
+let terminalShownForOrderId = null
+
+/** Test/reset helper — не для прод-UI. */
+export function resetPendingRecoverySession() {
+  pendingRecoveryGuard = createVisibilityStatusGuard()
+  terminalShownForOrderId = null
+}
+
+/**
+ * #86: восстановить payment UI после СБП/банка (return / cold start / pageshow).
+ * Network ≠ REJECTED; expired pending → none; terminal один раз на orderId.
+ *
+ * @param {(path: string, opts?: object) => Promise<object>} api
+ * @param {{
+ *   storage?: Storage,
+ *   now?: number,
+ *   loadPending?: typeof loadPendingOrder,
+ *   checkStatus?: typeof checkOrderStatus
+ * }} [opts]
+ * @returns {Promise<{
+ *   ui: "ok"|"fail"|"waiting"|"none"|"skip",
+ *   orderId?: string,
+ *   status?: string,
+ *   reason?: string
+ * }>}
+ */
+export async function recoverPendingPayment(api, opts = {}) {
+  const loadPending = opts.loadPending ?? loadPendingOrder
+  const checkStatus = opts.checkStatus ?? checkOrderStatus
+
+  return pendingRecoveryGuard.run(async () => {
+    const pending = loadPending({ storage: opts.storage, now: opts.now })
+    if (!pending?.orderId) return { ui: "none" }
+
+    if (terminalShownForOrderId === pending.orderId) {
+      return {
+        ui: "skip",
+        reason: "terminal_already_shown",
+        orderId: pending.orderId
+      }
+    }
+
+    try {
+      const status = await checkStatus(api, {
+        orderId: pending.orderId,
+        storage: opts.storage
+      })
+      if (status === "CONFIRMED") {
+        terminalShownForOrderId = pending.orderId
+        return { ui: "ok", orderId: pending.orderId, status }
+      }
+      if (status === "REJECTED" || status === "CANCELED") {
+        terminalShownForOrderId = pending.orderId
+        return { ui: "fail", orderId: pending.orderId, status }
+      }
+      return { ui: "waiting", orderId: pending.orderId, status: "PENDING" }
+    } catch {
+      // Subtask 9: сеть ≠ terminal; pending остаётся (checkOrderStatus не чистит при throw)
+      return {
+        ui: "waiting",
+        orderId: pending.orderId,
+        status: "PENDING",
+        reason: "network_error"
+      }
+    }
+  })
 }

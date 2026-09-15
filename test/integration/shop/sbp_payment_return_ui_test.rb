@@ -34,7 +34,8 @@ class Shop::SbpPaymentReturnUiTest < ActionDispatch::IntegrationTest
     app = File.read(Rails.root.join("app/frontend/App.svelte"))
     pending = File.read(Rails.root.join("app/frontend/lib/codeblackPendingOrder.js"))
     assert_includes pending, "codeblack_pending_order"
-    assert_includes app, "loadPendingOrder"
+    assert_includes pending, "loadPendingOrder"
+    assert_includes app, "recoverPendingPayment"
     assert_includes app, "visibilitychange"
     assert_includes app, "recoverCodeblackPendingOrder"
     # #79: recoverCodeblackPendingOrder polls on waiting; skip only ok/fail/success

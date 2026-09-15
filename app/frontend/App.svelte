@@ -27,10 +27,9 @@
     returningFromPaymentPage
   } from "./lib/shopGuestSession.js"
   import {
-    loadPendingOrder,
     createVisibilityStatusGuard
   } from "./lib/codeblackPendingOrder.js"
-  import { checkOrderStatus } from "./lib/shopSbpPay.js"
+  import { recoverPendingPayment } from "./lib/shopSbpPay.js"
 
   installSlowRequestTracker()
   initTelegram()
@@ -84,29 +83,23 @@
   }
 
   async function recoverCodeblackPendingOrder() {
-    const pending = loadPendingOrder()
-    if (!pending?.orderId) return
-
     const hash = window.location.hash || ""
     // #79: на waiting всё ещё poll; стоп только на финальных ok/fail/success
     if (/payment-result/.test(hash) && /status=(ok|fail|success)\b/i.test(hash)) return
 
     return pendingStatusGuard.run(async () => {
-      try {
-        await reconnectGuestOrder(api)
-        const st = await checkOrderStatus(api, { orderId: pending.orderId })
-        if (st === "CONFIRMED") {
-          push(`/payment-result?status=ok&order_id=${pending.orderId}`)
-          return
-        }
-        if (st === "REJECTED" || st === "CANCELED") {
-          push(`/payment-result?status=fail&order_id=${pending.orderId}`)
-          return
-        }
-        push(`/payment-result?status=waiting&order_id=${pending.orderId}`)
-      } catch {
-        push(`/payment-result?status=waiting&order_id=${pending.orderId}`)
+      await reconnectGuestOrder(api).catch(() => {})
+      const out = await recoverPendingPayment(api)
+      if (out.ui === "none" || out.ui === "skip") return
+      if (out.ui === "ok") {
+        push(`/payment-result?status=ok&order_id=${out.orderId}`)
+        return
       }
+      if (out.ui === "fail") {
+        push(`/payment-result?status=fail&order_id=${out.orderId}`)
+        return
+      }
+      push(`/payment-result?status=waiting&order_id=${out.orderId}`)
     })
   }
 
@@ -134,6 +127,8 @@
       if (event.persisted || returningFromPaymentPage()) {
         recoverAfterPaymentReturn()
       }
+      // #86: pageshow / bfcache return — не только visibilitychange
+      recoverCodeblackPendingOrder()
     }
     const onOfflineSent = (event) => {
       const orderId = event.detail?.order_id
