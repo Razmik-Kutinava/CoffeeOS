@@ -15,8 +15,9 @@
 
 - Local PASS · manual bugbot+security (Task usage limit) · no blocker
 - Entire `01M2JVMYKV47VGQ1SCRBC5V77R` на `06dca7c3`
+- **CI green** run `34991136715`
 - clear only on `confirmed` · DELETE `/cart` session · receipt = Order interactive:false
-- Fly MCP G4 / deploy — после CI green · только апрув
+- Fly MCP G4 / deploy — только апрув
 
 ## 2026-09-15 — test: #87 regress PASS (Quick Repeat status zone)
 
