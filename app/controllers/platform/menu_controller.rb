@@ -34,7 +34,7 @@ module Platform
     def update_category
       category = Category.find(params[:id])
       authorize category, :update?
-      attrs = category_params
+      attrs = normalized_category_attrs(category: category)
       if attrs[:slug].present?
         attrs[:slug] = unique_slug(Category, attrs[:slug], category.name, skip_id: category.id)
       end
@@ -192,6 +192,25 @@ module Platform
 
     def category_params
       params.require(:category).permit(:name, :slug, :description, :sort_order, :is_active)
+    end
+
+    # Sentry RUBY-1K: пустой sort_order из формы → NULL → PG::NotNullViolation.
+    # blank → оставить текущий; 0 → в конец списка; >0 → как передано.
+    def normalized_category_attrs(category:)
+      attrs = category_params.to_h.symbolize_keys
+      raw = attrs[:sort_order].to_s.strip
+      requested = raw.present? ? raw.to_i : 0
+
+      attrs[:sort_order] =
+        if requested.positive?
+          requested
+        elsif raw.blank?
+          category.sort_order.presence || (Category.maximum(:sort_order).to_i + 1)
+        else
+          Category.maximum(:sort_order).to_i + 1
+        end
+
+      attrs
     end
 
     def product_params

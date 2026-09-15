@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-15 — fix: Sentry RUBY-1K category sort_order NotNull
+
+- `Platform::MenuController#update_category`: `normalized_category_attrs` — blank keep / 0 append
+- test `menu_category_sort_order_update_test` · Fixes RUBY-1K
+
 ## 2026-09-15 — feat: #87 REVIEW — Quick Repeat clear cart after pay (push)
 
 - Local PASS · manual bugbot+security (Task usage limit) · no blocker
