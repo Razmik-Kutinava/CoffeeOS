@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-15 — docs: #86 SPEC — SBP PWA recovery after bank
+
+- `todo.md`: SBR фазы · 7 путей · Не ломать · Проверка (node + rails SBP return UI)
+- OUT: #79 надписи/11·8 · SMS → каскад
+- stop до `/sbr` RED
+
 ## 2026-09-15 — docs: intake #86 SBP PWA recovery after bank (EXT)
 
 - `TASK-86-Восстановление PWA после оплаты СБП-EXT.md` — правки заказчика 1:1 + Spec из Google Doc
