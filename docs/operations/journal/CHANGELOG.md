@@ -15,7 +15,7 @@
 
 - GREEN `recoverPendingPayment` + pageshow; regress PASS; Entire `01M2JSNRNQCYGRZ6BCSXFTSG4A`
 - Task bugbot/security: usage limit → manual review #86 (no blocker)
-- Device Android/iOS + Fly MCP Point A — после deploy апрува
+- **CI green** run `34987062132` · device Android/iOS + Fly MCP Point A — после deploy апрува
 
 ## 2026-09-15 — test: #86 regress PASS (SBP PWA recovery zone)
 
