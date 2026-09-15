@@ -1,0 +1,434 @@
+<timestamp>Tuesday, Sep 15, 2026, 6:44 PM (UTC+4)</timestamp>
+
+правка этого пункта:
+
+не ясно какой экран подкинуть  после перехода в сайт приложение  БОЛЬШАЯ ПРОБЛЕМА!!  проверял на андроиде
+По моему это хуйня, как задача, или она реализована и я не понял, что все - ок
+
+Задачи по правкам:
+
+7/  надписи по ответу от банка- авто платеж статусы сломаны, нет нихуя
+проверить оплаты 11,8 сбп 
+Вернулись, но не понятно через сколько дней 
+
+не ясно какой экран подкинуть  после перехода в сайт приложение  БОЛЬШАЯ ПРОБЛЕМА!!  проверял на андроиде
+По моему это хуйня, как задача, или она реализована и я не понял, что все - ок
+
+возможно отправлять смс с ссылкой на гл экран со статусами, задача по бесшовному восстановлению нихуя не вышло возможно на IOS - нужен тест 
+Это реализовать, как задачу к каскадной рассылке
+
+задача # Интеграция Т-Кассы (СБП + Токенизация) в PWA CODE:BLACK
+
+TASK_86:Восстановление PWA после оплаты СБП-EXT.md 
+Тип: новая задача (сценарий не был полностью зафиксирован в исходной задаче)
+Расширяет: docs/operations/milestones/veha_2/requirements/customer_tasks/Интеграция Т-Кассы СБП и токенизации в PWA CODE BLACK.md
+Основание: аудит восстановления PWA после СБП, read-only
+Платформы: Android + iOS
+Статус: Spec
+Платформенные различия Android/iOS на этапе Spec не разделяются на отдельные задачи. Сначала реализуется и проверяется общий recovery-сценарий. Если device-тесты после реализации покажут различия, требующие отдельного поведения, создаются отдельные патчи/доп.задачи по правилам проекта.
+Бизнес-цель:
+Обеспечить восстановление пользовательского платежного состояния после перехода из PWA в СБП/нативное банковское приложение независимо от того, сохранился ли исходный browsing context PWA. Пользователь должен после завершения оплаты либо вернуться в PWA, либо повторно открыть PWA и получить актуальный результат платежа без потери orderId и без необходимости начинать оплату заново.
+
+1. Карта интеграций — затронуто / нет
+Затронуто
+Существующий платежный flow:
+PWA → /payments/sbp/init → paymentUrl → qr.nspk.ru → СБП/банк → webhook → Payment.status/order.status → PWA recovery → GET /payments/status/:orderId
+Используемые существующие backend-механизмы:
+SBP init;
+payment_url;
+webhook Т-Кассы;
+сохранение статуса платежа;
+GET /payments/status/:orderId.
+Не требуется менять в рамках этой задачи
+алгоритм инициации SBP;
+/payments/sbp/init;
+webhook Т-Кассы;
+источник истины статуса платежа в БД;
+SHA-256/Token validation;
+существующую бизнес-логику CONFIRMED/REJECTED/CANCELED;
+токенизацию/RebillId;
+card payment flow.
+Граница: задача решает восстановление frontend/PWA после ухода в SBP/банк. Backend payment processing не переписывается.
+
+2. Карта компонентов
+Затронутые компоненты
+Компонент/файл
+Назначение
+Общий файл с другой задачей
+Граница
+App.svelte
+lifecycle/recovery PWA
+Да
+Не ломать существующий guest restore и pageshow-flow
+Checkout.svelte
+запуск SBP flow
+Да
+Не менять checkout/card flow за пределами SBP recovery
+PaymentResult.svelte
+waiting/result UI
+Да
+Не менять существующие terminal-status semantics
+shopSbpPay.js
+SBP redirect/status
+Да
+Не менять backend payment protocol
+codeblackPendingOrder.js
+persistence pending order
+Нет/требует проверки карты
+Только данные, необходимые для recovery
+shopGuestSession.js
+восстановление ownership/session
+Да
+Не ломать существующий guest reconnect
+payments_controller.rb
+status API
+Да
+Только если device/recovery тест выявит реальное ограничение ownership/status
+
+COMPONENT_MAP
+COMPONENT_MAP.md в рамках Spec не изменять.
+После Review и зелёных тестов обновление выполняется отдельно по правилам проекта.
+Не трогать
+CartSheet;
+OrderStatusSheet active-orders recovery;
+Product/catalog visibility polling;
+card/Rebill payment flow;
+unrelated PWA install/telemetry lifecycle;
+существующий guest reconnect, кроме необходимого для восстановления SBP order ownership.
+
+3. Текущее поведение — факт
+По результатам аудита:
+Перед переходом в SBP сохраняется codeblack_pending_order с:
+orderId;
+timestamp.
+Затем PWA переводит UI в waiting-state и выполняет переход через:
+window.location.assign(paymentUrl).
+paymentUrl ведёт на *.nspk.ru, поэтому исходный document PWA заменяется внешним document.
+В текущей реализации recovery выполняется через:
+visibilitychange;
+cold start/onMount;
+ручную кнопку «Я оплатил».
+Backend способен определить финальный статус независимо от frontend:
+webhook обновляет БД;
+status endpoint выполняет актуализацию статуса.
+Реальный путь:
+PWA → NSPK → bank app → PWA
+не покрыт полноценным device E2E.
+Существующий Gherkin 4.2 описывает hidden → visible, но не фиксирует полный сценарий cross-origin navigation + native bank app + возврат/re-entry.
+Android/iOS-specific реализации SBP recovery в коде нет.
+
+4. Scope
+Разрешено
+Исследовать и реализовать общий механизм восстановления SBP payment state после:
+возврата в существующий PWA context;
+восстановления PWA после background;
+повторного открытия PWA;
+cold start;
+повторной загрузки страницы.
+Использовать существующий codeblack_pending_order либо безопасно скорректировать его, если это необходимо для recovery.
+Использовать существующий status endpoint как источник актуального frontend payment status.
+Использовать несколько lifecycle entry points, если это необходимо для корректного общего recovery flow.
+Добавить защиту от:
+повторной проверки одного order;
+race condition;
+устаревшего pending order;
+повторного показа результата;
+нескольких lifecycle events.
+Провести реальные device-тесты на:
+Android;
+iOS.
+Зафиксировать фактические различия платформ.
+Если после реализации Android/iOS требуют разных механизмов — вынести платформенную специфику в отдельные изменения по результатам Review, а не закладывать её заранее.
+Запрещено
+Не менять backend payment processing без подтвержденной необходимости.
+Не менять контракт /payments/sbp/init без отдельного основания.
+Не менять webhook contract.
+Не менять card/Rebill flow.
+Не хранить на клиенте:
+данные карты;
+платежные credentials;
+чувствительные данные Т-Кассы.
+Не считать visibilitychange единственным обязательным механизмом восстановления.
+Не считать наличие visibilitychange доказательством возврата пользователя из банковского приложения.
+Не добавлять platform-specific Android/iOS hacks до подтверждения реальным device test.
+Не ломать существующий guest session reconnect.
+Не менять COMPONENT_MAP.md до успешного Review.
+
+5. Gherkin
+Subtask 1 — сохранение pending payment перед уходом в SBP
+Subtask: Given пользователь находится на checkout и инициирует оплату СБП
+When backend возвращает валидный paymentUrl и orderId
+Then frontend сохраняет pending payment state с orderId и временем создания
+And переводит UI в состояние WAITING_FOR_BANK
+And выполняет переход на paymentUrl.
+
+Subtask 2 — recovery при возврате в существующий PWA context
+Subtask: Given перед переходом в банк существует валидный codeblack_pending_order
+And пользователь возвращается в тот же PWA browsing context
+When PWA получает lifecycle event, свидетельствующий о возобновлении приложения
+Then recovery запускает получение актуального payment status
+And не запускает несколько параллельных проверок одного orderId.
+Примечание: конкретное browser lifecycle event (visibilitychange, pageshow, focus или комбинация) не является частью бизнес-контракта и определяется реализацией после device testing.
+
+Subtask 3 — recovery после cold start
+Subtask: Given существует codeblack_pending_order с валидным TTL
+When пользователь повторно открывает или перезапускает PWA
+Then PWA восстанавливает orderId из persistent storage
+And запрашивает актуальный payment status
+And показывает результат платежа.
+
+Subtask 4 — восстановление после завершенного платежа
+Subtask: Given существует pending payment
+And backend уже получил подтверждение успешной оплаты
+When PWA выполняет recovery/status check
+Then PWA получает CONFIRMED
+And очищает pending payment state
+And показывает экран успешной оплаты.
+
+Subtask 5 — восстановление после отклоненного/отмененного платежа
+Subtask: Given существует pending payment
+And backend сообщает REJECTED или CANCELED
+When PWA выполняет recovery/status check
+Then pending payment state очищается
+And пользователь получает соответствующий экран ошибки/повторной оплаты.
+
+Subtask 6 — платеж ещё не завершён
+Subtask: Given существует pending payment
+And backend сообщает PENDING
+When PWA выполняет recovery/status check
+Then pending payment state сохраняется
+And пользователь остаётся на экране ожидания
+And пользователь может повторно запросить статус через существующий механизм Я оплатил.
+
+Subtask 7 — истекший pending payment
+Subtask: Given codeblack_pending_order старше установленного TTL
+When PWA запускает recovery
+Then pending payment state удаляется
+And старый orderId не используется для восстановления
+And пользователь не получает устаревший результат платежа.
+
+Subtask 8 — несколько lifecycle events
+Subtask: Given пользователь вернулся из банковского приложения
+And браузер генерирует несколько lifecycle events
+When recovery получает несколько сигналов
+Then для одного orderId выполняется не более одной активной проверки статуса
+And race condition не приводит к неправильному UI state
+And terminal result не отображается повторно.
+
+Subtask 9 — сетевой сбой во время recovery
+Subtask: Given существует валидный pending payment
+When status request завершается сетевой ошибкой
+Then payment не считается REJECTED или CANCELED
+And pending state сохраняется в пределах TTL
+And пользователь остаётся в состоянии ожидания/повторной проверки.
+
+Subtask 10 — Android device flow
+Subtask: Given пользователь использует Android PWA
+When выполняется полный flow PWA → NSPK → СБП → банковское приложение → возврат/повторное открытие PWA
+Then фактический lifecycle фиксируется в тестовом результате
+And recovery корректно восстанавливает payment state.
+Обязательно зафиксировать:
+PWA standalone или browser;
+браузер;
+что происходит при переходе в NSPK;
+запускается ли банковское приложение;
+что происходит при возврате;
+какие lifecycle events приходят;
+сохраняется ли localStorage;
+происходит ли cold start;
+какой status/result отображается.
+
+Subtask 11 — iOS device flow
+Subtask: Given пользователь использует iOS PWA
+When выполняется полный flow PWA → NSPK → СБП → банковское приложение → возврат/повторное открытие PWA
+Then фактический lifecycle фиксируется в тестовом результате
+And recovery корректно восстанавливает payment state.
+Обязательно отдельно проверить:
+Safari PWA/standalone;
+Safari browser tab, если используется;
+возврат из банковского приложения;
+lifecycle events;
+сохранение localStorage;
+cold start;
+status/result.
+
+Subtask 12 — единый cross-platform recovery contract
+Subtask: Given Android и iOS прошли device test
+When сравниваются результаты recovery
+Then общий бизнес-сценарий восстановления остаётся одинаковым
+And platform-specific различия документируются отдельно
+And platform-specific код добавляется только при подтвержденной необходимости.
+
+6. TDD-проверка
+Unit
+Проверить:
+codeblackPendingOrder
+├── save pending order
+├── load pending order
+├── TTL expiration
+├── clear terminal order
+├── duplicate lifecycle events
+└── concurrent recovery guard
+
+Проверить recovery:
+recover pending order
+├── CONFIRMED
+├── REJECTED
+├── CANCELED
+├── PENDING
+└── network error
+
+Integration
+Проверить:
+SBP init
+→ pending state
+→ redirect state
+→ recovery
+→ status API
+→ result UI
+
+Отдельно проверить:
+webhook
+→ DB status
+→ subsequent PWA recovery
+→ correct UI result
+
+E2E
+Минимально:
+checkout
+→ SBP
+→ waiting
+→ recovery
+→ status
+→ result
+
+и:
+cold start
+→ pending order
+→ status
+→ result
+
+Device E2E
+Обязательно:
+Android:
+PWA → NSPK → bank → return/reopen PWA → recovery → result
+
+iOS:
+PWA → NSPK → bank → return/reopen PWA → recovery → result
+
+Для device E2E не считать SKIP успешным прохождением сценария.
+
+7. Критерии проверки
+Functional
+Pending order сохраняется до ухода в SBP.
+Пользователь не теряет orderId.
+Recovery работает после возврата в существующий context.
+Recovery работает после cold start.
+CONFIRMED приводит к success.
+REJECTED/CANCELED приводят к соответствующему error/retry state.
+PENDING не приводит к ложному отказу.
+Сетевой сбой не приводит к ложному terminal status.
+Истекший pending order не восстанавливается.
+Concurrency
+Несколько lifecycle events не создают параллельные проверки одного заказа.
+Terminal result не отображается повторно.
+Старый order не перезаписывает результат нового заказа.
+Platform
+Android device flow проверен на реальном устройстве.
+iOS device flow проверен на реальном устройстве.
+Результаты Android/iOS зафиксированы отдельно.
+Если платформы ведут себя одинаково — используется общий recovery flow.
+Если платформы различаются — различие документировано до внесения platform-specific workaround.
+
+8. Exit Criteria
+Все новые unit/integration тесты зелёные.
+Frontend E2E recovery tests зелёные.
+tsc/typecheck зелёный.
+Lint зелёный.
+Android device flow выполнен без SKIP.
+iOS device flow выполнен без SKIP.
+Для каждого устройства зафиксировано:
+способ открытия PWA;
+браузер/OS;
+lifecycle;
+возврат из банка;
+сохранение pending state;
+итоговый UI.
+Recovery не зависит исключительно от visibilitychange.
+Backend payment processing не изменён без отдельного подтверждённого основания.
+Existing guest reconnect не сломан.
+Card/Rebill flow не изменён.
+Review подтверждает отсутствие регрессий в соседних задачах.
+
+9. Результат Review
+После реализации и device testing принять одно из решений:
+Вариант A — общий механизм
+Android и iOS имеют совместимое поведение.
+→ Оставить единый cross-platform recovery.
+Вариант B — Android-specific correction
+Android требует отдельного поведения.
+→ Создать отдельный патч/доп.задачу по результатам фактов device test.
+Вариант C — iOS-specific correction
+iOS требует отдельного поведения.
+→ Создать отдельный патч/доп.задачу по результатам фактов device test.
+Вариант D — обе платформы различаются
+→ Сохранить общий recovery contract и выделить platform-specific implementation changes отдельными задачами.
+До получения device evidence нельзя считать Android/iOS различия установленным фактом.
+
+10. Не трогать
+В рамках этой задачи не изменять без отдельного основания:
+CartSheet;
+active orders / OrderStatusSheet;
+Product visibility polling;
+card payment;
+RebillId;
+Т-Касса webhook contract;
+Receipt;
+SHA-256 Token validation;
+unrelated PWA install flow;
+business semantics заказа;
+существующий guest reconnect вне необходимого SBP recovery.
+Ключевая граница: задача отвечает за восстановление состояния PWA после ухода пользователя в SBP/банк, а не за изменение самого платежного протокола.
+SBR: Spec → Build → Review — SBP PWA Recovery
+Файлы (ожидаемо)
+App.svelte
+Checkout.svelte
+PaymentResult.svelte
+shopSbpPay.js
+codeblackPendingOrder.js
+shopGuestSession.js
+связанные payment/recovery tests
+e2e/payment-flow.spec.ts или фактический существующий E2E-файл
+device test artifacts для Android/iOS
+Не ломать
+Card/Rebill flow
+T-Касса webhook/payment processing
+OrderStatusSheet / active orders recovery
+Product/catalog visibility polling
+guest session reconnect
+существующие terminal payment statuses
+Общая граница: recovery SBP payment state не должен менять бизнес-логику платежа и соседние lifecycle-сценарии.
+Проверка
+Unit: pending state / TTL / terminal clear / race guard
+Integration: SBP → pending → status → result
+E2E: cold start + recovery
+Device E2E: Android PWA → NSPK → bank → return/reopen → recovery
+Device E2E: iOS PWA → NSPK → bank → return/reopen → recovery
+tsc
+lint
+DoD
+Unit/integration/E2E зелёные
+Android device flow проверен без SKIP
+iOS device flow проверен без SKIP
+Recovery работает после возврата и cold start
+Нет race condition при повторных lifecycle events
+Нет регрессий card/Rebill и guest reconnect
+Review завершён
+После Review принято решение по необходимости Android/iOS-specific corrections
+COMPONENT_MAP.md обновляется только после зелёного Review
+
+вот что прислал заказчик и таск 86 и все что нужно знать
+я хочу чтобы ты все собпал вместе и написал что трбует заказчик и как мы будем все решать
+важно мне понять каким путем мы будем ити дл решения тип по сбр или просто тип доп раюота 
+
+ответ коротко и понятными словами
