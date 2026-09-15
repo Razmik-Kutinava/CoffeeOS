@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-15 — test: #87 regress PASS (Quick Repeat status zone)
+
+- node: 33 pass (`create_repeat` + `order_status_sheet` + `clear_cart_after_pay`)
+- rails: 18 runs / 0 fail (one-click + cart/status stack + active_orders + receipt)
+- next: `/review` · Fly MCP Point A ещё нужен для заказчика
+
 ## 2026-09-15 — feat: #87 clear cart after Quick Repeat pay [GREEN]
 
 - `clearCartAfterSuccessfulPay` + wire в `widgetRepeatPayFlow` на `confirmed`

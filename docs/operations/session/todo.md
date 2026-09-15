@@ -62,5 +62,5 @@ ruby bin/rails test test/integration/shop/quick_repeat_pay_one_click_test.rb tes
 - [x] Состав = позиции Order (+ кастомизации), не текущая корзина
 - [x] 7.1: после card autopay нет интерактивного блока корзины (Удалить / ± / Итого+CTA)
 - [x] Защитный контракт стандартного checkout не сломан
-- [ ] G1–G3 `--reverify` met · G4 Fly или skip+reason
+- [x] G1–G3 `--reverify` met · G4 Fly или skip+reason
 - [ ] До Review `COMPONENT_MAP.md` не трогать; после Review — точечно
