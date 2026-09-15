@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-15 — feat: #87 clear cart after Quick Repeat pay [GREEN]
+
+- `clearCartAfterSuccessfulPay` + wire в `widgetRepeatPayFlow` на `confirmed`
+- 7.1: leftover cart не висит под status; receipt = Order (`interactive: false`)
+- G1–G3 met · Entire `01M2JVMYKV47VGQ1SCRBC5V77R` на `06dca7c3` · next `/regress`
+
 ## 2026-09-15 — docs: #87 SPEC — Quick Repeat status composition
 
 - `todo.md`: SBR · 6 путей · blast-radius · Не ломать · Проверка (node + rails zone)

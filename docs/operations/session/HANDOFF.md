@@ -2,18 +2,18 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-15 (#87 SPEC)  
+**Дата:** 2026-09-15 (#87 GREEN)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #87 Quick Repeat status composition · **SPEC** | `/sbr` RED |
+| #87 Quick Repeat status composition · **GREEN** | `/regress` → `/review` |
 | #86 REVIEW · CI green `34987062132` | deploy апрув · Fly MCP · device |
 | #79 parked · надписи/11·8 | после #86 или отдельно |
 | #84 · CI green | deploy апрув · Fly MCP |
 
-**last_done:** #87 `/spec` · todo 6 путей · Не ломать/Проверка  
-**next_step:** **Next: /sbr**
+**last_done:** #87 GREEN · `clearCartAfterSuccessfulPay` · Entire `01M2JVMYKV47VGQ1SCRBC5V77R` на `06dca7c3`  
+**next_step:** **Next: /regress**
 
 **ctx_trim:** `2026-09-02`  
 **Fly:** v495 `deployment-01M22JRN95TXRSV1PQDN49227M`
