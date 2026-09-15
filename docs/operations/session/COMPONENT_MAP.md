@@ -8,6 +8,7 @@
 | Компонент | Файл | Назначение | Связи | Последние PR | Не трогать без пометки |
 |---|---|---|---|---|---|
 | CartSheet | app/frontend/components/CartSheet.svelte | Хост-контейнер; монтирует OrderStatusSheet; gate hasActiveOrder | → OrderStatusSheet; store hasActiveOrder, statusWidgetUiVisible; cartSheetThresholds | #80, #67, #63 | Высота STATUS_IN_SHEET_EXTRA_VH — общая с cartSheetThresholds |
+| cartSheetStore | app/frontend/lib/cartSheetStore.js | Store корзины (items/total/mode); refresh; clear после успешной оплаты | → CartSheet; api DELETE /cart | #87 | `clearCartAfterSuccessfulPay` — после confirmed Quick Repeat (#87); не mutex status↔cart |
 | OrderStatusSheet | app/frontend/components/OrderStatusSheet.svelte | Sticky-панель активных заказов: GET /orders/active, Cable, poll, dismiss, cancel-modal | → ActiveOrdersAccordion, OrderCancelModal; множество lib | #63, #35 | Родитель ActiveOrdersAccordion — правки в дочернем компоненте влияют на этот файл |
 | ActiveOrdersAccordion | app/frontend/components/ActiveOrdersAccordion.svelte | Строка заказа: meta + progress + CTA + X; клик → #/order/:id | → OrderActionButtons; lib activeOrdersAccordion | #81, #35, #77, #63, #84 | Крестик (обработчик ×) — задача "Поведение крестика" (#83); блок чека и CTA "Состав заказа" после meta/progress/CTA — задача "Восстановление чека" (#84); остальная разметка общая |
 | OrderActionButtons | app/frontend/components/OrderActionButtons.svelte | До 2 CTA (cancel/push/wallet/chat/tips/subscription) | → orderStatusCtaMachine, orderActionButtons, subscriptionOfferCta | #77, #41 | — |
@@ -20,6 +21,7 @@
 | orderStatusCtaMachine.js | app/frontend/lib/orderStatusCtaMachine.js | CTA-машина по status/OS/can_cancel/push/subscription | OrderActionButtons, OrderStatus | #35, #77 | — |
 | orderStatusNotifyActions.js | app/frontend/lib/orderStatusNotifyActions.js | Wallet download, push subscribe, open receipt toggle | ActiveOrdersAccordion, OrderStatus | #81, #84 | openOrderReceipt подключается к CTA задачей "Восстановление чека" (#84); toggleExpandedOrder не менять сигнатуру |
 | frequentRepeatStore.js | app/frontend/lib/frequentRepeatStore.js | Store hasActiveOrder; gate Repeat в CartSheet | CartSheet, OrderStatusSheet, RepeatSection | — | — |
+| widgetRepeatPayFlow | app/frontend/lib/widgetRepeatPayFlow.js | One-click widget Init → poll → confirmed/error UI | → RepeatSection; clearCartAfterSuccessfulPay (#87) | #87 | На `confirmed` — clear leftover cart (#87); payment Init/Charge контракт не менять |
 | shopGuestSession.js | app/frontend/lib/shopGuestSession.js | reconnect_token / last order id | OrderStatusSheet, OrderStatus, Cable | #66 | — |
 | OrdersController#active/cancel/wallet_pass | app/controllers/shop/api/orders_controller.rb | GET orders/active, POST cancel, GET wallet_pass | ActiveOrdersPresenter, GuestOrderCancellationService | #82 | — |
 | ActiveOrdersPresenter | app/services/shop/active_orders_presenter.rb | JSON активных заказов: items/mods/totals/can_cancel | OrdersController#active | #41, #36 | items/mods в JSON уже отдаются backend'ом — фронт их не рендерит |
