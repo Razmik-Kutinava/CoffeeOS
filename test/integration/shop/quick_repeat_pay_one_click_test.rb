@@ -42,6 +42,17 @@ class Shop::QuickRepeatPayOneClickTest < ActionDispatch::IntegrationTest
     assert_equal [ :stay, :error ], pay_outcome(repeat_ok: false)
   end
 
+  # #87 / 7.1: после confirmed card/widget pay leftover cart не должен висеть
+  # под status (Удалить / ± / +N₽).
+  test "#87 confirmed pay clears cart via clearCartAfterSuccessfulPay" do
+    flow = File.read(Rails.root.join("app/frontend/lib/widgetRepeatPayFlow.js"))
+    store = File.read(Rails.root.join("app/frontend/lib/cartSheetStore.js"))
+
+    assert_includes store, "export async function clearCartAfterSuccessfulPay"
+    assert_includes flow, "clearCartAfterSuccessfulPay"
+    assert_match(/kind === ["']confirmed["'][\s\S]*clearCartAfterSuccessfulPay/, flow)
+  end
+
   private
 
   # Ошибка добавления в корзину: error-тост уже показан repeatAllToCart,
