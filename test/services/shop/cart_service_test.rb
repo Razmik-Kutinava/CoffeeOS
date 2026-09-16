@@ -228,6 +228,16 @@ class Shop::CartServiceTest < ActiveSupport::TestCase
     assert_equal 0, exists_count, "RUBY-V: json_lines must use preloaded settings, got #{exists_count} EXISTS"
   end
 
+  test "add! rejects client-only modifier price without id" do
+    assert_raises(ActiveRecord::RecordNotFound) do
+      cart.add!(
+        product_id: @product.id,
+        quantity: 1,
+        selected_modifiers: [ { name: "Скидка", price: -999 } ]
+      )
+    end
+  end
+
   test "json_lines includes product description for peek full card" do
     @product.update!(description: "Кардамон и корица — пряный акцент")
     cart.add!(product_id: @product.id, quantity: 1, selected_modifiers: [])

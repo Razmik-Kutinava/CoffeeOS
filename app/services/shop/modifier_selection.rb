@@ -15,9 +15,13 @@ module Shop
     def self.normalize_modifiers(mods)
       Array(mods).map do |m|
         h = ActiveSupport::HashWithIndifferentAccess.new(m.respond_to?(:to_unsafe_h) ? m.to_unsafe_h : m)
+        id = h[:id].presence
+        unless id
+          raise ActiveRecord::RecordNotFound, "Модификатор без id не принимается"
+        end
         # price может отсутствовать (в cookie храним только id) — тогда 0, восстановим из БД позже.
         {
-          "id" => h[:id],
+          "id" => id,
           "name" => h[:name],
           "price" => h[:price].present? ? BigDecimal(h[:price].to_s).to_f : 0.0
         }

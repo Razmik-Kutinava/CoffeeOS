@@ -114,10 +114,11 @@ class Auth::SessionsControllerTest < ActionDispatch::IntegrationTest
 
   test "session is populated with user_id after login (reset_session was called)" do
     get "/login"
-    # After reset_session + re-population, user_id must be present
+    session[:decoy] = "attacker-controlled"
     post "/login", params: { email: @user.email, password: "pass123" }
     assert session[:user_id].present?
     assert_equal @user.id, session[:user_id]
+    assert_nil session[:decoy]
   end
 
   # ---------------------------------------------------------------------------

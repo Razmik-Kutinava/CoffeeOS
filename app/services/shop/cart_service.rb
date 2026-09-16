@@ -166,11 +166,11 @@ module Shop
       Array(mods).map do |m|
         h = m.respond_to?(:to_unsafe_h) ? m.to_unsafe_h : m
         id = (h["id"] || h[:id]).presence
-        if id
-          { "id" => id }
-        else
-          { "id" => nil, "name" => h["name"] || h[:name], "price" => (h["price"] || h[:price]).to_f }
+        unless id
+          raise ActiveRecord::RecordNotFound, "Модификатор без id не принимается"
         end
+
+        { "id" => id }
       end
     end
 
@@ -189,8 +189,10 @@ module Shop
         opt = id && option_lookup[id.to_s]
         if opt
           { "id" => opt.id, "name" => opt.name, "price" => opt.price_delta.to_f }
+        elsif id.present?
+          raise ActiveRecord::RecordNotFound, "Модификатор #{id} не найден"
         else
-          { "id" => m["id"], "name" => m["name"], "price" => m["price"].to_f }
+          raise ActiveRecord::RecordNotFound, "Модификатор без id не принимается"
         end
       end
     end
@@ -242,8 +244,10 @@ module Shop
     end
 
     def verified_modifier_delta(product, m)
-      oid = m["id"]
-      return BigDecimal(m["price"].to_s) if oid.blank?
+      oid = m["id"].presence
+      unless oid
+        raise ActiveRecord::RecordNotFound, "Модификатор без id не принимается"
+      end
 
       opt = ProductModifierOption.joins(:group)
         .find_by(id: oid, product_modifier_groups: { product_id: product.id })

@@ -2,6 +2,7 @@ module Callbacks
   class EventsController < ApplicationController
     skip_forgery_protection
     before_action :prepare_callback_context
+    before_action :reject_unconfigured_callbacks!
     before_action :authenticate_callback!
     before_action :authenticate_callback_hmac!
     before_action :enforce_anti_replay!
@@ -89,6 +90,22 @@ module Callbacks
     end
 
     private
+
+    def reject_unconfigured_callbacks!
+      return unless Rails.env.production?
+
+      token = ENV["CALLBACK_SHARED_TOKEN"].to_s
+      secret = ENV["CALLBACK_SHARED_SECRET"].to_s
+      return if token.present? && secret.present?
+
+      audit_event(
+        state: "rejected",
+        callback_type: action_name,
+        tenant_id: params[:tenant_id],
+        details: { reason: "callback secrets not configured" }
+      )
+      render json: { error: "callback not configured" }, status: :unauthorized
+    end
 
     def prepare_callback_context
       @callback_raw_body = request.raw_post.to_s

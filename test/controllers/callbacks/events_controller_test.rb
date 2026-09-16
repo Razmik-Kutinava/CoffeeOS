@@ -116,6 +116,16 @@ class Callbacks::EventsControllerTest < ActionDispatch::IntegrationTest
     assert_response :ok
   end
 
+  test "production rejects callbacks when secrets are not configured" do
+    env = Rails.env
+    Rails.env = ActiveSupport::StringInquirer.new("production")
+    post_payment(headers: {})
+    assert_response :unauthorized
+    assert_equal "callback not configured", JSON.parse(response.body)["error"]
+  ensure
+    Rails.env = env
+  end
+
   # ---------------------------------------------------------------------------
   # HMAC authentication
   # ---------------------------------------------------------------------------

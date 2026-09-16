@@ -11,6 +11,14 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-16 — fix: security P0/P1 (Grok review — callbacks, cart modifiers, staff login)
+
+- P0: `Callbacks::EventsController` — в **production** без `CALLBACK_SHARED_TOKEN` + `CALLBACK_SHARED_SECRET` → **401** (как email bounce)
+- P1: shop cart/modifiers — только **id** из БД, клиентский `price` без id отклоняется
+- P1: `Auth::SessionsController#create` — `reset_session` до заполнения сессии (session fixation)
+- Deploy: на Fly секреты callbacks должны быть заданы **до** выката, иначе легитимные колбэки упадут
+- Local: events_controller + auth sessions + cart/modifier + callbacks_e2e **71/71 PASS**
+
 ## 2026-09-16 — fix: security catch-up OTP unlock / widget step-up / API key fallback
 
 - HIGH: `binding_step_up` unlock only if lock existed **before** `link!` (no same-request bypass)

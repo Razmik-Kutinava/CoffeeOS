@@ -37,6 +37,7 @@ class Auth::SessionsController < ApplicationController
 
       role = pick_login_role(user_roles)
       Current.role_code = role.code
+      reset_session
       apply_session_after_login!(user, role.code)
       context_tenant_id = session[:manager_tenant_id].presence || user.tenant_id
       Auth::SessionTracker.start!(

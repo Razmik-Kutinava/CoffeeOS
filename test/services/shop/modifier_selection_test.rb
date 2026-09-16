@@ -37,4 +37,13 @@ class Shop::ModifierSelectionTest < ActiveSupport::TestCase
     assert_equal 1, result[:removed_modifiers].size
     assert_equal "Обычный", result[:removed_modifiers].first["name"]
   end
+
+  test "build rejects modifier without id" do
+    assert_raises(ActiveRecord::RecordNotFound) do
+      Shop::ModifierSelection.build(
+        product: @product,
+        selected_modifiers: [ { name: "Fake", price: -100 } ]
+      )
+    end
+  end
 end
