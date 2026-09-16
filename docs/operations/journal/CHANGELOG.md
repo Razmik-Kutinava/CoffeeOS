@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-16 — docs: #91 zone regress PASS (phone-auth UI / cart sheet)
+
+- node: webview + wizard + otp_ui + cascade — 39 pass
+- rails: cart_sheet_ux + auth_funnel + checkout_ui_cleanup — 13 runs / 247 assert / 0 fail
+- unlazy `--reverify` G1–G4 PASS · G5 Fly MCP Point A still unmet (post-deploy)
+- Hot-path Fly MCP Point A (G5) — ещё нужен после deploy
+
 ## 2026-09-16 — docs: SPEC #91 TASK_89-UI-EXT phone input UI/UX
 
 - todo: phone-auth → скрыть CTA+cart · thinner sheet

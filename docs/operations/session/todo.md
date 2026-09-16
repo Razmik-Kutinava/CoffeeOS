@@ -3,7 +3,7 @@
 | Поле | Значение |
 |------|----------|
 | **ID** | CBR **#91** (Google: TASK_89-UI-EXT) |
-| **Статус** | **GREEN** 2026-09-16 · ждёт `/regress` |
+| **Статус** | **regress PASS** 2026-09-16 · ждёт `/review` |
 | **ТЗ** | [`TASK-89-UI-EXT-…md`](../milestones/veha_2/requirements/customer_tasks/TASK-89-UI-EXT-UI-UX-авторизации-PWA-экран-ввода-телефона.md) |
 | **Google** | https://docs.google.com/document/d/1PTP5LIVgnj2QNpOMi4Md4Lb8Y8imvL3MQnsHhVNDQoc/edit?usp=drivesdk |
 | **Артефакты** | `artifacts/pwa_auth_phone_input_ui_ux/` |
@@ -44,4 +44,4 @@
 
 ## Next
 
-`/regress` → потом `/review`
+`/review`
