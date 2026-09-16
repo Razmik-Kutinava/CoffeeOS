@@ -4,6 +4,9 @@
  */
 import assert from "node:assert/strict"
 import { describe, it } from "node:test"
+import { readFileSync } from "node:fs"
+import { fileURLToPath } from "node:url"
+import { dirname, join } from "node:path"
 import {
   WIZARD_SCREEN,
   PIN_LENGTH,
@@ -19,6 +22,8 @@ import {
   buildVerifySmsBody
 } from "../../app/frontend/lib/phoneAuthWizard.js"
 import { formatPhoneMask, normalizePhoneToE164Ru } from "../../app/frontend/lib/phoneOtp.js"
+
+const root = join(dirname(fileURLToPath(import.meta.url)), "../..")
 
 describe("phoneAuthWizard Screen 1", () => {
   it("nationalPhoneDigits counts 10 national digits from mask", () => {
@@ -44,6 +49,27 @@ describe("phoneAuthWizard Screen 1", () => {
 
   it("nextScreenAfterInit goes to VERIFY", () => {
     assert.equal(nextScreenAfterInit(WIZARD_SCREEN.PHONE), WIZARD_SCREEN.VERIFY)
+  })
+})
+
+describe("#90 POSTCALL-EXT lifecycle wiring", () => {
+  it("PhoneAuthCodeStep resumes Callcheck on visibility/pageshow without init_callcheck", () => {
+    const step = readFileSync(
+      join(root, "app/frontend/components/PhoneAuthCodeStep.svelte"),
+      "utf8"
+    )
+    const wizard = readFileSync(
+      join(root, "app/frontend/components/PhoneAuthWizard.svelte"),
+      "utf8"
+    )
+    assert.match(step, /visibilitychange/)
+    assert.match(step, /pageshow/)
+    assert.match(step, /callcheckForegroundAction/)
+    assert.doesNotMatch(step, /init_callcheck/)
+    // Wizard: init only from continue CTA, not lifecycle
+    assert.match(wizard, /init_callcheck/)
+    assert.doesNotMatch(wizard, /visibilitychange/)
+    assert.doesNotMatch(wizard, /pageshow/)
   })
 })
 
