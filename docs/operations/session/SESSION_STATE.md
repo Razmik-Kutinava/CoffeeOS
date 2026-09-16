@@ -10,7 +10,7 @@
 | #91 UI-EXT regress PASS · ждёт `/review` | `/review` |
 | #90 parked до #91 | после #91 — #90 заново |
 
-**last_done:** zone regress PASS shop auth/cart sheet  
+**last_done:** unlazy reverify #91 G1–G4 PASS  
 **next_step:** `/review` #91
 
 **ctx_trim:** `2026-09-02`

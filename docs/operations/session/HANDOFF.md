@@ -11,7 +11,7 @@
 | #90 parked до закрытия #91 | после #91 — #90 заново |
 | #89 REVIEW ok (не трогали) | — |
 
-**last_done:** zone regress PASS (#91 phone-auth UI)  
+**last_done:** unlazy reverify #91 G1–G4 PASS  
 **next_step:** `/review` #91
 
 **ctx_trim:** `2026-09-02`  

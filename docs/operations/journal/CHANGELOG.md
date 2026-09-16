@@ -11,6 +11,10 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-16 — docs: unlazy reverify #91 pre-review (G1–G4 met)
+
+- `gate-check --reverify` G1–G4 PASS; G5 Fly MCP Point A still unmet (post-deploy)
+
 ## 2026-09-16 — docs: #91 zone regress PASS (phone-auth UI / cart sheet)
 
 - node: webview + wizard + otp_ui + cascade — 39 pass
