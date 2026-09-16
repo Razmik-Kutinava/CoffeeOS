@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-16 — docs: SPEC #90 POSTCALL-EXT restart
+
+- todo: lifecycle return Callcheck → resume → PaymentMethodsSheet
+- Файлы: phoneAuthCascade + PhoneAuthCodeStep + Wizard + 3 теста
+- Не ломать: #89 linker/session · #91 UI-EXT · FlashCall · CartSheet
+
 ## 2026-09-16 — docs: unlazy GATES #90 POSTCALL-EXT restart
 
 - Ledger `session/GATES.md` · restart после rollback

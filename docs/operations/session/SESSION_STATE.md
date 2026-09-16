@@ -2,16 +2,16 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-16 (#90 unlazy restart)  
+**Дата:** 2026-09-16 (#90 SPEC restart)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #90 POSTCALL-EXT · unlazy G1–G4 met | `/spec` → `/sbr` |
+| #90 POSTCALL-EXT · SPEC `[x]` | `/sbr` |
 | #91 REVIEW · deploy апрув | G5 Fly после deploy |
 
-**last_done:** unlazy GATES #90 restart · G1–G4 PASS · G5 unmet (post-deploy)  
-**next_step:** `/spec` #90
+**last_done:** SPEC #90 — lifecycle return + PaymentMethodsSheet (restart)  
+**next_step:** `/sbr` #90
 
 **ctx_trim:** `2026-09-02`
 
