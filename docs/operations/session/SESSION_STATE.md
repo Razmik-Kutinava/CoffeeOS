@@ -2,16 +2,16 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-16 (#90 SPEC)  
+**Дата:** 2026-09-16 (#90 GREEN)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #90 SPEC `[x]` · [todo.md](todo.md) | `/sbr` RED |
-| GATES G1–G4 baseline · G5 Fly pending | после GREEN/deploy |
+| #90 GREEN · resume Callcheck + copy «вернитесь» | `/regress` → `/review` |
+| GATES G1–G4 · G5 Fly pending | после deploy |
 
-**last_done:** PHASE 1 SPEC #90 POSTCALL-EXT  
-**next_step:** `/sbr` RED
+**last_done:** PHASE 2 GREEN #90 POSTCALL-EXT  
+**next_step:** `/regress`
 
 **ctx_trim:** `2026-09-02`
 
