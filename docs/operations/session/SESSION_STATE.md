@@ -2,16 +2,16 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-16 (#89 REVIEW)  
+**Дата:** 2026-09-16 (#89 REVIEW · CI green)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #89 REVIEW: bugbot+security clean · push/CI | CI green → deploy апрув |
-| G5 Fly MCP Point A | после deploy |
+| #89 CI green `35082473762` · GREEN `84490e04` | deploy апрув · G5 Fly MCP |
+| Entire `01M2MSDK9ZMPZH7YDZ17GHM44B` | |
 
-**last_done:** PHASE 3 REVIEW #89  
-**next_step:** deploy только апрув · G5 Fly
+**last_done:** REVIEW + push + CI PASS  
+**next_step:** deploy только апрув
 
 **ctx_trim:** `2026-09-02`
 
