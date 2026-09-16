@@ -6,7 +6,7 @@
 **Google Doc:** https://docs.google.com/document/d/1PTP5LIVgnj2QNpOMi4Md4Lb8Y8imvL3MQnsHhVNDQoc/edit?usp=drivesdk  
 **Расширяет:** [`TASK-89-Авторизация-регистрация-PWA-Callcheck-SMS.md`](TASK-89-Авторизация-регистрация-PWA-Callcheck-SMS.md)  
 **Связь:** overlap #80 / #89 · граница с #90 POSTCALL-EXT (lifecycle return — не эта задача)  
-**Статус:** SPEC 2026-09-16 · ждёт `/sbr`
+**Статус:** **REVIEW** 2026-09-16 · CI green · deploy апрув · G5 Fly после deploy
 
 ---
 

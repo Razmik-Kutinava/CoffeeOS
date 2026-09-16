@@ -11,6 +11,14 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-16 — review: #91 TASK_89-UI-EXT phone input UI/UX
+
+- GREEN `8c267e56`: slim sheet 8vh · hide CTA+cart на phone-auth
+- bugbot: no bugs · security: no medium+
+- Entire: `01M2N8XBEJ7JRD7T89JT4DAHS8` на GREEN
+- Local zone PASS · CI green `35108357982` · G5 Fly MCP после deploy
+- COMPONENT_MAP: не трогали (не новая сущность карты)
+
 ## 2026-09-16 — docs: unlazy reverify #91 pre-review (G1–G4 met)
 
 - `gate-check --reverify` G1–G4 PASS; G5 Fly MCP Point A still unmet (post-deploy)
