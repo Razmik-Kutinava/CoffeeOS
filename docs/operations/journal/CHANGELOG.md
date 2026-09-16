@@ -11,6 +11,10 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-16 — docs: unlazy reverify #90 pre-review (G1–G4 met)
+
+- `gate-check --reverify` G1–G4 PASS; G5 Fly MCP Point A still unmet (post-deploy)
+
 ## 2026-09-16 — docs: #90 zone regress PASS (shop auth / Callcheck return)
 
 - rails: auth_funnel + silent_refresh + phone_otp + linker — 27 runs / 211 assert / 0 fail
