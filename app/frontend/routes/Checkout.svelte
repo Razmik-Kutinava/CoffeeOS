@@ -343,13 +343,16 @@
     offerSaveToProfile = true
   }
 
-  function onWizardVerified({ refreshToken } = {}) {
+  async function onWizardVerified({ refreshToken } = {}) {
     if (refreshToken) saveShopRefreshToken(refreshToken)
     phoneVerified = true
     otpNotice = "Телефон подтверждён"
     savedProfile = true
     editContact = false
     err = null
+    // #89: после Callcheck/SMS — сразу экран оплаты (флоу заказчика)
+    await tick()
+    await openPaymentSheet()
   }
 
   function onWizardError(message) {

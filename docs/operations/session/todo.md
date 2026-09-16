@@ -17,8 +17,8 @@
 
 - [x] PHASE 0 intake
 - [x] PHASE 1 `/spec` — канон в этом todo
-- [ ] PHASE 2 RED — падающие тесты: post-verify → `openPaymentSheet` / pay-stack; linker/session контракт
-- [ ] PHASE 2 GREEN — `onWizardVerified` открывает оплату; wizard закрыт; зона PASS + `--reverify`
+- [x] PHASE 2 RED — падающие тесты: post-verify → `openPaymentSheet` / pay-stack; linker/session контракт
+- [x] PHASE 2 GREEN — `onWizardVerified` открывает оплату; wizard закрыт; зона PASS + `--reverify`
 - [ ] PHASE 3 `/review` — bugbot+security · Entire · push/CI · G5 Fly MCP
 
 ## DoD (заказчик + Google)
