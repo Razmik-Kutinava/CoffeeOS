@@ -77,4 +77,18 @@ class Shop::AuthFunnelWizardUiTest < ActionDispatch::IntegrationTest
     assert_includes cascade, "afterSmsSend"
     assert_includes lib, "buildSendSmsBody"
   end
+
+  test "#91 phone-auth hides CTA and cart preview via layout flag" do
+    layout = File.read(Rails.root.join("app/frontend/lib/shopWebViewLayout.js"))
+    cart = File.read(Rails.root.join("app/frontend/components/CartSheet.svelte"))
+    checkout = File.read(Rails.root.join("app/frontend/routes/Checkout.svelte"))
+
+    assert_includes layout, "phoneAuthActive"
+    assert_match(/shouldHideCartCheckoutCta\([\s\S]*phoneAuthActive/, layout)
+    assert_includes cart, "phoneAuthActive"
+    assert_includes cart, "shouldHideCartCheckoutCta({ onCheckout, keyboardOpen, phoneAuthActive })"
+    assert_includes cart, "shop-cart-phone-auth-slim"
+    assert_includes checkout, "setCheckoutPhoneAuthActive"
+    assert_match(/setCheckoutPhoneAuthActive\(!phoneVerified\)|setCheckoutPhoneAuthActive\(\s*!phoneVerified\s*\)/, checkout)
+  end
 end

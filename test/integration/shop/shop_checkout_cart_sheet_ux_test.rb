@@ -76,4 +76,26 @@ class Shop::ShopCheckoutCartSheetUxTest < ActionDispatch::IntegrationTest
     assert_includes thresh, "CHECKOUT_PAY_STACK_VH"
     assert_includes thresh, "CHECKOUT_PEEK_VH"
   end
+
+  test "#91 phone-auth: thinner sheet constant and store flag" do
+    thresh = File.read(THRESH)
+    store = File.read(STORE)
+    cart = File.read(SHEET)
+    checkout = File.read(CHECKOUT)
+
+    assert_includes thresh, "CHECKOUT_PHONE_AUTH_VH"
+    assert_match(/CHECKOUT_PHONE_AUTH_VH\s*=\s*\d+/, thresh)
+    phone_auth_vh = thresh[/CHECKOUT_PHONE_AUTH_VH\s*=\s*(\d+)/, 1].to_i
+    peek_vh = thresh[/CHECKOUT_PEEK_VH\s*=\s*(\d+)/, 1].to_i
+    assert phone_auth_vh.positive?, "CHECKOUT_PHONE_AUTH_VH must be > 0"
+    assert phone_auth_vh < peek_vh, "phone-auth sheet must be thinner than CHECKOUT_PEEK_VH"
+
+    assert_includes store, "checkoutPhoneAuthActive"
+    assert_includes store, "setCheckoutPhoneAuthActive"
+    assert_includes checkout, "setCheckoutPhoneAuthActive"
+    assert_includes cart, "checkoutPhoneAuthActive"
+    assert_includes cart, "CHECKOUT_PHONE_AUTH_VH"
+    assert_includes cart, "data-checkout-phone-auth"
+    assert_includes cart, "shop-cart-phone-auth-slim"
+  end
 end

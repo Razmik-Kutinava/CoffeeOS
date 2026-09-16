@@ -72,6 +72,21 @@ describe("keyboard open / close", () => {
     assert.equal(shouldHideCartCheckoutCta({ onCheckout: false, keyboardOpen: true }), false)
   })
 
+  it("#91 hides checkout +sum CTA when phone-auth active even without keyboard", () => {
+    assert.equal(
+      shouldHideCartCheckoutCta({ onCheckout: true, keyboardOpen: false, phoneAuthActive: true }),
+      true
+    )
+    assert.equal(
+      shouldHideCartCheckoutCta({ onCheckout: true, keyboardOpen: false, phoneAuthActive: false }),
+      false
+    )
+    assert.equal(
+      shouldHideCartCheckoutCta({ onCheckout: false, keyboardOpen: false, phoneAuthActive: true }),
+      false
+    )
+  })
+
   it("detects keyboard when visualViewport shrinks vs innerHeight", () => {
     assert.equal(
       isShopKeyboardOpen({
