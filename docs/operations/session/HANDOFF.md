@@ -2,17 +2,17 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-16 (#91 UI-EXT intake)  
+**Дата:** 2026-09-16 (#91 UI-EXT unlazy)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #91 UI-EXT intake · ждёт `/spec` | `/spec` → RED/GREEN |
+| #91 UI-EXT · GATES G1–G4 PASS · ждёт `/spec` | `/spec` → `/sbr` |
 | #90 parked до закрытия #91 | после #91 — #90 заново |
 | #89 REVIEW ok (не трогали) | — |
 
-**last_done:** PHASE 0 intake #91 TASK_89-UI-EXT  
-**next_step:** `/spec` #91 (скрыть CTA/cart · тоньше sheet)
+**last_done:** unlazy GATES #91 baseline G1–G4 PASS  
+**next_step:** `/spec` #91
 
 **ctx_trim:** `2026-09-02`  
 **Fly:** v495 `deployment-01M22JRN95TXRSV1PQDN49227M`

@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-16 — docs: unlazy GATES #91 UI-EXT baseline
+
+- Ledger `session/GATES.md` · G1–G4 PASS (phone auth UI / cart sheet / auth funnel / cascade)
+- G5 Fly MCP Point A unmet (после REVIEW/deploy)
+- RED ещё добавит CTA/cart hide asserts
+
 ## 2026-09-16 — docs: intake #91 TASK_89-UI-EXT phone input UI/UX
 
 - Чат + Google Doc → `customer_tasks/TASK-89-UI-EXT-…md` (1:1)
