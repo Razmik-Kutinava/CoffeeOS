@@ -2,16 +2,16 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-16 (security P0/P1 + demo harden + push)  
+**Дата:** 2026-09-16 (security backlog · 9dd17656)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Security P0/P1 на remote · DEMO_AUTO_SEED=false · barista promo UI | deploy апрув · CALLBACK_* на Fly |
-| push | Fly MCP после deploy |
+| Backlog на origin/develop (Tbank Amount, promo, token, Rack callbacks) | deploy апрув |
+| Grok перепроверка по SHA | Fly secrets · demo пароли в БД вручную |
 
-**last_done:** callbacks · modifiers · reset_session · barista no fake 10% · DEMO_AUTO_SEED off · push develop  
-**next_step:** deploy только апрув · сменить demo-пароли в БД вручную если стенд публичный
+**last_done:** `9dd17656` push · tests 76/76 · ops `a2f3cb1c`  
+**next_step:** deploy только апрув
 
 **ctx_trim:** `2026-09-02`  
 **Fly:** v495 `deployment-01M22JRN95TXRSV1PQDN49227M`
