@@ -2,16 +2,16 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-16 (#89 GREEN)  
+**Дата:** 2026-09-16 (#89 regress PASS)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #89 GREEN · Checkout opens pay after Callcheck/SMS | `/regress` |
-| G5 Fly MCP Point A | `/review` |
+| #89 zone regress PASS (rails 33 · node 23) | `/review` |
+| G5 Fly MCP Point A | после deploy |
 
-**last_done:** feat onWizardVerified → openPaymentSheet  
-**next_step:** `/regress`
+**last_done:** `/regress` shop auth/OTP zone PASS  
+**next_step:** `/review`
 
 **ctx_trim:** `2026-09-02`
 

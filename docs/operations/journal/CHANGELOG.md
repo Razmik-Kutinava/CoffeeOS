@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-16 — docs: #89 zone regress PASS (shop auth / OTP)
+
+- rails: phone_otp + linker + silent_refresh + auth_funnel — 33 runs / 0 fail
+- node: phone_auth wizard/cascade/ui — 23 pass
+- Hot-path Fly MCP Point A (G5) — ещё нужен после deploy
+
 ## 2026-09-16 — docs: SPEC #89 post-Callcheck → payment sheet
 
 - `todo.md` #89: `onWizardVerified` → `openPaymentSheet`; файлы Checkout + structural/OTP tests

@@ -25,9 +25,11 @@
 
 1. Callcheck confirmed → `PhoneVerifiedCustomerLinker` → `MobileCustomer` + session + refresh_token (уже канон; не ломать).
 2. После verify wizard скрыт, пользователь в checkout context (`phoneVerified` / contacts).
-3. **Доп.задача:** сразу **экран оплаты** (`PaymentMethodsSheet` / pay-stack) — сейчас `onWizardVerified` только ставит флаги, **не** зовёт `openPaymentSheet`.
+3. **Доп.задача:** сразу **экран оплаты** (`PaymentMethodsSheet` / pay-stack) — GREEN: `onWizardVerified` → `openPaymentSheet()`.
 4. SMS fallback → тот же post-verify handoff.
 5. FlashCall не возвращён.
+
+**Regress:** 2026-09-16 local PASS (rails 33 · node 23). Fly MCP G5 — на Review/deploy.
 
 ## Файлы (ожидаемо)
 
