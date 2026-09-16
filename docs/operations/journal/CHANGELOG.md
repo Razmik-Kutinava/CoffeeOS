@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-16 — docs: unlazy GATES #89 PWA auth Callcheck → SMS
+
+- `session/GATES.md` → #89 (G1–G4 baseline PASS, G5 Fly MCP pending)
+- Scope: Callcheck/SMS → session → checkout + экран оплаты; FlashCall guard
+
 ## 2026-09-16 — docs: intake customer task #89 PWA auth Callcheck → SMS
 
 - `TASK-89-Авторизация-регистрация-PWA-Callcheck-SMS.md` + artifacts `pwa_auth_registration_callcheck_sms/`

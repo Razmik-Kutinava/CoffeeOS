@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-16 (#89 intake)  
+**Дата:** 2026-09-16 (#89 unlazy)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #89 PWA auth Callcheck→SMS — PHASE 0 intake `[x]` | `/spec` |
+| #89 GATES G1–G4 baseline met · G5 Fly pending | `/spec` → `/sbr` |
 | Security backlog на origin (9dd17656) | deploy апрув (отдельно) |
 
-**last_done:** intake TASK-89 + CBR/ISSUES  
+**last_done:** unlazy GATES #89 · G1–G4 PASS  
 **next_step:** `/spec` по #89
 
 **ctx_trim:** `2026-09-02`  
