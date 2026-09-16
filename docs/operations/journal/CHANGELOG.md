@@ -16,7 +16,7 @@
 - GREEN `4932e2b0` + fix iOS tel resume `0588ead1` (pagehide / markLeftForDial / focus)
 - bugbot: high iOS skip → fixed · security: no medium+
 - Entire: `01M2N01DRZ1TPY8WCNKRE80R5V` на GREEN/fix
-- Local zone PASS · G5 Fly MCP после deploy
+- Local zone PASS · CI green `35094780266` · G5 Fly MCP после deploy
 - COMPONENT_MAP: не трогали (не главная зона карты)
 
 ## 2026-09-16 — docs: #89 artifact — curtain sum keyboard screenshot

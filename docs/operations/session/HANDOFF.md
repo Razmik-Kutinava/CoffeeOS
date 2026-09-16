@@ -7,11 +7,11 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| #90 REVIEW push · Entire `01M2N01DRZ1TPY8WCNKRE80R5V` · fix iOS `0588ead1` | CI green · deploy апрув |
+| #90 CI green `35094780266` · Entire `01M2N01DRZ1TPY8WCNKRE80R5V` | deploy апрув |
 | G5 Fly MCP Point A | после deploy |
 
-**last_done:** REVIEW #90 POSTCALL-EXT  
-**next_step:** CI green · deploy только апрув
+**last_done:** REVIEW push CI PASS  
+**next_step:** deploy только апрув
 
 **ctx_trim:** `2026-09-02`  
 **Fly:** v495 `deployment-01M22JRN95TXRSV1PQDN49227M`
