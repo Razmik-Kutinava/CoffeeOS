@@ -11,6 +11,14 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-16 — review: #90 POSTCALL-EXT return after Callcheck
+
+- GREEN `37b808c4`: resume poll + copy «вернитесь» + pagehide/iOS + checking UI
+- bugbot: no bugs · security: no medium+
+- Entire: `01M2NCXMN67QF5CB228K6HCT97` на GREEN
+- Local zone PASS · push/CI · G5 Fly MCP после deploy
+- COMPONENT_MAP: не трогали (не новая сущность карты)
+
 ## 2026-09-16 — docs: unlazy reverify #90 pre-review (G1–G4 met)
 
 - `gate-check --reverify` G1–G4 PASS; G5 Fly MCP Point A still unmet (post-deploy)

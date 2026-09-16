@@ -4,7 +4,8 @@
 |------|----------|
 | **ID** | CBR **#90** (Google: TASK_89-POSTCALL-EXT) |
 | **Тип** | SBR · EXT #89 — lifecycle return + resume + PaymentMethodsSheet |
-| **Статус** | **regress PASS** 2026-09-16 · ждёт `/review` |
+| **Статус** | **REVIEW** 2026-09-16 · push/CI · G5 Fly после deploy |
+| **GREEN** | `37b808c4` · Entire `01M2NCXMN67QF5CB228K6HCT97` |
 | **Ветка** | `develop` |
 | **Канон** | `@spec-build-review` · `@coffeeos-commit-ops` · `@coffeeos-dev-gates` |
 | **ТЗ** | [`TASK-89-POSTCALL-EXT-…md`](../milestones/veha_2/requirements/customer_tasks/TASK-89-POSTCALL-EXT-Возврат%20в%20PWA%20после%20Callcheck%20и%20продолжение%20оплаты.md) |
@@ -19,11 +20,11 @@
 - [x] PHASE 1 `/spec` — канон в этом todo
 - [x] PHASE 2 RED — copy «вернитесь»; visibility/pageshow ≠ init_callcheck; pending → «Проверяем номер» + poll; confirmed/SMS → openPaymentSheet
 - [x] PHASE 2 GREEN — resume poll + copy + handoff; зона PASS + unlazy `--reverify`
-- [ ] PHASE 3 `/review` — bugbot+security · Entire · push/CI · G5 Fly MCP
+- [x] PHASE 3 `/review` — bugbot+security · Entire · push/CI · G5 Fly MCP (после deploy)
 
 ## Next
 
-`/review`
+Deploy — только по апруву · затем Fly MCP Point A (G5).
 
 ## DoD
 
