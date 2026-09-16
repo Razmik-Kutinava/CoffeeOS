@@ -2,16 +2,16 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-16 (security backlog · 9dd17656)  
+**Дата:** 2026-09-16 (#89 intake)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Backlog на origin/develop (Tbank Amount, promo, token, Rack callbacks) | deploy апрув |
-| Grok перепроверка по SHA | Fly secrets · demo пароли в БД вручную |
+| #89 PWA auth Callcheck→SMS — PHASE 0 intake `[x]` | `/spec` |
+| Security backlog на origin (9dd17656) | deploy апрув (отдельно) |
 
-**last_done:** `9dd17656` push · tests 76/76 · ops `a2f3cb1c`  
-**next_step:** deploy только апрув
+**last_done:** intake TASK-89 + CBR/ISSUES  
+**next_step:** `/spec` по #89
 
 **ctx_trim:** `2026-09-02`  
 **Fly:** v495 `deployment-01M22JRN95TXRSV1PQDN49227M`

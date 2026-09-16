@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-16 — docs: intake customer task #89 PWA auth Callcheck → SMS
+
+- `TASK-89-Авторизация-регистрация-PWA-Callcheck-SMS.md` + artifacts `pwa_auth_registration_callcheck_sms/`
+- CBR / customer_tasks README / ISSUES #89
+- Чат: post-call → PWA + экран оплаты; overlap #80
+
 ## 2026-09-16 — fix: security backlog (Tbank Amount, promo used_count, token, callbacks throttle)
 
 - T-Bank: `TbankAdapter.notification_amount_matches?` (копейки) + guard в `TbankCallbackJob` на CONFIRMED/succeeded

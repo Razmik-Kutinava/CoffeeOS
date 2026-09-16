@@ -2,16 +2,16 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-16 (security backlog · push 9dd17656)  
+**Дата:** 2026-09-16 (#89 intake)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| Backlog: Tbank Amount · promo used_count · token · callbacks throttle | deploy апрув · Fly CALLBACK_* |
-| remote develop = 9dd17656 | Fly MCP после deploy |
+| #89 Callcheck→SMS + post-call handoff → pay | `/spec` |
+| remote develop = 9dd17656 (security) | deploy апрув отдельно |
 
-**last_done:** 4 backlog fixes · 76 tests PASS · push  
-**next_step:** deploy только апрув
+**last_done:** PHASE 0 intake TASK-89  
+**next_step:** `/spec` #89
 
 **ctx_trim:** `2026-09-02`
 
