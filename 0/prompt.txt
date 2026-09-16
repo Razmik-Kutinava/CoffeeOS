@@ -1,0 +1,5 @@
+<timestamp>Wednesday, Sep 16, 2026, 3:18 PM (UTC+4)</timestamp>
+
+включи мсп гугл док и найди 
+1. TASK_89-POSTCALL-EXT
+Возврат в PWA после Callcheck и продолжение оплаты
