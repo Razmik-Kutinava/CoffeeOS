@@ -34,4 +34,14 @@ class Shop::SilentRefreshFrontendStructuralTest < ActiveSupport::TestCase
     assert_includes code_step, "refresh_token"
     assert_match(/refreshToken:\s*res\?\.refresh_token/, code_step)
   end
+
+  # #89: после Callcheck/SMS verify — сразу экран оплаты (флоу заказчика)
+  test "Checkout onWizardVerified opens payment sheet after phone verify" do
+    checkout = File.read(Rails.root.join("app/frontend/routes/Checkout.svelte"))
+    assert_match(
+      /(?:async\s+)?function onWizardVerified\([^)]*\)\s*\{[^}]*openPaymentSheet\s*\(/m,
+      checkout,
+      "onWizardVerified must call openPaymentSheet after Callcheck/SMS (#89)"
+    )
+  end
 end
