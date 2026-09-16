@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-16 — fix: barista promo UI + DEMO_AUTO_SEED off + push
+
+- Barista POS: убрана фейковая клиентская −10%; скидка только через `PromoCode` на сервере
+- `fly.toml`: `DEMO_AUTO_SEED=false` (публичный fly.dev больше не пересидит `demo123456` на каждый deploy)
+- Push `develop` — Grok/remote видят `488551aa` + этот коммит
+- Deploy: апрув · до выката проверить `CALLBACK_SHARED_*` на Fly
+
 ## 2026-09-16 — fix: security P0/P1 (Grok review — callbacks, cart modifiers, staff login)
 
 - P0: `Callbacks::EventsController` — в **production** без `CALLBACK_SHARED_TOKEN` + `CALLBACK_SHARED_SECRET` → **401** (как email bounce)

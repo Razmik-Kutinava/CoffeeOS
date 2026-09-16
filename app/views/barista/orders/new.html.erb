@@ -141,9 +141,9 @@
   
   function renderCart() {
     const subtotal = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
-    const promoCode = document.getElementById('promo-code-input')?.value.trim() || '';
-    const discount = promoCode ? (subtotal * 0.1) : 0; // 10% скидка если промокод есть
-    const total = subtotal - discount;
+    // Скидка только на сервере (PromoCode) — UI не рисует фейковые 10%.
+    const discount = 0;
+    const total = subtotal;
     
     const cartItems = document.getElementById('cart-items');
     if (cart.length === 0) {
@@ -272,10 +272,9 @@
       return;
     }
     
-    // TODO: валидация через API когда будет модель PromoCode
-    // Пока просто показываем что промокод применён
-    statusDiv.innerHTML = '<span style="color: #7cf0a0;">✓ Промокод применён (скидка 10%)</span>';
-    renderCart(); // Пересчитываем с учётом скидки
+    // Валидация и % скидки — только Barista::OrderCreationService / PromoCode на submit.
+    statusDiv.innerHTML = '<span style="color: #7cf0a0;">✓ Код будет проверен при оплате</span>';
+    renderCart();
   }
   
   function filterCategory(cat) {

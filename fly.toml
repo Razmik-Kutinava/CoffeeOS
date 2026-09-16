@@ -18,9 +18,9 @@ primary_region = "ams"
   RAILS_MAX_THREADS = "3"
   # Worker (bin/jobs): Solid Queue threads + dispatchers > RAILS_MAX_THREADS; иначе crash loop на prod.
   DB_POOL           = "8"
-  # Период живого демо на develop→Fly: идемпотентный demo:seed после каждого деплоя.
-  # Убрать demo:seed из release_command после закрытия H.3 (см. veha_1/CHECKLIST § H.0).
-  DEMO_AUTO_SEED    = "true"
+  # Security harden 2026-09-16: не сидить demo123456 на публичный fly.dev при каждом deploy.
+  # Ручной seed: fly ssh console -C "bin/rails demo:seed" (см. FLY_DEMO_STAND.md).
+  DEMO_AUTO_SEED    = "false"
   # Одна боевая точка для заказчика (Point A); B/C и мусор — inactive после seed/cleanup.
   DEMO_SINGLE_POINT = "true"
   SHOP_DEFAULT_TENANT_ID = "2fdee1ac-4674-41ee-b89e-87b45643f789"

@@ -188,7 +188,7 @@
 - [x] ⭐ Smoke: витрина A с `tenant_id` — меню не пустое (см. CUSTOMER_HANDOFF)
 - [x] ⭐ Логин `barista-a@demo.coffeeos.local` / `demo123456` → `/barista`
 - [x] Поддомены на `*.coffeeos.fly.dev` на Fly недоступны (DNS/TLS) — витрина через `?tenant_id=` (FLY_DEMO_STAND)
-- [ ] После закрытия H.3: **убрать** `demo:seed` из `release_command` (отметить здесь дату)
+- [x] После закрытия H.3: **убрать** автосид — `DEMO_AUTO_SEED=false` в `fly.toml` (2026-09-16; `fly:release` больше не зовёт `demo:seed`)
 
 ### 3. Живое демо
 

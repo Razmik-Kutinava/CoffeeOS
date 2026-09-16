@@ -97,7 +97,7 @@ UUID — см. ниже § «Узнать URL без SSH».
 
 - `release_command`: `bin/rails fly:release` (`db:prepare` + solid migrate + `demo:seed`)
 - `SHOP_BASE_DOMAIN` **не задан** — витрина `?tenant_id=` (режим B)
-- `DEMO_AUTO_SEED=true` — запасной `demo:seed` при старте Puma
+- `DEMO_AUTO_SEED=false` (с 2026-09-16) — автосид на публичном fly.dev выключен; ручной `demo:seed` по SSH при необходимости
 
 В логах release после сида есть строки **`Shop A:`** / **`Shop B:`** / **`Shop C:`** с полным URL.
 
