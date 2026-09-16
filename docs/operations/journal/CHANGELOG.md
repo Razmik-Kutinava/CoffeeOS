@@ -11,6 +11,14 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-16 — review: #89 post-Callcheck → payment sheet
+
+- GREEN `84490e04`: `onWizardVerified` → `openPaymentSheet` после Callcheck/SMS
+- bugbot: no bugs · security: no medium+ (#89 Checkout scope)
+- Entire: `01M2MSDK9ZMPZH7YDZ17GHM44B` на `84490e04`
+- Local zone PASS · G5 Fly MCP после deploy
+- COMPONENT_MAP: не трогали (не главная зона карты)
+
 ## 2026-09-16 — docs: unlazy reverify #89 pre-review (G1–G4 met)
 
 - `gate-check --reverify` G1–G4 PASS; G5 Fly MCP Point A still unmet (post-deploy)

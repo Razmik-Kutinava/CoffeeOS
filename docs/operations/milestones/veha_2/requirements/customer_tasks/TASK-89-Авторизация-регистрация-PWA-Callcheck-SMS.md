@@ -5,7 +5,7 @@
 **Артефакты:** docs/operations/milestones/veha_2/artifacts/pwa_auth_registration_callcheck_sms/  
 **Google Doc:** https://docs.google.com/document/d/1wDRuIFxAl1pBSxh305sEidRxj-Kd6vwjytFkOvWn2ZQ/edit?usp=drivesdk  
 **Связь:** предшественник / overlap #80 — [`Регистрация PWA UI UX и каскад Callcheck x2 SMS.md`](Регистрация%20PWA%20UI%20UX%20и%20каскад%20Callcheck%20x2%20SMS.md) · канон Callcheck — [`BUG-REPORT SMS.ru FlashCall вместо Callcheck.md`](BUG-REPORT%20SMS.ru%20FlashCall%20вместо%20Callcheck.md) · [`docs/integrations/sms-auth.md`](../../../../../integrations/sms-auth.md)  
-**Статус:** Spec (Google) · intake `[x]` · SPEC `[x]` 2026-09-16 · ждёт `/sbr`
+**Статус:** Spec (Google) · intake `[x]` · SPEC `[x]` · GREEN `[x]` · REVIEW 2026-09-16 · G5 Fly после deploy
 
 ---
 

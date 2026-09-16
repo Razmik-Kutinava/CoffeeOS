@@ -14,7 +14,7 @@
 | #86 SBP PWA recovery after bank | 🟢 | CI green `34987062132` · deploy апрув · Fly MCP + device |
 | #87 Quick Repeat status composition | 🟢 | CI green `34991136715` · deploy апрув · Fly MCP G4 |
 | #80 Registration UI/UX + Callcheck cascade | 🟡 | OTP fallback false · live Callcheck SKIP · ждёт апрув / телефон |
-| #89 PWA auth Callcheck → SMS + post-pay handoff | 🟡 | SPEC `[x]` · ждёт `/sbr` · `onWizardVerified` → pay sheet |
+| #89 PWA auth Callcheck → SMS + post-pay handoff | 🟢 | REVIEW · GREEN `84490e04` · ждёт CI/deploy · G5 Fly MCP |
 | #81 Notifications / Wallet / WebPush gaps | 🟡 | v482 MCP PASS · ждёт апрув заказчика |
 | #82 Cascade SMS ready + sheet stuck | 🟡 | v482 MCP PASS · hide+SMS sent · ждёт апрув заказчика |
 | GH FLY_API_TOKEN | 🟢 | org token · Deploy green 2026-09-07 |
