@@ -118,6 +118,10 @@
     else pollStatus()
   }
 
+  function markLeftForDial() {
+    wasBackgrounded = true
+  }
+
   function onVisibilityChange() {
     if (typeof document !== "undefined" && document.visibilityState === "hidden") {
       wasBackgrounded = true
@@ -127,9 +131,19 @@
     resumeAfterForeground()
   }
 
+  function onPageHide() {
+    // iOS tel: often skips visibilitychange; pagehide is more reliable
+    wasBackgrounded = true
+  }
+
   function onPageShow(event) {
     if (!wasBackgrounded && !event?.persisted) return
     wasBackgrounded = true
+    resumeAfterForeground()
+  }
+
+  function onWindowFocus() {
+    if (!wasBackgrounded) return
     resumeAfterForeground()
   }
 
@@ -214,10 +228,14 @@
   startTick()
   onMount(() => {
     document.addEventListener("visibilitychange", onVisibilityChange)
+    window.addEventListener("pagehide", onPageHide)
     window.addEventListener("pageshow", onPageShow)
+    window.addEventListener("focus", onWindowFocus)
     return () => {
       document.removeEventListener("visibilitychange", onVisibilityChange)
+      window.removeEventListener("pagehide", onPageHide)
       window.removeEventListener("pageshow", onPageShow)
+      window.removeEventListener("focus", onWindowFocus)
     }
   })
   onDestroy(stopTimers)
@@ -252,6 +270,8 @@
           href={telHref}
           class="inline-flex w-full items-center justify-center rounded-lg bg-[#ff8c42] px-4 py-3 text-base font-semibold text-black no-underline"
           data-testid="phone-auth-tel-btn"
+          onpointerdown={markLeftForDial}
+          onclick={markLeftForDial}
         >
           {dialLabel}
         </a>

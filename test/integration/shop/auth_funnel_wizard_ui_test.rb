@@ -89,11 +89,14 @@ class Shop::AuthFunnelWizardUiTest < ActionDispatch::IntegrationTest
     assert_includes cascade, "callcheckForegroundAction"
     assert_includes step, "visibilitychange"
     assert_includes step, "pageshow"
+    assert_includes step, "pagehide"
+    assert_includes step, "markLeftForDial"
     assert_includes step, "callcheckForegroundAction"
     assert_includes step, 'data-testid="phone-auth-callcheck-checking"'
     refute_includes step, "/phone_otp/init_callcheck"
     assert_includes wizard, "init_callcheck"
     refute_includes wizard, "visibilitychange"
     refute_includes wizard, "pageshow"
+    refute_includes wizard, "pagehide"
   end
 end

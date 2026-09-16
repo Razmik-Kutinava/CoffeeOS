@@ -64,12 +64,15 @@ describe("#90 POSTCALL-EXT lifecycle wiring", () => {
     )
     assert.match(step, /visibilitychange/)
     assert.match(step, /pageshow/)
+    assert.match(step, /pagehide/)
+    assert.match(step, /markLeftForDial/)
     assert.match(step, /callcheckForegroundAction/)
     assert.doesNotMatch(step, /\/phone_otp\/init_callcheck/)
     // Wizard: init only from continue CTA, not lifecycle
     assert.match(wizard, /init_callcheck/)
     assert.doesNotMatch(wizard, /visibilitychange/)
     assert.doesNotMatch(wizard, /pageshow/)
+    assert.doesNotMatch(wizard, /pagehide/)
   })
 })
 
