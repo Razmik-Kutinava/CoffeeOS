@@ -11,6 +11,14 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-16 — review: #90 POSTCALL-EXT return after Callcheck
+
+- GREEN `4932e2b0` + fix iOS tel resume `0588ead1` (pagehide / markLeftForDial / focus)
+- bugbot: high iOS skip → fixed · security: no medium+
+- Entire: `01M2N01DRZ1TPY8WCNKRE80R5V` на GREEN/fix
+- Local zone PASS · G5 Fly MCP после deploy
+- COMPONENT_MAP: не трогали (не главная зона карты)
+
 ## 2026-09-16 — docs: #89 artifact — curtain sum keyboard screenshot
 
 - `pwa_auth_registration_callcheck_sms/screenshots/01_phone_input_curtain_sum_keyboard_2026-09-16.png`

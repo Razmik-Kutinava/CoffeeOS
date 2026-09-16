@@ -13,28 +13,13 @@
 | **Unlazy** | [`GATES.md`](GATES.md) — G1–G4 baseline met · G5 Fly pending |
 | **OUT** | TASK-89-UI-EXT (толщина/сумма/сетка) · SMS.ru backend · linker/session algorithm · PaymentMethodsSheet internals · FlashCall · CartSheet thresholds |
 
-# todo — #90 POSTCALL-EXT: return after Callcheck → pay
-
-| Поле | Значение |
-|------|----------|
-| **ID** | CBR **#90** (Google: TASK_89-POSTCALL-EXT) |
-| **Тип** | SBR · EXT #89 — lifecycle return + resume + PaymentMethodsSheet |
-| **Приоритет** | high |
-| **Ветка** | `develop` |
-| **Канон** | `@spec-build-review` · `@coffeeos-commit-ops` · `@coffeeos-dev-gates` · `@coffeeos-cart-sheet` |
-| **ТЗ** | [`TASK-89-POSTCALL-EXT-Возврат в PWA после Callcheck и продолжение оплаты.md`](../milestones/veha_2/requirements/customer_tasks/TASK-89-POSTCALL-EXT-Возврат%20в%20PWA%20после%20Callcheck%20и%20продолжение%20оплаты.md) |
-| **Google** | https://docs.google.com/document/d/1w2VKMPaYZdsJcqNkLrpSbJBPuLE-7Sm9giQ8DcJ0Bq0/edit?usp=drivesdk |
-| **Артефакты** | [`pwa_callcheck_return_continue_payment/`](../milestones/veha_2/artifacts/pwa_callcheck_return_continue_payment/) |
-| **Unlazy** | [`GATES.md`](GATES.md) — G1–G4 baseline met · G5 Fly pending |
-| **OUT** | TASK-89-UI-EXT (толщина/сумма/сетка) · SMS.ru backend · linker/session algorithm · PaymentMethodsSheet internals · FlashCall · CartSheet thresholds |
-
 ## SBR
 
 - [x] PHASE 0 intake
 - [x] PHASE 1 `/spec` — канон в этом todo
 - [x] PHASE 2 RED — падающие тесты: copy «вернитесь»; visibility/pageshow ≠ init_callcheck; pending → «Проверяем номер» + poll; confirmed/SMS → openPaymentSheet
 - [x] PHASE 2 GREEN — resume poll + copy + handoff сохранён; зона PASS + `--reverify`
-- [ ] PHASE 3 `/review` — bugbot+security · Entire · push/CI · G5 Fly MCP (после deploy)
+- [x] PHASE 3 `/review` — bugbot+security · Entire · push/CI · G5 Fly MCP (после deploy)
 
 
 ## DoD (заказчик + Google)
