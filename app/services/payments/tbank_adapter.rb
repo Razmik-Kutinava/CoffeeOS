@@ -219,6 +219,19 @@ module Payments
       TBANK_STATUS_MAP[tbank_status.to_s.upcase]
     end
 
+    # Webhook Amount — копейки (как в Init). Сверка с payment.amount / order.final_amount.
+    # Пустой Amount — пропуск (как optional amount в EventsController).
+    def self.notification_amount_matches?(payment, payload)
+      raw = payload["Amount"]
+      return true if raw.blank?
+
+      callback_kopecks = raw.to_i
+      expected_payment_kopecks = (BigDecimal(payment.amount.to_s) * 100).to_i
+      expected_order_kopecks = (BigDecimal(payment.order.final_amount.to_s) * 100).to_i
+
+      callback_kopecks == expected_payment_kopecks || callback_kopecks == expected_order_kopecks
+    end
+
     # Публичный метод для использования в верификации (в т.ч. из self-методов).
     # Вложенные объекты (Receipt, DATA, …) в расчёт Token не входят — канон Т-Кассы.
     def build_token(params)

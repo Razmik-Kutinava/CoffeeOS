@@ -194,6 +194,15 @@ class Callbacks::TbankControllerTest < ActionDispatch::IntegrationTest
     assert_equal "accepted",  @order.reload.status
   end
 
+  test "CONFIRMED with Amount mismatch leaves payment pending" do
+    payload = tbank_payload(status: "CONFIRMED")
+    payload["Amount"] = 100
+    payload["Token"] = Payments::TbankAdapter.new.build_token(payload.except("Token"))
+    post_notify(payload)
+    assert_response :ok
+    assert_equal "pending", @payment.reload.status
+  end
+
   test "CONFIRMED broadcasts synchronously (no BroadcastOrderBoardJob)" do
     assert_no_enqueued_jobs(only: Barista::BroadcastOrderBoardJob) do
       post_notify(tbank_payload(status: "CONFIRMED"))

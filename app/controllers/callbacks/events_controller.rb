@@ -119,7 +119,12 @@ module Callbacks
     def authenticate_callback!
       expected = ENV["CALLBACK_SHARED_TOKEN"].to_s
       return if expected.blank?
-      return if request.headers["X-Callback-Token"].to_s == expected
+
+      provided = request.headers["X-Callback-Token"].to_s
+      if expected.bytesize == provided.bytesize &&
+         ActiveSupport::SecurityUtils.secure_compare(expected, provided)
+        return
+      end
 
       audit_event(state: "rejected", callback_type: action_name, tenant_id: params[:tenant_id], details: { reason: "token auth failed" })
       render json: { error: "unauthorized callback" }, status: :unauthorized

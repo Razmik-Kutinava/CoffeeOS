@@ -78,6 +78,11 @@ class Rack::Attack
     req.ip if req.path == "/login" && req.post?
   end
 
+  # Webhooks (/callbacks/*): brute-force / flood по IP. MemoryStore — per-machine; shared store — follow-up.
+  throttle("callbacks/ip", limit: 120, period: 1.minute) do |req|
+    req.ip if req.post? && req.path.start_with?("/callbacks/")
+  end
+
   # Публичный каталог без API key — отдельный лимит (скрейпинг).
   throttle("shop/categories", limit: 60, period: 1.minute) do |req|
     req.ip if req.path == "/shop/api/categories" && req.get?

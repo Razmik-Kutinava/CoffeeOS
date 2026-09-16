@@ -26,7 +26,7 @@ module Barista
       validated_items = CartValidationService.new(@cart_items, tenant_id: @tenant_id).call!
 
       total_amount    = validated_items.sum { |i| i[:total_price] }
-      discount_amount = apply_promo(total_amount)
+      discount_amount, promo_record = promo_discount_and_record(total_amount)
       final_amount    = total_amount - discount_amount
 
       ActiveRecord::Base.transaction do
@@ -79,26 +79,34 @@ module Barista
           raise OrderCreationError, "order_number не назначен (триггер generate_order_number)"
         end
 
+        if promo_record && discount_amount.positive?
+          promo_record.with_lock do
+            if promo_record.max_uses > 0 && promo_record.used_count >= promo_record.max_uses
+              raise OrderCreationError, "Промокод исчерпан"
+            end
+            promo_record.increment_usage!
+          end
+        end
+
         order
       end
     end
 
     private
 
-    def apply_promo(total)
-      return 0 unless @promo_code.present?
+    def promo_discount_and_record(total)
+      return [ 0, nil ] unless @promo_code.present?
 
       promo = PromoCode.find_by(code: @promo_code, tenant_id: @tenant_id)
-      return 0 unless promo&.active?
+      return [ 0, nil ] unless promo&.active?
 
-      # Проверка срока действия
-      return 0 if promo.valid_from > Time.current || promo.valid_to < Time.current
+      return [ 0, nil ] if promo.valid_from > Time.current || promo.valid_to < Time.current
+      return [ 0, nil ] if promo.max_uses > 0 && promo.used_count >= promo.max_uses
 
-      # Проверка лимита использования
-      return 0 if promo.max_uses > 0 && promo.used_count >= promo.max_uses
+      discount = (total * promo.discount_percentage / 100).round(2)
+      return [ 0, nil ] unless discount.positive?
 
-      # Применяем скидку
-      (total * promo.discount_percentage / 100).round(2)
+      [ discount, promo ]
     end
   end
 end

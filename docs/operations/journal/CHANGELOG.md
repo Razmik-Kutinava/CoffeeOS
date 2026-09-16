@@ -11,6 +11,14 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-16 — fix: security backlog (Tbank Amount, promo used_count, token, callbacks throttle)
+
+- T-Bank: `TbankAdapter.notification_amount_matches?` (копейки) + guard в `TbankCallbackJob` на CONFIRMED/succeeded
+- Barista: `increment_usage!` в транзакции заказа при `discount_amount > 0`; max_uses держится
+- `EventsController`: `X-Callback-Token` через `secure_compare` (+ длина)
+- Rack::Attack: throttle POST `/callbacks/*` по IP (MemoryStore; shared — follow-up)
+- Local: tbank job/adapter + barista promo + events + tbank controller **76/76 PASS**
+
 ## 2026-09-16 — fix: barista promo UI + DEMO_AUTO_SEED off + push
 
 - Barista POS: убрана фейковая клиентская −10%; скидка только через `PromoCode` на сервере

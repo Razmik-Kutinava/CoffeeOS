@@ -166,13 +166,27 @@ class Barista::OrderCreationServiceTest < ActiveSupport::TestCase
   end
 
   test "valid active promo code applies discount" do
-    build_promo!(code: "SAVE10", percent: 10)
+    promo = build_promo!(code: "SAVE10", percent: 10)
     order = call_service(
       cart_items: [ { product_id: @product.id, quantity: 2 } ],
       promo_code: "SAVE10"
     )
     assert_equal 30, order.discount_amount
     assert_equal 270, order.final_amount
+    assert_equal 1, promo.reload.used_count
+  end
+
+  test "promo max_uses blocks second order after increment" do
+    build_promo!(code: "ONCE10", percent: 10, max_uses: 1)
+    call_service(
+      cart_items: [ { product_id: @product.id, quantity: 2 } ],
+      promo_code: "ONCE10"
+    )
+    order = call_service(
+      cart_items: [ { product_id: @product.id, quantity: 2 } ],
+      promo_code: "ONCE10"
+    )
+    assert_equal 0, order.discount_amount
   end
 
   test "expired promo code results in zero discount" do

@@ -40,6 +40,14 @@ module Payments
       return unless order
 
       with_order_tenant!(order) do
+        if our_status == "succeeded" && !Payments::TbankAdapter.notification_amount_matches?(payment, payload)
+          Rails.logger.error(
+            "[TbankCallbackJob] amount mismatch OrderId=#{order_id} PaymentId=#{tbank_payment_id} " \
+            "payload_amount=#{payload['Amount']} payment=#{payment.amount} order_final=#{order.final_amount}"
+          )
+          return
+        end
+
         Callbacks::PaymentStatusUpdater.new(
           payment:             payment,
           new_status:          our_status,

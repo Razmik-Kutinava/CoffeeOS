@@ -96,6 +96,13 @@ class Callbacks::EventsControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  test "wrong length token returns 401" do
+    with_token("correct-token") do
+      post_payment(headers: { "X-Callback-Token" => "correct-token-extra" })
+      assert_response :unauthorized
+    end
+  end
+
   test "missing token header when ENV set returns 401" do
     with_token("correct-token") do
       post_payment(headers: {})
