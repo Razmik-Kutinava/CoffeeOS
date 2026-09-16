@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-16 (#90 REVIEW · push/CI)  
+**Дата:** 2026-09-16 (#90 ROLLED BACK · wrong order)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #90 CI green `35094780266` · Entire `01M2N01DRZ1TPY8WCNKRE80R5V` | deploy апрув · G5 Fly |
+| #90 код снят · parked до UI-EXT | UI-EXT → потом #90 заново |
 
-**last_done:** REVIEW push CI PASS  
-**next_step:** deploy только апрув
+**last_done:** full rollback #90 POSTCALL  
+**next_step:** ждать UI-EXT · не дублировать чаты на #90
 
 **ctx_trim:** `2026-09-02`
 

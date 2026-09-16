@@ -15,7 +15,7 @@
 | #87 Quick Repeat status composition | 🟢 | CI green `34991136715` · deploy апрув · Fly MCP G4 |
 | #80 Registration UI/UX + Callcheck cascade | 🟡 | OTP fallback false · live Callcheck SKIP · ждёт апрув / телефон |
 | #89 PWA auth Callcheck → SMS + post-pay handoff | 🟢 | CI green `35082473762` · deploy апрув · G5 Fly MCP |
-| #90 Callcheck return → continue payment (POSTCALL-EXT) | 🟢 | CI green `35094780266` · deploy апрув · G5 Fly MCP |
+| #90 Callcheck return → continue payment (POSTCALL-EXT) | 🟡 | **ROLLED BACK** 2026-09-16 · код снят · сначала UI-EXT · потом #90 заново |
 | #81 Notifications / Wallet / WebPush gaps | 🟡 | v482 MCP PASS · ждёт апрув заказчика |
 | #82 Cascade SMS ready + sheet stuck | 🟡 | v482 MCP PASS · hide+SMS sent · ждёт апрув заказчика |
 | GH FLY_API_TOKEN | 🟢 | org token · Deploy green 2026-09-07 |

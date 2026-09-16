@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-16 — revert: #90 POSTCALL-EXT full rollback (wrong order)
+
+- Код снят: `PhoneAuthCodeStep` / `phoneAuthCascade` / тесты #90 → pre-RED
+- Причина: POSTCALL раньше UI-EXT · сломали очерёдность · два чата на одну задачу
+- ТЗ/intake #90 сохранены · статус ROLLED BACK · заново после UI-EXT
+- #89 не трогали · скрин шторки в #89 artifacts остаётся
+
 ## 2026-09-16 — review: #90 POSTCALL-EXT return after Callcheck
 
 - GREEN `4932e2b0` + fix iOS tel resume `0588ead1` (pagehide / markLeftForDial / focus)

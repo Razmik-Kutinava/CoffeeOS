@@ -17,14 +17,11 @@ import {
   cascadeHint,
   cascadeTimerLabel,
   CALLCHECK_HINT,
-  CALLCHECK_CHECKING_TITLE,
-  CALLCHECK_CHECKING_BODY,
   SMS_BTN_LABEL,
   telHrefFromCallPhone,
   smsSentHint,
   callPhoneButtonLabel,
-  interpretCallcheckPoll,
-  callcheckForegroundAction
+  interpretCallcheckPoll
 } from "../../app/frontend/lib/phoneAuthCascade.js"
 
 describe("AUTH_PHASE", () => {
@@ -87,23 +84,6 @@ describe("hints and tel", () => {
     assert.equal(cascadeHint({ phase: AUTH_PHASE.CALLCHECK }), CALLCHECK_HINT)
     assert.match(smsSentHint("+7 (900) 111-22-33"), /СМС/)
     assert.equal(SMS_BTN_LABEL.includes("СМС"), true)
-  })
-
-  // #90 POSTCALL-EXT [TDD]
-  it("callcheck hint tells user to return to PWA after dial", () => {
-    assert.match(CALLCHECK_HINT, /вернитесь/i)
-    assert.match(CALLCHECK_HINT, /приложени/i)
-  })
-
-  it("pending resume copy for return to PWA", () => {
-    assert.match(CALLCHECK_CHECKING_TITLE, /Проверяем номер/)
-    assert.match(CALLCHECK_CHECKING_BODY, /подождите/i)
-  })
-
-  it("foreground resume polls existing Callcheck without init", () => {
-    assert.equal(callcheckForegroundAction(AUTH_PHASE.CALLCHECK), "poll")
-    assert.equal(callcheckForegroundAction(AUTH_PHASE.SMS), "noop")
-    assert.equal(callcheckForegroundAction(null), "noop")
   })
 
   it("callPhoneButtonLabel prefers pretty number", () => {

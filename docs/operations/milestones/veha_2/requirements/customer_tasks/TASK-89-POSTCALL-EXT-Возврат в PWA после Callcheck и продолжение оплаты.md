@@ -6,7 +6,7 @@
 **Google Doc:** https://docs.google.com/document/d/1w2VKMPaYZdsJcqNkLrpSbJBPuLE-7Sm9giQ8DcJ0Bq0/edit?usp=drivesdk  
 **Расширяет:** [`TASK-89-Авторизация-регистрация-PWA-Callcheck-SMS.md`](TASK-89-Авторизация-регистрация-PWA-Callcheck-SMS.md)  
 **Связь:** overlap #80 / #89 · граница с TASK-89-UI-EXT (визуал телефона/sheet — не эта задача)  
-**Статус:** Spec (Google) · intake `[x]` · SPEC `[x]` · GREEN `[x]` · REVIEW 2026-09-16 · G5 Fly после deploy
+**Статус:** **ROLLED BACK** 2026-09-16 — код снят (неправильная очерёдность: POSTCALL до UI-EXT). Intake/ТЗ сохранены. Заново после TASK_89-UI-EXT.
 
 ---
 
