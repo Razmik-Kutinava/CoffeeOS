@@ -10,7 +10,12 @@ export const AUTH_PHASE = Object.freeze({
 })
 
 export const CALLCHECK_HINT =
-  "Позвоните на номер в кнопке ниже — регистрация пройдёт автоматически. На звонок отвечать не нужно."
+  "Позвоните на номер в кнопке ниже — регистрация пройдёт автоматически. На звонок отвечать не нужно. После звонка вернитесь в приложение — проверка продолжится автоматически."
+
+/** #90: UI после возврата из телефона, пока Callcheck ещё pending. */
+export const CALLCHECK_CHECKING_TITLE = "Проверяем номер"
+export const CALLCHECK_CHECKING_BODY =
+  "Проверяем результат звонка. Пожалуйста, подождите."
 
 export const SMS_BTN_LABEL = "Отправить код в СМС"
 export const SMS_SENT_HINT = "Отправили 4-значный код в СМС"
@@ -33,6 +38,15 @@ export function interpretCallcheckPoll(res) {
   }
   if (res?.expired) return { action: "sms_fallback" }
   return { action: "wait" }
+}
+
+/**
+ * #90: возврат PWA в foreground — только poll существующего Callcheck, без повторного init.
+ * @returns {"poll"|"noop"}
+ */
+export function callcheckForegroundAction(phase) {
+  if (phase === AUTH_PHASE.CALLCHECK) return "poll"
+  return "noop"
 }
 
 export function formatMmSs(totalSec) {

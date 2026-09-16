@@ -4,7 +4,7 @@
 |------|----------|
 | **ID** | CBR **#90** (Google: TASK_89-POSTCALL-EXT) |
 | **Тип** | SBR · EXT #89 — lifecycle return + resume + PaymentMethodsSheet |
-| **Статус** | **SPEC `[x]`** 2026-09-16 · restart после rollback · ждёт `/sbr` |
+| **Статус** | **GREEN** 2026-09-16 · ждёт `/regress` → `/review` |
 | **Ветка** | `develop` |
 | **Канон** | `@spec-build-review` · `@coffeeos-commit-ops` · `@coffeeos-dev-gates` |
 | **ТЗ** | [`TASK-89-POSTCALL-EXT-…md`](../milestones/veha_2/requirements/customer_tasks/TASK-89-POSTCALL-EXT-Возврат%20в%20PWA%20после%20Callcheck%20и%20продолжение%20оплаты.md) |
@@ -17,10 +17,13 @@
 
 - [x] PHASE 0 intake (сохранён; restart)
 - [x] PHASE 1 `/spec` — канон в этом todo
-- [ ] PHASE 2 RED — copy «вернитесь»; visibility/pageshow ≠ init_callcheck; pending → «Проверяем номер» + poll; confirmed/SMS → openPaymentSheet
-- [ ] PHASE 2 GREEN — resume poll + copy + handoff; зона PASS + unlazy `--reverify`
+- [x] PHASE 2 RED — copy «вернитесь»; visibility/pageshow ≠ init_callcheck; pending → «Проверяем номер» + poll; confirmed/SMS → openPaymentSheet
+- [x] PHASE 2 GREEN — resume poll + copy + handoff; зона PASS + unlazy `--reverify`
 - [ ] PHASE 3 `/review` — bugbot+security · Entire · push/CI · G5 Fly MCP
 
+## Next
+
+`/regress`
 ## DoD
 
 1. Перед звонком — инструкция: позвонить → **вернуться в PWA** (проверка продолжится).

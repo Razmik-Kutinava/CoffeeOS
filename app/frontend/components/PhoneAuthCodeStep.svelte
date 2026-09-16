@@ -1,13 +1,16 @@
 <script>
   /**
    * Экран 2: Callcheck (poll) → SMS fallback (PIN).
+   * #90: visibility/pageshow/pagehide/focus → resume poll существующего Callcheck (без повторного init).
    */
-  import { onDestroy } from "svelte"
+  import { onDestroy, onMount } from "svelte"
   import { api } from "../lib/api.js"
   import { buildVerifySmsBody, buildSendSmsBody } from "../lib/phoneAuthWizard.js"
   import {
     SMS_BTN_LABEL,
     CALLCHECK_POLL_MS,
+    CALLCHECK_CHECKING_TITLE,
+    CALLCHECK_CHECKING_BODY,
     initialCallcheckState,
     tickCallcheck,
     afterSmsSend,
@@ -17,6 +20,7 @@
     telHrefFromCallPhone,
     callPhoneButtonLabel,
     interpretCallcheckPoll,
+    callcheckForegroundAction,
     AUTH_PHASE
   } from "../lib/phoneAuthCascade.js"
   import PhoneAuthPinInputs from "./PhoneAuthPinInputs.svelte"
@@ -36,6 +40,8 @@
   let localError = $state("")
   let pinNonce = $state(0)
   let state = $state(initialCallcheckState(callcheck || {}))
+  let returnedChecking = $state(false)
+  let wasBackgrounded = false
   let tickId = null
   let pollId = null
 
@@ -54,6 +60,9 @@
   const telHref = $derived(telHrefFromCallPhone(state.callPhone))
   const dialLabel = $derived(callPhoneButtonLabel(state.callPhonePretty, state.callPhone))
   const busy = $derived(resending || verifying || completing)
+  const showChecking = $derived(
+    returnedChecking && state.phase === AUTH_PHASE.CALLCHECK && !completing
+  )
 
   function stopTimers() {
     if (tickId) {
@@ -101,6 +110,43 @@
     pollStatus()
   }
 
+  /** #90: return from phone app — poll only, never re-init Callcheck. */
+  function resumeAfterForeground() {
+    if (callcheckForegroundAction(state.phase) !== "poll") return
+    returnedChecking = true
+    if (!pollId) startPoll()
+    else pollStatus()
+  }
+
+  function markLeftForDial() {
+    wasBackgrounded = true
+  }
+
+  function onVisibilityChange() {
+    if (typeof document !== "undefined" && document.visibilityState === "hidden") {
+      wasBackgrounded = true
+      return
+    }
+    if (!wasBackgrounded) return
+    resumeAfterForeground()
+  }
+
+  function onPageHide() {
+    // iOS tel: often skips visibilitychange; pagehide is more reliable
+    wasBackgrounded = true
+  }
+
+  function onPageShow(event) {
+    if (!wasBackgrounded && !event?.persisted) return
+    wasBackgrounded = true
+    resumeAfterForeground()
+  }
+
+  function onWindowFocus() {
+    if (!wasBackgrounded) return
+    resumeAfterForeground()
+  }
+
   async function pollStatus() {
     if (state.phase !== AUTH_PHASE.CALLCHECK || verifying || completing) return
     try {
@@ -110,6 +156,7 @@
       const outcome = interpretCallcheckPoll(res)
       if (outcome.action === "complete") {
         completing = true
+        returnedChecking = false
         stopTimers()
         onVerified?.({
           phone: outcome.phone || phoneE164,
@@ -119,6 +166,7 @@
       }
       if (outcome.action === "sms_fallback") {
         stopPoll()
+        returnedChecking = false
         state = { ...state, phase: AUTH_PHASE.SMS, secondsLeft: 0 }
         await sendSms()
       }
@@ -178,6 +226,18 @@
   }
 
   startTick()
+  onMount(() => {
+    document.addEventListener("visibilitychange", onVisibilityChange)
+    window.addEventListener("pagehide", onPageHide)
+    window.addEventListener("pageshow", onPageShow)
+    window.addEventListener("focus", onWindowFocus)
+    return () => {
+      document.removeEventListener("visibilitychange", onVisibilityChange)
+      window.removeEventListener("pagehide", onPageHide)
+      window.removeEventListener("pageshow", onPageShow)
+      window.removeEventListener("focus", onWindowFocus)
+    }
+  })
   onDestroy(stopTimers)
 </script>
 
@@ -192,7 +252,12 @@
     Изменить номер
   </button>
   <p class="mb-2 text-sm text-[#a0a0a0]" role="status" data-testid="phone-auth-callcheck-hint">{hintText}</p>
-  {#if waitLabel}
+  {#if showChecking}
+    <div class="mb-3 text-center" role="status" data-testid="phone-auth-callcheck-checking">
+      <p class="text-sm font-medium text-white">{CALLCHECK_CHECKING_TITLE}</p>
+      <p class="mt-1 text-sm text-[#a0a0a0]">{CALLCHECK_CHECKING_BODY}</p>
+    </div>
+  {:else if waitLabel}
     <p class="mb-3 text-center text-sm text-white" role="status" data-testid="phone-auth-callcheck-timer">
       {waitLabel}
     </p>
@@ -205,6 +270,8 @@
           href={telHref}
           class="inline-flex w-full items-center justify-center rounded-lg bg-[#ff8c42] px-4 py-3 text-base font-semibold text-black no-underline"
           data-testid="phone-auth-tel-btn"
+          onpointerdown={markLeftForDial}
+          onclick={markLeftForDial}
         >
           {dialLabel}
         </a>
