@@ -45,6 +45,8 @@
 4. confirmed / SMS success → auth TASK_89 → **авто** `PaymentMethodsSheet` (без ручного CTA оплаты).
 5. Повторный уход/возврат не делает второй `init_callcheck` / повторную регистрацию.
 
+**Regress:** 2026-09-16 local PASS (rails 26 · node 27 · G1–G4 reverify). Fly MCP G5 — на Review/deploy.
+
 ## Файлы (ожидаемо)
 
 | Path | Зачем |
