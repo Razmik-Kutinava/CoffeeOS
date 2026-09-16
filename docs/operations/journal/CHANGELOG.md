@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-16 — fix: CI flake Rails.env pollution (payment_config_test)
+
+- `define_method(:env)` ломал stub production в callbacks test → 200 вместо 401
+- CI green `35119243465` после `db6cba85`
+
 ## 2026-09-16 — review: #90 POSTCALL-EXT return after Callcheck
 
 - GREEN `37b808c4`: resume poll + copy «вернитесь» + pagehide/iOS + checking UI
