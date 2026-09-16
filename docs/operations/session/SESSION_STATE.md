@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-16 (security P0/P1 + push)  
+**Дата:** 2026-09-16 (security backlog · push 9dd17656)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| P0/P1 + barista promo UI + DEMO_AUTO_SEED=false | deploy апрув · Fly CALLBACK_* audit |
-| push origin/develop | Fly MCP после deploy |
+| Backlog: Tbank Amount · promo used_count · token · callbacks throttle | deploy апрув · Fly CALLBACK_* |
+| remote develop = 9dd17656 | Fly MCP после deploy |
 
-**last_done:** callbacks · modifiers · reset_session · barista no fake 10% · DEMO_AUTO_SEED off · push  
+**last_done:** 4 backlog fixes · 76 tests PASS · push  
 **next_step:** deploy только апрув
 
 **ctx_trim:** `2026-09-02`
