@@ -35,6 +35,8 @@ export const CART_SHEET_BUILD = "prog38"
 export const CHECKOUT_PAY_STACK_VH = 92
 /** Высота peek-полосы в stacked checkout (vh) */
 export const CHECKOUT_PEEK_VH = 15
+/** #91: тоньше sheet на phone-auth (только handle; без CTA/состава) */
+export const CHECKOUT_PHONE_AUTH_VH = 8
 /** @deprecated use CHECKOUT_PEEK_VH — CSS var legacy rem fallback */
 export const CHECKOUT_PEEK_REM = 7.5
 

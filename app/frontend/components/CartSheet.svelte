@@ -8,6 +8,7 @@
     cartSheetBusy,
     cartSheetError,
     checkoutPayOpen,
+    checkoutPhoneAuthActive,
     isCartSheetRoute,
     isCheckoutRoute,
     onCartSheetRouteChange,
@@ -48,7 +49,8 @@
     CART_SHEET_MAX_WIDTH_PX,
     CART_SHEET_BUILD,
     CHECKOUT_PAY_STACK_VH,
-    CHECKOUT_PEEK_VH
+    CHECKOUT_PEEK_VH,
+    CHECKOUT_PHONE_AUTH_VH
   } from "../lib/cartSheetThresholds.js"
   import {
     sheetHeightPx,
@@ -65,6 +67,7 @@
   let busy = $state(false)
   let sheetError = $state(null)
   let payStackOpen = $state(false)
+  let phoneAuthActive = $state(false)
   let gestureStartY = 0
   let gestureActive = false
   let gestureZoneEl = $state(null)
@@ -83,7 +86,10 @@
   let onProduct = $derived(Boolean(productCta?.active))
   let count = $derived(items.length)
   let oosProductId = $derived(productCta?.outOfStockProductId ?? null)
-  let hideCheckoutCta = $derived(shouldHideCartCheckoutCta({ onCheckout, keyboardOpen }))
+  let hideCheckoutCta = $derived(
+    shouldHideCartCheckoutCta({ onCheckout, keyboardOpen, phoneAuthActive })
+  )
+  let phoneAuthSlim = $derived(onCheckout && phoneAuthActive && !payStackOpen)
 
   function lineUnavailable(line) {
     if (oosProductId == null || oosProductId === "") return false
@@ -101,7 +107,9 @@
   let payStackActive = $derived(onCheckout && payStackOpen && count > 0)
   let heightVh = $derived.by(() => {
     let base
-    if (payStackActive) {
+    if (phoneAuthSlim) {
+      base = CHECKOUT_PHONE_AUTH_VH
+    } else if (payStackActive) {
       base = CHECKOUT_PEEK_VH
     } else if (!count) {
       // Пустая корзина: peek-высота (placeholder или «повторить»)
@@ -113,9 +121,9 @@
       base = sheetHeightVh(mode, count)
     }
     // #63: резерв vh только пока статусный виджет реально на экране
-    if (statusWidgetVisible && count > 0 && !payStackActive) base += STATUS_IN_SHEET_EXTRA_VH
+    if (statusWidgetVisible && count > 0 && !payStackActive && !phoneAuthSlim) base += STATUS_IN_SHEET_EXTRA_VH
     // #44: CTA карточки товара внутри шторки — добавляем vh, не второй fixed-слой
-    if (onProduct && !payStackActive) base += PRODUCT_CTA_EXTRA_VH
+    if (onProduct && !payStackActive && !phoneAuthSlim) base += PRODUCT_CTA_EXTRA_VH
     return base
   })
   let vvh = $state(typeof window !== "undefined" ? shopVisualViewportHeight() : 0)
@@ -268,6 +276,9 @@
     const unsubBusy  = cartSheetBusy.subscribe((v) => { busy = v })
     const unsubErr   = cartSheetError.subscribe((v) => { sheetError = v })
     const unsubPay   = checkoutPayOpen.subscribe((v) => { payStackOpen = v })
+    const unsubPhoneAuth = checkoutPhoneAuthActive.subscribe((v) => {
+      phoneAuthActive = !!v
+    })
     const unsubFrequent = frequentItems.subscribe((v) => {
       frequentCount = Array.isArray(v) ? v.length : 0
     })
@@ -308,7 +319,7 @@
 
     return () => {
       unsubItems(); unsubTotal(); unsubMode(); unsubBusy()
-      unsubErr(); unsubPay(); unsubFrequent(); unsubHasActive(); unsubStatusUi()
+      unsubErr(); unsubPay(); unsubPhoneAuth(); unsubFrequent(); unsubHasActive(); unsubStatusUi()
       unsubInvalid(); unsubProductCta(); unsubVvh()
       window.removeEventListener("hashchange", onHash)
       if (typeof document !== "undefined") {
@@ -416,6 +427,7 @@
     data-cart-sheet-build={CART_SHEET_BUILD}
     data-cart-status-stack="status-above-lines"
     data-checkout-pay-stack={payStackActive ? "true" : "false"}
+    data-checkout-phone-auth={phoneAuthSlim ? "true" : "false"}
     class="cart-sheet fixed left-0 right-0 z-50 mx-auto flex flex-col overflow-hidden border-t border-[#3a3a3a] bg-[#2a2a2a]/98 backdrop-blur transition-[height,bottom] ease-out"
     class:cart-sheet--pay-stack-peek={payStackActive}
     style:height="{heightPx}px"
@@ -451,7 +463,8 @@
     {/if}
 
     <!-- Статус внутри шторки (#35). На checkout pay-stack — скрыт: иначе клип в 15vh поверх «Оплата». -->
-    {#if !payStackActive}
+    <!-- #91 phone-auth slim: без статуса/состава/CTA — только handle. -->
+    {#if !payStackActive && !phoneAuthSlim}
       <OrderStatusSheet
         embedded={true}
         sheetContext={mode === MODE_EXPANDED ? "cart_expanded" : "peek"}
@@ -459,7 +472,7 @@
     {/if}
 
     <!-- #44: CTA карточки товара — стык внутри шторки (peek/hidden/expanded) -->
-    {#if onProduct}
+    {#if onProduct && !phoneAuthSlim}
       <ProductSheetCta
         price={productCta.price}
         qty={productCta.qty}
@@ -472,8 +485,11 @@
       />
     {/if}
 
+    {#if phoneAuthSlim}
+      <div data-testid="shop-cart-phone-auth-slim" class="sr-only" aria-hidden="true">phone-auth</div>
+
     <!-- EMPTY — надпись только без истории и без активного статуса; иначе «повторить» -->
-    {#if mode === MODE_EMPTY || !count}
+    {:else if mode === MODE_EMPTY || !count}
       {#if !showRepeat && !hasActiveOrderFlag}
         <p data-testid="shop-cart-sheet-empty" class="px-4 py-2 text-center text-sm italic text-[#888]">
           тут будут твои заказы

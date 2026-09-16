@@ -42,9 +42,10 @@ export function isShopKeyboardOpen(env = globalThis) {
   return top > 0 || inner - h >= KEYBOARD_GAP_PX
 }
 
-/** #80: на checkout при открытой клавиатуре скрыть CTA «+сумма». */
-export function shouldHideCartCheckoutCta({ onCheckout, keyboardOpen } = {}) {
-  return Boolean(onCheckout && keyboardOpen)
+/** #80: на checkout при открытой клавиатуре скрыть CTA «+сумма».
+ *  #91: также скрывать на активном phone-auth wizard (даже без клавиатуры). */
+export function shouldHideCartCheckoutCta({ onCheckout, keyboardOpen, phoneAuthActive } = {}) {
+  return Boolean(onCheckout && (keyboardOpen || phoneAuthActive))
 }
 
 export function keepUiStateOnViewportChange(state) {

@@ -29,6 +29,12 @@ export const cartUndoLine = writable(null)
 export const cartSheetError = writable(null)
 /** Фаза 2 UX: peek корзины + PaymentMethodsSheet в одной шторке на #/checkout */
 export const checkoutPayOpen = writable(false)
+/** #91: phone-auth wizard активен на #/checkout — slim sheet без CTA/состава */
+export const checkoutPhoneAuthActive = writable(false)
+
+export function setCheckoutPhoneAuthActive(active) {
+  checkoutPhoneAuthActive.set(Boolean(active))
+}
 
 let undoClearTimer = null
 

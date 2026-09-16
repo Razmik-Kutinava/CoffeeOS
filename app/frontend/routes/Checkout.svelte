@@ -48,7 +48,8 @@
     openCheckoutPayStack,
     closeCheckoutPayStack,
     cartSheetError,
-    cartTotal
+    cartTotal,
+    setCheckoutPhoneAuthActive
   } from "../lib/cartSheetStore.js"
   import { REPEAT_AUTOPAY_KEY } from "../lib/frequentRepeatStore.js"
   import { restoreGuestSession } from "../lib/restoreGuestSession.js"
@@ -113,6 +114,12 @@
   const phoneE164 = $derived(normalizePhoneToE164Ru(phoneDisplay))
   const identityReady = $derived(phoneVerified)
   const canPay = $derived(identityReady && !submitting && shopIsOpenForPay())
+
+  // #91: slim cart sheet while phone-auth wizard is active
+  $effect(() => {
+    setCheckoutPhoneAuthActive(!phoneVerified)
+    return () => setCheckoutPhoneAuthActive(false)
+  })
   const sheetCanPay = $derived(
     canPay &&
       (selectionMode === "sbp" || selectionMode === "sbp_account"
@@ -226,11 +233,13 @@
       offHours?.()
       unsubCartTotal()
       closeCheckoutPayStack()
+      setCheckoutPhoneAuthActive(false)
     }
   })
 
   onDestroy(() => {
     closeCheckoutPayStack()
+    setCheckoutPhoneAuthActive(false)
   })
 
   async function loadSavedCards() {
