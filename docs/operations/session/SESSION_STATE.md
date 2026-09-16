@@ -9,6 +9,9 @@
 |--------|--------|
 | #90 CI green `35094780266` · Entire `01M2N01DRZ1TPY8WCNKRE80R5V` | deploy апрув · G5 Fly |
 
+**last_done:** REVIEW push CI PASS  
+**next_step:** deploy только апрув
+
 **ctx_trim:** `2026-09-02`
 
 ---
