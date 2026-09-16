@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-16 — docs: intake #90 TASK_89-POSTCALL-EXT
+
+- Google Doc → `customer_tasks/TASK-89-POSTCALL-EXT-…md` (1:1)
+- artifacts `pwa_callcheck_return_continue_payment/` · CBR #90 · README · ISSUES
+- EXT #89: return после Callcheck → resume → PaymentMethodsSheet; ждёт `/spec`
+
 ## 2026-09-16 — review: #89 post-Callcheck → payment sheet
 
 - GREEN `84490e04`: `onWizardVerified` → `openPaymentSheet` после Callcheck/SMS

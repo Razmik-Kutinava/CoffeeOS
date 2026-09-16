@@ -2,16 +2,16 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-16 (#89 REVIEW · CI green)  
+**Дата:** 2026-09-16 (#90 POSTCALL-EXT intake)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #89 CI green `35082473762` · GREEN `84490e04` | deploy апрув · G5 Fly MCP |
-| Entire `01M2MSDK9ZMPZH7YDZ17GHM44B` | |
+| #90 intake `[x]` · Google Doc → customer_tasks | `/spec` |
+| #89 REVIEW CI green · deploy апрув (parked) | G5 Fly после deploy |
 
-**last_done:** REVIEW + push + CI PASS  
-**next_step:** deploy только апрув
+**last_done:** PHASE 0 intake #90 TASK_89-POSTCALL-EXT  
+**next_step:** `/spec` #90
 
 **ctx_trim:** `2026-09-02`
 
