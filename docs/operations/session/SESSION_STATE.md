@@ -2,16 +2,16 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-16 (#89 unlazy)  
+**Дата:** 2026-09-16 (#89 SPEC)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #89 GATES.md · G1–G4 met · G5 Fly MCP pending | `/spec` → `/sbr` |
-| remote develop = 9dd17656 (security) | deploy апрув отдельно |
+| #89 SPEC: Checkout `onWizardVerified` → pay sheet | `/sbr` |
+| GATES baseline G1–G4 | RED → GREEN → G5 |
 
-**last_done:** unlazy ledger #89 approve G1–G4  
-**next_step:** `/spec` #89
+**last_done:** PHASE 1 SPEC #89 в todo  
+**next_step:** `/sbr` RED
 
 **ctx_trim:** `2026-09-02`
 

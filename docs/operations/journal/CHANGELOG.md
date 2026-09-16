@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-16 — docs: SPEC #89 post-Callcheck → payment sheet
+
+- `todo.md` #89: `onWizardVerified` → `openPaymentSheet`; файлы Checkout + structural/OTP tests
+- OUT: FlashCall, толщина шторки, каскад×2 #80
+
 ## 2026-09-16 — docs: unlazy GATES #89 PWA auth Callcheck → SMS
 
 - `session/GATES.md` → #89 (G1–G4 baseline PASS, G5 Fly MCP pending)
