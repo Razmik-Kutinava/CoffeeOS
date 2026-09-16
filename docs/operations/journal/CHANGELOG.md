@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-16 — docs: intake #91 TASK_89-UI-EXT phone input UI/UX
+
+- Чат + Google Doc → `customer_tasks/TASK-89-UI-EXT-…md` (1:1)
+- artifacts `pwa_auth_phone_input_ui_ux/` · CBR #91 · README · ISSUES · todo
+- Scope: phone-auth скрыть CTA суммы + cart preview · тоньше sheet; ждёт `/spec`
+
 ## 2026-09-16 — revert: #90 POSTCALL-EXT full rollback (wrong order)
 
 - Код снят: `PhoneAuthCodeStep` / `phoneAuthCascade` / тесты #90 → pre-RED

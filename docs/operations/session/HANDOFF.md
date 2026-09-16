@@ -2,16 +2,17 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-16 (#90 ROLLED BACK · wrong order)  
+**Дата:** 2026-09-16 (#91 UI-EXT intake)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #90 код снят · parked до UI-EXT | UI-EXT → потом #90 заново |
+| #91 UI-EXT intake · ждёт `/spec` | `/spec` → RED/GREEN |
+| #90 parked до закрытия #91 | после #91 — #90 заново |
 | #89 REVIEW ok (не трогали) | — |
 
-**last_done:** full rollback #90 POSTCALL  
-**next_step:** ждать UI-EXT · не открывать второй чат на #90
+**last_done:** PHASE 0 intake #91 TASK_89-UI-EXT  
+**next_step:** `/spec` #91 (скрыть CTA/cart · тоньше sheet)
 
 **ctx_trim:** `2026-09-02`  
 **Fly:** v495 `deployment-01M22JRN95TXRSV1PQDN49227M`
