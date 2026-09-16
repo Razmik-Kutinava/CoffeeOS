@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-16 — docs: unlazy GATES #90 POSTCALL-EXT
+
+- Ledger `session/GATES.md` · approve G1–G4 PASS (baseline #89 zone)
+- G5 Fly MCP Point A unmet (после REVIEW/deploy)
+- RED ещё добавит lifecycle asserts (return ≠ init_callcheck)
+
 ## 2026-09-16 — docs: intake #90 TASK_89-POSTCALL-EXT
 
 - Google Doc → `customer_tasks/TASK-89-POSTCALL-EXT-…md` (1:1)
