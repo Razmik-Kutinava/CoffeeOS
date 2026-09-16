@@ -11,6 +11,14 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-16 — fix: security catch-up OTP unlock / widget step-up / API key fallback
+
+- HIGH: `binding_step_up` unlock only if lock existed **before** `link!` (no same-request bypass)
+- MEDIUM: `widget_init` enforces `BindingStepUp` like `one_click`
+- MEDIUM ops: `SHOP_API_KEY_FALLBACK` **opt-in** (`=1`); default off after per-tenant seed
+- also: `BindingStepUp` lock on empty Hash session (`nil?` not `blank?`)
+- Local: binding_step_up + api_key_authenticator + phone_otp + widget_init **32/32 PASS**
+
 ## 2026-09-15 — fix: Sentry RUBY-1K category sort_order NotNull
 
 - `Platform::MenuController#update_category`: `normalized_category_attrs` — blank keep / 0 append

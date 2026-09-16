@@ -94,4 +94,27 @@ class Shop::ApiKeyAuthenticatorTest < ActiveSupport::TestCase
     )
     assert Shop::ApiKeyAuthenticator.call!(raw_key: raw, tenant_id: @tenant_b.id)
   end
+
+  test "ENV SHOP_API_KEY fallback is off unless SHOP_API_KEY_FALLBACK opt-in" do
+    ENV["SHOP_API_KEY"] = "sk_env_legacy_#{SecureRandom.hex(8)}"
+    ENV.delete("SHOP_API_KEY_FALLBACK")
+
+    assert_raises(Shop::ApiKeyAuthenticator::Unauthorized) do
+      Shop::ApiKeyAuthenticator.call!(raw_key: ENV["SHOP_API_KEY"], tenant_id: @tenant_a.id)
+    end
+
+    ENV["SHOP_API_KEY_FALLBACK"] = "0"
+    assert_raises(Shop::ApiKeyAuthenticator::Unauthorized) do
+      Shop::ApiKeyAuthenticator.call!(raw_key: ENV["SHOP_API_KEY"], tenant_id: @tenant_a.id)
+    end
+  end
+
+  test "ENV SHOP_API_KEY fallback accepted only when SHOP_API_KEY_FALLBACK=1" do
+    env_key = "sk_env_optin_#{SecureRandom.hex(8)}"
+    ENV["SHOP_API_KEY"] = env_key
+    ENV["SHOP_API_KEY_FALLBACK"] = "1"
+
+    result = Shop::ApiKeyAuthenticator.call!(raw_key: env_key, tenant_id: @tenant_b.id)
+    assert_equal :env_global_ops_fallback, result
+  end
 end

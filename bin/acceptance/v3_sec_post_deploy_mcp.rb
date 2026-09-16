@@ -212,7 +212,7 @@ checks << {
   id: "7_env_global_ops_fallback_200",
   pass: r_env[:http] == 200,
   http: r_env[:http],
-  note: "legacy SHOP_API_KEY still accepted until FALLBACK=0"
+  note: "legacy SHOP_API_KEY accepted only if digest match or SHOP_API_KEY_FALLBACK=1"
 }
 
 # ===================== JOB-TENANT-GUC =====================

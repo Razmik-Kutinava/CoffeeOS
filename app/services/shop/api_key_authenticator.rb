@@ -59,15 +59,16 @@ module Shop
 
       Rails.logger.warn(
         "[Shop::ApiKeyAuthenticator] ENV SHOP_API_KEY fallback as global_ops — " \
-        "seed per-tenant keys then set SHOP_API_KEY_FALLBACK=0"
+        "opt-in only (SHOP_API_KEY_FALLBACK=1); prefer per-tenant digest keys"
       )
       :env_global_ops_fallback
     end
 
+    # Opt-in only: unset / "0" = off. Legacy global ENV key must not be default-on after seed.
     def env_fallback_enabled?
-      return false if ENV["SHOP_API_KEY_FALLBACK"].to_s == "0"
+      return false if ENV["SHOP_API_KEY"].to_s.blank?
 
-      ENV["SHOP_API_KEY"].to_s.present?
+      %w[1 true yes on].include?(ENV["SHOP_API_KEY_FALLBACK"].to_s.strip.downcase)
     end
 
     def touch_last_used(record)

@@ -39,14 +39,18 @@ module Shop
         end
 
         phone = result[:phone]
+        locked_before = Payments::BindingStepUp.payments_locked?(session, @shop_tenant.id)
         customer_id = Shop::PhoneVerifiedCustomerLinker.link!(
           session: session,
           tenant_id: @shop_tenant.id,
           phone: phone
         )
-        if ActiveModel::Type::Boolean.new.cast(params[:binding_step_up])
-          Payments::BindingStepUp.unlock_payments!(session, @shop_tenant.id)
-        end
+        Payments::BindingStepUp.unlock_after_verified_step_up!(
+          session,
+          @shop_tenant.id,
+          binding_step_up: ActiveModel::Type::Boolean.new.cast(params[:binding_step_up]),
+          locked_before: locked_before
+        )
         payload = { confirmed: true, verified: true, phone: phone }
         if customer_id.present?
           payload[:refresh_token] = Shop::MobileSessionIssuer.call!(customer_id: customer_id)
@@ -91,14 +95,18 @@ module Shop
           phone: params.require(:phone),
           code: params.require(:code)
         )
+        locked_before = Payments::BindingStepUp.payments_locked?(session, @shop_tenant.id)
         customer_id = Shop::PhoneVerifiedCustomerLinker.link!(
           session: session,
           tenant_id: @shop_tenant.id,
           phone: phone
         )
-        if ActiveModel::Type::Boolean.new.cast(params[:binding_step_up])
-          Payments::BindingStepUp.unlock_payments!(session, @shop_tenant.id)
-        end
+        Payments::BindingStepUp.unlock_after_verified_step_up!(
+          session,
+          @shop_tenant.id,
+          binding_step_up: ActiveModel::Type::Boolean.new.cast(params[:binding_step_up]),
+          locked_before: locked_before
+        )
         payload = { verified: true, phone: phone }
         if customer_id.present?
           payload[:refresh_token] = Shop::MobileSessionIssuer.call!(customer_id: customer_id)

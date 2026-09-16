@@ -65,4 +65,23 @@ class Payments::BindingStepUpTest < ActiveSupport::TestCase
       tenant_id: @tenant.id
     )
   end
+
+  test "unlock_after_verified_step_up requires lock before link" do
+    Payments::BindingStepUp.lock_payments!(@session, @tenant.id)
+    Payments::BindingStepUp.unlock_after_verified_step_up!(
+      @session, @tenant.id, binding_step_up: true, locked_before: true
+    )
+    refute Payments::BindingStepUp.payments_locked?(@session, @tenant.id)
+
+    Payments::BindingStepUp.lock_payments!(@session, @tenant.id)
+    Payments::BindingStepUp.unlock_after_verified_step_up!(
+      @session, @tenant.id, binding_step_up: true, locked_before: false
+    )
+    assert Payments::BindingStepUp.payments_locked?(@session, @tenant.id)
+
+    Payments::BindingStepUp.unlock_after_verified_step_up!(
+      @session, @tenant.id, binding_step_up: false, locked_before: true
+    )
+    assert Payments::BindingStepUp.payments_locked?(@session, @tenant.id)
+  end
 end

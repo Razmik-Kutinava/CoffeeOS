@@ -65,6 +65,7 @@ class Shop::Api::PaymentWidgetInitTest < ActionDispatch::IntegrationTest
     open_session do |sess|
       order = Order.find(order_id)
       bind_shop_order_to_session!(sess, tenant_id: @tenant.id, order: order, email: @customer.email)
+      clear_shop_payment_step_up!(customer: @customer, tenant_id: @tenant.id, session: sess)
       sess.post "/shop/api/payments/widget_init",
         params: { order_id: order_id, **params },
         headers: shop_headers,
@@ -116,6 +117,44 @@ class Shop::Api::PaymentWidgetInitTest < ActionDispatch::IntegrationTest
       assert_equal "501", json["error_code"]
       refute json.key?("terminal_key"), "секреты не должны попадать в ответ"
       refute json.key?("password"), "секреты не должны попадать в ответ"
+    end
+  end
+
+  test "POST widget_init requires BindingStepUp when step-up required" do
+    order = create_order!
+    card = MobilePaymentMethod.create!(
+      customer_id: @customer.id,
+      payment_type: "card",
+      card_token: "rebill-widget-stepup-#{SecureRandom.hex(4)}",
+      card_masked: "4300****2222",
+      card_brand: "MIR",
+      is_active: true,
+      is_default: true
+    )
+
+    with_inline_init_stub do
+      result = nil
+      open_session do |sess|
+        bind_shop_order_to_session!(sess, tenant_id: @tenant.id, order: order, email: @customer.email)
+        cid = Shop::CustomerSession.customer_id(sess.session, @tenant.id)
+        MobileCustomer.where(id: cid).update_all(
+          phone_status: "recycled_risk",
+          phone_verified: true,
+          phone: "+79001230000",
+          updated_at: Time.current
+        )
+
+        sess.post "/shop/api/payments/widget_init",
+          params: { order_id: order.id, card_id: card.id },
+          headers: shop_headers,
+          as: :json
+        result = [ sess.response.status, sess.response.parsed_body ]
+      end
+
+      status, json = result
+      assert_equal 422, status, "body=#{json.inspect}"
+      assert_equal true, json["step_up_required"]
+      assert_match(/step.?up|подтверд/i, json["error"].to_s)
     end
   end
 end

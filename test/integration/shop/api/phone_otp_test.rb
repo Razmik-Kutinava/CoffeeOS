@@ -188,6 +188,78 @@ class Shop::Api::PhoneOtpTest < ActionDispatch::IntegrationTest
     assert_equal email, customer.email
   end
 
+  # Security: binding_step_up on the same verify that creates the lock must not unlock.
+  test "verify_sms binding_step_up does not clear lock created by profile switch" do
+    guest_email = "otp-lock-guest-#{SecureRandom.hex(3)}@example.com"
+    donor_phone = "+79001112233"
+    donor = create_mobile_customer!(phone: donor_phone, email: "otp-lock-donor-#{SecureRandom.hex(3)}@example.com")
+    donor.update!(phone_verified: true, phone_status: :verified)
+    MobilePaymentMethod.create!(
+      customer_id: donor.id,
+      payment_type: "card",
+      card_token: "rebill-sec-#{SecureRandom.hex(4)}",
+      card_masked: "4300****1111",
+      card_brand: "MIR",
+      is_active: true,
+      is_default: true
+    )
+
+    open_session do |sess|
+      verify_shop_email!(tenant_id: @tenant.id, email: guest_email, session: sess)
+      guest_id = Shop::CustomerSession.customer_id(sess.session, @tenant.id)
+      assert guest_id.present?
+      refute_equal donor.id.to_s, guest_id.to_s
+
+      sess.post "/shop/api/phone_otp/send_sms",
+        headers: shop_tenant_headers(@tenant.id),
+        params: { phone: donor_phone },
+        as: :json
+      assert_equal 200, sess.response.status, sess.response.body
+      record = MobileOtpCode.where(phone: donor_phone, is_used: false).order(created_at: :desc).first
+
+      sess.post "/shop/api/phone_otp/verify_sms",
+        headers: shop_tenant_headers(@tenant.id),
+        params: { phone: donor_phone, code: record.code, binding_step_up: true },
+        as: :json
+      assert_equal 200, sess.response.status, sess.response.body
+
+      assert_equal donor.id.to_s, Shop::CustomerSession.customer_id(sess.session, @tenant.id).to_s
+      assert Payments::BindingStepUp.payments_locked?(sess.session, @tenant.id),
+        "lock from profile switch must survive same-request binding_step_up"
+    end
+  end
+
+  test "verify_sms binding_step_up unlocks only when lock existed before link" do
+    phone = "+79004445566"
+    customer = create_mobile_customer!(phone: phone, email: "otp-unlock-#{SecureRandom.hex(3)}@example.com")
+    customer.update!(phone_verified: true, phone_status: :verified)
+
+    open_session do |sess|
+      sess.get "/shop/api/config",
+        headers: shop_tenant_headers(@tenant.id),
+        as: :json
+      assert_equal 200, sess.response.status, sess.response.body
+
+      Shop::CustomerSession.set_customer_id!(sess.session, @tenant.id, customer.id)
+      Payments::BindingStepUp.lock_payments!(sess.session, @tenant.id)
+      assert Payments::BindingStepUp.payments_locked?(sess.session, @tenant.id)
+
+      sess.post "/shop/api/phone_otp/send_sms",
+        headers: shop_tenant_headers(@tenant.id),
+        params: { phone: phone },
+        as: :json
+      assert_equal 200, sess.response.status, sess.response.body
+      record = MobileOtpCode.where(phone: phone, is_used: false).order(created_at: :desc).first
+
+      sess.post "/shop/api/phone_otp/verify_sms",
+        headers: shop_tenant_headers(@tenant.id),
+        params: { phone: phone, code: record.code, binding_step_up: true },
+        as: :json
+      assert_equal 200, sess.response.status, sess.response.body
+      refute Payments::BindingStepUp.payments_locked?(sess.session, @tenant.id)
+    end
+  end
+
   private
 
   def with_rack_attack

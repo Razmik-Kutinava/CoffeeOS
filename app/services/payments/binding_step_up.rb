@@ -30,7 +30,7 @@ module Payments
     end
 
     def self.lock_payments!(session, tenant_id)
-      return if session.blank? || tenant_id.blank?
+      return if session.nil? || tenant_id.blank?
 
       tid = tenant_id.to_s
       bucket = session[SESSION_LOCK_KEY]
@@ -40,7 +40,7 @@ module Payments
     end
 
     def self.unlock_payments!(session, tenant_id)
-      return if session.blank? || tenant_id.blank?
+      return if session.nil? || tenant_id.blank?
 
       tid = tenant_id.to_s
       bucket = session[SESSION_LOCK_KEY]
@@ -55,8 +55,17 @@ module Payments
       end
     end
 
+    # OTP verify with binding_step_up must not clear a lock created in the same request
+    # (profile switch → lock_payments! → immediate unlock bypass).
+    def self.unlock_after_verified_step_up!(session, tenant_id, binding_step_up:, locked_before:)
+      return unless binding_step_up
+      return unless locked_before
+
+      unlock_payments!(session, tenant_id)
+    end
+
     def self.payments_locked?(session, tenant_id)
-      return false if session.blank? || tenant_id.blank?
+      return false if session.nil? || tenant_id.blank?
 
       bucket = session[SESSION_LOCK_KEY]
       bucket.is_a?(Hash) && bucket[tenant_id.to_s] == true

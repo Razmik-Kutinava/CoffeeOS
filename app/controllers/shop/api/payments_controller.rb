@@ -92,6 +92,15 @@ module Shop
         order = find_visible_order!(params[:order_id])
 
         session_cid = Shop::CustomerSession.customer_id(session, @shop_tenant.id)
+        customer = session_cid.present? ? MobileCustomer.find_by(id: session_cid) : nil
+        if Payments::BindingStepUp.requires_step_up?(customer, session: session, tenant_id: @shop_tenant.id)
+          return render json: {
+            error: "Требуется подтверждение телефона (step-up) перед списанием с сохранённой карты",
+            step_up_required: true,
+            status: 422
+          }, status: :unprocessable_entity
+        end
+
         email_cid = Shop::GuestCustomerResolver.call(
           session: session,
           tenant_id: @shop_tenant.id,

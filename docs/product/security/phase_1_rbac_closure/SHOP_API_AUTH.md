@@ -48,16 +48,19 @@ RLS: isolation по `app.current_tenant_id` + lookup policy `app.shop_api_key_lo
 
 | Secret | Назначение |
 |--------|------------|
-| `SHOP_API_KEY` | Legacy global. Пока нет per-tenant ключей (или до `SHOP_API_KEY_FALLBACK=0`) — принимается как **global_ops** с warn в лог. MCP/`ShopApiKeyResolver` читает его же. |
-| `SHOP_API_KEY_FALLBACK=0` | Выключить ENV fallback после seed per-tenant ключей |
+| `SHOP_API_KEY` | Legacy raw. Если значение совпадает с digest в `shop_api_keys` — работает как tenant/global_ops ключ. Иначе — только при явном opt-in fallback. MCP/`ShopApiKeyResolver` читает его же. |
+| `SHOP_API_KEY_FALLBACK=1` | **Opt-in** ENV global_ops fallback (`true`/`yes`/`on`). По умолчанию **выкл.** |
+| `SHOP_API_KEY_FALLBACK=0` / unset | Fallback выключен (канон после seed per-tenant ключей) |
 
 **Рекомендуемый ops Point A:**
 
 1. `rails shop:api_keys:issue[<Point A uuid>,mcp]` → сохранить raw в password manager.
-2. Fly: положить raw Point A в `SHOP_API_KEY` **или** оставить ENV только для fallback и передавать tenant-key в MCP-скриптах через тот же secret (resolver пока берёт `SHOP_API_KEY` — не ломает `bin/acceptance/*`).
-3. Когда все точки на digest-ключах — `SHOP_API_KEY_FALLBACK=0`, revoke старых ENV-only клиентов.
+2. Fly: положить **тот же raw Point A** в `SHOP_API_KEY` (digest lookup) **или** передавать tenant-key в MCP через secret.
+3. Не включать `SHOP_API_KEY_FALLBACK=1` на prod без нужды; legacy ENV-only ключ без строки в `shop_api_keys` → 401.
 
-**Статус seed (2026-09-09, Fly v494):** выданы tenant-ключи всем `sales_point` (`seed-2026-09-09`, 17 шт.). Smoke A↔B PASS. **`SHOP_API_KEY_FALLBACK` пока НЕ выключали** (ENV global ещё жив). RAW: `config/secrets/shop_api_keys_fly_seed_2026-09-09.json` (gitignored). Артефакт: `artifacts/v3_sec_shop_api_keys_seed/mcp/fly_v494_2026-09-09/`.
+**Статус seed (2026-09-09, Fly v494):** выданы tenant-ключи всем `sales_point` (`seed-2026-09-09`, 17 шт.). Smoke A↔B PASS. RAW: `config/secrets/shop_api_keys_fly_seed_2026-09-09.json` (gitignored). Артефакт: `artifacts/v3_sec_shop_api_keys_seed/mcp/fly_v494_2026-09-09/`.
+
+**2026-09-16:** fallback переведён на **opt-in** (`FALLBACK=1`). Если Fly `SHOP_API_KEY` = raw из seed Point A — digest-path без fallback. Иначе перед MCP: убедиться что secret = seeded raw или временно `SHOP_API_KEY_FALLBACK=1` (не рекомендуется).
 
 **Онбординг УК:** `Platform::TenantOnboarding::Provision` для новой **sales_point** выдаёт ключ `onboarding` (если usable ещё нет). RAW один раз во flash на `show`. Prep kitchen — без ключа. Update не плодит второй ключ.
 
