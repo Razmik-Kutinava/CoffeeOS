@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-16 — docs: #90 zone regress PASS (shop auth / Callcheck return)
+
+- rails: auth_funnel + silent_refresh + phone_otp + linker — 27 runs / 211 assert / 0 fail
+- node: wizard + cascade + otp_ui — 27 pass
+- unlazy `--reverify` G1–G4 PASS · G5 Fly MCP Point A still unmet (post-deploy)
+
 ## 2026-09-16 — docs: SPEC #90 POSTCALL-EXT restart
 
 - todo: lifecycle return Callcheck → resume → PaymentMethodsSheet

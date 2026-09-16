@@ -4,7 +4,7 @@
 |------|----------|
 | **ID** | CBR **#90** (Google: TASK_89-POSTCALL-EXT) |
 | **Тип** | SBR · EXT #89 — lifecycle return + resume + PaymentMethodsSheet |
-| **Статус** | **GREEN** 2026-09-16 · ждёт `/regress` → `/review` |
+| **Статус** | **regress PASS** 2026-09-16 · ждёт `/review` |
 | **Ветка** | `develop` |
 | **Канон** | `@spec-build-review` · `@coffeeos-commit-ops` · `@coffeeos-dev-gates` |
 | **ТЗ** | [`TASK-89-POSTCALL-EXT-…md`](../milestones/veha_2/requirements/customer_tasks/TASK-89-POSTCALL-EXT-Возврат%20в%20PWA%20после%20Callcheck%20и%20продолжение%20оплаты.md) |
@@ -23,7 +23,7 @@
 
 ## Next
 
-`/regress`
+`/review`
 
 ## DoD
 
