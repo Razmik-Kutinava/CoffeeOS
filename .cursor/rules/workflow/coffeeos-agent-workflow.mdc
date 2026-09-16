@@ -25,6 +25,7 @@ PHASE 3: push без стопа — `spec-build-review.mdc` § PHASE 3.
 2. `SESSION_STATE.md` — то же
 3. `ISSUES.md` — только `## 🔴 Открыто`
 4. `todo.md` — если живая задача
+5. **Title (заказчик):** если Task/CBR/`#N` ясен — один раз `rename_chat` → `Задача N — кратко по-русски` (≤60). Без Task N — не трогать. Файлы ради title не читать.
 
 **Не читать без просьбы:** тело HANDOFF/SESSION/CHANGELOG/PRACTICES/QA, `session/archive/`, `journal/archive/`, CHECKLIST/CBR (если не про веху), **`session/COMPONENT_MAP.md`** (только если задача трогает зону карты: CartSheet / OrderStatus* / active orders / GuestOrder*).
 

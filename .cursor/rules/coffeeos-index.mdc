@@ -12,7 +12,7 @@ alwaysApply: true
 | Файл | Зачем |
 |------|--------|
 | `workflow/coffeeos-commit-ops.mdc` | commit + ops; push PHASE 3; deploy — апрув |
-| `workflow/coffeeos-agent-workflow.mdc` | порядок шага, память, отчёт |
+| `workflow/coffeeos-agent-workflow.mdc` | порядок шага, память, отчёт; title `Задача N — …` |
 | `project/coffeeos-core.mdc` | tenant / RLS / панели |
 | этот индекс + `.cursorrules` | навигация |
 

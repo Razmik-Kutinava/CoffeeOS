@@ -14,7 +14,7 @@
 |------|------------|
 | `coffeeos-index.mdc` | Карта always vs on-demand |
 | `workflow/coffeeos-commit-ops.mdc` | commit + ops всегда; push в PHASE 3 / иначе просьба; deploy — апрув |
-| `workflow/coffeeos-agent-workflow.mdc` | Порядок шага + когда читать остальные |
+| `workflow/coffeeos-agent-workflow.mdc` | Порядок шага + когда читать остальные; title чата `Задача N — …` |
 | `project/coffeeos-core.mdc` | RLS, панели, enum, честность |
 | `.cursorrules` | Краткий индекс корня |
 

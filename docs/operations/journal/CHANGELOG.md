@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-16 — docs: RU title чатов (agent-workflow)
+
+- Старт чата п.5: `rename_chat` → `Задача N — кратко` (≤60)
+- Без нового always-файла — только строка в уже loaded workflow + index/RULES_INDEX
+
 ## 2026-09-16 — review: #91 TASK_89-UI-EXT phone input UI/UX
 
 - GREEN `8c267e56`: slim sheet 8vh · hide CTA+cart на phone-auth
