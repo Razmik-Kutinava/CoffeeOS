@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-16 (#89 regress PASS)  
+**Дата:** 2026-09-16 (#89 unlazy pre-review)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #89 local regress PASS · GREEN `84490e04` | `/review` · push/CI |
-| G5 Fly MCP Point A | после deploy |
+| #89 G1–G4 met · G5 Fly pending | `/review` |
+| GREEN `84490e04` · Entire `01M2MSDK9ZMPZH7YDZ17GHM44B` | push/CI |
 
-**last_done:** `/regress` phone_otp + auth funnel + JS PASS  
+**last_done:** unlazy reverify pre-review  
 **next_step:** `/review`
 
 **ctx_trim:** `2026-09-02`  
