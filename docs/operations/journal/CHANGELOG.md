@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-16 — docs: SPEC #91 TASK_89-UI-EXT phone input UI/UX
+
+- todo: phone-auth → скрыть CTA+cart · thinner sheet
+- Файлы: Checkout · cartSheetStore · shopWebViewLayout · cartSheetThresholds · CartSheet (+2 теста)
+- Не ломать: #89 · CTA вне auth · keyboard path · #90
+
 ## 2026-09-16 — docs: unlazy GATES #91 UI-EXT baseline
 
 - Ledger `session/GATES.md` · G1–G4 PASS (phone auth UI / cart sheet / auth funnel / cascade)
