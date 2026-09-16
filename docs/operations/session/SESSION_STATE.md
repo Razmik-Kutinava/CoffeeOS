@@ -2,16 +2,16 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-16 (#90 unlazy GATES)  
+**Дата:** 2026-09-16 (#90 SPEC)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #90 GATES G1–G4 met (baseline) · G5 Fly pending | `/spec` → `/sbr` |
-| #89 REVIEW CI green · deploy апрув (parked) | G5 Fly после deploy |
+| #90 SPEC `[x]` · [todo.md](todo.md) | `/sbr` RED |
+| GATES G1–G4 baseline · G5 Fly pending | после GREEN/deploy |
 
-**last_done:** `/unlazy` #90 ledger + approve G1–G4  
-**next_step:** `/spec` #90
+**last_done:** PHASE 1 SPEC #90 POSTCALL-EXT  
+**next_step:** `/sbr` RED
 
 **ctx_trim:** `2026-09-02`
 

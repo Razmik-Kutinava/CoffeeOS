@@ -6,7 +6,7 @@
 **Google Doc:** https://docs.google.com/document/d/1w2VKMPaYZdsJcqNkLrpSbJBPuLE-7Sm9giQ8DcJ0Bq0/edit?usp=drivesdk  
 **Расширяет:** [`TASK-89-Авторизация-регистрация-PWA-Callcheck-SMS.md`](TASK-89-Авторизация-регистрация-PWA-Callcheck-SMS.md)  
 **Связь:** overlap #80 / #89 · граница с TASK-89-UI-EXT (визуал телефона/sheet — не эта задача)  
-**Статус:** Spec (Google) · intake `[x]` · ждёт `/spec`
+**Статус:** Spec (Google) · intake `[x]` · SPEC `[x]` · ждёт `/sbr`
 
 ---
 
