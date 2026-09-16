@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-16 — docs: #89 artifact — curtain sum keyboard screenshot
+
+- `pwa_auth_registration_callcheck_sms/screenshots/01_phone_input_curtain_sum_keyboard_2026-09-16.png`
+- заказчик: толщина шторки / видимость суммы (TASK_89-UI-EXT; OUT #90)
+
 ## 2026-09-16 — docs: unlazy reverify #90 pre-review (G1–G4 met)
 
 - `gate-check --reverify` G1–G4 PASS; G5 Fly MCP Point A still unmet (post-deploy)
