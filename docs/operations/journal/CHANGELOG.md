@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-16 — docs: unlazy GATES #90 POSTCALL-EXT restart
+
+- Ledger `session/GATES.md` · restart после rollback
+- G1–G4 PASS (cascade/wizard · structural+auth funnel · phone_otp/linker · otp_ui)
+- G5 Fly MCP Point A unmet (после REVIEW/deploy)
+- todo → #90 · Next: `/spec`
+
 ## 2026-09-16 — docs: RU title чатов (agent-workflow)
 
 - Старт чата п.5: `rename_chat` → `Задача N — кратко` (≤60)

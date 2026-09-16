@@ -2,16 +2,16 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-16 (chat title RU)  
+**Дата:** 2026-09-16 (#90 unlazy restart)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #91 UI-EXT REVIEW · CI green · deploy апрув | Fly MCP G5 после deploy |
-| chat title: пункт 5 в agent-workflow | #90 после G5 |
+| #90 POSTCALL-EXT · unlazy G1–G4 met | `/spec` → `/sbr` |
+| #91 REVIEW · deploy апрув | G5 Fly после deploy |
 
-**last_done:** RU title чата в agent-workflow (без нового always-файла)  
-**next_step:** deploy апрув #91 → G5 Fly MCP
+**last_done:** unlazy GATES #90 restart · G1–G4 PASS · G5 unmet (post-deploy)  
+**next_step:** `/spec` #90
 
 **ctx_trim:** `2026-09-02`
 

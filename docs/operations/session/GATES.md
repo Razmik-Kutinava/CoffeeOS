@@ -1,38 +1,38 @@
-# Gates: #91 TASK_89-UI-EXT — phone input UI/UX
+# Gates: #90 TASK_89-POSTCALL-EXT — return after Callcheck → pay
 
-Scope: На phone-auth wizard скрыты CTA с суммой и preview корзины; checkout-sheet тоньше (UX Guide); после auth — обычный checkout; Callcheck/SMS/backend не тронуты.
+Scope: После Callcheck-звонка пользователь возвращается в PWA без потери Callcheck/checkout; pending → «Проверяем номер» + polling; confirmed/SMS → auth TASK_89 → авто PaymentMethodsSheet; без нового init_callcheck на lifecycle.
 
-- [x] G1: phone-auth UI — CTA/cart hide + sheet (node; RED добавит asserts)
-  CHECK: node --test test/javascript/phone_auth_wizard_test.mjs test/javascript/phone_otp_ui_test.mjs
+- [x] G1: lifecycle return — visibility/pageshow resume Callcheck (node / structural)
+  CHECK: node --test test/javascript/shop_phone_auth_cascade_smsru_test.mjs test/javascript/phone_auth_wizard_test.mjs
   EXPECT: fail 0
   CWD: C:/Tools/workarea/CoffeeOS
-  EVIDENCE: automatic-evidence=v1; definition-sha256=ed0409d0a526f181ec24de6734ae799a53dc042f3ce11305078538dea06498c7; exit=0; EXPECT=matched; output-sha256=1e660c46d35bf85b5278f63db3dd0b2b8cdade4991ba00d454beb12a99c7422a; output-bytes=2123; shell=C:\Windows\system32\cmd.exe; cwd=C:\Tools\workarea\CoffeeOS; path=54c8ad8163c5/77 entries
+  EVIDENCE: automatic-evidence=v1; definition-sha256=75ae628ea5cba574f17ad6666aaa860f2ac313ad0ee789c10137434a3de9dd60; exit=0; EXPECT=matched; output-sha256=28c0f7e5235b3417026686cf260c99b9c6610765b2349773dd0010dbf60df4e5; output-bytes=3452; shell=C:\Windows\system32\cmd.exe; cwd=C:\Tools\workarea\CoffeeOS; path=54c8ad8163c5/77 entries
 
-- [x] G2: checkout / cart sheet UX zone (rails)
-  CHECK: ruby bin/rails test test/integration/shop/shop_checkout_cart_sheet_ux_test.rb test/integration/shop/checkout_ui_cleanup_test.rb
+- [x] G2: post-verify → PaymentMethodsSheet (rails structural + #89 handoff)
+  CHECK: ruby bin/rails test test/integration/shop/silent_refresh_frontend_structural_test.rb test/integration/shop/auth_funnel_wizard_ui_test.rb
   EXPECT: 0 failures, 0 errors
   CWD: C:/Tools/workarea/CoffeeOS
-  EVIDENCE: automatic-evidence=v1; definition-sha256=27005af3941f33ead9a77f9555dc317ffbb3186ce65f1dfde7e80161daf6c21f; exit=0; EXPECT=matched; output-sha256=c5cf5578cd2ed1db5218c3c16470475ecce3f070484d362a47a81746323dc3e2; output-bytes=1883; shell=C:\Windows\system32\cmd.exe; cwd=C:\Tools\workarea\CoffeeOS; path=54c8ad8163c5/77 entries
+  EVIDENCE: automatic-evidence=v1; definition-sha256=08eae614534bf91037574ef579dd25fff00142ea7ffa6a92accb69b1be6285b9; exit=0; EXPECT=matched; output-sha256=a99f693263ef08cb94dc46b6982955b87bd16fdd4b6fbeed5ca2b7330ea91245; output-bytes=1886; shell=C:\Windows\system32\cmd.exe; cwd=C:\Tools\workarea\CoffeeOS; path=54c8ad8163c5/77 entries
 
-- [x] G3: #89 auth funnel + phone OTP regress (rails)
-  CHECK: ruby bin/rails test test/integration/shop/auth_funnel_wizard_ui_test.rb test/integration/shop/api/phone_otp_test.rb
+- [x] G3: Callcheck / linker / session regress (rails)
+  CHECK: ruby bin/rails test test/integration/shop/api/phone_otp_test.rb test/services/shop/phone_verified_customer_linker_test.rb test/services/shop/phone_otp_test.rb
   EXPECT: 0 failures, 0 errors
   CWD: C:/Tools/workarea/CoffeeOS
-  EVIDENCE: automatic-evidence=v1; definition-sha256=d2fdc815e910315a5be2c2840c8886d9b65c4f9c870b8e5028aacfb04b2e6852; exit=0; EXPECT=matched; output-sha256=235e13f9070242b7b84ed7dfafbbd491ce75ecaccfe7cd93410bd1d7c0bdd235; output-bytes=1895; shell=C:\Windows\system32\cmd.exe; cwd=C:\Tools\workarea\CoffeeOS; path=54c8ad8163c5/77 entries
+  EVIDENCE: automatic-evidence=v1; definition-sha256=fb0d5a051e3e68b175d480ade9dc6104a4fff244af69db110886b028cf08901a; exit=0; EXPECT=matched; output-sha256=97f5a7dc83ba2a876bc48d8ef279b0b85ea523eeae26048f4b610af6c3aca10e; output-bytes=1899; shell=C:\Windows\system32\cmd.exe; cwd=C:\Tools\workarea\CoffeeOS; path=54c8ad8163c5/77 entries
 
-- [x] G4: phone auth cascade SMS.ru zone (node)
-  CHECK: node --test test/javascript/shop_phone_auth_cascade_smsru_test.mjs
+- [x] G4: phone OTP UI + cascade SMS.ru (node zone)
+  CHECK: node --test test/javascript/phone_otp_ui_test.mjs test/javascript/shop_phone_auth_cascade_smsru_test.mjs
   EXPECT: fail 0
   CWD: C:/Tools/workarea/CoffeeOS
-  EVIDENCE: automatic-evidence=v1; definition-sha256=d1f9140e216a1befd0d6903c965795d12d59039adccdf496c35bae62c6f0fcc7; exit=0; EXPECT=matched; output-sha256=ac15d9b1c16861a0f044a9088569c58431f31b13e655778c8b9210d4f38bf57f; output-bytes=2201; shell=C:\Windows\system32\cmd.exe; cwd=C:\Tools\workarea\CoffeeOS; path=54c8ad8163c5/77 entries
+  EVIDENCE: automatic-evidence=v1; definition-sha256=bfd4ac28cafddb5369eb027e7212cc642605deb6025de16c08ddd8ca625c8ccc; exit=0; EXPECT=matched; output-sha256=40b7f276bded437e2d4a6e9a8fe528f82c521d147daca7bae720cd4704b5e466; output-bytes=2951; shell=C:\Windows\system32\cmd.exe; cwd=C:\Tools\workarea\CoffeeOS; path=54c8ad8163c5/77 entries
 
-- [ ] G5: hot-path Fly MCP Point A — phone-auth sheet без суммы/состава
-  EVIDENCE: pending — skip until PHASE 3 REVIEW / deploy; artifact under artifacts/pwa_auth_phone_input_ui_ux/mcp/; PASS = на вводе телефона нет CTA суммы · нет cart preview · sheet тоньше · после auth checkout как раньше
+- [ ] G5: hot-path Fly MCP Point A — phone dial → return PWA → pay sheet
+  EVIDENCE: pending — skip until PHASE 3 REVIEW / deploy; artifact under artifacts/pwa_callcheck_return_continue_payment/mcp/; PASS = return resumes same Callcheck · no second init · confirmed/SMS → PaymentMethodsSheet · checkout state kept
 
 <!--
-CoffeeOS #91 unlazy:
-- EXT #89 UI only: phone-auth hide CTA+cart · thinner sheet; не Callcheck/SMS/POSTCALL.
-- G1–G4: baseline pre-SPEC (#89 zone). RED добавит UI asserts → обновить G1 CHECK при новом файле.
+CoffeeOS #90 unlazy (restart after rollback):
+- EXT #89: lifecycle PWA + copy «вернитесь» + resume poll; не UI-EXT; не SMS.ru backend.
+- G1–G4 baseline pre-SPEC (#89 zone). RED добавит lifecycle asserts → обновить G1 CHECK.
 - G5: manual Point A tenant 2fdee1ac-4674-41ee-b89e-87b45643f789.
 - ABANDON only with reason at column 1.
 -->
