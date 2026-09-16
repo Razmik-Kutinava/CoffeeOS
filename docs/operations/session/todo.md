@@ -4,8 +4,9 @@
 |------|----------|
 | **ID** | CBR **#90** (Google: TASK_89-POSTCALL-EXT) |
 | **Тип** | SBR · EXT #89 — lifecycle return + resume + PaymentMethodsSheet |
-| **Статус** | **REVIEW** 2026-09-16 · push/CI · G5 Fly после deploy |
+| **Статус** | **REVIEW** 2026-09-16 · CI green · deploy апрув · G5 Fly после deploy |
 | **GREEN** | `37b808c4` · Entire `01M2NCXMN67QF5CB228K6HCT97` |
+| **CI** | https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/35116445356 |
 | **Ветка** | `develop` |
 | **Канон** | `@spec-build-review` · `@coffeeos-commit-ops` · `@coffeeos-dev-gates` |
 | **ТЗ** | [`TASK-89-POSTCALL-EXT-…md`](../milestones/veha_2/requirements/customer_tasks/TASK-89-POSTCALL-EXT-Возврат%20в%20PWA%20после%20Callcheck%20и%20продолжение%20оплаты.md) |

@@ -10,8 +10,8 @@
 | #90 POSTCALL-EXT · REVIEW · push/CI | G5 Fly MCP после deploy |
 | #91 REVIEW · deploy апрув | G5 Fly после deploy |
 
-**last_done:** #90 REVIEW — bugbot/security clean · Entire `01M2NCXMN67QF5CB228K6HCT97` · push  
-**next_step:** CI green → deploy апрув → G5 Fly MCP
+**last_done:** #90 REVIEW · CI green `35116445356` · Entire `01M2NCXMN67QF5CB228K6HCT97`  
+**next_step:** deploy апрув #90 → G5 Fly MCP
 
 **ctx_trim:** `2026-09-02`
 

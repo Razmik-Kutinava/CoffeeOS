@@ -16,7 +16,7 @@
 - GREEN `37b808c4`: resume poll + copy «вернитесь» + pagehide/iOS + checking UI
 - bugbot: no bugs · security: no medium+
 - Entire: `01M2NCXMN67QF5CB228K6HCT97` на GREEN
-- Local zone PASS · push/CI · G5 Fly MCP после deploy
+- Local zone PASS · CI green `35116445356` · G5 Fly MCP после deploy
 - COMPONENT_MAP: не трогали (не новая сущность карты)
 
 ## 2026-09-16 — docs: unlazy reverify #90 pre-review (G1–G4 met)
