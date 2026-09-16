@@ -22,13 +22,13 @@ class Shop::PaymentConfigTest < ActiveSupport::TestCase
 
   test "simulate raises in production when enabled" do
     ENV["SHOP_SIMULATE_PAYMENT"] = "1"
-    saved_env = Rails.env
-    Rails.singleton_class.define_method(:env) { ActiveSupport::StringInquirer.new("production") }
+    env = Rails.env
+    Rails.env = ActiveSupport::StringInquirer.new("production")
     begin
       error = assert_raises(RuntimeError) { Shop::PaymentConfig.simulate? }
       assert_match(/must not be enabled in production/, error.message)
     ensure
-      Rails.singleton_class.define_method(:env) { saved_env }
+      Rails.env = env
     end
   end
 
