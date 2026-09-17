@@ -4,7 +4,9 @@
 |------|----------|
 | **ID** | CBR **#92** (Google: TASK_90) |
 | **Тип** | SBR · EXT #81 — recovery UI + deep-link/fallback `denied → settings` |
-| **Статус** | **SPEC** 2026-09-17 · ждёт `/sbr` (RED) |
+| **Статус** | **GREEN** 2026-09-17 · `0b7f0b2d` · ждёт `/regress` |
+| **GREEN** | `0b7f0b2d` · Entire `01M2Q1AF4E2PWDD5JW1FZPRPF1` |
+| **RED** | `95a9a000` |
 | **Ветка** | `develop` |
 | **Канон** | `@spec-build-review` · `@coffeeos-commit-ops` · `@coffeeos-dev-gates` |
 | **ТЗ** | [`TASK-90-Восстановление-WebPush-после-запрета-уведомлений.md`](../milestones/veha_2/requirements/customer_tasks/TASK-90-Восстановление-WebPush-после-запрета-уведомлений.md) |
@@ -17,13 +19,13 @@
 
 - [x] PHASE 0 intake
 - [x] PHASE 1 `/spec` — канон в этом todo
-- [ ] PHASE 2 RED — recovery UI + fallback instruction + dismiss → status
-- [ ] PHASE 2 GREEN — deep-link/fallback + CTA «Смотреть готовность»
+- [x] PHASE 2 RED — `95a9a000` recovery UI + fallback + dismiss
+- [x] PHASE 2 GREEN — `0b7f0b2d` deep-link/fallback + CTA «Смотреть готовность»
 - [ ] PHASE 3 `/review`
 
 ## Next
 
-`/sbr`
+`/regress`
 
 ## DoD
 
