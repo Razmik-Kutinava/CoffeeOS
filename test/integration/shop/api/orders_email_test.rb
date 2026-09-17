@@ -131,6 +131,89 @@ class Shop::Api::OrdersEmailTest < ActionDispatch::IntegrationTest
     assert_equal 1, OrderEmail.where(order_id: @order.id, email: email).count
   end
 
+  # --- Патч_1 2026-09-17: server profile email (Subtask 12/12a/13/14 patch v2) ---
+
+  test "P1 S12 saves post-pay email on MobileCustomer profile [TDD]" do
+    email = "patch71-#{SecureRandom.hex(3)}@example.com"
+    assert_nil @customer.email
+
+    post "/shop/api/orders/#{@order.id}/email",
+      headers: shop_tenant_headers(@tenant.id),
+      params: email_params(email: email),
+      as: :json
+
+    assert_response :success, response.body
+    @customer.reload
+    assert_equal email, @customer.email
+    assert @customer.email_collected_at.present?
+    assert_equal 1, OrderEmail.where(order_id: @order.id, email: email).count
+  end
+
+  test "P1 S12a profile email survives without previous OrderEmail [TDD]" do
+    email = "patch71-prof-#{SecureRandom.hex(3)}@example.com"
+    post "/shop/api/orders/#{@order.id}/email",
+      headers: shop_tenant_headers(@tenant.id),
+      params: email_params(email: email),
+      as: :json
+    assert_response :success
+
+    OrderEmail.where(order_id: @order.id).delete_all
+    @customer.reload
+    assert_equal email, @customer.email
+  end
+
+  test "P1 S13 empty email clears MobileCustomer.email [TDD]" do
+    email = "patch71-clear-#{SecureRandom.hex(3)}@example.com"
+    @customer.update!(email: email, email_collected_at: Time.current)
+
+    post "/shop/api/orders/#{@order.id}/email",
+      headers: shop_tenant_headers(@tenant.id),
+      params: email_params(email: ""),
+      as: :json
+
+    assert_response :success, response.body
+    @customer.reload
+    assert_nil @customer.email
+  end
+
+  test "P1 S13 change email updates MobileCustomer.email [TDD]" do
+    old = "patch71-old-#{SecureRandom.hex(3)}@example.com"
+    new_email = "patch71-new-#{SecureRandom.hex(3)}@example.com"
+    @customer.update!(email: old, email_collected_at: Time.current)
+
+    post "/shop/api/orders/#{@order.id}/email",
+      headers: shop_tenant_headers(@tenant.id),
+      params: email_params(email: new_email),
+      as: :json
+
+    assert_response :success, response.body
+    @customer.reload
+    assert_equal new_email, @customer.email
+  end
+
+  test "P1 S14 idempotent same email does not duplicate customer contact [TDD]" do
+    email = "patch71-idem-#{SecureRandom.hex(3)}@example.com"
+
+    post "/shop/api/orders/#{@order.id}/email",
+      headers: shop_tenant_headers(@tenant.id),
+      params: email_params(email: email),
+      as: :json
+    assert_response :success
+    collected_at = @customer.reload.email_collected_at
+
+    post "/shop/api/orders/#{@order.id}/email",
+      headers: shop_tenant_headers(@tenant.id),
+      params: email_params(email: email),
+      as: :json
+    assert_response :success
+
+    @customer.reload
+    assert_equal email, @customer.email
+    assert_equal collected_at.to_i, @customer.email_collected_at.to_i
+    assert_equal 1, OrderEmail.where(order_id: @order.id, email: email).count
+    assert_equal 1, MobileCustomer.where(email: email).count
+  end
+
   test "S11 bounce marks order_email bounced with HMAC" do
     oe = OrderEmail.create!(
       order: @order,

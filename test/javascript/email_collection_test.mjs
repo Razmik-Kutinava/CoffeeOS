@@ -204,7 +204,11 @@ describe("#71 QA reopen — remember receipt email, don't re-ask", () => {
     assert.match(src, /loadReceiptEmail/)
     assert.match(src, /saveReceiptEmail/)
     assert.match(src, /shouldAskReceiptEmail/)
-    assert.match(src, /askReceiptEmail\s*=\s*shouldAskReceiptEmail\(savedReceipt\)/)
+    // Патч_1: LS || serverEmail — не только savedReceipt
+    assert.match(
+      src,
+      /shouldAskReceiptEmail\(\s*savedReceipt\s*\|\|\s*serverEmail\s*\)/
+    )
     assert.match(
       src,
       /\{#if\s+askReceiptEmail\}[\s\S]*OrderSuccessEmailBlock[\s\S]*\{\/if\}/
@@ -217,6 +221,30 @@ describe("#71 QA reopen — remember receipt email, don't re-ask", () => {
       src,
       /async function handleEmailSkip[\s\S]{0,250}saveReceiptEmail/
     )
+  })
+
+  it("P1 PaymentResult loads server profile email for prefill without LS [TDD]", () => {
+    const src = readFront("routes/PaymentResult.svelte")
+    assert.match(src, /api\(\s*["']profile["']\s*\)/)
+    assert.match(src, /serverEmail/)
+    assert.match(
+      src,
+      /prefillEmail\s*=\s*savedReceipt\s*\|\|\s*serverEmail/
+    )
+    assert.match(
+      src,
+      /shouldAskReceiptEmail\(\s*savedReceipt\s*\|\|\s*serverEmail\s*\)/
+    )
+  })
+
+  it("P1 shouldAskReceiptEmail false when only server email present [TDD]", async () => {
+    const { shouldAskReceiptEmail } = await import(
+      "../../app/frontend/lib/emailCollection.js"
+    )
+    const savedReceipt = ""
+    const serverEmail = "from-server@example.com"
+    assert.equal(shouldAskReceiptEmail(savedReceipt || serverEmail), false)
+    assert.equal(shouldAskReceiptEmail(savedReceipt || ""), true)
   })
 })
 
