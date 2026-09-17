@@ -4,9 +4,10 @@
 |------|----------|
 | **ID** | CBR **#92** (Google: TASK_90) |
 | **Тип** | SBR · EXT #81 — recovery UI + deep-link/fallback `denied → settings` |
-| **Статус** | **REVIEW** 2026-09-17 · push/CI · G5 Fly после deploy |
+| **Статус** | **REVIEW** 2026-09-17 · CI green · deploy апрув · G5 Fly после deploy |
 | **GREEN** | `0b7f0b2d` · Entire `01M2Q1AF4E2PWDD5JW1FZPRPF1` |
 | **FIX** | `72dcb5e9` — Android intent always shows fallback (bugbot medium) |
+| **CI** | https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/35191890272 |
 | **RED** | `95a9a000` |
 | **Ветка** | `develop` |
 | **Канон** | `@spec-build-review` · `@coffeeos-commit-ops` · `@coffeeos-dev-gates` |

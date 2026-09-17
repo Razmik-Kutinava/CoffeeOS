@@ -17,7 +17,7 @@
 - bugbot medium → fix `72dcb5e9`: Android intent always shows fallback
 - security: no medium+
 - Entire: `01M2Q1AF4E2PWDD5JW1FZPRPF1` на GREEN+fix
-- Local zone PASS · CI pending push · G5 Fly MCP после deploy
+- Local zone PASS · CI green `35191890272` · G5 Fly MCP после deploy
 - COMPONENT_MAP: не трогали (не новая сущность карты)
 
 ## 2026-09-17 — docs: unlazy reverify #92 pre-review (G1–G4 met)
