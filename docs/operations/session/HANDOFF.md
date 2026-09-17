@@ -2,16 +2,16 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-17 (#92 COMPONENT_MAP)  
+**Дата:** 2026-09-17 (#93 TASK_91 intake)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #92 REVIEW · CI green · COMPONENT_MAP | deploy апрув → G5 Fly MCP |
-| #90/#91 REVIEW · deploy апрув | Fly MCP G5 после deploy |
+| #93 TASK_91 intake · п.9.2 post-pay → `#/` | `/spec` |
+| #92 REVIEW · CI green | deploy апрув → G5 Fly MCP |
 
-**last_done:** COMPONENT_MAP БЛОК 4 #92 — ActiveOrdersAccordion · orderStatusNotifyActions · firebasePush  
-**next_step:** deploy апрув #92 → G5 Point A
+**last_done:** intake #93 TASK_91 — customer_tasks + CBR + artifacts  
+**next_step:** `/spec` #93 (PaymentResult submit/skip/nav)
 
 **ctx_trim:** `2026-09-02`  
 **Fly:** v495 `deployment-01M22JRN95TXRSV1PQDN49227M`

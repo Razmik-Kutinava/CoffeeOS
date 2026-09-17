@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-17 — docs: intake #93 TASK_91 post-pay auto return catalog
+
+- Чат п.9.2 + скрины + Google Doc → `customer_tasks/TASK-91-…md` (1:1)
+- artifacts `post_pay_auto_return_catalog_status/` (подписи скринов; PNG с диска не найдены)
+- Google TASK_91 → CBR #93 (#91 занят UI-EXT); todo → #93 · Next: `/spec`
+
 ## 2026-09-17 — docs: update COMPONENT_MAP — ActiveOrdersAccordion / orderStatusNotifyActions / firebasePush
 
 - БЛОК 4 #92: точечно ActiveOrdersAccordion · orderStatusNotifyActions; новая строка firebasePush
