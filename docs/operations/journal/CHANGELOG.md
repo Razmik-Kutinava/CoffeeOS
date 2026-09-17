@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-17 — docs: intake #92 TASK_90 WebPush recovery after denied
+
+- Чат п.9/9.1 + Google Doc → `customer_tasks/TASK-90-…md` (1:1)
+- artifacts `webpush_recovery_after_denied/` · CBR #92 · ISSUES · todo
+- Google TASK_90 → CBR #92 (#90 занят POSTCALL); EXT #81 denied→settings
+- Next: `/spec`
+
 ## 2026-09-17 — docs: update COMPONENT_MAP — PhoneAuth / Checkout / PaymentMethodsSheet
 
 - БЛОК 4 #90: новые строки PhoneAuthWizard · PhoneAuthCodeStep · phoneAuthCascade · Checkout · PaymentMethodsSheet
