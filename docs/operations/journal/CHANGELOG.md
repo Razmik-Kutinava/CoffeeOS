@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-17 — docs: /patch #71 Патч_1 server email prefill
+
+- Секция **Патч_1** в TASK Email-сбор (#71): расхождение OrderEmail-only vs MobileCustomer.email
+- `todo.md` Шаг 5 под итерацию: SBR/Файлы/Не ломать/Проверка/DoD
+- Google: `1igng5OvrPOKMs5NkAZ8CAQYSufJBk3i3ZTI3bTgFLY8` · Next: `/sbr`
+
 ## 2026-09-17 — docs: #94 CI green after REVIEW
 
 - CI green `35198770223` · review sha `97f4291b`

@@ -199,4 +199,57 @@ Security: API-ключи CRM хранятся только в ENV; frontend не
 - As-is: `PaymentResult` всегда рендерит `OrderSuccessEmailBlock` на success; `prefillEmail` из `loadGuestProfile()` только заполняет поле, блок всё равно спрашивает.
 - Мета владельца: правки заказчика делать **как сказано**, без пересказа/смягчения.
 - Очередь правок 2026-09-06 (не смешивать в один SBR): **1–3** → #35 · **4/** → #26 · **5/** → CartSheet «Итого» · **эта** → #71.
-- Next: `/spec` → todo + пути + RED/GREEN (дополнение #71, не новая фича).
+- LS remember (v481) закрыл «не спрашивать» только в браузере; заказчик 2026-09-17: **поверить на бэкенде** → см. Патч_1.
+
+---
+
+## Патч_1: 2026-09-17
+
+**Основание:** аудит «Аудит: повторный запрос email после оплаты (#71)», факт `email_service.rb:55-61`, `PaymentResult.svelte:115-119`.  
+**Google Doc:** https://docs.google.com/document/d/1igng5OvrPOKMs5NkAZ8CAQYSufJBk3i3ZTI3bTgFLY8/edit?usp=drivesdk  
+**Тип:** ПАТЧ (секция в #71, не новая задача) · канон `docs/operations/dev/TASK_PATCH.md`
+
+### Расхождение
+
+**Subtask 12:** Given: у пользователя ранее сохранён email, связанный с его верифицированным номером телефона. When: пользователь завершает новый заказ и открывает экран успешной оплаты. Then: email предзаполнен сохранённым значением.
+
+По факту:
+
+1. email, введённый после оплаты, сохраняется в `OrderEmail`, связанном с текущим заказом, а не в `MobileCustomer.email` → `email_service.rb:40-43`, `schema.rb:527-538`;
+2. при сохранении email в `MobileCustomer` обновляется только `email_collected_at`, значение `email` не записывается → `email_service.rb:55-61`, `mobile_customer.rb:53-56`;
+3. связь verified phone → `MobileCustomer` существует, но post-pay email к `MobileCustomer.email` не привязывается → `phone_verified_customer_linker.rb:36-40`, `email_service.rb:55-61`;
+4. `OrderCreator` не получает email из `OrderEmail` предыдущего заказа → `order_creator.rb:388-416`;
+5. `PaymentResult` получает prefill только из browser LocalStorage / guest profile и не запрашивает серверный profile для этого сценария → `PaymentResult.svelte:115-119`;
+6. при отсутствии значения в LocalStorage / guest profile `prefillEmail` становится пустым и блок снова предлагается пользователю → `PaymentResult.svelte:118-119`, `emailCollection.js:20-22`.
+
+**Расхождение:** сценарий #71 требует сохранения email, доступного пользователю при следующем заказе через его verified phone, однако фактическая реализация сохраняет post-pay email только на предыдущем `OrderEmail` и не предоставляет его следующему success screen через серверный профиль.
+
+### Исправленный сценарий
+
+- [ ] **Subtask 12 (patch v2):** Given: пользователь имеет verified phone и ранее сохранил корректный email после оплаты; When: пользователь завершает новый заказ и открывает экран успешной оплаты; Then: PWA получает сохранённый email, связанный с этим пользователем, и предзаполняет email-блок на success screen.
+- [ ] **Subtask 12a (patch v2):** Given: email был сохранён после предыдущего заказа; When: создаётся следующий заказ того же пользователя по verified phone; Then: источник сохранённого email не зависит от `OrderEmail` предыдущего заказа и доступен через пользовательский профиль.
+- [ ] **Subtask 12b (patch v2):** Given: пользователь имеет сохранённый email; When: success screen нового заказа загружается; Then: отсутствие browser LocalStorage не должно приводить к повторному запросу email, если серверный профиль содержит сохранённый email.
+- [ ] **Subtask 13 (patch v2):** Given: email предзаполнен из сохранённого пользовательского контакта; When: пользователь изменяет или очищает email; Then: новое значение/удаление корректно отражается в пользовательском сохранённом контакте согласно существующему контракту Subtask 13.
+- [ ] **Subtask 14 (patch v2):** Given: email уже сохранён для пользователя и текущего заказа; When: success screen повторно отправляет сохранение того же email; Then: не создаются дубли пользовательского контакта, `OrderEmail` или фоновых операций.
+
+### Не трогать
+
+1. `Checkout.svelte` — общий файл с #89/#90/#91; только необходимый контракт email, не payment/checkout flow. См. `COMPONENT_MAP.md` → Checkout.
+2. Callcheck и verified phone — не менять механизм верификации.
+3. `TbankReceiptBuilder` и фискальный Receipt flow #72 — не менять.
+4. `OrderEmail` как историческую привязку к заказу — не удалять.
+5. LocalStorage / guest-profile — не удалять; не расширять назначение; оставить fallback.
+6. ActiveOrders / `receiptView` — вне scope.
+7. CRM, email-провайдер, bounce — не менять без прямой нужды для сохранения user email.
+8. `Receipt.Email` / `Receipt.Phone` — не менять.
+
+### Scope
+
+**Разрешено:** backend-контракт post-pay email → profile по verified phone (`MobileCustomer` / canonical); API/сериализация профиля; `PaymentResult` server email; LS как fallback; тесты `order1 → save → order2 → server prefill`; идемпотентность `OrderEmail`.
+
+**Запрещено:** callcheck; payment flow; Receipt/T-Bank; состав заказа; CRM/consent без основания; удаление `OrderEmail`; `Checkout.svelte` сверх контракта; ActiveOrders/receiptView; email OTP; email как условие оплаты.
+
+### TDD-проверка патча
+
+`order #1 → post-pay email save → очистить LS → order #2 (тот же verified phone) → success → server prefill → без повторного запроса`.  
+Сохранить существующие тесты LS-hide и идемпотентности.
