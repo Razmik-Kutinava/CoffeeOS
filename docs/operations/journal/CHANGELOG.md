@@ -11,6 +11,15 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-17 — review: #92 TASK_90 WebPush recovery after denied
+
+- GREEN `0b7f0b2d`: recovery UI + fallback + dismissPushRecovery
+- bugbot medium → fix `72dcb5e9`: Android intent always shows fallback
+- security: no medium+
+- Entire: `01M2Q1AF4E2PWDD5JW1FZPRPF1` на GREEN+fix
+- Local zone PASS · CI pending push · G5 Fly MCP после deploy
+- COMPONENT_MAP: не трогали (не новая сущность карты)
+
 ## 2026-09-17 — docs: unlazy reverify #92 pre-review (G1–G4 met)
 
 - `gate-check --reverify` G1–G4 PASS; G5 Fly MCP Point A still unmet (post-deploy)

@@ -2,16 +2,16 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-17 (#92 unlazy reverify pre-review)  
+**Дата:** 2026-09-17 (#92 REVIEW WebPush denied)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #92 WebPush · regress PASS · G1–G4 reverify | `/review` |
+| #92 WebPush recovery · **REVIEW** · push/CI | deploy апрув → G5 Fly MCP |
 | #90/#91 REVIEW · deploy апрув | Fly MCP G5 после deploy |
 
-**last_done:** unlazy `--reverify` #92 G1–G4 PASS · G5 unmet  
-**next_step:** `/review` #92
+**last_done:** REVIEW #92 — bugbot fix fallback · security clean · Entire · push  
+**next_step:** deploy апрув #92 → G5 Point A
 
 **ctx_trim:** `2026-09-02`  
 **Fly:** v495 `deployment-01M22JRN95TXRSV1PQDN49227M`
