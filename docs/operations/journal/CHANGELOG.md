@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-17 — docs: update COMPONENT_MAP — PhoneAuth / Checkout / PaymentMethodsSheet
+
+- БЛОК 4 #90: новые строки PhoneAuthWizard · PhoneAuthCodeStep · phoneAuthCascade · Checkout · PaymentMethodsSheet
+- Граница: resume без re-init · авто-open pay sheet из Checkout
+
 ## 2026-09-16 — fix: CI flake Rails.env pollution (payment_config_test)
 
 - `define_method(:env)` ломал stub production в callbacks test → 200 вместо 401
