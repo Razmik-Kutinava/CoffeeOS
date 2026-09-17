@@ -4,7 +4,9 @@
 |------|----------|
 | **ID** | CBR **#93** (Google: TASK_91) |
 | **Тип** | SBR · EXT #71 post-pay → авто `#/` + status model |
-| **Статус** | **SPEC** 2026-09-17 · ждёт `/sbr` |
+| **Статус** | **GREEN** 2026-09-17 · ждёт `/regress` → `/review` |
+| **RED** | `350f6b95` |
+| **GREEN** | _(fill after commit)_ |
 | **Ветка** | `develop` |
 | **Канон** | `@spec-build-review` · `@coffeeos-commit-ops` · `@coffeeos-dev-gates` |
 | **ТЗ** | [`TASK-91-Автоматический-возврат-на-каталог-после-post-pay-email.md`](../milestones/veha_2/requirements/customer_tasks/TASK-91-Автоматический-возврат-на-каталог-после-post-pay-email.md) |
@@ -17,13 +19,13 @@
 
 - [x] PHASE 0 intake
 - [x] PHASE 1 `/spec`
-- [ ] PHASE 2 RED
-- [ ] PHASE 2 GREEN
+- [x] PHASE 2 RED — `350f6b95`
+- [x] PHASE 2 GREEN
 - [ ] PHASE 3 `/review`
 
 ## Next
 
-`/sbr` — RED: auto `#/` when `!askReceiptEmail`; keep no auto-redirect while email block visible.
+`/regress` — зона Проверка; затем `/review`.
 
 ## DoD
 

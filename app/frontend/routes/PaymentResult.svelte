@@ -58,6 +58,7 @@
       if (st === "CONFIRMED") {
         const ok = await prepareSuccessScreen()
         if (!ok) return
+        await maybeAutoReturnToCatalog()
         return
       }
       if (st === "REJECTED" || st === "CANCELED") {
@@ -99,6 +100,12 @@
     push("/")
   }
 
+  /** #93: email уже известен — не ждать клик «В каталог»; при askReceiptEmail остаёмся на блоке (#71). */
+  async function maybeAutoReturnToCatalog() {
+    if (askReceiptEmail) return
+    await handleEmailSkip()
+  }
+
   onMount(async () => {
     const query = window.location.hash.split("?")[1] || ""
     const params = new URLSearchParams(query)
@@ -128,10 +135,11 @@
         return
       }
 
-      // success / ok / ok_sbp — показать email-блок, не редиректить сразу
+      // success / ok / ok_sbp — email-блок если нужен; иначе авто #/ (#93)
       if (status === "ok" || status === "ok_sbp" || isSbpReturnSuccessStatus(status)) {
-        await prepareSuccessScreen()
+        const ok = await prepareSuccessScreen()
         loading = false
+        if (ok) await maybeAutoReturnToCatalog()
         return
       }
 
