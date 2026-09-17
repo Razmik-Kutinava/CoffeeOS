@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-17 — docs: #93 zone regress PASS
+
+- `node --test email_collection_test.mjs` — 19 pass
+- `rails test order_status_acceptance + sheet_mount` — 15 runs, 0 fail
+- Next: `/review` · Fly MCP G4 после deploy
+
 ## 2026-09-17 — docs: unlazy GATES #94 TASK_92 background FCM
 
 - `GATES.md` → #94 baseline; gate-check `--approve` G1–G4 PASS; G5 Fly MCP pending
