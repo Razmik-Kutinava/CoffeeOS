@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-17 — docs: unlazy reverify #93 pre-review (G1–G3 met)
+
+- Ledger: `artifacts/post_pay_auto_return_catalog_status/GATES.md` (session GATES = #94)
+- `gate-check --reverify` G1–G3 PASS; G4 Fly MCP Point A still unmet (post-deploy)
+- Next: `/review`
+
 ## 2026-09-17 — docs: SPEC #94 TASK_92 background FCM + chat CTA
 
 - Gap: `FcmClient` notification+data → SW не владеет shade; OrderStatus chat → dead `orderDeepLink`
