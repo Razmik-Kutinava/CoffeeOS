@@ -185,10 +185,12 @@ export function openNotificationSettings(deps = {}) {
     }
     const win = openWindow(url, "_blank")
     const opened = Boolean(win)
+    // Android intent часто «открывается», но не ведёт к site notifications —
+    // всегда даём ручную инструкцию (acceptance Android+Chrome).
     return {
       attempted: true,
       opened,
-      fallbackInstruction: opened ? null : PUSH_SETTINGS_FALLBACK
+      fallbackInstruction: PUSH_SETTINGS_FALLBACK
     }
   } catch {
     return {

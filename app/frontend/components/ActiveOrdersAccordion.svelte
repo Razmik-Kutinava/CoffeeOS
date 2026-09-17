@@ -84,11 +84,8 @@
   function onOpenSettingsClick(e) {
     e.stopPropagation()
     const result = openNotificationSettings()
-    if (result?.opened) {
-      settingsFallback = ""
-      return
-    }
-    settingsFallback = result?.fallbackInstruction || PUSH_SETTINGS_FALLBACK
+    // Always surface instruction when provided (Android may report opened without landing).
+    settingsFallback = result?.fallbackInstruction || ""
   }
 
   /**

@@ -123,7 +123,8 @@ describe("openNotificationSettings (#81 / #92)", () => {
     })
     assert.equal(result.attempted, true)
     assert.equal(result.opened, true)
-    assert.equal(result.fallbackInstruction, null)
+    // Intent may not reach site settings — fallback always shown on Android path.
+    assert.equal(result.fallbackInstruction, PUSH_SETTINGS_FALLBACK)
     assert.equal(urls.length, 1)
     assert.match(urls[0], /intent:\/\/|android\.settings/i)
   })
