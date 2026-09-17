@@ -124,25 +124,38 @@ export async function downloadWalletPass(opts = {}) {
 }
 
 const PUSH_SUCCESS_LABEL = "✓ Уведомления включены"
-/** Публичный текст denied-баннера (#81). */
+/** Публичный текст denied-баннера (#81 / #92). */
 export const PUSH_DENIED_TOAST = "Уведомления запрещены в настройках браузера"
+/** #92 recovery CTA. */
+export const PUSH_OPEN_SETTINGS_CTA = "Открыть настройки"
+export const PUSH_WATCH_READINESS_CTA = "Смотреть готовность"
+/** Универсальная инструкция, если deep-link недоступен (#92). */
+export const PUSH_SETTINGS_FALLBACK =
+  "Откройте настройки сайта в браузере → Уведомления → Разрешить для этого сайта"
 const PUSH_NETWORK_TOAST = "Не удалось включить уведомления. Проверьте сеть."
 
 /**
- * Best-effort открытие настроек уведомлений браузера / site settings (#81).
+ * Best-effort открытие настроек уведомлений браузера / site settings (#81 / #92).
  * Web API не даёт надёжный deep-link — injectable `openSettings` для тестов и платформы.
+ * Если открыть нельзя — `fallbackInstruction` (не оставлять пользователя без шага).
  *
  * @param {{
  *   openSettings?: () => unknown,
- *   openWindow?: (url: string, target?: string) => unknown
+ *   openWindow?: (url: string, target?: string) => unknown,
+ *   userAgent?: string
  * }} [deps]
- * @returns {{ attempted: boolean, opened: boolean }}
+ * @returns {{ attempted: boolean, opened: boolean, fallbackInstruction: string|null }}
  */
 export function openNotificationSettings(deps = {}) {
   try {
     if (typeof deps.openSettings === "function") {
       const out = deps.openSettings()
-      return { attempted: true, opened: out !== false && out != null }
+      const opened = out !== false && out != null
+      return {
+        attempted: true,
+        opened,
+        fallbackInstruction: opened ? null : PUSH_SETTINGS_FALLBACK
+      }
     }
     // Chrome/Android: chrome:// и intent часто блокируются — пробуем без краша.
     const openWindow =
@@ -151,19 +164,38 @@ export function openNotificationSettings(deps = {}) {
         if (typeof globalThis.open === "function") return globalThis.open(url, target || "_blank")
         return null
       })
-    const ua = typeof navigator !== "undefined" ? String(navigator.userAgent || "") : ""
+    const ua =
+      typeof deps.userAgent === "string"
+        ? deps.userAgent
+        : typeof navigator !== "undefined"
+          ? String(navigator.userAgent || "")
+          : ""
     let url = null
     if (/Android/i.test(ua)) {
+      // Site notification settings for Chrome/Android (best-effort intent).
       url =
-        "intent://settings/apps/notification_settings#Intent;scheme=android.settings;end"
+        "intent://notification_settings/#Intent;scheme=android.settings;package=com.android.settings;end"
     }
     if (!url) {
-      return { attempted: true, opened: false }
+      return {
+        attempted: true,
+        opened: false,
+        fallbackInstruction: PUSH_SETTINGS_FALLBACK
+      }
     }
     const win = openWindow(url, "_blank")
-    return { attempted: true, opened: Boolean(win) }
+    const opened = Boolean(win)
+    return {
+      attempted: true,
+      opened,
+      fallbackInstruction: opened ? null : PUSH_SETTINGS_FALLBACK
+    }
   } catch {
-    return { attempted: true, opened: false }
+    return {
+      attempted: true,
+      opened: false,
+      fallbackInstruction: PUSH_SETTINGS_FALLBACK
+    }
   }
 }
 

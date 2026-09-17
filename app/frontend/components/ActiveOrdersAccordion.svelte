@@ -12,7 +12,11 @@
     resolveNotifyPrimaryInit,
     openNotificationSettings,
     openOrderReceipt,
-    notifyActionsView
+    notifyActionsView,
+    PUSH_DENIED_TOAST,
+    PUSH_OPEN_SETTINGS_CTA,
+    PUSH_WATCH_READINESS_CTA,
+    PUSH_SETTINGS_FALLBACK
   } from "../lib/orderStatusNotifyActions.js"
   import { openSupportChat } from "../lib/supportChatAdapter.js"
   import { SUPPORT_TELEGRAM_URL } from "../lib/supportConfig.js"
@@ -39,6 +43,8 @@
   let toastMsg = $state("")
   let toastOpensSettings = $state(false)
   let pushSubscribed = $state(false)
+  let pushRecovery = $state(false)
+  let settingsFallback = $state("")
 
   let orderId = $derived(order?.id || order?.order_id)
   let hasPushSubscription = $derived(
@@ -68,6 +74,23 @@
     openOrderReceipt(accordionState, orderId)
   }
 
+  function dismissPushRecovery() {
+    pushRecovery = false
+    settingsFallback = ""
+    toastMsg = ""
+    toastOpensSettings = false
+  }
+
+  function onOpenSettingsClick(e) {
+    e.stopPropagation()
+    const result = openNotificationSettings()
+    if (result?.opened) {
+      settingsFallback = ""
+      return
+    }
+    settingsFallback = result?.fallbackInstruction || PUSH_SETTINGS_FALLBACK
+  }
+
   /**
    * @param {string} kind
    */
@@ -75,6 +98,8 @@
     if (actionLoading) return
     toastMsg = ""
     toastOpensSettings = false
+    pushRecovery = false
+    settingsFallback = ""
 
     if (kind === "cancel") {
       if (typeof onCancelRequest === "function") {
@@ -111,7 +136,14 @@
           ? await downloadWalletPass({ orderId, onToast })
           : await subscribeOrderPush({ onToast })
       actionLoading = false
-      toastOpensSettings = Boolean(result?.openSettings)
+      if (kind === "push" && result?.openSettings) {
+        pushRecovery = true
+        toastMsg = ""
+        toastOpensSettings = false
+        settingsFallback = ""
+      } else {
+        toastOpensSettings = Boolean(result?.openSettings)
+      }
       if (result.ok) pushSubscribed = true
     }
   }
@@ -177,7 +209,40 @@
       onclick={onReceiptClick}
     >{receiptLabel}</button>
   {/if}
-  {#if toastMsg}
+  {#if pushRecovery}
+    <div
+      class="aoa__recovery"
+      data-testid="active-order-push-recovery"
+      role="status"
+    >
+      <p class="aoa__recovery-text">{PUSH_DENIED_TOAST}</p>
+      {#if settingsFallback}
+        <p
+          class="aoa__recovery-fallback"
+          data-testid="active-order-settings-fallback"
+        >{settingsFallback}</p>
+      {/if}
+      <div class="aoa__recovery-actions">
+        <button
+          type="button"
+          class="aoa__recovery-btn aoa__recovery-btn--primary"
+          data-testid="active-order-open-settings"
+          aria-label={PUSH_OPEN_SETTINGS_CTA}
+          onclick={onOpenSettingsClick}
+        >{PUSH_OPEN_SETTINGS_CTA}</button>
+        <button
+          type="button"
+          class="aoa__recovery-btn"
+          data-testid="active-order-watch-readiness"
+          aria-label={PUSH_WATCH_READINESS_CTA}
+          onclick={(e) => {
+            e.stopPropagation()
+            dismissPushRecovery()
+          }}
+        >{PUSH_WATCH_READINESS_CTA}</button>
+      </div>
+    </div>
+  {:else if toastMsg}
     {#if toastOpensSettings}
       <button
         type="button"
@@ -342,6 +407,49 @@
     text-underline-offset: 2px;
   }
   .aoa__toast--action:active { opacity: 0.85; }
+  .aoa__recovery {
+    margin-top: 0.35rem;
+    padding: 0.45rem 0.55rem;
+    border: 1px solid #555;
+    border-radius: 0.65rem;
+    background: #222;
+  }
+  .aoa__recovery-text {
+    margin: 0 0 0.35rem;
+    font-size: 0.68rem;
+    color: #ffb74d;
+    line-height: 1.35;
+  }
+  .aoa__recovery-fallback {
+    margin: 0 0 0.4rem;
+    font-size: 0.62rem;
+    color: #ccc;
+    line-height: 1.35;
+  }
+  .aoa__recovery-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+  .aoa__recovery-btn {
+    width: 100%;
+    margin: 0;
+    padding: 0.35rem 0.5rem;
+    border: 1px solid #666;
+    border-radius: 0.5rem;
+    background: #333;
+    color: #eee;
+    font-size: 0.72rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: center;
+  }
+  .aoa__recovery-btn--primary {
+    border-color: #ff8c42;
+    background: #ff8c42;
+    color: #000;
+  }
+  .aoa__recovery-btn:active { opacity: 0.9; }
   .aoa__receipt-cta {
     display: block;
     width: 100%;
