@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-17 — docs: SPEC #93 TASK_91 post-pay auto return catalog
+
+- Gap: success без email-блока (`!askReceiptEmail`) — только «В каталог»; submit/Skip уже `push("/")`
+- todo: 3 файла · Не ломать · Проверка · Next: `/sbr`
+
 ## 2026-09-17 — docs: unlazy GATES #93 + customer screenshots
 
 - screenshots `01`–`03` → `artifacts/post_pay_auto_return_catalog_status/screenshots/`
