@@ -4,7 +4,7 @@
 |------|----------|
 | **ID** | CBR **#71** · Патч_1 2026-09-17 |
 | **Тип** | **ПАТЧ** · канон `TASK_PATCH.md` |
-| **Статус** | **GREEN** · Next: `/regress` → `/review` |
+| **Статус** | **GREEN + regress PASS** · Next: `/review` |
 | **RED** | `5b1e31c2` |
 | **GREEN** | `55c34592` |
 | **Ветка** | `develop` |
@@ -59,4 +59,4 @@
 
 ## Next
 
-`/regress` → затем `/review`
+`/review`

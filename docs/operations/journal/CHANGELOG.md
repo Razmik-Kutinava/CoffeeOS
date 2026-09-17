@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-17 — regress: #71 Патч_1 server email PASS
+
+- Local: `orders_email_test` 13/0 · `email_collection_test` 21/0
+- GREEN `55c34592` · Entire `01M2QSJ5WY9Q3A3MC6028SZBBV` · Next: `/review`
+- Fly MCP Point A после Review/deploy (hot-path витрина)
+
 ## 2026-09-17 — docs: /patch #71 Патч_1 server email prefill
 
 - Секция **Патч_1** в TASK Email-сбор (#71): расхождение OrderEmail-only vs MobileCustomer.email
