@@ -42,11 +42,12 @@ module Shop
     # #39: платные каналы после бесплатных WS/Push/Wallet.
     # Group 4: grace → re-check presence в job; SMS только если всё ещё offline.
     # #82: сброс stale order:{id}:online (убитый WS без unsubscribe).
+    # #82 Патч_1: begin_sms_grace! — Cable reconnect внутри grace не даёт ложный SMS skipped.
     # Live Cable при hide-on-ready снимает подписку → unsubscribed → offline до SMS_GRACE.
     def self.enqueue_ready_cascade!(order)
       return unless order.ready?
 
-      Shop::OrderReadyPresence.mark_offline!(order.id)
+      Shop::OrderReadyPresence.begin_sms_grace!(order.id)
       Shop::OrderReadyCascadeJob
         .set(wait: Shop::OrderReadyCascadeJob::SMS_GRACE)
         .perform_later(order.id)

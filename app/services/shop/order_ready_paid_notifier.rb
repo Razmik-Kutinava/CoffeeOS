@@ -3,9 +3,8 @@
 module Shop
   # #39 v2 — платный fallback каскада: только SMS.ru (+ order_notification_logs).
   # Telegram убран из каскада (см. ТЗ v2).
+  # #82 Патч_1: текст с короткой ссылкой codeblack.xyz/o/{order_hash} (≤70).
   class OrderReadyPaidNotifier
-    SMS_TEMPLATE = "CODE:BLACK. Заказ готов! #%s"
-
     def self.call(order:)
       new(order).call
     end
@@ -36,7 +35,7 @@ module Shop
         return
       end
 
-      msg = format(SMS_TEMPLATE, @order.order_number)
+      msg = Shop::OrderReadySmsLink.sms_message_for(@order)
       result = Shop::SmsRuClient.send_message!(phone: phone, msg: msg)
       sms_id = result.respond_to?(:sms_id) ? result.sms_id : nil
       write_log!(

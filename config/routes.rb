@@ -17,6 +17,9 @@ Rails.application.routes.draw do
   get "/payment/success", to: "payment_returns#success"
   get "/payment/fail", to: "payment_returns#fail"
 
+  # #82 Патч_1 — SMS short link → shop order deep link
+  get "/o/:order_hash", to: "shop/order_short_links#show", as: :order_short_link
+
   # External callbacks (payment providers / fiscal providers / SMS.ru)
   namespace :callbacks do
     post "/payments", to: "events#payment"

@@ -4,8 +4,9 @@
 |------|----------|
 | **ID** | CBR **#82** / каскад #39 · **Патч_1** 2026-09-17 |
 | **Тип** | **ПАТЧ** · канон `TASK_PATCH.md` |
-| **Статус** | **RED** · тесты написаны · ждут GREEN |
-| **RED** | _(pending commit)_ |
+| **Статус** | **GREEN** · Local PASS · Next: `/review` |
+| **RED** | `33e7524c` |
+| **GREEN** | _(pending commit)_ |
 | **Ветка** | `develop` |
 | **Канон** | `@coffeeos-task-patch` · `@spec-build-review` · `@coffeeos-commit-ops` |
 | **ТЗ** | Google Doc § **Патч 1: 17.09.2026** · «Исправленный сценарий» |
@@ -16,8 +17,8 @@
 ## SBR
 
 - [x] `/patch` — секция Патч_1 + этот todo (Шаг 5)
-- [x] PHASE 2 RED
-- [ ] PHASE 2 GREEN
+- [x] PHASE 2 RED — `33e7524c`
+- [x] PHASE 2 GREEN — Presence grace + SMS short link + `/o/:hash`
 - [ ] PHASE 3 `/review`
 
 ## Файлы (ожидаемо)
@@ -45,25 +46,25 @@
 
 ## Проверка
 
-- `ruby bin/rails test test/jobs/shop/order_ready_cascade_job_test.rb test/services/shop/order_ready_presence_test.rb test/services/shop/order_ready_paid_notifier_test.rb test/services/shop/order_ready_sms_link_test.rb test/integration/shop/order_short_links_test.rb test/channels/shop/guest_order_channel_test.rb`
+- `ruby bin/rails test test/jobs/shop/order_ready_cascade_job_test.rb test/services/shop/order_ready_presence_test.rb test/services/shop/order_ready_paid_notifier_test.rb test/services/shop/order_ready_sms_link_test.rb test/integration/shop/order_short_links_test.rb test/channels/shop/guest_order_channel_test.rb` → **36/0 PASS**
 
 ## DoD (Патч_1)
 
-1. [ ] Cable reconnect внутри SMS_GRACE ≠ ложный SMS skipped
-2. [ ] Presence/cache error → log + ActiveJob retry (не silent swallow)
-3. [ ] SMS через `SmsRuClient.send_message!` с `codeblack.xyz/o/{order_hash}`
-4. [ ] SMS ≤70 до HTTP; >70 → ValidationError без HTTP
-5. [ ] 3.2 network fail — без регрессии
-6. [ ] Бесплатные WS/WebPush/Wallet не заменены SMS
+1. [x] Cable reconnect внутри SMS_GRACE ≠ ложный SMS skipped
+2. [x] Presence/cache error → log + ActiveJob retry (не silent swallow)
+3. [x] SMS через `SmsRuClient.send_message!` с `codeblack.xyz/o/{order_hash}`
+4. [x] SMS ≤70 до HTTP; ValidationError → failed log + re-raise
+5. [x] 3.2 network fail — без регрессии
+6. [x] Бесплатные WS/WebPush/Wallet не заменены SMS
 
 ## Исправленный сценарий (чекбокс)
 
-- [ ] Subtask 2.1 (patch v2) — Presence после grace без ложного skip на reconnect
-- [ ] Subtask 2.1 (patch v2) — Presence/cache unavailable → retry
-- [ ] Subtask 3.1 (patch v2) — `send_message!` + short link вместо `#order_number`
-- [ ] Subtask 3.1 (patch v2) — ≤70 до HTTP
+- [x] Subtask 2.1 (patch v2) — Presence после grace без ложного skip на reconnect
+- [x] Subtask 2.1 (patch v2) — Presence/cache unavailable → retry
+- [x] Subtask 3.1 (patch v2) — `send_message!` + short link вместо `#order_number`
+- [x] Subtask 3.1 (patch v2) — ≤70 до HTTP
 - [x] Subtask 3.2 — без изменений (уже ок)
 
 ## Next
 
-GREEN
+`/review`

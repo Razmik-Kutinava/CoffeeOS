@@ -93,19 +93,19 @@ class Shop::OrderReadyCascadeJobTest < ActiveSupport::TestCase
     assert_no_match(/SMS skipped\./, logs)
   end
 
-  test "#82 P1 Presence/cache failure logs and raises PresenceUnavailableError for retry" do
+  test "#82 P1 Presence/cache failure logs and schedules ActiveJob retry" do
     original = Rails.cache.method(:read)
     Rails.cache.define_singleton_method(:read) do |*_args|
       raise StandardError, "cache 500"
     end
 
     logs = capture_cascade_logs do
-      err = assert_raises(Shop::OrderReadyCascadeJob::PresenceUnavailableError) do
+      assert_enqueued_with(job: Shop::OrderReadyCascadeJob, args: [ @order.id ]) do
         Shop::OrderReadyCascadeJob.perform_now(@order.id)
       end
-      assert_match(/cache 500/, err.message)
     end
     assert_match(/Presence unavailable/, logs)
+    assert_match(/cache 500/, logs)
   ensure
     Rails.cache.define_singleton_method(:read, original) if original
   end
