@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-17 — docs: SPEC #94 TASK_92 background FCM + chat CTA
+
+- Gap: `FcmClient` notification+data → SW не владеет shade; OrderStatus chat → dead `orderDeepLink`
+- todo: 6 файлов · Не ломать · Проверка · Next: `/sbr`
+
 ## 2026-09-17 — docs: #93 zone regress PASS
 
 - `node --test email_collection_test.mjs` — 19 pass

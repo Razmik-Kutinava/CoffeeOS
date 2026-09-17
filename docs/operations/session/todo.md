@@ -1,79 +1,79 @@
-# todo — #93 TASK_91: post-pay auto return → catalog + status
+# todo — #94 TASK_92: Production background FCM + status sync
 
 | Поле | Значение |
 |------|----------|
-| **ID** | CBR **#93** (Google: TASK_91) |
-| **Тип** | SBR · EXT #71 post-pay → авто `#/` + status model |
-| **Статус** | **regress PASS** 2026-09-17 · ждёт `/review` |
-| **RED** | `350f6b95` |
-| **GREEN** | `118e5488` |
+| **ID** | CBR **#94** (Google/customer: TASK_92) |
+| **Тип** | SBR · reopen #38/#81: фоновые FCM + чат CTA |
+| **Статус** | **SPEC** 2026-09-17 · ждёт `/sbr` RED |
+| **RED** | _(fill)_ |
+| **GREEN** | _(fill)_ |
 | **Ветка** | `develop` |
-| **Канон** | `@spec-build-review` · `@coffeeos-commit-ops` · `@coffeeos-dev-gates` |
-| **ТЗ** | [`TASK-91-Автоматический-возврат-на-каталог-после-post-pay-email.md`](../milestones/veha_2/requirements/customer_tasks/TASK-91-Автоматический-возврат-на-каталог-после-post-pay-email.md) |
-| **Google** | https://docs.google.com/document/d/1nlWXyWV0UcV5X33i0owZixXRJl5d-nF_HwHdjjBVd2o/edit |
-| **Артефакты** | [`post_pay_auto_return_catalog_status/`](../milestones/veha_2/artifacts/post_pay_auto_return_catalog_status/) · screenshots `01`–`03` |
-| **GATES** | [`GATES.md`](GATES.md) — G1–G3 baseline met · G4 Fly pending |
-| **OUT** | Checkout `completePaySuccess` · SBP #79/#86 · OrderStatusSheet internals · Quick Repeat #87 · `isCartSheetRoute` + `/payment-result` · settleSuccess → `/order/:id` |
+| **Канон** | `@spec-build-review` · `@coffeeos-commit-ops` · `@coffeeos-dev-gates` · unlazy `GATES.md` |
+| **ТЗ** | [`TASK-92-Production-background-FCM-и-синхронизация-статусов-заказа.md`](../milestones/veha_2/requirements/customer_tasks/TASK-92-Production-background-FCM-и-синхронизация-статусов-заказа.md) |
+| **Google** | https://docs.google.com/document/d/1gcML9WkV4n2s6KNsDN0sobY3ITm4Dge9kOjStzf917g/edit?usp=sharing |
+| **Артефакты** | [`production_background_fcm_status_sync/`](../milestones/veha_2/artifacts/production_background_fcm_status_sync/) |
+| **GATES** | [`GATES.md`](GATES.md) — G1–G4 baseline met · G5 Fly pending |
+| **OUT** | Barista::OrdersController / OrderStatusUpdateService · полный Wallet redesign · CBR #92 WebPush recovery UI · gem’ы оплаты · RSpec/Vitest стек из ТЗ |
 
 ## SBR
 
 - [x] PHASE 0 intake
 - [x] PHASE 1 `/spec`
-- [x] PHASE 2 RED — `350f6b95`
-- [x] PHASE 2 GREEN
+- [ ] PHASE 2 RED
+- [ ] PHASE 2 GREEN
 - [ ] PHASE 3 `/review`
 
 ## Next
 
-`/review` — bugbot + security · Entire · push/CI · G4 Fly после deploy.
+`/sbr` RED — тесты на FCM web shape + chat CTA (`openSupportChat` / navigate).
 
 ## DoD
 
-1. Success `#/payment-result?status=ok` + **email блок** → после submit или Skip уже есть `push("/")` — сохранить.
-2. Success + **без** email-блока (`askReceiptEmail === false`, чек email в LS — типичный повтор / карточка товара) → **авто** `push("/")` после готовности success screen; без обязательного клика «В каталог».
-3. Пока email-блок виден — **нет** auto-redirect при mount (защита #71 / `email_collection_test` ~73–80).
-4. CTA `payment-result-continue` «В каталог» остаётся совместимым с #35 (`onclick={handleEmailSkip}`).
-5. На `#/` — существующая статусная модель без правок её логики.
+1. При валидном FCM token и смене статуса (`accepted`/`preparing`/`ready`) Android **фоновый** пуш управляется SW: **tag** дедуп, **actions**, прогресс в тексте — не «голый» system notification без actions.
+2. Кнопка **«Чат с поддержкой»** на карточке заказа (`OrderStatus`) **открывает** support (не мёртвый `orderDeepLink` без handler).
+3. Клик Chat из FCM shade (если SW postMessage / deep link) доводит до support или явного navigate handler — не silent no-op.
+4. `Barista::OrdersController` / `Barista::OrderStatusUpdateService` — **без diff**.
+5. Не ломать существующий accordion path `openSupportChat` и GATES G1–G4 зону.
 
 ## Факт кода (SPEC)
 
-| Вопрос Spec | Ответ |
-|-------------|--------|
-| Кто завершает email submit | `handleEmailSubmit` → `submitOrderEmail` → `saveReceiptEmail` → `push("/")` |
-| Кто Skip | `handleEmailSkip` → delay 200ms → `push("/")`; Continue = тот же handler |
-| Когда email-flow «завершён» | submit ok / Skip / **или** `shouldAskReceiptEmail(savedReceipt) === false` (блок не показывают) |
-| Nav API | `push` из `svelte-spa-router` → `push("/")` |
-| Runner #71 | `node --test test/javascript/email_collection_test.mjs` |
-| Runner #35 | `ruby bin/rails test test/integration/shop/order_status_acceptance_cbr_test.rb` |
-
-**Gap:** ветка `{:else}` (~198–208) только кнопка «В каталог» — автоперехода нет → скрин заказчика `01_stuck_…`.
+| Вопрос | Ответ |
+|--------|--------|
+| Backend payload tag/actions/progress | Уже в `OrderStatusPushPayload` / `OrderStatusPushNotifier` |
+| Почему фон «не реализован» | `FcmClient` шлёт `notification`+`data` → Android часто **не** зовёт SW `onBackgroundMessage` → нет custom tag/actions |
+| Чат CTA на OrderStatus | `onCtaClick` → `location.assign(orderDeepLink)` — **нет** `openSupportChat` / parser `?action=` |
+| Чат в accordion | Уже `openSupportChat` |
+| SW → app | `postMessage({ type: "coffeeos_navigate" })` — **нет** listener в `application.js` |
 
 ## Файлы (ожидаемо)
 
-| Path | Зачем |
-|------|--------|
-| `app/frontend/routes/PaymentResult.svelte` | Авто `push("/")` когда success готов и `!askReceiptEmail`; не трогать mount→email path |
-| `test/javascript/email_collection_test.mjs` | RED: auto-nav при known receipt; regression: нет immediate redirect при ask email |
-| `test/integration/shop/order_status_acceptance_cbr_test.rb` | `#35` Continue / `push("/")` остаётся |
+- `app/services/shop/fcm_client.rb` — web/PWA message shape так, чтобы SW владел showNotification (tag/actions)
+- `app/frontend/routes/OrderStatus.svelte` — chat CTA → `openSupportChat` (не мёртвый deep link)
+- `app/frontend/lib/supportChatAdapter.js` — opener + fallback если `window.open` блокируется
+- `app/frontend/lib/swNotificationActions.js` — контракт actions / deep link для SW
+- `app/frontend/entrypoints/application.js` — listener `coffeeos_navigate` от FCM SW
+- `app/views/shop/firebase_sw/show.js.erb` — выравнивание SW с payload/actions (blast)
 
-### Blast-radius (не менять, только не сломать)
+### Соседи (blast-radius)
 
-| Path | Почему сосед |
-|------|----------------|
-| `app/frontend/lib/emailCollection.js` | `shouldAskReceiptEmail` — контракт gate email-блока |
-| `app/frontend/components/OrderSuccessEmailBlock.svelte` | UI submit/skip; handlers снаружи |
-| `app/frontend/lib/cartSheetStore.js` | `isCartSheetRoute` — не добавлять `/payment-result` |
+- `app/jobs/shop/ready_push_job.rb` — тот же FcmClient path на `ready`
+- `app/frontend/components/ActiveOrdersAccordion.svelte` — эталон chat → `openSupportChat`
+- `app/frontend/lib/orderStatusCtaMachine.js` — только labels/matrix; не трогать без нужды
 
 ## Не ломать
 
-1. Card / Rebill / one-click / SBP оплата и `completePaySuccess` → `#/payment-result?status=ok&order_id=…`.
-2. #71 email-блок при первом success: нет auto-redirect до submit/Skip.
-3. #35 Continue «В каталог» / acceptance `order_status_acceptance_cbr_test`.
-4. SBP waiting/recover #79/#86 · Quick Repeat #87 · статусная модель на `#/` без mount на payment-result.
+- Оплата / Checkout / SBP return (#79/#86)
+- Статусная шторка accordion: Peek / dismiss / receipt (#83/#84)
+- WebPush recovery after denied (#92) UI
+- Subscribe path `firebasePush.js` / register token (не ломать granted flow)
 
 ## Проверка
 
-```bash
-node --test test/javascript/email_collection_test.mjs
-ruby bin/rails test test/integration/shop/order_status_acceptance_cbr_test.rb test/integration/shop/order_status_sheet_mount_acceptance_test.rb
-```
+- `ruby bin/rails test test/services/shop/fcm_client_test.rb test/services/shop/order_status_push_notifier_test.rb test/services/shop/order_status_push_payload_test.rb`
+- `node --test test/javascript/support_chat_adapter_test.mjs test/javascript/order_status_push_subscribe_test.mjs`
+
+## Тесты (ожидаемо RED)
+
+- `test/services/shop/fcm_client_test.rb` — assert web-safe message shape (data-driven / SW-owned)
+- `test/javascript/support_chat_adapter_test.mjs` — fallback / OrderStatus wiring contract
+- `test/javascript/order_status_push_subscribe_test.mjs` — OrderStatus chat → `openSupportChat` (не только accordion)

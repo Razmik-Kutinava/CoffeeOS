@@ -20,7 +20,7 @@
 | #81 Notifications / Wallet / WebPush gaps | 🟡 | v482 MCP PASS · denied→settings → **#92** · фоновые/чат — backlog |
 | #92 WebPush recovery after denied (TASK_90) | 🟢 | **REVIEW** CI green `35191890272` · deploy апрув · G5 Fly MCP |
 | #93 Post-pay auto return → catalog (TASK_91) | 🟡 | **regress PASS** · ждёт `/review` · G4 Fly после deploy |
-| #94 Production background FCM (TASK_92) | 🟡 | **unlazy** G1–G4 PASS · G5 Fly pending · ждёт `/spec` · reopen #38/#81 |
+| #94 Production background FCM (TASK_92) | 🟡 | **SPEC** 2026-09-17 · ждёт `/sbr` · FCM SW-owned + chat CTA |
 | #82 Cascade SMS ready + sheet stuck | 🟡 | v482 MCP PASS · hide+SMS sent · ждёт апрув заказчика |
 | GH FLY_API_TOKEN | 🟢 | org token · Deploy green 2026-09-07 |
 | Min charge 10₽ | 🟢 | PTS ≥10 · Init guard · Fly bump 48 rows 2026-09-07 |
