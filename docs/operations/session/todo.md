@@ -6,7 +6,7 @@
 | **Тип** | SBR · EXT #71 post-pay → авто `#/` + status model |
 | **Статус** | **GREEN** 2026-09-17 · ждёт `/regress` → `/review` |
 | **RED** | `350f6b95` |
-| **GREEN** | _(fill after commit)_ |
+| **GREEN** | `118e5488` |
 | **Ветка** | `develop` |
 | **Канон** | `@spec-build-review` · `@coffeeos-commit-ops` · `@coffeeos-dev-gates` |
 | **ТЗ** | [`TASK-91-Автоматический-возврат-на-каталог-после-post-pay-email.md`](../milestones/veha_2/requirements/customer_tasks/TASK-91-Автоматический-возврат-на-каталог-после-post-pay-email.md) |
