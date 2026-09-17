@@ -18,7 +18,7 @@
 | #90 Callcheck return → continue payment (POSTCALL-EXT) | 🟢 | **REVIEW** CI green `35116445356` · deploy апрув · G5 Fly MCP |
 | #91 PWA auth phone input UI/UX (UI-EXT) | 🟢 | **REVIEW** CI green `35108357982` · deploy апрув · G5 Fly MCP |
 | #81 Notifications / Wallet / WebPush gaps | 🟡 | v482 MCP PASS · denied→settings → **#92** · фоновые/чат — backlog |
-| #92 WebPush recovery after denied (TASK_90) | 🟡 | **SPEC** 2026-09-17 · ждёт `/sbr` |
+| #92 WebPush recovery after denied (TASK_90) | 🟡 | **regress PASS** · ждёт `/review` · G5 Fly после deploy |
 | #82 Cascade SMS ready + sheet stuck | 🟡 | v482 MCP PASS · hide+SMS sent · ждёт апрув заказчика |
 | GH FLY_API_TOKEN | 🟢 | org token · Deploy green 2026-09-07 |
 | Min charge 10₽ | 🟢 | PTS ≥10 · Init guard · Fly bump 48 rows 2026-09-07 |

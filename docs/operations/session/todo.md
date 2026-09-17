@@ -4,7 +4,7 @@
 |------|----------|
 | **ID** | CBR **#92** (Google: TASK_90) |
 | **Тип** | SBR · EXT #81 — recovery UI + deep-link/fallback `denied → settings` |
-| **Статус** | **GREEN** 2026-09-17 · `0b7f0b2d` · ждёт `/regress` |
+| **Статус** | **regress PASS** 2026-09-17 · ждёт `/review` |
 | **GREEN** | `0b7f0b2d` · Entire `01M2Q1AF4E2PWDD5JW1FZPRPF1` |
 | **RED** | `95a9a000` |
 | **Ветка** | `develop` |
@@ -25,7 +25,7 @@
 
 ## Next
 
-`/regress`
+`/review`
 
 ## DoD
 

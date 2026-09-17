@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-17 — docs: #92 zone regress PASS (WebPush denied recovery)
+
+- node: push_subscribe + notify + accordion — 52 pass
+- rails: order_status acceptance + sheet_mount — 15 runs / 139 assert / 0 fail
+- unlazy `--reverify` G1–G4 PASS · G5 Fly MCP Point A still unmet (post-deploy)
+
 ## 2026-09-17 — docs: SPEC #92 TASK_90 WebPush recovery after denied
 
 - todo: recovery UI + deep-link/fallback `denied → settings`
