@@ -6,7 +6,7 @@
 | **Тип** | **ПАТЧ** · канон `TASK_PATCH.md` |
 | **Статус** | **GREEN** · Next: `/regress` → `/review` |
 | **RED** | `5b1e31c2` |
-| **GREEN** | _(pending commit)_ |
+| **GREEN** | `55c34592` |
 | **Ветка** | `develop` |
 | **Канон** | `@coffeeos-task-patch` · `@spec-build-review` · `@coffeeos-commit-ops` |
 | **ТЗ** | [`Email-сбор после оплаты (Callcheck-флоу).md`](../milestones/veha_2/requirements/customer_tasks/Email-сбор%20после%20оплаты%20(Callcheck-флоу).md) § **Патч_1** |
