@@ -4,7 +4,7 @@
 |------|----------|
 | **ID** | CBR **#94** (Google/customer: TASK_92) |
 | **Тип** | SBR · reopen #38/#81: фоновые FCM + чат CTA |
-| **Статус** | **GREEN** 2026-09-17 · ждёт `/regress` |
+| **Статус** | **regress PASS** 2026-09-17 · ждёт `/review` |
 | **RED** | `20c05ba6` |
 | **GREEN** | `f274c11c` |
 | **Ветка** | `develop` |
@@ -25,7 +25,7 @@
 
 ## Next
 
-`/regress` — зона Проверка; затем `/review`.
+`/review` — bugbot + security · Entire · push/CI · G5 Fly после deploy.
 
 ## DoD
 
