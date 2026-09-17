@@ -242,3 +242,12 @@ describe("#84 restore receipt in status sheet", () => {
     )
   })
 })
+
+describe("#92 WebPush recovery after denied", () => {
+  it("recovery panel with open-settings and watch-readiness CTAs", () => {
+    const src = readFileSync(accordionComponentPath, "utf8")
+    assert.match(src, /data-testid=["']active-order-push-recovery["']/)
+    assert.match(src, /data-testid=["']active-order-open-settings["']/)
+    assert.match(src, /data-testid=["']active-order-watch-readiness["']/)
+  })
+})

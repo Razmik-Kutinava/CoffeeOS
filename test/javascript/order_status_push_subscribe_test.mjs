@@ -1,5 +1,5 @@
 /**
- * #81 — denied → settings + accordion wire [RED / TDD].
+ * #81 / #92 — denied → settings + recovery UI [TDD].
  *
  * node --test test/javascript/order_status_push_subscribe_test.mjs
  */
@@ -12,7 +12,10 @@ import { dirname, join } from "node:path"
 import {
   subscribeOrderPush,
   openNotificationSettings,
-  PUSH_DENIED_TOAST
+  PUSH_DENIED_TOAST,
+  PUSH_OPEN_SETTINGS_CTA,
+  PUSH_WATCH_READINESS_CTA,
+  PUSH_SETTINGS_FALLBACK
 } from "../../app/frontend/lib/orderStatusNotifyActions.js"
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "../..")
@@ -72,7 +75,7 @@ describe("subscribeOrderPush (#37 step 5 / #81)", () => {
   })
 })
 
-describe("openNotificationSettings (#81)", () => {
+describe("openNotificationSettings (#81 / #92)", () => {
   it("calls injectable openSettings and returns opened", () => {
     let called = 0
     const result = openNotificationSettings({
@@ -84,6 +87,7 @@ describe("openNotificationSettings (#81)", () => {
     assert.equal(called, 1)
     assert.equal(result.attempted, true)
     assert.equal(result.opened, true)
+    assert.equal(result.fallbackInstruction, null)
   })
 
   it("best-effort: no crash when openSettings fails / missing", () => {
@@ -94,10 +98,47 @@ describe("openNotificationSettings (#81)", () => {
     })
     assert.equal(result.attempted, true)
     assert.equal(result.opened, false)
+    assert.equal(result.fallbackInstruction, PUSH_SETTINGS_FALLBACK)
+  })
+
+  it("#92: when deep-link unavailable returns fallback instruction", () => {
+    const result = openNotificationSettings({
+      openSettings: () => false
+    })
+    assert.equal(result.attempted, true)
+    assert.equal(result.opened, false)
+    assert.ok(result.fallbackInstruction)
+    assert.match(result.fallbackInstruction, /настройк|уведомлен/i)
+    assert.equal(result.fallbackInstruction, PUSH_SETTINGS_FALLBACK)
+  })
+
+  it("#92: Android intent path attempts openWindow", () => {
+    const urls = []
+    const result = openNotificationSettings({
+      userAgent: "Mozilla/5.0 (Linux; Android 14) Chrome/120.0.0.0 Mobile",
+      openWindow: (url) => {
+        urls.push(url)
+        return { ok: true }
+      }
+    })
+    assert.equal(result.attempted, true)
+    assert.equal(result.opened, true)
+    assert.equal(result.fallbackInstruction, null)
+    assert.equal(urls.length, 1)
+    assert.match(urls[0], /intent:\/\/|android\.settings/i)
   })
 })
 
-describe("ActiveOrdersAccordion wires push + denied settings (#81)", () => {
+describe("#92 recovery CTA copy", () => {
+  it("exports Открыть настройки and Смотреть готовность labels", () => {
+    assert.equal(PUSH_OPEN_SETTINGS_CTA, "Открыть настройки")
+    assert.equal(PUSH_WATCH_READINESS_CTA, "Смотреть готовность")
+    assert.match(PUSH_SETTINGS_FALLBACK, /уведомлен/i)
+    assert.match(PUSH_DENIED_TOAST, /запрещены/i)
+  })
+})
+
+describe("ActiveOrdersAccordion wires push + denied settings (#81 / #92)", () => {
   it("imports subscribeOrderPush and handles push kind in onAction", () => {
     const src = readFileSync(accordionPath, "utf8")
     assert.match(src, /subscribeOrderPush/)
@@ -105,13 +146,33 @@ describe("ActiveOrdersAccordion wires push + denied settings (#81)", () => {
     assert.match(src, /onAction/)
   })
 
-  it("wires openNotificationSettings on denied toast click", () => {
+  it("wires openNotificationSettings on denied recovery", () => {
     const src = readFileSync(accordionPath, "utf8")
     assert.match(src, /openNotificationSettings/)
-    assert.match(src, /active-order-notify-toast/)
-    assert.match(src, /toastOpensSettings/)
     assert.match(src, /result\?\.openSettings|result\.openSettings/)
-    assert.match(src, /aoa__toast--action/)
+  })
+
+  it("#92: recovery UI — Открыть настройки + Смотреть готовность", () => {
+    const src = readFileSync(accordionPath, "utf8")
+    assert.match(src, /active-order-push-recovery/)
+    assert.match(src, /active-order-open-settings/)
+    assert.match(src, /active-order-watch-readiness/)
+    assert.match(src, /PUSH_OPEN_SETTINGS_CTA|Открыть настройки/)
+    assert.match(src, /PUSH_WATCH_READINESS_CTA|Смотреть готовность/)
+    assert.match(src, /PUSH_DENIED_TOAST/)
+  })
+
+  it("#92: Смотреть готовность clears recovery without new state machine", () => {
+    const src = readFileSync(accordionPath, "utf8")
+    assert.match(src, /active-order-watch-readiness/)
+    assert.match(src, /pushRecovery\s*=\s*false|dismissPushRecovery|clearPushRecovery/)
+    assert.doesNotMatch(src, /orderStatusCtaMachine/)
+  })
+
+  it("#92: fallback instruction shown when settings not opened", () => {
+    const src = readFileSync(accordionPath, "utf8")
+    assert.match(src, /active-order-settings-fallback/)
+    assert.match(src, /fallbackInstruction|PUSH_SETTINGS_FALLBACK|settingsFallback/)
   })
 
   it("opens support chat with default Telegram URL path", () => {
