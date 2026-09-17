@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-17 — docs: #94 zone regress PASS
+
+- `rails test fcm_client+notifier+payload` — 15 runs, 0 fail
+- `node --test support_chat + push_subscribe` — 22 pass
+- `push_pipeline_simulation` — 2 runs, 0 fail
+- Next: `/review` · Fly MCP G5 после deploy
+
 ## 2026-09-17 — docs: update COMPONENT_MAP — PaymentResult / Checkout / CartSheet / OrderStatusSheet
 
 - БЛОК 4 #93: новая строка PaymentResult; точечно Checkout · CartSheet · cartSheetStore · OrderStatusSheet · orderStatusSheet.js
