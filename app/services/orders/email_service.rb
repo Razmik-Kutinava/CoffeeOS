@@ -20,10 +20,11 @@ module Orders
       end
 
       if email_value.blank?
+        persist_customer_contact!("")
         success_response(order_email, queued_receipt: true)
       else
         if order_email.save
-          mark_customer_email_collected!
+          persist_customer_contact!(email_value)
           success_response(order_email, queued_receipt: true)
         else
           raise ValidationError, order_email.errors.full_messages.join(", ")
@@ -52,12 +53,25 @@ module Orders
       }
     end
 
-    # #77: first successful order email → customer.email_collected_at (idempotent).
-    def mark_customer_email_collected!
+    # #71 Патч_1: post-pay email → MobileCustomer profile (verified phone), not only OrderEmail.
+    def persist_customer_contact!(email_value)
       customer = @order.customer
       return unless customer
 
-      customer.mark_email_collected!
+      if email_value.blank?
+        return if customer.email.blank?
+
+        customer.update!(email: nil)
+        return
+      end
+
+      return if customer.email == email_value
+
+      customer.email = email_value
+      customer.email_collected_at ||= Time.current
+      customer.save!
+    rescue ActiveRecord::RecordInvalid => e
+      raise ValidationError, e.record.errors.full_messages.join(", ")
     end
   end
 end

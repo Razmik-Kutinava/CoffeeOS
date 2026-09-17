@@ -121,13 +121,21 @@
     reconnectToken = guestReconnectToken() || ""
     const savedReceipt = loadReceiptEmail()
     const profile = loadGuestProfile()
-    // Prefill may use profile email; hide block only after receipt LS was saved (#71 QA).
-    prefillEmail = savedReceipt || profile?.email || ""
-    askReceiptEmail = shouldAskReceiptEmail(savedReceipt)
 
     try {
       await reconnectGuestOrder(api)
       clearPaymentSession()
+
+      // #71 Патч_1: server profile email (verified phone) — LS is fallback only.
+      let serverEmail = ""
+      try {
+        const remote = await api("profile")
+        serverEmail = String(remote?.email || "").trim().toLowerCase()
+      } catch {
+        /* unauthorized / guest — LS + guest profile only */
+      }
+      prefillEmail = savedReceipt || serverEmail || profile?.email || ""
+      askReceiptEmail = shouldAskReceiptEmail(savedReceipt || serverEmail)
 
       if (status === "waiting") {
         waitingForBank = true
