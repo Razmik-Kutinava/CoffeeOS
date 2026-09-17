@@ -1,11 +1,10 @@
 # TASK_92: Production background FCM и синхронизация статусов заказа
 
-**CBR:** #94 · **Дата intake:** 2026-09-17  
+**ID заказчика:** TASK_92 · **CBR:** #92 · **Дата intake:** 2026-09-17  
 **Источник:** текст заказчика (правка по фоновым уведомлениям) + Google Doc  
 **Артефакты:** docs/operations/milestones/veha_2/artifacts/production_background_fcm_status_sync/  
 **Google Doc:** https://docs.google.com/document/d/1gcML9WkV4n2s6KNsDN0sobY3ITm4Dge9kOjStzf917g/edit?usp=sharing  
 **Связь:** reopen / gap — [#38 Фоновые уведомления…](Фоновые%20уведомления%20прогресс-бар%20Android%20FCM%20и%20Apple%20Wallet%20iOS.md) · [#81 Косяки…](Косяки%20уведомлений%20Wallet%20WebPush%20фоновые%20и%20кнопка%20чат.md) · [#41 Action Buttons…](Динамический%20блок%20действий%20Action%20Buttons%20в%20статусной%20панели%20заказа.md)  
-**Не путать:** CBR #92 = WebPush recovery after denied (TASK_90)
 
 ---
 
@@ -93,10 +92,10 @@ https://docs.google.com/document/d/1gcML9WkV4n2s6KNsDN0sobY3ITm4Dge9kOjStzf917g/
 
 ## Заметки агента
 
+- ID заказчика **TASK_92** = CBR **#92**.
 - Google Doc MCP: `user-google-docs` / `docs_read_document` — документ прочитан 2026-09-17; содержимое совпадает с каноном #38.
-- Customer label **TASK_92** → CBR **#94** (CBR #92 уже = WebPush recovery / TASK_90).
 - Фокус правки заказчика: **п.1 не реализовано** — фоновая поддержка уведомлений (FCM в шторке Android без открытой PWA).
-- Комментарий заказчика: «это задача не может быть реализована так как сам модуль подключения push-уведомлений через браузер не реализован» — продуктовый блокер/зависимость от WebPush subscribe (#37/#92).
+- Комментарий заказчика: «это задача не может быть реализована так как сам модуль подключения push-уведомлений через браузер не реализован» — продуктовый блокер/зависимость от WebPush subscribe (#37 / TASK_90).
 - Второй gap: кнопка «чат с поддержкой» **показывается** по статусной модели (подстановка/смена текста CTA), но **не работает** (клик).
 - Оспаривается формулировка «Задача реализована полностью».
 - Без правок кода на intake; Next: `go` → `/spec`.

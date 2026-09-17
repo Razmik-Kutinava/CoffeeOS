@@ -1,6 +1,6 @@
 # TASK_91: Автоматический возврат на каталог после завершения post-pay email-флоу
 
-**CBR:** #93 · **Дата intake:** 2026-09-17  
+**ID заказчика:** TASK_91 · **CBR:** #91 · **Дата intake:** 2026-09-17  
 **Источник:** чат заказчика (п.9 / 9.2) + скрины + Google Doc Spec  
 **Артефакты:** docs/operations/milestones/veha_2/artifacts/post_pay_auto_return_catalog_status/  
 **Google Doc:** https://docs.google.com/document/d/1nlWXyWV0UcV5X33i0owZixXRJl5d-nF_HwHdjjBVd2o/edit  
@@ -241,7 +241,7 @@ payment-result mount
 
 ## Заметки агента
 
-- Заказчик п.9.2 ≈ Google TASK_91 → CBR **#93** (#91 в CBR занят UI-EXT phone input).
+- ID заказчика **TASK_91** = CBR **#91**.
 - Скрины чата: (1) stuck «Чек сформирован»+«В каталог»; (2) эталон каталог+статусная модель; (3) статусная модель (автоплатёж/повтор / кейс отмены). Файлы: `artifacts/post_pay_auto_return_catalog_status/screenshots/01`–`03`.
-- п.9.1 → уже #92 TASK_90 (REVIEW, deploy апрув); в этот intake не входит.
+- п.9.1 → TASK_90 (REVIEW, deploy апрув); в этот intake не входит.
 - Unlazy: `docs/operations/session/GATES.md` — G1–G3 baseline met; G4 Fly после deploy.

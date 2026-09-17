@@ -1,8 +1,8 @@
-# Gates: #93 TASK_91 — post-pay auto return → catalog + status
+# Gates: TASK_91 / #91 — post-pay auto return → catalog + status
 
 Scope: После email submit/Skip или при `!askReceiptEmail` на `#/payment-result?status=ok` пользователь автоматически попадает на `#/` с существующей статусной моделью; без немедленного redirect при visible email-блоке; без правок Checkout/SBP/OrderStatusSheet internals.
 
-- [x] G1: email / PaymentResult zone (node #71 + #93)
+- [x] G1: email / PaymentResult zone (node #71 + TASK_91)
   CHECK: node --test test/javascript/email_collection_test.mjs
   EXPECT: fail 0
   CWD: C:/Tools/workarea/CoffeeOS
@@ -24,9 +24,9 @@ Scope: После email submit/Skip или при `!askReceiptEmail` на `#/pay
   EVIDENCE: pending — skip until PHASE 3 REVIEW / deploy; artifact under artifacts/post_pay_auto_return_catalog_status/mcp/; PASS = no stuck «В каталог» when receipt known · status model on `#/` · no immediate redirect while email block shown · Continue CTA still works · SBP/QR untouched
 
 <!--
-CoffeeOS #93 unlazy (post-GREEN / pre-REVIEW):
+CoffeeOS TASK_91 unlazy (post-GREEN / pre-REVIEW):
 - GREEN 118e5488 · maybeAutoReturnToCatalog when !askReceiptEmail
-- Session GATES.md may be owned by another task (#94) — this file is the #93 ledger.
+- Session GATES.md may be owned by another task (TASK_92) — this file is the TASK_91 ledger.
 - G1–G3 local; G4 Fly Point A after deploy.
 - ABANDON only with reason at column 1.
 -->

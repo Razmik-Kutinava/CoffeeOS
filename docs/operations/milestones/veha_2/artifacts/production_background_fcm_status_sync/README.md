@@ -1,4 +1,4 @@
-# Production background FCM + status sync (#94 / TASK_92)
+# Production background FCM + status sync (TASK_92 / #92)
 
 Intake 2026-09-17. Customer feedback: фоновая поддержка уведомлений не реализована; reopen gap #38 / #81.
 

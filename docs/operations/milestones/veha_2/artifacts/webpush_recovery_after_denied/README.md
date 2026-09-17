@@ -1,4 +1,4 @@
-# Artifacts — #92 TASK_90 WebPush recovery after denied
+# Artifacts — TASK_90 WebPush recovery after denied
 
 Скрины / MCP / device evidence для восстановления WebPush после `permission === "denied"`.
 

@@ -14,13 +14,13 @@
 | #86 SBP PWA recovery after bank | 🟢 | CI green `34987062132` · deploy апрув · Fly MCP + device |
 | #87 Quick Repeat status composition | 🟢 | CI green `34991136715` · deploy апрув · Fly MCP G4 |
 | #80 Registration UI/UX + Callcheck cascade | 🟡 | OTP fallback false · live Callcheck SKIP · ждёт апрув / телефон |
-| #89 PWA auth Callcheck → SMS + post-pay handoff | 🟢 | CI green `35082473762` · deploy апрув · G5 Fly MCP |
-| #90 Callcheck return → continue payment (POSTCALL-EXT) | 🟢 | **REVIEW** CI green `35116445356` · deploy апрув · G5 Fly MCP |
-| #91 PWA auth phone input UI/UX (UI-EXT) | 🟢 | **REVIEW** CI green `35108357982` · deploy апрув · G5 Fly MCP |
-| #81 Notifications / Wallet / WebPush gaps | 🟡 | v482 MCP PASS · denied→settings → **#92** · фоновые/чат — backlog |
-| #92 WebPush recovery after denied (TASK_90) | 🟢 | **REVIEW** CI green `35191890272` · deploy апрув · G5 Fly MCP |
-| #93 Post-pay auto return → catalog (TASK_91) | 🟢 | **REVIEW** CI green `35196766203` · deploy апрув · G4 Fly MCP |
-| #94 Production background FCM (TASK_92) | 🟢 | **REVIEW** CI green `35198770223` · deploy апрув · G5 Fly MCP |
+| #89 TASK_89 PWA auth Callcheck → SMS | 🟢 | CI green `35082473762` · deploy апрув · G5 Fly MCP |
+| TASK_89-UI-EXT phone input UI/UX | 🟢 | **REVIEW** CI green `35108357982` · deploy апрув · G5 Fly MCP |
+| TASK_89-POSTCALL-EXT return → continue payment | 🟢 | **REVIEW** CI green `35116445356` · deploy апрув · G5 Fly MCP |
+| #81 Notifications / Wallet / WebPush gaps | 🟡 | v482 MCP PASS · denied→settings → **TASK_90** · фоновые/чат — backlog |
+| #90 TASK_90 WebPush recovery after denied | 🟢 | **REVIEW** CI green `35191890272` · deploy апрув · G5 Fly MCP |
+| #91 TASK_91 post-pay auto return → catalog | 🟢 | **REVIEW** CI green `35196766203` · deploy апрув · G4 Fly MCP |
+| #92 TASK_92 Production background FCM | 🟢 | **REVIEW** CI green `35198770223` · deploy апрув · G5 Fly MCP |
 | #82 Cascade SMS ready + sheet stuck | 🟡 | v482 MCP PASS · hide+SMS sent · ждёт апрув заказчика |
 | GH FLY_API_TOKEN | 🟢 | org token · Deploy green 2026-09-07 |
 | Min charge 10₽ | 🟢 | PTS ≥10 · Init guard · Fly bump 48 rows 2026-09-07 |

@@ -1,12 +1,12 @@
 # TASK_89-POSTCALL-EXT: Возврат в PWA после Callcheck и продолжение оплаты
 
-**CBR:** #90 · **Дата intake:** 2026-09-16  
+**ID заказчика:** TASK_89-POSTCALL-EXT · **семья:** TASK_89 · **Дата intake:** 2026-09-16  
 **Источник:** Google Doc + заказчик 2026-09-16: «после звонка нет перехода в pwa» · «подкинуть экран оплаты»  
 **Артефакты:** docs/operations/milestones/veha_2/artifacts/pwa_callcheck_return_continue_payment/  
 **Google Doc:** https://docs.google.com/document/d/1w2VKMPaYZdsJcqNkLrpSbJBPuLE-7Sm9giQ8DcJ0Bq0/edit?usp=drivesdk  
 **Расширяет:** [`TASK-89-Авторизация-регистрация-PWA-Callcheck-SMS.md`](TASK-89-Авторизация-регистрация-PWA-Callcheck-SMS.md)  
-**Связь:** overlap #80 / #89 · граница с TASK-89-UI-EXT (визуал телефона/sheet — не эта задача)  
-**Статус:** **SPEC `[x]`** 2026-09-16 restart — ждёт `/sbr` (код после rollback снят).
+**Связь:** overlap #80 / TASK_89 · граница с TASK_89-UI-EXT (визуал телефона/sheet — не эта задача)  
+**Статус:** **REVIEW** 2026-09-16 · CI green · deploy апрув · G5 Fly после deploy
 
 ---
 

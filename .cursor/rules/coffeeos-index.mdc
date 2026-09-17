@@ -25,7 +25,7 @@ alwaysApply: true
 | Entire / Review | `docs/operations/dev/ENTIRE.md` |
 | Тесты / deploy / hot-path | `workflow/coffeeos-dev-gates.mdc` |
 | Новые файлы | `workflow/coffeeos-repo-layout.mdc` |
-| ТЗ заказчика | `workflow/coffeeos-customer-intake.mdc` |
+| ТЗ заказчика | `workflow/coffeeos-customer-intake.mdc` — **ID заказчика = канон** (EXT = суффикс, не новый `#`) |
 | Сплит файлов | `workflow/coffeeos-file-size-split.mdc` |
 | `/ctx-trim` | `workflow/coffeeos-context-hygiene.mdc` |
 | `/unlazy` · GATES ledger | `workflow/coffeeos-unlazy.mdc` · `docs/operations/dev/unlazy/README.md` |

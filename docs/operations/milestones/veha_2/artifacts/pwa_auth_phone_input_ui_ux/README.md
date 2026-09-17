@@ -1,4 +1,4 @@
-# Artifacts — #91 TASK_89-UI-EXT (phone input UI/UX)
+# Artifacts — TASK_89-UI-EXT (phone input UI/UX)
 
 Скрины / MCP / device evidence для TASK_89-UI-EXT.
 

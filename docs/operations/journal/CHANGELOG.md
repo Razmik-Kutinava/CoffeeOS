@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-17 — docs: sync ID заказчика (TASK_89 trio · 90/91/92)
+
+- Правило: ID заказчика = канон (`coffeeos-customer-intake.mdc`); EXT = суффикс, не новый `#`
+- CBR/ISSUES: TASK_89 + TASK_89-UI-EXT + TASK_89-POSTCALL-EXT; #90=TASK_90 · #91=TASK_91 · #92=TASK_92 (сняты ошибочные #93/#94)
+- Шапки ТЗ / artifacts / GATES / HANDOFF / SESSION / RULES_INDEX / index
+
 ## 2026-09-17 — review: #71 Патч_1 server email + security fix
 
 - GREEN `55c34592` · review fix `72d90862`: profile-first txn; `email_verified=false` на post-pay; linker не switch на unverified squat

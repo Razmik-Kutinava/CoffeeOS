@@ -1,4 +1,4 @@
-# Gates: #94 TASK_92 — Production background FCM + status sync
+# Gates: TASK_92 / #92 — Production background FCM + status sync
 
 Scope: Фоновые FCM (tag/actions/прогресс) при смене статуса без открытой PWA; кнопка «чат с поддержкой» в статусной модели кликабельна; без правок barista status controller/service.
 
@@ -30,8 +30,8 @@ Scope: Фоновые FCM (tag/actions/прогресс) при смене ст�
   EVIDENCE: pending — skip until PHASE 3 REVIEW / deploy; artifact under artifacts/production_background_fcm_status_sync/mcp/; PASS = Android push in shade with progress/tag while PWA backgrounded · status sync · chat CTA opens support · barista status files untouched · Point A tenant 2fdee1ac-4674-41ee-b89e-87b45643f789
 
 <!--
-CoffeeOS #94 unlazy post-GREEN/regress:
-- G1 includes fcm_client_test (#94 data-only).
+CoffeeOS TASK_92 / #92 unlazy post-GREEN/regress:
+- G1 includes fcm_client_test (TASK_92 data-only).
 - G5 Fly MCP Point A after deploy апрув.
 - ABANDON only with reason at column 1.
 -->

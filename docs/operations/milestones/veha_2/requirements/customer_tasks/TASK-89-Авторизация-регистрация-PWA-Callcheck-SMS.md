@@ -1,9 +1,10 @@
 # TASK_89: Авторизация и регистрация PWA — Callcheck → SMS
 
-**CBR:** #89 · **Дата intake:** 2026-09-16  
+**ID заказчика:** TASK_89 · **CBR:** #89 · **Дата intake:** 2026-09-16  
 **Источник:** Google Doc + правки заказчика (чат)  
 **Артефакты:** docs/operations/milestones/veha_2/artifacts/pwa_auth_registration_callcheck_sms/  
 **Google Doc:** https://docs.google.com/document/d/1wDRuIFxAl1pBSxh305sEidRxj-Kd6vwjytFkOvWn2ZQ/edit?usp=drivesdk  
+**Семья EXT:** [`TASK_89-UI-EXT`](TASK-89-UI-EXT-UI-UX-авторизации-PWA-экран-ввода-телефона.md) · [`TASK_89-POSTCALL-EXT`](TASK-89-POSTCALL-EXT-Возврат%20в%20PWA%20после%20Callcheck%20и%20продолжение%20оплаты.md)  
 **Связь:** предшественник / overlap #80 — [`Регистрация PWA UI UX и каскад Callcheck x2 SMS.md`](Регистрация%20PWA%20UI%20UX%20и%20каскад%20Callcheck%20x2%20SMS.md) · канон Callcheck — [`BUG-REPORT SMS.ru FlashCall вместо Callcheck.md`](BUG-REPORT%20SMS.ru%20FlashCall%20вместо%20Callcheck.md) · [`docs/integrations/sms-auth.md`](../../../../../integrations/sms-auth.md)  
 **Статус:** Spec (Google) · intake `[x]` · SPEC `[x]` · GREEN `[x]` · REVIEW 2026-09-16 · G5 Fly после deploy
 

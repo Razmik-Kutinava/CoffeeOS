@@ -1,4 +1,4 @@
-# Artifacts — #93 TASK_91 post-pay auto return → catalog + status model
+# Artifacts — TASK_91 post-pay auto return → catalog + status model
 
 Скрины / MCP / evidence для автоматического возврата на `#/` после завершения post-pay email-флоу.
 
@@ -16,7 +16,7 @@
 
 Источник: чат заказчика 2026-09-17 (повторная выгрузка скринов).
 
-**GATES (unlazy #93):** [`GATES.md`](GATES.md) — G1–G3 met · G4 Fly pending (session `GATES.md` может быть у другой задачи).
+**GATES (unlazy TASK_91):** [`GATES.md`](GATES.md) — G1–G3 met · G4 Fly pending (session `GATES.md` может быть у другой задачи).
 
 ## mcp/
 

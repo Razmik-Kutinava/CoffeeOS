@@ -1,11 +1,11 @@
 # TASK_89-UI-EXT: UI/UX авторизации PWA — экран ввода телефона
 
-**CBR:** #91 · **Дата intake:** 2026-09-16  
+**ID заказчика:** TASK_89-UI-EXT · **семья:** TASK_89 · **Дата intake:** 2026-09-16  
 **Источник:** чат заказчика + Google Doc  
 **Артефакты:** docs/operations/milestones/veha_2/artifacts/pwa_auth_phone_input_ui_ux/  
 **Google Doc:** https://docs.google.com/document/d/1PTP5LIVgnj2QNpOMi4Md4Lb8Y8imvL3MQnsHhVNDQoc/edit?usp=drivesdk  
 **Расширяет:** [`TASK-89-Авторизация-регистрация-PWA-Callcheck-SMS.md`](TASK-89-Авторизация-регистрация-PWA-Callcheck-SMS.md)  
-**Связь:** overlap #80 / #89 · граница с #90 POSTCALL-EXT (lifecycle return — не эта задача)  
+**Связь:** overlap #80 / TASK_89 · граница с TASK_89-POSTCALL-EXT (lifecycle return — не эта задача)  
 **Статус:** **REVIEW** 2026-09-16 · CI green · deploy апрув · G5 Fly после deploy
 
 ---
@@ -119,7 +119,7 @@ checkout после завершения auth работает как раньш
 
 ## Заметки агента
 
-- CBR **#91** (Google id: TASK_89-UI-EXT). Не путать с #89 (Callcheck→SMS) и #90 (POSTCALL return).
-- Скрин уже был в `#89` artifacts; копия в `pwa_auth_phone_input_ui_ux/screenshots/`.
+- ID заказчика **TASK_89-UI-EXT** (семья TASK_89). Не путать с TASK_89 (Callcheck→SMS) и TASK_89-POSTCALL-EXT.
+- Скрин уже был в TASK_89 artifacts; копия в `pwa_auth_phone_input_ui_ux/screenshots/`.
 - Фраза чата «чтобы было видно сумму» vs Google Doc «скрыть CTA с суммой» — на SPEC сверить: канон реализации = Google Doc (скрыть CTA + cart preview + тоньше sheet). Если заказчик имел в виду иное — уточнить до RED.
-- #90 parked до закрытия этой задачи.
+- TASK_89-POSTCALL-EXT был parked до закрытия этой задачи.

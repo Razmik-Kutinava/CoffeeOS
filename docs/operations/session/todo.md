@@ -31,7 +31,7 @@
 
 ## Не ломать
 
-- `Checkout.svelte` payment/checkout / Callcheck (#89/#90/#91)
+- `Checkout.svelte` payment/checkout / Callcheck (TASK_89 / TASK_89-UI-EXT / TASK_89-POSTCALL-EXT)
 - #72 `TbankReceiptBuilder` / Receipt.Email|Phone
 - LS `shop_receipt_email` hide после submit (v481) — fallback
 - ActiveOrders / `receiptView` (#83/#84)
