@@ -11,6 +11,14 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-17 — review: #82 Патч_1 cascade Presence grace + SMS short link
+
+- GREEN `9b087faf` · FIX `3f6ac720`: `/o/:hash` bind guest session + `reconnect_token`
+- Presence: `begin_sms_grace!` suppress Cable reconnect; Presence fail → `retry_on`
+- SMS: `codeblack.xyz/o/{order_hash}` ≤70 · Entire `01M2QWCCYY5P9QNJBJFBJSS6DK`
+- bugbot high (session) закрыт · security medium+ нет · Local 36/0 · push/CI
+- Fly MCP Point A после deploy апрув
+
 ## 2026-09-17 — docs: sync ID заказчика (TASK_89 trio · 90/91/92)
 
 - Правило: ID заказчика = канон (`coffeeos-customer-intake.mdc`); EXT = суффикс, не новый `#`

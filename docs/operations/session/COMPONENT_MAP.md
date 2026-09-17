@@ -40,12 +40,14 @@
 | OrdersController#active/cancel/wallet_pass | app/controllers/shop/api/orders_controller.rb | GET orders/active, POST cancel, GET wallet_pass | ActiveOrdersPresenter, GuestOrderCancellationService | #82 | — |
 | ActiveOrdersPresenter | app/services/shop/active_orders_presenter.rb | JSON активных заказов: items/mods/totals/can_cancel | OrdersController#active | #41, #36 | items/mods в JSON уже отдаются backend'ом — фронт их не рендерит |
 | GuestOrderChannel | app/channels/shop/guest_order_channel.rb | Cable-подписка гостя на заказ, presence | OrderReadyPresence, GuestOrderBroadcaster | — | — |
-| GuestOrderBroadcaster | app/services/shop/guest_order_broadcaster.rb | Broadcast status_changed (+ push/wallet/cascade) | GuestOrderChannel | #82 | — |
+| GuestOrderBroadcaster | app/services/shop/guest_order_broadcaster.rb | Broadcast status_changed (+ push/wallet/cascade) | GuestOrderChannel · OrderReadyPresence | #82 Патч_1, #82 | На ready — только `begin_sms_grace!` + enqueue cascade; контракт WS→WebPush→Wallet не менять |
 | GuestOrderCancellationService | app/services/shop/guest_order_cancellation_service.rb | Серверная отмена + broadcast | OrdersController#cancel | — | — |
-| GuestOrderReconnect | app/services/shop/guest_order_reconnect.rb | Токен/bind для Cable reconnect | Channel, FE session | — | — |
-| OrderReadyPresence | app/services/shop/order_ready_presence.rb | online/offline флаг заказа для cascade | GuestOrderChannel, Broadcaster | — | — |
+| GuestOrderReconnect | app/services/shop/guest_order_reconnect.rb | Токен/bind для Cable reconnect | Channel, FE session, OrderShortLinks | #82 Патч_1 | — |
+| OrderReadyPresence | app/services/shop/order_ready_presence.rb | online/offline + SMS_GRACE suppress mark_online | GuestOrderChannel, Broadcaster, CascadeJob | #82 Патч_1, #39 | Во время sms_grace `mark_online!` no-op (reconnect ≠ SMS skipped) |
+| OrderReadySmsLink | app/services/shop/order_ready_sms_link.rb | Короткий order_hash + SMS текст codeblack.xyz/o/{hash} | OrderReadyPaidNotifier, OrderShortLinks | #82 Патч_1 | — |
+| OrderShortLinksController | app/controllers/shop/order_short_links_controller.rb | GET /o/:order_hash → bind session + redirect shop `#/order/:id` | OrderReadySmsLink, GuestOrderReconnect | #82 Патч_1 | Публичный entrypoint SMS; bind + reconnect_token обязательны |
 
-**Маршруты API зоны:** GET /shop/api/orders/active · POST /shop/api/orders/:id/cancel · GET /shop/api/orders/:id/wallet_pass
+**Маршруты API зоны:** GET /shop/api/orders/active · POST /shop/api/orders/:id/cancel · GET /shop/api/orders/:id/wallet_pass · GET `/o/:order_hash` (SMS short link)
 
 **Известные дыры (требуют точечного аудита перед следующей задачей):**
 1. ActiveOrdersPresenter уже отдаёт items/modifiers/totals в JSON — backend, вероятно, готов.
