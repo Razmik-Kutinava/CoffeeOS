@@ -15,8 +15,7 @@
     notifyActionsView,
     PUSH_DENIED_TOAST,
     PUSH_OPEN_SETTINGS_CTA,
-    PUSH_WATCH_READINESS_CTA,
-    PUSH_SETTINGS_FALLBACK
+    PUSH_WATCH_READINESS_CTA
   } from "../lib/orderStatusNotifyActions.js"
   import { openSupportChat } from "../lib/supportChatAdapter.js"
   import { SUPPORT_TELEGRAM_URL } from "../lib/supportConfig.js"
