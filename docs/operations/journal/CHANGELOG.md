@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-17 — docs: SPEC #92 TASK_90 WebPush recovery after denied
+
+- todo: recovery UI + deep-link/fallback `denied → settings`
+- Файлы: orderStatusNotifyActions + ActiveOrdersAccordion + firebasePush(?) + 2 теста
+- Не ломать: оплата · #83/#84 · Wallet/OrderStatus · backend push/SW
+
 ## 2026-09-17 — docs: unlazy GATES #92 WebPush recovery after denied
 
 - Ledger `session/GATES.md` · baseline pre-SPEC
