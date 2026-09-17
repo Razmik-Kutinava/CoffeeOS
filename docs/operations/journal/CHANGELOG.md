@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-17 — docs: unlazy GATES #94 TASK_92 background FCM
+
+- `GATES.md` → #94 baseline; gate-check `--approve` G1–G4 PASS; G5 Fly MCP pending
+- Зона: notifier/payload · support_chat · push_subscribe · push_pipeline
+- Next: `/spec`
+
 ## 2026-09-17 — docs: intake #94 TASK_92 production background FCM
 
 - Чат заказчика + Google Doc MCP → `customer_tasks/TASK-92-…md` (1:1)
