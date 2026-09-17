@@ -2,17 +2,17 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-17 (#71 Патч_1 regress PASS)  
+**Дата:** 2026-09-17 (#71 Патч_1 REVIEW)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #71 **Патч_1** · GREEN + regress PASS | `/review` · потом Fly MCP Point A |
+| #71 **Патч_1** · review fix `72d90862` · push/CI | CI green → deploy апрув → Fly MCP |
 | #94 **REVIEW** · CI green `35198770223` | deploy апрув → G5 Fly MCP |
 | #93 **REVIEW** · CI green | deploy апрув → G4 Fly MCP |
 
-**last_done:** `/regress` #71 Патч_1 — orders_email 13/0 · email_collection 21/0  
-**next_step:** `/review` Патч_1
+**last_done:** REVIEW #71 Патч_1 — bugbot/security fix (profile-first + no squat)  
+**next_step:** push/CI → deploy апрув → Fly Point A
 
 **ctx_trim:** `2026-09-02`
 

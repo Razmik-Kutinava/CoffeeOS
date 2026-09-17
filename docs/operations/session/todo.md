@@ -4,9 +4,10 @@
 |------|----------|
 | **ID** | CBR **#71** · Патч_1 2026-09-17 |
 | **Тип** | **ПАТЧ** · канон `TASK_PATCH.md` |
-| **Статус** | **GREEN + regress PASS** · Next: `/review` |
+| **Статус** | **REVIEW** · fix `72d90862` · push/CI |
 | **RED** | `5b1e31c2` |
 | **GREEN** | `55c34592` |
+| **FIX** | `72d90862` review (txn + squat) |
 | **Ветка** | `develop` |
 | **Канон** | `@coffeeos-task-patch` · `@spec-build-review` · `@coffeeos-commit-ops` |
 | **ТЗ** | [`Email-сбор после оплаты (Callcheck-флоу).md`](../milestones/veha_2/requirements/customer_tasks/Email-сбор%20после%20оплаты%20(Callcheck-флоу).md) § **Патч_1** |
@@ -19,7 +20,7 @@
 - [x] `/patch` — секция Патч_1 в TASK + этот todo (Шаг 5)
 - [x] PHASE 2 RED — `5b1e31c2`
 - [x] PHASE 2 GREEN — server email persist + PaymentResult profile
-- [ ] PHASE 3 `/review`
+- [x] PHASE 3 `/review`
 
 ## Файлы (ожидаемо)
 

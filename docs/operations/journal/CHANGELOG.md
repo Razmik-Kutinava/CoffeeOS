@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-17 — review: #71 Патч_1 server email + security fix
+
+- GREEN `55c34592` · review fix `72d90862`: profile-first txn; `email_verified=false` на post-pay; linker не switch на unverified squat
+- bugbot high/medium + security medium закрыты
+- Entire `01M2QSJ5WY9Q3A3MC6028SZBBV` на GREEN · Local PASS · push/CI
+- Fly MCP Point A после deploy апрув
+
 ## 2026-09-17 — regress: #71 Патч_1 server email PASS
 
 - Local: `orders_email_test` 13/0 · `email_collection_test` 21/0
