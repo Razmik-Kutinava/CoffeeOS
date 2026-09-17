@@ -6,6 +6,7 @@ require "test_helper"
 class Shop::OrderReadyCascadeJobTest < ActiveSupport::TestCase
   include TestFactories
   include ActiveJob::TestHelper
+  include ActiveSupport::Testing::TimeHelpers
 
   setup do
     @tenant = create_tenant!
@@ -92,18 +93,54 @@ class Shop::OrderReadyCascadeJobTest < ActiveSupport::TestCase
     assert_no_match(/SMS skipped\./, logs)
   end
 
-  test "#39 v2 cache read failure re-raises and does not swallow" do
+  test "#82 P1 Presence/cache failure logs and raises PresenceUnavailableError for retry" do
     original = Rails.cache.method(:read)
     Rails.cache.define_singleton_method(:read) do |*_args|
       raise StandardError, "cache 500"
     end
 
-    err = assert_raises(StandardError) do
-      Shop::OrderReadyCascadeJob.perform_now(@order.id)
+    logs = capture_cascade_logs do
+      err = assert_raises(Shop::OrderReadyCascadeJob::PresenceUnavailableError) do
+        Shop::OrderReadyCascadeJob.perform_now(@order.id)
+      end
+      assert_match(/cache 500/, err.message)
     end
-    assert_match(/cache 500/, err.message)
+    assert_match(/Presence unavailable/, logs)
   ensure
     Rails.cache.define_singleton_method(:read, original) if original
+  end
+
+  test "#82 P1 Cable reconnect during SMS_GRACE still sends SMS (no false skip)" do
+    Shop::GuestOrderBroadcaster.send(:enqueue_ready_cascade!, @order)
+    assert Shop::OrderReadyPresence.in_sms_grace?(@order.id)
+
+    # Simulate shopOrderCable retry (~5s) inside grace: channel subscribed → mark_online!
+    Shop::OrderReadyPresence.mark_online!(@order.id)
+    assert_not Shop::OrderReadyPresence.online?(@order.id)
+
+    captured_msg = nil
+    original = Shop::SmsRuClient.method(:send_message!)
+    Shop::SmsRuClient.define_singleton_method(:send_message!) do |phone:, msg:, **_|
+      captured_msg = msg
+      Struct.new(:sms_id).new("p1-grace-sms")
+    end
+
+    assert_difference -> { OrderNotificationLog.where(order_id: @order.id, channel: "sms", status: "sent").count } => 1 do
+      Shop::OrderReadyCascadeJob.perform_now(@order.id)
+    end
+    assert_match(%r{codeblack\.xyz/o/}, captured_msg.to_s)
+  ensure
+    Shop::SmsRuClient.define_singleton_method(:send_message!, original) if original
+  end
+
+  test "#82 P1 online after grace expires still skips SMS" do
+    Shop::OrderReadyPresence.begin_sms_grace!(@order.id, duration: 1.second)
+    travel 2.seconds do
+      Shop::OrderReadyPresence.mark_online!(@order.id)
+      assert_no_difference -> { OrderNotificationLog.where(order_id: @order.id, channel: "sms").count } do
+        Shop::OrderReadyCascadeJob.perform_now(@order.id)
+      end
+    end
   end
 
   test "#39 v2 offline sends SMS with msg <= 70 and does not use telegram channel" do
@@ -115,7 +152,10 @@ class Shop::OrderReadyCascadeJobTest < ActiveSupport::TestCase
     end
     log = OrderNotificationLog.where(order_id: @order.id, channel: "sms").order(:created_at).last
     assert_equal "sent", log.status
-    assert_operator log.payload["msg"].to_s.length, :<=, 70
+    msg = log.payload["msg"].to_s
+    assert_operator msg.length, :<=, 70
+    assert_match(%r{\ACODE:BLACK\. Заказ готов! codeblack\.xyz/o/}, msg)
+    assert_no_match(/##{@order.order_number}/, msg)
     assert_equal 0, OrderNotificationLog.where(order_id: @order.id, channel: "telegram").count
   end
 

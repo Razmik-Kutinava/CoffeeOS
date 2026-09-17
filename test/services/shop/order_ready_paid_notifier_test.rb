@@ -44,4 +44,36 @@ class Shop::OrderReadyPaidNotifierTest < ActiveSupport::TestCase
     assert log, "expected sms sent log"
     assert_equal "000000-48000001", log.payload["sms_id"]
   end
+
+  test "#82 P1 SMS text uses short link and stays <= 70" do
+    captured = nil
+    @send_message_original = Shop::SmsRuClient.method(:send_message!)
+    Shop::SmsRuClient.define_singleton_method(:send_message!) do |phone:, msg:, **_|
+      captured = msg
+      Struct.new(:sms_id).new("p1-link")
+    end
+
+    Shop::OrderReadyPaidNotifier.call(order: @order)
+
+    hash = Shop::OrderReadySmsLink.hash_for(@order)
+    expected = "CODE:BLACK. Заказ готов! codeblack.xyz/o/#{hash}"
+    assert_equal expected, captured
+    assert_operator captured.length, :<=, 70
+    assert_no_match(/##{@order.order_number}/, captured)
+  end
+
+  test "#82 P1 ValidationError logs failed and re-raises without swallowing" do
+    @send_message_original = Shop::SmsRuClient.method(:send_message!)
+    Shop::SmsRuClient.define_singleton_method(:send_message!) do |**_|
+      raise Shop::SmsRuClient::ValidationError.new(
+        "SMS msg length 99 > 70",
+        http_status: 422
+      )
+    end
+
+    assert_raises(Shop::SmsRuClient::ValidationError) do
+      Shop::OrderReadyPaidNotifier.call(order: @order)
+    end
+    assert OrderNotificationLog.exists?(order_id: @order.id, channel: "sms", status: "failed")
+  end
 end
