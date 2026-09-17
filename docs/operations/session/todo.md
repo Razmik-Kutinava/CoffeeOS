@@ -6,7 +6,7 @@
 | **Тип** | **ПАТЧ** · канон `TASK_PATCH.md` |
 | **Статус** | **GREEN** · Local PASS · Next: `/review` |
 | **RED** | `33e7524c` |
-| **GREEN** | _(pending commit)_ |
+| **GREEN** | `9b087faf` |
 | **Ветка** | `develop` |
 | **Канон** | `@coffeeos-task-patch` · `@spec-build-review` · `@coffeeos-commit-ops` |
 | **ТЗ** | Google Doc § **Патч 1: 17.09.2026** · «Исправленный сценарий» |
