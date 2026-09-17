@@ -4,9 +4,9 @@
 |------|----------|
 | **ID** | CBR **#94** (Google/customer: TASK_92) |
 | **Тип** | SBR · reopen #38/#81: фоновые FCM + чат CTA |
-| **Статус** | **SPEC** 2026-09-17 · ждёт `/sbr` RED |
-| **RED** | _(fill)_ |
-| **GREEN** | _(fill)_ |
+| **Статус** | **GREEN** 2026-09-17 · ждёт `/regress` |
+| **RED** | `20c05ba6` |
+| **GREEN** | _(fill after commit)_ |
 | **Ветка** | `develop` |
 | **Канон** | `@spec-build-review` · `@coffeeos-commit-ops` · `@coffeeos-dev-gates` · unlazy `GATES.md` |
 | **ТЗ** | [`TASK-92-Production-background-FCM-и-синхронизация-статусов-заказа.md`](../milestones/veha_2/requirements/customer_tasks/TASK-92-Production-background-FCM-и-синхронизация-статусов-заказа.md) |
@@ -19,13 +19,13 @@
 
 - [x] PHASE 0 intake
 - [x] PHASE 1 `/spec`
-- [ ] PHASE 2 RED
-- [ ] PHASE 2 GREEN
+- [x] PHASE 2 RED — `20c05ba6`
+- [x] PHASE 2 GREEN
 - [ ] PHASE 3 `/review`
 
 ## Next
 
-`/sbr` RED — тесты на FCM web shape + chat CTA (`openSupportChat` / navigate).
+`/regress` — зона Проверка; затем `/review`.
 
 ## DoD
 

@@ -90,9 +90,15 @@ async function handleNotificationAction(opts) {
 }
 
 messaging.onBackgroundMessage(function (payload) {
-  var title = (payload.notification && payload.notification.title) || "CoffeeOS";
-  var body = (payload.notification && payload.notification.body) || "";
   var data = payload.data || {};
+  var title =
+    (payload.notification && payload.notification.title) ||
+    data.title ||
+    "CoffeeOS";
+  var body =
+    (payload.notification && payload.notification.body) ||
+    data.body ||
+    "";
   var options = buildShowNotificationOptions({ body: body, data: data });
   return self.registration.showNotification(title, options);
 });

@@ -19,6 +19,8 @@
   } from "../lib/subscriptionOfferCta.js"
   import { downloadWalletPass } from "../lib/orderStatusNotifyActions.js"
   import { orderDeepLink } from "../lib/swNotificationActions.js"
+  import { openSupportChat } from "../lib/supportChatAdapter.js"
+  import { SUPPORT_TELEGRAM_URL } from "../lib/supportConfig.js"
   import {
     buildAcceptedCancelModalCopy,
     shouldShowAcceptedCancelModal,
@@ -177,9 +179,14 @@
       if (result.ok) ctaToast = result.primaryLabel || "✓ Карта добавлена"
       return
     }
-    if (kind === "chat" || kind === "tips") {
+    if (kind === "chat") {
+      openSupportChat(order.id, SUPPORT_TELEGRAM_URL)
+      return
+    }
+    if (kind === "tips") {
       const url = orderDeepLink(order.id, kind)
       window.location.assign(url)
+      return
     }
     if (kind === "subscription") {
       push("/profile")

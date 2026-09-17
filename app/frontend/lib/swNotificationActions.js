@@ -99,3 +99,48 @@ export async function handleNotificationAction(opts) {
 
   return { kind: "ignored" }
 }
+
+/**
+ * #94 — handle FCM SW postMessage `{ type: "coffeeos_navigate", url }`.
+ * Chat deep links open support; other actions assign location.
+ *
+ * @param {unknown} data
+ * @param {{
+ *   openSupportChat?: (orderId: string, chatUrl?: string) => unknown,
+ *   assignLocation?: (url: string) => void,
+ *   chatUrl?: string
+ * }} [deps]
+ * @returns {{ handled: boolean, kind?: string }}
+ */
+export function handleCoffeeosNavigateMessage(data, deps = {}) {
+  if (!data || typeof data !== "object") return { handled: false }
+  const msg = /** @type {{ type?: string, url?: string }} */ (data)
+  if (msg.type !== "coffeeos_navigate") return { handled: false }
+  const url = typeof msg.url === "string" ? msg.url : ""
+  if (!url) return { handled: false }
+
+  const actionMatch = url.match(/[?&]action=([^&/#]+)/)
+  const action = actionMatch ? decodeURIComponent(actionMatch[1]) : ""
+  const orderMatch = url.match(/#\/order\/([^/?#]+)/)
+  const orderId = orderMatch ? decodeURIComponent(orderMatch[1]) : ""
+
+  if (action === "chat") {
+    const open =
+      deps.openSupportChat ||
+      (() => {
+        /* optional */
+      })
+    open(orderId || "unknown", deps.chatUrl)
+    return { handled: true, kind: "chat" }
+  }
+
+  const assign =
+    deps.assignLocation ||
+    ((u) => {
+      if (typeof globalThis.location !== "undefined") {
+        globalThis.location.assign(u)
+      }
+    })
+  assign(url)
+  return { handled: true, kind: "navigate" }
+}

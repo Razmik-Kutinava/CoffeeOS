@@ -42,6 +42,20 @@ module Shop
       )
     end
 
+    # #94: data-only FCM for web/PWA so SW onBackgroundMessage owns tag/actions.
+    # Top-level `notification` makes Android display system push and skip the SW.
+    def build_message(token:, title:, body:, data:)
+      merged = stringify_fcm_data(
+        data.to_h.merge("title" => title, "body" => body)
+      )
+      {
+        message: {
+          token: token,
+          data: merged
+        }
+      }
+    end
+
     private
 
     def simulate?
@@ -92,13 +106,7 @@ module Shop
 
     def send_message!(project_id:, access_token:, token:, title:, body:, data:)
       uri = URI("https://fcm.googleapis.com/v1/projects/#{project_id}/messages:send")
-      payload = {
-        message: {
-          token: token,
-          notification: { title: title, body: body },
-          data: stringify_fcm_data(data)
-        }
-      }
+      payload = build_message(token: token, title: title, body: body, data: data)
 
       response = post_json(uri, payload, "Authorization" => "Bearer #{access_token}")
       unless response.is_a?(Net::HTTPSuccess)

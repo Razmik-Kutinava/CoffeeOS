@@ -6,6 +6,9 @@ import { initShopNetwork } from "../lib/shopNetwork.js"
 import { flushOrderQueue } from "../lib/shopOfflineQueue.js"
 import { flushCartQueue } from "../lib/shopOfflineCart.js"
 import { api } from "../lib/api.js"
+import { handleCoffeeosNavigateMessage } from "../lib/swNotificationActions.js"
+import { openSupportChat } from "../lib/supportChatAdapter.js"
+import { SUPPORT_TELEGRAM_URL } from "../lib/supportConfig.js"
 
 function showShopBootError(err) {
   const el = document.getElementById("app")
@@ -32,6 +35,19 @@ window.addEventListener("online", () => {
   flushCartQueue(api).catch(() => {})
   flushOrderQueue(api).catch(() => {})
 })
+
+// #94: FCM SW postMessage { type: "coffeeos_navigate", url } → chat / deep link
+if (typeof navigator !== "undefined" && navigator.serviceWorker) {
+  navigator.serviceWorker.addEventListener("message", (event) => {
+    handleCoffeeosNavigateMessage(event.data, {
+      openSupportChat: (orderId) => openSupportChat(orderId, SUPPORT_TELEGRAM_URL),
+      assignLocation: (url) => {
+        window.location.assign(url)
+      },
+      chatUrl: SUPPORT_TELEGRAM_URL
+    })
+  })
+}
 
 try {
   const el = document.getElementById("app")
