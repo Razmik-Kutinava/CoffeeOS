@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-17 — feat: #94 FCM data-only + chat CTA [GREEN]
+
+- FcmClient: data-only (title/body in data) → SW owns shade tag/actions
+- OrderStatus chat → `openSupportChat`; application.js `coffeeos_navigate`; SW `data.title`
+- RED `20c05ba6` · GREEN `f274c11c` · Next: `/regress`
+
 ## 2026-09-17 — review: #93 TASK_91 post-pay auto return catalog
 
 - GREEN `118e5488`: `maybeAutoReturnToCatalog` when `!askReceiptEmail`
