@@ -20,12 +20,13 @@ module Shop
       session_customer = session_cid.present? ? MobileCustomer.find_by(id: session_cid) : nil
       email_customer = MobileCustomer.find_by(email: @email)
 
-      # #71 Патч_1: unverified post-pay claim must not trap OTP victim onto squatter.
-      if email_customer && !email_customer.email_verified?
-        if session_customer.nil? || email_customer.id != session_customer.id
-          email_customer.update!(email: nil)
-          email_customer = nil
-        end
+      # #71 Патч_1: unverified post-pay claim must not trap OTP victim onto squatter
+      # when victim already has a different session customer. Empty session → keep
+      # email_customer (GuestCustomerResolver / OTP restore of post-pay profile).
+      if email_customer && !email_customer.email_verified? &&
+          session_customer && email_customer.id != session_customer.id
+        email_customer.update!(email: nil)
+        email_customer = nil
       end
 
       action = "attach"
