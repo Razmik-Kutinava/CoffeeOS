@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-17 — docs: unlazy GATES #92 WebPush recovery after denied
+
+- Ledger `session/GATES.md` · baseline pre-SPEC
+- G1–G4 PASS (push subscribe · notify actions · accordion · order_status rails)
+- G5 Fly MCP Point A unmet (после REVIEW/deploy)
+- todo → #92 · Next: `/spec`
+
 ## 2026-09-17 — docs: intake #92 TASK_90 WebPush recovery after denied
 
 - Чат п.9/9.1 + Google Doc → `customer_tasks/TASK-90-…md` (1:1)

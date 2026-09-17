@@ -1,38 +1,38 @@
-# Gates: #90 TASK_89-POSTCALL-EXT — return after Callcheck → pay
+# Gates: #92 TASK_90 — WebPush recovery after denied
 
-Scope: После Callcheck-звонка пользователь возвращается в PWA без потери Callcheck/checkout; pending → «Проверяем номер» + polling; confirmed/SMS → auth TASK_89 → авто PaymentMethodsSheet; без нового init_callcheck на lifecycle.
+Scope: После `Notification.permission === "denied"` пользователь видит recovery UI («Открыть настройки» + «Смотреть готовность»); deep-link/fallback в настройки сайта; без нового backend/SW/iOS/Wallet; статусная модель заказа без нового recovery-state.
 
-- [x] G1: lifecycle return — visibility/pageshow resume Callcheck (node / structural)
-  CHECK: node --test test/javascript/shop_phone_auth_cascade_smsru_test.mjs test/javascript/phone_auth_wizard_test.mjs
+- [x] G1: denied → settings + recovery CTA (node push subscribe)
+  CHECK: node --test test/javascript/order_status_push_subscribe_test.mjs
   EXPECT: fail 0
   CWD: C:/Tools/workarea/CoffeeOS
-  EVIDENCE: automatic-evidence=v1; definition-sha256=75ae628ea5cba574f17ad6666aaa860f2ac313ad0ee789c10137434a3de9dd60; exit=0; EXPECT=matched; output-sha256=915cdfb6b2b281f97bcce6806c9dba66dd0ca23e078612d807f9f6fe9aa4a13f; output-bytes=4349; shell=C:\Windows\system32\cmd.exe; cwd=C:\Tools\workarea\CoffeeOS; path=54c8ad8163c5/77 entries
+  EVIDENCE: automatic-evidence=v1; definition-sha256=bb9b966fd804e14a53b13f7d2a725e8cde4e001bf442db53eda9a6b0d11b884d; exit=0; EXPECT=matched; output-sha256=8bcd5a48ac9eff00b2b6a826846e31161560f22e70a1e8e7233aebc1b25f36a4; output-bytes=2015; shell=C:\Windows\system32\cmd.exe; cwd=C:\Tools\workarea\CoffeeOS; path=54c8ad8163c5/77 entries
 
-- [x] G2: post-verify → PaymentMethodsSheet (rails structural + #89 handoff)
-  CHECK: ruby bin/rails test test/integration/shop/silent_refresh_frontend_structural_test.rb test/integration/shop/auth_funnel_wizard_ui_test.rb
-  EXPECT: 0 failures, 0 errors
-  CWD: C:/Tools/workarea/CoffeeOS
-  EVIDENCE: automatic-evidence=v1; definition-sha256=08eae614534bf91037574ef579dd25fff00142ea7ffa6a92accb69b1be6285b9; exit=0; EXPECT=matched; output-sha256=62424995fd4ec7329bfa7e69abc5a17e62ad9214f00f65afb7f19dce494f0a85; output-bytes=1889; shell=C:\Windows\system32\cmd.exe; cwd=C:\Tools\workarea\CoffeeOS; path=54c8ad8163c5/77 entries
-
-- [x] G3: Callcheck / linker / session regress (rails)
-  CHECK: ruby bin/rails test test/integration/shop/api/phone_otp_test.rb test/services/shop/phone_verified_customer_linker_test.rb test/services/shop/phone_otp_test.rb
-  EXPECT: 0 failures, 0 errors
-  CWD: C:/Tools/workarea/CoffeeOS
-  EVIDENCE: automatic-evidence=v1; definition-sha256=fb0d5a051e3e68b175d480ade9dc6104a4fff244af69db110886b028cf08901a; exit=0; EXPECT=matched; output-sha256=6c4a62fddb7a51a3148d798034e4fbf66b86572811da230e68451f19d8fb534b; output-bytes=1899; shell=C:\Windows\system32\cmd.exe; cwd=C:\Tools\workarea\CoffeeOS; path=54c8ad8163c5/77 entries
-
-- [x] G4: phone OTP UI + cascade SMS.ru (node zone)
-  CHECK: node --test test/javascript/phone_otp_ui_test.mjs test/javascript/shop_phone_auth_cascade_smsru_test.mjs
+- [x] G2: notify actions orchestration (node)
+  CHECK: node --test test/javascript/order_status_notify_actions_test.mjs test/javascript/order_status_notify_init_test.mjs
   EXPECT: fail 0
   CWD: C:/Tools/workarea/CoffeeOS
-  EVIDENCE: automatic-evidence=v1; definition-sha256=bfd4ac28cafddb5369eb027e7212cc642605deb6025de16c08ddd8ca625c8ccc; exit=0; EXPECT=matched; output-sha256=42c2b0e70b8b9a711fcf6a02037772c49bcbcb2389ac8e759bd69c4e1e62f8e1; output-bytes=3464; shell=C:\Windows\system32\cmd.exe; cwd=C:\Tools\workarea\CoffeeOS; path=54c8ad8163c5/77 entries
+  EVIDENCE: automatic-evidence=v1; definition-sha256=b6173ac12b067596448a324d9b616803a9417c77cf873a98fe6764a4af6ec01d; exit=0; EXPECT=matched; output-sha256=be50164200e049a11fa379e19f62844e09876e72f5bc462b4b4f7a4cdf16fba5; output-bytes=4053; shell=C:\Windows\system32\cmd.exe; cwd=C:\Tools\workarea\CoffeeOS; path=54c8ad8163c5/77 entries
 
-- [ ] G5: hot-path Fly MCP Point A — phone dial → return PWA → pay sheet
-  EVIDENCE: pending — skip until PHASE 3 REVIEW / deploy; artifact under artifacts/pwa_callcheck_return_continue_payment/mcp/; PASS = return resumes same Callcheck · no second init · confirmed/SMS → PaymentMethodsSheet · checkout state kept
+- [x] G3: ActiveOrdersAccordion zone (node accordion + receipt)
+  CHECK: node --test test/javascript/active_orders_accordion_test.mjs
+  EXPECT: fail 0
+  CWD: C:/Tools/workarea/CoffeeOS
+  EVIDENCE: automatic-evidence=v1; definition-sha256=3bff25f2d45bb61e8f556568d1afc1cca911c36fab1e005f1312404af7f27744; exit=0; EXPECT=matched; output-sha256=2c74e36633257d4e61161267d0fb6bc94450717c0293616885be2f38a7db1670; output-bytes=4662; shell=C:\Windows\system32\cmd.exe; cwd=C:\Tools\workarea\CoffeeOS; path=54c8ad8163c5/77 entries
+
+- [x] G4: order status acceptance / push structural (rails)
+  CHECK: ruby bin/rails test test/integration/shop/order_status_acceptance_cbr_test.rb test/integration/shop/order_status_sheet_mount_acceptance_test.rb
+  EXPECT: 0 failures, 0 errors
+  CWD: C:/Tools/workarea/CoffeeOS
+  EVIDENCE: automatic-evidence=v1; definition-sha256=a27fce989cc4164feaef45d5034f755aaf05e12af56efcad4ce53909fe45b4b8; exit=0; EXPECT=matched; output-sha256=5da0a944ca450f0330ba3362c271d4bc754adbf54b0af900d45e353228198b4f; output-bytes=1887; shell=C:\Windows\system32\cmd.exe; cwd=C:\Tools\workarea\CoffeeOS; path=54c8ad8163c5/77 entries
+
+- [ ] G5: hot-path Fly MCP Point A — Android Chrome denied → settings → return PWA
+  EVIDENCE: pending — skip until PHASE 3 REVIEW / deploy; artifact under artifacts/webpush_recovery_after_denied/mcp/; PASS = recovery UI · open settings path or fallback · «Смотреть готовность» → status model · WebPush resumes after grant · Wallet/iOS untouched
 
 <!--
-CoffeeOS #90 unlazy (restart after rollback):
-- EXT #89: lifecycle PWA + copy «вернитесь» + resume poll; не UI-EXT; не SMS.ru backend.
-- G1–G4 baseline pre-SPEC (#89 zone). RED добавит lifecycle asserts → обновить G1 CHECK.
-- G5: manual Point A tenant 2fdee1ac-4674-41ee-b89e-87b45643f789.
+CoffeeOS #92 unlazy baseline (pre-SPEC):
+- EXT #81 п.9.1 / Google TASK_90: recovery after denied; не фоновые FCM; не чат; не #83/#84.
+- G1–G4 baseline существующей зоны #37/#81. RED добавит recovery UI asserts → обновить G1 CHECK.
+- G5: manual Point A tenant 2fdee1ac-4674-41ee-b89e-87b45643f789 · Android+Chrome.
 - ABANDON only with reason at column 1.
 -->
