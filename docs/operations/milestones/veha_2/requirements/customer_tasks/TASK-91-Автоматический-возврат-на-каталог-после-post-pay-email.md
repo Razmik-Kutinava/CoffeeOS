@@ -6,7 +6,7 @@
 **Google Doc:** https://docs.google.com/document/d/1nlWXyWV0UcV5X33i0owZixXRJl5d-nF_HwHdjjBVd2o/edit  
 **Расширяет:** post-pay success/email-флоу #71 · Continue → `#/` #35  
 **Реверсирует:** не применимо (не возвращает settleSuccess → `/order/:id`)  
-**Статус:** **SPEC** 2026-09-17 · ждёт `/sbr`
+**Статус:** **REVIEW** 2026-09-17 · push/CI · G4 Fly после deploy
 
 ---
 

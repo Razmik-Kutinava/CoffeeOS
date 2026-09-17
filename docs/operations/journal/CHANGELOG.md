@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-17 — review: #93 TASK_91 post-pay auto return catalog
+
+- GREEN `118e5488`: `maybeAutoReturnToCatalog` when `!askReceiptEmail`
+- bugbot: no bugs · security: no medium+
+- Entire: `01M2Q4KBV30SBFMRTNDVP99HKM` (attach) · Local zone PASS · push/CI
+- G4 Fly MCP после deploy · COMPONENT_MAP: не трогали (не новая сущность карты)
+
 ## 2026-09-17 — docs: unlazy reverify #93 pre-review (G1–G3 met)
 
 - Ledger: `artifacts/post_pay_auto_return_catalog_status/GATES.md` (session GATES = #94)
