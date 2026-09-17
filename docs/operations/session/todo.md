@@ -9,7 +9,8 @@
 | **Канон** | `@spec-build-review` · `@coffeeos-commit-ops` · `@coffeeos-dev-gates` |
 | **ТЗ** | [`TASK-91-Автоматический-возврат-на-каталог-после-post-pay-email.md`](../milestones/veha_2/requirements/customer_tasks/TASK-91-Автоматический-возврат-на-каталог-после-post-pay-email.md) |
 | **Google** | https://docs.google.com/document/d/1nlWXyWV0UcV5X33i0owZixXRJl5d-nF_HwHdjjBVd2o/edit |
-| **Артефакты** | [`post_pay_auto_return_catalog_status/`](../milestones/veha_2/artifacts/post_pay_auto_return_catalog_status/) |
+| **Артефакты** | [`post_pay_auto_return_catalog_status/`](../milestones/veha_2/artifacts/post_pay_auto_return_catalog_status/) · screenshots `01`–`03` |
+| **GATES** | [`GATES.md`](GATES.md) — #93 unlazy baseline G1–G3 · G4 Fly pending |
 | **OUT** | Checkout `completePaySuccess` · SBP #79/#86 · OrderStatusSheet internals · Quick Repeat #87 · `isCartSheetRoute` + `/payment-result` · immediate redirect on mount |
 
 ## SBR

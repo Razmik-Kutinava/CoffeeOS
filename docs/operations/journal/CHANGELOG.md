@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-17 — docs: unlazy GATES #93 + customer screenshots
+
+- screenshots `01`–`03` → `artifacts/post_pay_auto_return_catalog_status/screenshots/`
+- `GATES.md` → #93 baseline; `gate-check --approve` G1–G3 PASS; G4 Fly MCP pending
+- todo: ссылка GATES · Next: `/spec`
+
 ## 2026-09-17 — docs: intake #93 TASK_91 post-pay auto return catalog
 
 - Чат п.9.2 + скрины + Google Doc → `customer_tasks/TASK-91-…md` (1:1)

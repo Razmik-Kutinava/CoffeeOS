@@ -242,5 +242,6 @@ payment-result mount
 ## Заметки агента
 
 - Заказчик п.9.2 ≈ Google TASK_91 → CBR **#93** (#91 в CBR занят UI-EXT phone input).
-- Скрины чата: (1) stuck «Чек сформирован»+«В каталог»; (2)(3) эталон каталог+статусная модель / автоплатёж-повтор без ручного «В каталог». Бинарники на диск не попали при intake — см. artifacts README.
+- Скрины чата: (1) stuck «Чек сформирован»+«В каталог»; (2) эталон каталог+статусная модель; (3) статусная модель (автоплатёж/повтор / кейс отмены). Файлы: `artifacts/post_pay_auto_return_catalog_status/screenshots/01`–`03`.
 - п.9.1 → уже #92 TASK_90 (REVIEW, deploy апрув); в этот intake не входит.
+- Unlazy: `docs/operations/session/GATES.md` — G1–G3 baseline met; G4 Fly после deploy.
