@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-17 — docs: #94 CI green after REVIEW
+
+- CI green `35198770223` · review sha `97f4291b`
+- G5 Fly MCP после deploy апрув
+
 ## 2026-09-17 — review: #94 TASK_92 background FCM + chat CTA
 
 - GREEN `f274c11c`: FCM data-only + OrderStatus `openSupportChat`
