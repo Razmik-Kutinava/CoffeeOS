@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-17 — docs: #93 CI green after REVIEW
+
+- CI green `35196766203` · review sha `45f459ea`
+- G4 Fly MCP после deploy апрув
+
 ## 2026-09-17 — feat: #94 FCM data-only + chat CTA [GREEN]
 
 - FcmClient: data-only (title/body in data) → SW owns shade tag/actions
