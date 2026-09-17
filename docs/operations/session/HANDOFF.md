@@ -2,16 +2,17 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-17 (#93 TASK_91 GREEN)  
+**Дата:** 2026-09-17 (#94 TASK_92 intake)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| #93 GREEN · maybeAutoReturnToCatalog | `/regress` → `/review` |
+| #94 intake · background FCM + chat gap | `go` → `/spec` |
+| #93 SPEC · gap: auto `#/` when `!askReceiptEmail` | `/sbr` RED |
 | #92 REVIEW · CI green | deploy апрув → G5 Fly MCP |
 
-**last_done:** GREEN #93 — auto `#/` when `!askReceiptEmail`  
-**next_step:** `/regress` #93
+**last_done:** intake #94 TASK_92 — фоновые FCM «не реализовано» + чат CTA; Google Doc MCP  
+**next_step:** `go` → `/spec` #94 (или продолжить #93 `/sbr`)
 
 **ctx_trim:** `2026-09-02`  
 **Fly:** v495 `deployment-01M22JRN95TXRSV1PQDN49227M`

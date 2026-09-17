@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-17 — docs: intake #94 TASK_92 production background FCM
+
+- Чат заказчика + Google Doc MCP → `customer_tasks/TASK-92-…md` (1:1)
+- artifacts `production_background_fcm_status_sync/`; CBR #94 (CBR #92 = WebPush recovery)
+- Gaps: п.1 фоновые FCM; чат CTA показывается, клик нет · Next: `go` → `/spec`
+
 ## 2026-09-17 — docs: SPEC #93 TASK_91 post-pay auto return catalog
 
 - Gap: success без email-блока (`!askReceiptEmail`) — только «В каталог»; submit/Skip уже `push("/")`
