@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-17 — docs: update COMPONENT_MAP — PaymentResult / Checkout / CartSheet / OrderStatusSheet
+
+- БЛОК 4 #93: новая строка PaymentResult; точечно Checkout · CartSheet · cartSheetStore · OrderStatusSheet · orderStatusSheet.js
+- Граница: `maybeAutoReturnToCatalog` / `isCartSheetRoute` без `/payment-result` · без правки статуса internals
+
 ## 2026-09-17 — docs: #93 CI green after REVIEW
 
 - CI green `35196766203` · review sha `45f459ea`
