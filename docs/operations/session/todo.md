@@ -4,10 +4,10 @@
 |------|----------|
 | **ID** | CBR **#71** · Патч_1 2026-09-17 |
 | **Тип** | **ПАТЧ** · канон `TASK_PATCH.md` |
-| **Статус** | **REVIEW** · fix `72d90862` · push/CI |
+| **Статус** | **REVIEW** · CI green `35230879863` · Next: deploy апрув |
 | **RED** | `5b1e31c2` |
 | **GREEN** | `55c34592` |
-| **FIX** | `72d90862` review (txn + squat) |
+| **FIX** | `72d90862` · `844a618a` (linker empty-session restore) |
 | **Ветка** | `develop` |
 | **Канон** | `@coffeeos-task-patch` · `@spec-build-review` · `@coffeeos-commit-ops` |
 | **ТЗ** | [`Email-сбор после оплаты (Callcheck-флоу).md`](../milestones/veha_2/requirements/customer_tasks/Email-сбор%20после%20оплаты%20(Callcheck-флоу).md) § **Патч_1** |

@@ -17,6 +17,11 @@
 - CBR/ISSUES: TASK_89 + TASK_89-UI-EXT + TASK_89-POSTCALL-EXT; #90=TASK_90 · #91=TASK_91 · #92=TASK_92 (сняты ошибочные #93/#94)
 - Шапки ТЗ / artifacts / GATES / HANDOFF / SESSION / RULES_INDEX / index
 
+## 2026-09-17 — docs: #71 Патч_1 CI green after REVIEW
+
+- CI green `35230879863` · review sha `844a618a`
+- Fly MCP Point A после deploy апрув
+
 ## 2026-09-17 — review: #71 Патч_1 server email + security fix
 
 - GREEN `55c34592` · review fix `72d90862`: profile-first txn; `email_verified=false` на post-pay; linker не switch на unverified squat
