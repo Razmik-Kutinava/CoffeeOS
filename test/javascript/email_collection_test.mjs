@@ -219,3 +219,34 @@ describe("#71 QA reopen — remember receipt email, don't re-ask", () => {
     )
   })
 })
+
+describe("#93 PaymentResult auto return to catalog when receipt known", () => {
+  it("success path auto-navigates via handleEmailSkip when !askReceiptEmail [TDD]", () => {
+    const src = readFront("routes/PaymentResult.svelte")
+    assert.match(
+      src,
+      /(?:maybeAutoReturnToCatalog|if\s*\(\s*!askReceiptEmail\s*\))/
+    )
+    assert.match(
+      src,
+      /await prepareSuccessScreen\(\)[\s\S]{0,400}(?:maybeAutoReturnToCatalog|!askReceiptEmail[\s\S]{0,120}handleEmailSkip)/
+    )
+  })
+
+  it("Continue CTA stays wired to handleEmailSkip (#35) [TDD]", () => {
+    const src = readFront("routes/PaymentResult.svelte")
+    assert.match(
+      src,
+      /data-testid=["']payment-result-continue["'][\s\S]{0,80}onclick=\{handleEmailSkip\}/
+    )
+  })
+
+  it("email-block path still has no settleSuccess auto-redirect on mount [TDD]", () => {
+    const src = readFront("routes/PaymentResult.svelte")
+    assert.doesNotMatch(
+      src,
+      /if\s*\(\s*isSbpReturnSuccessStatus\(status\)\s*\)\s*\{\s*[\s\S]*?await settleSuccess\(\)/
+    )
+    assert.match(src, /askReceiptEmail[\s\S]{0,200}OrderSuccessEmailBlock/)
+  })
+})
