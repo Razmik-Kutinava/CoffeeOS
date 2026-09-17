@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-17 — docs: update COMPONENT_MAP — ActiveOrdersAccordion / orderStatusNotifyActions / firebasePush
+
+- БЛОК 4 #92: точечно ActiveOrdersAccordion · orderStatusNotifyActions; новая строка firebasePush
+- Граница: recovery UI / openNotificationSettings · без #83/#84 · без register token
+
 ## 2026-09-17 — review: #92 TASK_90 WebPush recovery after denied
 
 - GREEN `0b7f0b2d`: recovery UI + fallback + dismissPushRecovery
