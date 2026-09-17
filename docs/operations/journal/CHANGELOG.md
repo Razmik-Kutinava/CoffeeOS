@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-17 — docs: unlazy reverify #94 G1–G4 met pre-review
+
+- `GATES.md` G1 includes `fcm_client_test`; `--approve` + `--reverify` G1–G4 PASS
+- G5 Fly MCP Point A still unmet (post-deploy)
+- Next: `/review`
+
 ## 2026-09-17 — docs: #94 zone regress PASS
 
 - `rails test fcm_client+notifier+payload` — 15 runs, 0 fail
