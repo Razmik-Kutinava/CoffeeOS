@@ -4,7 +4,7 @@
 |------|----------|
 | **ID** | CBR **#93** (Google: TASK_91) |
 | **Тип** | SBR · EXT #71 post-pay → авто `#/` + status model |
-| **Статус** | **GREEN** 2026-09-17 · ждёт `/regress` → `/review` |
+| **Статус** | **regress PASS** 2026-09-17 · ждёт `/review` |
 | **RED** | `350f6b95` |
 | **GREEN** | `118e5488` |
 | **Ветка** | `develop` |
@@ -25,7 +25,7 @@
 
 ## Next
 
-`/regress` — зона Проверка; затем `/review`.
+`/review` — bugbot + security · Entire · push/CI · G4 Fly после deploy.
 
 ## DoD
 
