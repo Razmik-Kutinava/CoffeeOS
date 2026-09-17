@@ -19,6 +19,15 @@ module Shop
       session_cid = CustomerSession.customer_id(@session, @tenant_id)
       session_customer = session_cid.present? ? MobileCustomer.find_by(id: session_cid) : nil
       email_customer = MobileCustomer.find_by(email: @email)
+
+      # #71 Патч_1: unverified post-pay claim must not trap OTP victim onto squatter.
+      if email_customer && !email_customer.email_verified?
+        if session_customer.nil? || email_customer.id != session_customer.id
+          email_customer.update!(email: nil)
+          email_customer = nil
+        end
+      end
+
       action = "attach"
       payment_methods_moved = 0
 

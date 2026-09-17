@@ -60,4 +60,35 @@ class Shop::EmailVerifiedCustomerLinkerTest < ActiveSupport::TestCase
       tenant_id: @tenant.id
     )
   end
+
+  test "does not switch victim onto unverified post-pay squat [TDD]" do
+    attacker = MobileCustomer.create!(
+      phone: "+79005556677",
+      first_name: "Attacker",
+      is_active: true,
+      phone_verified: true,
+      email: @email,
+      email_verified: false
+    )
+    victim_session = {}
+    victim = MobileCustomer.create!(
+      phone: "+79008889900",
+      first_name: "Victim",
+      is_active: true,
+      phone_verified: true
+    )
+    Shop::CustomerSession.set_customer_id!(victim_session, @tenant.id, victim.id)
+
+    cid = Shop::EmailVerifiedCustomerLinker.link!(
+      session: victim_session,
+      tenant_id: @tenant.id,
+      email: @email
+    )
+
+    assert_equal victim.id, cid
+    assert_equal victim.id, Shop::CustomerSession.customer_id(victim_session, @tenant.id)
+    assert_nil attacker.reload.email
+    assert_equal @email, victim.reload.email
+    assert victim.email_verified
+  end
 end

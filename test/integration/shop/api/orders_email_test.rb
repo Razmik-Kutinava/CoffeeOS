@@ -209,9 +209,45 @@ class Shop::Api::OrdersEmailTest < ActionDispatch::IntegrationTest
 
     @customer.reload
     assert_equal email, @customer.email
+    assert_equal false, @customer.email_verified
     assert_equal collected_at.to_i, @customer.email_collected_at.to_i
     assert_equal 1, OrderEmail.where(order_id: @order.id, email: email).count
     assert_equal 1, MobileCustomer.where(email: email).count
+  end
+
+  test "P1 post-pay email clears email_verified on change [TDD]" do
+    old = "patch71-ver-#{SecureRandom.hex(3)}@example.com"
+    new_email = "patch71-unver-#{SecureRandom.hex(3)}@example.com"
+    @customer.update!(email: old, email_verified: true, email_collected_at: Time.current)
+
+    post "/shop/api/orders/#{@order.id}/email",
+      headers: shop_tenant_headers(@tenant.id),
+      params: email_params(email: new_email),
+      as: :json
+
+    assert_response :success, response.body
+    @customer.reload
+    assert_equal new_email, @customer.email
+    assert_equal false, @customer.email_verified
+  end
+
+  test "P1 verified email conflict does not leave OrderEmail without profile [TDD]" do
+    taken = "patch71-taken-#{SecureRandom.hex(3)}@example.com"
+    MobileCustomer.create!(
+      email: taken,
+      first_name: "Other",
+      is_active: true,
+      email_verified: true
+    )
+
+    post "/shop/api/orders/#{@order.id}/email",
+      headers: shop_tenant_headers(@tenant.id),
+      params: email_params(email: taken),
+      as: :json
+
+    assert_response :bad_request
+    assert_equal 0, OrderEmail.where(order_id: @order.id, email: taken).count
+    assert_nil @customer.reload.email
   end
 
   test "S11 bounce marks order_email bounced with HMAC" do
