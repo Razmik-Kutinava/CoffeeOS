@@ -11,6 +11,10 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-17 — docs: unlazy reverify #92 pre-review (G1–G4 met)
+
+- `gate-check --reverify` G1–G4 PASS; G5 Fly MCP Point A still unmet (post-deploy)
+
 ## 2026-09-17 — docs: #92 zone regress PASS (WebPush denied recovery)
 
 - node: push_subscribe + notify + accordion — 52 pass
