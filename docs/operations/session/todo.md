@@ -4,9 +4,10 @@
 |------|----------|
 | **ID** | CBR **#94** (Google/customer: TASK_92) |
 | **Тип** | SBR · reopen #38/#81: фоновые FCM + чат CTA |
-| **Статус** | **regress PASS** 2026-09-17 · ждёт `/review` |
+| **Статус** | **REVIEW** 2026-09-17 · push/CI · G5 Fly после deploy |
 | **RED** | `20c05ba6` |
 | **GREEN** | `f274c11c` |
+| **FIX** | `5da31ad0` cold-start hash boot |
 | **Ветка** | `develop` |
 | **Канон** | `@spec-build-review` · `@coffeeos-commit-ops` · `@coffeeos-dev-gates` · unlazy `GATES.md` |
 | **ТЗ** | [`TASK-92-Production-background-FCM-и-синхронизация-статусов-заказа.md`](../milestones/veha_2/requirements/customer_tasks/TASK-92-Production-background-FCM-и-синхронизация-статусов-заказа.md) |
@@ -21,11 +22,11 @@
 - [x] PHASE 1 `/spec`
 - [x] PHASE 2 RED — `20c05ba6`
 - [x] PHASE 2 GREEN
-- [ ] PHASE 3 `/review`
+- [x] PHASE 3 `/review`
 
 ## Next
 
-`/review` — bugbot + security · Entire · push/CI · G5 Fly после deploy.
+CI green → deploy апрув → G5 Fly MCP Point A.
 
 ## DoD
 

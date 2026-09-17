@@ -11,6 +11,14 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-17 — review: #94 TASK_92 background FCM + chat CTA
+
+- GREEN `f274c11c`: FCM data-only + OrderStatus `openSupportChat`
+- bugbot high → fix `5da31ad0`: cold-start hash boot + openWindow postMessage
+- security: no medium+
+- Entire: `01M2Q5JKXMAXYVGWY68BZT431F` · Local PASS · push/CI
+- G5 Fly MCP после deploy
+
 ## 2026-09-17 — docs: unlazy reverify #94 G1–G4 met pre-review
 
 - `GATES.md` G1 includes `fcm_client_test`; `--approve` + `--reverify` G1–G4 PASS
