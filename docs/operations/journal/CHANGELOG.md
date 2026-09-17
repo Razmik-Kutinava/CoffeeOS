@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-17 — docs: #82 Патч_1 CI green after REVIEW
+
+- CI green `35234267606` · review sha `f0ccc4a5` · Entire `01M2QWCCYY5P9QNJBJFBJSS6DK`
+- Fly MCP Point A после deploy апрув
+
 ## 2026-09-17 — review: #82 Патч_1 cascade Presence grace + SMS short link
 
 - GREEN `9b087faf` · FIX `3f6ac720`: `/o/:hash` bind guest session + `reconnect_token`

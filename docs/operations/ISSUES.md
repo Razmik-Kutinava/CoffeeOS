@@ -21,7 +21,7 @@
 | #90 TASK_90 WebPush recovery after denied | 🟢 | **REVIEW** CI green `35191890272` · deploy апрув · G5 Fly MCP |
 | #91 TASK_91 post-pay auto return → catalog | 🟢 | **REVIEW** CI green `35196766203` · deploy апрув · G4 Fly MCP |
 | #92 TASK_92 Production background FCM | 🟢 | **REVIEW** CI green `35198770223` · deploy апрув · G5 Fly MCP |
-| #82 Cascade SMS ready + sheet stuck | 🟡 | **Патч_1** REVIEW · Local PASS · push/CI · deploy апрув → Fly MCP |
+| #82 Cascade SMS ready + sheet stuck | 🟡 | **Патч_1** CI green `35234267606` · deploy апрув → Fly MCP |
 | GH FLY_API_TOKEN | 🟢 | org token · Deploy green 2026-09-07 |
 | Min charge 10₽ | 🟢 | PTS ≥10 · Init guard · Fly bump 48 rows 2026-09-07 |
 | #26 invalid token / pay error copy | 🟢 | v493 MCP **PASS** M2 inline «Сбой банка: позже» · артефакт fly_v493 |

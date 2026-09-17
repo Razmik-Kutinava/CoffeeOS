@@ -4,7 +4,7 @@
 |------|----------|
 | **ID** | CBR **#82** / каскад #39 · **Патч_1** 2026-09-17 |
 | **Тип** | **ПАТЧ** · канон `TASK_PATCH.md` |
-| **Статус** | **REVIEW** · Local PASS · push/CI |
+| **Статус** | **REVIEW** · CI green `35234267606` · Next: deploy апрув |
 | **RED** | `33e7524c` |
 | **GREEN** | `9b087faf` |
 | **FIX** | `3f6ac720` (short-link session bind) |
@@ -64,4 +64,4 @@
 
 ## Next
 
-CI green → deploy апрув → Fly MCP
+deploy апрув → Fly MCP
