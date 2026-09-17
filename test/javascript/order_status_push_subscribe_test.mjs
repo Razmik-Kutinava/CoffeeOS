@@ -184,4 +184,35 @@ describe("ActiveOrdersAccordion wires push + denied settings (#81 / #92)", () =>
       /SUPPORT_TELEGRAM_URL|shopAboutConfig|supportTelegram|getSupport/
     )
   })
+
+  it("#94: OrderStatus chat CTA uses openSupportChat (not dead deep link only)", () => {
+    const orderStatusPath = new URL(
+      "../../app/frontend/routes/OrderStatus.svelte",
+      import.meta.url
+    )
+    const src = readFileSync(orderStatusPath, "utf8")
+    assert.match(src, /openSupportChat/)
+    assert.match(src, /kind === ["']chat["']/)
+    assert.match(src, /SUPPORT_TELEGRAM_URL/)
+  })
+
+  it("#94: application.js listens for coffeeos_navigate from FCM SW", () => {
+    const appPath = new URL(
+      "../../app/frontend/entrypoints/application.js",
+      import.meta.url
+    )
+    const src = readFileSync(appPath, "utf8")
+    assert.match(src, /coffeeos_navigate/)
+    assert.match(src, /handleCoffeeosNavigateMessage|serviceWorker\.addEventListener/)
+  })
+
+  it("#94: firebase SW reads title/body from data when notification absent", () => {
+    const swPath = new URL(
+      "../../app/views/shop/firebase_sw/show.js.erb",
+      import.meta.url
+    )
+    const src = readFileSync(swPath, "utf8")
+    assert.match(src, /payload\.data\s*&&\s*payload\.data\.title|data\.title/)
+    assert.match(src, /payload\.data\s*&&\s*payload\.data\.body|data\.body/)
+  })
 })

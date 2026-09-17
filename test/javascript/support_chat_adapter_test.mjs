@@ -72,4 +72,19 @@ describe("openSupportChat (#41 / #81)", () => {
     assert.equal(result.pending, true)
     assert.equal(logs[0], "[Chat Integration Pending] Order: ord-no-default")
   })
+
+  it("#94: falls back to same-tab assign when window.open is blocked", () => {
+    const assigned = []
+    const result = openSupportChat("ord-pwa", "https://t.me/code_black_support_bot", {
+      openWindow: () => null,
+      assignLocation: (url) => {
+        assigned.push(url)
+      }
+    })
+
+    assert.equal(result.opened, true)
+    assert.equal(result.pending, false)
+    assert.equal(result.fallback, true)
+    assert.deepEqual(assigned, ["https://t.me/code_black_support_bot"])
+  })
 })

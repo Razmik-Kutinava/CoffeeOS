@@ -35,4 +35,27 @@ class Shop::FcmClientTest < ActiveSupport::TestCase
     assert_equal true, result[:simulated]
     assert_equal "sim-token", result[:token]
   end
+
+  # #94: web/PWA background — SW must own showNotification (tag/actions).
+  # Top-level FCM `notification` makes Android skip onBackgroundMessage.
+  test "#94 build_message is data-only with title/body in data" do
+    client = Shop::FcmClient.new
+    payload = client.send(
+      :build_message,
+      token: "tok-1",
+      title: "CoffeeOS",
+      body: "🟩⬜⬜ Заказ принят",
+      data: { order_id: "ord-1", tag: "order-ord-1", actions: %w[cancel] }
+    )
+
+    message = payload.fetch(:message)
+    refute message.key?(:notification), "must not send top-level notification for web SW"
+    data = message.fetch(:data)
+    assert_equal "tok-1", message.fetch(:token)
+    assert_equal "CoffeeOS", data["title"]
+    assert_equal "🟩⬜⬜ Заказ принят", data["body"]
+    assert_equal "ord-1", data["order_id"]
+    assert_equal "order-ord-1", data["tag"]
+    assert_equal '["cancel"]', data["actions"]
+  end
 end

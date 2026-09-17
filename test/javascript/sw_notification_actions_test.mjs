@@ -9,6 +9,7 @@ import { describe, it } from "node:test"
 import {
   CANCEL_ERROR_MESSAGE,
   buildShowNotificationOptions,
+  handleCoffeeosNavigateMessage,
   handleNotificationAction,
   orderDeepLink,
   parseNotificationActions
@@ -155,5 +156,45 @@ describe("handleNotificationAction (#38 step 2)", () => {
 
     assert.equal(result.kind, "navigate")
     assert.deepEqual(opened, ["/shop/#/order/ord-5?action=tips"])
+  })
+})
+
+describe("handleCoffeeosNavigateMessage (#94)", () => {
+  it("opens support chat when url has action=chat", () => {
+    const chats = []
+    const assigned = []
+    const result = handleCoffeeosNavigateMessage(
+      { type: "coffeeos_navigate", url: "/shop/#/order/42?action=chat" },
+      {
+        openSupportChat: (orderId) => {
+          chats.push(orderId)
+        },
+        assignLocation: (url) => {
+          assigned.push(url)
+        }
+      }
+    )
+    assert.equal(result.handled, true)
+    assert.equal(result.kind, "chat")
+    assert.deepEqual(chats, ["42"])
+    assert.equal(assigned.length, 0)
+  })
+
+  it("assigns location for non-chat navigate", () => {
+    const assigned = []
+    const result = handleCoffeeosNavigateMessage(
+      { type: "coffeeos_navigate", url: "/shop/#/order/7?action=tips" },
+      {
+        openSupportChat: () => {
+          throw new Error("should not chat")
+        },
+        assignLocation: (url) => {
+          assigned.push(url)
+        }
+      }
+    )
+    assert.equal(result.handled, true)
+    assert.equal(result.kind, "navigate")
+    assert.deepEqual(assigned, ["/shop/#/order/7?action=tips"])
   })
 })
