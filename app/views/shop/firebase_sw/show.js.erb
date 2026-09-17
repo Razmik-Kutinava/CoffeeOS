@@ -56,7 +56,12 @@ async function openClient(url) {
     }
   }
   if (clients.openWindow) {
-    await clients.openWindow(url);
+    var client = await clients.openWindow(url);
+    if (client && "postMessage" in client) {
+      try {
+        client.postMessage({ type: "coffeeos_navigate", url: url });
+      } catch (e) { /* cold-start: hash boot handles action=chat */ }
+    }
     return { opened: true };
   }
   return { opened: false };

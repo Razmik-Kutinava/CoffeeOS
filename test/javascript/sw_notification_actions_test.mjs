@@ -9,6 +9,7 @@ import { describe, it } from "node:test"
 import {
   CANCEL_ERROR_MESSAGE,
   buildShowNotificationOptions,
+  handleCoffeeosHashBoot,
   handleCoffeeosNavigateMessage,
   handleNotificationAction,
   orderDeepLink,
@@ -196,5 +197,31 @@ describe("handleCoffeeosNavigateMessage (#94)", () => {
     assert.equal(result.handled, true)
     assert.equal(result.kind, "navigate")
     assert.deepEqual(assigned, ["/shop/#/order/7?action=tips"])
+  })
+})
+
+describe("handleCoffeeosHashBoot (#94 cold-start)", () => {
+  it("opens support chat from hash action=chat without postMessage", () => {
+    const chats = []
+    const result = handleCoffeeosHashBoot("#/order/99?action=chat", {
+      openSupportChat: (orderId) => {
+        chats.push(orderId)
+      },
+      assignLocation: () => {
+        throw new Error("should not assign")
+      }
+    })
+    assert.equal(result.handled, true)
+    assert.equal(result.kind, "chat")
+    assert.deepEqual(chats, ["99"])
+  })
+
+  it("ignores hash without action", () => {
+    const result = handleCoffeeosHashBoot("#/order/1", {
+      openSupportChat: () => {
+        throw new Error("no")
+      }
+    })
+    assert.equal(result.handled, false)
   })
 })

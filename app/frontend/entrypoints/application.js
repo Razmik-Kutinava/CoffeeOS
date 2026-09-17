@@ -6,7 +6,7 @@ import { initShopNetwork } from "../lib/shopNetwork.js"
 import { flushOrderQueue } from "../lib/shopOfflineQueue.js"
 import { flushCartQueue } from "../lib/shopOfflineCart.js"
 import { api } from "../lib/api.js"
-import { handleCoffeeosNavigateMessage } from "../lib/swNotificationActions.js"
+import { handleCoffeeosNavigateMessage, handleCoffeeosHashBoot } from "../lib/swNotificationActions.js"
 import { openSupportChat } from "../lib/supportChatAdapter.js"
 import { SUPPORT_TELEGRAM_URL } from "../lib/supportConfig.js"
 
@@ -24,6 +24,16 @@ function showShopBootError(err) {
   if (btn) btn.onclick = function () { window.location.reload() }
 }
 
+function coffeeosNavigateDeps() {
+  return {
+    openSupportChat: (orderId) => openSupportChat(orderId, SUPPORT_TELEGRAM_URL),
+    assignLocation: (url) => {
+      window.location.assign(url)
+    },
+    chatUrl: SUPPORT_TELEGRAM_URL
+  }
+}
+
 try {
   initShopPwa()
   initShopNetwork()
@@ -39,14 +49,18 @@ window.addEventListener("online", () => {
 // #94: FCM SW postMessage { type: "coffeeos_navigate", url } → chat / deep link
 if (typeof navigator !== "undefined" && navigator.serviceWorker) {
   navigator.serviceWorker.addEventListener("message", (event) => {
-    handleCoffeeosNavigateMessage(event.data, {
-      openSupportChat: (orderId) => openSupportChat(orderId, SUPPORT_TELEGRAM_URL),
-      assignLocation: (url) => {
-        window.location.assign(url)
-      },
-      chatUrl: SUPPORT_TELEGRAM_URL
-    })
+    handleCoffeeosNavigateMessage(event.data, coffeeosNavigateDeps())
   })
+}
+
+// #94 cold-start: openWindow deep link without postMessage
+try {
+  handleCoffeeosHashBoot(
+    typeof window !== "undefined" ? window.location : { hash: "" },
+    coffeeosNavigateDeps()
+  )
+} catch (err) {
+  console.warn("[shop-boot] hash navigate", err)
 }
 
 try {

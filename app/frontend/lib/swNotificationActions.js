@@ -144,3 +144,26 @@ export function handleCoffeeosNavigateMessage(data, deps = {}) {
   assign(url)
   return { handled: true, kind: "navigate" }
 }
+
+/**
+ * #94 cold-start: when SW `openWindow` loads deep link without postMessage,
+ * boot reads hash `?action=chat|tips` and runs the same navigate handler.
+ *
+ * @param {{ hash?: string }|string} locationLike
+ * @param {Parameters<typeof handleCoffeeosNavigateMessage>[1]} [deps]
+ */
+export function handleCoffeeosHashBoot(locationLike, deps = {}) {
+  const hash =
+    typeof locationLike === "string"
+      ? locationLike.includes("#")
+        ? locationLike.slice(locationLike.indexOf("#"))
+        : locationLike.startsWith("#")
+          ? locationLike
+          : ""
+      : String((locationLike && locationLike.hash) || "")
+
+  if (!hash || !/[?&]action=/.test(hash)) return { handled: false }
+
+  const url = `/shop/${hash.startsWith("#") ? hash : `#${hash}`}`
+  return handleCoffeeosNavigateMessage({ type: "coffeeos_navigate", url }, deps)
+}

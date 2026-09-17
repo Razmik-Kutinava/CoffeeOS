@@ -204,6 +204,17 @@ describe("ActiveOrdersAccordion wires push + denied settings (#81 / #92)", () =>
     const src = readFileSync(appPath, "utf8")
     assert.match(src, /coffeeos_navigate/)
     assert.match(src, /handleCoffeeosNavigateMessage|serviceWorker\.addEventListener/)
+    assert.match(src, /handleCoffeeosHashBoot/)
+  })
+
+  it("#94: firebase SW openWindow still posts coffeeos_navigate when possible", () => {
+    const swPath = new URL(
+      "../../app/views/shop/firebase_sw/show.js.erb",
+      import.meta.url
+    )
+    const src = readFileSync(swPath, "utf8")
+    assert.match(src, /openWindow/)
+    assert.match(src, /postMessage\(\s*\{\s*type:\s*"coffeeos_navigate"/)
   })
 
   it("#94: firebase SW reads title/body from data when notification absent", () => {
