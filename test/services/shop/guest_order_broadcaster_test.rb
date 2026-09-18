@@ -209,6 +209,24 @@ class Shop::GuestOrderBroadcasterTest < ActiveSupport::TestCase
     Shop::AppleWallet::PassUpdater.define_singleton_method(:call!, original) if original
   end
 
+  test "T-J1a ready does not enqueue PassUpdateJob (ReadyPushJob owns wallet)" do
+    OrderWalletPass.create!(
+      order_id: @order.id,
+      tenant_id: @tenant.id,
+      customer_id: @customer.id,
+      serial_number: "ser-#{SecureRandom.hex(8)}",
+      authentication_token: SecureRandom.hex(16),
+      pass_type_identifier: "pass.ru.coffeeos.order",
+      status_label: "preparing",
+      revision: 2
+    )
+    @order.update!(status: :ready)
+
+    assert_no_enqueued_jobs(only: Shop::AppleWallet::PassUpdateJob) do
+      Shop::GuestOrderBroadcaster.call(order: @order.reload, old_status: "preparing")
+    end
+  end
+
   test "T-J3a cascade wait is SMS_GRACE + SMS_GRACE_JOB_BUFFER (20s)" do
     freeze_time do
       @order.update!(status: :ready)

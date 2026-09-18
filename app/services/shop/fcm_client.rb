@@ -13,7 +13,9 @@ module Shop
     OAUTH_URL = URI("https://oauth2.googleapis.com/token")
     FCM_SCOPE = "https://www.googleapis.com/auth/firebase.messaging"
     OAUTH_CACHE_TTL = 50.minutes
-    DEAD_TOKEN_CODES = %w[UNREGISTERED INVALID_ARGUMENT].freeze
+    # Only UNREGISTERED is always a dead registration. INVALID_ARGUMENT is token-dead
+    # only when the error text clearly refers to the registration token (not payload/schema).
+    DEAD_TOKEN_ERROR_CODES = %w[UNREGISTERED].freeze
 
     def self.deliver!(token:, title:, body:, data: {}, customer: nil)
       new.deliver!(token: token, title: title, body: body, data: data, customer: customer)
@@ -137,16 +139,20 @@ module Shop
     end
 
     def dead_token_error?(response_body)
-      parsed = JSON.parse(response_body.to_s)
+      body = response_body.to_s
+      parsed = JSON.parse(body)
       details = parsed.dig("error", "details")
-      codes = Array(details).filter_map { |d| d["errorCode"] || d[:errorCode] }
+      codes = Array(details).filter_map { |d| d["errorCode"] || d[:errorCode] }.map(&:to_s)
       status = parsed.dig("error", "status").to_s
-      codes.any? { |c| DEAD_TOKEN_CODES.include?(c.to_s) } ||
-        DEAD_TOKEN_CODES.include?(status) ||
-        response_body.to_s.include?("UNREGISTERED") ||
-        (status == "INVALID_ARGUMENT" && response_body.to_s.match?(/token/i))
+
+      return true if codes.intersect?(DEAD_TOKEN_ERROR_CODES) || DEAD_TOKEN_ERROR_CODES.include?(status)
+      return true if body.include?("UNREGISTERED")
+
+      # INVALID_ARGUMENT covers many FCM request bugs — clear only when clearly about the token.
+      invalid_arg = codes.include?("INVALID_ARGUMENT") || status == "INVALID_ARGUMENT"
+      invalid_arg && body.match?(/registration.?token|not a valid (fcm|apns)?\s*token|invalid.?token/i)
     rescue JSON::ParserError
-      response_body.to_s.include?("UNREGISTERED")
+      body.to_s.include?("UNREGISTERED")
     end
 
     def post_form(uri, form)

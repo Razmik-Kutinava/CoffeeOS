@@ -154,6 +154,36 @@ class Shop::FcmClientTest < ActiveSupport::TestCase
     assert_equal false, customer.push_enabled
   end
 
+  test "T-J2b INVALID_ARGUMENT without token context does not clear push" do
+    customer = create_mobile_customer!(phone: "+79004445566")
+    customer.update!(push_enabled: true, push_token: "still-valid-token")
+    with_fcm_service_account!
+    client = Shop::FcmClient.new
+    stub_fcm_http!(
+      client,
+      oauth_bodies: [ JSON.generate("access_token" => "oauth-1", "expires_in" => 3600) ],
+      fcm_response: [
+        400,
+        JSON.generate(
+          "error" => {
+            "code" => 400,
+            "status" => "INVALID_ARGUMENT",
+            "message" => "Invalid data value for key actions",
+            "details" => [ { "errorCode" => "INVALID_ARGUMENT" } ]
+          }
+        )
+      ]
+    )
+
+    assert_raises(Shop::FcmClient::Error) do
+      client.deliver!(token: customer.push_token, title: "T", body: "B", customer: customer)
+    end
+
+    customer.reload
+    assert_equal "still-valid-token", customer.push_token
+    assert_equal true, customer.push_enabled
+  end
+
   test "T-J2c simulate mode unchanged with customer arg" do
     ENV["FCM_SIMULATE"] = "1"
     customer = create_mobile_customer!(phone: "+79001112233")

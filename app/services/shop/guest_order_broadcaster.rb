@@ -30,6 +30,8 @@ module Shop
 
     def self.enqueue_wallet_pass_update!(order)
       return unless OrderWalletPass.exists?(order_id: order.id)
+      # ready: ReadyPushJob owns PassUpdater (avoid concurrent double-bump with PassUpdateJob).
+      return if order.ready?
 
       Shop::AppleWallet::PassUpdateJob.perform_later(order.id)
     end
