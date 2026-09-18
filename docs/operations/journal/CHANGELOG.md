@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-18 — ci: Semgrep → GitHub Code Scanning
+
+- `.github/workflows/semgrep.yml`: p/ruby + p/javascript + p/rails → SARIF → `upload-sarif` (category semgrep)
+- Алерты: Security → Code scanning (рядом с CodeQL); Actions → Semgrep
+
 ## 2026-09-18 — fix: CodeQL ReDoS + dismiss false positives
 
 - ReDoS: `URI::MailTo::EMAIL_REGEXP` в email_otp / email_service / purchase / tbank_receipt; JS login_form без nested `+`

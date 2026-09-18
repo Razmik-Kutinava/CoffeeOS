@@ -2,17 +2,17 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-18 (CodeQL triage)  
+**Дата:** 2026-09-18 (Semgrep CI → Code Scanning)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| CodeQL ReDoS fix + 13 dismiss | Actions CodeQL rescan → #1/#10/#11 close |
-| GetState Amount + inventory + #78 | CI · deploy апрув → Fly Point A |
-| #82 **Патч_1** · CI green | deploy апрув → Fly MCP |
+| Semgrep CI + SARIF upload | Actions Semgrep → Security Code scanning (tool Semgrep) |
+| CodeQL triage | rescan / alerts |
+| GetState + #78 / #82 | deploy апрув |
 
-**last_done:** CodeQL triage — ReDoS fix + dismiss CSRF/test/FP (13 alerts)  
-**next_step:** ждать CodeQL Actions на develop → open alerts = 0
+**last_done:** `.github/workflows/semgrep.yml` — ruby/js/rails → SARIF → Code scanning  
+**next_step:** push → Actions Semgrep → View alerts (фильтр Semgrep)
 
 **ctx_trim:** `2026-09-02`  
 **Fly:** v495 `deployment-01M22JRN95TXRSV1PQDN49227M`

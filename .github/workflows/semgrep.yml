@@ -1,3 +1,4 @@
+# Semgrep → GitHub Code Scanning (SARIF рядом с CodeQL)
 name: Semgrep
 
 on:
@@ -10,6 +11,8 @@ on:
 
 permissions:
   contents: read
+  security-events: write
+  actions: read
 
 jobs:
   semgrep:
@@ -18,5 +21,23 @@ jobs:
     container:
       image: semgrep/semgrep
     steps:
-      - uses: actions/checkout@v4
-      - run: semgrep ci --config auto
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Semgrep scan (SARIF)
+        # findings → non-zero exit; всё равно грузим SARIF в Code scanning
+        continue-on-error: true
+        run: |
+          semgrep scan \
+            --config p/ruby \
+            --config p/javascript \
+            --config p/rails \
+            --sarif \
+            --output=semgrep.sarif
+
+      - name: Upload SARIF to Code Scanning
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: semgrep.sarif
+          category: semgrep
+        if: always()
