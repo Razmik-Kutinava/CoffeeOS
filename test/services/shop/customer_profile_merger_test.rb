@@ -116,4 +116,24 @@ class Shop::CustomerProfileMergerTest < ActiveSupport::TestCase
     assert_equal @email, survivor.reload.email
     assert survivor.email_verified
   end
+
+  test "T-K4a reassign_optional_table! raises for non-whitelisted table" do
+    survivor = MobileCustomer.create!(phone: @phone, first_name: "S", is_active: true, phone_verified: true)
+    donor = MobileCustomer.create!(email: @email, first_name: "D", is_active: true, email_verified: true)
+    merger = Shop::CustomerProfileMerger.new(survivor: survivor, donor: donor)
+
+    err = assert_raises(ArgumentError) { merger.send(:reassign_optional_table!, "orders") }
+    assert_match(/not allowed|whitelist|optional/i, err.message)
+  end
+
+  test "T-K4b allowed optional tables still merge" do
+    survivor = MobileCustomer.create!(phone: @phone, first_name: "S", is_active: true, phone_verified: true)
+    donor = MobileCustomer.create!(email: @email, first_name: "D", is_active: true, email_verified: true)
+    merger = Shop::CustomerProfileMerger.new(survivor: survivor, donor: donor)
+
+    assert_nothing_raised do
+      merger.send(:reassign_optional_table!, "order_feedback")
+      merger.send(:reassign_optional_table!, "promo_code_usages")
+    end
+  end
 end

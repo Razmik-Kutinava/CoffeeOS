@@ -140,4 +140,53 @@ class Demo::EnvironmentSetupTest < ActiveSupport::TestCase
       ENV["DEMO_SINGLE_POINT"] = old
     end
   end
+
+  test "T-K2a production aborts seed when DEMO_AUTO_SEED is false" do
+    old_seed = ENV["DEMO_AUTO_SEED"]
+    ENV["DEMO_AUTO_SEED"] = "false"
+    env = Rails.env
+    Rails.env = ActiveSupport::StringInquirer.new("production")
+    begin
+      err = assert_raises(RuntimeError) { Demo::EnvironmentSetup.call(load_catalog: false) }
+      assert_match(/DEMO_AUTO_SEED|production|abort/i, err.message)
+    ensure
+      Rails.env = env
+      if old_seed.nil?
+        ENV.delete("DEMO_AUTO_SEED")
+      else
+        ENV["DEMO_AUTO_SEED"] = old_seed
+      end
+    end
+  end
+
+  test "T-K2a production allows seed when DEMO_AUTO_SEED true" do
+    old_seed = ENV["DEMO_AUTO_SEED"]
+    ENV["DEMO_AUTO_SEED"] = "true"
+    env = Rails.env
+    Rails.env = ActiveSupport::StringInquirer.new("production")
+    begin
+      assert_nothing_raised { Demo::EnvironmentSetup.call(load_catalog: false) }
+    ensure
+      Rails.env = env
+      if old_seed.nil?
+        ENV.delete("DEMO_AUTO_SEED")
+      else
+        ENV["DEMO_AUTO_SEED"] = old_seed
+      end
+    end
+  end
+
+  test "T-K2b DEMO_LOGINS warns not for production" do
+    path = Rails.root.join("docs/operations/milestones/veha_1/reference/DEMO_LOGINS.md")
+    text = File.read(path)
+    assert_match(/не\s+(для\s+)?prod|not\s+for\s+prod|не\s+prod/i, text)
+  end
+
+  test "T-K2c demo123456 under app only in Demo::EnvironmentSetup" do
+    hits = Dir.glob(Rails.root.join("app/**/*.{rb,erb,js,svelte,ts}")).select do |path|
+      File.read(path).include?("demo123456")
+    end.map { |p| Pathname.new(p).relative_path_from(Rails.root).to_s }
+
+    assert_equal [ "app/services/demo/environment_setup.rb" ], hits.sort
+  end
 end
