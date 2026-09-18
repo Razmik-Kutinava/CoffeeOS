@@ -3,7 +3,7 @@
 | Поле | Значение |
 |------|----------|
 | **ID** | CBR **#93** · **TASK_93-C** |
-| **Статус** | **REGRESS PASS** · Next: `/review` |
+| **Статус** | **GATES met 5 / abandoned 1** · Next: `/review` |
 | **RED** | `1346d895` |
 | **GREEN** | `c2ef2d68` |
 | **GATES** | [`GATES-block-C.md`](GATES-block-C.md) |
@@ -24,6 +24,7 @@
 - [x] RED `1346d895`
 - [x] GREEN `c2ef2d68` — 18/0 PASS
 - [x] `/regress` — 18 runs / 0 failures (2026-09-18)
+- [x] `/unlazy` approve+reverify — G1–G5 **met** · G6 **abandoned**→L
 - [ ] `/review`
 
 ## Проверка

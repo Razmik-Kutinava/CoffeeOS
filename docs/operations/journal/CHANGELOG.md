@@ -11,6 +11,18 @@
 
 ## РўРµРєСѓС‰РёР№ РјРµСЃСЏС† (2026-09)
 
+## 2026-09-18 — docs: SPEC #93 TASK_93-J Push / worker / SMS_GRACE
+
+- `todo.md` + `todo-block-J.md` → TASK_93-J: R1 PassUpdateJob · R2 broadcaster after lock · R4 FCM cache 50m · R6 wait=20s · R8 Puma plugin
+- Файлы 7 + blast · Не ломать · Проверка G1/G4
+- Next: `/sbr` RED (код не трогали)
+
+## 2026-09-18 — docs: unlazy approve #93 TASK_93-C SMS short link
+
+- `GATES-block-C.md`: `--approve` + `--reverify` · **met 5** · **abandoned 1** (G6→L)
+- Local G1–G5 CHECK PASS; Fly MCP Point A = TASK_93-L
+- Next: `/review`
+
 ## 2026-09-18 вЂ” feat: TASK_93-D history per_page default 20 [GREEN]
 
 - `OrdersController#history`: blank/0/missing в†’ 20; max 50; T-D1aвЂ“d В· T-D3a/b PASS

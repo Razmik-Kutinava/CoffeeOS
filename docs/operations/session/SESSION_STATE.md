@@ -2,17 +2,17 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-18 (TASK_93-D GREEN)  
+**Дата:** 2026-09-18 (TASK_93-J SPEC)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#93-D** GREEN | `/regress` G2 |
-| T-D* PASS · RED `faca7e3c` | `--approve` G1 после regress |
-| `todo-block-D.md` | `/review` · G4→L |
+| **#93-J** SPEC ready | `/sbr` RED T-J* |
+| R1–R8 · GATES J | GREEN → approve G1–G3 · G4 `/regress` |
+| A/C/I/H… ledgers | `GATES-block-*.md` (не затирать) |
 
-**last_done:** feat history per_page=20 `[GREEN]` `9d2b98a8`  
-**next_step:** `/regress` → `/review`
+**last_done:** `/spec` TASK_93-J Push/worker — todo + PassUpdateJob · BUFFER=5s · R8 Puma  
+**next_step:** `/sbr` RED · коммит `[RED]` · стоп до GREEN
 
 **ctx_trim:** `2026-09-02`
 
