@@ -1,0 +1,225 @@
+<manually_attached_skills>
+The user has manually attached the following skills to their message.
+These skills contain specific instructions or workflows that the user wants you to follow for this request.
+Only read the files if needed, the full skill content is inlined here.
+
+Skill Name: start
+Path: c:\Tools\workarea\CoffeeOS\.cursor\skills\start\SKILL.md
+SKILL.md content:
+Выполни инструкции из `.cursor/commands/start.md` целиком (умный старт A/B, отчёт, строка `Next: /…`).
+</manually_attached_skills>
+<cursor_commands>
+
+--- Cursor Command: start ---
+# /start — старт сессии / задачи (умный)
+
+CoffeeOS. Следуй `coffeeos-agent-workflow` + `coffeeos-customer-intake` (PHASE 0) при нужде.
+
+## Режим (выбери один, не гоняй всё)
+
+### A) Узкий старт (по умолчанию, если контекст уже есть)
+Используй, если в чате/todo уже: баг локализован, есть список файлов, живой `todo.md`, или пользователь продолжает ту же задачу.
+
+Сделай **только**:
+1. Шапка `HANDOFF.md` + шапка `SESSION_STATE.md` (`Read` limit до `---`, не тело)
+2. `ISSUES.md` — только секция **`## 🔴 Открыто`** (до следующего `##`), если релевантно багу
+3. `todo.md` — если есть
+4. **Не** перечитывай PRACTICES/QA/весь CHECKLIST/весь CHANGELOG / **`COMPONENT_MAP.md`**
+5. **Не** заново PHASE 0, если ТЗ уже в `customer_tasks/` или задача уже в todo
+6. Коротко: `last_done` / `current_state` / `next_step` (одна строка каждый)
+7. **ctx-trim:** если пт–вс и в шапке HANDOFF `ctx_trim` старше 7 дней — одна строка: «рекомендуется `/ctx-trim`» (не блокировать старт)
+
+### B) Полный старт + PHASE 0
+Только если **новое** ТЗ от заказчика ещё не в `customer_tasks/` / CBR, или пользователь явно просит intake.
+
+Тогда: PHASE 0 (intake 1:1) → краткая шапка ops → стоп до `/spec`.
+
+## Отчёт
+Таблица Сделано | Не сделано.  
+`Субагент: нет — старт` (или explore, если уже звал).  
+**Не пиши код** на этом шаге.
+
+## Обязательно в конце (копипаст для пользователя)
+
+Одной строкой, без лишнего текста вокруг:
+
+- Если нужен план/файлы → `Next: /spec`
+- Если SPEC/todo уже готов → `Next: /sbr`
+- Если только что завершили PHASE 0 → `Next: /spec`
+
+--- End Command ---
+</cursor_commands>
+<timestamp>Friday, Sep 18, 2026, 12:07 PM (UTC+4)</timestamp>
+
+# TASK_93-D — Блок D: История заказов / ЛК список
+
+Зонтик: **TASK_93** / `#93` — Critical path hardening.  
+Этот SBR-прогон: **только TASK_93-D**.
+
+Title чата: `Задача 93 — Critical path hardening (блок D)`.
+
+---
+
+## 1. Зачем
+
+`GET /shop/api/orders/history` считает:
+
+```ruby
+per_page = [ [ params[:per_page].to_i, 1 ].max, 50 ].min
+```
+
+Без `per_page` → `.to_i` = **0** → `max(0,1)` = **1** → в ответе максимум **один** заказ.
+
+Клиенты без param:
+- `PersonalAccount.svelte` → `api("/orders/history")`
+- `Orders.svelte` → `api('/orders/history?today=1')` («Заказы за сегодня»)
+
+`shopAccountOrders.js` шлёт `per_page=20` — ок, но основные экраны ЛК/сегодня — нет.
+
+## 2. Цель блока
+
+Списки показывают **нормальную пачку** заказов (default 20–50), не один заказ по умолчанию.
+
+## 3. Scope / Non-scope
+
+**В scope (D1–D3):**
+- `Shop::Api::OrdersController#history` — default `per_page`
+- Соседние list с тем же антипаттерном `params[:per_page].to_i` без default (если найдутся в shop API orders)
+- Клиенты: `PersonalAccount.svelte`, `Orders.svelte`, `shopAccountOrders.js` — согласованный default
+- Тесты D3
+
+**Вне scope:** active orders sheet, Quick Repeat, пагинация UI «load more» (можно оставить page=1), A/B/C, deploy.
+
+## 4. Продуктовые правила
+
+| Правило | Решение |
+|---------|---------|
+| **R1** | Default `per_page` = **20** (канон; max по-прежнему **50**) |
+| **R2** | Явный `per_page` от клиента уважается в диапазоне 1..50 |
+| **R3** | `per_page` пустой / `"0"` / мусор → default **20**, не 1 |
+| **R4** | `today=1` фильтр без изменений; меняется только размер страницы |
+| **R5** | Клиенты без param полагаются на серверный default; `shopAccountOrders` может продолжать слать 20 |
+
+## 5. Файлы (ожидаемо)
+
+```
+app/controllers/shop/api/orders_controller.rb
+app/frontend/routes/PersonalAccount.svelte
+app/frontend/routes/Orders.svelte
+app/frontend/lib/shopAccountOrders.js
+
+test/integration/shop/api/orders_controller_test.rb
+```
+
+## 6. Не ломать
+
+1. История только своего `customer_id` + tenant.  
+2. `today=1` — только заказы с сегодня.  
+3. Гость без session → `[]`.  
+4. Изоляция tenant (существующий test).  
+5. `active` endpoint — не ломать окно ACTIVE_ORDERS.
+
+## 7. Матрица приёмки D1–D3 ↔ тесты
+
+Блок D закрыт только если **все** T-D* PASS.
+
+### D1 — Серверный default
+
+| ID | Тест | Arrange | Assert |
+|----|------|---------|--------|
+| **T-D1a** | `history without per_page returns default page size` | session customer + **≥3** mobile orders | `GET /orders/history` **без** per_page → `json.length == 3` (или min(3, default)); **не** 1 |
+| **T-D1b** | `history blank/zero per_page uses default not one` | ≥3 orders; `per_page=` или `per_page=0` | length > 1 (ожидаемо 3 / default) |
+| **T-D1c** | `history per_page capped at 50` | при желании 51+ orders; `per_page=999` | length ≤ 50 |
+| **T-D1d** | `history respects explicit per_page=2` | ≥3 orders; `per_page=2` | length == 2 |
+
+Реализация default (пример для GREEN):
+
+```ruby
+raw = params[:per_page].presence&.to_i
+per_page = raw.nil? || raw < 1 ? 20 : [ raw, 50 ].min
+```
+
+### D2 — Клиент согласован
+
+| ID | Тест / проверка | Assert |
+|----|-----------------|--------|
+| **T-D2a** | `shopAccountOrders` default `perPage \|\| 20` | остаётся 20; не слать 1 |
+| **T-D2b** | PersonalAccount / Orders | либо без param (сервер 20), либо явный `per_page=20`; **не** `per_page=1` |
+| **T-D2c** | (опционально) оба экрана используют `fetchAccountOrderHistory` | один клиентский путь — предпочтительно в GREEN |
+
+Если нет JS runner — DoD: code review + T-D1a гарантирует, что текущие вызовы без param уже чинятся сервером. В REVIEW — grep: нет `per_page=1` в frontend shop orders.
+
+### D3 — Главный приёмочный сценарий
+
+| ID | Тест | Assert |
+|----|------|--------|
+| **T-D3a** | `history without param returns more than one order when multiple exist` | создать **2+** заказов одному customer; `GET history` без params → `json.length >= 2` |
+| **T-D3b** | `history?today=1 without per_page returns more than one when multiple today` | 2+ заказа сегодня; `today=1` без per_page → `length >= 2` |
+
+Именно T-D3a/b = доказательство DoD «ЛК / Заказы за сегодня не показывают один заказ».
+
+Файл: `test/integration/shop/api/orders_controller_test.rb` (дописать к существующим history tests).
+
+## 8. Команды проверки
+
+```bash
+bin/rails test test/integration/shop/api/orders_controller_test.rb
+```
+
+Регресс узкий:
+
+```bash
+bin/rails test test/integration/shop/api/orders_controller_test.rb \
+  test/integration/shop/api/mvp_flow_test.rb
+```
+
+## 9. Definition of Done — Блок D
+
+- [ ] Default `per_page` = 20 (не 1) при отсутствии/нуле param  
+- [ ] T-D1a–d PASS  
+- [ ] T-D3a, T-D3b PASS  
+- [ ] Клиенты ЛК/сегодня не завязаны на баг (D2)  
+- [ ] Max 50 сохранён  
+- [ ] REVIEW-таблица D1–D3 \| тест ID \| PASS  
+- [ ] Deploy = TASK_93-L  
+
+## 10. SBR-цикл для 93-D
+
+| Фаза | Что |
+|------|-----|
+| `/start` | секция **Блок D** в TASK_93 |
+| `/spec` | default=20, max=50; файлы выше |
+| `/sbr` RED | T-D3a/T-D3b **красные** на текущем HEAD (ожидаемо length==1) |
+| `/sbr` GREEN | фикс формулы per_page (+ клиент по желанию) |
+| `/regress` | §8 |
+| `/review` | таблица PASS |
+
+Ожидаемый RED: **T-D3a** — 2 заказа в БД, в JSON один.
+
+## 11. Таблица закрытия (REVIEW)
+
+```
+D1 T-D1a T-D1b T-D1c T-D1d   PASS
+D2 клиент / grep             PASS
+D3 T-D3a T-D3b               PASS
+```
+
+Без T-D3a+b блок **не** закрыт.
+
+---
+
+## Связь
+
+| Блок | Боль |
+|------|------|
+| A | Оплата ↔ склад |
+| B | Identity Pay |
+| C | SMS short link |
+| **D** | ЛК показывает 1 заказ |
+
+Блок D **дешёвый** — можно сразу после A или параллельно с C (не пересекается).
+
+---
+
+Ask mode: файлы не пишу. В Agent: `/start` с **TASK_93-D**.
+/start
