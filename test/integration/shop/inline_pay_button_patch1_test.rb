@@ -28,6 +28,7 @@ class Shop::InlinePayButtonPatch1Test < ActiveSupport::TestCase
   test "widgetRepeatPayFlow resets ERROR and timeout to IDLE after 3000ms" do
     flow = File.read(Rails.root.join("app/frontend/lib/widgetRepeatPayFlow.js"))
     assert_match(/kind === ["']timeout["'][\s\S]*resetAfterMs\s*=\s*TBANK_INLINE_ERROR_RESET_MS/, flow)
-    assert_match(/resetAfterMs\s*=\s*TBANK_INLINE_ERROR_RESET_MS/, flow)
+    assert_includes flow, "INLINE_TIMEOUT_LABEL"
+    assert_operator flow.scan(/resetAfterMs\s*=\s*TBANK_INLINE_ERROR_RESET_MS/).size, :>=, 4
   end
 end

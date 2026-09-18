@@ -2,17 +2,17 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-18 (Fly v499 deep MCP PASS 20/20)  
+**Дата:** 2026-09-18 (Патч 1 inline pay GREEN)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **Fly v499** · deep MCP **PASS** 20/20 | live pay/Callcheck device (апрув) |
-| Redis + throttle 429 · phone verify OK | УК лента |
-| Artifact `fly_v499_deep_2026-09-18` | — |
+| **Патч 1** inline статусы в `shop-repeat-card-pay` **GREEN** | `/review` |
+| Local JS 25/25 · Rails patch1+QR PASS | Fly MCP после Review |
+| TASK_94 ЛК history — **не** в scope | — |
 
-**last_done:** TASK_93-L deep MCP Point A matrix (+ browser `#/checkout`)  
-**next_step:** live charge/Callcheck only with device+funded card апрув
+**last_done:** Патч 1 Subtask 8/10/12/13 (patch v1)  
+**next_step:** `/review`
 
 **ctx_trim:** `2026-09-02`  
 **Fly:** v499 `deployment-01M2T582RETP2608KZMBMXAE1A`

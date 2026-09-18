@@ -8,6 +8,7 @@ import {
   INLINE_SUCCESS_LABEL,
   INLINE_GENERIC_ERROR_LABEL,
   INLINE_NETWORK_ERROR_LABEL,
+  INLINE_TIMEOUT_LABEL,
   TBANK_INLINE_ERROR_RESET_MS,
   runTbankInlineButtonCycle,
   classifyInlinePayErrorLabel
@@ -159,12 +160,14 @@ export async function runRepeatWidgetPayFlow({
         /* pay UX уже успешен — clear best-effort */
       }
     } else if (result.kind === "timeout") {
+      // Патч 1 Subtask 13: timeout label + ERROR→IDLE через 3000 мс; retry сохранён.
       lastErrorCode = result.errorCode || ""
       fsm.reject({ error_code: lastErrorCode })
       fsm.state = WIDGET_FSM_STATES.ERROR
-      errorText = INLINE_NETWORK_ERROR_LABEL
+      errorText = result.errorLabel || INLINE_TIMEOUT_LABEL
       statusText = errorText
       onStatusText?.(statusText)
+      resetAfterMs = TBANK_INLINE_ERROR_RESET_MS
       ;({ showFallbackMethods, showExpandedCards, showNewCardForm, showRetry } =
         resolveNetworkRetryUi())
     } else if (result.kind === "http_error") {
@@ -174,9 +177,11 @@ export async function runRepeatWidgetPayFlow({
       errorText = result.errorLabel || INLINE_GENERIC_ERROR_LABEL
       statusText = errorText
       onStatusText?.(statusText)
+      resetAfterMs = TBANK_INLINE_ERROR_RESET_MS
       ;({ showFallbackMethods, showExpandedCards, showNewCardForm, showRetry } =
         resolveCardDeclineFallbackUi())
     } else {
+      // Патч 1 Subtask 12: 1051 short / else «Ошибка оплаты»; ERROR→IDLE 3000 мс.
       lastErrorCode = result.errorCode || ""
       fsm.reject({ error_code: lastErrorCode })
       errorText =
@@ -188,6 +193,7 @@ export async function runRepeatWidgetPayFlow({
       if (fsm.state !== WIDGET_FSM_STATES.FALLBACK) {
         fsm.state = WIDGET_FSM_STATES.ERROR
       }
+      resetAfterMs = TBANK_INLINE_ERROR_RESET_MS
       ;({ showFallbackMethods, showExpandedCards, showNewCardForm, showRetry } =
         resolveCardDeclineFallbackUi())
     }
@@ -202,6 +208,7 @@ export async function runRepeatWidgetPayFlow({
     })
     statusText = errorText
     onStatusText?.(statusText)
+    resetAfterMs = TBANK_INLINE_ERROR_RESET_MS
     if (errorText === INLINE_NETWORK_ERROR_LABEL) {
       ;({ showFallbackMethods, showExpandedCards, showNewCardForm, showRetry } =
         resolveNetworkRetryUi())

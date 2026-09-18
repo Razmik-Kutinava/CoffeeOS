@@ -2,17 +2,17 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-18 (Fly v499 deep MCP PASS 20/20)  
+**Дата:** 2026-09-18 (Патч 1 inline pay GREEN)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **Fly v499** · deep MCP **20/20 PASS** | live pay/Callcheck = device апрув |
-| Redis Rack::Attack + OTP 429 | УК лента |
-| `d1c88c91` + scripts | — |
+| **Патч 1** inline T‑Bank статусы в кнопке **GREEN** | `/review` |
+| Subtask 8/10/12/13 patch v1 | Fly MCP Point A (после Review) |
+| todo: Патч 1 | TASK_94 ЛК — отдельно, не трогали |
 
-**last_done:** deep MCP matrix 93-L / #86–#94 smoke · browser checkout  
-**next_step:** optional live charge with апрув
+**last_done:** Патч 1 GREEN — `cardPayLabel` + 1051 short + ERROR→IDLE 3s  
+**next_step:** `/review` (bugbot + security + push)
 
 **ctx_trim:** `2026-09-02`
 

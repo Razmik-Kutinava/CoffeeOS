@@ -8,7 +8,7 @@
     repeatFeedback
   } from "../lib/frequentRepeatStore.js"
   import { repeatBumpEmbeddedToCart } from "../lib/repeatEmbeddedCart.js"
-  import { createWidgetPayFsm } from "../lib/shopWidgetPayFsm.js"
+  import { createWidgetPayFsm, WIDGET_FSM_STATES } from "../lib/shopWidgetPayFsm.js"
   import {
     runRepeatWidgetPayFlow,
     resolveCardDeclineFallbackUi,
@@ -18,7 +18,8 @@
   import {
     INLINE_ROTATION_LABELS,
     classifyInlinePayErrorLabel,
-    INLINE_NETWORK_ERROR_LABEL
+    INLINE_NETWORK_ERROR_LABEL,
+    INLINE_SUCCESS_LABEL
   } from "../lib/shopInlinePayFsm.js"
   import {
     repeatInlinePayUi,
@@ -200,6 +201,47 @@
   function roundPrice(n) {
     return Math.round(Number(n) || 0)
   }
+
+  /** Патч 1: статус банка внутри главной pay-кнопки карточки. */
+  function cardPayLabel(key) {
+    if (payUi.activeKey !== key) return "оплатить в 1 клик"
+    const st = payUi.fsm?.state
+    if (st === WIDGET_FSM_STATES.PROCESSING) {
+      return payUi.statusText || INLINE_ROTATION_LABELS[0]
+    }
+    if (st === WIDGET_FSM_STATES.SUCCESS) {
+      return payUi.statusText || INLINE_SUCCESS_LABEL
+    }
+    if (
+      st === WIDGET_FSM_STATES.ERROR ||
+      st === WIDGET_FSM_STATES.FALLBACK
+    ) {
+      return payUi.errorText || payUi.statusText || "оплатить в 1 клик"
+    }
+    return "оплатить в 1 клик"
+  }
+
+  function cardPayClass(key) {
+    if (payUi.activeKey !== key) return "bg-[#ff8c42] text-black"
+    const st = payUi.fsm?.state
+    if (st === WIDGET_FSM_STATES.SUCCESS) return "bg-green-600 text-white"
+    if (st === WIDGET_FSM_STATES.ERROR || st === WIDGET_FSM_STATES.FALLBACK) {
+      return "bg-red-600 text-white"
+    }
+    if (st === WIDGET_FSM_STATES.PROCESSING) return "bg-[#ff8c42] text-black"
+    return "bg-[#ff8c42] text-black"
+  }
+
+  function cardPayShowsStatus(key) {
+    if (payUi.activeKey !== key) return false
+    const st = payUi.fsm?.state
+    return (
+      st === WIDGET_FSM_STATES.PROCESSING ||
+      st === WIDGET_FSM_STATES.SUCCESS ||
+      st === WIDGET_FSM_STATES.ERROR ||
+      st === WIDGET_FSM_STATES.FALLBACK
+    )
+  }
 </script>
 
 {#if topItems.length}
@@ -268,10 +310,16 @@
             <button
               type="button"
               data-testid="shop-repeat-card-pay"
-              class="mt-0.5 min-h-7 w-full rounded-lg bg-[#ff8c42] px-2 py-1 text-[10px] font-semibold text-black disabled:opacity-40"
+              class="mt-0.5 min-h-7 w-full rounded-lg px-2 py-1 text-[10px] font-semibold disabled:opacity-40 {cardPayClass(key)}"
               disabled={repeatBusy}
+              aria-busy={payUi.activeKey === key && payUi.fsm?.state === WIDGET_FSM_STATES.PROCESSING}
               onclick={() => onPayCardClick(item)}
-            >оплатить в 1 клик</button>
+            >
+              {#if payUi.activeKey === key && payUi.fsm?.state === WIDGET_FSM_STATES.SUCCESS}
+                <span aria-hidden="true">✔ </span>
+              {/if}
+              {cardPayLabel(key)}
+            </button>
           {/if}
         </div>
       {/each}
@@ -288,6 +336,7 @@
           showExpandedCards={!!payUi.showExpandedCards}
           showNewCardForm={!!payUi.showNewCardForm}
           showRetry={!!payUi.showRetry}
+          statusInHostButton={!embedded && cardPayShowsStatus(payUi.activeKey)}
           onSelectSbp={onFallbackSbp}
           onSelectCardPlus={onFallbackCardPlus}
           onSelectSavedCard={onSelectSavedCard}

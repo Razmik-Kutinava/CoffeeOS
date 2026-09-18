@@ -19,21 +19,21 @@ export const INLINE_FSM_STATES = {
   ERROR: "ERROR"
 }
 
-/** Фазы PROCESSING (цикл до финального статуса). */
+/** Фазы PROCESSING (цикл до финального статуса). Патч 1 / Subtask 10. */
 export const INLINE_ROTATION_LABELS = [
   "Ещё чуть-чуть...",
   "Связываемся с банком...",
-  "Платеж принимается банком..."
+  "Платеж принимается от банка..."
 ]
 
 export const INLINE_SUCCESS_LABEL = "Оплачено!"
 export const INLINE_TIMEOUT_LABEL = "Время ожидания истекло"
-export const INLINE_GENERIC_ERROR_LABEL = "Ошибка оплаты, попробуйте снова"
-/** @deprecated use INLINE_CARD_ERROR_LABEL — канон заказчика 2026-08-13 */
-export const INLINE_INSUFFICIENT_FUNDS_LABEL =
-  "Недостаточно средств, или карта заблокирована банком, или истёк срок действия карты"
-export const INLINE_CARD_ERROR_LABEL =
-  "Недостаточно средств, или карта заблокирована банком, или истёк срок действия карты"
+/** Патч 1: generic REJECTED/CANCELED (не 1051). */
+export const INLINE_GENERIC_ERROR_LABEL = "Ошибка оплаты"
+/** Патч 1 Subtask 12: ровно для ErrorCode 1051. */
+export const INLINE_INSUFFICIENT_FUNDS_LABEL = "Недостаточно средств"
+/** @deprecated alias → INLINE_INSUFFICIENT_FUNDS_LABEL (Патч 1) */
+export const INLINE_CARD_ERROR_LABEL = INLINE_INSUFFICIENT_FUNDS_LABEL
 export const INLINE_NETWORK_ERROR_LABEL = "Нет связи. Повторить"
 
 function defaultSleep(ms) {
@@ -45,7 +45,7 @@ function defaultSleep(ms) {
  */
 export function mapTbankInlineError(data = {}) {
   const code = String(data?.error_code || "").trim()
-  if (isCardErrorCode(code)) return INLINE_CARD_ERROR_LABEL
+  if (code === "1051") return INLINE_INSUFFICIENT_FUNDS_LABEL
   return INLINE_GENERIC_ERROR_LABEL
 }
 
@@ -67,7 +67,8 @@ export function classifyInlinePayErrorLabel(info = {}) {
     return INLINE_NETWORK_ERROR_LABEL
   }
   const code = String(info.error_code || "").trim()
-  if (isCardErrorCode(code)) return INLINE_CARD_ERROR_LABEL
+  if (code === "1051") return INLINE_INSUFFICIENT_FUNDS_LABEL
+  if (isCardErrorCode(code)) return INLINE_GENERIC_ERROR_LABEL
   if (info.label) return String(info.label)
   return INLINE_GENERIC_ERROR_LABEL
 }

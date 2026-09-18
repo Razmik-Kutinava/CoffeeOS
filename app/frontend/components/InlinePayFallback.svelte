@@ -18,6 +18,8 @@
     showExpandedCards = false,
     showNewCardForm = false,
     showRetry = false,
+    /** Патч 1: статус уже в shop-repeat-card-pay — не дублировать bar. */
+    statusInHostButton = false,
     onSelectSbp = undefined,
     onSelectCardPlus = undefined,
     onSelectSavedCard = undefined,
@@ -29,7 +31,14 @@
   let fallback = $derived(fsmState === WIDGET_FSM_STATES.FALLBACK)
   let success = $derived(fsmState === WIDGET_FSM_STATES.SUCCESS)
   let error = $derived(fsmState === WIDGET_FSM_STATES.ERROR)
-  let visible = $derived(processing || fallback || success || error)
+  let showStatusBar = $derived(!statusInHostButton && (processing || fallback || success || error))
+  let visible = $derived(
+    showStatusBar ||
+      (showRetry && error) ||
+      (showFallbackMethods && (fallback || error)) ||
+      showExpandedCards ||
+      showNewCardForm
+  )
 
   let displayText = $derived(
     processing ? (statusText || WIDGET_STATUS_LABELS.PROCESSING) :
@@ -48,19 +57,21 @@
 
 {#if visible}
   <div data-testid="inline-pay-fallback" class="mt-1 w-full min-w-[12rem] space-y-1.5">
-    <div
-      data-testid="inline-pay-status-bar"
-      data-fsm={fsmState}
-      class="flex min-h-10 items-center justify-center rounded-xl px-3 py-2.5 text-[13px] font-semibold {barClass}"
-      aria-busy={processing}
-    >
-      {#if processing}
-        <span class="mr-2 inline-block h-3.5 w-3.5 animate-spin rounded-full border-2 border-black border-t-transparent"></span>
-      {:else if success}
-        <span class="mr-1.5" aria-hidden="true" data-testid="inline-pay-success-check">✔</span>
-      {/if}
-      {displayText}
-    </div>
+    {#if showStatusBar}
+      <div
+        data-testid="inline-pay-status-bar"
+        data-fsm={fsmState}
+        class="flex min-h-10 items-center justify-center rounded-xl px-3 py-2.5 text-[13px] font-semibold {barClass}"
+        aria-busy={processing}
+      >
+        {#if processing}
+          <span class="mr-2 inline-block h-3.5 w-3.5 animate-spin rounded-full border-2 border-black border-t-transparent"></span>
+        {:else if success}
+          <span class="mr-1.5" aria-hidden="true" data-testid="inline-pay-success-check">✔</span>
+        {/if}
+        {displayText}
+      </div>
+    {/if}
 
     {#if showRetry && error}
       <button

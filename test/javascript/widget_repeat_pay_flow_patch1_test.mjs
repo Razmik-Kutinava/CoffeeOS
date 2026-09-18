@@ -76,11 +76,15 @@ describe("Патч 1 — Subtask 12/13 flow: ERROR/timeout → resetAfterMs", ()
     )
     assert.match(
       src,
-      /REJECTED|rejected|CANCELED|canceled[\s\S]{0,800}?resetAfterMs\s*=\s*TBANK_INLINE_ERROR_RESET_MS/
+      /kind === ["']http_error["'][\s\S]{0,400}?resetAfterMs\s*=\s*TBANK_INLINE_ERROR_RESET_MS/
     )
+    // else-ветка (REJECTED/CANCELED) — reset после classifyInlinePayErrorLabel
     assert.match(
       src,
-      /timeout[\s\S]{0,400}?INLINE_TIMEOUT_LABEL|errorLabel/
+      /classifyInlinePayErrorLabel[\s\S]{0,400}?resetAfterMs\s*=\s*TBANK_INLINE_ERROR_RESET_MS/
     )
+    assert.match(src, /INLINE_TIMEOUT_LABEL/)
+    const resets = src.match(/resetAfterMs\s*=\s*TBANK_INLINE_ERROR_RESET_MS/g) || []
+    assert.ok(resets.length >= 4, `expected ≥4 resetAfterMs assignments, got ${resets.length}`)
   })
 })

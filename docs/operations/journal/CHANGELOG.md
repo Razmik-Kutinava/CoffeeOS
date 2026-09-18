@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-18 — feat: Патч 1 inline pay статусы в кнопке [GREEN]
+
+- Subtask 8/10/12/13 patch v1: `cardPayLabel` в `shop-repeat-card-pay`; 1051→«Недостаточно средств»; ERROR/timeout→IDLE 3s
+- `statusInHostButton` в InlinePayFallback; rotation «Платеж принимается от банка...»
+- Local: JS 25/25 · Rails patch1 4/4 · quick_repeat_pay 5/5 · Next: `/review`
+- RED `ddd04998`
+
 ## 2026-09-18 — ops: TASK_93-L deep MCP Point A PASS 20/20
 
 - Artifact `critical_path_hardening/mcp/fly_v499_deep_2026-09-18/` · scripts `bin/acceptance/task_93_l_deep_mcp*.rb`
