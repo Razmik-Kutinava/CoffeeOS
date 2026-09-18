@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-18 — docs: unlazy GATES #93 TASK_93-C SMS short link (active)
+
+- Активный `session/GATES.md` = **C** · канон `GATES-block-C.md` · зеркало `artifacts/.../GATES.md`
+- G1 SMS host · G2 `/o/` bind · G3 throttle · G4 TTL · G5 zone · G6 Fly **ABANDON** → TASK_93-L
+- `gate-check --status`: unmet 5, abandoned 1; `--approve` после GREEN (не сейчас)
+- Параллельно: A SPEC · B/D в `GATES-block-B/D.md`
+
 ## 2026-09-18 — docs: unlazy GATES #93 TASK_93-B Checkout identity (active)
 
 - Активный `session/GATES.md` = **B** (восстановлен после коллизии с C)

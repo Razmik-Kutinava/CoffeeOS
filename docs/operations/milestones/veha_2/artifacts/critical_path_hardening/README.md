@@ -6,15 +6,17 @@
 
 | Файл | Назначение |
 |------|------------|
-| `GATES.md` | unlazy ledger **активного блока** (= сейчас B) |
+| `GATES.md` | unlazy ledger **блока C** (активный session mirror) |
+| `GATES-block-C.md` | канон ledger блока C |
+| `GATES-block-B.md` | ledger блока B |
 | `GATES-block-A.md` | ledger блока A |
-| `GATES-block-B.md` | зеркало ledger блока B |
-| `GATES-block-C.md` | ledger блока C (параллельный чат; не активный session) |
+| `GATES-block-D.md` | ledger блока D |
 
 | Блок | Фокус |
 |------|--------|
-| A | Деньги ↔ заказ — ledger `GATES-block-A.md` · SPEC в todo (др. чат) |
-| B | Checkout identity — **сейчас** · [ТЗ B](../../requirements/customer_tasks/TASK-93-B-Checkout-identity.md) · `GATES.md` · Next: `/spec` |
-| C | SMS short link — ledger `GATES-block-C.md` · ждёт свой `/start`→`/spec` |
-| D–K | см. карту в зонтике |
+| A | Деньги ↔ заказ — `GATES-block-A.md` · SPEC в todo → `/sbr` |
+| B | Checkout identity — `GATES-block-B.md` · [ТЗ B](../../requirements/customer_tasks/TASK-93-B-Checkout-identity.md) |
+| C | SMS short link / hosts / throttle / TTL — **сейчас** · `GATES.md` · Next: `/spec` |
+| D | History per_page — `GATES-block-D.md` |
+| E–K | см. карту в зонтике |
 | L | Deploy + Point A MCP |

@@ -40,9 +40,8 @@ ABANDON: G6 Fly MCP Point A is TASK_93-L DoD, not block C; Local G1–G5 close C
 <!--
 CoffeeOS TASK_93-C unlazy (post-/start / pre-SPEC):
 - Канон брифа: чат TASK_93-C §3–9 (C1–C5); зонтик customer_tasks/TASK-93-Critical-path-hardening.md карта C
-- Зеркало: artifacts/critical_path_hardening/GATES-block-C.md
-- A/B ledgers: GATES-block-A.md · GATES-block-B.md
+- Канон ledger: session/GATES.md + artifacts/.../GATES-block-C.md (+ зеркало GATES.md)
+- A/B/D: GATES-block-A.md · GATES-block-B.md · GATES-block-D.md
 - Close C: G1–G5 met via --approve/--reverify after GREEN + /regress; G6 abandoned until L
 - SPEC must lock: R2-A|B, TTL hours, one-time y/n, throttle limit/period
-- 2026-09-18: сохранён из параллельного чата; активный session/GATES.md = блок B
 -->
