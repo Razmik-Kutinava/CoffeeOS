@@ -61,16 +61,11 @@ module Shop
       session_customer = load_session_customer
       return session_customer if phone_ready?(session_customer)
 
-      email = EmailVerificationSession.normalize(@params[:email])
-      raise Error, IDENTITY_REQUIRED if email.blank?
-
-      verified = EmailVerification.verified_email(
-        session: @session,
-        tenant_id: @tenant.id,
-        session_id: browser_session_id,
-        email: email
-      )
-      raise Error, EMAIL_OTP_REQUIRED unless verified == email
+      # R4: same email rules as find_or_create_for_order! (session email_verified OR live OTP)
+      email = resolve_verified_email!(session_customer)
+      if session_customer && (session_customer.email.blank? || session_customer.email == email)
+        return session_customer
+      end
 
       MobileCustomer.find_by!(email: email)
     rescue ActiveRecord::RecordNotFound

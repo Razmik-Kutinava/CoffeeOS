@@ -77,6 +77,42 @@ class Shop::RecurrentOrderCreatorTest < ActiveSupport::TestCase
     ENV["SHOP_SIMULATE_PAYMENT"] = @old_simulate
   end
 
+  # T-B2d + R4: email_verified session (no live OTP) works for recurrent like orders
+  test "one_click email_verified session without live OTP uses same identity as orders" do
+    email = "rec-email-#{SecureRandom.hex(3)}@example.com"
+    customer = MobileCustomer.create!(
+      email: email,
+      phone: nil,
+      first_name: "Email",
+      is_active: true,
+      email_verified: true
+    )
+    card = MobilePaymentMethod.create!(
+      customer_id: customer.id,
+      payment_type: "card",
+      card_token: "rebill-email-#{SecureRandom.hex(3)}",
+      card_masked: "*2222",
+      card_brand: "MIR",
+      is_active: true,
+      is_default: true
+    )
+    session = {
+      shop_cart: [
+        { "product_id" => @product.id, "quantity" => 1, "selected_modifiers" => [] }
+      ]
+    }
+    Shop::CustomerSession.set_customer_id!(session, @tenant.id, customer.id)
+
+    order = Shop::RecurrentOrderCreator.new(session, tenant: @tenant).call!({
+      payment_method: "card",
+      email: "",
+      name: "Email Rec",
+      saved_card_id: card.id
+    })
+
+    assert_equal customer.id, order.customer_id
+  end
+
   # T-B2d
   test "one_click phone_verified without email reaches charge path" do
     session = {
