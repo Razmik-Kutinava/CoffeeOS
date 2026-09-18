@@ -1,39 +1,32 @@
-# Gates: TASK_93-B / #93 — Checkout identity (phone vs email)
+﻿# Gates: TASK_93-D / #93 — История заказов / ЛК список (per_page)
 
-Scope: UI «можно платить» ≡ бэкенд принимает заказ/оплату без 422 email при `phone_verified` (канон phone-first R1–R5); один identity на orders / new_card / one_click / SBP create. Deploy = TASK_93-L (не DoD блока B).
+Scope: `GET /shop/api/orders/history` default `per_page=20` (не 1) при отсутствии/нуле/мусоре; max 50; `today=1` без изменений размера логики фильтра; ЛК/«сегодня» показывают пачку заказов. Deploy = TASK_93-L (не DoD блока D).
 
-- [ ] G1: T-B2a..f — OrderCreator + RecurrentOrderCreator (phone-only / email-only / neither)
-  CHECK: ruby bin/rails test test/services/shop/order_creator_test.rb test/services/shop/recurrent_order_creator_test.rb
+- [ ] G1: матрица T-D1a–d + T-D3a/b (history default / blank / cap / explicit / today)
+  CHECK: ruby bin/rails test test/integration/shop/api/orders_controller_test.rb
   EXPECT: 0 failures, 0 errors
   CWD: C:/Tools/workarea/CoffeeOS
-  EVIDENCE: unmet pre-RED — `recurrent_order_creator_test.rb` отсутствует (InvalidTestError); T-B2a ещё не написан; создать на `/sbr` RED
+  EVIDENCE: pending — unmet pre-RED; T-D* ещё не написаны; после RED/GREEN — length≥2 без per_page
 
-- [ ] G2: T-B5a..e + T-B4a — integration checkout_identity (orders / cards / one_click ownership)
-  CHECK: ruby bin/rails test test/integration/shop/api/checkout_identity_test.rb
+- [ ] G2: узкий регресс зоны shop orders API (§8)
+  CHECK: ruby bin/rails test test/integration/shop/api/orders_controller_test.rb test/integration/shop/api/mvp_flow_test.rb
   EXPECT: 0 failures, 0 errors
   CWD: C:/Tools/workarea/CoffeeOS
-  EVIDENCE: unmet pre-RED — файла нет (InvalidTestError); создать на RED; phone → 2xx без «Подтвердите email»; no identity → 422; чужая карта → ownership 422
+  EVIDENCE: pending — `/regress` после GREEN
 
-- [x] G3: зона shop pay-paths (ТЗ §8 + new_card)
-  CHECK: ruby bin/rails test test/integration/shop/api/email_otp_checkout_test.rb test/integration/shop/shop_one_click_payment_step4_test.rb test/integration/shop/shop_new_card_payment_step2_test.rb
-  EXPECT: 0 failures, 0 errors
-  CWD: C:/Tools/workarea/CoffeeOS
-  EVIDENCE: automatic-evidence=v1; definition-sha256=fbf78ac6552223e6ed94b6318bf8756327834caeeb578a41eae0ab122d3ecb9c; exit=0; EXPECT=matched; output-sha256=ece15702826475523ee350cb7709330b105562f54f2b8e67897a039046c63b65; output-bytes=1629; shell=C:\Windows\system32\cmd.exe; cwd=C:\Tools\workarea\CoffeeOS; path=54c8ad8163c5/77 entries — baseline PASS до изменений B
+- [ ] G3: D2 клиент — нет `per_page=1` в shop ЛК/orders; default 20 согласован
+  EVIDENCE: pending — manual/REVIEW: grep PersonalAccount.svelte · Orders.svelte · shopAccountOrders.js; либо без param (сервер 20), либо явный 20; T-D2a `perPage || 20`
 
-- [ ] G4: T-B3 UI identityReady ≡ R1–R3 (phone-first, не требует emailVerified для Pay)
-  EVIDENCE: pending — manual/REVIEW: grep `identityReady` в Checkout.svelte ≡ phoneVerified \|\| emailVerified (или phone-first derived); без фейкового emailVerified; цитата в GREEN-отчёте; JS unit если появится runner
+- [ ] G4: hot-path Fly MCP Point A — ЛК history ≥2 заказов на стенде
+  EVIDENCE: abandoned — not DoD for TASK_93-D; reopen in TASK_93-L after deploy апрув; artifact `artifacts/critical_path_hardening/mcp/`; PASS = Point A tenant `2fdee1ac-4674-41ee-b89e-87b45643f789` · session customer · GET history без per_page → json.length ≥ 2 при ≥2 заказах
 
-- [ ] G5: hot-path Fly MCP Point A — phone Callcheck → Pay → order без 422 email
-  EVIDENCE: abandoned — not DoD for TASK_93-B; reopen in TASK_93-L after deploy апрув; artifact `artifacts/critical_path_hardening/mcp/`; PASS = Point A tenant `2fdee1ac-4674-41ee-b89e-87b45643f789` · phone_verified session → POST /orders 2xx · Pay path без «Подтвердите email»
-
-ABANDON: G5 Fly MCP Point A is TASK_93-L DoD, not block B; Local G1–G3 + REVIEW G4 close B
+ABANDON: G4 Fly MCP Point A is TASK_93-L DoD, not block D; Local G1–G2 + REVIEW G3 close D
 
 <!--
-CoffeeOS TASK_93-B unlazy (post-intake / pre-SPEC):
-- Канон ТЗ: customer_tasks/TASK-93-B-Checkout-identity.md §7–9
-- Зеркало: artifacts/critical_path_hardening/GATES.md
-- Блок A ledger: artifacts/critical_path_hardening/GATES-block-A.md
-- Close B: G1–G3 met via --approve/--reverify after GREEN + /regress; G4 evidence в REVIEW; G5 abandoned until L
-- Не гибрид: phone-first only (не email-gate)
-- 2026-09-18 --approve: G3 met; G1/G2 unmet (missing test files); G4 manual; G5 abandoned
+CoffeeOS TASK_93-D unlazy (pre-SPEC / pre-SBR):
+- Канон: customer_tasks/TASK-93-Critical-path-hardening.md · блок D (R1–R5 default 20 / max 50)
+- Зеркало: artifacts/critical_path_hardening/GATES-block-D.md
+- Блок A: GATES-block-A.md · Блок B: session был B → artifacts/.../GATES.md (не трогать)
+- Close D: G1–G2 met via --approve/--reverify after GREEN + /regress; G3 evidence в REVIEW; G4 abandoned until L
+- Без T-D3a+b блок не закрыт
 -->

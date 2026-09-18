@@ -6,12 +6,15 @@
 
 | Файл | Назначение |
 |------|------------|
-| `GATES.md` | unlazy ledger **блока B** (активный) |
-| `GATES-block-A.md` | unlazy ledger блока A (отложен) |
+| `GATES.md` | unlazy ledger **активного блока** (= сейчас B) |
+| `GATES-block-A.md` | ledger блока A |
+| `GATES-block-B.md` | зеркало ledger блока B |
+| `GATES-block-C.md` | ledger блока C (параллельный чат; не активный session) |
 
 | Блок | Фокус |
 |------|--------|
-| A | Деньги ↔ заказ (склад + webhook) — intake, ждёт `/spec` · ledger `GATES-block-A.md` |
-| B | Checkout identity (phone vs email) — **сейчас** · [ТЗ B](../../requirements/customer_tasks/TASK-93-B-Checkout-identity.md) · ledger `GATES.md` |
-| C–K | см. карту в зонтике |
+| A | Деньги ↔ заказ — ledger `GATES-block-A.md` · SPEC в todo (др. чат) |
+| B | Checkout identity — **сейчас** · [ТЗ B](../../requirements/customer_tasks/TASK-93-B-Checkout-identity.md) · `GATES.md` · Next: `/spec` |
+| C | SMS short link — ledger `GATES-block-C.md` · ждёт свой `/start`→`/spec` |
+| D–K | см. карту в зонтике |
 | L | Deploy + Point A MCP |

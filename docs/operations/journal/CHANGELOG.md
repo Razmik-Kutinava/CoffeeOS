@@ -11,6 +11,20 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-18 — docs: unlazy GATES #93 TASK_93-B Checkout identity (active)
+
+- Активный `session/GATES.md` = **B** (восстановлен после коллизии с C)
+- `--approve`: G3 baseline PASS; G1/G2 unmet (нет `recurrent_order_creator_test` / `checkout_identity_test`); G5→L
+- `GATES-block-A/B/C.md` в artifacts; C сохранён в `GATES-block-C.md`
+- Next: `/spec` B
+
+## 2026-09-18 — docs: unlazy GATES #93 TASK_93-C SMS short link
+
+- `session/GATES.md` + `artifacts/critical_path_hardening/GATES.md` (+ `GATES-block-C.md`)
+- B → `GATES-block-B.md`; A остаётся `GATES-block-A.md`; todo A → pointer на block-A
+- G1 SMS host · G2 `/o/` bind · G3 throttle · G4 TTL · G5 zone · G6 Fly **ABANDON** → TASK_93-L
+- `gate-check --status`: unmet 5, abandoned 1; `--approve` после GREEN (не сейчас)
+
 ## 2026-09-18 — docs: SPEC #93 TASK_93-A Critical path (деньги↔заказ)
 
 - `todo.md` → TASK_93-A: файлы A1–A6 · Не ломать · Проверка G1/G2 · матрица T-A*
