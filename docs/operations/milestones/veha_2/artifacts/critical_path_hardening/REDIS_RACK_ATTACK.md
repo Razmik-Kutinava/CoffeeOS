@@ -14,16 +14,18 @@ except Docker **`SECRET_KEY_BASE_DUMMY=1`** (assets:precompile) → MemoryStore,
 
 Dev without URL → `MemoryStore` + warn log (per-process limits).
 
-## Fly (TASK_93-L — needs approve)
+## Fly (TASK_93-L)
 
 ```bash
-# create / attach Upstash or Fly Redis, then:
-fly secrets set REDIS_URL='redis://...' -a coffeeos
-# or:
+# non-interactive create (skip ProdPack prompt):
+fly redis create -n coffeeos-rack-attack -o personal -r ams \
+  --no-replicas --enable-eviction --enable-prodpack=false
+# then:
 fly secrets set RACK_ATTACK_REDIS_URL='redis://...' -a coffeeos
+# or REDIS_URL=...
 ```
 
-Do **not** deploy Redis/secrets from block I without ops approve (block **L**).
+**Live 2026-09-18:** DB `coffeeos-rack-attack` · secret `RACK_ATTACK_REDIS_URL` on `coffeeos` · Fly **v499**.
 
 ## Local / CI
 

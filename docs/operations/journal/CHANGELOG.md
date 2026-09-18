@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-18 — ops: Fly v499 deploy + Point A smoke (TASK_93-L)
+
+- Deploy Actions **success** `35340979415` · image `deployment-01M2T582RETP2608KZMBMXAE1A` · web/worker **v499**
+- Blockers fixed: Upstash Redis `coffeeos-rack-attack` + secret `RACK_ATTACK_REDIS_URL` (TASK_93-I); retry after ConcurrentMigrationError
+- Pack: `/up`+shop+categories **200** · browser catalog/cart PASS · Sentry unresolved 24h **0** · logs OK
+- Artifact: `artifacts/critical_path_hardening/mcp/fly_v499_2026-09-18/MCP_RESULT.md` · deep G5 matrix = next
+
 ## 2026-09-18 — docs: REVIEW #93 TASK_93-E Init idempotency
 
 - Local **86/0** · bugbot: ClientOrderReused Init вне rolled-back txn · security: no med/high/crit

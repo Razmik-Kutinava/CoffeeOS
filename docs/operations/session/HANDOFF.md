@@ -2,20 +2,20 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-18 (TASK_93-E REVIEW CI green)  
+**Дата:** 2026-09-18 (Fly v499 deploy + smoke)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#93-E** REVIEW **CI green** `35338088214` | deploy только апрув |
-| Local 86/0 · GATES met 4 · G5→L | Fly MCP Point A = L |
-| Entire `01M2SZBBAQEGHNGEJCXYHG76XH` на `ead5cf38` | — |
+| **Fly v499** live · deploy `35340979415` | deep MCP TASK_93-L A–K |
+| Redis Upstash `coffeeos-rack-attack` + `RACK_ATTACK_REDIS_URL` | pay/OTP/webhook matrix |
+| Smoke Point A **PASS** | УК лента + full G5 |
 
-**last_done:** `/review` TASK_93-E — E1–E4 PASS · bugbot+security · push · CI green  
-**next_step:** deploy только апрув владельца
+**last_done:** deploy апрув → Redis create → Fly v499 · smoke MCP PASS  
+**next_step:** deep Fly MCP Point A (матрица 93-L / #86–#94)
 
 **ctx_trim:** `2026-09-02`  
-**Fly:** v495 `deployment-01M22JRN95TXRSV1PQDN49227M`
+**Fly:** v499 `deployment-01M2T582RETP2608KZMBMXAE1A`
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
