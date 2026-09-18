@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-18 — docs: unlazy GATES #93 TASK_93-E Init idempotency
+
+- `session/GATES.md` + `artifacts/critical_path_hardening/GATES-block-E.md`
+- G1 double Init / pid · G2 RecordNotUnique / concurrent uuid · G3 §2.3 regress · G4 HTTP вне txn (REVIEW) · G5 Fly **ABANDON** → TASK_93-L
+- `gate-check --status`: unmet 4, abandoned 1; `--approve` после GREEN (baseline ≠ DoD без T-E*)
+- Параллельно: A SPEC · C SPEC · B/D в `GATES-block-B/D.md`
+
 ## 2026-09-18 — docs: SPEC #93 TASK_93-C SMS short link
 
 - `todo.md` → TASK_93-C: R2-A · TTL 48h · throttle 30/min · one-time SKIP
