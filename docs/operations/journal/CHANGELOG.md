@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-18 — docs: REVIEW #93 TASK_93-F Callbacks/stuck/Events
+
+- Local notify pack **68/0** · F1–F5 PASS · bugbot no bugs · security PASS
+- Entire `01M2SSQXT1V67AK260SH1P9RAX` · GREEN `1b28a128`
+- Next: push/CI · deploy апрув · Fly MCP = L
+
 ## 2026-09-18 — docs: unlazy reverify #93 TASK_93-H G1–G4 met (G5 to L)
 
 - `GATES-block-H.md`: `--approve` + `--reverify` PASS (G1–G4); G5 abandoned→L

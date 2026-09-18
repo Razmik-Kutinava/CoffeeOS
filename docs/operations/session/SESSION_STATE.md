@@ -2,17 +2,17 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-18 (TASK_93-H unlazy reverify)  
+**Дата:** 2026-09-18 (TASK_93-I regress PASS)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#93-H** GATES met 4 · abandoned G5 | `/review` |
-| Local overflow/cart PASS | push · без deploy |
-| G5→L | Fly MCP Point A |
+| **#93-I** regress PASS · G1–G4 met · G5→L | `/review` |
+| matrix 23/0 · zone 27/0 | push · **без deploy Redis** |
+| GREEN `c14f5202` | Fly Redis/MCP = L |
 
-**last_done:** `/unlazy` reverify H — G1–G4 met (automatic-evidence)  
-**next_step:** `/review` · bugbot + security · push
+**last_done:** `/regress` TASK_93-I — Attack store/verify + phone OTP + short-link PASS  
+**next_step:** `/review` · таблица I1–I4 · push · без deploy
 
 **ctx_trim:** `2026-09-02`
 
