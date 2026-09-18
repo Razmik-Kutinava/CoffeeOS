@@ -11,8 +11,8 @@
 | GetState Amount + inventory + #78 | CI · deploy апрув → Fly Point A |
 | #82 **Патч_1** · CI green | deploy апрув → Fly MCP |
 
-**last_done:** `.github/workflows/codeql.yml` на develop (ветки develop+main; без broken manual if)  
-**next_step:** push develop (или merge) → дождаться CodeQL run; на main — Edit existing file, не Create
+**last_done:** CodeQL на develop+main · push develop `adae7af5` · main fix `fe1349a4`  
+**next_step:** Actions CodeQL green → Security alerts; не удалять workflow с main
 
 **ctx_trim:** `2026-09-02`  
 **Fly:** v495 `deployment-01M22JRN95TXRSV1PQDN49227M`

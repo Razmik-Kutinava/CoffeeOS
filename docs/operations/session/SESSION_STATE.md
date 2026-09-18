@@ -11,8 +11,8 @@
 | GetState + inventory + #78 | CI · deploy апрув |
 | #82 Патч_1 | deploy апрув |
 
-**last_done:** codeql.yml на develop  
-**next_step:** push / дождаться CodeQL run
+**last_done:** CodeQL pushed develop+main (без manual if)  
+**next_step:** смотреть Actions → CodeQL
 
 **ctx_trim:** `2026-09-02`
 

@@ -11,11 +11,16 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-18 — ci: CodeQL Advanced on develop + main (push)
+
+- develop push `adae7af5`; main fix `fe1349a4` (убран broken manual if)
+- Один workflow на обеих ветках — не удалять с main (триггеры develop+main)
+- Languages: ruby + javascript-typescript; build-mode none
+
 ## 2026-09-18 — ci: CodeQL Advanced workflow (ruby + JS)
 
 - `.github/workflows/codeql.yml`: develop+main; `javascript-typescript` + `ruby`; `build-mode: none`
 - Без шага manual if (ломал GH expression на `"manual"`)
-- На `origin/main` файл уже был — не Create в UI, Edit или push с develop
 
 ## 2026-09-18 — fix: GetState Amount + inventory hard-fail + #78 cancel/confirm
 
