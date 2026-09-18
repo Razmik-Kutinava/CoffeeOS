@@ -11,6 +11,18 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-18 — docs: SPEC #93 TASK_93-H Cart cookie / overflow
+
+- `todo.md` + `todo-block-H.md` → TASK_93-H: R1 OverflowError rescue · R3 cookie+cap (T-H2c SKIP) · R4 lines=20 / bytes=3072 · R5 update тоже
+- Файлы 5 + blast modifiers · Не ломать · Проверка G1/G4
+- Next: `/sbr` RED (код не трогали)
+
+## 2026-09-18 — docs: SPEC #93 TASK_93-G Tenant GUC / RLS / schema
+
+- `todo.md` + `todo-block-G.md` → TASK_93-G: R1 txn SET LOCAL · R2 staff concern · **R3-B** ensure_all · R5 `app.shop_city_lookup` · R6 raise except test
+- `RLS_PG_INVENTORY.md` must-have policies/triggers · Не ломать · Проверка G1/G2
+- Next: `/sbr` RED (код не трогали)
+
 ## 2026-09-18 — docs: unlazy #93 TASK_93-I OTP / Rack::Attack / auth abuse
 
 - `GATES-block-I.md` + session `GATES.md`: G1 store T-I1 · G2 verify T-I2 · G3 OTP6/DEFER T-I3 · G4 short-link+regress T-I4 · G5→L

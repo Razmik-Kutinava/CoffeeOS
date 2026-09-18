@@ -2,17 +2,17 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-18 (TASK_93-I unlazy)  
+**Дата:** 2026-09-18 (TASK_93-H SPEC)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#93-I** GATES I unmet 4 · G5→L | `/spec` → RED T-I1a / T-I2a |
-| Close I | GREEN → approve G1–G2 (+G3) · G4 `/regress` |
-| A/H/F/G/E… | `GATES-block-*.md` (не затирать) · A→`/review` |
+| **#93-H** SPEC ready | `/sbr` RED T-H* |
+| R1–R6 · cookie+cap · lines=20 · bytes=3072 | GREEN → reverify G1–G3 · G4 `/regress` |
+| GATES-block-H | не затирать чужие `GATES-block-*` |
 
-**last_done:** `/unlazy` TASK_93-I — ledger G1–G5 (Redis store · verify throttle · OTP6/DEFER · short-link · L)  
-**next_step:** `/spec` R1–R7 · todo блок I · затем `/sbr`
+**last_done:** `/spec` TASK_93-H Cart cookie overflow — todo + Не ломать/Проверка  
+**next_step:** `/sbr` RED · коммит `[RED]` · стоп до GREEN
 
 **ctx_trim:** `2026-09-02`
 

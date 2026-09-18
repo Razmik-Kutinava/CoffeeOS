@@ -1,43 +1,42 @@
-# Gates: TASK_93-I / #93 — OTP / rate limit / auth abuse
+# Gates: TASK_93-G / #93 — Tenant GUC / RLS / schema
 
-Scope: Rack::Attack shared Redis store на multi-machine Fly; throttle `verify_sms` (+ legacy/email по SPEC); OTP SMS 6 digits **или** явный DEFER; short-link rule `shop/order_short_link/ip` живой через shared store **без** дубля. Deploy Redis / secret Fly = TASK_93-L (не DoD блока I). SolidCache для Attack **запрещён**.
+Scope: staff `SET LOCAL` реально внутри txn (как Shop API); must-have policies/triggers воспроизводимы после schema load (`ensure_all` **или** `structure.sql`); city switcher без голого `row_security = off`; `ensure_tenant_id` строго по SPEC. Deploy/migrate Fly = TASK_93-L (не DoD блока G).
 
-- [ ] G1: матрица T-I1 — shared Attack store (не MemoryStore на prod/FLY)
-  CHECK: ruby bin/rails test test/integration/rack_attack_store_test.rb
+- [ ] G1: матрица T-G1 — barista/manager/prep `SET LOCAL` только внутри open transaction
+  CHECK: ruby bin/rails test test/integration/staff_pg_context_transaction_test.rb
   EXPECT: 0 failures, 0 errors
   CWD: C:/Tools/workarea/CoffeeOS
-  EVIDENCE: unmet pre-RED — файла/кейсов T-I1a/b/c может не быть; baseline MemoryStore ≠ DoD; `--approve` после GREEN: prod/FLY+REDIS_URL → Redis*/RedisCacheStore (T-I1a) · shared increment (T-I1b) · без REDIS_URL на FLY → boot fail **или** documented fail-open+ERROR (T-I1c = SPEC)
+  EVIDENCE: unmet pre-RED — файла/кейсов T-G1a/b/c может не быть; baseline без txn-wrap ≠ DoD; `--approve` только после GREEN: `transaction_open?` при SET LOCAL · GUC `app.current_tenant_id` читается в том же request · вне txn no-op/forbid (T-G1c)
 
-- [ ] G2: матрица T-I2 — throttle verify_sms (+ legacy)
-  CHECK: ruby bin/rails test test/integration/rack_attack_otp_verify_test.rb
+- [ ] G2: матрица T-G2 + T-G3 + T-G4 — инвентарь + ensure_all/structure + свежая БД (policies/triggers)
+  CHECK: ruby bin/rails test test/integration/rls_tenant_isolation_test.rb test/integration/db_triggers_test.rb
   EXPECT: 0 failures, 0 errors
   CWD: C:/Tools/workarea/CoffeeOS
-  EVIDENCE: unmet pre-RED — нет throttle verify → T-I2a должен падать на RED; `--approve` после GREEN: N+1 → 429 RATE_LIMIT_EXCEEDED (T-I2a) · under limit не 429 (T-I2b) · phone key (T-I2c если R3) · legacy `/phone_otp/verify` (T-I2d); email verify — если SPEC R4 in-scope
+  EVIDENCE: unmet pre-RED — нужен `RLS_PG_INVENTORY.md` (T-G2a) · asserts `pg_policies` / `trg_generate_order_number`+`trg_auto_deduct_ingredients`+`trg_auto_stop_list` (T-G2b/c · T-G4) · `DatabaseTriggers.ensure_all!` (или R3-A structure) не «только order_number» (T-G3); `--approve` после GREEN + inventory file in git
 
-- [ ] G3: матрица T-I3 — SMS OTP 6 digits (+ UI)
-  CHECK: ruby bin/rails test test/services/shop/phone_otp_test.rb
+- [ ] G3: матрица T-G5 — CustomerTenantHistory без `row_security = off`; city peers + last_ordered
+  CHECK: ruby bin/rails test test/services/shop/customer_tenant_history_test.rb
   EXPECT: 0 failures, 0 errors
   CWD: C:/Tools/workarea/CoffeeOS
-  EVIDENCE: unmet pre-SPEC — I3 in-scope **или** DEFER до RED (не после); если DEFER → ABANDON G3 + REVIEW «I3 DEFER»; иначе GREEN: `%06d` (T-I3a) · verify 6 (T-I3b) · frontend length=6 (T-I3c); Callcheck не менять
+  EVIDENCE: unmet pre-RED — T-G5b grep/assert no `row_security = off` · T-G5a peers same city · T-G5c изоляция без city GUC · T-G5d last_ordered; `--approve` после GREEN через `Rls::GucContext.with_shop_city_lookup` (имя GUC — SPEC)
 
-- [ ] G4: матрица T-I4 + узкий регресс §8 (после GREEN)
-  CHECK: ruby bin/rails test test/integration/rack_attack_order_short_link_test.rb test/integration/shop/order_short_links_test.rb test/integration/rack_attack_otp_verify_test.rb test/services/shop/phone_otp_test.rb
+- [ ] G4: матрица T-G6 + узкий регресс §8 (после GREEN)
+  CHECK: ruby bin/rails test test/integration/rls_tenant_isolation_test.rb test/integration/db_triggers_test.rb test/services/shop/customer_tenant_history_test.rb test/integration/staff_pg_context_transaction_test.rb
   EXPECT: 0 failures, 0 errors
   CWD: C:/Tools/workarea/CoffeeOS
-  EVIDENCE: unmet — `/regress` после GREEN; T-I4a rule exists · T-I4b many GET `/o/` → 429 · T-I4c один matched name (нет дубля); phone OTP zone regress; без I1+I2 блок не закрыт; I4 = «C4 multi-machine»
+  EVIDENCE: unmet — `/regress` после GREEN; T-G6a production-like raise на blank tenant_id · T-G6b test-env поведение = SPEC; без G1+G3 (продукт) + T-G5 блок не закрыт
 
-- [ ] G5: Fly Redis attach / secret `REDIS_URL` + hot-path MCP Point A
-  EVIDENCE: abandoned — not DoD for TASK_93-I; reopen in TASK_93-L (или отдельный ops step с апрувом); runbook Redis в artifacts ок в I; PASS = Point A tenant `2fdee1ac-4674-41ee-b89e-87b45643f789` · Attack counters shared across machines · verify_sms 429 · `/o/` throttle
+- [ ] G5: Fly MCP / migrate ensure на стенде
+  EVIDENCE: abandoned — not DoD for TASK_93-G; reopen in TASK_93-L after deploy апрув; PASS = Point A tenant `2fdee1ac-4674-41ee-b89e-87b45643f789` · staff GUC в txn · `db:rls:ensure` / triggers на Fly · city switcher peers
 
-ABANDON: G5 Fly Redis secret + MCP Point A is TASK_93-L DoD, not block I; Local G1–G2 (+ G3 if in-scope) + G4 after /regress close I; runbook docs allowed in I
+ABANDON: G5 Fly ensure/MCP is TASK_93-L DoD, not block G; Local G1–G3 + G4 after /regress close G
 
 <!--
-CoffeeOS TASK_93-I unlazy (post-/start / pre-SPEC):
-- Канон брифа: чат TASK_93-I §3–11 (I1–I4 · R1–R7 · T-I*); зонтик customer_tasks/TASK-93-Critical-path-hardening.md карта I
+CoffeeOS TASK_93-G unlazy (pre-SPEC / pre-SBR):
+- Канон: customer_tasks/TASK-93-Critical-path-hardening.md · блок G (R1–R6) + DoD чата G1–G6
 - Активный ledger сессии: docs/operations/session/GATES.md (тот же текст)
-- Артефакт блока: milestones/veha_2/artifacts/critical_path_hardening/GATES-block-I.md
-- Close I: G1–G2 met via --approve/--reverify after GREEN; G3 met или DEFER/abandon; G4 после /regress; G5 abandoned until L
-- SPEC must lock: REDIS_URL vs RACK_ATTACK_REDIS_URL · fail-boot vs fail-open (T-I1c) · verify limit/period · IP+phone keys · email verify in-scope? · I3 6 digits да/нет · CI redis service
-- Без I1+I2 блок не закрыт; I4 обязателен; I3 по SPEC
-- 2026-09-18: --status unmet 4 · abandoned 1 (G5); --approve после GREEN (не сейчас)
+- Close G: G1–G3 met via --approve/--reverify after GREEN; G4 после /regress; G5 abandoned until L
+- SPEC обязателен: R3-A vs R3-B · must-have inventory · city GUC name · ensure_tenant_id в test
+- Без T-G1a + T-G3a + T-G5b блок не закрыт
+- 2026-09-18: --status unmet 4 + abandoned 1; --approve после GREEN (не сейчас)
 -->

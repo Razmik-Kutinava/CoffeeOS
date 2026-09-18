@@ -12,7 +12,9 @@
 | `GATES-block-C.md` | ledger блока C |
 | `GATES-block-B.md` | ledger блока B |
 | `GATES-block-A.md` | ledger блока A |
-| `session/GATES.md` | общий слот — сейчас зеркало **E**; при параллели смотри `GATES-block-*.md` |
+| `GATES-block-G.md` | ledger блока G (Tenant GUC / RLS) |
+| `todo-block-G.md` | зеркало SPEC G |
+| `session/GATES.md` | общий слот — при параллели смотри `GATES-block-*.md` |
 
 | Блок | Фокус |
 |------|--------|

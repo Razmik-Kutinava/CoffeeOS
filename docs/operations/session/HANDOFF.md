@@ -2,17 +2,17 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-18 (TASK_93-I unlazy)  
+**Дата:** 2026-09-18 (TASK_93-H SPEC)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#93-I** GATES unmet 4 · G5→L | `/spec` R1–R7 → `/sbr` RED T-I* |
-| **#93-A** regress PASS | `/review` · push · deploy=L |
-| B–H параллельно | свои ledgers / todo |
+| **#93-H** SPEC в `todo.md` | `/sbr` RED T-H1a/b/c · T-H2a/b · T-H3a/b |
+| GATES H unmet 4 · G5→L | GREEN → `/regress` → `/review` |
+| **#93-*** параллельно | свои ledgers / todo снимки |
 
-**last_done:** `/unlazy` TASK_93-I · `GATES-block-I.md` + session `GATES.md`  
-**next_step:** `/spec` блок I (Redis URL · verify limits · I3 да/нет · CI redis)
+**last_done:** `/spec` TASK_93-H · R1–R6 · cookie+cap · T-H2c SKIP  
+**next_step:** `/sbr` RED (OverflowError path / caps)
 
 **ctx_trim:** `2026-09-02`  
 **Fly:** v495 `deployment-01M22JRN95TXRSV1PQDN49227M`
