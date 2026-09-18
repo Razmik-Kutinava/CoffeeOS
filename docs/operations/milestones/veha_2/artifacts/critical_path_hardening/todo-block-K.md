@@ -1,4 +1,4 @@
-﻿# todo — #93 TASK_93-K: Hygiene pack (K1–K7)
+# todo — #93 TASK_93-K: Hygiene pack (K1–K7)
 
 Зеркало session `todo.md` (параллельные блоки не затирают канон K).
 
@@ -6,7 +6,7 @@
 |------|----------|
 | **ID** | CBR **#93** · **TASK_93-K** |
 | **Тип** | SBR · hygiene pack (blog / demo / paymentUrl / merger / ops) |
-| **Статус** | **SPEC** · Next: `/sbr` RED |
+| **Статус** | **GREEN** · Next: `/regress` |
 | **Ветка** | `develop` |
 | **Канон** | `@spec-build-review` · `@coffeeos-commit-ops` · `@coffeeos-dev-gates` |
 | **ТЗ** | бриф чата K1–K7 · зонтик [`TASK-93-Critical-path-hardening.md`](../../requirements/customer_tasks/TASK-93-Critical-path-hardening.md) карта K |
@@ -33,8 +33,8 @@
 - [x] PHASE 0 `/start` — бриф TASK_93-K в чате
 - [x] `/unlazy` — GATES K (`GATES-block-K.md` · unmet 4 · G5→L)
 - [x] PHASE 1 `/spec` — этот todo (+ зеркало session)
-- [ ] PHASE 2 RED — пачка T-K1a/b/c · T-K2* · T-K3a · T-K4a · (T-K7a) · коммит `[RED]`
-- [ ] PHASE 2 GREEN — R1–R7 · коммит `[GREEN]` · все T-K* PASS
+- [x] PHASE 2 RED — пачка T-K1a/b/c · T-K2* · T-K3a · T-K4a · (T-K7a) · коммит `[RED]`
+- [x] PHASE 2 GREEN — R1–R7 · коммит `[GREEN]` · все T-K* PASS
 - [ ] `/regress` — GATES G4 § Проверка
 - [ ] PHASE 3 `/review` — таблица K1–K7 · K6 sha sync · push · **без deploy**
 

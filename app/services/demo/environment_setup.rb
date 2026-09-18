@@ -109,6 +109,10 @@ module Demo
     end
 
     def call
+      if Rails.env.production? && !ActiveModel::Type::Boolean.new.cast(ENV.fetch("DEMO_AUTO_SEED", "false"))
+        raise "Demo::EnvironmentSetup aborted in production (set DEMO_AUTO_SEED=true to allow)"
+      end
+
       roles = nil
       org = nil
       tenant_a = nil

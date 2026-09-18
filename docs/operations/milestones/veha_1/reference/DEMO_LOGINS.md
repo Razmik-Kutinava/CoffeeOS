@@ -1,5 +1,7 @@
 # Demo-логины (единый источник правды)
 
+> **Не для prod.** Пароли и сиды только для local / demo-стенда. На Fly `DEMO_AUTO_SEED=false`; ручной `demo:seed` в production — только с явным `DEMO_AUTO_SEED=true`.
+
 **Код:** `app/services/demo/environment_setup.rb`  
 **Задачи:** `bin/rails demo:seed`, `bin/rails test:create_test_users` (дубль, те же данные)
 

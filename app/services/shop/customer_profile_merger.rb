@@ -137,12 +137,19 @@ module Shop
       reassign_loyalty!
     end
 
+    ALLOWED_OPTIONAL_TABLES = %w[order_feedback promo_code_usages].freeze
+
     def reassign_optional_table!(table)
+      table_name = table.to_s
+      unless ALLOWED_OPTIONAL_TABLES.include?(table_name)
+        raise ArgumentError, "optional table not allowed: #{table_name}"
+      end
+
       conn = ActiveRecord::Base.connection
-      return unless conn.data_source_exists?(table)
+      return unless conn.data_source_exists?(table_name)
 
       conn.execute(
-        "UPDATE #{table} SET customer_id = #{conn.quote(@survivor.id)} " \
+        "UPDATE #{table_name} SET customer_id = #{conn.quote(@survivor.id)} " \
         "WHERE customer_id = #{conn.quote(@donor.id)}"
       )
     end
