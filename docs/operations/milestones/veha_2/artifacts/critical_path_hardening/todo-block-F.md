@@ -31,10 +31,12 @@ TTL claim: 24h на processed/failed; rejected → delete.
 - [x] PHASE 0 `/start`
 - [x] `/unlazy` — GATES F `f56db39b`
 - [x] PHASE 1 `/spec` — зеркало session `todo.md`
-- [x] PHASE 2 RED — T-F1a · T-F2a/b · T-F3a · T-F4a · `[RED]` `4913e432`
-- [x] PHASE 2 GREEN — R1–R6 · `[GREEN]` · все T-F* PASS
+- [x] PHASE 2 RED — T-F1a · T-F2a/b · T-F3a · T-F4a · `[RED]` `4913e432` / `1c7d71a7`
+- [x] PHASE 2 GREEN — R1–R6 · `[GREEN]` `1b28a128` · все T-F* PASS (48 runs)
 - [ ] `/regress` — G4
 - [ ] PHASE 3 `/review` — F1–F5 PASS · push · без deploy
+
+**Entire:** attach session `863c79d0-3a0a-4671-9180-2a0be7fd2ee0` → GREEN why-context (docs checkpoint)
 
 ## Файлы (ожидаемо)
 
