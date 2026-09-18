@@ -1,0 +1,248 @@
+<manually_attached_skills>
+The user has manually attached the following skills to their message.
+These skills contain specific instructions or workflows that the user wants you to follow for this request.
+Only read the files if needed, the full skill content is inlined here.
+
+Skill Name: start
+Path: c:\Tools\workarea\CoffeeOS\.cursor\skills\start\SKILL.md
+SKILL.md content:
+Выполни инструкции из `.cursor/commands/start.md` целиком (умный старт A/B, отчёт, строка `Next: /…`).
+</manually_attached_skills>
+<cursor_commands>
+
+--- Cursor Command: start ---
+# /start — старт сессии / задачи (умный)
+
+CoffeeOS. Следуй `coffeeos-agent-workflow` + `coffeeos-customer-intake` (PHASE 0) при нужде.
+
+## Режим (выбери один, не гоняй всё)
+
+### A) Узкий старт (по умолчанию, если контекст уже есть)
+Используй, если в чате/todo уже: баг локализован, есть список файлов, живой `todo.md`, или пользователь продолжает ту же задачу.
+
+Сделай **только**:
+1. Шапка `HANDOFF.md` + шапка `SESSION_STATE.md` (`Read` limit до `---`, не тело)
+2. `ISSUES.md` — только секция **`## 🔴 Открыто`** (до следующего `##`), если релевантно багу
+3. `todo.md` — если есть
+4. **Не** перечитывай PRACTICES/QA/весь CHECKLIST/весь CHANGELOG / **`COMPONENT_MAP.md`**
+5. **Не** заново PHASE 0, если ТЗ уже в `customer_tasks/` или задача уже в todo
+6. Коротко: `last_done` / `current_state` / `next_step` (одна строка каждый)
+7. **ctx-trim:** если пт–вс и в шапке HANDOFF `ctx_trim` старше 7 дней — одна строка: «рекомендуется `/ctx-trim`» (не блокировать старт)
+
+### B) Полный старт + PHASE 0
+Только если **новое** ТЗ от заказчика ещё не в `customer_tasks/` / CBR, или пользователь явно просит intake.
+
+Тогда: PHASE 0 (intake 1:1) → краткая шапка ops → стоп до `/spec`.
+
+## Отчёт
+Таблица Сделано | Не сделано.  
+`Субагент: нет — старт` (или explore, если уже звал).  
+**Не пиши код** на этом шаге.
+
+## Обязательно в конце (копипаст для пользователя)
+
+Одной строкой, без лишнего текста вокруг:
+
+- Если нужен план/файлы → `Next: /spec`
+- Если SPEC/todo уже готов → `Next: /sbr`
+- Если только что завершили PHASE 0 → `Next: /spec`
+
+--- End Command ---
+</cursor_commands>
+<timestamp>Friday, Sep 18, 2026, 12:26 PM (UTC+4)</timestamp>
+
+/start 
+
+# TASK_93-J — Блок J: Push / уведомления / worker
+
+Зонтик: **TASK_93** / `#93` — Critical path hardening.  
+Этот SBR-прогон: **только TASK_93-J**.
+
+Title чата: `Задача 93 — Critical path hardening (блок J)`.
+
+---
+
+## 1. Зачем
+
+| Проблема | Сейчас |
+|----------|--------|
+| **J1** | `Barista::OrderStatusUpdateService` после txn синхронно зовёт `GuestOrderBroadcaster` → **sync** `AppleWallet::PassUpdater` (APNs) + push notifier. В `PaymentStatusUpdater#with_lock` тоже `GuestOrderBroadcaster` — HTTP push/APNs может держать lock/запрос |
+| **J1b** | `ReadyPushJob` для FCM делает `SendPushNotificationJob.perform_now` (ок в job, но wallet sync в broadcaster на POS — плохо) |
+| **J2** | `FcmClient#fetch_access_token!` на **каждый** deliver, без cache; мёртвые токены (UNREGISTERED) не чистятся |
+| **J3** | `SMS_GRACE = 15.s` и `set(wait: SMS_GRACE)` — **одинаково** → гонка expiry grace vs запуск cascade (#82) |
+| **J4** | Worker на Fly часто stopped; T‑Bank уже `perform_now` + fallback; cascade/push на `perform_later` могут не бежать без `SOLID_QUEUE_IN_PUMA` / отдельного worker — runbook неполный |
+
+## 2. Цель блока
+
+**Смена статуса / webhook не ждут APNs/FCM; OAuth FCM кэшируется + мёртвые токены чистятся; каскад ready→SMS без race grace; очередь гарантированно обрабатывает callback/cascade (runbook + код).**
+
+## 3. Scope / Non-scope
+
+**В scope (J1–J4):**
+- Вынести APNs/Wallet/FCM с request path и из `payment.with_lock`
+- `FcmClient` token cache + invalidate dead tokens на customer
+- `SMS_GRACE` vs `wait:` — развести с буфером
+- Runbook Solid Queue / `SOLID_QUEUE_IN_PUMA` + довести hot-path (cascade/ready push / tbank) чтобы не терялись
+
+**Вне scope:** UI WebPush recovery (#90), текст SMS (C), Redis Attack (I), склад (A), полный отдельный Fly `worker` process (можно рекомендовать в L).
+
+## 4. Продуктовые правила (SPEC до RED)
+
+| Правило | Решение |
+|---------|---------|
+| **R1** | После commit статуса: Cable broadcast можно sync (быстро); **APNs / PassUpdater / FCM deliver — только `perform_later`** (или уже существующие jobs). Broadcaster **не** вызывает PassUpdater sync |
+| **R2** | `PaymentStatusUpdater`: внутри `with_lock` только DB; broadcaster/push — **после** lock (reload + enqueue) |
+| **R3** | `ReadyPushJob` / `SendPushNotificationJob`: FCM в job; `perform_now` внутри ReadyPush допустим только если ReadyPush уже async |
+| **R4** | OAuth access_token: cache в Redis/SolidCache с TTL ~50 min (`expires_in` от Google − skew) |
+| **R5** | FCM response `UNREGISTERED` / `INVALID_ARGUMENT` token → `customer.update!(push_token: nil, push_enabled: false)` (или mark) + log |
+| **R6** | Cascade: `wait: SMS_GRACE + BUFFER` (например **+5s**) **или** grace = wait − buffer; job в начале `sleep`/check `!in_sms_grace?` с коротким requeue. Зафиксировать одно: рекомендация **`wait = SMS_GRACE + 5.seconds`**, grace без изменения 15s |
+| **R7** | Runbook: на Fly либо `SOLID_QUEUE_IN_PUMA=true` на web, либо отдельный worker process always-on; checklist в artifacts |
+| **R8** | Критичные jobs (TbankCallback, OrderReadyCascade, ReadyPush): стратегия «web perform_now fallback» **или** guaranteed Puma plugin — довести единообразно в доке + тестах контракта |
+
+## 5. Файлы (ожидаемо)
+
+```
+app/services/barista/order_status_update_service.rb
+app/services/shop/guest_order_broadcaster.rb
+app/services/callbacks/payment_status_updater.rb
+app/services/shop/order_status_push_notifier.rb
+app/services/shop/fcm_client.rb
+app/jobs/shop/ready_push_job.rb
+app/jobs/shop/send_push_notification_job.rb
+app/jobs/shop/order_ready_cascade_job.rb
+app/services/shop/order_ready_presence.rb
+app/controllers/callbacks/tbank_controller.rb          # J4 reference
+config/puma.rb
+config/deploy.yml
+docs/operations/runbooks/SOLID_QUEUE_FLY.md            # новый
+
+test/services/barista/order_status_update_service_test.rb
+test/services/shop/guest_order_broadcaster_test.rb
+test/services/callbacks/payment_status_updater_test.rb
+test/services/shop/fcm_client_test.rb
+test/jobs/shop/order_ready_cascade_job_test.rb
+test/jobs/shop/ready_push_job_test.rb
+```
+
+## 6. Не ломать
+
+1. Cable `status_changed` доходит до PWA.  
+2. Ready claim (#35) — один ready push.  
+3. Cascade SMS только если offline после grace (#39/#82).  
+4. `begin_sms_grace!` suppress ложный online от Cable reconnect.  
+5. T‑Bank notify OK + idempotency.  
+6. `FCM_SIMULATE` / Wallet simulate в test.
+
+## 7. Матрица приёмки J1–J4 ↔ тесты
+
+### J1 — Async APNs/FCM, вне lock
+
+| ID | Тест | Assert |
+|----|------|--------|
+| **T-J1a** | barista status change enqueues wallet/push jobs, does not call PassUpdater sync | stub PassUpdater — **не** вызван из broadcaster; `assert_enqueued_with` ReadyPushJob / WalletUpdateJob |
+| **T-J1b** | `PaymentStatusUpdater` does not call GuestOrderBroadcaster inside open row lock` | instrumentation/order: broadcaster after lock; или unit: mock with_lock yield then assert broadcaster called once outside |
+| **T-J1c** | POS latency: broadcaster path stubbed APNs not required for 200 | status update completes without waiting FCM HTTP (WebMock no request to apple/fcm on controller test) |
+
+### J2 — FCM OAuth cache + dead tokens
+
+| ID | Тест | Assert |
+|----|------|--------|
+| **T-J2a** | second deliver! reuses cached access_token | stub OAuth once; two deliver → один HTTP к oauth2 |
+| **T-J2b** | UNREGISTERED clears customer push_token | stub FCM 404 UNREGISTERED → customer.push_token nil / push_enabled false |
+| **T-J2c** | simulate mode unchanged | |
+
+### J3 — SMS_GRACE vs job delay
+
+| ID | Тест | Assert |
+|----|------|--------|
+| **T-J3a** | enqueued cascade wait **>** SMS_GRACE | `assert_enqueued_with(..., at: ...)` wait == GRACE+BUFFER |
+| **T-J3b** | during grace mark_online! returns false | регресс presence |
+| **T-J3c** | after grace+buffer, offline → SMS notifier called | travel time; perform job; `OrderReadyPaidNotifier` called |
+| **T-J3d** | after grace, online → SMS skipped | |
+
+### J4 — Worker / Solid Queue
+
+| ID | Тест / артефакт | Assert |
+|----|-----------------|--------|
+| **T-J4a** | runbook file exists | `SOLID_QUEUE_FLY.md`: Puma plugin vs worker; env vars; что будет если worker stopped |
+| **T-J4b** | Tbank still perform_now primary | регресс controller test |
+| **T-J4c** | cascade/ready jobs documented as requiring queue runner | checklist в REVIEW; опционально assert `SOLID_QUEUE_IN_PUMA` in deploy.yml |
+| **T-J4d** | (optional code) if queue enqueue fails, critical path fallback | mirror tbank pattern for cascade **или** явный «Puma must run solid_queue» без dual perform_now для SMS |
+
+## 8. Команды проверки
+
+```bash
+bin/rails test \
+  test/services/barista/order_status_update_service_test.rb \
+  test/services/shop/guest_order_broadcaster_test.rb \
+  test/services/shop/fcm_client_test.rb \
+  test/jobs/shop/order_ready_cascade_job_test.rb \
+  test/jobs/shop/ready_push_job_test.rb \
+  test/services/callbacks/payment_status_updater_test.rb \
+  test/controllers/callbacks/tbank_controller_test.rb
+```
+
+Регресс:
+
+```bash
+bin/rails test test/jobs/shop/ test/services/shop/order_ready_presence_test.rb \
+  test/services/shop/order_status_push_notifier_test.rb
+```
+
+## 9. Definition of Done — Блок J
+
+- [ ] J1: нет sync APNs/PassUpdater на barista request; push вне `payment.with_lock`  
+- [ ] J2: OAuth cache + dead token cleanup  
+- [ ] J3: wait ≠ гонка с grace (buffer); T-J3* PASS  
+- [ ] J4: runbook + tbank/cascade контракт очереди  
+- [ ] REVIEW-таблица J1–J4 \| тест ID \| PASS  
+- [ ] Fly worker/Puma plugin — **L** или ops checklist в REVIEW  
+
+## 10. SBR-цикл для 93-J
+
+| Фаза | Что |
+|------|-----|
+| `/start` | секция **Блок J** |
+| `/spec` | BUFFER seconds; job names; runbook path; sync vs async matrix |
+| `/sbr` RED | T-J1a (PassUpdater sync), T-J2a (no cache), T-J3a (wait==grace) |
+| `/sbr` GREEN | async enqueue + FCM cache + grace buffer + runbook |
+| `/regress` | §8 |
+| `/review` | таблица PASS |
+
+## 11. Таблица закрытия (REVIEW)
+
+```
+J1 T-J1a T-J1b T-J1c     PASS
+J2 T-J2a T-J2b T-J2c     PASS
+J3 T-J3a T-J3b T-J3c T-J3d PASS
+J4 T-J4a T-J4b T-J4c     PASS
+```
+
+Без J1+J3 блок **не** закрыт.
+
+---
+
+## Зависимости
+
+| Блок | Связь |
+|------|--------|
+| **A** | PaymentStatusUpdater: после A deduction soft-fail; J выносит broadcaster из lock — лучше **A затем J** |
+| **C** | SMS текст/host — ортогонально; cascade шлёт SMS |
+| **F** | StuckPayments jobs — та же очередь Solid Queue (J4 runbook) |
+| **L** | Включить/проверить worker на Fly |
+
+Порядок: **A → … → J** (после F удобно).
+
+---
+
+## Кратко GREEN
+
+1. `GuestOrderBroadcaster`: Cable sync; wallet/push → `perform_later` only.  
+2. `PaymentStatusUpdater`: broadcaster **после** `with_lock`.  
+3. `FcmClient`: `Rails.cache.fetch("fcm:oauth:…", expires_in: 50.minutes)`; clear token on UNREGISTERED.  
+4. Cascade: `wait: SMS_GRACE + 5.seconds`.  
+5. Runbook Solid Queue + checklist deploy.yml.
+
+---
+
+Ask mode: файлы не создаю. В Agent: `/start` с **TASK_93-J**.
