@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-18 — docs: unlazy reverify #93 TASK_93-I GATES G1-G4 met
+
+- --reverify GATES-block-I: met **4** · abandoned **1** (G5→L)
+- Next: /review (код не трогали)
+
 ## 2026-09-18 — feat: #93 TASK_93-J Push/worker async + FCM cache [GREEN]
 
 - `PassUpdateJob` · GuestOrderBroadcaster без sync PassUpdater · cascade wait GRACE+5s
