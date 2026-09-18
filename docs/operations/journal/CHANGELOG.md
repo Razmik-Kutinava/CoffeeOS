@@ -11,6 +11,18 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-18 — docs: REVIEW #93 TASK_93-B Checkout identity
+
+- Local 50/0 · bugbot R4 fix (`find_existing!` ≡ orders) · security: EmailVerification tenant DB → ISSUES backlog
+- GREEN `2213cbeb` · R4 `4217cab5` · Entire `01M2STWJAMB844CP992D067NWP`
+- Next: push/CI · deploy апрув · Fly = L
+
+## 2026-09-18 — docs: regress PASS #93 TASK_93-F Callbacks/stuck/Events
+
+- Notify pack: **68/0** · zone callbacks/jobs/sync: **74/0**
+- GATES-block-F G1–G4 met · G5→L · GREEN `1b28a128`
+- Next: `/review` · Fly MCP Point A = TASK_93-L
+
 ## 2026-09-18 — docs: regress PASS #93 TASK_93-E Init idempotency
 
 - G1 Init: **30/0** · G2 orders+§2.3+base: **55/0** · total **85/0**

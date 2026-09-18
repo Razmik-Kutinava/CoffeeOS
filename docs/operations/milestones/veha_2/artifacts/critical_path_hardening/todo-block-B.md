@@ -1,10 +1,10 @@
-﻿# todo — #93 TASK_93-B: Checkout identity (phone vs email)
+# todo — #93 TASK_93-B: Checkout identity (phone vs email)
 
 | Поле | Значение |
 |------|----------|
 | **ID** | CBR **#93** · **TASK_93-B** |
 | **Тип** | SBR · hot-path shop checkout / оплата / identity |
-| **Статус** | **REGRESS PASS** · Next: `/review` |
+| **Статус** | **REVIEW** · Next: CI green · deploy апрув
 | **Ветка** | `develop` |
 | **RED** | `f6e2f3ca` |
 | **GREEN** | `2213cbeb` |
@@ -29,7 +29,7 @@
 - [x] PHASE 2 RED — `f6e2f3ca`
 - [x] PHASE 2 GREEN — `CheckoutIdentity` + Checkout · `2213cbeb` · 47/0 PASS
 - [x] `/regress` — 47/0 PASS (G1–G3 zone)
-- [ ] PHASE 3 `/review` — таблица B1–B5 · push · без deploy
+- [x] PHASE 3 `/review` — B1–B5 PASS · bugbot R4 fix · security backlog EmailVerification
 
 ## Файлы
 

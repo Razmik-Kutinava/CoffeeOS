@@ -2,17 +2,17 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-18 (TASK_93-E regress)  
+**Дата:** 2026-09-18 (TASK_93-B REVIEW)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#93-E** REGRESS **PASS** | `/review` · push · **без deploy** |
-| G1 30/0 · G2 55/0 | G4 cite + bugbot/security |
-| GREEN `2eb22c71` | Fly MCP Point A = TASK_93-L |
+| **#93** TASK_93-B REVIEW | push → CI green |
+| Local 50/0 · R4 fix `4217cab5` | deploy апрув · Fly MCP = L |
+| Entire `01M2STWJAMB844CP992D067NWP` | — |
 
-**last_done:** `/regress` TASK_93-E — Init/uuid/§2.3 **85/0**  
-**next_step:** `/review` блок E (таблица E1–E4 · Entire · push)
+**last_done:** REVIEW B — bugbot R4 fixed · security EmailVerification → ISSUES backlog  
+**next_step:** CI green · стоп (deploy апрув)
 
 **ctx_trim:** `2026-09-02`
 
