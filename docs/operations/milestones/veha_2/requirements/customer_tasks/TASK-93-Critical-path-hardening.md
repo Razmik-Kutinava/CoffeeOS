@@ -4,7 +4,8 @@
 **Источник:** готовое ТЗ (чат) под цепочку `/start` → `/spec` → `/sbr` → `/regress` → `/review`  
 **Артефакты:** docs/operations/milestones/veha_2/artifacts/critical_path_hardening/  
 **Нарезка:** TASK_93-A … TASK_93-L (блоки A–L). Не отдельные #94+.  
-**Сейчас:** TASK_93-A — Блок A (деньги ↔ заказ)
+**Сейчас:** TASK_93-B — Блок B (Checkout identity); A — intake/ожидает `/spec`  
+**Блок B:** [`TASK-93-B-Checkout-identity.md`](TASK-93-B-Checkout-identity.md)
 
 ---
 
@@ -18,10 +19,11 @@
 | **Название** | Critical path hardening — деньги, витрина, ops |
 | **CBR #** | `#93` |
 | **Нарезка** | `TASK_93-A` … `TASK_93-L` (блоки A–L из плана). Не отдельные `#94+`. |
-| **Сейчас делаем** | **TASK_93-A** — Блок A (деньги ↔ заказ) |
-| **Дальше** | B → C → D → … → L (deploy) отдельными SBR-прогонами на том же `#93` |
+| **Сейчас делаем** | **TASK_93-B** — Блок B (Checkout identity); A — intake, ждёт свой `/spec` |
+| **Дальше** | C → D → … → L (deploy) отдельными SBR-прогонами на том же `#93` |
 
-Title чата: `Задача 93 — Critical path hardening (блок A)`.
+Title чата: `Задача 93 — Critical path hardening (блок B)`.  
+EXT B: [`TASK-93-B-Checkout-identity.md`](TASK-93-B-Checkout-identity.md).
 
 ---
 

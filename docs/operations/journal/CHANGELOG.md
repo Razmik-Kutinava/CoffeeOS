@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-18 — docs: intake #93 TASK_93-B Checkout identity
+
+- `customer_tasks/TASK-93-B-Checkout-identity.md` — ТЗ 1:1 (phone-first; UI Pay ≡ бэкенд)
+- CBR `#93` → блок B · artifacts `critical_path_hardening/` · ISSUES #93
+- Next: `/spec` (не код)
+
 ## 2026-09-18 — docs: intake #93 TASK_93 Critical path hardening (блок A)
 
 - `customer_tasks/TASK-93-Critical-path-hardening.md` — ТЗ 1:1 (зонтик A–L; сейчас A: деньги↔заказ)

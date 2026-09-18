@@ -6,6 +6,7 @@
 
 | Блок | Фокус |
 |------|--------|
-| A | Деньги ↔ заказ (склад + webhook) — **сейчас** |
-| B–K | см. карту в ТЗ |
+| A | Деньги ↔ заказ (склад + webhook) — intake, ждёт `/spec` |
+| B | Checkout identity (phone vs email) — **сейчас** · [ТЗ B](../../requirements/customer_tasks/TASK-93-B-Checkout-identity.md) |
+| C–K | см. карту в зонтике |
 | L | Deploy + Point A MCP |
