@@ -11,6 +11,18 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-18 — docs: unlazy reverify #93 TASK_93-H G1–G4 met (G5 to L)
+
+- `GATES-block-H.md`: `--approve` + `--reverify` PASS (G1–G4); G5 abandoned→L
+- automatic-evidence на overflow + cart_service + persistence/modifiers
+- Next: `/review`
+
+## 2026-09-18 — docs: regress PASS #93 TASK_93-I OTP / Rack::Attack
+
+- Matrix: **23 runs / 0 fail / 1 skip** (T-I1b no local Redis) — store · verify · short_link · phone_otp
+- Zone: **27 runs / 0 fail** — phone_otp API · order_short_links · phone_otp service
+- GATES I G1–G4 met · G5→L · GREEN \c14f5202- Next: \/review\ · Fly Redis = L
+
 ## 2026-09-18 — docs: regress PASS #93 TASK_93-H cart cookie overflow
 
 - Zone: `cart_service` + `cart_overflow` + `cart_persistence` + `b113_s4_cart_modifiers` → **53 runs, 0 fail**
