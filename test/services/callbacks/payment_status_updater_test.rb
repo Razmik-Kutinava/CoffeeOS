@@ -110,4 +110,103 @@ class Callbacks::PaymentStatusUpdaterTest < ActiveSupport::TestCase
     assert_equal plan.id, sub.plan_id
     assert_equal 0, sub.drinks_used_this_period
   end
+
+  # --- TASK_93-A: money ↔ order / stock soft-fail ---
+
+  def attach_recipe_item!(qty_needed: 25, stock_qty: nil)
+    category = create_category!
+    product = create_product!(category: category)
+    enable_product_for_tenant!(tenant: @tenant, product: product, price: 200)
+    ingredient = Ingredient.create!(name: "Upd Ing #{SecureRandom.hex(2)}", unit: "g", is_active: true)
+    ProductRecipe.create!(product: product, ingredient: ingredient, qty_per_serving: qty_needed)
+    if stock_qty
+      IngredientTenantStock.create!(tenant: @tenant, ingredient: ingredient, qty: stock_qty, min_qty: 0)
+    end
+    OrderItem.create!(
+      order: @order,
+      product_id: product.id,
+      product_name: product.name,
+      quantity: 1,
+      unit_price: 200,
+      total_price: 200
+    )
+    ingredient
+  end
+
+  # T-A1a
+  test "succeeded accepts order even when recipe deduction would fail (insufficient stock)" do
+    ingredient = attach_recipe_item!(qty_needed: 25, stock_qty: 5)
+
+    assert_nothing_raised do
+      Callbacks::PaymentStatusUpdater.new(payment: @payment, new_status: "succeeded").call!
+    end
+
+    assert_equal "succeeded", @payment.reload.status
+    assert_equal "accepted", @order.reload.status
+    stock = IngredientTenantStock.find_by!(tenant_id: @tenant.id, ingredient_id: ingredient.id)
+    assert_equal 5.to_d, stock.qty
+    assert AdminAuditLog.exists?(action: "inventory_deduction_skipped", tenant_id: @tenant.id)
+  end
+
+  # T-A1b
+  test "succeeded accepts order when stock row missing (no find_or_create trap)" do
+    ingredient = attach_recipe_item!(qty_needed: 25, stock_qty: nil)
+
+    Callbacks::PaymentStatusUpdater.new(payment: @payment, new_status: "succeeded").call!
+
+    assert_equal "succeeded", @payment.reload.status
+    assert_equal "accepted", @order.reload.status
+    refute IngredientTenantStock.exists?(tenant_id: @tenant.id, ingredient_id: ingredient.id)
+    assert AdminAuditLog.exists?(action: "inventory_deduction_skipped", tenant_id: @tenant.id)
+  end
+
+  # T-A5a / T-A5b / T-A5c (service-level CONFIRMED scenarios)
+  test "CONFIRMED path with missing stock succeeds and accepts" do
+    attach_recipe_item!(stock_qty: nil)
+    Callbacks::PaymentStatusUpdater.new(payment: @payment, new_status: "succeeded").call!
+    assert_equal "succeeded", @payment.reload.status
+    assert_equal "accepted", @order.reload.status
+  end
+
+  test "CONFIRMED path with insufficient stock succeeds and leaves stock unchanged" do
+    ingredient = attach_recipe_item!(qty_needed: 40, stock_qty: 10)
+    Callbacks::PaymentStatusUpdater.new(payment: @payment, new_status: "succeeded").call!
+    assert_equal "succeeded", @payment.reload.status
+    assert_equal "accepted", @order.reload.status
+    assert_equal 10.to_d, IngredientTenantStock.find_by!(tenant_id: @tenant.id, ingredient_id: ingredient.id).qty
+  end
+
+  test "CONFIRMED path with enough stock succeeds and deducts" do
+    ingredient = attach_recipe_item!(qty_needed: 25, stock_qty: 40)
+    Callbacks::PaymentStatusUpdater.new(payment: @payment, new_status: "succeeded").call!
+    assert_equal "succeeded", @payment.reload.status
+    assert_equal "accepted", @order.reload.status
+    assert_equal 15.to_d, IngredientTenantStock.find_by!(tenant_id: @tenant.id, ingredient_id: ingredient.id).qty
+  end
+
+  # T-A6a
+  test "succeeded on cancelled order does not quiet-return without audit" do
+    @order.update!(status: "cancelled")
+
+    assert_difference -> { AdminAuditLog.where(action: "payment_on_non_pending_order").count }, 1 do
+      Callbacks::PaymentStatusUpdater.new(payment: @payment, new_status: "succeeded").call!
+    end
+
+    assert_equal "succeeded", @payment.reload.status
+    assert_equal "cancelled", @order.reload.status
+    log = AdminAuditLog.where(action: "payment_on_non_pending_order").order(created_at: :desc).first
+    assert_equal "needs_manual_refund", log.details["reason"]
+  end
+
+  # T-A6b
+  test "succeeded on closed order does not quiet-return without audit" do
+    @order.update!(status: "closed")
+
+    assert_difference -> { AdminAuditLog.where(action: "payment_on_non_pending_order").count }, 1 do
+      Callbacks::PaymentStatusUpdater.new(payment: @payment, new_status: "succeeded").call!
+    end
+
+    assert_equal "succeeded", @payment.reload.status
+    assert_equal "closed", @order.reload.status
+  end
 end

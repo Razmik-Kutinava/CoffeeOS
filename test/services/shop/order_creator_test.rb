@@ -359,4 +359,21 @@ class Shop::OrderCreatorTest < ActiveSupport::TestCase
       pass "DB trigger not installed; skipping"
     end
   end
+
+  # T-A3b — TASK_93-A R5 (simulate → accepted)
+  test "accepted flow with insufficient stock does not raise; order accepted + audit" do
+    ingredient = Ingredient.create!(name: "Shop Low #{SecureRandom.hex(2)}", unit: "g", is_active: true)
+    ProductRecipe.create!(product: @product, ingredient: ingredient, qty_per_serving: 80)
+    IngredientTenantStock.create!(tenant: @tenant, ingredient: ingredient, qty: 5, min_qty: 0)
+
+    session = build_session_with_item
+    order = nil
+    assert_nothing_raised do
+      order = run_creator(session, payment_method: "card")
+    end
+
+    assert_equal "accepted", order.status
+    assert_equal 5.to_d, IngredientTenantStock.find_by!(tenant_id: @tenant.id, ingredient_id: ingredient.id).qty
+    assert AdminAuditLog.exists?(action: "inventory_deduction_skipped", tenant_id: @tenant.id)
+  end
 end

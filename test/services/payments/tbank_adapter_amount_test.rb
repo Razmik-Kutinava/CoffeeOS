@@ -34,6 +34,11 @@ class Payments::TbankAdapterAmountTest < ActiveSupport::TestCase
     assert_not Payments::TbankAdapter.notification_amount_matches?(@payment, { "Amount" => 100 })
   end
 
+  test "notification_amount_matches rejects when Amount blank" do
+    assert_not Payments::TbankAdapter.notification_amount_matches?(@payment, { "Amount" => "" })
+    assert_not Payments::TbankAdapter.notification_amount_matches?(@payment, { "Amount" => nil })
+  end
+
   test "notification_amount_matches rejects when Amount absent" do
     assert_not Payments::TbankAdapter.notification_amount_matches?(@payment, {})
   end

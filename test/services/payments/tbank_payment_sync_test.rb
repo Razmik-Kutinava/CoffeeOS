@@ -80,6 +80,20 @@ class Payments::TbankPaymentSyncTest < ActiveSupport::TestCase
     assert @payment.reload.pending?
   end
 
+  # T-A4b
+  test "reports error when GetState has blank Amount or mismatch" do
+    assert_difference -> { AdminAuditLog.where(action: "tbank_amount_mismatch").count }, 2 do
+      assert_not sync_with_state("Status" => "CONFIRMED", "PaymentId" => "pay-sync-1")
+      assert_not sync_with_state(
+        "Status" => "CONFIRMED",
+        "PaymentId" => "pay-sync-1",
+        "Amount" => 100
+      )
+    end
+
+    assert @payment.reload.pending?
+  end
+
   test "sync does not accept order when GetState Amount is blank" do
     assert_not sync_with_state(
       "Status" => "CONFIRMED",

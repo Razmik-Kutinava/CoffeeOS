@@ -18,7 +18,8 @@ class Inventory::OrderRecipeDeductionTest < ActiveSupport::TestCase
 
   teardown { Current.reset }
 
-  test "deducts stock for accepted order with items" do
+  # T-A2c
+  test "deducts when stock sufficient" do
     order = Order.create!(
       tenant: @tenant,
       order_number: "DED-1",
@@ -43,7 +44,8 @@ class Inventory::OrderRecipeDeductionTest < ActiveSupport::TestCase
     assert_equal 15.to_d, stock.qty, "40 - 1×25"
   end
 
-  test "raises when stock is insufficient" do
+  # T-A2b — soft-fail: no deduct + audit signal (не raise для rollback оплаты)
+  test "does not deduct when insufficient; signals shortfall" do
     order = Order.create!(
       tenant: @tenant,
       order_number: "DED-LOW",
@@ -62,12 +64,45 @@ class Inventory::OrderRecipeDeductionTest < ActiveSupport::TestCase
       total_price: 400
     )
 
-    assert_raises(Inventory::OrderRecipeDeduction::Error) do
-      Inventory::OrderRecipeDeduction.call!(order: order)
+    assert_difference -> { AdminAuditLog.where(action: "inventory_deduction_skipped").count }, 1 do
+      assert_nothing_raised { Inventory::OrderRecipeDeduction.call!(order: order) }
     end
 
     stock = IngredientTenantStock.find_by!(tenant_id: @tenant.id, ingredient_id: @ingredient.id)
     assert_equal 40.to_d, stock.qty
+    log = AdminAuditLog.where(action: "inventory_deduction_skipped").order(created_at: :desc).first
+    assert_equal "insufficient_stock", log.details["reason"]
+  end
+
+  # T-A2a
+  test "skips deduct and reports when stock row absent" do
+    IngredientTenantStock.where(tenant_id: @tenant.id, ingredient_id: @ingredient.id).delete_all
+    order = Order.create!(
+      tenant: @tenant,
+      order_number: "DED-MISS",
+      source: "manual",
+      status: "accepted",
+      total_amount: 200,
+      discount_amount: 0,
+      final_amount: 200
+    )
+    OrderItem.create!(
+      order: order,
+      product_id: @product.id,
+      product_name: @product.name,
+      quantity: 1,
+      unit_price: 200,
+      total_price: 200
+    )
+
+    assert_difference -> { AdminAuditLog.where(action: "inventory_deduction_skipped").count }, 1 do
+      assert_nothing_raised { Inventory::OrderRecipeDeduction.call!(order: order) }
+    end
+
+    refute IngredientTenantStock.exists?(tenant_id: @tenant.id, ingredient_id: @ingredient.id),
+           "must not create qty=0 trap row"
+    log = AdminAuditLog.where(action: "inventory_deduction_skipped").order(created_at: :desc).first
+    assert_equal "stock_row_absent", log.details["reason"]
   end
 
   test "no-op when order not accepted" do

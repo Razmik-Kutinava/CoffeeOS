@@ -243,4 +243,31 @@ class Barista::OrderCreationServiceTest < ActiveSupport::TestCase
     assert_equal payment_count, Payment.count
     assert_equal log_count,     OrderStatusLog.count
   end
+
+  # T-A3a — TASK_93-A R5
+  test "creates accepted order when stock insufficient (soft-fail + audit)" do
+    ingredient = Ingredient.create!(name: "Barista Low #{SecureRandom.hex(2)}", unit: "g", is_active: true)
+    ProductRecipe.create!(product: @product, ingredient: ingredient, qty_per_serving: 100)
+    IngredientTenantStock.create!(tenant: @tenant, ingredient: ingredient, qty: 10, min_qty: 0)
+
+    order = nil
+    assert_nothing_raised do
+      order = call_service(cart_items: [ { product_id: @product.id, quantity: 1 } ])
+    end
+
+    assert_equal "accepted", order.status
+    assert_equal 10.to_d, IngredientTenantStock.find_by!(tenant_id: @tenant.id, ingredient_id: ingredient.id).qty
+    assert AdminAuditLog.exists?(action: "inventory_deduction_skipped", tenant_id: @tenant.id)
+  end
+
+  test "creates accepted order when stock row missing (soft-fail + audit)" do
+    ingredient = Ingredient.create!(name: "Barista Miss #{SecureRandom.hex(2)}", unit: "g", is_active: true)
+    ProductRecipe.create!(product: @product, ingredient: ingredient, qty_per_serving: 50)
+
+    order = call_service(cart_items: [ { product_id: @product.id, quantity: 1 } ])
+
+    assert_equal "accepted", order.status
+    refute IngredientTenantStock.exists?(tenant_id: @tenant.id, ingredient_id: ingredient.id)
+    assert AdminAuditLog.exists?(action: "inventory_deduction_skipped", tenant_id: @tenant.id)
+  end
 end
