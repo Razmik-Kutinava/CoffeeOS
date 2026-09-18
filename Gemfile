@@ -15,7 +15,8 @@ gem "turbo-rails"
 # Hotwire's modest JavaScript framework [https://stimulus.hotwired.dev]
 gem "stimulus-rails"
 # View components for Rails [https://viewcomponent.org/]
-gem "view_component", "~> 3.0"
+# CVE floor: preview/helper dispatch + system-test path (GHSA-7f3r-gwc9-2995 et al.) — need ≥4.9.0
+gem "view_component", "~> 4.9"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
 

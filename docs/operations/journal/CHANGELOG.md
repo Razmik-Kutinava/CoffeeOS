@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-18 — security: Dependabot pack (gems + npm)
+
+- `view_component` 3.25 → **4.15.0** (GHSA preview/helper + system-test path; floor ≥4.9)
+- `vite` → **8.0.16**, `devalue` → **5.9.2**, `svelte` lock 5.57 (npm audit 0)
+- Rails/AS stack уже **8.1.3.1**, rack-session 2.1.2, puma 8.0.2 — bundler-audit clean
+- Цель: закрыть 91 Dependabot alert на default branch `main` (sync lockfiles)
+
 ## 2026-09-18 — fix: CodeQL ruby syntax warning on main
 
 - `db/migrate/20250115000002_create_stage_2_payments.rb` на main: orphan `, if_not_exists: true, if_not_exists: true` → файл как на develop
