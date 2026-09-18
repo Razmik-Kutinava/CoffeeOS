@@ -21,7 +21,7 @@
 | #90 TASK_90 WebPush recovery after denied | рџџў | **REVIEW** CI green `35191890272` В· deploy Р°РїСЂСѓРІ В· G5 Fly MCP |
 | #91 TASK_91 post-pay auto return в†’ catalog | рџџў | **REVIEW** CI green `35196766203` В· deploy Р°РїСЂСѓРІ В· G4 Fly MCP |
 | #92 TASK_92 Production background FCM | рџџў | **REVIEW** CI green `35198770223` В· deploy Р°РїСЂСѓРІ В· G5 Fly MCP |
-| #93 TASK_93 Critical path hardening | 🟢 | **G** REVIEW+push · G1–G6 Local PASS · G5/deploy = L · параллельно … |
+| #93 TASK_93 Critical path hardening | 🟢 | **E** REGRESS PASS 85/0 · Next: `/review` · **G** REVIEW+push · G5/deploy = L |
 | #78 subscription cancel/confirm | рџџў | CancelService + ConfirmPayment GetState РІ РєРѕРґРµ В· deploy Р°РїСЂСѓРІ |
 | #82 Cascade SMS ready + sheet stuck | рџџЎ | **РџР°С‚С‡_1** CI green `35234267606` В· deploy Р°РїСЂСѓРІ в†’ Fly MCP |
 | GH FLY_API_TOKEN | рџџў | org token В· Deploy green 2026-09-07 |

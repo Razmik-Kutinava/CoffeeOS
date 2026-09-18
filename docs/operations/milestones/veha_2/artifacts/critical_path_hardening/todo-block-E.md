@@ -4,7 +4,7 @@
 |------|----------|
 | **ID** | CBR **#93** · **TASK_93-E** |
 | **Тип** | SBR · hot-path оплата / Init |
-| **Статус** | **GREEN** · Next: `/regress` |
+| **Статус** | **REGRESS PASS** · Next: `/review` |
 | **RED** | `0a7e72ba` |
 | **GREEN** | `2eb22c71` |
 | **Ветка** | `develop` |
@@ -33,7 +33,7 @@
 - [x] PHASE 1 `/spec` — этот todo (+ зеркало `todo-block-E.md`)
 - [x] PHASE 2 RED — T-E1a/b · T-E2a/b · T-E3a · T-E4a/b падают · коммит `[RED]` `0a7e72ba`
 - [x] PHASE 2 GREEN — R1–R5 · коммит `[GREEN]` `2eb22c71` · все T-E* PASS
-- [ ] `/regress` — G3 §2.3 + base_controller · GREEN code `2eb22c71` · Entire `01M2SZBBAQEGHNGEJCXYHG76XH`
+- [x] `/regress` — G3 §2.3 + base_controller · GREEN code `2eb22c71` · Entire `01M2SZBBAQEGHNGEJCXYHG76XH` · **85/0**
 - [ ] PHASE 3 `/review` — таблица E1–E4 PASS · G4 evidence · push · **без deploy**
 
 ## Файлы (ожидаемо)

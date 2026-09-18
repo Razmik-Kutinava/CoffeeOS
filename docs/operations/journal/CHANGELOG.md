@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-18 — docs: regress PASS #93 TASK_93-E Init idempotency
+
+- G1 Init: **30/0** · G2 orders+§2.3+base: **55/0** · total **85/0**
+- GREEN `2eb22c71` · Next: `/review` · Fly MCP Point A = TASK_93-L
+
 ## 2026-09-18 — docs: REVIEW #93 TASK_93-G Tenant GUC / RLS
 
 - Local 30/0 · bugbot clean · security: no med/high/crit
