@@ -2,17 +2,17 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-18 (GetState amount + inventory hard-fail + #78 cancel/confirm)  
+**Дата:** 2026-09-18 (CodeQL workflow on develop)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| GetState Amount + blank fail-closed; stock hard-fail; #78 cancel/confirm | CI · deploy апрув → Fly Point A |
-| #82 **Патч_1** · CI green `35234267606` | deploy апрув → Fly MCP Point A |
-| #71 **Патч_1** · CI green `35230879863` | deploy апрув → Fly MCP Point A |
+| CodeQL Advanced · ruby + javascript-typescript | Actions CodeQL → Security alerts |
+| GetState Amount + inventory + #78 | CI · deploy апрув → Fly Point A |
+| #82 **Патч_1** · CI green | deploy апрув → Fly MCP |
 
-**last_done:** GetState amount check; blank Amount reject; inventory raise; #78 Cancel/ConfirmPayment  
-**next_step:** CI / deploy апрув → Fly Point A (не в этом шаге)
+**last_done:** `.github/workflows/codeql.yml` на develop (ветки develop+main; без broken manual if)  
+**next_step:** push develop (или merge) → дождаться CodeQL run; на main — Edit existing file, не Create
 
 **ctx_trim:** `2026-09-02`  
 **Fly:** v495 `deployment-01M22JRN95TXRSV1PQDN49227M`

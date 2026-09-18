@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-18 — ci: CodeQL Advanced workflow (ruby + JS)
+
+- `.github/workflows/codeql.yml`: develop+main; `javascript-typescript` + `ruby`; `build-mode: none`
+- Без шага manual if (ломал GH expression на `"manual"`)
+- На `origin/main` файл уже был — не Create в UI, Edit или push с develop
+
 ## 2026-09-18 — fix: GetState Amount + inventory hard-fail + #78 cancel/confirm
 
 - GetState CONFIRMED: `notification_amount_matches?` до succeeded; blank Amount fail-closed
