@@ -5,9 +5,11 @@ module Payments
   # Schema: docs/operations/milestones/veha_2/artifacts/fiscal_receipts_personal_cabinet/SCHEMA.md
   class TbankFiscalNotificationHandler
     REFUND_TYPES = %w[incomereturn income_return return refund возврат].freeze
+    MAX_PAYMENT_NOT_FOUND_RETRY = 1
 
-    def initialize(payload:)
+    def initialize(payload:, retry_attempt: 0)
       @payload = payload.stringify_keys
+      @retry_attempt = retry_attempt.to_i
     end
 
     def call!
@@ -16,12 +18,15 @@ module Payments
         Rails.logger.warn(
           "[TbankFiscal] Payment not found OrderId=#{@payload['OrderId']} PaymentId=#{@payload['PaymentId']}"
         )
+        report_skip!(:payment_not_found)
+        enqueue_payment_not_found_retry!
         return { ok: true, skipped: :payment_not_found }
       end
 
       external_id = ofd_receipt_id
       if external_id.blank?
         Rails.logger.warn("[TbankFiscal] Missing fiscal ids PaymentId=#{@payload['PaymentId']}")
+        report_skip!(:missing_fiscal_ids)
         return { ok: true, skipped: :missing_fiscal_ids }
       end
 
@@ -47,6 +52,29 @@ module Payments
     end
 
     private
+
+    def report_skip!(reason)
+      Rails.error.report(
+        StandardError.new("TbankFiscal skipped: #{reason}"),
+        handled: true,
+        context: {
+          reason: reason.to_s,
+          order_id: @payload["OrderId"],
+          payment_id: @payload["PaymentId"],
+          retry_attempt: @retry_attempt
+        }
+      )
+    rescue StandardError => e
+      Rails.logger.error("[TbankFiscal] report_skip failed: #{e.class}: #{e.message}")
+    end
+
+    def enqueue_payment_not_found_retry!
+      return if @retry_attempt >= MAX_PAYMENT_NOT_FOUND_RETRY
+
+      Payments::TbankFiscalRetryJob
+        .set(wait: 30.seconds)
+        .perform_later(@payload, @retry_attempt + 1)
+    end
 
     def find_payment
       order_id = @payload["OrderId"].to_s

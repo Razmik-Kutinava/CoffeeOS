@@ -15,6 +15,7 @@ module Callbacks
 
       new_status = params[:status].to_s
       unless Payment.statuses.key?(new_status)
+        release_idempotency_claim
         return render json: { error: "invalid payment status" }, status: :unprocessable_entity
       end
 
@@ -57,6 +58,7 @@ module Callbacks
 
       new_status = params[:status].to_s
       unless FiscalReceipt.statuses.key?(new_status)
+        release_idempotency_claim
         return render json: { error: "invalid fiscal receipt status" }, status: :unprocessable_entity
       end
 
@@ -91,8 +93,12 @@ module Callbacks
 
     private
 
+    def callbacks_fail_closed?
+      Rails.env.production? || ENV["FLY_APP_NAME"].present? || ENV["CALLBACK_FAIL_CLOSED"].to_s == "1"
+    end
+
     def reject_unconfigured_callbacks!
-      return unless Rails.env.production?
+      return unless callbacks_fail_closed?
 
       token = ENV["CALLBACK_SHARED_TOKEN"].to_s
       secret = ENV["CALLBACK_SHARED_SECRET"].to_s
@@ -118,7 +124,12 @@ module Callbacks
 
     def authenticate_callback!
       expected = ENV["CALLBACK_SHARED_TOKEN"].to_s
-      return if expected.blank?
+      if expected.blank?
+        return unless callbacks_fail_closed?
+
+        audit_event(state: "rejected", callback_type: action_name, tenant_id: params[:tenant_id], details: { reason: "token not configured" })
+        return render json: { error: "unauthorized callback" }, status: :unauthorized
+      end
 
       provided = request.headers["X-Callback-Token"].to_s
       if expected.bytesize == provided.bytesize &&
@@ -132,7 +143,12 @@ module Callbacks
 
     def authenticate_callback_hmac!
       secret = ENV["CALLBACK_SHARED_SECRET"].to_s
-      return if secret.blank?
+      if secret.blank?
+        return unless callbacks_fail_closed?
+
+        audit_event(state: "rejected", callback_type: action_name, tenant_id: params[:tenant_id], details: { reason: "hmac secret not configured" })
+        return render json: { error: "unauthorized callback" }, status: :unauthorized
+      end
 
       if @callback_timestamp.blank? || @callback_signature.blank?
         audit_event(state: "rejected", callback_type: action_name, tenant_id: params[:tenant_id], details: { reason: "missing signature headers" })
@@ -272,6 +288,12 @@ module Callbacks
       render json: { error: "amount mismatch" }, status: :unprocessable_entity
     end
 
+    def release_idempotency_claim
+      return if @idempotency_cache_key.blank?
+
+      Rails.cache.delete(@idempotency_cache_key)
+    end
+
     def audit_event(state:, callback_type:, tenant_id:, record_id: nil, details: {})
       payload = {
         event: "callback_event",
@@ -293,6 +315,13 @@ module Callbacks
       File.open(log_path, "a") { |f| f.puts(payload.to_json) }
 
       return if @idempotency_cache_key.blank?
+
+      # R2/R3: rejected must not leave processing claim for 24h — release so retry can proceed.
+      if state.to_s == "rejected"
+        release_idempotency_claim
+        return
+      end
+
       return unless state.in?(%w[processed failed])
 
       Rails.cache.write(

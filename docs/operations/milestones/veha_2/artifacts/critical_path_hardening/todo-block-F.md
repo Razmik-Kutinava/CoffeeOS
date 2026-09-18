@@ -31,8 +31,8 @@ TTL claim: 24h на processed/failed; rejected → delete.
 - [x] PHASE 0 `/start`
 - [x] `/unlazy` — GATES F `f56db39b`
 - [x] PHASE 1 `/spec` — зеркало session `todo.md`
-- [ ] PHASE 2 RED — T-F1a · T-F2a/b · T-F3a · T-F4a · `[RED]`
-- [ ] PHASE 2 GREEN — R1–R6 · `[GREEN]`
+- [x] PHASE 2 RED — T-F1a · T-F2a/b · T-F3a · T-F4a · `[RED]` `4913e432`
+- [x] PHASE 2 GREEN — R1–R6 · `[GREEN]` · все T-F* PASS
 - [ ] `/regress` — G4
 - [ ] PHASE 3 `/review` — F1–F5 PASS · push · без deploy
 
