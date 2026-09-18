@@ -2,17 +2,17 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-18 (Dependabot security pack)  
+**Дата:** 2026-09-18 (Dependabot 0 open)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| VC 4.15 / vite 8.0.16 / devalue 5.9.2 | push main lockfiles |
-| bundler-audit + npm audit 0 | Dependabot refresh |
-| auth sessions PASS | — |
+| Dependabot 0 open | UI badge refresh |
+| main `d33f83c7` | CI main |
+| develop `f646180a` | — |
 
-**last_done:** security dependency bumps (gems+npm) on develop  
-**next_step:** sync secure lockfiles to default branch `main`
+**last_done:** closed all Dependabot alerts via patched lockfiles on default branch  
+**next_step:** none for Dependabot pack
 
 **ctx_trim:** `2026-09-02`
 
