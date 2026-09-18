@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-18 — docs: SPEC #93 TASK_93-E Init idempotency
+
+- `todo.md` → TASK_93-E: R1 pid · R2 uuid/failed txn · R3 HTTP вне base_controller txn · R4 tests
+- Файлы 7 + blast · Не ломать · Проверка G1/G2
+- Next: `/sbr` RED (код не трогали)
+
 ## 2026-09-18 — docs: restore SPEC #93 TASK_93-B (todo after D race)
 
 - `todo.md` снова TASK_93-B phone-first (после параллельного SPEC D)

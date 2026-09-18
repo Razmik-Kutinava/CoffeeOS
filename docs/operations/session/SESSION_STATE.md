@@ -2,17 +2,17 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-18 (TASK_93-B SPEC)  
+**Дата:** 2026-09-18 (TASK_93-E SPEC)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#93** TASK_93-B SPEC | `/sbr` RED T-B2a/c T-B5a/c |
-| phone-first R1–R5 в todo | GREEN → identity + Checkout |
-| GATES-block-B G3 met | G1/G2 после RED/GREEN |
+| **#93-E** SPEC ready | `/sbr` RED T-E* |
+| R1–R5 · GATES E | GREEN → approve G1–G3 · G4 REVIEW |
+| A/B/C/D ledgers | `GATES-block-*.md` (не затирать) |
 
-**last_done:** PHASE 1 SPEC TASK_93-B — todo + Не ломать + Проверка  
-**next_step:** `/sbr` RED (намеренно падающие T-B*)
+**last_done:** `/spec` TASK_93-E Init idempotency — todo + Не ломать/Проверка  
+**next_step:** `/sbr` RED · коммит `[RED]` · стоп до GREEN
 
 **ctx_trim:** `2026-09-02`
 

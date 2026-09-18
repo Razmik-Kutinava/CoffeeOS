@@ -1,98 +1,98 @@
-# todo — #93 TASK_93-B: Checkout identity (phone vs email)
+# todo — #93 TASK_93-E: Init / идемпотентность оплаты (shop)
 
 | Поле | Значение |
 |------|----------|
-| **ID** | CBR **#93** · **TASK_93-B** |
-| **Тип** | SBR · hot-path shop checkout / оплата / identity |
+| **ID** | CBR **#93** · **TASK_93-E** |
+| **Тип** | SBR · hot-path оплата / Init |
 | **Статус** | **SPEC** · Next: `/sbr` RED |
 | **Ветка** | `develop` |
 | **Канон** | `@spec-build-review` · `@coffeeos-commit-ops` · `@coffeeos-dev-gates` |
-| **ТЗ** | [`TASK-93-B-Checkout-identity.md`](../milestones/veha_2/requirements/customer_tasks/TASK-93-B-Checkout-identity.md) |
-| **GATES** | [`GATES-block-B.md`](../milestones/veha_2/artifacts/critical_path_hardening/GATES-block-B.md) · не `session/GATES.md` (параллельные A/C/D) |
-| **Цель** | UI «можно платить» ≡ бэкенд без 422 email при `phone_verified`; один identity на все pay-пути |
-| **OUT** | склад/webhook (A) · SMS host (C) · per_page (D) · Init race (E) · RLS · OTP длины · FCM · deploy (L) · email чека post-pay (#71) не блокирует Pay |
+| **ТЗ** | бриф чата E1–E4 · зонтик [`TASK-93-Critical-path-hardening.md`](../milestones/veha_2/requirements/customer_tasks/TASK-93-Critical-path-hardening.md) карта E |
+| **GATES** | [`session/GATES.md`](GATES.md) · [`GATES-block-E.md`](../milestones/veha_2/artifacts/critical_path_hardening/GATES-block-E.md) |
+| **Цель** | Повторный Init и гонки не портят живой `provider_payment_id` и не оставляют txn в failed state; HTTP в Т‑Банк не внутри длинной DB-txn `BaseController` на happy path |
+| **OUT** | A–D / F–K · deploy (L) · gem’ы оплаты · смена Amount/webhook политики |
 
-## Канон продукта (зафиксировано SPEC) — phone-first
+## Канон продукта (зафиксировано SPEC)
 
 | ID | Решение |
 |----|---------|
-| **R1** | Session customer с `phone_verified` → можно создавать заказ и инициировать оплату (email не обязателен) |
-| **R2** | Email не обязателен для Pay; verified email — merge как сейчас; иначе заказ на phone-customer; email post-pay (#71) ок |
-| **R3** | Без `phone_verified` **и** без `email_verified` → 422; UI `canPay` false |
-| **R4** | Одна проверка identity: orders / new_card / one_click / SBP create order |
-| **R5** | UI: `identityReady` ≡ R1–R3 (`phoneVerified \|\| emailVerified`), не «телефон ок + скрытый require email» |
+| **R1 (E1)** | Живой `provider_payment_id` **не** перетирается повторным Init (widget / SBP / reuse uuid) — иначе webhook теряется |
+| **R2 (E2)** | `RecordNotUnique` по `client_order_uuid`: lock / rescue **вне** «грязной» открытой txn (нет `InFailedSqlTransaction` на последующих запросах) |
+| **R3 (E3)** | HTTP Init/Т‑Банк **не** держит connection pool ~15s внутри `with_shop_tenant!` txn на happy path (сузить scope или Init после commit GUC-окна) |
+| **R4 (E4)** | Тесты: double Init; concurrent same `client_order_uuid` |
+| **R5** | Clear pid только на явный fail Charge (#46 Error 119) — **не** на happy re-Init |
 
-**Не email-gate. Не гибрид.** Смена канона — только до RED.
+Базовый факт кода (SPEC): `OrderCreator` уже делает gateway Init **после** внутренней create-txn; бомба пула — обёртка `Shop::Api::BaseController#with_shop_tenant!` (`transaction` + `SET LOCAL` вокруг **всего** action, включая Init).
 
 ## SBR
 
-- [x] PHASE 0 `/start` — `TASK-93-B-Checkout-identity.md`
-- [x] `/unlazy` — `GATES-block-B.md` (G3 baseline met · G1/G2 unmet pre-RED · G5→L)
-- [x] PHASE 1 `/spec` — этот todo · phone-first
-- [ ] PHASE 2 RED — T-B2a/c, T-B5a/c красные на HEAD · `recurrent_order_creator_test.rb` + `checkout_identity_test.rb` · коммит `[RED]`
-- [ ] PHASE 2 GREEN — одна identity-проверка + Checkout sync · коммит `[GREEN]` · T-B2* T-B4* T-B5* PASS
-- [ ] `/regress` — G3 zone + § Проверка
-- [ ] PHASE 3 `/review` — таблица B1–B5 PASS · push · **без deploy**
+- [x] PHASE 0 `/start` — бриф TASK_93-E в чате
+- [x] `/unlazy` — GATES E `bc6d770e` (G1–G4 unmet · G5→L)
+- [x] PHASE 1 `/spec` — этот todo
+- [ ] PHASE 2 RED — T-E1a/b · T-E2a/b · T-E3a · T-E4a/b падают · коммит `[RED]`
+- [ ] PHASE 2 GREEN — R1–R5 · коммит `[GREEN]` · все T-E* PASS
+- [ ] `/regress` — G3 §2.3 + base_controller
+- [ ] PHASE 3 `/review` — таблица E1–E4 PASS · G4 evidence · push · **без deploy**
 
 ## Файлы (ожидаемо)
 
-- `app/services/shop/order_creator.rb` — `find_or_create_customer!`: phone_verified session → order без email; email_verified path сохранить; neither → Error
-- `app/services/shop/recurrent_order_creator.rb` — `find_customer!`: тот же канон (session phone customer + card ownership)
-- `app/frontend/routes/Checkout.svelte` — `identityReady = phoneVerified \|\| emailVerified`; Pay payload без фейкового `emailVerified`; `loadSavedCards` ок без `?email=` при session
+- `app/controllers/shop/api/base_controller.rb` — E3: сузить `with_shop_tenant!` txn (GUC без длинного hold HTTP)
+- `app/services/shop/order_creator.rb` — E2: `RecordNotUnique` / reuse uuid без failed txn; не Init поверх чужого живого pid
+- `app/services/shop/widget_payment_initiator.rb` — E1: re-Init с живым pid → resume/return, не overwrite
+- `app/services/shop/sbp_payment_initiator.rb` — E1: re-Init → `resume_existing_qr!` (регресс + усиление тестов)
+- `test/services/shop/widget_payment_initiator_test.rb` — T-E1a · T-E4a
+- `test/services/shop/order_creator_test.rb` — T-E2* · T-E4b
+- `test/controllers/shop/api/base_controller_test.rb` — T-E3a (нет open txn вокруг Init HTTP)
 
 ### Blast-radius (+соседи)
 
-- `app/controllers/shop/api/user_cards_controller.rb` — B4: уже session `customer_id`; не требовать email (регресс T-B4a)
-- `app/controllers/shop/api/payments_controller.rb` — new_card/one_click ловят `OrderCreator::Error`; текст 422 может смениться на «телефон или email»
-- `app/services/shop/checkout_identity.rb` — **опционально** на GREEN, если DRY общей проверки (иначе оставить в двух creators)
+- `test/integration/shop/api/payment_widget_init_test.rb` / `sbp_payment_init_test.rb` — G1 integration
+- `test/integration/shop/api/orders_controller_test.rb` — idempotent `client_order_uuid` (регресс)
+- `app/controllers/shop/api/payments_controller.rb` — только если E3 требует skip/around для Init actions (**не** трогать без нужды)
 
-### Тесты (создать/дополнить на RED)
+## Матрица приёмки (RED → GREEN)
 
-- `test/services/shop/order_creator_test.rb` — T-B2a/b/c
-- `test/services/shop/recurrent_order_creator_test.rb` — **новый** · T-B2d
-- `test/integration/shop/api/checkout_identity_test.rb` — **новый** · T-B4a · T-B5a…e · T-B2e/f через API
+| ID | Тест | Файл |
+|----|------|------|
+| T-E1a | widget: pid уже set → второй Init **не** меняет pid / не зовёт новый Init | `widget_payment_initiator_test` |
+| T-E1b | SBP: pid set → resume GetQr, pid тот же | `sbp_payment_initiator_test` |
+| T-E2a | `RecordNotUnique` на uuid → возвращает existing; нет `InFailedSqlTransaction` | `order_creator_test` |
+| T-E2b | после unique-fail последующие AR-запросы в том же request ok (savepoint / вне dirty txn) | ↑ и/или `orders_controller_test` |
+| T-E3a | happy-path Init: adapter HTTP при **closed** AR txn (или assert open=false) | `base_controller_test` (+ stub adapter) |
+| T-E4a | double Init подряд — один pid, webhook-id стабилен | widget (+ optional integration) |
+| T-E4b | concurrent same `client_order_uuid` — один order / без 500 / без failed txn | `order_creator_test` / `orders_controller_test` |
+
+Без **T-E1a + T-E2a + T-E3a + T-E4a** блок не закрыт.
 
 ## Не ломать
 
-- Email-verified guest **без** phone — по-прежнему может платить (R3)
-- one_click: карта принадлежит session customer; чужой RebillId → 422 ownership (не identity)
-- Callcheck/SMS linker (#89) — session + `phone_verified` без регресса
-- Post-pay email (#71/#91) — email **не** требуется до Pay
-- Amount limits / closed shop / simulate guards — без изменений
+1. Happy path: первый Init пишет pid → webhook CONFIRMED settles
+2. Clear `provider_payment_id` после **fail Charge** (#46 / Error 119) — остаётся
+3. SBP resume GetQr при уже живом pid (error 8 / retry) — остаётся
+4. RLS: `SET LOCAL app.current_tenant_id` на shop API по-прежнему действует на DB-work запроса
+5. Идемпотентность POST orders с `client_order_uuid` (existing tests)
 
 ## Проверка
 
 ```bash
-ruby bin/rails test test/services/shop/order_creator_test.rb test/services/shop/recurrent_order_creator_test.rb test/integration/shop/api/checkout_identity_test.rb
+# G1 — матрица E (Init / pid)
+bin/rails test test/services/shop/widget_payment_initiator_test.rb \
+  test/integration/shop/api/payment_widget_init_test.rb \
+  test/services/shop/sbp_payment_initiator_test.rb \
+  test/integration/shop/api/sbp_payment_init_test.rb
+
+# G2 — race / uuid + G3 зона §2.3 (/regress)
+bin/rails test test/integration/shop/api/orders_controller_test.rb \
+  test/services/shop/order_creator_test.rb \
+  test/controllers/shop/api/base_controller_test.rb \
+  test/integration/shop/api/qa_section_2_3_payment_cart_test.rb \
+  test/integration/shop/api/qa_section_2_3_stage5_e2e_test.rb
 ```
 
-```bash
-ruby bin/rails test test/integration/shop/api/email_otp_checkout_test.rb test/integration/shop/shop_one_click_payment_step4_test.rb test/integration/shop/shop_new_card_payment_step2_test.rb
-```
+## DoD блока E
 
-(= GATES-block-B G1+G2 и G3)
-
-## Матрица приёмки (DoD B)
-
-| ID | Assert |
-|----|--------|
-| T-B1 | SPEC + одна точка identity в коде = R1–R5 |
-| T-B2a | phone_verified, email nil → order, нет Error email |
-| T-B2b | email_verified без phone → order |
-| T-B2c | neither → Error/422, order не создан |
-| T-B2d | one_click phone без email → не identity 422 |
-| T-B2e | new_card phone без email → не identity 422 |
-| T-B2f | SBP/orders phone без email → не identity 422 |
-| T-B3a–c | `identityReady` ≡ R1–R3; canPay false без identity |
-| T-B4a/b | GET /user/cards phone session 200; loadSavedCards без обязательного `?email=` |
-| T-B5a–e | integration пакет (см. ТЗ §7) |
-
-## REVIEW-таблица (вставить в `/review`)
-
-```
-B1 канон phone-first     PASS (SPEC + код)
-B2 T-B2a..f              PASS
-B3 UI identityReady      PASS
-B4 T-B4a T-B4b           PASS
-B5 T-B5a..e              PASS
-```
+- [ ] T-E1a/b · T-E2a/b · T-E3a · T-E4a/b зелёные
+- [ ] G4 REVIEW: cite — HTTP Init вне длинной `base_controller` txn
+- [ ] Повторный Init не теряет webhook (живой pid)
+- [ ] Пул не держит ~15s HTTP внутри txn на happy path
+- [ ] G5 Fly → L (не блокер E)
