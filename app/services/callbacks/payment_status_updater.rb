@@ -24,6 +24,7 @@ module Callbacks
       end
 
       old_status = @payment.status
+      @guest_broadcast_order = nil
 
       @payment.with_lock do
         downgrade_from_terminal = TERMINAL_STATUSES.include?(old_status) &&
@@ -53,6 +54,9 @@ module Callbacks
         fail_order_if_rejected!
       end
 
+      # TASK_93-J: Cable/push/APNs enqueue after row lock (R2).
+      broadcast_guest_order_if_needed!
+
       # TASK_93-A: списание после commit оплаты/accepted — склад не откатывает txn денег.
       deduct_inventory_if_needed!
 
@@ -60,6 +64,13 @@ module Callbacks
     end
 
     private
+
+    def broadcast_guest_order_if_needed!
+      return unless @guest_broadcast_order
+
+      order = @guest_broadcast_order.reload
+      Shop::GuestOrderBroadcaster.call(order: order, old_status: "pending_payment")
+    end
 
     def accept_order_if_paid!
       return unless @payment.status == "succeeded"
@@ -87,8 +98,8 @@ module Callbacks
       )
       order = order.reload
       @order_for_deduction = order
+      @guest_broadcast_order = order
       Barista::OrderBoardBroadcaster.call(order: order, old_status: "pending_payment")
-      Shop::GuestOrderBroadcaster.call(order: order, old_status: "pending_payment")
       # Quick Repeat: оплаченный заказ меняет частоту покупок — сбрасываем кэш секции «повторить»
       Shop::CustomerFrequentProductsService.bust_cache!(tenant_id: order.tenant_id, customer_id: order.customer_id)
     end

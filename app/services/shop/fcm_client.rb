@@ -12,12 +12,14 @@ module Shop
 
     OAUTH_URL = URI("https://oauth2.googleapis.com/token")
     FCM_SCOPE = "https://www.googleapis.com/auth/firebase.messaging"
+    OAUTH_CACHE_TTL = 50.minutes
+    DEAD_TOKEN_CODES = %w[UNREGISTERED INVALID_ARGUMENT].freeze
 
-    def self.deliver!(token:, title:, body:, data: {})
-      new.deliver!(token: token, title: title, body: body, data: data)
+    def self.deliver!(token:, title:, body:, data: {}, customer: nil)
+      new.deliver!(token: token, title: title, body: body, data: data, customer: customer)
     end
 
-    def deliver!(token:, title:, body:, data: {})
+    def deliver!(token:, title:, body:, data: {}, customer: nil)
       if simulate?
         Rails.logger.info("[Shop::FcmClient] FCM_SIMULATE — #{title}: #{body} (token=#{token.to_s.first(12)}…)")
         return { simulated: true, token: token }
@@ -38,7 +40,8 @@ module Shop
         token: token,
         title: title,
         body: body,
-        data: data
+        data: data,
+        customer: customer
       )
     end
 
@@ -77,45 +80,73 @@ module Shop
       private_key_pem = account["private_key"]
       raise Error, "service account missing client_email or private_key" if client_email.blank? || private_key_pem.blank?
 
-      private_key = OpenSSL::PKey::RSA.new(private_key_pem)
-      now = Time.now.to_i
-      assertion = JWT.encode(
-        {
-          iss: client_email,
-          sub: client_email,
-          aud: OAUTH_URL.to_s,
-          iat: now,
-          exp: now + 3600,
-          scope: FCM_SCOPE
-        },
-        private_key,
-        "RS256"
-      )
+      Rails.cache.fetch("fcm:oauth:#{client_email}", expires_in: OAUTH_CACHE_TTL) do
+        private_key = OpenSSL::PKey::RSA.new(private_key_pem)
+        now = Time.now.to_i
+        assertion = JWT.encode(
+          {
+            iss: client_email,
+            sub: client_email,
+            aud: OAUTH_URL.to_s,
+            iat: now,
+            exp: now + 3600,
+            scope: FCM_SCOPE
+          },
+          private_key,
+          "RS256"
+        )
 
-      response = post_form(
-        OAUTH_URL,
-        "grant_type" => "urn:ietf:params:oauth:grant-type:jwt-bearer",
-        "assertion" => assertion
-      )
-      parsed = JSON.parse(response.body)
-      token = parsed["access_token"]
-      raise Error, "OAuth token missing: #{parsed}" if token.blank?
+        response = post_form(
+          OAUTH_URL,
+          "grant_type" => "urn:ietf:params:oauth:grant-type:jwt-bearer",
+          "assertion" => assertion
+        )
+        parsed = JSON.parse(response.body)
+        token = parsed["access_token"]
+        raise Error, "OAuth token missing: #{parsed}" if token.blank?
 
-      token
+        token
+      end
     end
 
-    def send_message!(project_id:, access_token:, token:, title:, body:, data:)
+    def send_message!(project_id:, access_token:, token:, title:, body:, data:, customer: nil)
       uri = URI("https://fcm.googleapis.com/v1/projects/#{project_id}/messages:send")
       payload = build_message(token: token, title: title, body: body, data: data)
 
       response = post_json(uri, payload, "Authorization" => "Bearer #{access_token}")
       unless response.is_a?(Net::HTTPSuccess)
+        clear_dead_token_if_needed!(response.body, customer)
         raise Error, "FCM v1 #{response.code}: #{response.body}"
       end
 
       JSON.parse(response.body)
     rescue JSON::ParserError => e
       raise Error, "FCM v1 invalid JSON: #{e.message}"
+    end
+
+    def clear_dead_token_if_needed!(response_body, customer)
+      return if customer.blank?
+      return unless dead_token_error?(response_body)
+
+      customer.update!(push_token: nil, push_enabled: false)
+      Rails.logger.info(
+        "[Shop::FcmClient] cleared dead push token for customer=#{customer.id}"
+      )
+    rescue StandardError => e
+      Rails.logger.warn("[Shop::FcmClient] dead-token cleanup failed: #{e.class} #{e.message}")
+    end
+
+    def dead_token_error?(response_body)
+      parsed = JSON.parse(response_body.to_s)
+      details = parsed.dig("error", "details")
+      codes = Array(details).filter_map { |d| d["errorCode"] || d[:errorCode] }
+      status = parsed.dig("error", "status").to_s
+      codes.any? { |c| DEAD_TOKEN_CODES.include?(c.to_s) } ||
+        DEAD_TOKEN_CODES.include?(status) ||
+        response_body.to_s.include?("UNREGISTERED") ||
+        (status == "INVALID_ARGUMENT" && response_body.to_s.match?(/token/i))
+    rescue JSON::ParserError
+      response_body.to_s.include?("UNREGISTERED")
     end
 
     def post_form(uri, form)

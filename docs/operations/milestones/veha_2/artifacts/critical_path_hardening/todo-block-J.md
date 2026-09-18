@@ -4,7 +4,7 @@
 |------|----------|
 | **ID** | CBR **#93** · **TASK_93-J** |
 | **Тип** | SBR · hot-path shop status / push / queue |
-| **Статус** | **SPEC** · Next: `/sbr` RED |
+| **Статус** | **GREEN** · Next: `/regress` |
 | **Ветка** | `develop` |
 | **Канон** | `@spec-build-review` · `@coffeeos-commit-ops` · `@coffeeos-dev-gates` |
 | **ТЗ** | бриф чата J1–J4 · зонтик [`TASK-93-Critical-path-hardening.md`](../../requirements/customer_tasks/TASK-93-Critical-path-hardening.md) карта J |
@@ -32,8 +32,8 @@
 - [x] PHASE 0 `/start`
 - [x] `/unlazy` — GATES J
 - [x] PHASE 1 `/spec` — зеркало session `todo.md`
-- [ ] PHASE 2 RED — T-J1a · T-J2a · T-J3a · `[RED]`
-- [ ] PHASE 2 GREEN — R1–R8 · `[GREEN]`
+- [x] PHASE 2 RED — T-J1a · T-J2a · T-J3a · `[RED]` `06979f96`
+- [x] PHASE 2 GREEN — R1–R8 · `[GREEN]`
 - [ ] `/regress` — G4
 - [ ] PHASE 3 `/review` — J1–J4 PASS · push · без deploy
 

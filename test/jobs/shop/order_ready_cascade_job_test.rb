@@ -181,6 +181,7 @@ class Shop::OrderReadyCascadeJobTest < ActiveSupport::TestCase
     source = File.read(Rails.root.join("app/services/shop/guest_order_broadcaster.rb"))
     assert_match(/SMS_GRACE/, source)
     assert_operator Shop::OrderReadyCascadeJob::SMS_GRACE, :>=, 5.seconds
+    assert_equal 5.seconds, Shop::OrderReadyCascadeJob::SMS_GRACE_JOB_BUFFER
   end
 
   test "#39 v2 online presence creates no notification logs even with telegram_chat_id" do

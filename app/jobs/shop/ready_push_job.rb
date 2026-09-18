@@ -31,7 +31,7 @@ module Shop
 
     def update_wallet!(order)
       pass = OrderWalletPass.find_by(order_id: order.id)
-      # #38: Broadcaster уже обновил pass до ready — не bump revision повторно.
+      # #38: PassUpdateJob may already bump to ready — skip duplicate revision.
       return if pass&.status_label.to_s == "ready"
 
       Shop::AppleWallet::PassUpdater.call!(order: order)

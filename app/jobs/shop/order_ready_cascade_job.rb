@@ -13,6 +13,8 @@ module Shop
 
     # Пауза после ready: push/WS успевают, SMS — только если клиент не online.
     SMS_GRACE = 15.seconds
+    # TASK_93-J: job starts after grace ends (+ skew) — avoid race with Presence grace expiry.
+    SMS_GRACE_JOB_BUFFER = 5.seconds
 
     def perform(order_id)
       order = Order.find_by(id: order_id)

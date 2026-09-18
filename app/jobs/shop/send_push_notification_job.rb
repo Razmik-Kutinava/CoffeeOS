@@ -19,7 +19,8 @@ module Shop
           token: customer.push_token,
           title: notification.title,
           body: notification.body,
-          data: notification.payload
+          data: notification.payload,
+          customer: customer
         )
 
         notification.update!(status: :sent, sent_at: Time.current, error_message: nil)

@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-18 — feat: #93 TASK_93-J Push/worker async + FCM cache [GREEN]
+
+- `PassUpdateJob` · GuestOrderBroadcaster без sync PassUpdater · cascade wait GRACE+5s
+- `PaymentStatusUpdater` broadcaster после `with_lock` · FCM OAuth cache 50m + UNREGISTERED clear
+- Runbook `SOLID_QUEUE_FLY.md` · Local T-J* + zone 53/0 · barista/tbank 20/0
+- Next: `/regress`
+
 ## 2026-09-18 — docs: REVIEW #93 TASK_93-F Callbacks/stuck/Events
 
 - Local notify pack **68/0** · F1–F5 PASS · bugbot no bugs · security PASS

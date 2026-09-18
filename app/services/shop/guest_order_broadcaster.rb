@@ -24,32 +24,30 @@ module Shop
       end
 
       Shop::OrderStatusPushNotifier.call(order: order, old_status: old_status)
-      update_wallet_pass_if_present!(order)
+      enqueue_wallet_pass_update!(order)
       enqueue_ready_cascade!(order)
     end
 
-    def self.update_wallet_pass_if_present!(order)
+    def self.enqueue_wallet_pass_update!(order)
       return unless OrderWalletPass.exists?(order_id: order.id)
 
-      Shop::AppleWallet::PassUpdater.call!(order: order)
-    rescue Shop::AppleWallet::UnavailableError, Shop::AppleWallet::GenerationError => e
-      Rails.logger.warn("[Shop::GuestOrderBroadcaster] wallet update soft-fail: #{e.class} #{e.message}")
-    rescue StandardError => e
-      Rails.logger.warn("[Shop::GuestOrderBroadcaster] wallet update soft-fail: #{e.class} #{e.message}")
+      Shop::AppleWallet::PassUpdateJob.perform_later(order.id)
     end
-    private_class_method :update_wallet_pass_if_present!
+    private_class_method :enqueue_wallet_pass_update!
 
     # #39: платные каналы после бесплатных WS/Push/Wallet.
     # Group 4: grace → re-check presence в job; SMS только если всё ещё offline.
     # #82: сброс stale order:{id}:online (убитый WS без unsubscribe).
     # #82 Патч_1: begin_sms_grace! — Cable reconnect внутри grace не даёт ложный SMS skipped.
     # Live Cable при hide-on-ready снимает подписку → unsubscribed → offline до SMS_GRACE.
+    # TASK_93-J: wait = SMS_GRACE + BUFFER (избежать race expiry vs job start).
     def self.enqueue_ready_cascade!(order)
       return unless order.ready?
 
       Shop::OrderReadyPresence.begin_sms_grace!(order.id)
+      wait = Shop::OrderReadyCascadeJob::SMS_GRACE + Shop::OrderReadyCascadeJob::SMS_GRACE_JOB_BUFFER
       Shop::OrderReadyCascadeJob
-        .set(wait: Shop::OrderReadyCascadeJob::SMS_GRACE)
+        .set(wait: wait)
         .perform_later(order.id)
     end
     private_class_method :enqueue_ready_cascade!

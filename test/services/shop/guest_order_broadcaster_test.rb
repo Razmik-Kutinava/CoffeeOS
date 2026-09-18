@@ -73,7 +73,9 @@ class Shop::GuestOrderBroadcasterTest < ActiveSupport::TestCase
     )
 
     @order.update!(status: :preparing)
-    Shop::GuestOrderBroadcaster.call(order: @order.reload, old_status: "accepted")
+    perform_enqueued_jobs only: Shop::AppleWallet::PassUpdateJob do
+      Shop::GuestOrderBroadcaster.call(order: @order.reload, old_status: "accepted")
+    end
 
     pass.reload
     assert_equal "preparing", pass.status_label
@@ -84,7 +86,9 @@ class Shop::GuestOrderBroadcasterTest < ActiveSupport::TestCase
     @order.update!(status: :preparing)
 
     assert_no_difference -> { OrderWalletPass.count } do
-      Shop::GuestOrderBroadcaster.call(order: @order.reload, old_status: "accepted")
+      assert_no_enqueued_jobs(only: Shop::AppleWallet::PassUpdateJob) do
+        Shop::GuestOrderBroadcaster.call(order: @order.reload, old_status: "accepted")
+      end
     end
   end
 
@@ -104,8 +108,11 @@ class Shop::GuestOrderBroadcasterTest < ActiveSupport::TestCase
     @order.update!(status: :preparing)
     assert_nothing_raised do
       assert_enqueued_with(job: Shop::SendPushNotificationJob) do
-        Shop::GuestOrderBroadcaster.call(order: @order.reload, old_status: "accepted")
+        assert_enqueued_with(job: Shop::AppleWallet::PassUpdateJob) do
+          Shop::GuestOrderBroadcaster.call(order: @order.reload, old_status: "accepted")
+        end
       end
+      perform_enqueued_jobs only: Shop::AppleWallet::PassUpdateJob
     end
   end
 
