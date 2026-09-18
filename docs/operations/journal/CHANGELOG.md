@@ -11,6 +11,18 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-18 — docs: unlazy #93 TASK_93-G Tenant GUC / RLS / schema
+
+- `GATES-block-G.md` + session `GATES.md`: G1 staff T-G1 · G2 inventory/ensure/fresh T-G2–G4 · G3 city T-G5 · G4 regress+T-G6 · G5→L
+- `--status`: unmet 4 · abandoned 1 (G5)
+- Next: `/spec` (код не трогали)
+
+## 2026-09-18 — docs: SPEC #93 TASK_93-F Callbacks/stuck/Events
+
+- `todo.md` + `todo-block-F.md` → TASK_93-F: R1 fail-closed · R2/R3 release claim on reject · R4 stuck GetState · R5 fiscal report+1 retry · R6 422
+- Файлы 7 + blast · Не ломать · Проверка G1/G4
+- Next: `/sbr` RED (код не трогали)
+
 ## 2026-09-18 — docs: unlazy #93 TASK_93-F Callbacks/stuck/Events
 
 - `GATES-block-F.md` + session `GATES.md`: G1 Events T-F1/F2/F5 · G2 stuck T-F3 · G3 fiscal T-F4 · G4 regress · G5→L
