@@ -9,6 +9,7 @@ require "securerandom"
 require_relative "support/factories"
 require_relative "support/shop_email_test_helper"
 require_relative "support/fake_tbank_init"
+require_relative "support/rack_attack_test_helper"
 
 module ActiveSupport
   class TestCase
@@ -77,4 +78,5 @@ end
 class ActionDispatch::IntegrationTest
   include TestFactories
   include ShopEmailTestHelper
+  include RackAttackTestHelper
 end

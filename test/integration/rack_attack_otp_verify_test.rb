@@ -104,15 +104,4 @@ class RackAttackOtpVerifyTest < ActionDispatch::IntegrationTest
     end
   end
 
-  private
-
-  def with_rack_attack
-    was_enabled = Rack::Attack.enabled
-    Rack::Attack.enabled = true
-    Rack::Attack.cache.store.clear if Rack::Attack.cache.store.respond_to?(:clear)
-    yield
-  ensure
-    Rack::Attack.cache.store.clear if Rack::Attack.cache.store.respond_to?(:clear)
-    Rack::Attack.enabled = was_enabled
-  end
 end
