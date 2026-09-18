@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-18 — docs: SPEC #93 TASK_93-D history per_page
+
+- `todo.md` → TASK_93-D: R1–R5 default 20 / max 50 · T-D1/T-D3
+- Файлы 5 + blast · Не ломать · Проверка G1/G2
+- Next: `/sbr` RED (код не трогали)
+
 ## 2026-09-18 — docs: SPEC #93 TASK_93-B Checkout identity
 
 - `todo.md` → TASK_93-B: phone-first R1–R5 · файлы OrderCreator/Recurrent/Checkout · Не ломать · Проверка G1–G3

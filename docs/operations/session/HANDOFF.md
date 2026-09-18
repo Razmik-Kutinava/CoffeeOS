@@ -2,17 +2,17 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-18 (TASK_93-B SPEC)  
+**Дата:** 2026-09-18 (TASK_93-D SPEC)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#93** TASK_93-B SPEC в `todo.md` | `/sbr` RED → GREEN B1–B5 |
-| Канон **phone-first** R1–R5 | `/regress` → `/review` · без deploy |
-| Ledger `GATES-block-B.md` | A/C/D — другие чаты |
+| **#93-D** SPEC готово (`todo.md`) | `/sbr` RED → GREEN D1–D3 |
+| GATES D · G4 Fly → L | `/regress` → `/review` без deploy |
+| A/B/C/E — др. чаты / block-* | deploy = L |
 
-**last_done:** SPEC TASK_93-B — файлы + Не ломать + Проверка + phone-first  
-**next_step:** `/sbr` RED — T-B2a/c + T-B5a/c красные
+**last_done:** SPEC TASK_93-D — 5 файлов + blast · Не ломать · Проверка G1/G2  
+**next_step:** `/sbr` RED — T-D3a/b (+ T-D1*)
 
 **ctx_trim:** `2026-09-02`  
 **Fly:** v495 `deployment-01M22JRN95TXRSV1PQDN49227M`
