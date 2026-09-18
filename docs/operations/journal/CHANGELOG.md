@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-18 — docs: unlazy #93 TASK_93-H Cart cookie / overflow
+
+- `GATES-block-H.md` + session `GATES.md`: G1 T-H1 rescue · G2 T-H2 line/byte · G3 T-H3 422-not-500 · G4 cart regress · G5→L
+- `--status`: unmet 4 · abandoned 1 (G5); `--approve`: G1/G3 no `cart_overflow_test` · G2/G4 baseline ≠ DoD
+- Next: `/spec` (код не трогали)
+
 ## 2026-09-18 — feat: #93 TASK_93-A money↔order stock soft-fail [GREEN]
 
 - `OrderRecipeDeduction`: missing/insufficient → skip + `inventory_deduction_skipped` (нет qty=0 trap)
