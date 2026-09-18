@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-18 — docs: regress PASS #93 TASK_93-K hygiene pack
+
+- Zone: sanitize · demo · paymentUrl · merger · collector · menu sort_order · onboarding
+- Local: **35 runs / 0 failures** (seed 50003) · GREEN `39b38d58` · G1–G4 met · G5→L
+- Next: `/review` · Fly MCP Point A = TASK_93-L
+
 ## 2026-09-18 — docs: unlazy reverify #93 TASK_93-G gates met
 
 - GATES-block-G: G1–G4 **met** (--reverify); G5 Fly **abandoned** → TASK_93-L

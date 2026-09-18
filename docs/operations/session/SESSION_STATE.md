@@ -1,18 +1,18 @@
-﻿# SESSION_STATE
+# SESSION_STATE
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-18 (TASK_93-B unlazy reverify)  
+**Дата:** 2026-09-18 (TASK_93-K regress)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#93** TASK_93-B GATES G1–G4 **met** | `/review` |
-| G5 abandoned → L | push · без deploy |
-| Local reverify PASS | Fly MCP Point A после L |
+| **#93-K** REGRESS **PASS** 35/0 | `/review` |
+| GATES-block-K G1–G4 met · G5→L | таблица K1–K7 · push · без deploy |
+| GREEN `39b38d58` | Fly MCP Point A — после deploy (L) |
 
-**last_done:** `/unlazy` reverify GATES-block-B · met 4 · abandoned 1  
-**next_step:** `/review` TASK_93-B
+**last_done:** `/regress` TASK_93-K — blog/demo/paymentUrl/merger/collector/menu **35/0** · approve G1–G4  
+**next_step:** `/review` блок K
 
 **ctx_trim:** `2026-09-02`
 

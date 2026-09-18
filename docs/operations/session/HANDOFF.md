@@ -1,18 +1,18 @@
-﻿# HANDOFF — Веха 2
+# HANDOFF — Веха 2
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-18 (TASK_93-B unlazy reverify)  
+**Дата:** 2026-09-18 (TASK_93-K regress)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#93** TASK_93-B GATES met | `/review` → push |
-| G1–G4 met · G5→L | без deploy |
-| Ledger: `GATES-block-B.md` | — |
+| **#93-K** REGRESS **PASS** 35/0 | `/review` · push · **без deploy** |
+| G1–G4 met · G5→L | K6 sha sync · RUBY-1K/1J notes |
+| GREEN `39b38d58` | Fly MCP Point A = TASK_93-L |
 
-**last_done:** unlazy `--reverify` B · G1–G3 rerun PASS · G4 UI · G5 abandoned  
-**next_step:** `/review` TASK_93-B
+**last_done:** `/regress` TASK_93-K — sanitize+merger+demo+paymentUrl+collector+menu **35/0**  
+**next_step:** `/review` блок K (таблица K1–K7 · Entire · push)
 
 **ctx_trim:** `2026-09-02`  
 **Fly:** v495 `deployment-01M22JRN95TXRSV1PQDN49227M`

@@ -6,7 +6,7 @@
 |------|----------|
 | **ID** | CBR **#93** · **TASK_93-K** |
 | **Тип** | SBR · hygiene pack (blog / demo / paymentUrl / merger / ops) |
-| **Статус** | **GREEN** · Next: `/regress` |
+| **Статус** | **REGRESS PASS** · Next: `/review` |
 | **Ветка** | `develop` |
 | **Канон** | `@spec-build-review` · `@coffeeos-commit-ops` · `@coffeeos-dev-gates` |
 | **ТЗ** | бриф чата K1–K7 · зонтик [`TASK-93-Critical-path-hardening.md`](../../requirements/customer_tasks/TASK-93-Critical-path-hardening.md) карта K |
@@ -35,7 +35,7 @@
 - [x] PHASE 1 `/spec` — этот todo (+ зеркало session)
 - [x] PHASE 2 RED — пачка T-K1a/b/c · T-K2* · T-K3a · T-K4a · (T-K7a) · коммит `[RED]`
 - [x] PHASE 2 GREEN — R1–R7 · коммит `[GREEN]` · все T-K* PASS
-- [ ] `/regress` — GATES G4 § Проверка
+- [x] `/regress` — GATES G4 § Проверка
 - [ ] PHASE 3 `/review` — таблица K1–K7 · K6 sha sync · push · **без deploy**
 
 ## Файлы (ожидаемо)
@@ -91,9 +91,11 @@ bin/rails test \
   test/integration/platform/menu_category_sort_order_update_test.rb \
   test/services/shop/customer_profile_merger_test.rb \
   test/services/analytics/channel_order_stats_collector_test.rb \
-  test/models/blog_post_test.rb \
-  test/controllers/shop/api/payments_controller_test.rb
-# + новые T-K* файлы (sanitize / widget_payment_url / demo guard)
+  test/models/blog_post_sanitize_consistency_test.rb \
+  test/controllers/shop/api/widget_payment_url_test.rb \
+  test/integration/shop/api/payment_widget_init_test.rb \
+  test/services/demo/environment_setup_test.rb \
+  test/integration/platform/onboarding_infra_test.rb
 ```
 
-GATES: G1–G3 после GREEN `--approve`; G4 = этот regress; G5→L.
+GATES: G1–G4 met после `/regress` · G5→L. Local **35/0** (2026-09-18).
