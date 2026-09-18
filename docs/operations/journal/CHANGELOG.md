@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-18 — docs: unlazy GATES #93 TASK_93-D history per_page
+
+- `session/GATES.md` + `artifacts/critical_path_hardening/GATES-block-D.md`
+- G1 T-D1/T-D3 · G2 orders+mvp_flow · G3 D2 клиент (REVIEW) · G4 Fly **ABANDON** → TASK_93-L
+- `gate-check --status`: unmet 3, abandoned 1; `--approve` после GREEN (baseline file PASS ≠ DoD без T-D*)
+- Параллельно: A SPEC · B/C в `GATES-block-B/C.md`
+
 ## 2026-09-18 — docs: unlazy GATES #93 TASK_93-C SMS short link (active)
 
 - Активный `session/GATES.md` = **C** · канон `GATES-block-C.md` · зеркало `artifacts/.../GATES.md`

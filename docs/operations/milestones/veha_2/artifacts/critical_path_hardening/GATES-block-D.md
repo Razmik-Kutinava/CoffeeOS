@@ -1,4 +1,4 @@
-﻿# Gates: TASK_93-D / #93 — История заказов / ЛК список (per_page)
+# Gates: TASK_93-D / #93 — История заказов / ЛК список (per_page)
 
 Scope: `GET /shop/api/orders/history` default `per_page=20` (не 1) при отсутствии/нуле/мусоре; max 50; `today=1` без изменений размера логики фильтра; ЛК/«сегодня» показывают пачку заказов. Deploy = TASK_93-L (не DoD блока D).
 
@@ -25,9 +25,7 @@ ABANDON: G4 Fly MCP Point A is TASK_93-L DoD, not block D; Local G1–G2 + REVIE
 <!--
 CoffeeOS TASK_93-D unlazy (pre-SPEC / pre-SBR):
 - Канон: customer_tasks/TASK-93-Critical-path-hardening.md · блок D (R1–R5 default 20 / max 50)
-- Зеркало: artifacts/critical_path_hardening/GATES-block-D.md
-- Параллельные блоки: GATES-block-A/B/C.md (не затирать; session = активный чат)
+- Активный ledger сессии: docs/operations/session/GATES.md (тот же текст)
 - Close D: G1–G2 met via --approve/--reverify after GREEN + /regress; G3 evidence в REVIEW; G4 abandoned until L
-- Без T-D3a+b блок не закрыт
 - 2026-09-18: --status unmet 3 + abandoned 1; --approve после GREEN (не сейчас)
 -->
