@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-18 — docs: unlazy reverify #93 TASK_93-F G1–G4 met (G5 to L)
+
+- `GATES-block-F.md`: reverify PASS (G1–G4); G5 abandoned→L
+- Первый reverify flake: missing `redis` gem (TASK_93-I) → `bundle install` → PASS
+- Next: `/review`
+
 ## 2026-09-18 — docs: unlazy reverify #93 TASK_93-E G1–G4 met (G5 to L)
 
 - `session/GATES.md` + `GATES-block-E.md`: G1–G3 approve+reverify PASS · G4 cite met · G5→L
