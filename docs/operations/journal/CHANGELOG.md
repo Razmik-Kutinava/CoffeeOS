@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-18 — docs: regress PASS #93 TASK_93-D history per_page
+
+- Local: `orders_controller_test` + `mvp_flow_test` — **20 runs, 0 failures**
+- `GATES-block-D`: G1/G2 **met** (--approve); G3 REVIEW; G4→L
+- Next: `/review`
+
 ## 2026-09-18 — docs: SPEC #93 TASK_93-K Hygiene pack (K1–K7)
 
 - `todo-block-K.md` (+ session todo): R1–R7 · K7-**B** · paymentUrl prod 422 · DEFER пусто

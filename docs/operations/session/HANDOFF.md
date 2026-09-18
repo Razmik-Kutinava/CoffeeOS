@@ -2,20 +2,22 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-18 (TASK_93-I SPEC)  
-**Ветка:** \develop
+**Дата:** 2026-09-18 (TASK_93-D regress PASS)  
+**Ветка:** `develop`
+
 | Сейчас | Дальше |
 |--------|--------|
-| **#93-I** SPEC (\	odo-block-I.md\) | \/sbr\ RED T-I1a · T-I2a · T-I3a |
-| GATES I unmet 4 · G5→L | GREEN → \/regress\ → \/review\ |
-| **#93-*** параллельно | свои ledgers (не затирать) |
+| **#93-D** regress PASS · G1/G2 met | `/review` · push · без deploy |
+| G3 D2 grep → REVIEW | G4 Fly → L |
+| канон `todo-block-D` · `GATES-block-D` | параллельные блоки — свои mirrors |
 
-**last_done:** \/spec\ TASK_93-I · R1–R9 · Redis fail-boot · verify 5/min · I3=6  
-**next_step:** \/sbr\ RED (store + verify_sms throttle)
+**last_done:** `/regress` orders+mvp_flow 20/0 · gate-check G1/G2 met  
+**next_step:** `/review` — таблица D1–D3 PASS
 
-**ctx_trim:** 6-09-02\  
-**Fly:** v495 \deployment-01M22JRN95TXRSV1PQDN49227M
-**Архив session:** [\rchive/README.md\](archive/README.md)  
-**Архив journal:** [\../journal/archive/README.md\](../journal/archive/README.md)
+**ctx_trim:** `2026-09-02`  
+**Fly:** v495 `deployment-01M22JRN95TXRSV1PQDN49227M`
+
+**Архив session:** [`archive/README.md`](archive/README.md)  
+**Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
 
 ---

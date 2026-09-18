@@ -2,16 +2,18 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-18 (TASK_93-I SPEC)  
-**Ветка:** \develop
+**Дата:** 2026-09-18 (TASK_93-D regress PASS)  
+**Ветка:** `develop`
+
 | Сейчас | Дальше |
 |--------|--------|
-| **#93-I** SPEC ready | \/sbr\ RED T-I* |
-| R1–R9 · GATES I | GREEN → approve G1–G3 · G4 \/regress\ |
-| параллельно | \GATES-block-*.md\ / \	odo-block-*\ |
+| **#93-D** G1/G2 met | `/review` |
+| Local 20 runs 0 fail | G3 REVIEW · G4→L |
+| `todo-block-D.md` | push на Review |
 
-**last_done:** \/spec\ TASK_93-I — \	odo-block-I.md\ канон · Не ломать/Проверка  
-**next_step:** \/sbr\ RED · коммит \[RED]\ · стоп до GREEN
+**last_done:** `/regress` PASS — orders_controller + mvp_flow  
+**next_step:** `/review`
 
-**ctx_trim:** 6-09-02
+**ctx_trim:** `2026-09-02`
+
 ---

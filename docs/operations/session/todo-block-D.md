@@ -4,7 +4,7 @@
 |------|----------|
 | **ID** | CBR **#93** · **TASK_93-D** |
 | **Тип** | SBR · shop API history / ЛК |
-| **Статус** | **GREEN** · Next: `/regress` · Entire `01M2STB3BHJ65BAYQM492QTT7P` |
+| **Статус** | **regress PASS** · Next: `/review` · Entire `01M2STB3BHJ65BAYQM492QTT7P` |
 | **Ветка** | `develop` |
 | **Канон** | `@spec-build-review` · `@coffeeos-commit-ops` · `@coffeeos-dev-gates` |
 | **ТЗ** | бриф чата TASK_93-D · зонтик [`TASK-93-Critical-path-hardening.md`](../milestones/veha_2/requirements/customer_tasks/TASK-93-Critical-path-hardening.md) карта D |
@@ -29,7 +29,7 @@
 - [x] PHASE 1 `/spec`
 - [x] PHASE 2 RED — `faca7e3c`
 - [x] PHASE 2 GREEN — формула per_page · T-D* PASS
-- [ ] `/regress` — G2 orders + mvp_flow
+- [x] `/regress` — G2 orders + mvp_flow · 20 runs 0 fail
 - [ ] PHASE 3 `/review` — таблица D1–D3 PASS · push · **без deploy**
 
 ## Файлы
