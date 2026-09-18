@@ -5,6 +5,7 @@ require "test_helper"
 class Shop::GuestOrderBroadcasterTest < ActiveSupport::TestCase
   include TestFactories
   include ActiveJob::TestHelper
+  include ActiveSupport::Testing::TimeHelpers
 
   setup do
     @tenant = create_tenant!
@@ -168,6 +169,49 @@ class Shop::GuestOrderBroadcasterTest < ActiveSupport::TestCase
 
     assert_no_enqueued_jobs(only: Shop::OrderReadyCascadeJob) do
       Shop::GuestOrderBroadcaster.call(order: kiosk, old_status: "preparing")
+    end
+  end
+
+  # --- TASK_93-J ---
+
+  test "T-J1a enqueues PassUpdateJob and does not call PassUpdater sync" do
+    OrderWalletPass.create!(
+      order_id: @order.id,
+      tenant_id: @tenant.id,
+      customer_id: @customer.id,
+      serial_number: "ser-#{SecureRandom.hex(8)}",
+      authentication_token: SecureRandom.hex(16),
+      pass_type_identifier: "pass.ru.coffeeos.order",
+      status_label: "accepted",
+      revision: 1
+    )
+
+    sync_called = false
+    original = Shop::AppleWallet::PassUpdater.method(:call!)
+    Shop::AppleWallet::PassUpdater.define_singleton_method(:call!) do |**|
+      sync_called = true
+      raise "PassUpdater must not run sync from GuestOrderBroadcaster"
+    end
+
+    @order.update!(status: :preparing)
+    assert_enqueued_with(job: Shop::AppleWallet::PassUpdateJob, args: [ @order.id ]) do
+      Shop::GuestOrderBroadcaster.call(order: @order.reload, old_status: "accepted")
+    end
+    assert_not sync_called, "PassUpdater.call! must not be sync from broadcaster"
+  ensure
+    Shop::AppleWallet::PassUpdater.define_singleton_method(:call!, original) if original
+  end
+
+  test "T-J3a cascade wait is SMS_GRACE + SMS_GRACE_JOB_BUFFER (20s)" do
+    freeze_time do
+      @order.update!(status: :ready)
+      buffer = Shop::OrderReadyCascadeJob.const_get(:SMS_GRACE_JOB_BUFFER)
+      assert_equal 5.seconds, buffer
+      expected_at = Time.current + Shop::OrderReadyCascadeJob::SMS_GRACE + buffer
+
+      assert_enqueued_with(job: Shop::OrderReadyCascadeJob, args: [ @order.id ], at: expected_at) do
+        Shop::GuestOrderBroadcaster.call(order: @order.reload, old_status: "preparing")
+      end
     end
   end
 end

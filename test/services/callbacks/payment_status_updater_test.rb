@@ -267,4 +267,37 @@ class Callbacks::PaymentStatusUpdaterTest < ActiveSupport::TestCase
     Callbacks::PaymentStatusUpdater.new(payment: payment2, new_status: "succeeded").call!
     assert_equal 30.to_d, IngredientTenantStock.find_by!(tenant_id: @tenant.id, ingredient_id: ingredient.id).qty
   end
+
+  # --- TASK_93-J ---
+
+  test "T-J1b GuestOrderBroadcaster runs after payment with_lock" do
+    sequence = []
+    payment = @payment
+    locked = false
+
+    payment.define_singleton_method(:with_lock) do |&block|
+      sequence << :lock_enter
+      locked = true
+      begin
+        ActiveRecord::Base.transaction(requires_new: true) { block.call }
+      ensure
+        locked = false
+        sequence << :lock_exit
+      end
+    end
+
+    original_broadcast = Shop::GuestOrderBroadcaster.method(:call)
+    Shop::GuestOrderBroadcaster.define_singleton_method(:call) do |**kwargs|
+      sequence << (locked ? :broadcaster_inside_lock : :broadcaster_after_lock)
+      original_broadcast.call(**kwargs)
+    end
+
+    Callbacks::PaymentStatusUpdater.new(payment: payment, new_status: "succeeded").call!
+
+    assert_includes sequence, :broadcaster_after_lock
+    refute_includes sequence, :broadcaster_inside_lock
+  ensure
+    payment.singleton_class.remove_method(:with_lock) if payment.singleton_class.method_defined?(:with_lock)
+    Shop::GuestOrderBroadcaster.define_singleton_method(:call, original_broadcast) if original_broadcast
+  end
 end
