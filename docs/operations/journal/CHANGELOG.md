@@ -11,6 +11,17 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-18 — review: TASK_93-D history per_page PASS
+
+- D1–D3 PASS · Local 20/0 · bugbot 0 · security 0 · Entire `01M2STB3BHJ65BAYQM492QTT7P`
+- GREEN `9d2b98a8` · Deploy = TASK_93-L (не сейчас)
+
+## 2026-09-18 — docs: regress PASS #93 TASK_93-G Tenant GUC / RLS
+
+- Zone: staff_pg_context + rls_tenant_isolation + db_triggers + customer_tenant_history → **22/0**
+- GATES-block-G: G1–G4 met · G5 abandoned→L
+- Next: `/review`
+
 ## 2026-09-18 — docs: regress PASS #93 TASK_93-B Checkout identity
 
 - Zone: order_creator + recurrent + checkout_identity + email_otp + one_click + new_card → **47/0**
