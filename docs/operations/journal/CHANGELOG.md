@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-18 — docs: unlazy reverify #93 TASK_93-K G1–G4 met (G5 to L)
+
+- `GATES-block-K.md`: reverify PASS G1–G4; G5 abandoned → TASK_93-L
+- Next: `/review`
+
 ## 2026-09-18 — feat: TASK_93-E Init idempotency [GREEN]
 
 - GREEN `2eb22c71` · RED `0a7e72ba` · zone 53/0
