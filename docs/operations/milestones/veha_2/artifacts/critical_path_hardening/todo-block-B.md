@@ -4,7 +4,7 @@
 |------|----------|
 | **ID** | CBR **#93** · **TASK_93-B** |
 | **Тип** | SBR · hot-path shop checkout / оплата / identity |
-| **Статус** | **GREEN** · Next: `/regress` |
+| **Статус** | **REGRESS PASS** · Next: `/review` |
 | **Ветка** | `develop` |
 | **RED** | `f6e2f3ca` |
 | **GREEN** | `2213cbeb` |
@@ -28,7 +28,7 @@
 - [x] PHASE 1 `/spec`
 - [x] PHASE 2 RED — `f6e2f3ca`
 - [x] PHASE 2 GREEN — `CheckoutIdentity` + Checkout · `2213cbeb` · 47/0 PASS
-- [ ] `/regress` — G3 zone
+- [x] `/regress` — 47/0 PASS (G1–G3 zone)
 - [ ] PHASE 3 `/review` — таблица B1–B5 · push · без deploy
 
 ## Файлы

@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-18 — docs: regress PASS #93 TASK_93-B Checkout identity
+
+- Zone: order_creator + recurrent + checkout_identity + email_otp + one_click + new_card → **47/0**
+- `gate-check --reverify` GATES-block-B: G1–G3 met · G4 UI · G5 abandoned→L
+- Next: `/review`
+
 ## 2026-09-18 — docs: unlazy reverify #93 TASK_93-D gates met
 
 - `GATES-block-D.md`: G1–G3 **met** (--reverify + G3 grep); G4 Fly **abandoned** → TASK_93-L
