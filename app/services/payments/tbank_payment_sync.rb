@@ -106,6 +106,7 @@ module Payments
             "payload_amount=#{state['Amount']} payment=#{@payment.amount} " \
             "order_final=#{@payment.order.final_amount}"
           )
+          report_amount_mismatch!(state)
           return :amount_mismatch
         end
       end
@@ -124,6 +125,34 @@ module Payments
       end
 
       persist_card_if_needed!(state, tbank_status)
+    end
+
+    def report_amount_mismatch!(state)
+      AdminAuditLog.log(
+        action: "tbank_amount_mismatch",
+        actor: nil,
+        entity: @payment,
+        tenant_id: @payment.tenant_id,
+        details: {
+          payload_amount: state["Amount"],
+          payment_amount: @payment.amount.to_s,
+          order_final: @payment.order.final_amount.to_s,
+          blank: state["Amount"].blank?,
+          payment_id: @payment.id,
+          order_id: @payment.order_id
+        }
+      )
+      Rails.error.report(
+        StandardError.new("T-Bank GetState/webhook amount mismatch or blank Amount"),
+        handled: true,
+        context: {
+          payment_id: @payment.id,
+          amount: state["Amount"],
+          blank: state["Amount"].blank?
+        }
+      )
+    rescue StandardError => e
+      Rails.logger.error("[TbankPaymentSync] amount mismatch report failed: #{e.class}: #{e.message}")
     end
 
     def merge_provider_data!(state, provider_id)

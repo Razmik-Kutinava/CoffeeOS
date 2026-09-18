@@ -4,8 +4,12 @@ module Inventory
   # Block F: списание ингредиентов по product_recipes (+ modifier_option_recipes) при продаже.
   # Вызывается после создания order_items, когда заказ сразу accepted (INSERT).
   # UPDATE pending→accepted покрывает DB-триггер auto_deduct_ingredients_on_order_accept.
+  #
+  # TASK_93-A: недостаток/отсутствие стока не raise (не откатывает оплату) — skip + AdminAuditLog.
   class OrderRecipeDeduction
     class Error < StandardError; end
+
+    AUDIT_ACTION = "inventory_deduction_skipped"
 
     def self.call!(order:)
       new(order: order).call!
@@ -29,19 +33,25 @@ module Inventory
         totals.each do |ingredient_id, qty_needed|
           next if qty_needed <= 0
 
-          stock = IngredientTenantStock.lock.find_or_create_by!(
+          stock = IngredientTenantStock.lock.find_by(
             tenant_id: tenant_id,
             ingredient_id: ingredient_id
-          ) do |row|
-            row.qty = 0
-            row.min_qty = 0
+          )
+
+          if stock.nil?
+            report_skip!(reason: "stock_row_absent", ingredient_id: ingredient_id, qty_needed: qty_needed)
+            next
           end
 
           new_qty = stock.qty - qty_needed
           if new_qty.negative?
-            raise Error,
-                  "Недостаточно остатка ingredient=#{ingredient_id} " \
-                  "needed=#{qty_needed} had=#{stock.qty}"
+            report_skip!(
+              reason: "insufficient_stock",
+              ingredient_id: ingredient_id,
+              qty_needed: qty_needed,
+              had_qty: stock.qty
+            )
+            next
           end
 
           stock.update!(
@@ -55,6 +65,37 @@ module Inventory
     end
 
     private
+
+    def report_skip!(reason:, ingredient_id:, qty_needed:, had_qty: nil)
+      details = {
+        reason: reason,
+        ingredient_id: ingredient_id,
+        qty_needed: qty_needed.to_s,
+        order_id: @order.id
+      }
+      details[:had_qty] = had_qty.to_s unless had_qty.nil?
+
+      AdminAuditLog.log(
+        action: AUDIT_ACTION,
+        actor: nil,
+        entity: @order,
+        tenant_id: @order.tenant_id,
+        details: details
+      )
+
+      Rails.logger.error(
+        "[Inventory::OrderRecipeDeduction] skip order=#{@order.id} reason=#{reason} " \
+        "ingredient=#{ingredient_id} needed=#{qty_needed} had=#{had_qty}"
+      )
+
+      Rails.error.report(
+        Error.new("inventory deduction skipped: #{reason}"),
+        handled: true,
+        context: details
+      )
+    rescue StandardError => e
+      Rails.logger.error("[Inventory::OrderRecipeDeduction] report failed: #{e.class}: #{e.message}")
+    end
 
     def ingredient_totals(items)
       product_ids = items.map(&:product_id).uniq

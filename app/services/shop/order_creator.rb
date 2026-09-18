@@ -130,7 +130,8 @@ module Shop
         begin
           Inventory::OrderRecipeDeduction.call!(order: order.reload) if flow[:order_status] == :accepted
         rescue Inventory::OrderRecipeDeduction::Error => e
-          raise Error, e.message
+          # TASK_93-A: склад не откатывает accepted/оплату (soft-fail + audit внутри deduction).
+          Rails.logger.error("[Shop::OrderCreator] stock soft-fail: #{e.message}")
         end
 
         bind_customer!(customer.id)

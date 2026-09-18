@@ -56,7 +56,8 @@ module Barista
         begin
           Inventory::OrderRecipeDeduction.call!(order: order.reload)
         rescue Inventory::OrderRecipeDeduction::Error => e
-          raise OrderCreationError, e.message
+          # TASK_93-A: склад не блокирует создание accepted-заказа (deduction soft-fail + audit).
+          Rails.logger.error("[Barista::OrderCreationService] stock soft-fail: #{e.message}")
         end
 
         Payment.create!(

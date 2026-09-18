@@ -7,6 +7,7 @@ module Callbacks
     TERMINAL_STATUSES = %w[
       succeeded failed refunded partially_refunded
     ].freeze
+    NON_PENDING_PAYMENT_AUDIT = "payment_on_non_pending_order"
 
     def initialize(payment:, new_status:, provider_data: {}, provider_payment_id: nil, note: nil)
       @payment = payment
@@ -14,6 +15,7 @@ module Callbacks
       @provider_data = provider_data || {}
       @provider_payment_id = provider_payment_id
       @note = note
+      @order_for_deduction = nil
     end
 
     def call!
@@ -51,6 +53,9 @@ module Callbacks
         fail_order_if_rejected!
       end
 
+      # TASK_93-A: списание после commit оплаты/accepted — склад не откатывает txn денег.
+      deduct_inventory_if_needed!
+
       @payment.reload
     end
 
@@ -65,23 +70,59 @@ module Callbacks
         return
       end
 
-      return unless @payment.order.status == "pending_payment"
+      order = @payment.order
+      unless order.status == "pending_payment"
+        audit_payment_on_non_pending_order!(order)
+        return
+      end
 
-      @payment.order.update!(status: "accepted")
+      order.update!(status: "accepted")
       OrderStatusLog.create!(
-        order: @payment.order,
+        order: order,
         status_from: "pending_payment",
         status_to: "accepted",
         changed_by_id: nil,
         source: "payment_callback",
         comment: "Оплата подтверждена callback"
       )
-      order = @payment.order.reload
-      Inventory::OrderRecipeDeduction.call!(order: order)
+      order = order.reload
+      @order_for_deduction = order
       Barista::OrderBoardBroadcaster.call(order: order, old_status: "pending_payment")
       Shop::GuestOrderBroadcaster.call(order: order, old_status: "pending_payment")
       # Quick Repeat: оплаченный заказ меняет частоту покупок — сбрасываем кэш секции «повторить»
       Shop::CustomerFrequentProductsService.bust_cache!(tenant_id: order.tenant_id, customer_id: order.customer_id)
+    end
+
+    def deduct_inventory_if_needed!
+      return unless @order_for_deduction
+
+      Inventory::OrderRecipeDeduction.call!(order: @order_for_deduction)
+    end
+
+    def audit_payment_on_non_pending_order!(order)
+      AdminAuditLog.log(
+        action: NON_PENDING_PAYMENT_AUDIT,
+        actor: nil,
+        entity: @payment,
+        tenant_id: order.tenant_id,
+        details: {
+          reason: "needs_manual_refund",
+          order_id: order.id,
+          order_status: order.status,
+          payment_id: @payment.id
+        }
+      )
+      Rails.logger.error(
+        "[PaymentStatusUpdater] succeeded on non-pending_payment order=#{order.id} " \
+        "status=#{order.status} payment=#{@payment.id} → needs_manual_refund"
+      )
+      Rails.error.report(
+        StandardError.new("payment succeeded on non-pending_payment order"),
+        handled: true,
+        context: { order_id: order.id, order_status: order.status, payment_id: @payment.id }
+      )
+    rescue StandardError => e
+      Rails.logger.error("[PaymentStatusUpdater] non-pending audit failed: #{e.class}: #{e.message}")
     end
 
     def subscription_intent?
