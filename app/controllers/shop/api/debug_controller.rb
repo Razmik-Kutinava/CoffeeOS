@@ -39,8 +39,9 @@ module Shop
           products_for_tenant: tenant_products,
           categories_for_tenant: tenant_categories,
           product_tenant_settings: pts_data,
-          # TASK_93-E probe: Init HTTP must not run under open AR txn (pool bomb).
-          ar_transaction_open: ActiveRecord::Base.connection.transaction_open?
+          # TASK_93-E probe: Init HTTP must not nest an extra AR txn (pool bomb).
+          # In CI/dev tests a single outer transactional-fixture txn may already be open (≤1).
+          ar_open_transactions: ActiveRecord::Base.connection.open_transactions
         }
       end
     end

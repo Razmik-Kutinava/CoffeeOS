@@ -523,15 +523,19 @@ class Shop::OrderCreatorTest < ActiveSupport::TestCase
     recovered = nil
     assert_nothing_raised do
       ActiveRecord::Base.transaction do
-        recovered = creator.send(
-          :create_shop_order!,
-          customer: customer,
-          params: { client_order_uuid: uuid, name: "E2" },
-          flow: flow,
-          subtotal: 200,
-          discount: 0,
-          total: 200
-        )
+        begin
+          recovered = creator.send(
+            :create_shop_order!,
+            customer: customer,
+            params: { client_order_uuid: uuid, name: "E2" },
+            flow: flow,
+            subtotal: 200,
+            discount: 0,
+            total: 200
+          )
+        rescue Shop::OrderCreator::ClientOrderReused => e
+          recovered = e.order
+        end
         # T-E2b: subsequent query in same txn must work
         assert_equal existing.id, Order.find(recovered.id).id
       end

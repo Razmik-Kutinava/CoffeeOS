@@ -11,6 +11,16 @@ module Shop
       end
     end
 
+    # TASK_93-E: peer won the client_order_uuid race — return existing, do not create items/payment.
+    class ClientOrderReused < StandardError
+      attr_reader :order
+
+      def initialize(order)
+        @order = order
+        super("client_order_uuid already exists")
+      end
+    end
+
     attr_reader :payment_url, :provider_payment_id, :card_binding
 
     def initialize(session, tenant:, request: nil)
@@ -64,17 +74,18 @@ module Shop
 
       order = nil
       payment = nil
-      ActiveRecord::Base.transaction do
-        # В1 гибрид смены: витрина/shop не привязана к CashShift (cash_shift_id остаётся NULL).
-        # Barista POS — только через OrderCreationService с открытой сменой. См. docs/operations/milestones/veha_1/reference/ORDER_ENTRY_AUDIT.md.
-        order = create_shop_order!(
-          customer: customer,
-          params: params,
-          flow: flow,
-          subtotal: subtotal,
-          discount: discount,
-          total: total
-        )
+      begin
+        ActiveRecord::Base.transaction do
+          # В1 гибрид смены: витрина/shop не привязана к CashShift (cash_shift_id остаётся NULL).
+          # Barista POS — только через OrderCreationService с открытой сменой. См. docs/operations/milestones/veha_1/reference/ORDER_ENTRY_AUDIT.md.
+          order = create_shop_order!(
+            customer: customer,
+            params: params,
+            flow: flow,
+            subtotal: subtotal,
+            discount: discount,
+            total: total
+          )
 
         product_ids = cart_data[:items].map { |line| line[:product_id] }.uniq
         products_by_id = Product.where(id: product_ids).index_by(&:id)
@@ -136,6 +147,9 @@ module Shop
 
         bind_customer!(customer.id)
         clear_cart! if flow[:order_status] == :accepted
+      end
+      rescue ClientOrderReused => e
+        return e.order
       end
 
       # Quick Repeat: новый заказ меняет частоту покупок — сбрасываем кэш секции «повторить»
@@ -260,22 +274,33 @@ module Shop
     end
 
     def create_shop_order!(customer:, params:, flow:, subtotal:, discount:, total:)
-      Order.create!(
-        tenant_id: @tenant.id,
-        customer_id: customer.id,
-        customer_name: customer.full_name.presence || params[:name].presence || "Гость",
-        order_number: "",
-        source: @order_source,
-        status: flow[:order_status],
-        total_amount: subtotal,
-        discount_amount: discount,
-        final_amount: total,
-        promo_code_id: nil,
-        client_order_uuid: params[:client_order_uuid].presence
-      )
-    rescue ActiveRecord::RecordNotUnique
-      find_client_order_duplicate!(params[:client_order_uuid]) ||
+      # TASK_93-E: requires_new savepoint — RecordNotUnique must not poison outer txn
+      # (InFailedSqlTransaction / pool left in failed state).
+      order = nil
+      begin
+        ActiveRecord::Base.transaction(requires_new: true) do
+          order = Order.create!(
+            tenant_id: @tenant.id,
+            customer_id: customer.id,
+            customer_name: customer.full_name.presence || params[:name].presence || "Гость",
+            order_number: "",
+            source: @order_source,
+            status: flow[:order_status],
+            total_amount: subtotal,
+            discount_amount: discount,
+            final_amount: total,
+            promo_code_id: nil,
+            client_order_uuid: params[:client_order_uuid].presence
+          )
+        end
+      rescue ActiveRecord::RecordNotUnique
+        order = nil
+      end
+      return order if order
+
+      dup = find_client_order_duplicate!(params[:client_order_uuid]) ||
         raise(Error, "Заказ с таким идентификатором уже создан")
+      raise ClientOrderReused.new(dup)
     end
 
     def find_client_order_duplicate!(client_order_uuid)
@@ -302,10 +327,14 @@ module Shop
     def attach_client_order_uuid!(order, client_order_uuid)
       return order if client_order_uuid.blank? || order.client_order_uuid == client_order_uuid
 
-      order.update!(client_order_uuid: client_order_uuid)
-      order
-    rescue ActiveRecord::RecordNotUnique
-      find_client_order_duplicate!(client_order_uuid) || order
+      begin
+        ActiveRecord::Base.transaction(requires_new: true) do
+          order.update!(client_order_uuid: client_order_uuid)
+        end
+        order
+      rescue ActiveRecord::RecordNotUnique
+        find_client_order_duplicate!(client_order_uuid) || order
+      end
     end
 
     def find_reusable_pending_order!(cart_data, params)
@@ -350,6 +379,12 @@ module Shop
     def init_gateway_payment!(order, payment, save_card: false)
       save_card = ActiveModel::Type::Boolean.new.cast(save_card)
       stamp_save_card_intent!(payment, save_card)
+
+      # TASK_93-E / E1: never overwrite a live provider_payment_id (webhook would be lost).
+      if payment.provider_payment_id.present?
+        @provider_payment_id = payment.provider_payment_id.to_s
+        return
+      end
 
       return_base_url = ENV.fetch("TBANK_RETURN_URL", @request&.base_url.to_s)
       notification_url = "#{return_base_url}/callbacks/tbank"
