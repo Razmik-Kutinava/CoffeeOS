@@ -53,7 +53,11 @@ module Barista
           )
         end
 
-        Inventory::OrderRecipeDeduction.call!(order: order.reload)
+        begin
+          Inventory::OrderRecipeDeduction.call!(order: order.reload)
+        rescue Inventory::OrderRecipeDeduction::Error => e
+          raise OrderCreationError, e.message
+        end
 
         Payment.create!(
           order_id:  order.id,

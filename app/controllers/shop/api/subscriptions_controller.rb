@@ -2,7 +2,7 @@
 
 module Shop
   module Api
-    # #78 slice-5: публичный Shop API подписки (GET/POST/auto_renew; cancel/confirm → 501).
+    # #78 slice-5: публичный Shop API подписки (GET/POST/auto_renew/cancel/confirm).
     class SubscriptionsController < Shop::Api::BaseController
       before_action :require_customer!
 
@@ -57,11 +57,22 @@ module Shop
       end
 
       def cancel
-        render json: { error: "not_implemented", slice: 3 }, status: :not_implemented
+        sub = current_subscription
+        return render json: { error: "Подписка не найдена" }, status: :not_found unless sub
+
+        sub = Subscriptions::CancelService.call(subscription: sub)
+        render json: serialize_subscription(sub)
+      rescue Subscriptions::CancelService::Error => e
+        render json: { error: e.message }, status: :unprocessable_entity
       end
 
       def confirm_payment
-        render json: { error: "not_implemented", slice: 4 }, status: :not_implemented
+        sub = Subscriptions::ConfirmPaymentService.call(customer: @customer)
+        render json: serialize_subscription(sub)
+      rescue Subscriptions::ConfirmPaymentService::Error => e
+        render json: { error: e.message }, status: :unprocessable_entity
+      rescue Subscriptions::PaymentFulfillment::Error => e
+        render json: { error: e.message }, status: :unprocessable_entity
       end
 
       private

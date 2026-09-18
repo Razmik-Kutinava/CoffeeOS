@@ -191,10 +191,8 @@
       openTipsService(order.id, tenantId, TIPS_SERVICE_URL)
       return
     }
-    // #78 cancel/confirm_payment still 501 — do not land on dead profile purchase
     if (kind === "subscription") {
-      const tenantId = order?.tenant_id || order?.sales_point?.tenant_id || ""
-      openTipsService(order.id, tenantId, TIPS_SERVICE_URL)
+      push("/profile")
     }
   }
 

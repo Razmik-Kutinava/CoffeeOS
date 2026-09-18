@@ -42,7 +42,8 @@ class Payments::TbankPaymentSyncTest < ActiveSupport::TestCase
   test "sync accepts order when GetState returns CONFIRMED" do
     assert sync_with_state(
       "Status" => "CONFIRMED",
-      "PaymentId" => "pay-sync-1"
+      "PaymentId" => "pay-sync-1",
+      "Amount" => 17_900
     )
 
     assert @order.reload.accepted?
@@ -55,6 +56,7 @@ class Payments::TbankPaymentSyncTest < ActiveSupport::TestCase
     assert sync_with_state(
       "Status" => "CONFIRMED",
       "PaymentId" => "pay-sync-1",
+      "Amount" => 17_900,
       "RebillId" => "rebill-sync-5953",
       "Pan" => "220220******5953",
       "ExpDate" => "0927",
@@ -65,6 +67,27 @@ class Payments::TbankPaymentSyncTest < ActiveSupport::TestCase
     assert card, "finalize/GetState должен создать UserCards при RebillId"
     assert_equal "*5953", card.pan_display
     assert_equal "MIR", card.card_brand
+  end
+
+  test "sync does not accept order when GetState Amount mismatches" do
+    assert_not sync_with_state(
+      "Status" => "CONFIRMED",
+      "PaymentId" => "pay-sync-1",
+      "Amount" => 100
+    )
+
+    assert @order.reload.pending_payment?
+    assert @payment.reload.pending?
+  end
+
+  test "sync does not accept order when GetState Amount is blank" do
+    assert_not sync_with_state(
+      "Status" => "CONFIRMED",
+      "PaymentId" => "pay-sync-1"
+    )
+
+    assert @order.reload.pending_payment?
+    assert @payment.reload.pending?
   end
 
   test "sync_for_rebill retries GetState until RebillId then persists UserCards" do

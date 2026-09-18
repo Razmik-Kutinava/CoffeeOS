@@ -219,11 +219,10 @@ module Payments
       TBANK_STATUS_MAP[tbank_status.to_s.upcase]
     end
 
-    # Webhook Amount — копейки (как в Init). Сверка с payment.amount / order.final_amount.
-    # Пустой Amount — пропуск (как optional amount в EventsController).
+    # Webhook/GetState Amount — копейки. Пустой Amount на CONFIRMED/succeeded — mismatch.
     def self.notification_amount_matches?(payment, payload)
       raw = payload["Amount"]
-      return true if raw.blank?
+      return false if raw.blank?
 
       callback_kopecks = raw.to_i
       expected_payment_kopecks = (BigDecimal(payment.amount.to_s) * 100).to_i

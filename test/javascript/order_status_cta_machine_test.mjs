@@ -143,7 +143,7 @@ describe("orderStatusCtas (#38 / #40 step 5)", () => {
     )
   })
 
-  it("#78 hides subscription CTA even when offer eligible", () => {
+  it("#78 shows subscription CTA when offer eligible on ready", () => {
     const view = orderStatusCtas({
       status: "ready",
       os: "android",
@@ -154,7 +154,7 @@ describe("orderStatusCtas (#38 / #40 step 5)", () => {
     })
     assert.deepEqual(
       view.buttons.map((b) => b.kind),
-      ["chat", "tips"]
+      ["chat", "subscription"]
     )
   })
 })

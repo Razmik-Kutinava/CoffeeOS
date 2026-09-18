@@ -29,7 +29,8 @@ class Callbacks::TbankControllerTest < ActionDispatch::IntegrationTest
           "Success" => true,
           "ErrorCode" => "0",
           "Status" => "CONFIRMED",
-          "PaymentId" => payment_id.to_s
+          "PaymentId" => payment_id.to_s,
+          "Amount" => 50_000
         }
       end
     end

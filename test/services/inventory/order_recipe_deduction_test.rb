@@ -32,15 +32,42 @@ class Inventory::OrderRecipeDeductionTest < ActiveSupport::TestCase
       order: order,
       product_id: @product.id,
       product_name: @product.name,
-      quantity: 2,
+      quantity: 1,
       unit_price: 200,
-      total_price: 400
+      total_price: 200
     )
 
     Inventory::OrderRecipeDeduction.call!(order: order)
 
     stock = IngredientTenantStock.find_by!(tenant_id: @tenant.id, ingredient_id: @ingredient.id)
-    assert_equal 0.to_d, stock.qty, "40 - 2×25 clamped at 0"
+    assert_equal 15.to_d, stock.qty, "40 - 1×25"
+  end
+
+  test "raises when stock is insufficient" do
+    order = Order.create!(
+      tenant: @tenant,
+      order_number: "DED-LOW",
+      source: "manual",
+      status: "accepted",
+      total_amount: 200,
+      discount_amount: 0,
+      final_amount: 200
+    )
+    OrderItem.create!(
+      order: order,
+      product_id: @product.id,
+      product_name: @product.name,
+      quantity: 2,
+      unit_price: 200,
+      total_price: 400
+    )
+
+    assert_raises(Inventory::OrderRecipeDeduction::Error) do
+      Inventory::OrderRecipeDeduction.call!(order: order)
+    end
+
+    stock = IngredientTenantStock.find_by!(tenant_id: @tenant.id, ingredient_id: @ingredient.id)
+    assert_equal 40.to_d, stock.qty
   end
 
   test "no-op when order not accepted" do

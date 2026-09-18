@@ -2,7 +2,7 @@
 
 require "test_helper"
 
-# #78 slice-5 [TDD][RED] Shop API subscriptions: GET/POST + auto_renew; cancel/confirm 501
+# #78 Shop API subscriptions: GET/POST + auto_renew + cancel/confirm
 class Shop::Api::SubscriptionsApiTest < ActionDispatch::IntegrationTest
   include TestFactories
   include ShopEmailTestHelper
@@ -243,9 +243,9 @@ class Shop::Api::SubscriptionsApiTest < ActionDispatch::IntegrationTest
     end
   end
 
-  # --- cancel / confirm_payment contract (501 until later slices) ---
+  # --- cancel / confirm_payment ---
 
-  test "POST cancel returns 501 not_implemented slice 3" do
+  test "POST cancel marks current subscription canceled and stops auto_renew" do
     create_active_subscription!
 
     open_session do |sess|
@@ -253,25 +253,54 @@ class Shop::Api::SubscriptionsApiTest < ActionDispatch::IntegrationTest
       sess.post "/shop/api/subscriptions/current/cancel",
         headers: shop_headers,
         as: :json
-      assert_equal 501, sess.response.status, sess.response.body
+      assert_equal 200, sess.response.status, sess.response.body
       body = sess.response.parsed_body
-      assert_equal "not_implemented", body["error"]
-      assert_equal 3, body["slice"]
+      assert_equal "canceled", body["status"]
+      assert_equal false, body["auto_renew"]
+      sub = Subscription.find_by!(customer_id: @customer.id)
+      assert_equal "canceled", sub.status
+      assert_equal false, sub.auto_renew
     end
   end
 
-  test "POST confirm_payment returns 501 not_implemented slice 4" do
-    create_active_subscription!
+  test "POST confirm_payment fulfills pending subscription Charge via GetState" do
+    order = Order.create!(
+      tenant_id: @tenant.id,
+      customer_id: @customer.id,
+      customer_name: "Sub",
+      order_number: "",
+      source: :mobile,
+      status: :pending_payment,
+      total_amount: 499,
+      discount_amount: 0,
+      final_amount: 499
+    )
+    Payment.create!(
+      tenant_id: @tenant.id,
+      order_id: order.id,
+      amount: 499,
+      method: :card,
+      status: :pending,
+      provider: "tbank",
+      provider_payment_id: "sub-confirm-1",
+      provider_data: {
+        "subscription_intent" => true,
+        "subscription_plan_id" => @plan.id,
+        "subscription_payment_method_id" => @payment_method.id,
+        "auto_renew" => true,
+        "save_card" => false
+      }
+    )
 
     open_session do |sess|
       login!(sess)
       sess.post "/shop/api/subscriptions/current/confirm_payment",
         headers: shop_headers,
         as: :json
-      assert_equal 501, sess.response.status, sess.response.body
+      assert_equal 200, sess.response.status, sess.response.body
       body = sess.response.parsed_body
-      assert_equal "not_implemented", body["error"]
-      assert_equal 4, body["slice"]
+      assert_equal "active", body["status"]
+      assert_equal @plan.code, body["plan_code"]
     end
   end
 end
@@ -299,6 +328,18 @@ module FakeTbankSubscription
         "Status" => "CONFIRMED",
         "PaymentId" => payment_id,
         "ErrorCode" => "0"
+      }
+    end
+
+    def get_payment_state(payment_id:)
+      return super unless FakeTbankSubscription.enabled
+
+      {
+        "Success" => true,
+        "ErrorCode" => "0",
+        "Status" => "CONFIRMED",
+        "PaymentId" => payment_id.to_s,
+        "Amount" => 49_900
       }
     end
   end

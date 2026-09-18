@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-18 — fix: GetState Amount + inventory hard-fail + #78 cancel/confirm
+
+- GetState CONFIRMED: `notification_amount_matches?` до succeeded; blank Amount fail-closed
+- Inventory: недостаточно остатка → `OrderRecipeDeduction::Error` (не clamp в 0)
+- #78: `CancelService` + `ConfirmPaymentService` (GetState + PaymentFulfillment); Shop API не 501
+- Local: Rails 46+4 PASS · JS CTA 17 PASS · Fly MCP skip (нет deploy)
+
 ## 2026-09-18 — fix: P0/P1 crits (tips, Tbank mismatch, FCM tenant, Callcheck×2, SMS HMAC)
 
 - Tips CTA: default URL + same-tab fallback как chat (#94); FCM `action=tips` → `openTipsService`

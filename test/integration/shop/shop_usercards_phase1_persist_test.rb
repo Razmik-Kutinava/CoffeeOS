@@ -195,6 +195,7 @@ class Shop::ShopUsercardsPhase1PersistTest < ActionDispatch::IntegrationTest
       "Success" => true,
       "ErrorCode" => "0",
       "Status" => "CONFIRMED",
+      "Amount" => 17_900,
       "RebillId" => "rebill-fin-5953",
       "Pan" => "220196******5953",
       "ExpDate" => "0927",

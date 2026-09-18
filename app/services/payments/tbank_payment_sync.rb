@@ -46,8 +46,8 @@ module Payments
       state = fetch_state!(provider_id)
       return false unless state
 
-      apply_state!(state)
-      true
+      result = apply_state!(state)
+      result != :amount_mismatch
     rescue TbankAdapter::Error => e
       Rails.logger.warn("[TbankPaymentSync] payment=#{@payment.id} #{e.message}")
       false
@@ -98,6 +98,17 @@ module Payments
       tbank_status = state["Status"].to_s
       our_status = TbankAdapter.map_status(tbank_status)
       provider_id = state["PaymentId"].to_s.presence || @payment.provider_payment_id.to_s
+
+      if our_status == "succeeded" && @payment.status != "succeeded"
+        unless TbankAdapter.notification_amount_matches?(@payment, state)
+          Rails.logger.error(
+            "[TbankPaymentSync] amount mismatch payment=#{@payment.id} " \
+            "payload_amount=#{state['Amount']} payment=#{@payment.amount} " \
+            "order_final=#{@payment.order.final_amount}"
+          )
+          return :amount_mismatch
+        end
+      end
 
       if our_status && @payment.status != our_status
         Callbacks::PaymentStatusUpdater.new(

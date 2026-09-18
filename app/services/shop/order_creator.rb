@@ -127,7 +127,11 @@ module Shop
           }
         )
 
-        Inventory::OrderRecipeDeduction.call!(order: order.reload) if flow[:order_status] == :accepted
+        begin
+          Inventory::OrderRecipeDeduction.call!(order: order.reload) if flow[:order_status] == :accepted
+        rescue Inventory::OrderRecipeDeduction::Error => e
+          raise Error, e.message
+        end
 
         bind_customer!(customer.id)
         clear_cart! if flow[:order_status] == :accepted

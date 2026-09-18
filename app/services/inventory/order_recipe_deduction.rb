@@ -39,11 +39,9 @@ module Inventory
 
           new_qty = stock.qty - qty_needed
           if new_qty.negative?
-            Rails.logger.warn(
-              "[Inventory::OrderRecipeDeduction] clamped stock to 0 " \
-              "order=#{@order.id} ingredient=#{ingredient_id} needed=#{qty_needed} had=#{stock.qty}"
-            )
-            new_qty = 0
+            raise Error,
+                  "Недостаточно остатка ingredient=#{ingredient_id} " \
+                  "needed=#{qty_needed} had=#{stock.qty}"
           end
 
           stock.update!(
