@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-18 - review done: #93 TASK_93-A CI green
+
+- A1-A6 PASS · FIX 77291dc6 trigger no-op · push develop · CI 35326857443 SUCCESS (tip 7c34314a)
+- Entire 01M2SSQXT1V67AK260SH1P9RAX · GATES G1-G3 met · G4 Fly = L
+- Next: deploy only with owner approval
+
 ## 2026-09-18 - review: #93 TASK_93-A money-order + trigger no-op
 
 - bugbot/security: hard auto_deduct bypassed soft-fail -> migration no-op; Ruby sole deduct

@@ -3,19 +3,19 @@
 | Поле | Значение |
 |------|----------|
 | **ID** | CBR **#93** · **TASK_93-A** |
-| **Статус** | **REVIEW** · push pending |
+| **Статус** | **REVIEW done** · CI green `35326857443` · deploy = L |
 | **RED** | `fc97a432` |
 | **GREEN** | `bba068f9` |
 | **FIX** | `77291dc6` (trigger no-op) |
 | **Entire** | `01M2SSQXT1V67AK260SH1P9RAX` |
+| **CI** | tip `7c34314a` · run `35326857443` SUCCESS |
 | **GATES** | G1–G3 met · G4→L |
 
 ## SBR
 
 - [x] RED/GREEN/regress/unlazy
-- [x] `/review` local 80/0 · bugbot hole → FIX trigger · security reviewed
-- [ ] push → CI green
-- [ ] deploy = L only
+- [x] `/review` local · bugbot→FIX · security · Entire · push · **CI green**
+- [ ] deploy = TASK_93-L (апрув)
 
 ## Acceptance A1–A6
 
@@ -30,4 +30,4 @@ A6 T-A6a T-A6b     PASS
 
 ## Next
 
-push · CI · deploy апрув (L)
+deploy — только по апруву (блок L)
