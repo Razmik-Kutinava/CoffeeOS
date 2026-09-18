@@ -87,3 +87,36 @@
 - Интейк PHASE 0: 2026-07-29. Код / `todo.md` / SPEC не трогали — ждут go → PHASE 1.
 - Пути тестов в ТЗ (`src/components/…`, React Testing Library, Jest/Supertest) — из шаблона заказчика; в CoffeeOS канон: Rails `test/` + Svelte/Vitest `app/frontend/` — маппинг на SPEC.
 - Связанные ТЗ: СБП Deep Link + токенизация (`Интеграция оплаты СБП…`), CODE:BLACK lifecycle, анализ статусной модели Т-Банк — не дублировать без сверки на SPEC.
+
+---
+
+## Патч 1: 2026-09-17
+
+Основание: аудит от 2026-09-17, факты `app/frontend/lib/shopInlinePayFsm.js:23–36, 144–154, 201–238`, `app/frontend/lib/shopWidgetPayFsm.js:16–17, 66–69`, `app/frontend/lib/widgetRepeatPayFlow.js:161–169`, `app/frontend/components/InlinePayFallback.svelte:28–88`.
+
+### Расхождение
+
+- **Subtask 8:** PROCESSING/ротация есть, но UI в `InlinePayFallback`, не внутри главной payment button (`RepeatSection` / `shop-repeat-card-pay`).
+- **Subtask 10:** интервалы 1800/1500 есть; вывод не гарантирован на кнопке.
+- **Subtask 12:** 1051 → длинный `INLINE_CARD_ERROR_LABEL`; ERROR→IDLE через 3 с не для error.
+- **Subtask 13:** timeout 15 с → «Нет связи. Повторить» без auto-reset IDLE.
+
+### Исправленный сценарий
+
+- [ ] Subtask 8 (patch v1): Given пользователь выбрал сохранённую карту, When шторка закрывается и начинается оплата, Then главная payment button → PROCESSING, блокируется и **внутри неё** «Ещё чуть-чуть...».
+- [ ] Subtask 10 (patch v1): Given кнопка в PROCESSING, When каждые 1800 мс, Then текст **внутри кнопки** циклически: «Ещё чуть-чуть...» → «Связываемся с банком...» → «Платеж принимается от банка...»; polling каждые 1500 мс.
+- [ ] Subtask 12 (patch v1): Given REJECTED/CANCELED, Then кнопка красная; 1051 → ровно «Недостаточно средств»; иначе → «Ошибка оплаты»; через 3000 мс → IDLE.
+- [ ] Subtask 13 (patch v1): Given 15000 мс без финала, Then красная кнопка «Ошибка оплаты» или «Время ожидания истекло»; через 3000 мс → IDLE.
+- [ ] Subtask 12/13 (patch v1): при ошибке/timeout сохранить retry / другую карту / fallback; API payment не менять.
+
+### Не трогать
+
+См. `COMPONENT_MAP.md` (CartSheet, cartSheetStore, OrderStatusSheet, Checkout, PaymentMethodsSheet).
+
+Не изменять: TASK-PERSONAL-CABINET-EXT / Profile / OrderReceipt; стандартный checkout; CartSheet / Quick Repeat граница; cartSheetStore clear; OrderStatusSheet / `/orders/active`; payment API / widget_init / Charge / webhook; ОФД; SBP flow кроме fallback; Quick Repeat orchestration как отдельную фичу.
+
+### Scope
+
+Разрешено: UI/state inline payment; статусы внутри главной pay button; 1051 short label; timeout 15 с по сценарию; ERROR→IDLE 3000 мс; retry/fallback; targeted tests.
+
+Запрещено: ЛК history repeat; новый one-click; backend payment API; checkout; active-order; CartSheet/OrderStatusSheet/cartSheetStore ради ЛК; T-Bank за пределами UI/state.

@@ -10,7 +10,8 @@ import { fileURLToPath } from "node:url"
 import { dirname, join } from "node:path"
 
 import {
-  INLINE_CARD_ERROR_LABEL,
+  INLINE_INSUFFICIENT_FUNDS_LABEL,
+  INLINE_GENERIC_ERROR_LABEL,
   INLINE_NETWORK_ERROR_LABEL,
   mapTbankInlineError,
   classifyInlinePayErrorLabel
@@ -25,41 +26,40 @@ import { resolveNetworkRetryUi } from "../../app/frontend/lib/widgetRepeatPayFlo
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "../..")
 
-const CARD_MSG =
+/** Checkout / shopPayFsm — длинный канон 2026-08-13 (не Патч 1 inline). */
+const CHECKOUT_CARD_MSG =
   "Недостаточно средств, или карта заблокирована банком, или истёк срок действия карты"
 const NET_MSG = "Нет связи. Повторить"
 
-describe("payment error user messages — labels [TDD]", () => {
-  it("exports exact customer card and network texts", () => {
-    assert.equal(INLINE_CARD_ERROR_LABEL, CARD_MSG)
+describe("payment error user messages — inline labels [Патч 1]", () => {
+  it("exports short 1051 + generic + network texts", () => {
+    assert.equal(INLINE_INSUFFICIENT_FUNDS_LABEL, "Недостаточно средств")
+    assert.equal(INLINE_GENERIC_ERROR_LABEL, "Ошибка оплаты")
     assert.equal(INLINE_NETWORK_ERROR_LABEL, NET_MSG)
   })
 
-  it("maps card ErrorCodes (1051/1054/1014) to card message", () => {
-    assert.equal(mapTbankInlineError({ error_code: "1051" }), CARD_MSG)
-    assert.equal(mapTbankInlineError({ error_code: "1054" }), CARD_MSG)
-    assert.equal(mapTbankInlineError({ error_code: "1014" }), CARD_MSG)
+  it("maps 1051 short; other codes → «Ошибка оплаты»", () => {
+    assert.equal(mapTbankInlineError({ error_code: "1051" }), "Недостаточно средств")
+    assert.equal(mapTbankInlineError({ error_code: "1054" }), "Ошибка оплаты")
+    assert.equal(mapTbankInlineError({ error_code: "1014" }), "Ошибка оплаты")
   })
 
   it("keeps generic label for unknown bank code (no technical codes in UI)", () => {
-    assert.equal(
-      mapTbankInlineError({ error_code: "9999" }),
-      "Ошибка оплаты, попробуйте снова"
-    )
+    assert.equal(mapTbankInlineError({ error_code: "9999" }), "Ошибка оплаты")
     assert.ok(!/\d{3,}/.test(mapTbankInlineError({ error_code: "9999" })))
   })
 
-  it("classifyInlinePayErrorLabel: offline/timeout → network; card code → card", () => {
+  it("classifyInlinePayErrorLabel: offline/timeout → network; 1051 → short", () => {
     const netErr = new Error("Failed to fetch")
     assert.equal(classifyInlinePayErrorLabel({ error: netErr }), NET_MSG)
     assert.equal(classifyInlinePayErrorLabel({ kind: "timeout" }), NET_MSG)
-    assert.equal(classifyInlinePayErrorLabel({ error_code: "1051" }), CARD_MSG)
+    assert.equal(classifyInlinePayErrorLabel({ error_code: "1051" }), "Недостаточно средств")
   })
 })
 
 describe("payment error user messages — checkout FSM labels [TDD]", () => {
   it("CLIENT_ERROR / NET_ERROR labels match customer copy", () => {
-    assert.equal(PAY_FSM_LABELS[PAY_FSM.CLIENT_ERROR], CARD_MSG)
+    assert.equal(PAY_FSM_LABELS[PAY_FSM.CLIENT_ERROR], CHECKOUT_CARD_MSG)
     assert.equal(PAY_FSM_LABELS[PAY_FSM.NET_ERROR], NET_MSG)
   })
 
@@ -84,7 +84,7 @@ describe("payment error user messages — sheet inline on pay decline [TDD #26 s
   it("resolveCheckoutSheetInlineError returns friendly labels for NET/CLIENT/BANK", () => {
     const raw = new Error("Failed to fetch")
     assert.equal(resolveCheckoutSheetInlineError(raw, PAY_FSM.NET_ERROR), NET_MSG)
-    assert.equal(resolveCheckoutSheetInlineError(raw, PAY_FSM.CLIENT_ERROR), CARD_MSG)
+    assert.equal(resolveCheckoutSheetInlineError(raw, PAY_FSM.CLIENT_ERROR), CHECKOUT_CARD_MSG)
     assert.equal(
       resolveCheckoutSheetInlineError(raw, PAY_FSM.BANK_ERROR),
       PAY_FSM_LABELS[PAY_FSM.BANK_ERROR]

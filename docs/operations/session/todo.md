@@ -1,97 +1,53 @@
-# todo — #93 TASK_93-I: OTP / rate limit / auth abuse
-
-**Канон блока при race session todo** — этот файл. Session `todo.md` может быть чужим блоком.
+# todo — Патч 1: inline-оплата Т‑Банка — статусы в кнопке
 
 | Поле | Значение |
 |------|----------|
-| **ID** | CBR **#93** · **TASK_93-I** |
-| **Тип** | SBR · hot-path shop auth / Rack::Attack |
-| **Статус** | **SPEC** · Next: `/sbr` RED |
+| **ID** | Inline T‑Bank · **Патч 1** (2026-09-17) |
+| **Тип** | SBR · patch · hot-path shop pay UI |
+| **Статус** | **BUILD** · RED→GREEN |
 | **Ветка** | `develop` |
-| **Канон** | `@spec-build-review` · `@coffeeos-commit-ops` · `@coffeeos-dev-gates` |
-| **ТЗ** | бриф чата I1–I4 · зонтик [`TASK-93-Critical-path-hardening.md`](../milestones/veha_2/requirements/customer_tasks/TASK-93-Critical-path-hardening.md) карта I |
-| **GATES** | [`GATES-block-I.md`](../milestones/veha_2/artifacts/critical_path_hardening/GATES-block-I.md) |
-| **Цель** | Attack limits **общие** на Fly (Redis); `verify_sms` (+ legacy/email) throttled → 429; SMS OTP **6** + UI; short-link без дубля |
-| **OUT** | Callcheck · SMS.ru · app Solid→Redis · **Fly Redis deploy (L)** |
-| **Зависимость** | C4 rule `shop/order_short_link/ip` уже в HEAD; Redis secret = **L** |
-
-## Канон продукта (зафиксировано SPEC)
-
-| ID | Решение |
-|----|---------|
-| **R1 (I1)** | prod или `FLY_APP_NAME` → `RedisCacheStore`; URL = `RACK_ATTACK_REDIS_URL` \|\| `REDIS_URL`. Dev без URL → MemoryStore + warn. Test → MemoryStore |
-| **R2** | SolidCache **запрещён** для Attack |
-| **R3 (I2)** | `verify_sms` + legacy `verify`: **5 / 1.minute** по **IP** и **phone**. Имена `shop/phone_otp_verify_sms/ip`, `…/phone`. Retry-After **60** |
-| **R4** | `email_otp/verify`: **5 / 1.minute** IP + email. `shop/email_otp_verify/ip`, `…/email` |
-| **R5 (I3)** | **IN SCOPE**: `%06d` в `PhoneOtp#send_sms_code!`; UI `PIN_LENGTH`/`SMS_PIN_LENGTH`=6. Callcheck/flash/`test_code` не трогать |
-| **R6 (I4)** | одно `shop/order_short_link/ip` — не дублировать |
-| **R7** | `MAX_ATTEMPTS` defense-in-depth |
-| **R8** | prod/FLY без Redis URL → **fail boot** |
-| **R9** | CI redis service + `REDIS_URL`; T-I1b skip без URL locally |
+| **ТЗ** | [`Интеграция inline-оплаты Т-Банка…`](../milestones/veha_2/requirements/customer_tasks/Интеграция%20inline-оплаты%20Т-Банка%20с%20динамическими%20статусами%20внутри%20кнопки.md) · секция **Патч 1** |
+| **Цель** | Subtask 8/10/12/13 (patch v1): PROCESSING/ротация **внутри** `shop-repeat-card-pay`; 1051→«Недостаточно средств»; ERROR/timeout → IDLE через 3000 мс |
 
 ## SBR
 
-- [x] PHASE 0 `/start`
-- [x] `/unlazy` — `07538476`
-- [x] PHASE 1 `/spec` — этот файл (+ session todo если не race)
-- [ ] PHASE 2 RED — T-I1a · T-I2a · T-I3a · `[RED]`
-- [ ] PHASE 2 GREEN — R1–R9 · `[GREEN]`
+- [x] PHASE 0 /start (чат)
+- [x] PHASE 1 SPEC — этот файл
+- [ ] PHASE 2 RED — failing tests `[RED]`
+- [ ] PHASE 2 GREEN — UI/FSM/flow `[GREEN]`
 - [ ] `/regress` — § Проверка
-- [ ] PHASE 3 `/review` — I1–I4 PASS · push · **без deploy Redis**
+- [ ] PHASE 3 `/review` — после GREEN
 
 ## Файлы (ожидаемо)
 
-- `config/initializers/rack_attack.rb` — store + verify/email throttles
-- `Gemfile` (+ lock) — `gem "redis"`
-- `app/services/shop/phone_otp.rb` — `%06d`
-- `app/frontend/lib/phoneAuthWizard.js` — `PIN_LENGTH = 6`
-- `app/frontend/lib/shopSmsPinPad.js` — `SMS_PIN_LENGTH = 6`
-- `test/integration/rack_attack_otp_verify_test.rb` — создать T-I2*
-- `test/integration/rack_attack_store_test.rb` — создать T-I1*
-
-### Blast-radius
-
-- `test/services/shop/phone_otp_test.rb` — T-I3
-- `test/integration/rack_attack_order_short_link_test.rb` — T-I4
-- `.github/workflows/ci.yml` — redis (R9)
-- `REDIS_RACK_ATTACK.md` — новый runbook (secret → L)
-
-## Матрица приёмки
-
-| ID | Assert |
-|----|--------|
-| T-I1a | prod/FLY+URL → Redis* store |
-| T-I1b | shared increment (CI redis) |
-| T-I1c | без URL → boot raise |
-| T-I2a | N+1 verify_sms → 429 |
-| T-I2b | under limit ≠ 429 |
-| T-I2c | phone key across IPs |
-| T-I2d | legacy verify → 429 |
-| T-I2e | email verify → 429 |
-| T-I3a–c | 6 digits + UI |
-| T-I4a–c | one `/o/` rule + 429 |
-
-Без T-I1a + T-I2a блок не закрыт.
+- `app/frontend/lib/shopInlinePayFsm.js` — labels 1051 / «Ошибка оплаты» / ротация «от банка»
+- `app/frontend/lib/widgetRepeatPayFlow.js` — timeout label + `resetAfterMs` на ERROR/timeout
+- `app/frontend/components/RepeatSection.svelte` — статус внутри `shop-repeat-card-pay`
+- `app/frontend/components/InlinePayFallback.svelte` — не дублировать status bar, если хост-кнопка
+- `test/javascript/shop_inline_pay_button_fsm_test.mjs` — патч-ассерты
+- `test/javascript/payment_error_user_messages_test.mjs` — INLINE labels (checkout PAY_FSM не трогать)
+- `test/javascript/widget_repeat_pay_flow_patch1_test.mjs` — resetAfterMs / timeout / 1051
+- `test/integration/shop/inline_pay_button_patch1_test.rb` — зеркало: текст в кнопке
 
 ## Не ломать
 
-1. Callcheck 20s / SMS send 60s
-2. Retry-After JSON phone OTP send/callcheck
-3. Attack `enabled=false` в test по умолчанию
-4. Short-link HMAC/bind (C)
-5. Happy path phone/email OTP
+1. `cartSheetStore.clearCartAfterSuccessfulPay` (#87) — не менять семантику
+2. Стандартный checkout / `Checkout.svelte` / `shopPayFsm` long CARD_MSG
+3. CartSheet / OrderStatusSheet / active-order contour (COMPONENT_MAP)
+4. Fallback СБП / «карта +» / retry после отказа; widget_init / Charge / webhook API
 
 ## Проверка
 
 ```bash
-bin/rails test \
-  test/integration/rack_attack_store_test.rb \
-  test/integration/rack_attack_otp_verify_test.rb \
-  test/integration/rack_attack_order_short_link_test.rb \
-  test/services/shop/phone_otp_test.rb
-
-bin/rails test \
-  test/integration/shop/api/phone_otp_test.rb \
-  test/integration/shop/order_short_links_test.rb \
-  test/services/shop/phone_otp_test.rb
+node --test test/javascript/shop_inline_pay_button_fsm_test.mjs test/javascript/payment_error_user_messages_test.mjs test/javascript/widget_repeat_pay_flow_fallback_ui_test.mjs test/javascript/widget_repeat_pay_flow_patch1_test.mjs
+bin/rails test test/integration/shop/inline_pay_button_patch1_test.rb test/integration/shop/quick_repeat_pay_one_click_test.rb
 ```
+
+## DoD
+
+- [ ] Subtask 8 (patch v1): PROCESSING + «Ещё чуть-чуть...» внутри главной pay-кнопки
+- [ ] Subtask 10 (patch v1): ротация 1800 мс в кнопке; poll 1500 мс
+- [ ] Subtask 12 (patch v1): 1051 → «Недостаточно средств»; иначе → «Ошибка оплаты»; ERROR→IDLE 3000 мс
+- [ ] Subtask 13 (patch v1): timeout 15000 → красная кнопка + label; →IDLE 3000 мс
+- [ ] retry / другая карта / fallback сохранены
+- [ ] targeted + regress зелёные

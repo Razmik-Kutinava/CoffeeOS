@@ -22,18 +22,22 @@ describe("shopInlinePayFsm — exported intervals", () => {
   })
 })
 
-describe("mapTbankInlineError — card codes → customer card message", () => {
-  it("maps ErrorCode=1051 to card user message", () => {
+describe("mapTbankInlineError — Патч 1: 1051 short / else generic", () => {
+  it("maps ErrorCode=1051 to «Недостаточно средств»", () => {
     assert.equal(
       mapTbankInlineError({ status: "REJECTED", error_code: "1051" }),
-      "Недостаточно средств, или карта заблокирована банком, или истёк срок действия карты"
+      "Недостаточно средств"
     )
   })
 
-  it("maps other terminal errors to a generic message", () => {
+  it("maps other terminal errors to «Ошибка оплаты»", () => {
     assert.equal(
       mapTbankInlineError({ status: "REJECTED", error_code: "9999" }),
-      "Ошибка оплаты, попробуйте снова"
+      "Ошибка оплаты"
+    )
+    assert.equal(
+      mapTbankInlineError({ status: "REJECTED", error_code: "1054" }),
+      "Ошибка оплаты"
     )
   })
 })
@@ -69,9 +73,9 @@ describe("runTbankInlineButtonCycle — scheduling + terminal outcomes", () => {
     )
     assert.deepEqual(
       res.rotationLabels,
-      ["Ещё чуть-чуть...", "Связываемся с банком...", "Платеж принимается банком..."]
+      ["Ещё чуть-чуть...", "Связываемся с банком...", "Платеж принимается от банка..."]
     )
-    assert.equal(res.labelAtTerminal, "Платеж принимается банком...")
+    assert.equal(res.labelAtTerminal, "Платеж принимается от банка...")
 
     // 0→1500 poll, 1500→1800 rotate, 1800→3000 poll, 3000→3600 rotate, 3600→4500 poll
     assert.deepEqual(sleeps, [1500, 300, 1200, 600, 900])
@@ -100,12 +104,12 @@ describe("runTbankInlineButtonCycle — scheduling + terminal outcomes", () => {
 
     assert.equal(res.rotationTimes.length, 8) // 1800..14400
     assert.equal(res.rotationTimes.at(-1), 14400)
-    assert.equal(res.labelAtTerminal, "Платеж принимается банком...")
+    assert.equal(res.labelAtTerminal, "Платеж принимается от банка...")
 
     assert.ok(sleeps.length > 0)
   })
 
-  it("maps REJECTED with ErrorCode=1051 into card user message", async () => {
+  it("maps REJECTED with ErrorCode=1051 into short insufficient-funds label", async () => {
     const pollStatusFn = async ({ attempt }) => {
       if (attempt === 1) {
         return { status: "REJECTED", error_code: "1051" }
@@ -120,10 +124,7 @@ describe("runTbankInlineButtonCycle — scheduling + terminal outcomes", () => {
     assert.equal(res.kind, "rejected")
     assert.equal(res.terminalStatus, "REJECTED")
     assert.equal(res.errorCode, "1051")
-    assert.equal(
-      res.errorLabel,
-      "Недостаточно средств, или карта заблокирована банком, или истёк срок действия карты"
-    )
+    assert.equal(res.errorLabel, "Недостаточно средств")
     assert.equal(res.labelAtTerminal, "Ещё чуть-чуть...")
     assert.deepEqual(res.pollTimes, [1500])
     assert.deepEqual(res.rotationTimes, [])
@@ -143,7 +144,7 @@ describe("runTbankInlineButtonCycle — scheduling + terminal outcomes", () => {
     assert.equal(res.kind, "http_error")
     assert.equal(res.terminalStatus, "HTTP_ERROR")
     assert.equal(res.errorCode, "500")
-    assert.equal(res.errorLabel, "Ошибка оплаты, попробуйте снова")
+    assert.equal(res.errorLabel, "Ошибка оплаты")
   })
 
   it("maps HTTP 400 status payload to http_error", async () => {
@@ -155,7 +156,7 @@ describe("runTbankInlineButtonCycle — scheduling + terminal outcomes", () => {
 
     assert.equal(res.kind, "http_error")
     assert.equal(res.errorCode, "400")
-    assert.equal(res.errorLabel, "Ошибка оплаты, попробуйте снова")
+    assert.equal(res.errorLabel, "Ошибка оплаты")
   })
 })
 
