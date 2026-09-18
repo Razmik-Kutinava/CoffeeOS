@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-18 — docs: unlazy GATES #93 TASK_93-A Critical path (деньги↔заказ)
+
+- `session/GATES.md` + `artifacts/critical_path_hardening/GATES.md`
+- G1 матрица T-A* · G2 zone regress · G3 A4 Amount · G4 Fly **ABANDON** → TASK_93-L
+- `gate-check --status`: unmet 3, abandoned 1; `--approve` после GREEN (не сейчас)
+
 ## 2026-09-18 — fix: Sentry RUBY-1J ChannelOrderStats N+1
 
 - `Analytics::ChannelOrderStatsCollector`: один aggregate `GROUP BY tenant_id, source` + `SET LOCAL row_security = off` (вместо SET LOCAL tenant на каждый tenant)
