@@ -65,7 +65,8 @@ class BlockFStockFlowTest < ActionDispatch::IntegrationTest
     assert_equal 18.to_d, stock.qty, "36 - 18 = 18"
   end
 
-  test "sale allowed when stock insufficient goes negative" do
+  # Hard-fail (не QA 4.2 soft-negative): OrderRecipeDeduction raises → shop 422, stock не трогаем.
+  test "sale rejected when stock insufficient" do
     tenant = create_tenant!(slug: "bf-neg-#{SecureRandom.hex(3)}")
     category = create_category!
     product = create_product!(category: category, name: "BF Overdraw")
@@ -83,12 +84,14 @@ class BlockFStockFlowTest < ActionDispatch::IntegrationTest
 
     post "/shop/api/orders",
       headers: headers,
-      params: shop_order_params(email: email, name: "Negative OK", payment_method: "card"),
+      params: shop_order_params(email: email, name: "Negative blocked", payment_method: "card"),
       as: :json
-    assert_response :success
+    assert_response :unprocessable_entity
+    body = JSON.parse(response.body)
+    assert_match(/Недостаточно остатка/, body["error"].to_s)
 
     stock = IngredientTenantStock.find_by!(tenant_id: tenant.id, ingredient_id: ingredient.id)
-    assert_equal(-40.to_d, stock.qty, "10 - 50 = -40 (QA 4.2)")
+    assert_equal 10.to_d, stock.qty, "stock unchanged on hard fail"
   end
 
   test "auto_deduct update path does not double deduct on noop update" do

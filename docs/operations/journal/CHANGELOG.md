@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-18 — fix: CI Block F stock hard-fail test
+
+- `BlockFStockFlowTest`: sale при нехватке остатка → 422 + stock unchanged (не soft-negative QA 4.2)
+- Согласовано с `Inventory::OrderRecipeDeduction` hard-fail
+- Local: block_f + deduction 8 PASS
+
 ## 2026-09-18 — ci: Semgrep → GitHub Code Scanning
 
 - `.github/workflows/semgrep.yml`: p/ruby + p/javascript + p/rails → SARIF → `upload-sarif` (category semgrep)
