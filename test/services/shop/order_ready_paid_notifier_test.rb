@@ -55,10 +55,10 @@ class Shop::OrderReadyPaidNotifierTest < ActiveSupport::TestCase
 
     Shop::OrderReadyPaidNotifier.call(order: @order)
 
-    hash = Shop::OrderReadySmsLink.hash_for(@order)
-    expected = "CODE:BLACK. Заказ готов! codeblack.xyz/o/#{hash}"
+    expected = Shop::OrderReadySmsLink.sms_message_for(@order)
     assert_equal expected, captured
     assert_operator captured.length, :<=, 70
+    refute_includes captured, "codeblack.xyz"
     assert_no_match(/##{@order.order_number}/, captured)
   end
 

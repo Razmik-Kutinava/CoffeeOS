@@ -2,7 +2,7 @@
 
 require "test_helper"
 
-# #82 Патч_1 — GET /o/:order_hash → shop order deep link + guest session bind
+# TASK_93-C — GET /o/:order_hash → bind + TTL + forge 404
 class Shop::OrderShortLinksTest < ActionDispatch::IntegrationTest
   include TestFactories
 
@@ -21,21 +21,53 @@ class Shop::OrderShortLinksTest < ActionDispatch::IntegrationTest
       status: :ready,
       total_amount: 100,
       discount_amount: 0,
-      final_amount: 100
+      final_amount: 100,
+      ready_at: Time.current,
+      ready_notified_at: Time.current
     )
   end
 
-  test "#82 P1 /o/:hash redirects with reconnect_token and binds guest session" do
+  test "T-C3a T-C3b T-C5c /o/:hash redirects with reconnect_token and binds guest session" do
     hash = Shop::OrderReadySmsLink.hash_for(@order)
-    get "/o/#{hash}"
+    get "/o/#{hash}", headers: { "HOST" => "www.example.com" }
     assert_response :redirect
     assert_match %r{/shop\?tenant_id=#{@tenant.id}&reconnect_token=}, response.redirect_url
     assert_match %r{#/order/#{@order.id}\z}, response.redirect_url
     assert_equal @customer.id.to_s, Shop::CustomerSession.customer_id(session, @tenant.id).to_s
   end
 
-  test "#82 P1 unknown hash returns 404" do
+  test "T-C2c /o/ not blocked for allowed host" do
+    hash = Shop::OrderReadySmsLink.hash_for(@order)
+    get "/o/#{hash}", headers: { "HOST" => "coffeeos.fly.dev" }
+    assert_response :redirect
+    refute_equal 403, response.status
+  end
+
+  test "T-C3c unknown hash returns 404 without bind" do
     get "/o/zzzzzzzzzzzzzzzzzzzzzz"
     assert_response :not_found
+    assert_nil Shop::CustomerSession.customer_id(session, @tenant.id)
+  end
+
+  test "T-C3d forged MAC returns 404 without bind" do
+    hash = Shop::OrderReadySmsLink.hash_for(@order)
+    raw = Base64.urlsafe_decode64(hash)
+    forged_raw = raw.byteslice(0, 16) + raw.byteslice(16, 4).bytes.map { |b| b ^ 0xff }.pack("C*")
+    forged = Base64.urlsafe_encode64(forged_raw, padding: false)
+    get "/o/#{forged}"
+    assert_response :not_found
+    assert_nil Shop::CustomerSession.customer_id(session, @tenant.id)
+  end
+
+  test "T-C5a expired token returns 404 without bind" do
+    @order.update!(
+      ready_notified_at: 49.hours.ago,
+      ready_at: 49.hours.ago,
+      updated_at: 49.hours.ago
+    )
+    hash = Shop::OrderReadySmsLink.hash_for(@order)
+    get "/o/#{hash}"
+    assert_response :not_found
+    assert_nil Shop::CustomerSession.customer_id(session, @tenant.id)
   end
 end
