@@ -360,6 +360,56 @@ class Shop::OrderCreatorTest < ActiveSupport::TestCase
     end
   end
 
+  # --- TASK_93-B Checkout identity (phone-first) ---------------------------
+
+  # T-B2a
+  test "allows phone_verified customer without email" do
+    phone = "+7900#{rand(1000000..9999999)}"
+    customer = MobileCustomer.create!(
+      phone: phone,
+      email: nil,
+      first_name: "Phone",
+      is_active: true,
+      phone_verified: true,
+      phone_status: :verified
+    )
+    session = build_session_with_item
+    Shop::CustomerSession.set_customer_id!(session, @tenant.id, customer.id)
+
+    order = Shop::OrderCreator.new(session, tenant: @tenant).call!({
+      payment_method: "card",
+      email: "",
+      name: "Phone Guest"
+    })
+
+    assert_equal customer.id, order.customer_id
+    assert_equal "accepted", order.status
+  end
+
+  # T-B2b
+  test "still allows email_verified without phone" do
+    email = "email-only-#{SecureRandom.hex(3)}@example.com"
+    session = build_session_with_item
+    order = run_creator(session, email: email)
+    assert MobileCustomer.exists?(email: email)
+    assert_equal "accepted", order.status
+  end
+
+  # T-B2c
+  test "rejects when neither phone nor email verified" do
+    session = build_session_with_item
+    before = Order.count
+    error = assert_raises(Shop::OrderCreator::Error) do
+      Shop::OrderCreator.new(session, tenant: @tenant).call!({
+        payment_method: "card",
+        email: "",
+        name: "Nobody"
+      })
+    end
+    assert_match(/телефон|email/i, error.message)
+    assert_equal before, Order.count
+  end
+
   # T-A3b — TASK_93-A R5 (simulate → accepted)
   test "accepted flow with insufficient stock does not raise; order accepted + audit" do
     ingredient = Ingredient.create!(name: "Shop Low #{SecureRandom.hex(2)}", unit: "g", is_active: true)
