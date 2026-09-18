@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-18 — docs: SPEC #93 TASK_93-B Checkout identity
+
+- `todo.md` → TASK_93-B: phone-first R1–R5 · файлы OrderCreator/Recurrent/Checkout · Не ломать · Проверка G1–G3
+- CBR `#93` SPEC B · Next: `/sbr` RED (код не трогали)
+
 ## 2026-09-18 — docs: unlazy GATES #93 TASK_93-E Init idempotency
 
 - `session/GATES.md` + `artifacts/critical_path_hardening/GATES-block-E.md`
