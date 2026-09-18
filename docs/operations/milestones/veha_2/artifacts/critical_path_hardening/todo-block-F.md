@@ -4,7 +4,7 @@
 |------|----------|
 | **ID** | CBR **#93** · **TASK_93-F** |
 | **Тип** | SBR · hot-path callbacks / payments |
-| **Статус** | **SPEC** · Next: `/sbr` RED |
+| **Статус** | **REGRESS PASS** · Next: `/review` |
 | **Ветка** | `develop` |
 | **Канон** | `@spec-build-review` · `@coffeeos-commit-ops` · `@coffeeos-dev-gates` |
 | **ТЗ** | бриф чата F1–F5 · зонтик [`TASK-93-Critical-path-hardening.md`](../../requirements/customer_tasks/TASK-93-Critical-path-hardening.md) карта F |
@@ -33,7 +33,7 @@ TTL claim: 24h на processed/failed; rejected → delete.
 - [x] PHASE 1 `/spec` — зеркало session `todo.md`
 - [x] PHASE 2 RED — T-F1a · T-F2a/b · T-F3a · T-F4a · `[RED]` `4913e432` / `1c7d71a7`
 - [x] PHASE 2 GREEN — R1–R6 · `[GREEN]` `1b28a128` · все T-F* PASS (48 runs)
-- [ ] `/regress` — G4
+- [x] `/regress` — G4 · pack **68/0** · zone **74/0** (2026-09-18)
 - [ ] PHASE 3 `/review` — F1–F5 PASS · push · без deploy
 
 **Entire:** attach session `863c79d0-3a0a-4671-9180-2a0be7fd2ee0` → GREEN why-context (docs checkpoint)
