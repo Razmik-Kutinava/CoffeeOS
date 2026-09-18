@@ -1,18 +1,18 @@
-# SESSION_STATE
+﻿# SESSION_STATE
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-18 (TASK_93-I unlazy reverify)  
+**Дата:** 2026-09-18 (TASK_93-J GREEN + Entire)  
 **Ветка:** develop
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#93-I** GATES met 4 · G5→L | /review · push · **без deploy Redis** |
-| reverify PASS | I1–I4 + bugbot/security |
-| GREEN c14f5202 | Fly Redis/MCP = L |
+| **#93-J** GREEN 566dba9b | /regress §8 |
+| Entire attach pending pin | G5→L |
+| parallel ledgers | не затирать |
 
-**last_done:** /unlazy reverify TASK_93-I — G1–G4 met · G5 abandoned  
-**next_step:** /review блок I
+**last_done:** /sbr TASK_93-J RED→GREEN PassUpdateJob/FCM/grace  
+**next_step:** /regress
 
 **ctx_trim:** 2026-09-02
 
