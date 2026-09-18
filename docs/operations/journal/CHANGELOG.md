@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-18 — docs: intake #93 TASK_93 Critical path hardening (блок A)
+
+- `customer_tasks/TASK-93-Critical-path-hardening.md` — ТЗ 1:1 (зонтик A–L; сейчас A: деньги↔заказ)
+- CBR `#93` · `artifacts/critical_path_hardening/` · ISSUES строка #93
+- Next: `/spec` (не код)
+
 ## 2026-09-18 — security: Dependabot pack (gems + npm)
 
 - `view_component` 3.25 → **4.15.0** (GHSA preview/helper + system-test path; floor ≥4.9)
