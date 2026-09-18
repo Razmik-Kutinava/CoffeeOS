@@ -121,7 +121,8 @@ module Shop
           end
 
           page = [ params[:page].to_i, 1 ].max
-          per_page = [ [ params[:per_page].to_i, 1 ].max, 50 ].min
+          raw = params[:per_page].presence&.to_i
+          per_page = raw.nil? || raw < 1 ? 20 : [ raw, 50 ].min
           orders = orders.limit(per_page).offset((page - 1) * per_page)
 
           render json: orders.map { |o|
