@@ -34,9 +34,9 @@ ABANDON: G5 Fly ensure/MCP is TASK_93-L DoD, not block G; Local G1–G3 + G4 aft
 <!--
 CoffeeOS TASK_93-G unlazy (pre-SPEC / pre-SBR):
 - Канон: customer_tasks/TASK-93-Critical-path-hardening.md · блок G (R1–R6) + DoD чата G1–G6
-- Активный ledger сессии: docs/operations/session/GATES.md (тот же текст)
+- Канон ledger блока: milestones/.../GATES-block-G.md (session/GATES.md гоняют параллельные блоки)
 - Close G: G1–G3 met via --approve/--reverify after GREEN; G4 после /regress; G5 abandoned until L
-- SPEC обязателен: R3-A vs R3-B · must-have inventory · city GUC name · ensure_tenant_id в test
+- SPEC: R3-B · must-have inventory · app.shop_city_lookup · ensure_tenant raise except test
 - Без T-G1a + T-G3a + T-G5b блок не закрыт
 - 2026-09-18: --status unmet 4 + abandoned 1; --approve после GREEN (не сейчас)
 -->

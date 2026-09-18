@@ -1,18 +1,18 @@
-# SESSION_STATE
+﻿# SESSION_STATE
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-18 (TASK_93-J unlazy)  
+**Дата:** 2026-09-18 (TASK_93-G SPEC)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#93-J** GATES ready | `/spec` → `/sbr` RED |
-| unmet 4 · abandoned G5→L | GREEN → approve G1–G3 · G4 `/regress` |
-| A/C/I/H/F… ledgers | `GATES-block-*.md` (не затирать) |
+| **#93-G** SPEC ready · `todo-block-G.md` | `/sbr` RED T-G* |
+| R1–R6 · GATES-block-G | GREEN → approve G1–G3 · G4 `/regress` |
+| */ledgers параллельно | не затирать `todo-block-G` / `GATES-block-G` |
 
-**last_done:** `/unlazy` TASK_93-J Push/worker — G1–G5 ledger  
-**next_step:** `/spec` · BUFFER · job names · runbook path
+**last_done:** `/spec` TASK_93-G Tenant GUC/RLS — inventory + Не ломать/Проверка  
+**next_step:** `/sbr` RED · коммит `[RED]` · стоп до GREEN
 
 **ctx_trim:** `2026-09-02`
 

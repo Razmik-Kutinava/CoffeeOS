@@ -1,44 +1,42 @@
-# Gates: TASK_93-J / #93 — Push / уведомления / worker
+# Gates: TASK_93-G / #93 — Tenant GUC / RLS / schema
 
-Scope: смена статуса / webhook **не** ждут APNs/FCM; FCM OAuth cache + dead tokens; cascade `wait = SMS_GRACE + 5s` без race grace; runbook Solid Queue / `SOLID_QUEUE_IN_PUMA`. Deploy worker Fly = TASK_93-L (не DoD блока J). UI WebPush (#90), SMS текст (C), Redis Attack (I), склад (A) — out of scope.
+Scope: staff `SET LOCAL` реально внутри txn (как Shop API); must-have policies/triggers воспроизводимы после schema load (`ensure_all` **или** `structure.sql`); city switcher без голого `row_security = off`; `ensure_tenant_id` строго по SPEC. Deploy/migrate Fly = TASK_93-L (не DoD блока G).
 
-- [ ] G1: матрица T-J1 — async APNs/Wallet/FCM; PassUpdater **не** sync из broadcaster; push вне `payment.with_lock`
-  CHECK: ruby bin/rails test test/services/barista/order_status_update_service_test.rb test/services/shop/guest_order_broadcaster_test.rb test/services/callbacks/payment_status_updater_test.rb
+- [ ] G1: матрица T-G1 — barista/manager/prep `SET LOCAL` только внутри open transaction
+  CHECK: ruby bin/rails test test/integration/staff_pg_context_transaction_test.rb
   EXPECT: 0 failures, 0 errors
   CWD: C:/Tools/workarea/CoffeeOS
-  EVIDENCE: unmet pre-RED — baseline: `GuestOrderBroadcaster` sync `PassUpdater.call!`; cascade `set(wait: SMS_GRACE)`; `GuestOrderBroadcaster` из `accept_order_if_paid!` **внутри** `with_lock`; T-J1a/b/c ещё нет / не assert DoD; `--approve` после GREEN
+  EVIDENCE: unmet pre-RED — файла/кейсов T-G1a/b/c может не быть; baseline без txn-wrap ≠ DoD; `--approve` только после GREEN: `transaction_open?` при SET LOCAL · GUC `app.current_tenant_id` читается в том же request · вне txn no-op/forbid (T-G1c)
 
-- [ ] G2: матрица T-J2 — FCM OAuth cache + UNREGISTERED clears token
-  CHECK: ruby bin/rails test test/services/shop/fcm_client_test.rb
+- [ ] G2: матрица T-G2 + T-G3 + T-G4 — инвентарь + ensure_all/structure + свежая БД (policies/triggers)
+  CHECK: ruby bin/rails test test/integration/rls_tenant_isolation_test.rb test/integration/db_triggers_test.rb
   EXPECT: 0 failures, 0 errors
   CWD: C:/Tools/workarea/CoffeeOS
-  EVIDENCE: unmet pre-RED — `fetch_access_token!` без `Rails.cache`; нет cleanup UNREGISTERED; T-J2a/b/c; `--approve` после GREEN · T-J2c simulate unchanged
+  EVIDENCE: unmet pre-RED — нужен `RLS_PG_INVENTORY.md` (T-G2a) · asserts `pg_policies` / `trg_generate_order_number`+`trg_auto_deduct_ingredients`+`trg_auto_stop_list` (T-G2b/c · T-G4) · `DatabaseTriggers.ensure_all!` (или R3-A structure) не «только order_number» (T-G3); `--approve` после GREEN + inventory file in git
 
-- [ ] G3: матрица T-J3 — cascade wait **>** SMS_GRACE (BUFFER +5s); presence grace / SMS skip
-  CHECK: ruby bin/rails test test/jobs/shop/order_ready_cascade_job_test.rb test/services/shop/order_ready_presence_test.rb
+- [ ] G3: матрица T-G5 — CustomerTenantHistory без `row_security = off`; city peers + last_ordered
+  CHECK: ruby bin/rails test test/services/shop/customer_tenant_history_test.rb
   EXPECT: 0 failures, 0 errors
   CWD: C:/Tools/workarea/CoffeeOS
-  EVIDENCE: unmet pre-RED — enqueue `wait: SMS_GRACE` (==15s) → race; нужно `wait: SMS_GRACE + 5.seconds`; T-J3a–d; без **J1+J3** блок не закрыт; `--approve` после GREEN
+  EVIDENCE: unmet pre-RED — T-G5b grep/assert no `row_security = off` · T-G5a peers same city · T-G5c изоляция без city GUC · T-G5d last_ordered; `--approve` после GREEN через `Rls::GucContext.with_shop_city_lookup` (имя GUC — SPEC)
 
-- [ ] G4: J4 runbook + tbank/cascade queue contract + узкий регресс §8 (после GREEN)
-  CHECK: ruby bin/rails test test/jobs/shop/ready_push_job_test.rb test/jobs/shop/order_ready_cascade_job_test.rb test/controllers/callbacks/tbank_controller_test.rb test/services/shop/order_status_push_notifier_test.rb
+- [ ] G4: матрица T-G6 + узкий регресс §8 (после GREEN)
+  CHECK: ruby bin/rails test test/integration/rls_tenant_isolation_test.rb test/integration/db_triggers_test.rb test/services/shop/customer_tenant_history_test.rb test/integration/staff_pg_context_transaction_test.rb
   EXPECT: 0 failures, 0 errors
   CWD: C:/Tools/workarea/CoffeeOS
-  EVIDENCE: unmet — `/regress` после GREEN; T-J4a `docs/operations/runbooks/SOLID_QUEUE_FLY.md` (файл **отсутствует** 2026-09-18); T-J4b tbank `perform_now` primary; T-J4c cascade/ready требуют queue runner · `deploy.yml` уже `SOLID_QUEUE_IN_PUMA: true` (зафиксировать в runbook); без ложного dual perform_now для SMS
+  EVIDENCE: unmet — `/regress` после GREEN; T-G6a production-like raise на blank tenant_id · T-G6b test-env поведение = SPEC; без G1+G3 (продукт) + T-G5 блок не закрыт
 
-- [ ] G5: hot-path Fly MCP Point A — worker / push / cascade на стенде
-  EVIDENCE: abandoned — not DoD for TASK_93-J; reopen in TASK_93-L (включить/проверить worker или Puma plugin live); artifact `artifacts/critical_path_hardening/mcp/`; PASS = Point A tenant `2fdee1ac-4674-41ee-b89e-87b45643f789` · status change без sync APNs latency · cascade SMS after grace+buffer · queue jobs run
+- [ ] G5: Fly MCP / migrate ensure на стенде
+  EVIDENCE: abandoned — not DoD for TASK_93-G; reopen in TASK_93-L after deploy апрув; PASS = Point A tenant `2fdee1ac-4674-41ee-b89e-87b45643f789` · staff GUC в txn · `db:rls:ensure` / triggers на Fly · city switcher peers
 
-ABANDON: G5 Fly worker/MCP Point A is TASK_93-L DoD, not block J; Local G1–G3 + G4 after /regress close J; runbook docs in J (T-J4a)
+ABANDON: G5 Fly ensure/MCP is TASK_93-L DoD, not block G; Local G1–G3 + G4 after /regress close G
 
 <!--
-CoffeeOS TASK_93-J unlazy (post-/start / pre-SPEC):
-- Канон брифа: чат TASK_93-J §3–11 (J1–J4 · R1–R8 · T-J*); зонтик customer_tasks/TASK-93-Critical-path-hardening.md карта J
-- Активный ledger сессии: docs/operations/session/GATES.md (тот же текст)
-- Артефакт блока: milestones/veha_2/artifacts/critical_path_hardening/GATES-block-J.md
-- Close J: G1–G3 met via --approve/--reverify after GREEN; G4 после /regress; G5 abandoned until L
-- SPEC must lock: BUFFER=5s · job names (WalletUpdateJob?) · sync Cable vs async APNs/FCM matrix · R8 perform_now fallback vs Puma-only
-- Зависимость: A затем J (broadcaster из lock); после F удобно (та же очередь)
-- Без J1+J3 блок не закрыт
-- 2026-09-18: --status unmet 4 · abandoned 1 (G5); --approve после GREEN (не сейчас)
+CoffeeOS TASK_93-G unlazy (pre-SPEC / pre-SBR):
+- Канон: customer_tasks/TASK-93-Critical-path-hardening.md · блок G (R1–R6) + DoD чата G1–G6
+- Канон ledger блока: milestones/.../GATES-block-G.md (session/GATES.md гоняют параллельные блоки)
+- Close G: G1–G3 met via --approve/--reverify after GREEN; G4 после /regress; G5 abandoned until L
+- SPEC: R3-B · must-have inventory · app.shop_city_lookup · ensure_tenant raise except test
+- Без T-G1a + T-G3a + T-G5b блок не закрыт
+- 2026-09-18: --status unmet 4 + abandoned 1; --approve после GREEN (не сейчас)
 -->
