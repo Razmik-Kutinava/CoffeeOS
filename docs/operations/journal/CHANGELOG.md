@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-18 — docs: restore SPEC #93 TASK_93-B (todo after D race)
+
+- `todo.md` снова TASK_93-B phone-first (после параллельного SPEC D)
+- Next: `/sbr` RED
+
 ## 2026-09-18 — docs: SPEC #93 TASK_93-D history per_page
 
 - `todo.md` → TASK_93-D: R1–R5 default 20 / max 50 · T-D1/T-D3
