@@ -5,7 +5,7 @@ export const WIZARD_SCREEN = Object.freeze({
   VERIFY: 2
 })
 
-export const PIN_LENGTH = 4
+export const PIN_LENGTH = 6
 
 /** Национальные цифры после +7 (ожидаем 10). */
 export function nationalPhoneDigits(display) {

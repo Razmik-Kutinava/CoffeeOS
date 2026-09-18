@@ -2,7 +2,7 @@
  * SMS-пинпад для inline-оплаты (скрин #32): код + таймер 00:59.
  */
 
-export const SMS_PIN_LENGTH = 4
+export const SMS_PIN_LENGTH = 6
 export const SMS_PIN_TIMER_SEC = 59
 
 export function createSmsPinPadState(opts = {}) {

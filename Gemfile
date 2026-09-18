@@ -46,8 +46,9 @@ gem "nokogiri", ">= 1.19.4"
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 gem "image_processing", "~> 1.2"
 
-# Rate limiting для API
+# Rate limiting для API (TASK_93-I: RedisCacheStore needs redis client)
 gem "rack-attack"
+gem "redis", "~> 5.0"
 
 # Error tracking (Sentry) — активируется через SENTRY_DSN в ENV
 gem "sentry-ruby"

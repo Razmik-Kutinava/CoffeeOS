@@ -102,7 +102,7 @@ module Shop
 
     def send_sms_code!(phone:, ip: nil)
       normalized = PhoneNormalizer.normalize!(phone)
-      otp_code = format("%04d", SecureRandom.random_number(10_000))
+      otp_code = format("%06d", SecureRandom.random_number(1_000_000))
 
       ActiveRecord::Base.transaction do
         MobileOtpCode.where(phone: normalized, is_used: false).update_all(is_used: true)

@@ -1,15 +1,50 @@
 # Rate limiting для API
 # Защита от злоупотреблений и DDoS
+# TASK_93-I: shared Redis store on prod/FLY; verify_sms / email verify throttles
 
 class Rack::Attack
   SHOP_PHONE_OTP_RETRY_AFTER = {
     "shop/phone_otp_callcheck" => 20,
-    "shop/phone_otp_sms" => 60
+    "shop/phone_otp_sms" => 60,
+    "shop/phone_otp_verify_sms/ip" => 60,
+    "shop/phone_otp_verify_sms/phone" => 60,
+    "shop/email_otp_verify/ip" => 60,
+    "shop/email_otp_verify/email" => 60
   }.freeze
 
-  # Используем MemoryStore для rate limiting, так как SolidCache не поддерживает increment
-  # Это предотвращает ошибки при upsert в solid_cache_entries
-  Rack::Attack.cache.store = ActiveSupport::Cache::MemoryStore.new
+  PHONE_OTP_VERIFY_PATHS = [
+    "/shop/api/phone_otp/verify_sms",
+    "/shop/api/phone_otp/verify"
+  ].freeze
+
+  # SolidCache cannot increment — Redis (prod/FLY) or MemoryStore (dev/test).
+  def self.resolve_cache_store(
+    production: Rails.env.production?,
+    fly_app_name: ENV["FLY_APP_NAME"],
+    rack_attack_redis_url: ENV["RACK_ATTACK_REDIS_URL"],
+    redis_url: ENV["REDIS_URL"]
+  )
+    url = rack_attack_redis_url.to_s.presence || redis_url.to_s.presence
+    public_like = production || fly_app_name.to_s.present?
+
+    if public_like
+      if url.blank?
+        raise "Rack::Attack requires REDIS_URL or RACK_ATTACK_REDIS_URL on production/FLY (TASK_93-I)"
+      end
+      return ActiveSupport::Cache::RedisCacheStore.new(url: url)
+    end
+
+    if url.present?
+      return ActiveSupport::Cache::RedisCacheStore.new(url: url)
+    end
+
+    if defined?(Rails) && Rails.logger
+      Rails.logger.warn("[Rack::Attack] MemoryStore (no REDIS_URL) — limits are per-process")
+    end
+    ActiveSupport::Cache::MemoryStore.new
+  end
+
+  Rack::Attack.cache.store = Rack::Attack.resolve_cache_store
 
   # Лимит для API: 100 запросов в минуту с одного IP
   throttle("api/ip", limit: 100, period: 1.minute) do |req|
@@ -34,7 +69,7 @@ class Rack::Attack
     req.ip if req.path == "/tv_board" && req.get?
   end
 
-  # SMS short link /o/:hash — brute MAC (MemoryStore OK; shared store → TASK_93-I)
+  # SMS short link /o/:hash — brute MAC (shared via Redis store on FLY)
   throttle("shop/order_short_link/ip", limit: 30, period: 1.minute) do |req|
     req.ip if req.get? && req.path.start_with?("/o/")
   end
@@ -73,6 +108,33 @@ class Rack::Attack
       Rack::Attack.shop_phone_otp_legacy_sms(req)
   end
 
+  # TASK_93-I: brute OTP verify (SMS + legacy) — 5/min IP and phone
+  throttle("shop/phone_otp_verify_sms/ip", limit: 5, period: 1.minute) do |req|
+    next unless req.post? && PHONE_OTP_VERIFY_PATHS.include?(req.path)
+
+    req.ip
+  end
+
+  throttle("shop/phone_otp_verify_sms/phone", limit: 5, period: 1.minute) do |req|
+    next unless req.post? && PHONE_OTP_VERIFY_PATHS.include?(req.path)
+
+    phone = Rack::Attack.shop_otp_json_field(req, "phone")
+    "#{phone}:verify" if phone.present?
+  end
+
+  throttle("shop/email_otp_verify/ip", limit: 5, period: 1.minute) do |req|
+    next unless req.post? && req.path == "/shop/api/email_otp/verify"
+
+    req.ip
+  end
+
+  throttle("shop/email_otp_verify/email", limit: 5, period: 1.minute) do |req|
+    next unless req.post? && req.path == "/shop/api/email_otp/verify"
+
+    email = Rack::Attack.shop_otp_json_field(req, "email")&.downcase
+    "#{email}:verify" if email.present?
+  end
+
   # Лимит на создание заказов баристой: 30 заказов в минуту с одного IP
   throttle("barista/orders", limit: 30, period: 1.minute) do |req|
     req.ip if req.path == "/barista/orders" && req.post?
@@ -83,7 +145,7 @@ class Rack::Attack
     req.ip if req.path == "/login" && req.post?
   end
 
-  # Webhooks (/callbacks/*): brute-force / flood по IP. MemoryStore — per-machine; shared store — follow-up.
+  # Webhooks (/callbacks/*): brute-force / flood по IP.
   throttle("callbacks/ip", limit: 120, period: 1.minute) do |req|
     req.ip if req.post? && req.path.start_with?("/callbacks/")
   end
@@ -144,13 +206,17 @@ class Rack::Attack
     end
   end
 
-  def self.shop_phone_otp_phone_from_path(req, path)
-    return unless req.path == path && req.post?
-
+  def self.shop_otp_json_field(req, key)
     body = req.body.read
     req.body.rewind if req.body.respond_to?(:rewind)
     json = JSON.parse(body) rescue {}
-    phone = json["phone"].to_s.presence
+    json[key].to_s.presence
+  end
+
+  def self.shop_phone_otp_phone_from_path(req, path)
+    return unless req.path == path && req.post?
+
+    phone = shop_otp_json_field(req, "phone")
     return unless phone.present?
 
     "#{phone}:#{path}"

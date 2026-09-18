@@ -29,15 +29,17 @@ describe("shopSmsPinPad", () => {
     assert.equal(formatSmsTimer(90), "01:30")
   })
 
-  it("appends digits up to length 4", () => {
+  it("appends digits up to length 6", () => {
     let s = createSmsPinPadState()
     s = appendSmsDigit(s, "1")
     s = appendSmsDigit(s, "2")
     s = appendSmsDigit(s, "3")
     s = appendSmsDigit(s, "4")
     s = appendSmsDigit(s, "5")
-    assert.equal(s.code, "1234")
-    assert.equal(SMS_PIN_LENGTH, 4)
+    s = appendSmsDigit(s, "6")
+    s = appendSmsDigit(s, "7")
+    assert.equal(s.code, "123456")
+    assert.equal(SMS_PIN_LENGTH, 6)
     assert.ok(isSmsCodeComplete(s))
   })
 

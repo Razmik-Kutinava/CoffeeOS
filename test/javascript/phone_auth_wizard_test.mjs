@@ -78,25 +78,25 @@ describe("#90 POSTCALL-EXT lifecycle wiring", () => {
 })
 
 describe("PIN helpers", () => {
-  it("PIN_LENGTH is 4", () => {
-    assert.equal(PIN_LENGTH, 4)
-    assert.equal(emptyPinCells().length, 4)
+  it("PIN_LENGTH is 6", () => {
+    assert.equal(PIN_LENGTH, 6)
+    assert.equal(emptyPinCells().length, 6)
   })
 
   it("applyPinDigit and auto-submit", () => {
     let cells = emptyPinCells()
     let code = ""
-    for (let i = 0; i < 4; i++) {
-      const r = applyPinDigit(cells, i, String(i + 1))
+    for (let i = 0; i < 6; i++) {
+      const r = applyPinDigit(cells, i, String((i + 1) % 10))
       cells = r.cells
       code = r.code
     }
-    assert.equal(code, "1234")
+    assert.equal(code, "123456")
     assert.equal(shouldAutoSubmitPin(code), true)
     assert.deepEqual(buildVerifySmsBody("+79001234567", code), {
       phone: "+79001234567",
-      code: "1234"
+      code: "123456"
     })
-    assert.equal(pinCodeFromCells(cells), "1234")
+    assert.equal(pinCodeFromCells(cells), "123456")
   })
 })

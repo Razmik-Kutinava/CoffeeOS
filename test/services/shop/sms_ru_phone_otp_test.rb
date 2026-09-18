@@ -21,10 +21,10 @@ class Shop::SmsRuPhoneOtpTest < ActiveSupport::TestCase
     assert_equal 0, MobileOtpCode.where(phone: @phone).count
   end
 
-  test "send_sms_code generates new 4 digit otp" do
+  test "send_sms_code generates new 6 digit otp" do
     Shop::PhoneOtp.send_sms_code!(phone: @phone)
     latest = MobileOtpCode.where(phone: @phone, is_used: false).order(created_at: :desc).first
-    assert_equal 4, latest.code.length
+    assert_equal 6, latest.code.length
   end
 
   test "verify_sms works with sms code" do
