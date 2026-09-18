@@ -245,4 +245,74 @@ class Shop::CartServiceTest < ActiveSupport::TestCase
     assert_equal "Кардамон и корица — пряный акцент", line[:description]
     assert_equal @product.name, line[:product_name]
   end
+
+  # ---------------------------------------------------------------------------
+  # TASK_93-H — overflow guards (T-H2a / T-H2b)
+  # ---------------------------------------------------------------------------
+
+  test "T-H2a add! raises OverflowError when distinct lines exceed MAX_CART_LINES" do
+    with_cart_overflow_caps(lines: 3) do
+      category = create_category!(slug: "h2a-cat-#{SecureRandom.hex(3)}")
+      products = 4.times.map do |i|
+        p = create_product!(category: category, slug: "h2a-p-#{i}-#{SecureRandom.hex(2)}", name: "H2a #{i}")
+        enable_product_for_tenant!(tenant: @tenant, product: p, price: 100 + i)
+        p
+      end
+
+      svc = cart
+      products.take(3).each do |p|
+        svc.add!(product_id: p.id, quantity: 1, selected_modifiers: [])
+      end
+      assert_equal 3, @session[:shop_cart].size
+
+      assert_raises(Shop::CartService::OverflowError) do
+        svc.add!(product_id: products.last.id, quantity: 1, selected_modifiers: [])
+      end
+      assert_operator @session[:shop_cart].size, :<=, 3
+    end
+  end
+
+  test "T-H2b add! raises OverflowError when estimated session cart bytes exceed budget" do
+    with_cart_overflow_caps(bytes: 80) do
+      category = create_category!(slug: "h2b-cat-#{SecureRandom.hex(3)}")
+      products = 5.times.map do |i|
+        p = create_product!(category: category, slug: "h2b-p-#{i}-#{SecureRandom.hex(2)}", name: "H2b #{i}")
+        enable_product_for_tenant!(tenant: @tenant, product: p, price: 100)
+        p
+      end
+
+      svc = cart
+      assert_raises(Shop::CartService::OverflowError) do
+        products.each do |p|
+          svc.add!(product_id: p.id, quantity: 1, selected_modifiers: [])
+        end
+      end
+    end
+  end
+
+  private
+
+  def with_cart_overflow_caps(lines: nil, bytes: nil)
+    originals = {}
+    if lines
+      originals[:lines] = Shop::CartService::MAX_CART_LINES
+      Shop::CartService.send(:remove_const, :MAX_CART_LINES)
+      Shop::CartService.const_set(:MAX_CART_LINES, lines)
+    end
+    if bytes
+      originals[:bytes] = Shop::CartService::MAX_SESSION_CART_BYTES
+      Shop::CartService.send(:remove_const, :MAX_SESSION_CART_BYTES)
+      Shop::CartService.const_set(:MAX_SESSION_CART_BYTES, bytes)
+    end
+    yield
+  ensure
+    if originals.key?(:lines)
+      Shop::CartService.send(:remove_const, :MAX_CART_LINES)
+      Shop::CartService.const_set(:MAX_CART_LINES, originals[:lines])
+    end
+    if originals.key?(:bytes)
+      Shop::CartService.send(:remove_const, :MAX_SESSION_CART_BYTES)
+      Shop::CartService.const_set(:MAX_SESSION_CART_BYTES, originals[:bytes])
+    end
+  end
 end
