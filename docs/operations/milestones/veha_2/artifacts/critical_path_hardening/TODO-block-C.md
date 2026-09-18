@@ -3,9 +3,11 @@
 | Поле | Значение |
 |------|----------|
 | **ID** | CBR **#93** · **TASK_93-C** |
-| **Статус** | **REVIEW** · push/CI · без deploy |
+| **Статус** | **REVIEW done** · CI green · **без deploy** |
 | **RED** | `1346d895` |
 | **GREEN** | `c2ef2d68` |
+| **CI fix** | `6254ab0d` (cascade/auth asserts) |
+| **CI** | https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/35326857443 |
 | **Entire** | `01M2SSQXT1V67AK260SH1P9RAX` на `c2ef2d68` |
 | **GATES** | [`GATES-block-C.md`](GATES-block-C.md) · G1–G5 met · G6→L |
 
@@ -21,7 +23,7 @@
 
 - [x] `/start` · `/unlazy` · `/spec` · RED · GREEN · `/regress`
 - [x] `/unlazy` approve+reverify — G1–G5 met · G6→L
-- [x] `/review` — Local 18/0 · bugbot clean · security no medium+ · Entire · push
+- [x] `/review` — Local 18/0 · bugbot · security · Entire · push · **CI green**
 
 ## REVIEW-таблица
 
