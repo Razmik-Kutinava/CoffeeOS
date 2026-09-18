@@ -38,7 +38,9 @@ module Shop
           resolved_tenant: { id: tenant.id, slug: tenant.slug, name: tenant.name },
           products_for_tenant: tenant_products,
           categories_for_tenant: tenant_categories,
-          product_tenant_settings: pts_data
+          product_tenant_settings: pts_data,
+          # TASK_93-E probe: Init HTTP must not run under open AR txn (pool bomb).
+          ar_transaction_open: ActiveRecord::Base.connection.transaction_open?
         }
       end
     end

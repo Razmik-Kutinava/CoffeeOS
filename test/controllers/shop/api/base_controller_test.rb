@@ -62,4 +62,15 @@ class Shop::Api::BaseControllerTest < ActionDispatch::IntegrationTest
     assert_equal other_tenant.id, second_tenant_id
     assert_not_equal first_tenant_id, second_tenant_id
   end
+
+  # T-E3a — TASK_93-E: action body (Init HTTP path) must not hold open AR transaction
+  test "[TDD E] shop API action body runs without open AR transaction" do
+    get "/shop/api/debug", headers: { "X-Shop-Tenant" => @tenant.id.to_s }
+    assert_response :success
+    body = response.parsed_body
+    assert_equal @tenant.id, body.dig("resolved_tenant", "id")
+    assert_includes body.keys, "ar_transaction_open"
+    refute body["ar_transaction_open"],
+      "T-E3a: with_shop_tenant! must not wrap action yield in open AR transaction (HTTP Init pool bomb)"
+  end
 end

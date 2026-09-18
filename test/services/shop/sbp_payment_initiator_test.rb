@@ -297,6 +297,8 @@ class Shop::SbpPaymentInitiatorTest < ActiveSupport::TestCase
     assert_equal "pay-existing-sbp", captured_qr_payment_id
     assert_equal "https://qr.nspk.ru/AS10000RESUME", result[:payment_url]
     assert_equal "pay-existing-sbp", result[:provider_payment_id]
+    assert_equal "pay-existing-sbp", order.payments.first.reload.provider_payment_id,
+      "T-E1b: resume must not overwrite live provider_payment_id"
   end
 
   test "call! live rejects final_amount below 10 rubles before Init" do

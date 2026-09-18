@@ -410,6 +410,178 @@ class Shop::OrderCreatorTest < ActiveSupport::TestCase
     assert_equal before, Order.count
   end
 
+  # --- TASK_93-E Init / uuid / txn ------------------------------------------------
+
+  # T-E1 — reuse same client_order_uuid must not overwrite live provider_payment_id
+  test "[TDD E] client_order_uuid reuse keeps live provider_payment_id" do
+    uuid = SecureRandom.uuid
+    email = "e1-reuse-#{SecureRandom.hex(3)}@example.com"
+    session = build_session_with_item
+    Shop::EmailVerificationSession.mark_verified!(session, @tenant.id, email)
+    customer = MobileCustomer.create!(
+      email: email,
+      first_name: "E1",
+      is_active: true,
+      email_verified: true
+    )
+
+    order = Order.create!(
+      tenant_id: @tenant.id,
+      customer_id: customer.id,
+      customer_name: "E1",
+      order_number: "",
+      source: :mobile,
+      status: :pending_payment,
+      total_amount: 200,
+      discount_amount: 0,
+      final_amount: 200,
+      client_order_uuid: uuid
+    )
+    OrderItem.create!(
+      order_id: order.id,
+      product_id: @product.id,
+      product_name: @product.name,
+      quantity: 1,
+      unit_price: 200,
+      total_price: 200
+    )
+    payment = Payment.create!(
+      tenant_id: @tenant.id,
+      order_id: order.id,
+      amount: 200,
+      method: :card,
+      status: :pending,
+      provider: "tbank",
+      provider_payment_id: "live-pid-keep"
+    )
+
+    old_tax = ENV["TBANK_TAXATION"]
+    old_vat = ENV["TBANK_TAX"]
+    ENV["TBANK_TAXATION"] = "usn_income"
+    ENV["TBANK_TAX"] = "none"
+    ENV["TBANK_TERMINAL_KEY"] ||= "TestTerminal"
+    ENV["TBANK_PASSWORD"] ||= "TestPassword"
+
+    init_count = 0
+    fake = Object.new
+    fake.define_singleton_method(:init_payment) do |**_|
+      init_count += 1
+      { provider_payment_id: "OVERWRITE-BAD", payment_url: "https://pay.example/bad" }
+    end
+    original_new = Payments::TbankAdapter.method(:new)
+    Payments::TbankAdapter.define_singleton_method(:new) { |*_a, **_k| fake }
+
+    begin
+      returned = Shop::OrderCreator.new(session, tenant: @tenant).call!({
+        payment_method: "card",
+        email: email,
+        name: "E1",
+        client_order_uuid: uuid
+      })
+      assert_equal order.id, returned.id
+      assert_equal 0, init_count, "T-E1: must not re-Init when live pid present"
+      assert_equal "live-pid-keep", payment.reload.provider_payment_id
+    ensure
+      Payments::TbankAdapter.define_singleton_method(:new, original_new)
+      ENV["TBANK_TAXATION"] = old_tax
+      ENV["TBANK_TAX"] = old_vat
+    end
+  end
+
+  # T-E2a / T-E2b — RecordNotUnique inside open txn must not leave InFailedSqlTransaction
+  test "[TDD E] RecordNotUnique on client_order_uuid recovers without InFailedSqlTransaction" do
+    uuid = SecureRandom.uuid
+    email = "e2-uuid-#{SecureRandom.hex(3)}@example.com"
+    customer = MobileCustomer.create!(
+      email: email,
+      first_name: "E2",
+      is_active: true,
+      email_verified: true
+    )
+    existing = Order.create!(
+      tenant_id: @tenant.id,
+      customer_id: customer.id,
+      customer_name: "E2",
+      order_number: "",
+      source: :mobile,
+      status: :pending_payment,
+      total_amount: 200,
+      discount_amount: 0,
+      final_amount: 200,
+      client_order_uuid: uuid
+    )
+
+    session = build_session_with_item
+    creator = Shop::OrderCreator.new(session, tenant: @tenant)
+    flow = {
+      order_status: :pending_payment,
+      payment_status: :pending,
+      paid_at: nil,
+      comment: "E2"
+    }
+
+    recovered = nil
+    assert_nothing_raised do
+      ActiveRecord::Base.transaction do
+        recovered = creator.send(
+          :create_shop_order!,
+          customer: customer,
+          params: { client_order_uuid: uuid, name: "E2" },
+          flow: flow,
+          subtotal: 200,
+          discount: 0,
+          total: 200
+        )
+        # T-E2b: subsequent query in same txn must work
+        assert_equal existing.id, Order.find(recovered.id).id
+      end
+    end
+    assert_equal existing.id, recovered.id
+  end
+
+  # T-E4b — concurrent same client_order_uuid → one order, no 500
+  test "[TDD E] concurrent same client_order_uuid yields one order" do
+    uuid = SecureRandom.uuid
+    email = "e4b-#{SecureRandom.hex(3)}@example.com"
+    ready = Queue.new
+    go = Queue.new
+    results = Queue.new
+
+    threads = 2.times.map do
+      Thread.new do
+        ActiveRecord::Base.connection_pool.with_connection do
+          Current.tenant_id = @tenant.id
+          session = build_session_with_item
+          Shop::EmailVerificationSession.mark_verified!(session, @tenant.id, email)
+          ready << true
+          go.pop
+          order = Shop::OrderCreator.new(session, tenant: @tenant).call!({
+            payment_method: "card",
+            email: email,
+            name: "Race",
+            client_order_uuid: uuid
+          })
+          results << [ :ok, order.id ]
+        rescue StandardError => e
+          results << [ :err, "#{e.class}: #{e.message}" ]
+        ensure
+          Current.reset
+        end
+      end
+    end
+
+    2.times { ready.pop }
+    2.times { go << true }
+    threads.each(&:join)
+
+    outcomes = 2.times.map { results.pop }
+    errors = outcomes.select { |s, _| s == :err }
+    assert_empty errors, "T-E4b concurrent uuid errors: #{errors.inspect}"
+    ids = outcomes.map { |_, id| id }.uniq
+    assert_equal 1, ids.size, "T-E4b expected one order id, got #{ids.inspect}"
+    assert_equal 1, Order.where(tenant_id: @tenant.id, client_order_uuid: uuid).count
+  end
+
   # T-A3b — TASK_93-A R5 (simulate → accepted)
   test "accepted flow with insufficient stock does not raise; order accepted + audit" do
     ingredient = Ingredient.create!(name: "Shop Low #{SecureRandom.hex(2)}", unit: "g", is_active: true)

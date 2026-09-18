@@ -71,6 +71,24 @@ class Shop::WidgetPaymentInitiatorTest < ActiveSupport::TestCase
     assert_equal "existing-pid", result[:provider_payment_id]
   end
 
+  # T-E1a / T-E4a — TASK_93-E: double Init must not overwrite live pid / call Init
+  test "[TDD E] double Init keeps live provider_payment_id and skips Init" do
+    @payment.update_columns(provider_payment_id: "live-pid-1")
+    adapter = Object.new
+    adapter.define_singleton_method(:init_payment) { |**_| raise "Init must not run on re-Init" }
+
+    2.times do
+      result = Shop::WidgetPaymentInitiator.call(
+        order: @order,
+        return_base_url: "https://example.com",
+        notification_url: "https://example.com/cb",
+        adapter: adapter
+      )
+      assert_equal "live-pid-1", result[:provider_payment_id]
+    end
+    assert_equal "live-pid-1", @payment.reload.provider_payment_id
+  end
+
   test "with rebill uses Init+Charge and settles CONFIRMED" do
     MobilePaymentMethod.create!(
       customer_id: @customer.id,
