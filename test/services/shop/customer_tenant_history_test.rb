@@ -93,6 +93,21 @@ class Shop::CustomerTenantHistoryTest < ActiveSupport::TestCase
     assert_equal @tenant_a.id, payload[:last_ordered_tenant_id]
   end
 
+  test "T-G5b CustomerTenantHistory source has no row_security = off" do
+    source = File.read(Rails.root.join("app/services/shop/customer_tenant_history.rb"))
+    refute_match(/row_security\s*=\s*off/i, source)
+    assert_match(/with_shop_city_lookup|GucContext/, source)
+  end
+
+  test "T-G5d last_ordered_tenant_id still works cross-tenant for same customer" do
+    create_mobile_order!(tenant: @tenant_a, customer: @customer, created_at: 2.days.ago)
+    create_mobile_order!(tenant: @tenant_c, customer: @customer, created_at: 1.hour.ago)
+    Shop::CustomerSession.set_customer_id!(@session, @tenant_a.id, @customer.id)
+
+    payload = Shop::CustomerTenantHistory.call(session: @session, current_tenant: @tenant_a)
+    assert_equal @tenant_c.id, payload[:last_ordered_tenant_id]
+  end
+
   private
 
   def create_mobile_order!(tenant:, customer:, created_at: Time.current)
