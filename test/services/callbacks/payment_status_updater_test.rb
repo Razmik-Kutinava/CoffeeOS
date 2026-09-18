@@ -209,4 +209,62 @@ class Callbacks::PaymentStatusUpdaterTest < ActiveSupport::TestCase
     assert_equal "succeeded", @payment.reload.status
     assert_equal "closed", @order.reload.status
   end
+
+  # TASK_93-A / bugbot: with DB triggers installed, UPDATE→accepted must not hard-deduct or double-deduct.
+  test "succeeded with triggers: insufficient stock unchanged once; enough stock deducts once" do
+    require_relative "../../support/db_triggers"
+    TestDbTriggers.ensure!
+
+    category = create_category!
+    product = create_product!(category: category)
+    enable_product_for_tenant!(tenant: @tenant, product: product, price: 200)
+    ingredient = Ingredient.create!(name: "Trig #{SecureRandom.hex(2)}", unit: "g", is_active: true)
+    ProductRecipe.create!(product: product, ingredient: ingredient, qty_per_serving: 10)
+    IngredientTenantStock.create!(tenant: @tenant, ingredient: ingredient, qty: 5, min_qty: 0)
+    OrderItem.create!(
+      order: @order,
+      product_id: product.id,
+      product_name: product.name,
+      quantity: 1,
+      unit_price: 200,
+      total_price: 200
+    )
+
+    Callbacks::PaymentStatusUpdater.new(payment: @payment, new_status: "succeeded").call!
+
+    assert_equal "succeeded", @payment.reload.status
+    assert_equal "accepted", @order.reload.status
+    assert_equal 5.to_d, IngredientTenantStock.find_by!(tenant_id: @tenant.id, ingredient_id: ingredient.id).qty
+    assert AdminAuditLog.exists?(action: "inventory_deduction_skipped", tenant_id: @tenant.id)
+
+    order2 = Order.create!(
+      tenant: @tenant,
+      order_number: "PAY-2",
+      source: "mobile",
+      status: "pending_payment",
+      total_amount: 200,
+      discount_amount: 0,
+      final_amount: 200
+    )
+    payment2 = Payment.create!(
+      order: order2,
+      tenant: @tenant,
+      amount: 200,
+      method: "card",
+      provider: "shop",
+      status: "pending"
+    )
+    IngredientTenantStock.find_by!(tenant_id: @tenant.id, ingredient_id: ingredient.id).update!(qty: 40)
+    OrderItem.create!(
+      order: order2,
+      product_id: product.id,
+      product_name: product.name,
+      quantity: 1,
+      unit_price: 200,
+      total_price: 200
+    )
+
+    Callbacks::PaymentStatusUpdater.new(payment: payment2, new_status: "succeeded").call!
+    assert_equal 30.to_d, IngredientTenantStock.find_by!(tenant_id: @tenant.id, ingredient_id: ingredient.id).qty
+  end
 end

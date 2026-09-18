@@ -3,9 +3,8 @@
 module Inventory
   # Block F: списание ингредиентов по product_recipes (+ modifier_option_recipes) при продаже.
   # Вызывается после создания order_items, когда заказ сразу accepted (INSERT).
-  # UPDATE pending→accepted покрывает DB-триггер auto_deduct_ingredients_on_order_accept.
-  #
-  # TASK_93-A: недостаток/отсутствие стока не raise (не откатывает оплату) — skip + AdminAuditLog.
+  # UPDATE pending→accepted: DB trigger is TASK_93-A no-op; Ruby soft-fail owns deduct.
+  # INSERT accepted (barista/shop) still uses OrderRecipeDeduction after items.
   class OrderRecipeDeduction
     class Error < StandardError; end
 

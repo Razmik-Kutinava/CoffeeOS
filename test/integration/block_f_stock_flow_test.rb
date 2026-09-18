@@ -93,6 +93,7 @@ class BlockFStockFlowTest < ActionDispatch::IntegrationTest
     assert AdminAuditLog.exists?(action: "inventory_deduction_skipped", tenant_id: tenant.id)
   end
 
+  # TASK_93-A: trigger auto_deduct is no-op; Ruby soft-fail owns UPDATE→accepted deduct.
   test "auto_deduct update path does not double deduct on noop update" do
     tenant = create_tenant!(slug: "bf-idem-#{SecureRandom.hex(3)}")
     barista = create_user!(tenant: tenant, role_codes: %w[barista])
@@ -125,12 +126,16 @@ class BlockFStockFlowTest < ActionDispatch::IntegrationTest
     )
 
     order.update!(status: "accepted")
+    stock_after_status = IngredientTenantStock.find_by!(tenant_id: tenant.id, ingredient_id: ingredient.id)
+    assert_equal 100.to_d, stock_after_status.qty, "trigger is no-op until Ruby deduct"
+
+    Inventory::OrderRecipeDeduction.call!(order: order.reload)
     stock_after_accept = IngredientTenantStock.find_by!(tenant_id: tenant.id, ingredient_id: ingredient.id)
     assert_equal 90.to_d, stock_after_accept.qty
 
     order.update!(customer_name: "Renamed")
     stock_after_update = IngredientTenantStock.find_by!(tenant_id: tenant.id, ingredient_id: ingredient.id)
-    assert_equal 90.to_d, stock_after_update.qty, "no second deduction"
+    assert_equal 90.to_d, stock_after_update.qty, "trigger no-op on non-status update; no second deduct"
   end
 
   test "prep_kitchen draft movement confirm updates stock" do
