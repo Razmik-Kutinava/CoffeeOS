@@ -1,6 +1,14 @@
-# todo — #93 TASK_93-C (канон; session/todo.md гоняют параллельные чаты)
+# todo — #93 TASK_93-C: SMS «заказ готов» + short link (канон)
 
-См. также `docs/operations/session/todo.md` когда активен блок C.
+| Поле | Значение |
+|------|----------|
+| **ID** | CBR **#93** · **TASK_93-C** |
+| **Статус** | **GREEN** · Next: `/regress` |
+| **RED** | `1346d895` |
+| **GREEN** | `fd57e777` |
+| **GATES** | [`GATES-block-C.md`](GATES-block-C.md) |
+
+## Канон
 
 | ID | Решение |
 |----|---------|
@@ -8,5 +16,18 @@
 | **TTL** | 48h от ready_notified_at ‖ ready_at ‖ updated_at |
 | **Throttle** | 30/min/IP GET /o/ |
 | **One-time** | SKIP |
+| **SMS** | `CODE:BLACK. Готов! {host}/o/{hash}` ≤70 |
 
-Файлы / Не ломать / Проверка — как в session todo C.
+## SBR
+
+- [x] `/start` · `/unlazy` · `/spec`
+- [x] RED `1346d895`
+- [x] GREEN `fd57e777` — 18/0 PASS
+- [ ] `/regress`
+- [ ] `/review`
+
+## Проверка
+
+```bash
+bin/rails test test/services/shop/order_ready_sms_link_test.rb test/services/shop/order_ready_paid_notifier_test.rb test/integration/shop/order_short_links_test.rb test/integration/rack_attack_order_short_link_test.rb
+```
