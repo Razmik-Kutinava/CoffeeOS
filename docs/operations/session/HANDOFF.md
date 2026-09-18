@@ -2,17 +2,17 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-18 (TASK_93-B unlazy)  
+**Дата:** 2026-09-18 (TASK_93-C SPEC)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#93** TASK_93-B GATES | `/spec` → `/sbr` B1–B5 |
-| Ledger: `GATES-block-B.md` (G3 met) | session/GATES.md гоняют параллельные A/C/D |
-| Dependabot 0 open | — |
+| **#93-C** SPEC готово (`todo.md`) | `/sbr` RED → GREEN C1–C5 |
+| GATES C · G6 Fly → L | `/regress` → `/review` без deploy |
+| R2-A · TTL 48h · throttle 30/min | one-time SKIP |
 
-**last_done:** `/unlazy` B · G3 baseline PASS · G1/G2 unmet pre-RED · G5→L  
-**next_step:** `/spec` по блоку B (phone-first)
+**last_done:** SPEC TASK_93-C — 7 файлов + blast · Не ломать · Проверка G1–G5  
+**next_step:** `/sbr` RED — T-C1a/c, T-C4a, T-C5a
 
 **ctx_trim:** `2026-09-02`  
 **Fly:** v495 `deployment-01M22JRN95TXRSV1PQDN49227M`

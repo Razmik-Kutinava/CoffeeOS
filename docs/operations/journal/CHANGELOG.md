@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-18 — fix: CI ABAC-015 (revert TenantOperatingHours preload)
+
+- Loaded-empty `weekday_schedules` → `open_now?` всегда true → 3 CI fails
+- Revert preload; RUBY-1J batch aggregate остаётся (`94a7644b`)
+- CI green: https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/35323013520
+
 ## 2026-09-18 — docs: unlazy GATES #93 TASK_93-B Checkout identity
 
 - Канон ledger: `artifacts/critical_path_hardening/GATES-block-B.md` (session/GATES.md гоняют A/C/D)
