@@ -5,7 +5,7 @@
 | **ID** | CBR **#93** · **TASK_93-C** |
 | **Статус** | **GREEN** · Next: `/regress` |
 | **RED** | `1346d895` |
-| **GREEN** | `fd57e777` |
+| **GREEN** | `c2ef2d68` (идентичный `fd57e777` в параллельной линии) |
 | **GATES** | [`GATES-block-C.md`](GATES-block-C.md) |
 
 ## Канон
