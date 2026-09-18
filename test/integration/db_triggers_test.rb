@@ -86,6 +86,8 @@ class DbTriggersTest < ActionDispatch::IntegrationTest
     assert_equal 500.to_d, stock_before.qty, "Stock should be 500 before accept"
 
     order.update!(status: "accepted")
+    # TASK_93-A: trg_auto_deduct is no-op; deduct via soft-fail service
+    Inventory::OrderRecipeDeduction.call!(order: order)
 
     stock_after = IngredientTenantStock.find_by!(tenant_id: tenant.id, ingredient_id: ingredient.id)
     # 2 portions * 200 ml = 400

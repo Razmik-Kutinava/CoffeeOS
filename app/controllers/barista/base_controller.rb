@@ -1,5 +1,7 @@
 module Barista
   class BaseController < ApplicationController
+    include WithTenantPgContext
+
     layout "barista"
     before_action :require_login
     before_action :require_barista_role

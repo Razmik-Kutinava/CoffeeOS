@@ -20,8 +20,7 @@ class ApplicationRecord < ActiveRecord::Base
 
   def ensure_tenant_id
     if tenant_id.blank?
-      # В development/test режиме не выбрасываем исключение, только логируем
-      if Rails.env.development? || Rails.env.test?
+      if Rails.env.test?
         Rails.logger.warn "Current.tenant_id not set for #{self.class.name}, but tenant_id is blank"
       else
         raise "Current.tenant_id not set for #{self.class.name}"

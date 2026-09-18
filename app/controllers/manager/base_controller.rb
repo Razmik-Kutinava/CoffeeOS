@@ -1,5 +1,7 @@
 module Manager
   class BaseController < ApplicationController
+    include WithTenantPgContext
+
     layout "manager"
 
     before_action :require_login

@@ -3,8 +3,8 @@
 # После db:schema:load триггеры отсутствуют — восстанавливаем в dev/test при boot.
 if Rails.env.local?
   Rails.application.config.after_initialize do
-    DatabaseTriggers.ensure_order_number!
+    DatabaseTriggers.ensure_all!
   rescue StandardError => e
-    Rails.logger.warn("DatabaseTriggers.ensure_order_number! skipped: #{e.class} — #{e.message}")
+    Rails.logger.warn("DatabaseTriggers.ensure_all! skipped: #{e.class} — #{e.message}")
   end
 end

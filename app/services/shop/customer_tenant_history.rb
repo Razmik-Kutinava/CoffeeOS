@@ -58,7 +58,7 @@ module Shop
       city_key = TenantGeo.normalize_city(@current_tenant.city)
       return [] if city_key.blank?
 
-      with_rls_off do
+      with_shop_city_lookup do
         Tenant.where(status: "active", type: "sales_point").select do |t|
           TenantGeo.normalize_city(t.city) == city_key
         end
@@ -69,13 +69,13 @@ module Shop
       cid = CustomerSession.customer_id(@session, @current_tenant.id)
       return nil if cid.blank?
 
-      stats = with_rls_off do
+      stats = with_shop_city_lookup do
         Order.mobile.where(customer_id: cid).group(:tenant_id).maximum(:created_at)
       end
       return nil if stats.blank?
 
       # Только active sales_point — иначе inactive Fly Overnight «перебивает» Point A.
-      active_ids = with_rls_off do
+      active_ids = with_shop_city_lookup do
         Tenant.where(id: stats.keys, status: "active", type: "sales_point").pluck(:id).map(&:to_s)
       end.to_set
 
@@ -100,10 +100,8 @@ module Shop
       km.nil? ? nil : km.round(2)
     end
 
-    def with_rls_off
-      conn = ActiveRecord::Base.connection
-      conn.execute("SET LOCAL row_security = off")
-      yield
+    def with_shop_city_lookup(&block)
+      Rls::GucContext.with_shop_city_lookup(&block)
     end
   end
 end

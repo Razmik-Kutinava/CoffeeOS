@@ -50,6 +50,11 @@ class ApplicationController < ActionController::Base
   # Вызывается из каждого namespace base_controller.
   def set_pg_context(tenant_id: nil, user_id: nil)
     conn = ActiveRecord::Base.connection
+    unless conn.transaction_open?
+      Rails.logger.warn("set_pg_context skipped: no open transaction (SET LOCAL would be ignored)")
+      return
+    end
+
     conn.execute("SET LOCAL app.current_tenant_id = #{conn.quote(tenant_id.to_s)}") if tenant_id
     conn.execute("SET LOCAL app.current_user_id = #{conn.quote(user_id.to_s)}") if user_id
   end

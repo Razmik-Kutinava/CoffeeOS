@@ -32,8 +32,8 @@
 - [x] PHASE 0 `/start`
 - [x] `/unlazy` — GATES G `576d37bf`
 - [x] PHASE 1 `/spec` — этот файл + `RLS_PG_INVENTORY.md`
-- [ ] PHASE 2 RED — T-G1a/c · T-G5b · gaps · `[RED]`
-- [ ] PHASE 2 GREEN — R1–R6 · `[GREEN]`
+- [x] PHASE 2 RED — T-G1a/c · T-G5b · gaps · `[RED]`
+- [x] PHASE 2 GREEN — R1–R6 · `[GREEN]`
 - [ ] `/regress` — G4
 - [ ] PHASE 3 `/review` — G1–G6 PASS · push · без deploy
 

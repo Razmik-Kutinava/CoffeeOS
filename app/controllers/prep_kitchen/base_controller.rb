@@ -1,5 +1,7 @@
 module PrepKitchen
   class BaseController < ApplicationController
+    include WithTenantPgContext
+
     layout "prep_kitchen"
     helper_method :current_user, :prep_kitchen_manager?
 
