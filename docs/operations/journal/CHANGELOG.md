@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-18 — docs: REVIEW #93 TASK_93-K hygiene + PaymentURL blank fix
+
+- bugbot: prod blank PaymentURL → empty (not 422) · security: no med+ · K6 sha · K7-B note
+- Table K1–K7 PASS · G5→L · push
+
 ## 2026-09-18 — feat: #93 TASK_93-H cart cookie overflow [GREEN]
 
 - `CartService::OverflowError` · `MAX_CART_LINES=20` · `MAX_SESSION_CART_BYTES=3072` · rollback guard

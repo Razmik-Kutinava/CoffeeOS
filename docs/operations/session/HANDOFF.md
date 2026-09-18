@@ -2,17 +2,18 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-18 (TASK_93-F unlazy reverify)  
-**Ветка:** `develop`
+**Дата:** 2026-09-18 (TASK_93-K REVIEW)  
+**Ветка:** `develop`  
+**sha:** `a193ad1b`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#93-F** GATES met 4 · G5→L | `/review` · push · **без deploy** |
-| Local G1–G4 reverify PASS | F1–F5 PASS table |
-| GREEN `1b28a128` · Entire `01M2SSQXT1V67AK260SH1P9RAX` | Parallel E/B/I — свои ledgers |
+| **#93-K** REVIEW · Local PASS | push → CI green · **без deploy** |
+| K1–K7 закрыты · G5→L | Next блок **L** (deploy) или остаток 93 |
+| GREEN+fix `a193ad1b` | Fly MCP Point A = L |
 
-**last_done:** `/unlazy` reverify TASK_93-F — met 4 / abandoned 1  
-**next_step:** `/review` блок F
+**last_done:** `/review` TASK_93-K — bugbot fix blank PaymentURL · security clean · K6 sha sync  
+**next_step:** CI green · deploy только апрув · блок L
 
 **ctx_trim:** `2026-09-02`  
 **Fly:** v495 `deployment-01M22JRN95TXRSV1PQDN49227M`
