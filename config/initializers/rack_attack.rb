@@ -20,12 +20,14 @@ class Rack::Attack
   # SolidCache cannot increment — Redis (prod/FLY) or MemoryStore (dev/test).
   # CI sets REDIS_URL; parallel workers + FLUSHDB race throttle counters — default
   # test resolution uses MemoryStore. T-I1 passes production:/fly_app_name: to exercise Redis.
+  # Docker assets:precompile sets SECRET_KEY_BASE_DUMMY=1 without Redis — MemoryStore, no raise.
   def self.resolve_cache_store(
     production: Rails.env.production?,
     test: Rails.env.test?,
     fly_app_name: ENV["FLY_APP_NAME"],
     rack_attack_redis_url: ENV["RACK_ATTACK_REDIS_URL"],
-    redis_url: ENV["REDIS_URL"]
+    redis_url: ENV["REDIS_URL"],
+    assets_precompile: ENV["SECRET_KEY_BASE_DUMMY"].present?
   )
     url = rack_attack_redis_url.to_s.presence || redis_url.to_s.presence
     public_like = production || fly_app_name.to_s.present?
@@ -36,6 +38,9 @@ class Rack::Attack
 
     if public_like
       if url.blank?
+        if assets_precompile
+          return ActiveSupport::Cache::MemoryStore.new
+        end
         raise "Rack::Attack requires REDIS_URL or RACK_ATTACK_REDIS_URL on production/FLY (TASK_93-I)"
       end
       return ActiveSupport::Cache::RedisCacheStore.new(url: url)
@@ -125,7 +130,7 @@ class Rack::Attack
   throttle("shop/phone_otp_verify_sms/phone", limit: 5, period: 1.minute) do |req|
     next unless req.post? && PHONE_OTP_VERIFY_PATHS.include?(req.path)
 
-    phone = Rack::Attack.shop_otp_json_field(req, "phone")
+    phone = Rack::Attack.shop_otp_normalized_phone(req)
     "#{phone}:verify" if phone.present?
   end
 
@@ -220,10 +225,20 @@ class Rack::Attack
     json[key].to_s.presence
   end
 
+  # Canonical +79… for throttle keys (same as Shop::PhoneOtp). Invalid → nil (IP throttle still applies).
+  def self.shop_otp_normalized_phone(req)
+    raw = shop_otp_json_field(req, "phone")
+    return if raw.blank?
+
+    Shop::PhoneNormalizer.normalize!(raw)
+  rescue Shop::PhoneNormalizer::Error
+    nil
+  end
+
   def self.shop_phone_otp_phone_from_path(req, path)
     return unless req.path == path && req.post?
 
-    phone = shop_otp_json_field(req, "phone")
+    phone = shop_otp_normalized_phone(req)
     return unless phone.present?
 
     "#{phone}:#{path}"
@@ -235,10 +250,15 @@ class Rack::Attack
     body = req.body.read
     req.body.rewind if req.body.respond_to?(:rewind)
     json = JSON.parse(body) rescue {}
-    phone = json["phone"].to_s.presence
-    return unless phone.present? && json["channel"].to_s == "sms"
+    return unless json["channel"].to_s == "sms"
 
+    raw = json["phone"].to_s.presence
+    return if raw.blank?
+
+    phone = Shop::PhoneNormalizer.normalize!(raw)
     "#{phone}:sms"
+  rescue Shop::PhoneNormalizer::Error
+    nil
   end
 end
 

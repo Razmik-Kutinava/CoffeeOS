@@ -66,6 +66,26 @@ class RackAttackOtpVerifyTest < ActionDispatch::IntegrationTest
     end
   end
 
+  test "T-I2f phone variants 8xxx and +7xxx share phone throttle key" do
+    digits = @phone.gsub(/\D/, "")
+    eight = "8#{digits[1..]}"
+    with_rack_attack do
+      5.times do |i|
+        post "/shop/api/phone_otp/verify_sms",
+          headers: shop_tenant_headers(@tenant.id).merge("REMOTE_ADDR" => "203.0.113.#{110 + i}"),
+          params: { phone: eight, code: "000000" },
+          as: :json
+        assert_includes [ 422, 401, 404 ], response.status
+      end
+
+      post "/shop/api/phone_otp/verify_sms",
+        headers: shop_tenant_headers(@tenant.id).merge("REMOTE_ADDR" => "203.0.113.199"),
+        params: { phone: @phone, code: "000000" },
+        as: :json
+      assert_response :too_many_requests
+    end
+  end
+
   test "T-I2d legacy phone_otp/verify is throttled" do
     with_rack_attack do
       ip = "203.0.113.60"

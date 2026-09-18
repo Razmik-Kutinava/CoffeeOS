@@ -9,7 +9,8 @@ Shared rate-limit store across Fly web machines. **Not** app `Rails.cache` (Soli
 | `RACK_ATTACK_REDIS_URL` | Preferred for Attack only |
 | `REDIS_URL` | Fallback if Attack-specific unset |
 
-On **production** or when `FLY_APP_NAME` is set: missing URL → **boot fail** (`resolve_cache_store` raises).
+On **production** or when `FLY_APP_NAME` is set: missing URL → **boot fail** (`resolve_cache_store` raises),
+except Docker **`SECRET_KEY_BASE_DUMMY=1`** (assets:precompile) → MemoryStore, no raise.
 
 Dev without URL → `MemoryStore` + warn log (per-process limits).
 

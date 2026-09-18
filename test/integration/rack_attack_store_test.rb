@@ -56,9 +56,21 @@ class RackAttackStoreTest < ActiveSupport::TestCase
         production: true,
         fly_app_name: "coffeeos",
         rack_attack_redis_url: nil,
-        redis_url: nil
+        redis_url: nil,
+        assets_precompile: false
       )
     end
+  end
+
+  test "T-I1d assets precompile without Redis uses MemoryStore (no raise)" do
+    store = Rack::Attack.resolve_cache_store(
+      production: true,
+      fly_app_name: "coffeeos",
+      rack_attack_redis_url: nil,
+      redis_url: nil,
+      assets_precompile: true
+    )
+    assert_kind_of ActiveSupport::Cache::MemoryStore, store
   end
 
   test "T-I1 dev without URL returns MemoryStore" do
