@@ -89,7 +89,10 @@ class Shop::AuthFunnelWizardUiTest < ActionDispatch::IntegrationTest
     assert_includes cart, "shouldHideCartCheckoutCta({ onCheckout, keyboardOpen, phoneAuthActive })"
     assert_includes cart, "shop-cart-phone-auth-slim"
     assert_includes checkout, "setCheckoutPhoneAuthActive"
-    assert_match(/setCheckoutPhoneAuthActive\(!phoneVerified\)|setCheckoutPhoneAuthActive\(\s*!phoneVerified\s*\)/, checkout)
+    assert_match(
+      /setCheckoutPhoneAuthActive\(!phoneVerified\s*&&\s*!emailVerified\)|setCheckoutPhoneAuthActive\(\s*!phoneVerified\s*&&\s*!emailVerified\s*\)/,
+      checkout
+    )
   end
 
   # #90 POSTCALL-EXT [TDD]: return from phone → resume poll, no second init

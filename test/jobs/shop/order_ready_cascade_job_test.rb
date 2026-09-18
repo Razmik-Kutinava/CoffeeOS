@@ -128,7 +128,8 @@ class Shop::OrderReadyCascadeJobTest < ActiveSupport::TestCase
     assert_difference -> { OrderNotificationLog.where(order_id: @order.id, channel: "sms", status: "sent").count } => 1 do
       Shop::OrderReadyCascadeJob.perform_now(@order.id)
     end
-    assert_match(%r{codeblack\.xyz/o/}, captured_msg.to_s)
+    assert_match(%r{coffeeos\.fly\.dev/o/}, captured_msg.to_s)
+    refute_match(%r{codeblack\.xyz}, captured_msg.to_s)
   ensure
     Shop::SmsRuClient.define_singleton_method(:send_message!, original) if original
   end
@@ -154,7 +155,8 @@ class Shop::OrderReadyCascadeJobTest < ActiveSupport::TestCase
     assert_equal "sent", log.status
     msg = log.payload["msg"].to_s
     assert_operator msg.length, :<=, 70
-    assert_match(%r{\ACODE:BLACK\. Заказ готов! codeblack\.xyz/o/}, msg)
+    assert_match(%r{\ACODE:BLACK\. Готов! coffeeos\.fly\.dev/o/}, msg)
+    refute_match(%r{codeblack\.xyz}, msg)
     assert_no_match(/##{@order.order_number}/, msg)
     assert_equal 0, OrderNotificationLog.where(order_id: @order.id, channel: "telegram").count
   end
