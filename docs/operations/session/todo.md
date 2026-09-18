@@ -8,7 +8,7 @@
 | **Ветка** | `develop` |
 | **Канон** | `@spec-build-review` · `@coffeeos-commit-ops` · `@coffeeos-dev-gates` |
 | **ТЗ** | [`TASK-93-Critical-path-hardening.md`](../milestones/veha_2/requirements/customer_tasks/TASK-93-Critical-path-hardening.md) § Блок A |
-| **GATES** | [`session/GATES.md`](GATES.md) · [`artifacts/…/GATES.md`](../milestones/veha_2/artifacts/critical_path_hardening/GATES.md) |
+| **GATES** | [`GATES-block-A.md`](../milestones/veha_2/artifacts/critical_path_hardening/GATES-block-A.md) (канон A; `session/GATES.md` может быть B/C) |
 | **Цель** | Банк CONFIRMED → всегда `payment.succeeded` + `order.accepted`; склад **не** откатывает оплату (R1–R7) |
 | **OUT** | блоки B–L · deploy (L) · ослабление Amount check |
 
