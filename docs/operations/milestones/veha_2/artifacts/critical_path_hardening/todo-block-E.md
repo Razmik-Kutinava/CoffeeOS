@@ -4,7 +4,9 @@
 |------|----------|
 | **ID** | CBR **#93** · **TASK_93-E** |
 | **Тип** | SBR · hot-path оплата / Init |
-| **Статус** | **SPEC** · Next: `/sbr` RED |
+| **Статус** | **GREEN** · Next: `/regress` |
+| **RED** | `0a7e72ba` |
+| **GREEN** | `2eb22c71` |
 | **Ветка** | `develop` |
 | **Канон** | `@spec-build-review` · `@coffeeos-commit-ops` · `@coffeeos-dev-gates` |
 | **ТЗ** | бриф чата E1–E4 · зонтик [`TASK-93-Critical-path-hardening.md`](../milestones/veha_2/requirements/customer_tasks/TASK-93-Critical-path-hardening.md) карта E |
@@ -29,8 +31,8 @@
 - [x] PHASE 0 `/start` — бриф TASK_93-E в чате
 - [x] `/unlazy` — GATES E `bc6d770e` (G1–G4 unmet · G5→L)
 - [x] PHASE 1 `/spec` — этот todo (+ зеркало `todo-block-E.md`)
-- [ ] PHASE 2 RED — T-E1a/b · T-E2a/b · T-E3a · T-E4a/b падают · коммит `[RED]`
-- [ ] PHASE 2 GREEN — R1–R5 · коммит `[GREEN]` · все T-E* PASS
+- [x] PHASE 2 RED — T-E1a/b · T-E2a/b · T-E3a · T-E4a/b падают · коммит `[RED]` `0a7e72ba`
+- [x] PHASE 2 GREEN — R1–R5 · коммит `[GREEN]` `2eb22c71` · все T-E* PASS
 - [ ] `/regress` — G3 §2.3 + base_controller
 - [ ] PHASE 3 `/review` — таблица E1–E4 PASS · G4 evidence · push · **без deploy**
 

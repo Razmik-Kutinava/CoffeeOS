@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-18 — feat: TASK_93-E Init idempotency [GREEN]
+
+- GREEN `2eb22c71` · RED `0a7e72ba` · zone 53/0
+- `base_controller`: session SET GUC (не long txn) · `OrderCreator`: savepoint + pid guard + `ClientOrderReused`
+- Next: `/regress` §2.3
+
 ## 2026-09-18 — docs: regress PASS #93 TASK_93-K hygiene pack
 
 - Zone: sanitize · demo · paymentUrl · merger · collector · menu sort_order · onboarding
