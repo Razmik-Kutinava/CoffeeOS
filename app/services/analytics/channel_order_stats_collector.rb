@@ -4,6 +4,9 @@ module Analytics
   # Считает заказы за последние WINDOW_MINUTES по orders.source для каждой
   # активной sales_point и пишет одну JSON-строку в лог на tenant.
   # Временный сбор (1–2 недели); Telegram не трогает.
+  #
+  # Sentry RUBY-1J: раньше на каждый tenant был SET LOCAL + SELECT → N+1.
+  # Сейчас один read-only aggregate (row_security off) + preload расписаний.
   class ChannelOrderStatsCollector
     WINDOW_MINUTES = 15
     SOURCES = %w[mobile manual kiosk app].freeze
@@ -22,22 +25,49 @@ module Analytics
     end
 
     def call
-      logged = 0
+      tenants = active_sales_points
+      counts_by_tenant = batch_counts(tenants.map(&:id))
 
-      Tenant.where(status: "active", type: "sales_point").find_each do |tenant|
-        log_tenant!(tenant)
-        logged += 1
+      tenants.each do |tenant|
+        log_tenant!(tenant, counts_by_tenant[tenant.id] || {})
       end
 
-      Result.new(tenants_logged: logged, window_minutes: window_minutes)
+      Result.new(tenants_logged: tenants.size, window_minutes: window_minutes)
     end
 
     private
 
     attr_reader :now, :window_minutes, :since
 
-    def log_tenant!(tenant)
-      counts = counts_for(tenant)
+    def active_sales_points
+      Tenant.where(status: "active", type: "sales_point")
+            .includes(:weekday_schedules)
+            .order(:id)
+            .to_a
+    end
+
+    # Analytics job: нет user/tenant session — один SELECT по списку tenant_id.
+    # RLS off только внутри транзакции (SET LOCAL), read-only counts.
+    def batch_counts(tenant_ids)
+      return {} if tenant_ids.empty?
+
+      rows = ActiveRecord::Base.transaction do
+        conn = ActiveRecord::Base.connection
+        conn.execute("SET LOCAL row_security = off")
+
+        Order.where(tenant_id: tenant_ids)
+             .where("created_at >= ? AND created_at < ?", since, now)
+             .group(:tenant_id, :source)
+             .count
+      end
+
+      rows.each_with_object({}) do |((tenant_id, source), n), memo|
+        memo[tenant_id] ||= {}
+        memo[tenant_id][source] = n
+      end
+    end
+
+    def log_tenant!(tenant, counts)
       open_now = TenantOperatingHours.open_now?(tenant, at: now)
 
       payload = {
@@ -52,18 +82,6 @@ module Analytics
       }
 
       Rails.logger.info("[#{LOG_TAG}] #{payload.to_json}")
-    end
-
-    def counts_for(tenant)
-      ActiveRecord::Base.transaction do
-        conn = ActiveRecord::Base.connection
-        conn.execute("SET LOCAL app.current_tenant_id = #{conn.quote(tenant.id.to_s)}")
-
-        Order.where(tenant_id: tenant.id)
-             .where("created_at >= ? AND created_at < ?", since, now)
-             .group(:source)
-             .count
-      end
     end
   end
 end

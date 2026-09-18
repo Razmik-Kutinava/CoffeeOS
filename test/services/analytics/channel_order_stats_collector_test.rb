@@ -62,6 +62,29 @@ class Analytics::ChannelOrderStatsCollectorTest < ActiveSupport::TestCase
     end
   end
 
+  # Sentry RUBY-1J: не гонять SET LOCAL app.current_tenant_id на каждый tenant.
+  test "batch counts without per-tenant SET LOCAL tenant GUC" do
+    travel_to @now do
+      create_order!(tenant: @tenant, source: "mobile", created_at: 1.minute.ago)
+      create_order!(tenant: @other, source: "kiosk", created_at: 2.minutes.ago)
+
+      sqls = []
+      callback = lambda do |_name, _start, _finish, _id, payload|
+        sqls << payload[:sql].to_s
+      end
+
+      ActiveSupport::Notifications.subscribed(callback, "sql.active_record") do
+        Analytics::ChannelOrderStatsCollector.call(now: @now)
+      end
+
+      tenant_gucs = sqls.select { |s| s.match?(/SET\s+LOCAL\s+app\.current_tenant_id/i) }
+      assert_empty tenant_gucs, "expected no per-tenant SET LOCAL app.current_tenant_id, got: #{tenant_gucs}"
+
+      rls_off = sqls.select { |s| s.match?(/SET\s+LOCAL\s+row_security\s*=\s*off/i) }
+      assert_equal 1, rls_off.size, "expected one SET LOCAL row_security = off"
+    end
+  end
+
   private
 
   def capture_info_logs

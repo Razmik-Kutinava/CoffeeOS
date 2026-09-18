@@ -75,7 +75,16 @@ class TenantOperatingHours
   end
 
   def enabled_schedules
-    @enabled_schedules ||= tenant.weekday_schedules.enabled.index_by(&:weekday)
+    @enabled_schedules ||= begin
+      assoc = tenant.weekday_schedules
+      rows =
+        if assoc.loaded?
+          assoc.select(&:enabled?)
+        else
+          assoc.enabled.to_a
+        end
+      rows.index_by(&:weekday)
+    end
   end
 
   def local_weekday

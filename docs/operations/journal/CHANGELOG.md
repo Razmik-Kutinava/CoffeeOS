@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-18 — fix: Sentry RUBY-1J ChannelOrderStats N+1
+
+- `Analytics::ChannelOrderStatsCollector`: один aggregate `GROUP BY tenant_id, source` + `SET LOCAL row_security = off` (вместо SET LOCAL tenant на каждый tenant)
+- `TenantOperatingHours`: если `weekday_schedules` preloaded — фильтр в памяти
+- Tests: collector + job + menu sort_order (RUBY-1K regression) PASS
+- RUBY-1K: фикс уже в `64b99477`, ждёт deploy
+
 ## 2026-09-18 — docs: intake #93 TASK_93-B Checkout identity
 
 - `customer_tasks/TASK-93-B-Checkout-identity.md` — ТЗ 1:1 (phone-first; UI Pay ≡ бэкенд)
