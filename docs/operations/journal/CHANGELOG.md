@@ -11,6 +11,14 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-18 — feat: #93 TASK_93-A money↔order stock soft-fail [GREEN]
+
+- `OrderRecipeDeduction`: missing/insufficient → skip + `inventory_deduction_skipped` (нет qty=0 trap)
+- `PaymentStatusUpdater`: deduct после payment txn; cancelled/closed+succeeded → `payment_on_non_pending_order` / needs_manual_refund
+- barista / OrderCreator: soft-fail склада; `TbankPaymentSync` → `tbank_amount_mismatch` audit
+- RED `fc97a432` · GREEN `bba068f9` · Local 83 PASS · Entire `01M2SSQXT1V67AK260SH1P9RAX`
+- Next: `/regress` · todo: `artifacts/critical_path_hardening/TODO-block-A.md`
+
 ## 2026-09-18 — docs: unlazy #93 TASK_93-G Tenant GUC / RLS / schema
 
 - `GATES-block-G.md` + session `GATES.md`: G1 staff T-G1 · G2 inventory/ensure/fresh T-G2–G4 · G3 city T-G5 · G4 regress+T-G6 · G5→L
