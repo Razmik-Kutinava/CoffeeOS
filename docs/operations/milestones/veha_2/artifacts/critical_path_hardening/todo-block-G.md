@@ -6,7 +6,7 @@
 |------|----------|
 | **ID** | CBR **#93** · **TASK_93-G** |
 | **Тип** | SBR · hot-path RLS / staff GUC |
-| **Статус** | **REGRESS PASS** · Next: `/review` |
+| **Статус** | **REVIEW** · CI · Next: deploy апрув |
 | **Ветка** | `develop` |
 | **Канон** | `@spec-build-review` · `@coffeeos-commit-ops` · `@coffeeos-dev-gates` |
 | **ТЗ** | бриф чата G1–G6 · зонтик [`TASK-93-Critical-path-hardening.md`](../../requirements/customer_tasks/TASK-93-Critical-path-hardening.md) карта G |
@@ -35,7 +35,7 @@
 - [x] PHASE 2 RED — T-G1a/c · T-G5b · gaps · `[RED]`
 - [x] PHASE 2 GREEN — R1–R6 · `[GREEN]`
 - [x] `/regress` — G4
-- [ ] PHASE 3 `/review` — G1–G6 PASS · push · без deploy
+- [x] PHASE 3 `/review` — G1–G6 PASS · push · без deploy
 
 ## Файлы (ожидаемо)
 

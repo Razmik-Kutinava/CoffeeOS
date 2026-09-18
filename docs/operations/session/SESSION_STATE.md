@@ -2,17 +2,17 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-18 (TASK_93-K regress)  
+**Дата:** 2026-09-18 (TASK_93-G REVIEW)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#93-K** REGRESS **PASS** 35/0 | `/review` |
-| GATES-block-K G1–G4 met · G5→L | таблица K1–K7 · push · без deploy |
-| GREEN `39b38d58` | Fly MCP Point A — после deploy (L) |
+| **#93-G** REVIEW · push/CI | CI green → стоп |
+| G1–G6 Local PASS · G5→L | deploy только апрув |
+| bugbot+security clean | Entire на GREEN |
 
-**last_done:** `/regress` TASK_93-K — blog/demo/paymentUrl/merger/collector/menu **35/0** · approve G1–G4  
-**next_step:** `/review` блок K
+**last_done:** `/review` TASK_93-G — bugbot/security · Entire · push  
+**next_step:** CI green · deploy только апрув
 
 **ctx_trim:** `2026-09-02`
 

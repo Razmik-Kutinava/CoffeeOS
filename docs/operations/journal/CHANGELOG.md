@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-18 — docs: REVIEW #93 TASK_93-G Tenant GUC / RLS
+
+- Local 30/0 · bugbot clean · security: no med/high/crit
+- Entire `01M2SSXE54SV4CM341NHXR0SCE` на `7c34314a` · GATES G1–G4 met · G5→L
+- Таблица G1–G6 PASS · push/CI · **без deploy**
+
 ## 2026-09-18 — docs: unlazy reverify #93 TASK_93-K G1–G4 met (G5 to L)
 
 - `GATES-block-K.md`: reverify PASS G1–G4; G5 abandoned → TASK_93-L
