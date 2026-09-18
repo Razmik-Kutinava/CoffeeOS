@@ -1,0 +1,258 @@
+<manually_attached_skills>
+The user has manually attached the following skills to their message.
+These skills contain specific instructions or workflows that the user wants you to follow for this request.
+Only read the files if needed, the full skill content is inlined here.
+
+Skill Name: start
+Path: c:\Tools\workarea\CoffeeOS\.cursor\skills\start\SKILL.md
+SKILL.md content:
+Выполни инструкции из `.cursor/commands/start.md` целиком (умный старт A/B, отчёт, строка `Next: /…`).
+</manually_attached_skills>
+<cursor_commands>
+
+--- Cursor Command: start ---
+# /start — старт сессии / задачи (умный)
+
+CoffeeOS. Следуй `coffeeos-agent-workflow` + `coffeeos-customer-intake` (PHASE 0) при нужде.
+
+## Режим (выбери один, не гоняй всё)
+
+### A) Узкий старт (по умолчанию, если контекст уже есть)
+Используй, если в чате/todo уже: баг локализован, есть список файлов, живой `todo.md`, или пользователь продолжает ту же задачу.
+
+Сделай **только**:
+1. Шапка `HANDOFF.md` + шапка `SESSION_STATE.md` (`Read` limit до `---`, не тело)
+2. `ISSUES.md` — только секция **`## 🔴 Открыто`** (до следующего `##`), если релевантно багу
+3. `todo.md` — если есть
+4. **Не** перечитывай PRACTICES/QA/весь CHECKLIST/весь CHANGELOG / **`COMPONENT_MAP.md`**
+5. **Не** заново PHASE 0, если ТЗ уже в `customer_tasks/` или задача уже в todo
+6. Коротко: `last_done` / `current_state` / `next_step` (одна строка каждый)
+7. **ctx-trim:** если пт–вс и в шапке HANDOFF `ctx_trim` старше 7 дней — одна строка: «рекомендуется `/ctx-trim`» (не блокировать старт)
+
+### B) Полный старт + PHASE 0
+Только если **новое** ТЗ от заказчика ещё не в `customer_tasks/` / CBR, или пользователь явно просит intake.
+
+Тогда: PHASE 0 (intake 1:1) → краткая шапка ops → стоп до `/spec`.
+
+## Отчёт
+Таблица Сделано | Не сделано.  
+`Субагент: нет — старт` (или explore, если уже звал).  
+**Не пиши код** на этом шаге.
+
+## Обязательно в конце (копипаст для пользователя)
+
+Одной строкой, без лишнего текста вокруг:
+
+- Если нужен план/файлы → `Next: /spec`
+- Если SPEC/todo уже готов → `Next: /sbr`
+- Если только что завершили PHASE 0 → `Next: /spec`
+
+--- End Command ---
+</cursor_commands>
+<timestamp>Friday, Sep 18, 2026, 12:18 PM (UTC+4)</timestamp>
+
+# TASK_93-F — Блок F: Callbacks / stuck payments / Events
+
+Зонтик: **TASK_93** / `#93` — Critical path hardening.  
+Этот SBR-прогон: **только TASK_93-F**.
+
+Title чата: `Задача 93 — Critical path hardening (блок F)`.
+
+---
+
+## 1. Зачем
+
+Внутренние Events и банковский контур «молчат» или залипают:
+
+| Проблема | Код сейчас |
+|----------|------------|
+| Secrets пустые | `reject_unconfigured_callbacks!` только при `Rails.env.production?`; `authenticate_*` делают `return if blank` → на staging/FLY-like без secrets endpoint открыт |
+| Idempotency | claim пишется `state: processing` на 24h; `audit_event` обновляет cache только на `processed`/`failed` — **не** на `rejected` → после 422 (amount mismatch и т.п.) повтор даёт `duplicate: true, ok: true` |
+| Stuck payments | `StuckPaymentsCheckJob` только `TelegramAlertJob`, **без** GetState / `TbankPaymentSync` |
+| Fiscal | `TbankFiscalNotificationHandler` при skip логирует warn и `{ ok: true, skipped: … }` — без Sentry/retry |
+
+T‑Bank webhook (`Callbacks::TbankController`) в этот блок **не ломаем** (подпись уже есть); F4 — fiscal RECEIPT path.
+
+## 2. Цель блока
+
+**Callbacks не залипают и не молчат:** Events без секретов закрыты на публичном стенде; rejected не держит `processing` 24h; stuck tbank payments дожимаются через GetState; fiscal soft-skip → явный алерт/retry.
+
+## 3. Scope / Non-scope
+
+**В scope (F1–F5):**
+- `Callbacks::EventsController` — fail-closed secrets, idempotency claim lifecycle
+- `Payments::StuckPaymentsCheckJob` — GetState + sync/дожим
+- `Payments::TbankFiscalNotificationHandler` — alert/retry на skip
+- Тесты auth Events + claim + stuck + fiscal
+
+**Вне scope:** склад/PaymentStatusUpdater (A), checkout identity (B), SMS `/o/` (C), history per_page (D), Init race (E), RLS (G), Rack store Redis (I — можно оставить MemoryStore, но claim release обязателен), deploy (L).
+
+## 4. Продуктовые правила (зафиксировать в SPEC до RED)
+
+| Правило | Решение |
+|---------|---------|
+| **R1** | Fail-closed Events, если нет пары `CALLBACK_SHARED_TOKEN` + `CALLBACK_SHARED_SECRET`, когда среда «публичная»: `Rails.env.production?` **или** `ENV["FLY_APP_NAME"].present?` **или** `ENV["CALLBACK_FAIL_CLOSED"]=1`. Dev/test без флага — можно открыто для локальных тестов **или** тесты сами ставят secrets |
+| **R2** | После claim `processing`: любой terminal outcome (`processed` / `failed` / **`rejected`**) обновляет или **удаляет** cache key; rejected/422 **не** оставляют `processing` на 24h |
+| **R3** | Повтор с тем же key после **успеха** → `duplicate: true, ok: true`; после **reject** → можно ретраить обработку (нет ложного ok) или явный `duplicate` со `state: rejected` **без** повторного мутирования — зафиксировать одно в SPEC (рекомендация: **release claim on reject**, retry allowed) |
+| **R4** | `StuckPaymentsCheckJob`: для каждого stuck tbank payment с `provider_payment_id` → `TbankPaymentSync` / GetState → обновить статус; без id → alert only; ошибки sync → log + alert, job не падает целиком |
+| **R5** | Fiscal skip (`payment_not_found` / `missing_fiscal_ids`) → `Rails.error.report` (или `AdminAuditLog` + Telegram); опционально enqueue retry job 1–2 раза; **не** маскировать как тихий success без сигнала |
+| **R6** | Amount mismatch на Events по-прежнему **422** и не меняет payment на succeeded |
+
+## 5. Файлы (ожидаемо)
+
+```
+app/controllers/callbacks/events_controller.rb
+app/jobs/payments/stuck_payments_check_job.rb
+app/services/payments/tbank_payment_sync.rb          # reuse
+app/services/payments/tbank_fiscal_notification_handler.rb
+app/jobs/payments/tbank_fiscal_retry_job.rb          # если введёте retry
+
+test/controllers/callbacks/events_controller_test.rb
+test/jobs/payments/stuck_payments_check_job_test.rb  # создать
+test/services/payments/tbank_fiscal_notification_handler_test.rb
+```
+
+## 6. Не ломать
+
+1. Happy path Events payment → succeeded + order accept (с учётом A, если уже смержен).  
+2. Valid HMAC + token.  
+3. Anti-replay stale timestamp.  
+4. T‑Bank `notify` signature + amount mismatch release (уже есть).  
+5. Fiscal duplicate `ofd_receipt_id` — идемпотентный create.  
+6. Stuck job `limit(50)` — не раздувать без нужды.
+
+## 7. Матрица приёмки F1–F5 ↔ тесты
+
+Блок F закрыт только если **все** T-F* PASS.
+
+### F1 — Fail-closed secrets
+
+| ID | Тест | Arrange | Assert |
+|----|------|---------|--------|
+| **T-F1a** | `rejects when secrets blank and fail-closed env` | stub `FLY_APP_NAME` или `CALLBACK_FAIL_CLOSED=1` **или** `Rails.env=production`; TOKEN/SECRET blank | POST `/callbacks/payments` → **401**; payment status unchanged |
+| **T-F1b** | `rejects when only token set without secret (fail-closed)` | token set, secret blank, fail-closed on | 401 |
+| **T-F1c** | `accepts when both secrets set + valid auth` | token+secret+hmac+idem | 200 / ok path |
+
+Сейчас T-F1a на non-production без FLY — **ожидаемый RED** (открыто).
+
+### F2 — Idempotency claim на reject
+
+| ID | Тест | Arrange | Assert |
+|----|------|---------|--------|
+| **T-F2a** | `amount mismatch rejects and releases processing claim` | valid auth; succeeded + **wrong amount** → 422 | cache key **нет** `state: processing` (nil или `rejected`) |
+| **T-F2b** | `retry after amount mismatch can process with correct amount` | тот же idempotency key; второй POST с correct amount | **не** ложный `duplicate: true` ok без обновления; либо успех, либо явный rejected duplicate — по R3 |
+| **T-F2c** | `successful process then duplicate returns ok duplicate` | два identical success | второй `duplicate: true` |
+| **T-F2d** | `missing idempotency key when required → 422 without 24h ghost claim` | secret present, no key | 422; нет orphan processing keys |
+
+Файл: `events_controller_test.rb` (дописать; сейчас claim-on-reject скорее всего дыра).
+
+### F3 — StuckPayments GetState + дожим
+
+| ID | Тест | Arrange | Assert |
+|----|------|---------|--------|
+| **T-F3a** | `syncs stuck pending via GetState to succeeded` | payment tbank pending >30m, `provider_payment_id` set; stub GetState CONFIRMED | после `StuckPaymentsCheckJob#perform` payment **succeeded** (и order accepted — если updater path); **не** только Telegram |
+| **T-F3b** | `alerts when stuck without provider_payment_id` | pending, id blank | TelegramAlert (или report) enqueued; no crash |
+| **T-F3c** | `GetState failure still alerts and continues` | stub GetState raise | alert; job completes; другие payments в batch обрабатываются |
+| **T-F3d** | `ignores fresh payments under threshold` | created_at 5.minutes.ago | no sync/no alert |
+
+Файл: `test/jobs/payments/stuck_payments_check_job_test.rb`.  
+Reuse: `Payments::TbankPaymentSync` / adapter stub как в существующих tbank tests.
+
+### F4 — Fiscal soft-skip → алерт / retry
+
+| ID | Тест | Assert |
+|----|------|--------|
+| **T-F4a** | `payment_not_found reports error` | stub/assert `Rails.error.report` **или** `AdminAuditLog` / Telegram; результат может остаться skipped, но **сигнал есть** |
+| **T-F4b** | `missing_fiscal_ids reports error` | то же |
+| **T-F4c** | (если retry) `enqueues fiscal retry when payment_not_found` | job enqueued ≤ N times |
+| **T-F4d** | happy create receipt | регресс: receipt created, no false report |
+
+Файл: `tbank_fiscal_notification_handler_test.rb`.
+
+### F5 — Сводный пакет auth + claim lifecycle
+
+| ID | Тест | Assert |
+|----|------|--------|
+| **T-F5a** | invalid token → 401 | payment unchanged |
+| **T-F5b** | invalid HMAC → 401 | |
+| **T-F5c** | claim lifecycle suite | T-F2a+b+c входят в один describe или явно перечислены в REVIEW |
+
+Часть уже есть в `events_controller_test.rb` — не дублировать, **добавить** дыры F1/F2.
+
+## 8. Команды проверки
+
+```bash
+bin/rails test \
+  test/controllers/callbacks/events_controller_test.rb \
+  test/jobs/payments/stuck_payments_check_job_test.rb \
+  test/services/payments/tbank_fiscal_notification_handler_test.rb \
+  test/jobs/payments/tbank_callback_job_test.rb \
+  test/controllers/callbacks/tbank_controller_test.rb
+```
+
+Регресс зоны callbacks/payments:
+
+```bash
+bin/rails test test/controllers/callbacks/ test/jobs/payments/ test/services/payments/tbank_payment_sync_test.rb
+```
+
+## 9. Definition of Done — Блок F
+
+- [ ] F1: fail-closed на FLY/production/flag без secrets → 401  
+- [ ] F2: reject/422 **не** оставляет `processing` 24h; retry после reject возможен (R3)  
+- [ ] F3: stuck job вызывает GetState/sync, не только Telegram  
+- [ ] F4: fiscal skip → report/alert (+ retry если в SPEC)  
+- [ ] Все T-F1…T-F5 PASS  
+- [ ] REVIEW-таблица F1–F5 \| тест ID \| PASS  
+- [ ] Deploy = TASK_93-L  
+
+## 10. SBR-цикл для 93-F
+
+| Фаза | Что |
+|------|-----|
+| `/start` | секция **Блок F** в TASK_93 |
+| `/spec` | R1–R6; TTL claim; retry fiscal да/нет; threshold stuck 30m |
+| `/sbr` RED | T-F1a, T-F2a/b, T-F3a, T-F4a — ожидаемый RED на HEAD |
+| `/sbr` GREEN | fail-closed + release claim on rejected + sync in job + report fiscal |
+| `/regress` | §8 |
+| `/review` | таблица PASS; push; без deploy |
+
+## 11. Таблица закрытия (REVIEW)
+
+```
+F1 T-F1a T-F1b T-F1c           PASS
+F2 T-F2a T-F2b T-F2c T-F2d     PASS
+F3 T-F3a T-F3b T-F3c T-F3d     PASS
+F4 T-F4a T-F4b (T-F4c) T-F4d   PASS
+F5 T-F5a T-F5b + claim suite   PASS
+```
+
+Без T-F2a и T-F3a блок **не** закрыт.
+
+---
+
+## Зависимости
+
+| Блок | Связь |
+|------|--------|
+| **A** | Stuck/GetState → succeeded может снова вызвать deduction; лучше **A до F**, иначе F3 тесты ловят откат склада |
+| **E** | Init/`provider_payment_id` — без id F3b только alert; не блокер F |
+| **I** | Redis Attack store — не обязателен для F |
+
+Порядок: **A → … → F** (F можно после D/C; не раньше A).
+
+---
+
+## Кратко: что чинить в GREEN
+
+1. `reject_unconfigured_callbacks!` — не только `production?`.  
+2. `authenticate_*` — в fail-closed **не** `return if blank`.  
+3. `audit_event` / ensure — на `rejected` **release или rewrite** claim (как tbank release_idempotency).  
+4. `StuckPaymentsCheckJob` — вызвать sync, потом alert если всё ещё stuck.  
+5. Fiscal — `Rails.error.report` (+ optional retry job).
+
+---
+
+Ask mode: файлы не создаю. В Agent: `/start` с **TASK_93-F**.
+
+/start
