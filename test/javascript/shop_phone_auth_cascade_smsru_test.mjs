@@ -51,24 +51,33 @@ describe("initialCallcheckState", () => {
 })
 
 describe("tickCallcheck", () => {
-  it("counts down then transitions to SMS with autoSend", () => {
-    let state = { ...initialCallcheckState(), secondsLeft: 1 }
+  it("first timeout stays on Callcheck and requests second attempt", () => {
+    let state = { ...initialCallcheckState(), secondsLeft: 1, callcheckAttempt: 1 }
+    const next = tickCallcheck(state)
+    assert.equal(next.phase, AUTH_PHASE.CALLCHECK)
+    assert.equal(next.autoSend, "callcheck")
+    assert.equal(next.callcheckAttempt, 2)
+    assert.equal(next.secondsLeft, CALLCHECK_TIMEOUT_SEC)
+  })
+
+  it("second timeout transitions to SMS with autoSend", () => {
+    let state = { ...initialCallcheckState(), secondsLeft: 1, callcheckAttempt: 2 }
     const next = tickCallcheck(state)
     assert.equal(next.phase, AUTH_PHASE.SMS)
     assert.equal(next.autoSend, "sms")
     assert.equal(next.timedOut, true)
   })
 
-  it("timeout after 40 ticks", () => {
+  it("timeout after 80 ticks (Callcheck ×2)", () => {
     let state = initialCallcheckState()
     let ticks = 0
     while (state.phase === AUTH_PHASE.CALLCHECK) {
       state = tickCallcheck(state)
       ticks++
-      if (ticks > 50) break
+      if (ticks > 100) break
     }
     assert.equal(state.phase, AUTH_PHASE.SMS)
-    assert.equal(ticks, 40)
+    assert.equal(ticks, 80)
   })
 })
 

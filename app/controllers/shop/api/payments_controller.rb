@@ -156,6 +156,9 @@ module Shop
       end
 
       def adapter_payment_url(result)
+        url = result[:payment_url].to_s
+        return url if url.start_with?("http://", "https://")
+
         pid = result[:provider_payment_id]
         "https://securepayments.tinkoff.ru/#{pid}"
       end

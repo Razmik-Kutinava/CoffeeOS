@@ -384,9 +384,9 @@ class Callbacks::EventsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "pending", @payment.status
   end
 
-  test "callback with matching amount succeeds" do
+  test "callback with matching amount in T-Bank kopecks succeeds" do
     post_payment(
-      params: { status: "succeeded", amount: 300 },
+      params: { status: "succeeded", amount: 30_000 },
       headers: {}
     )
 

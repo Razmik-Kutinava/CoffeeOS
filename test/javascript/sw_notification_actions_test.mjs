@@ -13,7 +13,8 @@ import {
   handleCoffeeosNavigateMessage,
   handleNotificationAction,
   orderDeepLink,
-  parseNotificationActions
+  parseNotificationActions,
+  cancelOrderRequest
 } from "../../app/frontend/lib/swNotificationActions.js"
 
 describe("parseNotificationActions (#38 step 2)", () => {
@@ -87,6 +88,28 @@ describe("handleNotificationAction (#38 step 2)", () => {
     assert.equal(calls[0].url, "/shop/api/orders/ord-1/cancel")
     assert.equal(calls[0].opts.method, "POST")
     assert.equal(calls[0].opts.credentials, "include")
+  })
+
+  it("cancel: appends tenant_id query and X-Shop-Tenant header", async () => {
+    const calls = []
+    const req = cancelOrderRequest("ord-1", "tenant-a")
+    assert.equal(req.url, "/shop/api/orders/ord-1/cancel?tenant_id=tenant-a")
+    assert.equal(req.headers["X-Shop-Tenant"], "tenant-a")
+
+    await handleNotificationAction({
+      action: "cancel",
+      orderId: "ord-1",
+      tenantId: "tenant-a",
+      fetchImpl: async (url, opts) => {
+        calls.push({ url, opts })
+        return { ok: true, status: 200 }
+      },
+      openClient: async () => ({ opened: false }),
+      showLocalNotification: async () => {}
+    })
+
+    assert.equal(calls[0].url, "/shop/api/orders/ord-1/cancel?tenant_id=tenant-a")
+    assert.equal(calls[0].opts.headers["X-Shop-Tenant"], "tenant-a")
   })
 
   it("cancel: 400/500 shows local error notification and does not throw", async () => {
@@ -181,10 +204,33 @@ describe("handleCoffeeosNavigateMessage (#94)", () => {
     assert.equal(assigned.length, 0)
   })
 
-  it("assigns location for non-chat navigate", () => {
+  it("opens tips adapter when url has action=tips", () => {
+    const tips = []
     const assigned = []
     const result = handleCoffeeosNavigateMessage(
       { type: "coffeeos_navigate", url: "/shop/#/order/7?action=tips" },
+      {
+        openSupportChat: () => {
+          throw new Error("should not chat")
+        },
+        openTipsService: (orderId) => {
+          tips.push(orderId)
+        },
+        assignLocation: (url) => {
+          assigned.push(url)
+        }
+      }
+    )
+    assert.equal(result.handled, true)
+    assert.equal(result.kind, "tips")
+    assert.deepEqual(tips, ["7"])
+    assert.equal(assigned.length, 0)
+  })
+
+  it("assigns location for other navigate", () => {
+    const assigned = []
+    const result = handleCoffeeosNavigateMessage(
+      { type: "coffeeos_navigate", url: "/shop/#/order/7?action=wallet" },
       {
         openSupportChat: () => {
           throw new Error("should not chat")
@@ -196,7 +242,7 @@ describe("handleCoffeeosNavigateMessage (#94)", () => {
     )
     assert.equal(result.handled, true)
     assert.equal(result.kind, "navigate")
-    assert.deepEqual(assigned, ["/shop/#/order/7?action=tips"])
+    assert.deepEqual(assigned, ["/shop/#/order/7?action=wallet"])
   })
 })
 

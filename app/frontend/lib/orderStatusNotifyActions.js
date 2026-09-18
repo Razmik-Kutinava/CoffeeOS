@@ -25,8 +25,9 @@ const LABELS = Object.freeze({
 /**
  * @param {{ os?: "ios"|"android"|"desktop" }} opts
  */
-export function notifyActionsView({ os } = {}) {
-  const primaryKind = os === "ios" ? "wallet" : "push"
+export function notifyActionsView({ os, walletAvailable } = {}) {
+  const walletOk = walletAvailable !== false
+  const primaryKind = os === "ios" && walletOk ? "wallet" : "push"
   return {
     primaryLabel: primaryKind === "wallet" ? LABELS.wallet : LABELS.push,
     secondaryLabel: LABELS.receipt,

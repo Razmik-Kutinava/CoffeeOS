@@ -7,8 +7,13 @@ module Payments
   class TbankCallbackJob < ApplicationJob
     queue_as :critical
 
+    class AmountMismatchError < StandardError; end
+
     retry_on StandardError, wait: :polynomially_longer, attempts: 5
     discard_on Callbacks::PaymentStatusUpdater::InvalidStatusError
+    discard_on AmountMismatchError do |_job, error|
+      raise error
+    end
 
     def perform(payload)
       tbank_payment_id = payload["PaymentId"].to_s
@@ -45,7 +50,8 @@ module Payments
             "[TbankCallbackJob] amount mismatch OrderId=#{order_id} PaymentId=#{tbank_payment_id} " \
             "payload_amount=#{payload['Amount']} payment=#{payment.amount} order_final=#{order.final_amount}"
           )
-          return
+          raise AmountMismatchError,
+                "amount mismatch OrderId=#{order_id} PaymentId=#{tbank_payment_id}"
         end
 
         Callbacks::PaymentStatusUpdater.new(

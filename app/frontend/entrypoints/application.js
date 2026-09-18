@@ -9,6 +9,8 @@ import { api } from "../lib/api.js"
 import { handleCoffeeosNavigateMessage, handleCoffeeosHashBoot } from "../lib/swNotificationActions.js"
 import { openSupportChat } from "../lib/supportChatAdapter.js"
 import { SUPPORT_TELEGRAM_URL } from "../lib/supportConfig.js"
+import { openTipsService } from "../lib/tipsAdapter.js"
+import { TIPS_SERVICE_URL } from "../lib/tipsConfig.js"
 
 function showShopBootError(err) {
   const el = document.getElementById("app")
@@ -27,10 +29,12 @@ function showShopBootError(err) {
 function coffeeosNavigateDeps() {
   return {
     openSupportChat: (orderId) => openSupportChat(orderId, SUPPORT_TELEGRAM_URL),
+    openTipsService: (orderId) => openTipsService(orderId, "", TIPS_SERVICE_URL),
     assignLocation: (url) => {
       window.location.assign(url)
     },
-    chatUrl: SUPPORT_TELEGRAM_URL
+    chatUrl: SUPPORT_TELEGRAM_URL,
+    tipsUrl: TIPS_SERVICE_URL
   }
 }
 

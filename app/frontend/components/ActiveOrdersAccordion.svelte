@@ -20,6 +20,8 @@
   import { openSupportChat } from "../lib/supportChatAdapter.js"
   import { SUPPORT_TELEGRAM_URL } from "../lib/supportConfig.js"
   import { openTipsService } from "../lib/tipsAdapter.js"
+  import { TIPS_SERVICE_URL } from "../lib/tipsConfig.js"
+  import { shopWalletAvailable } from "../lib/shopWalletConfig.js"
   import OrderActionButtons from "./OrderActionButtons.svelte"
 
   let {
@@ -37,7 +39,9 @@
   let receipt = $derived(row.expanded ? receiptView(order) : null)
   let scrollStyle = receiptScrollStyle()
   let deviceOs = $derived(getDeviceOS())
-  let receiptLabel = $derived(notifyActionsView({ os: deviceOs }).secondaryLabel)
+  let receiptLabel = $derived(
+    notifyActionsView({ os: deviceOs, walletAvailable: shopWalletAvailable() }).secondaryLabel
+  )
   let actionLoading = $state(false)
   let toastMsg = $state("")
   let toastOpensSettings = $state(false)
@@ -112,7 +116,7 @@
 
     if (kind === "tips") {
       const tenantId = order?.tenant_id || order?.sales_point?.tenant_id || ""
-      openTipsService(orderId, tenantId)
+      openTipsService(orderId, tenantId, TIPS_SERVICE_URL)
       return
     }
 

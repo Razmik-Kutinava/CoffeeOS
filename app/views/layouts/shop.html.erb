@@ -13,6 +13,7 @@
     <% if @shop_tenant %>
       <meta name="shop-tenant-id" content="<%= @shop_tenant.id %>">
     <% end %>
+    <meta name="shop-wallet-available" content="<%= Shop::AppleWallet::Config.available? ? "true" : "false" %>">
     <meta name="action-cable-url" content="<%= ENV.fetch("ACTION_CABLE_URL", "/cable") %>">
     <% if Shop::FirebaseConfig.client_configured? %>
       <meta name="firebase-api-key" content="<%= Shop::FirebaseConfig.api_key %>">

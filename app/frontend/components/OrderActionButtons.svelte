@@ -13,6 +13,7 @@
     loadSubscriptionOfferCta,
     subscriptionOfferCtaDefaults
   } from "../lib/subscriptionOfferCta.js"
+  import { shopWalletAvailable } from "../lib/shopWalletConfig.js"
 
   let {
     status = "",
@@ -37,6 +38,7 @@
       os,
       canCancel,
       hasPushSubscription,
+      walletAvailable: shopWalletAvailable(),
       subscriptionOfferEnabled: offerCta.subscriptionOfferEnabled,
       secondCtaMode: offerCta.secondCtaMode,
       eligibleForSubscriptionOffer: offerCta.eligibleForSubscriptionOffer

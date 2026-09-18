@@ -75,14 +75,16 @@ class Shop::Api::PaymentWidgetInitTest < ActionDispatch::IntegrationTest
     result
   end
 
-  test "[TDD] POST widget_init returns paymentUrl from T-Kassa Init with connection_type Widget" do
+  test "POST widget_init prefers Init PaymentURL when present" do
     order = create_order!
 
-    with_inline_init_stub do
+    with_inline_init_stub(result: {
+      provider_payment_id: "pid-widget-stub",
+      payment_url: "https://securepay.tinkoff.ru/real-widget"
+    }) do
       status, json = post_widget_init!(order_id: order.id)
       assert_equal 200, status
-      assert json["paymentUrl"].present?, "ожидали paymentUrl в ответе"
-      assert_includes json["paymentUrl"], "pid-widget-stub"
+      assert_equal "https://securepay.tinkoff.ru/real-widget", json["paymentUrl"]
     end
   end
 

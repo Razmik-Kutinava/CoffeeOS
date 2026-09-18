@@ -37,8 +37,17 @@ module Inventory
             row.min_qty = 0
           end
 
+          new_qty = stock.qty - qty_needed
+          if new_qty.negative?
+            Rails.logger.warn(
+              "[Inventory::OrderRecipeDeduction] clamped stock to 0 " \
+              "order=#{@order.id} ingredient=#{ingredient_id} needed=#{qty_needed} had=#{stock.qty}"
+            )
+            new_qty = 0
+          end
+
           stock.update!(
-            qty: stock.qty - qty_needed,
+            qty: new_qty,
             last_updated_at: Time.current
           )
         end

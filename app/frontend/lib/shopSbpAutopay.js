@@ -14,7 +14,8 @@ export const SBP_AUTOPAY_TOASTS = Object.freeze({
   SERVICE_UNAVAILABLE: "Сервис временно недоступен",
   CHARGE_DECLINED:
     "Не удалось выполнить быстрый платеж. Пожалуйста, подтвердите оплату вручную",
-  CONNECTION_ERROR: "Ошибка соединения, попробуйте еще раз"
+  CONNECTION_ERROR: "Ошибка соединения, попробуйте еще раз",
+  REFUND_TIMING: "Возврат при отмене — 1–3 рабочих дня"
 })
 
 export function createSbpAutopayFsm({ orderId = null, cartSnapshot = null } = {}) {

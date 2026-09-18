@@ -2,6 +2,7 @@
 
 export const CALLCHECK_POLL_MS = 3000
 export const CALLCHECK_TIMEOUT_SEC = 40
+export const CALLCHECK_MAX_ATTEMPTS = 2
 export const SMS_COOLDOWN_SEC = 60
 
 export const AUTH_PHASE = Object.freeze({
@@ -10,7 +11,7 @@ export const AUTH_PHASE = Object.freeze({
 })
 
 export const CALLCHECK_HINT =
-  "Позвоните на номер в кнопке ниже — регистрация пройдёт автоматически. На звонок отвечать не нужно. После звонка вернитесь в приложение — проверка продолжится автоматически."
+  "Позвоните на номер в кнопке ниже — регистрация пройдёт автоматически. На звонок отвечать не нужно. Если не успели, будет вторая попытка звонка, затем SMS. После звонка вернитесь в приложение — проверка продолжится автоматически."
 
 /** #90: UI после возврата из телефона, пока Callcheck ещё pending. */
 export const CALLCHECK_CHECKING_TITLE = "Проверяем номер"
@@ -73,14 +74,16 @@ export function initialCallcheckState(payload = {}) {
     callPhonePretty: payload.call_phone_pretty || null,
     callPhoneHtml: payload.call_phone_html || null,
     lastChannel: null,
-    smsSent: false
+    smsSent: false,
+    callcheckAttempt: 1
   }
 }
 
-/** Тик 1с на Callcheck. По истечении 40с → SMS phase + autoSend sms. */
+/** Тик 1с на Callcheck. Попытка 1 истекла → вторая Callcheck; попытка 2 → SMS. */
 export function tickCallcheck(state) {
   const phase = state?.phase || AUTH_PHASE.CALLCHECK
   const left = Math.max(0, Number(state?.secondsLeft) || 0)
+  const attempt = Math.max(1, Number(state?.callcheckAttempt) || 1)
 
   if (phase !== AUTH_PHASE.CALLCHECK) {
     if (phase === AUTH_PHASE.SMS && left > 0) {
@@ -91,6 +94,17 @@ export function tickCallcheck(state) {
 
   if (left > 1) {
     return { ...state, phase, secondsLeft: left - 1, autoSend: null, timedOut: false }
+  }
+
+  if (attempt < CALLCHECK_MAX_ATTEMPTS) {
+    return {
+      ...state,
+      phase: AUTH_PHASE.CALLCHECK,
+      secondsLeft: CALLCHECK_TIMEOUT_SEC,
+      callcheckAttempt: attempt + 1,
+      autoSend: "callcheck",
+      timedOut: false
+    }
   }
 
   return {

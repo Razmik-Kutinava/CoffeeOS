@@ -40,7 +40,7 @@ class Inventory::OrderRecipeDeductionTest < ActiveSupport::TestCase
     Inventory::OrderRecipeDeduction.call!(order: order)
 
     stock = IngredientTenantStock.find_by!(tenant_id: @tenant.id, ingredient_id: @ingredient.id)
-    assert_equal(-10.to_d, stock.qty, "40 - 2×25 = -10 allowed")
+    assert_equal 0.to_d, stock.qty, "40 - 2×25 clamped at 0"
   end
 
   test "no-op when order not accepted" do

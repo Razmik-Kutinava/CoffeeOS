@@ -9,6 +9,7 @@
     labelAddCard,
     labelSbp,
     labelSbpBoundUsual,
+    labelSbpRefundTiming,
     labelBindSbpAccount,
     promoSaveToday11,
     promoNudgeInsteadOf,
@@ -129,6 +130,7 @@
               onclick={() => onSelectSbpAccount?.()}
             >
               <span class="pm-row__label pm-row__label--solo">{labelSbpBoundUsual()}</span>
+              <span class="mt-1 block text-xs text-[#a0a0a0]">{labelSbpRefundTiming()}</span>
             </button>
           </li>
         {/if}

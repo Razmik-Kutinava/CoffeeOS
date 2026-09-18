@@ -25,10 +25,27 @@ describe("openTipsService (#41 step 2)", () => {
     ])
   })
 
-  it("logs pending integration when tipsUrl is missing", () => {
+  it("opens default tips URL when tipsUrl is missing", () => {
+    const opened = []
+    const result = openTipsService("ord-99", "tenant-b", undefined, {
+      openWindow: (url, target) => {
+        opened.push({ url, target })
+        return { ok: true }
+      }
+    })
+
+    assert.equal(result.opened, true)
+    assert.equal(result.pending, false)
+    assert.equal(opened.length, 1)
+    assert.match(opened[0].url, /ord-99/)
+    assert.equal(opened[0].target, "_blank")
+  })
+
+  it("logs pending integration when default URL is also empty", () => {
     const logs = []
     const opened = []
     const result = openTipsService("ord-99", "tenant-b", undefined, {
+      defaultUrl: "",
       openWindow: (url, target) => {
         opened.push({ url, target })
       },
@@ -42,17 +59,28 @@ describe("openTipsService (#41 step 2)", () => {
     assert.equal(logs[0], "[Tips Integration Pending] Order: ord-99")
   })
 
-  it("treats empty string tipsUrl as missing (pending log)", () => {
-    const logs = []
+  it("treats empty string tipsUrl as default (opens)", () => {
+    const opened = []
     const result = openTipsService("ord-empty", "tenant-c", "", {
-      openWindow: () => {
-        throw new Error("should not open")
-      },
-      log: (msg) => logs.push(msg)
+      openWindow: (url, target) => {
+        opened.push({ url, target })
+        return { ok: true }
+      }
     })
 
-    assert.equal(result.opened, false)
-    assert.equal(result.pending, true)
-    assert.equal(logs[0], "[Tips Integration Pending] Order: ord-empty")
+    assert.equal(result.opened, true)
+    assert.equal(result.pending, false)
+    assert.equal(opened.length, 1)
+  })
+
+  it("falls back to assignLocation when window.open blocked", () => {
+    const assigned = []
+    const result = openTipsService("ord-42", "t", "https://tips.example/o/x", {
+      openWindow: () => null,
+      assignLocation: (url) => assigned.push(url)
+    })
+    assert.equal(result.opened, true)
+    assert.equal(result.fallback, true)
+    assert.deepEqual(assigned, ["https://tips.example/o/x"])
   })
 })

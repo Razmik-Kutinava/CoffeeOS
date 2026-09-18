@@ -18,9 +18,11 @@
     subscriptionOfferCtaDefaults
   } from "../lib/subscriptionOfferCta.js"
   import { downloadWalletPass } from "../lib/orderStatusNotifyActions.js"
-  import { orderDeepLink } from "../lib/swNotificationActions.js"
   import { openSupportChat } from "../lib/supportChatAdapter.js"
   import { SUPPORT_TELEGRAM_URL } from "../lib/supportConfig.js"
+  import { openTipsService } from "../lib/tipsAdapter.js"
+  import { TIPS_SERVICE_URL } from "../lib/tipsConfig.js"
+  import { shopWalletAvailable } from "../lib/shopWalletConfig.js"
   import {
     buildAcceptedCancelModalCopy,
     shouldShowAcceptedCancelModal,
@@ -57,6 +59,7 @@
           status: order.status,
           os: deviceOs,
           canCancel: Boolean(order.can_cancel),
+          walletAvailable: shopWalletAvailable(),
           subscriptionOfferEnabled: offerCta.subscriptionOfferEnabled,
           secondCtaMode: offerCta.secondCtaMode,
           eligibleForSubscriptionOffer: offerCta.eligibleForSubscriptionOffer
@@ -184,12 +187,14 @@
       return
     }
     if (kind === "tips") {
-      const url = orderDeepLink(order.id, kind)
-      window.location.assign(url)
+      const tenantId = order?.tenant_id || order?.sales_point?.tenant_id || ""
+      openTipsService(order.id, tenantId, TIPS_SERVICE_URL)
       return
     }
+    // #78 cancel/confirm_payment still 501 — do not land on dead profile purchase
     if (kind === "subscription") {
-      push("/profile")
+      const tenantId = order?.tenant_id || order?.sales_point?.tenant_id || ""
+      openTipsService(order.id, tenantId, TIPS_SERVICE_URL)
     }
   }
 

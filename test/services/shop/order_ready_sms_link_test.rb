@@ -20,12 +20,18 @@ class Shop::OrderReadySmsLinkTest < ActiveSupport::TestCase
     )
   end
 
-  test "#82 P1 hash_for is short enough for SMS prefix + hash <= 70" do
+  test "#82 P1 hash_for is HMAC-bound and SMS prefix + hash <= 70" do
     hash = Shop::OrderReadySmsLink.hash_for(@order)
     msg = "CODE:BLACK. Заказ готов! codeblack.xyz/o/#{hash}"
     assert hash.present?
-    assert_operator hash.length, :<=, 22
+    assert_operator hash.length, :<=, 32
     assert_operator msg.length, :<=, 70
+  end
+
+  test "find_order rejects unsigned uuid-only hash" do
+    uuid_hex = @order.id.to_s.delete("-")
+    unsigned = Base64.urlsafe_encode64([ uuid_hex ].pack("H*"), padding: false)
+    assert_nil Shop::OrderReadySmsLink.find_order(unsigned)
   end
 
   test "#82 P1 find_order roundtrips hash to order" do

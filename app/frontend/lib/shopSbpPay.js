@@ -8,7 +8,7 @@ import { clearPendingOrder, savePendingOrder, loadPendingOrder, createVisibility
 export const SBP_LOADING_LABEL = "Оплата через СБП…"
 export const SBP_INCOMPLETE_MESSAGE = "Оплата не завершена, попробовать снова"
 export const SBP_WAITING_FOR_BANK_MESSAGE =
-  "Завершите оплату в приложении банка и вернитесь в приложение"
+  "Завершите оплату в приложении банка и вернитесь в приложение. Возврат при отмене — 1–3 рабочих дня."
 export const SBP_I_PAID_LABEL = "Я оплатил"
 
 const TERMINAL_PAYMENT_STATUSES = new Set(["CONFIRMED", "REJECTED", "CANCELED"])

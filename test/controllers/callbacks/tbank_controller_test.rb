@@ -194,12 +194,14 @@ class Callbacks::TbankControllerTest < ActionDispatch::IntegrationTest
     assert_equal "accepted",  @order.reload.status
   end
 
-  test "CONFIRMED with Amount mismatch leaves payment pending" do
+  test "CONFIRMED with Amount mismatch releases claim and returns 422" do
     payload = tbank_payload(status: "CONFIRMED")
     payload["Amount"] = 100
     payload["Token"] = Payments::TbankAdapter.new.build_token(payload.except("Token"))
     post_notify(payload)
-    assert_response :ok
+    assert_response :unprocessable_entity
+    body = JSON.parse(response.body)
+    assert_equal "amount mismatch", body["error"]
     assert_equal "pending", @payment.reload.status
   end
 

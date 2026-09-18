@@ -52,6 +52,7 @@ module Shop
       body = compose_body(meta)
       payload = {
         "order_id" => @order.id,
+        "tenant_id" => @order.tenant_id,
         "status" => @order.status,
         "order_number" => @order.order_number
       }

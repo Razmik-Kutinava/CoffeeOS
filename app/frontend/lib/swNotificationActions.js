@@ -37,6 +37,19 @@ export function orderDeepLink(orderId, action) {
 }
 
 /**
+ * @param {string|number} orderId
+ * @param {string|number} [tenantId]
+ */
+export function cancelOrderRequest(orderId, tenantId) {
+  const tid = String(tenantId || "").trim()
+  let url = `/shop/api/orders/${orderId}/cancel`
+  if (tid) url += `?tenant_id=${encodeURIComponent(tid)}`
+  const headers = { Accept: "application/json" }
+  if (tid) headers["X-Shop-Tenant"] = tid
+  return { url, headers }
+}
+
+/**
  * @param {{ body?: string, data?: Record<string, unknown> }} input
  */
 export function buildShowNotificationOptions(input = {}) {
@@ -59,6 +72,7 @@ export function buildShowNotificationOptions(input = {}) {
  * @param {{
  *   action: string,
  *   orderId: string|number,
+ *   tenantId?: string|number,
  *   fetchImpl?: typeof fetch,
  *   openClient: (url: string) => Promise<unknown>,
  *   showLocalNotification: (title: string, body: string) => Promise<unknown>
@@ -68,6 +82,7 @@ export async function handleNotificationAction(opts) {
   const {
     action,
     orderId,
+    tenantId,
     fetchImpl = globalThis.fetch.bind(globalThis),
     openClient,
     showLocalNotification
@@ -75,10 +90,11 @@ export async function handleNotificationAction(opts) {
 
   if (action === "cancel") {
     try {
-      const res = await fetchImpl(`/shop/api/orders/${orderId}/cancel`, {
+      const req = cancelOrderRequest(orderId, tenantId)
+      const res = await fetchImpl(req.url, {
         method: "POST",
         credentials: "include",
-        headers: { Accept: "application/json" }
+        headers: req.headers
       })
       if (!res.ok) {
         await showLocalNotification("CoffeeOS", CANCEL_ERROR_MESSAGE)
@@ -107,8 +123,10 @@ export async function handleNotificationAction(opts) {
  * @param {unknown} data
  * @param {{
  *   openSupportChat?: (orderId: string, chatUrl?: string) => unknown,
+ *   openTipsService?: (orderId: string, tenantId?: string, tipsUrl?: string) => unknown,
  *   assignLocation?: (url: string) => void,
- *   chatUrl?: string
+ *   chatUrl?: string,
+ *   tipsUrl?: string
  * }} [deps]
  * @returns {{ handled: boolean, kind?: string }}
  */
@@ -132,6 +150,16 @@ export function handleCoffeeosNavigateMessage(data, deps = {}) {
       })
     open(orderId || "unknown", deps.chatUrl)
     return { handled: true, kind: "chat" }
+  }
+
+  if (action === "tips") {
+    const open =
+      deps.openTipsService ||
+      (() => {
+        /* optional */
+      })
+    open(orderId || "unknown", "", deps.tipsUrl)
+    return { handled: true, kind: "tips" }
   }
 
   const assign =

@@ -26,7 +26,7 @@ module Payments
           rebill_id: rebill_id
         )
 
-        { provider_payment_id: charge_response["PaymentId"].to_s }
+        { provider_payment_id: charge_response["PaymentId"].to_s, payment_url: init_result[:payment_url] }
       else
         init_result = adapter.init_payment(
           order: order,
@@ -39,7 +39,7 @@ module Payments
           receipt: receipt
         )
 
-        { provider_payment_id: init_result[:provider_payment_id] }
+        { provider_payment_id: init_result[:provider_payment_id], payment_url: init_result[:payment_url] }
       end
     end
   end

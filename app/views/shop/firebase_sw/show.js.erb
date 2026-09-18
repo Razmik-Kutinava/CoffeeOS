@@ -32,6 +32,15 @@ function orderDeepLink(orderId, action) {
   return "/shop/#/order/" + orderId + "?action=" + encodeURIComponent(action);
 }
 
+function cancelOrderRequest(orderId, tenantId) {
+  var tid = String(tenantId || "").trim();
+  var url = "/shop/api/orders/" + orderId + "/cancel";
+  if (tid) url += "?tenant_id=" + encodeURIComponent(tid);
+  var headers = { Accept: "application/json" };
+  if (tid) headers["X-Shop-Tenant"] = tid;
+  return { url: url, headers: headers };
+}
+
 function buildShowNotificationOptions(input) {
   const data = Object.assign({}, (input && input.data) || {});
   const actions = parseNotificationActions(data.actions).map(function (action) {
@@ -70,12 +79,14 @@ async function openClient(url) {
 async function handleNotificationAction(opts) {
   var action = opts.action;
   var orderId = opts.orderId;
+  var tenantId = opts.tenantId;
   if (action === "cancel") {
     try {
-      var res = await fetch("/shop/api/orders/" + orderId + "/cancel", {
+      var req = cancelOrderRequest(orderId, tenantId);
+      var res = await fetch(req.url, {
         method: "POST",
         credentials: "include",
-        headers: { Accept: "application/json" }
+        headers: req.headers
       });
       if (!res.ok) {
         await self.registration.showNotification("CoffeeOS", { body: CANCEL_ERROR_MESSAGE });
@@ -112,13 +123,14 @@ self.addEventListener("notificationclick", function (event) {
   event.notification.close();
   var data = event.notification.data || {};
   var orderId = data.order_id;
+  var tenantId = data.tenant_id;
   var action = event.action || "";
 
   if (!orderId) return;
 
   if (action === "cancel" || action === "chat" || action === "tips") {
     event.waitUntil(
-      handleNotificationAction({ action: action, orderId: orderId })
+      handleNotificationAction({ action: action, orderId: orderId, tenantId: tenantId })
     );
     return;
   }

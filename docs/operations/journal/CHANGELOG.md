@@ -11,6 +11,15 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-18 — fix: P0/P1 crits (tips, Tbank mismatch, FCM tenant, Callcheck×2, SMS HMAC)
+
+- Tips CTA: default URL + same-tab fallback как chat (#94); FCM `action=tips` → `openTipsService`
+- Tbank amount mismatch: raise + release idempotency claim + HTTP 422 (не silent OK)
+- FCM payload `tenant_id`; SW cancel `?tenant_id=` + `X-Shop-Tenant`
+- Callcheck ×2 (80s) затем SMS; SMS `/o/:hash` HMAC (не reversible UUID)
+- #78: subscription CTA скрыт (501 stubs); Wallet CTA скрыт без certs; Events Amount kopecks; stock clamp ≥0
+- Local: JS 73+45 PASS · Rails 82+25 PASS · Fly MCP skip (нет deploy)
+
 ## 2026-09-17 — docs: #82 Патч_1 CI green after REVIEW
 
 - CI green `35234267606` · review sha `f0ccc4a5` · Entire `01M2QWCCYY5P9QNJBJFBJSS6DK`

@@ -53,8 +53,10 @@ class Payments::TbankCallbackJobTest < ActiveJob::TestCase
     assert_equal "succeeded", @payment.reload.status
   end
 
-  test "CONFIRMED with Amount mismatch does not mark payment succeeded" do
-    Payments::TbankCallbackJob.perform_now(build_payload(amount_kopecks: 100))
+  test "CONFIRMED with Amount mismatch raises and does not mark payment succeeded" do
+    assert_raises(Payments::TbankCallbackJob::AmountMismatchError) do
+      Payments::TbankCallbackJob.perform_now(build_payload(amount_kopecks: 100))
+    end
     assert_equal "pending", @payment.reload.status
   end
 

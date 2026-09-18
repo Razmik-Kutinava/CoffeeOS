@@ -239,7 +239,13 @@ module Callbacks
     def amount_matches_payment?(payment, callback_amount)
       expected_payment = BigDecimal(payment.amount.to_s)
       expected_order = BigDecimal(payment.order.final_amount.to_s)
-      callback_amount == expected_payment || callback_amount == expected_order
+      return true if callback_amount == expected_payment || callback_amount == expected_order
+
+      # T-Bank Amount is kopecks; Events may send either rubles or kopecks.
+      kop = callback_amount.to_i
+      expected_payment_kop = (expected_payment * 100).to_i
+      expected_order_kop = (expected_order * 100).to_i
+      kop == expected_payment_kop || kop == expected_order_kop
     end
 
     def reject_amount_mismatch!(payment, callback_amount, tenant_id:)

@@ -5,10 +5,12 @@
    */
   import { onDestroy, onMount } from "svelte"
   import { api } from "../lib/api.js"
-  import { buildVerifySmsBody, buildSendSmsBody } from "../lib/phoneAuthWizard.js"
+  import { buildVerifySmsBody, buildSendSmsBody, buildInitCallcheckBody } from "../lib/phoneAuthWizard.js"
   import {
     SMS_BTN_LABEL,
     CALLCHECK_POLL_MS,
+    CALLCHECK_TIMEOUT_SEC,
+    CALLCHECK_MAX_ATTEMPTS,
     CALLCHECK_CHECKING_TITLE,
     CALLCHECK_CHECKING_BODY,
     initialCallcheckState,
@@ -85,9 +87,12 @@
         secondsLeft: next.secondsLeft,
         lastChannel: next.lastChannel,
         smsSent: next.smsSent,
+        callcheckAttempt: next.callcheckAttempt,
         autoSend: null
       }
-      if (next.autoSend === "sms") {
+      if (next.autoSend === "callcheck") {
+        retryCallcheck()
+      } else if (next.autoSend === "sms") {
         stopPoll()
         sendSms()
       }
@@ -167,12 +172,42 @@
       if (outcome.action === "sms_fallback") {
         stopPoll()
         returnedChecking = false
-        state = { ...state, phase: AUTH_PHASE.SMS, secondsLeft: 0 }
-        await sendSms()
+        if ((state.callcheckAttempt || 1) < CALLCHECK_MAX_ATTEMPTS) {
+          await retryCallcheck()
+        } else {
+          state = { ...state, phase: AUTH_PHASE.SMS, secondsLeft: 0 }
+          await sendSms()
+        }
       }
     } catch (e) {
       localError = e?.message || "Не удалось проверить звонок. Попробуйте SMS."
       onError?.(localError)
+    }
+  }
+
+  async function retryCallcheck() {
+    if (!phoneE164 || resending || verifying) return
+    resending = true
+    localError = ""
+    try {
+      const res = await api("/phone_otp/init_callcheck", {
+        method: "POST",
+        body: JSON.stringify(buildInitCallcheckBody(phoneE164))
+      })
+      const attempt = Math.max(2, Number(state.callcheckAttempt) || 2)
+      state = {
+        ...initialCallcheckState(res || {}),
+        callcheckAttempt: attempt,
+        secondsLeft: CALLCHECK_TIMEOUT_SEC
+      }
+      if (state.phase === AUTH_PHASE.CALLCHECK) startPoll()
+    } catch (e) {
+      localError = e?.message || "Не удалось повторить звонок. Пробуем SMS."
+      onError?.(localError)
+      state = { ...state, phase: AUTH_PHASE.SMS, secondsLeft: 0 }
+      await sendSms()
+    } finally {
+      resending = false
     }
   }
 

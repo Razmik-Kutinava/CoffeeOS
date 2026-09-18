@@ -60,6 +60,7 @@ class Payments::TbankInlineInitTest < ActiveSupport::TestCase
     assert captured[0][:url].end_with?("/Init")
     assert_equal "O", captured[0][:payload]["PayType"]
     assert_equal "pid-inline-1", result[:provider_payment_id]
+    assert_equal "https://pay.tbank.ru/x", result[:payment_url]
   end
 
   test "[TDD] with rebill_id posts Charge and returns PaymentId" do

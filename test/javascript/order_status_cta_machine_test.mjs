@@ -32,7 +32,7 @@ describe("orderStatusCtas (#38 / #40 step 5)", () => {
       ["cancel", "push"]
     )
     assert.equal(view.buttons[0].label, "Отменить заказ")
-    assert.equal(view.buttons[0].hint, "Вернем 100% суммы")
+    assert.equal(view.buttons[0].hint, "Вернем 100% · 1–3 дня")
     assert.equal(view.buttons[1].label, "🔔 Уведомление о готовности")
     assert.equal(view.style.background, CTA_STYLE.background)
   })
@@ -48,7 +48,7 @@ describe("orderStatusCtas (#38 / #40 step 5)", () => {
       ["cancel", "wallet"]
     )
     assert.equal(view.buttons[0].label, "Отменить заказ")
-    assert.equal(view.buttons[0].hint, "Вернем 100% суммы")
+    assert.equal(view.buttons[0].hint, "Вернем 100% · 1–3 дня")
     assert.equal(view.buttons[1].label, "Карта в Apple Wallet")
   })
 
@@ -130,9 +130,32 @@ describe("orderStatusCtas (#38 / #40 step 5)", () => {
     assert.equal(ios.buttons[0].label, "Чат с поддержкой")
   })
 
-  it("cancelled / unknown: no CTAs", () => {
-    assert.equal(orderStatusCtas({ status: "cancelled", os: "android" }).buttons.length, 0)
-    assert.equal(orderStatusCtas({ status: "issued", os: "ios" }).buttons.length, 0)
+  it("ios without wallet certs uses Push instead of Wallet", () => {
+    const view = orderStatusCtas({
+      status: "accepted",
+      os: "ios",
+      canCancel: true,
+      walletAvailable: false
+    })
+    assert.deepEqual(
+      view.buttons.map((b) => b.kind),
+      ["cancel", "push"]
+    )
+  })
+
+  it("#78 hides subscription CTA even when offer eligible", () => {
+    const view = orderStatusCtas({
+      status: "ready",
+      os: "android",
+      hasPushSubscription: true,
+      subscriptionOfferEnabled: true,
+      secondCtaMode: "subscription",
+      eligibleForSubscriptionOffer: true
+    })
+    assert.deepEqual(
+      view.buttons.map((b) => b.kind),
+      ["chat", "tips"]
+    )
   })
 })
 

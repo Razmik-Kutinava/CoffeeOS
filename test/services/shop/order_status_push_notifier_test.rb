@@ -89,6 +89,7 @@ class Shop::OrderStatusPushNotifierTest < ActiveSupport::TestCase
     assert notification.present?
     assert_equal "order-#{@order.id}", notification.payload["tag"]
     assert_equal %w[cancel], notification.payload["actions"]
+    assert_equal @tenant.id.to_s, notification.payload["tenant_id"].to_s
     assert_equal "🟩⬜⬜", notification.payload["progress"]
     assert_match(/\A🟩⬜⬜/, notification.body)
   end

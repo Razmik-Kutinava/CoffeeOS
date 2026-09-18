@@ -23,6 +23,7 @@ const LABELS = Object.freeze({
  *   os?: "ios"|"android"|"desktop",
  *   canCancel?: boolean,
  *   hasPushSubscription?: boolean,
+ *   walletAvailable?: boolean,
  *   subscriptionOfferEnabled?: boolean,
  *   secondCtaMode?: "tips"|"subscription",
  *   eligibleForSubscriptionOffer?: boolean
@@ -39,9 +40,12 @@ export function orderStatusCtas(opts = {}) {
   const os = opts.os || "desktop"
   const canCancel = Boolean(opts.canCancel)
   const hasPushSubscription = Boolean(opts.hasPushSubscription)
-  const notifyKind = os === "ios" ? "wallet" : "push"
-  const offerOn =
-    Boolean(opts.subscriptionOfferEnabled) && String(opts.secondCtaMode || "") === "subscription"
+  const walletOk = opts.walletAvailable !== false
+  const notifyKind = os === "ios" && walletOk ? "wallet" : "push"
+  // #78 Shop API cancel/confirm_payment → 501: do not show subscription CTA
+  const offerOn = false
+  void opts.subscriptionOfferEnabled
+  void opts.secondCtaMode
   const eligible = Boolean(opts.eligibleForSubscriptionOffer)
 
   /** @type {Array<{ kind: string, label: string, hint?: string }>} */

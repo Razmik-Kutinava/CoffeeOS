@@ -47,6 +47,11 @@ export function labelSbpAccount() {
   return "Ваш счет СБП"
 }
 
+/** #79: срок возврата после автоплатежа / отмены. */
+export function labelSbpRefundTiming() {
+  return "Возврат при отмене — 1–3 рабочих дня"
+}
+
 /** #75 TOV сохранённого СБП без last4. */
 export function labelSbpBoundUsual() {
   return "СБП · как обычно"

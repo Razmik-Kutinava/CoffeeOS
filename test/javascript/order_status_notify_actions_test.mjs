@@ -59,6 +59,11 @@ describe("notifyActionsView by OS (#37 step 2)", () => {
     assert.equal(view.secondaryLabel, "Состав заказа")
   })
 
+  it("ios without wallet → Push primary", () => {
+    const view = notifyActionsView({ os: "ios", walletAvailable: false })
+    assert.equal(view.primaryKind, "push")
+  })
+
   it("exposes actions/button class hooks for scoped CSS", () => {
     const view = notifyActionsView({ os: "ios" })
     assert.equal(view.actionsClass, "aoa__actions")

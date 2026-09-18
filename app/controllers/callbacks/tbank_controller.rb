@@ -55,6 +55,10 @@ module Callbacks
       # RebillId из webhook теряется (finalize/GetState без RebillId). Retry через очередь — fallback.
       begin
         Payments::TbankCallbackJob.perform_now(payload.to_h)
+      rescue Payments::TbankCallbackJob::AmountMismatchError => e
+        release_idempotency_claim(idem_key) if claimed
+        Rails.logger.error("[Tbank::Callback] #{e.class}: #{e.message}")
+        return render json: { error: "amount mismatch" }, status: :unprocessable_entity
       rescue StandardError => e
         Rails.logger.error("[Tbank::Callback] perform_now failed, enqueue: #{e.class} #{e.message}")
         begin
