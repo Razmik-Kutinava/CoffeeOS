@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-18 — fix: CodeQL ruby syntax warning on main
+
+- `db/migrate/20250115000002_create_stage_2_payments.rb` на main: orphan `, if_not_exists: true, if_not_exists: true` → файл как на develop
+- Push main `7ab6456c`; CodeQL Advanced main SUCCESS (ruby + js)
+
 ## 2026-09-18 — fix: CI Block F stock hard-fail test
 
 - `BlockFStockFlowTest`: sale при нехватке остатка → 422 + stock unchanged (не soft-negative QA 4.2)

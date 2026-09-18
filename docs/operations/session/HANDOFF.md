@@ -2,17 +2,17 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-18 (CI green Block F stock)  
+**Дата:** 2026-09-18 (CodeQL main syntax fix)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| CI test fix Block F hard stock | Actions CI green на develop |
-| Semgrep SARIF upload | Code scanning (tool Semgrep) |
-| GetState + #78 / #82 | deploy апрув |
+| CodeQL main migration syntax fixed `7ab6456c` | Security tool status → warning clear (refresh) |
+| Semgrep SARIF | Code scanning Semgrep |
+| CI Block F / GetState / #82 | deploy апрув |
 
-**last_done:** BlockF stock test → expect 422 (hard-fail); Semgrep continue-on-error уже на HEAD  
-**next_step:** CI Actions green
+**last_done:** main — убрана orphan `, if_not_exists` в stage_2 payments; CodeQL ruby+js SUCCESS  
+**next_step:** обновить Security → CodeQL status page (warning с fe1349a4 уйдёт)
 
 **ctx_trim:** `2026-09-02`  
 **Fly:** v495 `deployment-01M22JRN95TXRSV1PQDN49227M`
