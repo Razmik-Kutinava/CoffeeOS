@@ -46,9 +46,14 @@ class Shop::Api::CheckoutIdentityTest < ActionDispatch::IntegrationTest
     @product = create_product!(category: category)
     enable_product_for_tenant!(tenant: @tenant, product: @product, price: 179)
     ENV["SHOP_SIMULATE_PAYMENT"] = "1"
+    ENV["SHOP_OTP_LOG_FALLBACK"] = "true"
     FakeTbankIdentity.install!
     FakeTbankIdentity.enabled = false
     FakeTbankIdentity.last_charge = nil
+  end
+
+  teardown do
+    ENV.delete("SHOP_OTP_LOG_FALLBACK")
   end
 
   def add_cart!(sess)
@@ -59,26 +64,37 @@ class Shop::Api::CheckoutIdentityTest < ActionDispatch::IntegrationTest
     assert_equal 200, sess.response.status, sess.response.body
   end
 
-  def phone_customer!(phone: nil)
-    phone ||= "+7900#{rand(1000000..9999999)}"
-    MobileCustomer.create!(
-      phone: phone,
-      email: nil,
-      first_name: "Phone",
-      is_active: true,
-      phone_verified: true,
-      phone_status: :verified
-    )
+  def verify_shop_phone!(sess, phone:)
+    sess.post "/shop/api/phone_otp/send_sms",
+      headers: shop_tenant_headers(@tenant.id),
+      params: { phone: phone },
+      as: :json
+    assert_equal 200, sess.response.status, sess.response.body
+
+    record = MobileOtpCode.where(phone: phone, is_used: false).order(created_at: :desc).first
+    assert record, "expected OTP for #{phone}"
+
+    sess.post "/shop/api/phone_otp/verify_sms",
+      headers: shop_tenant_headers(@tenant.id),
+      params: { phone: phone, code: record.code },
+      as: :json
+    assert_equal 200, sess.response.status, sess.response.body
+    assert_equal true, sess.response.parsed_body["verified"]
+  end
+
+  def unique_phone
+    "+7900#{rand(1000000..9999999)}"
   end
 
   # T-B5a
   test "phone verified POST orders succeeds without email confirm error" do
-    customer = phone_customer!
+    phone = unique_phone
 
     open_session do |sess|
       add_cart!(sess)
-      sess.get "/shop/api/config", headers: shop_tenant_headers(@tenant.id), as: :json
-      Shop::CustomerSession.set_customer_id!(sess.session, @tenant.id, customer.id)
+      verify_shop_phone!(sess, phone: phone)
+      customer = MobileCustomer.find_by!(phone: phone)
+      assert customer.phone_verified
 
       sess.post "/shop/api/orders",
         headers: shop_tenant_headers(@tenant.id),
@@ -88,8 +104,9 @@ class Shop::Api::CheckoutIdentityTest < ActionDispatch::IntegrationTest
       body = JSON.parse(sess.response.body)
       assert_equal 200, sess.response.status, body.inspect
       refute_match(/подтвердите email|укажите email/i, body["error"].to_s)
-      assert body["id"].present? || body["order_id"].present? || body["status"].present?
-      assert_equal customer.id, Order.find(body["id"] || body["order_id"]).customer_id
+      order_id = body["id"] || body["order_id"]
+      assert order_id.present?, body.inspect
+      assert_equal customer.id, Order.find(order_id).customer_id
     end
   end
 
@@ -123,17 +140,17 @@ class Shop::Api::CheckoutIdentityTest < ActionDispatch::IntegrationTest
       assert_equal 422, sess.response.status
       err = sess.response.parsed_body["error"].to_s
       assert_match(/телефон|email/i, err)
-      refute_equal "Укажите email", err # phone-first: not email-only copy
+      refute_equal "Укажите email", err
     end
   end
 
   # T-B4a
   test "GET user/cards with phone session customer no email returns 200" do
-    customer = phone_customer!
+    phone = unique_phone
 
     open_session do |sess|
-      sess.get "/shop/api/config", headers: shop_tenant_headers(@tenant.id), as: :json
-      Shop::CustomerSession.set_customer_id!(sess.session, @tenant.id, customer.id)
+      verify_shop_phone!(sess, phone: phone)
+      assert Shop::CustomerSession.customer_id(sess.session, @tenant.id).present?
 
       sess.get "/shop/api/user/cards",
         headers: shop_tenant_headers(@tenant.id),
@@ -155,8 +172,16 @@ class Shop::Api::CheckoutIdentityTest < ActionDispatch::IntegrationTest
     ENV["TBANK_PASSWORD"] ||= "TestPassword"
     FakeTbankIdentity.enabled = true
 
-    owner = phone_customer!
-    thief = phone_customer!
+    owner_phone = unique_phone
+    thief_phone = unique_phone
+    owner = MobileCustomer.create!(
+      phone: owner_phone,
+      email: nil,
+      first_name: "Owner",
+      is_active: true,
+      phone_verified: true,
+      phone_status: :verified
+    )
     foreign_card = MobilePaymentMethod.create!(
       customer_id: owner.id,
       payment_type: "card",
@@ -169,8 +194,8 @@ class Shop::Api::CheckoutIdentityTest < ActionDispatch::IntegrationTest
 
     open_session do |sess|
       add_cart!(sess)
-      sess.get "/shop/api/config", headers: shop_tenant_headers(@tenant.id), as: :json
-      Shop::CustomerSession.set_customer_id!(sess.session, @tenant.id, thief.id)
+      verify_shop_phone!(sess, phone: thief_phone)
+      thief = MobileCustomer.find_by!(phone: thief_phone)
       clear_shop_payment_step_up!(customer: thief, tenant_id: @tenant.id, session: sess)
 
       sess.post "/shop/api/payments/one_click",
@@ -201,7 +226,15 @@ class Shop::Api::CheckoutIdentityTest < ActionDispatch::IntegrationTest
     ENV["TBANK_PASSWORD"] ||= "TestPassword"
     FakeTbankIdentity.enabled = true
 
-    customer = phone_customer!
+    phone = unique_phone
+    customer = MobileCustomer.create!(
+      phone: phone,
+      email: nil,
+      first_name: "Owner",
+      is_active: true,
+      phone_verified: true,
+      phone_status: :verified
+    )
     card = MobilePaymentMethod.create!(
       customer_id: customer.id,
       payment_type: "card",
@@ -214,9 +247,10 @@ class Shop::Api::CheckoutIdentityTest < ActionDispatch::IntegrationTest
 
     open_session do |sess|
       add_cart!(sess)
-      sess.get "/shop/api/config", headers: shop_tenant_headers(@tenant.id), as: :json
-      Shop::CustomerSession.set_customer_id!(sess.session, @tenant.id, customer.id)
-      clear_shop_payment_step_up!(customer: customer, tenant_id: @tenant.id, session: sess)
+      verify_shop_phone!(sess, phone: phone)
+      linked = MobileCustomer.find_by!(phone: phone)
+      assert_equal customer.id, linked.id
+      clear_shop_payment_step_up!(customer: linked, tenant_id: @tenant.id, session: sess)
 
       sess.post "/shop/api/payments/one_click",
         headers: shop_tenant_headers(@tenant.id),
@@ -232,7 +266,6 @@ class Shop::Api::CheckoutIdentityTest < ActionDispatch::IntegrationTest
       body = JSON.parse(sess.response.body)
       err = body["error"].to_s
       refute_match(/подтвердите email|укажите email/i, err)
-      # 200 preferred; if gateway/other fails — must not be identity
       if sess.response.status == 422
         refute_match(/email/i, err)
       else

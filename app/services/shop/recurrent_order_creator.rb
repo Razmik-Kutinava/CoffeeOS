@@ -102,20 +102,14 @@ module Shop
     end
 
     def find_customer!(params)
-      email = Shop::EmailVerificationSession.normalize(params[:email])
-      raise Error, "Укажите email" if email.blank?
-
-      verified = Shop::EmailVerification.verified_email(
+      Shop::CheckoutIdentity.find_existing!(
         session: @session,
-        tenant_id: @tenant.id,
-        session_id: @request&.session&.id&.to_s,
-        email: email
+        tenant: @tenant,
+        request: @request,
+        params: params
       )
-      raise Error, "Подтвердите email кодом из письма" unless verified == email
-
-      MobileCustomer.find_by!(email: email)
-    rescue ActiveRecord::RecordNotFound
-      raise Error, "Гость не найден"
+    rescue Shop::CheckoutIdentity::Error => e
+      raise Error, e.message
     end
   end
 end

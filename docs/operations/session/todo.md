@@ -1,99 +1,98 @@
-﻿# todo — #93 TASK_93-K: Hygiene pack (K1–K7)
-
-Зеркало session `todo.md` (параллельные блоки не затирают канон K).
+# todo — #93 TASK_93-B: Checkout identity (phone vs email)
 
 | Поле | Значение |
 |------|----------|
-| **ID** | CBR **#93** · **TASK_93-K** |
-| **Тип** | SBR · hygiene pack (blog / demo / paymentUrl / merger / ops) |
+| **ID** | CBR **#93** · **TASK_93-B** |
+| **Тип** | SBR · hot-path shop checkout / оплата / identity |
 | **Статус** | **SPEC** · Next: `/sbr` RED |
 | **Ветка** | `develop` |
 | **Канон** | `@spec-build-review` · `@coffeeos-commit-ops` · `@coffeeos-dev-gates` |
-| **ТЗ** | бриф чата K1–K7 · зонтик [`TASK-93-Critical-path-hardening.md`](../../requirements/customer_tasks/TASK-93-Critical-path-hardening.md) карта K |
-| **GATES** | [`GATES-block-K.md`](GATES-block-K.md) (канон; `session/GATES.md` может быть чужим блоком) |
-| **Цель** | Один GREEN/PR: K1–K7 PASS или явный DEFER в REVIEW; без молчаливых хвостов |
-| **OUT** | A–J продуктовые · полный RLS (G) · deploy (L) · расширение Blog allowlist · fake subdomain |
-| **Зависимость** | после стабилизации A–J или параллельно мелкий pack; L закрывает K5-in-prod |
-| **DEFER** | *(пусто)* |
+| **ТЗ** | [`TASK-93-B-Checkout-identity.md`](../milestones/veha_2/requirements/customer_tasks/TASK-93-B-Checkout-identity.md) |
+| **GATES** | [`GATES-block-B.md`](../milestones/veha_2/artifacts/critical_path_hardening/GATES-block-B.md) · не `session/GATES.md` (параллельные A/C/D) |
+| **Цель** | UI «можно платить» ≡ бэкенд без 422 email при `phone_verified`; один identity на все pay-пути |
+| **OUT** | склад/webhook (A) · SMS host (C) · per_page (D) · Init race (E) · RLS · OTP длины · FCM · deploy (L) · email чека post-pay (#71) не блокирует Pay |
 
-## Канон продукта (зафиксировано SPEC)
+## Канон продукта (зафиксировано SPEC) — phone-first
 
 | ID | Решение |
 |----|---------|
-| **R1 (K1)** | View/helper sanitize **только** `BlogPost::ALLOWED_TAGS` / `ALLOWED_ATTRIBUTES`. Не расширять allowlist в ERB. `<img>`/`style`/`h1` strip на save + на render |
-| **R2 (K2)** | `Demo::EnvironmentSetup.call` / `demo:seed`: в `Rails.env.production?` — **abort**, кроме `DEMO_AUTO_SEED=true`. `DEMO_LOGINS.md`: warning «не для prod». T-K2c: нет `demo123456` под `app/` (docs/bin/artifacts ок) |
-| **R3 (K3)** | `adapter_payment_url`: non-http(s) в **production** → **не** `securepayments.tinkoff.ru/#{pid}`; вернуть ошибку (**422**/JSON error) вызывающему widget/pay path. simulate/test/dev — fallback ок. `SHOP_BASE_DOMAIN` blank → `?tenant_id=` (уже UrlBuilder); док ok, fake subdomain запрещён |
-| **R4 (K4)** | `ALLOWED_OPTIONAL_TABLES = %w[order_feedback promo_code_usages].freeze`; иначе `ArgumentError` |
-| **R5 (K5)** | Код RUBY-1K уже в git; T-K5a must stay green; REVIEW: «RUBY-1K fix shipped in this release train» |
-| **R6 (K6)** | После GREEN/REVIEW: шапка HANDOFF/SESSION sha = `git rev-parse --short HEAD` + next_step (L / остаток) |
-| **R7 (K7)** | **B** (зафиксировано): collector уже batch + 1× `SET LOCAL row_security=off`; T-K7a assert ≤1 SET LOCAL на `call`; T-K7c PASS. **Не** Sentry ignore как DoD (A = не выбран). REVIEW: закрыть/отметить RUBY-1J после verify |
+| **R1** | Session customer с `phone_verified` → можно создавать заказ и инициировать оплату (email не обязателен) |
+| **R2** | Email не обязателен для Pay; verified email — merge как сейчас; иначе заказ на phone-customer; email post-pay (#71) ок |
+| **R3** | Без `phone_verified` **и** без `email_verified` → 422; UI `canPay` false |
+| **R4** | Одна проверка identity: orders / new_card / one_click / SBP create order |
+| **R5** | UI: `identityReady` ≡ R1–R3 (`phoneVerified \|\| emailVerified`), не «телефон ок + скрытый require email» |
+
+**Не email-gate. Не гибрид.** Смена канона — только до RED.
 
 ## SBR
 
-- [x] PHASE 0 `/start` — бриф TASK_93-K в чате
-- [x] `/unlazy` — GATES K (`GATES-block-K.md` · unmet 4 · G5→L)
-- [x] PHASE 1 `/spec` — этот todo (+ зеркало session)
-- [ ] PHASE 2 RED — пачка T-K1a/b/c · T-K2* · T-K3a · T-K4a · (T-K7a) · коммит `[RED]`
-- [ ] PHASE 2 GREEN — R1–R7 · коммит `[GREEN]` · все T-K* PASS
-- [ ] `/regress` — GATES G4 § Проверка
-- [ ] PHASE 3 `/review` — таблица K1–K7 · K6 sha sync · push · **без deploy**
+- [x] PHASE 0 `/start` — `TASK-93-B-Checkout-identity.md`
+- [x] `/unlazy` — `GATES-block-B.md` (G3 baseline met · G1/G2 unmet pre-RED · G5→L)
+- [x] PHASE 1 `/spec` — этот todo · phone-first
+- [ ] PHASE 2 RED — T-B2a/c, T-B5a/c красные на HEAD · `recurrent_order_creator_test.rb` + `checkout_identity_test.rb` · коммит `[RED]`
+- [ ] PHASE 2 GREEN — одна identity-проверка + Checkout sync · коммит `[GREEN]` · T-B2* T-B4* T-B5* PASS
+- [ ] `/regress` — G3 zone + § Проверка
+- [ ] PHASE 3 `/review` — таблица B1–B5 PASS · push · **без deploy**
 
 ## Файлы (ожидаемо)
 
-- `app/views/blog/posts/show.html.erb` — sanitize → `BlogPost::ALLOWED_*`
-- `app/models/blog_post.rb` — канон allowlist (без расширения)
-- `app/controllers/shop/api/payments_controller.rb` — `adapter_payment_url` prod fail
-- `app/services/shop/customer_profile_merger.rb` — `ALLOWED_OPTIONAL_TABLES` + raise
-- `app/services/demo/environment_setup.rb` — production guard / DEMO_AUTO_SEED
-- `docs/operations/milestones/veha_1/reference/DEMO_LOGINS.md` — warning «не prod»
-- `app/services/analytics/channel_order_stats_collector.rb` — только если T-K7a потребует правки (baseline уже B)
+- `app/services/shop/order_creator.rb` — `find_or_create_customer!`: phone_verified session → order без email; email_verified path сохранить; neither → Error
+- `app/services/shop/recurrent_order_creator.rb` — `find_customer!`: тот же канон (session phone customer + card ownership)
+- `app/frontend/routes/Checkout.svelte` — `identityReady = phoneVerified \|\| emailVerified`; Pay payload без фейкового `emailVerified`; `loadSavedCards` ок без `?email=` при session
 
 ### Blast-radius (+соседи)
 
-- `test/models/blog_post_sanitize_consistency_test.rb` (+ integration show) — T-K1*
-- `test/controllers/shop/api/widget_payment_url_test.rb` — T-K3a/b
-- `test/integration/platform/onboarding_infra_test.rb` — T-K3c регресс (не ломать)
+- `app/controllers/shop/api/user_cards_controller.rb` — B4: уже session `customer_id`; не требовать email (регресс T-B4a)
+- `app/controllers/shop/api/payments_controller.rb` — new_card/one_click ловят `OrderCreator::Error`; текст 422 может смениться на «телефон или email»
+- `app/services/shop/checkout_identity.rb` — **опционально** на GREEN, если DRY общей проверки (иначе оставить в двух creators)
 
-## Матрица приёмки (RED → GREEN)
+### Тесты (создать/дополнить на RED)
 
-| ID | Assert |
-|----|--------|
-| T-K1a | ERB/helper без отдельного широкого `%w[h1 img style…]` |
-| T-K1b | save strips `<img>` |
-| T-K1c | blog show не re-introduce disallowed |
-| T-K2a | production + DEMO_AUTO_SEED false → seed abort / no overwrite |
-| T-K2b | DEMO_LOGINS содержит warning не-prod |
-| T-K2c | (opt) no `demo123456` under `app/` |
-| T-K3a | production-like blank/non-http → error, не fake tinkoff URL |
-| T-K3b | valid https as-is |
-| T-K3c | UrlBuilder без SHOP_BASE_DOMAIN → tenant_id URL |
-| T-K4a | `reassign_optional_table!("orders")` raises |
-| T-K4b | allowed tables merge |
-| T-K5a | `menu_category_sort_order_update_test` PASS |
-| T-K6a/b | REVIEW ops sha + next_step |
-| T-K7a | SET LOCAL count ≤ bound на collector.call |
-| T-K7c | `channel_order_stats_collector_test` PASS |
-
-Без **T-K1a + T-K3a + T-K4a** блок не закрыт.
+- `test/services/shop/order_creator_test.rb` — T-B2a/b/c
+- `test/services/shop/recurrent_order_creator_test.rb` — **новый** · T-B2d
+- `test/integration/shop/api/checkout_identity_test.rb` — **новый** · T-B4a · T-B5a…e · T-B2e/f через API
 
 ## Не ломать
 
-1. Widget/pay happy path с валидным https PaymentURL
-2. Blog publish/edit + render allowed tags (p/a/h2…)
-3. Profile merge email/phone + allowed optional tables
-4. Demo seed на local / `DEMO_AUTO_SEED=true`
-5. Menu category blank `sort_order` update (RUBY-1K)
+- Email-verified guest **без** phone — по-прежнему может платить (R3)
+- one_click: карта принадлежит session customer; чужой RebillId → 422 ownership (не identity)
+- Callcheck/SMS linker (#89) — session + `phone_verified` без регресса
+- Post-pay email (#71/#91) — email **не** требуется до Pay
+- Amount limits / closed shop / simulate guards — без изменений
 
 ## Проверка
 
 ```bash
-bin/rails test \
-  test/integration/platform/menu_category_sort_order_update_test.rb \
-  test/services/shop/customer_profile_merger_test.rb \
-  test/services/analytics/channel_order_stats_collector_test.rb \
-  test/models/blog_post_test.rb \
-  test/controllers/shop/api/payments_controller_test.rb
-# + новые T-K* файлы (sanitize / widget_payment_url / demo guard)
+ruby bin/rails test test/services/shop/order_creator_test.rb test/services/shop/recurrent_order_creator_test.rb test/integration/shop/api/checkout_identity_test.rb
 ```
 
-GATES: G1–G3 после GREEN `--approve`; G4 = этот regress; G5→L.
+```bash
+ruby bin/rails test test/integration/shop/api/email_otp_checkout_test.rb test/integration/shop/shop_one_click_payment_step4_test.rb test/integration/shop/shop_new_card_payment_step2_test.rb
+```
+
+(= GATES-block-B G1+G2 и G3)
+
+## Матрица приёмки (DoD B)
+
+| ID | Assert |
+|----|--------|
+| T-B1 | SPEC + одна точка identity в коде = R1–R5 |
+| T-B2a | phone_verified, email nil → order, нет Error email |
+| T-B2b | email_verified без phone → order |
+| T-B2c | neither → Error/422, order не создан |
+| T-B2d | one_click phone без email → не identity 422 |
+| T-B2e | new_card phone без email → не identity 422 |
+| T-B2f | SBP/orders phone без email → не identity 422 |
+| T-B3a–c | `identityReady` ≡ R1–R3; canPay false без identity |
+| T-B4a/b | GET /user/cards phone session 200; loadSavedCards без обязательного `?email=` |
+| T-B5a–e | integration пакет (см. ТЗ §7) |
+
+## REVIEW-таблица (вставить в `/review`)
+
+```
+B1 канон phone-first     PASS (SPEC + код)
+B2 T-B2a..f              PASS
+B3 UI identityReady      PASS
+B4 T-B4a T-B4b           PASS
+B5 T-B5a..e              PASS
+```

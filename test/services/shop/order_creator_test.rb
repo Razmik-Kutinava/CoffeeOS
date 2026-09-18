@@ -72,7 +72,7 @@ class Shop::OrderCreatorTest < ActiveSupport::TestCase
         name: "Test User"
       })
     end
-    assert_match(/email/i, error.message)
+    assert_match(/телефон|email/i, error.message)
   end
 
   test "raises Error when email is not verified" do

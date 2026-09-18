@@ -112,12 +112,12 @@
   let cardsLoadError = $state(null)
 
   const phoneE164 = $derived(normalizePhoneToE164Ru(phoneDisplay))
-  const identityReady = $derived(phoneVerified)
+  const identityReady = $derived(phoneVerified || emailVerified)
   const canPay = $derived(identityReady && !submitting && shopIsOpenForPay())
 
   // #91: slim cart sheet while phone-auth wizard is active
   $effect(() => {
-    setCheckoutPhoneAuthActive(!phoneVerified)
+    setCheckoutPhoneAuthActive(!phoneVerified && !emailVerified)
     return () => setCheckoutPhoneAuthActive(false)
   })
   const sheetCanPay = $derived(
