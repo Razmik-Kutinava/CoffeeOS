@@ -2,18 +2,18 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-18 (TASK_93-J regress PASS)  
-**Ветка:** `develop`
+**Дата:** 2026-09-18 (TASK_93-I REVIEW)  
+**Ветка:** develop
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#93-J** Local regress **PASS** 87/0 | `/review` · push · **без deploy** |
-| GREEN `566dba9b` · G5→L | Fly MCP Point A после L |
-| **#93-*** параллельно | свои SBR |
+| **#93-I** REVIEW Local+bugbot+security | push → CI green |
+| fix ce45d164 (precompile + phone norm) | deploy Redis = L (апрув) |
+| GREEN c14f5202 | Fly MCP = L |
 
-**last_done:** `/regress` TASK_93-J — shop jobs/presence/push + barista/fcm/updater/tbank  
-**next_step:** `/review` J1–J4 таблица · Entire · push
+**last_done:** /review TASK_93-I — Local PASS · bugbot/security fixed · Entire attach  
+**next_step:** push/CI · deploy Redis только апрув
 
-**ctx_trim:** `2026-09-02`
+**ctx_trim:** 2026-09-02
 
 ---

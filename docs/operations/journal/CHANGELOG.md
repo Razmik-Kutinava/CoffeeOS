@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-18 — docs: REVIEW #93 TASK_93-I OTP / Rack::Attack
+
+- Local zone PASS · bugbot: assets DUMMY MemoryStore · security: PhoneNormalizer throttle keys
+- Fix ce45d164 · GREEN c14f5202 · GATES G1–G4 met · G5→L
+- Next: push/CI · deploy Redis = апрув
+
 ## 2026-09-18 — docs: regress PASS #93 TASK_93-J Push / worker zone
 
 - Zone: jobs/shop + presence + push_notifier + barista/broadcaster/fcm/updater + tbank

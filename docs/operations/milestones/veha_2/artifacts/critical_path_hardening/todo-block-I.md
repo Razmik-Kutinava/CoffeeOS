@@ -95,3 +95,12 @@ bin/rails test \
   test/integration/shop/order_short_links_test.rb \
   test/services/shop/phone_otp_test.rb
 ```
+
+
+## REVIEW table (I1–I4)
+
+\I1 T-I1a T-I1b (T-I1c/d)     PASS
+I2 T-I2a T-I2b T-I2c T-I2d T-I2e T-I2f PASS
+I3 T-I3a..c                  PASS
+I4 T-I4a T-I4b T-I4c         PASS
+\
