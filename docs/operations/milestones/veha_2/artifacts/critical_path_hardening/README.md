@@ -7,6 +7,7 @@
 | Файл | Назначение |
 |------|------------|
 | `GATES-block-E.md` | **канон ledger блока E** (этот чат) — `gate-check` / `session/GATES.md` |
+| `todo-block-E.md` | зеркало SPEC E (session `todo.md` гоняют параллельные блоки) |
 | `GATES-block-D.md` | ledger блока D |
 | `GATES-block-C.md` | ledger блока C |
 | `GATES-block-B.md` | ledger блока B |
@@ -19,6 +20,6 @@
 | B | Checkout identity · `GATES-block-B.md` · [ТЗ B](../../requirements/customer_tasks/TASK-93-B-Checkout-identity.md) |
 | C | SMS short link · `GATES-block-C.md` |
 | D | orders history per_page · `GATES-block-D.md` |
-| E | Init idempotency / txn — **сейчас** · `GATES-block-E.md` · Next: `/spec` |
+| E | Init idempotency / txn — **сейчас** · `GATES-block-E.md` + `todo-block-E.md` · Next: `/sbr` |
 | F–K | см. карту в зонтике |
 | L | Deploy + Point A MCP |
