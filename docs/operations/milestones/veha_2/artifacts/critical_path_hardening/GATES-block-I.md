@@ -40,4 +40,5 @@ CoffeeOS TASK_93-I unlazy (post-/start / pre-SPEC):
 - SPEC 2026-09-18: R1 Redis URL priority · R8 fail-boot · R3/R4 5/min IP+identity · R5 I3 IN SCOPE · R9 CI redis
 - Без I1+I2 блок не закрыт; I4 обязателен; I3 in-scope
 - 2026-09-18: --status unmet 4 · abandoned 1 (G5); --approve после GREEN (не сейчас)
+- 2026-09-18 GREEN c14f5202 · Local matrix PASS (T-I1b skip) · Entire backfill commit next
 -->

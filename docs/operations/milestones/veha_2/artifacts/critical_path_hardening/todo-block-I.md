@@ -6,7 +6,7 @@
 |------|----------|
 | **ID** | CBR **#93** · **TASK_93-I** |
 | **Тип** | SBR · hot-path shop auth / Rack::Attack |
-| **Статус** | **SPEC** · Next: `/sbr` RED |
+| **Статус** | **GREEN** · Next: `/regress` |
 | **Ветка** | `develop` |
 | **Канон** | `@spec-build-review` · `@coffeeos-commit-ops` · `@coffeeos-dev-gates` |
 | **ТЗ** | бриф чата I1–I4 · зонтик [`TASK-93-Critical-path-hardening.md`](../../requirements/customer_tasks/TASK-93-Critical-path-hardening.md) карта I |
@@ -34,8 +34,8 @@
 - [x] PHASE 0 `/start`
 - [x] `/unlazy` — `07538476`
 - [x] PHASE 1 `/spec` — этот файл (+ session todo если не race)
-- [ ] PHASE 2 RED — T-I1a · T-I2a · T-I3a · `[RED]`
-- [ ] PHASE 2 GREEN — R1–R9 · `[GREEN]`
+- [x] PHASE 2 RED — tests in `0504f088` (msg race) · T-I*
+- [x] PHASE 2 GREEN — `c14f5202` · R1–R9 · Local PASS (T-I1b skip без Redis)
 - [ ] `/regress` — § Проверка
 - [ ] PHASE 3 `/review` — I1–I4 PASS · push · **без deploy Redis**
 
