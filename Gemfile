@@ -1,13 +1,13 @@
 source "https://rubygems.org"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
-gem "rails", "~> 8.1.2"
+gem "rails", "~> 8.1.3", ">= 8.1.3.1"
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
 gem "propshaft"
 # Use PostgreSQL as the database for Active Record
 gem "pg", "~> 1.5"
 # Use the Puma web server [https://github.com/puma/puma]
-gem "puma", ">= 5.0"
+gem "puma", ">= 8.0.2"
 # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
 gem "importmap-rails"
 # Hotwire's SPA-like page accelerator [https://turbo.hotwired.dev]
@@ -15,12 +15,13 @@ gem "turbo-rails"
 # Hotwire's modest JavaScript framework [https://stimulus.hotwired.dev]
 gem "stimulus-rails"
 # View components for Rails [https://viewcomponent.org/]
-gem "view_component", "~> 3.0"
+# CVE floor: preview/helper dispatch + system-test path (GHSA-7f3r-gwc9-2995 et al.) — need ≥4.9.0
+gem "view_component", "~> 4.9"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
 
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
-gem "bcrypt", "~> 3.1.7"
+gem "bcrypt", "~> 3.1.7", ">= 3.1.20"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: %i[ windows jruby ]
@@ -39,11 +40,21 @@ gem "kamal", require: false
 # Add HTTP asset caching/compression and X-Sendfile acceleration to Puma [https://github.com/basecamp/thruster/]
 gem "thruster", require: false
 
+# CVE floor: nokogiri ≥1.19.4 (ReDoS / parse); pulled by rails, pin for bundler-audit regression guard
+gem "nokogiri", ">= 1.19.4"
+
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 gem "image_processing", "~> 1.2"
 
 # Rate limiting для API
 gem "rack-attack"
+
+# Error tracking (Sentry) — активируется через SENTRY_DSN в ENV
+gem "sentry-ruby"
+gem "sentry-rails"
+
+# Authorization
+gem "pundit"
 
 # Витрина (Svelte SPA из coffee-shop) через Vite
 gem "vite_rails", "~> 3.10"
@@ -79,3 +90,5 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
 end
+
+gem "jwt", "~> 2.9"
