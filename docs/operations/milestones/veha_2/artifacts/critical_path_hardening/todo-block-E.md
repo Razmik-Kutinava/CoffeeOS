@@ -33,7 +33,7 @@
 - [x] PHASE 1 `/spec` — этот todo (+ зеркало `todo-block-E.md`)
 - [x] PHASE 2 RED — T-E1a/b · T-E2a/b · T-E3a · T-E4a/b падают · коммит `[RED]` `0a7e72ba`
 - [x] PHASE 2 GREEN — R1–R5 · коммит `[GREEN]` `2eb22c71` · все T-E* PASS
-- [ ] `/regress` — G3 §2.3 + base_controller
+- [ ] `/regress` — G3 §2.3 + base_controller · GREEN code `2eb22c71` · Entire `01M2SZBBAQEGHNGEJCXYHG76XH`
 - [ ] PHASE 3 `/review` — таблица E1–E4 PASS · G4 evidence · push · **без deploy**
 
 ## Файлы (ожидаемо)
