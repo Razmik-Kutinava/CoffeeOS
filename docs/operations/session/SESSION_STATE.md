@@ -2,17 +2,17 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-18 (TASK_93-G SPEC)  
+**Дата:** 2026-09-18 (TASK_93-D GREEN)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#93-G** SPEC ready · `todo-block-G.md` | `/sbr` RED T-G* |
-| R1–R6 · GATES-block-G | GREEN → approve G1–G3 · G4 `/regress` |
-| */ledgers параллельно | не затирать `todo-block-G` / `GATES-block-G` |
+| **#93-D** GREEN | `/regress` G2 |
+| T-D* PASS · RED `faca7e3c` | `--approve` G1 после regress |
+| `todo-block-D.md` | `/review` · G4→L |
 
-**last_done:** `/spec` TASK_93-G Tenant GUC/RLS — inventory + Не ломать/Проверка  
-**next_step:** `/sbr` RED · коммит `[RED]` · стоп до GREEN
+**last_done:** feat history per_page=20 `[GREEN]` `9d2b98a8`  
+**next_step:** `/regress` → `/review`
 
 **ctx_trim:** `2026-09-02`
 
