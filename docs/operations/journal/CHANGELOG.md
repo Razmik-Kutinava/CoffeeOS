@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-18 — fix: CodeQL ReDoS + dismiss false positives
+
+- ReDoS: `URI::MailTo::EMAIL_REGEXP` в email_otp / email_service / purchase / tbank_receipt; JS login_form без nested `+`
+- Dismiss 13 alerts: CSRF callbacks/API (#2–#9, #15), test password (#14/#16), acceptance SSRF (#12), bank_card_id FP (#13)
+- Open до rescan: #1 / #10 / #11 (закроются после CodeQL на push)
+- Local: email_otp + receipt_builder 15 PASS
+
 ## 2026-09-18 — ci: CodeQL Advanced on develop + main (push)
 
 - develop push `adae7af5`; main fix `fe1349a4` (убран broken manual if)

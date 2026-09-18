@@ -7,7 +7,8 @@ module Shop
     CODE_TTL = 10.minutes
     MAX_ATTEMPTS = 5
     COOLDOWN = 60.seconds
-    EMAIL_FORMAT = /\A[^@\s]+@[^@\s]+\.[^@\s]+\z/
+    # URI::MailTo — без polynomial backtracking (CodeQL rb/polynomial-redos).
+    EMAIL_FORMAT = URI::MailTo::EMAIL_REGEXP
 
     def self.send_code!(email:)
       new.send_code!(email: email)
@@ -19,7 +20,7 @@ module Shop
 
     def send_code!(email:)
       normalized = EmailVerificationSession.normalize(email)
-      raise Error, "Укажите корректный email" unless normalized.match?(EMAIL_FORMAT)
+      raise Error, "Укажите корректный email" unless EMAIL_FORMAT.match?(normalized)
 
       enforce_cooldown!(normalized)
 

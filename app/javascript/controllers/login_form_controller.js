@@ -57,12 +57,23 @@ export default class extends Controller {
   }
   
   isValidEmailOrPhone(value) {
-    // Email: локальные домены demo.coffeeos.local и обычные адреса
-    const emailRegex = /^[^\s@]+@([^\s@]+\.)+[^\s@]+$/
+    // Email без nested + (CodeQL js/redos); допускает demo.coffeeos.local
+    const emailOk = this.isValidEmail(value)
     // Phone regex (российский формат)
     const phoneRegex = /^\+?[1-9]\d{10,14}$/
-    
-    return emailRegex.test(value) || phoneRegex.test(value.replace(/[\s\-\(\)]/g, ''))
+
+    return emailOk || phoneRegex.test(value.replace(/[\s\-\(\)]/g, ''))
+  }
+
+  isValidEmail(value) {
+    if (typeof value !== "string" || value.length > 254) return false
+    const at = value.indexOf("@")
+    if (at < 1 || at !== value.lastIndexOf("@")) return false
+    const local = value.slice(0, at)
+    const domain = value.slice(at + 1)
+    if (local.length > 64 || /\s/.test(local) || /\s/.test(domain)) return false
+    if (!domain.includes(".") || domain.startsWith(".") || domain.endsWith(".")) return false
+    return true
   }
   
   showError(target, message) {

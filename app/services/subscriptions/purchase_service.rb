@@ -135,7 +135,7 @@ module Subscriptions
     def apply_contact!(receipt)
       email = @customer.email.to_s.strip
       phone = @customer.phone.to_s.strip
-      if email.present? && email.match?(/\A[^\s@]+@[^\s@]+\.[^\s@]+\z/)
+      if email.present? && URI::MailTo::EMAIL_REGEXP.match?(email)
         receipt["Email"] = email
       elsif phone.present?
         receipt["Phone"] = phone

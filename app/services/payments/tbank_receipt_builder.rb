@@ -15,7 +15,7 @@ module Payments
     DEFAULT_TAXATION = "usn_income"
     DEFAULT_TAX = "none"
     NAME_MAX_LEN = 128
-    EMAIL_FORMAT = /\A[^\s@]+@[^\s@]+\.[^\s@]+\z/
+    EMAIL_FORMAT = URI::MailTo::EMAIL_REGEXP
 
     def self.call!(order:, email: nil, phone: nil)
       new(order: order, email: email, phone: phone).call!

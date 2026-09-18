@@ -37,7 +37,8 @@ module Orders
     private
 
     def valid_email?(email)
-      email.match?(/\A[^\s@]+@[^\s@]+\.[^\s@]+\z/)
+      # URI::MailTo — без polynomial backtracking (CodeQL rb/polynomial-redos).
+      URI::MailTo::EMAIL_REGEXP.match?(email)
     end
 
     def find_or_create_order_email(email, marketing_consent)
