@@ -1,0 +1,244 @@
+<manually_attached_skills>
+The user has manually attached the following skills to their message.
+These skills contain specific instructions or workflows that the user wants you to follow for this request.
+Only read the files if needed, the full skill content is inlined here.
+
+Skill Name: start
+Path: c:\Tools\workarea\CoffeeOS\.cursor\skills\start\SKILL.md
+SKILL.md content:
+Выполни инструкции из `.cursor/commands/start.md` целиком (умный старт A/B, отчёт, строка `Next: /…`).
+</manually_attached_skills>
+<cursor_commands>
+
+--- Cursor Command: start ---
+# /start — старт сессии / задачи (умный)
+
+CoffeeOS. Следуй `coffeeos-agent-workflow` + `coffeeos-customer-intake` (PHASE 0) при нужде.
+
+## Режим (выбери один, не гоняй всё)
+
+### A) Узкий старт (по умолчанию, если контекст уже есть)
+Используй, если в чате/todo уже: баг локализован, есть список файлов, живой `todo.md`, или пользователь продолжает ту же задачу.
+
+Сделай **только**:
+1. Шапка `HANDOFF.md` + шапка `SESSION_STATE.md` (`Read` limit до `---`, не тело)
+2. `ISSUES.md` — только секция **`## 🔴 Открыто`** (до следующего `##`), если релевантно багу
+3. `todo.md` — если есть
+4. **Не** перечитывай PRACTICES/QA/весь CHECKLIST/весь CHANGELOG / **`COMPONENT_MAP.md`**
+5. **Не** заново PHASE 0, если ТЗ уже в `customer_tasks/` или задача уже в todo
+6. Коротко: `last_done` / `current_state` / `next_step` (одна строка каждый)
+7. **ctx-trim:** если пт–вс и в шапке HANDOFF `ctx_trim` старше 7 дней — одна строка: «рекомендуется `/ctx-trim`» (не блокировать старт)
+
+### B) Полный старт + PHASE 0
+Только если **новое** ТЗ от заказчика ещё не в `customer_tasks/` / CBR, или пользователь явно просит intake.
+
+Тогда: PHASE 0 (intake 1:1) → краткая шапка ops → стоп до `/spec`.
+
+## Отчёт
+Таблица Сделано | Не сделано.  
+`Субагент: нет — старт` (или explore, если уже звал).  
+**Не пиши код** на этом шаге.
+
+## Обязательно в конце (копипаст для пользователя)
+
+Одной строкой, без лишнего текста вокруг:
+
+- Если нужен план/файлы → `Next: /spec`
+- Если SPEC/todo уже готов → `Next: /sbr`
+- Если только что завершили PHASE 0 → `Next: /spec`
+
+--- End Command ---
+</cursor_commands>
+<timestamp>Friday, Sep 18, 2026, 12:24 PM (UTC+4)</timestamp>
+
+/start 
+
+# TASK_93-I — Блок I: OTP / rate limit / auth abuse
+
+Зонтик: **TASK_93** / `#93` — Critical path hardening.  
+Этот SBR-прогон: **только TASK_93-I**.
+
+Title чата: `Задача 93 — Critical path hardening (блок I)`.
+
+---
+
+## 1. Зачем
+
+На Fly несколько web-машин. Сейчас:
+
+```ruby
+Rack::Attack.cache.store = ActiveSupport::Cache::MemoryStore.new
+```
+
+Лимиты **per-process** → brute OTP / flood `/o/` можно размазать по инстансам.
+
+Отправка SMS/Callcheck throttled; **`POST .../phone_otp/verify_sms` — нет**.  
+Код SMS: **`%04d`** (10 000 вариантов); `verify_sms!` уже принимает 4–6 цифр.
+
+**I4 / short-link:** правило `shop/order_short_link/ip` в `rack_attack.rb` **уже есть** (лимит 30/min) с пометкой «shared store → TASK_93-I». **Не дублировать** в C; в I — сделать store общим, чтобы C4 заработал на multi-machine.
+
+Solid Cache **не** подходит для Rack::Attack (`increment` нет) — нужен **Redis** (или иной store с atomic increment).
+
+## 2. Цель блока
+
+**Лимиты общие на весь Fly; verify SMS не открыт для brute; OTP достаточной длины (если продукт ок); short-link throttle живой через shared store.**
+
+## 3. Scope / Non-scope
+
+**В scope (I1–I4):**
+- Shared Rack::Attack cache store (Redis)
+- Throttle `verify_sms` (+ legacy `phone_otp/verify`, email verify — по SPEC)
+- OTP length 4→6 (SMS phone), UI/копирайт
+- I4: **не** второе правило `/o/` — только verify что правило есть + работает на shared store
+
+**Вне scope:** смена Callcheck провайдера, SMS.ru API, блок C текст SMS, MemoryStore→Redis для всего Rails.cache приложения (можно оставить SolidCache для app cache; Attack — отдельно), deploy Redis на Fly (**L** или ops в этом блоке как runbook).
+
+## 4. Продуктовые правила (SPEC до RED)
+
+| Правило | Решение |
+|---------|---------|
+| **R1** | Production/FLY: `Rack::Attack.cache.store` = **Redis** (`REDIS_URL` / `RACK_ATTACK_REDIS_URL`). Dev без Redis → MemoryStore + warn log. Test → MemoryStore / disable как сейчас |
+| **R2** | Не использовать SolidCache для Attack increment |
+| **R3** | Throttle verify: `POST /shop/api/phone_otp/verify_sms` (+ `/phone_otp/verify` legacy) — по **IP** и по **phone** (из body), лимит например **5 / 1.minute** (или 10) — зафиксировать цифры в SPEC |
+| **R4** | Email `email_otp/verify` — тот же класс защиты (рекомендуется в том же блоке) |
+| **R5 / I3** | SMS OTP length = **6** (`%06d`, 1e6). UI: 6 полей/маска. Callcheck **не** менять. Product reject 6 → явно skip I3 в SPEC до RED, не после |
+| **R6 / I4** | Одно правило `shop/order_short_link/ip`; I только shared store + регресс-тест что throttle срабатывает |
+| **R7** | `MobileOtpCode` MAX_ATTEMPTS остаётся defense-in-depth; Attack — первая линия |
+
+## 5. Файлы (ожидаемо)
+
+```
+config/initializers/rack_attack.rb
+Gemfile / Gemfile.lock                    # gem "redis" если нет
+config/cable.yml или docs runbook         # REDIS_URL на Fly
+app/services/shop/phone_otp.rb            # %06d
+app/frontend/... phone OTP input          # 6 digits (Checkout / phone auth)
+test/integration/rack_attack_*_test.rb
+test/services/shop/phone_otp_*_test.rb
+test/integration/shop/order_short_links_test.rb  # или rack_attack short link
+```
+
+## 6. Не ломать
+
+1. Callcheck init/poll throttles (20s / 60s SMS send).  
+2. `Retry-After` JSON для phone OTP.  
+3. `Rack::Attack.enabled = false` в test по умолчанию; тесты Attack **включают** локально + `cache.clear`.  
+4. verify принимает код после смены длины (старые 4-digit в полёте — TTL короткий; ок invalidate).  
+5. Short-link HMAC / bind (C) — не трогать логику, только store.
+
+## 7. Матрица приёмки I1–I4 ↔ тесты
+
+Блок I закрыт только если **все** T-I* PASS (с учётом skip I3 по SPEC).
+
+### I1 — Shared store
+
+| ID | Тест | Assert |
+|----|------|--------|
+| **T-I1a** | `Rack::Attack store is not MemoryStore in production config` | stub `Rails.env.production?` / `FLY_APP_NAME` + `REDIS_URL` → store class Redis* / RedisCacheStore |
+| **T-I1b** | `increment is shared` | два «логических» процесса / два write через один Redis (в CI: redis service или fakeredis) → второй hit видит counter первого |
+| **T-I1c** | без REDIS_URL в production → явный boot error **или** documented fail-open с ERROR log (выбрать в SPEC; рекомендация: **fail boot** на FLY) |
+
+### I2 — Throttle verify_sms
+
+| ID | Тест | Assert |
+|----|------|--------|
+| **T-I2a** | `verify_sms exceeds limit → 429` | enable Attack; N+1 POST verify_sms → 429 + RATE_LIMIT_EXCEEDED |
+| **T-I2b** | under limit → не 429 (может 422 неверный код) | |
+| **T-I2c** | throttle by phone key | разные IP, один phone → всё равно лимит (если R3 phone key) |
+| **T-I2d** | legacy `/phone_otp/verify` covered | 429 аналогично |
+
+### I3 — OTP 6 digits (если в SCOPE)
+
+| ID | Тест | Assert |
+|----|------|--------|
+| **T-I3a** | `send_sms_code! generates 6 digit code` | code =~ /\A\d{6}\z/ |
+| **T-I3b** | verify accepts 6 digit | happy path |
+| **T-I3c** | frontend expects 6 (source assert) | Checkout/phone UI length=6 / pattern |
+
+Если I3 skip: в REVIEW «I3 DEFER» + не блокирует DoD I.
+
+### I4 — Short-link (без дубля)
+
+| ID | Тест | Assert |
+|----|------|--------|
+| **T-I4a** | rule `shop/order_short_link/ip` exists | source/integration |
+| **T-I4b** | many GET `/o/...` → 429 | как C4; на shared store (если redis в test) |
+| **T-I4c** | **нет** второго duplicate throttle path для `/o/` | grep один matched name |
+
+## 8. Команды проверки
+
+```bash
+bin/rails test \
+  test/integration/rack_attack_otp_verify_test.rb \
+  test/integration/rack_attack_order_short_link_test.rb \
+  test/services/shop/phone_otp_test.rb \
+  test/integration/shop/order_short_links_test.rb
+```
+
+Регресс phone auth:
+
+```bash
+bin/rails test test/integration/shop/api/  # phone_otp / email_otp related
+# или точечно существующие TASK_89 tests
+```
+
+CI: если Redis required — service container `redis` в workflow (часть GREEN/DoD).
+
+## 9. Definition of Done — Блок I
+
+- [ ] I1: на FLY/production Attack → Redis (не MemoryStore)  
+- [ ] I2: verify_sms (+ legacy) throttled → 429  
+- [ ] I3: 6 digits **или** явный DEFER в SPEC/REVIEW  
+- [ ] I4: одно правило `/o/`; работает с shared store; без дубля  
+- [ ] T-I* PASS  
+- [ ] Runbook: `REDIS_URL` / Fly redis attach  
+- [ ] REVIEW-таблица I1–I4 \| тест ID \| PASS  
+- [ ] Секрет Redis на Fly = апрув в **L** или отдельный ops step  
+
+## 10. SBR-цикл для 93-I
+
+| Фаза | Что |
+|------|-----|
+| `/start` | секция **Блок I** |
+| `/spec` | Redis URL env; лимиты verify; I3 да/нет; CI redis |
+| `/sbr` RED | T-I2a (нет throttle), T-I1a (MemoryStore in prod path) |
+| `/sbr` GREEN | redis store + verify throttles + optional %06d |
+| `/regress` | §8 + phone OTP zone |
+| `/review` | таблица PASS; checklist Fly redis |
+
+## 11. Таблица закрытия (REVIEW)
+
+```
+I1 T-I1a T-I1b (T-I1c)     PASS
+I2 T-I2a T-I2b T-I2c T-I2d PASS
+I3 T-I3a..c | DEFER        PASS/DEFER
+I4 T-I4a T-I4b T-I4c       PASS
+```
+
+Без I1+I2 блок **не** закрыт. I4 обязателен как «C4 multi-machine». I3 — по SPEC.
+
+---
+
+## Зависимости
+
+| Блок | Связь |
+|------|--------|
+| **C** | Throttle `/o/` уже в коде; I даёт shared store. Делать **I после C** или сразу после, если C4 rule уже в develop |
+| **B** | Phone verify UX; длина OTP согласована с UI |
+| **L** | `fly redis` / secret `REDIS_URL` |
+
+Порядок: **C (rule) → I (store)** или I сразу, если rule уже в HEAD (сейчас rule **есть**).
+
+---
+
+## Кратко GREEN
+
+1. `gem "redis"` + initializer: Redis store if URL, else MemoryStore (non-prod).  
+2. Throttles: `shop/phone_otp_verify_sms` by ip + phone.  
+3. Optional: `%06d` + UI 6.  
+4. Не трогать short-link rule кроме тестов.  
+5. Документ Fly Redis в artifacts/runbook.
+
+---
+
+Ask mode: файлы не создаю. В Agent: `/start` с **TASK_93-I**.
