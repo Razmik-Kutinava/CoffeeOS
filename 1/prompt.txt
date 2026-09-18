@@ -1,0 +1,232 @@
+<manually_attached_skills>
+The user has manually attached the following skills to their message.
+These skills contain specific instructions or workflows that the user wants you to follow for this request.
+Only read the files if needed, the full skill content is inlined here.
+
+Skill Name: start
+Path: c:\Tools\workarea\CoffeeOS\.cursor\skills\start\SKILL.md
+SKILL.md content:
+Выполни инструкции из `.cursor/commands/start.md` целиком (умный старт A/B, отчёт, строка `Next: /…`).
+</manually_attached_skills>
+<cursor_commands>
+
+--- Cursor Command: start ---
+# /start — старт сессии / задачи (умный)
+
+CoffeeOS. Следуй `coffeeos-agent-workflow` + `coffeeos-customer-intake` (PHASE 0) при нужде.
+
+## Режим (выбери один, не гоняй всё)
+
+### A) Узкий старт (по умолчанию, если контекст уже есть)
+Используй, если в чате/todo уже: баг локализован, есть список файлов, живой `todo.md`, или пользователь продолжает ту же задачу.
+
+Сделай **только**:
+1. Шапка `HANDOFF.md` + шапка `SESSION_STATE.md` (`Read` limit до `---`, не тело)
+2. `ISSUES.md` — только секция **`## 🔴 Открыто`** (до следующего `##`), если релевантно багу
+3. `todo.md` — если есть
+4. **Не** перечитывай PRACTICES/QA/весь CHECKLIST/весь CHANGELOG / **`COMPONENT_MAP.md`**
+5. **Не** заново PHASE 0, если ТЗ уже в `customer_tasks/` или задача уже в todo
+6. Коротко: `last_done` / `current_state` / `next_step` (одна строка каждый)
+7. **ctx-trim:** если пт–вс и в шапке HANDOFF `ctx_trim` старше 7 дней — одна строка: «рекомендуется `/ctx-trim`» (не блокировать старт)
+
+### B) Полный старт + PHASE 0
+Только если **новое** ТЗ от заказчика ещё не в `customer_tasks/` / CBR, или пользователь явно просит intake.
+
+Тогда: PHASE 0 (intake 1:1) → краткая шапка ops → стоп до `/spec`.
+
+## Отчёт
+Таблица Сделано | Не сделано.  
+`Субагент: нет — старт` (или explore, если уже звал).  
+**Не пиши код** на этом шаге.
+
+## Обязательно в конце (копипаст для пользователя)
+
+Одной строкой, без лишнего текста вокруг:
+
+- Если нужен план/файлы → `Next: /spec`
+- Если SPEC/todo уже готов → `Next: /sbr`
+- Если только что завершили PHASE 0 → `Next: /spec`
+
+--- End Command ---
+</cursor_commands>
+<timestamp>Friday, Sep 18, 2026, 12:22 PM (UTC+4)</timestamp>
+
+/start 
+
+# TASK_93-H — Блок H: Корзина cookie / overflow
+
+Зонтик: **TASK_93** / `#93` — Critical path hardening.  
+Этот SBR-прогон: **только TASK_93-H**.
+
+Title чата: `Задача 93 — Critical path hardening (блок H)`.
+
+---
+
+## 1. Зачем
+
+Корзина shop лежит в **cookie session** (`session[:shop_cart]`). Лимит cookie ~**4KB**. При переполнении:
+
+```ruby
+rescue ActionDispatch::CookieOverflow
+  clear! + 422
+```
+
+Константы **`ActionDispatch::CookieOverflow` в Rails 8 скорее всего нет** → вместо 422 получаем **`NameError` 500** (или необработанный overflow при commit cookie).
+
+Уже есть: compact modifiers (только id), `MAX_CART_ITEMS = 50` (сумма qty), комментарий про CookieOverflow в `CartService`. Нет: реального rescue-класса, byte-budget guard, теста на >4KB path.
+
+## 2. Цель блока
+
+**Большая корзина → понятный 422 + clear (или отказ add до записи), не 500 / NameError.**
+
+## 3. Scope / Non-scope
+
+**В scope (H1–H3):**
+- `Shop::Api::CartController` — rescue / error path на add (и update, если тоже пишет session)
+- `Shop::CartService` — лимит линий / byte-budget / свой `OverflowError`
+- Решение H2: лимиты **и/или** server-side store (ниже)
+- Integration-тест переполнения
+
+**Вне scope:** UI CartSheet UX, MobileCart merge при профиле (уже есть таблица — можно использовать в H2, но не обязателен полный PWA redesign), A–G, deploy.
+
+## 4. Продуктовые правила (SPEC до RED)
+
+| Правило | Решение |
+|---------|---------|
+| **R1** | Запрещён мёртвый `rescue ActionDispatch::CookieOverflow` без проверки `defined?` / реального класса |
+| **R2** | Канон ошибки: свой `Shop::CartService::OverflowError` (или `CookieOverflowError`), который контроллер ловит → **422** + clear + русское сообщение |
+| **R3** | **Proactive guard** до commit: оценка размера payload / лимит **distinct lines** (рекомендация: max **15–20 линий** или `Marshal`/`JSON` size session cart > порог ~3KB) → `OverflowError` **до** ответа, не ждать Rack |
+| **R4** | H2 минимум: R3 + лимиты. **Полный server-side** (`MobileCart` / Rails cache keyed by session_id) — **в том же блоке**, если cookie-only не закрывает DoD на реальном >4KB с модификаторами; иначе зафиксировать «cookie + hard line/byte cap» как достаточный DoD |
+| **R5** | `update`/`replace_line!` тоже не должны 500 при раздувании session |
+| **R6** | Сообщение клиенту стабильное: `"Корзина переполнена…"` (или короче); UI может показать toast — не блокер |
+
+**Рекомендация SPEC (дешёвый GREEN):**  
+H1 = свой OverflowError + rescue; H2 = `MAX_CART_LINES` (distinct) + `MAX_SESSION_CART_BYTES` check в `touch_cart_session!`; H3 = тест.  
+Server-side DB — только если после лимитов всё ещё легко упереться в 4KB на типичном меню.
+
+## 5. Файлы (ожидаемо)
+
+```
+app/controllers/shop/api/cart_controller.rb
+app/services/shop/cart_service.rb
+# опционально H2 server-side:
+# app/models/mobile_cart.rb
+# app/services/shop/persistent_cart_store.rb
+
+test/services/shop/cart_service_test.rb
+test/integration/shop/api/cart_overflow_test.rb    # новый
+test/integration/shop/api/cart_persistence_test.rb # регресс
+```
+
+## 6. Не ломать
+
+1. Persist cart across requests (session cookie + api key) — `cart_persistence_test`.  
+2. Compact modifiers — только id в session.  
+3. `MAX_ITEM_QUANTITY` / суммарный qty cap (или согласовать с новым line cap).  
+4. pending order keeps cart until pay success.  
+5. clear after successful pay.
+
+## 7. Матрица приёмки H1–H3 ↔ тесты
+
+Блок H закрыт только если **все** T-H* PASS.
+
+### H1 — Реальный rescue
+
+| ID | Тест | Assert |
+|----|------|--------|
+| **T-H1a** | `CartController rescues CartService::OverflowError with 422 and clears` | stub/force OverflowError на add → status **422**, body error про переполнение, cart empty |
+| **T-H1b** | `no NameError from ActionDispatch::CookieOverflow constant` | `refute defined?(ActionDispatch::CookieOverflow) && controller still handles overflow` **или** grep/source test: контроллер **не** рескует несуществующую константу в одиночку |
+| **T-H1c** | `update path rescues overflow too` (если applies) | 422 + clear / reject |
+
+### H2 — Лимит / store
+
+| ID | Тест | Assert |
+|----|------|--------|
+| **T-H2a** | `add! raises OverflowError when distinct lines exceed MAX_CART_LINES` | N+1-я unique line → OverflowError; session не раздута сверх лимита |
+| **T-H2b** | `touch_cart_session! / add! raises when estimated bytes exceed budget` | искусственно большой payload (много линий/модов) → OverflowError |
+| **T-H2c** | (если server-side) cart survives beyond cookie size | add many lines → GET cart всё ещё полный; cookie не обязан держать весь JSON |
+
+Если выбран только cookie+cap: T-H2c skip в SPEC.
+
+### H3 — >4KB / переполнение → не 500
+
+| ID | Тест | Assert |
+|----|------|--------|
+| **T-H3a** | `POST /cart/add repeatedly until overflow returns 422 not 500` | цикл add разных products (или stub огромный session) → последний ответ **422** (или промежуточный отказ), **никогда** 500; после 422 GET cart пустой или без нового item |
+| **T-H3b** | `normal small cart still 200` | регресс 1–3 позиции |
+| **T-H3c** | ручной чеклист REVIEW | 20+ позиций с модификаторами в UI / curl — в отчёте «сделано» |
+
+Файл: `test/integration/shop/api/cart_overflow_test.rb`.
+
+**Как стабильно тестировать без хрупкости:**  
+в тесте временно stub `Shop::CartService::MAX_SESSION_CART_BYTES = 200` (или lines=3) → переполнение на 4-й add; отдельно один тест с реалистичным порогом ближе к 4KB если нужно.
+
+## 8. Команды проверки
+
+```bash
+bin/rails test \
+  test/services/shop/cart_service_test.rb \
+  test/integration/shop/api/cart_overflow_test.rb \
+  test/integration/shop/api/cart_persistence_test.rb
+```
+
+Регресс:
+
+```bash
+bin/rails test test/services/shop/cart_service_test.rb \
+  test/integration/shop/api/cart_persistence_test.rb \
+  test/integration/shop/b113_s4_cart_modifiers_test.rb
+```
+
+## 9. Definition of Done — Блок H
+
+- [ ] H1: нет мёртвого `ActionDispatch::CookieOverflow` как единственного rescue; есть рабочий Overflow path → **422 + clear**  
+- [ ] H2: line/byte cap (и server-side, если в SPEC)  
+- [ ] H3: T-H3a PASS — не 500  
+- [ ] Малый cart регресс PASS  
+- [ ] REVIEW-таблица H1–H3 \| тест ID \| PASS  
+- [ ] Deploy = TASK_93-L  
+
+## 10. SBR-цикл для 93-H
+
+| Фаза | Что |
+|------|-----|
+| `/start` | секция **Блок H** в TASK_93 |
+| `/spec` | cookie+cap vs MobileCart; цифры MAX_LINES / BYTES; покрыть ли update |
+| `/sbr` RED | T-H1b/T-H3a — на HEAD либо NameError, либо нет 422 path |
+| `/sbr` GREEN | OverflowError + guards + controller rescue |
+| `/regress` | §8 |
+| `/review` | таблица PASS |
+
+Ожидаемый RED: вызвать переполнение / stub — **500** или непойманный exception; после GREEN — **422**.
+
+## 11. Таблица закрытия (REVIEW)
+
+```
+H1 T-H1a T-H1b (T-H1c)   PASS
+H2 T-H2a T-H2b (T-H2c)   PASS
+H3 T-H3a T-H3b           PASS
+```
+
+Без T-H3a блок **не** закрыт.
+
+---
+
+## Зависимости
+
+Блок **H** независим от A–G; можно параллелить с D.  
+Не путать с `mobile_carts` merge в profile — это H2 optional path.
+
+---
+
+## Кратко GREEN
+
+1. `CartService::OverflowError`.  
+2. В `touch_cart_session!` / `add!` — check lines + bytes → raise.  
+3. Controller: `rescue OverflowError` (+ опционально `CookieOverflow` **если** `const_defined?`).  
+4. Убрать голый `rescue ActionDispatch::CookieOverflow`.  
+5. Тесты T-H*.
+
+---
+
+Ask mode: файлы не создаю. В Agent: `/start` с **TASK_93-H**.
