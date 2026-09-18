@@ -1,19 +1,19 @@
-# SESSION_STATE
+﻿# SESSION_STATE
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-18 (TASK_93-G regress)  
-**Ветка:** develop
+**Дата:** 2026-09-18 (TASK_93-B unlazy reverify)  
+**Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#93-G** REGRESS **PASS** 22/0 | /review |
-| GATES-block-G G1–G4 met · G5→L | таблица G1–G6 · push · без deploy |
-| GREEN 7c34314a | Fly MCP Point A — после deploy (L) |
+| **#93** TASK_93-B GATES G1–G4 **met** | `/review` |
+| G5 abandoned → L | push · без deploy |
+| Local reverify PASS | Fly MCP Point A после L |
 
-**last_done:** /regress TASK_93-G — staff+rls+db_triggers+city_history **22/0** · approve G1–G4  
-**next_step:** /review блок G
+**last_done:** `/unlazy` reverify GATES-block-B · met 4 · abandoned 1  
+**next_step:** `/review` TASK_93-B
 
-**ctx_trim:** 2026-09-02
+**ctx_trim:** `2026-09-02`
 
 ---

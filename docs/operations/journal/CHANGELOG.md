@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-18 — docs: unlazy reverify #93 TASK_93-B gates met
+
+- `GATES-block-B.md`: G1–G3 **met** (--reverify); G4 UI; G5 Fly **abandoned** → TASK_93-L
+- Next: `/review`
+
 ## 2026-09-18 — review: TASK_93-D history per_page PASS
 
 - D1–D3 PASS · Local 20/0 · bugbot 0 · security 0 · Entire `01M2STB3BHJ65BAYQM492QTT7P`
