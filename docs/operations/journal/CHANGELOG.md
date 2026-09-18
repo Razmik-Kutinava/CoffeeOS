@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-18 — docs: SPEC #93 TASK_93-C SMS short link
+
+- `todo.md` → TASK_93-C: R2-A · TTL 48h · throttle 30/min · one-time SKIP
+- Файлы 7 + blast · Не ломать · Проверка G1–G5
+- Next: `/sbr` RED (код не трогали)
+
 ## 2026-09-18 — fix: CI ABAC-015 (revert TenantOperatingHours preload)
 
 - Loaded-empty `weekday_schedules` → `open_now?` всегда true → 3 CI fails

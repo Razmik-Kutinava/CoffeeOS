@@ -1,91 +1,97 @@
-# todo — #93 TASK_93-A: Деньги ↔ заказ (склад + webhook)
+# todo — #93 TASK_93-D: История заказов / ЛК список (per_page)
 
 | Поле | Значение |
 |------|----------|
-| **ID** | CBR **#93** · **TASK_93-A** |
-| **Тип** | SBR · hot-path оплата / склад |
+| **ID** | CBR **#93** · **TASK_93-D** |
+| **Тип** | SBR · shop API history / ЛК |
 | **Статус** | **SPEC** · Next: `/sbr` RED |
 | **Ветка** | `develop` |
 | **Канон** | `@spec-build-review` · `@coffeeos-commit-ops` · `@coffeeos-dev-gates` |
-| **ТЗ** | [`TASK-93-Critical-path-hardening.md`](../milestones/veha_2/requirements/customer_tasks/TASK-93-Critical-path-hardening.md) § Блок A |
-| **GATES** | [`GATES-block-A.md`](../milestones/veha_2/artifacts/critical_path_hardening/GATES-block-A.md) (канон A; `session/GATES.md` может быть B/C) |
-| **Цель** | Банк CONFIRMED → всегда `payment.succeeded` + `order.accepted`; склад **не** откатывает оплату (R1–R7) |
-| **OUT** | блоки B–L · deploy (L) · ослабление Amount check |
+| **ТЗ** | бриф чата TASK_93-D · зонтик [`TASK-93-Critical-path-hardening.md`](../milestones/veha_2/requirements/customer_tasks/TASK-93-Critical-path-hardening.md) карта D |
+| **GATES** | [`session/GATES.md`](GATES.md) · [`GATES-block-D.md`](../milestones/veha_2/artifacts/critical_path_hardening/GATES-block-D.md) |
+| **Цель** | Default `per_page=20` (не 1) при отсутствии/нуле/мусоре; max 50; ЛК / «сегодня» показывают пачку заказов |
+| **OUT** | active orders sheet · Quick Repeat · UI load-more · A/B/C · deploy (L) · products/categories per_page |
+
+## Канон продукта (зафиксировано SPEC)
+
+| ID | Решение |
+|----|---------|
+| **R1** | Default `per_page` = **20** |
+| **R2** | Явный `per_page` уважается в **1..50** |
+| **R3** | Пустой / `"0"` / мусор → default **20**, не 1 |
+| **R4** | `today=1` фильтр без изменений; меняется только размер страницы |
+| **R5** | Клиенты без param → серверный default; `shopAccountOrders` может слать 20 |
+
+Формула (GREEN):
+
+```ruby
+raw = params[:per_page].presence&.to_i
+per_page = raw.nil? || raw < 1 ? 20 : [ raw, 50 ].min
+```
 
 ## SBR
 
-- [x] PHASE 0 `/start` — intake `348f0b1a`
-- [x] `/unlazy` — GATES A `630d744a` (G1–G3 unmet · G4→L)
+- [x] PHASE 0 `/start` — бриф TASK_93-D в чате
+- [x] `/unlazy` — GATES D `2e9fce04` (G1–G3 unmet · G4→L)
 - [x] PHASE 1 `/spec` — этот todo
-- [ ] PHASE 2 RED — T-A1a…T-A6b падают · коммит `[RED]`
-- [ ] PHASE 2 GREEN — политика soft-fail + audit · коммит `[GREEN]` · все T-A* PASS
-- [ ] `/regress` — G2 zone payments/callbacks/jobs
-- [ ] PHASE 3 `/review` — таблица A1–A6 PASS · push · **без deploy**
+- [ ] PHASE 2 RED — T-D3a/b (+ T-D1*) падают · коммит `[RED]`
+- [ ] PHASE 2 GREEN — формула per_page (+ клиент по желанию) · коммит `[GREEN]` · все T-D* PASS
+- [ ] `/regress` — G2 orders + mvp_flow
+- [ ] PHASE 3 `/review` — таблица D1–D3 PASS · push · **без deploy**
 
 ## Файлы (ожидаемо)
 
-- `app/services/callbacks/payment_status_updater.rb` — A1/A6: deduct вне rollback txn оплаты; cancelled/closed + succeeded → audit/`needs_refund`
-- `app/services/inventory/order_recipe_deduction.rb` — A2: нет `find_or_create(qty:0)`→Error; missing/insufficient → skip + report
-- `app/services/barista/order_creation_service.rb` — A3: та же политика, что updater (заказ accepted, склад алертом)
-- `app/services/shop/order_creator.rb` — A3: то же при `order_status: accepted`
-- `app/services/payments/tbank_adapter.rb` — A4: blank Amount → mismatch/`false` + видимость report
-- `app/services/payments/tbank_payment_sync.rb` — A4: GetState blank/mismatch → `Rails.error.report` / audit (статус платежа не ослаблять)
+- `app/controllers/shop/api/orders_controller.rb` — `#history`: default 20 / max 50 / blank→20
+- `app/frontend/routes/PersonalAccount.svelte` — `api("/orders/history")` без `per_page=1`
+- `app/frontend/routes/Orders.svelte` — `today=1` без `per_page=1`
+- `app/frontend/lib/shopAccountOrders.js` — `perPage \|\| 20` (регресс D2a)
+- `test/integration/shop/api/orders_controller_test.rb` — T-D1a–d · T-D3a/b
 
 ### Blast-radius (+соседи)
 
-- `test/integration/block_f_stock_flow_test.rb` — переписать hard-fail→422 под R5 (согласовать с A3)
-- `test/jobs/payments/tbank_callback_job_test.rb` / `test/controllers/callbacks/tbank_controller_test.rb` — A5 CONFIRMED×stock; не трогать Init/subscription без нужды
+- `app/frontend/routes/Profile.svelte` — уже через `fetchAccountOrderHistory` (не ломать; не трогать без нужды)
+- Другие `per_page.to_i` в products/categories — **вне scope** D
 
 ## Матрица приёмки (RED → GREEN)
 
 | ID | Тест | Файл |
 |----|------|------|
-| T-A1a | succeeded + insufficient stock → succeeded/accepted, stock не минус, audit | `payment_status_updater_test` |
-| T-A1b | succeeded + stock row missing → no qty=0 trap, accepted + audit | ↑ |
-| T-A2a | skip deduct + report when stock absent | `order_recipe_deduction_test` |
-| T-A2b | insufficient → no deduct + signal | ↑ |
-| T-A2c | sufficient → deduct (регрессия) | ↑ |
-| T-A3a | barista create + bad stock → accepted + alert | `order_creation_service_test` |
-| T-A3b | OrderCreator accepted + bad stock → no 500/rollback | `order_creator_test` / `block_f_stock_flow_test` |
-| T-A4a | blank Amount → `notification_amount_matches?` false | `tbank_adapter_test` |
-| T-A4b | blank/mismatch → report/audit ≥1; платёж не succeeded | adapter/sync/callback_job |
-| T-A5a/b/c | CONFIRMED × missing / insufficient / enough stock | integration или controller/job |
-| T-A6a/b | succeeded on cancelled/closed → audit (не quiet) | `payment_status_updater_test` |
+| T-D1a | without per_page → length == min(n,20), не 1 | `orders_controller_test` |
+| T-D1b | blank/zero per_page → default, не 1 | ↑ |
+| T-D1c | per_page=999 → length ≤ 50 | ↑ |
+| T-D1d | per_page=2 → length == 2 | ↑ |
+| T-D2a | shopAccountOrders default 20 | code review / grep |
+| T-D2b | PersonalAccount / Orders без per_page=1 | ↑ |
+| T-D3a | ≥2 orders → history без param length ≥ 2 | `orders_controller_test` |
+| T-D3b | ≥2 today → `today=1` без per_page length ≥ 2 | ↑ |
+
+Без **T-D3a+b** блок не закрыт.
 
 ## Не ломать
 
-1. Happy path: CONFIRMED → succeeded + accepted + **deduct при достаточном стоке**
-2. Amount mismatch по-прежнему **не** подтверждает платёж
-3. Subscription intent (#78) — closed + fulfill, **не** barista accepted
-4. Failed/REJECTED → cancel + journal как сейчас
+1. История только своего `customer_id` + tenant
+2. `today=1` — только заказы с сегодня
+3. Гость без session → `[]`
+4. Изоляция tenant (существующий test)
+5. `active` endpoint / окно ACTIVE_ORDERS — не трогать
 
 ## Проверка
 
 ```bash
-# G1 — матрица A (+ новые A5/A6 файлы после RED)
-bin/rails test test/services/callbacks/payment_status_updater_test.rb \
-  test/services/inventory/order_recipe_deduction_test.rb \
-  test/jobs/payments/tbank_callback_job_test.rb \
-  test/controllers/callbacks/tbank_controller_test.rb \
-  test/integration/block_f_stock_flow_test.rb
+# G1 — матрица D
+bin/rails test test/integration/shop/api/orders_controller_test.rb
 
-# G2 — регресс зоны после GREEN (/regress)
-bin/rails test test/services/payments/ test/services/callbacks/ test/jobs/payments/
+# G2 — узкий регресс (/regress)
+bin/rails test test/integration/shop/api/orders_controller_test.rb \
+  test/integration/shop/api/mvp_flow_test.rb
 ```
 
-Доп. A4: `bin/rails test test/services/payments/tbank_adapter_test.rb test/services/payments/tbank_payment_sync_test.rb`
+## DoD блока D
 
-## DoD блока A
-
-- [ ] T-A1a…T-A6b (+ T-A5*) зелёные
-- [ ] updater: deduction **не** откатывает `with_lock` txn оплаты
-- [ ] нет `find_or_create(qty:0)`→Error на точках без склада
-- [ ] barista / OrderCreator / updater — одна политика
-- [ ] blank Amount / mismatch — report/audit
-- [ ] cancelled/closed + succeeded — не quiet
-- [ ] `/regress` G2 PASS · GATES G1–G3 met · G4 abandoned (L)
-- [ ] REVIEW: таблица A1–A6 \| PASS · **без deploy**
-
-## Next
-
-`/sbr` RED — только падающие T-A*
+- [ ] Default `per_page` = 20 (не 1) при отсутствии/нуле
+- [ ] T-D1a–d PASS
+- [ ] T-D3a, T-D3b PASS
+- [ ] D2 клиент / grep PASS
+- [ ] Max 50 сохранён
+- [ ] REVIEW-таблица D1–D3 \| тест ID \| PASS
+- [ ] Deploy = TASK_93-L
