@@ -1,0 +1,249 @@
+<cursor_commands>
+
+--- Cursor Command: start ---
+# /start — старт сессии / задачи (умный)
+
+CoffeeOS. Следуй `coffeeos-agent-workflow` + `coffeeos-customer-intake` (PHASE 0) при нужде.
+
+## Режим (выбери один, не гоняй всё)
+
+### A) Узкий старт (по умолчанию, если контекст уже есть)
+Используй, если в чате/todo уже: баг локализован, есть список файлов, живой `todo.md`, или пользователь продолжает ту же задачу.
+
+Сделай **только**:
+1. Шапка `HANDOFF.md` + шапка `SESSION_STATE.md` (`Read` limit до `---`, не тело)
+2. `ISSUES.md` — только секция **`## 🔴 Открыто`** (до следующего `##`), если релевантно багу
+3. `todo.md` — если есть
+4. **Не** перечитывай PRACTICES/QA/весь CHECKLIST/весь CHANGELOG / **`COMPONENT_MAP.md`**
+5. **Не** заново PHASE 0, если ТЗ уже в `customer_tasks/` или задача уже в todo
+6. Коротко: `last_done` / `current_state` / `next_step` (одна строка каждый)
+7. **ctx-trim:** если пт–вс и в шапке HANDOFF `ctx_trim` старше 7 дней — одна строка: «рекомендуется `/ctx-trim`» (не блокировать старт)
+
+### B) Полный старт + PHASE 0
+Только если **новое** ТЗ от заказчика ещё не в `customer_tasks/` / CBR, или пользователь явно просит intake.
+
+Тогда: PHASE 0 (intake 1:1) → краткая шапка ops → стоп до `/spec`.
+
+## Отчёт
+Таблица Сделано | Не сделано.  
+`Субагент: нет — старт` (или explore, если уже звал).  
+**Не пиши код** на этом шаге.
+
+## Обязательно в конце (копипаст для пользователя)
+
+Одной строкой, без лишнего текста вокруг:
+
+- Если нужен план/файлы → `Next: /spec`
+- Если SPEC/todo уже готов → `Next: /sbr`
+- Если только что завершили PHASE 0 → `Next: /spec`
+
+--- End Command ---
+</cursor_commands>
+<timestamp>Friday, Sep 18, 2026, 12:05 PM (UTC+4)</timestamp>
+
+/start 
+
+# TASK_93-C — Блок C: SMS «заказ готов» + short link
+
+Зонтик: **TASK_93** / `#93` — Critical path hardening.  
+Этот SBR-прогон: **только TASK_93-C**.
+
+Title чата: `Задача 93 — Critical path hardening (блок C)`.
+
+---
+
+## 1. Зачем
+
+SMS текст хардкодит **`codeblack.xyz/o/{hash}`**, а production `config.hosts` пускает только `*.fly.dev`. Итог: ссылка из SMS либо не на наше приложение, либо HostAuthorization режет запрос. Route `/o/:hash` и HMAC уже есть; bind session есть; **throttle на `/o/` нет**; TTL нет.
+
+Сейчас:
+- `OrderReadySmsLink::PREFIX` → `codeblack.xyz`
+- `GET /o/:order_hash` → bind + redirect `/shop?...#/order/:id`
+- Тесты: roundtrip hash, 404, redirect+bind
+- `rack_attack`: throttle на `/o/` **отсутствует**
+
+## 2. Цель блока
+
+**SMS → клиент открывает статус заказа на живом хосте приложения; сессия биндится; HostAuthorization не режет; brute MAC ограничен.**
+
+## 3. Scope / Non-scope
+
+**В scope (C1–C5):**
+- Текст/URL SMS (`PREFIX` / base host из env)
+- `config.hosts` + `host_authorization` под выбранный SMS-домен **или** отказ от стороннего домена в тексте
+- Регрессия `/o/:hash` + reconnect bind
+- Rack::Attack throttle на `GET /o/*`
+- C5: TTL и/или одноразовость токена (**в этом блоке целиком** — см. §4)
+
+**Вне scope:** Callcheck/SMS OTP auth (B/I), содержимое статуса заказа UI, FCM, склад (A), deploy (L).  
+Смена MemoryStore→Redis для Attack — блок **I**; в C достаточно throttle-правила (даже на MemoryStore), с пометкой «shared store в 93-I».
+
+## 4. Продуктовые правила (зафиксировать в SPEC до RED)
+
+| Правило | Решение |
+|---------|---------|
+| **R1** | Канон хоста SMS: **`ENV["SHOP_SMS_LINK_HOST"]` или `ENV["APP_HOST"]`**, fallback `coffeeos.fly.dev`. **Не** хардкод мёртвого домена без DNS |
+| **R2** | Два допустимых режима (выбрать **один** в SPEC): **(A)** текст = `{host}/o/{hash}` где host ∈ fly/APP_HOST; **(B)** брендовый `codeblack.xyz` **только если** DNS → приложение **и** host добавлен в `config.hosts` |
+| **R3** | Длина SMS с префиксом: сохранить бюджет **≤70** символов (или явно поднять лимит в тесте+доке, если host длиннее — тогда укоротить префикс) |
+| **R4** | `/o/:hash`: valid → 302 + bind guest + `reconnect_token`; invalid → 404 |
+| **R5** | Throttle: лимит на IP (и опционально на hash) для `GET /^\/o\//` — порядок как у `tv_board` (достаточно жёстко против 2³² brute) |
+| **R6 / C5 в блоке** | **Включить в DoD:** токен с **TTL** (например 48h / 7d с момента ready/SMS) **или** one-time consume после первого успешного `/o/`. Без «опционально потом» — иначе блок C неполный |
+
+**Рекомендация канона:** режим **R2-A** (`coffeeos.fly.dev` / `APP_HOST`) — меньше DNS/certs; бренд в тексте можно оставить словами «CODE:BLACK», URL — наш host.
+
+## 5. Файлы (ожидаемо)
+
+```
+app/services/shop/order_ready_sms_link.rb
+app/services/shop/order_ready_paid_notifier.rb
+app/controllers/shop/order_short_links_controller.rb
+config/environments/production.rb          # hosts
+config/initializers/rack_attack.rb         # throttle /o/
+config/routes.rb                           # /o/:order_hash (регресс)
+
+test/services/shop/order_ready_sms_link_test.rb
+test/services/shop/order_ready_paid_notifier_test.rb
+test/integration/shop/order_short_links_test.rb
+test/integration/rack_attack_order_short_link_test.rb   # новый, если нет
+```
+
+## 6. Не ломать
+
+1. HMAC + `secure_compare`; unsigned UUID-only → nil/404.  
+2. Только `source: :mobile` заказы.  
+3. Redirect только на relative `/shop?...` (`allow_other_host: false`).  
+4. Бюджет длины SMS (R3).  
+5. Guest reconnect / status sheet после bind (#82 path).
+
+## 7. Матрица приёмки C1–C5 ↔ тесты
+
+Блок C закрыт только если **все** T-C* PASS.
+
+### C1 — PREFIX / URL из канона хоста
+
+| ID | Тест | Assert |
+|----|------|--------|
+| **T-C1a** | `sms_message_for uses configured host not hardcoded dead domain` | stub/set `APP_HOST` или `SHOP_SMS_LINK_HOST` → сообщение содержит `{host}/o/{hash}`; **нет** `codeblack.xyz` **если** выбран режим R2-A |
+| **T-C1b** | `sms_message length within budget` | `sms_message_for(order).length <= 70` (или новый лимит из SPEC) |
+| **T-C1c** | fallback host | без env → безопасный default (`coffeeos.fly.dev`), не произвольный чужой домен |
+
+Файл: `order_ready_sms_link_test.rb` (переписать assert с хардкодом `codeblack.xyz`).
+
+### C2 — hosts / HostAuthorization
+
+| ID | Тест | Assert |
+|----|------|--------|
+| **T-C2a** | production hosts include SMS host **if** R2-B | если бренд-домен в тексте — он в `Rails.application.config.hosts` (тест на конфиг или integration с `Host` header) |
+| **T-C2b** | R2-A: SMS URL host is already allowed | host из сообщения ∈ fly pattern / APP_HOST; отдельный брендовый host не обязателен |
+| **T-C2c** | `/o/` not blocked for allowed host | integration: `get "/o/#{hash}", headers: { "HOST" => allowed }` → redirect, не 403 host |
+
+(В test env hosts часто свободные — для T-C2a допустим unit на список hosts в `production.rb` через чтение конфига / отдельный assert-файл.)
+
+### C3 — Route + reconnect bind (регресс + усиление)
+
+| ID | Тест | Assert |
+|----|------|--------|
+| **T-C3a** | existing: valid hash → redirect + `#/order/:id` + reconnect_token | как сейчас + tenant_id |
+| **T-C3b** | bind guest session | `CustomerSession.customer_id` / reconnect bind после GET |
+| **T-C3c** | unknown / bad MAC → 404 | без bind |
+| **T-C3d** | forged MAC (wrong last bytes) → 404 | |
+
+Файл: `order_short_links_test.rb`.
+
+### C4 — Throttle GET `/o/:hash`
+
+| ID | Тест | Assert |
+|----|------|--------|
+| **T-C4a** | many GETs `/o/...` from same IP → 429 | после N запросов (лимит из rack_attack) `assert_response :too_many_requests` |
+| **T-C4b** | under limit still 302/404 | не ломает нормальный один клик |
+
+Файл: новый integration + правило в `rack_attack.rb`, например:
+
+```ruby
+throttle("shop/order_short_link/ip", limit: 30, period: 1.minute) do |req|
+  req.ip if req.get? && req.path.start_with?("/o/")
+end
+```
+
+(цифры зафиксировать в SPEC; в тесте — тот же limit или `Rack::Attack.cache.store.clear` + временный override).
+
+### C5 — TTL / одноразовость (в DoD блока)
+
+| ID | Тест | Assert |
+|----|------|--------|
+| **T-C5a** | expired token → 404 | hash валидный по MAC, но order ready/SMS older than TTL **или** embedded expiry → not_found; session **не** bind |
+| **T-C5b** | one-time: second GET after success → 404 **или** redirect without re-bind (выбрать одно в SPEC) | если one-time |
+| **T-C5c** | within TTL first open → 302 + bind | happy path |
+
+Если выберете **только TTL** без one-time — T-C5b skip с пометкой в SPEC; **хотя бы TTL обязателен**.  
+Реализация: хранить `sms_link_expires_at` / использовать `order.updated_at`+READY / Redis consume key — решение в GREEN, тесты красные на RED.
+
+## 8. Команды проверки
+
+```bash
+bin/rails test \
+  test/services/shop/order_ready_sms_link_test.rb \
+  test/services/shop/order_ready_paid_notifier_test.rb \
+  test/integration/shop/order_short_links_test.rb \
+  test/integration/rack_attack_order_short_link_test.rb
+```
+
+Регресс зоны #82 / notifications:
+
+```bash
+bin/rails test test/services/shop/order_ready_paid_notifier_test.rb \
+  test/integration/shop/order_short_links_test.rb
+```
+
+## 9. Definition of Done — Блок C
+
+- [ ] C1: SMS URL строится из канона host (не мёртвый хардкод без DNS)  
+- [ ] C2: выбранный host разрешён HostAuthorization / hosts  
+- [ ] C3: T-C3a–d PASS (bind + 404 forge)  
+- [ ] C4: throttle есть + T-C4a/b PASS  
+- [ ] C5: TTL (и one-time, если выбрали) + T-C5* PASS  
+- [ ] Длина SMS в бюджете  
+- [ ] HMAC forge по-прежнему закрыт  
+- [ ] REVIEW-таблица C1–C5 \| тест ID \| PASS  
+- [ ] Deploy / DNS certs для брендового домена — в **93-L** или runbook; код блока C готов под выбранный R2  
+
+**Ручная приёмка (после L или staging):** SMS на тестовый номер → тап → видна шторка заказа. До деплоя достаточно автотестов + конфиг.
+
+## 10. SBR-цикл для 93-C
+
+| Фаза | Что |
+|------|-----|
+| `/start` | секция **Блок C** в TASK_93 (+ artifacts `critical_path_hardening/`) |
+| `/spec` | зафиксировать **R2-A или R2-B**, TTL часы, one-time да/нет, лимит throttle |
+| `/sbr` RED | T-C1a (host), T-C4a (нет throttle), T-C5a (нет TTL) — ожидаемый RED |
+| `/sbr` GREEN | host builder + hosts + attack + TTL |
+| `/regress` | §8 |
+| `/review` | таблица PASS; push; deploy отдельно |
+
+## 11. Таблица закрытия (REVIEW)
+
+```
+C1 T-C1a T-C1b T-C1c     PASS
+C2 T-C2a/b T-C2c         PASS
+C3 T-C3a..d              PASS
+C4 T-C4a T-C4b           PASS
+C5 T-C5a (T-C5b) T-C5c   PASS
+```
+
+Без строки C5 — блок **не** закрыт (в этом ТЗ C5 обязателен).
+
+---
+
+## Связь A / B / C
+
+| Блок | Боль |
+|------|------|
+| A | Деньги есть — заказа нет |
+| B | Pay в UI — 422 identity |
+| C | Заказ ready — SMS-ссылка мёртвая / без защиты |
+
+Порядок: A → B → **C**.
+
+---
+
+Ask mode: файлы не создаю. В Agent: `/start` с этим текстом как **TASK_93-C**.
