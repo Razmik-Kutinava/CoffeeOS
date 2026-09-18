@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-18 — docs: REVIEW done #93 TASK_93-F CI green
+
+- Local 68/0 · F1–F5 PASS · bugbot + security PASS · Entire `01M2SSQXT1V67AK260SH1P9RAX`
+- CI green `35335419241` · GREEN `1b28a128`
+- Next: deploy апрув · Fly MCP = L
+
 ## 2026-09-18 — fix: #93 TASK_93-H REVIEW cart overflow holes
 
 - `MAX_SESSION_CART_BYTES` 3072→**2048** (OTP/customer/cookie crypto headroom)

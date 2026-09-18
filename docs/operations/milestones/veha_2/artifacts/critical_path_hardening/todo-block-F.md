@@ -4,7 +4,7 @@
 |------|----------|
 | **ID** | CBR **#93** · **TASK_93-F** |
 | **Тип** | SBR · hot-path callbacks / payments |
-| **Статус** | **REVIEW** · CI pending · Next: deploy апрув · **без deploy** |
+| **Статус** | **REVIEW** · CI green `35335419241` · Next: deploy апрув · **без deploy** |
 | **Ветка** | `develop` |
 | **Канон** | `@spec-build-review` · `@coffeeos-commit-ops` · `@coffeeos-dev-gates` |
 | **ТЗ** | бриф чата F1–F5 · зонтик [`TASK-93-Critical-path-hardening.md`](../../requirements/customer_tasks/TASK-93-Critical-path-hardening.md) карта F |

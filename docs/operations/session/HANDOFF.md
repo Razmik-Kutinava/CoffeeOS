@@ -2,17 +2,17 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-18 (TASK_93-H REVIEW)  
+**Дата:** 2026-09-18 (TASK_93-F REVIEW done)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#93-H** REVIEW Local PASS · holes fixed | push/CI green · **без deploy** |
-| bytes=2048 · remove shrink · rescue_from | G5 Fly = L |
-| parallel #93-I/J | свои ledgers |
+| **#93-F** REVIEW CI green `35335419241` | deploy апрув · **без deploy** |
+| F1–F5 PASS · Entire `01M2SSQXT1V67AK260SH1P9RAX` | Fly MCP Point A = TASK_93-L |
+| GREEN `1b28a128` | — |
 
-**last_done:** `/review` TASK_93-H — bugbot+security → fix → zone PASS  
-**next_step:** CI green → стоп · deploy только апрув
+**last_done:** `/review` TASK_93-F closed (Local+bugbot+security+push+CI)  
+**next_step:** deploy — только по апруву владельца
 
 **ctx_trim:** `2026-09-02`  
 **Fly:** v495 `deployment-01M22JRN95TXRSV1PQDN49227M`
