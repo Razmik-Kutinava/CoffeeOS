@@ -2,17 +2,17 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-18 (TASK_93-E unlazy reverify)  
+**Дата:** 2026-09-18 (TASK_93-F regress)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#93-E** GATES met 4 · G5→L | `/review` · push · **без deploy** |
-| Local G1–G4 evidence | Fly MCP Point A = L |
-| GREEN `2eb22c71` | — |
+| **#93-F** REGRESS **PASS** 68+74/0 | `/review` · push · **без deploy** |
+| GATES-block-F G1–G4 met · G5→L | F1–F5 PASS table |
+| GREEN `1b28a128` · Entire `01M2SSQXT1V67AK260SH1P9RAX` | Parallel E/B — свои ledgers |
 
-**last_done:** `/unlazy` reverify TASK_93-E — G1–G4 met · G5 abandoned  
-**next_step:** `/review` блок E
+**last_done:** `/regress` TASK_93-F — notify pack + zone **PASS** · `3b9040a6`  
+**next_step:** `/review` блок F
 
 **ctx_trim:** `2026-09-02`  
 **Fly:** v495 `deployment-01M22JRN95TXRSV1PQDN49227M`
