@@ -18,7 +18,7 @@ Scope: Rack::Attack shared Redis store на multi-machine Fly; throttle `verify_
   CHECK: ruby bin/rails test test/services/shop/phone_otp_test.rb
   EXPECT: 0 failures, 0 errors
   CWD: C:/Tools/workarea/CoffeeOS
-  EVIDENCE: unmet pre-SPEC — I3 in-scope **или** DEFER до RED (не после); если DEFER → ABANDON G3 + REVIEW «I3 DEFER»; иначе GREEN: `%06d` (T-I3a) · verify 6 (T-I3b) · frontend length=6 (T-I3c); Callcheck не менять
+  EVIDENCE: unmet pre-RED — SPEC **I3 IN SCOPE** (не DEFER): `%06d` (T-I3a) · verify 6 (T-I3b) · frontend PIN/SMS length=6 (T-I3c); Callcheck не менять; `--approve` после GREEN
 
 - [ ] G4: матрица T-I4 + узкий регресс §8 (после GREEN)
   CHECK: ruby bin/rails test test/integration/rack_attack_order_short_link_test.rb test/integration/shop/order_short_links_test.rb test/integration/rack_attack_otp_verify_test.rb test/services/shop/phone_otp_test.rb
@@ -37,7 +37,7 @@ CoffeeOS TASK_93-I unlazy (post-/start / pre-SPEC):
 - Активный ledger сессии: docs/operations/session/GATES.md (тот же текст)
 - Артефакт блока: milestones/veha_2/artifacts/critical_path_hardening/GATES-block-I.md
 - Close I: G1–G2 met via --approve/--reverify after GREEN; G3 met или DEFER/abandon; G4 после /regress; G5 abandoned until L
-- SPEC must lock: REDIS_URL vs RACK_ATTACK_REDIS_URL · fail-boot vs fail-open (T-I1c) · verify limit/period · IP+phone keys · email verify in-scope? · I3 6 digits да/нет · CI redis service
-- Без I1+I2 блок не закрыт; I4 обязателен; I3 по SPEC
+- SPEC 2026-09-18: R1 Redis URL priority · R8 fail-boot · R3/R4 5/min IP+identity · R5 I3 IN SCOPE · R9 CI redis
+- Без I1+I2 блок не закрыт; I4 обязателен; I3 in-scope
 - 2026-09-18: --status unmet 4 · abandoned 1 (G5); --approve после GREEN (не сейчас)
 -->
