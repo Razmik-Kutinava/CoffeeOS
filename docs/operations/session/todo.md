@@ -1,99 +1,82 @@
-﻿# todo — #93 TASK_93-K: Hygiene pack (K1–K7)
+# todo — #93 TASK_93-G: Tenant GUC / RLS / schema
 
-Зеркало session `todo.md` (параллельные блоки не затирают канон K).
+**Канон блока G** (session `todo.md` / `GATES.md` гоняют параллельные блоки — смотри сюда).
 
 | Поле | Значение |
 |------|----------|
-| **ID** | CBR **#93** · **TASK_93-K** |
-| **Тип** | SBR · hygiene pack (blog / demo / paymentUrl / merger / ops) |
+| **ID** | CBR **#93** · **TASK_93-G** |
+| **Тип** | SBR · hot-path RLS / staff GUC |
 | **Статус** | **SPEC** · Next: `/sbr` RED |
 | **Ветка** | `develop` |
 | **Канон** | `@spec-build-review` · `@coffeeos-commit-ops` · `@coffeeos-dev-gates` |
-| **ТЗ** | бриф чата K1–K7 · зонтик [`TASK-93-Critical-path-hardening.md`](../../requirements/customer_tasks/TASK-93-Critical-path-hardening.md) карта K |
-| **GATES** | [`GATES-block-K.md`](GATES-block-K.md) (канон; `session/GATES.md` может быть чужим блоком) |
-| **Цель** | Один GREEN/PR: K1–K7 PASS или явный DEFER в REVIEW; без молчаливых хвостов |
-| **OUT** | A–J продуктовые · полный RLS (G) · deploy (L) · расширение Blog allowlist · fake subdomain |
-| **Зависимость** | после стабилизации A–J или параллельно мелкий pack; L закрывает K5-in-prod |
-| **DEFER** | *(пусто)* |
+| **ТЗ** | бриф чата G1–G6 · зонтик [`TASK-93-Critical-path-hardening.md`](../../requirements/customer_tasks/TASK-93-Critical-path-hardening.md) карта G |
+| **GATES** | [`GATES-block-G.md`](GATES-block-G.md) |
+| **Инвентарь** | [`docs/operations/dev/RLS_PG_INVENTORY.md`](../../../../dev/RLS_PG_INVENTORY.md) |
+| **Цель** | Staff `SET LOCAL` внутри txn; must-have policies/triggers после load; city switcher без `row_security = off`; `ensure_tenant_id` строго |
+| **OUT** | A–F / H–K · полный аудит 39 таблиц сверх must-have · R3-A `structure.sql` · deploy (L) |
+| **Зависимость** | A soft-fail — не откатывать; `trg_auto_deduct` must exist |
 
 ## Канон продукта (зафиксировано SPEC)
 
 | ID | Решение |
 |----|---------|
-| **R1 (K1)** | View/helper sanitize **только** `BlogPost::ALLOWED_TAGS` / `ALLOWED_ATTRIBUTES`. Не расширять allowlist в ERB. `<img>`/`style`/`h1` strip на save + на render |
-| **R2 (K2)** | `Demo::EnvironmentSetup.call` / `demo:seed`: в `Rails.env.production?` — **abort**, кроме `DEMO_AUTO_SEED=true`. `DEMO_LOGINS.md`: warning «не для prod». T-K2c: нет `demo123456` под `app/` (docs/bin/artifacts ок) |
-| **R3 (K3)** | `adapter_payment_url`: non-http(s) в **production** → **не** `securepayments.tinkoff.ru/#{pid}`; вернуть ошибку (**422**/JSON error) вызывающему widget/pay path. simulate/test/dev — fallback ок. `SHOP_BASE_DOMAIN` blank → `?tenant_id=` (уже UrlBuilder); док ok, fake subdomain запрещён |
-| **R4 (K4)** | `ALLOWED_OPTIONAL_TABLES = %w[order_feedback promo_code_usages].freeze`; иначе `ArgumentError` |
-| **R5 (K5)** | Код RUBY-1K уже в git; T-K5a must stay green; REVIEW: «RUBY-1K fix shipped in this release train» |
-| **R6 (K6)** | После GREEN/REVIEW: шапка HANDOFF/SESSION sha = `git rev-parse --short HEAD` + next_step (L / остаток) |
-| **R7 (K7)** | **B** (зафиксировано): collector уже batch + 1× `SET LOCAL row_security=off`; T-K7a assert ≤1 SET LOCAL на `call`; T-K7c PASS. **Не** Sentry ignore как DoD (A = не выбран). REVIEW: закрыть/отметить RUBY-1J после verify |
+| **R1** | Request-scoped `SET LOCAL` tenant/user — только внутри AR transaction |
+| **R2** | Concern `WithTenantPgContext` → barista / manager / prep (как Shop `around_action`) |
+| **R3** | **B:** `schema.rb` + `DatabaseTriggers.ensure_all!` / `db:rls:ensure` (не `:sql` в G) |
+| **R4** | Must-have = `RLS_PG_INVENTORY.md` |
+| **R5** | GUC `app.shop_city_lookup` + policy на `tenants`; запрет `row_security = off` |
+| **R6** | `ensure_tenant_id` raise везде кроме `test?` (allow+warn) |
 
 ## SBR
 
-- [x] PHASE 0 `/start` — бриф TASK_93-K в чате
-- [x] `/unlazy` — GATES K (`GATES-block-K.md` · unmet 4 · G5→L)
-- [x] PHASE 1 `/spec` — этот todo (+ зеркало session)
-- [ ] PHASE 2 RED — пачка T-K1a/b/c · T-K2* · T-K3a · T-K4a · (T-K7a) · коммит `[RED]`
-- [ ] PHASE 2 GREEN — R1–R7 · коммит `[GREEN]` · все T-K* PASS
-- [ ] `/regress` — GATES G4 § Проверка
-- [ ] PHASE 3 `/review` — таблица K1–K7 · K6 sha sync · push · **без deploy**
+- [x] PHASE 0 `/start`
+- [x] `/unlazy` — GATES G `576d37bf`
+- [x] PHASE 1 `/spec` — этот файл + `RLS_PG_INVENTORY.md`
+- [ ] PHASE 2 RED — T-G1a/c · T-G5b · gaps · `[RED]`
+- [ ] PHASE 2 GREEN — R1–R6 · `[GREEN]`
+- [ ] `/regress` — G4
+- [ ] PHASE 3 `/review` — G1–G6 PASS · push · без deploy
 
 ## Файлы (ожидаемо)
 
-- `app/views/blog/posts/show.html.erb` — sanitize → `BlogPost::ALLOWED_*`
-- `app/models/blog_post.rb` — канон allowlist (без расширения)
-- `app/controllers/shop/api/payments_controller.rb` — `adapter_payment_url` prod fail
-- `app/services/shop/customer_profile_merger.rb` — `ALLOWED_OPTIONAL_TABLES` + raise
-- `app/services/demo/environment_setup.rb` — production guard / DEMO_AUTO_SEED
-- `docs/operations/milestones/veha_1/reference/DEMO_LOGINS.md` — warning «не prod»
-- `app/services/analytics/channel_order_stats_collector.rb` — только если T-K7a потребует правки (baseline уже B)
+- `app/controllers/concerns/with_tenant_pg_context.rb` — around_action txn + SET LOCAL
+- `app/controllers/barista/base_controller.rb` — concern (manager/prep — blast)
+- `lib/database_triggers.rb` — `ensure_all!` policies+triggers из инвентаря
+- `app/services/rls/guc_context.rb` — `with_shop_city_lookup`
+- `app/services/shop/customer_tenant_history.rb` — без `row_security = off`
+- `app/models/application_record.rb` — ensure_tenant R6
+- `db/migrate/*_add_rls_tenants_shop_city_lookup_policy.rb` — policy на `tenants`
 
-### Blast-radius (+соседи)
+### Blast-radius
 
-- `test/models/blog_post_sanitize_consistency_test.rb` (+ integration show) — T-K1*
-- `test/controllers/shop/api/widget_payment_url_test.rb` — T-K3a/b
-- `test/integration/platform/onboarding_infra_test.rb` — T-K3c регресс (не ломать)
+- `manager/base_controller.rb` / `prep_kitchen/base_controller.rb`
+- `shop/api/base_controller.rb` — эталон, не ломать
+- `test/support/rls_test_bootstrap.rb`
 
-## Матрица приёмки (RED → GREEN)
+## Матрица (must PASS)
 
-| ID | Assert |
-|----|--------|
-| T-K1a | ERB/helper без отдельного широкого `%w[h1 img style…]` |
-| T-K1b | save strips `<img>` |
-| T-K1c | blog show не re-introduce disallowed |
-| T-K2a | production + DEMO_AUTO_SEED false → seed abort / no overwrite |
-| T-K2b | DEMO_LOGINS содержит warning не-prod |
-| T-K2c | (opt) no `demo123456` under `app/` |
-| T-K3a | production-like blank/non-http → error, не fake tinkoff URL |
-| T-K3b | valid https as-is |
-| T-K3c | UrlBuilder без SHOP_BASE_DOMAIN → tenant_id URL |
-| T-K4a | `reassign_optional_table!("orders")` raises |
-| T-K4b | allowed tables merge |
-| T-K5a | `menu_category_sort_order_update_test` PASS |
-| T-K6a/b | REVIEW ops sha + next_step |
-| T-K7a | SET LOCAL count ≤ bound на collector.call |
-| T-K7c | `channel_order_stats_collector_test` PASS |
-
-Без **T-K1a + T-K3a + T-K4a** блок не закрыт.
+T-G1a/b/c · T-G2a/b/c · T-G3a/b · T-G4a/b · T-G5a/b/c/d · T-G6a/b  
+Без **T-G1a + T-G3a + T-G5b** блок не закрыт.
 
 ## Не ломать
 
-1. Widget/pay happy path с валидным https PaymentURL
-2. Blog publish/edit + render allowed tags (p/a/h2…)
-3. Profile merge email/phone + allowed optional tables
-4. Demo seed на local / `DEMO_AUTO_SEED=true`
-5. Menu category blank `sort_order` update (RUBY-1K)
+1. Shop API `with_shop_tenant!` txn + GUC
+2. RLS isolation (tenant A ≠ B)
+3. Platform onboarding без tenant GUC
+4. `Rls::GucContext` device / shop_api_key / auth_login
+5. Order number после schema:load
+6. City switcher UX (peers same city)
 
 ## Проверка
 
 ```bash
 bin/rails test \
-  test/integration/platform/menu_category_sort_order_update_test.rb \
-  test/services/shop/customer_profile_merger_test.rb \
-  test/services/analytics/channel_order_stats_collector_test.rb \
-  test/models/blog_post_test.rb \
-  test/controllers/shop/api/payments_controller_test.rb
-# + новые T-K* файлы (sanitize / widget_payment_url / demo guard)
-```
+  test/integration/staff_pg_context_transaction_test.rb \
+  test/integration/rls_tenant_isolation_test.rb \
+  test/integration/db_triggers_test.rb \
+  test/services/shop/customer_tenant_history_test.rb
 
-GATES: G1–G3 после GREEN `--approve`; G4 = этот regress; G5→L.
+bin/rails test test/integration/rls_tenant_isolation_test.rb \
+  test/integration/db_triggers_test.rb \
+  test/services/shop/customer_tenant_history_test.rb
+```
