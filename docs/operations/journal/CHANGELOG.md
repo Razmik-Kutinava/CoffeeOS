@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-18 — docs: regress #93 TASK_93-A payments/callbacks PASS
+
+- G1 matrix: **40 runs, 0 fail** (updater · deduction · callback job · tbank ctrl · block_f)
+- G2 zone: **139 runs, 0 fail** (`payments/` · `callbacks/` · `jobs/payments/`)
+- Next: `/review` · Fly MCP = блок L
+
 ## 2026-09-18 — docs: unlazy #93 TASK_93-H Cart cookie / overflow
 
 - `GATES-block-H.md` + session `GATES.md`: G1 T-H1 rescue · G2 T-H2 line/byte · G3 T-H3 422-not-500 · G4 cart regress · G5→L

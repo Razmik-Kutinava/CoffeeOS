@@ -2,17 +2,17 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-18 (TASK_93-H unlazy)  
+**Дата:** 2026-09-18 (TASK_93-A regress PASS)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#93-H** GATES unmet 4 · G5→L | `/spec` cookie+cap vs MobileCart |
-| G1–G4 ledger + baseline cart zone PASS | RED T-H1/T-H3 (overflow test) |
-| **#93-F/E/A/C/D/G** параллельно | свои ledgers / todo |
+| **#93-A** G1 40/0 · G2 139/0 | `/review` · push · deploy=L |
+| **#93-H** unlazy | `/spec` H отдельно |
+| B–G параллельно | свои ledgers |
 
-**last_done:** `/unlazy` TASK_93-H · `GATES-block-H.md` + session  
-**next_step:** `/spec` (MAX_LINES/BYTES · update · T-H2c skip?)
+**last_done:** `/regress` TASK_93-A payments/callbacks/jobs PASS · GREEN `bba068f9`  
+**next_step:** `/review` блок A (A1–A6 table · push · без deploy)
 
 **ctx_trim:** `2026-09-02`  
 **Fly:** v495 `deployment-01M22JRN95TXRSV1PQDN49227M`
