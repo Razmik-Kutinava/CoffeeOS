@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-18 — docs: unlazy #93 TASK_93-K Hygiene pack (K1–K7)
+
+- `GATES-block-K.md` + session `GATES.md`: G1 T-K1 blog · G2 T-K2+T-K4 demo/merger · G3 T-K3 paymentUrl · G4 regress+K5/K7c · G5→L
+- `--status`: unmet 4 · abandoned 1 (G5); `--approve` после GREEN; K6 HANDOFF + K7 A|B = `/review` (SPEC locks A vs B)
+- Next: `/spec` (код не трогали)
+
 ## 2026-09-18 — docs: regress PASS #93 TASK_93-C SMS short link
 
 - Zone: `order_ready_sms_link` + notifier + `order_short_links` + `rack_attack_order_short_link`

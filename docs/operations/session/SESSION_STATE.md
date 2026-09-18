@@ -2,17 +2,17 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-18 (TASK_93-C regress PASS)  
+**Дата:** 2026-09-18 (TASK_93-K unlazy)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#93-C** Local regress **PASS** 18/0 | `/review` · push · **без deploy** |
-| GREEN `c2ef2d68` · G6→L | Fly MCP Point A после L |
-| **#93-H** и др. параллельно | свои SBR |
+| **#93-K** GATES K unmet 4 · G5→L | `/spec` → RED T-K1/K3/K4 pack |
+| Close K | GREEN → approve G1–G3 · G4 `/regress` · K6+K7 `/review` |
+| **#93-C** regress PASS | `/review` · push · **без deploy** |
 
-**last_done:** `/regress` TASK_93-C — sms_link + notifier + short_links + rack_attack `/o/`  
-**next_step:** `/review` C1–C5 таблица · Entire · push
+**last_done:** `/unlazy` TASK_93-K — ledger G1–G5 (blog · demo+merger · paymentUrl · regress+K5 · L)  
+**next_step:** `/spec` K7 A\|B · K3 · todo-K · затем `/sbr`
 
 **ctx_trim:** `2026-09-02`
 
