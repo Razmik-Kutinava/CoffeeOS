@@ -2,18 +2,18 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-18 (TASK_93-D REVIEW)  
-**Ветка:** `develop`
+**Дата:** 2026-09-18 (TASK_93-G regress)  
+**Ветка:** develop
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#93-D** REVIEW PASS | push / CI |
-| G1–G3 met · G4→L | deploy апрув = L |
-| `todo-block-D.md` | — |
+| **#93-G** REGRESS **PASS** 22/0 | /review |
+| GATES-block-G G1–G4 met · G5→L | таблица G1–G6 · push · без deploy |
+| GREEN 7c34314a | Fly MCP Point A — после deploy (L) |
 
-**last_done:** `/review` D — bugbot+security clean · Local PASS  
-**next_step:** CI green → стоп; deploy не делать
+**last_done:** /regress TASK_93-G — staff+rls+db_triggers+city_history **22/0** · approve G1–G4  
+**next_step:** /review блок G
 
-**ctx_trim:** `2026-09-02`
+**ctx_trim:** 2026-09-02
 
 ---

@@ -2,22 +2,22 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-18 (TASK_93-D REVIEW)  
-**Ветка:** `develop`
+**Дата:** 2026-09-18 (TASK_93-G regress)  
+**Ветка:** develop
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#93-D** REVIEW · D1–D3 PASS | push → CI green → **стоп** |
-| bugbot 0 · security 0 | Deploy = **L** (апрув) |
-| Entire `01M2STB3BHJ65BAYQM492QTT7P` | — |
+| **#93-G** REGRESS PASS 22/0 | /review → push · без deploy |
+| G1–G4 met · G5 Fly → L | демо Point A после L |
+| Зеркало: 	odo-block-G.md | — |
 
-**last_done:** PHASE 3 REVIEW TASK_93-D — Local 20/0 · dual review clean  
-**next_step:** `git push` → CI; deploy только апрув (TASK_93-L)
+**last_done:** regress G — **22/0** · gate-check G1–G4 PASS · G5→L  
+**next_step:** /review TASK_93-G
 
-**ctx_trim:** `2026-09-02`  
-**Fly:** v495 `deployment-01M22JRN95TXRSV1PQDN49227M`
+**ctx_trim:** 2026-09-02  
+**Fly:** v495 deployment-01M22JRN95TXRSV1PQDN49227M
 
-**Архив session:** [`archive/README.md`](archive/README.md)  
-**Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
+**Архив session:** [rchive/README.md](archive/README.md)  
+**Архив journal:** [../journal/archive/README.md](../journal/archive/README.md)
 
 ---
