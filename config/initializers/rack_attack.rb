@@ -18,14 +18,21 @@ class Rack::Attack
   ].freeze
 
   # SolidCache cannot increment — Redis (prod/FLY) or MemoryStore (dev/test).
+  # CI sets REDIS_URL; parallel workers + FLUSHDB race throttle counters — default
+  # test resolution uses MemoryStore. T-I1 passes production:/fly_app_name: to exercise Redis.
   def self.resolve_cache_store(
     production: Rails.env.production?,
+    test: Rails.env.test?,
     fly_app_name: ENV["FLY_APP_NAME"],
     rack_attack_redis_url: ENV["RACK_ATTACK_REDIS_URL"],
     redis_url: ENV["REDIS_URL"]
   )
     url = rack_attack_redis_url.to_s.presence || redis_url.to_s.presence
     public_like = production || fly_app_name.to_s.present?
+
+    if test && !public_like
+      return ActiveSupport::Cache::MemoryStore.new
+    end
 
     if public_like
       if url.blank?
