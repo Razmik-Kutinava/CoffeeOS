@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-18 — docs: REVIEW close #93 TASK_93-H cart overflow
+
+- Local bugbot+security → fix `e80790c9` · CI green on develop tip
+- H1–H3 PASS · G5→L · без deploy
+- Next: deploy — только по апруву владельца
+
 ## 2026-09-18 — docs: CI green #93 TASK_93-K REVIEW
 
 - CI `35335419241` green `c87377fc` · K1–K7 · G5→L

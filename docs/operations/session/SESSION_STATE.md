@@ -2,17 +2,17 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-18 (TASK_93-K REVIEW done)  
-**Ветка:** `develop`  
-**sha:** `c87377fc`
+**Дата:** 2026-09-18 (TASK_93-J regress PASS)  
+**Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#93-K** CI green | deploy = апрув · **L** |
-| K1–K7 закрыты | Fly MCP Point A после L |
+| **#93-J** Local regress **PASS** 87/0 | `/review` · push · **без deploy** |
+| GREEN `566dba9b` · G5→L | Fly MCP Point A после L |
+| **#93-*** параллельно | свои SBR |
 
-**last_done:** `/review` K PASS · CI `35335419241` · `c87377fc`  
-**next_step:** deploy только по апруву владельца
+**last_done:** `/regress` TASK_93-J — shop jobs/presence/push + barista/fcm/updater/tbank  
+**next_step:** `/review` J1–J4 таблица · Entire · push
 
 **ctx_trim:** `2026-09-02`
 
