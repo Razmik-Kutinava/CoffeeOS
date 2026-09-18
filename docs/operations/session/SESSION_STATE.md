@@ -1,4 +1,4 @@
-# SESSION_STATE
+﻿# SESSION_STATE
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
