@@ -2,17 +2,17 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-18 (TASK_93-D GREEN)  
+**Дата:** 2026-09-18 (TASK_93-K unlazy)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#93-D** GREEN | `/regress` G2 |
-| T-D* PASS · RED `faca7e3c` | `--approve` G1 после regress |
-| `todo-block-D.md` | `/review` · G4→L |
+| **#93-K** GATES unmet 4 · G5→L | `/spec` → RED T-K1/K3/K4 pack |
+| Close K | GREEN → approve G1–G3 · G4 `/regress` · K6+K7 `/review` |
+| Параллель | `GATES-block-*` / `todo-block-*` — не затирать |
 
-**last_done:** feat history per_page=20 `[GREEN]` `9d2b98a8`  
-**next_step:** `/regress` → `/review`
+**last_done:** `/unlazy` TASK_93-K — ledger G1–G5 (blog · demo+merger · paymentUrl · regress+K5 · L)  
+**next_step:** `/spec` K7 A\|B · K3 · todo-K · затем `/sbr`
 
 **ctx_trim:** `2026-09-02`
 

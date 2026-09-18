@@ -2,17 +2,17 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-18 (TASK_93-D GREEN)  
+**Дата:** 2026-09-18 (TASK_93-K unlazy)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#93-D** GREEN `9d2b98a8` | `/regress` → G2 orders+mvp_flow |
-| T-D1* · T-D3* PASS · default 20 | `/review` · без deploy |
-| канон `todo-block-D.md` · GATES-block-D | G/I/K… — др. чаты |
+| **#93-K** GATES unmet 4 · G5→L | `/spec` K7 A\|B · K3 prod · todo-K |
+| **#93-*** параллельно | свои `todo-block-*` / `GATES-block-*` |
+| Deploy | TASK_93-L |
 
-**last_done:** SBR GREEN TASK_93-D — `#history` per_page default 20 (не 1)  
-**next_step:** `/regress` — `orders_controller_test` + `mvp_flow_test`
+**last_done:** `/unlazy` TASK_93-K · `GATES-block-K.md` + session `GATES.md` (pin)  
+**next_step:** `/spec` блок K (K7 A vs B · paymentUrl prod · DEFER list)
 
 **ctx_trim:** `2026-09-02`  
 **Fly:** v495 `deployment-01M22JRN95TXRSV1PQDN49227M`
