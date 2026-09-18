@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-18 — docs: unlazy reverify #93 TASK_93-E G1–G4 met (G5 to L)
+
+- `session/GATES.md` + `GATES-block-E.md`: G1–G3 approve+reverify PASS · G4 cite met · G5→L
+- `--status`: met 4, abandoned 1 · коммит `4905294f`
+- Next: `/review`
+
 ## 2026-09-18 — docs: REVIEW #93 TASK_93-B Checkout identity
 
 - Local 50/0 · bugbot R4 fix (`find_existing!` ≡ orders) · security: EmailVerification tenant DB → ISSUES backlog
