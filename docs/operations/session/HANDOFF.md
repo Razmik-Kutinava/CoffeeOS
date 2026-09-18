@@ -4,15 +4,15 @@
 
 **Дата:** 2026-09-18 (TASK_93-K REVIEW)  
 **Ветка:** `develop`  
-**sha:** `a193ad1b`
+**sha:** `cfeb1e58`
 
 | Сейчас | Дальше |
 |--------|--------|
 | **#93-K** REVIEW · Local PASS | push → CI green · **без deploy** |
 | K1–K7 закрыты · G5→L | Next блок **L** (deploy) или остаток 93 |
-| GREEN+fix `a193ad1b` | Fly MCP Point A = L |
+| GREEN `39b38d58` · fix `a193ad1b` | Fly MCP Point A = L |
 
-**last_done:** `/review` TASK_93-K — bugbot fix blank PaymentURL · security clean · K6 sha sync  
+**last_done:** `/review` TASK_93-K — bugbot fix blank PaymentURL · security clean · K6 sha `cfeb1e58`  
 **next_step:** CI green · deploy только апрув · блок L
 
 **ctx_trim:** `2026-09-02`  

@@ -4,16 +4,15 @@
 
 **Дата:** 2026-09-18 (TASK_93-K REVIEW)  
 **Ветка:** `develop`  
-**sha:** `a193ad1b`
+**sha:** `cfeb1e58`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#93-K** REVIEW in progress | push · CI · стоп |
+| **#93-K** REVIEW · push | CI green · стоп |
 | K1–K7 PASS · G5→L | deploy = апрув / блок L |
-| fix blank PaymentURL | `a193ad1b` |
 
-**last_done:** `/review` K — bugbot high fixed · security OK · K6 sync  
-**next_step:** CI green · `Next: deploy — только по апруву`
+**last_done:** `/review` K — bugbot high fixed · security OK · K6 `cfeb1e58`  
+**next_step:** CI green · deploy только по апруву
 
 **ctx_trim:** `2026-09-02`
 
