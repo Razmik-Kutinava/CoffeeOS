@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-18 — docs: regress PASS #93 TASK_93-J Push / worker zone
+
+- Zone: jobs/shop + presence + push_notifier + barista/broadcaster/fcm/updater + tbank
+- Local: **87 runs / 0 failures** · GREEN `566dba9b` · gate-check G1–G4 met · G5→L
+- Next: `/review` · Fly MCP Point A = TASK_93-L
+
 ## 2026-09-18 — docs: REVIEW close #93 TASK_93-H cart overflow
 
 - Local bugbot+security → fix `e80790c9` · CI green on develop tip
