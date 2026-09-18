@@ -2,17 +2,17 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-18 (TASK_93-B REVIEW)  
+**Дата:** 2026-09-18 (TASK_93-E unlazy reverify)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#93** TASK_93-B REVIEW+push | CI green · deploy апрув |
-| B1–B5 PASS · phone-first | Fly MCP Point A = блок L |
-| EmailVerification DB fallback | ISSUES backlog (не DoD B) |
+| **#93-E** GATES met 4 · G5→L | `/review` · push · **без deploy** |
+| Local G1–G4 evidence | Fly MCP Point A = L |
+| GREEN `2eb22c71` | — |
 
-**last_done:** REVIEW TASK_93-B · R4 one_click=orders · таблица B1–B5  
-**next_step:** дождаться CI · deploy только апрув
+**last_done:** `/unlazy` reverify TASK_93-E — G1–G4 met · G5 abandoned  
+**next_step:** `/review` блок E
 
 **ctx_trim:** `2026-09-02`  
 **Fly:** v495 `deployment-01M22JRN95TXRSV1PQDN49227M`

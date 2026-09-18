@@ -2,17 +2,17 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-18 (TASK_93-B REVIEW)  
+**Дата:** 2026-09-18 (TASK_93-E unlazy reverify)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#93** TASK_93-B REVIEW | push → CI green |
-| Local 50/0 · R4 fix `4217cab5` | deploy апрув · Fly MCP = L |
-| Entire `01M2STWJAMB844CP992D067NWP` | — |
+| **#93-E** GATES G1–G4 **met** · G5→L | `/review` · push · **без deploy** |
+| reverify PASS | bugbot + security |
+| GREEN `2eb22c71` | Fly MCP = TASK_93-L |
 
-**last_done:** REVIEW B — bugbot R4 fixed · security EmailVerification → ISSUES backlog  
-**next_step:** CI green · стоп (deploy апрув)
+**last_done:** `/unlazy` TASK_93-E — approve+reverify met 4 / abandoned 1  
+**next_step:** `/review` блок E
 
 **ctx_trim:** `2026-09-02`
 
