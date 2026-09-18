@@ -8,6 +8,11 @@ module Payments
 
     STUCK_THRESHOLD = 30.minutes
 
+    # Test hook: inject adapter into TbankPaymentSync (nil = real adapter).
+    class << self
+      attr_accessor :sync_adapter
+    end
+
     def perform
       stuck = Payment
         .pending_or_processing

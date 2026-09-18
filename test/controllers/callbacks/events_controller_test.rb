@@ -35,6 +35,8 @@ class Callbacks::EventsControllerTest < ActionDispatch::IntegrationTest
     ENV.delete("CALLBACK_SHARED_TOKEN")
     ENV.delete("CALLBACK_SHARED_SECRET")
     ENV.delete("CALLBACK_REQUIRE_IDEMPOTENCY")
+    ENV.delete("CALLBACK_FAIL_CLOSED")
+    ENV.delete("FLY_APP_NAME")
     Rails.cache.clear
   end
 
@@ -131,6 +133,159 @@ class Callbacks::EventsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "callback not configured", JSON.parse(response.body)["error"]
   ensure
     Rails.env = env
+  end
+
+  # ---------------------------------------------------------------------------
+  # TASK_93-F — F1 fail-closed · F2 claim lifecycle
+  # ---------------------------------------------------------------------------
+
+  # T-F1a
+  test "T-F1a rejects when secrets blank and fail-closed env" do
+    ENV["CALLBACK_FAIL_CLOSED"] = "1"
+    ENV.delete("CALLBACK_SHARED_TOKEN")
+    ENV.delete("CALLBACK_SHARED_SECRET")
+
+    post_payment(headers: {})
+
+    assert_response :unauthorized
+    assert_equal "callback not configured", JSON.parse(response.body)["error"]
+    @payment.reload
+    assert_equal "pending", @payment.status
+  end
+
+  # T-F1b
+  test "T-F1b rejects when only token set without secret (fail-closed)" do
+    ENV["CALLBACK_FAIL_CLOSED"] = "1"
+    ENV["CALLBACK_SHARED_TOKEN"] = "only-token"
+    ENV.delete("CALLBACK_SHARED_SECRET")
+
+    post_payment(headers: { "X-Callback-Token" => "only-token" })
+
+    assert_response :unauthorized
+    assert_equal "callback not configured", JSON.parse(response.body)["error"]
+  end
+
+  # T-F1c
+  test "T-F1c accepts when both secrets set + valid auth" do
+    token = "pair-token"
+    secret = "pair-secret"
+    ENV["CALLBACK_FAIL_CLOSED"] = "1"
+    ENV["CALLBACK_SHARED_TOKEN"] = token
+    ENV["CALLBACK_SHARED_SECRET"] = secret
+
+    req_params = {
+      tenant_id: @tenant.id,
+      payment_id: @payment.id,
+      status: "succeeded",
+      provider_payment_id: "pay_f1c"
+    }
+    body = req_params.to_json
+    timestamp = Time.current.to_i.to_s
+    sig = OpenSSL::HMAC.hexdigest("SHA256", secret, "#{timestamp}.#{body}")
+
+    post "/callbacks/payments",
+         params: body,
+         headers: {
+           "Content-Type" => "application/json",
+           "X-Callback-Token" => token,
+           "X-Callback-Timestamp" => timestamp,
+           "X-Callback-Signature" => sig,
+           "X-Idempotency-Key" => SecureRandom.hex(8)
+         }
+
+    assert_response :ok
+    body_json = JSON.parse(response.body)
+    assert_equal true, body_json["ok"]
+    @payment.reload
+    assert_equal "succeeded", @payment.status
+  end
+
+  # T-F2a
+  test "T-F2a amount mismatch rejects and releases processing claim" do
+    ENV["CALLBACK_REQUIRE_IDEMPOTENCY"] = "1"
+    idem_key = "f2a-#{SecureRandom.hex(4)}"
+    cache_key = "callbacks:idempotency:#{idem_key}"
+
+    post_payment(
+      params: { status: "succeeded", amount: 1 },
+      headers: { "X-Idempotency-Key" => idem_key }
+    )
+
+    assert_response :unprocessable_entity
+    claim = Rails.cache.read(cache_key)
+    assert(
+      claim.nil? || claim[:state].to_s != "processing" && claim["state"].to_s != "processing",
+      "rejected must not leave processing claim, got=#{claim.inspect}"
+    )
+    @payment.reload
+    assert_equal "pending", @payment.status
+  end
+
+  # T-F2b
+  test "T-F2b retry after amount mismatch can process with correct amount" do
+    ENV["CALLBACK_REQUIRE_IDEMPOTENCY"] = "1"
+    idem_key = "f2b-#{SecureRandom.hex(4)}"
+
+    post_payment(
+      params: { status: "succeeded", amount: 1 },
+      headers: { "X-Idempotency-Key" => idem_key }
+    )
+    assert_response :unprocessable_entity
+
+    post_payment(
+      params: { status: "succeeded", amount: 300 },
+      headers: { "X-Idempotency-Key" => idem_key }
+    )
+
+    assert_response :ok
+    body = JSON.parse(response.body)
+    assert_not body["duplicate"], "retry after reject must not be false duplicate ok"
+    @payment.reload
+    assert_equal "succeeded", @payment.status
+  end
+
+  # T-F2c covered by existing duplicate success test; explicit matrix id:
+  test "T-F2c successful process then duplicate returns ok duplicate" do
+    ENV["CALLBACK_REQUIRE_IDEMPOTENCY"] = "1"
+    idem_key = "f2c-#{SecureRandom.hex(4)}"
+
+    post_payment(params: { status: "succeeded" }, headers: { "X-Idempotency-Key" => idem_key })
+    assert_response :ok
+
+    post_payment(params: { status: "succeeded" }, headers: { "X-Idempotency-Key" => idem_key })
+    assert_response :ok
+    assert_equal true, JSON.parse(response.body)["duplicate"]
+  end
+
+  # T-F2d
+  test "T-F2d missing idempotency key when required returns 422 without ghost claim" do
+    secret = "need-idem"
+    ENV["CALLBACK_SHARED_SECRET"] = secret
+    ENV.delete("CALLBACK_SHARED_TOKEN")
+
+    req_params = {
+      tenant_id: @tenant.id,
+      payment_id: @payment.id,
+      status: "succeeded",
+      provider_payment_id: "pay_f2d"
+    }
+    body = req_params.to_json
+    timestamp = Time.current.to_i.to_s
+    sig = OpenSSL::HMAC.hexdigest("SHA256", secret, "#{timestamp}.#{body}")
+
+    post "/callbacks/payments",
+         params: body,
+         headers: {
+           "Content-Type" => "application/json",
+           "X-Callback-Timestamp" => timestamp,
+           "X-Callback-Signature" => sig
+           # no X-Idempotency-Key
+         }
+
+    assert_response :unprocessable_entity
+    assert_match(/idempotency/i, response.body)
+    @payment.reload
+    assert_equal "pending", @payment.status
   end
 
   # ---------------------------------------------------------------------------

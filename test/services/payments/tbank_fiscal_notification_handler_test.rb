@@ -5,6 +5,7 @@ require "test_helper"
 # #73 — inbound NotificationFiscalization (Status=RECEIPT)
 class Payments::TbankFiscalNotificationHandlerTest < ActiveSupport::TestCase
   include TestFactories
+  include ActiveJob::TestHelper
 
   setup do
     ENV["TBANK_TERMINAL_KEY"] = "TestTerminal"
@@ -114,5 +115,70 @@ class Payments::TbankFiscalNotificationHandlerTest < ActiveSupport::TestCase
 
     assert result[:ok]
     assert_equal 0, FiscalReceipt.where(ofd_receipt_id: "#{payload['PaymentId']}:9999078900001234:12345:987654321").count
+  end
+
+  # ---------------------------------------------------------------------------
+  # TASK_93-F — F4 fiscal soft-skip → report / retry
+  # ---------------------------------------------------------------------------
+
+  def capture_error_reports
+    reports = []
+    original = Rails.error.method(:report)
+    Rails.error.define_singleton_method(:report) do |error = nil, **kwargs, &block|
+      reports << { error: error, **kwargs }
+      nil
+    end
+    yield reports
+  ensure
+    Rails.error.define_singleton_method(:report) do |error = nil, **kwargs, &block|
+      original.call(error, **kwargs, &block)
+    end
+  end
+
+  # T-F4a
+  test "T-F4a payment_not_found reports error" do
+    payload = fiscal_payload("PaymentId" => "missing-pay-id", "OrderId" => SecureRandom.uuid)
+
+    capture_error_reports do |reports|
+      result = Payments::TbankFiscalNotificationHandler.new(payload: payload).call!
+      assert result[:ok]
+      assert_equal :payment_not_found, result[:skipped]
+      assert_operator reports.size, :>=, 1, "payment_not_found must Rails.error.report"
+    end
+  end
+
+  # T-F4b
+  test "T-F4b missing_fiscal_ids reports error" do
+    payload = fiscal_payload(
+      "FnNumber" => nil,
+      "FiscalDocumentNumber" => nil,
+      "FiscalDocumentAttribute" => nil
+    )
+
+    capture_error_reports do |reports|
+      result = Payments::TbankFiscalNotificationHandler.new(payload: payload).call!
+      assert result[:ok]
+      assert_equal :missing_fiscal_ids, result[:skipped]
+      assert_operator reports.size, :>=, 1, "missing_fiscal_ids must Rails.error.report"
+    end
+  end
+
+  # T-F4c
+  test "T-F4c enqueues fiscal retry when payment_not_found" do
+    payload = fiscal_payload("PaymentId" => "missing-pay-id", "OrderId" => SecureRandom.uuid)
+
+    assert_enqueued_with(job: Payments::TbankFiscalRetryJob) do
+      Payments::TbankFiscalNotificationHandler.new(payload: payload).call!
+    end
+  end
+
+  # T-F4d
+  test "T-F4d happy create receipt does not false-report" do
+    capture_error_reports do |reports|
+      result = Payments::TbankFiscalNotificationHandler.new(payload: fiscal_payload).call!
+      assert result[:ok]
+      assert result[:fiscal_receipt]
+      assert_empty reports, "happy path must not Rails.error.report"
+    end
   end
 end
