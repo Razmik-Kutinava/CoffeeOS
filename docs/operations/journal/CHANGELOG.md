@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-18 — docs: unlazy reverify #93 TASK_93-G gates met
+
+- GATES-block-G: G1–G4 **met** (--reverify); G5 Fly **abandoned** → TASK_93-L
+- Local evidence automatic; Next: /review
+
 ## 2026-09-18 — docs: unlazy reverify #93 TASK_93-B gates met
 
 - `GATES-block-B.md`: G1–G3 **met** (--reverify); G4 UI; G5 Fly **abandoned** → TASK_93-L
