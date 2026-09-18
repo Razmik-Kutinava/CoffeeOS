@@ -45,24 +45,32 @@ class Shop::PhoneOtpTest < ActiveSupport::TestCase
     assert_match(/сессия|недействительн/i, err.message)
   end
 
-  test "send_sms_code creates otp without callcheck" do
+  test "T-I3a send_sms_code generates 6 digit code" do
     phone = Shop::PhoneOtp.send_sms_code!(phone: @phone)
     assert_equal @phone, phone
     record = MobileOtpCode.where(phone: @phone, is_used: false).order(created_at: :desc).first
-    assert_equal 4, record.code.length
+    assert_match(/\A\d{6}\z/, record.code)
   end
 
-  test "verify_sms accepts code" do
+  test "T-I3b verify_sms accepts 6 digit code" do
     Shop::PhoneOtp.send_sms_code!(phone: @phone)
     record = MobileOtpCode.where(phone: @phone, is_used: false).order(created_at: :desc).first
+    assert_equal 6, record.code.length
     assert_equal @phone, Shop::PhoneOtp.verify_sms!(phone: @phone, code: record.code)
     assert record.reload.is_used
+  end
+
+  test "T-I3c frontend expects 6 digit SMS pin" do
+    wizard = Rails.root.join("app/frontend/lib/phoneAuthWizard.js").read
+    pin_pad = Rails.root.join("app/frontend/lib/shopSmsPinPad.js").read
+    assert_match(/PIN_LENGTH\s*=\s*6/, wizard)
+    assert_match(/SMS_PIN_LENGTH\s*=\s*6/, pin_pad)
   end
 
   test "verify_sms rejects wrong code" do
     Shop::PhoneOtp.send_sms_code!(phone: @phone)
     assert_raises(Shop::PhoneOtp::Error) do
-      Shop::PhoneOtp.verify_sms!(phone: @phone, code: "0000")
+      Shop::PhoneOtp.verify_sms!(phone: @phone, code: "000000")
     end
   end
 

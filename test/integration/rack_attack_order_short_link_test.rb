@@ -48,6 +48,32 @@ class RackAttackOrderShortLinkTest < ActionDispatch::IntegrationTest
     end
   end
 
+  test "T-I4a shop/order_short_link/ip throttle rule exists" do
+    assert Rack::Attack.throttles.key?("shop/order_short_link/ip")
+  end
+
+  test "T-I4b many GETs /o/ return 429 (shared-store ready)" do
+    with_rack_attack do
+      ip = "203.0.113.12"
+      30.times do
+        get "/o/#{@hash}", headers: { "REMOTE_ADDR" => ip }
+        assert_includes [ 302, 301, 404 ], response.status
+      end
+      get "/o/#{@hash}", headers: { "REMOTE_ADDR" => ip }
+      assert_response :too_many_requests
+    end
+  end
+
+  test "T-I4c exactly one throttle path for /o/" do
+    source = Rails.root.join("config/initializers/rack_attack.rb").read
+    matches = source.scan(/throttle\([^)]*\)\s+do\s+\|req\|.*?start_with\?\("\/o\/"\)/m)
+    # Fallback: count start_with?("/o/") inside throttle blocks
+    o_paths = source.scan(/start_with\?\("\/o\/"\)/)
+    assert_equal 1, o_paths.length, "expected one /o/ throttle discriminator, got #{o_paths.length}"
+    names = source.scan(/throttle\("([^"]*order_short_link[^"]*)"/).flatten
+    assert_equal [ "shop/order_short_link/ip" ], names.uniq
+  end
+
   private
 
   def with_rack_attack
