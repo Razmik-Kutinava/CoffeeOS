@@ -2,18 +2,17 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-18 (TASK_93-K REVIEW)  
-**Ветка:** `develop`  
-**sha:** `cfeb1e58`
+**Дата:** 2026-09-18 (TASK_93-H regress)  
+**Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#93-K** REVIEW · Local PASS | push → CI green · **без deploy** |
-| K1–K7 закрыты · G5→L | Next блок **L** (deploy) или остаток 93 |
-| GREEN `39b38d58` · fix `a193ad1b` | Fly MCP Point A = L |
+| **#93-H** regress PASS · G1–G4 met · G5→L | `/review` · push · **без deploy** |
+| GREEN `d8e5636b` · Local 53/0 | Fly MCP overflow = L |
+| **#93-*** параллельно | свои ledgers |
 
-**last_done:** `/review` TASK_93-K — bugbot fix blank PaymentURL · security clean · K6 sha `cfeb1e58`  
-**next_step:** CI green · deploy только апрув · блок L
+**last_done:** `/regress` TASK_93-H cart cookie overflow — 53 runs PASS  
+**next_step:** `/review` (таблица H1–H3 · push)
 
 **ctx_trim:** `2026-09-02`  
 **Fly:** v495 `deployment-01M22JRN95TXRSV1PQDN49227M`

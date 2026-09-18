@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-18 — docs: regress PASS #93 TASK_93-H cart cookie overflow
+
+- Zone: `cart_service` + `cart_overflow` + `cart_persistence` + `b113_s4_cart_modifiers` → **53 runs, 0 fail**
+- GATES-block-H G1–G4 met · G5→L
+- Next: `/review`
+
 ## 2026-09-18 — docs: REVIEW #93 TASK_93-K hygiene + PaymentURL blank fix
 
 - bugbot: prod blank PaymentURL → empty (not 422) · security: no med+ · K6 sha · K7-B note

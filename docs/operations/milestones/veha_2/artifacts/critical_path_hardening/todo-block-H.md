@@ -31,7 +31,7 @@
 - [x] PHASE 1 `/spec` — зеркало session `todo.md`
 - [x] PHASE 2 RED — T-H1a/b/c · T-H2a/b · T-H3a/b · `[RED]` `5a635be3`
 - [x] PHASE 2 GREEN — R1–R6 · `[GREEN]` · все T-H* PASS (T-H2c skip)
-- [ ] `/regress` — G4
+- [x] `/regress` — G4 · **53 runs, 0 fail** (overflow + persistence + modifiers)
 - [ ] PHASE 3 `/review` — H1–H3 PASS · push · без deploy
 
 ## Файлы (ожидаемо)

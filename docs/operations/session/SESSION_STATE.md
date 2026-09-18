@@ -2,17 +2,17 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-18 (TASK_93-K REVIEW)  
-**Ветка:** `develop`  
-**sha:** `cfeb1e58`
+**Дата:** 2026-09-18 (TASK_93-H regress)  
+**Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#93-K** REVIEW · push | CI green · стоп |
-| K1–K7 PASS · G5→L | deploy = апрув / блок L |
+| **#93-H** zone cart **PASS** | `/review` |
+| GATES H G1–G4 met · G5→L | push · без deploy |
+| 53 runs / 0 fail | Fly MCP = L |
 
-**last_done:** `/review` K — bugbot high fixed · security OK · K6 `cfeb1e58`  
-**next_step:** CI green · deploy только по апруву
+**last_done:** `/regress` TASK_93-H — overflow + persistence + modifiers PASS  
+**next_step:** `/review` · bugbot + security · push
 
 **ctx_trim:** `2026-09-02`
 
