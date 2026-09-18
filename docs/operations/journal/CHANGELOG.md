@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-18 — feat: GREEN #93 TASK_93-B Checkout identity phone-first
+
+- `Shop::CheckoutIdentity` · OrderCreator / RecurrentOrderCreator
+- Checkout `identityReady = phoneVerified || emailVerified`
+- Tests 47/0 · RED `f6e2f3ca` · GREEN `2213cbeb` · Entire `01M2STWJAMB844CP992D067NWP`
+- Next: `/regress`
+
 ## 2026-09-18 — docs: REVIEW #93 TASK_93-C SMS short link
 
 - Local 18/0 · bugbot clean · security no medium+ · Entire `01M2SSQXT1V67AK260SH1P9RAX` на `c2ef2d68`

@@ -2,17 +2,17 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-18 (TASK_93-C REVIEW)  
+**Дата:** 2026-09-18 (TASK_93-B GREEN)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#93-C** REVIEW done · push/CI | CI green → стоп · **без deploy** |
-| GREEN `c2ef2d68` · GATES met 5 | Fly MCP → TASK_93-L |
-| Entire `01M2SSQXT1V67AK260SH1P9RAX` | |
+| **#93** TASK_93-B GREEN | `/regress` → `/review` |
+| Канон phone-first в `CheckoutIdentity` | без deploy (L) |
+| todo зеркало: `todo-block-B.md` | session/todo может быть чужим блоком |
 
-**last_done:** `/review` TASK_93-C SMS short link (bugbot + security + Entire + push)  
-**next_step:** CI green; deploy — апрув владельца
+**last_done:** GREEN phone-first · `identityReady = phoneVerified \|\| emailVerified` · Entire attach  
+**next_step:** `/regress` TASK_93-B
 
 **ctx_trim:** `2026-09-02`  
 **Fly:** v495 `deployment-01M22JRN95TXRSV1PQDN49227M`
