@@ -1,0 +1,68 @@
+<manually_attached_skills>
+The user has manually attached the following skills to their message.
+These skills contain specific instructions or workflows that the user wants you to follow for this request.
+Only read the files if needed, the full skill content is inlined here.
+
+Skill Name: start
+Path: c:\Tools\workarea\CoffeeOS\.cursor\skills\start\SKILL.md
+SKILL.md content:
+Выполни инструкции из `.cursor/commands/start.md` целиком (умный старт A/B, отчёт, строка `Next: /…`).
+</manually_attached_skills>
+<cursor_commands>
+
+--- Cursor Command: start ---
+# /start — старт сессии / задачи (умный)
+
+CoffeeOS. Следуй `coffeeos-agent-workflow` + `coffeeos-customer-intake` (PHASE 0) при нужде.
+
+## Режим (выбери один, не гоняй всё)
+
+### A) Узкий старт (по умолчанию, если контекст уже есть)
+Используй, если в чате/todo уже: баг локализован, есть список файлов, живой `todo.md`, или пользователь продолжает ту же задачу.
+
+Сделай **только**:
+1. Шапка `HANDOFF.md` + шапка `SESSION_STATE.md` (`Read` limit до `---`, не тело)
+2. `ISSUES.md` — только секция **`## 🔴 Открыто`** (до следующего `##`), если релевантно багу
+3. `todo.md` — если есть
+4. **Не** перечитывай PRACTICES/QA/весь CHECKLIST/весь CHANGELOG / **`COMPONENT_MAP.md`**
+5. **Не** заново PHASE 0, если ТЗ уже в `customer_tasks/` или задача уже в todo
+6. Коротко: `last_done` / `current_state` / `next_step` (одна строка каждый)
+7. **ctx-trim:** если пт–вс и в шапке HANDOFF `ctx_trim` старше 7 дней — одна строка: «рекомендуется `/ctx-trim`» (не блокировать старт)
+
+### B) Полный старт + PHASE 0
+Только если **новое** ТЗ от заказчика ещё не в `customer_tasks/` / CBR, или пользователь явно просит intake.
+
+Тогда: PHASE 0 (intake 1:1) → краткая шапка ops → стоп до `/spec`.
+
+## Отчёт
+Таблица Сделано | Не сделано.  
+`Субагент: нет — старт` (или explore, если уже звал).  
+**Не пиши код** на этом шаге.
+
+## Обязательно в конце (копипаст для пользователя)
+
+Одной строкой, без лишнего текста вокруг:
+
+- Если нужен план/файлы → `Next: /spec`
+- Если SPEC/todo уже готов → `Next: /sbr`
+- Если только что завершили PHASE 0 → `Next: /spec`
+
+--- End Command ---
+</cursor_commands>
+<timestamp>Friday, Sep 18, 2026, 12:11 PM (UTC+4)</timestamp>
+
+Блок E — Init / идемпотентность оплаты (shop)
+Цель: повторный Init и гонки не портят provider_payment_id и не оставляют txn в failed state.
+
+#	Что
+E1
+Не перетирать живой provider_payment_id при повторном Init
+E2
+RecordNotUnique / client_order_uuid: lock или обработка вне «грязной» открытой txn (InFailedSqlTransaction)
+E3
+Вынести HTTP в Т‑Банк из длинной DB-транзакции base_controller (или сузить scope txn) — в рамках этого блока, иначе пул останется бомбой
+E4
+Тесты: double Init; concurrent same uuid
+DoD блока: повторная оплата/Init не теряет webhook; пул не держит 15s HTTP внутри txn на happy path.
+
+/start
