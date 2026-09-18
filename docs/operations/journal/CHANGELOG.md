@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-18 — docs: unlazy reverify #93 TASK_93-J G1–G4 met (G5 to L)
+
+- `GATES-block-J.md`: `--reverify` · **met 4** · **abandoned 1** (G5→L)
+- Local G1–G4 CHECK PASS (reran 4); Fly MCP Point A = TASK_93-L
+- Next: `/review`
+
 ## 2026-09-18 — docs: REVIEW #93 TASK_93-I OTP / Rack::Attack
 
 - Local zone PASS · bugbot: assets DUMMY MemoryStore · security: PhoneNormalizer throttle keys
