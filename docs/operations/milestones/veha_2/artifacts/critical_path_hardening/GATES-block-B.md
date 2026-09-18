@@ -18,7 +18,7 @@ Scope: UI «можно платить» ≡ бэкенд принимает за
   CHECK: ruby bin/rails test test/integration/shop/api/email_otp_checkout_test.rb test/integration/shop/shop_one_click_payment_step4_test.rb test/integration/shop/shop_new_card_payment_step2_test.rb
   EXPECT: 0 failures, 0 errors
   CWD: C:/Tools/workarea/CoffeeOS
-  EVIDENCE: automatic-evidence=v1; exit=0; EXPECT=matched; output-sha256=ece15702826475523ee350cb7709330b105562f54f2b8e67897a039046c63b65 — baseline PASS до изменений B
+  EVIDENCE: automatic-evidence=v1; definition-sha256=fbf78ac6552223e6ed94b6318bf8756327834caeeb578a41eae0ab122d3ecb9c; exit=0; EXPECT=matched; output-sha256=6a0bb584fa89522225757a3bbbd62cb7df24ec1207b9b37b9f19d2140e9a3001; output-bytes=1629; shell=C:\Windows\system32\cmd.exe; cwd=C:\Tools\workarea\CoffeeOS; path=54c8ad8163c5/77 entries
 
 - [ ] G4: T-B3 UI identityReady ≡ R1–R3 (phone-first, не требует emailVerified для Pay)
   EVIDENCE: pending — manual/REVIEW: grep `identityReady` в Checkout.svelte ≡ phoneVerified || emailVerified; без фейкового emailVerified; цитата в GREEN-отчёте

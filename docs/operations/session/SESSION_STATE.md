@@ -2,18 +2,17 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-18 (TASK_93-D unlazy)  
+**Дата:** 2026-09-18 (TASK_93-B unlazy)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#93-D** GATES ledger | `/spec` → `/sbr` D |
-| G1–G3 unmet · G4→L | RED T-D*; `--approve` после GREEN |
-| **#93-A** SPEC ready | `/sbr` RED A (todo) |
-| A/B/C ledgers | `GATES-block-A/B/C.md` |
+| **#93** TASK_93-B GATES | `/spec` todo B1–B5 |
+| `GATES-block-B`: G3 met · G1/G2/G4 unmet · G5 abandoned | `/sbr` RED создаёт missing tests |
+| Dependabot 0 open | — |
 
-**last_done:** `/unlazy` TASK_93-D history per_page — unmet 3 / abandoned 1  
-**next_step:** `/spec` D (R1–R5 default 20 / max 50) → `/sbr` RED
+**last_done:** `/unlazy` TASK_93-B · `--approve` на `GATES-block-B.md` · G3 PASS  
+**next_step:** `/spec` — todo B1–B5 + Не ломать + Проверка + канон phone-first
 
 **ctx_trim:** `2026-09-02`
 

@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-18 — docs: unlazy GATES #93 TASK_93-B Checkout identity
+
+- Канон ledger: `artifacts/critical_path_hardening/GATES-block-B.md` (session/GATES.md гоняют A/C/D)
+- `--approve`: G3 baseline PASS; G1/G2 unmet (нет test files); G4 manual; G5→L
+- Next: `/spec` B
+
 ## 2026-09-18 — docs: unlazy GATES #93 TASK_93-D history per_page
 
 - `session/GATES.md` + `artifacts/critical_path_hardening/GATES-block-D.md`
