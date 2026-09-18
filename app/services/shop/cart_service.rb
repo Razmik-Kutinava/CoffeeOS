@@ -2,9 +2,15 @@
 
 module Shop
   class CartService
+    class OverflowError < StandardError; end
+
     SESSION_KEY = :shop_cart
     MAX_CART_ITEMS = 50
     MAX_ITEM_QUANTITY = 99
+    # Distinct lines in cookie session (not sum of qty).
+    MAX_CART_LINES = 20
+    # Proactive budget under typical ~4KB cookie limit.
+    MAX_SESSION_CART_BYTES = 3072
 
     def initialize(session, tenant_id)
       @session = session
@@ -14,96 +20,107 @@ module Shop
     end
 
     def add!(product_id:, quantity:, selected_modifiers:)
-      product = Product.find(product_id)
-      raise ActiveRecord::RecordNotFound, "Товар не найден" unless shop_available?(product)
+      with_session_cart_guard! do
+        product = Product.find(product_id)
+        raise ActiveRecord::RecordNotFound, "Товар не найден" unless shop_available?(product)
 
-      # Проверка на общее количество товаров в корзине
-      current_total = @session[SESSION_KEY].sum { |l| l["quantity"].to_i }
-      if current_total >= MAX_CART_ITEMS
-        raise ActiveRecord::RecordNotFound, "Максимум #{MAX_CART_ITEMS} товаров в корзине"
-      end
-
-      mods = ModifierSelection.build(product: product, selected_modifiers: selected_modifiers)
-      line = {
-        "product_id" => product.id,
-        "quantity" => quantity.to_i.clamp(1, MAX_ITEM_QUANTITY),
-        "selected_modifiers" => compact_modifiers(mods[:selected_modifiers])
-      }
-      key = line_key(line)
-      existing = @session[SESSION_KEY].find_index { |l| line_key(l) == key }
-      if existing
-        # Проверка при добавлении к существующему товару
-        new_quantity = @session[SESSION_KEY][existing]["quantity"] + line["quantity"]
-        if new_quantity > MAX_ITEM_QUANTITY
-          raise ActiveRecord::RecordNotFound, "Максимум #{MAX_ITEM_QUANTITY} единиц товара"
-        end
-        @session[SESSION_KEY][existing]["quantity"] += line["quantity"]
-      else
-        if current_total + line["quantity"] > MAX_CART_ITEMS
+        # Проверка на общее количество товаров в корзине
+        current_total = @session[SESSION_KEY].sum { |l| l["quantity"].to_i }
+        if current_total >= MAX_CART_ITEMS
           raise ActiveRecord::RecordNotFound, "Максимум #{MAX_CART_ITEMS} товаров в корзине"
         end
-        @session[SESSION_KEY] << line
+
+        mods = ModifierSelection.build(product: product, selected_modifiers: selected_modifiers)
+        line = {
+          "product_id" => product.id,
+          "quantity" => quantity.to_i.clamp(1, MAX_ITEM_QUANTITY),
+          "selected_modifiers" => compact_modifiers(mods[:selected_modifiers])
+        }
+        key = line_key(line)
+        existing = @session[SESSION_KEY].find_index { |l| line_key(l) == key }
+        if existing
+          # Проверка при добавлении к существующему товару
+          new_quantity = @session[SESSION_KEY][existing]["quantity"] + line["quantity"]
+          if new_quantity > MAX_ITEM_QUANTITY
+            raise ActiveRecord::RecordNotFound, "Максимум #{MAX_ITEM_QUANTITY} единиц товара"
+          end
+          @session[SESSION_KEY][existing]["quantity"] += line["quantity"]
+        else
+          if @session[SESSION_KEY].size >= MAX_CART_LINES
+            raise OverflowError, "Корзина переполнена (слишком много позиций)"
+          end
+          if current_total + line["quantity"] > MAX_CART_ITEMS
+            raise ActiveRecord::RecordNotFound, "Максимум #{MAX_CART_ITEMS} товаров в корзине"
+          end
+          @session[SESSION_KEY] << line
+        end
+        touch_cart_session!
       end
-      touch_cart_session!
       self
     end
 
     # S4-блок-2: замена модификаторов строки корзины.
     # Если новая комбинация совпадает с другой строкой — слияние количества, старая строка удаляется.
     def replace_line!(index, selected_modifiers:, quantity: nil)
-      i = index.to_i
-      old_line = @session[SESSION_KEY][i]
-      raise ActiveRecord::RecordNotFound, "Строка корзины не найдена" unless old_line
+      with_session_cart_guard! do
+        i = index.to_i
+        old_line = @session[SESSION_KEY][i]
+        raise ActiveRecord::RecordNotFound, "Строка корзины не найдена" unless old_line
 
-      product = Product.find(old_line["product_id"])
-      raise ActiveRecord::RecordNotFound, "Товар не найден" unless shop_available?(product)
+        product = Product.find(old_line["product_id"])
+        raise ActiveRecord::RecordNotFound, "Товар не найден" unless shop_available?(product)
 
-      mods = ModifierSelection.build(product: product, selected_modifiers: selected_modifiers)
-      new_qty = quantity ? quantity.to_i.clamp(1, MAX_ITEM_QUANTITY) : old_line["quantity"]
+        mods = ModifierSelection.build(product: product, selected_modifiers: selected_modifiers)
+        new_qty = quantity ? quantity.to_i.clamp(1, MAX_ITEM_QUANTITY) : old_line["quantity"]
 
-      new_line = {
-        "product_id" => old_line["product_id"],
-        "quantity"   => new_qty,
-        "selected_modifiers" => compact_modifiers(mods[:selected_modifiers])
-      }
-      new_key = line_key(new_line)
+        new_line = {
+          "product_id" => old_line["product_id"],
+          "quantity"   => new_qty,
+          "selected_modifiers" => compact_modifiers(mods[:selected_modifiers])
+        }
+        new_key = line_key(new_line)
 
-      # Ищем другую строку с той же сигнатурой (product_id + modifiers)
-      other_indices = (0...@session[SESSION_KEY].size).reject { |j| j == i }
-      merge_idx = other_indices.find { |j| line_key(@session[SESSION_KEY][j]) == new_key }
+        # Ищем другую строку с той же сигнатурой (product_id + modifiers)
+        other_indices = (0...@session[SESSION_KEY].size).reject { |j| j == i }
+        merge_idx = other_indices.find { |j| line_key(@session[SESSION_KEY][j]) == new_key }
 
-      if merge_idx
-        merged_qty = (@session[SESSION_KEY][merge_idx]["quantity"] + new_qty).clamp(1, MAX_ITEM_QUANTITY)
-        @session[SESSION_KEY][merge_idx]["quantity"] = merged_qty
-        @session[SESSION_KEY].delete_at(i)
-      else
-        @session[SESSION_KEY][i] = new_line
+        if merge_idx
+          merged_qty = (@session[SESSION_KEY][merge_idx]["quantity"] + new_qty).clamp(1, MAX_ITEM_QUANTITY)
+          @session[SESSION_KEY][merge_idx]["quantity"] = merged_qty
+          @session[SESSION_KEY].delete_at(i)
+        else
+          @session[SESSION_KEY][i] = new_line
+        end
+
+        touch_cart_session!
       end
-
-      touch_cart_session!
       self
     end
 
     def remove!(index)
-      @session[SESSION_KEY].delete_at(index.to_i)
-      touch_cart_session!
+      with_session_cart_guard! do
+        @session[SESSION_KEY].delete_at(index.to_i)
+        touch_cart_session!
+      end
     end
 
     def update_quantity!(index, delta)
-      i = index.to_i
-      return unless @session[SESSION_KEY][i]
+      with_session_cart_guard! do
+        i = index.to_i
+        return unless @session[SESSION_KEY][i]
 
-      new_qty = @session[SESSION_KEY][i]["quantity"] + delta.to_i
-      if delta.to_i.positive? && new_qty > MAX_ITEM_QUANTITY
-        raise ActiveRecord::RecordNotFound, "Максимум #{MAX_ITEM_QUANTITY} единиц товара"
+        new_qty = @session[SESSION_KEY][i]["quantity"] + delta.to_i
+        if delta.to_i.positive? && new_qty > MAX_ITEM_QUANTITY
+          raise ActiveRecord::RecordNotFound, "Максимум #{MAX_ITEM_QUANTITY} единиц товара"
+        end
+
+        if new_qty < 1
+          raise ActiveRecord::RecordNotFound, "Минимум 1 единица товара"
+        end
+
+        @session[SESSION_KEY][i]["quantity"] = new_qty
+        touch_cart_session!
       end
-
-      if new_qty < 1
-        raise ActiveRecord::RecordNotFound, "Минимум 1 единица товара"
-      end
-
-      @session[SESSION_KEY][i]["quantity"] = new_qty
-      touch_cart_session!
     end
 
     def clear!
@@ -149,7 +166,28 @@ module Shop
     # Rails не помечает session dirty при in-place изменении массива — cookie не обновляется между HTTP-запросами.
     def touch_cart_session!
       compact_session_cart!
+      enforce_session_cart_budget!
       @session[SESSION_KEY] = @session[SESSION_KEY].dup
+    end
+
+    def with_session_cart_guard!
+      snapshot = Marshal.load(Marshal.dump(@session[SESSION_KEY]))
+      yield
+    rescue OverflowError
+      @session[SESSION_KEY] = snapshot
+      raise
+    end
+
+    def enforce_session_cart_budget!
+      lines = @session[SESSION_KEY]
+      if lines.size > MAX_CART_LINES
+        raise OverflowError, "Корзина переполнена (слишком много позиций)"
+      end
+
+      bytes = JSON.generate(lines).bytesize
+      if bytes > MAX_SESSION_CART_BYTES
+        raise OverflowError, "Корзина переполнена (слишком большой объём сессии)"
+      end
     end
 
     # removed_modifiers не храним в cookie-сессии — иначе ActionDispatch::CookieOverflow (~4KB).

@@ -29,8 +29,8 @@
 - [x] PHASE 0 `/start`
 - [x] `/unlazy` — GATES H `6d4a8a5f`
 - [x] PHASE 1 `/spec` — зеркало session `todo.md`
-- [ ] PHASE 2 RED — T-H1a/b/c · T-H2a/b · T-H3a/b · `[RED]`
-- [ ] PHASE 2 GREEN — R1–R6 · `[GREEN]`
+- [x] PHASE 2 RED — T-H1a/b/c · T-H2a/b · T-H3a/b · `[RED]` `5a635be3`
+- [x] PHASE 2 GREEN — R1–R6 · `[GREEN]` · все T-H* PASS (T-H2c skip)
 - [ ] `/regress` — G4
 - [ ] PHASE 3 `/review` — H1–H3 PASS · push · без deploy
 

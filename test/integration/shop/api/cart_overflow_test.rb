@@ -27,7 +27,7 @@ class Shop::Api::CartOverflowTest < ActionDispatch::IntegrationTest
       sess.get "/shop?tenant_id=#{@tenant.id}"
       assert_equal 200, sess.response.status
 
-      Shop::CartService.stub(:new, raising_cart_service(:add!)) do
+      with_forced_cart_overflow(:add!) do
         sess.post "/shop/api/cart/add",
           headers: cart_headers,
           params: { product_id: @product.id, quantity: 1, selected_modifiers: [] },
@@ -73,7 +73,7 @@ class Shop::Api::CartOverflowTest < ActionDispatch::IntegrationTest
         as: :json
       assert_equal 200, sess.response.status
 
-      Shop::CartService.stub(:new, raising_cart_service(:update_quantity!, :replace_line!)) do
+      with_forced_cart_overflow(:update_quantity!, :replace_line!) do
         sess.patch "/shop/api/cart/items/0",
           headers: cart_headers,
           params: { delta: 1 },
@@ -154,11 +154,24 @@ class Shop::Api::CartOverflowTest < ActionDispatch::IntegrationTest
   end
 
   # Real CartService for show/clear after overflow; raises OverflowError on mutating methods.
+  def with_forced_cart_overflow(*raising_methods)
+    factory = raising_cart_service(*raising_methods)
+    original_new = Shop::CartService.method(:new)
+    Shop::CartService.define_singleton_method(:new) do |session, tenant_id|
+      factory.call(session, tenant_id)
+    end
+    yield
+  ensure
+    Shop::CartService.singleton_class.send(:remove_method, :new)
+    Shop::CartService.define_singleton_method(:new) do |session, tenant_id|
+      original_new.call(session, tenant_id)
+    end
+  end
+
   def raising_cart_service(*raising_methods)
     overflow = Shop::CartService::OverflowError
     lambda do |session, tenant_id|
-      real = Shop::CartService.allocate
-      real.send(:initialize, session, tenant_id)
+      real = original_cart_service_new(session, tenant_id)
       raising_methods.each do |meth|
         real.define_singleton_method(meth) do |*|
           raise overflow, "forced overflow"
@@ -166,6 +179,10 @@ class Shop::Api::CartOverflowTest < ActionDispatch::IntegrationTest
       end
       real
     end
+  end
+
+  def original_cart_service_new(session, tenant_id)
+    Shop::CartService.allocate.tap { |svc| svc.send(:initialize, session, tenant_id) }
   end
 
   def with_cart_overflow_caps(lines: nil, bytes: nil)
