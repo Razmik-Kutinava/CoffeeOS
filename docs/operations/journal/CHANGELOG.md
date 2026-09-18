@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-18 — docs: REVIEW #93 TASK_93-E Init idempotency
+
+- Local **86/0** · bugbot: ClientOrderReused Init вне rolled-back txn · security: no med/high/crit
+- GREEN `2eb22c71` · GATES G1–G4 met · G5→L · push/CI · **без deploy**
+
 ## 2026-09-18 — docs: CI green #93 TASK_93-J REVIEW
 
 - CI `35337468382` green `6b6cf8a0` · J1–J4 · G5→L

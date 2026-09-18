@@ -543,6 +543,103 @@ class Shop::OrderCreatorTest < ActiveSupport::TestCase
     assert_equal existing.id, recovered.id
   end
 
+  # REVIEW / bugbot — Init after ClientOrderReused must not run inside aborted outer txn
+  test "[REVIEW E] ClientOrderReused race Inits only outside rolled-back txn" do
+    uuid = SecureRandom.uuid
+    email = "e-review-#{SecureRandom.hex(3)}@example.com"
+    customer = MobileCustomer.create!(
+      email: email,
+      first_name: "ER",
+      is_active: true,
+      email_verified: true
+    )
+    existing = Order.create!(
+      tenant_id: @tenant.id,
+      customer_id: customer.id,
+      customer_name: "ER",
+      order_number: "",
+      source: :mobile,
+      status: :pending_payment,
+      total_amount: 200,
+      discount_amount: 0,
+      final_amount: 200,
+      client_order_uuid: uuid
+    )
+    OrderItem.create!(
+      order_id: existing.id,
+      product_id: @product.id,
+      product_name: @product.name,
+      quantity: 1,
+      unit_price: 200,
+      total_price: 200
+    )
+    payment = Payment.create!(
+      tenant_id: @tenant.id,
+      order_id: existing.id,
+      amount: 200,
+      method: :card,
+      status: :pending,
+      provider: "shop"
+    )
+
+    old_sim = ENV["SHOP_SIMULATE_PAYMENT"]
+    old_tax = ENV["TBANK_TAXATION"]
+    old_vat = ENV["TBANK_TAX"]
+    ENV["SHOP_SIMULATE_PAYMENT"] = "0"
+    ENV["TBANK_TAXATION"] = "usn_income"
+    ENV["TBANK_TAX"] = "none"
+    ENV["TBANK_TERMINAL_KEY"] ||= "TestTerminal"
+    ENV["TBANK_PASSWORD"] ||= "TestPassword"
+
+    init_open_txns = []
+    fake = Object.new
+    fake.define_singleton_method(:init_payment) do |**_|
+      init_open_txns << ActiveRecord::Base.connection.open_transactions
+      { provider_payment_id: "pid-after-race", payment_url: "https://pay.example/after" }
+    end
+    original_new = Payments::TbankAdapter.method(:new)
+    Payments::TbankAdapter.define_singleton_method(:new) { |*_a, **_k| fake }
+
+    session = build_session_with_item
+    creator = Shop::OrderCreator.new(session, tenant: @tenant)
+    flow = {
+      order_status: :pending_payment,
+      payment_status: :pending,
+      paid_at: nil,
+      comment: "ER"
+    }
+    params = { client_order_uuid: uuid, name: "ER", payment_method: "card", save_card: false }
+
+    begin
+      ActiveRecord::Base.transaction do
+        err = assert_raises(Shop::OrderCreator::ClientOrderReused) do
+          creator.send(
+            :create_shop_order!,
+            customer: customer,
+            params: params,
+            flow: flow,
+            subtotal: 200,
+            discount: 0,
+            total: 200
+          )
+        end
+        assert_equal existing.id, err.order.id
+        assert_empty init_open_txns, "Init must not run inside create_shop_order! race (init:false)"
+      end
+
+      creator.send(:finalize_reused_client_order!, existing, params, gateway: true)
+      assert_equal [ 1 ], init_open_txns.map { |n| n <= 1 ? 1 : n },
+        "Init after race should see at most fixture txn (open_transactions=#{init_open_txns.inspect})"
+      assert_operator init_open_txns.first, :<=, 1
+      assert_equal "pid-after-race", payment.reload.provider_payment_id
+    ensure
+      Payments::TbankAdapter.define_singleton_method(:new, original_new)
+      ENV["SHOP_SIMULATE_PAYMENT"] = old_sim
+      ENV["TBANK_TAXATION"] = old_tax
+      ENV["TBANK_TAX"] = old_vat
+    end
+  end
+
   # T-E4b — concurrent same client_order_uuid → one order, no 500
   test "[TDD E] concurrent same client_order_uuid yields one order" do
     uuid = SecureRandom.uuid

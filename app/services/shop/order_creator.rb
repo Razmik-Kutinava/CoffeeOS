@@ -149,7 +149,9 @@ module Shop
         clear_cart! if flow[:order_status] == :accepted
       end
       rescue ClientOrderReused => e
-        return e.order
+        # TASK_93-E / bugbot: never Init inside the rolled-back outer txn.
+        # Race path looked up the peer with init:false; Init (if needed) runs here, after commit/rollback.
+        return finalize_reused_client_order!(e.order, params, gateway: gateway)
       end
 
       # Quick Repeat: новый заказ меняет частоту покупок — сбрасываем кэш секции «повторить»
@@ -298,12 +300,13 @@ module Shop
       end
       return order if order
 
-      dup = find_client_order_duplicate!(params[:client_order_uuid]) ||
+      # init:false — T‑Bank HTTP must not run inside outer txn that ClientOrderReused aborts.
+      dup = find_client_order_duplicate!(params[:client_order_uuid], init: false) ||
         raise(Error, "Заказ с таким идентификатором уже создан")
       raise ClientOrderReused.new(dup)
     end
 
-    def find_client_order_duplicate!(client_order_uuid)
+    def find_client_order_duplicate!(client_order_uuid, init: true)
       return nil if client_order_uuid.blank?
 
       order = Order.where(
@@ -314,7 +317,7 @@ module Shop
       return nil unless order
 
       payment = order.payments.order(created_at: :desc).first
-      if order.pending_payment? && payment&.pending?
+      if init && order.pending_payment? && payment&.pending?
         init_gateway_payment!(order, payment)
       end
 
@@ -322,6 +325,23 @@ module Shop
     rescue Payments::TbankAdapter::Error, Error => e
       Rails.logger.warn("[Shop::OrderCreator] client_order_uuid reuse failed: #{e.message}")
       nil
+    end
+
+    # After ClientOrderReused: Init (if still needed) outside any open AR txn.
+    def finalize_reused_client_order!(order, params, gateway: true)
+      payment = order.payments.order(created_at: :desc).first
+      defer_init = ActiveModel::Type::Boolean.new.cast(params.fetch(:defer_payment_init, false))
+      payment_method = map_payment_method(params[:payment_method])
+      if gateway && order.pending_payment? && payment&.pending? && payment.provider_payment_id.blank? &&
+          payment_method != :sbp && !defer_init
+        begin
+          save_card = ActiveModel::Type::Boolean.new.cast(params.fetch(:save_card, false))
+          init_gateway_payment!(order, payment, save_card: save_card)
+        rescue Payments::TbankAdapter::Error, Error => e
+          Rails.logger.warn("[Shop::OrderCreator] reuse Init after race failed: #{e.message}")
+        end
+      end
+      order
     end
 
     def attach_client_order_uuid!(order, client_order_uuid)
