@@ -11,6 +11,18 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-18 — docs: regress PASS #93 TASK_93-C SMS short link
+
+- Zone: `order_ready_sms_link` + notifier + `order_short_links` + `rack_attack_order_short_link`
+- Local: **18 runs / 0 failures** (seed 61367) · GREEN `c2ef2d68`
+- Next: `/review` · Fly MCP Point A = TASK_93-L
+
+## 2026-09-18 — docs: unlazy #93 TASK_93-J Push / worker / SMS_GRACE
+
+- `GATES-block-J.md` + session `GATES.md`: G1 T-J1 async APNs · G2 T-J2 FCM cache · G3 T-J3 grace+5s · G4 runbook+regress · G5→L
+- `--status`: unmet 4 · abandoned 1 (G5); `--approve` после GREEN (baseline: sync PassUpdater · wait==grace · no OAuth cache · no SOLID_QUEUE_FLY.md)
+- Next: `/spec` (код не трогали)
+
 ## 2026-09-18 — docs: SPEC #93 TASK_93-H Cart cookie / overflow
 
 - `todo.md` + `todo-block-H.md` → TASK_93-H: R1 OverflowError rescue · R3 cookie+cap (T-H2c SKIP) · R4 lines=20 / bytes=3072 · R5 update тоже

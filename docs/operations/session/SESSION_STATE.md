@@ -2,17 +2,17 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-18 (TASK_93-H SPEC)  
+**Дата:** 2026-09-18 (TASK_93-C regress PASS)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#93-H** SPEC ready | `/sbr` RED T-H* |
-| R1–R6 · cookie+cap · lines=20 · bytes=3072 | GREEN → reverify G1–G3 · G4 `/regress` |
-| GATES-block-H | не затирать чужие `GATES-block-*` |
+| **#93-C** Local regress **PASS** 18/0 | `/review` · push · **без deploy** |
+| GREEN `c2ef2d68` · G6→L | Fly MCP Point A после L |
+| **#93-H** и др. параллельно | свои SBR |
 
-**last_done:** `/spec` TASK_93-H Cart cookie overflow — todo + Не ломать/Проверка  
-**next_step:** `/sbr` RED · коммит `[RED]` · стоп до GREEN
+**last_done:** `/regress` TASK_93-C — sms_link + notifier + short_links + rack_attack `/o/`  
+**next_step:** `/review` C1–C5 таблица · Entire · push
 
 **ctx_trim:** `2026-09-02`
 
