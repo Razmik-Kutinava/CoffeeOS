@@ -4,7 +4,7 @@
 |------|----------|
 | **ID** | CBR **#93** · **TASK_93-J** |
 | **Тип** | SBR · hot-path shop status / push / queue |
-| **Статус** | **regress PASS** · Next: `/review` |
+| **Статус** | **REVIEW** · Next: push/CI · deploy=L |
 | **Ветка** | `develop` |
 | **Канон** | `@spec-build-review` · `@coffeeos-commit-ops` · `@coffeeos-dev-gates` |
 | **ТЗ** | бриф чата J1–J4 · зонтик [`TASK-93-Critical-path-hardening.md`](../../requirements/customer_tasks/TASK-93-Critical-path-hardening.md) карта J |
@@ -35,7 +35,18 @@
 - [x] PHASE 2 RED — T-J1a · T-J2a · T-J3a · `[RED]` `06979f96`
 - [x] PHASE 2 GREEN — R1–R8 · `[GREEN]`
 - [x] `/regress` — G4 · **87/0** (2026-09-18)
-- [ ] PHASE 3 `/review` — J1–J4 PASS · push · без deploy
+- [x] PHASE 3 `/review` — J1–J4 PASS · bugbot fix · security PASS · push
+
+## Таблица закрытия (REVIEW)
+
+```
+J1 T-J1a T-J1b T-J1c     PASS
+J2 T-J2a T-J2b T-J2c     PASS
+J3 T-J3a T-J3b T-J3c T-J3d PASS
+J4 T-J4a T-J4b T-J4c     PASS
+```
+
+G5 Fly MCP / worker → TASK_93-L
 
 ## Файлы (ожидаемо)
 

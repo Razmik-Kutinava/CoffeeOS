@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-18 — docs: REVIEW #93 TASK_93-J Push / worker
+
+- Local zone **87/0** · bugbot: INVALID_ARGUMENT + ready race → fix `5fba4622` · security PASS
+- Entire `01M2T11SGYVJM111FYJ5D47A1P` · GREEN `566dba9b` · G5→L
+- Table J1–J4 PASS · Next: push/CI · deploy = апрув L
+
 ## 2026-09-18 — docs: REVIEW re-check #93 TASK_93-H (this chat)
 
 - Local zone **55/0** · [bugbot](0089a9a9-c512-478f-a78c-b68bacc1ec99) no bugs · [security](24935038-d61b-47a3-8a5d-afb74e5ca88d) med+ 0

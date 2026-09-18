@@ -2,16 +2,17 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-18 (TASK_93-H REVIEW)  
+**Дата:** 2026-09-18 (TASK_93-J REVIEW)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#93-H** REVIEW closed | CI green · стоп |
-| H1–H3 PASS · G5→L | deploy = апрув / блок L |
+| **#93-J** REVIEW done | push · CI · **без deploy** |
+| J1–J4 PASS · fix `b49c8d62` | Fly MCP = L |
+| GREEN `566dba9b` | |
 
-**last_done:** `/review` H — Local 55 PASS · bugbot 0 · security 0 · push  
-**next_step:** CI green · deploy только по апруву
+**last_done:** `/review` TASK_93-J — bugbot fix + security PASS · Local 87/0  
+**next_step:** push/CI · deploy только по апруву
 
 **ctx_trim:** `2026-09-02`
 
