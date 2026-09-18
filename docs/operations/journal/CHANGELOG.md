@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-18 — docs: CI green #93 TASK_93-K REVIEW
+
+- CI `35335419241` green `c87377fc` · K1–K7 · G5→L
+- Unblocks: Brakeman deep_dup · Rack::Attack test MemoryStore
+
 ## 2026-09-18 — docs: REVIEW done #93 TASK_93-F CI green
 
 - Local 68/0 · F1–F5 PASS · bugbot + security PASS · Entire `01M2SSQXT1V67AK260SH1P9RAX`
