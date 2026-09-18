@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-18 — docs: REVIEW #93 TASK_93-C SMS short link
+
+- Local 18/0 · bugbot clean · security no medium+ · Entire `01M2SSQXT1V67AK260SH1P9RAX` на `c2ef2d68`
+- GATES G1–G5 met · G6→L · push/CI · без deploy
+
 ## 2026-09-18 — docs: regress PASS #93 TASK_93-D history per_page
 
 - Local: `orders_controller_test` + `mvp_flow_test` — **20 runs, 0 failures**

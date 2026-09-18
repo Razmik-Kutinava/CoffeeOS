@@ -1,40 +1,40 @@
-# ISSUES
+﻿# ISSUES
 
-> **Агент на старте:** только `## 🔴 Открыто`. Resolved → [`issues/archive/`](issues/archive/).
+> **РђРіРµРЅС‚ РЅР° СЃС‚Р°СЂС‚Рµ:** С‚РѕР»СЊРєРѕ `## рџ”ґ РћС‚РєСЂС‹С‚Рѕ`. Resolved в†’ [`issues/archive/`](issues/archive/).
 
-## 🔴 Открыто
+## рџ”ґ РћС‚РєСЂС‹С‚Рѕ
 
-| ID | Статус | Блокер |
+| ID | РЎС‚Р°С‚СѓСЃ | Р‘Р»РѕРєРµСЂ |
 |----|--------|--------|
-| UserCards / RebillId | 🟢 | v493 live MIR `*5953`/`*8782` RebillId + Charge PASS · new save_card FA не re-run |
-| Checkout UX (Фаза 2) | 🟡 | апрув заказчика |
-| SBP 3001 | 🟢 | live init v493 ≠3001 · остаток: bind AccountToken (B) |
-| #47 / #35 PWA статусы | 🟡 | Fly v481 MCP MUST PASS · ждёт апрув заказчика |
-| #79 SBP return + autopay labels | 🟡 | timing «1–3 дня» в WAITING + SBP row · 11/8 SBP live остаётся |
-| #86 SBP PWA recovery after bank | 🟢 | CI green `34987062132` · deploy апрув · Fly MCP + device |
-| #87 Quick Repeat status composition | 🟢 | CI green `34991136715` · deploy апрув · Fly MCP G4 |
-| #80 Registration UI/UX + Callcheck cascade | 🟡 | Callcheck ×2 в коде (40s+40s→SMS) · live Callcheck ждёт телефон |
-| #89 TASK_89 PWA auth Callcheck → SMS | 🟢 | CI green `35082473762` · deploy апрув · G5 Fly MCP |
-| TASK_89-UI-EXT phone input UI/UX | 🟢 | **REVIEW** CI green `35108357982` · deploy апрув · G5 Fly MCP |
-| TASK_89-POSTCALL-EXT return → continue payment | 🟢 | **REVIEW** CI green `35116445356` · deploy апрув · G5 Fly MCP |
-| #81 Notifications / Wallet / WebPush gaps | 🟡 | tips CTA wired (#94 path) · Wallet CTA скрыт без certs · denied→#90 |
-| #90 TASK_90 WebPush recovery after denied | 🟢 | **REVIEW** CI green `35191890272` · deploy апрув · G5 Fly MCP |
-| #91 TASK_91 post-pay auto return → catalog | 🟢 | **REVIEW** CI green `35196766203` · deploy апрув · G4 Fly MCP |
-| #92 TASK_92 Production background FCM | 🟢 | **REVIEW** CI green `35198770223` · deploy апрув · G5 Fly MCP |
-| #93 TASK_93 Critical path hardening | 🟡 | **D** regress PASS · Next: `/review` · G1/G2 met · G4→L · параллельно … |
-| #78 subscription cancel/confirm | 🟢 | CancelService + ConfirmPayment GetState в коде · deploy апрув |
-| #82 Cascade SMS ready + sheet stuck | 🟡 | **Патч_1** CI green `35234267606` · deploy апрув → Fly MCP |
-| GH FLY_API_TOKEN | 🟢 | org token · Deploy green 2026-09-07 |
-| Min charge 10₽ | 🟢 | PTS ≥10 · Init guard · Fly bump 48 rows 2026-09-07 |
-| #26 invalid token / pay error copy | 🟢 | v493 MCP **PASS** M2 inline «Сбой банка: позже» · артефакт fly_v493 |
-| #71 email after pay — remember | 🟡 | Fly v481 MCP PASS · ждёт апрув заказчика |
+| UserCards / RebillId | рџџў | v493 live MIR `*5953`/`*8782` RebillId + Charge PASS В· new save_card FA РЅРµ re-run |
+| Checkout UX (Р¤Р°Р·Р° 2) | рџџЎ | Р°РїСЂСѓРІ Р·Р°РєР°Р·С‡РёРєР° |
+| SBP 3001 | рџџў | live init v493 в‰ 3001 В· РѕСЃС‚Р°С‚РѕРє: bind AccountToken (B) |
+| #47 / #35 PWA СЃС‚Р°С‚СѓСЃС‹ | рџџЎ | Fly v481 MCP MUST PASS В· Р¶РґС‘С‚ Р°РїСЂСѓРІ Р·Р°РєР°Р·С‡РёРєР° |
+| #79 SBP return + autopay labels | рџџЎ | timing В«1вЂ“3 РґРЅСЏВ» РІ WAITING + SBP row В· 11/8 SBP live РѕСЃС‚Р°С‘С‚СЃСЏ |
+| #86 SBP PWA recovery after bank | рџџў | CI green `34987062132` В· deploy Р°РїСЂСѓРІ В· Fly MCP + device |
+| #87 Quick Repeat status composition | рџџў | CI green `34991136715` В· deploy Р°РїСЂСѓРІ В· Fly MCP G4 |
+| #80 Registration UI/UX + Callcheck cascade | рџџЎ | Callcheck Г—2 РІ РєРѕРґРµ (40s+40sв†’SMS) В· live Callcheck Р¶РґС‘С‚ С‚РµР»РµС„РѕРЅ |
+| #89 TASK_89 PWA auth Callcheck в†’ SMS | рџџў | CI green `35082473762` В· deploy Р°РїСЂСѓРІ В· G5 Fly MCP |
+| TASK_89-UI-EXT phone input UI/UX | рџџў | **REVIEW** CI green `35108357982` В· deploy Р°РїСЂСѓРІ В· G5 Fly MCP |
+| TASK_89-POSTCALL-EXT return в†’ continue payment | рџџў | **REVIEW** CI green `35116445356` В· deploy Р°РїСЂСѓРІ В· G5 Fly MCP |
+| #81 Notifications / Wallet / WebPush gaps | рџџЎ | tips CTA wired (#94 path) В· Wallet CTA СЃРєСЂС‹С‚ Р±РµР· certs В· deniedв†’#90 |
+| #90 TASK_90 WebPush recovery after denied | рџџў | **REVIEW** CI green `35191890272` В· deploy Р°РїСЂСѓРІ В· G5 Fly MCP |
+| #91 TASK_91 post-pay auto return в†’ catalog | рџџў | **REVIEW** CI green `35196766203` В· deploy Р°РїСЂСѓРІ В· G4 Fly MCP |
+| #92 TASK_92 Production background FCM | рџџў | **REVIEW** CI green `35198770223` В· deploy Р°РїСЂСѓРІ В· G5 Fly MCP |
+| #93 TASK_93 Critical path hardening | 🟡 | **C** REVIEW · push/CI · G6→L · deploy = апрув |
+| #78 subscription cancel/confirm | рџџў | CancelService + ConfirmPayment GetState РІ РєРѕРґРµ В· deploy Р°РїСЂСѓРІ |
+| #82 Cascade SMS ready + sheet stuck | рџџЎ | **РџР°С‚С‡_1** CI green `35234267606` В· deploy Р°РїСЂСѓРІ в†’ Fly MCP |
+| GH FLY_API_TOKEN | рџџў | org token В· Deploy green 2026-09-07 |
+| Min charge 10в‚Ѕ | рџџў | PTS в‰Ґ10 В· Init guard В· Fly bump 48 rows 2026-09-07 |
+| #26 invalid token / pay error copy | рџџў | v493 MCP **PASS** M2 inline В«РЎР±РѕР№ Р±Р°РЅРєР°: РїРѕР·Р¶РµВ» В· Р°СЂС‚РµС„Р°РєС‚ fly_v493 |
+| #71 email after pay вЂ” remember | рџџЎ | Fly v481 MCP PASS В· Р¶РґС‘С‚ Р°РїСЂСѓРІ Р·Р°РєР°Р·С‡РёРєР° |
 
-Детали до 2026-08 → [`issues/archive/ISSUES-resolved-through-2026-08.md`](issues/archive/ISSUES-resolved-through-2026-08.md)
+Р”РµС‚Р°Р»Рё РґРѕ 2026-08 в†’ [`issues/archive/ISSUES-resolved-through-2026-08.md`](issues/archive/ISSUES-resolved-through-2026-08.md)
 
 ---
 
-## Решено недавно
+## Р РµС€РµРЅРѕ РЅРµРґР°РІРЅРѕ
 
-> Новые resolved с 2026-09 — ≤10 строк; при >30 или конце месяца — `/ctx-trim`.
+> РќРѕРІС‹Рµ resolved СЃ 2026-09 вЂ” в‰¤10 СЃС‚СЂРѕРє; РїСЂРё >30 РёР»Рё РєРѕРЅС†Рµ РјРµСЃСЏС†Р° вЂ” `/ctx-trim`.
 
-_Пока пусто (сентябрь 2026)._
+_РџРѕРєР° РїСѓСЃС‚Рѕ (СЃРµРЅС‚СЏР±СЂСЊ 2026)._

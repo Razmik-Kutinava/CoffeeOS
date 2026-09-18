@@ -2,17 +2,17 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-18 (TASK_93-D regress PASS)  
+**Дата:** 2026-09-18 (TASK_93-C REVIEW)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#93-D** regress PASS · G1/G2 met | `/review` · push · без deploy |
-| G3 D2 grep → REVIEW | G4 Fly → L |
-| канон `todo-block-D` · `GATES-block-D` | параллельные блоки — свои mirrors |
+| **#93-C** REVIEW done · push/CI | CI green → стоп · **без deploy** |
+| GREEN `c2ef2d68` · GATES met 5 | Fly MCP → TASK_93-L |
+| Entire `01M2SSQXT1V67AK260SH1P9RAX` | |
 
-**last_done:** `/regress` orders+mvp_flow 20/0 · gate-check G1/G2 met  
-**next_step:** `/review` — таблица D1–D3 PASS
+**last_done:** `/review` TASK_93-C SMS short link (bugbot + security + Entire + push)  
+**next_step:** CI green; deploy — апрув владельца
 
 **ctx_trim:** `2026-09-02`  
 **Fly:** v495 `deployment-01M22JRN95TXRSV1PQDN49227M`
