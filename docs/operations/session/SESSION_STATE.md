@@ -2,18 +2,18 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-18 (TASK_93-J GREEN + Entire)  
-**Ветка:** develop
+**Дата:** 2026-09-18 (TASK_93-H REVIEW)  
+**Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#93-J** GREEN 566dba9b | /regress §8 |
-| Entire attach pending pin | G5→L |
-| parallel ledgers | не затирать |
+| **#93-H** REVIEW holes fixed | push · CI |
+| Local cart zone PASS | G5→L · без deploy |
+| parallel I/J | не затирать их ledgers |
 
-**last_done:** /sbr TASK_93-J RED→GREEN PassUpdateJob/FCM/grace  
-**next_step:** /regress
+**last_done:** `/review` H — byte headroom 2048 · remove/clear shrink · rescue_from all cart actions  
+**next_step:** Entire + push + CI green
 
-**ctx_trim:** 2026-09-02
+**ctx_trim:** `2026-09-02`
 
 ---

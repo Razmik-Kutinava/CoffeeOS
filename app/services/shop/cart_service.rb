@@ -9,8 +9,9 @@ module Shop
     MAX_ITEM_QUANTITY = 99
     # Distinct lines in cookie session (not sum of qty).
     MAX_CART_LINES = 20
-    # Proactive budget under typical ~4KB cookie limit.
-    MAX_SESSION_CART_BYTES = 3072
+    # Cart-only JSON budget with headroom for OTP/customer/pending keys + cookie
+    # encryption overhead under typical ~4KB _coffeeos_session limit.
+    MAX_SESSION_CART_BYTES = 2048
 
     def initialize(session, tenant_id)
       @session = session
@@ -100,7 +101,8 @@ module Shop
     def remove!(index)
       with_session_cart_guard! do
         @session[SESSION_KEY].delete_at(index.to_i)
-        touch_cart_session!
+        # Shrink path: never block remove on legacy over-cap carts.
+        touch_cart_session!(enforce_budget: false)
       end
     end
 
@@ -119,13 +121,13 @@ module Shop
         end
 
         @session[SESSION_KEY][i]["quantity"] = new_qty
-        touch_cart_session!
+        touch_cart_session!(enforce_budget: delta.to_i.positive?)
       end
     end
 
     def clear!
       @session[SESSION_KEY] = []
-      touch_cart_session!
+      touch_cart_session!(enforce_budget: false)
     end
 
     def json_lines
@@ -164,9 +166,9 @@ module Shop
     private
 
     # Rails не помечает session dirty при in-place изменении массива — cookie не обновляется между HTTP-запросами.
-    def touch_cart_session!
+    def touch_cart_session!(enforce_budget: true)
       compact_session_cart!
-      enforce_session_cart_budget!
+      enforce_session_cart_budget! if enforce_budget
       @session[SESSION_KEY] = @session[SESSION_KEY].dup
     end
 

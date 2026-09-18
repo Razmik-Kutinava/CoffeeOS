@@ -20,7 +20,7 @@
 | **R1** | Нет голого `rescue ActionDispatch::CookieOverflow`; канон `OverflowError` → 422+clear; CookieOverflow только при `const_defined?` |
 | **R2** | `Shop::CartService::OverflowError`; copy: `"Корзина переполнена. Мы её очистили — добавьте товары снова."` |
 | **R3** | **Cookie + caps**; MobileCart/store **OUT**; **T-H2c SKIP** |
-| **R4** | `MAX_CART_LINES=20` · `MAX_SESSION_CART_BYTES=3072` · guard в `touch_cart_session!`; qty caps 50/99 без изменений |
+| **R4** | `MAX_CART_LINES=20` · `MAX_SESSION_CART_BYTES=2048` (headroom OTP/customer/cookie crypto) · guard в `touch_cart_session!`; shrink paths (`remove!`/`clear!`/qty−) без budget-block; qty caps 50/99 без изменений |
 | **R5** | add **и** update ловят OverflowError |
 | **R6** | bytes via `JSON.generate(cart).bytesize`; тесты stub порогов вниз |
 
@@ -32,7 +32,7 @@
 - [x] PHASE 2 RED — T-H1a/b/c · T-H2a/b · T-H3a/b · `[RED]` `5a635be3`
 - [x] PHASE 2 GREEN — R1–R6 · `[GREEN]` · все T-H* PASS (T-H2c skip)
 - [x] `/regress` — G4 · **53 runs, 0 fail** (overflow + persistence + modifiers)
-- [ ] PHASE 3 `/review` — H1–H3 PASS · push · без deploy
+- [x] PHASE 3 `/review` — H1–H3 PASS · bugbot+security holes fixed · push · без deploy
 
 ## Файлы (ожидаемо)
 

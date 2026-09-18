@@ -11,6 +11,14 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-18 — fix: #93 TASK_93-H REVIEW cart overflow holes
+
+- `MAX_SESSION_CART_BYTES` 3072→**2048** (OTP/customer/cookie crypto headroom)
+- `remove!`/`clear!`/qty−: `touch_cart_session!(enforce_budget: false)` — legacy over-cap не 500
+- `CartController` `rescue_from OverflowError` на все actions + CookieOverflow gate
+- Tests T-H1d · T-H2d · zone Local PASS
+- Next: push/CI · deploy апрув · Fly MCP = L
+
 ## 2026-09-18 — docs: unlazy reverify #93 TASK_93-I GATES G1-G4 met
 
 - --reverify GATES-block-I: met **4** · abandoned **1** (G5→L)

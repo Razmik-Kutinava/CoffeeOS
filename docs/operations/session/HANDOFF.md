@@ -2,22 +2,22 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-18 (TASK_93-I unlazy reverify)  
-**Ветка:** develop
+**Дата:** 2026-09-18 (TASK_93-H REVIEW)  
+**Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#93-I** GATES met 4 · G5→L | /review · push · **без deploy Redis** |
-| reverify PASS (после regress) | I1–I4 + bugbot/security |
-| GREEN c14f5202 | Fly Redis/MCP = L |
+| **#93-H** REVIEW Local PASS · holes fixed | push/CI green · **без deploy** |
+| bytes=2048 · remove shrink · rescue_from | G5 Fly = L |
+| parallel #93-I/J | свои ledgers |
 
-**last_done:** /unlazy reverify TASK_93-I — G1–G4 met · G5 abandoned  
-**next_step:** /review блок I
+**last_done:** `/review` TASK_93-H — bugbot+security → fix → zone PASS  
+**next_step:** CI green → стоп · deploy только апрув
 
-**ctx_trim:** 2026-09-02  
-**Fly:** v495 deployment-01M22JRN95TXRSV1PQDN49227M
+**ctx_trim:** `2026-09-02`  
+**Fly:** v495 `deployment-01M22JRN95TXRSV1PQDN49227M`
 
-**Архив session:** [rchive/README.md](archive/README.md)  
-**Архив journal:** [../journal/archive/README.md](../journal/archive/README.md)
+**Архив session:** [`archive/README.md`](archive/README.md)  
+**Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
 
 ---

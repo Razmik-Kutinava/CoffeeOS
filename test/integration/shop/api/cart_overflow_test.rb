@@ -88,6 +88,26 @@ class Shop::Api::CartOverflowTest < ActionDispatch::IntegrationTest
     end
   end
 
+  test "T-H1d destroy path rescues OverflowError with 422 and clears" do
+    open_session do |sess|
+      sess.get "/shop?tenant_id=#{@tenant.id}"
+      assert_equal 200, sess.response.status
+
+      sess.post "/shop/api/cart/add",
+        headers: cart_headers,
+        params: { product_id: @product.id, quantity: 1, selected_modifiers: [] },
+        as: :json
+      assert_equal 200, sess.response.status
+
+      with_forced_cart_overflow(:remove!) do
+        sess.delete "/shop/api/cart/items/0", headers: cart_headers, as: :json
+      end
+
+      assert_equal 422, sess.response.status, sess.response.body
+      assert_equal OVERFLOW_MSG, sess.response.parsed_body["error"]
+    end
+  end
+
   test "T-H3a POST cart/add until overflow returns 422 not 500" do
     with_cart_overflow_caps(lines: 3) do
       products = 4.times.map do |i|

@@ -290,6 +290,26 @@ class Shop::CartServiceTest < ActiveSupport::TestCase
     end
   end
 
+  test "T-H2d remove! succeeds on legacy over-cap cart without OverflowError" do
+    with_cart_overflow_caps(lines: 2) do
+      category = create_category!(slug: "h2d-cat-#{SecureRandom.hex(3)}")
+      products = 3.times.map do |i|
+        p = create_product!(category: category, slug: "h2d-p-#{i}-#{SecureRandom.hex(2)}", name: "H2d #{i}")
+        enable_product_for_tenant!(tenant: @tenant, product: p, price: 100 + i)
+        p
+      end
+
+      @session[:shop_cart] = products.map do |p|
+        { "product_id" => p.id, "quantity" => 1, "selected_modifiers" => [] }
+      end
+      assert_equal 3, @session[:shop_cart].size
+
+      svc = cart
+      assert_nothing_raised { svc.remove!(0) }
+      assert_equal 2, @session[:shop_cart].size
+    end
+  end
+
   private
 
   def with_cart_overflow_caps(lines: nil, bytes: nil)

@@ -5,6 +5,8 @@ module Shop
     class CartController < Shop::Api::BaseController
       CART_OVERFLOW_MESSAGE = "Корзина переполнена. Мы её очистили — добавьте товары снова."
 
+      rescue_from Shop::CartService::OverflowError, with: :handle_cart_overflow!
+
       def add
         Rails.logger.info("[Shop::Cart] Adding product #{params[:product_id]} to cart for tenant #{@shop_tenant.id}")
         Shop::CartService.new(session, @shop_tenant.id).add!(
@@ -17,8 +19,6 @@ module Shop
       rescue ActiveRecord::RecordNotFound => e
         Rails.logger.warn("[Shop::Cart] Failed to add product: #{e.message}")
         render json: { error: e.message }, status: :not_found
-      rescue Shop::CartService::OverflowError
-        handle_cart_overflow!
       rescue => e
         raise unless cookie_overflow_error?(e)
         handle_cart_overflow!
@@ -27,11 +27,17 @@ module Shop
       def show
         data = Shop::CartService.new(session, @shop_tenant.id).json_lines
         render json: { items: data[:items], total: data[:total] }
+      rescue => e
+        raise unless cookie_overflow_error?(e)
+        handle_cart_overflow!
       end
 
       def clear
         Shop::CartService.new(session, @shop_tenant.id).clear!
         render json: { items: [], total: 0 }
+      rescue => e
+        raise unless cookie_overflow_error?(e)
+        handle_cart_overflow!
       end
 
       def destroy
@@ -41,6 +47,9 @@ module Shop
         Shop::CartService.new(session, @shop_tenant.id).remove!(params[:index])
         data = Shop::CartService.new(session, @shop_tenant.id).json_lines
         render json: { items: data[:items], total: data[:total] }
+      rescue => e
+        raise unless cookie_overflow_error?(e)
+        handle_cart_overflow!
       end
 
       def update
@@ -59,8 +68,6 @@ module Shop
         render json: { items: data[:items], total: data[:total] }
       rescue ActiveRecord::RecordNotFound => e
         render json: { error: e.message }, status: :not_found
-      rescue Shop::CartService::OverflowError
-        handle_cart_overflow!
       rescue => e
         raise unless cookie_overflow_error?(e)
         handle_cart_overflow!
@@ -68,7 +75,7 @@ module Shop
 
       private
 
-      def handle_cart_overflow!
+      def handle_cart_overflow!(_error = nil)
         Shop::CartService.new(session, @shop_tenant.id).clear!
         render json: { error: CART_OVERFLOW_MESSAGE }, status: :unprocessable_entity
       end
