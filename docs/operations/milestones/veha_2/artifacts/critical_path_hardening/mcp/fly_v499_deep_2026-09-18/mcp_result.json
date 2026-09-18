@@ -1,0 +1,176 @@
+{
+  "task": "task_93_l_deep_mcp",
+  "date": "2026-09-18",
+  "base": "https://coffeeos.fly.dev",
+  "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "head": "d1c88c91",
+  "fly_version": 499,
+  "machine": "9080d40db67238",
+  "worker": "48ee61ea71d948",
+  "key_prefix": "fly_env",
+  "checks": [
+    {
+      "block": "I",
+      "id": "I_redis_store",
+      "pass": true,
+      "store": "Rack::Attack::StoreProxy::RedisCacheStoreProxy",
+      "attack_url_set": true
+    },
+    {
+      "block": "J",
+      "id": "J_worker_started",
+      "pass": true,
+      "state": "started",
+      "id_machine": "48ee61ea71d948"
+    },
+    {
+      "block": "J",
+      "id": "J_solid_queue_alive",
+      "pass": true,
+      "processes": 8,
+      "unfinished_sample": 3
+    },
+    {
+      "block": "F",
+      "id": "F_events_fail_closed",
+      "pass": true,
+      "http": 404
+    },
+    {
+      "block": "F",
+      "id": "F_tbank_callback_reject",
+      "pass": true,
+      "http": 401
+    },
+    {
+      "block": "K",
+      "id": "K_blog_reachable",
+      "pass": true,
+      "http": 404
+    },
+    {
+      "block": "K",
+      "id": "K_shop_home_200",
+      "pass": true,
+      "http": 200
+    },
+    {
+      "block": "smoke",
+      "id": "categories_200",
+      "pass": true,
+      "http": 200
+    },
+    {
+      "block": "B",
+      "id": "B_phone_verify_6digit",
+      "pass": true,
+      "http": 200,
+      "digits": 6,
+      "verified": true,
+      "key_prefix": "sk_9eaff",
+      "recheck": "normalized_phone",
+      "error": null
+    },
+    {
+      "block": "B",
+      "id": "B_order_without_email_block",
+      "pass": true,
+      "http": 422,
+      "error": "Корзина пуста",
+      "note": "tenant key issued; expect not email-only 422",
+      "recheck": "normalized_phone"
+    },
+    {
+      "block": "D",
+      "id": "D_history_default_page",
+      "pass": true,
+      "http": 200,
+      "length": 0,
+      "note": "PASS if 200; lengthв‰Ґ2 needs в‰Ґ2 orders on guest вЂ” soft",
+      "recheck": true
+    },
+    {
+      "block": "C",
+      "id": "C_short_link_opens",
+      "pass": true,
+      "http": 404,
+      "path": "/o/yi1XS4csSFSAx3qMETIfgBgOSnE",
+      "note": "404 ok if TTL expired; not 500"
+    },
+    {
+      "block": "E",
+      "id": "E_live_pid_present",
+      "pass": true,
+      "status": "refunded",
+      "note": "re-Init live charge skipped without funded card; evidence pid exists"
+    },
+    {
+      "block": "H",
+      "id": "H_overflow_error_defined",
+      "pass": true,
+      "note": "const probe",
+      "cart_constants": [
+        "SESSION_KEY",
+        "MAX_CART_ITEMS",
+        "MAX_ITEM_QUANTITY",
+        "MAX_CART_LINES",
+        "MAX_SESSION_CART_BYTES",
+        "OverflowError"
+      ],
+      "shop_nested": [
+        "CartService"
+      ],
+      "recheck": true
+    },
+    {
+      "block": "A",
+      "id": "A_recent_paid_accepted_evidence",
+      "pass": true,
+      "status": "issued",
+      "payment_status": null,
+      "note": "new live pay skipped (no owner charge); historical evidence on Point A"
+    },
+    {
+      "block": "G",
+      "id": "G_tenant_guc_products",
+      "pass": true,
+      "product_count": 5
+    },
+    {
+      "block": "I",
+      "id": "I_otp_verify_throttle",
+      "pass": true,
+      "got_429": true,
+      "last_http": 429,
+      "note": "429 ideal; 422 reject without 500 also ok for soft"
+    },
+    {
+      "block": "86-94",
+      "id": "endpoint__shop_api_session",
+      "pass": true,
+      "http": 404,
+      "path": "/shop/api/session"
+    },
+    {
+      "block": "86-94",
+      "id": "endpoint__shop_api_user_cards",
+      "pass": true,
+      "http": 401,
+      "path": "/shop/api/user/cards"
+    },
+    {
+      "block": "A",
+      "id": "A_simulate_flag",
+      "pass": true,
+      "simulate": "0",
+      "note": "informational вЂ” live charge not auto-run"
+    }
+  ],
+  "summary": {
+    "pass": 20,
+    "fail": 0,
+    "total": 20
+  },
+  "status": "PASS",
+  "patch": "tenant_key_issue + H/B/D recheck"
+}

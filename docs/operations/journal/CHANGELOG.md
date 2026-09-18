@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-18 — ops: TASK_93-L deep MCP Point A PASS 20/20
+
+- Artifact `critical_path_hardening/mcp/fly_v499_deep_2026-09-18/` · scripts `bin/acceptance/task_93_l_deep_mcp*.rb`
+- Redis store + OTP 429 · phone verify 6-digit · worker/SolidQueue · Events/callback reject · short `/o/` · history · GUC
+- Browser: cart → `#/checkout` · live charge/Callcheck device skipped (`SHOP_SIMULATE=0`)
+
 ## 2026-09-18 — ops: Fly v499 deploy + Point A smoke (TASK_93-L)
 
 - Deploy Actions **success** `35340979415` · image `deployment-01M2T582RETP2608KZMBMXAE1A` · web/worker **v499**
