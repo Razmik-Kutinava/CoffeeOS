@@ -79,15 +79,13 @@ class Shop::Api::WidgetPaymentUrlTest < ActionDispatch::IntegrationTest
     Shop::Api::PaymentsController.new.send(:adapter_payment_url, result)
   end
 
-  test "T-K3a production blank payment_url raises without fake tinkoff fallback" do
+  test "T-K3a production blank payment_url returns empty not fake tinkoff fallback" do
     Rails.env = ActiveSupport::StringInquirer.new("production")
     pid = "pid-no-url-#{SecureRandom.hex(3)}"
 
-    err = assert_raises(Shop::WidgetPaymentInitiator::Error) do
-      adapter_payment_url(provider_payment_id: pid)
-    end
-    assert_match(/PaymentURL|payment.?url/i, err.message)
-    refute_match(%r{securepayments\.tinkoff\.ru/}i, err.message)
+    url = adapter_payment_url(provider_payment_id: pid)
+    assert_equal "", url
+    refute_match(%r{securepayments\.tinkoff\.ru/}i, url)
   end
 
   test "T-K3a production non-http payment_url raises without fake tinkoff fallback" do

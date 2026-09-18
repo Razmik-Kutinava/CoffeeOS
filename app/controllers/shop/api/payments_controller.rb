@@ -159,9 +159,14 @@ module Shop
         url = result[:payment_url].to_s
         return url if url.start_with?("http://", "https://")
 
+        # Production: never invent securepayments.tinkoff.ru/#{pid}.
+        # Blank URL is valid for charge/one-click paths that only return provider_payment_id.
         if Rails.env.production?
-          raise Shop::WidgetPaymentInitiator::Error,
-                "PaymentURL missing from provider (refusing fake securepayments fallback in production)"
+          if url.present?
+            raise Shop::WidgetPaymentInitiator::Error,
+                  "PaymentURL missing from provider (refusing fake securepayments fallback in production)"
+          end
+          return ""
         end
 
         pid = result[:provider_payment_id]
