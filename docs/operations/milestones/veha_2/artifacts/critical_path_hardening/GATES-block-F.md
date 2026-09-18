@@ -35,7 +35,6 @@ ABANDON: G5 Fly MCP Point A is TASK_93-L DoD, not block F; Local G1–G3 + G4 af
 CoffeeOS TASK_93-F unlazy (pre-SPEC / pre-SBR):
 - Канон: customer_tasks/TASK-93-Critical-path-hardening.md · блок F (R1–R6) + DoD чата F1–F5
 - Активный ledger сессии: docs/operations/session/GATES.md (тот же текст)
-- Артефакт блока: milestones/veha_2/artifacts/critical_path_hardening/GATES-block-F.md
 - Close F: G1–G3 met via --approve/--reverify after GREEN; G4 после /regress; G5 abandoned until L
 - Зависимость: A до F предпочтительно (GetState→succeeded может снова дернуть deduction)
 - Без T-F2a и T-F3a блок не закрыт

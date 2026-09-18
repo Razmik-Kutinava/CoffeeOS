@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-18 — docs: unlazy #93 TASK_93-F Callbacks/stuck/Events
+
+- `GATES-block-F.md` + session `GATES.md`: G1 Events T-F1/F2/F5 · G2 stuck T-F3 · G3 fiscal T-F4 · G4 regress · G5→L
+- `--status`: unmet 4 · abandoned 1 (G5)
+- Next: `/spec` (код не трогали)
+
 ## 2026-09-18 — docs: SPEC #93 TASK_93-E Init idempotency
 
 - `todo.md` + `todo-block-E.md` → TASK_93-E: R1 pid · R2 uuid/failed txn · R3 HTTP вне base_controller txn · R4 tests
