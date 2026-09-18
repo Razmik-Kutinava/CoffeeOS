@@ -145,6 +145,94 @@ class Shop::Api::OrdersControllerTest < ActionDispatch::IntegrationTest
     assert json.is_a?(Array)
   end
 
+  # TASK_93-D — default per_page=20 (не 1) при отсутствии/нуле param
+  test "T-D1a history without per_page returns default page size" do
+    seed_mobile_history_orders!(count: 3)
+
+    open_session do |sess|
+      verify_shop_email!(tenant_id: @tenant.id, email: @email, session: sess)
+      sess.get "/shop/api/orders/history",
+        headers: shop_tenant_headers(@tenant.id)
+      assert_equal 200, sess.response.status
+      json = sess.response.parsed_body
+      assert_equal 3, json.length, "without per_page expected default page (≥3), not 1; got #{json.length}"
+    end
+  end
+
+  test "T-D1b history blank/zero per_page uses default not one" do
+    seed_mobile_history_orders!(count: 3)
+
+    open_session do |sess|
+      verify_shop_email!(tenant_id: @tenant.id, email: @email, session: sess)
+
+      sess.get "/shop/api/orders/history",
+        headers: shop_tenant_headers(@tenant.id),
+        params: { per_page: "" }
+      assert_equal 200, sess.response.status
+      assert_operator sess.response.parsed_body.length, :>, 1
+
+      sess.get "/shop/api/orders/history",
+        headers: shop_tenant_headers(@tenant.id),
+        params: { per_page: 0 }
+      assert_equal 200, sess.response.status
+      assert_equal 3, sess.response.parsed_body.length
+    end
+  end
+
+  test "T-D1c history per_page capped at 50" do
+    seed_mobile_history_orders!(count: 51)
+
+    open_session do |sess|
+      verify_shop_email!(tenant_id: @tenant.id, email: @email, session: sess)
+      sess.get "/shop/api/orders/history",
+        headers: shop_tenant_headers(@tenant.id),
+        params: { per_page: 999 }
+      assert_equal 200, sess.response.status
+      assert_operator sess.response.parsed_body.length, :<=, 50
+      assert_equal 50, sess.response.parsed_body.length
+    end
+  end
+
+  test "T-D1d history respects explicit per_page=2" do
+    seed_mobile_history_orders!(count: 3)
+
+    open_session do |sess|
+      verify_shop_email!(tenant_id: @tenant.id, email: @email, session: sess)
+      sess.get "/shop/api/orders/history",
+        headers: shop_tenant_headers(@tenant.id),
+        params: { per_page: 2 }
+      assert_equal 200, sess.response.status
+      assert_equal 2, sess.response.parsed_body.length
+    end
+  end
+
+  test "T-D3a history without param returns more than one order when multiple exist" do
+    seed_mobile_history_orders!(count: 2)
+
+    open_session do |sess|
+      verify_shop_email!(tenant_id: @tenant.id, email: @email, session: sess)
+      sess.get "/shop/api/orders/history",
+        headers: shop_tenant_headers(@tenant.id)
+      assert_equal 200, sess.response.status
+      assert_operator sess.response.parsed_body.length, :>=, 2
+    end
+  end
+
+  test "T-D3b history?today=1 without per_page returns more than one when multiple today" do
+    seed_mobile_history_orders!(count: 2, created_at: Time.zone.now)
+
+    open_session do |sess|
+      verify_shop_email!(tenant_id: @tenant.id, email: @email, session: sess)
+      sess.get "/shop/api/orders/history",
+        headers: shop_tenant_headers(@tenant.id),
+        params: { today: 1 }
+      assert_equal 200, sess.response.status
+      json = sess.response.parsed_body
+      assert_operator json.length, :>=, 2
+      assert json.all? { |row| Time.zone.parse(row["created_at"]) >= Time.zone.today.beginning_of_day }
+    end
+  end
+
   test "GET /shop/api/orders/history?today=1 returns only todays orders" do
     post "/shop/api/cart/add",
       headers: shop_tenant_headers(@tenant.id),
@@ -330,6 +418,24 @@ class Shop::Api::OrdersControllerTest < ActionDispatch::IntegrationTest
         params: { reconnect_token: token }
       assert_equal 200, lost.response.status
       assert_equal order_id, lost.response.parsed_body["id"]
+    end
+  end
+
+  private
+
+  def seed_mobile_history_orders!(count:, created_at: Time.zone.now)
+    count.times do |i|
+      Order.create!(
+        tenant: @tenant,
+        customer_id: @customer.id,
+        order_number: "TD93D-#{SecureRandom.hex(3)}-#{i}",
+        source: :mobile,
+        status: :accepted,
+        total_amount: 100,
+        discount_amount: 0,
+        final_amount: 100,
+        created_at: created_at - i.seconds
+      )
     end
   end
 end
