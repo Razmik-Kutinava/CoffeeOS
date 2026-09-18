@@ -1,33 +1,39 @@
-# Gates: TASK_93-A / #93 — Critical path hardening (деньги ↔ заказ)
+# Gates: TASK_93-B / #93 — Checkout identity (phone vs email)
 
-Scope: Банк CONFIRMED → всегда `payment.succeeded` + `order.accepted`; склад/рецепт не откатывает оплату (A1–A6); blank Amount / cancelled|closed+succeeded — не silent. Deploy = TASK_93-L (не DoD блока A).
+Scope: UI «можно платить» ≡ бэкенд принимает заказ/оплату без 422 email при `phone_verified` (канон phone-first R1–R5); один identity на orders / new_card / one_click / SBP create. Deploy = TASK_93-L (не DoD блока B).
 
-- [ ] G1: матрица T-A1…T-A6 (updater + deduction + stock flow + callbacks)
-  CHECK: ruby bin/rails test test/services/callbacks/payment_status_updater_test.rb test/services/inventory/order_recipe_deduction_test.rb test/jobs/payments/tbank_callback_job_test.rb test/controllers/callbacks/tbank_controller_test.rb test/integration/block_f_stock_flow_test.rb
+- [ ] G1: T-B2a..f — OrderCreator + RecurrentOrderCreator (phone-only / email-only / neither)
+  CHECK: ruby bin/rails test test/services/shop/order_creator_test.rb test/services/shop/recurrent_order_creator_test.rb
   EXPECT: 0 failures, 0 errors
   CWD: C:/Tools/workarea/CoffeeOS
-  EVIDENCE: pending — RED/GREEN A1–A6; после GREEN добавить новые A5/A6 файлы в CHECK если появятся
+  EVIDENCE: unmet pre-RED — `recurrent_order_creator_test.rb` отсутствует (InvalidTestError); T-B2a ещё не написан; создать на `/sbr` RED
 
-- [ ] G2: зона payments / callbacks / jobs (регресс после GREEN)
-  CHECK: ruby bin/rails test test/services/payments/ test/services/callbacks/ test/jobs/payments/
+- [ ] G2: T-B5a..e + T-B4a — integration checkout_identity (orders / cards / one_click ownership)
+  CHECK: ruby bin/rails test test/integration/shop/api/checkout_identity_test.rb
   EXPECT: 0 failures, 0 errors
   CWD: C:/Tools/workarea/CoffeeOS
-  EVIDENCE: pending — `/regress` блок A
+  EVIDENCE: unmet pre-RED — файла нет (InvalidTestError); создать на RED; phone → 2xx без «Подтвердите email»; no identity → 422; чужая карта → ownership 422
 
-- [ ] G3: Amount blank / mismatch visibility (A4)
-  CHECK: ruby bin/rails test test/services/payments/tbank_adapter_test.rb test/services/payments/tbank_payment_sync_test.rb
+- [x] G3: зона shop pay-paths (ТЗ §8 + new_card)
+  CHECK: ruby bin/rails test test/integration/shop/api/email_otp_checkout_test.rb test/integration/shop/shop_one_click_payment_step4_test.rb test/integration/shop/shop_new_card_payment_step2_test.rb
   EXPECT: 0 failures, 0 errors
   CWD: C:/Tools/workarea/CoffeeOS
-  EVIDENCE: pending — T-A4a/b; report/audit при blank/mismatch; платёж не succeeded при mismatch
+  EVIDENCE: automatic-evidence=v1; definition-sha256=fbf78ac6552223e6ed94b6318bf8756327834caeeb578a41eae0ab122d3ecb9c; exit=0; EXPECT=matched; output-sha256=ece15702826475523ee350cb7709330b105562f54f2b8e67897a039046c63b65; output-bytes=1629; shell=C:\Windows\system32\cmd.exe; cwd=C:\Tools\workarea\CoffeeOS; path=54c8ad8163c5/77 entries — baseline PASS до изменений B
 
-- [ ] G4: hot-path Fly MCP Point A — CONFIRMED → barista sees accepted (даже без склада)
-  EVIDENCE: abandoned — not DoD for TASK_93-A; reopen in TASK_93-L after deploy апрув; artifact `artifacts/critical_path_hardening/mcp/`; PASS = Point A tenant `2fdee1ac-4674-41ee-b89e-87b45643f789` · webhook/GetState → payment succeeded + order accepted · stock alert без rollback оплаты
+- [ ] G4: T-B3 UI identityReady ≡ R1–R3 (phone-first, не требует emailVerified для Pay)
+  EVIDENCE: pending — manual/REVIEW: grep `identityReady` в Checkout.svelte ≡ phoneVerified \|\| emailVerified (или phone-first derived); без фейкового emailVerified; цитата в GREEN-отчёте; JS unit если появится runner
 
-ABANDON: G4 Fly MCP Point A is TASK_93-L DoD, not block A; Local G1–G3 close A
+- [ ] G5: hot-path Fly MCP Point A — phone Callcheck → Pay → order без 422 email
+  EVIDENCE: abandoned — not DoD for TASK_93-B; reopen in TASK_93-L after deploy апрув; artifact `artifacts/critical_path_hardening/mcp/`; PASS = Point A tenant `2fdee1ac-4674-41ee-b89e-87b45643f789` · phone_verified session → POST /orders 2xx · Pay path без «Подтвердите email»
+
+ABANDON: G5 Fly MCP Point A is TASK_93-L DoD, not block B; Local G1–G3 + REVIEW G4 close B
 
 <!--
-CoffeeOS TASK_93-A unlazy (pre-SPEC / pre-SBR):
-- Канон ТЗ: customer_tasks/TASK-93-Critical-path-hardening.md §7–9
-- Зеркало ledger: artifacts/critical_path_hardening/GATES.md
-- Close A: G1–G3 met via --approve/--reverify after GREEN + /regress; G4 abandoned until L
+CoffeeOS TASK_93-B unlazy (post-intake / pre-SPEC):
+- Канон ТЗ: customer_tasks/TASK-93-B-Checkout-identity.md §7–9
+- Зеркало: artifacts/critical_path_hardening/GATES.md
+- Блок A ledger: artifacts/critical_path_hardening/GATES-block-A.md
+- Close B: G1–G3 met via --approve/--reverify after GREEN + /regress; G4 evidence в REVIEW; G5 abandoned until L
+- Не гибрид: phone-first only (не email-gate)
+- 2026-09-18 --approve: G3 met; G1/G2 unmet (missing test files); G4 manual; G5 abandoned
 -->

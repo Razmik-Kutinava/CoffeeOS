@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-18 — docs: SPEC #93 TASK_93-A Critical path (деньги↔заказ)
+
+- `todo.md` → TASK_93-A: файлы A1–A6 · Не ломать · Проверка G1/G2 · матрица T-A*
+- Next: `/sbr` RED (код не трогали)
+
 ## 2026-09-18 — docs: unlazy GATES #93 TASK_93-A Critical path (деньги↔заказ)
 
 - `session/GATES.md` + `artifacts/critical_path_hardening/GATES.md`

@@ -4,9 +4,14 @@
 
 Сюда — скрины, JSON, MCP-артефакты по блокам A–L (не в корень репо).
 
+| Файл | Назначение |
+|------|------------|
+| `GATES.md` | unlazy ledger **блока B** (активный) |
+| `GATES-block-A.md` | unlazy ledger блока A (отложен) |
+
 | Блок | Фокус |
 |------|--------|
-| A | Деньги ↔ заказ (склад + webhook) — intake, ждёт `/spec` |
-| B | Checkout identity (phone vs email) — **сейчас** · [ТЗ B](../../requirements/customer_tasks/TASK-93-B-Checkout-identity.md) |
+| A | Деньги ↔ заказ (склад + webhook) — intake, ждёт `/spec` · ledger `GATES-block-A.md` |
+| B | Checkout identity (phone vs email) — **сейчас** · [ТЗ B](../../requirements/customer_tasks/TASK-93-B-Checkout-identity.md) · ledger `GATES.md` |
 | C–K | см. карту в зонтике |
 | L | Deploy + Point A MCP |

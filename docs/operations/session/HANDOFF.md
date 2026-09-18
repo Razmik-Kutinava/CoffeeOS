@@ -2,17 +2,17 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-18 (TASK_93-A unlazy)  
+**Дата:** 2026-09-18 (TASK_93-A SPEC)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#93-A** GATES (G1–G3 unmet, G4→L) | `/spec` → `/sbr` A1–A6 |
-| **#93-B** Checkout identity intake | `/spec` B отдельно |
-| Sentry RUBY-1J fixed in tree | deploy апрув |
+| **#93-A** SPEC готово (`todo.md`) | `/sbr` RED → GREEN A1–A6 |
+| GATES A · G4 Fly → L | `/regress` → `/review` без deploy |
+| **#93-B** intake отдельно | не в этом прогоне |
 
-**last_done:** unlazy ledger TASK_93-A (`session/GATES.md` · `artifacts/critical_path_hardening/GATES.md`)  
-**next_step:** `/spec` блок A → `/sbr` RED; `--approve` G1–G3 после GREEN
+**last_done:** SPEC TASK_93-A — 6 файлов + blast · Не ломать · Проверка G1/G2  
+**next_step:** `/sbr` RED — T-A1a…T-A6b
 
 **ctx_trim:** `2026-09-02`  
 **Fly:** v495 `deployment-01M22JRN95TXRSV1PQDN49227M`
