@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-18 — docs: unlazy #93 TASK_93-I OTP / Rack::Attack / auth abuse
+
+- `GATES-block-I.md` + session `GATES.md`: G1 store T-I1 · G2 verify T-I2 · G3 OTP6/DEFER T-I3 · G4 short-link+regress T-I4 · G5→L
+- `--status`: unmet 4 · abandoned 1 (G5)
+- Next: `/spec` (код не трогали)
+
 ## 2026-09-18 — docs: regress #93 TASK_93-A payments/callbacks PASS
 
 - G1 matrix: **40 runs, 0 fail** (updater · deduction · callback job · tbank ctrl · block_f)
