@@ -14,7 +14,8 @@
 ## 2026-09-18 — docs: REVIEW #93 TASK_93-E Init idempotency
 
 - Local **86/0** · bugbot: ClientOrderReused Init вне rolled-back txn · security: no med/high/crit
-- GREEN `2eb22c71` · GATES G1–G4 met · G5→L · push/CI · **без deploy**
+- GREEN `2eb22c71` · REVIEW fix `ead5cf38` · Entire `01M2SZBBAQEGHNGEJCXYHG76XH`
+- CI green `35338088214` · GATES G1–G4 met · G5→L · **без deploy**
 
 ## 2026-09-18 — docs: CI green #93 TASK_93-J REVIEW
 
