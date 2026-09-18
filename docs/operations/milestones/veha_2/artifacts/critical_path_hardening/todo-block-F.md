@@ -4,7 +4,7 @@
 |------|----------|
 | **ID** | CBR **#93** · **TASK_93-F** |
 | **Тип** | SBR · hot-path callbacks / payments |
-| **Статус** | **REGRESS PASS** · Next: `/review` |
+| **Статус** | **REVIEW** · CI pending · Next: deploy апрув · **без deploy** |
 | **Ветка** | `develop` |
 | **Канон** | `@spec-build-review` · `@coffeeos-commit-ops` · `@coffeeos-dev-gates` |
 | **ТЗ** | бриф чата F1–F5 · зонтик [`TASK-93-Critical-path-hardening.md`](../../requirements/customer_tasks/TASK-93-Critical-path-hardening.md) карта F |
@@ -34,9 +34,19 @@ TTL claim: 24h на processed/failed; rejected → delete.
 - [x] PHASE 2 RED — T-F1a · T-F2a/b · T-F3a · T-F4a · `[RED]` `4913e432` / `1c7d71a7`
 - [x] PHASE 2 GREEN — R1–R6 · `[GREEN]` `1b28a128` · все T-F* PASS (48 runs)
 - [x] `/regress` — G4 · pack **68/0** · zone **74/0** (2026-09-18)
-- [ ] PHASE 3 `/review` — F1–F5 PASS · push · без deploy
+- [x] PHASE 3 `/review` — F1–F5 PASS · bugbot+security PASS · Entire `01M2SSQXT1V67AK260SH1P9RAX` · push
 
-**Entire:** attach session `863c79d0-3a0a-4671-9180-2a0be7fd2ee0` → GREEN why-context (docs checkpoint)
+## REVIEW F1–F5
+
+```
+F1 T-F1a T-F1b T-F1c           PASS
+F2 T-F2a T-F2b T-F2c T-F2d     PASS
+F3 T-F3a T-F3b T-F3c T-F3d     PASS
+F4 T-F4a T-F4b T-F4c T-F4d     PASS
+F5 T-F5a T-F5b + claim suite   PASS
+```
+
+Local REVIEW pack: **68/0** · bugbot: no bugs · security: PASS
 
 ## Файлы (ожидаемо)
 
