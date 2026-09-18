@@ -73,5 +73,4 @@ class RackAttackOrderShortLinkTest < ActionDispatch::IntegrationTest
     names = source.scan(/throttle\("([^"]*order_short_link[^"]*)"/).flatten
     assert_equal [ "shop/order_short_link/ip" ], names.uniq
   end
-
 end

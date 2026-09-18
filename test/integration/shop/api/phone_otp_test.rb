@@ -259,5 +259,4 @@ class Shop::Api::PhoneOtpTest < ActionDispatch::IntegrationTest
       refute Payments::BindingStepUp.payments_locked?(sess.session, @tenant.id)
     end
   end
-
 end

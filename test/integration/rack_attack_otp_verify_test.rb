@@ -103,5 +103,4 @@ class RackAttackOtpVerifyTest < ActionDispatch::IntegrationTest
       assert_response :too_many_requests
     end
   end
-
 end
