@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-18 - review: #93 TASK_93-A money-order + trigger no-op
+
+- bugbot/security: hard auto_deduct bypassed soft-fail -> migration no-op; Ruby sole deduct
+- FIX 77291dc6 · Local A zone 80/0 · Entire 01M2SSQXT1V67AK260SH1P9RAX
+- Next: push · CI · deploy=L
+
 ## 2026-09-18 — feat: GREEN #93 TASK_93-B Checkout identity phone-first
 
 - `Shop::CheckoutIdentity` · OrderCreator / RecurrentOrderCreator
