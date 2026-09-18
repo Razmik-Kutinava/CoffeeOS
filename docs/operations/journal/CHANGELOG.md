@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-18 — docs: unlazy reverify #93 TASK_93-D gates met
+
+- `GATES-block-D.md`: G1–G3 **met** (--reverify + G3 grep); G4 Fly **abandoned** → TASK_93-L
+- Next: `/review`
+
 ## 2026-09-18 — docs: REVIEW done #93 TASK_93-C SMS short link · CI green
 
 - C1–C5 PASS · GREEN `c2ef2d68` · fix `6254ab0d` · CI https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/35326857443

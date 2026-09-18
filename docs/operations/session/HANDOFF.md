@@ -2,17 +2,17 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-18 (TASK_93-C REVIEW CI green)  
+**Дата:** 2026-09-18 (TASK_93-D unlazy reverify)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#93-C** CI green · REVIEW закрыт | **стоп** · **без deploy** |
-| GREEN `c2ef2d68` · fix `6254ab0d` | Fly MCP → TASK_93-L |
-| Entire `01M2SSQXT1V67AK260SH1P9RAX` | |
+| **#93-D** G1–G3 **met** · G4 abandoned→L | `/review` · push · без deploy |
+| `--reverify` PASS | таблица D1–D3 |
+| `GATES-block-D.md` канон | параллельные блоки — свои mirrors |
 
-**last_done:** `/review` TASK_93-C SMS short link · CI https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/35326857443  
-**next_step:** deploy — только апрув владельца
+**last_done:** `/unlazy` reverify D — met 3 / abandoned 1  
+**next_step:** `/review`
 
 **ctx_trim:** `2026-09-02`  
 **Fly:** v495 `deployment-01M22JRN95TXRSV1PQDN49227M`

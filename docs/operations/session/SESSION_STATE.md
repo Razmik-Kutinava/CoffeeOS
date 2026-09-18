@@ -2,17 +2,17 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-18 (TASK_93-C REVIEW CI green)  
+**Дата:** 2026-09-18 (TASK_93-D unlazy reverify)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#93-C** REVIEW **done** · CI green | **стоп** · deploy = апрув (L) |
-| Entire `01M2SSQXT1V67AK260SH1P9RAX` на `c2ef2d68` | Fly MCP Point A → L |
-| G1–G5 met · G6→L | |
+| **#93-D** G1–G3 met · G4→L | `/review` |
+| reverify PASS | push · без deploy |
+| `todo-block-D.md` | — |
 
-**last_done:** `/review` TASK_93-C — CI green `35326857443`  
-**next_step:** deploy — только апрув владельца (TASK_93-L)
+**last_done:** unlazy `--reverify` GATES-block-D · G3 manual met  
+**next_step:** `/review`
 
 **ctx_trim:** `2026-09-02`
 
