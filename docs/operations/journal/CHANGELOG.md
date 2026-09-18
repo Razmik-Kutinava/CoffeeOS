@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-18 — feat: #93 TASK_93-H cart cookie overflow [GREEN]
+
+- `CartService::OverflowError` · `MAX_CART_LINES=20` · `MAX_SESSION_CART_BYTES=3072` · rollback guard
+- Controller add+update → 422 + clear; no bare CookieOverflow
+- RED `5a635be3` · GREEN `d8e5636b` · Local 28 PASS (T-H* · T-H2c SKIP)
+- Next: `/regress`
+
 ## 2026-09-18 — docs: unlazy reverify #93 TASK_93-F G1–G4 met (G5 to L)
 
 - `GATES-block-F.md`: reverify PASS (G1–G4); G5 abandoned→L
