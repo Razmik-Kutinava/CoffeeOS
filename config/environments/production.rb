@@ -99,6 +99,12 @@ Rails.application.configure do
     /.*\.coffeeos\.fly\.dev\z/, # витрины точек: {slug}.coffeeos.fly.dev
     /.*\.fly\.dev/              # preview machines Fly.io
   ]
+  # TASK_93-C: SMS short-link host from env (R2-A); skip if already covered by fly patterns
+  sms_link_host = ENV["SHOP_SMS_LINK_HOST"].presence || ENV["APP_HOST"].presence
+  if sms_link_host.present?
+    host_only = sms_link_host.to_s.sub(%r{\Ahttps?://}i, "").split("/").first.to_s.split(":").first
+    config.hosts << host_only if host_only.present? && !host_only.match?(/fly\.dev\z/i)
+  end
   config.host_authorization = {
     exclude: ->(request) { request.path == "/up" || request.path.start_with?("/callbacks/") }
   }

@@ -4,13 +4,23 @@ require "base64"
 require "openssl"
 
 module Shop
-  # #82 Патч_1 — короткий HMAC token для SMS `codeblack.xyz/o/{hash}` (≤70 с префиксом).
+  # TASK_93-C / #82 — короткий HMAC token для SMS `{host}/o/{hash}` (≤70 с префиксом).
   # 16 байт UUID + 4 байта HMAC-SHA256 → 27 символов urlsafe Base64 (не обратимый UUID).
   class OrderReadySmsLink
-    PREFIX = "CODE:BLACK. Заказ готов! codeblack.xyz/o/"
+    DEFAULT_HOST = "coffeeos.fly.dev"
+    TTL = 48.hours
     UUID_BYTES = 16
     MAC_BYTES = 4
     TOKEN_BYTES = UUID_BYTES + MAC_BYTES
+
+    def self.link_host
+      ENV["SHOP_SMS_LINK_HOST"].presence || ENV["APP_HOST"].presence || DEFAULT_HOST
+    end
+
+    def self.message_prefix
+      # ≤70 с DEFAULT_HOST + 27-char hash: короче, чем «Заказ готов!»
+      "CODE:BLACK. Готов! #{link_host}/o/"
+    end
 
     def self.hash_for(order)
       uuid_hex = order.id.to_s.delete("-")
@@ -34,14 +44,26 @@ module Shop
       expected = OpenSSL::HMAC.digest("SHA256", secret, uuid)[0, MAC_BYTES]
       return nil unless ActiveSupport::SecurityUtils.secure_compare(mac, expected)
 
-      Order.find_by(id: uuid, source: :mobile)
+      order = Order.find_by(id: uuid, source: :mobile)
+      return nil unless order
+      return nil if link_expired?(order)
+
+      order
     rescue ArgumentError, TypeError
       nil
     end
 
     def self.sms_message_for(order)
-      "#{PREFIX}#{hash_for(order)}"
+      "#{message_prefix}#{hash_for(order)}"
     end
+
+    def self.link_expired?(order)
+      anchor = order.ready_notified_at || order.ready_at || order.updated_at
+      return true if anchor.blank?
+
+      anchor < TTL.ago
+    end
+    private_class_method :link_expired?
 
     def self.secret
       Rails.application.key_generator.generate_key("shop/order_ready_sms_link", 32)

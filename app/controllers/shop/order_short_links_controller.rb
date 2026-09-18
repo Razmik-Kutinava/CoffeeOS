@@ -3,7 +3,7 @@
 require "cgi"
 
 module Shop
-  # #82 Патч_1 — публичный entrypoint SMS short link codeblack.xyz/o/{order_hash}.
+  # TASK_93-C / #82 — публичный entrypoint SMS short link `{host}/o/{order_hash}`.
   # Bind guest session + reconnect_token so cold-open from SMS can load order (bugbot).
   class OrderShortLinksController < ApplicationController
     skip_forgery_protection

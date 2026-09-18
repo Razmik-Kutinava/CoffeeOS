@@ -34,6 +34,11 @@ class Rack::Attack
     req.ip if req.path == "/tv_board" && req.get?
   end
 
+  # SMS short link /o/:hash — brute MAC (MemoryStore OK; shared store → TASK_93-I)
+  throttle("shop/order_short_link/ip", limit: 30, period: 1.minute) do |req|
+    req.ip if req.get? && req.path.start_with?("/o/")
+  end
+
   # Лимит для мобильного API: 200 запросов в минуту по refresh_token
   throttle("mobile/api", limit: 200, period: 1.minute) do |req|
     if req.path.start_with?("/api/mobile/")
