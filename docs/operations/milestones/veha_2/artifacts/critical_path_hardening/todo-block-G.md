@@ -1,6 +1,6 @@
 # todo — #93 TASK_93-G: Tenant GUC / RLS / schema
 
-Зеркало session `todo.md` (параллельные блоки не затирают канон G).
+**Канон блока G** (session `todo.md` / `GATES.md` гоняют параллельные блоки — смотри сюда).
 
 | Поле | Значение |
 |------|----------|
@@ -10,7 +10,7 @@
 | **Ветка** | `develop` |
 | **Канон** | `@spec-build-review` · `@coffeeos-commit-ops` · `@coffeeos-dev-gates` |
 | **ТЗ** | бриф чата G1–G6 · зонтик [`TASK-93-Critical-path-hardening.md`](../../requirements/customer_tasks/TASK-93-Critical-path-hardening.md) карта G |
-| **GATES** | [`session/GATES.md`](../../../session/GATES.md) · [`GATES-block-G.md`](GATES-block-G.md) |
+| **GATES** | [`GATES-block-G.md`](GATES-block-G.md) |
 | **Инвентарь** | [`docs/operations/dev/RLS_PG_INVENTORY.md`](../../../../dev/RLS_PG_INVENTORY.md) |
 | **Цель** | Staff `SET LOCAL` внутри txn; must-have policies/triggers после load; city switcher без `row_security = off`; `ensure_tenant_id` строго |
 | **OUT** | A–F / H–K · полный аудит 39 таблиц сверх must-have · R3-A `structure.sql` · deploy (L) |
@@ -31,7 +31,7 @@
 
 - [x] PHASE 0 `/start`
 - [x] `/unlazy` — GATES G `576d37bf`
-- [x] PHASE 1 `/spec` — зеркало session `todo.md`
+- [x] PHASE 1 `/spec` — этот файл + `RLS_PG_INVENTORY.md`
 - [ ] PHASE 2 RED — T-G1a/c · T-G5b · gaps · `[RED]`
 - [ ] PHASE 2 GREEN — R1–R6 · `[GREEN]`
 - [ ] `/regress` — G4
@@ -39,14 +39,44 @@
 
 ## Файлы (ожидаемо)
 
-- `app/controllers/concerns/with_tenant_pg_context.rb`
-- `app/controllers/barista/base_controller.rb` (+ manager/prep blast)
-- `lib/database_triggers.rb`
-- `app/services/rls/guc_context.rb`
-- `app/services/shop/customer_tenant_history.rb`
-- `app/models/application_record.rb`
-- `db/migrate/*_add_rls_tenants_shop_city_lookup_policy.rb`
+- `app/controllers/concerns/with_tenant_pg_context.rb` — around_action txn + SET LOCAL
+- `app/controllers/barista/base_controller.rb` — concern (manager/prep — blast)
+- `lib/database_triggers.rb` — `ensure_all!` policies+triggers из инвентаря
+- `app/services/rls/guc_context.rb` — `with_shop_city_lookup`
+- `app/services/shop/customer_tenant_history.rb` — без `row_security = off`
+- `app/models/application_record.rb` — ensure_tenant R6
+- `db/migrate/*_add_rls_tenants_shop_city_lookup_policy.rb` — policy на `tenants`
 
-## Не ломать / Проверка
+### Blast-radius
 
-См. session `todo.md` (Shop API · RLS A≠B · lookups · order_number · city UX).
+- `manager/base_controller.rb` / `prep_kitchen/base_controller.rb`
+- `shop/api/base_controller.rb` — эталон, не ломать
+- `test/support/rls_test_bootstrap.rb`
+
+## Матрица (must PASS)
+
+T-G1a/b/c · T-G2a/b/c · T-G3a/b · T-G4a/b · T-G5a/b/c/d · T-G6a/b  
+Без **T-G1a + T-G3a + T-G5b** блок не закрыт.
+
+## Не ломать
+
+1. Shop API `with_shop_tenant!` txn + GUC
+2. RLS isolation (tenant A ≠ B)
+3. Platform onboarding без tenant GUC
+4. `Rls::GucContext` device / shop_api_key / auth_login
+5. Order number после schema:load
+6. City switcher UX (peers same city)
+
+## Проверка
+
+```bash
+bin/rails test \
+  test/integration/staff_pg_context_transaction_test.rb \
+  test/integration/rls_tenant_isolation_test.rb \
+  test/integration/db_triggers_test.rb \
+  test/services/shop/customer_tenant_history_test.rb
+
+bin/rails test test/integration/rls_tenant_isolation_test.rb \
+  test/integration/db_triggers_test.rb \
+  test/services/shop/customer_tenant_history_test.rb
+```

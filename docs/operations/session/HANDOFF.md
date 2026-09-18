@@ -1,18 +1,18 @@
-﻿# HANDOFF — Веха 2
+# HANDOFF — Веха 2
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-18 (TASK_93-J SPEC)  
+**Дата:** 2026-09-18 (TASK_93-G SPEC)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#93-J** SPEC в `todo.md` | `/sbr` RED T-J1a · T-J2a · T-J3a |
-| GATES J unmet 4 · G5→L | GREEN → `/regress` → `/review` |
-| **#93-*** параллельно | свои ledgers / todo (не затирать) |
+| **#93-G** SPEC · канон `todo-block-G.md` | `/sbr` RED T-G1a/c · T-G5b · gaps |
+| GATES-block-G unmet 4 · G5→L | GREEN → `/regress` → `/review` |
+| **#93-*** параллельно | свои ledgers (не затирать G зеркало) |
 
-**last_done:** `/spec` TASK_93-J · R1–R8 · PassUpdateJob · wait=20s · runbook  
-**next_step:** `/sbr` RED (PassUpdater sync / OAuth cache / grace wait)
+**last_done:** `/spec` TASK_93-G · R1–R6 · R3-B · `app.shop_city_lookup` · inventory  
+**next_step:** `/sbr` RED (staff txn · ensure_all · city · ensure_tenant)
 
 **ctx_trim:** `2026-09-02`  
 **Fly:** v495 `deployment-01M22JRN95TXRSV1PQDN49227M`
