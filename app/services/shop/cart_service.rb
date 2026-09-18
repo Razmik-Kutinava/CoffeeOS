@@ -171,7 +171,8 @@ module Shop
     end
 
     def with_session_cart_guard!
-      snapshot = Marshal.load(Marshal.dump(@session[SESSION_KEY]))
+      # JSON-safe deep copy (avoid Marshal — Brakeman Deserialize).
+      snapshot = @session[SESSION_KEY].deep_dup
       yield
     rescue OverflowError
       @session[SESSION_KEY] = snapshot
