@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-19 — docs: SPEC TASK_94 LK history repeat one-click
+
+- `todo.md`: Profile + OrderReceipt + `historyRepeatAdapter.js` · Не ломать/Проверка
+- GATES G1–G2 на RED · Next: `/sbr`
+
 ## 2026-09-19 — docs: /unlazy TASK_94 GATES ledger
 
 - `session/GATES.md` + `artifacts/lk_history_repeat_one_click/GATES.md`

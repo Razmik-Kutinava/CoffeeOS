@@ -2,16 +2,16 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-19 (TASK_94 /unlazy)  
+**Дата:** 2026-09-19 (TASK_94 SPEC)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **TASK_94** GATES ledger · G3/G4 met · G1/G2/G5 unmet | `/spec` |
+| **TASK_94** SPEC `[x]` · todo + GATES | `/sbr` RED |
 | Патч 1 inline T‑Bank REVIEW · CI green | deploy — апрув (отдельно) |
 
-**last_done:** `/unlazy` TASK_94 ledger + baseline approve  
-**next_step:** `/spec`
+**last_done:** `/spec` TASK_94  
+**next_step:** `/sbr`
 
 **ctx_trim:** `2026-09-02`
 

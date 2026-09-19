@@ -6,7 +6,7 @@
 **Google Doc:** https://docs.google.com/document/d/19QWNuRirU9jGkzFMY7sXXQV8xFTf2oEq_u3Yf0fo-6w/edit  
 **Расширяет:** [`TASK-PERSONAL-CABINET.md`](TASK-PERSONAL-CABINET.md)  
 **Тип:** дополнительная задача (не патч Subtask 12)  
-**Статус:** intake `[x]` · ждёт `/spec`
+**Статус:** intake `[x]` · `/spec` `[x]` · ждёт `/sbr`
 
 ---
 

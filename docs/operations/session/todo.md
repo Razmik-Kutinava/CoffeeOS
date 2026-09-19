@@ -1,50 +1,58 @@
-# todo — Патч 1: inline-оплата Т‑Банка — статусы в кнопке
+# todo — TASK_94: Повтор покупки из истории ЛК с one-click
 
 | Поле | Значение |
 |------|----------|
-| **ID** | Inline T‑Bank · **Патч 1** (2026-09-17) |
-| **Тип** | SBR · patch · hot-path shop pay UI |
-| **Статус** | **REVIEW** · push/CI |
+| **ID** | **TASK_94** / #94 |
+| **Тип** | SBR · доп.задача · hot-path shop pay / ЛК |
+| **Статус** | **SPEC `[x]`** · ждёт `/sbr` |
 | **Ветка** | `develop` |
-| **ТЗ** | [`Интеграция inline-оплаты Т-Банка…`](../milestones/veha_2/requirements/customer_tasks/Интеграция%20inline-оплаты%20Т-Банка%20с%20динамическими%20статусами%20внутри%20кнопки.md) · секция **Патч 1** |
-| **Entire** | `01M2WC1SCBV10YQZW2HFQ6DNM7` на `9eab6800` |
+| **ТЗ** | [`TASK-94-Повтор-покупки-из-истории-ЛК-с-one-click-оплатой.md`](../milestones/veha_2/requirements/customer_tasks/TASK-94-Повтор-покупки-из-истории-ЛК-с-one-click-оплатой.md) |
+| **GATES** | [`session/GATES.md`](GATES.md) · G3/G4 baseline met · G1/G2/G5 unmet |
+| **Google Doc** | https://docs.google.com/document/d/19QWNuRirU9jGkzFMY7sXXQV8xFTf2oEq_u3Yf0fo-6w/edit |
 
 ## SBR
 
-- [x] PHASE 0 /start
+- [x] PHASE 0 /start (intake)
 - [x] PHASE 1 SPEC
-- [x] PHASE 2 RED `ddd04998`
-- [x] PHASE 2 GREEN `9e0a295c`
-- [x] `/regress` Local PASS
-- [x] PHASE 3 `/review` — bugbot (timer fix) + security clean · Entire · push
+- [ ] PHASE 2 RED — `lk_history_repeat_one_click` tests [TDD]
+- [ ] PHASE 2 GREEN — Profile/OrderReceipt + adapter → existing pay flow
+- [ ] `/regress` (Проверка)
+- [ ] PHASE 3 `/review` — bugbot + security · Entire · push · Fly MCP G5
 
-## Файлы
+## Файлы (ожидаемо)
 
-- `app/frontend/lib/shopInlinePayFsm.js`
-- `app/frontend/lib/widgetRepeatPayFlow.js`
-- `app/frontend/components/RepeatSection.svelte` (+ `clearPayResetTimer`)
-- `app/frontend/components/InlinePayFallback.svelte`
-- tests: `shop_inline_pay_button_fsm_test.mjs`, `payment_error_user_messages_test.mjs`, `widget_repeat_pay_flow_patch1_test.mjs`, `inline_pay_button_patch1_test.rb`
+1. `app/frontend/routes/Profile.svelte` — `shop-lk-repeat-btn`: не только `openReceipt`, старт repeat выбранного заказа
+2. `app/frontend/routes/OrderReceipt.svelte` — заменить stub `onRepeatStub` на реальный repeat + pay orchestration
+3. `app/frontend/lib/historyRepeatAdapter.js` *(новый)* — исторический Order → item(s) / вызов существующего `createRepeatInlineOrder` + `runRepeatWidgetPayFlow`
+4. `app/frontend/lib/createRepeatInlineOrder.js` — только если адаптеру нужен multi-item / без ломки QR single-card контракта
+5. `test/javascript/lk_history_repeat_one_click_test.mjs` *(новый)* — G1: adapter + handlers (не stub)
+6. `test/integration/shop/lk_history_repeat_one_click_test.rb` *(новый)* — G2: contract Profile/OrderReceipt + checkout regression guard
+
+### Blast-radius (соседи, не менять ради ЛК)
+
+- `app/frontend/lib/widgetRepeatPayFlow.js` — **reuse** as-is (Патч 1 inline уже в кнопке)
+- `app/frontend/lib/repeatInlinePayUiStore.js` — подключить UI/FSM, не дублировать payment
+- `app/frontend/components/RepeatSection.svelte` — эталон оркестрации; QR UI не трогать
 
 ## Не ломать
 
-1. `clearCartAfterSuccessfulPay` (#87)
-2. checkout / `shopPayFsm` long CARD_MSG
-3. CartSheet / OrderStatusSheet / active-order
-4. Fallback СБП / «карта +» / retry; payment API
+1. Стандартный checkout / `Checkout.svelte` / payment API (`widget_init`, status)
+2. Quick Repeat `hasActiveOrder` gate + `RepeatSection` one-click
+3. `cartSheetStore.clearCartAfterSuccessfulPay` (#87)
+4. `OrderStatusSheet` / `/orders/active` критерии и контракт
 
 ## Проверка
 
 ```bash
-node --test test/javascript/shop_inline_pay_button_fsm_test.mjs test/javascript/payment_error_user_messages_test.mjs test/javascript/widget_repeat_pay_flow_fallback_ui_test.mjs test/javascript/widget_repeat_pay_flow_patch1_test.mjs
-bundle exec ruby -Itest test/integration/shop/inline_pay_button_patch1_test.rb test/integration/shop/quick_repeat_pay_one_click_test.rb
+node --test test/javascript/lk_history_repeat_one_click_test.mjs test/javascript/widget_repeat_pay_flow_patch1_test.mjs
+bundle exec ruby -Itest test/integration/shop/lk_history_repeat_one_click_test.rb test/integration/shop/quick_repeat_pay_one_click_test.rb test/integration/shop/pwa_personal_account_lk_test.rb
 ```
 
 ## DoD
 
-- [x] Subtask 8/10/12/13 patch v1
-- [x] retry/fallback сохранены
-- [x] bugbot hole closed (`payResetTimer`)
-- [x] Entire id на sha
-- [x] CI green `35431986540`
-- [x] COMPONENT_MAP — не главная → не трогали
+- [ ] «Повторить» в `#/profile` / receipt → новый Order из выбранного history
+- [ ] Существующий Quick Repeat / widget one-click (+ inline статусы кнопки)
+- [ ] Исходный historical Order не изменён; composition не из чужой корзины
+- [ ] Checkout regression green
+- [ ] G1–G4 met · G5 Fly после deploy
+- [ ] `COMPONENT_MAP.md` — только после Review (если зона карты)
