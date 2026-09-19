@@ -276,6 +276,7 @@ Then: открывается bottom sheet с двумя вариантами с�
 
 - Google Doc: https://docs.google.com/document/d/1yH1DzM48Bcg43X9lT_37WVICKUkmFLGETduYX3eOpzo/edit
 - Текст заказчика (задача_2 · 2 патча): рис.1 = Патч 1 (иконка «обратная связь»); рис.2 = Патч 2 («Tg» → «Telegram» как на гл. экране).
+- Артефакт рис.1: `artifacts/pwa_personal_account_lk/screenshots/patch1_2026-09-17_fig1_lk_ux_markup.png` · understanding `PATCH1_FIG1_UNDERSTANDING_2026-09-19.md`.
 - Артефакт рис.2: `artifacts/pwa_personal_account_lk/screenshots/patch2_2026-09-17_fig2_telegram_label.png` (референс «Связь с поддержкой» / Telegram).
 - Факт кода до патча: `ContactSupportSheet.svelte` кнопка `contact-support-telegram` = «Tg»; гл. экран `SupportContactSheet` уже «Telegram» через `supportConfig`.
-- Итерация: только Патч 2 / Subtask 21 (patch v1). Патч 1 не в scope этого шага.
+- Итерация сейчас: Патч 2 GREEN → `/review`. Патч 1 (убрать чат из Header) — следующий отдельный шаг; красные стикеры PLG/ОФД/легал ≠ scope Патча 1.
