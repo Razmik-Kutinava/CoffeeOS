@@ -15,7 +15,8 @@
 
 - Local PASS · bugbot: clearPayResetTimer · security: no med/high/crit
 - Entire `01M2WC1SCBV10YQZW2HFQ6DNM7` на `9eab6800` (attach)
-- GREEN `9e0a295c` · REVIEW fix `9eab6800` · push/CI
+- GREEN `9e0a295c` · REVIEW fix `9eab6800` · lint unblock `fd3a0abd`
+- CI green [`35431986540`](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/35431986540)
 
 ## 2026-09-18 — feat: Патч 1 inline pay статусы в кнопке [GREEN]
 

@@ -7,12 +7,12 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **Патч 1** inline T‑Bank **REVIEW** | CI green → стоп |
-| bugbot fix `payResetTimer` · security clean | deploy — апрув |
-| Entire `01M2WC1SCBV10YQZW2HFQ6DNM7` на `9eab6800` | — |
+| **Патч 1** inline T‑Bank **REVIEW · CI green** | deploy — апрув |
+| Entire `01M2WC1SCBV10YQZW2HFQ6DNM7` на `9eab6800` | Fly MCP Point A после deploy |
+| CI `35431986540` success | — |
 
-**last_done:** `/review` Патч 1 — clearPayResetTimer + push  
-**next_step:** CI green; deploy только апрув
+**last_done:** `/review` Патч 1 · CI green `fd3a0abd`  
+**next_step:** deploy — только апрув
 
 **ctx_trim:** `2026-09-02`
 

@@ -46,5 +46,5 @@ bundle exec ruby -Itest test/integration/shop/inline_pay_button_patch1_test.rb t
 - [x] retry/fallback сохранены
 - [x] bugbot hole closed (`payResetTimer`)
 - [x] Entire id на sha
-- [ ] CI green (после push)
-- [ ] COMPONENT_MAP — не главная задача зоны → не трогали
+- [x] CI green `35431986540`
+- [x] COMPONENT_MAP — не главная → не трогали

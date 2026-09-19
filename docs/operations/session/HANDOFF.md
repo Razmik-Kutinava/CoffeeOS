@@ -7,12 +7,12 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **Патч 1** inline статусы в кнопке **REVIEW** | CI → стоп |
-| Entire `01M2WC1SCBV10YQZW2HFQ6DNM7` · `9eab6800` | deploy апрув |
-| TASK_94 ЛК — вне scope | — |
+| **Патч 1** inline статусы в кнопке **REVIEW · CI green** | deploy апрув |
+| Entire `01M2WC1SCBV10YQZW2HFQ6DNM7` · `9eab6800` | Fly MCP после deploy |
+| CI `35431986540` | — |
 
-**last_done:** `/review` Патч 1 (bugbot timer fix + security clean)  
-**next_step:** CI green; deploy — апрув
+**last_done:** `/review` Патч 1 · CI green  
+**next_step:** deploy — апрув
 
 **ctx_trim:** `2026-09-02`  
 **Fly:** v499 `deployment-01M2T582RETP2608KZMBMXAE1A`
