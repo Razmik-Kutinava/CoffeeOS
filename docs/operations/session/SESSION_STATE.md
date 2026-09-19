@@ -2,17 +2,17 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-19 (#69 Патч 2 GREEN)  
+**Дата:** 2026-09-19 (#69 Патч 2 GREEN · Патч 1 fig1 intake)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
 | **#69 Патч 2** Subtask 21 · Tg→Telegram · Local PASS 14/14 | `/review` |
-| **Патч 1** inline-pay · Local PASS · Fly UI old | deploy апрув |
-| **TASK_94** REVIEW · CI green | deploy апрув (отдельно) |
+| **#69 Патч 1** рис.1 intake · Subtask 1 patch v1 **open** | после Review П2 — Header без чата |
+| Inline-pay Патч 1 · Local PASS · Fly UI old | deploy апрув |
 
-**last_done:** #69 Патч 2 GREEN — ContactSupportSheet «Telegram» · рис.2 в artifacts  
-**next_step:** `/review` Патч 2 (или deploy Патч 1 — апрув)
+**last_done:** рис.1 Патч 1 ЛК в artifacts + understanding (не путать с inline-pay)  
+**next_step:** `/review` Патч 2
 
 **ctx_trim:** `2026-09-02`
 

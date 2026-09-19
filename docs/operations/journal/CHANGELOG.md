@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-19 — docs: #69 Патч 1 рис.1 ЛК intake + understanding
+
+- Google Doc после TODO → Патч 1: убрать иконку «Обратная связь» из шапки гл. экрана
+- Артефакт: `pwa_personal_account_lk/screenshots/patch1_2026-09-17_fig1_lk_ux_markup.png`
+- Understanding: [`PATCH1_FIG1_UNDERSTANDING_2026-09-19.md`](../milestones/veha_2/artifacts/pwa_personal_account_lk/PATCH1_FIG1_UNDERSTANDING_2026-09-19.md)
+- Next: `/review` Патч 2 · затем отдельным шагом Патч 1 (не PLG/ОФД)
+
 ## 2026-09-19 — feat: #69 Патч 2 ЛК «Tg» → «Telegram» [GREEN]
 
 - Subtask 21 patch v1: `ContactSupportSheet` подпись Telegram (как на гл. экране)
