@@ -4,7 +4,7 @@
 |------|----------|
 | **ID** | **TASK_94** / #94 |
 | **Тип** | SBR · доп.задача · hot-path shop pay / ЛК |
-| **Статус** | **REVIEW** · push/CI |
+| **Статус** | **REVIEW · CI green** · deploy апрув |
 | **Ветка** | `develop` |
 | **ТЗ** | [`TASK-94-Повтор-покупки-из-истории-ЛК-с-one-click-оплатой.md`](../milestones/veha_2/requirements/customer_tasks/TASK-94-Повтор-покупки-из-истории-ЛК-с-one-click-оплатой.md) |
 | **GATES** | [`session/GATES.md`](GATES.md) · G1–G4 **met** (reverify) · G5 Fly unmet |
