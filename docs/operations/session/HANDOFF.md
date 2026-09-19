@@ -2,17 +2,17 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-19 (Патч 1 screen compare)  
+**Дата:** 2026-09-19 (#69 Патч 2 GREEN)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **Патч 1** Local PASS · Fly UI old (статус вне кнопки) | deploy → скрин PROCESSING in button |
+| **#69 Патч 2** Tg→Telegram · Local PASS | `/review` |
+| **Патч 1** inline-pay · Fly UI old | deploy апрув |
 | **TASK_94** REVIEW · CI green | deploy апрув (отдельно) |
-| Compare [`PATCH1_SCREEN_COMPARE_2026-09-19.md`](../milestones/veha_2/artifacts/tbank_inline_payment_button_statuses/PATCH1_SCREEN_COMPARE_2026-09-19.md) | Fly MCP |
 
-**last_done:** скрин заказчика в артефакт + Fly compare (FAIL UI на стенде)  
-**next_step:** deploy Патч 1 — апрув
+**last_done:** #69 Патч 2 · Subtask 21 patch v1 · ContactSupportSheet «Telegram» · рис.2 artifact  
+**next_step:** `/review` Патч 2
 
 **ctx_trim:** `2026-09-02`  
 **Fly:** v499 `deployment-01M2T582RETP2608KZMBMXAE1A`

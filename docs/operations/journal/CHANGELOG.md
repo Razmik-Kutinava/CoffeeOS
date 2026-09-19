@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-19 — feat: #69 Патч 2 ЛК «Tg» → «Telegram» [GREEN]
+
+- Subtask 21 patch v1: `ContactSupportSheet` подпись Telegram (как на гл. экране)
+- Артефакт рис.2: `pwa_personal_account_lk/screenshots/patch2_2026-09-17_fig2_telegram_label.png`
+- Тест: `telegram_support_test.mjs` 14/14 · URL/email/механика без изменений
+- Next: `/review`
+
 ## 2026-09-19 — docs: Патч 1 screen compare (customer + Fly)
 
 - Artifact `tbank_inline_payment_button_statuses/PATCH1_SCREEN_COMPARE_2026-09-19.md`

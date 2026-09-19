@@ -2,17 +2,17 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-19 (Патч 1 screen compare)  
+**Дата:** 2026-09-19 (#69 Патч 2 GREEN)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **Патч 1** Local PASS · Fly v499 UI **ещё old** (статус вне кнопки) | deploy апрув → повторный скрин |
-| **TASK_94** REVIEW · CI green `35434127135` | deploy апрув (отдельно) |
-| Artifact `PATCH1_SCREEN_COMPARE_2026-09-19.md` | Fly MCP после deploy |
+| **#69 Патч 2** Subtask 21 · Tg→Telegram · Local PASS 14/14 | `/review` |
+| **Патч 1** inline-pay · Local PASS · Fly UI old | deploy апрув |
+| **TASK_94** REVIEW · CI green | deploy апрув (отдельно) |
 
-**last_done:** customer markup + Fly compare · during_pay = статус в fallback, не в card-pay  
-**next_step:** deploy Патч 1 — апрув
+**last_done:** #69 Патч 2 GREEN — ContactSupportSheet «Telegram» · рис.2 в artifacts  
+**next_step:** `/review` Патч 2 (или deploy Патч 1 — апрув)
 
 **ctx_trim:** `2026-09-02`
 

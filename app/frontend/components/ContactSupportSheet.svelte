@@ -47,7 +47,7 @@
         e mail
       </button>
       <button type="button" class="cs-btn" data-testid="contact-support-telegram" onclick={openTelegram}>
-        Tg
+        Telegram
       </button>
     </div>
   </section>

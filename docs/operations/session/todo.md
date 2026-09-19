@@ -4,7 +4,7 @@
 |------|----------|
 | **ID** | **#69** · **Патч 2** · 2026-09-17 · patch v1 |
 | **Тип** | SBR · патч · ЛК bottom sheet «Написать нам» |
-| **Статус** | **SPEC → RED** |
+| **Статус** | **GREEN · Local PASS** · дальше `/review` |
 | **Ветка** | `develop` |
 | **ТЗ** | [`Доработка личного кабинета (ЛК) в PWA.md`](../milestones/veha_2/requirements/customer_tasks/Доработка%20личного%20кабинета%20(ЛК)%20в%20PWA.md) · секция **Патч 2: 2026-09-17** → **Исправленный сценарий** |
 | **Артефакт** | [`screenshots/patch2_2026-09-17_fig2_telegram_label.png`](../milestones/veha_2/artifacts/pwa_personal_account_lk/screenshots/patch2_2026-09-17_fig2_telegram_label.png) · рис.2 |
@@ -14,9 +14,9 @@
 
 - [x] PHASE 0 /start — Google Doc · customer_tasks · рис.2 в artifacts
 - [x] PHASE 1 SPEC — только Исправленный сценарий (Subtask 21 patch v1)
-- [ ] PHASE 2 RED — тест подписи Telegram [TDD]
-- [ ] PHASE 2 GREEN — `ContactSupportSheet`: «Tg» → «Telegram»
-- [ ] `/regress` (Проверка)
+- [x] PHASE 2 RED — тест подписи Telegram [TDD] · `098b4c24`
+- [x] PHASE 2 GREEN — `ContactSupportSheet`: «Tg» → «Telegram»
+- [x] `/regress` (Проверка) · `node --test test/javascript/telegram_support_test.mjs` · 14/14
 - [ ] PHASE 3 `/review`
 
 ## Файлы (ожидаемо)
@@ -47,6 +47,6 @@ node --test test/javascript/telegram_support_test.mjs
 
 ## DoD
 
-- [ ] Subtask 21 (patch v1): в bottom sheet ЛК варианты «email» и **«Telegram»** (не «Tg»)
-- [ ] URL / обработчик / email / структура sheet без изменений
-- [ ] Local PASS · затем `/review` при намерении
+- [x] Subtask 21 (patch v1): в bottom sheet ЛК варианты «email» и **«Telegram»** (не «Tg»)
+- [x] URL / обработчик / email / структура sheet без изменений
+- [x] Local PASS · затем `/review` при намерении
