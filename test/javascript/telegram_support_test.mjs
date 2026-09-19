@@ -95,6 +95,21 @@ describe("Unified URL both entry points (#70 Subtask 11) [RED]", () => {
     assert.doesNotMatch(headerSheet, /iframe|Telegram\.WebApp/i)
   })
 
+  it("Патч 2 Subtask 21: LK sheet labels Telegram (not Tg) like main screen", () => {
+    const lkSheet = readFront("components/ContactSupportSheet.svelte")
+    const headerSheet = readFront("components/SupportContactSheet.svelte")
+    assert.match(headerSheet, /channel\.name/)
+    assert.equal(SUPPORT_CHANNELS.TELEGRAM.name, "Telegram")
+    assert.match(
+      lkSheet,
+      /data-testid="contact-support-telegram"[\s\S]*?>\s*Telegram\s*</
+    )
+    assert.doesNotMatch(
+      lkSheet,
+      /data-testid="contact-support-telegram"[\s\S]*?>\s*Tg\s*</
+    )
+  })
+
   it("opened URL cleaned of query/hash PII", () => {
     const dirty = `${CANON}?user_id=1&phone=9#order_id=2`
     const cleaned = cleanDeepLinkUrl(dirty)

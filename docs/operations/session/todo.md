@@ -1,62 +1,52 @@
-# todo — Патч 1: inline-оплата · статусы внутри кнопки
+# todo — Патч 2: ЛК · «Tg» → «Telegram» (Subtask 21)
 
 | Поле | Значение |
 |------|----------|
-| **ID** | **Патч 1** · 2026-09-17 · patch v1 |
-| **Тип** | SBR · патч · hot-path shop pay (Quick Repeat button) |
-| **Статус** | **REVIEW · CI green** · deploy апрув |
+| **ID** | **#69** · **Патч 2** · 2026-09-17 · patch v1 |
+| **Тип** | SBR · патч · ЛК bottom sheet «Написать нам» |
+| **Статус** | **SPEC → RED** |
 | **Ветка** | `develop` |
-| **ТЗ** | [`Интеграция inline-оплаты Т-Банка с динамическими статусами внутри кнопки.md`](../milestones/veha_2/requirements/customer_tasks/Интеграция%20inline-оплаты%20Т-Банка%20с%20динамическими%20статусами%20внутри%20кнопки.md) · секция **Патч 1: 2026-09-17** → **Исправленный сценарий** |
-| **GATES** | JS/Rails patch1 + FSM · Local PASS 2026-09-19 · Fly MCP после deploy |
-| **Google Doc** | https://docs.google.com/document/d/16mYs8tQLg7r1sm7XBmWxRS8ON1kngU4cHIh4EdrKVEY/edit |
+| **ТЗ** | [`Доработка личного кабинета (ЛК) в PWA.md`](../milestones/veha_2/requirements/customer_tasks/Доработка%20личного%20кабинета%20(ЛК)%20в%20PWA.md) · секция **Патч 2: 2026-09-17** → **Исправленный сценарий** |
+| **Артефакт** | [`screenshots/patch2_2026-09-17_fig2_telegram_label.png`](../milestones/veha_2/artifacts/pwa_personal_account_lk/screenshots/patch2_2026-09-17_fig2_telegram_label.png) · рис.2 |
+| **Google Doc** | https://docs.google.com/document/d/1yH1DzM48Bcg43X9lT_37WVICKUkmFLGETduYX3eOpzo/edit |
 
 ## SBR
 
-- [x] PHASE 0 /start (аудит vs Google Doc / customer_tasks)
-- [x] PHASE 1 SPEC — только Исправленный сценарий (Subtask 8/10/12/13 patch v1)
-- [x] PHASE 2 RED — `widget_repeat_pay_flow_patch1` + `inline_pay_button_patch1` [TDD]
-- [x] PHASE 2 GREEN — статусы в `shop-repeat-card-pay` · 1051 short · ERROR/timeout → IDLE 3000 мс
-- [x] `/regress` (Проверка) · Local PASS 2026-09-19 (reverify)
-- [x] PHASE 3 `/review` — CI green · deploy апрув
+- [x] PHASE 0 /start — Google Doc · customer_tasks · рис.2 в artifacts
+- [x] PHASE 1 SPEC — только Исправленный сценарий (Subtask 21 patch v1)
+- [ ] PHASE 2 RED — тест подписи Telegram [TDD]
+- [ ] PHASE 2 GREEN — `ContactSupportSheet`: «Tg» → «Telegram»
+- [ ] `/regress` (Проверка)
+- [ ] PHASE 3 `/review`
 
 ## Файлы (ожидаемо)
 
-1. `app/frontend/lib/shopInlinePayFsm.js` — ротация 1800 · poll 1500 · timeout 15000 · 1051 / «Ошибка оплаты» · `TBANK_INLINE_ERROR_RESET_MS=3000`
-2. `app/frontend/lib/widgetRepeatPayFlow.js` — `resetAfterMs` на REJECTED/CANCELED/timeout/http_error; retry/fallback UI
-3. `app/frontend/components/RepeatSection.svelte` — `cardPayLabel` / цвет кнопки · `statusInHostButton` · `payResetTimer` → IDLE
-4. `app/frontend/components/InlinePayFallback.svelte` — `statusInHostButton` скрывает дубль status bar
-5. `test/javascript/widget_repeat_pay_flow_patch1_test.mjs` — G1 labels/UI/reset
-6. `test/javascript/shop_inline_pay_button_fsm_test.mjs` — intervals + cycle
-7. `test/integration/shop/inline_pay_button_patch1_test.rb` — source-contract patch1
+1. `app/frontend/components/ContactSupportSheet.svelte` — подпись кнопки `contact-support-telegram`: «Tg» → «Telegram»
+2. `test/javascript/telegram_support_test.mjs` — контракт Патч 2 (Subtask 21)
+3. `docs/operations/milestones/veha_2/requirements/customer_tasks/Доработка личного кабинета (ЛК) в PWA.md` — секции Патч 1/2 (синхрон с Google Doc)
+4. `docs/operations/milestones/veha_2/artifacts/pwa_personal_account_lk/screenshots/patch2_2026-09-17_fig2_telegram_label.png` — рис.2
 
 ### Blast-radius (соседи, не менять)
 
-- `Checkout.svelte` / `PaymentMethodsSheet.svelte` — стандартный checkout
-- `CartSheet.svelte` / `cartSheetStore.js` — clearCart / граница QR
-- `OrderStatusSheet` / `/orders/active`
-- `Profile.svelte` / `OrderReceipt.svelte` / `historyRepeatAdapter.js` — TASK_94 / ЛК
-- payment API · `widget_init` · Charge · webhook
+- `SupportContactSheet.svelte` / `supportConfig.js` — гл. экран (уже «Telegram»; референс)
+- `Profile.svelte` / `AccountSettings.svelte` — только хосты sheet; не трогать (TASK_94 / ЛК)
+- Telegram URL / `openDeepLink` / email-кнопка / структура bottom sheet
 
 ## Не ломать
 
-1. Стандартный checkout / payment API (`widget_init`, status, Charge, webhook)
-2. Quick Repeat orchestration как отдельную фичу (только UI/state статусов кнопки)
-3. `cartSheetStore.clearCartAfterSuccessfulPay` (#87)
-4. `OrderStatusSheet` / active-order · Profile/OrderReceipt (TASK_94)
+1. Механику «Написать нам» / deep link / URL бота (`shopSupportTelegramUrl` / `SUPPORT_TELEGRAM_URL`)
+2. Email-сценарий и подпись «e mail» / email (без редизайна sheet)
+3. `Profile.svelte` history repeat / TASK_94 (COMPONENT_MAP · Profile → ContactSupportSheet)
+4. Header / Патч 1 (иконка «обратная связь») — вне scope этой итерации
 
 ## Проверка
 
 ```bash
-node --test test/javascript/widget_repeat_pay_flow_patch1_test.mjs test/javascript/shop_inline_pay_button_fsm_test.mjs
-bundle exec rails test test/integration/shop/inline_pay_button_patch1_test.rb test/integration/shop/quick_repeat_pay_one_click_test.rb
+node --test test/javascript/telegram_support_test.mjs
 ```
 
 ## DoD
 
-- [x] Subtask 8 (patch v1): PROCESSING + «Ещё чуть-чуть...» **внутри** `shop-repeat-card-pay`
-- [x] Subtask 10 (patch v1): ротация 1800 мс внутри кнопки · poll 1500 мс
-- [x] Subtask 12 (patch v1): 1051 → «Недостаточно средств»; иначе «Ошибка оплаты»; ERROR→IDLE 3000 мс
-- [x] Subtask 13 (patch v1): timeout 15000 → «Время ожидания истекло»; → IDLE 3000 мс
-- [x] Subtask 12/13: retry / СБП / «карта +» сохранены; payment API не меняли
-- [ ] Fly MCP Point A после deploy (апрув)
-- [ ] `COMPONENT_MAP.md` — только если Review потребует смены строки (зона уже отражена)
+- [ ] Subtask 21 (patch v1): в bottom sheet ЛК варианты «email» и **«Telegram»** (не «Tg»)
+- [ ] URL / обработчик / email / структура sheet без изменений
+- [ ] Local PASS · затем `/review` при намерении
