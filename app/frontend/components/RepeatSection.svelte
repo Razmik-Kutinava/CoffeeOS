@@ -43,11 +43,20 @@
   let brokenUrls = $state(/** @type {Set<string>} */ (new Set()))
   let feedback = $state(null)
   let toastTimer = null
+  /** Патч 1 REVIEW: cancel pending IDLE-reset when starting a new pay. */
+  let payResetTimer = null
   let payUi = $state(/** @type {any} */ ({}))
 
   let topItems = $derived(items.slice(0, 3))
   let embedded = $derived(layout === "embedded")
   let repeatBusy = $derived(!!payUi.busy)
+
+  function clearPayResetTimer() {
+    if (payResetTimer != null) {
+      clearTimeout(payResetTimer)
+      payResetTimer = null
+    }
+  }
 
   onMount(() => {
     const unsubItems = frequentItems.subscribe((v) => { items = Array.isArray(v) ? v : [] })
@@ -61,6 +70,7 @@
     return () => {
       unsubItems(); unsubQty(); unsubPay(); unsubFeedback()
       if (toastTimer) clearTimeout(toastTimer)
+      clearPayResetTimer()
     }
   })
 
@@ -97,6 +107,7 @@
 
   async function onPayCardClick(item) {
     if (payUi.busy) return
+    clearPayResetTimer()
     const key = frequentCardKey(item)
     const fsm = createWidgetPayFsm()
     fsm.start()
@@ -140,7 +151,11 @@
         return
       }
       if (out.resetAfterMs) {
-        setTimeout(() => resetRepeatInlinePayUi(), out.resetAfterMs)
+        clearPayResetTimer()
+        payResetTimer = setTimeout(() => {
+          payResetTimer = null
+          resetRepeatInlinePayUi()
+        }, out.resetAfterMs)
       }
     } catch (e) {
       fsm.reject({ error_code: e?.error_code || "" })

@@ -65,6 +65,13 @@ describe("Патч 1 — Subtask 8/10 UI: status inside shop-repeat-card-pay", (
     )
     assert.match(src, /statusInHostButton|hideStatusBar/)
   })
+
+  it("clears pending payResetTimer before new pay / on unmount (bugbot)", () => {
+    const src = readFileSync(join(root, "app/frontend/components/RepeatSection.svelte"), "utf8")
+    assert.match(src, /clearPayResetTimer/)
+    assert.match(src, /payResetTimer\s*=\s*setTimeout/)
+    assert.match(src, /clearPayResetTimer\(\)/)
+  })
 })
 
 describe("Патч 1 — Subtask 12/13 flow: ERROR/timeout → resetAfterMs", () => {
