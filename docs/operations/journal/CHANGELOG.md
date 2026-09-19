@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-19 — docs: Патч 1 screen compare (customer + Fly)
+
+- Artifact `tbank_inline_payment_button_statuses/PATCH1_SCREEN_COMPARE_2026-09-19.md`
+- Customer markup + Fly idle/during/paid · during_pay: статус в fallback, не в `shop-repeat-card-pay`
+- Вывод: Local PASS · Fly v499 ещё без Патча 1 UI · next = deploy апрув
+
 ## 2026-09-19 — docs: todo Патч 1 inline pay (Исправленный сценарий)
 
 - Google Doc + customer_tasks: только Патч 1 Subtask 8/10/12/13 patch v1

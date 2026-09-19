@@ -2,16 +2,16 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-19 (Патч 1 reverify · todo)  
+**Дата:** 2026-09-19 (Патч 1 screen compare)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **Патч 1** Исправленный сценарий · Local PASS · REVIEW/CI green | deploy апрув |
+| **Патч 1** Local PASS · Fly UI old (статус вне кнопки) | deploy → скрин PROCESSING in button |
 | **TASK_94** REVIEW · CI green | deploy апрув (отдельно) |
-| Entire `01M2WE9CRRMSBH3NM8QQWWG50X` · `4336854` | Fly MCP после deploy |
+| Compare [`PATCH1_SCREEN_COMPARE_2026-09-19.md`](../milestones/veha_2/artifacts/tbank_inline_payment_button_statuses/PATCH1_SCREEN_COMPARE_2026-09-19.md) | Fly MCP |
 
-**last_done:** todo → Патч 1 · Subtask 8/10/12/13 patch v1 already in code · reverify PASS  
+**last_done:** скрин заказчика в артефакт + Fly compare (FAIL UI на стенде)  
 **next_step:** deploy Патч 1 — апрув
 
 **ctx_trim:** `2026-09-02`  

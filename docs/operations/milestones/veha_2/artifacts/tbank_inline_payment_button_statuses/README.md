@@ -22,3 +22,4 @@
 
 - 2026-07-29: папка заведена (скринов в сообщении не было).
 - 2026-07-30: добавлен скрин схемы flow `01_…png`.
+- 2026-09-19: Патч 1 — customer markup + Fly compare → [`PATCH1_SCREEN_COMPARE_2026-09-19.md`](PATCH1_SCREEN_COMPARE_2026-09-19.md) · `screenshots/patch1_2026-09-19_*.png`.
