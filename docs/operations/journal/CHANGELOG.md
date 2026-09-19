@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-19 — docs: REVIEW TASK_94 LK history repeat one-click
+
+- Local PASS · bugbot: no bugs · security: no med/high/crit (app auth scoped)
+- Entire `01M2WE9CRRMSBH3NM8QQWWG50X` на `4336854`
+- GREEN `ff63997d` · GATES G1–G4 met · G5 Fly после deploy
+- Next: CI green → deploy апрув
+
 ## 2026-09-19 — docs: unlazy reverify TASK_94 G1–G4 met
 
 - `--approve` + `--reverify`: G1–G4 PASS · G5 Fly unmet (после deploy)
