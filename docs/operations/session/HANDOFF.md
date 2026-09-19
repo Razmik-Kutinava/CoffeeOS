@@ -2,17 +2,16 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-19 (Патч 1 REVIEW)  
+**Дата:** 2026-09-19 (TASK_94 PHASE 0 intake)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **Патч 1** inline статусы в кнопке **REVIEW · CI green** | deploy апрув |
-| Entire `01M2WC1SCBV10YQZW2HFQ6DNM7` · `9eab6800` | Fly MCP после deploy |
-| CI `35431986540` | — |
+| **TASK_94** повтор из истории ЛК **intake `[x]`** | `/spec` |
+| Патч 1 inline статусы REVIEW · CI green | deploy апрув (отдельно) |
 
-**last_done:** `/review` Патч 1 · CI green  
-**next_step:** deploy — апрув
+**last_done:** `/start` PHASE 0 TASK_94  
+**next_step:** `/spec`
 
 **ctx_trim:** `2026-09-02`  
 **Fly:** v499 `deployment-01M2T582RETP2608KZMBMXAE1A`

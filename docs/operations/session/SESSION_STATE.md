@@ -2,17 +2,16 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-19 (Патч 1 REVIEW)  
+**Дата:** 2026-09-19 (TASK_94 PHASE 0 intake)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **Патч 1** inline T‑Bank **REVIEW · CI green** | deploy — апрув |
-| Entire `01M2WC1SCBV10YQZW2HFQ6DNM7` на `9eab6800` | Fly MCP Point A после deploy |
-| CI `35431986540` success | — |
+| **TASK_94** LK history repeat one-click **intake `[x]`** | `/spec` |
+| Патч 1 inline T‑Bank REVIEW · CI green | deploy — апрув (отдельно) |
 
-**last_done:** `/review` Патч 1 · CI green `fd3a0abd`  
-**next_step:** deploy — только апрув
+**last_done:** `/start` PHASE 0 TASK_94  
+**next_step:** `/spec`
 
 **ctx_trim:** `2026-09-02`
 

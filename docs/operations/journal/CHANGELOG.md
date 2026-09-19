@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-19 — docs: intake TASK_94 LK history repeat one-click
+
+- `customer_tasks/TASK-94-Повтор-покупки-из-истории-ЛК-с-one-click-оплатой.md` — Google Doc 1:1
+- artifacts `lk_history_repeat_one_click/` · CBR #94 · customer_tasks README
+- Next: `/spec`
+
 ## 2026-09-19 — docs: REVIEW Патч 1 inline pay button statuses
 
 - Local PASS · bugbot: clearPayResetTimer · security: no med/high/crit
