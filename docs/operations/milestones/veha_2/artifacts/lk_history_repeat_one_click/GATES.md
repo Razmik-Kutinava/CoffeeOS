@@ -2,36 +2,35 @@
 
 Scope: В каноническом `#/profile` «Повторить» создаёт новый Order из выбранного исторического заказа и запускает существующий Quick Repeat / widget one-click (inline статусы кнопки); исходный Order и стандартный checkout не меняются.
 
+**Живой ledger сессии:** [`docs/operations/session/GATES.md`](../../../session/GATES.md)
+
 - [ ] G1: JS — ЛК → Repeat → adapter / orchestration (targeted)
   CHECK: node --test test/javascript/lk_history_repeat_one_click_test.mjs
   EXPECT: fail 0
   CWD: C:/Tools/workarea/CoffeeOS
-  EVIDENCE: pending
+  EVIDENCE: pending — file created on RED
 
 - [ ] G2: Rails — ЛК history repeat → new Order + one-click contract (targeted)
   CHECK: ruby bin/rails test test/integration/shop/lk_history_repeat_one_click_test.rb
   EXPECT: 0 failures, 0 errors
   CWD: C:/Tools/workarea/CoffeeOS
-  EVIDENCE: pending
+  EVIDENCE: pending — file created on RED
 
 - [x] G3: zone regression — Quick Repeat one-click + ЛК contract (не ломать)
   CHECK: ruby bin/rails test test/integration/shop/quick_repeat_pay_one_click_test.rb test/integration/shop/pwa_personal_account_lk_test.rb
   EXPECT: 0 failures, 0 errors
   CWD: C:/Tools/workarea/CoffeeOS
-  EVIDENCE: automatic-evidence=v1; definition-sha256=1fc42298a9a99198874bcb6a403c11b0281342891e717f6df66561be0965b7d9; exit=0; EXPECT=matched; output-sha256=2f09d2d0d92c35e8bd02d95dcd5e744e5aa26216b063b7a3042539689b1d3b73; output-bytes=1625; shell=C:\Windows\system32\cmd.exe; cwd=C:\Tools\workarea\CoffeeOS; path=54c8ad8163c5/77 entries
+  EVIDENCE: see session GATES.md (2026-09-19 baseline PASS)
 
 - [x] G4: zone regression — inline pay button / widget flow (Патч 1)
   CHECK: node --test test/javascript/widget_repeat_pay_flow_patch1_test.mjs test/javascript/shop_inline_pay_button_fsm_test.mjs
   EXPECT: fail 0
   CWD: C:/Tools/workarea/CoffeeOS
-  EVIDENCE: automatic-evidence=v1; definition-sha256=1188fc8f061ff909bb86a4e1c52ad8025ee7a796f9b4755766bee5e35a62ea1c; exit=0; EXPECT=matched; output-sha256=f80a9f27ba895c6f0c26f7fa63fc94435c4db7952211c6433928621bd3cdf0c2; output-bytes=4131; shell=C:\Windows\system32\cmd.exe; cwd=C:\Tools\workarea\CoffeeOS; path=54c8ad8163c5/77 entries
+  EVIDENCE: see session GATES.md (2026-09-19 baseline PASS)
 
 - [ ] G5: hot-path Fly MCP Point A — Profile → история → Повторить → one-click → PROCESSING → результат → active order
-  EVIDENCE: pending — skip until PHASE 3 REVIEW / deploy; artifact under artifacts/lk_history_repeat_one_click/mcp/; PASS = Point A tenant `2fdee1ac-4674-41ee-b89e-87b45643f789` · new Order from selected history · same widget pay flow · inline button statuses · historical Order unchanged · checkout untouched
+  EVIDENCE: pending — skip until PHASE 3 REVIEW / deploy; artifact under artifacts/lk_history_repeat_one_click/mcp/
 
 <!--
-CoffeeOS TASK_94 unlazy:
-- Pre-SPEC/SBR: G1–G2 test files created on RED; G3–G4 must stay green.
-- G5 Fly Point A after deploy. ABANDON only with reason at column 1.
-- Do not change Checkout / payment API / OrderStatusSheet / CartSheet clearCartAfterSuccessfulPay.
+CoffeeOS TASK_94 unlazy — baseline 2026-09-19: met G3/G4 · unmet G1/G2/G5
 -->

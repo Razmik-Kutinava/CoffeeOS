@@ -2,15 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-19 (TASK_94 PHASE 0 intake)  
+**Дата:** 2026-09-19 (TASK_94 /unlazy)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **TASK_94** повтор из истории ЛК **intake `[x]`** | `/spec` |
+| **TASK_94** GATES · G3/G4 met · G1/G2/G5 unmet | `/spec` |
 | Патч 1 inline статусы REVIEW · CI green | deploy апрув (отдельно) |
 
-**last_done:** `/start` PHASE 0 TASK_94  
+**last_done:** `/unlazy` TASK_94 ledger  
 **next_step:** `/spec`
 
 **ctx_trim:** `2026-09-02`  

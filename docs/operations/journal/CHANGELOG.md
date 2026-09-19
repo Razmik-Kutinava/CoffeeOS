@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-19 — docs: /unlazy TASK_94 GATES ledger
+
+- `session/GATES.md` + `artifacts/lk_history_repeat_one_click/GATES.md`
+- Baseline: G3/G4 PASS · G1/G2 unmet (тесты на RED) · G5 Fly pending
+- Next: `/spec`
+
 ## 2026-09-19 — docs: intake TASK_94 LK history repeat one-click
 
 - `customer_tasks/TASK-94-Повтор-покупки-из-истории-ЛК-с-one-click-оплатой.md` — Google Doc 1:1
