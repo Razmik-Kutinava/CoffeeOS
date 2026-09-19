@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-19 — docs: todo Патч 1 inline pay (Исправленный сценарий)
+
+- Google Doc + customer_tasks: только Патч 1 Subtask 8/10/12/13 patch v1
+- Код уже GREEN (2026-09-18) · REVIEW CI green — reverify Local PASS (JS 15/15 · Rails patch1 4/4)
+- `todo.md` переключён на итерацию Патч 1 · чеклист Исправленный сценарий `[x]`
+- Next: deploy апрув · Fly MCP
+
 ## 2026-09-19 — docs: REVIEW TASK_94 LK history repeat one-click
 
 - Local PASS · bugbot: no bugs · security: no med/high/crit (app auth scoped)

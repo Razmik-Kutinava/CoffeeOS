@@ -1,59 +1,62 @@
-# todo — TASK_94: Повтор покупки из истории ЛК с one-click
+# todo — Патч 1: inline-оплата · статусы внутри кнопки
 
 | Поле | Значение |
 |------|----------|
-| **ID** | **TASK_94** / #94 |
-| **Тип** | SBR · доп.задача · hot-path shop pay / ЛК |
+| **ID** | **Патч 1** · 2026-09-17 · patch v1 |
+| **Тип** | SBR · патч · hot-path shop pay (Quick Repeat button) |
 | **Статус** | **REVIEW · CI green** · deploy апрув |
 | **Ветка** | `develop` |
-| **ТЗ** | [`TASK-94-Повтор-покупки-из-истории-ЛК-с-one-click-оплатой.md`](../milestones/veha_2/requirements/customer_tasks/TASK-94-Повтор-покупки-из-истории-ЛК-с-one-click-оплатой.md) |
-| **GATES** | [`session/GATES.md`](GATES.md) · G1–G4 **met** (reverify) · G5 Fly unmet |
-| **Google Doc** | https://docs.google.com/document/d/19QWNuRirU9jGkzFMY7sXXQV8xFTf2oEq_u3Yf0fo-6w/edit |
+| **ТЗ** | [`Интеграция inline-оплаты Т-Банка с динамическими статусами внутри кнопки.md`](../milestones/veha_2/requirements/customer_tasks/Интеграция%20inline-оплаты%20Т-Банка%20с%20динамическими%20статусами%20внутри%20кнопки.md) · секция **Патч 1: 2026-09-17** → **Исправленный сценарий** |
+| **GATES** | JS/Rails patch1 + FSM · Local PASS 2026-09-19 · Fly MCP после deploy |
+| **Google Doc** | https://docs.google.com/document/d/16mYs8tQLg7r1sm7XBmWxRS8ON1kngU4cHIh4EdrKVEY/edit |
 
 ## SBR
 
-- [x] PHASE 0 /start (intake)
-- [x] PHASE 1 SPEC
-- [x] PHASE 2 RED — `lk_history_repeat_one_click` tests [TDD]
-- [x] PHASE 2 GREEN — Profile/OrderReceipt + adapter → existing pay flow
-- [x] `/regress` (Проверка) · Local PASS 2026-09-19
-- [x] PHASE 3 `/review` — bugbot + security · Entire · push · Fly MCP G5 после deploy
+- [x] PHASE 0 /start (аудит vs Google Doc / customer_tasks)
+- [x] PHASE 1 SPEC — только Исправленный сценарий (Subtask 8/10/12/13 patch v1)
+- [x] PHASE 2 RED — `widget_repeat_pay_flow_patch1` + `inline_pay_button_patch1` [TDD]
+- [x] PHASE 2 GREEN — статусы в `shop-repeat-card-pay` · 1051 short · ERROR/timeout → IDLE 3000 мс
+- [x] `/regress` (Проверка) · Local PASS 2026-09-19 (reverify)
+- [x] PHASE 3 `/review` — CI green · deploy апрув
 
 ## Файлы (ожидаемо)
 
-1. `app/frontend/routes/Profile.svelte` — `shop-lk-repeat-btn`: не только `openReceipt`, старт repeat выбранного заказа
-2. `app/frontend/routes/OrderReceipt.svelte` — заменить stub `onRepeatStub` на реальный repeat + pay orchestration
-3. `app/frontend/lib/historyRepeatAdapter.js` *(новый)* — исторический Order → item(s) / вызов существующего `createRepeatInlineOrder` + `runRepeatWidgetPayFlow`
-4. `app/frontend/lib/createRepeatInlineOrder.js` — только если адаптеру нужен multi-item / без ломки QR single-card контракта *(не трогали — multi-item в adapter)*
-5. `app/controllers/shop/api/orders_controller.rb` — `product_id` в `order_json` items
-6. `test/javascript/lk_history_repeat_one_click_test.mjs` *(новый)* — G1
-7. `test/integration/shop/lk_history_repeat_one_click_test.rb` *(новый)* — G2
+1. `app/frontend/lib/shopInlinePayFsm.js` — ротация 1800 · poll 1500 · timeout 15000 · 1051 / «Ошибка оплаты» · `TBANK_INLINE_ERROR_RESET_MS=3000`
+2. `app/frontend/lib/widgetRepeatPayFlow.js` — `resetAfterMs` на REJECTED/CANCELED/timeout/http_error; retry/fallback UI
+3. `app/frontend/components/RepeatSection.svelte` — `cardPayLabel` / цвет кнопки · `statusInHostButton` · `payResetTimer` → IDLE
+4. `app/frontend/components/InlinePayFallback.svelte` — `statusInHostButton` скрывает дубль status bar
+5. `test/javascript/widget_repeat_pay_flow_patch1_test.mjs` — G1 labels/UI/reset
+6. `test/javascript/shop_inline_pay_button_fsm_test.mjs` — intervals + cycle
+7. `test/integration/shop/inline_pay_button_patch1_test.rb` — source-contract patch1
 
-### Blast-radius (соседи, не менять ради ЛК)
+### Blast-radius (соседи, не менять)
 
-- `app/frontend/lib/widgetRepeatPayFlow.js` — **reuse** as-is (Патч 1 inline уже в кнопке)
-- `app/frontend/lib/repeatInlinePayUiStore.js` — подключить UI/FSM, не дублировать payment
-- `app/frontend/components/RepeatSection.svelte` — эталон оркестрации; QR UI не трогать
+- `Checkout.svelte` / `PaymentMethodsSheet.svelte` — стандартный checkout
+- `CartSheet.svelte` / `cartSheetStore.js` — clearCart / граница QR
+- `OrderStatusSheet` / `/orders/active`
+- `Profile.svelte` / `OrderReceipt.svelte` / `historyRepeatAdapter.js` — TASK_94 / ЛК
+- payment API · `widget_init` · Charge · webhook
 
 ## Не ломать
 
-1. Стандартный checkout / `Checkout.svelte` / payment API (`widget_init`, status)
-2. Quick Repeat `hasActiveOrder` gate + `RepeatSection` one-click
+1. Стандартный checkout / payment API (`widget_init`, status, Charge, webhook)
+2. Quick Repeat orchestration как отдельную фичу (только UI/state статусов кнопки)
 3. `cartSheetStore.clearCartAfterSuccessfulPay` (#87)
-4. `OrderStatusSheet` / `/orders/active` критерии и контракт
+4. `OrderStatusSheet` / active-order · Profile/OrderReceipt (TASK_94)
 
 ## Проверка
 
 ```bash
-node --test test/javascript/lk_history_repeat_one_click_test.mjs test/javascript/widget_repeat_pay_flow_patch1_test.mjs
-bundle exec rails test test/integration/shop/lk_history_repeat_one_click_test.rb test/integration/shop/quick_repeat_pay_one_click_test.rb test/integration/shop/pwa_personal_account_lk_test.rb
+node --test test/javascript/widget_repeat_pay_flow_patch1_test.mjs test/javascript/shop_inline_pay_button_fsm_test.mjs
+bundle exec rails test test/integration/shop/inline_pay_button_patch1_test.rb test/integration/shop/quick_repeat_pay_one_click_test.rb
 ```
 
 ## DoD
 
-- [ ] «Повторить» в `#/profile` / receipt → новый Order из выбранного history
-- [ ] Существующий Quick Repeat / widget one-click (+ inline статусы кнопки)
-- [ ] Исходный historical Order не изменён; composition не из чужой корзины
-- [ ] Checkout regression green
-- [ ] G1–G4 met · G5 Fly после deploy
-- [ ] `COMPONENT_MAP.md` — только после Review (если зона карты)
+- [x] Subtask 8 (patch v1): PROCESSING + «Ещё чуть-чуть...» **внутри** `shop-repeat-card-pay`
+- [x] Subtask 10 (patch v1): ротация 1800 мс внутри кнопки · poll 1500 мс
+- [x] Subtask 12 (patch v1): 1051 → «Недостаточно средств»; иначе «Ошибка оплаты»; ERROR→IDLE 3000 мс
+- [x] Subtask 13 (patch v1): timeout 15000 → «Время ожидания истекло»; → IDLE 3000 мс
+- [x] Subtask 12/13: retry / СБП / «карта +» сохранены; payment API не меняли
+- [ ] Fly MCP Point A после deploy (апрув)
+- [ ] `COMPONENT_MAP.md` — только если Review потребует смены строки (зона уже отражена)
