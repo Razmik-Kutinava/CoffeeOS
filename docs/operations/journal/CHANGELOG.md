@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-19 — docs: unlazy reverify TASK_94 G1–G4 met
+
+- `--approve` + `--reverify`: G1–G4 PASS · G5 Fly unmet (после deploy)
+- Next: `/review`
+
 ## 2026-09-19 — docs: regress PASS TASK_94 LK history repeat
 
 - JS 12/12 · Rails 16/16 (LK + QR + personal account)

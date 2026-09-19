@@ -7,7 +7,7 @@
 | **Статус** | **regress PASS** · ждёт `/review` |
 | **Ветка** | `develop` |
 | **ТЗ** | [`TASK-94-Повтор-покупки-из-истории-ЛК-с-one-click-оплатой.md`](../milestones/veha_2/requirements/customer_tasks/TASK-94-Повтор-покупки-из-истории-ЛК-с-one-click-оплатой.md) |
-| **GATES** | [`session/GATES.md`](GATES.md) · G3/G4 baseline met · G1/G2/G5 unmet |
+| **GATES** | [`session/GATES.md`](GATES.md) · G1–G4 **met** (reverify) · G5 Fly unmet |
 | **Google Doc** | https://docs.google.com/document/d/19QWNuRirU9jGkzFMY7sXXQV8xFTf2oEq_u3Yf0fo-6w/edit |
 
 ## SBR
