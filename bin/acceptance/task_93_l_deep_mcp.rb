@@ -395,7 +395,7 @@ if short["ok"]
   checks << {
     block: "C",
     id: "C_short_link_opens",
-    pass: [200, 302, 303, 404].include?(sl[:http]) && sl[:http] != 500,
+    pass: [ 200, 302, 303, 404 ].include?(sl[:http]) && sl[:http] != 500,
     http: sl[:http],
     path: short["path"],
     note: "404 ok if TTL expired; not 500"
@@ -405,7 +405,7 @@ else
   checks << {
     block: "C",
     id: "C_short_link_opens",
-    pass: [404, 302, 303, 410].include?(sl[:http]),
+    pass: [ 404, 302, 303, 410 ].include?(sl[:http]),
     http: sl[:http],
     reason: short["reason"],
     note: "no mobile order; route must not 500"
