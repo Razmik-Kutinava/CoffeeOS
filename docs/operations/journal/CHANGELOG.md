@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-19 — docs: regress PASS TASK_94 LK history repeat
+
+- JS 12/12 · Rails 16/16 (LK + QR + personal account)
+- GREEN `ff63997d` · Entire `01M2WE9CRRMSBH3NM8QQWWG50X`
+- Next: `/review` · Fly MCP G5 после deploy
+
 ## 2026-09-19 — docs: SPEC TASK_94 LK history repeat one-click
 
 - `todo.md`: Profile + OrderReceipt + `historyRepeatAdapter.js` · Не ломать/Проверка

@@ -4,7 +4,7 @@
 |------|----------|
 | **ID** | **TASK_94** / #94 |
 | **Тип** | SBR · доп.задача · hot-path shop pay / ЛК |
-| **Статус** | **GREEN `[x]`** · ждёт `/regress` |
+| **Статус** | **regress PASS** · ждёт `/review` |
 | **Ветка** | `develop` |
 | **ТЗ** | [`TASK-94-Повтор-покупки-из-истории-ЛК-с-one-click-оплатой.md`](../milestones/veha_2/requirements/customer_tasks/TASK-94-Повтор-покупки-из-истории-ЛК-с-one-click-оплатой.md) |
 | **GATES** | [`session/GATES.md`](GATES.md) · G3/G4 baseline met · G1/G2/G5 unmet |
@@ -16,7 +16,7 @@
 - [x] PHASE 1 SPEC
 - [x] PHASE 2 RED — `lk_history_repeat_one_click` tests [TDD]
 - [x] PHASE 2 GREEN — Profile/OrderReceipt + adapter → existing pay flow
-- [ ] `/regress` (Проверка)
+- [x] `/regress` (Проверка) · Local PASS 2026-09-19
 - [ ] PHASE 3 `/review` — bugbot + security · Entire · push · Fly MCP G5
 
 ## Файлы (ожидаемо)
@@ -46,7 +46,7 @@
 
 ```bash
 node --test test/javascript/lk_history_repeat_one_click_test.mjs test/javascript/widget_repeat_pay_flow_patch1_test.mjs
-bundle exec ruby -Itest test/integration/shop/lk_history_repeat_one_click_test.rb test/integration/shop/quick_repeat_pay_one_click_test.rb test/integration/shop/pwa_personal_account_lk_test.rb
+bundle exec rails test test/integration/shop/lk_history_repeat_one_click_test.rb test/integration/shop/quick_repeat_pay_one_click_test.rb test/integration/shop/pwa_personal_account_lk_test.rb
 ```
 
 ## DoD

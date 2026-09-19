@@ -2,16 +2,16 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-19 (TASK_94 GREEN)  
+**Дата:** 2026-09-19 (TASK_94 regress PASS)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **TASK_94** GREEN `ff63997d` · Entire `01M2WE9CRRMSBH3NM8QQWWG50X` | `/regress` |
+| **TASK_94** regress **Local PASS** · GREEN `ff63997d` | `/review` |
 | Патч 1 inline T‑Bank REVIEW · CI green | deploy — апрув (отдельно) |
 
-**last_done:** `/sbr` RED+GREEN TASK_94  
-**next_step:** `/regress`
+**last_done:** `/regress` TASK_94 · JS 12/12 · Rails 16/16  
+**next_step:** `/review`
 
 **ctx_trim:** `2026-09-02`
 
