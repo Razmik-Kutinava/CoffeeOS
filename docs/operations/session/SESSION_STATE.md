@@ -2,17 +2,17 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-18 (Патч 1 inline pay GREEN)  
+**Дата:** 2026-09-19 (Патч 1 REVIEW)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **Патч 1** inline T‑Bank статусы в кнопке **GREEN** | `/review` |
-| Subtask 8/10/12/13 patch v1 | Fly MCP Point A (после Review) |
-| todo: Патч 1 | TASK_94 ЛК — отдельно, не трогали |
+| **Патч 1** inline T‑Bank **REVIEW** | CI green → стоп |
+| bugbot fix `payResetTimer` · security clean | deploy — апрув |
+| Entire `01M2WC1SCBV10YQZW2HFQ6DNM7` на `9eab6800` | — |
 
-**last_done:** Патч 1 GREEN — `cardPayLabel` + 1051 short + ERROR→IDLE 3s  
-**next_step:** `/review` (bugbot + security + push)
+**last_done:** `/review` Патч 1 — clearPayResetTimer + push  
+**next_step:** CI green; deploy только апрув
 
 **ctx_trim:** `2026-09-02`
 

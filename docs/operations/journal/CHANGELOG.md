@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-19 — docs: REVIEW Патч 1 inline pay button statuses
+
+- Local PASS · bugbot: clearPayResetTimer · security: no med/high/crit
+- Entire `01M2WC1SCBV10YQZW2HFQ6DNM7` на `9eab6800` (attach)
+- GREEN `9e0a295c` · REVIEW fix `9eab6800` · push/CI
+
 ## 2026-09-18 — feat: Патч 1 inline pay статусы в кнопке [GREEN]
 
 - Subtask 8/10/12/13 patch v1: `cardPayLabel` в `shop-repeat-card-pay`; 1051→«Недостаточно средств»; ERROR/timeout→IDLE 3s
