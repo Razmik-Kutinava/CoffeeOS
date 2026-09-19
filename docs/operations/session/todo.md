@@ -4,7 +4,7 @@
 |------|----------|
 | **ID** | **#69** · **Патч 2** · 2026-09-17 · patch v1 |
 | **Тип** | SBR · патч · ЛК bottom sheet «Написать нам» |
-| **Статус** | **REVIEW · CI pending** |
+| **Статус** | **REVIEW · CI green** · deploy апрув |
 | **Ветка** | `develop` |
 | **ТЗ** | [`Доработка личного кабинета (ЛК) в PWA.md`](../milestones/veha_2/requirements/customer_tasks/Доработка%20личного%20кабинета%20(ЛК)%20в%20PWA.md) · секция **Патч 2: 2026-09-17** → **Исправленный сценарий** |
 | **Артефакт** | [`screenshots/patch2_2026-09-17_fig2_telegram_label.png`](../milestones/veha_2/artifacts/pwa_personal_account_lk/screenshots/patch2_2026-09-17_fig2_telegram_label.png) · рис.2 |
@@ -18,7 +18,7 @@
 - [x] PHASE 2 RED — тест подписи Telegram [TDD] · `098b4c24`
 - [x] PHASE 2 GREEN — `ContactSupportSheet`: «Tg» → «Telegram» · `4f8ee541`
 - [x] `/regress` (Проверка) · `node --test test/javascript/telegram_support_test.mjs` · 14/14
-- [x] PHASE 3 `/review` — Local PASS · bugbot no bugs · security no med+ · Entire attach · push/CI
+- [x] PHASE 3 `/review` — Local PASS · bugbot no bugs · security no med+ · Entire attach · CI green `35442696778`
 
 ## Файлы (ожидаемо)
 

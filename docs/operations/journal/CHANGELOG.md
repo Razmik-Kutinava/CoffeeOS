@@ -16,7 +16,8 @@
 - Local PASS 14/14 · bugbot: no bugs · security: no med/high/crit
 - Entire `01M2WSS8C919PDRPZJ8ECAH6WP` на `3bae4b26` (session attach)
 - GREEN `4f8ee541` · Subtask 21 patch v1 · COMPONENT_MAP не трогали
-- Next: CI green → deploy апрув
+- CI green [`35442696778`](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/35442696778)
+- Next: deploy апрув
 
 ## 2026-09-19 — docs: #69 Патч 1 рис.1 ЛК intake + understanding
 
