@@ -4,20 +4,21 @@
 |------|----------|
 | **ID** | **#69** · **Патч 2** · 2026-09-17 · patch v1 |
 | **Тип** | SBR · патч · ЛК bottom sheet «Написать нам» |
-| **Статус** | **GREEN · Local PASS** · дальше `/review` |
+| **Статус** | **REVIEW · CI pending** |
 | **Ветка** | `develop` |
 | **ТЗ** | [`Доработка личного кабинета (ЛК) в PWA.md`](../milestones/veha_2/requirements/customer_tasks/Доработка%20личного%20кабинета%20(ЛК)%20в%20PWA.md) · секция **Патч 2: 2026-09-17** → **Исправленный сценарий** |
 | **Артефакт** | [`screenshots/patch2_2026-09-17_fig2_telegram_label.png`](../milestones/veha_2/artifacts/pwa_personal_account_lk/screenshots/patch2_2026-09-17_fig2_telegram_label.png) · рис.2 |
 | **Google Doc** | https://docs.google.com/document/d/1yH1DzM48Bcg43X9lT_37WVICKUkmFLGETduYX3eOpzo/edit |
+| **Entire** | `01M2WSS8C919PDRPZJ8ECAH6WP` на `3bae4b26` |
 
 ## SBR
 
 - [x] PHASE 0 /start — Google Doc · customer_tasks · рис.2 в artifacts
 - [x] PHASE 1 SPEC — только Исправленный сценарий (Subtask 21 patch v1)
 - [x] PHASE 2 RED — тест подписи Telegram [TDD] · `098b4c24`
-- [x] PHASE 2 GREEN — `ContactSupportSheet`: «Tg» → «Telegram»
+- [x] PHASE 2 GREEN — `ContactSupportSheet`: «Tg» → «Telegram» · `4f8ee541`
 - [x] `/regress` (Проверка) · `node --test test/javascript/telegram_support_test.mjs` · 14/14
-- [ ] PHASE 3 `/review`
+- [x] PHASE 3 `/review` — Local PASS · bugbot no bugs · security no med+ · Entire attach · push/CI
 
 ## Файлы (ожидаемо)
 

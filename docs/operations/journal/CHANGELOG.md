@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-19 — docs: REVIEW #69 Патч 2 ЛК Telegram label
+
+- Local PASS 14/14 · bugbot: no bugs · security: no med/high/crit
+- Entire `01M2WSS8C919PDRPZJ8ECAH6WP` на `3bae4b26` (session attach)
+- GREEN `4f8ee541` · Subtask 21 patch v1 · COMPONENT_MAP не трогали
+- Next: CI green → deploy апрув
+
 ## 2026-09-19 — docs: #69 Патч 1 рис.1 ЛК intake + understanding
 
 - Google Doc после TODO → Патч 1: убрать иконку «Обратная связь» из шапки гл. экрана
