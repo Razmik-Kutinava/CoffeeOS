@@ -4,6 +4,8 @@
   import { api } from "../lib/api.js"
   import { useTelegramBack } from "../lib/telegram.js"
   import PageSkeleton from "../components/PageSkeleton.svelte"
+  import { runHistoryRepeatPayFlow } from "../lib/historyRepeatAdapter.js"
+  import { repeatInlinePayUi } from "../lib/repeatInlinePayUiStore.js"
 
   let { params = {} } = $props()
 
@@ -12,16 +14,22 @@
   let order = $state(null)
   let loading = $state(true)
   let loadError = $state(false)
+  let payUi = $state(/** @type {any} */ ({}))
+  let repeatError = $state("")
 
-  onMount(async () => {
-    try {
-      order = await api(`/orders/${params.id}`)
-    } catch {
-      order = null
-      loadError = true
-    } finally {
-      loading = false
-    }
+  onMount(() => {
+    const unsubPay = repeatInlinePayUi.subscribe((v) => { payUi = v || {} })
+    ;(async () => {
+      try {
+        order = await api(`/orders/${params.id}`)
+      } catch {
+        order = null
+        loadError = true
+      } finally {
+        loading = false
+      }
+    })()
+    return () => unsubPay()
   })
 
   function formatDate(iso) {
@@ -35,8 +43,20 @@
     return first || "Заказ"
   }
 
-  function onRepeatStub() {
-    /* Subtask 12: без бизнес-логики повтора */
+  function repeatButtonLabel() {
+    if (payUi.busy && payUi.statusText) return payUi.statusText
+    if (payUi.errorText && !payUi.busy) return payUi.errorText
+    return "ПОВТОРИТЬ"
+  }
+
+  async function onRepeat() {
+    if (!order || payUi.busy) return
+    repeatError = ""
+    try {
+      await runHistoryRepeatPayFlow({ order, api })
+    } catch (e) {
+      repeatError = e?.message || "Не удалось повторить заказ"
+    }
   }
 
   function operationLabel(r) {
@@ -105,8 +125,17 @@
     </section>
 
     <div class="repeat-wrap">
-      <button type="button" class="repeat-main" data-testid="shop-order-repeat-stub" onclick={onRepeatStub}>
-        ПОВТОРИТЬ
+      {#if repeatError}
+        <div class="repeat-err" data-testid="shop-order-repeat-error">{repeatError}</div>
+      {/if}
+      <button
+        type="button"
+        class="repeat-main"
+        data-testid="shop-order-repeat-stub"
+        disabled={!!payUi.busy}
+        onclick={onRepeat}
+      >
+        {repeatButtonLabel()}
       </button>
     </div>
   {/if}
@@ -128,6 +157,8 @@
   .item-row { display: flex; justify-content: space-between; gap: 12px; font-size: 14px; }
   .total-row { display: flex; justify-content: space-between; margin-top: 16px; padding-top: 12px; border-top: 1px solid #3a3a3a; font-weight: 700; font-size: 16px; }
   .repeat-wrap { position: fixed; left: 16px; right: 16px; bottom: calc(16px + env(safe-area-inset-bottom, 0px)); }
+  .repeat-err { color: #f87171; font-size: 13px; text-align: center; margin-bottom: 8px; }
   .repeat-main { width: 100%; background: #ff8c42; color: #fff; border: none; border-radius: 12px; padding: 16px; font-size: 16px; font-weight: 700; cursor: pointer; }
+  .repeat-main:disabled { opacity: 0.85; cursor: wait; }
   .state-error { text-align: center; padding: 48px 20px; color: #a0a0a0; }
 </style>

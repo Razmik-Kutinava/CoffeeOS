@@ -242,6 +242,7 @@ module Shop
           fiscal_receipts: fiscal_receipts_json(order),
           items: order.order_items.map do |item|
             {
+              product_id: item.product_id,
               product_name: item.product_name,
               quantity: item.quantity,
               price: item.unit_price.to_f,

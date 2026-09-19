@@ -13,6 +13,8 @@
   import ContactSupportSheet from "../components/ContactSupportSheet.svelte"
   import PageSkeleton from "../components/PageSkeleton.svelte"
   import { MessageCircle, Settings } from "lucide-svelte"
+  import { startHistoryRepeatFromOrderId } from "../lib/historyRepeatAdapter.js"
+  import { repeatInlinePayUi } from "../lib/repeatInlinePayUiStore.js"
 
   useTelegramBack(() => push("/"))
 
@@ -22,20 +24,26 @@
   let historyLoading = $state(true)
   let historyError = $state(null)
   let supportSheetOpen = $state(false)
+  let payUi = $state(/** @type {any} */ ({}))
+  let repeatError = $state("")
 
-  onMount(async () => {
-    try {
-      user = await api("profile")
-    } catch {
-      user = null
-    } finally {
-      loadingProfile = false
-    }
+  onMount(() => {
+    const unsubPay = repeatInlinePayUi.subscribe((v) => { payUi = v || {} })
+    ;(async () => {
+      try {
+        user = await api("profile")
+      } catch {
+        user = null
+      } finally {
+        loadingProfile = false
+      }
 
-    const result = await fetchAccountOrderHistory()
-    orders = result.orders
-    historyError = result.errorKind
-    historyLoading = false
+      const result = await fetchAccountOrderHistory()
+      orders = result.orders
+      historyError = result.errorKind
+      historyLoading = false
+    })()
+    return () => unsubPay()
   })
 
   function displayName() {
@@ -49,6 +57,22 @@
 
   function openReceipt(orderId) {
     push(`/order/${orderId}/receipt`)
+  }
+
+  function repeatLabel(order) {
+    const key = `history:${order.id}`
+    if (payUi.busy && payUi.activeKey === key && payUi.statusText) return payUi.statusText
+    return "повторить"
+  }
+
+  async function onRepeatHistory(order) {
+    if (payUi.busy) return
+    repeatError = ""
+    try {
+      await startHistoryRepeatFromOrderId(order.id, { api })
+    } catch (e) {
+      repeatError = e?.message || "Не удалось повторить заказ"
+    }
   }
 </script>
 
@@ -102,12 +126,21 @@
               </div>
               <div class="order-title">{orderHistoryTitle(order)}</div>
             </button>
-            <button type="button" class="repeat-btn" data-testid="shop-lk-repeat-btn" onclick={() => openReceipt(order.id)}>
-              повторить
+            <button
+              type="button"
+              class="repeat-btn"
+              data-testid="shop-lk-repeat-btn"
+              disabled={!!payUi.busy}
+              onclick={() => onRepeatHistory(order)}
+            >
+              {repeatLabel(order)}
             </button>
           </div>
         {/each}
       </div>
+      {#if repeatError}
+        <div class="state-error" data-testid="shop-lk-repeat-error">{repeatError}</div>
+      {/if}
     {/if}
   </section>
 </div>
