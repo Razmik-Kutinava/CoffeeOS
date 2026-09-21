@@ -109,8 +109,84 @@ class Shop::Api::OrderFiscalReceiptsApiTest < ActionDispatch::IntegrationTest
       assert_equal 1, receipts.length
       assert_equal "https://receipt.example/lk-check", receipts.first["url"]
       assert_equal "payment", receipts.first["operation_type"]
+      assert_equal "9999078900009999", receipts.first["fn_number"]
+      assert_equal 55, receipts.first["fiscal_document_number"].to_i
+      assert_equal 66, receipts.first["fiscal_document_attribute"].to_i
+      assert_equal "Income", receipts.first["type_label"]
       assert_nil receipts.first["raw"]
       assert_nil receipts.first["receipt_data"]
+    end
+  end
+
+  test "[TDD] payment + IncomeReturn exposes two fiscal receipts on order show" do
+    open_session do |sess|
+      sess.post "/shop/api/cart/add",
+        headers: shop_tenant_headers(@tenant.id),
+        params: { product_id: @product.id, quantity: 1, selected_modifiers: [] },
+        as: :json
+      verify_shop_email!(tenant_id: @tenant.id, email: @email, session: sess)
+
+      sess.post "/shop/api/orders",
+        headers: shop_tenant_headers(@tenant.id),
+        params: shop_order_params(email: @email, name: "Fiscal Refund Guest", payment_method: "card"),
+        as: :json
+      assert_equal 200, sess.response.status, sess.response.body
+      order_id = sess.response.parsed_body["order_id"] || sess.response.parsed_body["id"]
+      order = Order.find(order_id)
+      order.update!(status: "accepted")
+
+      payment = order.payments.order(created_at: :desc).first!
+      payment.update!(
+        provider: "tbank",
+        provider_payment_id: "fiscal_ref_#{SecureRandom.hex(4)}",
+        status: "succeeded",
+        provider_data: (payment.provider_data || {}).merge("save_card" => false)
+      )
+
+      pay_payload = sign_payload(
+        "TerminalKey" => "TestTerminal",
+        "OrderId" => order.id.to_s,
+        "Success" => true,
+        "Status" => "RECEIPT",
+        "PaymentId" => payment.provider_payment_id,
+        "ErrorCode" => "0",
+        "Amount" => (order.final_amount * 100).to_i,
+        "FnNumber" => "9999078900001111",
+        "FiscalDocumentNumber" => 71,
+        "FiscalDocumentAttribute" => 72,
+        "Type" => "Income",
+        "Url" => "https://receipt.example/pay"
+      )
+      refund_payload = sign_payload(
+        "TerminalKey" => "TestTerminal",
+        "OrderId" => order.id.to_s,
+        "Success" => true,
+        "Status" => "RECEIPT",
+        "PaymentId" => payment.provider_payment_id,
+        "ErrorCode" => "0",
+        "Amount" => (order.final_amount * 100).to_i,
+        "FnNumber" => "9999078900001111",
+        "FiscalDocumentNumber" => 73,
+        "FiscalDocumentAttribute" => 74,
+        "Type" => "IncomeReturn",
+        "Url" => "https://receipt.example/refund"
+      )
+
+      post "/callbacks/tbank", params: pay_payload.to_json, headers: { "Content-Type" => "application/json" }
+      assert_response :ok
+      assert_equal "OK", response.body
+
+      post "/callbacks/tbank", params: refund_payload.to_json, headers: { "Content-Type" => "application/json" }
+      assert_response :ok
+      assert_equal "OK", response.body
+
+      sess.get "/shop/api/orders/#{order_id}", headers: shop_tenant_headers(@tenant.id), as: :json
+      assert_equal 200, sess.response.status
+      receipts = sess.response.parsed_body["fiscal_receipts"]
+      assert_equal 2, receipts.length
+      assert_equal %w[payment refund], receipts.map { |r| r["operation_type"] }
+      assert_equal "https://receipt.example/pay", receipts.first["url"]
+      assert_equal "https://receipt.example/refund", receipts.second["url"]
     end
   end
 
