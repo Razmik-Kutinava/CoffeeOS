@@ -4,7 +4,7 @@
 |------|----------|
 | **ID** | **#73 Патч 1** · 2026-09-21 |
 | **Тип** | `/patch` · SBR · hot-path |
-| **Статус** | **REVIEW** · push/CI |
+| **Статус** | **REVIEW · CI green** · deploy апрув |
 | **Ветка** | `develop` |
 | **ТЗ** | customer_tasks · **Патч 1: 2026-09-20** |
 | **Google Doc** | https://docs.google.com/document/d/1HZGokk3jaE5-HjF3YtiyaIWo9Y0EAHF35HJbFpbCER0/edit |
@@ -18,8 +18,8 @@
 
 - [x] SPEC / RED / GREEN / regress
 - [x] PHASE 3 Local · bugbot · security
-- [ ] Entire attach + explain
-- [ ] push / CI green
+- [x] Entire attach + explain
+- [x] push / CI green
 - [ ] G5 / Subtask 3 fiscal notify ON
 - [ ] Subtask 21/26 после payload
 
@@ -48,5 +48,5 @@ ruby bin/rails test test/services/payments/tbank_fiscal_notification_handler_tes
 
 - [x] 10/12/18/28 Local PASS
 - [x] bugbot + security
-- [ ] Entire id · CI green
+- [x] Entire id · CI green
 - [ ] Subtask 3 ops · G5

@@ -14,6 +14,7 @@
 ## 2026-09-21 — docs: REVIEW #73 Патч 1 fiscal OFD poll
 - GREEN `ced2ad97`: OrderReceipt poll + claim-release / unique ofd tests
 - Local PASS · bugbot clean · security no med+
+- Entire `01M31CYA74N9H6HHS2DX30M2AY` на `d50f167a` · CI [`35571998446`](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/35571998446) green
 - Subtask 3 ops + 21/26 prepayment Type — ещё открыты
 - Next: deploy апрув · G5 после fiscal notify ON
 
