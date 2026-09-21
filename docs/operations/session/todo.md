@@ -4,7 +4,7 @@
 |------|----------|
 | **ID** | **#73** · 2026-09-21 |
 | **Тип** | SBR · hot-path (callbacks / shop API / ЛК) |
-| **Статус** | **REVIEW** · push/CI |
+| **Статус** | **REVIEW · CI green** · deploy апрув |
 | **Ветка** | `develop` |
 | **ТЗ** | [`Хранение и отображение фискальных чеков в личном кабинете.md`](../milestones/veha_2/requirements/customer_tasks/Хранение%20и%20отображение%20фискальных%20чеков%20в%20личном%20кабинете.md) |
 | **Google Doc** | https://docs.google.com/document/d/1HZGokk3jaE5-HjF3YtiyaIWo9Y0EAHF35HJbFpbCER0/edit |

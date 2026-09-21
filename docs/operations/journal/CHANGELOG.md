@@ -16,8 +16,9 @@
 - Local PASS · bugbot: RLS JobTenantContext + UI (no Url / cancelled) · security: no med+
 - Entire `01M319ZHF0R2YQGJYXFH1459KR` на `12caceb7`
 - GREEN `439a87af` · fix `12caceb7`
+- CI green [`35569642319`](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/35569642319)
 - G5 Fly unmet до fiscal notify ON
-- Next: CI green · deploy апрув · затем Патч 1 `/patch`
+- Next: deploy апрув · затем Патч 1 `/patch`
 
 ## 2026-09-21 — docs: /unlazy reverify #73 перед REVIEW
 
