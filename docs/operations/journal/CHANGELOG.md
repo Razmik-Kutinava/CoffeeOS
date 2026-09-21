@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-21 — docs: regress PASS TASK_84-RECEIPT-DISPLAY-EXT
+
+- JS `active_orders_accordion_test.mjs` 27/27 PASS
+- Rails зона: 15 runs, 117 assertions, 0 failures
+- GATES G1–G4 reverify PASS · G5 Fly unmet
+- Next: `/review`
+
 ## 2026-09-21 — docs: SPEC TASK_84-RECEIPT-DISPLAY-EXT runtime receipt
 
 - todo.md: SBR + 4 пути + Не ломать/Проверка (hot-path status sheet)

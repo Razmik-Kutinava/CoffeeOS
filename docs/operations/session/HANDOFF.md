@@ -2,17 +2,17 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-21 (TASK_84-RECEIPT-DISPLAY-EXT · SPEC)  
+**Дата:** 2026-09-21 (TASK_84-RECEIPT-DISPLAY-EXT · regress PASS)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **TASK_84-RECEIPT-DISPLAY-EXT** SPEC | `/sbr` RED |
+| **TASK_84-RECEIPT-DISPLAY-EXT** regress PASS | `/review` |
 | **#73 Патч 1** REVIEW · CI green `35571998446` | deploy апрув · G5 · Subtask 3 |
 | **#73** REVIEW · CI green `35569642319` | deploy апрув · fiscal notify ON |
 
-**last_done:** /spec TASK_84-RECEIPT-DISPLAY-EXT · todo пути + Не ломать/Проверка  
-**next_step:** `/sbr`
+**last_done:** /regress · JS 27/27 · rails 15/0 · GATES G1–G4 reverify  
+**next_step:** `/review`
 
 **ctx_trim:** `2026-09-02`  
 **Fly:** v499 `deployment-01M2T582RETP2608KZMBMXAE1A`

@@ -2,4 +2,4 @@
 
 **Канон ledger:** [`../milestones/veha_2/artifacts/active_orders_receipt_display_restore/GATES.md`](../milestones/veha_2/artifacts/active_orders_receipt_display_restore/GATES.md)
 
-2026-09-21 /unlazy: **G1–G4 met** (baseline) · **G5 unmet** (Fly MCP after REVIEW/deploy).
+2026-09-21 /regress: **G1–G4 met** (reverify) · **G5 unmet** (Fly MCP after REVIEW/deploy).

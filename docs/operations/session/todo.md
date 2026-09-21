@@ -4,7 +4,7 @@
 |------|----------|
 | **ID** | **TASK_84-RECEIPT-DISPLAY-EXT** · семья **#84** · 2026-09-21 |
 | **Тип** | доп.задача (EXT) · SBR · hot-path (status sheet) |
-| **Статус** | **GREEN** · ждёт `/regress` |
+| **Статус** | **regress PASS** · ждёт `/review` |
 | **Ветка** | `develop` |
 | **ТЗ** | `customer_tasks/TASK-84-RECEIPT-DISPLAY-EXT-…ActiveOrdersAccordion.md` |
 | **Google Doc** | https://docs.google.com/document/d/13Msfo8hDhUXHHB3NoKhMQvrPxQMpvlKctvFDOkr7aEI/edit |
@@ -22,7 +22,7 @@
 - [x] SPEC
 - [x] RED — runtime DOM: expand → `.aoa__receipt` + текст позиции + Total Amount
 - [x] GREEN — `receiptPanelView` + wire ActiveOrdersAccordion
-- [ ] regress (секция «Проверка»)
+- [x] regress (секция «Проверка»)
 - [ ] REVIEW / push / CI / G5 Fly
 
 ## Файлы (ожидаемо)
