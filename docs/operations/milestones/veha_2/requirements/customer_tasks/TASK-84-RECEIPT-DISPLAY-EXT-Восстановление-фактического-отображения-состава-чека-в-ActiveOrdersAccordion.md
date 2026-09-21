@@ -6,7 +6,7 @@
 **Google Doc:** https://docs.google.com/document/d/13Msfo8hDhUXHHB3NoKhMQvrPxQMpvlKctvFDOkr7aEI/edit  
 **Расширяет:** [`TASK-84-status-sheet-receipt-restore.md`](TASK-84-status-sheet-receipt-restore.md)  
 **Тип:** дополнительная задача (EXT)  
-**Статус:** intake `[x]` 2026-09-21 · ждёт `/spec`
+**Статус:** SPEC `[x]` 2026-09-21 · ждёт `/sbr`
 
 ---
 

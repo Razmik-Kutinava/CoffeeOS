@@ -1,52 +1,57 @@
-# todo — #73 Патч 1: fiscal OFD (2026-09-20)
+# todo — TASK_84-RECEIPT-DISPLAY-EXT: runtime receipt display
 
 | Поле | Значение |
 |------|----------|
-| **ID** | **#73 Патч 1** · 2026-09-21 |
-| **Тип** | `/patch` · SBR · hot-path |
-| **Статус** | **REVIEW · CI green** · deploy апрув |
+| **ID** | **TASK_84-RECEIPT-DISPLAY-EXT** · семья **#84** · 2026-09-21 |
+| **Тип** | доп.задача (EXT) · SBR · hot-path (status sheet) |
+| **Статус** | **SPEC** · ждёт `/sbr` |
 | **Ветка** | `develop` |
-| **ТЗ** | customer_tasks · **Патч 1: 2026-09-20** |
-| **Google Doc** | https://docs.google.com/document/d/1HZGokk3jaE5-HjF3YtiyaIWo9Y0EAHF35HJbFpbCER0/edit |
-| **GREEN** | `ced2ad97` · RED `bcaa0511` |
+| **ТЗ** | `customer_tasks/TASK-84-RECEIPT-DISPLAY-EXT-…ActiveOrdersAccordion.md` |
+| **Google Doc** | https://docs.google.com/document/d/13Msfo8hDhUXHHB3NoKhMQvrPxQMpvlKctvFDOkr7aEI/edit |
+| **GATES** | `artifacts/active_orders_receipt_display_restore/GATES.md` · G1–G4 baseline met · G5 Fly unmet |
+| **Не путать** | `#94` / TASK_94 = LK history repeat (другая задача) |
 
 ## Цель
 
-Патч 1 Исправленный сценарий: 10/12/18/28 ✅ · 3 ops ⏳ · 21/26 blocked.
+Фактическое отображение текстового `.aoa__receipt` после CTA «Состав заказа» / expand: позиции, модификаторы, qty/price, Subtotal/Discount/Total Amount. Через существующий `receiptView` + данные `GET /shop/api/orders/active`. Без rewrite `receiptView` / backend / dismiss / Cable.
 
 ## SBR
 
-- [x] SPEC / RED / GREEN / regress
-- [x] PHASE 3 Local · bugbot · security
-- [x] Entire attach + explain
-- [x] push / CI green
-- [ ] G5 / Subtask 3 fiscal notify ON
-- [ ] Subtask 21/26 после payload
+- [x] SPEC
+- [ ] RED — runtime DOM: expand → `.aoa__receipt` + текст позиции + Total Amount
+- [ ] GREEN — починить runtime-путь (только нужный FE)
+- [ ] regress (секция «Проверка»)
+- [ ] REVIEW / push / CI / G5 Fly
 
-## Файлы
+## Файлы (ожидаемо)
 
-1. `app/frontend/lib/orderReceiptFiscalPoll.js`
-2. `app/frontend/routes/OrderReceipt.svelte`
-3. tests (js + callbacks + handler)
-4. `docs/integrations/tbank.md` · COMPONENT_MAP
+1. `test/javascript/active_orders_accordion_test.mjs` — RED/GREEN: runtime regression (DOM), не только source-contract `#84`
+2. `app/frontend/components/ActiveOrdersAccordion.svelte` — фактический рендер/путь раскрытия receipt (сейчас код есть; закрыть расхождение с билдом)
+3. `app/frontend/lib/activeOrdersAccordion.js` — **только если** сломан expand/`activeExpandedOrderId`; **не** переписывать `receiptView`
+4. `app/frontend/lib/orderStatusNotifyActions.js` — **сосед:** только если сломан `openOrderReceipt`; сигнатуру не менять
+
+## Blast-radius (не трогать без нужды)
+
+- `app/frontend/components/OrderStatusSheet.svelte` — не менять state/polling
+- `aoa__dismiss` / push recovery / wallet CTA в том же accordion
 
 ## Не ломать
 
-1. Payment webhook plain OK
-2. Fiscal idempotency / claim FN·FD·FP
-3. receiptView / OrderStatusSheet
-4. TbankFiscalRetryJob на payment_not_found
+1. Status/progress mapping + polling/Cable reconnect
+2. `aoa__dismiss` (×) и dismissOrder
+3. `receiptView` реализация / backend `active` + ActiveOrdersPresenter
+4. Push recovery / Wallet / cancel-modal / TASK_91/#94 LK
 
 ## Проверка
 
 ```bash
-node --test test/javascript/order_fiscal_receipt_lk_test.mjs test/javascript/order_receipt_fiscal_poll_test.mjs
-ruby bin/rails test test/services/payments/tbank_fiscal_notification_handler_test.rb test/integration/shop/api/order_fiscal_receipts_api_test.rb test/controllers/callbacks/tbank_controller_test.rb test/services/payments/tbank_receipt_builder_test.rb
+node --test test/javascript/active_orders_accordion_test.mjs
+ruby bin/rails test test/integration/shop/api/active_orders_receipt_test.rb test/integration/shop/api/active_orders_test.rb test/integration/shop/order_status_sheet_mount_acceptance_test.rb
 ```
 
 ## DoD
 
-- [x] 10/12/18/28 Local PASS
-- [x] bugbot + security
-- [x] Entire id · CI green
-- [ ] Subtask 3 ops · G5
+- [ ] Subtask 1–13 Gherkin (ТЗ) — runtime receipt виден
+- [ ] Позитивный #84 contract сохранён; негативный #35 не возвращать
+- [ ] Local PASS (Проверка) · GATES reverify G1–G4
+- [ ] REVIEW + G5 Fly Point A после deploy

@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-21 — docs: SPEC TASK_84-RECEIPT-DISPLAY-EXT runtime receipt
+
+- todo.md: SBR + 4 пути + Не ломать/Проверка (hot-path status sheet)
+- Next: `/sbr` RED (runtime DOM)
+
 ## 2026-09-21 — docs: /unlazy TASK_84-RECEIPT-DISPLAY-EXT GATES
 
 - Ledger: `artifacts/active_orders_receipt_display_restore/GATES.md`
