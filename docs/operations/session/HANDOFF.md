@@ -2,20 +2,19 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-21 (TASK_84-RECEIPT-DISPLAY-EXT · REVIEW · CI green)  
+**Дата:** 2026-09-21 (Fly v500 deploy + MCP batch)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **TASK_84-RECEIPT-DISPLAY-EXT** REVIEW · CI green `35579839261` | deploy апрув · G5 |
-| **#73 Патч 1** REVIEW · CI green `35571998446` | deploy апрув · G5 · Subtask 3 |
-| **#73** REVIEW · CI green `35569642319` | deploy апрув · fiscal notify ON |
+| **Fly v500** `ad0421c6` · CI `35584900523` · MCP 19/21 | G5 TASK_84 expand receipt · #73 fiscal notify ON |
+| **TASK_84 / #73 / #94 / Patch1 / #69** на стенде | device Callcheck/pay по апруву |
 
-**last_done:** COMPONENT_MAP update TASK_84-RECEIPT-DISPLAY-EXT · CI green `35579839261`  
-**next_step:** deploy — только апрув
+**last_done:** push+CI green · fly deploy v500 · deep MCP + Point A browser  
+**next_step:** G5 active-order receipt; fiscal notify; device smoke
 
 **ctx_trim:** `2026-09-02`  
-**Fly:** v499 `deployment-01M2T582RETP2608KZMBMXAE1A`
+**Fly:** v500 `deployment-01M31NTDXYAJYWZQK3ZYGHHEZX`
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

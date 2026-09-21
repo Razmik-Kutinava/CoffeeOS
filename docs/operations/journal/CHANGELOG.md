@@ -11,6 +11,15 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-21 — ops: Fly v500 deploy + MCP batch (post-v499)
+
+- Push `ad0421c6` · CI green [`35584900523`](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/35584900523)
+- Fly **v500** `deployment-01M31NTDXYAJYWZQK3ZYGHHEZX` (web+worker)
+- Deep MCP Point A **19/21 PARTIAL** · browser catalog/cart/1-click · Sentry RUBY-1M resolved
+- Artifacts: `artifacts/mcp/fly_v500_2026-09-21/` · `critical_path_hardening/mcp/fly_v500_deep*_2026-09-21/`
+- Soft-fail: phone verify without Callcheck · H overflow runner probe
+- G5 TASK_84 expand receipt / #73 fiscal live — ещё unmet
+
 ## 2026-09-21 — docs: update COMPONENT_MAP — ActiveOrdersAccordion / receiptPanelView
 
 - Строки: ActiveOrdersAccordion · activeOrdersAccordion.js · ActiveOrdersPresenter

@@ -2,17 +2,16 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-21 (TASK_84-RECEIPT-DISPLAY-EXT · REVIEW · CI green)  
+**Дата:** 2026-09-21 (Fly v500 deploy + MCP batch)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **TASK_84-RECEIPT-DISPLAY-EXT** REVIEW · CI green | deploy апрув · G5 |
-| **#73 Патч 1** REVIEW · CI green | deploy апрув · G5 · Subtask 3 ops |
-| **#73** REVIEW · CI green | deploy апрув · fiscal notify ON |
+| **Fly v500** deploy PASS · MCP PARTIAL 19/21 | G5 expand `.aoa__receipt` · #73 fiscal ON |
+| Bundle: `aoa__receipt` / Telegram / 1-click UI | device live pay skip |
 
-**last_done:** COMPONENT_MAP — ActiveOrdersAccordion / receiptPanelView · CI green  
-**next_step:** deploy — только апрув · G5 после deploy
+**last_done:** CI `35584900523` · deploy v500 · MCP artifacts fly_v500*  
+**next_step:** G5 active order receipt · fiscal notify · optional device
 
 **ctx_trim:** `2026-09-02`
 

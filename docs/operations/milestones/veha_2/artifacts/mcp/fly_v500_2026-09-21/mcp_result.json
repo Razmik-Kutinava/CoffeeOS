@@ -1,0 +1,22 @@
+{
+  "fly_version": 500,
+  "head": "ad0421c6",
+  "ci": "35584900523",
+  "image": "deployment-01M31NTDXYAJYWZQK3ZYGHHEZX",
+  "deep_mcp": { "pass": 19, "fail": 2, "total": 21, "status": "PARTIAL" },
+  "browser": {
+    "catalog": "PASS",
+    "cart_add_10rub": "PASS",
+    "one_click_ui": "PASS",
+    "aoa_receipt_expand": "SKIP_no_active_orders",
+    "live_pay": "SKIP_customer_profile_safety"
+  },
+  "sentry_24h": { "new_firstSeen": 0, "resolved": ["RUBY-1M"] },
+  "features": {
+    "TASK_84": "PARTIAL",
+    "TASK_94": "PASS_ui",
+    "Patch1_inline_pay": "PASS_ui",
+    "issue_69_telegram": "PASS_bundle",
+    "issue_73_fiscal": "SKIP_fiscal_notify"
+  }
+}
