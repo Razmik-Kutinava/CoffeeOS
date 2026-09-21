@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-21 — docs: /unlazy reverify TASK_84-RECEIPT-DISPLAY-EXT pre-REVIEW
+
+- G1–G4 **met** (reverify) · G5 **unmet** (Fly Point A)
+- Ledger: `active_orders_receipt_display_restore/GATES.md`
+- Next: `/review`
+
 ## 2026-09-21 — docs: regress PASS TASK_84-RECEIPT-DISPLAY-EXT
 
 - JS `active_orders_accordion_test.mjs` 27/27 PASS
