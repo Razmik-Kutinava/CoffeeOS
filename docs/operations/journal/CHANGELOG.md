@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-21 — docs: REVIEW #73 Патч 1 fiscal OFD poll
+- GREEN `ced2ad97`: OrderReceipt poll + claim-release / unique ofd tests
+- Local PASS · bugbot clean · security no med+
+- Subtask 3 ops + 21/26 prepayment Type — ещё открыты
+- Next: deploy апрув · G5 после fiscal notify ON
+
 ## 2026-09-21 — docs: REVIEW #73 фискальные чеки в ЛК
 
 - Local PASS · bugbot: RLS JobTenantContext + UI (no Url / cancelled) · security: no med+
