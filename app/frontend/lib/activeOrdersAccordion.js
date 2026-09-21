@@ -95,6 +95,54 @@ export function receiptView(order) {
   }
 }
 
+/**
+ * Runtime display path for expanded receipt (TASK_84-RECEIPT-DISPLAY-EXT).
+ * Uses existing receiptView; does not rewrite it.
+ */
+export function receiptPanelView(order, activeExpandedOrderId) {
+  const expanded = accordionRowView(order, activeExpandedOrderId).expanded
+  const scroll = receiptScrollStyle()
+  if (!expanded) {
+    return {
+      show: false,
+      className: "aoa__receipt",
+      testId: "active-order-receipt",
+      text: "",
+      receipt: null,
+      scroll
+    }
+  }
+  const receipt = receiptView(order)
+  return {
+    show: true,
+    className: "aoa__receipt",
+    testId: "active-order-receipt",
+    text: formatReceiptPanelText(receipt),
+    receipt,
+    scroll
+  }
+}
+
+/** Text mirror of ActiveOrdersAccordion receipt markup (lines + totals). */
+function formatReceiptPanelText(receipt) {
+  const chunks = []
+  for (const line of receipt?.lines || []) {
+    chunks.push(String(line.name || ""))
+    for (const mod of line.modifiers || []) {
+      const price = mod?.price != null && mod.price !== "" ? ` · ${mod.price}₽` : ""
+      chunks.push(`+ ${mod.name || ""}${price}`)
+    }
+    const disc = line.discount ? ` · скидка ${line.discount}₽` : ""
+    chunks.push(
+      `×${line.quantity} · ${line.price}₽${disc} · итог ${line.lineTotal}₽`
+    )
+  }
+  chunks.push(`Subtotal: ${receipt?.subtotal ?? 0}₽`)
+  chunks.push(`Discount: ${receipt?.discount ?? 0}₽`)
+  chunks.push(`Total Amount: ${receipt?.totalAmount ?? 0}₽`)
+  return chunks.join("\n")
+}
+
 export function receiptScrollStyle() {
   return {
     maxHeight: `${RECEIPT_SCROLL.maxHeightPx}px`,

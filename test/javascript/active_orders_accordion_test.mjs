@@ -211,17 +211,26 @@ describe("receiptView — text only (#36 B4/B5)", () => {
 })
 
 describe("#84 restore receipt in status sheet", () => {
-  it("ActiveOrdersAccordion renders receipt via receiptView", () => {
+  it("ActiveOrdersAccordion renders receipt via receiptPanelView → receiptView", () => {
     const src = readFileSync(accordionComponentPath, "utf8")
     assert.match(
       src,
-      /receiptView\s*\(/,
-      "status sheet row must call receiptView"
+      /receiptPanelView\s*\(/,
+      "status sheet row must call receiptPanelView (wraps receiptView)"
     )
     assert.match(
       src,
       /aoa__receipt|data-testid=["']active-order-receipt["']/,
       "status model must show order composition block"
+    )
+    const libSrc = readFileSync(
+      join(root, "app/frontend/lib/activeOrdersAccordion.js"),
+      "utf8"
+    )
+    assert.match(
+      libSrc,
+      /receiptPanelView[\s\S]*receiptView\s*\(/,
+      "receiptPanelView must call existing receiptView"
     )
   })
 

@@ -2,8 +2,7 @@
   /** #36/#37/#41/#84 accordion: статус + OrderActionButtons + текстовый чек. */
   import {
     accordionRowView,
-    receiptView,
-    receiptScrollStyle
+    receiptPanelView
   } from "../lib/activeOrdersAccordion.js"
   import { getDeviceOS } from "../lib/deviceDetect.js"
   import {
@@ -36,8 +35,11 @@
   let row = $derived(
     accordionRowView(order, accordionState?.activeExpandedOrderId, { sheetContext })
   )
-  let receipt = $derived(row.expanded ? receiptView(order) : null)
-  let scrollStyle = receiptScrollStyle()
+  let receiptPanel = $derived(
+    receiptPanelView(order, accordionState?.activeExpandedOrderId)
+  )
+  let receipt = $derived(receiptPanel.receipt)
+  let scrollStyle = $derived(receiptPanel.scroll)
   let deviceOs = $derived(getDeviceOS())
   let receiptLabel = $derived(
     notifyActionsView({ os: deviceOs, walletAvailable: shopWalletAvailable() }).secondaryLabel
@@ -258,7 +260,7 @@
       <div class="aoa__toast" data-testid="active-order-notify-toast" role="status">{toastMsg}</div>
     {/if}
   {/if}
-  {#if receipt}
+  {#if receiptPanel.show && receipt}
     <div
       class="aoa__receipt"
       data-testid="active-order-receipt"
