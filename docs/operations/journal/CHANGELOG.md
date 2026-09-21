@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-21 — docs: CI green TASK_84-RECEIPT-DISPLAY-EXT REVIEW close
+
+- CI green [`35579839261`](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/35579839261) · Semgrep · CodeQL
+- GREEN `4e84a4b4` · Entire `01M31GK06473NABJMKATBKCJD0`
+- Next: deploy апрув · G5 Fly после deploy
+
 ## 2026-09-21 — docs: REVIEW TASK_84-RECEIPT-DISPLAY-EXT runtime receipt
 
 - GREEN `4e84a4b4`: `receiptPanelView` + ActiveOrdersAccordion wire

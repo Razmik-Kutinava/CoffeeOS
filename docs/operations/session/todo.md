@@ -4,7 +4,7 @@
 |------|----------|
 | **ID** | **TASK_84-RECEIPT-DISPLAY-EXT** · семья **#84** · 2026-09-21 |
 | **Тип** | доп.задача (EXT) · SBR · hot-path (status sheet) |
-| **Статус** | **REVIEW** · push/CI |
+| **Статус** | **REVIEW · CI green** · deploy апрув |
 | **Ветка** | `develop` |
 | **ТЗ** | `customer_tasks/TASK-84-RECEIPT-DISPLAY-EXT-…ActiveOrdersAccordion.md` |
 | **Google Doc** | https://docs.google.com/document/d/13Msfo8hDhUXHHB3NoKhMQvrPxQMpvlKctvFDOkr7aEI/edit |
@@ -24,7 +24,7 @@
 - [x] GREEN — `receiptPanelView` + wire ActiveOrdersAccordion
 - [x] regress (секция «Проверка»)
 - [x] REVIEW Local · bugbot · security
-- [ ] push / CI green
+- [x] push / CI green [`35579839261`](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/35579839261)
 - [ ] G5 Fly после deploy
 
 ## Файлы (ожидаемо)
