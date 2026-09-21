@@ -4,11 +4,11 @@
 |------|----------|
 | **ID** | **TASK_84-RECEIPT-DISPLAY-EXT** · семья **#84** · 2026-09-21 |
 | **Тип** | доп.задача (EXT) · SBR · hot-path (status sheet) |
-| **Статус** | **regress PASS** · ждёт `/review` |
+| **Статус** | **REVIEW** · push/CI |
 | **Ветка** | `develop` |
 | **ТЗ** | `customer_tasks/TASK-84-RECEIPT-DISPLAY-EXT-…ActiveOrdersAccordion.md` |
 | **Google Doc** | https://docs.google.com/document/d/13Msfo8hDhUXHHB3NoKhMQvrPxQMpvlKctvFDOkr7aEI/edit |
-| **GATES** | `artifacts/active_orders_receipt_display_restore/GATES.md` · G1–G4 baseline met · G5 Fly unmet |
+| **GATES** | G1–G4 met · G5 Fly unmet |
 | **Не путать** | `#94` / TASK_94 = LK history repeat (другая задача) |
 | **RED** | `073a55b5` |
 | **GREEN** | `4e84a4b4` · Entire `01M31GK06473NABJMKATBKCJD0` |
@@ -23,7 +23,9 @@
 - [x] RED — runtime DOM: expand → `.aoa__receipt` + текст позиции + Total Amount
 - [x] GREEN — `receiptPanelView` + wire ActiveOrdersAccordion
 - [x] regress (секция «Проверка»)
-- [ ] REVIEW / push / CI / G5 Fly
+- [x] REVIEW Local · bugbot · security
+- [ ] push / CI green
+- [ ] G5 Fly после deploy
 
 ## Файлы (ожидаемо)
 

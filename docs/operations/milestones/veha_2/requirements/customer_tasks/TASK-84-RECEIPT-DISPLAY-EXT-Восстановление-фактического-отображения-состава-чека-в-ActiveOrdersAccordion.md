@@ -6,7 +6,7 @@
 **Google Doc:** https://docs.google.com/document/d/13Msfo8hDhUXHHB3NoKhMQvrPxQMpvlKctvFDOkr7aEI/edit  
 **Расширяет:** [`TASK-84-status-sheet-receipt-restore.md`](TASK-84-status-sheet-receipt-restore.md)  
 **Тип:** дополнительная задача (EXT)  
-**Статус:** SPEC `[x]` 2026-09-21 · ждёт `/sbr`
+**Статус:** **REVIEW** 2026-09-21 · push/CI · G5 Fly после deploy
 
 ---
 

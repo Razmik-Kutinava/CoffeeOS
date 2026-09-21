@@ -11,6 +11,14 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-21 — docs: REVIEW TASK_84-RECEIPT-DISPLAY-EXT runtime receipt
+
+- GREEN `4e84a4b4`: `receiptPanelView` + ActiveOrdersAccordion wire
+- Local PASS · bugbot clean · security: no med+
+- Entire `01M31GK06473NABJMKATBKCJD0` на `4e84a4b4`
+- G5 Fly unmet до deploy
+- Next: push/CI · deploy апрув
+
 ## 2026-09-21 — docs: /unlazy reverify TASK_84-RECEIPT-DISPLAY-EXT pre-REVIEW
 
 - G1–G4 **met** (reverify) · G5 **unmet** (Fly Point A)
