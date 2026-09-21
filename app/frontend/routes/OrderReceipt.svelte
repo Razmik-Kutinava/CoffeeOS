@@ -6,6 +6,10 @@
   import PageSkeleton from "../components/PageSkeleton.svelte"
   import { runHistoryRepeatPayFlow } from "../lib/historyRepeatAdapter.js"
   import { repeatInlinePayUi } from "../lib/repeatInlinePayUiStore.js"
+  import {
+    ORDER_RECEIPT_FISCAL_POLL_MS,
+    shouldKeepPollingFiscal
+  } from "../lib/orderReceiptFiscalPoll.js"
 
   let { params = {} } = $props()
 
@@ -30,6 +34,21 @@
       }
     })()
     return () => unsubPay()
+  })
+
+  // #73 Патч 1: пока «Чек формируется» — poll GET /orders/:id (не status-sheet Cable).
+  $effect(() => {
+    if (loading || !order || !shouldKeepPollingFiscal(order)) return
+    const orderId = params.id
+    const timer = setInterval(async () => {
+      try {
+        const next = await api(`/orders/${orderId}`)
+        order = next
+      } catch {
+        /* keep forming state */
+      }
+    }, ORDER_RECEIPT_FISCAL_POLL_MS)
+    return () => clearInterval(timer)
   })
 
   function formatDate(iso) {

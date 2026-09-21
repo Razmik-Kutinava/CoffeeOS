@@ -4,64 +4,51 @@
 |------|----------|
 | **ID** | **#73 Патч 1** · 2026-09-21 |
 | **Тип** | `/patch` · SBR · hot-path (callbacks / shop API / OrderReceipt) |
-| **Статус** | **SPEC → RED** |
+| **Статус** | **GREEN Local** · ждать `/review` · Subtask 3 ops + 21/26 blocked |
 | **Ветка** | `develop` |
-| **ТЗ** | [`Хранение и отображение фискальных чеков…`](../milestones/veha_2/requirements/customer_tasks/Хранение%20и%20отображение%20фискальных%20чеков%20в%20личном%20кабинете.md) · секция **Патч 1: 2026-09-20** |
+| **ТЗ** | [`Хранение и отображение фискальных чеков…`](../milestones/veha_2/requirements/customer_tasks/Хранение%20и%20отображение%20фискальных%20чеков%20в%20личном%20кабинете.md) · **Патч 1: 2026-09-20** |
 | **Google Doc** | https://docs.google.com/document/d/1HZGokk3jaE5-HjF3YtiyaIWo9Y0EAHF35HJbFpbCER0/edit |
-| **GATES** | [`fiscal_receipts_personal_cabinet/GATES.md`](../milestones/veha_2/artifacts/fiscal_receipts_personal_cabinet/GATES.md) · G5 Fly = Subtask 3 ops |
+| **GATES** | [`GATES.md`](../milestones/veha_2/artifacts/fiscal_receipts_personal_cabinet/GATES.md) · G5 = Subtask 3 ops |
 
 ## Цель шага (только Патч 1)
 
-Закрыть **Исправленный сценарий** Патч 1 (patch v1): Subtasks **3, 10, 12, 18, 21, 26, 28**.  
-Основная задача #73 (subtasks 0–30 без патча) — **не трогать** (уже REVIEW).
+Закрыть **Исправленный сценарий** Патч 1 (patch v1).
 
-| Subtask | Действие |
-|---------|----------|
-| **3** | Ops: fiscal notify ON → `POST /callbacks/tbank` (код готов; F0 = кабинет Т-Банка) |
-| **10** | Regression: fiscal exception → HTTP 500 + release claim; `payment_not_found` → `TbankFiscalRetryJob` |
-| **12** | Regression: 2-й receipt с другим `ofd_receipt_id` не перезаписывает |
-| **18 / 28** | Live-refresh: poll `OrderReceipt` пока «Чек формируется» |
-| **21 / 26** | **Blocked** — нет подтверждённого `Type`/payload закрытия предоплаты (запрет патча) |
-
-## Вне scope
-
-- Переписывать `TbankFiscalNotificationHandler` / новый `FiscalReceipt` flow
-- `receiptView` / ActiveOrdersAccordion / OrderStatusSheet poll-Cable / payment business logic
-- Собственный QR · предположительный Type предоплаты
-- `COMPONENT_MAP.md` до Review
+| Subtask | Статус |
+|---------|--------|
+| **10** | ✅ claim release на fiscal 500 + `TbankFiscalRetryJob` на payment_not_found |
+| **12** | ✅ второй receipt с уникальным `ofd_receipt_id` |
+| **18 / 28** | ✅ poll `OrderReceipt` пока «Чек формируется» |
+| **3** | ⏳ ops: fiscal notify ON в кабинете Т-Банка (не код) |
+| **21 / 26** | ⛔ blocked — нет Type/payload закрытия предоплаты |
 
 ## SBR
 
-- [x] PHASE 0 — патч в Google Doc + аудит vs код
-- [ ] PHASE 1 SPEC — этот файл
-- [ ] PHASE 2 RED — тесты дыр Патч 1 [TDD]
-- [ ] PHASE 2 GREEN — poll + regression claim release
-- [ ] `/regress` (Проверка)
-- [ ] PHASE 3 `/review` — после GREEN
+- [x] PHASE 0 — патч в Google Doc + аудит
+- [x] PHASE 1 SPEC — этот файл
+- [x] PHASE 2 RED — `bcaa0511`
+- [x] PHASE 2 GREEN — poll + regression · Local PASS
+- [x] `/regress` (Проверка)
+- [ ] PHASE 3 `/review`
 - [ ] G5 / Subtask 3 — fiscal notify ON + deploy апрув
+- [ ] Subtask 21/26 — после примера payload от Т-Банка
 
 ## Файлы (ожидаемо)
 
-1. `app/frontend/lib/orderReceiptFiscalPoll.js` — **новый** · shouldPoll + interval ms
-2. `app/frontend/routes/OrderReceipt.svelte` — poll пока forming (не status-sheet)
-3. `test/javascript/order_receipt_fiscal_poll_test.mjs` — контракт poll helper
-4. `test/javascript/order_fiscal_receipt_lk_test.mjs` — source: poll wired
-5. `test/controllers/callbacks/tbank_controller_test.rb` — fiscal 500 → release claim
-6. `test/services/payments/tbank_fiscal_notification_handler_test.rb` — unique `ofd_receipt_id` + retry job (уточнение)
-7. `docs/operations/milestones/veha_2/requirements/customer_tasks/Хранение и отображение фискальных чеков в личном кабинете.md` — секция Патч 1 sync
-
-### Blast-radius (не менять)
-
-- `ActiveOrdersAccordion.svelte` / `activeOrdersAccordion.js` / `orderStatusNotifyActions.js` — `receiptView` = #84
-- `OrderStatusSheet.svelte` / `OrderStatus.svelte` — poll/Cable/dismiss
-- `app/services/payments/tbank_receipt_builder.rb` — #72
+1. `app/frontend/lib/orderReceiptFiscalPoll.js` — shouldPoll + 5s
+2. `app/frontend/routes/OrderReceipt.svelte` — `$effect` poll (не status-sheet)
+3. `test/javascript/order_receipt_fiscal_poll_test.mjs`
+4. `test/javascript/order_fiscal_receipt_lk_test.mjs`
+5. `test/controllers/callbacks/tbank_controller_test.rb` — fiscal 500 → release
+6. `test/services/payments/tbank_fiscal_notification_handler_test.rb` — unique ofd + max retry
+7. customer_tasks + `docs/integrations/tbank.md` — Патч 1 / ops note
 
 ## Не ломать
 
 1. Платёжные webhook (не-RECEIPT) + plain `OK`
-2. Идемпотентность fiscal (`ofd_receipt_id` / claim key с FN/FD/FP)
-3. `receiptView` / «Состав заказа» ≠ ОФД `OrderReceipt` — см. COMPONENT_MAP · OrderReceipt / ActiveOrdersAccordion
-4. `TbankFiscalRetryJob` на `payment_not_found` (не общий `retry_on`)
+2. Идемпотентность fiscal (`ofd_receipt_id` / claim FN/FD/FP)
+3. `receiptView` / ActiveOrdersAccordion / OrderStatusSheet — COMPONENT_MAP
+4. `TbankFiscalRetryJob` только на `payment_not_found`
 
 ## Проверка
 
@@ -70,10 +57,12 @@ node --test test/javascript/order_fiscal_receipt_lk_test.mjs test/javascript/ord
 ruby bin/rails test test/services/payments/tbank_fiscal_notification_handler_test.rb test/integration/shop/api/order_fiscal_receipts_api_test.rb test/controllers/callbacks/tbank_controller_test.rb test/services/payments/tbank_receipt_builder_test.rb
 ```
 
+**Local:** JS 8/0 · Rails 41/0 PASS (2026-09-21)
+
 ## DoD
 
-- [ ] Subtask 10 / 12 / 18 / 28 — Local PASS
-- [ ] Subtask 3 — ops checklist зафиксирован; live ON = владелец (не код)
-- [ ] Subtask 21 / 26 — явно blocked + открытый вопрос в ТЗ
-- [ ] Не тронуты файлы из «Не трогать» / COMPONENT_MAP status-sheet
-- [ ] `/review` + G5 после fiscal notify ON — отдельно
+- [x] Subtask 10 / 12 / 18 / 28 — Local PASS
+- [x] Subtask 3 — ops checklist в `tbank.md` / ТЗ; live ON = владелец
+- [x] Subtask 21 / 26 — явно blocked в ТЗ
+- [x] Не тронуты status-sheet / receiptView
+- [ ] `/review` + G5 после fiscal notify ON

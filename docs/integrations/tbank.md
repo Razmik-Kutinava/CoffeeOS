@@ -138,6 +138,10 @@ NotificationURL в кабинете → `https://<fly-host>/callbacks/tbank`
 
 Ответ на **любое** успешное уведомление (платёж и fiscal): HTTP 200 + тело **`OK`** (plain text, без JSON). Иначе банк ретраит (час → сутки → архив). Ошибки (невалидный Token и т.п.) — по-прежнему 4xx/5xx JSON.
 
+**Ops (Патч 1 / Subtask 3):** в кабинете Т-Банка включить **уведомления о фискализации** на тот же NotificationURL (`…/callbacks/tbank`). Без этого live RECEIPT не придёт (код готов; G5 Fly ждёт ON).
+
+**Патч 1 UI:** `OrderReceipt` poll’ит заказ пока «Чек формируется» (`orderReceiptFiscalPoll.js`, 5s). Закрытие предоплаты (отдельный `Type`) — blocked до примера payload.
+
 Схема/пример: `docs/operations/milestones/veha_2/artifacts/fiscal_receipts_personal_cabinet/`.
 
 ---
