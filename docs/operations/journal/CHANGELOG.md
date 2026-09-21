@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-21 — docs: /spec #73 фискальные чеки в ЛК
+
+- `todo.md`: полный SBR · без Патч 1 · 5 файлов · Не ломать/Проверка
+- GATES G1–G4 baseline · G5 Fly после fiscal notify ON
+- Next: `/sbr`
+
 ## 2026-09-21 — docs: /unlazy #73 фискальные чеки в ЛК
 
 - Ledger: `artifacts/fiscal_receipts_personal_cabinet/GATES.md`

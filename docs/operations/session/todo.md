@@ -1,53 +1,70 @@
-# todo — Патч 2: ЛК · «Tg» → «Telegram» (Subtask 21)
+# todo — #73: Фискальные чеки в ЛК
 
 | Поле | Значение |
 |------|----------|
-| **ID** | **#69** · **Патч 2** · 2026-09-17 · patch v1 |
-| **Тип** | SBR · патч · ЛК bottom sheet «Написать нам» |
-| **Статус** | **REVIEW · CI green** · deploy апрув |
+| **ID** | **#73** · 2026-09-21 |
+| **Тип** | SBR · hot-path (callbacks / shop API / ЛК) |
+| **Статус** | **SPEC** · без Патч 1 |
 | **Ветка** | `develop` |
-| **ТЗ** | [`Доработка личного кабинета (ЛК) в PWA.md`](../milestones/veha_2/requirements/customer_tasks/Доработка%20личного%20кабинета%20(ЛК)%20в%20PWA.md) · секция **Патч 2: 2026-09-17** → **Исправленный сценарий** |
-| **Артефакт** | [`screenshots/patch2_2026-09-17_fig2_telegram_label.png`](../milestones/veha_2/artifacts/pwa_personal_account_lk/screenshots/patch2_2026-09-17_fig2_telegram_label.png) · рис.2 |
-| **Google Doc** | https://docs.google.com/document/d/1yH1DzM48Bcg43X9lT_37WVICKUkmFLGETduYX3eOpzo/edit |
-| **Entire** | `01M2WSS8C919PDRPZJ8ECAH6WP` на `3bae4b26` |
+| **ТЗ** | [`Хранение и отображение фискальных чеков в личном кабинете.md`](../milestones/veha_2/requirements/customer_tasks/Хранение%20и%20отображение%20фискальных%20чеков%20в%20личном%20кабинете.md) |
+| **Google Doc** | https://docs.google.com/document/d/1HZGokk3jaE5-HjF3YtiyaIWo9Y0EAHF35HJbFpbCER0/edit |
+| **GATES** | [`fiscal_receipts_personal_cabinet/GATES.md`](../milestones/veha_2/artifacts/fiscal_receipts_personal_cabinet/GATES.md) · G1–G4 met · G5 Fly pending |
+| **Схема** | [`SCHEMA.md`](../milestones/veha_2/artifacts/fiscal_receipts_personal_cabinet/SCHEMA.md) |
+
+## Цель шага (полный SBR)
+
+Закрыть **основную** задачу #73: `Status=RECEIPT` → `FiscalReceipt` → API заказа → секция «Чек» в ЛК (`OrderReceipt`).  
+Код контура уже на `develop` (CLOSURE_PREP); SBR = контрактные тесты + добить дыры vs ТЗ (subtasks 0–30 **без** Патч 1) → REVIEW.
+
+## Вне scope (не трогать в этом SBR)
+
+- **Патч 1** (Google Doc) — отдельный `/patch` после закрытия задачи
+- Допы заказчика: почта с QR / ИНН·КПП в истории платежей — отдельная задача
+- Собственная генерация QR по ФН/ФД/ФП
+- Manager finance fiscal UI · #72 Receipt.Email (только не ломать)
 
 ## SBR
 
-- [x] PHASE 0 /start — Google Doc · customer_tasks · рис.2 в artifacts
-- [x] PHASE 1 SPEC — только Исправленный сценарий (Subtask 21 patch v1)
-- [x] PHASE 2 RED — тест подписи Telegram [TDD] · `098b4c24`
-- [x] PHASE 2 GREEN — `ContactSupportSheet`: «Tg» → «Telegram» · `4f8ee541`
-- [x] `/regress` (Проверка) · `node --test test/javascript/telegram_support_test.mjs` · 14/14
-- [x] PHASE 3 `/review` — Local PASS · bugbot no bugs · security no med+ · Entire attach · CI green `35442696778`
+- [x] PHASE 0 /start
+- [x] /unlazy — G1–G4 PASS
+- [x] PHASE 1 SPEC — этот файл
+- [ ] PHASE 2 RED — контрактные тесты дыр vs ТЗ [TDD]
+- [ ] PHASE 2 GREEN — добить только дыры
+- [ ] `/regress` (Проверка)
+- [ ] PHASE 3 `/review` — Local · bugbot · security · Entire · push · CI · G5 Fly после fiscal notify ON
 
 ## Файлы (ожидаемо)
 
-1. `app/frontend/components/ContactSupportSheet.svelte` — подпись кнопки `contact-support-telegram`: «Tg» → «Telegram»
-2. `test/javascript/telegram_support_test.mjs` — контракт Патч 2 (Subtask 21)
-3. `docs/operations/milestones/veha_2/requirements/customer_tasks/Доработка личного кабинета (ЛК) в PWA.md` — секции Патч 1/2 (синхрон с Google Doc)
-4. `docs/operations/milestones/veha_2/artifacts/pwa_personal_account_lk/screenshots/patch2_2026-09-17_fig2_telegram_label.png` — рис.2
+1. `app/services/payments/tbank_fiscal_notification_handler.rb` — RECEIPT → create/idempotent `FiscalReceipt`
+2. `app/controllers/callbacks/tbank_controller.rb` — `Status=RECEIPT` → handler · plain `OK`
+3. `app/models/fiscal_receipt.rb` — хранение · enum payment/refund · unique `ofd_receipt_id`
+4. `app/controllers/shop/api/orders_controller.rb` — `fiscal_receipts` / `fiscal_expected` в JSON заказа
+5. `app/frontend/routes/OrderReceipt.svelte` — секция «Чек» · ссылка · «Чек формируется»
 
-### Blast-radius (соседи, не менять)
+### Blast-radius (соседи, не менять без нужды)
 
-- `SupportContactSheet.svelte` / `supportConfig.js` — гл. экран (уже «Telegram»; референс)
-- `Profile.svelte` / `AccountSettings.svelte` — только хосты sheet; не трогать (TASK_94 / ЛК)
-- Telegram URL / `openDeepLink` / email-кнопка / структура bottom sheet
+- `app/services/payments/tbank_receipt_builder.rb` — #72 contact в Init; регрессия G4
+- `app/frontend/lib/orderStatusNotifyActions.js` / `ActiveOrdersAccordion.svelte` — `receiptView` = состав заказа, **не** ОФД-чек
+- `app/frontend/components/OrderStatusSheet.svelte` — poll/Cable/status вне scope
 
 ## Не ломать
 
-1. Механику «Написать нам» / deep link / URL бота (`shopSupportTelegramUrl` / `SUPPORT_TELEGRAM_URL`)
-2. Email-сценарий и подпись «e mail» / email (без редизайна sheet)
-3. `Profile.svelte` history repeat / TASK_94 (COMPONENT_MAP · Profile → ContactSupportSheet)
-4. Header / Патч 1 (иконка «обратная связь») — вне scope этой итерации
+1. Платёжные webhook (не-RECEIPT) и checkout / Init / Confirm
+2. Идемпотентность fiscal + plain `OK` (иначе ретраи Т-Банка)
+3. `receiptView` / «Состав заказа» в status-sheet ≠ `OrderReceipt` ОФД
+4. Авторизация PWA / возвраты / чужие платёжные провайдеры
 
 ## Проверка
 
 ```bash
-node --test test/javascript/telegram_support_test.mjs
+ruby bin/rails test test/services/payments/tbank_fiscal_notification_handler_test.rb test/integration/shop/api/order_fiscal_receipts_api_test.rb test/controllers/callbacks/tbank_controller_test.rb test/services/payments/tbank_receipt_builder_test.rb
 ```
+
+GATES: `node .agents/skills/unlazy/scripts/gate-check.mjs --reverify docs/operations/milestones/veha_2/artifacts/fiscal_receipts_personal_cabinet/GATES.md`
 
 ## DoD
 
-- [x] Subtask 21 (patch v1): в bottom sheet ЛК варианты «email» и **«Telegram»** (не «Tg»)
-- [x] URL / обработчик / email / структура sheet без изменений
-- [x] Local PASS · затем `/review` при намерении
+- [ ] Subtasks 0–30 основной задачи (без Патч 1) закрыты или явно N/A в отчёте
+- [ ] Local Проверка PASS · G1–G4 reverify
+- [ ] Нет своей генерации QR · нет дублей fiscal
+- [ ] `/review` + G5 Fly MCP (fiscal notify ON) — ops/deploy апрув
