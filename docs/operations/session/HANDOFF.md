@@ -11,7 +11,7 @@
 | **#73 Патч 1** REVIEW · CI green `35571998446` | deploy апрув · G5 · Subtask 3 |
 | **#73** REVIEW · CI green `35569642319` | deploy апрув · fiscal notify ON |
 
-**last_done:** /review TASK_84-RECEIPT-DISPLAY-EXT · CI green · Entire `01M31GK06473NABJMKATBKCJD0` на `4e84a4b4`  
+**last_done:** COMPONENT_MAP update TASK_84-RECEIPT-DISPLAY-EXT · CI green `35579839261`  
 **next_step:** deploy — только апрув
 
 **ctx_trim:** `2026-09-02`  

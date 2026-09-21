@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-21 — docs: update COMPONENT_MAP — ActiveOrdersAccordion / receiptPanelView
+
+- Строки: ActiveOrdersAccordion · activeOrdersAccordion.js · ActiveOrdersPresenter
+- Дыра «Presenter items уже в JSON» снята (TASK_84-RECEIPT-DISPLAY-EXT)
+
 ## 2026-09-21 — docs: CI green TASK_84-RECEIPT-DISPLAY-EXT REVIEW close
 
 - CI green [`35579839261`](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/35579839261) · Semgrep · CodeQL
