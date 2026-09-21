@@ -11,6 +11,14 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-21 — docs: /unlazy #73 фискальные чеки в ЛК
+
+- Ledger: `artifacts/fiscal_receipts_personal_cabinet/GATES.md`
+- Scope: основная задача (без Патч 1; без email/QR-допов)
+- G1–G4 **met** (handler / API / callbacks / receipt_builder)
+- G5 **unmet** — Fly MCP Point A после fiscal notify ON + deploy
+- Next: `/spec`
+
 ## 2026-09-19 — docs: REVIEW #69 Патч 2 ЛК Telegram label
 
 - Local PASS 14/14 · bugbot: no bugs · security: no med/high/crit
