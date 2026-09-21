@@ -173,12 +173,29 @@ class Payments::TbankFiscalNotificationHandlerTest < ActiveSupport::TestCase
   end
 
   # T-F4d
-  test "T-F4d happy create receipt does not false-report" do
+  test "[TDD] happy create receipt does not false-report" do
     capture_error_reports do |reports|
       result = Payments::TbankFiscalNotificationHandler.new(payload: fiscal_payload).call!
       assert result[:ok]
       assert result[:fiscal_receipt]
       assert_empty reports, "happy path must not Rails.error.report"
+    end
+  end
+
+  test "[TDD] persist wraps FiscalReceipt create in Rls::JobTenantContext" do
+    seen_tid = nil
+    original = Rls::JobTenantContext.method(:with)
+    Rls::JobTenantContext.define_singleton_method(:with) do |record, &block|
+      seen_tid = record.tenant_id
+      original.call(record, &block)
+    end
+
+    begin
+      result = Payments::TbankFiscalNotificationHandler.new(payload: fiscal_payload).call!
+      assert result[:ok]
+      assert_equal @tenant.id, seen_tid
+    ensure
+      Rls::JobTenantContext.define_singleton_method(:with, original)
     end
   end
 end

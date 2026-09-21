@@ -23,6 +23,13 @@ module Payments
         return { ok: true, skipped: :payment_not_found }
       end
 
+      # Callbacks web has no Current.tenant_id — mirror TbankCallbackJob for fiscal_receipts RLS.
+      Rls::JobTenantContext.with(payment) { persist_receipt!(payment) }
+    end
+
+    private
+
+    def persist_receipt!(payment)
       external_id = ofd_receipt_id
       if external_id.blank?
         Rails.logger.warn("[TbankFiscal] Missing fiscal ids PaymentId=#{@payload['PaymentId']}")
@@ -50,8 +57,6 @@ module Payments
       existing = FiscalReceipt.find_by(ofd_receipt_id: external_id)
       { ok: true, duplicate: true, fiscal_receipt: existing }
     end
-
-    private
 
     def report_skip!(reason)
       Rails.error.report(

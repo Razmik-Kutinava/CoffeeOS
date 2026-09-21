@@ -34,4 +34,10 @@ describe("#73 OrderReceipt fiscal OFD section", () => {
     assert.match(src, /operation_type === ["']refund["']/)
     assert.match(src, /Чек возврата/)
   })
+
+  it("shows receipt without Url via FN/FD/FP; no forming for cancelled", () => {
+    assert.match(src, /receiptVisible/)
+    assert.match(src, /status !== ["']cancelled["']/)
+    assert.match(src, /shop-order-fiscal-label/)
+  })
 })

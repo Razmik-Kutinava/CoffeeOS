@@ -69,10 +69,19 @@
     return Boolean(r?.fn_number || r?.fiscal_document_number || r?.fiscal_document_attribute)
   }
 
+  function receiptVisible(r) {
+    return Boolean(r?.url || hasFiscalAttrs(r))
+  }
+
   const receipts = $derived(Array.isArray(order?.fiscal_receipts) ? order.fiscal_receipts : [])
-  const hasReceipts = $derived(receipts.some((r) => r?.url))
+  const hasReceipts = $derived(receipts.some(receiptVisible))
   const showForming = $derived(
-    Boolean(order?.payment_settled && order?.fiscal_expected && !hasReceipts)
+    Boolean(
+      order?.payment_settled &&
+        order?.fiscal_expected &&
+        !hasReceipts &&
+        order?.status !== "cancelled"
+    )
   )
 </script>
 
@@ -94,15 +103,19 @@
         <h3>Чек</h3>
         {#if hasReceipts}
           <ul class="fiscal-list">
-            {#each receipts.filter((r) => r?.url) as r (r.id)}
+            {#each receipts.filter(receiptVisible) as r (r.id)}
               <li class="fiscal-item">
-                <a
-                  class="fiscal-link"
-                  href={r.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  data-testid="shop-order-fiscal-link"
-                >{operationLabel(r)}</a>
+                {#if r.url}
+                  <a
+                    class="fiscal-link"
+                    href={r.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    data-testid="shop-order-fiscal-link"
+                  >{operationLabel(r)}</a>
+                {:else}
+                  <span class="fiscal-label" data-testid="shop-order-fiscal-label">{operationLabel(r)}</span>
+                {/if}
                 {#if hasFiscalAttrs(r)}
                   <div class="fiscal-attrs" data-testid="shop-order-fiscal-attrs">
                     {#if r.fn_number}<span>ФН {r.fn_number}</span>{/if}
@@ -165,6 +178,7 @@
   .fiscal-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
   .fiscal-item { display: flex; flex-direction: column; gap: 4px; }
   .fiscal-link { color: #ff8c42; font-size: 14px; text-decoration: underline; }
+  .fiscal-label { color: #e0e0e0; font-size: 14px; }
   .fiscal-attrs { display: flex; flex-wrap: wrap; gap: 8px 12px; color: #a0a0a0; font-size: 12px; line-height: 1.4; }
   .items { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
   .item-row { display: flex; justify-content: space-between; gap: 12px; font-size: 14px; }
