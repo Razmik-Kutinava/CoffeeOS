@@ -11,7 +11,7 @@
 | **GATES** | `artifacts/active_orders_receipt_display_restore/GATES.md` · G1–G4 baseline met · G5 Fly unmet |
 | **Не путать** | `#94` / TASK_94 = LK history repeat (другая задача) |
 | **RED** | `073a55b5` |
-| **GREEN** | `a65cf627` |
+| **GREEN** | `4e84a4b4` · Entire `01M31GK06473NABJMKATBKCJD0` |
 
 ## Цель
 
