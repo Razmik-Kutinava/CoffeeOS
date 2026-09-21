@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-21 — docs: /unlazy reverify #73 перед REVIEW
+
+- G1–G4 **met** (reverify) · G5 **unmet** (Fly Point A)
+- Ledger: `fiscal_receipts_personal_cabinet/GATES.md`
+- Next: `/review`
+
 ## 2026-09-21 — docs: /regress #73 фискальные чеки в ЛК
 
 - JS `order_fiscal_receipt_lk_test.mjs` 3/3 PASS
