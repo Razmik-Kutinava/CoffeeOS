@@ -4,12 +4,13 @@
 |------|----------|
 | **ID** | **TASK_84-RECEIPT-DISPLAY-EXT** · семья **#84** · 2026-09-21 |
 | **Тип** | доп.задача (EXT) · SBR · hot-path (status sheet) |
-| **Статус** | **SPEC** · ждёт `/sbr` |
+| **Статус** | **RED** · ждёт GREEN |
 | **Ветка** | `develop` |
 | **ТЗ** | `customer_tasks/TASK-84-RECEIPT-DISPLAY-EXT-…ActiveOrdersAccordion.md` |
 | **Google Doc** | https://docs.google.com/document/d/13Msfo8hDhUXHHB3NoKhMQvrPxQMpvlKctvFDOkr7aEI/edit |
 | **GATES** | `artifacts/active_orders_receipt_display_restore/GATES.md` · G1–G4 baseline met · G5 Fly unmet |
 | **Не путать** | `#94` / TASK_94 = LK history repeat (другая задача) |
+| **RED** | pending commit |
 
 ## Цель
 
@@ -18,8 +19,8 @@
 ## SBR
 
 - [x] SPEC
-- [ ] RED — runtime DOM: expand → `.aoa__receipt` + текст позиции + Total Amount
-- [ ] GREEN — починить runtime-путь (только нужный FE)
+- [x] RED — runtime DOM: expand → `.aoa__receipt` + текст позиции + Total Amount
+- [ ] GREEN — `receiptPanelView` + wire ActiveOrdersAccordion
 - [ ] regress (секция «Проверка»)
 - [ ] REVIEW / push / CI / G5 Fly
 

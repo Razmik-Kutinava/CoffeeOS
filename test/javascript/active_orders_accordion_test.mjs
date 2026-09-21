@@ -17,8 +17,10 @@ import {
   toggleExpandedOrder,
   accordionRowView,
   receiptView,
+  receiptPanelView,
   statusMetaThird
 } from "../../app/frontend/lib/activeOrdersAccordion.js"
+import { openOrderReceipt } from "../../app/frontend/lib/orderStatusNotifyActions.js"
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "../..")
 const accordionComponentPath = join(
@@ -249,5 +251,71 @@ describe("#92 WebPush recovery after denied", () => {
     assert.match(src, /data-testid=["']active-order-push-recovery["']/)
     assert.match(src, /data-testid=["']active-order-open-settings["']/)
     assert.match(src, /data-testid=["']active-order-watch-readiness["']/)
+  })
+})
+
+describe("TASK_84-RECEIPT-DISPLAY-EXT runtime receipt [TDD]", () => {
+  it("CTA expand → panel text has item name + Total Amount (not source-only)", () => {
+    const state = createActiveOrdersAccordionState(sampleOrders)
+    openOrderReceipt(state, "o1")
+    const panel = receiptPanelView(sampleOrders[0], state.activeExpandedOrderId)
+    assert.equal(panel.show, true)
+    assert.equal(panel.className, "aoa__receipt")
+    assert.equal(panel.testId, "active-order-receipt")
+    assert.match(panel.text, /Капучино/)
+    assert.match(panel.text, /Сироп ваниль/)
+    assert.match(panel.text, /×1 · 280₽/)
+    assert.match(panel.text, /Subtotal:\s*280₽/)
+    assert.match(panel.text, /Discount:\s*30₽/)
+    assert.match(panel.text, /Total Amount:\s*250₽/)
+    assert.equal(panel.scroll.maxHeight, "350px")
+    assert.equal(panel.scroll.overflowY, "auto")
+    assert.equal(panel.receipt?.hasActionButtons, false)
+  })
+
+  it("toggle collapse clears receipt panel", () => {
+    const state = createActiveOrdersAccordionState(sampleOrders)
+    openOrderReceipt(state, "o1")
+    openOrderReceipt(state, "o1")
+    const panel = receiptPanelView(sampleOrders[0], state.activeExpandedOrderId)
+    assert.equal(state.activeExpandedOrderId, null)
+    assert.equal(panel.show, false)
+    assert.equal(panel.text, "")
+  })
+
+  it("only one expanded receipt at a time", () => {
+    const state = createActiveOrdersAccordionState(sampleOrders)
+    openOrderReceipt(state, "o1")
+    openOrderReceipt(state, "o2")
+    assert.equal(receiptPanelView(sampleOrders[0], state.activeExpandedOrderId).show, false)
+    const second = receiptPanelView(sampleOrders[1], state.activeExpandedOrderId)
+    assert.equal(second.show, true)
+    assert.match(second.text, /Эспрессо/)
+    assert.match(second.text, /Total Amount:\s*300₽/)
+  })
+
+  it("empty items still shows totals without throwing", () => {
+    const empty = {
+      id: "empty",
+      status: "preparing",
+      items: [],
+      subtotal: 0,
+      discount: 0,
+      total_amount: 0
+    }
+    const state = createActiveOrdersAccordionState([empty])
+    openOrderReceipt(state, "empty")
+    const panel = receiptPanelView(empty, state.activeExpandedOrderId)
+    assert.equal(panel.show, true)
+    assert.match(panel.text, /Total Amount:\s*0₽/)
+  })
+
+  it("ActiveOrdersAccordion uses receiptPanelView for display path", () => {
+    const src = readFileSync(accordionComponentPath, "utf8")
+    assert.match(
+      src,
+      /receiptPanelView\s*\(/,
+      "component must call receiptPanelView (runtime path, not source-only receiptView)"
+    )
   })
 })
