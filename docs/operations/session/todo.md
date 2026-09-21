@@ -4,7 +4,7 @@
 |------|----------|
 | **ID** | **#73** · 2026-09-21 |
 | **Тип** | SBR · hot-path (callbacks / shop API / ЛК) |
-| **Статус** | **SPEC** · без Патч 1 |
+| **Статус** | **GREEN** · ждём `/regress` → `/review` |
 | **Ветка** | `develop` |
 | **ТЗ** | [`Хранение и отображение фискальных чеков в личном кабинете.md`](../milestones/veha_2/requirements/customer_tasks/Хранение%20и%20отображение%20фискальных%20чеков%20в%20личном%20кабинете.md) |
 | **Google Doc** | https://docs.google.com/document/d/1HZGokk3jaE5-HjF3YtiyaIWo9Y0EAHF35HJbFpbCER0/edit |
@@ -28,8 +28,8 @@
 - [x] PHASE 0 /start
 - [x] /unlazy — G1–G4 PASS
 - [x] PHASE 1 SPEC — этот файл
-- [ ] PHASE 2 RED — контрактные тесты дыр vs ТЗ [TDD]
-- [ ] PHASE 2 GREEN — добить только дыры
+- [x] PHASE 2 RED — контрактные тесты дыр vs ТЗ [TDD] · `1cfb14eb`
+- [x] PHASE 2 GREEN — ФН/ФД/ФП в OrderReceipt · Local PASS
 - [ ] `/regress` (Проверка)
 - [ ] PHASE 3 `/review` — Local · bugbot · security · Entire · push · CI · G5 Fly после fiscal notify ON
 
@@ -39,7 +39,9 @@
 2. `app/controllers/callbacks/tbank_controller.rb` — `Status=RECEIPT` → handler · plain `OK`
 3. `app/models/fiscal_receipt.rb` — хранение · enum payment/refund · unique `ofd_receipt_id`
 4. `app/controllers/shop/api/orders_controller.rb` — `fiscal_receipts` / `fiscal_expected` в JSON заказа
-5. `app/frontend/routes/OrderReceipt.svelte` — секция «Чек» · ссылка · «Чек формируется»
+5. `app/frontend/routes/OrderReceipt.svelte` — секция «Чек» · ссылка · ФН/ФД/ФП · «Чек формируется»
+6. `test/javascript/order_fiscal_receipt_lk_test.mjs` — контракт UI #73
+7. `test/integration/shop/api/order_fiscal_receipts_api_test.rb` — API FN/FD/FP + refund
 
 ### Blast-radius (соседи, не менять без нужды)
 
@@ -57,6 +59,7 @@
 ## Проверка
 
 ```bash
+node --test test/javascript/order_fiscal_receipt_lk_test.mjs
 ruby bin/rails test test/services/payments/tbank_fiscal_notification_handler_test.rb test/integration/shop/api/order_fiscal_receipts_api_test.rb test/controllers/callbacks/tbank_controller_test.rb test/services/payments/tbank_receipt_builder_test.rb
 ```
 

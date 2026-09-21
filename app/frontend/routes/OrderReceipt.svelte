@@ -65,6 +65,10 @@
     return "Чек"
   }
 
+  function hasFiscalAttrs(r) {
+    return Boolean(r?.fn_number || r?.fiscal_document_number || r?.fiscal_document_attribute)
+  }
+
   const receipts = $derived(Array.isArray(order?.fiscal_receipts) ? order.fiscal_receipts : [])
   const hasReceipts = $derived(receipts.some((r) => r?.url))
   const showForming = $derived(
@@ -91,7 +95,7 @@
         {#if hasReceipts}
           <ul class="fiscal-list">
             {#each receipts.filter((r) => r?.url) as r (r.id)}
-              <li>
+              <li class="fiscal-item">
                 <a
                   class="fiscal-link"
                   href={r.url}
@@ -99,6 +103,13 @@
                   rel="noopener noreferrer"
                   data-testid="shop-order-fiscal-link"
                 >{operationLabel(r)}</a>
+                {#if hasFiscalAttrs(r)}
+                  <div class="fiscal-attrs" data-testid="shop-order-fiscal-attrs">
+                    {#if r.fn_number}<span>ФН {r.fn_number}</span>{/if}
+                    {#if r.fiscal_document_number}<span>ФД {r.fiscal_document_number}</span>{/if}
+                    {#if r.fiscal_document_attribute}<span>ФП {r.fiscal_document_attribute}</span>{/if}
+                  </div>
+                {/if}
               </li>
             {/each}
           </ul>
@@ -152,7 +163,9 @@
   .check-section h3 { margin: 0 0 8px; font-size: 14px; font-weight: 600; color: #c0c0c0; }
   .ofd-box { background: #1a1a1a; border-radius: 12px; padding: 12px; color: #a0a0a0; font-size: 13px; line-height: 1.45; min-height: 48px; }
   .fiscal-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+  .fiscal-item { display: flex; flex-direction: column; gap: 4px; }
   .fiscal-link { color: #ff8c42; font-size: 14px; text-decoration: underline; }
+  .fiscal-attrs { display: flex; flex-wrap: wrap; gap: 8px 12px; color: #a0a0a0; font-size: 12px; line-height: 1.4; }
   .items { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
   .item-row { display: flex; justify-content: space-between; gap: 12px; font-size: 14px; }
   .total-row { display: flex; justify-content: space-between; margin-top: 16px; padding-top: 12px; border-top: 1px solid #3a3a3a; font-weight: 700; font-size: 16px; }
