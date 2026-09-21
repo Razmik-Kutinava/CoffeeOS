@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-21 — docs: /unlazy TASK_84-RECEIPT-DISPLAY-EXT GATES
+
+- Ledger: `artifacts/active_orders_receipt_display_restore/GATES.md`
+- G1–G4 **met** (baseline approve+run) · G5 **unmet** (Fly MCP after deploy)
+- Next: `/spec` → `/sbr`
+
 ## 2026-09-21 — docs: intake TASK_84-RECEIPT-DISPLAY-EXT runtime receipt
 
 - Google Doc → `customer_tasks/TASK-84-RECEIPT-DISPLAY-EXT-…ActiveOrdersAccordion.md`
