@@ -101,6 +101,33 @@ class Payments::TbankFiscalNotificationHandlerTest < ActiveSupport::TestCase
     assert_equal "https://receipt.example/check/refund", receipts.second.receipt_data["Url"]
   end
 
+  test "[TDD Patch1] second Income with unique ofd_receipt_id does not overwrite first" do
+    Payments::TbankFiscalNotificationHandler.new(payload: fiscal_payload).call!
+    second = fiscal_payload(
+      "FiscalDocumentNumber" => 99901,
+      "FiscalDocumentAttribute" => 99902,
+      "Url" => "https://receipt.example/check/second"
+    )
+    Payments::TbankFiscalNotificationHandler.new(payload: second).call!
+
+    receipts = FiscalReceipt.where(payment_id: @payment.id).order(:created_at)
+    assert_equal 2, receipts.count
+    assert_equal "payment", receipts.first.type
+    assert_equal "payment", receipts.second.type
+    assert_not_equal receipts.first.ofd_receipt_id, receipts.second.ofd_receipt_id
+    assert_equal "https://receipt.example/check/abc", receipts.first.receipt_data["Url"]
+    assert_equal "https://receipt.example/check/second", receipts.second.receipt_data["Url"]
+  end
+
+  test "[TDD Patch1] payment_not_found soft-skip does not enqueue retry after max attempt" do
+    payload = fiscal_payload("PaymentId" => "missing-pay-id", "OrderId" => SecureRandom.uuid)
+
+    assert_no_enqueued_jobs(only: Payments::TbankFiscalRetryJob) do
+      result = Payments::TbankFiscalNotificationHandler.new(payload: payload, retry_attempt: 1).call!
+      assert_equal :payment_not_found, result[:skipped]
+    end
+  end
+
   test "[TDD] retry is idempotent — one row" do
     payload = fiscal_payload
     Payments::TbankFiscalNotificationHandler.new(payload: payload).call!

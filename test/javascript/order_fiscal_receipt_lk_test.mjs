@@ -40,4 +40,11 @@ describe("#73 OrderReceipt fiscal OFD section", () => {
     assert.match(src, /status !== ["']cancelled["']/)
     assert.match(src, /shop-order-fiscal-label/)
   })
+
+  it("[TDD Patch1] live-refresh polls while Чек формируется (not status-sheet)", () => {
+    assert.match(src, /orderReceiptFiscalPoll/)
+    assert.match(src, /shouldKeepPollingFiscal/)
+    assert.match(src, /ORDER_RECEIPT_FISCAL_POLL_MS|setInterval/)
+    assert.doesNotMatch(src, /ACTIVE_ORDERS_POLL_MS|GuestOrderChannel|receiptView/)
+  })
 })

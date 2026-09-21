@@ -69,6 +69,26 @@ class Callbacks::TbankControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  # #73 Патч 1 Subtask 10: fiscal handler exception → 500 + release claim.
+  module FakeFiscalHandlerFail
+    mattr_accessor :enabled, default: false
+
+    module Override
+      def call!
+        raise StandardError, "simulated fiscal handler failure" if FakeFiscalHandlerFail.enabled
+
+        super
+      end
+    end
+
+    def self.install!
+      return if @prepended
+
+      Payments::TbankFiscalNotificationHandler.prepend(Override)
+      @prepended = true
+    end
+  end
+
   setup do
     ENV["TBANK_TERMINAL_KEY"] = "TestTerminal"
     ENV["TBANK_PASSWORD"]     = "TestPassword"
@@ -87,6 +107,8 @@ class Callbacks::TbankControllerTest < ActionDispatch::IntegrationTest
     FakePollingConfirm.enabled = false
     FakeJobTotalFail.install!
     FakeJobTotalFail.enabled = false
+    FakeFiscalHandlerFail.install!
+    FakeFiscalHandlerFail.enabled = false
 
     @order = Order.create!(
       tenant:          @tenant,
@@ -120,6 +142,7 @@ class Callbacks::TbankControllerTest < ActionDispatch::IntegrationTest
     ENV.delete("TBANK_REBILL_SYNC_RETRIES")
     ENV.delete("TBANK_REBILL_SYNC_PAUSE_SEC")
     FakeJobTotalFail.enabled = false
+    FakeFiscalHandlerFail.enabled = false
     Payments::CacheCounter.clear!
     Rails.cache.clear
   end
@@ -275,6 +298,41 @@ class Callbacks::TbankControllerTest < ActionDispatch::IntegrationTest
     assert_equal "OK", response.body
     assert_equal "succeeded", @payment.reload.status
     assert_equal "accepted", @order.reload.status
+  end
+
+  test "[TDD Patch1] fiscal RECEIPT handler error releases claim for bank retry" do
+    @payment.update!(status: "succeeded")
+    payload = {
+      "TerminalKey" => "TestTerminal",
+      "OrderId" => @order.id.to_s,
+      "Success" => true,
+      "Status" => "RECEIPT",
+      "PaymentId" => @provider_payment_id,
+      "ErrorCode" => "0",
+      "Amount" => 50_000,
+      "FnNumber" => "9999078900005555",
+      "FiscalDocumentNumber" => 101,
+      "FiscalDocumentAttribute" => 202,
+      "Type" => "Income",
+      "Url" => "https://receipt.example/patch1-fail"
+    }
+    payload["Token"] = Payments::TbankAdapter.new.build_token(payload)
+    idem_key = "tbank:callback:#{@provider_payment_id}:RECEIPT:9999078900005555:101:202"
+
+    FakeFiscalHandlerFail.enabled = true
+    begin
+      post_notify(payload)
+      assert_response :internal_server_error
+      assert_not Rails.cache.exist?(idem_key), "fiscal claim must be released on 500"
+      assert_equal 0, FiscalReceipt.where(payment_id: @payment.id).count
+    ensure
+      FakeFiscalHandlerFail.enabled = false
+    end
+
+    post_notify(payload)
+    assert_response :ok
+    assert_equal "OK", response.body
+    assert_equal 1, FiscalReceipt.where(payment_id: @payment.id).count
   end
 
   test "duplicate path does not delete another request claim [TDD]" do
