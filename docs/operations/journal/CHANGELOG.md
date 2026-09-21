@@ -11,6 +11,14 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-21 — docs: /regress #73 фискальные чеки в ЛК
+
+- JS `order_fiscal_receipt_lk_test.mjs` 3/3 PASS
+- Rails зона: 37 runs, 153 assertions, 0 failures
+- GATES G1–G4 reverify PASS · G5 Fly unmet (fiscal notify ON)
+- GREEN `439a87af` · Entire `01M319ZHF0R2YQGJYXFH1459KR`
+- Next: `/review` · Fly MCP Point A ещё нужен для «готово заказчику»
+
 ## 2026-09-21 — docs: /spec #73 фискальные чеки в ЛК
 
 - `todo.md`: полный SBR · без Патч 1 · 5 файлов · Не ломать/Проверка

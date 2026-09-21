@@ -4,7 +4,7 @@
 |------|----------|
 | **ID** | **#73** · 2026-09-21 |
 | **Тип** | SBR · hot-path (callbacks / shop API / ЛК) |
-| **Статус** | **GREEN** · ждём `/regress` → `/review` |
+| **Статус** | **regress PASS** · Next `/review` |
 | **Ветка** | `develop` |
 | **ТЗ** | [`Хранение и отображение фискальных чеков в личном кабинете.md`](../milestones/veha_2/requirements/customer_tasks/Хранение%20и%20отображение%20фискальных%20чеков%20в%20личном%20кабинете.md) |
 | **Google Doc** | https://docs.google.com/document/d/1HZGokk3jaE5-HjF3YtiyaIWo9Y0EAHF35HJbFpbCER0/edit |
@@ -29,8 +29,8 @@
 - [x] /unlazy — G1–G4 PASS
 - [x] PHASE 1 SPEC — этот файл
 - [x] PHASE 2 RED — контрактные тесты дыр vs ТЗ [TDD] · `1cfb14eb`
-- [x] PHASE 2 GREEN — ФН/ФД/ФП в OrderReceipt · Local PASS
-- [ ] `/regress` (Проверка)
+- [x] PHASE 2 GREEN — ФН/ФД/ФП в OrderReceipt · Local PASS · `439a87af`
+- [x] `/regress` (Проверка) · JS 3/3 · Rails 37/0 · G1–G4 reverify
 - [ ] PHASE 3 `/review` — Local · bugbot · security · Entire · push · CI · G5 Fly после fiscal notify ON
 
 ## Файлы (ожидаемо)

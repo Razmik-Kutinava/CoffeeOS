@@ -2,17 +2,17 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-21 (#73 SPEC)  
+**Дата:** 2026-09-21 (#73 regress PASS)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#73** PHASE 1 SPEC · todo готов | `/sbr` RED |
-| **#73 Патч 1** вне scope | `/patch` после |
-| GATES G1–G4 met · G5 pending | reverify на GREEN/REVIEW |
+| **#73** zone regress PASS · G1–G4 reverify | `/review` |
+| **#73** G5 Fly MCP | fiscal notify ON + deploy |
+| **#73 Патч 1** вне scope | `/patch` после задачи |
 
-**last_done:** /spec #73 · hot-path Не ломать + Проверка  
-**next_step:** `/sbr`
+**last_done:** /regress #73 · JS 3/3 · Rails 37 runs 0 fail  
+**next_step:** `/review`
 
 **ctx_trim:** `2026-09-02`
 
