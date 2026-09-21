@@ -11,6 +11,14 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-21 — docs: REVIEW #73 фискальные чеки в ЛК
+
+- Local PASS · bugbot: RLS JobTenantContext + UI (no Url / cancelled) · security: no med+
+- Entire `01M319ZHF0R2YQGJYXFH1459KR` на `12caceb7`
+- GREEN `439a87af` · fix `12caceb7`
+- G5 Fly unmet до fiscal notify ON
+- Next: CI green · deploy апрув · затем Патч 1 `/patch`
+
 ## 2026-09-21 — docs: /unlazy reverify #73 перед REVIEW
 
 - G1–G4 **met** (reverify) · G5 **unmet** (Fly Point A)
