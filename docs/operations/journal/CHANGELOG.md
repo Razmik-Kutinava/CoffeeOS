@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-21 — docs: intake TASK_84-RECEIPT-DISPLAY-EXT runtime receipt
+
+- Google Doc → `customer_tasks/TASK-84-RECEIPT-DISPLAY-EXT-…ActiveOrdersAccordion.md`
+- artifacts `active_orders_receipt_display_restore/` · CBR + customer_tasks README
+- ID: EXT к #84 (не #94 — занят LK history); заголовок Doc «TASK_94» → канон `TASK_84-RECEIPT-DISPLAY-EXT`
+- Next: `/spec`
+
 ## 2026-09-21 — docs: REVIEW #73 Патч 1 fiscal OFD poll
 - GREEN `ced2ad97`: OrderReceipt poll + claim-release / unique ofd tests
 - Local PASS · bugbot clean · security no med+
