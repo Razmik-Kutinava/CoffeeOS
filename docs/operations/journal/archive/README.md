@@ -6,8 +6,8 @@
 
 ## Файлы
 
-`CHANGELOG-2026-06.md` · `CHANGELOG-2026-07.md` · **`CHANGELOG-2026-08.md`** (ctx-trim 2026-09-01)
+`CHANGELOG-2026-06.md` · `CHANGELOG-2026-07.md` · **`CHANGELOG-2026-08.md`** (ctx-trim 2026-09-01) · **`CHANGELOG-2026-09-early.md`** (01–17 сен, ctx-trim 2026-09-22)
 
 ## Зачем это нам
 
-Живой CHANGELOG — шапка + текущий месяц. Архив — `/ctx-trim`.
+Живой CHANGELOG — шапка + **хвост текущего месяца** (с 18.09). Архив — `/ctx-trim`.

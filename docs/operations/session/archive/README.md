@@ -12,6 +12,8 @@
 | 2026-07 | `handoff-2026-07.md` | `session_state-2026-07.md` |
 | 2026-06 | `handoff-2026-06.md` | `session_state-2026-06.md` |
 
+**todo stubs:** `todo-shift-close-2026-09.md` · `todo-task84-receipt-2026-09.md` (ctx-trim 2026-09-22)
+
 Архивация: `/ctx-trim` · правило `coffeeos-context-hygiene.mdc`.
 
 ## Зачем это нам

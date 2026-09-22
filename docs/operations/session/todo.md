@@ -1,61 +1,20 @@
-# todo — TASK_84-RECEIPT-DISPLAY-EXT: runtime receipt display
+# todo — TASK_84-RECEIPT-DISPLAY-EXT (stub)
 
 | Поле | Значение |
 |------|----------|
-| **ID** | **TASK_84-RECEIPT-DISPLAY-EXT** · семья **#84** · 2026-09-21 |
-| **Тип** | доп.задача (EXT) · SBR · hot-path (status sheet) |
-| **Статус** | **REVIEW · CI green** · deploy апрув |
-| **Ветка** | `develop` |
-| **ТЗ** | `customer_tasks/TASK-84-RECEIPT-DISPLAY-EXT-…ActiveOrdersAccordion.md` |
-| **Google Doc** | https://docs.google.com/document/d/13Msfo8hDhUXHHB3NoKhMQvrPxQMpvlKctvFDOkr7aEI/edit |
-| **GATES** | G1–G4 met · G5 Fly unmet |
-| **Не путать** | `#94` / TASK_94 = LK history repeat (другая задача) |
-| **RED** | `073a55b5` |
+| **ID** | TASK_84-RECEIPT-DISPLAY-EXT · #84 |
+| **Статус** | REVIEW · CI green · **G5 Fly unmet** (после deploy) |
 | **GREEN** | `4e84a4b4` · Entire `01M31GK06473NABJMKATBKCJD0` |
+| **CI** | [`35579839261`](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/35579839261) |
+| **Полный SPEC** | [`archive/todo-task84-receipt-2026-09.md`](archive/todo-task84-receipt-2026-09.md) |
 
-## Цель
+## next_step
 
-Фактическое отображение текстового `.aoa__receipt` после CTA «Состав заказа» / expand: позиции, модификаторы, qty/price, Subtotal/Discount/Total Amount. Через существующий `receiptView` + данные `GET /shop/api/orders/active`. Без rewrite `receiptView` / backend / dismiss / Cable.
+1. deploy апрув → Fly
+2. G5 Point A: expand → `.aoa__receipt` runtime text
 
-## SBR
-
-- [x] SPEC
-- [x] RED — runtime DOM: expand → `.aoa__receipt` + текст позиции + Total Amount
-- [x] GREEN — `receiptPanelView` + wire ActiveOrdersAccordion
-- [x] regress (секция «Проверка»)
-- [x] REVIEW Local · bugbot · security
-- [x] push / CI green [`35579839261`](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/35579839261)
-- [ ] G5 Fly после deploy
-
-## Файлы (ожидаемо)
-
-1. `test/javascript/active_orders_accordion_test.mjs` — RED/GREEN: runtime regression (DOM), не только source-contract `#84`
-2. `app/frontend/components/ActiveOrdersAccordion.svelte` — фактический рендер/путь раскрытия receipt (сейчас код есть; закрыть расхождение с билдом)
-3. `app/frontend/lib/activeOrdersAccordion.js` — **только если** сломан expand/`activeExpandedOrderId`; **не** переписывать `receiptView`
-4. `app/frontend/lib/orderStatusNotifyActions.js` — **сосед:** только если сломан `openOrderReceipt`; сигнатуру не менять
-
-## Blast-radius (не трогать без нужды)
-
-- `app/frontend/components/OrderStatusSheet.svelte` — не менять state/polling
-- `aoa__dismiss` / push recovery / wallet CTA в том же accordion
-
-## Не ломать
-
-1. Status/progress mapping + polling/Cable reconnect
-2. `aoa__dismiss` (×) и dismissOrder
-3. `receiptView` реализация / backend `active` + ActiveOrdersPresenter
-4. Push recovery / Wallet / cancel-modal / TASK_91/#94 LK
-
-## Проверка
+## Проверка (после deploy)
 
 ```bash
 node --test test/javascript/active_orders_accordion_test.mjs
-ruby bin/rails test test/integration/shop/api/active_orders_receipt_test.rb test/integration/shop/api/active_orders_test.rb test/integration/shop/order_status_sheet_mount_acceptance_test.rb
 ```
-
-## DoD
-
-- [ ] Subtask 1–13 Gherkin (ТЗ) — runtime receipt виден
-- [ ] Позитивный #84 contract сохранён; негативный #35 не возвращать
-- [ ] Local PASS (Проверка) · GATES reverify G1–G4
-- [ ] REVIEW + G5 Fly Point A после deploy
