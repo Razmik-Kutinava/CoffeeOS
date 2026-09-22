@@ -2,16 +2,16 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-22 (ctx-trim)  
+**Дата:** 2026-09-22 (TEMP diag iOS push)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **ctx-trim** · CHANGELOG early-Sep → archive · ISSUES/todo сжаты | G5 TASK_84 expand receipt · #73 fiscal notify ON |
-| **Fly v500** `ad0421c6` на стенде | device Callcheck/pay по апруву |
+| **TEMP diag** `9b3c1488` — toast-шаги registerShopPush на экране | deploy стенд/prod? · снять лог после диагностики |
+| Fly v500 `ad0421c6` на стенде | G5 receipt · #73 fiscal · device |
 
-**last_done:** `/ctx-trim` 2026-09-22 (CHANGELOG 01–17 → archive, ISSUES UTF-8, todo stub)  
-**next_step:** G5 active-order receipt; fiscal notify; device smoke
+**last_done:** TEMP on-device diag toasts для iOS push permission (#81)  
+**next_step:** уточнить deploy target → ручной прогон на iPhone → убрать TEMP отдельным коммитом
 
 **ctx_trim:** `2026-09-22`  
 **Fly:** v500 `deployment-01M31NTDXYAJYWZQK3ZYGHHEZX`

@@ -2,16 +2,16 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-22 (ctx-trim)  
+**Дата:** 2026-09-22 (TEMP diag iOS push)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **ctx-trim PASS** · live CHANGELOG = 09-18+ | G5 expand `.aoa__receipt` · #73 fiscal ON |
-| Bundle на стенде: receipt / Telegram / 1-click | device live pay skip |
+| **TEMP diag** push toast steps `9b3c1488` | deploy апрув (стенд vs prod) · on-device iPhone |
+| Bundle на стенде ещё без diag | после лога — revert TEMP отдельным коммитом |
 
-**last_done:** ctx-trim 2026-09-22 · archive `CHANGELOG-2026-09-early.md`  
-**next_step:** G5 active order receipt · fiscal notify · optional device
+**last_done:** diag: TEMP toast steps registerShopPush (#81)  
+**next_step:** спросить куда деплоить → ручная проверка iOS → убрать TEMP
 
 **ctx_trim:** `2026-09-22`
 

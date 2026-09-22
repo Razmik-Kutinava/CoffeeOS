@@ -11,7 +11,16 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-22 — diag: TEMP toast-шаги iOS push (#81)
+
+- `registerShopPush({ onToast })` — накопительный лог 1…10 / ОШИБКА на шаге N
+- OrderStatus: `ctaToast` + `pushErr` у кнопки «Разрешить» (без delay до requestPermission)
+- `subscribeOrderPush` прокидывает onToast; не затирает diag outcome-тостами
+- **Не финал** — убрать отдельным коммитом после on-device
+- Коммит: `9b3c1488`
+
 ## 2026-09-22 — ops: ctx-trim токенов (CHANGELOG early-Sep + ISSUES + todo)
+
 
 - Архив: `journal/archive/CHANGELOG-2026-09-early.md` (2026-09-01…17)
 - Живой CHANGELOG: шапка + **09-18+** (~650 строк vs ~1986)
