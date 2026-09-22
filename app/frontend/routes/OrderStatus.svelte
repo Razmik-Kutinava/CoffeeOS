@@ -99,20 +99,29 @@
   async function enablePushNotifications() {
     pushErr = null
     pushState = "requesting"
+    // TEMP DIAG: тот же механизм, что downloadWalletPass → ctaToast;
+    // дублируем в pushErr, чтобы лог был у кнопки «Разрешить уведомления».
+    const onToast = (msg) => {
+      ctaToast = msg
+      pushErr = msg
+    }
     try {
-      const result = await registerShopPush()
+      const result = await registerShopPush({ onToast })
       if (result.ok) {
         pushState = "registered"
       } else if (result.reason === "denied") {
         pushState = "denied"
-        pushErr = "Уведомления отключены в браузере"
+        // TEMP DIAG: не затирать лог шагов коротким текстом
       } else {
         pushState = "error"
-        pushErr = "Не удалось включить уведомления"
       }
     } catch (e) {
       pushState = "error"
-      pushErr = e.message || "Ошибка подписки на push"
+      if (!ctaToast) {
+        const msg = e.message || "Ошибка подписки на push"
+        pushErr = msg
+        ctaToast = msg
+      }
     }
   }
 
@@ -281,9 +290,6 @@
     {#if pushAvailable && !progress.cancelled && pushState !== "registered"}
       <div class="push-banner">
         <p class="push-banner-text">Получайте статус заказа в шторке уведомлений</p>
-        {#if pushErr}
-          <p class="push-banner-error">{pushErr}</p>
-        {/if}
         <button
           type="button"
           class="push-banner-btn"
@@ -292,9 +298,15 @@
         >
           {pushState === "requesting" ? "Подключаем…" : "Разрешить уведомления"}
         </button>
+        {#if pushErr}
+          <p class="push-banner-error" role="status">{pushErr}</p>
+        {/if}
       </div>
     {:else if pushState === "registered"}
       <p class="push-ok" role="status">Уведомления включены</p>
+      {#if ctaToast}
+        <p class="push-banner-error" role="status">{ctaToast}</p>
+      {/if}
     {/if}
 
     {#if progress.cancelled}
@@ -644,9 +656,13 @@
   }
 
   .push-banner-error {
-    margin: 0 0 8px;
-    font-size: 13px;
+    margin: 8px 0 0;
+    font-size: 12px;
     color: #ff8c42;
+    text-align: left;
+    /* TEMP DIAG iOS push */
+    white-space: pre-line;
+    word-break: break-word;
   }
 
   .push-banner-btn {
@@ -840,8 +856,11 @@
   .cancel-toast {
     margin: 12px 0 0;
     font-size: 13px;
-    text-align: center;
+    text-align: left;
     line-height: 1.35;
+    /* TEMP DIAG iOS push: многострочный лог шагов registerShopPush */
+    white-space: pre-line;
+    word-break: break-word;
   }
 
   .cancel-toast--success {

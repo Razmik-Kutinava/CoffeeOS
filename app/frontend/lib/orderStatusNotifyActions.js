@@ -217,6 +217,9 @@ export async function subscribeOrderPush(opts = {}) {
     storage = typeof localStorage !== "undefined" ? localStorage : null
   } = opts
   const idleLabel = LABELS.push
+  // TEMP DIAG: реальный registerShopPush пишет лог шагов в onToast —
+  // не затираем его outcome-тостами (в тестах mock всё ещё шлёт soft toast).
+  const injectedRegister = typeof registerShopPushImpl === "function"
 
   try {
     let register = registerShopPushImpl
@@ -224,7 +227,7 @@ export async function subscribeOrderPush(opts = {}) {
       const mod = await import("./firebasePush.js")
       register = mod.registerShopPush
     }
-    const result = await register()
+    const result = await register({ onToast })
 
     if (result?.ok) {
       try {
@@ -236,7 +239,7 @@ export async function subscribeOrderPush(opts = {}) {
     }
 
     if (result?.reason === "denied") {
-      if (typeof onToast === "function") onToast(PUSH_DENIED_TOAST)
+      if (typeof onToast === "function" && injectedRegister) onToast(PUSH_DENIED_TOAST)
       return {
         ok: false,
         isLoading: false,
@@ -246,7 +249,7 @@ export async function subscribeOrderPush(opts = {}) {
       }
     }
 
-    if (typeof onToast === "function") onToast(PUSH_NETWORK_TOAST)
+    if (typeof onToast === "function" && injectedRegister) onToast(PUSH_NETWORK_TOAST)
     return {
       ok: false,
       isLoading: false,
@@ -254,7 +257,7 @@ export async function subscribeOrderPush(opts = {}) {
       error: result?.reason || "failed"
     }
   } catch (_err) {
-    if (typeof onToast === "function") onToast(PUSH_NETWORK_TOAST)
+    if (typeof onToast === "function" && injectedRegister) onToast(PUSH_NETWORK_TOAST)
     return { ok: false, isLoading: false, primaryLabel: idleLabel, error: "network" }
   }
 }
