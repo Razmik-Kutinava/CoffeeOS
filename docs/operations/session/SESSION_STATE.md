@@ -2,16 +2,16 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-22 (TEMP diag iOS push)  
+**Дата:** 2026-09-24 (custom domain hosts)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **TEMP diag** push toast steps `9b3c1488` | deploy апрув (стенд vs prod) · on-device iPhone |
-| Bundle на стенде ещё без diag | после лога — revert TEMP отдельным коммитом |
+| **codeblack.coffee** в `config.hosts` + `APP_HOST` | Fly deploy → проверить https://codeblack.coffee |
+| TEMP diag iOS push ещё в коде | после iPhone — revert TEMP |
 
-**last_done:** diag: TEMP toast steps registerShopPush (#81)  
-**next_step:** спросить куда деплоить → ручная проверка iOS → убрать TEMP
+**last_done:** whitelist `codeblack.coffee` / `www` + APP_HOST в fly.toml (фикс 403 HostAuthorization)  
+**next_step:** deploy coffeeos → curl/браузер домена
 
 **ctx_trim:** `2026-09-22`
 

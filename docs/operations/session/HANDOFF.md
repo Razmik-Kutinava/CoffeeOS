@@ -2,19 +2,19 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-22 (TEMP diag iOS push)  
+**Дата:** 2026-09-24 (custom domain hosts)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **TEMP diag** `9b3c1488` — toast-шаги registerShopPush на экране | deploy стенд/prod? · снять лог после диагностики |
-| Fly v500 `ad0421c6` на стенде | G5 receipt · #73 fiscal · device |
+| **codeblack.coffee** hosts + APP_HOST | Fly deploy → 403 должен уйти |
+| TEMP diag `9b3c1488` ещё в дереве | on-device iPhone · revert TEMP |
 
-**last_done:** TEMP on-device diag toasts для iOS push permission (#81)  
-**next_step:** уточнить deploy target → ручной прогон на iPhone → убрать TEMP отдельным коммитом
+**last_done:** Rails HostAuthorization: `codeblack.coffee` + `www`; fly.toml `APP_HOST=codeblack.coffee`  
+**next_step:** deploy → проверка https://codeblack.coffee
 
 **ctx_trim:** `2026-09-22`  
-**Fly:** v500 `deployment-01M31NTDXYAJYWZQK3ZYGHHEZX`
+**Fly:** v500 `deployment-01M31NTDXYAJYWZQK3ZYGHHEZX` (домен — после нового deploy)
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

@@ -69,7 +69,10 @@ Rails.application.configure do
   # config.action_mailer.raise_delivery_errors = false
 
   # Set host to be used by links generated in mailer templates.
-  config.action_mailer.default_url_options = { host: "coffeeos.fly.dev", protocol: "https" }
+  config.action_mailer.default_url_options = {
+    host: ENV.fetch("APP_HOST", "codeblack.coffee"),
+    protocol: "https"
+  }
 
   # Specify outgoing SMTP server. Remember to add smtp/* credentials via bin/rails credentials:edit.
   # config.action_mailer.smtp_settings = {
@@ -97,13 +100,20 @@ Rails.application.configure do
   config.hosts = [
     "coffeeos.fly.dev",
     /.*\.coffeeos\.fly\.dev\z/, # витрины точек: {slug}.coffeeos.fly.dev
-    /.*\.fly\.dev/              # preview machines Fly.io
+    /.*\.fly\.dev/,             # preview machines Fly.io
+    "codeblack.coffee",         # кастомный домен (Beget DNS → Fly)
+    "www.codeblack.coffee"
   ]
   # TASK_93-C: SMS short-link host from env (R2-A); skip if already covered by fly patterns
   sms_link_host = ENV["SHOP_SMS_LINK_HOST"].presence || ENV["APP_HOST"].presence
   if sms_link_host.present?
     host_only = sms_link_host.to_s.sub(%r{\Ahttps?://}i, "").split("/").first.to_s.split(":").first
     config.hosts << host_only if host_only.present? && !host_only.match?(/fly\.dev\z/i)
+  end
+  # Extra hosts from env (comma-separated), e.g. staging aliases
+  ENV.fetch("ADDITIONAL_HOSTS", "").split(",").each do |h|
+    host_only = h.to_s.strip.sub(%r{\Ahttps?://}i, "").split("/").first.to_s.split(":").first
+    config.hosts << host_only if host_only.present?
   end
   config.host_authorization = {
     exclude: ->(request) { request.path == "/up" || request.path.start_with?("/callbacks/") }
