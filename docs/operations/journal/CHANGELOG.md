@@ -16,7 +16,8 @@
 - `config.hosts`: `codeblack.coffee`, `www.codeblack.coffee` + `ADDITIONAL_HOSTS`
 - `fly.toml` `APP_HOST=codeblack.coffee`; mailer host из `APP_HOST`
 - DNS/сертификат Fly уже Active — без whitelist Rails отдавал 403
-- Коммит: `ccd37e7d`
+- Fly **v501** `deployment-01M39802N9J3ZGMJR64VJ6DN2X` — `https://codeblack.coffee` → **200**
+- Коммит: `ccd37e7d` (+ ops)
 
 ## 2026-09-22 — diag: TEMP toast-шаги iOS push (#81)
 

@@ -14,7 +14,7 @@
 **next_step:** deploy → проверка https://codeblack.coffee
 
 **ctx_trim:** `2026-09-22`  
-**Fly:** v500 `deployment-01M31NTDXYAJYWZQK3ZYGHHEZX` (домен — после нового deploy)
+**Fly:** v501 `deployment-01M39802N9J3ZGMJR64VJ6DN2X` · https://codeblack.coffee
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
