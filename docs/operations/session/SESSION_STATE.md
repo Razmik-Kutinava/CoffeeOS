@@ -2,16 +2,17 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-24 (custom domain hosts)  
+**Дата:** 2026-09-25 (Fly v502 fresh deploy)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **Fly v501** hosts fix на стенде | проверить https://codeblack.coffee в браузере |
-| TEMP diag iOS push ещё в коде | после iPhone — revert TEMP |
+| **Fly v502** `deployment-01M3BWPNB0P1T0PPE2WRP7KBPY` | заказчик: витрина Point A |
+| CI `36115565894` success | TEMP iOS push diag — revert после device |
+| Smoke: `/up`+`/shop` 200 на codeblack | MCP full batch — skip (HTTP smoke only) |
 
-**last_done:** whitelist + deploy v501 `deployment-01M39802N9J3ZGMJR64VJ6DN2X`  
-**next_step:** открыть https://codeblack.coffee — 403 должен уйти
+**last_done:** push + CI green + fly deploy v502  
+**next_step:** отдать ссылку витрины; при апруве — `/` → `/shop`
 
 **ctx_trim:** `2026-09-22`
 

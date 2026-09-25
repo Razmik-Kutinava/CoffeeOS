@@ -11,6 +11,14 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-25 — ops: Fly v502 fresh deploy (CI green)
+
+- `git push` develop (hosts fix + TEMP iOS diag + ops) → CI / Semgrep / CodeQL **success** (`36115565894`)
+- `fly deploy -a coffeeos --remote-only --depot=false` → **v502** `deployment-01M3BWPNB0P1T0PPE2WRP7KBPY`
+- Smoke: `https://codeblack.coffee/up` 200 · `/shop?tenant_id=PointA` 200 · fly.dev `/shop` 200
+- Витрина заказчику: `https://codeblack.coffee/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789`
+- Fly MCP full batch: skip (HTTP smoke); Sentry/Neon/УК — не гоняли в этом шаге
+
 ## 2026-09-24 — fix: custom domain codeblack.coffee (HostAuthorization 403)
 
 - `config.hosts`: `codeblack.coffee`, `www.codeblack.coffee` + `ADDITIONAL_HOSTS`
