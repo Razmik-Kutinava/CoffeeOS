@@ -11,6 +11,14 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-26 — feat: #77 Патч 1 — приоритет 11₽ над оффером подписки [GREEN]
+
+- Gate уже в `SubscriptionOfferEligibility` через `GrowthPromo.available?` (не дублирует промо)
+- Profile API tests: false пока 11₽ available / true после exhaust
+- Синк секции Патч 1 в customer_tasks · `todo.md` Шаг 5
+- Док: https://docs.google.com/document/d/16MJSOBP0lMtZThbrCN8IdtUUqwUQZ7XQdgPHZUktqrk/edit
+- Local: eligibility 7 PASS · profile offer 9 PASS
+
 ## 2026-09-26 — fix: invalidate subscription CTA cache after pay (Патч 1 /review)
 
 - `clearSubscriptionOfferCtaCache()` в `completePaySuccess` + `PaymentResult.prepareSuccessScreen`

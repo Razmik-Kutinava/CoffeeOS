@@ -1,54 +1,47 @@
-# todo — Патч 1: 22.09.2026 · Привязка способа оплаты и промо 11₽
+# todo — #77 Патч 1: 22.09.2026 · Умный показ оффера подписки
 
 | Поле | Значение |
 |------|----------|
-| **ID** | Патч 1 · 22.09.2026 · Google Doc «Привязка способа оплаты и промо 11₽» |
-| **Док** | https://docs.google.com/document/d/1hP-1JZnB3J_3V-cm5Dl7bFRrCk6JWIvrZOZir250x3Y/edit |
-| **Статус** | REVIEW done · CI green · deploy апрув |
-| **RED** | `b5653fa1` |
-| **GREEN** | `ddf8e294` |
-| **fix (bugbot)** | `e687317d` · Entire `01M3EF80ZRWCQSW2HV6TG9N8B6` |
-| **CI** | [`36231701455`](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/36231701455) success (+ Semgrep + CodeQL) |
-| **Scope** | Только «Исправленный сценарий» Патча 1 |
+| **ID** | #77 · Патч 1 · 22.09.2026 |
+| **Док** | [Умный показ оффера подписки — сигналы толерантности и УК-переключатель.md](../milestones/veha_2/requirements/customer_tasks/Умный%20показ%20оффера%20подписки%20—%20сигналы%20толерантности%20и%20УК-переключатель.md) |
+| **Google** | https://docs.google.com/document/d/16MJSOBP0lMtZThbrCN8IdtUUqwUQZ7XQdgPHZUktqrk/edit |
+| **Статус** | GREEN · verify + profile API tests |
+| **Scope** | Только «Исправленный сценарий» Патча 1 (Subtask 7 / 17–20 patch v2) |
 
-## SBR: REVIEW done
+## SBR: GREEN
 
 ## Файлы (ожидаемо)
 
-- `app/services/payments/growth_promo.rb` — `available?(customer, point)`
-- `app/services/shop/subscription_offer_eligibility.rb` — gate через `available?`
-- `app/frontend/lib/paymentMethodI18n.js` — тексты из `amount_rub`
-- `app/frontend/components/PaymentMethodsSheet.svelte` — `promoAmountRub`
-- `app/frontend/routes/Checkout.svelte` — amount + clear CTA cache
-- `app/frontend/routes/PaymentResult.svelte` — clear CTA cache on success
-- тесты growth_promo / subscription_offer / i18n
+- `app/services/shop/subscription_offer_eligibility.rb` — gate `GrowthPromo.available?` до толерантности
+- `app/services/payments/growth_promo.rb` — только вызов `available?` (логику промо не трогаем)
+- `test/services/shop/subscription_offer_eligibility_test.rb` — unit приоритета 11₽
+- `test/integration/shop/api/profile_subscription_offer_test.rb` — profile API: false пока available / true после exhaust
+- `docs/.../customer_tasks/Умный показ оффера подписки — …md` — секция Патч 1 синкнута с Google Doc
 
 ## Не ломать
 
-- Правила eligibility / дедуп / antifraud — только фасад
-- Payment Init/Charge/callback — не менять
-- COMPONENT_MAP: Checkout/PaymentMethodsSheet/PaymentResult — только promo copy + cache clear
+- Механика 11₽ / `promo_point_settings` / дедуп / `Payments::TbankAdapter` / payment binding — только чтение через `GrowthPromo.available?`
+- Engagement signals / `orders_count` / `subscription_offer_settings` CRUD — без изменений
+- COMPONENT_MAP: `orderStatusCtaMachine.js` / OrderActionButtons — UI CTA не трогаем в этом патче (eligibility server-side)
 
 ## Проверка
 
 ```bash
-bundle exec ruby -Itest test/services/payments/growth_promo_test.rb   # 20 PASS
-bundle exec ruby -Itest test/services/shop/subscription_offer_eligibility_test.rb  # 7 PASS
-node --test test/javascript/payment_method_promo_11rub_i18n_test.mjs  # 4 PASS
+bundle exec ruby -Itest test/services/shop/subscription_offer_eligibility_test.rb
+bundle exec ruby -Itest test/integration/shop/api/profile_subscription_offer_test.rb
 ```
 
 ## DoD
 
-- [x] `GrowthPromo.available?(customer, point)`
-- [x] `SubscriptionOfferEligibility` false пока available
-- [x] UI amount_rub
-- [x] bugbot medium → clear CTA cache
-- [x] Entire + push + CI green
-- [ ] deploy — только по апруву владельца
+- [x] `SubscriptionOfferEligibility` → `false` пока `GrowthPromo.available?`
+- [x] При `available? = false` — прежние правила толерантности/заказов
+- [x] Нет дублирования промо-логики в subscription-модуле
+- [x] Backend-тесты приоритета (unit + profile API)
+- [x] Секция Патч 1 в customer_tasks md
+- [ ] REVIEW / push / deploy — отдельно
 
 ## Subtasks (patch v2)
 
-- [x] available? фасад
-- [x] gate в SubscriptionOfferEligibility
-- [x] сумма → текст / nudge
-- [x] invalidate CTA cache after pay
+- [x] Subtask 7 (patch v2): учитывать 11₽ в eligibility
+- [x] Subtask 7 (patch v2): не дублировать промо-логику
+- [x] Subtask 17–20 (patch v2): покрыть правило приоритета

@@ -71,6 +71,77 @@ class Shop::Api::ProfileSubscriptionOfferTest < ActionDispatch::IntegrationTest
     end
   end
 
+  # --- #77 Патч 1 22.09.2026: приоритет 11₽ над оффером (profile API) ---
+
+  test "profile eligible false while GrowthPromo available despite orders and signals" do
+    PointCampaignSetting.create!(
+      point_id: @tenant.id,
+      campaign_type: PointCampaignSetting::CAMPAIGN_CARD_BINDING_PROMO,
+      enabled: true,
+      threshold: 1000,
+      counter: 0,
+      config: { "promo_amount_rub" => 11 }
+    )
+    Order.create!(
+      tenant_id: @tenant.id,
+      customer_id: @customer.id,
+      customer_name: "Guest",
+      order_number: "77-promo-#{SecureRandom.hex(2)}",
+      source: :mobile,
+      status: :issued,
+      total_amount: 50,
+      discount_amount: 0,
+      final_amount: 50
+    )
+    @customer.update!(pwa_installed_at: Time.current)
+    assert Payments::GrowthPromo.available?(@customer, @tenant)
+
+    open_session do |sess|
+      login_customer!(sess)
+      sess.get "/shop/api/profile", headers: shop_tenant_headers(@tenant.id), as: :json
+      assert_equal 200, sess.response.status
+      assert_equal false, sess.response.parsed_body["eligible_for_subscription_offer"]
+    end
+  end
+
+  test "profile eligible true after GrowthPromo exhausted with orders and signals" do
+    PointCampaignSetting.create!(
+      point_id: @tenant.id,
+      campaign_type: PointCampaignSetting::CAMPAIGN_CARD_BINDING_PROMO,
+      enabled: true,
+      threshold: 1000,
+      counter: 0,
+      config: { "promo_amount_rub" => 11 }
+    )
+    Order.create!(
+      tenant_id: @tenant.id,
+      customer_id: @customer.id,
+      customer_name: "Guest",
+      order_number: "77-exh-#{SecureRandom.hex(2)}",
+      source: :mobile,
+      status: :issued,
+      total_amount: 50,
+      discount_amount: 0,
+      final_amount: 50
+    )
+    @customer.update!(pwa_installed_at: Time.current)
+    Payments::GrowthPromo.mark_used!(
+      phone: @customer.phone,
+      method_hash: "hash-77-profile-promo",
+      method_type: "card",
+      customer_id: @customer.id,
+      tenant_id: @tenant.id
+    )
+    refute Payments::GrowthPromo.available?(@customer, @tenant)
+
+    open_session do |sess|
+      login_customer!(sess)
+      sess.get "/shop/api/profile", headers: shop_tenant_headers(@tenant.id), as: :json
+      assert_equal 200, sess.response.status
+      assert_equal true, sess.response.parsed_body["eligible_for_subscription_offer"]
+    end
+  end
+
   test "config exposes subscription_offer enabled and second_cta_mode" do
     get "/shop/api/config", headers: shop_tenant_headers(@tenant.id)
     assert_response :success

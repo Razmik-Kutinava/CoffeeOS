@@ -2,22 +2,21 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-26 (Патч 1 REVIEW · CI green)  
+**Дата:** 2026-09-26 (#77 Патч 1 GREEN)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **Патч 1** CI green · Entire `01M3EF80ZRWCQSW2HV6TG9N8B6` на `e687317d` | deploy — апрув |
-| Fly v502 live | Point A MCP после deploy |
+| **#77 Патч 1** GREEN · приоритет 11₽ в eligibility + profile tests | `/review` по намерению |
+| Fly v502 live | Point A после deploy |
 
-**last_done:** /review: bugbot+security · fix CTA cache · Entire attach · push · CI PASS  
-**next_step:** deploy только по апруву владельца
+**last_done:** #77 Патч 1 — customer_tasks sync · profile API tests · todo Шаг 5  
+**next_step:** REVIEW (#77 Патч 1) или следующий шаг
 
 **ctx_trim:** `2026-09-22`  
 **Fly:** v502 `deployment-01M3BWPNB0P1T0PPE2WRP7KBPY` · https://codeblack.coffee  
 **Витрина Point A:** https://codeblack.coffee/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789  
-**Док:** https://docs.google.com/document/d/1hP-1JZnB3J_3V-cm5Dl7bFRrCk6JWIvrZOZir250x3Y/edit  
-**CI:** https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/36231701455
+**Док #77:** https://docs.google.com/document/d/16MJSOBP0lMtZThbrCN8IdtUUqwUQZ7XQdgPHZUktqrk/edit  
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)
