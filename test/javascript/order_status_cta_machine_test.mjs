@@ -157,6 +157,23 @@ describe("orderStatusCtas (#38 / #40 step 5)", () => {
       ["chat", "subscription"]
     )
   })
+
+  // Задача-1 Патч 1: emergency disable = enabled=false only (mode may stay subscription)
+  it("Задача-1 patch v2: enabled=false + mode subscription → no subscription CTA", () => {
+    const view = orderStatusCtas({
+      status: "ready",
+      os: "android",
+      hasPushSubscription: true,
+      subscriptionOfferEnabled: false,
+      secondCtaMode: "subscription",
+      eligibleForSubscriptionOffer: true
+    })
+    assert.deepEqual(
+      view.buttons.map((b) => b.kind),
+      ["chat", "tips"]
+    )
+    assert.ok(!view.buttons.some((b) => b.kind === "subscription"))
+  })
 })
 
 describe("orderStatusCtas (#41 step 3 ButtonMapper)", () => {

@@ -11,6 +11,14 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-26 — ops: Задача-1 Патч 1 — emergency disable via enabled=false [GREEN]
+
+- Fly Point A: `enabled=false`, `second_cta_mode=subscription` (tips больше не механизм disable)
+- Audit: только Point A; других risky нет
+- Verify: `order_status_cta_machine_test.mjs` 18 PASS (кейс enabled=false + mode subscription)
+- Артефакт: `rollback_point_a_patch_v2_2026-09-26.json` · DEMO_FEEDBACK · customer_tasks · todo Шаг 5
+- Код CTA/eligibility / `INTEGRATIONS.md` не менялись
+
 ## 2026-09-26 — review: #77 Патч 1 — приоритет 11₽ / CI green
 
 - Local: eligibility 7 · profile offer 9 — PASS

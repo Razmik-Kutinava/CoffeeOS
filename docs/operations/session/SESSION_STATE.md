@@ -2,16 +2,16 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-26 (#77 Патч 1 REVIEW · CI green)  
+**Дата:** 2026-09-26 (Задача-1 Патч 1 · emergency disable v2)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#77 Патч 1** REVIEW done · Entire `01M3ESPX2CJ6Z16E5ED7RFY9BK` · CI `36240947436` | deploy — апрув владельца |
-| Fly v502 live | Point A после deploy |
+| **Задача-1 Патч 1** GREEN · Point A `enabled=false`, mode=`subscription` | чек-лист повторного включения — когда billing/экран готовы |
+| Fly coffeeos live | #77 deploy — апрув |
 
-**last_done:** /review #77 Патч 1 — bugbot+security clean · Entire attach · push · CI green  
-**next_step:** deploy только по апруву
+**last_done:** Патч 1 Задача-1: config-only disable via enabled=false; tips не механизм; CTA matrix verify  
+**next_step:** стоп · повторное включение только по чек-листу патча
 
 **ctx_trim:** `2026-09-22`
 

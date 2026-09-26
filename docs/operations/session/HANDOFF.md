@@ -2,22 +2,22 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-26 (#77 Патч 1 REVIEW · CI green)  
+**Дата:** 2026-09-26 (Задача-1 Патч 1 · emergency disable v2)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **#77 Патч 1** CI green · Entire `01M3ESPX2CJ6Z16E5ED7RFY9BK` на `0b7f0e7f` | deploy — апрув |
-| Fly v502 live | Point A MCP после deploy |
+| **Задача-1 Патч 1** Point A offer OFF (`enabled=false`, mode=`subscription`) | повторное включение — чек-лист патча (billing/экран) |
+| #77 Патч 1 CI green | deploy #77 — апрув |
 
-**last_done:** /review #77 Патч 1: bugbot+security · Entire attach · push · CI PASS  
-**next_step:** deploy только по апруву владельца
+**last_done:** Задача-1 Патч 1: Fly config `enabled=false` only; tips≠disable; CTA matrix PASS  
+**next_step:** стоп · не включать offer до чек-листа
 
 **ctx_trim:** `2026-09-22`  
-**Fly:** v502 `deployment-01M3BWPNB0P1T0PPE2WRP7KBPY` · https://codeblack.coffee  
+**Fly:** v502 · https://codeblack.coffee · app `coffeeos`  
 **Витрина Point A:** https://codeblack.coffee/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789  
-**Док #77:** https://docs.google.com/document/d/16MJSOBP0lMtZThbrCN8IdtUUqwUQZ7XQdgPHZUktqrk/edit  
-**CI:** https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/36240947436
+**Док Задача-1:** https://docs.google.com/document/d/1h-ChIiU09TKAIWsZDjbEWfOgEzZNhmUdwQghDqHI3CY/edit  
+**Артефакт:** `subscription_offer_eligibility/ops/rollback_point_a_patch_v2_2026-09-26.json`
 
 **Архив session:** [`archive/README.md`](archive/README.md)  
 **Архив journal:** [`../journal/archive/README.md`](../journal/archive/README.md)

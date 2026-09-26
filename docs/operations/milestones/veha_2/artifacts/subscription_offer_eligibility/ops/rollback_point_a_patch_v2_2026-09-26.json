@@ -1,0 +1,57 @@
+{
+  "task": "emergency_disable_subscription_offer_point_a",
+  "patch": "1",
+  "patch_date": "2026-09-22",
+  "applied_at": "2026-09-26T15:20:00Z",
+  "fly_app": "coffeeos",
+  "method": "rails runner ActiveRecord update (enabled=false only; second_cta_mode not used as disable mechanism)",
+  "audit_before": {
+    "rows": [
+      {
+        "point_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+        "tenant_name": "Demo Coffee Point A",
+        "enabled": false,
+        "second_cta_mode": "tips",
+        "note": "prior 2026-09-05 rollback used tips as coupled disable mechanism"
+      }
+    ],
+    "risky_enabled_subscription": 0,
+    "other_points": "none"
+  },
+  "patch_v2": {
+    "point_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+    "before": {
+      "enabled": false,
+      "second_cta_mode": "tips"
+    },
+    "after": {
+      "enabled": false,
+      "second_cta_mode": "subscription"
+    },
+    "rationale": "Emergency disable = enabled=false only. Revert second_cta_mode from tips so tips is not the disable mechanism; mode stays subscription for future UK re-enable."
+  },
+  "other_points": {
+    "rolled_back": [],
+    "note": "SELECT: only Point A row exists; no other enabled+subscription rows"
+  },
+  "verify": {
+    "subtask_2": "Point A enabled=false; second_cta_mode not used as disable (left/restored to subscription)",
+    "subtask_3": "no other risky points",
+    "subtask_5": {
+      "offerOn_formula": "enabled && secondCtaMode===subscription",
+      "with_enabled_false": "offerOn=false → no «Оформить подписку», no subscription redirect",
+      "tips_as_disable_mechanism": false,
+      "cta_matrix_note": "pre-existing matrix may still show tips/push as non-subscription second CTA; code CTA machine not changed per Scope"
+    },
+    "local_cta_js": "order_status_cta_machine_test.mjs — see todo Проверка"
+  },
+  "do_not_touch": [
+    "SubscriptionOfferEligibility",
+    "engagement signals",
+    "orderStatusCtaMachine.js",
+    "tips pending adapter",
+    "backend billing",
+    "subscription checkout UI",
+    "INTEGRATIONS.md"
+  ]
+}
