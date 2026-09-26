@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Subscriptions
-  # #78 slice 3: отмена текущей подписки (active/past_due).
+  # #78 / Патч 1: отмена. Usage = events в текущем оплаченном периоде (не drinks_used_this_period).
   class CancelService
     class Error < StandardError; end
 
@@ -21,7 +21,22 @@ module Subscriptions
         raise Error, "subscription cannot be canceled"
       end
 
+      unused = !@subscription.used_in_current_period?
+
       @subscription.update!(status: :canceled, auto_renew: false)
+
+      if unused
+        TelegramAlertJob.perform_later(
+          "Subscription cancel without usage — manual refund required",
+          {
+            subscription_id: @subscription.id,
+            customer_id: @subscription.customer_id,
+            plan_id: @subscription.plan_id,
+            price_at_period_start: @subscription.price_at_period_start.to_s
+          }
+        )
+      end
+
       @subscription
     end
   end

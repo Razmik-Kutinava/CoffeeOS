@@ -65,12 +65,11 @@ export function orderStatusCtas(opts = {}) {
   } else if (status === "preparing" || status === "ready") {
     buttons.push({ kind: "chat", label: LABELS.chat })
     if (hasPushSubscription) {
-      // #77: subscription offer only on ready when enabled + eligible; else tips fallback
+      // Задачи-3 Патч 1 / Subtask 29: subscription only when enabled+eligible; tips не fallback
       if (status === "ready" && offerOn && eligible) {
         buttons.push({ kind: "subscription", label: LABELS.subscription })
-      } else {
-        buttons.push({ kind: "tips", label: LABELS.tips })
       }
+      // tips intentionally absent (запрет восстановления чаевых)
     } else {
       buttons.push({ kind: notifyKind, label: LABELS[notifyKind] })
     }

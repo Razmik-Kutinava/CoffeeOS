@@ -2,7 +2,7 @@
 
 module Shop
   module Api
-    # #78 slice-5: публичный Shop API подписки (GET/POST/auto_renew/cancel/confirm).
+    # #78 slice-5 / Патч 1: Shop API подписки.
     class SubscriptionsController < Shop::Api::BaseController
       before_action :require_customer!
 
@@ -19,25 +19,36 @@ module Shop
         end
 
         plan = resolve_plan!
-        payment_method = resolve_payment_method!
+        payment_method = resolve_payment_method
 
         result = Subscriptions::PurchaseService.call(
           customer: @customer,
           plan: plan,
           purchase_point: @shop_tenant,
           payment_method: payment_method,
+          payment_method_type: params[:payment_method_type].presence || "card",
           return_base_url: ENV.fetch("TBANK_RETURN_URL", request.base_url),
           notification_url: "#{request.base_url}/callbacks/tbank",
-          auto_renew: cast_bool(params.fetch(:auto_renew, true))
+          auto_renew: cast_bool(params.fetch(:auto_renew, true)),
+          utm_campaign: params[:utm_campaign].presence,
+          utm_content: params[:utm_content].presence,
+          offer_channel: params[:offer_channel].presence
         )
 
-        sub = Subscription.find(result[:subscription_id])
-        render json: serialize_subscription(sub).merge(
-          subscription_id: result[:subscription_id],
+        payload = {
           order_id: result[:order_id],
           provider_payment_id: result[:provider_payment_id],
-          payment_url: result[:payment_url]
-        ), status: :created
+          payment_url: result[:payment_url],
+          pending_payment: result[:pending_payment]
+        }.compact
+
+        if result[:subscription_id].present?
+          sub = Subscription.find(result[:subscription_id])
+          render json: serialize_subscription(sub).merge(payload).merge(subscription_id: result[:subscription_id]),
+                 status: :created
+        else
+          render json: payload.merge(status: "pending_payment"), status: :accepted
+        end
       rescue ActionController::ParameterMissing => e
         render json: { error: e.message }, status: :bad_request
       rescue Subscriptions::PurchaseService::Error => e
@@ -52,8 +63,10 @@ module Shop
           return render json: { error: "auto_renew required" }, status: :unprocessable_entity
         end
 
-        sub.update!(auto_renew: cast_bool(params[:auto_renew]))
+        sub = Subscriptions::AutoRenewService.call(subscription: sub, auto_renew: params[:auto_renew])
         render json: serialize_subscription(sub)
+      rescue Subscriptions::AutoRenewService::Error => e
+        render json: { error: e.message }, status: :unprocessable_entity
       end
 
       def cancel
@@ -105,9 +118,12 @@ module Shop
         plan
       end
 
-      def resolve_payment_method!
+      # Optional: без PM — Init redirect / bind в том же платеже.
+      def resolve_payment_method
+        return nil if params[:payment_method_id].blank?
+
         pm = MobilePaymentMethod.find_by(
-          id: params.require(:payment_method_id),
+          id: params[:payment_method_id],
           customer_id: @customer.id,
           is_active: true
         )
@@ -118,7 +134,8 @@ module Shop
 
       def serialize_subscription(sub)
         limit = sub.drink_limit_at_period_start.to_i
-        used = sub.drinks_used_this_period.to_i
+        # Патч 1: источник истины — events в 7d окне, не drinks_used_this_period.
+        used = sub.usage_count_in_rolling_window
         {
           id: sub.id,
           status: sub.status,
@@ -128,7 +145,10 @@ module Shop
           drinks_remaining: [ limit - used, 0 ].max,
           savings_amount: SubscriptionUsageEvent.where(subscription_id: sub.id).sum(:savings_amount).to_f,
           current_period_end: sub.current_period_end,
-          auto_renew: sub.auto_renew
+          auto_renew: sub.auto_renew,
+          utm_campaign: sub.utm_campaign,
+          utm_content: sub.utm_content,
+          offer_channel: sub.offer_channel
         }
       end
 

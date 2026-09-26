@@ -29,7 +29,7 @@ module Subscriptions
       customer_id = @payment.order.customer_id
       raise Error, "order without customer" if customer_id.blank?
 
-      pm_id = data["subscription_payment_method_id"].presence
+      pm_id = resolve_payment_method_id(data)
       auto_renew = ActiveModel::Type::Boolean.new.cast(data.fetch("auto_renew", true))
 
       subscription = Subscription.new(
@@ -39,11 +39,31 @@ module Subscriptions
         payment_method_id: pm_id,
         payment_id: @payment.id,
         auto_renew: auto_renew,
-        status: :active
+        status: :active,
+        utm_campaign: data["utm_campaign"].presence,
+        utm_content: data["utm_content"].presence,
+        offer_channel: data["offer_channel"].presence
       )
       subscription.start_period_from_plan!(plan)
       subscription.save!
       subscription
+    end
+
+    private
+
+    # Патч 1 / 5a: не подставлять фиктивный payment_method_id; только реальный id из data / SavedCard.
+    def resolve_payment_method_id(data)
+      explicit = data["subscription_payment_method_id"].presence
+      return explicit if explicit
+
+      # Card bind from same payment (SavedCardStore may have written RebillId → MobilePaymentMethod).
+      rebill = data["RebillId"].presence || data["rebill_id"].presence
+      if rebill.present?
+        pm = MobilePaymentMethod.find_by(customer_id: @payment.order.customer_id, card_token: rebill, is_active: true)
+        return pm.id if pm
+      end
+
+      nil
     end
   end
 end

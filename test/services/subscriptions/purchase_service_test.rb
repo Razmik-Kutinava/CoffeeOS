@@ -61,6 +61,9 @@ module Subscriptions
         return_base_url: "https://example.com",
         notification_url: "https://example.com/callbacks/tbank",
         auto_renew: true,
+        utm_campaign: "spring",
+        utm_content: "hero",
+        offer_channel: "banner",
         adapter: confirmed_adapter
       )
 
@@ -73,6 +76,9 @@ module Subscriptions
       assert_equal BigDecimal("499"), sub.price_at_period_start
       assert_equal 5, sub.drink_limit_at_period_start
       assert_equal 20, sub.discount_percent_at_period_start
+      assert_equal "spring", sub.utm_campaign
+      assert_equal "hero", sub.utm_content
+      assert_equal "banner", sub.offer_channel
       assert sub.auto_renew
       assert sub.current_period_start.present?
       assert_operator sub.current_period_end, :>, sub.current_period_start
@@ -86,6 +92,45 @@ module Subscriptions
 
       order = Order.find(result[:order_id])
       assert_equal "closed", order.status, "technical subscription order must not stay on barista board"
+    end
+
+    test "purchase without saved PM returns payment_url and does not invent payment_method_id" do
+      plan = SubscriptionPlan.create!(
+        code: "pilot_redirect",
+        price: 99,
+        currency: "RUB",
+        period_days: 7,
+        drink_limit: 5,
+        discount_price_per_drink: 119,
+        over_limit_discount_percent: 20,
+        active: true
+      )
+      fake = Object.new
+      fake.define_singleton_method(:init_payment) do |**_kw|
+        { provider_payment_id: "pid-redir-1", payment_url: "https://pay.example/pid-redir-1" }
+      end
+      fake.define_singleton_method(:charge) { |**_| raise "charge must not run without rebill" }
+
+      result = Subscriptions::PurchaseService.call(
+        customer: @customer,
+        plan: plan,
+        purchase_point: @tenant,
+        payment_method: nil,
+        payment_method_type: "sbp",
+        return_base_url: "https://example.com",
+        notification_url: "https://example.com/callbacks/tbank",
+        offer_channel: "lk",
+        adapter: fake
+      )
+
+      assert result[:pending_payment]
+      assert_equal "https://pay.example/pid-redir-1", result[:payment_url]
+      assert_nil result[:subscription_id]
+      payment = Payment.find_by!(order_id: result[:order_id])
+      assert_equal "sbp", payment.method
+      assert_nil payment.provider_data["subscription_payment_method_id"]
+      assert ActiveModel::Type::Boolean.new.cast(payment.provider_data["save_sbp_account"])
+      refute Subscription.exists?(customer_id: @customer.id)
     end
   end
 end

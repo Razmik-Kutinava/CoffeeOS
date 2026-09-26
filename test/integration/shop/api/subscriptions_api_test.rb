@@ -106,24 +106,26 @@ class Shop::Api::SubscriptionsApiTest < ActionDispatch::IntegrationTest
 
   test "GET current returns status remaining savings period_end auto_renew" do
     sub = create_active_subscription!(drinks_used: 2)
-    SubscriptionUsageEvent.create!(
-      subscription_id: sub.id,
-      order_id: Order.create!(
-        tenant_id: @tenant.id,
-        customer_id: @customer.id,
-        customer_name: "U",
-        order_number: "ue-#{SecureRandom.hex(2)}",
-        source: :mobile,
-        status: :closed,
-        total_amount: 119,
-        discount_amount: 0,
-        final_amount: 119
-      ).id,
-      point_id: @tenant.id,
-      applied_price: 119,
-      savings_amount: 81,
-      pricing_kind: "in_limit"
-    )
+    2.times do
+      SubscriptionUsageEvent.create!(
+        subscription_id: sub.id,
+        order_id: Order.create!(
+          tenant_id: @tenant.id,
+          customer_id: @customer.id,
+          customer_name: "U",
+          order_number: "ue-#{SecureRandom.hex(2)}",
+          source: :mobile,
+          status: :closed,
+          total_amount: 119,
+          discount_amount: 0,
+          final_amount: 119
+        ).id,
+        point_id: @tenant.id,
+        applied_price: 119,
+        savings_amount: 81,
+        pricing_kind: "in_limit"
+      )
+    end
 
     open_session do |sess|
       login!(sess)
@@ -138,7 +140,7 @@ class Shop::Api::SubscriptionsApiTest < ActionDispatch::IntegrationTest
       assert_equal @plan.code, body["plan_code"]
       assert_equal true, body["auto_renew"]
       assert body["current_period_end"].present?
-      assert_in_delta 81.0, body["savings_amount"].to_f, 0.01
+      assert_in_delta 162.0, body["savings_amount"].to_f, 0.01
     end
   end
 
@@ -228,8 +230,26 @@ class Shop::Api::SubscriptionsApiTest < ActionDispatch::IntegrationTest
 
   # --- PATCH auto_renew ---
 
-  test "PATCH auto_renew updates flag on current subscription" do
-    create_active_subscription!
+  test "PATCH auto_renew updates flag on current subscription after period usage" do
+    sub = create_active_subscription!
+    SubscriptionUsageEvent.create!(
+      subscription_id: sub.id,
+      order_id: Order.create!(
+        tenant_id: @tenant.id,
+        customer_id: @customer.id,
+        customer_name: "U",
+        order_number: "ar-#{SecureRandom.hex(2)}",
+        source: :mobile,
+        status: :closed,
+        total_amount: 119,
+        discount_amount: 0,
+        final_amount: 119
+      ).id,
+      point_id: @tenant.id,
+      applied_price: 119,
+      savings_amount: 81,
+      pricing_kind: "in_limit"
+    )
 
     open_session do |sess|
       login!(sess)
@@ -240,6 +260,20 @@ class Shop::Api::SubscriptionsApiTest < ActionDispatch::IntegrationTest
       assert_equal 200, sess.response.status, sess.response.body
       assert_equal false, sess.response.parsed_body["auto_renew"]
       assert_equal false, Subscription.find_by!(customer_id: @customer.id).auto_renew
+    end
+  end
+
+  test "PATCH auto_renew false without period usage returns 422" do
+    create_active_subscription!
+
+    open_session do |sess|
+      login!(sess)
+      sess.patch "/shop/api/subscriptions/current/auto_renew",
+        headers: shop_headers,
+        params: { auto_renew: false },
+        as: :json
+      assert_equal 422, sess.response.status, sess.response.body
+      assert Subscription.find_by!(customer_id: @customer.id).auto_renew
     end
   end
 

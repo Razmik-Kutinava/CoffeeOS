@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
 module Subscriptions
-  # User-initiated покупка подписки через Payments::TbankAdapter (Init→Charge по RebillId).
-  # Не использует Shop::RecurrentOrderCreator. Техзаказ после оплаты → closed (не табло баристы).
+  # User-initiated покупка подписки через Payments::TbankAdapter (Init→Charge по RebillId
+  # или Init+PaymentURL без сохранённого PM — bind в том же платеже).
+  # Не использует Shop::RecurrentOrderCreator. Техзаказ после оплаты → closed.
   class PurchaseService
     class Error < StandardError; end
 
@@ -10,15 +11,20 @@ module Subscriptions
       new(**kwargs).call
     end
 
-    def initialize(customer:, plan:, purchase_point:, payment_method:, return_base_url:, notification_url:,
-                   auto_renew: true, adapter: nil)
+    def initialize(customer:, plan:, purchase_point:, return_base_url:, notification_url:,
+                   payment_method: nil, payment_method_type: "card", auto_renew: true,
+                   utm_campaign: nil, utm_content: nil, offer_channel: nil, adapter: nil)
       @customer = customer
       @plan = plan
       @purchase_point = purchase_point
       @payment_method = payment_method
+      @payment_method_type = payment_method_type.to_s
       @return_base_url = return_base_url
       @notification_url = notification_url
       @auto_renew = auto_renew
+      @utm_campaign = utm_campaign
+      @utm_content = utm_content
+      @offer_channel = offer_channel
       @adapter = adapter || Payments::TbankAdapter.new
     end
 
@@ -28,6 +34,88 @@ module Subscriptions
       order = create_technical_order!
       payment = create_payment!(order)
 
+      if chargeable_rebill?
+        charge_and_activate!(order: order, payment: payment)
+      else
+        init_redirect_flow!(order: order, payment: payment)
+      end
+    end
+
+    private
+
+    def validate!
+      raise Error, "plan inactive" unless @plan.active?
+      if @offer_channel.present? && !Subscription::OFFER_CHANNELS.include?(@offer_channel.to_s)
+        raise Error, "invalid offer_channel"
+      end
+      return if @payment_method.blank?
+
+      raise Error, "payment method missing rebill" if @payment_method.rebill_id.blank?
+      raise Error, "payment method customer mismatch" unless @payment_method.customer_id == @customer.id
+    end
+
+    def chargeable_rebill?
+      @payment_method.present? && @payment_method.rebill_id.present?
+    end
+
+    def create_technical_order!
+      amount = BigDecimal(@plan.price.to_s)
+      Order.create!(
+        tenant_id: @purchase_point.id,
+        customer_id: @customer.id,
+        customer_name: @customer.full_name.presence || "Subscription",
+        order_number: "",
+        source: :mobile,
+        status: :pending_payment,
+        total_amount: amount,
+        discount_amount: 0,
+        final_amount: amount
+      )
+    end
+
+    def create_payment!(order)
+      method = @payment_method_type == "sbp" ? :sbp : :card
+      Payment.create!(
+        tenant_id: @purchase_point.id,
+        order_id: order.id,
+        amount: order.final_amount,
+        method: method,
+        status: :pending,
+        provider: "pending",
+        provider_data: subscription_provider_data
+      )
+    end
+
+    def subscription_provider_data
+      data = {
+        "subscription_intent" => true,
+        "subscription_plan_id" => @plan.id,
+        "auto_renew" => @auto_renew,
+        "utm_campaign" => @utm_campaign,
+        "utm_content" => @utm_content,
+        "offer_channel" => @offer_channel
+      }
+      if @payment_method.present?
+        data["subscription_payment_method_id"] = @payment_method.id
+        # Existing rebill charge — never trigger SavedCardStore growth path.
+        data["save_card"] = false
+      else
+        # Bind in the same payment when the flow supports it (card recurrent / SBP token).
+        data["save_card"] = @payment_method_type != "sbp"
+        data["save_sbp_account"] = @payment_method_type == "sbp"
+      end
+      data.compact
+    end
+
+    def attribution
+      {
+        utm_campaign: @utm_campaign,
+        utm_content: @utm_content,
+        offer_channel: @offer_channel
+      }
+    end
+
+    def charge_and_activate!(order:, payment:)
       init_result = @adapter.init_payment(
         order: order,
         return_base_url: @return_base_url,
@@ -66,49 +154,30 @@ module Subscriptions
       }
     end
 
-    private
-
-    def validate!
-      raise Error, "plan inactive" unless @plan.active?
-      raise Error, "payment method missing rebill" if @payment_method.rebill_id.blank?
-      raise Error, "payment method customer mismatch" unless @payment_method.customer_id == @customer.id
-    end
-
-    def create_technical_order!
-      amount = BigDecimal(@plan.price.to_s)
-      Order.create!(
-        tenant_id: @purchase_point.id,
-        customer_id: @customer.id,
-        customer_name: @customer.full_name.presence || "Subscription",
-        order_number: "",
-        source: :mobile,
-        status: :pending_payment,
-        total_amount: amount,
-        discount_amount: 0,
-        final_amount: amount
+    def init_redirect_flow!(order:, payment:)
+      init_result = @adapter.init_payment(
+        order: order,
+        return_base_url: @return_base_url,
+        notification_url: @notification_url,
+        customer_key: @customer.id.to_s,
+        recurrent: @payment_method_type != "sbp",
+        receipt: build_receipt(order)
       )
-    end
+      pid = init_result[:provider_payment_id].to_s
+      raise Error, "Init without PaymentId" if pid.blank?
 
-    def create_payment!(order)
-      Payment.create!(
-        tenant_id: @purchase_point.id,
-        order_id: order.id,
-        amount: order.final_amount,
-        method: :card,
-        status: :pending,
-        provider: "pending",
-        provider_data: subscription_provider_data
+      payment.update!(
+        provider: "tbank",
+        provider_payment_id: pid,
+        provider_data: (payment.provider_data || {}).merge(subscription_provider_data)
       )
-    end
 
-    def subscription_provider_data
       {
-        "subscription_intent" => true,
-        "subscription_plan_id" => @plan.id,
-        "subscription_payment_method_id" => @payment_method.id,
-        "auto_renew" => @auto_renew,
-        # Webhook SavedCardStore defaults save_card=true when absent — never for subscription.
-        "save_card" => false
+        subscription_id: nil,
+        order_id: order.id,
+        provider_payment_id: pid,
+        payment_url: init_result[:payment_url],
+        pending_payment: true
       }
     end
 
@@ -157,7 +226,6 @@ module Subscriptions
             subscription_provider_data
           ).merge(charge_response.except("Token", "Password"))
         )
-        # Не PaymentStatusUpdater → accepted (иначе попадёт на табло баристы).
         order.update!(status: :closed)
         Subscriptions::PaymentFulfillment.call(payment: payment.reload)
       end

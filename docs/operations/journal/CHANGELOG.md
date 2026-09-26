@@ -11,6 +11,17 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-26 — feat: Задачи-3 Патч 1 — 7d usage / attribution / CTA [GREEN]
+
+- `UsagePricingService` — лимит/over-limit по `subscription_usage_events` (окно 7d), не `drinks_used_this_period`
+- Cancel / AutoRenew — usage только в текущем оплаченном периоде; Telegram на cancel без usage
+- `RenewalService` — новый период, events + attribution не трогаем
+- Attribution: `utm_campaign` / `utm_content` / `offer_channel` (migration + purchase/fulfillment)
+- Purchase без PM → Init+payment_url; SBP без фейкового `payment_method_id`
+- CTA: tips не fallback при `enabled=false` (Subtask 29)
+- Local: `test/services/subscriptions/` + API **29/0** · CTA JS **18 pass**
+- Backlog: OrderCreator SKU wiring · Charge в RenewalService
+
 ## 2026-09-26 — review: Задача-1 Патч 1 — emergency disable enabled=false
 
 - Local: `order_status_cta_machine_test.mjs` 18 PASS

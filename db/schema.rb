@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_18_123500) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_26_190000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_stat_statements"
@@ -1246,6 +1246,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_18_123500) do
     t.uuid "subscription_id", null: false
     t.datetime "updated_at", null: false
     t.index ["order_id"], name: "idx_subscription_usage_events_order"
+    t.index ["subscription_id", "created_at"], name: "idx_subscription_usage_events_sub_created"
     t.index ["subscription_id"], name: "idx_subscription_usage_events_sub"
   end
 
@@ -1258,6 +1259,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_18_123500) do
     t.integer "discount_percent_at_period_start"
     t.integer "drink_limit_at_period_start"
     t.integer "drinks_used_this_period", default: 0, null: false
+    t.string "offer_channel", limit: 32
     t.uuid "payment_id"
     t.uuid "payment_method_id"
     t.uuid "plan_id", null: false
@@ -1265,11 +1267,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_18_123500) do
     t.uuid "purchase_point_id", null: false
     t.string "status", limit: 32, default: "pending", null: false
     t.datetime "updated_at", null: false
+    t.string "utm_campaign", limit: 255
+    t.string "utm_content", limit: 255
     t.index ["current_period_end"], name: "idx_subscriptions_period_end"
     t.index ["customer_id", "status"], name: "idx_subscriptions_customer_status"
     t.index ["customer_id"], name: "idx_subscriptions_customer"
     t.index ["plan_id"], name: "idx_subscriptions_plan"
     t.check_constraint "drinks_used_this_period >= 0", name: "chk_subscriptions_drinks_used"
+    t.check_constraint "offer_channel IS NULL OR (offer_channel::text = ANY (ARRAY['banner'::character varying, 'lk'::character varying, 'push'::character varying]::text[]))", name: "chk_subscriptions_offer_channel"
     t.check_constraint "status::text = ANY (ARRAY['pending'::text, 'active'::text, 'canceled'::text, 'past_due'::text])", name: "chk_subscriptions_status"
   end
 

@@ -75,24 +75,24 @@ describe("orderStatusCtas (#38 / #40 step 5)", () => {
     assert.ok(view.buttons.length <= 2)
   })
 
-  it("preparing: cancel gone — Чат + Чаевые (android, subscribed)", () => {
+  it("preparing: cancel gone — только Чат (android, subscribed; tips removed)", () => {
     const view = orderStatusCtas({
       status: "preparing",
       os: "android",
       canCancel: false,
       hasPushSubscription: true
     })
-    assert.equal(view.buttons.length, 2)
+    assert.equal(view.buttons.length, 1)
     assert.deepEqual(
       view.buttons.map((b) => b.kind),
-      ["chat", "tips"]
+      ["chat"]
     )
     assert.equal(view.buttons[0].label, "Чат с поддержкой")
-    assert.equal(view.buttons[1].label, "Оставить чаевые")
     assert.ok(!view.buttons.some((b) => b.kind === "cancel"))
+    assert.ok(!view.buttons.some((b) => b.kind === "tips"))
   })
 
-  it("preparing ios + subscribed: Чат + Чаевые", () => {
+  it("preparing ios + subscribed: только Чат (tips removed)", () => {
     const view = orderStatusCtas({
       status: "preparing",
       os: "ios",
@@ -101,13 +101,13 @@ describe("orderStatusCtas (#38 / #40 step 5)", () => {
     })
     assert.deepEqual(
       view.buttons.map((b) => b.kind),
-      ["chat", "tips"]
+      ["chat"]
     )
     assert.equal(view.buttons[0].label, "Чат с поддержкой")
-    assert.equal(view.buttons[1].label, "Оставить чаевые")
+    assert.ok(!view.buttons.some((b) => b.kind === "tips"))
   })
 
-  it("ready + subscribed: same matrix as preparing (chat + tips)", () => {
+  it("ready + subscribed: chat only when offer off (tips not restored)", () => {
     const android = orderStatusCtas({
       status: "ready",
       os: "android",
@@ -120,14 +120,15 @@ describe("orderStatusCtas (#38 / #40 step 5)", () => {
     })
     assert.deepEqual(
       android.buttons.map((b) => b.kind),
-      ["chat", "tips"]
+      ["chat"]
     )
     assert.equal(android.buttons[0].label, "Чат с поддержкой")
     assert.deepEqual(
       ios.buttons.map((b) => b.kind),
-      ["chat", "tips"]
+      ["chat"]
     )
     assert.equal(ios.buttons[0].label, "Чат с поддержкой")
+    assert.ok(!android.buttons.some((b) => b.kind === "tips"))
   })
 
   it("ios without wallet certs uses Push instead of Wallet", () => {
@@ -158,8 +159,8 @@ describe("orderStatusCtas (#38 / #40 step 5)", () => {
     )
   })
 
-  // Задача-1 Патч 1: emergency disable = enabled=false only (mode may stay subscription)
-  it("Задача-1 patch v2: enabled=false + mode subscription → no subscription CTA", () => {
+  // Задачи-3 Патч 1 Subtask 29 + Задача-1: enabled=false → no subscription, tips not restored
+  it("Патч 1: enabled=false + mode subscription → chat only, no tips", () => {
     const view = orderStatusCtas({
       status: "ready",
       os: "android",
@@ -170,9 +171,10 @@ describe("orderStatusCtas (#38 / #40 step 5)", () => {
     })
     assert.deepEqual(
       view.buttons.map((b) => b.kind),
-      ["chat", "tips"]
+      ["chat"]
     )
     assert.ok(!view.buttons.some((b) => b.kind === "subscription"))
+    assert.ok(!view.buttons.some((b) => b.kind === "tips"))
   })
 })
 
