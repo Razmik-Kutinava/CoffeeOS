@@ -11,6 +11,14 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-26 — review: #77 Патч 1 — приоритет 11₽ / CI green
+
+- Local: eligibility 7 · profile offer 9 — PASS
+- bugbot: no bugs · security: no medium+
+- Entire `01M3ESPX2CJ6Z16E5ED7RFY9BK` на `0b7f0e7f` (session attach)
+- CI [`36240947436`](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/36240947436) + Semgrep + CodeQL success
+- GREEN `18c82b91` · Док: https://docs.google.com/document/d/16MJSOBP0lMtZThbrCN8IdtUUqwUQZ7XQdgPHZUktqrk/edit
+
 ## 2026-09-26 — feat: #77 Патч 1 — приоритет 11₽ над оффером подписки [GREEN]
 
 - Gate уже в `SubscriptionOfferEligibility` через `GrowthPromo.available?` (не дублирует промо)
