@@ -11,6 +11,14 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-26 — review: Задача-1 Патч 1 — emergency disable enabled=false
+
+- Local: `order_status_cta_machine_test.mjs` 18 PASS
+- bugbot: no bugs · security: no medium+
+- Entire `01M3F5K4DJJ5WE8P2755NHQ022` на `61b3fc79` (session attach)
+- Push develop · CI [`36252477440`](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/36252477440) + Semgrep + CodeQL **success**
+- Deploy не нужен (config уже на Fly Point A)
+
 ## 2026-09-26 — ops: Задача-1 Патч 1 — emergency disable via enabled=false [GREEN]
 
 - Fly Point A: `enabled=false`, `second_cta_mode=subscription` (tips больше не механизм disable)

@@ -5,10 +5,13 @@
 | **ID** | Задача-1 · Патч 1 · 22.09.2026 |
 | **Док** | [Задача-1 Экстренное отключение subscription-оффера на Point A.md](../milestones/veha_2/requirements/customer_tasks/Задача-1%20Экстренное%20отключение%20subscription-оффера%20на%20Point%20A.md) |
 | **Google** | https://docs.google.com/document/d/1h-ChIiU09TKAIWsZDjbEWfOgEzZNhmUdwQghDqHI3CY/edit |
-| **Статус** | GREEN · config Fly + verify |
+| **Статус** | REVIEW done · CI green |
+| **GREEN** | `61b3fc79` |
+| **Entire** | `01M3F5K4DJJ5WE8P2755NHQ022` на `61b3fc79` |
+| **CI** | [`36252477440`](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/36252477440) success (+ Semgrep + CodeQL) |
 | **Scope** | Только «Исправленный сценарий» Патча 1 (Subtask 2 / 3 / 5 patch v2) |
 
-## SBR: GREEN done (config-only)
+## SBR: REVIEW done
 
 ## Файлы (ожидаемо)
 
@@ -27,20 +30,22 @@
 ## Проверка
 
 ```bash
-node --test test/javascript/order_status_cta_machine_test.mjs
-# Fly: SubscriptionOfferSetting Point A → enabled=false, second_cta_mode=subscription
+node --test test/javascript/order_status_cta_machine_test.mjs  # 18 PASS
+# Fly: Point A enabled=false, second_cta_mode=subscription
 ```
 
 ## DoD
 
-- [x] Subtask 2 (patch v2): Point A `enabled=false`; tips не механизм disable
-- [x] Subtask 3 (patch v2): других risky точек нет
-- [x] Subtask 5 (patch v2): subscription CTA не показывается (matrix test)
-- [x] Артефакт + DEMO_FEEDBACK
-- [ ] Чек-лист повторного включения — только когда billing/экран готовы (не этот шаг)
+- [x] Subtask 2/3/5 patch v2
+- [x] bugbot + security — clean
+- [x] Entire `01M3F5K4DJJ5WE8P2755NHQ022` на `61b3fc79`
+- [x] push develop
+- [x] CI green [`36252477440`](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/36252477440) (+ Semgrep + CodeQL)
+- [ ] Чек-лист повторного включения — когда billing/экран готовы
+- [ ] deploy — не нужен (config уже на Fly)
 
 ## Subtasks (patch v2)
 
 - [x] Subtask 2 (patch v2): Point A `enabled=false`
-- [x] Subtask 3 (patch v2): другие точки `enabled=false` (n/a — нет)
+- [x] Subtask 3 (patch v2): другие точки (n/a)
 - [x] Subtask 5 (patch v2): verify после отключения
