@@ -16,6 +16,7 @@
   } from "../lib/shopSbpPay.js"
   import OrderSuccessEmailBlock from "../components/OrderSuccessEmailBlock.svelte"
   import { submitOrderEmail, shouldAskReceiptEmail } from "../lib/emailCollection.js"
+  import { clearSubscriptionOfferCtaCache } from "../lib/subscriptionOfferCta.js"
 
   let status = $state("fail")
   let orderId = $state("")
@@ -44,6 +45,8 @@
     }
     clearPendingOrder()
     clearGuestOrderSession()
+    // Патч 1: после growth 11₽ eligible_for_subscription_offer может стать true — сбросить CTA-кэш.
+    clearSubscriptionOfferCtaCache()
     waitingForBank = false
     status = "ok"
     return true

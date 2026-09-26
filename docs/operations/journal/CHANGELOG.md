@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-26 — fix: invalidate subscription CTA cache after pay (Патч 1 /review)
+
+- `clearSubscriptionOfferCtaCache()` в `completePaySuccess` + `PaymentResult.prepareSuccessScreen`
+- После growth 11₽ `eligible_for_subscription_offer` может flip true — без clear кэш #77 держал false до hard reload
+- bugbot medium · security: no medium+
+
 ## 2026-09-26 — feat: Патч 1 промо 11₽ — GrowthPromo.available? + amount_rub UI [GREEN]
 
 - `Payments::GrowthPromo.available?(customer, point)` — фасад point settings / лимитов / phone-дедупа (без bind checkbox)

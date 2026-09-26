@@ -54,6 +54,7 @@
   import { REPEAT_AUTOPAY_KEY } from "../lib/frequentRepeatStore.js"
   import { restoreGuestSession } from "../lib/restoreGuestSession.js"
   import { paymentMethodLoadErrorMessage } from "../lib/paymentMethodI18n.js"
+  import { clearSubscriptionOfferCtaCache } from "../lib/subscriptionOfferCta.js"
   import { initSbpPayment, beginSbpBankRedirect } from "../lib/shopSbpPay.js"
   import {
     chargeSbpAutopay,
@@ -452,6 +453,8 @@
     selectionMode = "saved_card"
     clearTokenInvalid(selectedCardId)
     refreshInvalidRebillFlag()
+    // Патч 1 / bugbot: growth pay может открыть subscription CTA — инвалидировать #77 кэш до PaymentResult.
+    clearSubscriptionOfferCtaCache()
     // После 3DS/soft-fail: stale saved_card из FA-ответа ненадёжен — ретраим GET.
     let cards = []
     if (wantedSave && !savedCard) {
