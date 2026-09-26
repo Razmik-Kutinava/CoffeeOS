@@ -91,4 +91,45 @@ class Shop::SubscriptionOfferEligibilityTest < ActiveSupport::TestCase
 
     assert_equal false, Shop::SubscriptionOfferEligibility.check(@customer, @tenant)
   end
+
+  # --- Патч 1 22.09.2026: приоритет 11₽ над оффером подписки ---
+
+  test "false while GrowthPromo.available? even with orders and signals" do
+    PointCampaignSetting.create!(
+      point_id: @tenant.id,
+      campaign_type: PointCampaignSetting::CAMPAIGN_CARD_BINDING_PROMO,
+      enabled: true,
+      threshold: 1000,
+      counter: 0,
+      config: { "promo_amount_rub" => 11 }
+    )
+    create_order!(status: :issued)
+    @customer.update!(pwa_installed_at: Time.current)
+
+    assert Payments::GrowthPromo.available?(@customer, @tenant)
+    assert_equal false, Shop::SubscriptionOfferEligibility.check(@customer, @tenant)
+  end
+
+  test "true when promo exhausted and orders+signals met" do
+    PointCampaignSetting.create!(
+      point_id: @tenant.id,
+      campaign_type: PointCampaignSetting::CAMPAIGN_CARD_BINDING_PROMO,
+      enabled: true,
+      threshold: 1000,
+      counter: 0,
+      config: { "promo_amount_rub" => 11 }
+    )
+    create_order!(status: :issued)
+    @customer.update!(pwa_installed_at: Time.current)
+    Payments::GrowthPromo.mark_used!(
+      phone: @customer.phone,
+      method_hash: "hash-sub-elig-1",
+      method_type: "card",
+      customer_id: @customer.id,
+      tenant_id: @tenant.id
+    )
+
+    refute Payments::GrowthPromo.available?(@customer, @tenant)
+    assert_equal true, Shop::SubscriptionOfferEligibility.check(@customer, @tenant)
+  end
 end

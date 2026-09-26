@@ -239,4 +239,54 @@ class Payments::GrowthPromoTest < ActiveSupport::TestCase
       bind_requested: true
     )
   end
+
+  # --- Патч 1 22.09.2026: GrowthPromo.available?(customer, point) ---
+
+  test "available? is true when point allows promo and phone has no growth event" do
+    assert Payments::GrowthPromo.available?(@customer, @tenant)
+  end
+
+  test "available? ignores bind checkbox (true even when eligible? needs bind)" do
+    refute Payments::GrowthPromo.eligible?(
+      tenant: @tenant,
+      customer: @customer,
+      bind_requested: false
+    )
+    assert Payments::GrowthPromo.available?(@customer, @tenant)
+  end
+
+  test "available? is false when campaign disabled or blank args" do
+    setting = PointCampaignSetting.card_binding_promo_for(@tenant.id)
+    setting.update!(enabled: false)
+    refute Payments::GrowthPromo.available?(@customer, @tenant)
+    refute Payments::GrowthPromo.available?(nil, @tenant)
+    refute Payments::GrowthPromo.available?(@customer, nil)
+  end
+
+  test "available? is false after growth used for phone" do
+    Payments::GrowthPromo.mark_used!(
+      phone: @phone,
+      method_hash: "hash-avail-1",
+      method_type: "card",
+      customer_id: @customer.id,
+      tenant_id: @tenant.id
+    )
+    refute Payments::GrowthPromo.available?(@customer, @tenant)
+  end
+
+  test "available? is false when point growth counter at threshold" do
+    setting = PointCampaignSetting.card_binding_promo_for(@tenant.id)
+    setting.update!(threshold: 1, counter: 0)
+    Payments::GrowthPromo.mark_used!(
+      phone: "+7902#{format('%07d', rand(10_000_000))}",
+      method_hash: "hash-threshold-other",
+      method_type: "sbp",
+      customer_id: create_mobile_customer!(
+        phone: "+7902#{format('%07d', rand(10_000_000))}",
+        email: "thr-#{SecureRandom.hex(3)}@example.com"
+      ).id,
+      tenant_id: @tenant.id
+    )
+    refute Payments::GrowthPromo.available?(@customer, @tenant)
+  end
 end
