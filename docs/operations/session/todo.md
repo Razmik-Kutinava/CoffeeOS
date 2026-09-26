@@ -5,7 +5,8 @@
 | **ID** | #77 · Патч 1 · 22.09.2026 |
 | **Док** | [Умный показ оффера подписки — сигналы толерантности и УК-переключатель.md](../milestones/veha_2/requirements/customer_tasks/Умный%20показ%20оффера%20подписки%20—%20сигналы%20толерантности%20и%20УК-переключатель.md) |
 | **Google** | https://docs.google.com/document/d/16MJSOBP0lMtZThbrCN8IdtUUqwUQZ7XQdgPHZUktqrk/edit |
-| **Статус** | GREEN · verify + profile API tests |
+| **Статус** | GREEN · `18c82b91` |
+| **GREEN** | `18c82b91` |
 | **Scope** | Только «Исправленный сценарий» Патча 1 (Subtask 7 / 17–20 patch v2) |
 
 ## SBR: GREEN
