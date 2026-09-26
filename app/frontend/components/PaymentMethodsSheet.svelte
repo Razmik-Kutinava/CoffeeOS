@@ -11,7 +11,7 @@
     labelSbpBoundUsual,
     labelSbpRefundTiming,
     labelBindSbpAccount,
-    promoSaveToday11,
+    promoSaveToday,
     promoNudgeInsteadOf,
     ctaSbpFastPay,
     ctaSbpAccountPay,
@@ -35,6 +35,7 @@
     selectionMode = "saved_card", // saved_card | new_card | sbp | sbp_account
     saveSbpAccount = $bindable(true),
     promoEligible = false,
+    promoAmountRub = 11,
     cartTotalRub = 0,
     canPay = false,
     fsmState = PAY_FSM.DEFAULT,
@@ -205,7 +206,7 @@
         </label>
         {#if promoEligible}
           <p class="pm-promo" data-testid="payment-promo-11rub">
-            {saveSbpAccount ? promoSaveToday11() : promoNudgeInsteadOf(cartTotalRub)}
+            {saveSbpAccount ? promoSaveToday(promoAmountRub) : promoNudgeInsteadOf(cartTotalRub, promoAmountRub)}
           </p>
         {/if}
       {/if}
@@ -216,7 +217,7 @@
         </div>
         {#if promoEligible}
           <p class="pm-promo" data-testid="payment-promo-11rub-card">
-            {newCardState.save_card ? promoSaveToday11() : promoNudgeInsteadOf(cartTotalRub)}
+            {newCardState.save_card ? promoSaveToday(promoAmountRub) : promoNudgeInsteadOf(cartTotalRub, promoAmountRub)}
           </p>
         {/if}
       {/if}

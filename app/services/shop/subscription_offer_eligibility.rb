@@ -17,6 +17,8 @@ module Shop
 
     def check
       return false unless @customer && @point
+      # Патч 1: пока 11₽ доступно — оффер подписки не eligible (единый GrowthPromo.available?).
+      return false if Payments::GrowthPromo.available?(@customer, @point)
 
       setting = SubscriptionOfferSetting.for_point(@point.id)
       return false unless setting&.enabled?

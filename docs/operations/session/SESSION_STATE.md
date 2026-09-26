@@ -2,17 +2,16 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-25 (Fly v502 fresh deploy)  
+**Дата:** 2026-09-26 (Патч 1 промо 11₽ GREEN)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **Fly v502** `deployment-01M3BWPNB0P1T0PPE2WRP7KBPY` | заказчик: витрина Point A |
-| CI `36115565894` success | TEMP iOS push diag — revert после device |
-| Smoke: `/up`+`/shop` 200 на codeblack | MCP full batch — skip (HTTP smoke only) |
+| **Патч 1** GrowthPromo.available? + amount_rub UI · local GREEN | `/review` Entire + push |
+| Fly v502 live | заказчик: витрина Point A |
 
-**last_done:** push + CI green + fly deploy v502  
-**next_step:** отдать ссылку витрины; при апруве — `/` → `/shop`
+**last_done:** Патч 1 RED `b5653fa1` → GREEN (available? + SubscriptionOffer gate + promo amount_rub)  
+**next_step:** PHASE 3 REVIEW (Entire → push → CI)
 
 **ctx_trim:** `2026-09-22`
 

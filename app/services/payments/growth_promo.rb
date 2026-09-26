@@ -8,10 +8,18 @@ module Payments
 
     def self.eligible?(tenant:, customer:, bind_requested:, method_hash: nil)
       return false unless ActiveModel::Type::Boolean.new.cast(bind_requested)
-      return false if tenant.blank? || customer.blank?
-      return false unless point_allows_promo?(tenant)
-      return false if CardBindingAttempt.growth_used_for_phone?(customer.phone)
+      return false unless available?(customer, tenant)
       return false if CardBindingAttempt.growth_used_for_method_hash?(method_hash)
+
+      true
+    end
+
+    # Патч 1 22.09.2026: читаемый фасад «11₽ доступно на точке» для SubscriptionOfferEligibility и др.
+    # Не зависит от чекбокса bind; method_hash проверяется отдельно в eligible?/charge.
+    def self.available?(customer, point)
+      return false if customer.blank? || point.blank?
+      return false unless point_allows_promo?(point)
+      return false if CardBindingAttempt.growth_used_for_phone?(customer.phone)
 
       true
     end

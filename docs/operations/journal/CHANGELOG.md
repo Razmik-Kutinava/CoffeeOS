@@ -11,6 +11,14 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-26 — feat: Патч 1 промо 11₽ — GrowthPromo.available? + amount_rub UI [GREEN]
+
+- `Payments::GrowthPromo.available?(customer, point)` — фасад point settings / лимитов / phone-дедупа (без bind checkbox)
+- `Shop::SubscriptionOfferEligibility` — false пока промо доступно (не копирует правила GrowthPromo)
+- PWA: `promoSaveToday(amountRub)` / nudge из `growth_promo.amount_rub` API (Checkout → PaymentMethodsSheet)
+- RED `b5653fa1` · зона: growth_promo 20 · subscription_offer 7 · i18n 4 — PASS
+- Док: https://docs.google.com/document/d/1hP-1JZnB3J_3V-cm5Dl7bFRrCk6JWIvrZOZir250x3Y/edit
+
 ## 2026-09-25 — ops: Fly v502 fresh deploy (CI green)
 
 - `git push` develop (hosts fix + TEMP iOS diag + ops) → CI / Semgrep / CodeQL **success** (`36115565894`)

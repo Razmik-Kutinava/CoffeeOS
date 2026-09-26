@@ -4,10 +4,12 @@
 |------|----------|
 | **ID** | Патч 1 · 22.09.2026 · Google Doc «Привязка способа оплаты и промо 11₽» |
 | **Док** | https://docs.google.com/document/d/1hP-1JZnB3J_3V-cm5Dl7bFRrCk6JWIvrZOZir250x3Y/edit |
-| **Статус** | SPEC → RED |
+| **Статус** | GREEN · local PASS · REVIEW pending |
+| **RED** | `b5653fa1` |
+| **GREEN** | *(этот коммит)* |
 | **Scope** | Только «Исправленный сценарий» Патча 1; остальные Subtask документа — контекст, не трогать |
 
-## SBR: SPEC
+## SBR: GREEN
 
 ## Файлы (ожидаемо)
 
@@ -30,21 +32,25 @@
 ## Проверка
 
 ```bash
-bin/rails test test/services/payments/growth_promo_test.rb test/services/shop/subscription_offer_eligibility_test.rb
+bundle exec ruby -Itest test/services/payments/growth_promo_test.rb
+# → 20 runs, 0 failures
+bundle exec ruby -Itest test/services/shop/subscription_offer_eligibility_test.rb
+# → 7 runs, 0 failures
 node --test test/javascript/payment_method_promo_11rub_i18n_test.mjs
+# → 4 pass
 ```
 
 ## DoD
 
-- [ ] `Payments::GrowthPromo.available?(customer, point)` — true только при праве на промо на точке
-- [ ] `SubscriptionOfferEligibility` → false пока `available?` == true
-- [ ] UI: `Сохрани — счёт сегодня [amount_rub] ₽.` / nudge с `[amount_rub]` из API
-- [ ] Тесты зоны зелёные; RED+GREEN коммиты
-- [ ] Ops: SESSION_STATE / CHANGELOG / HANDOFF (после GREEN / REVIEW)
+- [x] `Payments::GrowthPromo.available?(customer, point)` — true только при праве на промо на точке
+- [x] `SubscriptionOfferEligibility` → false пока `available?` == true
+- [x] UI: `Сохрани — счёт сегодня [amount_rub] ₽.` / nudge с `[amount_rub]` из API
+- [x] Тесты зоны зелёные; RED+GREEN коммиты
+- [ ] Ops REVIEW: Entire + push + CI (следующий шаг)
 
 ## Subtasks (patch v2)
 
-- [ ] Дать читаемый метод доступности промо
-- [ ] Использовать как состояние «11₽ доступно / исчерпано» в SubscriptionOfferEligibility
-- [ ] Сумма промо → основной текст
-- [ ] Сумма промо → nudge
+- [x] Дать читаемый метод доступности промо
+- [x] Использовать как состояние «11₽ доступно / исчерпано» в SubscriptionOfferEligibility
+- [x] Сумма промо → основной текст
+- [x] Сумма промо → nudge

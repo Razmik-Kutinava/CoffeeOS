@@ -62,16 +62,29 @@ export function labelBindSbpAccount() {
   return "Привязать счет для покупок в один клик"
 }
 
-/** #75 промо: чекбокс включён. */
-export function promoSaveToday11() {
-  return "Сохрани — счёт сегодня 11 ₽."
+/** #75 / Патч 1: промо — сумма из amount_rub (не hardcoded 11). */
+export function promoSaveToday(amountRub) {
+  const amount = formatPromoAmountRub(amountRub)
+  return `Сохрани — счёт сегодня ${amount} ₽.`
 }
 
-/** #75 nudge: чекбокс выключен. */
-export function promoNudgeInsteadOf(cartTotalRub) {
+/** @deprecated имя — alias promoSaveToday(11) для старых импортов */
+export function promoSaveToday11(amountRub = 11) {
+  return promoSaveToday(amountRub)
+}
+
+/** #75 / Патч 1 nudge: чекбокс выключен. */
+export function promoNudgeInsteadOf(cartTotalRub, amountRub = 11) {
   const sum = Number(cartTotalRub)
   const pretty = Number.isFinite(sum) ? String(Math.round(sum)) : String(cartTotalRub ?? "")
-  return `Сохрани — счёт станет 11 ₽ вместо ${pretty} ₽.`
+  const amount = formatPromoAmountRub(amountRub)
+  return `Сохрани — счёт станет ${amount} ₽ вместо ${pretty} ₽.`
+}
+
+function formatPromoAmountRub(amountRub) {
+  const n = Number(amountRub)
+  if (Number.isFinite(n)) return String(Math.round(n))
+  return String(amountRub ?? 11)
 }
 
 export function bindingBlockedMessage() {

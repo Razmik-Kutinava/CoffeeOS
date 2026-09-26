@@ -103,6 +103,7 @@
   let saveSbpAccountTouched = $state(false)
   let sbpAccounts = $state([])
   let promoEligible = $state(false)
+  let promoAmountRub = $state(11)
   let cartTotalRub = $state(0)
   let newCardState = $state(createNewCardFormState())
   let payFsmState = $state(PAY_FSM.DEFAULT)
@@ -247,6 +248,7 @@
       savedCards = []
       sbpAccounts = []
       promoEligible = false
+      promoAmountRub = 11
       cardsLoadError = null
       return true
     }
@@ -261,6 +263,8 @@
       savedCards = Array.isArray(res?.cards) ? res.cards : []
       sbpAccounts = Array.isArray(res?.sbp_accounts) ? res.sbp_accounts : []
       promoEligible = !!res?.growth_promo?.eligible
+      const amt = Number(res?.growth_promo?.amount_rub)
+      promoAmountRub = Number.isFinite(amt) && amt > 0 ? Math.round(amt) : 11
       const primary = res?.primary
       const persisted = loadPaymentSelection()
       const picked = pickDefaultPaymentSelection({
@@ -282,6 +286,7 @@
       savedCards = []
       sbpAccounts = []
       promoEligible = false
+      promoAmountRub = 11
       cardsLoadError = e?.message || paymentMethodLoadErrorMessage()
       return false
     } finally {
@@ -768,6 +773,7 @@
     {selectionMode}
     bind:saveSbpAccount
     {promoEligible}
+    {promoAmountRub}
     {cartTotalRub}
     canPay={sheetCanPay}
     fsmState={payFsmState}
