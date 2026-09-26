@@ -16,6 +16,7 @@
 - `clearSubscriptionOfferCtaCache()` в `completePaySuccess` + `PaymentResult.prepareSuccessScreen`
 - После growth 11₽ `eligible_for_subscription_offer` может flip true — без clear кэш #77 держал false до hard reload
 - bugbot medium · security: no medium+
+- Entire `01M3EF80ZRWCQSW2HV6TG9N8B6` на `e687317d` · CI [`36231701455`](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/36231701455) success
 
 ## 2026-09-26 — feat: Патч 1 промо 11₽ — GrowthPromo.available? + amount_rub UI [GREEN]
 

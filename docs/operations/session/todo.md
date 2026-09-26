@@ -4,53 +4,51 @@
 |------|----------|
 | **ID** | Патч 1 · 22.09.2026 · Google Doc «Привязка способа оплаты и промо 11₽» |
 | **Док** | https://docs.google.com/document/d/1hP-1JZnB3J_3V-cm5Dl7bFRrCk6JWIvrZOZir250x3Y/edit |
-| **Статус** | GREEN · local PASS · REVIEW pending |
+| **Статус** | REVIEW done · CI green · deploy апрув |
 | **RED** | `b5653fa1` |
 | **GREEN** | `ddf8e294` |
-| **Scope** | Только «Исправленный сценарий» Патча 1; остальные Subtask документа — контекст, не трогать |
+| **fix (bugbot)** | `e687317d` · Entire `01M3EF80ZRWCQSW2HV6TG9N8B6` |
+| **CI** | [`36231701455`](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/36231701455) success (+ Semgrep + CodeQL) |
+| **Scope** | Только «Исправленный сценарий» Патча 1 |
 
-## SBR: GREEN
+## SBR: REVIEW done
 
 ## Файлы (ожидаемо)
 
-- `app/services/payments/growth_promo.rb` — `available?(customer, point)` фасад существующих правил
-- `app/services/shop/subscription_offer_eligibility.rb` — gate через `GrowthPromo.available?` (не копировать условия)
-- `app/frontend/lib/paymentMethodI18n.js` — тексты промо из `amount_rub`, без hardcoded `11`
-- `app/frontend/components/PaymentMethodsSheet.svelte` — прокинуть `promoAmountRub` в i18n
-- `app/frontend/routes/Checkout.svelte` — взять `growth_promo.amount_rub` из API → sheet
-- `test/services/payments/growth_promo_test.rb` — тесты `available?`
-- `test/services/shop/subscription_offer_eligibility_test.rb` — приоритет 11₽ над оффером
-- `test/javascript/payment_method_promo_11rub_i18n_test.mjs` — amount из конфига
+- `app/services/payments/growth_promo.rb` — `available?(customer, point)`
+- `app/services/shop/subscription_offer_eligibility.rb` — gate через `available?`
+- `app/frontend/lib/paymentMethodI18n.js` — тексты из `amount_rub`
+- `app/frontend/components/PaymentMethodsSheet.svelte` — `promoAmountRub`
+- `app/frontend/routes/Checkout.svelte` — amount + clear CTA cache
+- `app/frontend/routes/PaymentResult.svelte` — clear CTA cache on success
+- тесты growth_promo / subscription_offer / i18n
 
 ## Не ломать
 
-- Правила eligibility промо / `promo_point_settings` / дедуп phone+method_hash / antifraud — только фасад, без новых правил (`Не трогать` патча)
-- Checkout/payment Init/Charge/callback — не менять механику оплаты (COMPONENT_MAP: Checkout, PaymentMethodsSheet — только promo copy + amount prop)
-- `SubscriptionOfferEligibility` не дублирует условия GrowthPromo — только вызов `available?`
-- Существующие тесты #75/#77 без PointCampaignSetting — поведение оффера без кампании не ломать
+- Правила eligibility / дедуп / antifraud — только фасад
+- Payment Init/Charge/callback — не менять
+- COMPONENT_MAP: Checkout/PaymentMethodsSheet/PaymentResult — только promo copy + cache clear
 
 ## Проверка
 
 ```bash
-bundle exec ruby -Itest test/services/payments/growth_promo_test.rb
-# → 20 runs, 0 failures
-bundle exec ruby -Itest test/services/shop/subscription_offer_eligibility_test.rb
-# → 7 runs, 0 failures
-node --test test/javascript/payment_method_promo_11rub_i18n_test.mjs
-# → 4 pass
+bundle exec ruby -Itest test/services/payments/growth_promo_test.rb   # 20 PASS
+bundle exec ruby -Itest test/services/shop/subscription_offer_eligibility_test.rb  # 7 PASS
+node --test test/javascript/payment_method_promo_11rub_i18n_test.mjs  # 4 PASS
 ```
 
 ## DoD
 
-- [x] `Payments::GrowthPromo.available?(customer, point)` — true только при праве на промо на точке
-- [x] `SubscriptionOfferEligibility` → false пока `available?` == true
-- [x] UI: `Сохрани — счёт сегодня [amount_rub] ₽.` / nudge с `[amount_rub]` из API
-- [x] Тесты зоны зелёные; RED+GREEN коммиты
-- [ ] Ops REVIEW: Entire + push + CI (следующий шаг)
+- [x] `GrowthPromo.available?(customer, point)`
+- [x] `SubscriptionOfferEligibility` false пока available
+- [x] UI amount_rub
+- [x] bugbot medium → clear CTA cache
+- [x] Entire + push + CI green
+- [ ] deploy — только по апруву владельца
 
 ## Subtasks (patch v2)
 
-- [x] Дать читаемый метод доступности промо
-- [x] Использовать как состояние «11₽ доступно / исчерпано» в SubscriptionOfferEligibility
-- [x] Сумма промо → основной текст
-- [x] Сумма промо → nudge
+- [x] available? фасад
+- [x] gate в SubscriptionOfferEligibility
+- [x] сумма → текст / nudge
+- [x] invalidate CTA cache after pay
