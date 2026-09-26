@@ -2,16 +2,16 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-26 (Задачи-3 Патч 1 GREEN)  
+**Дата:** 2026-09-26 (Задачи-3 Патч 1 REVIEW)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **Задачи-3 Патч 1** GREEN · local 29+18 PASS | REVIEW · OrderCreator SKU wiring backlog |
-| Point A offer OFF | включение — чек-лист после UI |
+| **Задачи-3 Патч 1** REVIEW done · Entire `01M3F6KCQVG7SF39R9KE8EEARD` · CI `36253473587` | deploy — апрув |
+| Point A offer OFF | wiring OrderCreator / SKU — backlog |
 
-**last_done:** Патч 1 patch v2: 7d events pricing · period cancel/auto_renew · attribution · CTA  
-**next_step:** стоп · `/review` или wiring корзины
+**last_done:** /review Задачи-3 Патч 1 — bugbot+security · Entire · push · CI green  
+**next_step:** стоп · deploy только по апруву
 
 **ctx_trim:** `2026-09-22`
 

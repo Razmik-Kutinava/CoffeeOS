@@ -5,10 +5,10 @@
 | **ID** | Задачи-3 · Патч 1 · 22.09.2026 |
 | **Док** | [Архитектура подписки — планы биллинг и автосписание.md](../milestones/veha_2/requirements/customer_tasks/Архитектура%20подписки%20—%20планы%20биллинг%20и%20автосписание.md) |
 | **Google** | https://docs.google.com/document/d/11AlzRrp8PomEvwrLPtp04ZhrbG2bYR9abSpjhwDnuCU/edit |
-| **Статус** | GREEN · local PASS |
+| **Статус** | REVIEW done · CI green |
 | **Scope** | Только «Исправленный сценарий» Патча 1 (Subtask 2/2a/5/5a/9/10/12/13/14/16/29 patch v2) |
 
-## SBR: GREEN
+## SBR: REVIEW done
 
 ## Файлы (ожидаемо)
 

@@ -11,6 +11,14 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-26 — review: Задачи-3 Патч 1 — CI green
+
+- Local: subscriptions 29/0 · CTA JS 18 PASS
+- bugbot: no bugs · security: no medium+
+- Entire `01M3F6KCQVG7SF39R9KE8EEARD` на `0fe747a0` (session attach)
+- Push develop · CI [`36253473587`](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/36253473587) + Semgrep + CodeQL **success**
+- Deploy — апрув; OrderCreator SKU wiring — backlog
+
 ## 2026-09-26 — feat: Задачи-3 Патч 1 — 7d usage / attribution / CTA [GREEN]
 
 - `UsagePricingService` — лимит/over-limit по `subscription_usage_events` (окно 7d), не `drinks_used_this_period`
