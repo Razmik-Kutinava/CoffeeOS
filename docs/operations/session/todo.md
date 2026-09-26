@@ -6,7 +6,7 @@
 | **Док** | https://docs.google.com/document/d/1hP-1JZnB3J_3V-cm5Dl7bFRrCk6JWIvrZOZir250x3Y/edit |
 | **Статус** | GREEN · local PASS · REVIEW pending |
 | **RED** | `b5653fa1` |
-| **GREEN** | *(этот коммит)* |
+| **GREEN** | `ddf8e294` |
 | **Scope** | Только «Исправленный сценарий» Патча 1; остальные Subtask документа — контекст, не трогать |
 
 ## SBR: GREEN
