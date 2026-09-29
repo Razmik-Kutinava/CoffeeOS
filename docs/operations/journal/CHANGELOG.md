@@ -11,6 +11,10 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-29 — ops: первый /crit-audit — CLEAN (baseline)
+
+- Scope `0a3ac0db..dd072f3f`: 0 файлов в app/ lib/ db/ config/ frontend/ → находок нет · CI+Semgrep+CodeQL green на `0a3ac0db` · smoke/Fly MCP skip (код = CI-прогон) · `CRITICAL_LEDGER` baseline `dd072f3f`
+
 ## 2026-09-29 — docs: /crit-audit — конечный аудит критических ошибок
 
 - Новое правило `workflow/coffeeos-critical-audit.mdc`: критично = только C1–C5 (тенанты, деньги/оплата, авторизация, падение hot-path, потеря данных); находка только с `файл:строка` + сценарием + падающим тестом; scope = дифф от `last_audited_sha`; вердикт `CLEAN` / `BLOCKED: N` по объективным гейтам (CI · `bin/smoke` · Fly MCP Point A)

@@ -6,9 +6,9 @@
 
 ## Шапка
 
-**last_audited_sha:** — (ещё не было; первый запуск: дифф от последнего прод-деплоя `0a3ac0db` / Fly v504, либо «полный аудит» по просьбе)  
-**last_audit_date:** —  
-**last_verdict:** —
+**last_audited_sha:** `dd072f3f` (код = `0a3ac0db` / Fly v504)  
+**last_audit_date:** 2026-09-29  
+**last_verdict:** `CLEAN` (пустой дифф кода; baseline, не полный аудит)
 
 ## Статусы
 
@@ -27,3 +27,4 @@
 
 | Дата | Scope | Вердикт | Гейты (CI · smoke · Fly MCP) |
 |------|-------|---------|------------------------------|
+| 2026-09-29 | `0a3ac0db..dd072f3f` — 0 файлов кода (только docs/ops) | `CLEAN` | CI+Semgrep+CodeQL green на `0a3ac0db` ([36578912741](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/36578912741)) · smoke skip: код идентичен CI-прогону · Fly MCP skip: нет диффа hot-path |
