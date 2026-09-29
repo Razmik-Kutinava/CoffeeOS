@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-29 — docs: TASK_96 intake
+
+- `customer_tasks/TASK-96-Оффер-подписки-frontend-push-и-аналитика.md` — Google Doc 1:1 + заметки агента (overlap TASK_97/98, зависимость от #95)
+- `artifacts/subscription_offer_frontend_push_analytics/README.md` · CBR #96 (intake · ждёт `/spec`)
+
 ## 2026-09-29 — docs: TASK_95 SPEC
 
 - `todo.md` → TASK_95: 7 путей (migration · model · OfferPresentationService · SubscriptionOffersController · routes · profile · PaymentFulfillment) + Не ломать / Проверка
