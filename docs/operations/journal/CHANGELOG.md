@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-29 — docs: TASK_98 /regress PASS
+
+- Rails зона 22 файла: `test/services/subscriptions/**`, `test/jobs/shop/*`, `test/integration/shop/**/subscription*`, `marketing_event_test`, `profile_subscription_offer_test`, `subscription_offer_eligibility_test`, manager reports RBAC (general/shift) + `manager_office_panel_test` — 172 runs / 845 assertions / 0 failures
+- JS `subscription_offer_banner/card_test.mjs` — 39/0
+
 ## 2026-09-29 — test: TASK_98 /sbr (пустой отчёт воронки)
 
 - `00bdcf64`: +2 теста в `subscription_offer_funnel_test.rb` — `OfferFunnelReport` на пустом диапазоне (`rows: []`, totals нулевые) и `/manager/subscription_offer_funnel` JSON 200 с пустыми rows
