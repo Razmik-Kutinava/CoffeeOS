@@ -266,6 +266,7 @@ TASK_96: Оффер подписки — frontend, push и аналитика
 
 - Тип: **новая фича** — продолжение TASK_95 (backend состояния уже есть: `subscription_offer_states`, `OfferPresentationService`, `dismiss`/`viewed`, флаги в `profile/config`); в репо нет `OfferPushNotifier`, `marketing_events`, `SubscriptionOfferBanner`/`Card` → полный SBR.
 - «Задача A» в тексте = TASK_95 (владелец `mark_shown` / state machine).
-- Пересечение: в Drive есть [TASK_97: Push-оффер подписки](https://docs.google.com/document/d/1VN1VSBHuGtIjluoNFATbmAw0OsfL_UBqKnPho_fTtU4/edit) и [TASK_98: События воронки и UTM-атрибуция](https://docs.google.com/document/d/1XSqPUfCJYxBsEU8oxr8R6Exj9VibgQIPMsBqtYJUNzM/edit) — по названиям дублируют push (Subtask 14–21) и аналитику (22–33). Решить на `/spec`: TASK_96 целиком или только frontend.
+- Пересечение: в Drive есть [TASK_97: Push-оффер подписки](https://docs.google.com/document/d/1VN1VSBHuGtIjluoNFATbmAw0OsfL_UBqKnPho_fTtU4/edit) и [TASK_98: События воронки и UTM-атрибуция](https://docs.google.com/document/d/1XSqPUfCJYxBsEU8oxr8R6Exj9VibgQIPMsBqtYJUNzM/edit) — по названиям дублируют push (Subtask 14–21) и аналитику (22–33). SPEC 2026-09-29 (владелец): TASK_96 делаем **целиком**, TASK_97/98 держим в уме, их судьбу решает владелец.
+- **Блокер (SPEC 2026-09-29):** во frontend нет экрана оформления подписки / «Моя подписка» (billing UI, Задача-3) → цель перехода Subtask 5/26–27/30/35 не существует. Решение владельца: TASK_96 ждёт billing UI.
 - Зависимость: TASK_95 на стадии `/review` (не задеплоен) — RED/GREEN TASK_96 строить поверх `develop` после мержа #95.
 - §5 `npx tsc --noEmit` — Shop-фронт на Svelte/JS; применимость уточнить на `/spec`.

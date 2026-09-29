@@ -46,5 +46,6 @@ CoffeeOS TASK_96 unlazy:
 - G1–G4 — новые тест-файлы (RED на /sbr); пути уточнить на /spec, при смене — обновить CHECK и заново --approve.
 - G5–G6 — существующие файлы, должны быть зелёными до и после.
 - G7 manual; Fly после deploy (апрув).
-- Вопросы к /spec: overlap TASK_97 (push) / TASK_98 (воронка+UTM) — если вынести, ABANDON G2/G3/G4 с причиной; где «экран оформления подписки» и путь ЛК-роута; mark_shown с фронта = существующий `POST subscription_offer/shown` из #95?; `npx tsc` не применим (Svelte/JS, node --test).
+- SPEC 2026-09-29: весь scope в TASK_96 (G2–G4 остаются); ЛК = `Profile.svelte`; mark_shown = `POST subscription_offer/shown` (#95); `npx tsc` не применим; E2E-раннера нет → G7 Fly MCP browser.
+- BLOCKED: экрана оформления подписки во frontend нет (billing UI, Задача-3) — `/sbr` после снятия блокера.
 -->

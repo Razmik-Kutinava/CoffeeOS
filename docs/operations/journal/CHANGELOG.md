@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-29 — docs: TASK_96 SPEC
+
+- `todo.md` → TASK_96 (весь scope, Subtask 1–36): 14 групп путей (frontend модуль+баннер+карточка · OfferPushNotifier · SW `offer_url` · marketing_events + logger · `POST subscription_offer/opened` · атрибуция в PaymentFulfillment · OfferFunnelReport + manager JSON) + Не ломать / Проверка
+- 13 решений по умолчанию (idempotency push = id `banner_shown` на переход; UTM `subscription_offer` / `<channel>_v1`; sendBeacon; без RLS как `subscriptions`)
+- **BLOCKED:** во frontend нет экрана оформления подписки (billing UI, Задача-3) — решение владельца: TASK_96 ждёт; TASK_97/98 — пересечение учтено, не делаем
+
 ## 2026-09-29 — docs: TASK_96 intake
 
 - `customer_tasks/TASK-96-Оффер-подписки-frontend-push-и-аналитика.md` — Google Doc 1:1 + заметки агента (overlap TASK_97/98, зависимость от #95)

@@ -1,3 +1,115 @@
+# todo — TASK_96: Оффер подписки — frontend, push и аналитика
+
+| Поле | Значение |
+|------|----------|
+| **ID** | TASK_96 · CBR #96 |
+| **Док** | [TASK-96-Оффер-подписки-frontend-push-и-аналитика.md](../milestones/veha_2/requirements/customer_tasks/TASK-96-Оффер-подписки-frontend-push-и-аналитика.md) |
+| **Google** | https://docs.google.com/document/d/1kbB0iDYgFoioln0I2xUXeMBXWaKo_cKqDEfproHJN1M/edit?usp=drivesdk |
+| **Ledger** | [GATES.md](../milestones/veha_2/artifacts/subscription_offer_frontend_push_analytics/GATES.md) |
+| **Тип** | новая фича поверх TASK_95 · полный SBR · **весь scope TASK_96 (Subtask 1–36)** |
+| **Статус** | SPEC `[x]` · **BLOCKED** — нет экрана оформления подписки (billing UI, Задача-3); решение владельца: TASK_96 ждёт |
+
+## SBR
+
+- [x] PHASE 0 intake
+- [x] /unlazy ledger (G5–G6 baseline PASS)
+- [x] PHASE 1 SPEC
+- [ ] PHASE 2 RED — G1–G4 (после снятия блокера)
+- [ ] PHASE 2 GREEN
+- [ ] /regress
+- [ ] PHASE 3 REVIEW — push/CI · deploy по апруву · G7 Fly
+
+## Блокер
+
+- **Экран оформления подписки отсутствует во frontend.** В `App.svelte` нет `#/subscription…` / «Моя подписка»; есть только backend `POST /shop/api/subscriptions` (принимает `utm_campaign`, `utm_content`, `offer_channel`). Billing UI — зона Задачи-3 (Point A offer OFF «до billing UI»), своей задачи/CBR в репо нет.
+- Зависят от него: Subtask 5, 26–27 (цель перехода), 30 (цель push deep link), 11 («Моя подписка»), 35 (E2E «переход в оформление»).
+- Решение владельца (SPEC 2026-09-29): **TASK_96 ждёт billing UI**. Снятие блокера = появился роут экрана оформления → вписать путь в `subscriptionOffer.js` и стартовать `/sbr`.
+
+## Пересечения (держим в уме, не делаем)
+
+- TASK_97 (push-оффер) ⊂ Subtask 14–21; TASK_98 (воронка + UTM) ⊂ Subtask 22–33. TASK_96 делаем целиком; решения совместимы с их текстом (idempotency на переход в `shown`, а не на заказ/дату; атрибуция в `subscriptions.utm_*` из последнего `offer_opened`; ошибки аналитики/FCM не влияют на основной flow). Судьба TASK_97/98 — решает владелец.
+
+## Решения SPEC (по умолчанию — подтвердить до RED)
+
+1. **Точка показа баннера** — `OrderStatus.svelte` после блока прогресса (после L340, перед «Состав заказа»), только при `order.status === "ready"` + `should_show_banner` + профиль 200. Layout виджета статуса не меняется.
+2. **`mark_shown` с фронта** — существующий `POST /shop/api/subscription_offer/shown` (TASK_95), один раз за монтирование экрана (флаг в модуле, по `order.id`).
+3. **Флаги** — из `GET /shop/api/profile` (`should_show_banner`, `has_unread_offer_in_lk`); карточка ЛК показывается при `eligible_for_subscription_offer && !purchased`; purchased = есть активная подписка (`GET /shop/api/subscriptions/current` 200) → карточки нет.
+4. **UTM** — `utm_campaign=subscription_offer`, `utm_content=<channel>_v1` (`banner_v1` / `lk_v1` / `push_v1`), `offer_channel ∈ Subscription::OFFER_CHANNELS` (`banner lk push`). Константа версии креатива — одна, в `subscriptionOffer.js`.
+5. **`offer_opened` / `push_opened`** — новый `POST /shop/api/subscription_offer/opened` (`channel`, `utm_*`); frontend шлёт через `navigator.sendBeacon`, fallback `fetch(..., { keepalive: true })` без `await` перед навигацией.
+6. **Idempotency push** — `OfferPresentationService#mark_shown` возвращает `true` только при фактическом переходе (под row-lock `with_state`); на переход создаётся ровно одно `banner_shown`, его `id` = idempotency-ключ push (`push_notifications.payload.offer_event_id`, проверка перед созданием). Повторный `shown` после 3 заказов → новое событие → новый push. Колонки в `subscription_offer_states` не добавляем.
+7. **`OfferPushNotifier`** — как `Shop::OrderStatusPushNotifier`: `PushNotification` (`notification_type: "subscription_offer"`) + `Shop::SendPushNotificationJob` → `FcmClient`; только при `push_enabled_at` и `push_token`; `rescue StandardError` → log. `push_sent` пишет job после успешной доставки. Вызов — `after_commit`-безопасно (enqueue после транзакции состояния).
+8. **Deep link push** — `data.offer_url` в payload; в `firebase_sw/show.js.erb` ветка `notificationclick`: `offer_url` → `openClient(offer_url)` **до** `if (!orderId) return` (order-ветки не трогаем).
+9. **Атрибуция покупки** — в `Subscriptions::PaymentFulfillment` (единая точка активации, как `mark_purchased` в TASK_95): если UTM не пришли в покупке — берём из последнего `offer_opened` гостя; `subscription_purchased` пишется `rescue`-безопасно, покупка не откатывается. `PurchaseService` не трогаем.
+10. **`marketing_events`** — без RLS (как `subscriptions` / `subscription_offer_states`, customer-scoped), `point_id` = tenant точки; запись только через `Subscriptions::MarketingEventLogger` (never raises). Индексы: `(point_id, occurred_at)`, `(customer_id, event_type, occurred_at)`.
+11. **Отчёт воронки** — `Subscriptions::OfferFunnelReport` (group by `event_type, channel` за `from..to`, фильтр `point_id = Current.tenant_id`) + JSON `GET /manager/subscription_offer_funnel` (manager namespace, без UI).
+12. **Шаблон push** — title «Кофе по подписке», body «Оформите подписку и экономьте на каждом заказе» (заглушка — текст подтвердить у заказчика).
+13. **§5 ТЗ** — `npx tsc --noEmit` не применим (Svelte/JS) → `node --test`; E2E-раннера в репо нет → Subtask 35 = Fly MCP browser на Point A (G7).
+
+## Файлы (ожидаемо)
+
+Полный scope (36 Subtask) — больше 7 путей; сгруппировано по блокам.
+
+**Frontend (G1)**
+1. `app/frontend/lib/subscriptionOffer.js` — новый чистый модуль: `bannerVisible({ order, profile })`, `lkCardView(profile, subscription)`, `buildOfferLink(channel)`, `markShownOnce/dismiss/markViewed`, `trackOfferOpened` (sendBeacon). Весь тестируемый код здесь.
+2. `app/frontend/components/SubscriptionOfferBanner.svelte` — новый: баннер, свайп/крестик → локальное скрытие + dismiss, клик → `trackOfferOpened` + переход.
+3. `app/frontend/components/SubscriptionOfferCard.svelte` — новый: карточка ЛК + unread-индикатор, раскрытие → viewed (оптимистично), клик → переход.
+4. `app/frontend/routes/OrderStatus.svelte` — только точка монтирования баннера после L340.
+5. `app/frontend/routes/Profile.svelte` — только подключение карточки после `<PlgBlockSection />`.
+
+**Push (G2)**
+6. `app/services/subscriptions/offer_push_notifier.rb` — новый.
+7. `app/services/subscriptions/offer_presentation_service.rb` — `mark_shown` → bool + side-effect `banner_shown` + notifier (без смены правил).
+8. `app/views/shop/firebase_sw/show.js.erb` — ветка `offer_url` в `notificationclick`.
+9. `app/jobs/shop/send_push_notification_job.rb` — после успешной доставки `subscription_offer` → `push_sent`.
+
+**Аналитика (G3–G4)**
+10. `db/migrate/2026XXXX_create_marketing_events.rb` + `app/models/marketing_event.rb` — `enum :event_type` (7 значений, string).
+11. `app/services/subscriptions/marketing_event_logger.rb` — единая безопасная запись.
+12. `app/controllers/shop/api/subscription_offers_controller.rb` + `config/routes.rb` — события в dismiss/viewed + `POST subscription_offer/opened`.
+13. `app/services/subscriptions/payment_fulfillment.rb` — `subscription_purchased` + атрибуция из последнего `offer_opened`.
+14. `app/services/subscriptions/offer_funnel_report.rb` + `app/controllers/manager/subscription_offer_funnel_controller.rb` — отчёт.
+
+**Тесты (G1–G4)**
+- `test/javascript/subscription_offer_banner_test.mjs` · `test/javascript/subscription_offer_card_test.mjs`
+- `test/services/subscriptions/offer_push_notifier_test.rb`
+- `test/models/marketing_event_test.rb` · `test/integration/shop/api/subscription_offer_marketing_events_test.rb`
+- `test/integration/shop/subscription_offer_funnel_test.rb`
+
+**Docs:** `docs/integrations/shop-api.md` (`opened`) · `docs/integrations/pwa-realtime.md` (offer push) · `docs/operations/session/COMPONENT_MAP.md` (4 новых компонента).
+
+Blast-radius (только чтение/регрессия):
+- `app/services/shop/order_status_push_notifier.rb` + `app/services/shop/fcm_client.rb` — образец и общий транспорт; не менять.
+- `app/frontend/lib/orderStatusCtaMachine.js` / `subscriptionOfferCta.js` — существующий CTA подписки на статусе; не менять (баннер — отдельный канал).
+- `app/services/subscriptions/purchase_service.rb` — вызывает `PaymentFulfillment`; регрессия G5.
+
+## Не ломать
+
+- Статус заказа: layout `OrderStatus.svelte`, `orderStatusCtaMachine.js`, CTA на `ready`, шторка `ActiveOrdersAccordion` / `OrderStatusSheet`, Cable-статусы.
+- Push о статусе заказа: `OrderStatusPushNotifier`, Cascade ready, FCM registration + `push_enabled_at`, `notificationclick` для `order_id` (chat/tips/cancel).
+- Оплата подписки: `PurchaseService` / `PaymentFulfillment` идемпотентность (повторный webhook → тот же `Subscription`, без второго `subscription_purchased`), `Payments::TbankAdapter`.
+- ЛК: история + «Повторить» (TASK_94), PLG-слоты; состояние оффера TASK_95 (`shown/dismiss/viewed` API, флаги профиля).
+
+## Проверка
+
+```bash
+node --test test/javascript/subscription_offer_banner_test.mjs test/javascript/subscription_offer_card_test.mjs test/javascript/order_status_cta_machine_test.mjs test/javascript/order_status_sheet_test.mjs test/javascript/lk_history_repeat_one_click_test.mjs
+bin/rails test test/services/subscriptions/offer_push_notifier_test.rb test/models/marketing_event_test.rb test/integration/shop/api/subscription_offer_marketing_events_test.rb test/integration/shop/subscription_offer_funnel_test.rb test/services/subscriptions/ test/integration/shop/api/subscription_offer_state_api_test.rb test/services/shop/order_status_push_notifier_test.rb test/jobs/shop/ready_push_job_test.rb test/jobs/shop/order_ready_cascade_job_test.rb
+```
+
+Fly MCP Point A (G7, после deploy): статус `ready` → баннер · dismiss · карточка ЛК + unread гаснет · переход в оформление с UTM · витрина/корзина/статус PASS.
+
+## DoD
+
+- [ ] Subtask 1–13: баннер + карточка ЛК + error-path (G1)
+- [ ] Subtask 14–21: `OfferPushNotifier` + idempotency (G2)
+- [ ] Subtask 22–30: `marketing_events` + события (G3)
+- [ ] Subtask 31–33: атрибуция покупки + отчёт (G4)
+- [ ] Subtask 34, 36: unit + регрессия (G1, G5–G6)
+- [ ] Subtask 35: E2E на Fly (G7)
+- [ ] Docs integrations + COMPONENT_MAP
+
+---
+
 # todo — TASK_95: Состояние оффера подписки на гостя
 
 | Поле | Значение |
