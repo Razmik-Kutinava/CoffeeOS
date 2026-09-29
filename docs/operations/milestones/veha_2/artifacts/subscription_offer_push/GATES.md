@@ -20,6 +20,12 @@ Scope: `Subscriptions::OfferPushNotifier` шлёт через существую
   CWD: C:/Tools/workarea/CoffeeOS
   EVIDENCE: automatic-evidence=v1; definition-sha256=a6b6210abfe2a393c0b1f57312f94c883b77e0d10261051bb74ac7d0e993f9a7; exit=0; EXPECT=matched; output-sha256=ecc17b84c9da3a4b0efeb7211468a801b5872e9bfefe64acfdb1eadeba39ecc2; output-bytes=1660; shell=C:\Windows\system32\cmd.exe; cwd=C:\Tools\workarea\CoffeeOS; path=54c8ad8163c5/77 entries
 
+- [ ] G5: concurrent idempotency — параллельные `mark_shown` / `OfferPushNotifier.call` с одним ключом → ровно 1 push (Проверка TASK_97 «idempotency при параллельных вызовах»)
+  CHECK: ruby bin/rails test test/services/subscriptions/offer_push_concurrency_test.rb
+  EXPECT: 0 failures, 0 errors
+  CWD: C:/Tools/workarea/CoffeeOS
+  EVIDENCE: pending
+
 - [ ] G4: Fly MCP Point A — после deploy: переход в shown у тестового гостя с push → одна `push_notifications` `subscription_offer`; витрина / статус заказа не сломаны
   EVIDENCE: pending — deploy только по апруву (TASK_95/96 тоже не задеплоены)
 

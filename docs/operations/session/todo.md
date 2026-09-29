@@ -1,3 +1,71 @@
+# todo — TASK_97: Push-оффер подписки
+
+| Поле | Значение |
+|------|----------|
+| **ID** | TASK_97 · CBR #97 |
+| **Док** | [TASK-97-Push-оффер-подписки.md](../milestones/veha_2/requirements/customer_tasks/TASK-97-Push-оффер-подписки.md) |
+| **Google** | https://docs.google.com/document/d/1VN1VSBHuGtIjluoNFATbmAw0OsfL_UBqKnPho_fTtU4/edit?usp=drivesdk |
+| **Ledger** | [GATES.md](../milestones/veha_2/artifacts/subscription_offer_push/GATES.md) |
+| **Тип** | ⊂ TASK_96 Subtask 14–21 · реализация уже в `63a317a1` (GREEN #96) · остаток — concurrent idempotency + закрытие |
+| **Статус** | SPEC `[x]` · ждёт `/sbr` |
+
+## SBR
+
+- [x] PHASE 0 intake (`a98bf595`)
+- [x] /unlazy ledger — G1–G3 PASS, G4 Fly pending (`a79978d3`)
+- [x] PHASE 1 SPEC
+- [ ] PHASE 2 RED — G5 concurrent-тест
+- [ ] PHASE 2 GREEN — G5 зелёный (фикс только если RED реально красный)
+- [ ] /regress — `--reverify` G1–G3 на HEAD
+- [ ] PHASE 3 REVIEW — push/CI · deploy по апруву · G4 Fly
+
+## Покрытие TASK_97 реализацией #96 (сверка SPEC)
+
+| TASK_97 | Где сделано | Тест |
+|---|---|---|
+| Subtask 1 notifier через существующий FCM | `OfferPushNotifier` → `PushNotification` + `Shop::SendPushNotificationJob` | `offer_push_notifier_test` |
+| Subtask 2 side-effect `not_shown → shown` | `OfferPresentationService#mark_shown` → `after_shown_transition` (после `with_lock`, т.е. после коммита) | то же |
+| Subtask 3 `push_enabled_at = null` | guard в `OfferPushNotifier#call` | «push_enabled_at nil → no push» |
+| Subtask 4 idempotency на переход | `transition_key = state.id:updated_at` + `already_sent?` по `payload->>'offer_transition_key'`; переход под row-lock | последовательные повторы · **concurrent — нет** |
+| Subtask 5 повтор после 3 заказов | новый `updated_at` → новый ключ | «re-show after dismiss + 3 orders» |
+| Subtask 6 `purchased` | `mark_shown` + `purchased?` в notifier | «purchased → no offer push» |
+| Subtask 7 промо 11₽ | `should_show_banner` false → нет перехода | «GrowthPromo available» |
+| Subtask 8 ошибка FCM | `rescue` в notifier + job `failed` без raise | 2 теста |
+| Subtask 9 регрессия FCM | — | G3 (8 файлов) |
+| Не ломать №10 COMPONENT_MAP | строка `OfferPushNotifier` уже есть (TASK_96) | — |
+
+## Файлы (ожидаемо)
+
+1. `test/services/subscriptions/offer_push_concurrency_test.rb` — **новый**: `use_transactional_tests = false` (транзакционные тесты шарят одно соединение → потоки сериализуются, как в `saved_card_store_test`), 4 потока `OfferPresentationService#mark_shown` одновременно → ровно 1 `push_notifications` `subscription_offer`, 1 `banner_shown`; второй кейс — 2 потока `OfferPushNotifier.call` с одним `transition_key` → 1 push. Teardown чистит свои записи (образец — `test/integration/pg_inventory_test.rb`).
+2. `app/services/subscriptions/offer_push_notifier.rb` — **только если** второй кейс красный: `already_sent?` + `create!` не атомарны. Фикс без миграции — `transaction` + `pg_advisory_xact_lock(hashtext(transition_key))` вокруг проверки и создания.
+3. `docs/operations/milestones/veha_2/artifacts/subscription_offer_push/GATES.md` — +G5 (concurrent-тест).
+4. `docs/operations/session/COMPONENT_MAP.md` — строка `OfferPushNotifier`: владелец `TASK_96 · TASK_97` (без смены смысла).
+5. `customer_tasks/TASK-97-Push-оффер-подписки.md` + CBR — статус закрытия со ссылкой на `63a317a1`.
+
+Blast-radius (только читать, не менять): `app/services/subscriptions/offer_presentation_service.rb` (переход под `with_lock`), `app/jobs/shop/send_push_notification_job.rb` (доставка + `push_sent`).
+
+## Решения SPEC (по умолчанию)
+
+1. Реализацию #96 не переписываем — TASK_97 закрывается ей; новый код только если concurrent-тест упал.
+2. Idempotency без миграции (partial unique index на `payload->>'offer_transition_key'` — только если advisory lock не хватит; тогда Migration Gate).
+3. Текст push — как в #96 («Кофе по подписке» / «Оформите подписку и экономьте на каждом заказе»), подтверждение у заказчика — общий хвост #96.
+
+## Не ломать
+
+- push о статусе заказа + Cascade ready (`OrderStatusPushNotifier`, `ReadyPushJob`, `OrderReadyCascadeJob`)
+- FCM registration flow / `push_enabled_at` (`push_register`)
+- `OfferPresentationService` правила TASK_95 (dismiss / повтор после 3 заказов / purchased / промо 11₽) и `profile` флаги
+- `SendPushNotificationJob` для не-offer push (без `marketing_events`)
+
+## Проверка
+
+```text
+ruby bin/rails test test/services/subscriptions/offer_push_concurrency_test.rb test/services/subscriptions/offer_push_notifier_test.rb
+node .agents/skills/unlazy/scripts/gate-check.mjs --reverify docs/operations/milestones/veha_2/artifacts/subscription_offer_push/GATES.md
+```
+
+---
+
 # todo — TASK_96: Оффер подписки — frontend, push и аналитика
 
 | Поле | Значение |

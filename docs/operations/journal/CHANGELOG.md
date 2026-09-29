@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-29 — docs: TASK_97 SPEC
+
+- `todo.md` — блок TASK_97 сверху (TASK_96 ниже без изменений): сверка Subtask 1–9 с GREEN #96 `63a317a1` — всё покрыто, кроме concurrent idempotency
+- Файлы: новый `offer_push_concurrency_test.rb` (non-transactional, потоки) · фикс `OfferPushNotifier` (advisory lock) только если тест красный · COMPONENT_MAP владелец +TASK_97
+- `GATES.md` +G5 concurrent
+
 ## 2026-09-29 — fix: CI scan_ruby — rack-proxy 2.0.1 (TASK_95 REVIEW)
 
 - `Gemfile.lock`: rack-proxy 0.7.7 → 2.0.1, vite_ruby 3.10.2 → 3.11.0 (`bundle update --conservative`) — GHSA-42qh-8mx8-7wqm, bundler-audit чисто
