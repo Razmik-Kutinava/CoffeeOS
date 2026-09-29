@@ -2,7 +2,7 @@
 
 **CBR:** #97 · **Дата intake:** 2026-09-29  
 **Источник:** Google Doc Spec  
-**Артефакты:** нет своих — общая папка с TASK_96: docs/operations/milestones/veha_2/artifacts/subscription_offer_frontend_push_analytics/  
+**Артефакты:** docs/operations/milestones/veha_2/artifacts/subscription_offer_push/ (ledger `GATES.md`) · смежные — `artifacts/subscription_offer_frontend_push_analytics/` (TASK_96)  
 **Google Doc:** https://docs.google.com/document/d/1VN1VSBHuGtIjluoNFATbmAw0OsfL_UBqKnPho_fTtU4/edit?usp=drivesdk  
 **Тип:** новая фича (backend) · **дублирует TASK_96 Subtask 14–21**  
 **Статус:** intake `[x]` · ждёт решения владельца (делать отдельно / закрыть в составе TASK_96)
