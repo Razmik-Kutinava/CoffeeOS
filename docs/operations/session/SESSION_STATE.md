@@ -10,7 +10,7 @@
 | **TASK_95** intake `[x]` · [ТЗ](../milestones/veha_2/requirements/customer_tasks/TASK-95-Состояние-оффера-подписки-на-гостя.md) · полный SBR | `/spec` #95 |
 | **Fly v503** `2a9adacb` · MCP Point A PASS | фото `/uploads` 404 (ISSUES) — хранилище |
 
-**last_done:** PHASE 0 intake TASK_95 (ТЗ 1:1 + artifacts + CBR #95)  
+**last_done:** intake TASK_95 + /unlazy ledger (G5–G6 baseline PASS · G1–G4 unmet · G7 Fly)  
 **next_step:** `/spec` TASK_95
 
 **ctx_trim:** `2026-09-22`

@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-29 — docs: TASK_95 intake + /unlazy ledger
+
+- Intake: [`TASK-95-…`](../milestones/veha_2/requirements/customer_tasks/TASK-95-Состояние-оффера-подписки-на-гостя.md) · CBR #95 · полный SBR (новая фича)
+- Ledger: [`artifacts/subscription_offer_guest_state/GATES.md`](../milestones/veha_2/artifacts/subscription_offer_guest_state/GATES.md) — G1–G4 unmet (тестов нет) · G5–G6 regression baseline PASS · G7 Fly после deploy
+- Вопросы к `/spec`: `profile/config` = `/shop/api/profile` или `/shop/api/config`; eligibility уже учитывает GrowthPromo; purchased cross-tenant vs RLS
+
 ## 2026-09-29 — ops: Fly v503 deploy + Point A MCP (batch since v502)
 
 - HEAD `2a9adacb` · CI [`36253679528`](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/36253679528) + Semgrep + CodeQL green

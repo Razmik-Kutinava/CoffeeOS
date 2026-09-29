@@ -11,7 +11,7 @@
 | **Fly v503** задеплоен (`2a9adacb`) · MCP Point A PASS · [MCP_RESULT](../milestones/veha_2/artifacts/mcp/fly_v503_2026-09-29/MCP_RESULT.md) | фото `/uploads` 404 — решение по хранилищу · OrderCreator wiring backlog |
 | Point A offer OFF | повторное включение — после billing UI · live purchase подписки |
 
-**last_done:** PHASE 0 intake TASK_95 · до этого deploy v503 + MCP PASS  
+**last_done:** intake TASK_95 + /unlazy [GATES](../milestones/veha_2/artifacts/subscription_offer_guest_state/GATES.md) (G5–G6 PASS · G1–G4 unmet)  
 **next_step:** `/spec` TASK_95 · параллельно — хранилище фото товаров
 
 **ctx_trim:** `2026-09-22`  

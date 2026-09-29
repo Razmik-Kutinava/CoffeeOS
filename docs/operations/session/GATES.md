@@ -1,5 +1,5 @@
-# Gates: TASK_84-RECEIPT-DISPLAY-EXT — runtime receipt display
+# Gates: TASK_95 — Subscription offer guest state
 
-**Канон ledger:** [`../milestones/veha_2/artifacts/active_orders_receipt_display_restore/GATES.md`](../milestones/veha_2/artifacts/active_orders_receipt_display_restore/GATES.md)
+**Канон ledger:** [`../milestones/veha_2/artifacts/subscription_offer_guest_state/GATES.md`](../milestones/veha_2/artifacts/subscription_offer_guest_state/GATES.md)
 
-2026-09-21 /unlazy pre-REVIEW: **G1–G4 met** (reverify) · **G5 unmet** (Fly MCP after deploy).
+2026-09-29 /unlazy pre-SPEC: ledger создан · **G1–G4 unmet** (тестов ещё нет) · G5–G6 regression baseline · G7 Fly после deploy.
