@@ -1,3 +1,31 @@
+# todo — TASK_99: iOS — системный диалог разрешения WebPush
+
+| Поле | Значение |
+|------|----------|
+| **ID** | TASK_99 |
+| **Google** | https://docs.google.com/document/d/1RFadqCs70QvUX2dFZmL98SEtPd1N5sGSEy-hNNrlVwU/edit (патчей/доп.задач нет) |
+| **Ledger** | [GATES.md](../milestones/veha_2/artifacts/ios_webpush_permission/GATES.md) |
+| **Статус** | /sbr |
+
+## Файлы (ожидаемо)
+
+- `app/frontend/lib/firebasePush.js` — `requestPermission()` первым async; Firebase-проверки после `granted`; `opts.deps` для тестов (дефолт = реальные функции)
+- `app/frontend/lib/orderStatusNotifyActions.js` — статический импорт `registerShopPush`
+- `test/javascript/order_status_push_subscribe_test.mjs`
+
+## Не ломать
+
+- backend `OrderStatusPushNotifier` / `ReadyPushJob` / `FcmClient` · контракт `/push/register` · PassKit / `WALLET_SIMULATE` · SMS · `push_enabled`/`push_token`
+- `getToken()` + регистрация после `granted` · остальная логика аккордеона
+
+## Проверка
+
+- `node --test test/javascript/order_status_push_subscribe_test.mjs` (ТЗ `npm test`/`typecheck` в репо нет)
+- G3 зона: notify actions / init / accordion / SW / order status sheet
+- физический iPhone + Fly MCP — после deploy по апруву
+
+---
+
 # todo — TASK_97: Push-оффер подписки
 
 | Поле | Значение |

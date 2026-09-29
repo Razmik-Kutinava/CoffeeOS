@@ -17,6 +17,7 @@ import {
   PUSH_WATCH_READINESS_CTA,
   PUSH_SETTINGS_FALLBACK
 } from "../../app/frontend/lib/orderStatusNotifyActions.js"
+import { registerShopPush } from "../../app/frontend/lib/firebasePush.js"
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "../..")
 const accordionPath = join(
@@ -217,6 +218,15 @@ describe("ActiveOrdersAccordion wires push + denied settings (#81 / #92)", () =>
     assert.match(src, /postMessage\(\s*\{\s*type:\s*"coffeeos_navigate"/)
   })
 
+  it("#99: firebasePush.js imported statically (no async import before permission)", () => {
+    const src = readFileSync(
+      join(root, "app/frontend/lib/orderStatusNotifyActions.js"),
+      "utf8"
+    )
+    assert.doesNotMatch(src, /import\(\s*["']\.\/firebasePush\.js["']\s*\)/)
+    assert.match(src, /^import\s+\{[^}]*registerShopPush[^}]*\}\s+from\s+["']\.\/firebasePush\.js["']/m)
+  })
+
   it("#94: firebase SW reads title/body from data when notification absent", () => {
     const swPath = new URL(
       "../../app/views/shop/firebase_sw/show.js.erb",
@@ -225,5 +235,141 @@ describe("ActiveOrdersAccordion wires push + denied settings (#81 / #92)", () =>
     const src = readFileSync(swPath, "utf8")
     assert.match(src, /payload\.data\s*&&\s*payload\.data\.title|data\.title/)
     assert.match(src, /payload\.data\s*&&\s*payload\.data\.body|data\.body/)
+  })
+})
+
+describe("registerShopPush — iOS user gesture (#99)", () => {
+  function installNotification(permission, calls) {
+    const Notification = {
+      requestPermission: () => {
+        calls.push("requestPermission")
+        return Promise.resolve(permission)
+      }
+    }
+    globalThis.window = { Notification }
+    globalThis.Notification = Notification
+  }
+
+  function removeNotification() {
+    delete globalThis.window
+    delete globalThis.Notification
+  }
+
+  function fakeDeps(calls, { supported = true, configured = true } = {}) {
+    return {
+      isSupported: async () => {
+        calls.push("isSupported")
+        return supported
+      },
+      firebaseClientConfigured: () => {
+        calls.push("firebaseClientConfigured")
+        return configured
+      },
+      getToken: async () => {
+        calls.push("getToken")
+        return "tok-99"
+      },
+      registerToken: async (token) => {
+        calls.push(`registerToken:${token}`)
+      }
+    }
+  }
+
+  it("calls requestPermission synchronously, before any await", async () => {
+    const calls = []
+    installNotification("granted", calls)
+    try {
+      const pending = registerShopPush({ deps: fakeDeps(calls) })
+      assert.deepEqual(calls, ["requestPermission"])
+      await pending
+    } finally {
+      removeNotification()
+    }
+  })
+
+  it("granted: requestPermission → isSupported → firebaseClientConfigured → getToken → register", async () => {
+    const calls = []
+    installNotification("granted", calls)
+    try {
+      const result = await registerShopPush({ deps: fakeDeps(calls) })
+      assert.deepEqual(calls, [
+        "requestPermission",
+        "isSupported",
+        "firebaseClientConfigured",
+        "getToken",
+        "registerToken:tok-99"
+      ])
+      assert.equal(result.ok, true)
+      assert.equal(result.token, "tok-99")
+    } finally {
+      removeNotification()
+    }
+  })
+
+  for (const permission of ["denied", "default"]) {
+    it(`${permission}: no Firebase calls, resolves without throwing`, async () => {
+      const calls = []
+      installNotification(permission, calls)
+      try {
+        const result = await registerShopPush({ deps: fakeDeps(calls) })
+        assert.deepEqual(calls, ["requestPermission"])
+        assert.equal(result.ok, false)
+        assert.equal(result.reason, "denied")
+        assert.equal(result.permission, permission)
+      } finally {
+        removeNotification()
+      }
+    })
+  }
+
+  it("granted but Firebase unsupported: stops before config/getToken", async () => {
+    const calls = []
+    installNotification("granted", calls)
+    try {
+      const result = await registerShopPush({ deps: fakeDeps(calls, { supported: false }) })
+      assert.deepEqual(calls, ["requestPermission", "isSupported"])
+      assert.equal(result.reason, "unsupported")
+    } finally {
+      removeNotification()
+    }
+  })
+
+  it("granted but no Firebase config: stops before getToken", async () => {
+    const calls = []
+    installNotification("granted", calls)
+    try {
+      const result = await registerShopPush({ deps: fakeDeps(calls, { configured: false }) })
+      assert.deepEqual(calls, ["requestPermission", "isSupported", "firebaseClientConfigured"])
+      assert.equal(result.reason, "no_config")
+    } finally {
+      removeNotification()
+    }
+  })
+
+  it("no Notification API: requestPermission not called, no Firebase calls", async () => {
+    const calls = []
+    globalThis.window = {}
+    try {
+      const result = await registerShopPush({ deps: fakeDeps(calls) })
+      assert.deepEqual(calls, [])
+      assert.equal(result.ok, false)
+      assert.equal(result.reason, "no_notification_api")
+    } finally {
+      removeNotification()
+    }
+  })
+
+  it("accordion path: subscribeOrderPush reaches requestPermission synchronously", async () => {
+    const calls = []
+    installNotification("denied", calls)
+    try {
+      const pending = subscribeOrderPush({ onToast: () => {}, storage: null })
+      assert.deepEqual(calls, ["requestPermission"])
+      const result = await pending
+      assert.equal(result.ok, false)
+      assert.equal(result.error, "denied")
+    } finally {
+      removeNotification()
+    }
   })
 })
