@@ -53,9 +53,12 @@
 | OrderReadyCascadeJob | app/jobs/shop/order_ready_cascade_job.rb | После SMS_GRACE: presence check → SMS fallback | OrderReadyPresence, OrderReadyPaidNotifier | #82 Патч_1, #39 | Presence fail → `PresenceUnavailableError` + `retry_on`; SMS только если offline после grace |
 | OrderReadyPaidNotifier | app/services/shop/order_ready_paid_notifier.rb | Платный SMS fallback каскада «Заказ готов» | SmsRuClient, OrderReadySmsLink, OrderNotificationLog | #82 Патч_1, #39, #48 | Текст через `OrderReadySmsLink` (`codeblack.xyz/o/{hash}`); ≤70 до HTTP; не синхронно из update_status |
 | OrderReadySmsLink | app/services/shop/order_ready_sms_link.rb | Короткий order_hash и SMS-текст ready | OrderReadyPaidNotifier, OrderShortLinksController | #82 Патч_1 | hash = urlsafe Base64 UUID; длина префикс+hash ≤70 |
+| SubscriptionOfferState | app/models/subscription_offer_state.rb · db/migrate/20260929120000_create_subscription_offer_states.rb | Состояние оффера подписки на гостя (not_shown/shown/dismissed/viewed_in_lk/purchased), одна запись на customer_id | OfferPresentationService | TASK_95 | Владелец TASK_95; не менять из других задач без обновления карты; без RLS (customer-scoped, как `subscriptions`) |
+| OfferPresentationService | app/services/subscriptions/offer_presentation_service.rb | `should_show_banner` / `should_show_push` / `has_unread_offer_in_lk` + переходы `mark_*` | ProfileController, SubscriptionOffersController, PaymentFulfillment; читает SubscriptionOfferEligibility + GrowthPromo | TASK_95 | Владелец TASK_95; eligibility / GrowthPromo / `subscription_offer_settings` только читать, не менять |
+| SubscriptionOffersController (shop api) | app/controllers/shop/api/subscription_offers_controller.rb | POST `subscription_offer/shown` · `dismiss` · `viewed` (+ 2 поля в `profile`) | OfferPresentationService | TASK_95 | Владелец TASK_95; только session customer; не смешивать с frontend-логикой баннера/ЛК/push |
 | OrderShortLinksController | app/controllers/shop/order_short_links_controller.rb | GET `/o/:order_hash` → shop `#/order/:id` | OrderReadySmsLink, GuestOrderReconnect | #82 Патч_1 | Публичный SMS entrypoint: `bind!` + `reconnect_token` в redirect обязательны |
 
-**Маршруты API зоны:** GET /shop/api/orders/active · POST /shop/api/orders/:id/cancel · GET /shop/api/orders/:id/wallet_pass · GET `/o/:order_hash` (SMS short link)
+**Маршруты API зоны:** GET /shop/api/orders/active · POST /shop/api/orders/:id/cancel · GET /shop/api/orders/:id/wallet_pass · GET `/o/:order_hash` (SMS short link) · POST /shop/api/subscription_offer/{shown,dismiss,viewed} (TASK_95)
 
 **Известные дыры (требуют точечного аудита перед следующей задачей):** нет.
 

@@ -41,7 +41,7 @@ PWA / mobile витрина. Tenant: `@shop_tenant` из `tenant_id` query ил�
 
 | Method | Path | Service | Keys |
 |--------|------|---------|------|
-| GET/PATCH | `profile` | `ProfileController` | `mobile_customers.id`; **#77** `eligible_for_subscription_offer` (server `SubscriptionOfferEligibility`; не путать с `orders_count`) |
+| GET/PATCH | `profile` | `ProfileController` | `mobile_customers.id`; **#77** `eligible_for_subscription_offer` (server `SubscriptionOfferEligibility`; не путать с `orders_count`); **TASK_95** `should_show_banner`, `has_unread_offer_in_lk` (bool, server `Subscriptions::OfferPresentationService`) |
 | POST | `profile/link_email` | `CustomerProfileMerger#link_email!` | merge donor→survivor |
 | POST | `profile/link_phone` | `CustomerProfileMerger#link_phone!` | перенос cards FK |
 | GET | `user/cards` | `UserCardsController` | `?email=` fallback; filter expired exp |
@@ -99,6 +99,26 @@ PWA / mobile витрина. Tenant: `@shop_tenant` из `tenant_id` query ил�
 **Edge:** ownership = session customer only (чужая карта / sub → 404/422). Не табло barista. Usage pricing — Slice 2; PWA UI — Slice 6.
 
 **Tests:** `subscriptions_api_test.rb` · `test/services/subscriptions/`
+
+---
+
+## Subscription offer state (TASK_95)
+
+| Method | Path | Service / controller | Notes |
+|--------|------|----------------------|-------|
+| POST | `subscription_offer/shown` | `SubscriptionOffersController#shown` → `OfferPresentationService#mark_shown` | FE после фактического рендера баннера; no-op если `should_show_banner=false` (промо 11₽ / not eligible / уже shown / purchased) |
+| POST | `subscription_offer/dismiss` | `#dismiss` → `mark_dismissed` | только из `shown`; фиксирует `last_dismissed_at` + completed orders snapshot; повтор — no-op (тот же цикл) |
+| POST | `subscription_offer/viewed` | `#viewed` → `mark_viewed_in_lk` | гасит unread; `shown`/`dismissed` → `viewed_in_lk`; идемпотентно; `not_shown`/`purchased` не меняются |
+
+**Response (все три, 200):** `{ status, should_show_banner, has_unread_offer_in_lk }`.
+
+**Identity mapping:** session customer (`Shop::CustomerSession`) → `subscription_offer_states.customer_id` (одна запись на гостя, point-agnostic, без RLS как `subscriptions`). `customer_id` из body игнорируется.
+
+**Errors:** нет валидной сессии → 401 `{ error: "Требуется авторизация" }`, состояние не меняется.
+
+**Правила показа:** `GrowthPromo.available?` → false (приоритет 11₽) · `SubscriptionOfferEligibility.check` false → false · `not_shown` → true · после dismiss — true только при ≥3 новых completed (`issued`/`closed`) заказах на текущей точке · `purchased` → всё false на любой точке. `purchased` ставит `Subscriptions::PaymentFulfillment` (sync charge и webhook).
+
+**Tests:** `subscription_offer_state_api_test.rb` · `subscription_offer_lifecycle_test.rb` · `offer_presentation_service_test.rb`
 
 ---
 

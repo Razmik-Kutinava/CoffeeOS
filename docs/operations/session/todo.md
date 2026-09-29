@@ -77,5 +77,5 @@ Fly MCP Point A (G7, после deploy): `GET /shop/api/profile` отдаёт 2 
 - [x] Subtask 18–22: профиль + shown/dismiss/viewed + 401 (G3)
 - [x] Subtask 23–24: lifecycle + промо-приоритет e2e (G4)
 - [x] Subtask 25: регрессия G5–G6
-- [ ] Subtask 26–28: docs integrations + COMPONENT_MAP
+- [x] Subtask 26–28: docs integrations + COMPONENT_MAP
 - [ ] G7 Fly MCP Point A (после deploy по апруву)

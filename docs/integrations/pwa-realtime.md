@@ -60,6 +60,8 @@ Barista update_status
 
 **#77 Subscription offer CTA (ready):** point `subscription_offer_settings` (`enabled`, `second_cta_mode` tips|subscription). Shop config exposes mode; profile exposes server `eligible_for_subscription_offer`. Engagement signals (first-write-wins): `pwa_installed_at` via `POST /shop/api/pwa_install` (`appinstalled`), `push_enabled_at` via push register, `email_collected_at` via `POST orders/:id/email`. CTA machine: on `ready` + mode=subscription + eligible → second button `subscription`; else tips fallback. Absent/disabled settings → legacy CTA.
 
+**TASK_95 Offer presentation state (ready):** решение о показе баннера/push оффера — только backend. На `ready` FE читает `GET /shop/api/profile` → `should_show_banner` / `has_unread_offer_in_lk` (`Subscriptions::OfferPresentationService`); FE **не** вычисляет eligibility / промо 11₽ / счётчик заказов сам. После рендера баннера → `POST subscription_offer/shown`; смахивание → `dismiss`; открытие оффера в ЛК → `viewed`. Backend-хука в смену статуса нет; `orderStatusCtaMachine.js` и Cable-контракт не менялись.
+
 ENV: Firebase/VAPID — см. `Shop::FirebaseConfig`.
 
 ---
