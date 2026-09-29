@@ -5,7 +5,7 @@
 **Артефакты:** docs/operations/milestones/veha_2/artifacts/subscription_offer_push/ (ledger `GATES.md`) · смежные — `artifacts/subscription_offer_frontend_push_analytics/` (TASK_96)  
 **Google Doc:** https://docs.google.com/document/d/1VN1VSBHuGtIjluoNFATbmAw0OsfL_UBqKnPho_fTtU4/edit?usp=drivesdk  
 **Тип:** новая фича (backend) · **дублирует TASK_96 Subtask 14–21**  
-**Статус:** intake `[x]` · ждёт решения владельца (делать отдельно / закрыть в составе TASK_96)
+**Статус:** GREEN 2026-09-29 — реализация в TASK_96 `63a317a1` + concurrent idempotency (advisory lock в `OfferPushNotifier`) · G1–G3, G5 PASS · G4 Fly после deploy
 
 ---
 

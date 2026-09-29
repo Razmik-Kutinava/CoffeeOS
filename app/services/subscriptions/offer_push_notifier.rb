@@ -29,22 +29,9 @@ module Subscriptions
       return if @transition_key.blank?
       return if @customer.push_enabled_at.blank? || @customer.push_token.blank?
       return if purchased?
-      return if already_sent?
 
-      notification = PushNotification.create!(
-        customer_id: @customer.id,
-        tenant_id: @point.id,
-        notification_type: NOTIFICATION_TYPE,
-        title: TITLE,
-        body: BODY,
-        payload: {
-          "type" => NOTIFICATION_TYPE,
-          "offer_transition_key" => @transition_key,
-          "tag" => "subscription-offer"
-        },
-        status: :pending
-      )
-      notification.update!(payload: notification.payload.merge("offer_url" => offer_url(notification.id)))
+      notification = create_once
+      return unless notification
 
       Shop::SendPushNotificationJob.perform_later(notification.id)
       notification
@@ -54,6 +41,33 @@ module Subscriptions
     end
 
     private
+
+    # Проверка already_sent? и create! сами по себе не атомарны: параллельные вызовы с одним
+    # transition_key сериализуются advisory-локом до конца транзакции.
+    def create_once
+      PushNotification.transaction do
+        conn = PushNotification.connection
+        lock_key = "#{NOTIFICATION_TYPE}:#{@customer.id}:#{@transition_key}"
+        conn.execute("SELECT pg_advisory_xact_lock(hashtext(#{conn.quote(lock_key)}))")
+        next nil if already_sent?
+
+        notification = PushNotification.create!(
+          customer_id: @customer.id,
+          tenant_id: @point.id,
+          notification_type: NOTIFICATION_TYPE,
+          title: TITLE,
+          body: BODY,
+          payload: {
+            "type" => NOTIFICATION_TYPE,
+            "offer_transition_key" => @transition_key,
+            "tag" => "subscription-offer"
+          },
+          status: :pending
+        )
+        notification.update!(payload: notification.payload.merge("offer_url" => offer_url(notification.id)))
+        notification
+      end
+    end
 
     def already_sent?
       PushNotification.where(customer_id: @customer.id, notification_type: NOTIFICATION_TYPE)

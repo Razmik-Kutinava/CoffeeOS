@@ -6,25 +6,25 @@ Scope: `Subscriptions::OfferPushNotifier` шлёт через существую
   CHECK: ruby bin/rails test test/services/subscriptions/offer_push_notifier_test.rb
   EXPECT: 0 failures, 0 errors
   CWD: C:/Tools/workarea/CoffeeOS
-  EVIDENCE: automatic-evidence=v1; definition-sha256=22e88e48a12a04c567422791a5c836f4ffa12a27f3eb4b134b3ad2572097e685; exit=0; EXPECT=matched; output-sha256=eae6ef41173e0b6e69c4066ca114a1eccb03c766b5a342a64e8b9b49ce124a3a; output-bytes=1626; shell=C:\Windows\system32\cmd.exe; cwd=C:\Tools\workarea\CoffeeOS; path=54c8ad8163c5/77 entries
+  EVIDENCE: automatic-evidence=v1; definition-sha256=22e88e48a12a04c567422791a5c836f4ffa12a27f3eb4b134b3ad2572097e685; exit=0; EXPECT=matched; output-sha256=7f01d44644702d3cec980ccedd6a9ef61ffe9ea4bb04a7423441c89b12d9fb0d; output-bytes=1627; shell=C:\Windows\system32\cmd.exe; cwd=C:\Tools\workarea\CoffeeOS; path=54c8ad8163c5/77 entries
 
 - [x] G2: OfferPresentationService / state API (TASK_95) — правила состояния не изменились, side-effect подключён только к переходу в shown
   CHECK: ruby bin/rails test test/services/subscriptions/offer_presentation_service_test.rb test/integration/shop/api/subscription_offer_state_api_test.rb test/integration/shop/subscription_offer_lifecycle_test.rb test/integration/shop/api/profile_subscription_offer_test.rb test/services/shop/subscription_offer_eligibility_test.rb
   EXPECT: 0 failures, 0 errors
   CWD: C:/Tools/workarea/CoffeeOS
-  EVIDENCE: automatic-evidence=v1; definition-sha256=0600911dd19bb7ad3d113bba65c737cfc7bce4f11d2ba560c641b58f034affcb; exit=0; EXPECT=matched; output-sha256=8a73b98a9618b7b1f9f420a19d209f229b2ad1f13cbbfe5cdbca077f26b5bfa0; output-bytes=1661; shell=C:\Windows\system32\cmd.exe; cwd=C:\Tools\workarea\CoffeeOS; path=54c8ad8163c5/77 entries
+  EVIDENCE: automatic-evidence=v1; definition-sha256=0600911dd19bb7ad3d113bba65c737cfc7bce4f11d2ba560c641b58f034affcb; exit=0; EXPECT=matched; output-sha256=eecbf1028ea30eac85f003b84dcae4091d5de504386b82d889486ad9b5656119; output-bytes=1662; shell=C:\Windows\system32\cmd.exe; cwd=C:\Tools\workarea\CoffeeOS; path=54c8ad8163c5/77 entries
 
 - [x] G3: push/FCM regression — FCM client, push статуса заказа + Cascade ready, registration flow (Subtask 9)
   CHECK: ruby bin/rails test test/services/shop/fcm_client_test.rb test/services/shop/order_status_push_notifier_test.rb test/services/shop/order_status_push_payload_test.rb test/services/shop/ready_push_claim_test.rb test/jobs/shop/ready_push_job_test.rb test/jobs/shop/order_ready_cascade_job_test.rb test/integration/shop/api/push_register_test.rb test/integration/shop/push_pipeline_simulation_test.rb
   EXPECT: 0 failures, 0 errors
   CWD: C:/Tools/workarea/CoffeeOS
-  EVIDENCE: automatic-evidence=v1; definition-sha256=a6b6210abfe2a393c0b1f57312f94c883b77e0d10261051bb74ac7d0e993f9a7; exit=0; EXPECT=matched; output-sha256=ecc17b84c9da3a4b0efeb7211468a801b5872e9bfefe64acfdb1eadeba39ecc2; output-bytes=1660; shell=C:\Windows\system32\cmd.exe; cwd=C:\Tools\workarea\CoffeeOS; path=54c8ad8163c5/77 entries
+  EVIDENCE: automatic-evidence=v1; definition-sha256=a6b6210abfe2a393c0b1f57312f94c883b77e0d10261051bb74ac7d0e993f9a7; exit=0; EXPECT=matched; output-sha256=fc84a09656214b77ad09b5123b8ff8b737c0656be8086c78a3ab85a7e844cd1f; output-bytes=1665; shell=C:\Windows\system32\cmd.exe; cwd=C:\Tools\workarea\CoffeeOS; path=54c8ad8163c5/77 entries
 
-- [ ] G5: concurrent idempotency — параллельные `mark_shown` / `OfferPushNotifier.call` с одним ключом → ровно 1 push (Проверка TASK_97 «idempotency при параллельных вызовах»)
+- [x] G5: concurrent idempotency — параллельные `mark_shown` / `OfferPushNotifier.call` с одним ключом → ровно 1 push (Проверка TASK_97 «idempotency при параллельных вызовах»)
   CHECK: ruby bin/rails test test/services/subscriptions/offer_push_concurrency_test.rb
   EXPECT: 0 failures, 0 errors
   CWD: C:/Tools/workarea/CoffeeOS
-  EVIDENCE: pending
+  EVIDENCE: automatic-evidence=v1; definition-sha256=8446671f63e527bfce26fbb488c5520c6c6885b1d873afbd18f726d633aecee1; exit=0; EXPECT=matched; output-sha256=50a3e3ff53552f4fd1293d41312cc272c42a92bd78ed51de8e777ea635b2baf6; output-bytes=1613; shell=C:\Windows\system32\cmd.exe; cwd=C:\Tools\workarea\CoffeeOS; path=54c8ad8163c5/77 entries
 
 - [ ] G4: Fly MCP Point A — после deploy: переход в shown у тестового гостя с push → одна `push_notifications` `subscription_offer`; витрина / статус заказа не сломаны
   EVIDENCE: pending — deploy только по апруву (TASK_95/96 тоже не задеплоены)
