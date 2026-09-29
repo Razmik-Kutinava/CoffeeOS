@@ -11,6 +11,14 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-29 — docs: TASK_98 /unlazy ledger
+
+- Новый `artifacts/subscription_offer_funnel_utm/GATES.md` (G1–G7); Google Doc TASK_98 — без патчей/доп.задач, комментариев нет
+- TASK_98 ⊂ TASK_96 Subtask 22–33: 7 событий, `MarketingEventLogger`, атрибуция в `subscriptions.utm_*`, `OfferFunnelReport` + `/manager/subscription_offer_funnel` уже в `63a317a1`
+- PASS: G1 модель+API 17/0 · G2 push_sent 12/0 · G3 атрибуция+отчёт 9/0 · G4 JS баннер/карточка · G6 зона 89/0
+- G5 FAIL: пустой диапазон отчёта не покрыт тестом (0 runs) — RED на /sbr · G7 Fly manual
+- `EXPECT` с regex — только в `/…/` (иначе literal substring)
+
 ## 2026-09-29 — docs: TASK_99 /unlazy ledger
 
 - Новый `artifacts/ios_webpush_permission/GATES.md` (G1–G5); `session/GATES.md` → указатель на TASK_99
