@@ -3,6 +3,7 @@
  */
 
 import { toggleExpandedOrder } from "./activeOrdersAccordion.js"
+import { registerShopPush } from "./firebasePush.js"
 
 /** Токены UI-kit (accent проекта, h-9 ≈ 36px, rounded-lg, w-44). */
 export const CTA_STYLE = Object.freeze({
@@ -222,11 +223,8 @@ export async function subscribeOrderPush(opts = {}) {
   const injectedRegister = typeof registerShopPushImpl === "function"
 
   try {
-    let register = registerShopPushImpl
-    if (typeof register !== "function") {
-      const mod = await import("./firebasePush.js")
-      register = mod.registerShopPush
-    }
+    // iOS (#99): без await до register — requestPermission должен остаться в user gesture.
+    const register = injectedRegister ? registerShopPushImpl : registerShopPush
     const result = await register({ onToast })
 
     if (result?.ok) {
