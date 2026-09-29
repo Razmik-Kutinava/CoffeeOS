@@ -5,7 +5,15 @@
 | **ID** | TASK_99 |
 | **Google** | https://docs.google.com/document/d/1RFadqCs70QvUX2dFZmL98SEtPd1N5sGSEy-hNNrlVwU/edit (патчей/доп.задач нет) |
 | **Ledger** | [GATES.md](../milestones/veha_2/artifacts/ios_webpush_permission/GATES.md) |
-| **Статус** | /sbr |
+| **Статус** | GREEN `48fa264` · ждёт `/regress` |
+
+## SBR
+
+- [x] /unlazy ledger (`def97615`)
+- [x] RED `b016f7dc` — 9 новых тестов fail (порядок, sync requestPermission, denied/default/unsupported, аккордеон, статический импорт)
+- [x] GREEN `48fa264` — 27/0 · G1–G3 PASS · Entire `01M3PPE93CDW728HQ2PP4ZNDM8`
+- [ ] /regress
+- [ ] REVIEW — push/CI · deploy по апруву · G4 iPhone · G5 Fly
 
 ## Файлы (ожидаемо)
 
