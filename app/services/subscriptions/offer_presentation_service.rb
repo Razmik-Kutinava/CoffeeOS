@@ -18,6 +18,8 @@ module Subscriptions
     end
 
     def call
+      return { should_show_banner: false, should_show_push: false, has_unread_offer_in_lk: false } if subscribed?
+
       state = current_state
       banner = banner?(state)
       {
@@ -94,11 +96,25 @@ module Subscriptions
       reshow_due?(state)
     end
 
+    # Снимок completed_orders_count_at_dismissal снят на точке смахивания; сравнивать его со счётчиком
+    # другой точки нельзя, поэтому считаем новые завершённые заказы текущей точки после last_dismissed_at.
     def reshow_due?(state)
       return false unless state.dismissed? || state.viewed_in_lk?
-      return false if state.completed_orders_count_at_dismissal.nil?
+      return false if state.completed_orders_count_at_dismissal.nil? || state.last_dismissed_at.nil?
 
-      completed_orders_count - state.completed_orders_count_at_dismissal >= RESHOW_AFTER_COMPLETED_ORDERS
+      completed_orders_since(state.last_dismissed_at) >= RESHOW_AFTER_COMPLETED_ORDERS
+    end
+
+    def completed_orders_since(time)
+      Order.where(
+        tenant_id: @point.id,
+        customer_id: @customer.id,
+        status: Shop::SubscriptionOfferEligibility::COMPLETED_STATUSES
+      ).where("created_at > ?", time).count
+    end
+
+    def subscribed?
+      Subscription.for_customer(@customer.id).where(status: %i[active past_due]).exists?
     end
 
     def unread?(state)

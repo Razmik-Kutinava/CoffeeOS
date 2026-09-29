@@ -116,7 +116,7 @@ PWA / mobile витрина. Tenant: `@shop_tenant` из `tenant_id` query ил�
 
 **Errors:** нет валидной сессии → 401 `{ error: "Требуется авторизация" }`, состояние не меняется.
 
-**Правила показа:** `GrowthPromo.available?` → false (приоритет 11₽) · `SubscriptionOfferEligibility.check` false → false · `not_shown` → true · после dismiss — true только при ≥3 новых completed (`issued`/`closed`) заказах на текущей точке · `purchased` → всё false на любой точке. `purchased` ставит `Subscriptions::PaymentFulfillment` (sync charge и webhook).
+**Правила показа:** есть `Subscription` `active`/`past_due` → всё false (в т.ч. подписчики до TASK_95 без state) · `GrowthPromo.available?` → false (приоритет 11₽) · `SubscriptionOfferEligibility.check` false → false · `not_shown` → true · после dismiss — true только при ≥3 новых completed (`issued`/`closed`) заказах на текущей точке, созданных после `last_dismissed_at` (снимок `completed_orders_count_at_dismissal` хранится, но между точками не сравнивается) · `purchased` → всё false на любой точке. `purchased` ставит `Subscriptions::PaymentFulfillment` (sync charge и webhook).
 
 **Tests:** `subscription_offer_state_api_test.rb` · `subscription_offer_lifecycle_test.rb` · `offer_presentation_service_test.rb`
 
