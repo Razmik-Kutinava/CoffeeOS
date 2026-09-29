@@ -7,14 +7,14 @@
 | **Google** | https://docs.google.com/document/d/1kbB0iDYgFoioln0I2xUXeMBXWaKo_cKqDEfproHJN1M/edit?usp=drivesdk |
 | **Ledger** | [GATES.md](../milestones/veha_2/artifacts/subscription_offer_frontend_push_analytics/GATES.md) |
 | **Тип** | новая фича поверх TASK_95 · полный SBR · **весь scope TASK_96 (Subtask 1–36)** |
-| **Статус** | SPEC `[x]` · **BLOCKED** — нет экрана оформления подписки (billing UI, Задача-3); решение владельца: TASK_96 ждёт |
+| **Статус** | RED · владелец (2026-09-29 `/sbr`): делаем всё, кроме цели перехода — `OFFER_TARGET_PATH = "/profile"` до billing UI; G7/Subtask 35 открыты |
 
 ## SBR
 
 - [x] PHASE 0 intake
 - [x] /unlazy ledger (G5–G6 baseline PASS)
 - [x] PHASE 1 SPEC
-- [ ] PHASE 2 RED — G1–G4 (после снятия блокера)
+- [x] PHASE 2 RED — G1–G4 (Ruby 38 runs · 13 F · 25 E; JS — модуль отсутствует)
 - [ ] PHASE 2 GREEN
 - [ ] /regress
 - [ ] PHASE 3 REVIEW — push/CI · deploy по апруву · G7 Fly
