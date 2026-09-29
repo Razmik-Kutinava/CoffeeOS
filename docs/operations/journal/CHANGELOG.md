@@ -11,6 +11,14 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-29 — feat: TASK_97 push-оффер подписки (REVIEW)
+
+- Реализация — в TASK_96 `63a317a1` (`OfferPushNotifier`, side-effect `mark_shown`); TASK_97 закрыл пробел «idempotency при параллельных вызовах»
+- RED `d798968b`: `offer_push_concurrency_test` (non-transactional, реальные соединения) — 2 параллельных `OfferPushNotifier.call` с одним ключом → 2 push
+- GREEN `c187fd81`: `create_once` — `already_sent?` + `create!` в транзакции под `pg_advisory_xact_lock(hashtext(key))`, job после коммита; без миграции
+- Local: зона 28 файлов 176/0 · concurrent ×5 · GATES G1–G3, G5, G6 met · G4 Fly после deploy
+- Review: bugbot — 0 · security-review — 0 medium+
+
 ## 2026-09-29 — docs: TASK_98 /unlazy ledger
 
 - Новый `artifacts/subscription_offer_funnel_utm/GATES.md` (G1–G7); Google Doc TASK_98 — без патчей/доп.задач, комментариев нет

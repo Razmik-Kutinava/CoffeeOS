@@ -43,7 +43,7 @@
 | **Google** | https://docs.google.com/document/d/1VN1VSBHuGtIjluoNFATbmAw0OsfL_UBqKnPho_fTtU4/edit?usp=drivesdk |
 | **Ledger** | [GATES.md](../milestones/veha_2/artifacts/subscription_offer_push/GATES.md) |
 | **Тип** | ⊂ TASK_96 Subtask 14–21 · реализация уже в `63a317a1` (GREEN #96) · остаток — concurrent idempotency + закрытие |
-| **Статус** | /regress `[x]` · ждёт `/review` |
+| **Статус** | REVIEW — bugbot 0 · security 0 · push/CI · G4 Fly после deploy |
 
 ## SBR
 
