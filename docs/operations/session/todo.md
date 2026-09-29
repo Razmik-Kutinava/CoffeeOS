@@ -16,7 +16,7 @@
 - [x] PHASE 1 SPEC
 - [x] PHASE 2 RED — тесты G1–G4 (`a88558cb`: 32 runs · 4 F · 28 E)
 - [x] PHASE 2 GREEN — код (32/0 · G1–G6 reverify PASS · subscriptions 37/0)
-- [ ] /regress — G5–G6
+- [x] /regress — 190/0 (TASK_95 32 · подписки/промо/профиль 92 · T-Bank callback 50 · RLS 16)
 - [ ] PHASE 3 REVIEW — push/CI · deploy по апруву · G7 Fly
 
 ## Решения SPEC (по умолчанию — подтвердить до RED)

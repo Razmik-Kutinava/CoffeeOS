@@ -7,11 +7,11 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **TASK_95** SPEC `[x]` · [todo](todo.md) · 4 решения по умолчанию (подтвердить до RED) | `/sbr` RED #95 |
+| **TASK_95** GREEN `42b61e1c` · regress PASS 190/0 (подписки·профиль·T-Bank callback·RLS) | `/review` #95 · docs Subtask 26–28 · G7 Fly после deploy |
 | **Fly v503** `2a9adacb` · MCP Point A PASS | фото `/uploads` 404 (ISSUES) — хранилище |
 
-**last_done:** SPEC TASK_95 (7 путей · Не ломать/Проверка) · ledger G5–G6 PASS  
-**next_step:** подтвердить 4 решения SPEC → `/sbr` RED
+**last_done:** /regress TASK_95 — Local PASS: G1–G4 32/0 · подписки/промо/профиль 92/0 · T-Bank callback 50/0 · RLS 16/0  
+**next_step:** `/review` TASK_95 (bugbot + security-review → Entire → push/CI)
 
 **ctx_trim:** `2026-09-22`
 
