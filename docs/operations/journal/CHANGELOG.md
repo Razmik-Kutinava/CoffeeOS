@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-29 — docs: TASK_99 /unlazy ledger
+
+- Новый `artifacts/ios_webpush_permission/GATES.md` (G1–G5); `session/GATES.md` → указатель на TASK_99
+- Baseline: G1 `order_status_push_subscribe_test.mjs` 18/0 · G3 зона notify/accordion/SW/sheet 88/0 · G2 статический оракул (порядок `requestPermission` < `isSupported` < `getToken`, нет `import("./firebasePush.js")`) FAIL — ожидаемо до GREEN
+- ТЗ: `npm test`/`npm run typecheck` отсутствуют в `package.json` → `node --test`; статический импорт `firebasePush.js` в Node грузится (IMPORT_OK)
+
 ## 2026-09-29 — docs: TASK_97 SPEC
 
 - `todo.md` — блок TASK_97 сверху (TASK_96 ниже без изменений): сверка Subtask 1–9 с GREEN #96 `63a317a1` — всё покрыто, кроме concurrent idempotency
