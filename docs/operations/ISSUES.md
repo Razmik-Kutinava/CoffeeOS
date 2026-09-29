@@ -26,6 +26,7 @@
 | #82 Cascade SMS + sheet stuck | 🟡 | Патч_1 CI green · deploy → Fly MCP |
 | #71 email after pay remember | 🟡 | Fly v481 MCP PASS · апрув заказчика |
 | TASK_84 receipt display | 🟢 | REVIEW CI green · G5 Fly после deploy |
+| JS legacy fails (найдено на TASK_99 /regress) | 🟡 | до TASK_99 те же (`def97615`): `email_collection_test` «identityReady / canPay depend on phoneVerified» 1 fail · `order_action_buttons_cancel_test` «422/500: force preparing» 1 fail · `personal_cabinet_test` 58 — `[RED]` TDD, не баг. Не push-зона |
 | Product images `/uploads` 404 | 🟡 | `ProductImageStorage` → `public/uploads` на эфемерном диске Fly, volume нет → фото стираются при деплое (v503: 5 ссылок, 1 файл). Нужно решение: S3/Tigris или volume |
 
 Детали до 2026-08 → [`issues/archive/ISSUES-resolved-through-2026-08.md`](issues/archive/ISSUES-resolved-through-2026-08.md)
