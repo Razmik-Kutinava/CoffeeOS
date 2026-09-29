@@ -151,6 +151,30 @@ class Shop::SubscriptionOfferFunnelTest < ActionDispatch::IntegrationTest
     assert_equal 1, report[:totals]["banner_shown"]
   end
 
+  # TASK_98 Subtask 11: отсутствие событий → пустые/нулевые значения, без 500
+  test "funnel report on empty range returns empty rows and zero totals" do
+    log_opened!(channel: "banner", content: "banner_v1", at: 30.days.ago)
+    now = Time.current
+
+    report = Subscriptions::OfferFunnelReport.call(point_id: @tenant.id, from: now - 7.days, to: now)
+
+    assert_equal [], report[:rows]
+    assert report[:totals].values.all?(&:zero?)
+    assert_equal 0, report[:totals]["offer_opened"]
+  end
+
+  test "manager JSON endpoint on empty range returns 200 with empty rows" do
+    manager = create_user!(tenant: @tenant, role_codes: %w[general_manager], email: "fun-e-#{SecureRandom.hex(3)}@test.com")
+
+    login_as!(manager)
+    get "/manager/subscription_offer_funnel", params: { from: 1.day.ago.iso8601, to: Time.current.iso8601 },
+                                              headers: { "ACCEPT" => "application/json" }
+    assert_response :success
+    body = response.parsed_body
+    assert_equal [], body["rows"]
+    assert_equal({}, body["totals"].reject { |_, v| v.zero? })
+  end
+
   test "manager JSON endpoint returns funnel for current tenant only" do
     manager = create_user!(tenant: @tenant, role_codes: %w[general_manager], email: "fun-#{SecureRandom.hex(3)}@test.com")
     log_opened!(channel: "banner", content: "banner_v1", at: 1.hour.ago)
