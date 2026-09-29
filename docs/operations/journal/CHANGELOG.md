@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-29 — fix: CI scan_ruby — rack-proxy 2.0.1 (TASK_95 REVIEW)
+
+- `Gemfile.lock`: rack-proxy 0.7.7 → 2.0.1, vite_ruby 3.10.2 → 3.11.0 (`bundle update --conservative`) — GHSA-42qh-8mx8-7wqm, bundler-audit чисто
+- Local: layout/Vite 3 файла + TASK_95 — 50/0
+- Push `23565015` (cherry-pick поверх `origin/develop`, без RED #96) · CI [36567405779](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/36567405779) green · Semgrep/CodeQL green
+
 ## 2026-09-29 — docs: TASK_97 /unlazy ledger
 
 - `artifacts/subscription_offer_push/GATES.md` — 4 gates: G1 `offer_push_notifier_test` · G2 OfferPresentationService/state API (TASK_95) · G3 push/FCM regression (8 файлов) · G4 Fly MCP manual
