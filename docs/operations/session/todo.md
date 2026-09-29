@@ -7,7 +7,7 @@
 | **Google** | https://docs.google.com/document/d/1VN1VSBHuGtIjluoNFATbmAw0OsfL_UBqKnPho_fTtU4/edit?usp=drivesdk |
 | **Ledger** | [GATES.md](../milestones/veha_2/artifacts/subscription_offer_push/GATES.md) |
 | **Тип** | ⊂ TASK_96 Subtask 14–21 · реализация уже в `63a317a1` (GREEN #96) · остаток — concurrent idempotency + закрытие |
-| **Статус** | GREEN `[x]` · ждёт `/regress` |
+| **Статус** | /regress `[x]` · ждёт `/review` |
 
 ## SBR
 
@@ -16,7 +16,7 @@
 - [x] PHASE 1 SPEC
 - [x] PHASE 2 RED — G5: `OfferPushNotifier.call` ×2 одним ключом → 2 push (`d798968b`); параллельный `mark_shown` уже был верен
 - [x] PHASE 2 GREEN — advisory xact lock в `OfferPushNotifier#create_once` · 14/0 · `--reverify` G1–G3, G5 PASS
-- [ ] /regress — `--reverify` G1–G3 на HEAD
+- [x] /regress — `--reverify` G1–G3, G5 · зона 28 файлов 176/0 · concurrent ×5 PASS
 - [ ] PHASE 3 REVIEW — push/CI · deploy по апруву · G4 Fly
 
 ## Покрытие TASK_97 реализацией #96 (сверка SPEC)

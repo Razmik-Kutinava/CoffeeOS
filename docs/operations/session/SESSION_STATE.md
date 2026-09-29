@@ -7,7 +7,7 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **TASK_97** intake `[x]` · [ТЗ](../milestones/veha_2/requirements/customer_tasks/TASK-97-Push-оффер-подписки.md) · ⊂ TASK_96 Subtask 14–21 · [GATES](../milestones/veha_2/artifacts/subscription_offer_push/GATES.md) G1–G3 PASS (на незакоммиченном GREEN #96) · RED `d798968b` → GREEN `c187fd81` (advisory lock в `OfferPushNotifier`) · G1–G3, G5 PASS (reverify) · G4 Fly pending · Entire attach не сделан (сессии нет в `entire session list`) | `/regress` → `/review` (attach до push) |
+| **TASK_97** intake `[x]` · [ТЗ](../milestones/veha_2/requirements/customer_tasks/TASK-97-Push-оффер-подписки.md) · ⊂ TASK_96 Subtask 14–21 · [GATES](../milestones/veha_2/artifacts/subscription_offer_push/GATES.md) G1–G3 PASS (на незакоммиченном GREEN #96) · RED `d798968b` → GREEN `c187fd81` (advisory lock в `OfferPushNotifier`) · G1–G3, G5 PASS (reverify) · G4 Fly pending · /regress PASS: зона subscriptions+push+shop jobs 28 файлов 176/0 · concurrent ×5 стабильно · Entire attach не сделан | `/review` (attach до push) · G4 Fly после deploy |
 | **TASK_96** GREEN `63a317a1` · **regress PASS** (JS 89+18/0 · Rails зона 112/0 · соседи push/auth/shop api 356/0) · [GATES](../milestones/veha_2/artifacts/subscription_offer_frontend_push_analytics/GATES.md) G7 open · цель перехода `/profile` до billing UI | `/review` #96 (bugbot+security, push) → deploy по апруву → G7 Fly MCP Point A |
 | **TASK_95** REVIEW `[x]` · fix `bb64f742` · Local 194/0 · bugbot+security чисто · **CI green** [36567405779](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/36567405779) на `23565015` (rack-proxy 2.0.1) | deploy по апруву · G7 Fly MCP |
 | **Fly v503** `2a9adacb` · MCP Point A PASS | фото `/uploads` 404 (ISSUES) — хранилище |
