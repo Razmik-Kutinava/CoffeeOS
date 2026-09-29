@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-29 — test: TASK_98 /sbr (пустой отчёт воронки)
+
+- `00bdcf64`: +2 теста в `subscription_offer_funnel_test.rb` — `OfferFunnelReport` на пустом диапазоне (`rows: []`, totals нулевые) и `/manager/subscription_offer_funnel` JSON 200 с пустыми rows
+- Сразу зелёные (2/0) — поведение уже было верным, прод-код не менялся; RED-substep не применим (характеризация)
+- `--reverify` G1–G6 met · G7 Fly manual
+- Entire: attach `--force` в WSL amend-нул HEAD параллельной сессии (`a832cc3` → `e592af1a`, только trailer, не запушен); чекпоинт `01M3PPM41DS4J8RQG6RB3TK0K2` перепривязан на ops-коммит. Урок: перед attach проверять `git log -1` в той же команде
+
 ## 2026-09-29 — feat: TASK_97 push-оффер подписки (REVIEW)
 
 - Реализация — в TASK_96 `63a317a1` (`OfferPushNotifier`, side-effect `mark_shown`); TASK_97 закрыл пробел «idempotency при параллельных вызовах»
