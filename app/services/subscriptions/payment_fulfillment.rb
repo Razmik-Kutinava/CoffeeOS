@@ -46,6 +46,7 @@ module Subscriptions
       )
       subscription.start_period_from_plan!(plan)
       subscription.save!
+      Subscriptions::OfferPresentationService.mark_purchased!(customer_id: customer_id)
       subscription
     end
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_26_190000) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_29_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_stat_statements"
@@ -1215,6 +1215,19 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_26_190000) do
     t.index ["point_id"], name: "idx_subscription_offer_settings_point", unique: true
   end
 
+  create_table "subscription_offer_states", id: :uuid, default: -> { "gen_random_uuid()" }, comment: "TASK_95: guest subscription offer presentation state", force: :cascade do |t|
+    t.integer "completed_orders_count_at_dismissal"
+    t.datetime "created_at", null: false
+    t.uuid "customer_id", null: false
+    t.datetime "first_shown_at"
+    t.datetime "last_dismissed_at"
+    t.string "status", limit: 32, default: "not_shown", null: false
+    t.datetime "unread_since"
+    t.datetime "updated_at", null: false
+    t.index ["customer_id"], name: "idx_subscription_offer_states_customer", unique: true
+    t.check_constraint "status::text = ANY (ARRAY['not_shown'::text, 'shown'::text, 'dismissed'::text, 'viewed_in_lk'::text, 'purchased'::text])", name: "chk_subscription_offer_states_status"
+  end
+
   create_table "subscription_plans", id: :uuid, default: -> { "gen_random_uuid()" }, comment: "#78: guest PWA subscription plans (not platform billing_plans)", force: :cascade do |t|
     t.boolean "active", default: true, null: false
     t.string "code", limit: 64, null: false
@@ -1546,6 +1559,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_26_190000) do
   add_foreign_key "stock_movements", "users", column: "confirmed_by_id", on_delete: :nullify
   add_foreign_key "stock_movements", "users", column: "created_by_id", on_delete: :nullify
   add_foreign_key "subscription_offer_settings", "tenants", column: "point_id"
+  add_foreign_key "subscription_offer_states", "mobile_customers", column: "customer_id"
   add_foreign_key "subscription_usage_events", "orders"
   add_foreign_key "subscription_usage_events", "subscriptions"
   add_foreign_key "subscription_usage_events", "tenants", column: "point_id"

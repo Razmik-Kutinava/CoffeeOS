@@ -14,8 +14,8 @@
 - [x] PHASE 0 intake
 - [x] /unlazy ledger (G5–G6 baseline PASS)
 - [x] PHASE 1 SPEC
-- [ ] PHASE 2 RED — тесты G1–G4
-- [ ] PHASE 2 GREEN — код
+- [x] PHASE 2 RED — тесты G1–G4 (`a88558cb`: 32 runs · 4 F · 28 E)
+- [x] PHASE 2 GREEN — код (32/0 · G1–G6 reverify PASS · subscriptions 37/0)
 - [ ] /regress — G5–G6
 - [ ] PHASE 3 REVIEW — push/CI · deploy по апруву · G7 Fly
 
@@ -72,10 +72,10 @@ Fly MCP Point A (G7, после deploy): `GET /shop/api/profile` отдаёт 2 
 
 ## DoD
 
-- [ ] Subtask 1–3: таблица + модель + одна запись на гостя (G1)
-- [ ] Subtask 4–17: сервис + переходы + промо-приоритет + 3 заказа + unread + purchased (G2)
-- [ ] Subtask 18–22: профиль + shown/dismiss/viewed + 401 (G3)
-- [ ] Subtask 23–24: lifecycle + промо-приоритет e2e (G4)
-- [ ] Subtask 25: регрессия G5–G6
+- [x] Subtask 1–3: таблица + модель + одна запись на гостя (G1)
+- [x] Subtask 4–17: сервис + переходы + промо-приоритет + 3 заказа + unread + purchased (G2)
+- [x] Subtask 18–22: профиль + shown/dismiss/viewed + 401 (G3)
+- [x] Subtask 23–24: lifecycle + промо-приоритет e2e (G4)
+- [x] Subtask 25: регрессия G5–G6
 - [ ] Subtask 26–28: docs integrations + COMPONENT_MAP
 - [ ] G7 Fly MCP Point A (после deploy по апруву)

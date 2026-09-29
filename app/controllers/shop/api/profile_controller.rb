@@ -68,6 +68,7 @@ module Shop
       end
 
       def profile_json(customer)
+        offer = Subscriptions::OfferPresentationService.new(customer: customer, point: @shop_tenant).call
         {
           id: customer.id,
           email: customer.email,
@@ -82,7 +83,9 @@ module Shop
           discount_percent: 0,
           orders_count: Order.where(tenant_id: @shop_tenant.id, customer_id: customer.id).count,
           favorites_count: (session[:shop_favorites] || []).size,
-          eligible_for_subscription_offer: Shop::SubscriptionOfferEligibility.check(customer, @shop_tenant)
+          eligible_for_subscription_offer: Shop::SubscriptionOfferEligibility.check(customer, @shop_tenant),
+          should_show_banner: offer[:should_show_banner],
+          has_unread_offer_in_lk: offer[:has_unread_offer_in_lk]
         }
       end
     end

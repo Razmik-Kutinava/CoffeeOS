@@ -240,6 +240,10 @@ Rails.application.routes.draw do
       patch "subscriptions/current/auto_renew", to: "subscriptions#update_auto_renew"
       post "subscriptions/current/cancel", to: "subscriptions#cancel"
       post "subscriptions/current/confirm_payment", to: "subscriptions#confirm_payment"
+      # TASK_95: состояние оффера подписки на гостя
+      post "subscription_offer/shown", to: "subscription_offers#shown"
+      post "subscription_offer/dismiss", to: "subscription_offers#dismiss"
+      post "subscription_offer/viewed", to: "subscription_offers#viewed"
     end
     # SPA hash-routes иногда попадают на сервер как /shop/... — отдаём shell витрины
     get "*spa_path", to: "pages#home", constraints: ->(req) { req.format.html? }
