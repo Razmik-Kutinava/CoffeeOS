@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-29 — feat: TASK_99 iOS WebPush — системный диалог разрешения (REVIEW)
+
+- `firebasePush.js`: `Notification.requestPermission()` — первый async после sync-проверки `"Notification" in window`; `isSupported()` / `firebaseClientConfigured()` / `getToken()` / `/push/register` — только после `granted`; `opts.deps` для тестов (дефолт = реальные функции)
+- `orderStatusNotifyActions.js`: статический импорт `registerShopPush` вместо `await import()` в пути аккордеона
+- RED `b016f7dc` → GREEN `48fa2646` · JS 27/0 · зона 88/0 · Rails push 19/0 · bugbot 0 · security 0 · CI green [36578386943](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/36578386943)
+- Открыто: G4 физический iPhone · G5 Fly MCP — после deploy по апруву
+
 ## 2026-09-29 — docs: TASK_98 /regress PASS
 
 - Rails зона 22 файла: `test/services/subscriptions/**`, `test/jobs/shop/*`, `test/integration/shop/**/subscription*`, `marketing_event_test`, `profile_subscription_offer_test`, `subscription_offer_eligibility_test`, manager reports RBAC (general/shift) + `manager_office_panel_test` — 172 runs / 845 assertions / 0 failures

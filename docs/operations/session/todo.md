@@ -5,7 +5,7 @@
 | **ID** | TASK_99 |
 | **Google** | https://docs.google.com/document/d/1RFadqCs70QvUX2dFZmL98SEtPd1N5sGSEy-hNNrlVwU/edit (патчей/доп.задач нет) |
 | **Ledger** | [GATES.md](../milestones/veha_2/artifacts/ios_webpush_permission/GATES.md) |
-| **Статус** | /regress PASS · ждёт `/review` |
+| **Статус** | REVIEW `[x]` · CI green · ждёт deploy (апрув) |
 
 ## SBR
 
@@ -13,7 +13,8 @@
 - [x] RED `b016f7dc` — 9 новых тестов fail (порядок, sync requestPermission, denied/default/unsupported, аккордеон, статический импорт)
 - [x] GREEN `48fa264` — 27/0 · G1–G3 PASS · Entire `01M3PPE93CDW728HQ2PP4ZNDM8`
 - [x] /regress — JS 584: 60 fail legacy (= `def97615`, ISSUES) · Rails 19/0 · G1–G3 reverify
-- [ ] REVIEW — push/CI · deploy по апруву · G4 iPhone · G5 Fly
+- [x] REVIEW — bugbot 0 · security 0 · CI green [36578386943](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/36578386943) на `180d88fc`
+- [ ] deploy по апруву · G4 iPhone · G5 Fly
 
 ## Файлы (ожидаемо)
 
