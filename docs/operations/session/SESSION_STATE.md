@@ -8,11 +8,11 @@
 | Сейчас | Дальше |
 |--------|--------|
 | **TASK_96** intake `[x]` · [ТЗ](../milestones/veha_2/requirements/customer_tasks/TASK-96-Оффер-подписки-frontend-push-и-аналитика.md) · [GATES](../milestones/veha_2/artifacts/subscription_offer_frontend_push_analytics/GATES.md) G5–G6 PASS · SPEC `[x]` ([todo](todo.md)) · **BLOCKED** billing UI (Задача-3) | `/sbr` #96 после экрана оформления подписки |
-| **TASK_95** GREEN `42b61e1c` · regress PASS 190/0 (подписки·профиль·T-Bank callback·RLS) | `/review` #95 · docs Subtask 26–28 · G7 Fly после deploy |
+| **TASK_95** REVIEW · fix `bb64f742` · Local 194/0 · bugbot+security чисто · push/CI | CI green → deploy по апруву · G7 Fly MCP |
 | **Fly v503** `2a9adacb` · MCP Point A PASS | фото `/uploads` 404 (ISSUES) — хранилище |
 
-**last_done:** /regress TASK_95 — Local PASS: G1–G4 32/0 · подписки/промо/профиль 92/0 · T-Bank callback 50/0 · RLS 16/0  
-**next_step:** `/review` TASK_95 (bugbot + security-review → Entire → push/CI)
+**last_done:** REVIEW TASK_95 — bugbot 2 бага → fix `bb64f742` · Local 194/0 · Entire `01M3P4QA99DMBM0JSZYKKWSHZ5` · push  
+**next_step:** CI green → deploy только по апруву → Fly MCP G7 Point A
 
 **ctx_trim:** `2026-09-22`
 

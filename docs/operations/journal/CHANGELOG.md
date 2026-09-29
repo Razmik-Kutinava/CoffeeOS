@@ -23,6 +23,16 @@
 - `artifacts/subscription_offer_frontend_push_analytics/README.md` · CBR #96 (intake · ждёт `/spec`)
 - /unlazy `GATES.md` — 7 gates: G1–G4 новые тесты (unmet, RED на `/sbr`) · G5 backend regression PASS · G6 OrderStatus JS regression PASS · G7 Fly MCP pending
 
+## 2026-09-29 — feat: TASK_95 subscription offer guest state (REVIEW)
+
+- Новое: таблица `subscription_offer_states` (1 на гостя, без RLS как `subscriptions`) · `Subscriptions::OfferPresentationService` · `POST /shop/api/subscription_offer/{shown,dismiss,viewed}` (401 без сессии) · `GET /shop/api/profile` +`should_show_banner`/`has_unread_offer_in_lk` · `PaymentFulfillment` → `mark_purchased!`
+- Правила: промо 11₽ блокирует · повтор после ≥3 новых completed заказов на текущей точке после dismiss · purchased/активный подписчик — оффер off на любой точке
+- Bugbot фиксы: повтор не сравнивает снимок другой точки; подписчики без state не видят оффер
+- Local 194/0 (TASK_95 34 · подписки/промо/профиль 94 · T-Bank callback 50 · RLS 16) · bugbot + security-review чисто
+- Коммиты: RED `a88558cb` · GREEN `42b61e1c` · fix `bb64f742` · Entire `01M3P4QA99DMBM0JSZYKKWSHZ5`
+- Docs: `shop-api.md`, `pwa-realtime.md`, `COMPONENT_MAP.md`
+- Не сделано: Fly MCP G7 (после deploy по апруву) · frontend баннера/ЛК/push — отдельные задачи
+
 ## 2026-09-29 — docs: TASK_95 SPEC
 
 - `todo.md` → TASK_95: 7 путей (migration · model · OfferPresentationService · SubscriptionOffersController · routes · profile · PaymentFulfillment) + Не ломать / Проверка
