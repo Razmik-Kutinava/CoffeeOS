@@ -14,7 +14,7 @@ Scope: Для каждого гостя backend хранит одну запис
   CWD: C:/Tools/workarea/CoffeeOS
   EVIDENCE: pending
 
-- [ ] G3: API — флаги в профиле + dismiss/viewed + 401 без сессии, состояние не меняется (Subtask 18–22)
+- [ ] G3: API — флаги в GET /shop/api/profile + shown/dismiss/viewed + 401 без сессии, состояние не меняется (Subtask 18–22)
   CHECK: ruby bin/rails test test/integration/shop/api/subscription_offer_state_api_test.rb
   EXPECT: 0 failures, 0 errors
   CWD: C:/Tools/workarea/CoffeeOS

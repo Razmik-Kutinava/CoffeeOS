@@ -7,11 +7,11 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **TASK_95** intake `[x]` · [ТЗ](../milestones/veha_2/requirements/customer_tasks/TASK-95-Состояние-оффера-подписки-на-гостя.md) · полный SBR | `/spec` #95 |
+| **TASK_95** SPEC `[x]` · [todo](todo.md) · 4 решения по умолчанию (подтвердить до RED) | `/sbr` RED #95 |
 | **Fly v503** `2a9adacb` · MCP Point A PASS | фото `/uploads` 404 (ISSUES) — хранилище |
 
-**last_done:** intake TASK_95 + /unlazy ledger (G5–G6 baseline PASS · G1–G4 unmet · G7 Fly)  
-**next_step:** `/spec` TASK_95
+**last_done:** SPEC TASK_95 (7 путей · Не ломать/Проверка) · ledger G5–G6 PASS  
+**next_step:** подтвердить 4 решения SPEC → `/sbr` RED
 
 **ctx_trim:** `2026-09-22`
 

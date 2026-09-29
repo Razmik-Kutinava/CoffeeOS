@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-29 — docs: TASK_95 SPEC
+
+- `todo.md` → TASK_95: 7 путей (migration · model · OfferPresentationService · SubscriptionOffersController · routes · profile · PaymentFulfillment) + Не ломать / Проверка
+- Решения по умолчанию: флаги в `/shop/api/profile` · +`POST subscription_offer/shown` (пробел ТЗ) · `mark_purchased` в `PaymentFulfillment` · заказы на текущей точке · таблица без RLS как `subscriptions`
+
 ## 2026-09-29 — docs: TASK_95 intake + /unlazy ledger
 
 - Intake: [`TASK-95-…`](../milestones/veha_2/requirements/customer_tasks/TASK-95-Состояние-оффера-подписки-на-гостя.md) · CBR #95 · полный SBR (новая фича)
