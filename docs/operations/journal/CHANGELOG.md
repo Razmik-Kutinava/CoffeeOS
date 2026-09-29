@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-29 — ops: Fly v504 deploy (TASK_95–99) + пачка приёмки
+
+- CI + Semgrep + CodeQL green на `0a3ac0db` ([36578912741](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/36578912741)) → `fly deploy` v504
+- Миграции `subscription_offer_states` + `marketing_events` на проде · Fly logs без 5xx · Sentry 24h 0 issues
+- Проверка на проде: эндпоинты `subscription_offer/*` → 401 без auth; bundle с баннером/LK/`requestPermission`; SW `offer_url`; `OfferFunnelReport` / `OfferPresentationService` read-only OK · [MCP_RESULT](../milestones/veha_2/artifacts/mcp/fly_v504_2026-09-29/MCP_RESULT.md)
+- Открыто: TASK_99 G4 физический iPhone · live offer — после billing UI
+
 ## 2026-09-29 — feat: TASK_99 iOS WebPush — системный диалог разрешения (REVIEW)
 
 - `firebasePush.js`: `Notification.requestPermission()` — первый async после sync-проверки `"Notification" in window`; `isSupported()` / `firebaseClientConfigured()` / `getToken()` / `/push/register` — только после `granted`; `opts.deps` для тестов (дефолт = реальные функции)
