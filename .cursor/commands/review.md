@@ -2,7 +2,7 @@
 
 **Канон (не дублировать):** [`spec-build-review.mdc`](../rules/workflow/spec-build-review.mdc) § PHASE 3.
 
-Порядок: local → `bugbot`+`security-review` → Entire (`explain` не пустой, иначе attach, не push) → push/CI (логи, чин, снова push) → **CI green → стоп**. Deploy — апрув владельца.
+Порядок: local → `bugbot`+`security-review` + **`/crit-audit`** ([`crit-audit.md`](crit-audit.md); находки субагентов фильтруются по C1–C5 + падающий тест, вердикт `CLEAN` обязателен) → Entire (`explain` не пустой, иначе attach, не push) → push/CI (логи, чин, снова push) → **CI green → стоп**. Deploy — апрув владельца.
 
 ## COMPONENT_MAP (опционально, после принятия)
 

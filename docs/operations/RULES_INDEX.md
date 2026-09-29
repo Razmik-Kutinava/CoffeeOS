@@ -30,6 +30,7 @@
 | `workflow/coffeeos-customer-intake.mdc` | PHASE 0: ТЗ → `customer_tasks/` · **ID заказчика = канон** (EXT = суффикс) |
 | `workflow/coffeeos-context-hygiene.mdc` | `/ctx-trim` — архив ops, сжатие ISSUES; weekly пт–вс + 1–3 число месяца |
 | `workflow/coffeeos-unlazy.mdc` | `/unlazy` · GATES ledger для substantial work; Stop-hook/Depth Tree — нет по умолчанию |
+| `workflow/coffeeos-critical-audit.mdc` | `/crit-audit` · критично = C1–C5 + падающий тест; журнал `docs/operations/dev/CRITICAL_LEDGER.md`; вердикт CLEAN/BLOCKED; шаг 2 PHASE 3 |
 | `workflow/coffeeos-task-patch.mdc` | `/patch` · кривая задача: патч / доп.задача / переписать; канон `docs/operations/dev/TASK_PATCH.md` |
 | `project/coffeeos-performance.mdc` | N+1 / SQL (globs `app|db|test|lib/**/*.rb`) |
 | `project/coffeeos-services.mdc` | Сервис-объекты |

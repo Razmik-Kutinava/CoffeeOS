@@ -9,6 +9,7 @@ Slash-команды в чате Agent: введи `/` и выбери имя ф
 | `/sbr` | `sbr.md` | RED→GREEN | `/regress` |
 | `/regress` | `regress.md` | Тесты зоны **до** push/Fly | `/review` |
 | `/review` | `review.md` | PHASE 3: local → 2 субагента → Entire → push/CI → стоп | `deploy — только по апруву` |
+| `/crit-audit` | `crit-audit.md` | Аудит критических (C1–C5 + падающий тест, журнал, вердикт CLEAN/BLOCKED); сам в `/review` | `/review` или `/sbr` |
 | `/trace-bug` | `trace-bug.md` | Сквозной аудит бага оплата/OTP/merge (до правок) | `/spec` или `/sbr` |
 | `/ctx-trim` | `ctx-trim.md` | Архив ops, сжатие ISSUES, аудит rules, анализ токенов | `/start` |
 | `/unlazy` | `unlazy.md` | Substantial: GATES ledger + gate-check (не мелочь) | `/sbr` / `/regress` / `/review` |

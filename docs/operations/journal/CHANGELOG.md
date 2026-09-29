@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-29 — docs: /crit-audit — конечный аудит критических ошибок
+
+- Новое правило `workflow/coffeeos-critical-audit.mdc`: критично = только C1–C5 (тенанты, деньги/оплата, авторизация, падение hot-path, потеря данных); находка только с `файл:строка` + сценарием + падающим тестом; scope = дифф от `last_audited_sha`; вердикт `CLEAN` / `BLOCKED: N` по объективным гейтам (CI · `bin/smoke` · Fly MCP Point A)
+- Журнал `docs/operations/dev/CRITICAL_LEDGER.md` (открыто / исправлено / отклонено) — новый чат не повторяет закрытое
+- Команда `/crit-audit`; встроена в `/review` и PHASE 3 шаг 2 (`spec-build-review.mdc`); блокеры в `coffeeos-code-review.mdc` = C1–C5; индексы обновлены
+
 ## 2026-09-29 — ops: Fly v504 deploy (TASK_95–99) + пачка приёмки
 
 - CI + Semgrep + CodeQL green на `0a3ac0db` ([36578912741](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/36578912741)) → `fly deploy` v504
