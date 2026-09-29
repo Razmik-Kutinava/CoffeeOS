@@ -1,0 +1,30 @@
+{
+  "fly_version": 503,
+  "head": "2a9adacb",
+  "ci": "36253679528",
+  "image": "deployment-01M3NZFK3A1M4H7CC5H02S188S",
+  "local": { "rails": "65/0", "js": "22/0" },
+  "migration": { "version": "20260926190000", "columns": "PASS", "index": "PASS" },
+  "browser": {
+    "catalog": "PASS",
+    "cart_add_10rub": "PASS",
+    "checkout_hash": "PASS",
+    "cart_cleared": "PASS",
+    "live_pay": "SKIP_customer_profile_safety"
+  },
+  "api": {
+    "user_cards_growth_promo_amount_rub": "PASS",
+    "config_subscription_offer_enabled_false": "PASS",
+    "subscriptions_unauth_401": "PASS"
+  },
+  "sentry_24h": "SKIP_mcp_auth_timeout",
+  "fly_logs_5xx_after_deploy": 0,
+  "features": {
+    "growth_promo_amount_rub": "PASS",
+    "cta_cache_clear": "PASS_bundle",
+    "issue_77_patch1": "PASS_local",
+    "task1_patch1_emergency_disable": "PASS",
+    "task3_patch1": "PASS_wire"
+  },
+  "findings": ["product_uploads_ephemeral_404", "redundant_index_subscription_usage_events_sub"]
+}

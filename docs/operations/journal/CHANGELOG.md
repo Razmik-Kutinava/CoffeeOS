@@ -11,6 +11,16 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-29 — ops: Fly v503 deploy + Point A MCP (batch since v502)
+
+- HEAD `2a9adacb` · CI [`36253679528`](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/36253679528) + Semgrep + CodeQL green
+- В релизе: GrowthPromo `amount_rub` · CTA cache clear · #77 Patch 1 · Задача-1 Patch 1 · Задачи-3 Patch 1 (migration `20260926190000`)
+- Local: Rails зона подписок **65/0** · JS **22/0**
+- Prod: миграция/колонки/индекс OK · health passing · 5xx нет
+- MCP Point A: catalog/cart/checkout PASS · `growth_promo.amount_rub=11` · offer `enabled=false` · subscriptions без auth 401 · Sentry skip (OAuth)
+- Finding: фото `/uploads/products` 404 после деплоя (эфемерный диск) → ISSUES
+- Артефакт: `milestones/veha_2/artifacts/mcp/fly_v503_2026-09-29/`
+
 ## 2026-09-26 — review: Задачи-3 Патч 1 — CI green
 
 - Local: subscriptions 29/0 · CTA JS 18 PASS
