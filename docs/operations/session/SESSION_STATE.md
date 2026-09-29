@@ -7,7 +7,7 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **TASK_96** intake `[x]` · [ТЗ](../milestones/veha_2/requirements/customer_tasks/TASK-96-Оффер-подписки-frontend-push-и-аналитика.md) | `/spec` #96 · решить overlap TASK_97/98 |
+| **TASK_96** intake `[x]` · [ТЗ](../milestones/veha_2/requirements/customer_tasks/TASK-96-Оффер-подписки-frontend-push-и-аналитика.md) · [GATES](../milestones/veha_2/artifacts/subscription_offer_frontend_push_analytics/GATES.md) G5–G6 PASS · G1–G4 unmet (нет тестов) · G7 pending | `/spec` #96 · решить overlap TASK_97/98 |
 | **TASK_95** GREEN `42b61e1c` · regress PASS 190/0 (подписки·профиль·T-Bank callback·RLS) | `/review` #95 · docs Subtask 26–28 · G7 Fly после deploy |
 | **Fly v503** `2a9adacb` · MCP Point A PASS | фото `/uploads` 404 (ISSUES) — хранилище |
 
