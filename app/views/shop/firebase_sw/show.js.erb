@@ -126,6 +126,11 @@ self.addEventListener("notificationclick", function (event) {
   var tenantId = data.tenant_id;
   var action = event.action || "";
 
+  if (data.offer_url) {
+    event.waitUntil(openClient(String(data.offer_url)));
+    return;
+  }
+
   if (!orderId) return;
 
   if (action === "cancel" || action === "chat" || action === "tips") {

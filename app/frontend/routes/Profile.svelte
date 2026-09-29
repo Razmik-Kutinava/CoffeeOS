@@ -10,6 +10,7 @@
     orderHistoryTitle
   } from "../lib/shopAccountOrders.js"
   import PlgBlockSection from "../components/PlgBlockSection.svelte"
+  import SubscriptionOfferCard from "../components/SubscriptionOfferCard.svelte"
   import ContactSupportSheet from "../components/ContactSupportSheet.svelte"
   import PageSkeleton from "../components/PageSkeleton.svelte"
   import { MessageCircle, Settings } from "lucide-svelte"
@@ -94,6 +95,8 @@
   </div>
 
   <PlgBlockSection />
+
+  <SubscriptionOfferCard />
 
   <section class="history" data-testid="shop-lk-order-history">
     <h2>История заказов</h2>

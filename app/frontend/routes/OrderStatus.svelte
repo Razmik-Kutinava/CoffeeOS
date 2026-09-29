@@ -31,6 +31,7 @@
   } from "../lib/orderCancelFlow.js"
   import PageSkeleton from "../components/PageSkeleton.svelte"
   import OrderCancelModal from "../components/OrderCancelModal.svelte"
+  import SubscriptionOfferBanner from "../components/SubscriptionOfferBanner.svelte"
 
   let { params } = $props()
 
@@ -338,6 +339,8 @@
         </div>
       </div>
     {/if}
+
+    <SubscriptionOfferBanner {order} />
 
     <section class="card">
       <h2 class="card-title">Состав заказа</h2>

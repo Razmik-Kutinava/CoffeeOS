@@ -120,6 +120,20 @@ PWA / mobile витрина. Tenant: `@shop_tenant` из `tenant_id` query ил�
 
 **Tests:** `subscription_offer_state_api_test.rb` · `subscription_offer_lifecycle_test.rb` · `offer_presentation_service_test.rb`
 
+### Funnel events (TASK_96)
+
+| Method | Path | Service / controller | Notes |
+|--------|------|----------------------|-------|
+| POST | `subscription_offer/opened` | `#opened` → `Subscriptions::MarketingEventLogger` | body `{ channel: banner\|lk\|push, utm_campaign, utm_content, push_notification_id? }`; `push` → `push_opened`, иначе `offer_opened`; 204; неизвестный channel → 422; FE шлёт `navigator.sendBeacon` (тело может прийти `text/plain` — разбирается из raw body) |
+
+Side-effects: `shown` (фактический переход) → `banner_shown` + push-оффер (`Subscriptions::OfferPushNotifier`) · `dismiss` → `banner_dismissed` · `viewed` → `lk_viewed` · успешная доставка push → `push_sent` (`Shop::SendPushNotificationJob`) · активация подписки → `subscription_purchased` (`PaymentFulfillment`; UTM покупки приоритетнее, иначе последний `offer_opened`/`push_opened` гостя). Ошибка записи события не ломает основной flow (savepoint + rescue).
+
+Хранилище: `marketing_events` (`event_type`, `customer_id`, `point_id`, `utm_campaign`, `utm_content`, `channel`, `occurred_at`, `metadata` jsonb), customer-scoped без RLS как `subscriptions`. Отчёт: `GET /manager/subscription_offer_funnel?from=&to=` (JSON, `Current.tenant_id`, `Manager::ReportPolicy`) → `{ rows: [{ event_type, channel, count }], totals }`.
+
+UTM: `utm_campaign=subscription_offer`, `utm_content=<channel>_v1`. Цель перехода — `#/profile?offer_channel=…&utm_*` до появления экрана оформления подписки (billing UI, Задача-3).
+
+**Tests:** `subscription_offer_marketing_events_test.rb` · `subscription_offer_funnel_test.rb` · `offer_push_notifier_test.rb` · `marketing_event_test.rb`
+
 ---
 
 ## Payments (shop → T-Bank)

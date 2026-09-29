@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_29_120000) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_29_150000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_stat_statements"
@@ -385,6 +385,22 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_29_120000) do
     t.check_constraint "balance_after >= 0", name: "chk_loyalty_txn_balance_after"
     t.check_constraint "points > 0", name: "chk_loyalty_txn_points"
     t.check_constraint "transaction_type::text = ANY (ARRAY['earn'::character varying::text, 'spend'::character varying::text, 'expire'::character varying::text, 'manual_add'::character varying::text, 'manual_subtract'::character varying::text])", name: "chk_loyalty_txn_type"
+  end
+
+  create_table "marketing_events", id: :uuid, default: -> { "gen_random_uuid()" }, comment: "TASK_96: subscription offer funnel events", force: :cascade do |t|
+    t.string "channel", limit: 16
+    t.datetime "created_at", null: false
+    t.uuid "customer_id", null: false
+    t.string "event_type", limit: 32, null: false
+    t.jsonb "metadata", default: {}, null: false
+    t.datetime "occurred_at", null: false
+    t.uuid "point_id"
+    t.string "utm_campaign", limit: 100
+    t.string "utm_content", limit: 100
+    t.index ["customer_id", "event_type", "occurred_at"], name: "idx_marketing_events_customer_type"
+    t.index ["point_id", "occurred_at"], name: "idx_marketing_events_point_occurred"
+    t.check_constraint "channel IS NULL OR (channel::text = ANY (ARRAY['banner'::text, 'lk'::text, 'push'::text]))", name: "chk_marketing_events_channel"
+    t.check_constraint "event_type::text = ANY (ARRAY['banner_shown'::text, 'banner_dismissed'::text, 'lk_viewed'::text, 'offer_opened'::text, 'push_sent'::text, 'push_opened'::text, 'subscription_purchased'::text])", name: "chk_marketing_events_event_type"
   end
 
   create_table "menu_types", id: :uuid, default: -> { "gen_random_uuid()" }, comment: "Типы меню (kiosk, main, seasonal)", force: :cascade do |t|
@@ -1464,6 +1480,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_29_120000) do
   add_foreign_key "loyalty_transactions", "orders", on_delete: :nullify
   add_foreign_key "loyalty_transactions", "tenants", on_delete: :nullify
   add_foreign_key "loyalty_transactions", "users", column: "created_by_id", on_delete: :nullify
+  add_foreign_key "marketing_events", "mobile_customers", column: "customer_id"
   add_foreign_key "mobile_carts", "mobile_customers", column: "customer_id", on_delete: :cascade
   add_foreign_key "mobile_carts", "tenants", on_delete: :cascade
   add_foreign_key "mobile_payment_methods", "mobile_customers", column: "customer_id", on_delete: :cascade

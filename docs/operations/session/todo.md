@@ -15,7 +15,7 @@
 - [x] /unlazy ledger (G5–G6 baseline PASS)
 - [x] PHASE 1 SPEC
 - [x] PHASE 2 RED — G1–G4 (Ruby 38 runs · 13 F · 25 E; JS — модуль отсутствует)
-- [ ] PHASE 2 GREEN
+- [x] PHASE 2 GREEN — G1–G6 reverify PASS · соседи 80/0 · vite build OK
 - [ ] /regress
 - [ ] PHASE 3 REVIEW — push/CI · deploy по апруву · G7 Fly
 
@@ -100,13 +100,13 @@ Fly MCP Point A (G7, после deploy): статус `ready` → баннер �
 
 ## DoD
 
-- [ ] Subtask 1–13: баннер + карточка ЛК + error-path (G1)
-- [ ] Subtask 14–21: `OfferPushNotifier` + idempotency (G2)
-- [ ] Subtask 22–30: `marketing_events` + события (G3)
-- [ ] Subtask 31–33: атрибуция покупки + отчёт (G4)
-- [ ] Subtask 34, 36: unit + регрессия (G1, G5–G6)
-- [ ] Subtask 35: E2E на Fly (G7)
-- [ ] Docs integrations + COMPONENT_MAP
+- [x] Subtask 1–13: баннер + карточка ЛК + error-path (G1) — цель перехода `#/profile` до billing UI
+- [x] Subtask 14–21: `OfferPushNotifier` + idempotency (G2)
+- [x] Subtask 22–30: `marketing_events` + события (G3)
+- [x] Subtask 31–33: атрибуция покупки + отчёт (G4)
+- [x] Subtask 34, 36: unit + регрессия (G1, G5–G6)
+- [ ] Subtask 35: E2E на Fly (G7) — после deploy; «переход в оформление» — после billing UI
+- [x] Docs integrations + COMPONENT_MAP
 
 ---
 

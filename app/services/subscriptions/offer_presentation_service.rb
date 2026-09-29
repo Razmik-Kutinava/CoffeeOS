@@ -29,20 +29,27 @@ module Subscriptions
       }
     end
 
+    # true — только при фактическом переходе в shown (TASK_96: на него вешаются banner_shown + push).
     def mark_shown
-      return unless call[:should_show_banner]
+      return false unless call[:should_show_banner]
 
-      with_state do |state|
-        next if state.shown? || state.purchased?
+      transitioned = false
+      state = with_state do |s|
+        next if s.shown? || s.purchased?
 
         now = Time.current
-        state.update!(
+        s.update!(
           status: :shown,
-          first_shown_at: state.first_shown_at || now,
-          unread_since: state.unread_since || now,
+          first_shown_at: s.first_shown_at || now,
+          unread_since: s.unread_since || now,
           completed_orders_count_at_dismissal: nil
         )
+        transitioned = true
       end
+      return false unless transitioned
+
+      after_shown_transition(state)
+      true
     end
 
     def mark_dismissed
@@ -76,6 +83,19 @@ module Subscriptions
     end
 
     private
+
+    # Ключ уникален на каждый переход: updated_at строки меняется при каждом shown (в т.ч. повторном после 3 заказов).
+    def after_shown_transition(state)
+      transition_key = "#{state.id}:#{state.updated_at.utc.iso8601(6)}"
+      Subscriptions::MarketingEventLogger.log(
+        event_type: :banner_shown,
+        customer_id: @customer.id,
+        point_id: @point.id,
+        channel: "banner",
+        metadata: { "transition_key" => transition_key }
+      )
+      Subscriptions::OfferPushNotifier.call(customer: @customer, point: @point, transition_key: transition_key)
+    end
 
     def current_state
       SubscriptionOfferState.find_by(customer_id: @customer.id)

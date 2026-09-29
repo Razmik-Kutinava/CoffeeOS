@@ -62,6 +62,8 @@ Barista update_status
 
 **TASK_95 Offer presentation state (ready):** решение о показе баннера/push оффера — только backend. На `ready` FE читает `GET /shop/api/profile` → `should_show_banner` / `has_unread_offer_in_lk` (`Subscriptions::OfferPresentationService`); FE **не** вычисляет eligibility / промо 11₽ / счётчик заказов сам. После рендера баннера → `POST subscription_offer/shown`; смахивание → `dismiss`; открытие оффера в ЛК → `viewed`. Backend-хука в смену статуса нет; `orderStatusCtaMachine.js` и Cable-контракт не менялись.
 
+**TASK_96 Offer banner / LK card / push:** `SubscriptionOfferBanner` монтируется в `OrderStatus.svelte` после прогресса (показ: `order.status=ready` + `should_show_banner` + сессия; один `shown` на заказ); `SubscriptionOfferCard` — в `Profile.svelte` после PLG (eligible + нет активной подписки по `GET subscriptions/current`; unread → `viewed` оптимистично). Push-оффер: `Subscriptions::OfferPushNotifier` на фактический переход в `shown` при `push_enabled_at` + `push_token`, через `PushNotification` (`notification_type: subscription_offer`) + `SendPushNotificationJob`; один push на переход (`payload.offer_transition_key`). Payload без `order_id`, с `offer_url`; SW `notificationclick` открывает `offer_url` до order-веток (chat/tips/cancel не менялись). Открытие по push → `POST subscription_offer/opened` с `channel=push`.
+
 ENV: Firebase/VAPID — см. `Shop::FirebaseConfig`.
 
 ---

@@ -55,6 +55,7 @@ Rails.application.routes.draw do
     get "/menu", to: "menu#index", as: :menu
     patch "/menu/settings/:id/price", to: "menu#update_price", as: :menu_setting_price
     get "/reports", to: "reports#index", as: :reports
+    get "/subscription_offer_funnel", to: "subscription_offer_funnel#show", as: :subscription_offer_funnel
 
     resources :staff_members, path: "staff", controller: "staff", only: %i[index new create edit update]
     get "/devices", to: "devices#index", as: :devices
@@ -244,6 +245,7 @@ Rails.application.routes.draw do
       post "subscription_offer/shown", to: "subscription_offers#shown"
       post "subscription_offer/dismiss", to: "subscription_offers#dismiss"
       post "subscription_offer/viewed", to: "subscription_offers#viewed"
+      post "subscription_offer/opened", to: "subscription_offers#opened"
     end
     # SPA hash-routes иногда попадают на сервер как /shop/... — отдаём shell витрины
     get "*spa_path", to: "pages#home", constraints: ->(req) { req.format.html? }
