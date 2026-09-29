@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-29 — docs: TASK_97 intake
+
+- `customer_tasks/TASK-97-Push-оффер-подписки.md` — Google Doc 1:1 + заметки агента; патчей/EXT/комментариев в доке нет
+- CBR #97 (intake) · пересечение: целиком ⊂ TASK_96 Subtask 14–21 (backend `OfferPushNotifier`), без SW deep link / аналитики → не зависит от billing UI · судьба — решение владельца
+
 ## 2026-09-29 — docs: TASK_96 SPEC
 
 - `todo.md` → TASK_96 (весь scope, Subtask 1–36): 14 групп путей (frontend модуль+баннер+карточка · OfferPushNotifier · SW `offer_url` · marketing_events + logger · `POST subscription_offer/opened` · атрибуция в PaymentFulfillment · OfferFunnelReport + manager JSON) + Не ломать / Проверка
