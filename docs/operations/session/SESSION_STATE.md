@@ -2,16 +2,16 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-29 (Fly v503 deploy + MCP)  
+**Дата:** 2026-09-29 (TASK_95 intake)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **Fly v503** `2a9adacb` · CI `36253679528` · MCP Point A PASS | фото `/uploads` 404 (ISSUES) — хранилище |
-| Point A offer OFF | wiring OrderCreator / SKU — backlog |
+| **TASK_95** intake `[x]` · [ТЗ](../milestones/veha_2/requirements/customer_tasks/TASK-95-Состояние-оффера-подписки-на-гостя.md) · полный SBR | `/spec` #95 |
+| **Fly v503** `2a9adacb` · MCP Point A PASS | фото `/uploads` 404 (ISSUES) — хранилище |
 
-**last_done:** deploy v503 · Local 65/0 + JS 22/0 · MCP catalog/cart/API · Sentry skip  
-**next_step:** стоп · решение по хранилищу фото
+**last_done:** PHASE 0 intake TASK_95 (ТЗ 1:1 + artifacts + CBR #95)  
+**next_step:** `/spec` TASK_95
 
 **ctx_trim:** `2026-09-22`
 
