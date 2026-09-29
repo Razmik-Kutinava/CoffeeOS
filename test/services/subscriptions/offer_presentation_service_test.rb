@@ -204,6 +204,39 @@ module Subscriptions
       assert_equal false, result[:has_unread_offer_in_lk]
     end
 
+    test "reshow counts 3 new completed orders on the current point, not a snapshot from another point" do
+      other = create_tenant!
+      SubscriptionOfferSetting.create!(
+        point_id: other.id, enabled: true, second_cta_mode: "subscription",
+        min_completed_orders: 1, required_signals_count: 1
+      )
+      4.times { create_order!(status: :issued) }
+      service.mark_shown
+      service.mark_dismissed
+      assert_equal 5, state.completed_orders_count_at_dismissal
+
+      create_order!(status: :issued, tenant: other)
+      assert_equal false, service(point: other).call[:should_show_banner]
+
+      2.times { create_order!(status: :issued, tenant: other) }
+      assert_equal true, service(point: other).call[:should_show_banner]
+    end
+
+    test "active subscriber without offer state gets no banner and no unread" do
+      plan = SubscriptionPlan.create!(
+        code: "ops_#{SecureRandom.hex(2)}", price: 99, currency: "RUB", period_days: 7,
+        drink_limit: 5, discount_price_per_drink: 119, over_limit_discount_percent: 20, active: true
+      )
+      sub = Subscription.new(customer_id: @customer.id, plan_id: plan.id, purchase_point_id: @tenant.id, status: :active)
+      sub.start_period_from_plan!(plan)
+      sub.save!
+
+      assert_nil state
+      result = service.call
+      assert_equal false, result[:should_show_banner]
+      assert_equal false, result[:has_unread_offer_in_lk]
+    end
+
     test "purchased is terminal for shown/dismissed/viewed" do
       OfferPresentationService.mark_purchased!(customer_id: @customer.id)
       service.mark_shown
