@@ -13,8 +13,10 @@
 - [x] SPEC — патчи оформлены
 - [x] Патч B RED-попытка: SSR DOM-тесты (`svelte_ssr_helper.mjs` + 3 теста в `active_orders_accordion_test.mjs`) **сразу зелёные** — после `openOrderReceipt` HTML содержит `.aoa__receipt`, позицию, модификатор, `Total Amount`, inline `max-height: 350px; overflow-y: auto`, без `<button>`; только раскрытый заказ рендерит чек. Мутация `{#if false}` → 2 fail (тест не пустой). Стейт: `$state` proxy (`OrderStatusSheet.svelte:47`), `sync()` сохраняет раскрытый id (`:73–78`) — дефекта нет. **Вывод: рендер компонента исправен; RED не воспроизведён.**
 - [x] Патч B — причина **доказана** в браузере ([MEASURE](../milestones/veha_2/artifacts/active_orders_receipt_display_restore/patch1_browser_2026-09-30/MEASURE.md)): 390×844, клик CTA → `.aoa__receipt` 196px в DOM, видно **61px**; режут `.oss__panel.embedded.expanded` 224px (`OrderStatusSheet.svelte:348–350`, чек на 145px ниже верха) и `CartSheet` `overflow:hidden` 287px. Внешняя панель скроллится (498 > 224) — Subtask 11 нарушен. Одной CSS-правки панели мало — режет `CartSheet` (вне scope)
-- [ ] Патч B — решение владельца по scope фикса (в панели/аккордеоне vs высота `CartSheet`)
-- [ ] Патч B GREEN — только после доказательства (CSS `:344–350` станет разрешённым scope)
+- [x] Патч B — scope: вариант 1 (в аккордеоне, без `CartSheet`); подъём `CartSheet` при открытом чеке — кандидат в доп.задачу
+- [x] Патч B RED `d237ed6d` — `fitReceiptInView` (замер 390×844) + source-контракт `overscroll-behavior: contain`
+- [x] Патч B GREEN — `fitReceiptInView` + fit/scroll в `ActiveOrdersAccordion.svelte`; тесты 46/0, зона 134/0; браузер: чек виден целиком, Total Amount через свой scroll, внешняя панель не скроллится ([MEASURE](../milestones/veha_2/artifacts/active_orders_receipt_display_restore/patch1_browser_2026-09-30/MEASURE.md))
+- [ ] Патч B `/regress` → `/review`
 - [ ] Патч A RED/GREEN — отдельно от B (разные коммиты)
 
 ## Файлы (ожидаемо)

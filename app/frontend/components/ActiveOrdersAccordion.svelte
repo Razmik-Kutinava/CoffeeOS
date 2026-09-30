@@ -1,7 +1,9 @@
 <script>
   /** #36/#37/#41/#84 accordion: статус + OrderActionButtons + текстовый чек. */
+  import { tick } from "svelte"
   import {
     accordionRowView,
+    fitReceiptInView,
     receiptPanelView
   } from "../lib/activeOrdersAccordion.js"
   import { getDeviceOS } from "../lib/deviceDetect.js"
@@ -40,6 +42,14 @@
   )
   let receipt = $derived(receiptPanel.receipt)
   let scrollStyle = $derived(receiptPanel.scroll)
+  let receiptEl = $state(null)
+  let receiptCtaEl = $state(null)
+  let receiptFit = $state(null)
+  let receiptStyle = $derived(
+    `max-height: ${receiptFit ? `${receiptFit.maxHeightPx}px` : scrollStyle.maxHeight}; ` +
+      `overflow-y: ${scrollStyle.overflowY}` +
+      (receiptFit?.bottomGapPx ? `; margin-bottom: ${receiptFit.bottomGapPx}px` : "")
+  )
   let deviceOs = $derived(getDeviceOS())
   let receiptLabel = $derived(
     notifyActionsView({ os: deviceOs, walletAvailable: shopWalletAvailable() }).secondaryLabel
@@ -68,6 +78,60 @@
       orderId
     })
     if (init.restored) pushSubscribed = true
+  })
+
+  function isScrollBox(el) {
+    const cs = getComputedStyle(el)
+    return cs.overflowY === "auto" || cs.overflowY === "scroll"
+  }
+
+  function isClipBox(el) {
+    const cs = getComputedStyle(el)
+    return cs.overflowY !== "visible" || cs.overflow === "hidden"
+  }
+
+  function measureReceiptFit() {
+    const el = receiptEl
+    if (!el) return null
+    let container = el.parentElement
+    while (container && !isScrollBox(container)) container = container.parentElement
+    if (!container) return null
+    let clipBottom = window.innerHeight
+    for (let a = container; a && a !== document.documentElement; a = a.parentElement) {
+      if (isClipBox(a)) clipBottom = Math.min(clipBottom, a.getBoundingClientRect().bottom)
+    }
+    const box = container.getBoundingClientRect()
+    const anchor = receiptCtaEl || el
+    return {
+      container,
+      fit: fitReceiptInView({
+        containerTop: box.top,
+        containerBottom: box.bottom,
+        clipBottom,
+        anchorTop: anchor.getBoundingClientRect().top,
+        ctaHeightPx: receiptCtaEl ? receiptCtaEl.offsetHeight : 0
+      })
+    }
+  }
+
+  async function fitReceipt() {
+    const first = measureReceiptFit()
+    if (!first) return
+    receiptFit = first.fit
+    await tick()
+    const next = measureReceiptFit()
+    if (next) next.container.scrollTop += next.fit.scrollDelta
+  }
+
+  $effect(() => {
+    if (!receiptPanel.show || !receiptEl || !receipt) {
+      receiptFit = null
+      return
+    }
+    fitReceipt()
+    const onResize = () => { fitReceipt() }
+    window.addEventListener("resize", onResize)
+    return () => window.removeEventListener("resize", onResize)
   })
 
   function onDetail() {
@@ -206,6 +270,7 @@
       type="button"
       class="aoa__receipt-cta"
       data-testid="active-order-receipt-cta"
+      bind:this={receiptCtaEl}
       aria-expanded={row.expanded}
       aria-label={receiptLabel}
       onclick={onReceiptClick}
@@ -264,7 +329,8 @@
     <div
       class="aoa__receipt"
       data-testid="active-order-receipt"
-      style="max-height: {scrollStyle.maxHeight}; overflow-y: {scrollStyle.overflowY}"
+      bind:this={receiptEl}
+      style={receiptStyle}
     >
       {#each receipt.lines as line, i (i)}
         <div class="aoa__line">
@@ -476,6 +542,7 @@
     color: #ddd;
     font-size: 0.68rem;
     line-height: 1.35;
+    overscroll-behavior: contain;
   }
   .aoa__line { margin-bottom: 0.4rem; }
   .aoa__line-name { color: #fff; font-weight: 500; }

@@ -24,3 +24,16 @@
 4. Одной правки `OrderStatusSheet.svelte:344–350` недостаточно: даже без лимита панели её режет `CartSheet` (высота — `CartSheet.svelte:108–127`, `cartSheetThresholds.js`, вне scope патча).
 
 Скрин: [`receipt_clipped_390x844.png`](receipt_clipped_390x844.png)
+
+## После GREEN (тот же стенд и путь)
+
+Фикс: `fitReceiptInView` (`activeOrdersAccordion.js`) + `ActiveOrdersAccordion.svelte` — при раскрытии CTA прокручивается к верху `.oss__panel`, `max-height` чека = видимое место до клипа (`CartSheet`), `margin-bottom` = выступ панели за клип; `overscroll-behavior: contain`. `CartSheet` / `OrderStatusSheet` не менялись.
+
+| Сценарий | Результат |
+|---|---|
+| Заказ №1 (3 позиции) | чек 171/171px виден, низ = 844 (клип); свой scroll 194 > 169 · [`after_order1_fit.png`](after_order1_fit.png) |
+| Прокрутка внутри чека | `Total Amount: 940₽` виден; `.oss__panel.scrollTop` 110 → 110 (внешняя не скроллится); `overscroll-behavior-y: contain` · [`after_order1_scrolled_total.png`](after_order1_scrolled_total.png) |
+| Заказ №2 (последний) | чек 107/107px, `Total Amount: 300₽` низ 820 < 844; чек №1 закрыт (1 receipt в DOM) · [`after_order2_last.png`](after_order2_last.png) |
+| Повторный клик | 0 receipt, режим `peek` |
+
+Замечание: `cart-sheet.scrollTop = 3` после клика по №2 — от auto-scroll инструмента клика браузера (`Scrolled 1 nested container`), код скроллит только `.oss__panel`.
