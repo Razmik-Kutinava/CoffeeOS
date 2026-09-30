@@ -332,3 +332,30 @@ node --test test/javascript/active_orders_accordion_test.mjs
 - Заголовок Google Doc был `TASK_94: …`, но тело: **Тип: дополнительная задача**, **Расширяет: TASK-84**. В CBR **#94** уже занят (`TASK_94` LK history repeat). По канону intake EXT → суффикс к ID родителя: **`TASK_84-RECEIPT-DISPLAY-EXT`**, не новый `#94`.
 - Документ обрывается на секции RED (нет GREEN/DoD в источнике) — для SPEC достаточно Gherkin + scope.
 - Патчей и вложенных доп.задач в доке нет; Subtask 1–13 = критерии приёмки.
+
+---
+
+## Патч 1: 2026-09-30
+
+Основание: read-only аудит от 2026-09-30, факты: путь `«Состав заказа» → openOrderReceipt → toggleExpandedOrder → activeExpandedOrderId → receiptPanelView → receiptView → {#if receiptPanel.show && receipt}` (`ActiveOrdersAccordion.svelte:38–41`, `:78–80`, `:263–288`; `activeOrdersAccordion.js:27–32`, `:77–96`, `:102–124`); внешний лимит `OrderStatusSheet.svelte:348–350`.
+
+### Расхождение
+
+- Subtask 13: было «тест проверяет результат рендера DOM» / по факту `active_orders_accordion_test.mjs:266–320` проверяют текст `formatReceiptPanelText()`, `:322–329` — наличие строки `receiptPanelView(` в исходнике; монтирования Svelte-компонента в `test/` нет / расхождение: runtime-контракт не покрыт, фактическое отображение `.aoa__receipt` в DOM не подтверждено.
+- Subtask 11: было «прокручивается только содержимое receipt, внешняя шторка не получает scroll» / по факту receipt `max-height: 350px; overflow-y: auto` (`activeOrdersAccordion.js:5–8`, `ActiveOrdersAccordion.svelte:267`), но `.oss__panel.embedded.expanded` — `max-height: min(36vh, 14rem)` (= 224px при 16px) при `overflow-y: auto` от `.expanded` (`OrderStatusSheet.svelte:344–350`) / расхождение: внешний контейнер обрезает раньше внутреннего, контракт «scroll только внутри receipt» не гарантирован.
+- **Причина исчезновения receipt в браузере — не установлена.** CSS-лимит не считать причиной до подтверждения RED-тестом/воспроизведением.
+
+### Исправленный сценарий
+
+- [ ] Subtask 13 (patch v1): Given активный заказ с позицией и `total_amount` / When через фактический пользовательский путь (клик CTA «Состав заказа» в смонтированном `ActiveOrdersAccordion`) заказ переходит в expanded / Then DOM содержит `.aoa__receipt`, текст позиции из входных данных и `Total Amount`. Тест монтирует компонент (не `formatReceiptPanelText`, не regex по исходнику).
+- [ ] Subtask 11 (patch v1): Given receipt с длинным списком позиций внутри embedded+expanded шторки / When пользователь прокручивает receipt / Then скроллится только `.aoa__receipt`; внешняя `.oss__panel` не получает собственного scroll; receipt не обрезается внешним контейнером.
+- [ ] Устранить расхождение между runtime-контрактом и фактическим отображением. Причина определяется RED-тестом и привязывается к файлу:строке. Если RED покажет, что `.aoa__receipt` в DOM есть, но визуально обрезается, — CSS-правка `OrderStatusSheet.svelte:344–350` становится доказанным scope патча (исключение из «OrderStatusSheet — не затронуто» только для этих строк).
+
+### Не трогать
+
+См. `COMPONENT_MAP.md` строки `ActiveOrdersAccordion`, `OrderStatusSheet`: `aoa__dismiss` / `×` (принадлежит TASK_83 Патч 1), `accordionState` (общий объект), `receiptView` — пока не доказано, что проблема внутри него.
+
+### Scope
+
+Разрешено: RED DOM-тест (монтирование Svelte) для Subtask 11/13; код пути раскрытия в `ActiveOrdersAccordion.svelte` / `activeOrdersAccordion.js` — только по результату RED; CSS высоты `OrderStatusSheet.svelte:344–350` — только если RED докажет обрезание.
+Запрещено: backend active-orders API, `OrdersController#active`, `ActiveOrdersPresenter`, polling, ActionCable, reconnect, push, wallet, cancel API, `OrderActionButtons`, cancel-modal, `receiptView` (до доказательства), `×` / dismiss, старый chevron #36, негативный тест #35, Home Indicator, глобальная safe-area механика, «только peek», новые стрелки `>` / `v`.

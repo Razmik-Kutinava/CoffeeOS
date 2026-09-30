@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-30 — docs: /patch — TASK_83 Патч 1 (убрать ×) + TASK_84-RECEIPT-DISPLAY-EXT Патч 1 (receipt DOM + scroll)
+
+- Классификация по read-only аудиту: `×` → ПАТЧ TASK_83; receipt не подтверждён DOM-тестом + внешний `max-height: min(36vh, 14rem)` (`OrderStatusSheet.svelte:348–350`) перекрывает внутренний scroll 350px → ПАТЧ EXT (Subtask 11/13). Причина исчезновения receipt не установлена — определяется RED.
+- Доп.задачи в `DEMO_FEEDBACK` (`open`): «только peek», новые `>`/`v`, min Home Indicator (шторка / все экраны). Номера строк TASK_83 / `COMPONENT_MAP` — после Review. Код не менялся.
+
 ## 2026-09-29 — ops: первый /crit-audit — CLEAN (baseline)
 
 - Scope `0a3ac0db..dd072f3f`: 0 файлов в app/ lib/ db/ config/ frontend/ → находок нет · CI+Semgrep+CodeQL green на `0a3ac0db` · smoke/Fly MCP skip (код = CI-прогон) · `CRITICAL_LEDGER` baseline `dd072f3f`

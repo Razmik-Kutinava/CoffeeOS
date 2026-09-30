@@ -1,3 +1,52 @@
+# todo — Патчи 2026-09-30: TASK_83 (убрать ×) + TASK_84-RECEIPT-DISPLAY-EXT (receipt runtime)
+
+| Поле | Значение |
+|------|----------|
+| **Основание** | read-only аудит 2026-09-30 · классификация `/patch` |
+| **Патч A** | [TASK_83 § Патч 1](../milestones/veha_2/requirements/customer_tasks/TASK-83-status-sheet-dismiss.md) — убрать `×` |
+| **Патч B** | [TASK_84-RECEIPT-DISPLAY-EXT § Патч 1](../milestones/veha_2/requirements/customer_tasks/TASK-84-RECEIPT-DISPLAY-EXT-Восстановление-фактического-отображения-состава-чека-в-ActiveOrdersAccordion.md) — DOM-контракт receipt + внутренний scroll |
+| **Доп.задачи (backlog)** | «только peek» · новые `>`/`v` · min Home Indicator (шторка / все экраны) — [DEMO_FEEDBACK](../milestones/veha_2/requirements/DEMO_FEEDBACK.md) |
+| **Статус** | SPEC `[x]` · RED pending |
+
+## SBR: SPEC → RED
+
+- [x] SPEC — патчи оформлены
+- [ ] Патч B RED: DOM-тест `активный заказ → «Состав заказа» → expanded → .aoa__receipt → текст позиции → Total Amount` + scroll-контракт; причина → файл:строка
+- [ ] Патч B GREEN — только по результату RED
+- [ ] Патч A RED/GREEN — отдельно от B (разные коммиты)
+
+## Файлы (ожидаемо)
+
+- `app/frontend/components/ActiveOrdersAccordion.svelte` — A: `aoa__dismiss` (190–202) · B: путь раскрытия (38–41, 78–80, 263–288) только по RED
+- `app/frontend/components/OrderStatusSheet.svelte` — A: проп `onDismiss` (274), если мёртвый · B: `.oss__panel.embedded.expanded` (344–350) только если RED докажет обрезание
+- `app/frontend/lib/activeOrdersAccordion.js` — B, только по RED
+- `test/javascript/active_orders_accordion_test.mjs`, `test/javascript/order_status_notify_actions_test.mjs`
+
+## Не ломать
+
+- A не трогает receipt; B не трогает `×`/dismiss; общий объект — `accordionState` (форму не менять)
+- backend active-orders API, `OrdersController#active`, `ActiveOrdersPresenter`, polling, ActionCable, reconnect, push, wallet, cancel API, `OrderActionButtons`, cancel-modal
+- `receiptView` — пока не доказано, что проблема в нём · chevron #36 · негативный тест #35 · Home Indicator / safe-area
+- `COMPONENT_MAP.md` и номера строк в TASK_83 — только после Review
+
+## Открытый вопрос (до RED Патча B)
+
+- В `package.json` нет jsdom / testing-library. Варианты DOM-теста: `svelte/compiler` + `svelte/server` `render()` с предустановленным `accordionState` (без клика — фактический путь через клик не покрыт) **или** dev-зависимость (jsdom/happy-dom) для mount + click. Новая зависимость — по решению владельца.
+
+## Проверка
+
+- `node --test test/javascript/active_orders_accordion_test.mjs test/javascript/order_status_notify_actions_test.mjs`
+- зона: order status sheet / notify actions / accordion
+- Fly MCP Point A — после deploy по апруву
+
+## DoD
+
+- [ ] B: DOM содержит `.aoa__receipt`, позицию, `Total Amount` после фактического раскрытия
+- [ ] B: scroll только внутри receipt, внешняя панель без scroll
+- [ ] A: `×` нет в DOM; status/polling/Cable без изменений; тесты на наличие `×` заменены позитивным контрактом отсутствия
+
+---
+
 # todo — TASK_99: iOS — системный диалог разрешения WebPush
 
 | Поле | Значение |
