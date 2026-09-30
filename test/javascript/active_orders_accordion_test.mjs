@@ -424,4 +424,10 @@ describe("TASK_84-RECEIPT-DISPLAY-EXT Патч 1 — receipt fits visible area [
     assert.match(src, /fitReceiptInView\s*\(/)
     assert.match(src, /overscroll-behavior:\s*contain/)
   })
+
+  it("re-fits after panel max-height transition ends (bugbot)", () => {
+    const src = readFileSync(accordionComponentPath, "utf8")
+    assert.match(src, /addEventListener\(\s*["']transitionend["']/)
+    assert.match(src, /removeEventListener\(\s*["']transitionend["']/)
+  })
 })
