@@ -11,6 +11,10 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-30 — docs: TASK_84-RECEIPT-DISPLAY-EXT Патч 1 — причина исчезновения чека доказана
+
+- Local dev 390×844, реальный клик «Состав заказа»: `.aoa__receipt` в DOM (196px), видно 61px. Режут `.oss__panel.embedded.expanded` 224px (`OrderStatusSheet.svelte:348–350`) и `CartSheet` `overflow:hidden` 287px. Артефакт: `artifacts/active_orders_receipt_display_restore/patch1_browser_2026-09-30/`. Код не менялся.
+
 ## 2026-09-30 — test: TASK_84-RECEIPT-DISPLAY-EXT Патч 1 — SSR DOM-контракт receipt
 
 - `test/javascript/svelte_ssr_helper.mjs`: loader-хук `svelte/compiler` (generate server) + `svelte/server` render, без новых зависимостей. 3 теста: свёрнуто — нет `.aoa__receipt`; после `openOrderReceipt` — `.aoa__receipt` + позиция + `Total Amount` + scroll 350px, без кнопок; только один раскрытый.
