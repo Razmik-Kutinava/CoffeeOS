@@ -150,14 +150,17 @@ const RECEIPT_GAP_PX = 6
  * Вписать раскрытый чек в видимую часть скролл-контейнера (Патч 1 EXT):
  * CTA прокручивается к верху контейнера, чек ограничен до нижней границы клипа
  * (контейнер или предок с overflow — CartSheet), дальше скроллится сам.
+ * `receiptOffsetPx` — фактическое расстояние от верха CTA до верха чека
+ * (между ними могут быть push recovery / toast); без него — CTA + зазор.
  * @param {{ containerTop: number, containerBottom: number, clipBottom: number,
- *   anchorTop: number, ctaHeightPx: number }} m
+ *   anchorTop: number, ctaHeightPx: number, receiptOffsetPx?: number }} m
  */
 export function fitReceiptInView(m) {
   const visibleBottom = Math.min(m.containerBottom, m.clipBottom)
-  const available = Math.floor(
-    visibleBottom - m.containerTop - m.ctaHeightPx - RECEIPT_GAP_PX
-  )
+  const offset = Number.isFinite(m.receiptOffsetPx)
+    ? m.receiptOffsetPx
+    : m.ctaHeightPx + RECEIPT_GAP_PX
+  const available = Math.floor(visibleBottom - m.containerTop - offset)
   return {
     maxHeightPx: Math.max(
       RECEIPT_MIN_HEIGHT_PX,

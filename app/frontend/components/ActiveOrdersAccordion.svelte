@@ -97,19 +97,25 @@
     while (container && !isScrollBox(container)) container = container.parentElement
     if (!container) return null
     let clipBottom = window.innerHeight
+    const clipBoxes = []
     for (let a = container; a && a !== document.documentElement; a = a.parentElement) {
-      if (isClipBox(a)) clipBottom = Math.min(clipBottom, a.getBoundingClientRect().bottom)
+      if (!isClipBox(a)) continue
+      clipBoxes.push(a)
+      clipBottom = Math.min(clipBottom, a.getBoundingClientRect().bottom)
     }
     const box = container.getBoundingClientRect()
     const anchor = receiptCtaEl || el
+    const anchorTop = anchor.getBoundingClientRect().top
     return {
       container,
+      clipBoxes,
       fit: fitReceiptInView({
         containerTop: box.top,
         containerBottom: box.bottom,
         clipBottom,
-        anchorTop: anchor.getBoundingClientRect().top,
-        ctaHeightPx: receiptCtaEl ? receiptCtaEl.offsetHeight : 0
+        anchorTop,
+        ctaHeightPx: receiptCtaEl ? receiptCtaEl.offsetHeight : 0,
+        receiptOffsetPx: receiptCtaEl ? el.getBoundingClientRect().top - anchorTop : undefined
       })
     }
   }
@@ -124,7 +130,7 @@
     if (gen !== fitGeneration) return null
     const next = measureReceiptFit()
     if (next) next.container.scrollTop += next.fit.scrollDelta
-    return first.container
+    return first
   }
 
   $effect(() => {
@@ -133,23 +139,37 @@
       receiptFit = null
       return
     }
+    // Блоки между CTA и чеком меняют отступ — перевписать.
+    void pushRecovery, toastMsg, settingsFallback
     const gen = ++fitGeneration
     let container = null
+    let observer = null
+    let frame = 0
+    const refit = () => {
+      cancelAnimationFrame(frame)
+      frame = requestAnimationFrame(() => fitReceipt(gen))
+    }
     // Панель анимирует max-height при expand — замер до конца transition неточный.
     const onTransitionEnd = (e) => {
-      if (e.target === container) fitReceipt(gen)
+      if (e.target === container) refit()
     }
-    const onResize = () => { fitReceipt(gen) }
-    fitReceipt(gen).then((c) => {
-      if (!c || gen !== fitGeneration) return
-      container = c
+    fitReceipt(gen).then((m) => {
+      if (!m || gen !== fitGeneration) return
+      container = m.container
       container.addEventListener("transitionend", onTransitionEnd)
+      // CartSheet меняет высоту драгом/режимом без window resize.
+      if (typeof ResizeObserver === "function") {
+        observer = new ResizeObserver(refit)
+        m.clipBoxes.forEach((box) => observer.observe(box))
+      }
     })
-    window.addEventListener("resize", onResize)
+    window.addEventListener("resize", refit)
     return () => {
       fitGeneration++
-      window.removeEventListener("resize", onResize)
+      cancelAnimationFrame(frame)
+      window.removeEventListener("resize", refit)
       if (container) container.removeEventListener("transitionend", onTransitionEnd)
+      if (observer) observer.disconnect()
     }
   })
 
