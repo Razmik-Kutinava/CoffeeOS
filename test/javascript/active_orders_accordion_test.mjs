@@ -18,6 +18,7 @@ import {
   accordionRowView,
   receiptView,
   receiptPanelView,
+  fitReceiptInView,
   statusMetaThird
 } from "../../app/frontend/lib/activeOrdersAccordion.js"
 import { openOrderReceipt } from "../../app/frontend/lib/orderStatusNotifyActions.js"
@@ -369,5 +370,58 @@ describe("TASK_84-RECEIPT-DISPLAY-EXT runtime receipt [TDD]", () => {
       /receiptPanelView\s*\(/,
       "component must call receiptPanelView (runtime path, not source-only receiptView)"
     )
+  })
+})
+
+describe("TASK_84-RECEIPT-DISPLAY-EXT Патч 1 — receipt fits visible area [TDD]", () => {
+  // Замер local 390×844: .oss__panel 638–862, CartSheet clip 844, CTA top 752.
+  const measured = {
+    containerTop: 638,
+    containerBottom: 862,
+    clipBottom: 844,
+    anchorTop: 752,
+    ctaHeightPx: 25
+  }
+
+  it("receipt bottom stays inside clip (CartSheet) after scrolling CTA to panel top", () => {
+    const fit = fitReceiptInView(measured)
+    const receiptTop = measured.containerTop + measured.ctaHeightPx + fit.gapPx
+    assert.ok(receiptTop + fit.maxHeightPx <= measured.clipBottom)
+    assert.equal(fit.scrollDelta, 114)
+    assert.equal(fit.bottomGapPx, 18)
+  })
+
+  it("receipt shorter than content gets own scroll (not the outer panel)", () => {
+    const fit = fitReceiptInView(measured)
+    assert.ok(fit.maxHeightPx < 196, "196px receipt must scroll inside itself")
+  })
+
+  it("caps at RECEIPT_SCROLL.maxHeightPx when space is large", () => {
+    const fit = fitReceiptInView({
+      containerTop: 0,
+      containerBottom: 900,
+      clipBottom: 900,
+      anchorTop: 100,
+      ctaHeightPx: 25
+    })
+    assert.equal(fit.maxHeightPx, RECEIPT_SCROLL.maxHeightPx)
+    assert.equal(fit.bottomGapPx, 0)
+  })
+
+  it("never collapses below a readable minimum", () => {
+    const fit = fitReceiptInView({
+      containerTop: 800,
+      containerBottom: 820,
+      clipBottom: 820,
+      anchorTop: 810,
+      ctaHeightPx: 25
+    })
+    assert.equal(fit.maxHeightPx, 64)
+  })
+
+  it("component fits receipt on expand and blocks scroll chaining", () => {
+    const src = readFileSync(accordionComponentPath, "utf8")
+    assert.match(src, /fitReceiptInView\s*\(/)
+    assert.match(src, /overscroll-behavior:\s*contain/)
   })
 })
