@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-30 — feat: TASK_84-RECEIPT-DISPLAY-EXT Патч 1 — чек в статусной шторке виден целиком (REVIEW)
+
+- `fitReceiptInView` (`activeOrdersAccordion.js`) + `ActiveOrdersAccordion.svelte`: при раскрытии CTA прокручивается к верху `.oss__panel`, `max-height` чека = видимое место до клипа (`CartSheet`), свой scroll + `overscroll-behavior: contain`. Refit на `transitionend` панели, `ResizeObserver` (CartSheet драг), смену push recovery/toast; устаревший async fit отбрасывается (`fitGeneration`).
+- Браузер 390×844: было 61/196px видно → целиком; `Total Amount` через scroll чека, внешняя панель не скроллится. `CartSheet`/`OrderStatusSheet`/`receiptView` не менялись.
+- REVIEW: bugbot 2 раунда (4 находки → fixed) · security чисто · `/crit-audit` CLEAN · JS зона 138/0 · Rails `active_orders_receipt` 4/0 · vite build OK.
+
 ## 2026-09-30 — docs: TASK_84-RECEIPT-DISPLAY-EXT Патч 1 — причина исчезновения чека доказана
 
 - Local dev 390×844, реальный клик «Состав заказа»: `.aoa__receipt` в DOM (196px), видно 61px. Режут `.oss__panel.embedded.expanded` 224px (`OrderStatusSheet.svelte:348–350`) и `CartSheet` `overflow:hidden` 287px. Артефакт: `artifacts/active_orders_receipt_display_restore/patch1_browser_2026-09-30/`. Код не менялся.

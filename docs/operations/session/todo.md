@@ -17,7 +17,8 @@
 - [x] Патч B RED `d237ed6d` — `fitReceiptInView` (замер 390×844) + source-контракт `overscroll-behavior: contain`
 - [x] Патч B GREEN — `fitReceiptInView` + fit/scroll в `ActiveOrdersAccordion.svelte`; тесты 46/0, зона 134/0; браузер: чек виден целиком, Total Amount через свой scroll, внешняя панель не скроллится ([MEASURE](../milestones/veha_2/artifacts/active_orders_receipt_display_restore/patch1_browser_2026-09-30/MEASURE.md))
 - [x] Патч B `/regress` PASS — JS 592 (60 fail = legacy baseline) · zone 134/0 · vite build · Rails active_orders_receipt 4/0
-- [ ] Патч B `/review`
+- [x] Патч B `/review`: bugbot → 2 раунда фиксов (transitionend refit + stale async guard `74b0dd48`; реальный отступ CTA→чек + ResizeObserver на CartSheet `0f06a868`) · security чисто · `/crit-audit` CLEAN · браузер: refit после анимации 101→171px, шторка −40px → 131px, низ по клипу
+- [ ] Патч B push → CI green → deploy по апруву → Fly MCP Point A
 - [ ] Патч A RED/GREEN — отдельно от B (разные коммиты)
 
 ## Файлы (ожидаемо)

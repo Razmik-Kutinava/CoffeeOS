@@ -347,9 +347,9 @@ node --test test/javascript/active_orders_accordion_test.mjs
 
 ### Исправленный сценарий
 
-- [ ] Subtask 13 (patch v1): Given активный заказ с позицией и `total_amount` / When через фактический пользовательский путь (клик CTA «Состав заказа» в смонтированном `ActiveOrdersAccordion`) заказ переходит в expanded / Then DOM содержит `.aoa__receipt`, текст позиции из входных данных и `Total Amount`. Тест монтирует компонент (не `formatReceiptPanelText`, не regex по исходнику).
-- [ ] Subtask 11 (patch v1): Given receipt с длинным списком позиций внутри embedded+expanded шторки / When пользователь прокручивает receipt / Then скроллится только `.aoa__receipt`; внешняя `.oss__panel` не получает собственного scroll; receipt не обрезается внешним контейнером.
-- [ ] Устранить расхождение между runtime-контрактом и фактическим отображением. Причина определяется RED-тестом и привязывается к файлу:строке. Если RED покажет, что `.aoa__receipt` в DOM есть, но визуально обрезается, — CSS-правка `OrderStatusSheet.svelte:344–350` становится доказанным scope патча (исключение из «OrderStatusSheet — не затронуто» только для этих строк).
+- [x] Subtask 13 (patch v1): Given активный заказ с позицией и `total_amount` / When через фактический пользовательский путь (клик CTA «Состав заказа» в смонтированном `ActiveOrdersAccordion`) заказ переходит в expanded / Then DOM содержит `.aoa__receipt`, текст позиции из входных данных и `Total Amount`. Тест монтирует компонент (не `formatReceiptPanelText`, не regex по исходнику).
+- [x] Subtask 11 (patch v1): Given receipt с длинным списком позиций внутри embedded+expanded шторки / When пользователь прокручивает receipt / Then скроллится только `.aoa__receipt`; внешняя `.oss__panel` не получает собственного scroll; receipt не обрезается внешним контейнером.
+- [x] Устранить расхождение между runtime-контрактом и фактическим отображением. **Итог:** причина — обрезание `.oss__panel` 224px + `CartSheet` 287px (MEASURE); фикс в аккордеоне (`fitReceiptInView`), `OrderStatusSheet`/`CartSheet` не менялись. Причина определяется RED-тестом и привязывается к файлу:строке. Если RED покажет, что `.aoa__receipt` в DOM есть, но визуально обрезается, — CSS-правка `OrderStatusSheet.svelte:344–350` становится доказанным scope патча (исключение из «OrderStatusSheet — не затронуто» только для этих строк).
 
 ### Не трогать
 
