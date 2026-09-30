@@ -11,8 +11,9 @@
 ## SBR: SPEC → RED
 
 - [x] SPEC — патчи оформлены
-- [ ] Патч B RED: DOM-тест `активный заказ → «Состав заказа» → expanded → .aoa__receipt → текст позиции → Total Amount` + scroll-контракт; причина → файл:строка
-- [ ] Патч B GREEN — только по результату RED
+- [x] Патч B RED-попытка: SSR DOM-тесты (`svelte_ssr_helper.mjs` + 3 теста в `active_orders_accordion_test.mjs`) **сразу зелёные** — после `openOrderReceipt` HTML содержит `.aoa__receipt`, позицию, модификатор, `Total Amount`, inline `max-height: 350px; overflow-y: auto`, без `<button>`; только раскрытый заказ рендерит чек. Мутация `{#if false}` → 2 fail (тест не пустой). Стейт: `$state` proxy (`OrderStatusSheet.svelte:47`), `sync()` сохраняет раскрытый id (`:73–78`) — дефекта нет. **Вывод: рендер компонента исправен; RED не воспроизведён.**
+- [ ] Патч B — доказать причину в браузере: гипотеза (не доказана) — чек в DOM, но уходит ниже видимой области `.oss__panel.embedded.expanded` `max-height: min(36vh, 14rem)` (`OrderStatusSheet.svelte:348–350`) под шапкой строки (прогресс + `OrderActionButtons` min-height 44px). Нужен визуальный прогон с активным заказом (local dev или Fly Point A) → скрин/`getBoundingClientRect` `.aoa__receipt` vs `.oss__panel`
+- [ ] Патч B GREEN — только после доказательства (CSS `:344–350` станет разрешённым scope)
 - [ ] Патч A RED/GREEN — отдельно от B (разные коммиты)
 
 ## Файлы (ожидаемо)
@@ -21,6 +22,7 @@
 - `app/frontend/components/OrderStatusSheet.svelte` — A: проп `onDismiss` (274), если мёртвый · B: `.oss__panel.embedded.expanded` (344–350) только если RED докажет обрезание
 - `app/frontend/lib/activeOrdersAccordion.js` — B, только по RED
 - `test/javascript/active_orders_accordion_test.mjs`, `test/javascript/order_status_notify_actions_test.mjs`
+- `test/javascript/svelte_ssr_helper.mjs` (+1 путь: loader-хук компиляции `.svelte` для SSR)
 
 ## Не ломать
 

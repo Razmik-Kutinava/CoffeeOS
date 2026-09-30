@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-30 — test: TASK_84-RECEIPT-DISPLAY-EXT Патч 1 — SSR DOM-контракт receipt
+
+- `test/javascript/svelte_ssr_helper.mjs`: loader-хук `svelte/compiler` (generate server) + `svelte/server` render, без новых зависимостей. 3 теста: свёрнуто — нет `.aoa__receipt`; после `openOrderReceipt` — `.aoa__receipt` + позиция + `Total Amount` + scroll 350px, без кнопок; только один раскрытый.
+- Результат: 30/0 сразу; мутация рендера → 2 fail. Дефекта в рендере/стейте нет — причина исчезновения вне компонента (гипотеза: обрезание внешней панелью, нужен браузер). Код приложения не менялся.
+
 ## 2026-09-30 — docs: /patch — TASK_83 Патч 1 (убрать ×) + TASK_84-RECEIPT-DISPLAY-EXT Патч 1 (receipt DOM + scroll)
 
 - Классификация по read-only аудиту: `×` → ПАТЧ TASK_83; receipt не подтверждён DOM-тестом + внешний `max-height: min(36vh, 14rem)` (`OrderStatusSheet.svelte:348–350`) перекрывает внутренний scroll 350px → ПАТЧ EXT (Subtask 11/13). Причина исчезновения receipt не установлена — определяется RED.

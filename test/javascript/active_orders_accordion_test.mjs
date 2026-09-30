@@ -21,6 +21,7 @@ import {
   statusMetaThird
 } from "../../app/frontend/lib/activeOrdersAccordion.js"
 import { openOrderReceipt } from "../../app/frontend/lib/orderStatusNotifyActions.js"
+import { renderSvelte } from "./svelte_ssr_helper.mjs"
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "../..")
 const accordionComponentPath = join(
@@ -317,6 +318,48 @@ describe("TASK_84-RECEIPT-DISPLAY-EXT runtime receipt [TDD]", () => {
     const panel = receiptPanelView(empty, state.activeExpandedOrderId)
     assert.equal(panel.show, true)
     assert.match(panel.text, /Total Amount:\s*0₽/)
+  })
+
+  it("SSR: collapsed row renders CTA but no .aoa__receipt", async () => {
+    const state = createActiveOrdersAccordionState(sampleOrders)
+    const html = await renderSvelte(accordionComponentPath, {
+      order: sampleOrders[0],
+      accordionState: state
+    })
+    assert.match(html, /data-testid="active-order-receipt-cta"/)
+    assert.doesNotMatch(html, /class="aoa__receipt[\s"]/)
+  })
+
+  it("SSR: after openOrderReceipt DOM has .aoa__receipt, item text, Total Amount", async () => {
+    const state = createActiveOrdersAccordionState(sampleOrders)
+    openOrderReceipt(state, "o1")
+    const html = await renderSvelte(accordionComponentPath, {
+      order: sampleOrders[0],
+      accordionState: state
+    })
+    assert.match(html, /class="aoa__receipt[\s"]/)
+    assert.match(html, /data-testid="active-order-receipt"/)
+    assert.match(html, /Капучино/)
+    assert.match(html, /\+ Сироп ваниль/)
+    assert.match(html, /Total Amount: 250₽/)
+    assert.match(html, /max-height: 350px; overflow-y: auto/)
+    const receiptHtml = html.slice(html.search(/class="aoa__receipt[\s"]/))
+    assert.doesNotMatch(receiptHtml, /<button/, "receipt must stay text-only")
+  })
+
+  it("SSR: only the expanded order renders .aoa__receipt", async () => {
+    const state = createActiveOrdersAccordionState(sampleOrders)
+    openOrderReceipt(state, "o1")
+    openOrderReceipt(state, "o2")
+    const [first, second] = await Promise.all(
+      sampleOrders.map((order) =>
+        renderSvelte(accordionComponentPath, { order, accordionState: state })
+      )
+    )
+    assert.doesNotMatch(first, /class="aoa__receipt[\s"]/)
+    assert.match(second, /class="aoa__receipt[\s"]/)
+    assert.match(second, /Эспрессо/)
+    assert.match(second, /Total Amount: 300₽/)
   })
 
   it("ActiveOrdersAccordion uses receiptPanelView for display path", () => {
