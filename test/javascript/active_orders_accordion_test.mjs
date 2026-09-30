@@ -437,3 +437,24 @@ describe("TASK_84-RECEIPT-DISPLAY-EXT Патч 1 — receipt fits visible area [
     assert.match(src, /gen\s*!==\s*fitGeneration/)
   })
 })
+
+describe("TASK_84-RECEIPT-DISPLAY-EXT Патч 1 — bugbot review 2 [TDD]", () => {
+  it("uses real CTA→receipt offset (toast / push recovery between them)", () => {
+    const fit = fitReceiptInView({
+      containerTop: 638,
+      containerBottom: 862,
+      clipBottom: 844,
+      anchorTop: 752,
+      ctaHeightPx: 25,
+      receiptOffsetPx: 90
+    })
+    assert.equal(fit.maxHeightPx, 844 - 638 - 90)
+    assert.ok(638 + 90 + fit.maxHeightPx <= 844)
+  })
+
+  it("re-fits on CartSheet / panel size change via ResizeObserver", () => {
+    const src = readFileSync(accordionComponentPath, "utf8")
+    assert.match(src, /new ResizeObserver\(/)
+    assert.match(src, /\.disconnect\(\)/)
+  })
+})
