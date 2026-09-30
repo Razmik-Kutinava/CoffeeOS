@@ -114,24 +114,43 @@
     }
   }
 
-  async function fitReceipt() {
+  let fitGeneration = 0
+
+  async function fitReceipt(gen) {
     const first = measureReceiptFit()
-    if (!first) return
+    if (!first || gen !== fitGeneration) return null
     receiptFit = first.fit
     await tick()
+    if (gen !== fitGeneration) return null
     const next = measureReceiptFit()
     if (next) next.container.scrollTop += next.fit.scrollDelta
+    return first.container
   }
 
   $effect(() => {
     if (!receiptPanel.show || !receiptEl || !receipt) {
+      fitGeneration++
       receiptFit = null
       return
     }
-    fitReceipt()
-    const onResize = () => { fitReceipt() }
+    const gen = ++fitGeneration
+    let container = null
+    // Панель анимирует max-height при expand — замер до конца transition неточный.
+    const onTransitionEnd = (e) => {
+      if (e.target === container) fitReceipt(gen)
+    }
+    const onResize = () => { fitReceipt(gen) }
+    fitReceipt(gen).then((c) => {
+      if (!c || gen !== fitGeneration) return
+      container = c
+      container.addEventListener("transitionend", onTransitionEnd)
+    })
     window.addEventListener("resize", onResize)
-    return () => window.removeEventListener("resize", onResize)
+    return () => {
+      fitGeneration++
+      window.removeEventListener("resize", onResize)
+      if (container) container.removeEventListener("transitionend", onTransitionEnd)
+    }
   })
 
   function onDetail() {
