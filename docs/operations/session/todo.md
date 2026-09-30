@@ -16,7 +16,8 @@
 - [x] Патч B — scope: вариант 1 (в аккордеоне, без `CartSheet`); подъём `CartSheet` при открытом чеке — кандидат в доп.задачу
 - [x] Патч B RED `d237ed6d` — `fitReceiptInView` (замер 390×844) + source-контракт `overscroll-behavior: contain`
 - [x] Патч B GREEN — `fitReceiptInView` + fit/scroll в `ActiveOrdersAccordion.svelte`; тесты 46/0, зона 134/0; браузер: чек виден целиком, Total Amount через свой scroll, внешняя панель не скроллится ([MEASURE](../milestones/veha_2/artifacts/active_orders_receipt_display_restore/patch1_browser_2026-09-30/MEASURE.md))
-- [ ] Патч B `/regress` → `/review`
+- [x] Патч B `/regress` PASS — JS 592 (60 fail = legacy baseline) · zone 134/0 · vite build · Rails active_orders_receipt 4/0
+- [ ] Патч B `/review`
 - [ ] Патч A RED/GREEN — отдельно от B (разные коммиты)
 
 ## Файлы (ожидаемо)
