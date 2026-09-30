@@ -29,9 +29,11 @@
 - `receiptView` — пока не доказано, что проблема в нём · chevron #36 · негативный тест #35 · Home Indicator / safe-area
 - `COMPONENT_MAP.md` и номера строк в TASK_83 — только после Review
 
-## Открытый вопрос (до RED Патча B)
+## Решение владельца 2026-09-30
 
-- В `package.json` нет jsdom / testing-library. Варианты DOM-теста: `svelte/compiler` + `svelte/server` `render()` с предустановленным `accordionState` (без клика — фактический путь через клик не покрыт) **или** dev-зависимость (jsdom/happy-dom) для mount + click. Новая зависимость — по решению владельца.
+- DOM-тест Патча B: **SSR** — `svelte/compiler` + `svelte/server` `render()` с `accordionState` после `openOrderReceipt` (путь через стейт, без клика); новых зависимостей нет.
+- Ограничение: SSR не покрывает клик и не может проверить scroll-контракт (layout) → Subtask 11 проверяется визуально/Fly MCP после deploy; в отчёте GREEN указать явно.
+- Порядок: **B → A**.
 
 ## Проверка
 
