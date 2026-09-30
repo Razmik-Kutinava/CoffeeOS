@@ -430,4 +430,10 @@ describe("TASK_84-RECEIPT-DISPLAY-EXT Патч 1 — receipt fits visible area [
     assert.match(src, /addEventListener\(\s*["']transitionend["']/)
     assert.match(src, /removeEventListener\(\s*["']transitionend["']/)
   })
+
+  it("stale async fit is dropped after collapse / re-run (bugbot)", () => {
+    const src = readFileSync(accordionComponentPath, "utf8")
+    assert.match(src, /fitGeneration/)
+    assert.match(src, /gen\s*!==\s*fitGeneration/)
+  })
 })
