@@ -11,7 +11,7 @@
 - [x] SPEC — `dismissOrder` (lib) используется в `test/javascript/order_status_sheet_test.mjs` → **оставлен**; UI-цепочка `onDismissOrder` → `onDismiss` → `aoa__dismiss` после удаления кнопки мертва → убрана (Scope патча разрешает)
 - [x] RED `f7a6dc49` — 4 fail: SSR «× нет в DOM», source «нет `status-widget-dismiss`/«Скрыть статус заказа»», «нет `aoa__dismiss`/`onDismiss`», «шторка не пробрасывает `onDismiss={onDismissOrder}`»
 - [x] GREEN `93f500ee` — удалены кнопка `×`, проп `onDismiss`, CSS `.aoa__dismiss` (`ActiveOrdersAccordion.svelte`); проброс `onDismiss`, `onDismissOrder`, импорт `dismissOrder` (`OrderStatusSheet.svelte`) · Entire `01M3SBAXJXWA8X0DWT56SNEE36`
-- [ ] `/regress`
+- [x] `/regress` PASS — JS 597 (60 fail = legacy baseline) · `vite build` OK · Rails active_orders(_receipt) + cart_peek_stack 13/0
 - [ ] `/review` (bugbot + security + `/crit-audit`) → push → CI
 - [ ] после Review: номера строк в TASK_83 и COMPONENT_MAP (`COMPONENT_MAP.md` в этой итерации только читался)
 - [ ] deploy — **запрещён** до закрытия задачи; затем Fly MCP Point A
