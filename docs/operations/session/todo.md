@@ -10,7 +10,7 @@
 - [x] intake `5e516968`
 - [x] RED `e6a57efb` — `shop_safe_bottom_min_test.mjs` 9 fail (константа, WebView 0→8, `app.css` max(), 5 экранов без `env()`, добавки 24/16px)
 - [x] GREEN `1c21dbda` — `app.css` max(8px, env), `shopWebViewLayout.js` `SHOP_SAFE_BOTTOM_MIN_PX`, 5 экранов на `var(--shop-safe-bottom)` · Entire `01M3SBAXJXWA8X0DWT56SNEE36`
-- [ ] `/regress`
+- [x] `/regress` PASS — JS 616 (60 fail = legacy baseline) · `vite build` OK · Rails весь `test/integration/shop` 70 файлов 420/0
 - [ ] `/review` → push → CI
 
 ## Файлы
