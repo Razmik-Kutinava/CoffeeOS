@@ -30,8 +30,7 @@
     sheetContext = "peek",
     accordionState = $bindable(),
     onOpenDetail = undefined,
-    onCancelRequest = undefined,
-    onDismiss = undefined
+    onCancelRequest = undefined
   } = $props()
 
   let row = $derived(
@@ -290,19 +289,6 @@
       isLoading={actionLoading}
       onAction={onAction}
     />
-    {#if typeof onDismiss === "function"}
-      <button
-        type="button"
-        class="aoa__dismiss"
-        data-testid="status-widget-dismiss"
-        aria-label="Скрыть статус заказа"
-        title="Скрыть"
-        onclick={(e) => {
-          e.stopPropagation()
-          onDismiss(order)
-        }}
-      >×</button>
-    {/if}
   </div>
   {#if showReceiptCta}
     <button
@@ -399,21 +385,6 @@
     border-bottom: 1px solid #333;
   }
   .aoa:last-child { border-bottom: 0; }
-  .aoa__dismiss {
-    flex-shrink: 0;
-    width: 1.75rem;
-    height: 1.75rem;
-    margin: 0;
-    padding: 0;
-    border: 0;
-    border-radius: 999px;
-    background: #3a3a3a;
-    color: #ddd;
-    font-size: 1.15rem;
-    line-height: 1;
-    cursor: pointer;
-  }
-  .aoa__dismiss:active { background: #4a4a4a; }
   .aoa__head {
     display: flex;
     gap: 0.4rem;

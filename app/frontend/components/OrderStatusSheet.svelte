@@ -14,7 +14,6 @@
     ACTIVE_ORDERS_POLL_MS,
     startActiveOrdersPolling,
     stopActiveOrdersPolling,
-    dismissOrder,
     visibleOrders,
     shouldShowStatusSheetUi,
     statusWidgetUiVisible
@@ -76,13 +75,6 @@
       (o) => String(o.id || o.order_id) === String(prev || "")
     )
     if (stillThere) accordionState.activeExpandedOrderId = prev
-  }
-
-  function onDismissOrder(order) {
-    const id = order?.id || order?.order_id
-    if (!id) return
-    dismissOrder(sheet, id)
-    sync()
   }
 
   function clearSubs() {
@@ -271,7 +263,6 @@
           bind:accordionState
           onOpenDetail={(o) => push(`/order/${o.id || o.order_id}`)}
           onCancelRequest={onCancelRequest}
-          onDismiss={onDismissOrder}
         />
       {/each}
       {#if scrollable}
