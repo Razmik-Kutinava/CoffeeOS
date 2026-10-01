@@ -6,8 +6,8 @@
 
 ## Шапка
 
-**last_audited_sha:** `0f06a868` (TASK_84-RECEIPT-DISPLAY-EXT Патч 1)  
-**last_audit_date:** 2026-09-30  
+**last_audited_sha:** `0b54ac21` (TASK_83 Патч 1)  
+**last_audit_date:** 2026-10-01  
 **last_verdict:** `CLEAN` (CI pending до push)
 
 ## Статусы
@@ -27,5 +27,6 @@
 
 | Дата | Scope | Вердикт | Гейты (CI · smoke · Fly MCP) |
 |------|-------|---------|------------------------------|
+| 2026-10-01 | `0f06a868..0b54ac21` — 2 файла, только удаление (`ActiveOrdersAccordion.svelte`: кнопка `×`, проп `onDismiss`, CSS; `OrderStatusSheet.svelte`: проброс `onDismissOrder`, импорт `dismissOrder`) · C1/C2/C3/C5 неприменимы (UI-only, локальное скрытие без API) · C4: кандидатов нет — ссылок на `onDismiss`/`onDismissOrder` в `app/` не осталось, SSR-рендер зелёный | `CLEAN` | CI pending (до push) · smoke skip: полный `bin/rails test` зависает на Windows — `/regress` JS 597 (60 legacy) + Rails active_orders 13/0 + vite build · Fly MCP: после deploy (deploy запрещён до закрытия задачи) |
 | 2026-09-30 | `dd072f3f..0f06a868` — 2 файла (`ActiveOrdersAccordion.svelte`, `activeOrdersAccordion.js`: вписывание чека в видимую область) · C1/C2/C3/C5 неприменимы (нет данных/денег/auth) · C4: кандидатов нет (SSR-рендер зелёный, effect-only DOM, null-guards, `ResizeObserver` guard) | `CLEAN` | CI pending (до push) · smoke skip: полный `bin/rails test` зависает на Windows (dev-gates) — зона JS 138/0 + Rails `active_orders_receipt` 4/0 · Fly MCP: после deploy (hot-path витрина, UI-only) |
 | 2026-09-29 | `0a3ac0db..dd072f3f` — 0 файлов кода (только docs/ops) | `CLEAN` | CI+Semgrep+CodeQL green на `0a3ac0db` ([36578912741](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/36578912741)) · smoke skip: код идентичен CI-прогону · Fly MCP skip: нет диффа hot-path |
