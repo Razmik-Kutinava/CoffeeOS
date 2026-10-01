@@ -211,13 +211,12 @@
 
   let displayOrders = $derived(visibleOrders(orders))
   let scrollable = $derived(shouldScrollStatusList(displayOrders))
-  let panelExpanded = $derived(!!accordionState.activeExpandedOrderId)
+  /** TASK_84-PEEK-ONLY-EXT: открытый чек не раскрывает шторку — только scroll внутри peek */
+  let receiptOpen = $derived(!!accordionState.activeExpandedOrderId)
   let statusSheetMode = $derived(
     displayOrders.length === 0
       ? ORDER_STATUS_SHEET_MODES.HIDDEN
-      : panelExpanded
-        ? ORDER_STATUS_SHEET_MODES.EXPANDED
-        : ORDER_STATUS_SHEET_MODES.PEEK
+      : ORDER_STATUS_SHEET_MODES.PEEK
   )
   let showStatusUi = $derived(
     shouldShowStatusSheetUi({ hash: routeHash, orders }) &&
@@ -244,7 +243,7 @@
     <div
       class="oss__panel"
       class:scrollable
-      class:expanded={panelExpanded}
+      class:receipt-open={receiptOpen}
       class:embedded
       style={embedded ? undefined : "pointer-events:auto"}
       role="status"
@@ -332,13 +331,7 @@
     max-height: min(22vh, 8.5rem);
   }
   .oss__panel.scrollable { overflow-y: auto; }
-  .oss__panel.expanded {
-    max-height: min(70vh, 32rem);
-    overflow-y: auto;
-  }
-  .oss__panel.embedded.expanded {
-    max-height: min(36vh, 14rem);
-  }
+  .oss__panel.receipt-open { overflow-y: auto; }
   .oss__conn { margin: 0 0 0.25rem; font-size: 0.65rem; color: #f0c070; }
   .oss__toast {
     margin: 0 0 0.35rem;
