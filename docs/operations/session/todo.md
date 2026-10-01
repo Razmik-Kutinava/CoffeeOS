@@ -4,7 +4,7 @@
 |------|----------|
 | **Основание** | [TASK_84-PEEK-ONLY-EXT](../milestones/veha_2/requirements/customer_tasks/TASK-84-PEEK-ONLY-EXT-Статусная-шторка-остаётся-в-peek-при-открытом-чеке.md) — сценарий владельца 2026-10-01 · вариант (а): CartSheet не поднимаем |
 | **Реверсирует** | `expanded` статусной шторки при открытом чеке + Rails-тест «…EXPANDED» |
-| **Статус** | RED `[x]` · GREEN `[x]` · ждёт `/regress` → `/review` · deploy запрещён |
+| **Статус** | REVIEW `[x]` · CI green [36825940981](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/36825940981) на `f6f95987` · deploy запрещён |
 
 ## SBR
 
@@ -12,7 +12,7 @@
 - [x] RED `8f795504` — 3 fail: нет `ORDER_STATUS_SHEET_MODES.EXPANDED`, нет `.expanded` CSS/класса, есть `.receipt-open { overflow-y: auto }` без `max-height`; Rails `mount_acceptance` перевёрнут на `refute EXPANDED`
 - [x] GREEN `8b75d868` — `OrderStatusSheet.svelte`: режим только hidden/peek, `class:receipt-open`, CSS `.expanded` удалён · Entire `01M3SBAXJXWA8X0DWT56SNEE36`
 - [x] `/regress` PASS — JS 602 (60 fail = legacy baseline) · `vite build` OK · Rails 18 файлов (шторка, CartSheet b113_s2*, quick_repeat_section, catalog_hidden, active orders) 100/0
-- [ ] `/review` → push → CI
+- [x] `/review` — bugbot 0 · security 0 · `/crit-audit` CLEAN (`44ec7814`) · push · CI + Semgrep + CodeQL green [36825940981](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/36825940981)
 
 ## Файлы
 
@@ -38,7 +38,7 @@
 - [x] открытие чека — `data-status-sheet-mode="peek"`, высота не растёт
 - [x] чек внутри peek со своей прокруткой, `Total Amount` достижим
 - [x] закрытие чека — peek
-- [ ] Review + CI green
+- [x] Review + CI green
 
 ---
 

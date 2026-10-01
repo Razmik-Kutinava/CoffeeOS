@@ -11,6 +11,10 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-10-01 — review: TASK_84-PEEK-ONLY-EXT — CI green
+
+- `/regress` PASS (JS 602 / 60 legacy · vite build · Rails 100/0) · bugbot 0 · security 0 · `/crit-audit` CLEAN · CI + Semgrep + CodeQL green [36825940981](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/36825940981) на `f6f95987`.
+
 ## 2026-10-01 — feat: TASK_84-PEEK-ONLY-EXT — статусная шторка только peek (GREEN)
 
 - Intake `c4f4bd0e` (сценарий владельца, вариант а — CartSheet не поднимаем). RED `8f795504` → GREEN `8b75d868`.
