@@ -8,7 +8,7 @@
 
 **last_audited_sha:** `406b10e7` (TASK_84-RECEIPT-ARROW-EXT)  
 **last_audit_date:** 2026-10-01  
-**last_verdict:** `CLEAN` (CI pending до push)
+**last_verdict:** `CLEAN` (CI green [36832232323](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/36832232323) на `f4658bb7`)
 
 ## Статусы
 

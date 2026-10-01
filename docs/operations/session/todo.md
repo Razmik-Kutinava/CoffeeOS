@@ -4,7 +4,7 @@
 |------|----------|
 | **Основание** | [TASK_84-RECEIPT-ARROW-EXT](../milestones/veha_2/requirements/customer_tasks/TASK-84-RECEIPT-ARROW-EXT-Стрелка-состояния-на-кнопке-Состав-заказа.md) — сценарий владельца 2026-10-01 · стрелка только на кнопке чека |
 | **Реверсирует** | запрет «новые стрелки» в Scope TASK_84-RECEIPT-DISPLAY-EXT (только кнопка чека); chevron #36 на шапке и тест #35 остаются |
-| **Статус** | RED `[x]` · GREEN `[x]` · ждёт `/regress` → `/review` · deploy запрещён |
+| **Статус** | REVIEW `[x]` · CI green [36832232323](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/36832232323) на `f4658bb7` · deploy запрещён |
 
 ## SBR
 
@@ -12,7 +12,7 @@
 - [x] RED `c0aef683` — `active_orders_receipt_arrow_test.mjs` 3 fail (SSR: текст кнопки, `aria-expanded`, `aria-hidden` стрелка)
 - [x] GREEN `d3f929a8` — `ActiveOrdersAccordion.svelte`: `<span class="aoa__receipt-arrow" aria-hidden="true">{row.chevron}</span>` в кнопке · Entire `01M3SBAXJXWA8X0DWT56SNEE36`
 - [x] `/regress` PASS — JS 605 (60 fail = legacy baseline) · `vite build` OK · Rails 18 файлов 100/0
-- [ ] `/review` → push → CI
+- [x] `/review` — bugbot 0 · security 0 · `/crit-audit` CLEAN (`406b10e7`) · push · CI + Semgrep + CodeQL green [36832232323](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/36832232323)
 
 ## Файлы
 
@@ -35,7 +35,7 @@
 
 - [x] свёрнут — «Состав заказа >», `aria-expanded="false"`
 - [x] открыт — «Состав заказа v», `aria-expanded="true"`
-- [ ] Review + CI green
+- [x] Review + CI green
 
 ---
 

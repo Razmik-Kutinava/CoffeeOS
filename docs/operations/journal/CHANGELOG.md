@@ -11,6 +11,10 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-10-01 — review: TASK_84-RECEIPT-ARROW-EXT — CI green
+
+- `/regress` PASS (JS 605 / 60 legacy · vite build · Rails 100/0) · bugbot 0 · security 0 · `/crit-audit` CLEAN · CI + Semgrep + CodeQL green [36832232323](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/36832232323) на `f4658bb7`.
+
 ## 2026-10-01 — feat: TASK_84-RECEIPT-ARROW-EXT — стрелка >/v на кнопке «Состав заказа» (GREEN)
 
 - Intake `86a123ce` (сценарий владельца; стрелка только на кнопке чека). RED `c0aef683` → GREEN `d3f929a8`.
