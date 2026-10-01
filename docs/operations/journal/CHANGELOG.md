@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-09-30 — feat: TASK_83 Патч 1 — убран × из статусной шторки (GREEN)
+
+- RED `f7a6dc49` → GREEN `93f500ee`: в `ActiveOrdersAccordion.svelte` удалены кнопка `×` (`status-widget-dismiss`), проп `onDismiss`, CSS `.aoa__dismiss`; в `OrderStatusSheet.svelte` удалены проброс `onDismiss={onDismissOrder}`, `onDismissOrder`, импорт `dismissOrder`.
+- `dismissOrder` / `refreshMode` в `lib/orderStatusSheet.js` оставлены — покрыты `order_status_sheet_test.mjs`. Чек #84 / EXT и `accordionState` не трогались.
+- Тесты: 51/0; зона 168/1 (1 = legacy «422/500», ISSUES). Deploy запрещён до закрытия задачи.
+
 ## 2026-09-30 — feat: TASK_84-RECEIPT-DISPLAY-EXT Патч 1 — чек в статусной шторке виден целиком (REVIEW)
 
 - `fitReceiptInView` (`activeOrdersAccordion.js`) + `ActiveOrdersAccordion.svelte`: при раскрытии CTA прокручивается к верху `.oss__panel`, `max-height` чека = видимое место до клипа (`CartSheet`), свой scroll + `overscroll-behavior: contain`. Refit на `transitionend` панели, `ResizeObserver` (CartSheet драг), смену push recovery/toast; устаревший async fit отбрасывается (`fitGeneration`).

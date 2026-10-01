@@ -1,3 +1,50 @@
+# todo — TASK_83 Патч 1 (2026-09-30): убрать × из статусной шторки (patch v1)
+
+| Поле | Значение |
+|------|----------|
+| **Основание** | [TASK_83 § Патч 1: 2026-09-30](../milestones/veha_2/requirements/customer_tasks/TASK-83-status-sheet-dismiss.md) — «Исправленный сценарий», Subtask 1, 4, 5, 6 (patch v1) |
+| **Тип** | патч (не доп.задача) · остальные Subtask TASK_83 — контекст, не трогались |
+| **Статус** | RED `[x]` · GREEN `[x]` · ждёт `/regress` → `/review` · deploy запрещён до закрытия задачи |
+
+## SBR
+
+- [x] SPEC — `dismissOrder` (lib) используется в `test/javascript/order_status_sheet_test.mjs` → **оставлен**; UI-цепочка `onDismissOrder` → `onDismiss` → `aoa__dismiss` после удаления кнопки мертва → убрана (Scope патча разрешает)
+- [x] RED `f7a6dc49` — 4 fail: SSR «× нет в DOM», source «нет `status-widget-dismiss`/«Скрыть статус заказа»», «нет `aoa__dismiss`/`onDismiss`», «шторка не пробрасывает `onDismiss={onDismissOrder}`»
+- [x] GREEN `93f500ee` — удалены кнопка `×`, проп `onDismiss`, CSS `.aoa__dismiss` (`ActiveOrdersAccordion.svelte`); проброс `onDismiss`, `onDismissOrder`, импорт `dismissOrder` (`OrderStatusSheet.svelte`) · Entire `01M3SBAXJXWA8X0DWT56SNEE36`
+- [ ] `/regress`
+- [ ] `/review` (bugbot + security + `/crit-audit`) → push → CI
+- [ ] после Review: номера строк в TASK_83 и COMPONENT_MAP (`COMPONENT_MAP.md` в этой итерации только читался)
+- [ ] deploy — **запрещён** до закрытия задачи; затем Fly MCP Point A
+
+## Файлы
+
+- `app/frontend/components/ActiveOrdersAccordion.svelte` — −кнопка `×`, −проп `onDismiss`, −CSS `.aoa__dismiss`
+- `app/frontend/components/OrderStatusSheet.svelte` — −`onDismiss={onDismissOrder}`, −`onDismissOrder`, −импорт `dismissOrder`
+- `test/javascript/active_orders_accordion_test.mjs` — тест «aria-label Скрыть» → SSR «× отсутствует, CTA чека и action buttons на месте»
+- `test/javascript/order_status_notify_actions_test.mjs` — тесты наличия `×` → контракт отсутствия + тест проброса из шторки
+
+## Не ломать
+
+- блок чека и CTA (#84 / TASK_84-EXT): `receiptView`, `receiptPanelView`, fit/scroll чека, форма `accordionState`
+- `dismissOrder` / `refreshMode` в `lib/orderStatusSheet.js` и их тесты (`order_status_sheet_test.mjs`)
+- `OrderCancelModal` `onDismiss` (`OrderStatusSheet.svelte`), `OrderStatus.svelte` `onDismiss` — другой смысл, не трогались
+- status / polling / ActionCable / reconnect / `OrderActionButtons` / cancel flow
+
+## Проверка
+
+- `node --test test/javascript/active_orders_accordion_test.mjs test/javascript/order_status_notify_actions_test.mjs` — 51/0
+- зона (13 файлов `order_status*` `active_orders*` `cart_sheet*` `sticky*` `order_cancel*` `order_action*`) — 168/1; 1 fail `order_action_buttons_cancel_test` «422/500» — legacy, уже в ISSUES, падал и до патча
+- Fly MCP Point A — после deploy по апруву
+
+## DoD
+
+- [x] Subtask 1: `×` нет в DOM статусной шторки
+- [x] Subtask 4–5: status / polling / Cable / чек без изменений; мёртвый проброс `onDismiss` удалён, `dismissOrder` (lib) сохранён
+- [x] Subtask 6: тесты на наличие `×` заменены контрактом отсутствия
+- [ ] Review + CI green
+
+---
+
 # todo — Патчи 2026-09-30: TASK_83 (убрать ×) + TASK_84-RECEIPT-DISPLAY-EXT (receipt runtime)
 
 | Поле | Значение |
@@ -20,7 +67,7 @@
 - [x] Патч B `/review`: bugbot → 2 раунда фиксов (transitionend refit + stale async guard `74b0dd48`; реальный отступ CTA→чек + ResizeObserver на CartSheet `0f06a868`) · security чисто · `/crit-audit` CLEAN · браузер: refit после анимации 101→171px, шторка −40px → 131px, низ по клипу
 - [x] Патч B push `93d1dac` → CI green [36745691728](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/36745691728) + Semgrep/CodeQL
 - [ ] Патч B deploy по апруву → Fly MCP Point A
-- [ ] Патч A RED/GREEN — отдельно от B (разные коммиты)
+- [x] Патч A RED `f7a6dc49` / GREEN `93f500ee` — см. блок «TASK_83 Патч 1» выше
 
 ## Файлы (ожидаемо)
 
