@@ -54,6 +54,18 @@ describe("TASK_SAFE-BOTTOM-MIN — минимальный нижний отст�
     assert.match(read("app/frontend/components/CartSheet.svelte"), /"var\(--shop-safe-bottom, 0px\)"/)
   })
 
+  it("bugbot: резерв под CartSheet учитывает её подъём на --shop-safe-bottom", () => {
+    const lift = "var(--cart-sheet-h, 42vh) + var(--shop-safe-bottom, 0px)"
+    assert.ok(read("app/frontend/routes/Catalog.svelte").includes(`padding-bottom: calc(${lift})`))
+    assert.match(
+      read("app/frontend/routes/CategoryProducts.svelte"),
+      /padding-bottom: max\(80px, calc\(var\(--cart-sheet-h, 80px\) \+ var\(--shop-safe-bottom, 0px\)\)\)/
+    )
+    const product = read("app/frontend/routes/Product.svelte")
+    assert.match(product, /height: calc\(var\(--cart-sheet-h, 34vh\) \+ var\(--shop-safe-bottom, 0px\) \+ 1rem\)/)
+    assert.match(product, /bottom: calc\(var\(--cart-sheet-h, 34vh\) \+ var\(--shop-safe-bottom, 0px\) \+ 0\.5rem\)/)
+  })
+
   it("screen extras 24px/16px сохранены", () => {
     assert.match(read(SCREENS[0]), /calc\(24px \+ var\(--shop-safe-bottom/)
     assert.match(read(SCREENS[1]), /calc\(24px \+ var\(--shop-safe-bottom/)
