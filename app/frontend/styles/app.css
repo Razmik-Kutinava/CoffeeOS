@@ -3,7 +3,7 @@
 :root {
   --shop-vvh: 100dvh;
   --shop-safe-top: env(safe-area-inset-top, 0px);
-  --shop-safe-bottom: env(safe-area-inset-bottom, 0px);
+  --shop-safe-bottom: max(8px, env(safe-area-inset-bottom, 0px));
   --shop-keyboard-inset: 0px;
   --bg-primary: #1a1a1a;
   --bg-secondary: #2a2a2a;

@@ -72,6 +72,9 @@ function emitViewport(h) {
   }
 }
 
+/** Минимальный нижний отступ (Home Indicator), когда safe-area = 0 — синхронно с `app.css` */
+export const SHOP_SAFE_BOTTOM_MIN_PX = 8
+
 export function applyShopWebViewLayout(rootEl, env = globalThis) {
   const h = shopVisualViewportHeight(env)
   if (rootEl?.style?.setProperty) {
@@ -80,7 +83,8 @@ export function applyShopWebViewLayout(rootEl, env = globalThis) {
       rootEl.style.setProperty("--shop-safe-top", `${Math.round(Number(env.safeAreaInsetTop) || 0)}px`)
     }
     if (env.safeAreaInsetBottom != null) {
-      rootEl.style.setProperty("--shop-safe-bottom", `${Math.round(Number(env.safeAreaInsetBottom) || 0)}px`)
+      const bottom = Math.max(SHOP_SAFE_BOTTOM_MIN_PX, Math.round(Number(env.safeAreaInsetBottom) || 0))
+      rootEl.style.setProperty("--shop-safe-bottom", `${bottom}px`)
     }
     const kb = isShopKeyboardOpen(env)
     const kbInset = kb ? Math.max(0, Math.round(Number(env.innerHeight || 0) - h)) : 0

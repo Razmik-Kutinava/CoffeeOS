@@ -69,7 +69,7 @@
     z-index: 61;
     background: #2a2a2a;
     border-radius: 16px 16px 0 0;
-    padding: 12px 16px calc(16px + env(safe-area-inset-bottom, 0px));
+    padding: 12px 16px calc(16px + var(--shop-safe-bottom, 0px));
   }
 
   .cs-handle {

@@ -202,7 +202,7 @@
   .items { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
   .item-row { display: flex; justify-content: space-between; gap: 12px; font-size: 14px; }
   .total-row { display: flex; justify-content: space-between; margin-top: 16px; padding-top: 12px; border-top: 1px solid #3a3a3a; font-weight: 700; font-size: 16px; }
-  .repeat-wrap { position: fixed; left: 16px; right: 16px; bottom: calc(16px + env(safe-area-inset-bottom, 0px)); }
+  .repeat-wrap { position: fixed; left: 16px; right: 16px; bottom: calc(16px + var(--shop-safe-bottom, 0px)); }
   .repeat-err { color: #f87171; font-size: 13px; text-align: center; margin-bottom: 8px; }
   .repeat-main { width: 100%; background: #ff8c42; color: #fff; border: none; border-radius: 12px; padding: 16px; font-size: 16px; font-weight: 700; cursor: pointer; }
   .repeat-main:disabled { opacity: 0.85; cursor: wait; }

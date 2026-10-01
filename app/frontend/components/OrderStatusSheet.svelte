@@ -296,7 +296,7 @@
     z-index: 60;
     display: flex;
     justify-content: center;
-    padding-bottom: env(safe-area-inset-bottom, 0);
+    padding-bottom: var(--shop-safe-bottom, 0px);
   }
   /* Внутри CartSheet: flow-секция, не второй слой */
   .oss.embedded {

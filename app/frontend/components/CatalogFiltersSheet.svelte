@@ -126,7 +126,7 @@
     background: #141414;
     border-radius: 20px 20px 0 0;
     padding: 8px 20px 24px;
-    padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+    padding-bottom: calc(24px + var(--shop-safe-bottom, 0px));
     box-sizing: border-box;
     overflow-y: auto;
     animation: slide-up 0.25s ease;
