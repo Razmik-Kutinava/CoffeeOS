@@ -1,0 +1,63 @@
+import { describe, it } from "node:test"
+import assert from "node:assert/strict"
+import { readFileSync } from "node:fs"
+import { dirname, join } from "node:path"
+import { fileURLToPath } from "node:url"
+import * as layout from "../../app/frontend/lib/shopWebViewLayout.js"
+
+const root = join(dirname(fileURLToPath(import.meta.url)), "../..")
+const read = (p) => readFileSync(join(root, p), "utf8")
+
+function rootStub() {
+  const props = {}
+  return { props, el: { style: { setProperty: (k, v) => { props[k] = v } } } }
+}
+
+const SCREENS = [
+  "app/frontend/components/CatalogFiltersSheet.svelte",
+  "app/frontend/components/CatalogSortSheet.svelte",
+  "app/frontend/components/ContactSupportSheet.svelte",
+  "app/frontend/routes/OrderReceipt.svelte",
+  "app/frontend/components/OrderStatusSheet.svelte"
+]
+
+describe("TASK_SAFE-BOTTOM-MIN — минимальный нижний отступ 8px [TDD]", () => {
+  it("SHOP_SAFE_BOTTOM_MIN_PX = 8", () => {
+    assert.equal(layout.SHOP_SAFE_BOTTOM_MIN_PX, 8)
+  })
+
+  it("WebView inset 0 → --shop-safe-bottom 8px", () => {
+    const { el, props } = rootStub()
+    layout.applyShopWebViewLayout(el, { innerHeight: 640, visualViewport: { height: 640 }, safeAreaInsetBottom: 0 })
+    assert.equal(props["--shop-safe-bottom"], "8px")
+  })
+
+  it("WebView inset 34 (Home Indicator) → 34px (берётся большее)", () => {
+    const { el, props } = rootStub()
+    layout.applyShopWebViewLayout(el, { innerHeight: 640, visualViewport: { height: 640 }, safeAreaInsetBottom: 34 })
+    assert.equal(props["--shop-safe-bottom"], "34px")
+  })
+
+  it("app.css default --shop-safe-bottom = max(8px, env(safe-area-inset-bottom))", () => {
+    assert.match(read("app/frontend/styles/app.css"), /--shop-safe-bottom:\s*max\(8px,\s*env\(safe-area-inset-bottom,\s*0px\)\);/)
+  })
+
+  for (const p of SCREENS) {
+    it(`${p.split("/").pop()} uses var(--shop-safe-bottom), not own env()`, () => {
+      const src = read(p)
+      assert.doesNotMatch(src, /env\(safe-area-inset-bottom/)
+      assert.match(src, /var\(--shop-safe-bottom/)
+    })
+  }
+
+  it("CartSheet (и встроенная шторка статуса) — bottom из var(--shop-safe-bottom)", () => {
+    assert.match(read("app/frontend/components/CartSheet.svelte"), /"var\(--shop-safe-bottom, 0px\)"/)
+  })
+
+  it("screen extras 24px/16px сохранены", () => {
+    assert.match(read(SCREENS[0]), /calc\(24px \+ var\(--shop-safe-bottom/)
+    assert.match(read(SCREENS[1]), /calc\(24px \+ var\(--shop-safe-bottom/)
+    assert.match(read(SCREENS[2]), /calc\(16px \+ var\(--shop-safe-bottom/)
+    assert.match(read(SCREENS[3]), /calc\(16px \+ var\(--shop-safe-bottom/)
+  })
+})
