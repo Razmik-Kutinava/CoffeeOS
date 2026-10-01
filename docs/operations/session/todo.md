@@ -3,7 +3,7 @@
 | Поле | Значение |
 |------|----------|
 | **Основание** | [TASK_SAFE-BOTTOM-MIN](../milestones/veha_2/requirements/customer_tasks/TASK-SAFE-BOTTOM-MIN-Минимальный-нижний-отступ-Home-Indicator.md) — N = 8px · задачи 3 и 4 слиты (решение владельца: шторка статуса встроена в CartSheet, её низ = `--shop-safe-bottom`) |
-| **Статус** | RED `[x]` · GREEN `[x]` · ждёт `/regress` → `/review` · deploy запрещён |
+| **Статус** | REVIEW `[x]` · CI green [36837366924](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/36837366924) на `f74e2e5d` · deploy запрещён |
 
 ## SBR
 
@@ -11,10 +11,11 @@
 - [x] RED `e6a57efb` — `shop_safe_bottom_min_test.mjs` 9 fail (константа, WebView 0→8, `app.css` max(), 5 экранов без `env()`, добавки 24/16px)
 - [x] GREEN `1c21dbda` — `app.css` max(8px, env), `shopWebViewLayout.js` `SHOP_SAFE_BOTTOM_MIN_PX`, 5 экранов на `var(--shop-safe-bottom)` · Entire `01M3SBAXJXWA8X0DWT56SNEE36`
 - [x] `/regress` PASS — JS 616 (60 fail = legacy baseline) · `vite build` OK · Rails весь `test/integration/shop` 70 файлов 420/0
-- [ ] `/review` → push → CI
+- [x] `/review` — bugbot: 1 находка (резерв Catalog/CategoryProducts/Product под CartSheet без safe-bottom) → RED `835566b2` → GREEN `6309066c` → повторный bugbot 0 · security 0 · `/crit-audit` CLEAN (`6309066c`) · push · CI + Semgrep + CodeQL green [36837366924](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/36837366924)
 
 ## Файлы
 
+- `routes/Catalog.svelte`, `routes/CategoryProducts.svelte`, `routes/Product.svelte` — резерв под CartSheet `+ var(--shop-safe-bottom, 0px)` (bugbot)
 - `app/frontend/styles/app.css` — `--shop-safe-bottom: max(8px, env(safe-area-inset-bottom, 0px))`
 - `app/frontend/lib/shopWebViewLayout.js` — `SHOP_SAFE_BOTTOM_MIN_PX = 8`, `max()` для значения от WebView
 - `CatalogFiltersSheet.svelte`, `CatalogSortSheet.svelte`, `ContactSupportSheet.svelte`, `routes/OrderReceipt.svelte`, `OrderStatusSheet.svelte` — `env()` → `var(--shop-safe-bottom, 0px)`
@@ -38,7 +39,7 @@
 - [x] inset 0 → отступ 8px; inset 34 → 34px
 - [x] все bottom-sheet берут отступ из `--shop-safe-bottom`
 - [x] добавки 24px/16px сохранены
-- [ ] Review + CI green
+- [x] Review + CI green
 
 ---
 

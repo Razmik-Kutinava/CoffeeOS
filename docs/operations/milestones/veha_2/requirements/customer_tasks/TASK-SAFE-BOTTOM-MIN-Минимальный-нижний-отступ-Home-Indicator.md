@@ -42,7 +42,9 @@
 - [x] 4. `CartSheet` — без правок (уже `var(--shop-safe-bottom)`), шторка статуса получает минимум через него
 - [x] 5. Тесты: 0 → 8px, 34 → 34px; в 5 экранах нет `env(safe-area-inset-bottom`
 
-**RED** `e6a57efb` (9 fail) → **GREEN** `1c21dbda` · визуально на устройстве не проверено (Android: CartSheet в peek поднимается на 8px от края)
+- [x] 6. (bugbot) резерв `Catalog` / `CategoryProducts` / `Product` под CartSheet + `var(--shop-safe-bottom)` — RED `835566b2` → GREEN `6309066c`
+
+**RED** `e6a57efb` (9 fail) → **GREEN** `1c21dbda` · REVIEW · CI green [36837366924](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/36837366924) · визуально на устройстве не проверено (Android: CartSheet в peek поднимается на 8px от края)
 
 ## Scope
 

@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-10-01 — review: TASK_SAFE-BOTTOM-MIN — CI green
+
+- `/regress` PASS (JS 616 / 60 legacy · vite build · Rails `test/integration/shop` 420/0).
+- bugbot: резерв `Catalog` / `CategoryProducts` / `Product` под CartSheet не учитывал её подъём на `--shop-safe-bottom` (последний ряд мог уйти под шторку на 8px; на iPhone — на 34px и раньше) → RED `835566b2` → GREEN `6309066c` → повторный bugbot 0.
+- security 0 · `/crit-audit` CLEAN · CI + Semgrep + CodeQL green [36837366924](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/36837366924) на `f74e2e5d`.
+
 ## 2026-10-01 — feat: TASK_SAFE-BOTTOM-MIN — минимальный нижний отступ 8px (GREEN)
 
 - Intake `5e516968`: доп.задачи 3 (шторка статуса) и 4 (все экраны) слиты — шторка встроена в CartSheet, её низ = `--shop-safe-bottom`. N = 8px.
