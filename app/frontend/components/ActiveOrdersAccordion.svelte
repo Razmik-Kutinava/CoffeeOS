@@ -299,7 +299,7 @@
       aria-expanded={row.expanded}
       aria-label={receiptLabel}
       onclick={onReceiptClick}
-    >{receiptLabel}</button>
+    >{receiptLabel} <span class="aoa__receipt-arrow" aria-hidden="true">{row.chevron}</span></button>
   {/if}
   {#if pushRecovery}
     <div
@@ -543,6 +543,7 @@
     text-align: center;
   }
   .aoa__receipt-cta:active { opacity: 0.9; }
+  .aoa__receipt-arrow { display: inline-block; min-width: 0.6em; }
   .aoa__receipt {
     margin-top: 0.35rem;
     border: 1px solid #888;
