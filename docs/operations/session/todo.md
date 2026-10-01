@@ -11,7 +11,7 @@
 - [x] intake `86a123ce`
 - [x] RED `c0aef683` — `active_orders_receipt_arrow_test.mjs` 3 fail (SSR: текст кнопки, `aria-expanded`, `aria-hidden` стрелка)
 - [x] GREEN `d3f929a8` — `ActiveOrdersAccordion.svelte`: `<span class="aoa__receipt-arrow" aria-hidden="true">{row.chevron}</span>` в кнопке · Entire `01M3SBAXJXWA8X0DWT56SNEE36`
-- [ ] `/regress`
+- [x] `/regress` PASS — JS 605 (60 fail = legacy baseline) · `vite build` OK · Rails 18 файлов 100/0
 - [ ] `/review` → push → CI
 
 ## Файлы
