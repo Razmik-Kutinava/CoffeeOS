@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-10-01 — deploy: Fly v505 (TASK_83 / TASK_84 аудит) — MCP Point A PASS
+
+- Push `09620222` → CI `36841893742` + Semgrep + CodeQL green → Deploy to Fly.io `36842242232` (workflow_dispatch) → v505.
+- Приёмка: `/up` 200, витрина 200; bundle — `aoa__dismiss` 0, `aoa__receipt-arrow`, `receipt-open`, `max(8px` есть; DOM `--shop-safe-bottom` = 8px, CartSheet на 8px. Sentry 24h — RUBY-1N (до деплоя). Live шторки — skip (нет активного заказа).
+- Артефакт: `artifacts/mcp/fly_v505_2026-10-01/MCP_RESULT.md` + скрин.
+
 ## 2026-10-01 — docs: номера строк TASK_83 + COMPONENT_MAP после Review
 
 - `ba5f67c2`: TASK_83 §2–3 / «Файлы» / таблица — `dismissOrder` 137–146, `refreshMode` 95–100, `aoa__dismiss` и проброс `onDismiss` удалены; Subtask patch v1 отмечены.
