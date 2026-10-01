@@ -49,7 +49,7 @@ module Payments
         return
       end
 
-      payment.reload
+      # TbankPaymentSync держит этот же объект и сам делает reload после смены статуса.
       alert_stuck!(payment) if payment.pending? || payment.processing?
     end
 

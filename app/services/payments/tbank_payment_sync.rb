@@ -205,6 +205,8 @@ module Payments
     end
 
     def rebill_still_needed?
+      # save_card пишется один раз при создании платежа — false не перечитываем из БД.
+      return false unless Payments::SavedCardStore.allowed_for?(@payment)
       return false unless Payments::SavedCardStore.allowed_for?(@payment.reload)
 
       data = @payment.provider_data
