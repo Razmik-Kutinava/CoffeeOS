@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-10-01 — fix: RUBY-1N — N+1 в StuckPaymentsCheckJob
+
+- Sentry `RUBY-1N` (perf N+1): на проде 4 stuck T-Bank платежа (`save_card=false`, GetState → всё ещё pending) → по 2 `SELECT payments WHERE id` на каждый.
+- RED `4e5452d7`: 3 платежа → 6 by-id SELECT. GREEN `01efc828`: в job убран `payment.reload` (sync держит тот же объект и reload после смены статуса); `TbankPaymentSync#rebill_still_needed?` — reload только если `save_card` разрешён.
+- Local: 160/0 (stuck job + services/payments + tbank callback), 419/0 (jobs/payments + §2.3 + shop/subscriptions services).
+
 ## 2026-10-01 — deploy: Fly v505 (TASK_83 / TASK_84 аудит) — MCP Point A PASS
 
 - Push `09620222` → CI `36841893742` + Semgrep + CodeQL green → Deploy to Fly.io `36842242232` (workflow_dispatch) → v505.

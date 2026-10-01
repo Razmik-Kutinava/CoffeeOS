@@ -7,6 +7,7 @@
 
 | Сейчас | Дальше |
 |--------|--------|
+| **RUBY-1N** N+1 `StuckPaymentsCheckJob` починен `01efc828` (`Fixes RUBY-1N`) · Local payment 419/0 | не запушено · deploy по апруву → Sentry RUBY-1N закроется |
 | **Fly v505** задеплоен (`09620222`) · MCP Point A PASS · [MCP_RESULT](../milestones/veha_2/artifacts/mcp/fly_v505_2026-10-01/MCP_RESULT.md) — TASK_83 × убран, TASK_84 EXT (чек/peek/стрелка), safe-bottom 8px на проде | апрув заказчика глазами: активный заказ на телефоне + Android 8px · RUBY-1N N+1 (`StuckPaymentsCheckJob`) backlog |
 | **Аудит TASK_83/84 закрыт целиком**: Патч × (TASK_83), Патч чека (EXT), доп.задачи peek-only / стрелка / safe-bottom 8px — все CI green; номера строк TASK_83 + `COMPONENT_MAP.md` обновлены `ba5f67c2` | подъём CartSheet при открытом чеке (новая, нужен сценарий) · **deploy по апруву** → Fly MCP Point A |
 | **TASK_SAFE-BOTTOM-MIN** — минимальный нижний отступ 8px для всех bottom-sheet (шторка статуса через CartSheet) · GREEN `1c21dbda` · bugbot fix `6309066c` (резерв каталога/товара) · REVIEW · **CI green** [36837366924](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/36837366924) · [todo](todo.md) | номера строк TASK_83/COMPONENT_MAP · подъём CartSheet (новая) · **deploy запрещён** |
