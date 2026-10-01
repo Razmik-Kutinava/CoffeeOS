@@ -20,15 +20,15 @@
 ## 2. Связь с картой компонентов
 - **Затронутые компоненты из `@COMPONENT_MAP.md`:** `ActiveOrdersAccordion`, `OrderStatusSheet`.
 - **Общий файл с другой задачей:** да — с задачей «Восстановление чека». В рамках этой задачи разрешена только логика dismiss:
-  - `ActiveOrdersAccordion.svelte:139–150` — `aoa__dismiss`;
-  - `orderStatusSheet.js:119–132` — `dismissOrder` / `refreshMode`.
+  - `ActiveOrdersAccordion.svelte` — `aoa__dismiss` (**удалён** Патчем 1, `93f500ee`);
+  - `orderStatusSheet.js:137–146` — `dismissOrder`; `orderStatusSheet.js:95–100` — `refreshMode`.
   Блок чека принадлежит соседней задаче и не изменяется.
 - **Новый компонент (не в карте):** нет.
 
 ## 3. Разрешенный и Запрещенный Scope
 - **Разрешено менять/создавать:**
-  - `ActiveOrdersAccordion.svelte:139–150` — только dismiss-обработку;
-  - `orderStatusSheet.js:119–132` — только `dismissOrder` / связанную логику `refreshMode`;
+  - `ActiveOrdersAccordion.svelte` — только dismiss-обработку (после Патча 1 её нет);
+  - `orderStatusSheet.js:137–146` / `:95–100` — только `dismissOrder` / связанную логику `refreshMode`;
   - тесты, необходимые для покрытия зафиксированного dismiss-контракта.
 - **Строго запрещено менять:**
   - блок чека / `receiptView`;
@@ -92,8 +92,8 @@
 Текущая фаза: SPEC
 
 ## Файлы (ожидаемо)
-- ActiveOrdersAccordion.svelte:139–150
-- orderStatusSheet.js:119–132
+- ActiveOrdersAccordion.svelte (`aoa__dismiss` удалён Патчем 1)
+- orderStatusSheet.js:137–146 (`dismissOrder`), :95–100 (`refreshMode`)
 - test/javascript/order_status_notify_actions_test.mjs
 
 ## Не ломать
@@ -118,8 +118,8 @@
 
 | Компонент | Файлы | Владеющая задача | Общий файл с | Не трогать без пометки |
 |---|---|---|---|---|
-| ActiveOrdersAccordion | ActiveOrdersAccordion.svelte | Поведение крестика (dismiss) в статусной шторке | Восстановление чека | Блок чека / receiptView; изменения только в `aoa__dismiss` (139–150) |
-| OrderStatusSheet | orderStatusSheet.js | Поведение крестика (dismiss) в статусной шторке | Восстановление чека | Блок чека / receiptView; изменения только в `dismissOrder` / `refreshMode` (119–132) |
+| ActiveOrdersAccordion | ActiveOrdersAccordion.svelte | Поведение крестика (dismiss) в статусной шторке | Восстановление чека | Блок чека / receiptView; `aoa__dismiss` удалён Патчем 1 (`93f500ee`) |
+| OrderStatusSheet | orderStatusSheet.js | Поведение крестика (dismiss) в статусной шторке | Восстановление чека | Блок чека / receiptView; изменения только в `dismissOrder` (137–146) / `refreshMode` (95–100) |
 
 ---
 
@@ -131,20 +131,22 @@
 
 Subtask 1 / 4 / 6: Given/When/Then было «пользователь нажимает крестик (×) → `onDismiss(order)` → локальный `dismissOrder`» / по факту код соответствует: `×` отрисован (`ActiveOrdersAccordion.svelte:193–201`), закреплён тестами `order_status_notify_actions_test.mjs:106–113`, `:115–120`, `active_orders_accordion_test.mjs:247–254` / расхождение: новое продуктовое решение — `×` в статусной шторке **убрать полностью**; ранее зафиксированный контракт существования `×` отменяется.
 
-Номера строк в §2–3 и в таблице выше устарели (факт HEAD: `ActiveOrdersAccordion.svelte:190–202`; `orderStatusSheet.js:137–146` — `dismissOrder`; `orderStatusSheet.js:95–100` — `refreshMode`). Исправление ссылок и `COMPONENT_MAP.md` — после Review, не на этом шаге.
+Номера строк в §2–3, «Файлы» и таблице выше **обновлены 2026-10-01** после Review Патча 1 (`orderStatusSheet.js:137–146` — `dismissOrder`; `:95–100` — `refreshMode`; `aoa__dismiss` и проброс `onDismiss` удалены). Номера строк в «Основание» / «Расхождение» — факт на момент аудита 2026-09-30.
 
 ### Исправленный сценарий
 
-- [ ] Subtask 1 (patch v1): Given в статусной шторке отображается активный заказ / When компонент `ActiveOrdersAccordion` отрисован / Then кнопки `×` (`aoa__dismiss`, `data-testid="status-widget-dismiss"`) в DOM нет.
-- [ ] Subtask 4 (patch v1): Given `×` удалён из UI / When отрисован раскрытый или свёрнутый заказ / Then CTA «Состав заказа», receipt, `OrderActionButtons` и push recovery работают без изменений.
-- [ ] Subtask 5 (patch v1): Given UI `×` удалён / When выполняется обновление статуса (polling / Cable) / Then `status` / `refreshMode` / Cable-поведение шторки не меняются. `dismissOrder` не удалять и не переписывать, пока не проверено, что он не используется другим контрактом (иначе — отдельное решение).
-- [ ] Subtask 6 (patch v1): тесты, требующие наличие `×` (`order_status_notify_actions_test.mjs:106–113` — только assert'ы на `status-widget-dismiss` / `Скрыть статус заказа`; `:115–120`; `active_orders_accordion_test.mjs:247–254`), заменить на позитивный контракт «`×` отсутствует»; assert'ы на receipt / `openOrderReceipt` / отсутствие `aoa__chevron` сохранить.
+- [x] Subtask 1 (patch v1): Given в статусной шторке отображается активный заказ / When компонент `ActiveOrdersAccordion` отрисован / Then кнопки `×` (`aoa__dismiss`, `data-testid="status-widget-dismiss"`) в DOM нет.
+- [x] Subtask 4 (patch v1): Given `×` удалён из UI / When отрисован раскрытый или свёрнутый заказ / Then CTA «Состав заказа», receipt, `OrderActionButtons` и push recovery работают без изменений.
+- [x] Subtask 5 (patch v1): Given UI `×` удалён / When выполняется обновление статуса (polling / Cable) / Then `status` / `refreshMode` / Cable-поведение шторки не меняются. `dismissOrder` не удалять и не переписывать, пока не проверено, что он не используется другим контрактом (иначе — отдельное решение).
+- [x] Subtask 6 (patch v1): тесты, требующие наличие `×` (`order_status_notify_actions_test.mjs:106–113` — только assert'ы на `status-widget-dismiss` / `Скрыть статус заказа`; `:115–120`; `active_orders_accordion_test.mjs:247–254`), заменить на позитивный контракт «`×` отсутствует»; assert'ы на receipt / `openOrderReceipt` / отсутствие `aoa__chevron` сохранить.
 
 ### Не трогать
 
-См. `COMPONENT_MAP.md` строки `ActiveOrdersAccordion`, `OrderStatusSheet`: блок чека (`ActiveOrdersAccordion.svelte:263–288`, `receiptView`, `receiptPanelView`), `accordionState` — общий объект с задачей восстановления чека, не менять его форму.
+См. `COMPONENT_MAP.md` строки `ActiveOrdersAccordion`, `OrderStatusSheet`: блок чека (`ActiveOrdersAccordion.svelte:353–379`, CTA «Состав заказа» `:293–303`, `receiptView`, `receiptPanelView`; на 2026-10-01), `accordionState` — общий объект с задачей восстановления чека, не менять его форму.
 
 ### Scope
 
-Разрешено: разметка/стили `aoa__dismiss` в `ActiveOrdersAccordion.svelte`; проп `onDismiss` и его проброс в `OrderStatusSheet.svelte:274` — только если после удаления UI он мёртвый; тесты из Subtask 6 (patch v1).
+Разрешено: разметка/стили `aoa__dismiss` в `ActiveOrdersAccordion.svelte`; проп `onDismiss` и его проброс в `OrderStatusSheet.svelte` (был `:274`, удалён) — только если после удаления UI он мёртвый; тесты из Subtask 6 (patch v1).
+
+**Итог Патча 1:** RED `f7a6dc49` → GREEN `93f500ee` · REVIEW · CI green [36821953421](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/36821953421).
 Запрещено: receipt / `receiptView` / `receiptPanelView`; polling, ActionCable, reconnect, push, wallet, cancel API, `OrderActionButtons`, cancel-modal; backend active-orders API; старый chevron #36; Home Indicator / safe-area; «только peek».
