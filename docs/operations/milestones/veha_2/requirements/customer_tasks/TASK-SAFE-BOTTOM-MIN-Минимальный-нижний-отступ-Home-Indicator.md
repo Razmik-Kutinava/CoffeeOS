@@ -36,11 +36,13 @@
 
 ## Subtask
 
-- [ ] 1. `app.css`: `--shop-safe-bottom: max(8px, env(safe-area-inset-bottom, 0px))`
-- [ ] 2. `shopWebViewLayout.js`: значение от WebView → `max(8, inset)` px (`SHOP_SAFE_BOTTOM_MIN_PX = 8`)
-- [ ] 3. Экраны на переменную вместо своего `env()`: `CatalogFiltersSheet`, `CatalogSortSheet`, `ContactSupportSheet`, `OrderReceipt`, `OrderStatusSheet` (overlay); добавки 24px/16px сохраняются
-- [ ] 4. `CartSheet` — без правок (уже `var(--shop-safe-bottom)`), шторка статуса получает минимум через него
-- [ ] 5. Тесты: 0 → 8px, 34 → 34px; в 5 экранах нет `env(safe-area-inset-bottom`
+- [x] 1. `app.css`: `--shop-safe-bottom: max(8px, env(safe-area-inset-bottom, 0px))`
+- [x] 2. `shopWebViewLayout.js`: значение от WebView → `max(8, inset)` px (`SHOP_SAFE_BOTTOM_MIN_PX = 8`)
+- [x] 3. Экраны на переменную вместо своего `env()`: `CatalogFiltersSheet`, `CatalogSortSheet`, `ContactSupportSheet`, `OrderReceipt`, `OrderStatusSheet` (overlay); добавки 24px/16px сохраняются
+- [x] 4. `CartSheet` — без правок (уже `var(--shop-safe-bottom)`), шторка статуса получает минимум через него
+- [x] 5. Тесты: 0 → 8px, 34 → 34px; в 5 экранах нет `env(safe-area-inset-bottom`
+
+**RED** `e6a57efb` (9 fail) → **GREEN** `1c21dbda` · визуально на устройстве не проверено (Android: CartSheet в peek поднимается на 8px от края)
 
 ## Scope
 

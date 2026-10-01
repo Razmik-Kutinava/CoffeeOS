@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-10-01 — feat: TASK_SAFE-BOTTOM-MIN — минимальный нижний отступ 8px (GREEN)
+
+- Intake `5e516968`: доп.задачи 3 (шторка статуса) и 4 (все экраны) слиты — шторка встроена в CartSheet, её низ = `--shop-safe-bottom`. N = 8px.
+- RED `e6a57efb` → GREEN `1c21dbda`: `app.css` `--shop-safe-bottom: max(8px, env(…))`; `shopWebViewLayout.js` `SHOP_SAFE_BOTTOM_MIN_PX`; `CatalogFiltersSheet`, `CatalogSortSheet`, `ContactSupportSheet`, `OrderReceipt`, `OrderStatusSheet` на `var(--shop-safe-bottom)`.
+- Тесты: новый 11/0, JS зона 344/1 (legacy), Rails 67/0.
+
 ## 2026-10-01 — review: TASK_84-RECEIPT-ARROW-EXT — CI green
 
 - `/regress` PASS (JS 605 / 60 legacy · vite build · Rails 100/0) · bugbot 0 · security 0 · `/crit-audit` CLEAN · CI + Semgrep + CodeQL green [36832232323](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/36832232323) на `f4658bb7`.

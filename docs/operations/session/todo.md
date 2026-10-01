@@ -1,3 +1,47 @@
+# todo — TASK_SAFE-BOTTOM-MIN (доп.задачи 3+4): минимальный нижний отступ 8px
+
+| Поле | Значение |
+|------|----------|
+| **Основание** | [TASK_SAFE-BOTTOM-MIN](../milestones/veha_2/requirements/customer_tasks/TASK-SAFE-BOTTOM-MIN-Минимальный-нижний-отступ-Home-Indicator.md) — N = 8px · задачи 3 и 4 слиты (решение владельца: шторка статуса встроена в CartSheet, её низ = `--shop-safe-bottom`) |
+| **Статус** | RED `[x]` · GREEN `[x]` · ждёт `/regress` → `/review` · deploy запрещён |
+
+## SBR
+
+- [x] intake `5e516968`
+- [x] RED `e6a57efb` — `shop_safe_bottom_min_test.mjs` 9 fail (константа, WebView 0→8, `app.css` max(), 5 экранов без `env()`, добавки 24/16px)
+- [x] GREEN `1c21dbda` — `app.css` max(8px, env), `shopWebViewLayout.js` `SHOP_SAFE_BOTTOM_MIN_PX`, 5 экранов на `var(--shop-safe-bottom)` · Entire `01M3SBAXJXWA8X0DWT56SNEE36`
+- [ ] `/regress`
+- [ ] `/review` → push → CI
+
+## Файлы
+
+- `app/frontend/styles/app.css` — `--shop-safe-bottom: max(8px, env(safe-area-inset-bottom, 0px))`
+- `app/frontend/lib/shopWebViewLayout.js` — `SHOP_SAFE_BOTTOM_MIN_PX = 8`, `max()` для значения от WebView
+- `CatalogFiltersSheet.svelte`, `CatalogSortSheet.svelte`, `ContactSupportSheet.svelte`, `routes/OrderReceipt.svelte`, `OrderStatusSheet.svelte` — `env()` → `var(--shop-safe-bottom, 0px)`
+- `test/javascript/shop_safe_bottom_min_test.mjs` — новый
+
+## Не ломать
+
+- `--shop-safe-top`, `--shop-keyboard-inset`, высоты CartSheet / `stackBottomPx` (pay stack) / `cartSheetThresholds`
+- #67 тест «34px» (`shop_telegram_webview_ui_test.mjs`) — значение > 8 не меняется
+- чек / peek-only / стрелка / `×`
+
+## Проверка
+
+- `node --test test/javascript/shop_safe_bottom_min_test.mjs` — 11/0
+- зона JS (`shop_*` `order_status*` `active_orders*` `cart_sheet*` `catalog*` `contact*` `order_receipt*` `sticky*` `order_cancel*` `order_action*`, 33 файла) — 344/1 (legacy «422/500»)
+- Rails (telegram/webview/safe, b113_s2*, cart_sheet, catalog filter/sort, contact support, order receipt, order_status_sheet — 11 файлов) — 67/0
+- визуально: Android (inset 0) — CartSheet в peek поднят на 8px; iPhone — без изменений (34px). Устройство / Fly — после deploy
+
+## DoD
+
+- [x] inset 0 → отступ 8px; inset 34 → 34px
+- [x] все bottom-sheet берут отступ из `--shop-safe-bottom`
+- [x] добавки 24px/16px сохранены
+- [ ] Review + CI green
+
+---
+
 # todo — TASK_84-RECEIPT-ARROW-EXT (доп.задача 2): стрелка `>` / `v` на кнопке «Состав заказа»
 
 | Поле | Значение |
