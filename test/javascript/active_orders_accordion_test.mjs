@@ -246,13 +246,17 @@ describe("#84 restore receipt in status sheet", () => {
     )
   })
 
-  it("dismiss button aria-label is Скрыть (not cancel)", () => {
-    const src = readFileSync(accordionComponentPath, "utf8")
-    assert.match(
-      src,
-      /aria-label=["']Скрыть[^"']*["']/,
-      "X must read as hide/dismiss, not close/cancel order"
-    )
+  it("TASK_83 patch v1: no × dismiss button in DOM (SSR)", async () => {
+    const state = createActiveOrdersAccordionState(sampleOrders)
+    const html = await renderSvelte(accordionComponentPath, {
+      order: sampleOrders[0],
+      accordionState: state,
+      onDismiss: () => {}
+    })
+    assert.doesNotMatch(html, /status-widget-dismiss/)
+    assert.doesNotMatch(html, /aoa__dismiss/)
+    assert.match(html, /data-testid="active-order-receipt-cta"/)
+    assert.match(html, /data-testid="order-action-buttons"/)
   })
 })
 

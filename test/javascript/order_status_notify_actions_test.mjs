@@ -103,19 +103,27 @@ describe("openOrderReceipt (#37 step 3)", () => {
     assert.equal(result.isLoading, false)
   })
 
-  it("ActiveOrdersAccordion status model has dismiss + receipt (#84); no chevron", () => {
+  it("ActiveOrdersAccordion status model has receipt (#84), no × (TASK_83 patch v1), no chevron", () => {
     const src = readFileSync(accordionPath, "utf8")
-    assert.match(src, /status-widget-dismiss/)
-    assert.match(src, /Скрыть статус заказа/)
+    assert.doesNotMatch(src, /status-widget-dismiss/)
+    assert.doesNotMatch(src, /Скрыть статус заказа/)
     assert.match(src, /active-order-receipt/)
     assert.match(src, /openOrderReceipt/)
     assert.doesNotMatch(src, /aoa__chevron/)
   })
 
-  it("#83 aoa__dismiss calls onDismiss(order) locally", () => {
+  it("TASK_83 patch v1: no aoa__dismiss / onDismiss in accordion", () => {
     const src = readFileSync(accordionPath, "utf8")
-    assert.match(src, /class="aoa__dismiss"/)
-    assert.match(src, /onDismiss\(order\)/)
-    assert.match(src, /e\.stopPropagation\(\)/)
+    assert.doesNotMatch(src, /aoa__dismiss/)
+    assert.doesNotMatch(src, /onDismiss/)
+  })
+
+  it("TASK_83 patch v1: OrderStatusSheet no longer wires onDismiss into accordion", () => {
+    const src = readFileSync(
+      join(root, "app/frontend/components/OrderStatusSheet.svelte"),
+      "utf8"
+    )
+    assert.doesNotMatch(src, /onDismiss=\{onDismissOrder\}/)
+    assert.doesNotMatch(src, /function onDismissOrder/)
   })
 })
