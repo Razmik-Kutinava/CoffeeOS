@@ -32,11 +32,13 @@
 
 ## Subtask
 
-- [ ] 1. `statusSheetMode` при наличии заказов — только `peek` (открытый чек не даёт `expanded`)
-- [ ] 2. Высота панели при открытом чеке = высота peek (`min(22vh, 8.5rem)` embedded / `8.75rem` overlay); CSS роста `.expanded` удалён
-- [ ] 3. Панель при открытом чеке — scroll-контейнер (`overflow-y: auto`), чтобы чек вписывался в peek и `Total Amount` был достижим прокруткой чека
-- [ ] 4. Закрытие чека — шторка в peek
-- [ ] 5. Тесты: контракт «нет `expanded`» вместо «есть `EXPANDED`»; регрессия зоны шторки
+- [x] 1. `statusSheetMode` при наличии заказов — только `peek` (открытый чек не даёт `expanded`)
+- [x] 2. Высота панели при открытом чеке = высота peek (`min(22vh, 8.5rem)` embedded / `8.75rem` overlay); CSS роста `.expanded` удалён
+- [x] 3. Панель при открытом чеке — scroll-контейнер (`overflow-y: auto`), чтобы чек вписывался в peek и `Total Amount` был достижим прокруткой чека
+- [x] 4. Закрытие чека — шторка в peek
+- [x] 5. Тесты: контракт «нет `expanded`» вместо «есть `EXPANDED`»; регрессия зоны шторки
+
+**RED** `8f795504` (3 fail) → **GREEN** `8b75d868` · браузер 390×844 PASS — [MEASURE](../../artifacts/active_orders_receipt_display_restore/peek_only_2026-10-01/MEASURE.md)
 
 ## Scope
 

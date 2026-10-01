@@ -1,3 +1,47 @@
+# todo — TASK_84-PEEK-ONLY-EXT (доп.задача 1): статусная шторка только peek
+
+| Поле | Значение |
+|------|----------|
+| **Основание** | [TASK_84-PEEK-ONLY-EXT](../milestones/veha_2/requirements/customer_tasks/TASK-84-PEEK-ONLY-EXT-Статусная-шторка-остаётся-в-peek-при-открытом-чеке.md) — сценарий владельца 2026-10-01 · вариант (а): CartSheet не поднимаем |
+| **Реверсирует** | `expanded` статусной шторки при открытом чеке + Rails-тест «…EXPANDED» |
+| **Статус** | RED `[x]` · GREEN `[x]` · ждёт `/regress` → `/review` · deploy запрещён |
+
+## SBR
+
+- [x] intake `c4f4bd0e`
+- [x] RED `8f795504` — 3 fail: нет `ORDER_STATUS_SHEET_MODES.EXPANDED`, нет `.expanded` CSS/класса, есть `.receipt-open { overflow-y: auto }` без `max-height`; Rails `mount_acceptance` перевёрнут на `refute EXPANDED`
+- [x] GREEN `8b75d868` — `OrderStatusSheet.svelte`: режим только hidden/peek, `class:receipt-open`, CSS `.expanded` удалён · Entire `01M3SBAXJXWA8X0DWT56SNEE36`
+- [ ] `/regress`
+- [ ] `/review` → push → CI
+
+## Файлы
+
+- `app/frontend/components/OrderStatusSheet.svelte` — `receiptOpen` вместо `panelExpanded`; `statusSheetMode` без `EXPANDED`; `.oss__panel.receipt-open { overflow-y: auto }`
+- `test/javascript/order_status_sheet_peek_only_test.mjs` — новый
+- `test/integration/shop/order_status_sheet_mount_acceptance_test.rb` — `EXPANDED` → `refute`
+
+## Не ломать
+
+- чек (`ActiveOrdersAccordion`, `fitReceiptInView`, `receiptView`), `×` (уже удалён), polling/Cable, `lib/orderStatusSheet.js` (`ORDER_STATUS_SHEET_MODES` с `EXPANDED` остаётся)
+- `CartSheet.svelte` и его `MODE_EXPANDED` (другой режим — шторка корзины)
+- #42 высота peek `min(22vh, 8.5rem)`
+
+## Проверка
+
+- `node --test test/javascript/order_status_sheet_peek_only_test.mjs` — 5/0
+- зона JS (`order_status*` `active_orders*` `cart_sheet*` `sticky*` `order_cancel*` `order_action*`) — 173/1 (legacy «422/500»)
+- Rails `order_status_sheet_mount_acceptance`, `order_status_expanded_stack_canon`, `active_order_cart_peek_stack`, `api/active_orders_receipt` — 20/0
+- браузер 390×844: peek 136px до/после клика, чек 101px внутри панели, `Total Amount` через scroll чека, панель не скроллится — [MEASURE](../milestones/veha_2/artifacts/active_orders_receipt_display_restore/peek_only_2026-10-01/MEASURE.md)
+
+## DoD
+
+- [x] открытие чека — `data-status-sheet-mode="peek"`, высота не растёт
+- [x] чек внутри peek со своей прокруткой, `Total Amount` достижим
+- [x] закрытие чека — peek
+- [ ] Review + CI green
+
+---
+
 # todo — TASK_83 Патч 1 (2026-09-30): убрать × из статусной шторки (patch v1)
 
 | Поле | Значение |

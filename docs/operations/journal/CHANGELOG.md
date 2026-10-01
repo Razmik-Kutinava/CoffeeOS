@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-10-01 — feat: TASK_84-PEEK-ONLY-EXT — статусная шторка только peek (GREEN)
+
+- Intake `c4f4bd0e` (сценарий владельца, вариант а — CartSheet не поднимаем). RED `8f795504` → GREEN `8b75d868`.
+- `OrderStatusSheet.svelte`: `statusSheetMode` только hidden/peek; открытый чек → `.oss__panel.receipt-open { overflow-y: auto }` без роста высоты; CSS `.expanded` удалён. Rails-тест `EXPANDED` перевёрнут.
+- Тесты: JS зона 173/1 (legacy), Rails 20/0, браузер 390×844 — чек 101px в peek 136px, `Total Amount` через scroll чека.
+
 ## 2026-10-01 — review: TASK_83 Патч 1 — CI green
 
 - `/regress` PASS (JS 597 / 60 legacy · vite build · Rails active_orders 13/0) · bugbot 0 · security 0 · `/crit-audit` CLEAN.
