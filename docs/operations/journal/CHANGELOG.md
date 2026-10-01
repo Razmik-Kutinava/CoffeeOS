@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-10-01 — docs: номера строк TASK_83 + COMPONENT_MAP после Review
+
+- `ba5f67c2`: TASK_83 §2–3 / «Файлы» / таблица — `dismissOrder` 137–146, `refreshMode` 95–100, `aoa__dismiss` и проброс `onDismiss` удалены; Subtask patch v1 отмечены.
+- `COMPONENT_MAP.md`: `OrderStatusSheet` (без dismiss, peek-only `receipt-open`, safe-bottom), `ActiveOrdersAccordion` (без ×, CTA 293–303 со стрелкой, чек 353–379), `orderStatusSheet.js` (137–146 / 95–100).
+
 ## 2026-10-01 — review: TASK_SAFE-BOTTOM-MIN — CI green
 
 - `/regress` PASS (JS 616 / 60 legacy · vite build · Rails `test/integration/shop` 420/0).
