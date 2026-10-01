@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-10-01 — review: TASK_83 Патч 1 — CI green
+
+- `/regress` PASS (JS 597 / 60 legacy · vite build · Rails active_orders 13/0) · bugbot 0 · security 0 · `/crit-audit` CLEAN.
+- CI `scan_ruby` упал на brakeman `--ensure-latest` (вышел 8.1.0) → `Gemfile.lock` brakeman 8.0.6 → 8.1.0 (`f2253be4`) → CI + Semgrep + CodeQL green [36821953421](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/36821953421).
+
 ## 2026-09-30 — feat: TASK_83 Патч 1 — убран × из статусной шторки (GREEN)
 
 - RED `f7a6dc49` → GREEN `93f500ee`: в `ActiveOrdersAccordion.svelte` удалены кнопка `×` (`status-widget-dismiss`), проп `onDismiss`, CSS `.aoa__dismiss`; в `OrderStatusSheet.svelte` удалены проброс `onDismiss={onDismissOrder}`, `onDismissOrder`, импорт `dismissOrder`.

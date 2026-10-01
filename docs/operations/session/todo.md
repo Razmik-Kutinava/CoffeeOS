@@ -4,7 +4,7 @@
 |------|----------|
 | **Основание** | [TASK_83 § Патч 1: 2026-09-30](../milestones/veha_2/requirements/customer_tasks/TASK-83-status-sheet-dismiss.md) — «Исправленный сценарий», Subtask 1, 4, 5, 6 (patch v1) |
 | **Тип** | патч (не доп.задача) · остальные Subtask TASK_83 — контекст, не трогались |
-| **Статус** | RED `[x]` · GREEN `[x]` · ждёт `/regress` → `/review` · deploy запрещён до закрытия задачи |
+| **Статус** | REVIEW `[x]` · CI green [36821953421](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/36821953421) на `f2253be4` · deploy запрещён до закрытия задачи |
 
 ## SBR
 
@@ -12,7 +12,7 @@
 - [x] RED `f7a6dc49` — 4 fail: SSR «× нет в DOM», source «нет `status-widget-dismiss`/«Скрыть статус заказа»», «нет `aoa__dismiss`/`onDismiss`», «шторка не пробрасывает `onDismiss={onDismissOrder}`»
 - [x] GREEN `93f500ee` — удалены кнопка `×`, проп `onDismiss`, CSS `.aoa__dismiss` (`ActiveOrdersAccordion.svelte`); проброс `onDismiss`, `onDismissOrder`, импорт `dismissOrder` (`OrderStatusSheet.svelte`) · Entire `01M3SBAXJXWA8X0DWT56SNEE36`
 - [x] `/regress` PASS — JS 597 (60 fail = legacy baseline) · `vite build` OK · Rails active_orders(_receipt) + cart_peek_stack 13/0
-- [ ] `/review` (bugbot + security + `/crit-audit`) → push → CI
+- [x] `/review` — bugbot 0 · security 0 · `/crit-audit` CLEAN (`0b54ac21`) · push · CI сначала red: `scan_ruby` brakeman `--ensure-latest` (вышел 8.1.0, к патчу не относится) → bump `f2253be4` → CI + Semgrep + CodeQL green [36821953421](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/36821953421)
 - [ ] после Review: номера строк в TASK_83 и COMPONENT_MAP (`COMPONENT_MAP.md` в этой итерации только читался)
 - [ ] deploy — **запрещён** до закрытия задачи; затем Fly MCP Point A
 
@@ -41,7 +41,7 @@
 - [x] Subtask 1: `×` нет в DOM статусной шторки
 - [x] Subtask 4–5: status / polling / Cable / чек без изменений; мёртвый проброс `onDismiss` удалён, `dismissOrder` (lib) сохранён
 - [x] Subtask 6: тесты на наличие `×` заменены контрактом отсутствия
-- [ ] Review + CI green
+- [x] Review + CI green
 
 ---
 
