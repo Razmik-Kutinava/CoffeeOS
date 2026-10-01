@@ -1,3 +1,44 @@
+# todo — TASK_84-RECEIPT-ARROW-EXT (доп.задача 2): стрелка `>` / `v` на кнопке «Состав заказа»
+
+| Поле | Значение |
+|------|----------|
+| **Основание** | [TASK_84-RECEIPT-ARROW-EXT](../milestones/veha_2/requirements/customer_tasks/TASK-84-RECEIPT-ARROW-EXT-Стрелка-состояния-на-кнопке-Состав-заказа.md) — сценарий владельца 2026-10-01 · стрелка только на кнопке чека |
+| **Реверсирует** | запрет «новые стрелки» в Scope TASK_84-RECEIPT-DISPLAY-EXT (только кнопка чека); chevron #36 на шапке и тест #35 остаются |
+| **Статус** | RED `[x]` · GREEN `[x]` · ждёт `/regress` → `/review` · deploy запрещён |
+
+## SBR
+
+- [x] intake `86a123ce`
+- [x] RED `c0aef683` — `active_orders_receipt_arrow_test.mjs` 3 fail (SSR: текст кнопки, `aria-expanded`, `aria-hidden` стрелка)
+- [x] GREEN `d3f929a8` — `ActiveOrdersAccordion.svelte`: `<span class="aoa__receipt-arrow" aria-hidden="true">{row.chevron}</span>` в кнопке · Entire `01M3SBAXJXWA8X0DWT56SNEE36`
+- [ ] `/regress`
+- [ ] `/review` → push → CI
+
+## Файлы
+
+- `app/frontend/components/ActiveOrdersAccordion.svelte` — стрелка в `aoa__receipt-cta` + CSS `.aoa__receipt-arrow`
+- `test/javascript/active_orders_receipt_arrow_test.mjs` — новый
+
+## Не ломать
+
+- шапка строки без стрелки (chevron #36 не возвращаем, тест #35 «нет `aoa__chevron`»)
+- `LABELS.receipt` = «Состав заказа» (`orderStatusNotifyActions.js`) и тесты на него; `aria-label` кнопки без стрелки
+- чек / `fitReceiptInView` / peek-only (`OrderStatusSheet.svelte`) / `×` / polling / Cable
+
+## Проверка
+
+- `node --test test/javascript/active_orders_receipt_arrow_test.mjs` — 3/0
+- зона JS (`order_status*` `active_orders*` `cart_sheet*` `sticky*` `order_cancel*` `order_action*` `subscription_offer_banner*`) — 197/1 (legacy «422/500»)
+- браузер — browser MCP завис 2026-10-01, не пройдено (SSR покрывает текст и `aria-expanded`)
+
+## DoD
+
+- [x] свёрнут — «Состав заказа >», `aria-expanded="false"`
+- [x] открыт — «Состав заказа v», `aria-expanded="true"`
+- [ ] Review + CI green
+
+---
+
 # todo — TASK_84-PEEK-ONLY-EXT (доп.задача 1): статусная шторка только peek
 
 | Поле | Значение |

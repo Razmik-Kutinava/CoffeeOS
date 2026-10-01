@@ -26,10 +26,12 @@
 
 ## Subtask
 
-- [ ] 1. Свёрнутый заказ: текст кнопки «Состав заказа >», `aria-expanded="false"`
-- [ ] 2. Открытый чек: «Состав заказа v», `aria-expanded="true"`
-- [ ] 3. Символы — существующие `CHEVRON.collapsed` / `CHEVRON.expanded` (`activeOrdersAccordion.js`) через `row.chevron`; класс не `aoa__chevron` (#35)
-- [ ] 4. `aria-label` кнопки — «Состав заказа» (стрелка декоративная, `aria-hidden`)
+- [x] 1. Свёрнутый заказ: текст кнопки «Состав заказа >», `aria-expanded="false"`
+- [x] 2. Открытый чек: «Состав заказа v», `aria-expanded="true"`
+- [x] 3. Символы — существующие `CHEVRON.collapsed` / `CHEVRON.expanded` (`activeOrdersAccordion.js`) через `row.chevron`; класс не `aoa__chevron` (#35)
+- [x] 4. `aria-label` кнопки — «Состав заказа» (стрелка декоративная, `aria-hidden`)
+
+**RED** `c0aef683` (3 fail) → **GREEN** `d3f929a8` · SSR-тест обоих состояний · браузерная проверка — зависла (browser MCP), не пройдена
 
 ## Scope
 

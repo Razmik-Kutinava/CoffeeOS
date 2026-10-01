@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-10-01 — feat: TASK_84-RECEIPT-ARROW-EXT — стрелка >/v на кнопке «Состав заказа» (GREEN)
+
+- Intake `86a123ce` (сценарий владельца; стрелка только на кнопке чека). RED `c0aef683` → GREEN `d3f929a8`.
+- `ActiveOrdersAccordion.svelte`: в `aoa__receipt-cta` декоративная `aoa__receipt-arrow` (`aria-hidden`) из `row.chevron`; `aria-label` и `LABELS.receipt` без изменений; chevron #36 на шапке не возвращён.
+- Тесты: новый 3/0, JS зона 197/1 (legacy). Браузерная проверка не пройдена — browser MCP завис.
+
 ## 2026-10-01 — review: TASK_84-PEEK-ONLY-EXT — CI green
 
 - `/regress` PASS (JS 602 / 60 legacy · vite build · Rails 100/0) · bugbot 0 · security 0 · `/crit-audit` CLEAN · CI + Semgrep + CodeQL green [36825940981](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/36825940981) на `f6f95987`.
