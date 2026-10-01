@@ -11,7 +11,7 @@
 - [x] intake `c4f4bd0e`
 - [x] RED `8f795504` — 3 fail: нет `ORDER_STATUS_SHEET_MODES.EXPANDED`, нет `.expanded` CSS/класса, есть `.receipt-open { overflow-y: auto }` без `max-height`; Rails `mount_acceptance` перевёрнут на `refute EXPANDED`
 - [x] GREEN `8b75d868` — `OrderStatusSheet.svelte`: режим только hidden/peek, `class:receipt-open`, CSS `.expanded` удалён · Entire `01M3SBAXJXWA8X0DWT56SNEE36`
-- [ ] `/regress`
+- [x] `/regress` PASS — JS 602 (60 fail = legacy baseline) · `vite build` OK · Rails 18 файлов (шторка, CartSheet b113_s2*, quick_repeat_section, catalog_hidden, active orders) 100/0
 - [ ] `/review` → push → CI
 
 ## Файлы
