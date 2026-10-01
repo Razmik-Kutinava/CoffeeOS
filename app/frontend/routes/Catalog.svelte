@@ -99,7 +99,7 @@
     <p>Пока нет товаров</p>
   </div>
 {:else}
-  <div class="catalog-with-sheet" style="padding-bottom: var(--cart-sheet-h, 42vh)">
+  <div class="catalog-with-sheet" style="padding-bottom: calc(var(--cart-sheet-h, 42vh) + var(--shop-safe-bottom, 0px))">
   {#each categories as cat (cat.id)}
     <CategorySection category={cat} />
   {/each}

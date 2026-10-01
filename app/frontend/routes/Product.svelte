@@ -383,12 +383,12 @@
 
   .bottom-spacer {
     /* Синхрон с CartSheet heightVh (+ CTA) — стык, не магические 230px */
-    height: calc(var(--cart-sheet-h, 34vh) + 1rem);
+    height: calc(var(--cart-sheet-h, 34vh) + var(--shop-safe-bottom, 0px) + 1rem);
   }
 
   .more-menu {
     position: fixed;
-    bottom: calc(var(--cart-sheet-h, 34vh) + 0.5rem);
+    bottom: calc(var(--cart-sheet-h, 34vh) + var(--shop-safe-bottom, 0px) + 0.5rem);
     right: 16px;
     background: #2a2a2a;
     border: 1px solid #3a3a3a;

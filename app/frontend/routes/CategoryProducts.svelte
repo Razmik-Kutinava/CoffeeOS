@@ -156,7 +156,7 @@
   .category-page {
     min-height: var(--shop-vvh, 100dvh);
     background: var(--bg-primary, #1a1a1a);
-    padding-bottom: max(80px, var(--cart-sheet-h, 80px));
+    padding-bottom: max(80px, calc(var(--cart-sheet-h, 80px) + var(--shop-safe-bottom, 0px)));
   }
 
   .page-header {
