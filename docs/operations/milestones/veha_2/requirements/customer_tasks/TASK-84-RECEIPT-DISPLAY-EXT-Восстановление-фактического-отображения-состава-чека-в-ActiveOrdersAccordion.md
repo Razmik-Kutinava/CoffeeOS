@@ -359,3 +359,31 @@ node --test test/javascript/active_orders_accordion_test.mjs
 
 Разрешено: RED DOM-тест (монтирование Svelte) для Subtask 11/13; код пути раскрытия в `ActiveOrdersAccordion.svelte` / `activeOrdersAccordion.js` — только по результату RED; CSS высоты `OrderStatusSheet.svelte:344–350` — только если RED докажет обрезание.
 Запрещено: backend active-orders API, `OrdersController#active`, `ActiveOrdersPresenter`, polling, ActionCable, reconnect, push, wallet, cancel API, `OrderActionButtons`, cancel-modal, `receiptView` (до доказательства), `×` / dismiss, старый chevron #36, негативный тест #35, Home Indicator, глобальная safe-area механика, «только peek», новые стрелки `>` / `v`.
+
+---
+
+## Патч 2: 2026-10-01
+
+Основание: независимый аудит Патча 1 — **PARTIALLY VERIFIED**, код не принят. Повторная read-only проверка 2026-10-02 (код + git + headless Chrome) подтвердила три расхождения с Gherkin Патча 1. Это патч, не новая задача: требования уже зафиксированы в Subtask 11/13 (patch v1).
+
+### Расхождение
+
+- **Subtask 13:** было «клик CTA «Состав заказа» в смонтированном `ActiveOrdersAccordion`» / по факту все DOM-тесты вызывают `openOrderReceipt(state, …)` напрямую и рендерят SSR (`active_orders_accordion_test.mjs:338–368`), тест «CTA wires openOrderReceipt» (`:239–247`) находит строку в `import` / расхождение: мутация «удалить `onclick={onReceiptClick}`» (`ActiveOrdersAccordion.svelte:301`) → 47/0, пользовательский путь не защищён.
+- **Subtask 11:** было «внешняя `.oss__panel` не получает собственного scroll» / по факту `.oss__panel.receipt-open { overflow-y: auto }` (`OrderStatusSheet.svelte:334`) и `fitReceipt` двигает её `scrollTop += scrollDelta` (`ActiveOrdersAccordion.svelte:131`); замер headless Chrome: `scrollTop` панели 127, `scrollHeight` 308 > `clientHeight` 149 / расхождение: внешняя панель — фактический scroll-контейнер.
+- **Runtime fit:** было «чек вписан в видимую область» / по факту `fitReceiptInView` покрыт только как чистая функция + regex по исходнику / расхождение: цепочка DOM → замер → `fitReceiptInView` → стиль чека не проверяется.
+
+### Почему нужна правка архитектуры
+
+Peek-панель embedded — 136px внутренней высоты (`min(22vh, 8.5rem)`, TASK_84-PEEK-ONLY-EXT: высота не растёт). Шапка заказа (прогресс + `OrderActionButtons` 2×44px) — 96px, CTA — 26px. Без прокрутки панели под чек остаётся ≈0–10px. Решение владельца 2026-10-02: **высота peek не меняется; пока чек открыт, у раскрытого заказа скрыты прогресс и кнопки действий** (компонент `OrderActionButtons` не меняется, только не рендерится); TASK_84-PEEK-ONLY-EXT и его тест не трогать (правило `overflow-y: auto` остаётся).
+
+### Исправленный сценарий
+
+- [ ] Subtask 13 (patch v2): Given смонтированная (client, не SSR) `OrderStatusSheet` → `ActiveOrdersAccordion` с активным заказом / When реальный DOM-клик по `[data-testid="active-order-receipt-cta"]` / Then в DOM `.aoa__receipt`, текст позиции и `Total Amount`; повторный клик — чека нет. Прямой вызов `openOrderReceipt` в тесте запрещён. Мутация «удалить `onclick` CTA» → FAIL.
+- [ ] Subtask 11 (patch v2): Given открыт длинный чек в peek / Then у `.oss__panel` диапазон прокрутки 0 (`scrollHeight ≤ clientHeight`), `scrollTop` = 0 и не меняется при попытке прокрутки; код не пишет `scrollTop` внешнего контейнера; прокручивается только `.aoa__receipt` (`scrollHeight > clientHeight`), `Total Amount` достижим прокруткой чека. Мутация «вернуть панель в состояние Патча 1» → FAIL.
+- [ ] Runtime fit (patch v2): тест в реальном браузере проверяет, что `max-height` чека взят из `fitReceiptInView` по замеру DOM (< 350px, низ чека внутри панели и клипа). Мутация «отключить вызов `fitReceiptInView`» → FAIL.
+
+### Scope
+
+Разрешено: `ActiveOrdersAccordion.svelte` (скрытие прогресса/кнопок при открытом чеке, fit без scroll внешнего контейнера), `fitReceiptInView` в `activeOrdersAccordion.js`, тесты Патча 1 на `fitReceiptInView`, новый браузерный runtime-тест (headless Chrome, без новых npm-зависимостей).
+Запрещено: payment, backend active orders, `OrdersController`, `ActiveOrdersPresenter`, polling, Cable, push, wallet, cancel, `OrderActionButtons.svelte`, `receiptView`, форма `accordionState`, T-Bank, Receipt builder, `dismissOrder`, status, `refreshMode`, callcheck, авторизация, `OrderStatusSheet.svelte` (не потребовался), TASK_84-PEEK-ONLY-EXT (док и тест), `COMPONENT_MAP.md` (до Review).
+
