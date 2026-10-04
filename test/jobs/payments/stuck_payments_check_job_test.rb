@@ -162,4 +162,25 @@ class Payments::StuckPaymentsCheckJobTest < ActiveSupport::TestCase
     assert_enqueued_jobs 3, only: TelegramAlertJob
     payments.each { |p| assert_equal "pending", p.reload.status }
   end
+
+  test "still-pending stuck payments with save_card allowed are not reloaded one by one" do
+    payments = 3.times.map do |i|
+      create_stuck_payment!(provider_payment_id: "pay-n1-save-#{i}", created_at: 45.minutes.ago).tap do |p|
+        p.update_columns(provider_data: { "save_card" => true })
+      end
+    end
+    Payments::StuckPaymentsCheckJob.sync_adapter = fake_adapter("Status" => "NEW")
+
+    by_id_selects = 0
+    counter = lambda do |*, payload|
+      by_id_selects += 1 if payload[:sql].match?(/\ASELECT "payments"\.\* FROM "payments" WHERE "payments"\."id" = /)
+    end
+    ActiveSupport::Notifications.subscribed(counter, "sql.active_record") do
+      Payments::StuckPaymentsCheckJob.perform_now
+    end
+
+    assert_equal 0, by_id_selects
+    assert_enqueued_jobs 3, only: TelegramAlertJob
+    payments.each { |p| assert_equal "pending", p.reload.status }
+  end
 end
