@@ -120,7 +120,8 @@ module Payments
           note: "Т-Банк GetState: #{tbank_status}"
         ).call!
         @payment.reload
-      elsif state["RebillId"].to_s.present? || rebill_still_needed?
+      # RebillId Т-Банк отдаёт только с CONFIRMED — для не-succeeded нечего дожимать.
+      elsif state["RebillId"].to_s.present? || (our_status == "succeeded" && rebill_still_needed?)
         merge_provider_data!(state, provider_id)
       end
 
