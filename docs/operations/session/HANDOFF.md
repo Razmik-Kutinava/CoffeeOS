@@ -7,6 +7,7 @@
 
 | Сейчас | Дальше |
 |--------|--------|
+| **Fly v506** задеплоен (`0fa72666`) — RUBY-1N на проде; регресс 10:45 был от старого v505 · Sentry → resolved · [MCP_RESULT](../milestones/veha_2/artifacts/mcp/fly_v506_2026-10-04/MCP_RESULT.md) | через ~5 ч проверить Sentry · 4 тестовых pending 11 ₽ спамят алертами — решение владельца |
 | **RUBY-1N** дочинен `1642a746` (`Fixes RUBY-1N`): N+1 в `StuckPaymentsCheckJob` убран и для `save_card=true` · Local payments 146/0 · не запушено | push → CI → deploy по апруву → Sentry без новых событий |
 | **/crit-audit CLEAN** (2026-10-04) на `0319513b` — фикс RUBY-1N без критических рисков для оплаты · local payments 137/0 · CI pending | push → CI → deploy по апруву |
 | **RUBY-1N** N+1 `StuckPaymentsCheckJob` починен `01efc828` (`Fixes RUBY-1N`) · Local payment 419/0 | не запушено · deploy по апруву → Sentry RUBY-1N закроется |

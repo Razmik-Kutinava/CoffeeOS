@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-10-04 — deploy: Fly v506 (RUBY-1N)
+
+- RUBY-1N «Regressed» в 10:45 UTC: фикс не был запушен — прод v505 крутил старый код; Sentry resolved час назад без деплоя → следующий сэмпл = регрессия.
+- Push `09620222..0fa72666` · CI/Semgrep/CodeQL green · deploy [`37198218226`](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/37198218226) → v506.
+- Worker 11:30 UTC OK (4 stuck, 1668 ms) · Point A 200 · Sentry RUBY-1N → resolved · [MCP_RESULT](../milestones/veha_2/artifacts/mcp/fly_v506_2026-10-04/MCP_RESULT.md).
+
 ## 2026-10-04 — fix: RUBY-1N — хвост N+1 при save_card=true
 
 - Sentry MCP: последнее событие RUBY-1N (04.10 09:00 UTC) — прод v505 без фикса; в трейсе 4 stuck → 8 `SELECT payments WHERE id`.
