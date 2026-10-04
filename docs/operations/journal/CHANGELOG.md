@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-10-04 — audit: /crit-audit CLEAN (`6309066c..0319513b`)
+
+- Scope: 2 файла кода (RUBY-1N): `StuckPaymentsCheckJob` без `payment.reload`, `TbankPaymentSync#rebill_still_needed?` ранний выход по in-memory `save_card`.
+- C1–C5 кандидатов нет: смена статуса — `PaymentStatusUpdater` + `@payment.reload` на том же объекте; `save_card` пишется только до/при Init.
+- Local: `test/services/payments` 137/0, `test/jobs/payments` + sync 15/0 · CI pending · Fly MCP skip (не витрина).
+- Backlog: лишний Telegram-алерт при гонке webhook vs job (шум, не критично).
+
 ## 2026-10-01 — fix: RUBY-1N — N+1 в StuckPaymentsCheckJob
 
 - Sentry `RUBY-1N` (perf N+1): на проде 4 stuck T-Bank платежа (`save_card=false`, GetState → всё ещё pending) → по 2 `SELECT payments WHERE id` на каждый.

@@ -6,9 +6,9 @@
 
 ## Шапка
 
-**last_audited_sha:** `6309066c` (TASK_SAFE-BOTTOM-MIN)  
-**last_audit_date:** 2026-10-01  
-**last_verdict:** `CLEAN` (CI green [36837366924](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/36837366924) на `f74e2e5d`)
+**last_audited_sha:** `0319513b` (RUBY-1N + TASK_84 docs)  
+**last_audit_date:** 2026-10-04  
+**last_verdict:** `CLEAN` (CI pending — 5 коммитов не запушены; local payments 137/0 + jobs 15/0)
 
 ## Статусы
 
@@ -27,6 +27,7 @@
 
 | Дата | Scope | Вердикт | Гейты (CI · smoke · Fly MCP) |
 |------|-------|---------|------------------------------|
+| 2026-10-04 | `6309066c..0319513b` — 2 файла кода (RUBY-1N `01efc828`): `StuckPaymentsCheckJob` без `payment.reload` после sync; `TbankPaymentSync#rebill_still_needed?` — ранний выход по in-memory `save_card` до `reload` · C1/C3 неприменимы (фоновый джоб, тенант не меняется) · C2/C5: кандидатов нет — смена статуса идёт через `PaymentStatusUpdater` + `@payment.reload` на том же объекте; все записи `save_card` (`OrderCreator`/`NewCardPaymentService`/`PurchaseService`) происходят до/при Init, `merge_provider_data!` ключ сохраняет · C4: исключения sync ловятся `rescue` → алерт · Backlog: при гонке webhook vs job без смены статуса через sync возможен лишний Telegram-алерт (шум, не C1–C5) | `CLEAN` | CI pending (до push) · smoke skip: полный `bin/rails test` зависает на Windows — `test/services/payments` 137/0 + `test/jobs/payments` + sync 15/0 · Fly MCP skip: фоновый джоб / ветка rebill, не витрина; деплой не делался |
 | 2026-10-01 | `406b10e7..6309066c` — 10 файлов, только CSS/layout (`--shop-safe-bottom = max(8px, safe-area)` в `app.css` + `shopWebViewLayout.js`; 5 bottom-sheet на переменную; резерв Catalog/CategoryProducts/Product под CartSheet + safe-bottom — фикс находки bugbot, не C1–C5) · C1/C2/C3/C5 неприменимы · C4: кандидатов нет — числовое значение с `Math.max`/`Number()`, CSS fallback `0px`, `vite build` OK, Rails shop 420/0 | `CLEAN` | CI pending (до push) · smoke skip: полный `bin/rails test` зависает на Windows — `/regress` JS 616 (60 legacy) + Rails `test/integration/shop` 420/0 · Fly MCP: после deploy (запрещён до закрытия задачи) |
 | 2026-10-01 | `44ec7814..406b10e7` — 1 файл (`ActiveOrdersAccordion.svelte`: декоративная стрелка `aoa__receipt-arrow` из константы `row.chevron` в кнопке чека) · C1/C2/C3/C5 неприменимы (UI-only, без пользовательских данных) · C4: кандидатов нет — SSR-рендер обоих состояний зелёный, `vite build` OK | `CLEAN` | CI pending (до push) · smoke skip: полный `bin/rails test` зависает на Windows — `/regress` JS 605 (60 legacy) + Rails 100/0 · Fly MCP: после deploy (запрещён до закрытия задачи) |
 | 2026-10-01 | `0b54ac21..44ec7814` — 1 файл (`OrderStatusSheet.svelte`: режим только hidden/peek, `class:receipt-open` + `overflow-y: auto`, CSS `.expanded` удалён) · C1/C2/C3/C5 неприменимы (UI-only) · C4: кандидатов нет — `vite build` OK, браузер 390×844 PASS, Rails шторка 100/0 | `CLEAN` | CI pending (до push) · smoke skip: полный `bin/rails test` зависает на Windows — `/regress` JS 602 (60 legacy) + Rails 100/0 · Fly MCP: после deploy (запрещён до закрытия задачи) |
