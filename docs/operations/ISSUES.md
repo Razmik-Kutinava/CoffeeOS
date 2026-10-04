@@ -27,7 +27,7 @@
 | #71 email after pay remember | 🟡 | Fly v481 MCP PASS · апрув заказчика |
 | TASK_84 receipt display | 🟢 | REVIEW CI green · G5 Fly после deploy |
 | JS legacy fails (найдено на TASK_99 /regress) | 🟡 | до TASK_99 те же (`def97615`): `email_collection_test` «identityReady / canPay depend on phoneVerified» 1 fail · `order_action_buttons_cancel_test` «422/500: force preparing» 1 fail · `personal_cabinet_test` 58 — `[RED]` TDD, не баг. Не push-зона |
-| RUBY-1N N+1 `StuckPaymentsCheckJob` | 🟢 | Sentry perf: 2× `SELECT payments WHERE id` на каждый stuck (job `reload` + `rebill_still_needed?` reload при `save_card=false`). Fix `01efc828` (RED `4e5452d7`) · Local payment 419/0 · push → CI → deploy апрув → Sentry закроется |
+| RUBY-1N N+1 `StuckPaymentsCheckJob` | 🟢 | Sentry perf: 2× `SELECT payments WHERE id` на каждый stuck (job `reload` + `rebill_still_needed?` reload при `save_card=false`). Fix `01efc828` (RED `4e5452d7`) · хвост `save_card=true`: rebill-проверка только для succeeded — RED `6f401fb5` → GREEN `1642a746` · Local payments 146/0 + rebill/UserCards 57/0 · Sentry-событие 04.10 09:00 UTC — ещё код v505 · push → CI → deploy апрув → Sentry закроется |
 | Product images `/uploads` 404 | 🟡 | `ProductImageStorage` → `public/uploads` на эфемерном диске Fly, volume нет → фото стираются при деплое (v503: 5 ссылок, 1 файл). Нужно решение: S3/Tigris или volume |
 
 Детали до 2026-08 → [`issues/archive/ISSUES-resolved-through-2026-08.md`](issues/archive/ISSUES-resolved-through-2026-08.md)

@@ -7,6 +7,7 @@
 
 | Сейчас | Дальше |
 |--------|--------|
+| **RUBY-1N хвост** (Sentry MCP подключён, org `llc-manageengine`): событие 04.10 — ещё v505 · `save_card=true` тоже давал reload на каждый stuck → RED `6f401fb5` → GREEN `1642a746` (rebill-ветка только для succeeded) · Local 146/0 + 57/0 | push → CI → deploy по апруву → проверить, что новых событий RUBY-1N нет |
 | **/crit-audit 2026-10-04 CLEAN** · scope `6309066c..0319513b` (2 файла RUBY-1N: stuck job + `rebill_still_needed?`) · C1–C5 кандидатов нет · local `test/services/payments` 137/0 + jobs/sync 15/0 · CI pending (5 коммитов не запушены) · [CRITICAL_LEDGER](../dev/CRITICAL_LEDGER.md) | push → CI → deploy по апруву |
 | **RUBY-1N** (Sentry N+1 `StuckPaymentsCheckJob`): RED `4e5452d7` (6 SELECT на 3 платежа) → GREEN `01efc828` — убран `payment.reload` в job, `rebill_still_needed?` не reload при `save_card=false` · Local: stuck job + services/payments + tbank callback 160/0; payment §2.3 + shop/subscriptions services 419/0 | push → CI → deploy по апруву → Sentry RUBY-1N resolved |
 | **Fly v505 задеплоен** (`09620222`, Actions [36842242232](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/36842242232)) · CI/Semgrep/CodeQL green · MCP Point A PASS (bundle: × нет, стрелка/peek/чек есть; safe-bottom 8px в DOM) · Sentry 24h: только RUBY-1N (до деплоя) · [MCP_RESULT](../milestones/veha_2/artifacts/mcp/fly_v505_2026-10-01/MCP_RESULT.md) | апрув заказчика глазами (активный заказ, Android) · RUBY-1N N+1 backlog |

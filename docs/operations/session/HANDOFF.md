@@ -7,6 +7,7 @@
 
 | Сейчас | Дальше |
 |--------|--------|
+| **RUBY-1N** дочинен `1642a746` (`Fixes RUBY-1N`): N+1 в `StuckPaymentsCheckJob` убран и для `save_card=true` · Local payments 146/0 · не запушено | push → CI → deploy по апруву → Sentry без новых событий |
 | **/crit-audit CLEAN** (2026-10-04) на `0319513b` — фикс RUBY-1N без критических рисков для оплаты · local payments 137/0 · CI pending | push → CI → deploy по апруву |
 | **RUBY-1N** N+1 `StuckPaymentsCheckJob` починен `01efc828` (`Fixes RUBY-1N`) · Local payment 419/0 | не запушено · deploy по апруву → Sentry RUBY-1N закроется |
 | **Fly v505** задеплоен (`09620222`) · MCP Point A PASS · [MCP_RESULT](../milestones/veha_2/artifacts/mcp/fly_v505_2026-10-01/MCP_RESULT.md) — TASK_83 × убран, TASK_84 EXT (чек/peek/стрелка), safe-bottom 8px на проде | апрув заказчика глазами: активный заказ на телефоне + Android 8px · RUBY-1N N+1 (`StuckPaymentsCheckJob`) backlog |

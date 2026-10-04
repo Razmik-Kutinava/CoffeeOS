@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-10-04 — fix: RUBY-1N — хвост N+1 при save_card=true
+
+- Sentry MCP: последнее событие RUBY-1N (04.10 09:00 UTC) — прод v505 без фикса; в трейсе 4 stuck → 8 `SELECT payments WHERE id`.
+- `01efc828` закрывал только `save_card=false`; при `save_card=true` `rebill_still_needed?` всё ещё делал reload на каждый pending.
+- RED `6f401fb5` → GREEN `1642a746`: в `TbankPaymentSync#apply_state!` rebill-ветка только для `succeeded` (RebillId приходит лишь с CONFIRMED; ErrorCode у failed пишется через `PaymentStatusUpdater`).
+- Local: `test/jobs/payments` + `test/services/payments` 146/0 · rebill/UserCards/callback 57/0.
+
 ## 2026-10-04 — audit: /crit-audit CLEAN (`6309066c..0319513b`)
 
 - Scope: 2 файла кода (RUBY-1N): `StuckPaymentsCheckJob` без `payment.reload`, `TbankPaymentSync#rebill_still_needed?` ранний выход по in-memory `save_card`.
